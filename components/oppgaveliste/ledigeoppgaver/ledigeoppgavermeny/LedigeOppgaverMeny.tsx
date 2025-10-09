@@ -6,15 +6,27 @@ import { plukkOppgaveClient, synkroniserOppgaveMedEnhetClient } from 'lib/oppgav
 import { isSuccess } from 'lib/utils/api';
 import { byggKelvinURL } from 'lib/utils/request';
 import { useRouter } from 'next/navigation';
-import { isDev } from '../../../../lib/utils/environment';
+import { isProd } from 'lib/utils/environment';
 
 interface Props {
   oppgave: Oppgave;
   setFeilmelding: Dispatch<SetStateAction<string | undefined>>;
   setÅpenModal: Dispatch<SetStateAction<boolean>>;
+  setVisSynkroniserEnhetModal: Dispatch<SetStateAction<boolean>>;
+  revaliderOppgaver: () => void;
+  setVisTildelOppgaveModal: Dispatch<SetStateAction<boolean>>;
+  setOppgaverSomSkalTildeles: Dispatch<SetStateAction<number[]>>;
 }
 
-export const LedigeOppgaverMeny = ({ oppgave, setFeilmelding, setÅpenModal }: Props) => {
+export const LedigeOppgaverMeny = ({
+  revaliderOppgaver,
+  oppgave,
+  setFeilmelding,
+  setÅpenModal,
+  setVisSynkroniserEnhetModal,
+  setVisTildelOppgaveModal,
+  setOppgaverSomSkalTildeles,
+}: Props) => {
   const router = useRouter();
   const [isPendingBehandle, startTransitionBehandle] = useTransition();
 
@@ -36,9 +48,13 @@ export const LedigeOppgaverMeny = ({ oppgave, setFeilmelding, setÅpenModal }: P
   }
 
   async function synkroniserEnhetPåOppgave(oppgave: Oppgave) {
-    if (oppgave.id) {
-      await synkroniserOppgaveMedEnhetClient(oppgave.id);
-    }
+    startTransitionBehandle(async () => {
+      if (oppgave.id) {
+        await synkroniserOppgaveMedEnhetClient(oppgave.id);
+        revaliderOppgaver();
+        setVisSynkroniserEnhetModal(true);
+      }
+    });
   }
 
   return (
@@ -54,13 +70,17 @@ export const LedigeOppgaverMeny = ({ oppgave, setFeilmelding, setÅpenModal }: P
           </ActionMenu.Trigger>
           <ActionMenu.Content>
             <ActionMenu.Item onSelect={() => plukkOgGåTilOppgave(oppgave)}>Behandle</ActionMenu.Item>
-            {isDev() && (
+            <ActionMenu.Item onSelect={() => synkroniserEnhetPåOppgave(oppgave)}>
+              Sjekk kontortilhørighet
+            </ActionMenu.Item>
+            {!isProd() && (
               <ActionMenu.Item
-                onSelect={async () => {
-                  await synkroniserEnhetPåOppgave(oppgave);
+                onSelect={() => {
+                  oppgave.id && setOppgaverSomSkalTildeles([oppgave.id]);
+                  setVisTildelOppgaveModal(true);
                 }}
               >
-                Synkroniser enhet på oppgave
+                Tildel oppgave
               </ActionMenu.Item>
             )}
           </ActionMenu.Content>

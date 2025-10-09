@@ -1,5 +1,4 @@
 ingresses:
-  - "https://kelvin.ansatt.nav.no"
   - "https://kelvin.intern.nav.no"
 
 groups:

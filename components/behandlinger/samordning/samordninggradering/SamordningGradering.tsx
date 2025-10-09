@@ -18,7 +18,6 @@ import { Behovstype } from 'lib/utils/form';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { addDays, format, isValid, parse } from 'date-fns';
 import { YtelseTabell } from 'components/behandlinger/samordning/samordninggradering/YtelseTabell';
-import { validerDato } from 'lib/validation/dateValidation';
 
 import styles from 'components/behandlinger/samordning/samordninggradering/SamordningGradering.module.css';
 import { Ytelsesvurderinger } from 'components/behandlinger/samordning/samordninggradering/Ytelsesvurderinger';
@@ -30,7 +29,6 @@ import { useSak } from 'hooks/SakHook';
 import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { capitalize } from 'lodash';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
-import { isProd } from 'lib/utils/environment';
 
 interface Props {
   bruker: BrukerInformasjon;
@@ -53,8 +51,6 @@ interface SamordnetYtelse {
 
 export interface SamordningGraderingFormfields {
   begrunnelse: string;
-  maksDatoEndelig: string;
-  fristNyRevurdering?: string;
   vurderteSamordninger: SamordnetYtelse[];
 }
 
@@ -95,27 +91,6 @@ export const SamordningGradering = ({
         rules: { required: 'Du må gjøre en vilkårsvurdering' },
         defaultValue: defaultValue.begrunnelse,
       },
-      maksDatoEndelig: {
-        type: 'radio',
-        label: 'Skal virkningstidspunkt revurderes nærmere?',
-        options: [
-          { label: 'Ja, virkningstidspunkt må vurderes på nytt', value: 'false' },
-          { label: 'Nei, virkningstidspunkt er bekreftet', value: 'true' },
-        ],
-        rules: { required: 'Du må ta stilling til om virkningstidspunkt er endelig' },
-        defaultValue: defaultValue.maksDatoEndelig,
-      },
-      fristNyRevurdering: {
-        type: 'date_input',
-        label: 'Sett dato for ny revurdering',
-        rules: {
-          required: 'Du må sette en dato for revurdering',
-          validate: {
-            gyldigDato: (v) => validerDato(v as string),
-          },
-        },
-        defaultValue: defaultValue.fristNyRevurdering,
-      },
       vurderteSamordninger: {
         type: 'fieldArray',
         defaultValue: defaultValue.vurderteSamordninger,
@@ -143,10 +118,8 @@ export const SamordningGradering = ({
               behovstype: Behovstype.AVKLAR_SAMORDNING_GRADERING,
               vurderingerForSamordning: {
                 begrunnelse: data.begrunnelse,
-                maksDatoEndelig: data.maksDatoEndelig !== 'false',
-                fristNyRevurdering:
-                  data.fristNyRevurdering &&
-                  formaterDatoForBackend(parse(data.fristNyRevurdering, 'dd.MM.yyyy', new Date())),
+                maksDatoEndelig: true, // hardkodes til true - var påkrevd tidligere pga opprettelse av revurdering
+                fristNyRevurdering: null, // hardkodes til null - var et valg tidligere pga opprettelse av revurdering
                 vurderteSamordningerData: (data.vurderteSamordninger || []).map((vurdertSamordning) => ({
                   manuell: vurdertSamordning.manuell,
                   gradering: vurdertSamordning.gradering,
@@ -199,7 +172,7 @@ export const SamordningGradering = ({
       {bruker && visModalForOppfølgingsoppgaveState && (
         <Modal
           ref={ref}
-          header={{ heading: 'Opprett oppfølgningsoppgave' }}
+          header={{ heading: 'Vurder konsekvens' }}
           onClose={() => setModalForOppfølgingsoppgaveState(false)}
           open={true}
         >
@@ -246,12 +219,12 @@ export const SamordningGradering = ({
             <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
             <YtelseTabell ytelser={grunnlag.ytelser} />
             <Ytelsesvurderinger form={form} readOnly={readOnly} />
-            {!isProd() && (success || erAllereddeOppfølgningsOppgave) && (
+            {(success || erAllereddeOppfølgningsOppgave) && (
               <Box maxWidth={'80ch'}>
                 <Alert variant="success">Oppfølgingsoppgave opprettet</Alert>
               </Box>
             )}
-            {!isProd() && !erAllereddeOppfølgningsOppgave && visRevurderVirkningstidspunkt && !success && (
+            {!erAllereddeOppfølgningsOppgave && visRevurderVirkningstidspunkt && !success && (
               <Box maxWidth={'90ch'}>
                 <Alert variant="info">
                   <Heading spacing size="small" level="3">
@@ -310,13 +283,6 @@ export const SamordningGradering = ({
 function mapVurderingToDraftFormFields(grunnlag: SamordningGraderingGrunnlag): DraftFormFields {
   return {
     begrunnelse: grunnlag.vurdering?.begrunnelse || undefined,
-    fristNyRevurdering:
-      (grunnlag.vurdering?.fristNyRevurdering && formaterDatoForFrontend(grunnlag.vurdering?.fristNyRevurdering)) ||
-      undefined,
-    maksDatoEndelig:
-      grunnlag.vurdering?.maksDatoEndelig === undefined || grunnlag.vurdering?.maksDatoEndelig === null
-        ? undefined
-        : grunnlag.vurdering?.maksDatoEndelig.toString(),
     vurderteSamordninger: grunnlag.vurdering?.vurderinger.map((ytelse) => ({
       ytelseType: ytelse.ytelseType,
       kilde: '',
@@ -334,8 +300,6 @@ function mapVurderingToDraftFormFields(grunnlag: SamordningGraderingGrunnlag): D
 function emptyDraftFormFields(): DraftFormFields {
   return {
     begrunnelse: '',
-    fristNyRevurdering: '',
-    maksDatoEndelig: '',
     vurderteSamordninger: [],
   };
 }

@@ -12,7 +12,7 @@ import { Veiledning } from 'components/veiledning/Veiledning';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
-import { Alert, BodyShort, Link } from '@navikt/ds-react';
+import { Alert, Link } from '@navikt/ds-react';
 
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
@@ -40,13 +40,7 @@ interface FormFields {
   virkningsdato: string;
 }
 
-export const OvergangUfore = ({
-  behandlingVersjon,
-  grunnlag,
-  readOnly,
-  typeBehandling,
-  initialMellomlagretVurdering,
-}: Props) => {
+export const OvergangUfore = ({ behandlingVersjon, grunnlag, readOnly, initialMellomlagretVurdering }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('OVERGANG_UFORE');
@@ -55,7 +49,7 @@ export const OvergangUfore = ({
   const brukerSøktUføretrygdLabel = 'Har brukeren søkt om uføretrygd?';
   const brukerHarFaattVedtakOmUføretrygdLabel = 'Har brukeren fått vedtak på søknaden om uføretrygd?';
   const brukerrettPaaAAPLabel = 'Har brukeren rett på AAP under behandling av krav om uføretrygd etter § 11-18?';
-  const virkningsdatoLabel = 'Virkningsdato for vurderingen';
+  const virkningsdatoLabel = 'Virkningstidspunkt for vurderingen';
 
   const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
     useMellomlagring(Behovstype.OVERGANG_UFORE, initialMellomlagretVurdering);
@@ -118,7 +112,7 @@ export const OvergangUfore = ({
         type: 'textarea',
         label: virkningsdatoLabel,
         defaultValue: (defaultValue.virkningsdato && formaterDatoForFrontend(defaultValue.virkningsdato)) || undefined,
-        rules: { required: 'Du må velge virkningsdato for vurderingen' },
+        rules: { required: 'Du må velge virkningstidspunkt for vurderingen' },
       },
     },
     { readOnly: readOnly, shouldUnregister: true }
@@ -153,8 +147,6 @@ export const OvergangUfore = ({
   const brukerHarSoktOmUforetrygd = form.watch('brukerHarSøktUføretrygd') === JaEllerNei.Ja;
   const brukerHarFattAvslagPaUforetrygd = form.watch('brukerHarFåttVedtakOmUføretrygd') === 'JA_AVSLAG';
 
-  const gjeldendeSykdomsvurdering = grunnlag?.gjeldendeSykdsomsvurderinger.at(-1);
-  const vurderingenGjelderFra = gjeldendeSykdomsvurdering?.vurderingenGjelderFra;
   const historiskeVurderinger = grunnlag?.historiskeVurderinger;
 
   return (
@@ -196,13 +188,21 @@ export const OvergangUfore = ({
           </div>
         }
       />
-      {typeBehandling === 'Revurdering' && (
-        <BodyShort>
-          Vurderingen gjelder fra {vurderingenGjelderFra && formaterDatoForFrontend(vurderingenGjelderFra)}
-        </BodyShort>
-      )}
       <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
       <FormField form={form} formField={formFields.brukerHarSøktUføretrygd} horizontalRadio />
+      {brukerHarSoktOmUforetrygd && (
+        <DateInputWrapper
+          name={`virkningsdato`}
+          control={form.control}
+          label={'Virkningstidspunkt for vurderingen'}
+          rules={{
+            validate: {
+              gyldigDato: (value) => validerDato(value as string),
+            },
+          }}
+          readOnly={readOnly}
+        />
+      )}
       {brukerHarSoktOmUforetrygd && <FormField form={form} formField={formFields.brukerHarFåttVedtakOmUføretrygd} />}
       {brukerHarFattAvslagPaUforetrygd && (
         <Alert variant="warning">
@@ -212,19 +212,6 @@ export const OvergangUfore = ({
       )}
       {brukerHarSoktOmUforetrygd && form.watch('brukerHarSøktUføretrygd') !== 'NEI' && (
         <FormField form={form} formField={formFields.brukerRettPåAAP} horizontalRadio />
-      )}
-      {brukerHarSoktOmUforetrygd && (
-        <DateInputWrapper
-          name={`virkningsdato`}
-          control={form.control}
-          label={'Virkningsdato for vurderingen'}
-          rules={{
-            validate: {
-              gyldigDato: (value) => validerDato(value as string),
-            },
-          }}
-          readOnly={readOnly}
-        />
       )}
     </VilkårskortMedFormOgMellomlagring>
   );

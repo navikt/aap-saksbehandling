@@ -26,6 +26,7 @@ describe('Lovvalg og medlemskap wrapper', () => {
           avklaringsbehovkode: Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP,
           behandlingId: { id: 1 },
         }}
+        behovstype={Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP}
       >
         Innhold
       </LovvalgOgMedlemskapVedSøknadsTidspunktOverstyringsWrapper>
@@ -46,6 +47,7 @@ describe('Lovvalg og medlemskap wrapper', () => {
         readOnly={false}
         automatiskVurdering={automatiskLovvalgOgMedlemskapVurdering}
         harAvklaringsbehov={false}
+        behovstype={Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP}
       >
         Innhold
       </LovvalgOgMedlemskapVedSøknadsTidspunktOverstyringsWrapper>

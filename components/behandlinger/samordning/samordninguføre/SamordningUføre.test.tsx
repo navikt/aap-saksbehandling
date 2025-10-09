@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MellomlagretVurderingResponse, SamordningUføreGrunnlag } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
 import { render, screen } from 'lib/test/CustomRender';
@@ -6,10 +6,15 @@ import { FetchResponse } from 'lib/utils/api';
 import userEvent from '@testing-library/user-event';
 import createFetchMock from 'vitest-fetch-mock';
 import { SamordningUføre } from 'components/behandlinger/samordning/samordninguføre/SamordningUføre';
+import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
 const user = userEvent.setup();
+
+beforeEach(() => {
+  setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'SAMORDNING_UFØRE' });
+});
 
 describe('mellomlagring', () => {
   const mellomlagring: MellomlagretVurderingResponse = {

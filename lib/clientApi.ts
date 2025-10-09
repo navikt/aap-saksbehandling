@@ -24,7 +24,7 @@ import { getErrorMessage } from 'lib/utils/errorUtil';
 import { ClientConfig } from 'lib/types/clientConfig';
 import { FetchResponse } from 'lib/utils/api';
 import { TilgangResponse } from 'lib/services/tilgangservice/tilgangsService';
-import { Markering } from 'lib/types/oppgaveTypes';
+import { Markering, SaksbehandlerSøkRespons, TildelOppgaveRequest } from 'lib/types/oppgaveTypes';
 import { MellomLagringIdentifikator } from 'app/saksbehandling/api/mellomlagring/route';
 import { isLocal } from 'lib/utils/environment';
 
@@ -192,3 +192,18 @@ export function clientSettMarkeringForBehandling(referanse: string, markering: M
 export function clientFjernMarkeringForBehandling(referanse: string, markering: Markering) {
   return clientFetch(`${BASE_URL}/api/behandling/${referanse}/markering/fjern`, 'POST', markering);
 }
+
+export function clientSøkPåSaksbehandler(oppgaver: number[], søketekst: string) {
+  return clientFetch<SaksbehandlerSøkRespons>(`${BASE_URL}/api/saksbehandler/finn-saksbehandler`, 'POST', {
+    oppgaver: oppgaver,
+    søketekst: søketekst
+  });
+}
+
+export function clientTildelTilSaksbehandler(oppgaver: number[], saksbehandlerIdent: string) {
+  return clientFetch<TildelOppgaveRequest>(`${BASE_URL}/api/saksbehandler/tildel-oppgave`, 'POST', {
+    oppgaver: oppgaver,
+    saksbehandlerIdent: saksbehandlerIdent
+  });
+}
+

@@ -3,14 +3,23 @@ import { Bistandsbehov } from 'components/behandlinger/sykdom/bistandsbehov/Bist
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
+import { isDev } from 'lib/utils/environment';
+import { BistandsbehovNyVisning } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovNyVisning';
 import { skalViseSteg, StegData } from 'lib/utils/steg';
 
 interface Props {
   behandlingsReferanse: string;
   stegData: StegData;
+  overgangUføreEnabled: Boolean;
+  overgangArbeidEnabled: Boolean;
 }
 
-export const BistandsbehovMedDataFetching = async ({ behandlingsReferanse, stegData }: Props) => {
+export const BistandsbehovMedDataFetching = async ({
+  behandlingsReferanse,
+  stegData,
+  overgangArbeidEnabled,
+  overgangUføreEnabled,
+}: Props) => {
   const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
     hentBistandsbehovGrunnlag(behandlingsReferanse),
     hentMellomlagring(behandlingsReferanse, Behovstype.AVKLAR_BISTANDSBEHOV_KODE),
@@ -27,13 +36,25 @@ export const BistandsbehovMedDataFetching = async ({ behandlingsReferanse, stegD
     return null;
   }
 
-  return (
+  return isDev() ? (
+    <BistandsbehovNyVisning
+      grunnlag={grunnlag.data}
+      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+      behandlingVersjon={stegData.behandlingVersjon}
+      initialMellomlagretVurdering={initialMellomlagretVurdering}
+      typeBehandling={stegData.typeBehandling}
+      overgangArbeidEnabled={overgangArbeidEnabled}
+      overgangUføreEnabled={overgangUføreEnabled}
+    />
+  ) : (
     <Bistandsbehov
       grunnlag={grunnlag.data}
       readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       behandlingVersjon={stegData.behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
       typeBehandling={stegData.typeBehandling}
+      overgangArbeidEnabled={overgangArbeidEnabled}
+      overgangUføreEnabled={overgangUføreEnabled}
     />
   );
 };

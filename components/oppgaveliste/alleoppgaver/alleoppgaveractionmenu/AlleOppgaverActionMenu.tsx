@@ -5,15 +5,24 @@ import { byggKelvinURL } from 'lib/utils/request';
 import { Oppgave } from 'lib/types/oppgaveTypes';
 import { avreserverOppgaveClient, synkroniserOppgaveMedEnhetClient } from 'lib/oppgaveClientApi';
 import { isSuccess } from 'lib/utils/api';
-import { useState, useTransition } from 'react';
-import { isDev } from '../../../../lib/utils/environment';
+import { Dispatch, SetStateAction, useState, useTransition } from 'react';
+import { isProd } from 'lib/utils/environment';
 
 interface Props {
   oppgave: Oppgave;
   revalidateFunction: () => Promise<unknown>;
+  setVisSynkroniserEnhetModal: Dispatch<SetStateAction<boolean>>;
+  setOppgaverSomSkalTildeles: Dispatch<SetStateAction<number[]>>;
+  setVisTildelOppgaveModal: Dispatch<SetStateAction<boolean>>;
 }
 
-export const AlleOppgaverActionMenu = ({ oppgave, revalidateFunction }: Props) => {
+export const AlleOppgaverActionMenu = ({
+  setVisSynkroniserEnhetModal,
+  oppgave,
+  revalidateFunction,
+  setOppgaverSomSkalTildeles,
+  setVisTildelOppgaveModal,
+}: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const [isPendingFrigi, startTransitionFrigi] = useTransition();
@@ -32,12 +41,15 @@ export const AlleOppgaverActionMenu = ({ oppgave, revalidateFunction }: Props) =
   }
 
   async function synkroniserEnhetPåOppgave(oppgave: Oppgave) {
-    if (oppgave.id) {
-      const res = await synkroniserOppgaveMedEnhetClient(oppgave.id);
-      if (isSuccess(res)) {
-        await revalidateFunction();
+    startTransitionFrigi(async () => {
+      if (oppgave.id) {
+        const res = await synkroniserOppgaveMedEnhetClient(oppgave.id);
+        if (isSuccess(res)) {
+          await revalidateFunction();
+          setVisSynkroniserEnhetModal(true);
+        }
       }
-    }
+    });
   }
 
   return (
@@ -60,15 +72,13 @@ export const AlleOppgaverActionMenu = ({ oppgave, revalidateFunction }: Props) =
           >
             Åpne oppgave
           </ActionMenu.Item>
-          {isDev() && (
-            <ActionMenu.Item
-              onSelect={async () => {
-                await synkroniserEnhetPåOppgave(oppgave);
-              }}
-            >
-              Synkroniser enhet på oppgave
-            </ActionMenu.Item>
-          )}
+          <ActionMenu.Item
+            onSelect={async () => {
+              await synkroniserEnhetPåOppgave(oppgave);
+            }}
+          >
+            Sjekk kontortilhørighet
+          </ActionMenu.Item>
           {erReservert && (
             <ActionMenu.Item
               onSelect={async () => {
@@ -76,6 +86,16 @@ export const AlleOppgaverActionMenu = ({ oppgave, revalidateFunction }: Props) =
               }}
             >
               Frigi oppgave
+            </ActionMenu.Item>
+          )}
+          {!isProd() && (
+            <ActionMenu.Item
+              onSelect={() => {
+                oppgave.id && setOppgaverSomSkalTildeles([oppgave.id]);
+                setVisTildelOppgaveModal(true);
+              }}
+            >
+              Tildel oppgave
             </ActionMenu.Item>
           )}
         </ActionMenu.Content>

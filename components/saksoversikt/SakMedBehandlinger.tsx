@@ -5,47 +5,27 @@ import { SaksInfo } from 'lib/types/types';
 import { capitalize } from 'lodash';
 import { SakDevTools } from 'components/saksoversikt/SakDevTools';
 import { useRouter } from 'next/navigation';
-import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { BehandlingButtons } from 'components/saksoversikt/BehandlingButtons';
-import { mapTilÅrsakTilOpprettelseTilTekst } from 'lib/utils/oversettelser';
-import { isLocal, isProd } from 'lib/utils/environment';
-
-const formaterBehandlingType = (behandlingtype: string) => {
-  switch (behandlingtype) {
-    case 'ae0034':
-      return 'Førstegangsbehandling';
-    case 'ae0028':
-      return 'Revurdering';
-    case 'ae0058':
-      return 'Klage';
-    case 'svar-fra-andreinstans':
-      return 'Svar fra Nav Klageinstans';
-    case 'oppfølgingsbehandling':
-      return 'Oppfølgingsoppgave';
-    case 'aktivitetsplikt':
-      return 'Aktivitetsplikt $ 11-7';
-    case 'aktivitetsplikt11-9':
-      return 'Aktivitetsplikt $ 11-9';
-    default:
-      return `Ukjent behandlingtype (${behandlingtype})`;
-  }
-};
+import { isLocal } from 'lib/utils/environment';
+import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
+import {
+  Behandlingstype,
+  erAvsluttetFørstegangsbehandling,
+  erFørstegangsbehandling,
+  erTrukket,
+  formaterBehandlingType,
+  formatterÅrsakTilOpprettelseTilTekst,
+} from 'lib/utils/behandling';
 
 export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
   const router = useRouter();
 
-  const kanRevurdere = !!sak.behandlinger.filter(
-    (behandling) =>
-      behandling.type === 'ae0034' &&
-      behandling.status !== 'OPPRETTET' &&
-      !behandling.vurderingsbehov.includes('SØKNAD_TRUKKET')
-  ).length;
+  const kanRevurdere = sak.behandlinger.some(
+    (behandling) => erFørstegangsbehandling(behandling) && behandling.status !== 'OPPRETTET' && !erTrukket(behandling)
+  );
 
-  const kanRegistrerebrudd =
-    sak.behandlinger.filter(
-      (behandling) => behandling.type === 'ae0034' && !behandling.vurderingsbehov.includes('SØKNAD_TRUKKET')
-    ).length > 0;
+  const kanRegistrerebrudd = sak.behandlinger.some((behandling) => erAvsluttetFørstegangsbehandling(behandling));
 
   return (
     <VStack gap="8">
@@ -60,13 +40,13 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
           >
             Opprett klage
           </Button>
-          {kanRegistrerebrudd && !isProd() && (
+          {kanRegistrerebrudd && (
             <Button
               variant="secondary"
               size="small"
               onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/aktivitet`)}
             >
-              Registrer brudd på aktivitetsplikten
+              Vurder aktivitetsplikt
             </Button>
           )}
 
@@ -108,8 +88,8 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
           {sak?.behandlinger?.map((behandling) => (
             <Table.Row key={behandling.referanse}>
               <Table.DataCell>{formaterDatoMedTidspunktForFrontend(behandling.opprettet)}</Table.DataCell>
-              <Table.DataCell>{formaterBehandlingType(behandling.type)}</Table.DataCell>
-              <Table.DataCell>{mapTilÅrsakTilOpprettelseTilTekst(behandling.årsakTilOpprettelse)}</Table.DataCell>
+              <Table.DataCell>{formaterBehandlingType(behandling.type as Behandlingstype)}</Table.DataCell>
+              <Table.DataCell>{formatterÅrsakTilOpprettelseTilTekst(behandling.årsakTilOpprettelse)}</Table.DataCell>
               <Table.DataCell>{capitalize(behandling.status)}</Table.DataCell>
               <Table.DataCell>
                 {behandling.vurderingsbehov.map((behov) => formaterVurderingsbehov(behov)).join(', ')}

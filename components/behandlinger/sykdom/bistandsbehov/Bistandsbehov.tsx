@@ -13,13 +13,13 @@ import { Alert, BodyShort, Heading, Link, VStack } from '@navikt/ds-react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
 import { Veiledning } from 'components/veiledning/Veiledning';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 
 interface Props {
   behandlingVersjon: number;
@@ -27,6 +27,8 @@ interface Props {
   typeBehandling: TypeBehandling;
   grunnlag?: BistandsGrunnlag;
   initialMellomlagretVurdering?: MellomlagretVurdering;
+  overgangUføreEnabled?: Boolean,
+  overgangArbeidEnabled?: Boolean,
 }
 
 interface FormFields {
@@ -47,10 +49,15 @@ export const Bistandsbehov = ({
   readOnly,
   typeBehandling,
   initialMellomlagretVurdering,
+  overgangArbeidEnabled = false,
+  overgangUføreEnabled = false,
 }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_BISTANDSBEHOV');
+
+  const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
+    useMellomlagring(Behovstype.AVKLAR_BISTANDSBEHOV_KODE, initialMellomlagretVurdering);
 
   const vilkårsvurderingLabel = 'Vilkårsvurdering';
   const erBehovForAktivBehandlingLabel = 'a: Har brukeren behov for aktiv behandling?';
@@ -59,9 +66,6 @@ export const Bistandsbehov = ({
     'c: Kan brukeren anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra Nav?';
   const vurderAAPIOvergangTilUføreLabel = 'Har brukeren rett til AAP under behandling av krav om uføretrygd?';
   const vurderAAPIOvergangTilArbeidLabel = 'Har brukeren rett til AAP i perioden som arbeidssøker?';
-
-  const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
-    useMellomlagring(Behovstype.AVKLAR_BISTANDSBEHOV_KODE, initialMellomlagretVurdering);
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -124,7 +128,7 @@ export const Bistandsbehov = ({
         },
       },
     },
-    { readOnly: readOnly, shouldUnregister: true }
+    { readOnly, shouldUnregister: true }
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -150,7 +154,9 @@ export const Bistandsbehov = ({
           },
           referanse: behandlingsReferanse,
         },
-        () => nullstillMellomlagretVurdering()
+        () => {
+          nullstillMellomlagretVurdering();
+        }
       );
     })(event);
   };
@@ -171,7 +177,6 @@ export const Bistandsbehov = ({
       heading={'§ 11-6 Behov for bistand til å skaffe seg eller beholde arbeid'}
       steg={'VURDER_BISTANDSBEHOV'}
       onSubmit={handleSubmit}
-      visBekreftKnapp={!readOnly}
       isLoading={isLoading}
       status={status}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
@@ -185,6 +190,7 @@ export const Bistandsbehov = ({
         });
       }}
       mellomlagretVurdering={mellomlagretVurdering}
+      visBekreftKnapp={!readOnly}
       readOnly={readOnly}
     >
       {historiskeVurderinger && historiskeVurderinger.length > 0 && (
@@ -228,7 +234,9 @@ export const Bistandsbehov = ({
         form.watch('erBehovForArbeidsrettetTiltak') !== JaEllerNei.Ja && (
           <FormField form={form} formField={formFields.erBehovForAnnenOppfølging} horizontalRadio />
         )}
-      {(typeBehandling === 'Førstegangsbehandling' || (typeBehandling === 'Revurdering' && grunnlag?.harOppfylt11_5)) &&
+      {!overgangUføreEnabled &&
+        (typeBehandling === 'Førstegangsbehandling' ||
+          (typeBehandling === 'Revurdering' && grunnlag?.harOppfylt11_5)) &&
         bistandsbehovErIkkeOppfylt && (
           <VStack gap={'4'} as={'section'}>
             <Heading level={'3'} size="small">
@@ -243,20 +251,23 @@ export const Bistandsbehov = ({
             )}
           </VStack>
         )}
-      {typeBehandling === 'Revurdering' && !grunnlag?.harOppfylt11_5 && bistandsbehovErIkkeOppfylt && (
-        <VStack gap={'4'} as={'section'}>
-          <Heading level={'3'} size="small">
-            § 11-17 Arbeidsavklaringspenger i perioden som arbeidssøker
-          </Heading>
-          <FormField form={form} formField={formFields.overgangBegrunnelse} className="begrunnelse" />
-          <FormField form={form} formField={formFields.skalVurdereAapIOvergangTilArbeid} horizontalRadio />
-          {form.watch('skalVurdereAapIOvergangTilArbeid') === JaEllerNei.Ja && (
-            <Alert variant="warning">
-              Sett saken på vent og meld i fra til Team AAP at du har fått en § 11-17-sak.
-            </Alert>
-          )}
-        </VStack>
-      )}
+      {!overgangArbeidEnabled &&
+        typeBehandling === 'Revurdering' &&
+        !grunnlag?.harOppfylt11_5 &&
+        bistandsbehovErIkkeOppfylt && (
+          <VStack gap={'4'} as={'section'}>
+            <Heading level={'3'} size="small">
+              § 11-17 Arbeidsavklaringspenger i perioden som arbeidssøker
+            </Heading>
+            <FormField form={form} formField={formFields.overgangBegrunnelse} className="begrunnelse" />
+            <FormField form={form} formField={formFields.skalVurdereAapIOvergangTilArbeid} horizontalRadio />
+            {form.watch('skalVurdereAapIOvergangTilArbeid') === JaEllerNei.Ja && (
+              <Alert variant="warning">
+                Sett saken på vent og meld i fra til Team AAP at du har fått en § 11-17-sak.
+              </Alert>
+            )}
+          </VStack>
+        )}
     </VilkårskortMedFormOgMellomlagring>
   );
 

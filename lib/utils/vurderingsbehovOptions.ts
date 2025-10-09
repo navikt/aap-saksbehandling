@@ -1,6 +1,7 @@
 import { ValuePair } from 'components/form/FormField';
 import type { Vurderingsbehov } from '../types/types';
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
+import { isDev, isLocal } from 'lib/utils/environment';
 
 export const vurderingsbehovOptions: ValuePair<Vurderingsbehov>[] = [
   { label: 'Helhetlig vurdering', value: 'HELHETLIG_VURDERING' },
@@ -10,12 +11,17 @@ export const vurderingsbehovOptions: ValuePair<Vurderingsbehov>[] = [
   { label: 'Beregningstidspunkt', value: 'REVURDER_BEREGNING' },
   { label: 'Barnetillegg', value: 'BARNETILLEGG' },
   { label: 'Institusjonsopphold', value: 'INSTITUSJONSOPPHOLD' },
-  { label: 'Samordning og avregning', value: 'SAMORDNING_OG_AVREGNING' },
   { label: 'Yrkesskade', value: 'REVURDER_YRKESSKADE' },
   { label: 'Manuell inntekt', value: 'REVURDER_MANUELL_INNTEKT' },
+  { label: 'Student', value: 'REVURDER_STUDENT' },
   { label: 'Overstyr perioder uten overholdt meldeplikt', value: 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN' },
-  // TODO: For at denne skal fungere må det gjøres litt justering i data som sendes i melding.
-  // { label: 'Utenlandsopphold før søknadstidspunkt', value: 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT' },
+  // TODO: Fjerne miljøsjekk når testet OK
+  ...(isDev() || isLocal()
+    ? [
+        { label: 'Dødsfall bruker', value: 'DØDSFALL_BRUKER' } as ValuePair<Vurderingsbehov>,
+        { label: 'Dødsfall barn', value: 'DØDSFALL_BARN' } as ValuePair<Vurderingsbehov>,
+      ]
+    : []),
 ];
 
 export const alleVurderingsbehovOptions: ValuePair<Vurderingsbehov>[] = [
@@ -28,13 +34,14 @@ export const alleVurderingsbehovOptions: ValuePair<Vurderingsbehov>[] = [
   { value: 'MOTATT_KLAGE', label: formaterVurderingsbehov('MOTATT_KLAGE') },
   { value: 'SØKNAD_TRUKKET', label: formaterVurderingsbehov('SØKNAD_TRUKKET') },
   { value: 'KLAGE_TRUKKET', label: formaterVurderingsbehov('KLAGE_TRUKKET') },
-  { value: 'REVURDERING_KANSELLERT', label: formaterVurderingsbehov('REVURDERING_KANSELLERT') },
+  { value: 'REVURDERING_AVBRUTT', label: formaterVurderingsbehov('REVURDERING_AVBRUTT') },
   { value: 'REVURDER_MEDLEMSKAP', label: formaterVurderingsbehov('REVURDER_MEDLEMSKAP') },
   { value: 'REVURDER_SAMORDNING', label: formaterVurderingsbehov('REVURDER_SAMORDNING') },
   { value: 'REVURDER_LOVVALG', label: formaterVurderingsbehov('REVURDER_LOVVALG') },
   { value: 'REVURDER_BEREGNING', label: formaterVurderingsbehov('REVURDER_BEREGNING') },
   { value: 'REVURDER_YRKESSKADE', label: formaterVurderingsbehov('REVURDER_YRKESSKADE') },
   { value: 'REVURDER_MANUELL_INNTEKT', label: formaterVurderingsbehov('REVURDER_MANUELL_INNTEKT') },
+  { value: 'REVURDER_STUDENT', label: formaterVurderingsbehov('REVURDER_STUDENT') },
   { value: 'G_REGULERING', label: formaterVurderingsbehov('G_REGULERING') },
   { value: 'LOVVALG_OG_MEDLEMSKAP', label: formaterVurderingsbehov('LOVVALG_OG_MEDLEMSKAP') },
   { value: 'FORUTGAENDE_MEDLEMSKAP', label: formaterVurderingsbehov('FORUTGAENDE_MEDLEMSKAP') },

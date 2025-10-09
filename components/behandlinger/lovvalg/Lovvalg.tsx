@@ -10,12 +10,13 @@ import { LovvalgOgMedlemskapVedSøknadsTidspunktOverstyringsWrapper } from 'comp
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
-import { LovvalgOgMedlemskapVedSøknadstidspunkt } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapvedsøknadstidspunkt/LovvalgOgMedlemskapVedSøknadstidspunkt';
 import { kanViseOverstyrKnapp } from 'lib/utils/overstyring';
+import { LovvalgOgMedlemskapVedSøknadstidspunkt } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapvedsøknadstidspunkt/LovvalgOgMedlemskapVedSøknadstidspunkt';
 
 interface Props {
   behandlingsReferanse: string;
 }
+
 export const Lovvalg = async ({ behandlingsReferanse }: Props) => {
   const [flyt, vurderingAutomatisk, grunnlag, initialMellomlagretVurdering] = await Promise.all([
     hentFlyt(behandlingsReferanse),
@@ -31,6 +32,8 @@ export const Lovvalg = async ({ behandlingsReferanse }: Props) => {
   const vurderLovvalgSteg = getStegData('LOVVALG', 'VURDER_LOVVALG', flyt.data);
   const behandlingsVersjon = flyt.data.behandlingVersjon;
   const readOnly = vurderLovvalgSteg.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
+  const erOverstyrtTilbakeførtVurdering =
+    vurderingAutomatisk.data.kanBehandlesAutomatisk && grunnlag.data.vurdering == null;
 
   const visManuellVurdering = skalViseSteg(vurderLovvalgSteg, !!grunnlag.data.vurdering);
   const visOverstyrKnapp = kanViseOverstyrKnapp(
@@ -38,6 +41,12 @@ export const Lovvalg = async ({ behandlingsReferanse }: Props) => {
     readOnly,
     vurderLovvalgSteg.avklaringsbehov
   );
+
+  const behovstype =
+    flyt.data.visning.typeBehandling === 'Førstegangsbehandling' &&
+    (!!grunnlag?.data.vurdering?.overstyrt || erOverstyrtTilbakeførtVurdering)
+      ? Behovstype.MANUELL_OVERSTYRING_LOVVALG
+      : Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP;
 
   return (
     <GruppeSteg
@@ -55,14 +64,16 @@ export const Lovvalg = async ({ behandlingsReferanse }: Props) => {
         readOnly={readOnly}
         visOverstyrKnapp={visOverstyrKnapp}
         initialMellomlagretVurdering={initialMellomlagretVurdering}
+        behovstype={behovstype}
       >
         {visManuellVurdering && (
           <LovvalgOgMedlemskapVedSøknadstidspunkt
             behandlingVersjon={behandlingsVersjon}
             grunnlag={grunnlag.data}
             readOnly={readOnly}
-            overstyring={!!grunnlag?.data.vurdering?.overstyrt}
+            overstyring={!!grunnlag?.data.vurdering?.overstyrt || erOverstyrtTilbakeførtVurdering}
             initialMellomlagretVurdering={initialMellomlagretVurdering}
+            behovstype={behovstype}
           />
         )}
       </LovvalgOgMedlemskapVedSøknadsTidspunktOverstyringsWrapper>

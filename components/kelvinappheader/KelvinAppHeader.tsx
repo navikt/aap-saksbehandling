@@ -93,7 +93,7 @@ export const KelvinAppHeader = ({
         </HStack>
 
         <Spacer />
-        {(isLocal() || isDev()) && <AppSwitcher />}
+        <AppSwitcher />
         <Brukermeny brukerInformasjon={brukerInformasjon} roller={roller} />
       </InternalHeader>
 

@@ -8,9 +8,9 @@ import { useState } from 'react';
 import { Spinner } from 'components/felles/Spinner';
 import styles from './OpprettAktivitetsplikt.module.css';
 import { FormField } from 'components/form/FormField';
-import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { isSuccess } from 'lib/utils/api';
 import { useRouter } from 'next/navigation';
+import { isLocal } from 'lib/utils/environment';
 
 export interface AktivitetspliktbruddFormFields {
   aktivitetspliktBruddType: 'AKTIVITETSPLIKT_11_7';
@@ -41,10 +41,14 @@ export const OpprettAktivitetspliktBehandling = ({ sak }: { sak: SaksInfo }) => 
           label: '§ 11-7',
           value: 'AKTIVITETSPLIKT_11_7',
         },
-        {
-          label: '§ 11-9',
-          value: 'AKTIVITETSPLIKT_11_9',
-        },
+        ...(isLocal() // TODO: Oppdater når 11-9 skal i henholdsvis dev og prod
+          ? [
+              {
+                label: '§ 11-9',
+                value: 'AKTIVITETSPLIKT_11_9',
+              },
+            ]
+          : []),
       ],
       rules: { required: 'Velg ' },
     },
@@ -64,9 +68,9 @@ export const OpprettAktivitetspliktBehandling = ({ sak }: { sak: SaksInfo }) => 
         }}
       >
         <VStack gap="4">
-          <ExpansionCard aria-label="Opprett Aktivitetspliktbrudd" size={'small'} defaultOpen={true}>
+          <ExpansionCard aria-label="Opprett vurdering av aktivitetsplikten" size={'small'} defaultOpen={true}>
             <ExpansionCard.Header className={styles.header}>
-              <ExpansionCard.Title size="small">Opprett Aktivitetspliktbrudd</ExpansionCard.Title>
+              <ExpansionCard.Title size="small">Opprett vurdering av aktivitetsplikten</ExpansionCard.Title>
             </ExpansionCard.Header>
 
             <ExpansionCard.Content className={styles.content}>
@@ -83,18 +87,16 @@ export const OpprettAktivitetspliktBehandling = ({ sak }: { sak: SaksInfo }) => 
           )}
 
           <HStack gap="4">
+            <Button type="submit">Bekreft</Button>
             <Button
               as="a"
               href={`/saksbehandling/sak/${sak.saksnummer}`}
               rel="noreferrer noopener"
               size="small"
               variant="secondary"
-              icon={<ExternalLinkIcon aria-hidden />}
             >
               Avbryt
             </Button>
-
-            <Button type="submit">Opprett Aktivitetspliktbrudd</Button>
           </HStack>
         </VStack>
       </form>

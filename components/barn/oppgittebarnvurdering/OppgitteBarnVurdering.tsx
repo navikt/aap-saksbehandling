@@ -2,11 +2,11 @@ import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { BarnetilleggFormFields } from 'components/behandlinger/barnetillegg/barnetilleggvurdering/BarnetilleggVurdering';
 import { QuestionmarkDiamondIcon, TrashIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, Detail } from '@navikt/ds-react';
-import { OppgitteBarnVurderingFelter } from 'components/barn/oppgittebarnvurderingfelter/OppgitteBarnVurderingFelter';
 import { kalkulerAlder } from 'components/behandlinger/alder/Alder';
 import { JaEllerNei } from 'lib/utils/form';
 
 import styles from 'components/barn/oppgittebarnvurdering/OppgitteBarnVurdering.module.css';
+import { OppgitteBarnVurderingFelter } from 'components/barn/oppgittebarnvurderingfelter/OppgitteBarnVurderingFelter';
 
 interface Props {
   form: UseFormReturn<BarnetilleggFormFields>;
@@ -14,10 +14,19 @@ interface Props {
   ident: string | null | undefined;
   navn: string;
   fødselsdato: string | null | undefined;
+  harOppgittFosterforelderRelasjon: boolean;
   readOnly: boolean;
 }
 
-export const OppgitteBarnVurdering = ({ form, barnetilleggIndex, ident, navn, readOnly, fødselsdato }: Props) => {
+export const OppgitteBarnVurdering = ({
+  form,
+  barnetilleggIndex,
+  ident,
+  navn,
+  readOnly,
+  fødselsdato,
+  harOppgittFosterforelderRelasjon,
+}: Props) => {
   const {
     fields: vurderinger,
     remove,
@@ -30,7 +39,7 @@ export const OppgitteBarnVurdering = ({ form, barnetilleggIndex, ident, navn, re
   const kanLeggeTilNyVurdering =
     form
       .watch(`barnetilleggVurderinger.${barnetilleggIndex}`)
-      .vurderinger.every((vurdering) => vurdering.harForeldreAnsvar !== JaEllerNei.Nei) && !readOnly;
+      ?.vurderinger?.every((vurdering) => vurdering.harForeldreAnsvar !== JaEllerNei.Nei) && !readOnly;
 
   return (
     <section className={`flex-column`}>
@@ -39,7 +48,9 @@ export const OppgitteBarnVurdering = ({ form, barnetilleggIndex, ident, navn, re
           <QuestionmarkDiamondIcon title="manuelt barn ikon" fontSize={'2rem'} />
         </div>
         <div>
-          <Detail className={styles.detailgray}>Oppgitt fosterbarn</Detail>
+          <Detail className={styles.detailgray}>
+            {harOppgittFosterforelderRelasjon ? 'Oppgitt fosterbarn' : 'Oppgitt barn'}
+          </Detail>
           <BodyShort size={'small'}>
             {navn}, {ident} ({fødselsdato ? kalkulerAlder(new Date(fødselsdato)) : 'Ukjent fødselsdato'})
           </BodyShort>
@@ -57,6 +68,7 @@ export const OppgitteBarnVurdering = ({ form, barnetilleggIndex, ident, navn, re
                 barneTilleggIndex={barnetilleggIndex}
                 vurderingIndex={vurderingIndex}
                 fødselsdato={fødselsdato}
+                harOppgittFosterforelderRelasjon={harOppgittFosterforelderRelasjon}
               />
               {kanFjernePeriode && !readOnly && (
                 <Button

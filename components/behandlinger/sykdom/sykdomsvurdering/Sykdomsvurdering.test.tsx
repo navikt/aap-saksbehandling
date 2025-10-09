@@ -14,6 +14,7 @@ const user = userEvent.setup();
 const grunnlagUtenYrkesskade: SykdomsGrunnlag = {
   harTilgangTilÅSaksbehandle: true,
   skalVurdereYrkesskade: false,
+  erÅrsakssammenhengYrkesskade: false,
   opplysninger: { innhentedeYrkesskader: [], oppgittYrkesskadeISøknad: false },
   gjeldendeVedtatteSykdomsvurderinger: [],
   sykdomsvurderinger: [],
@@ -23,6 +24,7 @@ const grunnlagUtenYrkesskade: SykdomsGrunnlag = {
 const grunnlagMedYrkesskade: SykdomsGrunnlag = {
   harTilgangTilÅSaksbehandle: true,
   skalVurdereYrkesskade: true,
+  erÅrsakssammenhengYrkesskade: false,
   opplysninger: { innhentedeYrkesskader: [], oppgittYrkesskadeISøknad: true },
   gjeldendeVedtatteSykdomsvurderinger: [],
   sykdomsvurderinger: [],
@@ -77,7 +79,7 @@ describe('generelt', () => {
     await user.click(within(harBrukerNedsattArbeidsevneFelt).getByRole('radio', { name: 'Nei' }));
 
     const informasjonsvarsling = screen.getByText(
-      'brukeren vil få vedtak om at de ikke har rett på AAP. De kvalifiserer ikke for sykepengeerstatning.'
+      'Brukeren vil få vedtak om at de ikke har rett på AAP. De kvalifiserer ikke for sykepengeerstatning.'
     );
 
     expect(informasjonsvarsling).toBeVisible();
@@ -685,6 +687,7 @@ describe('revurdering', () => {
     const grunnlag: SykdomsGrunnlag = {
       harTilgangTilÅSaksbehandle: true,
       skalVurdereYrkesskade: false,
+      erÅrsakssammenhengYrkesskade: false,
       opplysninger: { innhentedeYrkesskader: [], oppgittYrkesskadeISøknad: false },
       gjeldendeVedtatteSykdomsvurderinger: [],
       historikkSykdomsvurderinger: [],
@@ -714,10 +717,19 @@ describe('revurdering', () => {
   });
 
   it('viser spørsmål om den nedsatte arbeidsevnen er minst 30 prosent når det skal vurderes mot yrkesskade', async () => {
+    const grunnlagMedYrkesskadeOgÅrsakssammenheng: SykdomsGrunnlag = {
+      harTilgangTilÅSaksbehandle: true,
+      skalVurdereYrkesskade: true,
+      erÅrsakssammenhengYrkesskade: true,
+      opplysninger: { innhentedeYrkesskader: [], oppgittYrkesskadeISøknad: true },
+      gjeldendeVedtatteSykdomsvurderinger: [],
+      sykdomsvurderinger: [],
+      historikkSykdomsvurderinger: [],
+    };
     const søknadstidspunkt = subDays(new Date(), 14);
     customRenderWithSøknadstidspunkt(
       <Sykdomsvurdering
-        grunnlag={grunnlagMedYrkesskade}
+        grunnlag={grunnlagMedYrkesskadeOgÅrsakssammenheng}
         readOnly={false}
         behandlingVersjon={0}
         typeBehandling={'Revurdering'}
@@ -847,6 +859,7 @@ describe('mellomlagring i sykdom', () => {
     historikkSykdomsvurderinger: [],
     opplysninger: { innhentedeYrkesskader: [], oppgittYrkesskadeISøknad: false },
     skalVurdereYrkesskade: false,
+    erÅrsakssammenhengYrkesskade: false,
     sykdomsvurderinger: [sykdomsvurdering],
   };
 
@@ -856,6 +869,7 @@ describe('mellomlagring i sykdom', () => {
     historikkSykdomsvurderinger: [],
     opplysninger: { innhentedeYrkesskader: [], oppgittYrkesskadeISøknad: false },
     skalVurdereYrkesskade: false,
+    erÅrsakssammenhengYrkesskade: false,
     sykdomsvurderinger: [],
   };
 

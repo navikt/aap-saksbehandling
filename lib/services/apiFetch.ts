@@ -37,10 +37,21 @@ export const apiFetch = async <ResponseType>(
   scope: string,
   method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' = 'GET',
   requestBody?: object,
-  tags?: string[]
+  tags?: string[],
+  cache?: RequestCache
 ): Promise<FetchResponse<ResponseType>> => {
   const oboToken = isLocal() ? await hentLocalToken(scope) : await getOnBefalfOfToken(scope, url);
-  return await fetchWithRetry<ResponseType>(url, method, oboToken, NUMBER_OF_RETRIES, requestBody, tags);
+  return await fetchWithRetry<ResponseType>(
+    url,
+    method,
+    oboToken,
+    NUMBER_OF_RETRIES,
+    requestBody,
+    tags,
+    undefined,
+    undefined,
+    cache
+  );
 };
 
 export const apiFetchNoMemoization = async <ResponseType>(
@@ -64,7 +75,8 @@ const fetchWithRetry = async <ResponseType>(
   requestBody?: object,
   tags?: string[],
   signal?: AbortSignal,
-  errors?: string[]
+  errors?: string[],
+  cache?: RequestCache
 ): Promise<FetchResponse<ResponseType>> => {
   if (!errors) errors = [];
 
@@ -72,7 +84,7 @@ const fetchWithRetry = async <ResponseType>(
     logError(`Unable to fetch ${url}: `, Error(errors.join('\n')));
   }
 
-  const response = await fetch(url, {
+  const options: RequestInit = {
     method,
     body: JSON.stringify(requestBody),
     headers: {
@@ -82,7 +94,13 @@ const fetchWithRetry = async <ResponseType>(
     },
     next: { revalidate: 0, tags },
     signal: signal,
-  });
+  };
+
+  if (cache) {
+    options.cache = cache;
+  }
+
+  const response = await fetch(url, options);
 
   if (response.status === 204) {
     return { type: 'SUCCESS', status: response.status, data: undefined as ResponseType };

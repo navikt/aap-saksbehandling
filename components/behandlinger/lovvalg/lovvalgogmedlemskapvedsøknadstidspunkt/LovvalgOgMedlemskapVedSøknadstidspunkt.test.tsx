@@ -1,10 +1,11 @@
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import { render, screen, within } from 'lib/test/CustomRender';
-import { LovvalgOgMedlemskapVedSøknadstidspunkt } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapvedsøknadstidspunkt/LovvalgOgMedlemskapVedSøknadstidspunkt';
 import { LovvalgMedlemskapGrunnlag, MellomlagretVurderingResponse } from 'lib/types/types';
 import { FetchResponse } from 'lib/utils/api';
 import createFetchMock from 'vitest-fetch-mock';
+import { LovvalgOgMedlemskapVedSøknadstidspunkt } from './LovvalgOgMedlemskapVedSøknadstidspunkt';
+import { Behovstype } from 'lib/utils/form';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
@@ -23,9 +24,24 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
           behandlingVersjon={0}
           grunnlag={grunnlagUtenVurdering}
           overstyring={false}
+          behovstype={Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP}
         />
       );
       const heading = screen.getByText('Lovvalg og medlemskap ved søknadstidspunkt');
+      expect(heading).toBeVisible();
+    });
+
+    it('Sender inn riktig behovstype gitt behandlingstype og overstyring i en revurdering', () => {
+      render(
+        <LovvalgOgMedlemskapVedSøknadstidspunkt
+          readOnly={false}
+          behandlingVersjon={0}
+          grunnlag={grunnlagUtenVurdering}
+          overstyring={true}
+          behovstype={Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP}
+        />
+      );
+      const heading = screen.getByText('Overstyring av lovvalg og medlemskap ved søknadstidspunkt');
       expect(heading).toBeVisible();
     });
 
@@ -36,6 +52,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
           behandlingVersjon={0}
           grunnlag={grunnlagUtenVurdering}
           overstyring={true}
+          behovstype={Behovstype.MANUELL_OVERSTYRING_LOVVALG}
         />
       );
       const heading = screen.getByText('Overstyring av lovvalg og medlemskap ved søknadstidspunkt');
@@ -51,6 +68,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
           behandlingVersjon={0}
           grunnlag={grunnlagUtenVurdering}
           overstyring={false}
+          behovstype={Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP}
         />
       );
       const begrunnelse = screen.getByRole('textbox', { name: 'Vurder riktig lovvalg ved søknadstidspunkt' });
@@ -64,6 +82,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
           behandlingVersjon={0}
           grunnlag={grunnlagUtenVurdering}
           overstyring={false}
+          behovstype={Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP}
         />
       );
       const felt = screen.getByRole('group', {
@@ -79,6 +98,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
           behandlingVersjon={0}
           grunnlag={grunnlagUtenVurdering}
           overstyring={false}
+          behovstype={Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP}
         />
       );
       const lovvalg = screen.getByRole('group', {
@@ -99,6 +119,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
           behandlingVersjon={0}
           grunnlag={grunnlagUtenVurdering}
           overstyring={false}
+          behovstype={Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP}
         />
       );
       const lovvalg = screen.getByRole('group', {
@@ -120,6 +141,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
           behandlingVersjon={0}
           grunnlag={grunnlagUtenVurdering}
           overstyring={false}
+          behovstype={Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP}
         />
       );
       await trykkPåBekreft();
@@ -134,6 +156,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
           behandlingVersjon={0}
           grunnlag={grunnlagUtenVurdering}
           overstyring={false}
+          behovstype={Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP}
         />
       );
       await trykkPåBekreft();
@@ -148,6 +171,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
           behandlingVersjon={0}
           grunnlag={grunnlagUtenVurdering}
           overstyring={false}
+          behovstype={Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP}
         />
       );
       const lovvalg = screen.getByRole('group', {
@@ -171,6 +195,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
           behandlingVersjon={0}
           grunnlag={grunnlagUtenVurdering}
           overstyring={false}
+          behovstype={Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP}
         />
       );
       const lovvalg = screen.getByRole('group', {
@@ -193,6 +218,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
           behandlingVersjon={0}
           grunnlag={grunnlagUtenVurdering}
           overstyring={false}
+          behovstype={Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP}
         />
       );
       const lovvalg = screen.getByRole('group', {
@@ -211,6 +237,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
           behandlingVersjon={0}
           grunnlag={grunnlagUtenVurdering}
           overstyring={false}
+          behovstype={Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP}
         />
       );
       const lovvalg = screen.getByRole('group', {
@@ -255,6 +282,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
           grunnlag={grunnlagUtenVurdering}
           overstyring={false}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+          behovstype={Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP}
         />
       );
       const tekst = screen.getByText('Utkast lagret 21.08.2025 12:00 (Jan T. Loven)');
@@ -268,6 +296,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
           behandlingVersjon={0}
           grunnlag={grunnlagUtenVurdering}
           overstyring={false}
+          behovstype={Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP}
         />
       );
 
@@ -298,6 +327,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
           grunnlag={grunnlagUtenVurdering}
           overstyring={false}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+          behovstype={Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP}
         />
       );
 
@@ -320,6 +350,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
           grunnlag={grunnlagMedVurdering}
           overstyring={false}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+          behovstype={Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP}
         />
       );
       const begrunnelseFelt = screen.getByRole('textbox', {
@@ -336,6 +367,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
           behandlingVersjon={0}
           grunnlag={grunnlagMedVurdering}
           overstyring={false}
+          behovstype={Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP}
         />
       );
 
@@ -354,6 +386,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
           grunnlag={grunnlagUtenVurdering}
           overstyring={false}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+          behovstype={Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP}
         />
       );
 
@@ -381,6 +414,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
           grunnlag={grunnlagMedVurdering}
           overstyring={false}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+          behovstype={Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP}
         />
       );
       await user.type(
@@ -409,6 +443,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
           grunnlag={grunnlagMedVurdering}
           overstyring={false}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+          behovstype={Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP}
         />
       );
 

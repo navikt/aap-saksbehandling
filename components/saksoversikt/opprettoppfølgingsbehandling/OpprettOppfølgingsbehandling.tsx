@@ -49,11 +49,14 @@ export const OpprettOppfølgingsBehandling = ({
   behandlingsreferanse,
   behovsType,
 }: Props) => {
+  const erOppfølgingsoppgaveForSamordningGradering = behovsType === Behovstype.AVKLAR_SAMORDNING_GRADERING;
   const defaultValues: DefaultValues = {
     datoForOppfølging: finnTidligsteVirkningstidspunkt ? finnTidligsteVirkningstidspunkt : '',
-    hvaSkalFølgesOpp: modalOnClose ? 'Vurder virkningstidspunkt etter samordning' : '',
-    hvemSkalFølgeOpp: modalOnClose ? 'NasjonalEnhet' : '',
-    reserverTilMeg: modalOnClose ? [] : ['RESERVER_TIL_MEG'],
+    hvaSkalFølgesOpp: erOppfølgingsoppgaveForSamordningGradering
+      ? 'Vurder om virkningstidspunkt etter samordning må endres'
+      : '',
+    hvemSkalFølgeOpp: erOppfølgingsoppgaveForSamordningGradering ? 'NasjonalEnhet' : '',
+    reserverTilMeg: erOppfølgingsoppgaveForSamordningGradering ? [] : ['RESERVER_TIL_MEG'],
   };
 
   const router = useRouter();
@@ -127,13 +130,20 @@ export const OpprettOppfølgingsBehandling = ({
       type: 'combobox',
       label: 'Hvem følger opp?',
       defaultValue: defaultValues.hvemSkalFølgeOpp,
-      options: [
-        {
-          label: 'NAY',
-          value: 'NasjonalEnhet',
-        },
-        { label: 'Lokalkontor', value: 'Lokalkontor' },
-      ],
+      options: erOppfølgingsoppgaveForSamordningGradering
+        ? [
+            {
+              label: 'NAY',
+              value: 'NasjonalEnhet',
+            },
+          ]
+        : [
+            {
+              label: 'NAY',
+              value: 'NasjonalEnhet',
+            },
+            { label: 'Lokalkontor', value: 'Lokalkontor' },
+          ],
       rules: { required: 'Må sette hvem som skal følge opp.' },
     },
     reserverTilMeg: {
@@ -164,7 +174,9 @@ export const OpprettOppfølgingsBehandling = ({
               <FormField form={form} formField={formFields.datoForOppfølging} size="medium" />
               <FormField form={form} formField={formFields.hvaSkalFølgesOpp} size="medium" />
               <FormField form={form} formField={formFields.hvemSkalFølgeOpp} size="medium" />
-              <FormField form={form} formField={formFields.reserverTilMeg} size="medium" />
+              {behovsType !== Behovstype.AVKLAR_SAMORDNING_GRADERING && (
+                <FormField form={form} formField={formFields.reserverTilMeg} size="medium" />
+              )}
             </VStack>
           </Box>
 

@@ -18,7 +18,7 @@ const grunnlag: YrkesskadeVurderingGrunnlag = {
       {
         ref: 'YRK',
         kilde: 'Yrkesskaderegisteret',
-        skadedato: '2024-10-10',
+        skadedato: null,
       },
     ],
     oppgittYrkesskadeISøknad: false,
@@ -82,6 +82,26 @@ describe('Yrkesskade', () => {
       await user.click(checkbox);
 
       expect(screen.getByRole('checkbox', { name: 'Tilknytt yrkesskade til vurdering' })).toBeChecked();
+    });
+
+    it('skal vise en feilmelding dersom yrkesskade er valgt, men skadedato mangler', async () => {
+      await velgJaPåÅrsakssammenheng();
+
+      const checkbox = screen.getByRole('checkbox', { name: 'Tilknytt yrkesskade til vurdering' });
+      await user.click(checkbox);
+
+      await velgBekreft();
+
+      const feilmelding = screen.getByText('Du må angi dato for yrkesskade');
+      expect(feilmelding).toBeVisible();
+    });
+
+    it('skal vise en feilmelding dersom det ikke er tilknyttet noen yrkesskade', async () => {
+      await velgJaPåÅrsakssammenheng();
+      await velgBekreft();
+
+      const feilmelding = screen.getByText('Du må velge minst én yrkesskade');
+      expect(feilmelding).toBeVisible();
     });
 
     it('skal være synlig dersom det finnes en årsakssammenheng', async () => {

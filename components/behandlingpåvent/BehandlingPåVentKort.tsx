@@ -51,30 +51,29 @@ export const BehandlingPåVentKort = ({ informasjon }: Props) => {
                 {errorMessage}
               </Alert>
             )}
-            {informasjon.grunn !== 'VENTER_PÅ_UTENLANDSK_VIDEREFORING_AVKLARING' && (
-              <Button
-                size={'medium'}
-                loading={isLoading}
-                onClick={async () => {
-                  setErrorMessage(undefined);
-                  if (!flyt?.behandlingVersjon) {
-                    setErrorMessage('Mangler behandlingsversjon');
-                    return;
-                  }
 
-                  løsBehovOgVentPåProsessering({
-                    behandlingVersjon: flyt.behandlingVersjon,
-                    behov: {
-                      behovstype: informasjon?.definisjon.kode,
-                    },
-                    referanse: behandlingsReferanse,
-                  });
-                }}
-                className={'fit-content'}
-              >
-                Åpne behandling
-              </Button>
-            )}
+            <Button
+              size={'medium'}
+              loading={isLoading}
+              onClick={async () => {
+                setErrorMessage(undefined);
+                if (!flyt?.behandlingVersjon) {
+                  setErrorMessage('Mangler behandlingsversjon');
+                  return;
+                }
+
+                løsBehovOgVentPåProsessering({
+                  behandlingVersjon: flyt.behandlingVersjon,
+                  behov: {
+                    behovstype: informasjon?.definisjon.kode,
+                  },
+                  referanse: behandlingsReferanse,
+                });
+              }}
+              className={'fit-content'}
+            >
+              Åpne behandling
+            </Button>
           </>
         )}
       </div>

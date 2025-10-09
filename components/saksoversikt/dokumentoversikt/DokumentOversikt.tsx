@@ -1,5 +1,5 @@
 import styles from './DokumentOversikt.module.css';
-import { Box, Heading, HStack, Table, VStack } from '@navikt/ds-react';
+import { Alert, Box, Heading, HStack, Table, VStack } from '@navikt/ds-react';
 import { Spinner } from 'components/felles/Spinner';
 import { isSuccess } from 'lib/utils/api';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
@@ -29,6 +29,7 @@ interface HentDokumentoversiktBrukerRequest {
 
 export const DokumentOversikt = ({ sak }: { sak: SaksInfo }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string>();
   const [journalposter, setJournalposter] = useState<Journalpost[]>([]);
 
   const hent = async (request: HentDokumentoversiktBrukerRequest) => {
@@ -37,7 +38,7 @@ export const DokumentOversikt = ({ sak }: { sak: SaksInfo }) => {
     await clientHentAlleDokumenterPåBruker(request)
       .then((res) => {
         if (isSuccess(res)) setJournalposter(res.data);
-        else throw Error(res.apiException.message);
+        else setError(res.apiException.message);
       })
       .finally(() => setIsLoading(false));
   };
@@ -87,6 +88,8 @@ export const DokumentOversikt = ({ sak }: { sak: SaksInfo }) => {
 
   if (isLoading) {
     return <Spinner label="Henter dokumenter" />;
+  } else if (error) {
+    return <Alert variant="error">{error || 'Ukjent feil oppsto'}</Alert>;
   }
 
   return (
@@ -118,7 +121,7 @@ export const DokumentOversikt = ({ sak }: { sak: SaksInfo }) => {
           </Table.Header>
 
           <Table.Body>
-            {journalposter.map((journalpost) => (
+            {journalposter?.map((journalpost) => (
               <Table.Row key={journalpost.journalpostId}>
                 <Table.DataCell textSize={'small'}>{journalpost.journalpostId}</Table.DataCell>
                 <Table.DataCell title={journalpost.tittel || ''} className={styles.ellipsis} textSize={'small'}>

@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render, screen } from 'lib/test/CustomRender';
 import { MellomlagretVurderingResponse, SamordningTjenestePensjonGrunnlag } from 'lib/types/types';
 import { SamordningTjenestePensjon } from 'components/behandlinger/samordning/samordningtjenestepensjon/SamordningTjenestePensjon';
@@ -6,6 +6,7 @@ import userEvent from '@testing-library/user-event';
 import { Behovstype } from 'lib/utils/form';
 import { FetchResponse } from 'lib/utils/api';
 import createFetchMock from 'vitest-fetch-mock';
+import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
@@ -38,6 +39,10 @@ const grunnlagMedVurdering: SamordningTjenestePensjonGrunnlag = {
     },
   ],
 };
+
+beforeEach(() => {
+  setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV' });
+});
 
 describe('Refusjon tjenestepensjon', () => {
   const user = userEvent.setup();

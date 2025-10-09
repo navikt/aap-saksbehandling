@@ -29,7 +29,7 @@ export const BehandlingPage = async ({ behandlingsReferanse, aktivGruppe }: Prop
     flytResponse.data.aktivGruppe != decodeURIComponent(aktivGruppe);
 
   return stegIkkeVurdertEnda ? (
-    <BodyShort>Dette steget er ikke vurdert enda.</BodyShort>
+    <BodyShort>Dette steget er ikke vurdert ennå.</BodyShort>
   ) : (
     <OppgaveKolonne
       className={styles.oppgavekolonne}

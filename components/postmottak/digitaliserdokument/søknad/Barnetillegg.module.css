@@ -1,0 +1,9 @@
+.barn {
+    background-color: #E6F0FF;
+    padding: 1rem;
+    border-radius: 0.5rem;
+}
+
+.input {
+    min-width: 20rem;
+}

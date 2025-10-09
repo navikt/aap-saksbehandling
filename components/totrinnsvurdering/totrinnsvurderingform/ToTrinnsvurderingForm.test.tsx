@@ -67,7 +67,7 @@ describe('totrinnsvurderingform', () => {
     const vurderPåNyttValg = screen.getByRole('radio', { name: /nei/i });
     await user.click(vurderPåNyttValg);
 
-    const begrunnelseFelt = await screen.getByRole('textbox', { name: /beskriv returårsak/i });
+    const begrunnelseFelt = await screen.getByRole('textbox', { name: /begrunnelse for retur/i });
     expect(begrunnelseFelt).toBeVisible();
   });
 
@@ -83,7 +83,7 @@ describe('totrinnsvurderingform', () => {
     const manglendeUtredning = screen.getByRole('checkbox', { name: /mangler i utredning før vilkårsvurderingen/i });
     const feilLovanvendelse = screen.getByRole('checkbox', { name: /feil resultat i vedtaket/i });
     const annet = screen.getByRole('checkbox', {
-      name: /annen returgrunn/i,
+      name: /annen returårsak/i,
     });
 
     expect(mangelfullBegrunnelse).toBeVisible();
@@ -130,7 +130,7 @@ describe('totrinnsvurderingform', () => {
     const knapp = screen.getByRole('button', { name: /bekreft/i });
     await user.click(knapp);
 
-    const errorMessage = await screen.getByText('Du må oppgi en grunn');
+    const errorMessage = await screen.getByText('Du må oppgi en årsak');
     expect(errorMessage).toBeVisible();
   });
 
@@ -142,13 +142,13 @@ describe('totrinnsvurderingform', () => {
     const vurderPåNyttValg = screen.getByRole('radio', { name: /nei/i });
     await user.click(vurderPåNyttValg);
 
-    const fritekstFelt = await screen.queryByRole('textbox', { name: /annen returgrunn/i });
+    const fritekstFelt = await screen.queryByRole('textbox', { name: /annen returårsak/i });
     expect(fritekstFelt).not.toBeInTheDocument();
 
-    const annetValg = screen.getByRole('checkbox', { name: /annen returgrunn/i });
+    const annetValg = screen.getByRole('checkbox', { name: /annen returårsak/i });
     await user.click(annetValg);
 
-    const fritekstFeltEtterAnnetErValgt = screen.getByRole('textbox', { name: /annen returgrunn/i });
+    const fritekstFeltEtterAnnetErValgt = screen.getByRole('textbox', { name: /annen returårsak/i });
     expect(fritekstFeltEtterAnnetErValgt).toBeVisible();
   });
 
@@ -160,19 +160,19 @@ describe('totrinnsvurderingform', () => {
     const vurderPåNyttValg = screen.getByRole('radio', { name: /nei/i });
     await user.click(vurderPåNyttValg);
 
-    const fritekstFelt = await screen.queryByRole('textbox', { name: /annen returgrunn/i });
+    const fritekstFelt = await screen.queryByRole('textbox', { name: /annen returårsak/i });
     expect(fritekstFelt).not.toBeInTheDocument();
 
-    const annetValg = screen.getByRole('checkbox', { name: /annen returgrunn/i });
+    const annetValg = screen.getByRole('checkbox', { name: /annen returårsak/i });
     await user.click(annetValg);
 
-    const fritekstFeltEtterAnnetErValgt = await screen.queryByRole('textbox', { name: /annen returgrunn/i });
+    const fritekstFeltEtterAnnetErValgt = await screen.queryByRole('textbox', { name: /annen returårsak/i });
     expect(fritekstFeltEtterAnnetErValgt).toBeVisible();
 
     const knapp = screen.getByRole('button', { name: /bekreft/i });
     await user.click(knapp);
 
-    const errorMessage = await screen.getByText('Du må skrive en grunn');
+    const errorMessage = await screen.getByText('Annen returårsak må fylles ut');
     expect(errorMessage).toBeVisible();
   });
 
@@ -184,7 +184,7 @@ describe('totrinnsvurderingform', () => {
     const vurderPåNyttValg = screen.getByRole('radio', { name: /nei/i });
     await user.click(vurderPåNyttValg);
 
-    const begrunnelse = screen.getByRole('textbox', { name: 'Beskriv returårsak' });
+    const begrunnelse = screen.getByRole('textbox', { name: 'Begrunnelse for retur' });
     await user.type(begrunnelse, 'En grunn');
     const mangelfullBegrunnelse = screen.getByRole('checkbox', { name: 'Mangler i vilkårsvurderingen' });
 
@@ -195,7 +195,7 @@ describe('totrinnsvurderingform', () => {
     expect(mangelfullBegrunnelse).not.toBeChecked();
 
     await user.click(screen.getByRole('button', { name: 'Bekreft' }));
-    expect(screen.getByText('Du må oppgi en grunn')).toBeVisible();
+    expect(screen.getByText('Du må oppgi en årsak')).toBeVisible();
   });
 
   it('skal vise en feilmelding dersom det ikke har blitt gjort noen totrinnsvurdering og man prøver å send inn vurderingene', async () => {
@@ -209,6 +209,79 @@ describe('totrinnsvurderingform', () => {
     await user.click(sendInnButton);
 
     expect(screen.getByText('Du må gjøre minst én vurdering.')).toBeInTheDocument();
+  });
+
+  it('skal vise en feilmelding dersom det er vurdering(er) som ikke er tatt stilling til og forrige vurdering er godkjent', async () => {
+    render(
+      <TotrinnsvurderingForm
+        grunnlag={{
+          ...grunnlagUtenVurdering,
+          vurderinger: [...grunnlagUtenVurdering.vurderinger, { definisjon: Behovstype.AVKLAR_OPPFØLGINGSBEHOV_NAY }],
+        }}
+        erKvalitetssikring={false}
+        link={link}
+        readOnly={false}
+      />
+    );
+    const radioJa = screen.getAllByRole('radio', { name: /ja/i });
+    await user.click(radioJa[0]);
+
+    const sendInnButton = screen.getByRole('button', { name: /bekreft/i });
+    await user.click(sendInnButton);
+
+    expect(
+      screen.getByText('Du må ta stilling til alle vilkårsvurderinger hvis ikke du underkjenner.')
+    ).toBeInTheDocument();
+  });
+
+  it('skal ikke vise vise en feilmelding dersom det er flere vurderinger og man underkjenner kun den første', async () => {
+    render(
+      <TotrinnsvurderingForm
+        grunnlag={{
+          ...grunnlagUtenVurdering,
+          vurderinger: [...grunnlagUtenVurdering.vurderinger, { definisjon: Behovstype.AVKLAR_OPPFØLGINGSBEHOV_NAY }],
+        }}
+        erKvalitetssikring={false}
+        link={link}
+        readOnly={false}
+      />
+    );
+    const radioJa = screen.getAllByRole('radio', { name: /nei/i });
+    await user.click(radioJa[0]);
+
+    const sendInnButton = screen.getByRole('button', { name: /bekreft/i });
+    await user.click(sendInnButton);
+
+    expect(screen.queryByText('Du må gjøre minst én vurdering.')).not.toBeInTheDocument();
+    expect(
+      screen.queryByText('Du må ta stilling til alle vilkårsvurderinger hvis ikke du underkjenner.')
+    ).not.toBeInTheDocument();
+  });
+});
+
+describe('Totrinnsvurdering av vedtaksbrev', () => {
+  const grunnlaget: FatteVedtakGrunnlag = {
+    harTilgangTilÅSaksbehandle: true,
+    vurderinger: [
+      {
+        definisjon: Behovstype.SYKDOMSVURDERING_BREV_KODE,
+      },
+    ],
+    historikk: [],
+  };
+  it('har en egen beskrivelse for kvalitetssikring av vedtaksbrev', () => {
+    render(<TotrinnsvurderingForm grunnlag={grunnlaget} erKvalitetssikring={true} link={link} readOnly={false} />);
+    expect(screen.getByText('Godkjenner du begrunnelsen?')).toBeVisible();
+  });
+
+  it('har egne grunner for retur', async () => {
+    render(<TotrinnsvurderingForm grunnlag={grunnlaget} erKvalitetssikring={true} link={link} readOnly={false} />);
+
+    await user.click(screen.getByRole('radio', { name: /Nei/ }));
+
+    expect(screen.getByRole('checkbox', { name: /Skrivefeil/ })).toBeVisible();
+    expect(screen.getByRole('checkbox', { name: /For detaljerte beskrivelser/ })).toBeVisible();
+    expect(screen.getByRole('checkbox', { name: /Ikke individuell og konkret nok/ })).toBeVisible();
   });
 });
 
@@ -262,7 +335,7 @@ describe('mellomlagring', () => {
     await user.click(vurderPåNyttValg);
 
     await user.type(
-      screen.getByRole('textbox', { name: 'Beskriv returårsak' }),
+      screen.getByRole('textbox', { name: 'Begrunnelse for retur' }),
       'Her har jeg begynt å skrive en vurdering..'
     );
     expect(screen.queryByText('Utkast lagret 21.08.2025 00:00 (Jan T. Loven)')).not.toBeInTheDocument();
@@ -314,7 +387,7 @@ describe('mellomlagring', () => {
     );
 
     const begrunnelseFelt = screen.getByRole('textbox', {
-      name: 'Beskriv returårsak',
+      name: 'Begrunnelse for retur',
     });
 
     expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er mellomlagret');
@@ -331,7 +404,7 @@ describe('mellomlagring', () => {
     );
 
     const begrunnelseFelt = screen.getByRole('textbox', {
-      name: 'Beskriv returårsak',
+      name: 'Begrunnelse for retur',
     });
 
     expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er bekreftet');
@@ -348,9 +421,9 @@ describe('mellomlagring', () => {
       />
     );
 
-    await user.type(screen.getByRole('textbox', { name: 'Beskriv returårsak' }), ' her er ekstra tekst');
+    await user.type(screen.getByRole('textbox', { name: 'Begrunnelse for retur' }), ' her er ekstra tekst');
 
-    expect(screen.getByRole('textbox', { name: 'Beskriv returårsak' })).toHaveValue(
+    expect(screen.getByRole('textbox', { name: 'Begrunnelse for retur' })).toHaveValue(
       'Dette er min vurdering som er mellomlagret her er ekstra tekst'
     );
 
@@ -358,7 +431,7 @@ describe('mellomlagring', () => {
 
     await user.click(slettKnapp);
 
-    expect(screen.queryByRole('textbox', { name: 'Beskriv returårsak' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('textbox', { name: 'Begrunnelse for retur' })).not.toBeInTheDocument();
   });
 
   it('Skal resette skjema til bekreftet vurdering dersom det finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
@@ -372,9 +445,9 @@ describe('mellomlagring', () => {
       />
     );
 
-    await user.type(screen.getByRole('textbox', { name: 'Beskriv returårsak' }), ' her er ekstra tekst');
+    await user.type(screen.getByRole('textbox', { name: 'Begrunnelse for retur' }), ' her er ekstra tekst');
 
-    expect(screen.getByRole('textbox', { name: 'Beskriv returårsak' })).toHaveValue(
+    expect(screen.getByRole('textbox', { name: 'Begrunnelse for retur' })).toHaveValue(
       'Dette er min vurdering som er mellomlagret her er ekstra tekst'
     );
 
@@ -382,7 +455,7 @@ describe('mellomlagring', () => {
 
     await user.click(slettKnapp);
 
-    expect(screen.getByRole('textbox', { name: 'Beskriv returårsak' })).toHaveValue(
+    expect(screen.getByRole('textbox', { name: 'Begrunnelse for retur' })).toHaveValue(
       'Dette er min vurdering som er bekreftet'
     );
   });

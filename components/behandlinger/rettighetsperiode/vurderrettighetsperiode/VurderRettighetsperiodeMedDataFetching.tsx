@@ -6,18 +6,14 @@ import {
   hentRettighetsperiodeGrunnlag,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { Behovstype } from 'lib/utils/form';
+import { skalViseSteg, StegData } from 'lib/utils/steg';
 
 interface Props {
   behandlingsreferanse: string;
-  readOnly: boolean;
-  behandlingVersjon: number;
+  stegData: StegData;
 }
 
-export const VurderRettighetsperiodeMedDataFetching = async ({
-  readOnly,
-  behandlingVersjon,
-  behandlingsreferanse,
-}: Props) => {
+export const VurderRettighetsperiodeMedDataFetching = async ({ behandlingsreferanse, stegData }: Props) => {
   const [rettighetsperiodeGrunnlag, initialMellomlagretVurdering] = await Promise.all([
     hentRettighetsperiodeGrunnlag(behandlingsreferanse),
     hentMellomlagring(behandlingsreferanse, Behovstype.VURDER_RETTIGHETSPERIODE),
@@ -27,11 +23,15 @@ export const VurderRettighetsperiodeMedDataFetching = async ({
     return <ApiException apiResponses={[rettighetsperiodeGrunnlag]} />;
   }
 
+  if (!skalViseSteg(stegData, rettighetsperiodeGrunnlag.data.vurdering != null)) {
+    return null;
+  }
+
   return (
     <VurderRettighetsperiode
       grunnlag={rettighetsperiodeGrunnlag.data}
-      readOnly={readOnly || !rettighetsperiodeGrunnlag.data.harTilgangTilÅSaksbehandle}
-      behandlingVersjon={behandlingVersjon}
+      readOnly={stegData.readOnly || !rettighetsperiodeGrunnlag.data.harTilgangTilÅSaksbehandle}
+      behandlingVersjon={stegData.behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
     />
   );

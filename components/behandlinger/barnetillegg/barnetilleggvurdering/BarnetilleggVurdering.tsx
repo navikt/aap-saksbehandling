@@ -9,14 +9,12 @@ import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useFieldArray } from 'react-hook-form';
 import { DATO_FORMATER, formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { parse } from 'date-fns';
-import { OppgitteBarnVurdering } from 'components/barn/oppgittebarnvurdering/OppgitteBarnVurdering';
 import { FormEvent } from 'react';
 import styles from './BarnetilleggVurdering.module.css';
 import { useConfigForm } from 'components/form/FormHook';
-import { isProd } from 'lib/utils/environment';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
-import { OppgitteBarnVurderingV2 } from 'components/barn/oppgittebarnvurderingV2/OppgitteBarnVurderingV2';
+import { OppgitteBarnVurdering } from 'components/barn/oppgittebarnvurdering/OppgitteBarnVurdering';
 
 interface Props {
   behandlingsversjon: number;
@@ -67,12 +65,15 @@ export const BarnetilleggVurdering = ({
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag.vurderteBarn, grunnlag.barnSomTrengerVurdering, behandlingPersonInfo);
 
-  const { form } = useConfigForm<BarnetilleggFormFields>({
-    barnetilleggVurderinger: {
-      type: 'fieldArray',
-      defaultValue: defaultValue.barnetilleggVurderinger,
+  const { form } = useConfigForm<BarnetilleggFormFields>(
+    {
+      barnetilleggVurderinger: {
+        type: 'fieldArray',
+        defaultValue: defaultValue.barnetilleggVurderinger,
+      },
     },
-  });
+    {}
+  );
 
   const { fields: barnetilleggVurderinger } = useFieldArray({
     control: form.control,
@@ -97,7 +98,10 @@ export const BarnetilleggVurdering = ({
                       begrunnelse: vurdering.begrunnelse,
                       harForeldreAnsvar: vurdering.harForeldreAnsvar === JaEllerNei.Ja,
                       fraDato: getFraDato(vurdering.fraDato),
-                      erFosterForelder: vurdering.erFosterforelder === JaEllerNei.Ja,
+                      erFosterForelder:
+                        vurdering.erFosterforelder === JaEllerNei.Ja || vurdering.erFosterforelder === JaEllerNei.Nei
+                          ? vurdering.erFosterforelder === JaEllerNei.Ja
+                          : null,
                     };
                   }),
                 };
@@ -154,18 +158,7 @@ export const BarnetilleggVurdering = ({
             </div>
 
             {barnetilleggVurderinger.map((vurdering, barnetilleggIndex) => {
-              return !isProd() ? (
-                <OppgitteBarnVurderingV2
-                  key={vurdering.id}
-                  form={form}
-                  barnetilleggIndex={barnetilleggIndex}
-                  ident={vurdering.ident}
-                  fødselsdato={vurdering.fødselsdato}
-                  navn={vurdering.navn || behandlingPersonInfo?.info[vurdering.ident || 'null'] || 'Ukjent'}
-                  harOppgittFosterforelderRelasjon={vurdering.oppgittForelderRelasjon === 'FOSTERFORELDER'}
-                  readOnly={readOnly}
-                />
-              ) : (
+              return (
                 <OppgitteBarnVurdering
                   key={vurdering.id}
                   form={form}
@@ -173,6 +166,7 @@ export const BarnetilleggVurdering = ({
                   ident={vurdering.ident}
                   fødselsdato={vurdering.fødselsdato}
                   navn={vurdering.navn || behandlingPersonInfo?.info[vurdering.ident || 'null'] || 'Ukjent'}
+                  harOppgittFosterforelderRelasjon={vurdering.oppgittForelderRelasjon === 'FOSTERFORELDER'}
                   readOnly={readOnly}
                 />
               );
@@ -210,6 +204,7 @@ function mapVurderingToDraftFormFields(
     return {
       ident: barn.ident,
       navn: barn.ident ? behandlingPersonInfo?.info[barn.ident] : navn,
+      oppgittForelderRelasjon: barn.oppgittForeldreRelasjon,
       fødselsdato: barn.fødselsdato,
       vurderinger: barn.vurderinger.map((value) => {
         return {

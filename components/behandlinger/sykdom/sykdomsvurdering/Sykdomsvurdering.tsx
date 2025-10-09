@@ -12,7 +12,7 @@ import {
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent, useCallback } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
-import { Alert, Link } from '@navikt/ds-react';
+import { Link } from '@navikt/ds-react';
 import { DiagnoseSystem, diagnoseSøker } from 'lib/diagnosesøker/DiagnoseSøker';
 import { formaterDatoForBackend, formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
 import { isBefore, parse, startOfDay } from 'date-fns';
@@ -31,10 +31,10 @@ import { Diagnosesøk } from 'components/behandlinger/sykdom/sykdomsvurdering/Di
 import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { useSak } from 'hooks/SakHook';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 
 export interface SykdomsvurderingFormFields {
   begrunnelse: string;
@@ -209,7 +209,7 @@ export const Sykdomsvurdering = ({
         defaultValue: defaultValues?.yrkesskadeBegrunnelse,
       },
     },
-    { shouldUnregister: false, readOnly: readOnly }
+    { shouldUnregister: false, readOnly }
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -248,7 +248,9 @@ export const Sykdomsvurdering = ({
           },
           referanse: behandlingsReferanse,
         },
-        () => nullstillMellomlagretVurdering()
+        () => {
+          nullstillMellomlagretVurdering();
+        }
       );
     })(event);
   };
@@ -268,6 +270,7 @@ export const Sykdomsvurdering = ({
   }, [behandlingErRevurdering, sak, vurderingenGjelderFra]);
 
   const historiskeVurderinger = grunnlag.historikkSykdomsvurderinger;
+
   return (
     <VilkårskortMedFormOgMellomlagring
       heading={'§ 11-5 Nedsatt arbeidsevne og krav til årsakssammenheng'}
@@ -275,9 +278,9 @@ export const Sykdomsvurdering = ({
       vilkårTilhørerNavKontor={true}
       onSubmit={handleSubmit}
       status={status}
+      visBekreftKnapp={!readOnly}
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      visBekreftKnapp={!readOnly}
       vurdertAvAnsatt={sykdomsvurdering?.vurdertAv}
       knappTekst={'Bekreft'}
       kvalitetssikretAv={grunnlag.kvalitetssikretAv}
@@ -301,11 +304,6 @@ export const Sykdomsvurdering = ({
           getVurdertAvIdent={(v) => v.vurdertAv.ident}
           getVurdertDato={(v) => v.vurdertAv.dato}
         />
-      )}
-      {grunnlag.skalVurdereYrkesskade && (
-        <Alert variant={'warning'} size={'small'}>
-          Det har blitt funnet én eller flere yrkesskader på brukeren
-        </Alert>
       )}
       <Link href="https://lovdata.no/nav/rundskriv/r11-00#KAPITTEL_7-1" target="_blank">
         Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-5 (lovdata.no)
@@ -331,7 +329,7 @@ export const Sykdomsvurdering = ({
         <Revurdering
           form={form}
           formFields={formFields}
-          skalVurdereYrkesskade={grunnlag.skalVurdereYrkesskade}
+          erÅrsakssammenhengYrkesskade={grunnlag.erÅrsakssammenhengYrkesskade}
           diagnosesøker={
             <Diagnosesøk
               form={form}

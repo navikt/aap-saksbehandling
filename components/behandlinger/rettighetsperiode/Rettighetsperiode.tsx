@@ -4,6 +4,7 @@ import { VurderRettighetsperiodeMedDataFetching } from 'components/behandlinger/
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
+import { getStegData } from 'lib/utils/steg';
 
 interface Props {
   behandlingsReferanse: string;
@@ -15,6 +16,8 @@ export const Rettighetsperiode = async ({ behandlingsReferanse }: Props) => {
     return <ApiException apiResponses={[flyt]} />;
   }
 
+  const rettighetsperiodeSteg = getStegData('RETTIGHETSPERIODE', 'VURDER_RETTIGHETSPERIODE', flyt.data);
+
   return (
     <GruppeSteg
       behandlingVersjon={flyt.data.behandlingVersjon}
@@ -23,13 +26,14 @@ export const Rettighetsperiode = async ({ behandlingsReferanse }: Props) => {
       visning={flyt.data.visning}
       aktivtSteg={flyt.data.aktivtSteg}
     >
-      <StegSuspense>
-        <VurderRettighetsperiodeMedDataFetching
-          behandlingsreferanse={behandlingsReferanse}
-          readOnly={flyt.data.visning.saksbehandlerReadOnly}
-          behandlingVersjon={flyt.data.behandlingVersjon}
-        />
-      </StegSuspense>
+      {rettighetsperiodeSteg.skalViseSteg && (
+        <StegSuspense>
+          <VurderRettighetsperiodeMedDataFetching
+            behandlingsreferanse={behandlingsReferanse}
+            stegData={rettighetsperiodeSteg}
+          />
+        </StegSuspense>
+      )}
     </GruppeSteg>
   );
 };

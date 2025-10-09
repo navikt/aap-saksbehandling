@@ -45,7 +45,7 @@ export const BrevKortMedDataFetching = async ({
   const { bruker, fullmektig } = mapGrunnlagTilMottakere(mottaker, fullmektigGrunnlag.data.vurdering);
 
   return (
-    <VilkårsKort heading={brevtekst} steg="BREV" defaultOpen={true}>
+    <VilkårsKort heading={brevtekst} steg="BREV" defaultOpen={true} aktivMarkering={!readOnly}>
       {brev && (
         <SkriveBrev
           status={status}

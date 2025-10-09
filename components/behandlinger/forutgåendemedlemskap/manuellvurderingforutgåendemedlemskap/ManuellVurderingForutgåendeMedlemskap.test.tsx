@@ -1,10 +1,11 @@
 import { userEvent } from '@testing-library/user-event';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render, screen, within } from 'lib/test/CustomRender';
 import { ForutgåendeMedlemskapGrunnlag, MellomlagretVurderingResponse } from 'lib/types/types';
 import { ManuellVurderingForutgåendeMedlemskap } from 'components/behandlinger/forutgåendemedlemskap/manuellvurderingforutgåendemedlemskap/ManuellVurderingForutgåendeMedlemskap';
 import { FetchResponse } from 'lib/utils/api';
 import createFetchMock from 'vitest-fetch-mock';
+import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
@@ -14,6 +15,10 @@ const grunnlagUtenVurdering: ForutgåendeMedlemskapGrunnlag = {
   harTilgangTilÅSaksbehandle: true,
   historiskeManuelleVurderinger: [],
 };
+
+beforeEach(() => {
+  setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'VURDER_MEDLEMSKAP' });
+});
 
 describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
   it('Skal ha en overskrift', () => {
@@ -64,6 +69,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
         grunnlag={grunnlagUtenVurdering}
       />
     );
+    screen.logTestingPlaygroundURL();
     const felt = screen.getByRole('group', {
       name: 'Har brukeren fem års forutgående medlemskap i folketrygden jf. § 11-2?',
     });

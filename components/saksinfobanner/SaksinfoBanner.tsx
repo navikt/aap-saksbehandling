@@ -1,6 +1,6 @@
 'use client';
 
-import { BodyShort, Button, CopyButton, Dropdown, HStack, Label, Link } from '@navikt/ds-react';
+import { BodyShort, Button, CopyButton, Dropdown, HStack, Label, Link, Tag } from '@navikt/ds-react';
 import { DetaljertBehandling, FlytGruppe, FlytVisning, SakPersoninfo, SaksInfo as SaksInfoType } from 'lib/types/types';
 import { useState } from 'react';
 import { SettBehandllingPåVentModal } from 'components/settbehandlingpåventmodal/SettBehandllingPåVentModal';
@@ -22,8 +22,9 @@ import { MarkeringType, Oppgave } from 'lib/types/oppgaveTypes';
 import { NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType } from '@navikt/aap-oppgave-typescript-types';
 import { MarkeringInfoboks } from 'components/markeringinfoboks/MarkeringInfoboks';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
-import { KansellerRevurderingModal } from 'components/saksinfobanner/kansellerrevurderingmodal/KansellerRevurderingModal';
+import { AvbrytRevurderingModal } from 'components/saksinfobanner/avbrytrevurderingmodal/AvbrytRevurderingModal';
 import { isProd } from 'lib/utils/environment';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 
 interface Props {
   personInformasjon: SakPersoninfo;
@@ -35,6 +36,7 @@ interface Props {
   brukerKanSaksbehandle?: boolean;
   flyt?: FlytGruppe[];
   visning?: FlytVisning;
+  brukerErBeslutter?: boolean;
 }
 
 export const SaksinfoBanner = ({
@@ -47,20 +49,21 @@ export const SaksinfoBanner = ({
   brukerKanSaksbehandle,
   flyt,
   visning,
+  brukerErBeslutter,
 }: Props) => {
   const [settBehandlingPåVentmodalIsOpen, setSettBehandlingPåVentmodalIsOpen] = useState(false);
   const [visTrekkSøknadModal, settVisTrekkSøknadModal] = useState(false);
   const [visTrekkKlageModal, settVisTrekkKlageModal] = useState(false);
-  const [visKansellerRevurderingModal, settVisKansellerRevurderingModal] = useState(false);
+  const [visAvbrytRevurderingModal, settVisAvbrytRevurderingModal] = useState(false);
   const [visVurderRettighetsperiodeModal, settVisVurderRettighetsperiodeModal] = useState(false);
   const [visHarUlesteDokumenter, settVisHarUlesteDokumenter] = useState(!!oppgave?.harUlesteDokumenter);
   const [aktivMarkeringType, settAktivMarkeringType] = useState<MarkeringType | null>(null);
   const erReservertAvInnloggetBruker = brukerInformasjon?.NAVident === oppgave?.reservertAv;
 
   const søknadStegGruppe = flyt && flyt.find((f) => f.stegGruppe === 'SØKNAD');
-  const kansellerRevurderingSteg = flyt && flyt.find((f) => f.stegGruppe === 'KANSELLER_REVURDERING');
+  const avbrytRevurderingSteg = flyt && flyt.find((f) => f.stegGruppe === 'AVBRYT_REVURDERING');
   const behandlerEnSøknadSomSkalTrekkes = søknadStegGruppe && søknadStegGruppe.skalVises;
-  const behandlerRevurderingSomSkalKanselleres = kansellerRevurderingSteg && kansellerRevurderingSteg.skalVises;
+  const behandlerRevurderingSomSkalAvbrytes = avbrytRevurderingSteg && avbrytRevurderingSteg.skalVises;
 
   const trekkKlageSteg = flyt && flyt.find((f) => f.stegGruppe === 'TREKK_KLAGE');
   const harAlleredeValgtTrekkKlage = trekkKlageSteg && trekkKlageSteg.skalVises;
@@ -79,9 +82,11 @@ export const SaksinfoBanner = ({
     behandlingErFørstegangsbehandling &&
     behandlingErIkkeAvsluttet;
 
-  const visValgForÅKansellereRevurdering =
+  const visValgForÅAvbryteRevurdering =
     !isProd() &&
-    !behandlerRevurderingSomSkalKanselleres &&
+    behandlingErIkkeIverksatt &&
+    brukerErBeslutter &&
+    !behandlerRevurderingSomSkalAvbrytes &&
     brukerKanSaksbehandle &&
     behandlingErRevurdering &&
     behandlingErIkkeAvsluttet;
@@ -105,7 +110,7 @@ export const SaksinfoBanner = ({
     } else if (sak.søknadErTrukket) {
       return { status: 'TRUKKET', label: 'Trukket' };
     } else if (visning?.resultatKode) {
-      return { status: 'KANSELLERT', label: 'Kansellert' };
+      return { status: 'AVBRUTT', label: 'Avbrutt' };
     }
   };
 
@@ -130,6 +135,12 @@ export const SaksinfoBanner = ({
             iconPosition="right"
             className={styles.copybutton}
           />
+
+          {personInformasjon.dødsdato && (
+            <Tag variant="alt1" size="small">
+              &#10013; {formaterDatoForFrontend(personInformasjon.dødsdato)}
+            </Tag>
+          )}
 
           {erPåBehandlingSiden && behandling && (
             <>
@@ -191,9 +202,9 @@ export const SaksinfoBanner = ({
                       Trekk søknad
                     </Dropdown.Menu.GroupedList.Item>
                   )}
-                  {visValgForÅKansellereRevurdering && (
-                    <Dropdown.Menu.GroupedList.Item onClick={() => settVisKansellerRevurderingModal(true)}>
-                      Kanseller revurdering
+                  {visValgForÅAvbryteRevurdering && (
+                    <Dropdown.Menu.GroupedList.Item onClick={() => settVisAvbrytRevurderingModal(true)}>
+                      Avbryt behandling
                     </Dropdown.Menu.GroupedList.Item>
                   )}
                   {visValgForÅTrekkeKlage && (
@@ -235,11 +246,12 @@ export const SaksinfoBanner = ({
               saksnummer={sak.saksnummer}
               behandlingReferanse={behandling?.referanse!}
             />
-            <KansellerRevurderingModal
-              isOpen={visKansellerRevurderingModal}
-              onClose={() => settVisKansellerRevurderingModal(false)}
+            <AvbrytRevurderingModal
+              isOpen={visAvbrytRevurderingModal}
+              onClose={() => settVisAvbrytRevurderingModal(false)}
               saksnummer={sak.saksnummer}
               behandlingReferanse={behandlingsreferanse}
+              navIdent={brukerInformasjon?.NAVident ? brukerInformasjon.NAVident : null}
             />
             <VurderRettighetsperiodeModal
               isOpen={visVurderRettighetsperiodeModal}

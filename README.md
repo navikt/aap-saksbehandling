@@ -63,7 +63,7 @@ Dette repoet bruker GitHub Copilot til å generere kode.
 
 Spørsmål knyttet til koden eller prosjektet kan stilles som issues her på GitHub
 
-# For NAV-ansatte
+# For Nav-ansatte
 
 ---
 

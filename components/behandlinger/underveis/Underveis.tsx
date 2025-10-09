@@ -5,7 +5,6 @@ import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { IkkeOppfyltMeldepliktMedDataFetching } from 'components/behandlinger/underveis/ikkeoppfyltmeldeplikt/IkkeOppfyltMeldepliktMedDataFetching';
-import { isProd } from 'lib/utils/environment';
 
 interface Props {
   behandlingsreferanse: string;
@@ -25,15 +24,13 @@ export const Underveis = async ({ behandlingsreferanse }: Props) => {
       visning={flyt.data.visning}
       aktivtSteg={flyt.data.aktivtSteg}
     >
-      {!isProd() && (
-        <StegSuspense>
-          <IkkeOppfyltMeldepliktMedDataFetching
-            behandlingsreferanse={behandlingsreferanse}
-            behandlingVersjon={flyt.data.behandlingVersjon}
-            readOnly={flyt.data.visning.saksbehandlerReadOnly}
-          />
-        </StegSuspense>
-      )}
+      <StegSuspense>
+        <IkkeOppfyltMeldepliktMedDataFetching
+          behandlingsreferanse={behandlingsreferanse}
+          behandlingVersjon={flyt.data.behandlingVersjon}
+          readOnly={flyt.data.visning.saksbehandlerReadOnly}
+        />
+      </StegSuspense>
       <StegSuspense>
         <UnderveisgrunnlagMedDataFetching
           readOnly={flyt.data.visning.saksbehandlerReadOnly}
