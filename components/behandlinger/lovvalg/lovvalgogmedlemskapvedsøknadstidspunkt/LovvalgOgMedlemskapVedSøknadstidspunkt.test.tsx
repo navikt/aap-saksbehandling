@@ -31,6 +31,20 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
       expect(heading).toBeVisible();
     });
 
+    it('Sender inn riktig behovstype gitt behandlingstype og overstyring i en revurdering', () => {
+      render(
+        <LovvalgOgMedlemskapVedSøknadstidspunkt
+          readOnly={false}
+          behandlingVersjon={0}
+          grunnlag={grunnlagUtenVurdering}
+          overstyring={true}
+          behovstype={Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP}
+        />
+      );
+      const heading = screen.getByText('Overstyring av lovvalg og medlemskap ved søknadstidspunkt');
+      expect(heading).toBeVisible();
+    });
+
     it('Skal ha riktig overskrift ved overstyring', () => {
       render(
         <LovvalgOgMedlemskapVedSøknadstidspunkt
