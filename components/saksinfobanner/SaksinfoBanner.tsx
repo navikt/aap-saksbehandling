@@ -23,7 +23,6 @@ import { NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType } from '@navikt/aap-o
 import { MarkeringInfoboks } from 'components/markeringinfoboks/MarkeringInfoboks';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { AvbrytRevurderingModal } from 'components/saksinfobanner/avbrytrevurderingmodal/AvbrytRevurderingModal';
-import { isProd } from 'lib/utils/environment';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 
 interface Props {
@@ -83,7 +82,6 @@ export const SaksinfoBanner = ({
     behandlingErIkkeAvsluttet;
 
   const visValgForÅAvbryteRevurdering =
-    !isProd() &&
     behandlingErIkkeIverksatt &&
     brukerErBeslutter &&
     !behandlerRevurderingSomSkalAvbrytes &&
