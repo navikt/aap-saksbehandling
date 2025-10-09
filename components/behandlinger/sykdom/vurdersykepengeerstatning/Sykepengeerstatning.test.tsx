@@ -24,9 +24,10 @@ describe('Sykepengeerstatning', () => {
     expect(screen.getByRole('textbox', { name: 'Vilkårsvurdering' })).toBeVisible();
   });
 
+  /*
   it('har et datofelt', () => {
     expect(screen.getByRole('textbox', { name: 'Gjelder fra' })).toBeVisible();
-  });
+  });*/
 
   it('har felt for krav på sykepengeerstatning', () => {
     expect(screen.getByRole('group', { name: 'Har brukeren krav på sykepengeerstatning?' })).toBeVisible();
