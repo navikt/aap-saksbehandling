@@ -1,7 +1,12 @@
 'use client';
 
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
-import { MellomlagretVurdering, SykepengeerstatningGrunnlag, SykepengeerstatningVurderingGrunn } from 'lib/types/types';
+import {
+  MellomlagretVurdering,
+  SykepengeerstatningGrunnlag,
+  SykepengeerstatningVurderingGrunn,
+  SykepengerVurderingResponse,
+} from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
@@ -9,6 +14,11 @@ import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
+import { formaterDatoForFrontend } from 'lib/utils/date';
+import { formaterDatoForBackend } from 'lib/utils/date';
+import { parse } from 'date-fns';
+import { isDev } from '../../../../lib/utils/environment';
 
 interface Props {
   behandlingVersjon: number;
@@ -20,6 +30,7 @@ interface Props {
 interface FormFields {
   begrunnelse: string;
   erOppfylt: string;
+  gjelderFra: string;
   grunn?: SykepengeerstatningVurderingGrunn;
 }
 
@@ -35,7 +46,7 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
 
   const defaultValues: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
-    : mapVurderingToDraftFormFields(grunnlag?.vurdering);
+    : mapVurderingToDraftFormFields(grunnlag?.vurderinger);
 
   const { form, formFields } = useConfigForm<FormFields>(
     {
@@ -44,6 +55,12 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
         label: 'Vilkårsvurdering',
         rules: { required: 'Du må begrunne avgjørelsen din.' },
         defaultValue: defaultValues?.begrunnelse,
+      },
+      gjelderFra: {
+        type: 'date_input',
+        label: 'Gjelder fra',
+        rules: { required: 'Du må sette dato' },
+        defaultValue: defaultValues?.gjelderFra,
       },
       erOppfylt: {
         type: 'radio',
@@ -75,6 +92,9 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
               dokumenterBruktIVurdering: [],
               harRettPå: data.erOppfylt === JaEllerNei.Ja,
               grunn: data.grunn,
+              gjelderFra: data.gjelderFra
+                ? formaterDatoForBackend(parse(data.gjelderFra, 'dd.MM.yyyy', new Date()))
+                : null,
             },
           },
           referanse: behandlingsReferanse,
@@ -94,17 +114,36 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
       visBekreftKnapp={!readOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
-      vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
+      vurdertAvAnsatt={
+        grunnlag?.vurderinger && grunnlag.vurderinger.length > 0
+          ? grunnlag.vurderinger[grunnlag.vurderinger.length - 1].vurdertAv
+          : undefined
+      }
       mellomlagretVurdering={mellomlagretVurdering}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() => {
-          form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields());
+          form.reset(
+            grunnlag?.vurderinger && grunnlag.vurderinger.length > 0
+              ? mapVurderingToDraftFormFields(grunnlag.vurderinger)
+              : emptyDraftFormFields()
+          );
         });
       }}
       readOnly={readOnly}
     >
+      {isDev() && grunnlag?.vurderinger && grunnlag?.vurderinger?.length > 0 && (
+        <TidligereVurderinger
+          data={grunnlag?.vurderinger}
+          buildFelter={byggFelter}
+          getErGjeldende={() => true}
+          getFomDato={(v) => v.gjelderFra}
+          getVurdertAvIdent={(v) => v.vurdertAv.ident}
+          getVurdertDato={(v) => v.vurdertAv.dato}
+        />
+      )}
       <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
+      {isDev() && <FormField form={form} formField={formFields.gjelderFra} className="gjelderFra" />}
       <FormField form={form} formField={formFields.erOppfylt} horizontalRadio />
       {form.watch('erOppfylt') === JaEllerNei.Ja && (
         <FormField form={form} formField={formFields.grunn} className={'radio'} />
@@ -113,16 +152,28 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
   );
 };
 
-function mapVurderingToDraftFormFields(vurdering: SykepengeerstatningGrunnlag['vurdering']): DraftFormFields {
+function mapVurderingToDraftFormFields(
+  vurderinger: SykepengeerstatningGrunnlag['vurderinger'] | undefined
+): DraftFormFields {
+  if (!vurderinger || vurderinger.length === 0) {
+    return {
+      begrunnelse: undefined,
+      erOppfylt: undefined,
+      grunn: undefined,
+      gjelderFra: undefined,
+    };
+  }
+  const sisteVurdering = vurderinger[vurderinger.length - 1];
   return {
-    begrunnelse: vurdering?.begrunnelse,
-    erOppfylt: getJaNeiEllerUndefined(vurdering?.harRettPå),
-    grunn: vurdering?.grunn,
+    begrunnelse: sisteVurdering.begrunnelse,
+    erOppfylt: getJaNeiEllerUndefined(sisteVurdering.harRettPå),
+    grunn: sisteVurdering.grunn,
+    gjelderFra: sisteVurdering.gjelderFra ? formaterDatoForFrontend(sisteVurdering.gjelderFra) : undefined,
   };
 }
 
 function emptyDraftFormFields(): DraftFormFields {
-  return { begrunnelse: '', erOppfylt: '', grunn: undefined };
+  return { begrunnelse: '', erOppfylt: '', grunn: undefined, gjelderFra: undefined };
 }
 
 const grunnOptions: ValuePair<NonNullable<SykepengeerstatningVurderingGrunn>>[] = [
@@ -150,5 +201,24 @@ const grunnOptions: ValuePair<NonNullable<SykepengeerstatningVurderingGrunn>>[] 
     label:
       'Brukeren har mottatt arbeidsavklaringspenger og deretter foreldrepenger og innen seks måneder etter foreldrepengene opphørte, blir arbeidsufør på grunn av sykdom eller skade, se § 8-2 andre ledd',
     value: 'FORELDREPENGER_INNEN_SEKS_MND',
+  },
+];
+
+const byggFelter = (grunnlag: SykepengerVurderingResponse): ValuePair[] => [
+  {
+    label: 'Vilkårsvurdering',
+    value: grunnlag?.begrunnelse,
+  },
+  {
+    label: 'Gjelder fra',
+    value: `${grunnlag.gjelderFra ? formaterDatoForFrontend(grunnlag.gjelderFra) : ''}`,
+  },
+  {
+    label: 'Har brukeren krav på sykepengeerstatning?',
+    value: grunnlag?.harRettPå ? 'Ja' : 'Nei',
+  },
+  {
+    label: 'Grunn',
+    value: grunnOptions.find((option) => option.value === grunnlag?.grunn)?.label ?? '',
   },
 ];

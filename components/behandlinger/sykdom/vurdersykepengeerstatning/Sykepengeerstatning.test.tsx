@@ -24,6 +24,11 @@ describe('Sykepengeerstatning', () => {
     expect(screen.getByRole('textbox', { name: 'Vilkårsvurdering' })).toBeVisible();
   });
 
+  /*
+  it('har et datofelt', () => {
+    expect(screen.getByRole('textbox', { name: 'Gjelder fra' })).toBeVisible();
+  });*/
+
   it('har felt for krav på sykepengeerstatning', () => {
     expect(screen.getByRole('group', { name: 'Har brukeren krav på sykepengeerstatning?' })).toBeVisible();
   });
@@ -88,20 +93,24 @@ describe('mellomlagring', () => {
 
   const grunnlagMedVurdering: SykepengeerstatningGrunnlag = {
     harTilgangTilÅSaksbehandle: true,
-    vurdering: {
-      begrunnelse: 'Dette er min vurdering som er bekreftet',
-      dokumenterBruktIVurdering: [],
-      harRettPå: true,
-      grunn: 'ANNEN_SYKDOM_INNEN_SEKS_MND',
-      vurdertAv: {
-        dato: '2025-08-21',
-        ident: 'Saksbehandler',
+    vurderinger: [
+      {
+        begrunnelse: 'Dette er min vurdering som er bekreftet',
+        dokumenterBruktIVurdering: [],
+        harRettPå: true,
+        gjelderFra: '2025-01.01',
+        grunn: 'ANNEN_SYKDOM_INNEN_SEKS_MND',
+        vurdertAv: {
+          dato: '2025-08-21',
+          ident: 'Saksbehandler',
+        },
       },
-    },
+    ],
   };
 
   const grunnlagUtenVurdering: SykepengeerstatningGrunnlag = {
     harTilgangTilÅSaksbehandle: true,
+    vurderinger: [],
   };
 
   it('Skal vise en tekst om hvem som har gjort vurderingen dersom det finnes en mellomlagring', () => {

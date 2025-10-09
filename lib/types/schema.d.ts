@@ -9006,10 +9006,16 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykepengergrunnlag.SykepengerGrunnlagResponse': {
       'harTilgangTil\u00C5Saksbehandle': boolean;
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykepengergrunnlag.SykepengerVurderingResponse'];
+      vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykepengergrunnlag.SykepengerVurderingResponse'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykepengergrunnlag.SykepengerVurderingResponse': {
       begrunnelse: string;
       dokumenterBruktIVurdering: components['schemas']['no.nav.aap.verdityper.dokument.JournalpostId'][];
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      gjelderFra?: string | null;
       /** @enum {string|null} */
       grunn?:
         | 'ANNEN_SYKDOM_INNEN_SEKS_MND'
@@ -11472,6 +11478,11 @@ export interface components {
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.SykepengerVurderingDto': {
       begrunnelse: string;
       dokumenterBruktIVurdering: components['schemas']['no.nav.aap.verdityper.dokument.JournalpostId'][];
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      gjelderFra?: string | null;
       /** @enum {string|null} */
       grunn?:
         | 'ANNEN_SYKDOM_INNEN_SEKS_MND'
