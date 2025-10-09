@@ -23,6 +23,7 @@ interface Props {
   grunnlag?: LovvalgMedlemskapGrunnlag;
   overstyring: boolean;
   initialMellomlagretVurdering?: MellomlagretVurdering;
+  behovstype: Behovstype;
 }
 
 interface FormFields {
@@ -73,6 +74,7 @@ export const LovvalgOgMedlemskapVedSøknadstidspunktGammelVising = ({
   behandlingVersjon,
   overstyring,
   initialMellomlagretVurdering,
+  behovstype,
 }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { isLoading, status, løsBehovOgGåTilNesteSteg, løsBehovOgGåTilNesteStegError } =
@@ -140,7 +142,7 @@ export const LovvalgOgMedlemskapVedSøknadstidspunktGammelVising = ({
         {
           behandlingVersjon: behandlingVersjon,
           behov: {
-            behovstype: overstyring ? Behovstype.MANUELL_OVERSTYRING_LOVVALG : Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP,
+            behovstype: behovstype,
             manuellVurderingForLovvalgMedlemskap: {
               lovvalgVedSøknadsTidspunkt: {
                 begrunnelse: data.lovvalgBegrunnelse,

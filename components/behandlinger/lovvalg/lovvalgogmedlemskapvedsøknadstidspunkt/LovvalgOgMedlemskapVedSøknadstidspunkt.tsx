@@ -2,6 +2,7 @@ import { LovvalgOgMedlemskapVedSøknadstidspunktNyVisning } from 'components/beh
 import { LovvalgMedlemskapGrunnlag, MellomlagretVurdering } from 'lib/types/types';
 import { LovvalgOgMedlemskapVedSøknadstidspunktGammelVising } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapvedsøknadstidspunkt/LovvalgOgMedlemskapVedSøknadstidspunktGammelVising';
 import { isDev } from 'lib/utils/environment';
+import { Behovstype } from 'lib/utils/form';
 
 interface Props {
   behandlingVersjon: number;
@@ -9,6 +10,7 @@ interface Props {
   grunnlag?: LovvalgMedlemskapGrunnlag;
   overstyring: boolean;
   initialMellomlagretVurdering?: MellomlagretVurdering;
+  behovstype: Behovstype;
 }
 
 export const LovvalgOgMedlemskapVedSøknadstidspunkt = ({
@@ -17,6 +19,7 @@ export const LovvalgOgMedlemskapVedSøknadstidspunkt = ({
   overstyring,
   initialMellomlagretVurdering,
   grunnlag,
+  behovstype,
 }: Props) => {
   return isDev() ? (
     <LovvalgOgMedlemskapVedSøknadstidspunktNyVisning
@@ -25,6 +28,7 @@ export const LovvalgOgMedlemskapVedSøknadstidspunkt = ({
       overstyring={overstyring}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
       grunnlag={grunnlag}
+      behovstype={behovstype}
     />
   ) : (
     <LovvalgOgMedlemskapVedSøknadstidspunktGammelVising
@@ -33,6 +37,7 @@ export const LovvalgOgMedlemskapVedSøknadstidspunkt = ({
       overstyring={overstyring}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
       grunnlag={grunnlag}
+      behovstype={behovstype}
     />
   );
 };
