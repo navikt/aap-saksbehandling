@@ -18,6 +18,7 @@ import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereV
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { parse } from 'date-fns';
+import { isDev } from '../../../../lib/utils/environment';
 
 interface Props {
   behandlingVersjon: number;
@@ -91,7 +92,9 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
               dokumenterBruktIVurdering: [],
               harRettPå: data.erOppfylt === JaEllerNei.Ja,
               grunn: data.grunn,
-              gjelderFra: formaterDatoForBackend(parse(data.gjelderFra, 'dd.MM.yyyy', new Date())),
+              gjelderFra: data.gjelderFra
+                ? formaterDatoForBackend(parse(data.gjelderFra, 'dd.MM.yyyy', new Date()))
+                : null,
             },
           },
           referanse: behandlingsReferanse,
@@ -129,7 +132,7 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
       }}
       readOnly={readOnly}
     >
-      {grunnlag?.vurderinger && grunnlag?.vurderinger?.length > 0 && (
+      {isDev() && grunnlag?.vurderinger && grunnlag?.vurderinger?.length > 0 && (
         <TidligereVurderinger
           data={grunnlag?.vurderinger}
           buildFelter={byggFelter}
@@ -140,7 +143,7 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
         />
       )}
       <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
-      <FormField form={form} formField={formFields.gjelderFra} className="gjelderFra" />
+      {isDev() && <FormField form={form} formField={formFields.gjelderFra} className="gjelderFra" />}
       <FormField form={form} formField={formFields.erOppfylt} horizontalRadio />
       {form.watch('erOppfylt') === JaEllerNei.Ja && (
         <FormField form={form} formField={formFields.grunn} className={'radio'} />
