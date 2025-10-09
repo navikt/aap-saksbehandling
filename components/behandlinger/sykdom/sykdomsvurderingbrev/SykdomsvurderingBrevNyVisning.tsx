@@ -112,6 +112,7 @@ export const SykdomsvurderingBrevNyVisning = ({
       readOnly={formReadOnly}
       visningModus={visningModus}
       visningActions={visningActions}
+      knappTekst={'Bekreft og send videre'}
     >
       <VStack gap={'4'}>
         {skalViseTidligereVurderinger && (
