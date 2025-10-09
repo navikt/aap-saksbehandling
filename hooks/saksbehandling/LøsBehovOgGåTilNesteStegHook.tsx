@@ -4,7 +4,7 @@ import {
   ServerSentEventStatus,
 } from 'app/saksbehandling/api/behandling/hent/[referanse]/[gruppe]/[steg]/nesteSteg/route';
 import { useParams, useRouter } from 'next/navigation';
-import { LøsAvklaringsbehovPåBehandling, StegType } from 'lib/types/types';
+import { FatteVedtakLøsning, KvalitetssikringLøsning, LøsAvklaringsbehovPåBehandling, StegType } from 'lib/types/types';
 import {
   clientHentFlyt,
   clientHentTilgangForKvalitetssikring,
@@ -14,6 +14,8 @@ import {
 import { useIngenFlereOppgaverModal } from 'hooks/saksbehandling/IngenFlereOppgaverModalHook';
 import { ApiException, isError, isSuccess } from 'lib/utils/api';
 import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
+import { Behovstype } from 'lib/utils/form';
+import { isProd } from 'lib/utils/environment';
 
 export type LøsBehovOgGåTilNesteStegStatus = ServerSentEventStatus | undefined;
 
@@ -63,14 +65,28 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
       }
     }
 
-    listenSSE().then(() => {
+    const underkjennelseIKvalitetssikringEllerBeslutning = () => {
+      if (isProd()) return false;
+
+      const brukerHarKvalitetssikret = behov.behov.behovstype === Behovstype.KVALITETSSIKRING_KODE;
+      const brukerHarBesluttet = behov.behov.behovstype === Behovstype.FATTE_VEDTAK_KODE;
+
+      if (brukerHarKvalitetssikret || brukerHarBesluttet) {
+        const løsning = behov.behov as KvalitetssikringLøsning | FatteVedtakLøsning;
+        const detFinnesEnUnderkjentVurdering = løsning.vurderinger.some((vurdering) => vurdering.godkjent === false);
+        return detFinnesEnUnderkjentVurdering;
+      }
+      return false;
+    };
+
+    listenSSE(underkjennelseIKvalitetssikringEllerBeslutning()).then(() => {
       if (callback) {
         callback();
       }
     });
   };
 
-  const listenSSE = async () => {
+  const listenSSE = async (underkjennelseIKvalitetssikringEllerBeslutning: boolean) => {
     const eventSource = new EventSource(
       `/saksbehandling/api/behandling/hent/${params.behandlingsReferanse}/${params.aktivGruppe}/${steg}/nesteSteg/`,
       {
@@ -112,7 +128,10 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
         }
 
         // TODO Brev har ingen egen definisjonskode som vi kan hente ut fra steget. Må skrives om i backend
-        if (!kanFortsetteSaksbehandling && aktivtVisningSteg !== 'BREV') {
+        if (
+          (!kanFortsetteSaksbehandling && aktivtVisningSteg !== 'BREV') ||
+          underkjennelseIKvalitetssikringEllerBeslutning
+        ) {
           setIsModalOpen(true);
         } else {
           if (skalBytteGruppe || skalBytteSteg) {
