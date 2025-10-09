@@ -15,10 +15,9 @@ import { FormField, ValuePair } from 'components/form/FormField';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
-import { formaterDatoForFrontend } from 'lib/utils/date';
-import { formaterDatoForBackend } from 'lib/utils/date';
+import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { parse } from 'date-fns';
-import { isDev } from '../../../../lib/utils/environment';
+import { isDev } from 'lib/utils/environment';
 
 interface Props {
   behandlingVersjon: number;
