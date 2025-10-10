@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { Studentvurdering } from 'components/behandlinger/sykdom/student/student/Studentvurdering';
 import { userEvent } from '@testing-library/user-event';
@@ -8,10 +8,15 @@ import { render, screen, within } from 'lib/test/CustomRender';
 import { MellomlagretVurderingResponse, StudentGrunnlag } from 'lib/types/types';
 import { FetchResponse } from 'lib/utils/api';
 import createFetchMock from 'vitest-fetch-mock';
+import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
 const user = userEvent.setup();
+
+beforeEach(() => {
+  setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'AVKLAR_STUDENT' });
+});
 
 describe('Student', () => {
   describe('Generelt', () => {

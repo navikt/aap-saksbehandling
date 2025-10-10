@@ -1,11 +1,9 @@
-import { Studentvurdering } from 'components/behandlinger/sykdom/student/student/Studentvurdering';
 import { hentMellomlagring, hentStudentGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { Behovstype } from 'lib/utils/form';
 import { skalViseSteg, StegData } from 'lib/utils/steg';
-import { StudentvurderingNyVisning } from 'components/behandlinger/sykdom/student/student/StudentvurderingNyVisning';
-import { isDev } from 'lib/utils/environment';
+import { Studentvurdering } from 'components/behandlinger/sykdom/student/student/Studentvurdering';
 
 interface Props {
   behandlingsreferanse: string;
@@ -26,14 +24,7 @@ export const StudentvurderingMedDataFetching = async ({ behandlingsreferanse, st
     return null;
   }
 
-  return isDev() ? (
-    <StudentvurderingNyVisning
-      grunnlag={grunnlag.data}
-      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
-      behandlingVersjon={stegData.behandlingVersjon}
-      initialMellomlagretVurdering={initialMellomlagretVurdering}
-    />
-  ) : (
+  return (
     <Studentvurdering
       grunnlag={grunnlag.data}
       readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
