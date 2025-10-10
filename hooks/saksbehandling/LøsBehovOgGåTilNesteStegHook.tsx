@@ -15,7 +15,6 @@ import { useIngenFlereOppgaverModal } from 'hooks/saksbehandling/IngenFlereOppga
 import { ApiException, isError, isSuccess } from 'lib/utils/api';
 import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
 import { Behovstype } from 'lib/utils/form';
-import { isProd } from 'lib/utils/environment';
 
 export type LøsBehovOgGåTilNesteStegStatus = ServerSentEventStatus | undefined;
 
@@ -66,8 +65,6 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
     }
 
     const underkjennelseIKvalitetssikringEllerBeslutning = () => {
-      if (isProd()) return false;
-
       const brukerHarKvalitetssikret = behov.behov.behovstype === Behovstype.KVALITETSSIKRING_KODE;
       const brukerHarBesluttet = behov.behov.behovstype === Behovstype.FATTE_VEDTAK_KODE;
 
