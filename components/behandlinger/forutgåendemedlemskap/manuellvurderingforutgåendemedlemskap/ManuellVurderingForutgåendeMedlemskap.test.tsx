@@ -56,7 +56,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
         grunnlag={grunnlagUtenVurdering}
       />
     );
-    const begrunnelse = screen.getByRole('textbox', { name: 'Vurder brukerens forutgående medlemskap' });
+    const begrunnelse = screen.getByRole('textbox', { name: 'Vurder brukerens blabla forutgående medlemskap' });
     expect(begrunnelse).toBeVisible();
   });
 

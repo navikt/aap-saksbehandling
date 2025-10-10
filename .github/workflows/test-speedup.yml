@@ -68,33 +68,18 @@ jobs:
           merge-multiple: true
 
       - name: Merge reports
-        run: npx vitest --merge-reports
+        run: npx vitest --merge-reports --output-file=.vitest-reports/merged-reports.json
 
-      - name: Upload HTML report to CDN
-        uses: nais/deploy/actions/cdn-upload/v2@master
-        with:
-          team: aap
-          source: .vitest-reports
-          destination: /${{ github.repository }}/${{ github.run_number }}
-          identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
-          project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
-
-
-#      - name: Make fancy GHA Summary
-#          run: |
-#            total_tests=$(jq '.stats.expected + .stats.unexpected' playwright-report/report.json)
-#            passed_tests=$(jq '.stats.expected' playwright-report/report.json)
-#            failed_tests=$(jq '.stats.unexpected' playwright-report/report.json)
-#            failed_test_info=$(jq -r '.suites[].specs[] | select(.ok == false) | "\(.title) (\(.file), \(.tests[].projectName))"' playwright-report/report.json)
-#            echo "## Playwright Test Report Summary" >> $GITHUB_STEP_SUMMARY
-#            echo "Total tests: $total_tests ✅" >> $GITHUB_STEP_SUMMARY
-#            echo "Passed tests: $passed_tests ✅" >> $GITHUB_STEP_SUMMARY
-#            if [ "$failed_tests" -gt 0 ]; then
-#              echo "Failed tests: $failed_tests ❌" >> $GITHUB_STEP_SUMMARY
-#              echo "### Failed Tests:" >> $GITHUB_STEP_SUMMARY
-#              while IFS= read -r test; do
-#                echo "- $test ❌" >> $GITHUB_STEP_SUMMARY
-#              done <<< "$failed_test_info"
-#            else
-#              echo "Failed tests: $failed_tests 🔹" >> $GITHUB_STEP_SUMMARY
-#            fi
+      - name: Make fancy GHA Summary
+        run: |
+          total_tests=$(jq '.numTotalTests' .vitest-reports/merged-reports.json)
+          passed_tests=$(jq '.numPassedTests' .vitest-reports/merged-reports.json)
+          failed_tests=$(jq '.numFailedTests' .vitest-reports/merged-reports.json)
+          echo "## Playwright Test Report Summary" >> $GITHUB_STEP_SUMMARY
+          echo "Total tests: $total_tests ✅" >> $GITHUB_STEP_SUMMARY
+          echo "Passed tests: $passed_tests ✅" >> $GITHUB_STEP_SUMMARY
+          if [ "$failed_tests" -gt 0 ]; then
+            echo "Failed tests: $failed_tests ❌" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "Failed tests: $failed_tests 🔹" >> $GITHUB_STEP_SUMMARY
+          fi
