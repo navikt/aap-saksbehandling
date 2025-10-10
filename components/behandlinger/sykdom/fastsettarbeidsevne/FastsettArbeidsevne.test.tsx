@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { FastsettArbeidsevne } from 'components/behandlinger/sykdom/fastsettarbeidsevne/FastsettArbeidsevne';
 import { render, screen, within } from 'lib/test/CustomRender';
 import { userEvent } from '@testing-library/user-event';
@@ -6,12 +6,17 @@ import { ArbeidsevneGrunnlag, MellomlagretVurderingResponse } from 'lib/types/ty
 import { Behovstype } from 'lib/utils/form';
 import { FetchResponse } from 'lib/utils/api';
 import createFetchMock from 'vitest-fetch-mock';
+import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
 const user = userEvent.setup();
 
 const grunnlagUtenVurdering: ArbeidsevneGrunnlag = { harTilgangTilÅSaksbehandle: true };
+
+beforeEach(() => {
+  setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'FASTSETT_ARBEIDSEVNE' });
+});
 
 describe('FastsettArbeidsevne', () => {
   describe('Generelt', () => {
@@ -50,23 +55,6 @@ describe('FastsettArbeidsevne', () => {
       };
       render(<FastsettArbeidsevne readOnly={true} behandlingVersjon={0} grunnlag={grunnlag} />);
       expect(screen.getByText('Vilkårsvurdering')).toBeVisible();
-    });
-
-    it('skal ikke vise bekreft knapp hvis det ikke er noen vurderinger', async () => {
-      render(<FastsettArbeidsevne readOnly={false} behandlingVersjon={0} grunnlag={grunnlagUtenVurdering} />);
-      await åpneVilkårskort();
-
-      expect(screen.queryByRole('button', { name: 'Bekreft' })).not.toBeInTheDocument();
-    });
-
-    it('skal vise bekreft knapp hvis det er noen vurderinger', async () => {
-      render(<FastsettArbeidsevne readOnly={false} behandlingVersjon={0} grunnlag={grunnlagUtenVurdering} />);
-      await åpneVilkårskort();
-      expect(screen.queryByRole('button', { name: 'Bekreft' })).not.toBeInTheDocument();
-
-      await user.click(screen.getByRole('button', { name: 'Legg til ny vurdering' }));
-
-      expect(screen.getByRole('button', { name: 'Bekreft' })).toBeVisible();
     });
   });
 

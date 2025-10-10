@@ -21,8 +21,9 @@ import { useConfigForm } from 'components/form/FormHook';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 
 interface Props {
   grunnlag: ArbeidsevneGrunnlag;
@@ -64,6 +65,12 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly, ini
 
   const { mellomlagretVurdering, lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering } =
     useMellomlagring(Behovstype.FASTSETT_ARBEIDSEVNE_KODE, initialMellomlagretVurdering);
+
+  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+    readOnly,
+    'FASTSETT_ARBEIDSEVNE',
+    mellomlagretVurdering
+  );
 
   const defaultValues: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -107,10 +114,9 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly, ini
 
   const showAsOpen =
     (!!grunnlag?.vurderinger && grunnlag.vurderinger.length >= 1) || initialMellomlagretVurdering !== undefined;
-  const skalViseBekreftKnapp = !readOnly && arbeidsevneVurderinger.length > 0;
 
   return (
-    <VilkårskortMedFormOgMellomlagring
+    <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'§ 11-23 andre ledd. Arbeidsevne som ikke er utnyttet'}
       steg={'FASTSETT_ARBEIDSEVNE'}
       vilkårTilhørerNavKontor={true}
@@ -118,7 +124,7 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly, ini
       onSubmit={handleSubmit}
       status={status}
       isLoading={isLoading}
-      visBekreftKnapp={skalViseBekreftKnapp}
+      visBekreftKnapp={false}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vurdertAvAnsatt={grunnlag?.vurderinger?.[0]?.vurdertAv}
       mellomlagretVurdering={mellomlagretVurdering}
@@ -130,7 +136,8 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly, ini
           );
         });
       }}
-      readOnly={readOnly}
+      visningModus={visningModus}
+      visningActions={visningActions}
     >
       <Link href={'https://lovdata.no/pro/rundskriv/r11-00/KAPITTEL_26-3'} target="_blank">
         Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-23 (lovdata.no)
@@ -146,7 +153,7 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly, ini
             name={`arbeidsevnevurderinger.${index}.begrunnelse`}
             rules={{ required: 'Du må begrunne vurderingen din' }}
             className={'begrunnelse'}
-            readOnly={readOnly}
+            readOnly={formReadOnly}
           />
           <div className={styles.rad}>
             <div>
@@ -166,7 +173,7 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly, ini
                     }
                   },
                 }}
-                readOnly={readOnly}
+                readOnly={formReadOnly}
                 className="prosent_input"
               />
               <div className={styles.timekolonne}>
@@ -182,9 +189,9 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly, ini
               required: 'Du må angi datoen arbeidsevnen gjelder fra',
               validate: (value) => validerDato(value as string),
             }}
-            readOnly={readOnly}
+            readOnly={formReadOnly}
           />
-          {!readOnly && (
+          {!formReadOnly && (
             <div>
               <Button
                 onClick={() => remove(index)}
@@ -199,7 +206,7 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly, ini
           )}
         </div>
       ))}
-      {!readOnly && (
+      {!formReadOnly && (
         <div>
           <Button
             onClick={() => append({ begrunnelse: '', arbeidsevne: '', fom: '' })}
@@ -211,7 +218,7 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly, ini
           </Button>
         </div>
       )}
-    </VilkårskortMedFormOgMellomlagring>
+    </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };
 
