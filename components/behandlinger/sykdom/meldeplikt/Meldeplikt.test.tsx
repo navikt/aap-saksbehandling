@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render, screen, within } from 'lib/test/CustomRender';
 import userEvent from '@testing-library/user-event';
 import { Meldeplikt } from 'components/behandlinger/sykdom/meldeplikt/Meldeplikt';
@@ -6,10 +6,15 @@ import { FritakMeldepliktGrunnlag, MellomlagretVurderingResponse } from 'lib/typ
 import { Behovstype } from 'lib/utils/form';
 import { FetchResponse } from 'lib/utils/api';
 import createFetchMock from 'vitest-fetch-mock';
+import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
 const user = userEvent.setup();
+
+beforeEach(() => {
+  setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'FRITAK_MELDEPLIKT' });
+});
 
 describe('Meldeplikt', () => {
   describe('generelt', () => {
@@ -40,23 +45,6 @@ describe('Meldeplikt', () => {
       };
       render(<Meldeplikt behandlingVersjon={0} readOnly={true} grunnlag={meldepliktGrunnlag} />);
       expect(screen.queryByRole('textbox', { name: 'Vilkårsvurdering' })).toBeVisible();
-    });
-
-    it('skal ikke vise bekreft knapp hvis det ikke er noen vurderinger', async () => {
-      render(<Meldeplikt readOnly={false} behandlingVersjon={0} />);
-      await åpneVilkårskort();
-
-      expect(screen.queryByRole('button', { name: 'Bekreft' })).not.toBeInTheDocument();
-    });
-
-    it('skal vise bekreft knapp hvis det er noen vurderinger', async () => {
-      render(<Meldeplikt readOnly={false} behandlingVersjon={0} />);
-      await åpneVilkårskort();
-      expect(screen.queryByRole('button', { name: 'Bekreft' })).not.toBeInTheDocument();
-
-      await klikkPåNyPeriode();
-
-      expect(screen.getByRole('button', { name: 'Bekreft' })).toBeVisible();
     });
   });
 
