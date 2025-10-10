@@ -2,8 +2,8 @@ import { hentBistandsbehovGrunnlag, hentMellomlagring } from 'lib/services/saksb
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
-import { BistandsbehovNyVisning } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovNyVisning';
 import { skalViseSteg, StegData } from 'lib/utils/steg';
+import { Bistandsbehov } from 'components/behandlinger/sykdom/bistandsbehov/Bistandsbehov';
 
 interface Props {
   behandlingsReferanse: string;
@@ -35,7 +35,7 @@ export const BistandsbehovMedDataFetching = async ({
   }
 
   return (
-    <BistandsbehovNyVisning
+    <Bistandsbehov
       grunnlag={grunnlag.data}
       readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       behandlingVersjon={stegData.behandlingVersjon}
