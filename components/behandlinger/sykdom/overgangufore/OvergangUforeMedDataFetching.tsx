@@ -1,11 +1,9 @@
 import { hentMellomlagring, hentOvergangUforeGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
-import { OvergangUfore } from 'components/behandlinger/sykdom/overgangufore/OvergangUfore';
 import { Behovstype } from 'lib/utils/form';
 import { skalViseSteg, StegData } from 'lib/utils/steg';
-import { isDev } from 'lib/utils/environment';
-import { OvergangUforeNyVisning } from 'components/behandlinger/sykdom/overgangufore/OvergangUforeNyVisning';
+import { OvergangUfore } from 'components/behandlinger/sykdom/overgangufore/OvergangUfore';
 
 interface Props {
   behandlingsReferanse: string;
@@ -28,15 +26,7 @@ export const OvergangUforeMedDataFetching = async ({ behandlingsReferanse, stegD
     return null;
   }
 
-  return isDev() ? (
-    <OvergangUforeNyVisning
-      grunnlag={grunnlag.data}
-      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
-      behandlingVersjon={stegData.behandlingVersjon}
-      initialMellomlagretVurdering={initialMellomlagretVurdering}
-      typeBehandling={stegData.typeBehandling}
-    />
-  ) : (
+  return (
     <OvergangUfore
       grunnlag={grunnlag.data}
       readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
