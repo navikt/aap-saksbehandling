@@ -54,11 +54,11 @@ jobs:
         with:
           node-version: 22
 
-#      - name: Enable Corepack
-#        run: corepack enable
-#
-#      - name: install dependencies Yarn
-#        run: yarn install --immutable
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: install dependencies Yarn
+        run: yarn install --immutable
 
       - name: Download blob reports from GitHub Actions Artifacts
         uses: actions/download-artifact@v4
