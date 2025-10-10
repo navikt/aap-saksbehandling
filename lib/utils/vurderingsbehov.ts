@@ -73,7 +73,7 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov): strin
     case 'AKTIVITETSPLIKT_11_9':
       return 'Aktivitetsplikt § 11-9';
     case 'EFFEKTUER_AKTIVITETSPLIKT':
-      return 'Effektuer aktivitetsplikt $ 11-7';
+      return 'Effektuer aktivitetsplikt § 11-7';
     case 'OVERGANG_UFORE':
       return 'Overgang til uføre';
     case 'OVERGANG_ARBEID':
@@ -83,7 +83,7 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov): strin
     case 'DØDSFALL_BRUKER':
       return 'Dødsfall bruker';
     case 'EFFEKTUER_AKTIVITETSPLIKT_11_9':
-      return 'Effektuer aktivitetsplikt $ 11-9';
+      return 'Effektuer aktivitetsplikt § 11-9';
     default:
       return vurderingsbehov;
   }
