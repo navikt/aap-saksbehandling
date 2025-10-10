@@ -6,6 +6,7 @@ import { userEvent } from '@testing-library/user-event';
 import { Behovstype } from 'lib/utils/form';
 import { FetchResponse } from 'lib/utils/api';
 import createFetchMock from 'vitest-fetch-mock';
+import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
@@ -24,6 +25,10 @@ const grunnlag: YrkesskadeVurderingGrunnlag = {
     oppgittYrkesskadeISøknad: false,
   },
 };
+
+beforeEach(() => {
+  setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'VURDER_YRKESSKADE' });
+});
 
 describe('Yrkesskade', () => {
   describe('Generelt', () => {
