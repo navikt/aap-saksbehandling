@@ -16,9 +16,10 @@ export const SamordningSosialstønad = ({ grunnlag }: Props) => {
   return (
     vurderinger && (
       <VilkårsKort heading="§11-29 Refusjonskrav sosialstønad" steg="REFUSJON_KRAV" defaultOpen={true}>
-        <BodyShort spacing>
-          Vi har funnet perioder med sosialstønad eller tjenestepensjonsordning. Disse kan føre til refusjonskrav på
-          etterbetaling.
+        <BodyShort size={'small'} spacing>
+          Nav kontor har meldt om perioder der brukeren kan ha mottatt sosialstønad. Disse kan føre til refusjonskrav på
+          etterbetaling. Etterbetaling settes på vent i opp til 21 dager i påvente av refusjonskrav fra nav kontor.
+          Følgende nav kontor vil varsles automatisk via Gosys når vedtak fattes i saken.
         </BodyShort>
         <TableStyled>
           <Table.Header>

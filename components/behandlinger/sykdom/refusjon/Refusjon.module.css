@@ -2,3 +2,28 @@
   border-left: 2px solid var(--a-border-subtle);
   padding-left: var(--a-spacing-4);
 }
+.refusjonTekstHeader {
+  color: var(--Text-Default, #23262A);
+  font-feature-settings: 'liga' off, 'clig' off;
+
+  font-family: "Source Sans Pro";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 20px; /* 125% */
+  letter-spacing: 0.032px;
+}
+
+.refusjonKravTekst{
+  color: var(--Text-Subtle, rgba(1, 11, 24, 0.68));
+  font-feature-settings: 'liga' off, 'clig' off;
+
+  font-family: "Source Sans Pro";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px; /* 150% */
+  letter-spacing: 0.032px;
+
+  padding-bottom: 10px;
+}

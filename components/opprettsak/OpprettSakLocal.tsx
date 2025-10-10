@@ -12,6 +12,7 @@ import { useConfigForm } from 'components/form/FormHook';
 import { Sykepenger } from 'components/opprettsak/samordning/Sykepenger';
 import { parse } from 'date-fns';
 import { TestcaseSteg } from 'lib/types/types';
+import { AndreYtelser } from 'components/opprettsak/samordning/AndreYtelser';
 
 interface Barn {
   fodselsdato: string;
@@ -34,6 +35,19 @@ interface SamordningSykepenger {
 
 type Institusjon = 'fengsel' | 'sykehus';
 
+enum AndreUtbetalingerYtelser {
+  ØKONOMISK_SOSIALHJELP = 'ØKONOMISK_SOSIALHJELP',
+  OMSORGSSTØNAD = 'OMSORGSSTØNAD',
+  INTRODUKSJONSSTØNAD = 'INTRODUKSJONSSTØNAD',
+  KVALIFISERINGSSTØNAD = 'KVALIFISERINGSSTØNAD',
+  VERV = 'VERV',
+  UTLAND = 'UTLAND',
+  AFP = 'AFP',
+  STIPEND = 'STIPEND',
+  LÅN = 'LÅN',
+  NEI = 'NEI',
+}
+
 export interface OpprettSakFormFields {
   fødselsdato: Date;
   yrkesskade: JaEllerNei;
@@ -49,6 +63,9 @@ export interface OpprettSakFormFields {
   erArbeidsevnenNedsatt: JaEllerNei;
   erNedsettelseIArbeidsevneMerEnnHalvparten: JaEllerNei;
   steg?: TestcaseSteg;
+  afp: JaEllerNei;
+  lønn: JaEllerNei;
+  stønad?: AndreUtbetalingerYtelser[];
 }
 
 export const OpprettSakLocal = () => {
@@ -59,6 +76,23 @@ export const OpprettSakLocal = () => {
         type: 'date',
         label: 'Søknadsdato',
         defaultValue: new Date(),
+      },
+      afp: {
+        type: 'radio',
+        defaultValue: JaEllerNei.Nei,
+        options: JaEllerNeiOptions,
+        label: 'afp',
+      },
+      lønn: {
+        type: 'radio',
+        defaultValue: JaEllerNei.Nei,
+        options: JaEllerNeiOptions,
+        label: 'lønn',
+      },
+
+      stønad: {
+        type: 'fieldArray',
+        label: 'stønad',
       },
       fødselsdato: {
         type: 'date',
@@ -154,14 +188,16 @@ export const OpprettSakLocal = () => {
         ],
       },
     },
-    {
-      shouldUnregister: true,
-    }
-  );
+  });
 
   const mapInnhold = (data: OpprettSakFormFields, steg?: TestcaseSteg) => {
     return {
       ...data,
+      andreUtbetalinger: {
+        afp: data.afp,
+        lønn: data.lønn,
+        stønad: data.stønad,
+      },
       søknadsdato: formaterDatoForBackend(data.søknadsdato),
       fødselsdato: formaterDatoForBackend(data.fødselsdato),
       yrkesskade: data.yrkesskade === JaEllerNei.Ja,
@@ -232,6 +268,9 @@ export const OpprettSakLocal = () => {
             <FormField form={form} formField={formFields.tjenestePensjon} horizontalRadio={true} />
             <FormField form={form} formField={formFields.institusjon} />
             <FormField form={form} formField={formFields.uføre} />
+            <FormField form={form} formField={formFields.afp} />
+            <FormField form={form} formField={formFields.lønn} />
+            <FormField form={form} formField={formFields.stønad} />
           </VStack>
           <VStack gap="4">
             <OpprettSakBarn form={form} />
