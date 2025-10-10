@@ -29,46 +29,72 @@ jobs:
       - name: Run tests
         run: yarn run test --reporter=blob --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
 
-      - name: Merge reports
-        run: npx vitest --merge-reports
+      - name: Upload blob report to GitHub Actions Artifacts
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: blob-report-${{ matrix.shardIndex }}
+          path: .vitest-reports/*
+          include-hidden-files: true
+          retention-days: 1
+  merge-reports:
+    if: ${{ !cancelled() }}
+    permissions:
+      contents: read
+      id-token: write
+      packages: write
+    env:
+      NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+      SKIP_YARN_COREPACK_CHECK: true
+    needs: [tests]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
 
-#      - name: Upload blob report to GitHub Actions Artifacts
-#        if: ${{ !cancelled() }}
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: blob-report-${{ matrix.shardIndex }}
-#          path: .vitest-reports/*
-#          include-hidden-files: true
-#          retention-days: 1
-#  merge-reports:
-#    if: ${{ !cancelled() }}
-#    permissions:
-#      contents: read
-#      id-token: write
-#      packages: write
-#    env:
-#      NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
-#      SKIP_YARN_COREPACK_CHECK: true
-#    needs: [tests]
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v5
-#      - uses: actions/setup-node@v5
-#        with:
-#          node-version: 22
-#
 #      - name: Enable Corepack
 #        run: corepack enable
 #
 #      - name: install dependencies Yarn
 #        run: yarn install --immutable
-#
-#      - name: Download blob reports from GitHub Actions Artifacts
-#        uses: actions/download-artifact@v4
-#        with:
-#          path: .vitest-reports
-#          pattern: blob-report-*
-#          merge-multiple: true
-#
-#      - name: Merge reports
-#        run: npx vitest --merge-reports
+
+      - name: Download blob reports from GitHub Actions Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: .vitest-reports
+          pattern: blob-report-*
+          merge-multiple: true
+
+      - name: Merge reports
+        run: npx vitest --merge-reports
+
+      - name: Upload HTML report to CDN
+        uses: nais/deploy/actions/cdn-upload/v2@master
+        with:
+          team: aap
+          source: .vitest-reports
+          destination: /${{ github.repository }}/${{ github.run_number }}
+          identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
+          project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
+
+
+#      - name: Make fancy GHA Summary
+#          run: |
+#            total_tests=$(jq '.stats.expected + .stats.unexpected' playwright-report/report.json)
+#            passed_tests=$(jq '.stats.expected' playwright-report/report.json)
+#            failed_tests=$(jq '.stats.unexpected' playwright-report/report.json)
+#            failed_test_info=$(jq -r '.suites[].specs[] | select(.ok == false) | "\(.title) (\(.file), \(.tests[].projectName))"' playwright-report/report.json)
+#            echo "## Playwright Test Report Summary" >> $GITHUB_STEP_SUMMARY
+#            echo "Total tests: $total_tests ✅" >> $GITHUB_STEP_SUMMARY
+#            echo "Passed tests: $passed_tests ✅" >> $GITHUB_STEP_SUMMARY
+#            if [ "$failed_tests" -gt 0 ]; then
+#              echo "Failed tests: $failed_tests ❌" >> $GITHUB_STEP_SUMMARY
+#              echo "### Failed Tests:" >> $GITHUB_STEP_SUMMARY
+#              while IFS= read -r test; do
+#                echo "- $test ❌" >> $GITHUB_STEP_SUMMARY
+#              done <<< "$failed_test_info"
+#            else
+#              echo "Failed tests: $failed_tests 🔹" >> $GITHUB_STEP_SUMMARY
+#            fi
