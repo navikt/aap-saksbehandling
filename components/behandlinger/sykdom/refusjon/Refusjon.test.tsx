@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render, screen, within } from 'lib/test/CustomRender';
 import { Refusjon } from 'components/behandlinger/sykdom/refusjon/Refusjon';
 import { MellomlagretVurderingResponse, RefusjonskravGrunnlag } from 'lib/types/types';
@@ -6,10 +6,15 @@ import { userEvent } from '@testing-library/user-event';
 import { addDays, format, subDays } from 'date-fns';
 import createFetchMock from 'vitest-fetch-mock';
 import { FetchResponse } from 'lib/utils/api';
+import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
 const user = userEvent.setup();
+
+beforeEach(() => {
+  setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'REFUSJON_KRAV' });
+});
 
 const grunnlagMedVurdering: RefusjonskravGrunnlag = {
   gjeldendeVurderinger: [
