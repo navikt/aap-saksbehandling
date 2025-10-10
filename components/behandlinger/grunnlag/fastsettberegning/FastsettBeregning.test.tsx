@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render, screen } from 'lib/test/CustomRender';
 import { FastsettBeregning } from 'components/behandlinger/grunnlag/fastsettberegning/FastsettBeregning';
 import { userEvent } from '@testing-library/user-event';
@@ -7,6 +7,7 @@ import { addDays, format, subDays } from 'date-fns';
 import { FetchResponse } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 import createFetchMock from 'vitest-fetch-mock';
+import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
@@ -17,6 +18,10 @@ const grunnlagUtenVurdering: BeregningTidspunktGrunnlag = {
   skalVurdereYtterligere: true,
   historiskeVurderinger: [],
 };
+
+beforeEach(() => {
+  setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'FASTSETT_BEREGNINGSTIDSPUNKT' });
+});
 
 describe('Generelt', () => {
   it('skal ha korrekt heading for vilkårskortet dersom det ikke skal vurderes ytterligere nedsatt arbeidsevne', () => {

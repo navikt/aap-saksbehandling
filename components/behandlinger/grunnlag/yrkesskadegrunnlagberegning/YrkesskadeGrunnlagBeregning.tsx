@@ -13,12 +13,13 @@ import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useConfigForm } from 'components/form/FormHook';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { ValuePair } from 'components/form/FormField';
 import { formaterTilNok } from 'lib/utils/string';
 import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 
 interface Props {
   behandlingVersjon: number;
@@ -54,6 +55,12 @@ export const YrkesskadeGrunnlagBeregning = ({
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
     useMellomlagring(Behovstype.FASTSETT_YRKESSKADEINNTEKT, initialMellomlagretVurdering);
 
+  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+    readOnly,
+    'FASTSETT_GRUNNLAG',
+    mellomlagretVurdering
+  );
+
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingerToDraftFormFields(yrkeskadeBeregningGrunnlag);
@@ -65,7 +72,7 @@ export const YrkesskadeGrunnlagBeregning = ({
         defaultValue: defaultValue.vurderinger,
       },
     },
-    { readOnly: readOnly }
+    { readOnly: formReadOnly }
   );
 
   const { fields } = useFieldArray({ control: form.control, name: 'vurderinger' });
@@ -75,7 +82,7 @@ export const YrkesskadeGrunnlagBeregning = ({
   const historiskeVurderinger = yrkeskadeBeregningGrunnlag?.historiskeVurderinger;
 
   return (
-    <VilkårskortMedFormOgMellomlagring
+    <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'Yrkesskade grunnlagsberegning §§ 11-19 / 11-22'}
       steg={'FASTSETT_BEREGNINGSTIDSPUNKT'}
       onSubmit={form.handleSubmit((data) => {
@@ -113,6 +120,8 @@ export const YrkesskadeGrunnlagBeregning = ({
           form.reset(mapVurderingerToDraftFormFields(yrkeskadeBeregningGrunnlag));
         })
       }
+      visningModus={visningModus}
+      visningActions={visningActions}
     >
       {!!historiskeVurderinger?.length && (
         <TidligereVurderinger
@@ -144,7 +153,7 @@ export const YrkesskadeGrunnlagBeregning = ({
               name={`vurderinger.${index}.begrunnelse`}
               control={form.control}
               label={`Begrunnelse for anslått årlig arbeidsinntekt for skadetidspunkt ${formaterDatoForFrontend(field.skadetidspunkt)}`}
-              readOnly={readOnly}
+              readOnly={formReadOnly}
               className={'begrunnelse'}
               rules={{ required: 'Du må oppgi en begrunnelse for anslått arbeidsinntekt.' }}
             />
@@ -158,7 +167,7 @@ export const YrkesskadeGrunnlagBeregning = ({
                   control={form.control}
                   type={'number'}
                   className={'inntekt_input'}
-                  readOnly={readOnly}
+                  readOnly={formReadOnly}
                   rules={{
                     required: 'Du må oppgi anslått årlig arbeidsinntekt på skadetidspunkt.',
                     min: { value: 0, message: 'Inntekt kan ikke være negativ.' },
@@ -170,7 +179,7 @@ export const YrkesskadeGrunnlagBeregning = ({
           </div>
         );
       })}
-    </VilkårskortMedFormOgMellomlagring>
+    </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };
 
