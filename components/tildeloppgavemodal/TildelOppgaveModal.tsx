@@ -29,6 +29,7 @@ export const TildelOppgaveModal = ({ oppgaveIder, isOpen, onClose, setValgteRade
   const [error, setError] = useState<string>();
   const [success, setSuccess] = useState<string>();
   const [infomelding, setInfomelding] = useState<string>();
+  const [søkefeltError, setSøkefeltError] = useState<string>();
 
   const lukkOgResetModal = () => {
     setSaksbehandlere([]);
@@ -38,6 +39,7 @@ export const TildelOppgaveModal = ({ oppgaveIder, isOpen, onClose, setValgteRade
     setError(undefined);
     setSuccess(undefined);
     setPageState(1);
+    setSøkefeltError(undefined);
     form.reset();
     onClose();
   };
@@ -59,7 +61,8 @@ export const TildelOppgaveModal = ({ oppgaveIder, isOpen, onClose, setValgteRade
         setError(res.apiException.message);
       } else {
         setError(undefined);
-        setSuccess(`Oppgave(r) ble tildelt veileder/saksbehandler med ident ${data.saksbehandlerIdent}`);
+        const selectedSaksbehandler = saksbehandlere.find(s => s.navIdent === data.saksbehandlerIdent);
+        setSuccess(`Oppgave(r) ble tildelt ${selectedSaksbehandler?.navn ?? data.saksbehandlerIdent}`);
         if (setValgteRader) {
           skalFjerneValgteRader && setValgteRader([]);
         }
@@ -97,6 +100,8 @@ export const TildelOppgaveModal = ({ oppgaveIder, isOpen, onClose, setValgteRade
                 setSøketekst={setSøketekst}
                 setInfomelding={setInfomelding}
                 setPageState={setPageState}
+                søkefeltError={søkefeltError}
+                setSøkefeltError={setSøkefeltError}
               />
               {infomelding && (
                 <Alert variant={'info'} size={'small'}>
@@ -130,6 +135,7 @@ export const TildelOppgaveModal = ({ oppgaveIder, isOpen, onClose, setValgteRade
                 </RadioGroupWrapper>
               </form>
               {skalVisePaginering && (
+                <HStack justify="center">
                 <Pagination
                   page={pageState}
                   onPageChange={setPageState}
@@ -142,22 +148,25 @@ export const TildelOppgaveModal = ({ oppgaveIder, isOpen, onClose, setValgteRade
                     text: 'Paginering av søkeresultater',
                   }}
                 />
+                </HStack>
               )}
             </VStack>
           </Modal.Body>
 
-          {saksbehandlere.length > 0 && (
-            <Modal.Footer>
-              <HStack gap={'4'}>
-                <Button variant={'secondary'} onClick={lukkOgResetModal}>
-                  Avbryt
-                </Button>
-                <Button form={'tildelSaksbehandler'} loading={isLoading} type={'submit'}>
-                  Tildel
-                </Button>
-              </HStack>
-            </Modal.Footer>
-          )}
+          <Modal.Footer>
+            <HStack gap={'4'}>
+              <Button variant={'secondary'} onClick={lukkOgResetModal}>
+                Avbryt
+              </Button>
+              <Button
+                form={'tildelSaksbehandler'}
+                loading={isLoading}
+                type={'submit'}
+              >
+                Tildel
+              </Button>
+            </HStack>
+          </Modal.Footer>
         </>
       )}
     </Modal>
