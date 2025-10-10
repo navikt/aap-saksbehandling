@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useTransition } from 'react';
 import useSWR from 'swr';
-import { BodyShort, Box, Button, HStack, Label, Switch, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Box, Button, HStack, Label, Switch, VStack } from '@navikt/ds-react';
 import { EnhetSelect } from 'components/oppgaveliste/enhetselect/EnhetSelect';
 import { KøSelect } from 'components/oppgaveliste/køselect/KøSelect';
 import { byggKelvinURL, queryParamsArray } from 'lib/utils/request';
@@ -154,6 +154,10 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
         }
       }
     });
+  }
+
+  if (isError(køer)) {
+    return <Alert variant="error">{køer.apiException.message}</Alert>;
   }
 
   const oppgaveKøer = isSuccess(køer) ? køer.data : undefined;

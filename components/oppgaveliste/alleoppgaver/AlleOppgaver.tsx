@@ -4,7 +4,7 @@ import { Enhet } from 'lib/types/oppgaveTypes';
 import { EnhetSelect } from 'components/oppgaveliste/enhetselect/EnhetSelect';
 import { useEffect, useState } from 'react';
 import { useLagreAktivEnhet } from 'hooks/oppgave/aktivEnhetHook';
-import { BodyShort, Box, Button, HStack, Label, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Box, Button, HStack, Label, VStack } from '@navikt/ds-react';
 import { AlleOppgaverTabell } from 'components/oppgaveliste/alleoppgaver/alleoppgavertabell/AlleOppgaverTabell';
 import { useAlleOppgaverForEnhet } from 'hooks/oppgave/OppgaveHook';
 import { KøSelect } from 'components/oppgaveliste/køselect/KøSelect';
@@ -142,6 +142,10 @@ export const AlleOppgaver = ({ enheter }: Props) => {
     setAktivKøId(id);
     lagreAktivKøId(id);
   };
+
+  if (isError(køer)) {
+    return <Alert variant="error">{køer.apiException.message}</Alert>;
+  }
 
   const oppgaveKøer = isSuccess(køer) ? køer.data : undefined;
 
