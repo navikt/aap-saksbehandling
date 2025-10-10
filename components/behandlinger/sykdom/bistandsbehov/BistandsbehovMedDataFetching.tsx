@@ -1,9 +1,7 @@
 import { hentBistandsbehovGrunnlag, hentMellomlagring } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { Bistandsbehov } from 'components/behandlinger/sykdom/bistandsbehov/Bistandsbehov';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
-import { isDev } from 'lib/utils/environment';
 import { BistandsbehovNyVisning } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovNyVisning';
 import { skalViseSteg, StegData } from 'lib/utils/steg';
 
@@ -36,18 +34,8 @@ export const BistandsbehovMedDataFetching = async ({
     return null;
   }
 
-  return isDev() ? (
+  return (
     <BistandsbehovNyVisning
-      grunnlag={grunnlag.data}
-      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
-      behandlingVersjon={stegData.behandlingVersjon}
-      initialMellomlagretVurdering={initialMellomlagretVurdering}
-      typeBehandling={stegData.typeBehandling}
-      overgangArbeidEnabled={overgangArbeidEnabled}
-      overgangUføreEnabled={overgangUføreEnabled}
-    />
-  ) : (
-    <Bistandsbehov
       grunnlag={grunnlag.data}
       readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       behandlingVersjon={stegData.behandlingVersjon}
