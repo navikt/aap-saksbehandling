@@ -1,14 +1,19 @@
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render, screen } from 'lib/test/CustomRender';
 import { OvergangArbeid } from 'components/behandlinger/sykdom/overgangarbeid/OvergangArbeid';
 import { MellomlagretVurderingResponse, OvergangArbeidGrunnlag } from 'lib/types/types';
 import { FetchResponse } from 'lib/utils/api';
 import createFetchMock from 'vitest-fetch-mock';
 import { userEvent } from '@testing-library/user-event';
+import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
 const user = userEvent.setup();
+
+beforeEach(() => {
+  setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'OVERGANG_ARBEID' });
+});
 
 describe('mellomlagring i overgang arbeid', () => {
   const mellomlagring: MellomlagretVurderingResponse = {
