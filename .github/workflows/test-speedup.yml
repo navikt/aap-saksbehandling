@@ -3,38 +3,43 @@ on:
   workflow_dispatch:
 
 jobs:
-tests:
-  runs-on: ubuntu-latest
-  strategy:
-    matrix:
-      shardIndex: [1, 2, 3, 4]
-      shardTotal: [4]
-  steps:
-    - uses: actions/checkout@v5
-    - uses: actions/setup-node@v5
-      with:
-        node-version: 22
-    - name: Enable Corepack
-      run: corepack enable
-    - name: install dependencies Yarn
-      run: yarn install --immutable
+  tests:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+      packages: write
+    env:
+      NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+      SKIP_YARN_COREPACK_CHECK: true
+    strategy:
+      matrix:
+        shardIndex: [1, 2, 3, 4]
+        shardTotal: [4]
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Enable Corepack
+        run: corepack enable
+      - name: install dependencies Yarn
+        run: yarn install --immutable
 
-    - name: Run tests
-      run: yarn run test --reporter=blob --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
+      - name: Run tests
+        run: yarn run test --reporter=blob --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
 
-    - name: Upload blob report to GitHub Actions Artifacts
-      if: ${{ !cancelled() }}
-      uses: actions/upload-artifact@v4
-      with:
-        name: blob-report-${{ matrix.shardIndex }}
-        path: .vitest-reports/*
-        include-hidden-files: true
-        retention-days: 1
-
+      - name: Upload blob report to GitHub Actions Artifacts
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: blob-report-${{ matrix.shardIndex }}
+          path: .vitest-reports/*
+          include-hidden-files: true
+          retention-days: 1
   merge-reports:
     if: ${{ !cancelled() }}
     needs: [tests]
-
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
