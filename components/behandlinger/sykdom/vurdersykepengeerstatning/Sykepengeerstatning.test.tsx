@@ -6,10 +6,15 @@ import { MellomlagretVurderingResponse, SykepengeerstatningGrunnlag } from 'lib/
 import { Behovstype } from 'lib/utils/form';
 import { FetchResponse } from 'lib/utils/api';
 import createFetchMock from 'vitest-fetch-mock';
+import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
 const user = userEvent.setup();
+
+beforeEach(() => {
+  setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'VURDER_SYKEPENGEERSTATNING' });
+});
 
 describe('Sykepengeerstatning', () => {
   beforeEach(() => {
@@ -30,7 +35,7 @@ describe('Sykepengeerstatning', () => {
   });*/
 
   it('har felt for krav på sykepengeerstatning', () => {
-    expect(screen.getByRole('group', { name: 'Har brukeren krav på sykepengeerstatning?' })).toBeVisible();
+    expect(screen.getByRole('group', { name: 'Krav på sykepengeerstatning?' })).toBeVisible();
   });
 
   it('skal vise valg for grunn når krav på sykeerstatning er oppfylt', async () => {
@@ -239,6 +244,7 @@ describe('mellomlagring', () => {
 
     await user.click(slettKnapp);
 
+    screen.logTestingPlaygroundURL();
     expect(screen.getByRole('textbox', { name: 'Vilkårsvurdering' })).toHaveValue(
       'Dette er min vurdering som er bekreftet'
     );

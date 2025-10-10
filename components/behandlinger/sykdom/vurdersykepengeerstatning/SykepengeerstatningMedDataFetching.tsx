@@ -1,4 +1,3 @@
-import { Sykepengeerstatning } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/Sykepengeerstatning';
 import {
   hentMellomlagring,
   hentSykepengerErstatningGrunnlag,
@@ -6,8 +5,7 @@ import {
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
-import { isDev } from 'lib/utils/environment';
-import { SykepengeerstatningNyVisning } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/SykepengeerstatningNyVisning';
+import { Sykepengeerstatning } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/Sykepengeerstatning';
 import { skalViseSteg, StegData } from 'lib/utils/steg';
 
 interface Props {
@@ -29,14 +27,7 @@ export const SykepengeerstatningMedDataFetching = async ({ behandlingsReferanse,
     return null;
   }
 
-  return isDev() ? (
-    <SykepengeerstatningNyVisning
-      grunnlag={grunnlag.data}
-      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
-      behandlingVersjon={stegData.behandlingVersjon}
-      initialMellomlagretVurdering={initialMellomlagretVurdering}
-    />
-  ) : (
+  return (
     <Sykepengeerstatning
       grunnlag={grunnlag.data}
       readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
