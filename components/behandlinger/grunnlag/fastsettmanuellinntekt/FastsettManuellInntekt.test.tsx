@@ -5,6 +5,7 @@ import { FastsettManuellInntekt } from 'components/behandlinger/grunnlag/fastset
 import { ManuellInntektGrunnlag, MellomlagretVurderingResponse } from 'lib/types/types';
 import { FetchResponse } from 'lib/utils/api';
 import createFetchMock from 'vitest-fetch-mock';
+import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 
 const user = userEvent.setup();
 
@@ -30,6 +31,10 @@ const grunnlagMedVurdering: ManuellInntektGrunnlag = {
     belop: 500000,
   },
 };
+
+beforeEach(() => {
+  setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'MANGLENDE_LIGNING' });
+});
 
 describe('Fastsett manuell inntekt', () => {
   beforeEach(() => render(<FastsettManuellInntekt behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />));

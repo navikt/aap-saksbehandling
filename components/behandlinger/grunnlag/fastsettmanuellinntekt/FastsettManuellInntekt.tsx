@@ -1,6 +1,5 @@
 'use client';
 
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { Alert, BodyShort, HStack } from '@navikt/ds-react';
 import { useConfigForm } from 'components/form/FormHook';
@@ -17,6 +16,8 @@ import { formaterTilNok } from 'lib/utils/string';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 
 interface Props {
   behandlingsversjon: number;
@@ -45,6 +46,12 @@ export const FastsettManuellInntekt = ({
   const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
     useMellomlagring(Behovstype.FASTSETT_MANUELL_INNTEKT, initialMellomlagretVurdering);
 
+  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+    readOnly,
+    'MANGLENDE_LIGNING',
+    mellomlagretVurdering
+  );
+
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag.vurdering);
@@ -67,7 +74,7 @@ export const FastsettManuellInntekt = ({
         defaultValue: defaultValue.inntekt || '',
       },
     },
-    { readOnly }
+    { readOnly: formReadOnly }
   );
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -96,7 +103,7 @@ export const FastsettManuellInntekt = ({
   const historiskeVurderinger = grunnlag.historiskeVurderinger;
 
   return (
-    <VilkårskortMedFormOgMellomlagring
+    <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'Pensjonsgivende inntekt mangler (§ 11-19)'}
       steg={'MANGLENDE_LIGNING'}
       onSubmit={handleSubmit}
@@ -114,6 +121,8 @@ export const FastsettManuellInntekt = ({
       }}
       mellomlagretVurdering={mellomlagretVurdering}
       readOnly={readOnly}
+      visningModus={visningModus}
+      visningActions={visningActions}
     >
       {!!historiskeVurderinger?.length && (
         <TidligereVurderinger
@@ -135,7 +144,7 @@ export const FastsettManuellInntekt = ({
         <FormField form={form} formField={formFields.inntekt} className={'inntekt_input'} />
         <BodyShort>{inntektIgVerdi.toFixed(2)} G</BodyShort>
       </HStack>
-    </VilkårskortMedFormOgMellomlagring>
+    </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };
 

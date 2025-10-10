@@ -3,7 +3,6 @@ import { hentManuellInntektGrunnlag } from 'lib/services/saksbehandlingservice/s
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { skalViseSteg, StegData } from 'lib/utils/steg';
-import { isProd } from 'lib/utils/environment';
 
 interface Props {
   behandlingsreferanse: string;
@@ -21,13 +20,7 @@ export const FastsettManuellInntektMedDataFetching = async ({ behandlingsreferan
     return null;
   }
 
-  return !isProd() ? (
-    <FastsettManuellInntekt
-      behandlingsversjon={stegData.behandlingVersjon}
-      grunnlag={grunnlag.data}
-      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
-    />
-  ) : (
+  return (
     <FastsettManuellInntekt
       behandlingsversjon={stegData.behandlingVersjon}
       grunnlag={grunnlag.data}
