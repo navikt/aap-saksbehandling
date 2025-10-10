@@ -18,6 +18,8 @@ interface Props {
   setSøketekst: Dispatch<SetStateAction<string>>;
   setInfomelding: Dispatch<SetStateAction<string | undefined>>;
   setPageState: Dispatch<SetStateAction<number>>;
+  søkefeltError: string | undefined;
+  setSøkefeltError: Dispatch<SetStateAction<string | undefined>>;
 }
 
 export const SaksbehandlerSøk = ({
@@ -27,6 +29,8 @@ export const SaksbehandlerSøk = ({
   setSøketekst,
   setInfomelding,
   setPageState,
+  søkefeltError,
+  setSøkefeltError,
 }: Props) => {
   const [error, setError] = useState<string>();
   const [isLoading, setIsLoading] = useState(false);
@@ -35,7 +39,14 @@ export const SaksbehandlerSøk = ({
     event.preventDefault();
     setIsLoading(true);
     setInfomelding(undefined);
-    setError(undefined)
+    setError(undefined);
+    setSøkefeltError(undefined)
+
+    if (!søketekst || søketekst.trim() === '') {
+      setSøkefeltError('Du må fylle ut søkefeltet');
+      setIsLoading(false)
+      return;
+    }
 
     const res = await clientSøkPåSaksbehandler(oppgaver, søketekst);
     if (res.type == 'SUCCESS') {
@@ -59,6 +70,7 @@ export const SaksbehandlerSøk = ({
           value={søketekst}
           onChange={setSøketekst}
           id={'saksbehandlerSøkefelt'}
+          error={søkefeltError}
         >
           <Search.Button loading={isLoading} />
         </Search>
