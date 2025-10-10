@@ -134,9 +134,9 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
       visningModus={visningModus}
       visningActions={visningActions}
     >
-      {isDev() && grunnlag?.vurderinger && grunnlag?.vurderinger?.length > 0 && (
+      {isDev() && grunnlag?.vedtatteVurderinger && grunnlag?.vedtatteVurderinger?.length > 0 && (
         <TidligereVurderinger
-          data={grunnlag?.vurderinger}
+          data={grunnlag?.vedtatteVurderinger}
           buildFelter={byggFelter}
           getErGjeldende={() => true}
           getFomDato={(v) => v.gjelderFra}

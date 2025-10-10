@@ -1,11 +1,12 @@
 import { userEvent } from '@testing-library/user-event';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render, screen, within } from 'lib/test/CustomRender';
 import { LovvalgMedlemskapGrunnlag, MellomlagretVurderingResponse } from 'lib/types/types';
 import { FetchResponse } from 'lib/utils/api';
 import createFetchMock from 'vitest-fetch-mock';
 import { LovvalgOgMedlemskapVedSøknadstidspunkt } from './LovvalgOgMedlemskapVedSøknadstidspunkt';
 import { Behovstype } from 'lib/utils/form';
+import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
@@ -14,6 +15,10 @@ const grunnlagUtenVurdering: LovvalgMedlemskapGrunnlag = {
   harTilgangTilÅSaksbehandle: true,
   historiskeManuelleVurderinger: [],
 };
+
+beforeEach(() => {
+  setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'VURDER_LOVVALG' });
+});
 
 describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
   describe('generelt', () => {
@@ -85,6 +90,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
           behovstype={Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP}
         />
       );
+      screen.logTestingPlaygroundURL();
       const felt = screen.getByRole('group', {
         name: 'Hva er riktig lovvalgsland ved søknadstidspunkt?',
       });
