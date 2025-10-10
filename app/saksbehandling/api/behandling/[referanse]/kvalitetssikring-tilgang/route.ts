@@ -8,7 +8,7 @@ export async function GET(req: NextRequest, props: { params: Promise<{ referanse
   const res = await hentKvalitetssikringTilgang(params.referanse);
   if (isError(res)) {
     logError(
-      `api/behandling/${params.referanse}/kvalitetssikring-tilgang ${res.status} - ${res.apiException.code}: ${res.apiException.code}`
+      `api/behandling/${params.referanse}/kvalitetssikring-tilgang ${res.status} - ${res.apiException.code}: ${res.apiException.message}`
     );
   }
   return new Response(JSON.stringify(res), { status: res.status });
