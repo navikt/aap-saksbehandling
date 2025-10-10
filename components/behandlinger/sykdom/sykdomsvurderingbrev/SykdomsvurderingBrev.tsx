@@ -12,11 +12,12 @@ import {
 import { Behovstype } from 'lib/utils/form';
 import { FormEvent } from 'react';
 import { useConfigForm } from 'components/form/FormHook';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 
 interface Props {
   behandlingVersjon: number;
@@ -47,6 +48,12 @@ export const SykdomsvurderingBrev = ({
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
     useMellomlagring(Behovstype.SYKDOMSVURDERING_BREV_KODE, initialMellomlagretVurdering);
 
+  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+    readOnly,
+    'SYKDOMSVURDERING_BREV',
+    mellomlagretVurdering
+  );
+
   const defaultValues: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag?.vurdering);
@@ -60,7 +67,7 @@ export const SykdomsvurderingBrev = ({
         rules: { required: 'Du må skrive en individuell begrunnelse' },
       },
     },
-    { shouldUnregister: true, readOnly: readOnly }
+    { shouldUnregister: true, readOnly: formReadOnly }
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -84,7 +91,7 @@ export const SykdomsvurderingBrev = ({
     typeBehandling === 'Revurdering' && historiskeVurderinger && historiskeVurderinger.length > 0;
 
   return (
-    <VilkårskortMedFormOgMellomlagring
+    <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'Individuell begrunnelse for §§ 11-5 og 11-6 til vedtaksbrev'}
       steg="SYKDOMSVURDERING_BREV"
       vilkårTilhørerNavKontor={true}
@@ -92,7 +99,7 @@ export const SykdomsvurderingBrev = ({
       onSubmit={handleSubmit}
       status={status}
       isLoading={isLoading}
-      visBekreftKnapp={!readOnly}
+      visBekreftKnapp={!formReadOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
       mellomlagretVurdering={mellomlagretVurdering}
@@ -102,7 +109,10 @@ export const SykdomsvurderingBrev = ({
           form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields());
         });
       }}
-      readOnly={readOnly}
+      readOnly={formReadOnly}
+      visningModus={visningModus}
+      visningActions={visningActions}
+      knappTekst={'Bekreft og send videre'}
     >
       <VStack gap={'4'}>
         {skalViseTidligereVurderinger && (
@@ -158,7 +168,7 @@ export const SykdomsvurderingBrev = ({
         />
         <FormField form={form} formField={formFields.vurdering} className={'begrunnelse'} />
       </VStack>
-    </VilkårskortMedFormOgMellomlagring>
+    </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };
 

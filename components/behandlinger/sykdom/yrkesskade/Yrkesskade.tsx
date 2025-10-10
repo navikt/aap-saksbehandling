@@ -13,7 +13,8 @@ import { YrkesskadeVurderingTabell } from 'components/behandlinger/sykdom/yrkess
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { parse } from 'date-fns';
 import { useFieldArray } from 'react-hook-form';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 
 interface Props {
   grunnlag: YrkesskadeVurderingGrunnlag;
@@ -53,6 +54,12 @@ export const Yrkesskade = ({
 
   const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
     useMellomlagring(Behovstype.YRKESSKADE_KODE, initialMellomlagretVurdering);
+
+  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+    readOnly,
+    'VURDER_YRKESSKADE',
+    mellomlagretVurdering
+  );
 
   const defaultValues: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -104,7 +111,7 @@ export const Yrkesskade = ({
         },
       },
     },
-    { readOnly, shouldUnregister: true }
+    { readOnly: formReadOnly, shouldUnregister: true }
   );
 
   const { fields: relevanteYrkesskadeSaker, update } = useFieldArray({
@@ -170,7 +177,7 @@ export const Yrkesskade = ({
   };
 
   return (
-    <VilkårskortMedFormOgMellomlagring
+    <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'§ 11-22 AAP ved yrkesskade'}
       steg={'VURDER_YRKESSKADE'}
       vilkårTilhørerNavKontor={false}
@@ -188,6 +195,8 @@ export const Yrkesskade = ({
         });
       }}
       readOnly={readOnly}
+      visningModus={visningModus}
+      visningActions={visningActions}
     >
       <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
       <FormField form={form} formField={formFields.erÅrsakssammenheng} horizontalRadio />
@@ -199,7 +208,7 @@ export const Yrkesskade = ({
             </Label>
             <YrkesskadeVurderingTabell
               form={form}
-              readOnly={readOnly}
+              readOnly={formReadOnly}
               yrkesskader={relevanteYrkesskadeSaker}
               update={update}
             />
@@ -207,7 +216,7 @@ export const Yrkesskade = ({
           <FormField form={form} formField={formFields.andelAvNedsettelsen} className={'prosent_input'} />
         </>
       )}
-    </VilkårskortMedFormOgMellomlagring>
+    </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };
 

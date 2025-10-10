@@ -11,8 +11,9 @@ import { BodyShort, Label } from '@navikt/ds-react';
 import { validerDato } from 'lib/validation/dateValidation';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 
 interface Props {
   behandlingVersjon: number;
@@ -40,6 +41,12 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly, initia
 
   const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
     useMellomlagring(Behovstype.AVKLAR_STUDENT_KODE, initialMellomlagretVurdering);
+
+  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+    readOnly,
+    'AVKLAR_STUDENT',
+    mellomlagretVurdering
+  );
 
   const defaultValues: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -112,7 +119,7 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly, initia
         rules: { required: 'Du må svare på om avbruddet er forventet å vare i mer enn 6 måneder.' },
       },
     },
-    { readOnly: readOnly, shouldUnregister: true }
+    { readOnly: formReadOnly, shouldUnregister: true }
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -149,13 +156,13 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly, initia
   };
 
   return (
-    <VilkårskortMedFormOgMellomlagring
+    <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'§ 11-14 Student'}
       steg={'AVKLAR_STUDENT'}
       onSubmit={handleSubmit}
       status={status}
       isLoading={isLoading}
-      visBekreftKnapp={!readOnly}
+      visBekreftKnapp={!formReadOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
       vurdertAvAnsatt={grunnlag?.studentvurdering?.vurdertAv}
@@ -170,7 +177,9 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly, initia
           );
         });
       }}
-      readOnly={readOnly}
+      readOnly={formReadOnly}
+      visningModus={visningModus}
+      visningActions={visningActions}
     >
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
         <Label size={'small'}>Relevant informasjon fra søknaden</Label>
@@ -204,7 +213,7 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly, initia
       {form.watch('avbruddMerEnn6Måneder') === JaEllerNei.Ja && (
         <FormField form={form} formField={formFields.avbruttDato} />
       )}
-    </VilkårskortMedFormOgMellomlagring>
+    </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };
 

@@ -25,8 +25,9 @@ import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrap
 import { validerDato } from 'lib/validation/dateValidation';
 import { parse } from 'date-fns';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 
 interface Props {
   behandlingVersjon: number;
@@ -61,6 +62,12 @@ export const OvergangArbeid = ({
   const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
     useMellomlagring(Behovstype.OVERGANG_ARBEID, initialMellomlagretVurdering);
 
+  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+    readOnly,
+    'OVERGANG_ARBEID',
+    mellomlagretVurdering
+  );
+
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag?.vurdering);
@@ -88,7 +95,7 @@ export const OvergangArbeid = ({
         rules: { required: 'Du må velge virkningsdato for vurderingen' },
       },
     },
-    { readOnly: readOnly, shouldUnregister: true }
+    { readOnly: formReadOnly, shouldUnregister: true }
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -116,11 +123,11 @@ export const OvergangArbeid = ({
   const historiskeVurderinger = grunnlag?.historiskeVurderinger;
 
   return (
-    <VilkårskortMedFormOgMellomlagring
+    <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'§ 11-17 AAP i perioden som arbeidssøker'}
       steg={'OVERGANG_ARBEID'}
       onSubmit={handleSubmit}
-      visBekreftKnapp={!readOnly}
+      visBekreftKnapp={!formReadOnly}
       isLoading={isLoading}
       status={status}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
@@ -131,8 +138,10 @@ export const OvergangArbeid = ({
         slettMellomlagring();
         form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields());
       }}
-      readOnly={readOnly}
+      readOnly={formReadOnly}
       mellomlagretVurdering={mellomlagretVurdering}
+      visningModus={visningModus}
+      visningActions={visningActions}
     >
       {typeBehandling === 'Revurdering' && historiskeVurderinger && historiskeVurderinger.length > 0 && (
         <TidligereVurderinger
@@ -171,10 +180,10 @@ export const OvergangArbeid = ({
               gyldigDato: (value) => validerDato(value as string),
             },
           }}
-          readOnly={readOnly}
+          readOnly={formReadOnly}
         />
       </VStack>
-    </VilkårskortMedFormOgMellomlagring>
+    </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 
   function mapVurderingToDraftFormFields(vurdering?: OvergangArbeidVurdering): DraftFormFields {

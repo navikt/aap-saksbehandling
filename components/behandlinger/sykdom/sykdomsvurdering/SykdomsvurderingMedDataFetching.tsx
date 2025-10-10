@@ -1,4 +1,3 @@
-import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import { hentMellomlagring, hentSykdomsGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { DiagnoseSystem, diagnoseSøker } from 'lib/diagnosesøker/DiagnoseSøker';
 import { uniqBy } from 'lodash';
@@ -7,9 +6,8 @@ import { ValuePair } from 'components/form/FormField';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
-import { isDev } from 'lib/utils/environment';
-import { SykdomsvurderingNyVisning } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedNyVisning';
 import { skalViseSteg, StegData } from 'lib/utils/steg';
+import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 
 interface Props {
   behandlingsReferanse: string;
@@ -45,17 +43,7 @@ export const SykdomsvurderingMedDataFetching = async ({ behandlingsReferanse, st
     return null;
   }
 
-  return isDev() ? (
-    <SykdomsvurderingNyVisning
-      grunnlag={grunnlag.data}
-      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
-      behandlingVersjon={stegData.behandlingVersjon}
-      bidiagnoserDeafultOptions={bidiagnoserDefaultOptions}
-      hoveddiagnoseDefaultOptions={hovedDiagnoseDefaultOptions}
-      typeBehandling={typeBehandling}
-      initialMellomlagretVurdering={initialMellomlagretVurdering}
-    />
-  ) : (
+  return (
     <Sykdomsvurdering
       grunnlag={grunnlag.data}
       readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}

@@ -1,4 +1,3 @@
-import { Meldeplikt } from 'components/behandlinger/sykdom/meldeplikt/Meldeplikt';
 import {
   hentMellomlagring,
   hentUnntakMeldepliktGrunnlag,
@@ -6,8 +5,7 @@ import {
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
-import { isDev } from 'lib/utils/environment';
-import { MeldepliktNyVisning } from 'components/behandlinger/sykdom/meldeplikt/MeldepliktNyVisning';
+import { Meldeplikt } from 'components/behandlinger/sykdom/meldeplikt/Meldeplikt';
 import { StegData } from 'lib/utils/steg';
 
 interface Props {
@@ -25,14 +23,7 @@ export const MeldepliktMedDataFetching = async ({ behandlingsReferanse, stegData
     return <ApiException apiResponses={[grunnlag]} />;
   }
 
-  return isDev() ? (
-    <MeldepliktNyVisning
-      grunnlag={grunnlag.data}
-      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
-      behandlingVersjon={stegData.behandlingVersjon}
-      initialMellomlagretVurdering={initialMellomlagretVurdering}
-    />
-  ) : (
+  return (
     <Meldeplikt
       grunnlag={grunnlag.data}
       readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}

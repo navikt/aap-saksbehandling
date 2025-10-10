@@ -1,4 +1,3 @@
-import { FastsettArbeidsevne } from 'components/behandlinger/sykdom/fastsettarbeidsevne/FastsettArbeidsevne';
 import {
   hentFastsettArbeidsevneGrunnlag,
   hentMellomlagring,
@@ -6,8 +5,7 @@ import {
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
-import { FastsettArbeidsevneNyVisning } from 'components/behandlinger/sykdom/fastsettarbeidsevne/FastsettArbeidsevneNyVisning';
-import { isDev } from 'lib/utils/environment';
+import { FastsettArbeidsevne } from 'components/behandlinger/sykdom/fastsettarbeidsevne/FastsettArbeidsevne';
 import { StegData } from 'lib/utils/steg';
 
 interface Props {
@@ -25,14 +23,7 @@ export const FastsettArbeidsevneMedDataFetching = async ({ behandlingsReferanse,
     return <ApiException apiResponses={[grunnlag]} />;
   }
 
-  return isDev() ? (
-    <FastsettArbeidsevneNyVisning
-      grunnlag={grunnlag.data}
-      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
-      behandlingVersjon={stegData.behandlingVersjon}
-      initialMellomlagretVurdering={initialMellomlagretVurdering}
-    />
-  ) : (
+  return (
     <FastsettArbeidsevne
       grunnlag={grunnlag.data}
       readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}

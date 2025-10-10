@@ -17,8 +17,9 @@ import { parse } from 'date-fns';
 import { useConfigForm } from 'components/form/FormHook';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 
 interface Props {
   behandlingVersjon: number;
@@ -68,6 +69,12 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly, initialMello
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
     useMellomlagring(Behovstype.FRITAK_MELDEPLIKT_KODE, initialMellomlagretVurdering);
 
+  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+    readOnly,
+    'FRITAK_MELDEPLIKT',
+    mellomlagretVurdering
+  );
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
       løsBehovOgGåTilNesteSteg(
@@ -92,10 +99,9 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly, initialMello
 
   const showAsOpen =
     (!!grunnlag?.vurderinger && grunnlag.vurderinger.length > 0) || initialMellomlagretVurdering !== undefined;
-  const skalViseBekreftKnapp = !readOnly && fritakMeldepliktVurderinger.length > 0;
 
   return (
-    <VilkårskortMedFormOgMellomlagring
+    <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'§ 11-10 tredje ledd. Unntak fra meldeplikt'}
       steg="FRITAK_MELDEPLIKT"
       vilkårTilhørerNavKontor={true}
@@ -103,7 +109,7 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly, initialMello
       onSubmit={handleSubmit}
       status={status}
       isLoading={isLoading}
-      visBekreftKnapp={skalViseBekreftKnapp}
+      visBekreftKnapp={false}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vurdertAvAnsatt={sisteFritakVurdertAv}
       mellomlagretVurdering={mellomlagretVurdering}
@@ -116,6 +122,8 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly, initialMello
         );
       }}
       readOnly={readOnly}
+      visningModus={visningModus}
+      visningActions={visningActions}
     >
       <VStack gap={'4'}>
         <Link href={'https://lovdata.no/pro/rundskriv/r11-00/KAPITTEL_12'} target="_blank">
@@ -130,14 +138,14 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly, initialMello
               name={`fritaksvurderinger.${index}.begrunnelse`}
               rules={{ required: 'Du må begrunne vurderingen din' }}
               className={'begrunnelse'}
-              readOnly={readOnly}
+              readOnly={formReadOnly}
             />
             <RadioGroupWrapper
               label={'Skal brukeren få fritak fra meldeplikt?'}
               control={form.control}
               name={`fritaksvurderinger.${index}.harFritak`}
               rules={{ required: 'Du må svare på om brukeren skal få fritak fra meldeplikt' }}
-              readOnly={readOnly}
+              readOnly={formReadOnly}
               horisontal
             >
               <Radio value={JaEllerNei.Ja}>Ja</Radio>
@@ -151,9 +159,9 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly, initialMello
                 required: 'Du må angi en dato vurderingen gjelder fra',
                 validate: (value) => validerDato(value as string),
               }}
-              readOnly={readOnly}
+              readOnly={formReadOnly}
             />
-            {!readOnly && (
+            {!formReadOnly && (
               <div>
                 <Button
                   onClick={() => remove(index)}
@@ -168,7 +176,7 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly, initialMello
             )}
           </div>
         ))}
-        {!readOnly && (
+        {!formReadOnly && (
           <Button
             onClick={() => append({ begrunnelse: '', harFritak: '', fraDato: '' })}
             type={'button'}
@@ -180,7 +188,7 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly, initialMello
           </Button>
         )}
       </VStack>
-    </VilkårskortMedFormOgMellomlagring>
+    </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };
 

@@ -12,12 +12,13 @@ import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { isDev } from 'lib/utils/environment';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { parse } from 'date-fns';
-import { isDev } from 'lib/utils/environment';
 
 interface Props {
   behandlingVersjon: number;
@@ -43,6 +44,12 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
   const { lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
     useMellomlagring(Behovstype.VURDER_SYKEPENGEERSTATNING_KODE, initialMellomlagretVurdering);
 
+  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+    readOnly,
+    'VURDER_SYKEPENGEERSTATNING',
+    mellomlagretVurdering
+  );
+
   const defaultValues: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag?.vurderinger);
@@ -63,7 +70,7 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
       },
       erOppfylt: {
         type: 'radio',
-        label: 'Har brukeren krav på sykepengeerstatning?',
+        label: 'Krav på sykepengeerstatning?',
         rules: { required: 'Du må ta stilling til om brukeren har rett på AAP som sykepengeerstatning.' },
         options: JaEllerNeiOptions,
         defaultValue: defaultValues?.erOppfylt,
@@ -76,7 +83,7 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
         options: grunnOptions,
       },
     },
-    { shouldUnregister: true, readOnly: readOnly }
+    { shouldUnregister: true, readOnly: formReadOnly }
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -104,32 +111,28 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
   };
 
   return (
-    <VilkårskortMedFormOgMellomlagring
+    <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'§ 11-13 AAP som sykepengeerstatning'}
       steg="VURDER_SYKEPENGEERSTATNING"
       onSubmit={handleSubmit}
       status={status}
       isLoading={isLoading}
-      visBekreftKnapp={!readOnly}
+      visBekreftKnapp={!formReadOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
-      vurdertAvAnsatt={
-        grunnlag?.vurderinger && grunnlag.vurderinger.length > 0
-          ? grunnlag.vurderinger[grunnlag.vurderinger.length - 1].vurdertAv
-          : undefined
-      }
+      vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
       mellomlagretVurdering={mellomlagretVurdering}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() => {
           form.reset(
-            grunnlag?.vurderinger && grunnlag.vurderinger.length > 0
-              ? mapVurderingToDraftFormFields(grunnlag.vurderinger)
-              : emptyDraftFormFields()
+            grunnlag?.vurderinger?.length ? mapVurderingToDraftFormFields(grunnlag.vurderinger) : emptyDraftFormFields()
           );
         });
       }}
-      readOnly={readOnly}
+      readOnly={formReadOnly}
+      visningModus={visningModus}
+      visningActions={visningActions}
     >
       {isDev() && grunnlag?.vedtatteVurderinger && grunnlag?.vedtatteVurderinger?.length > 0 && (
         <TidligereVurderinger
@@ -147,7 +150,7 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
       {form.watch('erOppfylt') === JaEllerNei.Ja && (
         <FormField form={form} formField={formFields.grunn} className={'radio'} />
       )}
-    </VilkårskortMedFormOgMellomlagring>
+    </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };
 

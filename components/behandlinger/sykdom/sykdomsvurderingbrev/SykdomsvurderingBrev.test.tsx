@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render, screen } from 'lib/test/CustomRender';
 import { userEvent } from '@testing-library/user-event';
 import { MellomlagretVurderingResponse, SykdomsvurderingBrevGrunnlag } from 'lib/types/types';
@@ -6,6 +6,7 @@ import { SykdomsvurderingBrev } from 'components/behandlinger/sykdom/sykdomsvurd
 import { Behovstype } from 'lib/utils/form';
 import { FetchResponse } from 'lib/utils/api';
 import createFetchMock from 'vitest-fetch-mock';
+import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
@@ -16,6 +17,10 @@ const grunnlag: SykdomsvurderingBrevGrunnlag = {
   historiskeVurderinger: [],
   kanSaksbehandle: true,
 };
+
+beforeEach(() => {
+  setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'SYKDOMSVURDERING_BREV' });
+});
 
 describe('sykdomsvurdering for brev', () => {
   it('Skal vise vurderingsfelt', async () => {
@@ -40,7 +45,7 @@ describe('sykdomsvurdering for brev', () => {
         behandlingVersjon={0}
       />
     );
-    const button = screen.getByRole('button', { name: 'Bekreft' });
+    const button = screen.getByRole('button', { name: 'Bekreft og send videre' });
     await user.click(button);
 
     expect(await screen.findByText('Du må skrive en individuell begrunnelse')).toBeVisible();

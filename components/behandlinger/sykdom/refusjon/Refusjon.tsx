@@ -10,7 +10,6 @@ import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } fro
 import { validerNullableDato } from 'lib/validation/dateValidation';
 import { FormEvent } from 'react';
 import { useSak } from 'hooks/SakHook';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { Button, HStack, Radio, VStack } from '@navikt/ds-react';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { useFieldArray } from 'react-hook-form';
@@ -25,6 +24,8 @@ import { Sak } from 'context/saksbehandling/SakContext';
 
 import styles from './Refusjon.module.css';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 
 interface Props {
   behandlingVersjon: number;
@@ -55,6 +56,12 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
 
   const { lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
     useMellomlagring(Behovstype.REFUSJON_KRAV_KODE, initialMellomlagretVurdering);
+
+  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+    readOnly,
+    'REFUSJON_KRAV',
+    mellomlagretVurdering
+  );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -120,22 +127,24 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
   const historiskeVurderinger = grunnlag.historiskeVurderinger;
 
   return (
-    <VilkårskortMedFormOgMellomlagring
+    <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'Sosialstønad refusjonskrav'}
       steg="REFUSJON_KRAV"
       vilkårTilhørerNavKontor={true}
       onSubmit={handleSubmit}
       status={status}
       isLoading={isLoading}
-      visBekreftKnapp={!readOnly}
+      visBekreftKnapp={!formReadOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vurdertAvAnsatt={grunnlag.gjeldendeVurderinger?.[0]?.vurdertAv}
-      readOnly={readOnly}
+      readOnly={formReadOnly}
       mellomlagretVurdering={mellomlagretVurdering}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() => form.reset(mapVurderingToDraftFormFields(grunnlag, sak)))
       }
+      visningModus={visningModus}
+      visningActions={visningActions}
     >
       {!!historiskeVurderinger?.length && (
         <TidligereVurderinger data={historiskeVurderinger} buildFelter={byggFelter} />
@@ -146,7 +155,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
         control={form.control}
         label={'Er det refusjonskrav fra Nav-kontor?'}
         rules={{ required: 'Du må velge om brukeren har refusjonskrav' }}
-        readOnly={readOnly}
+        readOnly={formReadOnly}
         horisontal
       >
         <Radio value={JaEllerNei.Ja}>Ja</Radio>
@@ -175,7 +184,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
                 }}
                 size={'small'}
                 defaultOptions={defaultOptions}
-                readOnly={readOnly}
+                readOnly={formReadOnly}
               />
               <HStack gap={'4'} align={'end'}>
                 <DateInputWrapper
@@ -195,7 +204,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
                       },
                     },
                   }}
-                  readOnly={readOnly}
+                  readOnly={formReadOnly}
                 />
                 <DateInputWrapper
                   name={`refusjoner.${index}.tom`}
@@ -218,9 +227,9 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
                       },
                     },
                   }}
-                  readOnly={readOnly}
+                  readOnly={formReadOnly}
                 />
-                {!erFørsterefusjon && !readOnly && (
+                {!erFørsterefusjon && !formReadOnly && (
                   <Button
                     type={'button'}
                     icon={<TrashIcon aria-hidden />}
@@ -236,7 +245,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
             </VStack>
           );
         })}
-      {form.watch('harKrav') === JaEllerNei.Ja && !readOnly && (
+      {form.watch('harKrav') === JaEllerNei.Ja && !formReadOnly && (
         <Button
           type={'button'}
           className={'fit-content'}
@@ -247,7 +256,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
           Legg til nytt Nav-kontor
         </Button>
       )}
-    </VilkårskortMedFormOgMellomlagring>
+    </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };
 

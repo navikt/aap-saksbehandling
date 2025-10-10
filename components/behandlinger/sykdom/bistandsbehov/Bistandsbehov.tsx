@@ -19,7 +19,8 @@ import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
 import { Veiledning } from 'components/veiledning/Veiledning';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 
 interface Props {
   behandlingVersjon: number;
@@ -27,8 +28,8 @@ interface Props {
   typeBehandling: TypeBehandling;
   grunnlag?: BistandsGrunnlag;
   initialMellomlagretVurdering?: MellomlagretVurdering;
-  overgangUføreEnabled?: Boolean,
-  overgangArbeidEnabled?: Boolean,
+  overgangUføreEnabled?: Boolean;
+  overgangArbeidEnabled?: Boolean;
 }
 
 interface FormFields {
@@ -58,6 +59,12 @@ export const Bistandsbehov = ({
 
   const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
     useMellomlagring(Behovstype.AVKLAR_BISTANDSBEHOV_KODE, initialMellomlagretVurdering);
+
+  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+    readOnly,
+    'VURDER_BISTANDSBEHOV',
+    mellomlagretVurdering
+  );
 
   const vilkårsvurderingLabel = 'Vilkårsvurdering';
   const erBehovForAktivBehandlingLabel = 'a: Har brukeren behov for aktiv behandling?';
@@ -128,7 +135,7 @@ export const Bistandsbehov = ({
         },
       },
     },
-    { readOnly, shouldUnregister: true }
+    { readOnly: formReadOnly, shouldUnregister: true }
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -156,6 +163,7 @@ export const Bistandsbehov = ({
         },
         () => {
           nullstillMellomlagretVurdering();
+          visningActions.onBekreftClick();
         }
       );
     })(event);
@@ -173,7 +181,7 @@ export const Bistandsbehov = ({
   const historiskeVurderinger = grunnlag?.historiskeVurderinger;
 
   return (
-    <VilkårskortMedFormOgMellomlagring
+    <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'§ 11-6 Behov for bistand til å skaffe seg eller beholde arbeid'}
       steg={'VURDER_BISTANDSBEHOV'}
       onSubmit={handleSubmit}
@@ -190,8 +198,9 @@ export const Bistandsbehov = ({
         });
       }}
       mellomlagretVurdering={mellomlagretVurdering}
-      visBekreftKnapp={!readOnly}
-      readOnly={readOnly}
+      visBekreftKnapp={false}
+      visningModus={visningModus}
+      visningActions={visningActions}
     >
       {historiskeVurderinger && historiskeVurderinger.length > 0 && (
         <TidligereVurderinger
@@ -268,7 +277,7 @@ export const Bistandsbehov = ({
             )}
           </VStack>
         )}
-    </VilkårskortMedFormOgMellomlagring>
+    </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 
   function mapVurderingToDraftFormFields(vurdering?: BistandsbehovVurdering): DraftFormFields {

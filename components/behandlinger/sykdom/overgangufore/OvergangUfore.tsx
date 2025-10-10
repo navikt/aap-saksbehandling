@@ -13,7 +13,6 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgG
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { Alert, Link } from '@navikt/ds-react';
-
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
@@ -21,8 +20,9 @@ import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrap
 import { validerDato } from 'lib/validation/dateValidation';
 import { parse } from 'date-fns';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 
 interface Props {
   behandlingVersjon: number;
@@ -53,6 +53,12 @@ export const OvergangUfore = ({ behandlingVersjon, grunnlag, readOnly, initialMe
 
   const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
     useMellomlagring(Behovstype.OVERGANG_UFORE, initialMellomlagretVurdering);
+
+  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+    readOnly,
+    'OVERGANG_UFORE',
+    mellomlagretVurdering
+  );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -112,10 +118,10 @@ export const OvergangUfore = ({ behandlingVersjon, grunnlag, readOnly, initialMe
         type: 'textarea',
         label: virkningsdatoLabel,
         defaultValue: (defaultValue.virkningsdato && formaterDatoForFrontend(defaultValue.virkningsdato)) || undefined,
-        rules: { required: 'Du må velge virkningstidspunkt for vurderingen' },
+        rules: { required: 'Du må velge virkningsdato for vurderingen' },
       },
     },
-    { readOnly: readOnly, shouldUnregister: true }
+    { readOnly: formReadOnly, shouldUnregister: true }
   );
 
   type DraftFormFields = Partial<FormFields>;
@@ -150,11 +156,11 @@ export const OvergangUfore = ({ behandlingVersjon, grunnlag, readOnly, initialMe
   const historiskeVurderinger = grunnlag?.historiskeVurderinger;
 
   return (
-    <VilkårskortMedFormOgMellomlagring
+    <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'§ 11-18 AAP under behandling av krav om uføretrygd'}
       steg={'OVERGANG_UFORE'}
       onSubmit={handleSubmit}
-      visBekreftKnapp={!readOnly}
+      visBekreftKnapp={!formReadOnly}
       isLoading={isLoading}
       status={status}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
@@ -166,7 +172,9 @@ export const OvergangUfore = ({ behandlingVersjon, grunnlag, readOnly, initialMe
         form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields());
       }}
       mellomlagretVurdering={mellomlagretVurdering}
-      readOnly={readOnly}
+      readOnly={formReadOnly}
+      visningModus={visningModus}
+      visningActions={visningActions}
     >
       {historiskeVurderinger && historiskeVurderinger.length > 0 && (
         <TidligereVurderinger
@@ -200,7 +208,7 @@ export const OvergangUfore = ({ behandlingVersjon, grunnlag, readOnly, initialMe
               gyldigDato: (value) => validerDato(value as string),
             },
           }}
-          readOnly={readOnly}
+          readOnly={formReadOnly}
         />
       )}
       {brukerHarSoktOmUforetrygd && <FormField form={form} formField={formFields.brukerHarFåttVedtakOmUføretrygd} />}
@@ -213,7 +221,7 @@ export const OvergangUfore = ({ behandlingVersjon, grunnlag, readOnly, initialMe
       {brukerHarSoktOmUforetrygd && form.watch('brukerHarSøktUføretrygd') !== 'NEI' && (
         <FormField form={form} formField={formFields.brukerRettPåAAP} horizontalRadio />
       )}
-    </VilkårskortMedFormOgMellomlagring>
+    </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 
   function mapVurderingToDraftFormFields(vurdering?: OvergangUføreVurdering): DraftFormFields {
