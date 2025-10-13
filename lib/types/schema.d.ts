@@ -4227,6 +4227,7 @@ export interface components {
       oppholdstype: 'A' | 'D' | 'F' | 'H' | 'P' | 'R' | 'S' | 'V' | 'UKJENT';
     };
     'no.nav.aap.behandlingsflyt.OpprettTestcaseDTO': {
+      andreUtbetalinger?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AndreUtbetalinger'];
       barn: components['schemas']['no.nav.aap.behandlingsflyt.TestBarn'][];
       erArbeidsevnenNedsatt: boolean;
       erNedsettelseIArbeidsevneMerEnnHalvparten: boolean;
@@ -13606,6 +13607,24 @@ export interface components {
        */
       tilOgMed: string;
     };
+    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AndreUtbetalinger': {
+      afp?: string | null;
+      'l\u00F8nn'?: string | null;
+      'st\u00F8nad'?:
+        | (
+            | 'ØKONOMISK_SOSIALHJELP'
+            | 'OMSORGSSTØNAD'
+            | 'INTRODUKSJONSSTØNAD'
+            | 'KVALIFISERINGSSTØNAD'
+            | 'VERV'
+            | 'UTLAND'
+            | 'AFP'
+            | 'STIPEND'
+            | 'LÅN'
+            | 'NEI'
+          )[]
+        | null;
+    };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AnkeITrygderettenbehandlingOpprettetDetaljer': {
       /**
        * Format: date-time
@@ -14104,6 +14123,7 @@ export interface components {
       kommeTilbake?: 'Ja' | 'Nei' | 'VetIkke' | null;
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.S\u00F8knadV0': {
+      andreUtbetalinger?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AndreUtbetalinger'];
       medlemskap?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.S\u00F8knadMedlemskapDto'];
       oppgitteBarn?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.OppgitteBarn'];
       student?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.S\u00F8knadStudentDto'];
@@ -14562,6 +14582,7 @@ export interface components {
       's\u00F8knadErTrukket'?: boolean | null;
     };
     'no.nav.aap.behandlingsflyt.test.OpprettDummySakDto': {
+      andreUtbetalinger?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AndreUtbetalinger'];
       erStudent: boolean;
       harMedlemskap: boolean;
       harYrkesskade: boolean;

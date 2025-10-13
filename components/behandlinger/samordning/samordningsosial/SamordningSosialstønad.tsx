@@ -39,8 +39,8 @@ export const SamordningSosialstønad = ({ grunnlag }: Props) => {
                 <Table.Row key={vurdering.navKontor ?? index}>
                   <Table.DataCell textSize="small">
                     <HStack gap={'2'} marginInline={'2'}>
-                      {formaterDatoForFrontend(vurdering.fom!!)} -
-                      {vurdering.tom ? formaterDatoForFrontend(vurdering.tom) : ''}
+                      {vurdering.fom ? formaterDatoForFrontend(vurdering.fom) : ''} -{' '}
+                      {vurdering.tom ? formaterDatoForFrontend(vurdering.tom) : 'Ingen sluttdato'}
                     </HStack>
                   </Table.DataCell>
                   <Table.DataCell textSize="small">{vurdering.navKontor}</Table.DataCell>

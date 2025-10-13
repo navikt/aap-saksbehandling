@@ -11,12 +11,12 @@ import { AsyncComboSearch } from 'components/form/asynccombosearch/AsyncComboSea
 import { clientHentAlleNavenheter } from 'lib/clientApi';
 import { isError } from 'lib/utils/api';
 
-import { RefusjonFormFields } from 'components/behandlinger/sykdom/refusjon/Refusjon';
+import { FormFields } from 'components/behandlinger/sykdom/refusjon/Refusjon';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import styles from './Refusjon.module.css';
 
 interface Props {
-  form: UseFormReturn<RefusjonFormFields>;
+  form: UseFormReturn<FormFields>;
   readOnly: boolean;
 }
 
@@ -42,7 +42,7 @@ export const RefusjonsKrav = ({ form, readOnly }: Props) => {
 
   function leggTilRad() {
     append({
-      navKontor: undefined,
+      navKontor: { label: '', value: '' },
       fom: '',
       tom: '',
     });

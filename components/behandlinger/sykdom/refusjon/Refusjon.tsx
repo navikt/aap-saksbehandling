@@ -9,8 +9,6 @@ import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date'
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { FormEvent } from 'react';
 import { useSak } from 'hooks/SakHook';
-import { Button, HStack, Radio, VStack } from '@navikt/ds-react';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { BodyLong, Radio } from '@navikt/ds-react';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 
@@ -31,12 +29,12 @@ interface Props {
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
-interface FormFields {
+export interface FormFields {
   harKrav: string;
   refusjoner: Refusjon[];
 }
 
-interface Refusjon {
+export interface Refusjon {
   fom?: string;
   navKontor: ValuePair;
   tom?: string;
@@ -162,7 +160,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
       </RadioGroupWrapper>
 
       {form.watch('harKrav') === JaEllerNei.Ja && <RefusjonsKrav form={form} readOnly={readOnly} />}
-    </VilkårskortMedFormOgMellomlagring>
+    </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };
 
