@@ -52,12 +52,12 @@ const visning: FlytVisning = {
   kvalitetssikringReadOnly: false,
   resultatKode: null,
   saksbehandlerReadOnly: true,
-  typeBehandling: "Førstegangsbehandling",
+  typeBehandling: 'Førstegangsbehandling',
   visBeslutterKort: false,
   visBrevkort: false,
   visKvalitetssikringKort: false,
   visVentekort: false,
-}
+};
 
 describe('Saksinfobanner på sak siden', () => {
   beforeEach(() => {
@@ -317,7 +317,7 @@ describe('Sak status', () => {
     expect(påVentTag).not.toBeInTheDocument();
   });
 
-  it('skal vise saksbehandlers navn på reservert-tag dersom oppgaven er reservert', () => {
+  it('skal vise saksbehandlers navn på tildelt-tag dersom oppgaven er reservert', () => {
     render(
       <SaksinfoBanner
         personInformasjon={personInformasjon}
@@ -330,11 +330,11 @@ describe('Sak status', () => {
       />
     );
 
-    const reservertTag = screen.getByText('Reservert Test Testesen');
-    expect(reservertTag).toBeVisible();
+    const tildeltTag = screen.getByText('Tildelt: Test Testesen');
+    expect(tildeltTag).toBeVisible();
   });
 
-  it('skal vise saksbehandlers ident på reservert-tag dersom oppgaven er reservert og navn ikke finnes', () => {
+  it('skal vise saksbehandlers ident på tildelt-tag dersom oppgaven er tildelt og navn ikke finnes', () => {
     render(
       <SaksinfoBanner
         personInformasjon={personInformasjon}
@@ -347,11 +347,11 @@ describe('Sak status', () => {
       />
     );
 
-    const reservertTagIdent = screen.getByText('Reservert navIdent');
-    expect(reservertTagIdent).toBeVisible();
+    const tildeltTagIdent = screen.getByText('Tildelt: navIdent');
+    expect(tildeltTagIdent).toBeVisible();
   });
 
-  it('skal ikke vise en tag som viser om behandlingen er reservert dersom innnlogget bruker har resertvert den', () => {
+  it('skal vise en tag som viser om behandlingen er tildelt dersom innnlogget bruker har resertvert den', () => {
     render(
       <SaksinfoBanner
         personInformasjon={personInformasjon}
@@ -363,8 +363,8 @@ describe('Sak status', () => {
       />
     );
 
-    const reservertTag = screen.queryByText('Reservert Test Testesen');
-    expect(reservertTag).not.toBeInTheDocument();
+    const reservertTag = screen.getByText('Tildelt: navIdent');
+    expect(reservertTag).toBeVisible();
   });
 
   it('skal ikke vise en tag som viser om behandlingen er reservert dersom ingen har reservert den', () => {
@@ -378,7 +378,7 @@ describe('Sak status', () => {
       />
     );
 
-    const reservertTag = screen.queryByText('Reservert Test Testesen');
+    const reservertTag = screen.queryByText('Tildelt: Test Testesen');
     expect(reservertTag).not.toBeInTheDocument();
   });
 
@@ -407,5 +407,19 @@ describe('Sak status', () => {
       />
     );
     expect(screen.getByText('Trukket')).toBeVisible();
+  });
+
+  it('skal vise ledig-tag når en oppgave ikke er tildelt noen', () => {
+    render(
+      <SaksinfoBanner
+        personInformasjon={personInformasjon}
+        sak={sak}
+        behandling={behandling}
+        brukerInformasjon={{ navn: 'Saksbehandler', NAVident: 'navIdent' }}
+        referanse={'123456'}
+      />
+    );
+    const ledigTag = screen.getByText('Ledig');
+    expect(ledigTag).toBeVisible();
   });
 });

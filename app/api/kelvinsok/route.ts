@@ -86,7 +86,7 @@ async function utledSøkeresultat(søketekst: string, brukerinformasjon?: Bruker
         oppgaveData.push({
           href: byggKelvinURL(oppgave),
           label: `${formaterOppgave(oppgave)}`,
-          status: isReservert ? 'RESERVERT' : isPåVent ? 'PÅ_VENT' : 'ÅPEN',
+          status: isReservert ? 'TILDELT' : isPåVent ? 'PÅ_VENT' : 'ÅPEN',
           markeringer: oppgave.markeringer.map((markering) => markering.markeringType),
         });
         kontorData.push({ enhet: `${oppgave.oppfølgingsenhet ?? oppgave.enhet}` });
