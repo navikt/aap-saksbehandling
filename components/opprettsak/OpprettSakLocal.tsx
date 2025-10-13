@@ -13,6 +13,7 @@ import { Sykepenger } from 'components/opprettsak/samordning/Sykepenger';
 import { parse } from 'date-fns';
 import { TestcaseSteg } from 'lib/types/types';
 import { AndreYtelser } from 'components/opprettsak/samordning/AndreYtelser';
+import { hjemmelMap } from 'lib/utils/hjemmel';
 
 interface Barn {
   fodselsdato: string;
@@ -48,6 +49,11 @@ enum AndreUtbetalingerYtelser {
   NEI = 'NEI',
 }
 
+export const AndreUtbetalingerYtelserAlternativer = Object.entries(AndreUtbetalingerYtelser).map(([k, v]) => ({
+  value: k,
+  label: v,
+}));
+
 export interface OpprettSakFormFields {
   fødselsdato: Date;
   yrkesskade: JaEllerNei;
@@ -65,7 +71,7 @@ export interface OpprettSakFormFields {
   steg?: TestcaseSteg;
   afp: JaEllerNei;
   lønn: JaEllerNei;
-  stønad?: AndreUtbetalingerYtelser[];
+  stønad: AndreUtbetalingerYtelser[];
 }
 
 export const OpprettSakLocal = () => {
@@ -91,8 +97,9 @@ export const OpprettSakLocal = () => {
       },
 
       stønad: {
-        type: 'fieldArray',
+        type: 'combobox_multiple',
         label: 'stønad',
+        options: AndreUtbetalingerYtelserAlternativer,
       },
       fødselsdato: {
         type: 'date',

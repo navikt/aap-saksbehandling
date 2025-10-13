@@ -1,6 +1,7 @@
-import { VStack, Checkbox, CheckboxGroup, BodyShort } from '@navikt/ds-react';
+import { VStack, Checkbox, CheckboxGroup, BodyShort, Radio, RadioGroup } from '@navikt/ds-react';
 import { UseFormReturn } from 'react-hook-form';
 import { OpprettSakFormFields } from 'components/opprettsak/OpprettSakLocal';
+import { JaEllerNei } from 'lib/utils/form';
 
 interface Props {
   form: UseFormReturn<OpprettSakFormFields>;
@@ -22,13 +23,9 @@ enum AndreUtbetalingerYtelser {
 export const AndreYtelser = ({ form }: Props) => {
   const { setValue, watch } = form;
 
-  const lønn = watch('andreUtbetalinger.lønn');
-  const afp = watch('andreUtbetalinger.afp');
-  const stønad = watch('andreUtbetalinger.stønad') ?? [];
-
-  const toggleSingleValue = (field: 'lønn' | 'afp', value: string) => {
-    setValue(`andreUtbetalinger.${field}`, value);
-  };
+  const lønn = watch('lønn');
+  const afp = watch('afp');
+  const stønad = watch('stønad') ?? [];
 
   const toggleStønad = (value: AndreUtbetalingerYtelser) => {
     const current = new Set(stønad);
@@ -37,36 +34,23 @@ export const AndreYtelser = ({ form }: Props) => {
     } else {
       current.add(value);
     }
-    setValue('andreUtbetalinger.stønad', Array.from(current));
+    setValue('stønad', Array.from(current));
   };
-
-  const isChecked = (value: string, fieldValue?: string) => fieldValue === value;
 
   return (
     <VStack gap="4">
       <BodyShort>Har du fått eller skal du få ekstra utbetalinger fra arbeidsgiver?</BodyShort>
 
-      {/* Lønn */}
-      <CheckboxGroup legend="Lønn fra arbeidsgiver">
-        <Checkbox value="ja" checked={isChecked('ja', lønn)} onChange={() => toggleSingleValue('lønn', 'ja')}>
-          Ja
-        </Checkbox>
-        <Checkbox value="Nei" checked={isChecked('Nei', lønn)} onChange={() => toggleSingleValue('lønn', 'Nei')}>
-          Nei
-        </Checkbox>
-      </CheckboxGroup>
+      <RadioGroup legend="Lønn fra arbeidsgiver" value={lønn} onChange={(val) => setValue('lønn', val)}>
+        <Radio value={JaEllerNei.Ja}>Ja</Radio>
+        <Radio value={JaEllerNei.Nei}>Nei</Radio>
+      </RadioGroup>
 
-      {/* AFP */}
-      <CheckboxGroup legend="AFP (avtalefestet pensjon)">
-        <Checkbox value="ja" checked={isChecked('ja', afp)} onChange={() => toggleSingleValue('afp', 'ja')}>
-          Ja
-        </Checkbox>
-        <Checkbox value="Nei" checked={isChecked('Nei', afp)} onChange={() => toggleSingleValue('afp', 'Nei')}>
-          Nei
-        </Checkbox>
-      </CheckboxGroup>
+      <RadioGroup legend="AFP (avtalefestet pensjon)" value={afp} onChange={(val) => setValue('afp', val)}>
+        <Radio value={JaEllerNei.Ja}>Ja</Radio>
+        <Radio value={JaEllerNei.Nei}>Nei</Radio>
+      </RadioGroup>
 
-      {/* Stønad (multi-select) */}
       <CheckboxGroup legend="Andre stønader eller utbetalinger">
         {Object.values(AndreUtbetalingerYtelser).map((ytelse) => (
           <Checkbox key={ytelse} value={ytelse} checked={stønad.includes(ytelse)} onChange={() => toggleStønad(ytelse)}>

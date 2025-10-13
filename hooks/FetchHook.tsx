@@ -86,6 +86,7 @@ export function useOpprettSak(): {
   const { method, isLoading } = useFetchV2(clientOpprettSak);
 
   async function opprettSakMethod(body: OpprettTestcase) {
+    console.log(body);
     await method(body);
   }
 

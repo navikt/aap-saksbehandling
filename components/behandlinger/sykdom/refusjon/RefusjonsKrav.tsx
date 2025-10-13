@@ -95,12 +95,6 @@ export const RefusjonsKrav = ({ form, readOnly }: Props) => {
                         control={form.control}
                         name={`refusjoner.${index}.tom`}
                         hideLabel={true}
-                        rules={{
-                          required: 'Du må velge dato for slutt',
-                          validate: (value) => {
-                            return validerDato(value as string);
-                          },
-                        }}
                         readOnly={readOnly}
                       />
                     </HStack>
