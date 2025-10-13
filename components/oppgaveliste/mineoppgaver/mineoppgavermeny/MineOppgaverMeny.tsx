@@ -7,7 +7,6 @@ import { byggKelvinURL } from 'lib/utils/request';
 import { Dispatch, SetStateAction, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './MineOppgaverMeny.module.css';
-import { isProd } from 'lib/utils/environment';
 
 interface Props {
   oppgave: Oppgave;
@@ -87,16 +86,14 @@ export const MineOppgaverMeny = ({
             <Dropdown.Menu.GroupedList.Item onClick={() => frigiOppgave(oppgave)}>
               Frigi oppgave
             </Dropdown.Menu.GroupedList.Item>
-            {!isProd() && (
-              <Dropdown.Menu.GroupedList.Item
-                onClick={() => {
-                  oppgave.id && setOppgaverSomSkalTildeles([oppgave.id]);
-                  setVisTildelOppgaveModal(true);
-                }}
-              >
-                Tildel oppgave
-              </Dropdown.Menu.GroupedList.Item>
-            )}
+            <Dropdown.Menu.GroupedList.Item
+              onClick={() => {
+                oppgave.id && setOppgaverSomSkalTildeles([oppgave.id]);
+                setVisTildelOppgaveModal(true);
+              }}
+            >
+              Tildel oppgave
+            </Dropdown.Menu.GroupedList.Item>
           </Dropdown.Menu.GroupedList>
         </Dropdown.Menu>
       </Dropdown>
