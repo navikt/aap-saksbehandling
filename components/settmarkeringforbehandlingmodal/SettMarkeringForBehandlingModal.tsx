@@ -20,17 +20,30 @@ interface Props {
 
 interface FormFields {
   begrunnelse: string;
+  hasteBegrunnelse: string;
 }
 
 export const SettMarkeringForBehandlingModal = ({ referanse, type, isOpen, onClose }: Props) => {
   const [error, setError] = useState<string>();
   const [isLoading, setIsLoading] = useState(false);
+  const markeringsType = markeringTypeTilEnum(type);
 
   const { form, formFields } = useConfigForm<FormFields>({
     begrunnelse: {
       type: 'textarea',
       label: 'Skriv en begrunnelse',
       rules: { required: 'Du må gi en begrunnelse' },
+    },
+    hasteBegrunnelse: {
+      type: 'select',
+      label: 'Velg en årsak',
+      options: [
+        { label: '', value: '' },
+        'Brukeren har ikke, eller mister snart, livsoppholdsytelse',
+        'Vedtak er omgjort etter klage',
+        'Avtalt med leder',
+      ],
+      rules: { required: 'Du må velge en årsak' },
     },
   });
 
@@ -55,8 +68,11 @@ export const SettMarkeringForBehandlingModal = ({ referanse, type, isOpen, onClo
                 setIsLoading(true);
 
                 const res = await clientSettMarkeringForBehandling(referanse, {
-                  begrunnelse: data.begrunnelse,
-                  markeringType: markeringTypeTilEnum(type),
+                  begrunnelse:
+                    markeringsType === NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.HASTER
+                      ? data.hasteBegrunnelse
+                      : data.begrunnelse,
+                  markeringType: markeringsType,
                 });
 
                 if (res.type === 'SUCCESS') {
@@ -71,7 +87,11 @@ export const SettMarkeringForBehandlingModal = ({ referanse, type, isOpen, onClo
               className={'flex-column'}
               autoComplete={'off'}
             >
-              <FormField form={form} formField={formFields.begrunnelse} />
+              {markeringsType === NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.HASTER ? (
+                <FormField form={form} formField={formFields.hasteBegrunnelse} />
+              ) : (
+                <FormField form={form} formField={formFields.begrunnelse} />
+              )}
             </form>
           )}
           {error && (

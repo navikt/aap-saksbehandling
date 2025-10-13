@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { BodyShort, Button, Popover, Tag, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, Detail, Popover, Tag, VStack } from '@navikt/ds-react';
 import styles from './MarkeringInfoBoks.module.css';
 import { clientFjernMarkeringForBehandling } from 'lib/clientApi';
 import { Markering, MarkeringType } from 'lib/types/oppgaveTypes';
@@ -35,7 +35,7 @@ export const MarkeringInfoboks = ({ markering, referanse, showLabel = false, siz
       )}
 
       <Popover
-        onClose={() => setVisInfo(visInfo)}
+        onClose={() => setVisInfo(false)}
         open={visInfo}
         anchorEl={tagRef.current}
         arrow={false}
@@ -57,10 +57,17 @@ export const MarkeringInfoboks = ({ markering, referanse, showLabel = false, siz
               {markeringTypeTilTekst(markering.markeringType)}
             </BodyShort>
           </Tag>
+          {markering.begrunnelse ? (
+            <VStack gap={'0'}>
+              <Detail textColor="subtle">Årsak</Detail>
+              <div>{markering.begrunnelse}</div>
+            </VStack>
+          ) : undefined}
           {referanse && visTag && (
             <VStack gap={'0'} align={'end'}>
               <Button
                 variant={'secondary'}
+                size={'small'}
                 loading={isLoading}
                 onClick={async () => {
                   setIsLoading(true);
