@@ -159,7 +159,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
         <Radio value={JaEllerNei.Nei}>Nei</Radio>
       </RadioGroupWrapper>
 
-      {form.watch('harKrav') === JaEllerNei.Ja && <RefusjonsKrav form={form} readOnly={readOnly} />}
+      {form.watch('harKrav') === JaEllerNei.Ja && <RefusjonsKrav sak={sak} form={form} readOnly={readOnly} />}
     </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };

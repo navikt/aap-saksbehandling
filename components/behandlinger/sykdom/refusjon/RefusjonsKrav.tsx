@@ -3,7 +3,7 @@ import { BodyLong, BodyShort, Box, Button, HStack, Table, VStack } from '@navikt
 
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 
-import { validerDato } from 'lib/validation/dateValidation';
+import { validerNullableDato } from 'lib/validation/dateValidation';
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 
 import { TableStyled } from 'components/tablestyled/TableStyled';
@@ -14,13 +14,17 @@ import { isError } from 'lib/utils/api';
 import { FormFields } from 'components/behandlinger/sykdom/refusjon/Refusjon';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import styles from './Refusjon.module.css';
+import { isBefore, parse, startOfDay } from 'date-fns';
+import { stringToDate } from 'lib/utils/date';
+import { Sak } from 'context/saksbehandling/SakContext';
 
 interface Props {
+  sak: Sak;
   form: UseFormReturn<FormFields>;
   readOnly: boolean;
 }
 
-export const RefusjonsKrav = ({ form, readOnly }: Props) => {
+export const RefusjonsKrav = ({ sak, form, readOnly }: Props) => {
   const { fields, append, remove } = useFieldArray({ name: 'refusjoner', control: form.control });
   const behandlingsreferanse = useBehandlingsReferanse();
 
@@ -77,31 +81,55 @@ export const RefusjonsKrav = ({ form, readOnly }: Props) => {
                   <Table.DataCell>
                     <HStack align={'center'} gap={'1'}>
                       <DateInputWrapper
-                        label="Fra og med"
+                        label="Refusjonen gjelder fra"
                         control={form.control}
                         name={`refusjoner.${index}.fom`}
                         hideLabel={true}
                         rules={{
-                          required: 'Du må velge dato for start',
-                          validate: (value) => {
-                            return validerDato(value as string);
+                          validate: {
+                            gyldigDato: (value) => validerNullableDato(value as string),
+                            kanIkkeVaereFoerSoeknadstidspunkt: (value) => {
+                              const starttidspunkt = startOfDay(new Date(sak.periode.fom));
+                              const vurderingGjelderFra = stringToDate(value as string, 'dd.MM.yyyy');
+                              if (vurderingGjelderFra && isBefore(startOfDay(vurderingGjelderFra), starttidspunkt)) {
+                                return 'Vurderingen kan ikke gjelde fra før starttidspunktet';
+                              }
+                              return true;
+                            },
                           },
                         }}
                         readOnly={readOnly}
                       />
                       {'-'}
                       <DateInputWrapper
-                        label="Til og med"
+                        label="Refusjonen gjelder til"
                         control={form.control}
                         name={`refusjoner.${index}.tom`}
                         hideLabel={true}
+                        rules={{
+                          validate: {
+                            gyldigDato: (value) => validerNullableDato(value as string),
+                            kanIkkeVaereFoerFraDato: (value) => {
+                              const fomValue = form.getValues(`refusjoner.${index}.fom`);
+                              if (!fomValue) {
+                                return true;
+                              }
+                              const fomDate = startOfDay(parse(fomValue, 'dd.MM.yyyy', new Date()));
+                              const vurderingGjelderTil = stringToDate(value as string, 'dd.MM.yyyy');
+                              if (vurderingGjelderTil && isBefore(startOfDay(vurderingGjelderTil), fomDate)) {
+                                return 'Tildato kan ikke være før fradato';
+                              }
+                              return true;
+                            },
+                          },
+                        }}
                         readOnly={readOnly}
                       />
                     </HStack>
                   </Table.DataCell>
                   <Table.DataCell>
                     <AsyncComboSearch
-                      label={''}
+                      label={'Søk opp Nav-kontor'}
                       form={form}
                       name={`refusjoner.${index}.navKontor`}
                       fetcher={kontorSøk}

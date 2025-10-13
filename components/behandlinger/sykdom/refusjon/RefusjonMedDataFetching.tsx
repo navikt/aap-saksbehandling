@@ -23,8 +23,6 @@ export const RefusjonMedDataFetching = async ({ behandlingsReferanse, stegData }
   if (!skalViseSteg(stegData, refusjonGrunnlag.data.gjeldendeVurdering != null)) {
     return null;
   }
-  console.log(refusjonGrunnlag);
-  console.log(initialMellomlagretVurdering);
 
   return (
     <Refusjon
