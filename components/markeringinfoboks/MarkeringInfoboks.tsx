@@ -5,6 +5,7 @@ import { clientFjernMarkeringForBehandling } from 'lib/clientApi';
 import { Markering, MarkeringType } from 'lib/types/oppgaveTypes';
 import { BookIcon, ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import { NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType } from '@navikt/aap-oppgave-typescript-types';
+import { isDev } from 'lib/utils/environment';
 
 interface Props {
   markering: Markering;
@@ -57,7 +58,7 @@ export const MarkeringInfoboks = ({ markering, referanse, showLabel = false, siz
               {markeringTypeTilTekst(markering.markeringType)}
             </BodyShort>
           </Tag>
-          {markering.begrunnelse ? (
+          {isDev() && markering.begrunnelse ? (
             <VStack gap={'0'}>
               <Detail textColor="subtle">Årsak</Detail>
               <div>{markering.begrunnelse}</div>
