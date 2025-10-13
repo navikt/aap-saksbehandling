@@ -305,7 +305,7 @@ export const Bistandsbehov = ({
   }
 
   function byggFelter(vurdering: BistandsbehovVurdering): ValuePair[] {
-    return [
+    const felter = [
       {
         label: vilkårsvurderingLabel,
         value: vurdering.begrunnelse,
@@ -322,14 +322,30 @@ export const Bistandsbehov = ({
         label: erBehovForAnnenOppfølgingLabel,
         value: getJaNeiEllerIkkeBesvart(vurdering.erBehovForAnnenOppfølging),
       },
-      {
+    ];
+
+    if (harVurdertOvergangUføre(vurdering)) {
+      felter.push({
         label: vurderAAPIOvergangTilUføreLabel,
         value: getJaNeiEllerIkkeBesvart(vurdering.skalVurdereAapIOvergangTilUføre),
-      },
-      {
+      });
+    }
+
+    if (harVurdertOvergangArbeid(vurdering)) {
+      felter.push({
         label: vurderAAPIOvergangTilArbeidLabel,
         value: getJaNeiEllerIkkeBesvart(vurdering.skalVurdereAapIOvergangTilArbeid),
-      },
-    ];
+      });
+    }
+
+    return felter;
+  }
+
+  function harVurdertOvergangArbeid(vurdering: BistandsbehovVurdering) {
+    return vurdering.skalVurdereAapIOvergangTilArbeid === false || vurdering.skalVurdereAapIOvergangTilArbeid === true;
+  }
+
+  function harVurdertOvergangUføre(vurdering: BistandsbehovVurdering) {
+    return vurdering.skalVurdereAapIOvergangTilUføre === false || vurdering.skalVurdereAapIOvergangTilUføre === true;
   }
 };
