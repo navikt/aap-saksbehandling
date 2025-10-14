@@ -2,6 +2,7 @@ import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingServi
 import { BehandlingsFlytAvklaringsbehovKode, StegGruppe, StegType } from 'lib/types/types';
 import { NextRequest } from 'next/server';
 import { logError, logInfo } from 'lib/serverutlis/logger';
+import { isError } from 'lib/utils/api';
 
 const DEFAULT_TIMEOUT_IN_MS = 500;
 const RETRIES = 0;
@@ -47,7 +48,7 @@ export async function GET(
       }
 
       const flyt = await hentFlyt((await context.params).referanse);
-      if (flyt.type === 'ERROR') {
+      if (isError(flyt)) {
         const errorString = `neste-steg hentFlyt ${flyt.status} - ${flyt.apiException.code}: ${flyt.apiException.message}`;
         logError(errorString);
         const json: ServerSentEventData = {

@@ -13,6 +13,7 @@ import {
 } from 'lib/types/postmottakTypes';
 import { logError, logInfo } from 'lib/serverutlis/logger';
 import { apiFetch, apiFetchPdf } from 'lib/services/apiFetch';
+import { isError } from 'lib/utils/api';
 
 const dokumentMottakApiBaseUrl = process.env.DOKUMENTMOTTAK_API_BASE_URL;
 const dokumentMottakApiScope = process.env.DOKUMENTMOTTAK_API_SCOPE ?? '';
@@ -116,7 +117,7 @@ async function ventTilProsesseringErFerdig(
 
     logInfo(`ventTilProsesseringErFerdig, orsøk nummer: ${forsøk}`);
     const response = await hentFlyt(behandlingsreferanse);
-    if (response.type === 'ERROR') {
+    if (isError(response)) {
       logError(
         `ventTilProsseseringErFerdig hentFlyt ${response.status} - ${response.apiException.code}: ${response.apiException.message}`
       );

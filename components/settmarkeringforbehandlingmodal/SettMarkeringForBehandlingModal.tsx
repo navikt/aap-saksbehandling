@@ -11,6 +11,7 @@ import { MarkeringType } from 'lib/types/oppgaveTypes';
 import { NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType } from '@navikt/aap-oppgave-typescript-types';
 import { FormField } from 'components/form/FormField';
 import { isDev } from 'lib/utils/environment';
+import { isSuccess } from 'lib/utils/api';
 
 interface Props {
   referanse: string;
@@ -76,7 +77,7 @@ export const SettMarkeringForBehandlingModal = ({ referanse, type, isOpen, onClo
                   markeringType: markeringsType,
                 });
 
-                if (res.type === 'SUCCESS') {
+                if (isSuccess(res)) {
                   await revalidateFlyt(referanse);
                   onClose();
                 } else {

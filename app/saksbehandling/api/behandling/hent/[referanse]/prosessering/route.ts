@@ -3,6 +3,7 @@ import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingServi
 import { FlytProsesseringStatus } from 'lib/types/types';
 import { NextRequest } from 'next/server';
 import { ServerSentEventData } from 'app/saksbehandling/api/behandling/hent/[referanse]/[gruppe]/[steg]/nesteSteg/route';
+import { isError } from 'lib/utils/api';
 
 const DEFAULT_TIMEOUT_IN_MS = 1000;
 const RETRIES = 0;
@@ -29,7 +30,7 @@ export async function GET(__request: NextRequest, context: { params: Promise<{ r
 
       const flyt = await hentFlyt((await context.params).referanse);
 
-      if (flyt.type === 'ERROR') {
+      if (isError(flyt)) {
         const errorString = `prosessering hentFlyt ${flyt.status} - ${flyt.apiException.code}: ${flyt.apiException.message}`;
         logError(errorString);
         const json: ServerSentEventData = {

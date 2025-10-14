@@ -4,6 +4,7 @@ import { BehandlingFlytOgTilstand } from 'lib/types/types';
 import { useParams } from 'next/navigation';
 import useSWR from 'swr';
 import { clientHentFlyt } from 'lib/clientApi';
+import { isError, isSuccess } from 'lib/utils/api';
 
 export function useFlyt(): {
   flyt?: BehandlingFlytOgTilstand;
@@ -22,7 +23,7 @@ export function useFlyt(): {
   );
 
   return {
-    flyt: data?.type === 'SUCCESS' ? data?.data : undefined,
+    flyt: isSuccess(data) ? data?.data : undefined,
     refetchFlytClient: mutate,
   };
 }
@@ -43,7 +44,7 @@ export function useRequiredFlyt(): { flyt: BehandlingFlytOgTilstand; refetchFlyt
     }
   );
 
-  if (flyt?.type === 'ERROR' || !flyt) {
+  if (isError(flyt) || !flyt) {
     throw new Error('Kunne ikke finne påkrevd flyt');
   }
 

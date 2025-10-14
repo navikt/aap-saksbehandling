@@ -1,7 +1,7 @@
 'use client';
 
 import { Alert, BodyShort, VStack } from '@navikt/ds-react';
-import { FetchResponse } from 'lib/utils/api';
+import { FetchResponse, isError } from 'lib/utils/api';
 
 interface Props {
   apiResponses: FetchResponse<unknown>[];
@@ -10,7 +10,7 @@ export const ApiException = ({ apiResponses }: Props) => {
   return (
     <Alert variant={'error'} size={'small'}>
       {apiResponses
-        .filter((e) => e.type === 'ERROR')
+        .filter((res) => isError(res))
         .map((feil, i) => (
           <VStack key={`feil-${i}`}>
             <BodyShort size={'small'}>{feil.status}</BodyShort>

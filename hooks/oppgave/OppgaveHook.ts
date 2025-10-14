@@ -2,7 +2,7 @@ import { Oppgave, OppgavelisteRequest, Paging } from 'lib/types/oppgaveTypes';
 import useSWRInfinite from 'swr/infinite';
 import { hentMineOppgaverClient, hentOppgaverClient } from 'lib/oppgaveClientApi';
 import useSWR from 'swr';
-import { isSuccess } from 'lib/utils/api';
+import { isError, isSuccess } from 'lib/utils/api';
 
 const PAGE_SIZE = 50;
 
@@ -117,7 +117,7 @@ export function useOppgaver({
 
   const oppgaverFlatMap =
     oppgaverValgtKø
-      ?.filter((res) => res.type === 'SUCCESS')
+      ?.filter((res) => isSuccess(res))
       .map((res) => ({
         antallOppgaver: res.data.antallTotalt,
         oppgaver: res.data.oppgaver,
@@ -175,5 +175,5 @@ export const useMineOppgaver = () => {
   const { data, mutate, isLoading } = useSWR('api/mine-oppgaver', hentMineOppgaverClient);
   const oppgaver = isSuccess(data) ? data?.data?.oppgaver?.flat() : [];
 
-  return { oppgaver, mutate, isLoading, error: data?.type === 'ERROR' ? data.apiException.message : undefined };
+  return { oppgaver, mutate, isLoading, error: isError(data) ? data.apiException.message : undefined };
 };

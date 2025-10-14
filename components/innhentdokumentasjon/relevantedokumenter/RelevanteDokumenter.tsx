@@ -5,7 +5,7 @@ import styles from './RelevanteDokumenter.module.css';
 import { CheckmarkCircleFillIcon, InformationSquareFillIcon, MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
-import { isError } from 'lib/utils/api';
+import { isError, isSuccess } from 'lib/utils/api';
 import { clientHentRelevanteDokumenter } from 'lib/dokumentClientApi';
 import { useSak } from 'hooks/SakHook';
 import { formaterDatoForFrontend } from 'lib/utils/date';
@@ -50,8 +50,7 @@ export const RelevanteDokumenter = () => {
       options: Array.from(
         new Set([
           ...[''],
-          ...((relevanteDokumenter?.type === 'SUCCESS' && relevanteDokumenter.data?.map((dokument) => dokument.tema)) ||
-            []),
+          ...((isSuccess(relevanteDokumenter) && relevanteDokumenter.data?.map((dokument) => dokument.tema)) || []),
         ])
       ),
     },

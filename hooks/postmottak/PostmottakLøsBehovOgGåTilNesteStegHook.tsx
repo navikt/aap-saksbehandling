@@ -6,7 +6,7 @@ import {
 import { useParams, useRouter } from 'next/navigation';
 import { LøsAvklaringsbehovPåBehandling, StegType } from 'lib/types/postmottakTypes';
 import { postmottakLøsBehovClient } from 'lib/postmottakClientApi';
-import { ApiException } from 'lib/utils/api';
+import { ApiException, isError } from 'lib/utils/api';
 
 export const usePostmottakLøsBehovOgGåTilNesteSteg = (
   steg: StegType
@@ -29,7 +29,7 @@ export const usePostmottakLøsBehovOgGåTilNesteSteg = (
     setStatus(undefined);
     setError(undefined);
     const løsbehovRes = await postmottakLøsBehovClient(behov);
-    if (løsbehovRes.type === 'ERROR') {
+    if (isError(løsbehovRes)) {
       setError(løsbehovRes.apiException);
       setIsLoading(false);
       return;

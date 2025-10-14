@@ -3,7 +3,7 @@ import { useParams } from 'next/navigation';
 import { FlytProsesseringStatus } from 'lib/types/types';
 import { clientSendHendelse } from 'lib/clientApi';
 import { FlytProsesseringServerSentEvent } from 'app/saksbehandling/api/behandling/hent/[referanse]/prosessering/route';
-import { ApiException } from 'lib/utils/api';
+import { ApiException, isError } from 'lib/utils/api';
 import { useFlyt } from 'hooks/saksbehandling/FlytHook';
 import { useRouter } from 'next/navigation';
 
@@ -32,7 +32,7 @@ export const useSendHendelseOgVentPåProsessering = (): {
     setStatus(undefined);
 
     const sendHendelseResultat = await clientSendHendelse(saksnummer, hendelse);
-    if (sendHendelseResultat.type === 'ERROR') {
+    if (isError(sendHendelseResultat)) {
       setError(sendHendelseResultat.apiException);
       if (sendHendelseResultat.status === 409) {
         setStatus('CLIENT_CONFLICT');
