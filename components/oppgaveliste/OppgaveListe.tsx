@@ -7,6 +7,7 @@ import { MineOppgaver } from 'components/oppgaveliste/mineoppgaver/MineOppgaver'
 import { LedigeOppgaver } from 'components/oppgaveliste/ledigeoppgaver/LedigeOppgaver';
 import { AlleOppgaver } from 'components/oppgaveliste/alleoppgaver/AlleOppgaver';
 import { useLagreAktivTab } from 'hooks/oppgave/aktivTabHook';
+import { TildelOppgaverProvider } from 'context/oppgave/TildelOppgaverContext';
 
 interface Props {
   enheter: Enhet[];
@@ -29,28 +30,30 @@ export const OppgaveListe = ({ enheter }: Props) => {
 
   return (
     <VStack gap={'8'} padding={'8'} maxWidth={'1680px'} marginInline={'auto'} marginBlock={'0'}>
-      <HStack gap={'4'} align={'center'}>
-        <Heading level={'1'} size={'large'}>
-          Oppgaver
-        </Heading>
-        <Tabs
-          value={selected}
-          onChange={(value) => {
-            setSelected(value as MenyValg);
-            lagreAktivTab(value as MenyValg);
-          }}
-        >
-          <Tabs.List>
-            {options.map((option) => (
-              <Tabs.Tab key={option} value={option} label={option} />
-            ))}
-          </Tabs.List>
-        </Tabs>
-      </HStack>
+      <TildelOppgaverProvider>
+        <HStack gap={'4'} align={'center'}>
+          <Heading level={'1'} size={'large'}>
+            Oppgaver
+          </Heading>
+          <Tabs
+            value={selected}
+            onChange={(value) => {
+              setSelected(value as MenyValg);
+              lagreAktivTab(value as MenyValg);
+            }}
+          >
+            <Tabs.List>
+              {options.map((option) => (
+                <Tabs.Tab key={option} value={option} label={option} />
+              ))}
+            </Tabs.List>
+          </Tabs>
+        </HStack>
 
-      {selected === 'Mine oppgaver' && <MineOppgaver />}
-      {selected === 'Ledige oppgaver' && <LedigeOppgaver enheter={enheter} />}
-      {selected === 'Alle oppgaver' && <AlleOppgaver enheter={enheter} />}
+        {selected === 'Mine oppgaver' && <MineOppgaver />}
+        {selected === 'Ledige oppgaver' && <LedigeOppgaver enheter={enheter} />}
+        {selected === 'Alle oppgaver' && <AlleOppgaver enheter={enheter} />}
+      </TildelOppgaverProvider>
     </VStack>
   );
 };
