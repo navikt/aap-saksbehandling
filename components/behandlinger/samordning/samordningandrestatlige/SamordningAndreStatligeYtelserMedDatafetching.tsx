@@ -1,4 +1,3 @@
-import { SamordningAndreStatligeYtelser } from 'components/behandlinger/samordning/samordningandrestatlige/SamordningAndreStatligeYtelser';
 import {
   hentMellomlagring,
   hentSamordningAndreStatligeYtelseGrunnlag,
@@ -7,8 +6,7 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 import { skalViseSteg, StegData } from 'lib/utils/steg';
-import { isProd } from 'lib/utils/environment';
-import { SamordningAndreStatligeYtelserNyVisning } from 'components/behandlinger/samordning/samordningandrestatlige/SamordningAndreStatligeYtelserNyVisning';
+import { SamordningAndreStatligeYtelser } from 'components/behandlinger/samordning/samordningandrestatlige/SamordningAndreStatligeYtelser';
 
 interface Props {
   behandlingsreferanse: string;
@@ -28,14 +26,7 @@ export const SamordningAndreStatligeYtelserMedDatafetching = async ({ behandling
     return null;
   }
 
-  return !isProd() ? (
-    <SamordningAndreStatligeYtelserNyVisning
-      grunnlag={grunnlag.data}
-      behandlingVersjon={stegData.behandlingVersjon}
-      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
-      initialMellomlagretVurdering={initialMellomlagretVurdering}
-    />
-  ) : (
+  return (
     <SamordningAndreStatligeYtelser
       grunnlag={grunnlag.data}
       behandlingVersjon={stegData.behandlingVersjon}

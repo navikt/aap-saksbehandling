@@ -15,8 +15,9 @@ import {
   SamordningAndreStatligeYtelserGrunnlag,
   SamordningAndreStatligeYtelserYtelse,
 } from 'lib/types/types';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 
 interface Props {
   grunnlag: SamordningAndreStatligeYtelserGrunnlag;
@@ -53,6 +54,12 @@ export const SamordningAndreStatligeYtelser = ({
   const { lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
     useMellomlagring(Behovstype.AVKLAR_SAMORDNING_ANDRE_STATLIGE_YTELSER, initialMellomlagretVurdering);
 
+  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+    readOnly,
+    'SAMORDNING_ANDRE_STATLIGE_YTELSER',
+    mellomlagretVurdering
+  );
+
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag.vurdering);
@@ -70,7 +77,7 @@ export const SamordningAndreStatligeYtelser = ({
         defaultValue: defaultValue.vurderteSamordninger,
       },
     },
-    { readOnly: readOnly }
+    { readOnly: formReadOnly }
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -98,10 +105,10 @@ export const SamordningAndreStatligeYtelser = ({
     )(event);
   };
 
-  const skalViseBekreftKnapp = !readOnly && visYtelsesTabell;
+  const skalViseBekreftKnapp = !formReadOnly && visYtelsesTabell;
 
   return (
-    <VilkårskortMedFormOgMellomlagring
+    <VilkårskortMedFormOgMellomlagringNyVisning
       heading="Andre ytelser til avregning"
       steg="SAMORDNING_ANDRE_STATLIGE_YTELSER"
       onSubmit={handleSubmit}
@@ -119,10 +126,17 @@ export const SamordningAndreStatligeYtelser = ({
         );
       }}
       readOnly={readOnly}
+      visningModus={visningModus}
+      visningActions={visningActions}
     >
       {!visYtelsesTabell && (
         <HStack>
-          <Button size={'small'} variant={'secondary'} onClick={() => setVisYtelsesTabell(true)} disabled={readOnly}>
+          <Button
+            size={'small'}
+            variant={'secondary'}
+            onClick={() => setVisYtelsesTabell(true)}
+            disabled={formReadOnly}
+          >
             Legg til ytelser
           </Button>
         </HStack>
@@ -130,10 +144,10 @@ export const SamordningAndreStatligeYtelser = ({
       {visYtelsesTabell && (
         <VStack gap={'6'}>
           <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
-          <AndreStatligeYtelserTabell form={form} readOnly={readOnly} />
+          <AndreStatligeYtelserTabell form={form} readOnly={formReadOnly} />
         </VStack>
       )}
-    </VilkårskortMedFormOgMellomlagring>
+    </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };
 
