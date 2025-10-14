@@ -389,6 +389,9 @@ export type Aktivitetsplikt11_9Grunnlag =
 export type Aktivitetsplikt11_9Løsning =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.aktivitetsplikt.Aktivitetsplikt11_9L\u00F8sningDto'];
 
+export type AktivitetspliktMedTrekkRespons =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_9.AktivitetspliktMedTrekkDto'];
+
 export type Brudd =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.aktivitetsplikt.Aktivitetsplikt11_9L\u00F8sningDto']['brudd'];
 
