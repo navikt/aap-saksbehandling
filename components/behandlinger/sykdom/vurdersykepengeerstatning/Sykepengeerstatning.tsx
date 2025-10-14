@@ -15,7 +15,6 @@ import { FormField, ValuePair } from 'components/form/FormField';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
-import { isDev } from 'lib/utils/environment';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { parse } from 'date-fns';
@@ -134,7 +133,7 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
       visningModus={visningModus}
       visningActions={visningActions}
     >
-      {isDev() && grunnlag?.vedtatteVurderinger && grunnlag?.vedtatteVurderinger?.length > 0 && (
+      {grunnlag?.vedtatteVurderinger && grunnlag?.vedtatteVurderinger?.length > 0 && (
         <TidligereVurderinger
           data={grunnlag?.vedtatteVurderinger}
           buildFelter={byggFelter}
@@ -145,7 +144,7 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
         />
       )}
       <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
-      {isDev() && <FormField form={form} formField={formFields.gjelderFra} className="gjelderFra" />}
+      {<FormField form={form} formField={formFields.gjelderFra} className="gjelderFra" />}
       <FormField form={form} formField={formFields.erOppfylt} horizontalRadio />
       {form.watch('erOppfylt') === JaEllerNei.Ja && (
         <FormField form={form} formField={formFields.grunn} className={'radio'} />
