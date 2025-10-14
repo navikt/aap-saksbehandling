@@ -1,5 +1,5 @@
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
-import { BodyLong, BodyShort, Box, Button, HStack, Table, VStack } from '@navikt/ds-react';
+import { BodyLong, Box, Button, HStack, Table, VStack } from '@navikt/ds-react';
 
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 
@@ -13,7 +13,6 @@ import { isError } from 'lib/utils/api';
 
 import { FormFields } from 'components/behandlinger/sykdom/refusjon/Refusjon';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
-import styles from './Refusjon.module.css';
 import { isBefore, parse, startOfDay } from 'date-fns';
 import { stringToDate } from 'lib/utils/date';
 import { Sak } from 'context/saksbehandling/SakContext';
@@ -131,6 +130,7 @@ export const RefusjonsKrav = ({ sak, form, readOnly }: Props) => {
                   </Table.DataCell>
                   <Table.DataCell>
                     <AsyncComboSearch
+                      hideLabel={true}
                       label={'Søk opp Nav-kontor'}
                       form={form}
                       name={`refusjoner.${index}.navKontor`}
