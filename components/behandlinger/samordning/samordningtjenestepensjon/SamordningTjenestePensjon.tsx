@@ -1,6 +1,5 @@
 'use client';
 
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { BodyShort, Table, VStack } from '@navikt/ds-react';
 import { MellomlagretVurdering, SamordningTjenestePensjonGrunnlag } from 'lib/types/types';
@@ -12,6 +11,8 @@ import { formaterPeriode } from 'lib/utils/date';
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 
 interface Props {
   grunnlag: SamordningTjenestePensjonGrunnlag;
@@ -41,6 +42,12 @@ export const SamordningTjenestePensjon = ({
   const { lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
     useMellomlagring(Behovstype.SAMORDNING_REFUSJONS_KRAV, initialMellomlagretVurdering);
 
+  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+    readOnly,
+    'SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV',
+    mellomlagretVurdering
+  );
+
   const defaultValues: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag.tjenestepensjonRefusjonskravVurdering);
@@ -62,7 +69,7 @@ export const SamordningTjenestePensjon = ({
         rules: { required: 'Du må svare på om etterbetalingen skal holdes igjen.' },
       },
     },
-    { readOnly }
+    { readOnly: formReadOnly }
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -85,7 +92,7 @@ export const SamordningTjenestePensjon = ({
   };
 
   return (
-    <VilkårskortMedFormOgMellomlagring
+    <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'Refusjonskrav tjenestepensjon'}
       status={status}
       isLoading={isLoading}
@@ -106,6 +113,8 @@ export const SamordningTjenestePensjon = ({
         )
       }
       readOnly={readOnly}
+      visningModus={visningModus}
+      visningActions={visningActions}
     >
       <VStack gap={'1'}>
         <BodyShort weight={'semibold'}>
@@ -139,7 +148,7 @@ export const SamordningTjenestePensjon = ({
 
       <FormField form={form} formField={formFields.begrunnelse} />
       <FormField form={form} formField={formFields.skalEtterbetalingHoldesIgjen} horizontalRadio />
-    </VilkårskortMedFormOgMellomlagring>
+    </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };
 

@@ -1,4 +1,3 @@
-import { SamordningUføre } from 'components/behandlinger/samordning/samordninguføre/SamordningUføre';
 import {
   hentMellomlagring,
   hentSamordningUføreGrunnlag,
@@ -7,8 +6,7 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 import { skalViseSteg, StegData } from 'lib/utils/steg';
-import { isProd } from 'lib/utils/environment';
-import { SamordningUføreNyVisning } from 'components/behandlinger/samordning/samordninguføre/SamordningUføreNyVisning';
+import { SamordningUføre } from 'components/behandlinger/samordning/samordninguføre/SamordningUføre';
 
 interface Props {
   behandlingsreferanse: string;
@@ -28,14 +26,7 @@ export const SamordningUføreMedDatafetching = async ({ behandlingsreferanse, st
     return null;
   }
 
-  return !isProd() ? (
-    <SamordningUføreNyVisning
-      grunnlag={grunnlag.data}
-      behandlingVersjon={stegData.behandlingVersjon}
-      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
-      initialMellomlagretVurdering={initialMellomlagretVurdering}
-    />
-  ) : (
+  return (
     <SamordningUføre
       grunnlag={grunnlag.data}
       behandlingVersjon={stegData.behandlingVersjon}

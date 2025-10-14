@@ -12,8 +12,9 @@ import { formaterDatoForBackend } from 'lib/utils/date';
 import { format, parse } from 'date-fns';
 import { BodyShort, Label, Table, VStack } from '@navikt/ds-react';
 import { TableStyled } from 'components/tablestyled/TableStyled';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 
 interface Props {
   grunnlag: SamordningUføreGrunnlag;
@@ -41,6 +42,12 @@ export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly, initia
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
     useMellomlagring(Behovstype.AVKLAR_SAMORDNING_UFORE, initialMellomlagretVurdering);
 
+  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+    readOnly,
+    'SAMORDNING_UFØRE',
+    mellomlagretVurdering
+  );
+
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag);
@@ -58,7 +65,7 @@ export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly, initia
         defaultValue: defaultValue.vurderteSamordninger,
       },
     },
-    { readOnly }
+    { readOnly: formReadOnly }
   );
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -86,7 +93,7 @@ export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly, initia
   }
 
   return (
-    <VilkårskortMedFormOgMellomlagring
+    <VilkårskortMedFormOgMellomlagringNyVisning
       heading="Samordning med delvis uføre"
       steg="SAMORDNING_UFØRE"
       onSubmit={handleSubmit}
@@ -102,6 +109,8 @@ export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly, initia
         slettMellomlagring(() => form.reset(mapVurderingToDraftFormFields(grunnlag)));
       }}
       readOnly={readOnly}
+      visningModus={visningModus}
+      visningActions={visningActions}
     >
       <FormField form={form} formField={formFields.begrunnelse} />
       {grunnlag?.grunnlag?.length > 0 && (
@@ -130,8 +139,8 @@ export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly, initia
           </TableStyled>
         </VStack>
       )}
-      <SamordningUføreTabell form={form} readOnly={readOnly} />
-    </VilkårskortMedFormOgMellomlagring>
+      <SamordningUføreTabell form={form} readOnly={formReadOnly} />
+    </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };
 
