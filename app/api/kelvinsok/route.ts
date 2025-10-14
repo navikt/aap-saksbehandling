@@ -34,7 +34,7 @@ interface Props {
  * Burde på sikt bli håndtert i backend, men det fordrer en større opprydding i typer tilknyttet Saksnummer
  **/
 const formaterSaksnummer = (saksnummer: string) => {
-  return saksnummer.toUpperCase().replace('O', 'o').replace('I', 'i');
+  return saksnummer.toUpperCase().replaceAll('O', 'o').replaceAll('I', 'i');
 };
 
 export async function POST(req: Request, brukerinformasjon: Props) {
