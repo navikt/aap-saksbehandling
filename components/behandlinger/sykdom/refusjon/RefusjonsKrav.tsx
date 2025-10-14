@@ -55,8 +55,10 @@ export const RefusjonsKrav = ({ sak, form, readOnly }: Props) => {
   return (
     <Box>
       <VStack gap={'4'}>
-        <BodyShort className={styles.refusjonTekstHeader}>Legg til refusjonskrav</BodyShort>
-        <BodyLong size="small" className={styles.refusjonKravTekst}>
+        <BodyLong size={'small'} weight={'semibold'}>
+          Legg til refusjonskrav
+        </BodyLong>
+        <BodyLong size="small" textColor={'subtle'}>
           Hvis det er flere kontorer som kan ha refusjonskrav, legg til flere perioder.
           <br />
           Sluttdato på periode blir dagen før vedtaksdato med mindre annet er oppgitt.

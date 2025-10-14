@@ -109,14 +109,24 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
     LÅN = 'LÅN',
     NEI = 'NEI',
   }
+  const AndreUtbetalingerYtelserLabels: Record<AndreUtbetalingerYtelser, string> = {
+    [AndreUtbetalingerYtelser.ØKONOMISK_SOSIALHJELP]: 'Økonomisk sosialhjelp',
+    [AndreUtbetalingerYtelser.OMSORGSSTØNAD]: 'Omsorgsstønad',
+    [AndreUtbetalingerYtelser.INTRODUKSJONSSTØNAD]: 'Introduksjonsstønad',
+    [AndreUtbetalingerYtelser.KVALIFISERINGSSTØNAD]: 'Kvalifiseringsstønad',
+    [AndreUtbetalingerYtelser.VERV]: 'Verv',
+    [AndreUtbetalingerYtelser.UTLAND]: 'Utland',
+    [AndreUtbetalingerYtelser.AFP]: 'AFP',
+    [AndreUtbetalingerYtelser.STIPEND]: 'Stipend',
+    [AndreUtbetalingerYtelser.LÅN]: 'Lån',
+    [AndreUtbetalingerYtelser.NEI]: 'Nei',
+  };
 
-  const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
-  const formattedList = grunnlag.andreUtbetalingerYtelser
-    ?.filter((str): str is AndreUtbetalingerYtelser =>
-      Object.values(AndreUtbetalingerYtelser).includes(str as AndreUtbetalingerYtelser)
-    )
-    .map((str) => capitalize(str))
-    .join(', ');
+  const formattedList =
+    grunnlag.andreUtbetalingerYtelser
+      ?.filter((str): str is AndreUtbetalingerYtelser => str in AndreUtbetalingerYtelserLabels)
+      .map((str) => AndreUtbetalingerYtelserLabels[str])
+      .join(', ') || '';
 
   const historiskeVurderinger = grunnlag.historiskeVurderinger;
 
@@ -143,8 +153,10 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
         <TidligereVurderinger data={historiskeVurderinger} buildFelter={byggFelter} />
       )}
 
-      <BodyLong className={styles.refusjonTekstHeader}>Relevant informasjon fra søknad:</BodyLong>
-      <BodyLong className={styles.refusjonKravTekst}>
+      <BodyLong weight={'semibold'} size={'small'}>
+        Relevant informasjon fra søknad:
+      </BodyLong>
+      <BodyLong size={'small'} textColor={'subtle'}>
         Kryss av for utbetalinger du får, eller nylig har søkt om: {formattedList}{' '}
       </BodyLong>
       <RadioGroupWrapper
