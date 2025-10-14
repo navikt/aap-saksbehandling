@@ -12,7 +12,6 @@ import { RefusjonMedDataFetching } from 'components/behandlinger/sykdom/refusjon
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { SykdomsvurderingBrevMedDataFetching } from 'components/behandlinger/sykdom/sykdomsvurderingbrev/SykdomsvurderingBrevMedDataFetching';
-import { isDev, isLocal } from 'lib/utils/environment';
 import { OvergangUforeMedDataFetching } from './overgangufore/OvergangUforeMedDataFetching';
 import { OvergangArbeidMedDataFetching } from './overgangarbeid/OvergangArbeidMedDataFetching';
 
@@ -20,8 +19,8 @@ interface Props {
   behandlingsReferanse: string;
 }
 
-export const overgangUføreFeature = () => isLocal() || isDev();
-export const overgangArbeidFeature = ()=> false;
+export const overgangUføreFeature = () => true;
+export const overgangArbeidFeature = () => false;
 
 export const Sykdom = async ({ behandlingsReferanse }: Props) => {
   const flyt = await hentFlyt(behandlingsReferanse);
@@ -39,7 +38,9 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
   const vurderYrkesskadeSteg = getStegData(aktivStegGruppe, 'VURDER_YRKESSKADE', flyt.data);
   const vurderSykepengeerstatningSteg = getStegData(aktivStegGruppe, 'VURDER_SYKEPENGEERSTATNING', flyt.data);
   const overganguføreSteg = overgangUføreFeature() ? getStegData(aktivStegGruppe, 'OVERGANG_UFORE', flyt.data) : null;
-  const overgangarbeidSteg = overgangArbeidFeature() ? getStegData(aktivStegGruppe, 'OVERGANG_ARBEID', flyt.data) : null;
+  const overgangarbeidSteg = overgangArbeidFeature()
+    ? getStegData(aktivStegGruppe, 'OVERGANG_ARBEID', flyt.data)
+    : null;
 
   return (
     <GruppeSteg
