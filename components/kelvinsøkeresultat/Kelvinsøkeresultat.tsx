@@ -150,8 +150,8 @@ export const Kelvinsøkeresultat = ({
 function mapStatus(status: string): OppgaveStatusType | null {
   if (status === 'PÅ_VENT') {
     return { status: 'PÅ_VENT', label: 'På vent' };
-  } else if (status === 'RESERVERT') {
-    return { status: 'RESERVERT', label: 'Reservert' };
+  } else if (status === 'TILDELT') {
+    return { status: 'TILDELT', label: 'Tildelt' };
   }
   return null;
 }

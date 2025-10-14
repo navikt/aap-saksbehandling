@@ -4,7 +4,7 @@ import { HourglassTopFilledIcon, PadlockLockedFillIcon, XMarkOctagonIcon } from 
 import styles from './OppgaveStatus.module.css';
 
 export interface OppgaveStatusType {
-  status: 'PÅ_VENT' | 'RESERVERT' | 'TRUKKET' | 'AVBRUTT';
+  status: 'PÅ_VENT' | 'TILDELT' | 'TRUKKET' | 'AVBRUTT' | 'LEDIG' | 'TILDELT_INNLOGGET_BRUKER';
   label: string;
 }
 
@@ -22,9 +22,21 @@ export const OppgaveStatus = ({ oppgaveStatus, size = 'small', showLabel = true 
           {showLabel && oppgaveStatus.label}
         </Tag>
       );
-    case 'RESERVERT':
+    case 'TILDELT':
       return (
         <Tag className={styles.tag} icon={<PadlockLockedFillIcon />} variant={'error-moderate'} size={size}>
+          {showLabel && oppgaveStatus.label}
+        </Tag>
+      );
+    case 'TILDELT_INNLOGGET_BRUKER':
+      return (
+        <Tag className={styles.tag} variant={'neutral-moderate'} size={size}>
+          {showLabel && oppgaveStatus.label}
+        </Tag>
+      );
+    case 'LEDIG':
+      return (
+        <Tag className={styles.tag} variant={'neutral-moderate'} size={size}>
           {showLabel && oppgaveStatus.label}
         </Tag>
       );

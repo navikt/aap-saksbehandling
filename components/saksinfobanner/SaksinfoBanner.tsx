@@ -101,9 +101,7 @@ export const SaksinfoBanner = ({
   const visValgForÅSetteMarkering = brukerKanSaksbehandle && behandlingErIkkeAvsluttet;
 
   const hentOppgaveStatus = (): OppgaveStatusType | undefined => {
-    if (oppgave?.reservertAv && !erReservertAvInnloggetBruker) {
-      return { status: 'RESERVERT', label: `Reservert ${oppgave.reservertAvNavn ?? oppgave.reservertAv}` };
-    } else if (visning?.visVentekort) {
+    if (visning?.visVentekort) {
       return { status: 'PÅ_VENT', label: 'På vent' };
     } else if (sak.søknadErTrukket) {
       return { status: 'TRUKKET', label: 'Trukket' };
@@ -112,8 +110,22 @@ export const SaksinfoBanner = ({
     }
   };
 
+  const hentOppgaveTildeling = (): OppgaveStatusType | undefined => {
+    if (!oppgave?.reservertAv) {
+      return { status: 'LEDIG', label: `Ledig` };
+    } else if (erReservertAvInnloggetBruker) {
+      return {
+        status: 'TILDELT_INNLOGGET_BRUKER',
+        label: `Tildelt: ${oppgave.reservertAvNavn ?? oppgave.reservertAv}`,
+      };
+    } else if (oppgave?.reservertAv && !erReservertAvInnloggetBruker) {
+      return { status: 'TILDELT', label: `Tildelt: ${oppgave.reservertAvNavn ?? oppgave.reservertAv}` };
+    }
+  };
+
   const behandlingsreferanse = useBehandlingsReferanse();
   const oppgaveStatus = hentOppgaveStatus();
+  const oppgaveTildelingStatus = hentOppgaveTildeling();
 
   const erPåBehandlingSiden = referanse !== undefined;
   return (
@@ -165,6 +177,11 @@ export const SaksinfoBanner = ({
                 behandlingReferanse={referanse}
                 oppdaterVisHarUlesteDokumenter={settVisHarUlesteDokumenter}
               />
+            </div>
+          )}
+          {oppgaveTildelingStatus && (
+            <div className={styles.oppgavestatus}>
+              <OppgaveStatus oppgaveStatus={oppgaveTildelingStatus} />
             </div>
           )}
           {oppgaveStatus && (

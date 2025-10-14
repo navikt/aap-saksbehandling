@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import { TildelOppgaveModal } from 'components/tildeloppgavemodal/TildelOppgaveModal';
 
 describe('tildelOppgaveModalTest', () => {
-  it('skal ha en heading', () => {
+  it('skal ha en tildel-knapp og en avbryt-knapp', () => {
     render(
       <TildelOppgaveModal
         oppgaveIder={[1]}
@@ -13,8 +13,11 @@ describe('tildelOppgaveModalTest', () => {
         skalFjerneValgteRader={false}
       />
     );
-    const heading = screen.getByText('Tildel');
-    expect(heading).toBeVisible();
+    const tildelKnapp = screen.getByRole('button', { name: /Tildel/i });
+    expect(tildelKnapp).toBeVisible();
+
+    const avbrytKnapp = screen.getByRole('button', { name: /Avbryt/i });
+    expect(avbrytKnapp).toBeVisible();
   });
 
   it('skal ha søkefelt med søkeknapp', () => {
