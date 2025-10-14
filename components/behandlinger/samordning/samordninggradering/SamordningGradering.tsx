@@ -21,7 +21,6 @@ import { YtelseTabell } from 'components/behandlinger/samordning/samordninggrade
 
 import styles from 'components/behandlinger/samordning/samordninggradering/SamordningGradering.module.css';
 import { Ytelsesvurderinger } from 'components/behandlinger/samordning/samordninggradering/Ytelsesvurderinger';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { isNullOrUndefined } from 'lib/utils/validering';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { OpprettOppfølgingsBehandling } from 'components/saksoversikt/opprettoppfølgingsbehandling/OpprettOppfølgingsbehandling';
@@ -29,6 +28,8 @@ import { useSak } from 'hooks/SakHook';
 import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { capitalize } from 'lodash';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 
 interface Props {
   bruker: BrukerInformasjon;
@@ -79,6 +80,18 @@ export const SamordningGradering = ({
 
   const [visForm, setVisForm] = useState<boolean>(finnesYtelserEllerVurderinger);
 
+  const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
+    useLøsBehovOgGåTilNesteSteg('SAMORDNING_GRADERING');
+
+  const { mellomlagretVurdering, lagreMellomlagring, nullstillMellomlagretVurdering, slettMellomlagring } =
+    useMellomlagring(Behovstype.AVKLAR_SAMORDNING_GRADERING, initialMellomlagretVurdering);
+
+  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+    readOnly,
+    'SAMORDNING_GRADERING',
+    mellomlagretVurdering
+  );
+
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag);
@@ -96,14 +109,8 @@ export const SamordningGradering = ({
         defaultValue: defaultValue.vurderteSamordninger,
       },
     },
-    { readOnly: readOnly, shouldUnregister: true }
+    { readOnly: formReadOnly, shouldUnregister: true }
   );
-
-  const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('SAMORDNING_GRADERING');
-
-  const { mellomlagretVurdering, lagreMellomlagring, nullstillMellomlagretVurdering, slettMellomlagring } =
-    useMellomlagring(Behovstype.AVKLAR_SAMORDNING_GRADERING, initialMellomlagretVurdering);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit(async (data) => {
@@ -189,7 +196,7 @@ export const SamordningGradering = ({
           </Modal.Body>
         </Modal>
       )}
-      <VilkårskortMedFormOgMellomlagring
+      <VilkårskortMedFormOgMellomlagringNyVisning
         heading="§§ 11-27 / 11-28 Samordning med andre folketrygdytelser"
         steg="SAMORDNING_GRADERING"
         onSubmit={handleSubmit}
@@ -207,6 +214,8 @@ export const SamordningGradering = ({
           );
         }}
         mellomlagretVurdering={mellomlagretVurdering}
+        visningModus={visningModus}
+        visningActions={visningActions}
       >
         {!!historiskeVurderinger && !!historiskeVurderinger.length && (
           /* TODO: <TidligereVurderinger/> er ikke ideelt for visning av denne typen data (samordning, inst, m.m.).
@@ -218,7 +227,7 @@ export const SamordningGradering = ({
           <VStack gap={'6'}>
             <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
             <YtelseTabell ytelser={grunnlag.ytelser} />
-            <Ytelsesvurderinger form={form} readOnly={readOnly} />
+            <Ytelsesvurderinger form={form} readOnly={formReadOnly} />
             {(success || erAllereddeOppfølgningsOppgave) && (
               <Box maxWidth={'80ch'}>
                 <Alert variant="success">Oppfølgingsoppgave opprettet</Alert>
@@ -268,14 +277,14 @@ export const SamordningGradering = ({
                 type={'button'}
                 variant={'secondary'}
                 onClick={() => setVisForm(true)}
-                disabled={readOnly}
+                disabled={formReadOnly}
               >
                 Legg til folketrygdytelse
               </Button>
             </HStack>
           </VStack>
         )}
-      </VilkårskortMedFormOgMellomlagring>
+      </VilkårskortMedFormOgMellomlagringNyVisning>
     </>
   );
 };

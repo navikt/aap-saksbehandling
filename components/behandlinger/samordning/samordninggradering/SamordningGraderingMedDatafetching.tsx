@@ -1,4 +1,3 @@
-import { SamordningGradering } from 'components/behandlinger/samordning/samordninggradering/SamordningGradering';
 import {
   hentMellomlagring,
   hentOppfølgningsOppgaverOpprinselsePåBehandlingsReferanse,
@@ -9,8 +8,7 @@ import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 import { hentBrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { skalViseSteg, StegData } from 'lib/utils/steg';
-import { isProd } from 'lib/utils/environment';
-import { SamordningGraderingNyVisning } from 'components/behandlinger/samordning/samordninggradering/SamordningGraderingNyVisning';
+import { SamordningGradering } from 'components/behandlinger/samordning/samordninggradering/SamordningGradering';
 
 interface Props {
   behandlingsreferanse: string;
@@ -36,16 +34,7 @@ export const SamordningGraderingMedDatafetching = async ({ behandlingsreferanse,
     return null;
   }
 
-  return !isProd() ? (
-    <SamordningGraderingNyVisning
-      oppfølgningOppgave={oppfølgningOppgaver.data}
-      bruker={brukerInformasjon}
-      grunnlag={grunnlag.data}
-      behandlingVersjon={stegData.behandlingVersjon}
-      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
-      initialMellomlagretVurdering={initialMellomlagretVurdering}
-    />
-  ) : (
+  return (
     <SamordningGradering
       oppfølgningOppgave={oppfølgningOppgaver.data}
       bruker={brukerInformasjon}
