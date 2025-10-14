@@ -4,11 +4,9 @@ import {
   hentMellomlagring,
   hentSamordningArbeidsgiverGrunnlag,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { SamordningArbeidsgiver } from 'components/behandlinger/samordning/samordningArbeidsgiver/SamordningArbeidsgiver';
 import { Behovstype } from 'lib/utils/form';
 import { skalViseSteg, StegData } from 'lib/utils/steg';
-import { isProd } from 'lib/utils/environment';
-import { SamordningArbeidsgiverNyVisning } from 'components/behandlinger/samordning/samordningArbeidsgiver/SamordningArbeidsgiverNyVisning';
+import { SamordningArbeidsgiver } from 'components/behandlinger/samordning/samordningArbeidsgiver/SamordningArbeidsgiver';
 
 interface Props {
   behandlingsreferanse: string;
@@ -28,14 +26,7 @@ export const SamordningArbeidsgiverMedDatafetching = async ({ behandlingsreferan
     return null;
   }
 
-  return !isProd() ? (
-    <SamordningArbeidsgiverNyVisning
-      grunnlag={grunnlag.data}
-      behandlingVersjon={stegData.behandlingVersjon}
-      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
-      initialMellomlagretVurdering={initialMellomlagretVurdering}
-    />
-  ) : (
+  return (
     <SamordningArbeidsgiver
       grunnlag={grunnlag.data}
       behandlingVersjon={stegData.behandlingVersjon}

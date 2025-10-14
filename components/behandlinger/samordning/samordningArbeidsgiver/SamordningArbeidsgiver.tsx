@@ -7,13 +7,14 @@ import { FormEvent } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { MellomlagretVurdering, SamordningArbeidsgiverGrunnlag } from 'lib/types/types';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { validerDato } from 'lib/validation/dateValidation';
 import { parse } from 'date-fns';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 
 interface Props {
   grunnlag: SamordningArbeidsgiverGrunnlag;
@@ -43,6 +44,12 @@ export const SamordningArbeidsgiver = ({
   const { nullstillMellomlagretVurdering, mellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
     useMellomlagring(Behovstype.AVKLAR_SAMORDNING_ARBEIDSGIVER, initialMellomlagretVurdering);
 
+  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+    readOnly,
+    'SAMORDNING_ARBEIDSGIVER',
+    mellomlagretVurdering
+  );
+
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag.vurdering);
@@ -68,7 +75,7 @@ export const SamordningArbeidsgiver = ({
         defaultValue: defaultValue.tom,
       },
     },
-    { readOnly: readOnly }
+    { readOnly: formReadOnly }
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -91,10 +98,10 @@ export const SamordningArbeidsgiver = ({
     )(event);
   };
 
-  const skalViseBekreftKnapp = !readOnly;
+  const skalViseBekreftKnapp = !formReadOnly;
 
   return (
-    <VilkårskortMedFormOgMellomlagring
+    <VilkårskortMedFormOgMellomlagringNyVisning
       heading="Ytelser fra arbeidsgiver (sluttpakke)"
       steg="SAMORDNING_ARBEIDSGIVER"
       onSubmit={handleSubmit}
@@ -112,6 +119,8 @@ export const SamordningArbeidsgiver = ({
         )
       }
       readOnly={readOnly}
+      visningModus={visningModus}
+      visningActions={visningActions}
     >
       {
         <VStack gap={'6'}>
@@ -129,7 +138,7 @@ export const SamordningArbeidsgiver = ({
                   return validerDato(value as string);
                 },
               }}
-              readOnly={readOnly}
+              readOnly={formReadOnly}
             />
             <DateInputWrapper
               control={form.control}
@@ -142,12 +151,12 @@ export const SamordningArbeidsgiver = ({
                   return validerDato(value as string);
                 },
               }}
-              readOnly={readOnly}
+              readOnly={formReadOnly}
             />
           </HStack>
         </VStack>
       }
-    </VilkårskortMedFormOgMellomlagring>
+    </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };
 
