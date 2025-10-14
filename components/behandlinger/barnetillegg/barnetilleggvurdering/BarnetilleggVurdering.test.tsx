@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { BarnetilleggVurdering } from 'components/behandlinger/barnetillegg/barnetilleggvurdering/BarnetilleggVurdering';
 import { userEvent } from '@testing-library/user-event';
@@ -8,10 +8,15 @@ import { render, screen, within } from 'lib/test/CustomRender';
 import createFetchMock from 'vitest-fetch-mock';
 import { Behovstype } from 'lib/utils/form';
 import { FetchResponse } from 'lib/utils/api';
+import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
 const user = userEvent.setup();
+
+beforeEach(() => {
+  setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'BARNETILLEGG' });
+});
 
 const barnSomTrengerVurderingFosterforelder: BarnetilleggGrunnlag['barnSomTrengerVurdering'][number] = {
   ident: {
