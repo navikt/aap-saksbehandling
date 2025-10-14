@@ -3,6 +3,7 @@
 import { Alert, Search, VStack } from '@navikt/ds-react';
 import { Dispatch, FormEvent, SetStateAction, useState } from 'react';
 import { clientSøkPåSaksbehandler } from 'lib/clientApi';
+import { isSuccess } from 'lib/utils/api';
 
 interface Props {
   oppgaver: number[];
@@ -40,16 +41,16 @@ export const SaksbehandlerSøk = ({
     setIsLoading(true);
     setInfomelding(undefined);
     setError(undefined);
-    setSøkefeltError(undefined)
+    setSøkefeltError(undefined);
 
     if (!søketekst || søketekst.trim() === '') {
       setSøkefeltError('Du må fylle ut søkefeltet');
-      setIsLoading(false)
+      setIsLoading(false);
       return;
     }
 
     const res = await clientSøkPåSaksbehandler(oppgaver, søketekst);
-    if (res.type == 'SUCCESS') {
+    if (isSuccess(res)) {
       setSaksbehandlere(res.data.saksbehandlere);
       if (res.data.saksbehandlere.length == 0) {
         setInfomelding('Fant ingen veiledere eller saksbehandlere.');
