@@ -12,9 +12,10 @@ import { parse } from 'date-fns';
 import { FormEvent } from 'react';
 import styles from './BarnetilleggVurdering.module.css';
 import { useConfigForm } from 'components/form/FormHook';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { OppgitteBarnVurdering } from 'components/barn/oppgittebarnvurdering/OppgitteBarnVurdering';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 
 interface Props {
   behandlingsversjon: number;
@@ -60,6 +61,12 @@ export const BarnetilleggVurdering = ({
 
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
     useMellomlagring(Behovstype.AVKLAR_BARNETILLEGG_KODE, initialMellomlagretVurdering);
+
+  const { visningActions, visningModus, formReadOnly } = useVilkårskortVisning(
+    readOnly,
+    'BARNETILLEGG',
+    mellomlagretVurdering
+  );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -126,7 +133,7 @@ export const BarnetilleggVurdering = ({
   const erFolkeregistrerteBarn = grunnlag.folkeregisterbarn && grunnlag.folkeregisterbarn.length > 0;
 
   return (
-    <VilkårskortMedFormOgMellomlagring
+    <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'§ 11-20 tredje og fjerde ledd barnetillegg '}
       steg={'BARNETILLEGG'}
       onSubmit={handleSubmit}
@@ -147,6 +154,8 @@ export const BarnetilleggVurdering = ({
           )
         )
       }
+      visningModus={visningModus}
+      visningActions={visningActions}
     >
       <div className={'flex-column'}>
         {visManuellVurdering && (
@@ -167,7 +176,7 @@ export const BarnetilleggVurdering = ({
                   fødselsdato={vurdering.fødselsdato}
                   navn={vurdering.navn || behandlingPersonInfo?.info[vurdering.ident || 'null'] || 'Ukjent'}
                   harOppgittFosterforelderRelasjon={vurdering.oppgittForelderRelasjon === 'FOSTERFORELDER'}
-                  readOnly={readOnly}
+                  readOnly={formReadOnly}
                 />
               );
             })}
@@ -190,7 +199,7 @@ export const BarnetilleggVurdering = ({
           </div>
         )}
       </div>
-    </VilkårskortMedFormOgMellomlagring>
+    </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };
 
