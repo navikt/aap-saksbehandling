@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Alert, Button, HStack, Page, TextField } from '@navikt/ds-react';
 import { postmottakOpprettBehandlingClient } from 'lib/postmottakClientApi';
 import styles from './OpprettBehandling.module.css';
+import { isSuccess } from 'lib/utils/api';
 
 export const OpprettBehandling = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -14,7 +15,7 @@ export const OpprettBehandling = () => {
     setIsLoading(true);
     try {
       const res = await postmottakOpprettBehandlingClient(journalpostId);
-      if (res.type === 'SUCCESS') {
+      if (isSuccess(res)) {
         setMessage(`Behandlingsnummer: ${res.data.referanse}`);
       } else {
         setMessage('Noe gikk galt');

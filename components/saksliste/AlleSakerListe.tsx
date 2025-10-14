@@ -9,6 +9,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';
 import { SaksInfo } from 'lib/types/types';
+import { isSuccess } from 'lib/utils/api';
 
 function getSortedAndPaginatedData(
   data: SaksInfo[],
@@ -68,7 +69,7 @@ export const AlleSakerListe = () => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {data?.type === 'SUCCESS' &&
+          {isSuccess(data) &&
             getSortedAndPaginatedData(data.data, searchValue, page, numPerPage).map((sak) => (
               <Table.Row key={sak.saksnummer}>
                 <Table.DataCell>
@@ -82,7 +83,7 @@ export const AlleSakerListe = () => {
             ))}
         </Table.Body>
       </Table>
-      {data?.type === 'SUCCESS' && data.data.length > numPerPage && (
+      {isSuccess(data) && data.data.length > numPerPage && (
         <Pagination page={page} onPageChange={setPage} count={Math.ceil(data.data.length / numPerPage)} size="small" />
       )}
     </div>

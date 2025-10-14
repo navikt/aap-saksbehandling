@@ -6,6 +6,7 @@ import { Markering, MarkeringType } from 'lib/types/oppgaveTypes';
 import { BookIcon, ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import { NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType } from '@navikt/aap-oppgave-typescript-types';
 import { isDev } from 'lib/utils/environment';
+import { isSuccess } from 'lib/utils/api';
 
 interface Props {
   markering: Markering;
@@ -73,7 +74,7 @@ export const MarkeringInfoboks = ({ markering, referanse, showLabel = false, siz
                 onClick={async () => {
                   setIsLoading(true);
                   const res = await clientFjernMarkeringForBehandling(referanse, markering);
-                  if (res.type === 'SUCCESS') {
+                  if (isSuccess(res)) {
                     setVisInfo(false);
                     setVisTag(false);
                   }

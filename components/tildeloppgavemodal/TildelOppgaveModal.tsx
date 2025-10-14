@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { clientTildelTilSaksbehandler } from 'lib/clientApi';
 import styles from './TildelOppgaveModal.module.css';
+import { isError } from 'lib/utils/api';
 
 interface Props {
   oppgaveIder: number[];
@@ -57,11 +58,11 @@ export const TildelOppgaveModal = ({ oppgaveIder, isOpen, onClose, setValgteRade
     await form.handleSubmit(async (data) => {
       setIsLoading(true);
       const res = await clientTildelTilSaksbehandler(oppgaveIder, data.saksbehandlerIdent);
-      if (res.type == 'ERROR') {
+      if (isError(res)) {
         setError(res.apiException.message);
       } else {
         setError(undefined);
-        const selectedSaksbehandler = saksbehandlere.find(s => s.navIdent === data.saksbehandlerIdent);
+        const selectedSaksbehandler = saksbehandlere.find((s) => s.navIdent === data.saksbehandlerIdent);
         setSuccess(`Oppgave(r) ble tildelt ${selectedSaksbehandler?.navn ?? data.saksbehandlerIdent}`);
         if (setValgteRader) {
           skalFjerneValgteRader && setValgteRader([]);
@@ -136,18 +137,18 @@ export const TildelOppgaveModal = ({ oppgaveIder, isOpen, onClose, setValgteRade
               </form>
               {skalVisePaginering && (
                 <HStack justify="center">
-                <Pagination
-                  page={pageState}
-                  onPageChange={setPageState}
-                  count={antallSider}
-                  boundaryCount={1}
-                  siblingCount={1}
-                  size={'small'}
-                  srHeading={{
-                    tag: 'h2',
-                    text: 'Paginering av søkeresultater',
-                  }}
-                />
+                  <Pagination
+                    page={pageState}
+                    onPageChange={setPageState}
+                    count={antallSider}
+                    boundaryCount={1}
+                    siblingCount={1}
+                    size={'small'}
+                    srHeading={{
+                      tag: 'h2',
+                      text: 'Paginering av søkeresultater',
+                    }}
+                  />
                 </HStack>
               )}
             </VStack>
@@ -158,11 +159,7 @@ export const TildelOppgaveModal = ({ oppgaveIder, isOpen, onClose, setValgteRade
               <Button variant={'secondary'} onClick={lukkOgResetModal}>
                 Avbryt
               </Button>
-              <Button
-                form={'tildelSaksbehandler'}
-                loading={isLoading}
-                type={'submit'}
-              >
+              <Button form={'tildelSaksbehandler'} loading={isLoading} type={'submit'}>
                 Tildel
               </Button>
             </HStack>

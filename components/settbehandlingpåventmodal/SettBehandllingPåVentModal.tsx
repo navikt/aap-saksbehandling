@@ -15,6 +15,7 @@ import { useConfigForm } from 'components/form/FormHook';
 import { erDatoIFremtiden, validerDato } from 'lib/validation/dateValidation';
 import { useFlyt } from 'hooks/saksbehandling/FlytHook';
 import { FlytProsesseringServerSentEvent } from 'app/saksbehandling/api/behandling/hent/[referanse]/prosessering/route';
+import { isSuccess } from 'lib/utils/api';
 
 interface Props {
   behandlingsReferanse: string;
@@ -99,7 +100,7 @@ export const SettBehandllingPåVentModal = ({ behandlingsReferanse, reservert, i
         grunn: data.grunn,
       });
 
-      if (res.type === 'SUCCESS') {
+      if (isSuccess(res)) {
         listenSSE();
       } else {
         setError(res.apiException.message);

@@ -584,7 +584,7 @@ async function ventTilProsesseringErFerdig(
     forsøk++;
 
     const response = await hentFlytUtenRequestMemoization(behandlingsreferanse);
-    if (response.type === 'ERROR') {
+    if (isError(response)) {
       logError(
         `ventTilProssesering hentFlyt: Behandlingsreferanse: [${behandlingsreferanse}] - ${response.status} - ${response.apiException.code}: ${response.apiException.message}`
       );
