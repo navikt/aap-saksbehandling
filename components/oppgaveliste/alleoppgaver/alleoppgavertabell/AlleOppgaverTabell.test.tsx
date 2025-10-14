@@ -7,6 +7,7 @@ import {
   NoNavAapOppgaveOppgaveDtoBehandlingstype,
   NoNavAapOppgaveOppgaveDtoStatus,
 } from '@navikt/aap-oppgave-typescript-types';
+import { TildelOppgaverProvider } from 'context/oppgave/TildelOppgaverContext';
 
 const oppgaver: Oppgave[] = [
   {
@@ -43,18 +44,14 @@ const oppgaver: Oppgave[] = [
 describe('AlleOppgaverTabell', () => {
   it('skal vise saksbehandlers navn når det finnes', async () => {
     render(
-      <AlleOppgaverTabell
-        oppgaver={[oppgaver[0]]}
-        revalidateFunction={vi.fn()}
-        setValgteRader={vi.fn()}
-        valgteRader={[]}
-        visTildelOppgaveModal={false}
-        setVisTildelOppgaveModal={vi.fn()}
-        oppgaverSomSkalTildeles={[]}
-        setOppgaverSomSkalTildeles={vi.fn()}
-        skalFjerneValgteRaderEtterTildeling={false}
-        setSkalFjerneValgteRaderEtterTildeling={vi.fn()}
-      />
+      <TildelOppgaverProvider>
+        <AlleOppgaverTabell
+          oppgaver={[oppgaver[0]]}
+          revalidateFunction={vi.fn()}
+          setValgteRader={vi.fn()}
+          valgteRader={[]}
+        />
+      </TildelOppgaverProvider>
     );
     const saksbehandlernavn = screen.getByText('Test Testesen');
     expect(saksbehandlernavn).toBeVisible();
@@ -65,18 +62,14 @@ describe('AlleOppgaverTabell', () => {
 
   it('skal vise saksbehandlers ident når navn ikke finnes', async () => {
     render(
-      <AlleOppgaverTabell
-        oppgaver={[oppgaver[1]]}
-        revalidateFunction={vi.fn()}
-        setValgteRader={vi.fn()}
-        valgteRader={[]}
-        visTildelOppgaveModal={false}
-        setVisTildelOppgaveModal={vi.fn()}
-        oppgaverSomSkalTildeles={[]}
-        setOppgaverSomSkalTildeles={vi.fn()}
-        skalFjerneValgteRaderEtterTildeling={false}
-        setSkalFjerneValgteRaderEtterTildeling={vi.fn()}
-      />
+      <TildelOppgaverProvider>
+        <AlleOppgaverTabell
+          oppgaver={[oppgaver[1]]}
+          revalidateFunction={vi.fn()}
+          setValgteRader={vi.fn()}
+          valgteRader={[]}
+        />
+      </TildelOppgaverProvider>
     );
     const saksbehandlerIdent = screen.getByText('ident2');
     expect(saksbehandlerIdent).toBeVisible();

@@ -8,6 +8,7 @@ import {
 } from '@navikt/aap-oppgave-typescript-types';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { TildelOppgaverProvider } from 'context/oppgave/TildelOppgaverContext';
 
 const oppgaver: Oppgave = {
   vurderingsbehov: [],
@@ -28,14 +29,14 @@ describe('MineOppgaverMeny', () => {
 
   it('skal ha en knapp for å behandle oppgaven', () => {
     render(
-      <MineOppgaverMeny
-        oppgave={oppgaver}
-        setFeilmelding={vi.fn()}
-        revalidateFunction={vi.fn()}
-        setÅpenModal={vi.fn()}
-        setVisTildelOppgaveModal={vi.fn()}
-        setOppgaverSomSkalTildeles={vi.fn()}
-      />
+      <TildelOppgaverProvider>
+        <MineOppgaverMeny
+          oppgave={oppgaver}
+          setFeilmelding={vi.fn()}
+          revalidateFunction={vi.fn()}
+          setÅpenModal={vi.fn()}
+        />
+      </TildelOppgaverProvider>
     );
     const button = screen.getByRole('button', { name: 'Behandle' });
     expect(button).toBeVisible();
@@ -43,14 +44,14 @@ describe('MineOppgaverMeny', () => {
 
   it('skal ha en knapp for å frigi oppgaven', async () => {
     render(
-      <MineOppgaverMeny
-        oppgave={oppgaver}
-        setFeilmelding={vi.fn()}
-        revalidateFunction={vi.fn()}
-        setÅpenModal={vi.fn()}
-        setVisTildelOppgaveModal={vi.fn()}
-        setOppgaverSomSkalTildeles={vi.fn()}
-      />
+      <TildelOppgaverProvider>
+        <MineOppgaverMeny
+          oppgave={oppgaver}
+          setFeilmelding={vi.fn()}
+          revalidateFunction={vi.fn()}
+          setÅpenModal={vi.fn()}
+        />
+      </TildelOppgaverProvider>
     );
     const menu = screen.getByRole('img', { name: 'Meny' });
     await user.click(menu);

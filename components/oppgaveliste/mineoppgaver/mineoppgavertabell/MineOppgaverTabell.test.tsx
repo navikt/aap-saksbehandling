@@ -8,6 +8,7 @@ import {
 } from '@navikt/aap-oppgave-typescript-types';
 import { render } from 'lib/test/CustomRender';
 import { MineOppgaverTabell } from 'components/oppgaveliste/mineoppgaver/mineoppgavertabell/MineOppgaverTabell';
+import { TildelOppgaverProvider } from 'context/oppgave/TildelOppgaverContext';
 
 const oppgaver: Oppgave[] = [
   {
@@ -40,7 +41,13 @@ const oppgaver: Oppgave[] = [
 ];
 
 describe('Mine oppgaver tabell', () => {
-  beforeEach(() => render(<MineOppgaverTabell oppgaver={oppgaver} revalidateFunction={vi.fn()} />));
+  beforeEach(() =>
+    render(
+      <TildelOppgaverProvider>
+        <MineOppgaverTabell oppgaver={oppgaver} revalidateFunction={vi.fn()} />
+      </TildelOppgaverProvider>
+    )
+  );
 
   it('Skal inneholde korrekte kolonner ', () => {
     const kolonner = ['Navn', 'Fnr', 'ID', 'Behandlingstype', 'Beh. opprettet', 'Vurderingsbehov', 'Oppgave'];
