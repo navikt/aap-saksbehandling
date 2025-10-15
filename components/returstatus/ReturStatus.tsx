@@ -12,7 +12,7 @@ interface Props {
 
 export const ReturStatus = ({ returStatus }: Props) => {
   return (
-    <Tag className={styles.tag} icon={<ArrowsSquarepathIcon />} variant={'alt1-moderate'} size={"small"}>
+    <Tag className={styles.tag} icon={<ArrowsSquarepathIcon />} variant={'warning-moderate'} size={"small"}>
       {returStatusTilTekst(returStatus)}
     </Tag>
   )
