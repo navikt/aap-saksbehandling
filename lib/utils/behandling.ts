@@ -81,7 +81,9 @@ export function formatterÅrsakTilOpprettelseTilTekst(årsakTilOpprettelse: Års
     case 'ENDRING_I_REGISTERDATA':
       return 'Endring i register';
     case 'AKTIVITETSPLIKT':
-      return 'Aktivitetsplikt';
+      return 'Aktivitetsplikt 11-7';
+    case 'AKTIVITETSPLIKT_11_9':
+      return 'Aktivitetsplikt 11-9';
     default:
       return 'Ukjent årsak';
   }

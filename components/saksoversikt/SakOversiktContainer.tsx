@@ -37,7 +37,7 @@ export const SakOversiktContainer = ({ sak }: { sak: SaksInfo }) => {
             <Tabs.Tab label="Oversikt" value={Tab.OVERSIKT} icon={<PersonIcon />} />
             <Tabs.Tab label="Dokumenter" value={Tab.DOKUMENTER} icon={<FileTextIcon />} />
             {aktivitetspliktMedTrekkVisningFeature() && (
-              <Tabs.Tab label="Aktivitetsplikt trekk" value={Tab.TREKK} icon={<FileTextIcon />} />
+              <Tabs.Tab label="Aktivitetsplikt 11-9 trekk" value={Tab.TREKK} icon={<FileTextIcon />} />
             )}
           </Tabs.List>
 
