@@ -7,7 +7,7 @@ interface TildelOppgaverContext {
   setVisModal: Dispatch<SetStateAction<boolean>>;
   setOppgaveIder: Dispatch<SetStateAction<number[]>>;
 }
-const TildelOppgaverContext = createContext<TildelOppgaverContext | null>(null);
+export const TildelOppgaverContext = createContext<TildelOppgaverContext | null>(null);
 interface Props {
   children: React.ReactNode;
 }

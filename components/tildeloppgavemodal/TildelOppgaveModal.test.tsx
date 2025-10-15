@@ -1,15 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { TildelOppgaveModal } from 'components/tildeloppgavemodal/TildelOppgaveModal';
-import { TildelOppgaverProvider } from 'context/oppgave/TildelOppgaverContext';
+import { customRenderWithTildelOppgaveContext } from 'lib/test/CustomRender';
 
 describe('tildelOppgaveModalTest', () => {
   it('skal ha en tildel-knapp og en avbryt-knapp', () => {
-    render(
-      <TildelOppgaverProvider>
-        <TildelOppgaveModal />
-      </TildelOppgaverProvider>
-    );
+    customRenderWithTildelOppgaveContext(<TildelOppgaveModal />, true);
     const tildelKnapp = screen.getByRole('button', { name: /Tildel/i });
     expect(tildelKnapp).toBeVisible();
 
@@ -18,11 +14,7 @@ describe('tildelOppgaveModalTest', () => {
   });
 
   it('skal ha søkefelt med søkeknapp', () => {
-    render(
-      <TildelOppgaverProvider>
-        <TildelOppgaveModal />
-      </TildelOppgaverProvider>
-    );
+    customRenderWithTildelOppgaveContext(<TildelOppgaveModal />, true);
     const searchButton = screen.getByRole('button', { name: /søk/i });
     expect(searchButton).toBeInTheDocument();
   });
