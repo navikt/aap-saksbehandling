@@ -27,16 +27,19 @@ describe('mellomlagring i overgang arbeid', () => {
   };
 
   const overgangArbeidgrunnlag: OvergangArbeidGrunnlag = {
-    vurdering: {
-      begrunnelse: 'Dette er min vurdering som er bekreftet',
-      brukerRettPåAAP: true,
-      virkningsdato: '2025-08-19',
-      vurdertAv: { ident: 'TESTER', dato: '2025-08-19' },
-    },
+    nyeVurderinger: [
+      {
+        begrunnelse: 'Dette er min vurdering som er bekreftet',
+        brukerRettPåAAP: true,
+        fom: '2025-08-19',
+        vurdertAv: { ident: 'TESTER', dato: '2025-08-19' },
+      },
+    ],
     gjeldendeSykdsomsvurderinger: [],
-    gjeldendeVedtatteVurderinger: [],
+    sisteVedtatteVurderinger: [],
     harTilgangTilÅSaksbehandle: true,
-    historiskeVurderinger: [],
+    behøverVurderinger: [],
+    kanVurderes: [],
   };
 
   it('Skal vise en tekst om hvem som har gjort vurderingen dersom det finnes en mellomlagring', () => {

@@ -14,13 +14,13 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { SykdomsvurderingBrevMedDataFetching } from 'components/behandlinger/sykdom/sykdomsvurderingbrev/SykdomsvurderingBrevMedDataFetching';
 import { OvergangUforeMedDataFetching } from './overgangufore/OvergangUforeMedDataFetching';
 import { OvergangArbeidMedDataFetching } from './overgangarbeid/OvergangArbeidMedDataFetching';
+import { toggles } from '../../../lib/utils/toggles';
 
 interface Props {
   behandlingsReferanse: string;
 }
 
 export const overgangUføreFeature = () => true;
-export const overgangArbeidFeature = () => false;
 
 export const Sykdom = async ({ behandlingsReferanse }: Props) => {
   const flyt = await hentFlyt(behandlingsReferanse);
@@ -38,7 +38,7 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
   const vurderYrkesskadeSteg = getStegData(aktivStegGruppe, 'VURDER_YRKESSKADE', flyt.data);
   const vurderSykepengeerstatningSteg = getStegData(aktivStegGruppe, 'VURDER_SYKEPENGEERSTATNING', flyt.data);
   const overganguføreSteg = overgangUføreFeature() ? getStegData(aktivStegGruppe, 'OVERGANG_UFORE', flyt.data) : null;
-  const overgangarbeidSteg = overgangArbeidFeature()
+  const overgangarbeidSteg = toggles.featureOvergangArbeid
     ? getStegData(aktivStegGruppe, 'OVERGANG_ARBEID', flyt.data)
     : null;
 
@@ -61,7 +61,7 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
             behandlingsReferanse={behandlingsReferanse}
             stegData={vurderBistandsbehovSteg}
             overgangUføreEnabled={overgangUføreFeature()}
-            overgangArbeidEnabled={overgangArbeidFeature()}
+            overgangArbeidEnabled={toggles.featureOvergangArbeid}
           />
         </StegSuspense>
       )}
@@ -88,7 +88,7 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
           <OvergangUforeMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={overganguføreSteg} />
         </StegSuspense>
       )}
-      {overgangArbeidFeature() && overgangarbeidSteg !== null && overgangarbeidSteg.skalViseSteg && (
+      {toggles.featureOvergangArbeid && overgangarbeidSteg !== null && overgangarbeidSteg.skalViseSteg && (
         <StegSuspense>
           <OvergangArbeidMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={overgangarbeidSteg} />
         </StegSuspense>

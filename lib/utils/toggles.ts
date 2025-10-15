@@ -9,4 +9,5 @@ export const toggles = {
   featureOpprettAktivitetsplikt11_9: !isProd(),
   featureRevurderingVurderingsbehov: !isProd(),
   featureAktivitetspliktMedTrekkVisning: !isProd(),
+  featureOvergangArbeid: !isProd(),
 };
