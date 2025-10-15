@@ -2,7 +2,7 @@ import { ActionMenu, Button, HStack, Loader } from '@navikt/ds-react';
 import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
 import { Dispatch, SetStateAction, useTransition } from 'react';
 import { Oppgave } from 'lib/types/oppgaveTypes';
-import { plukkOppgaveClient, synkroniserOppgaveMedEnhetClient } from 'lib/oppgaveClientApi';
+import { hentOppgaveClient, plukkOppgaveClient, synkroniserOppgaveMedEnhetClient } from 'lib/oppgaveClientApi';
 import { isSuccess } from 'lib/utils/api';
 import { byggKelvinURL } from 'lib/utils/request';
 import { useRouter } from 'next/navigation';
@@ -15,6 +15,8 @@ interface Props {
   revaliderOppgaver: () => void;
   setVisTildelOppgaveModal: Dispatch<SetStateAction<boolean>>;
   setOppgaverSomSkalTildeles: Dispatch<SetStateAction<number[]>>;
+  setVisOppgaveIkkeLedigModal: Dispatch<SetStateAction<boolean>>;
+  setSaksbehandlerNavn: Dispatch<SetStateAction<string | undefined>>;
 }
 
 export const LedigeOppgaverMeny = ({
@@ -25,6 +27,8 @@ export const LedigeOppgaverMeny = ({
   setVisSynkroniserEnhetModal,
   setVisTildelOppgaveModal,
   setOppgaverSomSkalTildeles,
+  setVisOppgaveIkkeLedigModal,
+  setSaksbehandlerNavn
 }: Props) => {
   const router = useRouter();
   const [isPendingBehandle, startTransitionBehandle] = useTransition();
@@ -32,7 +36,18 @@ export const LedigeOppgaverMeny = ({
 
   async function plukkOgGåTilOppgave(oppgave: Oppgave) {
     startTransitionBehandle(async () => {
-      if (oppgave.id !== undefined && oppgave.id !== null && oppgave.versjon >= 0) {
+      if (oppgave.id !== undefined && oppgave.id !== null && oppgave.versjon >= 0 && oppgave.behandlingRef) {
+        const hentNyesteOppgave = await hentOppgaveClient(oppgave.behandlingRef);
+        if (isSuccess(hentNyesteOppgave)) {
+          if (hentNyesteOppgave.data.reservertAv != null) {
+            setSaksbehandlerNavn(oppgave.reservertAvNavn ?? oppgave.reservertAv ?? 'Ukjent')
+            setVisOppgaveIkkeLedigModal(true)
+            return;
+          }
+        } else {
+          setFeilmelding(`Feil ved henting av oppgave: ${hentNyesteOppgave.apiException.message}`);
+        }
+
         const plukketOppgave = await plukkOppgaveClient(oppgave.id, oppgave.versjon);
         if (isSuccess(plukketOppgave)) {
           router.push(byggKelvinURL(plukketOppgave.data));
@@ -66,49 +81,51 @@ export const LedigeOppgaverMeny = ({
   }
 
   return (
-    <HStack style={{ display: 'flex', justifyContent: 'flex-end' }} gap={'1'}>
-      <Button
-        type={'button'}
-        size={'small'}
-        variant={'secondary'}
-        onClick={() => plukkOgGåTilOppgave(oppgave)}
-        loading={isPendingBehandle}
-      >
-        Behandle
-      </Button>
-      {!isPendingMeny ? (
-        <ActionMenu>
-          <ActionMenu.Trigger>
-            <Button
-              variant={'tertiary-neutral'}
-              icon={<MenuElipsisVerticalIcon title={'Oppgavemeny'} />}
-              size={'small'}
-            />
-          </ActionMenu.Trigger>
-          <ActionMenu.Content>
-            <ActionMenu.Item
-              onSelect={() => {
-                åpneOppgave(oppgave);
-              }}
-            >
-              Åpne oppgave
-            </ActionMenu.Item>
-            <ActionMenu.Item onSelect={() => synkroniserEnhetPåOppgave(oppgave)}>
-              Sjekk kontortilhørighet
-            </ActionMenu.Item>
-            <ActionMenu.Item
-              onSelect={() => {
-                oppgave.id && setOppgaverSomSkalTildeles([oppgave.id]);
-                setVisTildelOppgaveModal(true);
-              }}
-            >
-              Tildel oppgave
-            </ActionMenu.Item>
-          </ActionMenu.Content>
-        </ActionMenu>
-      ) : (
-        <Loader />
-      )}
-    </HStack>
+    <>
+      <HStack style={{ display: 'flex', justifyContent: 'flex-end' }} gap={'1'}>
+        <Button
+          type={'button'}
+          size={'small'}
+          variant={'secondary'}
+          onClick={() => plukkOgGåTilOppgave(oppgave)}
+          loading={isPendingBehandle}
+        >
+          Behandle
+        </Button>
+        {!isPendingMeny ? (
+          <ActionMenu>
+            <ActionMenu.Trigger>
+              <Button
+                variant={'tertiary-neutral'}
+                icon={<MenuElipsisVerticalIcon title={'Oppgavemeny'} />}
+                size={'small'}
+              />
+            </ActionMenu.Trigger>
+            <ActionMenu.Content>
+              <ActionMenu.Item
+                onSelect={() => {
+                  åpneOppgave(oppgave);
+                }}
+              >
+                Åpne oppgave
+              </ActionMenu.Item>
+              <ActionMenu.Item onSelect={() => synkroniserEnhetPåOppgave(oppgave)}>
+                Sjekk kontortilhørighet
+              </ActionMenu.Item>
+              <ActionMenu.Item
+                onSelect={() => {
+                  oppgave.id && setOppgaverSomSkalTildeles([oppgave.id]);
+                  setVisTildelOppgaveModal(true);
+                }}
+              >
+                Tildel oppgave
+              </ActionMenu.Item>
+            </ActionMenu.Content>
+          </ActionMenu>
+        ) : (
+          <Loader />
+        )}
+      </HStack>
+    </>
   );
 };
