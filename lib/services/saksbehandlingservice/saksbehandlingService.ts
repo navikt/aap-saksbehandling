@@ -426,6 +426,11 @@ export const opprettDummySakDev = async (sak: OpprettTestcase) => {
   return await apiFetch<void>(url, saksbehandlingApiScope, 'POST', sak);
 };
 
+export const opprettOgFullfoerDummySak = async (sak: OpprettTestcase) => {
+  const url = `${saksbehandlingApiBaseUrl}/test/opprett-og-fullfoer`;
+  return await apiFetch<void>(url, saksbehandlingApiScope, 'POST', sak);
+};
+
 export const opprettDummySakTest = async (sak: OpprettDummySakDto) => {
   const url = `${saksbehandlingApiBaseUrl}/api/test/opprettDummySak`;
   return await apiFetch<void>(url, saksbehandlingApiScope, 'POST', sak);

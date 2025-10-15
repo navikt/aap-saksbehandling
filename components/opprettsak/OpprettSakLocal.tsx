@@ -8,11 +8,12 @@ import { formaterDatoForBackend } from 'lib/utils/date';
 import { OpprettSakBarn } from 'components/opprettsak/barn/OpprettSakBarn';
 import { getTrueFalseEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { OpprettInntekter } from 'components/opprettsak/inntekter/OpprettInntekter';
-import { useOpprettSak } from 'hooks/FetchHook';
+import { useOpprettOgFullfoer, useOpprettSak } from 'hooks/FetchHook';
 import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { Sykepenger } from 'components/opprettsak/samordning/Sykepenger';
 import { parse } from 'date-fns';
+import React from 'react';
 
 interface Barn {
   fodselsdato: string;
@@ -50,7 +51,9 @@ export interface OpprettSakFormFields {
 }
 
 export const OpprettSakLocal = () => {
-  const { isLoading, opprettSak } = useOpprettSak();
+  const [submitType, setSubmitType] = React.useState<'opprett' | 'fullfoer'>('opprett');
+  const { isLoadingSak, opprettSak } = useOpprettSak();
+  const { isLoadingFullfoer, opprettOgFullfoer } = useOpprettOgFullfoer();
   const { formFields, form } = useConfigForm<OpprettSakFormFields>({
     søknadsdato: {
       type: 'date',
@@ -116,7 +119,7 @@ export const OpprettSakLocal = () => {
   return (
     <form
       onSubmit={form.handleSubmit(async (data) => {
-        await opprettSak({
+        const innhold = {
           ...data,
           søknadsdato: formaterDatoForBackend(data.søknadsdato),
           fødselsdato: formaterDatoForBackend(data.fødselsdato),
@@ -124,25 +127,21 @@ export const OpprettSakLocal = () => {
           student: data.student === JaEllerNei.Ja,
           uføre: Number(data.uføre),
           barn:
-            data.barn?.map((barn) => {
-              return {
-                fodselsdato: formaterDatoForBackend(new Date(barn.fodselsdato)),
-                harRelasjon: barn.harRelasjon === 'folkeregistrertBarn',
-                skalFinnesIPDL: barn.skalFinnesIPDL == 'true',
-              };
-            }) || [],
+            data.barn?.map((barn) => ({
+              fodselsdato: formaterDatoForBackend(new Date(barn.fodselsdato)),
+              harRelasjon: barn.harRelasjon === 'folkeregistrertBarn',
+              skalFinnesIPDL: barn.skalFinnesIPDL == 'true',
+            })) || [],
           institusjoner: {
             sykehus: data?.institusjon?.includes('sykehus'),
             fengsel: data?.institusjon?.includes('fengsel'),
           },
           medlemskap: data.medlemskap === JaEllerNei.Ja,
           inntekterPerAr:
-            data.inntekter?.map((inntekt) => {
-              return {
-                år: Number(inntekt.år),
-                beløp: { verdi: Number(inntekt.beløp) },
-              };
-            }) || [],
+            data.inntekter?.map((inntekt) => ({
+              år: Number(inntekt.år),
+              beløp: { verdi: Number(inntekt.beløp) },
+            })) || [],
           sykepenger:
             data.sykepenger?.map((samordning) => ({
               grad: samordning.grad,
@@ -152,7 +151,13 @@ export const OpprettSakLocal = () => {
               },
             })) || [],
           tjenestePensjon: getTrueFalseEllerUndefined(data.tjenestePensjon),
-        });
+        };
+
+        if (submitType === 'opprett') {
+          await opprettSak(innhold);
+        } else {
+          await opprettOgFullfoer(innhold);
+        }
         await mutate('api/sak/alle');
       })}
       className={styles.form}
@@ -173,9 +178,19 @@ export const OpprettSakLocal = () => {
         <OpprettInntekter form={form} />
         <Sykepenger form={form} />
       </div>
-      <Button className={'fit-content'} loading={isLoading}>
-        Opprett testsak
-      </Button>
+      <div style={{ display: 'flex', gap: '1rem' }}>
+        <Button className={'fit-content'} loading={isLoadingSak} type="submit" onClick={() => setSubmitType('opprett')}>
+          Opprett testsak
+        </Button>
+        <Button
+          className={'fit-content'}
+          loading={isLoadingFullfoer}
+          type="submit"
+          onClick={() => setSubmitType('fullfoer')}
+        >
+          Opprett og fullfør testsak
+        </Button>
+      </div>
     </form>
   );
 };
