@@ -3024,6 +3024,44 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/aktivitetsplikt/trekk/{saksnummer}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description saksnummer */
+          saksnummer: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_9.AktivitetspliktMedTrekkDto'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/behandling/{referanse}/grunnlag/brev': {
     parameters: {
       query?: never;
@@ -4086,6 +4124,37 @@ export interface components {
       dato: string;
       /** @enum {string} */
       grunn: 'IKKE_RIMELIG_GRUNN' | 'RIMELIG_GRUNN';
+      vurdertAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_9.AktivitetspliktMedTrekkDto': {
+      vurderingerMedTrekk: components['schemas']['no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_9.AktivitetspliktVurderingMedTrekkDto'][];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_9.AktivitetspliktTrekkDto': {
+      /** Format: int32 */
+      'bel\u00F8p': number;
+      posteringer: components['schemas']['no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_9.AktivitetspliktTrekkPosteringDto'][];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_9.AktivitetspliktTrekkPosteringDto': {
+      /** Format: int32 */
+      'bel\u00F8p': number;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      dato: string;
+    };
+    'no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_9.AktivitetspliktVurderingMedTrekkDto': {
+      begrunnelse: string;
+      /** @enum {string} */
+      brudd: 'IKKE_MØTT_TIL_TILTAK' | 'IKKE_MØTT_TIL_BEHANDLING' | 'IKKE_MØTT_TIL_MØTE' | 'IKKE_SENDT_DOKUMENTASJON';
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      dato: string;
+      /** @enum {string} */
+      grunn: 'IKKE_RIMELIG_GRUNN' | 'RIMELIG_GRUNN';
+      registrertTrekk?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_9.AktivitetspliktTrekkDto'];
       vurdertAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.arbeidsevne.ArbeidsevneGrunnlagDto': {

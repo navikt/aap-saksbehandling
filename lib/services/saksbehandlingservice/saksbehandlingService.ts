@@ -1,6 +1,7 @@
 import {
   Aktivitetsplikt11_7Grunnlag,
   Aktivitetsplikt11_9Grunnlag,
+  AktivitetspliktMedTrekkRespons,
   AlderGrunnlag,
   ArbeidsevneGrunnlag,
   AutomatiskLovvalgOgMedlemskapVurdering,
@@ -559,6 +560,13 @@ export const slettMellomlagring = async (behandlingsReferanse: string, kode: Beh
     `${saksbehandlingApiBaseUrl}/api/behandling/mellomlagret-vurdering/${behandlingsReferanse}/${kode}/slett`,
     saksbehandlingApiScope,
     'POST'
+  );
+};
+
+export const hentAktivitetspliktTrekk = async (saksnummer: string) => {
+  return apiFetch<AktivitetspliktMedTrekkRespons>(
+    `${saksbehandlingApiBaseUrl}/api/aktivitetsplikt/trekk/${saksnummer}`,
+    saksbehandlingApiScope
   );
 };
 
