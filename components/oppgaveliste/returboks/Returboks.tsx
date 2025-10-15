@@ -17,12 +17,16 @@ interface Props {
   oppgave: Oppgave;
 }
 
-function returStatusTilTekst(status: ReturStatus): string {
+export function returStatusTilTekst(status: ReturStatus): string {
   switch (status) {
     case NoNavAapOppgaveReturInformasjonStatus.RETUR_FRA_BESLUTTER:
       return 'Retur fra beslutter';
     case NoNavAapOppgaveReturInformasjonStatus.RETUR_FRA_KVALITETSSIKRER:
       return 'Retur fra kvalitetssikrer';
+    case NoNavAapOppgaveReturInformasjonStatus.RETUR_FRA_SAKSBEHANDLER:
+      return 'Retur fra saksbehandler';
+    case NoNavAapOppgaveReturInformasjonStatus.RETUR_FRA_VEILEDER:
+      return 'Retur fra veileder';
     default:
       exhaustiveCheck(status);
   }
@@ -53,6 +57,9 @@ export const Returboks = ({ oppgave: { returInformasjon: maybeReturInformasjon }
   const [vis, setVis] = useState(false);
 
   const årsakTekst = returInformasjon.årsaker.length <= 1 ? 'Årsak' : 'Årsaker';
+  const skalViseBoks =
+    maybeReturInformasjon?.status == 'RETUR_FRA_KVALITETSSIKRER' ||
+    maybeReturInformasjon?.status == 'RETUR_FRA_BESLUTTER';
 
   return (
     <>
@@ -64,30 +71,40 @@ export const Returboks = ({ oppgave: { returInformasjon: maybeReturInformasjon }
         size="xsmall"
       />
       <Popover
-        onClose={() => setVis(vis)}
+        onClose={() => setVis(false)}
         open={vis}
         anchorEl={buttonRef.current}
         arrow={false}
         placement={'bottom-end'}
         offset={8}
       >
-        <VStack gap={'2'} className={styles.boks}>
-          <Tag icon={<ArrowsSquarepathIcon />} variant={'warning-moderate'} size={'medium'} className={styles.tag}>
-            <BodyShort size={'small'} weight={'semibold'}>
-              {returStatusTilTekst(returInformasjon.status)}
-            </BodyShort>
-          </Tag>
-          <VStack gap={'0'}>
-            <Detail textColor="subtle">{årsakTekst}</Detail>
+        {skalViseBoks ? (
+          <VStack gap={'2'} className={styles.boks}>
+            <Tag icon={<ArrowsSquarepathIcon />} variant={'warning-moderate'} size={'medium'} className={styles.tag}>
+              <BodyShort size={'small'} weight={'semibold'}>
+                {returStatusTilTekst(returInformasjon.status)}
+              </BodyShort>
+            </Tag>
+            <VStack gap={'0'}>
+              <Detail textColor="subtle">{årsakTekst}</Detail>
 
-            <div>{årsakerTilString(returInformasjon.årsaker)} </div>
-          </VStack>
-          <VStack gap={'0'}>
-            <Detail textColor="subtle">Begrunnelse</Detail>
+              <div>{årsakerTilString(returInformasjon.årsaker)} </div>
+            </VStack>
+            <VStack gap={'0'}>
+              <Detail textColor="subtle">Begrunnelse</Detail>
 
-            <div>{returInformasjon?.begrunnelse}</div>
+              <div>{returInformasjon?.begrunnelse}</div>
+            </VStack>
           </VStack>
-        </VStack>
+        ) : (
+          <VStack className={styles.litenBoks}>
+            <Tag icon={<ArrowsSquarepathIcon />} variant={'warning-moderate'} size={'medium'} className={styles.tag}>
+              <BodyShort size={'small'} weight={'semibold'}>
+                {returStatusTilTekst(returInformasjon.status)}
+              </BodyShort>
+            </Tag>
+          </VStack>
+        )}
       </Popover>
     </>
   );

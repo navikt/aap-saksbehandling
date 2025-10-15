@@ -1,5 +1,6 @@
 import { Behandler } from 'components/innhentdokumentasjon/innhentdokumentasjonskjema/InnhentDokumentasjonSkjema';
 import {
+  AktivitetspliktMedTrekkRespons,
   BehandlingFlytOgTilstand,
   BehandlingsFlytAvklaringsbehovKode,
   BehandlingsHistorikk,
@@ -196,14 +197,17 @@ export function clientFjernMarkeringForBehandling(referanse: string, markering: 
 export function clientSøkPåSaksbehandler(oppgaver: number[], søketekst: string) {
   return clientFetch<SaksbehandlerSøkRespons>(`${BASE_URL}/api/saksbehandler/finn-saksbehandler`, 'POST', {
     oppgaver: oppgaver,
-    søketekst: søketekst
+    søketekst: søketekst,
   });
 }
 
 export function clientTildelTilSaksbehandler(oppgaver: number[], saksbehandlerIdent: string) {
   return clientFetch<TildelOppgaveRequest>(`${BASE_URL}/api/saksbehandler/tildel-oppgave`, 'POST', {
     oppgaver: oppgaver,
-    saksbehandlerIdent: saksbehandlerIdent
+    saksbehandlerIdent: saksbehandlerIdent,
   });
 }
 
+export function clientHentAktivitetspliktMedTrekk(saksnummer: string) {
+  return clientFetch<AktivitetspliktMedTrekkRespons>(`${BASE_URL}/api/aktivitetsplikt/trekk/${saksnummer}`, 'GET');
+}

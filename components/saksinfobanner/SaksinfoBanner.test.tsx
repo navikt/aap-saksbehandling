@@ -7,6 +7,7 @@ import { Oppgave } from 'lib/types/oppgaveTypes';
 import {
   NoNavAapOppgaveOppgaveDtoBehandlingstype,
   NoNavAapOppgaveOppgaveDtoStatus,
+  NoNavAapOppgaveReturInformasjonStatus,
 } from '@navikt/aap-oppgave-typescript-types';
 
 const personInformasjon: SakPersoninfo = { navn: 'Peder Ås', fnr: '12345678910' };
@@ -421,5 +422,66 @@ describe('Sak status', () => {
     );
     const ledigTag = screen.getByText('Ledig');
     expect(ledigTag).toBeVisible();
+  });
+
+  it('skal vise retur-tag når behandling er sendt tilbake fra kvalitetssikrer', () => {
+    render(
+      <SaksinfoBanner
+        personInformasjon={personInformasjon}
+        sak={sak}
+        behandling={behandling}
+        brukerInformasjon={{ navn: 'Saksbehandler', NAVident: 'navIdent' }}
+        referanse={'123456'}
+        oppgave={{
+          ...oppgave,
+          returInformasjon: {
+            begrunnelse: 'Underkjent',
+            endretAv: 'Kvalitetssikrer',
+            status: NoNavAapOppgaveReturInformasjonStatus.RETUR_FRA_KVALITETSSIKRER,
+            årsaker: [],
+          },
+        }}
+      />
+    );
+    const returTag = screen.getByText('Retur fra kvalitetssikrer');
+    expect(returTag).toBeVisible();
+  });
+
+  it('skal vise retur-tag når behandling er sendt tilbake til kvalitetssikrer', () => {
+    render(
+      <SaksinfoBanner
+        personInformasjon={personInformasjon}
+        sak={sak}
+        behandling={behandling}
+        brukerInformasjon={{ navn: 'Saksbehandler', NAVident: 'navIdent' }}
+        referanse={'123456'}
+        oppgave={{
+          ...oppgave,
+          returInformasjon: {
+            begrunnelse: 'Underkjent',
+            endretAv: 'Kvalitetssikrer',
+            status: NoNavAapOppgaveReturInformasjonStatus.RETUR_FRA_VEILEDER,
+            årsaker: [],
+          },
+        }}
+      />
+    );
+    const returTag = screen.getByText('Retur fra veileder');
+    expect(returTag).toBeVisible();
+  });
+
+  it('skal ikke vise retur-tag når oppgave ikke har retur-status', () => {
+    render(
+      <SaksinfoBanner
+        personInformasjon={personInformasjon}
+        sak={sak}
+        behandling={behandling}
+        brukerInformasjon={{ navn: 'Saksbehandler', NAVident: 'navIdent' }}
+        referanse={'123456'}
+        oppgave={oppgave}
+      />
+    );
+    const returTag = screen.queryByText('Retur');
+    expect(returTag).not.toBeInTheDocument()
   });
 });
