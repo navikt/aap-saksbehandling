@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { render } from 'lib/test/CustomRender';
+import { customRenderWithTildelOppgaveContext } from 'lib/test/CustomRender';
 import { screen } from '@testing-library/react';
 import { AlleOppgaverTabell } from 'components/oppgaveliste/alleoppgaver/alleoppgavertabell/AlleOppgaverTabell';
 import { Oppgave } from 'lib/types/oppgaveTypes';
@@ -7,7 +7,6 @@ import {
   NoNavAapOppgaveOppgaveDtoBehandlingstype,
   NoNavAapOppgaveOppgaveDtoStatus,
 } from '@navikt/aap-oppgave-typescript-types';
-import { TildelOppgaverProvider } from 'context/oppgave/TildelOppgaverContext';
 
 const oppgaver: Oppgave[] = [
   {
@@ -43,15 +42,14 @@ const oppgaver: Oppgave[] = [
 
 describe('AlleOppgaverTabell', () => {
   it('skal vise saksbehandlers navn når det finnes', async () => {
-    render(
-      <TildelOppgaverProvider>
-        <AlleOppgaverTabell
-          oppgaver={[oppgaver[0]]}
-          revalidateFunction={vi.fn()}
-          setValgteRader={vi.fn()}
-          valgteRader={[]}
-        />
-      </TildelOppgaverProvider>
+    customRenderWithTildelOppgaveContext(
+      <AlleOppgaverTabell
+        oppgaver={[oppgaver[0]]}
+        revalidateFunction={vi.fn()}
+        setValgteRader={vi.fn()}
+        valgteRader={[]}
+      />,
+      false
     );
     const saksbehandlernavn = screen.getByText('Test Testesen');
     expect(saksbehandlernavn).toBeVisible();
@@ -61,15 +59,14 @@ describe('AlleOppgaverTabell', () => {
   });
 
   it('skal vise saksbehandlers ident når navn ikke finnes', async () => {
-    render(
-      <TildelOppgaverProvider>
-        <AlleOppgaverTabell
-          oppgaver={[oppgaver[1]]}
-          revalidateFunction={vi.fn()}
-          setValgteRader={vi.fn()}
-          valgteRader={[]}
-        />
-      </TildelOppgaverProvider>
+    customRenderWithTildelOppgaveContext(
+      <AlleOppgaverTabell
+        oppgaver={[oppgaver[1]]}
+        revalidateFunction={vi.fn()}
+        setValgteRader={vi.fn()}
+        valgteRader={[]}
+      />,
+      false
     );
     const saksbehandlerIdent = screen.getByText('ident2');
     expect(saksbehandlerIdent).toBeVisible();

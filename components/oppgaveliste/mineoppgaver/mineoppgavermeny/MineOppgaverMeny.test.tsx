@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { render } from 'lib/test/CustomRender';
+import { customRenderWithTildelOppgaveContext } from 'lib/test/CustomRender';
 import { MineOppgaverMeny } from 'components/oppgaveliste/mineoppgaver/mineoppgavermeny/MineOppgaverMeny';
 import { Oppgave } from 'lib/types/oppgaveTypes';
 import {
@@ -8,7 +8,6 @@ import {
 } from '@navikt/aap-oppgave-typescript-types';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { TildelOppgaverProvider } from 'context/oppgave/TildelOppgaverContext';
 
 const oppgaver: Oppgave = {
   vurderingsbehov: [],
@@ -28,30 +27,28 @@ describe('MineOppgaverMeny', () => {
   const user = userEvent.setup();
 
   it('skal ha en knapp for å behandle oppgaven', () => {
-    render(
-      <TildelOppgaverProvider>
-        <MineOppgaverMeny
-          oppgave={oppgaver}
-          setFeilmelding={vi.fn()}
-          revalidateFunction={vi.fn()}
-          setÅpenModal={vi.fn()}
-        />
-      </TildelOppgaverProvider>
+    customRenderWithTildelOppgaveContext(
+      <MineOppgaverMeny
+        oppgave={oppgaver}
+        setFeilmelding={vi.fn()}
+        revalidateFunction={vi.fn()}
+        setÅpenModal={vi.fn()}
+      />,
+      false
     );
     const button = screen.getByRole('button', { name: 'Behandle' });
     expect(button).toBeVisible();
   });
 
   it('skal ha en knapp for å frigi oppgaven', async () => {
-    render(
-      <TildelOppgaverProvider>
-        <MineOppgaverMeny
-          oppgave={oppgaver}
-          setFeilmelding={vi.fn()}
-          revalidateFunction={vi.fn()}
-          setÅpenModal={vi.fn()}
-        />
-      </TildelOppgaverProvider>
+    customRenderWithTildelOppgaveContext(
+      <MineOppgaverMeny
+        oppgave={oppgaver}
+        setFeilmelding={vi.fn()}
+        revalidateFunction={vi.fn()}
+        setÅpenModal={vi.fn()}
+      />,
+      false
     );
     const menu = screen.getByRole('img', { name: 'Meny' });
     await user.click(menu);

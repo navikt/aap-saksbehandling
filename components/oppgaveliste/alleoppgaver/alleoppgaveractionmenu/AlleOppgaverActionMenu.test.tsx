@@ -5,10 +5,9 @@ import {
 } from '@navikt/aap-oppgave-typescript-types';
 import { describe, expect, it, vi } from 'vitest';
 import userEvent from '@testing-library/user-event';
-import { render } from 'lib/test/CustomRender';
+import { customRenderWithTildelOppgaveContext } from 'lib/test/CustomRender';
 import { screen } from '@testing-library/react';
 import { AlleOppgaverActionMenu } from 'components/oppgaveliste/alleoppgaver/alleoppgaveractionmenu/AlleOppgaverActionMenu';
-import { TildelOppgaverProvider } from 'context/oppgave/TildelOppgaverContext';
 
 const oppgave: Oppgave = {
   vurderingsbehov: [],
@@ -30,10 +29,9 @@ describe('AlleOppgaverActionMenu', () => {
   const user = userEvent.setup();
 
   it('skal ha en knapp for å åpne oppgaven', async () => {
-    render(
-      <TildelOppgaverProvider>
-        <AlleOppgaverActionMenu oppgave={oppgave} setVisSynkroniserEnhetModal={setSync} revalidateFunction={vi.fn()} />
-      </TildelOppgaverProvider>
+    customRenderWithTildelOppgaveContext(
+      <AlleOppgaverActionMenu oppgave={oppgave} setVisSynkroniserEnhetModal={setSync} revalidateFunction={vi.fn()} />,
+      false
     );
     const menu = screen.getByRole('button', { name: 'Oppgavemeny' });
     await user.click(menu);
@@ -43,14 +41,13 @@ describe('AlleOppgaverActionMenu', () => {
 
   it('skal ha en knapp for å frigi oppgaven hvis oppgaven er reservert', async () => {
     const reservertOppgave = { ...oppgave, reservertAv: 'saksbehandler' };
-    render(
-      <TildelOppgaverProvider>
-        <AlleOppgaverActionMenu
-          oppgave={reservertOppgave}
-          setVisSynkroniserEnhetModal={setSync}
-          revalidateFunction={vi.fn()}
-        />
-      </TildelOppgaverProvider>
+    customRenderWithTildelOppgaveContext(
+      <AlleOppgaverActionMenu
+        oppgave={reservertOppgave}
+        setVisSynkroniserEnhetModal={setSync}
+        revalidateFunction={vi.fn()}
+      />,
+      false
     );
     const menu = screen.getByRole('button', { name: 'Oppgavemeny' });
     await user.click(menu);
@@ -59,10 +56,9 @@ describe('AlleOppgaverActionMenu', () => {
   });
 
   it('skal ikke ha knapp for å frigi hvis oppgave ikke er reservert', async () => {
-    render(
-      <TildelOppgaverProvider>
-        <AlleOppgaverActionMenu oppgave={oppgave} setVisSynkroniserEnhetModal={setSync} revalidateFunction={vi.fn()} />
-      </TildelOppgaverProvider>
+    customRenderWithTildelOppgaveContext(
+      <AlleOppgaverActionMenu oppgave={oppgave} setVisSynkroniserEnhetModal={setSync} revalidateFunction={vi.fn()} />,
+      false
     );
     const menu = screen.getByRole('button', { name: 'Oppgavemeny' });
     await user.click(menu);
