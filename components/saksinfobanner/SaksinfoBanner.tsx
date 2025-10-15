@@ -24,6 +24,7 @@ import { MarkeringInfoboks } from 'components/markeringinfoboks/MarkeringInfobok
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { AvbrytRevurderingModal } from 'components/saksinfobanner/avbrytrevurderingmodal/AvbrytRevurderingModal';
 import { formaterDatoForFrontend } from 'lib/utils/date';
+import { ReturStatus } from 'components/returstatus/ReturStatus';
 
 interface Props {
   personInformasjon: SakPersoninfo;
@@ -187,6 +188,11 @@ export const SaksinfoBanner = ({
           {oppgaveStatus && (
             <div className={styles.oppgavestatus}>
               <OppgaveStatus oppgaveStatus={oppgaveStatus} />
+            </div>
+          )}
+          {oppgave?.returInformasjon?.status && (
+            <div className={styles.oppgavestatus}>
+              <ReturStatus returStatus={oppgave.returInformasjon.status} />
             </div>
           )}
           {oppgave?.markeringer?.map((markering) => (
