@@ -258,7 +258,6 @@ describe('mellomlagring', () => {
 
     await user.click(slettKnapp);
 
-    screen.logTestingPlaygroundURL();
     expect(screen.getByRole('textbox', { name: 'Vilkårsvurdering' })).toHaveValue(
       'Dette er min vurdering som er bekreftet'
     );
