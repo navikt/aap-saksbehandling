@@ -1,8 +1,8 @@
 import { AvklarOppholdkravLøsning, OppholdskravGrunnlagResponse } from 'lib/types/types';
 import { OppholdskravForm, OppholdskravVurderingForm } from 'components/behandlinger/oppholdskrav/types';
-import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
+import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { alleLandUtenNorge } from 'lib/utils/countries';
-import { parse } from 'date-fns';
+import { parse, sub } from 'date-fns';
 import { getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 
 export function getDefaultValuesFromGrunnlag(grunnlag?: OppholdskravGrunnlagResponse): OppholdskravForm {
@@ -42,14 +42,25 @@ export function getDefaultValuesFromGrunnlag(grunnlag?: OppholdskravGrunnlagResp
 
 export const mapFormTilDto = (
   periodeForm: OppholdskravVurderingForm,
-  tilDato: string | undefined
-): AvklarOppholdkravLøsning => ({
-  begrunnelse: periodeForm.begrunnelse,
-  fom: formaterDatoForBackend(parse(periodeForm.fraDato!, 'dd.MM.yyyy', new Date())),
-  tom: tilDato != null ? formaterDatoForBackend(parse(tilDato, 'dd.MM.yyyy', new Date())) : null,
-  oppfylt: periodeForm.oppfyller === JaEllerNei.Ja,
-  land: periodeForm.land === 'ANNET' ? periodeForm.landAnnet : periodeForm.land,
-});
+  tilDato: string | undefined | null
+): AvklarOppholdkravLøsning => {
+  return {
+    begrunnelse: periodeForm.begrunnelse,
+    fom: formaterDatoForBackend(parse(periodeForm.fraDato!, 'dd.MM.yyyy', new Date())),
+    tom: tilDato,
+    oppfylt: periodeForm.oppfyller === JaEllerNei.Ja,
+    land: periodeForm.land === 'ANNET' ? periodeForm.landAnnet : periodeForm.land,
+  };
+};
+
+export function parseDatoFraDatePickerOgTrekkFra1Dag(datoFraDatepicker?: string) {
+  const parsedDate = parseDatoFraDatePicker(datoFraDatepicker);
+  if (parsedDate == null) {
+    return null;
+  }
+
+  return sub(parsedDate, { days: 1 });
+}
 
 export function isNotEmpty<T>(item: T | null | undefined): item is T {
   return item != null && item !== '';
