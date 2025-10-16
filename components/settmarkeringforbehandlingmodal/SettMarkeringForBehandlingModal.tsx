@@ -10,7 +10,6 @@ import { clientSettMarkeringForBehandling } from 'lib/clientApi';
 import { MarkeringType } from 'lib/types/oppgaveTypes';
 import { NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType } from '@navikt/aap-oppgave-typescript-types';
 import { FormField } from 'components/form/FormField';
-import { isDev } from 'lib/utils/environment';
 import { isSuccess } from 'lib/utils/api';
 
 interface Props {
@@ -89,7 +88,7 @@ export const SettMarkeringForBehandlingModal = ({ referanse, type, isOpen, onClo
               className={'flex-column'}
               autoComplete={'off'}
             >
-              {isDev() && markeringsType === NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.HASTER ? (
+              {markeringsType === NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.HASTER ? (
                 <FormField form={form} formField={formFields.hasteBegrunnelse} />
               ) : (
                 <FormField form={form} formField={formFields.begrunnelse} />
