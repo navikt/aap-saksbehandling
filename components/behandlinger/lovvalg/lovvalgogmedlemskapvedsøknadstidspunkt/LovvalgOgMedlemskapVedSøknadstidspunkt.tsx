@@ -134,7 +134,7 @@ export const LovvalgOgMedlemskapVedSøknadstidspunkt = ({
         type: 'radio',
         label: medlemAvFolkeTrygdenVedSøknadstidspunktLabel,
         options: JaEllerNeiOptions,
-        rules: { required: 'Du må velg om brukeren var medlem av folketrygden på søknadstidspunkt' },
+        rules: { required: 'Du må velge om brukeren var medlem av folketrygden på søknadstidspunkt' },
         defaultValue: defaultValues.medlemAvFolkeTrygdenVedSøknadstidspunkt,
       },
     },
