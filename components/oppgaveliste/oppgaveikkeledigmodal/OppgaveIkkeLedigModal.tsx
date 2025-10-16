@@ -16,7 +16,7 @@ export const OppgaveIkkeLedigModal = ({ visOppgaveIkkeLedigModal, setVisOppgaveI
       className={styles.modal}
       open={visOppgaveIkkeLedigModal}
       header={{
-        heading: 'Oppgaven har blitt plukket av noen andre',
+        heading: 'Oppgaven er plukket av noen andre',
         icon: <PadlockLockedFillIcon  />,
       }}
       onClose={() => {
@@ -32,7 +32,7 @@ export const OppgaveIkkeLedigModal = ({ visOppgaveIkkeLedigModal, setVisOppgaveI
     >
       <Modal.Body>
         <BodyShort>
-          {`Oppgaven har blitt tildelt til ${saksbehandlerNavn} og er ikke lenger ledig. Oppdater oppgavelisten for å se ledige oppgaver.`}
+          {`Oppgaven er hos ${saksbehandlerNavn}. Oppdater oppgavelisten for å plukke en annen oppgave.`}
         </BodyShort>
         <Modal.Footer>
           <Button
