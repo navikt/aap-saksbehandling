@@ -112,7 +112,7 @@ export function useOppgaver({
 
       return hentOppgaverClient(payload);
     },
-    { revalidateOnFocus: false }
+    { revalidateOnFocus: true, refreshInterval: 10000 }
   );
 
   const oppgaverFlatMap =

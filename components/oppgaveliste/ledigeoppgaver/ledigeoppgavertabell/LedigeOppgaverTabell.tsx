@@ -18,6 +18,7 @@ import { OppgaveInformasjon } from 'components/oppgaveliste/oppgaveinformasjon/O
 import { ManglerTilgangModal } from 'components/oppgaveliste/manglertilgangmodal/ManglerTilgangModal';
 import { SynkroniserEnhetModal } from 'components/oppgaveliste/synkroniserenhetmodal/SynkroniserEnhetModal';
 import { TildelOppgaveModal } from 'components/tildeloppgavemodal/TildelOppgaveModal';
+import { OppgaveIkkeLedigModal } from 'components/oppgaveliste/oppgaveikkeledigmodal/OppgaveIkkeLedigModal';
 
 interface Props {
   oppgaver: Oppgave[];
@@ -31,6 +32,8 @@ export const LedigeOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) =>
   const [visSynkroniserEnhetModal, setVisSynkroniserEnhetModal] = useState<boolean>(false);
   const [oppgaverSomSkalTildeles, setOppgaverSomSkalTildeles] = useState<number[]>([]);
   const [visTildelOppgaveModal, setVisTildelOppgaveModal] = useState<boolean>(false);
+  const [saksbehandlerNavn, setSaksbehandlerNavn] = useState<string>()
+  const [visOppgaveIkkeLedigModal, setVisOppgaveIkkeLedigModal] = useState<boolean>(false)
 
   return (
     <>
@@ -50,6 +53,12 @@ export const LedigeOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) =>
       <SynkroniserEnhetModal
         visSynkroniserEnhetModal={visSynkroniserEnhetModal}
         setVisSynkroniserEnhetModal={setVisSynkroniserEnhetModal}
+      />
+      <OppgaveIkkeLedigModal
+        visOppgaveIkkeLedigModal={visOppgaveIkkeLedigModal}
+        setVisOppgaveIkkeLedigModal={setVisOppgaveIkkeLedigModal}
+        saksbehandlerNavn={saksbehandlerNavn}
+        revaliderOppgaver={revalidateFunction}
       />
       {feilmelding && <Alert variant={'error'}>{feilmelding}</Alert>}
       <TableStyled
@@ -156,6 +165,8 @@ export const LedigeOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) =>
                   revaliderOppgaver={revalidateFunction}
                   setVisTildelOppgaveModal={setVisTildelOppgaveModal}
                   setOppgaverSomSkalTildeles={setOppgaverSomSkalTildeles}
+                  setVisOppgaveIkkeLedigModal={setVisOppgaveIkkeLedigModal}
+                  setSaksbehandlerNavn={setSaksbehandlerNavn}
                 />
               </Table.DataCell>
             </Table.Row>
