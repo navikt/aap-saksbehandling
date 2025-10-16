@@ -38,7 +38,7 @@ export const LedigeOppgaverMeny = ({
   async function plukkOgGåTilOppgave(oppgave: Oppgave) {
     startTransitionBehandle(async () => {
       if (oppgave.id !== undefined && oppgave.id !== null && oppgave.versjon >= 0 && oppgave.behandlingRef) {
-        if (isProd()) {
+        if (!isProd()) {
           const nyesteOppgave = await hentOppgaveClient(oppgave.behandlingRef);
           if (isSuccess(nyesteOppgave)) {
             if (nyesteOppgave.data.reservertAv != null) {
