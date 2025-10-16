@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, VStack } from '@navikt/ds-react';
+import { Alert, Button, VStack } from '@navikt/ds-react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { Behovstype } from 'lib/utils/form';
@@ -12,7 +12,11 @@ import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårs
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { PlusIcon } from '@navikt/aksel-icons';
 import { CustomExpandableCard } from 'components/customexpandablecard/CustomExpandableCard';
-import { getDefaultValuesFromGrunnlag, mapFormTilDto } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
+import {
+  getDefaultValuesFromGrunnlag,
+  mapFormTilDto,
+  parseDatoFraDatePickerOgTrekkFra1Dag,
+} from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
 import { OppholdskravFormInput } from 'components/behandlinger/oppholdskrav/OppholdskravFormInput';
 import { OppholdskravTidligereVurdering } from 'components/behandlinger/oppholdskrav/OppholdskravTidligereVurdering';
 import { OppholdskravVurdertAv } from 'components/behandlinger/oppholdskrav/OppholdskravVurdertAv';
@@ -21,7 +25,7 @@ import {
   OppholdskravTidligerePeriodeHeading,
 } from 'components/behandlinger/oppholdskrav/OppholdskravPeriodeHeading';
 import { parseISO } from 'date-fns';
-import { parseDatoFraDatePicker } from 'lib/utils/date';
+import { formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
 
 type Props = {
   grunnlag: OppholdskravGrunnlagResponse | undefined;
@@ -74,8 +78,10 @@ export const OppholdskravSteg = ({ grunnlag, behandlingVersjon, readOnly }: Prop
         behovstype: Behovstype.OPPHOLDSKRAV_KODE,
         løsningerForPerioder: data.vurderinger.map((periode, index) => {
           const isLast = index === data.vurderinger.length - 1;
-          const tilDato = isLast ? undefined : data.vurderinger[index + 1].fraDato;
-          return mapFormTilDto(periode, tilDato);
+          const tilDato = isLast
+            ? undefined
+            : parseDatoFraDatePickerOgTrekkFra1Dag(data.vurderinger[index + 1].fraDato);
+          return mapFormTilDto(periode, tilDato != null ? formaterDatoForBackend(tilDato) : undefined);
         }),
       },
     };
@@ -112,6 +118,10 @@ export const OppholdskravSteg = ({ grunnlag, behandlingVersjon, readOnly }: Prop
       }
     >
       <VStack gap="8">
+        <Alert variant="warning">
+          Dette steget er kun her for testing, og vurderingen man gjør her vil ikke påvirke utbetalingen.
+        </Alert>
+
         <VStack gap="2">
           {vedtatteVurderinger.map((vurdering) => (
             <CustomExpandableCard
