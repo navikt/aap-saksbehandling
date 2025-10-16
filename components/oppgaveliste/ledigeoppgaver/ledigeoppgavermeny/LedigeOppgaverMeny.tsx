@@ -6,6 +6,7 @@ import { hentOppgaveClient, plukkOppgaveClient, synkroniserOppgaveMedEnhetClient
 import { isSuccess } from 'lib/utils/api';
 import { byggKelvinURL } from 'lib/utils/request';
 import { useRouter } from 'next/navigation';
+import { isProd } from 'lib/utils/environment';
 
 interface Props {
   oppgave: Oppgave;
@@ -37,15 +38,17 @@ export const LedigeOppgaverMeny = ({
   async function plukkOgGåTilOppgave(oppgave: Oppgave) {
     startTransitionBehandle(async () => {
       if (oppgave.id !== undefined && oppgave.id !== null && oppgave.versjon >= 0 && oppgave.behandlingRef) {
-        const nyesteOppgave = await hentOppgaveClient(oppgave.behandlingRef);
-        if (isSuccess(nyesteOppgave)) {
-          if (nyesteOppgave.data.reservertAv != null) {
-            setSaksbehandlerNavn(nyesteOppgave.data.reservertAvNavn ?? nyesteOppgave.data.reservertAv ?? 'Ukjent')
-            setVisOppgaveIkkeLedigModal(true)
-            return;
+        if (isProd()) {
+          const nyesteOppgave = await hentOppgaveClient(oppgave.behandlingRef);
+          if (isSuccess(nyesteOppgave)) {
+            if (nyesteOppgave.data.reservertAv != null) {
+              setSaksbehandlerNavn(nyesteOppgave.data.reservertAvNavn ?? nyesteOppgave.data.reservertAv ?? 'Ukjent');
+              setVisOppgaveIkkeLedigModal(true);
+              return;
+            }
+          } else {
+            setFeilmelding(`Feil ved henting av oppgave: ${nyesteOppgave.apiException.message}`);
           }
-        } else {
-          setFeilmelding(`Feil ved henting av oppgave: ${nyesteOppgave.apiException.message}`);
         }
 
         const plukketOppgave = await plukkOppgaveClient(oppgave.id, oppgave.versjon);
