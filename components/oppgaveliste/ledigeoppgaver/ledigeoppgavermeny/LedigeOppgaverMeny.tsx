@@ -2,10 +2,11 @@ import { ActionMenu, Button, HStack, Loader } from '@navikt/ds-react';
 import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
 import { Dispatch, SetStateAction, useTransition } from 'react';
 import { Oppgave } from 'lib/types/oppgaveTypes';
-import { plukkOppgaveClient, synkroniserOppgaveMedEnhetClient } from 'lib/oppgaveClientApi';
+import { hentOppgaveClient, plukkOppgaveClient, synkroniserOppgaveMedEnhetClient } from 'lib/oppgaveClientApi';
 import { isSuccess } from 'lib/utils/api';
 import { byggKelvinURL } from 'lib/utils/request';
 import { useRouter } from 'next/navigation';
+import { isProd } from 'lib/utils/environment';
 
 interface Props {
   oppgave: Oppgave;
@@ -15,6 +16,8 @@ interface Props {
   revaliderOppgaver: () => void;
   setVisTildelOppgaveModal: Dispatch<SetStateAction<boolean>>;
   setOppgaverSomSkalTildeles: Dispatch<SetStateAction<number[]>>;
+  setVisOppgaveIkkeLedigModal: Dispatch<SetStateAction<boolean>>;
+  setSaksbehandlerNavn: Dispatch<SetStateAction<string | undefined>>;
 }
 
 export const LedigeOppgaverMeny = ({
@@ -25,6 +28,8 @@ export const LedigeOppgaverMeny = ({
   setVisSynkroniserEnhetModal,
   setVisTildelOppgaveModal,
   setOppgaverSomSkalTildeles,
+  setVisOppgaveIkkeLedigModal,
+  setSaksbehandlerNavn,
 }: Props) => {
   const router = useRouter();
   const [isPendingBehandle, startTransitionBehandle] = useTransition();
@@ -32,7 +37,20 @@ export const LedigeOppgaverMeny = ({
 
   async function plukkOgGåTilOppgave(oppgave: Oppgave) {
     startTransitionBehandle(async () => {
-      if (oppgave.id !== undefined && oppgave.id !== null && oppgave.versjon >= 0) {
+      if (oppgave.id !== undefined && oppgave.id !== null && oppgave.versjon >= 0 && oppgave.behandlingRef) {
+        if (!isProd()) {
+          const nyesteOppgave = await hentOppgaveClient(oppgave.behandlingRef);
+          if (isSuccess(nyesteOppgave)) {
+            if (nyesteOppgave.data.reservertAv != null) {
+              setSaksbehandlerNavn(nyesteOppgave.data.reservertAvNavn ?? nyesteOppgave.data.reservertAv ?? 'Ukjent');
+              setVisOppgaveIkkeLedigModal(true);
+              return;
+            }
+          } else {
+            setFeilmelding(`Feil ved henting av oppgave: ${nyesteOppgave.apiException.message}`);
+          }
+        }
+
         const plukketOppgave = await plukkOppgaveClient(oppgave.id, oppgave.versjon);
         if (isSuccess(plukketOppgave)) {
           router.push(byggKelvinURL(plukketOppgave.data));

@@ -63,6 +63,9 @@ export async function antallÅpneBehandlingerMedReturPerAvklaringsbehovClient(ur
 export async function hentOppgaverClient(oppgavelisteRequest: OppgavelisteRequest) {
   return clientFetch<OppgavelisteResponse>('/oppgave/api/oppgave/oppgaveliste', 'POST', oppgavelisteRequest);
 }
+export async function hentOppgaveClient(behandlingsreferanse: string) {
+  return clientFetch<Oppgave>(`/oppgave/api/oppgave/${behandlingsreferanse}/hent`, 'GET');
+}
 
 export async function hentMineOppgaverClient() {
   return clientFetch<OppgavelisteResponse>('/oppgave/api/oppgave/mine-oppgaver', 'GET');
