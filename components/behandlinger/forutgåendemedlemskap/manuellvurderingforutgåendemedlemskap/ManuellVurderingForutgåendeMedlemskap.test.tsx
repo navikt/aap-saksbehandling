@@ -69,7 +69,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
         grunnlag={grunnlagUtenVurdering}
       />
     );
-    screen.logTestingPlaygroundURL();
+
     const felt = screen.getByRole('group', {
       name: 'Har brukeren fem års forutgående medlemskap i folketrygden jf. § 11-2?',
     });

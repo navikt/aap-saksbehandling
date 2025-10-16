@@ -90,7 +90,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
           behovstype={Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP}
         />
       );
-      screen.logTestingPlaygroundURL();
+
       const felt = screen.getByRole('group', {
         name: 'Hva er riktig lovvalgsland ved søknadstidspunkt?',
       });
