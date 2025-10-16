@@ -1,7 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
 import { BodyShort, Button, Modal } from '@navikt/ds-react';
 import { PadlockLockedFillIcon } from '@navikt/aksel-icons';
-import styles from './OppgaveIkkeLedigModal.module.css'
 
 interface Props {
   visOppgaveIkkeLedigModal: boolean;
@@ -13,7 +12,6 @@ interface Props {
 export const OppgaveIkkeLedigModal = ({ visOppgaveIkkeLedigModal, setVisOppgaveIkkeLedigModal, saksbehandlerNavn, revaliderOppgaver }: Props) => {
   return (
     <Modal
-      className={styles.modal}
       open={visOppgaveIkkeLedigModal}
       header={{
         heading: 'Oppgaven er plukket av noen andre',
