@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, VStack } from '@navikt/ds-react';
+import { Alert, Button, ErrorMessage, VStack } from '@navikt/ds-react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { Behovstype } from 'lib/utils/form';
@@ -25,7 +25,7 @@ import {
   OppholdskravTidligerePeriodeHeading,
 } from 'components/behandlinger/oppholdskrav/OppholdskravPeriodeHeading';
 import { parseISO } from 'date-fns';
-import { formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
+import { formaterDatoForBackend, parseDatoFraDatePicker, stringToDate } from 'lib/utils/date';
 
 type Props = {
   grunnlag: OppholdskravGrunnlagResponse | undefined;
@@ -58,7 +58,27 @@ export const OppholdskravSteg = ({ grunnlag, behandlingVersjon, readOnly }: Prop
     reValidateMode: 'onChange',
   });
 
-  const { fields: vurderingerFields, append, remove } = useFieldArray({ control: form.control, name: 'vurderinger' });
+  const {
+    fields: vurderingerFields,
+    append,
+    remove,
+  } = useFieldArray({
+    control: form.control,
+    name: 'vurderinger',
+    rules: {
+      validate: (fields) => {
+        const sorterteVurderinger = fields.toSorted((a, b) => {
+          const aParsed = stringToDate(a.fraDato, 'dd.MM.yyyy')!;
+          const bParsed = stringToDate(b.fraDato, 'dd.MM.yyyy')!;
+          return aParsed.getTime() - bParsed.getTime();
+        });
+        const likRekkefølge = sorterteVurderinger.every((value, index) => value.fraDato === fields[index].fraDato);
+        if (!likRekkefølge) {
+          return 'Vurderingene som legges til må være i kronologisk rekkefølge fra eldst til nyest';
+        }
+      },
+    },
+  });
 
   function onAddPeriode() {
     append({
@@ -95,6 +115,7 @@ export const OppholdskravSteg = ({ grunnlag, behandlingVersjon, readOnly }: Prop
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const foersteNyePeriode = vurderingerFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
 
+  console.log('error', form.formState.errors);
   return (
     <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'Oppholdskrav § 11-3'}
@@ -187,6 +208,11 @@ export const OppholdskravSteg = ({ grunnlag, behandlingVersjon, readOnly }: Prop
             </CustomExpandableCard>
           ))}
         </VStack>
+        {form.formState.errors.vurderinger && (
+          <ErrorMessage size={'small'} showIcon>
+            {form.formState.errors.vurderinger?.root?.message}
+          </ErrorMessage>
+        )}
       </VStack>
     </VilkårskortMedFormOgMellomlagringNyVisning>
   );
