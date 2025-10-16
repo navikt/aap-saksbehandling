@@ -37,15 +37,15 @@ export const LedigeOppgaverMeny = ({
   async function plukkOgGåTilOppgave(oppgave: Oppgave) {
     startTransitionBehandle(async () => {
       if (oppgave.id !== undefined && oppgave.id !== null && oppgave.versjon >= 0 && oppgave.behandlingRef) {
-        const hentNyesteOppgave = await hentOppgaveClient(oppgave.behandlingRef);
-        if (isSuccess(hentNyesteOppgave)) {
-          if (hentNyesteOppgave.data.reservertAv != null) {
-            setSaksbehandlerNavn(oppgave.reservertAvNavn ?? oppgave.reservertAv ?? 'Ukjent')
+        const nyesteOppgave = await hentOppgaveClient(oppgave.behandlingRef);
+        if (isSuccess(nyesteOppgave)) {
+          if (nyesteOppgave.data.reservertAv != null) {
+            setSaksbehandlerNavn(nyesteOppgave.data.reservertAvNavn ?? nyesteOppgave.data.reservertAv ?? 'Ukjent')
             setVisOppgaveIkkeLedigModal(true)
             return;
           }
         } else {
-          setFeilmelding(`Feil ved henting av oppgave: ${hentNyesteOppgave.apiException.message}`);
+          setFeilmelding(`Feil ved henting av oppgave: ${nyesteOppgave.apiException.message}`);
         }
 
         const plukketOppgave = await plukkOppgaveClient(oppgave.id, oppgave.versjon);
