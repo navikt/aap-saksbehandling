@@ -185,6 +185,8 @@ export function mapTilSteggruppeTekst(steggruppe: string) {
       return '§ 11-9 Aktivitetsplikt';
     case 'UDEFINERT':
       return 'Udefinert';
+    case 'OPPHOLDSKRAV':
+      return 'Oppholdskrav';
     default:
       return `${steggruppe}`;
   }

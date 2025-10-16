@@ -54,6 +54,7 @@ export enum Behovstype {
   FASTSETT_MANUELL_INNTEKT = '7001',
   AVKLAR_OPPFØLGINGSBEHOV_NAY = '8002',
   AVKLAR_OPPFØLGINGSBEHOV_LOKALKONTOR = '8001',
+  OPPHOLDSKRAV_KODE = '5035',
 }
 
 type BehovsKode = `${Behovstype}`;
@@ -128,6 +129,8 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
       return 'Avbryt revurdering';
     case '5022':
       return 'Overstyr § 11-2 forutgående medlemskap';
+    case '5035':
+      return 'Oppholdskrav § 11-3';
     case '5050':
       return 'Skriv brev';
     case '5051':

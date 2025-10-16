@@ -3,8 +3,8 @@
 import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
 import { FormEvent, FormEventHandler } from 'react';
 import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/PostmottakLøsBehovOgGåTilNesteStegHook';
-import { FinnSakGrunnlag, Saksinfo } from 'lib/types/postmottakTypes';
-import { Alert, Button, Detail, HStack, Label, Radio, VStack } from '@navikt/ds-react';
+import { AvsenderMottakerIdType, FinnSakGrunnlag, Saksinfo } from 'lib/types/postmottakTypes';
+import { Alert, Button, Detail, Label, Radio, VStack } from '@navikt/ds-react';
 import { ServerSentEventStatusAlert } from 'components/postmottak/serversenteventstatusalert/ServerSentEventStatusAlert';
 import { FormFieldRadioOptions } from 'components/form/FormHook';
 import { formaterDatoForFrontend } from 'lib/utils/date';
@@ -20,11 +20,21 @@ interface Props {
   readOnly: boolean;
 }
 
+/**
+ * Ukjent må ikke sendes til backend
+ **/
+enum IdType {
+  FNR = 'FNR',
+  ORGNR = 'ORGNR',
+  UKJENT = 'UKJENT',
+}
+
 interface FormFields {
   knyttTilSak: string;
   journalpostTittel: string;
   avsenderMottaker: {
     id: string;
+    idType: IdType;
     navn: string;
   };
   dokumenter: {
@@ -46,6 +56,17 @@ function mapVurderingTilValgtOption(vurdering: FinnSakGrunnlag['vurdering']) {
   }
 }
 
+const mapIdType = (type?: string | null) => {
+  switch (type) {
+    case 'FNR':
+      return IdType.FNR;
+    case 'ORGNR':
+      return IdType.ORGNR;
+    default:
+      return undefined;
+  }
+};
+
 export const AvklarSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, readOnly }: Props) => {
   const nySakOption = grunnlag.saksinfo.length === 0 ? [{ label: 'Opprett ny sak', value: NY }] : [];
 
@@ -56,6 +77,7 @@ export const AvklarSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, 
       avsenderMottaker: grunnlag.kanEndreAvsenderMottaker
         ? {
             id: grunnlag.avsenderMottaker?.id || '',
+            idType: mapIdType(grunnlag.avsenderMottaker?.idType),
             navn: grunnlag.avsenderMottaker?.navn || '',
           }
         : undefined,
@@ -87,7 +109,7 @@ export const AvklarSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, 
           avsenderMottaker: grunnlag.kanEndreAvsenderMottaker
             ? {
                 id: data.avsenderMottaker.id,
-                idType: 'FNR',
+                idType: mapIdType(data.avsenderMottaker.idType) as AvsenderMottakerIdType,
                 navn: data.avsenderMottaker.navn,
               }
             : undefined,
@@ -98,6 +120,8 @@ export const AvklarSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, 
       });
     })(event);
   };
+
+  const valgtIdType = form.watch('avsenderMottaker.idType');
 
   return (
     <VilkårsKort heading={'Avklar sak og journalpostdetaljer'}>
@@ -153,7 +177,19 @@ export const AvklarSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, 
           {grunnlag.kanEndreAvsenderMottaker && (
             <VStack gap="2">
               <Label size="small">Avsender</Label>
-              <HStack gap="2">
+              <RadioGroupWrapper
+                label="Avsendertype"
+                rules={{ required: 'Du må velge avsendertype' }}
+                name={'avsenderMottaker.idType'}
+                control={form.control}
+                readOnly={readOnly}
+              >
+                <Radio value={IdType.FNR}>Privatperson (Fødselsnummer)</Radio>
+                <Radio value={IdType.ORGNR}>Organisasjon (Organisasjonsnummer)</Radio>
+                <Radio value={IdType.UKJENT}>Annet</Radio>
+              </RadioGroupWrapper>
+
+              {valgtIdType === IdType.FNR && (
                 <TextFieldToggle
                   form={form}
                   rules={{
@@ -165,7 +201,21 @@ export const AvklarSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, 
                   label="Fødselsnummer"
                   readOnly={readOnly}
                 />
-              </HStack>
+              )}
+
+              {valgtIdType === IdType.ORGNR && (
+                <TextFieldToggle
+                  form={form}
+                  rules={{
+                    required: 'Orgnr. må være satt',
+                    minLength: { value: 9, message: 'Orgnr. må bestå av 9 siffer' },
+                    maxLength: { value: 9, message: 'Orgnr. må bestå av 9 siffer' },
+                  }}
+                  name={'avsenderMottaker.id'}
+                  label="Organisasjonsnummer"
+                  readOnly={readOnly}
+                />
+              )}
 
               <TextFieldToggle
                 form={form}

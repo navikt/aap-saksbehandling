@@ -78,6 +78,8 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov): strin
       return 'Overgang til uføre';
     case 'OVERGANG_ARBEID':
       return 'Overgang arbeidssøker';
+    case 'OPPHOLDSKRAV':
+      return 'Oppholdskrav § 11-3';
     case 'DØDSFALL_BARN':
       return 'Dødsfall barn';
     case 'DØDSFALL_BRUKER':

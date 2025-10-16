@@ -8,7 +8,6 @@ import { InnhentDokumentasjon } from 'components/innhentdokumentasjon/InnhentDok
 
 import styles from './Saksbehandlingsoversikt.module.css';
 import { SaksHistorikk } from 'components/sakshistorikk/SaksHistorikk';
-import { isDev } from 'lib/utils/environment';
 
 enum Tab {
   SAKSDOKUMENTER = 'SAKSDOKUMENTER',
@@ -36,11 +35,9 @@ export const Saksbehandlingsoversikt = () => {
           <Tooltip content={'Åpne be om opplysninger'}>
             <Tabs.Tab value={Tab.BE_OM_OPPLYSNINGER} label={'Be om opplysninger'} icon={<HddDownIcon aria-hidden />} />
           </Tooltip>
-          {isDev() && (
-            <Tooltip content={'Historikk'}>
-              <Tabs.Tab value={Tab.HISTORIKK} label={'Historikk'} icon={<ClockDashedIcon aria-hidden />} />
-            </Tooltip>
-          )}
+          <Tooltip content={'Historikk'}>
+            <Tabs.Tab value={Tab.HISTORIKK} label={'Historikk'} icon={<ClockDashedIcon aria-hidden />} />
+          </Tooltip>
         </Tabs.List>
       </Tabs>
       <div className={styles.tabContent}>

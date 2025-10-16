@@ -90,7 +90,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
           behovstype={Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP}
         />
       );
-      screen.logTestingPlaygroundURL();
+
       const felt = screen.getByRole('group', {
         name: 'Hva er riktig lovvalgsland ved søknadstidspunkt?',
       });
@@ -251,7 +251,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
       });
       await user.click(within(lovvalg).getByRole('radio', { name: 'Norge' }));
       await trykkPåBekreft();
-      const feilmelding = screen.getByText('Du må velg om brukeren var medlem av folketrygden på søknadstidspunkt');
+      const feilmelding = screen.getByText('Du må velge om brukeren var medlem av folketrygden på søknadstidspunkt');
       expect(feilmelding).toBeVisible();
     });
   });

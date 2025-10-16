@@ -106,7 +106,7 @@ export const ManuellVurderingForutgåendeMedlemskap = ({
           {
             value: 'A',
             label:
-              'a: Ja, brukeren har vært medlem i forlketrygden i minst ett år umiddelbart før krav om ytelsen settes frem {{søknadsdato}}, og var medlem i trygden da arbeidsevnen ble nedsatt med minst halvparten {{beregningstidspunkt}}, og etter fylte 16 år har perioder med medlemskap som minst tilsvarer perioder uten medlemskap',
+              'a: Ja, brukeren har vært medlem i folketrygden i minst ett år umiddelbart før krav om ytelsen settes frem {{søknadsdato}}, og var medlem i trygden da arbeidsevnen ble nedsatt med minst halvparten {{beregningstidspunkt}}, og etter fylte 16 år har perioder med medlemskap som minst tilsvarer perioder uten medlemskap',
           },
           {
             value: 'B',

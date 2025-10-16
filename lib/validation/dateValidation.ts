@@ -1,4 +1,4 @@
-import { getYear, isFuture, parse } from 'date-fns';
+import { getYear, isAfter, isBefore, isFuture, parse } from 'date-fns';
 import { parseDatoFraDatePicker } from 'lib/utils/date';
 
 export function validerDato(value?: string) {
@@ -35,6 +35,13 @@ export function erDatoFoerDato(inputDato: string, referanseDato: string): boolea
   const parsedReferanseDato = new Date(parse(referanseDato, 'dd.MM.yyyy', new Date()));
 
   return parsedInputDato < parsedReferanseDato;
+}
+
+export function erDatoIPeriode(inputDato: Date, periodeFra: Date, periodeTil: Date): boolean {
+  return (
+    (isAfter(inputDato, periodeFra) || inputDato === periodeFra) &&
+    (isBefore(inputDato, periodeTil) || inputDato === periodeTil)
+  );
 }
 
 export function erDatoIFremtiden(value: string): boolean {

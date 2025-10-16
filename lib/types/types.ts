@@ -160,6 +160,9 @@ export type TypeBehandling =
 
 export type LøsAvklaringsbehovPåBehandling =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.flate.LøsAvklaringsbehovPåBehandling'];
+export type LøsPeriodisertBehovPåBehandling =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.flate.L\u00F8sPeriodisertAvklaringsbehovP\u00E5Behandling'];
+
 export type KvalitetssikringLøsning =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.KvalitetssikringL\u00F8sning'];
 export type FatteVedtakLøsning =
@@ -221,6 +224,11 @@ export type YrkesskadeUføreGrunnlag =
 
 export type Yrkesskadevurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.YrkesskadevurderingDto'];
+
+export type AvklarOppholdkravLøsning =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.oppholdskrav.AvklarOppholdkravLøsningForPeriodeDto'];
+export type OppholdskravVurderingDto =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.oppholdskrav.OppholdskravVurderingDto'];
 
 export type Inntekt = components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.InntektDTO'];
 export type UføreInntekt = components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.UføreInntektDTO'];
@@ -337,6 +345,9 @@ export type NavEnhetRequest =
 
 export type NavEnheterResponse =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.refusjon.NavEnheterResponse'];
+
+export type OppholdskravGrunnlagResponse =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.oppholdskrav.OppholdskravGrunnlagResponse'];
 
 export type Søknad = components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.S\u00F8knadV0'];
 

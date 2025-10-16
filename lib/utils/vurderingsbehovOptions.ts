@@ -20,6 +20,7 @@ export const vurderingsbehovOptions: ValuePair<Vurderingsbehov>[] = [
     ? [
         { label: 'Dødsfall bruker', value: 'DØDSFALL_BRUKER' } as ValuePair<Vurderingsbehov>,
         { label: 'Dødsfall barn', value: 'DØDSFALL_BARN' } as ValuePair<Vurderingsbehov>,
+        { label: 'Oppholdskrav', value: 'OPPHOLDSKRAV' } as ValuePair<Vurderingsbehov>,
       ]
     : []),
 ];

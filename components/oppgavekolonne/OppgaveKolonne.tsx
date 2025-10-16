@@ -29,6 +29,7 @@ import { AvklarOppfolgingsSteg } from 'components/behandlinger/oppfolgingsbehand
 import { Aktivitetsplikt11_7 } from 'components/behandlinger/aktivitetsplikt/11-7/Aktivitetsplikt11_7';
 import { AvbrytRevurdering } from 'components/behandlinger/revurdering/avbrytVurdering/AvbrytRevurdering';
 import { Lovvalg } from '../behandlinger/lovvalg/Lovvalg';
+import { OppholdskravStegGruppe } from 'components/behandlinger/oppholdskrav/OppholdskravGruppe';
 import { Aktivitetsplikt11_9 } from 'components/behandlinger/aktivitetsplikt/11-9/Aktivitetsplikt11_9';
 
 interface Props {
@@ -61,6 +62,7 @@ export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe, classN
           <ForutgåendeMedlemskap behandlingsReferanse={behandlingsReferanse} />
         </StegSuspense>
       )}
+      {aktivGruppe === 'OPPHOLDSKRAV' && <OppholdskravStegGruppe behandlingsreferanse={behandlingsReferanse} />}
       {aktivGruppe === 'GRUNNLAG' && <Grunnlag behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'UNDERVEIS' && <Underveis behandlingsreferanse={behandlingsReferanse} />}
       {aktivGruppe === 'SAMORDNING' && <Samordning behandlingsreferanse={behandlingsReferanse} />}

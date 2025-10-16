@@ -18,6 +18,7 @@ import { OppgaveInformasjon } from 'components/oppgaveliste/oppgaveinformasjon/O
 import { ManglerTilgangModal } from 'components/oppgaveliste/manglertilgangmodal/ManglerTilgangModal';
 import { SynkroniserEnhetModal } from 'components/oppgaveliste/synkroniserenhetmodal/SynkroniserEnhetModal';
 import { TildelOppgaveModal } from 'components/tildeloppgavemodal/TildelOppgaveModal';
+import { OppgaveIkkeLedigModal } from 'components/oppgaveliste/oppgaveikkeledigmodal/OppgaveIkkeLedigModal';
 
 interface Props {
   oppgaver: Oppgave[];
@@ -41,6 +42,12 @@ export const LedigeOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) =>
       <SynkroniserEnhetModal
         visSynkroniserEnhetModal={visSynkroniserEnhetModal}
         setVisSynkroniserEnhetModal={setVisSynkroniserEnhetModal}
+      />
+      <OppgaveIkkeLedigModal
+        visOppgaveIkkeLedigModal={visOppgaveIkkeLedigModal}
+        setVisOppgaveIkkeLedigModal={setVisOppgaveIkkeLedigModal}
+        saksbehandlerNavn={saksbehandlerNavn}
+        revaliderOppgaver={revalidateFunction}
       />
       {feilmelding && <Alert variant={'error'}>{feilmelding}</Alert>}
       <TableStyled

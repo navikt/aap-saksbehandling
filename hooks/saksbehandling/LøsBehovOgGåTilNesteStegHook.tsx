@@ -4,11 +4,12 @@ import {
   ServerSentEventStatus,
 } from 'app/saksbehandling/api/behandling/hent/[referanse]/[gruppe]/[steg]/nesteSteg/route';
 import { useParams, useRouter } from 'next/navigation';
-import { FatteVedtakLøsning, KvalitetssikringLøsning, LøsAvklaringsbehovPåBehandling, StegType } from 'lib/types/types';
+import { FatteVedtakLøsning, KvalitetssikringLøsning, LøsAvklaringsbehovPåBehandling, LøsPeriodisertBehovPåBehandling, StegType } from 'lib/types/types';
 import {
   clientHentFlyt,
   clientHentTilgangForKvalitetssikring,
   clientLøsBehov,
+  clientLøsPeriodisertBehov,
   clientSjekkTilgang,
 } from 'lib/clientApi';
 import { useIngenFlereOppgaverModal } from 'hooks/saksbehandling/IngenFlereOppgaverModalHook';
@@ -23,6 +24,7 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
   status: LøsBehovOgGåTilNesteStegStatus;
   isLoading: boolean;
   løsBehovOgGåTilNesteSteg: (behov: LøsAvklaringsbehovPåBehandling, callback?: () => void) => void;
+  løsPeriodisertBehovOgGåTilNesteSteg: (behov: LøsPeriodisertBehovPåBehandling, callback?: () => void) => void;
 } {
   const params = useParams<{ aktivGruppe: string; behandlingsReferanse: string; saksId: string }>();
   const router = useRouter();
@@ -34,22 +36,33 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
   const [error, setError] = useState<ApiException | undefined>();
   const [isPending, startTransition] = useTransition();
 
-  const løsBehovOgGåTilNesteSteg = async (behov: LøsAvklaringsbehovPåBehandling, callback?: () => void) => {
+  const løsBehovOgGåTilNesteSteg = async (
+    behov: LøsAvklaringsbehovPåBehandling | LøsPeriodisertBehovPåBehandling,
+    erPeriodisert: boolean,
+    callback?: () => void
+  ) => {
     setIsLoading(true);
     setStatus(undefined);
     setError(undefined);
 
-    const løsbehovRes = await clientLøsBehov(behov);
+    const løsbehovRes = erPeriodisert
+      ? await clientLøsPeriodisertBehov(behov as LøsPeriodisertBehovPåBehandling)
+      : await clientLøsBehov(behov);
     if (isError(løsbehovRes)) {
       if (løsbehovRes.status === 409) {
         // Henter siste versjon av flyt for å bruke siste behandlingversjon
         const flytResponse = await clientHentFlyt(params.behandlingsReferanse);
 
         if (isSuccess(flytResponse)) {
-          const clientLøsBehovEtterConflict = await clientLøsBehov({
-            ...behov,
-            behandlingVersjon: flytResponse.data.behandlingVersjon,
-          });
+          const clientLøsBehovEtterConflict = erPeriodisert
+            ? await clientLøsPeriodisertBehov({
+                ...(behov as LøsPeriodisertBehovPåBehandling), // TODO: Rydd opp i typene
+                behandlingVersjon: flytResponse.data.behandlingVersjon,
+              })
+            : await clientLøsBehov({
+                ...behov,
+                behandlingVersjon: flytResponse.data.behandlingVersjon,
+              });
 
           if (isError(clientLøsBehovEtterConflict)) {
             setError(clientLøsBehovEtterConflict.apiException);
@@ -164,7 +177,8 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
   return {
     isLoading: isLoading || isPending,
     status,
-    løsBehovOgGåTilNesteSteg,
+    løsBehovOgGåTilNesteSteg: (behov, callback) => løsBehovOgGåTilNesteSteg(behov, false, callback),
+    løsPeriodisertBehovOgGåTilNesteSteg: (behov, callback) => løsBehovOgGåTilNesteSteg(behov, true, callback),
     løsBehovOgGåTilNesteStegError: error,
   };
 }
