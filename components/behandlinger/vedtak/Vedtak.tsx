@@ -1,11 +1,9 @@
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { getStegSomSkalVises } from 'lib/utils/steg';
 import { ForeslåVedtakMedDataFetching } from 'components/behandlinger/vedtak/foreslåvedtak/ForeslåVedtakMedDataFetching';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-import { isProd } from 'lib/utils/environment';
 
 interface Props {
   behandlingsReferanse: string;
@@ -17,8 +15,6 @@ export const Vedtak = async ({ behandlingsReferanse }: Props) => {
     return <ApiException apiResponses={[flyt]} />;
   }
 
-  const stegSomSkalVises = getStegSomSkalVises('VEDTAK', flyt.data);
-
   const behandlingVersjon = flyt.data.behandlingVersjon;
 
   return (
@@ -29,15 +25,13 @@ export const Vedtak = async ({ behandlingsReferanse }: Props) => {
       visning={flyt.data.visning}
       aktivtSteg={flyt.data.aktivtSteg}
     >
-      {(stegSomSkalVises.includes('FORESLÅ_VEDTAK') || !isProd()) && ( // TODO: fjern prod-sjekk når testing er ferdig
-        <StegSuspense>
-          <ForeslåVedtakMedDataFetching
-            behandlingVersjon={behandlingVersjon}
-            behandlingsreferanse={behandlingsReferanse}
-            readonly={flyt.data.visning.saksbehandlerReadOnly}
-          />
-        </StegSuspense>
-      )}
+      <StegSuspense>
+        <ForeslåVedtakMedDataFetching
+          behandlingVersjon={behandlingVersjon}
+          behandlingsreferanse={behandlingsReferanse}
+          readonly={flyt.data.visning.saksbehandlerReadOnly}
+        />
+      </StegSuspense>
     </GruppeSteg>
   );
 };
