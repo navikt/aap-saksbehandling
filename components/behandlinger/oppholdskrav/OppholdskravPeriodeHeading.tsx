@@ -5,6 +5,7 @@ import styles from './oppholdskrav.module.css';
 import { OppholdskravForm } from 'components/behandlinger/oppholdskrav/types';
 import { UseFormReturn } from 'react-hook-form';
 import { JaEllerNei } from 'lib/utils/form';
+import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
 
 type OppholdskravTidligerePeriodeHeadingProps = {
   fom: Date;
@@ -48,13 +49,13 @@ type OppholdskravTNyPeriodeHeadingProps = {
 export const OppholdskravNyPeriodeHeading = ({ index, form, isLast }: OppholdskravTNyPeriodeHeadingProps) => {
   const fom = parseDatoFraDatePicker(form.watch(`vurderinger.${index}.fraDato`));
   const oppfylt = form.watch(`vurderinger.${index}.oppfyller`);
-  const tom = isLast ? null : parseDatoFraDatePicker(form.watch(`vurderinger.${index + 1}.fraDato`));
+  const tom = isLast ? null : parseDatoFraDatePickerOgTrekkFra1Dag(form.watch(`vurderinger.${index + 1}.fraDato`));
 
   return (
     <HStack gap="space-12">
       <Detail>
         Ny vurdering: {fom == null ? '[Ikke valgt]' : formaterDatoForFrontend(fom)} –{' '}
-        {tom != null ? <span>formaterDatoForFrontend(tom)</span> : <span>{isLast ? ' ' : '[Ikke valgt]'}</span>}
+        {tom != null ? <span>{formaterDatoForFrontend(tom)}</span> : <span>{isLast ? ' ' : '[Ikke valgt]'}</span>}
       </Detail>
       <OppholdskravStatusTag oppfylt={oppfylt != null ? oppfylt === JaEllerNei.Ja : null} />
     </HStack>
