@@ -6,8 +6,8 @@ import { hentOppgaveClient, plukkOppgaveClient, synkroniserOppgaveMedEnhetClient
 import { isSuccess } from 'lib/utils/api';
 import { byggKelvinURL } from 'lib/utils/request';
 import { useRouter } from 'next/navigation';
-import { useTildelOppgaver } from 'context/oppgave/TildelOppgaverContext';
 import { isProd } from 'lib/utils/environment';
+import { useTildelOppgaver } from 'context/oppgave/TildelOppgaverContext';
 
 interface Props {
   oppgave: Oppgave;
@@ -15,6 +15,8 @@ interface Props {
   setÅpenModal: Dispatch<SetStateAction<boolean>>;
   setVisSynkroniserEnhetModal: Dispatch<SetStateAction<boolean>>;
   revaliderOppgaver: () => void;
+  setVisOppgaveIkkeLedigModal: Dispatch<SetStateAction<boolean>>;
+  setSaksbehandlerNavn: Dispatch<SetStateAction<string | undefined>>;
 }
 
 export const LedigeOppgaverMeny = ({
@@ -23,11 +25,13 @@ export const LedigeOppgaverMeny = ({
   setFeilmelding,
   setÅpenModal,
   setVisSynkroniserEnhetModal,
+  setVisOppgaveIkkeLedigModal,
+  setSaksbehandlerNavn,
 }: Props) => {
   const router = useRouter();
+  const { setOppgaveIder, visModal } = useTildelOppgaver();
   const [isPendingBehandle, startTransitionBehandle] = useTransition();
   const [isPendingMeny, startTransitionMeny] = useTransition();
-  const { setOppgaveIder, visModal } = useTildelOppgaver();
 
   async function plukkOgGåTilOppgave(oppgave: Oppgave) {
     startTransitionBehandle(async () => {

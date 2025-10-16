@@ -30,6 +30,7 @@ export const TildelOppgaveModal = () => {
     setOppgaveIder([]);
     setInfomelding('');
     setSøketekst('');
+    setSaksbehandlere([]);
     setIsLoading(false);
     setError(undefined);
     setSuccess(undefined);

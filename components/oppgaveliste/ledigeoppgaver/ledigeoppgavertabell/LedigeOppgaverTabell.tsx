@@ -30,6 +30,8 @@ export const LedigeOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) =>
   const { sort, sortertListe, håndterSortering } = useSortertListe(oppgaver);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [visSynkroniserEnhetModal, setVisSynkroniserEnhetModal] = useState<boolean>(false);
+  const [saksbehandlerNavn, setSaksbehandlerNavn] = useState<string>();
+  const [visOppgaveIkkeLedigModal, setVisOppgaveIkkeLedigModal] = useState<boolean>(false);
 
   return (
     <>
@@ -152,6 +154,8 @@ export const LedigeOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) =>
                   setÅpenModal={setIsModalOpen}
                   setVisSynkroniserEnhetModal={setVisSynkroniserEnhetModal}
                   revaliderOppgaver={revalidateFunction}
+                  setVisOppgaveIkkeLedigModal={setVisOppgaveIkkeLedigModal}
+                  setSaksbehandlerNavn={setSaksbehandlerNavn}
                 />
               </Table.DataCell>
             </Table.Row>
