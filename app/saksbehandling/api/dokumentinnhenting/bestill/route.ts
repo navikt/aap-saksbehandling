@@ -4,8 +4,9 @@ import { isLocal } from 'lib/utils/environment';
 import { NextRequest } from 'next/server';
 import { FetchResponse, isError } from 'lib/utils/api';
 
+const lokalFakeBestillingAvDokumenter = isLocal();
 export async function POST(req: NextRequest) {
-  if (isLocal()) {
+  if (lokalFakeBestillingAvDokumenter) {
     const response: FetchResponse<unknown> = {
       type: 'SUCCESS',
       status: 200,

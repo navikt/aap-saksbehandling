@@ -144,7 +144,7 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
         />
       )}
       <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
-      {<FormField form={form} formField={formFields.gjelderFra} className="gjelderFra" />}
+      <FormField form={form} formField={formFields.gjelderFra} className="gjelderFra" />
       <FormField form={form} formField={formFields.erOppfylt} horizontalRadio />
       {form.watch('erOppfylt') === JaEllerNei.Ja && (
         <FormField form={form} formField={formFields.grunn} className={'radio'} />

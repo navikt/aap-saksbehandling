@@ -35,10 +35,11 @@ export const LedigeOppgaverMeny = ({
   const [isPendingBehandle, startTransitionBehandle] = useTransition();
   const [isPendingMeny, startTransitionMeny] = useTransition();
 
+  const featureIkkeMuligÅPlukkeOppgaveSomAlleredeErReservert = !isProd();
   async function plukkOgGåTilOppgave(oppgave: Oppgave) {
     startTransitionBehandle(async () => {
       if (oppgave.id !== undefined && oppgave.id !== null && oppgave.versjon >= 0 && oppgave.behandlingRef) {
-        if (!isProd()) {
+        if (featureIkkeMuligÅPlukkeOppgaveSomAlleredeErReservert) {
           const nyesteOppgave = await hentOppgaveClient(oppgave.behandlingRef);
           if (isSuccess(nyesteOppgave)) {
             if (nyesteOppgave.data.reservertAv != null) {

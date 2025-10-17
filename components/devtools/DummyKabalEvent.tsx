@@ -5,7 +5,7 @@ import { useConfigForm } from 'components/form/FormHook';
 import { FormEvent } from 'react';
 import { FormField } from 'components/form/FormField';
 import { KabalBehandlingDetaljer, KabalSvarType } from 'lib/types/types';
-import { uuidv4 } from 'unleash-client/lib/uuidv4';
+import { v4 as uuidv4 } from 'uuid';
 
 interface FormFields {
   kildereferanse: string;

@@ -8,7 +8,7 @@ import { DokumentOversikt } from 'components/saksoversikt/dokumentoversikt/Dokum
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { AktivitetspliktTrekk } from 'components/saksoversikt/aktivitetsplikttrekk/AktivitetspliktTrekk';
-import { isDev, isLocal } from 'lib/utils/environment';
+import { isProd } from 'lib/utils/environment';
 
 enum Tab {
   OVERSIKT = 'OVERSIKT',
@@ -16,7 +16,7 @@ enum Tab {
   TREKK = 'TREKK',
 }
 
-export const aktivitetspliktMedTrekkVisningFeature = () => isLocal() || isDev();
+export const aktivitetspliktMedTrekkVisningFeature = () => !isProd();
 
 export const SakOversiktContainer = ({ sak }: { sak: SaksInfo }) => {
   const router = useRouter();

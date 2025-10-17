@@ -75,9 +75,7 @@ export const Dokumentvisning = ({ journalpostId, dokumenter, setIsExpandedAction
       {dataUri && (
         <div className={styles.pdf}>
           <object data={`${dataUri}#toolbar=0`} type="application/pdf" width="100%" height="100%">
-            <p>
-              Alternative text - include a link <a href="http://africau.edu/images/default/sample.pdf">to the PDF!</a>
-            </p>
+            <p>Visning av dokument</p>
           </object>
         </div>
       )}

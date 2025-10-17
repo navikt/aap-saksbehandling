@@ -31,8 +31,9 @@ async function issuer() {
   return _issuer;
 }
 
+const lokalFakeAccessToken = isLocal();
 export function getAccessTokenOrRedirectToLogin(headers: Headers): string {
-  if (isLocal()) return 'fake-token';
+  if (lokalFakeAccessToken) return 'fake-token';
 
   const redirectPath = headers.get('x-path');
   const token = getToken(headers);

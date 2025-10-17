@@ -6,9 +6,12 @@ import { hentAlleBehandlinger } from 'lib/services/postmottakservice/postmottaks
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
+const visningAvAlleBehandlingerLokaltOgDev = !isProd();
+const dummyOpprettBehandlingLokalt = isLocal();
+
 const Page = async () => {
   let alleBehandlinger: { id: string; journalpostId: string; status: string; opprettet: string; steg: string }[] = [];
-  if (!isProd()) {
+  if (visningAvAlleBehandlingerLokaltOgDev) {
     const res = await hentAlleBehandlinger();
     if (isError(res)) {
       return <ApiException apiResponses={[res]} />;
@@ -18,9 +21,9 @@ const Page = async () => {
 
   return (
     <AkselPage>
-      {!isProd() && <BehandlingOversikt behandlinger={alleBehandlinger} />}
+      {visningAvAlleBehandlingerLokaltOgDev && <BehandlingOversikt behandlinger={alleBehandlinger} />}
 
-      {isLocal() && <OpprettBehandling />}
+      {dummyOpprettBehandlingLokalt && <OpprettBehandling />}
     </AkselPage>
   );
 };

@@ -140,8 +140,9 @@ export function clientForhåndsvisDialogmelding(dialogmelding: ForhåndsvisDialo
   );
 }
 
+const lokalFakeUthentingAvEnheter = isLocal();
 export function clientHentAlleNavenheter(behandlingReferanse: string, input: NavEnhetRequest) {
-  if (isLocal()) {
+  if (lokalFakeUthentingAvEnheter) {
     const res: FetchResponse<NavEnheterResponse[]> = {
       type: 'SUCCESS',
       data: [

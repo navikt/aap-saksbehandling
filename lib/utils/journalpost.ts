@@ -5,6 +5,7 @@ export const erFerdigstilt = (status: Journalstatus) => {
     case 'JOURNALFOERT':
     case 'FERDIGSTILT':
     case 'FEILREGISTRERT':
+    case 'EKSPEDERT':
       return true;
     default:
       return false;
