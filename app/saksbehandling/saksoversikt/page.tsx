@@ -6,13 +6,13 @@ import OpprettSakTest from 'components/opprettsak/OpprettSakTest';
 import { Suspense } from 'react';
 
 const lokalOpprettelseAvDummySak = isLocal();
-const testOpprettelseAvDummySak = isDev();
+const devOpprettelseAvDummySak = isDev();
 const visningAvAlleBehandlingerLokaltOgDev = !isProd();
 const Page = async () => {
   return (
     <main className={styles.main}>
       {lokalOpprettelseAvDummySak && <OpprettSakLocal />}
-      {testOpprettelseAvDummySak && <OpprettSakTest />}
+      {devOpprettelseAvDummySak && <OpprettSakTest />}
       {visningAvAlleBehandlingerLokaltOgDev && (
         <Suspense>
           <AlleSakerListe />
