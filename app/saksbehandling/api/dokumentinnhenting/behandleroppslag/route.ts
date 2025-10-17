@@ -48,8 +48,9 @@ const testdata: Behandler[] = [
   },
 ];
 
+const lokaltKallMotBehandler = isLocal();
 export async function POST(req: NextRequest) {
-  if (isLocal()) {
+  if (lokaltKallMotBehandler) {
     const response: FetchResponse<Behandler[]> = {
       type: 'SUCCESS',
       data: testdata,

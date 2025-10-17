@@ -178,8 +178,9 @@ export const hentKvalitetssikringGrunnlag = async (behandlingsReferanse: string)
   return await apiFetch<KvalitetssikringGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
+const lokalFakeKvalitetssikrerTilgang = isLocal();
 export const hentKvalitetssikringTilgang = async (behandlingsReferanse: string) => {
-  if (isLocal()) {
+  if (lokalFakeKvalitetssikrerTilgang) {
     const res: FetchResponse<KvalitetssikringTilgang> = {
       type: 'SUCCESS',
       status: 200,

@@ -28,9 +28,10 @@ const testdata: LegeerklæringStatus[] = [
   },
 ];
 
+const lokalFakeStatusPåDokumentbestilling = isLocal();
 export async function GET(_: NextRequest, props: { params: Promise<{ saksnummer: string }> }) {
   const params = await props.params;
-  if (isLocal()) {
+  if (lokalFakeStatusPåDokumentbestilling) {
     const response: FetchResponse<LegeerklæringStatus[]> = {
       type: 'SUCCESS',
       status: 200,
