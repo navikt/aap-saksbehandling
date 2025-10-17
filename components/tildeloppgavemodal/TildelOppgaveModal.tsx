@@ -52,9 +52,7 @@ export const TildelOppgaveModal = () => {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     await form.handleSubmit(async (data) => {
       setIsLoading(true);
-      console.log('tildeler', oppgaveIder);
       const res = await clientTildelTilSaksbehandler(oppgaveIder, data.saksbehandlerIdent);
-      console.log(res);
       if (isError(res)) {
         setError(res.apiException.message);
       } else {
