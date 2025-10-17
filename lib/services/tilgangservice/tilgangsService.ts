@@ -9,11 +9,12 @@ export interface TilgangResponse {
   tilgang: boolean;
 }
 
+const lokalFakeTilgangssjekk = isLocal();
 export async function sjekkTilgang(
   behandlingsreferanse: string,
   avklaringsbehovKode: string
 ): Promise<FetchResponse<TilgangResponse>> {
-  if (isLocal()) {
+  if (lokalFakeTilgangssjekk) {
     return { data: { tilgang: true }, status: 200, type: 'SUCCESS' };
   }
   const url = `${tilgangApiBaseUrl}/tilgang/behandling`;

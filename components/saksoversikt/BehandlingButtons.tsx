@@ -6,6 +6,7 @@ import { isLocal } from 'lib/utils/environment';
 import { BestillBrevTestKnapp } from 'components/behandlinger/brev/BestillBrevTestKnapp';
 import { EyeIcon } from '@navikt/aksel-icons';
 
+const lokalBrevBestillingKnapp = isLocal();
 export const BehandlingButtons = ({
   sak,
   behandlingsReferanse,
@@ -27,7 +28,7 @@ export const BehandlingButtons = ({
 
   return (
     <HStack gap="2" justify="end">
-      {isLocal() && <BestillBrevTestKnapp behandlingReferanse={behandlingsReferanse} />}
+      {lokalBrevBestillingKnapp && <BestillBrevTestKnapp behandlingReferanse={behandlingsReferanse} />}
       <Button
         size="small"
         type={'button'}
