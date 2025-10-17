@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, ErrorMessage, VStack } from '@navikt/ds-react';
+import { Button, ErrorMessage, VStack } from '@navikt/ds-react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { Behovstype } from 'lib/utils/form';
@@ -115,7 +115,6 @@ export const OppholdskravSteg = ({ grunnlag, behandlingVersjon, readOnly }: Prop
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const foersteNyePeriode = vurderingerFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
 
-  console.log('error', form.formState.errors);
   return (
     <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'Oppholdskrav § 11-3'}
@@ -139,10 +138,6 @@ export const OppholdskravSteg = ({ grunnlag, behandlingVersjon, readOnly }: Prop
       }
     >
       <VStack gap="8">
-        <Alert variant="warning">
-          Dette steget er kun her for testing, og vurderingen man gjør her vil ikke påvirke utbetalingen.
-        </Alert>
-
         <VStack gap="2">
           {vedtatteVurderinger.map((vurdering) => (
             <CustomExpandableCard

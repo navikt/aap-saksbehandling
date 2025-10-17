@@ -9208,6 +9208,7 @@ export interface components {
       /** @enum {string} */
       brevtype:
         | 'INNVILGELSE'
+        | 'VEDTAK_11_17'
         | 'VEDTAK_11_18'
         | 'AVSLAG'
         | 'VARSEL_OM_BESTILLING'
@@ -9353,6 +9354,8 @@ export interface components {
         | 'VARIGHETSKVOTE_BRUKT_OPP'
         | 'BRUDD_PÅ_AKTIVITETSPLIKT_11_7_STANS'
         | 'BRUDD_PÅ_AKTIVITETSPLIKT_11_7_OPPHØR'
+        | 'BRUDD_PÅ_OPPHOLDSKRAV_11_3_STANS'
+        | 'BRUDD_PÅ_OPPHOLDSKRAV_11_3_OPPHØR'
         | null;
       'vilk\u00E5rsavslag': (
         | 'BRUKER_UNDER_18'
@@ -10465,6 +10468,8 @@ export interface components {
         | 'VARIGHETSKVOTE_BRUKT_OPP'
         | 'BRUDD_PÅ_AKTIVITETSPLIKT_11_7_STANS'
         | 'BRUDD_PÅ_AKTIVITETSPLIKT_11_7_OPPHØR'
+        | 'BRUDD_PÅ_OPPHOLDSKRAV_11_3_STANS'
+        | 'BRUDD_PÅ_OPPHOLDSKRAV_11_3_OPPHØR'
         | null;
       brukerAvKvoter: ('ORDINÆR' | 'STUDENT' | 'ETABLERINGSFASE' | 'UTVIKLINGSFASE' | 'SYKEPENGEERSTATNING')[];
       gradering: components['schemas']['no.nav.aap.behandlingsflyt.behandling.underveis.GraderingDto'];
