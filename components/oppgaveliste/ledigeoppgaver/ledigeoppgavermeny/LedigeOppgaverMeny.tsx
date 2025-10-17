@@ -6,7 +6,6 @@ import { hentOppgaveClient, plukkOppgaveClient, synkroniserOppgaveMedEnhetClient
 import { isSuccess } from 'lib/utils/api';
 import { byggKelvinURL } from 'lib/utils/request';
 import { useRouter } from 'next/navigation';
-import { isProd } from 'lib/utils/environment';
 import { useTildelOppgaver } from 'context/oppgave/TildelOppgaverContext';
 import { toggles } from 'lib/utils/toggles';
 
