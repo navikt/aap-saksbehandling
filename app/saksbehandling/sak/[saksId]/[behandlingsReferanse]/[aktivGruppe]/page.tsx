@@ -17,7 +17,7 @@ const Page = async (props: {
     return <div>Feil i henting av behandling</div>;
   }
 
-  auditlog(params.behandlingsReferanse);
+  await auditlog(params.behandlingsReferanse);
 
   return behandling.data.skalForberede ? (
     <Suspense fallback={<Spinner size={'xlarge'} label={'Forbereder behandling..'} />}>

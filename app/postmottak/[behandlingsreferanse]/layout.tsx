@@ -45,7 +45,7 @@ const Layout = async (props: LayoutProps) => {
   if (isError(flytResponse) || isError(journalpostInfo)) {
     return <ApiException apiResponses={[journalpostInfo, flytResponse]} />;
   }
-  auditlog(journalpostInfo.data.journalpostId);
+  await auditlog(journalpostInfo.data.journalpostId);
 
   const stegGrupper = flytResponse.data.flyt.map((steg) => steg);
   const dokumenter = journalpostInfo.data.dokumenter;

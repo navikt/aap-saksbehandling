@@ -35,8 +35,8 @@ export async function GET(
           status: 'ERROR',
           errormessage: 'Antall retries er brukt opp',
         };
-        writer.write(`event: message\ndata: ${JSON.stringify(json)}\n\n`);
-        writer.close();
+        await writer.write(`event: message\ndata: ${JSON.stringify(json)}\n\n`);
+        await writer.close();
         return;
       }
       if (retries === 10) {
@@ -55,8 +55,8 @@ export async function GET(
           status: 'ERROR',
           errormessage: errorString,
         };
-        writer.write(`event: message\ndata: ${JSON.stringify(json)}\n\n`);
-        writer.close();
+        await writer.write(`event: message\ndata: ${JSON.stringify(json)}\n\n`);
+        await writer.close();
         return;
       }
 
@@ -68,8 +68,8 @@ export async function GET(
           errormessage: `Prosessering feilet i backend`,
         };
 
-        writer.write(`event: message\ndata: ${JSON.stringify(json)}\n\n`);
-        writer.close();
+        await writer.write(`event: message\ndata: ${JSON.stringify(json)}\n\n`);
+        await writer.close();
         return;
       }
 
@@ -90,8 +90,8 @@ export async function GET(
           status: 'DONE',
         };
 
-        writer.write(`event: message\ndata: ${JSON.stringify(json)}\n\n`);
-        writer.close();
+        await writer.write(`event: message\ndata: ${JSON.stringify(json)}\n\n`);
+        await writer.close();
         return;
       } else {
         logInfo('Prosessering jobber');
