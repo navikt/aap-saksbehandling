@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { render } from 'lib/test/CustomRender';
+import { customRenderWithTildelOppgaveContext } from 'lib/test/CustomRender';
 import { screen } from '@testing-library/react';
 import { AlleOppgaverTabell } from 'components/oppgaveliste/alleoppgaver/alleoppgavertabell/AlleOppgaverTabell';
 import { Oppgave } from 'lib/types/oppgaveTypes';
@@ -42,19 +42,14 @@ const oppgaver: Oppgave[] = [
 
 describe('AlleOppgaverTabell', () => {
   it('skal vise saksbehandlers navn når det finnes', async () => {
-    render(
+    customRenderWithTildelOppgaveContext(
       <AlleOppgaverTabell
         oppgaver={[oppgaver[0]]}
         revalidateFunction={vi.fn()}
         setValgteRader={vi.fn()}
         valgteRader={[]}
-        visTildelOppgaveModal={false}
-        setVisTildelOppgaveModal={vi.fn()}
-        oppgaverSomSkalTildeles={[]}
-        setOppgaverSomSkalTildeles={vi.fn()}
-        skalFjerneValgteRaderEtterTildeling={false}
-        setSkalFjerneValgteRaderEtterTildeling={vi.fn()}
-      />
+      />,
+      false
     );
     const saksbehandlernavn = screen.getByText('Test Testesen');
     expect(saksbehandlernavn).toBeVisible();
@@ -64,19 +59,14 @@ describe('AlleOppgaverTabell', () => {
   });
 
   it('skal vise saksbehandlers ident når navn ikke finnes', async () => {
-    render(
+    customRenderWithTildelOppgaveContext(
       <AlleOppgaverTabell
         oppgaver={[oppgaver[1]]}
         revalidateFunction={vi.fn()}
         setValgteRader={vi.fn()}
         valgteRader={[]}
-        visTildelOppgaveModal={false}
-        setVisTildelOppgaveModal={vi.fn()}
-        oppgaverSomSkalTildeles={[]}
-        setOppgaverSomSkalTildeles={vi.fn()}
-        skalFjerneValgteRaderEtterTildeling={false}
-        setSkalFjerneValgteRaderEtterTildeling={vi.fn()}
-      />
+      />,
+      false
     );
     const saksbehandlerIdent = screen.getByText('ident2');
     expect(saksbehandlerIdent).toBeVisible();

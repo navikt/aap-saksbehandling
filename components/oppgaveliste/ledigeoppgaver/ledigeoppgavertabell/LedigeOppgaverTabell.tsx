@@ -30,10 +30,8 @@ export const LedigeOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) =>
   const { sort, sortertListe, håndterSortering } = useSortertListe(oppgaver);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [visSynkroniserEnhetModal, setVisSynkroniserEnhetModal] = useState<boolean>(false);
-  const [oppgaverSomSkalTildeles, setOppgaverSomSkalTildeles] = useState<number[]>([]);
-  const [visTildelOppgaveModal, setVisTildelOppgaveModal] = useState<boolean>(false);
-  const [saksbehandlerNavn, setSaksbehandlerNavn] = useState<string>()
-  const [visOppgaveIkkeLedigModal, setVisOppgaveIkkeLedigModal] = useState<boolean>(false)
+  const [saksbehandlerNavn, setSaksbehandlerNavn] = useState<string>();
+  const [visOppgaveIkkeLedigModal, setVisOppgaveIkkeLedigModal] = useState<boolean>(false);
 
   return (
     <>
@@ -42,14 +40,7 @@ export const LedigeOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) =>
         setIsModalOpen={setIsModalOpen}
         revalidateFunction={revalidateFunction}
       />
-      <TildelOppgaveModal
-        oppgaveIder={oppgaverSomSkalTildeles}
-        isOpen={visTildelOppgaveModal}
-        onClose={() => {
-          setVisTildelOppgaveModal(false);
-          revalidateFunction();
-        }}
-      />
+      <TildelOppgaveModal />
       <SynkroniserEnhetModal
         visSynkroniserEnhetModal={visSynkroniserEnhetModal}
         setVisSynkroniserEnhetModal={setVisSynkroniserEnhetModal}
@@ -163,8 +154,6 @@ export const LedigeOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) =>
                   setÅpenModal={setIsModalOpen}
                   setVisSynkroniserEnhetModal={setVisSynkroniserEnhetModal}
                   revaliderOppgaver={revalidateFunction}
-                  setVisTildelOppgaveModal={setVisTildelOppgaveModal}
-                  setOppgaverSomSkalTildeles={setOppgaverSomSkalTildeles}
                   setVisOppgaveIkkeLedigModal={setVisOppgaveIkkeLedigModal}
                   setSaksbehandlerNavn={setSaksbehandlerNavn}
                 />

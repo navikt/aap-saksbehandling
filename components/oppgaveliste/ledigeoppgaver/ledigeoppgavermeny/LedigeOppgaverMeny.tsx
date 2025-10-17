@@ -6,6 +6,7 @@ import { hentOppgaveClient, plukkOppgaveClient, synkroniserOppgaveMedEnhetClient
 import { isSuccess } from 'lib/utils/api';
 import { byggKelvinURL } from 'lib/utils/request';
 import { useRouter } from 'next/navigation';
+import { useTildelOppgaver } from 'context/oppgave/TildelOppgaverContext';
 import { toggles } from 'lib/utils/toggles';
 
 interface Props {
@@ -14,8 +15,6 @@ interface Props {
   setÅpenModal: Dispatch<SetStateAction<boolean>>;
   setVisSynkroniserEnhetModal: Dispatch<SetStateAction<boolean>>;
   revaliderOppgaver: () => void;
-  setVisTildelOppgaveModal: Dispatch<SetStateAction<boolean>>;
-  setOppgaverSomSkalTildeles: Dispatch<SetStateAction<number[]>>;
   setVisOppgaveIkkeLedigModal: Dispatch<SetStateAction<boolean>>;
   setSaksbehandlerNavn: Dispatch<SetStateAction<string | undefined>>;
 }
@@ -26,12 +25,11 @@ export const LedigeOppgaverMeny = ({
   setFeilmelding,
   setÅpenModal,
   setVisSynkroniserEnhetModal,
-  setVisTildelOppgaveModal,
-  setOppgaverSomSkalTildeles,
   setVisOppgaveIkkeLedigModal,
   setSaksbehandlerNavn,
 }: Props) => {
   const router = useRouter();
+  const { setOppgaveIder, visModal } = useTildelOppgaver();
   const [isPendingBehandle, startTransitionBehandle] = useTransition();
   const [isPendingMeny, startTransitionMeny] = useTransition();
 
@@ -116,8 +114,8 @@ export const LedigeOppgaverMeny = ({
             </ActionMenu.Item>
             <ActionMenu.Item
               onSelect={() => {
-                oppgave.id && setOppgaverSomSkalTildeles([oppgave.id]);
-                setVisTildelOppgaveModal(true);
+                oppgave.id && setOppgaveIder([oppgave.id]);
+                visModal();
               }}
             >
               Tildel oppgave

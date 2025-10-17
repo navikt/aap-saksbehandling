@@ -12,6 +12,7 @@ import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppga
 import { aktiveFiltreringer } from 'components/oppgaveliste/filtrering/filtreringUtils';
 import { avreserverOppgaveClient } from 'lib/oppgaveClientApi';
 import { isSuccess } from 'lib/utils/api';
+import { useTildelOppgaver } from 'context/oppgave/TildelOppgaverContext';
 
 interface Props {
   form: UseFormReturn<FormFieldsFilter>;
@@ -22,9 +23,6 @@ interface Props {
   valgteRader: number[];
   setValgteRader: Dispatch<SetStateAction<number[]>>;
   revalidateFunction: () => void;
-  setVisTildelOppgaveModal: Dispatch<SetStateAction<boolean>>;
-  setOppgaverSomSkalTildeles: Dispatch<SetStateAction<number[]>>;
-  setSkalFjerneValgteRaderEtterTildeling: Dispatch<SetStateAction<boolean>>;
 }
 
 export const AlleOppgaverFiltrering = ({
@@ -36,13 +34,11 @@ export const AlleOppgaverFiltrering = ({
   valgteRader,
   revalidateFunction,
   setValgteRader,
-  setVisTildelOppgaveModal,
-  setOppgaverSomSkalTildeles,
-  setSkalFjerneValgteRaderEtterTildeling,
 }: Props) => {
   const [åpneFilter, setÅpneFilter] = useState(false);
   const [kanBrukerFiltrere, setKanBrukerFiltrere] = useState<boolean>();
   const [isPendingFrigi, startTransitionFrigi] = useTransition();
+  const { visModal, setOppgaveIder } = useTildelOppgaver();
 
   useEffect(() => {
     setKanBrukerFiltrere(kanFiltrere);
@@ -83,9 +79,9 @@ export const AlleOppgaverFiltrering = ({
                 </Button>
                 <Button
                   onClick={() => {
-                    setOppgaverSomSkalTildeles(valgteRader);
-                    setSkalFjerneValgteRaderEtterTildeling(true);
-                    setVisTildelOppgaveModal(true);
+                    setOppgaveIder(valgteRader);
+                    visModal();
+                    setValgteRader([]);
                   }}
                   type={'button'}
                   size={'small'}

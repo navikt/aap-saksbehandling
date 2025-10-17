@@ -115,7 +115,6 @@ export const OppholdskravSteg = ({ grunnlag, behandlingVersjon, readOnly }: Prop
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const foersteNyePeriode = vurderingerFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
 
-  console.log('error', form.formState.errors);
   return (
     <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'Oppholdskrav § 11-3'}
