@@ -77,6 +77,7 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
       }
     }
 
+    // TODO: Avgjørelse om visning av modalen "Du har fullført oppgaven" bør skje i backend og sendes som en boolean til frontend
     const underkjennelseIKvalitetssikringEllerBeslutning = () => {
       const brukerHarKvalitetssikret = behov.behov.behovstype === Behovstype.KVALITETSSIKRING_KODE;
       const brukerHarBesluttet = behov.behov.behovstype === Behovstype.FATTE_VEDTAK_KODE;
@@ -137,10 +138,14 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
           }
         }
 
+        // TODO: Avgjørelse om visning av modalen "Du har fullført oppgaven" bør skje i backend og sendes som en boolean til frontend
+        const saksbehandlerHarSendtTilBeslutter = gjeldendeSteg === 'FATTE_VEDTAK' && skalBytteGruppe;
+
         // TODO Brev har ingen egen definisjonskode som vi kan hente ut fra steget. Må skrives om i backend
         if (
           (!kanFortsetteSaksbehandling && aktivtVisningSteg !== 'BREV') ||
-          underkjennelseIKvalitetssikringEllerBeslutning
+          underkjennelseIKvalitetssikringEllerBeslutning ||
+          saksbehandlerHarSendtTilBeslutter
         ) {
           setIsModalOpen(true);
         } else {
