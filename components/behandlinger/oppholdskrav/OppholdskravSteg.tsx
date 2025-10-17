@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, ErrorMessage, VStack } from '@navikt/ds-react';
+import { Button, ErrorMessage, VStack } from '@navikt/ds-react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { Behovstype } from 'lib/utils/form';
@@ -139,10 +139,6 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
       }
     >
       <VStack gap="8">
-        <Alert variant="warning">
-          Dette steget er kun her for testing, og vurderingen man gjør her vil ikke påvirke utbetalingen.
-        </Alert>
-
         <VStack gap="2">
           {vedtatteVurderinger.map((vurdering) => (
             <CustomExpandableCard
