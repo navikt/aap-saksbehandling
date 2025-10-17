@@ -113,6 +113,10 @@ function årsakTilString(avslagsÅrsak: UnderveisAvslagsÅrsak): string {
       return 'Brudd på aktivitetsplikt etter § 11-7 - Opphør';
     case 'BRUDD_PÅ_AKTIVITETSPLIKT_11_7_STANS':
       return 'Brudd på aktivitetsplikt etter § 11-7 - Stans';
+    case 'BRUDD_PÅ_OPPHOLDSKRAV_11_3_STANS':
+      return 'Brudd på oppholdskrav etter § 11-3 - Stans';
+    case 'BRUDD_PÅ_OPPHOLDSKRAV_11_3_OPPHØR':
+      return 'Brudd på oppholdskrav etter § 11-3 - Opphør';
     default:
       exhaustiveCheck(avslagsÅrsak);
   }
