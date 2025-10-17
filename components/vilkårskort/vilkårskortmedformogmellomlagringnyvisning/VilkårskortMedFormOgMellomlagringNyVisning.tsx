@@ -7,7 +7,6 @@ import { formaterDatoForFrontend, formaterDatoMedTidspunktForFrontend } from 'li
 
 import styles from 'components/vilkårskort/Vilkårskort.module.css';
 import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
-import { isProd } from 'lib/utils/environment';
 import { VilkårsKortMedFormProps } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
 import { VisningActions, VisningModus } from 'hooks/saksbehandling/visning/VisningHook';
 import { ReactNode } from 'react';
@@ -142,7 +141,7 @@ export const VilkårskortMedFormOgMellomlagringNyVisning = ({
                     {`Vurdert av ${utledVurdertAv(vurdertAvAnsatt)}, ${formaterDatoForFrontend(vurdertAvAnsatt.dato)}`}
                   </Detail>
                 )}
-                {kvalitetssikretAv && !isProd() && (
+                {kvalitetssikretAv && (
                   <Detail>
                     {`Kvalitetssikret av ${utledVurdertAv(kvalitetssikretAv)}, ${formaterDatoForFrontend(
                       kvalitetssikretAv.dato
