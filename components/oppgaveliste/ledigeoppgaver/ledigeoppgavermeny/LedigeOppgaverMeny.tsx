@@ -6,7 +6,7 @@ import { hentOppgaveClient, plukkOppgaveClient, synkroniserOppgaveMedEnhetClient
 import { isSuccess } from 'lib/utils/api';
 import { byggKelvinURL } from 'lib/utils/request';
 import { useRouter } from 'next/navigation';
-import { isProd } from 'lib/utils/environment';
+import { toggles } from 'lib/utils/toggles';
 
 interface Props {
   oppgave: Oppgave;
@@ -35,11 +35,10 @@ export const LedigeOppgaverMeny = ({
   const [isPendingBehandle, startTransitionBehandle] = useTransition();
   const [isPendingMeny, startTransitionMeny] = useTransition();
 
-  const featureIkkeMuligÅPlukkeOppgaveSomAlleredeErReservert = !isProd();
   async function plukkOgGåTilOppgave(oppgave: Oppgave) {
     startTransitionBehandle(async () => {
       if (oppgave.id !== undefined && oppgave.id !== null && oppgave.versjon >= 0 && oppgave.behandlingRef) {
-        if (featureIkkeMuligÅPlukkeOppgaveSomAlleredeErReservert) {
+        if (toggles.featureIkkeMuligÅPlukkeOppgaveSomAlleredeErReservert) {
           const nyesteOppgave = await hentOppgaveClient(oppgave.behandlingRef);
           if (isSuccess(nyesteOppgave)) {
             if (nyesteOppgave.data.reservertAv != null) {
