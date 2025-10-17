@@ -4,6 +4,7 @@ import {
   clientOpprettSak,
   clientOpprettDummySak,
   clientPurrPåLegeerklæring,
+  clientOpprettOgFullfoer,
 } from 'lib/clientApi';
 import { BestillLegeerklæring, OpprettTestcase, OpprettDummySakDto } from 'lib/types/types';
 import { getErrorMessage } from 'lib/utils/errorUtil';
@@ -79,9 +80,22 @@ export function useFetchV2<FunctionParameters extends any[], ResponseBody>(
   return { isLoading, error, data, method };
 }
 
+export function useOpprettOgFullfoer(): {
+  opprettOgFullfoer: (opprettTestCase: OpprettTestcase) => Promise<{ ok: boolean }>;
+  isLoadingFullfoer: boolean;
+} {
+  const { method, isLoading } = useFetchV2(clientOpprettOgFullfoer);
+
+  async function opprettOgFullfoerMethod(body: OpprettTestcase) {
+    return await method(body);
+  }
+
+  return { opprettOgFullfoer: opprettOgFullfoerMethod, isLoadingFullfoer: isLoading};
+}
+
 export function useOpprettSak(): {
   opprettSak: (opprettTestCase: OpprettTestcase) => Promise<void>;
-  isLoading: boolean;
+  isLoadingSak: boolean;
 } {
   const { method, isLoading } = useFetchV2(clientOpprettSak);
 
@@ -89,7 +103,7 @@ export function useOpprettSak(): {
     await method(body);
   }
 
-  return { opprettSak: opprettSakMethod, isLoading };
+  return { opprettSak: opprettSakMethod, isLoadingSak: isLoading };
 }
 
 export function useOpprettDummySak(): {
