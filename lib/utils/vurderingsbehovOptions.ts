@@ -1,9 +1,8 @@
 import { ValuePair } from 'components/form/FormField';
 import type { Vurderingsbehov } from '../types/types';
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
-import { isProd } from 'lib/utils/environment';
+import { toggles } from 'lib/utils/toggles';
 
-const featureRevurderingVurderingsbehov = !isProd(); // TODO: Fjerne miljøsjekk når testet OK
 export const vurderingsbehovOptions: ValuePair<Vurderingsbehov>[] = [
   { label: 'Helhetlig vurdering', value: 'HELHETLIG_VURDERING' },
   { label: 'Lovvalg og medlemskap', value: 'LOVVALG_OG_MEDLEMSKAP' },
@@ -16,7 +15,7 @@ export const vurderingsbehovOptions: ValuePair<Vurderingsbehov>[] = [
   { label: 'Manuell inntekt', value: 'REVURDER_MANUELL_INNTEKT' },
   { label: 'Student', value: 'REVURDER_STUDENT' },
   { label: 'Overstyr perioder uten overholdt meldeplikt', value: 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN' },
-  ...(featureRevurderingVurderingsbehov
+  ...(toggles.featureRevurderingVurderingsbehov
     ? [
         { label: 'Dødsfall bruker', value: 'DØDSFALL_BRUKER' } as ValuePair<Vurderingsbehov>,
         { label: 'Dødsfall barn', value: 'DØDSFALL_BARN' } as ValuePair<Vurderingsbehov>,

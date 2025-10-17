@@ -10,13 +10,11 @@ import styles from './OpprettAktivitetsplikt.module.css';
 import { FormField } from 'components/form/FormField';
 import { isSuccess } from 'lib/utils/api';
 import { useRouter } from 'next/navigation';
-import { isProd } from 'lib/utils/environment';
+import { toggles } from 'lib/utils/toggles';
 
 export interface AktivitetspliktbruddFormFields {
   aktivitetspliktBruddType: 'AKTIVITETSPLIKT_11_7';
 }
-
-const featureOpprettAktivitetsplikt11_9 = !isProd(); // TODO: Oppdater når 11-9 skal i henholdsvis dev og prod
 
 export const OpprettAktivitetspliktBehandling = ({ sak }: { sak: SaksInfo }) => {
   const router = useRouter();
@@ -43,7 +41,7 @@ export const OpprettAktivitetspliktBehandling = ({ sak }: { sak: SaksInfo }) => 
           label: '§ 11-7',
           value: 'AKTIVITETSPLIKT_11_7',
         },
-        ...(featureOpprettAktivitetsplikt11_9
+        ...(toggles.featureOpprettAktivitetsplikt11_9
           ? [
               {
                 label: '§ 11-9',
