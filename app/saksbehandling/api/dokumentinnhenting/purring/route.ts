@@ -4,8 +4,9 @@ import { isLocal } from 'lib/utils/environment';
 import { NextRequest } from 'next/server';
 import { ApiException, ErrorResponseBody, isError } from 'lib/utils/api';
 
+const lokalFakePurringAvDokumenter = isLocal();
 export async function POST(req: NextRequest) {
-  if (isLocal()) {
+  if (lokalFakePurringAvDokumenter) {
     return new Response(JSON.stringify({ message: 'ok' }), { status: 200 });
   }
   try {

@@ -8,8 +8,9 @@ export interface BrukerInformasjon {
   NAVident?: string;
 }
 
+const lokaltOverstyrtBruker = isLocal();
 export async function hentBrukerInformasjon(): Promise<BrukerInformasjon> {
-  if (isLocal()) {
+  if (lokaltOverstyrtBruker) {
     return { navn: 'Iren Panikk', NAVident: 'z123456' };
   }
   const requestHeaders = await headers();
@@ -29,8 +30,9 @@ export enum Roller {
   PRODUKSJONSSTYRING = 'Produksjonsstyring',
 }
 
+const lokaltOverstyrteRoller = isLocal();
 export async function hentRollerForBruker(): Promise<Roller[]> {
-  if (isLocal()) {
+  if (lokaltOverstyrteRoller) {
     return [
       Roller.BESLUTTER,
       Roller.KVALITETSSIKRER,

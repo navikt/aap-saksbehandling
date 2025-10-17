@@ -34,6 +34,22 @@ const grunnlagIkkeOppfylt: AlderGrunnlag = {
   ],
 };
 
+const manglendeData: AlderGrunnlag = {
+  fødselsdato: null,
+  vilkårsperioder: [
+    {
+      periode: {
+        fom: '2024-06-12',
+        tom: '2027-06-12',
+      },
+      utfall: 'IKKE_OPPFYLT',
+      manuellVurdering: false,
+      avslagsårsak: 'BRUKER_OVER_67',
+      versjon: '1',
+    },
+  ],
+};
+
 describe('alder', () => {
   it('Skal vise fødselsdato', () => {
     render(<Alder grunnlag={grunnlagOppfylt} />);
@@ -46,10 +62,15 @@ describe('alder', () => {
 
   it('Skal vise alder', () => {
     render(<Alder grunnlag={grunnlagOppfylt} />);
-    const alderString = kalkulerAlder(new Date(grunnlagOppfylt.fødselsdato));
+    const alderString = kalkulerAlder(new Date(grunnlagOppfylt.fødselsdato!!));
     const alder = screen.getByText(`(Brukeren er ${alderString} i dag)`);
 
     expect(alder).toBeVisible();
+  });
+
+  it('Skal ikke vise innhold om fødsesdato ikke eksisterer', () => {
+    render(<Alder grunnlag={manglendeData} />);
+    expect(screen.queryByText('Fødselsdato')).not.toBeInTheDocument();
   });
 
   it('skal vise tabell med utfall, fra og med, til og med i header', () => {

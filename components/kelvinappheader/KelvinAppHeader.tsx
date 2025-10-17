@@ -28,13 +28,16 @@ interface BrukerInformasjon {
   NAVident?: string;
 }
 
+const bytteBrukerForDevOgLokalt = !isProd();
+const visRollerForDev = isDev();
+const lokalBrukerbytte = isLocal();
 const Brukermeny = ({ brukerInformasjon, roller }: { brukerInformasjon: BrukerInformasjon; roller?: Roller[] }) => {
   return (
     <Dropdown>
       <InternalHeader.UserButton name={brukerInformasjon.navn} as={Dropdown.Toggle} />
       <Dropdown.Menu>
         <Dropdown.Menu.GroupedList>
-          {isDev() && (
+          {visRollerForDev && (
             <>
               <Dropdown.Menu.GroupedList.Heading>
                 Roller: {roller?.map((rolle) => rolle).join(', ')}
@@ -43,7 +46,7 @@ const Brukermeny = ({ brukerInformasjon, roller }: { brukerInformasjon: BrukerIn
             </>
           )}
 
-          {!isProd() && (
+          {bytteBrukerForDevOgLokalt && (
             <>
               <Dropdown.Menu.List.Item as={Link} href={'/oauth2/login?prompt=select_account'}>
                 <BodyShort>Bytt bruker</BodyShort>
@@ -60,7 +63,7 @@ const Brukermeny = ({ brukerInformasjon, roller }: { brukerInformasjon: BrukerIn
           </Dropdown.Menu.List.Item>
         </Dropdown.Menu.GroupedList>
 
-        {isLocal() && (
+        {lokalBrukerbytte && (
           <>
             <Dropdown.Menu.Divider />
             <LokalBrukerBytte />
@@ -71,6 +74,7 @@ const Brukermeny = ({ brukerInformasjon, roller }: { brukerInformasjon: BrukerIn
   );
 };
 
+const lokalLenkeTilSaksoversikt = isLocal();
 export const KelvinAppHeader = ({
   brukerInformasjon,
   roller,
@@ -89,7 +93,7 @@ export const KelvinAppHeader = ({
           <Kelvinsøk setSøkeresultat={setSøkeresultat} />
           <Link href={`/oppgave/`}>Oppgaveliste</Link>
           <Link href={`/oppgave/produksjonsstyring`}>Produksjonsstyring</Link>
-          {isLocal() && <Link href={`/saksbehandling/saksoversikt`}>Saksoversikt</Link>}
+          {lokalLenkeTilSaksoversikt && <Link href={`/saksbehandling/saksoversikt`}>Saksoversikt</Link>}
         </HStack>
 
         <Spacer />

@@ -5,12 +5,15 @@ import { OpprettSakLocal } from 'components/opprettsak/OpprettSakLocal';
 import OpprettSakTest from 'components/opprettsak/OpprettSakTest';
 import { Suspense } from 'react';
 
+const lokalOpprettelseAvDummySak = isLocal();
+const devOpprettelseAvDummySak = isDev();
+const visningAvAlleBehandlingerLokaltOgDev = !isProd();
 const Page = async () => {
   return (
     <main className={styles.main}>
-      {isLocal() && <OpprettSakLocal />}
-      {isDev() && <OpprettSakTest />}
-      {!isProd() && (
+      {lokalOpprettelseAvDummySak && <OpprettSakLocal />}
+      {devOpprettelseAvDummySak && <OpprettSakTest />}
+      {visningAvAlleBehandlingerLokaltOgDev && (
         <Suspense>
           <AlleSakerListe />
         </Suspense>

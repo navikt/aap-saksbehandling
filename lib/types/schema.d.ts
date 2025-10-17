@@ -4032,6 +4032,44 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/test/opprett-og-fullfoer': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['no.nav.aap.behandlingsflyt.OpprettTestcaseDTO'];
+        };
+      };
+      responses: {
+        202: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.OpprettTestcaseDTO'];
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -8864,7 +8902,7 @@ export interface components {
        * Format: date
        * @example 2025-04-01
        */
-      'f\u00F8dselsdato': string;
+      'f\u00F8dselsdato'?: string | null;
       'vilk\u00E5rsperioder': components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.vilk\u00E5rsresultat.Vilk\u00E5rsperiode'][];
       /**
        * Format: date
@@ -9208,6 +9246,7 @@ export interface components {
       /** @enum {string} */
       brevtype:
         | 'INNVILGELSE'
+        | 'VEDTAK_11_17'
         | 'VEDTAK_11_18'
         | 'AVSLAG'
         | 'VARSEL_OM_BESTILLING'
@@ -9353,6 +9392,8 @@ export interface components {
         | 'VARIGHETSKVOTE_BRUKT_OPP'
         | 'BRUDD_PÅ_AKTIVITETSPLIKT_11_7_STANS'
         | 'BRUDD_PÅ_AKTIVITETSPLIKT_11_7_OPPHØR'
+        | 'BRUDD_PÅ_OPPHOLDSKRAV_11_3_STANS'
+        | 'BRUDD_PÅ_OPPHOLDSKRAV_11_3_OPPHØR'
         | null;
       'vilk\u00E5rsavslag': (
         | 'BRUKER_UNDER_18'
@@ -10465,6 +10506,8 @@ export interface components {
         | 'VARIGHETSKVOTE_BRUKT_OPP'
         | 'BRUDD_PÅ_AKTIVITETSPLIKT_11_7_STANS'
         | 'BRUDD_PÅ_AKTIVITETSPLIKT_11_7_OPPHØR'
+        | 'BRUDD_PÅ_OPPHOLDSKRAV_11_3_STANS'
+        | 'BRUDD_PÅ_OPPHOLDSKRAV_11_3_OPPHØR'
         | null;
       brukerAvKvoter: ('ORDINÆR' | 'STUDENT' | 'ETABLERINGSFASE' | 'UTVIKLINGSFASE' | 'SYKEPENGEERSTATNING')[];
       gradering: components['schemas']['no.nav.aap.behandlingsflyt.behandling.underveis.GraderingDto'];

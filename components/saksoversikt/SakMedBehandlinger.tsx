@@ -18,6 +18,7 @@ import {
   formatterÅrsakTilOpprettelseTilTekst,
 } from 'lib/utils/behandling';
 
+const lokalDevToolsForBehandlingOgSak = isLocal();
 export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
   const router = useRouter();
 
@@ -108,7 +109,7 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
         </Table.Body>
       </Table>
 
-      {isLocal() && (
+      {lokalDevToolsForBehandlingOgSak && (
         <SakDevTools
           saksnummer={sak.saksnummer}
           behandlinger={sak.behandlinger.map((e) => ({ referanse: e.referanse, type: e.type }))}

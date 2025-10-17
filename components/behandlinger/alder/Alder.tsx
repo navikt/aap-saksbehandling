@@ -22,68 +22,70 @@ export const Alder = ({ grunnlag }: Props) => {
 
   return (
     <VilkårsKort heading={'§ 11-4 Alder'} steg={'VURDER_ALDER'}>
-      <VStack gap={'4'}>
-        <div className={'flex-column'}>
-          <div>
-            <Label size={'small'}>Fødselsdato</Label>
-            <BodyShort size={'small'}>
-              <span>{formaterDatoForFrontend(grunnlag.fødselsdato)} </span>
-              <span>{`(Brukeren er ${kalkulerAlder(new Date(grunnlag.fødselsdato))} i dag)`}</span>
-            </BodyShort>
+      {grunnlag.fødselsdato && (
+        <VStack gap={'4'}>
+          <div className={'flex-column'}>
+            <div>
+              <Label size={'small'}>Fødselsdato</Label>
+              <BodyShort size={'small'}>
+                <span>{formaterDatoForFrontend(grunnlag.fødselsdato)} </span>
+                <span>{`(Brukeren er ${kalkulerAlder(new Date(grunnlag.fødselsdato))} i dag)`}</span>
+              </BodyShort>
+            </div>
+
+            <div>
+              <Label size={'small'}>Dato brukeren blir 67 år</Label>
+              <BodyShort size={'small'}>
+                <span>{formaterDatoForFrontend(addYears(new Date(grunnlag.fødselsdato), 67))}</span>
+              </BodyShort>
+            </div>
           </div>
 
-          <div>
-            <Label size={'small'}>Dato brukeren blir 67 år</Label>
-            <BodyShort size={'small'}>
-              <span>{formaterDatoForFrontend(addYears(new Date(grunnlag.fødselsdato), 67))}</span>
-            </BodyShort>
-          </div>
-        </div>
-
-        <TableStyled>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell scope="col">Fra og med</Table.HeaderCell>
-              <Table.HeaderCell scope="col">Til og med</Table.HeaderCell>
-              {inneholderPerioderMedIkkeOppfylt && <Table.HeaderCell scope="col">Avslagsårsak</Table.HeaderCell>}
-              <Table.HeaderCell scope="col">Resultat</Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {grunnlag.vilkårsperioder.map((vilkårsperiode, index) => {
-              return (
-                <Table.Row key={index}>
-                  <Table.DataCell textSize={'small'}>
-                    {formaterDatoForFrontend(vilkårsperiode.periode.fom)}
-                  </Table.DataCell>
-                  <Table.DataCell textSize={'small'}>
-                    {formaterDatoForFrontend(vilkårsperiode.periode.tom)}
-                  </Table.DataCell>
-                  {inneholderPerioderMedIkkeOppfylt && (
+          <TableStyled>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell scope="col">Fra og med</Table.HeaderCell>
+                <Table.HeaderCell scope="col">Til og med</Table.HeaderCell>
+                {inneholderPerioderMedIkkeOppfylt && <Table.HeaderCell scope="col">Avslagsårsak</Table.HeaderCell>}
+                <Table.HeaderCell scope="col">Resultat</Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              {grunnlag.vilkårsperioder.map((vilkårsperiode, index) => {
+                return (
+                  <Table.Row key={index}>
                     <Table.DataCell textSize={'small'}>
-                      {vilkårsperiode.avslagsårsak ? mapAvslagÅrsakTilTekst(vilkårsperiode.avslagsårsak) : ''}
+                      {formaterDatoForFrontend(vilkårsperiode.periode.fom)}
                     </Table.DataCell>
-                  )}
-                  <Table.DataCell textSize={'small'}>
-                    <div className={styles.utfall}>
-                      {vilkårsperiode.utfall === 'OPPFYLT' ? (
-                        <CheckmarkIcon title="Oppfylt" className={styles.oppfyltIcon} />
-                      ) : (
-                        <ExclamationmarkTriangleIcon title={'Ikke oppfylt'} className={styles.avslåttIcon} />
-                      )}
+                    <Table.DataCell textSize={'small'}>
+                      {formaterDatoForFrontend(vilkårsperiode.periode.tom)}
+                    </Table.DataCell>
+                    {inneholderPerioderMedIkkeOppfylt && (
+                      <Table.DataCell textSize={'small'}>
+                        {vilkårsperiode.avslagsårsak ? mapAvslagÅrsakTilTekst(vilkårsperiode.avslagsårsak) : ''}
+                      </Table.DataCell>
+                    )}
+                    <Table.DataCell textSize={'small'}>
+                      <div className={styles.utfall}>
+                        {vilkårsperiode.utfall === 'OPPFYLT' ? (
+                          <CheckmarkIcon title="Oppfylt" className={styles.oppfyltIcon} />
+                        ) : (
+                          <ExclamationmarkTriangleIcon title={'Ikke oppfylt'} className={styles.avslåttIcon} />
+                        )}
 
-                      <span>{mapUtfallTilTekst(vilkårsperiode.utfall)}</span>
-                    </div>
-                  </Table.DataCell>
-                </Table.Row>
-              );
-            })}
-          </Table.Body>
-        </TableStyled>
-        <HStack justify={'end'} align={'end'}>
-          <Detail>Vurdert automatisk</Detail>
-        </HStack>
-      </VStack>
+                        <span>{mapUtfallTilTekst(vilkårsperiode.utfall)}</span>
+                      </div>
+                    </Table.DataCell>
+                  </Table.Row>
+                );
+              })}
+            </Table.Body>
+          </TableStyled>
+          <HStack justify={'end'} align={'end'}>
+            <Detail>Vurdert automatisk</Detail>
+          </HStack>
+        </VStack>
+      )}
     </VilkårsKort>
   );
 };

@@ -8,6 +8,7 @@ import { byggKelvinURL } from 'lib/utils/request';
 import { useRouter } from 'next/navigation';
 import { isProd } from 'lib/utils/environment';
 import { useTildelOppgaver } from 'context/oppgave/TildelOppgaverContext';
+import { toggles } from 'lib/utils/toggles';
 
 interface Props {
   oppgave: Oppgave;
@@ -36,7 +37,7 @@ export const LedigeOppgaverMeny = ({
   async function plukkOgGåTilOppgave(oppgave: Oppgave) {
     startTransitionBehandle(async () => {
       if (oppgave.id !== undefined && oppgave.id !== null && oppgave.versjon >= 0 && oppgave.behandlingRef) {
-        if (!isProd()) {
+        if (toggles.featureIkkeMuligÅPlukkeOppgaveSomAlleredeErReservert) {
           const nyesteOppgave = await hentOppgaveClient(oppgave.behandlingRef);
           if (isSuccess(nyesteOppgave)) {
             if (nyesteOppgave.data.reservertAv != null) {

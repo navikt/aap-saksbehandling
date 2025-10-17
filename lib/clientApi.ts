@@ -78,6 +78,10 @@ export function clientOpprettSak(sak: OpprettTestcase) {
   return clientFetch(`${BASE_URL}/api/test/opprett`, 'POST', sak);
 }
 
+export function clientOpprettOgFullfoer(sak: OpprettTestcase) {
+  return clientFetch(`${BASE_URL}/api/test/opprettOgFullfoer`, 'POST', sak);
+}
+
 export function clientOpprettDummySak(sak: OpprettDummySakDto) {
   return clientFetch(`${BASE_URL}/api/test/opprettDummySak`, 'POST', sak);
 }
@@ -136,8 +140,9 @@ export function clientForhåndsvisDialogmelding(dialogmelding: ForhåndsvisDialo
   );
 }
 
+const lokalFakeUthentingAvEnheter = isLocal();
 export function clientHentAlleNavenheter(behandlingReferanse: string, input: NavEnhetRequest) {
-  if (isLocal()) {
+  if (lokalFakeUthentingAvEnheter) {
     const res: FetchResponse<NavEnheterResponse[]> = {
       type: 'SUCCESS',
       data: [

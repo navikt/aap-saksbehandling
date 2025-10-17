@@ -4,8 +4,8 @@ import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { hentBehandling, hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isError } from 'lib/utils/api';
 import { UtbetalingOgSimuleringMedDataFetching } from './utbetalingogsimulering/UtbetalingOgSimuleringMedDataFetching';
-import { isDev, isProd } from 'lib/utils/environment';
 import { Alert } from '@navikt/ds-react';
+import { toggles } from 'lib/utils/toggles';
 
 interface Props {
   behandlingsReferanse: string;
@@ -13,7 +13,7 @@ interface Props {
 
 export const Simulering = async ({ behandlingsReferanse }: Props) => {
   // TODO: Ref AAP-1325 - Skal skjule simuleringssteget frem til forbedringer er på plass
-  if (isProd() || isDev()) {
+  if (!toggles.featureSimulering) {
     return <div>Simulering er foreløpig under arbeid</div>;
   }
   const [flyt, behandling] = await Promise.all([hentFlyt(behandlingsReferanse), hentBehandling(behandlingsReferanse)]);
