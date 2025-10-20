@@ -136,6 +136,8 @@ export function behovstypeTilVilkårskortLink(behovstype: Behovstype): string {
       return 'UNDERVEIS';
     case Behovstype.VURDER_BRUDD_11_7_KODE:
       return 'AKTIVITETSPLIKT_11_7';
+    case Behovstype.OPPHOLDSKRAV_KODE:
+      return 'OPPHOLDSKRAV';
     default:
       return 'SYKDOM';
   }
