@@ -6,7 +6,7 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgG
 import { Behovstype } from 'lib/utils/form';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { OppholdskravForm } from 'components/behandlinger/oppholdskrav/types';
-import { LøsPeriodisertBehovPåBehandling, OppholdskravGrunnlagResponse } from 'lib/types/types';
+import { LøsPeriodisertBehovPåBehandling, MellomlagretVurdering, OppholdskravGrunnlagResponse } from 'lib/types/types';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
@@ -29,18 +29,19 @@ import { formaterDatoForBackend, parseDatoFraDatePicker, stringToDate } from 'li
 
 type Props = {
   grunnlag: OppholdskravGrunnlagResponse | undefined;
+  initialMellomlagring?: MellomlagretVurdering;
   behandlingVersjon: number;
   readOnly: boolean;
 };
 
-export const OppholdskravSteg = ({ grunnlag, behandlingVersjon, readOnly }: Props) => {
+export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVersjon, readOnly }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
 
   const { løsPeriodisertBehovOgGåTilNesteSteg, status, løsBehovOgGåTilNesteStegError, isLoading } =
     useLøsBehovOgGåTilNesteSteg('VURDER_OPPHOLDSKRAV');
 
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.OPPHOLDSKRAV_KODE, undefined);
+    useMellomlagring(Behovstype.OPPHOLDSKRAV_KODE, initialMellomlagring);
 
   const { visningActions, visningModus, formReadOnly } = useVilkårskortVisning(
     readOnly,
