@@ -40,7 +40,7 @@ interface Props {
 interface FormFields {
   begrunnelse: string;
   brukerRettPåAAP?: string;
-  virkningsdato: string;
+  fom: string;
 }
 
 type DraftFormFields = Partial<FormFields>;
@@ -53,7 +53,7 @@ export const OvergangArbeid = ({
   initialMellomlagretVurdering,
 }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
+  const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('OVERGANG_ARBEID');
 
   const vilkårsvurderingLabel = 'Vilkårsvurdering';
@@ -70,7 +70,7 @@ export const OvergangArbeid = ({
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
-    : mapVurderingToDraftFormFields(grunnlag?.vurdering);
+    : mapVurderingToDraftFormFields(grunnlag?.nyeVurderinger?.[0]);
 
   const { formFields, form } = useConfigForm<FormFields>(
     {
@@ -87,10 +87,10 @@ export const OvergangArbeid = ({
         defaultValue: defaultValue.brukerRettPåAAP,
         rules: { required: 'Du må svare på om brukeren har krav på AAP i perioden som arbeidssøker etter § 11-17' },
       },
-      virkningsdato: {
+      fom: {
         type: 'textarea',
         label: virkningsdatoLabel,
-        defaultValue: (defaultValue.virkningsdato && formaterDatoForFrontend(defaultValue.virkningsdato)) || undefined,
+        defaultValue: (defaultValue.fom && formaterDatoForFrontend(defaultValue.fom)) || undefined,
         description: 'Bruker får AAP etter § 11-17 fra til',
         rules: { required: 'Du må velge virkningsdato for vurderingen' },
       },
@@ -100,16 +100,18 @@ export const OvergangArbeid = ({
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
-      løsBehovOgGåTilNesteSteg(
+      løsPeriodisertBehovOgGåTilNesteSteg(
         {
           behandlingVersjon: behandlingVersjon,
           behov: {
             behovstype: Behovstype.OVERGANG_ARBEID,
-            overgangArbeidVurdering: {
-              begrunnelse: data.begrunnelse,
-              brukerRettPåAAP: data.brukerRettPåAAP === JaEllerNei.Ja,
-              virkningsdato: formaterDatoForBackend(parse(data.virkningsdato, 'dd.MM.yyyy', new Date())),
-            },
+            løsningerForPerioder: [
+              {
+                begrunnelse: data.begrunnelse,
+                brukerRettPåAAP: data.brukerRettPåAAP === JaEllerNei.Ja,
+                fom: formaterDatoForBackend(parse(data.fom, 'dd.MM.yyyy', new Date())),
+              },
+            ],
           },
           referanse: behandlingsReferanse,
         },
@@ -120,7 +122,7 @@ export const OvergangArbeid = ({
 
   const gjeldendeSykdomsvurdering = grunnlag?.gjeldendeSykdsomsvurderinger.at(-1);
   const vurderingenGjelderFra = gjeldendeSykdomsvurdering?.vurderingenGjelderFra;
-  const historiskeVurderinger = grunnlag?.historiskeVurderinger;
+  const sisteVedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger;
 
   return (
     <VilkårskortMedFormOgMellomlagringNyVisning
@@ -132,20 +134,20 @@ export const OvergangArbeid = ({
       status={status}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={true}
-      vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
+      vurdertAvAnsatt={grunnlag?.nyeVurderinger?.[0]?.vurdertAv}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring();
-        form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields());
+        form.reset(grunnlag?.nyeVurderinger?.[0] ? mapVurderingToDraftFormFields(grunnlag.nyeVurderinger?.[0]) : emptyDraftFormFields());
       }}
       readOnly={formReadOnly}
       mellomlagretVurdering={mellomlagretVurdering}
       visningModus={visningModus}
       visningActions={visningActions}
     >
-      {typeBehandling === 'Revurdering' && historiskeVurderinger && historiskeVurderinger.length > 0 && (
+      {typeBehandling === 'Revurdering' && sisteVedtatteVurderinger && sisteVedtatteVurderinger.length > 0 && (
         <TidligereVurderinger
-          data={historiskeVurderinger}
+          data={sisteVedtatteVurderinger}
           buildFelter={byggFelter}
           getErGjeldende={() => true}
           getFomDato={(v) => v.vurdertAv.dato}
@@ -172,7 +174,7 @@ export const OvergangArbeid = ({
       <FormField form={form} formField={formFields.brukerRettPåAAP} horizontalRadio />
       <VStack gap={'4'} as={'section'}>
         <DateInputWrapper
-          name={`virkningsdato`}
+          name={`fom`}
           control={form.control}
           label={'Virkningsdato for vurderingen'}
           rules={{
@@ -190,7 +192,7 @@ export const OvergangArbeid = ({
     return {
       begrunnelse: vurdering?.begrunnelse,
       brukerRettPåAAP: getJaNeiEllerUndefined(vurdering?.brukerRettPåAAP),
-      virkningsdato: vurdering?.virkningsdato || '',
+      fom: vurdering?.fom || '',
     };
   }
 
@@ -198,7 +200,7 @@ export const OvergangArbeid = ({
     return {
       begrunnelse: '',
       brukerRettPåAAP: '',
-      virkningsdato: '',
+      fom: '',
     };
   }
 
@@ -214,7 +216,7 @@ export const OvergangArbeid = ({
       },
       {
         label: virkningsdatoLabel,
-        value: (vurdering.virkningsdato && formaterDatoForFrontend(vurdering.virkningsdato)) || '',
+        value: (vurdering.fom && formaterDatoForFrontend(vurdering.fom)) || '',
       },
     ];
   }

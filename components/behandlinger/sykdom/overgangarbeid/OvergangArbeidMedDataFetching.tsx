@@ -23,7 +23,7 @@ export const OvergangArbeidMedDataFetching = async ({ behandlingsReferanse, steg
   }
 
   const harTidligereVurderinger =
-    grunnlag.data.gjeldendeVedtatteVurderinger != null && grunnlag.data.gjeldendeVedtatteVurderinger.length > 0;
+    grunnlag.data.sisteVedtatteVurderinger != null && grunnlag.data.sisteVedtatteVurderinger.length > 0;
 
   if (!skalViseSteg(stegData, harTidligereVurderinger)) {
     return null;
