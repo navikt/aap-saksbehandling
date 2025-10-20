@@ -40,7 +40,7 @@ export const LedigeOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) =>
         setIsModalOpen={setIsModalOpen}
         revalidateFunction={revalidateFunction}
       />
-      <TildelOppgaveModal />
+      <TildelOppgaveModal revalidateFunction={revalidateFunction} />
       <SynkroniserEnhetModal
         visSynkroniserEnhetModal={visSynkroniserEnhetModal}
         setVisSynkroniserEnhetModal={setVisSynkroniserEnhetModal}

@@ -44,7 +44,7 @@ export const AlleOppgaverTabell = ({ oppgaver, revalidateFunction, setValgteRade
         visSynkroniserEnhetModal={visSynkroniserEnhetModal}
         setVisSynkroniserEnhetModal={setVisSynkroniserEnhetModal}
       />
-      <TildelOppgaveModal />
+      <TildelOppgaveModal revalidateFunction={revalidateFunction} />
       <TableStyled
         size={'small'}
         zebraStripes

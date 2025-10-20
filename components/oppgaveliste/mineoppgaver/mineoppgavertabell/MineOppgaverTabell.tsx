@@ -24,7 +24,7 @@ export const MineOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) => {
         setIsModalOpen={setIsModalOpen}
         revalidateFunction={revalidateFunction}
       />
-      <TildelOppgaveModal />
+      <TildelOppgaveModal revalidateFunction={revalidateFunction} />
       {feilmelding && <Alert variant={'error'}>{feilmelding}</Alert>}
       <TableStyled
         size={'small'}

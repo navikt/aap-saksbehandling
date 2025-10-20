@@ -15,7 +15,11 @@ interface FormFields {
   saksbehandlerIdent: string;
 }
 
-export const TildelOppgaveModal = () => {
+interface Props {
+  revalidateFunction: () => void;
+}
+
+export const TildelOppgaveModal = ({ revalidateFunction }: Props) => {
   const { modalSkalVises, skjulModal, oppgaveIder, setOppgaveIder } = useTildelOppgaver();
   const [saksbehandlere, setSaksbehandlere] = useState<SaksbehandlerFraSøk[]>([]);
   const [søketekst, setSøketekst] = useState('');
@@ -37,6 +41,7 @@ export const TildelOppgaveModal = () => {
     setPageState(1);
     setSøkefeltError(undefined);
     form.reset();
+    revalidateFunction();
     skjulModal();
   };
 
