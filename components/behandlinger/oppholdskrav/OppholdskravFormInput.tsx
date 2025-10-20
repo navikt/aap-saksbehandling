@@ -1,4 +1,4 @@
-import { Button, HStack, ReadMore, VStack } from '@navikt/ds-react';
+import { Alert, Button, HStack, Link, ReadMore, VStack } from '@navikt/ds-react';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
@@ -45,7 +45,7 @@ export const OppholdskravFormInput = ({
   };
 
   return (
-    <VStack gap="4">
+    <VStack gap="5">
       <DateInputWrapper
         name={`vurderinger.${index}.fraDato`}
         label="Vurderingen gjelder fra"
@@ -62,10 +62,14 @@ export const OppholdskravFormInput = ({
         (denne) vurderingen. Sluttdatoen for denne vurderingen blir satt til dagen før den nye vurderingen sin “gjelder
         fra” dato.
       </ReadMore>
+      <Link href="https://lovdata.no/nav/rundskriv/r11-00#ref/lov/1997-02-28-19/%C2%A711-3" target="_blank">
+        Du kan lese om hvordan vilkåret skal vurderes i rundskrivet til § 11-3 (lovdata.no)
+      </Link>
       <TextAreaWrapper
         name={`vurderinger.${index}.begrunnelse`}
         control={control}
         label="Vilkårsvurdering"
+        description="Vurder om brukeren har utenlandsopphold som ikke overholder bestemmelsene i § 11-3"
         rules={{
           required: 'Du må fylle ut en vilkårsvurdering',
         }}
@@ -82,6 +86,11 @@ export const OppholdskravFormInput = ({
 
       {watch(`vurderinger.${index}.oppfyller`) === JaEllerNei.Nei && (
         <>
+          <HStack>
+            <Alert variant="warning" size="small">
+              Pass på at kun den delen av utenlandsoppholdet som bryter vilkårene i § 11-3 legges inn
+            </Alert>
+          </HStack>
           <HStack>
             <ComboboxWrapper
               name={`vurderinger.${index}.land`}
