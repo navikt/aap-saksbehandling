@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 import { hentOppgaverForFilter } from 'lib/services/oppgaveservice/oppgaveservice';
-import { logError } from 'lib/serverutlis/logger';
+import { logError, logWarning } from 'lib/serverutlis/logger';
 import { isError } from 'lib/utils/api';
 import { OppgavelisteRequest } from 'lib/types/oppgaveTypes';
 
@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
   try {
     const res = await hentOppgaverForFilter(data);
     if (isError(res)) {
-      logError(`/api/oppgave/oppgaveliste`, res.apiException);
+      logWarning(`/api/oppgave/oppgaveliste`, res.apiException);
     }
     return new Response(JSON.stringify(res), { status: res.status });
   } catch (error) {
