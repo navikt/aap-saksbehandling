@@ -5,7 +5,6 @@ import { isProd } from 'lib/utils/environment';
  */
 export const toggles = {
   featureSimulering: !isProd(),
-  featureIkkeMuligÅPlukkeOppgaveSomAlleredeErReservert: !isProd(),
   featureOpprettAktivitetsplikt11_9: !isProd(),
   featureRevurderingVurderingsbehov: !isProd(),
   featureAktivitetspliktMedTrekkVisning: !isProd(),
