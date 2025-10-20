@@ -46,7 +46,7 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
   const { visningActions, visningModus, formReadOnly } = useVilkårskortVisning(
     readOnly,
     'VURDER_OPPHOLDSKRAV',
-    undefined
+    mellomlagretVurdering
   );
 
   const defaultValues =
@@ -128,7 +128,7 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
       status={status}
       mellomlagretVurdering={mellomlagretVurdering}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
-      onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset())}
+      onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}
       readOnly={readOnly}
       visningModus={visningModus}
       visningActions={visningActions}
