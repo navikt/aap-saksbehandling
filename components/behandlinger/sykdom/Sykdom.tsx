@@ -19,7 +19,6 @@ interface Props {
   behandlingsReferanse: string;
 }
 
-export const overgangUføreFeature = () => true;
 export const overgangArbeidFeature = () => false;
 
 export const Sykdom = async ({ behandlingsReferanse }: Props) => {
@@ -37,7 +36,7 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
   const sykdomsvurderingBrevSteg = getStegData(aktivStegGruppe, 'SYKDOMSVURDERING_BREV', flyt.data);
   const vurderYrkesskadeSteg = getStegData(aktivStegGruppe, 'VURDER_YRKESSKADE', flyt.data);
   const vurderSykepengeerstatningSteg = getStegData(aktivStegGruppe, 'VURDER_SYKEPENGEERSTATNING', flyt.data);
-  const overganguføreSteg = overgangUføreFeature() ? getStegData(aktivStegGruppe, 'OVERGANG_UFORE', flyt.data) : null;
+  const overganguføreSteg = getStegData(aktivStegGruppe, 'OVERGANG_UFORE', flyt.data);
   const overgangarbeidSteg = overgangArbeidFeature()
     ? getStegData(aktivStegGruppe, 'OVERGANG_ARBEID', flyt.data)
     : null;
@@ -60,7 +59,6 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
           <BistandsbehovMedDataFetching
             behandlingsReferanse={behandlingsReferanse}
             stegData={vurderBistandsbehovSteg}
-            overgangUføreEnabled={overgangUføreFeature()}
             overgangArbeidEnabled={overgangArbeidFeature()}
           />
         </StegSuspense>
@@ -83,7 +81,7 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
           <RefusjonMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={refusjonskravSteg} />
         </StegSuspense>
       )}
-      {overgangUføreFeature() && overganguføreSteg !== null && overganguføreSteg.skalViseSteg && (
+      {overganguføreSteg.skalViseSteg && (
         <StegSuspense>
           <OvergangUforeMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={overganguføreSteg} />
         </StegSuspense>
