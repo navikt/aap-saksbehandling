@@ -1,4 +1,4 @@
-import { Detail, HStack, Tag } from '@navikt/ds-react';
+import { BodyShort, HStack, Tag } from '@navikt/ds-react';
 import { isBefore, isSameDay, sub } from 'date-fns';
 import { formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
 import styles from './oppholdskrav.module.css';
@@ -27,14 +27,14 @@ export const OppholdskravTidligerePeriodeHeading = ({
     (tom == null || isBefore(foersteNyePeriode, tom) || isSameDay(foersteNyePeriode, tom));
 
   return (
-    <HStack gap="space-12">
-      <Detail className={strekUtHele ? styles.streketUtTekst : ''}>
+    <HStack paddingBlock={'1'} gap="12">
+      <BodyShort size={'small'} className={strekUtHele ? styles.streketUtTekst : ''}>
         {formaterDatoForFrontend(fom)} –{' '}
         {tom != null && (
           <span className={nySluttdato ? styles.streketUtTekst : ''}>{formaterDatoForFrontend(tom)}</span>
         )}
         {nySluttdato && <span> {formaterDatoForFrontend(sub(foersteNyePeriode, { days: 1 }))}</span>}
-      </Detail>
+      </BodyShort>
       <OppholdskravStatusTag oppfylt={oppfylt} />
     </HStack>
   );
@@ -52,11 +52,11 @@ export const OppholdskravNyPeriodeHeading = ({ index, form, isLast }: Oppholdskr
   const tom = isLast ? null : parseDatoFraDatePickerOgTrekkFra1Dag(form.watch(`vurderinger.${index + 1}.fraDato`));
 
   return (
-    <HStack gap="space-12">
-      <Detail>
+    <HStack paddingBlock={'1'} gap="space-12">
+      <BodyShort size={'small'}>
         Ny vurdering: {fom == null ? '[Ikke valgt]' : formaterDatoForFrontend(fom)} –{' '}
         {tom != null ? <span>{formaterDatoForFrontend(tom)}</span> : <span>{isLast ? ' ' : '[Ikke valgt]'}</span>}
-      </Detail>
+      </BodyShort>
       <OppholdskravStatusTag oppfylt={oppfylt != null ? oppfylt === JaEllerNei.Ja : null} />
     </HStack>
   );
