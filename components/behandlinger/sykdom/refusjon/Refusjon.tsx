@@ -126,7 +126,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
     grunnlag.andreUtbetalingerYtelser
       ?.filter((str): str is AndreUtbetalingerYtelser => str in AndreUtbetalingerYtelserLabels)
       .map((str) => AndreUtbetalingerYtelserLabels[str])
-      .join(', ') || '';
+      .join(', ') || 'Ingen utbetalinger krysset av';
 
   const historiskeVurderinger = grunnlag.historiskeVurderinger;
 
