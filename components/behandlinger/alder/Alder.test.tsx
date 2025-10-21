@@ -63,7 +63,7 @@ describe('alder', () => {
   it('Skal vise alder', () => {
     render(<Alder grunnlag={grunnlagOppfylt} />);
     const alderString = kalkulerAlder(new Date(grunnlagOppfylt.fødselsdato!!));
-    const alder = screen.getByText(`(Brukeren er ${alderString} i dag)`);
+    const alder = screen.getByText(`(Brukeren er ${alderString})`);
 
     expect(alder).toBeVisible();
   });

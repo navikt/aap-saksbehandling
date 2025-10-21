@@ -80,7 +80,7 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
     },
     statuser: {
       type: 'checkbox',
-      label: 'Status',
+      label: 'Markering',
       options: OppgaveStatuser,
       defaultValue: lagretUtvidetFilter?.statuser ?? [],
     },

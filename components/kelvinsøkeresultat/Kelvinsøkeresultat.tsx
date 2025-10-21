@@ -22,7 +22,7 @@ export const Kelvinsøkeresultat = ({
     return (
       <HStack>
         <Alert variant={'info'} size={'small'} className={styles.info}>
-          Fant ingen saker for søketeksten.
+          Du fikk ingen treff. Sjekk at saksnummeret eller fødselsnummer er riktig skrevet.
         </Alert>
       </HStack>
     );

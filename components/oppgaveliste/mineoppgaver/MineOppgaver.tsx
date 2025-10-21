@@ -62,7 +62,7 @@ export const MineOppgaver = () => {
     },
     statuser: {
       type: 'checkbox',
-      label: 'Status',
+      label: 'Markering',
       options: OppgaveStatuser,
       defaultValue: lagretUtvidetFilter?.statuser ?? [],
     },

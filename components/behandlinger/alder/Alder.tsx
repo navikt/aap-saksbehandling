@@ -29,7 +29,7 @@ export const Alder = ({ grunnlag }: Props) => {
               <Label size={'small'}>Fødselsdato</Label>
               <BodyShort size={'small'}>
                 <span>{formaterDatoForFrontend(grunnlag.fødselsdato)} </span>
-                <span>{`(Brukeren er ${kalkulerAlder(new Date(grunnlag.fødselsdato))} i dag)`}</span>
+                <span>{`(Brukeren er ${kalkulerAlder(new Date(grunnlag.fødselsdato))})`}</span>
               </BodyShort>
             </div>
 
