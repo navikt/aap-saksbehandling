@@ -27,7 +27,7 @@ export const OppholdskravTidligerePeriodeHeading = ({
     (tom == null || isBefore(foersteNyePeriode, tom) || isSameDay(foersteNyePeriode, tom));
 
   return (
-    <HStack paddingBlock={'1'} gap="12">
+    <HStack justify={'space-between'} paddingBlock={'1'} gap="12">
       <BodyShort size={'small'} className={strekUtHele ? styles.streketUtTekst : ''}>
         {formaterDatoForFrontend(fom)} –{' '}
         {tom != null && (
@@ -52,7 +52,7 @@ export const OppholdskravNyPeriodeHeading = ({ index, form, isLast }: Oppholdskr
   const tom = isLast ? null : parseDatoFraDatePickerOgTrekkFra1Dag(form.watch(`vurderinger.${index + 1}.fraDato`));
 
   return (
-    <HStack paddingBlock={'1'} gap="space-12">
+    <HStack justify={'space-between'} paddingBlock={'1'} gap="space-12">
       <BodyShort size={'small'}>
         Ny vurdering: {fom == null ? '[Ikke valgt]' : formaterDatoForFrontend(fom)} –{' '}
         {tom != null ? <span>{formaterDatoForFrontend(tom)}</span> : <span>{isLast ? ' ' : '[Ikke valgt]'}</span>}
