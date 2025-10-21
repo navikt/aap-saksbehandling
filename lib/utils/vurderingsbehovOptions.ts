@@ -17,6 +17,20 @@ export const vurderingsbehovOptions: ValuePair<Vurderingsbehov>[] = [
   { label: 'Overstyr perioder uten overholdt meldeplikt', value: 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN' },
   ...(toggles.featureRevurderingVurderingsbehov
     ? [
+        {
+          label: 'Samordning andre folketrygdytelser',
+          value: 'REVURDER_SAMORDNING_ANDRE_FOLKETRYGDYTELSER',
+        } as ValuePair<Vurderingsbehov>,
+        { label: 'Samordning uføre', value: 'REVURDER_SAMORDNING_UFØRE' } as ValuePair<Vurderingsbehov>,
+        {
+          label: 'Samordning andre statlige ytelser',
+          value: 'REVURDER_SAMORDNING_ANDRE_STATLIGE_YTELSER',
+        } as ValuePair<Vurderingsbehov>,
+        { label: 'Samordning arbeidsgiver', value: 'REVURDER_SAMORDNING_ARBEIDSGIVER' } as ValuePair<Vurderingsbehov>,
+        {
+          label: 'Samordning tjenestepensjon',
+          value: 'REVURDER_SAMORDNING_TJENESTEPENSJON',
+        } as ValuePair<Vurderingsbehov>,
         { label: 'Dødsfall bruker', value: 'DØDSFALL_BRUKER' } as ValuePair<Vurderingsbehov>,
         { label: 'Dødsfall barn', value: 'DØDSFALL_BARN' } as ValuePair<Vurderingsbehov>,
         { label: 'Oppholdskrav', value: 'OPPHOLDSKRAV' } as ValuePair<Vurderingsbehov>,
