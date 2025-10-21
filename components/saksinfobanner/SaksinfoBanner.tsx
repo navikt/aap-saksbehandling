@@ -260,6 +260,7 @@ export const SaksinfoBanner = ({
               onClose={() => settVisTrekkSøknadModal(false)}
               saksnummer={sak.saksnummer}
               behandlingReferanse={behandling?.referanse!}
+              navIdent={brukerInformasjon?.NAVident ? brukerInformasjon.NAVident : null}
             />
             <TrekkKlageModal
               isOpen={visTrekkKlageModal}
