@@ -112,7 +112,7 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
     case '5021':
       return 'Overstyr lovvalg';
     case '5024':
-      return 'Samordning med delvis uføre';
+      return '§ 11-28 Samordning med delvis uføre';
     case '5026':
       return 'Sosialstønad refusjonskrav';
     case '5027':
