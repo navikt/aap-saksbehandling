@@ -5,7 +5,7 @@ import {
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
-import { skalViseSteg, StegData } from 'lib/utils/steg';
+import { StegData } from 'lib/utils/steg';
 import { SamordningAndreStatligeYtelser } from 'components/behandlinger/samordning/samordningandrestatlige/SamordningAndreStatligeYtelser';
 
 interface Props {
@@ -20,10 +20,6 @@ export const SamordningAndreStatligeYtelserMedDatafetching = async ({ behandling
 
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
-  }
-
-  if (!skalViseSteg(stegData, grunnlag.data.vurdering != null)) {
-    return null;
   }
 
   return (

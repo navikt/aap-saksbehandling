@@ -5,7 +5,7 @@ import {
   hentSamordningArbeidsgiverGrunnlag,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { Behovstype } from 'lib/utils/form';
-import { skalViseSteg, StegData } from 'lib/utils/steg';
+import { StegData } from 'lib/utils/steg';
 import { SamordningArbeidsgiver } from 'components/behandlinger/samordning/samordningArbeidsgiver/SamordningArbeidsgiver';
 
 interface Props {
@@ -20,10 +20,6 @@ export const SamordningArbeidsgiverMedDatafetching = async ({ behandlingsreferan
 
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
-  }
-
-  if (!skalViseSteg(stegData, grunnlag.data.vurdering != null)) {
-    return null;
   }
 
   return (
