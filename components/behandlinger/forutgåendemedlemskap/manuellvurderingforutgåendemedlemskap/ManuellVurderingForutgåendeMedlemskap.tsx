@@ -112,7 +112,7 @@ export const ManuellVurderingForutgåendeMedlemskap = ({
         options: [
           {
             value: 'A',
-            label: `a: Ja, brukeren har vært medlem i folketrygden i minst ett år umiddelbart før krav om ytelsen settes frem (${rettighetsperiodeGrunnlag?.søknadsdato ? formaterDatoForFrontend(rettighetsperiodeGrunnlag?.søknadsdato) : '(Søknadsdato ikke funnet)'}), og var medlem i trygden da arbeidsevnen ble nedsatt med minst halvparten (${beregningstidspunktGrunnlag?.vurdering?.nedsattArbeidsevneDato ? formaterDatoForFrontend(beregningstidspunktGrunnlag?.vurdering?.nedsattArbeidsevneDato) : '(Dato for nedsatt arbeidsevne ikke funnet)'}), og etter fylte 16 år har perioder med medlemskap som minst tilsvarer perioder uten medlemskap`,
+            label: `a: Ja, brukeren har vært medlem i folketrygden i minst ett år umiddelbart før krav om ytelsen settes fram (${rettighetsperiodeGrunnlag?.søknadsdato ? formaterDatoForFrontend(rettighetsperiodeGrunnlag?.søknadsdato) : '(Søknadsdato ikke funnet)'}), og var medlem i trygden da arbeidsevnen ble nedsatt med minst halvparten (${beregningstidspunktGrunnlag?.vurdering?.nedsattArbeidsevneDato ? formaterDatoForFrontend(beregningstidspunktGrunnlag?.vurdering?.nedsattArbeidsevneDato) : '(Dato for nedsatt arbeidsevne ikke funnet)'}), og etter fylte 16 år har perioder med medlemskap som minst tilsvarer perioder uten medlemskap`,
           },
           {
             value: 'B',
