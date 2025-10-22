@@ -30,6 +30,7 @@ import { capitalize } from 'lodash';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { Veiledning } from 'components/veiledning/Veiledning';
 
 interface Props {
   bruker: BrukerInformasjon;
@@ -100,7 +101,7 @@ export const SamordningGradering = ({
     {
       begrunnelse: {
         type: 'textarea',
-        label: 'Vurder utbetalingsgrad for folketrygdytelser',
+        label: 'Vurder vilkåret',
         rules: { required: 'Du må gjøre en vilkårsvurdering' },
         defaultValue: defaultValue.begrunnelse,
       },
@@ -197,7 +198,7 @@ export const SamordningGradering = ({
         </Modal>
       )}
       <VilkårskortMedFormOgMellomlagringNyVisning
-        heading="§§ 11-27 / 11-28 Samordning med andre folketrygdytelser"
+        heading="§§ 11-27 / 11-28 Samordning med andre fulle eller reduserte folketrygdytelser"
         steg="SAMORDNING_GRADERING"
         onSubmit={handleSubmit}
         isLoading={isLoading}
@@ -225,6 +226,13 @@ export const SamordningGradering = ({
 
         {visForm && (
           <VStack gap={'6'}>
+            <Veiledning
+              header={'Hva skal vurderes?'}
+              tekst={
+                'For sykepenger skal det vurderes om grunnlaget er under 2 G. Det skal redegjøres for vurdert maksdato, inkludert eventuell ferie, og vises til hvor informasjonen er innhentet. Ved avslag på § 11-27 skal det være redegjort for hvorfor det avslås.'
+              }
+              defaultOpen={false}
+            />
             <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
             <YtelseTabell ytelser={grunnlag.ytelser} />
             <Ytelsesvurderinger form={form} readOnly={formReadOnly} />

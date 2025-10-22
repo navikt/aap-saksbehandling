@@ -17,15 +17,13 @@ export const YtelseTabell = ({ ytelser }: Props) => {
       <VStack gap={'2'}>
         <VStack gap={'2'}>
           <Label size="small">Vedtak om folketrygdytelser</Label>
-          <BodyShort size="small">
-            Vi har funnet følgende perioder med overlapp mellom andre folketrygdytelser og AAP
-          </BodyShort>
+          <BodyShort size="small">Vi har funnet følgende perioder som kan være relevante for AAP</BodyShort>
         </VStack>
         <TableStyled>
           <Table.Header>
             <Table.Row>
-              <Table.HeaderCell>Periode</Table.HeaderCell>
               <Table.HeaderCell>Ytelse</Table.HeaderCell>
+              <Table.HeaderCell>Periode</Table.HeaderCell>
               <Table.HeaderCell>Kilde</Table.HeaderCell>
               <Table.HeaderCell>Grad fra kilde</Table.HeaderCell>
             </Table.Row>
@@ -43,6 +41,7 @@ export const YtelseTabell = ({ ytelser }: Props) => {
               ].join(' ');
               return (
                 <Table.Row key={ytelse.saksRef ?? index} className={classNames}>
+                  <Table.DataCell textSize="small">{ytelse.ytelseType}</Table.DataCell>
                   <Table.DataCell textSize="small">
                     <HStack gap={'2'} marginInline={'2'}>
                       {ytelse.endringStatus === 'NY' && (
@@ -53,9 +52,8 @@ export const YtelseTabell = ({ ytelser }: Props) => {
                       {formaterDatoForFrontend(ytelse.periode.fom)} - {formaterDatoForFrontend(ytelse.periode.tom)}
                     </HStack>
                   </Table.DataCell>
-                  <Table.DataCell textSize="small">{ytelse.ytelseType}</Table.DataCell>
                   <Table.DataCell textSize="small">{ytelse.kilde}</Table.DataCell>
-                  <Table.DataCell textSize="small">{ytelse.gradering}</Table.DataCell>
+                  <Table.DataCell textSize="small">{ytelse.gradering} %</Table.DataCell>
                 </Table.Row>
               );
             })}
