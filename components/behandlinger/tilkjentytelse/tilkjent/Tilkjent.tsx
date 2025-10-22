@@ -55,7 +55,7 @@ export const Tilkjent = ({ grunnlag }: Props) => {
                   </Table.DataCell>
                   <Table.DataCell textSize={'small'}>{formaterTilNok(vurdertPeriode.felter.dagsats)}</Table.DataCell>
                   <Table.DataCell textSize={'small'}>
-                    {formaterTilNok(vurdertPeriode.felter.barneTilleggsats)}
+                    {formaterTilNok(vurdertPeriode.felter.barnetillegg)}
                   </Table.DataCell>
                   <Table.DataCell textSize={'small'}>
                     {formaterTilProsent(vurdertPeriode.felter.arbeidGradering)}
