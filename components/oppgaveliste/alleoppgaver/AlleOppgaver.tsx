@@ -41,10 +41,7 @@ export const AlleOppgaver = ({ enheter }: Props) => {
   const [aktivEnhet, setAktivEnhet] = useState<string>(hentLagretAktivEnhet() ?? enheter[0]?.enhetNr ?? '');
   const [aktivKøId, setAktivKøId] = useState<number>(ALLE_OPPGAVER_ID);
   const [valgteRader, setValgteRader] = useState<number[]>([]);
-  const [visTildelOppgaveModal, setVisTildelOppgaveModal] = useState<boolean>(false);
-  const [oppgaverSomSkalTildeles, setOppgaverSomSkalTildeles] = useState<number[]>([]);
   const lagretUtvidetFilter = hentAktivUtvidetFilter();
-  const [skalFjerneValgteRaderEtterTildeling, setSkalFjerneValgteRaderEtterTildeling] = useState<boolean>(false);
 
   const { form, formFields } = useConfigForm<FormFieldsFilter>({
     behandlingstyper: {
@@ -78,7 +75,7 @@ export const AlleOppgaver = ({ enheter }: Props) => {
     },
     statuser: {
       type: 'checkbox',
-      label: 'Status',
+      label: 'Markering',
       options: OppgaveStatuser,
       defaultValue: lagretUtvidetFilter?.statuser ?? [],
     },
@@ -182,9 +179,6 @@ export const AlleOppgaver = ({ enheter }: Props) => {
           valgteRader={valgteRader}
           setValgteRader={setValgteRader}
           revalidateFunction={mutate}
-          setVisTildelOppgaveModal={setVisTildelOppgaveModal}
-          setOppgaverSomSkalTildeles={setOppgaverSomSkalTildeles}
-          setSkalFjerneValgteRaderEtterTildeling={setSkalFjerneValgteRaderEtterTildeling}
         />
         {isLoading && <TabellSkeleton />}
 
@@ -195,12 +189,6 @@ export const AlleOppgaver = ({ enheter }: Props) => {
               revalidateFunction={mutate}
               valgteRader={valgteRader}
               setValgteRader={setValgteRader}
-              visTildelOppgaveModal={visTildelOppgaveModal}
-              setVisTildelOppgaveModal={setVisTildelOppgaveModal}
-              oppgaverSomSkalTildeles={oppgaverSomSkalTildeles}
-              setOppgaverSomSkalTildeles={setOppgaverSomSkalTildeles}
-              skalFjerneValgteRaderEtterTildeling={skalFjerneValgteRaderEtterTildeling}
-              setSkalFjerneValgteRaderEtterTildeling={setSkalFjerneValgteRaderEtterTildeling}
             />
           ) : (
             <BodyShort size={'small'} className={styles.ingenoppgaver}>

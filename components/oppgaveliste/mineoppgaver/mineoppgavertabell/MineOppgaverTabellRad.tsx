@@ -12,22 +12,18 @@ import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
 import { OppgaveInformasjon } from 'components/oppgaveliste/oppgaveinformasjon/OppgaveInformasjon';
 import { MineOppgaverMeny } from 'components/oppgaveliste/mineoppgaver/mineoppgavermeny/MineOppgaverMeny';
 import { Vurderingsbehov, ÅrsakTilOpprettelse } from 'lib/types/types';
-import { Dispatch, memo, SetStateAction } from 'react';
+import { memo } from 'react';
 
 const OppgaveRad = ({
   oppgave,
   setFeilmelding,
   setIsModalOpen,
   revalidateFunction,
-  setVisTildelOppgaveModal,
-  setOppgaverSomSkalTildeles,
 }: {
   oppgave: Oppgave;
   setFeilmelding: React.Dispatch<React.SetStateAction<string | undefined>>;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   revalidateFunction: () => void;
-  setVisTildelOppgaveModal: Dispatch<SetStateAction<boolean>>;
-  setOppgaverSomSkalTildeles: Dispatch<SetStateAction<number[]>>;
 }) => {
   return (
     <Table.Row key={oppgave.saksnummer || oppgave.journalpostId}>
@@ -80,8 +76,6 @@ const OppgaveRad = ({
           setFeilmelding={setFeilmelding}
           revalidateFunction={revalidateFunction}
           setÅpenModal={setIsModalOpen}
-          setOppgaverSomSkalTildeles={setOppgaverSomSkalTildeles}
-          setVisTildelOppgaveModal={setVisTildelOppgaveModal}
         />
       </Table.DataCell>
     </Table.Row>

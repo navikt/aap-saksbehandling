@@ -48,7 +48,7 @@ export const formaterBehandlernavn = (behandler: Behandler): string => {
 
 export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
   const [visModal, setVisModal] = useState<boolean>(false);
-  const [visBestillingsfeil, setVisBestillingsfeil] = useState<boolean>(false);
+  const [bestillingsfeil, setBestillingsfeil] = useState<string | boolean>();
   const [defaultOptions, setDefaultOptions] = useState<ValuePair[]>([]);
   const saksnummer = useSaksnummer();
   const behandlingsreferanse = useBehandlingsReferanse();
@@ -87,11 +87,20 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
         saksnummer: saksnummer,
         behandlingsReferanse: behandlingsreferanse,
       };
+
+      const manglerHprNr =
+        body.behandlerHprNr === undefined || body.behandlerHprNr === null || body.behandlerHprNr === 'null';
+
+      if (manglerHprNr) {
+        setBestillingsfeil(': Mangler HPR-nr på behandler');
+        return;
+      }
       await bestillDialogmelding(body);
-      if (!error) {
-        onSuccess();
+
+      if (error) {
+        setBestillingsfeil(true);
       } else {
-        setVisBestillingsfeil(true);
+        onSuccess();
       }
     })(event);
   };
@@ -156,10 +165,10 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
             Avbryt
           </Button>
         </div>
-        {visBestillingsfeil && (
+        {bestillingsfeil && (
           <div className={styles.rad}>
             <Alert variant="error" size={'small'}>
-              Noe gikk galt ved bestilling av dialogmelding
+              Noe gikk galt ved bestilling av dialogmelding{bestillingsfeil}
             </Alert>
           </div>
         )}

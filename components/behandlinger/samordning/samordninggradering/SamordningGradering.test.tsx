@@ -89,10 +89,7 @@ describe('Samordning gradering', () => {
     render(
       <SamordningGradering bruker={bruker} grunnlag={grunnlagUtenVurdering} behandlingVersjon={1} readOnly={false} />
     );
-    await user.type(
-      screen.getByRole('textbox', { name: 'Vurder utbetalingsgrad for folketrygdytelser' }),
-      'Min begrunnelse'
-    );
+    await user.type(screen.getByRole('textbox', { name: 'Vurder vilkåret' }), 'Min begrunnelse');
     await user.click(screen.getByRole('button', { name: 'Bekreft' }));
     expect(await screen.findByText('Du må gjøre en vurdering av periodene')).toBeVisible();
   });
@@ -129,7 +126,7 @@ describe('mellomlagring', () => {
     );
 
     await user.type(
-      screen.getByRole('textbox', { name: 'Vurder utbetalingsgrad for folketrygdytelser' }),
+      screen.getByRole('textbox', { name: 'Vurder vilkåret' }),
       'Her har jeg begynt å skrive en vurdering..'
     );
     expect(screen.queryByText('Utkast lagret 21.08.2025 00:00 (Jan T. Loven)')).not.toBeInTheDocument();
@@ -181,7 +178,7 @@ describe('mellomlagring', () => {
     );
 
     const begrunnelseFelt = screen.getByRole('textbox', {
-      name: 'Vurder utbetalingsgrad for folketrygdytelser',
+      name: 'Vurder vilkåret',
     });
 
     expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er mellomlagret');
@@ -193,7 +190,7 @@ describe('mellomlagring', () => {
     );
 
     const begrunnelseFelt = screen.getByRole('textbox', {
-      name: 'Vurder utbetalingsgrad for folketrygdytelser',
+      name: 'Vurder vilkåret',
     });
 
     expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er bekreftet');
@@ -210,12 +207,9 @@ describe('mellomlagring', () => {
       />
     );
 
-    await user.type(
-      screen.getByRole('textbox', { name: 'Vurder utbetalingsgrad for folketrygdytelser' }),
-      ' her er ekstra tekst'
-    );
+    await user.type(screen.getByRole('textbox', { name: 'Vurder vilkåret' }), ' her er ekstra tekst');
 
-    expect(screen.getByRole('textbox', { name: 'Vurder utbetalingsgrad for folketrygdytelser' })).toHaveValue(
+    expect(screen.getByRole('textbox', { name: 'Vurder vilkåret' })).toHaveValue(
       'Dette er min vurdering som er mellomlagret her er ekstra tekst'
     );
 
@@ -223,7 +217,7 @@ describe('mellomlagring', () => {
 
     await user.click(slettKnapp);
 
-    expect(screen.getByRole('textbox', { name: 'Vurder utbetalingsgrad for folketrygdytelser' })).toHaveValue('');
+    expect(screen.getByRole('textbox', { name: 'Vurder vilkåret' })).toHaveValue('');
   });
 
   it('Skal resette skjema til bekreftet vurdering dersom det finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
@@ -237,12 +231,9 @@ describe('mellomlagring', () => {
       />
     );
 
-    await user.type(
-      screen.getByRole('textbox', { name: 'Vurder utbetalingsgrad for folketrygdytelser' }),
-      ' her er ekstra tekst'
-    );
+    await user.type(screen.getByRole('textbox', { name: 'Vurder vilkåret' }), ' her er ekstra tekst');
 
-    expect(screen.getByRole('textbox', { name: 'Vurder utbetalingsgrad for folketrygdytelser' })).toHaveValue(
+    expect(screen.getByRole('textbox', { name: 'Vurder vilkåret' })).toHaveValue(
       'Dette er min vurdering som er mellomlagret her er ekstra tekst'
     );
 
@@ -250,7 +241,7 @@ describe('mellomlagring', () => {
 
     await user.click(slettKnapp);
 
-    expect(screen.getByRole('textbox', { name: 'Vurder utbetalingsgrad for folketrygdytelser' })).toHaveValue(
+    expect(screen.getByRole('textbox', { name: 'Vurder vilkåret' })).toHaveValue(
       'Dette er min vurdering som er bekreftet'
     );
   });

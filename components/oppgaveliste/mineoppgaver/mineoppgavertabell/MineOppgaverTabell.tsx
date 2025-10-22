@@ -16,8 +16,6 @@ export const MineOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) => {
   const [feilmelding, setFeilmelding] = useState<string | undefined>();
   const { sort, håndterSortering, sortertListe } = useSortertListe(oppgaver);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [oppgaverSomSkalTildeles, setOppgaverSomSkalTildeles] = useState<number[]>([]);
-  const [visTildelOppgaveModal, setVisTildelOppgaveModal] = useState<boolean>(false);
 
   return (
     <VStack gap={'5'}>
@@ -26,14 +24,7 @@ export const MineOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) => {
         setIsModalOpen={setIsModalOpen}
         revalidateFunction={revalidateFunction}
       />
-      <TildelOppgaveModal
-        oppgaveIder={oppgaverSomSkalTildeles}
-        isOpen={visTildelOppgaveModal}
-        onClose={() => {
-          setVisTildelOppgaveModal(false);
-          revalidateFunction();
-        }}
-      />
+      <TildelOppgaveModal revalidateFunction={revalidateFunction} />
       {feilmelding && <Alert variant={'error'}>{feilmelding}</Alert>}
       <TableStyled
         size={'small'}
@@ -79,8 +70,6 @@ export const MineOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) => {
               setFeilmelding={setFeilmelding}
               setIsModalOpen={setIsModalOpen}
               revalidateFunction={revalidateFunction}
-              setOppgaverSomSkalTildeles={setOppgaverSomSkalTildeles}
-              setVisTildelOppgaveModal={setVisTildelOppgaveModal}
             />
           ))}
         </Table.Body>

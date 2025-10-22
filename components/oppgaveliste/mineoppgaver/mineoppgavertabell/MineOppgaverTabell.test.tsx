@@ -6,7 +6,7 @@ import {
   NoNavAapOppgaveOppgaveDtoBehandlingstype,
   NoNavAapOppgaveOppgaveDtoStatus,
 } from '@navikt/aap-oppgave-typescript-types';
-import { render } from 'lib/test/CustomRender';
+import { customRenderWithTildelOppgaveContext } from 'lib/test/CustomRender';
 import { MineOppgaverTabell } from 'components/oppgaveliste/mineoppgaver/mineoppgavertabell/MineOppgaverTabell';
 
 const oppgaver: Oppgave[] = [
@@ -40,7 +40,9 @@ const oppgaver: Oppgave[] = [
 ];
 
 describe('Mine oppgaver tabell', () => {
-  beforeEach(() => render(<MineOppgaverTabell oppgaver={oppgaver} revalidateFunction={vi.fn()} />));
+  beforeEach(() =>
+    customRenderWithTildelOppgaveContext(<MineOppgaverTabell oppgaver={oppgaver} revalidateFunction={vi.fn()} />, false)
+  );
 
   it('Skal inneholde korrekte kolonner ', () => {
     const kolonner = ['Navn', 'Fnr', 'ID', 'Behandlingstype', 'Beh. opprettet', 'Vurderingsbehov', 'Oppgave'];

@@ -1,12 +1,12 @@
 'use client';
 
-import { Alert, Button, ErrorMessage, VStack } from '@navikt/ds-react';
+import { Button, ErrorMessage, VStack } from '@navikt/ds-react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { Behovstype } from 'lib/utils/form';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { OppholdskravForm } from 'components/behandlinger/oppholdskrav/types';
-import { LøsPeriodisertBehovPåBehandling, OppholdskravGrunnlagResponse } from 'lib/types/types';
+import { LøsPeriodisertBehovPåBehandling, MellomlagretVurdering, OppholdskravGrunnlagResponse } from 'lib/types/types';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
@@ -24,28 +24,29 @@ import {
   OppholdskravNyPeriodeHeading,
   OppholdskravTidligerePeriodeHeading,
 } from 'components/behandlinger/oppholdskrav/OppholdskravPeriodeHeading';
-import { parseISO } from 'date-fns';
-import { formaterDatoForBackend, parseDatoFraDatePicker, stringToDate } from 'lib/utils/date';
+import { isAfter, min, parseISO } from 'date-fns';
+import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker, stringToDate } from 'lib/utils/date';
 
 type Props = {
   grunnlag: OppholdskravGrunnlagResponse | undefined;
+  initialMellomlagring?: MellomlagretVurdering;
   behandlingVersjon: number;
   readOnly: boolean;
 };
 
-export const OppholdskravSteg = ({ grunnlag, behandlingVersjon, readOnly }: Props) => {
+export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVersjon, readOnly }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
 
   const { løsPeriodisertBehovOgGåTilNesteSteg, status, løsBehovOgGåTilNesteStegError, isLoading } =
     useLøsBehovOgGåTilNesteSteg('VURDER_OPPHOLDSKRAV');
 
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.OPPHOLDSKRAV_KODE, undefined);
+    useMellomlagring(Behovstype.OPPHOLDSKRAV_KODE, initialMellomlagring);
 
   const { visningActions, visningModus, formReadOnly } = useVilkårskortVisning(
     readOnly,
     'VURDER_OPPHOLDSKRAV',
-    undefined
+    mellomlagretVurdering
   );
 
   const defaultValues =
@@ -57,6 +58,9 @@ export const OppholdskravSteg = ({ grunnlag, behandlingVersjon, readOnly }: Prop
     defaultValues,
     reValidateMode: 'onChange',
   });
+
+  const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
+  const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
 
   const {
     fields: vurderingerFields,
@@ -75,6 +79,16 @@ export const OppholdskravSteg = ({ grunnlag, behandlingVersjon, readOnly }: Prop
         const likRekkefølge = sorterteVurderinger.every((value, index) => value.fraDato === fields[index].fraDato);
         if (!likRekkefølge) {
           return 'Vurderingene som legges til må være i kronologisk rekkefølge fra eldst til nyest';
+        }
+
+        const tidligsteDato = min([
+          ...sorterteVurderinger.map((i) => parseDatoFraDatePicker(i.fraDato)!),
+          ...tidligereVurderinger.map((i) => parseISO(i.fom)),
+        ]);
+
+        const tidligsteDatoSomMåVurderes = new Date(grunnlag?.kanVurderes[0]?.fom!);
+        if (isAfter(tidligsteDato, tidligsteDatoSomMåVurderes)) {
+          return `Den tidligste vurderte datoen må være startdatoen for rettighetsperioden. Tidligste vurderte dato er ${formaterDatoForFrontend(tidligsteDato)} men rettighetsperioden starter ${formaterDatoForFrontend(tidligsteDatoSomMåVurderes)}`;
         }
       },
     },
@@ -111,11 +125,8 @@ export const OppholdskravSteg = ({ grunnlag, behandlingVersjon, readOnly }: Prop
     });
   }
 
-  const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
-  const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const foersteNyePeriode = vurderingerFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
 
-  console.log('error', form.formState.errors);
   return (
     <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'Oppholdskrav § 11-3'}
@@ -128,7 +139,7 @@ export const OppholdskravSteg = ({ grunnlag, behandlingVersjon, readOnly }: Prop
       status={status}
       mellomlagretVurdering={mellomlagretVurdering}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
-      onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset())}
+      onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}
       readOnly={readOnly}
       visningModus={visningModus}
       visningActions={visningActions}
@@ -139,10 +150,6 @@ export const OppholdskravSteg = ({ grunnlag, behandlingVersjon, readOnly }: Prop
       }
     >
       <VStack gap="8">
-        <Alert variant="warning">
-          Dette steget er kun her for testing, og vurderingen man gjør her vil ikke påvirke utbetalingen.
-        </Alert>
-
         <VStack gap="2">
           {vedtatteVurderinger.map((vurdering) => (
             <CustomExpandableCard

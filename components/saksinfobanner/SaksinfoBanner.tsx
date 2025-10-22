@@ -3,7 +3,7 @@
 import { BodyShort, Button, CopyButton, Dropdown, HStack, Label, Link, Tag } from '@navikt/ds-react';
 import { DetaljertBehandling, FlytGruppe, FlytVisning, SakPersoninfo, SaksInfo as SaksInfoType } from 'lib/types/types';
 import { useState } from 'react';
-import { SettBehandllingPåVentModal } from 'components/settbehandlingpåventmodal/SettBehandllingPåVentModal';
+import { SettBehandlingPåVentModal } from 'components/settbehandlingpåventmodal/SettBehandlingPåVentModal';
 import { ChevronDownIcon, ChevronRightIcon } from '@navikt/aksel-icons';
 
 import styles from './SaksinfoBanner.module.css';
@@ -249,7 +249,7 @@ export const SaksinfoBanner = ({
               </Dropdown.Menu>
             </Dropdown>
 
-            <SettBehandllingPåVentModal
+            <SettBehandlingPåVentModal
               behandlingsReferanse={referanse}
               reservert={!!oppgave?.reservertAv}
               isOpen={settBehandlingPåVentmodalIsOpen}
@@ -260,6 +260,7 @@ export const SaksinfoBanner = ({
               onClose={() => settVisTrekkSøknadModal(false)}
               saksnummer={sak.saksnummer}
               behandlingReferanse={behandling?.referanse!}
+              navIdent={brukerInformasjon?.NAVident ? brukerInformasjon.NAVident : null}
             />
             <TrekkKlageModal
               isOpen={visTrekkKlageModal}

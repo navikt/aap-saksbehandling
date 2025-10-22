@@ -52,7 +52,10 @@ export const DokumentOversikt = ({ sak }: { sak: SaksInfo }) => {
         { value: 'AAP', label: 'Arbeidsavklaringspenger' },
         { value: 'SYK', label: 'Sykepenger' },
         { value: 'SYM', label: 'Sykmelding' },
-        { value: 'OPP', label: 'Arbeidsoppfølging' },
+        { value: 'OPP', label: 'Oppfølging' },
+        { value: 'MED', label: 'Medlemskap' },
+        { value: 'YRK', label: 'Yrkesskade' },
+        { value: 'AKT', label: 'Aktivitetsplan' },
       ],
     },
     typer: {
@@ -86,9 +89,7 @@ export const DokumentOversikt = ({ sak }: { sak: SaksInfo }) => {
     });
   }, [tema, statuser, typer, sak.ident]);
 
-  if (isLoading) {
-    return <Spinner label="Henter dokumenter" />;
-  } else if (error) {
+  if (error) {
     return <Alert variant="error">{error || 'Ukjent feil oppsto'}</Alert>;
   }
 
@@ -121,46 +122,52 @@ export const DokumentOversikt = ({ sak }: { sak: SaksInfo }) => {
           </Table.Header>
 
           <Table.Body>
-            {journalposter?.map((journalpost) => (
-              <Table.Row key={journalpost.journalpostId}>
-                <Table.DataCell textSize={'small'}>{journalpost.journalpostId}</Table.DataCell>
-                <Table.DataCell title={journalpost.tittel || ''} className={styles.ellipsis} textSize={'small'}>
-                  {journalpost.tittel}
-                </Table.DataCell>
-                <Table.DataCell textSize={'small'}>
-                  {journalpost.datoOpprettet && formaterDatoMedTidspunktForFrontend(journalpost.datoOpprettet)}
-                </Table.DataCell>
-                <Table.DataCell
-                  textSize={'small'}
-                  title={journalpost.avsenderMottaker?.navn || ''}
-                  className={styles.ellipsis}
-                >
-                  {journalpost.avsenderMottaker?.navn}
-                </Table.DataCell>
-                <Table.DataCell textSize={'small'} title={journalpost.temanavn || ''}>
-                  {journalpost.tema}
-                </Table.DataCell>
-                <Table.DataCell textSize={'small'}>
-                  {journalpost.journalposttype && formaterJournalpostType(journalpost.journalposttype)}
-                </Table.DataCell>
-                <Table.DataCell textSize={'small'}>
-                  {journalpost.journalstatus && formaterJournalstatus(journalpost.journalstatus)}
-                </Table.DataCell>
-                <Table.DataCell textSize={'small'}>{journalpost.sak?.fagsakId}</Table.DataCell>
-                <Table.DataCell textSize={'small'}>
-                  <HStack gap="2" wrap={false}>
-                    <ÅpneDokumentButton journalpost={journalpost} />
-                    {/* TODO: Fjerne sjekk når vi har støtte for redigering av journalpost */}
-                    {erFerdigstilt(journalpost.journalstatus) && (
-                      <HandlingerDokumentButton sak={sak} journalpost={journalpost} />
-                    )}
-                  </HStack>
+            {isLoading ? (
+              <Table.Row>
+                <Table.DataCell colSpan={100}>
+                  <Spinner label="Henter dokumenter" />
                 </Table.DataCell>
               </Table.Row>
-            ))}
+            ) : (
+              journalposter?.map((journalpost) => (
+                <JournalpostRad key={journalpost.journalpostId} journalpost={journalpost} sak={sak} />
+              ))
+            )}
           </Table.Body>
         </TableStyled>
       </HStack>
     </VStack>
   );
 };
+
+const JournalpostRad = ({ journalpost, sak }: { journalpost: Journalpost; sak: SaksInfo }) => (
+  <Table.Row>
+    <Table.DataCell textSize={'small'}>{journalpost.journalpostId}</Table.DataCell>
+    <Table.DataCell title={journalpost.tittel || ''} className={styles.ellipsis} textSize={'small'}>
+      {journalpost.tittel}
+    </Table.DataCell>
+    <Table.DataCell textSize={'small'}>
+      {journalpost.datoOpprettet && formaterDatoMedTidspunktForFrontend(journalpost.datoOpprettet)}
+    </Table.DataCell>
+    <Table.DataCell textSize={'small'} title={journalpost.avsenderMottaker?.navn || ''} className={styles.ellipsis}>
+      {journalpost.avsenderMottaker?.navn}
+    </Table.DataCell>
+    <Table.DataCell textSize={'small'} title={journalpost.temanavn || ''}>
+      {journalpost.tema}
+    </Table.DataCell>
+    <Table.DataCell textSize={'small'}>
+      {journalpost.journalposttype && formaterJournalpostType(journalpost.journalposttype)}
+    </Table.DataCell>
+    <Table.DataCell textSize={'small'}>
+      {journalpost.journalstatus && formaterJournalstatus(journalpost.journalstatus)}
+    </Table.DataCell>
+    <Table.DataCell textSize={'small'}>{journalpost.sak?.fagsakId}</Table.DataCell>
+    <Table.DataCell textSize={'small'}>
+      <HStack gap="2" wrap={false}>
+        <ÅpneDokumentButton journalpost={journalpost} />
+        {/* TODO: Fjerne sjekk når vi har støtte for redigering av journalpost */}
+        {erFerdigstilt(journalpost.journalstatus) && <HandlingerDokumentButton sak={sak} journalpost={journalpost} />}
+      </HStack>
+    </Table.DataCell>
+  </Table.Row>
+);

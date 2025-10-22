@@ -1,6 +1,6 @@
 'use client';
 
-import { HStack, VStack } from '@navikt/ds-react';
+import { HGrid, VStack } from '@navikt/ds-react';
 import { ReactNode, useState } from 'react';
 import { ChevronDownIcon, ChevronUpIcon, PadlockLockedIcon, PencilIcon } from '@navikt/aksel-icons';
 import styles from './CustomExpandableCard.module.css';
@@ -16,15 +16,15 @@ export const CustomExpandableCard = ({ heading, children, defaultOpen = false, e
   return (
     <VStack gap={'4'} className={styles.container}>
       <button className={styles.headingButton} type="button" onClick={() => setExpanded(!expanded)}>
-        <HStack align={'center'} justify={'space-between'}>
-          <HStack align={'center'} gap={'1'}>
+        <HGrid columns={'1fr 16px'} align={'center'} gap={'1'}>
+          <HGrid columns={'16px 1fr'} align={'center'} gap={'1'}>
             {editable ? <PencilIcon color={'black'} /> : <PadlockLockedIcon color={'black'} />}
             {heading}
-          </HStack>
+          </HGrid>
           {expanded ? <ChevronUpIcon color={'black'} /> : <ChevronDownIcon color={'black'} />}
-        </HStack>
+        </HGrid>
       </button>
-      {expanded && <VStack>{children}</VStack>}
+      {expanded && <VStack style={{ paddingLeft: '1.6rem', paddingBottom: '1rem' }}>{children}</VStack>}
     </VStack>
   );
 };

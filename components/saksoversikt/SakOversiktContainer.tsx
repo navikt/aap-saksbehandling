@@ -8,15 +8,13 @@ import { DokumentOversikt } from 'components/saksoversikt/dokumentoversikt/Dokum
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { AktivitetspliktTrekk } from 'components/saksoversikt/aktivitetsplikttrekk/AktivitetspliktTrekk';
-import { isDev, isLocal } from 'lib/utils/environment';
+import { toggles } from 'lib/utils/toggles';
 
 enum Tab {
   OVERSIKT = 'OVERSIKT',
   DOKUMENTER = 'DOKUMENTER',
   TREKK = 'TREKK',
 }
-
-export const aktivitetspliktMedTrekkVisningFeature = () => isLocal() || isDev();
 
 export const SakOversiktContainer = ({ sak }: { sak: SaksInfo }) => {
   const router = useRouter();
@@ -31,12 +29,12 @@ export const SakOversiktContainer = ({ sak }: { sak: SaksInfo }) => {
 
   return (
     <Page>
-      <Page.Block width="2xl">
+      <Page.Block width="2xl" style={{ padding: '0 var(--a-spacing-8)' }}>
         <Tabs defaultValue={tab} onChange={(value) => changeActiveTab(value as Tab)}>
           <Tabs.List>
             <Tabs.Tab label="Oversikt" value={Tab.OVERSIKT} icon={<PersonIcon />} />
             <Tabs.Tab label="Dokumenter" value={Tab.DOKUMENTER} icon={<FileTextIcon />} />
-            {aktivitetspliktMedTrekkVisningFeature() && (
+            {toggles.featureAktivitetspliktMedTrekkVisning && (
               <Tabs.Tab label="Aktivitetsplikt 11-9 trekk" value={Tab.TREKK} icon={<FileTextIcon />} />
             )}
           </Tabs.List>
@@ -49,7 +47,7 @@ export const SakOversiktContainer = ({ sak }: { sak: SaksInfo }) => {
             <Tabs.Panel value={Tab.DOKUMENTER}>
               <DokumentOversikt sak={sak} />
             </Tabs.Panel>
-            {aktivitetspliktMedTrekkVisningFeature() && (
+            {toggles.featureAktivitetspliktMedTrekkVisning && (
               <Tabs.Panel value={Tab.TREKK}>
                 <AktivitetspliktTrekk sak={sak} />
               </Tabs.Panel>

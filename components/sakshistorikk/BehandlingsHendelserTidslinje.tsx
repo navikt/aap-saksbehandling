@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { BehandlingsHistorikk } from 'lib/types/types';
 import { BehandlingsHendelse } from 'components/sakshistorikk/BehandlingsHendelse';
 import { BodyShort, Link, Process } from '@navikt/ds-react';
@@ -17,7 +17,7 @@ export const BehandlingsHendelserTidslinje = ({ hendelser, defaultKollapset }: P
   return (
     <Process>
       {hendelser.map((hendelse, hendelseIndex) => (
-        <>
+        <React.Fragment key={hendelseIndex}>
           {(!isCollapsed || hendelseIndex === 0 || hendelseIndex === hendelser.length - 1) && (
             <BehandlingsHendelse key={`hendelse-${hendelseIndex}`} hendelse={hendelse} />
           )}
@@ -43,7 +43,7 @@ export const BehandlingsHendelserTidslinje = ({ hendelser, defaultKollapset }: P
               </Link>
             </Process.Event>
           )}
-        </>
+        </React.Fragment>
       ))}
     </Process>
   );

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { Dispatch, FormEvent, SetStateAction, useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import { Alert, Button, HStack, Label, Modal, Pagination, Radio, VStack } from '@navikt/ds-react';
 import { SaksbehandlerSøk } from 'components/tildeloppgavemodal/SaksbehandlerSøk';
 import { SaksbehandlerFraSøk } from 'lib/types/oppgaveTypes';
@@ -9,20 +9,18 @@ import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupW
 import { clientTildelTilSaksbehandler } from 'lib/clientApi';
 import styles from './TildelOppgaveModal.module.css';
 import { isError } from 'lib/utils/api';
-
-interface Props {
-  oppgaveIder: number[];
-  isOpen: boolean;
-  onClose: () => void;
-  setValgteRader?: Dispatch<SetStateAction<number[]>>;
-  skalFjerneValgteRader?: boolean;
-}
+import { useTildelOppgaver } from 'context/oppgave/TildelOppgaverContext';
 
 interface FormFields {
   saksbehandlerIdent: string;
 }
 
-export const TildelOppgaveModal = ({ oppgaveIder, isOpen, onClose, setValgteRader, skalFjerneValgteRader }: Props) => {
+interface Props {
+  revalidateFunction: () => void;
+}
+
+export const TildelOppgaveModal = ({ revalidateFunction }: Props) => {
+  const { modalSkalVises, skjulModal, oppgaveIder, setOppgaveIder } = useTildelOppgaver();
   const [saksbehandlere, setSaksbehandlere] = useState<SaksbehandlerFraSøk[]>([]);
   const [søketekst, setSøketekst] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -33,16 +31,18 @@ export const TildelOppgaveModal = ({ oppgaveIder, isOpen, onClose, setValgteRade
   const [søkefeltError, setSøkefeltError] = useState<string>();
 
   const lukkOgResetModal = () => {
-    setSaksbehandlere([]);
+    setOppgaveIder([]);
     setInfomelding('');
     setSøketekst('');
+    setSaksbehandlere([]);
     setIsLoading(false);
     setError(undefined);
     setSuccess(undefined);
     setPageState(1);
     setSøkefeltError(undefined);
     form.reset();
-    onClose();
+    revalidateFunction();
+    skjulModal();
   };
 
   const saksbehandlerePerPage = 7;
@@ -64,9 +64,6 @@ export const TildelOppgaveModal = ({ oppgaveIder, isOpen, onClose, setValgteRade
         setError(undefined);
         const selectedSaksbehandler = saksbehandlere.find((s) => s.navIdent === data.saksbehandlerIdent);
         setSuccess(`Oppgave(r) ble tildelt ${selectedSaksbehandler?.navn ?? data.saksbehandlerIdent}`);
-        if (setValgteRader) {
-          skalFjerneValgteRader && setValgteRader([]);
-        }
       }
       setIsLoading(false);
     })(event);
@@ -74,7 +71,7 @@ export const TildelOppgaveModal = ({ oppgaveIder, isOpen, onClose, setValgteRade
 
   return (
     <Modal
-      open={isOpen}
+      open={modalSkalVises}
       onClose={lukkOgResetModal}
       header={{ heading: 'Tildel' }}
       className={styles.tildelOppgaveModal}

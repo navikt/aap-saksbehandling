@@ -4,6 +4,7 @@ import { afterEach } from 'vitest';
 import { IngenFlereOppgaverModalContextProvider } from 'context/saksbehandling/IngenFlereOppgaverModalContext';
 import { SakContextProvider } from 'context/saksbehandling/SakContext';
 import { addDays, format } from 'date-fns';
+import { TildelOppgaverContext } from 'context/oppgave/TildelOppgaverContext';
 
 afterEach(() => {
   cleanup();
@@ -45,6 +46,16 @@ export function customRenderWithSøknadstidspunkt(ui: ReactElement, søknadstids
         {ui}
       </SakContextProvider>
     </IngenFlereOppgaverModalContextProvider>
+  );
+}
+
+export function customRenderWithTildelOppgaveContext(ui: ReactElement, visModal: boolean) {
+  render(
+    <TildelOppgaverContext.Provider
+      value={{ oppgaveIder: [], setOppgaveIder: () => {}, visModal, setVisModal: () => {} }}
+    >
+      {ui}
+    </TildelOppgaverContext.Provider>
   );
 }
 

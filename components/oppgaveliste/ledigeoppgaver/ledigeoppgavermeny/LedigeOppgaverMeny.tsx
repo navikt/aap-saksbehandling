@@ -6,7 +6,7 @@ import { hentOppgaveClient, plukkOppgaveClient, synkroniserOppgaveMedEnhetClient
 import { isSuccess } from 'lib/utils/api';
 import { byggKelvinURL } from 'lib/utils/request';
 import { useRouter } from 'next/navigation';
-import { isProd } from 'lib/utils/environment';
+import { useTildelOppgaver } from 'context/oppgave/TildelOppgaverContext';
 
 interface Props {
   oppgave: Oppgave;
@@ -14,8 +14,6 @@ interface Props {
   setÅpenModal: Dispatch<SetStateAction<boolean>>;
   setVisSynkroniserEnhetModal: Dispatch<SetStateAction<boolean>>;
   revaliderOppgaver: () => void;
-  setVisTildelOppgaveModal: Dispatch<SetStateAction<boolean>>;
-  setOppgaverSomSkalTildeles: Dispatch<SetStateAction<number[]>>;
   setVisOppgaveIkkeLedigModal: Dispatch<SetStateAction<boolean>>;
   setSaksbehandlerNavn: Dispatch<SetStateAction<string | undefined>>;
 }
@@ -26,29 +24,26 @@ export const LedigeOppgaverMeny = ({
   setFeilmelding,
   setÅpenModal,
   setVisSynkroniserEnhetModal,
-  setVisTildelOppgaveModal,
-  setOppgaverSomSkalTildeles,
   setVisOppgaveIkkeLedigModal,
   setSaksbehandlerNavn,
 }: Props) => {
   const router = useRouter();
+  const { setOppgaveIder, visModal } = useTildelOppgaver();
   const [isPendingBehandle, startTransitionBehandle] = useTransition();
   const [isPendingMeny, startTransitionMeny] = useTransition();
 
   async function plukkOgGåTilOppgave(oppgave: Oppgave) {
     startTransitionBehandle(async () => {
       if (oppgave.id !== undefined && oppgave.id !== null && oppgave.versjon >= 0 && oppgave.behandlingRef) {
-        if (!isProd()) {
-          const nyesteOppgave = await hentOppgaveClient(oppgave.behandlingRef);
-          if (isSuccess(nyesteOppgave)) {
-            if (nyesteOppgave.data.reservertAv != null) {
-              setSaksbehandlerNavn(nyesteOppgave.data.reservertAvNavn ?? nyesteOppgave.data.reservertAv ?? 'Ukjent');
-              setVisOppgaveIkkeLedigModal(true);
-              return;
-            }
-          } else {
-            setFeilmelding(`Feil ved henting av oppgave: ${nyesteOppgave.apiException.message}`);
+        const nyesteOppgave = await hentOppgaveClient(oppgave.behandlingRef);
+        if (isSuccess(nyesteOppgave)) {
+          if (nyesteOppgave.data.reservertAv != null) {
+            setSaksbehandlerNavn(nyesteOppgave.data.reservertAvNavn ?? nyesteOppgave.data.reservertAv ?? 'Ukjent');
+            setVisOppgaveIkkeLedigModal(true);
+            return;
           }
+        } else {
+          setFeilmelding(`Feil ved henting av oppgave: ${nyesteOppgave.apiException.message}`);
         }
 
         const plukketOppgave = await plukkOppgaveClient(oppgave.id, oppgave.versjon);
@@ -116,8 +111,8 @@ export const LedigeOppgaverMeny = ({
             </ActionMenu.Item>
             <ActionMenu.Item
               onSelect={() => {
-                oppgave.id && setOppgaverSomSkalTildeles([oppgave.id]);
-                setVisTildelOppgaveModal(true);
+                oppgave.id && setOppgaveIder([oppgave.id]);
+                visModal();
               }}
             >
               Tildel oppgave

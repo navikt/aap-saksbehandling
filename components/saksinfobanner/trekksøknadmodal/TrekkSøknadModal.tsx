@@ -13,9 +13,10 @@ interface Props {
   isOpen: boolean;
   onClose: () => void;
   behandlingReferanse: string;
+  navIdent?: string | null;
 }
 
-export const TrekkSøknadModal = ({ saksnummer, isOpen, onClose, behandlingReferanse }: Props) => {
+export const TrekkSøknadModal = ({ saksnummer, isOpen, onClose, behandlingReferanse, navIdent }: Props) => {
   const { isLoading, sendHendelseOgVentPåProsessering, sendHendelseError } = useSendHendelseOgVentPåProsessering();
 
   return (
@@ -56,6 +57,7 @@ export const TrekkSøknadModal = ({ saksnummer, isOpen, onClose, behandlingRefer
                   meldingType: 'NyÅrsakTilBehandlingV0',
                   årsakerTilBehandling: ['SØKNAD_TRUKKET'],
                   behandlingReferanse: behandlingReferanse,
+                  reserverTilBruker: navIdent ?? null,
                 } satisfies NyÅrsakTilBehandlingV0,
               },
               onClose

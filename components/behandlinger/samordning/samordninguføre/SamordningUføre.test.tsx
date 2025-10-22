@@ -76,7 +76,7 @@ describe('mellomlagring', () => {
     render(<SamordningUføre grunnlag={grunnlagUtenVurdering} behandlingVersjon={0} readOnly={false} />);
 
     await user.type(
-      screen.getByRole('textbox', { name: 'Vurder hvilken grad med uføre som skal samordnes med AAP' }),
+      screen.getByRole('textbox', { name: 'Vurder uføregraden som skal samordnes med AAP' }),
       'Her har jeg begynt å skrive en vurdering..'
     );
     expect(screen.queryByText('Utkast lagret 21.08.2025 00:00 (Jan T. Loven)')).not.toBeInTheDocument();
@@ -126,7 +126,7 @@ describe('mellomlagring', () => {
     );
 
     const begrunnelseFelt = screen.getByRole('textbox', {
-      name: 'Vurder hvilken grad med uføre som skal samordnes med AAP',
+      name: 'Vurder uføregraden som skal samordnes med AAP',
     });
 
     expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er mellomlagret');
@@ -136,7 +136,7 @@ describe('mellomlagring', () => {
     render(<SamordningUføre behandlingVersjon={0} readOnly={false} grunnlag={grunnlagMedVurdering} />);
 
     const begrunnelseFelt = screen.getByRole('textbox', {
-      name: 'Vurder hvilken grad med uføre som skal samordnes med AAP',
+      name: 'Vurder uføregraden som skal samordnes med AAP',
     });
 
     expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er bekreftet');
@@ -153,21 +153,19 @@ describe('mellomlagring', () => {
     );
 
     await user.type(
-      screen.getByRole('textbox', { name: 'Vurder hvilken grad med uføre som skal samordnes med AAP' }),
+      screen.getByRole('textbox', { name: 'Vurder uføregraden som skal samordnes med AAP' }),
       ' her er ekstra tekst'
     );
 
-    expect(
-      screen.getByRole('textbox', { name: 'Vurder hvilken grad med uføre som skal samordnes med AAP' })
-    ).toHaveValue('Dette er min vurdering som er mellomlagret her er ekstra tekst');
+    expect(screen.getByRole('textbox', { name: 'Vurder uføregraden som skal samordnes med AAP' })).toHaveValue(
+      'Dette er min vurdering som er mellomlagret her er ekstra tekst'
+    );
 
     const slettKnapp = screen.getByRole('button', { name: 'Slett utkast' });
 
     await user.click(slettKnapp);
 
-    expect(
-      screen.getByRole('textbox', { name: 'Vurder hvilken grad med uføre som skal samordnes med AAP' })
-    ).toHaveValue('');
+    expect(screen.getByRole('textbox', { name: 'Vurder uføregraden som skal samordnes med AAP' })).toHaveValue('');
   });
 
   it('Skal resette skjema til bekreftet vurdering dersom det finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
@@ -181,21 +179,21 @@ describe('mellomlagring', () => {
     );
 
     await user.type(
-      screen.getByRole('textbox', { name: 'Vurder hvilken grad med uføre som skal samordnes med AAP' }),
+      screen.getByRole('textbox', { name: 'Vurder uføregraden som skal samordnes med AAP' }),
       ' her er ekstra tekst'
     );
 
-    expect(
-      screen.getByRole('textbox', { name: 'Vurder hvilken grad med uføre som skal samordnes med AAP' })
-    ).toHaveValue('Dette er min vurdering som er mellomlagret her er ekstra tekst');
+    expect(screen.getByRole('textbox', { name: 'Vurder uføregraden som skal samordnes med AAP' })).toHaveValue(
+      'Dette er min vurdering som er mellomlagret her er ekstra tekst'
+    );
 
     const slettKnapp = screen.getByRole('button', { name: 'Slett utkast' });
 
     await user.click(slettKnapp);
 
-    expect(
-      screen.getByRole('textbox', { name: 'Vurder hvilken grad med uføre som skal samordnes med AAP' })
-    ).toHaveValue('Dette er min vurdering som er bekreftet');
+    expect(screen.getByRole('textbox', { name: 'Vurder uføregraden som skal samordnes med AAP' })).toHaveValue(
+      'Dette er min vurdering som er bekreftet'
+    );
   });
 
   it('Skal ikke være mulig å lagre eller slette mellomlagring hvis det er readOnly', () => {

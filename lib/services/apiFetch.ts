@@ -9,6 +9,7 @@ import { logError, logWarning } from 'lib/serverutlis/logger';
 import { ApiException, FetchResponse } from 'lib/utils/api';
 
 const NUMBER_OF_RETRIES = 3;
+const lokalFakeObotoken = isLocal();
 
 const getOnBefalfOfToken = async (audience: string, url: string): Promise<string> => {
   const token = getAccessTokenOrRedirectToLogin(await headers());
@@ -40,7 +41,7 @@ export const apiFetch = async <ResponseType>(
   tags?: string[],
   cache?: RequestCache
 ): Promise<FetchResponse<ResponseType>> => {
-  const oboToken = isLocal() ? await hentLocalToken(scope) : await getOnBefalfOfToken(scope, url);
+  const oboToken = lokalFakeObotoken ? await hentLocalToken(scope) : await getOnBefalfOfToken(scope, url);
   return await fetchWithRetry<ResponseType>(
     url,
     method,
@@ -61,7 +62,7 @@ export const apiFetchNoMemoization = async <ResponseType>(
   requestBody?: object,
   tags?: string[]
 ): Promise<FetchResponse<ResponseType>> => {
-  const oboToken = isLocal() ? await hentLocalToken(scope) : await getOnBefalfOfToken(scope, url);
+  const oboToken = lokalFakeObotoken ? await hentLocalToken(scope) : await getOnBefalfOfToken(scope, url);
   // Brukes for å gi signal om og unngå bruk av request memoization. Se https://nextjs.org/docs/app/deep-dive/caching#request-memoization
   const abortSignal = new AbortController().signal;
   return await fetchWithRetry<ResponseType>(url, method, oboToken, NUMBER_OF_RETRIES, requestBody, tags, abortSignal);
@@ -134,7 +135,7 @@ const fetchWithRetry = async <ResponseType>(
 };
 
 export const apiFetchPdf = async (url: string, scope: string): Promise<Blob | undefined> => {
-  const oboToken = isLocal() ? await hentLocalToken(scope) : await getOnBefalfOfToken(scope, url);
+  const oboToken = lokalFakeObotoken ? await hentLocalToken(scope) : await getOnBefalfOfToken(scope, url);
   const response = await fetch(url, {
     method: 'GET',
     headers: {

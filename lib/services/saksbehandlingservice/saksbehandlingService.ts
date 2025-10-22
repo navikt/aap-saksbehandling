@@ -178,8 +178,9 @@ export const hentKvalitetssikringGrunnlag = async (behandlingsReferanse: string)
   return await apiFetch<KvalitetssikringGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
+const lokalFakeKvalitetssikrerTilgang = isLocal();
 export const hentKvalitetssikringTilgang = async (behandlingsReferanse: string) => {
-  if (isLocal()) {
+  if (lokalFakeKvalitetssikrerTilgang) {
     const res: FetchResponse<KvalitetssikringTilgang> = {
       type: 'SUCCESS',
       status: 200,
@@ -435,6 +436,11 @@ export const mellomlagreBrev = async (brevbestillingReferanse: string, brev: Bre
 
 export const opprettDummySakDev = async (sak: OpprettTestcase) => {
   const url = `${saksbehandlingApiBaseUrl}/test/opprett`;
+  return await apiFetch<void>(url, saksbehandlingApiScope, 'POST', sak);
+};
+
+export const opprettOgFullfoerDummySak = async (sak: OpprettTestcase) => {
+  const url = `${saksbehandlingApiBaseUrl}/test/opprett-og-fullfoer`;
   return await apiFetch<void>(url, saksbehandlingApiScope, 'POST', sak);
 };
 

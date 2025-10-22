@@ -30,7 +30,7 @@ interface FormFields {
   grunn: SettPåVentÅrsaker;
 }
 
-export const SettBehandllingPåVentModal = ({ behandlingsReferanse, reservert, isOpen, onClose }: Props) => {
+export const SettBehandlingPåVentModal = ({ behandlingsReferanse, reservert, isOpen, onClose }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>();
   const { flyt } = useFlyt();

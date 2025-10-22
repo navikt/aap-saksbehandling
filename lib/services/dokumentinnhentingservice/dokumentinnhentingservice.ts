@@ -12,8 +12,9 @@ import { FetchResponse } from 'lib/utils/api';
 const dokumentinnhentingApiBaseUrl = process.env.DOKUMENTINNHENTING_API_BASE_URL;
 const dokumentinnhentingApiScope = process.env.DOKUMENTINNHENTING_API_SCOPE ?? '';
 
+const lokalFakeDokumenterPåsak = isLocal();
 export const hentAlleDokumenterPåSak = async (saksnummer: string) => {
-  if (isLocal()) {
+  if (lokalFakeDokumenterPåsak) {
     const response: FetchResponse<RelevantDokumentType[]> = {
       type: 'SUCCESS',
       data: [

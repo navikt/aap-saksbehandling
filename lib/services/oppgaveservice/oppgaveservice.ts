@@ -39,8 +39,9 @@ export const hentOppgaverForFilter = async (data: OppgavelisteRequest) => {
   return await apiFetch<OppgavelisteResponse>(url, oppgaveApiScope, 'POST', data);
 };
 
+const lokalFakeOppgave = isLocal();
 export async function hentOppgave(behandlingReferanse: string) {
-  if (isLocal()) {
+  if (lokalFakeOppgave) {
     const mockResponse: FetchResponse<Oppgave> = {
       type: 'SUCCESS',
       data: {
@@ -103,7 +104,7 @@ export async function søkPåSaksbehandler(data: SaksbehandlerSøkRequest) {
   const url = `${oppgaveApiBaseURL}/saksbehandler-sok`;
   return await apiFetch<SaksbehandlerSøkRespons>(url, oppgaveApiScope, 'POST', {
     oppgaver: data.oppgaver,
-    søketekst: data.søketekst
+    søketekst: data.søketekst,
   });
 }
 
@@ -130,8 +131,9 @@ export async function mottattDokumenterLest(behandlingRef: string) {
   return await apiFetch<{}>(url, oppgaveApiScope, 'POST', { behandlingRef: behandlingRef });
 }
 
+const lokalFakeOppgaveSøk = isLocal();
 export async function oppgaveTekstSøk(søketekst: string) {
-  if (isLocal()) {
+  if (lokalFakeOppgaveSøk) {
     const oppgaver: Oppgave[] = [
       {
         avklaringsbehovKode: '',

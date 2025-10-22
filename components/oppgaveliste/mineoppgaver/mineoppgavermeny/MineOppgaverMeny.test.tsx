@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { render } from 'lib/test/CustomRender';
+import { customRenderWithTildelOppgaveContext } from 'lib/test/CustomRender';
 import { MineOppgaverMeny } from 'components/oppgaveliste/mineoppgaver/mineoppgavermeny/MineOppgaverMeny';
 import { Oppgave } from 'lib/types/oppgaveTypes';
 import {
@@ -27,30 +27,28 @@ describe('MineOppgaverMeny', () => {
   const user = userEvent.setup();
 
   it('skal ha en knapp for å behandle oppgaven', () => {
-    render(
+    customRenderWithTildelOppgaveContext(
       <MineOppgaverMeny
         oppgave={oppgaver}
         setFeilmelding={vi.fn()}
         revalidateFunction={vi.fn()}
         setÅpenModal={vi.fn()}
-        setVisTildelOppgaveModal={vi.fn()}
-        setOppgaverSomSkalTildeles={vi.fn()}
-      />
+      />,
+      false
     );
     const button = screen.getByRole('button', { name: 'Behandle' });
     expect(button).toBeVisible();
   });
 
   it('skal ha en knapp for å frigi oppgaven', async () => {
-    render(
+    customRenderWithTildelOppgaveContext(
       <MineOppgaverMeny
         oppgave={oppgaver}
         setFeilmelding={vi.fn()}
         revalidateFunction={vi.fn()}
         setÅpenModal={vi.fn()}
-        setVisTildelOppgaveModal={vi.fn()}
-        setOppgaverSomSkalTildeles={vi.fn()}
-      />
+      />,
+      false
     );
     const menu = screen.getByRole('img', { name: 'Meny' });
     await user.click(menu);

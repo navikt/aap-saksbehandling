@@ -160,7 +160,7 @@ export function mapTilSteggruppeTekst(steggruppe: string) {
     case 'RETTIGHETSPERIODE':
       return 'Starttidspunkt';
     case 'SAMORDNING':
-      return 'Samordning';
+      return 'Forhold til andre ytelser';
     case 'FORMKRAV':
       return 'Formkrav';
     case 'TREKK_KLAGE':

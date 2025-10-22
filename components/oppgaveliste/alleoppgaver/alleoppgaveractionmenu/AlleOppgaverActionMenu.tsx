@@ -6,26 +6,20 @@ import { Oppgave } from 'lib/types/oppgaveTypes';
 import { avreserverOppgaveClient, synkroniserOppgaveMedEnhetClient } from 'lib/oppgaveClientApi';
 import { isSuccess } from 'lib/utils/api';
 import { Dispatch, SetStateAction, useState, useTransition } from 'react';
+import { useTildelOppgaver } from 'context/oppgave/TildelOppgaverContext';
 
 interface Props {
   oppgave: Oppgave;
   revalidateFunction: () => Promise<unknown>;
   setVisSynkroniserEnhetModal: Dispatch<SetStateAction<boolean>>;
-  setOppgaverSomSkalTildeles: Dispatch<SetStateAction<number[]>>;
-  setVisTildelOppgaveModal: Dispatch<SetStateAction<boolean>>;
 }
 
-export const AlleOppgaverActionMenu = ({
-  setVisSynkroniserEnhetModal,
-  oppgave,
-  revalidateFunction,
-  setOppgaverSomSkalTildeles,
-  setVisTildelOppgaveModal,
-}: Props) => {
+export const AlleOppgaverActionMenu = ({ setVisSynkroniserEnhetModal, oppgave, revalidateFunction }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const [isPendingFrigi, startTransitionFrigi] = useTransition();
   const erReservert = oppgave.reservertAv != null;
+  const { setOppgaveIder, visModal } = useTildelOppgaver();
 
   async function frigiOppgave(oppgave: Oppgave) {
     startTransitionFrigi(async () => {
@@ -89,8 +83,8 @@ export const AlleOppgaverActionMenu = ({
           )}
           <ActionMenu.Item
             onSelect={() => {
-              oppgave.id && setOppgaverSomSkalTildeles([oppgave.id]);
-              setVisTildelOppgaveModal(true);
+              oppgave.id && setOppgaveIder([oppgave.id]);
+              visModal();
             }}
           >
             Tildel oppgave

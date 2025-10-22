@@ -1,4 +1,4 @@
-import { Button, HStack, ReadMore, VStack } from '@navikt/ds-react';
+import { Alert, Button, HStack, Link, ReadMore, VStack } from '@navikt/ds-react';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
@@ -7,7 +7,7 @@ import { ComboboxWrapper } from 'components/form/comboboxwrapper/ComboboxWrapper
 import { isNotEmpty } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
 import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
 import { VisningModus } from 'hooks/saksbehandling/visning/VisningHook';
-import { TrashIcon } from '@navikt/aksel-icons';
+import { TrashFillIcon } from '@navikt/aksel-icons';
 import { alleLandUtenNorge } from 'lib/utils/countries';
 import { UseFormReturn } from 'react-hook-form';
 import { OppholdskravForm } from 'components/behandlinger/oppholdskrav/types';
@@ -45,27 +45,49 @@ export const OppholdskravFormInput = ({
   };
 
   return (
-    <VStack gap="4">
-      <DateInputWrapper
-        name={`vurderinger.${index}.fraDato`}
-        label="Vurderingen gjelder fra"
-        control={control}
-        rules={{
-          required: 'Du må velge fra hvilken dato vurderingen gjelder fra',
-          validate: (value) => validerDato(value as string),
-        }}
-        readOnly={readOnly || (index === 0 && !harTidligereVurderinger)}
-      />
-      <ReadMore size={'small'} header="Hvordan legge til sluttdato?">
+    <VStack gap="5">
+      <HStack justify={'space-between'}>
+        <DateInputWrapper
+          name={`vurderinger.${index}.fraDato`}
+          label="Vurderingen gjelder fra"
+          control={control}
+          rules={{
+            required: 'Du må velge fra hvilken dato vurderingen gjelder fra',
+            validate: (value) => validerDato(value as string),
+          }}
+          readOnly={readOnly}
+        />
+        {(visningModus === VisningModus.AKTIV_MED_AVBRYT || visningModus === VisningModus.AKTIV_UTEN_AVBRYT) &&
+          (index !== 0 || harTidligereVurderinger) && (
+            <HStack>
+              <VStack justify={'end'}>
+                <Button
+                  loading={spinnerRemove}
+                  aria-label="Fjern vurdering"
+                  variant="tertiary"
+                  size="small"
+                  icon={<TrashFillIcon />}
+                  onClick={handleRemove}
+                  type="button"
+                ></Button>
+              </VStack>
+            </HStack>
+          )}
+      </HStack>
+      <ReadMore style={{ maxWidth: '90ch' }} size={'small'} header="Hvordan legge til sluttdato?">
         For å legge til en sluttdato på denne vurderingen velger du “Legg til ny vurdering”. Det oppretter en ny
         vurdering, der du kan ha et annet utfall og en ny “gjelder fra” dato, som da vil gi sluttdato på den foregående
         (denne) vurderingen. Sluttdatoen for denne vurderingen blir satt til dagen før den nye vurderingen sin “gjelder
         fra” dato.
       </ReadMore>
+      <Link href="https://lovdata.no/nav/rundskriv/r11-00#ref/lov/1997-02-28-19/%C2%A711-3" target="_blank">
+        Du kan lese om hvordan vilkåret skal vurderes i rundskrivet til § 11-3 (lovdata.no)
+      </Link>
       <TextAreaWrapper
         name={`vurderinger.${index}.begrunnelse`}
         control={control}
         label="Vilkårsvurdering"
+        description="Vurder om brukeren har utenlandsopphold som ikke overholder bestemmelsene i § 11-3"
         rules={{
           required: 'Du må fylle ut en vilkårsvurdering',
         }}
@@ -82,6 +104,11 @@ export const OppholdskravFormInput = ({
 
       {watch(`vurderinger.${index}.oppfyller`) === JaEllerNei.Nei && (
         <>
+          <HStack>
+            <Alert variant="warning" size="small">
+              Pass på at kun den delen av utenlandsoppholdet som bryter vilkårene i § 11-3 legges inn
+            </Alert>
+          </HStack>
           <HStack>
             <ComboboxWrapper
               name={`vurderinger.${index}.land`}
@@ -107,20 +134,6 @@ export const OppholdskravFormInput = ({
           )}
         </>
       )}
-      {(visningModus === VisningModus.AKTIV_MED_AVBRYT || visningModus === VisningModus.AKTIV_UTEN_AVBRYT) &&
-        (index !== 0 || harTidligereVurderinger) && (
-          <HStack>
-            <Button
-              loading={spinnerRemove}
-              aria-label="Fjern vurdering"
-              variant="secondary"
-              size="small"
-              icon={<TrashIcon />}
-              onClick={handleRemove}
-              type="button"
-            ></Button>
-          </HStack>
-        )}
     </VStack>
   );
 };

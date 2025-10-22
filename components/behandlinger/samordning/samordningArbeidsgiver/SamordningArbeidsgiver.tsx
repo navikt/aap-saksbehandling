@@ -58,7 +58,7 @@ export const SamordningArbeidsgiver = ({
     {
       begrunnelse: {
         type: 'textarea',
-        label: 'Vurder om brukeren skal ha 100% reduksjon av AAP i en periode som følge av ytelse fra arbeidsgiver',
+        label: 'Vurder om brukeren skal ha 100 % reduksjon av AAP i en periode som følge av ytelse fra arbeidsgiver',
         rules: { required: 'Du må gjøre en vilkårsvurdering' },
         defaultValue: defaultValue.begrunnelse,
       },
@@ -102,7 +102,7 @@ export const SamordningArbeidsgiver = ({
 
   return (
     <VilkårskortMedFormOgMellomlagringNyVisning
-      heading="Ytelser fra arbeidsgiver (sluttpakke)"
+      heading="§ 11-24 Reduksjon av AAP på grunn av ytelser fra arbeidsgiver"
       steg="SAMORDNING_ARBEIDSGIVER"
       onSubmit={handleSubmit}
       isLoading={isLoading}
@@ -133,7 +133,7 @@ export const SamordningArbeidsgiver = ({
               name={`fom`}
               hideLabel={false}
               rules={{
-                required: 'Du må velge når sluttpakken gjelder fra',
+                required: 'Du må velge når reduksjonen gjelder fra',
                 validate: (value) => {
                   return validerDato(value as string);
                 },
@@ -146,7 +146,7 @@ export const SamordningArbeidsgiver = ({
               name={`tom`}
               hideLabel={false}
               rules={{
-                required: 'Du må velge når sluttpakken gjelder til',
+                required: 'Du må velge når reduksjonen gjelder til',
                 validate: (value) => {
                   return validerDato(value as string);
                 },

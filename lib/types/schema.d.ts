@@ -4032,6 +4032,44 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/test/opprett-og-fullfoer': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['no.nav.aap.behandlingsflyt.OpprettTestcaseDTO'];
+        };
+      };
+      responses: {
+        202: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.OpprettTestcaseDTO'];
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -5111,7 +5149,7 @@ export interface components {
         | '9002'
         | '9003'
         | '9004';
-      overgangArbeidVurdering: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.overgangarbeid.flate.OvergangArbeidVurderingL\u00F8sningDto'];
+      'l\u00F8sningerForPerioder': components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.overgangarbeid.flate.OvergangArbeidVurderingL\u00F8sningDto'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarOvergangUf\u00F8reL\u00F8sning': {
       /** @enum {string} */
@@ -6045,7 +6083,6 @@ export interface components {
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarManuellInntektVurderingL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarOppf\u00F8lgingLokalkontorL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarOppf\u00F8lgingNAYL\u00F8sning']
-      | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarOvergangArbeidL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarOvergangUf\u00F8reL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarOverstyrtForutg\u00E5endeMedlemskapL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarOverstyrtLovvalgMedlemskapL\u00F8sning']
@@ -7132,7 +7169,9 @@ export interface components {
         | '9004';
       meldepliktOverstyringVurdering: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.meldeplikt.flate.MeldepliktOverstyringL\u00F8sningDto'];
     };
-    'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.PeriodisertAvklaringsbehovL\u00F8sning<*>': components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarOppholdskravL\u00F8sning'];
+    'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.PeriodisertAvklaringsbehovL\u00F8sning<*>':
+      | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarOppholdskravL\u00F8sning']
+      | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarOvergangArbeidL\u00F8sning'];
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.RefusjonkravL\u00F8sning': {
       /** @enum {string} */
       behovstype:
@@ -8864,7 +8903,7 @@ export interface components {
        * Format: date
        * @example 2025-04-01
        */
-      'f\u00F8dselsdato': string;
+      'f\u00F8dselsdato'?: string | null;
       'vilk\u00E5rsperioder': components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.vilk\u00E5rsresultat.Vilk\u00E5rsperiode'][];
       /**
        * Format: date
@@ -8951,26 +8990,28 @@ export interface components {
       vurdertAv: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangarbeid.OvergangArbeidGrunnlagResponse': {
+      'beh\u00F8verVurderinger': components['schemas']['no.nav.aap.komponenter.type.Periode'][];
       gjeldendeSykdsomsvurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomsvurderingResponse'][];
-      gjeldendeVedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangarbeid.OvergangArbeidVurderingResponse'][];
       'harTilgangTil\u00C5Saksbehandle': boolean;
-      historiskeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangarbeid.OvergangArbeidVurderingResponse'][];
-      vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangarbeid.OvergangArbeidVurderingResponse'];
+      kanVurderes: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
+      nyeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangarbeid.OvergangArbeidVurderingResponse'][];
+      sisteVedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangarbeid.OvergangArbeidVurderingResponse'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangarbeid.OvergangArbeidVurderingResponse': {
       begrunnelse: string;
-      'brukerRettP\u00E5AAP'?: boolean | null;
-      erGjeldende?: boolean | null;
+      besluttetAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
+      'brukerRettP\u00E5AAP': boolean;
       /**
        * Format: date
        * @example 2025-04-01
        */
-      virkningsdato?: string | null;
+      fom: string;
+      kvalitetssikretAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
       /**
        * Format: date
        * @example 2025-04-01
        */
-      vurderingenGjelderFra?: string | null;
+      tom?: string | null;
       vurdertAv: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.OvergangUf\u00F8reGrunnlagResponse': {
@@ -9208,6 +9249,7 @@ export interface components {
       /** @enum {string} */
       brevtype:
         | 'INNVILGELSE'
+        | 'VEDTAK_11_17'
         | 'VEDTAK_11_18'
         | 'AVSLAG'
         | 'VARSEL_OM_BESTILLING'
@@ -9353,6 +9395,8 @@ export interface components {
         | 'VARIGHETSKVOTE_BRUKT_OPP'
         | 'BRUDD_PÅ_AKTIVITETSPLIKT_11_7_STANS'
         | 'BRUDD_PÅ_AKTIVITETSPLIKT_11_7_OPPHØR'
+        | 'BRUDD_PÅ_OPPHOLDSKRAV_11_3_STANS'
+        | 'BRUDD_PÅ_OPPHOLDSKRAV_11_3_OPPHØR'
         | null;
       'vilk\u00E5rsavslag': (
         | 'BRUKER_UNDER_18'
@@ -9369,6 +9413,7 @@ export interface components {
         | 'ANNEN_FULL_YTELSE'
         | 'IKKE_RETT_PA_AAP_UNDER_BEHANDLING_AV_UFORE'
         | 'VARIGHET_OVERSKREDET_OVERGANG_UFORE'
+        | 'VARIGHET_OVERSKREDET_ARBEIDSSØKER'
         | 'IKKE_RETT_PA_AAP_I_PERIODE_SOM_ARBEIDSSOKER'
       )[];
     };
@@ -9804,6 +9849,11 @@ export interface components {
         | 'REVURDER_STUDENT'
         | 'REVURDER_MANUELL_INNTEKT'
         | 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN'
+        | 'REVURDER_SAMORDNING_ANDRE_FOLKETRYGDYTELSER'
+        | 'REVURDER_SAMORDNING_UFØRE'
+        | 'REVURDER_SAMORDNING_ANDRE_STATLIGE_YTELSER'
+        | 'REVURDER_SAMORDNING_ARBEIDSGIVER'
+        | 'REVURDER_SAMORDNING_TJENESTEPENSJON'
         | 'G_REGULERING'
         | 'LOVVALG_OG_MEDLEMSKAP'
         | 'FORUTGAENDE_MEDLEMSKAP'
@@ -10081,6 +10131,11 @@ export interface components {
         | 'REVURDER_STUDENT'
         | 'REVURDER_MANUELL_INNTEKT'
         | 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN'
+        | 'REVURDER_SAMORDNING_ANDRE_FOLKETRYGDYTELSER'
+        | 'REVURDER_SAMORDNING_UFØRE'
+        | 'REVURDER_SAMORDNING_ANDRE_STATLIGE_YTELSER'
+        | 'REVURDER_SAMORDNING_ARBEIDSGIVER'
+        | 'REVURDER_SAMORDNING_TJENESTEPENSJON'
         | 'G_REGULERING'
         | 'LOVVALG_OG_MEDLEMSKAP'
         | 'FORUTGAENDE_MEDLEMSKAP'
@@ -10139,6 +10194,11 @@ export interface components {
             | 'REVURDER_STUDENT'
             | 'REVURDER_MANUELL_INNTEKT'
             | 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN'
+            | 'REVURDER_SAMORDNING_ANDRE_FOLKETRYGDYTELSER'
+            | 'REVURDER_SAMORDNING_UFØRE'
+            | 'REVURDER_SAMORDNING_ANDRE_STATLIGE_YTELSER'
+            | 'REVURDER_SAMORDNING_ARBEIDSGIVER'
+            | 'REVURDER_SAMORDNING_TJENESTEPENSJON'
             | 'G_REGULERING'
             | 'LOVVALG_OG_MEDLEMSKAP'
             | 'FORUTGAENDE_MEDLEMSKAP'
@@ -10465,6 +10525,8 @@ export interface components {
         | 'VARIGHETSKVOTE_BRUKT_OPP'
         | 'BRUDD_PÅ_AKTIVITETSPLIKT_11_7_STANS'
         | 'BRUDD_PÅ_AKTIVITETSPLIKT_11_7_OPPHØR'
+        | 'BRUDD_PÅ_OPPHOLDSKRAV_11_3_STANS'
+        | 'BRUDD_PÅ_OPPHOLDSKRAV_11_3_OPPHØR'
         | null;
       brukerAvKvoter: ('ORDINÆR' | 'STUDENT' | 'ETABLERINGSFASE' | 'UTVIKLINGSFASE' | 'SYKEPENGEERSTATNING')[];
       gradering: components['schemas']['no.nav.aap.behandlingsflyt.behandling.underveis.GraderingDto'];
@@ -10748,6 +10810,7 @@ export interface components {
         | 'ANNEN_FULL_YTELSE'
         | 'IKKE_RETT_PA_AAP_UNDER_BEHANDLING_AV_UFORE'
         | 'VARIGHET_OVERSKREDET_OVERGANG_UFORE'
+        | 'VARIGHET_OVERSKREDET_ARBEIDSSØKER'
         | 'IKKE_RETT_PA_AAP_I_PERIODE_SOM_ARBEIDSSOKER'
         | null;
       begrunnelse?: string | null;
@@ -10756,7 +10819,6 @@ export interface components {
         | 'YRKESSKADE_ÅRSAKSSAMMENHENG'
         | 'STUDENT'
         | 'SYKEPENGEERSTATNING'
-        | 'ARBEIDSSØKER'
         | 'VURDERES_FOR_UFØRETRYGD'
         | null;
       manuellVurdering: boolean;
@@ -11358,13 +11420,17 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.overgangarbeid.flate.OvergangArbeidVurderingL\u00F8sningDto': {
       begrunnelse: string;
-      'brukerRettP\u00E5AAP'?: boolean | null;
-      overgangBegrunnelse?: string | null;
+      'brukerRettP\u00E5AAP': boolean;
       /**
        * Format: date
        * @example 2025-04-01
        */
-      virkningsdato?: string | null;
+      fom: string;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      tom?: string | null;
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.overgangufore.flate.OvergangUf\u00F8reVurderingL\u00F8sningDto': {
       begrunnelse: string;
@@ -12084,6 +12150,7 @@ export interface components {
         | 'ANNEN_FULL_YTELSE'
         | 'IKKE_RETT_PA_AAP_UNDER_BEHANDLING_AV_UFORE'
         | 'VARIGHET_OVERSKREDET_OVERGANG_UFORE'
+        | 'VARIGHET_OVERSKREDET_ARBEIDSSØKER'
         | 'IKKE_RETT_PA_AAP_I_PERIODE_SOM_ARBEIDSSOKER'
         | null;
       begrunnelse?: string | null;
@@ -12092,7 +12159,6 @@ export interface components {
         | 'YRKESSKADE_ÅRSAKSSAMMENHENG'
         | 'STUDENT'
         | 'SYKEPENGEERSTATNING'
-        | 'ARBEIDSSØKER'
         | 'VURDERES_FOR_UFØRETRYGD'
         | null;
       manuellVurdering: boolean;
@@ -12411,6 +12477,11 @@ export interface components {
         | 'BARNETILLEGG'
         | 'INSTITUSJONSOPPHOLD'
         | 'SAMORDNING_OG_AVREGNING'
+        | 'REVURDER_SAMORDNING_ANDRE_FOKETRYGDYTELSER'
+        | 'REVURDER_SAMORDNING_UFØRE'
+        | 'REVURDER_SAMORDNING_ANDRE_STATLIGE_YTELSER'
+        | 'REVURDER_SAMORDNING_ARBEIDSGIVER'
+        | 'REVURDER_SAMORDNING_TJENESTEPENSJON'
         | 'REFUSJONSKRAV'
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'VURDER_RETTIGHETSPERIODE'
@@ -12592,6 +12663,11 @@ export interface components {
         | 'BARNETILLEGG'
         | 'INSTITUSJONSOPPHOLD'
         | 'SAMORDNING_OG_AVREGNING'
+        | 'REVURDER_SAMORDNING_ANDRE_FOKETRYGDYTELSER'
+        | 'REVURDER_SAMORDNING_UFØRE'
+        | 'REVURDER_SAMORDNING_ANDRE_STATLIGE_YTELSER'
+        | 'REVURDER_SAMORDNING_ARBEIDSGIVER'
+        | 'REVURDER_SAMORDNING_TJENESTEPENSJON'
         | 'REFUSJONSKRAV'
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'VURDER_RETTIGHETSPERIODE'
@@ -12668,6 +12744,11 @@ export interface components {
         | 'BARNETILLEGG'
         | 'INSTITUSJONSOPPHOLD'
         | 'SAMORDNING_OG_AVREGNING'
+        | 'REVURDER_SAMORDNING_ANDRE_FOKETRYGDYTELSER'
+        | 'REVURDER_SAMORDNING_UFØRE'
+        | 'REVURDER_SAMORDNING_ANDRE_STATLIGE_YTELSER'
+        | 'REVURDER_SAMORDNING_ARBEIDSGIVER'
+        | 'REVURDER_SAMORDNING_TJENESTEPENSJON'
         | 'REFUSJONSKRAV'
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'VURDER_RETTIGHETSPERIODE'
@@ -12727,6 +12808,11 @@ export interface components {
         | 'BARNETILLEGG'
         | 'INSTITUSJONSOPPHOLD'
         | 'SAMORDNING_OG_AVREGNING'
+        | 'REVURDER_SAMORDNING_ANDRE_FOKETRYGDYTELSER'
+        | 'REVURDER_SAMORDNING_UFØRE'
+        | 'REVURDER_SAMORDNING_ANDRE_STATLIGE_YTELSER'
+        | 'REVURDER_SAMORDNING_ARBEIDSGIVER'
+        | 'REVURDER_SAMORDNING_TJENESTEPENSJON'
         | 'REFUSJONSKRAV'
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'VURDER_RETTIGHETSPERIODE'
@@ -12872,6 +12958,11 @@ export interface components {
         | 'REVURDER_STUDENT'
         | 'REVURDER_MANUELL_INNTEKT'
         | 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN'
+        | 'REVURDER_SAMORDNING_ANDRE_FOLKETRYGDYTELSER'
+        | 'REVURDER_SAMORDNING_UFØRE'
+        | 'REVURDER_SAMORDNING_ANDRE_STATLIGE_YTELSER'
+        | 'REVURDER_SAMORDNING_ARBEIDSGIVER'
+        | 'REVURDER_SAMORDNING_TJENESTEPENSJON'
         | 'G_REGULERING'
         | 'LOVVALG_OG_MEDLEMSKAP'
         | 'FORUTGAENDE_MEDLEMSKAP'
@@ -12990,6 +13081,11 @@ export interface components {
         | 'REVURDER_STUDENT'
         | 'REVURDER_MANUELL_INNTEKT'
         | 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN'
+        | 'REVURDER_SAMORDNING_ANDRE_FOLKETRYGDYTELSER'
+        | 'REVURDER_SAMORDNING_UFØRE'
+        | 'REVURDER_SAMORDNING_ANDRE_STATLIGE_YTELSER'
+        | 'REVURDER_SAMORDNING_ARBEIDSGIVER'
+        | 'REVURDER_SAMORDNING_TJENESTEPENSJON'
         | 'G_REGULERING'
         | 'LOVVALG_OG_MEDLEMSKAP'
         | 'FORUTGAENDE_MEDLEMSKAP'
@@ -13051,6 +13147,11 @@ export interface components {
         | 'REVURDER_STUDENT'
         | 'REVURDER_MANUELL_INNTEKT'
         | 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN'
+        | 'REVURDER_SAMORDNING_ANDRE_FOLKETRYGDYTELSER'
+        | 'REVURDER_SAMORDNING_UFØRE'
+        | 'REVURDER_SAMORDNING_ANDRE_STATLIGE_YTELSER'
+        | 'REVURDER_SAMORDNING_ARBEIDSGIVER'
+        | 'REVURDER_SAMORDNING_TJENESTEPENSJON'
         | 'G_REGULERING'
         | 'LOVVALG_OG_MEDLEMSKAP'
         | 'FORUTGAENDE_MEDLEMSKAP'

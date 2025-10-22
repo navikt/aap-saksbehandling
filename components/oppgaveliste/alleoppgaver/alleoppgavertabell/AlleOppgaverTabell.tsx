@@ -21,26 +21,9 @@ interface Props {
   revalidateFunction: () => Promise<unknown>;
   setValgteRader: Dispatch<SetStateAction<number[]>>;
   valgteRader: number[];
-  visTildelOppgaveModal: boolean;
-  setVisTildelOppgaveModal: Dispatch<SetStateAction<boolean>>;
-  oppgaverSomSkalTildeles: number[];
-  setOppgaverSomSkalTildeles: Dispatch<SetStateAction<number[]>>;
-  skalFjerneValgteRaderEtterTildeling: boolean;
-  setSkalFjerneValgteRaderEtterTildeling: Dispatch<SetStateAction<boolean>>;
 }
 
-export const AlleOppgaverTabell = ({
-  oppgaver,
-  revalidateFunction,
-  setValgteRader,
-  valgteRader,
-  visTildelOppgaveModal,
-  setVisTildelOppgaveModal,
-  oppgaverSomSkalTildeles,
-  setOppgaverSomSkalTildeles,
-  skalFjerneValgteRaderEtterTildeling,
-  setSkalFjerneValgteRaderEtterTildeling,
-}: Props) => {
+export const AlleOppgaverTabell = ({ oppgaver, revalidateFunction, setValgteRader, valgteRader }: Props) => {
   const { sort, sortertListe, håndterSortering } = useSortertListe(oppgaver);
   const [visSynkroniserEnhetModal, setVisSynkroniserEnhetModal] = useState<boolean>(false);
 
@@ -61,17 +44,7 @@ export const AlleOppgaverTabell = ({
         visSynkroniserEnhetModal={visSynkroniserEnhetModal}
         setVisSynkroniserEnhetModal={setVisSynkroniserEnhetModal}
       />
-      <TildelOppgaveModal
-        oppgaveIder={oppgaverSomSkalTildeles}
-        isOpen={visTildelOppgaveModal}
-        setValgteRader={setValgteRader}
-        skalFjerneValgteRader={skalFjerneValgteRaderEtterTildeling}
-        onClose={async () => {
-          setVisTildelOppgaveModal(false);
-          setSkalFjerneValgteRaderEtterTildeling(false);
-          await revalidateFunction();
-        }}
-      />
+      <TildelOppgaveModal revalidateFunction={revalidateFunction} />
       <TableStyled
         size={'small'}
         zebraStripes
@@ -182,8 +155,6 @@ export const AlleOppgaverTabell = ({
                   oppgave={oppgave}
                   revalidateFunction={revalidateFunction}
                   setVisSynkroniserEnhetModal={setVisSynkroniserEnhetModal}
-                  setOppgaverSomSkalTildeles={setOppgaverSomSkalTildeles}
-                  setVisTildelOppgaveModal={setVisTildelOppgaveModal}
                 />
               </Table.DataCell>
             </Table.Row>
