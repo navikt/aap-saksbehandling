@@ -55,6 +55,7 @@ export const DokumentOversikt = ({ sak }: { sak: SaksInfo }) => {
         { value: 'OPP', label: 'Oppfølging' },
         { value: 'MED', label: 'Medlemskap' },
         { value: 'YRK', label: 'Yrkesskade' },
+        { value: 'AKT', label: 'Aktivitetsplan' },
       ],
     },
     typer: {
