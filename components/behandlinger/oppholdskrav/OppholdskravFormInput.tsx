@@ -55,7 +55,7 @@ export const OppholdskravFormInput = ({
             required: 'Du må velge fra hvilken dato vurderingen gjelder fra',
             validate: (value) => validerDato(value as string),
           }}
-          readOnly={readOnly || (index === 0 && !harTidligereVurderinger)}
+          readOnly={readOnly}
         />
         {(visningModus === VisningModus.AKTIV_MED_AVBRYT || visningModus === VisningModus.AKTIV_UTEN_AVBRYT) &&
           (index !== 0 || harTidligereVurderinger) && (
