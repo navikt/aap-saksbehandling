@@ -5,9 +5,11 @@ import { Behovstype, getJaNeiEllerIkkeBesvart, JaEllerNei, JaEllerNeiOptions } f
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import {
+  BeregningTidspunktGrunnlag,
   ForutgåendeMedlemskapGrunnlag,
   HistoriskForutgåendeMedlemskapVurdering,
   MellomlagretVurdering,
+  RettighetsperiodeGrunnlag,
 } from 'lib/types/types';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
@@ -20,6 +22,8 @@ interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
   grunnlag?: ForutgåendeMedlemskapGrunnlag;
+  rettighetsperiodeGrunnlag?: RettighetsperiodeGrunnlag;
+  beregningstidspunktGrunnlag?: BeregningTidspunktGrunnlag;
   overstyring: boolean;
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }
@@ -62,6 +66,8 @@ const unntaksvilkårLabel = 'Oppfyller brukeren noen av unntaksvilkårene?';
 
 export const ManuellVurderingForutgåendeMedlemskap = ({
   grunnlag,
+  rettighetsperiodeGrunnlag,
+  beregningstidspunktGrunnlag,
   readOnly,
   behandlingVersjon,
   overstyring,
@@ -105,13 +111,11 @@ export const ManuellVurderingForutgåendeMedlemskap = ({
         options: [
           {
             value: 'A',
-            label:
-              'a: Ja, brukeren har vært medlem i folketrygden i minst ett år umiddelbart før krav om ytelsen settes frem {{søknadsdato}}, og var medlem i trygden da arbeidsevnen ble nedsatt med minst halvparten {{beregningstidspunkt}}, og etter fylte 16 år har perioder med medlemskap som minst tilsvarer perioder uten medlemskap',
+            label: `a: Ja, brukeren har vært medlem i folketrygden i minst ett år umiddelbart før krav om ytelsen settes frem (${rettighetsperiodeGrunnlag?.søknadsdato}), og var medlem i trygden da arbeidsevnen ble nedsatt med minst halvparten (${beregningstidspunktGrunnlag?.vurdering?.nedsattArbeidsevneDato}), og etter fylte 16 år har perioder med medlemskap som minst tilsvarer perioder uten medlemskap`,
           },
           {
             value: 'B',
-            label:
-              'b: Ja, brukeren har vært medlem i folketrygden i minst ett år umiddelbart før krav om ytelsen settes fram {{søknadsdato}}, og har etter fylte 16 år vært medlem i folketrygden med unntak av maksimum fem år.',
+            label: `b: Ja, brukeren har vært medlem i folketrygden i minst ett år umiddelbart før krav om ytelsen settes fram (${rettighetsperiodeGrunnlag?.søknadsdato}), og har etter fylte 16 år vært medlem i folketrygden med unntak av maksimum fem år.`,
           },
           { value: 'Nei', label: 'Nei' },
         ],
