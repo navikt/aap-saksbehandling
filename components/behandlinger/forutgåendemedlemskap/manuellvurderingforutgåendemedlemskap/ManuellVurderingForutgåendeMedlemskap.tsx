@@ -17,6 +17,7 @@ import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereV
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 
 interface Props {
   behandlingVersjon: number;
@@ -111,11 +112,11 @@ export const ManuellVurderingForutgåendeMedlemskap = ({
         options: [
           {
             value: 'A',
-            label: `a: Ja, brukeren har vært medlem i folketrygden i minst ett år umiddelbart før krav om ytelsen settes frem (${rettighetsperiodeGrunnlag?.søknadsdato}), og var medlem i trygden da arbeidsevnen ble nedsatt med minst halvparten (${beregningstidspunktGrunnlag?.vurdering?.nedsattArbeidsevneDato}), og etter fylte 16 år har perioder med medlemskap som minst tilsvarer perioder uten medlemskap`,
+            label: `a: Ja, brukeren har vært medlem i folketrygden i minst ett år umiddelbart før krav om ytelsen settes frem (${rettighetsperiodeGrunnlag?.søknadsdato ? formaterDatoForFrontend(rettighetsperiodeGrunnlag?.søknadsdato) : '(Søknadsdato ikke funnet)'}), og var medlem i trygden da arbeidsevnen ble nedsatt med minst halvparten (${beregningstidspunktGrunnlag?.vurdering?.nedsattArbeidsevneDato ? formaterDatoForFrontend(beregningstidspunktGrunnlag?.vurdering?.nedsattArbeidsevneDato) : '(Dato for nedsatt arbeidsevne ikke funnet)'}), og etter fylte 16 år har perioder med medlemskap som minst tilsvarer perioder uten medlemskap`,
           },
           {
             value: 'B',
-            label: `b: Ja, brukeren har vært medlem i folketrygden i minst ett år umiddelbart før krav om ytelsen settes fram (${rettighetsperiodeGrunnlag?.søknadsdato}), og har etter fylte 16 år vært medlem i folketrygden med unntak av maksimum fem år.`,
+            label: `b: Ja, brukeren har vært medlem i folketrygden i minst ett år umiddelbart før krav om ytelsen settes fram (${rettighetsperiodeGrunnlag?.søknadsdato ? formaterDatoForFrontend(rettighetsperiodeGrunnlag?.søknadsdato) : '(Søknadsdato ikke funnet)'}), og har etter fylte 16 år vært medlem i folketrygden med unntak av maksimum fem år.`,
           },
           { value: 'Nei', label: 'Nei' },
         ],
