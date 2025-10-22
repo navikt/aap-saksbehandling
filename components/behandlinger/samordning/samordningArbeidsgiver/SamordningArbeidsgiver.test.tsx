@@ -52,7 +52,7 @@ describe('mellomlagring', () => {
 
     await user.type(
       screen.getByRole('textbox', {
-        name: 'Vurder om brukeren skal ha 100% reduksjon av AAP i en periode som følge av ytelse fra arbeidsgiver',
+        name: 'Vurder om brukeren skal ha 100 % reduksjon av AAP i en periode som følge av ytelse fra arbeidsgiver',
       }),
       'Her har jeg begynt å skrive en vurdering..'
     );
@@ -103,7 +103,7 @@ describe('mellomlagring', () => {
     );
 
     const begrunnelseFelt = screen.getByRole('textbox', {
-      name: 'Vurder om brukeren skal ha 100% reduksjon av AAP i en periode som følge av ytelse fra arbeidsgiver',
+      name: 'Vurder om brukeren skal ha 100 % reduksjon av AAP i en periode som følge av ytelse fra arbeidsgiver',
     });
 
     expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er mellomlagret');
@@ -113,7 +113,7 @@ describe('mellomlagring', () => {
     render(<SamordningArbeidsgiver behandlingVersjon={0} readOnly={false} grunnlag={grunnlagMedVurdering} />);
 
     const begrunnelseFelt = screen.getByRole('textbox', {
-      name: 'Vurder om brukeren skal ha 100% reduksjon av AAP i en periode som følge av ytelse fra arbeidsgiver',
+      name: 'Vurder om brukeren skal ha 100 % reduksjon av AAP i en periode som følge av ytelse fra arbeidsgiver',
     });
 
     expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er bekreftet');
@@ -131,14 +131,14 @@ describe('mellomlagring', () => {
 
     await user.type(
       screen.getByRole('textbox', {
-        name: 'Vurder om brukeren skal ha 100% reduksjon av AAP i en periode som følge av ytelse fra arbeidsgiver',
+        name: 'Vurder om brukeren skal ha 100 % reduksjon av AAP i en periode som følge av ytelse fra arbeidsgiver',
       }),
       ' her er ekstra tekst'
     );
 
     expect(
       screen.getByRole('textbox', {
-        name: 'Vurder om brukeren skal ha 100% reduksjon av AAP i en periode som følge av ytelse fra arbeidsgiver',
+        name: 'Vurder om brukeren skal ha 100 % reduksjon av AAP i en periode som følge av ytelse fra arbeidsgiver',
       })
     ).toHaveValue('Dette er min vurdering som er mellomlagret her er ekstra tekst');
 
@@ -148,7 +148,7 @@ describe('mellomlagring', () => {
 
     expect(
       screen.getByRole('textbox', {
-        name: 'Vurder om brukeren skal ha 100% reduksjon av AAP i en periode som følge av ytelse fra arbeidsgiver',
+        name: 'Vurder om brukeren skal ha 100 % reduksjon av AAP i en periode som følge av ytelse fra arbeidsgiver',
       })
     ).toHaveValue('');
   });
@@ -165,14 +165,14 @@ describe('mellomlagring', () => {
 
     await user.type(
       screen.getByRole('textbox', {
-        name: 'Vurder om brukeren skal ha 100% reduksjon av AAP i en periode som følge av ytelse fra arbeidsgiver',
+        name: 'Vurder om brukeren skal ha 100 % reduksjon av AAP i en periode som følge av ytelse fra arbeidsgiver',
       }),
       ' her er ekstra tekst'
     );
 
     expect(
       screen.getByRole('textbox', {
-        name: 'Vurder om brukeren skal ha 100% reduksjon av AAP i en periode som følge av ytelse fra arbeidsgiver',
+        name: 'Vurder om brukeren skal ha 100 % reduksjon av AAP i en periode som følge av ytelse fra arbeidsgiver',
       })
     ).toHaveValue('Dette er min vurdering som er mellomlagret her er ekstra tekst');
 
@@ -182,7 +182,7 @@ describe('mellomlagring', () => {
 
     expect(
       screen.getByRole('textbox', {
-        name: 'Vurder om brukeren skal ha 100% reduksjon av AAP i en periode som følge av ytelse fra arbeidsgiver',
+        name: 'Vurder om brukeren skal ha 100 % reduksjon av AAP i en periode som følge av ytelse fra arbeidsgiver',
       })
     ).toHaveValue('Dette er min vurdering som er bekreftet');
   });

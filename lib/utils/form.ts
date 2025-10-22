@@ -120,7 +120,7 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
     case '5028':
       return 'Vurder trekk av søknad';
     case '5030':
-      return 'Ytelser fra arbeidsgiver (sluttpakke)';
+      return '§ 11-24 Reduksjon av AAP på grunn av ytelser fra arbeidsgiver';
     case '5031':
       return '§ 11-18 AAP under behandling av krav om uføretrygd';
     case '5032':
