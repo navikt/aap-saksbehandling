@@ -1,7 +1,7 @@
 'use client';
 
 import { BrevbyggerBeta } from '@navikt/aap-breveditor/';
-import { ActionMenu, Button, Label, Loader, VStack } from '@navikt/ds-react';
+import { ActionMenu, Alert, Button, Label, Loader, VStack } from '@navikt/ds-react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useDebounce } from 'hooks/DebounceHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
@@ -21,6 +21,8 @@ import { IkkeSendBrevModal } from 'components/behandlinger/brev/skriveBrev/IkkeS
 import { isSuccess } from 'lib/utils/api';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
+import { kanDistribuereBrev } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { isProd } from 'lib/utils/environment';
 
 export const SkriveBrev = ({
   referanse,
@@ -55,6 +57,7 @@ export const SkriveBrev = ({
   const [isSaving, setIsSaving] = useState(false);
   const debouncedBrev = useDebounce<Brev>(brev, 2000);
   const [kanMellomlagreBrev, setKanMellomlagreBrev] = useState(true);
+  const [valgteMottakere, setMottakere] = useState<Mottaker[]>([]);
 
   const [forhåndsvisModalOpen, setForhåndsvisModalOpen] = useState(false);
   const [ikkeSendBrevModalOpen, settIkkeSendBrevModalOpen] = useState(false);
@@ -94,7 +97,29 @@ export const SkriveBrev = ({
     settIkkeSendBrevModalOpen(false);
   };
 
-  const [valgteMottakere, setMottakere] = useState<Mottaker[]>([]);
+  const kanDistribuereTilAlleMottakere = async () => {
+    // TODO Fjerne feature toggle etter verifisering i dev
+    if (isProd()) {
+      return true;
+    }
+    const brukerIdent = brukerMottaker?.ident;
+
+    if (brukerIdent && saksnummer) {
+      const valgteMottakereIdentListe = valgteMottakere
+        .map(mottaker => mottaker.ident)
+        .filter(ident => typeof ident === 'string')
+
+      const mottakerIdentListe = valgteMottakereIdentListe.length > 0 ? valgteMottakereIdentListe : [brukerIdent]
+
+      const response = await kanDistribuereBrev({ brukerIdent, mottakerIdentListe, saksnummer });
+      if (isSuccess(response)) {
+        return !response.data.mottakereDistStatus.some(
+          (distStatus: { mottakerIdent: String; kanDistribuere: boolean }) => !distStatus.kanDistribuere
+        );
+      }
+    }
+    return true;
+  }
 
   return (
     <>
@@ -155,6 +180,11 @@ export const SkriveBrev = ({
             signatur={signaturer}
             readonly={readOnly}
           />
+          {!kanDistribuereTilAlleMottakere() &&
+            <Alert variant={'warning'} size={'small'} className={'fit-content'}>
+              Brevet kan ikke distribueres til alle mottakere. Se rutinebeskrivelse for manuell håndtering.
+            </Alert>
+          }
           {!readOnly && (
             <Button
               disabled={status !== 'FORHÅNDSVISNING_KLAR'}
@@ -250,3 +280,4 @@ function VelgeMottakere({
     </div>
   );
 }
+

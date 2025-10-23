@@ -19,9 +19,10 @@ const grunnlagMedVurdering: SamordningAndreStatligeYtelserGrunnlag = {
     vurderingPerioder: [],
     vurdertAv: { ident: 'Saksbehandler', dato: '2025-08-01' },
   },
+  historiskeVurderinger: []
 };
 
-const grunnlagUtenVurdering: SamordningAndreStatligeYtelserGrunnlag = { harTilgangTilÅSaksbehandle: false };
+const grunnlagUtenVurdering: SamordningAndreStatligeYtelserGrunnlag = { harTilgangTilÅSaksbehandle: false, historiskeVurderinger: [] };
 
 beforeEach(() => {
   setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'SAMORDNING_ANDRE_STATLIGE_YTELSER' });
