@@ -16,7 +16,7 @@ import {
   hentKabalKlageresultat,
   hentKlageresultat,
   hentSak,
-  hentSakPersoninfo,
+  hentSakPersoninfo
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
@@ -47,8 +47,16 @@ export const BehandlingLayout = async ({ saksId, behandlingsReferanse, children 
   // noinspection ES6MissingAwait - trenger ikke vente på svar fra auditlog-kall
   auditlog(behandlingsReferanse);
 
-  const [oppgave, personInfo, brukerInformasjon, flytResponse, sak, roller, kabalKlageResultat, klageresultat] =
-    await Promise.all([
+  const [
+    oppgave,
+    personInfo,
+    brukerInformasjon,
+    flytResponse,
+    sak,
+    roller,
+    kabalKlageResultat,
+    klageresultat
+  ] = await Promise.all([
       hentOppgave(behandlingsReferanse),
       hentSakPersoninfo(saksId),
       hentBrukerInformasjon(),
@@ -56,7 +64,7 @@ export const BehandlingLayout = async ({ saksId, behandlingsReferanse, children 
       hentSak(saksId),
       hentRollerForBruker(),
       hentKabalKlageresultat(behandlingsReferanse),
-      hentKlageresultat(behandlingsReferanse),
+      hentKlageresultat(behandlingsReferanse)
     ]);
 
   if (isError(flytResponse) || isError(klageresultat) || isError(oppgave)) {
@@ -86,7 +94,7 @@ export const BehandlingLayout = async ({ saksId, behandlingsReferanse, children 
     <SWRConfig
       value={{
         fallback: {
-          [`api/flyt/${behandlingsReferanse}`]: flytResponse,
+          [`api/flyt/${behandlingsReferanse}`]: flytResponse
         },
       }}
     >
