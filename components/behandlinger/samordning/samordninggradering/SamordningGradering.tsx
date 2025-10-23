@@ -198,7 +198,7 @@ export const SamordningGradering = ({
         </Modal>
       )}
       <VilkårskortMedFormOgMellomlagringNyVisning
-        heading="§§ 11-27 / 11-28 Samordning med andre fulle eller reduserte folketrygdytelser"
+        heading="§§ 11-27 / 11-28 Forholdet til andre fulle eller reduserte folketrygdytelser"
         steg="SAMORDNING_GRADERING"
         onSubmit={handleSubmit}
         isLoading={isLoading}

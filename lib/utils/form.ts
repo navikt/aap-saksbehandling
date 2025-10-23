@@ -98,7 +98,7 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
     case '5011':
       return '§ 11-25 Helseinstitusjon';
     case '5012':
-      return '§§ 11-27 / 11-28 Samordning med andre folketrygdytelser';
+      return '§§ 11-27 / 11-28 Forholdet til andre fulle eller reduserte folketrygdytelser';
     case '5013':
       return '§ 11-22 AAP ved yrkesskade';
     case '5014':
