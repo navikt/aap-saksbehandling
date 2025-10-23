@@ -1661,6 +1661,45 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/distribusjon/kan-distribuere-brev': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.distribusjon.KanDistribuereBrevRequest'];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.distribusjon.KanDistribuereBrevResponse'];
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/behandling/{referanse}/grunnlag/rettighetsperiode': {
     parameters: {
       query?: never;
@@ -10269,6 +10308,9 @@ export interface components {
       tom?: string | null;
       vurdertAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
     };
+    'no.nav.aap.behandlingsflyt.behandling.distribusjon.KanDistribuereBrevResponse': {
+      mottakereDistStatus: components['schemas']['no.nav.aap.brev.kontrakt.MottakerDistStatus'][]
+    }
     'no.nav.aap.behandlingsflyt.behandling.rettighetsperiode.RettighetsperiodeGrunnlagResponse': {
       'harTilgangTil\u00C5Saksbehandle': boolean;
       /**
@@ -10291,6 +10333,9 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.behandling.revurdering.AvbrytRevurderingGrunnlagDto': {
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.avbrytrevurdering.flate.AvbrytRevurderingVurderingDto'];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.distribusjon.KanDistribuereBrevRequest': {
+      mottakere: components['schemas']['no.nav.aap.brev.kontrakt.MottakerDto'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.student.StudentGrunnlagResponse': {
       'harTilgangTil\u00C5Saksbehandle': boolean;
@@ -13364,6 +13409,10 @@ export interface components {
       /** @enum {string|null} */
       identType?: 'FNR' | 'HPRNR' | 'ORGNR' | 'UTL_ORG' | null;
       navnOgAdresse?: components['schemas']['no.nav.aap.brev.kontrakt.NavnOgAdresse'];
+    };
+    'no.nav.aap.brev.kontrakt.MottakerDistStatus': {
+      mottaker: components['schemas']['no.nav.aap.brev.kontrakt.MottakerDto'];
+      kanDistribuere: boolean;
     };
     'no.nav.aap.brev.kontrakt.NavnOgAdresse': {
       adresse: components['schemas']['no.nav.aap.brev.kontrakt.Adresse'];

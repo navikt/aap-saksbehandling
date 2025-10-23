@@ -76,6 +76,7 @@ export type BrevStatus =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag.Brev']['status'];
 export type BrevMottaker =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag.Brev.Mottaker'];
+export type KanDistribuereBrev = components['schemas']['no.nav.aap.behandlingsflyt.behandling.distribusjon.KanDistribuereBrevRequest'];
 export type Signatur = components['schemas']['no.nav.aap.brev.kontrakt.Signatur'];
 export type Mottaker =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.SkrivBrevLøsning']['mottakere'][number];
