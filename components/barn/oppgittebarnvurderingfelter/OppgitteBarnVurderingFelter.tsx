@@ -116,6 +116,7 @@ export const OppgitteBarnVurderingFelter = ({
               ? null
               : 'Barnetillegg skal i hovedsak gis fra dato brukeren søkte om barnetillegg'
           }
+          readOnly={readOnly}
           control={form.control}
           name={`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.fraDato`}
           rules={{
