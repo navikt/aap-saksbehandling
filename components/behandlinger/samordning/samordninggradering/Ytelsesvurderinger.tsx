@@ -88,8 +88,8 @@ export const Ytelsesvurderinger = ({ form, readOnly }: Props) => {
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {fields.map((_, index) => (
-                <Table.Row key={index}>
+              {fields.map((field, index) => (
+                <Table.Row key={field.id}>
                   <Table.DataCell>
                     <HStack align={'center'} gap={'1'}>
                       <DateInputWrapper
