@@ -9516,7 +9516,8 @@ export interface components {
         | 'SVANGERSKAPSPENGER'
         | 'OMSORGSPENGER'
         | 'OPPLÆRINGSPENGER'
-        | 'UKJENT_SLUTTDATO_PÅ_YTELSE';
+        | 'UKJENT_SLUTTDATO_PÅ_YTELSE'
+        | 'FERIE_I_SYKEPENGEPERIODE';
     };
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningYtelseDTO': {
       /** @enum {string} */
@@ -9536,7 +9537,8 @@ export interface components {
         | 'SVANGERSKAPSPENGER'
         | 'OMSORGSPENGER'
         | 'OPPLÆRINGSPENGER'
-        | 'UKJENT_SLUTTDATO_PÅ_YTELSE';
+        | 'UKJENT_SLUTTDATO_PÅ_YTELSE'
+        | 'FERIE_I_SYKEPENGEPERIODE';
     };
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningYtelseVurderingDTO': {
       begrunnelse?: string | null;
@@ -11485,7 +11487,8 @@ export interface components {
         | 'SVANGERSKAPSPENGER'
         | 'OMSORGSPENGER'
         | 'OPPLÆRINGSPENGER'
-        | 'UKJENT_SLUTTDATO_PÅ_YTELSE';
+        | 'UKJENT_SLUTTDATO_PÅ_YTELSE'
+        | 'FERIE_I_SYKEPENGEPERIODE';
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.samordning.VurderingerForSamordning': {
       begrunnelse?: string | null;
