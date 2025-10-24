@@ -216,10 +216,10 @@ export const BarnetilleggVurdering = ({
             <Heading size={'xsmall'} level="3">
               Følgende barn er funnet i folkeregisteret
             </Heading>
-            <ReadMore header="Folkeregistrerte barn og barnetillegg" size="small">
-              Folkeregistrerte barn vil som hovedregel gi grunnlag for barnetillegg innenfor forsørgerperioden. Men om
-              opplysningene fra folkeregisteret skulle være feil kan den automatiske vurderingen overstyres ved å legge
-              til en vurdering under.
+            <ReadMore header="Slik vurderes barnetillegg for folkeregistrerte barn" size="small">
+              Folkeregistrerte barn vil som hovedregel gi grunnlag for barnetillegg innenfor forsørgerperioden. Hvis
+              opplysningene fra folkeregisteret ikke stemmer, kan du overstyre den automatiske vurderingen ved å legge
+              til en ny vurdering under.
             </ReadMore>
             <div className={styles.registrerte_barn}>
               {folkeregistrerteBarnVurderinger.map((vurdering, barnetilleggIndex) => {
