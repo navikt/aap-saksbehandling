@@ -1,6 +1,6 @@
 'use client';
 
-import { BodyShort, ReadMore } from '@navikt/ds-react';
+import { Heading, ReadMore } from '@navikt/ds-react';
 import { BarnetilleggGrunnlag, BehandlingPersoninfo, MellomlagretVurdering, Periode } from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { Behovstype, JaEllerNei } from 'lib/utils/form';
@@ -188,9 +188,9 @@ export const BarnetilleggVurdering = ({
         {harTidligereVurderinger && (
           <div className={'flex-column'}>
             <div>
-              <BodyShort size={'small'} weight={'semibold'}>
-                Følgende barn er oppgitt av brukeren og må vurderes
-              </BodyShort>
+              <Heading size={'xsmall'} level="3">
+                Følgende barn er oppgitt av bruker
+              </Heading>
             </div>
 
             {barnetilleggVurderinger.map((vurdering, barnetilleggIndex) => {
@@ -201,7 +201,9 @@ export const BarnetilleggVurdering = ({
                   barnetilleggIndex={barnetilleggIndex}
                   ident={vurdering.ident}
                   fødselsdato={vurdering.fødselsdato}
-                  navn={kapitaliserNavn(vurdering.navn || behandlingPersonInfo?.info[vurdering.ident || 'null'] || 'Ukjent')}
+                  navn={kapitaliserNavn(
+                    vurdering.navn || behandlingPersonInfo?.info[vurdering.ident || 'null'] || 'Ukjent'
+                  )}
                   harOppgittFosterforelderRelasjon={vurdering.oppgittForelderRelasjon === 'FOSTERFORELDER'}
                   readOnly={formReadOnly}
                 />
@@ -211,9 +213,9 @@ export const BarnetilleggVurdering = ({
         )}
         {erFolkeregistrerteBarn && (
           <div className={'flex-column'}>
-            <BodyShort size={'small'} weight={'semibold'}>
+            <Heading size={'xsmall'} level="3">
               Følgende barn er funnet i folkeregisteret
-            </BodyShort>
+            </Heading>
             <ReadMore header="Folkeregistrerte barn og barnetillegg" size="small">
               Folkeregistrerte barn vil som hovedregel gi grunnlag for barnetillegg innenfor forsørgerperioden. Men om
               opplysningene fra folkeregisteret skulle være feil kan den automatiske vurderingen overstyres ved å legge
@@ -228,7 +230,9 @@ export const BarnetilleggVurdering = ({
                     barnetilleggIndex={barnetilleggIndex}
                     ident={vurdering.ident}
                     fødselsdato={vurdering.fødselsdato}
-                    navn={kapitaliserNavn(vurdering.navn || behandlingPersonInfo?.info[vurdering.ident || 'null'] || 'Ukjent')}
+                    navn={kapitaliserNavn(
+                      vurdering.navn || behandlingPersonInfo?.info[vurdering.ident || 'null'] || 'Ukjent'
+                    )}
                     harOppgittFosterforelderRelasjon={vurdering.oppgittForelderRelasjon === 'FOSTERFORELDER'}
                     forsørgerPeriode={vurdering.forsørgerPeriode}
                     readOnly={formReadOnly}

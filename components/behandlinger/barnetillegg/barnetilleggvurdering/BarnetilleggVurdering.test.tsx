@@ -109,7 +109,7 @@ describe('barnetillegg', () => {
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
-    const heading = screen.getByText('Følgende barn er oppgitt av brukeren og må vurderes');
+    const heading = screen.getByText('Følgende barn er oppgitt av bruker');
     expect(heading).toBeVisible();
   });
 
