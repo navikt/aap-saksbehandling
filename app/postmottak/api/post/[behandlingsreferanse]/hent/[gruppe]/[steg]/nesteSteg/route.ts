@@ -33,8 +33,8 @@ export async function GET(
           status: 'ERROR',
           errormessage: 'Antall retries er brukt opp',
         };
-        writer.write(`event: message\ndata: ${JSON.stringify(json)}\n\n`);
-        writer.close();
+        await writer.write(`event: message\ndata: ${JSON.stringify(json)}\n\n`);
+        await writer.close();
         return;
       }
       if (retries === 3) {
@@ -42,7 +42,7 @@ export async function GET(
           status: 'POLLING',
         };
 
-        writer.write(`event: message\ndata: ${JSON.stringify(json)}\n\n`);
+        await writer.write(`event: message\ndata: ${JSON.stringify(json)}\n\n`);
       }
 
       const flyt = await hentFlyt((await context.params).behandlingsreferanse);
@@ -52,8 +52,8 @@ export async function GET(
           errormessage: `${flyt.apiException.code}: ${flyt.apiException.message}`,
         };
 
-        writer.write(`event: message\ndata: ${JSON.stringify(json)}\n\n`);
-        writer.close();
+        await writer.write(`event: message\ndata: ${JSON.stringify(json)}\n\n`);
+        await writer.close();
         return;
       }
       const aktivGruppe = flyt.data.aktivGruppe;
@@ -65,8 +65,8 @@ export async function GET(
           errormessage: `Prosessering feilet i backend`,
         };
 
-        writer.write(`event: message\ndata: ${JSON.stringify(json)}\n\n`);
-        writer.close();
+        await writer.write(`event: message\ndata: ${JSON.stringify(json)}\n\n`);
+        await writer.close();
         return;
       }
 
@@ -82,8 +82,8 @@ export async function GET(
           status: 'DONE',
         };
 
-        writer.write(`event: message\ndata: ${JSON.stringify(json)}\n\n`);
-        writer.close();
+        await writer.write(`event: message\ndata: ${JSON.stringify(json)}\n\n`);
+        await writer.close();
         return;
       } else {
         await pollFlytMedTimeoutOgRetry(timeout * 1.3, retries + 1);

@@ -37,8 +37,8 @@ export async function GET(__request: NextRequest, context: { params: Promise<{ r
           status: 'ERROR',
           errormessage: errorString,
         };
-        writer.write(`event: message\ndata: ${JSON.stringify(json)}\n\n`);
-        writer.close();
+        await writer.write(`event: message\ndata: ${JSON.stringify(json)}\n\n`);
+        await writer.close();
         return;
       }
 

@@ -64,7 +64,7 @@ export function DummyMeldekort({ saksid }: { saksid: string }) {
         onSubmit={form.handleSubmit(async (data) => {
           console.log(data);
 
-          postMeldekort(saksid, data);
+          await postMeldekort(saksid, data);
         })}
       >
         <Button>Send inn et meldekort</Button>
