@@ -10,4 +10,5 @@ export const toggles = {
   featureAktivitetspliktMedTrekkVisning: !isProd(),
   featureOvergangArbeid: !isProd(),
   featureFerieISykepengeperiode: !isProd(), // Finnes ikke i unleash - kun frontend-toggle
+  featureBarnetilleggVisning: !isProd(),
 };

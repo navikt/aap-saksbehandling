@@ -6,7 +6,7 @@ import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { getStegData } from 'lib/utils/steg';
-import { isProd } from 'lib/utils/environment';
+import { toggles } from 'lib/utils/toggles';
 
 interface Props {
   behandlingsreferanse: string;
@@ -29,13 +29,13 @@ export const Barnetillegg = async ({ behandlingsreferanse }: Props) => {
       aktivtSteg={flyt.data.aktivtSteg}
     >
       <StegSuspense>
-        {isProd() ? (
-          <OldBarnetilleggVurderingMedDataFetching
+        {toggles.featureBarnetilleggVisning ? (
+          <BarnetilleggVurderingMedDataFetching
             behandlingsreferanse={behandlingsreferanse}
             stegData={barnetilleggSteg}
           />
         ) : (
-          <BarnetilleggVurderingMedDataFetching
+          <OldBarnetilleggVurderingMedDataFetching
             behandlingsreferanse={behandlingsreferanse}
             stegData={barnetilleggSteg}
           />
