@@ -51,7 +51,7 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly, initi
 
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
-    'FASTSETT_BEREGNINGSTIDSPUNKT',
+    'FASTSETT_GRUNNLAG',
     mellomlagretVurdering
   );
 

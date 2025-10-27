@@ -34,6 +34,7 @@ export const Lovvalg = async ({ behandlingsReferanse }: Props) => {
   const readOnly = vurderLovvalgSteg.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
   const erOverstyrtTilbakeførtVurdering =
     vurderingAutomatisk.data.kanBehandlesAutomatisk && grunnlag.data.vurdering == null;
+
   const visManuellVurdering = skalViseSteg(vurderLovvalgSteg, !!grunnlag.data.vurdering);
   const visOverstyrKnapp = kanViseOverstyrKnapp(
     vurderingAutomatisk.data.kanBehandlesAutomatisk,
