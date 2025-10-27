@@ -7,3 +7,7 @@
   padding: 1rem;
   background-color: var(--a-surface-default);
 }
+.stretch {
+  display: flex;
+  justify-content: space-between;
+}
