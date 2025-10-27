@@ -41,7 +41,7 @@ export function useSortertListe<T>(elementer: T[]): {
       if (typeof a[sort.orderBy] === 'string' && typeof b[sort.orderBy] === 'string') {
         const valueA = a[sort.orderBy] as string;
         const valueB = b[sort.orderBy] as string;
-        return sort.direction === 'ascending' ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
+        return sort.direction === 'ascending' ? valueA.localeCompare(valueB, 'no') : valueB.localeCompare(valueA, 'no');
       }
 
       return sort.direction === 'ascending' ? comparator(a, b, sort.orderBy) : comparator(b, a, sort.orderBy);
