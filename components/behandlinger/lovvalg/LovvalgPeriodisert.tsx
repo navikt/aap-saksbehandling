@@ -2,26 +2,26 @@ import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import {
   hentAutomatiskLovvalgOgMedlemskapVurdering,
   hentFlyt,
-  hentLovvalgMedlemskapGrunnlag,
   hentMellomlagring,
+  hentPeriodisertLovvalgMedlemskapGrunnlag,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { getStegData, skalViseSteg } from 'lib/utils/steg';
-import { LovvalgOgMedlemskapVedSøknadsTidspunktOverstyringsWrapper } from 'components/behandlinger/lovvalg/LovvalgOgMedlemskapVedSøknadsTidspunktOverstyringswrapper';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 import { kanViseOverstyrKnapp } from 'lib/utils/overstyring';
-import { LovvalgOgMedlemskapVedSøknadstidspunkt } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapvedsøknadstidspunkt/LovvalgOgMedlemskapVedSøknadstidspunkt';
+import { LovvalgOgMedlemskapPeriodisert } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/LovvalgOgMedlemskapPeriodisert';
+import { LovvalgOgMedlemskapPeriodisertVedSøknadsTidspunktOverstyringsWrapper } from 'components/behandlinger/lovvalg/LovvalgOgMedlemskapPeriodisertOverstyringswrapper';
 
 interface Props {
   behandlingsReferanse: string;
 }
 
-export const Lovvalg = async ({ behandlingsReferanse }: Props) => {
+export const LovvalgPeriodisert = async ({ behandlingsReferanse }: Props) => {
   const [flyt, vurderingAutomatisk, grunnlag, initialMellomlagretVurdering] = await Promise.all([
     hentFlyt(behandlingsReferanse),
     hentAutomatiskLovvalgOgMedlemskapVurdering(behandlingsReferanse),
-    hentLovvalgMedlemskapGrunnlag(behandlingsReferanse),
+    hentPeriodisertLovvalgMedlemskapGrunnlag(behandlingsReferanse),
     hentMellomlagring(behandlingsReferanse, Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP),
   ]);
 
@@ -29,21 +29,25 @@ export const Lovvalg = async ({ behandlingsReferanse }: Props) => {
     return <ApiException apiResponses={[vurderingAutomatisk, grunnlag, flyt]} />;
   }
 
+  console.log(grunnlag);
   const vurderLovvalgSteg = getStegData('LOVVALG', 'VURDER_LOVVALG', flyt.data);
   const behandlingsVersjon = flyt.data.behandlingVersjon;
   const readOnly = vurderLovvalgSteg.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
   const erOverstyrtTilbakeførtVurdering =
-    vurderingAutomatisk.data.kanBehandlesAutomatisk && grunnlag.data.vurdering == null;
-  const visManuellVurdering = skalViseSteg(vurderLovvalgSteg, !!grunnlag.data.vurdering);
+    vurderingAutomatisk.data.kanBehandlesAutomatisk &&
+    (grunnlag.data.nyeVurderinger.length === 0 || grunnlag.data.overstyrt);
+
+  const visManuellVurdering = skalViseSteg(vurderLovvalgSteg, grunnlag.data.sisteVedtatteVurderinger.length > 0);
   const visOverstyrKnapp = kanViseOverstyrKnapp(
     vurderingAutomatisk.data.kanBehandlesAutomatisk,
     readOnly,
     vurderLovvalgSteg.avklaringsbehov
   );
 
+  const erOverstyrt = !!grunnlag?.data.overstyrt || erOverstyrtTilbakeførtVurdering;
+
   const behovstype =
-    flyt.data.visning.typeBehandling === 'Førstegangsbehandling' &&
-    (!!grunnlag?.data.vurdering?.overstyrt || erOverstyrtTilbakeførtVurdering)
+    flyt.data.visning.typeBehandling === 'Førstegangsbehandling' && erOverstyrt
       ? Behovstype.MANUELL_OVERSTYRING_LOVVALG
       : Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP;
 
@@ -55,7 +59,7 @@ export const Lovvalg = async ({ behandlingsReferanse }: Props) => {
       behandlingVersjon={behandlingsVersjon}
       aktivtSteg={flyt.data.aktivtSteg}
     >
-      <LovvalgOgMedlemskapVedSøknadsTidspunktOverstyringsWrapper
+      <LovvalgOgMedlemskapPeriodisertVedSøknadsTidspunktOverstyringsWrapper
         automatiskVurdering={vurderingAutomatisk.data}
         harAvklaringsbehov={vurderLovvalgSteg.avklaringsbehov.length > 0}
         behandlingsReferanse={behandlingsReferanse}
@@ -64,18 +68,19 @@ export const Lovvalg = async ({ behandlingsReferanse }: Props) => {
         visOverstyrKnapp={visOverstyrKnapp}
         initialMellomlagretVurdering={initialMellomlagretVurdering}
         behovstype={behovstype}
+        grunnlag={grunnlag.data}
       >
         {visManuellVurdering && (
-          <LovvalgOgMedlemskapVedSøknadstidspunkt
+          <LovvalgOgMedlemskapPeriodisert
             behandlingVersjon={behandlingsVersjon}
             grunnlag={grunnlag.data}
             readOnly={readOnly}
-            overstyring={!!grunnlag?.data.vurdering?.overstyrt || erOverstyrtTilbakeførtVurdering}
+            overstyring={erOverstyrt}
             initialMellomlagretVurdering={initialMellomlagretVurdering}
             behovstype={behovstype}
           />
         )}
-      </LovvalgOgMedlemskapVedSøknadsTidspunktOverstyringsWrapper>
+      </LovvalgOgMedlemskapPeriodisertVedSøknadsTidspunktOverstyringsWrapper>
     </GruppeSteg>
   );
 };

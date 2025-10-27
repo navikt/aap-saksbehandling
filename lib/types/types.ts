@@ -307,8 +307,17 @@ export type AutomatiskLovvalgOgMedlemskapVurdering =
 export type tilhørighetVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.Tilh\u00F8righetVurdering'];
 
+export type AvklarPeriodisertLovvalgMedlemskapLøsning =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.lovvalgmedlemskap.PeriodisertManuellVurderingForLovvalgMedlemskapDto'];
+
 export type LovvalgMedlemskapGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.LovvalgMedlemskapGrunnlagResponse'];
+
+export type PeriodisertLovvalgMedlemskapGrunnlag =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.PeriodisertLovvalgMedlemskapGrunnlagResponse'];
+
+export type PeriodisertManuellVurderingForLovvalgMedlemskapResponse =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.PeriodisertManuellVurderingForLovvalgMedlemskapResponse'];
 
 export type HistoriskLovvalgMedlemskapVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.HistoriskManuellVurderingForLovvalgMedlemskapResponse'];
