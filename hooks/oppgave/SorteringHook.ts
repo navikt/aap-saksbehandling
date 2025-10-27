@@ -18,11 +18,11 @@ function comparator<T>(a: T, b: T, orderBy: keyof T): number {
 export function useSortertListe<T>(elementer: T[]): {
   sort: ScopedSortState<T> | undefined;
   sortertListe: T[];
-  håndterSortering: (sortKey: ScopedSortState<T>['orderBy']) => void;
+  settSorteringskriterier: (sortKey: ScopedSortState<T>['orderBy']) => void;
 } {
   const [sort, setSort] = useState<ScopedSortState<T> | undefined>();
 
-  function håndterSortering(sortKey: ScopedSortState<T>['orderBy']) {
+  function settSorteringskriterier(sortKey: ScopedSortState<T>['orderBy']) {
     const sortering =
       sort && sortKey === sort.orderBy && sort.direction === 'descending'
         ? undefined
@@ -52,5 +52,5 @@ export function useSortertListe<T>(elementer: T[]): {
 
   const sortertListe = utførSortering(elementer);
 
-  return { sort, sortertListe, håndterSortering };
+  return { sort, sortertListe, settSorteringskriterier: settSorteringskriterier };
 }
