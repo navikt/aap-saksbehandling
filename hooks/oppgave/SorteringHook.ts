@@ -6,13 +6,10 @@ export interface ScopedSortState<T> extends SortState {
 }
 
 function comparator<T>(a: T, b: T, orderBy: keyof T): number {
-  const aValue = a[orderBy];
-  const bValue = b[orderBy];
-
-  if (bValue == null || bValue < aValue) {
+  if (b[orderBy] == null || b[orderBy] < a[orderBy]) {
     return -1;
   }
-  if (bValue > aValue) {
+  if (b[orderBy] > a[orderBy]) {
     return 1;
   }
   return 0;
@@ -37,12 +34,23 @@ export function useSortertListe<T>(elementer: T[]): {
     setSort(sortering as ScopedSortState<T>);
   }
 
-  const sorterteElementer = [...elementer].sort((a, b) => {
-    if (sort) {
-      return sort.direction === 'ascending' ? comparator(b, a, sort.orderBy) : comparator(a, b, sort.orderBy);
-    }
-    return 1;
-  });
+  function utførSortering(elementer: T[]) {
+    if (!sort) return elementer;
 
-  return { sort, sortertListe: sorterteElementer, håndterSortering };
+    const sorterteElementer = elementer.sort((a, b) => {
+      if (typeof a[sort.orderBy] === 'string' && typeof b[sort.orderBy] === 'string') {
+        const valueA = a[sort.orderBy] as string;
+        const valueB = b[sort.orderBy] as string;
+        return sort.direction === 'ascending' ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
+      }
+
+      return sort.direction === 'ascending' ? comparator(a, b, sort.orderBy) : comparator(b, a, sort.orderBy);
+    });
+
+    return sorterteElementer;
+  }
+
+  const sortertListe = utførSortering(elementer);
+
+  return { sort, sortertListe, håndterSortering };
 }
