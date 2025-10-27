@@ -11,11 +11,10 @@ import {
   MellomlagretVurdering,
   ToTrinnsVurderingGrunn,
 } from 'lib/types/types';
-import { ToTrinnsvurderingToggleGroup } from 'components/totrinnsvurdering/totrinnsvurderingtogglegroup/ToTrinnsvurderingToggleGroup';
 import { TotrinnsvurderingForm } from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingForm';
-
 import styles from 'components/totrinnsvurdering/ToTrinnsvurdering.module.css';
-import { Historikk } from 'components/totrinnsvurdering/historikk/Historikk';
+import { Tabs, Tooltip } from '@navikt/ds-react';
+import { PersonGavelFillIcon } from '@navikt/aksel-icons';
 
 interface Props {
   grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;
@@ -33,6 +32,10 @@ export interface ToTrinnsVurderingFormFields {
   definisjon: AvklaringsbehovKode;
 }
 
+enum Tab {
+  TOTRINNSVURDERING = 'TOTRINNSVURDERING',
+}
+
 export const ToTrinnsvurdering = ({
   grunnlag,
   behandlingsReferanse,
@@ -41,8 +44,7 @@ export const ToTrinnsvurdering = ({
   initialMellomlagretVurdering,
 }: Props) => {
   const params = useParams();
-
-  const [toggleGroupValue, setToggleGroupValue] = useState<string>(readOnly ? 'historikk' : 'totrinnsvurdering');
+  const [toggleGroupValue, setToggleGroupValue] = useState<Tab>(Tab.TOTRINNSVURDERING);
 
   const link = `/saksbehandling/sak/${params.saksId}/${behandlingsReferanse}`;
 
@@ -56,24 +58,24 @@ export const ToTrinnsvurdering = ({
         <Oppsummering vurderinger={vurderteTotrinnsvurderinger} link={link} erKvalitetssikrer={erKvalitetssikring} />
       )}
 
-      <ToTrinnsvurderingToggleGroup
-        activeToggle={toggleGroupValue}
-        setToggleValue={setToggleGroupValue}
-        erKvalitetssikring={erKvalitetssikring}
-      />
-      {toggleGroupValue === 'historikk' && (
-        <div>
-          {grunnlag.historikk.map((historikk, index) => (
-            <Historikk key={index} historikk={historikk} erFørsteElementIListen={index === 0} />
-          ))}
-        </div>
-      )}
-
-      <div
-        hidden={toggleGroupValue === 'historikk'}
-        aria-hidden={toggleGroupValue === 'historikk'}
-        className={toggleGroupValue === 'totrinnsvurdering' ? 'flex-column' : ''}
+      <Tabs
+        defaultValue={toggleGroupValue}
+        value={toggleGroupValue}
+        onChange={(value) => setToggleGroupValue(value as Tab)}
+        size={'small'}
+        className={styles.stretch}
+        fill
       >
+        <Tooltip content={'Åpne totrinnsvurdering'}>
+          <Tabs.Tab
+            value={Tab.TOTRINNSVURDERING}
+            label={erKvalitetssikring ? 'Kvalitetssikrer' : 'Beslutter'}
+            icon={<PersonGavelFillIcon aria-hidden />}
+          />
+        </Tooltip>
+      </Tabs>
+
+      {toggleGroupValue === Tab.TOTRINNSVURDERING && (
         <TotrinnsvurderingForm
           grunnlag={grunnlag}
           link={link}
@@ -81,7 +83,7 @@ export const ToTrinnsvurdering = ({
           readOnly={readOnly}
           initialMellomlagretVurdering={initialMellomlagretVurdering}
         />
-      </div>
+      )}
     </div>
   );
 };
