@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { Behovstype, JaEllerNei } from 'lib/utils/form';
 import { useParams } from 'next/navigation';
 import { Oppsummering } from 'components/totrinnsvurdering/oppsummering/Oppsummering';
@@ -13,8 +12,7 @@ import {
 } from 'lib/types/types';
 import { TotrinnsvurderingForm } from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingForm';
 import styles from 'components/totrinnsvurdering/ToTrinnsvurdering.module.css';
-import { Tabs, Tooltip } from '@navikt/ds-react';
-import { PersonGavelFillIcon } from '@navikt/aksel-icons';
+import { HStack, Label } from '@navikt/ds-react';
 
 interface Props {
   grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;
@@ -32,10 +30,6 @@ export interface ToTrinnsVurderingFormFields {
   definisjon: AvklaringsbehovKode;
 }
 
-enum Tab {
-  TOTRINNSVURDERING = 'TOTRINNSVURDERING',
-}
-
 export const ToTrinnsvurdering = ({
   grunnlag,
   behandlingsReferanse,
@@ -44,7 +38,6 @@ export const ToTrinnsvurdering = ({
   initialMellomlagretVurdering,
 }: Props) => {
   const params = useParams();
-  const [toggleGroupValue, setToggleGroupValue] = useState<Tab>(Tab.TOTRINNSVURDERING);
 
   const link = `/saksbehandling/sak/${params.saksId}/${behandlingsReferanse}`;
 
@@ -58,24 +51,8 @@ export const ToTrinnsvurdering = ({
         <Oppsummering vurderinger={vurderteTotrinnsvurderinger} link={link} erKvalitetssikrer={erKvalitetssikring} />
       )}
 
-      <Tabs
-        defaultValue={toggleGroupValue}
-        value={toggleGroupValue}
-        onChange={(value) => setToggleGroupValue(value as Tab)}
-        size={'small'}
-        className={styles.stretch}
-        fill
-      >
-        <Tooltip content={'Åpne totrinnsvurdering'}>
-          <Tabs.Tab
-            value={Tab.TOTRINNSVURDERING}
-            label={erKvalitetssikring ? 'Kvalitetssikrer' : 'Beslutter'}
-            icon={<PersonGavelFillIcon aria-hidden />}
-          />
-        </Tooltip>
-      </Tabs>
-
-      {toggleGroupValue === Tab.TOTRINNSVURDERING && (
+      <HStack gap={'1'}>
+        <Label>{erKvalitetssikring ? 'Kvalitetssikrer' : 'Beslutter'}</Label>
         <TotrinnsvurderingForm
           grunnlag={grunnlag}
           link={link}
@@ -83,7 +60,7 @@ export const ToTrinnsvurdering = ({
           readOnly={readOnly}
           initialMellomlagretVurdering={initialMellomlagretVurdering}
         />
-      )}
+      </HStack>
     </div>
   );
 };
