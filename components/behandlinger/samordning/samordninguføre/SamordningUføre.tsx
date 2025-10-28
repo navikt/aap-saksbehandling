@@ -56,7 +56,7 @@ export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly, initia
     {
       begrunnelse: {
         type: 'textarea',
-        label: 'Vurder hvilken grad med uføre som skal samordnes med AAP',
+        label: 'Vurder uføregraden som skal samordnes med AAP',
         rules: { required: 'Skriv begrunnelse' },
         defaultValue: defaultValue.begrunnelse,
       },
@@ -94,7 +94,7 @@ export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly, initia
 
   return (
     <VilkårskortMedFormOgMellomlagringNyVisning
-      heading="Samordning med delvis uføre"
+      heading="§ 11-28 Samordning med delvis uføre"
       steg="SAMORDNING_UFØRE"
       onSubmit={handleSubmit}
       status={status}
@@ -116,7 +116,7 @@ export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly, initia
       {grunnlag?.grunnlag?.length > 0 && (
         <VStack gap={'2'}>
           <Label size={'small'}>Vedtak om uføretrygd</Label>
-          <BodyShort size={'small'}>Vi har funnet følgende perioder med overlapp mellom uføretrygd og Aap.</BodyShort>
+          <BodyShort size={'small'}>Vi har funnet følgende perioder med overlapp mellom uføretrygd og AAP.</BodyShort>
           <TableStyled>
             <Table.Header>
               <Table.Row>

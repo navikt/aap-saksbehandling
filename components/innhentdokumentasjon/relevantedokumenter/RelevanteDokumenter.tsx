@@ -13,6 +13,7 @@ import { useState } from 'react';
 import { KnyttTilSakModal } from 'components/saksoversikt/dokumentoversikt/KnyttTilSakModal';
 import { SakContextType } from 'context/saksbehandling/SakContext';
 import { TableStyled } from 'components/tablestyled/TableStyled';
+import { storForbokstav } from 'lib/utils/string';
 
 interface FormFields {
   dokumentnavn: string;
@@ -138,7 +139,7 @@ const DokumentRad = ({ sak, dokument }: { sak: SakContextType; dokument: Relevan
         </Link>
       </Table.DataCell>
       <Table.DataCell textSize="small">{dokument.tema}</Table.DataCell>
-      <Table.DataCell textSize="small">{dokument.brevkode}</Table.DataCell>
+      <Table.DataCell textSize="small">{dokument.brevkode ? storForbokstav(dokument.brevkode) : '-'}</Table.DataCell>
       <Table.DataCell textSize="small">{formaterDatoForFrontend(dokument.datoOpprettet)}</Table.DataCell>
       <Table.DataCell textSize="small">
         {erKnyttetTilSak ? (

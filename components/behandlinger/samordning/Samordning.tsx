@@ -45,38 +45,30 @@ export const Samordning = async ({ behandlingsreferanse }: Props) => {
         </StegSuspense>
       )}
 
-      {samordningGraderingSteg.skalViseSteg && (
-        <StegSuspense>
-          <SamordningGraderingMedDatafetching
-            behandlingsreferanse={behandlingsreferanse}
-            stegData={samordningGraderingSteg}
-          />
-        </StegSuspense>
-      )}
+      <StegSuspense>
+        <SamordningGraderingMedDatafetching
+          behandlingsreferanse={behandlingsreferanse}
+          stegData={samordningGraderingSteg}
+        />
+      </StegSuspense>
 
-      {samordningUføreSteg.skalViseSteg && (
-        <StegSuspense>
-          <SamordningUføreMedDatafetching behandlingsreferanse={behandlingsreferanse} stegData={samordningUføreSteg} />
-        </StegSuspense>
-      )}
+      <StegSuspense>
+        <SamordningUføreMedDatafetching behandlingsreferanse={behandlingsreferanse} stegData={samordningUføreSteg} />
+      </StegSuspense>
 
-      {samordningStatligeYtelserSteg.skalViseSteg && (
-        <StegSuspense>
-          <SamordningAndreStatligeYtelserMedDatafetching
-            behandlingsreferanse={behandlingsreferanse}
-            stegData={samordningStatligeYtelserSteg}
-          />
-        </StegSuspense>
-      )}
+      <StegSuspense>
+        <SamordningAndreStatligeYtelserMedDatafetching
+          behandlingsreferanse={behandlingsreferanse}
+          stegData={samordningStatligeYtelserSteg}
+        />
+      </StegSuspense>
 
-      {samordningArbeidsgiverSteg.skalViseSteg && (
-        <StegSuspense>
-          <SamordningArbeidsgiverMedDatafetching
-            behandlingsreferanse={behandlingsreferanse}
-            stegData={samordningArbeidsgiverSteg}
-          />
-        </StegSuspense>
-      )}
+      <StegSuspense>
+        <SamordningArbeidsgiverMedDatafetching
+          behandlingsreferanse={behandlingsreferanse}
+          stegData={samordningArbeidsgiverSteg}
+        />
+      </StegSuspense>
 
       {samordningTjenestepensjonSteg.skalViseSteg && (
         <StegSuspense>

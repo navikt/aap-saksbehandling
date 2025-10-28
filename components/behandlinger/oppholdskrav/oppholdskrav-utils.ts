@@ -4,6 +4,7 @@ import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker
 import { alleLandUtenNorge } from 'lib/utils/countries';
 import { parse, sub } from 'date-fns';
 import { getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
+import { FieldError, FieldErrorsImpl, FieldValues, Merge } from 'react-hook-form';
 
 export function getDefaultValuesFromGrunnlag(grunnlag?: OppholdskravGrunnlagResponse): OppholdskravForm {
   if (grunnlag == null || (grunnlag.nyeVurderinger.length === 0 && grunnlag.sisteVedtatteVurderinger.length === 0)) {
@@ -71,4 +72,27 @@ export function getLandkodeOrAnnet(value: string): string {
     return value;
   }
   return 'ANNET';
+}
+interface VurderingerErrors<T extends FieldValues> {
+  vurderinger?: Merge<FieldError, (Merge<FieldError, FieldErrorsImpl<T>> | undefined)[]>;
+}
+
+interface ErrorListElement {
+  ref: string;
+  message: string;
+}
+type ErrorList = ErrorListElement[];
+
+export function mapPeriodiserteVurderingerErrorList<T extends FieldValues>(
+  formstateErrors: VurderingerErrors<T>
+): ErrorList {
+  return formstateErrors.vurderinger && Array.isArray(formstateErrors.vurderinger)
+    ? formstateErrors.vurderinger.reduce((acc, errVurdering, index) => {
+        const errors = Object.entries(errVurdering || {})
+          // @ts-ignore
+          .map(([key, errField]) => ({ ref: `#vurderinger.${index}.${key}`, message: errField?.message }))
+          .filter((el) => el.message);
+        return [...acc, ...errors];
+      }, [])
+    : [];
 }

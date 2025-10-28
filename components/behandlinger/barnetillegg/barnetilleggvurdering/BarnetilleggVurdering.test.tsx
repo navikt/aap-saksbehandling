@@ -3,7 +3,6 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { BarnetilleggVurdering } from 'components/behandlinger/barnetillegg/barnetilleggvurdering/BarnetilleggVurdering';
 import { userEvent } from '@testing-library/user-event';
 import { BarnetilleggGrunnlag, BehandlingPersoninfo, MellomlagretVurderingResponse } from 'lib/types/types';
-import { kalkulerAlder } from 'components/behandlinger/alder/Alder';
 import { render, screen, within } from 'lib/test/CustomRender';
 import createFetchMock from 'vitest-fetch-mock';
 import { Behovstype } from 'lib/utils/form';
@@ -74,6 +73,7 @@ const grunnlag: BarnetilleggGrunnlag = {
       },
     },
   ],
+  vurderteFolkeregisterBarn: [],
   vurderteBarn: [],
 };
 
@@ -109,7 +109,7 @@ describe('barnetillegg', () => {
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
-    const heading = screen.getByText('Følgende barn er oppgitt av brukeren og må vurderes');
+    const heading = screen.getByText('Følgende barn er oppgitt av bruker');
     expect(heading).toBeVisible();
   });
 
@@ -123,7 +123,7 @@ describe('barnetillegg', () => {
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
-    const heading = screen.getByText('Følgende barn er funnet i folkeregisteret og vil gi grunnlag for barnetillegg');
+    const heading = screen.getByText('Følgende barn er funnet i folkeregisteret');
     expect(heading).toBeVisible();
   });
 
@@ -207,21 +207,6 @@ describe('Oppgitte barn', () => {
 
     const feilmelding = screen.getByText(`Dato kan ikke være før fødselsdato (${fødselsdato})`);
     expect(feilmelding).toBeVisible();
-  });
-
-  it('skal vise navnet, identen og alder på barnet', () => {
-    render(
-      <BarnetilleggVurdering
-        behandlingsversjon={1}
-        grunnlag={grunnlag}
-        readOnly={false}
-        visManuellVurdering={true}
-        behandlingPersonInfo={behandlingPersonInfo}
-      />
-    );
-    const alder = kalkulerAlder(new Date(grunnlag.barnSomTrengerVurdering[0].fodselsDato!!));
-    const tekst = screen.getByText(`HELLO PELLO, 12345678910 (${alder})`);
-    expect(tekst).toBeVisible();
   });
 
   it('skal ha et begrunnelsesfelt', () => {
@@ -462,7 +447,7 @@ describe('Oppgitte barn', () => {
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
-    const knapp = screen.getByRole('button', { name: 'Legg til vurdering' });
+    const knapp = screen.getAllByRole('button', { name: 'Legg til vurdering' })[0];
     expect(knapp).toBeInTheDocument();
   });
 
@@ -483,7 +468,7 @@ describe('Oppgitte barn', () => {
 
     expect(begrunnelsesFelterFørDetErLagtTilEnNy.length).toBe(1);
 
-    const knapp = screen.getByRole('button', { name: 'Legg til vurdering' });
+    const knapp = screen.getAllByRole('button', { name: 'Legg til vurdering' })[0];
     await user.click(knapp);
 
     const begrunnelsesFelter = screen.getAllByRole('textbox', {
@@ -526,7 +511,7 @@ describe('Oppgitte barn', () => {
 
     expect(screen.queryByRole('button', { name: /fjern vurdering/i })).not.toBeInTheDocument();
 
-    const leggTilVurderingKnapp = screen.getByRole('button', { name: /legg til vurdering/i });
+    const leggTilVurderingKnapp = screen.getAllByRole('button', { name: /legg til vurdering/i })[0];
     await user.click(leggTilVurderingKnapp);
 
     expect(
@@ -549,11 +534,11 @@ describe('Oppgitte barn', () => {
       />
     );
 
-    expect(screen.getByRole('button', { name: /legg til vurdering/i })).toBeInTheDocument();
+    expect(screen.getAllByRole('button', { name: /legg til vurdering/i }).length).toBe(2);
 
     await user.click(screen.getByRole('radio', { name: /nei/i }));
 
-    expect(screen.queryByRole('button', { name: /legg til vurdering/i })).not.toBeInTheDocument();
+    expect(screen.getAllByRole('button', { name: /legg til vurdering/i }).length).toBe(1);
   });
 
   it('skal vise dato felt når man besvarer nei på forsørgeransvar så lenge det ikke er første vurdering', async () => {
@@ -569,7 +554,7 @@ describe('Oppgitte barn', () => {
 
     await user.click(screen.getByRole('radio', { name: /ja/i }));
 
-    await user.click(screen.getByRole('button', { name: 'Legg til vurdering' }));
+    await user.click(screen.getAllByRole('button', { name: 'Legg til vurdering' })[0]);
 
     await user.click(screen.getAllByRole('radio', { name: /nei/i })[1]);
 
@@ -590,7 +575,7 @@ describe('Oppgitte barn', () => {
     await user.click(screen.getAllByRole('radio', { name: /ja/i })[0]);
     await user.click(screen.getAllByRole('radio', { name: /ja/i })[1]);
 
-    await user.click(screen.getByRole('button', { name: 'Legg til vurdering' }));
+    await user.click(screen.getAllByRole('button', { name: 'Legg til vurdering' })[0]);
 
     const radioNos = screen.getAllByRole('radio', { name: /nei/i });
     await user.click(radioNos[2]);
@@ -650,6 +635,7 @@ describe('mellomlagring', () => {
     harTilgangTilÅSaksbehandle: true,
     søknadstidspunkt: '2025-09-02',
     folkeregisterbarn: [],
+    vurderteFolkeregisterBarn: [],
     vurderteBarn: [
       {
         ident: '01412086860',
@@ -678,6 +664,7 @@ describe('mellomlagring', () => {
     søknadstidspunkt: '2025-09-02',
     folkeregisterbarn: [],
     vurderteBarn: [],
+    vurderteFolkeregisterBarn: [],
     barnSomTrengerVurdering: [
       {
         ident: {

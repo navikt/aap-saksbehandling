@@ -7,7 +7,7 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 import { hentBrukerInformasjon } from 'lib/services/azure/azureUserService';
-import { skalViseSteg, StegData } from 'lib/utils/steg';
+import { StegData } from 'lib/utils/steg';
 import { SamordningGradering } from 'components/behandlinger/samordning/samordninggradering/SamordningGradering';
 
 interface Props {
@@ -28,10 +28,6 @@ export const SamordningGraderingMedDatafetching = async ({ behandlingsreferanse,
 
   if (isError(grunnlag) || isError(oppfølgningOppgaver)) {
     return <ApiException apiResponses={[grunnlag, oppfølgningOppgaver]} />;
-  }
-
-  if (!skalViseSteg(stegData, grunnlag.data.vurdering != null)) {
-    return null;
   }
 
   return (

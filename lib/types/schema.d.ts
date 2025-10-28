@@ -8964,6 +8964,7 @@ export interface components {
       's\u00F8knadstidspunkt': string;
       vurdertAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
       vurderteBarn: components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnetillegg.ExtendedVurdertBarnDto'][];
+      vurderteFolkeregisterBarn: components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnetillegg.ExtendedVurdertBarnDto'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.barnetillegg.ExtendedVurdertBarnDto': {
       /**
@@ -9697,7 +9698,8 @@ export interface components {
         | 'SVANGERSKAPSPENGER'
         | 'OMSORGSPENGER'
         | 'OPPLÆRINGSPENGER'
-        | 'UKJENT_SLUTTDATO_PÅ_YTELSE';
+        | 'UKJENT_SLUTTDATO_PÅ_YTELSE'
+        | 'FERIE_I_SYKEPENGEPERIODE';
     };
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningYtelseDTO': {
       /** @enum {string} */
@@ -9717,7 +9719,8 @@ export interface components {
         | 'SVANGERSKAPSPENGER'
         | 'OMSORGSPENGER'
         | 'OPPLÆRINGSPENGER'
-        | 'UKJENT_SLUTTDATO_PÅ_YTELSE';
+        | 'UKJENT_SLUTTDATO_PÅ_YTELSE'
+        | 'FERIE_I_SYKEPENGEPERIODE';
     };
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningYtelseVurderingDTO': {
       begrunnelse?: string | null;
@@ -10140,7 +10143,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.LovvalgResponse': {
       begrunnelse: string;
       /** @enum {string|null} */
-      'lovvalgsE\u00D8SLand'?:
+      'lovvalgsE\u00D8SLandEllerLandMedAvtale'?:
         | 'BEL'
         | 'BGR'
         | 'DNK'
@@ -10172,6 +10175,8 @@ export interface components {
         | 'DEU'
         | 'HUN'
         | 'AUT'
+        | 'GBR'
+        | 'AUS'
         | null;
     };
     'no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.ManuellVurderingForForutg\u00E5endeMedlemskapResponse': {
@@ -10628,6 +10633,8 @@ export interface components {
       arbeidsgiverGradering?: number | null;
       /** Format: double */
       barneTilleggsats: number;
+      /** Format: double */
+      barnetillegg: number;
       /** Format: double */
       dagsats: number;
       /** Format: double */
@@ -11428,7 +11435,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.faktagrunnlag.lovvalgmedlemskap.LovvalgVedS\u00F8knadsTidspunktDto': {
       begrunnelse: string;
       /** @enum {string|null} */
-      'lovvalgsE\u00D8SLand'?:
+      'lovvalgsE\u00D8SLandEllerLandMedAvtale'?:
         | 'BEL'
         | 'BGR'
         | 'DNK'
@@ -11460,6 +11467,8 @@ export interface components {
         | 'DEU'
         | 'HUN'
         | 'AUT'
+        | 'GBR'
+        | 'AUS'
         | null;
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.lovvalgmedlemskap.ManuellVurderingForForutg\u00E5endeMedlemskapDto': {
@@ -11705,7 +11714,8 @@ export interface components {
         | 'SVANGERSKAPSPENGER'
         | 'OMSORGSPENGER'
         | 'OPPLÆRINGSPENGER'
-        | 'UKJENT_SLUTTDATO_PÅ_YTELSE';
+        | 'UKJENT_SLUTTDATO_PÅ_YTELSE'
+        | 'FERIE_I_SYKEPENGEPERIODE';
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.samordning.VurderingerForSamordning': {
       begrunnelse?: string | null;
@@ -12700,7 +12710,7 @@ export interface components {
         | 'BARNETILLEGG'
         | 'INSTITUSJONSOPPHOLD'
         | 'SAMORDNING_OG_AVREGNING'
-        | 'REVURDER_SAMORDNING_ANDRE_FOKETRYGDYTELSER'
+        | 'REVURDER_SAMORDNING_ANDRE_FOLKETRYGDYTELSER'
         | 'REVURDER_SAMORDNING_UFØRE'
         | 'REVURDER_SAMORDNING_ANDRE_STATLIGE_YTELSER'
         | 'REVURDER_SAMORDNING_ARBEIDSGIVER'
@@ -12886,7 +12896,7 @@ export interface components {
         | 'BARNETILLEGG'
         | 'INSTITUSJONSOPPHOLD'
         | 'SAMORDNING_OG_AVREGNING'
-        | 'REVURDER_SAMORDNING_ANDRE_FOKETRYGDYTELSER'
+        | 'REVURDER_SAMORDNING_ANDRE_FOLKETRYGDYTELSER'
         | 'REVURDER_SAMORDNING_UFØRE'
         | 'REVURDER_SAMORDNING_ANDRE_STATLIGE_YTELSER'
         | 'REVURDER_SAMORDNING_ARBEIDSGIVER'
@@ -12967,7 +12977,7 @@ export interface components {
         | 'BARNETILLEGG'
         | 'INSTITUSJONSOPPHOLD'
         | 'SAMORDNING_OG_AVREGNING'
-        | 'REVURDER_SAMORDNING_ANDRE_FOKETRYGDYTELSER'
+        | 'REVURDER_SAMORDNING_ANDRE_FOLKETRYGDYTELSER'
         | 'REVURDER_SAMORDNING_UFØRE'
         | 'REVURDER_SAMORDNING_ANDRE_STATLIGE_YTELSER'
         | 'REVURDER_SAMORDNING_ARBEIDSGIVER'
@@ -13031,7 +13041,7 @@ export interface components {
         | 'BARNETILLEGG'
         | 'INSTITUSJONSOPPHOLD'
         | 'SAMORDNING_OG_AVREGNING'
-        | 'REVURDER_SAMORDNING_ANDRE_FOKETRYGDYTELSER'
+        | 'REVURDER_SAMORDNING_ANDRE_FOLKETRYGDYTELSER'
         | 'REVURDER_SAMORDNING_UFØRE'
         | 'REVURDER_SAMORDNING_ANDRE_STATLIGE_YTELSER'
         | 'REVURDER_SAMORDNING_ARBEIDSGIVER'

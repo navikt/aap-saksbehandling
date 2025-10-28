@@ -9,4 +9,6 @@ export const toggles = {
   featureRevurderingVurderingsbehov: !isProd(),
   featureAktivitetspliktMedTrekkVisning: !isProd(),
   featureOvergangArbeid: !isProd(),
+  featureFerieISykepengeperiode: !isProd(), // Finnes ikke i unleash - kun frontend-toggle
+  featurePostmottakBehandlingerPåVent: !isProd(),
 };

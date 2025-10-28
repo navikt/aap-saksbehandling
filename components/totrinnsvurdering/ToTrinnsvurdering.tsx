@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { Behovstype, JaEllerNei } from 'lib/utils/form';
 import { useParams } from 'next/navigation';
 import { Oppsummering } from 'components/totrinnsvurdering/oppsummering/Oppsummering';
@@ -11,11 +10,9 @@ import {
   MellomlagretVurdering,
   ToTrinnsVurderingGrunn,
 } from 'lib/types/types';
-import { ToTrinnsvurderingToggleGroup } from 'components/totrinnsvurdering/totrinnsvurderingtogglegroup/ToTrinnsvurderingToggleGroup';
 import { TotrinnsvurderingForm } from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingForm';
-
 import styles from 'components/totrinnsvurdering/ToTrinnsvurdering.module.css';
-import { Historikk } from 'components/totrinnsvurdering/historikk/Historikk';
+import { Label, VStack } from '@navikt/ds-react';
 
 interface Props {
   grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;
@@ -42,8 +39,6 @@ export const ToTrinnsvurdering = ({
 }: Props) => {
   const params = useParams();
 
-  const [toggleGroupValue, setToggleGroupValue] = useState<string>(readOnly ? 'historikk' : 'totrinnsvurdering');
-
   const link = `/saksbehandling/sak/${params.saksId}/${behandlingsReferanse}`;
 
   const vurderteTotrinnsvurderinger = grunnlag.vurderinger.filter(
@@ -52,36 +47,22 @@ export const ToTrinnsvurdering = ({
 
   return (
     <div className={styles.toTrinnsKontroll}>
-      {readOnly && (
+      {readOnly && vurderteTotrinnsvurderinger.length > 0 && (
         <Oppsummering vurderinger={vurderteTotrinnsvurderinger} link={link} erKvalitetssikrer={erKvalitetssikring} />
       )}
 
-      <ToTrinnsvurderingToggleGroup
-        activeToggle={toggleGroupValue}
-        setToggleValue={setToggleGroupValue}
-        erKvalitetssikring={erKvalitetssikring}
-      />
-      {toggleGroupValue === 'historikk' && (
-        <div>
-          {grunnlag.historikk.map((historikk, index) => (
-            <Historikk key={index} historikk={historikk} erFørsteElementIListen={index === 0} />
-          ))}
-        </div>
+      {!readOnly && (
+        <VStack gap={'3'}>
+          <Label>{erKvalitetssikring ? 'Kvalitetssikrer' : 'Beslutter'}</Label>
+          <TotrinnsvurderingForm
+            grunnlag={grunnlag}
+            link={link}
+            erKvalitetssikring={erKvalitetssikring}
+            readOnly={readOnly}
+            initialMellomlagretVurdering={initialMellomlagretVurdering}
+          />
+        </VStack>
       )}
-
-      <div
-        hidden={toggleGroupValue === 'historikk'}
-        aria-hidden={toggleGroupValue === 'historikk'}
-        className={toggleGroupValue === 'totrinnsvurdering' ? 'flex-column' : ''}
-      >
-        <TotrinnsvurderingForm
-          grunnlag={grunnlag}
-          link={link}
-          erKvalitetssikring={erKvalitetssikring}
-          readOnly={readOnly}
-          initialMellomlagretVurdering={initialMellomlagretVurdering}
-        />
-      </div>
     </div>
   );
 };

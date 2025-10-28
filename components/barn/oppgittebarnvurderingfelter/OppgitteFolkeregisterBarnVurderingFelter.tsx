@@ -21,7 +21,7 @@ interface Props {
   harOppgittFosterforelderRelasjon: boolean;
 }
 
-export const OppgitteBarnVurderingFelter = ({
+export const OppgitteFolkeregisterBarnVurderingFelter = ({
   readOnly,
   barneTilleggIndex,
   vurderingIndex,
@@ -32,12 +32,14 @@ export const OppgitteBarnVurderingFelter = ({
   const [prevHarForeldreAnsvar, setPrevHarForeldreAnsvar] = useState<string | undefined>(undefined);
   const [prevDato, setPrevDato] = useState<string | undefined>(undefined);
   const harForeldreAnsvar = form.watch(
-    `barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.harForeldreAnsvar`
+    `folkeregistrerteBarnVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.harForeldreAnsvar`
   );
   const erFosterforelder = form.watch(
-    `barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.erFosterforelder`
+    `folkeregistrerteBarnVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.erFosterforelder`
   );
-  const datoFelt = form.watch(`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.fraDato`);
+  const datoFelt = form.watch(
+    `folkeregistrerteBarnVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.fraDato`
+  );
 
   const skalSetteEnFraOgMedDatoForForeldreAnsvarSlutt =
     (harForeldreAnsvar === JaEllerNei.Nei || erFosterforelder === JaEllerNei.Nei) && vurderingIndex !== 0;
@@ -48,16 +50,19 @@ export const OppgitteBarnVurderingFelter = ({
 
   useEffect(() => {
     if (prevHarForeldreAnsvar) {
-      form.setValue(`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.harForeldreAnsvar`, '');
+      form.setValue(
+        `folkeregistrerteBarnVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.harForeldreAnsvar`,
+        ''
+      );
     }
     if (prevDato) {
-      form.setValue(`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.fraDato`, '');
+      form.setValue(`folkeregistrerteBarnVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.fraDato`, '');
     }
   }, [erFosterforelder]);
 
   useEffect(() => {
     if (prevDato) {
-      form.setValue(`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.fraDato`, '');
+      form.setValue(`folkeregistrerteBarnVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.fraDato`, '');
     }
     setPrevHarForeldreAnsvar(harForeldreAnsvar);
   }, [harForeldreAnsvar]);
@@ -71,7 +76,7 @@ export const OppgitteBarnVurderingFelter = ({
       <TextAreaWrapper
         label={'Vurder om brukeren har rett på barnetillegg for dette barnet'}
         control={form.control}
-        name={`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.begrunnelse`}
+        name={`folkeregistrerteBarnVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.begrunnelse`}
         readOnly={readOnly}
         rules={{ required: 'Du må gi en begrunnelse' }}
         className="begrunnelse"
@@ -80,7 +85,7 @@ export const OppgitteBarnVurderingFelter = ({
         <RadioGroupWrapper
           label={'Har fosterhjemsordningen vart i to år eller er den av varig karakter?'}
           control={form.control}
-          name={`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.erFosterforelder`}
+          name={`folkeregistrerteBarnVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.erFosterforelder`}
           readOnly={readOnly}
           rules={{
             required: 'Du må besvare om fosterhjemsordingen har vart i to år eller om den er av varig karakter',
@@ -95,7 +100,7 @@ export const OppgitteBarnVurderingFelter = ({
         <RadioGroupWrapper
           label={'Skal brukeren få barnetillegg for barnet?'}
           control={form.control}
-          name={`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.harForeldreAnsvar`}
+          name={`folkeregistrerteBarnVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.harForeldreAnsvar`}
           readOnly={readOnly}
           rules={{ required: 'Du må besvare om det skal beregnes barnetillegg for barnet' }}
           horisontal
@@ -116,9 +121,9 @@ export const OppgitteBarnVurderingFelter = ({
               ? null
               : 'Barnetillegg skal i hovedsak gis fra dato brukeren søkte om barnetillegg'
           }
-          readOnly={readOnly}
           control={form.control}
-          name={`barnetilleggVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.fraDato`}
+          readOnly={readOnly}
+          name={`folkeregistrerteBarnVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.fraDato`}
           rules={{
             validate: {
               validerDato: (value) => validerDato(value as string),

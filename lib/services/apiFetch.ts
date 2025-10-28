@@ -38,21 +38,10 @@ export const apiFetch = async <ResponseType>(
   scope: string,
   method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' = 'GET',
   requestBody?: object,
-  tags?: string[],
-  cache?: RequestCache
+  tags?: string[]
 ): Promise<FetchResponse<ResponseType>> => {
   const oboToken = lokalFakeObotoken ? await hentLocalToken(scope) : await getOnBefalfOfToken(scope, url);
-  return await fetchWithRetry<ResponseType>(
-    url,
-    method,
-    oboToken,
-    NUMBER_OF_RETRIES,
-    requestBody,
-    tags,
-    undefined,
-    undefined,
-    cache
-  );
+  return await fetchWithRetry<ResponseType>(url, method, oboToken, NUMBER_OF_RETRIES, requestBody, tags);
 };
 
 export const apiFetchNoMemoization = async <ResponseType>(
@@ -76,8 +65,7 @@ const fetchWithRetry = async <ResponseType>(
   requestBody?: object,
   tags?: string[],
   signal?: AbortSignal,
-  errors?: string[],
-  cache?: RequestCache
+  errors?: string[]
 ): Promise<FetchResponse<ResponseType>> => {
   if (!errors) errors = [];
 
@@ -96,10 +84,6 @@ const fetchWithRetry = async <ResponseType>(
     next: { revalidate: 0, tags },
     signal: signal,
   };
-
-  if (cache) {
-    options.cache = cache;
-  }
 
   const response = await fetch(url, options);
 

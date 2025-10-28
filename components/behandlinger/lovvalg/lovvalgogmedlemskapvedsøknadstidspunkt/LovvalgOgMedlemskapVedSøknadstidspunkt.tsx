@@ -153,7 +153,7 @@ export const LovvalgOgMedlemskapVedSøknadstidspunkt = ({
             manuellVurderingForLovvalgMedlemskap: {
               lovvalgVedSøknadsTidspunkt: {
                 begrunnelse: data.lovvalgBegrunnelse,
-                lovvalgsEØSLand:
+                lovvalgsEØSLandEllerLandMedAvtale:
                   data.lovvalgsLand === 'Annet land med avtale'
                     ? (data.annetLovvalgslandMedAvtale as LovvalgEØSLand)
                     : maplovvalgslandTilAlpha3(data.lovvalgsLand),
@@ -229,9 +229,9 @@ export const LovvalgOgMedlemskapVedSøknadstidspunkt = ({
   function mapVurderingToDraftFormFields(vurdering?: LovvalgMedlemskapGrunnlag['vurdering']): DraftFormFields {
     return {
       lovvalgBegrunnelse: vurdering?.lovvalgVedSøknadsTidspunkt.begrunnelse,
-      lovvalgsLand: mapGrunnlagTilLovvalgsland(vurdering?.lovvalgVedSøknadsTidspunkt.lovvalgsEØSLand),
+      lovvalgsLand: mapGrunnlagTilLovvalgsland(vurdering?.lovvalgVedSøknadsTidspunkt.lovvalgsEØSLandEllerLandMedAvtale),
       annetLovvalgslandMedAvtale: mapGrunnlagTilAnnetLovvalgslandMedAvtale(
-        vurdering?.lovvalgVedSøknadsTidspunkt?.lovvalgsEØSLand
+        vurdering?.lovvalgVedSøknadsTidspunkt?.lovvalgsEØSLandEllerLandMedAvtale
       ),
       medlemskapBegrunnelse: grunnlag?.vurdering?.medlemskapVedSøknadsTidspunkt?.begrunnelse
         ? grunnlag.vurdering?.medlemskapVedSøknadsTidspunkt?.begrunnelse
@@ -260,7 +260,7 @@ export const LovvalgOgMedlemskapVedSøknadstidspunkt = ({
       },
       {
         label: lovvalgsLandLabel,
-        value: vurdering.vurdering.lovvalgVedSøknadsTidspunkt.lovvalgsEØSLand || '',
+        value: vurdering.vurdering.lovvalgVedSøknadsTidspunkt.lovvalgsEØSLandEllerLandMedAvtale || '',
       },
       {
         label: medlemskapBegrunnelseLabel,

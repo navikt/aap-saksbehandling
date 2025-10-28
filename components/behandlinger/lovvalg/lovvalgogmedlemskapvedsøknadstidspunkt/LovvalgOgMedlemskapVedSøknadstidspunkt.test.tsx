@@ -271,7 +271,7 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
       vurdering: {
         lovvalgVedSøknadsTidspunkt: {
           begrunnelse: 'Dette er min vurdering som er bekreftet',
-          lovvalgsEØSLand: 'NOR',
+          lovvalgsEØSLandEllerLandMedAvtale: 'NOR',
         },
         overstyrt: false,
         vurdertAv: { ident: 'TESTER', dato: '2025-08-19' },

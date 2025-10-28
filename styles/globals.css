@@ -35,5 +35,8 @@
   max-width: 90ch;
 }
 .navds-read-more__content {
-    max-width: 90ch;
+  max-width: 90ch;
+}
+.navds-error-summary--small {
+  max-width: 90ch;
 }

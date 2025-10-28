@@ -24,7 +24,7 @@ interface Props {
 }
 
 export const AlleOppgaverTabell = ({ oppgaver, revalidateFunction, setValgteRader, valgteRader }: Props) => {
-  const { sort, sortertListe, håndterSortering } = useSortertListe(oppgaver);
+  const { sort, sortertListe, settSorteringskriterier } = useSortertListe(oppgaver);
   const [visSynkroniserEnhetModal, setVisSynkroniserEnhetModal] = useState<boolean>(false);
 
   const toggleValgtRad = (oppgaveId: number) => {
@@ -49,12 +49,12 @@ export const AlleOppgaverTabell = ({ oppgaver, revalidateFunction, setValgteRade
         size={'small'}
         zebraStripes
         sort={sort}
-        onSortChange={(sortKey) => håndterSortering(sortKey as ScopedSortState<Oppgave>['orderBy'])}
+        onSortChange={(sortKey) => settSorteringskriterier(sortKey as ScopedSortState<Oppgave>['orderBy'])}
       >
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell />
-            <Table.HeaderCell>ID</Table.HeaderCell>
+            <Table.HeaderCell>Sak</Table.HeaderCell>
             <Table.ColumnHeader sortKey={'personIdent'} sortable={true} textSize={'small'}>
               Fnr
             </Table.ColumnHeader>

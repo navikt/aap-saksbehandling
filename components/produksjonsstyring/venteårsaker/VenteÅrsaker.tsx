@@ -14,7 +14,7 @@ interface Props {
 
 export const VenteÅrsaker = ({ venteÅrsaker }: Props) => {
   const totalt = venteÅrsaker.reduce((sum, e) => sum + (e.antall || 0), 0);
-  const { sort, håndterSortering, sortertListe } = useSortertListe(venteÅrsaker);
+  const { sort, settSorteringskriterier, sortertListe } = useSortertListe(venteÅrsaker);
 
   return (
     <PlotWrapper>
@@ -27,7 +27,9 @@ export const VenteÅrsaker = ({ venteÅrsaker }: Props) => {
       <VStack padding={'space-8'} />
       <Table
         sort={sort}
-        onSortChange={(sortKey) => håndterSortering(sortKey as ScopedSortState<VenteÅrsakOgGjennomsnitt>['orderBy'])}
+        onSortChange={(sortKey) =>
+          settSorteringskriterier(sortKey as ScopedSortState<VenteÅrsakOgGjennomsnitt>['orderBy'])
+        }
       >
         <Table.Header>
           <Table.Row>

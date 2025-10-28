@@ -12,6 +12,7 @@ import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { usePostmottakEndreTema } from 'hooks/FetchHook';
 import { CheckmarkCircleIcon } from '@navikt/aksel-icons';
+import { toggles } from 'lib/utils/toggles';
 
 interface Props {
   behandlingsVersjon: number;
@@ -75,12 +76,14 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
     })(event);
   };
 
+  const settesPåVent = toggles.featurePostmottakBehandlingerPåVent;
+
   return (
     <VilkårsKort heading={'Avklar tema'}>
       <Modal
         open={visModal}
         header={{
-          heading: 'Dokumentet er sendt til gosys for journalføring',
+          heading: 'Dokumentet er sendt til Gosys for journalføring',
           icon: <CheckmarkCircleIcon fontSize={'inherit'} />,
         }}
         onClose={() => {
@@ -92,7 +95,14 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
         }}
       >
         <Modal.Body>
-          <BodyShort spacing>Gå til Gosys for å journalføre dokumentet.</BodyShort>
+          <BodyShort spacing>
+            Gå til Gosys for å journalføre dokumentet.{' '}
+            {settesPåVent && (
+              <>
+                Oppgaven settes på vent inntil tema er endret i Gosys. Om den går av vent, trykk <i>Neste</i> igjen
+              </>
+            )}
+          </BodyShort>
           <Modal.Footer>
             <Button
               type={'button'}

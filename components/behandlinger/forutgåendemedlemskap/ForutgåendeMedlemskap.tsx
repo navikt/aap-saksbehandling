@@ -1,9 +1,11 @@
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import {
+  hentBeregningstidspunktVurdering,
   hentFlyt,
   hentForutgåendeMedlemskapGrunnlag,
   hentForutgåendeMedlemskapsVurdering,
   hentMellomlagring,
+  hentRettighetsperiodeGrunnlag,
   hentYrkesskadeVurderingGrunnlag,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { getStegData, skalViseSteg } from 'lib/utils/steg';
@@ -18,16 +20,32 @@ interface Props {
   behandlingsReferanse: string;
 }
 export const ForutgåendeMedlemskap = async ({ behandlingsReferanse }: Props) => {
-  const [flyt, grunnlag, automatiskVurdering, yrkesskadeVurderingGrunnlag, initialMellomlagretVurdering] =
-    await Promise.all([
-      hentFlyt(behandlingsReferanse),
-      hentForutgåendeMedlemskapGrunnlag(behandlingsReferanse),
-      hentForutgåendeMedlemskapsVurdering(behandlingsReferanse),
-      hentYrkesskadeVurderingGrunnlag(behandlingsReferanse),
-      hentMellomlagring(behandlingsReferanse, Behovstype.AVKLAR_FORUTGÅENDE_MEDLEMSKAP),
-    ]);
+  const [
+    flyt,
+    grunnlag,
+    rettighetsperiodeGrunnlag,
+    beregningsperiodeGrunnlag,
+    automatiskVurdering,
+    yrkesskadeVurderingGrunnlag,
+    initialMellomlagretVurdering,
+  ] = await Promise.all([
+    hentFlyt(behandlingsReferanse),
+    hentForutgåendeMedlemskapGrunnlag(behandlingsReferanse),
+    hentRettighetsperiodeGrunnlag(behandlingsReferanse),
+    hentBeregningstidspunktVurdering(behandlingsReferanse),
+    hentForutgåendeMedlemskapsVurdering(behandlingsReferanse),
+    hentYrkesskadeVurderingGrunnlag(behandlingsReferanse),
+    hentMellomlagring(behandlingsReferanse, Behovstype.AVKLAR_FORUTGÅENDE_MEDLEMSKAP),
+  ]);
 
-  if (isError(grunnlag) || isError(automatiskVurdering) || isError(flyt) || isError(yrkesskadeVurderingGrunnlag)) {
+  if (
+    isError(grunnlag) ||
+    isError(automatiskVurdering) ||
+    isError(flyt) ||
+    isError(yrkesskadeVurderingGrunnlag) ||
+    isError(rettighetsperiodeGrunnlag) ||
+    isError(beregningsperiodeGrunnlag)
+  ) {
     return <ApiException apiResponses={[grunnlag, automatiskVurdering, flyt]} />;
   }
 
@@ -64,6 +82,8 @@ export const ForutgåendeMedlemskap = async ({ behandlingsReferanse }: Props) =>
         {visManuellVurdering && (
           <ManuellVurderingForutgåendeMedlemskap
             grunnlag={grunnlag.data}
+            rettighetsperiodeGrunnlag={rettighetsperiodeGrunnlag.data}
+            beregningstidspunktGrunnlag={beregningsperiodeGrunnlag.data}
             behandlingVersjon={behandlingsVersjon}
             readOnly={readOnly}
             overstyring={!!grunnlag.data.vurdering?.overstyrt}
