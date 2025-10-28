@@ -5,7 +5,7 @@ import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
 import { Klageresultat, SaksInfo } from 'lib/types/types';
 import { hjemmelMap, hjemmelÅrsakMapMap } from 'lib/utils/hjemmel';
 
-export const OmgjøringVurdering = ({ sak, klageresultat }: { sak: SaksInfo; klageresultat: Klageresultat }) => {
+export const OmgjøringVurdering = ({ sak, klageresultat, navIdent }: { sak: SaksInfo; klageresultat: Klageresultat, navIdent?: string }) => {
   return (
     <VilkårsKort heading={'Omgjøring'} steg={'OMGJØRING'}>
       <OpprettRevurdering
@@ -13,6 +13,7 @@ export const OmgjøringVurdering = ({ sak, klageresultat }: { sak: SaksInfo; kla
         defaultBegrunnelse={konstruerBegrunnelse()}
         defaultÅrsaker={finnDefaultÅrsaker()}
         redirect={true}
+        navIdent={navIdent}
       />
     </VilkårsKort>
   );

@@ -23,11 +23,13 @@ export const OpprettRevurdering = ({
   defaultÅrsaker,
   defaultBegrunnelse,
   redirect = false,
+  navIdent
 }: {
   sak: SaksInfo;
   defaultÅrsaker?: string[];
   defaultBegrunnelse?: string;
   redirect?: boolean;
+  navIdent?: string
 }) => {
   const router = useRouter();
 
@@ -48,6 +50,7 @@ export const OpprettRevurdering = ({
         meldingType: 'ManuellRevurderingV0',
         årsakerTilBehandling: data.årsaker,
         beskrivelse: data.beskrivelse,
+        opprettetAv: navIdent
       } as ManuellRevurderingV0,
     };
 
