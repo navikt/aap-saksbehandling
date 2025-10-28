@@ -13,7 +13,7 @@ interface Props {
 }
 
 export const VurderingsbehovPåBehandlinger = ({ vurderingsbehov }: Props) => {
-  const { sort, håndterSortering, sortertListe } = useSortertListe(vurderingsbehov);
+  const { sort, settSorteringskriterier, sortertListe } = useSortertListe(vurderingsbehov);
 
   return (
     <PlotWrapper>
@@ -29,7 +29,7 @@ export const VurderingsbehovPåBehandlinger = ({ vurderingsbehov }: Props) => {
       <Table
         sort={sort}
         onSortChange={(sortKey) =>
-          håndterSortering(sortKey as ScopedSortState<BehandlingÅrsakAntallGjennomsnitt>['orderBy'])
+          settSorteringskriterier(sortKey as ScopedSortState<BehandlingÅrsakAntallGjennomsnitt>['orderBy'])
         }
       >
         <Table.Header>

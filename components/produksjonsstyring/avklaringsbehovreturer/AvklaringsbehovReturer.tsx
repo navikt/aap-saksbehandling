@@ -16,7 +16,7 @@ interface Props {
 export const AvklaringsbehovReturer = ({ data }: Props) => {
   const [visning, setVisningMedÅrsak] = useState<string>('medÅrsak');
   const dataMapped = visning === 'medÅrsak' ? data : slåSammenÅrsak(data);
-  const { sort, håndterSortering, sortertListe } = useSortertListe(dataMapped);
+  const { sort, settSorteringskriterier, sortertListe } = useSortertListe(dataMapped);
 
   return (
     <PlotWrapper>
@@ -40,7 +40,7 @@ export const AvklaringsbehovReturer = ({ data }: Props) => {
       <Table
         sort={sort}
         onSortChange={(sortKey) =>
-          håndterSortering(sortKey as ScopedSortState<BehandlingAvklaringsbehovReturDTO>['orderBy'])
+          settSorteringskriterier(sortKey as ScopedSortState<BehandlingAvklaringsbehovReturDTO>['orderBy'])
         }
       >
         <Table.Header>

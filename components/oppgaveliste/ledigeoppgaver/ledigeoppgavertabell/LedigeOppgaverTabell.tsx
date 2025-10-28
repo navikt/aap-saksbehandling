@@ -27,7 +27,7 @@ interface Props {
 
 export const LedigeOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) => {
   const [feilmelding, setFeilmelding] = useState<string>();
-  const { sort, sortertListe, håndterSortering } = useSortertListe(oppgaver);
+  const { sort, sortertListe, settSorteringskriterier } = useSortertListe(oppgaver);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [visSynkroniserEnhetModal, setVisSynkroniserEnhetModal] = useState<boolean>(false);
   const [saksbehandlerNavn, setSaksbehandlerNavn] = useState<string>();
@@ -56,7 +56,7 @@ export const LedigeOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) =>
         size={'small'}
         zebraStripes
         sort={sort}
-        onSortChange={(sortKey) => håndterSortering(sortKey as ScopedSortState<Oppgave>['orderBy'])}
+        onSortChange={(sortKey) => settSorteringskriterier(sortKey as ScopedSortState<Oppgave>['orderBy'])}
       >
         <Table.Header>
           <Table.Row>
