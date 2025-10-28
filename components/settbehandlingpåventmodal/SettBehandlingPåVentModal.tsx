@@ -152,7 +152,7 @@ export const SettBehandlingPåVentModal = ({ behandlingsReferanse, reservert, is
               {!reservert && (
                 <Box marginBlock={'0 2'}>
                   <Alert variant={'info'} size={'small'}>
-                    Behandlingen er ikke reservert. Når du setter den på vent, blir den reservert deg.
+                    Behandlingen er ikke tildelt deg. Den tildeles deg når du setter den på vent.
                   </Alert>
                 </Box>
               )}

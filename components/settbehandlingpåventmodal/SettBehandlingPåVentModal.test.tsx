@@ -28,7 +28,7 @@ describe('settBehandlingPåVentModal', () => {
 });
 
 describe('settBehandlingPåVentModal viser infoboks om reservert oppgave', () => {
-  const expectedText = 'Behandlingen er ikke reservert. Når du setter den på vent, blir den reservert deg.';
+  const expectedText = 'Behandlingen er ikke tildelt deg. Den tildeles deg når du setter den på vent.';
 
   it('skal vise infoboks med informasjon om at oppgaven reserveres saksbehandler', () => {
     render(<SettBehandlingPåVentModal behandlingsReferanse={'123'} reservert={false} isOpen={true} onClose={vi.fn} />);

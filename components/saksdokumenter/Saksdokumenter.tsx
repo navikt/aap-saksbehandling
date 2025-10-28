@@ -11,6 +11,7 @@ import { isError } from 'lib/utils/api';
 import { useState } from 'react';
 import { ArrowDownRightIcon, ExternalLinkIcon, InboxDownIcon, InboxUpIcon } from '@navikt/aksel-icons';
 import { Journalposttype } from 'lib/types/journalpost';
+import { storForbokstav } from 'lib/utils/string';
 
 interface FormFields {
   dokumentnavn: string;
@@ -164,7 +165,7 @@ const HoveddokumentRow = ({
       </HStack>
     </Table.DataCell>
     <Table.DataCell>
-      <BodyShort size={'small'}>{brevkode}</BodyShort>
+      <BodyShort size={'small'}>{brevkode ? storForbokstav(brevkode) : '-'}</BodyShort>
     </Table.DataCell>
     <Table.DataCell>
       {datoOpprettet && (

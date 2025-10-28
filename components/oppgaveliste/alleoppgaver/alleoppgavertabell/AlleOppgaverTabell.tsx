@@ -54,7 +54,7 @@ export const AlleOppgaverTabell = ({ oppgaver, revalidateFunction, setValgteRade
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell />
-            <Table.HeaderCell>ID</Table.HeaderCell>
+            <Table.HeaderCell>Sak</Table.HeaderCell>
             <Table.ColumnHeader sortKey={'personIdent'} sortable={true} textSize={'small'}>
               Fnr
             </Table.ColumnHeader>

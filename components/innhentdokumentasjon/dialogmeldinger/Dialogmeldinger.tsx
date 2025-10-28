@@ -19,13 +19,13 @@ const mapStatusTilTekst = (status?: 'BESTILT' | 'SENDT' | 'OK' | 'AVVIST' | null
     case 'SENDT':
     case 'OK':
       return (
-        <Alert size={'small'} variant="success">
+        <Alert size={'small'} variant="success" inline>
           Bestilt
         </Alert>
       );
     case 'AVVIST':
       return (
-        <Alert size={'small'} variant="error">
+        <Alert size={'small'} variant="error" inline>
           Feilet
         </Alert>
       );

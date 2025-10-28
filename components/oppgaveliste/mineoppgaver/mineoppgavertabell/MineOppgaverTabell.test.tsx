@@ -46,7 +46,7 @@ describe('Mine oppgaver tabell', () => {
   );
 
   it('Skal inneholde korrekte kolonner ', () => {
-    const kolonner = ['Navn', 'Fnr', 'ID', 'Behandlingstype', 'Beh. opprettet', 'Vurderingsbehov', 'Oppgave'];
+    const kolonner = ['Navn', 'Fnr', 'Sak', 'Behandlingstype', 'Beh. opprettet', 'Vurderingsbehov', 'Oppgave'];
 
     kolonner.forEach((kolonne) => {
       const column = screen.getByRole('columnheader', { name: kolonne });
@@ -55,7 +55,7 @@ describe('Mine oppgaver tabell', () => {
   });
 
   it('Skal inneholde kolonner som kan sorteres ', () => {
-    const kolonnerSomKanSorteres = ['Navn', 'Fnr', 'ID', 'Beh. opprettet', 'Vurderingsbehov'];
+    const kolonnerSomKanSorteres = ['Navn', 'Fnr', 'Sak', 'Beh. opprettet', 'Vurderingsbehov'];
     kolonnerSomKanSorteres.forEach((kolonne) => {
       const column = screen.getByRole('button', { name: kolonne });
       expect(column).toBeVisible();
