@@ -58,6 +58,8 @@ const behandlingsTypeAlternativerFraEnum = Object.keys(
         return 'Oppfølgingsbehandling';
       case 'Aktivitetsplikt':
         return 'Aktivitetsplikt';
+      case 'Aktivitetsplikt11_9':
+        return 'Aktivitetsplikt';
     }
     exhaustiveCheck(key);
   });
@@ -68,7 +70,7 @@ export const OppgaveStatuser: ValuePair[] = [
   { label: 'På vent', value: 'VENT' },
   { label: 'Retur fra kvalitetssikrer', value: 'RETUR_FRA_KVALITETSSIKRER' },
   { label: 'Retur fra beslutter', value: 'RETUR_FRA_BESLUTTER' },
-  { label: 'Retur fra veileder', value: 'RETUR_FRA_VEILEDER'},
+  { label: 'Retur fra veileder', value: 'RETUR_FRA_VEILEDER' },
   { label: 'Retur fra saksbehandler', value: 'RETUR_FRA_SAKSBEHANDLER' },
   { label: 'Hastesak', value: 'ER_HASTESAK' },
 ];

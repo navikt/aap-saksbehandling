@@ -44,6 +44,7 @@ const oppgave: Oppgave = {
   årsakerTilBehandling: [],
   markeringer: [],
   reservertAv: 'navIdent',
+  enhetForKø: '0300',
 };
 
 const visning: FlytVisning = {
@@ -482,6 +483,6 @@ describe('Sak status', () => {
       />
     );
     const returTag = screen.queryByText('Retur');
-    expect(returTag).not.toBeInTheDocument()
+    expect(returTag).not.toBeInTheDocument();
   });
 });
