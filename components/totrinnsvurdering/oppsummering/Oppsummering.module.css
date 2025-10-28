@@ -1,13 +1,13 @@
 .oppsummering {
   display: grid;
   flex-direction: column;
-  gap: var(--a-spacing-4);
+  gap: var(--a-spacing-3);
 }
 
 .beslutteroppsummering {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: var(--a-spacing-3);
   border: 2px solid black;
   padding: 1rem;
 }

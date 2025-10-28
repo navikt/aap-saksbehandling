@@ -12,7 +12,7 @@ import {
 } from 'lib/types/types';
 import { TotrinnsvurderingForm } from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingForm';
 import styles from 'components/totrinnsvurdering/ToTrinnsvurdering.module.css';
-import { HStack, Label } from '@navikt/ds-react';
+import { Label, VStack } from '@navikt/ds-react';
 
 interface Props {
   grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;
@@ -47,20 +47,22 @@ export const ToTrinnsvurdering = ({
 
   return (
     <div className={styles.toTrinnsKontroll}>
-      {readOnly && (
+      {readOnly && vurderteTotrinnsvurderinger.length > 0 && (
         <Oppsummering vurderinger={vurderteTotrinnsvurderinger} link={link} erKvalitetssikrer={erKvalitetssikring} />
       )}
 
-      <HStack gap={'1'}>
-        <Label>{erKvalitetssikring ? 'Kvalitetssikrer' : 'Beslutter'}</Label>
-        <TotrinnsvurderingForm
-          grunnlag={grunnlag}
-          link={link}
-          erKvalitetssikring={erKvalitetssikring}
-          readOnly={readOnly}
-          initialMellomlagretVurdering={initialMellomlagretVurdering}
-        />
-      </HStack>
+      {!readOnly && (
+        <VStack gap={'3'}>
+          <Label>{erKvalitetssikring ? 'Kvalitetssikrer' : 'Beslutter'}</Label>
+          <TotrinnsvurderingForm
+            grunnlag={grunnlag}
+            link={link}
+            erKvalitetssikring={erKvalitetssikring}
+            readOnly={readOnly}
+            initialMellomlagretVurdering={initialMellomlagretVurdering}
+          />
+        </VStack>
+      )}
     </div>
   );
 };
