@@ -9961,7 +9961,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.LovvalgVedS\u00F8knadsTidspunktResponse': {
       begrunnelse: string;
       /** @enum {string|null} */
-      'lovvalgsE\u00D8SLand'?:
+      'lovvalgsE\u00D8SLandEllerLandMedAvtale'?:
         | 'BEL'
         | 'BGR'
         | 'DNK'
@@ -9993,6 +9993,8 @@ export interface components {
         | 'DEU'
         | 'HUN'
         | 'AUT'
+        | 'GBR'
+        | 'AUS'
         | null;
     };
     'no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.ManuellVurderingForForutg\u00E5endeMedlemskapResponse': {
@@ -11225,7 +11227,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.faktagrunnlag.lovvalgmedlemskap.LovvalgVedS\u00F8knadsTidspunktDto': {
       begrunnelse: string;
       /** @enum {string|null} */
-      'lovvalgsE\u00D8SLand'?:
+      'lovvalgsE\u00D8SLandEllerLandMedAvtale'?:
         | 'BEL'
         | 'BGR'
         | 'DNK'
@@ -11257,6 +11259,8 @@ export interface components {
         | 'DEU'
         | 'HUN'
         | 'AUT'
+        | 'GBR'
+        | 'AUS'
         | null;
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.lovvalgmedlemskap.ManuellVurderingForForutg\u00E5endeMedlemskapDto': {
