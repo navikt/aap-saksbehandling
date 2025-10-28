@@ -50,7 +50,7 @@ export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe, classN
       {aktivGruppe === 'AVBRYT_REVURDERING' && <AvbrytRevurdering behandlingsreferanse={behandlingsReferanse} />}
       {aktivGruppe === 'LOVVALG' && (
         <StegSuspense>
-          {!LovvalgMedlemskapPeriodisert ? (
+          {LovvalgMedlemskapPeriodisert ? (
             <LovvalgPeriodisert behandlingsReferanse={behandlingsReferanse} />
           ) : (
             <Lovvalg behandlingsReferanse={behandlingsReferanse} />

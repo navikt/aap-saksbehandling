@@ -39,8 +39,10 @@ export function getDefaultValuesFromGrunnlag(
         fraDato: formaterDatoForFrontend(vurdering.fom),
         lovvalg: {
           begrunnelse: vurdering.lovvalg.begrunnelse,
-          lovvalgsEØSLand: mapGrunnlagTilLovvalgsland(vurdering.lovvalg.lovvalgsEØSLand)!,
-          annetLovvalgslandMedAvtale: mapGrunnlagTilAnnetLovvalgslandMedAvtale(vurdering.lovvalg.lovvalgsEØSLand),
+          lovvalgsEØSLand: mapGrunnlagTilLovvalgsland(vurdering.lovvalg.lovvalgsEØSLandEllerLandMedAvtale)!,
+          annetLovvalgslandMedAvtale: mapGrunnlagTilAnnetLovvalgslandMedAvtale(
+            vurdering.lovvalg.lovvalgsEØSLandEllerLandMedAvtale
+          ),
         },
         medlemskap: {
           begrunnelse: vurdering.medlemskap?.begrunnelse ?? '',
@@ -74,7 +76,7 @@ export const mapFormTilDto = (
   tom: tilDato != null ? formaterDatoForBackend(sub(parse(tilDato, 'dd.MM.yyyy', new Date()), { days: 1 })) : null,
   lovvalg: {
     begrunnelse: periodeForm.lovvalg.begrunnelse,
-    lovvalgsEØSLand:
+    lovvalgsEØSLandEllerLandMedAvtale:
       periodeForm.lovvalg.lovvalgsEØSLand === 'Annet land med avtale'
         ? (periodeForm.lovvalg.annetLovvalgslandMedAvtale as LovvalgEØSLand)
         : maplovvalgslandTilAlpha3(periodeForm.lovvalg.lovvalgsEØSLand),

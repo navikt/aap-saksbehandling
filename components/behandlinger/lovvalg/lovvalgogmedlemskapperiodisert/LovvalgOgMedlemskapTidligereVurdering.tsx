@@ -13,7 +13,7 @@ export const LovvalgOgMedlemskapTidligereVurdering = ({ vurdering }: Props) => {
       <SpørsmålOgSvar spørsmål="Vurder riktig lovvalg ved angitt tidspunkt" svar={vurdering.lovvalg.begrunnelse} />
       <SpørsmålOgSvar
         spørsmål="Hva er riktig lovvalgsland ved angitt tidspunkt?"
-        svar={vurdering.lovvalg.lovvalgsEØSLand!!}
+        svar={vurdering.lovvalg.lovvalgsEØSLandEllerLandMedAvtale!!}
       />
       {vurdering.medlemskap && (
         <>

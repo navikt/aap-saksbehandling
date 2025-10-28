@@ -145,7 +145,8 @@ export const LovvalgOgMedlemskapPeriodisert = ({
                   tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
                   foersteNyePeriode={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
                   oppfylt={
-                    vurdering.lovvalg.lovvalgsEØSLand === 'NOR' && vurdering.medlemskap?.varMedlemIFolketrygd === true
+                    vurdering.lovvalg.lovvalgsEØSLandEllerLandMedAvtale === 'NOR' &&
+                    vurdering.medlemskap?.varMedlemIFolketrygd === true
                   }
                 />
               }

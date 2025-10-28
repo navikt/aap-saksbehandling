@@ -29,7 +29,6 @@ export const LovvalgPeriodisert = async ({ behandlingsReferanse }: Props) => {
     return <ApiException apiResponses={[vurderingAutomatisk, grunnlag, flyt]} />;
   }
 
-  console.log(grunnlag);
   const vurderLovvalgSteg = getStegData('LOVVALG', 'VURDER_LOVVALG', flyt.data);
   const behandlingsVersjon = flyt.data.behandlingVersjon;
   const readOnly = vurderLovvalgSteg.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;

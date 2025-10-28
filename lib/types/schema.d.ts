@@ -12875,6 +12875,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ManuellRevurdering': components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ManuellRevurderingV0'];
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ManuellRevurderingV0': {
       beskrivelse: string;
+      opprettetAv?: string | null;
       '\u00E5rsakerTilBehandling': (
         | 'SØKNAD'
         | 'AKTIVITETSMELDING'
