@@ -48,6 +48,8 @@ function mapÅrsakerTilString(årsak: SettPåVentÅrsaker): string {
       return 'Venter på svar fra bruker';
     case 'VENTER_PÅ_OPPLYSNINGER_FRA_UTENLANDSKE_MYNDIGHETER':
       return 'Venter på opplysninger fra utenlandske myndigheter';
+    case 'VENTER_PÅ_BEHANDLING_I_GOSYS':
+      return 'Venter på behandling i Gosys.';
   }
   exhaustiveCheck(årsak);
 }

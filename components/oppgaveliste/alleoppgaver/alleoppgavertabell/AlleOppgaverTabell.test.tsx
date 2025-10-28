@@ -23,6 +23,7 @@ const oppgaver: Oppgave[] = [
     markeringer: [],
     reservertAv: 'ident',
     reservertAvNavn: 'Test Testesen',
+    enhetForKø: '4491',
   },
   {
     vurderingsbehov: [],
@@ -37,6 +38,7 @@ const oppgaver: Oppgave[] = [
     årsakerTilBehandling: [],
     markeringer: [],
     reservertAv: 'ident2',
+    enhetForKø: '4491',
   },
 ];
 

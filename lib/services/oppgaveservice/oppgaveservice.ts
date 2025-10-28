@@ -56,6 +56,7 @@ export async function hentOppgave(behandlingReferanse: string) {
         versjon: 0,
         vurderingsbehov: [],
         årsakerTilBehandling: [],
+        enhetForKø: '4491',
       },
     };
 
