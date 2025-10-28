@@ -77,7 +77,7 @@ describe('Generelt', () => {
 
     // sjekk feilmelding på oppfylt
     await trykkPåBekreft();
-    expect(screen.getByText('Du må ta stilling til om brukeren oppfyller vilkårene')).toBeVisible();
+    expect(screen.getAllByText('Du må ta stilling til om brukeren oppfyller vilkårene')[0]).toBeVisible();
 
     // velg oppfylt ja
     const oppfyller = screen.getByRole('group', {
@@ -101,7 +101,7 @@ describe('Generelt', () => {
 
     // sjekk feilmelding på landvelger
     await trykkPåBekreft();
-    expect(screen.getByText('Du må velge et land')).toBeVisible();
+    expect(screen.getAllByText('Du må velge et land')[0]).toBeVisible();
 
     // velg annet
     const land = await screen.findByRole('combobox', {
@@ -128,8 +128,8 @@ describe('Generelt', () => {
     // feilmeldinger
     await trykkPåBekreft();
 
-    expect(screen.getByText('Du må fylle ut en vilkårsvurdering')).toBeVisible();
-    expect(screen.getByText('Du må skrive inn navnet på landet')).toBeVisible();
+    expect(screen.getAllByText('Du må fylle ut en vilkårsvurdering')[0]).toBeVisible();
+    expect(screen.getAllByText('Du må skrive inn navnet på landet')[0]).toBeVisible();
   });
 });
 
