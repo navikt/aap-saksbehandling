@@ -2,8 +2,8 @@
 
 import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
-import { Button, HStack, ReadMore, VStack } from '@navikt/ds-react';
-import { FormEvent, useState } from 'react';
+import { ReadMore, VStack } from '@navikt/ds-react';
+import { FormEvent } from 'react';
 import { AndreStatligeYtelserTabell } from 'components/behandlinger/samordning/samordningandrestatlige/AndreStatligeYtelserTabell';
 import { Behovstype } from 'lib/utils/form';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
@@ -46,7 +46,6 @@ export const SamordningAndreStatligeYtelser = ({
   grunnlag,
   initialMellomlagretVurdering,
 }: Props) => {
-  const [visYtelsesTabell, setVisYtelsesTabell] = useState<boolean>(grunnlag.vurdering !== null);
   const behandlingsreferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } = useLøsBehovOgGåTilNesteSteg(
     'SAMORDNING_ANDRE_STATLIGE_YTELSER'
@@ -106,7 +105,7 @@ export const SamordningAndreStatligeYtelser = ({
     )(event);
   };
 
-  const skalViseBekreftKnapp = !formReadOnly && visYtelsesTabell;
+  const skalViseBekreftKnapp = !formReadOnly;
 
   let historiskeVurderinger = grunnlag.historiskeVurderinger ?? null;
 
@@ -133,19 +132,6 @@ export const SamordningAndreStatligeYtelser = ({
       visningActions={visningActions}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
-      {!visYtelsesTabell && (
-        <HStack>
-          <Button
-            size={'small'}
-            variant={'secondary'}
-            onClick={() => setVisYtelsesTabell(true)}
-            disabled={formReadOnly}
-          >
-            Legg til ytelser
-          </Button>
-        </HStack>
-      )}
-
       {historiskeVurderinger != null && historiskeVurderinger.length > 0 && (
         <TidligereVurderinger
           data={historiskeVurderinger}
@@ -160,16 +146,14 @@ export const SamordningAndreStatligeYtelser = ({
         />
       )}
 
-      <ReadMore header="Hva skal vurderes?">
+      <ReadMore size={'small'} header="Hva skal vurderes?">
         Det må undersøkes om bruker har hatt andre ytelser i perioden med AAP som kan gi fradrag i AAP utbetalingen.
       </ReadMore>
 
-      {visYtelsesTabell && (
-        <VStack gap={'6'}>
-          <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
-          <AndreStatligeYtelserTabell form={form} readOnly={formReadOnly} />
-        </VStack>
-      )}
+      <VStack gap={'6'}>
+        <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
+        <AndreStatligeYtelserTabell form={form} readOnly={formReadOnly} />
+      </VStack>
     </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };
