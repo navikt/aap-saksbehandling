@@ -23,6 +23,9 @@ spec:
     path: /actuator/ready
     initialDelay: 20
     timeout: 60
+  prometheus:
+    enabled: true
+    path: /actuator/metrics
   replicas:
     min: 2
     max: 4
