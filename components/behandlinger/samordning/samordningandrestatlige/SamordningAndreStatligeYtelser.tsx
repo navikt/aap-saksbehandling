@@ -1,8 +1,8 @@
 'use client';
 
-import { FormField } from 'components/form/FormField';
+import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
-import { Button, HStack, VStack } from '@navikt/ds-react';
+import { Button, HStack, ReadMore, VStack } from '@navikt/ds-react';
 import { FormEvent, useState } from 'react';
 import { AndreStatligeYtelserTabell } from 'components/behandlinger/samordning/samordningandrestatlige/AndreStatligeYtelserTabell';
 import { Behovstype } from 'lib/utils/form';
@@ -18,6 +18,7 @@ import {
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 
 interface Props {
   grunnlag: SamordningAndreStatligeYtelserGrunnlag;
@@ -68,7 +69,7 @@ export const SamordningAndreStatligeYtelser = ({
     {
       begrunnelse: {
         type: 'textarea',
-        label: 'Vurder om brukeren har andre statlige ytelser som skal avregnes med AAP',
+        label: 'Vurder om brukeren har andre statlige ytelser som kan gi fradrag fra AAP etterbetaling',
         rules: { required: 'Du må gjøre en vilkårsvurdering' },
         defaultValue: defaultValue.begrunnelse,
       },
@@ -107,9 +108,11 @@ export const SamordningAndreStatligeYtelser = ({
 
   const skalViseBekreftKnapp = !formReadOnly && visYtelsesTabell;
 
+  let historiskeVurderinger = grunnlag.historiskeVurderinger ?? null;
+
   return (
     <VilkårskortMedFormOgMellomlagringNyVisning
-      heading="Andre ytelser til avregning"
+      heading="Fradrag ved andre statlige ytelser"
       steg="SAMORDNING_ANDRE_STATLIGE_YTELSER"
       onSubmit={handleSubmit}
       isLoading={isLoading}
@@ -142,6 +145,25 @@ export const SamordningAndreStatligeYtelser = ({
           </Button>
         </HStack>
       )}
+
+      {historiskeVurderinger != null && historiskeVurderinger.length > 0 && (
+        <TidligereVurderinger
+          data={historiskeVurderinger}
+          buildFelter={byggFelter}
+          getErGjeldende={() => {
+            return true;
+          }}
+          getFomDato={(v) => v.vurderingenGjelderFra ?? v.vurdertAv.dato}
+          getVurdertAvIdent={(v) => v.vurdertAv.ident}
+          getVurdertDato={(v) => v.vurdertAv.dato}
+          groupByCreateDate={true}
+        />
+      )}
+
+      <ReadMore header="Hva skal vurderes?">
+        Det må undersøkes om bruker har hatt andre ytelser i perioden med AAP som kan gi fradrag i AAP utbetalingen.
+      </ReadMore>
+
       {visYtelsesTabell && (
         <VStack gap={'6'}>
           <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
@@ -163,6 +185,37 @@ function mapVurderingToDraftFormFields(
       tom: formaterDatoForFrontend(vurdering.periode.tom),
     })),
   };
+}
+
+function byggFelter(vurdering: SamordningAndreStatligeYtelserGrunnlag['vurdering']): ValuePair<string>[] {
+  const begrunnelse = vurdering?.begrunnelse || 'Ingen begrunnelse på behandling funnet';
+  const perioder = vurdering?.vurderingPerioder || [];
+
+  const felter: ValuePair<string>[] = [
+    {
+      label: 'Begrunnelse',
+      value: begrunnelse,
+    },
+  ];
+
+  if (perioder.length === 0) {
+    felter.push({
+      label: 'Ytelse(r)',
+      value: 'Ingen ytelser',
+    });
+  } else {
+    perioder.forEach((item, index) => {
+      const ytelseLabel = index === 0 ? 'Ytelse(r)' : '';
+      const value = `${item.ytelse}: ${formaterDatoForFrontend(item.periode.fom)} - ${formaterDatoForFrontend(item.periode.tom)}`;
+
+      felter.push({
+        label: ytelseLabel,
+        value,
+      });
+    });
+  }
+
+  return felter;
 }
 
 function emptyDraftFormFields(): DraftFormFields {
