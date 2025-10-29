@@ -64,7 +64,7 @@ export const AlleOppgaverTabell = ({ oppgaver, revalidateFunction, setValgteRade
             <Table.ColumnHeader sortKey={'behandlingOpprettet'} sortable={true}>
               Beh. opprettet
             </Table.ColumnHeader>
-            <Table.ColumnHeader sortKey={'årsakerTilOpprettelse'} sortable={true}>
+            <Table.ColumnHeader sortKey={'årsakTilOpprettelse'} sortable={true}>
               Årsak
             </Table.ColumnHeader>
             <Table.ColumnHeader sortKey={'årsakerTilBehandling'} sortable={true}>
