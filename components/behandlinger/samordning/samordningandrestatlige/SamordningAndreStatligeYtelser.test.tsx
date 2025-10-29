@@ -79,7 +79,9 @@ describe('mellomlagring', () => {
     render(<SamordningAndreStatligeYtelser grunnlag={grunnlagUtenVurdering} behandlingVersjon={0} readOnly={false} />);
 
     await user.type(
-      screen.getByRole('textbox', { name: 'Vurder om brukeren har andre statlige ytelser som skal avregnes med AAP' }),
+      screen.getByRole('textbox', {
+        name: 'Vurder om brukeren har andre statlige ytelser som kan gi fradrag fra AAP etterbetaling',
+      }),
       'Her har jeg begynt å skrive en vurdering..'
     );
     expect(screen.queryByText('Utkast lagret 21.08.2025 00:00 (Jan T. Loven)')).not.toBeInTheDocument();
@@ -129,7 +131,7 @@ describe('mellomlagring', () => {
     );
 
     const begrunnelseFelt = screen.getByRole('textbox', {
-      name: 'Vurder om brukeren har andre statlige ytelser som skal avregnes med AAP',
+      name: 'Vurder om brukeren har andre statlige ytelser som kan gi fradrag fra AAP etterbetaling',
     });
 
     expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er mellomlagret');
@@ -139,7 +141,7 @@ describe('mellomlagring', () => {
     render(<SamordningAndreStatligeYtelser behandlingVersjon={0} readOnly={false} grunnlag={grunnlagMedVurdering} />);
 
     const begrunnelseFelt = screen.getByRole('textbox', {
-      name: 'Vurder om brukeren har andre statlige ytelser som skal avregnes med AAP',
+      name: 'Vurder om brukeren har andre statlige ytelser som kan gi fradrag fra AAP etterbetaling',
     });
 
     expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er bekreftet');
@@ -156,12 +158,16 @@ describe('mellomlagring', () => {
     );
 
     await user.type(
-      screen.getByRole('textbox', { name: 'Vurder om brukeren har andre statlige ytelser som skal avregnes med AAP' }),
+      screen.getByRole('textbox', {
+        name: 'Vurder om brukeren har andre statlige ytelser som kan gi fradrag fra AAP etterbetaling',
+      }),
       ' her er ekstra tekst'
     );
 
     expect(
-      screen.getByRole('textbox', { name: 'Vurder om brukeren har andre statlige ytelser som skal avregnes med AAP' })
+      screen.getByRole('textbox', {
+        name: 'Vurder om brukeren har andre statlige ytelser som kan gi fradrag fra AAP etterbetaling',
+      })
     ).toHaveValue('Dette er min vurdering som er mellomlagret her er ekstra tekst');
 
     const slettKnapp = screen.getByRole('button', { name: 'Slett utkast' });
@@ -169,7 +175,9 @@ describe('mellomlagring', () => {
     await user.click(slettKnapp);
 
     expect(
-      screen.getByRole('textbox', { name: 'Vurder om brukeren har andre statlige ytelser som skal avregnes med AAP' })
+      screen.getByRole('textbox', {
+        name: 'Vurder om brukeren har andre statlige ytelser som kan gi fradrag fra AAP etterbetaling',
+      })
     ).toHaveValue('');
   });
 
@@ -184,12 +192,16 @@ describe('mellomlagring', () => {
     );
 
     await user.type(
-      screen.getByRole('textbox', { name: 'Vurder om brukeren har andre statlige ytelser som skal avregnes med AAP' }),
+      screen.getByRole('textbox', {
+        name: 'Vurder om brukeren har andre statlige ytelser som kan gi fradrag fra AAP etterbetaling',
+      }),
       ' her er ekstra tekst'
     );
 
     expect(
-      screen.getByRole('textbox', { name: 'Vurder om brukeren har andre statlige ytelser som skal avregnes med AAP' })
+      screen.getByRole('textbox', {
+        name: 'Vurder om brukeren har andre statlige ytelser som kan gi fradrag fra AAP etterbetaling',
+      })
     ).toHaveValue('Dette er min vurdering som er mellomlagret her er ekstra tekst');
 
     const slettKnapp = screen.getByRole('button', { name: 'Slett utkast' });
@@ -197,7 +209,9 @@ describe('mellomlagring', () => {
     await user.click(slettKnapp);
 
     expect(
-      screen.getByRole('textbox', { name: 'Vurder om brukeren har andre statlige ytelser som skal avregnes med AAP' })
+      screen.getByRole('textbox', {
+        name: 'Vurder om brukeren har andre statlige ytelser som kan gi fradrag fra AAP etterbetaling',
+      })
     ).toHaveValue('Dette er min vurdering som er bekreftet');
   });
 
