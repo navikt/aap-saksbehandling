@@ -1,4 +1,4 @@
-import { AvklaringsbehovKode, Oppgave, Vurderingsbehov, ÅrsakTilOpprettelse } from 'lib/types/types';
+import { Oppgave, Vurderingsbehov, ÅrsakTilOpprettelse } from 'lib/types/types';
 import { BodyShort, Checkbox, CopyButton, Table, Tooltip } from '@navikt/ds-react';
 import {
   mapBehovskodeTilBehovstype,
@@ -16,6 +16,12 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import { SynkroniserEnhetModal } from 'components/oppgaveliste/synkroniserenhetmodal/SynkroniserEnhetModal';
 import { TildelOppgaveModal } from 'components/tildeloppgavemodal/TildelOppgaveModal';
 
+export interface OppgaveTilSortering extends Omit<Oppgave, 'behandlingstype' | 'årsakerTilBehandling'> {
+  behandlingstype: string;
+  årsakerTilBehandling: string;
+  originalOppgave: Oppgave;
+}
+
 interface Props {
   oppgaver: Oppgave[];
   revalidateFunction: () => Promise<unknown>;
@@ -23,8 +29,20 @@ interface Props {
   valgteRader: number[];
 }
 
+const mapTilSorterbarOppgave = (oppgave: Oppgave): OppgaveTilSortering => ({
+  ...oppgave,
+  behandlingstype: mapTilOppgaveBehandlingstypeTekst(oppgave.behandlingstype),
+  årsakTilOpprettelse: mapTilÅrsakTilOpprettelseTilTekst(oppgave.årsakTilOpprettelse as ÅrsakTilOpprettelse),
+  årsakerTilBehandling: oppgave.årsakerTilBehandling
+    .map((årsak) => formaterVurderingsbehov(årsak as Vurderingsbehov))
+    .join(', '),
+  avklaringsbehovKode: mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode),
+  originalOppgave: oppgave,
+});
+
 export const AlleOppgaverTabell = ({ oppgaver, revalidateFunction, setValgteRader, valgteRader }: Props) => {
-  const { sort, sortertListe, settSorteringskriterier } = useSortertListe(oppgaver);
+  const oppgaverTilSortering: OppgaveTilSortering[] = oppgaver.map(mapTilSorterbarOppgave);
+  const { sort, sortertListe, settSorteringskriterier } = useSortertListe(oppgaverTilSortering);
   const [visSynkroniserEnhetModal, setVisSynkroniserEnhetModal] = useState<boolean>(false);
 
   const toggleValgtRad = (oppgaveId: number) => {
@@ -111,32 +129,20 @@ export const AlleOppgaverTabell = ({ oppgaver, revalidateFunction, setValgteRade
                   'Ukjent'
                 )}
               </Table.DataCell>
-              <Table.DataCell textSize={'small'}>
-                {mapTilOppgaveBehandlingstypeTekst(oppgave.behandlingstype)}
-              </Table.DataCell>
+              <Table.DataCell textSize={'small'}>{oppgave.behandlingstype}</Table.DataCell>
               <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(oppgave.behandlingOpprettet)}</Table.DataCell>
-              <Table.DataCell textSize={'small'}>
-                {oppgave.årsakTilOpprettelse != null
-                  ? mapTilÅrsakTilOpprettelseTilTekst(oppgave.årsakTilOpprettelse as ÅrsakTilOpprettelse)
-                  : ''}
-              </Table.DataCell>
+              <Table.DataCell textSize={'small'}>{oppgave.årsakTilOpprettelse ?? '-'}</Table.DataCell>
               <Table.DataCell style={{ maxWidth: '150px' }} textSize={'small'}>
-                <Tooltip
-                  content={oppgave.årsakerTilBehandling
-                    .map((årsak) => formaterVurderingsbehov(årsak as Vurderingsbehov))
-                    .join(', ')}
-                >
+                <Tooltip content={oppgave.årsakerTilBehandling}>
                   <BodyShort truncate size={'small'}>
-                    {oppgave.årsakerTilBehandling
-                      .map((årsak) => formaterVurderingsbehov(årsak as Vurderingsbehov))
-                      .join(', ')}
+                    {oppgave.årsakerTilBehandling}
                   </BodyShort>
                 </Tooltip>
               </Table.DataCell>
               <Table.DataCell style={{ maxWidth: '150px' }} textSize={'small'}>
-                <Tooltip content={mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode as AvklaringsbehovKode)}>
+                <Tooltip content={oppgave.avklaringsbehovKode}>
                   <BodyShort truncate size={'small'}>
-                    {mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode as AvklaringsbehovKode)}
+                    {oppgave.avklaringsbehovKode}
                   </BodyShort>
                 </Tooltip>
               </Table.DataCell>
@@ -148,11 +154,11 @@ export const AlleOppgaverTabell = ({ oppgaver, revalidateFunction, setValgteRade
                 </Tooltip>
               </Table.DataCell>
               <Table.DataCell textSize={'small'}>
-                <OppgaveInformasjon oppgave={oppgave} />
+                <OppgaveInformasjon oppgave={oppgave.originalOppgave} />
               </Table.DataCell>
               <Table.DataCell textSize={'small'} align={'right'}>
                 <AlleOppgaverActionMenu
-                  oppgave={oppgave}
+                  oppgave={oppgave.originalOppgave}
                   revalidateFunction={revalidateFunction}
                   setVisSynkroniserEnhetModal={setVisSynkroniserEnhetModal}
                 />
