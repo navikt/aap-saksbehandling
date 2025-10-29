@@ -1,6 +1,7 @@
 import { AvslagÅrsak, SettPåVentÅrsaker, TypeBehandling, VilkårUtfall, ÅrsakTilOpprettelse } from 'lib/types/types';
 import { exhaustiveCheck } from 'lib/utils/typescript';
 import { OppgaveAvklaringsbehovKode, OppgaveBehandlingstype } from 'lib/types/oppgaveTypes';
+import { PostmottakSettPåVentÅrsaker } from 'lib/types/postmottakTypes';
 
 const behovskodeMap = {
   // Behandlingsflyt
@@ -84,7 +85,7 @@ export function mapBehovskodeTilBehovstype(kode: OppgaveAvklaringsbehovKode | st
   return behovskodeMap[kode as OppgaveAvklaringsbehovKode] ?? 'Ukjent behovstype';
 }
 
-export function mapTilVenteÅrsakTekst(årsak: SettPåVentÅrsaker): string {
+export function mapTilVenteÅrsakTekst(årsak: SettPåVentÅrsaker | PostmottakSettPåVentÅrsaker): string {
   switch (årsak) {
     case 'VENTER_PÅ_OPPLYSNINGER':
       return 'Venter på opplysninger';
@@ -106,6 +107,8 @@ export function mapTilVenteÅrsakTekst(årsak: SettPåVentÅrsaker): string {
       return 'Venter på svar på forhåndsvarsel';
     case 'VENTER_PÅ_FUNKSJONALITET':
       return 'Venter på manglende funksjonalitet';
+    case 'VENTER_PÅ_BEHANDLING_I_GOSYS':
+      return 'Venter på behandling i Gosys';
   }
   exhaustiveCheck(årsak);
 }

@@ -2,7 +2,7 @@
 
 import { BodyShort, Label } from '@navikt/ds-react';
 import { HourglassBottomFilledIcon } from '@navikt/aksel-icons';
-import { SettPåVentÅrsaker, Venteinformasjon } from 'lib/types/postmottakTypes';
+import { PostmottakSettPåVentÅrsaker, Venteinformasjon } from 'lib/types/postmottakTypes';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { exhaustiveCheck } from 'lib/utils/typescript';
 import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
@@ -36,7 +36,7 @@ export const PostmottakBehandlingPVentKort = ({ informasjon }: Props) => {
   );
 };
 
-function mapÅrsakerTilString(årsak: SettPåVentÅrsaker): string {
+function mapÅrsakerTilString(årsak: PostmottakSettPåVentÅrsaker): string {
   switch (årsak) {
     case 'VENTER_PÅ_VURDERING_AV_ROL':
       return 'Venter på vurdering av rådgivende overlege';
