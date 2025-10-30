@@ -93,13 +93,13 @@ export const Sykdomsvurdering = ({
   const diagnosegrunnlag = finnDiagnosegrunnlag(typeBehandling, grunnlag);
   const sykdomsvurdering = grunnlag.sykdomsvurderinger.at(-1);
 
-  const [formReset, setFormReset] = useState<boolean>(false);
+  const [skalTilbakestilleFelter, settSkalTilbakestilleFelter] = useState<boolean>(false);
 
   const { visningModus, visningActions, formReadOnly } = useVilkårskortVisning(
     readOnly,
     'AVKLAR_SYKDOM',
     mellomlagretVurdering,
-    setFormReset
+    settSkalTilbakestilleFelter
   );
 
   const defaultValues: DraftFormFields = initialMellomlagretVurdering
@@ -224,11 +224,11 @@ export const Sykdomsvurdering = ({
   );
 
   useEffect(() => {
-    if (formReset) {
+    if (skalTilbakestilleFelter) {
       form.reset();
-      setFormReset(false);
+      settSkalTilbakestilleFelter(false);
     }
-  }, [form, formReset]);
+  }, [form, skalTilbakestilleFelter]);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {

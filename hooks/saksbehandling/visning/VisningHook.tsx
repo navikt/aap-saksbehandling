@@ -25,7 +25,7 @@ export function useVilkårskortVisning(
   readOnly: boolean,
   steg: StegType,
   mellomlagring: MellomlagretVurdering | undefined,
-  setFormReset: Dispatch<SetStateAction<boolean>>
+  skalTilbakestilleFelter?: Dispatch<SetStateAction<boolean>>
 ): VisningState {
   const { flyt } = useRequiredFlyt();
 
@@ -47,7 +47,7 @@ export function useVilkårskortVisning(
   function avbrytEndringClick() {
     setVisning(VisningModus.LÅST_MED_ENDRE);
     setFormReadOnly(true);
-    setFormReset(true);
+    skalTilbakestilleFelter && skalTilbakestilleFelter(true);
   }
 
   function onEndreClick() {
