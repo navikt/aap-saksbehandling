@@ -14,6 +14,7 @@ import { ReactNode } from 'react';
 export interface VilkårsKortMedFormOgMellomlagringProps extends VilkårsKortMedFormProps {
   onDeleteMellomlagringClick: () => void;
   onLagreMellomLagringClick: () => void;
+  formReset?: () => void;
   mellomlagretVurdering: MellomlagretVurdering | undefined;
   visningModus: VisningModus;
   visningActions: VisningActions;
@@ -36,6 +37,7 @@ export const VilkårskortMedFormOgMellomlagringNyVisning = ({
   kvalitetssikretAv,
   onDeleteMellomlagringClick,
   onLagreMellomLagringClick,
+  formReset,
   mellomlagretVurdering,
   visningModus,
   visningActions,
@@ -96,7 +98,14 @@ export const VilkårskortMedFormOgMellomlagringNyVisning = ({
                     <>
                       <Button loading={isLoading}>{knappTekst}</Button>
                       {visningActions && (
-                        <Button type="button" variant="secondary" onClick={visningActions.avbrytEndringClick}>
+                        <Button
+                          type="button"
+                          variant="secondary"
+                          onClick={() => {
+                            visningActions.avbrytEndringClick();
+                            formReset && formReset();
+                          }}
+                        >
                           Avbryt
                         </Button>
                       )}

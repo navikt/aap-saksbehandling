@@ -10,7 +10,7 @@ import {
   JaEllerNeiOptions,
 } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { FormEvent, useCallback, useEffect, useState } from 'react';
+import { FormEvent, useCallback } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { Link } from '@navikt/ds-react';
 import { DiagnoseSystem, diagnoseSøker } from 'lib/diagnosesøker/DiagnoseSøker';
@@ -93,13 +93,10 @@ export const Sykdomsvurdering = ({
   const diagnosegrunnlag = finnDiagnosegrunnlag(typeBehandling, grunnlag);
   const sykdomsvurdering = grunnlag.sykdomsvurderinger.at(-1);
 
-  const [skalTilbakestilleFelter, settSkalTilbakestilleFelter] = useState<boolean>(false);
-
   const { visningModus, visningActions, formReadOnly } = useVilkårskortVisning(
     readOnly,
     'AVKLAR_SYKDOM',
-    mellomlagretVurdering,
-    settSkalTilbakestilleFelter
+    mellomlagretVurdering
   );
 
   const defaultValues: DraftFormFields = initialMellomlagretVurdering
@@ -223,13 +220,6 @@ export const Sykdomsvurdering = ({
     { shouldUnregister: false, readOnly: formReadOnly }
   );
 
-  useEffect(() => {
-    if (skalTilbakestilleFelter) {
-      form.reset();
-      settSkalTilbakestilleFelter(false);
-    }
-  }, [form, skalTilbakestilleFelter]);
-
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
       løsBehovOgGåTilNesteSteg(
@@ -312,6 +302,7 @@ export const Sykdomsvurdering = ({
       }}
       visningActions={visningActions}
       visningModus={visningModus}
+      formReset={() => form.reset(form.watch())}
     >
       {historiskeVurderinger && historiskeVurderinger.length > 0 && (
         <TidligereVurderinger
