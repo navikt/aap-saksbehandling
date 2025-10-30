@@ -107,7 +107,7 @@ export const SamordningAndreStatligeYtelser = ({
 
   const skalViseBekreftKnapp = !formReadOnly;
 
-  let historiskeVurderinger = grunnlag.historiskeVurderinger ?? null;
+  const historiskeVurderinger = grunnlag.historiskeVurderinger ?? null;
 
   return (
     <VilkårskortMedFormOgMellomlagringNyVisning
