@@ -5,15 +5,24 @@ import { AvklarSakMedDataFetching } from 'components/postmottak/avklarsak/Avklar
 import { OverleveringMedDataFetching } from 'components/postmottak/overlevering/OverleveringMedDataFetching';
 import { DigitaliserDokumentMedDatafetching } from 'components/postmottak/digitaliserdokument/DigitaliserDokumentMedDatafetching';
 import { FullførtOppgaveModal } from 'components/postmottak/fullførtoppgavemodal/FullførtOppgaveModal';
+import { hentFlyt } from 'lib/services/postmottakservice/postmottakservice';
+import { isSuccess } from 'lib/utils/api';
 
 interface Props {
   aktivGruppe: StegGruppe;
   behandlingsreferanse: string;
 }
 
-// TODO Ikke gå videre til VIDERESEND, men bli værende på AVKLAR_SAK
-// TODO Ikke gå videre til IVERKSETTES, men bli værende på OVERLEVER_TIL_FAGSYSTEM
-export const StegKolonne = ({ aktivGruppe, behandlingsreferanse }: Props) => {
+export const StegKolonne = async ({ aktivGruppe, behandlingsreferanse }: Props) => {
+  if (['VIDERESEND', 'IVERKSETTES'].includes(aktivGruppe)) {
+    const flyt = await hentFlyt(behandlingsreferanse);
+    if (isSuccess(flyt)) {
+      const nesteBehandlingId = flyt.data.nesteBehandlingId;
+      const typeBehandling = flyt.data.visning.typeBehandling;
+
+      return <FullførtOppgaveModal nesteBehandlingId={nesteBehandlingId} typeBehandling={typeBehandling} />;
+    }
+  }
   return (
     <>
       {aktivGruppe === 'AVKLAR_TEMA' && (
@@ -25,10 +34,6 @@ export const StegKolonne = ({ aktivGruppe, behandlingsreferanse }: Props) => {
         <StegSuspense>
           <AvklarSakMedDataFetching behandlingsreferanse={behandlingsreferanse} />
         </StegSuspense>
-      )}
-      {aktivGruppe === 'VIDERESEND' && <FullførtOppgaveModal successMessage={'Dokumentet er journalført'} />}
-      {aktivGruppe === 'IVERKSETTES' && (
-        <FullførtOppgaveModal successMessage={'Dokumentet er kategorisert og sendt.'} />
       )}
       {aktivGruppe === 'DIGITALISER' && (
         <StegSuspense>
