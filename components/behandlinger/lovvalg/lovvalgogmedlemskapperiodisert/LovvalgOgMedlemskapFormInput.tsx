@@ -50,7 +50,7 @@ export const LovvalgOgMedlemskapFormInput = ({
           required: 'Du må velge fra hvilken dato vurderingen gjelder fra',
           validate: (value) => validerDato(value as string),
         }}
-        readOnly={readOnly || (index === 0 && !harTidligereVurderinger)}
+        readOnly={readOnly}
       />
       <ReadMore size={'small'} header="Hvordan legge til sluttdato?">
         For å legge til en sluttdato på denne vurderingen velger du “Legg til ny vurdering”. Det oppretter en ny
