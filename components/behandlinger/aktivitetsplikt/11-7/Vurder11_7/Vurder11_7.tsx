@@ -106,7 +106,7 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
       },
       gjelderFra: {
         type: 'date_input',
-        label: 'Datoen for når AAP skal stanses.',
+        label: 'Vurderingen gjelder fra',
         description: !grunnlag.harSendtForhåndsvarsel
           ? 'Hvis § 11-7 ikke er oppfylt, bør dato settes 3 uker fram i tid for å gi bruker tid til å svare på forhåndsvarsel'
           : undefined,
