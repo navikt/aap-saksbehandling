@@ -29,15 +29,15 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov): strin
     case 'REVURDER_SAMORDNING':
       return 'Revurder samordning';
     case 'REVURDER_SAMORDNING_ANDRE_FOLKETRYGDYTELSER':
-      return 'Revurder samordning andre folketrygdytelser';
+      return 'Forhold andre ytelser - Folketrygdytelser';
     case 'REVURDER_SAMORDNING_UFØRE':
-      return 'Revurder samordning uføre (§ 11-28)';
+      return 'Forhold andre ytelser - Samordning ufør';
     case 'REVURDER_SAMORDNING_ANDRE_STATLIGE_YTELSER':
-      return 'Revurder samordning andre statlige ytelser';
+      return 'Forhold andre ytelser - Andre ytelser avregning';
     case 'REVURDER_SAMORDNING_ARBEIDSGIVER':
-      return 'Revurder samordning arbeidsgiver';
+      return 'Forhold andre ytelser - Arbeidsgiverytelse';
     case 'REVURDER_SAMORDNING_TJENESTEPENSJON':
-      return 'Revurder samordning tjenestepensjon';
+      return 'Forhold andre ytelser - Tjenestepensjon';
     case 'REVURDER_STUDENT':
       return 'Revurder student';
     case 'MOTATT_KLAGE':

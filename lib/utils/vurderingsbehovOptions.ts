@@ -15,11 +15,11 @@ export const vurderingsbehovOptions: ValuePair<Vurderingsbehov>[] = [
   { label: 'Manuell inntekt', value: 'REVURDER_MANUELL_INNTEKT' },
   { label: 'Student', value: 'REVURDER_STUDENT' },
   { label: 'Overstyr perioder uten overholdt meldeplikt', value: 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN' },
-  { label: 'Samordning andre folketrygdytelser', value: 'REVURDER_SAMORDNING_ANDRE_FOLKETRYGDYTELSER' },
-  { label: 'Samordning uføre', value: 'REVURDER_SAMORDNING_UFØRE' },
-  { label: 'Samordning andre statlige ytelser', value: 'REVURDER_SAMORDNING_ANDRE_STATLIGE_YTELSER' },
-  { label: 'Samordning arbeidsgiver', value: 'REVURDER_SAMORDNING_ARBEIDSGIVER' },
-  { label: 'Samordning tjenestepensjon', value: 'REVURDER_SAMORDNING_TJENESTEPENSJON' },
+  { label: 'Forhold andre ytelser - Folketrygdytelser', value: 'REVURDER_SAMORDNING_ANDRE_FOLKETRYGDYTELSER' },
+  { label: 'Forhold andre ytelser - Samordning ufør', value: 'REVURDER_SAMORDNING_UFØRE' },
+  { label: 'Forhold andre ytelser - Andre ytelser avregning', value: 'REVURDER_SAMORDNING_ANDRE_STATLIGE_YTELSER' },
+  { label: 'Forhold andre ytelser - Arbeidsgiverytelse', value: 'REVURDER_SAMORDNING_ARBEIDSGIVER' },
+  { label: 'Forhold andre ytelser - Tjenestepensjon', value: 'REVURDER_SAMORDNING_TJENESTEPENSJON' },
   ...(toggles.featureRevurderingVurderingsbehov
     ? [
         { label: 'Dødsfall bruker', value: 'DØDSFALL_BRUKER' } as ValuePair<Vurderingsbehov>,
