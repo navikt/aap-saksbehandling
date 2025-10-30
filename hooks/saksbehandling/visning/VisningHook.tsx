@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
 import { MellomlagretVurdering, StegType } from 'lib/types/types';
 
@@ -24,7 +24,8 @@ export interface VisningActions {
 export function useVilkårskortVisning(
   readOnly: boolean,
   steg: StegType,
-  mellomlagring: MellomlagretVurdering | undefined
+  mellomlagring: MellomlagretVurdering | undefined,
+  setFormReset: Dispatch<SetStateAction<boolean>>
 ): VisningState {
   const { flyt } = useRequiredFlyt();
 
@@ -46,6 +47,7 @@ export function useVilkårskortVisning(
   function avbrytEndringClick() {
     setVisning(VisningModus.LÅST_MED_ENDRE);
     setFormReadOnly(true);
+    setFormReset(true);
   }
 
   function onEndreClick() {
