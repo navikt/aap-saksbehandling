@@ -302,7 +302,7 @@ export const Sykdomsvurdering = ({
       }}
       visningActions={visningActions}
       visningModus={visningModus}
-      formReset={() => form.reset(form.watch())}
+      formReset={form.reset}
     >
       {historiskeVurderinger && historiskeVurderinger.length > 0 && (
         <TidligereVurderinger
