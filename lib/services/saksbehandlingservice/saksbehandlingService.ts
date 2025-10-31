@@ -627,10 +627,6 @@ async function ventTilProsesseringErFerdig(
     }
 
     if (status === 'FEILET') {
-      logError(
-        `Prosessering av flyt feilet. Behandlingsreferanse: [${behandlingsreferanse}]`,
-        Error(JSON.stringify(response.data.prosessering.ventendeOppgaver))
-      );
       prosessering = response.data.prosessering;
       break;
     }
