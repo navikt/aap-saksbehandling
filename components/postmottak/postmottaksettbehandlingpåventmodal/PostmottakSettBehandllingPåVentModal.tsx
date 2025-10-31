@@ -4,7 +4,7 @@ import React, { useEffect, useTransition } from 'react';
 import { Alert, Button, Modal } from '@navikt/ds-react';
 import styles from 'components/postmottak/postmottaksettbehandlingpåventmodal/PostmottakSettBehandlingPåVentModal.module.css';
 import { HourglassBottomFilledIcon } from '@navikt/aksel-icons';
-import { SettPåVentÅrsaker } from 'lib/types/postmottakTypes';
+import { PostmottakSettPåVentÅrsaker } from 'lib/types/postmottakTypes';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { revalidatePostMottakFlyt } from 'lib/actions/actions';
 import { FormField, ValuePair } from 'components/form/FormField';
@@ -22,7 +22,7 @@ interface Props {
 interface FormFields {
   begrunnelse: string;
   frist: string;
-  grunn: SettPåVentÅrsaker;
+  grunn: PostmottakSettPåVentÅrsaker;
 }
 
 export const PostmottakSettBehandllingPVentModal = ({
@@ -34,7 +34,7 @@ export const PostmottakSettBehandllingPVentModal = ({
   const [isPending, startTransition] = useTransition();
   const { postmottakSettPåVent, error } = usePostmottakSettPåVent();
 
-  const grunnOptions: ValuePair<SettPåVentÅrsaker>[] = [
+  const grunnOptions: ValuePair<PostmottakSettPåVentÅrsaker>[] = [
     { label: 'Venter på medisinske opplysninger', value: 'VENTER_PÅ_MEDISINSKE_OPPLYSNINGER' },
     { label: 'Venter på opplysninger', value: 'VENTER_PÅ_OPPLYSNINGER' },
     { label: 'Venter på vurdering fra rådgivende overlege', value: 'VENTER_PÅ_VURDERING_AV_ROL' },

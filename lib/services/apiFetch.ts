@@ -26,7 +26,7 @@ const getOnBefalfOfToken = async (audience: string, url: string): Promise<string
 
   const onBehalfOf = await requestAzureOboToken(token, audience);
   if (!onBehalfOf.ok) {
-    logError(`Henting av oboToken for ${url} feilet`, onBehalfOf.error);
+    logWarning(`Henting av oboToken for ${url} feilet`, onBehalfOf.error);
     throw new Error('Request oboToken for simpleTokenXProxy failed');
   }
 

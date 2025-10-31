@@ -16,13 +16,16 @@ spec:
     {{/each}}
   port: 3000
   liveness:
-    path: /saksbehandling/api/internal/isAlive
+    path: /actuator/live
     initialDelay: 20
     timeout: 60
   readiness:
-    path: /saksbehandling/api/internal/isReady
+    path: /actuator/ready
     initialDelay: 20
     timeout: 60
+  prometheus:
+    enabled: true
+    path: /actuator/metrics
   replicas:
     min: 2
     max: 4

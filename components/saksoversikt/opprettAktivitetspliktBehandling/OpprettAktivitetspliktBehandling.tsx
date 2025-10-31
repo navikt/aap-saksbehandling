@@ -35,7 +35,7 @@ export const OpprettAktivitetspliktBehandling = ({ sak }: { sak: SaksInfo }) => 
   const { form, formFields } = useConfigForm<AktivitetspliktbruddFormFields>({
     aktivitetspliktBruddType: {
       type: 'combobox',
-      label: 'Hvilket aktivitetspliktbrudd vil du registrere?',
+      label: 'Hvilken aktivitetshjemmel skal vurderes?',
       options: [
         {
           label: '§ 11-7',

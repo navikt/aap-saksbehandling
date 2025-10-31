@@ -15,7 +15,8 @@ export type LøsAvklaringsbehovPåBehandling =
   postmottak['schemas']['no.nav.aap.postmottak.avklaringsbehov.flate.L\u00F8sAvklaringsbehovP\u00E5Behandling'];
 
 export type SettPåVentRequest = postmottak['schemas']['no.nav.aap.postmottak.api.flyt.SettP\u00E5VentRequest'];
-export type SettPåVentÅrsaker = postmottak['schemas']['no.nav.aap.postmottak.api.flyt.SettP\u00E5VentRequest']['grunn'];
+export type PostmottakSettPåVentÅrsaker =
+  postmottak['schemas']['no.nav.aap.postmottak.api.flyt.SettP\u00E5VentRequest']['grunn'];
 export type Venteinformasjon = postmottak['schemas']['no.nav.aap.postmottak.api.flyt.Venteinformasjon'];
 export type DigitaliseringsGrunnlag =
   postmottak['schemas']['no.nav.aap.postmottak.api.faktagrunnlag.strukturering.DigitaliseringGrunnlagDto'];
