@@ -46,7 +46,6 @@ export function useVilkårskortVisning(
   function avbrytEndringClick() {
     setVisning(VisningModus.LÅST_MED_ENDRE);
     setFormReadOnly(true);
-    // skalTilbakestilleFelter && skalTilbakestilleFelter(true);
   }
 
   function onEndreClick() {
