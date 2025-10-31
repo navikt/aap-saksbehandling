@@ -8,7 +8,6 @@ import { DokumentOversikt } from 'components/saksoversikt/dokumentoversikt/Dokum
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { AktivitetspliktTrekk } from 'components/saksoversikt/aktivitetsplikttrekk/AktivitetspliktTrekk';
-import { toggles } from 'lib/utils/toggles';
 
 enum Tab {
   OVERSIKT = 'OVERSIKT',
@@ -34,9 +33,7 @@ export const SakOversiktContainer = ({ sak }: { sak: SaksInfo }) => {
           <Tabs.List>
             <Tabs.Tab label="Oversikt" value={Tab.OVERSIKT} icon={<PersonIcon />} />
             <Tabs.Tab label="Dokumenter" value={Tab.DOKUMENTER} icon={<FileTextIcon />} />
-            {toggles.featureAktivitetspliktMedTrekkVisning && (
-              <Tabs.Tab label="Aktivitetsplikt 11-9 trekk" value={Tab.TREKK} icon={<FileTextIcon />} />
-            )}
+            <Tabs.Tab label="Aktivitetsplikt 11-9 trekk" value={Tab.TREKK} icon={<FileTextIcon />} />
           </Tabs.List>
 
           <Box marginBlock="8">
@@ -47,11 +44,9 @@ export const SakOversiktContainer = ({ sak }: { sak: SaksInfo }) => {
             <Tabs.Panel value={Tab.DOKUMENTER}>
               <DokumentOversikt sak={sak} />
             </Tabs.Panel>
-            {toggles.featureAktivitetspliktMedTrekkVisning && (
-              <Tabs.Panel value={Tab.TREKK}>
-                <AktivitetspliktTrekk sak={sak} />
-              </Tabs.Panel>
-            )}
+            <Tabs.Panel value={Tab.TREKK}>
+              <AktivitetspliktTrekk sak={sak} />
+            </Tabs.Panel>
           </Box>
         </Tabs>
       </Page.Block>
