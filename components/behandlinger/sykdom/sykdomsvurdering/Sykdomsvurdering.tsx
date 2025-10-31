@@ -217,7 +217,7 @@ export const Sykdomsvurdering = ({
         defaultValue: defaultValues?.yrkesskadeBegrunnelse,
       },
     },
-    { shouldUnregister: false, readOnly: formReadOnly }
+    { shouldUnregister: true, readOnly: formReadOnly }
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {

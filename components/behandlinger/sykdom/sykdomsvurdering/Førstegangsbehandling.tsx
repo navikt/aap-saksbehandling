@@ -28,9 +28,7 @@ export const Førstegangsbehandling = ({ form, formFields, skalVurdereYrkesskade
       )}
 
       {form.watch('erArbeidsevnenNedsatt') === JaEllerNei.Ja && (
-        <>
-          <FormField form={form} formField={formFields.erNedsettelseIArbeidsevneMerEnnHalvparten} horizontalRadio />
-        </>
+        <FormField form={form} formField={formFields.erNedsettelseIArbeidsevneMerEnnHalvparten} horizontalRadio />
       )}
 
       {skalVurdereYrkesskade && form.watch('erNedsettelseIArbeidsevneMerEnnHalvparten') === JaEllerNei.Nei && (
