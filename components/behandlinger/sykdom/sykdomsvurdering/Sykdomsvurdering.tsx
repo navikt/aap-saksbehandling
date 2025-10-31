@@ -302,7 +302,7 @@ export const Sykdomsvurdering = ({
       }}
       visningActions={visningActions}
       visningModus={visningModus}
-      formReset={form.reset}
+      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
       {historiskeVurderinger && historiskeVurderinger.length > 0 && (
         <TidligereVurderinger
