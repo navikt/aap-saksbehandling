@@ -59,8 +59,9 @@ export const AndreStatligeYtelserTabell = ({ form, readOnly }: Props) => {
     <VStack gap={'2'}>
       <Label size={'small'}>Legg til ytelse og periode for utbetaling</Label>
       <BodyLong size={'small'}>
-        Legg til perioder brukeren har hatt andre statlige ytelser som må gi fradrag fra etterbetaling av AAP.
-        Etterbetaling for perioden holdes automatisk igjen hos NØS i 42 dager. Annen ytelse må varsles manuelt i Gosys
+        Legg til perioder der brukeren har hatt andre statlige ytelser. Disse ytelsene skal gi fradrag i etterbetalingen
+        av AAP. Etterbetaling for perioden holdes automatisk igjen hos NØS i 42 dager. Annen ytelse må varsles manuelt i
+        Gosys.
       </BodyLong>
       <TableStyled>
         <Table.Header>
