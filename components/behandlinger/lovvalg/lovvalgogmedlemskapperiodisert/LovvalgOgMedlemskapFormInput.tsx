@@ -1,4 +1,4 @@
-import { Button, HStack, ReadMore, VStack } from '@navikt/ds-react';
+import { Button, HStack, Radio, ReadMore, VStack } from '@navikt/ds-react';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
@@ -8,9 +8,10 @@ import { VisningModus } from 'hooks/saksbehandling/visning/VisningHook';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { landMedTrygdesamarbeid } from 'lib/utils/countries';
 import { UseFormReturn } from 'react-hook-form';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { validerDato } from 'lib/validation/dateValidation';
 import { LovOgMedlemskapVurderingForm } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/types';
+import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 
 type Props = {
   form: UseFormReturn<LovOgMedlemskapVurderingForm>;
@@ -67,20 +68,26 @@ export const LovvalgOgMedlemskapFormInput = ({
         }}
         readOnly={readOnly}
       />
-      <ComboboxWrapper
+      <RadioGroupWrapper
         name={`vurderinger.${index}.lovvalg.lovvalgsEØSLand`}
         control={control}
-        size={'small'}
-        label="Hva er riktig lovvalgsland ved angitt tidspunkt?"
-        options={[
-          { label: 'Norge', value: 'Norge' },
-          { label: 'Annet land med avtale', value: 'Annet land med avtale' },
-        ]}
+        label={'Hva er riktig lovvalgsland ved angitt tidspunkt?'}
         rules={{
           validate: (value) => (isNotEmpty(value) ? undefined : 'Du må velge riktig lovvalg ved angitt tidspunkt'),
         }}
         readOnly={readOnly}
-      />
+        size={'small'}
+      >
+        {[
+          { label: 'Norge', value: 'Norge' },
+          { label: 'Annet land med avtale', value: 'Annet land med avtale' },
+        ].map((option) => (
+          <Radio key={`radio-${option.value}`} value={option.value}>
+            {option.label}
+          </Radio>
+        ))}
+      </RadioGroupWrapper>
+
       {watch(`vurderinger.${index}.lovvalg.lovvalgsEØSLand`) === 'Annet land med avtale' && (
         <ComboboxWrapper
           name={`vurderinger.${index}.lovvalg.annetLovvalgslandMedAvtale`}
