@@ -15,7 +15,7 @@ interface Props {
   getVurdertAvIdent?: (vurdering: any) => string;
   getVurdertDato?: (vurdering: any) => string;
   getFomDato?: (vurdering: any) => string;
-  groupByCreateDate?: boolean;
+  grupperPåOpprettetDato?: boolean;
 }
 
 interface TidligereVurdering {
@@ -33,7 +33,7 @@ export function TidligereVurderinger({
   getVurdertAvIdent = (v: any) => v.vurdertAv.ident,
   getVurdertDato = (v: any) => v.vurdertAv.dato,
   getFomDato = (v: any) => v.vurderingenGjelderFra ?? v.vurdertAv?.dato,
-  groupByCreateDate = false,
+  grupperPåOpprettetDato = false,
 }: Props) {
   const finnSluttdato = (index: number, arr: any[]) => {
     if (arr.length <= 1 || index === 0) return null;
@@ -101,7 +101,7 @@ export function TidligereVurderinger({
           <Chips size={'medium'}>
             <VStack gap={'1'}>
               {mappedVurderinger.map((v, index) => {
-                const periode = groupByCreateDate
+                const periode = grupperPåOpprettetDato
                   ? `${formaterDatoForFrontend(v.vurdertDato)}`
                   : `${formaterDatoForFrontend(v.periode.fom)} - ${v.periode.tom ? formaterDatoForFrontend(v.periode.tom) : ''}`;
                 const flereVurderinger = mappedVurderinger.length > 1;

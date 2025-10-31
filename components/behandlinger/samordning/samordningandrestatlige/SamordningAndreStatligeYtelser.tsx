@@ -142,7 +142,7 @@ export const SamordningAndreStatligeYtelser = ({
           getFomDato={(v) => v.vurderingenGjelderFra ?? v.vurdertAv.dato}
           getVurdertAvIdent={(v) => v.vurdertAv.ident}
           getVurdertDato={(v) => v.vurdertAv.dato}
-          groupByCreateDate={true}
+          grupperPåOpprettetDato={true}
         />
       )}
 
