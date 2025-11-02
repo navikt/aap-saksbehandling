@@ -57,7 +57,7 @@ export const YrkesskadeGrunnlagBeregning = ({
 
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
-    'FASTSETT_BEREGNINGSTIDSPUNKT',
+    'FASTSETT_GRUNNLAG',
     mellomlagretVurdering
   );
 
