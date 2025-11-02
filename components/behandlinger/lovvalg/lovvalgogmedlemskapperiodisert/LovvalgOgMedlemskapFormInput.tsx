@@ -5,7 +5,7 @@ import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei
 import { ComboboxWrapper } from 'components/form/comboboxwrapper/ComboboxWrapper';
 import { isNotEmpty } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
 import { VisningModus } from 'hooks/saksbehandling/visning/VisningHook';
-import { TrashIcon } from '@navikt/aksel-icons';
+import { TrashFillIcon } from '@navikt/aksel-icons';
 import { landMedTrygdesamarbeid } from 'lib/utils/countries';
 import { UseFormReturn } from 'react-hook-form';
 import React, { useState } from 'react';
@@ -43,17 +43,35 @@ export const LovvalgOgMedlemskapFormInput = ({
 
   return (
     <VStack gap="4">
-      <DateInputWrapper
-        name={`vurderinger.${index}.fraDato`}
-        label="Vurderingen gjelder fra"
-        control={control}
-        rules={{
-          required: 'Du må velge fra hvilken dato vurderingen gjelder fra',
-          validate: (value) => validerDato(value as string),
-        }}
-        readOnly={readOnly}
-      />
-      <ReadMore size={'small'} header="Hvordan legge til sluttdato?">
+      <HStack justify={'space-between'}>
+        <DateInputWrapper
+          name={`vurderinger.${index}.fraDato`}
+          label="Vurderingen gjelder fra"
+          control={control}
+          rules={{
+            required: 'Du må velge fra hvilken dato vurderingen gjelder fra',
+            validate: (value) => validerDato(value as string),
+          }}
+          readOnly={readOnly}
+        />
+        {(visningModus === VisningModus.AKTIV_MED_AVBRYT || visningModus === VisningModus.AKTIV_UTEN_AVBRYT) &&
+          (index !== 0 || harTidligereVurderinger) && (
+            <HStack>
+              <VStack justify={'end'}>
+                <Button
+                  loading={spinnerRemove}
+                  aria-label="Fjern vurdering"
+                  variant="tertiary"
+                  size="small"
+                  icon={<TrashFillIcon />}
+                  onClick={handleRemove}
+                  type="button"
+                ></Button>
+              </VStack>
+            </HStack>
+          )}
+      </HStack>
+      <ReadMore style={{ maxWidth: '90ch' }} size={'small'} header="Hvordan legge til sluttdato?">
         For å legge til en sluttdato på denne vurderingen velger du “Legg til ny vurdering”. Det oppretter en ny
         vurdering, der du kan ha et annet utfall og en ny “gjelder fra” dato, som da vil gi sluttdato på den foregående
         (denne) vurderingen. Sluttdatoen for denne vurderingen blir satt til dagen før den nye vurderingen sin “gjelder
@@ -120,21 +138,6 @@ export const LovvalgOgMedlemskapFormInput = ({
           />
         </>
       )}
-
-      {(visningModus === VisningModus.AKTIV_MED_AVBRYT || visningModus === VisningModus.AKTIV_UTEN_AVBRYT) &&
-        (index !== 0 || harTidligereVurderinger) && (
-          <HStack>
-            <Button
-              loading={spinnerRemove}
-              aria-label="Fjern vurdering"
-              variant="secondary"
-              size="small"
-              icon={<TrashIcon />}
-              onClick={handleRemove}
-              type="button"
-            ></Button>
-          </HStack>
-        )}
     </VStack>
   );
 };

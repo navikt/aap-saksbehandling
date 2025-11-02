@@ -1,4 +1,4 @@
-import { Detail, HStack, Tag } from '@navikt/ds-react';
+import { BodyShort, HStack, Tag } from '@navikt/ds-react';
 import { isBefore, isSameDay, sub } from 'date-fns';
 import { formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
 import styles from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/lovogmedlemskap.module.css';
@@ -21,12 +21,12 @@ export const TidligerePeriodeHeading = ({ fom, tom, foersteNyePeriode, oppfylt }
     (tom == null || isBefore(foersteNyePeriode, tom) || isSameDay(foersteNyePeriode, tom));
 
   return (
-    <HStack gap="space-12">
-      <Detail className={strekUtHele ? styles.streketUtTekst : ''}>
+    <HStack justify={'space-between'} paddingBlock={'1'} gap="12">
+      <BodyShort size={'small'} className={strekUtHele ? styles.streketUtTekst : ''}>
         {formaterDatoForFrontend(fom)} –{' '}
         {tom && <span className={nySluttdato ? styles.streketUtTekst : ''}>{formaterDatoForFrontend(tom)}</span>}
         {nySluttdato && <span> {formaterDatoForFrontend(sub(foersteNyePeriode, { days: 1 }))}</span>}
-      </Detail>
+      </BodyShort>
       <StatusTag oppfylt={oppfylt} />
     </HStack>
   );
@@ -44,15 +44,15 @@ export const NyPeriodeHeading = ({ index, form, isLast }: NyPeriodeHeadingProps)
   const tom = isLast ? null : parseDatoFraDatePicker(form.watch(`vurderinger.${index + 1}.fraDato`));
 
   return (
-    <HStack gap="space-12">
-      <Detail>
+    <HStack justify={'space-between'} paddingBlock={'1'} gap="12">
+      <BodyShort size={'small'}>
         Ny vurdering: {fom == null ? '[Ikke valgt]' : formaterDatoForFrontend(fom)} –{' '}
         {tom != null ? (
           <span>{formaterDatoForFrontend(sub(tom, { days: 1 }))}</span>
         ) : (
           <span>{isLast ? ' ' : '[Ikke valgt]'}</span>
         )}
-      </Detail>
+      </BodyShort>
       <StatusTag oppfylt={oppfylt != null ? oppfylt === JaEllerNei.Ja : null} />
     </HStack>
   );
