@@ -5,9 +5,7 @@ import { isProd } from 'lib/utils/environment';
  */
 export const toggles = {
   featureSimulering: !isProd(),
-  featureOpprettAktivitetsplikt11_9: !isProd(),
   featureRevurderingVurderingsbehov: !isProd(),
-  featureAktivitetspliktMedTrekkVisning: !isProd(),
   featureOvergangArbeid: !isProd(),
   featureFerieISykepengeperiode: !isProd(), // Finnes ikke i unleash - kun frontend-toggle
   featurePostmottakBehandlingerPåVent: !isProd(),
