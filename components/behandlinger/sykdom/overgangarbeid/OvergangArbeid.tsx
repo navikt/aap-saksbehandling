@@ -138,12 +138,17 @@ export const OvergangArbeid = ({
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring();
-        form.reset(grunnlag?.nyeVurderinger?.[0] ? mapVurderingToDraftFormFields(grunnlag.nyeVurderinger?.[0]) : emptyDraftFormFields());
+        form.reset(
+          grunnlag?.nyeVurderinger?.[0]
+            ? mapVurderingToDraftFormFields(grunnlag.nyeVurderinger?.[0])
+            : emptyDraftFormFields()
+        );
       }}
       readOnly={formReadOnly}
       mellomlagretVurdering={mellomlagretVurdering}
       visningModus={visningModus}
       visningActions={visningActions}
+      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
       {typeBehandling === 'Revurdering' && sisteVedtatteVurderinger && sisteVedtatteVurderinger.length > 0 && (
         <TidligereVurderinger

@@ -15,6 +15,22 @@ beforeEach(() => {
   setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'OVERGANG_ARBEID' });
 });
 
+const overgangArbeidgrunnlag: OvergangArbeidGrunnlag = {
+  nyeVurderinger: [
+    {
+      begrunnelse: 'Dette er min vurdering som er bekreftet',
+      brukerRettPåAAP: true,
+      fom: '2025-08-19',
+      vurdertAv: { ident: 'TESTER', dato: '2025-08-19' },
+    },
+  ],
+  gjeldendeSykdsomsvurderinger: [],
+  sisteVedtatteVurderinger: [],
+  harTilgangTilÅSaksbehandle: true,
+  behøverVurderinger: [],
+  kanVurderes: [],
+};
+
 describe('mellomlagring i overgang arbeid', () => {
   const mellomlagring: MellomlagretVurderingResponse = {
     mellomlagretVurdering: {
@@ -24,22 +40,6 @@ describe('mellomlagring i overgang arbeid', () => {
       vurdertDato: '2025-08-21T12:00:00.000',
       vurdertAv: 'Jan T. Loven',
     },
-  };
-
-  const overgangArbeidgrunnlag: OvergangArbeidGrunnlag = {
-    nyeVurderinger: [
-      {
-        begrunnelse: 'Dette er min vurdering som er bekreftet',
-        brukerRettPåAAP: true,
-        fom: '2025-08-19',
-        vurdertAv: { ident: 'TESTER', dato: '2025-08-19' },
-      },
-    ],
-    gjeldendeSykdsomsvurderinger: [],
-    sisteVedtatteVurderinger: [],
-    harTilgangTilÅSaksbehandle: true,
-    behøverVurderinger: [],
-    kanVurderes: [],
   };
 
   it('Skal vise en tekst om hvem som har gjort vurderingen dersom det finnes en mellomlagring', () => {
@@ -231,5 +231,32 @@ describe('Førstegangsbehandling', () => {
       name: 'Virkningsdato for vurderingen',
     });
     expect(felt).toBeVisible();
+  });
+
+  it('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
+    setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'AVKLAR_SYKDOM' });
+
+    render(
+      <OvergangArbeid
+        grunnlag={overgangArbeidgrunnlag}
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Førstegangsbehandling'}
+      />
+    );
+
+    const endreKnapp = screen.getByRole('button', { name: 'Endre' });
+    await user.click(endreKnapp);
+
+    const begrunnelseFelt = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
+    await user.clear(begrunnelseFelt);
+    await user.type(begrunnelseFelt, 'Dette er en ny begrunnelse');
+    expect(begrunnelseFelt).toHaveValue('Dette er en ny begrunnelse');
+
+    const avbrytKnapp = screen.getByRole('button', { name: 'Avbryt' });
+    await user.click(avbrytKnapp);
+
+    const begrunnelseFeltEtterAvbryt = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
+    expect(begrunnelseFeltEtterAvbryt).toHaveValue('Dette er min vurdering som er bekreftet');
   });
 });
