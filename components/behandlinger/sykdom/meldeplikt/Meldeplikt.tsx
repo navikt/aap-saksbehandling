@@ -124,6 +124,7 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly, initialMello
       readOnly={readOnly}
       visningModus={visningModus}
       visningActions={visningActions}
+      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
       <VStack gap={'4'}>
         <Link href={'https://lovdata.no/pro/rundskriv/r11-00/KAPITTEL_12'} target="_blank">

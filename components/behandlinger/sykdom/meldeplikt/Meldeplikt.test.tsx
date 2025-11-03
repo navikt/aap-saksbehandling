@@ -46,6 +46,41 @@ describe('Meldeplikt', () => {
       render(<Meldeplikt behandlingVersjon={0} readOnly={true} grunnlag={meldepliktGrunnlag} />);
       expect(screen.queryByRole('textbox', { name: 'Vilkårsvurdering' })).toBeVisible();
     });
+
+    it('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
+      const grunnlagMedVurdering: FritakMeldepliktGrunnlag = {
+        harTilgangTilÅSaksbehandle: true,
+        vurderinger: [
+          {
+            begrunnelse: 'en god begrunnelse',
+            fraDato: '2024-08-10',
+            harFritak: true,
+            vurdertAv: { ident: 'saksbehandler', dato: '2024-08-10' },
+            vurderingsTidspunkt: '2024-08-10',
+          },
+        ],
+        gjeldendeVedtatteVurderinger: [],
+        historikk: [],
+      };
+
+      setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'AVKLAR_SYKDOM' });
+
+      render(<Meldeplikt grunnlag={grunnlagMedVurdering} readOnly={false} behandlingVersjon={0} />);
+
+      const endreKnapp = screen.getByRole('button', { name: 'Endre' });
+      await user.click(endreKnapp);
+
+      const begrunnelseFelt = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
+      await user.clear(begrunnelseFelt);
+      await user.type(begrunnelseFelt, 'Dette er en ny begrunnelse');
+      expect(begrunnelseFelt).toHaveValue('Dette er en ny begrunnelse');
+
+      const avbrytKnapp = screen.getByRole('button', { name: 'Avbryt' });
+      await user.click(avbrytKnapp);
+
+      const begrunnelseFeltEtterAvbryt = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
+      expect(begrunnelseFeltEtterAvbryt).toHaveValue('en god begrunnelse');
+    });
   });
 
   describe('felter', () => {
