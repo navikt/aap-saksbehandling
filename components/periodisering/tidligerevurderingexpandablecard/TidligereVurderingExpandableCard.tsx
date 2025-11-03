@@ -2,7 +2,7 @@
 
 import { CustomExpandableCard } from 'components/customexpandablecard/CustomExpandableCard';
 import { isBefore, isSameDay, sub } from 'date-fns';
-import { formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 import { ReactNode } from 'react';
 import { BodyShort, HStack, Tag, VStack } from '@navikt/ds-react';
 import styles from 'components/behandlinger/oppholdskrav/oppholdskrav.module.css';
@@ -12,7 +12,7 @@ import { VurdertAv } from 'components/vurdertav/VurdertAv';
 interface Props {
   fom: Date;
   tom: Date | null | undefined;
-  foersteNyePeriodeFraDato: string | null | undefined;
+  foersteNyePeriodeFraDato: Date | null | undefined;
   oppfylt: boolean;
   vurdertAv?: VurdertAvAnsatt;
   children: ReactNode;
@@ -25,15 +25,12 @@ export const TidligereVurderingExpandableCard = ({
   vurdertAv,
   children,
 }: Props) => {
-  const parsedFørsteNyePeriodeFraDato = foersteNyePeriodeFraDato
-    ? parseDatoFraDatePicker(foersteNyePeriodeFraDato)
-    : null;
   const formattertFom = formaterDatoForFrontend(fom);
-  const strekUtHele = parsedFørsteNyePeriodeFraDato ? !isBefore(fom, parsedFørsteNyePeriodeFraDato) : false;
+  const strekUtHele = foersteNyePeriodeFraDato ? !isBefore(fom, foersteNyePeriodeFraDato) : false;
   const nySluttdato =
     !strekUtHele &&
-    parsedFørsteNyePeriodeFraDato &&
-    (tom == null || isBefore(parsedFørsteNyePeriodeFraDato, tom) || isSameDay(parsedFørsteNyePeriodeFraDato, tom));
+    foersteNyePeriodeFraDato &&
+    (tom == null || isBefore(foersteNyePeriodeFraDato, tom) || isSameDay(foersteNyePeriodeFraDato, tom));
   return (
     <CustomExpandableCard
       key={formattertFom}
@@ -46,7 +43,7 @@ export const TidligereVurderingExpandableCard = ({
             {tom != null && (
               <span className={nySluttdato ? styles.streketUtTekst : ''}>{formaterDatoForFrontend(tom)}</span>
             )}
-            {nySluttdato && <span> {formaterDatoForFrontend(sub(parsedFørsteNyePeriodeFraDato, { days: 1 }))}</span>}
+            {nySluttdato && <span> {formaterDatoForFrontend(sub(foersteNyePeriodeFraDato, { days: 1 }))}</span>}
           </BodyShort>
           {oppfylt !== null && (
             <Tag size="xsmall" variant={oppfylt ? 'success-moderate' : 'error-moderate'}>

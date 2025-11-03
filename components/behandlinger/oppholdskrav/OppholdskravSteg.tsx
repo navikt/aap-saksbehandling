@@ -11,7 +11,6 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { PlusIcon } from '@navikt/aksel-icons';
-import { CustomExpandableCard } from 'components/customexpandablecard/CustomExpandableCard';
 import {
   getDefaultValuesFromGrunnlag,
   mapFormTilDto,
@@ -20,13 +19,10 @@ import {
 } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
 import { OppholdskravFormInput } from 'components/behandlinger/oppholdskrav/OppholdskravFormInput';
 import { OppholdskravTidligereVurdering } from 'components/behandlinger/oppholdskrav/OppholdskravTidligereVurdering';
-import { OppholdskravVurdertAv } from 'components/behandlinger/oppholdskrav/OppholdskravVurdertAv';
-import {
-  OppholdskravNyPeriodeHeading,
-  OppholdskravTidligerePeriodeHeading,
-} from 'components/behandlinger/oppholdskrav/OppholdskravPeriodeHeading';
 import { isAfter, min, parseISO } from 'date-fns';
 import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker, stringToDate } from 'lib/utils/date';
+import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
+import { NyVurderingExpandableCard } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 
 type Props = {
   grunnlag: OppholdskravGrunnlagResponse | undefined;
@@ -171,67 +167,39 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
       <VStack gap="4">
         <VStack gap="2">
           {vedtatteVurderinger.map((vurdering) => (
-            <CustomExpandableCard
+            <TidligereVurderingExpandableCard
               key={vurdering.fom}
-              editable={false}
-              defaultOpen={false}
-              heading={
-                <OppholdskravTidligerePeriodeHeading
-                  fom={parseISO(vurdering.fom)}
-                  tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
-                  foersteNyePeriode={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-                  oppfylt={vurdering.oppfylt}
-                />
-              }
+              fom={parseISO(vurdering.fom)}
+              tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
+              foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+              oppfylt={vurdering.oppfylt}
             >
-              <>
-                <OppholdskravTidligereVurdering
-                  fraDato={vurdering.fom}
-                  begrunnelse={vurdering.begrunnelse}
-                  land={vurdering.land}
-                  oppfyller={vurdering.oppfylt}
-                />
-                {vurdering.vurdertAv != null && (
-                  <OppholdskravVurdertAv
-                    navn={vurdering.vurdertAv.ansattnavn}
-                    ident={vurdering.vurdertAv.ident}
-                    dato={vurdering.vurdertAv.dato}
-                  />
-                )}
-              </>
-            </CustomExpandableCard>
+              <OppholdskravTidligereVurdering
+                fraDato={vurdering.fom}
+                begrunnelse={vurdering.begrunnelse}
+                land={vurdering.land}
+                oppfyller={vurdering.oppfylt}
+              />
+            </TidligereVurderingExpandableCard>
           ))}
           {vurderingerFields.map((vurdering, index) => (
-            <CustomExpandableCard
+            <NyVurderingExpandableCard
               key={vurdering.id}
-              editable
-              defaultOpen
-              heading={
-                <OppholdskravNyPeriodeHeading
-                  form={form}
-                  index={index}
-                  isLast={index === vurderingerFields.length - 1}
-                />
-              }
+              fraDato={vurdering.fraDato}
+              oppfylt={form.watch(`vurderinger.${index}.oppfyller`)}
+              nestePeriodeFraDato={form.watch(`vurderinger.${index + 1}.fraDato`)}
+              isLast={index === vurderingerFields.length - 1}
+              vurdertAv={vurdering.vurdertAv}
             >
-              <>
-                <OppholdskravFormInput
-                  form={form}
-                  readOnly={formReadOnly}
-                  index={index}
-                  harTidligereVurderinger={tidligereVurderinger.length !== 0}
-                  onRemove={() => remove(index)}
-                  visningModus={visningModus}
-                />
-                {vurdering.vurdertAv != null && (
-                  <OppholdskravVurdertAv
-                    navn={vurdering.vurdertAv.navn}
-                    ident={vurdering.vurdertAv.ident}
-                    dato={vurdering.vurdertAv.dato}
-                  />
-                )}
-              </>
-            </CustomExpandableCard>
+              <OppholdskravFormInput
+                form={form}
+                readOnly={formReadOnly}
+                index={index}
+                harTidligereVurderinger={tidligereVurderinger.length !== 0}
+                onRemove={() => remove(index)}
+                visningModus={visningModus}
+              />
+            </NyVurderingExpandableCard>
           ))}
         </VStack>
         {errorList.length > 0 && (

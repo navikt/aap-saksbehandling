@@ -10,11 +10,11 @@ import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/op
 import { JaEllerNei } from 'lib/utils/form';
 
 interface Props {
-  fraDato?: string;
+  fraDato: string | undefined;
   nestePeriodeFraDato: string | null | undefined;
   isLast: boolean;
   oppfylt: JaEllerNei | undefined | null;
-  vurdertAv?: VurdertAvAnsatt;
+  vurdertAv: VurdertAvAnsatt | undefined;
   children: ReactNode;
 }
 export const NyVurderingExpandableCard = ({

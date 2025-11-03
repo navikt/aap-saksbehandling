@@ -18,17 +18,13 @@ import {
   mapFormTilDto,
 } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/lovvalg-utils';
 import { Button, VStack } from '@navikt/ds-react';
-import { CustomExpandableCard } from 'components/customexpandablecard/CustomExpandableCard';
 import { parseISO } from 'date-fns';
 import { parseDatoFraDatePicker } from 'lib/utils/date';
-import {
-  NyPeriodeHeading,
-  TidligerePeriodeHeading,
-} from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/PeriodeHeading';
-import { VurdertAv } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/VurdertAv';
 import { LovvalgOgMedlemskapFormInput } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/LovvalgOgMedlemskapFormInput';
 import { LovvalgOgMedlemskapTidligereVurdering } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/LovvalgOgMedlemskapTidligereVurdering';
 import { PlusIcon } from '@navikt/aksel-icons';
+import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
+import { NyVurderingExpandableCard } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 
 interface Props {
   behandlingVersjon: number;
@@ -135,59 +131,37 @@ export const LovvalgOgMedlemskapPeriodisert = ({
       <VStack gap="8">
         <VStack gap="2">
           {vedtatteVurderinger.map((vurdering) => (
-            <CustomExpandableCard
+            <TidligereVurderingExpandableCard
               key={vurdering.fom}
-              editable={false}
-              defaultOpen={false}
-              heading={
-                <TidligerePeriodeHeading
-                  fom={parseISO(vurdering.fom)}
-                  tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
-                  foersteNyePeriode={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-                  oppfylt={
-                    vurdering.lovvalg.lovvalgsEØSLandEllerLandMedAvtale === 'NOR' &&
-                    vurdering.medlemskap?.varMedlemIFolketrygd === true
-                  }
-                />
+              fom={parseISO(vurdering.fom)}
+              tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
+              foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+              oppfylt={
+                vurdering.lovvalg.lovvalgsEØSLandEllerLandMedAvtale === 'NOR' &&
+                vurdering.medlemskap?.varMedlemIFolketrygd === true
               }
             >
-              <>
-                <LovvalgOgMedlemskapTidligereVurdering vurdering={vurdering} />
-                {vurdering.vurdertAv != null && (
-                  <VurdertAv
-                    navn={vurdering.vurdertAv.ansattnavn}
-                    ident={vurdering.vurdertAv.ident}
-                    dato={vurdering.vurdertAv.dato}
-                  />
-                )}
-              </>
-            </CustomExpandableCard>
+              <LovvalgOgMedlemskapTidligereVurdering vurdering={vurdering} />
+            </TidligereVurderingExpandableCard>
           ))}
           {vurderingerFields.map((vurdering, index) => (
-            <CustomExpandableCard
+            <NyVurderingExpandableCard
               key={vurdering.id}
-              editable
-              defaultOpen
-              heading={<NyPeriodeHeading form={form} index={index} isLast={index === vurderingerFields.length - 1} />}
+              nestePeriodeFraDato={form.watch(`vurderinger.${index + 1}.fraDato`)}
+              isLast={index === vurderingerFields.length - 1}
+              oppfylt={form.watch(`vurderinger.${index}.medlemskap.varMedlemIFolketrygd`)}
+              fraDato={vurdering.fraDato}
+              vurdertAv={vurdering.vurdertAv}
             >
-              <>
-                <LovvalgOgMedlemskapFormInput
-                  form={form}
-                  readOnly={formReadOnly}
-                  index={index}
-                  harTidligereVurderinger={tidligereVurderinger.length !== 0}
-                  onRemove={() => remove(index)}
-                  visningModus={visningModus}
-                />
-                {vurdering.vurdertAv != null && (
-                  <VurdertAv
-                    navn={vurdering.vurdertAv.navn}
-                    ident={vurdering.vurdertAv.ident}
-                    dato={vurdering.vurdertAv.dato}
-                  />
-                )}
-              </>
-            </CustomExpandableCard>
+              <LovvalgOgMedlemskapFormInput
+                form={form}
+                readOnly={formReadOnly}
+                index={index}
+                harTidligereVurderinger={tidligereVurderinger.length !== 0}
+                onRemove={() => remove(index)}
+                visningModus={visningModus}
+              />
+            </NyVurderingExpandableCard>
           ))}
         </VStack>
       </VStack>
