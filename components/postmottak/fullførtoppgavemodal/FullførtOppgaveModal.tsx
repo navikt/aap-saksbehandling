@@ -5,7 +5,6 @@ import { BodyShort, Button, Modal } from '@navikt/ds-react';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { BehandlingFlytOgTilstand } from 'lib/types/postmottakTypes';
-import { isProd } from 'lib/utils/environment';
 
 interface Props {
   nesteBehandlingId: string | undefined | null;
@@ -18,10 +17,9 @@ export const FullførtOppgaveModal = ({ nesteBehandlingId, typeBehandling }: Pro
   const heading =
     typeBehandling === 'Journalføring' ? 'Dokumentet er journalført' : 'Dokumentet er kategorisert og sendt.';
   // hvis nesteBehandlingId er satt vet vi at vi er i en avsluttet journalføring og at det har blitt opprettet en ny dokumenthåndtering
-  const message =
-    nesteBehandlingId && !isProd()
-      ? 'Dokumentet er journalført og det har blitt opprettet en ny oppgave for å digitalisere dokumentet. Start digitalisering for å fullføre hele dokumenthåndteringen. '
-      : 'Gå tilbake til oppgavelisten for å starte på neste oppgave.';
+  const message = nesteBehandlingId
+    ? 'Dokumentet er journalført og det har blitt opprettet en ny oppgave for å digitalisere dokumentet. Start digitalisering for å fullføre hele dokumenthåndteringen. '
+    : 'Gå tilbake til oppgavelisten for å starte på neste oppgave.';
   return (
     <Modal
       open={isModalOpen}
@@ -41,7 +39,7 @@ export const FullførtOppgaveModal = ({ nesteBehandlingId, typeBehandling }: Pro
       <Modal.Body>
         <BodyShort>{message}</BodyShort>
         <Modal.Footer>
-          {nesteBehandlingId && !isProd() ? (
+          {nesteBehandlingId ? (
             <>
               <Button
                 type={'button'}
