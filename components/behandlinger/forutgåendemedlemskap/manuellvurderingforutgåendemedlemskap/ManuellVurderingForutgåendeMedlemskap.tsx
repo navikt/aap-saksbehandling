@@ -175,6 +175,7 @@ export const ManuellVurderingForutgåendeMedlemskap = ({
       readOnly={readOnly}
       visningModus={visningModus}
       visningActions={visningActions}
+      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
       {historiskeManuelleVurderinger && historiskeManuelleVurderinger.length > 0 && (
         <TidligereVurderinger
