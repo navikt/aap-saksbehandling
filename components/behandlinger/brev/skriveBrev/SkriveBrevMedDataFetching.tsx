@@ -14,18 +14,22 @@ import { isError } from 'lib/utils/api';
 import { skrivBrevBehovstype } from 'components/brev/BrevKortMedDataFetching';
 import { BrevOppsummering } from 'components/behandlinger/brev/skriveBrev/BrevOppsummering';
 import { mapGrunnlagTilMottakere } from 'lib/utils/brevmottakere';
+import { isLocal, isProd } from 'lib/utils/environment';
+import { Brevbygger } from 'components/brevbygger/Brevbygger';
+
+interface Props {
+  behandlingsReferanse: string;
+  behandlingVersjon: number;
+  aktivtSteg: StegType;
+  behandlingstype: TypeBehandling;
+}
 
 export const SkriveBrevMedDataFetching = async ({
   behandlingsReferanse,
   behandlingVersjon,
   aktivtSteg,
   behandlingstype,
-}: {
-  behandlingsReferanse: string;
-  behandlingVersjon: number;
-  aktivtSteg: StegType;
-  behandlingstype: TypeBehandling;
-}) => {
+}: Props) => {
   const [
     brevGrunnlag,
     refusjonGrunnlag,
@@ -71,6 +75,9 @@ export const SkriveBrevMedDataFetching = async ({
     return <BrevOppsummering sendteBrev={sendteBrev} avbrutteBrev={avbrytteBrev} />;
   }
 
+  //Featuretoggle er allerede gjort i backend, hvis brevmal og brevdata er satt skal vi bruke ny brevbygger
+  const brukNyBrevbygger = isLocal() || (!isProd && brev.brevmal && brev.brevdata);
+
   const readOnlyBrev = aktivtSteg === 'BREV' && !brev.harTilgangTilÅSendeBrev;
   const behovstype = skrivBrevBehovstype(brev.avklaringsbehovKode);
 
@@ -85,18 +92,21 @@ export const SkriveBrevMedDataFetching = async ({
           behandlingstype === 'Aktivitetsplikt' ? aktivitetsplikt11_7Grunnlag.data : undefined
         }
       />
-      <SkriveBrev
-        status={brev.status}
-        referanse={brev.brevbestillingReferanse}
-        behovstype={behovstype}
-        grunnlag={brev.brev}
-        mottaker={brev.mottaker}
-        brukerMottaker={bruker}
-        fullmektigMottaker={fullmektig}
-        readOnly={readOnlyBrev}
-        signaturer={brev.signaturer}
-        behandlingVersjon={behandlingVersjon}
-      />
+      {brukNyBrevbygger && <Brevbygger brevmal={brev.brevmal} brevdata={brev.brevdata} />}
+      {!brukNyBrevbygger && (
+        <SkriveBrev
+          status={brev.status}
+          referanse={brev.brevbestillingReferanse}
+          behovstype={behovstype}
+          grunnlag={brev.brev}
+          mottaker={brev.mottaker}
+          brukerMottaker={bruker}
+          fullmektigMottaker={fullmektig}
+          readOnly={readOnlyBrev}
+          signaturer={brev.signaturer}
+          behandlingVersjon={behandlingVersjon}
+        />
+      )}
     </div>
   );
 };
