@@ -109,6 +109,33 @@ describe('generelt', () => {
 
     expect(informasjonsvarsling).toBeVisible();
   });
+
+  it('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
+    setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'VURDER_BISTANDSBEHOV' });
+
+    render(
+      <Sykdomsvurdering
+        grunnlag={grunnlagMedTidligereVurdering}
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Førstegangsbehandling'}
+      />
+    );
+
+    const endreKnapp = screen.getByRole('button', { name: 'Endre' });
+    await user.click(endreKnapp);
+
+    const begrunnelseFelt = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
+    await user.clear(begrunnelseFelt);
+    await user.type(begrunnelseFelt, 'Dette er en ny begrunnelse');
+    expect(begrunnelseFelt).toHaveValue('Dette er en ny begrunnelse');
+
+    const avbrytKnapp = screen.getByRole('button', { name: 'Avbryt' });
+    await user.click(avbrytKnapp);
+
+    const begrunnelseFeltEtterAvbryt = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
+    expect(begrunnelseFeltEtterAvbryt).toHaveValue('Dette er en tidligere begrunnelse');
+  });
 });
 
 describe('felt for begrunnelse', () => {
@@ -1093,32 +1120,3 @@ const velgNeiIGruppe = async (gruppe: HTMLElement): Promise<void> =>
 
 const velgJaIGruppe = async (gruppe: HTMLElement): Promise<void> =>
   await user.click(within(gruppe).getByRole('radio', { name: 'Ja' }));
-
-describe('Knapper i vilkårskort', () => {
-  it('skal resette state i felt dersom Avbryt blir trykket', async () => {
-    setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'VURDER_BISTANDSBEHOV' });
-
-    render(
-      <Sykdomsvurdering
-        grunnlag={grunnlagMedTidligereVurdering}
-        readOnly={false}
-        behandlingVersjon={0}
-        typeBehandling={'Førstegangsbehandling'}
-      />
-    );
-
-    const endreKnapp = screen.getByRole('button', { name: 'Endre' });
-    await user.click(endreKnapp);
-
-    const begrunnelseFelt = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
-    await user.clear(begrunnelseFelt);
-    await user.type(begrunnelseFelt, 'Dette er en ny begrunnelse');
-    expect(begrunnelseFelt).toHaveValue('Dette er en ny begrunnelse');
-
-    const avbrytKnapp = screen.getByRole('button', { name: 'Avbryt' });
-    await user.click(avbrytKnapp);
-
-    const begrunnelseFeltEtterAvbryt = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
-    expect(begrunnelseFeltEtterAvbryt).toHaveValue('Dette er en tidligere begrunnelse');
-  });
-});
