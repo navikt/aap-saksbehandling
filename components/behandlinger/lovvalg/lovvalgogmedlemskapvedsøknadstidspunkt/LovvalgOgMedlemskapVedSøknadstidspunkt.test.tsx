@@ -11,7 +11,21 @@ import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
 const user = userEvent.setup();
+
 const grunnlagUtenVurdering: LovvalgMedlemskapGrunnlag = {
+  harTilgangTilÅSaksbehandle: true,
+  historiskeManuelleVurderinger: [],
+};
+
+const grunnlagMedVurdering: LovvalgMedlemskapGrunnlag = {
+  vurdering: {
+    lovvalgVedSøknadsTidspunkt: {
+      begrunnelse: 'Dette er min vurdering som er bekreftet',
+      lovvalgsEØSLandEllerLandMedAvtale: 'NOR',
+    },
+    overstyrt: false,
+    vurdertAv: { ident: 'TESTER', dato: '2025-08-19' },
+  },
   harTilgangTilÅSaksbehandle: true,
   historiskeManuelleVurderinger: [],
 };
@@ -62,6 +76,36 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
       );
       const heading = screen.getByText('Overstyring av lovvalg og medlemskap ved søknadstidspunkt');
       expect(heading).toBeVisible();
+    });
+
+    it('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
+      setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'AVKLAR_SYKDOM' });
+
+      render(
+        <LovvalgOgMedlemskapVedSøknadstidspunkt
+          grunnlag={grunnlagMedVurdering}
+          readOnly={false}
+          behandlingVersjon={0}
+          overstyring={true}
+          behovstype={Behovstype.MANUELL_OVERSTYRING_LOVVALG}
+        />
+      );
+
+      const endreKnapp = screen.getByRole('button', { name: 'Endre' });
+      await user.click(endreKnapp);
+
+      const begrunnelseFelt = screen.getByRole('textbox', { name: 'Vurder riktig lovvalg ved søknadstidspunkt' });
+      await user.clear(begrunnelseFelt);
+      await user.type(begrunnelseFelt, 'Dette er en ny begrunnelse');
+      expect(begrunnelseFelt).toHaveValue('Dette er en ny begrunnelse');
+
+      const avbrytKnapp = screen.getByRole('button', { name: 'Avbryt' });
+      await user.click(avbrytKnapp);
+
+      const begrunnelseFeltEtterAvbryt = screen.getByRole('textbox', {
+        name: 'Vurder riktig lovvalg ved søknadstidspunkt',
+      });
+      expect(begrunnelseFeltEtterAvbryt).toHaveValue('Dette er min vurdering som er bekreftet');
     });
   });
 
