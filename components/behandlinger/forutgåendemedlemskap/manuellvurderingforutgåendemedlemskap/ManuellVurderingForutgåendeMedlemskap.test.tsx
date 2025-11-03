@@ -16,6 +16,20 @@ const grunnlagUtenVurdering: ForutgåendeMedlemskapGrunnlag = {
   historiskeManuelleVurderinger: [],
 };
 
+const grunnlagMedVurdering: ForutgåendeMedlemskapGrunnlag = {
+  harTilgangTilÅSaksbehandle: true,
+  historiskeManuelleVurderinger: [],
+  vurdering: {
+    begrunnelse: 'en god begrunnelse',
+    harForutgåendeMedlemskap: true,
+    overstyrt: true,
+    vurdertAv: {
+      dato: '2025-11-03',
+      ident: 'Saksbehandler',
+    },
+  },
+};
+
 beforeEach(() => {
   setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'VURDER_MEDLEMSKAP' });
 });
@@ -164,6 +178,33 @@ describe('Lovvalg og medlemskap ved søknadstidspunkt', () => {
 
     const feilmelding = screen.getByText('Du må svare på om brukeren oppfyller noen av unntaksvilkårene');
     expect(feilmelding).toBeVisible();
+  });
+
+  it('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
+    setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'VURDER_OPPHOLDSKRAV' });
+
+    render(
+      <ManuellVurderingForutgåendeMedlemskap
+        overstyring={false}
+        grunnlag={grunnlagMedVurdering}
+        behandlingVersjon={0}
+        readOnly={false}
+      />
+    );
+
+    const endreKnapp = screen.getByRole('button', { name: 'Endre' });
+    await user.click(endreKnapp);
+
+    const begrunnelseFelt = screen.getByRole('textbox', { name: 'Vurder brukerens forutgående medlemskap' });
+    await user.clear(begrunnelseFelt);
+    await user.type(begrunnelseFelt, 'Dette er en ny begrunnelse');
+    expect(begrunnelseFelt).toHaveValue('Dette er en ny begrunnelse');
+
+    const avbrytKnapp = screen.getByRole('button', { name: 'Avbryt' });
+    await user.click(avbrytKnapp);
+
+    const begrunnelseFeltEtterAvbryt = screen.getByRole('textbox', { name: 'Vurder brukerens forutgående medlemskap' });
+    expect(begrunnelseFeltEtterAvbryt).toHaveValue('en god begrunnelse');
   });
 });
 

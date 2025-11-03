@@ -12,8 +12,50 @@ const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
 const user = userEvent.setup();
 
+const grunnlagMedVurdering: SamordningUføreGrunnlag = {
+  grunnlag: [
+    {
+      endringStatus: 'NY',
+      kilde: 'PESYS',
+      uføregrad: 40,
+      virkningstidspunkt: '2025-08-01',
+    },
+  ],
+  harTilgangTilÅSaksbehandle: true,
+  vurdering: {
+    begrunnelse: 'Dette er min vurdering som er bekreftet',
+    vurderingPerioder: [{ uføregradTilSamordning: 40, virkningstidspunkt: '2025-08-01' }],
+    vurdertAv: {
+      dato: '2025-08-01',
+      ident: 'Saksbehandler',
+    },
+  },
+};
+
 beforeEach(() => {
   setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'SAMORDNING_UFØRE' });
+});
+
+it('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
+  setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'FASTSETT_GRUNNLAG' });
+
+  render(<SamordningUføre grunnlag={grunnlagMedVurdering} readOnly={false} behandlingVersjon={0} />);
+
+  const endreKnapp = screen.getByRole('button', { name: 'Endre' });
+  await user.click(endreKnapp);
+
+  const begrunnelseFelt = screen.getByRole('textbox', { name: 'Vurder uføregraden som skal samordnes med AAP' });
+  await user.clear(begrunnelseFelt);
+  await user.type(begrunnelseFelt, 'Dette er en ny begrunnelse');
+  expect(begrunnelseFelt).toHaveValue('Dette er en ny begrunnelse');
+
+  const avbrytKnapp = screen.getByRole('button', { name: 'Avbryt' });
+  await user.click(avbrytKnapp);
+
+  const begrunnelseFeltEtterAvbryt = screen.getByRole('textbox', {
+    name: 'Vurder uføregraden som skal samordnes med AAP',
+  });
+  expect(begrunnelseFeltEtterAvbryt).toHaveValue('Dette er min vurdering som er bekreftet');
 });
 
 describe('mellomlagring', () => {
@@ -37,26 +79,6 @@ describe('mellomlagring', () => {
       },
     ],
     harTilgangTilÅSaksbehandle: true,
-  };
-
-  const grunnlagMedVurdering: SamordningUføreGrunnlag = {
-    grunnlag: [
-      {
-        endringStatus: 'NY',
-        kilde: 'PESYS',
-        uføregrad: 40,
-        virkningstidspunkt: '2025-08-01',
-      },
-    ],
-    harTilgangTilÅSaksbehandle: true,
-    vurdering: {
-      begrunnelse: 'Dette er min vurdering som er bekreftet',
-      vurderingPerioder: [{ uføregradTilSamordning: 40, virkningstidspunkt: '2025-08-01' }],
-      vurdertAv: {
-        dato: '2025-08-01',
-        ident: 'Saksbehandler',
-      },
-    },
   };
 
   it('Skal vise en tekst om hvem som har gjort vurderingen dersom det finnes en mellomlagring', () => {

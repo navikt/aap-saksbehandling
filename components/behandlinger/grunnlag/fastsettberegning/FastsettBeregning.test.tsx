@@ -19,6 +19,20 @@ const grunnlagUtenVurdering: BeregningTidspunktGrunnlag = {
   historiskeVurderinger: [],
 };
 
+const grunnlagMedTidligereVurdering: BeregningTidspunktGrunnlag = {
+  harTilgangTilÅSaksbehandle: true,
+  skalVurdereYtterligere: true,
+  historiskeVurderinger: [],
+  vurdering: {
+    begrunnelse: 'Dette er en tidligere begrunnelse',
+    nedsattArbeidsevneDato: '2022-01-01',
+    vurdertAv: {
+      ident: 'Saksbehandler',
+      dato: '2022-07-01',
+    },
+  },
+};
+
 beforeEach(() => {
   setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'FASTSETT_BEREGNINGSTIDSPUNKT' });
 });
@@ -72,6 +86,26 @@ describe('Generelt', () => {
       'Sjekk om beregningstidspunkt skal være datert etter tidspunkt for foreløpig virkningstidspunkt'
     );
     expect(alert).not.toBeInTheDocument();
+  });
+
+  it('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
+    setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'FASTSETT_GRUNNLAG' });
+
+    render(<FastsettBeregning grunnlag={grunnlagMedTidligereVurdering} readOnly={false} behandlingVersjon={0} />);
+
+    const endreKnapp = screen.getByRole('button', { name: 'Endre' });
+    await user.click(endreKnapp);
+
+    const begrunnelseFelt = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
+    await user.clear(begrunnelseFelt);
+    await user.type(begrunnelseFelt, 'Dette er en ny begrunnelse');
+    expect(begrunnelseFelt).toHaveValue('Dette er en ny begrunnelse');
+
+    const avbrytKnapp = screen.getByRole('button', { name: 'Avbryt' });
+    await user.click(avbrytKnapp);
+
+    const begrunnelseFeltEtterAvbryt = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
+    expect(begrunnelseFeltEtterAvbryt).toHaveValue('Dette er en tidligere begrunnelse');
   });
 });
 

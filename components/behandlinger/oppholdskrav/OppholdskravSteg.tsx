@@ -163,6 +163,7 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
           Legg til ny vurdering
         </Button>
       }
+      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
       <VStack gap="4">
         <VStack gap="2">

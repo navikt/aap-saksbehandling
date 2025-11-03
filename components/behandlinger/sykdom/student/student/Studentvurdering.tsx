@@ -180,6 +180,7 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly, initia
       readOnly={formReadOnly}
       visningModus={visningModus}
       visningActions={visningActions}
+      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
         <Label size={'small'}>Relevant informasjon fra søknaden</Label>

@@ -131,6 +131,30 @@ describe('Generelt', () => {
     expect(screen.getAllByText('Du må fylle ut en vilkårsvurdering')[0]).toBeVisible();
     expect(screen.getAllByText('Du må skrive inn navnet på landet')[0]).toBeVisible();
   });
+
+  it('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
+    setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'FASTSETT_GRUNNLAG' });
+
+    render(
+      <OppholdskravSteg grunnlag={oppholdskravGrunnlagMedBekreftetVurdering} readOnly={false} behandlingVersjon={0} />
+    );
+
+    const endreKnapp = screen.getByRole('button', { name: 'Endre' });
+    await user.click(endreKnapp);
+
+    const begrunnelseFelt = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
+    await user.clear(begrunnelseFelt);
+    await user.type(begrunnelseFelt, 'Dette er en ny begrunnelse');
+    expect(begrunnelseFelt).toHaveValue('Dette er en ny begrunnelse');
+
+    const avbrytKnapp = screen.getByRole('button', { name: 'Avbryt' });
+    await user.click(avbrytKnapp);
+
+    const begrunnelseFeltEtterAvbryt = screen.getByRole('textbox', {
+      name: 'Vilkårsvurdering',
+    });
+    expect(begrunnelseFeltEtterAvbryt).toHaveValue('Dette er min vurdering som er bekreftet');
+  });
 });
 
 describe('mellomlagring i oppholdskrav', () => {
