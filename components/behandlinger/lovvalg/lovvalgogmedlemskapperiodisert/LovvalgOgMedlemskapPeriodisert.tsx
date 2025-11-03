@@ -9,7 +9,6 @@ import {
   PeriodisertLovvalgMedlemskapGrunnlag,
 } from 'lib/types/types';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { LovOgMedlemskapVurderingForm } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/types';
@@ -17,14 +16,13 @@ import {
   getDefaultValuesFromGrunnlag,
   mapFormTilDto,
 } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/lovvalg-utils';
-import { Button, VStack } from '@navikt/ds-react';
 import { parseISO } from 'date-fns';
 import { parseDatoFraDatePicker } from 'lib/utils/date';
 import { LovvalgOgMedlemskapFormInput } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/LovvalgOgMedlemskapFormInput';
 import { LovvalgOgMedlemskapTidligereVurdering } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/LovvalgOgMedlemskapTidligereVurdering';
-import { PlusIcon } from '@navikt/aksel-icons';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { NyVurderingExpandableCard } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
+import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 
 interface Props {
   behandlingVersjon: number;
@@ -107,7 +105,7 @@ export const LovvalgOgMedlemskapPeriodisert = ({
   const foersteNyePeriode = vurderingerFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
 
   return (
-    <VilkårskortMedFormOgMellomlagringNyVisning
+    <VilkårskortPeriodisert
       heading={heading}
       steg={'VURDER_LOVVALG'}
       onSubmit={form.handleSubmit(onSubmit)}
@@ -122,49 +120,42 @@ export const LovvalgOgMedlemskapPeriodisert = ({
       readOnly={readOnly}
       visningModus={visningModus}
       visningActions={visningActions}
-      extraActions={
-        <Button variant={'secondary'} icon={<PlusIcon />} onClick={onAddPeriode} type="button">
-          Legg til ny vurdering
-        </Button>
-      }
+      onLeggTilVurdering={onAddPeriode}
+      errors={form.formState.errors}
     >
-      <VStack gap="8">
-        <VStack gap="2">
-          {vedtatteVurderinger.map((vurdering) => (
-            <TidligereVurderingExpandableCard
-              key={vurdering.fom}
-              fom={parseISO(vurdering.fom)}
-              tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
-              foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-              oppfylt={
-                vurdering.lovvalg.lovvalgsEØSLandEllerLandMedAvtale === 'NOR' &&
-                vurdering.medlemskap?.varMedlemIFolketrygd === true
-              }
-            >
-              <LovvalgOgMedlemskapTidligereVurdering vurdering={vurdering} />
-            </TidligereVurderingExpandableCard>
-          ))}
-          {vurderingerFields.map((vurdering, index) => (
-            <NyVurderingExpandableCard
-              key={vurdering.id}
-              nestePeriodeFraDato={form.watch(`vurderinger.${index + 1}.fraDato`)}
-              isLast={index === vurderingerFields.length - 1}
-              oppfylt={form.watch(`vurderinger.${index}.medlemskap.varMedlemIFolketrygd`)}
-              fraDato={vurdering.fraDato}
-              vurdertAv={vurdering.vurdertAv}
-            >
-              <LovvalgOgMedlemskapFormInput
-                form={form}
-                readOnly={formReadOnly}
-                index={index}
-                harTidligereVurderinger={tidligereVurderinger.length !== 0}
-                onRemove={() => remove(index)}
-                visningModus={visningModus}
-              />
-            </NyVurderingExpandableCard>
-          ))}
-        </VStack>
-      </VStack>
-    </VilkårskortMedFormOgMellomlagringNyVisning>
+      {vedtatteVurderinger.map((vurdering) => (
+        <TidligereVurderingExpandableCard
+          key={vurdering.fom}
+          fom={parseISO(vurdering.fom)}
+          tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
+          foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+          oppfylt={
+            vurdering.lovvalg.lovvalgsEØSLandEllerLandMedAvtale === 'NOR' &&
+            vurdering.medlemskap?.varMedlemIFolketrygd === true
+          }
+        >
+          <LovvalgOgMedlemskapTidligereVurdering vurdering={vurdering} />
+        </TidligereVurderingExpandableCard>
+      ))}
+      {vurderingerFields.map((vurdering, index) => (
+        <NyVurderingExpandableCard
+          key={vurdering.id}
+          nestePeriodeFraDato={form.watch(`vurderinger.${index + 1}.fraDato`)}
+          isLast={index === vurderingerFields.length - 1}
+          oppfylt={form.watch(`vurderinger.${index}.medlemskap.varMedlemIFolketrygd`)}
+          fraDato={vurdering.fraDato}
+          vurdertAv={vurdering.vurdertAv}
+        >
+          <LovvalgOgMedlemskapFormInput
+            form={form}
+            readOnly={formReadOnly}
+            index={index}
+            harTidligereVurderinger={tidligereVurderinger.length !== 0}
+            onRemove={() => remove(index)}
+            visningModus={visningModus}
+          />
+        </NyVurderingExpandableCard>
+      ))}
+    </VilkårskortPeriodisert>
   );
 };

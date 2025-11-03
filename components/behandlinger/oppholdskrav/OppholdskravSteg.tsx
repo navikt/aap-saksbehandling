@@ -1,6 +1,5 @@
 'use client';
 
-import { Button, ErrorSummary, VStack } from '@navikt/ds-react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { Behovstype } from 'lib/utils/form';
@@ -8,13 +7,10 @@ import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { OppholdskravForm, OppholdskravVurderingForm } from 'components/behandlinger/oppholdskrav/types';
 import { LøsPeriodisertBehovPåBehandling, MellomlagretVurdering, OppholdskravGrunnlagResponse } from 'lib/types/types';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { PlusIcon } from '@navikt/aksel-icons';
 import {
   getDefaultValuesFromGrunnlag,
   mapFormTilDto,
-  mapPeriodiserteVurderingerErrorList,
   parseDatoFraDatePickerOgTrekkFra1Dag,
 } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
 import { OppholdskravFormInput } from 'components/behandlinger/oppholdskrav/OppholdskravFormInput';
@@ -23,6 +19,7 @@ import { isAfter, min, parseISO } from 'date-fns';
 import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker, stringToDate } from 'lib/utils/date';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { NyVurderingExpandableCard } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
+import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 
 type Props = {
   grunnlag: OppholdskravGrunnlagResponse | undefined;
@@ -68,8 +65,6 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
     name: 'vurderinger',
     rules: {},
   });
-
-  const errorList = mapPeriodiserteVurderingerErrorList<OppholdskravVurderingForm>(form.formState.errors);
 
   function onAddPeriode() {
     append({
@@ -143,7 +138,7 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
   const foersteNyePeriode = vurderingerFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
 
   return (
-    <VilkårskortMedFormOgMellomlagringNyVisning
+    <VilkårskortPeriodisert
       heading={'Oppholdskrav § 11-3'}
       steg={'VURDER_OPPHOLDSKRAV'}
       onSubmit={form.handleSubmit(onSubmit)}
@@ -158,61 +153,45 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
       readOnly={readOnly}
       visningModus={visningModus}
       visningActions={visningActions}
-      extraActions={
-        <Button variant={'secondary'} icon={<PlusIcon />} onClick={onAddPeriode} type="button">
-          Legg til ny vurdering
-        </Button>
-      }
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
+      onLeggTilVurdering={onAddPeriode}
+      errors={form.formState.errors}
     >
-      <VStack gap="4">
-        <VStack gap="2">
-          {vedtatteVurderinger.map((vurdering) => (
-            <TidligereVurderingExpandableCard
-              key={vurdering.fom}
-              fom={parseISO(vurdering.fom)}
-              tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
-              foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-              oppfylt={vurdering.oppfylt}
-            >
-              <OppholdskravTidligereVurdering
-                fraDato={vurdering.fom}
-                begrunnelse={vurdering.begrunnelse}
-                land={vurdering.land}
-                oppfyller={vurdering.oppfylt}
-              />
-            </TidligereVurderingExpandableCard>
-          ))}
-          {vurderingerFields.map((vurdering, index) => (
-            <NyVurderingExpandableCard
-              key={vurdering.id}
-              fraDato={vurdering.fraDato}
-              oppfylt={form.watch(`vurderinger.${index}.oppfyller`)}
-              nestePeriodeFraDato={form.watch(`vurderinger.${index + 1}.fraDato`)}
-              isLast={index === vurderingerFields.length - 1}
-              vurdertAv={vurdering.vurdertAv}
-            >
-              <OppholdskravFormInput
-                form={form}
-                readOnly={formReadOnly}
-                index={index}
-                harTidligereVurderinger={tidligereVurderinger.length !== 0}
-                onRemove={() => remove(index)}
-                visningModus={visningModus}
-              />
-            </NyVurderingExpandableCard>
-          ))}
-        </VStack>
-        {errorList.length > 0 && (
-          <ErrorSummary size={'small'}>
-            {errorList.map((error) => (
-              <ErrorSummary.Item key={error.ref} href={error.ref}>
-                {error?.message}
-              </ErrorSummary.Item>
-            ))}
-          </ErrorSummary>
-        )}
-      </VStack>
-    </VilkårskortMedFormOgMellomlagringNyVisning>
+      {vedtatteVurderinger.map((vurdering) => (
+        <TidligereVurderingExpandableCard
+          key={vurdering.fom}
+          fom={parseISO(vurdering.fom)}
+          tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
+          foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+          oppfylt={vurdering.oppfylt}
+        >
+          <OppholdskravTidligereVurdering
+            fraDato={vurdering.fom}
+            begrunnelse={vurdering.begrunnelse}
+            land={vurdering.land}
+            oppfyller={vurdering.oppfylt}
+          />
+        </TidligereVurderingExpandableCard>
+      ))}
+      {vurderingerFields.map((vurdering, index) => (
+        <NyVurderingExpandableCard
+          key={vurdering.id}
+          fraDato={vurdering.fraDato}
+          oppfylt={form.watch(`vurderinger.${index}.oppfyller`)}
+          nestePeriodeFraDato={form.watch(`vurderinger.${index + 1}.fraDato`)}
+          isLast={index === vurderingerFields.length - 1}
+          vurdertAv={vurdering.vurdertAv}
+        >
+          <OppholdskravFormInput
+            form={form}
+            readOnly={formReadOnly}
+            index={index}
+            harTidligereVurderinger={tidligereVurderinger.length !== 0}
+            onRemove={() => remove(index)}
+            visningModus={visningModus}
+          />
+        </NyVurderingExpandableCard>
+      ))}
+    </VilkårskortPeriodisert>
   );
 };

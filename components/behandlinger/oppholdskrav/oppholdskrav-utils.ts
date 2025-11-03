@@ -73,7 +73,7 @@ export function getLandkodeOrAnnet(value: string): string {
   }
   return 'ANNET';
 }
-interface VurderingerErrors<T extends FieldValues> {
+export interface VurderingerErrors<T extends FieldValues> {
   vurderinger?: Merge<FieldError, (Merge<FieldError, FieldErrorsImpl<T>> | undefined)[]>;
 }
 

@@ -33,7 +33,7 @@ export const NyVurderingExpandableCard = ({
       editable
       defaultOpen
       heading={
-        <HStack justify={'space-between'} gap="12">
+        <HStack justify={'space-between'} padding={'2'}>
           <BodyShort size={'small'}>
             Ny vurdering: {fraDatoParsed ? `${formaterDatoForFrontend(fraDatoParsed)} – ` : '[Ikke valgt]'}
             {tom ? <span>{formaterDatoForFrontend(tom)}</span> : <span>{isLast ? ' ' : '[Ikke valgt]'}</span>}

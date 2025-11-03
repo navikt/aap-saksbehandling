@@ -14,7 +14,7 @@ interface Props {
 export const CustomExpandableCard = ({ heading, children, defaultOpen = false, editable }: Props) => {
   const [expanded, setExpanded] = useState(defaultOpen);
   return (
-    <VStack gap={'4'} className={styles.container}>
+    <VStack gap={'4'} justify={'center'} className={styles.container} padding={'0'}>
       <button className={styles.headingButton} type="button" onClick={() => setExpanded(!expanded)}>
         <HGrid columns={'1fr 16px'} align={'center'} gap={'1'}>
           <HGrid columns={'16px 1fr'} align={'center'} gap={'1'}>

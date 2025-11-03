@@ -37,7 +37,7 @@ export const TidligereVurderingExpandableCard = ({
       editable={false}
       defaultOpen={false}
       heading={
-        <HStack justify={'space-between'} gap="12">
+        <HStack justify={'space-between'} padding={'2'}>
           <BodyShort size={'small'} className={strekUtHele ? styles.streketUtTekst : ''}>
             {formaterDatoForFrontend(fom)} –{' '}
             {tom != null && (
