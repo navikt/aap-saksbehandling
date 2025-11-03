@@ -14,6 +14,18 @@ const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
 const user = userEvent.setup();
 
+const grunnlagMedVurdering: StudentGrunnlag = {
+  harTilgangTilÅSaksbehandle: true,
+  studentvurdering: {
+    begrunnelse: 'en god begrunnelse',
+    harAvbruttStudie: true,
+    vurdertAv: {
+      dato: '2025-11-03',
+      ident: 'Saksbehandler',
+    },
+  },
+};
+
 beforeEach(() => {
   setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'AVKLAR_STUDENT' });
 });
@@ -24,6 +36,28 @@ describe('Student', () => {
       render(<Studentvurdering readOnly={false} behandlingVersjon={0} />);
       const heading = screen.getByText('§ 11-14 Student');
       expect(heading).toBeVisible();
+    });
+
+    it('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
+      setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'AVKLAR_SYKDOM' });
+
+      render(<Studentvurdering grunnlag={grunnlagMedVurdering} readOnly={false} behandlingVersjon={0} />);
+
+      const endreKnapp = screen.getByRole('button', { name: 'Endre' });
+      await user.click(endreKnapp);
+
+      const begrunnelseFelt = screen.getByRole('textbox', { name: 'Vurder §11-14 og vilkårene i §7 i forskriften' });
+      await user.clear(begrunnelseFelt);
+      await user.type(begrunnelseFelt, 'Dette er en ny begrunnelse');
+      expect(begrunnelseFelt).toHaveValue('Dette er en ny begrunnelse');
+
+      const avbrytKnapp = screen.getByRole('button', { name: 'Avbryt' });
+      await user.click(avbrytKnapp);
+
+      const begrunnelseFeltEtterAvbryt = screen.getByRole('textbox', {
+        name: 'Vurder §11-14 og vilkårene i §7 i forskriften',
+      });
+      expect(begrunnelseFeltEtterAvbryt).toHaveValue('en god begrunnelse');
     });
   });
 

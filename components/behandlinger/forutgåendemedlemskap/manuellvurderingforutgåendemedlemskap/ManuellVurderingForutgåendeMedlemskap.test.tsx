@@ -24,7 +24,7 @@ const grunnlagMedVurdering: ForutgåendeMedlemskapGrunnlag = {
     harForutgåendeMedlemskap: true,
     overstyrt: true,
     vurdertAv: {
-      dato: '2024-11-03',
+      dato: '2025-11-03',
       ident: 'Saksbehandler',
     },
   },
