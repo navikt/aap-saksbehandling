@@ -5,7 +5,6 @@ import {
   getJaNeiEllerIkkeBesvart,
   getJaNeiEllerUndefined,
   getStringEllerUndefined,
-  getTrueFalseEllerUndefined,
   JaEllerNei,
   JaEllerNeiOptions,
 } from 'lib/utils/form';
@@ -14,8 +13,8 @@ import { FormEvent, useCallback } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { Link } from '@navikt/ds-react';
 import { DiagnoseSystem, diagnoseSøker } from 'lib/diagnosesøker/DiagnoseSøker';
-import { formaterDatoForBackend, formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
-import { isBefore, parse, startOfDay } from 'date-fns';
+import { formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
+import { isBefore, startOfDay } from 'date-fns';
 import { validerDato } from 'lib/validation/dateValidation';
 import {
   MellomlagretVurdering,
@@ -36,6 +35,7 @@ import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerU
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import mapTilVurdering from 'components/behandlinger/sykdom/sykdomsvurdering/vurderingMapper';
 
 export interface SykdomsvurderingFormFields {
   begrunnelse: string;
@@ -222,37 +222,21 @@ export const Sykdomsvurdering = ({
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
+      const vurdering = mapTilVurdering(
+        data,
+        grunnlag.skalVurdereYrkesskade,
+        grunnlag.erÅrsakssammenhengYrkesskade,
+        behandlingErFørstegangsbehandling,
+        behandlingErRevurdering,
+        behandlingErRevurderingAvFørstegangsbehandling()
+      );
+
       løsBehovOgGåTilNesteSteg(
         {
           behandlingVersjon: behandlingVersjon,
           behov: {
             behovstype: Behovstype.AVKLAR_SYKDOM_KODE,
-            sykdomsvurderinger: [
-              {
-                dokumenterBruktIVurdering: [],
-                begrunnelse: data.begrunnelse,
-                vurderingenGjelderFra: data.vurderingenGjelderFra
-                  ? formaterDatoForBackend(parse(data.vurderingenGjelderFra, 'dd.MM.yyyy', new Date()))
-                  : undefined,
-                harSkadeSykdomEllerLyte: data.harSkadeSykdomEllerLyte === JaEllerNei.Ja,
-                kodeverk: data?.kodeverk,
-                hoveddiagnose: data?.hoveddiagnose?.value,
-                bidiagnoser: data.bidiagnose?.map((diagnose) => diagnose.value),
-                erArbeidsevnenNedsatt: getTrueFalseEllerUndefined(data.erArbeidsevnenNedsatt),
-                erSkadeSykdomEllerLyteVesentligdel: getTrueFalseEllerUndefined(data.erSkadeSykdomEllerLyteVesentligdel),
-                erNedsettelseIArbeidsevneMerEnnHalvparten:
-                  behandlingErFørstegangsbehandling || behandlingErRevurderingAvFørstegangsbehandling()
-                    ? getTrueFalseEllerUndefined(data.erNedsettelseIArbeidsevneMerEnnHalvparten)
-                    : getTrueFalseEllerUndefined(data.erNedsettelseIArbeidsevneMerEnnFørtiProsent),
-                erNedsettelseIArbeidsevneAvEnVissVarighet: getTrueFalseEllerUndefined(
-                  data.erNedsettelseIArbeidsevneAvEnVissVarighet
-                ),
-                erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense: getTrueFalseEllerUndefined(
-                  data.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense
-                ),
-                yrkesskadeBegrunnelse: data?.yrkesskadeBegrunnelse,
-              },
-            ],
+            sykdomsvurderinger: [vurdering],
           },
           referanse: behandlingsReferanse,
         },
@@ -304,7 +288,7 @@ export const Sykdomsvurdering = ({
       visningModus={visningModus}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
-      {historiskeVurderinger && historiskeVurderinger.length > 0 && (
+      {!!historiskeVurderinger?.length && (
         <TidligereVurderinger
           data={historiskeVurderinger}
           buildFelter={byggFelter}
@@ -319,37 +303,40 @@ export const Sykdomsvurdering = ({
       <Link href="https://lovdata.no/nav/rundskriv/r11-00#KAPITTEL_7-1" target="_blank">
         Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-5 (lovdata.no)
       </Link>
+
       <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
+
       {behandlingErRevurdering && <FormField form={form} formField={formFields.vurderingenGjelderFra} />}
-      {(behandlingErFørstegangsbehandling || behandlingErRevurderingAvFørstegangsbehandling()) && (
-        <Førstegangsbehandling
-          form={form}
-          formFields={formFields}
-          skalVurdereYrkesskade={grunnlag.skalVurdereYrkesskade}
-          diagnosesøker={
-            <Diagnosesøk
+
+      <FormField form={form} formField={formFields.harSkadeSykdomEllerLyte} horizontalRadio />
+
+      {form.watch('harSkadeSykdomEllerLyte') === JaEllerNei.Ja && (
+        <>
+          <Diagnosesøk
+            form={form}
+            formFields={formFields}
+            readOnly={readOnly}
+            hoveddiagnoseDefaultOptions={hoveddiagnoseDefaultOptions}
+          />
+
+          <FormField form={form} formField={formFields.erArbeidsevnenNedsatt} horizontalRadio />
+
+          {(behandlingErFørstegangsbehandling || behandlingErRevurderingAvFørstegangsbehandling()) && (
+            <Førstegangsbehandling
               form={form}
               formFields={formFields}
-              readOnly={readOnly}
-              hoveddiagnoseDefaultOptions={hoveddiagnoseDefaultOptions}
+              skalVurdereYrkesskade={grunnlag.skalVurdereYrkesskade}
             />
-          }
-        />
-      )}
-      {behandlingErRevurdering && !behandlingErRevurderingAvFørstegangsbehandling() && (
-        <Revurdering
-          form={form}
-          formFields={formFields}
-          erÅrsakssammenhengYrkesskade={grunnlag.erÅrsakssammenhengYrkesskade}
-          diagnosesøker={
-            <Diagnosesøk
+          )}
+
+          {behandlingErRevurdering && !behandlingErRevurderingAvFørstegangsbehandling() && (
+            <Revurdering
               form={form}
               formFields={formFields}
-              readOnly={readOnly}
-              hoveddiagnoseDefaultOptions={hoveddiagnoseDefaultOptions}
+              erÅrsakssammenhengYrkesskade={grunnlag.erÅrsakssammenhengYrkesskade}
             />
-          }
-        />
+          )}
+        </>
       )}
     </VilkårskortMedFormOgMellomlagringNyVisning>
   );
