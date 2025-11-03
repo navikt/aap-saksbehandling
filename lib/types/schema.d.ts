@@ -3023,6 +3023,44 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/aktivitetsplikt/trekk/{saksnummer}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description saksnummer */
+          saksnummer: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_9.AktivitetspliktMedTrekkDto'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/behandling/{referanse}/grunnlag/brev': {
     parameters: {
       query?: never;
@@ -4189,7 +4227,7 @@ export interface components {
       oppholdstype: 'A' | 'D' | 'F' | 'H' | 'P' | 'R' | 'S' | 'V' | 'UKJENT';
     };
     'no.nav.aap.behandlingsflyt.OpprettTestcaseDTO': {
-      andreUtbetalinger?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AndreUtbetalinger'];
+      andreUtbetalinger?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AndreUtbetalingerDto'];
       barn: components['schemas']['no.nav.aap.behandlingsflyt.TestBarn'][];
       erArbeidsevnenNedsatt: boolean;
       erNedsettelseIArbeidsevneMerEnnHalvparten: boolean;
@@ -4338,6 +4376,37 @@ export interface components {
       dato: string;
       /** @enum {string} */
       grunn: 'IKKE_RIMELIG_GRUNN' | 'RIMELIG_GRUNN';
+      vurdertAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_9.AktivitetspliktMedTrekkDto': {
+      vurderingerMedTrekk: components['schemas']['no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_9.AktivitetspliktVurderingMedTrekkDto'][];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_9.AktivitetspliktTrekkDto': {
+      /** Format: int32 */
+      'bel\u00F8p': number;
+      posteringer: components['schemas']['no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_9.AktivitetspliktTrekkPosteringDto'][];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_9.AktivitetspliktTrekkPosteringDto': {
+      /** Format: int32 */
+      'bel\u00F8p': number;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      dato: string;
+    };
+    'no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_9.AktivitetspliktVurderingMedTrekkDto': {
+      begrunnelse: string;
+      /** @enum {string} */
+      brudd: 'IKKE_MØTT_TIL_TILTAK' | 'IKKE_MØTT_TIL_BEHANDLING' | 'IKKE_MØTT_TIL_MØTE' | 'IKKE_SENDT_DOKUMENTASJON';
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      dato: string;
+      /** @enum {string} */
+      grunn: 'IKKE_RIMELIG_GRUNN' | 'RIMELIG_GRUNN';
+      registrertTrekk?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_9.AktivitetspliktTrekkDto'];
       vurdertAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.arbeidsevne.ArbeidsevneGrunnlagDto': {
@@ -9730,12 +9799,12 @@ export interface components {
             | 'OMSORGSSTØNAD'
             | 'INTRODUKSJONSSTØNAD'
             | 'KVALIFISERINGSSTØNAD'
-            | 'VERV'
-            | 'UTLAND'
+            | 'GODGJØRELSE_ELLER_LØNN_FRA_VERV'
+            | 'YTELSE_FRA_UTENLANDSKE_TRYGDEMYNDIGHETER'
             | 'AFP'
-            | 'STIPEND'
-            | 'LÅN'
-            | 'NEI'
+            | 'STIPEND_FRA_LÅNEKASSEN'
+            | 'LÅN_FRA_LÅNEKASSEN'
+            | 'INGEN_AV_DISSE'
           )[]
         | null;
       gjeldendeVurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.refusjon.RefusjonkravVurderingResponse'];
@@ -13538,7 +13607,8 @@ export interface components {
        */
       tilOgMed: string;
     };
-    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AndreUtbetalinger': {
+    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AndreUtbetalingerDto': {
+      afp?: string | null;
       'l\u00F8nn'?: boolean | null;
       'st\u00F8nad'?:
         | (
@@ -14053,7 +14123,7 @@ export interface components {
       kommeTilbake?: 'Ja' | 'Nei' | 'VetIkke' | null;
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.S\u00F8knadV0': {
-      andreUtbetalinger?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AndreUtbetalinger'];
+      andreUtbetalinger?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AndreUtbetalingerDto'];
       medlemskap?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.S\u00F8knadMedlemskapDto'];
       oppgitteBarn?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.OppgitteBarn'];
       student?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.S\u00F8knadStudentDto'];
@@ -14512,7 +14582,7 @@ export interface components {
       's\u00F8knadErTrukket'?: boolean | null;
     };
     'no.nav.aap.behandlingsflyt.test.OpprettDummySakDto': {
-      andreUtbetalinger?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AndreUtbetalinger'];
+      andreUtbetalinger?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AndreUtbetalingerDto'];
       erStudent: boolean;
       harMedlemskap: boolean;
       harYrkesskade: boolean;

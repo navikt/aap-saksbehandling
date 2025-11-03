@@ -69,8 +69,8 @@ export interface OpprettSakFormFields {
   erArbeidsevnenNedsatt: JaEllerNei;
   erNedsettelseIArbeidsevneMerEnnHalvparten: JaEllerNei;
   steg?: TestcaseSteg;
-  afp: JaEllerNei;
   lønn: JaEllerNei;
+  afp: string;
   stønad: AndreUtbetalingerYtelser[];
 }
 
@@ -89,6 +89,11 @@ export const OpprettSakLocal = () => {
       label: 'Har du fått eller skal du få ekstra utbetalinger fra arbeidsgiver?',
     },
 
+    afp: {
+      type: 'text',
+      defaultValue: '',
+      label: 'Hvor mottar du AFP fra?',
+    },
       stønad: {
         type: 'combobox_multiple',
         label: 'stønad',
@@ -194,7 +199,8 @@ export const OpprettSakLocal = () => {
     return {
       ...data,
       andreUtbetalinger: {
-        lønn: data.lønn,
+        afp: data.afp,
+        lønn: data.lønn === JaEllerNei.Ja,
         stønad: data.stønad,
       },
       søknadsdato: formaterDatoForBackend(data.søknadsdato),
@@ -300,22 +306,9 @@ export const OpprettSakLocal = () => {
             borderColor="border-subtle"
             borderRadius="medium"
           >
-            <HStack gap="4" justify="space-between">
-              <Button type="button" size="small" loading={isLoading} onClick={() => opprett(undefined)}>
-                Opprett og iverksett
-              </Button>
-
-              {form.watch('erArbeidsevnenNedsatt') === JaEllerNei.Nei ||
-              form.watch('erNedsettelseIArbeidsevneMerEnnHalvparten') === JaEllerNei.Nei ? (
-                <Alert variant="error" inline>
-                  Avslag
-                </Alert>
-              ) : (
-                <Alert variant="success" inline>
-                  Innvilgelse
-                </Alert>
-              )}
-            </HStack>
+            <Button type="button" size="small" loading={isLoading} onClick={() => opprett(undefined)}>
+              Opprett og iverksett
+            </Button>
           </Box>
 
           <Box

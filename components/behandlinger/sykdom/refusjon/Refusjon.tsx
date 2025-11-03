@@ -9,7 +9,7 @@ import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date'
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { FormEvent } from 'react';
 import { useSak } from 'hooks/SakHook';
-import { BodyLong, Radio } from '@navikt/ds-react';
+import { BodyLong, List, Radio } from '@navikt/ds-react';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
@@ -102,31 +102,35 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
     OMSORGSSTØNAD = 'OMSORGSSTØNAD',
     INTRODUKSJONSSTØNAD = 'INTRODUKSJONSSTØNAD',
     KVALIFISERINGSSTØNAD = 'KVALIFISERINGSSTØNAD',
-    VERV = 'VERV',
-    UTLAND = 'UTLAND',
+    GODGJØRELSE_ELLER_LØNN_FRA_VERV = 'GODGJØRELSE_ELLER_LØNN_FRA_VERV',
+    YTELSE_FRA_UTENLANDSKE_TRYGDEMYNDIGHETER = 'YTELSE_FRA_UTENLANDSKE_TRYGDEMYNDIGHETER',
     AFP = 'AFP',
-    STIPEND = 'STIPEND',
-    LÅN = 'LÅN',
-    NEI = 'NEI',
+    STIPEND_FRA_LÅNEKASSEN = 'STIPEND_FRA_LÅNEKASSEN',
+    LÅN_FRA_LÅNEKASSEN = 'LÅN_FRA_LÅNEKASSEN',
+    INGEN_AV_DISSE = 'INGEN_AV_DISSE',
   }
   const AndreUtbetalingerYtelserLabels: Record<AndreUtbetalingerYtelser, string> = {
     [AndreUtbetalingerYtelser.ØKONOMISK_SOSIALHJELP]: 'Økonomisk sosialhjelp',
     [AndreUtbetalingerYtelser.OMSORGSSTØNAD]: 'Omsorgsstønad',
     [AndreUtbetalingerYtelser.INTRODUKSJONSSTØNAD]: 'Introduksjonsstønad',
     [AndreUtbetalingerYtelser.KVALIFISERINGSSTØNAD]: 'Kvalifiseringsstønad',
-    [AndreUtbetalingerYtelser.VERV]: 'Verv',
-    [AndreUtbetalingerYtelser.UTLAND]: 'Utland',
+    [AndreUtbetalingerYtelser.GODGJØRELSE_ELLER_LØNN_FRA_VERV]: 'Godtgjørelse eller lønn for verv',
+    [AndreUtbetalingerYtelser.YTELSE_FRA_UTENLANDSKE_TRYGDEMYNDIGHETER]: 'Ytelser fra utenlandske trygdemyndigheter',
     [AndreUtbetalingerYtelser.AFP]: 'AFP',
-    [AndreUtbetalingerYtelser.STIPEND]: 'Stipend',
-    [AndreUtbetalingerYtelser.LÅN]: 'Lån',
-    [AndreUtbetalingerYtelser.NEI]: 'Nei',
+    [AndreUtbetalingerYtelser.STIPEND_FRA_LÅNEKASSEN]: 'Sykestipend fra Lånekassen',
+    [AndreUtbetalingerYtelser.LÅN_FRA_LÅNEKASSEN]: 'Lån fra Lånekassen',
+    [AndreUtbetalingerYtelser.INGEN_AV_DISSE]: 'Ingen av Disse',
   };
 
-  const formattedList =
-    grunnlag.andreUtbetalingerYtelser
-      ?.filter((str): str is AndreUtbetalingerYtelser => str in AndreUtbetalingerYtelserLabels)
-      .map((str) => AndreUtbetalingerYtelserLabels[str])
-      .join(', ') || 'Ingen utbetalinger krysset av';
+  const formattedList = () => {
+    return (
+      <List as="ul" size={'small'}>
+        {grunnlag.andreUtbetalingerYtelser?.map((text, index) => (
+          <List.Item key={index}>{AndreUtbetalingerYtelserLabels[text]}</List.Item>
+        ))}
+      </List>
+    );
+  };
 
   const historiskeVurderinger = grunnlag.historiskeVurderinger;
 
@@ -152,13 +156,14 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
       {!!historiskeVurderinger?.length && (
         <TidligereVurderinger data={historiskeVurderinger} buildFelter={byggFelter} />
       )}
-
       <BodyLong weight={'semibold'} size={'small'}>
         Relevant informasjon fra søknad:
       </BodyLong>
       <BodyLong size={'small'} textColor={'subtle'}>
-        Kryss av for utbetalinger du får, eller nylig har søkt om: {formattedList}{' '}
+        Kryss av for utbetalinger du får, eller nylig har søkt om:
+        {formattedList()}
       </BodyLong>
+
       <RadioGroupWrapper
         name={`harKrav`}
         control={form.control}
@@ -170,7 +175,6 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
         <Radio value={JaEllerNei.Ja}>Ja</Radio>
         <Radio value={JaEllerNei.Nei}>Nei</Radio>
       </RadioGroupWrapper>
-
       {form.watch('harKrav') === JaEllerNei.Ja && <RefusjonsKrav sak={sak} form={form} readOnly={readOnly} />}
     </VilkårskortMedFormOgMellomlagringNyVisning>
   );
