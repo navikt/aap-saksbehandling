@@ -18,6 +18,7 @@ export interface VilkårsKortMedFormOgMellomlagringProps extends VilkårsKortMed
   visningModus: VisningModus;
   visningActions: VisningActions;
   extraActions?: ReactNode;
+  formReset?: () => void;
 }
 
 export const VilkårskortMedFormOgMellomlagringNyVisning = ({
@@ -40,6 +41,7 @@ export const VilkårskortMedFormOgMellomlagringNyVisning = ({
   visningModus,
   visningActions,
   extraActions,
+  formReset,
 }: VilkårsKortMedFormOgMellomlagringProps) => {
   const classNameBasertPåEnhet = vilkårTilhørerNavKontor ? styles.vilkårsKortNAV : styles.vilkårsKortNAY;
   const { flyt } = useRequiredFlyt();
@@ -96,7 +98,14 @@ export const VilkårskortMedFormOgMellomlagringNyVisning = ({
                     <>
                       <Button loading={isLoading}>{knappTekst}</Button>
                       {visningActions && (
-                        <Button type="button" variant="secondary" onClick={visningActions.avbrytEndringClick}>
+                        <Button
+                          type="button"
+                          variant="secondary"
+                          onClick={() => {
+                            visningActions.avbrytEndringClick();
+                            formReset && formReset();
+                          }}
+                        >
                           Avbryt
                         </Button>
                       )}

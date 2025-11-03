@@ -32,6 +32,26 @@ const grunnlagMedYrkesskade: SykdomsGrunnlag = {
   historikkSykdomsvurderinger: [],
 };
 
+const grunnlagMedTidligereVurdering: SykdomsGrunnlag = {
+  harTilgangTilÅSaksbehandle: true,
+  skalVurdereYrkesskade: false,
+  erÅrsakssammenhengYrkesskade: false,
+  opplysninger: { innhentedeYrkesskader: [], oppgittYrkesskadeISøknad: false },
+  gjeldendeVedtatteSykdomsvurderinger: [],
+  sykdomsvurderinger: [
+    {
+      begrunnelse: 'Dette er en tidligere begrunnelse',
+      dokumenterBruktIVurdering: [{ identifikator: '12345' }],
+      harSkadeSykdomEllerLyte: true,
+      vurdertAv: {
+        dato: '2025-10-31T09:44:54.793',
+        ident: 'Z123456',
+      },
+    },
+  ],
+  historikkSykdomsvurderinger: [],
+};
+
 beforeEach(() => {
   setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'AVKLAR_SYKDOM' });
 });
@@ -88,6 +108,33 @@ describe('generelt', () => {
     );
 
     expect(informasjonsvarsling).toBeVisible();
+  });
+
+  it('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
+    setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'VURDER_BISTANDSBEHOV' });
+
+    render(
+      <Sykdomsvurdering
+        grunnlag={grunnlagMedTidligereVurdering}
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Førstegangsbehandling'}
+      />
+    );
+
+    const endreKnapp = screen.getByRole('button', { name: 'Endre' });
+    await user.click(endreKnapp);
+
+    const begrunnelseFelt = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
+    await user.clear(begrunnelseFelt);
+    await user.type(begrunnelseFelt, 'Dette er en ny begrunnelse');
+    expect(begrunnelseFelt).toHaveValue('Dette er en ny begrunnelse');
+
+    const avbrytKnapp = screen.getByRole('button', { name: 'Avbryt' });
+    await user.click(avbrytKnapp);
+
+    const begrunnelseFeltEtterAvbryt = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
+    expect(begrunnelseFeltEtterAvbryt).toHaveValue('Dette er en tidligere begrunnelse');
   });
 });
 
