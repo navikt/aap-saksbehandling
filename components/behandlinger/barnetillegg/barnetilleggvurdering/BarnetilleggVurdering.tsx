@@ -183,6 +183,7 @@ export const BarnetilleggVurdering = ({
       }
       visningModus={visningModus}
       visningActions={visningActions}
+      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
       <div className={'flex-column'}>
         {harTidligereVurderinger && (

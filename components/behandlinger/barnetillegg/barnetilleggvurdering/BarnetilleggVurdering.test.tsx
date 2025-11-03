@@ -182,6 +182,34 @@ describe('barnetillegg', () => {
     const knapp = screen.getByRole('button', { name: 'Bekreft' });
     expect(knapp).toBeVisible();
   });
+
+  it('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
+    setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'SIMULERING' });
+
+    render(
+      <BarnetilleggVurdering
+        grunnlag={{ ...grunnlag, vurderteBarn: [vurdertBarnFosterForelder] }}
+        behandlingsversjon={0}
+        readOnly={false}
+        visManuellVurdering={true}
+        behandlingPersonInfo={behandlingPersonInfo}
+      />
+    );
+
+    const endreKnapp = screen.getByRole('button', { name: 'Endre' });
+    await user.click(endreKnapp);
+
+    const begrunnelseFelt = screen.getAllByRole('textbox')[0];
+    await user.clear(begrunnelseFelt);
+    await user.type(begrunnelseFelt, 'Dette er en ny begrunnelse');
+    expect(begrunnelseFelt).toHaveValue('Dette er en ny begrunnelse');
+
+    const avbrytKnapp = screen.getByRole('button', { name: 'Avbryt' });
+    await user.click(avbrytKnapp);
+
+    const begrunnelseFeltEtterAvbryt = screen.getAllByRole('textbox')[0];
+    expect(begrunnelseFeltEtterAvbryt).toHaveValue('en god begrunnelse');
+  });
 });
 
 describe('Oppgitte barn', () => {
