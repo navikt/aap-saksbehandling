@@ -14,11 +14,11 @@ import { ReactNode } from 'react';
 export interface VilkårsKortMedFormOgMellomlagringProps extends VilkårsKortMedFormProps {
   onDeleteMellomlagringClick: () => void;
   onLagreMellomLagringClick: () => void;
-  formReset?: () => void;
   mellomlagretVurdering: MellomlagretVurdering | undefined;
   visningModus: VisningModus;
   visningActions: VisningActions;
   extraActions?: ReactNode;
+  formReset: () => void;
 }
 
 export const VilkårskortMedFormOgMellomlagringNyVisning = ({
@@ -37,11 +37,11 @@ export const VilkårskortMedFormOgMellomlagringNyVisning = ({
   kvalitetssikretAv,
   onDeleteMellomlagringClick,
   onLagreMellomLagringClick,
-  formReset,
   mellomlagretVurdering,
   visningModus,
   visningActions,
   extraActions,
+  formReset,
 }: VilkårsKortMedFormOgMellomlagringProps) => {
   const classNameBasertPåEnhet = vilkårTilhørerNavKontor ? styles.vilkårsKortNAV : styles.vilkårsKortNAY;
   const { flyt } = useRequiredFlyt();
