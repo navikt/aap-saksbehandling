@@ -169,6 +169,7 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly, initi
       readOnly={readOnly}
       visningModus={visningModus}
       visningActions={visningActions}
+      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
       {!!historiskeVurderinger?.length && (
         <TidligereVurderinger
