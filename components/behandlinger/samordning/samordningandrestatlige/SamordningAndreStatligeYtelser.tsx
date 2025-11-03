@@ -128,6 +128,7 @@ export const SamordningAndreStatligeYtelser = ({
       readOnly={readOnly}
       visningModus={visningModus}
       visningActions={visningActions}
+      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
       {!visYtelsesTabell && (
         <HStack>
