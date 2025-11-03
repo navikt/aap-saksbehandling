@@ -26,6 +26,30 @@ const grunnlag: YrkesskadeVurderingGrunnlag = {
   },
 };
 
+const grunnelagMedTidligereVurdering: YrkesskadeVurderingGrunnlag = {
+  harTilgangTilÅSaksbehandle: true,
+  yrkesskadeVurdering: {
+    begrunnelse: 'Dette er min vurdering som er bekreftet',
+    erÅrsakssammenheng: true,
+    relevanteSaker: [],
+    relevanteYrkesskadeSaker: [],
+    vurdertAv: {
+      ident: 'hello pello',
+      dato: '2025-10-08',
+    },
+  },
+  opplysninger: {
+    innhentedeYrkesskader: [
+      {
+        ref: 'YRK',
+        kilde: 'Yrkesskaderegisteret',
+        skadedato: null,
+      },
+    ],
+    oppgittYrkesskadeISøknad: false,
+  },
+};
+
 beforeEach(() => {
   setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'VURDER_YRKESSKADE' });
 });
@@ -36,6 +60,33 @@ describe('Yrkesskade', () => {
       render(<Yrkesskade grunnlag={grunnlag} behandlingVersjon={1} readOnly={false} behandlingsReferanse={'123'} />);
       const heading = screen.getByRole('heading', { name: '§ 11-22 AAP ved yrkesskade' });
       expect(heading).toBeVisible();
+    });
+
+    it('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
+      setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'AVKLAR_SYKDOM' });
+
+      render(
+        <Yrkesskade
+          grunnlag={grunnelagMedTidligereVurdering}
+          readOnly={false}
+          behandlingVersjon={0}
+          behandlingsReferanse={'123'}
+        />
+      );
+
+      const endreKnapp = screen.getByRole('button', { name: 'Endre' });
+      await user.click(endreKnapp);
+
+      const begrunnelseFelt = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
+      await user.clear(begrunnelseFelt);
+      await user.type(begrunnelseFelt, 'Dette er en ny begrunnelse');
+      expect(begrunnelseFelt).toHaveValue('Dette er en ny begrunnelse');
+
+      const avbrytKnapp = screen.getByRole('button', { name: 'Avbryt' });
+      await user.click(avbrytKnapp);
+
+      const begrunnelseFeltEtterAvbryt = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
+      expect(begrunnelseFeltEtterAvbryt).toHaveValue('Dette er min vurdering som er bekreftet');
     });
   });
 
