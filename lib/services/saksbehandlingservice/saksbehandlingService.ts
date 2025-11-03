@@ -77,6 +77,7 @@ import {
   YrkesskadeVurderingGrunnlag,
   OppholdskravGrunnlagResponse,
   LøsPeriodisertBehovPåBehandling,
+  PeriodisertLovvalgMedlemskapGrunnlag,
 } from 'lib/types/types';
 import { apiFetch, apiFetchNoMemoization, apiFetchPdf } from 'lib/services/apiFetch';
 import { logError, logInfo } from 'lib/serverutlis/logger';
@@ -256,6 +257,11 @@ export const hentBrevGrunnlag = async (behandlingsReferanse: string) => {
 export const hentLovvalgMedlemskapGrunnlag = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/lovvalgmedlemskap`;
   return await apiFetch<LovvalgMedlemskapGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentPeriodisertLovvalgMedlemskapGrunnlag = async (behandlingsReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/lovvalgmedlemskap-v2`;
+  return await apiFetch<PeriodisertLovvalgMedlemskapGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentForutgåendeMedlemskapGrunnlag = async (behandlingsReferanse: string) => {

@@ -1,0 +1,104 @@
+import {
+  AvklarPeriodisertLovvalgMedlemskapLøsning,
+  LovvalgEØSLand,
+  PeriodisertLovvalgMedlemskapGrunnlag,
+} from 'lib/types/types';
+import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
+import { getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
+import {
+  LovOgMedlemskapVurderingForm,
+  LovvalgOgMedlemskapManuellVurderingForm,
+} from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/types';
+import { parse, sub } from 'date-fns';
+
+export function getDefaultValuesFromGrunnlag(
+  grunnlag?: PeriodisertLovvalgMedlemskapGrunnlag
+): LovOgMedlemskapVurderingForm {
+  if (grunnlag == null || (grunnlag.nyeVurderinger.length === 0 && grunnlag.sisteVedtatteVurderinger.length === 0)) {
+    // Vi har ingen tidligere vurderinger eller nye vurderinger, legg til en tom-default-periode
+    return {
+      vurderinger: [
+        {
+          begrunnelse: '',
+          lovvalg: {
+            begrunnelse: '',
+            lovvalgsEØSLand: '',
+          },
+          medlemskap: undefined,
+          fraDato: formaterDatoForFrontend(new Date(grunnlag?.kanVurderes[0]?.fom!)),
+        },
+      ],
+    };
+  }
+
+  // Vi har allerede data lagret, vis enten de som er lagret i grunnlaget her eller tom liste
+  return {
+    vurderinger:
+      grunnlag?.nyeVurderinger.map((vurdering) => ({
+        begrunnelse: '',
+        fraDato: formaterDatoForFrontend(vurdering.fom),
+        lovvalg: {
+          begrunnelse: vurdering.lovvalg.begrunnelse,
+          lovvalgsEØSLand: mapGrunnlagTilLovvalgsland(vurdering.lovvalg.lovvalgsEØSLandEllerLandMedAvtale)!,
+          annetLovvalgslandMedAvtale: mapGrunnlagTilAnnetLovvalgslandMedAvtale(
+            vurdering.lovvalg.lovvalgsEØSLandEllerLandMedAvtale
+          ),
+        },
+        medlemskap: {
+          begrunnelse: vurdering.medlemskap?.begrunnelse ?? '',
+          varMedlemIFolketrygd: getJaNeiEllerUndefined(vurdering.medlemskap?.varMedlemIFolketrygd) ?? JaEllerNei.Nei,
+        },
+        vurdertAv:
+          vurdering.vurdertAv != null
+            ? {
+                navn: vurdering.vurdertAv.ansattnavn,
+                ident: vurdering.vurdertAv.ident,
+                dato: vurdering.vurdertAv.dato,
+              }
+            : undefined,
+      })) || [],
+  };
+}
+
+function maplovvalgslandTilAlpha3(lovvalgsland: string) {
+  if (lovvalgsland === 'Norge') {
+    return 'NOR';
+  }
+  return null;
+}
+
+export const mapFormTilDto = (
+  periodeForm: LovvalgOgMedlemskapManuellVurderingForm,
+  tilDato: string | undefined
+): AvklarPeriodisertLovvalgMedlemskapLøsning => ({
+  begrunnelse: periodeForm.begrunnelse,
+  fom: formaterDatoForBackend(parse(periodeForm.fraDato!, 'dd.MM.yyyy', new Date())),
+  tom: tilDato != null ? formaterDatoForBackend(sub(parse(tilDato, 'dd.MM.yyyy', new Date()), { days: 1 })) : null,
+  lovvalg: {
+    begrunnelse: periodeForm.lovvalg.begrunnelse,
+    lovvalgsEØSLandEllerLandMedAvtale:
+      periodeForm.lovvalg.lovvalgsEØSLand === 'Annet land med avtale'
+        ? (periodeForm.lovvalg.annetLovvalgslandMedAvtale as LovvalgEØSLand)
+        : maplovvalgslandTilAlpha3(periodeForm.lovvalg.lovvalgsEØSLand),
+  },
+  medlemskap: {
+    begrunnelse: periodeForm.medlemskap?.begrunnelse ?? '',
+    varMedlemIFolketrygd: periodeForm.medlemskap?.varMedlemIFolketrygd === JaEllerNei.Ja,
+  },
+});
+
+function mapGrunnlagTilLovvalgsland(lovvalgsland?: LovvalgEØSLand) {
+  if (lovvalgsland === 'NOR') {
+    return 'Norge';
+  } else if (lovvalgsland) {
+    return 'Annet land med avtale';
+  }
+  return undefined;
+}
+
+function mapGrunnlagTilAnnetLovvalgslandMedAvtale(lovvalgsland?: LovvalgEØSLand) {
+  if (lovvalgsland && lovvalgsland !== 'NOR') {
+    return lovvalgsland;
+  }
+  return undefined;
+}

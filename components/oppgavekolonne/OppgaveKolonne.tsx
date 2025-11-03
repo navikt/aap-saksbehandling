@@ -31,6 +31,8 @@ import { AvbrytRevurdering } from 'components/behandlinger/revurdering/avbrytVur
 import { Lovvalg } from '../behandlinger/lovvalg/Lovvalg';
 import { OppholdskravStegGruppe } from 'components/behandlinger/oppholdskrav/OppholdskravGruppe';
 import { Aktivitetsplikt11_9 } from 'components/behandlinger/aktivitetsplikt/11-9/Aktivitetsplikt11_9';
+import { isDev, isLocal } from 'lib/utils/environment';
+import { LovvalgPeriodisert } from 'components/behandlinger/lovvalg/LovvalgPeriodisert';
 
 interface Props {
   behandlingsReferanse: string;
@@ -39,6 +41,8 @@ interface Props {
 }
 
 export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe, className }: Props) => {
+  const LovvalgMedlemskapPeriodisert = isDev() || isLocal();
+
   return (
     <section className={className}>
       {aktivGruppe === 'START_BEHANDLING' && <StartBehandling behandlingsReferanse={behandlingsReferanse} />}
@@ -46,7 +50,11 @@ export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe, classN
       {aktivGruppe === 'AVBRYT_REVURDERING' && <AvbrytRevurdering behandlingsreferanse={behandlingsReferanse} />}
       {aktivGruppe === 'LOVVALG' && (
         <StegSuspense>
-          <Lovvalg behandlingsReferanse={behandlingsReferanse} />
+          {LovvalgMedlemskapPeriodisert ? (
+            <LovvalgPeriodisert behandlingsReferanse={behandlingsReferanse} />
+          ) : (
+            <Lovvalg behandlingsReferanse={behandlingsReferanse} />
+          )}
         </StegSuspense>
       )}
       {aktivGruppe === 'RETTIGHETSPERIODE' && <Rettighetsperiode behandlingsReferanse={behandlingsReferanse} />}
