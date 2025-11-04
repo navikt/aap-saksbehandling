@@ -96,7 +96,7 @@ export const Yrkesskade = ({
       },
       andelAvNedsettelsen: {
         type: 'text',
-        label: 'Hvor stor andel totalt av nedsatt arbeidsevne skyldes yrkesskadene?',
+        label: 'Hvor stor andel totalt av nedsatt arbeidsevne skyldes yrkesskadene? (%)',
         defaultValue: grunnlag.yrkesskadeVurdering?.andelAvNedsettelsen?.toString(),
         rules: {
           required: 'Du må svare på hvor stor andel av den nedsatte arbeidsevnen skyldes yrkesskadene',

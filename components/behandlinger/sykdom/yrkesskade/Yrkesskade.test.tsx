@@ -163,7 +163,7 @@ describe('Yrkesskade', () => {
     it('skal være synlig dersom det finnes en årsakssammenheng', async () => {
       await velgJaPåÅrsakssammenheng();
       const felt = screen.getByRole('textbox', {
-        name: 'Hvor stor andel totalt av nedsatt arbeidsevne skyldes yrkesskadene?',
+        name: 'Hvor stor andel totalt av nedsatt arbeidsevne skyldes yrkesskadene? (%)',
       });
 
       expect(felt).toBeVisible();
