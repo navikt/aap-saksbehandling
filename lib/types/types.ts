@@ -456,3 +456,24 @@ export type MellomlagretVurdering =
 
 export type OppfølgningOppgaveOpprinnelseResponse =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.oppfolgingsbehandling.OppfølgningOppgaveOpprinnelseResponse'];
+
+// ---- HENTET FRA BEHANDLINGSFLYT PeriodiserteVurderingerDto.kt ---
+export interface VurderingDto {
+  fom: string;
+  tom?: string | null;
+  vurdertAv?: VurdertAvAnsatt | null;
+  kvalitetssikretAv?: VurdertAvAnsatt | null;
+  besluttetAv?: VurdertAvAnsatt | null;
+}
+export type PeriodiserteVurderingerDto<T extends VurderingDto> = {
+  harTilgangTilÅSaksbehandle: boolean;
+  sisteVedtatteVurderinger: Array<T>;
+  nyeVurderinger: Array<T>;
+  kanVurderes: Array<Periode>;
+  behøverVurderinger: Array<Periode>;
+};
+
+export interface PeriodisertVurderingFormFields {
+  fraDato?: string;
+  tilDato?: string | null;
+}

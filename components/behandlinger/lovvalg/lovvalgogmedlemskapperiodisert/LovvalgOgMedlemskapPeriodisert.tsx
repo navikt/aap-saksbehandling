@@ -23,6 +23,7 @@ import { LovvalgOgMedlemskapTidligereVurdering } from 'components/behandlinger/l
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { NyVurderingExpandableCard } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
+import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
 
 interface Props {
   behandlingVersjon: number;
@@ -79,6 +80,14 @@ export const LovvalgOgMedlemskapPeriodisert = ({
   }
 
   function onSubmit(data: LovOgMedlemskapVurderingForm) {
+    const erPerioderGyldige = validerPeriodiserteVurderingerRekkefølge({
+      form,
+      nyeVurderinger: data.vurderinger,
+      grunnlag,
+    });
+    if (!erPerioderGyldige) {
+      return;
+    }
     const losning: LøsPeriodisertBehovPåBehandling = {
       behandlingVersjon: behandlingVersjon,
       referanse: behandlingsReferanse,
