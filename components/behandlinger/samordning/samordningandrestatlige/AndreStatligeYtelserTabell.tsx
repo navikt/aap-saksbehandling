@@ -2,7 +2,7 @@
 
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { SamordningAndreStatligeYtelserFormFields } from 'components/behandlinger/samordning/samordningandrestatlige/SamordningAndreStatligeYtelser';
-import { Button, HStack, Label, Table, VStack } from '@navikt/ds-react';
+import { BodyLong, Button, HStack, Label, Table, VStack } from '@navikt/ds-react';
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
@@ -58,6 +58,11 @@ export const AndreStatligeYtelserTabell = ({ form, readOnly }: Props) => {
   return (
     <VStack gap={'2'}>
       <Label size={'small'}>Legg til ytelse og periode for utbetaling</Label>
+      <BodyLong size={'small'}>
+        Legg til perioder der brukeren har hatt andre statlige ytelser. Disse ytelsene skal gi fradrag i etterbetalingen
+        av AAP. Etterbetaling for perioden holdes automatisk igjen hos NØS i 42 dager. Annen ytelse må varsles manuelt i
+        Gosys.
+      </BodyLong>
       <TableStyled>
         <Table.Header>
           <Table.Row>
