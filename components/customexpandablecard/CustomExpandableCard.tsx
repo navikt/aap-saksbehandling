@@ -24,7 +24,9 @@ export const CustomExpandableCard = ({ heading, children, defaultOpen = false, e
           {expanded ? <ChevronUpIcon color={'black'} /> : <ChevronDownIcon color={'black'} />}
         </HGrid>
       </button>
-      {expanded && <VStack style={{ paddingLeft: '1.6rem', paddingBottom: '1rem' }}>{children}</VStack>}
+      <VStack style={{ ...(!expanded ? { display: 'none' } : {}), paddingLeft: '1.6rem', paddingBottom: '1rem' }}>
+        {children}
+      </VStack>
     </VStack>
   );
 };
