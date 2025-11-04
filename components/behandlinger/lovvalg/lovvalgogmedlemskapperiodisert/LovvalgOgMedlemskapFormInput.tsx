@@ -80,18 +80,18 @@ export const LovvalgOgMedlemskapFormInput = ({
       <TextAreaWrapper
         name={`vurderinger.${index}.lovvalg.begrunnelse`}
         control={control}
-        label="Vurder riktig lovvalg ved angitt tidspunkt"
+        label="Vurder riktig lovvalg"
         rules={{
-          required: 'Du må gi en begrunnelse på lovvalg ved angitt tidspunkt',
+          required: 'Du må gi en begrunnelse på lovvalg',
         }}
         readOnly={readOnly}
       />
       <RadioGroupWrapper
         name={`vurderinger.${index}.lovvalg.lovvalgsEØSLand`}
         control={control}
-        label={'Hva er riktig lovvalgsland ved angitt tidspunkt?'}
+        label={'Hva er riktig lovvalgsland?'}
         rules={{
-          validate: (value) => (isNotEmpty(value) ? undefined : 'Du må velge riktig lovvalg ved angitt tidspunkt'),
+          validate: (value) => (isNotEmpty(value) ? undefined : 'Du må velge riktig lovvalgsland'),
         }}
         readOnly={readOnly}
         size={'small'}
@@ -122,18 +122,18 @@ export const LovvalgOgMedlemskapFormInput = ({
           <TextAreaWrapper
             name={`vurderinger.${index}.medlemskap.begrunnelse`}
             control={control}
-            label="Vurder brukerens medlemskap på angitt tidspunkt"
+            label="Vurder brukerens medlemskap"
             rules={{
-              required: 'Du må begrunne medlemskap på angitt tidspunkt',
+              required: 'Du må begrunne medlemskapsvurderingen',
             }}
             readOnly={readOnly}
           />
           <RadioGroupJaNei
             name={`vurderinger.${index}.medlemskap.varMedlemIFolketrygd`}
             control={control}
-            label="Var brukeren medlem av folketrygden ved angitt tidspunkt?"
+            label="Var brukeren medlem av folketrygden?"
             horisontal={true}
-            rules={{ required: 'Du må velg om brukeren var medlem av folketrygden på angitt tidspunkt' }}
+            rules={{ required: 'Du må velg om brukeren var medlem av folketrygden' }}
             readOnly={readOnly}
           />
         </>
