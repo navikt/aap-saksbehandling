@@ -78,6 +78,65 @@ describe('YrkesskadeGrunnlagBeregning', () => {
     const manglendeFeilmelding = screen.queryByText('Du må oppgi en begrunnelse for anslått arbeidsinntekt.');
     expect(manglendeFeilmelding).toBeNull();
   });
+
+  it('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
+    setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'IKKE_OPPFYLT_MELDEPLIKT' });
+
+    const grunnlagMedVurdering: YrkeskadeBeregningGrunnlag = {
+      harTilgangTilÅSaksbehandle: true,
+      skalVurderes: [
+        {
+          referanse: 'YRK',
+          skadeDato: '2025-06-27',
+          grunnbeløp: {
+            verdi: 128116,
+          },
+          kilde: 'INFOTRYGD',
+        },
+      ],
+      vurderinger: [
+        {
+          antattÅrligInntekt: {
+            verdi: 500000,
+          },
+          referanse: 'YRK',
+          begrunnelse: 'Dette er en begrunnelse',
+          vurdertAv: {
+            ident: 'KVALITETSSIKRER',
+            dato: '2025-08-26',
+          },
+        },
+      ],
+      historiskeVurderinger: [],
+    };
+
+    render(
+      <YrkesskadeGrunnlagBeregning
+        behandlingVersjon={1}
+        yrkeskadeBeregningGrunnlag={grunnlagMedVurdering}
+        readOnly={false}
+      />
+    );
+
+    const endreKnapp = screen.getByRole('button', { name: 'Endre' });
+    await user.click(endreKnapp);
+
+    const begrunnelseFelt = screen.getByRole('textbox', {
+      name: 'Begrunnelse for anslått årlig arbeidsinntekt for skadetidspunkt 27.06.2025',
+    });
+
+    await user.clear(begrunnelseFelt);
+    await user.type(begrunnelseFelt, 'Dette er en ny begrunnelse');
+    expect(begrunnelseFelt).toHaveValue('Dette er en ny begrunnelse');
+
+    const avbrytKnapp = screen.getByRole('button', { name: 'Avbryt' });
+    await user.click(avbrytKnapp);
+
+    const begrunnelseFeltEtterAvbryt = screen.getByRole('textbox', {
+      name: 'Begrunnelse for anslått årlig arbeidsinntekt for skadetidspunkt 27.06.2025',
+    });
+    expect(begrunnelseFeltEtterAvbryt).toHaveValue('Dette er en begrunnelse');
+  });
 });
 
 describe('mellomlagring', () => {

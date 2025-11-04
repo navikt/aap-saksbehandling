@@ -113,6 +113,29 @@ describe('Fastsett manuell inntekt vurdering', () => {
     const inntektFelt = screen.getByRole('spinbutton', { name: 'Oppgi inntekt' });
     expect(inntektFelt).toHaveValue(500000);
   });
+
+  it('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
+    setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'IKKE_OPPFYLT_MELDEPLIKT' });
+
+    render(<FastsettManuellInntekt behandlingsversjon={1} grunnlag={grunnlagMedVurdering} readOnly={false} />);
+
+    const endreKnapp = screen.getByRole('button', { name: 'Endre' });
+    await user.click(endreKnapp);
+
+    const begrunnelseFelt = screen.getByRole('textbox', {
+      name: 'Begrunn inntekt for siste beregningsår (0) Begrunn inntekt for siste beregningsår (0)',
+    });
+
+    await user.clear(begrunnelseFelt);
+    await user.type(begrunnelseFelt, 'Dette er en ny begrunnelse');
+    expect(begrunnelseFelt).toHaveValue('Dette er en ny begrunnelse');
+
+    const avbrytKnapp = screen.getByRole('button', { name: 'Avbryt' });
+    await user.click(avbrytKnapp);
+
+    const begrunnelseFeltEtterAvbryt = screen.getByRole('textbox', { name: '' });
+    expect(begrunnelseFeltEtterAvbryt).toHaveValue('Dette er en begrunnelse');
+  });
 });
 
 describe('Fastsett manuell inntekt readOnly', () => {

@@ -27,6 +27,30 @@ beforeEach(() => {
   setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'SAMORDNING_ANDRE_STATLIGE_YTELSER' });
 });
 
+it('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
+  setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'AVKLAR_SYKDOM' });
+
+  render(<SamordningAndreStatligeYtelser grunnlag={grunnlagMedVurdering} readOnly={false} behandlingVersjon={0} />);
+
+  const endreKnapp = screen.getByRole('button', { name: 'Endre' });
+  await user.click(endreKnapp);
+
+  const begrunnelseFelt = screen.getByRole('textbox', {
+    name: 'Vurder om brukeren har andre statlige ytelser som skal avregnes med AAP',
+  });
+  await user.clear(begrunnelseFelt);
+  await user.type(begrunnelseFelt, 'Dette er en ny begrunnelse');
+  expect(begrunnelseFelt).toHaveValue('Dette er en ny begrunnelse');
+
+  const avbrytKnapp = screen.getByRole('button', { name: 'Avbryt' });
+  await user.click(avbrytKnapp);
+
+  const begrunnelseFeltEtterAvbryt = screen.getByRole('textbox', {
+    name: 'Vurder om brukeren har andre statlige ytelser som skal avregnes med AAP',
+  });
+  expect(begrunnelseFeltEtterAvbryt).toHaveValue('Dette er min vurdering som er bekreftet');
+});
+
 describe('mellomlagring', () => {
   const mellomlagring: MellomlagretVurderingResponse = {
     mellomlagretVurdering: {

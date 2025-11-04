@@ -122,6 +122,7 @@ export const YrkesskadeGrunnlagBeregning = ({
       }
       visningModus={visningModus}
       visningActions={visningActions}
+      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
       {!!historiskeVurderinger?.length && (
         <TidligereVurderinger

@@ -132,6 +132,7 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
       readOnly={formReadOnly}
       visningModus={visningModus}
       visningActions={visningActions}
+      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
       {grunnlag?.vedtatteVurderinger && grunnlag?.vedtatteVurderinger?.length > 0 && (
         <TidligereVurderinger
