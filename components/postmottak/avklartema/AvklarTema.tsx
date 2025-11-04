@@ -103,20 +103,20 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
               </>
             )}
           </BodyShort>
-          <Modal.Footer>
-            <Button
-              type={'button'}
-              onClick={() => {
-                if (data?.redirectUrl) {
-                  window.location.replace(data.redirectUrl);
-                  setVisModal(false);
-                }
-              }}
-            >
-              Gå til Gosys
-            </Button>
-          </Modal.Footer>
         </Modal.Body>
+        <Modal.Footer>
+          <Button
+            type={'button'}
+            onClick={() => {
+              if (data?.redirectUrl) {
+                window.location.replace(data.redirectUrl);
+                setVisModal(false);
+              }
+            }}
+          >
+            Gå til Gosys
+          </Button>
+        </Modal.Footer>
       </Modal>
       <form onSubmit={onSubmit}>
         <VStack gap={'6'}>

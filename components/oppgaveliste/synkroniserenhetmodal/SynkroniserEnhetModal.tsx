@@ -31,17 +31,17 @@ export const SynkroniserEnhetModal = ({ visSynkroniserEnhetModal, setVisSynkroni
           Systemet har sjekket om oppgaven fortsatt hører til det registrerte kontoret. Hvis tilhørigheten er endret, er
           den flyttet til riktig kontor.
         </BodyShort>
-        <Modal.Footer>
-          <Button
-            type={'button'}
-            onClick={async () => {
-              setVisSynkroniserEnhetModal(false);
-            }}
-          >
-            Lukk
-          </Button>
-        </Modal.Footer>
       </Modal.Body>
+      <Modal.Footer>
+        <Button
+          type={'button'}
+          onClick={async () => {
+            setVisSynkroniserEnhetModal(false);
+          }}
+        >
+          Lukk
+        </Button>
+      </Modal.Footer>
     </Modal>
   );
 };

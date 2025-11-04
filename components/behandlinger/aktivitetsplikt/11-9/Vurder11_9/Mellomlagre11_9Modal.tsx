@@ -27,15 +27,15 @@ export const Mellomlagre11_9Modal = ({ valgtRad, lagre, avbryt }: Props) => {
     >
       <Modal.Body>
         <Mellomlagre11_9Skjema lagre={lagre} avbryt={avbryt} valgtRad={valgtRad} />
-        <Modal.Footer>
-          <Button type="submit" variant="primary" className="fit-content" form={'11-9-brudd'}>
-            Lagre brudd
-          </Button>
-          <Button type="button" variant="secondary" className="fit-content" onClick={avbryt}>
-            {valgtRad?.id === '' ? 'Forkast' : 'Avbryt endringer'}
-          </Button>
-        </Modal.Footer>
       </Modal.Body>
+      <Modal.Footer>
+        <Button type="submit" variant="primary" className="fit-content" form={'11-9-brudd'}>
+          Lagre brudd
+        </Button>
+        <Button type="button" variant="secondary" className="fit-content" onClick={avbryt}>
+          {valgtRad?.id === '' ? 'Forkast' : 'Avbryt endringer'}
+        </Button>
+      </Modal.Footer>
     </Modal>
   );
 };

@@ -38,31 +38,21 @@ export const FullførtOppgaveModal = ({ nesteBehandlingId, typeBehandling }: Pro
     >
       <Modal.Body>
         <BodyShort>{message}</BodyShort>
-        <Modal.Footer>
-          {nesteBehandlingId ? (
-            <>
-              <Button
-                type={'button'}
-                onClick={async () => {
-                  setIsModalOpen(false);
-                  router.push(`/postmottak/${nesteBehandlingId}`);
-                }}
-              >
-                Start digitalisering av dokumentet
-              </Button>
-              <Button
-                variant={'secondary'}
-                type={'button'}
-                onClick={async () => {
-                  setIsModalOpen(false);
-                  router.push('/oppgave');
-                }}
-              >
-                Gå til oppgavelisten
-              </Button>
-            </>
-          ) : (
+      </Modal.Body>
+      <Modal.Footer>
+        {nesteBehandlingId ? (
+          <>
             <Button
+              type={'button'}
+              onClick={async () => {
+                setIsModalOpen(false);
+                router.push(`/postmottak/${nesteBehandlingId}`);
+              }}
+            >
+              Start digitalisering av dokumentet
+            </Button>
+            <Button
+              variant={'secondary'}
               type={'button'}
               onClick={async () => {
                 setIsModalOpen(false);
@@ -71,9 +61,19 @@ export const FullførtOppgaveModal = ({ nesteBehandlingId, typeBehandling }: Pro
             >
               Gå til oppgavelisten
             </Button>
-          )}
-        </Modal.Footer>
-      </Modal.Body>
+          </>
+        ) : (
+          <Button
+            type={'button'}
+            onClick={async () => {
+              setIsModalOpen(false);
+              router.push('/oppgave');
+            }}
+          >
+            Gå til oppgavelisten
+          </Button>
+        )}
+      </Modal.Footer>
     </Modal>
   );
 };

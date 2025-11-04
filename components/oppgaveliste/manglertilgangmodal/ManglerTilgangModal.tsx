@@ -31,18 +31,18 @@ export const ManglerTilgangModal = ({ isModalOpen, setIsModalOpen, revalidateFun
           Saken har blitt flyttet til en annen enhet og er ikke lenger tilgjengelig for deg. Oppdater oppgavelisten for
           å se hvilke saker du kan behandle.
         </BodyShort>
-        <Modal.Footer>
-          <Button
-            type={'button'}
-            onClick={async () => {
-              setIsModalOpen(false);
-              revalidateFunction();
-            }}
-          >
-            Oppdater oppgavelisten
-          </Button>
-        </Modal.Footer>
       </Modal.Body>
+      <Modal.Footer>
+        <Button
+          type={'button'}
+          onClick={async () => {
+            setIsModalOpen(false);
+            revalidateFunction();
+          }}
+        >
+          Oppdater oppgavelisten
+        </Button>
+      </Modal.Footer>
     </Modal>
   );
 };

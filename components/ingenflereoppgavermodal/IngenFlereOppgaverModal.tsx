@@ -25,19 +25,19 @@ export const IngenFlereOppgaverModal = () => {
       }}
     >
       <Modal.Body>
-        <BodyShort spacing>Gå tilbake til oppgavelisten for å starte på neste oppgave.</BodyShort>
-        <Modal.Footer>
-          <Button
-            type={'button'}
-            onClick={async () => {
-              router.push('/oppgave');
-              setIsModalOpen(false);
-            }}
-          >
-            Gå til oppgavelisten
-          </Button>
-        </Modal.Footer>
+        <BodyShort>Gå tilbake til oppgavelisten for å starte på neste oppgave.</BodyShort>
       </Modal.Body>
+      <Modal.Footer>
+        <Button
+          type={'button'}
+          onClick={async () => {
+            router.push('/oppgave');
+            setIsModalOpen(false);
+          }}
+        >
+          Gå til oppgavelisten
+        </Button>
+      </Modal.Footer>
     </Modal>
   );
 };

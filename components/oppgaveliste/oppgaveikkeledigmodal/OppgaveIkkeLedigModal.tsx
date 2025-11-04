@@ -9,17 +9,22 @@ interface Props {
   revaliderOppgaver: () => void;
 }
 
-export const OppgaveIkkeLedigModal = ({ visOppgaveIkkeLedigModal, setVisOppgaveIkkeLedigModal, saksbehandlerNavn, revaliderOppgaver }: Props) => {
+export const OppgaveIkkeLedigModal = ({
+  visOppgaveIkkeLedigModal,
+  setVisOppgaveIkkeLedigModal,
+  saksbehandlerNavn,
+  revaliderOppgaver,
+}: Props) => {
   return (
     <Modal
       open={visOppgaveIkkeLedigModal}
       header={{
         heading: 'Oppgaven er plukket av noen andre',
-        icon: <PadlockLockedFillIcon  />,
+        icon: <PadlockLockedFillIcon />,
       }}
       onClose={() => {
         setVisOppgaveIkkeLedigModal(false);
-        revaliderOppgaver()
+        revaliderOppgaver();
       }}
       onBeforeClose={() => {
         setVisOppgaveIkkeLedigModal(false);
@@ -32,17 +37,17 @@ export const OppgaveIkkeLedigModal = ({ visOppgaveIkkeLedigModal, setVisOppgaveI
         <BodyShort>
           {`Oppgaven er hos ${saksbehandlerNavn}. Oppdater oppgavelisten for å plukke en annen oppgave.`}
         </BodyShort>
-        <Modal.Footer>
-          <Button
-            type={'button'}
-            onClick={async () => {
-              setVisOppgaveIkkeLedigModal(false);
-            }}
-          >
-            Oppdater oppgavelisten
-          </Button>
-        </Modal.Footer>
       </Modal.Body>
+      <Modal.Footer>
+        <Button
+          type={'button'}
+          onClick={async () => {
+            setVisOppgaveIkkeLedigModal(false);
+          }}
+        >
+          Oppdater oppgavelisten
+        </Button>
+      </Modal.Footer>
     </Modal>
   );
 };
