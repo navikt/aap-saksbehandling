@@ -88,11 +88,25 @@ export function mapPeriodiserteVurderingerErrorList<T extends FieldValues>(
 ): ErrorList {
   return formstateErrors.vurderinger && Array.isArray(formstateErrors.vurderinger)
     ? formstateErrors.vurderinger.reduce((acc, errVurdering, index) => {
-        const errors = Object.entries(errVurdering || {})
+        const nestedErrors = Object.values(errVurdering)
           // @ts-ignore
-          .map(([key, errField]) => ({ ref: `#vurderinger.${index}.${key}`, message: errField?.message }))
+          .filter((val) => !val?.ref && !val?.message)
+          .map((nestedErrorParent) =>
+            // @ts-ignore
+            Object.values(nestedErrorParent).map((errField) => ({
+              // @ts-ignore
+              ref: errField?.ref?.name,
+              // @ts-ignore
+              message: errField?.message,
+            }))
+          )
+          .flat()
           .filter((el) => el.message);
-        return [...acc, ...errors];
+        const errors = Object.values(errVurdering || {})
+          // @ts-ignore
+          .map((errField) => ({ ref: errField?.ref?.name, message: errField?.message }))
+          .filter((el) => el.message);
+        return [...acc, ...errors, ...nestedErrors];
       }, [])
     : [];
 }
