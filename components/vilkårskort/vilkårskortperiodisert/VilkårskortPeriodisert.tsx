@@ -7,12 +7,9 @@ import { Button, Detail, ErrorSummary, Heading, HGrid, HStack, VStack } from '@n
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { formaterDatoForFrontend, formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { PlusIcon } from '@navikt/aksel-icons';
-import {
-  mapPeriodiserteVurderingerErrorList,
-  VurderingerErrors,
-} from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
 import { OppholdskravVurderingForm } from 'components/behandlinger/oppholdskrav/types';
 import { FieldValues } from 'react-hook-form';
+import { mapPeriodiserteVurderingerErrorList, VurderingerErrors } from 'lib/utils/formerrors';
 
 export interface VilkårsKortMedFormOgMellomlagringProps<T extends FieldValues> extends VilkårsKortMedFormProps {
   onDeleteMellomlagringClick: () => void;
