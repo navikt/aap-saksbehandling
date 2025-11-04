@@ -116,7 +116,7 @@ export const LovvalgOgMedlemskapPeriodisert = ({
       vilkårTilhørerNavKontor={false}
       mellomlagretVurdering={mellomlagretVurdering}
       onLagreMellomLagringClick={() => lagreMellomlagring({ ...form.watch(), overstyring })}
-      onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset())}
+      onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}
       readOnly={readOnly}
       visningModus={visningModus}
       visningActions={visningActions}
