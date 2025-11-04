@@ -122,6 +122,7 @@ export const LovvalgOgMedlemskapPeriodisert = ({
       visningActions={visningActions}
       onLeggTilVurdering={onAddPeriode}
       errors={form.formState.errors}
+      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
       {vedtatteVurderinger.map((vurdering) => (
         <TidligereVurderingExpandableCard
