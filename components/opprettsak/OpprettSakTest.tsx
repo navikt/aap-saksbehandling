@@ -86,7 +86,7 @@ const OpprettTestSakSkjema = () => {
     } catch {
       setShowError(true);
     }
-    await mutate('api/sak/alle');
+    await mutate('api/sak/siste/20');
   };
 
   return (

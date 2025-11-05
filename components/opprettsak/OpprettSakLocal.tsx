@@ -153,13 +153,13 @@ export const OpprettSakLocal = () => {
   const opprettOgFullførSak = async () => {
     const innhold = mapInnhold(form.getValues());
     await opprettOgFullfoer(innhold);
-    await mutate('api/sak/alle');
+    await mutate('api/sak/siste/20');
   };
 
   const opprettSakAlene = async () => {
     const innhold = mapInnhold(form.getValues());
     await opprettSak(innhold);
-    await mutate('api/sak/alle');
+    await mutate('api/sak/siste/20');
   };
 
   return (
@@ -180,20 +180,10 @@ export const OpprettSakLocal = () => {
         <Sykepenger form={form} />
       </div>
       <div style={{ display: 'flex', gap: '1rem' }}>
-        <Button
-          type="button"
-          className={'fit-content'}
-          loading={isLoadingSak}
-          onClick={opprettSakAlene}
-        >
+        <Button type="button" className={'fit-content'} loading={isLoadingSak} onClick={opprettSakAlene}>
           Opprett testsak
         </Button>
-        <Button
-          type="button"
-          className={'fit-content'}
-          loading={isLoadingFullfoer}
-          onClick={opprettOgFullførSak}
-        >
+        <Button type="button" className={'fit-content'} loading={isLoadingFullfoer} onClick={opprettOgFullførSak}>
           Opprett og fullfør testsak
         </Button>
       </div>

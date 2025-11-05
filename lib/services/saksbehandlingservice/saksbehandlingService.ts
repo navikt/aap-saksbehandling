@@ -144,8 +144,8 @@ export const finnSakerForIdent = async (ident: string) => {
   return await apiFetch<SaksInfo[]>(url, saksbehandlingApiScope, 'POST', { ident });
 };
 
-export const hentAlleSaker = async () => {
-  const url = `${saksbehandlingApiBaseUrl}/api/sak/alle`;
+export const hentSiste = async (antall: number) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/sak/siste/${antall}`;
   return await apiFetch<SaksInfo[]>(url, saksbehandlingApiScope, 'GET');
 };
 
