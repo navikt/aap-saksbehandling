@@ -43,13 +43,11 @@ export const Førstegangsbehandling = ({ form, formFields, skalVurdereYrkesskade
               <FormField form={form} formField={formFields.erSkadeSykdomEllerLyteVesentligdel} horizontalRadio />
 
               {form.watch('erSkadeSykdomEllerLyteVesentligdel') === JaEllerNei.Ja && (
-                <>
-                  <FormField
-                    form={form}
-                    formField={formFields.erNedsettelseIArbeidsevneAvEnVissVarighet}
-                    horizontalRadio
-                  />
-                </>
+                <FormField
+                  form={form}
+                  formField={formFields.erNedsettelseIArbeidsevneAvEnVissVarighet}
+                  horizontalRadio
+                />
               )}
             </>
           )}
