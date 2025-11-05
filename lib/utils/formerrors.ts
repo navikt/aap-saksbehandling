@@ -23,7 +23,7 @@ export function mapPeriodiserteVurderingerErrorList<T extends FieldValues>(
             // @ts-ignore
             Object.values(nestedErrorParent).map((errField) => ({
               // @ts-ignore
-              ref: errField?.ref?.name,
+              ref: `#${errField?.ref?.name}`,
               // @ts-ignore
               message: errField?.message,
               index,
@@ -33,7 +33,7 @@ export function mapPeriodiserteVurderingerErrorList<T extends FieldValues>(
           .filter((el) => el.message);
         const errors = Object.values(errVurdering || {})
           // @ts-ignore
-          .map((errField) => ({ ref: errField?.ref?.name, message: errField?.message }))
+          .map((errField) => ({ ref: `#${errField?.ref?.name}`, message: errField?.message }))
           .filter((el) => el.message);
         return [...acc, ...errors, ...nestedErrors];
       }, [])

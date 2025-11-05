@@ -3,11 +3,12 @@ import { MellomlagretVurdering, VurdertAvAnsatt } from 'lib/types/types';
 import { VisningActions, VisningModus } from 'hooks/saksbehandling/visning/VisningHook';
 import styles from './VilkårskortPeriodisert.module.css';
 import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
-import { Button, Detail, ErrorSummary, Heading, HGrid, HStack, VStack } from '@navikt/ds-react';
+import { Button, Detail, Heading, HGrid, HStack, VStack } from '@navikt/ds-react';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { formaterDatoForFrontend, formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { PlusIcon } from '@navikt/aksel-icons';
 import { ErrorList } from 'lib/utils/formerrors';
+import { FormErrorSummary } from 'components/formerrorsummary/FormErrorSummary';
 
 export interface VilkårsKortMedFormOgMellomlagringProps extends VilkårsKortMedFormProps {
   onDeleteMellomlagringClick: () => void;
@@ -73,15 +74,7 @@ export const VilkårskortPeriodisert = ({
               status={status}
             />
 
-            {errorList.length > 0 && (
-              <ErrorSummary size={'small'}>
-                {errorList.map((error) => (
-                  <ErrorSummary.Item key={error.ref} href={error.ref}>
-                    {error?.message}
-                  </ErrorSummary.Item>
-                ))}
-              </ErrorSummary>
-            )}
+            <FormErrorSummary errorList={errorList} />
 
             <HStack justify="space-between" align="end">
               {/* Venstre kolonne: knapper + utkast */}
