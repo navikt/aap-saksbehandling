@@ -113,7 +113,7 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
   };
 
   const behandlersøk = async (input: string) => {
-    if (input.length <= 2) {
+    if (input.length <= 2 || input.length > 40) {
       return [];
     }
     const response = await clientSøkPåBehandler(input, saksnummer);
