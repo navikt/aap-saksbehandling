@@ -13,6 +13,21 @@ fetchMock.enableMocks();
 const user = userEvent.setup();
 
 const grunnlagUtenVurdering: ArbeidsevneGrunnlag = { harTilgangTilÅSaksbehandle: true };
+const grunnlagMedVurdering: ArbeidsevneGrunnlag = {
+  harTilgangTilÅSaksbehandle: true,
+  vurderinger: [
+    {
+      arbeidsevne: 20,
+      begrunnelse: 'Dette er min vurdering som er bekreftet',
+      fraDato: '2025-08-21',
+      vurderingsTidspunkt: '2025-08-21',
+      vurdertAv: {
+        ident: 'Saksbehandler',
+        dato: '2025-08-21',
+      },
+    },
+  ],
+};
 
 beforeEach(() => {
   setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'FASTSETT_ARBEIDSEVNE' });
@@ -55,6 +70,26 @@ describe('FastsettArbeidsevne', () => {
       };
       render(<FastsettArbeidsevne readOnly={true} behandlingVersjon={0} grunnlag={grunnlag} />);
       expect(screen.getByText('Vilkårsvurdering')).toBeVisible();
+    });
+
+    it('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
+      setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'SYKDOMSVURDERING_BREV' });
+
+      render(<FastsettArbeidsevne grunnlag={grunnlagMedVurdering} readOnly={false} behandlingVersjon={0} />);
+
+      const endreKnapp = screen.getByRole('button', { name: 'Endre' });
+      await user.click(endreKnapp);
+
+      const begrunnelseFelt = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
+      await user.clear(begrunnelseFelt);
+      await user.type(begrunnelseFelt, 'Dette er en ny begrunnelse');
+      expect(begrunnelseFelt).toHaveValue('Dette er en ny begrunnelse');
+
+      const avbrytKnapp = screen.getByRole('button', { name: 'Avbryt' });
+      await user.click(avbrytKnapp);
+
+      const begrunnelseFeltEtterAvbryt = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
+      expect(begrunnelseFeltEtterAvbryt).toHaveValue('Dette er min vurdering som er bekreftet');
     });
   });
 

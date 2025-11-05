@@ -18,7 +18,7 @@ export interface VilkårsKortMedFormOgMellomlagringProps extends VilkårsKortMed
   visningModus: VisningModus;
   visningActions: VisningActions;
   extraActions?: ReactNode;
-  formReset?: () => void;
+  formReset: () => void;
 }
 
 export const VilkårskortMedFormOgMellomlagringNyVisning = ({
