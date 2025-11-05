@@ -275,7 +275,7 @@ export const Sykdomsvurdering = ({
       return false;
     }
     const søknadsdato = startOfDay(new Date(sak.periode.fom));
-    return søknadsdato.getTime() === startOfDay(gjelderFra).getTime();
+    return søknadsdato.getTime() >= startOfDay(gjelderFra).getTime();
   }, [behandlingErRevurdering, sak, vurderingenGjelderFra]);
 
   const historiskeVurderinger = grunnlag.historikkSykdomsvurderinger;
