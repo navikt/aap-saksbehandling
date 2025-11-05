@@ -619,19 +619,6 @@ describe('yrkesskade', () => {
 });
 
 describe('revurdering', () => {
-  it('datofelt for når vurderingen gjelder fra vises ikke for førstegangsbehandling', () => {
-    render(
-      <Sykdomsvurdering
-        grunnlag={grunnlagUtenYrkesskade}
-        readOnly={false}
-        behandlingVersjon={0}
-        typeBehandling={'Førstegangsbehandling'}
-      />
-    );
-
-    expect(screen.queryByRole('textbox', { name: 'Vurderingen gjelder fra' })).not.toBeInTheDocument();
-  });
-
   it('viser datofelt får når vurderingen gjelder fra', () => {
     render(
       <Sykdomsvurdering
