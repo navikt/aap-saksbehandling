@@ -6,21 +6,43 @@ describe('skade eller lyte', () => {
   it('hvis ingen skade eller lyte', () => {
     const vurdering = mapTilVurdering(
       {
-        begrunnelse: 'mangler',
+        begrunnelse: 'test',
         vurderingenGjelderFra: '01.01.2025',
-        harSkadeSykdomEllerLyte: JaEllerNei.Nei,
+        harSkadeSykdomEllerLyte: JaEllerNei.Nei, // Alt under harSkadeSykdomEllerLyte skal nullstilles
+        kodeverk: 'ICD10',
+        hoveddiagnose: { value: 'A01', label: 'Diagnose A01' },
+        bidiagnose: [
+          { value: 'B01', label: 'Diagnose B01' },
+          { value: 'B02', label: 'Diagnose B02' },
+        ],
+        erArbeidsevnenNedsatt: JaEllerNei.Ja,
+        erNedsettelseIArbeidsevneMerEnnHalvparten: JaEllerNei.Ja,
+        erSkadeSykdomEllerLyteVesentligdel: JaEllerNei.Ja,
+        erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense: JaEllerNei.Ja,
+        erNedsettelseIArbeidsevneAvEnVissVarighet: JaEllerNei.Ja,
+        yrkesskadeBegrunnelse: 'test',
       },
-      false,
-      false,
-      false,
-      false,
-      false
+      true,
+      true,
+      true,
+      true,
+      true
     );
+
+    expect(vurdering.begrunnelse).toEqual('test');
+    expect(vurdering.vurderingenGjelderFra).toEqual('2025-01-01');
+    expect(vurdering.harSkadeSykdomEllerLyte).toBe(false); // Alt under harSkadeSykdomEllerLyte skal nullstilles
 
     expect(vurdering.kodeverk).toBeUndefined();
     expect(vurdering.hoveddiagnose).toBeUndefined();
     expect(vurdering.bidiagnoser).toBeUndefined();
     expect(vurdering.erArbeidsevnenNedsatt).toBeUndefined();
+
+    expect(vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten).toBeUndefined();
+    expect(vurdering.erSkadeSykdomEllerLyteVesentligdel).toBeUndefined();
+    expect(vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense).toBeUndefined();
+    expect(vurdering.erNedsettelseIArbeidsevneAvEnVissVarighet).toBeUndefined();
+    expect(vurdering.yrkesskadeBegrunnelse).toBeUndefined();
   });
 
   it('hvis skade eller lyte med diagnose', () => {
@@ -35,19 +57,34 @@ describe('skade eller lyte', () => {
           { value: 'B01', label: 'Diagnose B01' },
           { value: 'B02', label: 'Diagnose B02' },
         ],
-        erArbeidsevnenNedsatt: JaEllerNei.Nei,
+        erArbeidsevnenNedsatt: JaEllerNei.Nei, // alt under erArbeidsevnenNedsatt skal nullstilles
+        erNedsettelseIArbeidsevneMerEnnHalvparten: JaEllerNei.Ja,
+        erSkadeSykdomEllerLyteVesentligdel: JaEllerNei.Ja,
+        erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense: JaEllerNei.Ja,
+        erNedsettelseIArbeidsevneAvEnVissVarighet: JaEllerNei.Ja,
+        yrkesskadeBegrunnelse: 'test',
       },
-      false,
-      false,
-      false,
-      false,
-      false
+      true,
+      true,
+      true,
+      true,
+      true
     );
+
+    expect(vurdering.begrunnelse).toEqual('test');
+    expect(vurdering.vurderingenGjelderFra).toEqual('2025-01-01');
+    expect(vurdering.harSkadeSykdomEllerLyte).toBe(true);
 
     expect(vurdering.kodeverk).toBe('ICD10');
     expect(vurdering.hoveddiagnose).toBe('A01');
     expect(vurdering.bidiagnoser).toEqual(['B01', 'B02']);
-    expect(vurdering.erArbeidsevnenNedsatt).toBe(false);
+    expect(vurdering.erArbeidsevnenNedsatt).toBe(false); // alt under erArbeidsevnenNedsatt skal nullstilles
+
+    expect(vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten).toBeUndefined();
+    expect(vurdering.erSkadeSykdomEllerLyteVesentligdel).toBeUndefined();
+    expect(vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense).toBeUndefined();
+    expect(vurdering.erNedsettelseIArbeidsevneAvEnVissVarighet).toBeUndefined();
+    expect(vurdering.yrkesskadeBegrunnelse).toBeUndefined();
   });
 });
 
@@ -58,7 +95,12 @@ describe('førstegangsbehandling', () => {
         begrunnelse: 'test',
         vurderingenGjelderFra: '01.01.2025',
         harSkadeSykdomEllerLyte: JaEllerNei.Ja,
-        erArbeidsevnenNedsatt: JaEllerNei.Nei,
+        erArbeidsevnenNedsatt: JaEllerNei.Nei, // alt under erArbeidsevnenNedsatt skal nullstilles
+        erNedsettelseIArbeidsevneMerEnnHalvparten: JaEllerNei.Ja,
+        erSkadeSykdomEllerLyteVesentligdel: JaEllerNei.Ja,
+        erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense: JaEllerNei.Ja,
+        erNedsettelseIArbeidsevneAvEnVissVarighet: JaEllerNei.Ja,
+        yrkesskadeBegrunnelse: 'test',
       },
       false,
       false,
@@ -70,6 +112,7 @@ describe('førstegangsbehandling', () => {
     expect(vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten).toBeUndefined();
     expect(vurdering.erSkadeSykdomEllerLyteVesentligdel).toBeUndefined();
     expect(vurdering.erNedsettelseIArbeidsevneAvEnVissVarighet).toBeUndefined();
+    expect(vurdering.yrkesskadeBegrunnelse).toBeUndefined();
   });
 
   it('skal mappe riktig når arbeidsevnen er nedsatt mer enn halvparten', () => {
@@ -81,7 +124,9 @@ describe('førstegangsbehandling', () => {
         erArbeidsevnenNedsatt: JaEllerNei.Ja,
         erNedsettelseIArbeidsevneMerEnnHalvparten: JaEllerNei.Ja,
         erSkadeSykdomEllerLyteVesentligdel: JaEllerNei.Ja,
+        erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense: JaEllerNei.Ja,
         erNedsettelseIArbeidsevneAvEnVissVarighet: JaEllerNei.Ja,
+        yrkesskadeBegrunnelse: 'test',
       },
       false,
       false,
@@ -93,6 +138,7 @@ describe('førstegangsbehandling', () => {
     expect(vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten).toBe(true);
     expect(vurdering.erSkadeSykdomEllerLyteVesentligdel).toBe(true);
     expect(vurdering.erNedsettelseIArbeidsevneAvEnVissVarighet).toBe(true);
+    expect(vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense).toBeUndefined();
     expect(vurdering.yrkesskadeBegrunnelse).toBeUndefined();
   });
 
@@ -104,6 +150,9 @@ describe('førstegangsbehandling', () => {
         harSkadeSykdomEllerLyte: JaEllerNei.Ja,
         erArbeidsevnenNedsatt: JaEllerNei.Ja,
         erNedsettelseIArbeidsevneMerEnnHalvparten: JaEllerNei.Nei,
+        erSkadeSykdomEllerLyteVesentligdel: JaEllerNei.Ja,
+        erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense: JaEllerNei.Ja,
+        erNedsettelseIArbeidsevneAvEnVissVarighet: JaEllerNei.Ja,
         yrkesskadeBegrunnelse: 'ingen yrkesskade',
       },
       false,
@@ -114,8 +163,9 @@ describe('førstegangsbehandling', () => {
     );
 
     expect(vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten).toBe(false);
-    expect(vurdering.yrkesskadeBegrunnelse).toBe('ingen yrkesskade');
     expect(vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense).toBeUndefined();
+    expect(vurdering.erNedsettelseIArbeidsevneAvEnVissVarighet).toBeUndefined();
+    expect(vurdering.yrkesskadeBegrunnelse).toBe('ingen yrkesskade');
   });
 
   it('skal mappe riktig med yrkesskade over yrkesskadegrense', () => {
@@ -128,6 +178,7 @@ describe('førstegangsbehandling', () => {
         erNedsettelseIArbeidsevneMerEnnHalvparten: JaEllerNei.Nei,
         erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense: JaEllerNei.Ja,
         erSkadeSykdomEllerLyteVesentligdel: JaEllerNei.Nei,
+        yrkesskadeBegrunnelse: 'begrunnelse yrkesskade',
       },
       true,
       false,
@@ -139,7 +190,7 @@ describe('førstegangsbehandling', () => {
     expect(vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten).toBe(false);
     expect(vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense).toBe(true);
     expect(vurdering.erSkadeSykdomEllerLyteVesentligdel).toBe(false);
-    expect(vurdering.yrkesskadeBegrunnelse).toBeUndefined();
+    expect(vurdering.yrkesskadeBegrunnelse).toBe('begrunnelse yrkesskade');
   });
 });
 
@@ -153,6 +204,10 @@ describe('revurdering', () => {
         erArbeidsevnenNedsatt: JaEllerNei.Ja,
         erNedsettelseIArbeidsevneMerEnnFørtiProsent: JaEllerNei.Ja,
         erSkadeSykdomEllerLyteVesentligdel: JaEllerNei.Nei,
+        erNedsettelseIArbeidsevneMerEnnHalvparten: JaEllerNei.Nei,
+        erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense: JaEllerNei.Ja,
+        erNedsettelseIArbeidsevneAvEnVissVarighet: JaEllerNei.Ja,
+        yrkesskadeBegrunnelse: 'ingen yrkesskade',
       },
       false,
       false,
@@ -164,6 +219,7 @@ describe('revurdering', () => {
     expect(vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten).toBe(true);
     expect(vurdering.erSkadeSykdomEllerLyteVesentligdel).toBe(false);
     expect(vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense).toBeUndefined();
+    expect(vurdering.yrkesskadeBegrunnelse).toBeUndefined();
   });
 
   it('skal mappe riktig for revurdering med årsakssammenheng yrkesskade', () => {
@@ -174,6 +230,10 @@ describe('revurdering', () => {
         harSkadeSykdomEllerLyte: JaEllerNei.Ja,
         erArbeidsevnenNedsatt: JaEllerNei.Ja,
         erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense: JaEllerNei.Ja,
+        erNedsettelseIArbeidsevneMerEnnHalvparten: JaEllerNei.Nei,
+        erSkadeSykdomEllerLyteVesentligdel: JaEllerNei.Ja,
+        erNedsettelseIArbeidsevneAvEnVissVarighet: JaEllerNei.Ja,
+        yrkesskadeBegrunnelse: 'ingen yrkesskade',
       },
       false,
       true,
@@ -184,6 +244,10 @@ describe('revurdering', () => {
 
     expect(vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten).toBeUndefined();
     expect(vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense).toBe(true);
+    expect(vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten).toBeUndefined();
+    expect(vurdering.erSkadeSykdomEllerLyteVesentligdel).toBeUndefined();
+    expect(vurdering.erNedsettelseIArbeidsevneAvEnVissVarighet).toBeUndefined();
+    expect(vurdering.yrkesskadeBegrunnelse).toBeUndefined();
   });
 
   it('skal ikke mappe nedsatt arbeidsevne hvis arbeidsevnen ikke er nedsatt i revurdering', () => {
@@ -203,6 +267,7 @@ describe('revurdering', () => {
 
     expect(vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten).toBeUndefined();
     expect(vurdering.erSkadeSykdomEllerLyteVesentligdel).toBeUndefined();
+    expect(vurdering.yrkesskadeBegrunnelse).toBeUndefined();
   });
 });
 
@@ -228,5 +293,6 @@ describe('revurdering av førstegangsbehandling', () => {
     expect(vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten).toBe(true);
     expect(vurdering.erSkadeSykdomEllerLyteVesentligdel).toBe(true);
     expect(vurdering.erNedsettelseIArbeidsevneAvEnVissVarighet).toBe(false);
+    expect(vurdering.yrkesskadeBegrunnelse).toBeUndefined();
   });
 });
