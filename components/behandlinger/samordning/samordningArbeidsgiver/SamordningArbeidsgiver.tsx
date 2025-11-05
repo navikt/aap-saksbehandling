@@ -1,8 +1,8 @@
 'use client';
 
-import { FormField } from 'components/form/FormField';
+import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
-import { HStack, Label, VStack } from '@navikt/ds-react';
+import { BodyLong, BodyShort, HStack, Label, VStack } from '@navikt/ds-react';
 import { FormEvent } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
@@ -15,6 +15,8 @@ import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date'
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
+import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
 
 interface Props {
   grunnlag: SamordningArbeidsgiverGrunnlag;
@@ -98,6 +100,12 @@ export const SamordningArbeidsgiver = ({
     )(event);
   };
 
+  const skalViseBekreftKnapp = !formReadOnly;
+
+  const historiskeVurderinger = grunnlag.historiskeVurderinger;
+
+  console.log(historiskeVurderinger);
+
   return (
     <VilkårskortMedFormOgMellomlagringNyVisning
       heading="§ 11-24 Reduksjon av AAP på grunn av ytelser fra arbeidsgiver"
@@ -121,6 +129,25 @@ export const SamordningArbeidsgiver = ({
     >
       {
         <VStack gap={'6'}>
+          {!!historiskeVurderinger?.length && (
+            <TidligereVurderinger
+              data={historiskeVurderinger}
+              buildFelter={byggFelter}
+              getErGjeldende={(v) => deepEqual(v, historiskeVurderinger[historiskeVurderinger.length - 1])}
+              getFomDato={(v) => v.vurderingenGjelderFra ?? v.vurdertAv.dato}
+              getVurdertAvIdent={(v) => v.vurdertAv.ident}
+              getVurdertDato={(v) => v.vurdertAv.dato}
+            />
+          )}
+
+          <BodyLong>
+            <BodyShort size={'small'} weight={'semibold'}>
+              Relevant informasjon fra søknad:
+            </BodyShort>
+            <BodyShort textColor={'subtle'} size={'small'} weight={'semibold'}>
+              Har du fått eller skal du få ekstra utbetalinger fra arbeidsgiver? Ja
+            </BodyShort>
+          </BodyLong>
           <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
           <Label size={'small'}>Legg til start- og sluttdato for reduksjon som følge av ytelse fra arbeidsgiver</Label>
           <HStack gap={'6'}>
@@ -156,6 +183,13 @@ export const SamordningArbeidsgiver = ({
     </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };
+
+const byggFelter = (vurdering: SamordningArbeidsgiverGrunnlag['vurdering']): ValuePair[] => [
+  {
+    label: 'Vurdering',
+    value: vurdering?.begrunnelse || '-',
+  },
+];
 
 function mapVurderingToDraftFormFields(vurdering: SamordningArbeidsgiverGrunnlag['vurdering']): DraftFormFields {
   return {
