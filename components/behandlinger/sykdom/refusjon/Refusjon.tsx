@@ -9,13 +9,12 @@ import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date'
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { FormEvent } from 'react';
 import { useSak } from 'hooks/SakHook';
-import { BodyLong, List, Radio } from '@navikt/ds-react';
+import { BodyLong, Radio } from '@navikt/ds-react';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { Sak } from 'context/saksbehandling/SakContext';
 
-import styles from './Refusjon.module.css';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { RefusjonsKrav } from 'components/behandlinger/sykdom/refusjon/RefusjonsKrav';
 import { ValuePair } from 'components/form/FormField';
@@ -122,15 +121,11 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
     [AndreUtbetalingerYtelser.INGEN_AV_DISSE]: 'Ingen av Disse',
   };
 
-  const formattedList = () => {
-    return (
-      <List as="ul" size={'small'}>
-        {grunnlag.andreUtbetalingerYtelser?.map((text, index) => (
-          <List.Item key={index}>{AndreUtbetalingerYtelserLabels[text]}</List.Item>
-        ))}
-      </List>
-    );
-  };
+  const formattedList =
+    grunnlag.andreUtbetalingerYtelser
+      ?.filter((str): str is AndreUtbetalingerYtelser => str in AndreUtbetalingerYtelserLabels)
+      .map((str) => AndreUtbetalingerYtelserLabels[str])
+      .join(', ') || 'Ingen utbetalinger krysset av';
 
   const historiskeVurderinger = grunnlag.historiskeVurderinger;
 
@@ -156,12 +151,13 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
       {!!historiskeVurderinger?.length && (
         <TidligereVurderinger data={historiskeVurderinger} buildFelter={byggFelter} />
       )}
-      <BodyLong weight={'semibold'} size={'small'}>
-        Relevant informasjon fra søknad:
-      </BodyLong>
-      <BodyLong size={'small'} textColor={'subtle'}>
-        Kryss av for utbetalinger du får, eller nylig har søkt om:
-        {formattedList()}
+      <BodyLong spacing={true}>
+        <BodyLong weight={'semibold'} size={'small'}>
+          Relevant informasjon fra søknad:
+        </BodyLong>
+        <BodyLong size={'small'} textColor={'subtle'}>
+          Kryss av for utbetalinger du får, eller nylig har søkt om: {formattedList}
+        </BodyLong>
       </BodyLong>
 
       <RadioGroupWrapper
