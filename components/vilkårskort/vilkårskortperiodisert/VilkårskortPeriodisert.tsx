@@ -7,11 +7,9 @@ import { Button, Detail, ErrorSummary, Heading, HGrid, HStack, VStack } from '@n
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { formaterDatoForFrontend, formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { PlusIcon } from '@navikt/aksel-icons';
-import { OppholdskravVurderingForm } from 'components/behandlinger/oppholdskrav/types';
-import { FieldValues } from 'react-hook-form';
-import { mapPeriodiserteVurderingerErrorList, VurderingerErrors } from 'lib/utils/formerrors';
+import { ErrorList } from 'lib/utils/formerrors';
 
-export interface VilkårsKortMedFormOgMellomlagringProps<T extends FieldValues> extends VilkårsKortMedFormProps {
+export interface VilkårsKortMedFormOgMellomlagringProps extends VilkårsKortMedFormProps {
   onDeleteMellomlagringClick: () => void;
   onLagreMellomLagringClick: () => void;
   mellomlagretVurdering: MellomlagretVurdering | undefined;
@@ -19,7 +17,7 @@ export interface VilkårsKortMedFormOgMellomlagringProps<T extends FieldValues> 
   visningActions: VisningActions;
   onLeggTilVurdering: () => void;
   formReset?: () => void;
-  errors: VurderingerErrors<T>;
+  errorList: ErrorList;
 }
 
 export const VilkårskortPeriodisert = ({
@@ -42,15 +40,13 @@ export const VilkårskortPeriodisert = ({
   visningActions,
   onLeggTilVurdering,
   formReset,
-  errors,
-}: VilkårsKortMedFormOgMellomlagringProps<any>) => {
+  errorList,
+}: VilkårsKortMedFormOgMellomlagringProps) => {
   const classNameBasertPåEnhet = vilkårTilhørerNavKontor ? styles.vilkårsKortNAV : styles.vilkårsKortNAY;
   const { flyt } = useRequiredFlyt();
   const erAktivtSteg = flyt.aktivtSteg === steg || visningModus === 'AKTIV_MED_AVBRYT';
 
   const readOnly = visningModus === 'LÅST_MED_ENDRE' || visningModus === 'LÅST_UTEN_ENDRE';
-
-  const errorList = mapPeriodiserteVurderingerErrorList<OppholdskravVurderingForm>(errors);
 
   return (
     <VStack

@@ -8,7 +8,7 @@ interface ErrorListElement {
   ref: string;
   message: string;
 }
-type ErrorList = ErrorListElement[];
+export type ErrorList = ErrorListElement[];
 
 export function mapPeriodiserteVurderingerErrorList<T extends FieldValues>(
   formstateErrors: VurderingerErrors<T>

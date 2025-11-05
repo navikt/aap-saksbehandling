@@ -24,6 +24,7 @@ import { TidligereVurderingExpandableCard } from 'components/periodisering/tidli
 import { NyVurderingExpandableCard } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
+import { mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
 
 interface Props {
   behandlingVersjon: number;
@@ -112,6 +113,7 @@ export const LovvalgOgMedlemskapPeriodisert = ({
   const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const foersteNyePeriode = vurderingerFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
+  const errorList = mapPeriodiserteVurderingerErrorList<LovOgMedlemskapVurderingForm>(form.formState.errors);
 
   return (
     <VilkårskortPeriodisert
@@ -130,7 +132,7 @@ export const LovvalgOgMedlemskapPeriodisert = ({
       visningModus={visningModus}
       visningActions={visningActions}
       onLeggTilVurdering={onAddPeriode}
-      errors={form.formState.errors}
+      errorList={errorList}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
       {vedtatteVurderinger.map((vurdering) => (

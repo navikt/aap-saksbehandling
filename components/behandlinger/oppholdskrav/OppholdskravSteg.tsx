@@ -21,6 +21,8 @@ import { TidligereVurderingExpandableCard } from 'components/periodisering/tidli
 import { NyVurderingExpandableCard } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
+import { mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
+import { LovOgMedlemskapVurderingForm } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/types';
 
 type Props = {
   grunnlag: OppholdskravGrunnlagResponse | undefined;
@@ -107,6 +109,7 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
   }
 
   const foersteNyePeriode = vurderingerFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
+  const errorList = mapPeriodiserteVurderingerErrorList<LovOgMedlemskapVurderingForm>(form.formState.errors);
 
   return (
     <VilkårskortPeriodisert
@@ -126,7 +129,7 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
       visningActions={visningActions}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
       onLeggTilVurdering={onAddPeriode}
-      errors={form.formState.errors}
+      errorList={errorList}
     >
       {vedtatteVurderinger.map((vurdering) => (
         <TidligereVurderingExpandableCard
