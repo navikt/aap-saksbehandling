@@ -15,6 +15,9 @@ export type SykepengeerstatningGrunnlag =
 export type SykepengerVurderingResponse =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykepengergrunnlag.SykepengerVurderingResponse'];
 
+export type SykdomsvurderingLøsningDto =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.SykdomsvurderingL\u00F8sningDto'];
+
 export type SykepengeerstatningVurderingGrunn =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.SykepengerVurderingDto']['grunn'];
 export type BistandsGrunnlag =

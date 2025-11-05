@@ -16,7 +16,9 @@ export const LøsBehovOgGåTilNesteStegStatusAlert = ({ status, løsBehovOgGåTi
     <>
       {løsBehovOgGåTilNesteStegError && (
         <Alert variant="error">
-          <BodyShort spacing>{løsBehovOgGåTilNesteStegError.message}</BodyShort>
+          <BodyShort spacing style={{ whiteSpace: 'pre-wrap' }}>
+            {løsBehovOgGåTilNesteStegError.message}
+          </BodyShort>
           <BodyShort size={'small'}>
             <b>SakId:</b>
             {` ${saksId}`}
