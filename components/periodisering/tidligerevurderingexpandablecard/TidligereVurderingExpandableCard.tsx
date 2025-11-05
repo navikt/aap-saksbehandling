@@ -3,7 +3,7 @@
 import { CustomExpandableCard } from 'components/customexpandablecard/CustomExpandableCard';
 import { isBefore, isSameDay, sub } from 'date-fns';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import { BodyShort, HStack, Tag, VStack } from '@navikt/ds-react';
 import styles from 'components/behandlinger/oppholdskrav/oppholdskrav.module.css';
 import { VurdertAvAnsatt } from 'lib/types/types';
@@ -25,6 +25,7 @@ export const TidligereVurderingExpandableCard = ({
   vurdertAv,
   children,
 }: Props) => {
+  const [cardExpanded, setCardExpanded] = useState<boolean>(true);
   const formattertFom = formaterDatoForFrontend(fom);
   const strekUtHele = foersteNyePeriodeFraDato ? !isBefore(fom, foersteNyePeriodeFraDato) : false;
   const nySluttdato =
@@ -35,7 +36,8 @@ export const TidligereVurderingExpandableCard = ({
     <CustomExpandableCard
       key={formattertFom}
       editable={false}
-      defaultOpen={false}
+      expanded={cardExpanded}
+      setExpanded={setCardExpanded}
       heading={
         <HStack justify={'space-between'} padding={'2'}>
           <BodyShort size={'small'} className={strekUtHele ? styles.streketUtTekst : ''}>

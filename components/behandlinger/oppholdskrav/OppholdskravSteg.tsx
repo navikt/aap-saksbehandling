@@ -4,7 +4,7 @@ import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { Behovstype } from 'lib/utils/form';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
-import { OppholdskravForm, OppholdskravVurderingForm } from 'components/behandlinger/oppholdskrav/types';
+import { OppholdskravForm } from 'components/behandlinger/oppholdskrav/types';
 import { LøsPeriodisertBehovPåBehandling, MellomlagretVurdering, OppholdskravGrunnlagResponse } from 'lib/types/types';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
@@ -15,11 +15,14 @@ import {
 } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
 import { OppholdskravFormInput } from 'components/behandlinger/oppholdskrav/OppholdskravFormInput';
 import { OppholdskravTidligereVurdering } from 'components/behandlinger/oppholdskrav/OppholdskravTidligereVurdering';
-import { isAfter, min, parseISO } from 'date-fns';
-import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker, stringToDate } from 'lib/utils/date';
+import { parseISO } from 'date-fns';
+import { formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { NyVurderingExpandableCard } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
+import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
+import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
+import { LovOgMedlemskapVurderingForm } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/types';
 
 type Props = {
   grunnlag: OppholdskravGrunnlagResponse | undefined;
@@ -75,43 +78,13 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
       fraDato: undefined,
     });
   }
-  function validerVurderingerRekkefølge(vurderinger: OppholdskravVurderingForm[]): boolean {
-    const sorterteVurderinger = vurderinger.toSorted((a, b) => {
-      const aParsed = stringToDate(a.fraDato, 'dd.MM.yyyy')!;
-      const bParsed = stringToDate(b.fraDato, 'dd.MM.yyyy')!;
-      return aParsed.getTime() - bParsed.getTime();
-    });
-    const likRekkefølge = sorterteVurderinger.every((value, index) => value.fraDato === vurderinger[index].fraDato);
-    if (!likRekkefølge) {
-      vurderinger.forEach((_vurdering, index) => {
-        form.setError(`vurderinger.${index}.fraDato`, {
-          message: 'Vurderingene som legges til må være i kronologisk rekkefølge fra eldst til nyest',
-          type: 'custom',
-        });
-      });
-      return false;
-    }
-
-    const tidligsteDato = min([
-      ...sorterteVurderinger.map((i) => parseDatoFraDatePicker(i.fraDato)!),
-      ...tidligereVurderinger.map((i) => parseISO(i.fom)),
-    ]);
-
-    const tidligsteDatoSomMåVurderes = new Date(grunnlag?.kanVurderes[0]?.fom!);
-    if (isAfter(tidligsteDato, tidligsteDatoSomMåVurderes)) {
-      vurderinger.forEach((vurdering, index) => {
-        form.setError(`vurderinger.${index}.fraDato`, {
-          message: `Den tidligste vurderte datoen må være startdatoen for rettighetsperioden. Tidligste vurderte dato er ${formaterDatoForFrontend(tidligsteDato)} men rettighetsperioden starter ${formaterDatoForFrontend(tidligsteDatoSomMåVurderes)}`,
-        });
-      });
-      return false;
-    }
-
-    return true;
-  }
 
   function onSubmit(data: OppholdskravForm) {
-    const erPerioderGyldige = validerVurderingerRekkefølge(data.vurderinger);
+    const erPerioderGyldige = validerPeriodiserteVurderingerRekkefølge({
+      form,
+      nyeVurderinger: data.vurderinger,
+      grunnlag,
+    });
     if (!erPerioderGyldige) {
       return;
     }
@@ -136,6 +109,7 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
   }
 
   const foersteNyePeriode = vurderingerFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
+  const errorList = mapPeriodiserteVurderingerErrorList<LovOgMedlemskapVurderingForm>(form.formState.errors);
 
   return (
     <VilkårskortPeriodisert
@@ -155,7 +129,7 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
       visningActions={visningActions}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
       onLeggTilVurdering={onAddPeriode}
-      errors={form.formState.errors}
+      errorList={errorList}
     >
       {vedtatteVurderinger.map((vurdering) => (
         <TidligereVurderingExpandableCard
@@ -181,6 +155,7 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
           nestePeriodeFraDato={form.watch(`vurderinger.${index + 1}.fraDato`)}
           isLast={index === vurderingerFields.length - 1}
           vurdertAv={vurdering.vurdertAv}
+          finnesFeil={finnesFeilForVurdering(index, errorList)}
         >
           <OppholdskravFormInput
             form={form}
