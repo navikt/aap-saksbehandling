@@ -181,6 +181,27 @@ describe('Refusjonskrav sosialstønad', () => {
     expect(feilmelding).toBeVisible();
   });
 
+  it('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
+    setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'VURDER_BISTANDSBEHOV' });
+
+    render(<Refusjon grunnlag={grunnlagMedVurdering} readOnly={false} behandlingVersjon={0} />);
+
+    const endreKnapp = screen.getByRole('button', { name: 'Endre' });
+    await user.click(endreKnapp);
+
+    await velgNei(finnGruppeVelgRefusjonskrav());
+
+    const avbrytKnapp = screen.getByRole('button', { name: 'Avbryt' });
+    await user.click(avbrytKnapp);
+
+    const refusjonskravEtterAvbryt = within(
+      screen.getByRole('group', {
+        name: /Er det refusjonskrav fra Nav-kontor?/,
+      })
+    ).getByRole('radio', { name: 'Ja' });
+    expect(refusjonskravEtterAvbryt).toBeChecked();
+  });
+
   const finnGruppeVelgRefusjonskrav = () => screen.getByRole('group', { name: 'Er det refusjonskrav fra Nav-kontor?' });
 
   const finnTekstfeltForFradato = () =>

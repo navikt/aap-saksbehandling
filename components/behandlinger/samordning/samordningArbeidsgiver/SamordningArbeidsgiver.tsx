@@ -121,6 +121,7 @@ export const SamordningArbeidsgiver = ({
       readOnly={readOnly}
       visningModus={visningModus}
       visningActions={visningActions}
+      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
       {
         <VStack gap={'6'}>

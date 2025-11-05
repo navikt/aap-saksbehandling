@@ -76,180 +76,210 @@ const grunnlagUtenVurdering: SykdomsvurderingBrevGrunnlag = {
   kanSaksbehandle: true,
 };
 
-it('Skal vise en tekst om hvem som har gjort vurderingen dersom det finnes en mellomlagring', () => {
-  render(
-    <SykdomsvurderingBrev
-      typeBehandling={'Førstegangsbehandling'}
-      readOnly={false}
-      behandlingVersjon={0}
-      grunnlag={grunnlagUtenVurdering}
-      initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
-    />
-  );
-  const tekst = screen.getByText('Utkast lagret 21.08.2025 12:00 (Jan T. Loven)');
-  expect(tekst).toBeVisible();
-});
+it('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
+  setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'VURDER_BISTANDSBEHOV' });
 
-it('Skal vise en tekst om hvem som har lagret vurdering dersom bruker trykker på lagre mellomlagring', async () => {
   render(
     <SykdomsvurderingBrev
-      typeBehandling={'Førstegangsbehandling'}
+      grunnlag={grunnlagMedVurdering}
       readOnly={false}
       behandlingVersjon={0}
-      grunnlag={grunnlagUtenVurdering}
+      typeBehandling={'Førstegangsbehandling'}
     />
   );
 
-  await user.type(
-    screen.getByRole('textbox', { name: 'Derfor får du AAP / Derfor får du ikke AAP' }),
-    'Her har jeg begynt å skrive en vurdering..'
-  );
-  expect(screen.queryByText('Utkast lagret 21.08.2025 00:00 (Jan T. Loven)')).not.toBeInTheDocument();
+  const endreKnapp = screen.getByRole('button', { name: 'Endre' });
+  await user.click(endreKnapp);
 
-  const mockFetchResponseLagreMellomlagring: FetchResponse<MellomlagretVurderingResponse> = {
-    type: 'SUCCESS',
-    data: mellomlagring,
-    status: 200,
-  };
-  fetchMock.mockResponse(JSON.stringify(mockFetchResponseLagreMellomlagring));
+  const begrunnelseFelt = screen.getByRole('textbox', { name: 'Derfor får du AAP / Derfor får du ikke AAP' });
+  await user.clear(begrunnelseFelt);
+  await user.type(begrunnelseFelt, 'Dette er en ny begrunnelse');
+  expect(begrunnelseFelt).toHaveValue('Dette er en ny begrunnelse');
 
-  const lagreKnapp = screen.getByRole('button', { name: 'Lagre utkast' });
-  await user.click(lagreKnapp);
-  const tekst = screen.getByText('Utkast lagret 21.08.2025 12:00 (Jan T. Loven)');
-  expect(tekst).toBeVisible();
-});
+  const avbrytKnapp = screen.getByRole('button', { name: 'Avbryt' });
+  await user.click(avbrytKnapp);
 
-it('Skal ikke vise tekst om hvem som har gjort mellomlagring dersom bruker trykker på slett mellomlagring', async () => {
-  render(
-    <SykdomsvurderingBrev
-      typeBehandling={'Førstegangsbehandling'}
-      readOnly={false}
-      behandlingVersjon={0}
-      grunnlag={grunnlagUtenVurdering}
-      initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
-    />
-  );
-
-  expect(screen.getByText('Utkast lagret 21.08.2025 12:00 (Jan T. Loven)')).toBeVisible();
-
-  const mockFetchResponseSlettMellomlagring: FetchResponse<object> = { type: 'SUCCESS', status: 202, data: {} };
-  fetchMock.mockResponse(JSON.stringify(mockFetchResponseSlettMellomlagring));
-
-  const slettKnapp = screen.getByRole('button', { name: 'Slett utkast' });
-  await user.click(slettKnapp);
-
-  expect(screen.queryByText('Utkast lagret 21.08.2025 12:00 (Jan T. Loven)')).not.toBeInTheDocument();
-});
-
-it('Skal bruke mellomlagring som defaultValue i skjema dersom det finnes', () => {
-  render(
-    <SykdomsvurderingBrev
-      typeBehandling={'Førstegangsbehandling'}
-      readOnly={false}
-      behandlingVersjon={0}
-      grunnlag={grunnlagUtenVurdering}
-      initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
-    />
-  );
-
-  const begrunnelseFelt = screen.getByRole('textbox', {
+  const begrunnelseFeltEtterAvbryt = screen.getByRole('textbox', {
     name: 'Derfor får du AAP / Derfor får du ikke AAP',
   });
-
-  expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er mellomlagret');
+  expect(begrunnelseFeltEtterAvbryt).toHaveValue('Dette er min vurdering som er bekreftet');
 });
 
-it('Skal bruke bekreftet vurdering fra grunnlag som defaultValue i skjema dersom mellomlagring ikke finnes', () => {
-  render(
-    <SykdomsvurderingBrev
-      typeBehandling={'Førstegangsbehandling'}
-      readOnly={false}
-      behandlingVersjon={0}
-      grunnlag={grunnlagMedVurdering}
-    />
-  );
-
-  const begrunnelseFelt = screen.getByRole('textbox', {
-    name: 'Derfor får du AAP / Derfor får du ikke AAP',
+describe('mellomlagring', () => {
+  it('Skal vise en tekst om hvem som har gjort vurderingen dersom det finnes en mellomlagring', () => {
+    render(
+      <SykdomsvurderingBrev
+        typeBehandling={'Førstegangsbehandling'}
+        readOnly={false}
+        behandlingVersjon={0}
+        grunnlag={grunnlagUtenVurdering}
+        initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+      />
+    );
+    const tekst = screen.getByText('Utkast lagret 21.08.2025 12:00 (Jan T. Loven)');
+    expect(tekst).toBeVisible();
   });
 
-  expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er bekreftet');
-});
+  it('Skal vise en tekst om hvem som har lagret vurdering dersom bruker trykker på lagre mellomlagring', async () => {
+    render(
+      <SykdomsvurderingBrev
+        typeBehandling={'Førstegangsbehandling'}
+        readOnly={false}
+        behandlingVersjon={0}
+        grunnlag={grunnlagUtenVurdering}
+      />
+    );
 
-it('Skal resette skjema til tomt skjema dersom det ikke finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
-  render(
-    <SykdomsvurderingBrev
-      typeBehandling={'Førstegangsbehandling'}
-      readOnly={false}
-      behandlingVersjon={0}
-      grunnlag={grunnlagUtenVurdering}
-      initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
-    />
-  );
+    await user.type(
+      screen.getByRole('textbox', { name: 'Derfor får du AAP / Derfor får du ikke AAP' }),
+      'Her har jeg begynt å skrive en vurdering..'
+    );
+    expect(screen.queryByText('Utkast lagret 21.08.2025 00:00 (Jan T. Loven)')).not.toBeInTheDocument();
 
-  await user.type(
-    screen.getByRole('textbox', { name: 'Derfor får du AAP / Derfor får du ikke AAP' }),
-    ' her er ekstra tekst'
-  );
+    const mockFetchResponseLagreMellomlagring: FetchResponse<MellomlagretVurderingResponse> = {
+      type: 'SUCCESS',
+      data: mellomlagring,
+      status: 200,
+    };
+    fetchMock.mockResponse(JSON.stringify(mockFetchResponseLagreMellomlagring));
 
-  expect(screen.getByRole('textbox', { name: 'Derfor får du AAP / Derfor får du ikke AAP' })).toHaveValue(
-    'Dette er min vurdering som er mellomlagret her er ekstra tekst'
-  );
-
-  const slettKnapp = screen.getByRole('button', { name: 'Slett utkast' });
-  await user.click(slettKnapp);
-
-  expect(screen.getByRole('textbox', { name: 'Derfor får du AAP / Derfor får du ikke AAP' })).toHaveValue('');
-});
-
-// TODO Ta inn denne når mellomlagring er i produksjon
-it.skip('Skal resette skjema til bekreftet vurdering dersom det finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
-  render(
-    <SykdomsvurderingBrev
-      typeBehandling={'Førstegangsbehandling'}
-      readOnly={false}
-      behandlingVersjon={0}
-      grunnlag={grunnlagMedVurdering}
-      initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
-    />
-  );
-
-  await user.type(
-    screen.getByRole('textbox', { name: 'Derfor får du AAP / Derfor får du ikke AAP' }),
-    ' her er ekstra tekst'
-  );
-
-  expect(screen.getByRole('textbox', { name: 'Derfor får du AAP / Derfor får du ikke AAP' })).toHaveValue(
-    'Dette er min vurdering som er mellomlagret her er ekstra tekst'
-  );
-
-  const mockFetchResponseSlettMellomlagring: FetchResponse<object> = { type: 'SUCCESS', status: 202, data: {} };
-  fetchMock.mockResponse(JSON.stringify(mockFetchResponseSlettMellomlagring));
-
-  const slettKnapp = screen.getByRole('button', {
-    name: /slett utkast/i,
+    const lagreKnapp = screen.getByRole('button', { name: 'Lagre utkast' });
+    await user.click(lagreKnapp);
+    const tekst = screen.getByText('Utkast lagret 21.08.2025 12:00 (Jan T. Loven)');
+    expect(tekst).toBeVisible();
   });
 
-  await user.click(slettKnapp);
+  it('Skal ikke vise tekst om hvem som har gjort mellomlagring dersom bruker trykker på slett mellomlagring', async () => {
+    render(
+      <SykdomsvurderingBrev
+        typeBehandling={'Førstegangsbehandling'}
+        readOnly={false}
+        behandlingVersjon={0}
+        grunnlag={grunnlagUtenVurdering}
+        initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+      />
+    );
 
-  expect(screen.getByRole('textbox', { name: 'Derfor får du AAP / Derfor får du ikke AAP' })).toHaveValue(
-    'Dette er min vurdering som er bekreftet'
-  );
-});
+    expect(screen.getByText('Utkast lagret 21.08.2025 12:00 (Jan T. Loven)')).toBeVisible();
 
-it('Skal ikke være mulig å lagre eller slette mellomlagring hvis det er readOnly', () => {
-  render(
-    <SykdomsvurderingBrev
-      typeBehandling={'Førstegangsbehandling'}
-      readOnly={true}
-      behandlingVersjon={0}
-      grunnlag={grunnlagMedVurdering}
-      initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
-    />
-  );
+    const mockFetchResponseSlettMellomlagring: FetchResponse<object> = { type: 'SUCCESS', status: 202, data: {} };
+    fetchMock.mockResponse(JSON.stringify(mockFetchResponseSlettMellomlagring));
 
-  const lagreKnapp = screen.queryByRole('button', { name: 'Lagre utkast' });
-  expect(lagreKnapp).not.toBeInTheDocument();
-  const slettKnapp = screen.queryByRole('button', { name: 'Slett utkast' });
-  expect(slettKnapp).not.toBeInTheDocument();
+    const slettKnapp = screen.getByRole('button', { name: 'Slett utkast' });
+    await user.click(slettKnapp);
+
+    expect(screen.queryByText('Utkast lagret 21.08.2025 12:00 (Jan T. Loven)')).not.toBeInTheDocument();
+  });
+
+  it('Skal bruke mellomlagring som defaultValue i skjema dersom det finnes', () => {
+    render(
+      <SykdomsvurderingBrev
+        typeBehandling={'Førstegangsbehandling'}
+        readOnly={false}
+        behandlingVersjon={0}
+        grunnlag={grunnlagUtenVurdering}
+        initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+      />
+    );
+
+    const begrunnelseFelt = screen.getByRole('textbox', {
+      name: 'Derfor får du AAP / Derfor får du ikke AAP',
+    });
+
+    expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er mellomlagret');
+  });
+
+  it('Skal bruke bekreftet vurdering fra grunnlag som defaultValue i skjema dersom mellomlagring ikke finnes', () => {
+    render(
+      <SykdomsvurderingBrev
+        typeBehandling={'Førstegangsbehandling'}
+        readOnly={false}
+        behandlingVersjon={0}
+        grunnlag={grunnlagMedVurdering}
+      />
+    );
+
+    const begrunnelseFelt = screen.getByRole('textbox', {
+      name: 'Derfor får du AAP / Derfor får du ikke AAP',
+    });
+
+    expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er bekreftet');
+  });
+
+  it('Skal resette skjema til tomt skjema dersom det ikke finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
+    render(
+      <SykdomsvurderingBrev
+        typeBehandling={'Førstegangsbehandling'}
+        readOnly={false}
+        behandlingVersjon={0}
+        grunnlag={grunnlagUtenVurdering}
+        initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+      />
+    );
+
+    await user.type(
+      screen.getByRole('textbox', { name: 'Derfor får du AAP / Derfor får du ikke AAP' }),
+      ' her er ekstra tekst'
+    );
+
+    expect(screen.getByRole('textbox', { name: 'Derfor får du AAP / Derfor får du ikke AAP' })).toHaveValue(
+      'Dette er min vurdering som er mellomlagret her er ekstra tekst'
+    );
+
+    const slettKnapp = screen.getByRole('button', { name: 'Slett utkast' });
+    await user.click(slettKnapp);
+
+    expect(screen.getByRole('textbox', { name: 'Derfor får du AAP / Derfor får du ikke AAP' })).toHaveValue('');
+  });
+
+  it('Skal resette skjema til bekreftet vurdering dersom det finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
+    render(
+      <SykdomsvurderingBrev
+        typeBehandling={'Førstegangsbehandling'}
+        readOnly={false}
+        behandlingVersjon={0}
+        grunnlag={grunnlagMedVurdering}
+        initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+      />
+    );
+
+    await user.type(
+      screen.getByRole('textbox', { name: 'Derfor får du AAP / Derfor får du ikke AAP' }),
+      ' her er ekstra tekst'
+    );
+
+    expect(screen.getByRole('textbox', { name: 'Derfor får du AAP / Derfor får du ikke AAP' })).toHaveValue(
+      'Dette er min vurdering som er mellomlagret her er ekstra tekst'
+    );
+
+    const mockFetchResponseSlettMellomlagring: FetchResponse<object> = { type: 'SUCCESS', status: 202, data: {} };
+    fetchMock.mockResponse(JSON.stringify(mockFetchResponseSlettMellomlagring));
+
+    const slettKnapp = screen.getByRole('button', {
+      name: /slett utkast/i,
+    });
+
+    await user.click(slettKnapp);
+
+    expect(screen.getByRole('textbox', { name: 'Derfor får du AAP / Derfor får du ikke AAP' })).toHaveValue(
+      'Dette er min vurdering som er bekreftet'
+    );
+  });
+
+  it('Skal ikke være mulig å lagre eller slette mellomlagring hvis det er readOnly', () => {
+    render(
+      <SykdomsvurderingBrev
+        typeBehandling={'Førstegangsbehandling'}
+        readOnly={true}
+        behandlingVersjon={0}
+        grunnlag={grunnlagMedVurdering}
+        initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+      />
+    );
+
+    const lagreKnapp = screen.queryByRole('button', { name: 'Lagre utkast' });
+    expect(lagreKnapp).not.toBeInTheDocument();
+    const slettKnapp = screen.queryByRole('button', { name: 'Slett utkast' });
+    expect(slettKnapp).not.toBeInTheDocument();
+  });
 });

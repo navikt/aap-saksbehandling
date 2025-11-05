@@ -93,6 +93,28 @@ describe('Samordning gradering', () => {
     await user.click(screen.getByRole('button', { name: 'Bekreft' }));
     expect(await screen.findByText('Du må gjøre en vurdering av periodene')).toBeVisible();
   });
+
+  test('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
+    setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'VURDER_BISTANDSBEHOV' });
+
+    render(
+      <SamordningGradering bruker={bruker} grunnlag={grunnlagMedVurdering} readOnly={false} behandlingVersjon={0} />
+    );
+
+    const endreKnapp = screen.getByRole('button', { name: 'Endre' });
+    await user.click(endreKnapp);
+
+    const begrunnelseFelt = screen.getByRole('textbox', { name: 'Vurder vilkåret' });
+    await user.clear(begrunnelseFelt);
+    await user.type(begrunnelseFelt, 'Dette er en ny begrunnelse');
+    expect(begrunnelseFelt).toHaveValue('Dette er en ny begrunnelse');
+
+    const avbrytKnapp = screen.getByRole('button', { name: 'Avbryt' });
+    await user.click(avbrytKnapp);
+
+    const begrunnelseFeltEtterAvbryt = screen.getByRole('textbox', { name: 'Vurder vilkåret' });
+    expect(begrunnelseFeltEtterAvbryt).toHaveValue('Dette er min vurdering som er bekreftet');
+  });
 });
 
 describe('mellomlagring', () => {

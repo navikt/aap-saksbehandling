@@ -175,6 +175,7 @@ export const OvergangUfore = ({ behandlingVersjon, grunnlag, readOnly, initialMe
       readOnly={formReadOnly}
       visningModus={visningModus}
       visningActions={visningActions}
+      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
       {historiskeVurderinger && historiskeVurderinger.length > 0 && (
         <TidligereVurderinger

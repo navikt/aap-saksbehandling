@@ -242,6 +242,7 @@ function renderComponentNyVisning(visningModus: VisningModus) {
         onEndreClick: vitest.fn,
         avbrytEndringClick: vitest.fn,
       }}
+      formReset={() => vitest.fn}
     >
       <span>Dette er innhold</span>
     </VilkårskortMedFormOgMellomlagringNyVisning>

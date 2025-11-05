@@ -115,6 +115,7 @@ export const SamordningTjenestePensjon = ({
       readOnly={readOnly}
       visningModus={visningModus}
       visningActions={visningActions}
+      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
       <VStack gap={'1'}>
         <BodyShort weight={'semibold'}>
