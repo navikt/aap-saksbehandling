@@ -14,7 +14,7 @@ import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { Link } from '@navikt/ds-react';
 import { DiagnoseSystem, diagnoseSøker } from 'lib/diagnosesøker/DiagnoseSøker';
 import { formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
-import { isBefore, startOfDay } from 'date-fns';
+import { isAfter, isBefore, startOfDay } from 'date-fns';
 import { validerDato } from 'lib/validation/dateValidation';
 import {
   MellomlagretVurdering,
@@ -127,6 +127,13 @@ export const Sykdomsvurdering = ({
               const vurderingGjelderFra = stringToDate(v as string, 'dd.MM.yyyy');
               if (vurderingGjelderFra && isBefore(startOfDay(vurderingGjelderFra), starttidspunkt)) {
                 return 'Vurderingen kan ikke gjelde fra før starttidspunktet';
+              }
+              if (
+                behandlingErFørstegangsbehandling &&
+                vurderingGjelderFra &&
+                isAfter(startOfDay(vurderingGjelderFra), starttidspunkt)
+              ) {
+                return 'Vurderingen må gjelde fra starttidspunktet';
               }
             },
           },
@@ -306,7 +313,7 @@ export const Sykdomsvurdering = ({
 
       <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
 
-      {behandlingErRevurdering && <FormField form={form} formField={formFields.vurderingenGjelderFra} />}
+      <FormField form={form} formField={formFields.vurderingenGjelderFra} />
 
       <FormField form={form} formField={formFields.harSkadeSykdomEllerLyte} horizontalRadio />
 
