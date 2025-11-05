@@ -7,6 +7,7 @@ export interface VurderingerErrors<T extends FieldValues> {
 interface ErrorListElement {
   ref: string;
   message: string;
+  index: number;
 }
 export type ErrorList = ErrorListElement[];
 
@@ -14,8 +15,8 @@ export function mapPeriodiserteVurderingerErrorList<T extends FieldValues>(
   formstateErrors: VurderingerErrors<T>
 ): ErrorList {
   return formstateErrors.vurderinger && Array.isArray(formstateErrors.vurderinger)
-    ? formstateErrors.vurderinger.reduce((acc, errVurdering) => {
-        const nestedErrors = Object.values(errVurdering)
+    ? formstateErrors.vurderinger.reduce((acc, errVurdering, index) => {
+        const nestedErrors = Object.values(errVurdering || {})
           // @ts-ignore
           .filter((val) => !val?.ref && !val?.message)
           .map((nestedErrorParent) =>
@@ -25,6 +26,7 @@ export function mapPeriodiserteVurderingerErrorList<T extends FieldValues>(
               ref: errField?.ref?.name,
               // @ts-ignore
               message: errField?.message,
+              index,
             }))
           )
           .flat()
@@ -36,4 +38,8 @@ export function mapPeriodiserteVurderingerErrorList<T extends FieldValues>(
         return [...acc, ...errors, ...nestedErrors];
       }, [])
     : [];
+}
+
+export function finnesFeilForVurdering(index: number, errorList: ErrorList) {
+  return !!errorList.find((err) => err.index === index);
 }

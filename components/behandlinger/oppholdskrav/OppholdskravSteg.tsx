@@ -21,7 +21,7 @@ import { TidligereVurderingExpandableCard } from 'components/periodisering/tidli
 import { NyVurderingExpandableCard } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
-import { mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
+import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
 import { LovOgMedlemskapVurderingForm } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/types';
 
 type Props = {
@@ -155,6 +155,7 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
           nestePeriodeFraDato={form.watch(`vurderinger.${index + 1}.fraDato`)}
           isLast={index === vurderingerFields.length - 1}
           vurdertAv={vurdering.vurdertAv}
+          finnesFeil={finnesFeilForVurdering(index, errorList)}
         >
           <OppholdskravFormInput
             form={form}

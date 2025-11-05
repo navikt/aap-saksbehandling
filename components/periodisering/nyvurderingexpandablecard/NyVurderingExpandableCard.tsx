@@ -2,7 +2,7 @@
 
 import { CustomExpandableCard } from 'components/customexpandablecard/CustomExpandableCard';
 import { formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import { BodyShort, HStack, Tag, VStack } from '@navikt/ds-react';
 import { VurdertAvAnsatt } from 'lib/types/types';
 import { VurdertAv } from 'components/vurdertav/VurdertAv';
@@ -15,6 +15,7 @@ interface Props {
   isLast: boolean;
   oppfylt: JaEllerNei | undefined | null;
   vurdertAv: VurdertAvAnsatt | undefined;
+  finnesFeil: boolean;
   children: ReactNode;
 }
 export const NyVurderingExpandableCard = ({
@@ -23,15 +24,19 @@ export const NyVurderingExpandableCard = ({
   isLast,
   oppfylt,
   vurdertAv,
+  finnesFeil,
   children,
 }: Props) => {
   const fraDatoParsed = parseDatoFraDatePicker(fraDato);
   const tom = nestePeriodeFraDato ? parseDatoFraDatePickerOgTrekkFra1Dag(nestePeriodeFraDato) : null;
+  const [cardExpanded, setCardExpanded] = useState<boolean>(true);
   return (
     <CustomExpandableCard
       key={fraDato}
       editable
       defaultOpen
+      expanded={cardExpanded || finnesFeil}
+      setExpanded={setCardExpanded}
       heading={
         <HStack justify={'space-between'} padding={'2'}>
           <BodyShort size={'small'}>

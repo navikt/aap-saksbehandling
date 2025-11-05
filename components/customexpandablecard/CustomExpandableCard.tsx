@@ -1,7 +1,7 @@
 'use client';
 
 import { HGrid, VStack } from '@navikt/ds-react';
-import { ReactNode, useState } from 'react';
+import { ReactNode } from 'react';
 import { ChevronDownIcon, ChevronUpIcon, PadlockLockedIcon, PencilIcon } from '@navikt/aksel-icons';
 import styles from './CustomExpandableCard.module.css';
 
@@ -9,10 +9,11 @@ interface Props {
   defaultOpen?: boolean;
   editable: boolean;
   heading: ReactNode;
+  expanded: boolean;
+  setExpanded: (expanded: boolean) => void;
   children: ReactNode;
 }
-export const CustomExpandableCard = ({ heading, children, defaultOpen = false, editable }: Props) => {
-  const [expanded, setExpanded] = useState(defaultOpen);
+export const CustomExpandableCard = ({ heading, children, expanded, setExpanded, editable }: Props) => {
   return (
     <VStack gap={'4'} justify={'center'} className={styles.container} padding={'0'}>
       <button className={styles.headingButton} type="button" onClick={() => setExpanded(!expanded)}>

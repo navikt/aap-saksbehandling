@@ -24,7 +24,7 @@ import { TidligereVurderingExpandableCard } from 'components/periodisering/tidli
 import { NyVurderingExpandableCard } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
-import { mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
+import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
 
 interface Props {
   behandlingVersjon: number;
@@ -157,6 +157,7 @@ export const LovvalgOgMedlemskapPeriodisert = ({
           oppfylt={form.watch(`vurderinger.${index}.medlemskap.varMedlemIFolketrygd`)}
           fraDato={vurdering.fraDato}
           vurdertAv={vurdering.vurdertAv}
+          finnesFeil={finnesFeilForVurdering(index, errorList)}
         >
           <LovvalgOgMedlemskapFormInput
             form={form}
