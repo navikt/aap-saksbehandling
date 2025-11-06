@@ -32,9 +32,11 @@ export function getDefaultValuesFromGrunnlag(
   }
 
   // Vi har allerede data lagret, vis enten de som er lagret i grunnlaget her eller tom liste
+  console.log('default', grunnlag.nyeVurderinger);
   return {
     vurderinger:
       grunnlag?.nyeVurderinger.map((vurdering) => ({
+        vurderingId: vurdering.id || 'heihei',
         begrunnelse: '',
         fraDato: formaterDatoForFrontend(vurdering.fom),
         lovvalg: {
@@ -48,14 +50,14 @@ export function getDefaultValuesFromGrunnlag(
           begrunnelse: vurdering.medlemskap?.begrunnelse ?? '',
           varMedlemIFolketrygd: getJaNeiEllerUndefined(vurdering.medlemskap?.varMedlemIFolketrygd) ?? JaEllerNei.Nei,
         },
-        vurdertAv:
-          vurdering.vurdertAv != null
-            ? {
-                navn: vurdering.vurdertAv.ansattnavn,
-                ident: vurdering.vurdertAv.ident,
-                dato: vurdering.vurdertAv.dato,
-              }
-            : undefined,
+        // vurdertAv:
+        //   vurdering.vurdertAv != null
+        //     ? {
+        //         navn: vurdering.vurdertAv.ansattnavn,
+        //         ident: vurdering.vurdertAv.ident,
+        //         dato: vurdering.vurdertAv.dato,
+        //       }
+        //     : undefined,
       })) || [],
   };
 }

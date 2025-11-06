@@ -12,6 +12,7 @@ import React, { useState } from 'react';
 import { validerDato } from 'lib/validation/dateValidation';
 import { LovOgMedlemskapVurderingForm } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/types';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
+import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
 
 type Props = {
   form: UseFormReturn<LovOgMedlemskapVurderingForm>;
@@ -43,6 +44,9 @@ export const LovvalgOgMedlemskapFormInput = ({
 
   return (
     <VStack gap="4">
+      <HStack style={{ display: 'none' }}>
+        <TextFieldWrapper hidden name={`vurderinger.${index}.vurderingId`} control={control} type={'text'} />
+      </HStack>
       <HStack justify={'space-between'}>
         <DateInputWrapper
           name={`vurderinger.${index}.fraDato`}

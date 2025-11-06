@@ -5,6 +5,7 @@ export type LovOgMedlemskapVurderingForm = {
 };
 
 export type LovvalgOgMedlemskapManuellVurderingForm = {
+  vurderingId?: string;
   begrunnelse: string;
   lovvalg: {
     begrunnelse: string;
@@ -16,9 +17,9 @@ export type LovvalgOgMedlemskapManuellVurderingForm = {
     varMedlemIFolketrygd: JaEllerNei;
   };
   fraDato?: string;
-  vurdertAv?: {
-    navn?: string | null;
-    ident: string;
-    dato: string;
-  };
+  // vurdertAv?: {
+  //   navn?: string | null;
+  //   ident: string;
+  //   dato: string;
+  // };
 };

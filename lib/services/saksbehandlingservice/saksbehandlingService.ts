@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import {
   Aktivitetsplikt11_7Grunnlag,
   Aktivitetsplikt11_9Grunnlag,
@@ -261,7 +262,21 @@ export const hentLovvalgMedlemskapGrunnlag = async (behandlingsReferanse: string
 
 export const hentPeriodisertLovvalgMedlemskapGrunnlag = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/lovvalgmedlemskap-v2`;
-  return await apiFetch<PeriodisertLovvalgMedlemskapGrunnlag>(url, saksbehandlingApiScope, 'GET');
+  const res = await apiFetch<PeriodisertLovvalgMedlemskapGrunnlag>(url, saksbehandlingApiScope, 'GET');
+  if (isSuccess(res)) {
+    console.log(res.data.nyeVurderinger);
+    return {
+      ...res,
+      data: {
+        ...res.data,
+        nyeVurderinger: res.data.nyeVurderinger.map((e) => ({
+          ...e,
+          id: randomUUID(),
+        })),
+      },
+    };
+  }
+  return res;
 };
 
 export const hentForutgåendeMedlemskapGrunnlag = async (behandlingsReferanse: string) => {

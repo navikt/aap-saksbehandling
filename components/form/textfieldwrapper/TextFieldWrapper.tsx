@@ -13,6 +13,7 @@ export interface TextFieldProps<FormFieldValues extends FieldValues> {
   description?: React.ReactNode;
   rules?: RegisterOptions<FormFieldValues>;
   readOnly?: boolean;
+  hidden?: boolean;
   className?: string;
   autocomplete?: HTMLInputAutoCompleteAttribute;
   onChangeCustom?: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -28,6 +29,7 @@ export const TextFieldWrapper = <FormFieldValues extends FieldValues>({
   size = 'small',
   rules,
   readOnly,
+  hidden = false,
   className,
   autocomplete,
   onChangeCustom,
@@ -46,6 +48,7 @@ export const TextFieldWrapper = <FormFieldValues extends FieldValues>({
 
       return (
         <TextField
+          hidden={hidden}
           id={name}
           name={name}
           size={size}

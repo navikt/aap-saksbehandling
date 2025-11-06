@@ -64,6 +64,7 @@ export const LovvalgOgMedlemskapPeriodisert = ({
   const form = useForm<LovOgMedlemskapVurderingForm>({
     defaultValues,
     reValidateMode: 'onChange',
+    shouldUnregister: true,
   });
 
   const { fields: vurderingerFields, append, remove } = useFieldArray({ control: form.control, name: 'vurderinger' });
@@ -115,6 +116,9 @@ export const LovvalgOgMedlemskapPeriodisert = ({
   const foersteNyePeriode = vurderingerFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
   const errorList = mapPeriodiserteVurderingerErrorList<LovOgMedlemskapVurderingForm>(form.formState.errors);
 
+  function finnVurdertAvIGrunnlag(vurderingId: string | undefined) {
+    return grunnlag?.nyeVurderinger.find((e) => e.id === vurderingId)?.vurdertAv;
+  }
   return (
     <VilkårskortPeriodisert
       heading={heading}
@@ -133,7 +137,11 @@ export const LovvalgOgMedlemskapPeriodisert = ({
       visningActions={visningActions}
       onLeggTilVurdering={onAddPeriode}
       errorList={errorList}
-      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
+      formReset={() =>
+        form.reset(
+          mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : getDefaultValuesFromGrunnlag(grunnlag)
+        )
+      }
     >
       {vedtatteVurderinger.map((vurdering) => (
         <TidligereVurderingExpandableCard
@@ -156,7 +164,7 @@ export const LovvalgOgMedlemskapPeriodisert = ({
           isLast={index === vurderingerFields.length - 1}
           oppfylt={form.watch(`vurderinger.${index}.medlemskap.varMedlemIFolketrygd`)}
           fraDato={vurdering.fraDato}
-          vurdertAv={vurdering.vurdertAv}
+          vurdertAv={finnVurdertAvIGrunnlag(vurdering.vurderingId)}
           finnesFeil={finnesFeilForVurdering(index, errorList)}
         >
           <LovvalgOgMedlemskapFormInput

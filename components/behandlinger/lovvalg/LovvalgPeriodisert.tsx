@@ -24,6 +24,7 @@ export const LovvalgPeriodisert = async ({ behandlingsReferanse }: Props) => {
     hentPeriodisertLovvalgMedlemskapGrunnlag(behandlingsReferanse),
     hentMellomlagring(behandlingsReferanse, Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP),
   ]);
+  console.log(grunnlag.data?.nyeVurderinger);
 
   if (isError(vurderingAutomatisk) || isError(grunnlag) || isError(flyt)) {
     return <ApiException apiResponses={[vurderingAutomatisk, grunnlag, flyt]} />;
