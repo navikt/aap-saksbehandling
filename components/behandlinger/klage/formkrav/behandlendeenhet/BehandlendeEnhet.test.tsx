@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render, screen } from '../../../../../lib/test/CustomRender';
 import { BehandlendeEnhet } from './BehandlendeEnhet';
 import { BehandlendeEnhetGrunnlag, MellomlagretVurderingResponse } from 'lib/types/types';
@@ -6,10 +6,15 @@ import { within } from '@testing-library/react';
 import { FetchResponse } from 'lib/utils/api';
 import createFetchMock from 'vitest-fetch-mock';
 import userEvent from '@testing-library/user-event';
+import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
 const user = userEvent.setup();
+
+beforeEach(() => {
+  setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'BEHANDLENDE_ENHET' });
+});
 
 describe('Klage - behandlende enhet', () => {
   it('Skal ha en overskrift', () => {

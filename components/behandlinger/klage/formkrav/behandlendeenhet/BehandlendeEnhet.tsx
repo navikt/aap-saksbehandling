@@ -5,10 +5,11 @@ import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormEvent } from 'react';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { FormField } from 'components/form/FormField';
 import { Behovstype } from 'lib/utils/form';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 
 interface Props {
   grunnlag?: BehandlendeEnhetGrunnlag;
@@ -33,6 +34,12 @@ export const BehandlendeEnhet = ({ behandlingVersjon, grunnlag, readOnly, initia
   const { lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
     useMellomlagring(Behovstype.FASTSETT_BEHANDLENDE_ENHET, initialMellomlagretVurdering);
 
+  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+    readOnly,
+    'BEHANDLENDE_ENHET',
+    mellomlagretVurdering
+  );
+
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag);
@@ -51,7 +58,7 @@ export const BehandlendeEnhet = ({ behandlingVersjon, grunnlag, readOnly, initia
         defaultValue: defaultValue.hvemSkalBehandle,
       },
     },
-    { readOnly }
+    { readOnly: formReadOnly }
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -71,7 +78,7 @@ export const BehandlendeEnhet = ({ behandlingVersjon, grunnlag, readOnly, initia
   };
 
   return (
-    <VilkårskortMedFormOgMellomlagring
+    <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'Klagebehandlende enhet'}
       steg={'BEHANDLENDE_ENHET'}
       onSubmit={handleSubmit}
@@ -89,9 +96,12 @@ export const BehandlendeEnhet = ({ behandlingVersjon, grunnlag, readOnly, initia
           form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag) : emptyDraftFormFields())
         )
       }
+      visningModus={visningModus}
+      visningActions={visningActions}
+      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
       <FormField form={form} formField={formFields.hvemSkalBehandle} />
-    </VilkårskortMedFormOgMellomlagring>
+    </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };
 
