@@ -35,6 +35,7 @@ export interface VilkårsKortMedFormProps {
   visningActions?: VisningActions; // TODO Gjør disse feltene required når den er klar til å implementeres i vilkårskortene
 }
 
+/** @deprecated Bruk vilkårskortMedFormOgMellomlagringNyVisning */
 export const VilkårskortMedForm = ({
   heading,
   steg,
