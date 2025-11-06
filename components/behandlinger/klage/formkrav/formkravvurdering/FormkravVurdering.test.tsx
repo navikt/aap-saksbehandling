@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render, screen } from 'lib/test/CustomRender';
 import { FormkravVurdering } from './FormkravVurdering';
 import { FormkravGrunnlag, MellomlagretVurderingResponse } from 'lib/types/types';
@@ -6,10 +6,15 @@ import { Behovstype } from 'lib/utils/form';
 import { FetchResponse } from 'lib/utils/api';
 import userEvent from '@testing-library/user-event';
 import createFetchMock from 'vitest-fetch-mock';
+import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
 const user = userEvent.setup();
+
+beforeEach(() => {
+  setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'FORMKRAV' });
+});
 
 describe('Klage', () => {
   it('Skal ha en overskrift', () => {
