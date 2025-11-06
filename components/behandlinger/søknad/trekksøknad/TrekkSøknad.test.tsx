@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render, screen } from 'lib/test/CustomRender';
 import { userEvent } from '@testing-library/user-event';
 import { TrekkSøknad } from 'components/behandlinger/søknad/trekksøknad/TrekkSøknad';
@@ -6,10 +6,15 @@ import { MellomlagretVurderingResponse, TrukketSøknadGrunnlag } from 'lib/types
 import { FetchResponse } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 import createFetchMock from 'vitest-fetch-mock';
+import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
 const user = userEvent.setup();
+
+beforeEach(() => {
+  setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'SØKNAD' });
+});
 
 describe('Trekk søknad', () => {
   describe('Generelt', () => {

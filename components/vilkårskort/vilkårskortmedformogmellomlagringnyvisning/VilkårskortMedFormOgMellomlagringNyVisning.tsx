@@ -49,6 +49,7 @@ export const VilkårskortMedFormOgMellomlagringNyVisning = ({
 
   const readOnly = visningModus === 'LÅST_MED_ENDRE' || visningModus === 'LÅST_UTEN_ENDRE';
 
+  console.log(onLagreMellomLagringClick);
   return (
     <ExpansionCard
       aria-label={heading}

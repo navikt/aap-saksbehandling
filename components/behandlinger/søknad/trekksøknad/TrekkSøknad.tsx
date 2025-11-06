@@ -7,8 +7,9 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgG
 import { MellomlagretVurdering, TrukketSøknadGrunnlag, TrukketSøknadVudering } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
 import { FormEvent } from 'react';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 
 interface Props {
   grunnlag: TrukketSøknadGrunnlag;
@@ -31,6 +32,12 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon, initialMel
   const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
     useMellomlagring(Behovstype.VURDER_TREKK_AV_SØKNAD_KODE, initialMellomlagretVurdering);
 
+  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+    readOnly,
+    'SØKNAD',
+    mellomlagretVurdering
+  );
+
   const vurderingerString = grunnlag?.vurderinger.at(-1);
 
   const defaultValues: DraftFormFields = initialMellomlagretVurdering
@@ -46,7 +53,7 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon, initialMel
         rules: { required: 'Du må begrunne hvorfor søknaden skal trekkes' },
       },
     },
-    { readOnly: readOnly }
+    { readOnly: formReadOnly }
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -65,8 +72,9 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon, initialMel
     )(event);
   };
 
+  console.log('modus', visningModus);
   return (
-    <VilkårskortMedFormOgMellomlagring
+    <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'Trekk søknad'}
       steg={'SØKNAD'}
       onSubmit={handleSubmit}
@@ -83,9 +91,12 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon, initialMel
         );
       }}
       readOnly={readOnly}
+      visningModus={visningModus}
+      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
+      visningActions={visningActions}
     >
       <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
-    </VilkårskortMedFormOgMellomlagring>
+    </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };
 
