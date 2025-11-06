@@ -6,6 +6,7 @@ import { HelseinstitusjonGrunnlag, MellomlagretVurderingResponse } from 'lib/typ
 import { Behovstype } from 'lib/utils/form';
 import { FetchResponse } from 'lib/utils/api';
 import createFetchMock from 'vitest-fetch-mock';
+import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
@@ -67,6 +68,10 @@ const grunnlagMedVurdering: HelseinstitusjonGrunnlag = {
     },
   ],
 };
+
+beforeEach(() => {
+  setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'DU_ER_ET_ANNET_STED' });
+});
 
 describe('Helseinstitusjonsvurdering', () => {
   beforeEach(() => {
