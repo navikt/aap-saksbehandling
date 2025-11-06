@@ -1720,24 +1720,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aap-oppgave-typescript-types@npm:0.0.513":
-  version: 0.0.513
-  resolution: "@navikt/aap-oppgave-typescript-types@npm:0.0.513::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-oppgave-typescript-types%2F0.0.513%2Fccc0a3915458a556ecb306caa9cf46175d34f4b6"
-  checksum: 10c0/3aa0dc145c79bf57e984a9e0554d5ef3e524d8c39eec84ae498f1c3cfea05102473f5761693696c2823dd3cfee0c562066e6c707b6a366fe65d0624a9b1e8025
+"@navikt/aap-oppgave-typescript-types@npm:0.0.514":
+  version: 0.0.514
+  resolution: "@navikt/aap-oppgave-typescript-types@npm:0.0.514::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-oppgave-typescript-types%2F0.0.514%2Fecdd9f8ffe152b4ddc8f5092c849d2601ac130ac"
+  checksum: 10c0/57c2e4d250ad3fe56f1c91d8dfe814534219ebe0e690e9836af8ae098daf0df2c72e899427b84eca7d485497b86d2a5a0dac7bd424b4ed87fb3552a714ef525b
   languageName: node
   linkType: hard
 
-"@navikt/aap-postmottak-backend-typescript-types@npm:^0.0.534":
-  version: 0.0.534
-  resolution: "@navikt/aap-postmottak-backend-typescript-types@npm:0.0.534::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-postmottak-backend-typescript-types%2F0.0.534%2F13e2361af3a661acb58b878df38dc28a212b3746"
-  checksum: 10c0/cabf190681d6ac196b62db3ba8703f968fe3cfd2c6650b87c762197d88f6a58c4af059dc4c845d991b9827048f89c6c3d1c73b786d3f9cee784d4c206b4e8d22
+"@navikt/aap-postmottak-backend-typescript-types@npm:^0.0.535":
+  version: 0.0.535
+  resolution: "@navikt/aap-postmottak-backend-typescript-types@npm:0.0.535::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-postmottak-backend-typescript-types%2F0.0.535%2Fea1d56c25541a12728eca1e496f458fbd3fbd6c1"
+  checksum: 10c0/788a8b7bc72c621934d03ed514e4b1e9583030fa832ab66e9bf2ce8142f3f68b02a22d76176934f75da5925a41c7ef894925425de2b57f3838573357c880cdf2
   languageName: node
   linkType: hard
 
-"@navikt/aap-statistikk-typescript-types@npm:^0.1.473":
-  version: 0.1.473
-  resolution: "@navikt/aap-statistikk-typescript-types@npm:0.1.473::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-statistikk-typescript-types%2F0.1.473%2Feef8d673820899b1f73d7bcb07778acfb9e6d0bc"
-  checksum: 10c0/8593ad29a0237069ecbc09ff4b530d5b4b6beade9cfaa52f9db6610c4ddddda5c15ad572b6d3cdd24f1a4afaf582e60400bc6d283f489a6e6f8a223a8a757f85
+"@navikt/aap-statistikk-typescript-types@npm:^0.1.483":
+  version: 0.1.483
+  resolution: "@navikt/aap-statistikk-typescript-types@npm:0.1.483::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-statistikk-typescript-types%2F0.1.483%2F450b970edf5606e6c9caf8fd207e6b4ab890c8ed"
+  checksum: 10c0/3d14a9c35172f75a312282fcfb036d9cc451d30c6c03d51164829279ad92477ccf6b0b980457799f63e349d266b6f829192fbdff32dfcaac066ca73ee3e7def2
   languageName: node
   linkType: hard
 
@@ -3482,9 +3482,9 @@ __metadata:
     "@navikt/aap-breveditor": "npm:^0.9.1"
     "@navikt/aap-breveditor-css": "npm:^0.4.1"
     "@navikt/aap-felles-prettier": "npm:^5.4.0"
-    "@navikt/aap-oppgave-typescript-types": "npm:0.0.513"
-    "@navikt/aap-postmottak-backend-typescript-types": "npm:^0.0.534"
-    "@navikt/aap-statistikk-typescript-types": "npm:^0.1.473"
+    "@navikt/aap-oppgave-typescript-types": "npm:0.0.514"
+    "@navikt/aap-postmottak-backend-typescript-types": "npm:^0.0.535"
+    "@navikt/aap-statistikk-typescript-types": "npm:^0.1.483"
     "@navikt/aksel-icons": "npm:7.33.0"
     "@navikt/diagnosekoder": "npm:^1.2025.0"
     "@navikt/ds-css": "npm:7.33.0"
