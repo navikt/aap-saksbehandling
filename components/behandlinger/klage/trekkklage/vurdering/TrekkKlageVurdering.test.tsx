@@ -1,15 +1,20 @@
 import createFetchMock from 'vitest-fetch-mock';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import userEvent from '@testing-library/user-event';
 import { MellomlagretVurderingResponse, TrekkKlageGrunnlag } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
 import { render, screen } from 'lib/test/CustomRender';
 import { FetchResponse } from 'lib/utils/api';
 import { TrekkKlageVurdering } from 'components/behandlinger/klage/trekkklage/vurdering/TrekkKlageVurdering';
+import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
 const user = userEvent.setup();
+
+beforeEach(() => {
+  setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'TREKK_KLAGE' });
+});
 
 describe('mellomlagring', () => {
   const mellomlagring: MellomlagretVurderingResponse = {
