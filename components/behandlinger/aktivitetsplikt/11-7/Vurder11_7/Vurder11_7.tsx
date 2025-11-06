@@ -6,7 +6,6 @@ import { validerDato } from 'lib/validation/dateValidation';
 import { addDays, isBefore, parse, startOfDay } from 'date-fns';
 import { formaterDatoForBackend, formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
 import { useSak } from 'hooks/SakHook';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
@@ -15,6 +14,8 @@ import { Aktivitetsplikt11_7Grunnlag, Aktivitetsplikt11_7Vurdering, Mellomlagret
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 
 interface Props {
   behandlingVersjon: number;
@@ -45,6 +46,12 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
 
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
     useMellomlagring(Behovstype.VURDER_BRUDD_11_7_KODE, initialMellomlagretVurdering);
+
+  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+    readOnly,
+    'VURDER_AKTIVITETSPLIKT_11_7',
+    mellomlagretVurdering
+  );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -136,7 +143,7 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
         ],
       },
     },
-    { readOnly }
+    { readOnly: formReadOnly }
   );
 
   const knapptekst = () => {
@@ -159,7 +166,7 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
   };
 
   return (
-    <VilkårskortMedFormOgMellomlagring
+    <VilkårskortMedFormOgMellomlagringNyVisning
       heading="§ 11-7 Medlemmets aktivitetsplikt"
       steg={'VURDER_AKTIVITETSPLIKT_11_7'}
       onSubmit={handleSubmit}
@@ -177,6 +184,9 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
         )
       }
       readOnly={readOnly}
+      visningModus={visningModus}
+      visningActions={visningActions}
+      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
       {!!vedtatteVurderinger?.length && (
         <TidligereVurderinger
@@ -197,7 +207,7 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
       {form.watch('erOppfylt') === JaEllerNei.Nei &&
         grunnlag.harSendtForhåndsvarsel &&
         harPassertVarselFrist === false && <FormField form={form} formField={formFields.skalIgnorereVarselFrist} />}
-    </VilkårskortMedFormOgMellomlagring>
+    </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };
 

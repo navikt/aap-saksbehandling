@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render, screen } from 'lib/test/CustomRender';
 import { Vurder11_7 } from './Vurder11_7';
 import { userEvent } from '@testing-library/user-event';
@@ -6,10 +6,15 @@ import { Aktivitetsplikt11_7Grunnlag, MellomlagretVurderingResponse } from 'lib/
 import { Behovstype } from 'lib/utils/form';
 import { FetchResponse } from 'lib/utils/api';
 import createFetchMock from 'vitest-fetch-mock';
+import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
 const user = userEvent.setup();
+
+beforeEach(() => {
+  setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'VURDER_AKTIVITETSPLIKT_11_7' });
+});
 
 describe('Vurder 11-7', () => {
   const tomtGrunnlag: Aktivitetsplikt11_7Grunnlag = {
