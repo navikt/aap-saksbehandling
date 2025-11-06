@@ -17,6 +17,7 @@ import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook
 import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
+import Link from 'next/link';
 
 interface Props {
   grunnlag: SamordningArbeidsgiverGrunnlag;
@@ -60,7 +61,7 @@ export const SamordningArbeidsgiver = ({
     {
       begrunnelse: {
         type: 'textarea',
-        label: 'Vurder om brukeren skal ha 100 % reduksjon av AAP i en periode som følge av ytelse fra arbeidsgiver',
+        label: 'Vurder om brukeren skal ha 100% reduksjon av AAP i en periode som følge av ytelse fra arbeidsgiver',
         rules: { required: 'Du må gjøre en vilkårsvurdering' },
         defaultValue: defaultValue.begrunnelse,
       },
@@ -140,16 +141,24 @@ export const SamordningArbeidsgiver = ({
             />
           )}
 
-          <BodyLong>
+          <VStack>
             <BodyShort size={'small'} weight={'semibold'}>
               Relevant informasjon fra søknad:
             </BodyShort>
             <BodyShort textColor={'subtle'} size={'small'} weight={'semibold'}>
               Har du fått eller skal du få ekstra utbetalinger fra arbeidsgiver? Ja
             </BodyShort>
+          </VStack>
+
+          <BodyLong>
+            <Link href={'https://lovdata.no/nav/rundskriv/r11-00#ref/lov/1997-02-28-19/%C2%A711-24'}>
+              {' '}
+              Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-24 (lovdata.no)
+            </Link>
           </BodyLong>
+
           <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
-          <Label size={'small'}>Legg til start- og sluttdato for reduksjon som følge av ytelse fra arbeidsgiver</Label>
+          <Label size={'small'}>Legg til periode med reduksjon som følge av ytelse fra arbeidsgiver</Label>
           <HStack gap={'6'}>
             <DateInputWrapper
               control={form.control}
