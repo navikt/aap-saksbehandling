@@ -43,7 +43,7 @@ export function TidligereVurderinger({
 
     const vurderingGjelderFra = getFomDato(arr[index]);
     if (forrigeGjelderFra === vurderingGjelderFra) {
-      return format(subDays(parse(vurderingGjelderFra, 'yyyy-MM-dd', new Date()), 0), 'yyyy-MM-dd');
+      return null;
     }
 
     const tom = erDatoFoerDato(formaterDatoForFrontend(vurderingGjelderFra), formaterDatoForFrontend(forrigeGjelderFra))
