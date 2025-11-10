@@ -75,6 +75,8 @@ const grunnlag: BarnetilleggGrunnlag = {
   ],
   vurderteFolkeregisterBarn: [],
   vurderteBarn: [],
+  saksbehandlerOppgitteBarn: [],
+  vurderteSaksbehandlerOppgitteBarn: []
 };
 
 const behandlingPersonInfo: BehandlingPersoninfo = {
@@ -685,6 +687,8 @@ describe('mellomlagring', () => {
       enhetsnavn: 'Lokalenhetsnavn',
     },
     barnSomTrengerVurdering: [],
+    saksbehandlerOppgitteBarn: [],
+    vurderteSaksbehandlerOppgitteBarn: []
   };
 
   const grunnlagUtenVurdering: BarnetilleggGrunnlag = {
@@ -707,6 +711,8 @@ describe('mellomlagring', () => {
         },
       },
     ],
+    saksbehandlerOppgitteBarn: [],
+    vurderteSaksbehandlerOppgitteBarn: []
   };
 
   it('Skal vise en tekst om hvem som har gjort vurderingen dersom det finnes en mellomlagring', () => {
