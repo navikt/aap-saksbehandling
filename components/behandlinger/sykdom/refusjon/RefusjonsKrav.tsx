@@ -13,7 +13,7 @@ import { isError } from 'lib/utils/api';
 
 import { FormFields } from 'components/behandlinger/sykdom/refusjon/Refusjon';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
-import { isBefore, parse, startOfDay } from 'date-fns';
+import { isBefore, startOfDay } from 'date-fns';
 import { stringToDate } from 'lib/utils/date';
 import { Sak } from 'context/saksbehandling/SakContext';
 
@@ -71,7 +71,7 @@ export const RefusjonsKrav = ({ sak, form, readOnly }: Props) => {
           <TableStyled>
             <Table.Header>
               <Table.Row>
-                <Table.HeaderCell>Periode</Table.HeaderCell>
+                <Table.HeaderCell>Fra dato</Table.HeaderCell>
                 <Table.HeaderCell>Kontor</Table.HeaderCell>
                 <Table.HeaderCell></Table.HeaderCell>
               </Table.Row>
@@ -94,31 +94,6 @@ export const RefusjonsKrav = ({ sak, form, readOnly }: Props) => {
                               const vurderingGjelderFra = stringToDate(value as string, 'dd.MM.yyyy');
                               if (vurderingGjelderFra && isBefore(startOfDay(vurderingGjelderFra), starttidspunkt)) {
                                 return 'Vurderingen kan ikke gjelde fra før starttidspunktet';
-                              }
-                              return true;
-                            },
-                          },
-                        }}
-                        readOnly={readOnly}
-                      />
-                      {'-'}
-                      <DateInputWrapper
-                        label="Refusjonen gjelder til"
-                        control={form.control}
-                        name={`refusjoner.${index}.tom`}
-                        hideLabel={true}
-                        rules={{
-                          validate: {
-                            gyldigDato: (value) => validerNullableDato(value as string),
-                            kanIkkeVaereFoerFraDato: (value) => {
-                              const fomValue = form.getValues(`refusjoner.${index}.fom`);
-                              if (!fomValue) {
-                                return true;
-                              }
-                              const fomDate = startOfDay(parse(fomValue, 'dd.MM.yyyy', new Date()));
-                              const vurderingGjelderTil = stringToDate(value as string, 'dd.MM.yyyy');
-                              if (vurderingGjelderTil && isBefore(startOfDay(vurderingGjelderTil), fomDate)) {
-                                return 'Tildato kan ikke være før fradato';
                               }
                               return true;
                             },

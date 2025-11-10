@@ -85,7 +85,6 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
               harKrav: data.harKrav === JaEllerNei.Ja,
               navKontor: refusjon.navKontor.value,
               fom: refusjon.fom ? formaterDatoForBackend(parse(refusjon.fom, 'dd.MM.yyyy', new Date())) : null,
-              tom: refusjon.tom ? formaterDatoForBackend(parse(refusjon.tom, 'dd.MM.yyyy', new Date())) : null,
             })),
           },
           behandlingVersjon: behandlingVersjon,
@@ -126,15 +125,18 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
       {!!historiskeVurderinger?.length && (
         <TidligereVurderinger data={historiskeVurderinger} buildFelter={byggFelter} />
       )}
-      <VStack>
-        <BodyLong weight={'semibold'} size={'small'}>
-          Relevant informasjon fra søknad:
-        </BodyLong>
-        <BodyLong size={'small'} textColor={'subtle'}>
-          Bruker har krysset av for at de får, eller nylig har søkt om økonomisk sosialhjelp:{' '}
-          {harKryssetAvØknomiskSosialHjelp}
-        </BodyLong>
-      </VStack>
+
+      {grunnlag.økonomiskSosialHjelp != null && (
+        <VStack>
+          <BodyLong weight={'semibold'} size={'small'}>
+            Relevant informasjon fra søknad:
+          </BodyLong>
+          <BodyLong size={'small'} textColor={'subtle'}>
+            Bruker har krysset av for at de får, eller nylig har søkt om økonomisk sosialhjelp:{' '}
+            {harKryssetAvØknomiskSosialHjelp}
+          </BodyLong>
+        </VStack>
+      )}
 
       <RadioGroupWrapper
         name={`harKrav`}
@@ -163,7 +165,6 @@ function mapVurderingToDraftFormFields(grunnlag: RefusjonskravGrunnlag, sak: Sak
               value: vurdering.navKontor ?? '',
             },
             fom: formaterDatoForFrontend(vurdering.fom ?? sak.periode.fom),
-            tom: vurdering.tom != null ? formaterDatoForFrontend(vurdering.tom) : '',
           }))
         : [
             {
