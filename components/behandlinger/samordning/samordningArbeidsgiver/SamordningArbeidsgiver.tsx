@@ -19,6 +19,8 @@ import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereV
 import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
 import Link from 'next/link';
 
+import { SamordningArbeidsGiverTabell } from 'components/behandlinger/samordning/samordningArbeidsgiver/SamordningArbeidsgiverTabell';
+
 interface Props {
   grunnlag: SamordningArbeidsgiverGrunnlag;
   behandlingVersjon: number;
@@ -27,9 +29,13 @@ interface Props {
 }
 
 export interface SamordningArbeidsgiverFormFields {
+  begrunnelse?: string;
+  perioder?: SamordningArbeidsgiverPerioder[];
+}
+
+export interface SamordningArbeidsgiverPerioder {
   fom?: string;
   tom?: string;
-  begrunnelse?: string;
 }
 
 type DraftFormFields = Partial<SamordningArbeidsgiverFormFields>;
@@ -61,21 +67,13 @@ export const SamordningArbeidsgiver = ({
     {
       begrunnelse: {
         type: 'textarea',
-        label: 'Vurder om brukeren skal ha 100% reduksjon av AAP i en periode som følge av ytelse fra arbeidsgiver',
+        label: 'Vurder om brukeren har andre statlige ytelser som kan gi fradrag fra AAP etterbetaling',
         rules: { required: 'Du må gjøre en vilkårsvurdering' },
         defaultValue: defaultValue.begrunnelse,
       },
-      fom: {
-        type: 'text',
-        label: 'Fra dato',
-        rules: { required: 'Du må velge en dato' },
-        defaultValue: defaultValue.fom,
-      },
-      tom: {
-        type: 'text',
-        label: 'Til dato',
-        rules: { required: 'Du må velge en dato' },
-        defaultValue: defaultValue.tom,
+      perioder: {
+        type: 'fieldArray',
+        defaultValue: defaultValue.perioder,
       },
     },
     { readOnly: formReadOnly }
@@ -88,10 +86,14 @@ export const SamordningArbeidsgiver = ({
           behandlingVersjon: behandlingVersjon,
           behov: {
             behovstype: Behovstype.AVKLAR_SAMORDNING_ARBEIDSGIVER,
-            samordningArbeidsgiverVurdering: {
-              vurdering: data.begrunnelse!!,
-              fom: formaterDatoForBackend(parse(data.fom!!, 'dd.MM.yyyy', new Date())),
-              tom: formaterDatoForBackend(parse(data.tom!!, 'dd.MM.yyyy', new Date())),
+            samordningAndreStatligeYtelserVurdering: {
+              begrunnelse: data.begrunnelse,
+              vurderingPerioder: data.perioder.map((periode) => ({
+                periode: {
+                  fom: formaterDatoForBackend(parse(periode.fom!, 'dd.MM.yyyy', new Date())),
+                  tom: formaterDatoForBackend(parse(periode.tom!, 'dd.MM.yyyy', new Date())),
+                },
+              })),
             },
           },
           referanse: behandlingsreferanse,
@@ -100,7 +102,6 @@ export const SamordningArbeidsgiver = ({
       )
     )(event);
   };
-
   const skalViseBekreftKnapp = !formReadOnly;
 
   const historiskeVurderinger = grunnlag.historiskeVurderinger;
@@ -159,34 +160,9 @@ export const SamordningArbeidsgiver = ({
 
           <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
           <Label size={'small'}>Legg til periode med reduksjon som følge av ytelse fra arbeidsgiver</Label>
-          <HStack gap={'6'}>
-            <DateInputWrapper
-              control={form.control}
-              label={'Startdato'}
-              name={`fom`}
-              hideLabel={false}
-              rules={{
-                required: 'Du må velge når reduksjonen gjelder fra',
-                validate: (value) => {
-                  return validerDato(value as string);
-                },
-              }}
-              readOnly={formReadOnly}
-            />
-            <DateInputWrapper
-              control={form.control}
-              label={'Sluttdato'}
-              name={`tom`}
-              hideLabel={false}
-              rules={{
-                required: 'Du må velge når reduksjonen gjelder til',
-                validate: (value) => {
-                  return validerDato(value as string);
-                },
-              }}
-              readOnly={formReadOnly}
-            />
-          </HStack>
+          <VStack gap={'6'}>
+            <SamordningArbeidsGiverTabell form={form} readOnly={formReadOnly} />
+          </VStack>
         </VStack>
       }
     </VilkårskortMedFormOgMellomlagringNyVisning>
