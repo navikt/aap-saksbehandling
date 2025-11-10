@@ -10,7 +10,8 @@ import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { FormEvent } from 'react';
 import { ForeslåVedtakGrunnlag } from 'lib/types/types';
 import { ForeslåVedtakTabell } from 'components/behandlinger/vedtak/foreslåvedtak/foreslåvedtaktabell/ForeslåVedtakTabell';
-import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
+import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 
 interface Props {
   behandlingVersjon: number;
@@ -23,8 +24,10 @@ export const ForeslåVedtak = ({ behandlingVersjon, readOnly, grunnlag }: Props)
   const { status, løsBehovOgGåTilNesteSteg, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('FORESLÅ_VEDTAK');
 
+  const { visningActions, visningModus } = useVilkårskortVisning(readOnly, 'FORESLÅ_VEDTAK', undefined);
+
   return (
-    <VilkårskortMedForm
+    <VilkårskortMedFormOgMellomlagringNyVisning
       heading="Foreslå vedtak"
       steg={'FORESLÅ_VEDTAK'}
       vilkårTilhørerNavKontor={false}
@@ -43,6 +46,12 @@ export const ForeslåVedtak = ({ behandlingVersjon, readOnly, grunnlag }: Props)
         });
       }}
       knappTekst={'Send til beslutter'}
+      mellomlagretVurdering={undefined}
+      visningModus={visningModus}
+      visningActions={visningActions}
+      formReset={() => {}}
+      onDeleteMellomlagringClick={undefined}
+      onLagreMellomLagringClick={undefined}
     >
       <div className={styles.foreslåvedtak}>
         <Label as="p" size={'medium'}>
@@ -54,6 +63,6 @@ export const ForeslåVedtak = ({ behandlingVersjon, readOnly, grunnlag }: Props)
           løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
         />
       </div>
-    </VilkårskortMedForm>
+    </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };

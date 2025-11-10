@@ -5,7 +5,6 @@ import { FormEvent } from 'react';
 import { Link, VStack } from '@navikt/ds-react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
 import { IkkeMeldtPerioderTable } from 'components/behandlinger/underveis/ikkeoppfyltmeldeplikt/IkkeMeldtPerioderTable';
 import { VurderingMeldepliktOverstyringSkjema } from 'components/behandlinger/underveis/ikkeoppfyltmeldeplikt/VurderingMeldepliktOverstyringSkjema';
 import { useConfigForm } from 'components/form/FormHook';
@@ -15,6 +14,8 @@ import {
   MeldepliktOverstyringVurdering,
 } from 'components/behandlinger/underveis/ikkeoppfyltmeldeplikt/types';
 import { Behovstype } from 'lib/utils/form';
+import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 
 type Props = {
   grunnlag?: OverstyringMeldepliktGrunnlag;
@@ -27,6 +28,12 @@ export const IkkeOppfyltMeldeplikt = ({ grunnlag, behandlingVersjon, readOnly }:
 
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('IKKE_OPPFYLT_MELDEPLIKT');
+
+  const { visningModus, visningActions, formReadOnly } = useVilkårskortVisning(
+    readOnly,
+    'IKKE_OPPFYLT_MELDEPLIKT',
+    undefined
+  );
 
   /**
    * Ikke meldte perioder som skal vises er alle perioder som er registrert som ikke meldt
@@ -138,7 +145,7 @@ export const IkkeOppfyltMeldeplikt = ({ grunnlag, behandlingVersjon, readOnly }:
       grunnlag.gjeldendeVedtatteOversyringsvurderinger.length > 0);
 
   return harIkkeMeldteEllerOverstyrtePerioder ? (
-    <VilkårskortMedForm
+    <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'§ 11-10 andre ledd. Perioder uten overholdt meldeplikt'}
       steg={'IKKE_OPPFYLT_MELDEPLIKT'}
       vilkårTilhørerNavKontor={true}
@@ -148,6 +155,12 @@ export const IkkeOppfyltMeldeplikt = ({ grunnlag, behandlingVersjon, readOnly }:
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       visBekreftKnapp={!readOnly}
       readOnly={readOnly}
+      onDeleteMellomlagringClick={undefined}
+      onLagreMellomLagringClick={undefined}
+      mellomlagretVurdering={undefined}
+      visningModus={visningModus}
+      visningActions={visningActions}
+      formReset={() => form.reset()}
     >
       <VStack gap={'4'}>
         <Link href={'https://lovdata.no/pro/rundskriv/r11-00/KAPITTEL_12'} target="_blank">
@@ -158,7 +171,7 @@ export const IkkeOppfyltMeldeplikt = ({ grunnlag, behandlingVersjon, readOnly }:
             ikkeMeldtPerioder={ikkeMeldtPerioderSomSkalVises}
             tidligereVurdertePerioder={tidligereVurderinger}
             valgtePerioder={valgtePerioder}
-            readOnly={readOnly}
+            readOnly={formReadOnly}
             onClickPeriode={handleChange}
           />
           {valgtePerioder.map((periode) => (
@@ -168,12 +181,12 @@ export const IkkeOppfyltMeldeplikt = ({ grunnlag, behandlingVersjon, readOnly }:
               control={form.control}
               index={vurderinger.findIndex((field) => field.fraDato === periode)}
               field={vurderinger.find((field) => field.fraDato === periode)!}
-              readOnly={readOnly}
+              readOnly={formReadOnly}
             />
           ))}
         </VStack>
       </VStack>
-    </VilkårskortMedForm>
+    </VilkårskortMedFormOgMellomlagringNyVisning>
   ) : (
     <></>
   );
