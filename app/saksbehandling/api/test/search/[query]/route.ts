@@ -1,5 +1,5 @@
 import { logError } from 'lib/serverutlis/logger';
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 export type Kommune = {
   code: string;
@@ -207,15 +207,13 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ quer
 
   try {
     if (returType === 'object') {
-      return new Response(
-        JSON.stringify(kommuner.filter((kommune) => kommune.name.toUpperCase().includes(searchFor))),
+      return NextResponse.json(
+        kommuner.filter((kommune) => kommune.name.toUpperCase().includes(searchFor)),
         { status: 200 }
       );
     } else {
-      return new Response(
-        JSON.stringify(
-          kommuner.filter((kommune) => kommune.name.toUpperCase().includes(searchFor)).map((kommune) => kommune.name)
-        ),
+      return NextResponse.json(
+        kommuner.filter((kommune) => kommune.name.toUpperCase().includes(searchFor)).map((kommune) => kommune.name),
         {
           status: 200,
         }
@@ -223,6 +221,6 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ quer
     }
   } catch (err: unknown) {
     logError('/test/opprett/', err);
-    return new Response(JSON.stringify({ message: err?.toString() }), { status: 500 });
+    return NextResponse.json({ message: err?.toString() }, { status: 500 });
   }
 }

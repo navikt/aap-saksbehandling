@@ -40,7 +40,7 @@ const formaterSaksnummer = (saksnummer: string) => {
 export async function POST(req: Request, brukerinformasjon: Props) {
   const body: { søketekst: string } = await req.json();
   if (!body.søketekst) {
-    return new Response(JSON.stringify({ message: 'søketekst mangler' }), { status: 400 });
+    return NextResponse.json({ message: 'søketekst mangler' }, { status: 400 });
   }
 
   const søketekst = body.søketekst;

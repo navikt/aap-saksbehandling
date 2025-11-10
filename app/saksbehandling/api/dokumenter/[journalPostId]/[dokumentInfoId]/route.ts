@@ -1,8 +1,9 @@
 import { NextApiRequest } from 'next';
 import { hentDokument } from 'lib/services/dokumentinnhentingservice/dokumentinnhentingservice';
+import { NextResponse } from 'next/server';
 
 export async function GET(
-  req: NextApiRequest,
+  _: NextApiRequest,
   props: { params: Promise<{ journalPostId: string; dokumentInfoId: string }> }
 ) {
   const params = await props.params;
@@ -11,6 +12,6 @@ export async function GET(
   if (blob !== undefined) {
     return new Response(blob, { status: 200, headers: new Headers({ 'Content-Type': blob.type }) });
   } else {
-    return new Response(JSON.stringify({ message: 'Ingen dokument funnet.' }), { status: 500 });
+    return NextResponse.json({ message: 'Ingen dokument funnet.' }, { status: 500 });
   }
 }

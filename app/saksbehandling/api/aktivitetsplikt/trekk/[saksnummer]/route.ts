@@ -1,4 +1,4 @@
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { hentAktivitetspliktTrekk } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isError } from 'lib/utils/api';
 import { logError } from 'lib/serverutlis/logger';
@@ -10,5 +10,5 @@ export async function GET(_: NextRequest, props: { params: Promise<{ saksnummer:
   if (isError(res)) {
     logError(`/aktivitetsplikt/trekk`, res.apiException);
   }
-  return new Response(JSON.stringify(res), { status: res.status });
+  return NextResponse.json(res, { status: res.status });
 }

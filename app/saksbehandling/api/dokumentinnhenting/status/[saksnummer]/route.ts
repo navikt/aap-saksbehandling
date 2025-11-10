@@ -2,7 +2,7 @@ import { logError } from 'lib/serverutlis/logger';
 import { hentAlleDialogmeldingerPåSak } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { LegeerklæringStatus } from 'lib/types/types';
 import { isLocal } from 'lib/utils/environment';
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { FetchResponse, isError } from 'lib/utils/api';
 
 const testdata: LegeerklæringStatus[] = [
@@ -37,7 +37,7 @@ export async function GET(_: NextRequest, props: { params: Promise<{ saksnummer:
       status: 200,
       data: testdata,
     };
-    return new Response(JSON.stringify(response), { status: 200 });
+    return NextResponse.json(response, { status: 200 });
   }
 
   const data = await hentAlleDialogmeldingerPåSak(params.saksnummer);
@@ -46,5 +46,5 @@ export async function GET(_: NextRequest, props: { params: Promise<{ saksnummer:
     logError(`/dokumentinnhenting/behandleroppslag`, data.apiException.message);
   }
 
-  return new Response(JSON.stringify(data), { status: 200 });
+  return NextResponse.json(data, { status: 200 });
 }

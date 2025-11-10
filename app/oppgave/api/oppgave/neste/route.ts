@@ -1,4 +1,4 @@
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { NesteOppgaveRequestBody } from 'lib/types/oppgaveTypes';
 import { velgNesteOppgave } from 'lib/services/oppgaveservice/oppgaveservice';
 import { logError } from 'lib/serverutlis/logger';
@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
     .json()
     .then((data) => ({ filterId: data.filterId, enheter: data.enheter }));
   if (data.filterId === undefined || data.enheter === undefined) {
-    return new Response(JSON.stringify({ message: 'Missing filterid or enheter', status: 400 }), { status: 400 });
+    return NextResponse.json({ message: 'Missing filterid or enheter', status: 400 }, { status: 400 });
   }
 
   try {
@@ -17,9 +17,9 @@ export async function POST(req: NextRequest) {
     if (isError(res)) {
       logError(`/api/oppgave/neste`, res.apiException);
     }
-    return new Response(res.status == 204 ? null : JSON.stringify(res), { status: res.status });
+    return NextResponse.json(res, { status: res.status });
   } catch (error) {
     logError(`/api/oppgave/neste`, error);
-    return new Response(JSON.stringify({ message: JSON.stringify(error), status: 500 }), { status: 500 });
+    return NextResponse.json({ message: JSON.stringify(error), status: 500 }, { status: 500 });
   }
 }

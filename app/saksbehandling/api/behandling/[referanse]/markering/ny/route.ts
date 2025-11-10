@@ -1,4 +1,4 @@
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { isError } from 'lib/utils/api';
 import { logError, logWarning } from 'lib/serverutlis/logger';
 import { getErrorMessage } from 'lib/utils/errorUtil';
@@ -14,9 +14,9 @@ export async function POST(req: NextRequest, props: { params: Promise<{ referans
     if (isError(nyMarkeringRes)) {
       logError(`/markering/ny, behandlingref: ${params.referanse}, message: ${nyMarkeringRes.apiException.message}`);
     }
-    return new Response(JSON.stringify(nyMarkeringRes), { status: nyMarkeringRes.status });
+    return NextResponse.json(nyMarkeringRes, { status: nyMarkeringRes.status });
   } catch (error) {
     logWarning(`/markering/ny ${body.markeringType}`, error);
-    return new Response(JSON.stringify({ message: getErrorMessage(error) }), { status: 500 });
+    return NextResponse.json({ message: getErrorMessage(error) }, { status: 500 });
   }
 }
