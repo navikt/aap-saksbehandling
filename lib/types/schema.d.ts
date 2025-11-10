@@ -8995,6 +8995,7 @@ export interface components {
       barnSomTrengerVurdering: components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnetillegg.IdentifiserteBarnDto'][];
       folkeregisterbarn: components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnetillegg.IdentifiserteBarnDto'][];
       'harTilgangTil\u00C5Saksbehandle': boolean;
+      saksbehandlerOppgitteBarn: components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnetillegg.IdentifiserteBarnDto'][];
       /**
        * Format: date
        * @example 2025-04-01
@@ -9003,6 +9004,7 @@ export interface components {
       vurdertAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
       vurderteBarn: components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnetillegg.ExtendedVurdertBarnDto'][];
       vurderteFolkeregisterBarn: components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnetillegg.ExtendedVurdertBarnDto'][];
+      vurderteSaksbehandlerOppgitteBarn: components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnetillegg.ExtendedVurdertBarnDto'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.barnetillegg.ExtendedVurdertBarnDto': {
       /**
@@ -9482,7 +9484,8 @@ export interface components {
         | 'KLAGE_AVVIST'
         | 'KLAGE_OPPRETTHOLDELSE'
         | 'KLAGE_TRUKKET'
-        | 'FORHÅNDSVARSEL_KLAGE_FORMKRAV';
+        | 'FORHÅNDSVARSEL_KLAGE_FORMKRAV'
+        | 'OMGJØRING_VEDTAK_11_9';
       'harTilgangTil\u00C5SendeBrev': boolean;
       mottaker: components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag.Brev.Mottaker'];
       /**
@@ -9660,9 +9663,7 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningAndreStatligeYtelserGrunnlagDTO': {
       'harTilgangTil\u00C5Saksbehandle': boolean;
-      historiskeVurderinger?:
-        | components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningAndreStatligeYtelserVurderingDTO'][]
-        | null;
+      historiskeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningAndreStatligeYtelserVurderingDTO'][];
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningAndreStatligeYtelserVurderingDTO'];
     };
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningAndreStatligeYtelserVurderingDTO': {
@@ -11591,6 +11592,7 @@ export interface components {
       harForeldreAnsvar: boolean;
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.barn.VurderingerForBarnetillegg': {
+      saksbehandlerOppgitteBarn: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.barn.VurdertBarnDto'][];
       vurderteBarn: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.barn.VurdertBarnDto'][];
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.barn.VurdertBarnDto': {
