@@ -238,6 +238,27 @@ describe('Vilkårskort med form', () => {
     expect(avbrytKnapp).not.toBeInTheDocument();
     expect(lagreUtkastKnapp).not.toBeInTheDocument();
   });
+  it('Skal ikke ha lagre utkast-knapp lagreMellomlagring listener er undefined', () => {
+    render(
+      <VilkårskortMedFormOgMellomlagringNyVisning
+        {...defaultProps}
+        visningModus={VisningModus.AKTIV_UTEN_AVBRYT}
+        visningActions={{
+          onBekreftClick: vitest.fn,
+          onEndreClick: vitest.fn,
+          avbrytEndringClick: vitest.fn,
+        }}
+        formReset={() => vitest.fn}
+        onLagreMellomLagringClick={undefined}
+      >
+        <span>Dette er innhold</span>
+      </VilkårskortMedFormOgMellomlagringNyVisning>
+    );
+
+    const lagreUtkastKnapp = screen.queryByRole('button', { name: 'Lagre utkast' });
+
+    expect(lagreUtkastKnapp).not.toBeInTheDocument();
+  });
 });
 
 const defaultProps: VilkårsKortMedFormOgMellomlagringProps = {
