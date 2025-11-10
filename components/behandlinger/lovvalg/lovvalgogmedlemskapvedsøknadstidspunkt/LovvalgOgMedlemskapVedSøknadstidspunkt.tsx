@@ -184,7 +184,6 @@ export const LovvalgOgMedlemskapVedSøknadstidspunkt = ({
       heading={heading}
       steg={'VURDER_LOVVALG'}
       onSubmit={handleSubmit}
-      visBekreftKnapp={!readOnly}
       isLoading={isLoading}
       status={status}
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
@@ -197,7 +196,6 @@ export const LovvalgOgMedlemskapVedSøknadstidspunkt = ({
           form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields());
         });
       }}
-      readOnly={readOnly}
       visningModus={visningModus}
       visningActions={visningActions}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}

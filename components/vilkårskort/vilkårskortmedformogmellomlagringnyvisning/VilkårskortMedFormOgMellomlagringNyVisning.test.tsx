@@ -20,13 +20,13 @@ describe('Vilkårskort med form', () => {
     expect(innhold).toBeVisible();
   });
 
-  it('skal vise en knapp for å bekrefte innesending av skjema dersom visBekreftKnapp er true', () => {
+  it('skal vise en knapp for å bekrefte innesending av skjema dersom visningsmodus er aktiv', () => {
     renderComponentNyVisning(VisningModus.AKTIV_UTEN_AVBRYT);
     const button = screen.getByRole('button', { name: 'Bekreft' });
     expect(button).toBeVisible();
   });
 
-  it('skal ikke vise bekreft knapp visBekreftKnapp er false', async () => {
+  it('skal ikke vise bekreft knapp dersom visningsmodus er låst', async () => {
     renderComponentNyVisning(VisningModus.LÅST_UTEN_ENDRE);
 
     const bekreftButton = screen.queryByRole('button', { name: 'Bekreft' });
@@ -79,7 +79,6 @@ describe('Vilkårskort med form', () => {
       <VilkårskortMedFormOgMellomlagringNyVisning
         {...defaultProps}
         visningModus={VisningModus.AKTIV_UTEN_AVBRYT}
-        readOnly={true}
         visningActions={{
           onBekreftClick: vitest.fn,
           onEndreClick: vitest.fn,
@@ -108,7 +107,6 @@ describe('Vilkårskort med form', () => {
       <VilkårskortMedFormOgMellomlagringNyVisning
         {...defaultProps}
         visningModus={VisningModus.AKTIV_UTEN_AVBRYT}
-        readOnly={true}
         visningActions={{
           onBekreftClick: vitest.fn,
           onEndreClick: vitest.fn,
@@ -136,7 +134,6 @@ describe('Vilkårskort med form', () => {
       <VilkårskortMedFormOgMellomlagringNyVisning
         {...defaultProps}
         visningModus={VisningModus.LÅST_UTEN_ENDRE}
-        readOnly={true}
         visningActions={{
           onBekreftClick: vitest.fn,
           onEndreClick: vitest.fn,
@@ -164,7 +161,6 @@ describe('Vilkårskort med form', () => {
       <VilkårskortMedFormOgMellomlagringNyVisning
         {...defaultProps}
         visningModus={VisningModus.LÅST_UTEN_ENDRE}
-        readOnly={true}
         visningActions={{
           onBekreftClick: vitest.fn,
           onEndreClick: vitest.fn,
@@ -268,7 +264,6 @@ const defaultProps: VilkårsKortMedFormOgMellomlagringProps = {
   onSubmit: vitest.fn(),
   isLoading: false,
   status: 'DONE',
-  visBekreftKnapp: false,
   vilkårTilhørerNavKontor: true,
   vurdertAvAnsatt: { ident: 'Lokalsaksbehandler', dato: '2025-04-25' },
   kvalitetssikretAv: { ident: 'Kvalitetssikrer', dato: '2025-04-26' },

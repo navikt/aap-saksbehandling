@@ -184,7 +184,6 @@ export const Yrkesskade = ({
       onSubmit={handleSubmit}
       isLoading={isLoading}
       status={status}
-      visBekreftKnapp={!readOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vurdertAvAnsatt={grunnlag.yrkesskadeVurdering?.vurdertAv}
       mellomlagretVurdering={mellomlagretVurdering}
@@ -194,7 +193,6 @@ export const Yrkesskade = ({
           form.reset(grunnlag?.yrkesskadeVurdering ? mapVurderingToDraftFormFields(grunnlag) : emptyDraftFormFields());
         });
       }}
-      readOnly={readOnly}
       visningModus={visningModus}
       visningActions={visningActions}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}

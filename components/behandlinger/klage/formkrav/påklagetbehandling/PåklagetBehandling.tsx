@@ -73,7 +73,6 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, ini
       steg={'PÅKLAGET_BEHANDLING'}
       onSubmit={handleSubmit(onSubmit)}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      visBekreftKnapp={!readOnly}
       vilkårTilhørerNavKontor={false}
       isLoading={isLoading}
       status={status}
@@ -89,7 +88,6 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, ini
           )
         )
       }
-      readOnly={readOnly}
       visningModus={visningModus}
       visningActions={visningActions}
       formReset={() => reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}

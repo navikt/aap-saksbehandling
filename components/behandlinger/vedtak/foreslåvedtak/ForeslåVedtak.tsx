@@ -34,7 +34,6 @@ export const ForeslåVedtak = ({ behandlingVersjon, readOnly, grunnlag }: Props)
       status={status}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       isLoading={isLoading}
-      visBekreftKnapp={!readOnly}
       onSubmit={(event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         løsBehovOgGåTilNesteSteg({

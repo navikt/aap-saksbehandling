@@ -157,7 +157,6 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly, initi
       vilkårTilhørerNavKontor={false}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       status={status}
-      visBekreftKnapp={!readOnly}
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
       mellomlagretVurdering={mellomlagretVurdering}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
@@ -166,7 +165,6 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly, initi
           form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields())
         );
       }}
-      readOnly={readOnly}
       visningModus={visningModus}
       visningActions={visningActions}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}

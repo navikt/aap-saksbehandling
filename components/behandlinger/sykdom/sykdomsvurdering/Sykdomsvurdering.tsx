@@ -278,7 +278,6 @@ export const Sykdomsvurdering = ({
       vilkårTilhørerNavKontor={true}
       onSubmit={handleSubmit}
       status={status}
-      visBekreftKnapp={!readOnly}
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vurdertAvAnsatt={sykdomsvurdering?.vurdertAv}

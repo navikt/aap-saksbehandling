@@ -56,7 +56,6 @@ export const Underveisgrunnlag = ({ grunnlag, readOnly, behandlingVersjon }: Pro
       status={status}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       isLoading={isLoading}
-      visBekreftKnapp={!readOnly}
       onSubmit={(event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         løsBehovOgGåTilNesteSteg({

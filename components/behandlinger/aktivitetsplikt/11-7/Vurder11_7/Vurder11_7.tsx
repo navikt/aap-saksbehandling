@@ -170,7 +170,6 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
       heading="§ 11-7 Medlemmets aktivitetsplikt"
       steg={'VURDER_AKTIVITETSPLIKT_11_7'}
       onSubmit={handleSubmit}
-      visBekreftKnapp={!readOnly}
       isLoading={isLoading}
       status={status}
       knappTekst={knapptekst()}
@@ -183,7 +182,6 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
           form.reset(grunnlag.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields())
         )
       }
-      readOnly={readOnly}
       visningModus={visningModus}
       visningActions={visningActions}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}

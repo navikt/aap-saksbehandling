@@ -1,22 +1,36 @@
 'use client';
 
 import { Button, Detail, ExpansionCard, HStack, VStack } from '@navikt/ds-react';
-import { MellomlagretVurdering, VurdertAvAnsatt } from 'lib/types/types';
+import { MellomlagretVurdering, StegType, VurdertAvAnsatt } from 'lib/types/types';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { formaterDatoForFrontend, formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 
 import styles from 'components/vilkårskort/Vilkårskort.module.css';
 import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
-import { VilkårsKortMedFormProps } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
 import { VisningActions, VisningModus } from 'hooks/saksbehandling/visning/VisningHook';
-import { ReactNode } from 'react';
+import { FormEvent, ReactNode } from 'react';
+import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
+import { ApiException } from 'lib/utils/api';
 
-export interface VilkårsKortMedFormOgMellomlagringProps extends VilkårsKortMedFormProps {
+export interface VilkårsKortMedFormOgMellomlagringProps {
+  heading: string;
+  steg: StegType;
+  children: ReactNode;
+  onSubmit: (e: FormEvent<HTMLFormElement>) => void;
+  isLoading: boolean;
+  status: LøsBehovOgGåTilNesteStegStatus;
+  løsBehovOgGåTilNesteStegError: ApiException | undefined;
+  knappTekst?: string;
+  defaultOpen?: boolean;
+  vilkårTilhørerNavKontor: boolean;
+  vurdertAvAnsatt?: VurdertAvAnsatt;
+  vurdertAutomatisk?: boolean;
+  kvalitetssikretAv?: VurdertAvAnsatt;
+  visningModus: VisningModus;
+  visningActions: VisningActions;
   onDeleteMellomlagringClick: (() => void) | undefined;
   onLagreMellomLagringClick: (() => void) | undefined;
   mellomlagretVurdering: MellomlagretVurdering | undefined;
-  visningModus: VisningModus;
-  visningActions: VisningActions;
   extraActions?: ReactNode;
   formReset: () => void;
 }

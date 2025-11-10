@@ -83,7 +83,6 @@ export const AvbrytRevurderingVurdering = ({ grunnlag, readOnly, behandlingVersj
       onSubmit={handleSubmit}
       status={status}
       isLoading={isLoading}
-      visBekreftKnapp={!readOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
       onDeleteMellomlagringClick={undefined}
