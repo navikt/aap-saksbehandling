@@ -14,6 +14,7 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import { LovOgMedlemskapVurderingForm } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/types';
 import {
   getDefaultValuesFromGrunnlag,
+  hentPeriodiserteVerdierFraMellomlagretVurdering,
   mapFormTilDto,
 } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/lovvalg-utils';
 import { parseISO } from 'date-fns';
@@ -58,7 +59,7 @@ export const LovvalgOgMedlemskapPeriodisert = ({
 
   const defaultValues =
     mellomlagretVurdering != null
-      ? (JSON.parse(mellomlagretVurdering.data) as LovOgMedlemskapVurderingForm)
+      ? hentPeriodiserteVerdierFraMellomlagretVurdering(mellomlagretVurdering, grunnlag)
       : getDefaultValuesFromGrunnlag(grunnlag);
 
   const form = useForm<LovOgMedlemskapVurderingForm>({
