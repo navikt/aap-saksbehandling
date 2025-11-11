@@ -105,11 +105,9 @@ export const TrekkKlageVurdering = ({ behandlingVersjon, readOnly, grunnlag, ini
       steg={'TREKK_KLAGE'}
       onSubmit={handleSubmit}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      visBekreftKnapp={!readOnly}
       vilkårTilhørerNavKontor={false}
       isLoading={isLoading}
       status={status}
-      readOnly={readOnly}
       mellomlagretVurdering={mellomlagretVurdering}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() =>

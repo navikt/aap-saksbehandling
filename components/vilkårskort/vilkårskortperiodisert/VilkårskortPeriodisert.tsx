@@ -1,4 +1,3 @@
-import { VilkårsKortMedFormProps } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
 import { MellomlagretVurdering, VurdertAvAnsatt } from 'lib/types/types';
 import { VisningActions, VisningModus } from 'hooks/saksbehandling/visning/VisningHook';
 import styles from './VilkårskortPeriodisert.module.css';
@@ -9,15 +8,15 @@ import { formaterDatoForFrontend, formaterDatoMedTidspunktForFrontend } from 'li
 import { PlusIcon } from '@navikt/aksel-icons';
 import { ErrorList } from 'lib/utils/formerrors';
 import { FormErrorSummary } from 'components/formerrorsummary/FormErrorSummary';
+import { VilkårsKortMedFormOgMellomlagringProps } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 
-export interface VilkårsKortMedFormOgMellomlagringProps extends VilkårsKortMedFormProps {
+export interface VilkårsKortPeriodisertProps extends VilkårsKortMedFormOgMellomlagringProps {
   onDeleteMellomlagringClick: () => void;
   onLagreMellomLagringClick: () => void;
   mellomlagretVurdering: MellomlagretVurdering | undefined;
   visningModus: VisningModus;
   visningActions: VisningActions;
   onLeggTilVurdering: () => void;
-  formReset?: () => void;
   errorList: ErrorList;
 }
 
@@ -42,7 +41,7 @@ export const VilkårskortPeriodisert = ({
   onLeggTilVurdering,
   formReset,
   errorList,
-}: VilkårsKortMedFormOgMellomlagringProps) => {
+}: VilkårsKortPeriodisertProps) => {
   const classNameBasertPåEnhet = vilkårTilhørerNavKontor ? styles.vilkårsKortNAV : styles.vilkårsKortNAY;
   const { flyt } = useRequiredFlyt();
   const erAktivtSteg = flyt.aktivtSteg === steg || visningModus === 'AKTIV_MED_AVBRYT';

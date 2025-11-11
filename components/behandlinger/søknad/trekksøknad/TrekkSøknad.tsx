@@ -80,7 +80,6 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon, initialMel
       onSubmit={handleSubmit}
       status={status}
       isLoading={isLoading}
-      visBekreftKnapp={!readOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
       mellomlagretVurdering={mellomlagretVurdering}
@@ -90,7 +89,6 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon, initialMel
           form.reset(vurderingerString ? mapVurderingToDraftFormFields(vurderingerString) : emptyDraftFormFields())
         );
       }}
-      readOnly={readOnly}
       visningModus={visningModus}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
       visningActions={visningActions}

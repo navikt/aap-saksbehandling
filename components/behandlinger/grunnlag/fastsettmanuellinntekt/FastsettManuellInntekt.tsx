@@ -110,7 +110,6 @@ export const FastsettManuellInntekt = ({
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       status={status}
-      visBekreftKnapp={!readOnly}
       vilkårTilhørerNavKontor={false}
       vurdertAvAnsatt={grunnlag.vurdering?.vurdertAv}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
@@ -120,7 +119,6 @@ export const FastsettManuellInntekt = ({
         });
       }}
       mellomlagretVurdering={mellomlagretVurdering}
-      readOnly={readOnly}
       visningModus={visningModus}
       visningActions={visningActions}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}

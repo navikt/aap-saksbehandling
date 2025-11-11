@@ -98,8 +98,6 @@ export const SamordningArbeidsgiver = ({
     )(event);
   };
 
-  const skalViseBekreftKnapp = !formReadOnly;
-
   return (
     <VilkårskortMedFormOgMellomlagringNyVisning
       heading="§ 11-24 Reduksjon av AAP på grunn av ytelser fra arbeidsgiver"
@@ -108,7 +106,6 @@ export const SamordningArbeidsgiver = ({
       isLoading={isLoading}
       status={status}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      visBekreftKnapp={skalViseBekreftKnapp}
       vilkårTilhørerNavKontor={false}
       vurdertAvAnsatt={grunnlag.vurdering?.vurdertAv}
       mellomlagretVurdering={mellomlagretVurdering}
@@ -118,7 +115,6 @@ export const SamordningArbeidsgiver = ({
           form.reset(grunnlag.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields())
         )
       }
-      readOnly={readOnly}
       visningModus={visningModus}
       visningActions={visningActions}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}

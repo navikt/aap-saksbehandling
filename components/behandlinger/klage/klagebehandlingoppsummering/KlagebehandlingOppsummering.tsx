@@ -9,7 +9,8 @@ import { BodyShort, Detail, VStack } from '@navikt/ds-react';
 import { mapInnstillingTilTekst } from 'lib/utils/oversettelser';
 import styles from './KlagebehandlingOppsummering.module.css';
 import { FormEvent } from 'react';
-import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 
 interface Props {
   behandlingVersjon: number;
@@ -60,6 +61,8 @@ export const KlagebehandlingOppsummering = ({ behandlingVersjon, readOnly, grunn
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('KLAGEBEHANDLING_OPPSUMMERING');
 
+  const { visningModus, visningActions } = useVilkårskortVisning(readOnly, 'KLAGEBEHANDLING_OPPSUMMERING', undefined);
+
   const utledetInnstilling = utledInnstilling(grunnlagNay, grunnlagKontor);
   const vilkårSomOmgjøres = utledVilkårSomOmgjøres(grunnlagKontor, grunnlagNay);
   const vilkårSomOpprettholdes = utledVilkårSomOpprettholdes(grunnlagKontor, grunnlagNay);
@@ -75,16 +78,21 @@ export const KlagebehandlingOppsummering = ({ behandlingVersjon, readOnly, grunn
     });
   };
   return (
-    <VilkårskortMedForm
+    <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'Oppsummering av klagebehandlingen'}
       steg={'KLAGEBEHANDLING_OPPSUMMERING'}
       onSubmit={handleSubmit}
       vilkårTilhørerNavKontor={false}
       status={status}
       isLoading={isLoading}
-      visBekreftKnapp={!readOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       knappTekst={'Bekreft og send til beslutter'}
+      onDeleteMellomlagringClick={undefined}
+      onLagreMellomLagringClick={undefined}
+      mellomlagretVurdering={undefined}
+      visningModus={visningModus}
+      visningActions={visningActions}
+      formReset={() => {}}
     >
       <VStack gap={'1'}>
         <BodyShort size={'small'} weight={'semibold'}>
@@ -124,6 +132,6 @@ export const KlagebehandlingOppsummering = ({ behandlingVersjon, readOnly, grunn
           })}
         </VStack>
       )}
-    </VilkårskortMedForm>
+    </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };

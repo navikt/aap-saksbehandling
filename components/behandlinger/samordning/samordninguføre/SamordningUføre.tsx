@@ -101,14 +101,12 @@ export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly, initia
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
-      visBekreftKnapp={!readOnly}
       vurdertAvAnsatt={grunnlag.vurdering?.vurdertAv}
       mellomlagretVurdering={mellomlagretVurdering}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() => form.reset(mapVurderingToDraftFormFields(grunnlag)));
       }}
-      readOnly={readOnly}
       visningModus={visningModus}
       visningActions={visningActions}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}

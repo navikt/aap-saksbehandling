@@ -105,8 +105,6 @@ export const SamordningAndreStatligeYtelser = ({
     )(event);
   };
 
-  const skalViseBekreftKnapp = !formReadOnly;
-
   const historiskeVurderinger = grunnlag.historiskeVurderinger ?? null;
 
   return (
@@ -117,7 +115,6 @@ export const SamordningAndreStatligeYtelser = ({
       isLoading={isLoading}
       status={status}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      visBekreftKnapp={skalViseBekreftKnapp}
       vilkårTilhørerNavKontor={false}
       vurdertAvAnsatt={grunnlag.vurdering?.vurdertAv}
       mellomlagretVurdering={mellomlagretVurdering}
@@ -127,7 +124,6 @@ export const SamordningAndreStatligeYtelser = ({
           form.reset(grunnlag.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields())
         );
       }}
-      readOnly={readOnly}
       visningModus={visningModus}
       visningActions={visningActions}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}

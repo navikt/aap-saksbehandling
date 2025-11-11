@@ -117,14 +117,12 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
       steg={'VURDER_OPPHOLDSKRAV'}
       onSubmit={form.handleSubmit(onSubmit)}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      visBekreftKnapp={true}
       vilkårTilhørerNavKontor={false}
       isLoading={isLoading}
       status={status}
       mellomlagretVurdering={mellomlagretVurdering}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}
-      readOnly={readOnly}
       visningModus={visningModus}
       visningActions={visningActions}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}

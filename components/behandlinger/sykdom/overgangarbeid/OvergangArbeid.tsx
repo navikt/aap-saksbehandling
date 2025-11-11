@@ -129,7 +129,6 @@ export const OvergangArbeid = ({
       heading={'§ 11-17 AAP i perioden som arbeidssøker'}
       steg={'OVERGANG_ARBEID'}
       onSubmit={handleSubmit}
-      visBekreftKnapp={!formReadOnly}
       isLoading={isLoading}
       status={status}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
@@ -144,7 +143,6 @@ export const OvergangArbeid = ({
             : emptyDraftFormFields()
         );
       }}
-      readOnly={formReadOnly}
       mellomlagretVurdering={mellomlagretVurdering}
       visningModus={visningModus}
       visningActions={visningActions}

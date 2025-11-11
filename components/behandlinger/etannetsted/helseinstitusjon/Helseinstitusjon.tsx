@@ -102,7 +102,6 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
       status={status}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       isLoading={isLoading}
-      visBekreftKnapp={!readOnly}
       vilkårTilhørerNavKontor={false}
       vurdertAvAnsatt={grunnlag.vurdertAv}
       mellomlagretVurdering={mellomlagretVurdering}
@@ -110,7 +109,6 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() => form.reset(mapVurderingToDraftFormFields(grunnlag.vurderinger)))
       }
-      readOnly={readOnly}
       visningModus={visningModus}
       visningActions={visningActions}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}

@@ -1,9 +1,14 @@
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { userEvent } from '@testing-library/user-event';
 import { AvbrytRevurderingVurdering } from 'components/behandlinger/revurdering/avbrytVurdering/vurdering/AvbrytRevurderingVurdering';
 import { render, screen } from 'lib/test/CustomRender';
+import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 
 const user = userEvent.setup();
+
+beforeEach(() => {
+  setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'AVBRYT_REVURDERING' });
+});
 
 describe('Avbryt revurdering', () => {
   it('har en overskrift', () => {
