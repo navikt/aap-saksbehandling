@@ -9624,24 +9624,7 @@ export interface components {
         | 'BRUDD_PÅ_OPPHOLDSKRAV_11_3_STANS'
         | 'BRUDD_PÅ_OPPHOLDSKRAV_11_3_OPPHØR'
         | null;
-      'vilk\u00E5rsavslag': (
-        | 'BRUKER_UNDER_18'
-        | 'BRUKER_OVER_67'
-        | 'MANGLENDE_DOKUMENTASJON'
-        | 'IKKE_SYKDOM_AV_VISS_VARIGHET'
-        | 'IKKE_SYKDOM_SKADE_LYTE_VESENTLIGDEL'
-        | 'IKKE_NOK_REDUSERT_ARBEIDSEVNE'
-        | 'IKKE_BEHOV_FOR_OPPFOLGING'
-        | 'IKKE_MEDLEM_FORUTGÅENDE'
-        | 'IKKE_MEDLEM'
-        | 'IKKE_OPPFYLT_OPPHOLDSKRAV_EØS'
-        | 'NORGE_IKKE_KOMPETENT_STAT'
-        | 'ANNEN_FULL_YTELSE'
-        | 'IKKE_RETT_PA_AAP_UNDER_BEHANDLING_AV_UFORE'
-        | 'VARIGHET_OVERSKREDET_OVERGANG_UFORE'
-        | 'VARIGHET_OVERSKREDET_ARBEIDSSØKER'
-        | 'IKKE_RETT_PA_AAP_I_PERIODE_SOM_ARBEIDSSOKER'
-      )[];
+      'vilk\u00E5rsavslag': string[];
     };
     'no.nav.aap.behandlingsflyt.behandling.foresl\u00E5vedtak.Foresl\u00E5VedtakDto': {
       'avslags\u00E5rsak': components['schemas']['no.nav.aap.behandlingsflyt.behandling.foresl\u00E5vedtak.Avslags\u00E5rsakDto'];
