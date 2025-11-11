@@ -19,12 +19,10 @@ const grunnlagMedVurdering: SamordningAndreStatligeYtelserGrunnlag = {
     begrunnelse: 'Dette er min vurdering som er bekreftet',
     vurderingPerioder: [],
     vurdertAv: { ident: 'Saksbehandler', dato: '2025-08-01' },
-  }
+  },
 };
 
-const grunnlagUtenVurdering: SamordningAndreStatligeYtelserGrunnlag = {
-  historiskeVurderinger: [],
-  harTilgangTilÅSaksbehandle: false };
+const grunnlagUtenVurdering: SamordningAndreStatligeYtelserGrunnlag = { harTilgangTilÅSaksbehandle: false, historiskeVurderinger: [] };
 
 beforeEach(() => {
   setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'SAMORDNING_ANDRE_STATLIGE_YTELSER' });

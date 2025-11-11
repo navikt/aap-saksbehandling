@@ -109,7 +109,6 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly, initialMello
       onSubmit={handleSubmit}
       status={status}
       isLoading={isLoading}
-      visBekreftKnapp={false}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vurdertAvAnsatt={sisteFritakVurdertAv}
       mellomlagretVurdering={mellomlagretVurdering}
@@ -121,7 +120,6 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly, initialMello
           )
         );
       }}
-      readOnly={readOnly}
       visningModus={visningModus}
       visningActions={visningActions}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}

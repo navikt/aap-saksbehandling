@@ -78,6 +78,8 @@ import {
   OppholdskravGrunnlagResponse,
   LøsPeriodisertBehovPåBehandling,
   PeriodisertLovvalgMedlemskapGrunnlag,
+  KanDistribuereBrevRequest,
+  KanDistribuereBrevResponse
 } from 'lib/types/types';
 import { apiFetch, apiFetchNoMemoization, apiFetchPdf } from 'lib/services/apiFetch';
 import { logError, logInfo } from 'lib/serverutlis/logger';
@@ -492,6 +494,11 @@ export const bestillDialogmelding = async (requestBody: BestillLegeerklæring) =
   const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/syfo/bestill`;
   return await apiFetch(url, saksbehandlingApiScope, 'POST', requestBody);
 };
+
+export const kanDistribuereBrev = async (requestBody: KanDistribuereBrevRequest) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/distribusjon/kan-distribuere-brev`;
+  return await apiFetch<KanDistribuereBrevResponse>(url, saksbehandlingApiScope, 'POST', requestBody);
+}
 
 export const forhåndsvisDialogmelding = async (requestBody: ForhåndsvisDialogmelding) => {
   const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/syfo/brevpreview`;

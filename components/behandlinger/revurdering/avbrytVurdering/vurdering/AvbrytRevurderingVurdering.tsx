@@ -6,8 +6,9 @@ import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { Behovstype } from 'lib/utils/form';
 import { FormEvent } from 'react';
-import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
 import { AvbrytRevurderingGrunnlag } from 'lib/types/types';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 
 interface Props {
   behandlingVersjon: number;
@@ -16,9 +17,7 @@ interface Props {
 }
 
 interface FormFields {
-  aarsak?:
-    | 'REVURDERINGEN_BLE_OPPRETTET_VED_EN_FEIL'
-    | 'DET_HAR_OPPSTAATT_EN_FEIL_OG_BEHANDLINGEN_MAA_STARTES_PAA_NYTT';
+  aarsak?: 'REVURDERINGEN_BLE_OPPRETTET_VED_EN_FEIL' | 'DET_HAR_OPPSTAATT_EN_FEIL_OG_BEHANDLINGEN_MAA_STARTES_PAA_NYTT';
   begrunnelse: string;
 }
 
@@ -27,6 +26,12 @@ export const AvbrytRevurderingVurdering = ({ grunnlag, readOnly, behandlingVersj
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('AVBRYT_REVURDERING');
 
+  const { visningModus, visningActions, formReadOnly } = useVilkårskortVisning(
+    readOnly,
+    'AVBRYT_REVURDERING',
+    undefined
+  );
+
   const { form, formFields } = useConfigForm<FormFields>(
     {
       aarsak: {
@@ -34,7 +39,10 @@ export const AvbrytRevurderingVurdering = ({ grunnlag, readOnly, behandlingVersj
         label: 'Hva er årsaken til at revurderingsbehandlingen skal avbrytes?',
         options: [
           { value: 'REVURDERINGEN_BLE_OPPRETTET_VED_EN_FEIL', label: 'Revurderingen ble opprettet ved en feil' },
-          { value: 'DET_HAR_OPPSTAATT_EN_FEIL_OG_BEHANDLINGEN_MAA_STARTES_PAA_NYTT', label: 'Det har oppstått en feil og behandlingen må startes på nytt' },
+          {
+            value: 'DET_HAR_OPPSTAATT_EN_FEIL_OG_BEHANDLINGEN_MAA_STARTES_PAA_NYTT',
+            label: 'Det har oppstått en feil og behandlingen må startes på nytt',
+          },
         ],
         defaultValue: grunnlag?.vurdering?.årsak ?? undefined,
         rules: {
@@ -49,7 +57,7 @@ export const AvbrytRevurderingVurdering = ({ grunnlag, readOnly, behandlingVersj
         rules: { required: 'Du må begrunne hvorfor revurdering avbrytes' },
       },
     },
-    { readOnly: readOnly }
+    { readOnly: formReadOnly }
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -69,18 +77,23 @@ export const AvbrytRevurderingVurdering = ({ grunnlag, readOnly, behandlingVersj
   };
 
   return (
-    <VilkårskortMedForm
+    <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'Avbryt revurdering'}
       steg={'AVBRYT_REVURDERING'}
       onSubmit={handleSubmit}
       status={status}
       isLoading={isLoading}
-      visBekreftKnapp={!readOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
+      onDeleteMellomlagringClick={undefined}
+      onLagreMellomLagringClick={undefined}
+      mellomlagretVurdering={undefined}
+      visningModus={visningModus}
+      visningActions={visningActions}
+      formReset={() => form.reset()}
     >
       <FormField form={form} formField={formFields.aarsak} className="årsak" />
       <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
-    </VilkårskortMedForm>
+    </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };

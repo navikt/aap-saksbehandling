@@ -93,7 +93,6 @@ describe('barnetillegg', () => {
         grunnlag={grunnlag}
         behandlingsversjon={0}
         readOnly={false}
-        visManuellVurdering={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -107,7 +106,6 @@ describe('barnetillegg', () => {
         grunnlag={grunnlag}
         behandlingsversjon={0}
         readOnly={false}
-        visManuellVurdering={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -121,7 +119,6 @@ describe('barnetillegg', () => {
         grunnlag={grunnlag}
         behandlingsversjon={0}
         readOnly={false}
-        visManuellVurdering={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -135,7 +132,6 @@ describe('barnetillegg', () => {
         grunnlag={grunnlag}
         behandlingsversjon={0}
         readOnly={false}
-        visManuellVurdering={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -147,7 +143,6 @@ describe('barnetillegg', () => {
     render(
       <BarnetilleggVurdering
         grunnlag={grunnlag}
-        visManuellVurdering={true}
         behandlingsversjon={0}
         readOnly={true}
         behandlingPersonInfo={behandlingPersonInfo}
@@ -161,7 +156,6 @@ describe('barnetillegg', () => {
     render(
       <BarnetilleggVurdering
         grunnlag={grunnlag}
-        visManuellVurdering={false}
         behandlingsversjon={0}
         readOnly={true}
         behandlingPersonInfo={behandlingPersonInfo}
@@ -175,7 +169,6 @@ describe('barnetillegg', () => {
     render(
       <BarnetilleggVurdering
         grunnlag={grunnlag}
-        visManuellVurdering={true}
         behandlingsversjon={0}
         readOnly={false}
         behandlingPersonInfo={behandlingPersonInfo}
@@ -193,7 +186,6 @@ describe('barnetillegg', () => {
         grunnlag={{ ...grunnlag, vurderteBarn: [vurdertBarnFosterForelder] }}
         behandlingsversjon={0}
         readOnly={false}
-        visManuellVurdering={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -223,7 +215,6 @@ describe('Oppgitte barn', () => {
         behandlingPersonInfo={behandlingPersonInfo}
         grunnlag={grunnlag}
         readOnly={false}
-        visManuellVurdering={true}
       />
     );
 
@@ -245,7 +236,6 @@ describe('Oppgitte barn', () => {
         behandlingsversjon={1}
         grunnlag={grunnlag}
         readOnly={false}
-        visManuellVurdering={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -261,7 +251,6 @@ describe('Oppgitte barn', () => {
         behandlingsversjon={1}
         grunnlag={grunnlag}
         readOnly={false}
-        visManuellVurdering={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -278,7 +267,6 @@ describe('Oppgitte barn', () => {
         behandlingsversjon={1}
         grunnlag={grunnlag}
         readOnly={false}
-        visManuellVurdering={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -294,7 +282,6 @@ describe('Oppgitte barn', () => {
         behandlingsversjon={1}
         grunnlag={grunnlag}
         readOnly={false}
-        visManuellVurdering={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -311,7 +298,6 @@ describe('Oppgitte barn', () => {
         grunnlag={{ ...grunnlag, barnSomTrengerVurdering: [barnSomTrengerVurderingFosterforelder] }}
         behandlingsversjon={0}
         readOnly={false}
-        visManuellVurdering={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -325,7 +311,6 @@ describe('Oppgitte barn', () => {
         grunnlag={grunnlag}
         behandlingsversjon={0}
         readOnly={false}
-        visManuellVurdering={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -339,7 +324,6 @@ describe('Oppgitte barn', () => {
         grunnlag={{ ...grunnlag, barnSomTrengerVurdering: [barnSomTrengerVurderingFosterforelder] }}
         behandlingsversjon={0}
         readOnly={false}
-        visManuellVurdering={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -353,7 +337,6 @@ describe('Oppgitte barn', () => {
         grunnlag={grunnlag}
         behandlingsversjon={0}
         readOnly={false}
-        visManuellVurdering={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -367,7 +350,6 @@ describe('Oppgitte barn', () => {
         grunnlag={{ ...grunnlag, vurderteBarn: [vurdertBarnFosterForelder] }}
         behandlingsversjon={0}
         readOnly={false}
-        visManuellVurdering={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -381,7 +363,6 @@ describe('Oppgitte barn', () => {
         grunnlag={grunnlag}
         behandlingsversjon={0}
         readOnly={false}
-        visManuellVurdering={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -395,7 +376,6 @@ describe('Oppgitte barn', () => {
         behandlingsversjon={1}
         grunnlag={grunnlag}
         readOnly={false}
-        visManuellVurdering={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -415,7 +395,6 @@ describe('Oppgitte barn', () => {
         behandlingsversjon={1}
         grunnlag={grunnlag}
         readOnly={false}
-        visManuellVurdering={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -437,7 +416,6 @@ describe('Oppgitte barn', () => {
         behandlingsversjon={1}
         grunnlag={grunnlag}
         readOnly={false}
-        visManuellVurdering={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -457,7 +435,6 @@ describe('Oppgitte barn', () => {
     render(
       <BarnetilleggVurdering
         readOnly={true}
-        visManuellVurdering={true}
         grunnlag={grunnlag}
         behandlingsversjon={1}
         behandlingPersonInfo={behandlingPersonInfo}
@@ -471,7 +448,6 @@ describe('Oppgitte barn', () => {
     render(
       <BarnetilleggVurdering
         readOnly={false}
-        visManuellVurdering={true}
         grunnlag={grunnlag}
         behandlingsversjon={1}
         behandlingPersonInfo={behandlingPersonInfo}
@@ -485,7 +461,6 @@ describe('Oppgitte barn', () => {
     render(
       <BarnetilleggVurdering
         readOnly={false}
-        visManuellVurdering={true}
         grunnlag={grunnlag}
         behandlingsversjon={1}
         behandlingPersonInfo={behandlingPersonInfo}
@@ -512,7 +487,6 @@ describe('Oppgitte barn', () => {
     render(
       <BarnetilleggVurdering
         readOnly={false}
-        visManuellVurdering={true}
         grunnlag={grunnlag}
         behandlingsversjon={1}
         behandlingPersonInfo={behandlingPersonInfo}
@@ -526,7 +500,6 @@ describe('Oppgitte barn', () => {
     render(
       <BarnetilleggVurdering
         readOnly={false}
-        visManuellVurdering={true}
         grunnlag={grunnlag}
         behandlingsversjon={1}
         behandlingPersonInfo={behandlingPersonInfo}
@@ -557,7 +530,6 @@ describe('Oppgitte barn', () => {
     render(
       <BarnetilleggVurdering
         readOnly={false}
-        visManuellVurdering={true}
         grunnlag={grunnlag}
         behandlingsversjon={1}
         behandlingPersonInfo={behandlingPersonInfo}
@@ -575,7 +547,6 @@ describe('Oppgitte barn', () => {
     render(
       <BarnetilleggVurdering
         readOnly={false}
-        visManuellVurdering={true}
         grunnlag={grunnlag}
         behandlingsversjon={1}
         behandlingPersonInfo={behandlingPersonInfo}
@@ -597,7 +568,6 @@ describe('Oppgitte barn', () => {
         grunnlag={{ ...grunnlag, barnSomTrengerVurdering: [barnSomTrengerVurderingFosterforelder] }}
         behandlingsversjon={0}
         readOnly={false}
-        visManuellVurdering={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -617,7 +587,6 @@ describe('Oppgitte barn', () => {
     render(
       <BarnetilleggVurdering
         readOnly={false}
-        visManuellVurdering={true}
         grunnlag={grunnlag}
         behandlingsversjon={1}
         behandlingPersonInfo={behandlingPersonInfo}
@@ -720,7 +689,6 @@ describe('mellomlagring', () => {
       <BarnetilleggVurdering
         behandlingsversjon={1}
         behandlingPersonInfo={behandlingPersonInfo}
-        visManuellVurdering={true}
         readOnly={false}
         grunnlag={grunnlagUtenVurdering}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
@@ -735,7 +703,6 @@ describe('mellomlagring', () => {
       <BarnetilleggVurdering
         behandlingsversjon={1}
         behandlingPersonInfo={behandlingPersonInfo}
-        visManuellVurdering={true}
         readOnly={false}
         grunnlag={grunnlagUtenVurdering}
       />
@@ -767,7 +734,6 @@ describe('mellomlagring', () => {
       <BarnetilleggVurdering
         behandlingsversjon={1}
         behandlingPersonInfo={behandlingPersonInfo}
-        visManuellVurdering={true}
         readOnly={false}
         grunnlag={grunnlagUtenVurdering}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
@@ -790,7 +756,6 @@ describe('mellomlagring', () => {
       <BarnetilleggVurdering
         behandlingsversjon={1}
         behandlingPersonInfo={behandlingPersonInfo}
-        visManuellVurdering={true}
         readOnly={false}
         grunnlag={grunnlagUtenVurdering}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
@@ -809,7 +774,6 @@ describe('mellomlagring', () => {
       <BarnetilleggVurdering
         behandlingsversjon={1}
         behandlingPersonInfo={behandlingPersonInfo}
-        visManuellVurdering={true}
         readOnly={false}
         grunnlag={grunnlagMedVurdering}
       />
@@ -827,7 +791,6 @@ describe('mellomlagring', () => {
       <BarnetilleggVurdering
         behandlingsversjon={1}
         behandlingPersonInfo={behandlingPersonInfo}
-        visManuellVurdering={true}
         readOnly={false}
         grunnlag={grunnlagUtenVurdering}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
@@ -863,7 +826,6 @@ describe('mellomlagring', () => {
       <BarnetilleggVurdering
         behandlingsversjon={1}
         behandlingPersonInfo={behandlingPersonInfo}
-        visManuellVurdering={true}
         readOnly={false}
         grunnlag={grunnlagMedVurdering}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
@@ -899,7 +861,6 @@ describe('mellomlagring', () => {
       <BarnetilleggVurdering
         behandlingsversjon={1}
         behandlingPersonInfo={behandlingPersonInfo}
-        visManuellVurdering={true}
         readOnly={true}
         grunnlag={grunnlagMedVurdering}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
@@ -917,7 +878,6 @@ describe('mellomlagring', () => {
       <BarnetilleggVurdering
         behandlingsversjon={1}
         behandlingPersonInfo={behandlingPersonInfo}
-        visManuellVurdering={true}
         readOnly={true}
         grunnlag={grunnlagUtenVurdering}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
@@ -956,7 +916,6 @@ describe('reset felter ved endringer som påvirker visningslogikk', () => {
         grunnlag={{ ...grunnlag, barnSomTrengerVurdering: [barnSomTrengerVurderingFosterforelder] }}
         behandlingsversjon={0}
         readOnly={false}
-        visManuellVurdering={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
@@ -981,7 +940,6 @@ describe('reset felter ved endringer som påvirker visningslogikk', () => {
         grunnlag={{ ...grunnlag, barnSomTrengerVurdering: [barnSomTrengerVurderingFosterforelder] }}
         behandlingsversjon={0}
         readOnly={false}
-        visManuellVurdering={true}
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );

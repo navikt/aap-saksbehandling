@@ -162,7 +162,6 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly, initia
       onSubmit={handleSubmit}
       status={status}
       isLoading={isLoading}
-      visBekreftKnapp={!formReadOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
       vurdertAvAnsatt={grunnlag?.studentvurdering?.vurdertAv}
@@ -177,7 +176,6 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly, initia
           );
         });
       }}
-      readOnly={formReadOnly}
       visningModus={visningModus}
       visningActions={visningActions}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}

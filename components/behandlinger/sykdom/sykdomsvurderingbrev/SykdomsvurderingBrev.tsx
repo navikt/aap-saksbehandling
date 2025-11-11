@@ -99,7 +99,6 @@ export const SykdomsvurderingBrev = ({
       onSubmit={handleSubmit}
       status={status}
       isLoading={isLoading}
-      visBekreftKnapp={!formReadOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
       mellomlagretVurdering={mellomlagretVurdering}
@@ -109,7 +108,6 @@ export const SykdomsvurderingBrev = ({
           form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields());
         });
       }}
-      readOnly={formReadOnly}
       visningModus={visningModus}
       visningActions={visningActions}
       knappTekst={'Bekreft og send videre'}

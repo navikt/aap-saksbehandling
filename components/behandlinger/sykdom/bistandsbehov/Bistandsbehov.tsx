@@ -198,7 +198,6 @@ export const Bistandsbehov = ({
         });
       }}
       mellomlagretVurdering={mellomlagretVurdering}
-      visBekreftKnapp={false}
       visningModus={visningModus}
       visningActions={visningActions}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}

@@ -28,10 +28,8 @@ import { KabalIverksettKonsekvensSteg } from 'components/behandlinger/klage/kaba
 import { AvklarOppfolgingsSteg } from 'components/behandlinger/oppfolgingsbehandling/AvklarOppfolgingsSteg';
 import { Aktivitetsplikt11_7 } from 'components/behandlinger/aktivitetsplikt/11-7/Aktivitetsplikt11_7';
 import { AvbrytRevurdering } from 'components/behandlinger/revurdering/avbrytVurdering/AvbrytRevurdering';
-import { Lovvalg } from '../behandlinger/lovvalg/Lovvalg';
 import { OppholdskravStegGruppe } from 'components/behandlinger/oppholdskrav/OppholdskravGruppe';
 import { Aktivitetsplikt11_9 } from 'components/behandlinger/aktivitetsplikt/11-9/Aktivitetsplikt11_9';
-import { isDev, isLocal } from 'lib/utils/environment';
 import { LovvalgPeriodisert } from 'components/behandlinger/lovvalg/LovvalgPeriodisert';
 
 interface Props {
@@ -41,8 +39,6 @@ interface Props {
 }
 
 export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe, className }: Props) => {
-  const LovvalgMedlemskapPeriodisert = isDev() || isLocal();
-
   return (
     <section className={className}>
       {aktivGruppe === 'START_BEHANDLING' && <StartBehandling behandlingsReferanse={behandlingsReferanse} />}
@@ -50,11 +46,7 @@ export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe, classN
       {aktivGruppe === 'AVBRYT_REVURDERING' && <AvbrytRevurdering behandlingsreferanse={behandlingsReferanse} />}
       {aktivGruppe === 'LOVVALG' && (
         <StegSuspense>
-          {LovvalgMedlemskapPeriodisert ? (
-            <LovvalgPeriodisert behandlingsReferanse={behandlingsReferanse} />
-          ) : (
-            <Lovvalg behandlingsReferanse={behandlingsReferanse} />
-          )}
+          <LovvalgPeriodisert behandlingsReferanse={behandlingsReferanse} />
         </StegSuspense>
       )}
       {aktivGruppe === 'RETTIGHETSPERIODE' && <Rettighetsperiode behandlingsReferanse={behandlingsReferanse} />}

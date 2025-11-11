@@ -203,11 +203,9 @@ export const SamordningGradering = ({
         onSubmit={handleSubmit}
         isLoading={isLoading}
         status={status}
-        visBekreftKnapp={!readOnly}
         løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
         vilkårTilhørerNavKontor={false}
         vurdertAvAnsatt={grunnlag.vurdering?.vurdertAv}
-        readOnly={readOnly}
         onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
         onDeleteMellomlagringClick={() => {
           slettMellomlagring(() =>

@@ -124,7 +124,6 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly, ini
       onSubmit={handleSubmit}
       status={status}
       isLoading={isLoading}
-      visBekreftKnapp={false}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vurdertAvAnsatt={grunnlag?.vurderinger?.[0]?.vurdertAv}
       mellomlagretVurdering={mellomlagretVurdering}
