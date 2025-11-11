@@ -22,3 +22,12 @@ export type LovvalgOgMedlemskapManuellVurderingForm = {
     dato: string;
   };
 };
+
+// TODO denne er midlertidig inntil alle mellomlagrede vurderinger har blitt periodisert (https://jira.adeo.no/browse/FAGSYSTEM-405014)
+export type LovOgMedlemskapVurderingFormIkkePeriodisert = {
+  overstyring: boolean;
+  lovvalgsLand: string;
+  lovvalgBegrunnelse: string;
+  medlemskapBegrunnelse: string;
+  medlemAvFolkeTrygdenVedSøknadstidspunkt: JaEllerNei;
+};

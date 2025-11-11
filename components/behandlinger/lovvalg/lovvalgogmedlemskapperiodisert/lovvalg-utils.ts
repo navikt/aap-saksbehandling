@@ -1,12 +1,14 @@
 import {
   AvklarPeriodisertLovvalgMedlemskapLøsning,
   LovvalgEØSLand,
+  MellomlagretVurdering,
   PeriodisertLovvalgMedlemskapGrunnlag,
 } from 'lib/types/types';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import {
   LovOgMedlemskapVurderingForm,
+  LovOgMedlemskapVurderingFormIkkePeriodisert,
   LovvalgOgMedlemskapManuellVurderingForm,
 } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/types';
 import { parse, sub } from 'date-fns';
@@ -103,4 +105,33 @@ function mapGrunnlagTilAnnetLovvalgslandMedAvtale(lovvalgsland?: LovvalgEØSLand
     return lovvalgsland;
   }
   return undefined;
+}
+
+// TODO denne er midlertidig inntil alle mellomlagrede vurderinger har blitt periodisert (https://jira.adeo.no/browse/FAGSYSTEM-405014)
+export function hentPeriodiserteVerdierFraMellomlagretVurdering(
+  mellomlagretVurdering: MellomlagretVurdering,
+  grunnlag?: PeriodisertLovvalgMedlemskapGrunnlag
+) {
+  const vurdering = JSON.parse(mellomlagretVurdering.data);
+  if (vurdering.vurderinger) {
+    return vurdering as LovOgMedlemskapVurderingForm;
+  } else {
+    const ikkePeriodisertVurdering = vurdering as LovOgMedlemskapVurderingFormIkkePeriodisert;
+    return {
+      vurderinger: [
+        {
+          begrunnelse: '',
+          lovvalg: {
+            begrunnelse: ikkePeriodisertVurdering.lovvalgBegrunnelse,
+            lovvalgsEØSLand: ikkePeriodisertVurdering.lovvalgsLand,
+          },
+          medlemskap: {
+            begrunnelse: ikkePeriodisertVurdering.medlemskapBegrunnelse,
+            varMedlemIFolketrygd: ikkePeriodisertVurdering.medlemAvFolkeTrygdenVedSøknadstidspunkt,
+          },
+          fraDato: grunnlag ? formaterDatoForFrontend(new Date(grunnlag?.kanVurderes[0]?.fom!)) : undefined,
+        },
+      ],
+    } as LovOgMedlemskapVurderingForm;
+  }
 }
