@@ -1,4 +1,4 @@
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { mottattDokumenterLest } from 'lib/services/oppgaveservice/oppgaveservice';
 import { logError } from 'lib/serverutlis/logger';
 import { isError } from 'lib/utils/api';
@@ -9,5 +9,5 @@ export async function POST(req: NextRequest) {
   if (isError(res)) {
     logError(`/oppgave/api/mottatt-dokumenter-lest`, res.apiException);
   }
-  return new Response(JSON.stringify(res), { status: res.status });
+  return NextResponse.json(res, { status: res.status });
 }

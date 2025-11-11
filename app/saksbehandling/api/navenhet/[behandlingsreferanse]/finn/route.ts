@@ -2,6 +2,7 @@ import { NavEnhetRequest } from 'lib/types/types';
 import { hentAlleNavEnheter } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { logError } from 'lib/serverutlis/logger';
 import { isError } from 'lib/utils/api';
+import { NextResponse } from 'next/server';
 
 export async function POST(req: Request, props: { params: Promise<{ behandlingsreferanse: string }> }) {
   const body: NavEnhetRequest = await req.json();
@@ -13,5 +14,5 @@ export async function POST(req: Request, props: { params: Promise<{ behandlingsr
       `/api/navenhet/${params.behandlingsreferanse}/finn/ ${navEnheterResponse.status}, ${navEnheterResponse.apiException.code}: ${navEnheterResponse.apiException.message}`
     );
   }
-  return new Response(JSON.stringify(navEnheterResponse), { status: navEnheterResponse.status });
+  return NextResponse.json(navEnheterResponse, { status: navEnheterResponse.status });
 }

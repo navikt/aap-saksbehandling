@@ -1,7 +1,7 @@
 import { Behandler } from 'components/innhentdokumentasjon/innhentdokumentasjonskjema/InnhentDokumentasjonSkjema';
 import { hentBehandleroppslag } from 'lib/services/dokumentinnhentingservice/dokumentinnhentingservice';
 import { isLocal } from 'lib/utils/environment';
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { logError } from 'lib/serverutlis/logger';
 import { FetchResponse, isError } from 'lib/utils/api';
 
@@ -57,7 +57,7 @@ export async function POST(req: NextRequest) {
       status: 200,
     };
 
-    return new Response(JSON.stringify(response), { status: 200 });
+    return NextResponse.json(response, { status: 200 });
   }
   const body = await req.json();
   const res = await hentBehandleroppslag(body);
@@ -65,5 +65,5 @@ export async function POST(req: NextRequest) {
     logError(`/dokumentinnhenting/behandleroppslag`, res.apiException.message);
   }
 
-  return new Response(JSON.stringify(res), { status: 200 });
+  return NextResponse.json(res, { status: 200 });
 }

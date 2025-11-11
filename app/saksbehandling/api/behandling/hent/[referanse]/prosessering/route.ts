@@ -12,7 +12,7 @@ export interface FlytProsesseringServerSentEvent {
   status: FlytProsesseringStatus;
 }
 
-export async function GET(__request: NextRequest, context: { params: Promise<{ referanse: string }> }) {
+export async function GET(_: NextRequest, context: { params: Promise<{ referanse: string }> }) {
   let responseStream = new TransformStream();
   const writer = responseStream.writable.getWriter();
 

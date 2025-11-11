@@ -1,4 +1,4 @@
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { hentAlleDokumenterPåBruker } from 'lib/services/dokumentinnhentingservice/dokumentinnhentingservice';
 
 export async function POST(req: NextRequest) {
@@ -6,5 +6,5 @@ export async function POST(req: NextRequest) {
 
   const data = await hentAlleDokumenterPåBruker(body);
 
-  return new Response(JSON.stringify(data), { status: data.status });
+  return NextResponse.json(data, { status: data.status });
 }
