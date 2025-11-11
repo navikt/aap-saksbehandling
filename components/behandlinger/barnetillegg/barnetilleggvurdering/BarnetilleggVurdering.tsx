@@ -22,7 +22,6 @@ interface Props {
   grunnlag: BarnetilleggGrunnlag;
   behandlingPersonInfo: BehandlingPersoninfo;
   readOnly: boolean;
-  visManuellVurdering: boolean;
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
@@ -54,7 +53,6 @@ export const BarnetilleggVurdering = ({
   behandlingsversjon,
   behandlingPersonInfo,
   readOnly,
-  visManuellVurdering,
   initialMellomlagretVurdering,
 }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
