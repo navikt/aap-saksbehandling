@@ -17,6 +17,10 @@ export async function POST(req: NextRequest) {
     if (isError(res)) {
       logError(`/api/oppgave/neste`, res.apiException);
     }
+
+    if (res.status === 204) {
+      return new NextResponse(null, { status: 204 });
+    }
     return NextResponse.json(res, { status: res.status });
   } catch (error) {
     logError(`/api/oppgave/neste`, error);

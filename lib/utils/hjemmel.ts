@@ -47,7 +47,6 @@ export const hjemmelMap: Partial<Record<Hjemmel, string>> = {
 // på en av disse hjemmlene, slik at vi kan vise en feilmelding i stede for å la det
 // feilge pga manglende mapping i backend
 export const ikkeImplementertKlageHjemmler: Hjemmel[] = [
-  'FOLKETRYGDLOVEN_11_3',
   'FOLKETRYGDLOVEN_11_4',
   'FOLKETRYGDLOVEN_11_7',
   'FOLKETRYGDLOVEN_11_8',

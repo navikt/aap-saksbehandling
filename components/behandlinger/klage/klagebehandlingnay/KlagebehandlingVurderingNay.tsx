@@ -170,6 +170,9 @@ export const KlagebehandlingVurderingNay = ({
       visningModus={visningModus}
       visningActions={visningActions}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
+      knappTekst={
+        ['OPPRETTHOLD', 'DELVIS_OMGJØR'].includes(innstilling) ? 'Send til klageinstans' : 'Send til beslutter'
+      }
     >
       <FormField form={form} formField={formFields.vurdering} />
       <FormField form={form} formField={formFields.notat} />
