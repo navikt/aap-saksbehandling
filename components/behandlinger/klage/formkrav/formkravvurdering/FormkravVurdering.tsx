@@ -153,6 +153,7 @@ export const FormkravVurdering = ({ behandlingVersjon, grunnlag, readOnly, initi
       visningModus={visningModus}
       visningActions={visningActions}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
+      knappTekst={avvistGrunnetFrist ? 'Send til beslutter' : 'Bekreft'}
     >
       <FormField form={form} formField={formFields.begrunnelse} />
       <FormField form={form} formField={formFields.erBrukerPart} horizontalRadio />
