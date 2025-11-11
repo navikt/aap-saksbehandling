@@ -40,7 +40,7 @@ export const SettMarkeringForBehandlingModal = ({ referanse, type, isOpen, onClo
       label: 'Velg en årsak',
       options: [
         { label: '', value: '' },
-        'Brukeren har ikke, eller mister snart, livsoppholdsytelse',
+        'Brukeren har ikke statlig livsoppholdsytelse',
         'Vedtak er omgjort etter klage',
         'Avtalt med leder',
       ],
