@@ -1,9 +1,9 @@
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { hentDokumentFraDokumentInfoId } from 'lib/services/postmottakservice/postmottakservice';
 import { logError } from 'lib/serverutlis/logger';
 
 export async function GET(
-  req: NextRequest,
+  _: NextRequest,
   props: { params: Promise<{ journalpostId: number; dokumentInfoId: string }> }
 ) {
   const params = await props.params;
@@ -12,6 +12,6 @@ export async function GET(
     return new Response(data, { status: 200 });
   } catch (error) {
     logError('error i route', error);
-    return new Response(JSON.stringify({ message: JSON.stringify(error) }), { status: 500 });
+    return NextResponse.json({ message: JSON.stringify(error) }, { status: 500 });
   }
 }

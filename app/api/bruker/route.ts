@@ -1,5 +1,6 @@
 import { BrukerInformasjon, hentBrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { FetchResponse } from 'lib/utils/api';
+import { NextResponse } from 'next/server';
 
 export async function GET() {
   const brukerInformasjon = await hentBrukerInformasjon();
@@ -9,5 +10,5 @@ export async function GET() {
     type: 'SUCCESS',
   };
 
-  return new Response(JSON.stringify(res), { status: 200 });
+  return NextResponse.json(res, { status: 200 });
 }

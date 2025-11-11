@@ -6,7 +6,7 @@ import { ValuePair } from 'components/form/FormField';
 import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
 import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
 import { SamordningYtelsestype } from 'lib/types/types';
-import { validerDato } from 'lib/validation/dateValidation';
+import { erDatoFoerDato, validerDato } from 'lib/validation/dateValidation';
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 
 import styles from 'components/behandlinger/samordning/samordninggradering/YtelseTabell.module.css';
@@ -110,8 +110,13 @@ export const Ytelsesvurderinger = ({ form, readOnly }: Props) => {
                         hideLabel={true}
                         rules={{
                           required: 'Du må velge dato for periodestart',
-                          validate: (value) => {
-                            return validerDato(value as string);
+                          validate: {
+                            gyldigDato: (value) => validerDato(value as string),
+                            ikkeFoerStart: (value, formValues) =>
+                              value &&
+                              erDatoFoerDato(formValues.vurderteSamordninger[index].periode.tom, value as string)
+                                ? 'Fra og med dato kan ikke være etter til og med dato'
+                                : undefined,
                           },
                         }}
                         readOnly={readOnly}

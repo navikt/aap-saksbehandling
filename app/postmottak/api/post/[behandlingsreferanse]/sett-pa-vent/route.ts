@@ -1,5 +1,5 @@
 import { settPåVent } from 'lib/services/postmottakservice/postmottakservice';
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { SettPåVentRequest } from 'lib/types/postmottakTypes';
 import { logError } from 'lib/serverutlis/logger';
 import { isError } from 'lib/utils/api';
@@ -16,9 +16,9 @@ export async function POST(req: NextRequest, props: { params: Promise<{ behandli
       );
     }
     const status = settPåVentResponse.status === 204 ? 200 : settPåVentResponse.status;
-    return new Response(JSON.stringify(settPåVentResponse), { status });
+    return NextResponse.json(settPåVentResponse, { status });
   } catch (error) {
     logError('/api/post/sett-pa-vent', error);
-    return new Response(JSON.stringify({ message: JSON.stringify(error) }), { status: 500 });
+    return NextResponse.json({ message: JSON.stringify(error) }, { status: 500 });
   }
 }

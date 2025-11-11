@@ -1,6 +1,7 @@
 import { hentMineOppgaver } from 'lib/services/oppgaveservice/oppgaveservice';
 import { logError } from 'lib/serverutlis/logger';
 import { isError } from 'lib/utils/api';
+import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {
@@ -8,9 +9,9 @@ export async function GET() {
     if (isError(res)) {
       logError(`/api/oppgave/mine-oppgaver`, res.apiException);
     }
-    return new Response(JSON.stringify(res), { status: res.status });
+    return NextResponse.json(res, { status: res.status });
   } catch (error) {
     logError(`/api/oppgave/mine-oppgaver`, error);
-    return new Response(JSON.stringify({ message: JSON.stringify(error), status: 500 }), { status: 500 });
+    return NextResponse.json({ message: JSON.stringify(error), status: 500 }, { status: 500 });
   }
 }

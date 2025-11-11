@@ -1,4 +1,4 @@
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { hentOppgaverForFilter } from 'lib/services/oppgaveservice/oppgaveservice';
 import { logError, logWarning } from 'lib/serverutlis/logger';
 import { isError } from 'lib/utils/api';
@@ -7,13 +7,13 @@ import { OppgavelisteRequest } from 'lib/types/oppgaveTypes';
 export async function POST(req: NextRequest) {
   const data: OppgavelisteRequest = await req.json();
   if (!data.filterId) {
-    return new Response(JSON.stringify({ message: 'filterId mangler', status: 400 }), { status: 400 });
+    return NextResponse.json({ message: 'filterId mangler', status: 400 }, { status: 400 });
   } else if (!data.enheter) {
-    return new Response(JSON.stringify({ message: 'enheter mangler', status: 400 }), { status: 400 });
+    return NextResponse.json({ message: 'enheter mangler', status: 400 }, { status: 400 });
   } else if (data.veileder === undefined || data.veileder === null) {
-    return new Response(JSON.stringify({ message: 'veileder mangler', status: 400 }), { status: 400 });
+    return NextResponse.json({ message: 'veileder mangler', status: 400 }, { status: 400 });
   } else if (data.paging === undefined) {
-    return new Response(JSON.stringify({ message: 'Paging mangler', status: 400 }), { status: 400 });
+    return NextResponse.json({ message: 'Paging mangler', status: 400 }, { status: 400 });
   }
 
   try {
@@ -21,9 +21,9 @@ export async function POST(req: NextRequest) {
     if (isError(res)) {
       logWarning(`/api/oppgave/oppgaveliste`, res.apiException);
     }
-    return new Response(JSON.stringify(res), { status: res.status });
+    return NextResponse.json(res, { status: res.status });
   } catch (error) {
     logError(`/api/oppgave/oppgaveliste`, error);
-    return new Response(JSON.stringify({ message: JSON.stringify(error), status: 500 }), { status: 500 });
+    return NextResponse.json({ message: JSON.stringify(error), status: 500 }, { status: 500 });
   }
 }

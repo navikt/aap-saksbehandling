@@ -3,7 +3,7 @@ import { screen } from '@testing-library/react';
 import { AutomatiskLovvalgOgMedlemskapVurdering } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
 import { customRender } from 'lib/test/CustomRender';
-import { LovvalgOgMedlemskapPeriodisertVedSøknadsTidspunktOverstyringsWrapper } from 'components/behandlinger/lovvalg/LovvalgOgMedlemskapPeriodisertOverstyringswrapper';
+import { LovvalgOgMedlemskapPeriodisertOverstyringswrapper } from 'components/behandlinger/lovvalg/LovvalgOgMedlemskapPeriodisertOverstyringswrapper';
 
 const automatiskLovvalgOgMedlemskapVurdering: AutomatiskLovvalgOgMedlemskapVurdering = {
   tilhørighetVurdering: [],
@@ -13,7 +13,7 @@ const automatiskLovvalgOgMedlemskapVurdering: AutomatiskLovvalgOgMedlemskapVurde
 describe('Lovvalg og medlemskap wrapper', () => {
   it('Skal vise vilkårskortet dersom det finnes en mellomlagring', () => {
     customRender(
-      <LovvalgOgMedlemskapPeriodisertVedSøknadsTidspunktOverstyringsWrapper
+      <LovvalgOgMedlemskapPeriodisertOverstyringswrapper
         behandlingsReferanse={'123'}
         behandlingVersjon={1}
         readOnly={false}
@@ -29,7 +29,7 @@ describe('Lovvalg og medlemskap wrapper', () => {
         behovstype={Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP}
       >
         Innhold
-      </LovvalgOgMedlemskapPeriodisertVedSøknadsTidspunktOverstyringsWrapper>
+      </LovvalgOgMedlemskapPeriodisertOverstyringswrapper>
     );
 
     const vilkårskort = screen.getByRole('heading', {
@@ -41,7 +41,7 @@ describe('Lovvalg og medlemskap wrapper', () => {
 
   it('Skal ikke vise vilkårskortet dersom det ikke finnes en mellomlagring', () => {
     customRender(
-      <LovvalgOgMedlemskapPeriodisertVedSøknadsTidspunktOverstyringsWrapper
+      <LovvalgOgMedlemskapPeriodisertOverstyringswrapper
         behandlingsReferanse={'123'}
         behandlingVersjon={1}
         readOnly={false}
@@ -50,7 +50,7 @@ describe('Lovvalg og medlemskap wrapper', () => {
         behovstype={Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP}
       >
         Innhold
-      </LovvalgOgMedlemskapPeriodisertVedSøknadsTidspunktOverstyringsWrapper>
+      </LovvalgOgMedlemskapPeriodisertOverstyringswrapper>
     );
 
     const vilkårskort = screen.queryByRole('heading', {

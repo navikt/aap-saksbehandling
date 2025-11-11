@@ -21,7 +21,7 @@ export interface ServerSentEventData {
 export type ServerSentEventStatus = 'POLLING' | 'ERROR' | 'DONE';
 
 export async function GET(
-  __request: NextRequest,
+  _: NextRequest,
   context: { params: Promise<{ referanse: string; gruppe: string; steg: string }> }
 ) {
   let responseStream = new TransformStream();
