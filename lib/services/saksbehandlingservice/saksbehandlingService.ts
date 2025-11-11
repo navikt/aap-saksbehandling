@@ -30,25 +30,29 @@ import {
   FullmektigGrunnlag,
   HelseinstitusjonGrunnlag,
   KabalKlageResultat,
+  KanDistribuereBrevRequest,
+  KanDistribuereBrevResponse,
   KlagebehandlingKontorGrunnlag,
   KlagebehandlingNayGrunnlag,
   Klageresultat,
   KvalitetssikringGrunnlag,
   KvalitetssikringTilgang,
   LegeerklæringStatus,
-  LovvalgMedlemskapGrunnlag,
   LøsAvklaringsbehovPåBehandling,
+  LøsPeriodisertBehovPåBehandling,
   ManuellInntektGrunnlag,
   MellomlagretVurderingRequest,
   MellomlagretVurderingResponse,
   NavEnhetRequest,
   OppfølgningOppgaveOpprinnelseResponse,
+  OppholdskravGrunnlagResponse,
   OpprettAktivitetspliktBehandlingDto,
   OpprettDummySakDto,
   OpprettTestcase,
   OvergangArbeidGrunnlag,
   OvergangUforeGrunnlag,
   OverstyringMeldepliktGrunnlag,
+  PeriodisertLovvalgMedlemskapGrunnlag,
   PåklagetBehandlingGrunnlag,
   RefusjonskravGrunnlag,
   RettighetsperiodeGrunnlag,
@@ -75,11 +79,6 @@ import {
   VenteInformasjon,
   YrkeskadeBeregningGrunnlag,
   YrkesskadeVurderingGrunnlag,
-  OppholdskravGrunnlagResponse,
-  LøsPeriodisertBehovPåBehandling,
-  PeriodisertLovvalgMedlemskapGrunnlag,
-  KanDistribuereBrevRequest,
-  KanDistribuereBrevResponse
 } from 'lib/types/types';
 import { apiFetch, apiFetchNoMemoization, apiFetchPdf } from 'lib/services/apiFetch';
 import { logError, logInfo } from 'lib/serverutlis/logger';
@@ -258,11 +257,6 @@ export const hentBrevGrunnlag = async (behandlingsReferanse: string) => {
 
 export const hentLovvalgMedlemskapGrunnlag = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/lovvalgmedlemskap`;
-  return await apiFetch<LovvalgMedlemskapGrunnlag>(url, saksbehandlingApiScope, 'GET');
-};
-
-export const hentPeriodisertLovvalgMedlemskapGrunnlag = async (behandlingsReferanse: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/lovvalgmedlemskap-v2`;
   return await apiFetch<PeriodisertLovvalgMedlemskapGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
@@ -498,7 +492,7 @@ export const bestillDialogmelding = async (requestBody: BestillLegeerklæring) =
 export const kanDistribuereBrev = async (requestBody: KanDistribuereBrevRequest) => {
   const url = `${saksbehandlingApiBaseUrl}/api/distribusjon/kan-distribuere-brev`;
   return await apiFetch<KanDistribuereBrevResponse>(url, saksbehandlingApiScope, 'POST', requestBody);
-}
+};
 
 export const forhåndsvisDialogmelding = async (requestBody: ForhåndsvisDialogmelding) => {
   const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/syfo/brevpreview`;
