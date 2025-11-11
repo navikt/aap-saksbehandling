@@ -321,18 +321,7 @@ export const BarnetilleggVurdering = ({
                 åpne={true}
                 readOnly={formReadOnly}
                 onLagreNyttBarn={(nyttBarn) => {
-                  if (nyttBarn && (nyttBarn.ident || nyttBarn.fødselsdato)) {
-                    // Fjern eventuelle tomme barn først (iterer baklengs for å unngå indeks-problemer)
-                    for (let i = saksbehandlerOppgitteBarnVurderinger.length - 1; i >= 0; i--) {
-                      if (
-                        !saksbehandlerOppgitteBarnVurderinger[i].ident &&
-                        !saksbehandlerOppgitteBarnVurderinger[i].fødselsdato
-                      ) {
-                        remove(i);
-                      }
-                    }
-                    append({ ...nyttBarn });
-                  }
+                  append({ ...nyttBarn });
                   setVisLeggTilBarnModal(false);
                 }}
               />

@@ -119,7 +119,9 @@ export const LeggTilBarnModal = ({ readOnly, åpne, avbryt, onLagreNyttBarn }: P
               rules={{
                 validate: {
                   validerIdent: (value) => {
-                    if (!value) return true;
+                    if (!value && !manglerIdent) {
+                      return 'Du må oppgi fødselsnummer eller huke av for mangler ident';
+                    }
                     const ident = value as string;
                     if (ident.length !== 11) return 'Fødselsnummeret må være 11 siffer';
                     if (!/^\d+$/.test(ident)) return 'Fødselsnummeret kan kun inneholde tall';
@@ -149,6 +151,7 @@ export const LeggTilBarnModal = ({ readOnly, åpne, avbryt, onLagreNyttBarn }: P
               if (checked) {
                 setValue('ident', null);
               }
+              trigger('ident'); // revalider ident-feltet når checkbox endres
             }}
           >
             <Checkbox value={'manglerIdent'}>Barnet har ikke fødselsnummer eller D-nummer</Checkbox>
