@@ -18,8 +18,9 @@ import { useConfigForm } from 'components/form/FormHook';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 
 interface Props {
   grunnlag: Soningsgrunnlag;
@@ -47,6 +48,12 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon, initi
 
   const { nullstillMellomlagretVurdering, mellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
     useMellomlagring(Behovstype.AVKLAR_SONINGSFORRHOLD, initialMellomlagretVurdering);
+
+  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+    readOnly,
+    'DU_ER_ET_ANNET_STED',
+    mellomlagretVurdering
+  );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -86,14 +93,13 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon, initi
   };
 
   return (
-    <VilkårskortMedFormOgMellomlagring
+    <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'§ 11-26 Soning'}
       steg={'DU_ER_ET_ANNET_STED'}
       onSubmit={handleSubmit}
       status={status}
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      visBekreftKnapp={!readOnly}
       vilkårTilhørerNavKontor={false}
       vurdertAvAnsatt={grunnlag.vurdertAv}
       mellomlagretVurdering={mellomlagretVurdering}
@@ -101,7 +107,9 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon, initi
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() => form.reset(mapVurderingToDraftFormFields(grunnlag.vurderinger)))
       }
-      readOnly={readOnly}
+      visningModus={visningModus}
+      visningActions={visningActions}
+      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
       <InstitusjonsoppholdTabell
         label="Brukeren har følgende soningsforhold"
@@ -120,14 +128,14 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon, initi
               }
               rules={{ required: 'Du må gi en begrunnelse' }}
               className={'begrunnelse'}
-              readOnly={readOnly}
+              readOnly={formReadOnly}
             />
             <RadioGroupWrapper
               name={`soningsvurderinger.${index}.skalOpphøre`}
               control={form.control}
               label={'Skal ytelsen stoppes på grunn av soning?'}
               rules={{ required: 'Du må ta stilling til om ytelsen skal stoppes på grunn av soning' }}
-              readOnly={readOnly}
+              readOnly={formReadOnly}
               horisontal
             >
               <Radio value={JaEllerNei.Ja}>Ja</Radio>
@@ -147,10 +155,10 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon, initi
                   required: 'Du må sette en dato for når vurderingen skal gjelde fra',
                   validate: (value) => validerDato(value as string),
                 }}
-                readOnly={readOnly}
+                readOnly={formReadOnly}
               />
             )}
-            {!erFørsteVurdering && !readOnly && (
+            {!erFørsteVurdering && !formReadOnly && (
               <Button
                 type={'button'}
                 icon={<TrashIcon aria-hidden />}
@@ -165,7 +173,7 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon, initi
           </div>
         );
       })}
-      {!readOnly && (
+      {!formReadOnly && (
         <Button
           type={'button'}
           className={'fit-content'}
@@ -176,7 +184,7 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon, initi
           Legg til ny vurdering
         </Button>
       )}
-    </VilkårskortMedFormOgMellomlagring>
+    </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };
 

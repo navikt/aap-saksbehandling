@@ -1,13 +1,13 @@
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(req: NextRequest, props: { params: Promise<{ referanse: string }> }) {
+export async function GET(_: NextRequest, props: { params: Promise<{ referanse: string }> }) {
   const params = await props.params;
   const data = await hentFlyt(params.referanse);
 
   if (data !== undefined) {
-    return new Response(JSON.stringify(data), { status: 200 });
+    return NextResponse.json(data, { status: 200 });
   } else {
-    return new Response(JSON.stringify({ message: 'Ingen sak funnet.' }), { status: 500 });
+    return NextResponse.json({ message: 'Ingen sak funnet.' }, { status: 500 });
   }
 }

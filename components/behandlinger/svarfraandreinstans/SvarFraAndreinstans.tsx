@@ -9,14 +9,15 @@ import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { FormEvent } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import { getValgteHjemlerSomIkkeErImplementert, hjemmelalternativer, hjemmelMap } from 'lib/utils/hjemmel';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { FormField } from 'components/form/FormField';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 
 interface Props {
   grunnlag?: SvarFraAndreinstansGrunnlag;
   behandlingVersjon: number;
-  readOnly?: boolean;
+  readOnly: boolean;
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
@@ -35,6 +36,12 @@ export const SvarFraAndreinstans = ({ grunnlag, readOnly, behandlingVersjon, ini
 
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
     useMellomlagring(Behovstype.HÅNDTER_SVAR_FRA_ANDREINSTANS, initialMellomlagretVurdering);
+
+  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+    readOnly,
+    'SVAR_FRA_ANDREINSTANS',
+    mellomlagretVurdering
+  );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -81,7 +88,7 @@ export const SvarFraAndreinstans = ({ grunnlag, readOnly, behandlingVersjon, ini
         defaultValue: defaultValue.vilkårSomSkalOmgjøres,
       },
     },
-    { readOnly }
+    { readOnly: formReadOnly }
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -107,16 +114,14 @@ export const SvarFraAndreinstans = ({ grunnlag, readOnly, behandlingVersjon, ini
   const konsekvens = form.watch('konsekvens');
 
   return (
-    <VilkårskortMedFormOgMellomlagring
+    <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'Vurder konsekvens av svar fra Nav Klageinstans'}
       steg={'SVAR_FRA_ANDREINSTANS'}
       onSubmit={handleSubmit}
       isLoading={isLoading}
       status={status}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      visBekreftKnapp={!readOnly}
       vilkårTilhørerNavKontor={false}
-      readOnly={readOnly}
       mellomlagretVurdering={mellomlagretVurdering}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() =>
@@ -128,6 +133,15 @@ export const SvarFraAndreinstans = ({ grunnlag, readOnly, behandlingVersjon, ini
           )
         )
       }
+      visningModus={visningModus}
+      visningActions={visningActions}
+      formReset={() => {
+        form.reset(
+          grunnlag?.gjeldendeVurdering
+            ? mapVurderingToDraftFormFields(grunnlag.gjeldendeVurdering)
+            : emptyDraftFormFields()
+        );
+      }}
     >
       <VStack gap={'4'}>
         {svarType && (
@@ -152,7 +166,7 @@ export const SvarFraAndreinstans = ({ grunnlag, readOnly, behandlingVersjon, ini
         <FormField form={form} formField={formFields.konsekvens} />
         {konsekvens === 'OMGJØRING' && <FormField form={form} formField={formFields.vilkårSomSkalOmgjøres} />}
       </VStack>
-    </VilkårskortMedFormOgMellomlagring>
+    </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };
 

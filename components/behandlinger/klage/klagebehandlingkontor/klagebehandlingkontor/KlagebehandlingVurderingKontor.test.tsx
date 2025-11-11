@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render, screen } from '../../../../../lib/test/CustomRender';
 import { KlagebehandlingVurderingKontor } from './KlagebehandlingVurderingKontor';
 import { userEvent } from '@testing-library/user-event';
@@ -6,10 +6,15 @@ import { KlagebehandlingKontorGrunnlag, MellomlagretVurderingResponse } from 'li
 import { Behovstype } from 'lib/utils/form';
 import { FetchResponse } from 'lib/utils/api';
 import createFetchMock from 'vitest-fetch-mock';
+import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
 const user = userEvent.setup();
+
+beforeEach(() => {
+  setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'KLAGEBEHANDLING_KONTOR' });
+});
 
 describe('Klage - vurdering kontor', () => {
   it('Skal ha en overskrift', () => {

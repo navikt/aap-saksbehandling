@@ -13,8 +13,9 @@ import styles from './Helseinstitusjon.module.css';
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useConfigForm } from 'components/form/FormHook';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 
 interface Props {
   grunnlag: HelseinstitusjonGrunnlag;
@@ -44,6 +45,12 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
 
   const { lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
     useMellomlagring(Behovstype.AVKLAR_HELSEINSTITUSJON, initialMellomlagretVurdering);
+
+  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+    readOnly,
+    'DU_ER_ET_ANNET_STED',
+    mellomlagretVurdering
+  );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -88,14 +95,13 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
   };
 
   return (
-    <VilkårskortMedFormOgMellomlagring
+    <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'§ 11-25 Helseinstitusjon'}
       steg={'DU_ER_ET_ANNET_STED'}
       onSubmit={handleSubmit}
       status={status}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       isLoading={isLoading}
-      visBekreftKnapp={!readOnly}
       vilkårTilhørerNavKontor={false}
       vurdertAvAnsatt={grunnlag.vurdertAv}
       mellomlagretVurdering={mellomlagretVurdering}
@@ -103,7 +109,9 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() => form.reset(mapVurderingToDraftFormFields(grunnlag.vurderinger)))
       }
-      readOnly={readOnly}
+      visningModus={visningModus}
+      visningActions={visningActions}
+      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
       <InstitusjonsoppholdTabell
         label={'Brukeren har følgende institusjonsopphold på helseinstitusjon'}
@@ -119,11 +127,11 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
                 {formaterDatoForFrontend(field.periode.fom)} - {formaterDatoForFrontend(field.periode.tom)}
               </BodyShort>
             </div>
-            <Helseinstitusjonsvurdering form={form} helseinstitusjonoppholdIndex={index} readonly={readOnly} />
+            <Helseinstitusjonsvurdering form={form} helseinstitusjonoppholdIndex={index} readonly={formReadOnly} />
           </div>
         );
       })}
-    </VilkårskortMedFormOgMellomlagring>
+    </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };
 

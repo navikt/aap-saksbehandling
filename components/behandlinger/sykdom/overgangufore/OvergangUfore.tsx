@@ -160,7 +160,6 @@ export const OvergangUfore = ({ behandlingVersjon, grunnlag, readOnly, initialMe
       heading={'§ 11-18 AAP under behandling av krav om uføretrygd'}
       steg={'OVERGANG_UFORE'}
       onSubmit={handleSubmit}
-      visBekreftKnapp={!formReadOnly}
       isLoading={isLoading}
       status={status}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
@@ -172,9 +171,9 @@ export const OvergangUfore = ({ behandlingVersjon, grunnlag, readOnly, initialMe
         form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields());
       }}
       mellomlagretVurdering={mellomlagretVurdering}
-      readOnly={formReadOnly}
       visningModus={visningModus}
       visningActions={visningActions}
+      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
       {historiskeVurderinger && historiskeVurderinger.length > 0 && (
         <TidligereVurderinger

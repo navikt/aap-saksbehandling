@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { FullmektigVurdering } from './FullmektigVurdering';
 import { FullmektigGrunnlag, MellomlagretVurderingResponse } from 'lib/types/types';
@@ -8,10 +8,15 @@ import createFetchMock from 'vitest-fetch-mock';
 import { render, screen } from 'lib/test/CustomRender';
 import userEvent from '@testing-library/user-event';
 import { within } from '@testing-library/react';
+import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
 const user = userEvent.setup();
+
+beforeEach(() => {
+  setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'FULLMEKTIG' });
+});
 
 describe('Klage', () => {
   it('Skal ha en overskrift', () => {

@@ -1,5 +1,5 @@
 import { mellomlagreBrev } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { logError } from 'lib/serverutlis/logger';
 import { isError } from 'lib/utils/api';
 
@@ -14,7 +14,7 @@ export async function POST(req: NextRequest, props: { params: Promise<{ brevbest
       );
     }
 
-    return new Response(JSON.stringify(res), { status: res.status });
+    return NextResponse.json(res, { status: res.status });
   } catch (error) {
     logError('Feil i mellomlagring av brev', error);
     return new Response(

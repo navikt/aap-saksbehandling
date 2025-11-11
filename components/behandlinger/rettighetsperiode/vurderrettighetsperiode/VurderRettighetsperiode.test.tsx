@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MellomlagretVurderingResponse, RettighetsperiodeGrunnlag } from 'lib/types/types';
@@ -7,10 +7,15 @@ import { VurderRettighetsperiode } from 'components/behandlinger/rettighetsperio
 import { FetchResponse } from 'lib/utils/api';
 import { customRender } from 'lib/test/CustomRender';
 import createFetchMock from 'vitest-fetch-mock';
+import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
 const user = userEvent.setup();
+
+beforeEach(() => {
+  setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'VURDER_RETTIGHETSPERIODE' });
+});
 
 describe('Vurder rettighetsperiode', () => {
   describe('mellomlagring', () => {

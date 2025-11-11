@@ -20,7 +20,7 @@ export const YrkesskadeBeregningTabell = ({ grunnlag, visning }: Props) => {
         <BodyShort
           size={'small'}
           style={{ maxWidth: '90ch' }}
-        >{`Anslått inntekt ved yrkesskadetidspunktet (${grunnlag.inntektSisteÅr.år}) er oppgitt til å være ${formaterTilNok(grunnlag.yrkesskadeinntekt.antattÅrligInntektIKronerYrkesskadeTidspunktet)} (${formaterTilG(grunnlag.yrkesskadeinntekt.antattÅrligInntektIGYrkesskadeTidspunktet)}) Yrkesskaden er
+        >{`Anslått inntekt ved yrkesskadetidspunktet (${grunnlag.yrkesskadeTidspunkt}) er oppgitt til å være ${formaterTilNok(grunnlag.yrkesskadeinntekt.antattÅrligInntektIKronerYrkesskadeTidspunktet)} (${formaterTilG(grunnlag.yrkesskadeinntekt.antattÅrligInntektIGYrkesskadeTidspunktet)}) Yrkesskaden er
         oppgitt å ha ${formaterTilProsent(grunnlag.yrkesskadeinntekt.prosentVekting)} årsakssammenheng med nedsatt arbeidsevne.`}</BodyShort>
         <Veiledning
           header={'Se detaljer om beregningen for brukeren med yrkesskade'}
@@ -50,7 +50,7 @@ export const YrkesskadeBeregningTabell = ({ grunnlag, visning }: Props) => {
         <Table.Body>
           <Table.Row>
             <Table.DataCell textSize={'small'}>
-              Anslått inntekt yrkesskade ({grunnlag.inntektSisteÅr.år})
+              Anslått inntekt ved yrkesskadetidspunktet ({grunnlag.yrkesskadeTidspunkt})
             </Table.DataCell>
             <Table.DataCell align={'right'} textSize={'small'}>
               {formaterTilNok(grunnlag.yrkesskadeinntekt.antattÅrligInntektIKronerYrkesskadeTidspunktet)} (

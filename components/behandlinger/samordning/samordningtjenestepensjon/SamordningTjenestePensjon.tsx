@@ -99,7 +99,6 @@ export const SamordningTjenestePensjon = ({
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
       steg={'SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV'}
-      visBekreftKnapp={!readOnly}
       onSubmit={handleSubmit}
       mellomlagretVurdering={mellomlagretVurdering}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
@@ -112,9 +111,9 @@ export const SamordningTjenestePensjon = ({
           )
         )
       }
-      readOnly={readOnly}
       visningModus={visningModus}
       visningActions={visningActions}
+      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
       <VStack gap={'1'}>
         <BodyShort weight={'semibold'}>

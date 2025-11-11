@@ -30,7 +30,7 @@ export const AlleSakerListe = () => {
   const pathname = usePathname();
   const { replace } = useRouter();
 
-  const { data, mutate, isLoading, isValidating } = useSWR('api/sak/alle', clientHentAlleSaker);
+  const { data, mutate, isLoading, isValidating } = useSWR('api/sak/siste/20', clientHentAlleSaker);
 
   const searchValue = searchParams.get('ident');
 

@@ -5,10 +5,11 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgG
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { MellomlagretVurdering, TrekkKlageGrunnlag, TypeBehandling } from 'lib/types/types';
 import { useConfigForm } from 'components/form/FormHook';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { FormEvent } from 'react';
 import { FormField } from 'components/form/FormField';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 
 interface Props {
   behandlingVersjon: number;
@@ -36,6 +37,12 @@ export const TrekkKlageVurdering = ({ behandlingVersjon, readOnly, grunnlag, ini
 
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
     useMellomlagring(Behovstype.TREKK_KLAGE_KODE, initialMellomlagretVurdering);
+
+  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+    readOnly,
+    'TREKK_KLAGE',
+    mellomlagretVurdering
+  );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -67,7 +74,7 @@ export const TrekkKlageVurdering = ({ behandlingVersjon, readOnly, grunnlag, ini
         defaultValue: defaultValue.hvorforTrekkes,
       },
     },
-    { readOnly: readOnly }
+    { readOnly: formReadOnly }
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -93,16 +100,14 @@ export const TrekkKlageVurdering = ({ behandlingVersjon, readOnly, grunnlag, ini
   const harValgtAtKlageTrekkes = form.watch('skalTrekkes') === JaEllerNei.Ja;
 
   return (
-    <VilkårskortMedFormOgMellomlagring
+    <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'Trekk klage'}
       steg={'TREKK_KLAGE'}
       onSubmit={handleSubmit}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      visBekreftKnapp={!readOnly}
       vilkårTilhørerNavKontor={false}
       isLoading={isLoading}
       status={status}
-      readOnly={readOnly}
       mellomlagretVurdering={mellomlagretVurdering}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() =>
@@ -110,11 +115,14 @@ export const TrekkKlageVurdering = ({ behandlingVersjon, readOnly, grunnlag, ini
           form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields())
         )
       }
+      visningModus={visningModus}
+      visningActions={visningActions}
+      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
       <FormField form={form} formField={formFields.begrunnelse} />
       <FormField form={form} formField={formFields.skalTrekkes} horizontalRadio />
       {harValgtAtKlageTrekkes && <FormField form={form} formField={formFields.hvorforTrekkes} />}
-    </VilkårskortMedFormOgMellomlagring>
+    </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };
 

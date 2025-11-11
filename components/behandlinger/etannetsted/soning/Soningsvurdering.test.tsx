@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { Soningsvurdering } from 'components/behandlinger/etannetsted/soning/Soningsvurdering';
 import { render, screen } from 'lib/test/CustomRender';
 import { MellomlagretVurderingResponse, Soningsgrunnlag } from 'lib/types/types';
@@ -6,6 +6,7 @@ import userEvent from '@testing-library/user-event';
 import { Behovstype } from 'lib/utils/form';
 import { FetchResponse } from 'lib/utils/api';
 import createFetchMock from 'vitest-fetch-mock';
+import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
@@ -52,6 +53,10 @@ const grunnlagMedVurdering: Soningsgrunnlag = {
     },
   ],
 };
+
+beforeEach(() => {
+  setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'DU_ER_ET_ANNET_STED' });
+});
 
 describe('Soningsvurdering', () => {
   it('har overskrift på nivå 3', () => {

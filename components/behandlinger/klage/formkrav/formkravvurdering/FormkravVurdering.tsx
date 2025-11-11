@@ -3,13 +3,14 @@
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { useConfigForm } from 'components/form/FormHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { FormEvent } from 'react';
 import { FormField } from 'components/form/FormField';
 import { FormkravGrunnlag, MellomlagretVurdering, TypeBehandling } from 'lib/types/types';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { FormkravAvvisningVarsel } from 'components/behandlinger/klage/formkrav/formkravvurdering/FormkravAvvisningVarsel';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 
 interface Props {
   grunnlag?: FormkravGrunnlag;
@@ -38,6 +39,12 @@ export const FormkravVurdering = ({ behandlingVersjon, grunnlag, readOnly, initi
 
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
     useMellomlagring(Behovstype.VURDER_FORMKRAV, initialMellomlagretVurdering);
+
+  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+    readOnly,
+    'FORMKRAV',
+    mellomlagretVurdering
+  );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -94,7 +101,7 @@ export const FormkravVurdering = ({ behandlingVersjon, grunnlag, readOnly, initi
         defaultValue: defaultValue.begrunnelse,
       },
     },
-    { readOnly, shouldUnregister: true }
+    { readOnly: formReadOnly, shouldUnregister: true }
   );
 
   const { erKonkret, erSignert, erBrukerPart, erFristOverholdt, likevelBehandles } = form.watch();
@@ -127,17 +134,15 @@ export const FormkravVurdering = ({ behandlingVersjon, grunnlag, readOnly, initi
   };
 
   return (
-    <VilkårskortMedFormOgMellomlagring
+    <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'Formkrav'}
       steg={'FORMKRAV'}
       onSubmit={handleSubmit}
       vilkårTilhørerNavKontor={false}
       status={status}
       isLoading={isLoading}
-      visBekreftKnapp={!readOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
-      readOnly={readOnly}
       mellomlagretVurdering={mellomlagretVurdering}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() =>
@@ -145,6 +150,9 @@ export const FormkravVurdering = ({ behandlingVersjon, grunnlag, readOnly, initi
           form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields())
         )
       }
+      visningModus={visningModus}
+      visningActions={visningActions}
+      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
       <FormField form={form} formField={formFields.begrunnelse} />
       <FormField form={form} formField={formFields.erBrukerPart} horizontalRadio />
@@ -155,7 +163,7 @@ export const FormkravVurdering = ({ behandlingVersjon, grunnlag, readOnly, initi
       {grunnlag?.varselSvarfrist != null && !readOnly && formkravErIkkeOppfylltVarsel && (
         <FormkravAvvisningVarsel frist={new Date(grunnlag.varselSvarfrist)} />
       )}
-    </VilkårskortMedFormOgMellomlagring>
+    </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };
 

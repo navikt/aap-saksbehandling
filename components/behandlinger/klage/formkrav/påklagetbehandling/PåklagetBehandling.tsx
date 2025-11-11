@@ -3,12 +3,13 @@
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { MellomlagretVurdering, PåklagetBehandlingGrunnlag, TypeBehandling } from 'lib/types/types';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { VelgPåklagetVedtakRadioTable } from 'components/behandlinger/klage/formkrav/påklagetbehandling/VelgPåklagetVedtakRadioTable';
 import { Controller, useForm } from 'react-hook-form';
 import { Behovstype } from 'lib/utils/form';
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 
 interface Props {
   behandlingVersjon: number;
@@ -32,6 +33,12 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, ini
 
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
     useMellomlagring(Behovstype.FASTSETT_PÅKLAGET_BEHANDLING, initialMellomlagretVurdering);
+
+  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+    readOnly,
+    'PÅKLAGET_BEHANDLING',
+    mellomlagretVurdering
+  );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -61,12 +68,11 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, ini
   };
 
   return (
-    <VilkårskortMedFormOgMellomlagring
+    <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'Klage på vedtak'}
       steg={'PÅKLAGET_BEHANDLING'}
       onSubmit={handleSubmit(onSubmit)}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      visBekreftKnapp={!readOnly}
       vilkårTilhørerNavKontor={false}
       isLoading={isLoading}
       status={status}
@@ -82,7 +88,9 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, ini
           )
         )
       }
-      readOnly={readOnly}
+      visningModus={visningModus}
+      visningActions={visningActions}
+      formReset={() => reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
       <Controller
         name="vedtak"
@@ -92,12 +100,12 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, ini
           <VelgPåklagetVedtakRadioTable
             options={mapGrunnlagTilValg(grunnlag)}
             error={fieldState.invalid ? fieldState.error?.message : undefined}
-            readOnly={readOnly}
+            readOnly={formReadOnly}
             {...field}
           />
         )}
       />
-    </VilkårskortMedFormOgMellomlagring>
+    </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };
 

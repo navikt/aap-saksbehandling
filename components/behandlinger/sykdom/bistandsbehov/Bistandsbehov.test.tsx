@@ -16,11 +16,77 @@ beforeEach(() => {
 });
 
 describe('Generelt', () => {
+  const grunnlagMedVurdering: BistandsGrunnlag = {
+    gjeldendeSykdsomsvurderinger: [
+      {
+        begrunnelse: 'blabla',
+        dokumenterBruktIVurdering: [],
+        erArbeidsevnenNedsatt: true,
+        erNedsettelseIArbeidsevneAvEnVissVarighet: true,
+        erNedsettelseIArbeidsevneMerEnnHalvparten: true,
+        erSkadeSykdomEllerLyteVesentligdel: true,
+        harSkadeSykdomEllerLyte: true,
+        vurderingenGjelderFra: '2025-03-24',
+        vurdertAv: { ident: 'Saksbehandler', dato: '2025-03-24' },
+      },
+    ],
+    gjeldendeVedtatteVurderinger: [
+      {
+        begrunnelse: 'En begrunnelse',
+        erBehovForArbeidsrettetTiltak: true,
+        erBehovForAktivBehandling: false,
+        vurdertAv: { ident: 'Saksbehandler', dato: '2025-03-24' },
+      },
+    ],
+    harTilgangTilÅSaksbehandle: true,
+    historiskeVurderinger: [
+      {
+        begrunnelse: 'En begrunnelse',
+        erBehovForArbeidsrettetTiltak: true,
+        erBehovForAktivBehandling: false,
+        vurdertAv: { ident: 'Saksbehandler', dato: '2025-03-24' },
+      },
+    ],
+    vurdering: {
+      begrunnelse: 'Dette er min vurdering som er bekreftet',
+      erBehovForAktivBehandling: true,
+      erBehovForArbeidsrettetTiltak: true,
+      vurdertAv: { ident: 'Saksbehandler', dato: '2025-03-24' },
+    },
+  };
+
   it('Skal ha en overskrift', () => {
     render(<Bistandsbehov readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
 
     const heading = screen.getByText('§ 11-6 Behov for bistand til å skaffe seg eller beholde arbeid');
     expect(heading).toBeVisible();
+  });
+
+  it('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
+    setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'SYKDOMSVURDERING_BREV' });
+
+    render(
+      <Bistandsbehov
+        grunnlag={grunnlagMedVurdering}
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Førstegangsbehandling'}
+      />
+    );
+
+    const endreKnapp = screen.getByRole('button', { name: 'Endre' });
+    await user.click(endreKnapp);
+
+    const begrunnelseFelt = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
+    await user.clear(begrunnelseFelt);
+    await user.type(begrunnelseFelt, 'Dette er en ny begrunnelse');
+    expect(begrunnelseFelt).toHaveValue('Dette er en ny begrunnelse');
+
+    const avbrytKnapp = screen.getByRole('button', { name: 'Avbryt' });
+    await user.click(avbrytKnapp);
+
+    const begrunnelseFeltEtterAvbryt = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
+    expect(begrunnelseFeltEtterAvbryt).toHaveValue('Dette er min vurdering som er bekreftet');
   });
 });
 

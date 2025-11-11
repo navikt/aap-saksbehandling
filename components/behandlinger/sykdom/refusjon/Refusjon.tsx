@@ -134,10 +134,8 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
       onSubmit={handleSubmit}
       status={status}
       isLoading={isLoading}
-      visBekreftKnapp={!formReadOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vurdertAvAnsatt={grunnlag.gjeldendeVurderinger?.[0]?.vurdertAv}
-      readOnly={formReadOnly}
       mellomlagretVurdering={mellomlagretVurdering}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() =>
@@ -145,6 +143,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
       }
       visningModus={visningModus}
       visningActions={visningActions}
+      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
       {!!historiskeVurderinger?.length && (
         <TidligereVurderinger data={historiskeVurderinger} buildFelter={byggFelter} />

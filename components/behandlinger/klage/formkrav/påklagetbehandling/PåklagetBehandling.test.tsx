@@ -1,7 +1,8 @@
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { render, screen } from 'lib/test/CustomRender';
 import { PåklagetBehandling } from './PåklagetBehandling';
 import { PåklagetBehandlingGrunnlag } from 'lib/types/types';
+import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 
 const grunnlag: PåklagetBehandlingGrunnlag = {
   harTilgangTilÅSaksbehandle: true,
@@ -28,6 +29,10 @@ const grunnlag: PåklagetBehandlingGrunnlag = {
     },
   ],
 };
+
+beforeEach(() => {
+  setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'PÅKLAGET_BEHANDLING' });
+});
 
 describe('Klage', () => {
   it('Skal ha en overskrift', () => {

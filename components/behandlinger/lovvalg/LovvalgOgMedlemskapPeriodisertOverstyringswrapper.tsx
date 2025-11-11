@@ -23,7 +23,7 @@ interface Props {
   behovstype: Behovstype;
 }
 
-export const LovvalgOgMedlemskapPeriodisertVedSøknadsTidspunktOverstyringsWrapper = ({
+export const LovvalgOgMedlemskapPeriodisertOverstyringswrapper = ({
   children,
   grunnlag,
   automatiskVurdering,

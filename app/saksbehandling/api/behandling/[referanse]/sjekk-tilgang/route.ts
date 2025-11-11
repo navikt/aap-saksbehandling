@@ -1,4 +1,4 @@
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { sjekkTilgang } from 'lib/services/tilgangservice/tilgangsService';
 
 type SjekkTilgangRequestType = { kode: string };
@@ -8,5 +8,5 @@ export async function POST(req: NextRequest, props: { params: Promise<{ referans
   const body: SjekkTilgangRequestType = await req.json();
 
   const res = await sjekkTilgang(params.referanse, body.kode);
-  return new Response(JSON.stringify(res), { status: 200 });
+  return NextResponse.json(res, { status: 200 });
 }

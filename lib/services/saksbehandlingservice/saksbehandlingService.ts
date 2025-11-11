@@ -79,6 +79,8 @@ import {
   OppholdskravGrunnlagResponse,
   LøsPeriodisertBehovPåBehandling,
   PeriodisertLovvalgMedlemskapGrunnlag,
+  KanDistribuereBrevRequest,
+  KanDistribuereBrevResponse
 } from 'lib/types/types';
 import { apiFetch, apiFetchNoMemoization, apiFetchPdf } from 'lib/services/apiFetch';
 import { logError, logInfo } from 'lib/serverutlis/logger';
@@ -145,8 +147,8 @@ export const finnSakerForIdent = async (ident: string) => {
   return await apiFetch<SaksInfo[]>(url, saksbehandlingApiScope, 'POST', { ident });
 };
 
-export const hentAlleSaker = async () => {
-  const url = `${saksbehandlingApiBaseUrl}/api/sak/alle`;
+export const hentSiste = async (antall: number) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/sak/siste/${antall}`;
   return await apiFetch<SaksInfo[]>(url, saksbehandlingApiScope, 'GET');
 };
 
@@ -507,6 +509,11 @@ export const bestillDialogmelding = async (requestBody: BestillLegeerklæring) =
   const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/syfo/bestill`;
   return await apiFetch(url, saksbehandlingApiScope, 'POST', requestBody);
 };
+
+export const kanDistribuereBrev = async (requestBody: KanDistribuereBrevRequest) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/distribusjon/kan-distribuere-brev`;
+  return await apiFetch<KanDistribuereBrevResponse>(url, saksbehandlingApiScope, 'POST', requestBody);
+}
 
 export const forhåndsvisDialogmelding = async (requestBody: ForhåndsvisDialogmelding) => {
   const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/syfo/brevpreview`;

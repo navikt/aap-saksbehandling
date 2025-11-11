@@ -11,7 +11,8 @@ import styles from 'components/behandlinger/vedtak/foreslåvedtak/ForeslåVedtak
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
+import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 
 type Props = {
   grunnlag: UnderveisGrunnlag[];
@@ -45,15 +46,16 @@ export const Underveisgrunnlag = ({ grunnlag, readOnly, behandlingVersjon }: Pro
   const { status, løsBehovOgGåTilNesteSteg, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('FASTSETT_UTTAK');
 
+  const { visningModus, visningActions } = useVilkårskortVisning(readOnly, 'FASTSETT_UTTAK', undefined);
+
   return (
-    <VilkårskortMedForm
+    <VilkårskortMedFormOgMellomlagringNyVisning
       heading="Underveis"
       steg={'FASTSETT_UTTAK'}
       vilkårTilhørerNavKontor={true}
       status={status}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       isLoading={isLoading}
-      visBekreftKnapp={!readOnly}
       onSubmit={(event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         løsBehovOgGåTilNesteSteg({
@@ -65,6 +67,12 @@ export const Underveisgrunnlag = ({ grunnlag, readOnly, behandlingVersjon }: Pro
         });
       }}
       knappTekst={'Neste'}
+      onDeleteMellomlagringClick={undefined}
+      onLagreMellomLagringClick={undefined}
+      mellomlagretVurdering={undefined}
+      visningModus={visningModus}
+      visningActions={visningActions}
+      formReset={() => {}}
     >
       <Table>
         <Table.Header>
@@ -91,7 +99,7 @@ export const Underveisgrunnlag = ({ grunnlag, readOnly, behandlingVersjon }: Pro
           løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
         />
       </div>
-    </VilkårskortMedForm>
+    </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };
 

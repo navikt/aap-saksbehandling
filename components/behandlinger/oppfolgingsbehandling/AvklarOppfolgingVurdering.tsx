@@ -6,12 +6,13 @@ import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { AvklarOppfolgingsoppgaveGrunnlagResponse, MellomlagretVurdering, Vurderingsbehov } from 'lib/types/types';
 import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { FormEvent } from 'react';
 import { vurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
 import { BodyShort, Label } from '@navikt/ds-react';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { formaterDatoForFrontend } from 'lib/utils/date';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 
 interface Props {
   behandlingVersjon: number;
@@ -48,6 +49,12 @@ export const AvklaroppfolgingVurdering = ({
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
     useMellomlagring(behovsType, initialMellomlagretVurdering);
 
+  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+    readOnly,
+    'AVKLAR_OPPFØLGING',
+    mellomlagretVurdering
+  );
+
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag.grunnlag);
@@ -77,7 +84,7 @@ export const AvklaroppfolgingVurdering = ({
         defaultValue: defaultValue.hvaSkalRevurderes,
       },
     },
-    { readOnly: readOnly }
+    { readOnly: formReadOnly }
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -101,7 +108,7 @@ export const AvklaroppfolgingVurdering = ({
   };
 
   return (
-    <VilkårskortMedFormOgMellomlagring
+    <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'Avklar oppfølgingsoppgave'}
       steg="AVKLAR_OPPFØLGING"
       vilkårTilhørerNavKontor={true}
@@ -109,10 +116,8 @@ export const AvklaroppfolgingVurdering = ({
       status={status}
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      visBekreftKnapp={!readOnly}
       vurdertAvAnsatt={undefined}
       knappTekst={'Fullfør'}
-      readOnly={readOnly}
       mellomlagretVurdering={mellomlagretVurdering}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() =>
@@ -120,6 +125,11 @@ export const AvklaroppfolgingVurdering = ({
           form.reset(grunnlag.grunnlag ? mapVurderingToDraftFormFields(grunnlag.grunnlag) : emptyDraftFormFields())
         )
       }
+      visningModus={visningModus}
+      visningActions={visningActions}
+      formReset={function (): void {
+        mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined;
+      }}
     >
       <div>
         <Label>Dato for oppfølging</Label>
@@ -136,7 +146,7 @@ export const AvklaroppfolgingVurdering = ({
           <FormField form={form} formField={formFields.årsak} />
         </>
       )}
-    </VilkårskortMedFormOgMellomlagring>
+    </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };
 

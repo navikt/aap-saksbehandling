@@ -87,7 +87,7 @@ export function clientOpprettDummySak(sak: OpprettDummySakDto) {
 }
 
 export function clientHentAlleSaker() {
-  return clientFetch<SaksInfo[]>(`${BASE_URL}/api/sak/alle`, 'GET');
+  return clientFetch<SaksInfo[]>(`${BASE_URL}/api/sak/siste/20`, 'GET');
 }
 
 export function clientLøsPeriodisertBehov(avklaringsBehov: LøsPeriodisertBehovPåBehandling) {

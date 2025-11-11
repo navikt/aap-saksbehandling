@@ -124,7 +124,6 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly, ini
       onSubmit={handleSubmit}
       status={status}
       isLoading={isLoading}
-      visBekreftKnapp={false}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vurdertAvAnsatt={grunnlag?.vurderinger?.[0]?.vurdertAv}
       mellomlagretVurdering={mellomlagretVurdering}
@@ -138,6 +137,7 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly, ini
       }}
       visningModus={visningModus}
       visningActions={visningActions}
+      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
       <Link href={'https://lovdata.no/pro/rundskriv/r11-00/KAPITTEL_26-3'} target="_blank">
         Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-23 (lovdata.no)

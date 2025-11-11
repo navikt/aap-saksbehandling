@@ -1,15 +1,20 @@
 import createFetchMock from 'vitest-fetch-mock';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import userEvent from '@testing-library/user-event';
 import { AvklarOppfolgingsoppgaveGrunnlagResponse, MellomlagretVurderingResponse } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
 import { render, screen } from 'lib/test/CustomRender';
 import { FetchResponse } from 'lib/utils/api';
 import { AvklaroppfolgingVurdering } from 'components/behandlinger/oppfolgingsbehandling/AvklarOppfolgingVurdering';
+import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
 const user = userEvent.setup();
+
+beforeEach(() => {
+  setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'AVKLAR_OPPFØLGING' });
+});
 
 describe('mellomlagring', () => {
   const mellomlagring: MellomlagretVurderingResponse = {

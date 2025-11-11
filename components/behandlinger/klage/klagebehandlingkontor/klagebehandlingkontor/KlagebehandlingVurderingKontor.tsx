@@ -2,7 +2,6 @@
 
 import { useConfigForm } from 'components/form/FormHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { FormField } from 'components/form/FormField';
 import {
   Hjemmel,
@@ -16,6 +15,8 @@ import { FormEvent, useEffect } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 
 interface Props {
   behandlingVersjon: number;
@@ -48,6 +49,12 @@ export const KlagebehandlingVurderingKontor = ({
 
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
     useMellomlagring(Behovstype.VURDER_KLAGE_KONTOR, initialMellomlagretVurdering);
+
+  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+    readOnly,
+    'KLAGEBEHANDLING_KONTOR',
+    mellomlagretVurdering
+  );
 
   const defaultValue: DraftFormfields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -109,7 +116,7 @@ export const KlagebehandlingVurderingKontor = ({
         rules: { required: 'Du velge hvilke påklagde vilkår som skal opprettholdes' },
       },
     },
-    { readOnly }
+    { readOnly: formReadOnly }
   );
 
   const innstilling = form.watch('innstilling');
@@ -145,14 +152,13 @@ export const KlagebehandlingVurderingKontor = ({
   };
 
   return (
-    <VilkårskortMedFormOgMellomlagring
+    <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'Vurder klage'}
       steg={'KLAGEBEHANDLING_KONTOR'}
       onSubmit={handleSubmit}
       vilkårTilhørerNavKontor={true}
       status={status}
       isLoading={isLoading}
-      visBekreftKnapp={!readOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
       mellomlagretVurdering={mellomlagretVurdering}
@@ -162,7 +168,9 @@ export const KlagebehandlingVurderingKontor = ({
           form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields())
         )
       }
-      readOnly={readOnly}
+      visningModus={visningModus}
+      visningActions={visningActions}
+      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
       <FormField form={form} formField={formFields.vurdering} />
       <FormField form={form} formField={formFields.notat} />
@@ -173,7 +181,7 @@ export const KlagebehandlingVurderingKontor = ({
       {['OPPRETTHOLD', 'DELVIS_OMGJØR'].includes(innstilling) && (
         <FormField form={form} formField={formFields.vilkårSomSkalOpprettholdes} />
       )}
-    </VilkårskortMedFormOgMellomlagring>
+    </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };
 

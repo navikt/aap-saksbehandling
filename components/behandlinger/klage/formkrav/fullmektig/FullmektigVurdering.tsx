@@ -3,7 +3,6 @@
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { useConfigForm } from 'components/form/FormHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { FormEvent } from 'react';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { FullmektigGrunnlag, MellomlagretVurdering, TypeBehandling } from 'lib/types/types';
@@ -13,6 +12,8 @@ import { landMedTrygdesamarbeidInklNorgeAlpha2 } from 'lib/utils/countries';
 import { erGyldigFødselsnummer } from 'lib/utils/fnr';
 import { erGyldigOrganisasjonsnummer } from 'lib/utils/orgnr';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 
 interface Props {
   grunnlag?: FullmektigGrunnlag;
@@ -47,6 +48,12 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly, ini
 
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
     useMellomlagring(Behovstype.FASTSETT_FULLMEKTIG, initialMellomlagretVurdering);
+
+  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+    readOnly,
+    'FULLMEKTIG',
+    mellomlagretVurdering
+  );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -153,7 +160,7 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly, ini
         defaultValue: defaultValue.land,
       },
     },
-    { readOnly }
+    { readOnly: formReadOnly }
   );
 
   const [harFullmektig, idType, land] = form.watch(['harFullmektig', 'idType', 'land']);
@@ -199,17 +206,15 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly, ini
   };
 
   return (
-    <VilkårskortMedFormOgMellomlagring
+    <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'Fullmektig/verge'}
       steg={'FULLMEKTIG'}
       onSubmit={handleSubmit}
       vilkårTilhørerNavKontor={false}
       status={status}
       isLoading={isLoading}
-      visBekreftKnapp={!readOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
-      readOnly={readOnly}
       mellomlagretVurdering={mellomlagretVurdering}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() =>
@@ -217,6 +222,9 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly, ini
           form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag) : emptyDraftFormFields())
         )
       }
+      visningModus={visningModus}
+      visningActions={visningActions}
+      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
       <FormField form={form} formField={formFields.harFullmektig} horizontalRadio />
       {harFullmektig === JaEllerNei.Ja && <FormField form={form} formField={formFields.idType} horizontalRadio />}
@@ -244,7 +252,7 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly, ini
           )}
         </>
       )}
-    </VilkårskortMedFormOgMellomlagring>
+    </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 
   function mapVurderingToDraftFormFields(grunnlag?: FullmektigGrunnlag): DraftFormFields {

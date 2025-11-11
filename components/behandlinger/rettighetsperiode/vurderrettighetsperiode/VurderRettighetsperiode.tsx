@@ -8,11 +8,12 @@ import { FormEvent } from 'react';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { validerDato } from 'lib/validation/dateValidation';
 import { MellomlagretVurdering, RettighetsperiodeGrunnlag } from 'lib/types/types';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { addYears, isBefore, parse, startOfDay } from 'date-fns';
 import { Alert, BodyShort, HStack, VStack } from '@navikt/ds-react';
 import { formaterDatoForBackend, formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 
 interface Props {
   readOnly: boolean;
@@ -39,8 +40,15 @@ export const VurderRettighetsperiode = ({
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_RETTIGHETSPERIODE');
+
   const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
     useMellomlagring(Behovstype.VURDER_RETTIGHETSPERIODE, initialMellomlagretVurdering);
+
+  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+    readOnly,
+    'VURDER_RETTIGHETSPERIODE',
+    mellomlagretVurdering
+  );
 
   const defaultValues: DraftFormfields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -90,7 +98,7 @@ export const VurderRettighetsperiode = ({
         defaultValue: defaultValues.startDato,
       },
     },
-    { readOnly: readOnly }
+    { readOnly: formReadOnly }
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -119,13 +127,12 @@ export const VurderRettighetsperiode = ({
   };
 
   return (
-    <VilkårskortMedFormOgMellomlagring
+    <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'Starttidspunkt'}
       steg={'VURDER_RETTIGHETSPERIODE'}
       onSubmit={handleSubmit}
       status={status}
       isLoading={isLoading}
-      visBekreftKnapp={!readOnly}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
@@ -136,7 +143,13 @@ export const VurderRettighetsperiode = ({
           form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields())
         );
       }}
-      readOnly={readOnly}
+      visningModus={visningModus}
+      visningActions={visningActions}
+      formReset={function (): void {
+        mellomlagretVurdering
+          ? JSON.parse(mellomlagretVurdering.data)
+          : mapVurderingToDraftFormFields(grunnlag?.vurdering);
+      }}
     >
       <VStack gap={'1'}>
         <BodyShort size={'small'} weight={'semibold'}>
@@ -160,7 +173,7 @@ export const VurderRettighetsperiode = ({
           </Alert>
         </HStack>
       )}
-    </VilkårskortMedFormOgMellomlagring>
+    </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };
 

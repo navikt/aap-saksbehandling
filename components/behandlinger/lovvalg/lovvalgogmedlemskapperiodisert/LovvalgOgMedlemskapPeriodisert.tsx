@@ -124,7 +124,6 @@ export const LovvalgOgMedlemskapPeriodisert = ({
       heading={heading}
       steg={'VURDER_LOVVALG'}
       onSubmit={form.handleSubmit(onSubmit)}
-      visBekreftKnapp={!readOnly}
       isLoading={isLoading}
       status={status}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
@@ -132,7 +131,6 @@ export const LovvalgOgMedlemskapPeriodisert = ({
       mellomlagretVurdering={mellomlagretVurdering}
       onLagreMellomLagringClick={() => lagreMellomlagring({ ...form.watch(), overstyring })}
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}
-      readOnly={readOnly}
       visningModus={visningModus}
       visningActions={visningActions}
       onLeggTilVurdering={onAddPeriode}

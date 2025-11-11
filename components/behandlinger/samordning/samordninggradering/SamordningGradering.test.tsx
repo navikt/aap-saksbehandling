@@ -93,6 +93,59 @@ describe('Samordning gradering', () => {
     await user.click(screen.getByRole('button', { name: 'Bekreft' }));
     expect(await screen.findByText('Du må gjøre en vurdering av periodene')).toBeVisible();
   });
+
+  test('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
+    setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'VURDER_BISTANDSBEHOV' });
+
+    render(
+      <SamordningGradering bruker={bruker} grunnlag={grunnlagMedVurdering} readOnly={false} behandlingVersjon={0} />
+    );
+
+    const endreKnapp = screen.getByRole('button', { name: 'Endre' });
+    await user.click(endreKnapp);
+
+    const begrunnelseFelt = screen.getByRole('textbox', { name: 'Vurder vilkåret' });
+    await user.clear(begrunnelseFelt);
+    await user.type(begrunnelseFelt, 'Dette er en ny begrunnelse');
+    expect(begrunnelseFelt).toHaveValue('Dette er en ny begrunnelse');
+
+    const avbrytKnapp = screen.getByRole('button', { name: 'Avbryt' });
+    await user.click(avbrytKnapp);
+
+    const begrunnelseFeltEtterAvbryt = screen.getByRole('textbox', { name: 'Vurder vilkåret' });
+    expect(begrunnelseFeltEtterAvbryt).toHaveValue('Dette er min vurdering som er bekreftet');
+  });
+
+  test('gir feilmelding når periodeslutt er før periodestart', async () => {
+    setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'VURDER_BISTANDSBEHOV' });
+
+    const etGrunnlag: SamordningGraderingGrunnlag = {
+      harTilgangTilÅSaksbehandle: true,
+      historiskeVurderinger: [],
+      ytelser: [],
+    };
+
+    render(<SamordningGradering bruker={bruker} grunnlag={etGrunnlag} readOnly={false} behandlingVersjon={0} />);
+
+    const endreKnapp = screen.getByRole('button', { name: 'Endre' });
+    await user.click(endreKnapp);
+
+    await user.click(screen.getByRole('button', { name: 'Legg til folketrygdytelse' }));
+
+    const begrunnelseFelt = screen.getByRole('textbox', { name: 'Vurder vilkåret' });
+    await user.type(begrunnelseFelt, 'Dette er en ny begrunnelse');
+
+    await user.click(screen.getByRole('button', { name: 'Legg til' }));
+
+    const fom = screen.getByRole('textbox', { name: 'Fra og med' });
+    await user.type(fom, '31.10.2025');
+
+    const tom = screen.getByRole('textbox', { name: 'Til og med' });
+    await user.type(tom, '01.10.2025');
+
+    await user.click(screen.getByRole('button', { name: 'Bekreft' }));
+    expect(screen.getByText('Fra og med dato kan ikke være etter til og med dato')).toBeVisible();
+  });
 });
 
 describe('mellomlagring', () => {

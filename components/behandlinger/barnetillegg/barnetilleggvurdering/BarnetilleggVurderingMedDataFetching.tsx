@@ -7,7 +7,7 @@ import {
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { Behovstype } from 'lib/utils/form';
-import { skalViseSteg, StegData } from 'lib/utils/steg';
+import { StegData } from 'lib/utils/steg';
 
 type Props = {
   behandlingsreferanse: string;
@@ -25,12 +25,8 @@ export const BarnetilleggVurderingMedDataFetching = async ({ behandlingsreferans
     return <ApiException apiResponses={[grunnlag, behandlingPersoninfo]} />;
   }
 
-  const harTidligereVurderinger = [grunnlag.data.barnSomTrengerVurdering, grunnlag.data.vurderteBarn].flat().length > 0;
-  const visManuellVurdering = skalViseSteg(stegData, harTidligereVurderinger);
-
   return (
     <BarnetilleggVurdering
-      visManuellVurdering={visManuellVurdering}
       grunnlag={grunnlag.data}
       behandlingsversjon={stegData.behandlingVersjon}
       readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}

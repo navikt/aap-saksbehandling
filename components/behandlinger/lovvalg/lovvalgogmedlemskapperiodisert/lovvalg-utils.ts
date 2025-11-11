@@ -83,10 +83,12 @@ export const mapFormTilDto = (
         ? (periodeForm.lovvalg.annetLovvalgslandMedAvtale as LovvalgEØSLand)
         : maplovvalgslandTilAlpha3(periodeForm.lovvalg.lovvalgsEØSLand),
   },
-  medlemskap: {
-    begrunnelse: periodeForm.medlemskap?.begrunnelse ?? '',
-    varMedlemIFolketrygd: periodeForm.medlemskap?.varMedlemIFolketrygd === JaEllerNei.Ja,
-  },
+  ...(periodeForm.lovvalg.lovvalgsEØSLand === 'Norge' && {
+    medlemskap: {
+      begrunnelse: periodeForm.medlemskap?.begrunnelse ?? '',
+      varMedlemIFolketrygd: periodeForm.medlemskap?.varMedlemIFolketrygd === JaEllerNei.Ja,
+    },
+  }),
 });
 
 function mapGrunnlagTilLovvalgsland(lovvalgsland?: LovvalgEØSLand) {

@@ -11,7 +11,7 @@ import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 import { kanViseOverstyrKnapp } from 'lib/utils/overstyring';
 import { LovvalgOgMedlemskapPeriodisert } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/LovvalgOgMedlemskapPeriodisert';
-import { LovvalgOgMedlemskapPeriodisertVedSøknadsTidspunktOverstyringsWrapper } from 'components/behandlinger/lovvalg/LovvalgOgMedlemskapPeriodisertOverstyringswrapper';
+import { LovvalgOgMedlemskapPeriodisertOverstyringswrapper } from 'components/behandlinger/lovvalg/LovvalgOgMedlemskapPeriodisertOverstyringswrapper';
 
 interface Props {
   behandlingsReferanse: string;
@@ -59,7 +59,7 @@ export const LovvalgPeriodisert = async ({ behandlingsReferanse }: Props) => {
       behandlingVersjon={behandlingsVersjon}
       aktivtSteg={flyt.data.aktivtSteg}
     >
-      <LovvalgOgMedlemskapPeriodisertVedSøknadsTidspunktOverstyringsWrapper
+      <LovvalgOgMedlemskapPeriodisertOverstyringswrapper
         automatiskVurdering={vurderingAutomatisk.data}
         harAvklaringsbehov={vurderLovvalgSteg.avklaringsbehov.length > 0}
         behandlingsReferanse={behandlingsReferanse}
@@ -80,7 +80,7 @@ export const LovvalgPeriodisert = async ({ behandlingsReferanse }: Props) => {
             behovstype={behovstype}
           />
         )}
-      </LovvalgOgMedlemskapPeriodisertVedSøknadsTidspunktOverstyringsWrapper>
+      </LovvalgOgMedlemskapPeriodisertOverstyringswrapper>
     </GruppeSteg>
   );
 };

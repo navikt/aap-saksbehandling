@@ -16,6 +16,20 @@ beforeEach(() => {
   setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'OVERGANG_UFORE' });
 });
 
+const overgangUføregrunnlag: OvergangUforeGrunnlag = {
+  vurdering: {
+    begrunnelse: 'Dette er min vurdering som er bekreftet',
+    brukerRettPåAAP: true,
+    brukerHarSøktUføretrygd: true,
+    brukerHarFåttVedtakOmUføretrygd: 'NEI',
+    vurdertAv: { ident: 'TESTER', dato: '2025-08-19' },
+  },
+  gjeldendeSykdsomsvurderinger: [],
+  gjeldendeVedtatteVurderinger: [],
+  harTilgangTilÅSaksbehandle: true,
+  historiskeVurderinger: [],
+};
+
 describe('mellomlagring i overgang uføre', () => {
   const mellomlagring: MellomlagretVurderingResponse = {
     mellomlagretVurdering: {
@@ -25,20 +39,6 @@ describe('mellomlagring i overgang uføre', () => {
       vurdertDato: '2025-08-21T12:00:00.000',
       vurdertAv: 'Jan T. Loven',
     },
-  };
-
-  const overgangUføregrunnlag: OvergangUforeGrunnlag = {
-    vurdering: {
-      begrunnelse: 'Dette er min vurdering som er bekreftet',
-      brukerRettPåAAP: true,
-      brukerHarSøktUføretrygd: true,
-      brukerHarFåttVedtakOmUføretrygd: 'NEI',
-      vurdertAv: { ident: 'TESTER', dato: '2025-08-19' },
-    },
-    gjeldendeSykdsomsvurderinger: [],
-    gjeldendeVedtatteVurderinger: [],
-    harTilgangTilÅSaksbehandle: true,
-    historiskeVurderinger: [],
   };
 
   it('Skal vise en tekst om hvem som har gjort vurderingen dersom det finnes en mellomlagring', () => {
@@ -237,6 +237,33 @@ describe('Førstegangsbehandling', () => {
     render(<OvergangUfore readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
     await velgJa(finnGruppeForSoktOmUforetrygd());
     expect(finnGruppeForRettPåAAP()).toBeVisible();
+  });
+
+  it('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
+    setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'VURDER_BISTANDSBEHOV' });
+
+    render(
+      <OvergangUfore
+        grunnlag={overgangUføregrunnlag}
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Førstegangsbehandling'}
+      />
+    );
+
+    const endreKnapp = screen.getByRole('button', { name: 'Endre' });
+    await user.click(endreKnapp);
+
+    const begrunnelseFelt = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
+    await user.clear(begrunnelseFelt);
+    await user.type(begrunnelseFelt, 'Dette er en ny begrunnelse');
+    expect(begrunnelseFelt).toHaveValue('Dette er en ny begrunnelse');
+
+    const avbrytKnapp = screen.getByRole('button', { name: 'Avbryt' });
+    await user.click(avbrytKnapp);
+
+    const begrunnelseFeltEtterAvbryt = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
+    expect(begrunnelseFeltEtterAvbryt).toHaveValue('Dette er min vurdering som er bekreftet');
   });
 
   const finnGruppeForSoktOmUforetrygd = () => screen.getByRole('group', { name: 'Har brukeren søkt om uføretrygd?' });

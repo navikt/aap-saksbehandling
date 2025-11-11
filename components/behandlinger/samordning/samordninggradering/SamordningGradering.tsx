@@ -203,11 +203,9 @@ export const SamordningGradering = ({
         onSubmit={handleSubmit}
         isLoading={isLoading}
         status={status}
-        visBekreftKnapp={!readOnly}
         løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
         vilkårTilhørerNavKontor={false}
         vurdertAvAnsatt={grunnlag.vurdering?.vurdertAv}
-        readOnly={readOnly}
         onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
         onDeleteMellomlagringClick={() => {
           slettMellomlagring(() =>
@@ -217,6 +215,7 @@ export const SamordningGradering = ({
         mellomlagretVurdering={mellomlagretVurdering}
         visningModus={visningModus}
         visningActions={visningActions}
+        formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
       >
         {!!historiskeVurderinger && !!historiskeVurderinger.length && (
           /* TODO: <TidligereVurderinger/> er ikke ideelt for visning av denne typen data (samordning, inst, m.m.).

@@ -239,7 +239,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  '/api/sak/alle': {
+  '/api/sak/siste/{antall}': {
     parameters: {
       query?: never;
       header?: never;
@@ -250,7 +250,10 @@ export interface paths {
       parameters: {
         query?: never;
         header?: never;
-        path?: never;
+        path: {
+          /** @description antall */
+          antall: number;
+        };
         cookie?: never;
       };
       requestBody?: never;
@@ -3213,6 +3216,45 @@ export interface paths {
     };
     put?: never;
     post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/distribusjon/kan-distribuere-brev': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['no.nav.aap.brev.kontrakt.KanDistribuereBrevRequest'];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.brev.kontrakt.KanDistribuereBrevReponse'];
+          };
+        };
+      };
+    };
     delete?: never;
     options?: never;
     head?: never;
@@ -9444,7 +9486,8 @@ export interface components {
         | 'KLAGE_AVVIST'
         | 'KLAGE_OPPRETTHOLDELSE'
         | 'KLAGE_TRUKKET'
-        | 'FORHÅNDSVARSEL_KLAGE_FORMKRAV';
+        | 'FORHÅNDSVARSEL_KLAGE_FORMKRAV'
+        | 'OMGJØRING_VEDTAK_11_9';
       'harTilgangTil\u00C5SendeBrev': boolean;
       mottaker: components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag.Brev.Mottaker'];
       /**
@@ -9622,9 +9665,7 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningAndreStatligeYtelserGrunnlagDTO': {
       'harTilgangTil\u00C5Saksbehandle': boolean;
-      historiskeVurderinger?:
-        | components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningAndreStatligeYtelserVurderingDTO'][]
-        | null;
+      historiskeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningAndreStatligeYtelserVurderingDTO'][];
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningAndreStatligeYtelserVurderingDTO'];
     };
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningAndreStatligeYtelserVurderingDTO': {
@@ -13589,6 +13630,18 @@ export interface components {
       id: string;
       kanRedigeres: boolean;
       overskrift?: string | null;
+    };
+    'no.nav.aap.brev.kontrakt.KanDistribuereBrevReponse': {
+      mottakereDistStatus: components['schemas']['no.nav.aap.brev.kontrakt.MottakerDistStatus'][];
+    };
+    'no.nav.aap.brev.kontrakt.KanDistribuereBrevRequest': {
+      brukerIdent: string;
+      mottakerIdentListe: string[];
+      saksnummer: string;
+    };
+    'no.nav.aap.brev.kontrakt.MottakerDistStatus': {
+      kanDistribuere: boolean;
+      mottakerIdent: string;
     };
     'no.nav.aap.brev.kontrakt.MottakerDto': {
       ident?: string | null;
