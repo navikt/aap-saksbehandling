@@ -104,6 +104,9 @@ export const SkriveBrev = ({
     }
     const brukerIdent = brukerMottaker?.ident;
 
+    console.log("Brukerident", brukerIdent)
+    console.log("Saksnummer", saksnummer)
+
     if (brukerIdent && saksnummer) {
       const valgteMottakereIdentListe = valgteMottakere
         .map(mottaker => mottaker.ident)
@@ -112,7 +115,9 @@ export const SkriveBrev = ({
       const mottakerIdentListe = valgteMottakereIdentListe.length > 0 ? valgteMottakereIdentListe : [brukerIdent]
 
       const response = await kanDistribuereBrev({ brukerIdent, mottakerIdentListe, saksnummer });
+      console.log("KanDistribuereBrevResponse", response)
       if (isSuccess(response)) {
+        console.log("Response success")
         return !response.data.mottakereDistStatus.some(
           (distStatus: { mottakerIdent: String; kanDistribuere: boolean }) => !distStatus.kanDistribuere
         );
