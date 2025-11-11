@@ -69,7 +69,7 @@ describe('Klage - vurdering nay', () => {
     const option = screen.getByRole('option', { name: '§ 11-3' });
     await user.click(option);
 
-    const bekreftKnapp = screen.getByRole('button', { name: 'Bekreft' });
+    const bekreftKnapp = screen.getByRole('button', { name: 'Send til beslutter' });
     await user.click(bekreftKnapp);
 
     expect(screen.getByText(/Det er ikke mulig å opprette revurdering på/)).toBeVisible();
@@ -92,7 +92,7 @@ describe('Klage - vurdering nay', () => {
     const option = screen.getByRole('option', { name: '§ 11-5' });
     await user.click(option);
 
-    const bekreftKnapp = screen.getByRole('button', { name: 'Bekreft' });
+    const bekreftKnapp = screen.getByRole('button', { name: 'Send til beslutter' });
     await user.click(bekreftKnapp);
 
     expect(screen.queryByText(/Det er ikke mulig å opprette revurdering på/)).not.toBeInTheDocument();

@@ -171,6 +171,7 @@ export const KlagebehandlingVurderingKontor = ({
       visningModus={visningModus}
       visningActions={visningActions}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
+      knappTekst={'Send til kvalitetssikrer'}
     >
       <FormField form={form} formField={formFields.vurdering} />
       <FormField form={form} formField={formFields.notat} />
