@@ -10,9 +10,7 @@ export async function POST(req: NextRequest) {
     const path = req.url.split('/api')[1].slice(0, -1);
     const endringsloggResponse = await hentEndringslogg(body, path);
 
-    const r = await endringsloggResponse.json();
-
-    return new Response(JSON.stringify(r), { status: 200 });
+    return new Response(JSON.stringify({}), { status: endringsloggResponse.status });
   } catch (error) {
     logWarning(`/endringslogg ${body.behov?.behovstype}`, error);
     return new Response(JSON.stringify({ message: getErrorMessage(error) }), { status: 500 });
