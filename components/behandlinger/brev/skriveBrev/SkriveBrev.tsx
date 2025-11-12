@@ -111,7 +111,7 @@ export const SkriveBrev = ({
 
       const mottakerIdentListe = valgteMottakereIdentListe.length > 0 ? valgteMottakereIdentListe : [brukerIdent]
 
-      const response = await kanDistribuereBrev({ brukerIdent, mottakerIdentListe, saksnummer });
+      const response = await kanDistribuereBrev({ brukerIdent, mottakerIdentListe, behandlingsReferanse });
       if (isSuccess(response)) {
         return !response.data.mottakereDistStatus.some(
           (distStatus: { mottakerIdent: String; kanDistribuere: boolean }) => !distStatus.kanDistribuere
