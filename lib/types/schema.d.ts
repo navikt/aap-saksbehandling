@@ -9793,20 +9793,6 @@ export interface components {
       navn: string;
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.refusjon.RefusjonkravGrunnlagResponse': {
-      andreUtbetalingerYtelser?:
-        | (
-            | 'ØKONOMISK_SOSIALHJELP'
-            | 'OMSORGSSTØNAD'
-            | 'INTRODUKSJONSSTØNAD'
-            | 'KVALIFISERINGSSTØNAD'
-            | 'GODGJØRELSE_ELLER_LØNN_FRA_VERV'
-            | 'YTELSE_FRA_UTENLANDSKE_TRYGDEMYNDIGHETER'
-            | 'AFP'
-            | 'STIPEND_FRA_LÅNEKASSEN'
-            | 'LÅN_FRA_LÅNEKASSEN'
-            | 'INGEN_AV_DISSE'
-          )[]
-        | null;
       gjeldendeVurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.refusjon.RefusjonkravVurderingResponse'];
       gjeldendeVurderinger?:
         | components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.refusjon.RefusjonkravVurderingResponse'][]
@@ -9815,6 +9801,7 @@ export interface components {
       historiskeVurderinger?:
         | components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.refusjon.RefusjonkravVurderingResponse'][]
         | null;
+      '\u00F8konomiskSosialHjelp'?: boolean | null;
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.refusjon.RefusjonkravVurderingResponse': {
       /**

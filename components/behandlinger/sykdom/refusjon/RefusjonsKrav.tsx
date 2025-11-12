@@ -71,7 +71,6 @@ export const RefusjonsKrav = ({ sak, form, readOnly }: Props) => {
           <TableStyled>
             <Table.Header>
               <Table.Row>
-                <Table.HeaderCell>Fra dato</Table.HeaderCell>
                 <Table.HeaderCell>Kontor</Table.HeaderCell>
                 <Table.HeaderCell></Table.HeaderCell>
               </Table.Row>
@@ -79,30 +78,6 @@ export const RefusjonsKrav = ({ sak, form, readOnly }: Props) => {
             <Table.Body>
               {fields.map((_, index) => (
                 <Table.Row key={index}>
-                  <Table.DataCell>
-                    <HStack align={'center'} gap={'1'}>
-                      <DateInputWrapper
-                        label="Refusjonen gjelder fra"
-                        control={form.control}
-                        name={`refusjoner.${index}.fom`}
-                        hideLabel={true}
-                        rules={{
-                          validate: {
-                            gyldigDato: (value) => validerNullableDato(value as string),
-                            kanIkkeVaereFoerSoeknadstidspunkt: (value) => {
-                              const starttidspunkt = startOfDay(new Date(sak.periode.fom));
-                              const vurderingGjelderFra = stringToDate(value as string, 'dd.MM.yyyy');
-                              if (vurderingGjelderFra && isBefore(startOfDay(vurderingGjelderFra), starttidspunkt)) {
-                                return 'Vurderingen kan ikke gjelde fra før starttidspunktet';
-                              }
-                              return true;
-                            },
-                          },
-                        }}
-                        readOnly={readOnly}
-                      />
-                    </HStack>
-                  </Table.DataCell>
                   <Table.DataCell>
                     <AsyncComboSearch
                       hideLabel={true}
