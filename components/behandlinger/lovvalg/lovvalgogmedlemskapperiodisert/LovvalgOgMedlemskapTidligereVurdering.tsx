@@ -10,16 +10,19 @@ export const LovvalgOgMedlemskapTidligereVurdering = ({ vurdering }: Props) => {
   return (
     <VStack gap="5">
       <SpørsmålOgSvar spørsmål="Vurderingen gjelder fra" svar={formaterDatoForFrontend(vurdering.fom)} />
-      <SpørsmålOgSvar spørsmål="Vurder riktig lovvalg" svar={vurdering.lovvalg.begrunnelse} />
+      <SpørsmålOgSvar spørsmål="Vurder riktig lovvalg ved angitt tidspunkt" svar={vurdering.lovvalg.begrunnelse} />
       <SpørsmålOgSvar
-        spørsmål="Hva er riktig lovvalgsland?"
-        svar={vurdering.lovvalg.lovvalgsEØSLandEllerLandMedAvtale}
+        spørsmål="Hva er riktig lovvalgsland ved angitt tidspunkt?"
+        svar={vurdering.lovvalg.lovvalgsEØSLandEllerLandMedAvtale!!}
       />
       {vurdering.medlemskap && (
         <>
-          <SpørsmålOgSvar spørsmål="Vurder brukerens medlemskap" svar={vurdering.medlemskap.begrunnelse ?? ''} />
           <SpørsmålOgSvar
-            spørsmål="Var brukeren medlem av folketrygden?"
+            spørsmål="Vurder brukerens medlemskap på angitt tidspunkt"
+            svar={vurdering.medlemskap.begrunnelse ?? ''}
+          />
+          <SpørsmålOgSvar
+            spørsmål="Var brukeren medlem av folketrygden ved angitt tidspunkt?"
             svar={vurdering.medlemskap.varMedlemIFolketrygd ? 'Ja' : 'Nei'}
           />
         </>

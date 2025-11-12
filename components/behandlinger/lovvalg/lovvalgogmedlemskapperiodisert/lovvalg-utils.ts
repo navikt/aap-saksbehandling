@@ -62,6 +62,13 @@ export function getDefaultValuesFromGrunnlag(
   };
 }
 
+function maplovvalgslandTilAlpha3(lovvalgsland: string) {
+  if (lovvalgsland === 'Norge') {
+    return 'NOR';
+  }
+  return null;
+}
+
 export const mapFormTilDto = (
   periodeForm: LovvalgOgMedlemskapManuellVurderingForm,
   tilDato: string | undefined
@@ -74,7 +81,7 @@ export const mapFormTilDto = (
     lovvalgsEØSLandEllerLandMedAvtale:
       periodeForm.lovvalg.lovvalgsEØSLand === 'Annet land med avtale'
         ? (periodeForm.lovvalg.annetLovvalgslandMedAvtale as LovvalgEØSLand)
-        : 'NOR',
+        : maplovvalgslandTilAlpha3(periodeForm.lovvalg.lovvalgsEØSLand),
   },
   ...(periodeForm.lovvalg.lovvalgsEØSLand === 'Norge' && {
     medlemskap: {
