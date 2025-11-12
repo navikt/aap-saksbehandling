@@ -67,6 +67,7 @@ const OppgaveRad = ({
           </BodyShort>
         </Tooltip>
       </Table.DataCell>
+      <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(oppgave.opprettetTidspunkt)}</Table.DataCell>
       <Table.DataCell textSize={'small'}>
         <OppgaveInformasjon oppgave={oppgave} />
       </Table.DataCell>
