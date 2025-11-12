@@ -6,9 +6,7 @@ import { kalkulerAlder } from 'components/behandlinger/alder/Alder';
 import { JaEllerNei } from 'lib/utils/form';
 
 import styles from 'components/barn/oppgittebarnvurdering/SaksbehandlerOppgitteBarnVurdering.module.css';
-import {
-  SaksbehandlerOppgitteBarnVurderingFelter
-} from 'components/barn/oppgittebarnvurderingfelter/SaksbehandlerOppgitteBarnVurderingFelter';
+import { SaksbehandlerOppgitteBarnVurderingFelter } from 'components/barn/oppgittebarnvurderingfelter/SaksbehandlerOppgitteBarnVurderingFelter';
 import React from 'react';
 
 interface Props {
@@ -20,6 +18,7 @@ interface Props {
   harOppgittFosterforelderRelasjon: boolean;
   readOnly: boolean;
   onRemove: () => void;
+  erSlettbar: boolean;
 }
 
 export const SaksbehandlerOppgittBarnVurdering = ({
@@ -31,12 +30,9 @@ export const SaksbehandlerOppgittBarnVurdering = ({
   fødselsdato,
   harOppgittFosterforelderRelasjon,
   onRemove,
+  erSlettbar,
 }: Props) => {
-  const {
-    fields: vurderinger,
-    append,
-    remove
-  } = useFieldArray({
+  const { fields: vurderinger, append, remove, } = useFieldArray({
     control: form.control,
     name: `saksbehandlerOppgitteBarnVurderinger.${barnetilleggIndex}.vurderinger`,
   });
@@ -60,17 +56,19 @@ export const SaksbehandlerOppgittBarnVurdering = ({
             {navn}, {ident} ({fødselsdato ? kalkulerAlder(new Date(fødselsdato)) : 'Ukjent alder'})
           </BodyShort>
         </div>
-        <Button
-          type="button"
-          variant={'tertiary'}
-          size={'small'}
-          icon={<TrashIcon aria-hidden />}
-          onClick={onRemove}
-          className={'fit-content'}
-          disabled={readOnly}
-        >
-          Fjern barn
-        </Button>
+        {erSlettbar && (
+          <Button
+            type="button"
+            variant={'tertiary'}
+            size={'small'}
+            icon={<TrashIcon aria-hidden />}
+            onClick={onRemove}
+            className={'fit-content'}
+            disabled={readOnly}
+          >
+            Fjern barn
+          </Button>
+        )}
       </div>
       <div className={styles.vurderingwrapper}>
         {vurderinger.map((vurdering, vurderingIndex) => {

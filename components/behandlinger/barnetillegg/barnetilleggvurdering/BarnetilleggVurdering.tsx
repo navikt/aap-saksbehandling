@@ -32,7 +32,11 @@ interface Props {
 export interface BarnetilleggFormFields {
   barnetilleggVurderinger: BarneTilleggVurdering[];
   folkeregistrerteBarnVurderinger: BarneTilleggVurdering[];
-  saksbehandlerOppgitteBarnVurderinger: BarneTilleggVurdering[];
+  saksbehandlerOppgitteBarnVurderinger: SaksbehandlerOppgitteBarnVurdering[];
+}
+
+export interface SaksbehandlerOppgitteBarnVurdering extends BarneTilleggVurdering {
+  erSlettbar: boolean;
 }
 
 type DraftFormFields = Partial<BarnetilleggFormFields>;
@@ -114,10 +118,7 @@ export const BarnetilleggVurdering = ({
   });
 
   const {
-    fields: saksbehandlerOppgitteBarnVurderinger,
-    append,
-    remove,
-  } = useFieldArray({
+    fields: saksbehandlerOppgitteBarnVurderinger, append, remove, } = useFieldArray({
     control: form.control,
     name: 'saksbehandlerOppgitteBarnVurderinger',
   });
@@ -295,6 +296,7 @@ export const BarnetilleggVurdering = ({
                   harOppgittFosterforelderRelasjon={vurdering.oppgittForelderRelasjon === 'FOSTERFORELDER'}
                   readOnly={formReadOnly}
                   onRemove={() => remove(manuelleBarnIndex)}
+                  erSlettbar={vurdering.erSlettbar}
                 />
               );
             })}
@@ -321,7 +323,7 @@ export const BarnetilleggVurdering = ({
                 åpne={true}
                 readOnly={formReadOnly}
                 onLagreNyttBarn={(nyttBarn) => {
-                  append({ ...nyttBarn });
+                  append({ ...nyttBarn, erSlettbar: true });
                   setVisLeggTilBarnModal(false);
                 }}
               />
@@ -355,7 +357,7 @@ function mapVurderingToDraftFormFields(
           harForeldreAnsvar: value.harForeldreAnsvar ? JaEllerNei.Ja : JaEllerNei.Nei,
           fraDato: formaterDatoForFrontend(value.fraDato),
           erFosterforelder:
-            value.erFosterForelder !== null ? (value.erFosterForelder ? JaEllerNei.Ja : JaEllerNei.Nei) : null,
+            value.erFosterForelder === null ? null : (value.erFosterForelder ? JaEllerNei.Ja : JaEllerNei.Nei),
         };
       }),
     };
@@ -388,26 +390,26 @@ function mapVurderingToDraftFormFields(
               harForeldreAnsvar: value.harForeldreAnsvar ? JaEllerNei.Ja : JaEllerNei.Nei,
               fraDato: formaterDatoForFrontend(value.fraDato),
               erFosterforelder:
-                value.erFosterForelder !== null ? (value.erFosterForelder ? JaEllerNei.Ja : JaEllerNei.Nei) : null,
+                value.erFosterForelder === null ? null : (value.erFosterForelder ? JaEllerNei.Ja : JaEllerNei.Nei),
             })),
     };
   });
 
-  const saksbehandlerOppgitteBarnVurderinger: BarneTilleggVurdering[] = saksbehandlerOppgitteBarn
+  const saksbehandlerOppgitteBarnVurderinger: SaksbehandlerOppgitteBarnVurdering[] = saksbehandlerOppgitteBarn
     .filter((barn) => barn !== null && barn !== undefined)
     .map((barn) => {
-      const vurderingForBarn = vurderteSaksbehandlerOppgitteBarn?.find((vurdertBarn) => {
+      const vurderingForBarn = vurderteSaksbehandlerOppgitteBarn?.find((eksisterendeVurdering) => {
         if (barn.ident?.identifikator) {
-          return vurdertBarn.ident === barn.ident.identifikator;
+          return eksisterendeVurdering.vurdertBarn.ident === barn.ident.identifikator;
         }
-        return vurdertBarn.navn === barn.navn && vurdertBarn.fødselsdato === barn.fodselsDato;
+        return eksisterendeVurdering.vurdertBarn.navn === barn.navn && eksisterendeVurdering.vurdertBarn.fødselsdato === barn.fodselsDato;
       });
 
       const mapVurdering = (value: any) => ({
         begrunnelse: value.begrunnelse,
         harForeldreAnsvar: value.harForeldreAnsvar ? JaEllerNei.Ja : JaEllerNei.Nei,
         fraDato: formaterDatoForFrontend(value.fraDato),
-        erFosterforelder: value.erFosterForelder !== null ? (value.erFosterForelder ? JaEllerNei.Ja : JaEllerNei.Nei) : null,
+        erFosterforelder: value.erFosterForelder === null ? null : (value.erFosterForelder ? JaEllerNei.Ja : JaEllerNei.Nei),
       });
 
       return {
@@ -415,9 +417,10 @@ function mapVurderingToDraftFormFields(
         fødselsdato: barn.fodselsDato,
         ident: barn.ident?.identifikator,
         oppgittForelderRelasjon: barn.oppgittForeldreRelasjon,
+        erSlettbar: vurderingForBarn?.erSlettbar ?? true,
         vurderinger: vurderingForBarn
-          ? vurderingForBarn.vurderinger.map(mapVurdering)
-          : [{ begrunnelse: '', harForeldreAnsvar: '', fraDato: '' }],
+          ? vurderingForBarn.vurdertBarn.vurderinger.map(mapVurdering)
+          : [{ begrunnelse: '', harForeldreAnsvar: '', fraDato: '' }]
       };
     });
 
