@@ -71,7 +71,7 @@ spec:
         - application: saksbehandling-pdfgen
         - application: dokumentinnhenting
         - application: tilgang
-        - application: endringslogg
+        - application: familie-endringslogg
           namespace: teamfamilie
       external:
         - host: cdn.nav.no
