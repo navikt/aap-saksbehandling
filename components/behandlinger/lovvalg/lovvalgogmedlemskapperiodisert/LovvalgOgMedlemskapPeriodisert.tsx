@@ -74,7 +74,7 @@ export const LovvalgOgMedlemskapPeriodisert = ({
       begrunnelse: '',
       lovvalg: {
         begrunnelse: '',
-        lovvalgsEØSLand: 'NOR',
+        lovvalgsEØSLand: '',
       },
       medlemskap: undefined,
       fraDato: undefined,
