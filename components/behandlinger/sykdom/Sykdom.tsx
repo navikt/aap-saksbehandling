@@ -75,11 +75,6 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
           />
         </StegSuspense>
       )}
-      {refusjonskravSteg.skalViseSteg && (
-        <StegSuspense>
-          <RefusjonMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={refusjonskravSteg} />
-        </StegSuspense>
-      )}
       {overganguføreSteg.skalViseSteg && (
         <StegSuspense>
           <OvergangUforeMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={overganguføreSteg} />
@@ -88,6 +83,11 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
       {toggles.featureOvergangArbeid && overgangarbeidSteg !== null && overgangarbeidSteg.skalViseSteg && (
         <StegSuspense>
           <OvergangArbeidMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={overgangarbeidSteg} />
+        </StegSuspense>
+      )}
+      {refusjonskravSteg.skalViseSteg && (
+        <StegSuspense>
+          <RefusjonMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={refusjonskravSteg} />
         </StegSuspense>
       )}
       {sykdomsvurderingBrevSteg.skalViseSteg && (
