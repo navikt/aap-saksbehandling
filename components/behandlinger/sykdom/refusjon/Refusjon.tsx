@@ -101,8 +101,6 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
       ? 'Nei'
       : 'ingen data';
 
-  const historiskeVurderinger = grunnlag.historiskeVurderinger;
-
   return (
     <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'Sosialstønad refusjonskrav'}
@@ -122,10 +120,6 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
       visningActions={visningActions}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
-      {!!historiskeVurderinger?.length && (
-        <TidligereVurderinger data={historiskeVurderinger} buildFelter={byggFelter} />
-      )}
-
       {grunnlag.økonomiskSosialHjelp != null && (
         <VStack>
           <BodyLong weight={'semibold'} size={'small'}>
@@ -178,18 +172,3 @@ function mapVurderingToDraftFormFields(grunnlag: RefusjonskravGrunnlag, sak: Sak
           ],
   };
 }
-
-const byggFelter = (vurdering: RefusjonkravVurderingResponse): ValuePair[] => [
-  {
-    label: 'Har noen Nav-kontor refusjonskrav for sosialstønad?',
-    value: vurdering.harKrav ? 'Ja' : 'Nei',
-  },
-  {
-    label: 'Nav-kontor',
-    value: vurdering.navKontor ?? '-',
-  },
-  {
-    label: 'Refusjonen gjelder periode',
-    value: `${vurdering.fom ? formaterDatoForFrontend(vurdering.fom) : 'mangler'} - ${vurdering.tom ? formaterDatoForFrontend(vurdering.tom) : 'mangler'}`,
-  },
-];

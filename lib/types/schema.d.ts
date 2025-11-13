@@ -9798,9 +9798,11 @@ export interface components {
         | components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.refusjon.RefusjonkravVurderingResponse'][]
         | null;
       'harTilgangTil\u00C5Saksbehandle': boolean;
-      historiskeVurderinger?:
-        | components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.refusjon.RefusjonkravVurderingResponse'][]
-        | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      'n\u00E5v\u00E6rendeVirkningsTidspunkt'?: string | null;
       '\u00F8konomiskSosialHjelp'?: boolean | null;
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.refusjon.RefusjonkravVurderingResponse': {
