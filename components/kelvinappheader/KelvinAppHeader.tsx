@@ -76,6 +76,10 @@ const Brukermeny = ({ brukerInformasjon, roller }: { brukerInformasjon: BrukerIn
   );
 };
 
+function finnEndringslogg(): HTMLElement {
+  return Array.from(document.getElementsByClassName('endringslogg-knapp'))[0] as HTMLElement;
+}
+
 const lokalLenkeTilSaksoversikt = isLocal();
 export const KelvinAppHeader = ({
   brukerInformasjon,
@@ -85,6 +89,7 @@ export const KelvinAppHeader = ({
   roller?: Roller[];
 }) => {
   const [søkeresultat, setSøkeresultat] = useState<SøkeResultat | undefined>(undefined);
+  const [endringsloggÅpen, setEndringsloggÅpen] = useState<boolean>(false);
 
   return (
     <>
@@ -100,17 +105,28 @@ export const KelvinAppHeader = ({
 
         <Spacer />
         {brukerInformasjon.NAVident && toggles.featureEndringslogg && (
-          <Endringslogg
-            userId={brukerInformasjon.NAVident}
-            dataFetchingIntervalSeconds={60 * 15}
-            appId={'AAP'}
-            backendUrl={'/saksbehandling/api'}
-            dataset={'production'}
-            maxEntries={50}
-            appName={'Arbeidsavklaringspenger'}
-            alignLeft={true}
-            stil={'lys'}
-          />
+          <InternalHeader.Button
+            as="div"
+            onClick={(e) => {
+              console.log(e, finnEndringslogg());
+              if (!endringsloggÅpen) {
+                finnEndringslogg().click();
+              }
+              setEndringsloggÅpen(!endringsloggÅpen);
+            }}
+          >
+            <Endringslogg
+              userId={brukerInformasjon.NAVident}
+              dataFetchingIntervalSeconds={60 * 15}
+              appId={'AAP'}
+              backendUrl={'/saksbehandling/api'}
+              dataset={'production'}
+              maxEntries={50}
+              appName={'Arbeidsavklaringspenger'}
+              alignLeft={true}
+              stil={'lys'}
+            />
+          </InternalHeader.Button>
         )}
         <AppSwitcher />
         <Brukermeny brukerInformasjon={brukerInformasjon} roller={roller} />
