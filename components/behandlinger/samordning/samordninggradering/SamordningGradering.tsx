@@ -347,10 +347,10 @@ function byggFelter(vurdering: SamordningYtelseVurdering): ValuePair<string>[] {
       value: 'Ingen ytelser',
     });
   } else {
-    perioder.forEach((item, index) => {
+    perioder.map((item, index) => {
       const ytelseLabel = index === 0 ? 'Ytelse(r)' : '';
       const value = `${storForbokstavOgMellomromForUnderstrek(item.ytelseType)} (${formaterDatoForFrontend(item.periode.fom)}
-       - ${formaterDatoForFrontend(item.periode.tom)}) - ${item.gradering}% Samordninggrad`;
+       - ${formaterDatoForFrontend(item.periode.tom)}) - ${item.gradering}% Samordningsgrad`;
 
       felter.push({
         label: ytelseLabel,
