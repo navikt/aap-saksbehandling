@@ -14,13 +14,11 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { SykdomsvurderingBrevMedDataFetching } from 'components/behandlinger/sykdom/sykdomsvurderingbrev/SykdomsvurderingBrevMedDataFetching';
 import { OvergangUforeMedDataFetching } from './overgangufore/OvergangUforeMedDataFetching';
 import { OvergangArbeidMedDataFetching } from './overgangarbeid/OvergangArbeidMedDataFetching';
-import { toggles } from '../../../lib/utils/toggles';
+import { toggles } from 'lib/utils/toggles';
 
 interface Props {
   behandlingsReferanse: string;
 }
-
-export const overgangUføreFeature = () => true;
 
 export const Sykdom = async ({ behandlingsReferanse }: Props) => {
   const flyt = await hentFlyt(behandlingsReferanse);
@@ -37,7 +35,7 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
   const sykdomsvurderingBrevSteg = getStegData(aktivStegGruppe, 'SYKDOMSVURDERING_BREV', flyt.data);
   const vurderYrkesskadeSteg = getStegData(aktivStegGruppe, 'VURDER_YRKESSKADE', flyt.data);
   const vurderSykepengeerstatningSteg = getStegData(aktivStegGruppe, 'VURDER_SYKEPENGEERSTATNING', flyt.data);
-  const overganguføreSteg = overgangUføreFeature() ? getStegData(aktivStegGruppe, 'OVERGANG_UFORE', flyt.data) : null;
+  const overganguføreSteg = getStegData(aktivStegGruppe, 'OVERGANG_UFORE', flyt.data);
   const overgangarbeidSteg = toggles.featureOvergangArbeid
     ? getStegData(aktivStegGruppe, 'OVERGANG_ARBEID', flyt.data)
     : null;
@@ -60,7 +58,6 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
           <BistandsbehovMedDataFetching
             behandlingsReferanse={behandlingsReferanse}
             stegData={vurderBistandsbehovSteg}
-            overgangUføreEnabled={overgangUføreFeature()}
             overgangArbeidEnabled={toggles.featureOvergangArbeid}
           />
         </StegSuspense>
@@ -83,7 +80,7 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
           <RefusjonMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={refusjonskravSteg} />
         </StegSuspense>
       )}
-      {overgangUføreFeature() && overganguføreSteg !== null && overganguføreSteg.skalViseSteg && (
+      {overganguføreSteg !== null && overganguføreSteg.skalViseSteg && (
         <StegSuspense>
           <OvergangUforeMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={overganguføreSteg} />
         </StegSuspense>

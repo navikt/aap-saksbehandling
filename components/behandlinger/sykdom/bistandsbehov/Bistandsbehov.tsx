@@ -28,7 +28,6 @@ interface Props {
   typeBehandling: TypeBehandling;
   grunnlag?: BistandsGrunnlag;
   initialMellomlagretVurdering?: MellomlagretVurdering;
-  overgangUføreEnabled?: Boolean;
   overgangArbeidEnabled?: Boolean;
 }
 
@@ -51,7 +50,6 @@ export const Bistandsbehov = ({
   typeBehandling,
   initialMellomlagretVurdering,
   overgangArbeidEnabled = false,
-  overgangUføreEnabled = false,
 }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
@@ -242,23 +240,6 @@ export const Bistandsbehov = ({
       {form.watch('erBehovForAktivBehandling') !== JaEllerNei.Ja &&
         form.watch('erBehovForArbeidsrettetTiltak') !== JaEllerNei.Ja && (
           <FormField form={form} formField={formFields.erBehovForAnnenOppfølging} horizontalRadio />
-        )}
-      {!overgangUføreEnabled &&
-        (typeBehandling === 'Førstegangsbehandling' ||
-          (typeBehandling === 'Revurdering' && grunnlag?.harOppfylt11_5)) &&
-        bistandsbehovErIkkeOppfylt && (
-          <VStack gap={'4'} as={'section'}>
-            <Heading level={'3'} size="small">
-              § 11-18 Arbeidsavklaringspenger under behandling av krav om uføretrygd
-            </Heading>
-            <FormField form={form} formField={formFields.overgangBegrunnelse} className="begrunnelse" />
-            <FormField form={form} formField={formFields.skalVurdereAapIOvergangTilUføre} horizontalRadio />
-            {form.watch('skalVurdereAapIOvergangTilUføre') === JaEllerNei.Ja && (
-              <Alert variant="warning">
-                Sett saken på vent og meld i fra til Team AAP at du har fått en § 11-18-sak.
-              </Alert>
-            )}
-          </VStack>
         )}
       {!overgangArbeidEnabled &&
         typeBehandling === 'Revurdering' &&
