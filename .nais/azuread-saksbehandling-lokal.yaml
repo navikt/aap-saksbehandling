@@ -28,6 +28,9 @@ spec:
     - application: dokumentinnhenting
       cluster: dev-gcp
       namespace: aap
+    - application: endringslogg
+      namespace: teamfamilie
+      cluster: dev-gcp
   tenant: trygdeetaten.no
   secretName: azuread-saksbehandling-lokal
   claims:

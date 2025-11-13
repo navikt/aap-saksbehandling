@@ -56,7 +56,7 @@ describe('Foreslå vedtak', () => {
 
   it('Skal vise rettighetstype på innvilget AAP', () => {
     render(<ForeslåVedtakTabell grunnlag={foreslåVedtakGrunnlag} />);
-    const innvilgetÅrsak = screen.getByText('§ 11-6 Bistandsbehov');
+    const innvilgetÅrsak = screen.getByText('§ 11-6');
     expect(innvilgetÅrsak).toBeVisible();
   });
 });

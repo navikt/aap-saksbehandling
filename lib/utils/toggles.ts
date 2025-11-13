@@ -9,4 +9,6 @@ export const toggles = {
   featureOvergangArbeid: !isProd(),
   featureFerieISykepengeperiode: !isProd(), // Finnes ikke i unleash - kun frontend-toggle
   featurePostmottakBehandlingerPåVent: !isProd(),
+  featureVisAvslagsårsaker: !isProd(),
+  featureEndringslogg: !isProd(),
 };

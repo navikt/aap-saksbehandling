@@ -104,14 +104,14 @@ export const SkriveBrev = ({
     }
     const brukerIdent = brukerMottaker?.ident;
 
-    if (brukerIdent && saksnummer) {
+    if (brukerIdent) {
       const valgteMottakereIdentListe = valgteMottakere
-        .map(mottaker => mottaker.ident)
-        .filter(ident => typeof ident === 'string')
+        .map((mottaker) => mottaker.ident)
+        .filter((ident) => typeof ident === 'string');
 
-      const mottakerIdentListe = valgteMottakereIdentListe.length > 0 ? valgteMottakereIdentListe : [brukerIdent]
+      const mottakerIdentListe = valgteMottakereIdentListe.length > 0 ? valgteMottakereIdentListe : [brukerIdent];
 
-      const response = await kanDistribuereBrev({ brukerIdent, mottakerIdentListe, saksnummer });
+      const response = await kanDistribuereBrev({ brukerIdent, mottakerIdentListe, behandlingsReferanse });
       if (isSuccess(response)) {
         return !response.data.mottakereDistStatus.some(
           (distStatus: { mottakerIdent: String; kanDistribuere: boolean }) => !distStatus.kanDistribuere
@@ -119,7 +119,7 @@ export const SkriveBrev = ({
       }
     }
     return true;
-  }
+  };
 
   return (
     <>
@@ -180,11 +180,11 @@ export const SkriveBrev = ({
             signatur={signaturer}
             readonly={readOnly}
           />
-          {!kanDistribuereTilAlleMottakere() &&
+          {!kanDistribuereTilAlleMottakere() && (
             <Alert variant={'warning'} size={'small'} className={'fit-content'}>
               Brevet kan ikke distribueres til alle mottakere. Se rutinebeskrivelse for manuell håndtering.
             </Alert>
-          }
+          )}
           {!readOnly && (
             <Button
               disabled={status !== 'FORHÅNDSVISNING_KLAR'}
@@ -280,4 +280,3 @@ function VelgeMottakere({
     </div>
   );
 }
-

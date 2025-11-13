@@ -58,6 +58,9 @@ export const MineOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) => {
             <Table.ColumnHeader sortKey={'avklaringsbehovKode'} sortable={true}>
               Oppgave
             </Table.ColumnHeader>
+            <Table.ColumnHeader sortKey={'opprettetTidspunkt'} sortable={true}>
+              Oppg. opprettet
+            </Table.ColumnHeader>
             <Table.HeaderCell></Table.HeaderCell>
             <Table.HeaderCell></Table.HeaderCell>
           </Table.Row>

@@ -3,7 +3,7 @@ import {
   hentAutomatiskLovvalgOgMedlemskapVurdering,
   hentFlyt,
   hentMellomlagring,
-  hentPeriodisertLovvalgMedlemskapGrunnlag,
+  hentLovvalgMedlemskapGrunnlag,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { getStegData, skalViseSteg } from 'lib/utils/steg';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
@@ -21,10 +21,9 @@ export const LovvalgPeriodisert = async ({ behandlingsReferanse }: Props) => {
   const [flyt, vurderingAutomatisk, grunnlag, initialMellomlagretVurdering] = await Promise.all([
     hentFlyt(behandlingsReferanse),
     hentAutomatiskLovvalgOgMedlemskapVurdering(behandlingsReferanse),
-    hentPeriodisertLovvalgMedlemskapGrunnlag(behandlingsReferanse),
+    hentLovvalgMedlemskapGrunnlag(behandlingsReferanse),
     hentMellomlagring(behandlingsReferanse, Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP),
   ]);
-  console.log(grunnlag.data?.nyeVurderinger);
 
   if (isError(vurderingAutomatisk) || isError(grunnlag) || isError(flyt)) {
     return <ApiException apiResponses={[vurderingAutomatisk, grunnlag, flyt]} />;

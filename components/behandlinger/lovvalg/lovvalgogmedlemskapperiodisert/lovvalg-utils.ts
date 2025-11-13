@@ -1,12 +1,14 @@
 import {
   AvklarPeriodisertLovvalgMedlemskapLøsning,
   LovvalgEØSLand,
+  MellomlagretVurdering,
   PeriodisertLovvalgMedlemskapGrunnlag,
 } from 'lib/types/types';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import {
   LovOgMedlemskapVurderingForm,
+  LovOgMedlemskapVurderingFormIkkePeriodisert,
   LovvalgOgMedlemskapManuellVurderingForm,
 } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/types';
 import { parse, sub } from 'date-fns';
@@ -19,7 +21,6 @@ export function getDefaultValuesFromGrunnlag(
     return {
       vurderinger: [
         {
-          begrunnelse: '',
           lovvalg: {
             begrunnelse: '',
             lovvalgsEØSLand: '',
@@ -32,7 +33,6 @@ export function getDefaultValuesFromGrunnlag(
   }
 
   // Vi har allerede data lagret, vis enten de som er lagret i grunnlaget her eller tom liste
-  console.log('default', grunnlag.nyeVurderinger);
   return {
     vurderinger:
       grunnlag?.nyeVurderinger.map((vurdering) => ({
@@ -50,30 +50,23 @@ export function getDefaultValuesFromGrunnlag(
           begrunnelse: vurdering.medlemskap?.begrunnelse ?? '',
           varMedlemIFolketrygd: getJaNeiEllerUndefined(vurdering.medlemskap?.varMedlemIFolketrygd) ?? JaEllerNei.Nei,
         },
-        // vurdertAv:
-        //   vurdering.vurdertAv != null
-        //     ? {
-        //         navn: vurdering.vurdertAv.ansattnavn,
-        //         ident: vurdering.vurdertAv.ident,
-        //         dato: vurdering.vurdertAv.dato,
-        //       }
-        //     : undefined,
+        vurdertAv:
+          vurdering.vurdertAv != null
+            ? {
+                navn: vurdering.vurdertAv.ansattnavn,
+                ident: vurdering.vurdertAv.ident,
+                dato: vurdering.vurdertAv.dato,
+              }
+            : undefined,
       })) || [],
   };
-}
-
-function maplovvalgslandTilAlpha3(lovvalgsland: string) {
-  if (lovvalgsland === 'Norge') {
-    return 'NOR';
-  }
-  return null;
 }
 
 export const mapFormTilDto = (
   periodeForm: LovvalgOgMedlemskapManuellVurderingForm,
   tilDato: string | undefined
 ): AvklarPeriodisertLovvalgMedlemskapLøsning => ({
-  begrunnelse: periodeForm.begrunnelse,
+  begrunnelse: `${periodeForm.lovvalg.begrunnelse}\n\n${periodeForm.medlemskap ? periodeForm.medlemskap.begrunnelse : ''}`,
   fom: formaterDatoForBackend(parse(periodeForm.fraDato!, 'dd.MM.yyyy', new Date())),
   tom: tilDato != null ? formaterDatoForBackend(sub(parse(tilDato, 'dd.MM.yyyy', new Date()), { days: 1 })) : null,
   lovvalg: {
@@ -81,7 +74,7 @@ export const mapFormTilDto = (
     lovvalgsEØSLandEllerLandMedAvtale:
       periodeForm.lovvalg.lovvalgsEØSLand === 'Annet land med avtale'
         ? (periodeForm.lovvalg.annetLovvalgslandMedAvtale as LovvalgEØSLand)
-        : maplovvalgslandTilAlpha3(periodeForm.lovvalg.lovvalgsEØSLand),
+        : 'NOR',
   },
   ...(periodeForm.lovvalg.lovvalgsEØSLand === 'Norge' && {
     medlemskap: {
@@ -105,4 +98,32 @@ function mapGrunnlagTilAnnetLovvalgslandMedAvtale(lovvalgsland?: LovvalgEØSLand
     return lovvalgsland;
   }
   return undefined;
+}
+
+// TODO denne er midlertidig inntil alle mellomlagrede vurderinger har blitt periodisert (https://jira.adeo.no/browse/FAGSYSTEM-405014)
+export function hentPeriodiserteVerdierFraMellomlagretVurdering(
+  mellomlagretVurdering: MellomlagretVurdering,
+  grunnlag?: PeriodisertLovvalgMedlemskapGrunnlag
+) {
+  const vurdering = JSON.parse(mellomlagretVurdering.data);
+  if (vurdering.vurderinger) {
+    return vurdering as LovOgMedlemskapVurderingForm;
+  } else {
+    const ikkePeriodisertVurdering = vurdering as LovOgMedlemskapVurderingFormIkkePeriodisert;
+    return {
+      vurderinger: [
+        {
+          lovvalg: {
+            begrunnelse: ikkePeriodisertVurdering.lovvalgBegrunnelse,
+            lovvalgsEØSLand: ikkePeriodisertVurdering.lovvalgsLand,
+          },
+          medlemskap: {
+            begrunnelse: ikkePeriodisertVurdering.medlemskapBegrunnelse,
+            varMedlemIFolketrygd: ikkePeriodisertVurdering.medlemAvFolkeTrygdenVedSøknadstidspunkt,
+          },
+          fraDato: grunnlag ? formaterDatoForFrontend(new Date(grunnlag?.kanVurderes[0]?.fom!)) : undefined,
+        },
+      ],
+    } as LovOgMedlemskapVurderingForm;
+  }
 }

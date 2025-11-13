@@ -6,7 +6,6 @@ export type LovOgMedlemskapVurderingForm = {
 
 export type LovvalgOgMedlemskapManuellVurderingForm = {
   vurderingId?: string;
-  begrunnelse: string;
   lovvalg: {
     begrunnelse: string;
     lovvalgsEØSLand: string;
@@ -17,9 +16,18 @@ export type LovvalgOgMedlemskapManuellVurderingForm = {
     varMedlemIFolketrygd: JaEllerNei;
   };
   fraDato?: string;
-  // vurdertAv?: {
-  //   navn?: string | null;
-  //   ident: string;
-  //   dato: string;
-  // };
+  vurdertAv?: {
+    navn?: string | null;
+    ident: string;
+    dato: string;
+  };
+};
+
+// TODO denne er midlertidig inntil alle mellomlagrede vurderinger har blitt periodisert (https://jira.adeo.no/browse/FAGSYSTEM-405014)
+export type LovOgMedlemskapVurderingFormIkkePeriodisert = {
+  overstyring: boolean;
+  lovvalgsLand: string;
+  lovvalgBegrunnelse: string;
+  medlemskapBegrunnelse: string;
+  medlemAvFolkeTrygdenVedSøknadstidspunkt: JaEllerNei;
 };

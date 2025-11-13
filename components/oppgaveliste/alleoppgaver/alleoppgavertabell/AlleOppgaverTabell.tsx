@@ -91,6 +91,9 @@ export const AlleOppgaverTabell = ({ oppgaver, revalidateFunction, setValgteRade
             <Table.ColumnHeader sortKey={'avklaringsbehovKode'} sortable={true}>
               Oppgave
             </Table.ColumnHeader>
+            <Table.ColumnHeader sortKey={'opprettetTidspunkt'} sortable={true}>
+              Oppg. opprettet
+            </Table.ColumnHeader>
             <Table.ColumnHeader sortKey={'reservertAvNavn'} sortable={true}>
               Veileder/Saksbehandler
             </Table.ColumnHeader>
@@ -146,6 +149,7 @@ export const AlleOppgaverTabell = ({ oppgaver, revalidateFunction, setValgteRade
                   </BodyShort>
                 </Tooltip>
               </Table.DataCell>
+              <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(oppgave.opprettetTidspunkt)}</Table.DataCell>
               <Table.DataCell style={{ maxWidth: '150px' }} textSize={'small'}>
                 <Tooltip content={(oppgave.reservertAvNavn ?? oppgave.reservertAv) || 'Ledig'}>
                   <BodyShort truncate size={'small'}>
