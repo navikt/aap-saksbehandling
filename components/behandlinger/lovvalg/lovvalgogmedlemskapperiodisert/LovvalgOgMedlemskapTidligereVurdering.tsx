@@ -17,7 +17,7 @@ export const LovvalgOgMedlemskapTidligereVurdering = ({ vurdering }: Props) => {
       />
       {vurdering.medlemskap && (
         <>
-          <SpørsmålOgSvar spørsmål="Vurder brukerens medlemskap" svar={vurdering.medlemskap.begrunnelse ?? ''} />
+          <SpørsmålOgSvar spørsmål="Vurder brukerens medlemskap" svar={vurdering.medlemskap.begrunnelse} />
           <SpørsmålOgSvar
             spørsmål="Var brukeren medlem av folketrygden?"
             svar={vurdering.medlemskap.varMedlemIFolketrygd ? 'Ja' : 'Nei'}
