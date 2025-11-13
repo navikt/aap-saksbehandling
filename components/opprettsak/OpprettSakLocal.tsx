@@ -1,18 +1,17 @@
 'use client';
 
-import { Button } from '@navikt/ds-react';
-
-import styles from './OpprettSak.module.css';
+import { Box, Button, HGrid, HStack, VStack } from '@navikt/ds-react';
 import { mutate } from 'swr';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { OpprettSakBarn } from 'components/opprettsak/barn/OpprettSakBarn';
 import { getTrueFalseEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { OpprettInntekter } from 'components/opprettsak/inntekter/OpprettInntekter';
-import { useOpprettOgFullfoer, useOpprettSak } from 'hooks/FetchHook';
+import { useOpprettSak } from 'hooks/FetchHook';
 import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { Sykepenger } from 'components/opprettsak/samordning/Sykepenger';
 import { parse } from 'date-fns';
+import { TestcaseSteg } from 'lib/types/types';
 
 interface Barn {
   fodselsdato: string;
@@ -47,11 +46,11 @@ export interface OpprettSakFormFields {
   søknadsdato: Date;
   sykepenger?: SamordningSykepenger[];
   tjenestePensjon?: JaEllerNei;
+  steg?: TestcaseSteg;
 }
 
 export const OpprettSakLocal = () => {
-  const { isLoadingSak, opprettSak } = useOpprettSak();
-  const { isLoadingFullfoer, opprettOgFullfoer } = useOpprettOgFullfoer();
+  const { isLoading, opprettSakOgBehandling } = useOpprettSak();
   const { formFields, form } = useConfigForm<OpprettSakFormFields>({
     søknadsdato: {
       type: 'date',
@@ -112,9 +111,37 @@ export const OpprettSakLocal = () => {
       options: JaEllerNeiOptions,
       defaultValue: JaEllerNei.Nei,
     },
+    steg: {
+      type: 'combobox',
+      label: 'Steg',
+      hideLabel: true,
+      defaultValue: 'KVALITETSSIKRING',
+      options: [
+        { value: 'AVKLAR_STUDENT', label: 'Avklar student' },
+        { value: 'AVKLAR_SYKDOM', label: 'Avklar sykdom' },
+        { value: 'VURDER_BISTANDSBEHOV', label: 'Vurder bistandsbehov' },
+        { value: 'REFUSJON_KRAV', label: 'Refusjon krav' },
+        { value: 'SYKDOMSVURDERING_BREV', label: 'Sykdomsvurdering brev' },
+        { value: 'KVALITETSSIKRING', label: 'Kvalitetssikring' },
+        { value: 'VURDER_YRKESSKADE', label: 'Vurder yrkesskade' },
+        { value: 'FASTSETT_BEREGNINGSTIDSPUNKT', label: 'Fastsett beregningstidspunkt' },
+        { value: 'MANGLENDE_LIGNING', label: 'Fastsett inntekt' },
+        { value: 'VURDER_YRKESSKADE', label: 'Vurder yrkesskade' },
+        { value: 'VURDER_MEDLEMSKAP', label: 'Vurder medlemskap' },
+        { value: 'VURDER_OPPHOLDSKRAV', label: 'Vurder oppholdskrav' },
+        { value: 'DU_ER_ET_ANNET_STED', label: 'Et annet sted' },
+        { value: 'BARNETILLEGG', label: 'Barnetillegg' },
+        { value: 'SAMORDNING_GRADERING', label: 'Samordning folketrygdytelser' },
+        { value: 'SAMORDNING_ANDRE_STATLIGE_YTELSER', label: 'Samordning andre statlige ytelser' },
+        { value: 'SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV', label: 'Samordning tjenestepensjon refusjonskrav' },
+        { value: 'FORESLÅ_VEDTAK', label: 'Foreslå vedtak' },
+        { value: 'FATTE_VEDTAK', label: 'Fatte vedtak' },
+        { value: 'BREV', label: 'Brev' },
+      ],
+    },
   });
 
-  const mapInnhold = (data: OpprettSakFormFields) => {
+  const mapInnhold = (data: OpprettSakFormFields, steg?: TestcaseSteg) => {
     return {
       ...data,
       søknadsdato: formaterDatoForBackend(data.søknadsdato),
@@ -147,46 +174,89 @@ export const OpprettSakLocal = () => {
           },
         })) || [],
       tjenestePensjon: getTrueFalseEllerUndefined(data.tjenestePensjon),
+      steg: steg,
     };
   };
 
-  const opprettOgFullførSak = async () => {
-    const innhold = mapInnhold(form.getValues());
-    await opprettOgFullfoer(innhold);
-    await mutate('api/sak/siste/20');
-  };
-
-  const opprettSakAlene = async () => {
-    const innhold = mapInnhold(form.getValues());
-    await opprettSak(innhold);
+  const opprett = async (steg?: TestcaseSteg) => {
+    const innhold = mapInnhold(form.getValues(), steg);
+    await opprettSakOgBehandling(innhold);
     await mutate('api/sak/siste/20');
   };
 
   return (
-    <form className={styles.form} autoComplete={'off'}>
-      <div className={'flex-column'}>
-        <FormField form={form} formField={formFields.søknadsdato} />
-        <FormField form={form} formField={formFields.fødselsdato} />
-        <FormField form={form} formField={formFields.yrkesskade} />
-        <FormField form={form} formField={formFields.student} />
-        <FormField form={form} formField={formFields.medlemskap} />
-        <FormField form={form} formField={formFields.tjenestePensjon} />
-        <FormField form={form} formField={formFields.institusjon} />
-        <FormField form={form} formField={formFields.uføre} />
-      </div>
-      <div className={'flex-column'}>
-        <OpprettSakBarn form={form} />
-        <OpprettInntekter form={form} />
-        <Sykepenger form={form} />
-      </div>
-      <div style={{ display: 'flex', gap: '1rem' }}>
-        <Button type="button" className={'fit-content'} loading={isLoadingSak} onClick={opprettSakAlene}>
-          Opprett testsak
-        </Button>
-        <Button type="button" className={'fit-content'} loading={isLoadingFullfoer} onClick={opprettOgFullførSak}>
-          Opprett og fullfør testsak
-        </Button>
-      </div>
+    <form autoComplete={'off'}>
+      <Box
+        padding="4"
+        marginBlock="4"
+        background="bg-default"
+        borderWidth="1"
+        borderColor="border-subtle"
+        borderRadius="medium"
+      >
+        <HGrid columns={2} gap="4">
+          <VStack gap="4">
+            <FormField form={form} formField={formFields.søknadsdato} />
+            <FormField form={form} formField={formFields.fødselsdato} />
+            <FormField form={form} formField={formFields.yrkesskade} horizontalRadio={true} />
+            <FormField form={form} formField={formFields.student} horizontalRadio={true} />
+            <FormField form={form} formField={formFields.medlemskap} horizontalRadio={true} />
+            <FormField form={form} formField={formFields.tjenestePensjon} horizontalRadio={true} />
+            <FormField form={form} formField={formFields.institusjon} />
+            <FormField form={form} formField={formFields.uføre} />
+          </VStack>
+          <VStack gap="4">
+            <OpprettSakBarn form={form} />
+            <OpprettInntekter form={form} />
+            <Sykepenger form={form} />
+          </VStack>
+        </HGrid>
+
+        <HGrid columns={3} gap="4">
+          <Box
+            padding="4"
+            marginBlock="4"
+            background="surface-info-subtle"
+            borderWidth="1"
+            borderColor="border-subtle"
+            borderRadius="medium"
+          >
+            <Button type="button" size="small" loading={isLoading} onClick={() => opprett('START_BEHANDLING')}>
+              Opprett
+            </Button>
+          </Box>
+
+          <Box
+            padding="4"
+            marginBlock="4"
+            background="surface-success-subtle"
+            borderWidth="1"
+            borderColor="border-subtle"
+            borderRadius="medium"
+          >
+            <Button type="button" size="small" loading={isLoading} onClick={() => opprett(undefined)}>
+              Opprett og iverksett
+            </Button>
+          </Box>
+
+          <Box
+            padding="4"
+            marginBlock="4"
+            background="surface-alt-1-subtle"
+            borderWidth="1"
+            borderColor="border-subtle"
+            borderRadius="medium"
+          >
+            <HStack gap="4" align="end" wrap={false}>
+              <FormField form={form} formField={formFields.steg} />
+
+              <Button type="button" size="small" loading={isLoading} onClick={() => opprett(form.getValues().steg)}>
+                Opprett
+              </Button>
+            </HStack>
+          </Box>
+        </HGrid>
+      </Box>
     </form>
   );
 };
