@@ -21,7 +21,6 @@ export function getDefaultValuesFromGrunnlag(
     return {
       vurderinger: [
         {
-          begrunnelse: '',
           lovvalg: {
             begrunnelse: '',
             lovvalgsEØSLand: '',
@@ -37,7 +36,6 @@ export function getDefaultValuesFromGrunnlag(
   return {
     vurderinger:
       grunnlag?.nyeVurderinger.map((vurdering) => ({
-        begrunnelse: '',
         fraDato: formaterDatoForFrontend(vurdering.fom),
         lovvalg: {
           begrunnelse: vurdering.lovvalg.begrunnelse,
@@ -66,7 +64,7 @@ export const mapFormTilDto = (
   periodeForm: LovvalgOgMedlemskapManuellVurderingForm,
   tilDato: string | undefined
 ): AvklarPeriodisertLovvalgMedlemskapLøsning => ({
-  begrunnelse: periodeForm.begrunnelse,
+  begrunnelse: `${periodeForm.lovvalg.begrunnelse}\n\n${periodeForm.medlemskap ? periodeForm.medlemskap.begrunnelse : ''}`,
   fom: formaterDatoForBackend(parse(periodeForm.fraDato!, 'dd.MM.yyyy', new Date())),
   tom: tilDato != null ? formaterDatoForBackend(sub(parse(tilDato, 'dd.MM.yyyy', new Date()), { days: 1 })) : null,
   lovvalg: {
@@ -113,7 +111,6 @@ export function hentPeriodiserteVerdierFraMellomlagretVurdering(
     return {
       vurderinger: [
         {
-          begrunnelse: '',
           lovvalg: {
             begrunnelse: ikkePeriodisertVurdering.lovvalgBegrunnelse,
             lovvalgsEØSLand: ikkePeriodisertVurdering.lovvalgsLand,

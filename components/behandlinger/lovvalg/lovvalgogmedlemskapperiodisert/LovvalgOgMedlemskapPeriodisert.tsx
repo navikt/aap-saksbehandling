@@ -71,7 +71,6 @@ export const LovvalgOgMedlemskapPeriodisert = ({
 
   function onAddPeriode() {
     append({
-      begrunnelse: '',
       lovvalg: {
         begrunnelse: '',
         lovvalgsEØSLand: '',
