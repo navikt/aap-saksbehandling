@@ -79,10 +79,8 @@ export type BrevStatus =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag.Brev']['status'];
 export type BrevMottaker =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag.Brev.Mottaker'];
-export type KanDistribuereBrevRequest =
-  components['schemas']['no.nav.aap.brev.kontrakt.KanDistribuereBrevRequest'];
-export type KanDistribuereBrevResponse =
-  components['schemas']['no.nav.aap.brev.kontrakt.KanDistribuereBrevReponse'];
+export type KanDistribuereBrevRequest = components['schemas']['no.nav.aap.brev.kontrakt.KanDistribuereBrevRequest'];
+export type KanDistribuereBrevResponse = components['schemas']['no.nav.aap.brev.kontrakt.KanDistribuereBrevReponse'];
 export type Signatur = components['schemas']['no.nav.aap.brev.kontrakt.Signatur'];
 export type Mottaker =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.SkrivBrevLøsning']['mottakere'][number];
@@ -266,7 +264,6 @@ export type IdentifisertBarn =
 export type Ident = components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.Ident'];
 
 export type Periode = components['schemas']['no.nav.aap.komponenter.type.Periode'];
-export type ÅpenPeriode = components['schemas']['no.nav.aap.behandlingsflyt.historiskevurderinger.ÅpenPeriodeDto'];
 
 export type BehandlingPersoninfo = components['schemas']['no.nav.aap.behandlingsflyt.flyt.BehandlingPersoninfo'];
 
@@ -324,17 +321,11 @@ export type tilhørighetVurdering =
 export type AvklarPeriodisertLovvalgMedlemskapLøsning =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.lovvalgmedlemskap.PeriodisertManuellVurderingForLovvalgMedlemskapDto'];
 
-export type LovvalgMedlemskapGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.LovvalgMedlemskapGrunnlagResponse'];
-
 export type PeriodisertLovvalgMedlemskapGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.PeriodisertLovvalgMedlemskapGrunnlagResponse'];
 
 export type PeriodisertManuellVurderingForLovvalgMedlemskapResponse =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.PeriodisertManuellVurderingForLovvalgMedlemskapResponse'];
-
-export type HistoriskLovvalgMedlemskapVurdering =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.HistoriskManuellVurderingForLovvalgMedlemskapResponse'];
 
 export type ForutgåendeMedlemskapGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.ForutgåendeMedlemskapGrunnlagResponse'];
@@ -346,7 +337,7 @@ export type SykdomBrevVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.SykdomsvurderingForBrevVurderingDto'];
 
 export type LovvalgEØSLand =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.lovvalgmedlemskap.LovvalgVedSøknadsTidspunktDto']['lovvalgsEØSLandEllerLandMedAvtale'];
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.lovvalgmedlemskap.LovvalgDto']['lovvalgsEØSLandEllerLandMedAvtale'];
 
 export type SykdomsvurderingResponse =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomsvurderingResponse'];
