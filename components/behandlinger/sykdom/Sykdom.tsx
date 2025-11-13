@@ -80,7 +80,7 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
           <RefusjonMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={refusjonskravSteg} />
         </StegSuspense>
       )}
-      {overganguføreSteg !== null && overganguføreSteg.skalViseSteg && (
+      {overganguføreSteg.skalViseSteg && (
         <StegSuspense>
           <OvergangUforeMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={overganguføreSteg} />
         </StegSuspense>
