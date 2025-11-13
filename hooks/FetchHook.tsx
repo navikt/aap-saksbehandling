@@ -1,12 +1,11 @@
 import { useState } from 'react';
 import {
   clientBestillDialogmelding,
-  clientOpprettSak,
   clientOpprettDummySak,
+  clientOpprettSak,
   clientPurrPåLegeerklæring,
-  clientOpprettOgFullfoer,
 } from 'lib/clientApi';
-import { BestillLegeerklæring, OpprettTestcase, OpprettDummySakDto } from 'lib/types/types';
+import { BestillLegeerklæring, OpprettDummySakDto, OpprettTestcase } from 'lib/types/types';
 import { getErrorMessage } from 'lib/utils/errorUtil';
 import { FetchResponse, isError, isSuccess } from 'lib/utils/api';
 import { postmottakEndreTemaClient, postmottakSettPåVentClient } from 'lib/postmottakClientApi';
@@ -80,22 +79,9 @@ export function useFetchV2<FunctionParameters extends any[], ResponseBody>(
   return { isLoading, error, data, method };
 }
 
-export function useOpprettOgFullfoer(): {
-  opprettOgFullfoer: (opprettTestCase: OpprettTestcase) => Promise<{ ok: boolean }>;
-  isLoadingFullfoer: boolean;
-} {
-  const { method, isLoading } = useFetchV2(clientOpprettOgFullfoer);
-
-  async function opprettOgFullfoerMethod(body: OpprettTestcase) {
-    return await method(body);
-  }
-
-  return { opprettOgFullfoer: opprettOgFullfoerMethod, isLoadingFullfoer: isLoading};
-}
-
 export function useOpprettSak(): {
-  opprettSak: (opprettTestCase: OpprettTestcase) => Promise<void>;
-  isLoadingSak: boolean;
+  opprettSakOgBehandling: (opprettTestCase: OpprettTestcase) => Promise<void>;
+  isLoading: boolean;
 } {
   const { method, isLoading } = useFetchV2(clientOpprettSak);
 
@@ -103,7 +89,7 @@ export function useOpprettSak(): {
     await method(body);
   }
 
-  return { opprettSak: opprettSakMethod, isLoadingSak: isLoading };
+  return { opprettSakOgBehandling: opprettSakMethod, isLoading: isLoading };
 }
 
 export function useOpprettDummySak(): {
