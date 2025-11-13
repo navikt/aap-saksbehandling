@@ -5,7 +5,6 @@ export type LovOgMedlemskapVurderingForm = {
 };
 
 export type LovvalgOgMedlemskapManuellVurderingForm = {
-  begrunnelse: string;
   lovvalg: {
     begrunnelse: string;
     lovvalgsEØSLand: string;

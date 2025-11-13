@@ -71,10 +71,9 @@ export const LovvalgOgMedlemskapPeriodisert = ({
 
   function onAddPeriode() {
     append({
-      begrunnelse: '',
       lovvalg: {
         begrunnelse: '',
-        lovvalgsEØSLand: 'NOR',
+        lovvalgsEØSLand: '',
       },
       medlemskap: undefined,
       fraDato: undefined,

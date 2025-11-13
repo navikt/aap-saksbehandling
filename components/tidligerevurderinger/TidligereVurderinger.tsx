@@ -3,7 +3,6 @@ import { Label, BodyShort, Detail, VStack, ExpansionCard, Chips } from '@navikt/
 import styles from './TidligereVurderinger.module.css';
 import { formaterDatoForFrontend, sorterEtterNyesteDato } from 'lib/utils/date';
 import { ClockDashedIcon } from '@navikt/aksel-icons';
-import { ÅpenPeriode } from '../../lib/types/types';
 import { ValuePair } from '../form/FormField';
 import { format, parse, subDays } from 'date-fns';
 import { erDatoFoerDato } from 'lib/validation/dateValidation';
@@ -19,7 +18,10 @@ interface Props {
 }
 
 interface TidligereVurdering {
-  periode: ÅpenPeriode;
+  periode: {
+    fom: string;
+    tom: string | null;
+  };
   vurdertAvIdent: string;
   vurdertDato: string;
   felter: ValuePair[];
