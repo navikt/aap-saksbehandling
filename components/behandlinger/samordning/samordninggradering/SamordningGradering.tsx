@@ -169,8 +169,6 @@ export const SamordningGradering = ({
 
   const historiskeVurderinger = grunnlag.historiskeVurderinger;
 
-  console.log(historiskeVurderinger);
-
   const erAllereddeOppfølgningsOppgave = oppfølgningOppgave && oppfølgningOppgave?.data.length > 0;
 
   const sak = useSak();
