@@ -37,7 +37,6 @@ interface FormFields {
   erBehovForArbeidsrettetTiltak: string;
   erBehovForAnnenOppfølging?: string;
   overgangBegrunnelse?: string;
-  skalVurdereAapIOvergangTilUføre?: string;
   skalVurdereAapIOvergangTilArbeid?: string;
 }
 
@@ -69,7 +68,6 @@ export const Bistandsbehov = ({
   const erBehovForArbeidsrettetTiltakLabel = 'b: Har brukeren behov for arbeidsrettet tiltak?';
   const erBehovForAnnenOppfølgingLabel =
     'c: Kan brukeren anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra Nav?';
-  const vurderAAPIOvergangTilUføreLabel = 'Har brukeren rett til AAP under behandling av krav om uføretrygd?';
   const vurderAAPIOvergangTilArbeidLabel = 'Har brukeren rett til AAP i perioden som arbeidssøker?';
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
@@ -111,17 +109,6 @@ export const Bistandsbehov = ({
         defaultValue: defaultValue?.overgangBegrunnelse || undefined,
         rules: { required: 'Du må gjøre en vilkårsvurdering' },
       },
-      skalVurdereAapIOvergangTilUføre: {
-        type: 'radio',
-        label: vurderAAPIOvergangTilUføreLabel,
-        options: JaEllerNeiOptions,
-        defaultValue: defaultValue?.skalVurdereAapIOvergangTilUføre,
-        rules: {
-          required: 'Du må svare på om brukeren har rett på AAP i overgang til uføre',
-          validate: (value) =>
-            value === JaEllerNei.Ja ? 'AAP under behandling av søknad om uføretrygd er ikke støttet enda' : undefined,
-        },
-      },
       skalVurdereAapIOvergangTilArbeid: {
         type: 'radio',
         label: vurderAAPIOvergangTilArbeidLabel,
@@ -151,7 +138,6 @@ export const Bistandsbehov = ({
                 ? data.erBehovForAnnenOppfølging === JaEllerNei.Ja
                 : undefined,
               ...(bistandsbehovErIkkeOppfylt && {
-                skalVurdereAapIOvergangTilUføre: data.skalVurdereAapIOvergangTilUføre === JaEllerNei.Ja,
                 skalVurdereAapIOvergangTilArbeid: data.skalVurdereAapIOvergangTilArbeid === JaEllerNei.Ja,
                 overgangBegrunnelse: data.overgangBegrunnelse,
               }),
@@ -268,7 +254,6 @@ export const Bistandsbehov = ({
       erBehovForAnnenOppfølging: getJaNeiEllerUndefined(vurdering?.erBehovForAnnenOppfølging),
       overgangBegrunnelse: vurdering?.overgangBegrunnelse || '',
       skalVurdereAapIOvergangTilArbeid: getJaNeiEllerUndefined(vurdering?.skalVurdereAapIOvergangTilArbeid),
-      skalVurdereAapIOvergangTilUføre: getJaNeiEllerUndefined(vurdering?.skalVurdereAapIOvergangTilUføre),
       erBehovForArbeidsrettetTiltak: getJaNeiEllerUndefined(vurdering?.erBehovForArbeidsrettetTiltak),
     };
   }
@@ -280,7 +265,6 @@ export const Bistandsbehov = ({
       erBehovForAnnenOppfølging: '',
       overgangBegrunnelse: '',
       skalVurdereAapIOvergangTilArbeid: '',
-      skalVurdereAapIOvergangTilUføre: '',
       erBehovForArbeidsrettetTiltak: '',
     };
   }
@@ -305,13 +289,6 @@ export const Bistandsbehov = ({
       },
     ];
 
-    if (harVurdertOvergangUføre(vurdering)) {
-      felter.push({
-        label: vurderAAPIOvergangTilUføreLabel,
-        value: getJaNeiEllerIkkeBesvart(vurdering.skalVurdereAapIOvergangTilUføre),
-      });
-    }
-
     if (harVurdertOvergangArbeid(vurdering)) {
       felter.push({
         label: vurderAAPIOvergangTilArbeidLabel,
@@ -324,9 +301,5 @@ export const Bistandsbehov = ({
 
   function harVurdertOvergangArbeid(vurdering: BistandsbehovVurdering) {
     return vurdering.skalVurdereAapIOvergangTilArbeid === false || vurdering.skalVurdereAapIOvergangTilArbeid === true;
-  }
-
-  function harVurdertOvergangUføre(vurdering: BistandsbehovVurdering) {
-    return vurdering.skalVurdereAapIOvergangTilUføre === false || vurdering.skalVurdereAapIOvergangTilUføre === true;
   }
 };
