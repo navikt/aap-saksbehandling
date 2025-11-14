@@ -15,6 +15,7 @@ import { SykdomsvurderingBrevMedDataFetching } from 'components/behandlinger/syk
 import { OvergangUforeMedDataFetching } from './overgangufore/OvergangUforeMedDataFetching';
 import { OvergangArbeidMedDataFetching } from './overgangarbeid/OvergangArbeidMedDataFetching';
 import { toggles } from 'lib/utils/toggles';
+import { ArbeidsopptrappingMedDataFetching } from 'components/behandlinger/sykdom/arbeidsopptrapping/ArbeidsopptrappingMedDataFetching';
 
 interface Props {
   behandlingsReferanse: string;
@@ -29,6 +30,7 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
   const aktivStegGruppe = 'SYKDOM';
   const sykdomSteg = getStegData(aktivStegGruppe, 'AVKLAR_SYKDOM', flyt.data);
   const vurderBistandsbehovSteg = getStegData(aktivStegGruppe, 'VURDER_BISTANDSBEHOV', flyt.data);
+  const arbeidsopptrappingSteg = getStegData(aktivStegGruppe, 'ARBEIDSOPPTRAPPING', flyt.data);
   const fritakMeldepliktSteg = getStegData(aktivStegGruppe, 'FRITAK_MELDEPLIKT', flyt.data);
   const fastsettArbeidsevneSteg = getStegData(aktivStegGruppe, 'FASTSETT_ARBEIDSEVNE', flyt.data);
   const refusjonskravSteg = getStegData(aktivStegGruppe, 'REFUSJON_KRAV', flyt.data);
@@ -59,6 +61,14 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
             behandlingsReferanse={behandlingsReferanse}
             stegData={vurderBistandsbehovSteg}
             overgangArbeidEnabled={toggles.featureOvergangArbeid}
+          />
+        </StegSuspense>
+      )}
+      {arbeidsopptrappingSteg.skalViseSteg && (
+        <StegSuspense>
+          <ArbeidsopptrappingMedDataFetching
+            behandlingsreferanse={behandlingsReferanse}
+            stegData={fritakMeldepliktSteg}
           />
         </StegSuspense>
       )}

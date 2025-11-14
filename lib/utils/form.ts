@@ -55,6 +55,7 @@ export enum Behovstype {
   AVKLAR_OPPFØLGINGSBEHOV_NAY = '8002',
   AVKLAR_OPPFØLGINGSBEHOV_LOKALKONTOR = '8001',
   OPPHOLDSKRAV_KODE = '5035',
+  ARBEIDSOPPTRAPPING_KODE = '5057',
 }
 
 type BehovsKode = `${Behovstype}`;
