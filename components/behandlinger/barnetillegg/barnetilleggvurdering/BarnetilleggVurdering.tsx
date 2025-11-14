@@ -118,7 +118,10 @@ export const BarnetilleggVurdering = ({
   });
 
   const {
-    fields: saksbehandlerOppgitteBarnVurderinger, append, remove, } = useFieldArray({
+    fields: saksbehandlerOppgitteBarnVurderinger,
+    append,
+    remove,
+  } = useFieldArray({
     control: form.control,
     name: 'saksbehandlerOppgitteBarnVurderinger',
   });
@@ -322,6 +325,27 @@ export const BarnetilleggVurdering = ({
                 avbryt={() => setVisLeggTilBarnModal(false)}
                 åpne={true}
                 readOnly={formReadOnly}
+                alleBarn={[
+                  ...[
+                    ...(grunnlag.vurderteBarn ?? []),
+                    ...(grunnlag.barnSomTrengerVurdering ?? []),
+                    ...(grunnlag.saksbehandlerOppgitteBarn ?? []),
+                  ].map((barn: any) => ({
+                    ident: barn.ident?.identifikator ?? barn.ident ?? '',
+                    navn: barn.navn ?? '',
+                    fødselsdato: barn.fodselsDato ?? barn.fødselsdato ?? '',
+                  })),
+                  ...(saksbehandlerOppgitteBarnVurderinger?.map((barn) => ({
+                    ident: barn.ident ?? '',
+                    navn: barn.navn ?? '',
+                    fødselsdato: barn.fødselsdato ?? '',
+                  })) ?? []),
+                  ...(folkeregistrerteBarnVurderinger?.map((barn) => ({
+                    ident: barn.ident ?? '',
+                    navn: barn.navn ?? '',
+                    fødselsdato: barn.fødselsdato ?? '',
+                  })) ?? []),
+                ]}
                 onLagreNyttBarn={(nyttBarn) => {
                   append({ ...nyttBarn, erSlettbar: true });
                   setVisLeggTilBarnModal(false);
@@ -357,7 +381,7 @@ function mapVurderingToDraftFormFields(
           harForeldreAnsvar: value.harForeldreAnsvar ? JaEllerNei.Ja : JaEllerNei.Nei,
           fraDato: formaterDatoForFrontend(value.fraDato),
           erFosterforelder:
-            value.erFosterForelder === null ? null : (value.erFosterForelder ? JaEllerNei.Ja : JaEllerNei.Nei),
+            value.erFosterForelder === null ? null : value.erFosterForelder ? JaEllerNei.Ja : JaEllerNei.Nei,
         };
       }),
     };
@@ -390,7 +414,7 @@ function mapVurderingToDraftFormFields(
               harForeldreAnsvar: value.harForeldreAnsvar ? JaEllerNei.Ja : JaEllerNei.Nei,
               fraDato: formaterDatoForFrontend(value.fraDato),
               erFosterforelder:
-                value.erFosterForelder === null ? null : (value.erFosterForelder ? JaEllerNei.Ja : JaEllerNei.Nei),
+                value.erFosterForelder === null ? null : value.erFosterForelder ? JaEllerNei.Ja : JaEllerNei.Nei,
             })),
     };
   });
@@ -402,14 +426,18 @@ function mapVurderingToDraftFormFields(
         if (barn.ident?.identifikator) {
           return eksisterendeVurdering.vurdertBarn.ident === barn.ident.identifikator;
         }
-        return eksisterendeVurdering.vurdertBarn.navn === barn.navn && eksisterendeVurdering.vurdertBarn.fødselsdato === barn.fodselsDato;
+        return (
+          eksisterendeVurdering.vurdertBarn.navn === barn.navn &&
+          eksisterendeVurdering.vurdertBarn.fødselsdato === barn.fodselsDato
+        );
       });
 
       const mapVurdering = (value: any) => ({
         begrunnelse: value.begrunnelse,
         harForeldreAnsvar: value.harForeldreAnsvar ? JaEllerNei.Ja : JaEllerNei.Nei,
         fraDato: formaterDatoForFrontend(value.fraDato),
-        erFosterforelder: value.erFosterForelder === null ? null : (value.erFosterForelder ? JaEllerNei.Ja : JaEllerNei.Nei),
+        erFosterforelder:
+          value.erFosterForelder === null ? null : value.erFosterForelder ? JaEllerNei.Ja : JaEllerNei.Nei,
       });
 
       return {
@@ -420,7 +448,7 @@ function mapVurderingToDraftFormFields(
         erSlettbar: vurderingForBarn?.erSlettbar ?? true,
         vurderinger: vurderingForBarn
           ? vurderingForBarn.vurdertBarn.vurderinger.map(mapVurdering)
-          : [{ begrunnelse: '', harForeldreAnsvar: '', fraDato: '' }]
+          : [{ begrunnelse: '', harForeldreAnsvar: '', fraDato: '' }],
       };
     });
 

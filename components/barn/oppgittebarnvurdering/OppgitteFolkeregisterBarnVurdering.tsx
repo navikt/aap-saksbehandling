@@ -9,6 +9,7 @@ import styles from 'components/barn/oppgittebarnvurdering/OppgitteFolkeregisterB
 import { OppgitteFolkeregisterBarnVurderingFelter } from 'components/barn/oppgittebarnvurderingfelter/OppgitteFolkeregisterBarnVurderingFelter';
 import { Periode } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
+import React from 'react';
 
 interface Props {
   form: UseFormReturn<BarnetilleggFormFields>;
@@ -58,10 +59,15 @@ export const OppgitteFolkeregisterBarnVurdering = ({
           <ChildEyesIcon title={`registrert barn ${ident}`} fontSize={'2rem'} />
         </div>
         <div className={styles.tekst}>
-          <Detail className={styles.detailgray}>Folkeregistrert barn</Detail>
+          <Detail className={styles.detailgray}>Barn</Detail>
           <BodyShort size={'small'}>
             {navn}, {ident} ({fødselsdato ? kalkulerAlder(new Date(fødselsdato)) : 'Ukjent alder'})
           </BodyShort>
+          {fødselsdato && (
+            <BodyShort size={'small'}>
+              Fødselsdato: {formaterDatoForFrontend(fødselsdato)}
+            </BodyShort>
+          )}
           <BodyShort size={'small'}>Forsørgerperiode:{periodeTekst}</BodyShort>
         </div>
       </div>
