@@ -2,8 +2,8 @@ import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import {
   hentAutomatiskLovvalgOgMedlemskapVurdering,
   hentFlyt,
-  hentMellomlagring,
   hentLovvalgMedlemskapGrunnlag,
+  hentMellomlagring,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { getStegData, skalViseSteg } from 'lib/utils/steg';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
@@ -12,6 +12,8 @@ import { Behovstype } from 'lib/utils/form';
 import { kanViseOverstyrKnapp } from 'lib/utils/overstyring';
 import { LovvalgOgMedlemskapPeriodisert } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/LovvalgOgMedlemskapPeriodisert';
 import { LovvalgOgMedlemskapPeriodisertOverstyringswrapper } from 'components/behandlinger/lovvalg/LovvalgOgMedlemskapPeriodisertOverstyringswrapper';
+import { PeriodisertLovvalgMedlemskapGrunnlag } from 'lib/types/types';
+import { leggTilIdPåGrunnlagNyeVurderinger } from 'lib/utils/periodisering';
 
 interface Props {
   behandlingsReferanse: string;
@@ -28,22 +30,24 @@ export const LovvalgPeriodisert = async ({ behandlingsReferanse }: Props) => {
   if (isError(vurderingAutomatisk) || isError(grunnlag) || isError(flyt)) {
     return <ApiException apiResponses={[vurderingAutomatisk, grunnlag, flyt]} />;
   }
+  const grunnlagMedId = leggTilIdPåGrunnlagNyeVurderinger<PeriodisertLovvalgMedlemskapGrunnlag>(grunnlag.data);
 
+  grunnlagMedId.nyeVurderinger.map((e) => e.id);
   const vurderLovvalgSteg = getStegData('LOVVALG', 'VURDER_LOVVALG', flyt.data);
   const behandlingsVersjon = flyt.data.behandlingVersjon;
-  const readOnly = vurderLovvalgSteg.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
+  const readOnly = vurderLovvalgSteg.readOnly || !grunnlagMedId.harTilgangTilÅSaksbehandle;
   const erOverstyrtTilbakeførtVurdering =
     vurderingAutomatisk.data.kanBehandlesAutomatisk &&
-    (grunnlag.data.nyeVurderinger.length === 0 || grunnlag.data.overstyrt);
+    (grunnlagMedId.nyeVurderinger.length === 0 || grunnlagMedId.overstyrt);
 
-  const visManuellVurdering = skalViseSteg(vurderLovvalgSteg, grunnlag.data.sisteVedtatteVurderinger.length > 0);
+  const visManuellVurdering = skalViseSteg(vurderLovvalgSteg, grunnlagMedId.sisteVedtatteVurderinger.length > 0);
   const visOverstyrKnapp = kanViseOverstyrKnapp(
     vurderingAutomatisk.data.kanBehandlesAutomatisk,
     readOnly,
     vurderLovvalgSteg.avklaringsbehov
   );
 
-  const erOverstyrt = !!grunnlag?.data.overstyrt || erOverstyrtTilbakeførtVurdering;
+  const erOverstyrt = !!grunnlagMedId?.overstyrt || erOverstyrtTilbakeførtVurdering;
 
   const behovstype =
     flyt.data.visning.typeBehandling === 'Førstegangsbehandling' && erOverstyrt
@@ -67,12 +71,12 @@ export const LovvalgPeriodisert = async ({ behandlingsReferanse }: Props) => {
         visOverstyrKnapp={visOverstyrKnapp}
         initialMellomlagretVurdering={initialMellomlagretVurdering}
         behovstype={behovstype}
-        grunnlag={grunnlag.data}
+        grunnlag={grunnlagMedId}
       >
         {visManuellVurdering && (
           <LovvalgOgMedlemskapPeriodisert
             behandlingVersjon={behandlingsVersjon}
-            grunnlag={grunnlag.data}
+            grunnlag={grunnlagMedId}
             readOnly={readOnly}
             overstyring={erOverstyrt}
             initialMellomlagretVurdering={initialMellomlagretVurdering}

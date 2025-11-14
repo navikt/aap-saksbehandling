@@ -5,6 +5,7 @@ import { Behovstype } from 'lib/utils/form';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import {
   LøsPeriodisertBehovPåBehandling,
+  MedIDNyeVurderinger,
   MellomlagretVurdering,
   PeriodisertLovvalgMedlemskapGrunnlag,
 } from 'lib/types/types';
@@ -26,11 +27,12 @@ import { NyVurderingExpandableCard } from 'components/periodisering/nyvurderinge
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
 import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
+import { finnVurdertAvIGrunnlag } from 'lib/utils/periodisering';
 
 interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
-  grunnlag?: PeriodisertLovvalgMedlemskapGrunnlag;
+  grunnlag?: MedIDNyeVurderinger<PeriodisertLovvalgMedlemskapGrunnlag>;
   overstyring: boolean;
   initialMellomlagretVurdering?: MellomlagretVurdering;
   behovstype: Behovstype;
@@ -116,9 +118,6 @@ export const LovvalgOgMedlemskapPeriodisert = ({
   const foersteNyePeriode = vurderingerFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
   const errorList = mapPeriodiserteVurderingerErrorList<LovOgMedlemskapVurderingForm>(form.formState.errors);
 
-  function finnVurdertAvIGrunnlag(vurderingId: string | undefined) {
-    return grunnlag?.nyeVurderinger.find((e) => e.id === vurderingId)?.vurdertAv;
-  }
   return (
     <VilkårskortPeriodisert
       heading={heading}
@@ -162,7 +161,7 @@ export const LovvalgOgMedlemskapPeriodisert = ({
           isLast={index === vurderingerFields.length - 1}
           oppfylt={form.watch(`vurderinger.${index}.medlemskap.varMedlemIFolketrygd`)}
           fraDato={vurdering.fraDato}
-          vurdertAv={finnVurdertAvIGrunnlag(vurdering.vurderingId)}
+          vurdertAv={finnVurdertAvIGrunnlag<PeriodisertLovvalgMedlemskapGrunnlag>(vurdering.vurderingId, grunnlag)}
           finnesFeil={finnesFeilForVurdering(index, errorList)}
         >
           <LovvalgOgMedlemskapFormInput

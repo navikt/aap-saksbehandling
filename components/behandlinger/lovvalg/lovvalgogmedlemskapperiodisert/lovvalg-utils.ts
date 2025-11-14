@@ -1,6 +1,7 @@
 import {
   AvklarPeriodisertLovvalgMedlemskapLøsning,
   LovvalgEØSLand,
+  MedIDNyeVurderinger,
   MellomlagretVurdering,
   PeriodisertLovvalgMedlemskapGrunnlag,
 } from 'lib/types/types';
@@ -14,7 +15,7 @@ import {
 import { parse, sub } from 'date-fns';
 
 export function getDefaultValuesFromGrunnlag(
-  grunnlag?: PeriodisertLovvalgMedlemskapGrunnlag
+  grunnlag?: MedIDNyeVurderinger<PeriodisertLovvalgMedlemskapGrunnlag>
 ): LovOgMedlemskapVurderingForm {
   if (grunnlag == null || (grunnlag.nyeVurderinger.length === 0 && grunnlag.sisteVedtatteVurderinger.length === 0)) {
     // Vi har ingen tidligere vurderinger eller nye vurderinger, legg til en tom-default-periode
@@ -36,8 +37,7 @@ export function getDefaultValuesFromGrunnlag(
   return {
     vurderinger:
       grunnlag?.nyeVurderinger.map((vurdering) => ({
-        vurderingId: vurdering.id || 'heihei',
-        begrunnelse: '',
+        vurderingId: vurdering.id,
         fraDato: formaterDatoForFrontend(vurdering.fom),
         lovvalg: {
           begrunnelse: vurdering.lovvalg.begrunnelse,
@@ -50,14 +50,6 @@ export function getDefaultValuesFromGrunnlag(
           begrunnelse: vurdering.medlemskap?.begrunnelse ?? '',
           varMedlemIFolketrygd: getJaNeiEllerUndefined(vurdering.medlemskap?.varMedlemIFolketrygd) ?? JaEllerNei.Nei,
         },
-        vurdertAv:
-          vurdering.vurdertAv != null
-            ? {
-                navn: vurdering.vurdertAv.ansattnavn,
-                ident: vurdering.vurdertAv.ident,
-                dato: vurdering.vurdertAv.dato,
-              }
-            : undefined,
       })) || [],
   };
 }

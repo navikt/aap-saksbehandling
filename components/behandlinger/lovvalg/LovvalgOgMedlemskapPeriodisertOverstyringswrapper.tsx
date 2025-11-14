@@ -2,6 +2,7 @@
 
 import {
   AutomatiskLovvalgOgMedlemskapVurdering,
+  MedIDNyeVurderinger,
   MellomlagretVurdering,
   PeriodisertLovvalgMedlemskapGrunnlag,
 } from 'lib/types/types';
@@ -12,7 +13,7 @@ import { LovvalgOgMedlemskapPeriodisert } from 'components/behandlinger/lovvalg/
 
 interface Props {
   behandlingsReferanse: string;
-  grunnlag?: PeriodisertLovvalgMedlemskapGrunnlag;
+  grunnlag?: MedIDNyeVurderinger<PeriodisertLovvalgMedlemskapGrunnlag>;
   behandlingVersjon: number;
   readOnly: boolean;
   automatiskVurdering: AutomatiskLovvalgOgMedlemskapVurdering;

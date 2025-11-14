@@ -16,11 +16,6 @@ export type LovvalgOgMedlemskapManuellVurderingForm = {
     varMedlemIFolketrygd: JaEllerNei;
   };
   fraDato?: string;
-  vurdertAv?: {
-    navn?: string | null;
-    ident: string;
-    dato: string;
-  };
 };
 
 // TODO denne er midlertidig inntil alle mellomlagrede vurderinger har blitt periodisert (https://jira.adeo.no/browse/FAGSYSTEM-405014)
