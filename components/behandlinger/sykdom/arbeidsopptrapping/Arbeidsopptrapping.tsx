@@ -22,6 +22,8 @@ import { TidligereVurderingExpandableCard } from 'components/periodisering/tidli
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 import { NyVurderingExpandableCard } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { ArbeidsopptrappingVurderingFormInput } from 'components/behandlinger/sykdom/arbeidsopptrapping/ArbeidsopptrappingVurderingFormInput';
+import { VStack } from '@navikt/ds-react';
+import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
 
 interface Props {
   behandlingVersjon: number;
@@ -136,7 +138,18 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
           foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
           oppfylt={vurdering.reellMulighetTilOpptrapping && vurdering.rettPaaAAPIOpptrapping}
         >
-          <div>hei</div>
+          <VStack gap={'5'}>
+            <SpørsmålOgSvar spørsmål="Vurderingen gjelder fra?" svar={formaterDatoForFrontend(vurdering.fom)} />
+            <SpørsmålOgSvar spørsmål="Vilkårsvurdering" svar={vurdering.begrunnelse} />
+            <SpørsmålOgSvar
+              spørsmål="Har brukeren en reell mulighet til å trappe opp til en 100% stilling?"
+              svar={getJaNeiEllerUndefined(vurdering.reellMulighetTilOpptrapping)!}
+            />
+            <SpørsmålOgSvar
+              spørsmål="Har brukeren rett på Aap i arbeidsopptrapping etter § 11-23 6. ledd?"
+              svar={getJaNeiEllerUndefined(vurdering.rettPaaAAPIOpptrapping)!}
+            />
+          </VStack>
         </TidligereVurderingExpandableCard>
       ))}
       {fields.map((vurdering, index) => (
