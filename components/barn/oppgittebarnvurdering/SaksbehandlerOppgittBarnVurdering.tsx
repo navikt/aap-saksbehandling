@@ -8,6 +8,7 @@ import { JaEllerNei } from 'lib/utils/form';
 import styles from 'components/barn/oppgittebarnvurdering/SaksbehandlerOppgitteBarnVurdering.module.css';
 import { SaksbehandlerOppgitteBarnVurderingFelter } from 'components/barn/oppgittebarnvurderingfelter/SaksbehandlerOppgitteBarnVurderingFelter';
 import React from 'react';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 
 interface Props {
   form: UseFormReturn<BarnetilleggFormFields>;
@@ -55,6 +56,11 @@ export const SaksbehandlerOppgittBarnVurdering = ({
           <BodyShort size={'small'}>
             {navn}, {ident} ({fødselsdato ? kalkulerAlder(new Date(fødselsdato)) : 'Ukjent alder'})
           </BodyShort>
+          {fødselsdato && (
+            <BodyShort size={'small'}>
+              Fødselsdato: {formaterDatoForFrontend(fødselsdato)}
+            </BodyShort>
+          )}
         </div>
         {erSlettbar && (
           <Button

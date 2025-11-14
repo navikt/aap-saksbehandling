@@ -73,7 +73,7 @@ export const LeggTilBarnModal = ({ readOnly, åpne, avbryt, onLagreNyttBarn }: P
         reset();
         return true;
       }}
-      width={'medium'}
+      width={'small'}
     >
       <Modal.Body>
         <VStack gap={'6'}>
