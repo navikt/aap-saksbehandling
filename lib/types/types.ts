@@ -482,3 +482,6 @@ export interface PeriodisertVurderingFormFields {
   fraDato?: string;
   tilDato?: string | null;
 }
+export type MedIDNyeVurderinger<T extends { nyeVurderinger: any[] }> = {
+  nyeVurderinger: (T['nyeVurderinger'][number] & { id: string })[];
+} & Omit<T, 'nyeVurderinger'>;
