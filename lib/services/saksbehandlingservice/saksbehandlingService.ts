@@ -4,6 +4,7 @@ import {
   AktivitetspliktMedTrekkRespons,
   AlderGrunnlag,
   ArbeidsevneGrunnlag,
+  ArbeidsopptrappingGrunnlagResponse,
   AutomatiskLovvalgOgMedlemskapVurdering,
   AvbrytRevurderingGrunnlag,
   AvklarOppfolgingsoppgaveGrunnlagResponse,
@@ -539,6 +540,13 @@ export const hentForhåndsvisningBrev = async (brevbestillingReferanse: string):
 export const hentOppfølgingsoppgaveGrunnlag = async (behandlingsReferanse: string) => {
   return apiFetch<AvklarOppfolgingsoppgaveGrunnlagResponse>(
     `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/oppfolgingsoppgave`,
+    saksbehandlingApiScope
+  );
+};
+
+export const hentArbeidsOpptrappingGrunnlag = async (behandlingsReferanse: string) => {
+  return apiFetch<ArbeidsopptrappingGrunnlagResponse>(
+    `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/arbeidsopptrapping`,
     saksbehandlingApiScope
   );
 };

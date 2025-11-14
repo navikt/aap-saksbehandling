@@ -463,6 +463,9 @@ export type MellomlagretVurdering =
 export type OppfølgningOppgaveOpprinnelseResponse =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.oppfolgingsbehandling.OppfølgningOppgaveOpprinnelseResponse'];
 
+export type ArbeidsopptrappingGrunnlagResponse =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.arbeidsopptrapping.ArbeidsopptrappingGrunnlagResponse'];
+
 // ---- HENTET FRA BEHANDLINGSFLYT PeriodiserteVurderingerDto.kt ---
 export interface VurderingDto {
   fom: string;
