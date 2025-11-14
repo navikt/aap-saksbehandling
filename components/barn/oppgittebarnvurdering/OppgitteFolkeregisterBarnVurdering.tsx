@@ -59,7 +59,7 @@ export const OppgitteFolkeregisterBarnVurdering = ({
           <ChildEyesIcon title={`registrert barn ${ident}`} fontSize={'2rem'} />
         </div>
         <div className={styles.tekst}>
-          <Detail className={styles.detailgray}>Folkeregistrert barn</Detail>
+          <Detail className={styles.detailgray}>Barn</Detail>
           <BodyShort size={'small'}>
             {navn}, {ident} ({fødselsdato ? kalkulerAlder(new Date(fødselsdato)) : 'Ukjent alder'})
           </BodyShort>

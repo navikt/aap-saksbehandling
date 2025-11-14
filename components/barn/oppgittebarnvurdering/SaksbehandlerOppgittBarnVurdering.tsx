@@ -51,7 +51,7 @@ export const SaksbehandlerOppgittBarnVurdering = ({
         </div>
         <div>
           <Detail className={styles.detailgray}>
-            {harOppgittFosterforelderRelasjon ? 'Oppgitt manuelt fosterbarn' : 'Oppgitt manuelt barn'}
+            {harOppgittFosterforelderRelasjon ? 'Fosterbarn' : 'Barn'}
           </Detail>
           <BodyShort size={'small'}>
             {navn}, {ident} ({fødselsdato ? kalkulerAlder(new Date(fødselsdato)) : 'Ukjent alder'})
