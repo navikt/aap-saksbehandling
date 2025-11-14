@@ -5,7 +5,7 @@ import { ActionMenu, Alert, Button, Label, Loader, VStack } from '@navikt/ds-rea
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useDebounce } from 'hooks/DebounceHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { clientHentFlyt, clientMellomlagreBrev } from 'lib/clientApi';
+import { clientHentFlyt, clientMellomlagreBrev, clientKanDistribuereBrev } from 'lib/clientApi';
 import { Brev, BrevMottaker, BrevStatus, Mottaker, Signatur } from 'lib/types/types';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { Behovstype } from 'lib/utils/form';
@@ -21,7 +21,6 @@ import { IkkeSendBrevModal } from 'components/behandlinger/brev/skriveBrev/IkkeS
 import { isSuccess } from 'lib/utils/api';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
-import { kanDistribuereBrev } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isProd } from 'lib/utils/environment';
 
 export const SkriveBrev = ({
@@ -108,10 +107,9 @@ export const SkriveBrev = ({
       const valgteMottakereIdentListe = valgteMottakere
         .map(mottaker => mottaker.ident)
         .filter(ident => typeof ident === 'string')
-
       const mottakerIdentListe = valgteMottakereIdentListe.length > 0 ? valgteMottakereIdentListe : [brukerIdent]
 
-      const response = await kanDistribuereBrev({ brukerIdent, mottakerIdentListe, behandlingsReferanse });
+      const response = await clientKanDistribuereBrev({ brukerIdent, mottakerIdentListe, behandlingsReferanse });
       if (isSuccess(response)) {
         return !response.data.mottakereDistStatus.some(
           (distStatus: { mottakerIdent: String; kanDistribuere: boolean }) => !distStatus.kanDistribuere
