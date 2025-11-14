@@ -8,6 +8,8 @@ import {
   Brev,
   ForhåndsvisDialogmelding,
   ForhåndsvisDialogmeldingResponse,
+  KanDistribuereBrevRequest,
+  KanDistribuereBrevResponse,
   KvalitetssikringTilgang,
   LegeerklæringStatus,
   LøsAvklaringsbehovPåBehandling,
@@ -92,6 +94,10 @@ export function clientLøsPeriodisertBehov(avklaringsBehov: LøsPeriodisertBehov
 
 export function clientLøsBehov(avklaringsBehov: LøsAvklaringsbehovPåBehandling) {
   return clientFetch(`${BASE_URL}/api/behandling/los-behov/`, 'POST', avklaringsBehov);
+}
+
+export function clientKanDistribuereBrev(request: KanDistribuereBrevRequest) {
+  return clientFetch<KanDistribuereBrevResponse>( `${BASE_URL}/api/brev/distribusjon/kan-distribuere-brev`, 'POST', request);
 }
 
 export function clientOpprettAktivitetsplikt(saksnummer: string, data: OpprettAktivitetspliktBehandlingDto) {

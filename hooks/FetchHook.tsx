@@ -3,7 +3,7 @@ import {
   clientBestillDialogmelding,
   clientOpprettDummySak,
   clientOpprettSak,
-  clientPurrPåLegeerklæring,
+  clientPurrPåLegeerklæring
 } from 'lib/clientApi';
 import { BestillLegeerklæring, OpprettDummySakDto, OpprettTestcase } from 'lib/types/types';
 import { getErrorMessage } from 'lib/utils/errorUtil';
