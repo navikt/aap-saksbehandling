@@ -7,7 +7,7 @@ import { erDatoIFremtiden, validerDato } from 'lib/validation/dateValidation';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { erGyldigFødselsnummer } from 'lib/utils/fnr';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
-import { DATO_FORMATER, formaterDatoForBackend } from 'lib/utils/date';
+import { DATO_FORMATER, formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { parse } from 'date-fns';
 
 interface Props {
@@ -15,6 +15,7 @@ interface Props {
   avbryt: () => void;
   åpne: boolean;
   onLagreNyttBarn: (barn: BarneTilleggVurdering) => void;
+  alleBarn: Array<{ ident: string; navn: string; fødselsdato: string }>;
 }
 
 export type LeggTilBarnFormFields = BarneTilleggVurdering & {
@@ -28,7 +29,13 @@ export enum Relasjon {
   FOSTERFORELDER = 'FOSTERFORELDER',
 }
 
-export const LeggTilBarnModal = ({ readOnly, åpne, avbryt, onLagreNyttBarn }: Props) => {
+export const LeggTilBarnModal = ({
+  readOnly,
+  åpne,
+  avbryt,
+  onLagreNyttBarn,
+  alleBarn,
+}: Props) => {
   const localForm = useForm<LeggTilBarnFormFields>({
     defaultValues: {
       fornavn: '',
@@ -42,8 +49,24 @@ export const LeggTilBarnModal = ({ readOnly, åpne, avbryt, onLagreNyttBarn }: P
   });
 
   const { control, handleSubmit, reset, watch, setValue, trigger } = localForm;
+  const identEksisterer = (ident: string) =>
+    alleBarn.some((barn) => barn.ident === ident);
+  const navnOgFødselsdatoEksisterer = (fornavn: string, etternavn: string, fødselsdato: string) =>
+    alleBarn.some(
+      (barn) =>
+        barn.navn.trim().toLowerCase() === `${fornavn} ${etternavn}`.trim().toLowerCase() &&
+        formaterDatoForFrontend(barn.fødselsdato) === fødselsdato
+    );
   const manglerIdent = watch('manglerIdent');
   const onSubmit = (data: LeggTilBarnFormFields) => {
+    if (navnOgFødselsdatoEksisterer(data.fornavn, data.etternavn, data.fødselsdato || '')) {
+      // Du kan vise en feilmelding her, f.eks. med setError fra useForm
+      localForm.setError('fornavn', {
+        type: 'manual',
+        message: 'Barn med samme navn og fødselsdato finnes allerede',
+      });
+      return;
+    }
     const nyttBarn: BarneTilleggVurdering = {
       navn: `${data.fornavn} ${data.etternavn}`,
       fødselsdato: data.fødselsdato
@@ -127,6 +150,9 @@ export const LeggTilBarnModal = ({ readOnly, åpne, avbryt, onLagreNyttBarn }: P
                     if (!/^\d+$/.test(ident)) return 'Fødselsnummeret kan kun inneholde tall';
                     if (!erGyldigFødselsnummer(ident)) {
                       return 'Ugyldig fødselsnummer eller D-nummer';
+                    }
+                    if (identEksisterer(ident)) {
+                      return 'Fødselsnummer/D-nummer finnes allerede for et annet barn';
                     }
                   },
                 },
