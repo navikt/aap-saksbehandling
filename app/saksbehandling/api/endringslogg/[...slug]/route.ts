@@ -3,12 +3,12 @@ import { getErrorMessage } from 'lib/utils/errorUtil';
 import { logWarning } from 'lib/serverutlis/logger';
 import { hentEndringslogg } from 'lib/services/endringsloggservice/endringsloggService';
 
-export async function POST(req: NextRequest) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ slug: string[] }> }) {
+  const { slug } = await params;
   const body = await req.json();
 
   try {
-    const path = req.url.split('/api')[1].slice(0, -1);
-    const endringsloggResponse = await hentEndringslogg(body, path);
+    const endringsloggResponse = await hentEndringslogg(body, `/endringslogg/${slug.join('/')}`);
     const r = await endringsloggResponse.json();
 
     return new Response(JSON.stringify(r), { status: 200 });

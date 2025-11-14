@@ -189,6 +189,7 @@ export type BehandlingsHistorikk =
 export type SøkPåSakInfo = components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.SøkPåSakDTO'];
 
 export type OpprettTestcase = components['schemas']['no.nav.aap.behandlingsflyt.OpprettTestcaseDTO'];
+export type TestcaseSteg = components['schemas']['no.nav.aap.behandlingsflyt.OpprettTestcaseDTO']['steg'];
 export type OpprettDummySakDto = components['schemas']['no.nav.aap.behandlingsflyt.test.OpprettDummySakDto'];
 export type FinnSakForIdent =
   components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.FinnSakForIdentDTO'];

@@ -13,13 +13,13 @@ fetchMock.enableMocks();
 const user = userEvent.setup();
 
 const grunnlagMedVurdering: SamordningAndreStatligeYtelserGrunnlag = {
+  historiskeVurderinger: [],
   harTilgangTilÅSaksbehandle: false,
   vurdering: {
     begrunnelse: 'Dette er min vurdering som er bekreftet',
     vurderingPerioder: [],
     vurdertAv: { ident: 'Saksbehandler', dato: '2025-08-01' },
   },
-  historiskeVurderinger: []
 };
 
 const grunnlagUtenVurdering: SamordningAndreStatligeYtelserGrunnlag = { harTilgangTilÅSaksbehandle: false, historiskeVurderinger: [] };

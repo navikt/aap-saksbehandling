@@ -8,7 +8,6 @@ import { Bistandsbehov } from 'components/behandlinger/sykdom/bistandsbehov/Bist
 interface Props {
   behandlingsReferanse: string;
   stegData: StegData;
-  overgangUføreEnabled: Boolean;
   overgangArbeidEnabled: Boolean;
 }
 
@@ -16,7 +15,6 @@ export const BistandsbehovMedDataFetching = async ({
   behandlingsReferanse,
   stegData,
   overgangArbeidEnabled,
-  overgangUføreEnabled,
 }: Props) => {
   const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
     hentBistandsbehovGrunnlag(behandlingsReferanse),
@@ -42,7 +40,6 @@ export const BistandsbehovMedDataFetching = async ({
       initialMellomlagretVurdering={initialMellomlagretVurdering}
       typeBehandling={stegData.typeBehandling}
       overgangArbeidEnabled={overgangArbeidEnabled}
-      overgangUføreEnabled={overgangUføreEnabled}
     />
   );
 };

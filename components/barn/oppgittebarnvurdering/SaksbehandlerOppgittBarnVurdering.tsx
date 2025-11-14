@@ -1,14 +1,13 @@
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { BarnetilleggFormFields } from 'components/behandlinger/barnetillegg/barnetilleggvurdering/BarnetilleggVurdering';
-import { ChildEyesIcon, TrashIcon } from '@navikt/aksel-icons';
+import { QuestionmarkDiamondIcon, TrashIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, Detail } from '@navikt/ds-react';
 import { kalkulerAlder } from 'components/behandlinger/alder/Alder';
 import { JaEllerNei } from 'lib/utils/form';
 
-import styles from 'components/barn/oppgittebarnvurdering/OppgitteFolkeregisterBarnVurdering.module.css';
-import { OppgitteFolkeregisterBarnVurderingFelter } from 'components/barn/oppgittebarnvurderingfelter/OppgitteFolkeregisterBarnVurderingFelter';
-import { Periode } from 'lib/types/types';
-import { formaterDatoForFrontend } from 'lib/utils/date';
+import styles from 'components/barn/oppgittebarnvurdering/SaksbehandlerOppgitteBarnVurdering.module.css';
+import { SaksbehandlerOppgitteBarnVurderingFelter } from 'components/barn/oppgittebarnvurderingfelter/SaksbehandlerOppgitteBarnVurderingFelter';
+import React from 'react';
 
 interface Props {
   form: UseFormReturn<BarnetilleggFormFields>;
@@ -17,68 +16,74 @@ interface Props {
   navn: string;
   fødselsdato: string | null | undefined;
   harOppgittFosterforelderRelasjon: boolean;
-  forsørgerPeriode?: Periode;
   readOnly: boolean;
+  onRemove: () => void;
+  erSlettbar: boolean;
 }
 
-export const OppgitteFolkeregisterBarnVurdering = ({
+export const SaksbehandlerOppgittBarnVurdering = ({
   form,
   barnetilleggIndex,
   ident,
   navn,
-  forsørgerPeriode,
   readOnly,
   fødselsdato,
   harOppgittFosterforelderRelasjon,
+  onRemove,
+  erSlettbar,
 }: Props) => {
-  const {
-    fields: vurderinger,
-    remove,
-    append,
-  } = useFieldArray({
+  const { fields: vurderinger, append, remove, } = useFieldArray({
     control: form.control,
-    name: `folkeregistrerteBarnVurderinger.${barnetilleggIndex}.vurderinger`,
+    name: `saksbehandlerOppgitteBarnVurderinger.${barnetilleggIndex}.vurderinger`,
   });
 
   const kanLeggeTilNyVurdering =
     form
-      .watch(`folkeregistrerteBarnVurderinger.${barnetilleggIndex}`)
+      .watch(`saksbehandlerOppgitteBarnVurderinger.${barnetilleggIndex}`)
       ?.vurderinger?.every((vurdering) => vurdering.harForeldreAnsvar !== JaEllerNei.Nei) && !readOnly;
-
-  const erUnderMyndighetsalder = fødselsdato ? Number.parseInt(kalkulerAlder(new Date(fødselsdato))) < 18 : false;
-
-  const periodeTekst = forsørgerPeriode?.fom
-    ? `${formaterDatoForFrontend(forsørgerPeriode.fom)} - ${forsørgerPeriode?.tom ? formaterDatoForFrontend(forsørgerPeriode.tom) : ''}`
-    : 'Ukjent';
 
   return (
     <section className={`flex-column`}>
-      <div className={styles.folkeregisterbarnheading}>
+      <div className={styles.manueltbarnheading}>
         <div>
-          <ChildEyesIcon title={`registrert barn ${ident}`} fontSize={'2rem'} />
+          <QuestionmarkDiamondIcon title="manuelt barn ikon" fontSize={'2rem'} />
         </div>
-        <div className={styles.tekst}>
-          <Detail className={styles.detailgray}>Folkeregistrert barn</Detail>
+        <div>
+          <Detail className={styles.detailgray}>
+            {harOppgittFosterforelderRelasjon ? 'Oppgitt manuelt fosterbarn' : 'Oppgitt manuelt barn'}
+          </Detail>
           <BodyShort size={'small'}>
             {navn}, {ident} ({fødselsdato ? kalkulerAlder(new Date(fødselsdato)) : 'Ukjent alder'})
           </BodyShort>
-          <BodyShort size={'small'}>Forsørgerperiode:{periodeTekst}</BodyShort>
         </div>
+        {erSlettbar && (
+          <Button
+            type="button"
+            variant={'tertiary'}
+            size={'small'}
+            icon={<TrashIcon aria-hidden />}
+            onClick={onRemove}
+            className={'fit-content'}
+            disabled={readOnly}
+          >
+            Fjern barn
+          </Button>
+        )}
       </div>
       <div className={styles.vurderingwrapper}>
         {vurderinger.map((vurdering, vurderingIndex) => {
+          const kanFjernePeriode = vurderingIndex !== 0;
           return (
             <div key={vurdering.id} className={styles.vurdering}>
-              <OppgitteFolkeregisterBarnVurderingFelter
+              <SaksbehandlerOppgitteBarnVurderingFelter
                 form={form}
                 readOnly={readOnly}
-                ident={ident}
                 barneTilleggIndex={barnetilleggIndex}
                 vurderingIndex={vurderingIndex}
                 fødselsdato={fødselsdato}
                 harOppgittFosterforelderRelasjon={harOppgittFosterforelderRelasjon}
               />
-              {!readOnly && (
+              {kanFjernePeriode && !readOnly && (
                 <Button
                   onClick={() => remove(vurderingIndex)}
                   className={'fit-content'}
@@ -93,7 +98,7 @@ export const OppgitteFolkeregisterBarnVurdering = ({
             </div>
           );
         })}
-        {kanLeggeTilNyVurdering && erUnderMyndighetsalder && (
+        {kanLeggeTilNyVurdering && (
           <Button
             onClick={() => append({ begrunnelse: '', harForeldreAnsvar: '', fraDato: '' })}
             className={'fit-content'}

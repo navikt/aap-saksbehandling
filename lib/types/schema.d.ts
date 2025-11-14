@@ -4074,44 +4074,6 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  '/test/opprett-og-fullfoer': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      requestBody?: {
-        content: {
-          'application/json': components['schemas']['no.nav.aap.behandlingsflyt.OpprettTestcaseDTO'];
-        };
-      };
-      responses: {
-        202: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.OpprettTestcaseDTO'];
-          };
-        };
-      };
-    };
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -4135,6 +4097,72 @@ export interface components {
       inntekterPerAr?: components['schemas']['no.nav.aap.behandlingsflyt.InntektPer\u00C5rDto'][] | null;
       institusjoner: components['schemas']['no.nav.aap.behandlingsflyt.Institusjoner'];
       medlemskap: boolean;
+      /** @enum {string|null} */
+      steg?:
+        | 'START_BEHANDLING'
+        | 'SEND_FORVALTNINGSMELDING'
+        | 'VURDER_RETTIGHETSPERIODE'
+        | 'SØKNAD'
+        | 'VURDER_ALDER'
+        | 'VURDER_LOVVALG'
+        | 'VURDER_MEDLEMSKAP'
+        | 'VURDER_OPPHOLDSKRAV'
+        | 'FASTSETT_MELDEPERIODER'
+        | 'AVKLAR_STUDENT'
+        | 'VURDER_BISTANDSBEHOV'
+        | 'OVERGANG_UFORE'
+        | 'OVERGANG_ARBEID'
+        | 'VURDER_SYKEPENGEERSTATNING'
+        | 'FASTSETT_SYKDOMSVILKÅRET'
+        | 'VURDER_YRKESSKADE'
+        | 'FRITAK_MELDEPLIKT'
+        | 'SYKDOMSVURDERING_BREV'
+        | 'KVALITETSSIKRING'
+        | 'BARNETILLEGG'
+        | 'AVKLAR_SYKDOM'
+        | 'REFUSJON_KRAV'
+        | 'FASTSETT_ARBEIDSEVNE'
+        | 'FASTSETT_BEREGNINGSTIDSPUNKT'
+        | 'FASTSETT_GRUNNLAG'
+        | 'VIS_GRUNNLAG'
+        | 'MANGLENDE_LIGNING'
+        | 'SAMORDNING_UFØRE'
+        | 'SAMORDNING_GRADERING'
+        | 'SAMORDNING_AVSLAG'
+        | 'SAMORDNING_ANDRE_STATLIGE_YTELSER'
+        | 'SAMORDNING_ARBEIDSGIVER'
+        | 'SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV'
+        | 'IKKE_OPPFYLT_MELDEPLIKT'
+        | 'FASTSETT_UTTAK'
+        | 'EFFEKTUER_11_7'
+        | 'DU_ER_ET_ANNET_STED'
+        | 'BEREGN_TILKJENT_YTELSE'
+        | 'SIMULERING'
+        | 'FORESLÅ_VEDTAK'
+        | 'FATTE_VEDTAK'
+        | 'IVERKSETT_VEDTAK'
+        | 'OPPRETT_REVURDERING'
+        | 'AVBRYT_REVURDERING'
+        | 'BREV'
+        | 'PÅKLAGET_BEHANDLING'
+        | 'FULLMEKTIG'
+        | 'FORMKRAV'
+        | 'BEHANDLENDE_ENHET'
+        | 'KLAGEBEHANDLING_KONTOR'
+        | 'KLAGEBEHANDLING_NAY'
+        | 'KLAGEBEHANDLING_OPPSUMMERING'
+        | 'OMGJØRING'
+        | 'TREKK_KLAGE'
+        | 'OPPRETTHOLDELSE'
+        | 'SVAR_FRA_ANDREINSTANS'
+        | 'IVERKSETT_KONSEKVENS'
+        | 'START_OPPFØLGINGSBEHANDLING'
+        | 'AVKLAR_OPPFØLGING'
+        | 'VURDER_AKTIVITETSPLIKT_11_7'
+        | 'IVERKSETT_BRUDD'
+        | 'VURDER_AKTIVITETSPLIKT_11_9'
+        | 'UDEFINERT'
+        | null;
       student: boolean;
       sykepenger: components['schemas']['no.nav.aap.behandlingsflyt.test.modell.TestPerson.Sykepenger'][];
       /**
@@ -8817,6 +8845,7 @@ export interface components {
       barnSomTrengerVurdering: components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnetillegg.IdentifiserteBarnDto'][];
       folkeregisterbarn: components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnetillegg.IdentifiserteBarnDto'][];
       'harTilgangTil\u00C5Saksbehandle': boolean;
+      saksbehandlerOppgitteBarn: components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnetillegg.IdentifiserteBarnDto'][];
       /**
        * Format: date
        * @example 2025-04-01
@@ -8825,6 +8854,7 @@ export interface components {
       vurdertAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
       vurderteBarn: components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnetillegg.ExtendedVurdertBarnDto'][];
       vurderteFolkeregisterBarn: components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnetillegg.ExtendedVurdertBarnDto'][];
+      vurderteSaksbehandlerOppgitteBarn: components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnetillegg.SlettbarVurdertBarnDto'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.barnetillegg.ExtendedVurdertBarnDto': {
       /**
@@ -8849,6 +8879,10 @@ export interface components {
       navn?: string | null;
       /** @enum {string|null} */
       oppgittForeldreRelasjon?: 'FORELDER' | 'FOSTERFORELDER' | null;
+    };
+    'no.nav.aap.behandlingsflyt.behandling.barnetillegg.SlettbarVurdertBarnDto': {
+      erSlettbar: boolean;
+      vurdertBarn: components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnetillegg.ExtendedVurdertBarnDto'];
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.BeregningDTO': {
       /** @enum {string} */
@@ -9024,7 +9058,6 @@ export interface components {
       erGjeldende?: boolean | null;
       overgangBegrunnelse?: string | null;
       skalVurdereAapIOvergangTilArbeid?: boolean | null;
-      'skalVurdereAapIOvergangTilUf\u00F8re'?: boolean | null;
       /**
        * Format: date
        * @example 2025-04-01
@@ -11367,6 +11400,7 @@ export interface components {
       harForeldreAnsvar: boolean;
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.barn.VurderingerForBarnetillegg': {
+      saksbehandlerOppgitteBarn: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.barn.VurdertBarnDto'][];
       vurderteBarn: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.barn.VurdertBarnDto'][];
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.barn.VurdertBarnDto': {
@@ -11416,7 +11450,6 @@ export interface components {
       erBehovForArbeidsrettetTiltak: boolean;
       overgangBegrunnelse?: string | null;
       skalVurdereAapIOvergangTilArbeid?: boolean | null;
-      'skalVurdereAapIOvergangTilUf\u00F8re'?: boolean | null;
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.flate.HelseinstitusjonVurderingDto': {
       begrunnelse: string;
