@@ -155,7 +155,7 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
       {fields.map((vurdering, index) => (
         <NyVurderingExpandableCard
           key={vurdering.id}
-          fraDato={form.watch(`vurderinger.${index}.fraDato`)}
+          fraDato={vurdering.fraDato}
           oppfylt={
             form.watch(`vurderinger.${index}.reellMulighetTilOpptrapping`) &&
             form.watch(`vurderinger.${index}.rettPaaAAPIOpptrapping`)
