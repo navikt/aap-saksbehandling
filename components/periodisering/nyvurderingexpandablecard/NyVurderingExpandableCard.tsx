@@ -7,13 +7,12 @@ import { BodyShort, HStack, Tag, VStack } from '@navikt/ds-react';
 import { VurdertAvAnsatt } from 'lib/types/types';
 import { VurdertAv } from 'components/vurdertav/VurdertAv';
 import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
-import { JaEllerNei } from 'lib/utils/form';
 
 interface Props {
   fraDato: string | undefined;
   nestePeriodeFraDato: string | null | undefined;
   isLast: boolean;
-  oppfylt: JaEllerNei | undefined | null;
+  oppfylt: boolean | undefined;
   vurdertAv: VurdertAvAnsatt | undefined;
   finnesFeil: boolean;
   children: ReactNode;
@@ -43,9 +42,9 @@ export const NyVurderingExpandableCard = ({
             Ny vurdering: {fraDatoParsed ? `${formaterDatoForFrontend(fraDatoParsed)} – ` : '[Ikke valgt]'}
             {tom ? <span>{formaterDatoForFrontend(tom)}</span> : <span>{isLast ? ' ' : '[Ikke valgt]'}</span>}
           </BodyShort>
-          {oppfylt && (
-            <Tag size="xsmall" variant={oppfylt === JaEllerNei.Ja ? 'success-moderate' : 'error-moderate'}>
-              {oppfylt === JaEllerNei.Ja ? 'Oppfylt' : 'Ikke oppfylt'}
+          {oppfylt !== undefined && (
+            <Tag size="xsmall" variant={oppfylt ? 'success-moderate' : 'error-moderate'}>
+              {oppfylt === true ? 'Oppfylt' : 'Ikke oppfylt'}
             </Tag>
           )}
         </HStack>

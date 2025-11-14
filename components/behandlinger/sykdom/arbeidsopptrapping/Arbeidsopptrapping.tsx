@@ -1,6 +1,27 @@
 'use client';
 
-import { ArbeidsopptrappingGrunnlagResponse, MellomlagretVurdering } from 'lib/types/types';
+import {
+  ArbeidsopptrappingGrunnlagResponse,
+  ArbeidsopptrappingLøsningDto,
+  LøsPeriodisertBehovPåBehandling,
+  MellomlagretVurdering,
+} from 'lib/types/types';
+import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
+import { useFieldArray, useForm } from 'react-hook-form';
+import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
+import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
+import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
+import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
+import { LovOgMedlemskapVurderingForm } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/types';
+import { parse, parseISO } from 'date-fns';
+import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
+import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
+import { NyVurderingExpandableCard } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
+import { ArbeidsopptrappingVurderingFormInput } from 'components/behandlinger/sykdom/arbeidsopptrapping/ArbeidsopptrappingVurderingFormInput';
 
 interface Props {
   behandlingVersjon: number;
@@ -8,6 +29,181 @@ interface Props {
   grunnlag?: ArbeidsopptrappingGrunnlagResponse;
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }
+export interface ArbeidsopptrappingForm {
+  vurderinger: ArbeidsopptrappingVurderingForm[];
+}
+export interface ArbeidsopptrappingVurderingForm {
+  begrunnelse: string;
+  fraDato: string | undefined;
+  reellMulighetTilOpptrapping: JaEllerNei | undefined;
+  rettPaaAAPIOpptrapping: JaEllerNei | undefined;
+  vurdertAv?: {
+    navn?: string | null;
+    ident: string;
+    dato: string;
+  };
+}
 export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, initialMellomlagretVurdering }: Props) => {
-  return <div>hei</div>;
+  const behandlingsreferanse = useBehandlingsReferanse();
+
+  const { løsPeriodisertBehovOgGåTilNesteSteg, status, løsBehovOgGåTilNesteStegError, isLoading } =
+    useLøsBehovOgGåTilNesteSteg('ARBEIDSOPPTRAPPING');
+
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
+    useMellomlagring(Behovstype.ARBEIDSOPPTRAPPING_KODE, initialMellomlagretVurdering);
+
+  const { visningActions, visningModus, formReadOnly } = useVilkårskortVisning(
+    readOnly,
+    'ARBEIDSOPPTRAPPING',
+    mellomlagretVurdering
+  );
+
+  const defaultValues =
+    mellomlagretVurdering != null
+      ? (JSON.parse(mellomlagretVurdering.data) as ArbeidsopptrappingForm)
+      : getDefaultValuesFromGrunnlag(grunnlag);
+
+  const form = useForm<ArbeidsopptrappingForm>({
+    defaultValues,
+  });
+
+  const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
+
+  const { fields, append, remove } = useFieldArray({ name: 'vurderinger', control: form.control });
+
+  function onAddPeriode() {
+    append({
+      begrunnelse: '',
+      fraDato: fields.length === 0 ? formaterDatoForFrontend(new Date(grunnlag?.kanVurderes[0]?.fom!)) : undefined,
+      reellMulighetTilOpptrapping: undefined,
+      rettPaaAAPIOpptrapping: undefined,
+    });
+  }
+  function onSubmit(data: ArbeidsopptrappingForm) {
+    const erPerioderGyldige = validerPeriodiserteVurderingerRekkefølge({
+      form,
+      nyeVurderinger: data.vurderinger,
+      grunnlag,
+    });
+    if (!erPerioderGyldige) {
+      return;
+    }
+    const losning: LøsPeriodisertBehovPåBehandling = {
+      behandlingVersjon: behandlingVersjon,
+      referanse: behandlingsreferanse,
+      behov: {
+        behovstype: Behovstype.ARBEIDSOPPTRAPPING_KODE,
+        løsningerForPerioder: data.vurderinger.map((periode, index) => {
+          const isLast = index === data.vurderinger.length - 1;
+          const tilDato = isLast
+            ? undefined
+            : parseDatoFraDatePickerOgTrekkFra1Dag(data.vurderinger[index + 1].fraDato);
+          return mapFormTilDto(periode, tilDato != null ? formaterDatoForBackend(tilDato) : undefined);
+        }),
+      },
+    };
+
+    løsPeriodisertBehovOgGåTilNesteSteg(losning, () => {
+      nullstillMellomlagretVurdering();
+    });
+  }
+
+  const foersteNyePeriode = fields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
+  const errorList = mapPeriodiserteVurderingerErrorList<LovOgMedlemskapVurderingForm>(form.formState.errors);
+  return (
+    <VilkårskortPeriodisert
+      heading={'§ 11-23 6. ledd. Arbeidsopptrapping (valgfritt)'}
+      steg={'ARBEIDSOPPTRAPPING'}
+      onSubmit={form.handleSubmit(onSubmit)}
+      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      vilkårTilhørerNavKontor={false}
+      isLoading={isLoading}
+      status={status}
+      mellomlagretVurdering={mellomlagretVurdering}
+      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
+      onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}
+      visningModus={visningModus}
+      visningActions={visningActions}
+      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
+      onLeggTilVurdering={onAddPeriode}
+      errorList={errorList}
+    >
+      {vedtatteVurderinger.map((vurdering) => (
+        <TidligereVurderingExpandableCard
+          key={vurdering.fom}
+          fom={parseISO(vurdering.fom)}
+          tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
+          foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+          oppfylt={vurdering.reellMulighetTilOpptrapping && vurdering.rettPaaAAPIOpptrapping}
+        >
+          <div>hei</div>
+        </TidligereVurderingExpandableCard>
+      ))}
+      {fields.map((vurdering, index) => (
+        <NyVurderingExpandableCard
+          key={vurdering.id}
+          fraDato={form.watch(`vurderinger.${index}.fraDato`)}
+          oppfylt={
+            form.watch(`vurderinger.${index}.reellMulighetTilOpptrapping`) &&
+            form.watch(`vurderinger.${index}.rettPaaAAPIOpptrapping`)
+              ? form.watch(`vurderinger.${index}.reellMulighetTilOpptrapping`) === JaEllerNei.Ja &&
+                form.watch(`vurderinger.${index}.rettPaaAAPIOpptrapping`) === JaEllerNei.Ja
+              : undefined
+          }
+          nestePeriodeFraDato={form.watch(`vurderinger.${index + 1}.fraDato`)}
+          isLast={index === fields.length - 1}
+          vurdertAv={vurdering.vurdertAv}
+          finnesFeil={finnesFeilForVurdering(index, errorList)}
+        >
+          <ArbeidsopptrappingVurderingFormInput
+            index={index}
+            form={form}
+            readonly={formReadOnly}
+            onRemove={() => remove(index)}
+          />
+        </NyVurderingExpandableCard>
+      ))}
+    </VilkårskortPeriodisert>
+  );
 };
+
+function getDefaultValuesFromGrunnlag(
+  grunnlag: ArbeidsopptrappingGrunnlagResponse | undefined
+): ArbeidsopptrappingForm {
+  if (grunnlag == null || (grunnlag.nyeVurderinger.length === 0 && grunnlag.sisteVedtatteVurderinger.length === 0)) {
+    // Vi har ingen tidligere vurderinger eller nye vurderinger, legg til en tom array med vurderinger
+    return {
+      vurderinger: [],
+    };
+  }
+
+  // Vi har allerede data lagret, vis enten de som er lagret i grunnlaget her eller tom liste
+  return {
+    vurderinger: grunnlag?.nyeVurderinger.map((vurdering) => ({
+      begrunnelse: vurdering.begrunnelse,
+      fraDato: formaterDatoForFrontend(vurdering.fom),
+      reellMulighetTilOpptrapping: getJaNeiEllerUndefined(vurdering.reellMulighetTilOpptrapping),
+      rettPaaAAPIOpptrapping: getJaNeiEllerUndefined(vurdering.rettPaaAAPIOpptrapping),
+      vurdertAv:
+        vurdering.vurdertAv != null
+          ? {
+              navn: vurdering.vurdertAv.ansattnavn,
+              ident: vurdering.vurdertAv.ident,
+              dato: vurdering.vurdertAv.dato,
+            }
+          : undefined,
+    })),
+  };
+}
+function mapFormTilDto(
+  periodeForm: ArbeidsopptrappingVurderingForm,
+  tilDato: string | undefined | null
+): ArbeidsopptrappingLøsningDto {
+  return {
+    begrunnelse: periodeForm.begrunnelse,
+    fom: formaterDatoForBackend(parse(periodeForm.fraDato!, 'dd.MM.yyyy', new Date())),
+    tom: tilDato,
+    reellMulighetTilOpptrapping: periodeForm.reellMulighetTilOpptrapping === JaEllerNei.Ja,
+    rettPaaAAPIOpptrapping: periodeForm.rettPaaAAPIOpptrapping === JaEllerNei.Ja,
+  };
+}

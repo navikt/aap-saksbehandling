@@ -170,6 +170,8 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
       return 'Avklar oppfølgingsbehov lokalkontor';
     case '8002':
       return 'Avklar oppfølgingsbehov NAY';
+    case '5057':
+      return 'Arbeidsopptrapping § 11-23 6. ledd';
   }
 }
 

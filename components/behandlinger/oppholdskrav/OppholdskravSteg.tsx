@@ -2,7 +2,7 @@
 
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { Behovstype } from 'lib/utils/form';
+import { Behovstype, JaEllerNei } from 'lib/utils/form';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { OppholdskravForm } from 'components/behandlinger/oppholdskrav/types';
 import { LøsPeriodisertBehovPåBehandling, MellomlagretVurdering, OppholdskravGrunnlagResponse } from 'lib/types/types';
@@ -149,7 +149,11 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
         <NyVurderingExpandableCard
           key={vurdering.id}
           fraDato={vurdering.fraDato}
-          oppfylt={form.watch(`vurderinger.${index}.oppfyller`)}
+          oppfylt={
+            form.watch(`vurderinger.${index}.oppfyller`)
+              ? form.watch(`vurderinger.${index}.oppfyller`) === JaEllerNei.Ja
+              : undefined
+          }
           nestePeriodeFraDato={form.watch(`vurderinger.${index + 1}.fraDato`)}
           isLast={index === vurderingerFields.length - 1}
           vurdertAv={vurdering.vurdertAv}
