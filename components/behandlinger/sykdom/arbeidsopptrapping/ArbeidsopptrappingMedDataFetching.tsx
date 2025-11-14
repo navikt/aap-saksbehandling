@@ -5,7 +5,7 @@ import {
 import { Behovstype } from 'lib/utils/form';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-import { skalViseSteg, StegData } from 'lib/utils/steg';
+import { StegData } from 'lib/utils/steg';
 import { Arbeidsopptrapping } from 'components/behandlinger/sykdom/arbeidsopptrapping/Arbeidsopptrapping';
 
 interface Props {
