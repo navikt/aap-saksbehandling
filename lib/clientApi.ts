@@ -96,8 +96,8 @@ export function clientLøsBehov(avklaringsBehov: LøsAvklaringsbehovPåBehandlin
   return clientFetch(`${BASE_URL}/api/behandling/los-behov/`, 'POST', avklaringsBehov);
 }
 
-export function clientKanDistribuereBrev(request: KanDistribuereBrevRequest) {
-  return clientFetch<KanDistribuereBrevResponse>( `${BASE_URL}/api/brev/distribusjon/kan-distribuere-brev`, 'POST', request);
+export function clientKanDistribuereBrev(brevbestillingReferanse: string, request: KanDistribuereBrevRequest) {
+  return clientFetch<KanDistribuereBrevResponse>( `${BASE_URL}/api/${brevbestillingReferanse}/kan-distribuere-brev`, 'POST', request);
 }
 
 export function clientOpprettAktivitetsplikt(saksnummer: string, data: OpprettAktivitetspliktBehandlingDto) {
