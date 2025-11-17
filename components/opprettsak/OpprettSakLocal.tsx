@@ -126,7 +126,6 @@ export const OpprettSakLocal = () => {
         { value: 'VURDER_YRKESSKADE', label: 'Vurder yrkesskade' },
         { value: 'FASTSETT_BEREGNINGSTIDSPUNKT', label: 'Fastsett beregningstidspunkt' },
         { value: 'MANGLENDE_LIGNING', label: 'Fastsett inntekt' },
-        { value: 'VURDER_YRKESSKADE', label: 'Vurder yrkesskade' },
         { value: 'VURDER_MEDLEMSKAP', label: 'Vurder medlemskap' },
         { value: 'VURDER_OPPHOLDSKRAV', label: 'Vurder oppholdskrav' },
         { value: 'DU_ER_ET_ANNET_STED', label: 'Et annet sted' },
