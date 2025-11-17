@@ -184,7 +184,7 @@ function byggFelter(vurdering: SamordningAndreStatligeYtelserGrunnlag['vurdering
       value: 'Ingen ytelser',
     });
   } else {
-    perioder.forEach((item, index) => {
+    perioder.map((item, index) => {
       const ytelseLabel = index === 0 ? 'Ytelse(r)' : '';
       const value = `${item.ytelse}: ${formaterDatoForFrontend(item.periode.fom)} - ${formaterDatoForFrontend(item.periode.tom)}`;
 
