@@ -12,8 +12,6 @@ import { useConfigForm } from 'components/form/FormHook';
 import { Sykepenger } from 'components/opprettsak/samordning/Sykepenger';
 import { parse } from 'date-fns';
 import { TestcaseSteg } from 'lib/types/types';
-import { AndreYtelser } from 'components/opprettsak/samordning/AndreYtelser';
-import { hjemmelMap } from 'lib/utils/hjemmel';
 
 interface Barn {
   fodselsdato: string;
