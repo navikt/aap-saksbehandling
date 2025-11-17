@@ -1,4 +1,4 @@
-export type FetchResponse<RespponseType> = SuccessResponseBody<RespponseType> | ErrorResponseBody<ApiException>;
+export type FetchResponse<ResponseType> = SuccessResponseBody<ResponseType> | ErrorResponseBody<ApiException>;
 
 export interface ApiException {
   message: string;
