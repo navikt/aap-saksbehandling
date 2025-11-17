@@ -1,46 +1,10 @@
 'use server';
 
-import { isLocal } from 'lib/utils/environment';
-import { requestAzureOboToken, validateToken } from '@navikt/oasis';
-import { headers } from 'next/headers';
-import { hentLocalToken } from 'lib/services/localFetch';
-import { getAccessTokenOrRedirectToLogin } from './azure/azuread';
 import { logError, logWarning } from 'lib/serverutlis/logger';
 import { ApiException, FetchResponse } from 'lib/utils/api';
+import { getToken } from 'lib/services/token';
 
 const NUMBER_OF_RETRIES = 3;
-const lokalFakeObotoken = isLocal();
-
-const getAzureOboToken = async (token: string, audience: string, url: string, retries: number) => {
-  const onBehalfOf = await requestAzureOboToken(token, audience);
-
-  if (onBehalfOf.ok) {
-    return onBehalfOf.token;
-  }
-
-  logWarning(`Henting av oboToken for ${url} feilet`, onBehalfOf.error);
-
-  if (retries === 0) {
-    throw new Error(`Henting av oboToken for ${url} feilet etter ${NUMBER_OF_RETRIES} forsøk`);
-  }
-  return await getAzureOboToken(token, audience, url, retries - 1);
-};
-
-const getToken = async (audience: string, url: string): Promise<string> => {
-  const token = getAccessTokenOrRedirectToLogin(await headers());
-  if (!token) {
-    logError(`Token for ${url} mangler (undefined, null eller tom)`);
-    throw new Error('Token mangler (undefined, null eller tom)');
-  }
-
-  const validation = await validateToken(token);
-  if (!validation.ok) {
-    logError(`Token for ${url} validerte ikke`);
-    throw new Error('Token validerte ikke');
-  }
-
-  return getAzureOboToken(token, audience, url, NUMBER_OF_RETRIES);
-};
 
 export const apiFetch = async <ResponseType>(
   url: string,
@@ -49,7 +13,7 @@ export const apiFetch = async <ResponseType>(
   requestBody?: object,
   tags?: string[]
 ): Promise<FetchResponse<ResponseType>> => {
-  const oboToken = lokalFakeObotoken ? await hentLocalToken(scope) : await getToken(scope, url);
+  const oboToken = await getToken(scope, url);
   return await fetchWithRetry<ResponseType>(url, method, oboToken, NUMBER_OF_RETRIES, requestBody, tags);
 };
 
@@ -60,7 +24,7 @@ export const apiFetchNoMemoization = async <ResponseType>(
   requestBody?: object,
   tags?: string[]
 ): Promise<FetchResponse<ResponseType>> => {
-  const oboToken = lokalFakeObotoken ? await hentLocalToken(scope) : await getToken(scope, url);
+  const oboToken = await getToken(scope, url);
   // Brukes for å gi signal om og unngå bruk av request memoization. Se https://nextjs.org/docs/app/deep-dive/caching#request-memoization
   const abortSignal = new AbortController().signal;
   return await fetchWithRetry<ResponseType>(url, method, oboToken, NUMBER_OF_RETRIES, requestBody, tags, abortSignal);
@@ -128,7 +92,8 @@ const fetchWithRetry = async <ResponseType>(
 };
 
 export const apiFetchPdf = async (url: string, scope: string): Promise<Blob | undefined> => {
-  const oboToken = lokalFakeObotoken ? await hentLocalToken(scope) : await getToken(scope, url);
+  const oboToken = await getToken(scope, url);
+
   const response = await fetch(url, {
     method: 'GET',
     headers: {
