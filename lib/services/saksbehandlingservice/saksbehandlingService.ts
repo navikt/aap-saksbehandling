@@ -490,8 +490,8 @@ export const bestillDialogmelding = async (requestBody: BestillLegeerklæring) =
   return await apiFetch(url, saksbehandlingApiScope, 'POST', requestBody);
 };
 
-export const kanDistribuereBrev = async (requestBody: KanDistribuereBrevRequest) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/distribusjon/kan-distribuere-brev`;
+export const kanDistribuereBrev = async (brevbestillingReferanse: string, requestBody: KanDistribuereBrevRequest) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/${brevbestillingReferanse}/kan-distribuere-brev`;
   return await apiFetch<KanDistribuereBrevResponse>(url, saksbehandlingApiScope, 'POST', requestBody);
 };
 

@@ -53,6 +53,7 @@ describe('Generelt', () => {
       erBehovForArbeidsrettetTiltak: true,
       vurdertAv: { ident: 'Saksbehandler', dato: '2025-03-24' },
     },
+    vurderinger: []
   };
 
   it('Skal ha en overskrift', () => {
@@ -112,6 +113,7 @@ describe('mellomlagring i bistandsbehov', () => {
     gjeldendeVedtatteVurderinger: [],
     harTilgangTilÅSaksbehandle: true,
     historiskeVurderinger: [],
+    vurderinger: []
   };
 
   it('Skal vise en tekst om hvem som har gjort vurderingen dersom det finnes en mellomlagring', () => {
@@ -456,6 +458,7 @@ describe('Revurdering', () => {
         vurdertAv: { ident: 'Saksbehandler', dato: '2025-03-24' },
       },
     ],
+    vurderinger: []
   };
 
   it('viser spørsmål om brukeren skal vurders for AAP i overgang til arbeid hvis det er avslag på både 11-5 og det svares nei på a,b og c', async () => {

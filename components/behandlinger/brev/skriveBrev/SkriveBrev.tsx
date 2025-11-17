@@ -108,8 +108,12 @@ export const SkriveBrev = ({
         .map(mottaker => mottaker.ident)
         .filter(ident => typeof ident === 'string')
       const mottakerIdentListe = valgteMottakereIdentListe.length > 0 ? valgteMottakereIdentListe : [brukerIdent]
+      const response = await clientKanDistribuereBrev(referanse, {
+        behandlingsReferanse: "",
+        brukerIdent,
+        mottakerIdentListe
+      });
 
-      const response = await clientKanDistribuereBrev({ brukerIdent, mottakerIdentListe, behandlingsReferanse });
       if (isSuccess(response)) {
         return !response.data.mottakereDistStatus.some(
           (distStatus: { mottakerIdent: String; kanDistribuere: boolean }) => !distStatus.kanDistribuere

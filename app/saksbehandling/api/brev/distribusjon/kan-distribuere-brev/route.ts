@@ -6,7 +6,7 @@ import { kanDistribuereBrev } from 'lib/services/saksbehandlingservice/saksbehan
 
 const lokalFakeKanDistribuereBrev = isLocal();
 
-export async function POST(req: NextRequest) {
+export async function POST(req: NextRequest, props: { params: Promise<{ brevbestillingReferanse: string }> }) {
   if (lokalFakeKanDistribuereBrev) {
     const response: FetchResponse<unknown> = {
       type: 'SUCCESS',
@@ -17,8 +17,9 @@ export async function POST(req: NextRequest) {
     return new Response(JSON.stringify(response), { status: 200 });
   }
 
+  const params = await props.params;
   const body = await req.json();
-  const res = await kanDistribuereBrev(body);
+  const res = await kanDistribuereBrev(params.brevbestillingReferanse, body);
 
   if (isError(res)) {
     logError('Feil ved henting av distribusjonstatus', res.apiException.message);
