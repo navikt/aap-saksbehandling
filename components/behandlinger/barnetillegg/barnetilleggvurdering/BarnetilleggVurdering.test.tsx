@@ -301,11 +301,11 @@ describe('Oppgitte barn', () => {
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
-    const el = screen.getByText('Oppgitt fosterbarn');
+    const el = screen.getByText('Fosterbarn');
     expect(el).toBeVisible();
   });
 
-  it('oppgitt barn skal ha overskrift oppgitt barn dersom oppgittforeldrerelasjon ikke er FOSTERFORELDER', () => {
+  it('oppgitt barn skal ha overskrift barn dersom oppgittforeldrerelasjon ikke er FOSTERFORELDER', () => {
     render(
       <BarnetilleggVurdering
         grunnlag={grunnlag}
@@ -314,8 +314,10 @@ describe('Oppgitte barn', () => {
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
-    const el = screen.getByText('Oppgitt barn');
-    expect(el).toBeVisible();
+    const antallBarn = screen.getAllByText('Barn').length;
+    expect(antallBarn).toBe(2); // Folkeregister barn og oppgitt barn
+    const el = screen.getAllByText('Barn');
+    el.forEach((item) => expect(item).toBeVisible());
   });
 
   it('skal vise spørsmål om fosterhjem dersom oppgittforeldrerelasjon er FOSTERFORELDER', () => {
