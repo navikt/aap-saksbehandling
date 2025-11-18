@@ -24,6 +24,7 @@ import { NyVurderingExpandableCard } from 'components/periodisering/nyvurderinge
 import { ArbeidsopptrappingVurderingFormInput } from 'components/behandlinger/sykdom/arbeidsopptrapping/ArbeidsopptrappingVurderingFormInput';
 import { VStack } from '@navikt/ds-react';
 import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
+import { IkkeVurderbarPeriode } from 'components/periodisering/IkkeVurderbarPeriode';
 
 interface Props {
   behandlingVersjon: number;
@@ -31,9 +32,11 @@ interface Props {
   grunnlag?: ArbeidsopptrappingGrunnlagResponse;
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }
+
 export interface ArbeidsopptrappingForm {
   vurderinger: ArbeidsopptrappingVurderingForm[];
 }
+
 export interface ArbeidsopptrappingVurderingForm {
   begrunnelse: string;
   fraDato: string | undefined;
@@ -45,6 +48,7 @@ export interface ArbeidsopptrappingVurderingForm {
     dato: string;
   };
 }
+
 export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, initialMellomlagretVurdering }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
 
@@ -70,6 +74,7 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
   });
 
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
+  const ikkeVurderbarePerioder = grunnlag?.ikkeVurderbarePerioder ?? [];
 
   const { fields, append, remove } = useFieldArray({ name: 'vurderinger', control: form.control });
 
@@ -81,6 +86,7 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
       rettPaaAAPIOpptrapping: undefined,
     });
   }
+
   function onSubmit(data: ArbeidsopptrappingForm) {
     const erPerioderGyldige = validerPeriodiserteVurderingerRekkefølge({
       form,
@@ -130,6 +136,17 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
       onLeggTilVurdering={onAddPeriode}
       errorList={errorList}
     >
+      {ikkeVurderbarePerioder.map((vurdering) => (
+        <IkkeVurderbarPeriode
+          key={vurdering.fom}
+          fom={parseISO(vurdering.fom)}
+          tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
+          alertMelding={
+            'Vilkåret kan ikke vurderes for denne perioden. For å vurdere vilkåret må §§ 11-5 og 11-6 være oppfylt.'
+          }
+          foersteNyePeriodeFraDato={undefined}
+        ></IkkeVurderbarPeriode>
+      ))}
       {vedtatteVurderinger.map((vurdering) => (
         <TidligereVurderingExpandableCard
           key={vurdering.fom}
@@ -173,6 +190,7 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
             form={form}
             readonly={formReadOnly}
             onRemove={() => remove(index)}
+            ikkeRelevantePerioder={grunnlag?.ikkeVurderbarePerioder}
           />
         </NyVurderingExpandableCard>
       ))}
@@ -208,6 +226,7 @@ function getDefaultValuesFromGrunnlag(
     })),
   };
 }
+
 function mapFormTilDto(
   periodeForm: ArbeidsopptrappingVurderingForm,
   tilDato: string | undefined | null
