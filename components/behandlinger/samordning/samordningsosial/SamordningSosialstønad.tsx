@@ -13,6 +13,9 @@ interface Props {
 export const SamordningSosialstønad = ({ grunnlag }: Props) => {
   if (!grunnlag.gjeldendeVurdering?.harKrav) return null;
   const vurderinger = grunnlag.gjeldendeVurderinger;
+
+  console.log(vurderinger);
+
   return (
     vurderinger && (
       <VilkårsKort heading="§11-29 Refusjonskrav sosialstønad" steg="REFUSJON_KRAV" defaultOpen={true}>
@@ -39,15 +42,12 @@ export const SamordningSosialstønad = ({ grunnlag }: Props) => {
                 <Table.Row key={vurdering.navKontor ?? index}>
                   <Table.DataCell textSize="small">
                     <HStack gap={'2'} marginInline={'2'}>
-                      {grunnlag.nåværendeVirkningsTidspunkt ? (
-                        <>
-                          {formaterDatoForFrontend(grunnlag.nåværendeVirkningsTidspunkt)}
-                          {' (foreløpig)'}
-                        </>
-                      ) : (
-                        ''
-                      )}{' '}
-                      - {'Vedtaksdato når fattes i saken'}
+                      {vurdering.fom
+                        ? formaterDatoForFrontend(vurdering.fom)
+                        : grunnlag.nåværendeVirkningsTidspunkt
+                          ? formaterDatoForFrontend(grunnlag.nåværendeVirkningsTidspunkt)
+                          : ''}{' '}
+                      - {vurdering.tom ? formaterDatoForFrontend(vurdering.tom) : 'Vedtaksdato når fattes i saken'}
                     </HStack>
                   </Table.DataCell>
                   <Table.DataCell textSize="small">{vurdering.navKontor}</Table.DataCell>
