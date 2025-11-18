@@ -26,11 +26,11 @@ import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { OpprettOppfølgingsBehandling } from 'components/saksoversikt/opprettoppfølgingsbehandling/OpprettOppfølgingsbehandling';
 import { useSak } from 'hooks/SakHook';
 import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
-import { capitalize } from 'lodash';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 import { Veiledning } from 'components/veiledning/Veiledning';
+import { storForbokstavOgMellomromForUnderstrek } from 'lib/utils/string';
 
 interface Props {
   bruker: BrukerInformasjon;
@@ -220,7 +220,17 @@ export const SamordningGradering = ({
         {!!historiskeVurderinger && !!historiskeVurderinger.length && (
           /* TODO: <TidligereVurderinger/> er ikke ideelt for visning av denne typen data (samordning, inst, m.m.).
               Burde på sikt utformes litt annerledes, men dette får fungere som en slags "MVP" */
-          <TidligereVurderinger data={historiskeVurderinger} buildFelter={byggFelter} />
+          <TidligereVurderinger
+            data={historiskeVurderinger}
+            buildFelter={byggFelter}
+            getErGjeldende={() => {
+              return true;
+            }}
+            getFomDato={(v) => v.vurderingenGjelderFra ?? v.vurdertAv.dato}
+            getVurdertAvIdent={(v) => v.vurdertAv.ident}
+            getVurdertDato={(v) => v.vurdertAv.dato}
+            grupperPåOpprettetDato={true}
+          />
         )}
 
         {visForm && (
@@ -320,8 +330,34 @@ function emptyDraftFormFields(): DraftFormFields {
   };
 }
 
-const byggFelter = (vurdering: SamordningYtelseVurdering): ValuePair[] =>
-  vurdering.vurderinger.map((v) => ({
-    label: `${capitalize(v.ytelseType)} (${formaterDatoForFrontend(v.periode.fom)} - ${formaterDatoForFrontend(v.periode.tom)})`,
-    value: `${v.gradering}% samordningsgrad`,
-  }));
+function byggFelter(vurdering: SamordningYtelseVurdering): ValuePair<string>[] {
+  const begrunnelse = vurdering?.begrunnelse || 'Ingen begrunnelse på behandling funnet';
+  const perioder = vurdering.vurderinger || [];
+
+  const felter: ValuePair<string>[] = [
+    {
+      label: 'Begrunnelse',
+      value: begrunnelse,
+    },
+  ];
+
+  if (perioder.length === 0) {
+    felter.push({
+      label: 'Ytelse(r)',
+      value: 'Ingen ytelser',
+    });
+  } else {
+    perioder.map((item, index) => {
+      const ytelseLabel = index === 0 ? 'Ytelse(r)' : '';
+      const value = `${storForbokstavOgMellomromForUnderstrek(item.ytelseType)} (${formaterDatoForFrontend(item.periode.fom)}
+       - ${formaterDatoForFrontend(item.periode.tom)}) - ${item.gradering}% Samordningsgrad`;
+
+      felter.push({
+        label: ytelseLabel,
+        value,
+      });
+    });
+  }
+
+  return felter;
+}

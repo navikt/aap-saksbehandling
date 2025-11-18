@@ -12,6 +12,11 @@ export function storForbokstav(value: string): string {
   return value.charAt(0).toUpperCase().concat(value.slice(1).toLowerCase());
 }
 
+export function storForbokstavOgMellomromForUnderstrek(value: string): string {
+  value = value.replace(/_/g, ' ');
+  return value.charAt(0).toUpperCase().concat(value.slice(1).toLowerCase());
+}
+
 export function formaterTilNok(sum: number | null | undefined): string {
   if (sum === null || sum === undefined) {
     return '';

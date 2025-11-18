@@ -7,6 +7,8 @@ import { JaEllerNei } from 'lib/utils/form';
 
 import styles from 'components/barn/oppgittebarnvurdering/OppgitteBarnVurdering.module.css';
 import { OppgitteBarnVurderingFelter } from 'components/barn/oppgittebarnvurderingfelter/OppgitteBarnVurderingFelter';
+import { formaterDatoForFrontend } from 'lib/utils/date';
+import React from 'react';
 
 interface Props {
   form: UseFormReturn<BarnetilleggFormFields>;
@@ -49,11 +51,16 @@ export const OppgitteBarnVurdering = ({
         </div>
         <div>
           <Detail className={styles.detailgray}>
-            {harOppgittFosterforelderRelasjon ? 'Oppgitt fosterbarn' : 'Oppgitt barn'}
+            {harOppgittFosterforelderRelasjon ? 'Fosterbarn' : 'Barn'}
           </Detail>
           <BodyShort size={'small'}>
             {navn}, {ident} ({fødselsdato ? kalkulerAlder(new Date(fødselsdato)) : 'Ukjent fødselsdato'})
           </BodyShort>
+          {fødselsdato && (
+            <BodyShort size={'small'}>
+              Fødselsdato: {formaterDatoForFrontend(fødselsdato)}
+            </BodyShort>
+          )}
         </div>
       </div>
       <div className={styles.vurderingwrapper}>
