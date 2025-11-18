@@ -47,6 +47,7 @@ const behovskodeMap = {
   '5052': 'Skriv forhåndsvarsel brudd aktivitetsplikt',
   '5053': 'Skriv sykdomsvurdering brev',
   '5056': 'Samordning refusjonskrav',
+  '5057': 'Arbeidsopptrapping',
   '5096': 'Forslå uttak',
   '5097': 'Kvalitetssikre sak',
   '5098': 'Foreslå vedtak',

@@ -1,7 +1,7 @@
 'use client';
 
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { Behovstype } from 'lib/utils/form';
+import { Behovstype, JaEllerNei } from 'lib/utils/form';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import {
   LøsPeriodisertBehovPåBehandling,
@@ -152,7 +152,11 @@ export const LovvalgOgMedlemskapPeriodisert = ({
           key={vurdering.id}
           nestePeriodeFraDato={form.watch(`vurderinger.${index + 1}.fraDato`)}
           isLast={index === vurderingerFields.length - 1}
-          oppfylt={form.watch(`vurderinger.${index}.medlemskap.varMedlemIFolketrygd`)}
+          oppfylt={
+            form.watch(`vurderinger.${index}.medlemskap.varMedlemIFolketrygd`)
+              ? form.watch(`vurderinger.${index}.medlemskap.varMedlemIFolketrygd`) === JaEllerNei.Ja
+              : undefined
+          }
           fraDato={vurdering.fraDato}
           vurdertAv={vurdering.vurdertAv}
           finnesFeil={finnesFeilForVurdering(index, errorList)}

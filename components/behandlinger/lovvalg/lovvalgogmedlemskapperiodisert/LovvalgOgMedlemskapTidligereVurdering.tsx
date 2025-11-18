@@ -1,6 +1,7 @@
-import { BodyShort, Label, VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { PeriodisertManuellVurderingForLovvalgMedlemskapResponse } from 'lib/types/types';
+import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
 
 type Props = {
   vurdering: PeriodisertManuellVurderingForLovvalgMedlemskapResponse;
@@ -27,15 +28,3 @@ export const LovvalgOgMedlemskapTidligereVurdering = ({ vurdering }: Props) => {
     </VStack>
   );
 };
-
-type SpørsmålOgSvarProps = {
-  spørsmål: string;
-  svar: string;
-};
-
-export const SpørsmålOgSvar = ({ spørsmål, svar }: SpørsmålOgSvarProps) => (
-  <VStack gap="1">
-    <Label size="small">{spørsmål}</Label>
-    <BodyShort size="small">{svar}</BodyShort>
-  </VStack>
-);

@@ -55,6 +55,7 @@ export enum Behovstype {
   AVKLAR_OPPFØLGINGSBEHOV_NAY = '8002',
   AVKLAR_OPPFØLGINGSBEHOV_LOKALKONTOR = '8001',
   OPPHOLDSKRAV_KODE = '5035',
+  ARBEIDSOPPTRAPPING_KODE = '5057',
 }
 
 type BehovsKode = `${Behovstype}`;
@@ -169,6 +170,8 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
       return 'Avklar oppfølgingsbehov lokalkontor';
     case '8002':
       return 'Avklar oppfølgingsbehov NAY';
+    case '5057':
+      return 'Arbeidsopptrapping § 11-23 6. ledd';
   }
 }
 
