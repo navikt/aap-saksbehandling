@@ -3260,7 +3260,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  '/api/distribusjon/kan-distribuere-brev': {
+  '/api/{brevbestillingReferanse}/kan-distribuere-brev': {
     parameters: {
       query?: never;
       header?: never;
@@ -3273,7 +3273,10 @@ export interface paths {
       parameters: {
         query?: never;
         header?: never;
-        path?: never;
+        path: {
+          /** @description brevbestillingReferanse */
+          brevbestillingReferanse: string;
+        };
         cookie?: never;
       };
       requestBody?: {
@@ -4351,6 +4354,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.arbeidsopptrapping.ArbeidsopptrappingGrunnlagResponse': {
       'beh\u00F8verVurderinger': components['schemas']['no.nav.aap.komponenter.type.Periode'][];
       'harTilgangTil\u00C5Saksbehandle': boolean;
+      ikkeVurderbarePerioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
       kanVurderes: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
       nyeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.arbeidsopptrapping.ArbeidsopptrappingVurderingResponse'][];
       sisteVedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.arbeidsopptrapping.ArbeidsopptrappingVurderingResponse'][];
@@ -13181,8 +13185,10 @@ export interface components {
         | null;
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.S\u00F8knadStudentDto': {
-      erStudent: string;
-      kommeTilbake?: string | null;
+      /** @enum {string} */
+      erStudent: 'Ja' | 'Avbrutt' | 'Nei';
+      /** @enum {string|null} */
+      kommeTilbake?: 'Ja' | 'Nei' | 'VetIkke' | null;
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.S\u00F8knadV0': {
       medlemskap?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.S\u00F8knadMedlemskapDto'];
