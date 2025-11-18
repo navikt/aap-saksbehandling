@@ -18,7 +18,7 @@ import { ArrowRightLeftIcon, LeaveIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Kelvinsøkeresultat } from 'components/kelvinsøkeresultat/Kelvinsøkeresultat';
 import styles from './KelvinAppHeader.module.css';
 import { AppSwitcher } from 'components/kelvinappheader/AppSwitcher';
-import { isDev, isLocal, isProd } from 'lib/utils/environment';
+import { isLocal, isProd } from 'lib/utils/environment';
 import { LokalBrukerBytte } from 'components/lokalbrukerbytte/LokalBrukerBytte';
 import { Roller } from 'lib/services/azure/azureUserService';
 import { SøkeResultat } from 'app/api/kelvinsok/route';
@@ -31,7 +31,6 @@ interface BrukerInformasjon {
 }
 
 const bytteBrukerForDevOgLokalt = !isProd();
-const visRollerForDev = isDev();
 const lokalBrukerbytte = isLocal();
 const Brukermeny = ({ brukerInformasjon, roller }: { brukerInformasjon: BrukerInformasjon; roller?: Roller[] }) => {
   return (
@@ -39,15 +38,10 @@ const Brukermeny = ({ brukerInformasjon, roller }: { brukerInformasjon: BrukerIn
       <InternalHeader.UserButton name={brukerInformasjon.navn} as={Dropdown.Toggle} />
       <Dropdown.Menu>
         <Dropdown.Menu.GroupedList>
-          {visRollerForDev && (
-            <>
-              <Dropdown.Menu.GroupedList.Heading>
-                Roller: {roller?.map((rolle) => rolle).join(', ')}
-              </Dropdown.Menu.GroupedList.Heading>
-              <Dropdown.Menu.Divider />
-            </>
-          )}
-
+          <Dropdown.Menu.GroupedList.Heading>
+            Roller: {roller?.map((rolle) => rolle).join(', ')}
+          </Dropdown.Menu.GroupedList.Heading>
+          <Dropdown.Menu.Divider />
           {bytteBrukerForDevOgLokalt && (
             <>
               <Dropdown.Menu.List.Item as={Link} href={'/oauth2/login?prompt=select_account'}>
