@@ -8,9 +8,9 @@ import { LedigeOppgaverNy } from 'components/oppgaveliste/ledigeoppgaver/LedigeO
 import { AlleOppgaverNy } from 'components/oppgaveliste/alleoppgaver/AlleOppgaverNy';
 import { useLagreAktivTab } from 'hooks/oppgave/aktivTabHook';
 import { TildelOppgaverProvider } from 'context/oppgave/TildelOppgaverContext';
-import { isProd } from 'lib/utils/environment';
 import { AlleOppgaver } from 'components/oppgaveliste/alleoppgaver/AlleOppgaver';
 import { LedigeOppgaver } from 'components/oppgaveliste/ledigeoppgaver/LedigeOppgaver';
+import { toggles } from 'lib/utils/toggles';
 
 interface Props {
   enheter: Enhet[];
@@ -54,10 +54,16 @@ export const OppgaveListe = ({ enheter }: Props) => {
         </HStack>
 
         {selected === 'Mine oppgaver' && <MineOppgaver />}
-        {selected === 'Ledige oppgaver' && isProd() && <LedigeOppgaver enheter={enheter} />}
-        {selected === 'Ledige oppgaver' && !isProd() && <LedigeOppgaverNy enheter={enheter} />}
-        {selected === 'Alle oppgaver' && isProd() && <AlleOppgaver enheter={enheter} />}
-        {selected === 'Alle oppgaver' && !isProd() && <AlleOppgaverNy enheter={enheter} />}
+        {selected === 'Ledige oppgaver' && !toggles.featureComboboxForValgAvEnheter && (
+          <LedigeOppgaver enheter={enheter} />
+        )}
+        {selected === 'Ledige oppgaver' && toggles.featureComboboxForValgAvEnheter && (
+          <LedigeOppgaverNy enheter={enheter} />
+        )}
+        {selected === 'Alle oppgaver' && !toggles.featureComboboxForValgAvEnheter && <AlleOppgaver enheter={enheter} />}
+        {selected === 'Alle oppgaver' && toggles.featureComboboxForValgAvEnheter && (
+          <AlleOppgaverNy enheter={enheter} />
+        )}
       </TildelOppgaverProvider>
     </VStack>
   );
