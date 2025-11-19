@@ -4,13 +4,14 @@ import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper
 import { UseFormReturn } from 'react-hook-form';
 import { ArbeidsopptrappingForm } from 'components/behandlinger/sykdom/arbeidsopptrapping/Arbeidsopptrapping';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
-import { Button, HStack, Link, VStack } from '@navikt/ds-react';
+import { Alert, Button, HStack, Link, VStack } from '@navikt/ds-react';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { erDatoIPeriode, validerDato } from 'lib/validation/dateValidation';
 import { TrashFillIcon } from '@navikt/aksel-icons';
 import { parse } from 'date-fns';
 import { Periode } from 'lib/types/types';
 import { stringToDate } from '../../../../lib/utils/date';
+import { JaEllerNei } from 'lib/utils/form';
 interface Props {
   index: number;
   form: UseFormReturn<ArbeidsopptrappingForm>;
@@ -25,6 +26,7 @@ export const ArbeidsopptrappingVurderingFormInput = ({
   onRemove,
   ikkeRelevantePerioder,
 }: Props) => {
+  const rettPåAAPIOpptrapping = form.watch(`vurderinger.${index}.rettPaaAAPIOpptrapping`);
   return (
     <VStack gap={'5'}>
       <HStack justify={'space-between'}>
@@ -92,6 +94,11 @@ export const ArbeidsopptrappingVurderingFormInput = ({
         rules={{ required: 'Du må ta stilling til om brukeren har rett på AAP i arbeidsopptrapping' }}
         readOnly={readonly}
       />
+      {rettPåAAPIOpptrapping === JaEllerNei.Ja && (
+        <HStack>
+          <Alert variant={'info'}>Har du husket å lage en aktivitet for opptrappingen i aktivitetsplanen?</Alert>
+        </HStack>
+      )}
     </VStack>
   );
 };
