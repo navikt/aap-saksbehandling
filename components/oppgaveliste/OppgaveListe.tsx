@@ -4,10 +4,13 @@ import { useEffect, useState } from 'react';
 import { Heading, HStack, Tabs, VStack } from '@navikt/ds-react';
 import { Enhet } from 'lib/types/oppgaveTypes';
 import { MineOppgaver } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
-import { LedigeOppgaver } from 'components/oppgaveliste/ledigeoppgaver/LedigeOppgaver';
-import { AlleOppgaver } from 'components/oppgaveliste/alleoppgaver/AlleOppgaver';
+import { LedigeOppgaverNy } from 'components/oppgaveliste/ledigeoppgaver/LedigeOppgaverNy';
+import { AlleOppgaverNy } from 'components/oppgaveliste/alleoppgaver/AlleOppgaverNy';
 import { useLagreAktivTab } from 'hooks/oppgave/aktivTabHook';
 import { TildelOppgaverProvider } from 'context/oppgave/TildelOppgaverContext';
+import { isProd } from 'lib/utils/environment';
+import { AlleOppgaver } from 'components/oppgaveliste/alleoppgaver/AlleOppgaver';
+import { LedigeOppgaver } from 'components/oppgaveliste/ledigeoppgaver/LedigeOppgaver';
 
 interface Props {
   enheter: Enhet[];
@@ -51,8 +54,10 @@ export const OppgaveListe = ({ enheter }: Props) => {
         </HStack>
 
         {selected === 'Mine oppgaver' && <MineOppgaver />}
-        {selected === 'Ledige oppgaver' && <LedigeOppgaver enheter={enheter} />}
-        {selected === 'Alle oppgaver' && <AlleOppgaver enheter={enheter} />}
+        {selected === 'Ledige oppgaver' && isProd() && <LedigeOppgaver enheter={enheter} />}
+        {selected === 'Ledige oppgaver' && !isProd() && <LedigeOppgaverNy enheter={enheter} />}
+        {selected === 'Alle oppgaver' && isProd() && <AlleOppgaver enheter={enheter} />}
+        {selected === 'Alle oppgaver' && !isProd() && <AlleOppgaverNy enheter={enheter} />}
       </TildelOppgaverProvider>
     </VStack>
   );

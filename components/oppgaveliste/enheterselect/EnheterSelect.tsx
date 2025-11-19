@@ -9,9 +9,10 @@ interface Props {
   enheter: Enhet[];
   aktiveEnheter: ComboOption[];
   setAktiveEnheter: (enheter: ComboOption[]) => void;
+  className?: string;
 }
 
-export const EnheterSelect = ({ enheter, aktiveEnheter, setAktiveEnheter }: Props) => {
+export const EnheterSelect = ({ enheter, aktiveEnheter, setAktiveEnheter, className }: Props) => {
   const [value, setValue] = useState('');
   const enheterOptions = enheter.map((enhet) => ({ value: enhet.enhetNr, label: enhet.navn }));
 
@@ -41,6 +42,7 @@ export const EnheterSelect = ({ enheter, aktiveEnheter, setAktiveEnheter }: Prop
       selectedOptions={aktiveEnheter as unknown as string[]}
       options={enheterOptions}
       onChange={setValue}
+      className={className}
     />
   );
 };

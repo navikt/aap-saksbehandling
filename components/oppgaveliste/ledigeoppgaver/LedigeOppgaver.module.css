@@ -8,3 +8,7 @@
 .ingenoppgaver {
   padding: var(--a-spacing-2);
 }
+
+.velgenhet {
+  width: 420px;
+}

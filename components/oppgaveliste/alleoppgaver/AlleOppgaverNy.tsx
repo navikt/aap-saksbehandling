@@ -1,52 +1,63 @@
 'use client';
 
-import { useEffect, useState, useTransition } from 'react';
-import useSWR from 'swr';
-import { Alert, BodyShort, Box, Button, HStack, Label, Switch, VStack } from '@navikt/ds-react';
-import { EnhetSelect } from 'components/oppgaveliste/enhetselect/EnhetSelect';
-import { KøSelect } from 'components/oppgaveliste/køselect/KøSelect';
-import { byggKelvinURL, queryParamsArray } from 'lib/utils/request';
 import { Enhet } from 'lib/types/oppgaveTypes';
-import { hentKøerForEnheterClient, plukkNesteOppgaveClient } from 'lib/oppgaveClientApi';
-import { useLagreAktivKø } from 'hooks/oppgave/aktivkøHook';
-import { useRouter } from 'next/navigation';
-import { useLagreAktivEnhet } from 'hooks/oppgave/aktivEnhetHook';
+import { useEffect, useState } from 'react';
+import { Alert, BodyShort, Box, Button, HStack, Label, VStack } from '@navikt/ds-react';
+import { AlleOppgaverTabell } from 'components/oppgaveliste/alleoppgaver/alleoppgavertabell/AlleOppgaverTabell';
+import { useAlleOppgaverForEnhet } from 'hooks/oppgave/OppgaveHook';
+import { KøSelect } from 'components/oppgaveliste/køselect/KøSelect';
 import { isError, isSuccess } from 'lib/utils/api';
-import { useLedigeOppgaver } from 'hooks/oppgave/OppgaveHook';
-import { LedigeOppgaverTabell } from 'components/oppgaveliste/ledigeoppgaver/ledigeoppgavertabell/LedigeOppgaverTabell';
+import useSWR from 'swr';
+import { queryParamsArray } from 'lib/utils/request';
+import { hentKøerForEnheterClient } from 'lib/oppgaveClientApi';
+import { useLagreAktivKø } from 'hooks/oppgave/aktivkøHook';
 import { useConfigForm } from 'components/form/FormHook';
+import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
 import { oppgaveBehandlingstyper, OppgaveStatuser } from 'lib/utils/behandlingstyper';
 import { alleVurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
 import { oppgaveAvklaringsbehov } from 'lib/utils/avklaringsbehov';
-import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
-import { formaterDatoForBackend } from 'lib/utils/date';
-
-import styles from 'components/oppgaveliste/ledigeoppgaver/LedigeOppgaver.module.css';
 import {
   NoNavAapOppgaveListeUtvidetOppgavelisteFilterBehandlingstyper,
   NoNavAapOppgaveListeUtvidetOppgavelisteFilterReturStatuser,
 } from '@navikt/aap-oppgave-typescript-types';
-import { LedigeOppgaverFiltrering } from 'components/oppgaveliste/filtrering/ledigeoppgaverfiltrering/LedigeOppgaverFiltrering';
+import { formaterDatoForBackend } from 'lib/utils/date';
+import styles from 'components/oppgaveliste/ledigeoppgaver/LedigeOppgaver.module.css';
 import { TabellSkeleton } from 'components/oppgaveliste/tabellskeleton/TabellSkeleton';
+import { AlleOppgaverFiltrering } from 'components/oppgaveliste/filtrering/alleoppgaverfiltrering/AlleOppgaverFiltrering';
 import { ALLE_OPPGAVER_ID } from 'components/oppgaveliste/filtrering/filtreringUtils';
-import { useLagreAktivUtvidetFilter } from '../../../hooks/oppgave/aktivUtvidetFilterHook';
+import { useLagreAktivUtvidetFilter } from 'hooks/oppgave/aktivUtvidetFilterHook';
+import { ComboOption } from 'components/produksjonsstyring/minenhet/MineEnheter';
+import { useLagreAktiveEnheter } from 'hooks/oppgave/aktiveEnheterHook';
+import { EnheterSelect } from 'components/oppgaveliste/enheterselect/EnheterSelect';
 
 interface Props {
   enheter: Enhet[];
 }
 
-export const LedigeOppgaver = ({ enheter }: Props) => {
+export const AlleOppgaverNy = ({ enheter }: Props) => {
   const { hentLagretAktivKø, lagreAktivKøId } = useLagreAktivKø();
-  const { lagreAktivEnhet, hentLagretAktivEnhet } = useLagreAktivEnhet();
   const { hentAktivUtvidetFilter, lagreAktivUtvidetFilter } = useLagreAktivUtvidetFilter();
+  const { hentLagredeAktiveEnheter, lagreAktiveEnheter } = useLagreAktiveEnheter();
 
-  const router = useRouter();
-  const [isPending, startTransition] = useTransition();
-
-  const [aktivEnhet, setAktivEnhet] = useState<string>(hentLagretAktivEnhet() ?? enheter[0]?.enhetNr ?? '');
-  const [veilederFilter, setVeilederFilter] = useState<string>('');
   const [aktivKøId, setAktivKøId] = useState<number>(ALLE_OPPGAVER_ID);
+  const [valgteRader, setValgteRader] = useState<number[]>([]);
   const lagretUtvidetFilter = hentAktivUtvidetFilter();
+
+  function førsteEnhetTilComboOption(enheter: Enhet[]): ComboOption[] | null {
+    const førsteEnhet = enheter.find((e) => e);
+    if (førsteEnhet) {
+      return [{ value: førsteEnhet.enhetNr, label: førsteEnhet.navn }];
+    }
+    return null;
+  }
+  const [aktiveEnheter, setAktiveEnheter] = useState<ComboOption[]>(
+    hentLagredeAktiveEnheter() ?? førsteEnhetTilComboOption(enheter) ?? []
+  );
+  const aktiveEnhetsnumre = aktiveEnheter.map((enhet) => enhet.value);
+  const oppdaterEnheter = (enheter: ComboOption[]) => {
+    setAktiveEnheter(enheter);
+    lagreAktiveEnheter(enheter);
+  };
 
   const { form, formFields } = useConfigForm<FormFieldsFilter>({
     behandlingstyper: {
@@ -108,10 +119,10 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
       : undefined;
 
   const { antallOppgaver, oppgaver, size, setSize, isLoading, isValidating, kanLasteInnFlereOppgaver, mutate } =
-    useLedigeOppgaver([aktivEnhet], veilederFilter === 'veileder', aktivKøId, utvidetFilter);
+    useAlleOppgaverForEnhet(aktiveEnhetsnumre, aktivKøId, utvidetFilter);
 
-  const { data: køer } = useSWR(`api/filter?${queryParamsArray('enheter', [aktivEnhet])}`, () =>
-    hentKøerForEnheterClient([aktivEnhet])
+  const { data: køer } = useSWR(`api/filter?${queryParamsArray('enheter', aktiveEnhetsnumre)}`, () =>
+    hentKøerForEnheterClient(aktiveEnhetsnumre)
   );
 
   useEffect(() => {
@@ -120,16 +131,6 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
     });
     return () => fieldValues.unsubscribe();
   }, [form, lagreAktivUtvidetFilter]);
-
-  const oppdaterKøId = (id: number) => {
-    setAktivKøId(id);
-    lagreAktivKøId(id);
-  };
-
-  const oppdaterEnhet = (enhetsnr: string) => {
-    setAktivEnhet(enhetsnr);
-    lagreAktivEnhet(enhetsnr);
-  };
 
   useEffect(() => {
     if (!køer || (køer && isError(køer))) {
@@ -145,16 +146,10 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
     }
   }, [køer]);
 
-  async function plukkOgGåTilOppgave() {
-    startTransition(async () => {
-      if (aktivEnhet && aktivKøId) {
-        const nesteOppgaveRes = await plukkNesteOppgaveClient(aktivKøId, [aktivEnhet]);
-        if (isSuccess(nesteOppgaveRes) && nesteOppgaveRes.data) {
-          router.push(byggKelvinURL(nesteOppgaveRes.data.avklaringsbehovReferanse));
-        }
-      }
-    });
-  }
+  const oppdaterKøId = (id: number) => {
+    setAktivKøId(id);
+    lagreAktivKøId(id);
+  };
 
   if (isError(køer)) {
     return <Alert variant="error">{køer.apiException.message}</Alert>;
@@ -163,38 +158,23 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
   const oppgaveKøer = isSuccess(køer) ? køer.data : undefined;
 
   return (
-    <VStack gap={'5'}>
+    <VStack gap={'4'}>
       <Box borderColor="border-divider" borderWidth="1" borderRadius={'xlarge'}>
         <VStack>
-          <HStack
-            justify={'space-between'}
-            align={'end'}
-            paddingInline={'4'}
-            paddingBlock={'2'}
-            style={{ borderBottom: '1px solid #071A3636' }}
-          >
-            <HStack gap={'4'} align={'end'}>
-              <EnhetSelect enheter={enheter} aktivEnhet={aktivEnhet} setAktivEnhet={oppdaterEnhet} />
-              <KøSelect
-                label={'Velg kø'}
-                køer={oppgaveKøer || []}
-                aktivKøId={aktivKøId}
-                setAktivKø={oppdaterKøId}
-                form={form}
-              />
-              <Switch
-                value="veileder"
-                checked={veilederFilter === 'veileder'}
-                onChange={(e) => setVeilederFilter((prevState) => (prevState ? '' : e.target.value))}
-                size={'small'}
-              >
-                Vis kun oppgaver jeg er veileder på
-              </Switch>
-            </HStack>
-
-            <Button size="medium" onClick={() => plukkOgGåTilOppgave()} loading={isPending}>
-              Behandle neste oppgave
-            </Button>
+          <HStack paddingInline={'4'} paddingBlock={'2'} gap={'4'} style={{ borderBottom: '1px solid #071A3636' }}>
+            <EnheterSelect
+              enheter={enheter}
+              aktiveEnheter={aktiveEnheter}
+              setAktiveEnheter={oppdaterEnheter}
+              className={styles.velgenhet}
+            />
+            <KøSelect
+              label={'Velg kø'}
+              køer={oppgaveKøer || []}
+              aktivKøId={aktivKøId}
+              setAktivKø={oppdaterKøId}
+              form={form}
+            />
           </HStack>
           <HStack gap={'2'} paddingInline={'4'} paddingBlock={'2'}>
             <Label as="p" size={'small'}>
@@ -206,18 +186,26 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
       </Box>
 
       <div className={styles.tabell}>
-        <LedigeOppgaverFiltrering
+        <AlleOppgaverFiltrering
           form={form}
           formFields={formFields}
           antallOppgaver={antallOppgaver}
           kanFiltrere={aktivKøId === ALLE_OPPGAVER_ID}
           onFiltrerClick={() => oppdaterKøId(ALLE_OPPGAVER_ID)}
+          valgteRader={valgteRader}
+          setValgteRader={setValgteRader}
+          revalidateFunction={mutate}
         />
         {isLoading && <TabellSkeleton />}
 
         {!isLoading &&
           (oppgaver.length > 0 ? (
-            <LedigeOppgaverTabell oppgaver={oppgaver} revalidateFunction={mutate} />
+            <AlleOppgaverTabell
+              oppgaver={oppgaver}
+              revalidateFunction={mutate}
+              valgteRader={valgteRader}
+              setValgteRader={setValgteRader}
+            />
           ) : (
             <BodyShort size={'small'} className={styles.ingenoppgaver}>
               Ingen oppgaver i valgt kø for valgt enhet

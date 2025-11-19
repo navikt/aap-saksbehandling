@@ -7,7 +7,7 @@ import { isError, isSuccess } from 'lib/utils/api';
 const PAGE_SIZE = 50;
 
 type UseOppgaverOptions = {
-  aktivEnhet: string[];
+  aktiveEnheter: string[];
   visKunOppgaverSomBrukerErVeilederPå?: boolean;
   type: 'LEDIGE_OPPGAVER' | 'ALLE_OPPGAVER';
   aktivKøId: number;
@@ -55,7 +55,7 @@ function lagUrlSuffix(filter: OppgavelisteRequest['utvidetFilter']): string {
 }
 
 export function useOppgaver({
-  aktivEnhet,
+  aktiveEnheter,
   visKunOppgaverSomBrukerErVeilederPå = false,
   aktivKøId,
   kunLedigeOppgaver = true,
@@ -75,7 +75,7 @@ export function useOppgaver({
     if (previousPageData && previousPageData.length === 0) return null;
     if (!aktivKøId) return null;
 
-    const base = `api/oppgave/oppgaveliste/${aktivKøId}/${aktivEnhet.join(',')}`;
+    const base = `api/oppgave/oppgaveliste/${aktivKøId}/${aktiveEnheter.join(',')}`;
     const suffix = visKunOppgaverSomBrukerErVeilederPå ? '/veileder/' : '/';
     const typeSuffix = `/${type}`;
     const utvidetFilterSuffix = lagUrlSuffix(utvidetFilter);
@@ -103,7 +103,7 @@ export function useOppgaver({
 
       const payload: OppgavelisteRequest = {
         filterId: aktivKøId!,
-        enheter: aktivEnhet,
+        enheter: aktiveEnheter,
         kunLedigeOppgaver: kunLedigeOppgaver,
         veileder: visKunOppgaverSomBrukerErVeilederPå,
         paging: paging,
@@ -142,13 +142,13 @@ export function useOppgaver({
 }
 
 export function useLedigeOppgaver(
-  aktivEnhet: string[],
+  aktiveEnheter: string[],
   visKunOppgaverSomBrukerErVeilederPå: boolean,
   aktivKøId: number,
   utvidetFilter?: OppgavelisteRequest['utvidetFilter']
 ) {
   return useOppgaver({
-    aktivEnhet,
+    aktiveEnheter,
     visKunOppgaverSomBrukerErVeilederPå,
     type: 'LEDIGE_OPPGAVER',
     aktivKøId,
@@ -157,12 +157,12 @@ export function useLedigeOppgaver(
 }
 
 export function useAlleOppgaverForEnhet(
-  aktivEnhet: string[],
+  aktiveEnheter: string[],
   aktivKøId: number,
   utvidetFilter?: OppgavelisteRequest['utvidetFilter']
 ) {
   return useOppgaver({
-    aktivEnhet,
+    aktiveEnheter,
     aktivKøId,
     visKunOppgaverSomBrukerErVeilederPå: false,
     kunLedigeOppgaver: false,
