@@ -12,4 +12,5 @@ export const toggles = {
   featureVisAvslagsårsaker: !isProd(),
   featureEndringslogg: !isProd(),
   featureArbeidsopptrapping: !isProd(),
+  featureComboboxForValgAvEnheter: !isProd(), // Finnes ikke i unleash - kun frontend-toggle
 };

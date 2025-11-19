@@ -4,10 +4,13 @@ import { useEffect, useState } from 'react';
 import { Heading, HStack, Tabs, VStack } from '@navikt/ds-react';
 import { Enhet } from 'lib/types/oppgaveTypes';
 import { MineOppgaver } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
-import { LedigeOppgaver } from 'components/oppgaveliste/ledigeoppgaver/LedigeOppgaver';
-import { AlleOppgaver } from 'components/oppgaveliste/alleoppgaver/AlleOppgaver';
+import { LedigeOppgaverNy } from 'components/oppgaveliste/ledigeoppgaver/LedigeOppgaverNy';
+import { AlleOppgaverNy } from 'components/oppgaveliste/alleoppgaver/AlleOppgaverNy';
 import { useLagreAktivTab } from 'hooks/oppgave/aktivTabHook';
 import { TildelOppgaverProvider } from 'context/oppgave/TildelOppgaverContext';
+import { AlleOppgaver } from 'components/oppgaveliste/alleoppgaver/AlleOppgaver';
+import { LedigeOppgaver } from 'components/oppgaveliste/ledigeoppgaver/LedigeOppgaver';
+import { toggles } from 'lib/utils/toggles';
 
 interface Props {
   enheter: Enhet[];
@@ -51,8 +54,16 @@ export const OppgaveListe = ({ enheter }: Props) => {
         </HStack>
 
         {selected === 'Mine oppgaver' && <MineOppgaver />}
-        {selected === 'Ledige oppgaver' && <LedigeOppgaver enheter={enheter} />}
-        {selected === 'Alle oppgaver' && <AlleOppgaver enheter={enheter} />}
+        {selected === 'Ledige oppgaver' && !toggles.featureComboboxForValgAvEnheter && (
+          <LedigeOppgaver enheter={enheter} />
+        )}
+        {selected === 'Ledige oppgaver' && toggles.featureComboboxForValgAvEnheter && (
+          <LedigeOppgaverNy enheter={enheter} />
+        )}
+        {selected === 'Alle oppgaver' && !toggles.featureComboboxForValgAvEnheter && <AlleOppgaver enheter={enheter} />}
+        {selected === 'Alle oppgaver' && toggles.featureComboboxForValgAvEnheter && (
+          <AlleOppgaverNy enheter={enheter} />
+        )}
       </TildelOppgaverProvider>
     </VStack>
   );

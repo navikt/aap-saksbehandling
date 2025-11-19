@@ -82,8 +82,8 @@ export async function hentKøerForEnheterClient(enheter: string[]) {
   return clientFetch<Kø[]>(url, 'GET');
 }
 
-export async function plukkNesteOppgaveClient(filterId: number, aktivEnhet: string) {
-  const payload: NesteOppgaveRequestBody = { filterId, enheter: [aktivEnhet || ''] };
+export async function plukkNesteOppgaveClient(filterId: number, valgteEnhetsnumre: string[]) {
+  const payload: NesteOppgaveRequestBody = { filterId, enheter: valgteEnhetsnumre };
   return await clientFetch<NesteOppgaveResponse | null>('/oppgave/api/oppgave/neste', 'POST', payload);
 }
 export async function plukkOppgaveClient(oppgaveId: number, versjon: number) {
