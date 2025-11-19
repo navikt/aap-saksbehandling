@@ -26,6 +26,7 @@ import { NyVurderingExpandableCard } from 'components/periodisering/nyvurderinge
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
 import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
+import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 
 interface Props {
   behandlingVersjon: number;
@@ -150,14 +151,14 @@ export const LovvalgOgMedlemskapPeriodisert = ({
       {vurderingerFields.map((vurdering, index) => (
         <NyVurderingExpandableCard
           key={vurdering.id}
-          nestePeriodeFraDato={form.watch(`vurderinger.${index + 1}.fraDato`)}
+          fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
+          nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
           isLast={index === vurderingerFields.length - 1}
           oppfylt={
             form.watch(`vurderinger.${index}.medlemskap.varMedlemIFolketrygd`)
               ? form.watch(`vurderinger.${index}.medlemskap.varMedlemIFolketrygd`) === JaEllerNei.Ja
               : undefined
           }
-          fraDato={vurdering.fraDato}
           vurdertAv={vurdering.vurdertAv}
           finnesFeil={finnesFeilForVurdering(index, errorList)}
         >

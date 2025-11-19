@@ -23,6 +23,7 @@ import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortper
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
 import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
 import { LovOgMedlemskapVurderingForm } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/types';
+import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 
 type Props = {
   grunnlag: OppholdskravGrunnlagResponse | undefined;
@@ -148,13 +149,13 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
       {vurderingerFields.map((vurdering, index) => (
         <NyVurderingExpandableCard
           key={vurdering.id}
-          fraDato={vurdering.fraDato}
+          fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
           oppfylt={
             form.watch(`vurderinger.${index}.oppfyller`)
               ? form.watch(`vurderinger.${index}.oppfyller`) === JaEllerNei.Ja
               : undefined
           }
-          nestePeriodeFraDato={form.watch(`vurderinger.${index + 1}.fraDato`)}
+          nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
           isLast={index === vurderingerFields.length - 1}
           vurdertAv={vurdering.vurdertAv}
           finnesFeil={finnesFeilForVurdering(index, errorList)}

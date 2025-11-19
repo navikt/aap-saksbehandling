@@ -25,6 +25,7 @@ import { ArbeidsopptrappingVurderingFormInput } from 'components/behandlinger/sy
 import { VStack } from '@navikt/ds-react';
 import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
 import { IkkeVurderbarPeriode } from 'components/periodisering/IkkeVurderbarPeriode';
+import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 
 interface Props {
   behandlingVersjon: number;
@@ -173,7 +174,7 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
       {fields.map((vurdering, index) => (
         <NyVurderingExpandableCard
           key={vurdering.id}
-          fraDato={vurdering.fraDato}
+          fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
           oppfylt={
             form.watch(`vurderinger.${index}.reellMulighetTilOpptrapping`) &&
             form.watch(`vurderinger.${index}.rettPaaAAPIOpptrapping`)
@@ -181,7 +182,7 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
                 form.watch(`vurderinger.${index}.rettPaaAAPIOpptrapping`) === JaEllerNei.Ja
               : undefined
           }
-          nestePeriodeFraDato={form.watch(`vurderinger.${index + 1}.fraDato`)}
+          nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
           isLast={index === fields.length - 1}
           vurdertAv={vurdering.vurdertAv}
           finnesFeil={finnesFeilForVurdering(index, errorList)}

@@ -1,6 +1,13 @@
-import { getYear, isAfter, isBefore, isEqual, isFuture, parse } from 'date-fns';
+import { getYear, isAfter, isBefore, isEqual, isFuture, isValid, parse } from 'date-fns';
 import { parseDatoFraDatePicker } from 'lib/utils/date';
 
+export function gyldigDatoEllerNull(value?: string) {
+  const inputDato = parseDatoFraDatePicker(value);
+  if (isValid(inputDato)) {
+    return inputDato as Date;
+  }
+  return null;
+}
 export function validerDato(value?: string) {
   if (!value) {
     return 'Du må sette en dato';

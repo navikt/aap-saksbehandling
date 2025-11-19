@@ -96,7 +96,9 @@ export const ArbeidsopptrappingVurderingFormInput = ({
       />
       {rettPåAAPIOpptrapping === JaEllerNei.Ja && (
         <HStack>
-          <Alert variant={'info'}>Har du husket å lage en aktivitet for opptrappingen i aktivitetsplanen?</Alert>
+          <Alert size={'small'} variant={'info'}>
+            Har du husket å lage en aktivitet for opptrappingen i aktivitetsplanen?
+          </Alert>
         </HStack>
       )}
     </VStack>
