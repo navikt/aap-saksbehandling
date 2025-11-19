@@ -117,7 +117,7 @@ export const FastsettArbeidsevne = ({ grunnlag, behandlingVersjon, readOnly, ini
 
   return (
     <VilkårskortMedFormOgMellomlagringNyVisning
-      heading={'§ 11-23 andre ledd. Arbeidsevne som ikke er utnyttet'}
+      heading={'§ 11-23 andre ledd. Arbeidsevne som ikke er utnyttet (valgfritt)'}
       steg={'FASTSETT_ARBEIDSEVNE'}
       vilkårTilhørerNavKontor={true}
       defaultOpen={showAsOpen}

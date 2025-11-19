@@ -171,7 +171,7 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
     case '8002':
       return 'Avklar oppfølgingsbehov NAY';
     case '5057':
-      return 'Arbeidsopptrapping § 11-23 6. ledd';
+      return 'Arbeidsopptrapping § 11-23 sjette ledd';
   }
 }
 

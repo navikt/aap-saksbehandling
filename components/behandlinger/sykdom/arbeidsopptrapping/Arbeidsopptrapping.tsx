@@ -120,7 +120,7 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
   const errorList = mapPeriodiserteVurderingerErrorList<LovOgMedlemskapVurderingForm>(form.formState.errors);
   return (
     <VilkårskortPeriodisert
-      heading={'§ 11-23 6. ledd. Arbeidsopptrapping (valgfritt)'}
+      heading={'§ 11-23 sjette ledd. Arbeidsopptrapping (valgfritt)'}
       steg={'ARBEIDSOPPTRAPPING'}
       onSubmit={form.handleSubmit(onSubmit)}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}

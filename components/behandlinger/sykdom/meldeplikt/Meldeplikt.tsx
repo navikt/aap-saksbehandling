@@ -102,7 +102,7 @@ export const Meldeplikt = ({ behandlingVersjon, grunnlag, readOnly, initialMello
 
   return (
     <VilkårskortMedFormOgMellomlagringNyVisning
-      heading={'§ 11-10 tredje ledd. Unntak fra meldeplikt'}
+      heading={'§ 11-10 tredje ledd. Unntak fra meldeplikt (valgfritt)'}
       steg="FRITAK_MELDEPLIKT"
       vilkårTilhørerNavKontor={true}
       defaultOpen={showAsOpen}
