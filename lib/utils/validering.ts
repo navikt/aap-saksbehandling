@@ -13,12 +13,13 @@ export function validerPeriodiserteVurderingerRekkefølge({
   form,
   grunnlag,
   nyeVurderinger,
+  tidligsteDatoMåMatcheMedRettighetsperiode = true,
 }: {
   form: UseFormReturn<any>;
   grunnlag?: PeriodiserteVurderingerDto<VurderingDto>;
   nyeVurderinger: Array<PeriodisertVurderingFormFields>;
+  tidligsteDatoMåMatcheMedRettighetsperiode?: boolean;
 }) {
-  // TODO: må eksistere minst en vurdering?
   const sorterteVurderinger = nyeVurderinger.toSorted((a, b) => {
     const aParsed = stringToDate(a.fraDato, 'dd.MM.yyyy')!;
     const bParsed = stringToDate(b.fraDato, 'dd.MM.yyyy')!;
@@ -35,19 +36,21 @@ export function validerPeriodiserteVurderingerRekkefølge({
     return false;
   }
 
-  const tidligsteDato = min([
-    ...sorterteVurderinger.map((i) => parseDatoFraDatePicker(i.fraDato)!),
-    ...(grunnlag?.sisteVedtatteVurderinger.map((i) => parseISO(i.fom)) || []),
-  ]);
+  if (tidligsteDatoMåMatcheMedRettighetsperiode) {
+    const tidligsteDato = min([
+      ...sorterteVurderinger.map((i) => parseDatoFraDatePicker(i.fraDato)!),
+      ...(grunnlag?.sisteVedtatteVurderinger.map((i) => parseISO(i.fom)) || []),
+    ]);
 
-  const tidligsteDatoSomMåVurderes = new Date(grunnlag?.kanVurderes[0]?.fom!);
-  if (isAfter(tidligsteDato, tidligsteDatoSomMåVurderes)) {
-    nyeVurderinger.forEach((vurdering, index) => {
-      form.setError(`vurderinger.${index}.fraDato`, {
-        message: `Den tidligste vurderte datoen må være startdatoen for rettighetsperioden. Tidligste vurderte dato er ${formaterDatoForFrontend(tidligsteDato)} men rettighetsperioden starter ${formaterDatoForFrontend(tidligsteDatoSomMåVurderes)}`,
+    const tidligsteDatoSomMåVurderes = new Date(grunnlag?.kanVurderes[0]?.fom!);
+    if (isAfter(tidligsteDato, tidligsteDatoSomMåVurderes)) {
+      nyeVurderinger.forEach((vurdering, index) => {
+        form.setError(`vurderinger.${index}.fraDato`, {
+          message: `Den tidligste vurderte datoen må være startdatoen for rettighetsperioden. Tidligste vurderte dato er ${formaterDatoForFrontend(tidligsteDato)} men rettighetsperioden starter ${formaterDatoForFrontend(tidligsteDatoSomMåVurderes)}`,
+        });
       });
-    });
-    return false;
+      return false;
+    }
   }
 
   return true;

@@ -92,6 +92,7 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
       form,
       nyeVurderinger: data.vurderinger,
       grunnlag,
+      tidligsteDatoMåMatcheMedRettighetsperiode: false,
     });
     if (!erPerioderGyldige) {
       return;
