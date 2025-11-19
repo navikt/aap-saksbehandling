@@ -163,7 +163,7 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
               svar={getJaNeiEllerUndefined(vurdering.reellMulighetTilOpptrapping)!}
             />
             <SpørsmålOgSvar
-              spørsmål="Har brukeren rett på Aap i arbeidsopptrapping etter § 11-23 6. ledd?"
+              spørsmål="Har brukeren rett på AAP i arbeidsopptrapping etter § 11-23 6. ledd?"
               svar={getJaNeiEllerUndefined(vurdering.rettPaaAAPIOpptrapping)!}
             />
           </VStack>
