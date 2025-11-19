@@ -20,7 +20,9 @@ describe('Meldeplikt', () => {
   describe('generelt', () => {
     it('har overskrift for å identifisere steget', () => {
       render(<Meldeplikt behandlingVersjon={0} readOnly={false} />);
-      expect(screen.getByRole('heading', { name: '§ 11-10 tredje ledd. Unntak fra meldeplikt' })).toBeVisible();
+      expect(
+        screen.getByRole('heading', { name: '§ 11-10 tredje ledd. Unntak fra meldeplikt (valgfritt)' })
+      ).toBeVisible();
     });
 
     it('er lukket initielt', () => {
@@ -327,7 +329,7 @@ async function klikkPåNyPeriode() {
 }
 
 async function åpneVilkårskort() {
-  const region = screen.getByRole('region', { name: '§ 11-10 tredje ledd. Unntak fra meldeplikt' });
+  const region = screen.getByRole('region', { name: '§ 11-10 tredje ledd. Unntak fra meldeplikt (valgfritt)' });
   const button = within(region).getByRole('button');
   await user.click(button);
 }

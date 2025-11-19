@@ -38,7 +38,7 @@ describe('FastsettArbeidsevne', () => {
     it('Skal ha riktig heading', () => {
       render(<FastsettArbeidsevne readOnly={false} behandlingVersjon={0} grunnlag={grunnlagUtenVurdering} />);
       const heading = screen.getByRole('heading', {
-        name: '§ 11-23 andre ledd. Arbeidsevne som ikke er utnyttet',
+        name: '§ 11-23 andre ledd. Arbeidsevne som ikke er utnyttet (valgfritt)',
         level: 3,
       });
       expect(heading).toBeVisible();
@@ -357,7 +357,7 @@ describe('FastsettArbeidsevne', () => {
 
   async function åpneVilkårskort() {
     const region = screen.getByRole('region', {
-      name: '§ 11-23 andre ledd. Arbeidsevne som ikke er utnyttet',
+      name: '§ 11-23 andre ledd. Arbeidsevne som ikke er utnyttet (valgfritt)',
     });
     const button = within(region).getByRole('button');
     await user.click(button);
