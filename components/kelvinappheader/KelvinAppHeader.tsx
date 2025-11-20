@@ -116,7 +116,7 @@ export const KelvinAppHeader = ({
               backendUrl={'/saksbehandling/api'}
               dataset={'production'}
               maxEntries={50}
-              appName={'Arbeidsavklaringspenger'}
+              appName={'Kelvin'}
               alignLeft={true}
               stil={'lys'}
             />
