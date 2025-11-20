@@ -3924,7 +3924,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  '/api/drift/flyttbehandlingtilstart/{referanse}': {
+  '/api/drift/behandling/{referanse}/kjor-fra-steg': {
     parameters: {
       query?: never;
       header?: never;
@@ -3943,7 +3943,11 @@ export interface paths {
         };
         cookie?: never;
       };
-      requestBody?: never;
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['no.nav.aap.behandlingsflyt.drift.`DriftApiKt$driftAPI$1$KjorFraSteg`'];
+        };
+      };
       responses: {
         /** @description OK */
         200: {
@@ -4115,6 +4119,46 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/test/endre/{saksnummer}/legg-til-institusjonsopphold': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description saksnummer */
+          saksnummer: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['no.nav.aap.behandlingsflyt.LeggTilInstitusjonsoppholdDTO'];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -4127,6 +4171,22 @@ export interface components {
     'no.nav.aap.behandlingsflyt.Institusjoner': {
       fengsel?: boolean | null;
       sykehus?: boolean | null;
+    };
+    'no.nav.aap.behandlingsflyt.LeggTilInstitusjonsoppholdDTO': {
+      /** @enum {string} */
+      institusjonstype: 'AS' | 'FO' | 'HS';
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      oppholdFom: string;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      oppholdTom: string;
+      /** @enum {string} */
+      oppholdstype: 'A' | 'D' | 'F' | 'H' | 'P' | 'R' | 'S' | 'V' | 'UKJENT';
     };
     'no.nav.aap.behandlingsflyt.OpprettTestcaseDTO': {
       barn: components['schemas']['no.nav.aap.behandlingsflyt.TestBarn'][];
@@ -9806,12 +9866,6 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningYtelseVurderingDTO': {
       begrunnelse?: string | null;
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      fristNyRevurdering?: string | null;
-      maksDatoEndelig?: boolean | null;
       vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningVurderingDTO'][];
       vurdertAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
     };
@@ -10966,6 +11020,74 @@ export interface components {
       dato: string;
       enhetsnavn?: string | null;
       ident: string;
+    };
+    'no.nav.aap.behandlingsflyt.drift.`DriftApiKt$driftAPI$1$KjorFraSteg`': {
+      /** @enum {string} */
+      steg:
+        | 'START_BEHANDLING'
+        | 'SEND_FORVALTNINGSMELDING'
+        | 'VURDER_RETTIGHETSPERIODE'
+        | 'SØKNAD'
+        | 'VURDER_ALDER'
+        | 'VURDER_LOVVALG'
+        | 'VURDER_MEDLEMSKAP'
+        | 'VURDER_OPPHOLDSKRAV'
+        | 'FASTSETT_MELDEPERIODER'
+        | 'AVKLAR_STUDENT'
+        | 'VURDER_BISTANDSBEHOV'
+        | 'OVERGANG_UFORE'
+        | 'OVERGANG_ARBEID'
+        | 'VURDER_SYKEPENGEERSTATNING'
+        | 'FASTSETT_SYKDOMSVILKÅRET'
+        | 'VURDER_YRKESSKADE'
+        | 'FRITAK_MELDEPLIKT'
+        | 'SYKDOMSVURDERING_BREV'
+        | 'KVALITETSSIKRING'
+        | 'BARNETILLEGG'
+        | 'AVKLAR_SYKDOM'
+        | 'ARBEIDSOPPTRAPPING'
+        | 'REFUSJON_KRAV'
+        | 'FASTSETT_ARBEIDSEVNE'
+        | 'FASTSETT_BEREGNINGSTIDSPUNKT'
+        | 'FASTSETT_GRUNNLAG'
+        | 'VIS_GRUNNLAG'
+        | 'MANGLENDE_LIGNING'
+        | 'SAMORDNING_UFØRE'
+        | 'SAMORDNING_GRADERING'
+        | 'SAMORDNING_AVSLAG'
+        | 'SAMORDNING_ANDRE_STATLIGE_YTELSER'
+        | 'SAMORDNING_ARBEIDSGIVER'
+        | 'SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV'
+        | 'IKKE_OPPFYLT_MELDEPLIKT'
+        | 'FASTSETT_UTTAK'
+        | 'EFFEKTUER_11_7'
+        | 'DU_ER_ET_ANNET_STED'
+        | 'BEREGN_TILKJENT_YTELSE'
+        | 'SIMULERING'
+        | 'FORESLÅ_VEDTAK'
+        | 'FATTE_VEDTAK'
+        | 'IVERKSETT_VEDTAK'
+        | 'OPPRETT_REVURDERING'
+        | 'AVBRYT_REVURDERING'
+        | 'BREV'
+        | 'PÅKLAGET_BEHANDLING'
+        | 'FULLMEKTIG'
+        | 'FORMKRAV'
+        | 'BEHANDLENDE_ENHET'
+        | 'KLAGEBEHANDLING_KONTOR'
+        | 'KLAGEBEHANDLING_NAY'
+        | 'KLAGEBEHANDLING_OPPSUMMERING'
+        | 'OMGJØRING'
+        | 'TREKK_KLAGE'
+        | 'OPPRETTHOLDELSE'
+        | 'SVAR_FRA_ANDREINSTANS'
+        | 'IVERKSETT_KONSEKVENS'
+        | 'START_OPPFØLGINGSBEHANDLING'
+        | 'AVKLAR_OPPFØLGING'
+        | 'VURDER_AKTIVITETSPLIKT_11_7'
+        | 'IVERKSETT_BRUDD'
+        | 'VURDER_AKTIVITETSPLIKT_11_9'
+        | 'UDEFINERT';
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.aktivitetsplikt.Aktivitetsplikt11_7L\u00F8sningDto': {
       begrunnelse: string;
@@ -13189,7 +13311,7 @@ export interface components {
       /** @enum {string} */
       erStudent: 'Ja' | 'Avbrutt' | 'Nei';
       /** @enum {string|null} */
-      kommeTilbake?: 'Ja' | 'Nei' | 'VetIkke' | 'Vet ikke' | null;
+      kommeTilbake?: 'Ja' | 'Nei' | 'VetIkke' | null;
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.S\u00F8knadV0': {
       medlemskap?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.S\u00F8knadMedlemskapDto'];
@@ -13657,7 +13779,6 @@ export interface components {
       mottakereDistStatus: components['schemas']['no.nav.aap.brev.kontrakt.MottakerDistStatus'][];
     };
     'no.nav.aap.brev.kontrakt.KanDistribuereBrevRequest': {
-      behandlingsReferanse: string;
       brukerIdent: string;
       mottakerIdentListe: string[];
     };

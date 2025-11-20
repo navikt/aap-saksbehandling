@@ -30,7 +30,7 @@ export function stringToJaNeiIkkeOppgitt(value: string) {
 export enum JaNeiVetIkke {
   JA = 'Ja',
   NEI = 'Nei',
-  VET_IKKE = 'Vet ikke'
+  VET_IKKE = 'VetIkke',
 }
 
 export const JaNeiEllerVetIkkeOptions: ValuePair[] = [

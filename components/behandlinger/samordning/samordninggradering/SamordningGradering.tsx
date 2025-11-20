@@ -126,8 +126,6 @@ export const SamordningGradering = ({
               behovstype: Behovstype.AVKLAR_SAMORDNING_GRADERING,
               vurderingerForSamordning: {
                 begrunnelse: data.begrunnelse,
-                maksDatoEndelig: true, // hardkodes til true - var påkrevd tidligere pga opprettelse av revurdering
-                fristNyRevurdering: null, // hardkodes til null - var et valg tidligere pga opprettelse av revurdering
                 vurderteSamordningerData: (data.vurderteSamordninger || []).map((vurdertSamordning) => ({
                   manuell: vurdertSamordning.manuell,
                   gradering: vurdertSamordning.gradering,

@@ -105,13 +105,12 @@ export const SkriveBrev = ({
 
     if (brukerIdent) {
       const valgteMottakereIdentListe = valgteMottakere
-        .map(mottaker => mottaker.ident)
-        .filter(ident => typeof ident === 'string')
-      const mottakerIdentListe = valgteMottakereIdentListe.length > 0 ? valgteMottakereIdentListe : [brukerIdent]
+        .map((mottaker) => mottaker.ident)
+        .filter((ident) => typeof ident === 'string');
+      const mottakerIdentListe = valgteMottakereIdentListe.length > 0 ? valgteMottakereIdentListe : [brukerIdent];
       const response = await clientKanDistribuereBrev(referanse, {
-        behandlingsReferanse: "",
         brukerIdent,
-        mottakerIdentListe
+        mottakerIdentListe,
       });
 
       if (isSuccess(response)) {
@@ -121,7 +120,7 @@ export const SkriveBrev = ({
       }
     }
     return true;
-  }
+  };
 
   return (
     <>
@@ -182,11 +181,11 @@ export const SkriveBrev = ({
             signatur={signaturer}
             readonly={readOnly}
           />
-          {!kanDistribuereTilAlleMottakere() &&
+          {!kanDistribuereTilAlleMottakere() && (
             <Alert variant={'warning'} size={'small'} className={'fit-content'}>
               Brevet kan ikke distribueres til alle mottakere. Se rutinebeskrivelse for manuell håndtering.
             </Alert>
-          }
+          )}
           {!readOnly && (
             <Button
               disabled={status !== 'FORHÅNDSVISNING_KLAR'}
@@ -282,4 +281,3 @@ function VelgeMottakere({
     </div>
   );
 }
-
