@@ -13,6 +13,7 @@ import { RadioGroupWrapper } from './radiogroupwrapper/RadioGroupWrapper';
 import { ComboboxWrapper } from './comboboxwrapper/ComboboxWrapper';
 import { MultipleComboboxWrapper } from './multiplecomboboxwrapper/MultipleComboboxWrapper';
 import { DateInputWrapper } from './dateinputwrapper/DateInputWrapper';
+import { SwitchWrapper } from 'components/form/switchwrapper/SwitchWrapper';
 
 export interface ValuePair<Enum = string> {
   value: Enum;
@@ -63,6 +64,19 @@ export const FormField = <FormFieldIds extends FieldValues>(props: Props<FormFie
           className={className}
           autocomplete={autocomplete}
           onChangeCustom={formField.onChange}
+        />
+      )}
+      {formField.type === 'switch' && (
+        <SwitchWrapper
+          name={formField.name}
+          label={formField.label}
+          description={formField.description}
+          hideLabel={formField.hideLabel}
+          control={form.control}
+          rules={formField.rules}
+          size={size}
+          readOnly={formField.readOnly}
+          className={className}
         />
       )}
       {formField.type === 'radio' && (

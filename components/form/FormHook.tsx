@@ -12,6 +12,7 @@ export type FormFieldConfig<FormFieldIds extends FieldValues> =
   | FormFieldText<FormFieldIds>
   | FormFieldDate<FormFieldIds>
   | FormFieldDateInput<FormFieldIds>
+  | FormFieldSwitch<FormFieldIds>
   | FormFieldRadio<FormFieldIds>
   | FormFieldSelect<FormFieldIds>
   | FormFieldCheckbox<FormFieldIds>
@@ -39,6 +40,11 @@ interface FormFieldSelect<FormFieldIds extends FieldValues> extends BaseFormFiel
   type: 'select';
   options: Array<string | ValuePair>;
   defaultValue?: string;
+}
+
+interface FormFieldSwitch<FormFieldIds extends FieldValues> extends BaseFormField<FormFieldIds> {
+  type: 'switch';
+  defaultValue?: boolean;
 }
 
 interface FormFieldRadio<FormFieldIds extends FieldValues> extends BaseFormField<FormFieldIds> {

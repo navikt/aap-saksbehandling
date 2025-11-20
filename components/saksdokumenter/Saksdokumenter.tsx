@@ -15,6 +15,7 @@ import { storForbokstav } from 'lib/utils/string';
 
 interface FormFields {
   dokumentnavn: string;
+  visMeldekort: boolean;
 }
 
 export const Saksdokumenter = () => {
@@ -30,20 +31,31 @@ export const Saksdokumenter = () => {
       type: 'text',
       label: 'Søk i dokumenttitler',
     },
+    visMeldekort: {
+      type: 'switch',
+      label: 'Vis meldekort',
+      // hideLabel: true,
+      defaultValue: false,
+    },
   });
 
   if (isError(journalposterPåSak)) {
     return <ApiException apiResponses={[journalposterPåSak]} />;
   }
 
+  const dokumentnavn = form.watch('dokumentnavn');
+  const visMeldekort = form.watch('visMeldekort');
+
   const dokumenterFiltrertPåSøk =
-    (!form.watch('dokumentnavn')
-      ? journalposterPåSak?.data
-      : journalposterPåSak?.data?.filter((journalpost) =>
-          journalpost.dokumenter?.some((dok) =>
-            dok.tittel?.toLowerCase().includes(form.watch('dokumentnavn').toLowerCase())
-          )
-        )) || [];
+    journalposterPåSak?.data?.filter((journalpost) =>
+      journalpost.dokumenter?.some((dok) => {
+        const inklMeldekort = visMeldekort || !dok.brevkode?.includes('00-10.02');
+
+        return dokumentnavn
+          ? dok.tittel?.toLowerCase().includes(dokumentnavn.toLowerCase()) && inklMeldekort
+          : inklMeldekort;
+      })
+    ) || [];
 
   const skalVisePaginering = dokumenterFiltrertPåSøk.length > dokumenterPerPage;
 
@@ -58,9 +70,7 @@ export const Saksdokumenter = () => {
 
   return (
     <VStack gap={'4'}>
-      <HStack gap="2" align="end" wrap={false} justify="space-between">
-        <FormField form={form} formField={formFields.dokumentnavn} />
-
+      <div>
         <Button
           as={Link}
           variant="tertiary"
@@ -69,8 +79,13 @@ export const Saksdokumenter = () => {
           target="_blank"
           href={`/saksbehandling/sak/${saksnummer}/?t=DOKUMENTER`}
         >
-          Gå til dokumentoversikten
+          Se andre relevante dokumenter
         </Button>
+      </div>
+
+      <HStack gap="4" align="end" wrap={false}>
+        <FormField form={form} formField={formFields.dokumentnavn} />
+        <FormField form={form} formField={formFields.visMeldekort} />
       </HStack>
 
       <TableStyled size={'small'}>
@@ -108,7 +123,6 @@ export const Saksdokumenter = () => {
           )}
         </Table.Body>
       </TableStyled>
-
       {skalVisePaginering && (
         <VStack align={'center'}>
           <Pagination
