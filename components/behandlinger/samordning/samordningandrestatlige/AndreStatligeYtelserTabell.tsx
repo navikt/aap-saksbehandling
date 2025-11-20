@@ -34,6 +34,10 @@ const ytelsesoptions: ValuePair<SamordningAndreStatligeYtelserYtelse | undefined
     label: 'Omstillingsstønad',
   },
   {
+    value: 'GJENLEVENDEPENSJON',
+    label: 'Gjenlevendepensjon',
+  },
+  {
     value: 'OVERGANGSSTØNAD',
     label: 'Overgangsstønad',
   },
