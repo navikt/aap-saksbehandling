@@ -8,7 +8,6 @@ import { FieldArrayWithId, UseFormReturn } from 'react-hook-form';
 import { FormFieldsToTrinnsVurdering } from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingForm';
 import { ValuePair } from 'components/form/FormField';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
-import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { CheckboxWrapper } from 'components/form/checkboxwrapper/CheckboxWrapper';
 
@@ -80,13 +79,12 @@ export const TotrinnnsvurderingFelter = ({ readOnly, link, erKvalitetssikring, f
             </CheckboxWrapper>
 
             {annetGrunnErValgt && (
-              <TextFieldWrapper
+              <TextAreaWrapper
                 label={'Annen returårsak'}
                 description={'Kort beskrivelse (maks 50 tegn)'}
                 readOnly={readOnly}
                 control={form.control}
                 name={`totrinnsvurderinger.${index}.årsakFritekst`}
-                type={'text'}
                 rules={{
                   required: 'Annen returårsak må fylles ut',
                   maxLength: {
