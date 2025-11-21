@@ -122,11 +122,15 @@ export const Sykdomsvurdering = ({
           required: 'Du må velge når vurderingen gjelder fra',
           validate: {
             gyldigDato: (v) => validerDato(v as string),
-            kanIkkeVaereFoerSoeknadstidspunkt: (v) => {
+            datoInnenforRettighetsperioden: (v) => {
               const starttidspunkt = startOfDay(new Date(sak.periode.fom));
               const vurderingGjelderFra = stringToDate(v as string, 'dd.MM.yyyy');
+              const sluttenAvRettighetsperioden = startOfDay(new Date(sak.periode.tom));
               if (vurderingGjelderFra && isBefore(startOfDay(vurderingGjelderFra), starttidspunkt)) {
                 return 'Vurderingen kan ikke gjelde fra før starttidspunktet';
+              }
+              if (vurderingGjelderFra && isAfter(startOfDay(vurderingGjelderFra), sluttenAvRettighetsperioden)) {
+                return 'Vurderingen kan ikke gjelde fra etter slutten av rettighetsperioden.';
               }
               if (
                 behandlingErFørstegangsbehandling &&
