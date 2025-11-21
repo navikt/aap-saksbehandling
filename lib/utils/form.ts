@@ -131,7 +131,7 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
     case '5022':
       return 'Overstyr § 11-2 forutgående medlemskap';
     case '5035':
-      return 'Oppholdskrav § 11-3';
+      return '§ 11-23 sjette ledd. Arbeidsopptrapping (valgfritt)';
     case '5050':
       return 'Skriv brev';
     case '5051':
