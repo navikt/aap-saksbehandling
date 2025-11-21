@@ -84,6 +84,7 @@ export const TotrinnnsvurderingFelter = ({ readOnly, link, erKvalitetssikring, f
                 description={'Kort beskrivelse (maks 50 tegn)'}
                 readOnly={readOnly}
                 control={form.control}
+                maxLength={50}
                 name={`totrinnsvurderinger.${index}.årsakFritekst`}
                 rules={{
                   required: 'Annen returårsak må fylles ut',
