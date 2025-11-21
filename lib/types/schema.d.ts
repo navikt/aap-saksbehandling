@@ -10205,6 +10205,7 @@ export interface components {
         | 'OVERGANG_ARBEID'
         | 'DØDSFALL_BRUKER'
         | 'DØDSFALL_BARN'
+        | 'ARBEIDSOPPTRAPPING'
       )[];
       /** @enum {string|null} */
       '\u00E5rsakTilOpprettelse'?:
@@ -10493,6 +10494,7 @@ export interface components {
         | 'OVERGANG_ARBEID'
         | 'DØDSFALL_BRUKER'
         | 'DØDSFALL_BARN'
+        | 'ARBEIDSOPPTRAPPING'
       )[];
       vurdertAv: string;
       '\u00E5rsak'?: string | null;
@@ -10556,6 +10558,7 @@ export interface components {
             | 'OVERGANG_ARBEID'
             | 'DØDSFALL_BRUKER'
             | 'DØDSFALL_BARN'
+            | 'ARBEIDSOPPTRAPPING'
           )[]
         | null;
       '\u00E5rsak'?: string | null;
@@ -12936,6 +12939,7 @@ export interface components {
         | 'OPPHOLDSKRAV'
         | 'EFFEKTUER_AKTIVITETSPLIKT'
         | 'EFFEKTUER_AKTIVITETSPLIKT_11_9'
+        | 'ARBEIDSOPPTRAPPING'
       )[];
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ArbeidIPeriodeV0': {
@@ -13123,6 +13127,7 @@ export interface components {
         | 'OPPHOLDSKRAV'
         | 'EFFEKTUER_AKTIVITETSPLIKT'
         | 'EFFEKTUER_AKTIVITETSPLIKT_11_9'
+        | 'ARBEIDSOPPTRAPPING'
       )[];
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ManueltOppgittBarn': {
@@ -13204,6 +13209,7 @@ export interface components {
         | 'OPPHOLDSKRAV'
         | 'EFFEKTUER_AKTIVITETSPLIKT'
         | 'EFFEKTUER_AKTIVITETSPLIKT_11_9'
+        | 'ARBEIDSOPPTRAPPING'
       )[];
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.OmgjoeringskravbehandlingAvsluttetDetaljer': {
@@ -13268,6 +13274,7 @@ export interface components {
         | 'OPPHOLDSKRAV'
         | 'EFFEKTUER_AKTIVITETSPLIKT'
         | 'EFFEKTUER_AKTIVITETSPLIKT_11_9'
+        | 'ARBEIDSOPPTRAPPING'
       )[];
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Oppf\u00F8lgingsoppgave': components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Oppf\u00F8lgingsoppgaveV0'];
@@ -13421,7 +13428,8 @@ export interface components {
         | 'OVERGANG_UFORE'
         | 'OVERGANG_ARBEID'
         | 'DØDSFALL_BRUKER'
-        | 'DØDSFALL_BARN';
+        | 'DØDSFALL_BARN'
+        | 'ARBEIDSOPPTRAPPING';
     };
     'no.nav.aap.behandlingsflyt.sakogbehandling.behandling.VurderingsbehovOg\u00C5rsak': {
       beskrivelse?: string | null;
@@ -13545,6 +13553,7 @@ export interface components {
         | 'OVERGANG_ARBEID'
         | 'DØDSFALL_BRUKER'
         | 'DØDSFALL_BARN'
+        | 'ARBEIDSOPPTRAPPING'
         | null
       )[];
       '\u00E5rsakerTilRetur': components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.\u00C5rsakTilRetur'][];
@@ -13611,6 +13620,7 @@ export interface components {
         | 'OVERGANG_ARBEID'
         | 'DØDSFALL_BRUKER'
         | 'DØDSFALL_BARN'
+        | 'ARBEIDSOPPTRAPPING'
       )[];
       /** @enum {string|null} */
       '\u00E5rsakTilOpprettelse'?:

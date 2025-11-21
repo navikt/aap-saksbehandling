@@ -96,6 +96,8 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov): strin
       return 'Dødsfall bruker';
     case 'EFFEKTUER_AKTIVITETSPLIKT_11_9':
       return 'Effektuer aktivitetsplikt § 11-9';
+    case 'ARBEIDSOPPTRAPPING':
+      return 'Arbeidsopptrapping';
     default:
       return vurderingsbehov;
   }
