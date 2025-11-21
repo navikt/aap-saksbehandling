@@ -1,4 +1,4 @@
-import { Helseinstitusjon } from 'components/behandlinger/etannetsted/helseinstitusjon/Helseinstitusjon';
+import { Helseinstitusjon } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/Helseinstitusjon';
 import {
   hentHelseInstitusjonsVurdering,
   hentMellomlagring,

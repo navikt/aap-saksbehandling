@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { Soningsvurdering } from 'components/behandlinger/etannetsted/soning/Soningsvurdering';
+import { Soningsvurdering } from 'components/behandlinger/institusjonsopphold/soning/Soningsvurdering';
 import { render, screen } from 'lib/test/CustomRender';
 import { MellomlagretVurderingResponse, Soningsgrunnlag } from 'lib/types/types';
 import userEvent from '@testing-library/user-event';

@@ -7,7 +7,7 @@ import { Vedtak } from 'components/behandlinger/vedtak/Vedtak';
 import { AlderMedDataFetching } from 'components/behandlinger/alder/AlderMedDataFetching';
 import { Student } from 'components/behandlinger/sykdom/student/Student';
 import { Barnetillegg } from 'components/behandlinger/barnetillegg/Barnetillegg';
-import { EtAnnetSted } from 'components/behandlinger/etannetsted/EtAnnetSted';
+import { Institusjonsopphold } from 'components/behandlinger/institusjonsopphold/Institusjonsopphold';
 import { Brev } from 'components/behandlinger/brev/Brev';
 import { Underveis } from 'components/behandlinger/underveis/Underveis';
 import { ForutgåendeMedlemskap } from 'components/behandlinger/forutgåendemedlemskap/ForutgåendeMedlemskap';
@@ -66,7 +66,7 @@ export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe, classN
       {aktivGruppe === 'GRUNNLAG' && <Grunnlag behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'UNDERVEIS' && <Underveis behandlingsreferanse={behandlingsReferanse} />}
       {aktivGruppe === 'SAMORDNING' && <Samordning behandlingsreferanse={behandlingsReferanse} />}
-      {aktivGruppe === 'ET_ANNET_STED' && <EtAnnetSted behandlingsreferanse={behandlingsReferanse} />}
+      {aktivGruppe === 'ET_ANNET_STED' && <Institusjonsopphold behandlingsreferanse={behandlingsReferanse} />}
       {aktivGruppe === 'BARNETILLEGG' && <Barnetillegg behandlingsreferanse={behandlingsReferanse} />}
       {aktivGruppe === 'TILKJENT_YTELSE' && <TilkjentYtelse behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'SIMULERING' && <Simulering behandlingsReferanse={behandlingsReferanse} />}
