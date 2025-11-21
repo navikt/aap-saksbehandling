@@ -148,7 +148,7 @@ export const IkkeOppfyltMeldeplikt = ({ grunnlag, behandlingVersjon, readOnly }:
     <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'§ 11-10 andre ledd. Perioder uten overholdt meldeplikt'}
       steg={'IKKE_OPPFYLT_MELDEPLIKT'}
-      vilkårTilhørerNavKontor={true}
+      vilkårTilhørerNavKontor={false}
       onSubmit={handleSubmit}
       status={status}
       isLoading={isLoading}
