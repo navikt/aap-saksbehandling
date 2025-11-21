@@ -68,6 +68,7 @@ export const IkkeMeldtPerioderTable = ({
                     periode={periode.row}
                     checked={periodeErValgt}
                     onChange={onClickPeriode}
+                    readonly={readOnly}
                   />
                 ) : (
                   <IkkeMeldtPeriodeRowData
@@ -98,6 +99,7 @@ const IkkeMeldtPeriodeRowData = ({ periode, checked, onChange, readOnly }: IkkeM
     <Table.DataCell>
       <Checkbox
         disabled={readOnly === true}
+        readOnly={readOnly}
         checked={checked}
         onChange={(e) => onChange(e.target.checked, periode.fom)}
       >
@@ -115,13 +117,21 @@ const IkkeMeldtPeriodeRowData = ({ periode, checked, onChange, readOnly }: IkkeM
 type TidligereVurdertRowProps = {
   periode: OverstyringMeldepliktGrunnlagVurdering;
   checked: boolean;
+  readonly: boolean;
   onChange: (checked: boolean, fraDato: string) => void;
 };
 
-const TidligereVurdertPeriodeRow = ({ periode, checked, onChange }: TidligereVurdertRowProps) => (
+const TidligereVurdertPeriodeRow = ({ periode, checked, onChange, readonly }: TidligereVurdertRowProps) => (
   <>
     <Table.DataCell>
-      <Checkbox checked={checked} onChange={(e) => onChange(e.target.checked, periode.fraDato)}>{` `}</Checkbox>
+      <Checkbox
+        readOnly={readonly}
+        disabled={readonly}
+        checked={checked}
+        onChange={(e) => onChange(e.target.checked, periode.fraDato)}
+      >
+        {` `}
+      </Checkbox>
     </Table.DataCell>
     <Table.DataCell textSize="small">{formaterPeriode(periode.fraDato, periode.tilDato)}</Table.DataCell>
     <Table.DataCell textSize="small">
