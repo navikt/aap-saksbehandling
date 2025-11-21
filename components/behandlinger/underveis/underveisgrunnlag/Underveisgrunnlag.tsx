@@ -52,7 +52,7 @@ export const Underveisgrunnlag = ({ grunnlag, readOnly, behandlingVersjon }: Pro
     <VilkårskortMedFormOgMellomlagringNyVisning
       heading="Underveis"
       steg={'FASTSETT_UTTAK'}
-      vilkårTilhørerNavKontor={true}
+      vilkårTilhørerNavKontor={false}
       status={status}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       isLoading={isLoading}
