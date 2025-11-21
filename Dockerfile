@@ -1,22 +1,17 @@
+# Først et mellomsteg for å sette opp norsk locale
 FROM debian:13-slim AS locale
-
-# Sakset og tilpasset til NO fra https://github.com/docker-library/postgres/blob/master/17/bookworm/Dockerfile
-# make the "nb_NO.UTF-8" locale so app will be utf-8 enabled by default
 RUN set -eux; \
-	if [ -f /etc/dpkg/dpkg.cfg.d/docker ]; then \
-# if this file exists, we're likely in "debian:xxx-slim", and locales are thus being excluded so we need to remove that exclusion (since we need locales)
-		grep -q '/usr/share/locale' /etc/dpkg/dpkg.cfg.d/docker; \
-		sed -ri '/\/usr\/share\/locale/d' /etc/dpkg/dpkg.cfg.d/docker; \
-		! grep -q '/usr/share/locale' /etc/dpkg/dpkg.cfg.d/docker; \
-	fi; \
-	apt-get update; apt-get install -y --no-install-recommends locales; rm -rf /var/lib/apt/lists/*; \
+	apt-get update; apt-get install -y --no-install-recommends locales; \
 	echo 'nb_NO.UTF-8 UTF-8' >> /etc/locale.gen; \
 	locale-gen; \
 	locale -a | grep 'nb_NO.utf8'
 
-FROM gcr.io/distroless/nodejs22-debian12@sha256:4c4b23e6694fa5a5081f79f94ad1c272fb7ff5c4a9609edf228e5e39492543b5
+# Selve runtime imaget
+FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/node:22-slim
 
+# For å støtte særnorske bokstaver i filnavn
 COPY --from=locale /usr/lib/locale /usr/lib/locale
+
 ENV LANG='nb_NO.UTF-8' LC_ALL='nb_NO.UTF-8' TZ="Europe/Oslo"
 
 WORKDIR /app
