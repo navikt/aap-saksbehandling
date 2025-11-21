@@ -20,5 +20,11 @@ export const IkkeOppfyltMeldepliktMedDataFetching = async ({
     return <ApiException apiResponses={[grunnlag]} />;
   }
 
-  return <IkkeOppfyltMeldeplikt grunnlag={grunnlag.data} behandlingVersjon={behandlingVersjon} readOnly={readOnly} />;
+  return (
+    <IkkeOppfyltMeldeplikt
+      grunnlag={grunnlag.data}
+      behandlingVersjon={behandlingVersjon}
+      readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+    />
+  );
 };
