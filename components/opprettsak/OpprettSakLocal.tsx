@@ -128,7 +128,7 @@ export const OpprettSakLocal = () => {
         { value: 'MANGLENDE_LIGNING', label: 'Fastsett inntekt' },
         { value: 'VURDER_MEDLEMSKAP', label: 'Vurder medlemskap' },
         { value: 'VURDER_OPPHOLDSKRAV', label: 'Vurder oppholdskrav' },
-        { value: 'DU_ER_ET_ANNET_STED', label: 'Et annet sted' },
+        { value: 'DU_ER_ET_ANNET_STED', label: 'Institusjonsopphold' },
         { value: 'BARNETILLEGG', label: 'Barnetillegg' },
         { value: 'SAMORDNING_GRADERING', label: 'Samordning folketrygdytelser' },
         { value: 'SAMORDNING_ANDRE_STATLIGE_YTELSER', label: 'Samordning andre statlige ytelser' },

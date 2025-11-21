@@ -1,7 +1,7 @@
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
-import { HelseinstitusjonMedDataFetching } from 'components/behandlinger/etannetsted/helseinstitusjon/HelseinstitusjonMedDataFetching';
+import { HelseinstitusjonMedDataFetching } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/HelseinstitusjonMedDataFetching';
 import { SoningsvurderingMedDataFetching } from './soning/SoningsvurderingMedDataFetching';
 import { Behovstype } from 'lib/utils/form';
 import { isError } from 'lib/utils/api';
@@ -12,7 +12,7 @@ interface Props {
   behandlingsreferanse: string;
 }
 
-export const EtAnnetSted = async ({ behandlingsreferanse }: Props) => {
+export const Institusjonsopphold = async ({ behandlingsreferanse }: Props) => {
   const flyt = await hentFlyt(behandlingsreferanse);
   if (isError(flyt)) {
     return <ApiException apiResponses={[flyt]} />;

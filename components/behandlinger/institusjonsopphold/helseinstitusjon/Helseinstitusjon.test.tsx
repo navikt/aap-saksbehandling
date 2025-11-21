@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, test, vi } from 'vitest';
-import { Helseinstitusjon } from 'components/behandlinger/etannetsted/helseinstitusjon/Helseinstitusjon';
+import { Helseinstitusjon } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/Helseinstitusjon';
 import { render, screen, within } from 'lib/test/CustomRender';
 import { userEvent } from '@testing-library/user-event';
 import { HelseinstitusjonGrunnlag, MellomlagretVurderingResponse } from 'lib/types/types';

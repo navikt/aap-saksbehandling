@@ -60,11 +60,11 @@ export type KvalitetssikringTilgang =
 export type BarnetilleggGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnetillegg.BarnetilleggDto'];
 export type Soningsgrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.etannetsted.SoningsGrunnlagDto'];
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.SoningsGrunnlagDto'];
 export type HelseinstitusjonGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.etannetsted.HelseinstitusjonGrunnlagDto'];
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.HelseinstitusjonGrunnlagDto'];
 export type Institusjonsopphold =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.etannetsted.InstitusjonsoppholdDto'];
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.InstitusjonsoppholdDto'];
 
 export type FatteVedtakGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.FatteVedtakGrunnlagDto'];
