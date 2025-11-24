@@ -8,6 +8,7 @@ export enum Adressebeskyttelsesgrad {
 
 export enum Enhet {
   VIKAFOSSEN = '2103',
+  NAV_VÆRNES = '1783'
 }
 
 export function utledAdressebeskyttelse(oppgave?: Oppgave): Adressebeskyttelsesgrad[] {
@@ -18,7 +19,8 @@ export function utledAdressebeskyttelse(oppgave?: Oppgave): Adressebeskyttelsesg
     adressebeskyttelser.push(Adressebeskyttelsesgrad.FORTROLIG);
   }
 
-  if (oppgave?.enhet.endsWith('83')) {
+  // Det finnes én enhet som slutter på 83 som ikke er egen ansatt-enhet. TODO utled dette i backend isteden
+  if (oppgave?.enhet.endsWith('83') && oppgave?.enhet != Enhet.NAV_VÆRNES) {
     adressebeskyttelser.push(Adressebeskyttelsesgrad.EGEN_ANSATT);
   }
   return adressebeskyttelser;

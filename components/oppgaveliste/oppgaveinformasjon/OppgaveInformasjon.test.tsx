@@ -86,4 +86,14 @@ describe('OppgaveInformasjon', () => {
     render(<OppgaveInformasjon oppgave={{ ...oppgave, harFortroligAdresse: false }} />);
     expect(screen.queryByRole('img', { name: 'Adressebeskyttelse Ikon' })).not.toBeInTheDocument();
   });
+
+  it('skal vise egen ansatt-ikon når oppgave ligger på egen ansatt-enhet', () => {
+    render(<OppgaveInformasjon oppgave={{ ...oppgave, enhet: '4483' }} />);
+    expect(screen.getByRole('img', { name: 'Adressebeskyttelse Ikon' })).toBeVisible();
+  });
+
+  it('skal ikke vise egen ansatt-ikon når bruker ikke er egen ansatt', () => {
+    render(<OppgaveInformasjon oppgave={{ ...oppgave, enhet: '1783' }} />);
+    expect(screen.queryByRole('img', { name: 'Adressebeskyttelse Ikon' })).not.toBeInTheDocument();
+  });
 });
