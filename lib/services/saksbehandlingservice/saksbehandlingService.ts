@@ -53,6 +53,7 @@ import {
   OvergangArbeidGrunnlag,
   OvergangUforeGrunnlag,
   OverstyringMeldepliktGrunnlag,
+  PeriodisertForutgåendeMedlemskapGrunnlag,
   PeriodisertLovvalgMedlemskapGrunnlag,
   PåklagetBehandlingGrunnlag,
   RefusjonskravGrunnlag,
@@ -269,6 +270,11 @@ export const hentLovvalgMedlemskapGrunnlag = async (behandlingsReferanse: string
 export const hentForutgåendeMedlemskapGrunnlag = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/forutgaaendemedlemskap`;
   return await apiFetch<ForutgåendeMedlemskapGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentPeriodisertForutgåendeMedlemskapGrunnlag = async (behandlingsReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/forutgaaendemedlemskap-v2`;
+  return await apiFetch<PeriodisertForutgåendeMedlemskapGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentSamordningGraderingGrunnlag = async (behandlingsReferanse: string) => {
