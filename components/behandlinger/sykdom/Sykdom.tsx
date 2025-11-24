@@ -68,7 +68,7 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
         <StegSuspense>
           <ArbeidsopptrappingMedDataFetching
             behandlingsreferanse={behandlingsReferanse}
-            stegData={fritakMeldepliktSteg}
+            stegData={arbeidsopptrappingSteg}
           />
         </StegSuspense>
       )}
