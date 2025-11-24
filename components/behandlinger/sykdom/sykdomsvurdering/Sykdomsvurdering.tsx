@@ -84,7 +84,7 @@ export const Sykdomsvurdering = ({
 }: SykdomProps) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { sak } = useSak();
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
+  const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('AVKLAR_SYKDOM');
 
   const { slettMellomlagring, lagreMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
@@ -242,12 +242,12 @@ export const Sykdomsvurdering = ({
         behandlingErRevurderingAvFørstegangsbehandling()
       );
 
-      løsBehovOgGåTilNesteSteg(
+      løsPeriodisertBehovOgGåTilNesteSteg(
         {
           behandlingVersjon: behandlingVersjon,
           behov: {
             behovstype: Behovstype.AVKLAR_SYKDOM_KODE,
-            sykdomsvurderinger: [vurdering],
+            løsningerForPerioder: [vurdering],
           },
           referanse: behandlingsReferanse,
         },
