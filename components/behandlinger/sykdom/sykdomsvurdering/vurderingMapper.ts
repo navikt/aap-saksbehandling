@@ -113,7 +113,9 @@ function mapTilVurdering(
   return {
     ...nedsattArbeidsevneOgYrkesskade,
     begrunnelse: data.begrunnelse,
-    fom: formaterDatoForBackend(parse(data.vurderingenGjelderFra, 'dd.MM.yyyy', new Date())),
+    vurderingenGjelderFra: data.vurderingenGjelderFra
+      ? formaterDatoForBackend(parse(data.vurderingenGjelderFra, 'dd.MM.yyyy', new Date()))
+      : undefined,
     harSkadeSykdomEllerLyte,
     kodeverk,
     hoveddiagnose,
