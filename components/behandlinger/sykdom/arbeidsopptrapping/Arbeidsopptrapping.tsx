@@ -82,7 +82,7 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
   function onAddPeriode() {
     append({
       begrunnelse: '',
-      fraDato: fields.length === 0 ? formaterDatoForFrontend(new Date(grunnlag?.kanVurderes[0]?.fom!)) : undefined,
+      fraDato: fields.length === 0 ? formaterDatoForFrontend(new Date()) : undefined,
       reellMulighetTilOpptrapping: undefined,
       rettPaaAAPIOpptrapping: undefined,
     });
