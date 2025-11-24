@@ -2,14 +2,13 @@
 
 import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
-import { BodyLong, BodyShort, HStack, Label, VStack } from '@navikt/ds-react';
+import { BodyLong, BodyShort, Label, VStack } from '@navikt/ds-react';
 import { FormEvent } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { MellomlagretVurdering, SamordningArbeidsgiverGrunnlag } from 'lib/types/types';
-import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
-import { validerDato } from 'lib/validation/dateValidation';
+
 import { parse } from 'date-fns';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
@@ -30,7 +29,7 @@ interface Props {
 
 export interface SamordningArbeidsgiverFormFields {
   begrunnelse?: string;
-  perioder?: SamordningArbeidsgiverPerioder[];
+  perioder: SamordningArbeidsgiverPerioder[];
 }
 
 export interface SamordningArbeidsgiverPerioder {
@@ -59,6 +58,8 @@ export const SamordningArbeidsgiver = ({
     mellomlagretVurdering
   );
 
+  console.log(grunnlag);
+
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag.vurdering);
@@ -86,13 +87,11 @@ export const SamordningArbeidsgiver = ({
           behandlingVersjon: behandlingVersjon,
           behov: {
             behovstype: Behovstype.AVKLAR_SAMORDNING_ARBEIDSGIVER,
-            samordningAndreStatligeYtelserVurdering: {
-              begrunnelse: data.begrunnelse,
-              vurderingPerioder: data.perioder.map((periode) => ({
-                periode: {
-                  fom: formaterDatoForBackend(parse(periode.fom!, 'dd.MM.yyyy', new Date())),
-                  tom: formaterDatoForBackend(parse(periode.tom!, 'dd.MM.yyyy', new Date())),
-                },
+            SamordningArbeidsgiverVurdering: {
+              begrunnelse: data.begrunnelse!!,
+              perioder: data.perioder.map((periode) => ({
+                fom: formaterDatoForBackend(parse(periode.fom!, 'dd.MM.yyyy', new Date())),
+                tom: formaterDatoForBackend(parse(periode.tom!, 'dd.MM.yyyy', new Date())),
               })),
             },
           },
@@ -178,16 +177,17 @@ const byggFelter = (vurdering: SamordningArbeidsgiverGrunnlag['vurdering']): Val
 
 function mapVurderingToDraftFormFields(vurdering: SamordningArbeidsgiverGrunnlag['vurdering']): DraftFormFields {
   return {
-    begrunnelse: vurdering?.begrunnelse,
-    tom: vurdering?.tom ? formaterDatoForFrontend(vurdering?.tom) : '',
-    fom: vurdering?.fom ? formaterDatoForFrontend(vurdering?.fom) : '',
+    begrunnelse: vurdering?.begrunnelse || '',
+    perioder: (vurdering?.perioder || []).map((vurdering) => ({
+      fom: formaterDatoForFrontend(vurdering.fom),
+      tom: formaterDatoForFrontend(vurdering.tom),
+    })),
   };
 }
 
 function emptyDraftFormFields(): DraftFormFields {
   return {
     begrunnelse: '',
-    tom: '',
-    fom: '',
+    perioder: [],
   };
 }
