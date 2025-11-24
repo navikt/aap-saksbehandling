@@ -87,6 +87,7 @@ import { FetchResponse, isError, isSuccess } from 'lib/utils/api';
 import { Enhet } from 'lib/types/oppgaveTypes';
 import { Behovstype } from 'lib/utils/form';
 import { isLocal } from 'lib/utils/environment';
+import { notFound } from 'next/navigation';
 
 const saksbehandlingApiBaseUrl = process.env.BEHANDLING_API_BASE_URL;
 const saksbehandlingApiScope = process.env.BEHANDLING_API_SCOPE ?? '';
@@ -101,7 +102,11 @@ export const hentSak = async (saksnummer: string) => {
   const res = await apiFetch<SaksInfo>(url, saksbehandlingApiScope, 'GET');
 
   if (isError(res)) {
-    throw new Error('Kunne ikke hente påkrevd sak.');
+    if (res.status === 404) {
+      notFound();
+    } else {
+      throw new Error('Kunne ikke hente påkrevd sak.');
+    }
   } else {
     return res.data;
   }
