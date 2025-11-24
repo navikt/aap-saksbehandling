@@ -30,7 +30,7 @@ describe('skade eller lyte', () => {
     );
 
     expect(vurdering.begrunnelse).toEqual('test');
-    expect(vurdering.vurderingenGjelderFra).toEqual('2025-01-01');
+    expect(vurdering.fom).toEqual('2025-01-01');
     expect(vurdering.harSkadeSykdomEllerLyte).toBe(false); // Alt under harSkadeSykdomEllerLyte skal nullstilles
 
     expect(vurdering.kodeverk).toBeUndefined();
@@ -72,7 +72,7 @@ describe('skade eller lyte', () => {
     );
 
     expect(vurdering.begrunnelse).toEqual('test');
-    expect(vurdering.vurderingenGjelderFra).toEqual('2025-01-01');
+    expect(vurdering.fom).toEqual('2025-01-01');
     expect(vurdering.harSkadeSykdomEllerLyte).toBe(true);
 
     expect(vurdering.kodeverk).toBe('ICD10');
