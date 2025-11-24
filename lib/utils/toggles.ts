@@ -11,6 +11,5 @@ export const toggles = {
   featurePostmottakBehandlingerPåVent: !isProd(),
   featureVisAvslagsårsaker: !isProd(),
   featureEndringslogg: !isProd(),
-  featureArbeidsopptrapping: !isProd(),
   featureComboboxForValgAvEnheter: !isProd(), // Finnes ikke i unleash - kun frontend-toggle
 };

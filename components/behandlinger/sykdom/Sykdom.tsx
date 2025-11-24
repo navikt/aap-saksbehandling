@@ -64,7 +64,7 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
           />
         </StegSuspense>
       )}
-      {toggles.featureArbeidsopptrapping && arbeidsopptrappingSteg.skalViseSteg && (
+      {arbeidsopptrappingSteg.skalViseSteg && (
         <StegSuspense>
           <ArbeidsopptrappingMedDataFetching
             behandlingsreferanse={behandlingsReferanse}
