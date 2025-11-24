@@ -119,12 +119,13 @@ export function useOppgaver({
     oppgaverValgtKø
       ?.filter((res) => isSuccess(res))
       .map((res) => ({
-        antallOppgaver: res.data.antallTotalt,
         oppgaver: res.data.oppgaver,
         antallGjenståendeOppgaver: res.data.antallGjenstaaende,
       })) ?? [];
 
-  const antallOppgaver = oppgaverFlatMap.reduce((acc, { antallOppgaver }) => acc + antallOppgaver, 0);
+  const antallOppgaver =
+      oppgaverValgtKø?.filter((res) => isSuccess(res))[0].data.antallTotalt ?? 0
+
   const oppgaver = oppgaverFlatMap.flatMap(({ oppgaver }) => oppgaver);
   const sisteKallMotOppgave = oppgaverFlatMap.at(-1);
   const kanLasteInnFlereOppgaver = (sisteKallMotOppgave?.antallGjenståendeOppgaver ?? 0) > 0;
