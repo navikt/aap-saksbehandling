@@ -23,7 +23,6 @@ import { LokalBrukerBytte } from 'components/lokalbrukerbytte/LokalBrukerBytte';
 import { Roller } from 'lib/services/azure/azureUserService';
 import { SøkeResultat } from 'app/api/kelvinsok/route';
 import Endringslogg from '@navikt/familie-endringslogg';
-import { toggles } from 'lib/utils/toggles';
 
 interface BrukerInformasjon {
   navn: string;
@@ -98,7 +97,7 @@ export const KelvinAppHeader = ({
         </HStack>
 
         <Spacer />
-        {brukerInformasjon.NAVident && toggles.featureEndringslogg && (
+        {brukerInformasjon.NAVident && (
           <InternalHeader.Button
             as="div"
             onClick={(e) => {
