@@ -31,7 +31,6 @@ describe('skade eller lyte', () => {
 
     expect(vurdering.begrunnelse).toEqual('test');
     expect(vurdering.fom).toEqual('2025-01-01');
-    expect(vurdering.vurderingenGjelderFra).toEqual('2025-01-01');
     expect(vurdering.harSkadeSykdomEllerLyte).toBe(false); // Alt under harSkadeSykdomEllerLyte skal nullstilles
 
     expect(vurdering.kodeverk).toBeUndefined();

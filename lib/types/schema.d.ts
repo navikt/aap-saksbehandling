@@ -12078,6 +12078,11 @@ export interface components {
       erNedsettelseIArbeidsevneMerEnnHalvparten?: boolean | null;
       erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense?: boolean | null;
       erSkadeSykdomEllerLyteVesentligdel?: boolean | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fom: string;
       harSkadeSykdomEllerLyte: boolean;
       hoveddiagnose?: string | null;
       kodeverk?: string | null;
@@ -12085,8 +12090,7 @@ export interface components {
        * Format: date
        * @example 2025-04-01
        */
-      vurderingenGjelderFra: string;
-      fom: string;
+      tom?: string | null;
       yrkesskadeBegrunnelse?: string | null;
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.SykepengerVurderingDto': {
