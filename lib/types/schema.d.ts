@@ -6151,7 +6151,7 @@ export interface components {
         | '9002'
         | '9003'
         | '9004';
-      sykdomsvurderinger: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.SykdomsvurderingL\u00F8sningDto'][];
+      sykdomsvurderinger: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.SykdomsvurderingL\u00F8sningGammelDto'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarSykdomL\u00F8sning': {
       /** @enum {string} */
@@ -12093,6 +12093,30 @@ export interface components {
       tom?: string | null;
       yrkesskadeBegrunnelse?: string | null;
     };
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.SykdomsvurderingL\u00F8sningGammelDto': {
+      begrunnelse: string;
+      bidiagnoser?: string[] | null;
+      dokumenterBruktIVurdering: components['schemas']['no.nav.aap.verdityper.dokument.JournalpostId'][];
+      erArbeidsevnenNedsatt?: boolean | null;
+      erNedsettelseIArbeidsevneAvEnVissVarighet?: boolean | null;
+      erNedsettelseIArbeidsevneMerEnnHalvparten?: boolean | null;
+      erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense?: boolean | null;
+      erSkadeSykdomEllerLyteVesentligdel?: boolean | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fom?: string | null;
+      harSkadeSykdomEllerLyte: boolean;
+      hoveddiagnose?: string | null;
+      kodeverk?: string | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      vurderingenGjelderFra?: string | null;
+      yrkesskadeBegrunnelse?: string | null;
+    };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.SykepengerVurderingDto': {
       begrunnelse: string;
       dokumenterBruktIVurdering: components['schemas']['no.nav.aap.verdityper.dokument.JournalpostId'][];
@@ -12110,6 +12134,9 @@ export interface components {
         | 'FORELDREPENGER_INNEN_SEKS_MND'
         | null;
       'harRettP\u00E5': boolean;
+    };
+    'no.nav.aap.behandlingsflyt.flyt.ArenaStatusDTO': {
+      harArenaHistorikk: boolean;
     };
     'no.nav.aap.behandlingsflyt.flyt.AvklaringsbehovDTO': {
       definisjon: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.avklaringsbehov.Definisjon'];
@@ -12418,6 +12445,7 @@ export interface components {
         | 'IVERKSETT_BRUDD'
         | 'VURDER_AKTIVITETSPLIKT_11_9'
         | 'UDEFINERT';
+      arenaStatus?: components['schemas']['no.nav.aap.behandlingsflyt.flyt.ArenaStatusDTO'];
       avklaringsbehov: components['schemas']['no.nav.aap.behandlingsflyt.flyt.AvklaringsbehovDTO'][];
       /**
        * Format: date

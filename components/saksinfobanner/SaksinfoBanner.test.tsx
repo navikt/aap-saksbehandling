@@ -286,6 +286,42 @@ describe('SaksinfoBanner på behandling siden', () => {
     await user.click(screen.getByRole('button', { name: 'Saksmeny' }));
     expect(screen.getByText('Marker som haster')).toBeVisible();
   });
+
+  it('skal ikke vise Arena-tag når brukeren ikke har AAP-Arena-historikk', () => {
+    render(
+      <SaksinfoBanner
+        personInformasjon={personInformasjon}
+        sak={sak}
+        behandling={behandling}
+        brukerInformasjon={{ navn: 'Saksbehandler', NAVident: 'navIdent' }}
+        referanse={'123456'}
+        oppgave={oppgave}
+      />
+    );
+    const returTag = screen.queryByText('Arenahistorikk');
+    expect(returTag).not.toBeInTheDocument();
+  });
+
+  it('skal vise Arena-tag når brukeren har AAP-Arena-historikk', () => {
+    sak.behandlinger;
+    render(
+      <SaksinfoBanner
+        personInformasjon={personInformasjon}
+        sak={sak}
+        behandling={{
+          ...behandling,
+          arenaStatus: {
+            harArenaHistorikk: true,
+          },
+        }}
+        brukerInformasjon={{ navn: 'Saksbehandler', NAVident: 'navIdent' }}
+        referanse={'123456'}
+        oppgave={oppgave}
+      />
+    );
+    const returTag = screen.queryByText('Arenahistorikk');
+    expect(returTag).toBeInTheDocument();
+  });
 });
 
 describe('Sak status', () => {

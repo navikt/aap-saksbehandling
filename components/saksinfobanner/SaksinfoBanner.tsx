@@ -21,6 +21,7 @@ import { SettMarkeringForBehandlingModal } from 'components/settmarkeringforbeha
 import { MarkeringType, Oppgave } from 'lib/types/oppgaveTypes';
 import { NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType } from '@navikt/aap-oppgave-typescript-types';
 import { MarkeringInfoboks } from 'components/markeringinfoboks/MarkeringInfoboks';
+import { ArenaStatus } from 'components/arenastatus/ArenaStatus';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { AvbrytRevurderingModal } from 'components/saksinfobanner/avbrytrevurderingmodal/AvbrytRevurderingModal';
 import { formaterDatoForFrontend } from 'lib/utils/date';
@@ -158,6 +159,7 @@ export const SaksinfoBanner = ({
               <ChevronRightIcon className={styles.chevron} />
               <BodyShort size={'small'}>Sak {sak.saksnummer}</BodyShort>
               <ChevronRightIcon className={styles.chevron} />
+
               <BodyShort size={'small'}>{behandling.type}</BodyShort>
               <Behandlingsstatus status={behandling.status} />
             </>
@@ -165,7 +167,7 @@ export const SaksinfoBanner = ({
         </HStack>
       </div>
 
-      {erPåBehandlingSiden && (
+      {erPåBehandlingSiden && behandling && (
         <HStack>
           {adressebeskyttelser?.map((adressebeskyttelse) => (
             <div key={adressebeskyttelse} className={styles.oppgavestatus}>
@@ -178,6 +180,11 @@ export const SaksinfoBanner = ({
                 behandlingReferanse={referanse}
                 oppdaterVisHarUlesteDokumenter={settVisHarUlesteDokumenter}
               />
+            </div>
+          )}
+          {behandling.arenaStatus?.harArenaHistorikk && (
+            <div className={styles.oppgavestatus}>
+              <ArenaStatus />
             </div>
           )}
           {oppgaveTildelingStatus && (
@@ -200,6 +207,7 @@ export const SaksinfoBanner = ({
               <MarkeringInfoboks markering={markering} referanse={behandling?.referanse} showLabel={true} />
             </div>
           ))}
+
           <div className={styles.saksmeny}>
             <Dropdown>
               <Button
