@@ -131,7 +131,7 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
     case '5022':
       return 'Overstyr § 11-2 forutgående medlemskap';
     case '5035':
-      return '§ 11-23 sjette ledd. Arbeidsopptrapping (valgfritt)';
+      return '§ 11-3 Oppholdskrav';
     case '5050':
       return 'Skriv brev';
     case '5051':
@@ -171,7 +171,7 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
     case '8002':
       return 'Avklar oppfølgingsbehov NAY';
     case '5057':
-      return 'Arbeidsopptrapping § 11-23 sjette ledd';
+      return '§ 11-23 sjette ledd. Arbeidsopptrapping (valgfritt)';
   }
 }
 
