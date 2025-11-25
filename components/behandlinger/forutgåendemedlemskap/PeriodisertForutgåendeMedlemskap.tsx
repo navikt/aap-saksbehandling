@@ -85,10 +85,12 @@ export const PeriodisertForutgåendeMedlemskap = async ({ behandlingsReferanse }
         behandlingVersjon={behandlingsVersjon}
         readOnly={readOnly}
         automatiskVurdering={automatiskVurdering.data}
+        grunnlag={grunnlag.data}
         harAvklaringsbehov={vurderMedlemskapSteg.avklaringsbehov.length > 0}
         visOverstyrKnapp={visOverstyrKnapp}
         harYrkesskade={harYrkesskade}
-        initialMellomlagretVurdering={initialMellomlagretVurdering}
+        rettighetsperiodeGrunnlag={rettighetsperiodeGrunnlag.data}
+        beregningstidspunktGrunnlag={beregningsperiodeGrunnlag.data}
       >
         {visManuellVurdering && (
           <ForutgåendeMedlemskapPeriodisert
