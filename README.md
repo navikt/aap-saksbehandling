@@ -8,6 +8,10 @@ Frontendapplikasjon for ny saksbehandlingsløsning på AAP
 
 For at linting ved commit skal skje må du kjøre `yarn husky` etter å ha klonet repoet
 
+
+### Linting 
+Prosjektet bruker prettier og eslint. I IntelliJ kan du skru på disse to pluginene med "auto" configuration valgt. 
+
 ### Github package registry
 
 Vi bruker Github sitt package registry for npm-pakker, siden flere av Nav sine pakker kun blir publisert her.
