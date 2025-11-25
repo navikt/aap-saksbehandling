@@ -2,20 +2,23 @@
 
 import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
-import { BodyLong, BodyShort, Label, VStack } from '@navikt/ds-react';
+import { BodyLong, BodyShort, VStack } from '@navikt/ds-react';
 import { FormEvent } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
-import { MellomlagretVurdering, SamordningArbeidsgiverGrunnlag } from 'lib/types/types';
+import {
+  MellomlagretVurdering,
+  SamordningArbeidsgiverGrunnlag,
+  SamordningArbeidsgiverVurdering,
+} from 'lib/types/types';
 
-import { parse } from 'date-fns';
+import { differenceInBusinessDays, parse } from 'date-fns';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
-import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
 import Link from 'next/link';
 
 import { SamordningArbeidsGiverTabell } from 'components/behandlinger/samordning/samordningArbeidsgiver/SamordningArbeidsgiverTabell';
@@ -28,13 +31,14 @@ interface Props {
 }
 
 export interface SamordningArbeidsgiverFormFields {
-  begrunnelse?: string;
-  perioder: SamordningArbeidsgiverPerioder[];
+  begrunnelse: string;
+  perioder: SamordningArbeidsGiverPeriode[];
 }
 
-export interface SamordningArbeidsgiverPerioder {
-  fom?: string;
-  tom?: string;
+export interface SamordningArbeidsGiverPeriode {
+  fom: string;
+  tom: string;
+  antallDager?: string;
 }
 
 type DraftFormFields = Partial<SamordningArbeidsgiverFormFields>;
@@ -58,8 +62,6 @@ export const SamordningArbeidsgiver = ({
     mellomlagretVurdering
   );
 
-  console.log(grunnlag);
-
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag.vurdering);
@@ -68,13 +70,14 @@ export const SamordningArbeidsgiver = ({
     {
       begrunnelse: {
         type: 'textarea',
-        label: 'Vurder om brukeren har andre statlige ytelser som kan gi fradrag fra AAP etterbetaling',
+        label: 'Vurder om brukeren skal ha 100% reduksjon av AAP i en periode som følge av ytelse fra arbeidsgiver',
         rules: { required: 'Du må gjøre en vilkårsvurdering' },
         defaultValue: defaultValue.begrunnelse,
       },
       perioder: {
         type: 'fieldArray',
         defaultValue: defaultValue.perioder,
+        rules: {},
       },
     },
     { readOnly: formReadOnly }
@@ -87,11 +90,11 @@ export const SamordningArbeidsgiver = ({
           behandlingVersjon: behandlingVersjon,
           behov: {
             behovstype: Behovstype.AVKLAR_SAMORDNING_ARBEIDSGIVER,
-            SamordningArbeidsgiverVurdering: {
-              begrunnelse: data.begrunnelse!!,
+            samordningArbeidsgiverVurdering: {
+              begrunnelse: data.begrunnelse,
               perioder: data.perioder.map((periode) => ({
-                fom: formaterDatoForBackend(parse(periode.fom!, 'dd.MM.yyyy', new Date())),
-                tom: formaterDatoForBackend(parse(periode.tom!, 'dd.MM.yyyy', new Date())),
+                fom: formaterDatoForBackend(parse(periode.fom, 'dd.MM.yyyy', new Date())),
+                tom: formaterDatoForBackend(parse(periode.tom, 'dd.MM.yyyy', new Date())),
               })),
             },
           },
@@ -101,11 +104,8 @@ export const SamordningArbeidsgiver = ({
       )
     )(event);
   };
-  const skalViseBekreftKnapp = !formReadOnly;
 
   const historiskeVurderinger = grunnlag.historiskeVurderinger;
-
-  console.log(historiskeVurderinger);
 
   return (
     <VilkårskortMedFormOgMellomlagringNyVisning
@@ -134,7 +134,8 @@ export const SamordningArbeidsgiver = ({
             <TidligereVurderinger
               data={historiskeVurderinger}
               buildFelter={byggFelter}
-              getErGjeldende={(v) => deepEqual(v, historiskeVurderinger[historiskeVurderinger.length - 1])}
+              grupperPåOpprettetDato={true}
+              getErGjeldende={() => true}
               getFomDato={(v) => v.vurderingenGjelderFra ?? v.vurdertAv.dato}
               getVurdertAvIdent={(v) => v.vurdertAv.ident}
               getVurdertDato={(v) => v.vurdertAv.dato}
@@ -142,12 +143,15 @@ export const SamordningArbeidsgiver = ({
           )}
 
           <VStack>
+            {/* TODO: Skal legges til senere
             <BodyShort size={'small'} weight={'semibold'}>
               Relevant informasjon fra søknad:
             </BodyShort>
+
             <BodyShort textColor={'subtle'} size={'small'} weight={'semibold'}>
               Har du fått eller skal du få ekstra utbetalinger fra arbeidsgiver? Ja
             </BodyShort>
+            */}
           </VStack>
 
           <BodyLong>
@@ -158,7 +162,6 @@ export const SamordningArbeidsgiver = ({
           </BodyLong>
 
           <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
-          <Label size={'small'}>Legg til periode med reduksjon som følge av ytelse fra arbeidsgiver</Label>
           <VStack gap={'6'}>
             <SamordningArbeidsGiverTabell form={form} readOnly={formReadOnly} />
           </VStack>
@@ -168,20 +171,52 @@ export const SamordningArbeidsgiver = ({
   );
 };
 
-const byggFelter = (vurdering: SamordningArbeidsgiverGrunnlag['vurdering']): ValuePair[] => [
-  {
-    label: 'Vurdering',
-    value: vurdering?.begrunnelse || '-',
-  },
-];
+function byggFelter(vurdering: SamordningArbeidsgiverVurdering): ValuePair<string>[] {
+  const begrunnelse = vurdering.begrunnelse || 'Ingen begrunnelse på behandling funnet';
+  const perioder = vurdering.perioder || [];
+
+  const felter: ValuePair<string>[] = [
+    {
+      label: 'Begrunnelse',
+      value: begrunnelse,
+    },
+  ];
+
+  if (perioder.length === 0) {
+    felter.push({
+      label: 'Reduksjonsperioder',
+      value: 'Ingen Reduksjonsperioder',
+    });
+  } else {
+    perioder.map((item, index) => {
+      const ytelseLabel = index === 0 ? 'Reduksjonsperioder' : '';
+      const value = `${formaterDatoForFrontend(item.fom)} - ${formaterDatoForFrontend(item.tom)}`;
+
+      felter.push({
+        label: ytelseLabel,
+        value,
+      });
+    });
+  }
+
+  return felter;
+}
 
 function mapVurderingToDraftFormFields(vurdering: SamordningArbeidsgiverGrunnlag['vurdering']): DraftFormFields {
   return {
     begrunnelse: vurdering?.begrunnelse || '',
-    perioder: (vurdering?.perioder || []).map((vurdering) => ({
-      fom: formaterDatoForFrontend(vurdering.fom),
-      tom: formaterDatoForFrontend(vurdering.tom),
-    })),
+    perioder: (vurdering?.perioder || []).map((periode) => {
+      const fomDate = parse(periode.fom, 'yyyy-MM-dd', new Date());
+      const tomDate = parse(periode.tom, 'yyyy-MM-dd', new Date());
+
+      const antallDager = differenceInBusinessDays(tomDate, fomDate) + 1;
+
+      return {
+        fom: formaterDatoForFrontend(periode.fom),
+        tom: formaterDatoForFrontend(periode.tom),
+        antallDager: String(antallDager),
+      };
+    }),
   };
 }
 
