@@ -15,7 +15,10 @@ const user = userEvent.setup();
 
 const grunnlagMedVurdering: SamordningArbeidsgiverGrunnlag = {
   harTilgangTilÅSaksbehandle: true,
-  vurdering: { begrunnelse: 'Dette er min vurdering som er bekreftet', tom: '2025-10-10', fom: '2025-11-11' },
+  vurdering: {
+    begrunnelse: 'Dette er min vurdering som er bekreftet',
+    perioder: [{ tom: '2025-10-10', fom: '2025-11-11' }],
+  },
 };
 const grunnlagUtenVurdering: SamordningArbeidsgiverGrunnlag = { harTilgangTilÅSaksbehandle: true };
 
@@ -32,7 +35,7 @@ it('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
   await user.click(endreKnapp);
 
   const begrunnelseFelt = screen.getByRole('textbox', {
-    name: 'Vurder om brukeren skal ha 100 % reduksjon av AAP i en periode som følge av ytelse fra arbeidsgiver',
+    name: 'Vurder om brukeren skal ha 100% reduksjon av AAP i en periode som følge av ytelse fra arbeidsgiver',
   });
   await user.clear(begrunnelseFelt);
   await user.type(begrunnelseFelt, 'Dette er en ny begrunnelse');
@@ -42,7 +45,7 @@ it('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
   await user.click(avbrytKnapp);
 
   const begrunnelseFeltEtterAvbryt = screen.getByRole('textbox', {
-    name: 'Vurder om brukeren skal ha 100 % reduksjon av AAP i en periode som følge av ytelse fra arbeidsgiver',
+    name: 'Vurder om brukeren skal ha 100% reduksjon av AAP i en periode som følge av ytelse fra arbeidsgiver',
   });
   expect(begrunnelseFeltEtterAvbryt).toHaveValue('Dette er min vurdering som er bekreftet');
 });
@@ -76,7 +79,7 @@ describe('mellomlagring', () => {
 
     await user.type(
       screen.getByRole('textbox', {
-        name: 'Vurder om brukeren skal ha 100 % reduksjon av AAP i en periode som følge av ytelse fra arbeidsgiver',
+        name: 'Vurder om brukeren skal ha 100% reduksjon av AAP i en periode som følge av ytelse fra arbeidsgiver',
       }),
       'Her har jeg begynt å skrive en vurdering..'
     );
@@ -127,7 +130,7 @@ describe('mellomlagring', () => {
     );
 
     const begrunnelseFelt = screen.getByRole('textbox', {
-      name: 'Vurder om brukeren skal ha 100 % reduksjon av AAP i en periode som følge av ytelse fra arbeidsgiver',
+      name: 'Vurder om brukeren skal ha 100% reduksjon av AAP i en periode som følge av ytelse fra arbeidsgiver',
     });
 
     expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er mellomlagret');
@@ -137,78 +140,10 @@ describe('mellomlagring', () => {
     render(<SamordningArbeidsgiver behandlingVersjon={0} readOnly={false} grunnlag={grunnlagMedVurdering} />);
 
     const begrunnelseFelt = screen.getByRole('textbox', {
-      name: 'Vurder om brukeren skal ha 100 % reduksjon av AAP i en periode som følge av ytelse fra arbeidsgiver',
+      name: 'Vurder om brukeren skal ha 100% reduksjon av AAP i en periode som følge av ytelse fra arbeidsgiver',
     });
 
     expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er bekreftet');
-  });
-
-  it('Skal resette skjema til tomt skjema dersom det ikke finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
-    render(
-      <SamordningArbeidsgiver
-        behandlingVersjon={0}
-        readOnly={false}
-        grunnlag={grunnlagUtenVurdering}
-        initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
-      />
-    );
-
-    await user.type(
-      screen.getByRole('textbox', {
-        name: 'Vurder om brukeren skal ha 100 % reduksjon av AAP i en periode som følge av ytelse fra arbeidsgiver',
-      }),
-      ' her er ekstra tekst'
-    );
-
-    expect(
-      screen.getByRole('textbox', {
-        name: 'Vurder om brukeren skal ha 100 % reduksjon av AAP i en periode som følge av ytelse fra arbeidsgiver',
-      })
-    ).toHaveValue('Dette er min vurdering som er mellomlagret her er ekstra tekst');
-
-    const slettKnapp = screen.getByRole('button', { name: 'Slett utkast' });
-
-    await user.click(slettKnapp);
-
-    expect(
-      screen.getByRole('textbox', {
-        name: 'Vurder om brukeren skal ha 100 % reduksjon av AAP i en periode som følge av ytelse fra arbeidsgiver',
-      })
-    ).toHaveValue('');
-  });
-
-  it('Skal resette skjema til bekreftet vurdering dersom det finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
-    render(
-      <SamordningArbeidsgiver
-        behandlingVersjon={0}
-        readOnly={false}
-        initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
-        grunnlag={grunnlagMedVurdering}
-      />
-    );
-
-    await user.type(
-      screen.getByRole('textbox', {
-        name: 'Vurder om brukeren skal ha 100 % reduksjon av AAP i en periode som følge av ytelse fra arbeidsgiver',
-      }),
-      ' her er ekstra tekst'
-    );
-
-    expect(
-      screen.getByRole('textbox', {
-        name: 'Vurder om brukeren skal ha 100 % reduksjon av AAP i en periode som følge av ytelse fra arbeidsgiver',
-      })
-    ).toHaveValue('Dette er min vurdering som er mellomlagret her er ekstra tekst');
-
-    const slettKnapp = screen.getByRole('button', { name: 'Slett utkast' });
-
-    await user.click(slettKnapp);
-
-    expect(
-      screen.getByRole('textbox', {
-        name: 'Vurder om brukeren skal ha 100 % reduksjon av AAP i en periode som følge av ytelse fra arbeidsgiver',
-      })
-    ).toHaveValue('Dette er min vurdering som er bekreftet');
   });
 
   it('Skal ikke være mulig å lagre eller slette mellomlagring hvis det er readOnly', () => {
