@@ -8,7 +8,6 @@ import {
   finnParentIdForValgtAlternativ,
   mapDelmalerFraSanity,
 } from 'components/brevbygger/brevmalMapping';
-import { innvilgelse_brev } from 'components/brevbygger/innvilgelse';
 import { BrevmalType } from 'components/brevbygger/brevmodellTypes';
 
 // kladd -- disse vil komme fra gentypes
@@ -79,13 +78,7 @@ interface BrevbyggerProps {
 }
 
 export const Brevbygger = ({ brevmal, brevdata }: BrevbyggerProps) => {
-  if (!brevmal) {
-    // TODO bør stoppes før vi kommer hit, er kun aktuelt så lenge vi må støtte ny og gammel brevmodell
-    return <div>Fant ingen brevmal...</div>;
-  }
-
-  const parsedBrevmal: BrevmalType = JSON.parse(brevmal);
-
+  const parsedBrevmal: BrevmalType = JSON.parse(brevmal || '');
   const { control, handleSubmit, watch } = useForm<BrevdataFormFields>({
     defaultValues: {
       delmaler: mapDelmalerFraSanity(parsedBrevmal.delmaler, brevdata),
