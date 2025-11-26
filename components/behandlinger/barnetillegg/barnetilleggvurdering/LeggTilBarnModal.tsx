@@ -29,13 +29,7 @@ export enum Relasjon {
   FOSTERFORELDER = 'FOSTERFORELDER',
 }
 
-export const LeggTilBarnModal = ({
-  readOnly,
-  åpne,
-  avbryt,
-  onLagreNyttBarn,
-  alleBarn,
-}: Props) => {
+export const LeggTilBarnModal = ({ readOnly, åpne, avbryt, onLagreNyttBarn, alleBarn }: Props) => {
   const localForm = useForm<LeggTilBarnFormFields>({
     defaultValues: {
       fornavn: '',
@@ -49,8 +43,7 @@ export const LeggTilBarnModal = ({
   });
 
   const { control, handleSubmit, reset, watch, setValue, trigger } = localForm;
-  const identEksisterer = (ident: string) =>
-    alleBarn.some((barn) => barn.ident === ident);
+  const identEksisterer = (ident: string) => alleBarn.some((barn) => barn.ident === ident);
   const navnOgFødselsdatoEksisterer = (fornavn: string, etternavn: string, fødselsdato: string) =>
     alleBarn.some(
       (barn) =>

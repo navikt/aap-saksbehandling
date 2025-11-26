@@ -1,5 +1,5 @@
 import { BodyShort, Button } from '@navikt/ds-react';
-import { clientSendHendelse } from "lib/clientApi";
+import { clientSendHendelse } from 'lib/clientApi';
 
 export const SendNySoknad = ({ saksid }: { saksid: string }) => {
   async function postSoknad() {

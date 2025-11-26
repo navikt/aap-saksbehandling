@@ -123,8 +123,7 @@ export function useOppgaver({
         antallGjenståendeOppgaver: res.data.antallGjenstaaende,
       })) ?? [];
 
-  const antallOppgaver =
-      oppgaverValgtKø?.filter((res) => isSuccess(res))[0].data.antallTotalt ?? 0
+  const antallOppgaver = oppgaverValgtKø?.filter((res) => isSuccess(res))[0].data.antallTotalt ?? 0;
 
   const oppgaver = oppgaverFlatMap.flatMap(({ oppgaver }) => oppgaver);
   const sisteKallMotOppgave = oppgaverFlatMap.at(-1);

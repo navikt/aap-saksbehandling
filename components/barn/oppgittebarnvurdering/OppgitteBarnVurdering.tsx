@@ -50,17 +50,11 @@ export const OppgitteBarnVurdering = ({
           <QuestionmarkDiamondIcon title="manuelt barn ikon" fontSize={'2rem'} />
         </div>
         <div>
-          <Detail className={styles.detailgray}>
-            {harOppgittFosterforelderRelasjon ? 'Fosterbarn' : 'Barn'}
-          </Detail>
+          <Detail className={styles.detailgray}>{harOppgittFosterforelderRelasjon ? 'Fosterbarn' : 'Barn'}</Detail>
           <BodyShort size={'small'}>
             {navn}, {ident} ({fødselsdato ? kalkulerAlder(new Date(fødselsdato)) : 'Ukjent fødselsdato'})
           </BodyShort>
-          {fødselsdato && (
-            <BodyShort size={'small'}>
-              Fødselsdato: {formaterDatoForFrontend(fødselsdato)}
-            </BodyShort>
-          )}
+          {fødselsdato && <BodyShort size={'small'}>Fødselsdato: {formaterDatoForFrontend(fødselsdato)}</BodyShort>}
         </div>
       </div>
       <div className={styles.vurderingwrapper}>

@@ -33,7 +33,11 @@ export const SaksbehandlerOppgittBarnVurdering = ({
   onRemove,
   erSlettbar,
 }: Props) => {
-  const { fields: vurderinger, append, remove, } = useFieldArray({
+  const {
+    fields: vurderinger,
+    append,
+    remove,
+  } = useFieldArray({
     control: form.control,
     name: `saksbehandlerOppgitteBarnVurderinger.${barnetilleggIndex}.vurderinger`,
   });
@@ -50,17 +54,11 @@ export const SaksbehandlerOppgittBarnVurdering = ({
           <QuestionmarkDiamondIcon title="manuelt barn ikon" fontSize={'2rem'} />
         </div>
         <div>
-          <Detail className={styles.detailgray}>
-            {harOppgittFosterforelderRelasjon ? 'Fosterbarn' : 'Barn'}
-          </Detail>
+          <Detail className={styles.detailgray}>{harOppgittFosterforelderRelasjon ? 'Fosterbarn' : 'Barn'}</Detail>
           <BodyShort size={'small'}>
             {navn}, {ident} ({fødselsdato ? kalkulerAlder(new Date(fødselsdato)) : 'Ukjent alder'})
           </BodyShort>
-          {fødselsdato && (
-            <BodyShort size={'small'}>
-              Fødselsdato: {formaterDatoForFrontend(fødselsdato)}
-            </BodyShort>
-          )}
+          {fødselsdato && <BodyShort size={'small'}>Fødselsdato: {formaterDatoForFrontend(fødselsdato)}</BodyShort>}
         </div>
         {erSlettbar && (
           <Button

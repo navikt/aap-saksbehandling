@@ -101,7 +101,11 @@ export function clientLøsBehov(avklaringsBehov: LøsAvklaringsbehovPåBehandlin
 }
 
 export function clientKanDistribuereBrev(brevbestillingReferanse: string, request: KanDistribuereBrevRequest) {
-  return clientFetch<KanDistribuereBrevResponse>( `${BASE_URL}/api/${brevbestillingReferanse}/kan-distribuere-brev`, 'POST', request);
+  return clientFetch<KanDistribuereBrevResponse>(
+    `${BASE_URL}/api/${brevbestillingReferanse}/kan-distribuere-brev`,
+    'POST',
+    request
+  );
 }
 
 export function clientOpprettAktivitetsplikt(saksnummer: string, data: OpprettAktivitetspliktBehandlingDto) {

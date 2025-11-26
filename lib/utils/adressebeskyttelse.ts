@@ -8,7 +8,7 @@ export enum Adressebeskyttelsesgrad {
 
 export enum Enhet {
   VIKAFOSSEN = '2103',
-  NAV_VÆRNES = '1783'
+  NAV_VÆRNES = '1783',
 }
 
 export function utledAdressebeskyttelse(oppgave?: Oppgave): Adressebeskyttelsesgrad[] {

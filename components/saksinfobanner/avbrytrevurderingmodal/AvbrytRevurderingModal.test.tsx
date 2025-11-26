@@ -13,5 +13,4 @@ describe('Avbryt revurdering', () => {
   it('har en knapp for å bekrefte at revurderingen avbrytes', () => {
     expect(screen.getByRole('button', { name: 'Bekreft' })).toBeVisible();
   });
-
 });
