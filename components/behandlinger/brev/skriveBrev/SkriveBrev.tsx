@@ -60,6 +60,7 @@ export const SkriveBrev = ({
 
   const [forhåndsvisModalOpen, setForhåndsvisModalOpen] = useState(false);
   const [ikkeSendBrevModalOpen, settIkkeSendBrevModalOpen] = useState(false);
+  const [visKanIkkeDistribuereAdvarsel, setVisKanIkkeDistribuereAdvarsel] = useState(false);
 
   const mellomlagreBackendRequest = useCallback(async () => {
     setIsSaving(true);
@@ -70,6 +71,32 @@ export const SkriveBrev = ({
     setIsSaving(false);
   }, [debouncedBrev, referanse]);
 
+  const kanDistribuereBrevRequest = useCallback(async () => {
+    // TODO Fjerne feature toggle etter verifisering i dev
+    if (isProd()) {
+      return;
+    }
+    const brukerIdent = brukerMottaker?.ident;
+
+    if (brukerIdent) {
+      const valgteMottakereIdentListe = valgteMottakere
+        .map((mottaker) => mottaker.ident)
+        .filter((ident) => typeof ident === 'string');
+      const mottakerIdentListe = valgteMottakereIdentListe.length > 0 ? valgteMottakereIdentListe : [brukerIdent];
+      const response = await clientKanDistribuereBrev(referanse, {
+        brukerIdent,
+        mottakerIdentListe,
+      });
+
+      if (isSuccess(response)) {
+        const kanDistribuereTilAlleMottakere = !response.data.mottakereDistStatus.some(
+          (distStatus: { mottakerIdent: String; kanDistribuere: boolean }) => !distStatus.kanDistribuere
+        );
+        setVisKanIkkeDistribuereAdvarsel(!kanDistribuereTilAlleMottakere);
+      }
+    }
+  }, [brukerMottaker?.ident, referanse, valgteMottakere]);
+
   const { løsBehovOgGåTilNesteSteg, isLoading } = useLøsBehovOgGåTilNesteSteg('BREV');
 
   useEffect(() => {
@@ -77,6 +104,10 @@ export const SkriveBrev = ({
       mellomlagreBackendRequest();
     }
   }, [debouncedBrev, mellomlagreBackendRequest, kanMellomlagreBrev]);
+
+  useEffect(() => {
+    kanDistribuereBrevRequest();
+  }, [kanDistribuereBrevRequest]);
 
   const onChange = (brev: Brev) => {
     setBrev(brev);
@@ -94,32 +125,6 @@ export const SkriveBrev = ({
     });
     await revalidateFlyt(behandlingsReferanse);
     settIkkeSendBrevModalOpen(false);
-  };
-
-  const kanDistribuereTilAlleMottakere = async () => {
-    // TODO Fjerne feature toggle etter verifisering i dev
-    if (isProd()) {
-      return true;
-    }
-    const brukerIdent = brukerMottaker?.ident;
-
-    if (brukerIdent) {
-      const valgteMottakereIdentListe = valgteMottakere
-        .map((mottaker) => mottaker.ident)
-        .filter((ident) => typeof ident === 'string');
-      const mottakerIdentListe = valgteMottakereIdentListe.length > 0 ? valgteMottakereIdentListe : [brukerIdent];
-      const response = await clientKanDistribuereBrev(referanse, {
-        brukerIdent,
-        mottakerIdentListe,
-      });
-
-      if (isSuccess(response)) {
-        return !response.data.mottakereDistStatus.some(
-          (distStatus: { mottakerIdent: String; kanDistribuere: boolean }) => !distStatus.kanDistribuere
-        );
-      }
-    }
-    return true;
   };
 
   return (
@@ -181,7 +186,7 @@ export const SkriveBrev = ({
             signatur={signaturer}
             readonly={readOnly}
           />
-          {!kanDistribuereTilAlleMottakere() && (
+          {visKanIkkeDistribuereAdvarsel && (
             <Alert variant={'warning'} size={'small'} className={'fit-content'}>
               Brevet kan ikke distribueres til alle mottakere. Se rutinebeskrivelse for manuell håndtering.
             </Alert>
