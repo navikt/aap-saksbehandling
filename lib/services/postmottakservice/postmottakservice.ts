@@ -13,7 +13,8 @@ import {
 } from 'lib/types/postmottakTypes';
 import { logError, logInfo } from 'lib/serverutlis/logger';
 import { apiFetch, apiFetchPdf } from 'lib/services/apiFetch';
-import { isError } from 'lib/utils/api';
+import { FetchResponse, isError } from 'lib/utils/api';
+import { NextResponse } from 'next/server';
 
 const dokumentMottakApiBaseUrl = process.env.DOKUMENTMOTTAK_API_BASE_URL;
 const dokumentMottakApiScope = process.env.DOKUMENTMOTTAK_API_SCOPE ?? '';
@@ -65,7 +66,7 @@ export const hentVenteInformasjon = async (behandlingsreferanse: string) => {
 export const hentDokumentFraDokumentInfoId = async (
   journalpostId: number,
   dokumentInfoId: string
-): Promise<Blob | undefined> => {
+): Promise<Response> => {
   return apiFetchPdf(
     `${dokumentMottakApiBaseUrl}/api/dokumenter/${journalpostId}/${dokumentInfoId}`,
     dokumentMottakApiScope

@@ -7,7 +7,8 @@ import {
 import { apiFetch, apiFetchPdf } from 'lib/services/apiFetch';
 import { Journalpost } from 'lib/types/journalpost';
 import { isLocal } from 'lib/utils/environment';
-import { FetchResponse } from 'lib/utils/api';
+import { ApiException, ErrorResponseBody, FetchResponse } from 'lib/utils/api';
+import { NextResponse } from 'next/server';
 
 const dokumentinnhentingApiBaseUrl = process.env.DOKUMENTINNHENTING_API_BASE_URL;
 const dokumentinnhentingApiScope = process.env.DOKUMENTINNHENTING_API_SCOPE ?? '';
@@ -47,7 +48,7 @@ export async function hentHelsedokumenterPåBruker(request: any) {
   return await apiFetch<RelevantDokumentType[]>(url, dokumentinnhentingApiScope, 'POST', request);
 }
 
-export const hentDokument = async (journalPostId: string, dokumentInfoId: string) => {
+export const hentDokument = async (journalPostId: string, dokumentInfoId: string): Promise<Response> => {
   const url = `${dokumentinnhentingApiBaseUrl}/api/dokumenter/${journalPostId}/${dokumentInfoId}`;
   return await apiFetchPdf(url, dokumentinnhentingApiScope);
 };

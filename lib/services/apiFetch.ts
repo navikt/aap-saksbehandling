@@ -91,21 +91,23 @@ const fetchWithRetry = async <ResponseType>(
   return { type: 'SUCCESS', status: response.status, data: responseJson };
 };
 
-export const apiFetchPdf = async (url: string, scope: string): Promise<Blob | undefined> => {
+export const apiFetchPdf = async (url: string, scope: string): Promise<Response> => {
   const oboToken = await getToken(scope, url);
 
   const response = await fetch(url, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${oboToken}`,
-      Accept: 'application/pdf',
+      Accept: 'application/pdf, application/json',
     },
     next: { revalidate: 0 },
   });
 
   if (response.ok) {
-    return response.blob();
+    return new Response(await response.blob());
   } else {
-    logError(`kunne ikke lese pdf på url ${url}.`);
+    logWarning(`kunne ikke lese pdf på url ${url}.`);
+    const apiException: ApiException = await response.json();
+    return new Response(apiException.message, { status: response.status });
   }
 };

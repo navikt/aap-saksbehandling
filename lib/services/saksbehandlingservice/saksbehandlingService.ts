@@ -89,6 +89,7 @@ import { Enhet } from 'lib/types/oppgaveTypes';
 import { Behovstype } from 'lib/utils/form';
 import { isLocal } from 'lib/utils/environment';
 import { notFound } from 'next/navigation';
+import { NextResponse } from 'next/server';
 
 const saksbehandlingApiBaseUrl = process.env.BEHANDLING_API_BASE_URL;
 const saksbehandlingApiScope = process.env.BEHANDLING_API_SCOPE ?? '';
@@ -546,7 +547,7 @@ export const hentRefusjonGrunnlag = async (behandlingsReferanse: string) => {
   return await apiFetch<RefusjonskravGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
-export const hentForhåndsvisningBrev = async (brevbestillingReferanse: string): Promise<Blob | undefined> => {
+export const hentForhåndsvisningBrev = async (brevbestillingReferanse: string): Promise<Response> => {
   return apiFetchPdf(
     `${saksbehandlingApiBaseUrl}/api/brev/${brevbestillingReferanse}/forhandsvis`,
     saksbehandlingApiScope
