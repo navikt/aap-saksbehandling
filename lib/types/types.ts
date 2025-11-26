@@ -163,6 +163,7 @@ export type SimulertUtbetaling = components['schemas']['no.nav.aap.utbetal.simul
 
 // Behandling
 export type DetaljertBehandling = components['schemas']['no.nav.aap.behandlingsflyt.flyt.DetaljertBehandlingDTO'];
+export type Arenastatus = components['schemas']['no.nav.aap.behandlingsflyt.flyt.ArenaStatusDTO'];
 export type BehandlingFlytOgTilstand =
   components['schemas']['no.nav.aap.behandlingsflyt.flyt.BehandlingFlytOgTilstandDto'];
 export type FlytGruppe = components['schemas']['no.nav.aap.behandlingsflyt.flyt.FlytGruppe'];

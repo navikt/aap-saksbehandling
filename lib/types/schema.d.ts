@@ -12363,6 +12363,9 @@ export interface components {
         | null;
       'harRettP\u00E5': boolean;
     };
+    'no.nav.aap.behandlingsflyt.flyt.ArenaStatusDTO': {
+      harArenaHistorikk: boolean;
+    };
     'no.nav.aap.behandlingsflyt.flyt.AvklaringsbehovDTO': {
       definisjon: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.avklaringsbehov.Definisjon'];
       endringer: components['schemas']['no.nav.aap.behandlingsflyt.flyt.EndringDTO'][];
@@ -12670,6 +12673,7 @@ export interface components {
         | 'IVERKSETT_BRUDD'
         | 'VURDER_AKTIVITETSPLIKT_11_9'
         | 'UDEFINERT';
+      arenaStatus?: components['schemas']['no.nav.aap.behandlingsflyt.flyt.ArenaStatusDTO'];
       avklaringsbehov: components['schemas']['no.nav.aap.behandlingsflyt.flyt.AvklaringsbehovDTO'][];
       /**
        * Format: date

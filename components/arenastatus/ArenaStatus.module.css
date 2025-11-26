@@ -1,0 +1,4 @@
+.tag {
+    border-radius: var(--a-border-radius-medium);
+    background-color: var(--a-surface-alt-1-moderate);
+}
