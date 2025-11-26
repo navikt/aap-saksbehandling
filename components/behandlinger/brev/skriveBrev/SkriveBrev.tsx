@@ -21,7 +21,6 @@ import { IkkeSendBrevModal } from 'components/behandlinger/brev/skriveBrev/IkkeS
 import { isSuccess } from 'lib/utils/api';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
-import { isProd } from 'lib/utils/environment';
 
 export const SkriveBrev = ({
   referanse,
@@ -72,10 +71,6 @@ export const SkriveBrev = ({
   }, [debouncedBrev, referanse]);
 
   const kanDistribuereBrevRequest = useCallback(async () => {
-    // TODO Fjerne feature toggle etter verifisering i dev
-    if (isProd()) {
-      return;
-    }
     const brukerIdent = brukerMottaker?.ident;
 
     if (brukerIdent) {
