@@ -97,9 +97,7 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
               dokumenterBruktIVurdering: [],
               harRettPå: data.erOppfylt === JaEllerNei.Ja,
               grunn: data.grunn,
-              gjelderFra: data.gjelderFra
-                ? formaterDatoForBackend(parse(data.gjelderFra, 'dd.MM.yyyy', new Date()))
-                : null,
+              gjelderFra: formaterDatoForBackend(parse(data.gjelderFra, 'dd.MM.yyyy', new Date())),
             },
           },
           referanse: behandlingsReferanse,

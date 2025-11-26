@@ -163,6 +163,7 @@ export type SimulertUtbetaling = components['schemas']['no.nav.aap.utbetal.simul
 
 // Behandling
 export type DetaljertBehandling = components['schemas']['no.nav.aap.behandlingsflyt.flyt.DetaljertBehandlingDTO'];
+export type Arenastatus = components['schemas']['no.nav.aap.behandlingsflyt.flyt.ArenaStatusDTO'];
 export type BehandlingFlytOgTilstand =
   components['schemas']['no.nav.aap.behandlingsflyt.flyt.BehandlingFlytOgTilstandDto'];
 export type FlytGruppe = components['schemas']['no.nav.aap.behandlingsflyt.flyt.FlytGruppe'];
@@ -327,6 +328,15 @@ export type PeriodisertLovvalgMedlemskapGrunnlag =
 
 export type PeriodisertManuellVurderingForLovvalgMedlemskapResponse =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.PeriodisertManuellVurderingForLovvalgMedlemskapResponse'];
+
+export type AvklarPeriodisertForutgåendeMedlemskapLøsning =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.lovvalgmedlemskap.PeriodisertManuellVurderingForForutgåendeMedlemskapDto'];
+
+export type PeriodisertForutgåendeMedlemskapGrunnlag =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.PeriodisertForutgåendeMedlemskapGrunnlagResponse'];
+
+export type PeriodisertManuellVurderingForForutgåendeMedlemskapResponse =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.PeriodisertManuellVurderingForForutgåendeMedlemskapResponse'];
 
 export type ForutgåendeMedlemskapGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.ForutgåendeMedlemskapGrunnlagResponse'];

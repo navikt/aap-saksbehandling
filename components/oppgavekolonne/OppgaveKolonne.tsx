@@ -31,6 +31,8 @@ import { AvbrytRevurdering } from 'components/behandlinger/revurdering/avbrytVur
 import { OppholdskravStegGruppe } from 'components/behandlinger/oppholdskrav/OppholdskravGruppe';
 import { Aktivitetsplikt11_9 } from 'components/behandlinger/aktivitetsplikt/11-9/Aktivitetsplikt11_9';
 import { LovvalgPeriodisert } from 'components/behandlinger/lovvalg/LovvalgPeriodisert';
+import { PeriodisertForutgåendeMedlemskap } from 'components/behandlinger/forutgåendemedlemskap/PeriodisertForutgåendeMedlemskap';
+import { isDev, isLocal } from 'lib/utils/environment';
 
 interface Props {
   behandlingsReferanse: string;
@@ -39,6 +41,7 @@ interface Props {
 }
 
 export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe, className }: Props) => {
+  const ForutgaendeMedlemskapPeriodisert = isDev() || isLocal();
   return (
     <section className={className}>
       {aktivGruppe === 'START_BEHANDLING' && <StartBehandling behandlingsReferanse={behandlingsReferanse} />}
@@ -59,7 +62,11 @@ export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe, classN
       {aktivGruppe === 'SYKDOM' && <Sykdom behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'MEDLEMSKAP' && (
         <StegSuspense>
-          <ForutgåendeMedlemskap behandlingsReferanse={behandlingsReferanse} />
+          {ForutgaendeMedlemskapPeriodisert ? (
+            <PeriodisertForutgåendeMedlemskap behandlingsReferanse={behandlingsReferanse} />
+          ) : (
+            <ForutgåendeMedlemskap behandlingsReferanse={behandlingsReferanse} />
+          )}
         </StegSuspense>
       )}
       {aktivGruppe === 'OPPHOLDSKRAV' && <OppholdskravStegGruppe behandlingsreferanse={behandlingsReferanse} />}

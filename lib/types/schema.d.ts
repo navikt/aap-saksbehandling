@@ -3966,6 +3966,44 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/behandling/{referanse}/grunnlag/forutgaaendemedlemskap-v2': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description referanse */
+          referanse: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.PeriodisertForutg\u00E5endeMedlemskapGrunnlagResponse'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/drift/behandling/{referanse}/kjor-fra-steg': {
     parameters: {
       query?: never;
@@ -5547,6 +5585,78 @@ export interface components {
         | '9004';
       'manuellVurderingForForutg\u00E5endeMedlemskap': components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.lovvalgmedlemskap.ManuellVurderingForForutg\u00E5endeMedlemskapDto'];
     };
+    'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarPeriodisertForutg\u00E5endeMedlemskapL\u00F8sning': {
+      /** @enum {string} */
+      behovstype:
+        | '4101'
+        | '4102'
+        | '4201'
+        | '5001'
+        | '5002'
+        | '5003'
+        | '5004'
+        | '5005'
+        | '5006'
+        | '5007'
+        | '5008'
+        | '5009'
+        | '5010'
+        | '5011'
+        | '5012'
+        | '5013'
+        | '5014'
+        | '5015'
+        | '5016'
+        | '5017'
+        | '5018'
+        | '5019'
+        | '5020'
+        | '5021'
+        | '5022'
+        | '5023'
+        | '5024'
+        | '5025'
+        | '5026'
+        | '5027'
+        | '5028'
+        | '5029'
+        | '5030'
+        | '5031'
+        | '5032'
+        | '5033'
+        | '5035'
+        | '5050'
+        | '5051'
+        | '5052'
+        | '5053'
+        | '5056'
+        | '5057'
+        | '5096'
+        | '5097'
+        | '5098'
+        | '5099'
+        | '5999'
+        | '6000'
+        | '6001'
+        | '6002'
+        | '6003'
+        | '6004'
+        | '6005'
+        | '6006'
+        | '6007'
+        | '6008'
+        | '6009'
+        | '6010'
+        | '7001'
+        | '8001'
+        | '8002'
+        | '8003'
+        | '9001'
+        | '9002'
+        | '9003'
+        | '9004';
+      'l\u00F8sningerForPerioder': components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.lovvalgmedlemskap.PeriodisertManuellVurderingForForutg\u00E5endeMedlemskapDto'][];
+    };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarPeriodisertLovvalgMedlemskapL\u00F8sning': {
       /** @enum {string} */
       behovstype:
@@ -5618,6 +5728,78 @@ export interface components {
         | '9003'
         | '9004';
       'l\u00F8sningerForPerioder': components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.lovvalgmedlemskap.PeriodisertManuellVurderingForLovvalgMedlemskapDto'][];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarPeriodisertOverstyrtForutg\u00E5endeMedlemskapL\u00F8sning': {
+      /** @enum {string} */
+      behovstype:
+        | '4101'
+        | '4102'
+        | '4201'
+        | '5001'
+        | '5002'
+        | '5003'
+        | '5004'
+        | '5005'
+        | '5006'
+        | '5007'
+        | '5008'
+        | '5009'
+        | '5010'
+        | '5011'
+        | '5012'
+        | '5013'
+        | '5014'
+        | '5015'
+        | '5016'
+        | '5017'
+        | '5018'
+        | '5019'
+        | '5020'
+        | '5021'
+        | '5022'
+        | '5023'
+        | '5024'
+        | '5025'
+        | '5026'
+        | '5027'
+        | '5028'
+        | '5029'
+        | '5030'
+        | '5031'
+        | '5032'
+        | '5033'
+        | '5035'
+        | '5050'
+        | '5051'
+        | '5052'
+        | '5053'
+        | '5056'
+        | '5057'
+        | '5096'
+        | '5097'
+        | '5098'
+        | '5099'
+        | '5999'
+        | '6000'
+        | '6001'
+        | '6002'
+        | '6003'
+        | '6004'
+        | '6005'
+        | '6006'
+        | '6007'
+        | '6008'
+        | '6009'
+        | '6010'
+        | '7001'
+        | '8001'
+        | '8002'
+        | '8003'
+        | '9001'
+        | '9002'
+        | '9003'
+        | '9004';
+      'l\u00F8sningerForPerioder': components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.lovvalgmedlemskap.PeriodisertManuellVurderingForForutg\u00E5endeMedlemskapDto'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarPeriodisertOverstyrtLovvalgMedlemskapL\u00F8sning': {
       /** @enum {string} */
@@ -7594,7 +7776,9 @@ export interface components {
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.ArbeidsopptrappingL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarOppholdskravL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarOvergangArbeidL\u00F8sning']
+      | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarPeriodisertForutg\u00E5endeMedlemskapL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarPeriodisertLovvalgMedlemskapL\u00F8sning']
+      | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarPeriodisertOverstyrtForutg\u00E5endeMedlemskapL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarPeriodisertOverstyrtLovvalgMedlemskapL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarSykdomL\u00F8sning'];
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.RefusjonkravL\u00F8sning': {
@@ -10435,6 +10619,14 @@ export interface components {
       begrunnelse: string;
       varMedlemIFolketrygd: boolean;
     };
+    'no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.PeriodisertForutg\u00E5endeMedlemskapGrunnlagResponse': {
+      'beh\u00F8verVurderinger': components['schemas']['no.nav.aap.komponenter.type.Periode'][];
+      'harTilgangTil\u00C5Saksbehandle': boolean;
+      kanVurderes: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
+      nyeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.PeriodisertManuellVurderingForForutg\u00E5endeMedlemskapResponse'][];
+      overstyrt: boolean;
+      sisteVedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.PeriodisertManuellVurderingForForutg\u00E5endeMedlemskapResponse'][];
+    };
     'no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.PeriodisertLovvalgMedlemskapGrunnlagResponse': {
       'beh\u00F8verVurderinger': components['schemas']['no.nav.aap.komponenter.type.Periode'][];
       'harTilgangTil\u00C5Saksbehandle': boolean;
@@ -10442,6 +10634,26 @@ export interface components {
       nyeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.PeriodisertManuellVurderingForLovvalgMedlemskapResponse'][];
       overstyrt: boolean;
       sisteVedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.PeriodisertManuellVurderingForLovvalgMedlemskapResponse'][];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.PeriodisertManuellVurderingForForutg\u00E5endeMedlemskapResponse': {
+      begrunnelse: string;
+      besluttetAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fom: string;
+      'harForutg\u00E5endeMedlemskap': boolean;
+      kvalitetssikretAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
+      medlemMedUnntakAvMaksFemAar?: boolean | null;
+      overstyrt: boolean;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      tom?: string | null;
+      varMedlemMedNedsattArbeidsevne?: boolean | null;
+      vurdertAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.PeriodisertManuellVurderingForLovvalgMedlemskapResponse': {
       besluttetAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
@@ -11794,6 +12006,22 @@ export interface components {
     'no.nav.aap.behandlingsflyt.faktagrunnlag.lovvalgmedlemskap.MedlemskapDto': {
       begrunnelse: string;
       varMedlemIFolketrygd: boolean;
+    };
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.lovvalgmedlemskap.PeriodisertManuellVurderingForForutg\u00E5endeMedlemskapDto': {
+      begrunnelse: string;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fom: string;
+      'harForutg\u00E5endeMedlemskap': boolean;
+      medlemMedUnntakAvMaksFemAar?: boolean | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      tom?: string | null;
+      varMedlemMedNedsattArbeidsevne?: boolean | null;
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.lovvalgmedlemskap.PeriodisertManuellVurderingForLovvalgMedlemskapDto': {
       begrunnelse: string;
