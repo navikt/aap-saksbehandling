@@ -22,7 +22,10 @@ const grunnlagMedVurdering: SamordningAndreStatligeYtelserGrunnlag = {
   },
 };
 
-const grunnlagUtenVurdering: SamordningAndreStatligeYtelserGrunnlag = { harTilgangTilÅSaksbehandle: false, historiskeVurderinger: [] };
+const grunnlagUtenVurdering: SamordningAndreStatligeYtelserGrunnlag = {
+  harTilgangTilÅSaksbehandle: false,
+  historiskeVurderinger: [],
+};
 
 beforeEach(() => {
   setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'SAMORDNING_ANDRE_STATLIGE_YTELSER' });

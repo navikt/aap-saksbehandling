@@ -63,11 +63,7 @@ export const OppgitteFolkeregisterBarnVurdering = ({
           <BodyShort size={'small'}>
             {navn}, {ident} ({fødselsdato ? kalkulerAlder(new Date(fødselsdato)) : 'Ukjent alder'})
           </BodyShort>
-          {fødselsdato && (
-            <BodyShort size={'small'}>
-              Fødselsdato: {formaterDatoForFrontend(fødselsdato)}
-            </BodyShort>
-          )}
+          {fødselsdato && <BodyShort size={'small'}>Fødselsdato: {formaterDatoForFrontend(fødselsdato)}</BodyShort>}
           <BodyShort size={'small'}>Forsørgerperiode:{periodeTekst}</BodyShort>
         </div>
       </div>

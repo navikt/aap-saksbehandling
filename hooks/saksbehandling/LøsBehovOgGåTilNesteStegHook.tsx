@@ -4,7 +4,13 @@ import {
   ServerSentEventStatus,
 } from 'app/saksbehandling/api/behandling/hent/[referanse]/[gruppe]/[steg]/nesteSteg/route';
 import { useParams, useRouter } from 'next/navigation';
-import { FatteVedtakLøsning, KvalitetssikringLøsning, LøsAvklaringsbehovPåBehandling, LøsPeriodisertBehovPåBehandling, StegType } from 'lib/types/types';
+import {
+  FatteVedtakLøsning,
+  KvalitetssikringLøsning,
+  LøsAvklaringsbehovPåBehandling,
+  LøsPeriodisertBehovPåBehandling,
+  StegType,
+} from 'lib/types/types';
 import {
   clientHentFlyt,
   clientHentTilgangForKvalitetssikring,

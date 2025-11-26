@@ -32,23 +32,17 @@ export const ÅrsakTilRevurdering = ({ vurderingsbehovOgÅrsaker }: Props) => {
       <ExpansionCard.Content>
         <VStack gap={'3'}>
           {vurderingsbehovOgÅrsaker
-            .filter(({ vurderingsbehov }) =>
-              !vurderingsbehov.some((v) => v.type === 'REVURDERING_AVBRUTT')
-            )
+            .filter(({ vurderingsbehov }) => !vurderingsbehov.some((v) => v.type === 'REVURDERING_AVBRUTT'))
             .map(({ vurderingsbehov, opprettet, årsak, beskrivelse }, index) => {
               return (
                 <Box key={index}>
                   <HStack gap="2" align="end">
-                    <Label size="small">
-                      {vurderingsbehov.map((v) => formaterVurderingsbehov(v.type)).join(', ')}
-                    </Label>
+                    <Label size="small">{vurderingsbehov.map((v) => formaterVurderingsbehov(v.type)).join(', ')}</Label>
                     <Detail textColor="subtle">
                       {mapTilÅrsakTilOpprettelseTilTekst(årsak)} {formaterDatoForFrontend(opprettet)}
                     </Detail>
                   </HStack>
-                  {beskrivelse && (
-                    <BodyLong size="small">Begrunnelse: {beskrivelse}</BodyLong>
-                  )}
+                  {beskrivelse && <BodyLong size="small">Begrunnelse: {beskrivelse}</BodyLong>}
                 </Box>
               );
             })}

@@ -6,7 +6,11 @@ import { hentBrukerInformasjon } from 'lib/services/azure/azureUserService';
 
 export default async function Page(props: { params: Promise<{ saksId: string }> }) {
   const params = await props.params;
-  const [sak, personInfo, brukerInformasjon] = await Promise.all([hentSak(params.saksId), hentSakPersoninfo(params.saksId), hentBrukerInformasjon()]);
+  const [sak, personInfo, brukerInformasjon] = await Promise.all([
+    hentSak(params.saksId),
+    hentSakPersoninfo(params.saksId),
+    hentBrukerInformasjon(),
+  ]);
 
   return (
     <AkselPage>

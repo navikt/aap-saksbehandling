@@ -64,11 +64,12 @@ function mapTilSøknadKontrakt(data: SøknadFormFields) {
       barn: data.oppgitteBarn.map((barn) => {
         return {
           fødselsdato: formaterDatoForBackend(parse(barn.fødselsdato, 'dd.MM.yyyy', new Date())),
-          ident: barn.fnr && !barn.checkboxList.includes('manglerIdent')
-            ? {
-                identifikator: barn.fnr,
-              }
-            : undefined,
+          ident:
+            barn.fnr && !barn.checkboxList.includes('manglerIdent')
+              ? {
+                  identifikator: barn.fnr,
+                }
+              : undefined,
           navn: barn.fornavn + ' ' + barn.etternavn,
           relasjon: barn.relasjon,
         };

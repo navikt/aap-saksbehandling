@@ -36,7 +36,9 @@ export const SaksbehandlerOppgitteBarnVurderingFelter = ({
   const erFosterforelder = form.watch(
     `saksbehandlerOppgitteBarnVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.erFosterforelder`
   );
-  const datoFelt = form.watch(`saksbehandlerOppgitteBarnVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.fraDato`);
+  const datoFelt = form.watch(
+    `saksbehandlerOppgitteBarnVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.fraDato`
+  );
 
   const skalSetteEnFraOgMedDatoForForeldreAnsvarSlutt =
     (harForeldreAnsvar === JaEllerNei.Nei || erFosterforelder === JaEllerNei.Nei) && vurderingIndex !== 0;
@@ -47,16 +49,25 @@ export const SaksbehandlerOppgitteBarnVurderingFelter = ({
 
   useEffect(() => {
     if (prevHarForeldreAnsvar) {
-      form.setValue(`saksbehandlerOppgitteBarnVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.harForeldreAnsvar`, '');
+      form.setValue(
+        `saksbehandlerOppgitteBarnVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.harForeldreAnsvar`,
+        ''
+      );
     }
     if (prevDato) {
-      form.setValue(`saksbehandlerOppgitteBarnVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.fraDato`, '');
+      form.setValue(
+        `saksbehandlerOppgitteBarnVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.fraDato`,
+        ''
+      );
     }
   }, [erFosterforelder]);
 
   useEffect(() => {
     if (prevDato) {
-      form.setValue(`saksbehandlerOppgitteBarnVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.fraDato`, '');
+      form.setValue(
+        `saksbehandlerOppgitteBarnVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.fraDato`,
+        ''
+      );
     }
     setPrevHarForeldreAnsvar(harForeldreAnsvar);
   }, [harForeldreAnsvar]);
