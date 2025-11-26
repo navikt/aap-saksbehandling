@@ -14,7 +14,7 @@ import { isError } from 'lib/utils/api';
 import { skrivBrevBehovstype } from 'components/brev/BrevKortMedDataFetching';
 import { BrevOppsummering } from 'components/behandlinger/brev/skriveBrev/BrevOppsummering';
 import { mapGrunnlagTilMottakere } from 'lib/utils/brevmottakere';
-import { isLocal, isProd } from 'lib/utils/environment';
+import { isProd } from 'lib/utils/environment';
 import { Brevbygger } from 'components/brevbygger/Brevbygger';
 
 interface Props {
@@ -76,7 +76,7 @@ export const SkriveBrevMedDataFetching = async ({
   }
 
   //Featuretoggle er allerede gjort i backend, hvis brevmal og brevdata er satt skal vi bruke ny brevbygger
-  const brukNyBrevbygger = isLocal() || (!isProd && brev.brevmal && brev.brevdata);
+  const brukNyBrevbygger = !isProd() && brev.brevmal && brev.brevdata;
 
   const readOnlyBrev = aktivtSteg === 'BREV' && !brev.harTilgangTilÅSendeBrev;
   const behovstype = skrivBrevBehovstype(brev.avklaringsbehovKode);
