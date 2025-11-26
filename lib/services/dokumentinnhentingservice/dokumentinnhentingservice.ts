@@ -47,7 +47,7 @@ export async function hentHelsedokumenterPåBruker(request: any) {
   return await apiFetch<RelevantDokumentType[]>(url, dokumentinnhentingApiScope, 'POST', request);
 }
 
-export const hentDokument = async (journalPostId: string, dokumentInfoId: string) => {
+export const hentDokument = async (journalPostId: string, dokumentInfoId: string): Promise<Response> => {
   const url = `${dokumentinnhentingApiBaseUrl}/api/dokumenter/${journalPostId}/${dokumentInfoId}`;
   return await apiFetchPdf(url, dokumentinnhentingApiScope);
 };

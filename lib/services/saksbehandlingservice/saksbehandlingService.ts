@@ -546,7 +546,7 @@ export const hentRefusjonGrunnlag = async (behandlingsReferanse: string) => {
   return await apiFetch<RefusjonskravGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
-export const hentForhåndsvisningBrev = async (brevbestillingReferanse: string): Promise<Blob | undefined> => {
+export const hentForhåndsvisningBrev = async (brevbestillingReferanse: string): Promise<Response> => {
   return apiFetchPdf(
     `${saksbehandlingApiBaseUrl}/api/brev/${brevbestillingReferanse}/forhandsvis`,
     saksbehandlingApiScope

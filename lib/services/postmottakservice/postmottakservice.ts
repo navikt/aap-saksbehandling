@@ -65,7 +65,7 @@ export const hentVenteInformasjon = async (behandlingsreferanse: string) => {
 export const hentDokumentFraDokumentInfoId = async (
   journalpostId: number,
   dokumentInfoId: string
-): Promise<Blob | undefined> => {
+): Promise<Response> => {
   return apiFetchPdf(
     `${dokumentMottakApiBaseUrl}/api/dokumenter/${journalpostId}/${dokumentInfoId}`,
     dokumentMottakApiScope
