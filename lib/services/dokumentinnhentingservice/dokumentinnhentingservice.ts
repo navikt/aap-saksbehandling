@@ -7,8 +7,7 @@ import {
 import { apiFetch, apiFetchPdf } from 'lib/services/apiFetch';
 import { Journalpost } from 'lib/types/journalpost';
 import { isLocal } from 'lib/utils/environment';
-import { ApiException, ErrorResponseBody, FetchResponse } from 'lib/utils/api';
-import { NextResponse } from 'next/server';
+import { FetchResponse } from 'lib/utils/api';
 
 const dokumentinnhentingApiBaseUrl = process.env.DOKUMENTINNHENTING_API_BASE_URL;
 const dokumentinnhentingApiScope = process.env.DOKUMENTINNHENTING_API_SCOPE ?? '';

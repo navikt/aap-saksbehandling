@@ -89,7 +89,6 @@ import { Enhet } from 'lib/types/oppgaveTypes';
 import { Behovstype } from 'lib/utils/form';
 import { isLocal } from 'lib/utils/environment';
 import { notFound } from 'next/navigation';
-import { NextResponse } from 'next/server';
 
 const saksbehandlingApiBaseUrl = process.env.BEHANDLING_API_BASE_URL;
 const saksbehandlingApiScope = process.env.BEHANDLING_API_SCOPE ?? '';

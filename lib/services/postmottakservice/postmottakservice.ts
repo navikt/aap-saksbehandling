@@ -13,8 +13,7 @@ import {
 } from 'lib/types/postmottakTypes';
 import { logError, logInfo } from 'lib/serverutlis/logger';
 import { apiFetch, apiFetchPdf } from 'lib/services/apiFetch';
-import { FetchResponse, isError } from 'lib/utils/api';
-import { NextResponse } from 'next/server';
+import { isError } from 'lib/utils/api';
 
 const dokumentMottakApiBaseUrl = process.env.DOKUMENTMOTTAK_API_BASE_URL;
 const dokumentMottakApiScope = process.env.DOKUMENTMOTTAK_API_SCOPE ?? '';
