@@ -3222,6 +3222,48 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/brev/{brevbestillingReferanse}/oppdater-brevdata': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description brevbestillingReferanse */
+          brevbestillingReferanse: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto'];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': string;
+          };
+        };
+      };
+    };
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/brev/{brevbestillingReferanse}/forhandsvis': {
     parameters: {
       query?: never;
@@ -9843,6 +9885,8 @@ export interface components {
       brev?: components['schemas']['no.nav.aap.brev.kontrakt.Brev'];
       /** Format: uuid */
       brevbestillingReferanse: string;
+      brevdata?: components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto'];
+      brevmal?: string | null;
       /** @enum {string} */
       brevtype:
         | 'INNVILGELSE'
@@ -11496,6 +11540,7 @@ export interface components {
         | 'BRUKER_UNDER_18'
         | 'BRUKER_OVER_67'
         | 'MANGLENDE_DOKUMENTASJON'
+        | 'IKKE_RETT_PA_SYKEPENGEERSTATNING'
         | 'IKKE_SYKDOM_AV_VISS_VARIGHET'
         | 'IKKE_SYKDOM_SKADE_LYTE_VESENTLIGDEL'
         | 'IKKE_NOK_REDUSERT_ARBEIDSEVNE'
@@ -12352,7 +12397,7 @@ export interface components {
        * Format: date
        * @example 2025-04-01
        */
-      gjelderFra?: string | null;
+      gjelderFra: string;
       /** @enum {string|null} */
       grunn?:
         | 'ANNEN_SYKDOM_INNEN_SEKS_MND'
@@ -12922,6 +12967,7 @@ export interface components {
         | 'BRUKER_UNDER_18'
         | 'BRUKER_OVER_67'
         | 'MANGLENDE_DOKUMENTASJON'
+        | 'IKKE_RETT_PA_SYKEPENGEERSTATNING'
         | 'IKKE_SYKDOM_AV_VISS_VARIGHET'
         | 'IKKE_SYKDOM_SKADE_LYTE_VESENTLIGDEL'
         | 'IKKE_NOK_REDUSERT_ARBEIDSEVNE'
@@ -14120,6 +14166,37 @@ export interface components {
       kanSendesAutomatisk?: boolean | null;
       overskrift?: string | null;
       tekstbolker: components['schemas']['no.nav.aap.brev.kontrakt.Tekstbolk'][];
+    };
+    'no.nav.aap.brev.kontrakt.BrevdataDto': {
+      betingetTekst: components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto.BetingetTekst'][];
+      delmaler: components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto.Delmal'][];
+      faktagrunnlag: components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto.Faktagrunnlag'][];
+      fritekster: components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto.Fritekst'][];
+      periodetekster: components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto.Periodetekst'][];
+      valg: components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto.Valg'][];
+    };
+    'no.nav.aap.brev.kontrakt.BrevdataDto.BetingetTekst': {
+      id: string;
+    };
+    'no.nav.aap.brev.kontrakt.BrevdataDto.Delmal': {
+      id: string;
+    };
+    'no.nav.aap.brev.kontrakt.BrevdataDto.Faktagrunnlag': {
+      tekniskNavn: string;
+      verdi: string;
+    };
+    'no.nav.aap.brev.kontrakt.BrevdataDto.Fritekst': {
+      fritekst: string;
+      key: string;
+      parentId: string;
+    };
+    'no.nav.aap.brev.kontrakt.BrevdataDto.Periodetekst': {
+      faktagrunnlag: components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto.Faktagrunnlag'][];
+      id: string;
+    };
+    'no.nav.aap.brev.kontrakt.BrevdataDto.Valg': {
+      id: string;
+      key: string;
     };
     'no.nav.aap.brev.kontrakt.Innhold': {
       blokker: components['schemas']['no.nav.aap.brev.kontrakt.Blokk'][];
