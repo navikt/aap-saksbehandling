@@ -1,17 +1,26 @@
-import { BodyShort, Box, HGrid, Label, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Box, HGrid, Label, VStack } from '@navikt/ds-react';
 import { KabalKlageResultat, Klageresultat } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import styles from 'components/behandlingsinfo/Behandlingsinfo.module.css';
 import { formaterSvartype, formaterUtfall } from 'lib/utils/svarfraandreinstans';
+import { FetchResponse, isError } from 'lib/utils/api';
 
 interface Props {
-  kabalKlageResultat?: KabalKlageResultat;
+  kabalKlageResultat?: FetchResponse<KabalKlageResultat>;
   klageresultat?: Klageresultat;
 }
 
 export const KlageBehandlingInfo = ({ kabalKlageResultat, klageresultat }: Props) => {
-  const harHendelserFraKabal =
-    kabalKlageResultat?.svarFraAndreinstans && kabalKlageResultat?.svarFraAndreinstans.length > 0;
+  if (isError(kabalKlageResultat)) {
+    return (
+      <Alert variant="warning">
+        Kunne ikke hente klagebehandlingsinformasjon fra Kabal: <br />
+        {kabalKlageResultat.apiException.message}
+      </Alert>
+    );
+  }
+
+  const svarFraAndreinstans = kabalKlageResultat?.data?.svarFraAndreinstans;
   const skalVises = klageresultat && ['OPPRETTHOLDES', 'DELVIS_OMGJØRES'].includes(klageresultat.type);
 
   return (
@@ -25,14 +34,14 @@ export const KlageBehandlingInfo = ({ kabalKlageResultat, klageresultat }: Props
       >
         <VStack gap={'4'}>
           <Label>Svar fra Nav klageinstans</Label>
-          {!harHendelserFraKabal ? (
+          {!svarFraAndreinstans?.length ? (
             <Box>
               <HGrid columns={'1fr 1fr'} gap="1">
                 <BodyShort size={'small'}>Venter på svar</BodyShort>
               </HGrid>
             </Box>
           ) : (
-            kabalKlageResultat?.svarFraAndreinstans?.map((resultat, index) => {
+            svarFraAndreinstans?.map((resultat, index) => {
               return (
                 <Box key={index} className={index !== 0 ? styles.klageBehandlingResultatMedSkillelinje : ''}>
                   <HGrid columns={'1fr 1fr'} gap="1">
