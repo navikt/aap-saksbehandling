@@ -1,4 +1,4 @@
-import { AlternativType, DelmalFormField, ValgFormField } from 'components/brevbygger/Brevbygger';
+import { AlternativFormField, DelmalFormField, ValgFormField } from 'components/brevbygger/Brevbygger';
 import { BrevmalType, DelmalReferanse, ValgType } from 'components/brevbygger/brevmodellTypes';
 import { BrevdataDto, DelmalDto, ValgDto } from 'lib/types/types';
 
@@ -39,7 +39,7 @@ function mapValg(delmal: DelmalReferanse, brevdata?: BrevdataDto): ValgFormField
     }));
 }
 
-function mapAlternativer(valg: ValgType): AlternativType[] {
+function mapAlternativer(valg: ValgType): AlternativFormField[] {
   return valg.alternativer.map((alternativ) => {
     if (alternativ._type === 'fritekst') {
       return { beskrivelse: 'Fritekst', verdi: alternativ._key };

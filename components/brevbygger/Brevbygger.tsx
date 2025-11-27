@@ -11,14 +11,14 @@ import {
 import { BrevmalType } from 'components/brevbygger/brevmodellTypes';
 import { BrevdataDto } from 'lib/types/types';
 
-export interface AlternativType {
+export interface AlternativFormField {
   verdi: string;
 }
 
 export interface ValgFormField {
   noekkel: string;
   key: string;
-  alternativer: AlternativType[];
+  alternativer: AlternativFormField[];
   valgtAlternativ: string;
 }
 
