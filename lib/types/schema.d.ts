@@ -6015,7 +6015,7 @@ export interface components {
         | '9002'
         | '9003'
         | '9004';
-      samordningArbeidsgiverVurdering: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.samordning.arbeidsgiver.SamordningArbeidsgiverVurderingDTO'];
+      samordningArbeidsgiverVurdering: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.samordning.arbeidsgiver.SamordningArbeidsgiverVurderingerDTO'];
     };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarSamordningGraderingL\u00F8sning': {
       /** @enum {string} */
@@ -10025,20 +10025,14 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningArbeidsgiverGrunnlagDTO': {
       'harTilgangTil\u00C5Saksbehandle': boolean;
+      historiskeVurderinger?:
+        | components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningArbeidsgiverVurderingDTO'][]
+        | null;
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningArbeidsgiverVurderingDTO'];
     };
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningArbeidsgiverVurderingDTO': {
       begrunnelse: string;
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      fom: string;
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      tom: string;
+      perioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
       vurdertAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningUf\u00F8reGrunnlagDTO': {
@@ -10527,6 +10521,7 @@ export interface components {
         | 'KLAGE'
         | 'AKTIVITETSPLIKT'
         | 'AKTIVITETSPLIKT_11_9'
+        | 'TILBAKEKREVING_HENDELSE'
         | null;
     };
     'no.nav.aap.behandlingsflyt.behandling.klage.p\u00E5klagetbehandling.P\u00E5klagetBehandlingGrunnlagDto': {
@@ -11466,18 +11461,9 @@ export interface components {
         | 'BARNEPENSJON'
         | 'GJENLEVENDEPENSJON';
     };
-    'no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.samordning.arbeidsgiver.SamordningArbeidsgiverVurderingDTO': {
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      fom: string;
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      tom: string;
-      vurdering: string;
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.samordning.arbeidsgiver.SamordningArbeidsgiverVurderingerDTO': {
+      begrunnelse: string;
+      perioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.samordning.tjenestepensjon.TjenestePensjonForhold': {
       ordning: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.samordning.tjenestepensjon.TjenestePensjonOrdning'];
@@ -13208,6 +13194,7 @@ export interface components {
         | 'SAKSBEHANDLER_KELVIN_REFERANSE'
         | 'MANUELL_OPPRETTELSE'
         | 'KABAL_HENDELSE_ID'
+        | 'TILBAKEKREING_HENDELSE_ID'
         | 'PDL_HENDELSE_ID';
       verdi: string;
     };
@@ -13405,6 +13392,7 @@ export interface components {
         | 'OMGJØRING_KLAGE_REVURDERING'
         | 'NY_ÅRSAK_TIL_BEHANDLING'
         | 'KABAL_HENDELSE'
+        | 'TILBAKEKREVING_HENDELSE'
         | 'PDL_HENDELSE_DODSFALL_BRUKER'
         | 'PDL_HENDELSE_DODSFALL_BARN'
         | 'OPPFØLGINGSOPPGAVE';
@@ -13538,7 +13526,8 @@ export interface components {
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Omgj\u00F8ringKlageRevurdering']
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Oppf\u00F8lgingsoppgave']
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.PdlHendelse']
-      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.S\u00F8knad'];
+      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.S\u00F8knad']
+      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.TilbakekrevingHendelse'];
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Ny\u00C5rsakTilBehandling': components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Ny\u00C5rsakTilBehandlingV0'];
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Ny\u00C5rsakTilBehandlingV0': {
       behandlingReferanse: string;
@@ -13693,6 +13682,7 @@ export interface components {
         | 'OMGJØRING_KLAGE_REVURDERING'
         | 'NY_ÅRSAK_TIL_BEHANDLING'
         | 'KABAL_HENDELSE'
+        | 'TILBAKEKREVING_HENDELSE'
         | 'PDL_HENDELSE_DODSFALL_BRUKER'
         | 'PDL_HENDELSE_DODSFALL_BARN'
         | 'OPPFØLGINGSOPPGAVE';
@@ -13718,6 +13708,51 @@ export interface components {
       oppgitteBarn?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.OppgitteBarn'];
       student?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.S\u00F8knadStudentDto'];
       yrkesskade: string;
+    };
+    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.TilbakekrevingHendelse': components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.TilbakekrevingHendelseV0'];
+    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.TilbakekrevingHendelseV0': {
+      eksternBehandlingId?: string | null;
+      eksternFagsakId: string;
+      /**
+       * Format: date-time
+       * @example 2025-04-01T12:30:00
+       */
+      hendelseOpprettet: string;
+      hendelsestype: string;
+      tilbakekreving: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.TilbakekrevingKafkaDto'];
+      /** Format: int32 */
+      versjon: number;
+    };
+    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.TilbakekrevingKafkaDto': {
+      /** Format: uuid */
+      behandlingId: string;
+      /** @enum {string} */
+      behandlingsstatus: 'OPPRETTET' | 'TIL_BEHANDLING' | 'AVSLUTTET';
+      fullstendigPeriode: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.TilbakekrevingPeriode'];
+      /**
+       * Format: date-time
+       * @example 2025-04-01T12:30:00
+       */
+      sakOpprettet: string;
+      saksbehandlingURL: string;
+      'totaltFeilutbetaltBel\u00F8p': number;
+      /**
+       * Format: date-time
+       * @example 2025-04-01T12:30:00
+       */
+      varselSendt?: string | null;
+    };
+    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.TilbakekrevingPeriode': {
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fom: string;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      tom: string;
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.UtenlandsPeriodeDto': {
       /**
@@ -13835,7 +13870,8 @@ export interface components {
         | 'SVAR_FRA_KLAGEINSTANS'
         | 'KLAGE'
         | 'AKTIVITETSPLIKT'
-        | 'AKTIVITETSPLIKT_11_9';
+        | 'AKTIVITETSPLIKT_11_9'
+        | 'TILBAKEKREVING_HENDELSE';
     };
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlingAvTypeDTO': {
       /** Format: uuid */
@@ -13939,6 +13975,7 @@ export interface components {
       hendelser: components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlingHendelseDTO'][];
     };
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO': {
+      'eksternSaksbehandlingsl\u00F8sningUrl'?: string | null;
       /**
        * Format: date-time
        * @example 2025-04-01T12:30:00
@@ -14017,6 +14054,7 @@ export interface components {
         | 'KLAGE'
         | 'AKTIVITETSPLIKT'
         | 'AKTIVITETSPLIKT_11_9'
+        | 'TILBAKEKREVING_HENDELSE'
         | null;
     };
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.FinnBehandlingForIdentDTO': {

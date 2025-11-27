@@ -105,6 +105,9 @@ export type SamordningAndreStatligeYtelserVurderinger =
 export type SamordningArbeidsgiverGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningArbeidsgiverGrunnlagDTO'];
 
+export type SamordningArbeidsgiverVurdering =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningArbeidsgiverVurderingDTO'];
+
 export type SamordningAndreStatligeYtelserData =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.samordning.andrestatligeytelservurdering.SamordningAndreStatligeYtelserVurderingPeriodeDto'];
 

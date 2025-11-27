@@ -57,13 +57,6 @@ export const Samordning = async ({ behandlingsreferanse }: Props) => {
       </StegSuspense>
 
       <StegSuspense>
-        <SamordningAndreStatligeYtelserMedDatafetching
-          behandlingsreferanse={behandlingsreferanse}
-          stegData={samordningStatligeYtelserSteg}
-        />
-      </StegSuspense>
-
-      <StegSuspense>
         <SamordningArbeidsgiverMedDatafetching
           behandlingsreferanse={behandlingsreferanse}
           stegData={samordningArbeidsgiverSteg}
@@ -78,6 +71,13 @@ export const Samordning = async ({ behandlingsreferanse }: Props) => {
           />
         </StegSuspense>
       )}
+
+      <StegSuspense>
+        <SamordningAndreStatligeYtelserMedDatafetching
+          behandlingsreferanse={behandlingsreferanse}
+          stegData={samordningStatligeYtelserSteg}
+        />
+      </StegSuspense>
     </GruppeSteg>
   );
 };
