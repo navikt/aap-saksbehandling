@@ -6015,7 +6015,7 @@ export interface components {
         | '9002'
         | '9003'
         | '9004';
-sch      samordningArbeidsgiverVurdering: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.samordning.arbeidsgiver.SamordningArbeidsgiverVurderingerDTO'];
+      samordningArbeidsgiverVurdering: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.samordning.arbeidsgiver.SamordningArbeidsgiverVurderingerDTO'];
     };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarSamordningGraderingL\u00F8sning': {
       /** @enum {string} */
