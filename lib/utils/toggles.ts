@@ -10,5 +10,4 @@ export const toggles = {
   featureFerieISykepengeperiode: !isProd(), // Finnes ikke i unleash - kun frontend-toggle
   featurePostmottakBehandlingerPåVent: !isProd(),
   featureVisAvslagsårsaker: !isProd(),
-  featureComboboxForValgAvEnheter: !isProd(), // Finnes ikke i unleash - kun frontend-toggle
 };

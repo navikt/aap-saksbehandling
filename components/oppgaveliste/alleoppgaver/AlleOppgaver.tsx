@@ -1,9 +1,7 @@
 'use client';
 
 import { Enhet } from 'lib/types/oppgaveTypes';
-import { EnhetSelect } from 'components/oppgaveliste/enhetselect/EnhetSelect';
 import { useEffect, useState } from 'react';
-import { useLagreAktivEnhet } from 'hooks/oppgave/aktivEnhetHook';
 import { Alert, BodyShort, Box, Button, HStack, Label, VStack } from '@navikt/ds-react';
 import { AlleOppgaverTabell } from 'components/oppgaveliste/alleoppgaver/alleoppgavertabell/AlleOppgaverTabell';
 import { useAlleOppgaverForEnhet } from 'hooks/oppgave/OppgaveHook';
@@ -28,20 +26,38 @@ import { TabellSkeleton } from 'components/oppgaveliste/tabellskeleton/TabellSke
 import { AlleOppgaverFiltrering } from 'components/oppgaveliste/filtrering/alleoppgaverfiltrering/AlleOppgaverFiltrering';
 import { ALLE_OPPGAVER_ID } from 'components/oppgaveliste/filtrering/filtreringUtils';
 import { useLagreAktivUtvidetFilter } from 'hooks/oppgave/aktivUtvidetFilterHook';
+import { ComboOption } from 'components/produksjonsstyring/minenhet/MineEnheter';
+import { useLagreAktiveEnheter } from 'hooks/oppgave/aktiveEnheterHook';
+import { EnheterSelect } from 'components/oppgaveliste/enheterselect/EnheterSelect';
 
 interface Props {
   enheter: Enhet[];
 }
 
 export const AlleOppgaver = ({ enheter }: Props) => {
-  const { hentLagretAktivEnhet, lagreAktivEnhet } = useLagreAktivEnhet();
   const { hentLagretAktivKø, lagreAktivKøId } = useLagreAktivKø();
   const { hentAktivUtvidetFilter, lagreAktivUtvidetFilter } = useLagreAktivUtvidetFilter();
+  const { hentLagredeAktiveEnheter, lagreAktiveEnheter } = useLagreAktiveEnheter();
 
-  const [aktivEnhet, setAktivEnhet] = useState<string>(hentLagretAktivEnhet() ?? enheter[0]?.enhetNr ?? '');
   const [aktivKøId, setAktivKøId] = useState<number>(ALLE_OPPGAVER_ID);
   const [valgteRader, setValgteRader] = useState<number[]>([]);
   const lagretUtvidetFilter = hentAktivUtvidetFilter();
+
+  function førsteEnhetTilComboOption(enheter: Enhet[]): ComboOption[] | null {
+    const førsteEnhet = enheter.find((e) => e);
+    if (førsteEnhet) {
+      return [{ value: førsteEnhet.enhetNr, label: førsteEnhet.navn }];
+    }
+    return null;
+  }
+  const [aktiveEnheter, setAktiveEnheter] = useState<ComboOption[]>(
+    hentLagredeAktiveEnheter() ?? førsteEnhetTilComboOption(enheter) ?? []
+  );
+  const aktiveEnhetsnumre = aktiveEnheter.map((enhet) => enhet.value);
+  const oppdaterEnheter = (enheter: ComboOption[]) => {
+    setAktiveEnheter(enheter);
+    lagreAktiveEnheter(enheter);
+  };
 
   const { form, formFields } = useConfigForm<FormFieldsFilter>({
     behandlingstyper: {
@@ -103,10 +119,10 @@ export const AlleOppgaver = ({ enheter }: Props) => {
       : undefined;
 
   const { antallOppgaver, oppgaver, size, setSize, isLoading, isValidating, kanLasteInnFlereOppgaver, mutate } =
-    useAlleOppgaverForEnhet([aktivEnhet], aktivKøId, utvidetFilter);
+    useAlleOppgaverForEnhet(aktiveEnhetsnumre, aktivKøId, utvidetFilter);
 
-  const { data: køer } = useSWR(`api/filter?${queryParamsArray('enheter', [aktivEnhet])}`, () =>
-    hentKøerForEnheterClient([aktivEnhet])
+  const { data: køer } = useSWR(`api/filter?${queryParamsArray('enheter', aktiveEnhetsnumre)}`, () =>
+    hentKøerForEnheterClient(aktiveEnhetsnumre)
   );
 
   useEffect(() => {
@@ -130,11 +146,6 @@ export const AlleOppgaver = ({ enheter }: Props) => {
     }
   }, [køer]);
 
-  const oppdaterEnhet = (enhetsnr: string) => {
-    setAktivEnhet(enhetsnr);
-    lagreAktivEnhet(enhetsnr);
-  };
-
   const oppdaterKøId = (id: number) => {
     setAktivKøId(id);
     lagreAktivKøId(id);
@@ -151,7 +162,12 @@ export const AlleOppgaver = ({ enheter }: Props) => {
       <Box borderColor="border-divider" borderWidth="1" borderRadius={'xlarge'}>
         <VStack>
           <HStack paddingInline={'4'} paddingBlock={'2'} gap={'4'} style={{ borderBottom: '1px solid #071A3636' }}>
-            <EnhetSelect enheter={enheter} aktivEnhet={aktivEnhet} setAktivEnhet={oppdaterEnhet} />
+            <EnheterSelect
+              enheter={enheter}
+              aktiveEnheter={aktiveEnheter}
+              setAktiveEnheter={oppdaterEnheter}
+              className={styles.velgenhet}
+            />
             <KøSelect
               label={'Velg kø'}
               køer={oppgaveKøer || []}
