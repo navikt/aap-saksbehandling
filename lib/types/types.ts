@@ -291,6 +291,8 @@ export type ManuellInntektGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.ManuellInntektGrunnlagResponse'];
 export type ManuellInntektVurderingGrunnlagResponse =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.ManuellInntektVurderingGrunnlagResponse'];
+export type ManuellInntektÅr =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.AarData'];
 
 export type RegistrerYrkesskade =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.RegistrertYrkesskade'];
