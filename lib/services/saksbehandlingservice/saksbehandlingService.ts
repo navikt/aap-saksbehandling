@@ -83,7 +83,7 @@ import {
   YrkesskadeVurderingGrunnlag,
 } from 'lib/types/types';
 import { apiFetch, apiFetchNoMemoization, apiFetchPdf } from 'lib/services/apiFetch';
-import { logError, logInfo } from 'lib/serverutlis/logger';
+import { logError, logInfo, logWarning } from 'lib/serverutlis/logger';
 import { FetchResponse, isError, isSuccess } from 'lib/utils/api';
 import { Enhet } from 'lib/types/oppgaveTypes';
 import { Behovstype } from 'lib/utils/form';
@@ -382,20 +382,22 @@ export const hentKlagebehandlingNayGrunnlag = async (behandlingsReferanse: strin
   return await apiFetch<KlagebehandlingNayGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
-export const hentKlageresultat = async (behandlingsReferanse: string) => {
+export const hentKlageresultat = async (behandlingsReferanse: string): Promise<FetchResponse<Klageresultat>> => {
   const url = `${saksbehandlingApiBaseUrl}/api/klage/${behandlingsReferanse}/resultat`;
   return await apiFetch<Klageresultat>(url, saksbehandlingApiScope, 'GET');
 };
 
-export const hentKabalKlageresultat = async (behandlingsReferanse: string) => {
+export const hentKabalKlageresultat = async (
+  behandlingsReferanse: string
+): Promise<FetchResponse<KabalKlageResultat>> => {
   const url = `${saksbehandlingApiBaseUrl}/api/klage/${behandlingsReferanse}/kabal-resultat`;
   const res = await apiFetch<KabalKlageResultat>(url, saksbehandlingApiScope, 'GET');
+
   if (isError(res)) {
-    logError(`Kunne ikke hente kabal-resultat for behandling ${behandlingsReferanse}`, res.apiException);
-    return;
-  } else {
-    return res.data;
+    logWarning(`Kunne ikke hente kabal-resultat for behandling ${behandlingsReferanse}`, res.apiException);
   }
+
+  return res;
 };
 
 export const hentAktivitetsplikt11_7Grunnlag = async (behandlingsreferanse: string) => {
