@@ -1,12 +1,6 @@
-import {
-  AlternativType,
-  BrevdataDto,
-  DelmalDto,
-  DelmalFormField,
-  ValgDto,
-  ValgFormField,
-} from 'components/brevbygger/Brevbygger';
+import { AlternativType, DelmalFormField, ValgFormField } from 'components/brevbygger/Brevbygger';
 import { BrevmalType, DelmalReferanse, ValgType } from 'components/brevbygger/brevmodellTypes';
+import { BrevdataDto, DelmalDto, ValgDto } from 'lib/types/types';
 
 export function erDelmalValgt(delmalId: string, valgteDelmaler?: DelmalDto[]) {
   if (!valgteDelmaler) {

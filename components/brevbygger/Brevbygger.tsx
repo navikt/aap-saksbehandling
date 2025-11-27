@@ -9,47 +9,7 @@ import {
   mapDelmalerFraSanity,
 } from 'components/brevbygger/brevmalMapping';
 import { BrevmalType } from 'components/brevbygger/brevmodellTypes';
-
-// kladd -- disse vil komme fra gentypes
-export type DelmalDto = {
-  id: string;
-};
-
-export type FaktagrunnlagDto = {
-  tekniskNavn: string;
-  verdi: string;
-};
-
-export type PeriodeteksterDto = {
-  id: string;
-  faktagrunnlag: FaktagrunnlagDto[];
-};
-
-export type ValgDto = {
-  id: string;
-  key: string;
-};
-
-export type FritekstDto = {
-  parentId: string;
-  key: string;
-  fritekst: string; // JSON
-};
-
-export type BetingetTekstDto = {
-  id: string;
-};
-// <-- kladd slutt
-
-// til/fra backend
-export interface BrevdataDto {
-  delmaler: DelmalDto[];
-  faktagrunnlag: FaktagrunnlagDto[];
-  periodetekster: PeriodeteksterDto[];
-  valg: ValgDto[];
-  betingetTekst: BetingetTekstDto[];
-  fritekster: FritekstDto[];
-}
+import { BrevdataDto } from 'lib/types/types';
 
 export interface AlternativType {
   verdi: string;

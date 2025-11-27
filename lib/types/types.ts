@@ -478,6 +478,10 @@ export type ArbeidsopptrappingGrunnlagResponse =
 
 export type ArbeidsopptrappingLøsningDto =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.arbeidsopptrapping.ArbeidsopptrappingL\u00F8sningDto'];
+
+export type BrevdataDto = components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto'];
+export type DelmalDto = components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto.Delmal'];
+export type ValgDto = components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto.Valg'];
 // ---- HENTET FRA BEHANDLINGSFLYT PeriodiserteVurderingerDto.kt ---
 export interface VurderingDto {
   fom: string;
