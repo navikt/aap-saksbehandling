@@ -8,7 +8,6 @@ import {
   LøsPeriodisertBehovPåBehandling,
   MellomlagretVurdering,
   PeriodisertForutgåendeMedlemskapGrunnlag,
-  RettighetsperiodeGrunnlag,
 } from 'lib/types/types';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
@@ -37,7 +36,6 @@ interface Props {
   overstyring: boolean;
   initialMellomlagretVurdering?: MellomlagretVurdering;
   behovstype: Behovstype;
-  rettighetsperiodeGrunnlag?: RettighetsperiodeGrunnlag;
   beregningstidspunktGrunnlag?: BeregningTidspunktGrunnlag;
 }
 
@@ -48,7 +46,6 @@ export const ForutgåendeMedlemskapPeriodisert = ({
   overstyring,
   initialMellomlagretVurdering,
   behovstype,
-  rettighetsperiodeGrunnlag,
   beregningstidspunktGrunnlag,
 }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
@@ -167,7 +164,6 @@ export const ForutgåendeMedlemskapPeriodisert = ({
         >
           <ForutgåendeMedlemskapFormInput
             form={form}
-            rettighetsperiodeGrunnlag={rettighetsperiodeGrunnlag}
             beregningstidspunktGrunnlag={beregningstidspunktGrunnlag}
             readOnly={formReadOnly}
             index={index}
