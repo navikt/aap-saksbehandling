@@ -15,18 +15,17 @@ describe('Manglende pensjonsgivende inntekter / EØS inntekter', () => {
     harTilgangTilÅSaksbehandle: true,
     historiskeVurderinger: [],
     manuelleVurderinger: {
-      aarsVurderinger: [
-        { ar: 2022, belop: null, eosBelop: null, gverdi: 0 },
-        { ar: 2023, belop: null, eosBelop: null, gverdi: 0 },
-        { ar: 2024, belop: null, eosBelop: null, gverdi: 0 },
-      ],
+      årsVurderinger: [{ år: 2022 }, { år: 2023, beløp: 200000, eøsBeløp: 50000 }, { år: 2024, eøsBeløp: 300000 }],
       begrunnelse: '',
       vurdertAv: {
         dato: '2025-11-27',
         ident: 'Saksbehandler',
       },
     },
-    registrerteInntekterSisteRelevanteAr: [{ ar: 2023, belop: null, eosBelop: null, gverdi: 0 }],
+    registrerteInntekterSisteRelevanteAr: [
+      { år: 2022, beløp: 230000 },
+      { år: 2023, beløp: 100000 },
+    ],
   };
 
   beforeEach(() => {
@@ -54,8 +53,7 @@ describe('Manglende pensjonsgivende inntekter / EØS inntekter', () => {
     expect(feilmelding).toBeVisible();
   });
 
-  // TODO fiks denne testen
-  it.skip('skal gi en feilmelding dersom det mangler utfylt PGI for et år', async () => {
+  it('skal gi en feilmelding dersom det mangler utfylt PGI for et år', async () => {
     const bekreftKnapp = screen.getByRole('button', { name: 'Bekreft' });
     await user.click(bekreftKnapp);
 
@@ -71,26 +69,28 @@ describe('Manglende pensjonsgivende inntekter / EØS inntekter', () => {
     expect(årstall).toEqual(['2022', '2023', '2024']);
   });
 
-  // TODO fiks denne testen
-  it.skip('skal vise ferdig lignet PGI fra grunnlag i tabell', () => {
+  it('skal vise ferdig lignet PGI fra grunnlag i tabell', () => {
     const tabell = screen.getByTestId('inntektstabell');
     const rader = within(tabell).getAllByRole('row');
     const ferdigLignetPGI = rader.map((rad) => within(rad).getByTestId('ferdigLignetPGI').textContent);
-    expect(ferdigLignetPGI).toEqual(['-', '520 000 kr', '-']);
+    expect(ferdigLignetPGI).toEqual(['230 000 kr', '100 000 kr', '-']);
   });
 
-  // TODO fiks denne testen
-  it.skip('skal vise manuelle inntekter fra grunnlag i tabell', () => {
+  it('skal vise manuelle inntekter fra grunnlag i tabell', () => {
     const beregnetPGICells = screen.queryAllByTestId('beregnetPGI');
     const beregnetPGIValues = beregnetPGICells.map((cell) => {
       const input = cell.querySelector('input');
       return input ? input.value : '';
     });
-    expect(beregnetPGIValues).toEqual(['', '100000', '200000']);
+    expect(beregnetPGIValues).toEqual(['', '200000', '']);
   });
 
-  // TODO skriv denne testen
-  it.skip('skal summere inntekter per år og vise totalen', () => {});
+  it('skal summere inntekter per år og vise totalen', () => {
+    const tabell = screen.getByTestId('inntektstabell');
+    const rader = within(tabell).getAllByRole('row');
+    const totalCells = rader.map((rad) => within(rad).getByTestId('totalt').textContent);
+    expect(totalCells).toEqual(['230 000 kr', '250 000 kr', '300 000 kr']);
+  });
 
   // TODO skriv tester for historiske vurderinger
   // TODO skriv tester for mellomlagring
