@@ -4,7 +4,7 @@ import { useConfigForm } from 'components/form/FormHook';
 import { parse } from 'date-fns';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { MellomlagretVurdering, RefusjonkravVurderingResponse, RefusjonskravGrunnlag } from 'lib/types/types';
+import { MellomlagretVurdering, RefusjonskravGrunnlag } from 'lib/types/types';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { FormEvent } from 'react';
@@ -15,7 +15,6 @@ import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupW
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { Sak } from 'context/saksbehandling/SakContext';
 
-import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { RefusjonsKrav } from 'components/behandlinger/sykdom/refusjon/RefusjonsKrav';
 import { ValuePair } from 'components/form/FormField';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
