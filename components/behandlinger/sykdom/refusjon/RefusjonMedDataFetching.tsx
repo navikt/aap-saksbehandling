@@ -20,7 +20,7 @@ export const RefusjonMedDataFetching = async ({ behandlingsReferanse, stegData }
     return <ApiException apiResponses={[refusjonGrunnlag]} />;
   }
 
-  if (!skalViseSteg(stegData, refusjonGrunnlag.data.gjeldendeVurdering != null)) {
+  if (!skalViseSteg(stegData, refusjonGrunnlag.data.gjeldendeVurderinger != null)) {
     return null;
   }
 
