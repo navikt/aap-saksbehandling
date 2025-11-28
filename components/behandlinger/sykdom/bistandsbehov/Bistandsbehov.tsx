@@ -72,7 +72,7 @@ export const Bistandsbehov = ({
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
-    : mapVurderingToDraftFormFields(grunnlag?.vurdering);
+    : mapVurderingToDraftFormFields(grunnlag?.vurderinger[0]);
 
   const { formFields, form } = useConfigForm<FormFields>(
     {
@@ -173,12 +173,14 @@ export const Bistandsbehov = ({
       status={status}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={true}
-      vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
+      vurdertAvAnsatt={grunnlag?.vurderinger[0]?.vurdertAv}
       kvalitetssikretAv={grunnlag?.kvalitetssikretAv}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() => {
-          form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields());
+          form.reset(
+            grunnlag?.vurderinger[0] ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields()
+          );
         });
       }}
       mellomlagretVurdering={mellomlagretVurdering}
