@@ -10,8 +10,10 @@ import { erDatoIPeriode, validerDato } from 'lib/validation/dateValidation';
 import { TrashFillIcon } from '@navikt/aksel-icons';
 import { parse } from 'date-fns';
 import { Periode } from 'lib/types/types';
-import { stringToDate } from '../../../../lib/utils/date';
+import { stringToDate } from 'lib/utils/date';
 import { JaEllerNei } from 'lib/utils/form';
+import { useTransition } from 'react';
+
 interface Props {
   index: number;
   form: UseFormReturn<ArbeidsopptrappingForm>;
@@ -27,6 +29,13 @@ export const ArbeidsopptrappingVurderingFormInput = ({
   ikkeRelevantePerioder,
 }: Props) => {
   const rettPåAAPIOpptrapping = form.watch(`vurderinger.${index}.rettPaaAAPIOpptrapping`);
+  const [isLoading, startTransition] = useTransition();
+  function handleDelete() {
+    startTransition(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      onRemove();
+    });
+  }
   return (
     <VStack gap={'5'}>
       <HStack justify={'space-between'}>
@@ -56,14 +65,17 @@ export const ArbeidsopptrappingVurderingFormInput = ({
           readOnly={readonly}
         />
 
-        <Button
-          aria-label="Fjern vurdering"
-          variant="tertiary"
-          size="small"
-          icon={<TrashFillIcon />}
-          onClick={() => onRemove()}
-          type="button"
-        />
+        {!readonly && (
+          <Button
+            aria-label="Fjern vurdering"
+            variant="tertiary"
+            size="small"
+            icon={<TrashFillIcon />}
+            loading={isLoading}
+            onClick={() => handleDelete()}
+            type="button"
+          />
+        )}
       </HStack>
       <Link href="https://lovdata.no/nav/rundskriv/r11-00#KAPITTEL_26-7" target="_blank">
         Du kan lese om hvordan vilkåret skal vurderes i rundskrivet til § 11-23 (lovdata.no)
