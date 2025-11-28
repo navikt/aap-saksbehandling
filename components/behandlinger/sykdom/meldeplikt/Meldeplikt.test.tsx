@@ -1,12 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render, screen, within } from 'lib/test/CustomRender';
 import userEvent from '@testing-library/user-event';
-import { Meldeplikt } from 'components/behandlinger/sykdom/meldeplikt/Meldeplikt';
 import { FritakMeldepliktGrunnlag, MellomlagretVurderingResponse } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
 import { FetchResponse } from 'lib/utils/api';
 import createFetchMock from 'vitest-fetch-mock';
 import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
+import { Meldeplikt } from 'components/behandlinger/sykdom/meldeplikt/MeldepliktGammel';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();

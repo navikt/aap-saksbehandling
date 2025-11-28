@@ -22,7 +22,7 @@ import { TidligereVurderingExpandableCard } from 'components/periodisering/tidli
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 import { NyVurderingExpandableCard } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { ArbeidsopptrappingVurderingFormInput } from 'components/behandlinger/sykdom/arbeidsopptrapping/ArbeidsopptrappingVurderingFormInput';
-import { VStack } from '@navikt/ds-react';
+import { Link, VStack } from '@navikt/ds-react';
 import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
 import { IkkeVurderbarPeriode } from 'components/periodisering/IkkeVurderbarPeriode';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
@@ -138,6 +138,13 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
       onLeggTilVurdering={onAddPeriode}
       errorList={errorList}
     >
+      {!formReadOnly && (
+        <VStack paddingBlock={'4'}>
+          <Link href="https://lovdata.no/nav/rundskriv/r11-00#KAPITTEL_26-7" target="_blank">
+            Du kan lese om hvordan vilkåret skal vurderes i rundskrivet til § 11-23 (lovdata.no)
+          </Link>
+        </VStack>
+      )}
       {ikkeVurderbarePerioder.map((vurdering) => (
         <IkkeVurderbarPeriode
           key={vurdering.fom}

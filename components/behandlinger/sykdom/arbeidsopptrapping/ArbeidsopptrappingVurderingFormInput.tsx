@@ -4,7 +4,7 @@ import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper
 import { UseFormReturn } from 'react-hook-form';
 import { ArbeidsopptrappingForm } from 'components/behandlinger/sykdom/arbeidsopptrapping/Arbeidsopptrapping';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
-import { Alert, Button, HStack, Link, VStack } from '@navikt/ds-react';
+import { Alert, Button, HStack, VStack } from '@navikt/ds-react';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { erDatoIPeriode, validerDato } from 'lib/validation/dateValidation';
 import { TrashFillIcon } from '@navikt/aksel-icons';
@@ -77,9 +77,6 @@ export const ArbeidsopptrappingVurderingFormInput = ({
           />
         )}
       </HStack>
-      <Link href="https://lovdata.no/nav/rundskriv/r11-00#KAPITTEL_26-7" target="_blank">
-        Du kan lese om hvordan vilkåret skal vurderes i rundskrivet til § 11-23 (lovdata.no)
-      </Link>
       <TextAreaWrapper
         name={`vurderinger.${index}.begrunnelse`}
         control={form.control}
