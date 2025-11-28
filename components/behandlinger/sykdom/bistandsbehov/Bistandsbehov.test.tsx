@@ -47,13 +47,14 @@ describe('Generelt', () => {
         vurdertAv: { ident: 'Saksbehandler', dato: '2025-03-24' },
       },
     ],
-    vurdering: {
-      begrunnelse: 'Dette er min vurdering som er bekreftet',
-      erBehovForAktivBehandling: true,
-      erBehovForArbeidsrettetTiltak: true,
-      vurdertAv: { ident: 'Saksbehandler', dato: '2025-03-24' },
-    },
-    vurderinger: []
+    vurderinger: [
+      {
+        begrunnelse: 'Dette er min vurdering som er bekreftet',
+        erBehovForAktivBehandling: true,
+        erBehovForArbeidsrettetTiltak: true,
+        vurdertAv: { ident: 'Saksbehandler', dato: '2025-03-24' },
+      },
+    ],
   };
 
   it('Skal ha en overskrift', () => {
@@ -103,17 +104,18 @@ describe('mellomlagring i bistandsbehov', () => {
   };
 
   const bistandsgrunnlag: BistandsGrunnlag = {
-    vurdering: {
-      begrunnelse: 'Dette er min vurdering som er bekreftet',
-      erBehovForAktivBehandling: true,
-      erBehovForArbeidsrettetTiltak: true,
-      vurdertAv: { ident: 'TESTER', dato: '2025-08-19' },
-    },
+    vurderinger: [
+      {
+        begrunnelse: 'Dette er min vurdering som er bekreftet',
+        erBehovForAktivBehandling: true,
+        erBehovForArbeidsrettetTiltak: true,
+        vurdertAv: { ident: 'TESTER', dato: '2025-08-19' },
+      },
+    ],
     gjeldendeSykdsomsvurderinger: [],
     gjeldendeVedtatteVurderinger: [],
     harTilgangTilÅSaksbehandle: true,
     historiskeVurderinger: [],
-    vurderinger: []
   };
 
   it('Skal vise en tekst om hvem som har gjort vurderingen dersom det finnes en mellomlagring', () => {
@@ -458,7 +460,7 @@ describe('Revurdering', () => {
         vurdertAv: { ident: 'Saksbehandler', dato: '2025-03-24' },
       },
     ],
-    vurderinger: []
+    vurderinger: [],
   };
 
   it('viser spørsmål om brukeren skal vurders for AAP i overgang til arbeid hvis det er avslag på både 11-5 og det svares nei på a,b og c', async () => {
