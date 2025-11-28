@@ -10,6 +10,7 @@ import {
 } from 'components/brevbygger/brevmalMapping';
 import { BrevmalType } from 'components/brevbygger/brevmodellTypes';
 import { BrevdataDto } from 'lib/types/types';
+import { ForhåndsvisBrev } from 'components/brevbygger/ForhåndsvisBrev';
 
 export interface AlternativFormField {
   verdi: string;
@@ -33,11 +34,12 @@ export interface BrevdataFormFields {
 }
 
 interface BrevbyggerProps {
+  referanse: string;
   brevmal?: string | null;
   brevdata?: BrevdataDto;
 }
 
-export const Brevbygger = ({ brevmal, brevdata }: BrevbyggerProps) => {
+export const Brevbygger = ({ referanse, brevmal, brevdata }: BrevbyggerProps) => {
   const parsedBrevmal: BrevmalType = JSON.parse(brevmal || '');
   const { control, handleSubmit, watch } = useForm<BrevdataFormFields>({
     defaultValues: {
@@ -86,12 +88,10 @@ export const Brevbygger = ({ brevmal, brevdata }: BrevbyggerProps) => {
               brevmal={parsedBrevmal}
             />
           ))}
-          <Button>Oppdater forhåndsvisning</Button>
+          <Button>Oppdater brevdata</Button>
         </form>
       </Box>
-      <Box padding={'2'} background={'bg-subtle'} shadow="medium">
-        Her kommer preview av brev...
-      </Box>
+      <ForhåndsvisBrev referanse={referanse} />
     </HGrid>
   );
 };

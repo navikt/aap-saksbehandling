@@ -92,7 +92,9 @@ export const SkriveBrevMedDataFetching = async ({
           behandlingstype === 'Aktivitetsplikt' ? aktivitetsplikt11_7Grunnlag.data : undefined
         }
       />
-      {brukNyBrevbygger && <Brevbygger brevmal={brev.brevmal} brevdata={brev.brevdata} />}
+      {brukNyBrevbygger && (
+        <Brevbygger brevmal={brev.brevmal} brevdata={brev.brevdata} referanse={brev.brevbestillingReferanse} />
+      )}
       {!brukNyBrevbygger && (
         <SkriveBrev
           status={brev.status}

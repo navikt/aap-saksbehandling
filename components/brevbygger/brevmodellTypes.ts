@@ -35,6 +35,8 @@ export interface TextEditorType {
   children: TekstinnholdType[];
   markDefs: any[];
   style: string;
+  listItem?: string;
+  level?: number;
 }
 
 export interface TekstType extends SanityAttributes {
