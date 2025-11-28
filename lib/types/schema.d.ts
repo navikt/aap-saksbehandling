@@ -4270,6 +4270,8 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.OpprettTestcaseDTO': {
       barn: components['schemas']['no.nav.aap.behandlingsflyt.TestBarn'][];
+      erArbeidsevnenNedsatt: boolean;
+      erNedsettelseIArbeidsevneMerEnnHalvparten: boolean;
       /**
        * Format: date
        * @example 2025-04-01

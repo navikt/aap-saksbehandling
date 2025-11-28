@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Button, HGrid, HStack, VStack } from '@navikt/ds-react';
+import { Alert, Box, Button, HGrid, HStack, VStack } from '@navikt/ds-react';
 import { mutate } from 'swr';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { OpprettSakBarn } from 'components/opprettsak/barn/OpprettSakBarn';
@@ -46,99 +46,118 @@ export interface OpprettSakFormFields {
   søknadsdato: Date;
   sykepenger?: SamordningSykepenger[];
   tjenestePensjon?: JaEllerNei;
+  erArbeidsevnenNedsatt: JaEllerNei;
+  erNedsettelseIArbeidsevneMerEnnHalvparten: JaEllerNei;
   steg?: TestcaseSteg;
 }
 
 export const OpprettSakLocal = () => {
   const { isLoading, opprettSakOgBehandling } = useOpprettSak();
-  const { formFields, form } = useConfigForm<OpprettSakFormFields>({
-    søknadsdato: {
-      type: 'date',
-      label: 'Søknadsdato',
-      defaultValue: new Date(),
+  const { formFields, form } = useConfigForm<OpprettSakFormFields>(
+    {
+      søknadsdato: {
+        type: 'date',
+        label: 'Søknadsdato',
+        defaultValue: new Date(),
+      },
+      fødselsdato: {
+        type: 'date',
+        defaultValue: new Date('2000-01-01'),
+        toDate: new Date(),
+        label: 'Fødselsdato',
+      },
+      yrkesskade: {
+        type: 'radio',
+        label: 'Yrkesskade?',
+        defaultValue: JaEllerNei.Nei,
+        options: JaEllerNeiOptions,
+      },
+      student: {
+        type: 'radio',
+        label: 'Student?',
+        defaultValue: JaEllerNei.Nei,
+        options: JaEllerNeiOptions,
+      },
+      barn: {
+        type: 'fieldArray',
+        defaultValue: [],
+      },
+      inntekter: {
+        type: 'fieldArray',
+        defaultValue: [{ år: '2024', beløp: '200000' }],
+      },
+      uføre: {
+        type: 'number',
+        label: 'Uføregrad (%)',
+      },
+      institusjon: {
+        type: 'checkbox',
+        label: 'Institujon',
+        options: [
+          { label: 'Er innlagt på sykehus', value: 'sykehus' },
+          { label: 'Er i fengsel', value: 'fengsel' },
+        ],
+      },
+      medlemskap: {
+        type: 'radio',
+        label: 'Har medlemskap folketrygden?',
+        defaultValue: JaEllerNei.Ja,
+        options: JaEllerNeiOptions,
+      },
+      sykepenger: {
+        type: 'fieldArray',
+        defaultValue: [{ grad: 50, periode: { fom: '14.03.2025', tom: '31.03.2025' } }],
+      },
+      tjenestePensjon: {
+        type: 'radio',
+        label: 'Tjenestepensjon?',
+        options: JaEllerNeiOptions,
+        defaultValue: JaEllerNei.Nei,
+      },
+      erArbeidsevnenNedsatt: {
+        type: 'radio',
+        label: 'Er arbeidsevnen nedsatt?',
+        options: JaEllerNeiOptions,
+        defaultValue: JaEllerNei.Ja,
+      },
+      erNedsettelseIArbeidsevneMerEnnHalvparten: {
+        type: 'radio',
+        label: 'Er nedsettelse i arbeidsevne mer enn halvparten?',
+        options: JaEllerNeiOptions,
+        defaultValue: JaEllerNei.Ja,
+      },
+      steg: {
+        type: 'combobox',
+        label: 'Steg',
+        hideLabel: true,
+        defaultValue: 'KVALITETSSIKRING',
+        options: [
+          { value: 'AVKLAR_STUDENT', label: 'Avklar student' },
+          { value: 'AVKLAR_SYKDOM', label: 'Avklar sykdom' },
+          { value: 'VURDER_BISTANDSBEHOV', label: 'Vurder bistandsbehov' },
+          { value: 'REFUSJON_KRAV', label: 'Refusjon krav' },
+          { value: 'SYKDOMSVURDERING_BREV', label: 'Sykdomsvurdering brev' },
+          { value: 'KVALITETSSIKRING', label: 'Kvalitetssikring' },
+          { value: 'VURDER_YRKESSKADE', label: 'Vurder yrkesskade' },
+          { value: 'FASTSETT_BEREGNINGSTIDSPUNKT', label: 'Fastsett beregningstidspunkt' },
+          { value: 'MANGLENDE_LIGNING', label: 'Fastsett inntekt' },
+          { value: 'VURDER_MEDLEMSKAP', label: 'Vurder medlemskap' },
+          { value: 'VURDER_OPPHOLDSKRAV', label: 'Vurder oppholdskrav' },
+          { value: 'DU_ER_ET_ANNET_STED', label: 'Institusjonsopphold' },
+          { value: 'BARNETILLEGG', label: 'Barnetillegg' },
+          { value: 'SAMORDNING_GRADERING', label: 'Samordning folketrygdytelser' },
+          { value: 'SAMORDNING_ANDRE_STATLIGE_YTELSER', label: 'Samordning andre statlige ytelser' },
+          { value: 'SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV', label: 'Samordning tjenestepensjon refusjonskrav' },
+          { value: 'FORESLÅ_VEDTAK', label: 'Foreslå vedtak' },
+          { value: 'FATTE_VEDTAK', label: 'Fatte vedtak' },
+          { value: 'BREV', label: 'Brev' },
+        ],
+      },
     },
-    fødselsdato: {
-      type: 'date',
-      defaultValue: new Date('2000-01-01'),
-      toDate: new Date(),
-      label: 'Fødselsdato',
-    },
-    yrkesskade: {
-      type: 'radio',
-      label: 'Yrkesskade?',
-      defaultValue: JaEllerNei.Nei,
-      options: JaEllerNeiOptions,
-    },
-    student: {
-      type: 'radio',
-      label: 'Student?',
-      defaultValue: JaEllerNei.Nei,
-      options: JaEllerNeiOptions,
-    },
-    barn: {
-      type: 'fieldArray',
-      defaultValue: [],
-    },
-    inntekter: {
-      type: 'fieldArray',
-      defaultValue: [{ år: '2024', beløp: '200000' }],
-    },
-    uføre: {
-      type: 'number',
-      label: 'Uføregrad (%)',
-    },
-    institusjon: {
-      type: 'checkbox',
-      label: 'Institujon',
-      options: [
-        { label: 'Er innlagt på sykehus', value: 'sykehus' },
-        { label: 'Er i fengsel', value: 'fengsel' },
-      ],
-    },
-    medlemskap: {
-      type: 'radio',
-      label: 'Har medlemskap folketrygden?',
-      defaultValue: JaEllerNei.Ja,
-      options: JaEllerNeiOptions,
-    },
-    sykepenger: {
-      type: 'fieldArray',
-      defaultValue: [{ grad: 50, periode: { fom: '14.03.2025', tom: '31.03.2025' } }],
-    },
-    tjenestePensjon: {
-      type: 'radio',
-      label: 'Tjenestepensjon?',
-      options: JaEllerNeiOptions,
-      defaultValue: JaEllerNei.Nei,
-    },
-    steg: {
-      type: 'combobox',
-      label: 'Steg',
-      hideLabel: true,
-      defaultValue: 'KVALITETSSIKRING',
-      options: [
-        { value: 'AVKLAR_STUDENT', label: 'Avklar student' },
-        { value: 'AVKLAR_SYKDOM', label: 'Avklar sykdom' },
-        { value: 'VURDER_BISTANDSBEHOV', label: 'Vurder bistandsbehov' },
-        { value: 'REFUSJON_KRAV', label: 'Refusjon krav' },
-        { value: 'SYKDOMSVURDERING_BREV', label: 'Sykdomsvurdering brev' },
-        { value: 'KVALITETSSIKRING', label: 'Kvalitetssikring' },
-        { value: 'VURDER_YRKESSKADE', label: 'Vurder yrkesskade' },
-        { value: 'FASTSETT_BEREGNINGSTIDSPUNKT', label: 'Fastsett beregningstidspunkt' },
-        { value: 'MANGLENDE_LIGNING', label: 'Fastsett inntekt' },
-        { value: 'VURDER_MEDLEMSKAP', label: 'Vurder medlemskap' },
-        { value: 'VURDER_OPPHOLDSKRAV', label: 'Vurder oppholdskrav' },
-        { value: 'DU_ER_ET_ANNET_STED', label: 'Institusjonsopphold' },
-        { value: 'BARNETILLEGG', label: 'Barnetillegg' },
-        { value: 'SAMORDNING_GRADERING', label: 'Samordning folketrygdytelser' },
-        { value: 'SAMORDNING_ANDRE_STATLIGE_YTELSER', label: 'Samordning andre statlige ytelser' },
-        { value: 'SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV', label: 'Samordning tjenestepensjon refusjonskrav' },
-        { value: 'FORESLÅ_VEDTAK', label: 'Foreslå vedtak' },
-        { value: 'FATTE_VEDTAK', label: 'Fatte vedtak' },
-        { value: 'BREV', label: 'Brev' },
-      ],
-    },
-  });
+    {
+      shouldUnregister: true,
+    }
+  );
 
   const mapInnhold = (data: OpprettSakFormFields, steg?: TestcaseSteg) => {
     return {
@@ -173,6 +192,8 @@ export const OpprettSakLocal = () => {
           },
         })) || [],
       tjenestePensjon: getTrueFalseEllerUndefined(data.tjenestePensjon),
+      erArbeidsevnenNedsatt: data.erArbeidsevnenNedsatt === JaEllerNei.Ja,
+      erNedsettelseIArbeidsevneMerEnnHalvparten: data.erNedsettelseIArbeidsevneMerEnnHalvparten === JaEllerNei.Ja,
       steg: steg,
     };
   };
@@ -198,6 +219,14 @@ export const OpprettSakLocal = () => {
             <FormField form={form} formField={formFields.søknadsdato} />
             <FormField form={form} formField={formFields.fødselsdato} />
             <FormField form={form} formField={formFields.yrkesskade} horizontalRadio={true} />
+            <FormField form={form} formField={formFields.erArbeidsevnenNedsatt} horizontalRadio={true} />
+            {form.watch('erArbeidsevnenNedsatt') === JaEllerNei.Ja && (
+              <FormField
+                form={form}
+                formField={formFields.erNedsettelseIArbeidsevneMerEnnHalvparten}
+                horizontalRadio={true}
+              />
+            )}
             <FormField form={form} formField={formFields.student} horizontalRadio={true} />
             <FormField form={form} formField={formFields.medlemskap} horizontalRadio={true} />
             <FormField form={form} formField={formFields.tjenestePensjon} horizontalRadio={true} />
@@ -233,9 +262,22 @@ export const OpprettSakLocal = () => {
             borderColor="border-subtle"
             borderRadius="medium"
           >
-            <Button type="button" size="small" loading={isLoading} onClick={() => opprett(undefined)}>
-              Opprett og iverksett
-            </Button>
+            <HStack gap="4" justify="space-between">
+              <Button type="button" size="small" loading={isLoading} onClick={() => opprett(undefined)}>
+                Opprett og iverksett
+              </Button>
+
+              {form.watch('erArbeidsevnenNedsatt') === JaEllerNei.Nei ||
+              form.watch('erNedsettelseIArbeidsevneMerEnnHalvparten') === JaEllerNei.Nei ? (
+                <Alert variant="error" inline>
+                  Avslag
+                </Alert>
+              ) : (
+                <Alert variant="success" inline>
+                  Innvilgelse
+                </Alert>
+              )}
+            </HStack>
           </Box>
 
           <Box
