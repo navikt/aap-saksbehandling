@@ -1,5 +1,5 @@
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
-import { BodyLong, Box, Button, HStack, Table, VStack } from '@navikt/ds-react';
+import { BodyLong, BodyShort, Box, Button, HStack, Table, VStack } from '@navikt/ds-react';
 
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 
@@ -19,7 +19,7 @@ interface Props {
   readOnly: boolean;
 }
 
-export const RefusjonsKrav = ({ form, readOnly }: Props) => {
+export const Refusjonskrav = ({ form, readOnly }: Props) => {
   const { fields, append, remove } = useFieldArray({ name: 'refusjoner', control: form.control });
   const behandlingsreferanse = useBehandlingsReferanse();
 
@@ -53,12 +53,16 @@ export const RefusjonsKrav = ({ form, readOnly }: Props) => {
         <BodyLong size={'small'} weight={'semibold'}>
           Legg til refusjonskrav
         </BodyLong>
-        <BodyLong size="small" textColor={'subtle'}>
-          Hvis det er flere kontorer som kan ha refusjonskrav, legg til flere perioder.
-          <br />
-          Sluttdato på periode blir dagen før vedtaksdato med mindre annet er oppgitt.
-          <br />
-          Refusjonskrav vil kun være på etterbetaling av AAP.
+        <BodyLong>
+          <BodyLong size="small" textColor={'subtle'}>
+            Hvis det er flere kontorer som kan ha refusjonskrav, legg til flere perioder.
+          </BodyLong>
+          <BodyLong size="small" textColor={'subtle'}>
+            Sluttdato på periode blir dagen før vedtaksdato med mindre annet er oppgitt.
+          </BodyLong>
+          <BodyLong size="small" textColor={'subtle'}>
+            Refusjonskrav vil kun være på etterbetaling av AAP.
+          </BodyLong>
         </BodyLong>
       </VStack>
 

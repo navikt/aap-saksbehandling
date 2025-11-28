@@ -15,7 +15,7 @@ import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupW
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { Sak } from 'context/saksbehandling/SakContext';
 
-import { RefusjonsKrav } from 'components/behandlinger/sykdom/refusjon/RefusjonsKrav';
+import { Refusjonskrav } from 'components/behandlinger/sykdom/refusjon/RefusjonsKrav';
 import { ValuePair } from 'components/form/FormField';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
@@ -119,7 +119,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
       visningActions={visningActions}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
-      {grunnlag.økonomiskSosialHjelp != null && (
+      {grunnlag.økonomiskSosialHjelp && (
         <VStack>
           <BodyLong weight={'semibold'} size={'small'}>
             Relevant informasjon fra søknad:
@@ -142,7 +142,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
         <Radio value={JaEllerNei.Ja}>Ja</Radio>
         <Radio value={JaEllerNei.Nei}>Nei</Radio>
       </RadioGroupWrapper>
-      {form.watch('harKrav') === JaEllerNei.Ja && <RefusjonsKrav sak={sak} form={form} readOnly={readOnly} />}
+      {form.watch('harKrav') === JaEllerNei.Ja && <Refusjonskrav sak={sak} form={form} readOnly={readOnly} />}
     </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };
