@@ -179,7 +179,7 @@ export const Bistandsbehov = ({
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() => {
           form.reset(
-            grunnlag?.vurderinger[0] ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields()
+            grunnlag?.vurderinger[0] ? mapVurderingToDraftFormFields(grunnlag.vurderinger[0]) : emptyDraftFormFields()
           );
         });
       }}
