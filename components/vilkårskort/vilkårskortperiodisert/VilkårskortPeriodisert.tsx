@@ -51,7 +51,7 @@ export const VilkårskortPeriodisert = ({
   return (
     <VStack
       padding={'3'}
-      gap={'3'}
+      gap={'1'}
       aria-label={heading}
       className={`${erAktivtSteg ? classNameBasertPåEnhet : ''} ${styles.vilkårsKort}`}
     >
@@ -149,7 +149,7 @@ export const VilkårskortPeriodisert = ({
               </VStack>
 
               {/* Høyre kolonne: vurdert av / kvalitetssikret av */}
-              <VStack align="baseline">
+              <VStack align="baseline" paddingBlock={'2 0'}>
                 {vurdertAutomatisk && <Detail>Vurdert automatisk</Detail>}
                 {vurdertAvAnsatt && (
                   <Detail>
