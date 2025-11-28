@@ -113,9 +113,9 @@ export const FastsettManuellInntektNy = ({
               begrunnelse: data.begrunnelse,
               belop: 0, // TODO Deprecated
               vurderinger: data.tabellår.map((år) => ({
-                ar: år.år,
-                belop: år.beregnetPGI,
-                eosBelop: år.eøsInntekt,
+                år: år.år,
+                beløp: år.beregnetPGI,
+                eøsBeløp: år.eøsInntekt,
               })),
             },
           },
@@ -255,10 +255,10 @@ const berikMedManglendeÅr = (sisteÅr: number): Tabellår[] => {
  */
 const berikMedInntekterFraGrunnlag = (treÅr: Tabellår[], inntekterFraGrunnlag: ManuellInntektÅr[]): Tabellår[] => {
   return treÅr.map((år) => {
-    const inntekter = inntekterFraGrunnlag.find((inntekter) => inntekter.ar === år.år);
+    const inntekter = inntekterFraGrunnlag.find((inntekter) => inntekter.år === år.år);
     return {
       år: år.år,
-      ferdigLignetPGI: inntekter?.belop,
+      ferdigLignetPGI: inntekter?.beløp,
       beregnetPGI: undefined,
       eøsInntekt: undefined,
       totalInntekt: undefined,
@@ -271,12 +271,12 @@ const berikMedInntekterFraGrunnlag = (treÅr: Tabellår[], inntekterFraGrunnlag:
  */
 const berikMedManuelleInntekter = (treÅr: Tabellår[], manuelleInntekter: ManuellInntektÅr[]): Tabellår[] => {
   return treÅr.map((år) => {
-    const inntekter = manuelleInntekter.find((inntekter) => inntekter.ar === år.år);
+    const inntekter = manuelleInntekter.find((inntekter) => inntekter.år === år.år);
     return {
       år: år.år,
       ferdigLignetPGI: år.ferdigLignetPGI,
-      beregnetPGI: inntekter?.belop,
-      eøsInntekt: inntekter?.eosBelop,
+      beregnetPGI: inntekter?.beløp,
+      eøsInntekt: inntekter?.eøsBeløp,
       totalInntekt: undefined,
     };
   });
@@ -290,7 +290,7 @@ const regnUtTotalbeløpPerÅr = (ferdigLignetPGI: number, beregnetPGI: number, e
 
 const byggTabellData = (grunnlag: ManuellInntektGrunnlag): Tabellår[] => {
   const inntekterFraGrunnlag = grunnlag.registrerteInntekterSisteRelevanteAr;
-  const manuelleInntekter = grunnlag.manuelleVurderinger?.aarsVurderinger || [];
+  const manuelleInntekter = grunnlag.manuelleVurderinger?.årsVurderinger || [];
 
   let tabellår: Tabellår[] = [];
   tabellår = berikMedManglendeÅr(grunnlag.ar);
