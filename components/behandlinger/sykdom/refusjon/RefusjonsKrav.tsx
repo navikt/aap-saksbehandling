@@ -1,9 +1,6 @@
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { BodyLong, Box, Button, HStack, Table, VStack } from '@navikt/ds-react';
 
-import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
-
-import { validerNullableDato } from 'lib/validation/dateValidation';
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 
 import { TableStyled } from 'components/tablestyled/TableStyled';
@@ -13,8 +10,7 @@ import { isError } from 'lib/utils/api';
 
 import { FormFields } from 'components/behandlinger/sykdom/refusjon/Refusjon';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
-import { isBefore, startOfDay } from 'date-fns';
-import { stringToDate } from 'lib/utils/date';
+
 import { Sak } from 'context/saksbehandling/SakContext';
 
 interface Props {
@@ -23,7 +19,7 @@ interface Props {
   readOnly: boolean;
 }
 
-export const RefusjonsKrav = ({ sak, form, readOnly }: Props) => {
+export const RefusjonsKrav = ({ form, readOnly }: Props) => {
   const { fields, append, remove } = useFieldArray({ name: 'refusjoner', control: form.control });
   const behandlingsreferanse = useBehandlingsReferanse();
 
