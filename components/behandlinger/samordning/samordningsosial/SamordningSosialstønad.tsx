@@ -14,8 +14,6 @@ export const SamordningSosialstønad = ({ grunnlag }: Props) => {
   if (!grunnlag.gjeldendeVurdering?.harKrav) return null;
   const vurderinger = grunnlag.gjeldendeVurderinger;
 
-  console.log(vurderinger);
-
   return (
     vurderinger && (
       <VilkårsKort heading="§11-29 Refusjonskrav sosialstønad" steg="REFUSJON_KRAV" defaultOpen={true}>
