@@ -39,7 +39,6 @@ export const PeriodisertForutgåendemedlemskapOverstyringswrapper = ({
   harYrkesskade,
   initialMellomlagretVurdering,
   behovstype,
-  rettighetsperiodeGrunnlag,
   beregningstidspunktGrunnlag,
 }: Props) => {
   const [overstyring, setOverstyring] = useState<boolean>(initialMellomlagretVurdering !== undefined);
@@ -61,7 +60,6 @@ export const PeriodisertForutgåendemedlemskapOverstyringswrapper = ({
           readOnly={readOnly}
           overstyring={true}
           initialMellomlagretVurdering={initialMellomlagretVurdering}
-          rettighetsperiodeGrunnlag={rettighetsperiodeGrunnlag}
           beregningstidspunktGrunnlag={beregningstidspunktGrunnlag}
         />
       )}

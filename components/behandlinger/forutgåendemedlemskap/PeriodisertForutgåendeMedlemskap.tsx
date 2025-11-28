@@ -5,7 +5,6 @@ import {
   hentForutgåendeMedlemskapsVurdering,
   hentMellomlagring,
   hentPeriodisertForutgåendeMedlemskapGrunnlag,
-  hentRettighetsperiodeGrunnlag,
   hentYrkesskadeVurderingGrunnlag,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { getStegData, skalViseSteg } from 'lib/utils/steg';
@@ -23,7 +22,6 @@ export const PeriodisertForutgåendeMedlemskap = async ({ behandlingsReferanse }
   const [
     flyt,
     grunnlag,
-    rettighetsperiodeGrunnlag,
     beregningsperiodeGrunnlag,
     automatiskVurdering,
     yrkesskadeVurderingGrunnlag,
@@ -31,7 +29,6 @@ export const PeriodisertForutgåendeMedlemskap = async ({ behandlingsReferanse }
   ] = await Promise.all([
     hentFlyt(behandlingsReferanse),
     hentPeriodisertForutgåendeMedlemskapGrunnlag(behandlingsReferanse),
-    hentRettighetsperiodeGrunnlag(behandlingsReferanse),
     hentBeregningstidspunktVurdering(behandlingsReferanse),
     hentForutgåendeMedlemskapsVurdering(behandlingsReferanse),
     hentYrkesskadeVurderingGrunnlag(behandlingsReferanse),
@@ -43,7 +40,6 @@ export const PeriodisertForutgåendeMedlemskap = async ({ behandlingsReferanse }
     isError(automatiskVurdering) ||
     isError(flyt) ||
     isError(yrkesskadeVurderingGrunnlag) ||
-    isError(rettighetsperiodeGrunnlag) ||
     isError(beregningsperiodeGrunnlag)
   ) {
     return <ApiException apiResponses={[grunnlag, automatiskVurdering, flyt]} />;
@@ -89,14 +85,12 @@ export const PeriodisertForutgåendeMedlemskap = async ({ behandlingsReferanse }
         harAvklaringsbehov={vurderMedlemskapSteg.avklaringsbehov.length > 0}
         visOverstyrKnapp={visOverstyrKnapp}
         harYrkesskade={harYrkesskade}
-        rettighetsperiodeGrunnlag={rettighetsperiodeGrunnlag.data}
         beregningstidspunktGrunnlag={beregningsperiodeGrunnlag.data}
       >
         {visManuellVurdering && (
           <ForutgåendeMedlemskapPeriodisert
             grunnlag={grunnlag.data}
             behovstype={behovstype}
-            rettighetsperiodeGrunnlag={rettighetsperiodeGrunnlag.data}
             beregningstidspunktGrunnlag={beregningsperiodeGrunnlag.data}
             behandlingVersjon={behandlingsVersjon}
             readOnly={readOnly}

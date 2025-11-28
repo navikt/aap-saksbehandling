@@ -10,12 +10,11 @@ import { validerDato } from 'lib/validation/dateValidation';
 import { ForutgåendeMedlemskapVurderingForm } from 'components/behandlinger/forutgåendemedlemskap/manuellvurderingperiodisert/types';
 import { JaEllerNei } from 'lib/utils/form';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
-import { BeregningTidspunktGrunnlag, RettighetsperiodeGrunnlag } from 'lib/types/types';
+import { BeregningTidspunktGrunnlag } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 
 type Props = {
   form: UseFormReturn<ForutgåendeMedlemskapVurderingForm>;
-  rettighetsperiodeGrunnlag?: RettighetsperiodeGrunnlag;
   beregningstidspunktGrunnlag?: BeregningTidspunktGrunnlag;
   visningModus: VisningModus;
   readOnly: boolean;
@@ -31,7 +30,6 @@ export const ForutgåendeMedlemskapFormInput = ({
   visningModus,
   form,
   onRemove,
-  rettighetsperiodeGrunnlag,
   beregningstidspunktGrunnlag,
 }: Props) => {
   const { control, watch } = form;
@@ -109,11 +107,11 @@ export const ForutgåendeMedlemskapFormInput = ({
           {[
             {
               value: 'A',
-              label: `a: Ja, brukeren har vært medlem i folketrygden i minst ett år umiddelbart før krav om ytelsen settes fram (${rettighetsperiodeGrunnlag?.søknadsdato ? formaterDatoForFrontend(rettighetsperiodeGrunnlag?.søknadsdato) : '(Søknadsdato ikke funnet)'}), og var medlem i trygden da arbeidsevnen ble nedsatt med minst halvparten (${beregningstidspunktGrunnlag?.vurdering?.nedsattArbeidsevneDato ? formaterDatoForFrontend(beregningstidspunktGrunnlag?.vurdering?.nedsattArbeidsevneDato) : '(Dato for nedsatt arbeidsevne ikke funnet)'}), og etter fylte 16 år har perioder med medlemskap som minst tilsvarer perioder uten medlemskap`,
+              label: `a: Ja, brukeren har vært medlem i folketrygden i minst ett år umiddelbart før krav om ytelsen settes fram, og var medlem i trygden da arbeidsevnen ble nedsatt med minst halvparten (${beregningstidspunktGrunnlag?.vurdering?.nedsattArbeidsevneDato ? formaterDatoForFrontend(beregningstidspunktGrunnlag?.vurdering?.nedsattArbeidsevneDato) : '(Dato for nedsatt arbeidsevne ikke funnet)'}), og etter fylte 16 år har perioder med medlemskap som minst tilsvarer perioder uten medlemskap`,
             },
             {
               value: 'B',
-              label: `b: Ja, brukeren har vært medlem i folketrygden i minst ett år umiddelbart før krav om ytelsen settes fram (${rettighetsperiodeGrunnlag?.søknadsdato ? formaterDatoForFrontend(rettighetsperiodeGrunnlag?.søknadsdato) : '(Søknadsdato ikke funnet)'}), og har etter fylte 16 år vært medlem i folketrygden med unntak av maksimum fem år.`,
+              label: `b: Ja, brukeren har vært medlem i folketrygden i minst ett år umiddelbart før krav om ytelsen settes fram, og har etter fylte 16 år vært medlem i folketrygden med unntak av maksimum fem år.`,
             },
             { value: 'Nei', label: 'Nei' },
           ].map((option) => (
