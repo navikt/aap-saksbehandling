@@ -141,7 +141,7 @@ export const FastsettManuellInntektNy = ({
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() => {
-          form.reset(grunnlag?.manuelleVurderinger ? mapGrunnlagToDraftFormFields(grunnlag) : emptyDraftFormFields());
+          form.reset(grunnlag ? mapGrunnlagToDraftFormFields(grunnlag) : emptyDraftFormFields());
         });
       }}
       mellomlagretVurdering={mellomlagretVurdering}

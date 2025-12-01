@@ -117,7 +117,6 @@ describe('Manglende pensjonsgivende inntekter / EØS inntekter', () => {
 
   // TODO skriv tester for historiske vurderinger
 
-  // TODO skriv tester for mellomlagring
   describe('Mellomlagring', () => {
     const fetchMock = createFetchMock(vi);
     fetchMock.enableMocks();
