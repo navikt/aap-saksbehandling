@@ -98,6 +98,7 @@ export const hentBehandling = async (behandlingsReferanse: string) => {
   return await apiFetch<DetaljertBehandling>(url, saksbehandlingApiScope, 'GET');
 };
 
+// TODO: Returnere respons, ikke data
 export const hentSak = async (saksnummer: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/${saksnummer}`;
   const res = await apiFetch<SaksInfo>(url, saksbehandlingApiScope, 'GET');
@@ -106,7 +107,7 @@ export const hentSak = async (saksnummer: string) => {
     if (res.status === 404) {
       notFound();
     } else {
-      throw new Error('Kunne ikke hente påkrevd sak.');
+      throw new Error(res.apiException.message || 'Ukjent feil oppsto ved henting av sak');
     }
   } else {
     return res.data;
