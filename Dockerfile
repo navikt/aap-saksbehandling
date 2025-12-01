@@ -7,7 +7,7 @@ RUN set -eux; \
 	locale -a | grep 'nb_NO.utf8'
 
 # Selve runtime imaget
-FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/node:22-slim
+FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/node:25-slim
 
 # For å støtte særnorske bokstaver i filnavn
 COPY --from=locale /usr/lib/locale /usr/lib/locale
