@@ -35,7 +35,7 @@ describe('Sykepengeerstatning', () => {
   });*/
 
   it('har felt for krav på sykepengeerstatning', () => {
-    expect(screen.getByRole('group', { name: 'Krav på sykepengeerstatning?' })).toBeVisible();
+    expect(screen.getByRole('group', { name: 'Har brukeren krav på sykepengeerstatning?' })).toBeVisible();
   });
 
   it('skal vise valg for grunn når krav på sykeerstatning er oppfylt', async () => {
@@ -83,56 +83,6 @@ describe('Sykepengeerstatning', () => {
     const feilmelding = await screen.findByText('Du må velge én grunn');
     expect(feilmelding).toBeVisible();
   });
-
-  it('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
-    setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'IKKE_OPPFYLT_MELDEPLIKT' });
-
-    const grunnlagMedVurdering: SykepengeerstatningGrunnlag = {
-      harTilgangTilÅSaksbehandle: true,
-      vurderinger: [
-        {
-          begrunnelse: 'Dette er en begrunnelse',
-          dokumenterBruktIVurdering: [],
-          harRettPå: true,
-          gjelderFra: '2025-06.27',
-          grunn: 'ANNEN_SYKDOM_INNEN_SEKS_MND',
-          vurdertAv: {
-            dato: '2025-08-21',
-            ident: 'Saksbehandler',
-          },
-        },
-      ],
-      vedtatteVurderinger: [
-        {
-          begrunnelse: 'Dette er en begrunnelse',
-          dokumenterBruktIVurdering: [],
-          harRettPå: true,
-          gjelderFra: '2025-06.27',
-          grunn: 'ANNEN_SYKDOM_INNEN_SEKS_MND',
-          vurdertAv: {
-            dato: '2025-08-21',
-            ident: 'Saksbehandler',
-          },
-        },
-      ],
-    };
-
-    render(<Sykepengeerstatning behandlingVersjon={1} grunnlag={grunnlagMedVurdering} readOnly={false} />);
-
-    const endreKnapp = screen.getByRole('button', { name: 'Endre' });
-    await user.click(endreKnapp);
-
-    const begrunnelseFelt = screen.getAllByRole('textbox')[2];
-    await user.clear(begrunnelseFelt);
-    await user.type(begrunnelseFelt, 'Dette er en ny begrunnelse');
-    expect(begrunnelseFelt).toHaveValue('Dette er en ny begrunnelse');
-
-    const avbrytKnapp = screen.getByRole('button', { name: 'Avbryt' });
-    await user.click(avbrytKnapp);
-
-    const begrunnelseFeltEtterAvbryt = screen.getAllByRole('textbox')[2];
-    expect(begrunnelseFeltEtterAvbryt).toHaveValue('Dette er en begrunnelse');
-  });
 });
 
 describe('mellomlagring', () => {
@@ -148,30 +98,44 @@ describe('mellomlagring', () => {
 
   const grunnlagMedVurdering: SykepengeerstatningGrunnlag = {
     harTilgangTilÅSaksbehandle: true,
-    vurderinger: [
+    kanVurderes: [],
+    behøverVurderinger: [],
+    vurderinger: [],
+    vedtatteVurderinger: [],
+    nyeVurderinger: [
       {
         begrunnelse: 'Dette er min vurdering som er bekreftet',
         dokumenterBruktIVurdering: [],
         harRettPå: true,
         gjelderFra: '2025-01.01',
+        fom: '2025-01.01',
+        vurdertIBehandling: { id: 1 },
+        opprettet: '2025-08-21',
         grunn: 'ANNEN_SYKDOM_INNEN_SEKS_MND',
         vurdertAv: {
           dato: '2025-08-21',
           ident: 'Saksbehandler',
         },
+        besluttetAv: undefined,
+        kvalitetssikretAv: undefined,
       },
     ],
-    vedtatteVurderinger: [
+    sisteVedtatteVurderinger: [
       {
         begrunnelse: 'Dette er min vurdering som er bekreftet',
         dokumenterBruktIVurdering: [],
         harRettPå: true,
         gjelderFra: '2025-01.01',
+        fom: '2025-01.01',
+        vurdertIBehandling: { id: 1 },
+        opprettet: '2025-08-21',
         grunn: 'ANNEN_SYKDOM_INNEN_SEKS_MND',
         vurdertAv: {
           dato: '2025-08-21',
           ident: 'Saksbehandler',
         },
+        besluttetAv: undefined,
+        kvalitetssikretAv: undefined,
       },
     ],
   };
@@ -180,6 +144,10 @@ describe('mellomlagring', () => {
     harTilgangTilÅSaksbehandle: true,
     vurderinger: [],
     vedtatteVurderinger: [],
+    nyeVurderinger: [],
+    sisteVedtatteVurderinger: [],
+    kanVurderes: [],
+    behøverVurderinger: [],
   };
 
   it('Skal vise en tekst om hvem som har gjort vurderingen dersom det finnes en mellomlagring', () => {

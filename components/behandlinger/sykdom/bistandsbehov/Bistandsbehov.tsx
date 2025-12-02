@@ -173,8 +173,8 @@ export const Bistandsbehov = ({
       status={status}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={true}
-      vurdertAvAnsatt={grunnlag?.vurderinger[0]?.vurdertAv}
-      kvalitetssikretAv={grunnlag?.nyeVurderinger[0]?.kvalitetssikretAv}
+      vurdertAvAnsatt={grunnlag?.nyeVurderinger?.[0]?.vurdertAv}
+      kvalitetssikretAv={grunnlag?.nyeVurderinger?.[0]?.kvalitetssikretAv}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() => {

@@ -1,23 +1,27 @@
 'use client';
 
-import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
-import {
-  MellomlagretVurdering,
-  SykepengeerstatningGrunnlag,
-  SykepengeerstatningVurderingGrunn,
-  SykepengerVurderingResponse,
-} from 'lib/types/types';
+import { Behovstype, JaEllerNei } from 'lib/utils/form';
+import { LøsPeriodisertBehovPåBehandling, MellomlagretVurdering, SykepengeerstatningGrunnlag } from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
-import { useConfigForm } from 'components/form/FormHook';
-import { FormField, ValuePair } from 'components/form/FormField';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
-import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
-import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
-import { parse } from 'date-fns';
+import { formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
+import { parseISO } from 'date-fns';
+import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
+import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
+import { useFieldArray, useForm } from 'react-hook-form';
+import { SykepengeerstatningForm } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/sykepengererstating-types';
+import {
+  getDefaultValuesFromGrunnlag,
+  mapFormTilDto,
+} from 'components/behandlinger/sykdom/vurdersykepengeerstatning/sykepengererstatning-utils';
+import { NyVurderingExpandableCard } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
+import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
+import { SykepengeerstatningFormInput } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/SykepengeerstatningFormInput';
+import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
+import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
+import { OppholdskravSykepengererstatninbgTidligereVurdering } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/SykepengererstatningTidligereVurdering';
 
 interface Props {
   behandlingVersjon: number;
@@ -26,197 +30,149 @@ interface Props {
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
-interface FormFields {
-  begrunnelse: string;
-  erOppfylt: string;
-  gjelderFra: string;
-  grunn?: SykepengeerstatningVurderingGrunn;
-}
-
-type DraftFormFields = Partial<FormFields>;
-
 export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, initialMellomlagretVurdering }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
-  const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
+  const { løsPeriodisertBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_SYKEPENGEERSTATNING');
 
   const { lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
     useMellomlagring(Behovstype.VURDER_SYKEPENGEERSTATNING_KODE, initialMellomlagretVurdering);
 
-  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+  const { visningActions, visningModus, formReadOnly } = useVilkårskortVisning(
     readOnly,
     'VURDER_SYKEPENGEERSTATNING',
     mellomlagretVurdering
   );
 
-  const defaultValues: DraftFormFields = initialMellomlagretVurdering
-    ? JSON.parse(initialMellomlagretVurdering.data)
-    : mapVurderingToDraftFormFields(grunnlag?.vurderinger);
+  const defaultValues =
+    mellomlagretVurdering != null
+      ? (JSON.parse(mellomlagretVurdering.data) as SykepengeerstatningForm)
+      : getDefaultValuesFromGrunnlag(grunnlag);
 
-  const { form, formFields } = useConfigForm<FormFields>(
-    {
-      begrunnelse: {
-        type: 'textarea',
-        label: 'Vilkårsvurdering',
-        rules: { required: 'Du må begrunne avgjørelsen din.' },
-        defaultValue: defaultValues?.begrunnelse,
-      },
-      gjelderFra: {
-        type: 'date_input',
-        label: 'Gjelder fra',
-        rules: { required: 'Du må sette dato' },
-        defaultValue: defaultValues?.gjelderFra,
-      },
-      erOppfylt: {
-        type: 'radio',
-        label: 'Krav på sykepengeerstatning?',
-        rules: { required: 'Du må ta stilling til om brukeren har rett på AAP som sykepengeerstatning.' },
-        options: JaEllerNeiOptions,
-        defaultValue: defaultValues?.erOppfylt,
-      },
-      grunn: {
-        type: 'radio',
-        label: 'Velg én grunn',
-        defaultValue: defaultValues?.grunn || undefined,
-        rules: { required: 'Du må velge én grunn' },
-        options: grunnOptions,
-      },
-    },
-    { shouldUnregister: true, readOnly: formReadOnly }
-  );
+  const form = useForm<SykepengeerstatningForm>({
+    defaultValues,
+    reValidateMode: 'onChange',
+  });
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    form.handleSubmit((data) =>
-      løsBehovOgGåTilNesteSteg(
-        {
-          behandlingVersjon: behandlingVersjon,
-          behov: {
-            behovstype: Behovstype.VURDER_SYKEPENGEERSTATNING_KODE,
-            sykepengeerstatningVurdering: {
-              begrunnelse: data.begrunnelse,
-              dokumenterBruktIVurdering: [],
-              harRettPå: data.erOppfylt === JaEllerNei.Ja,
-              grunn: data.grunn,
-              gjelderFra: formaterDatoForBackend(parse(data.gjelderFra, 'dd.MM.yyyy', new Date())),
-            },
-          },
-          referanse: behandlingsReferanse,
-        },
-        () => nullstillMellomlagretVurdering()
-      )
-    )(event);
+  const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
+
+  const {
+    fields: vurderingerFields,
+    append,
+    remove,
+  } = useFieldArray({
+    control: form.control,
+    name: 'vurderinger',
+    rules: {},
+  });
+
+  function onAddPeriode() {
+    append({
+      begrunnelse: '',
+      fraDato: '',
+      grunn: null,
+      erOppfylt: '',
+    });
+  }
+
+  const foersteNyePeriode = vurderingerFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
+
+  const onSubmit = (data: SykepengeerstatningForm) => {
+    const erPerioderGyldige = validerPeriodiserteVurderingerRekkefølge({
+      form,
+      nyeVurderinger: data.vurderinger,
+      grunnlag,
+    });
+    if (!erPerioderGyldige) {
+      return;
+    }
+    const losning: LøsPeriodisertBehovPåBehandling = {
+      behandlingVersjon: behandlingVersjon,
+      referanse: behandlingsReferanse,
+      behov: {
+        behovstype: Behovstype.VURDER_SYKEPENGEERSTATNING_KODE,
+        løsningerForPerioder: data.vurderinger.map((periode, index) => {
+          const isLast = index === data.vurderinger.length - 1;
+          const tilDato = isLast
+            ? undefined
+            : parseDatoFraDatePickerOgTrekkFra1Dag(data.vurderinger[index + 1].fraDato);
+          return mapFormTilDto(periode, tilDato != null ? formaterDatoForBackend(tilDato) : undefined);
+        }),
+      },
+    };
+
+    løsPeriodisertBehovOgGåTilNesteSteg(losning, () => {
+      nullstillMellomlagretVurdering();
+    });
   };
 
   return (
-    <VilkårskortMedFormOgMellomlagringNyVisning
+    <VilkårskortPeriodisert
       heading={'§ 11-13 AAP som sykepengeerstatning'}
       steg="VURDER_SYKEPENGEERSTATNING"
-      onSubmit={handleSubmit}
+      onSubmit={form.handleSubmit(onSubmit)}
       status={status}
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
-      vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
+      vurdertAvAnsatt={grunnlag?.sisteVedtatteVurderinger[0]?.vurdertAv}
+      kvalitetssikretAv={grunnlag?.sisteVedtatteVurderinger[0]?.kvalitetssikretAv}
       mellomlagretVurdering={mellomlagretVurdering}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() => {
-          form.reset(
-            grunnlag?.vurderinger?.length ? mapVurderingToDraftFormFields(grunnlag.vurderinger) : emptyDraftFormFields()
-          );
+          form.reset(getDefaultValuesFromGrunnlag(grunnlag));
         });
       }}
       visningModus={visningModus}
       visningActions={visningActions}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
+      onLeggTilVurdering={onAddPeriode}
+      errorList={[]}
     >
-      {grunnlag?.vedtatteVurderinger && grunnlag?.vedtatteVurderinger?.length > 0 && (
-        <TidligereVurderinger
-          data={grunnlag?.vedtatteVurderinger}
-          buildFelter={byggFelter}
-          getErGjeldende={() => true}
-          getFomDato={(v) => v.gjelderFra}
-          getVurdertAvIdent={(v) => v.vurdertAv.ident}
-          getVurdertDato={(v) => v.vurdertAv.dato}
-        />
-      )}
-      <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
-      <FormField form={form} formField={formFields.gjelderFra} className="gjelderFra" />
-      <FormField form={form} formField={formFields.erOppfylt} horizontalRadio />
-      {form.watch('erOppfylt') === JaEllerNei.Ja && (
-        <FormField form={form} formField={formFields.grunn} className={'radio'} />
-      )}
-    </VilkårskortMedFormOgMellomlagringNyVisning>
+      <>
+        {vedtatteVurderinger?.map((vurdering) => (
+          <TidligereVurderingExpandableCard
+            key={vurdering.fom}
+            fom={parseISO(vurdering.fom)}
+            tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
+            foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+            oppfylt={vurdering.harRettPå}
+          >
+            <OppholdskravSykepengererstatninbgTidligereVurdering
+              fraDato={vurdering.fom}
+              begrunnelse={vurdering.begrunnelse}
+              oppfyller={vurdering.harRettPå}
+              grunn={vurdering.grunn}
+            />
+          </TidligereVurderingExpandableCard>
+        ))}
+
+        {vurderingerFields.map((vurdering, index) => (
+          <NyVurderingExpandableCard
+            key={vurdering.id}
+            fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
+            oppfylt={
+              form.watch(`vurderinger.${index}.erOppfylt`)
+                ? form.watch(`vurderinger.${index}.erOppfylt`) === JaEllerNei.Ja
+                : undefined
+            }
+            nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
+            isLast={index === vurderingerFields.length - 1}
+            vurdertAv={vurdering.vurdertAv}
+            finnesFeil={false}
+          >
+            <SykepengeerstatningFormInput
+              form={form}
+              visningModus={visningModus}
+              readOnly={formReadOnly}
+              index={index}
+              harTidligereVurderinger={vedtatteVurderinger.length !== 0}
+              onRemove={() => remove(index)}
+            />
+          </NyVurderingExpandableCard>
+        ))}
+      </>
+    </VilkårskortPeriodisert>
   );
 };
-
-function mapVurderingToDraftFormFields(
-  vurderinger: SykepengeerstatningGrunnlag['vurderinger'] | undefined
-): DraftFormFields {
-  if (!vurderinger || vurderinger.length === 0) {
-    return {
-      begrunnelse: undefined,
-      erOppfylt: undefined,
-      grunn: undefined,
-      gjelderFra: undefined,
-    };
-  }
-  const sisteVurdering = vurderinger[vurderinger.length - 1];
-  return {
-    begrunnelse: sisteVurdering.begrunnelse,
-    erOppfylt: getJaNeiEllerUndefined(sisteVurdering.harRettPå),
-    grunn: sisteVurdering.grunn,
-    gjelderFra: sisteVurdering.gjelderFra ? formaterDatoForFrontend(sisteVurdering.gjelderFra) : undefined,
-  };
-}
-
-function emptyDraftFormFields(): DraftFormFields {
-  return { begrunnelse: '', erOppfylt: '', grunn: undefined, gjelderFra: undefined };
-}
-
-const grunnOptions: ValuePair<NonNullable<SykepengeerstatningVurderingGrunn>>[] = [
-  {
-    label:
-      'Brukeren har tidligere mottatt arbeidsavklaringspenger og innen seks måneder etter at arbeidsavklaringspengene er opphørt, blir arbeidsufør som følge av en annen sykdom',
-    value: 'ANNEN_SYKDOM_INNEN_SEKS_MND',
-  },
-  {
-    label:
-      'Brukeren har tidligere mottatt arbeidsavklaringspenger og innen ett år etter at arbeidsavklaringspengene er opphørt, blir arbeidsufør som følge av samme sykdom',
-    value: 'SAMME_SYKDOM_INNEN_ETT_AAR',
-  },
-  {
-    label:
-      'Brukeren har tidligere mottatt sykepenger etter kapittel 8 i til sammen 248, 250 eller 260 sykepengedager i løpet av de tre siste årene, se § 8-12, og igjen blir arbeidsufør på grunn av sykdom eller skade mens han eller hun er i arbeid',
-    value: 'SYKEPENGER_IGJEN_ARBEIDSUFOR',
-  },
-  {
-    label:
-      'Brukeren har tidligere mottatt sykepenger etter kapittel 8 i til sammen 248, 250 eller 260 sykepengedager i løpet av de tre siste årene, se § 8-12, og fortsatt er arbeidsufør på grunn av sykdom eller skade',
-    value: 'SYKEPENGER_FORTSATT_ARBEIDSUFOR',
-  },
-  {
-    label:
-      'Brukeren har mottatt arbeidsavklaringspenger og deretter foreldrepenger og innen seks måneder etter foreldrepengene opphørte, blir arbeidsufør på grunn av sykdom eller skade, se § 8-2 andre ledd',
-    value: 'FORELDREPENGER_INNEN_SEKS_MND',
-  },
-];
-
-const byggFelter = (grunnlag: SykepengerVurderingResponse): ValuePair[] => [
-  {
-    label: 'Vilkårsvurdering',
-    value: grunnlag?.begrunnelse,
-  },
-  {
-    label: 'Gjelder fra',
-    value: `${grunnlag.gjelderFra ? formaterDatoForFrontend(grunnlag.gjelderFra) : ''}`,
-  },
-  {
-    label: 'Har brukeren krav på sykepengeerstatning?',
-    value: grunnlag?.harRettPå ? 'Ja' : 'Nei',
-  },
-  {
-    label: 'Grunn',
-    value: grunnOptions.find((option) => option.value === grunnlag?.grunn)?.label ?? '',
-  },
-];
