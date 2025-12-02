@@ -7,7 +7,7 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgG
 
 import { useFieldArray } from 'react-hook-form';
 import { gyldigDatoEllerNull, validerDato } from 'lib/validation/dateValidation';
-import { ArbeidsevneGrunnlag, MellomlagretVurdering } from 'lib/types/types';
+import { ArbeidsevneGrunnlag, ArbeidsevneVurdering, MellomlagretVurdering } from 'lib/types/types';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { Behovstype } from 'lib/utils/form';
@@ -25,6 +25,8 @@ import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 import { NyVurderingExpandableCard } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { finnesFeilForVurdering } from 'lib/utils/formerrors';
+import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
+import { ValuePair } from 'components/form/FormField';
 
 interface Props {
   grunnlag: ArbeidsevneGrunnlag;
@@ -98,6 +100,19 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
     name: 'arbeidsevnevurderinger',
   });
 
+  function byggFelter(vurdering: ArbeidsevneVurdering): ValuePair[] {
+    return [
+      {
+        label: 'Vilkårsvurdering',
+        value: vurdering.begrunnelse,
+      },
+      {
+        label: 'Oppgi arbeidsevnen som ikke er utnyttet i prosent',
+        value: vurdering.arbeidsevne.toString(),
+      },
+    ];
+  }
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
       løsBehovOgGåTilNesteSteg(
@@ -164,6 +179,14 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
             Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-23 (lovdata.no)
           </Link>
         </VStack>
+      )}
+      {grunnlag.gjeldendeVedtatteVurderinger?.length != 0 && (
+        <TidligereVurderinger
+          data={grunnlag.gjeldendeVedtatteVurderinger ?? []}
+          buildFelter={byggFelter}
+          getErGjeldende={() => true}
+          getFomDato={(v) => v.fraDato}
+        />
       )}
       {arbeidsevneVurderinger.map((vurdering, index) => (
         <NyVurderingExpandableCard
