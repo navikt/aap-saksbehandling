@@ -174,12 +174,14 @@ export const Bistandsbehov = ({
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={true}
       vurdertAvAnsatt={grunnlag?.vurderinger[0]?.vurdertAv}
-      kvalitetssikretAv={grunnlag?.kvalitetssikretAv}
+      kvalitetssikretAv={grunnlag?.nyeVurderinger[0]?.kvalitetssikretAv}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() => {
           form.reset(
-            grunnlag?.vurderinger[0] ? mapVurderingToDraftFormFields(grunnlag.vurderinger[0]) : emptyDraftFormFields()
+            grunnlag?.nyeVurderinger[0]
+              ? mapVurderingToDraftFormFields(grunnlag.vurderinger[0])
+              : emptyDraftFormFields()
           );
         });
       }}
@@ -193,11 +195,9 @@ export const Bistandsbehov = ({
           data={historiskeVurderinger}
           buildFelter={byggFelter}
           getErGjeldende={(v) =>
-            grunnlag?.gjeldendeVedtatteVurderinger.some((gjeldendeVurdering) =>
-              deepEqual(v, gjeldendeVurdering, ['dato'])
-            )
+            grunnlag?.sisteVedtatteVurderinger.some((gjeldendeVurdering) => deepEqual(v, gjeldendeVurdering, ['dato']))
           }
-          getFomDato={(v) => v.vurderingenGjelderFra ?? v.vurdertAv.dato}
+          getFomDato={(v) => v.fom ?? v.vurdertAv.dato}
           getVurdertAvIdent={(v) => v.vurdertAv.ident}
           getVurdertDato={(v) => v.vurdertAv.dato}
         />
