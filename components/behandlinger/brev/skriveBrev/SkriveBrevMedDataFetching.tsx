@@ -70,13 +70,13 @@ export const SkriveBrevMedDataFetching = async ({
   const avbrytteBrev = brevGrunnlag.data.brevGrunnlag.filter(
     (x) => x.status === 'AVBRUTT' && x.brev != null && x.avklaringsbehovKode === '5050'
   );
+  const brukNyBrevbygger = !isProd() && brev?.brevmal && brev?.brevdata;
 
-  if (!brev?.brev) {
+  if (!brev?.brev && !brukNyBrevbygger) {
     return <BrevOppsummering sendteBrev={sendteBrev} avbrutteBrev={avbrytteBrev} />;
   }
 
   //Featuretoggle er allerede gjort i backend, hvis brevmal og brevdata er satt skal vi bruke ny brevbygger
-  const brukNyBrevbygger = !isProd() && brev.brevmal && brev.brevdata;
 
   const readOnlyBrev = aktivtSteg === 'BREV' && !brev.harTilgangTilÅSendeBrev;
   const behovstype = skrivBrevBehovstype(brev.avklaringsbehovKode);
@@ -95,7 +95,7 @@ export const SkriveBrevMedDataFetching = async ({
       {brukNyBrevbygger && (
         <Brevbygger brevmal={brev.brevmal} brevdata={brev.brevdata} referanse={brev.brevbestillingReferanse} />
       )}
-      {!brukNyBrevbygger && (
+      {!brukNyBrevbygger && brev.brev && (
         <SkriveBrev
           status={brev.status}
           referanse={brev.brevbestillingReferanse}
