@@ -11,6 +11,7 @@ import {
 import { BrevmalType } from 'components/brevbygger/brevmodellTypes';
 import { BrevdataDto } from 'lib/types/types';
 import { ForhåndsvisBrev } from 'components/brevbygger/ForhåndsvisBrev';
+import { clientOppdaterBrevdata } from 'lib/clientApi';
 
 export interface AlternativFormField {
   verdi: string;
@@ -49,12 +50,14 @@ export const Brevbygger = ({ referanse, brevmal, brevdata }: BrevbyggerProps) =>
 
   const { fields } = useFieldArray({ control, name: 'delmaler' });
 
-  const onSubmit = (formData: BrevdataFormFields) => {
+  const onSubmit = async (formData: BrevdataFormFields) => {
     const obligatoriskeDelmaler = formData.delmaler
       .filter((delmal) => delmalErObligatorisk(delmal.noekkel, parsedBrevmal))
-      .map((delmal) => delmal.noekkel);
+      .map((delmal) => ({
+        id: delmal.noekkel,
+      }));
 
-    const valgteDelmaler = formData.delmaler.filter((delmal) => delmal.valgt).map((delmal) => delmal.noekkel);
+    const valgteDelmaler = formData.delmaler.filter((delmal) => delmal.valgt).map((delmal) => ({ id: delmal.noekkel }));
     const valgteValg = formData.delmaler
       .flatMap((delmal) => delmal.valg?.filter((v) => v.valgtAlternativ !== ''))
       .filter((v) => !!v)
@@ -63,9 +66,13 @@ export const Brevbygger = ({ referanse, brevmal, brevdata }: BrevbyggerProps) =>
         key: valg.valgtAlternativ,
       }));
 
-    console.log({
+    await clientOppdaterBrevdata(referanse, {
       delmaler: [...obligatoriskeDelmaler, ...valgteDelmaler],
       valg: valgteValg,
+      betingetTekst: [],
+      faktagrunnlag: [],
+      fritekster: [],
+      periodetekster: [],
     });
   };
 

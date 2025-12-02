@@ -6,6 +6,7 @@ import {
   BehandlingsHistorikk,
   BestillLegeerklæring,
   Brev,
+  BrevdataDto,
   ForhåndsvisDialogmelding,
   ForhåndsvisDialogmeldingResponse,
   KanDistribuereBrevRequest,
@@ -36,7 +37,7 @@ const BASE_URL = '/saksbehandling';
 
 export async function clientFetch<ResponseBody>(
   url: string,
-  method: 'GET' | 'POST' | 'PATCH' | 'DELETE',
+  method: 'GET' | 'POST' | 'PATCH' | 'DELETE' | 'PUT',
   body?: object
 ): Promise<FetchResponse<ResponseBody>> {
   try {
@@ -179,6 +180,10 @@ export function clientHentAlleNavenheter(behandlingReferanse: string, input: Nav
 
 export function clientMellomlagreBrev(brevbestillingReferanse: string, brev: Brev) {
   return clientFetch(`${BASE_URL}/api/brev/${brevbestillingReferanse}/oppdater`, 'POST', brev);
+}
+
+export function clientOppdaterBrevdata(brevbestillingReferanse: string, brevdata: BrevdataDto) {
+  return clientFetch(`${BASE_URL}/api/brev/${brevbestillingReferanse}/oppdater-brevdata`, 'PUT', brevdata);
 }
 
 export function clientBestillTestBrev(behandlingReferanse: string) {

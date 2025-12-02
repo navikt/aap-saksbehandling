@@ -18,6 +18,7 @@ import {
   BestillLegeerklæring,
   BistandsGrunnlag,
   Brev,
+  BrevdataDto,
   BrevGrunnlag,
   DetaljertBehandling,
   FatteVedtakGrunnlag,
@@ -448,6 +449,11 @@ export const løsAvklaringsbehov = async (avklaringsBehov: LøsAvklaringsbehovP�
 export const mellomlagreBrev = async (brevbestillingReferanse: string, brev: Brev) => {
   const url = `${saksbehandlingApiBaseUrl}/api/brev/${brevbestillingReferanse}/oppdater`;
   return await apiFetch<void>(url, saksbehandlingApiScope, 'PUT', brev);
+};
+
+export const oppdaterBrevdata = async (brevbestillingReferanse: string, brevdata: BrevdataDto) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/brev/${brevbestillingReferanse}/oppdater`;
+  return await apiFetch<void>(url, saksbehandlingApiScope, 'PUT', brevdata);
 };
 
 export const opprettDummySakDev = async (sak: OpprettTestcase) => {
