@@ -9741,19 +9741,33 @@ export interface components {
       vurdertAv: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykepengergrunnlag.SykepengerGrunnlagResponse': {
+      'beh\u00F8verVurderinger': components['schemas']['no.nav.aap.komponenter.type.Periode'][];
       'harTilgangTil\u00C5Saksbehandle': boolean;
+      kanVurderes: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
+      nyeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykepengergrunnlag.SykepengerVurderingResponse'][];
+      sisteVedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykepengergrunnlag.SykepengerVurderingResponse'][];
       vedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykepengergrunnlag.SykepengerVurderingResponse'][];
-      vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykepengergrunnlag.SykepengerVurderingResponse'];
       vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykepengergrunnlag.SykepengerVurderingResponse'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykepengergrunnlag.SykepengerVurderingResponse': {
       begrunnelse: string;
+      besluttetAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
       dokumenterBruktIVurdering: components['schemas']['no.nav.aap.verdityper.dokument.JournalpostId'][];
       /**
        * Format: date
        * @example 2025-04-01
        */
-      gjelderFra?: string | null;
+      fom: string;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      gjelderFra: string;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      gjelderTom?: string | null;
       /** @enum {string|null} */
       grunn?:
         | 'ANNEN_SYKDOM_INNEN_SEKS_MND'
@@ -9763,7 +9777,19 @@ export interface components {
         | 'FORELDREPENGER_INNEN_SEKS_MND'
         | null;
       'harRettP\u00E5': boolean;
+      kvalitetssikretAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
+      /**
+       * Format: date-time
+       * @example 2025-04-01T12:30:00
+       */
+      opprettet: string;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      tom?: string | null;
       vurdertAv: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
+      vurdertIBehandling: components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.behandling.BehandlingId'];
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.ManuellInntektGrunnlagResponse': {
       /** Format: int32 */
@@ -10515,6 +10541,7 @@ export interface components {
         | 'FORUTGAENDE_MEDLEMSKAP'
         | 'OPPHOLDSKRAV'
         | 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND'
+        | 'REVURDER_SYKEPENGEERSTATNING'
         | 'BARNETILLEGG'
         | 'INSTITUSJONSOPPHOLD'
         | 'SAMORDNING_OG_AVREGNING'
@@ -10832,6 +10859,7 @@ export interface components {
         | 'FORUTGAENDE_MEDLEMSKAP'
         | 'OPPHOLDSKRAV'
         | 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND'
+        | 'REVURDER_SYKEPENGEERSTATNING'
         | 'BARNETILLEGG'
         | 'INSTITUSJONSOPPHOLD'
         | 'SAMORDNING_OG_AVREGNING'
@@ -10895,6 +10923,7 @@ export interface components {
             | 'FORUTGAENDE_MEDLEMSKAP'
             | 'OPPHOLDSKRAV'
             | 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND'
+            | 'REVURDER_SYKEPENGEERSTATNING'
             | 'BARNETILLEGG'
             | 'INSTITUSJONSOPPHOLD'
             | 'SAMORDNING_OG_AVREGNING'
@@ -13320,6 +13349,7 @@ export interface components {
         | 'LOVVALG_OG_MEDLEMSKAP'
         | 'FORUTGAENDE_MEDLEMSKAP'
         | 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND'
+        | 'REVURDER_SYKEPENGEERSTATNING'
         | 'BARNETILLEGG'
         | 'INSTITUSJONSOPPHOLD'
         | 'SAMORDNING_OG_AVREGNING'
@@ -13508,6 +13538,7 @@ export interface components {
         | 'LOVVALG_OG_MEDLEMSKAP'
         | 'FORUTGAENDE_MEDLEMSKAP'
         | 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND'
+        | 'REVURDER_SYKEPENGEERSTATNING'
         | 'BARNETILLEGG'
         | 'INSTITUSJONSOPPHOLD'
         | 'SAMORDNING_OG_AVREGNING'
@@ -13590,6 +13621,7 @@ export interface components {
         | 'LOVVALG_OG_MEDLEMSKAP'
         | 'FORUTGAENDE_MEDLEMSKAP'
         | 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND'
+        | 'REVURDER_SYKEPENGEERSTATNING'
         | 'BARNETILLEGG'
         | 'INSTITUSJONSOPPHOLD'
         | 'SAMORDNING_OG_AVREGNING'
@@ -13654,6 +13686,7 @@ export interface components {
         | 'LOVVALG_OG_MEDLEMSKAP'
         | 'FORUTGAENDE_MEDLEMSKAP'
         | 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND'
+        | 'REVURDER_SYKEPENGEERSTATNING'
         | 'BARNETILLEGG'
         | 'INSTITUSJONSOPPHOLD'
         | 'SAMORDNING_OG_AVREGNING'
@@ -13865,6 +13898,7 @@ export interface components {
         | 'FORUTGAENDE_MEDLEMSKAP'
         | 'OPPHOLDSKRAV'
         | 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND'
+        | 'REVURDER_SYKEPENGEERSTATNING'
         | 'BARNETILLEGG'
         | 'INSTITUSJONSOPPHOLD'
         | 'SAMORDNING_OG_AVREGNING'
@@ -13989,6 +14023,7 @@ export interface components {
         | 'FORUTGAENDE_MEDLEMSKAP'
         | 'OPPHOLDSKRAV'
         | 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND'
+        | 'REVURDER_SYKEPENGEERSTATNING'
         | 'BARNETILLEGG'
         | 'INSTITUSJONSOPPHOLD'
         | 'SAMORDNING_OG_AVREGNING'
@@ -14056,6 +14091,7 @@ export interface components {
         | 'FORUTGAENDE_MEDLEMSKAP'
         | 'OPPHOLDSKRAV'
         | 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND'
+        | 'REVURDER_SYKEPENGEERSTATNING'
         | 'BARNETILLEGG'
         | 'INSTITUSJONSOPPHOLD'
         | 'SAMORDNING_OG_AVREGNING'
