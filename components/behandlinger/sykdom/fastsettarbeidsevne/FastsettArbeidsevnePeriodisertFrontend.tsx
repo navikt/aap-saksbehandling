@@ -27,6 +27,7 @@ import { NyVurderingExpandableCard } from 'components/periodisering/nyvurderinge
 import { finnesFeilForVurdering } from 'lib/utils/formerrors';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { ValuePair } from 'components/form/FormField';
+import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
 
 interface Props {
   grunnlag: ArbeidsevneGrunnlag;
@@ -79,6 +80,8 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
     'FASTSETT_ARBEIDSEVNE',
     mellomlagretVurdering
   );
+
+  const vedtatteVurderinger = grunnlag.gjeldendeVedtatteVurderinger ?? []
 
   const defaultValues: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -180,11 +183,11 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
           </Link>
         </VStack>
       )}
-      {grunnlag.gjeldendeVedtatteVurderinger?.length != 0 && (
+      {vedtatteVurderinger.length != 0 && (
         <TidligereVurderinger
           data={grunnlag.gjeldendeVedtatteVurderinger ?? []}
           buildFelter={byggFelter}
-          getErGjeldende={() => true}
+          getErGjeldende={(v) => deepEqual(v, vedtatteVurderinger[vedtatteVurderinger.length - 1])}
           getFomDato={(v) => v.fraDato}
         />
       )}
