@@ -10,7 +10,6 @@ import { Barnetillegg } from 'components/behandlinger/barnetillegg/Barnetillegg'
 import { Institusjonsopphold } from 'components/behandlinger/institusjonsopphold/Institusjonsopphold';
 import { Brev } from 'components/behandlinger/brev/Brev';
 import { Underveis } from 'components/behandlinger/underveis/Underveis';
-import { ForutgåendeMedlemskap } from 'components/behandlinger/forutgåendemedlemskap/ForutgåendeMedlemskap';
 import { Samordning } from 'components/behandlinger/samordning/Samordning';
 import { Rettighetsperiode } from '../behandlinger/rettighetsperiode/Rettighetsperiode';
 import { Søknad } from 'components/behandlinger/søknad/Søknad';
@@ -32,7 +31,6 @@ import { OppholdskravStegGruppe } from 'components/behandlinger/oppholdskrav/Opp
 import { Aktivitetsplikt11_9 } from 'components/behandlinger/aktivitetsplikt/11-9/Aktivitetsplikt11_9';
 import { LovvalgPeriodisert } from 'components/behandlinger/lovvalg/LovvalgPeriodisert';
 import { PeriodisertForutgåendeMedlemskap } from 'components/behandlinger/forutgåendemedlemskap/PeriodisertForutgåendeMedlemskap';
-import { isDev, isLocal } from 'lib/utils/environment';
 
 interface Props {
   behandlingsReferanse: string;
@@ -41,7 +39,6 @@ interface Props {
 }
 
 export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe, className }: Props) => {
-  const ForutgaendeMedlemskapPeriodisert = isDev() || isLocal();
   return (
     <section className={className}>
       {aktivGruppe === 'START_BEHANDLING' && <StartBehandling behandlingsReferanse={behandlingsReferanse} />}
@@ -62,11 +59,7 @@ export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe, classN
       {aktivGruppe === 'SYKDOM' && <Sykdom behandlingsReferanse={behandlingsReferanse} />}
       {aktivGruppe === 'MEDLEMSKAP' && (
         <StegSuspense>
-          {ForutgaendeMedlemskapPeriodisert ? (
-            <PeriodisertForutgåendeMedlemskap behandlingsReferanse={behandlingsReferanse} />
-          ) : (
-            <ForutgåendeMedlemskap behandlingsReferanse={behandlingsReferanse} />
-          )}
+          <PeriodisertForutgåendeMedlemskap behandlingsReferanse={behandlingsReferanse} />
         </StegSuspense>
       )}
       {aktivGruppe === 'OPPHOLDSKRAV' && <OppholdskravStegGruppe behandlingsreferanse={behandlingsReferanse} />}
