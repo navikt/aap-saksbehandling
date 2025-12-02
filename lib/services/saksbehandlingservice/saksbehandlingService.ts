@@ -452,7 +452,7 @@ export const mellomlagreBrev = async (brevbestillingReferanse: string, brev: Bre
 };
 
 export const oppdaterBrevdata = async (brevbestillingReferanse: string, brevdata: BrevdataDto) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/brev/${brevbestillingReferanse}/oppdater`;
+  const url = `${saksbehandlingApiBaseUrl}/api/brev/${brevbestillingReferanse}/oppdater-brevdata`;
   return await apiFetch<void>(url, saksbehandlingApiScope, 'PUT', brevdata);
 };
 
