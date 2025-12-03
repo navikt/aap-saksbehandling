@@ -131,6 +131,7 @@ export const Bistandsbehov = ({
           behov: {
             behovstype: Behovstype.AVKLAR_BISTANDSBEHOV_KODE,
             bistandsVurdering: {
+              fom: vurderingenGjelderFra,
               begrunnelse: data.begrunnelse,
               erBehovForAktivBehandling: data.erBehovForAktivBehandling === JaEllerNei.Ja,
               erBehovForArbeidsrettetTiltak: data.erBehovForArbeidsrettetTiltak === JaEllerNei.Ja,
