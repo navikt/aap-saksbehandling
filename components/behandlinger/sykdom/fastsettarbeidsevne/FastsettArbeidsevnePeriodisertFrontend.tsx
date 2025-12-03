@@ -7,7 +7,7 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgG
 
 import { useFieldArray } from 'react-hook-form';
 import { gyldigDatoEllerNull, validerDato } from 'lib/validation/dateValidation';
-import { ArbeidsevneGrunnlag, MellomlagretVurdering } from 'lib/types/types';
+import { ArbeidsevneGrunnlag, ArbeidsevneVurdering, MellomlagretVurdering } from 'lib/types/types';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { Behovstype } from 'lib/utils/form';
@@ -25,6 +25,9 @@ import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 import { NyVurderingExpandableCard } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { finnesFeilForVurdering } from 'lib/utils/formerrors';
+import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
+import { ValuePair } from 'components/form/FormField';
+import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
 
 interface Props {
   grunnlag: ArbeidsevneGrunnlag;
@@ -78,6 +81,8 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
     mellomlagretVurdering
   );
 
+  const vedtatteVurderinger = grunnlag.gjeldendeVedtatteVurderinger ?? [];
+
   const defaultValues: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingerToDraftFormFields(grunnlag.vurderinger);
@@ -97,6 +102,19 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
     control: form.control,
     name: 'arbeidsevnevurderinger',
   });
+
+  function byggFelter(vurdering: ArbeidsevneVurdering): ValuePair[] {
+    return [
+      {
+        label: 'Vilkårsvurdering',
+        value: vurdering.begrunnelse,
+      },
+      {
+        label: 'Oppgi arbeidsevnen som ikke er utnyttet i prosent',
+        value: vurdering.arbeidsevne.toString(),
+      },
+    ];
+  }
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
@@ -164,6 +182,14 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
             Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-23 (lovdata.no)
           </Link>
         </VStack>
+      )}
+      {vedtatteVurderinger.length != 0 && (
+        <TidligereVurderinger
+          data={vedtatteVurderinger}
+          buildFelter={byggFelter}
+          getErGjeldende={(v) => deepEqual(v, vedtatteVurderinger[vedtatteVurderinger.length - 1])}
+          getFomDato={(v) => v.fraDato}
+        />
       )}
       {arbeidsevneVurderinger.map((vurdering, index) => (
         <NyVurderingExpandableCard
