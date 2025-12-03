@@ -74,24 +74,25 @@ export interface OpprettSakFormFields {
 
 export const OpprettSakLocal = () => {
   const { isLoading, opprettSakOgBehandling } = useOpprettSak();
-  const { formFields, form } = useConfigForm<OpprettSakFormFields>({
-    søknadsdato: {
-      type: 'date',
-      label: 'Søknadsdato',
-      defaultValue: new Date(),
-    },
-    lønn: {
-      type: 'radio',
-      defaultValue: JaEllerNei.Nei,
-      options: JaEllerNeiOptions,
-      label: 'Har du fått eller skal du få ekstra utbetalinger fra arbeidsgiver?',
-    },
+  const { formFields, form } = useConfigForm<OpprettSakFormFields>(
+    {
+      søknadsdato: {
+        type: 'date',
+        label: 'Søknadsdato',
+        defaultValue: new Date(),
+      },
+      lønn: {
+        type: 'radio',
+        defaultValue: JaEllerNei.Nei,
+        options: JaEllerNeiOptions,
+        label: 'Har du fått eller skal du få ekstra utbetalinger fra arbeidsgiver?',
+      },
 
-    afp: {
-      type: 'text',
-      defaultValue: '',
-      label: 'Hvor mottar du AFP fra?',
-    },
+      afp: {
+        type: 'text',
+        defaultValue: '',
+        label: 'Hvor mottar du AFP fra?',
+      },
       stønad: {
         type: 'combobox_multiple',
         label: 'stønad',
@@ -191,7 +192,10 @@ export const OpprettSakLocal = () => {
         ],
       },
     },
-  });
+    {
+      shouldUnregister: true,
+    }
+  );
 
   const mapInnhold = (data: OpprettSakFormFields, steg?: TestcaseSteg) => {
     return {

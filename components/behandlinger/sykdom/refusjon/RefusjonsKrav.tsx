@@ -53,7 +53,7 @@ export const Refusjonskrav = ({ form, readOnly }: Props) => {
         <BodyLong size={'small'} weight={'semibold'}>
           Legg til refusjonskrav
         </BodyLong>
-        <BodyLong>
+        <VStack>
           <BodyLong size="small" textColor={'subtle'}>
             Hvis det er flere kontorer som kan ha refusjonskrav, legg til flere perioder.
           </BodyLong>
@@ -63,7 +63,7 @@ export const Refusjonskrav = ({ form, readOnly }: Props) => {
           <BodyLong size="small" textColor={'subtle'}>
             Refusjonskrav vil kun være på etterbetaling av AAP.
           </BodyLong>
-        </BodyLong>
+        </VStack>
       </VStack>
 
       <VStack gap={'2'}>
