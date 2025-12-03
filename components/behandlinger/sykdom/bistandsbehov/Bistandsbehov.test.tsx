@@ -16,6 +16,26 @@ beforeEach(() => {
 });
 
 describe('Generelt', () => {
+  const nyeVurderinger = [
+    {
+      begrunnelse: 'Dette er min vurdering som er bekreftet',
+      erBehovForAktivBehandling: true,
+      erBehovForArbeidsrettetTiltak: true,
+      vurdertAv: { ident: 'Saksbehandler', dato: '2025-03-24' },
+      fom: '2025-03-24',
+    },
+  ];
+
+  const sisteVedtatteVurderinger = [
+    {
+      begrunnelse: 'En begrunnelse',
+      erBehovForArbeidsrettetTiltak: true,
+      erBehovForAktivBehandling: false,
+      vurdertAv: { ident: 'Saksbehandler', dato: '2025-03-24' },
+      fom: '2025-03-24',
+    },
+  ];
+
   const grunnlagMedVurdering: BistandsGrunnlag = {
     gjeldendeSykdsomsvurderinger: [
       {
@@ -30,14 +50,8 @@ describe('Generelt', () => {
         vurdertAv: { ident: 'Saksbehandler', dato: '2025-03-24' },
       },
     ],
-    gjeldendeVedtatteVurderinger: [
-      {
-        begrunnelse: 'En begrunnelse',
-        erBehovForArbeidsrettetTiltak: true,
-        erBehovForAktivBehandling: false,
-        vurdertAv: { ident: 'Saksbehandler', dato: '2025-03-24' },
-      },
-    ],
+    gjeldendeVedtatteVurderinger: sisteVedtatteVurderinger, //Deprekert
+    sisteVedtatteVurderinger: sisteVedtatteVurderinger,
     harTilgangTilÅSaksbehandle: true,
     historiskeVurderinger: [
       {
@@ -45,16 +59,13 @@ describe('Generelt', () => {
         erBehovForArbeidsrettetTiltak: true,
         erBehovForAktivBehandling: false,
         vurdertAv: { ident: 'Saksbehandler', dato: '2025-03-24' },
+        fom: '2025-03-24',
       },
     ],
-    vurderinger: [
-      {
-        begrunnelse: 'Dette er min vurdering som er bekreftet',
-        erBehovForAktivBehandling: true,
-        erBehovForArbeidsrettetTiltak: true,
-        vurdertAv: { ident: 'Saksbehandler', dato: '2025-03-24' },
-      },
-    ],
+    vurderinger: nyeVurderinger,
+    nyeVurderinger: nyeVurderinger,
+    behøverVurderinger: [],
+    kanVurderes: [],
   };
 
   it('Skal ha en overskrift', () => {
@@ -103,19 +114,25 @@ describe('mellomlagring i bistandsbehov', () => {
     },
   };
 
+  const nyeVurderinger = [
+    {
+      begrunnelse: 'Dette er min vurdering som er bekreftet',
+      erBehovForAktivBehandling: true,
+      erBehovForArbeidsrettetTiltak: true,
+      vurdertAv: { ident: 'TESTER', dato: '2025-08-19' },
+      fom: '2025-08-19',
+    },
+  ];
   const bistandsgrunnlag: BistandsGrunnlag = {
-    vurderinger: [
-      {
-        begrunnelse: 'Dette er min vurdering som er bekreftet',
-        erBehovForAktivBehandling: true,
-        erBehovForArbeidsrettetTiltak: true,
-        vurdertAv: { ident: 'TESTER', dato: '2025-08-19' },
-      },
-    ],
+    vurderinger: nyeVurderinger,
+    nyeVurderinger: nyeVurderinger,
     gjeldendeSykdsomsvurderinger: [],
-    gjeldendeVedtatteVurderinger: [],
+    gjeldendeVedtatteVurderinger: [], //Deprekert
+    sisteVedtatteVurderinger: [],
     harTilgangTilÅSaksbehandle: true,
     historiskeVurderinger: [],
+    kanVurderes: [],
+    behøverVurderinger: [],
   };
 
   it('Skal vise en tekst om hvem som har gjort vurderingen dersom det finnes en mellomlagring', () => {
@@ -428,23 +445,30 @@ describe('Førstegangsbehandling', () => {
 });
 
 describe('Revurdering', () => {
+  const sisteVedtatteVurderinger = [
+    {
+      begrunnelse: 'En begrunnelse',
+      erBehovForArbeidsrettetTiltak: true,
+      erBehovForAktivBehandling: false,
+      vurdertAv: { ident: 'Saksbehandler', dato: '2025-03-24' },
+      fom: '2025-03-24',
+    },
+  ];
+
   const grunnlagRevurdering: BistandsGrunnlag = {
     harTilgangTilÅSaksbehandle: true,
     harOppfylt11_5: true,
-    gjeldendeVedtatteVurderinger: [
-      {
-        begrunnelse: 'En begrunnelse',
-        erBehovForArbeidsrettetTiltak: true,
-        erBehovForAktivBehandling: false,
-        vurdertAv: { ident: 'Saksbehandler', dato: '2025-03-24' },
-      },
-    ],
+    gjeldendeVedtatteVurderinger: sisteVedtatteVurderinger, //Deprekert
+    sisteVedtatteVurderinger: sisteVedtatteVurderinger,
+    vurderinger: [], //Deprekert - bruk nye vurderinger
+    nyeVurderinger: [],
     historiskeVurderinger: [
       {
         begrunnelse: 'En begrunnelse',
         erBehovForArbeidsrettetTiltak: true,
         erBehovForAktivBehandling: false,
         vurdertAv: { ident: 'Saksbehandler', dato: '2025-03-24' },
+        fom: '2025-03-24',
       },
     ],
     gjeldendeSykdsomsvurderinger: [
@@ -460,7 +484,8 @@ describe('Revurdering', () => {
         vurdertAv: { ident: 'Saksbehandler', dato: '2025-03-24' },
       },
     ],
-    vurderinger: [],
+    behøverVurderinger: [],
+    kanVurderes: [], // Som regel rettighetsperioden - usikker på om vi trenger denne
   };
 
   it('viser spørsmål om brukeren skal vurders for AAP i overgang til arbeid hvis det er avslag på både 11-5 og det svares nei på a,b og c', async () => {
