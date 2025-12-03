@@ -1708,9 +1708,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aap-breveditor@npm:^0.10.0":
-  version: 0.10.0
-  resolution: "@navikt/aap-breveditor@npm:0.10.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-breveditor%2F0.10.0%2Fbdaa552bbfb48303d3e356aea8407b7c2c12573c"
+"@navikt/aap-breveditor@npm:^0.10.1":
+  version: 0.10.1
+  resolution: "@navikt/aap-breveditor@npm:0.10.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-breveditor%2F0.10.1%2F46c339840c82d14c6a952f938b55bed4b58b78d4"
   dependencies:
     "@navikt/aksel-icons": "npm:^7.9.1"
     "@navikt/ds-css": "npm:^7.25.1"
@@ -1720,10 +1720,10 @@ __metadata:
     "@tiptap/extension-underline": "npm:^2.11.7"
     "@tiptap/react": "npm:^2.11.7"
     "@tiptap/starter-kit": "npm:^2.11.7"
-    react: "npm:^19.2.0"
-    react-dom: "npm:^19.2.0"
+    react: "npm:^19.2.1"
+    react-dom: "npm:^19.2.1"
     uuid: "npm:^11.1.0"
-  checksum: 10c0/4c1df1e65d5b94b3cb08ab8f61b4f8b65989f3b52b450407496f75658bb1c6b4e5452e1d817692fb2ec2d715b93172af7577665cbdf93547b220ae7c71de9a58
+  checksum: 10c0/248ec4da60c16957da2904144feb3d3bfb9d6b2af238692ad3c0fd9bd1ab56cd9482fe6410ab8ed2581b9ce81735ccabd59c1289aedf327e0f03053188f748da
   languageName: node
   linkType: hard
 
@@ -3539,7 +3539,7 @@ __metadata:
   dependencies:
     "@eslint/eslintrc": "npm:^3.3.3"
     "@eslint/js": "npm:^9.39.1"
-    "@navikt/aap-breveditor": "npm:^0.10.0"
+    "@navikt/aap-breveditor": "npm:^0.10.1"
     "@navikt/aap-breveditor-css": "npm:^0.4.1"
     "@navikt/aap-felles-prettier": "npm:^5.4.0"
     "@navikt/aap-oppgave-typescript-types": "npm:0.0.530"
@@ -10622,7 +10622,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:19.2.1":
+"react-dom@npm:19.2.1, react-dom@npm:^19.2.1":
   version: 19.2.1
   resolution: "react-dom@npm:19.2.1"
   dependencies:
@@ -10630,17 +10630,6 @@ __metadata:
   peerDependencies:
     react: ^19.2.1
   checksum: 10c0/e56b6b3d72314df580ca800b70a69a21c6372703c8f45d9b5451ca6519faefb2496d76ffa9c5adb94136d2bbf2fd303d0dfc208a2cd77ede3132877471af9470
-  languageName: node
-  linkType: hard
-
-"react-dom@npm:^19.2.0":
-  version: 19.2.0
-  resolution: "react-dom@npm:19.2.0"
-  dependencies:
-    scheduler: "npm:^0.27.0"
-  peerDependencies:
-    react: ^19.2.0
-  checksum: 10c0/fa2cae05248d01288e91523b590ce4e7635b1e13f1344e225f850d722a8da037bf0782f63b1c1d46353334e0c696909b82e582f8cad607948fde6f7646cc18d9
   languageName: node
   linkType: hard
 
@@ -10721,17 +10710,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:19.2.1":
+"react@npm:19.2.1, react@npm:^19.2.1":
   version: 19.2.1
   resolution: "react@npm:19.2.1"
   checksum: 10c0/2b5eaf407abb3db84090434c20d6c5a8e447ab7abcd8fe9eaf1ddc299babcf31284ee9db7ea5671d21c85ac5298bd632fa1a7da1ed78d5b368a537f5e1cd5d62
-  languageName: node
-  linkType: hard
-
-"react@npm:^19.2.0":
-  version: 19.2.0
-  resolution: "react@npm:19.2.0"
-  checksum: 10c0/1b6d64eacb9324725bfe1e7860cb7a6b8a34bc89a482920765ebff5c10578eb487e6b46b2f0df263bd27a25edbdae2c45e5ea5d81ae61404301c1a7192c38330
   languageName: node
   linkType: hard
 

@@ -15,7 +15,7 @@
   },
   "prettier": "@navikt/aap-felles-prettier",
   "dependencies": {
-    "@navikt/aap-breveditor": "^0.10.0",
+    "@navikt/aap-breveditor": "^0.10.1",
     "@navikt/aap-breveditor-css": "^0.4.1",
     "@navikt/aksel-icons": "7.35.0",
     "@navikt/diagnosekoder": "^1.2025.0",
