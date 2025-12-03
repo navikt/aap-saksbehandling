@@ -27,7 +27,6 @@ import {
   ForhåndsvisDialogmelding,
   ForhåndsvisDialogmeldingResponse,
   FormkravGrunnlag,
-  ForutgåendeMedlemskapGrunnlag,
   FritakMeldepliktGrunnlag,
   FullmektigGrunnlag,
   HelseinstitusjonGrunnlag,
@@ -267,11 +266,6 @@ export const hentBrevGrunnlag = async (behandlingsReferanse: string) => {
 export const hentLovvalgMedlemskapGrunnlag = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/lovvalgmedlemskap`;
   return await apiFetch<PeriodisertLovvalgMedlemskapGrunnlag>(url, saksbehandlingApiScope, 'GET');
-};
-
-export const hentForutgåendeMedlemskapGrunnlag = async (behandlingsReferanse: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/forutgaaendemedlemskap`;
-  return await apiFetch<ForutgåendeMedlemskapGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentPeriodisertForutgåendeMedlemskapGrunnlag = async (behandlingsReferanse: string) => {
