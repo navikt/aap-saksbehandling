@@ -81,7 +81,7 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
     mellomlagretVurdering
   );
 
-  const vedtatteVurderinger = grunnlag.gjeldendeVedtatteVurderinger ?? []
+  const vedtatteVurderinger = grunnlag.gjeldendeVedtatteVurderinger ?? [];
 
   const defaultValues: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -185,7 +185,7 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
       )}
       {vedtatteVurderinger.length != 0 && (
         <TidligereVurderinger
-          data={grunnlag.gjeldendeVedtatteVurderinger ?? []}
+          data={vedtatteVurderinger}
           buildFelter={byggFelter}
           getErGjeldende={(v) => deepEqual(v, vedtatteVurderinger[vedtatteVurderinger.length - 1])}
           getFomDato={(v) => v.fraDato}
