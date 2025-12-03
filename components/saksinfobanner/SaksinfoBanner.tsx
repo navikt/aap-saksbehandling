@@ -26,6 +26,7 @@ import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { AvbrytRevurderingModal } from 'components/saksinfobanner/avbrytrevurderingmodal/AvbrytRevurderingModal';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { ReturStatus } from 'components/returstatus/ReturStatus';
+import { toggles } from 'lib/utils/toggles';
 
 interface Props {
   personInformasjon: SakPersoninfo;
@@ -182,7 +183,7 @@ export const SaksinfoBanner = ({
               />
             </div>
           )}
-          {behandling.arenaStatus?.harArenaHistorikk && (
+          {behandling.arenaStatus?.harArenaHistorikk && toggles.featureVisArenahistorikkKnapp && (
             <div className={styles.oppgavestatus}>
               <ArenaStatus />
             </div>
