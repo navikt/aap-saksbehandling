@@ -11,4 +11,5 @@ export const toggles = {
   featurePostmottakBehandlingerPåVent: !isProd(),
   featureVisAvslagsårsaker: !isProd(),
   featurePeriodiserteValgfrieKort: !isProd(),
+  featureVisArenahistorikkKnapp: !isProd(),
 };

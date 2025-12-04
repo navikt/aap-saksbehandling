@@ -43,6 +43,8 @@ export type OverstyringMeldepliktGrunnlagVurdering =
 export type MeldepliktOverstyringStatus = 'RIMELIG_GRUNN' | 'IKKE_MELDT_SEG' | 'HAR_MELDT_SEG';
 export type ArbeidsevneGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.arbeidsevne.ArbeidsevneGrunnlagDto'];
+export type ArbeidsevneVurdering =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.arbeidsevne.ArbeidsevneVurderingDto'];
 export type RefusjonskravGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.refusjon.RefusjonkravGrunnlagResponse'];
 export type RefusjonkravVurderingResponse =
