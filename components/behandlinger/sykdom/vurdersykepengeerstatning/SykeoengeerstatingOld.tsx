@@ -35,7 +35,12 @@ interface FormFields {
 
 type DraftFormFields = Partial<FormFields>;
 
-export const SykepengeerstatningOld = ({ behandlingVersjon, grunnlag, readOnly, initialMellomlagretVurdering }: Props) => {
+export const SykepengeerstatningOld = ({
+  behandlingVersjon,
+  grunnlag,
+  readOnly,
+  initialMellomlagretVurdering,
+}: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_SYKEPENGEERSTATNING');
@@ -116,7 +121,7 @@ export const SykepengeerstatningOld = ({ behandlingVersjon, grunnlag, readOnly, 
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
-      vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
+      vurdertAvAnsatt={grunnlag?.vurderinger?.[0]?.vurdertAv}
       mellomlagretVurdering={mellomlagretVurdering}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
