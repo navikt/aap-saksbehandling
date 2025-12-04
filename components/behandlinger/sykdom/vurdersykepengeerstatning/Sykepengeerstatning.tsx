@@ -22,6 +22,7 @@ import { SykepengeerstatningFormInput } from 'components/behandlinger/sykdom/vur
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
 import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
 import { OppholdskravSykepengererstatninbgTidligereVurdering } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/SykepengererstatningTidligereVurdering';
+import { mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
 
 interface Props {
   behandlingVersjon: number;
@@ -106,6 +107,8 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
     });
   };
 
+  const errorList = mapPeriodiserteVurderingerErrorList<SykepengeerstatningForm>(form.formState.errors);
+
   return (
     <VilkårskortPeriodisert
       heading={'§ 11-13 AAP som sykepengeerstatning'}
@@ -128,7 +131,7 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
       visningActions={visningActions}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
       onLeggTilVurdering={onAddPeriode}
-      errorList={[]}
+      errorList={errorList}
     >
       <>
         {vedtatteVurderinger?.map((vurdering) => (
