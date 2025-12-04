@@ -1,5 +1,4 @@
 import { Alert, Button, HStack, Link, ReadMore, VStack } from '@navikt/ds-react';
-import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
 import { JaEllerNei } from 'lib/utils/form';
@@ -13,6 +12,7 @@ import { UseFormReturn } from 'react-hook-form';
 import { OppholdskravForm } from 'components/behandlinger/oppholdskrav/types';
 import { useState } from 'react';
 import { validerDato } from 'lib/validation/dateValidation';
+import { DateInputWrapperOnBlur } from 'components/form/dateinputwrapper/DateInputWrapperOnBlur';
 
 type Props = {
   form: UseFormReturn<OppholdskravForm>;
@@ -47,7 +47,7 @@ export const OppholdskravFormInput = ({
   return (
     <VStack gap="5">
       <HStack justify={'space-between'}>
-        <DateInputWrapper
+        <DateInputWrapperOnBlur
           name={`vurderinger.${index}.fraDato`}
           label="Vurderingen gjelder fra"
           control={control}
