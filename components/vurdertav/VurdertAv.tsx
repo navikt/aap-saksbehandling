@@ -5,8 +5,8 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 
 export type VurdertAvShape = {
   ansattnavn: string | null | undefined;
-  ident: string | null | undefined;
-  dato: string | null | undefined;
+  ident: string;
+  dato: string;
 };
 
 interface Props {
