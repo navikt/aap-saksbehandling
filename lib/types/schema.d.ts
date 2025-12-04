@@ -9770,8 +9770,18 @@ export interface components {
       ar: number;
       gverdi: number;
       'harTilgangTil\u00C5Saksbehandle': boolean;
+      historiskeManuelleVurderinger?:
+        | components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.ManuellInntektGrunnlagVurdering'][]
+        | null;
       historiskeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.ManuellInntektVurderingGrunnlagResponse'][];
+      manuelleVurderinger?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.ManuellInntektGrunnlagVurdering'];
+      registrerteInntekterSisteRelevanteAr: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.\u00C5rData'][];
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.ManuellInntektVurderingGrunnlagResponse'];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.ManuellInntektGrunnlagVurdering': {
+      begrunnelse: string;
+      vurdertAv: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
+      '\u00E5rsVurderinger': components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.\u00C5rData'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.ManuellInntektVurderingGrunnlagResponse': {
       /** Format: int32 */
@@ -9779,6 +9789,12 @@ export interface components {
       begrunnelse: string;
       belop: number;
       vurdertAv: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.\u00C5rData': {
+      'bel\u00F8p'?: number | null;
+      'e\u00F8sBel\u00F8p'?: number | null;
+      /** Format: int32 */
+      '\u00E5r': number;
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.tidspunkt.BeregningTidspunktAvklaringResponse': {
       'harTilgangTil\u00C5Saksbehandle': boolean;
@@ -12142,11 +12158,20 @@ export interface components {
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.beregning.ManuellInntektVurderingDto': {
       begrunnelse: string;
       belop: number;
+      vurderinger?:
+        | components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.beregning.\u00C5rsVurdering'][]
+        | null;
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.beregning.YrkesskadeBel\u00F8pVurderingDTO': {
       'antatt\u00C5rligInntekt': components['schemas']['no.nav.aap.komponenter.verdityper.Bel\u00F8p'];
       begrunnelse: string;
       referanse: string;
+    };
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.beregning.\u00C5rsVurdering': {
+      'bel\u00F8p'?: number | null;
+      'e\u00F8sBel\u00F8p'?: number | null;
+      /** Format: int32 */
+      '\u00E5r': number;
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.bistand.flate.BistandVurderingL\u00F8sningDto': {
       begrunnelse: string;
