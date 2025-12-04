@@ -141,6 +141,22 @@ export const SaksbehandlerOppgitteBarnVurderingFelter = ({
 
                 return erFørFødselsdato ? `Dato kan ikke være før fødselsdato (${fødselsdato})` : true;
               },
+              validerIkkeEtter18År: (value) => {
+                if (!fødselsdato) {
+                  return;
+                }
+
+                const fødselsdatoDate = new Date(fødselsdato);
+                const fødselsdatoPlus18År = new Date(fødselsdatoDate);
+                fødselsdatoPlus18År.setFullYear(fødselsdatoDate.getFullYear() + 18);
+                const fødselsdatoPlus18ÅrFormatert = formaterDatoForFrontend(fødselsdatoPlus18År.toISOString());
+
+                const erEtter18År = erDatoFoerDato(fødselsdatoPlus18ÅrFormatert, value as string);
+
+                return erEtter18År
+                  ? `Dato kan ikke settes tidligere enn ${fødselsdatoPlus18ÅrFormatert}, da dette er første dato etter at barnet fylte 18 år.`
+                  : true;
+              },
             },
           }}
         />

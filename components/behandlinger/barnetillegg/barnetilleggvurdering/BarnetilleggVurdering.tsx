@@ -294,7 +294,7 @@ export const BarnetilleggVurdering = ({
                   ident={vurdering.ident}
                   fødselsdato={vurdering.fødselsdato}
                   navn={kapitaliserNavn(
-                    (vurdering.ident && behandlingPersonInfo?.info[vurdering.ident]) || vurdering.navn || 'Ukjent'
+                    vurdering.navn || (vurdering.ident && behandlingPersonInfo?.info[vurdering.ident]) || 'Ukjent'
                   )}
                   harOppgittFosterforelderRelasjon={vurdering.oppgittForelderRelasjon === 'FOSTERFORELDER'}
                   readOnly={formReadOnly}
@@ -369,10 +369,10 @@ function mapVurderingToDraftFormFields(
   behandlingPersonInfo: BehandlingPersoninfo
 ): DraftFormFields {
   const vurderteBarn: BarneTilleggVurdering[] = vurderteBarnArray.map((barn) => {
-    const navn = barn.navn || barn.ident || 'Ukjent';
+    const navn = barn.navn || 'Ukjent';
     return {
       ident: barn.ident,
-      navn: barn.ident ? behandlingPersonInfo?.info[barn.ident] : navn,
+      navn: navn || (barn.ident ? behandlingPersonInfo?.info[barn.ident] : 'Ukjent'),
       oppgittForelderRelasjon: barn.oppgittForeldreRelasjon,
       fødselsdato: barn.fødselsdato,
       vurderinger: barn.vurderinger.map((value) => {
@@ -402,7 +402,7 @@ function mapVurderingToDraftFormFields(
       (vurdertBarn) => vurdertBarn.ident === barn.ident?.identifikator
     );
     return {
-      navn: behandlingPersonInfo?.info[barn.ident!.identifikator],
+      navn: barn.navn || behandlingPersonInfo?.info[barn.ident!.identifikator],
       fødselsdato: barn.fodselsDato,
       ident: barn.ident?.identifikator,
       forsørgerPeriode: barn.forsorgerPeriode,
