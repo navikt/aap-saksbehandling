@@ -20,7 +20,11 @@ const Delmalvelger = ({ index, control, obligatorisk }: DelmalvelgerProps) => {
       name={`delmaler.${index}.valgt`}
       control={control}
       render={({ field }) => {
-        return <Switch onChange={field.onChange}>Inkluder i brev</Switch>;
+        return (
+          <Switch onChange={field.onChange} checked={field.value}>
+            Inkluder i brev
+          </Switch>
+        );
       }}
     />
   );
@@ -41,7 +45,7 @@ export const Delmal = ({ delmalFelt, index, control, watch, brevmal }: DelmalPro
         {finnBeskrivelseForDelmal(delmalFelt.noekkel, brevmal)}
       </Heading>
       <Delmalvelger control={control} index={index} obligatorisk={delmalErObligatorisk(delmalFelt.noekkel, brevmal)} />
-      {watch(`delmaler.${index}.valgt`) === true && delmalFelt.valg?.length && (
+      {watch(`delmaler.${index}.valgt`) === true && !!delmalFelt.valg?.length && (
         <Valgfelt valg={delmalFelt.valg} control={control} delmalIndex={index} brevmal={brevmal} />
       )}
     </Box>
