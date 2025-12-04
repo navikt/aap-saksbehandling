@@ -4,6 +4,8 @@ import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 import { skalViseSteg, StegData } from 'lib/utils/steg';
 import { Bistandsbehov } from 'components/behandlinger/sykdom/bistandsbehov/Bistandsbehov';
+import { toggles } from 'lib/utils/toggles';
+import { BistandsbehovPeriodisert } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovPeriodisert';
 
 interface Props {
   behandlingsReferanse: string;
@@ -32,7 +34,16 @@ export const BistandsbehovMedDataFetching = async ({
     return null;
   }
 
-  return (
+  return toggles.featureBistandPeriodisert ? (
+    <BistandsbehovPeriodisert
+      grunnlag={grunnlag.data}
+      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+      behandlingVersjon={stegData.behandlingVersjon}
+      initialMellomlagretVurdering={initialMellomlagretVurdering}
+      typeBehandling={stegData.typeBehandling}
+      overgangArbeidEnabled={overgangArbeidEnabled}
+    />
+  ) : (
     <Bistandsbehov
       grunnlag={grunnlag.data}
       readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}

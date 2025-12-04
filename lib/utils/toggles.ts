@@ -12,4 +12,5 @@ export const toggles = {
   featureVisAvslagsårsaker: !isProd(),
   featurePeriodiserteValgfrieKort: !isProd(),
   featureVisArenahistorikkKnapp: !isProd(),
+  featureBistandPeriodisert: !isProd(),
 };

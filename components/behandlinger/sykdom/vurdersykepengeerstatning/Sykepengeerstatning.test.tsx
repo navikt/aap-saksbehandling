@@ -89,8 +89,17 @@ describe('Sykepengeerstatning', () => {
 
     const grunnlagMedVurdering: SykepengeerstatningGrunnlag = {
       harTilgangTilÅSaksbehandle: true,
+      behøverVurderinger: [],
+      kanVurderes: [],
+      nyeVurderinger: [],
+      sisteVedtatteVurderinger: [],
       vurderinger: [
         {
+          opprettet: '2025-01-01',
+          fom: '2025-01-01',
+          vurdertIBehandling: {
+            id: 0,
+          },
           begrunnelse: 'Dette er en begrunnelse',
           dokumenterBruktIVurdering: [],
           harRettPå: true,
@@ -104,6 +113,11 @@ describe('Sykepengeerstatning', () => {
       ],
       vedtatteVurderinger: [
         {
+          opprettet: '2025-01-01',
+          fom: '2025-01-01',
+          vurdertIBehandling: {
+            id: 0,
+          },
           begrunnelse: 'Dette er en begrunnelse',
           dokumenterBruktIVurdering: [],
           harRettPå: true,
@@ -148,6 +162,10 @@ describe('mellomlagring', () => {
 
   const grunnlagMedVurdering: SykepengeerstatningGrunnlag = {
     harTilgangTilÅSaksbehandle: true,
+    behøverVurderinger: [],
+    kanVurderes: [],
+    nyeVurderinger: [],
+    sisteVedtatteVurderinger: [],
     vurderinger: [
       {
         begrunnelse: 'Dette er min vurdering som er bekreftet',
@@ -159,10 +177,20 @@ describe('mellomlagring', () => {
           dato: '2025-08-21',
           ident: 'Saksbehandler',
         },
+        opprettet: '2025-01-01',
+        fom: '2025-01-01',
+        vurdertIBehandling: {
+          id: 0,
+        },
       },
     ],
     vedtatteVurderinger: [
       {
+        opprettet: '2025-01-01',
+        fom: '2025-01-01',
+        vurdertIBehandling: {
+          id: 0,
+        },
         begrunnelse: 'Dette er min vurdering som er bekreftet',
         dokumenterBruktIVurdering: [],
         harRettPå: true,
@@ -178,6 +206,10 @@ describe('mellomlagring', () => {
 
   const grunnlagUtenVurdering: SykepengeerstatningGrunnlag = {
     harTilgangTilÅSaksbehandle: true,
+    behøverVurderinger: [],
+    kanVurderes: [],
+    nyeVurderinger: [],
+    sisteVedtatteVurderinger: [],
     vurderinger: [],
     vedtatteVurderinger: [],
   };
