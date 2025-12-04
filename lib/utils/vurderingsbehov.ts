@@ -48,6 +48,8 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov): strin
       return 'Forutgående medlemskap';
     case 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND':
       return 'Sykdom arbeidsevne behov for bistand';
+    case 'REVURDER_SYKEPENGEERSTATNING':
+      return 'Revurdering sykepengererstatning';
     case 'BARNETILLEGG':
       return 'Barnetillegg';
     case 'INSTITUSJONSOPPHOLD':
