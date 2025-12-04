@@ -29,11 +29,6 @@ describe('Sykepengeerstatning', () => {
     expect(screen.getByRole('textbox', { name: 'Vilkårsvurdering' })).toBeVisible();
   });
 
-  /*
-  it('har et datofelt', () => {
-    expect(screen.getByRole('textbox', { name: 'Gjelder fra' })).toBeVisible();
-  });*/
-
   it('har felt for krav på sykepengeerstatning', () => {
     expect(screen.getByRole('group', { name: 'Har brukeren krav på sykepengeerstatning?' })).toBeVisible();
   });
@@ -61,17 +56,17 @@ describe('Sykepengeerstatning', () => {
   it('skal vise feilmelding dersom begrunnelse ikke er besvart', async () => {
     const bekreftKnapp = screen.getByRole('button', { name: 'Bekreft' });
     await user.click(bekreftKnapp);
-    const feilmelding = await screen.findByText('Du må begrunne avgjørelsen din.');
-    expect(feilmelding).toBeVisible();
+    const feilmelding = await screen.findAllByText('Du må begrunne avgjørelsen din.');
+    expect(feilmelding[0]).toBeVisible();
   });
 
   it('skal vise feilmelding dersom krav på sykepengeerstatning ikke er besvart', async () => {
     const bekreftKnapp = screen.getByRole('button', { name: 'Bekreft' });
     await user.click(bekreftKnapp);
-    const feilmelding = await screen.findByText(
+    const feilmelding = await screen.findAllByText(
       'Du må ta stilling til om brukeren har rett på AAP som sykepengeerstatning.'
     );
-    expect(feilmelding).toBeVisible();
+    expect(feilmelding[0]).toBeVisible();
   });
 
   it('skal vise feilmelding dersom krav på sykepengeerstatning er oppfylt og grunn er ikke besvart', async () => {
@@ -80,8 +75,8 @@ describe('Sykepengeerstatning', () => {
 
     const bekreftKnapp = screen.getByRole('button', { name: 'Bekreft' });
     await user.click(bekreftKnapp);
-    const feilmelding = await screen.findByText('Du må velge én grunn');
-    expect(feilmelding).toBeVisible();
+    const feilmelding = await screen.findAllByText('Du må velge én grunn');
+    expect(feilmelding[0]).toBeVisible();
   });
 });
 
