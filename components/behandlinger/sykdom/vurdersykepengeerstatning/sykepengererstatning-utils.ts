@@ -48,7 +48,11 @@ export function getDefaultValuesFromGrunnlag(grunnlag?: SykepengeerstatningGrunn
         fraDato: formaterDatoForFrontend(vurdering.fom),
         erOppfylt: vurdering.harRettPå ? JaEllerNei.Ja : JaEllerNei.Nei,
         grunn: vurdering.grunn,
-        vurdertAv: vurdering.vurdertAv,
+        vurdertAv: {
+          ansattnavn: vurdering.vurdertAv.ansattnavn,
+          ident: vurdering.vurdertAv.ident,
+          dato: vurdering.vurdertAv.dato,
+        },
       })) || [],
   };
 }
