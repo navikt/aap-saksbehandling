@@ -1,5 +1,4 @@
 import { Button, HStack, Radio, ReadMore, VStack } from '@navikt/ds-react';
-import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
 import { VisningModus } from 'hooks/saksbehandling/visning/VisningHook';
@@ -12,6 +11,7 @@ import { JaEllerNei } from 'lib/utils/form';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { BeregningTidspunktGrunnlag } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
+import { DateInputWrapperOnBlur } from 'components/form/dateinputwrapper/DateInputWrapperOnBlur';
 
 type Props = {
   form: UseFormReturn<ForutgåendeMedlemskapVurderingForm>;
@@ -46,7 +46,7 @@ export const ForutgåendeMedlemskapFormInput = ({
   return (
     <VStack gap="4">
       <HStack justify={'space-between'}>
-        <DateInputWrapper
+        <DateInputWrapperOnBlur
           name={`vurderinger.${index}.fraDato`}
           label="Vurderingen gjelder fra"
           control={control}

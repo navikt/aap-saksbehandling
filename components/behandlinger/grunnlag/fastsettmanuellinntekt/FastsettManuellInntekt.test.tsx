@@ -14,6 +14,7 @@ const grunnlag: ManuellInntektGrunnlag = {
   gverdi: 100000,
   harTilgangTilÅSaksbehandle: true,
   historiskeVurderinger: [],
+  registrerteInntekterSisteRelevanteAr: [],
 };
 
 const grunnlagMedVurdering: ManuellInntektGrunnlag = {
@@ -30,6 +31,7 @@ const grunnlagMedVurdering: ManuellInntektGrunnlag = {
     },
     belop: 500000,
   },
+  registrerteInntekterSisteRelevanteAr: [],
 };
 
 beforeEach(() => {

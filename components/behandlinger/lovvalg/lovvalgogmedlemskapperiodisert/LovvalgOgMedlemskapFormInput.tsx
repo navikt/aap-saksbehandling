@@ -1,5 +1,4 @@
 import { Button, HStack, Radio, ReadMore, VStack } from '@navikt/ds-react';
-import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
 import { ComboboxWrapper } from 'components/form/comboboxwrapper/ComboboxWrapper';
@@ -12,6 +11,7 @@ import React, { useState } from 'react';
 import { validerDato } from 'lib/validation/dateValidation';
 import { LovOgMedlemskapVurderingForm } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/types';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
+import { DateInputWrapperOnBlur } from 'components/form/dateinputwrapper/DateInputWrapperOnBlur';
 
 type Props = {
   form: UseFormReturn<LovOgMedlemskapVurderingForm>;
@@ -44,7 +44,7 @@ export const LovvalgOgMedlemskapFormInput = ({
   return (
     <VStack gap="4">
       <HStack justify={'space-between'}>
-        <DateInputWrapper
+        <DateInputWrapperOnBlur
           name={`vurderinger.${index}.fraDato`}
           label="Vurderingen gjelder fra"
           control={control}
