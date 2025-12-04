@@ -90,7 +90,7 @@ describe('mellomlagring', () => {
     mellomlagretVurdering: {
       avklaringsbehovkode: Behovstype.VURDER_SYKEPENGEERSTATNING_KODE,
       behandlingId: { id: 1 },
-      data: '{"begrunnelse":"Dette er min vurdering som er mellomlagret"}',
+      data: '{"vurderinger": [{"begrunnelse":"Dette er min vurdering som er mellomlagret"}]}',
       vurdertDato: '2025-08-21T12:00:00.000',
       vurdertAv: 'Jan T. Loven',
     },
@@ -125,8 +125,8 @@ describe('mellomlagring', () => {
         begrunnelse: 'Dette er min vurdering som er bekreftet',
         dokumenterBruktIVurdering: [],
         harRettPå: true,
-        gjelderFra: '2025-01.01',
-        fom: '2025-01.01',
+        gjelderFra: '2025-01-01',
+        fom: '2025-01-01',
         vurdertIBehandling: { id: 1 },
         opprettet: '2025-08-21',
         grunn: 'ANNEN_SYKDOM_INNEN_SEKS_MND',
@@ -147,7 +147,7 @@ describe('mellomlagring', () => {
     nyeVurderinger: [],
     sisteVedtatteVurderinger: [],
     kanVurderes: [],
-    behøverVurderinger: [],
+    behøverVurderinger: [{ fom: '2025-01-01', tom: '2026-01-01' }],
   };
 
   it('Skal vise en tekst om hvem som har gjort vurderingen dersom det finnes en mellomlagring', () => {
