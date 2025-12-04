@@ -10,7 +10,7 @@ export type SykepengeerstatningVurderingForm = {
   fraDato: string;
   grunn?: SykepengeerstatningVurderingGrunn;
   vurdertAv?: {
-    navn?: string | null;
+    ansattnavn: string | null | undefined;
     ident: string;
     dato: string;
   };
