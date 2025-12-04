@@ -11,7 +11,7 @@ export type OppholdskravVurderingForm = {
   landAnnet?: string;
   fraDato?: string;
   vurdertAv?: {
-    navn?: string | null;
+    ansattnavn: string | null | undefined;
     ident: string;
     dato: string;
   };

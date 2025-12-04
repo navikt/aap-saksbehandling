@@ -1,11 +1,16 @@
 'use client';
 
-import { VurdertAvAnsatt } from 'lib/types/types';
 import { Detail, VStack } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 
+export type VurdertAvShape = {
+  ansattnavn: string | null | undefined;
+  ident: string | null | undefined;
+  dato: string | null | undefined;
+};
+
 interface Props {
-  vurdertAv?: VurdertAvAnsatt;
+  vurdertAv: VurdertAvShape | undefined;
 }
 
 export const VurdertAv = ({ vurdertAv }: Props) => {
