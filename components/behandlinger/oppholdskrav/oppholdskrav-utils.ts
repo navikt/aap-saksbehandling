@@ -31,7 +31,7 @@ export function getDefaultValuesFromGrunnlag(grunnlag?: OppholdskravGrunnlagResp
         vurdertAv:
           vurdering.vurdertAv != null
             ? {
-                navn: vurdering.vurdertAv.ansattnavn,
+                ansattnavn: vurdering.vurdertAv.ansattnavn,
                 ident: vurdering.vurdertAv.ident,
                 dato: vurdering.vurdertAv.dato,
               }

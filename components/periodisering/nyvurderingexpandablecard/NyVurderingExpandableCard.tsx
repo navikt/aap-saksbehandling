@@ -4,8 +4,7 @@ import { CustomExpandableCard } from 'components/customexpandablecard/CustomExpa
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { ReactNode, useState } from 'react';
 import { BodyShort, HStack, Tag, VStack } from '@navikt/ds-react';
-import { VurdertAvAnsatt } from 'lib/types/types';
-import { VurdertAv } from 'components/vurdertav/VurdertAv';
+import { VurdertAv, VurdertAvShape } from 'components/vurdertav/VurdertAv';
 import { subDays } from 'date-fns';
 
 interface Props {
@@ -13,7 +12,7 @@ interface Props {
   nestePeriodeFraDato: Date | null;
   isLast: boolean;
   oppfylt: boolean | undefined;
-  vurdertAv: VurdertAvAnsatt | undefined;
+  vurdertAv: VurdertAvShape | undefined;
   finnesFeil: boolean;
   children: ReactNode;
 }

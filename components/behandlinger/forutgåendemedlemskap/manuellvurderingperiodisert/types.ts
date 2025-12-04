@@ -10,7 +10,7 @@ export type ForutgåendeMedlemskapManuellVurderingForm = {
   unntaksvilkår?: 'A' | 'B' | 'Nei';
   fraDato?: string;
   vurdertAv?: {
-    navn?: string | null;
+    ansattnavn: string | null | undefined;
     ident: string;
     dato: string;
   };

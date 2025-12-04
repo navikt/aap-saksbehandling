@@ -42,7 +42,7 @@ export function getDefaultValuesFromGrunnlag(
         vurdertAv:
           vurdering.vurdertAv != null
             ? {
-                navn: vurdering.vurdertAv.ansattnavn,
+                ansattnavn: vurdering.vurdertAv.ansattnavn,
                 ident: vurdering.vurdertAv.ident,
                 dato: vurdering.vurdertAv.dato,
               }
