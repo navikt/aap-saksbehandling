@@ -143,7 +143,7 @@ export const BistandsbehovPeriodisert = ({
       ))}
       {fields.map((vurdering, index) => (
         <NyVurderingExpandableCard
-          key={`nyvurdering-bistand-${index}`}
+          key={vurdering.id}
           fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
           nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
           isLast={index === fields.length - 1}
@@ -162,7 +162,7 @@ export const BistandsbehovPeriodisert = ({
             form={form}
             readOnly={formReadOnly}
             index={index}
-            harTidligereVurderinger={false}
+            harTidligereVurderinger={vedtatteVurderinger.length > 0}
             onRemove={() => remove(index)}
             typeBehandling={typeBehandling}
             overgangArbeidEnabled={overgangArbeidEnabled}
@@ -179,7 +179,7 @@ export const BistandsbehovPeriodisert = ({
         vurderinger: [
           {
             ...emptyBistandVurderingForm(),
-            fraDato: formaterDatoForFrontend(new Date(grunnlag?.kanVurderes[0]?.fom!)),
+            fraDato: formaterDatoForFrontend(new Date(grunnlag?.behøverVurderinger[0]?.fom!)),
           },
         ],
       };
