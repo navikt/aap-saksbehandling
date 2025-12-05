@@ -30,6 +30,16 @@ export const BistandsbehovTidligereVurdering = ({ vurdering }: Props) => {
             svar={getJaNeiEllerUndefined(vurdering.erBehovForAnnenOppfølging)!}
           />
         ))}
+      {vurdering.overgangBegrunnelse && (
+        <SpørsmålOgSvar spørsmål="Vilkårsvurdering" svar={vurdering.overgangBegrunnelse!} />
+      )}
+      {vurdering.skalVurdereAapIOvergangTilArbeid === true ||
+        (vurdering.skalVurdereAapIOvergangTilArbeid === false && (
+          <SpørsmålOgSvar
+            spørsmål="Har brukeren rett til AAP i perioden som arbeidssøker?"
+            svar={getJaNeiEllerUndefined(vurdering.skalVurdereAapIOvergangTilArbeid)!}
+          />
+        ))}
     </VStack>
   );
 };

@@ -1,6 +1,6 @@
 'use client';
 
-import { BistandsbehovVurdering, BistandsGrunnlag, MellomlagretVurdering, TypeBehandling } from 'lib/types/types';
+import { BistandsGrunnlag, MellomlagretVurdering, TypeBehandling } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { FormEvent } from 'react';
 import { formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
@@ -18,6 +18,7 @@ import { parseISO } from 'date-fns';
 import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
 import { LovOgMedlemskapVurderingForm } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/types';
 import { BistandsbehovTidligereVurdering } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovTidligereVurdering';
+import { mapBistandVurderingFormTilDto } from 'components/behandlinger/sykdom/bistandsbehov/bistandsbehov-utils';
 
 interface Props {
   behandlingVersjon: number;
@@ -65,44 +66,36 @@ export const BistandsbehovPeriodisert = ({
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingerToBistandForm(grunnlag);
 
-  const form = useForm<BistandForm>({ defaultValues, shouldUnregister: true });
+  const form = useForm<BistandForm>({ defaultValues });
   const { fields, append, remove } = useFieldArray({ name: 'vurderinger', control: form.control });
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
-      // løsPeriodisertBehovOgGåTilNesteSteg(
-      //   {
-      //     behandlingVersjon: behandlingVersjon,
-      //     behov: {
-      //       behovstype: Behovstype.AVKLAR_BISTANDSBEHOV_KODE,
-      //       bistandsVurdering: {
-      //         fom: vurderingenGjelderFra,
-      //         begrunnelse: data.begrunnelse,
-      //         erBehovForAktivBehandling: data.erBehovForAktivBehandling === JaEllerNei.Ja,
-      //         erBehovForArbeidsrettetTiltak: data.erBehovForArbeidsrettetTiltak === JaEllerNei.Ja,
-      //         erBehovForAnnenOppfølging: data.erBehovForAnnenOppfølging
-      //           ? data.erBehovForAnnenOppfølging === JaEllerNei.Ja
-      //           : undefined,
-      //         ...(bistandsbehovErIkkeOppfylt && {
-      //           skalVurdereAapIOvergangTilArbeid: data.skalVurdereAapIOvergangTilArbeid === JaEllerNei.Ja,
-      //           overgangBegrunnelse: data.overgangBegrunnelse,
-      //         }),
-      //       },
-      //     },
-      //     referanse: behandlingsReferanse,
-      //   },
-      //   () => {
-      //     nullstillMellomlagretVurdering();
-      //     visningActions.onBekreftClick();
-      //   }
-      // );
+      løsPeriodisertBehovOgGåTilNesteSteg(
+        {
+          behandlingVersjon: behandlingVersjon,
+          behov: {
+            behovstype: Behovstype.AVKLAR_BISTANDSBEHOV_KODE,
+            løsningerForPerioder: data.vurderinger.map((vurdering, index) => {
+              const isLast = index === data.vurderinger.length - 1;
+              const tilDato = isLast ? undefined : data.vurderinger[index + 1].fraDato;
+              return mapBistandVurderingFormTilDto(vurdering, tilDato);
+            }),
+          },
+          referanse: behandlingsReferanse,
+        },
+        () => {
+          nullstillMellomlagretVurdering();
+          visningActions.onBekreftClick();
+        }
+      );
     })(event);
   };
 
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const foersteNyePeriode = fields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
   const errorList = mapPeriodiserteVurderingerErrorList<LovOgMedlemskapVurderingForm>(form.formState.errors);
-  console.log(grunnlag);
+
   return (
     <VilkårskortPeriodisert
       heading={'§ 11-6 Behov for bistand til å skaffe seg eller beholde arbeid'}
@@ -150,7 +143,7 @@ export const BistandsbehovPeriodisert = ({
       ))}
       {fields.map((vurdering, index) => (
         <NyVurderingExpandableCard
-          key={vurdering.id}
+          key={`nyvurdering-bistand-${index}`}
           fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
           nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
           isLast={index === fields.length - 1}
@@ -216,9 +209,5 @@ export const BistandsbehovPeriodisert = ({
       skalVurdereAapIOvergangTilArbeid: undefined,
       erBehovForArbeidsrettetTiltak: undefined,
     };
-  }
-
-  function harVurdertOvergangArbeid(vurdering: BistandsbehovVurdering) {
-    return vurdering.skalVurdereAapIOvergangTilArbeid === false || vurdering.skalVurdereAapIOvergangTilArbeid === true;
   }
 };
