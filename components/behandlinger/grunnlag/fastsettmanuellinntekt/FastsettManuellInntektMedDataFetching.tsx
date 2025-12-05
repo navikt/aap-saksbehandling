@@ -14,12 +14,10 @@ interface Props {
 export const FastsettManuellInntektMedDataFetching = async ({ behandlingsreferanse, stegData }: Props) => {
   const grunnlag = await hentManuellInntektGrunnlag(behandlingsreferanse);
 
-  if (isError(grunnlag)) {
-    return <ApiException apiResponses={[grunnlag]} />;
-  }
-
   if (toggles.featureManglendePGIOgEøsInntekter) {
-    //  Manglende pensjonsgivende inntekter / EØS inntekter
+    if (isError(grunnlag)) {
+      return null;
+    }
     return (
       <FastsettManuellInntektInfo
         behandlingsversjon={stegData.behandlingVersjon}
@@ -27,6 +25,10 @@ export const FastsettManuellInntektMedDataFetching = async ({ behandlingsreferan
         readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       />
     );
+  }
+
+  if (isError(grunnlag)) {
+    return <ApiException apiResponses={[grunnlag]} />;
   }
 
   if (!skalViseSteg(stegData, !!grunnlag.data.vurdering)) {
