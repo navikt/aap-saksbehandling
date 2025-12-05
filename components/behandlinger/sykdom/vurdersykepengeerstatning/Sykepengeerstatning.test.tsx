@@ -117,11 +117,6 @@ describe('mellomlagring', () => {
     ],
     sisteVedtatteVurderinger: [
       {
-        opprettet: '2025-01-01',
-        fom: '2025-01-01',
-        vurdertIBehandling: {
-          id: 0,
-        },
         begrunnelse: 'Dette er min vurdering som er bekreftet',
         dokumenterBruktIVurdering: [],
         harRettPå: true,
@@ -142,10 +137,6 @@ describe('mellomlagring', () => {
 
   const grunnlagUtenVurdering: SykepengeerstatningGrunnlag = {
     harTilgangTilÅSaksbehandle: true,
-    behøverVurderinger: [],
-    kanVurderes: [],
-    nyeVurderinger: [],
-    sisteVedtatteVurderinger: [],
     vurderinger: [],
     vedtatteVurderinger: [],
     nyeVurderinger: [],
