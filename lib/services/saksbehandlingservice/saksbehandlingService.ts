@@ -268,8 +268,8 @@ export const hentLovvalgMedlemskapGrunnlag = async (behandlingsReferanse: string
   return await apiFetch<PeriodisertLovvalgMedlemskapGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
-export const hentPeriodisertForutgåendeMedlemskapGrunnlag = async (behandlingsReferanse: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/forutgaaendemedlemskap-v2`;
+export const hentForutgåendeMedlemskapGrunnlag = async (behandlingsReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/forutgaaendemedlemskap`;
   return await apiFetch<PeriodisertForutgåendeMedlemskapGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
