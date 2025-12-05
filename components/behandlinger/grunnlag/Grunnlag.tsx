@@ -9,7 +9,6 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { isError } from 'lib/utils/api';
 import { FastsettManuellInntektMedDataFetching } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/FastsettManuellInntektMedDataFetching';
 import { getStegData } from 'lib/utils/steg';
-import { toggles } from 'lib/utils/toggles';
 
 interface Props {
   behandlingsReferanse: string;
@@ -39,6 +38,12 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
     Behovstype.FASTSETT_YRKESSKADEINNTEKT
   );
   const vurderManglendeLigningSteg = getStegData(aktivStegGruppe, 'MANGLENDE_LIGNING', flyt.data);
+  const avsluttet = ['AVSLUTTET', 'TOTRINNS_VURDERT', 'KVALITETSSIKRET', 'AVBRUTT'];
+
+  var stegstatus =
+    fastsettBeregningstidspunktSteg.avklaringsbehov.find((it) => it.definisjon.kode === '5008')?.status.toString() ??
+    '';
+  var fullførtBeregning = avsluttet.includes(stegstatus);
 
   return (
     <GruppeSteg
@@ -66,7 +71,7 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
         </StegSuspense>
       )}
 
-      {(toggles.featureManglendePGIOgEøsInntekter || vurderManglendeLigningSteg.skalViseSteg) && (
+      {(vurderManglendeLigningSteg.skalViseSteg || fullførtBeregning) && (
         <StegSuspense>
           <FastsettManuellInntektMedDataFetching
             behandlingsreferanse={behandlingsReferanse}
