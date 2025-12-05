@@ -9,6 +9,7 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { isError } from 'lib/utils/api';
 import { FastsettManuellInntektMedDataFetching } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/FastsettManuellInntektMedDataFetching';
 import { getStegData } from 'lib/utils/steg';
+import { toggles } from 'lib/utils/toggles';
 
 interface Props {
   behandlingsReferanse: string;
@@ -65,7 +66,7 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
         </StegSuspense>
       )}
 
-      {vurderManglendeLigningSteg.skalViseSteg && (
+      {(toggles.featureManglendePGIOgEøsInntekter || vurderManglendeLigningSteg.skalViseSteg) && (
         <StegSuspense>
           <FastsettManuellInntektMedDataFetching
             behandlingsreferanse={behandlingsReferanse}
