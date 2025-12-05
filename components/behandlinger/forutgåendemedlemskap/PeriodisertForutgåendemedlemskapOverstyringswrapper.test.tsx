@@ -3,17 +3,17 @@ import { screen } from '@testing-library/react';
 import { AutomatiskLovvalgOgMedlemskapVurdering } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
 import { customRender } from 'lib/test/CustomRender';
-import { ForutgåendemedlemskapOverstyringswrapper } from 'components/behandlinger/forutgåendemedlemskap/ForutgåendemedlemskapOverstyringswrapper';
+import { PeriodisertForutgåendemedlemskapOverstyringswrapper } from 'components/behandlinger/forutgåendemedlemskap/PeriodisertForutgåendemedlemskapOverstyringswrapper';
 
 const automatiskLovvalgOgMedlemskapVurdering: AutomatiskLovvalgOgMedlemskapVurdering = {
   tilhørighetVurdering: [],
   kanBehandlesAutomatisk: true,
 };
 
-describe('Lovvalg og medlemskap wrapper', () => {
+describe('Forutgående medlemskap wrapper', () => {
   it('Skal vise vilkårskortet dersom det finnes en mellomlagring', () => {
     customRender(
-      <ForutgåendemedlemskapOverstyringswrapper
+      <PeriodisertForutgåendemedlemskapOverstyringswrapper
         behandlingsReferanse={'123'}
         behandlingVersjon={1}
         readOnly={false}
@@ -28,9 +28,10 @@ describe('Lovvalg og medlemskap wrapper', () => {
         }}
         visOverstyrKnapp={true}
         harYrkesskade={true}
+        behovstype={Behovstype.AVKLAR_FORUTGÅENDE_MEDLEMSKAP}
       >
         Innhold
-      </ForutgåendemedlemskapOverstyringswrapper>
+      </PeriodisertForutgåendemedlemskapOverstyringswrapper>
     );
 
     const vilkårskort = screen.getByRole('heading', {
@@ -42,7 +43,7 @@ describe('Lovvalg og medlemskap wrapper', () => {
 
   it('Skal ikke vise vilkårskortet dersom det ikke finnes en mellomlagring', () => {
     customRender(
-      <ForutgåendemedlemskapOverstyringswrapper
+      <PeriodisertForutgåendemedlemskapOverstyringswrapper
         behandlingsReferanse={'123'}
         behandlingVersjon={1}
         readOnly={false}
@@ -50,9 +51,10 @@ describe('Lovvalg og medlemskap wrapper', () => {
         harAvklaringsbehov={false}
         visOverstyrKnapp={true}
         harYrkesskade={true}
+        behovstype={Behovstype.AVKLAR_FORUTGÅENDE_MEDLEMSKAP}
       >
         Innhold
-      </ForutgåendemedlemskapOverstyringswrapper>
+      </PeriodisertForutgåendemedlemskapOverstyringswrapper>
     );
 
     const vilkårskort = screen.queryByRole('heading', {
