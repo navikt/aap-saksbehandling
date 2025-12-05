@@ -18,9 +18,6 @@ export const FastsettManuellInntektMedDataFetching = async ({ behandlingsreferan
     return <ApiException apiResponses={[grunnlag]} />;
   }
 
-  if (!skalViseSteg(stegData, !!grunnlag.data.vurdering)) {
-    return null;
-  }
   if (toggles.featureManglendePGIOgEøsInntekter) {
     //  Manglende pensjonsgivende inntekter / EØS inntekter
     return (
@@ -30,6 +27,10 @@ export const FastsettManuellInntektMedDataFetching = async ({ behandlingsreferan
         readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       />
     );
+  }
+
+  if (!skalViseSteg(stegData, !!grunnlag.data.vurdering)) {
+    return null;
   }
   return (
     <FastsettManuellInntekt
