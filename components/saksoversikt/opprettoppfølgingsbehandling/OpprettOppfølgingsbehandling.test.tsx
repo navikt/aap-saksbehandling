@@ -20,7 +20,7 @@ describe('opprett oppfølgingsbehandling', () => {
 
     await user.click(screen.getByRole('button', { name: 'Bekreft' }));
 
-    expect(screen.getByText('Dato for oppfølging kan ikke må settes.')).toBeVisible();
+    expect(screen.getByText('Dato for oppfølging må være satt.')).toBeVisible();
 
     // Prøver å sette dato i fortiden
     let datotekstboks = screen.getByRole('textbox', { name: 'Dato for oppfølging' });
@@ -36,6 +36,10 @@ describe('opprett oppfølgingsbehandling', () => {
 
     await user.click(screen.getByRole('combobox', { name: 'Hvem følger opp?' }));
     await user.click(screen.getByRole('option', { name: 'NAY' }));
+
+    const beskrivelse = screen.getByRole('textbox', { name: 'Hva skal følges opp?' });
+    await user.type(beskrivelse, 'Dette er en ny beskrivelse');
+
     await user.click(screen.getByRole('button', { name: 'Bekreft' }));
 
     // Kaller `send` bare én gang
@@ -68,6 +72,9 @@ describe('opprett oppfølgingsbehandling', () => {
 
     await user.click(screen.getByRole('combobox', { name: 'Hvem følger opp?' }));
     await user.click(screen.getByRole('option', { name: 'Lokalkontor' }));
+
+    const beskrivelse = screen.getByRole('textbox', { name: 'Hva skal følges opp?' });
+    await user.type(beskrivelse, 'Dette er en ny beskrivelse');
 
     const checkbox = screen.getByRole('checkbox', { name: 'Reserver oppgaven til meg' });
     await user.click(checkbox);

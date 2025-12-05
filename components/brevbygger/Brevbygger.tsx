@@ -79,7 +79,6 @@ export const Brevbygger = ({ referanse, brevmal, brevdata }: BrevbyggerProps) =>
   return (
     <HGrid columns={2} gap={'2'} minWidth={'1280px'}>
       <Box>
-        <h1>{parsedBrevmal.overskrift}</h1>
         <form
           onSubmit={handleSubmit((data) => {
             onSubmit(data);

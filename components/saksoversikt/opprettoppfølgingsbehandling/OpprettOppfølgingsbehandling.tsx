@@ -103,6 +103,7 @@ export const OpprettOppfølgingsBehandling = ({
         router.push(`/saksbehandling/sak/${saksnummer}`);
       }
     } else {
+      setIsLoading(false);
       setError(res.apiException.message);
     }
   }
@@ -113,7 +114,7 @@ export const OpprettOppfølgingsBehandling = ({
       label: 'Dato for oppfølging',
       defaultValue: defaultValues.datoForOppfølging,
       rules: {
-        required: 'Dato for oppfølging kan ikke må settes.',
+        required: 'Dato for oppfølging må være satt.',
         validate: (value) => {
           const valideringsresultat = validerDato(value as string);
           if (valideringsresultat) {
@@ -155,6 +156,12 @@ export const OpprettOppfølgingsBehandling = ({
       type: 'textarea',
       label: 'Hva skal følges opp?',
       defaultValue: defaultValues.hvaSkalFølgesOpp,
+      rules: {
+        required: 'Må beskrive hva som skal følges opp.',
+        validate: (value) => {
+          if (value.length < 10) return 'Beskrivelsen må være på minst 10 tegn.';
+        },
+      },
     },
   });
 

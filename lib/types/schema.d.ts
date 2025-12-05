@@ -9902,8 +9902,6 @@ export interface components {
       historiskeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.ManuellInntektVurderingGrunnlagResponse'][];
       manuelleVurderinger?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.ManuellInntektGrunnlagVurdering'];
       registrerteInntekterSisteRelevanteAr: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.\u00C5rData'][];
-      /** Format: int32 */
-      'sisteRelevante\u00C5r': number;
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.ManuellInntektVurderingGrunnlagResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.ManuellInntektGrunnlagVurdering': {
@@ -12288,7 +12286,7 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.beregning.ManuellInntektVurderingDto': {
       begrunnelse: string;
-      belop?: number | null;
+      belop: number;
       vurderinger?:
         | components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.beregning.\u00C5rsVurdering'][]
         | null;
@@ -12304,7 +12302,7 @@ export interface components {
       /** Format: int32 */
       '\u00E5r': number;
     };
-    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.bistand.flate.BistandL\u00F8sningDto': {
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.bistand.flate.BistandVurderingL\u00F8sningDto': {
       begrunnelse: string;
       erBehovForAktivBehandling: boolean;
       'erBehovForAnnenOppf\u00F8lging'?: boolean | null;

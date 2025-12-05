@@ -3,6 +3,8 @@ import { hentManuellInntektGrunnlag } from 'lib/services/saksbehandlingservice/s
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { skalViseSteg, StegData } from 'lib/utils/steg';
+import { FastsettManuellInntektInfo } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/FastsettManuellInntektInfo';
+import { toggles } from 'lib/utils/toggles';
 
 interface Props {
   behandlingsreferanse: string;
@@ -16,10 +18,20 @@ export const FastsettManuellInntektMedDataFetching = async ({ behandlingsreferan
     return <ApiException apiResponses={[grunnlag]} />;
   }
 
+  if (toggles.featureManglendePGIOgEøsInntekter) {
+    //  Manglende pensjonsgivende inntekter / EØS inntekter
+    return (
+      <FastsettManuellInntektInfo
+        behandlingsversjon={stegData.behandlingVersjon}
+        grunnlag={grunnlag.data}
+        readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+      />
+    );
+  }
+
   if (!skalViseSteg(stegData, !!grunnlag.data.vurdering)) {
     return null;
   }
-
   return (
     <FastsettManuellInntekt
       behandlingsversjon={stegData.behandlingVersjon}
