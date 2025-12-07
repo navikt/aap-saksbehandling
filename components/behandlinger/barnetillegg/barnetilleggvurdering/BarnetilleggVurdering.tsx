@@ -369,7 +369,7 @@ function mapVurderingToDraftFormFields(
   behandlingPersonInfo: BehandlingPersoninfo
 ): DraftFormFields {
   const vurderteBarn: BarneTilleggVurdering[] = vurderteBarnArray.map((barn) => {
-    const navn = barn.navn || 'Ukjent';
+    const navn = barn.navn;
     return {
       ident: barn.ident,
       navn: navn || (barn.ident ? behandlingPersonInfo?.info[barn.ident] : 'Ukjent'),
