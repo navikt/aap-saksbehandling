@@ -15,6 +15,9 @@ export type SykepengeerstatningGrunnlag =
 export type SykepengerVurderingResponse =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykepengergrunnlag.SykepengerVurderingResponse'];
 
+export type SykepengererstatningPeriodeLøsning =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.PeriodisertSykepengerVurderingDto'];
+
 export type SykdomsvurderingLøsningDto =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.SykdomsvurderingL\u00F8sningDto'];
 
@@ -344,12 +347,6 @@ export type PeriodisertForutgåendeMedlemskapGrunnlag =
 
 export type PeriodisertManuellVurderingForForutgåendeMedlemskapResponse =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.PeriodisertManuellVurderingForForutgåendeMedlemskapResponse'];
-
-export type ForutgåendeMedlemskapGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.ForutgåendeMedlemskapGrunnlagResponse'];
-
-export type HistoriskForutgåendeMedlemskapVurdering =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.HistoriskManuellVurderingForForutgåendeMedlemskapResponse'];
 
 export type SykdomBrevVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.SykdomsvurderingForBrevVurderingDto'];

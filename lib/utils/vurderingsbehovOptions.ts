@@ -8,6 +8,7 @@ export const vurderingsbehovOptions: ValuePair<Vurderingsbehov>[] = [
   { label: 'Lovvalg og medlemskap', value: 'LOVVALG_OG_MEDLEMSKAP' },
   { label: 'Forutgående medlemskap', value: 'FORUTGAENDE_MEDLEMSKAP' },
   { label: 'Sykdom, arbeidsevne og behov for bistand', value: 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND' },
+  { label: 'Sykepengeerstatning', value: 'REVURDER_SYKEPENGEERSTATNING' },
   { label: 'Beregningstidspunkt', value: 'REVURDER_BEREGNING' },
   { label: 'Barnetillegg', value: 'BARNETILLEGG' },
   { label: 'Institusjonsopphold', value: 'INSTITUSJONSOPPHOLD' },

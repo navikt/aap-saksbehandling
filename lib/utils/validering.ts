@@ -44,9 +44,9 @@ export function validerPeriodiserteVurderingerRekkefølge({
 
     const tidligsteDatoSomMåVurderes = new Date(grunnlag?.kanVurderes[0]?.fom!);
     if (isAfter(tidligsteDato, tidligsteDatoSomMåVurderes)) {
-      nyeVurderinger.forEach((vurdering, index) => {
+      nyeVurderinger.forEach((_, index) => {
         form.setError(`vurderinger.${index}.fraDato`, {
-          message: `Den tidligste vurderte datoen må være startdatoen for rettighetsperioden. Tidligste vurderte dato er ${formaterDatoForFrontend(tidligsteDato)} men rettighetsperioden starter ${formaterDatoForFrontend(tidligsteDatoSomMåVurderes)}`,
+          message: `Periodene du har lagt inn dekker ikke hele perioden som må vurderes. Tidligste vurderte dato er ${formaterDatoForFrontend(tidligsteDato)} men hele perioden fra ${formaterDatoForFrontend(tidligsteDatoSomMåVurderes)} behøver vurdering.`,
         });
       });
       return false;

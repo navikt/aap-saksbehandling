@@ -1,6 +1,6 @@
 import { hentBeregningsGrunnlag, hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
-import { FastsettBeregningMedDataFeching } from 'components/behandlinger/grunnlag/fastsettberegning/FastsettBeregningMedDataFeching';
+import { FastsettBeregningMedDataFetching } from 'components/behandlinger/grunnlag/fastsettberegning/FastsettBeregningMedDataFetching';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { VisBeregning } from 'components/behandlinger/grunnlag/visberegning/VisBeregning';
 import { YrkesskadeGrunnlagBeregningMedDataFetching } from 'components/behandlinger/grunnlag/yrkesskadegrunnlagberegning/YrkesskadeGrunnlagBeregningMedDataFetching';
@@ -9,6 +9,7 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { isError } from 'lib/utils/api';
 import { FastsettManuellInntektMedDataFetching } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/FastsettManuellInntektMedDataFetching';
 import { getStegData } from 'lib/utils/steg';
+import { toggles } from 'lib/utils/toggles';
 
 interface Props {
   behandlingsReferanse: string;
@@ -49,7 +50,7 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
     >
       {fastsettBeregningstidspunktSteg.skalViseSteg && (
         <StegSuspense>
-          <FastsettBeregningMedDataFeching
+          <FastsettBeregningMedDataFetching
             behandlingsReferanse={behandlingsReferanse}
             stegData={fastsettBeregningstidspunktSteg}
           />
@@ -65,7 +66,7 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
         </StegSuspense>
       )}
 
-      {vurderManglendeLigningSteg.skalViseSteg && (
+      {(toggles.featureManglendePGIOgEøsInntekter || vurderManglendeLigningSteg.skalViseSteg) && (
         <StegSuspense>
           <FastsettManuellInntektMedDataFetching
             behandlingsreferanse={behandlingsReferanse}
