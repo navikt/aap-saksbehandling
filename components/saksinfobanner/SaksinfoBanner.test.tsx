@@ -45,6 +45,7 @@ const oppgave: Oppgave = {
   markeringer: [],
   reservertAv: 'navIdent',
   enhetForKø: '0300',
+  erPåVent: false,
 };
 
 const visning: FlytVisning = {
