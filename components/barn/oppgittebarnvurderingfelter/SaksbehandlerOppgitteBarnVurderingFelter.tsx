@@ -10,7 +10,7 @@ import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrap
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { useEffect, useState } from 'react';
-import { addYears, format, isBefore, parse, startOfDay } from 'date-fns';
+import { addYears, format, isBefore, parse, parseISO, startOfDay } from 'date-fns';
 
 interface Props {
   barneTilleggIndex: number;
@@ -147,7 +147,7 @@ export const SaksbehandlerOppgitteBarnVurderingFelter = ({
                   return;
                 }
 
-                const parsedFødselsdato = startOfDay(parse(fødselsdato, 'yyyy-MM-dd', new Date()));
+                const parsedFødselsdato = startOfDay(parseISO(fødselsdato));
                 const førsteDagEtter18År = addYears(parsedFødselsdato, 18);
                 const førsteDagEtter18ÅrFormatert = format(førsteDagEtter18År, 'dd.MM.yyyy');
                 const parsedValue = value ? startOfDay(parse(value as string, 'dd.MM.yyyy', new Date())) : null;
