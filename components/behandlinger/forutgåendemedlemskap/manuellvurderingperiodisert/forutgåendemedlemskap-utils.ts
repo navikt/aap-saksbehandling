@@ -21,7 +21,7 @@ export function getDefaultValuesFromGrunnlag(
       vurderinger: [
         {
           begrunnelse: '',
-          fraDato: formaterDatoForFrontend(new Date(grunnlag?.kanVurderes[0]?.fom!)),
+          fraDato: formaterDatoForFrontend(new Date(grunnlag?.behøverVurderinger[0]?.fom!)),
         },
       ],
     };

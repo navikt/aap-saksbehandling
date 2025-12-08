@@ -17,7 +17,12 @@ const grunnlag: PeriodisertForutgåendeMedlemskapGrunnlag = {
     },
   ],
   sisteVedtatteVurderinger: [],
-  behøverVurderinger: [],
+  behøverVurderinger: [
+    {
+      fom: '2025-10-10',
+      tom: '2030-10-10',
+    },
+  ],
   harTilgangTilÅSaksbehandle: true,
   overstyrt: false,
 };
@@ -40,8 +45,14 @@ const grunnlagMedBekreftetVurdering: PeriodisertForutgåendeMedlemskapGrunnlag =
       tom: '2030-11-01',
     },
   ],
+
   sisteVedtatteVurderinger: [],
-  behøverVurderinger: [],
+  behøverVurderinger: [
+    {
+      fom: '2025-10-10',
+      tom: '2030-10-10',
+    },
+  ],
   harTilgangTilÅSaksbehandle: true,
   overstyrt: false,
 };
