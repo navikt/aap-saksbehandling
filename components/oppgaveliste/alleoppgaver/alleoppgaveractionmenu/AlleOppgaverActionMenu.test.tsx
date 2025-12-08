@@ -22,6 +22,7 @@ const oppgave: Oppgave = {
   årsakerTilBehandling: [],
   markeringer: [],
   enhetForKø: '4491',
+  erPåVent: false,
 };
 
 const setSync = () => undefined;
