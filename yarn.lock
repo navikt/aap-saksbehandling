@@ -1727,13 +1727,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aap-felles-prettier@npm:^5.4.0":
-  version: 5.4.0
-  resolution: "@navikt/aap-felles-prettier@npm:5.4.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-prettier%2F5.4.0%2F17521ed6999bb48cabb6b9165a4ea02f43bcd902"
+"@navikt/aap-felles-prettier@npm:^5.4.1":
+  version: 5.4.1
+  resolution: "@navikt/aap-felles-prettier@npm:5.4.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-prettier%2F5.4.1%2Fa438dff0474ca9ea64391a39d00dfb23a0902006"
   dependencies:
     "@trivago/prettier-plugin-sort-imports": "npm:^4.3.0"
     prettier: "npm:^3.3.3"
-  checksum: 10c0/b9a4064b038ca3d7a3172547b890da9ada078ee42af680ddc34ea53fa42091b95d3f3d39031e8d24a3f710b7cdff0d611def495ddc5bef33366f30547199bc55
+  checksum: 10c0/257401d03d12a25d8137442e222dffdfa050c4a6dd54f0cb822f30a0a4171e0767303e16b7eb2b4e4d5d17ca4371b131fac3a2bfd44c077c2e40a95126d7b0cc
   languageName: node
   linkType: hard
 
@@ -3541,7 +3541,7 @@ __metadata:
     "@eslint/js": "npm:^9.39.1"
     "@navikt/aap-breveditor": "npm:^0.10.1"
     "@navikt/aap-breveditor-css": "npm:^0.4.1"
-    "@navikt/aap-felles-prettier": "npm:^5.4.0"
+    "@navikt/aap-felles-prettier": "npm:^5.4.1"
     "@navikt/aap-oppgave-typescript-types": "npm:0.0.530"
     "@navikt/aap-postmottak-backend-typescript-types": "npm:^0.0.549"
     "@navikt/aap-statistikk-typescript-types": "npm:^0.1.520"
