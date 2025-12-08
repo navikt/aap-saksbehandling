@@ -21,7 +21,7 @@ export const FastsettManuellInntektTabell = ({ tabellår, form }: Props) => {
   return (
     <VStack gap={'2'}>
       <Label size={'small'}>Hvilke år skal inntekt overstyres?</Label>
-      <TableStyled>
+      <TableStyled className={styles.tabell}>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell textSize={'small'}>År</Table.HeaderCell>
@@ -29,7 +29,6 @@ export const FastsettManuellInntektTabell = ({ tabellår, form }: Props) => {
             <Table.HeaderCell textSize={'small'}>Beregnet PGI</Table.HeaderCell>
             <Table.HeaderCell textSize={'small'}>EØS inntekt</Table.HeaderCell>
             <Table.HeaderCell textSize={'small'}>Totalt</Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body data-testid={'inntektstabell'}>
