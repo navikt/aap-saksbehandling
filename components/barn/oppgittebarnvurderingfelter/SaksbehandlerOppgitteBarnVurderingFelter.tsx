@@ -10,6 +10,7 @@ import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrap
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { useEffect, useState } from 'react';
+import { addYears, format, isBefore, parse, startOfDay } from 'date-fns';
 
 interface Props {
   barneTilleggIndex: number;
@@ -146,15 +147,15 @@ export const SaksbehandlerOppgitteBarnVurderingFelter = ({
                   return;
                 }
 
-                const fødselsdatoDate = new Date(fødselsdato);
-                const fødselsdatoPlus18År = new Date(fødselsdatoDate);
-                fødselsdatoPlus18År.setFullYear(fødselsdatoDate.getFullYear() + 18);
-                const fødselsdatoPlus18ÅrFormatert = formaterDatoForFrontend(fødselsdatoPlus18År.toISOString());
+                const parsedFødselsdato = startOfDay(parse(fødselsdato, 'yyyy-MM-dd', new Date()));
+                const førsteDagEtter18År = addYears(parsedFødselsdato, 18);
+                const førsteDagEtter18ÅrFormatert = format(førsteDagEtter18År, 'dd.MM.yyyy');
+                const parsedValue = value ? startOfDay(parse(value as string, 'dd.MM.yyyy', new Date())) : null;
 
-                const erEtter18År = erDatoFoerDato(fødselsdatoPlus18ÅrFormatert, value as string);
+                const erEtter18År = parsedValue ? !isBefore(parsedValue, førsteDagEtter18År) : false;
 
                 return erEtter18År
-                  ? `Dato kan ikke settes tidligere enn ${fødselsdatoPlus18ÅrFormatert}, da dette er første dato etter at barnet fylte 18 år.`
+                  ? `Dato kan ikke være på eller etter ${førsteDagEtter18ÅrFormatert}, da barnet har fylt 18 år.`
                   : true;
               },
             },
