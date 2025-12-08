@@ -9,6 +9,7 @@ export enum Behandlingstype {
   Oppfølgingsbehandling = 'oppfølgingsbehandling',
   Aktivitetsplikt11_7 = 'aktivitetsplikt',
   Aktivitetsplikt11_9 = 'aktivitetsplikt11-9',
+  Tilbakekreving = 'ae0203',
 }
 
 export function erFørstegangsbehandling(behandling: BehandlingInfo): boolean {
@@ -43,6 +44,8 @@ export function formaterBehandlingType(behandlingtype: Behandlingstype): string 
       return 'Aktivitetsplikt § 11-7';
     case Behandlingstype.Aktivitetsplikt11_9:
       return 'Aktivitetsplikt § 11-9';
+    case Behandlingstype.Tilbakekreving:
+      return 'Tilbakekreving';
     default:
       return `Ukjent behandlingtype (${behandlingtype})`;
   }
@@ -84,6 +87,8 @@ export function formatterÅrsakTilOpprettelseTilTekst(årsakTilOpprettelse: Års
       return 'Aktivitetsplikt 11-7';
     case 'AKTIVITETSPLIKT_11_9':
       return 'Aktivitetsplikt 11-9';
+    case 'TILBAKEKREVING_HENDELSE':
+      return 'Mulig feilutbetaling';
     default:
       return 'Ukjent årsak';
   }
