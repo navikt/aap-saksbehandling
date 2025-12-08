@@ -24,13 +24,16 @@ const oppgave: Oppgave = {
   årsakerTilBehandling: [],
   markeringer: [],
   enhetForKø: '4491',
+  erPåVent: false,
 };
 
 const user = userEvent.setup();
 
 describe('OppgaveInformasjon', () => {
   it('Skal vise på vent ikon dersom oppgave er på vent', () => {
-    render(<OppgaveInformasjon oppgave={{ ...oppgave, påVentTil: addDays(new Date(), 1).toDateString() }} />);
+    render(
+      <OppgaveInformasjon oppgave={{ ...oppgave, påVentTil: addDays(new Date(), 1).toDateString(), erPåVent: true }} />
+    );
     expect(screen.getByRole('img', { name: 'Oppgave på vent' })).toBeVisible();
   });
 
