@@ -8,9 +8,9 @@ import { erDatoFoerDato, validerDato } from 'lib/validation/dateValidation';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
-import { formaterDatoForFrontend } from 'lib/utils/date';
+import { formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { useEffect, useState } from 'react';
-import { addYears, format, isBefore, parse, parseISO, startOfDay } from 'date-fns';
+import { addYears, isBefore, parseISO, startOfDay } from 'date-fns';
 
 interface Props {
   barneTilleggIndex: number;
@@ -149,13 +149,13 @@ export const SaksbehandlerOppgitteBarnVurderingFelter = ({
 
                 const parsedFødselsdato = startOfDay(parseISO(fødselsdato));
                 const førsteDagSomFylt18År = addYears(parsedFødselsdato, 18);
-                const førsteDagSomFylt18ÅrFormatert = format(førsteDagSomFylt18År, 'dd.MM.yyyy');
-                const parsedValue = value ? startOfDay(parse(value as string, 'dd.MM.yyyy', new Date())) : null;
+                const parsedDate = parseDatoFraDatePicker(value as string);
+                const parsedValue = parsedDate ? startOfDay(parsedDate) : null;
 
                 const erPåEllerEtterFylt18År = parsedValue ? !isBefore(parsedValue, førsteDagSomFylt18År) : false;
 
                 return erPåEllerEtterFylt18År
-                  ? `Dato kan ikke være på eller etter ${førsteDagSomFylt18ÅrFormatert}, da barnet har fylt 18 år.`
+                  ? `Dato kan ikke være på eller etter ${formaterDatoForFrontend(førsteDagSomFylt18År)}, da barnet har fylt 18 år.`
                   : true;
               },
             },
