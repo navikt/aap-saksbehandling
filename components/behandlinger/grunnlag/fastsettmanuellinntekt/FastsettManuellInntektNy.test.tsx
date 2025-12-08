@@ -7,6 +7,7 @@ import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 import { within } from '@testing-library/react';
 import createFetchMock from 'vitest-fetch-mock';
 import { FetchResponse } from 'lib/utils/api';
+import { FastsettManuellInntektInfo } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/FastsettManuellInntektInfo';
 
 const user = userEvent.setup();
 
@@ -57,12 +58,10 @@ describe('Manglende pensjonsgivende inntekter / EØS inntekter', () => {
 
   describe('Generelt', () => {
     beforeEach(() => {
-      render(
-        <FastsettManuellInntektNy heading={heading} behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />
-      );
+      render(<FastsettManuellInntektInfo behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
     });
 
-    it('skal ha et felt for begrunnelse', () => {
+    it('skal vise hovedkort dersom det mangler PGI eller finnes manuelle endringer i grunnlag', () => {
       const felt = screen.getByRole('textbox', { name: 'Begrunnelse for endret arbeidsinntekt' });
       expect(felt).toBeVisible();
     });
