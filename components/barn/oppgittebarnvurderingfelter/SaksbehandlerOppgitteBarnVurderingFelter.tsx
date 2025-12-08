@@ -133,7 +133,7 @@ export const SaksbehandlerOppgitteBarnVurderingFelter = ({
           rules={{
             validate: {
               validerDato: (value) => validerDato(value as string),
-              validerIkkeFørDato: (value) => {
+              validerIkkeFørFødselsdato: (value) => {
                 if (!fødselsdato) {
                   return;
                 }
@@ -142,20 +142,20 @@ export const SaksbehandlerOppgitteBarnVurderingFelter = ({
 
                 return erFørFødselsdato ? `Dato kan ikke være før fødselsdato (${fødselsdato})` : true;
               },
-              validerIkkeEtter18År: (value) => {
+              validerIkkeEtterFylte18År: (value) => {
                 if (!fødselsdato) {
                   return;
                 }
 
                 const parsedFødselsdato = startOfDay(parseISO(fødselsdato));
-                const førsteDagEtter18År = addYears(parsedFødselsdato, 18);
-                const førsteDagEtter18ÅrFormatert = format(førsteDagEtter18År, 'dd.MM.yyyy');
+                const førsteDagSomFylt18År = addYears(parsedFødselsdato, 18);
+                const førsteDagSomFylt18ÅrFormatert = format(førsteDagSomFylt18År, 'dd.MM.yyyy');
                 const parsedValue = value ? startOfDay(parse(value as string, 'dd.MM.yyyy', new Date())) : null;
 
-                const erEtter18År = parsedValue ? !isBefore(parsedValue, førsteDagEtter18År) : false;
+                const erPåEllerEtterFylt18År = parsedValue ? !isBefore(parsedValue, førsteDagSomFylt18År) : false;
 
-                return erEtter18År
-                  ? `Dato kan ikke være på eller etter ${førsteDagEtter18ÅrFormatert}, da barnet har fylt 18 år.`
+                return erPåEllerEtterFylt18År
+                  ? `Dato kan ikke være på eller etter ${førsteDagSomFylt18ÅrFormatert}, da barnet har fylt 18 år.`
                   : true;
               },
             },
