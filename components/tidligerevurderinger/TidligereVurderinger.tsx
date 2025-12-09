@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import { Label, BodyShort, Detail, VStack, ExpansionCard, Chips } from '@navikt/ds-react';
 import styles from './TidligereVurderinger.module.css';
 import { formaterDatoForFrontend, sorterEtterNyesteDato } from 'lib/utils/date';
@@ -15,6 +15,7 @@ interface Props {
   getVurdertDato?: (vurdering: any) => string;
   getFomDato?: (vurdering: any) => string;
   grupperPåOpprettetDato?: boolean;
+  children?: ReactNode;
 }
 
 interface TidligereVurdering {
@@ -36,6 +37,7 @@ export function TidligereVurderinger({
   getVurdertDato = (v: any) => v.vurdertAv.dato,
   getFomDato = (v: any) => v.vurderingenGjelderFra ?? v.vurdertAv?.dato,
   grupperPåOpprettetDato = false,
+  children
 }: Props) {
   const finnSluttdato = (index: number, arr: any[]) => {
     if (arr.length <= 1 || index === 0) return null;
@@ -137,6 +139,7 @@ export function TidligereVurderinger({
                   <BodyShort size="small">{felt.value}</BodyShort>
                 </VStack>
               ))}
+              {children}
             </div>
             <Detail className={styles.footer} align="end">
               {`Vurdert av ${selected.vurdertAvIdent}${
