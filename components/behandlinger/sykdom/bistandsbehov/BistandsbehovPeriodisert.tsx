@@ -1,6 +1,6 @@
 'use client';
 
-import { BistandsGrunnlag, MellomlagretVurdering, TypeBehandling } from 'lib/types/types';
+import { BistandsGrunnlag, MellomlagretVurdering } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { FormEvent } from 'react';
 import { formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
@@ -23,10 +23,8 @@ import { mapBistandVurderingFormTilDto } from 'components/behandlinger/sykdom/bi
 interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
-  typeBehandling: TypeBehandling;
   grunnlag?: BistandsGrunnlag;
   initialMellomlagretVurdering?: MellomlagretVurdering;
-  overgangArbeidEnabled?: Boolean;
 }
 export interface BistandForm {
   vurderinger: Array<BistandVurderingForm>;
@@ -45,9 +43,7 @@ export const BistandsbehovPeriodisert = ({
   behandlingVersjon,
   grunnlag,
   readOnly,
-  typeBehandling,
   initialMellomlagretVurdering,
-  overgangArbeidEnabled = false,
 }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
@@ -162,10 +158,7 @@ export const BistandsbehovPeriodisert = ({
             form={form}
             readOnly={formReadOnly}
             index={index}
-            harTidligereVurderinger={vedtatteVurderinger.length > 0}
             onRemove={() => remove(index)}
-            typeBehandling={typeBehandling}
-            overgangArbeidEnabled={overgangArbeidEnabled}
           />
         </NyVurderingExpandableCard>
       ))}

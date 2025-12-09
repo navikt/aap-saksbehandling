@@ -40,8 +40,6 @@ export const BistandsbehovMedDataFetching = async ({
       readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       behandlingVersjon={stegData.behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
-      typeBehandling={stegData.typeBehandling}
-      overgangArbeidEnabled={overgangArbeidEnabled}
     />
   ) : (
     <Bistandsbehov
