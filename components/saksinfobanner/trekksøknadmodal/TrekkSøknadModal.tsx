@@ -30,7 +30,10 @@ export const TrekkSøknadModal = ({ saksnummer, isOpen, onClose, behandlingRefer
       className={styles.modal}
     >
       <Modal.Body>
-        <BodyLong>Når du trekker søknaden vil saken avsluttes og eventuelle vurderinger bli slettet.</BodyLong>
+        <BodyLong>
+          Når du trekker søknaden vil saken avsluttes og alle vurderinger vil bli slettet. Saken kan ikke åpnes igjen
+          etter søknaden er trukket.
+        </BodyLong>
         {sendHendelseError && (
           <Alert variant={'error'} size={'small'}>
             {sendHendelseError.message}
@@ -41,6 +44,7 @@ export const TrekkSøknadModal = ({ saksnummer, isOpen, onClose, behandlingRefer
         <Button
           type={'button'}
           className={'fit-content'}
+          variant={'danger'}
           onClick={async () => {
             sendHendelseOgVentPåProsessering(
               saksnummer,
