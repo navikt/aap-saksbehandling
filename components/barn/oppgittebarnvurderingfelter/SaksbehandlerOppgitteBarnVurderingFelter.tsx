@@ -8,8 +8,9 @@ import { erDatoFoerDato, validerDato } from 'lib/validation/dateValidation';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
-import { formaterDatoForFrontend } from 'lib/utils/date';
+import { formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { useEffect, useState } from 'react';
+import { addYears, isBefore, parseISO, startOfDay } from 'date-fns';
 
 interface Props {
   barneTilleggIndex: number;
@@ -132,7 +133,7 @@ export const SaksbehandlerOppgitteBarnVurderingFelter = ({
           rules={{
             validate: {
               validerDato: (value) => validerDato(value as string),
-              validerIkkeFørDato: (value) => {
+              validerIkkeFørFødselsdato: (value) => {
                 if (!fødselsdato) {
                   return;
                 }
@@ -140,6 +141,22 @@ export const SaksbehandlerOppgitteBarnVurderingFelter = ({
                 const erFørFødselsdato = erDatoFoerDato(value as string, formaterDatoForFrontend(fødselsdato));
 
                 return erFørFødselsdato ? `Dato kan ikke være før fødselsdato (${fødselsdato})` : true;
+              },
+              validerIkkeEtterFylte18År: (value) => {
+                if (!fødselsdato) {
+                  return;
+                }
+
+                const parsedFødselsdato = startOfDay(parseISO(fødselsdato));
+                const førsteDagSomFylt18År = addYears(parsedFødselsdato, 18);
+                const parsedDate = parseDatoFraDatePicker(value as string);
+                const parsedValue = parsedDate ? startOfDay(parsedDate) : null;
+
+                const erPåEllerEtterFylt18År = parsedValue ? !isBefore(parsedValue, førsteDagSomFylt18År) : false;
+
+                return erPåEllerEtterFylt18År
+                  ? `Dato kan ikke være på eller etter ${formaterDatoForFrontend(førsteDagSomFylt18År)}, da barnet har fylt 18 år.`
+                  : true;
               },
             },
           }}

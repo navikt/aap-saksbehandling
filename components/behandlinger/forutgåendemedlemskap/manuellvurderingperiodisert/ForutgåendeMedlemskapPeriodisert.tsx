@@ -85,6 +85,7 @@ export const ForutgåendeMedlemskapPeriodisert = ({
       form,
       nyeVurderinger: data.vurderinger,
       grunnlag,
+      tidligsteDatoMåMatcheMedRettighetsperiode: false,
     });
     if (!erPerioderGyldige) {
       return;
@@ -108,7 +109,7 @@ export const ForutgåendeMedlemskapPeriodisert = ({
     });
   }
 
-  const heading = overstyring ? 'Overstyring av forutgående medlemskap' : 'Forutgående medlemskap';
+  const heading = overstyring ? 'Overstyring av § 11-2 Forutgående medlemskap' : '§ 11-2 Forutgående medlemskap';
 
   const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];

@@ -97,12 +97,7 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
               </Table.DataCell>
 
               <Table.DataCell>
-                <BehandlingButtons
-                  key={behandling.referanse}
-                  sak={sak}
-                  behandlingsReferanse={behandling.referanse}
-                  behandlingsstatus={behandling.status}
-                ></BehandlingButtons>
+                <BehandlingButtons key={behandling.referanse} sak={sak} behandling={behandling}></BehandlingButtons>
               </Table.DataCell>
             </Table.Row>
           ))}

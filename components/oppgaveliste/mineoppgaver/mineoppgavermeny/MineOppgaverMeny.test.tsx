@@ -22,6 +22,7 @@ const oppgaver: Oppgave = {
   årsakerTilBehandling: [],
   markeringer: [],
   enhetForKø: '4491',
+  erPåVent: false,
 };
 
 describe('MineOppgaverMeny', () => {

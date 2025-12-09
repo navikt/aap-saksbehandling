@@ -7,9 +7,10 @@ import React, { FormEvent } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { ManuellInntektGrunnlag, ManuellInntektÅr, MellomlagretVurdering } from 'lib/types/types';
-import { formaterTilNok } from 'lib/utils/string';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { Alert, BodyShort, Link } from '@navikt/ds-react';
 import {
   VilkårskortMedFormOgMellomlagringNyVisning,
 } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
@@ -18,6 +19,8 @@ import { TableStyled } from 'components/tablestyled/TableStyled';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
 import { useFieldArray } from 'react-hook-form';
+import { FastsettManuellInntektTabell } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/FastsettManuellInntektTabell';
+import { FastsettManuellInntektForm, Tabellår } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/types';
 import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
 import styles from './FastsettManuellInntekt.module.css';
 import { HistoriskManuellVurderingTabell } from './HistoriskManuellVurderingTabell';
@@ -33,20 +36,7 @@ interface Props {
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
-interface FormFields {
-  begrunnelse: string;
-  tabellår: Tabellår[];
-}
-
-interface Tabellår {
-  år: number;
-  ferdigLignetPGI: number | null | undefined;
-  beregnetPGI: number | null | undefined;
-  eøsInntekt: number | null | undefined;
-  totalInntekt: number | null | undefined;
-}
-
-type DraftFormFields = Partial<FormFields>;
+type DraftFormFields = Partial<FastsettManuellInntektForm>;
 
 export const FastsettManuellInntektNy = ({
                                            heading,
@@ -72,7 +62,7 @@ export const FastsettManuellInntektNy = ({
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapGrunnlagToDraftFormFields(grunnlag);
 
-  const { form, formFields } = useConfigForm<FormFields>(
+  const { form, formFields } = useConfigForm<FastsettManuellInntektForm>(
     {
       begrunnelse: {
         type: 'textarea',
@@ -189,65 +179,7 @@ export const FastsettManuellInntektNy = ({
         Du kan lese mer om hvordan EØS inntekt skal beregnes i rundskrivet til § 11-7 (lovdata.no)
       </Link>
       <FormField form={form} formField={formFields.begrunnelse} />
-      <VStack gap={'2'}>
-        <Label size={'small'}>Hvilke år skal inntekt overstyres?</Label>
-        <TableStyled>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell textSize={'small'}>År</Table.HeaderCell>
-              <Table.HeaderCell textSize={'small'}>Ferdig lignet PGI</Table.HeaderCell>
-              <Table.HeaderCell textSize={'small'}>Beregnet PGI</Table.HeaderCell>
-              <Table.HeaderCell textSize={'small'}>EØS inntekt</Table.HeaderCell>
-              <Table.HeaderCell textSize={'small'}>Totalt</Table.HeaderCell>
-              <Table.HeaderCell></Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body data-testid={'inntektstabell'}>
-            {/* TODO Putt tabell i egen fil */}
-            {tabellår.map((år, index) => {
-              const ferdigLignetPGI = form.watch(`tabellår.${index}.ferdigLignetPGI`);
-              const beregnetPGI = form.watch(`tabellår.${index}.beregnetPGI`);
-              const eøsInntekt = form.watch(`tabellår.${index}.eøsInntekt`);
-              return (
-                <Table.Row key={år.år}>
-                  <Table.DataCell textSize={'small'}>{år.år}</Table.DataCell>
-                  <Table.DataCell textSize={'small'} data-testid={'ferdigLignetPGI'}>
-                    {år.ferdigLignetPGI ? formaterTilNok(år.ferdigLignetPGI) : '-'}
-                  </Table.DataCell>
-                  <Table.DataCell textSize={'small'} data-testid={'beregnetPGI'}>
-                    <TextFieldWrapper
-                      className={styles.inntektfelt}
-                      name={`tabellår.${index}.beregnetPGI`}
-                      control={form.control}
-                      type={'number'}
-                      hideLabel={true}
-                      readOnly={readOnly || år.ferdigLignetPGI !== undefined}
-                    />
-                  </Table.DataCell>
-                  <Table.DataCell textSize={'small'} data-testid={'eøsInntekt'}>
-                    <TextFieldWrapper
-                      className={styles.inntektfelt}
-                      name={`tabellår.${index}.eøsInntekt`}
-                      control={form.control}
-                      type={'number'}
-                      hideLabel={true}
-                      readOnly={readOnly}
-                    />
-                  </Table.DataCell>
-                  <Table.DataCell data-testid={'totalt'} textSize={'small'}>
-                    {regnUtTotalbeløpPerÅr(ferdigLignetPGI ?? 0, beregnetPGI ?? 0, eøsInntekt ?? 0)}
-                  </Table.DataCell>
-                </Table.Row>
-              );
-            })}
-          </Table.Body>
-        </TableStyled>
-        {form.formState.errors.tabellår && (
-          <ErrorMessage size={'small'} showIcon>
-            {form.formState.errors.tabellår[0]?.message}
-          </ErrorMessage>
-        )}
-      </VStack>
+      <FastsettManuellInntektTabell form={form} tabellår={tabellår} />
     </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };
@@ -295,12 +227,6 @@ const berikMedManuelleInntekter = (treÅr: Tabellår[], manuelleInntekter: Manue
       totalInntekt: undefined,
     };
   });
-};
-
-const regnUtTotalbeløpPerÅr = (ferdigLignetPGI: number, beregnetPGI: number, eøsInntekt: number): string => {
-  const total =
-    beregnetPGI > 0 ? Number(beregnetPGI) + Number(eøsInntekt) : Number(ferdigLignetPGI) + Number(eøsInntekt);
-  return formaterTilNok(total);
 };
 
 const byggTabellData = (grunnlag: ManuellInntektGrunnlag): Tabellår[] => {

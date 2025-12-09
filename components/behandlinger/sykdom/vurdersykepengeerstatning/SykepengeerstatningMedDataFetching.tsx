@@ -7,6 +7,8 @@ import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 import { Sykepengeerstatning } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/Sykepengeerstatning';
 import { skalViseSteg, StegData } from 'lib/utils/steg';
+import { SykepengeerstatningOld } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/SykeoengeerstatingOld';
+import { toggles } from 'lib/utils/toggles';
 
 interface Props {
   behandlingsReferanse: string;
@@ -23,8 +25,24 @@ export const SykepengeerstatningMedDataFetching = async ({ behandlingsReferanse,
     return <ApiException apiResponses={[grunnlag]} />;
   }
 
-  if (!skalViseSteg(stegData, grunnlag.data.vurdering != null || grunnlag.data.vurderinger.length > 0)) {
+  if (
+    !skalViseSteg(
+      stegData,
+      grunnlag.data.sisteVedtatteVurderinger.length > 0 || grunnlag.data.nyeVurderinger.length > 0
+    )
+  ) {
     return null;
+  }
+
+  if (!toggles.featurePeriodisertSPE) {
+    return (
+      <SykepengeerstatningOld
+        grunnlag={grunnlag.data}
+        readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+        behandlingVersjon={stegData.behandlingVersjon}
+        initialMellomlagretVurdering={initialMellomlagretVurdering}
+      />
+    );
   }
 
   return (

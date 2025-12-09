@@ -1,7 +1,7 @@
 'use client';
 
 import { BodyShort, Button } from '@navikt/ds-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ManuellInntektGrunnlag, MellomlagretVurdering } from 'lib/types/types';
 import { FastsettManuellInntektNy } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/FastsettManuellInntektNy';
 import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
@@ -19,10 +19,19 @@ export const FastsettManuellInntektInfo = ({
   readOnly,
   initialMellomlagretVurdering,
 }: Props) => {
-  const [overstyringAvManuellInntekt, setOverstyringAvManuellInntekt] = useState<boolean>(false);
+  const [visHovedkortet, setVisHovedkortet] = useState<boolean>(false);
   const heading = 'Manglende pensjonsgivende inntekter / EØS inntekter';
 
-  if (overstyringAvManuellInntekt) {
+  useEffect(() => {
+    const manglerPGI = grunnlag.registrerteInntekterSisteRelevanteAr.length < 3;
+    const finnesManuelleEndringer =
+      grunnlag.manuelleVurderinger?.årsVurderinger && grunnlag.manuelleVurderinger?.årsVurderinger.length > 0;
+    if (manglerPGI || finnesManuelleEndringer) {
+      setVisHovedkortet(true);
+    }
+  }, [grunnlag]);
+
+  if (visHovedkortet) {
     return (
       <FastsettManuellInntektNy
         heading={heading}
@@ -41,8 +50,8 @@ export const FastsettManuellInntektInfo = ({
         inntekter i EØS, så kan brukerens inntekt for relevante år overstyres. Inntekter skal ikke G-justeres, da det
         gjøres automatisk av systemet.
       </BodyShort>
-      <Button variant={'secondary'} onClick={() => setOverstyringAvManuellInntekt(true)}>
-        Overstyr
+      <Button variant={'secondary'} onClick={() => setVisHovedkortet(true)}>
+        Endre
       </Button>
     </VilkårsKort>
   );
