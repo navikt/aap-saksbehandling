@@ -11,22 +11,12 @@ import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 import { Alert, BodyShort, Link } from '@navikt/ds-react';
-import {
-  VilkårskortMedFormOgMellomlagringNyVisning,
-} from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
-import { Alert, BodyShort, ErrorMessage, Label, Link, Table, VStack } from '@navikt/ds-react';
-import { TableStyled } from 'components/tablestyled/TableStyled';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
 import { useFieldArray } from 'react-hook-form';
 import { FastsettManuellInntektTabell } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/FastsettManuellInntektTabell';
 import { FastsettManuellInntektForm, Tabellår } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/types';
-import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
-import styles from './FastsettManuellInntekt.module.css';
 import { HistoriskManuellVurderingTabell } from './HistoriskManuellVurderingTabell';
-import {
-  TidligereVurderingExpandableCard,
-} from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 
 interface Props {
   heading: string;
@@ -39,12 +29,12 @@ interface Props {
 type DraftFormFields = Partial<FastsettManuellInntektForm>;
 
 export const FastsettManuellInntektNy = ({
-                                           heading,
-                                           behandlingsversjon,
-                                           grunnlag,
-                                           readOnly,
-                                           initialMellomlagretVurdering,
-                                         }: Props) => {
+  heading,
+  behandlingsversjon,
+  grunnlag,
+  readOnly,
+  initialMellomlagretVurdering,
+}: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('MANGLENDE_LIGNING');
@@ -55,7 +45,7 @@ export const FastsettManuellInntektNy = ({
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
     'MANGLENDE_LIGNING',
-    mellomlagretVurdering,
+    mellomlagretVurdering
   );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
@@ -76,7 +66,7 @@ export const FastsettManuellInntektNy = ({
         defaultValue: defaultValue.tabellår,
       },
     },
-    { readOnly: formReadOnly },
+    { readOnly: formReadOnly }
   );
 
   const { fields: tabellår } = useFieldArray({
@@ -117,7 +107,7 @@ export const FastsettManuellInntektNy = ({
           },
           referanse: behandlingsReferanse,
         },
-        () => nullstillMellomlagretVurdering(),
+        () => nullstillMellomlagretVurdering()
       );
     })(event);
   }
@@ -156,13 +146,12 @@ export const FastsettManuellInntektNy = ({
           getVurdertAvIdent={(v) => v.vurdertAv.ident}
           getVurdertDato={(v) => v.vurdertAv.dato}
         >
-
-          {årsVurderinger?.map(((vurdering, index) => (
+          {årsVurderinger?.map((vurdering, index) => (
             <HistoriskManuellVurderingTabell
               key={index}
               historiskeManuelleVurderinger={vurdering}
             ></HistoriskManuellVurderingTabell>
-          )))}
+          ))}
         </TidligereVurderinger>
       )}
       {grunnlag.registrerteInntekterSisteRelevanteAr.length < 3 && (
