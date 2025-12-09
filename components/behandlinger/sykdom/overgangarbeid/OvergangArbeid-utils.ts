@@ -1,0 +1,62 @@
+import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
+import { JaEllerNei } from 'lib/utils/form';
+import { parse } from 'date-fns';
+import { OvergangArbeidGrunnlag, OvergangArbeidLøsning } from 'lib/types/types';
+import {
+  OvergangArbeidForm,
+  OvergangArbeidVurderingForm,
+} from 'components/behandlinger/sykdom/overgangarbeid/OvergangArbeid-types';
+
+export function getDefaultValuesFromGrunnlag(grunnlag?: OvergangArbeidGrunnlag): OvergangArbeidForm {
+  if (grunnlag == null) {
+    return {
+      vurderinger: [
+        {
+          begrunnelse: '',
+          fraDato: '',
+          brukerRettPåAAP: '',
+        },
+      ],
+    };
+  }
+
+  if (grunnlag.nyeVurderinger.length === 0 && grunnlag.sisteVedtatteVurderinger.length === 0) {
+    // Vi har ingen tidligere vurderinger eller nye vurderinger, legg til en tom-default-periode
+    return {
+      vurderinger: [
+        {
+          begrunnelse: '',
+          fraDato: formaterDatoForFrontend(new Date(grunnlag?.behøverVurderinger[0]?.fom!)),
+          brukerRettPåAAP: '',
+        },
+      ],
+    };
+  }
+
+  // Vi har allerede data lagret, vis enten de som er lagret i grunnlaget her eller tom liste
+  return {
+    vurderinger:
+      grunnlag?.nyeVurderinger.map((vurdering) => ({
+        begrunnelse: vurdering.begrunnelse,
+        fraDato: formaterDatoForFrontend(vurdering.fom),
+        brukerRettPåAAP: vurdering.brukerRettPåAAP ? JaEllerNei.Ja : JaEllerNei.Nei,
+        vurdertAv: {
+          ansattnavn: vurdering.vurdertAv.ansattnavn,
+          ident: vurdering.vurdertAv.ident,
+          dato: vurdering.vurdertAv.dato,
+        },
+      })) || [],
+  };
+}
+
+export const mapFormTilDto = (
+  periodeForm: OvergangArbeidVurderingForm,
+  tilDato: string | undefined | null
+): OvergangArbeidLøsning => {
+  return {
+    begrunnelse: periodeForm.begrunnelse,
+    fom: formaterDatoForBackend(parse(periodeForm.fraDato!, 'dd.MM.yyyy', new Date())),
+    tom: tilDato,
+    brukerRettPåAAP: periodeForm.brukerRettPåAAP === JaEllerNei.Ja,
+  };
+};
