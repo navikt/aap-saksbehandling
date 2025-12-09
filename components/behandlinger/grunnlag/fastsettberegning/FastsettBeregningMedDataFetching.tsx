@@ -13,7 +13,7 @@ interface Props {
   stegData: StegData;
 }
 
-export const FastsettBeregningMedDataFeching = async ({ behandlingsReferanse, stegData }: Props) => {
+export const FastsettBeregningMedDataFetching = async ({ behandlingsReferanse, stegData }: Props) => {
   const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
     hentBeregningstidspunktVurdering(behandlingsReferanse),
     hentMellomlagring(behandlingsReferanse, Behovstype.FASTSETT_BEREGNINGSTIDSPUNKT_KODE),

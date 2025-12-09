@@ -25,7 +25,12 @@ export const SykepengeerstatningMedDataFetching = async ({ behandlingsReferanse,
     return <ApiException apiResponses={[grunnlag]} />;
   }
 
-  if (!skalViseSteg(stegData, grunnlag.data.vurderinger.length > 0)) {
+  if (
+    !skalViseSteg(
+      stegData,
+      grunnlag.data.sisteVedtatteVurderinger.length > 0 || grunnlag.data.nyeVurderinger.length > 0
+    )
+  ) {
     return null;
   }
 

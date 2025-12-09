@@ -17,7 +17,12 @@ const oppholdskravGrunnlag: OppholdskravGrunnlagResponse = {
     },
   ],
   sisteVedtatteVurderinger: [],
-  behøverVurderinger: [],
+  behøverVurderinger: [
+    {
+      fom: '2025-10-10',
+      tom: '2030-10-10',
+    },
+  ],
   harTilgangTilÅSaksbehandle: true,
 };
 const oppholdskravGrunnlagMedBekreftetVurdering: OppholdskravGrunnlagResponse = {
@@ -29,7 +34,12 @@ const oppholdskravGrunnlagMedBekreftetVurdering: OppholdskravGrunnlagResponse = 
     },
   ],
   sisteVedtatteVurderinger: [],
-  behøverVurderinger: [],
+  behøverVurderinger: [
+    {
+      fom: '2025-10-10',
+      tom: '2030-10-10',
+    },
+  ],
   harTilgangTilÅSaksbehandle: true,
 };
 

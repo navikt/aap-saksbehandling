@@ -24,6 +24,7 @@ const oppgaver: Oppgave[] = [
     reservertAv: 'ident',
     reservertAvNavn: 'Test Testesen',
     enhetForKø: '4491',
+    erPåVent: false,
   },
   {
     vurderingsbehov: [],
@@ -39,6 +40,7 @@ const oppgaver: Oppgave[] = [
     markeringer: [],
     reservertAv: 'ident2',
     enhetForKø: '4491',
+    erPåVent: false,
   },
 ];
 

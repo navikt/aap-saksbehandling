@@ -4,7 +4,7 @@ import {
   hentFlyt,
   hentForutgåendeMedlemskapsVurdering,
   hentMellomlagring,
-  hentPeriodisertForutgåendeMedlemskapGrunnlag,
+  hentForutgåendeMedlemskapGrunnlag,
   hentYrkesskadeVurderingGrunnlag,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { getStegData, skalViseSteg } from 'lib/utils/steg';
@@ -28,7 +28,7 @@ export const PeriodisertForutgåendeMedlemskap = async ({ behandlingsReferanse }
     initialMellomlagretVurdering,
   ] = await Promise.all([
     hentFlyt(behandlingsReferanse),
-    hentPeriodisertForutgåendeMedlemskapGrunnlag(behandlingsReferanse),
+    hentForutgåendeMedlemskapGrunnlag(behandlingsReferanse),
     hentBeregningstidspunktVurdering(behandlingsReferanse),
     hentForutgåendeMedlemskapsVurdering(behandlingsReferanse),
     hentYrkesskadeVurderingGrunnlag(behandlingsReferanse),

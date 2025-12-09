@@ -48,10 +48,10 @@ export const OpprettRevurdering = ({
       mottattTidspunkt: new Date().toISOString(),
       melding: {
         meldingType: 'ManuellRevurderingV0',
-        årsakerTilBehandling: data.årsaker,
+        årsakerTilBehandling: data.årsaker as ManuellRevurderingV0['årsakerTilBehandling'],
         beskrivelse: data.beskrivelse,
         opprettetAv: navIdent,
-      } as ManuellRevurderingV0,
+      } satisfies ManuellRevurderingV0,
     };
 
     setIsLoading(true);

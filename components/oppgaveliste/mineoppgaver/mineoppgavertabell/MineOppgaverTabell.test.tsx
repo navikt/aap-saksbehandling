@@ -37,6 +37,7 @@ const oppgaver: Oppgave[] = [
     markeringer: [],
     vurderingsbehov: [],
     enhetForKø: '0300',
+    erPåVent: false,
   },
 ];
 
