@@ -39,6 +39,7 @@ describe('Generelt', () => {
   const grunnlagMedVurdering: BistandsGrunnlag = {
     gjeldendeSykdsomsvurderinger: [
       {
+        fom: '2025-03-24',
         begrunnelse: 'blabla',
         dokumenterBruktIVurdering: [],
         erArbeidsevnenNedsatt: true,
@@ -473,6 +474,7 @@ describe('Revurdering', () => {
     ],
     gjeldendeSykdsomsvurderinger: [
       {
+        fom: '2025-03-24',
         begrunnelse: 'blabla',
         dokumenterBruktIVurdering: [],
         erArbeidsevnenNedsatt: true,

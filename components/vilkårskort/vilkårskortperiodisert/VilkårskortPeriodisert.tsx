@@ -1,7 +1,6 @@
 import { MellomlagretVurdering, VurdertAvAnsatt } from 'lib/types/types';
 import { VisningActions, VisningModus } from 'hooks/saksbehandling/visning/VisningHook';
 import styles from './VilkårskortPeriodisert.module.css';
-import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
 import { Button, Detail, Heading, HGrid, HStack, VStack } from '@navikt/ds-react';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { formaterDatoForFrontend, formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
@@ -43,8 +42,7 @@ export const VilkårskortPeriodisert = ({
   errorList,
 }: VilkårsKortPeriodisertProps) => {
   const classNameBasertPåEnhet = vilkårTilhørerNavKontor ? styles.vilkårsKortNAV : styles.vilkårsKortNAY;
-  const { flyt } = useRequiredFlyt();
-  const erAktivtSteg = flyt.aktivtSteg === steg || visningModus === 'AKTIV_MED_AVBRYT';
+  const erAktivtSteg = visningModus === 'AKTIV_UTEN_AVBRYT' || visningModus === 'AKTIV_MED_AVBRYT';
 
   const readOnly = visningModus === 'LÅST_MED_ENDRE' || visningModus === 'LÅST_UTEN_ENDRE';
 
@@ -53,7 +51,7 @@ export const VilkårskortPeriodisert = ({
       padding={'3'}
       gap={'1'}
       aria-label={heading}
-      className={`${erAktivtSteg ? classNameBasertPåEnhet : ''} ${styles.vilkårsKort}`}
+      className={`${erAktivtSteg ? classNameBasertPåEnhet : styles.vilkårsKort}`}
     >
       <HGrid columns={'1fr'} paddingBlock={'3'}>
         <Heading level={'3'} size={'small'} data-testid="vilkår-heading">
