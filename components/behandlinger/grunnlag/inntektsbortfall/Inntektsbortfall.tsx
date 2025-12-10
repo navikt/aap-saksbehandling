@@ -49,7 +49,7 @@ export const Inntektsbortfall = ({ behandlingVersjon, readOnly }: Props) => {
     >
       <Alert variant="info">
         Brukeren er over 62 år og må vurderes for § 11-4 andre ledd. Det er ikke støttet i Kelvin enda. Saken må settes
-        på vent i påvente av at funksjonaliteten er ferdig utviklet
+        på vent i påvente av at funksjonaliteten er ferdig utviklet.
       </Alert>
     </VilkårskortMedFormOgMellomlagringNyVisning>
   );
