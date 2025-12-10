@@ -9,7 +9,7 @@ interface SanitySystemType {
 }
 
 // TODO vurder om vi trenger alle attributes her
-interface SanityAttributes {
+export interface SanityAttributes {
   _createdAt: string;
   _id: string;
   _originalId: string;
