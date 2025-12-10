@@ -131,7 +131,10 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
             })),
           },
         },
-        () => nullstillMellomlagretVurdering()
+        () => {
+          nullstillMellomlagretVurdering();
+          visningActions.onBekreftClick();
+        }
       );
     })(event);
   };
