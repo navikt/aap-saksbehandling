@@ -23,11 +23,18 @@ const overgangUføregrunnlag: OvergangUforeGrunnlag = {
     brukerHarSøktUføretrygd: true,
     brukerHarFåttVedtakOmUføretrygd: 'NEI',
     vurdertAv: { ident: 'TESTER', dato: '2025-08-19' },
+    fom: '',
+    virkningsdato: '',
   },
   gjeldendeSykdsomsvurderinger: [],
   gjeldendeVedtatteVurderinger: [],
   harTilgangTilÅSaksbehandle: true,
   historiskeVurderinger: [],
+  behøverVurderinger: [],
+  kanVurderes: [],
+  nyeVurderinger: [],
+  perioderSomIkkeErTilstrekkeligVurdert: [],
+  sisteVedtatteVurderinger: [],
 };
 
 describe('mellomlagring i overgang uføre', () => {
