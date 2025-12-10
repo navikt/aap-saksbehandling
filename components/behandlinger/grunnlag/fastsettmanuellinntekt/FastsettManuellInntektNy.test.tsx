@@ -7,13 +7,10 @@ import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 import { within } from '@testing-library/react';
 import createFetchMock from 'vitest-fetch-mock';
 import { FetchResponse } from 'lib/utils/api';
-import { FastsettManuellInntektInfo } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/FastsettManuellInntektInfo';
 
 const user = userEvent.setup();
 
 describe('Manglende pensjonsgivende inntekter / EØS inntekter', () => {
-  const heading = 'Manglende pensjonsgivende inntekter / EØS inntekter';
-
   const grunnlag: ManuellInntektGrunnlag = {
     ar: 2024,
     gverdi: 0,
@@ -58,7 +55,7 @@ describe('Manglende pensjonsgivende inntekter / EØS inntekter', () => {
 
   describe('Generelt', () => {
     beforeEach(() => {
-      render(<FastsettManuellInntektInfo behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
+      render(<FastsettManuellInntektNy behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
     });
 
     it('skal vise hovedkort dersom det mangler PGI eller finnes manuelle endringer i grunnlag', () => {
@@ -133,7 +130,6 @@ describe('Manglende pensjonsgivende inntekter / EØS inntekter', () => {
     it('Skal vise en tekst om hvem som har gjort vurderingen dersom det finnes en mellomlagring', () => {
       render(
         <FastsettManuellInntektNy
-          heading={heading}
           behandlingsversjon={0}
           grunnlag={grunnlag}
           readOnly={false}
@@ -146,9 +142,7 @@ describe('Manglende pensjonsgivende inntekter / EØS inntekter', () => {
     });
 
     it('Skal vise en tekst om hvem som har lagret vurdering dersom bruker trykker på lagre mellomlagring', async () => {
-      render(
-        <FastsettManuellInntektNy heading={heading} behandlingsversjon={0} grunnlag={grunnlag} readOnly={false} />
-      );
+      render(<FastsettManuellInntektNy behandlingsversjon={0} grunnlag={grunnlag} readOnly={false} />);
 
       await user.type(
         screen.getByRole('textbox', { name: 'Begrunnelse for endret arbeidsinntekt' }),
@@ -172,7 +166,6 @@ describe('Manglende pensjonsgivende inntekter / EØS inntekter', () => {
     it('Skal ikke vise tekst om hvem som har gjort mellomlagring dersom bruker trykker på slett mellomlagring', async () => {
       render(
         <FastsettManuellInntektNy
-          heading={heading}
           behandlingsversjon={0}
           grunnlag={grunnlag}
           readOnly={false}
@@ -194,7 +187,6 @@ describe('Manglende pensjonsgivende inntekter / EØS inntekter', () => {
     it('Skal bruke mellomlagring som defaultValue i skjema dersom det finnes', () => {
       render(
         <FastsettManuellInntektNy
-          heading={heading}
           behandlingsversjon={0}
           grunnlag={grunnlag}
           readOnly={false}
@@ -209,14 +201,7 @@ describe('Manglende pensjonsgivende inntekter / EØS inntekter', () => {
     });
 
     it('Skal bruke bekreftet vurdering fra grunnlag som defaultValue i skjema dersom mellomlagring ikke finnes', () => {
-      render(
-        <FastsettManuellInntektNy
-          heading={heading}
-          behandlingsversjon={0}
-          grunnlag={grunnlagMedVurdering}
-          readOnly={false}
-        />
-      );
+      render(<FastsettManuellInntektNy behandlingsversjon={0} grunnlag={grunnlagMedVurdering} readOnly={false} />);
 
       const begrunnelseFelt = screen.getByRole('textbox', {
         name: 'Begrunnelse for endret arbeidsinntekt',
@@ -227,7 +212,6 @@ describe('Manglende pensjonsgivende inntekter / EØS inntekter', () => {
     it('Skal resette skjema til tomt skjema dersom det ikke finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
       render(
         <FastsettManuellInntektNy
-          heading={heading}
           behandlingsversjon={0}
           grunnlag={grunnlag}
           readOnly={false}
@@ -250,7 +234,6 @@ describe('Manglende pensjonsgivende inntekter / EØS inntekter', () => {
     it('Skal resette skjema til bekreftet vurdering dersom det finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
       render(
         <FastsettManuellInntektNy
-          heading={heading}
           behandlingsversjon={0}
           grunnlag={grunnlagMedVurdering}
           readOnly={false}
@@ -271,7 +254,7 @@ describe('Manglende pensjonsgivende inntekter / EØS inntekter', () => {
     });
 
     it('Skal ikke være mulig å lagre eller slette mellomlagring hvis det er readOnly', () => {
-      render(<FastsettManuellInntektNy heading={heading} behandlingsversjon={0} grunnlag={grunnlag} readOnly={true} />);
+      render(<FastsettManuellInntektNy behandlingsversjon={0} grunnlag={grunnlag} readOnly={true} />);
 
       const lagreKnapp = screen.queryByRole('button', { name: 'Lagre utkast' });
       expect(lagreKnapp).not.toBeInTheDocument();

@@ -18,7 +18,6 @@ import { FastsettManuellInntektTabell } from 'components/behandlinger/grunnlag/f
 import { FastsettManuellInntektForm, Tabellår } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/types';
 
 interface Props {
-  heading: string;
   behandlingsversjon: number;
   grunnlag: ManuellInntektGrunnlag;
   readOnly: boolean;
@@ -28,7 +27,6 @@ interface Props {
 type DraftFormFields = Partial<FastsettManuellInntektForm>;
 
 export const FastsettManuellInntektNy = ({
-  heading,
   behandlingsversjon,
   grunnlag,
   readOnly,
@@ -46,6 +44,8 @@ export const FastsettManuellInntektNy = ({
     'MANGLENDE_LIGNING',
     mellomlagretVurdering
   );
+
+  const visHovedinnhold = !formReadOnly || grunnlag.manuelleVurderinger !== null;
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -115,7 +115,7 @@ export const FastsettManuellInntektNy = ({
 
   return (
     <VilkårskortMedFormOgMellomlagringNyVisning
-      heading={heading}
+      heading={'Manglende pensjonsgivende inntekter / EØS inntekter'}
       steg={'MANGLENDE_LIGNING'}
       onSubmit={handleSubmit}
       isLoading={isLoading}
@@ -155,11 +155,19 @@ export const FastsettManuellInntektNy = ({
         utgangspunkt i arbeidsperioder i EØS, så kan brukerens inntekt overstyres. Inntekter skal ikke oppjusteres etter
         G, da det gjøres automatisk av systemet.
       </BodyShort>
-      <Link href="https://lovdata.no/pro/rundskriv/r45-00/KAPITTEL_10-7-3'" target="_blank" rel="noopener noreferrer">
-        Du kan lese mer om hvordan EØS inntekt skal beregnes i rundskrivet til § 11-7 (lovdata.no)
-      </Link>
-      <FormField form={form} formField={formFields.begrunnelse} />
-      <FastsettManuellInntektTabell form={form} tabellår={tabellår} />
+      {visHovedinnhold && (
+        <>
+          <Link
+            href="https://lovdata.no/pro/rundskriv/r45-00/KAPITTEL_10-7-3'"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Du kan lese mer om hvordan EØS inntekt skal beregnes i rundskrivet til § 11-7 (lovdata.no)
+          </Link>
+          <FormField form={form} formField={formFields.begrunnelse} />
+          <FastsettManuellInntektTabell form={form} tabellår={tabellår} />
+        </>
+      )}
     </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };
