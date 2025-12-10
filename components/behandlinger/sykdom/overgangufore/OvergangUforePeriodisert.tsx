@@ -1,11 +1,10 @@
 'use client';
 
-import { MellomlagretVurdering, OvergangUforeGrunnlag, OvergangUføreVurdering } from 'lib/types/types';
-import { Behovstype, getJaNeiEllerIkkeBesvart, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
+import { MellomlagretVurdering, OvergangUforeGrunnlag } from 'lib/types/types';
+import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
-import { ValuePair } from 'components/form/FormField';
 import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { parse, parseISO } from 'date-fns';
@@ -47,12 +46,6 @@ export const OvergangUforePeriodisert = ({
   const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('OVERGANG_UFORE');
 
-  const vilkårsvurderingLabel = 'Vilkårsvurdering';
-  const brukerSøktUføretrygdLabel = 'Har brukeren søkt om uføretrygd?';
-  const brukerHarFaattVedtakOmUføretrygdLabel = 'Har brukeren fått vedtak på søknaden om uføretrygd?';
-  const brukerrettPaaAAPLabel = 'Har brukeren rett på AAP under behandling av krav om uføretrygd etter § 11-18?';
-  const virkningsdatoLabel = 'Virkningstidspunkt for vurderingen';
-
   const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
     useMellomlagring(Behovstype.OVERGANG_UFORE, initialMellomlagretVurdering);
 
@@ -62,8 +55,8 @@ export const OvergangUforePeriodisert = ({
     mellomlagretVurdering
   );
 
-  const defaultValues: OvergangUforeForm = initialMellomlagretVurdering
-    ? JSON.parse(initialMellomlagretVurdering.data)
+  const defaultValues: OvergangUforeForm = mellomlagretVurdering
+    ? JSON.parse(mellomlagretVurdering.data)
     : getDefaultValuesFromGrunnlag(grunnlag);
 
   const form = useForm<OvergangUforeForm>({ defaultValues });
@@ -108,11 +101,7 @@ export const OvergangUforePeriodisert = ({
       mellomlagretVurdering={mellomlagretVurdering}
       visningModus={visningModus}
       visningActions={visningActions}
-      formReset={() =>
-        form.reset(
-          mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : getDefaultValuesFromGrunnlag(grunnlag)
-        )
-      }
+      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
       onLeggTilVurdering={() => append(emptyOvergangUføreVurdering())}
       errorList={errorList}
     >
@@ -177,7 +166,7 @@ export const OvergangUforePeriodisert = ({
     }
     return {
       vurderinger: grunnlag.nyeVurderinger.map((vurdering) => ({
-        fraDato: vurdering?.virkningsdato || '',
+        fraDato: formaterDatoForFrontend(vurdering.fom),
         begrunnelse: vurdering?.begrunnelse,
         brukerRettPåAAP: getJaNeiEllerUndefined(vurdering?.brukerRettPåAAP),
         brukerHarSøktUføretrygd: getJaNeiEllerUndefined(vurdering?.brukerHarSøktUføretrygd),
@@ -195,4 +184,4 @@ export const OvergangUforePeriodisert = ({
       brukerRettPåAAP: undefined,
     };
   }
-
+};

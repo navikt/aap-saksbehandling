@@ -1,7 +1,6 @@
 'use client';
 
 import { Alert, Button, HStack, Link, Radio, VStack } from '@navikt/ds-react';
-import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { TrashFillIcon } from '@navikt/aksel-icons';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
@@ -11,6 +10,7 @@ import { OvergangUforeForm } from 'components/behandlinger/sykdom/overgangufore/
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { JaEllerNei } from 'lib/utils/form';
 import { Veiledning } from 'components/veiledning/Veiledning';
+import { DateInputWrapperOnBlur } from 'components/form/dateinputwrapper/DateInputWrapperOnBlur';
 
 interface Props {
   index: number;
@@ -50,7 +50,7 @@ export const OvergangUforeVurderingFormInput = ({ index, form, readonly, onRemov
         }
       />
       <HStack justify={'space-between'}>
-        <DateInputWrapper
+        <DateInputWrapperOnBlur
           name={`vurderinger.${index}.fraDato`}
           label={virkningsdatoLabel}
           control={form.control}
@@ -100,7 +100,6 @@ export const OvergangUforeVurderingFormInput = ({ index, form, readonly, onRemov
           shouldUnregister
           readOnly={readonly}
           size={'small'}
-          horisontal={true}
         >
           <Radio value={'NEI'}>Nei</Radio>
           <Radio value={'JA_INNVILGET_FULL'}>Ja, brukeren har fått innvilget full uføretrygd</Radio>
