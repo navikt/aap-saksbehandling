@@ -13,6 +13,11 @@ fetchMock.enableMocks();
 const user = userEvent.setup();
 
 const grunnlagUtenYrkesskade: SykdomsGrunnlag = {
+  behøverVurderinger: [],
+  kanVurderes: [],
+  nyeVurderinger: [],
+  sisteVedtatteVurderinger: [],
+  perioderSomIkkeErTilstrekkeligVurdert: [],
   harTilgangTilÅSaksbehandle: true,
   skalVurdereYrkesskade: false,
   erÅrsakssammenhengYrkesskade: false,
@@ -23,6 +28,11 @@ const grunnlagUtenYrkesskade: SykdomsGrunnlag = {
 };
 
 const grunnlagMedYrkesskade: SykdomsGrunnlag = {
+  behøverVurderinger: [],
+  kanVurderes: [],
+  nyeVurderinger: [],
+  sisteVedtatteVurderinger: [],
+  perioderSomIkkeErTilstrekkeligVurdert: [],
   harTilgangTilÅSaksbehandle: true,
   skalVurdereYrkesskade: true,
   erÅrsakssammenhengYrkesskade: false,
@@ -33,6 +43,11 @@ const grunnlagMedYrkesskade: SykdomsGrunnlag = {
 };
 
 const grunnlagMedTidligereVurdering: SykdomsGrunnlag = {
+  behøverVurderinger: [],
+  kanVurderes: [],
+  nyeVurderinger: [],
+  sisteVedtatteVurderinger: [],
+  perioderSomIkkeErTilstrekkeligVurdert: [],
   harTilgangTilÅSaksbehandle: true,
   skalVurdereYrkesskade: false,
   erÅrsakssammenhengYrkesskade: false,
@@ -40,6 +55,7 @@ const grunnlagMedTidligereVurdering: SykdomsGrunnlag = {
   gjeldendeVedtatteSykdomsvurderinger: [],
   sykdomsvurderinger: [
     {
+      fom: '2025-01-01',
       begrunnelse: 'Dette er en tidligere begrunnelse',
       dokumenterBruktIVurdering: [{ identifikator: '12345' }],
       harSkadeSykdomEllerLyte: true,
@@ -724,6 +740,11 @@ describe('revurdering', () => {
 
   it('feltet for erNedsettelseIArbeidsevneMerEnnHalvparten brukes som grunnlag for om nedsettelsen er på minst 40 prosent i en revurdering', () => {
     const grunnlag: SykdomsGrunnlag = {
+      behøverVurderinger: [],
+      kanVurderes: [],
+      nyeVurderinger: [],
+      sisteVedtatteVurderinger: [],
+      perioderSomIkkeErTilstrekkeligVurdert: [],
       harTilgangTilÅSaksbehandle: true,
       skalVurdereYrkesskade: false,
       erÅrsakssammenhengYrkesskade: false,
@@ -732,6 +753,7 @@ describe('revurdering', () => {
       historikkSykdomsvurderinger: [],
       sykdomsvurderinger: [
         {
+          fom: '2025-01-01',
           begrunnelse: 'En begrunnelse',
           dokumenterBruktIVurdering: [],
           harSkadeSykdomEllerLyte: true,
@@ -757,6 +779,11 @@ describe('revurdering', () => {
 
   it('viser spørsmål om den nedsatte arbeidsevnen er minst 30 prosent når det skal vurderes mot yrkesskade', async () => {
     const grunnlagMedYrkesskadeOgÅrsakssammenheng: SykdomsGrunnlag = {
+      behøverVurderinger: [],
+      kanVurderes: [],
+      nyeVurderinger: [],
+      sisteVedtatteVurderinger: [],
+      perioderSomIkkeErTilstrekkeligVurdert: [],
       harTilgangTilÅSaksbehandle: true,
       skalVurdereYrkesskade: true,
       erÅrsakssammenhengYrkesskade: true,
@@ -886,6 +913,7 @@ describe('mellomlagring i sykdom', () => {
   };
 
   const sykdomsvurdering: Sykdomvurdering = {
+    fom: '2025-01-01',
     begrunnelse: 'Dette er min vurdering som er bekreftet',
     dokumenterBruktIVurdering: [],
     harSkadeSykdomEllerLyte: false,
@@ -893,6 +921,11 @@ describe('mellomlagring i sykdom', () => {
   };
 
   const sykdomsGrunnlagMedVurdering: SykdomsGrunnlag = {
+    behøverVurderinger: [],
+    kanVurderes: [],
+    nyeVurderinger: [],
+    sisteVedtatteVurderinger: [],
+    perioderSomIkkeErTilstrekkeligVurdert: [],
     gjeldendeVedtatteSykdomsvurderinger: [],
     harTilgangTilÅSaksbehandle: false,
     historikkSykdomsvurderinger: [],
@@ -903,6 +936,11 @@ describe('mellomlagring i sykdom', () => {
   };
 
   const sykdomsGrunnlagUtenVurdering: SykdomsGrunnlag = {
+    behøverVurderinger: [],
+    kanVurderes: [],
+    nyeVurderinger: [],
+    sisteVedtatteVurderinger: [],
+    perioderSomIkkeErTilstrekkeligVurdert: [],
     gjeldendeVedtatteSykdomsvurderinger: [],
     harTilgangTilÅSaksbehandle: false,
     historikkSykdomsvurderinger: [],

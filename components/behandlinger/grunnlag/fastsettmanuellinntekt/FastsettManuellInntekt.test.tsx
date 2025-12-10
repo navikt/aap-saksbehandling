@@ -10,14 +10,15 @@ import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 const user = userEvent.setup();
 
 const grunnlag: ManuellInntektGrunnlag = {
+  registrerteInntekterSisteRelevanteAr: [],
   ar: 0,
   gverdi: 100000,
   harTilgangTilÅSaksbehandle: true,
   historiskeVurderinger: [],
-  registrerteInntekterSisteRelevanteAr: [],
 };
 
 const grunnlagMedVurdering: ManuellInntektGrunnlag = {
+  registrerteInntekterSisteRelevanteAr: [],
   ar: 0,
   gverdi: 100000,
   harTilgangTilÅSaksbehandle: true,
@@ -31,7 +32,6 @@ const grunnlagMedVurdering: ManuellInntektGrunnlag = {
     },
     belop: 500000,
   },
-  registrerteInntekterSisteRelevanteAr: [],
 };
 
 beforeEach(() => {
