@@ -56,6 +56,7 @@ export enum Behovstype {
   AVKLAR_OPPFØLGINGSBEHOV_LOKALKONTOR = '8001',
   OPPHOLDSKRAV_KODE = '5035',
   ARBEIDSOPPTRAPPING_KODE = '5057',
+  INNTEKTSBORTFALL = '5040',
 }
 
 type BehovsKode = `${Behovstype}`;
@@ -132,6 +133,8 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
       return 'Overstyr § 11-2 forutgående medlemskap';
     case '5035':
       return '§ 11-3 Oppholdskrav';
+    case '5040':
+      return '§ 11-4 andre ledd. Krav om inntektsbortfall etter fylte 62 år';
     case '5050':
       return 'Skriv brev';
     case '5051':

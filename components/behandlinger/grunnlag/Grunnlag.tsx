@@ -10,6 +10,7 @@ import { isError } from 'lib/utils/api';
 import { FastsettManuellInntektMedDataFetching } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/FastsettManuellInntektMedDataFetching';
 import { getStegData } from 'lib/utils/steg';
 import { toggles } from 'lib/utils/toggles';
+import { Inntektsbortfall } from './inntektsbortfall/Inntektsbortfall';
 
 interface Props {
   behandlingsReferanse: string;
@@ -39,6 +40,7 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
     Behovstype.FASTSETT_YRKESSKADEINNTEKT
   );
   const vurderManglendeLigningSteg = getStegData(aktivStegGruppe, 'MANGLENDE_LIGNING', flyt.data);
+  const inntektsbortfall = getStegData(aktivStegGruppe, 'INNTEKTSBORTFALL', flyt.data);
 
   return (
     <GruppeSteg
@@ -78,6 +80,11 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
       {beregningsgrunnlag.data && (
         <StegSuspense>
           <VisBeregning grunnlag={beregningsgrunnlag.data} />
+        </StegSuspense>
+      )}
+      {toggles.featureMidlertidigStansInntektsbortfall && inntektsbortfall.skalViseSteg && (
+        <StegSuspense>
+          <Inntektsbortfall behandlingVersjon={inntektsbortfall.behandlingVersjon} readOnly={true} />
         </StegSuspense>
       )}
     </GruppeSteg>
