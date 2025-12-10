@@ -96,7 +96,13 @@ export const KelvinAppHeader = ({
           {lokalLenkeTilSaksoversikt && <Link href={`/saksbehandling/saksoversikt`}>Saksoversikt</Link>}
         </HStack>
 
-        <Spacer />
+        {/*
+        TODO:
+          Legg tilbake vanlig spacer når julen er over
+          <Spacer />
+        */}
+        <XMasSpacer />
+
         {brukerInformasjon.NAVident && (
           <InternalHeader.Button
             as="div"
@@ -149,3 +155,7 @@ export const KelvinAppHeader = ({
     </>
   );
 };
+
+const XMasSpacer = () => (
+  <span className="navds-stack__spacer" style={{ backgroundImage: 'url(/xmas-lights.svg)', opacity: 1 }} />
+);
