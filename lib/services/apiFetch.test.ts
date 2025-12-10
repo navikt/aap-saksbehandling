@@ -136,7 +136,8 @@ describe('apiFetch', () => {
       status: 503,
     });
     expect(fetch).toHaveBeenCalledTimes(3);
-    expect(logError).toHaveBeenCalled();
+    // TODO: Endre tilbake til logError når behandlingsflyt blir mer stabilt
+    expect(logWarning).toHaveBeenCalled();
   });
 
   it('should handle text responses', async () => {

@@ -68,7 +68,7 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
         </StegSuspense>
       )}
 
-      {toggles.featureManglendePGIOgEøsInntekter && vurderManglendeLigningSteg.skalViseSteg && (
+      {vurderManglendeLigningSteg.skalViseSteg && (
         <StegSuspense>
           <FastsettManuellInntektMedDataFetching
             behandlingsreferanse={behandlingsReferanse}
