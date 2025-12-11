@@ -1,4 +1,4 @@
-import { isLocal, isProd } from 'lib/utils/environment';
+import { isProd } from 'lib/utils/environment';
 
 /**
  * Samle release toggles på ett sted - slik at man får en enkel oversikt over hvilke toggles som faktisk er i bruk
@@ -13,6 +13,6 @@ export const toggles = {
   featureManglendePGIOgEøsInntekter: !isProd(),
   featurePeriodiserteValgfrieKort: !isProd(),
   featureVisArenahistorikkKnapp: !isProd(),
-  featureBistandPeriodisert: isLocal(),
+  featureBistandPeriodisert: !isProd(),
   featurePeriodisertSPE: !isProd(),
 };
