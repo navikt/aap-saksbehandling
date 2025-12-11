@@ -17,14 +17,14 @@ interface Props {
 export const Inntektsbortfall = ({ behandlingVersjon, readOnly }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { status, løsBehovOgGåTilNesteSteg, isLoading, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('INNTEKTSBORTFALL');
+    useLøsBehovOgGåTilNesteSteg('VURDER_INNTEKTSBORTFALL');
 
-  const { visningActions, visningModus } = useVilkårskortVisning(readOnly, 'INNTEKTSBORTFALL', undefined);
+  const { visningActions, visningModus } = useVilkårskortVisning(readOnly, 'VURDER_INNTEKTSBORTFALL', undefined);
 
   return (
     <VilkårskortMedFormOgMellomlagringNyVisning
       heading="§ 11-4 andre ledd. Krav om inntektsbortfall etter fylte 62 år"
-      steg={'INNTEKTSBORTFALL'}
+      steg={'VURDER_INNTEKTSBORTFALL'}
       vilkårTilhørerNavKontor={false}
       status={status}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
@@ -35,7 +35,7 @@ export const Inntektsbortfall = ({ behandlingVersjon, readOnly }: Props) => {
         løsBehovOgGåTilNesteSteg({
           behandlingVersjon: behandlingVersjon,
           behov: {
-            behovstype: Behovstype.INNTEKTSBORTFALL,
+            behovstype: Behovstype.VURDER_INNTEKTSBORTFALL,
           },
           referanse: behandlingsReferanse,
         });
