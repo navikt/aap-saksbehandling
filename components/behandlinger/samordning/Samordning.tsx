@@ -30,8 +30,6 @@ export const Samordning = async ({ behandlingsreferanse }: Props) => {
   const samordningTjenestepensjonSteg = getStegData(aktivGruppe, 'SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV', flyt.data);
   const samordningBarnepensjonSteg = getStegData(aktivGruppe, 'SAMORDNING_BARNEPENSJON', flyt.data);
 
-  console.log(samordningBarnepensjonSteg);
-
   return (
     <GruppeSteg
       behandlingVersjon={flyt.data.behandlingVersjon}
@@ -42,10 +40,7 @@ export const Samordning = async ({ behandlingsreferanse }: Props) => {
     >
       {samordningBarnepensjonSteg.skalViseSteg && (
         <StegSuspense>
-          <SamordningBarnepensjonMedDatafetching
-            behandlingsreferanse={behandlingsreferanse}
-            stegData={samordningBarnepensjonSteg}
-          />
+          <SamordningBarnepensjonMedDatafetching />
         </StegSuspense>
       )}
       {samordningSosialStønadSteg.skalViseSteg && (
