@@ -1,12 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { render, screen } from 'lib/test/CustomRender';
-import { OvergangUfore } from 'components/behandlinger/sykdom/overgangufore/OvergangUfore';
-import { within } from '@testing-library/react';
+import { render, screen, within } from 'lib/test/CustomRender';
 import { userEvent } from '@testing-library/user-event';
 import { MellomlagretVurderingResponse, OvergangUforeGrunnlag } from 'lib/types/types';
-import { FetchResponse } from 'lib/utils/api';
 import createFetchMock from 'vitest-fetch-mock';
+import { FetchResponse } from 'lib/utils/api';
 import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
+import { OvergangUforePeriodisert } from 'components/behandlinger/sykdom/overgangufore/OvergangUforePeriodisert';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
@@ -16,25 +15,57 @@ beforeEach(() => {
   setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'OVERGANG_UFORE' });
 });
 
-const overgangUføregrunnlag: OvergangUforeGrunnlag = {
-  behøverVurderinger: [],
-  kanVurderes: [],
-  nyeVurderinger: [],
-  perioderSomIkkeErTilstrekkeligVurdert: [],
-  sisteVedtatteVurderinger: [],
-  vurdering: {
-    begrunnelse: 'Dette er min vurdering som er bekreftet',
-    brukerRettPåAAP: true,
-    brukerHarSøktUføretrygd: true,
-    brukerHarFåttVedtakOmUføretrygd: 'NEI',
-    vurdertAv: { ident: 'TESTER', dato: '2025-08-19' },
-    fom: '',
-    virkningsdato: '',
-  },
+const overganguforeGrunnlag: OvergangUforeGrunnlag = {
   gjeldendeSykdsomsvurderinger: [],
   gjeldendeVedtatteVurderinger: [],
-  harTilgangTilÅSaksbehandle: true,
   historiskeVurderinger: [],
+  perioderSomIkkeErTilstrekkeligVurdert: [],
+  nyeVurderinger: [],
+  kanVurderes: [
+    {
+      fom: '2025-10-10',
+      tom: '2030-10-10',
+    },
+  ],
+  sisteVedtatteVurderinger: [],
+  behøverVurderinger: [
+    {
+      fom: '2025-10-10',
+      tom: '2030-10-10',
+    },
+  ],
+  harTilgangTilÅSaksbehandle: true,
+};
+const overganguforeGrunnlagMedBekreftetVurdering: OvergangUforeGrunnlag = {
+  gjeldendeSykdsomsvurderinger: [],
+  gjeldendeVedtatteVurderinger: [],
+  historiskeVurderinger: [],
+  perioderSomIkkeErTilstrekkeligVurdert: [],
+  nyeVurderinger: [
+    {
+      begrunnelse: 'Dette er min vurdering som er bekreftet',
+      brukerHarSøktUføretrygd: true,
+      brukerHarFåttVedtakOmUføretrygd: 'JA',
+      brukerRettPåAAP: true,
+      virkningsdato: '',
+      fom: '2025-10-10',
+      vurdertAv: { dato: '2025-10-10', ident: 'FASF343' },
+    },
+  ],
+  kanVurderes: [
+    {
+      fom: '2025-10-10',
+      tom: '2030-10-10',
+    },
+  ],
+  sisteVedtatteVurderinger: [],
+  behøverVurderinger: [
+    {
+      fom: '2025-10-10',
+      tom: '2030-10-10',
+    },
+  ],
+  harTilgangTilÅSaksbehandle: true,
 };
 
 describe('mellomlagring i overgang uføre', () => {
@@ -42,7 +73,7 @@ describe('mellomlagring i overgang uføre', () => {
     mellomlagretVurdering: {
       avklaringsbehovkode: '5031',
       behandlingId: { id: 1 },
-      data: '{"begrunnelse":"Dette er min vurdering som er mellomlagret","brukerRettPåAAP":"ja","brukerHarSøktOmUføretrygd":"ja","brukerHarFåttVedtakOmUføretrygd": "NEI"}',
+      data: '{"vurderinger": [{"begrunnelse":"Dette er min vurdering som er mellomlagret","brukerRettPåAAP":"ja","brukerHarSøktOmUføretrygd":"ja","brukerHarFåttVedtakOmUføretrygd": "NEI"}]}',
       vurdertDato: '2025-08-21T12:00:00.000',
       vurdertAv: 'Jan T. Loven',
     },
@@ -50,10 +81,10 @@ describe('mellomlagring i overgang uføre', () => {
 
   it('Skal vise en tekst om hvem som har gjort vurderingen dersom det finnes en mellomlagring', () => {
     render(
-      <OvergangUfore
+      <OvergangUforePeriodisert
+        grunnlag={overganguforeGrunnlag}
         readOnly={false}
         behandlingVersjon={0}
-        typeBehandling={'Førstegangsbehandling'}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
       />
     );
@@ -64,7 +95,7 @@ describe('mellomlagring i overgang uføre', () => {
   it(
     'Skal vise en tekst om hvem som har lagret vurdering dersom bruker trykker på lagre ' + 'mellomlagring',
     async () => {
-      render(<OvergangUfore behandlingVersjon={0} readOnly={false} typeBehandling={'Førstegangsbehandling'} />);
+      render(<OvergangUforePeriodisert grunnlag={overganguforeGrunnlag} behandlingVersjon={0} readOnly={false} />);
 
       await user.type(
         screen.getByRole('textbox', { name: 'Vilkårsvurdering' }),
@@ -88,10 +119,10 @@ describe('mellomlagring i overgang uføre', () => {
 
   it('Skal ikke vise tekst om hvem som har gjort mellomlagring dersom bruker trykker på slett mellomlagring', async () => {
     render(
-      <OvergangUfore
+      <OvergangUforePeriodisert
+        grunnlag={overganguforeGrunnlag}
         behandlingVersjon={0}
         readOnly={false}
-        typeBehandling={'Førstegangsbehandling'}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
       />
     );
@@ -109,11 +140,10 @@ describe('mellomlagring i overgang uføre', () => {
 
   it('Skal bruke mellomlagring som defaultValue i skjema dersom det finnes', () => {
     render(
-      <OvergangUfore
+      <OvergangUforePeriodisert
         behandlingVersjon={0}
         readOnly={false}
-        typeBehandling={'Førstegangsbehandling'}
-        grunnlag={overgangUføregrunnlag}
+        grunnlag={overganguforeGrunnlag}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
       />
     );
@@ -127,11 +157,10 @@ describe('mellomlagring i overgang uføre', () => {
 
   it('Skal bruke bekreftet vurdering fra grunnlag som defaultValue i skjema dersom mellomlagring ikke finnes', () => {
     render(
-      <OvergangUfore
+      <OvergangUforePeriodisert
         behandlingVersjon={0}
         readOnly={false}
-        typeBehandling={'Førstegangsbehandling'}
-        grunnlag={overgangUføregrunnlag}
+        grunnlag={overganguforeGrunnlagMedBekreftetVurdering}
       />
     );
 
@@ -144,10 +173,10 @@ describe('mellomlagring i overgang uføre', () => {
 
   it('Skal resette skjema til tomt skjema dersom det ikke finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
     render(
-      <OvergangUfore
+      <OvergangUforePeriodisert
         behandlingVersjon={0}
         readOnly={false}
-        typeBehandling={'Førstegangsbehandling'}
+        grunnlag={overganguforeGrunnlag}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
       />
     );
@@ -167,14 +196,16 @@ describe('mellomlagring i overgang uføre', () => {
 
   it('Skal resette skjema til bekreftet vurdering dersom det finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
     render(
-      <OvergangUfore
+      <OvergangUforePeriodisert
         behandlingVersjon={0}
         readOnly={false}
-        typeBehandling={'Førstegangsbehandling'}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
-        grunnlag={overgangUføregrunnlag}
+        grunnlag={overganguforeGrunnlagMedBekreftetVurdering}
       />
     );
+
+    const mockFetchResponseSlettMellomlagring: FetchResponse<object> = { type: 'SUCCESS', status: 202, data: {} };
+    fetchMock.mockResponse(JSON.stringify(mockFetchResponseSlettMellomlagring));
 
     await user.type(screen.getByRole('textbox', { name: 'Vilkårsvurdering' }), ' her er ekstra tekst');
 
@@ -183,7 +214,6 @@ describe('mellomlagring i overgang uføre', () => {
     );
 
     const slettKnapp = screen.getByRole('button', { name: 'Slett utkast' });
-
     await user.click(slettKnapp);
 
     expect(screen.getByRole('textbox', { name: 'Vilkårsvurdering' })).toHaveValue(
@@ -193,12 +223,11 @@ describe('mellomlagring i overgang uføre', () => {
 
   it('Skal ikke være mulig å lagre eller slette mellomlagring hvis det er readOnly', () => {
     render(
-      <OvergangUfore
+      <OvergangUforePeriodisert
         behandlingVersjon={0}
         readOnly={true}
-        typeBehandling={'Førstegangsbehandling'}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
-        grunnlag={overgangUføregrunnlag}
+        grunnlag={overganguforeGrunnlag}
       />
     );
 
@@ -211,20 +240,20 @@ describe('mellomlagring i overgang uføre', () => {
 
 describe('Førstegangsbehandling', () => {
   it('Skal ha en overskrift', () => {
-    render(<OvergangUfore readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
+    render(<OvergangUforePeriodisert grunnlag={overganguforeGrunnlag} readOnly={false} behandlingVersjon={0} />);
 
     const heading = screen.getByText('§ 11-18 AAP under behandling av krav om uføretrygd');
     expect(heading).toBeVisible();
   });
 
   it('Skal ha felt for begrunnelse', () => {
-    render(<OvergangUfore readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
+    render(<OvergangUforePeriodisert grunnlag={overganguforeGrunnlag} readOnly={false} behandlingVersjon={0} />);
     const begrunnelse = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
     expect(begrunnelse).toBeVisible();
   });
 
   it('Skal ha felt for om brukeren har søkt om uføretrygd', () => {
-    render(<OvergangUfore readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
+    render(<OvergangUforePeriodisert grunnlag={overganguforeGrunnlag} readOnly={false} behandlingVersjon={0} />);
     const felt = screen.getByRole('group', {
       name: 'Har brukeren søkt om uføretrygd?',
     });
@@ -232,7 +261,7 @@ describe('Førstegangsbehandling', () => {
   });
 
   it('Viser felt om brukeren har fått vedtak om uføretrygd, dersom brukeren ikke har søkt', async () => {
-    render(<OvergangUfore readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
+    render(<OvergangUforePeriodisert grunnlag={overganguforeGrunnlag} readOnly={false} behandlingVersjon={0} />);
 
     expect(finnGruppeForSoktOmUforetrygd()).toBeVisible();
 
@@ -241,7 +270,7 @@ describe('Førstegangsbehandling', () => {
   });
 
   it('Har brukeren rett på AAP under behandling av krav om uføretrygd etter § 11-18?', async () => {
-    render(<OvergangUfore readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
+    render(<OvergangUforePeriodisert grunnlag={overganguforeGrunnlag} readOnly={false} behandlingVersjon={0} />);
     await velgJa(finnGruppeForSoktOmUforetrygd());
     expect(finnGruppeForRettPåAAP()).toBeVisible();
   });
@@ -250,11 +279,10 @@ describe('Førstegangsbehandling', () => {
     setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'VURDER_BISTANDSBEHOV' });
 
     render(
-      <OvergangUfore
-        grunnlag={overgangUføregrunnlag}
+      <OvergangUforePeriodisert
+        grunnlag={overganguforeGrunnlagMedBekreftetVurdering}
         readOnly={false}
         behandlingVersjon={0}
-        typeBehandling={'Førstegangsbehandling'}
       />
     );
 

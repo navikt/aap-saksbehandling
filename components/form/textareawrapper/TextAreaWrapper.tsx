@@ -15,6 +15,7 @@ export interface TextAreaProps<FormFieldValues extends FieldValues> {
   className?: string;
   autocomplete?: HTMLInputAutoCompleteAttribute;
   onChangeCustom?: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  shouldUnregister?: boolean;
 }
 
 export const TextAreaWrapper = <FormFieldValues extends FieldValues>({
@@ -30,11 +31,13 @@ export const TextAreaWrapper = <FormFieldValues extends FieldValues>({
   className,
   autocomplete,
   onChangeCustom,
+  shouldUnregister = false,
 }: TextAreaProps<FormFieldValues>) => (
   <Controller
     name={name}
     control={control}
     rules={rules}
+    shouldUnregister={shouldUnregister}
     render={({ field: { name, value, onChange }, fieldState: { error } }) => {
       const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         onChange(e);
