@@ -8608,6 +8608,7 @@ export interface components {
         | '9002'
         | '9003'
         | '9004';
+      skalTrekkes: boolean;
     };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.UtenlandskVideref\u00F8ringL\u00F8sning': {
       /** @enum {string} */
@@ -11168,6 +11169,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.s\u00F8knad.TrukketS\u00F8knadVurderingDto': {
       begrunnelse: string;
       journalpostId: string;
+      skalTrekkes: boolean;
       vurdertAv: string;
       /**
        * Format: date
