@@ -35,6 +35,7 @@ export const YrkesskadeUføreVisning = ({ grunnlag, gjeldendeGrunnbeløp }: Prop
         inntekter={sorterteInntekterUføre}
         gjennomsnittSiste3år={grunnlag.uføreGrunnlag.gjennomsnittligInntektSiste3årUfør}
         ytterligereNedsattArbeidsevneÅr={grunnlag.uføreGrunnlag.ytterligereNedsattArbeidsevneÅr}
+        gjeldendeGrunnbeløp={gjeldendeGrunnbeløp}
       />
 
       <YrkesskadeBeregningTabell grunnlag={grunnlag.yrkesskadeGrunnlag} visning="YRKESSKADE_UFØR" />
