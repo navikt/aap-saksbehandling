@@ -10,7 +10,7 @@ import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 const user = userEvent.setup();
 
 const grunnlag: ManuellInntektGrunnlag = {
-  sisteRelevanteÅr: 0,
+  sisteRelevanteÅr: 2020,
   registrerteInntekterSisteRelevanteAr: [],
   ar: 0,
   gverdi: 100000,
@@ -19,7 +19,7 @@ const grunnlag: ManuellInntektGrunnlag = {
 };
 
 const grunnlagMedVurdering: ManuellInntektGrunnlag = {
-  sisteRelevanteÅr: 0,
+  sisteRelevanteÅr: 2020,
   registrerteInntekterSisteRelevanteAr: [],
   ar: 0,
   gverdi: 100000,

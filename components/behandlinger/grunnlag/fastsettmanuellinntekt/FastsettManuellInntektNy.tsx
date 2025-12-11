@@ -165,7 +165,7 @@ export const FastsettManuellInntektNy = ({
             Du kan lese mer om hvordan EØS inntekt skal beregnes i rundskrivet til § 11-7 (lovdata.no)
           </Link>
           <FormField form={form} formField={formFields.begrunnelse} />
-          <FastsettManuellInntektTabell form={form} tabellår={tabellår} />
+          <FastsettManuellInntektTabell form={form} tabellår={tabellår} readOnly={formReadOnly} />
         </>
       )}
     </VilkårskortMedFormOgMellomlagringNyVisning>

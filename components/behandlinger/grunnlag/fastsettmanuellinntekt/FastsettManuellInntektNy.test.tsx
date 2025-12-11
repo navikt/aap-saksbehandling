@@ -32,7 +32,7 @@ describe('Manglende pensjonsgivende inntekter / EØS inntekter', () => {
   };
 
   const grunnlagMedVurdering: ManuellInntektGrunnlag = {
-    sisteRelevanteÅr: 0,
+    sisteRelevanteÅr: 2024,
     ar: 2024,
     gverdi: 0,
     harTilgangTilÅSaksbehandle: true,

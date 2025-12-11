@@ -16,4 +16,5 @@ export const toggles = {
   featureBistandPeriodisert: isLocal(),
   featurePeriodisertSPE: !isProd(),
   featurePeriodisertOvergangUføre: isLocal(),
+  featureMidlertidigStansInntektsbortfall: !isProd(),
 };

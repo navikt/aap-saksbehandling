@@ -1727,13 +1727,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aap-felles-prettier@npm:^5.4.1":
-  version: 5.4.1
-  resolution: "@navikt/aap-felles-prettier@npm:5.4.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-prettier%2F5.4.1%2Fa438dff0474ca9ea64391a39d00dfb23a0902006"
+"@navikt/aap-felles-prettier@npm:^5.5.0":
+  version: 5.5.0
+  resolution: "@navikt/aap-felles-prettier@npm:5.5.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-prettier%2F5.5.0%2F206f7eed1e12852b6d1d71ca5b5183f7c2059d51"
   dependencies:
     "@trivago/prettier-plugin-sort-imports": "npm:^4.3.0"
     prettier: "npm:^3.3.3"
-  checksum: 10c0/257401d03d12a25d8137442e222dffdfa050c4a6dd54f0cb822f30a0a4171e0767303e16b7eb2b4e4d5d17ca4371b131fac3a2bfd44c077c2e40a95126d7b0cc
+  checksum: 10c0/38fdfd80c984d1d837ce761cfc8e6e777727711d16054b79b9341521e1a77e28363edb2fadf25c9e35d1f831758a5b7c7b6910bdc34aee2e6b3bdb6e17e2df37
   languageName: node
   linkType: hard
 
@@ -3541,7 +3541,7 @@ __metadata:
     "@eslint/js": "npm:^9.39.1"
     "@navikt/aap-breveditor": "npm:^0.10.1"
     "@navikt/aap-breveditor-css": "npm:^0.4.1"
-    "@navikt/aap-felles-prettier": "npm:^5.4.1"
+    "@navikt/aap-felles-prettier": "npm:^5.5.0"
     "@navikt/aap-oppgave-typescript-types": "npm:0.0.544"
     "@navikt/aap-postmottak-backend-typescript-types": "npm:^0.0.557"
     "@navikt/aap-statistikk-typescript-types": "npm:^0.1.533"

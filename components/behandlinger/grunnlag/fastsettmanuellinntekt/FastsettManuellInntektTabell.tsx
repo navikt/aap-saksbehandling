@@ -9,9 +9,10 @@ import { FastsettManuellInntektForm, Tabellår } from 'components/behandlinger/g
 interface Props {
   form: UseFormReturn<FastsettManuellInntektForm>;
   tabellår: Tabellår[];
+  readOnly: boolean;
 }
 
-export const FastsettManuellInntektTabell = ({ tabellår, form }: Props) => {
+export const FastsettManuellInntektTabell = ({ tabellår, form, readOnly }: Props) => {
   const regnUtTotalbeløpPerÅr = (ferdigLignetPGI: number, beregnetPGI: number, eøsInntekt: number): string => {
     const total =
       beregnetPGI > 0 ? Number(beregnetPGI) + Number(eøsInntekt) : Number(ferdigLignetPGI) + Number(eøsInntekt);
@@ -49,7 +50,7 @@ export const FastsettManuellInntektTabell = ({ tabellår, form }: Props) => {
                     control={form.control}
                     type={'number'}
                     hideLabel={true}
-                    readOnly={år.ferdigLignetPGI !== undefined}
+                    readOnly={år.ferdigLignetPGI !== undefined || readOnly}
                   />
                 </Table.DataCell>
                 <Table.DataCell textSize={'small'} data-testid={'eøsInntekt'}>
@@ -59,6 +60,7 @@ export const FastsettManuellInntektTabell = ({ tabellår, form }: Props) => {
                     control={form.control}
                     type={'number'}
                     hideLabel={true}
+                    readOnly={readOnly}
                   />
                 </Table.DataCell>
                 <Table.DataCell data-testid={'totalt'} textSize={'small'}>
