@@ -17,11 +17,13 @@ export function getDefaultValuesFromGrunnlag(
 ): ForutgåendeMedlemskapVurderingForm {
   if (grunnlag == null || (grunnlag.nyeVurderinger.length === 0 && grunnlag.sisteVedtatteVurderinger.length === 0)) {
     // Vi har ingen tidligere vurderinger eller nye vurderinger, legg til en tom-default-periode
+    const fraDato = grunnlag?.behøverVurderinger[0]?.fom;
+
     return {
       vurderinger: [
         {
           begrunnelse: '',
-          fraDato: formaterDatoForFrontend(new Date(grunnlag?.behøverVurderinger[0]?.fom!)),
+          fraDato: fraDato && formaterDatoForFrontend(new Date(fraDato)),
         },
       ],
     };
