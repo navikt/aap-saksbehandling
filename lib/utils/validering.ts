@@ -42,7 +42,7 @@ export function validerPeriodiserteVurderingerRekkefølge({
       ...(grunnlag?.sisteVedtatteVurderinger.map((i) => parseISO(i.fom)) || []),
     ]);
 
-    const tidligsteDatoSomMåVurderes = new Date(grunnlag?.kanVurderes[0]?.fom!);
+    const tidligsteDatoSomMåVurderes = new Date(grunnlag?.behøverVurderinger[0]?.fom!);
     if (isAfter(tidligsteDato, tidligsteDatoSomMåVurderes)) {
       nyeVurderinger.forEach((_, index) => {
         form.setError(`vurderinger.${index}.fraDato`, {
