@@ -52,6 +52,7 @@ describe('Trekk søknad', () => {
           begrunnelse: 'Dette er min vurdering som er bekreftet',
           vurdertAv: 'Kjell T. Ringen',
           vurdertDato: '2025-08-21',
+          skalTrekkes: true,
           journalpostId: '123',
         },
       ],
