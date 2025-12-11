@@ -46,7 +46,7 @@ export const Delmal = ({ delmalFelt, index, control, watch, brevmal }: DelmalPro
       </Heading>
       <Delmalvelger control={control} index={index} obligatorisk={delmalErObligatorisk(delmalFelt.noekkel, brevmal)} />
       {watch(`delmaler.${index}.valgt`) === true && !!delmalFelt.valg?.length && (
-        <Valgfelt valg={delmalFelt.valg} control={control} delmalIndex={index} brevmal={brevmal} />
+        <Valgfelt valg={delmalFelt.valg} control={control} delmalIndex={index} brevmal={brevmal} watch={watch} />
       )}
     </Box>
   );

@@ -5,6 +5,7 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import { Delmal } from 'components/brevbygger/Delmal';
 import {
   delmalErObligatorisk,
+  erValgtIdFritekst,
   finnParentIdForValgtAlternativ,
   mapDelmalerFraSanity,
 } from 'components/brevbygger/brevmalMapping';
@@ -19,9 +20,9 @@ export interface AlternativFormField {
 
 export interface ValgFormField {
   noekkel: string;
-  key: string;
   alternativer: AlternativFormField[];
   valgtAlternativ: string;
+  fritekst?: string;
 }
 
 export interface DelmalFormField {
@@ -66,12 +67,29 @@ export const Brevbygger = ({ referanse, brevmal, brevdata }: BrevbyggerProps) =>
         key: valg.valgtAlternativ,
       }));
 
+    const fritekst = formData.delmaler
+      .filter((delmal) => delmal.valgt)
+      .map((delmal) => {
+        const fritekstValg = delmal.valg
+          ?.filter((alternativ) => alternativ.valgtAlternativ !== '')
+          .filter((alternativ) => erValgtIdFritekst(alternativ.valgtAlternativ, parsedBrevmal))
+          .at(0);
+        if (fritekstValg) {
+          return {
+            fritekst: JSON.stringify({ tekst: fritekstValg.fritekst || '' }),
+            key: fritekstValg.valgtAlternativ,
+            parentId: finnParentIdForValgtAlternativ(fritekstValg.valgtAlternativ, parsedBrevmal),
+          };
+        }
+      })
+      .filter((v) => !!v);
+
     await clientOppdaterBrevdata(referanse, {
       delmaler: [...obligatoriskeDelmaler, ...valgteDelmaler],
       valg: valgteValg,
       betingetTekst: [],
       faktagrunnlag: [],
-      fritekster: [],
+      fritekster: fritekst,
       periodetekster: [],
     });
   };
