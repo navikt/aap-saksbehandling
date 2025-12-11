@@ -15,6 +15,6 @@ export const toggles = {
   featureVisArenahistorikkKnapp: !isProd(),
   featureBistandPeriodisert: isLocal(),
   featurePeriodisertSPE: !isProd(),
-  featurePeriodisertOvergangUføre: isLocal(),
+  featurePeriodisertOvergangUføre: !isProd(),
   featureMidlertidigStansInntektsbortfall: !isProd(),
 };

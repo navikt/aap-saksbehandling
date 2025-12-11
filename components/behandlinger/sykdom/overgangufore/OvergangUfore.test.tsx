@@ -35,11 +35,6 @@ const overgangUføregrunnlag: OvergangUforeGrunnlag = {
   gjeldendeVedtatteVurderinger: [],
   harTilgangTilÅSaksbehandle: true,
   historiskeVurderinger: [],
-  behøverVurderinger: [],
-  kanVurderes: [],
-  nyeVurderinger: [],
-  perioderSomIkkeErTilstrekkeligVurdert: [],
-  sisteVedtatteVurderinger: [],
 };
 
 describe('mellomlagring i overgang uføre', () => {
