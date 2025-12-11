@@ -1,14 +1,11 @@
-import { Button, HStack, Radio, ReadMore, VStack } from '@navikt/ds-react';
+import { Button, HStack, ReadMore, VStack } from '@navikt/ds-react';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
-import { JaEllerNei } from 'lib/utils/form';
 import { VisningModus } from 'hooks/saksbehandling/visning/VisningHook';
 import { TrashFillIcon } from '@navikt/aksel-icons';
 import { UseFormReturn } from 'react-hook-form';
 import React, { useState } from 'react';
 import { validerDato } from 'lib/validation/dateValidation';
-import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
-import { grunnOptions } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/sykepengererstatning-utils';
 import { DateInputWrapperOnBlur } from 'components/form/dateinputwrapper/DateInputWrapperOnBlur';
 import { OvergangArbeidForm } from 'components/behandlinger/sykdom/overgangarbeid/OvergangArbeid-types';
 
