@@ -215,7 +215,7 @@ describe('Førstegangsbehandling', () => {
   it('Skal ha felt for virkningsdato', () => {
     render(<OvergangArbeid readOnly={false} behandlingVersjon={0} />);
     const felt = screen.queryByRole('textbox', {
-      name: 'Virkningsdato for vurderingen',
+      name: 'Vurderingen gjelder fra',
     });
     expect(felt).toBeVisible();
   });
