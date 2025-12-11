@@ -12,6 +12,7 @@ const innteker: Array<UføreInntekt> = [
     uføreGrad: 30,
     justertForUføreGrad: 500000,
     justertForUføreGradiG: 5,
+    inntektsPerioder: [],
   },
 ];
 

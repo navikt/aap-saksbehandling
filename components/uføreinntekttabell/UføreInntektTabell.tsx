@@ -1,7 +1,7 @@
 import { BodyShort, Table, VStack } from '@navikt/ds-react';
 import { UføreInntekt } from 'lib/types/types';
 
-import { formaterTilG, formaterTilNok, formaterTilProsent } from 'lib/utils/string';
+import { formaterTilG, formaterTilNok } from 'lib/utils/string';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { Veiledning } from 'components/veiledning/Veiledning';
 
@@ -39,10 +39,10 @@ export const UføreInntektTabell = ({ inntekter, gjennomsnittSiste3år, ytterlig
               Uføregrad
             </Table.HeaderCell>
             <Table.HeaderCell align={'right'} textSize={'small'}>
-              Deltidsinntekt
+              Pensjonsgivende inntekt
             </Table.HeaderCell>
             <Table.HeaderCell align={'right'} textSize={'small'}>
-              Justert for uføregrad
+              Oppjustert 100%
             </Table.HeaderCell>
             <Table.HeaderCell align={'right'} textSize={'small'}>
               Inntektsgrunnlag (maks 6 G)
@@ -50,23 +50,28 @@ export const UføreInntektTabell = ({ inntekter, gjennomsnittSiste3år, ytterlig
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {inntekter.map((inntekt) => (
-            <Table.Row key={inntekt.år}>
-              <Table.DataCell textSize={'small'}>{inntekt.år}</Table.DataCell>
-              <Table.DataCell align={'right'} textSize={'small'}>
-                {formaterTilProsent(inntekt.uføreGrad)}
-              </Table.DataCell>
-              <Table.DataCell align={'right'} textSize={'small'}>
-                {formaterTilNok(inntekt.inntektIKroner)} ({formaterTilG(inntekt.inntektIG)})
-              </Table.DataCell>
-              <Table.DataCell align={'right'} textSize={'small'}>
-                {formaterTilNok(inntekt.justertForUføreGrad)} ({formaterTilG(inntekt.justertForUføreGradiG)})
-              </Table.DataCell>
-              <Table.DataCell align={'right'} textSize={'small'}>
-                {formaterTilG(inntekt.justertTilMaks6G)}
-              </Table.DataCell>
-            </Table.Row>
-          ))}
+          {inntekter.map((inntekt) => {
+            return inntekt.inntektsPerioder.map((periode) => (
+              <Table.Row key={inntekt.år}>
+                <Table.DataCell textSize={'small'}>
+                  {inntekt.år} (${periode.periode.fom} - ${periode.periode.tom})
+                </Table.DataCell>
+                <Table.DataCell align={'right'} textSize={'small'}>
+                  {periode.uføregrad == null ? '-' : `${periode.uføregrad} %`}
+                </Table.DataCell>
+                <Table.DataCell align={'right'} textSize={'small'}>
+                  {formaterTilNok(periode.inntektJustertForUføregrad.verdi)} (
+                  {formaterTilG(periode.inntektJustertForUføregrad.verdi)})
+                </Table.DataCell>
+                <Table.DataCell align={'right'} textSize={'small'}>
+                  {formaterTilNok(periode.inntektIKroner.verdi)} ({formaterTilG(periode.inntektIKroner.verdi)})
+                </Table.DataCell>
+                <Table.DataCell align={'right'} textSize={'small'}>
+                  {formaterTilG(inntekt.justertTilMaks6G)}
+                </Table.DataCell>
+              </Table.Row>
+            ));
+          })}
           <Table.Row>
             <Table.DataCell textSize={'small'}>{`Gjennomsnitt ${foersteAar} - ${sisteAar}`}</Table.DataCell>
             <Table.DataCell align={'right'} colSpan={5} textSize={'small'}>
