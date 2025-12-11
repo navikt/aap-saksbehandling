@@ -19,6 +19,7 @@ import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib
 import { LovOgMedlemskapVurderingForm } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/types';
 import { BistandsbehovTidligereVurdering } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovTidligereVurdering';
 import { mapBistandVurderingFormTilDto } from 'components/behandlinger/sykdom/bistandsbehov/bistandsbehov-utils';
+import { Dato } from 'lib/types/Dato';
 
 interface Props {
   behandlingVersjon: number;
@@ -181,7 +182,7 @@ export const BistandsbehovPeriodisert = ({
     // Vi har allerede data lagret, vis enten de som er lagret i grunnlaget her eller tom liste
     return {
       vurderinger: grunnlag.vurderinger.map((vurdering) => ({
-        fraDato: '',
+        fraDato: new Dato(vurdering.fom).formaterForFrontend(),
         begrunnelse: vurdering?.begrunnelse,
         erBehovForAktivBehandling: getJaNeiEllerUndefined(vurdering?.erBehovForAktivBehandling),
         erBehovForAnnenOppfølging: getJaNeiEllerUndefined(vurdering?.erBehovForAnnenOppfølging),
