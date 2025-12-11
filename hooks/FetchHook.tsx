@@ -107,20 +107,6 @@ export function useOpprettDummySak(): {
   return { opprettSak: opprettSakMethod, isLoading, data, error };
 }
 
-export function useBestillDialogmelding(): {
-  bestillDialogmelding: (bestilling: BestillLegeerklæring) => Promise<void>;
-  isLoading: boolean;
-  error?: string;
-} {
-  const { method, isLoading, error } = useFetch(clientBestillDialogmelding);
-
-  async function bestill(body: BestillLegeerklæring) {
-    await method(body);
-  }
-
-  return { bestillDialogmelding: bestill, isLoading, error };
-}
-
 export function usePurrPåDialogmelding(): {
   purrPåDialogmelding: (dialogmeldingUuid: string, behandlingsreferanse: string) => Promise<{ ok: boolean }>;
   isLoading: boolean;

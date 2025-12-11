@@ -19,7 +19,6 @@ import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårs
 import { OppgitteFolkeregisterBarnVurdering } from 'components/barn/oppgittebarnvurdering/OppgitteFolkeregisterBarnVurdering';
 import { PlusIcon } from '@navikt/aksel-icons';
 import { SaksbehandlerOppgittBarnVurdering } from 'components/barn/oppgittebarnvurdering/SaksbehandlerOppgittBarnVurdering';
-import { isProd } from 'lib/utils/environment';
 
 interface Props {
   behandlingsversjon: number;
@@ -294,7 +293,7 @@ export const BarnetilleggVurdering = ({
                   ident={vurdering.ident}
                   fødselsdato={vurdering.fødselsdato}
                   navn={kapitaliserNavn(
-                    (vurdering.ident && behandlingPersonInfo?.info[vurdering.ident]) || vurdering.navn || 'Ukjent'
+                    vurdering.navn || (vurdering.ident && behandlingPersonInfo?.info[vurdering.ident]) || 'Ukjent'
                   )}
                   harOppgittFosterforelderRelasjon={vurdering.oppgittForelderRelasjon === 'FOSTERFORELDER'}
                   readOnly={formReadOnly}
@@ -305,54 +304,50 @@ export const BarnetilleggVurdering = ({
             })}
           </div>
         )}
-        {!isProd() && (
-          <>
-            <div className={'flex-row'}>
-              <Button
-                type="button"
-                className={'fit-content'}
-                size={'small'}
-                onClick={() => setVisLeggTilBarnModal(true)}
-                variant={'tertiary'}
-                icon={<PlusIcon aria-hidden />}
-                disabled={formReadOnly}
-              >
-                Legg til nytt barn
-              </Button>
-            </div>
-            {visLeggTilBarnModal && (
-              <LeggTilBarnModal
-                avbryt={() => setVisLeggTilBarnModal(false)}
-                åpne={true}
-                readOnly={formReadOnly}
-                alleBarn={[
-                  ...[
-                    ...(grunnlag.vurderteBarn ?? []),
-                    ...(grunnlag.barnSomTrengerVurdering ?? []),
-                    ...(grunnlag.saksbehandlerOppgitteBarn ?? []),
-                  ].map((barn: any) => ({
-                    ident: barn.ident?.identifikator ?? barn.ident ?? '',
-                    navn: barn.navn ?? '',
-                    fødselsdato: barn.fodselsDato ?? barn.fødselsdato ?? '',
-                  })),
-                  ...(saksbehandlerOppgitteBarnVurderinger?.map((barn) => ({
-                    ident: barn.ident ?? '',
-                    navn: barn.navn ?? '',
-                    fødselsdato: barn.fødselsdato ?? '',
-                  })) ?? []),
-                  ...(folkeregistrerteBarnVurderinger?.map((barn) => ({
-                    ident: barn.ident ?? '',
-                    navn: barn.navn ?? '',
-                    fødselsdato: barn.fødselsdato ?? '',
-                  })) ?? []),
-                ]}
-                onLagreNyttBarn={(nyttBarn) => {
-                  append({ ...nyttBarn, erSlettbar: true });
-                  setVisLeggTilBarnModal(false);
-                }}
-              />
-            )}
-          </>
+        <div className={'flex-row'}>
+          <Button
+            type="button"
+            className={'fit-content'}
+            size={'small'}
+            onClick={() => setVisLeggTilBarnModal(true)}
+            variant={'tertiary'}
+            icon={<PlusIcon aria-hidden />}
+            disabled={formReadOnly}
+          >
+            Legg til nytt barn
+          </Button>
+        </div>
+        {visLeggTilBarnModal && (
+          <LeggTilBarnModal
+            avbryt={() => setVisLeggTilBarnModal(false)}
+            åpne={true}
+            readOnly={formReadOnly}
+            alleBarn={[
+              ...[
+                ...(grunnlag.vurderteBarn ?? []),
+                ...(grunnlag.barnSomTrengerVurdering ?? []),
+                ...(grunnlag.saksbehandlerOppgitteBarn ?? []),
+              ].map((barn: any) => ({
+                ident: barn.ident?.identifikator ?? barn.ident ?? '',
+                navn: barn.navn ?? '',
+                fødselsdato: barn.fodselsDato ?? barn.fødselsdato ?? '',
+              })),
+              ...(saksbehandlerOppgitteBarnVurderinger?.map((barn) => ({
+                ident: barn.ident ?? '',
+                navn: barn.navn ?? '',
+                fødselsdato: barn.fødselsdato ?? '',
+              })) ?? []),
+              ...(folkeregistrerteBarnVurderinger?.map((barn) => ({
+                ident: barn.ident ?? '',
+                navn: barn.navn ?? '',
+                fødselsdato: barn.fødselsdato ?? '',
+              })) ?? []),
+            ]}
+            onLagreNyttBarn={(nyttBarn) => {
+              append({ ...nyttBarn, erSlettbar: true });
+              setVisLeggTilBarnModal(false);
+            }}
+          />
         )}
       </div>
     </VilkårskortMedFormOgMellomlagringNyVisning>
@@ -369,10 +364,10 @@ function mapVurderingToDraftFormFields(
   behandlingPersonInfo: BehandlingPersoninfo
 ): DraftFormFields {
   const vurderteBarn: BarneTilleggVurdering[] = vurderteBarnArray.map((barn) => {
-    const navn = barn.navn || barn.ident || 'Ukjent';
+    const navn = barn.navn;
     return {
       ident: barn.ident,
-      navn: barn.ident ? behandlingPersonInfo?.info[barn.ident] : navn,
+      navn: navn || (barn.ident ? behandlingPersonInfo?.info[barn.ident] : 'Ukjent'),
       oppgittForelderRelasjon: barn.oppgittForeldreRelasjon,
       fødselsdato: barn.fødselsdato,
       vurderinger: barn.vurderinger.map((value) => {
@@ -402,7 +397,7 @@ function mapVurderingToDraftFormFields(
       (vurdertBarn) => vurdertBarn.ident === barn.ident?.identifikator
     );
     return {
-      navn: behandlingPersonInfo?.info[barn.ident!.identifikator],
+      navn: barn.navn || behandlingPersonInfo?.info[barn.ident!.identifikator],
       fødselsdato: barn.fodselsDato,
       ident: barn.ident?.identifikator,
       forsørgerPeriode: barn.forsorgerPeriode,

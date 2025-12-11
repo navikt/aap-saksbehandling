@@ -4,6 +4,8 @@ import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 import { skalViseSteg, StegData } from 'lib/utils/steg';
 import { OvergangUfore } from 'components/behandlinger/sykdom/overgangufore/OvergangUfore';
+import { toggles } from 'lib/utils/toggles';
+import { OvergangUforePeriodisert } from 'components/behandlinger/sykdom/overgangufore/OvergangUforePeriodisert';
 
 interface Props {
   behandlingsReferanse: string;
@@ -26,7 +28,14 @@ export const OvergangUforeMedDataFetching = async ({ behandlingsReferanse, stegD
     return null;
   }
 
-  return (
+  return toggles.featurePeriodisertOvergangUføre ? (
+    <OvergangUforePeriodisert
+      grunnlag={grunnlag.data}
+      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+      behandlingVersjon={stegData.behandlingVersjon}
+      initialMellomlagretVurdering={initialMellomlagretVurdering}
+    />
+  ) : (
     <OvergangUfore
       grunnlag={grunnlag.data}
       readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}

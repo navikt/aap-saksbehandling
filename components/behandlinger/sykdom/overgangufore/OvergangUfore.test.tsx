@@ -17,12 +17,19 @@ beforeEach(() => {
 });
 
 const overgangUføregrunnlag: OvergangUforeGrunnlag = {
+  behøverVurderinger: [],
+  kanVurderes: [],
+  nyeVurderinger: [],
+  perioderSomIkkeErTilstrekkeligVurdert: [],
+  sisteVedtatteVurderinger: [],
   vurdering: {
     begrunnelse: 'Dette er min vurdering som er bekreftet',
     brukerRettPåAAP: true,
     brukerHarSøktUføretrygd: true,
     brukerHarFåttVedtakOmUføretrygd: 'NEI',
     vurdertAv: { ident: 'TESTER', dato: '2025-08-19' },
+    fom: '',
+    virkningsdato: '',
   },
   gjeldendeSykdsomsvurderinger: [],
   gjeldendeVedtatteVurderinger: [],

@@ -5,7 +5,7 @@ import { useConfigForm } from 'components/form/FormHook';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { MellomlagretVurdering, TrukketSøknadGrunnlag, TrukketSøknadVudering } from 'lib/types/types';
-import { Behovstype } from 'lib/utils/form';
+import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { FormEvent } from 'react';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
@@ -20,6 +20,7 @@ interface Props {
 
 interface FormFields {
   begrunnelse: string;
+  skalTrekkes?: string;
 }
 
 type DraftFormFields = Partial<FormFields>;
@@ -52,6 +53,13 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon, initialMel
         defaultValue: defaultValues.begrunnelse,
         rules: { required: 'Du må begrunne hvorfor søknaden skal trekkes' },
       },
+      skalTrekkes: {
+        type: 'radio',
+        label: 'Skal søknaden trekkes?',
+        options: JaEllerNeiOptions,
+        rules: { required: 'Du må velge om søknaden skal trekkes' },
+        defaultValue: defaultValues.skalTrekkes,
+      },
     },
     { readOnly: formReadOnly }
   );
@@ -64,6 +72,7 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon, initialMel
           behov: {
             behovstype: Behovstype.VURDER_TREKK_AV_SØKNAD_KODE,
             begrunnelse: data.begrunnelse,
+            skalTrekkes: data.skalTrekkes === JaEllerNei.Ja,
           },
           referanse: behandlingsReferanse,
         });
@@ -72,7 +81,6 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon, initialMel
     )(event);
   };
 
-  console.log('modus', visningModus);
   return (
     <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'Trekk søknad'}
@@ -94,6 +102,7 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon, initialMel
       visningActions={visningActions}
     >
       <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
+      <FormField form={form} formField={formFields.skalTrekkes} horizontalRadio />
     </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };
@@ -101,11 +110,13 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon, initialMel
 function mapVurderingToDraftFormFields(vurdering?: TrukketSøknadVudering): DraftFormFields {
   return {
     begrunnelse: vurdering?.begrunnelse,
+    skalTrekkes: getJaNeiEllerUndefined(vurdering?.skalTrekkes),
   };
 }
 
 function emptyDraftFormFields(): DraftFormFields {
   return {
     begrunnelse: '',
+    skalTrekkes: '',
   };
 }

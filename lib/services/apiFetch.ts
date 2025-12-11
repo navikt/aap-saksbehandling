@@ -73,7 +73,7 @@ const fetchWithRetry = async <ResponseType>(
       return await fetchWithRetry(url, options, retries - 1);
     }
 
-    logError(`For mange nettverksfeil (${options.method} ${url}): `, error);
+    logWarning(`For mange nettverksfeil (${options.method} ${url}): `, error);
     return {
       type: 'ERROR',
       apiException: { message: `Fikk ikke svar fra tjenesten. Prøv igjen.` },

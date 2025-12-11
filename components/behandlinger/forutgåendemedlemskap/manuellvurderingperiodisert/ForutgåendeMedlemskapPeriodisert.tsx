@@ -85,6 +85,7 @@ export const ForutgåendeMedlemskapPeriodisert = ({
       form,
       nyeVurderinger: data.vurderinger,
       grunnlag,
+      tidligsteDatoMåMatcheMedRettighetsperiode: false,
     });
     if (!erPerioderGyldige) {
       return;

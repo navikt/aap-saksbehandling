@@ -4,9 +4,8 @@ import { FormEvent, useState } from 'react';
 import styles from './InnhentDokumentasjonSkjema.module.css';
 import { BestillLegeerklæring } from 'lib/types/types';
 import { useBehandlingsReferanse, useSaksnummer } from 'hooks/saksbehandling/BehandlingHook';
-import { clientSøkPåBehandler } from 'lib/clientApi';
+import { clientBestillDialogmelding, clientSøkPåBehandler } from 'lib/clientApi';
 import { Forhåndsvisning } from 'components/innhentdokumentasjon/innhentdokumentasjonskjema/Forhåndsvisning';
-import { useBestillDialogmelding } from 'hooks/FetchHook';
 import { AsyncComboSearch } from 'components/form/asynccombosearch/AsyncComboSearch';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
@@ -48,12 +47,11 @@ export const formaterBehandlernavn = (behandler: Behandler): string => {
 
 export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
   const [visModal, setVisModal] = useState<boolean>(false);
-  const [bestillingsfeil, setBestillingsfeil] = useState<string | boolean>();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>();
   const [defaultOptions, setDefaultOptions] = useState<ValuePair[]>([]);
   const saksnummer = useSaksnummer();
   const behandlingsreferanse = useBehandlingsReferanse();
-
-  const { bestillDialogmelding, isLoading, error } = useBestillDialogmelding();
 
   const { form, formFields } = useConfigForm<FormFields>({
     behandler: {
@@ -92,13 +90,16 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
         body.behandlerHprNr === undefined || body.behandlerHprNr === null || body.behandlerHprNr === 'null';
 
       if (manglerHprNr) {
-        setBestillingsfeil(': Mangler HPR-nr på behandler');
+        setError(': Mangler HPR-nr på behandler');
         return;
       }
-      await bestillDialogmelding(body);
+      setIsLoading(true);
+      const result = await clientBestillDialogmelding(body).finally(() => setIsLoading(false));
 
-      if (error) {
-        setBestillingsfeil(true);
+      console.log(result);
+
+      if (isError(result)) {
+        setError(result.apiException.message);
       } else {
         onSuccess();
       }
@@ -165,10 +166,10 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
             Avbryt
           </Button>
         </div>
-        {bestillingsfeil && (
+        {error && (
           <div className={styles.rad}>
             <Alert variant="error" size={'small'}>
-              Noe gikk galt ved bestilling av dialogmelding{bestillingsfeil}
+              {error || 'Noe gikk galt ved bestilling av dialogmelding'}
             </Alert>
           </div>
         )}

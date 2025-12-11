@@ -13,5 +13,8 @@ export const toggles = {
   featureManglendePGIOgEøsInntekter: !isProd(),
   featurePeriodiserteValgfrieKort: !isProd(),
   featureVisArenahistorikkKnapp: !isProd(),
+  featureBistandPeriodisert: !isProd(),
   featurePeriodisertSPE: !isProd(),
+  featurePeriodisertOvergangUføre: !isProd(),
+  featureMidlertidigStansInntektsbortfall: !isProd(),
 };

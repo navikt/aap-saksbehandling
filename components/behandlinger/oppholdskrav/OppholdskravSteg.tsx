@@ -85,6 +85,7 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
       form,
       nyeVurderinger: data.vurderinger,
       grunnlag,
+      tidligsteDatoMåMatcheMedRettighetsperiode: false,
     });
     if (!erPerioderGyldige) {
       return;

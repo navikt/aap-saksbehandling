@@ -35,7 +35,6 @@ export const OvergangArbeidMedDataFetching = async ({ behandlingsReferanse, steg
       readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       behandlingVersjon={stegData.behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
-      typeBehandling={stegData.typeBehandling}
     />
   );
 };
