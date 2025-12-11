@@ -23,7 +23,7 @@ import { mapBistandVurderingFormTilDto } from 'components/behandlinger/sykdom/bi
 interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
-  grunnlag?: BistandsGrunnlag;
+  grunnlag: BistandsGrunnlag;
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 export interface BistandForm {
@@ -167,12 +167,15 @@ export const BistandsbehovPeriodisert = ({
 
   function mapVurderingerToBistandForm(grunnlag?: BistandsGrunnlag): BistandForm {
     if (!grunnlag || (grunnlag.nyeVurderinger.length === 0 && grunnlag.sisteVedtatteVurderinger.length === 0)) {
+      const førsteFraDatoSomBehøverVurdering = grunnlag?.behøverVurderinger[0]?.fom;
       // Vi har ingen tidligere vurderinger eller nye vurderinger, legg til en tom-default-periode
       return {
         vurderinger: [
           {
             ...emptyBistandVurderingForm(),
-            fraDato: formaterDatoForFrontend(new Date(grunnlag?.behøverVurderinger[0]?.fom!)),
+            ...(førsteFraDatoSomBehøverVurdering
+              ? { fraDato: formaterDatoForFrontend(new Date(førsteFraDatoSomBehøverVurdering)) }
+              : {}),
           },
         ],
       };
