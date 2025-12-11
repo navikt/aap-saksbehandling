@@ -71,7 +71,7 @@ const erSkadeSykdomEllerLyteVesentligdelLabel =
   'Er sykdom, skade eller lyte vesentlig medvirkende til at arbeidsevnen er nedsatt?';
 const erNedsettelseIArbeidsevneAvEnVissVarighetLabel = 'Er den nedsatte arbeidsevnen av en viss varighet?';
 
-export const Sykdomsvurdering = ({
+export const SykdomsvurderingPeriodisert = ({
   grunnlag,
   behandlingVersjon,
   readOnly,

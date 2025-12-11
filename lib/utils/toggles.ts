@@ -17,4 +17,5 @@ export const toggles = {
   featurePeriodisertSPE: !isProd(),
   featurePeriodisertOvergangUføre: !isProd(),
   featureMidlertidigStansInntektsbortfall: !isProd(),
+  featureNedsattArbeidsevnePeriodisert: !isProd(),
 };
