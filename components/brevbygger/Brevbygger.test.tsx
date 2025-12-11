@@ -9,6 +9,7 @@ import {
 import { render, screen, within } from 'lib/test/CustomRender';
 import { BrevdataDto } from 'lib/types/types';
 import { describe, test, expect } from 'vitest';
+import userEvent from '@testing-library/user-event';
 
 const brevdata: BrevdataDto = {
   betingetTekst: [],
@@ -18,6 +19,8 @@ const brevdata: BrevdataDto = {
   periodetekster: [],
   valg: [],
 };
+
+const user = userEvent.setup();
 
 describe('Delmalvelger', () => {
   const brevmal: BrevmalType = {
@@ -121,5 +124,19 @@ describe('Delmaler med valg', () => {
     );
     expect(screen.getByRole('option', { name: 'Alternativ 1' })).toBeInTheDocument();
     expect(screen.getByRole('option', { name: 'Alternativ 2' })).toBeInTheDocument();
+    expect(screen.getByRole('option', { name: 'Fritekst' })).toBeInTheDocument();
+  });
+
+  test('viser fritekstfelt når fritekst er valgt', async () => {
+    render(
+      <Brevbygger
+        referanse={'1234'}
+        brevmal={JSON.stringify(brevmal)}
+        brevdata={{ ...brevdata, delmaler: [{ id: valgfriDelmalMedAlternativer.delmal._id }] }}
+      />
+    );
+
+    await user.selectOptions(screen.getByRole('combobox', { name: 'Beskrivelse av alternativ' }), ['alt3-key']);
+    expect(screen.getByRole('textbox', { name: 'Fritekst' })).toBeVisible();
   });
 });

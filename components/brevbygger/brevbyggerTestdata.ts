@@ -105,6 +105,11 @@ export const valgfriDelmalMedAlternativer: DelmalReferanse = {
                 ],
               },
             },
+            {
+              _key: 'alt3-key',
+              _type: 'fritekst',
+              fritekst: '',
+            },
           ],
         },
       },

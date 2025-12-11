@@ -1,5 +1,5 @@
 import { AlternativFormField, DelmalFormField, ValgFormField } from 'components/brevbygger/Brevbygger';
-import { BrevmalType, DelmalReferanse, ValgType } from 'components/brevbygger/brevmodellTypes';
+import { BrevmalType, DelmalReferanse, ValgRef, ValgType } from 'components/brevbygger/brevmodellTypes';
 import { BrevdataDto, DelmalDto, ValgDto } from 'lib/types/types';
 
 export function erDelmalValgt(delmalId: string, valgteDelmaler?: DelmalDto[]) {
@@ -31,7 +31,6 @@ function mapValg(delmal: DelmalReferanse, brevdata?: BrevdataDto): ValgFormField
     .filter((teksteditor) => teksteditor._type === 'valgRef')
     .map((teksteditor) => ({
       noekkel: teksteditor.valg._id,
-      key: teksteditor._key,
       alternativer: mapAlternativer(teksteditor.valg),
       valgtAlternativ: erValgValgt(teksteditor.valg._id, teksteditor._key, brevdata?.valg)
         ? `${teksteditor.valg._id};${teksteditor._key}`
@@ -48,12 +47,14 @@ function mapAlternativer(valg: ValgType): AlternativFormField[] {
   });
 }
 
-export function finnParentIdForValgtAlternativ(valgKey: string, brevmal: BrevmalType): string {
-  const valgRefs = brevmal.delmaler.flatMap((delmal) =>
+function finnAlleValgRefs(brevmal: BrevmalType): ValgRef[] {
+  return brevmal.delmaler.flatMap((delmal) =>
     delmal.delmal.teksteditor.filter((teksteditor) => teksteditor._type === 'valgRef')
   );
+}
 
-  const parentId = valgRefs
+export function finnParentIdForValgtAlternativ(valgKey: string, brevmal: BrevmalType): string {
+  const parentId = finnAlleValgRefs(brevmal)
     .map((valg) => {
       const valget = valg.valg.alternativer.find((alternativ) => alternativ._key === valgKey);
       if (!valget) {
@@ -80,21 +81,13 @@ export function delmalErObligatorisk(noekkel: string, brevmal: BrevmalType): boo
 }
 
 export function finnBeskrivelseForValg(noekkel: string, brevmal: BrevmalType): string {
-  const valgRefs = brevmal.delmaler.flatMap((delmal) =>
-    delmal.delmal.teksteditor.filter((teksteditor) => teksteditor._type === 'valgRef')
-  );
-
-  const beskrivelse = valgRefs.find((valg) => valg.valg._id === noekkel)?.valg.beskrivelse;
+  const beskrivelse = finnAlleValgRefs(brevmal).find((valg) => valg.valg._id === noekkel)?.valg.beskrivelse;
 
   return beskrivelse || `Fant ikke beskrivelse for valg med id ${noekkel}`;
 }
 
 export function finnBeskrivelseForAlternativ(noekkel: string, brevmal: BrevmalType): string {
-  const valgRefs = brevmal.delmaler.flatMap((delmal) =>
-    delmal.delmal.teksteditor.filter((teksteditor) => teksteditor._type === 'valgRef')
-  );
-
-  const beskrivelse = valgRefs
+  const beskrivelse = finnAlleValgRefs(brevmal)
     .flatMap((valg) => valg.valg.alternativer.find((alternativ) => alternativ._key === noekkel))
     .filter((v) => !!v)
     .map((valg) => {
@@ -106,4 +99,12 @@ export function finnBeskrivelseForAlternativ(noekkel: string, brevmal: BrevmalTy
     .at(0);
 
   return beskrivelse || `Fant ikke beskrivelse for alternativ ${noekkel}`;
+}
+
+export function erValgtIdFritekst(noekkel: string, brevmal: BrevmalType): boolean {
+  return (
+    finnAlleValgRefs(brevmal)
+      .flatMap((valg) => valg.valg.alternativer.find((alternativ) => noekkel === alternativ._key))
+      .at(0)?._type === 'fritekst'
+  );
 }

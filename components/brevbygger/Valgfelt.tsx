@@ -1,18 +1,24 @@
 import { VStack } from '@navikt/ds-react';
 import { BrevdataFormFields, ValgFormField } from 'components/brevbygger/Brevbygger';
-import { finnBeskrivelseForAlternativ, finnBeskrivelseForValg } from 'components/brevbygger/brevmalMapping';
+import {
+  erValgtIdFritekst,
+  finnBeskrivelseForAlternativ,
+  finnBeskrivelseForValg,
+} from 'components/brevbygger/brevmalMapping';
 import { BrevmalType } from 'components/brevbygger/brevmodellTypes';
 import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
-import { Control } from 'react-hook-form';
+import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
+import { Control, UseFormWatch } from 'react-hook-form';
 
 interface ValgfeltProps {
   control: Control<BrevdataFormFields>;
   delmalIndex: number;
   valg: ValgFormField[];
   brevmal: BrevmalType;
+  watch: UseFormWatch<BrevdataFormFields>;
 }
 
-export const Valgfelt = ({ control, delmalIndex, valg, brevmal }: ValgfeltProps) => {
+export const Valgfelt = ({ control, delmalIndex, valg, brevmal, watch }: ValgfeltProps) => {
   return (
     <VStack gap="2">
       {valg.map((v, index) => {
@@ -22,20 +28,33 @@ export const Valgfelt = ({ control, delmalIndex, valg, brevmal }: ValgfeltProps)
         }));
 
         alternativer.unshift({ value: '', label: '' });
+
+        const valgtAlternativ = watch(`delmaler.${delmalIndex}.valg.${index}.valgtAlternativ`);
         return (
-          <SelectWrapper
-            control={control}
-            name={`delmaler.${delmalIndex}.valg.${index}.valgtAlternativ`}
-            label={finnBeskrivelseForValg(v.noekkel, brevmal)}
-            rules={{ required: 'Du må velge et alternativ' }}
-            key={v.noekkel}
-          >
-            {alternativer.map((alternativ) => (
-              <option value={alternativ.value} key={alternativ.value}>
-                {alternativ.label}
-              </option>
-            ))}
-          </SelectWrapper>
+          <>
+            <SelectWrapper
+              control={control}
+              name={`delmaler.${delmalIndex}.valg.${index}.valgtAlternativ`}
+              label={finnBeskrivelseForValg(v.noekkel, brevmal)}
+              rules={{ required: 'Du må velge et alternativ' }}
+              key={v.noekkel}
+            >
+              {alternativer.map((alternativ) => (
+                <option value={alternativ.value} key={alternativ.value}>
+                  {alternativ.label}
+                </option>
+              ))}
+            </SelectWrapper>
+            {valgtAlternativ && erValgtIdFritekst(valgtAlternativ, brevmal) && (
+              <>
+                <TextAreaWrapper
+                  control={control}
+                  name={`delmaler.${delmalIndex}.valg.${index}.fritekst`}
+                  label="Fritekst"
+                />
+              </>
+            )}
+          </>
         );
       })}
     </VStack>
