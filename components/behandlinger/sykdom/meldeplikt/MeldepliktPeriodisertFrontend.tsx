@@ -96,7 +96,10 @@ export const MeldepliktPeriodisertFrontend = ({
             })),
           },
         },
-        () => nullstillMellomlagretVurdering()
+        () => {
+          nullstillMellomlagretVurdering();
+          visningActions.onBekreftClick();
+        }
       );
     })(event);
   };

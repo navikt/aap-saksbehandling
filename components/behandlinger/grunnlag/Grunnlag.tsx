@@ -9,6 +9,7 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { isError } from 'lib/utils/api';
 import { FastsettManuellInntektMedDataFetching } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/FastsettManuellInntektMedDataFetching';
 import { getStegData } from 'lib/utils/steg';
+import { FastsettManuellInntektMedDataFetchingNy } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/FastsettManuellInntektMedDataFetchingNy';
 import { toggles } from 'lib/utils/toggles';
 import { Inntektsbortfall } from './inntektsbortfall/Inntektsbortfall';
 
@@ -58,7 +59,6 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
           />
         </StegSuspense>
       )}
-
       {fastsettYrkesskadeInntekt.skalViseSteg && (
         <StegSuspense>
           <YrkesskadeGrunnlagBeregningMedDataFetching
@@ -67,8 +67,7 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
           />
         </StegSuspense>
       )}
-
-      {vurderManglendeLigningSteg.skalViseSteg && (
+      {!toggles.featureManglendePGIOgEøsInntekter && vurderManglendeLigningSteg.skalViseSteg && (
         <StegSuspense>
           <FastsettManuellInntektMedDataFetching
             behandlingsreferanse={behandlingsReferanse}
@@ -76,7 +75,14 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
           />
         </StegSuspense>
       )}
-
+      {toggles.featureManglendePGIOgEøsInntekter && (
+        <StegSuspense>
+          <FastsettManuellInntektMedDataFetchingNy
+            behandlingsreferanse={behandlingsReferanse}
+            stegData={vurderManglendeLigningSteg}
+          />
+        </StegSuspense>
+      )}
       {beregningsgrunnlag.data && (
         <StegSuspense>
           <VisBeregning grunnlag={beregningsgrunnlag.data} />
