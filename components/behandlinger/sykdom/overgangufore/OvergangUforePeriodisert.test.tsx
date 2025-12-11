@@ -272,6 +272,8 @@ describe('Førstegangsbehandling', () => {
   it('Har brukeren rett på AAP under behandling av krav om uføretrygd etter § 11-18?', async () => {
     render(<OvergangUforePeriodisert grunnlag={overganguforeGrunnlag} readOnly={false} behandlingVersjon={0} />);
     await velgJa(finnGruppeForSoktOmUforetrygd());
+    const fåttVedtak = finnGruppeForVedtakOmUforetrygd();
+    await user.click(within(fåttVedtak).getByRole('radio', { name: 'Nei' }));
     expect(finnGruppeForRettPåAAP()).toBeVisible();
   });
 

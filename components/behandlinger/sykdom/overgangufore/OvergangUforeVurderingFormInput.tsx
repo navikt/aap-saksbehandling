@@ -113,7 +113,7 @@ export const OvergangUforeVurderingFormInput = ({ index, form, readonly, onRemov
           uføretrygdvedtaket.
         </Alert>
       )}
-      {brukerHarSoktOmUforetrygd && form.watch(`vurderinger.${index}.brukerHarFåttVedtakOmUføretrygd`) !== 'NEI' && (
+      {brukerHarSoktOmUforetrygd && form.watch(`vurderinger.${index}.brukerHarFåttVedtakOmUføretrygd`) === 'NEI' && (
         <RadioGroupJaNei
           name={`vurderinger.${index}.brukerRettPåAAP`}
           control={form.control}
