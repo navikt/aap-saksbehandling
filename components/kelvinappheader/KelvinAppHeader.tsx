@@ -157,5 +157,5 @@ export const KelvinAppHeader = ({
 };
 
 const XMasSpacer = () => (
-  <span className="navds-stack__spacer" style={{ backgroundImage: 'url(/xmas-lights.svg)', opacity: 1 }} />
+  <span className="navds-stack__spacer" style={{ backgroundImage: 'url(/xmas-lights.svg)', opacity: 0.75 }} />
 );
