@@ -12,7 +12,7 @@ import {
 import { BrevmalType } from 'components/brevbygger/brevmodellTypes';
 import { BrevdataDto } from 'lib/types/types';
 import { ForhåndsvisBrev } from 'components/brevbygger/ForhåndsvisBrev';
-import { clientOppdaterBrevdata } from 'lib/clientApi';
+import { clientOppdaterBrevdata, clientOppdaterBrevmal } from 'lib/clientApi';
 
 export interface AlternativFormField {
   verdi: string;
@@ -94,6 +94,10 @@ export const Brevbygger = ({ referanse, brevmal, brevdata }: BrevbyggerProps) =>
     });
   };
 
+  const oppdaterBrevmal = async () => {
+    await clientOppdaterBrevmal(referanse);
+  };
+
   return (
     <HGrid columns={2} gap={'2'} minWidth={'1280px'}>
       <Box>
@@ -113,6 +117,9 @@ export const Brevbygger = ({ referanse, brevmal, brevdata }: BrevbyggerProps) =>
             />
           ))}
           <Button>Oppdater brevdata</Button>
+        </form>
+        <form onSubmit={oppdaterBrevmal}>
+          <Button>Oppdater brevmal</Button>
         </form>
       </Box>
       <ForhåndsvisBrev referanse={referanse} />
