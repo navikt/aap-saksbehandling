@@ -7,6 +7,7 @@ import createFetchMock from 'vitest-fetch-mock';
 import { FetchResponse } from 'lib/utils/api';
 import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 import { BistandsbehovPeriodisert } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovPeriodisert';
+import { BistandFormOld } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovMellomlagringParser';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
@@ -223,6 +224,40 @@ describe('mellomlagring i bistandsbehov', () => {
     });
 
     expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er mellomlagret');
+  });
+
+  it('Skal støtte å bruke gammelt format på mellomlagret data', () => {
+    const dataGammel: Partial<BistandFormOld> = {
+      begrunnelse: 'Dette er en gammel mellomlagret begrunnelse',
+      erBehovForAktivBehandling: 'ja',
+      erBehovForArbeidsrettetTiltak: 'ja',
+      erBehovForAnnenOppfølging: 'ja',
+    };
+
+    const mellomlagringGammel: MellomlagretVurderingResponse = {
+      mellomlagretVurdering: {
+        avklaringsbehovkode: '5006',
+        behandlingId: { id: 1 },
+        data: JSON.stringify(dataGammel),
+        vurdertDato: '2025-08-21T12:00:00.000',
+        vurdertAv: 'Jan T. Loven',
+      },
+    };
+
+    render(
+      <BistandsbehovPeriodisert
+        behandlingVersjon={0}
+        readOnly={false}
+        grunnlag={grunnlagTomt}
+        initialMellomlagretVurdering={mellomlagringGammel.mellomlagretVurdering}
+      />
+    );
+
+    const begrunnelseFelt = screen.getByRole('textbox', {
+      name: /vilkårsvurdering/i,
+    });
+
+    expect(begrunnelseFelt).toHaveValue(dataGammel.begrunnelse);
   });
 
   it('Skal bruke bekreftet vurdering fra grunnlag som defaultValue i skjema dersom mellomlagring ikke finnes', () => {
