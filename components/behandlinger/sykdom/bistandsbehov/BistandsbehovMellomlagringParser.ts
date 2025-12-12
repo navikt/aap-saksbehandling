@@ -1,7 +1,7 @@
 import { BistandForm } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovPeriodisert';
 import { JaEllerNei } from 'lib/utils/form';
 
-interface BistandFormOld {
+export interface BistandFormOld {
   begrunnelse: string;
   erBehovForAktivBehandling: string;
   erBehovForArbeidsrettetTiltak: string;

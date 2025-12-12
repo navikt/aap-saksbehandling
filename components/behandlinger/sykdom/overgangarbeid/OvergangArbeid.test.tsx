@@ -6,6 +6,7 @@ import { FetchResponse } from 'lib/utils/api';
 import createFetchMock from 'vitest-fetch-mock';
 import { userEvent } from '@testing-library/user-event';
 import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
+import { OvergangArbeidFormOld } from 'components/behandlinger/sykdom/overgangarbeid/OvergangArbeid-types';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
@@ -114,6 +115,39 @@ describe('mellomlagring i overgang arbeid', () => {
     });
 
     expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er mellomlagret');
+  });
+
+  it('Skal støtte å migrere mellomlagret vurdering på gammelt format', () => {
+    const dataGammel: OvergangArbeidFormOld = {
+      begrunnelse: 'dette en min gammel vurdering som er mellomlagret',
+      brukerRettPåAAP: 'Ja',
+      fom: '01.01.2026',
+    };
+
+    const mellomlagringGammel: MellomlagretVurderingResponse = {
+      mellomlagretVurdering: {
+        avklaringsbehovkode: '5006',
+        behandlingId: { id: 1 },
+        data: JSON.stringify(dataGammel),
+        vurdertDato: '2025-08-21T12:00:00.000',
+        vurdertAv: 'Jan T. Loven',
+      },
+    };
+
+    render(
+      <OvergangArbeid
+        behandlingVersjon={0}
+        readOnly={false}
+        grunnlag={overgangArbeidgrunnlag}
+        initialMellomlagretVurdering={mellomlagringGammel.mellomlagretVurdering}
+      />
+    );
+
+    const begrunnelseFelt = screen.getByRole('textbox', {
+      name: /vilkårsvurdering/i,
+    });
+
+    expect(begrunnelseFelt).toHaveValue(dataGammel.begrunnelse);
   });
 
   it('Skal bruke bekreftet vurdering fra grunnlag som defaultValue i skjema dersom mellomlagring ikke finnes', () => {
