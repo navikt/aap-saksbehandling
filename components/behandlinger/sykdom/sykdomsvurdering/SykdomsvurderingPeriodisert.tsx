@@ -20,6 +20,7 @@ import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib
 import { SykdomsvurderingFormInput } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingFormInput';
 import { TidligereSykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/TidligereSykdomsvurdering';
 import mapTilPeriodisertVurdering from 'components/behandlinger/sykdom/sykdomsvurdering/periodisertVurderingMapper';
+import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMellomlagringParser';
 
 export interface Sykdomsvurderinger {
   vurderinger: Array<SykdomsvurderingForm>;
@@ -78,8 +79,8 @@ export const SykdomsvurderingPeriodisert = ({
     mellomlagretVurdering
   );
 
-  const defaultValues: Sykdomsvurderinger = initialMellomlagretVurdering
-    ? JSON.parse(initialMellomlagretVurdering.data)
+  const defaultValues: Sykdomsvurderinger = mellomlagretVurdering
+    ? parseOgMigrerMellomlagretData(mellomlagretVurdering.data)
     : mapGrunnlagTilDefaultvalues(grunnlag);
 
   const form = useForm<Sykdomsvurderinger>({ defaultValues });
