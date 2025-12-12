@@ -2,6 +2,12 @@ export type OvergangArbeidForm = {
   vurderinger: OvergangArbeidVurderingForm[];
 };
 
+export type OvergangArbeidFormOld = {
+  begrunnelse: string;
+  brukerRettPåAAP?: string;
+  fom: string;
+};
+
 export type OvergangArbeidVurderingForm = {
   begrunnelse: string;
   brukerRettPåAAP: string;

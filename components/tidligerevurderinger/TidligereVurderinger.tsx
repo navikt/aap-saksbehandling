@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import { Label, BodyShort, Detail, VStack, ExpansionCard, Chips } from '@navikt/ds-react';
 import styles from './TidligereVurderinger.module.css';
 import { formaterDatoForFrontend, sorterEtterNyesteDato } from 'lib/utils/date';
@@ -15,6 +15,7 @@ interface Props {
   getVurdertDato?: (vurdering: any) => string;
   getFomDato?: (vurdering: any) => string;
   grupperPåOpprettetDato?: boolean;
+  customElement?: ReactNode;
 }
 
 interface TidligereVurdering {
@@ -36,6 +37,7 @@ export function TidligereVurderinger({
   getVurdertDato = (v: any) => v.vurdertAv.dato,
   getFomDato = (v: any) => v.vurderingenGjelderFra ?? v.vurdertAv?.dato,
   grupperPåOpprettetDato = false,
+  customElement,
 }: Props) {
   const finnSluttdato = (index: number, arr: any[]) => {
     if (arr.length <= 1 || index === 0) return null;
@@ -131,12 +133,14 @@ export function TidligereVurderinger({
 
           <div className={styles.vurderingDetail}>
             <div className={styles.fields}>
-              {selected.felter.map((felt, i) => (
-                <VStack key={i}>
-                  <Label size="small">{felt.label}</Label>
-                  <BodyShort size="small">{felt.value}</BodyShort>
-                </VStack>
-              ))}
+              {customElement
+                ? customElement
+                : selected.felter.map((felt, i) => (
+                    <VStack key={i}>
+                      <Label size="small">{felt.label}</Label>
+                      <BodyShort size="small">{felt.value}</BodyShort>
+                    </VStack>
+                  ))}
             </div>
             <Detail className={styles.footer} align="end">
               {`Vurdert av ${selected.vurdertAvIdent}${

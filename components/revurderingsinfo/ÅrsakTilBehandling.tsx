@@ -1,7 +1,7 @@
 'use client';
 
 import { BodyLong, Box, Detail, ExpansionCard, HStack, Label, VStack } from '@navikt/ds-react';
-import { VurderingsbehovOgÅrsak } from 'lib/types/types';
+import { TypeBehandling, VurderingsbehovOgÅrsak } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { mapTilÅrsakTilOpprettelseTilTekst } from 'lib/utils/oversettelser';
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
@@ -9,10 +9,11 @@ import { TasklistStartIcon } from '@navikt/aksel-icons';
 
 interface Props {
   vurderingsbehovOgÅrsaker: VurderingsbehovOgÅrsak[];
+  behandlingType: TypeBehandling;
 }
 
-export const ÅrsakTilRevurdering = ({ vurderingsbehovOgÅrsaker }: Props) => {
-  const tittel = 'Årsak til revurdering';
+export const ÅrsakTilBehandling = ({ vurderingsbehovOgÅrsaker, behandlingType }: Props) => {
+  const tittel = behandlingType === 'Revurdering' ? 'Årsak til revurdering' : 'Årsak til opprettelse';
 
   return (
     <ExpansionCard

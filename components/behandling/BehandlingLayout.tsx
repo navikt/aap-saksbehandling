@@ -25,7 +25,7 @@ import { hentOppgave } from 'lib/services/oppgaveservice/oppgaveservice';
 import { StegGruppe } from 'lib/types/types';
 import { SakContextProvider } from 'context/saksbehandling/SakContext';
 import { KlageBehandlingInfo } from 'components/behandlingsinfo/KlageBehandlingInfo';
-import { ÅrsakTilRevurdering } from 'components/revurderingsinfo/ÅrsakTilRevurdering';
+import { ÅrsakTilBehandling } from 'components/revurderingsinfo/ÅrsakTilBehandling';
 
 interface Props {
   saksId: string;
@@ -79,8 +79,12 @@ export const BehandlingLayout = async ({ saksId, behandlingsReferanse, children 
   const visTotrinnsvurdering =
     flytResponse.data.visning.visBeslutterKort || flytResponse.data.visning.visKvalitetssikringKort;
 
+  const visÅrsakTilAktivitetspliktBehandling =
+    ['Aktivitetsplikt', 'Aktivitetsplikt11_9'].includes(behandling.data.type) &&
+    behandling.data.vurderingsbehovOgÅrsaker?.some((e) => e.årsak === 'OMGJØRING_ETTER_KLAGE');
   const visÅrsakTilRevurdering =
     behandling.data.type === 'Revurdering' && behandling.data.vurderingsbehovOgÅrsaker.length > 0;
+  const visÅrsakTilBehandling = visÅrsakTilAktivitetspliktBehandling || visÅrsakTilRevurdering;
 
   return (
     <SWRConfig
@@ -120,8 +124,11 @@ export const BehandlingLayout = async ({ saksId, behandlingsReferanse, children 
               }}
             >
               <VStack gap={'5'}>
-                {visÅrsakTilRevurdering && (
-                  <ÅrsakTilRevurdering vurderingsbehovOgÅrsaker={behandling.data.vurderingsbehovOgÅrsaker} />
+                {visÅrsakTilBehandling && (
+                  <ÅrsakTilBehandling
+                    behandlingType={behandling.data.type}
+                    vurderingsbehovOgÅrsaker={behandling.data.vurderingsbehovOgÅrsaker}
+                  />
                 )}
                 {/*Vi må ha children inne i en div for å unngå layoutshift*/}
                 <div style={{ width: '100%' }}>{children}</div>
