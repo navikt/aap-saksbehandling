@@ -170,13 +170,6 @@ export const SykdomsvurderingPeriodisert = ({
           key={vurdering.id}
           fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
           oppfylt={erVurderingOppfylt(form.watch(`vurderinger.${index}`))}
-          // TODO:
-          // form.watch(`vurderinger.${index}.brukerRettPåAAP`)
-          //   ? form.watch(`vurderinger.${index}.brukerRettPåAAP`) === JaEllerNei.Ja
-          //   : form.watch(`vurderinger.${index}.brukerHarSøktUføretrygd`) === JaEllerNei.Nei ||
-          //       form.watch(`vurderinger.${index}.brukerHarFåttVedtakOmUføretrygd`) === 'NEI'
-          //     ? false
-          //     : undefined
           nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
           isLast={index === nyeVurderingerFields.length - 1}
           vurdertAv={undefined} // TODO:
@@ -200,10 +193,14 @@ export const SykdomsvurderingPeriodisert = ({
   function mapGrunnlagTilDefaultvalues(grunnlag: SykdomsGrunnlag): Sykdomsvurderinger {
     if (grunnlag == null || (grunnlag.nyeVurderinger.length === 0 && grunnlag.sisteVedtatteVurderinger.length === 0)) {
       // Vi har ingen tidligere vurderinger eller nye vurderinger, legg til en tom-default-periode
+      const førsteFraDatoSomKanVurderes = grunnlag.kanVurderes[0].fom
+        ? { fraDato: new Dato(grunnlag.kanVurderes[0].fom).formaterForFrontend() }
+        : {};
       return {
         vurderinger: [
           {
             ...emptySykdomsvurderingForm(),
+            ...førsteFraDatoSomKanVurderes,
           },
         ],
       };

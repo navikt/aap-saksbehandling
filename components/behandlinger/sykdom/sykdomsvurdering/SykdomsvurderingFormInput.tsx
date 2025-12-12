@@ -1,7 +1,6 @@
 'use client';
 
 import { Button, HStack, Link, VStack } from '@navikt/ds-react';
-import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { erDatoIPeriode, validerDato } from 'lib/validation/dateValidation';
 import { parse, startOfDay } from 'date-fns';
 import { stringToDate } from 'lib/utils/date';
@@ -17,6 +16,7 @@ import { Sak } from 'context/saksbehandling/SakContext';
 import { SykdomsvurderingFørstegangsbehandling } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingFørstegangsbehandling';
 import { SykdomsvurderingRevurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingRevurdering';
 import { SykdomsvurderingDiagnosesøk } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingDiagnosesøk';
+import { DateInputWrapperOnBlur } from 'components/form/dateinputwrapper/DateInputWrapperOnBlur';
 
 interface Props {
   index: number;
@@ -71,8 +71,8 @@ export const SykdomsvurderingFormInput = ({
         Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-5 (lovdata.no)
       </Link>
       <HStack justify={'space-between'}>
-        <DateInputWrapper
-          name={`vurderinger.${index}.vurderingenGjelderFra`}
+        <DateInputWrapperOnBlur
+          name={`vurderinger.${index}.fraDato`}
           label="Vurderingen gjelder fra"
           control={form.control}
           rules={{
