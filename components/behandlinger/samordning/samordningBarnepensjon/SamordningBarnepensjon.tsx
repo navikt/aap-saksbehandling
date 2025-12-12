@@ -27,7 +27,7 @@ export const SamordningBarnepensjon = ({ fødselsdato }: Props) => {
   if (!erYngereEnn23) return null;
 
   return (
-    <VilkårsKort heading="§ 11-27 Samordning barnepensjon (valgfritt)" steg="SAMORDNING_BARNEPENSJON">
+    <VilkårsKort heading="§ 11-27 Samordning barnepensjon (valgfritt)" steg="UDEFINERT">
       {
         <VStack gap={'6'}>
           <BodyLong>
