@@ -13,19 +13,8 @@ function mapFromOldFormToNewForm(oldData: SykdomsvurderingFormFields): Sykdomsvu
   return {
     vurderinger: [
       {
+        ...oldData,
         fraDato: oldData.vurderingenGjelderFra,
-        begrunnelse: oldData.begrunnelse,
-        harSkadeSykdomEllerLyte: oldData.harSkadeSykdomEllerLyte,
-        erArbeidsevnenNedsatt: oldData.erArbeidsevnenNedsatt,
-        erNedsettelseIArbeidsevneMerEnnHalvparten: oldData.erNedsettelseIArbeidsevneMerEnnHalvparten,
-        erSkadeSykdomEllerLyteVesentligdel: oldData.erSkadeSykdomEllerLyteVesentligdel,
-        kodeverk: oldData.kodeverk,
-        hoveddiagnose: oldData.hoveddiagnose,
-        bidiagnose: oldData.bidiagnose,
-        erNedsettelseIArbeidsevneAvEnVissVarighet: oldData.erNedsettelseIArbeidsevneAvEnVissVarighet,
-        erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense: oldData.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense,
-        erNedsettelseIArbeidsevneMerEnnFørtiProsent: oldData.erNedsettelseIArbeidsevneMerEnnFørtiProsent,
-        yrkesskadeBegrunnelse: oldData.yrkesskadeBegrunnelse,
       },
     ],
   };
