@@ -20,6 +20,7 @@ import { LovOgMedlemskapVurderingForm } from 'components/behandlinger/lovvalg/lo
 import { BistandsbehovTidligereVurdering } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovTidligereVurdering';
 import { mapBistandVurderingFormTilDto } from 'components/behandlinger/sykdom/bistandsbehov/bistandsbehov-utils';
 import { Dato } from 'lib/types/Dato';
+import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovMellomlagringParser';
 
 interface Props {
   behandlingVersjon: number;
@@ -60,7 +61,7 @@ export const BistandsbehovPeriodisert = ({
   );
 
   const defaultValues: BistandForm = initialMellomlagretVurdering
-    ? JSON.parse(initialMellomlagretVurdering.data)
+    ? parseOgMigrerMellomlagretData(initialMellomlagretVurdering.data, grunnlag?.behøverVurderinger?.[0]?.fom)
     : mapVurderingerToBistandForm(grunnlag);
 
   const form = useForm<BistandForm>({ defaultValues });

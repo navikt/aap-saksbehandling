@@ -23,6 +23,7 @@ import {
 } from 'components/behandlinger/sykdom/overgangarbeid/OvergangArbeid-utils';
 import { OvergangArbeidTidligereVurdering } from 'components/behandlinger/sykdom/overgangarbeid/OvergangArbeidTidligereVurderinger';
 import { OvergangArbeidFormInput } from 'components/behandlinger/sykdom/overgangarbeid/OvergangArbeidFormInput';
+import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/overgangarbeid/OvergangArbeidMellomlagringParser';
 
 interface Props {
   behandlingVersjon: number;
@@ -47,7 +48,7 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialM
 
   const defaultValues =
     mellomlagretVurdering != null
-      ? (JSON.parse(mellomlagretVurdering.data) as OvergangArbeidForm)
+      ? parseOgMigrerMellomlagretData(mellomlagretVurdering.data)
       : getDefaultValuesFromGrunnlag(grunnlag);
 
   const form = useForm<OvergangArbeidForm>({
