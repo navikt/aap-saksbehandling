@@ -14,6 +14,7 @@ import { BrevdataDto } from 'lib/types/types';
 import { ForhåndsvisBrev } from 'components/brevbygger/ForhåndsvisBrev';
 import { clientOppdaterBrevdata, clientOppdaterBrevmal } from 'lib/clientApi';
 import { useRouter } from 'next/navigation';
+import { parse } from 'path';
 
 export interface AlternativFormField {
   verdi: string;
@@ -51,7 +52,6 @@ export const Brevbygger = ({ referanse, brevmal, brevdata }: BrevbyggerProps) =>
   });
 
   const router = useRouter();
-
   const { fields } = useFieldArray({ control, name: 'delmaler' });
 
   const onSubmit = async (formData: BrevdataFormFields) => {

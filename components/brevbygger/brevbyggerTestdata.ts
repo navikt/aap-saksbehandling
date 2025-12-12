@@ -1,15 +1,11 @@
 import { SanityAttributes, DelmalReferanse } from 'components/brevbygger/brevmodellTypes';
 
-export const sanityAttrs: SanityAttributes = {
+export const sanityAttrs: Omit<SanityAttributes, '_id'> = {
   _createdAt: new Date().toISOString(),
-  _id: '99',
   _originalId: '99',
   _rev: '0',
   _system: {
-    base: {
-      id: 'base_id',
-      rev: 'base_rev',
-    },
+    base: { id: 'base_id', rev: 'base_rev' },
   },
   _type: 'mal',
   _updatedAt: new Date().toISOString(),
@@ -65,6 +61,7 @@ export const valgfriDelmalMedAlternativer: DelmalReferanse = {
         obligatorisk: true,
         valg: {
           ...sanityAttrs,
+          _id: 'valgref-1',
           beskrivelse: 'Beskrivelse av alternativ',
           alternativer: [
             {
@@ -73,6 +70,7 @@ export const valgfriDelmalMedAlternativer: DelmalReferanse = {
               kategori: null,
               tekst: {
                 ...sanityAttrs,
+                _id: 'tekstid-1',
                 beskrivelse: 'Alternativ 1',
                 teksteditor: [
                   {
@@ -92,6 +90,7 @@ export const valgfriDelmalMedAlternativer: DelmalReferanse = {
               kategori: null,
               tekst: {
                 ...sanityAttrs,
+                _id: 'tekstid-2',
                 beskrivelse: 'Alternativ 2',
                 teksteditor: [
                   {

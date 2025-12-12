@@ -1,6 +1,6 @@
 import { AlternativFormField, DelmalFormField, ValgFormField } from 'components/brevbygger/Brevbygger';
 import { BrevmalType, DelmalReferanse, ValgRef, ValgType } from 'components/brevbygger/brevmodellTypes';
-import { BrevdataDto, DelmalDto, ValgDto } from 'lib/types/types';
+import { BrevdataDto, DelmalDto, FritekstDto, ValgDto } from 'lib/types/types';
 
 export function erDelmalValgt(delmalId: string, valgteDelmaler?: DelmalDto[]) {
   if (!valgteDelmaler) {
@@ -9,11 +9,16 @@ export function erDelmalValgt(delmalId: string, valgteDelmaler?: DelmalDto[]) {
   return !!valgteDelmaler.find((delmal) => delmal.id === delmalId);
 }
 
-export function erValgValgt(valgNoekkel: string, valgKey: string, valgteValg?: ValgDto[]) {
+export function finnValgtAlternativ(teksteditorValgId: string, valgteValg?: ValgDto[]) {
   if (!valgteValg) {
-    return false;
+    return '';
   }
-  return !!valgteValg.find((valg) => valg.key === valgKey && valg.id === valgNoekkel);
+
+  const valgForId = valgteValg.find((valg) => valg.id === teksteditorValgId);
+  if (valgForId) {
+    return valgForId.key;
+  }
+  return '';
 }
 
 export function mapDelmalerFraSanity(delmaler: DelmalReferanse[], brevdata?: BrevdataDto): DelmalFormField[] {
@@ -26,15 +31,33 @@ export function mapDelmalerFraSanity(delmaler: DelmalReferanse[], brevdata?: Bre
   });
 }
 
+export function finnFritekstForValgtAlternativ(
+  teksteditorValgId: string,
+  valgteValg?: ValgDto[],
+  fritekster?: FritekstDto[]
+) {
+  if (!valgteValg || !fritekster) {
+    return '';
+  }
+  if (valgteValg.find((valg) => valg.id === teksteditorValgId)) {
+    const teksten = fritekster.find((fritekst) => fritekst.parentId === teksteditorValgId)?.fritekst;
+    if (!teksten) {
+      return '';
+    }
+    return JSON.parse(teksten).tekst;
+  }
+
+  return '';
+}
+
 function mapValg(delmal: DelmalReferanse, brevdata?: BrevdataDto): ValgFormField[] {
   return delmal.delmal.teksteditor
     .filter((teksteditor) => teksteditor._type === 'valgRef')
     .map((teksteditor) => ({
       noekkel: teksteditor.valg._id,
       alternativer: mapAlternativer(teksteditor.valg),
-      valgtAlternativ: erValgValgt(teksteditor.valg._id, teksteditor._key, brevdata?.valg)
-        ? `${teksteditor.valg._id};${teksteditor._key}`
-        : '',
+      valgtAlternativ: finnValgtAlternativ(teksteditor.valg._id, brevdata?.valg),
+      fritekst: finnFritekstForValgtAlternativ(teksteditor.valg._id, brevdata?.valg, brevdata?.fritekster),
     }));
 }
 
