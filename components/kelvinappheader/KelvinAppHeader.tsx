@@ -98,10 +98,10 @@ export const KelvinAppHeader = ({
 
         {/*
         TODO:
-          Legg tilbake vanlig spacer når julen er over
-          <Spacer />
+          Midlertidig revert til det er godkjent av produktleder... 😅
+          <XMasSpacer />
         */}
-        <XMasSpacer />
+        <Spacer />
 
         {brukerInformasjon.NAVident && (
           <InternalHeader.Button
@@ -156,6 +156,7 @@ export const KelvinAppHeader = ({
   );
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const XMasSpacer = () => (
   <span className="navds-stack__spacer" style={{ backgroundImage: 'url(/xmas-lights.svg)', opacity: 0.75 }} />
 );
