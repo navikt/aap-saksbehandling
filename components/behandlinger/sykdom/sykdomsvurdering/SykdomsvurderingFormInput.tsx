@@ -30,11 +30,15 @@ interface Props {
   erÅrsakssammenhengYrkesskade: boolean;
 }
 
-const vilkårsvurderingLabel = 'Vilkårsvurdering';
-const harSkadeSykdomEllerLyteLabel = 'Har brukeren sykdom, skade eller lyte?';
-const erArbeidsevnenNedsattLabel = 'Har brukeren nedsatt arbeidsevne?';
+export const vilkårsvurderingLabel = 'Vilkårsvurdering';
+export const harSkadeSykdomEllerLyteLabel = 'Har brukeren sykdom, skade eller lyte?';
+export const erArbeidsevnenNedsattLabel = 'Har brukeren nedsatt arbeidsevne?';
+export const erNedsettelseIArbeidsevneMerEnnHalvpartenLabel = 'Er arbeidsevnen nedsatt med minst halvparten?';
+export const erSkadeSykdomEllerLyteVesentligdelLabel =
+  'Er sykdom, skade eller lyte vesentlig medvirkende til at arbeidsevnen er nedsatt?';
+export const erNedsettelseIArbeidsevneAvEnVissVarighetLabel = 'Er den nedsatte arbeidsevnen av en viss varighet?';
 
-export const SykdomsvurderingForm = ({
+export const SykdomsvurderingFormInput = ({
   erÅrsakssammenhengYrkesskade,
   skalVurdereYrkesskade,
   sak,
