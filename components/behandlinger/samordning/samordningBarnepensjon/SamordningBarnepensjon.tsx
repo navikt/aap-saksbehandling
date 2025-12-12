@@ -1,9 +1,10 @@
 'use client';
 
-import { Alert, BodyLong, VStack } from '@navikt/ds-react';
+import { Alert, VStack } from '@navikt/ds-react';
 import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
-import { differenceInYears, isValid, parse } from 'date-fns';
+import { differenceInYears } from 'date-fns';
 import { useSak } from 'hooks/SakHook';
+import { stringToDate } from 'lib/utils/date';
 
 interface Props {
   fødselsdato: string;
@@ -12,14 +13,8 @@ interface Props {
 export const SamordningBarnepensjon = ({ fødselsdato }: Props) => {
   const { sak } = useSak();
 
-  const parseDate = (dateString: string | null | undefined) => {
-    if (!dateString) return null;
-    const parsed = parse(dateString, 'yyyy-MM-dd', new Date());
-    return isValid(parsed) ? parsed : null;
-  };
-
-  const fødselsdatoAsDate = parseDate(fødselsdato);
-  const startDato = parseDate(sak.periode.fom);
+  const fødselsdatoAsDate = stringToDate(fødselsdato);
+  const startDato = stringToDate(sak.periode.fom);
 
   if (!fødselsdatoAsDate || !startDato) return null;
 
@@ -30,12 +25,10 @@ export const SamordningBarnepensjon = ({ fødselsdato }: Props) => {
     <VilkårsKort heading="§ 11-27 Samordning barnepensjon (valgfritt)" steg="UDEFINERT">
       {
         <VStack gap={'6'}>
-          <BodyLong>
-            <Alert variant={'info'}>
-              Samordning med barnepensjon er ikke støttet. Hvis brukeren har barnepensjon må du sette behandlingen på
-              vent og melde behovet i porten
-            </Alert>
-          </BodyLong>
+          <Alert variant={'info'}>
+            Samordning med barnepensjon er ikke støttet. Hvis brukeren har barnepensjon må du sette behandlingen på vent
+            og melde behovet i porten
+          </Alert>
         </VStack>
       }
     </VilkårsKort>
