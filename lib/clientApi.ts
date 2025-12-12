@@ -186,6 +186,10 @@ export function clientOppdaterBrevdata(brevbestillingReferanse: string, brevdata
   return clientFetch(`${BASE_URL}/api/brev/${brevbestillingReferanse}/oppdater-brevdata`, 'PUT', brevdata);
 }
 
+export function clientOppdaterBrevmal(brevbestillingReferanse: string) {
+  return clientFetch(`${BASE_URL}/api/brev/${brevbestillingReferanse}/oppdater-brevmal`, 'PUT');
+}
+
 export function clientBestillTestBrev(behandlingReferanse: string) {
   return clientFetch(`${BASE_URL}/api/test/bestill/brev`, 'POST', { behandlingReferanse });
 }

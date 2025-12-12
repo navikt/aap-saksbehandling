@@ -12,7 +12,8 @@ import {
 import { BrevmalType } from 'components/brevbygger/brevmodellTypes';
 import { BrevdataDto } from 'lib/types/types';
 import { ForhåndsvisBrev } from 'components/brevbygger/ForhåndsvisBrev';
-import { clientOppdaterBrevdata } from 'lib/clientApi';
+import { clientOppdaterBrevdata, clientOppdaterBrevmal } from 'lib/clientApi';
+import { useRouter } from 'next/navigation';
 
 export interface AlternativFormField {
   verdi: string;
@@ -44,10 +45,12 @@ interface BrevbyggerProps {
 export const Brevbygger = ({ referanse, brevmal, brevdata }: BrevbyggerProps) => {
   const parsedBrevmal: BrevmalType = JSON.parse(brevmal || '');
   const { control, handleSubmit, watch } = useForm<BrevdataFormFields>({
-    defaultValues: {
+    values: {
       delmaler: mapDelmalerFraSanity(parsedBrevmal.delmaler, brevdata),
     },
   });
+
+  const router = useRouter();
 
   const { fields } = useFieldArray({ control, name: 'delmaler' });
 
@@ -94,6 +97,11 @@ export const Brevbygger = ({ referanse, brevmal, brevdata }: BrevbyggerProps) =>
     });
   };
 
+  const oppdaterBrevmal = async () => {
+    await clientOppdaterBrevmal(referanse);
+    router.refresh();
+  };
+
   return (
     <HGrid columns={2} gap={'2'} minWidth={'1280px'}>
       <Box>
@@ -114,6 +122,7 @@ export const Brevbygger = ({ referanse, brevmal, brevdata }: BrevbyggerProps) =>
           ))}
           <Button>Oppdater brevdata</Button>
         </form>
+        <Button onClick={oppdaterBrevmal}>Oppdater brevmal</Button>
       </Box>
       <ForhåndsvisBrev referanse={referanse} />
     </HGrid>
