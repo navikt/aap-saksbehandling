@@ -43,6 +43,7 @@ export const YrkesskadeVurderingTabell = ({ form, yrkesskader, readOnly, update 
             <Table.HeaderCell textSize={'small'}>Tilknytt yrkesskade</Table.HeaderCell>
             <Table.HeaderCell textSize={'small'}>Saksnummer</Table.HeaderCell>
             <Table.HeaderCell textSize={'small'}>Kilde</Table.HeaderCell>
+            <Table.HeaderCell textSize={'small'}>Referanse</Table.HeaderCell>
             <Table.HeaderCell textSize={'small'}>Skadedato</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
@@ -64,6 +65,7 @@ export const YrkesskadeVurderingTabell = ({ form, yrkesskader, readOnly, update 
                 </Table.DataCell>
                 <Table.DataCell textSize={'small'}>{yrkesskade.saksnummer}</Table.DataCell>
                 <Table.DataCell textSize={'small'}>{yrkesskade.kilde}</Table.DataCell>
+                <Table.DataCell textSize={'small'}>{yrkesskade.ref}</Table.DataCell>
                 <Table.DataCell textSize={'small'}>
                   {yrkesskade.skadedato ? (
                     formaterDatoForFrontend(yrkesskade.skadedato)
