@@ -28,7 +28,6 @@ export const Samordning = async ({ behandlingsreferanse }: Props) => {
   const samordningStatligeYtelserSteg = getStegData(aktivGruppe, 'SAMORDNING_ANDRE_STATLIGE_YTELSER', flyt.data);
   const samordningArbeidsgiverSteg = getStegData(aktivGruppe, 'SAMORDNING_ARBEIDSGIVER', flyt.data);
   const samordningTjenestepensjonSteg = getStegData(aktivGruppe, 'SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV', flyt.data);
-  const samordningBarnepensjonSteg = getStegData(aktivGruppe, 'SAMORDNING_BARNEPENSJON', flyt.data);
 
   return (
     <GruppeSteg
@@ -38,11 +37,10 @@ export const Samordning = async ({ behandlingsreferanse }: Props) => {
       visning={flyt.data.visning}
       aktivtSteg={flyt.data.aktivtSteg}
     >
-      {samordningBarnepensjonSteg.skalViseSteg && (
-        <StegSuspense>
-          <SamordningBarnepensjonMedDatafetching />
-        </StegSuspense>
-      )}
+      <StegSuspense>
+        <SamordningBarnepensjonMedDatafetching behandlingsreferanse={behandlingsreferanse} />
+      </StegSuspense>
+
       {samordningSosialStønadSteg.skalViseSteg && (
         <StegSuspense>
           <SamordningSosialstønadMedDatafetching
