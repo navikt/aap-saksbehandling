@@ -24,6 +24,7 @@ export const SykdomsvurderingRevurdering = ({ form, index, erÅrsakssammenhengYr
               required: 'Du må svare på om den nedsatte arbeidsevnen er nedsatt med minst 40 prosent.',
             }}
             readOnly={readonly}
+            shouldUnregister
           />
         )}
 
@@ -37,6 +38,7 @@ export const SykdomsvurderingRevurdering = ({ form, index, erÅrsakssammenhengYr
               required: 'Du må svare på om den nedsatte arbeidsevnen er nedsatt med minst 30 prosent.',
             }}
             readOnly={readonly}
+            shouldUnregister
           />
         )}
 
@@ -50,6 +52,7 @@ export const SykdomsvurderingRevurdering = ({ form, index, erÅrsakssammenhengYr
               required: 'Du må svare på om sykdom, skade eller lyte er vesentlig medvirkende til nedsatt arbeidsevne',
             }}
             readOnly={readonly}
+            shouldUnregister
           />
         )}
       </>

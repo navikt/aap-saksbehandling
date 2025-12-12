@@ -1,9 +1,6 @@
 import { Alert } from '@navikt/ds-react';
-import { SykdomsvurderingFormFields } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
-import { FormFields } from 'components/form/FormHook';
 import { JaEllerNei } from 'lib/utils/form';
-import { FieldPath, UseFormReturn } from 'react-hook-form';
-import { FormField } from 'components/form/FormField';
+import { UseFormReturn } from 'react-hook-form';
 import type { Sykdomsvurderinger } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingPeriodisert';
 import { Periode } from 'lib/types/types';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
@@ -35,6 +32,7 @@ export const SykdomsvurderingFørstegangsbehandling = ({ form, skalVurdereYrkess
             horisontal={true}
             rules={{ required: 'Du må svare på om arbeidsevnen er nedsatt med minst halvparten' }}
             readOnly={readonly}
+            shouldUnregister
           />
 
           {skalVurdereYrkesskade &&
@@ -52,6 +50,7 @@ export const SykdomsvurderingFørstegangsbehandling = ({ form, skalVurdereYrkess
                   }}
                   className={'begrunnelse'}
                   readOnly={readonly}
+                  shouldUnregister
                 />
 
                 <RadioGroupJaNei
@@ -63,6 +62,7 @@ export const SykdomsvurderingFørstegangsbehandling = ({ form, skalVurdereYrkess
                     required: 'Du må svare på om den nedsatte arbeidsevnen er nedsatt med minst 30 prosent.',
                   }}
                   readOnly={readonly}
+                  shouldUnregister
                 />
               </>
             )}
@@ -82,6 +82,7 @@ export const SykdomsvurderingFørstegangsbehandling = ({ form, skalVurdereYrkess
                     'Du må svare på om sykdom, skade eller lyte er vesentlig medvirkende til nedsatt arbeidsevne',
                 }}
                 readOnly={readonly}
+                shouldUnregister
               />
 
               {form.watch(`vurderinger.${index}.erSkadeSykdomEllerLyteVesentligdel`) === JaEllerNei.Ja && (
@@ -94,6 +95,7 @@ export const SykdomsvurderingFørstegangsbehandling = ({ form, skalVurdereYrkess
                     required: 'Du må svare på om den nedsatte arbeidsevnen er av en viss varighet',
                   }}
                   readOnly={readonly}
+                  shouldUnregister
                 />
               )}
             </>
