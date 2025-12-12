@@ -10,7 +10,7 @@ import { ManuellInntektGrunnlag, ManuellInntektÅr, MellomlagretVurdering } from
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
-import { Alert, BodyShort, Link } from '@navikt/ds-react';
+import { Alert, BodyShort, Label, Link, VStack } from '@navikt/ds-react';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
 import { useFieldArray } from 'react-hook-form';
@@ -22,6 +22,7 @@ interface Props {
   grunnlag: ManuellInntektGrunnlag;
   readOnly: boolean;
   initialMellomlagretVurdering?: MellomlagretVurdering;
+  behandlingErRevurdering: boolean;
 }
 
 type DraftFormFields = Partial<FastsettManuellInntektForm>;
@@ -31,6 +32,7 @@ export const FastsettManuellInntektNy = ({
   grunnlag,
   readOnly,
   initialMellomlagretVurdering,
+  behandlingErRevurdering,
 }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
@@ -44,8 +46,6 @@ export const FastsettManuellInntektNy = ({
     'MANGLENDE_LIGNING',
     mellomlagretVurdering
   );
-
-  const visHovedinnhold = !formReadOnly || grunnlag.manuelleVurderinger !== null;
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -111,7 +111,8 @@ export const FastsettManuellInntektNy = ({
     })(event);
   }
 
-  const historiskeVurderinger = grunnlag.historiskeVurderinger;
+  const visHovedinnhold = !formReadOnly || grunnlag.manuelleVurderinger !== null;
+  const sisteVurdering = grunnlag.historiskeManuelleVurderinger?.at(-1);
 
   return (
     <VilkårskortMedFormOgMellomlagringNyVisning
@@ -134,15 +135,25 @@ export const FastsettManuellInntektNy = ({
       visningActions={visningActions}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
-      {/* TODO denne er ikke testet at funker som forventet */}
-      {!!historiskeVurderinger?.length && (
+      {behandlingErRevurdering && sisteVurdering && (
         <TidligereVurderinger
-          data={historiskeVurderinger}
+          data={[sisteVurdering]}
           buildFelter={byggFelter}
-          getErGjeldende={(v) => deepEqual(v, historiskeVurderinger[historiskeVurderinger.length - 1])}
-          getFomDato={(v) => v.vurderingenGjelderFra ?? v.vurdertAv.dato}
+          getErGjeldende={(v) => deepEqual(v, sisteVurdering)}
           getVurdertAvIdent={(v) => v.vurdertAv.ident}
           getVurdertDato={(v) => v.vurdertAv.dato}
+          grupperPåOpprettetDato={true}
+          customElement={
+            <>
+              <VStack>
+                <Label size="small">{formFields.begrunnelse.label}</Label>
+                <BodyShort size="small">{form.getValues('begrunnelse')}</BodyShort>
+              </VStack>
+              <VStack>
+                <FastsettManuellInntektTabell form={form} tabellår={tabellår} visUtenInputFelter={true} />
+              </VStack>
+            </>
+          }
         />
       )}
       {grunnlag.registrerteInntekterSisteRelevanteAr.length < 3 && (

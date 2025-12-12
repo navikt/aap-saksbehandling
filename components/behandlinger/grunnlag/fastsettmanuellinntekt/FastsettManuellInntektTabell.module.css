@@ -1,5 +1,6 @@
 .tabell {
   table-layout: fixed;
+  background: var(--a-surface-default);
 }
 
 .inntektfelt {
