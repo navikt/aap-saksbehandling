@@ -9,10 +9,11 @@ import { FastsettManuellInntektForm, Tabellår } from 'components/behandlinger/g
 interface Props {
   form: UseFormReturn<FastsettManuellInntektForm>;
   tabellår: Tabellår[];
-  readOnly: boolean;
+  readOnly?: boolean;
+  visUtenInputFelter?: boolean;
 }
 
-export const FastsettManuellInntektTabell = ({ tabellår, form, readOnly }: Props) => {
+export const FastsettManuellInntektTabell = ({ tabellår, form, readOnly, visUtenInputFelter }: Props) => {
   const regnUtTotalbeløpPerÅr = (ferdigLignetPGI: number, beregnetPGI: number, eøsInntekt: number): string => {
     const total =
       beregnetPGI > 0 ? Number(beregnetPGI) + Number(eøsInntekt) : Number(ferdigLignetPGI) + Number(eøsInntekt);
@@ -44,24 +45,40 @@ export const FastsettManuellInntektTabell = ({ tabellår, form, readOnly }: Prop
                   {år.ferdigLignetPGI ? formaterTilNok(år.ferdigLignetPGI) : '-'}
                 </Table.DataCell>
                 <Table.DataCell textSize={'small'} data-testid={'beregnetPGI'}>
-                  <TextFieldWrapper
-                    className={styles.inntektfelt}
-                    name={`tabellår.${index}.beregnetPGI`}
-                    control={form.control}
-                    type={'number'}
-                    hideLabel={true}
-                    readOnly={år.ferdigLignetPGI !== undefined || readOnly}
-                  />
+                  {visUtenInputFelter ? (
+                    beregnetPGI ? (
+                      formaterTilNok(beregnetPGI)
+                    ) : (
+                      '-'
+                    )
+                  ) : (
+                    <TextFieldWrapper
+                      className={styles.inntektfelt}
+                      name={`tabellår.${index}.beregnetPGI`}
+                      control={form.control}
+                      type={'number'}
+                      hideLabel={true}
+                      readOnly={år.ferdigLignetPGI !== undefined || readOnly}
+                    />
+                  )}
                 </Table.DataCell>
                 <Table.DataCell textSize={'small'} data-testid={'eøsInntekt'}>
-                  <TextFieldWrapper
-                    className={styles.inntektfelt}
-                    name={`tabellår.${index}.eøsInntekt`}
-                    control={form.control}
-                    type={'number'}
-                    hideLabel={true}
-                    readOnly={readOnly}
-                  />
+                  {visUtenInputFelter ? (
+                    eøsInntekt ? (
+                      formaterTilNok(eøsInntekt)
+                    ) : (
+                      '-'
+                    )
+                  ) : (
+                    <TextFieldWrapper
+                      className={styles.inntektfelt}
+                      name={`tabellår.${index}.eøsInntekt`}
+                      control={form.control}
+                      type={'number'}
+                      hideLabel={true}
+                      readOnly={readOnly}
+                    />
+                  )}
                 </Table.DataCell>
                 <Table.DataCell data-testid={'totalt'} textSize={'small'}>
                   {regnUtTotalbeløpPerÅr(ferdigLignetPGI ?? 0, beregnetPGI ?? 0, eøsInntekt ?? 0)}

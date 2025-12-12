@@ -33,6 +33,7 @@ export const FastsettManuellInntektMedDataFetchingNy = async ({ behandlingsrefer
       behandlingsversjon={stegData.behandlingVersjon}
       grunnlag={grunnlag.data}
       readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+      behandlingErRevurdering={stegData.typeBehandling === 'Revurdering'}
     />
   );
 };

@@ -57,7 +57,14 @@ describe('Manglende pensjonsgivende inntekter / EØS inntekter', () => {
 
   describe('Generelt', () => {
     beforeEach(() => {
-      render(<FastsettManuellInntektNy behandlingsversjon={1} grunnlag={grunnlag} readOnly={false} />);
+      render(
+        <FastsettManuellInntektNy
+          behandlingsversjon={1}
+          grunnlag={grunnlag}
+          readOnly={false}
+          behandlingErRevurdering={false}
+        />
+      );
     });
 
     it('skal vise hovedkort dersom det mangler PGI eller finnes manuelle endringer i grunnlag', () => {
@@ -136,6 +143,7 @@ describe('Manglende pensjonsgivende inntekter / EØS inntekter', () => {
           grunnlag={grunnlag}
           readOnly={false}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+          behandlingErRevurdering={false}
         />
       );
 
@@ -144,7 +152,14 @@ describe('Manglende pensjonsgivende inntekter / EØS inntekter', () => {
     });
 
     it('Skal vise en tekst om hvem som har lagret vurdering dersom bruker trykker på lagre mellomlagring', async () => {
-      render(<FastsettManuellInntektNy behandlingsversjon={0} grunnlag={grunnlag} readOnly={false} />);
+      render(
+        <FastsettManuellInntektNy
+          behandlingsversjon={0}
+          grunnlag={grunnlag}
+          readOnly={false}
+          behandlingErRevurdering={false}
+        />
+      );
 
       await user.type(
         screen.getByRole('textbox', { name: 'Begrunnelse for endret arbeidsinntekt' }),
@@ -172,6 +187,7 @@ describe('Manglende pensjonsgivende inntekter / EØS inntekter', () => {
           grunnlag={grunnlag}
           readOnly={false}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+          behandlingErRevurdering={false}
         />
       );
 
@@ -193,6 +209,7 @@ describe('Manglende pensjonsgivende inntekter / EØS inntekter', () => {
           grunnlag={grunnlag}
           readOnly={false}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+          behandlingErRevurdering={false}
         />
       );
 
@@ -203,7 +220,14 @@ describe('Manglende pensjonsgivende inntekter / EØS inntekter', () => {
     });
 
     it('Skal bruke bekreftet vurdering fra grunnlag som defaultValue i skjema dersom mellomlagring ikke finnes', () => {
-      render(<FastsettManuellInntektNy behandlingsversjon={0} grunnlag={grunnlagMedVurdering} readOnly={false} />);
+      render(
+        <FastsettManuellInntektNy
+          behandlingsversjon={0}
+          grunnlag={grunnlagMedVurdering}
+          readOnly={false}
+          behandlingErRevurdering={false}
+        />
+      );
 
       const begrunnelseFelt = screen.getByRole('textbox', {
         name: 'Begrunnelse for endret arbeidsinntekt',
@@ -218,6 +242,7 @@ describe('Manglende pensjonsgivende inntekter / EØS inntekter', () => {
           grunnlag={grunnlag}
           readOnly={false}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+          behandlingErRevurdering={false}
         />
       );
 
@@ -240,6 +265,7 @@ describe('Manglende pensjonsgivende inntekter / EØS inntekter', () => {
           grunnlag={grunnlagMedVurdering}
           readOnly={false}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+          behandlingErRevurdering={false}
         />
       );
 
@@ -256,7 +282,14 @@ describe('Manglende pensjonsgivende inntekter / EØS inntekter', () => {
     });
 
     it('Skal ikke være mulig å lagre eller slette mellomlagring hvis det er readOnly', () => {
-      render(<FastsettManuellInntektNy behandlingsversjon={0} grunnlag={grunnlag} readOnly={true} />);
+      render(
+        <FastsettManuellInntektNy
+          behandlingsversjon={0}
+          grunnlag={grunnlag}
+          readOnly={true}
+          behandlingErRevurdering={false}
+        />
+      );
 
       const lagreKnapp = screen.queryByRole('button', { name: 'Lagre utkast' });
       expect(lagreKnapp).not.toBeInTheDocument();

@@ -96,7 +96,13 @@ export const KelvinAppHeader = ({
           {lokalLenkeTilSaksoversikt && <Link href={`/saksbehandling/saksoversikt`}>Saksoversikt</Link>}
         </HStack>
 
+        {/*
+        TODO:
+          Midlertidig revert til det er godkjent av produktleder... 😅
+          <XMasSpacer />
+        */}
         <Spacer />
+
         {brukerInformasjon.NAVident && (
           <InternalHeader.Button
             as="div"
@@ -149,3 +155,8 @@ export const KelvinAppHeader = ({
     </>
   );
 };
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const XMasSpacer = () => (
+  <span className="navds-stack__spacer" style={{ backgroundImage: 'url(/xmas-lights.svg)', opacity: 0.75 }} />
+);
