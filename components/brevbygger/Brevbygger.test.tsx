@@ -25,6 +25,7 @@ const user = userEvent.setup();
 describe('Delmalvelger', () => {
   const brevmal: BrevmalType = {
     ...sanityAttrs,
+    _id: 'brevmal-id',
     beskrivelse: 'En beskrivelse',
     overskrift: 'En overskrift',
     journalposttittel: 'jp-tittel',
@@ -91,6 +92,7 @@ describe('Delmalvelger', () => {
 describe('Delmaler med valg', () => {
   const brevmal: BrevmalType = {
     ...sanityAttrs,
+    _id: 'brevmal-id',
     beskrivelse: 'En beskrivelse',
     overskrift: 'En overskrift',
     journalposttittel: 'jp-tittel',
@@ -138,5 +140,59 @@ describe('Delmaler med valg', () => {
 
     await user.selectOptions(screen.getByRole('combobox', { name: 'Beskrivelse av alternativ' }), ['alt3-key']);
     expect(screen.getByRole('textbox', { name: 'Fritekst' })).toBeVisible();
+  });
+
+  test('valg er valgt når det kommer som input til brevbyggeren', () => {
+    render(
+      <Brevbygger
+        referanse={'1234'}
+        brevmal={JSON.stringify(brevmal)}
+        brevdata={{
+          ...brevdata,
+          delmaler: [{ id: valgfriDelmalMedAlternativer.delmal._id }],
+          valg: [
+            {
+              id: 'valgref-1',
+              key: 'alt1-key',
+            },
+          ],
+        }}
+      />
+    );
+
+    expect(screen.getByRole('combobox', { name: 'Beskrivelse av alternativ' })).toBeVisible();
+    expect((screen.getByRole('option', { name: 'Alternativ 1' }) as HTMLOptionElement).selected).toBe(true);
+  });
+
+  test('fritekst er valgt når det kommer som input til brevbyggeren', () => {
+    render(
+      <Brevbygger
+        referanse={'1234'}
+        brevmal={JSON.stringify(brevmal)}
+        brevdata={{
+          ...brevdata,
+          delmaler: [{ id: valgfriDelmalMedAlternativer.delmal._id }],
+          valg: [
+            {
+              id: 'valgref-1',
+              key: 'alt3-key',
+            },
+          ],
+          fritekster: [
+            {
+              fritekst: JSON.stringify({ tekst: 'Her kommer det litt fritekst' }),
+              parentId: 'valgref-1',
+              key: 'alt3-key',
+            },
+          ],
+        }}
+      />
+    );
+
+    expect(screen.getByRole('combobox', { name: 'Beskrivelse av alternativ' })).toBeVisible();
+    expect((screen.getByRole('option', { name: 'Fritekst' }) as HTMLOptionElement).selected).toBe(true);
+    expect(screen.getByRole('textbox', { name: 'Fritekst' })).toBeVisible();
+    screen.logTestingPlaygroundURL();
+    expect(screen.getByText('Her kommer det litt fritekst')).toBeVisible();
   });
 });

@@ -51,7 +51,6 @@ export const Brevbygger = ({ referanse, brevmal, brevdata }: BrevbyggerProps) =>
   });
 
   const router = useRouter();
-
   const { fields } = useFieldArray({ control, name: 'delmaler' });
 
   const onSubmit = async (formData: BrevdataFormFields) => {
