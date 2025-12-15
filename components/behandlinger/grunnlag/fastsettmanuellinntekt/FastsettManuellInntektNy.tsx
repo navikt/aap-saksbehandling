@@ -2,7 +2,7 @@
 
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useConfigForm } from 'components/form/FormHook';
-import { FormField, ValuePair } from 'components/form/FormField';
+import { FormField } from 'components/form/FormField';
 import React, { FormEvent } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
@@ -23,6 +23,12 @@ interface Props {
   readOnly: boolean;
   initialMellomlagretVurdering?: MellomlagretVurdering;
   behandlingErRevurdering: boolean;
+}
+
+interface ByggTabellDataProps {
+  sisteÅr: number;
+  pgi: ManuellInntektÅr[];
+  manuelleInntekter: ManuellInntektÅr[];
 }
 
 type DraftFormFields = Partial<FastsettManuellInntektForm>;
@@ -112,7 +118,7 @@ export const FastsettManuellInntektNy = ({
   }
 
   const visHovedinnhold = !formReadOnly || grunnlag.manuelleVurderinger !== null;
-  const sisteVurdering = grunnlag.historiskeManuelleVurderinger?.at(-1);
+  const historiskeVurderinger = grunnlag.historiskeManuelleVurderinger;
 
   return (
     <VilkårskortMedFormOgMellomlagringNyVisning
@@ -135,25 +141,33 @@ export const FastsettManuellInntektNy = ({
       visningActions={visningActions}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
-      {behandlingErRevurdering && sisteVurdering && (
+      {behandlingErRevurdering && historiskeVurderinger && (
         <TidligereVurderinger
-          data={[sisteVurdering]}
-          buildFelter={byggFelter}
-          getErGjeldende={(v) => deepEqual(v, sisteVurdering)}
+          data={historiskeVurderinger}
+          getErGjeldende={(v) => deepEqual(v, historiskeVurderinger[historiskeVurderinger.length - 1])}
           getVurdertAvIdent={(v) => v.vurdertAv.ident}
           getVurdertDato={(v) => v.vurdertAv.dato}
+          getFomDato={(v) => v.fomDato}
           grupperPåOpprettetDato={true}
-          customElement={
-            <>
-              <VStack>
-                <Label size="small">{formFields.begrunnelse.label}</Label>
-                <BodyShort size="small">{form.getValues('begrunnelse')}</BodyShort>
-              </VStack>
-              <VStack>
-                <FastsettManuellInntektTabell form={form} tabellår={tabellår} visUtenInputFelter={true} />
-              </VStack>
-            </>
-          }
+          customElement={(selectedIndex) => {
+            const pgi = grunnlag.registrerteInntekterSisteRelevanteAr;
+            const tabelldata = byggTabellData({
+              sisteÅr: grunnlag.ar,
+              pgi: pgi,
+              manuelleInntekter: historiskeVurderinger.at(selectedIndex)?.årsVurderinger || [],
+            });
+            return (
+              <>
+                <VStack>
+                  <Label size="small">{formFields.begrunnelse.label}</Label>
+                  <BodyShort size="small">{historiskeVurderinger.at(selectedIndex)?.begrunnelse}</BodyShort>
+                </VStack>
+                <VStack>
+                  <FastsettManuellInntektTabell form={form} tabellår={tabelldata} låstVisning={true} />
+                </VStack>
+              </>
+            );
+          }}
         />
       )}
       {grunnlag.registrerteInntekterSisteRelevanteAr.length < 3 && (
@@ -199,9 +213,9 @@ const berikMedManglendeÅr = (sisteÅr: number): Tabellår[] => {
 /**
  * Berik siste tre relevante beregningsår med pensjonsgivende inntekter fra grunnlag dersom de finnes.
  */
-const berikMedInntekterFraGrunnlag = (treÅr: Tabellår[], inntekterFraGrunnlag: ManuellInntektÅr[]): Tabellår[] => {
+const berikMedPGI = (treÅr: Tabellår[], pgi: ManuellInntektÅr[]): Tabellår[] => {
   return treÅr.map((år) => {
-    const inntekter = inntekterFraGrunnlag.find((inntekter) => inntekter.år === år.år);
+    const inntekter = pgi.find((inntekter) => inntekter.år === år.år);
     return {
       år: år.år,
       ferdigLignetPGI: inntekter?.beløp,
@@ -228,13 +242,10 @@ const berikMedManuelleInntekter = (treÅr: Tabellår[], manuelleInntekter: Manue
   });
 };
 
-const byggTabellData = (grunnlag: ManuellInntektGrunnlag): Tabellår[] => {
-  const inntekterFraGrunnlag = grunnlag.registrerteInntekterSisteRelevanteAr;
-  const manuelleInntekter = grunnlag.manuelleVurderinger?.årsVurderinger || [];
-
+const byggTabellData = ({ sisteÅr, pgi, manuelleInntekter }: ByggTabellDataProps): Tabellår[] => {
   let tabellår: Tabellår[] = [];
-  tabellår = berikMedManglendeÅr(grunnlag.ar);
-  tabellår = berikMedInntekterFraGrunnlag(tabellår, inntekterFraGrunnlag);
+  tabellår = berikMedManglendeÅr(sisteÅr);
+  tabellår = berikMedPGI(tabellår, pgi);
   tabellår = berikMedManuelleInntekter(tabellår, manuelleInntekter);
   return tabellår;
 };
@@ -242,7 +253,11 @@ const byggTabellData = (grunnlag: ManuellInntektGrunnlag): Tabellår[] => {
 const mapGrunnlagToDraftFormFields = (grunnlag: ManuellInntektGrunnlag): DraftFormFields => {
   return {
     begrunnelse: grunnlag.manuelleVurderinger?.begrunnelse,
-    tabellår: byggTabellData(grunnlag),
+    tabellår: byggTabellData({
+      sisteÅr: grunnlag.ar,
+      pgi: grunnlag.registrerteInntekterSisteRelevanteAr,
+      manuelleInntekter: grunnlag.manuelleVurderinger?.årsVurderinger || [],
+    }),
   };
 };
 
@@ -252,14 +267,3 @@ const emptyDraftFormFields = (): DraftFormFields => {
     tabellår: [],
   };
 };
-
-const byggFelter = (manuelleVurderinger: ManuellInntektGrunnlag['manuelleVurderinger']): ValuePair[] => [
-  {
-    label: 'Begrunnelse for arbeidsinntekt',
-    value: manuelleVurderinger?.begrunnelse ?? '-',
-  },
-  {
-    label: 'Hvilke år skal inntekt overstyres?',
-    value: '-',
-  },
-];

@@ -1,5 +1,5 @@
-import React, { ReactNode, useState } from 'react';
-import { Label, BodyShort, Detail, VStack, ExpansionCard, Chips } from '@navikt/ds-react';
+import { useState } from 'react';
+import { BodyShort, Chips, Detail, ExpansionCard, Label, VStack } from '@navikt/ds-react';
 import styles from './TidligereVurderinger.module.css';
 import { formaterDatoForFrontend, sorterEtterNyesteDato } from 'lib/utils/date';
 import { ClockDashedIcon } from '@navikt/aksel-icons';
@@ -9,13 +9,13 @@ import { erDatoFoerDato } from 'lib/validation/dateValidation';
 
 interface Props {
   data: any[];
-  buildFelter: (vurdering: any) => ValuePair[];
+  buildFelter?: (vurdering: any) => ValuePair[];
   getErGjeldende?: (vurdering: any) => boolean;
   getVurdertAvIdent?: (vurdering: any) => string;
   getVurdertDato?: (vurdering: any) => string;
   getFomDato?: (vurdering: any) => string;
   grupperPåOpprettetDato?: boolean;
-  customElement?: ReactNode;
+  customElement?: (selectedIndex: number) => React.JSX.Element;
 }
 
 interface TidligereVurdering {
@@ -25,7 +25,7 @@ interface TidligereVurdering {
   };
   vurdertAvIdent: string;
   vurdertDato: string;
-  felter: ValuePair[];
+  felter: ValuePair[] | undefined;
   erGjeldendeVurdering: boolean;
 }
 
@@ -80,7 +80,7 @@ export function TidligereVurderinger({
     vurdertAvIdent: getVurdertAvIdent(v),
     vurdertDato: getVurdertDato(v),
     erGjeldendeVurdering: getErGjeldende(v),
-    felter: buildFelter(v),
+    felter: buildFelter && buildFelter(v),
   }));
   const [selectedIndex, setSelectedIndex] = useState(0);
   const selected = mappedVurderinger[selectedIndex];
@@ -134,8 +134,8 @@ export function TidligereVurderinger({
           <div className={styles.vurderingDetail}>
             <div className={styles.fields}>
               {customElement
-                ? customElement
-                : selected.felter.map((felt, i) => (
+                ? customElement(selectedIndex)
+                : selected.felter?.map((felt, i) => (
                     <VStack key={i}>
                       <Label size="small">{felt.label}</Label>
                       <BodyShort size="small">{felt.value}</BodyShort>
