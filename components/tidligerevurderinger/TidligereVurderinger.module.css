@@ -39,7 +39,7 @@
 }
 
 .footer {
-  margin-top: auto;
+  margin-top: var(--a-spacing-6);
 }
 
 .tidligereVurderinger {
