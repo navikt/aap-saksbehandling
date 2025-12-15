@@ -10,11 +10,7 @@ export function erDelmalValgt(delmalId: string, valgteDelmaler?: DelmalDto[]) {
 }
 
 export function finnValgtAlternativ(teksteditorValgId: string, valgteValg?: ValgDto[]) {
-  if (!valgteValg) {
-    return '';
-  }
-
-  const valgForId = valgteValg.find((valg) => valg.id === teksteditorValgId);
+  const valgForId = valgteValg?.find((valg) => valg.id === teksteditorValgId);
   if (valgForId) {
     return valgForId.key;
   }
@@ -36,11 +32,8 @@ export function finnFritekstForValgtAlternativ(
   valgteValg?: ValgDto[],
   fritekster?: FritekstDto[]
 ) {
-  if (!valgteValg || !fritekster) {
-    return '';
-  }
-  if (valgteValg.find((valg) => valg.id === teksteditorValgId)) {
-    const teksten = fritekster.find((fritekst) => fritekst.parentId === teksteditorValgId)?.fritekst;
+  if (valgteValg?.find((valg) => valg.id === teksteditorValgId)) {
+    const teksten = fritekster?.find((fritekst) => fritekst.parentId === teksteditorValgId)?.fritekst;
     if (!teksten) {
       return '';
     }
