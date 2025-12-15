@@ -27,7 +27,7 @@ export const SamordningBarnepensjon = ({ fødselsdato }: Props) => {
         <VStack gap={'6'}>
           <Alert variant={'info'}>
             Samordning med barnepensjon er ikke støttet. Hvis brukeren har barnepensjon må du sette behandlingen på vent
-            og melde behovet i porten
+            og melde behovet i porten.
           </Alert>
         </VStack>
       }
