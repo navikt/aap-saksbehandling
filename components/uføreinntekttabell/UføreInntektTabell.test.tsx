@@ -12,7 +12,21 @@ const innteker: Array<UføreInntekt> = [
     uføreGrad: 30,
     justertForUføreGrad: 500000,
     justertForUføreGradiG: 5,
-    inntektsPerioder: [],
+    inntektsPerioder: [
+      {
+        inntektIKroner: {
+          verdi: 750000,
+        },
+        inntektJustertForUføregrad: {
+          verdi: 500000,
+        },
+        periode: {
+          fom: '2024-12-01',
+          tom: '2024-12-31',
+        },
+        uføregrad: {},
+      },
+    ],
   },
 ];
 
@@ -29,24 +43,22 @@ describe('tabell for å vise uføre inntekter', () => {
     expect(periodeKolonne).toBeVisible();
   });
 
-  // Fiks denne
-  it.skip('skal ha en kolonne som heter Uføregrad', () => {
+  it('skal ha en kolonne som heter Uføregrad', () => {
     render(<UføreInntektTabell inntekter={innteker} gjennomsnittSiste3år={6} ytterligereNedsattArbeidsevneÅr="2021" />);
-    const uføregradKolonne = screen.getByRole('columnheader', { name: /uføregrad/i });
+    const uføregradKolonne = screen.getByRole('columnheader', { name: /Uføregrad/i });
     expect(uføregradKolonne).toBeVisible();
   });
 
-  // Fiks denne
-  it.skip('skal ha en kolonne som heter inntekt', () => {
+  it('skal ha en kolonne som heter Pensjonsgivende inntekt', () => {
     render(<UføreInntektTabell inntekter={innteker} gjennomsnittSiste3år={6} ytterligereNedsattArbeidsevneÅr="2021" />);
-    const inntektKolonne = screen.getByRole('columnheader', { name: /inntekt/i });
-    expect(inntektKolonne).toBeVisible();
+    const pensjonsgivendeInntektKolonne = screen.getByRole('columnheader', { name: /Pensjonsgivende inntekt/i });
+    expect(pensjonsgivendeInntektKolonne).toBeVisible();
   });
 
-  it('skal ha en kolonne som heter Justert for uføregrad', () => {
+  it('skal ha en kolonne som heter Oppjustert 100%', () => {
     render(<UføreInntektTabell inntekter={innteker} gjennomsnittSiste3år={6} ytterligereNedsattArbeidsevneÅr="2021" />);
-    const justertForUføregradKolonne = screen.getByRole('columnheader', { name: /justert for uføregrad/i });
-    expect(justertForUføregradKolonne).toBeVisible();
+    const oppjustertHundreProsentKolonne = screen.getByRole('columnheader', { name: /Oppjustert 100%/i });
+    expect(oppjustertHundreProsentKolonne).toBeVisible();
   });
 
   it('skal ha en kolonne som heter Inntektsgrunnlag (maks 6 G)', () => {

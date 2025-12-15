@@ -4,6 +4,7 @@ import { UføreInntekt } from 'lib/types/types';
 import { formaterTilG, formaterTilNok } from 'lib/utils/string';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { Veiledning } from 'components/veiledning/Veiledning';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 
 interface Props {
   inntekter: Array<UføreInntekt>;
@@ -54,7 +55,8 @@ export const UføreInntektTabell = ({ inntekter, gjennomsnittSiste3år, ytterlig
             return inntekt.inntektsPerioder.map((periode) => (
               <Table.Row key={inntekt.år}>
                 <Table.DataCell textSize={'small'}>
-                  {inntekt.år} (${periode.periode.fom} - ${periode.periode.tom})
+                  {inntekt.år} (${formaterDatoForFrontend(periode.periode.fom)} - $
+                  {formaterDatoForFrontend(periode.periode.tom)})
                 </Table.DataCell>
                 <Table.DataCell align={'right'} textSize={'small'}>
                   {periode.uføregrad == null ? '-' : `${periode.uføregrad} %`}
