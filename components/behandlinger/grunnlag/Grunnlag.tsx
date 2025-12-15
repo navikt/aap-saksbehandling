@@ -89,7 +89,7 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
           <VisBeregning grunnlag={beregningsgrunnlag.data} />
         </StegSuspense>
       )}
-      {toggles.featureMidlertidigStansInntektsbortfall && skalViseInntektsbortfall && (
+      {skalViseInntektsbortfall && (
         <StegSuspense>
           <Inntektsbortfall behandlingVersjon={inntektsbortfall.behandlingVersjon} readOnly={true} />
         </StegSuspense>
