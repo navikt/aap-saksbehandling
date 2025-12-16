@@ -21,6 +21,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { isSuccess } from 'lib/utils/api';
 import { revalidateFlyt } from 'lib/actions/actions';
 import { VelgeMottakere } from 'components/brevbygger/VelgeMottakere';
+import { IkkeSendBrevModal } from 'components/behandlinger/brev/skriveBrev/IkkeSendBrevModal';
+import { Brevbyggermeny } from 'components/brevbygger/Brevbyggermeny';
 
 export interface AlternativFormField {
   verdi: string;
@@ -49,6 +51,7 @@ interface BrevbyggerProps {
   mottaker: BrevMottaker;
   behandlingVersjon: number;
   readOnly: boolean;
+  visAvbryt?: boolean;
   fullmektigMottaker?: Mottaker;
   brukerMottaker?: Mottaker;
   brevmal?: string | null;
@@ -65,6 +68,7 @@ export const Brevbygger = ({
   brukerMottaker,
   behandlingVersjon,
   readOnly,
+  visAvbryt = true,
 }: BrevbyggerProps) => {
   const parsedBrevmal: BrevmalType = JSON.parse(brevmal || '');
   const { control, handleSubmit, watch } = useForm<BrevdataFormFields>({
@@ -76,6 +80,7 @@ export const Brevbygger = ({
   const router = useRouter();
   const [valgteMottakere, setMottakere] = useState<Mottaker[]>([]);
   const [visKanIkkeDistribuereAdvarsel, setVisKanIkkeDistribuereAdvarsel] = useState(false);
+  const [ikkeSendBrevModalOpen, settIkkeSendBrevModalOpen] = useState(false);
   const behandlingsReferanse = useBehandlingsReferanse();
   const { fields } = useFieldArray({ control, name: 'delmaler' });
   const { løsBehovOgGåTilNesteSteg, isLoading } = useLøsBehovOgGåTilNesteSteg('BREV');
@@ -183,6 +188,11 @@ export const Brevbygger = ({
   return (
     <HGrid columns={2} gap={'2'} minWidth={'1280px'}>
       <Box>
+        <Brevbyggermeny
+          visAvbryt={visAvbryt}
+          oppdaterBrevmal={oppdaterBrevmal}
+          settIkkeSendBrevModalOpen={settIkkeSendBrevModalOpen}
+        />
         {fullmektigMottaker && brukerMottaker && (
           <VelgeMottakere
             setMottakere={setMottakere}
@@ -213,18 +223,22 @@ export const Brevbygger = ({
             />
           ))}
           <Button variant="secondary">Oppdater brevdata</Button>
-          <Button onClick={oppdaterBrevmal} disabled={isLoading} variant="secondary">
-            Oppdater brevmal
-          </Button>
         </form>
         <Button type="button" onClick={() => sendBrev()} loading={isLoading}>
           Send brev
         </Button>
-        <Button type="button" onClick={() => slettBrev()} variant="danger">
-          Avbryt brev
-        </Button>
       </Box>
       <ForhåndsvisBrev referanse={referanse} />
+
+      <IkkeSendBrevModal
+        isOpen={ikkeSendBrevModalOpen}
+        onClose={() => {
+          settIkkeSendBrevModalOpen(false);
+        }}
+        onDelete={() => {
+          slettBrev();
+        }}
+      />
     </HGrid>
   );
 };
