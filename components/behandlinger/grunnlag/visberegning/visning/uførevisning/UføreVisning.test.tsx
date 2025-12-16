@@ -23,6 +23,7 @@ const grunnlag: UføreGrunnlag = {
     uføreGrad: 50,
     justertForUføreGrad: 250000,
     justertForUføreGradiG: 2.5,
+    inntektsPerioder: [],
   },
   inntekter: [
     {
@@ -41,6 +42,7 @@ const grunnlag: UføreGrunnlag = {
       inntektIG: 500000,
       justertTilMaks6G: 50000,
       inntektIKroner: 5000,
+      inntektsPerioder: [],
     },
   ],
 };
