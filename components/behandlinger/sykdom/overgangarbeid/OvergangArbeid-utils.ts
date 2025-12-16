@@ -6,6 +6,7 @@ import {
   OvergangArbeidForm,
   OvergangArbeidVurderingForm,
 } from 'components/behandlinger/sykdom/overgangarbeid/OvergangArbeid-types';
+import { getFraDatoFraGrunnlagForFrontend } from 'lib/utils/periodisering';
 
 export function getDefaultValuesFromGrunnlag(grunnlag?: OvergangArbeidGrunnlag): OvergangArbeidForm {
   if (grunnlag == null) {
@@ -26,7 +27,7 @@ export function getDefaultValuesFromGrunnlag(grunnlag?: OvergangArbeidGrunnlag):
       vurderinger: [
         {
           begrunnelse: '',
-          fraDato: formaterDatoForFrontend(new Date(grunnlag?.behøverVurderinger[0]?.fom!)),
+          fraDato: getFraDatoFraGrunnlagForFrontend(grunnlag),
           brukerRettPåAAP: '',
         },
       ],
