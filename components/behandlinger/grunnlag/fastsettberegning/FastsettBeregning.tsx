@@ -1,7 +1,7 @@
 'use client';
 
 import { Behovstype, getStringEllerUndefined } from 'lib/utils/form';
-import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
+import { formaterDatoForBackend, formaterDatoForFrontend, sorterEtterNyesteDato } from 'lib/utils/date';
 import {
   BeregningstidspunktVurderingResponse,
   BeregningTidspunktGrunnlag,
@@ -146,7 +146,9 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly, initi
     form.watch('nedsattArbeidsevneDato') &&
     erDatoFoerDato(formaterDatoForFrontend(sak.virkningsTidspunkt), form.watch('nedsattArbeidsevneDato'));
 
-  const historiskeVurderinger = grunnlag?.historiskeVurderinger;
+  const historiskeVurderinger = grunnlag?.historiskeVurderinger.sort((a, b) => {
+    return sorterEtterNyesteDato(a.vurdertAv.dato, b.vurdertAv.dato);
+  });
 
   return (
     <VilkårskortMedFormOgMellomlagringNyVisning
@@ -173,10 +175,10 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly, initi
         <TidligereVurderinger
           data={historiskeVurderinger}
           buildFelter={byggFelter}
-          getErGjeldende={(v) => deepEqual(v, historiskeVurderinger[historiskeVurderinger.length - 1])}
-          getFomDato={(v) => v.vurderingenGjelderFra ?? v.vurdertAv.dato}
+          getErGjeldende={(v) => deepEqual(v, historiskeVurderinger.at(0))}
           getVurdertAvIdent={(v) => v.vurdertAv.ident}
           getVurdertDato={(v) => v.vurdertAv.dato}
+          grupperPåOpprettetDato={true}
         />
       )}
 
