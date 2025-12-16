@@ -11,6 +11,7 @@ import {
 } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/sykepengererstating-types';
 import { parse } from 'date-fns';
 import { ValuePair } from 'components/form/FormField';
+import { getFraDatoFraGrunnlagForFrontend } from 'lib/utils/periodisering';
 
 export function getDefaultValuesFromGrunnlag(grunnlag?: SykepengeerstatningGrunnlag): SykepengeerstatningForm {
   if (grunnlag == null) {
@@ -32,7 +33,7 @@ export function getDefaultValuesFromGrunnlag(grunnlag?: SykepengeerstatningGrunn
       vurderinger: [
         {
           begrunnelse: '',
-          fraDato: formaterDatoForFrontend(new Date(grunnlag?.behøverVurderinger[0]?.fom!)),
+          fraDato: getFraDatoFraGrunnlagForFrontend(grunnlag),
           grunn: null,
           erOppfylt: '',
         },
