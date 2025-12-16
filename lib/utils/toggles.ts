@@ -16,4 +16,5 @@ export const toggles = {
   featureBistandPeriodisert: !isProd(),
   featurePeriodisertSPE: !isProd(),
   featurePeriodisertOvergangUføre: !isProd(),
+  featureRefusjonNyUi: !isProd(),
 };
