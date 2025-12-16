@@ -122,7 +122,7 @@ export const FastsettManuellInntektNy = ({
 
   return (
     <VilkårskortMedFormOgMellomlagringNyVisning
-      heading={'Manglende pensjonsgivende inntekter / EØS inntekter'}
+      heading={'Manglende pensjonsgivende inntekter / EØS-inntekter'}
       steg={'MANGLENDE_LIGNING'}
       onSubmit={handleSubmit}
       isLoading={isLoading}
@@ -187,7 +187,7 @@ export const FastsettManuellInntektNy = ({
             target="_blank"
             rel="noopener noreferrer"
           >
-            Du kan lese mer om hvordan EØS inntekt skal beregnes i rundskrivet til § 11-7 (lovdata.no)
+            Du kan lese mer om hvordan EØS-inntekt skal beregnes i rundskrivet til § 11-7 (lovdata.no).
           </Link>
           <FormField form={form} formField={formFields.begrunnelse} />
           <FastsettManuellInntektTabell form={form} tabellår={tabellår} readOnly={formReadOnly} />
