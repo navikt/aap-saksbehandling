@@ -29,7 +29,7 @@ export const FastsettManuellInntektTabell = ({ tabellår, form, readOnly, låstV
             <Table.HeaderCell textSize={'small'}>År</Table.HeaderCell>
             <Table.HeaderCell textSize={'small'}>Ferdig lignet PGI</Table.HeaderCell>
             <Table.HeaderCell textSize={'small'}>Beregnet PGI</Table.HeaderCell>
-            <Table.HeaderCell textSize={'small'}>EØS-inntekt</Table.HeaderCell>
+            <Table.HeaderCell textSize={'small'}>EØS-beregnet inntekt</Table.HeaderCell>
             <Table.HeaderCell textSize={'small'}>Totalt</Table.HeaderCell>
           </Table.Row>
         </Table.Header>

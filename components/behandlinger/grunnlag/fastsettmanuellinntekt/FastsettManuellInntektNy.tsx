@@ -125,7 +125,7 @@ export const FastsettManuellInntektNy = ({
 
   return (
     <VilkårskortMedFormOgMellomlagringNyVisning
-      heading={'Manglende pensjonsgivende inntekter / EØS-inntekter'}
+      heading={'Manglende pensjonsgivende inntekt / EØS-beregnet inntekt'}
       steg={'MANGLENDE_LIGNING'}
       onSubmit={handleSubmit}
       isLoading={isLoading}
