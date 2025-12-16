@@ -189,7 +189,7 @@ export const FastsettManuellInntektNy = ({
             target="_blank"
             rel="noopener noreferrer"
           >
-            Du kan lese mer om hvordan EØS-inntekt skal beregnes i rundskrivet til § 11-7 (lovdata.no).
+            Du kan lese mer om hvordan EØS-inntekt skal beregnes i kapittel 11.7 av EØS-rundskrivet.
           </Link>
           <FormField form={form} formField={formFields.begrunnelse} />
           <FastsettManuellInntektTabell form={form} tabellår={tabellår} readOnly={formReadOnly} />
