@@ -32,6 +32,10 @@ describe('Meldeplikt', () => {
 
     it('vises som åpent når det skal kvalitetssikres (readOnly er true og minst en vurdering finnes)', () => {
       const meldepliktGrunnlag: FritakMeldepliktGrunnlag = {
+        behøverVurderinger: [],
+        kanVurderes: [],
+        nyeVurderinger: [],
+        sisteVedtatteVurderinger: [],
         harTilgangTilÅSaksbehandle: true,
         vurderinger: [
           {
@@ -51,6 +55,10 @@ describe('Meldeplikt', () => {
 
     it('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
       const grunnlagMedVurdering: FritakMeldepliktGrunnlag = {
+        behøverVurderinger: [],
+        kanVurderes: [],
+        nyeVurderinger: [],
+        sisteVedtatteVurderinger: [],
         harTilgangTilÅSaksbehandle: true,
         vurderinger: [
           {
@@ -135,6 +143,10 @@ describe('Meldeplikt', () => {
       },
     };
     const grunnlagMedVurdering: FritakMeldepliktGrunnlag = {
+      behøverVurderinger: [],
+      kanVurderes: [],
+      nyeVurderinger: [],
+      sisteVedtatteVurderinger: [],
       gjeldendeVedtatteVurderinger: [],
       harTilgangTilÅSaksbehandle: true,
       historikk: [],
@@ -153,6 +165,10 @@ describe('Meldeplikt', () => {
     };
 
     const grunnlagUtenVurdering: FritakMeldepliktGrunnlag = {
+      behøverVurderinger: [],
+      kanVurderes: [],
+      nyeVurderinger: [],
+      sisteVedtatteVurderinger: [],
       gjeldendeVedtatteVurderinger: [],
       harTilgangTilÅSaksbehandle: true,
       historikk: [],
