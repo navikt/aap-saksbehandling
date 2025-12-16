@@ -152,7 +152,7 @@ export const FastsettManuellInntektNy = ({
           customElement={(selectedIndex) => {
             const pgi = grunnlag.registrerteInntekterSisteRelevanteAr;
             const tabelldata = byggTabellData({
-              sisteÅr: grunnlag.ar,
+              sisteÅr: grunnlag.sisteRelevanteÅr,
               pgi: pgi,
               manuelleInntekter: historiskeVurderinger.at(selectedIndex)?.årsVurderinger || [],
             });
@@ -254,7 +254,7 @@ const mapGrunnlagToDraftFormFields = (grunnlag: ManuellInntektGrunnlag): DraftFo
   return {
     begrunnelse: grunnlag.manuelleVurderinger?.begrunnelse,
     tabellår: byggTabellData({
-      sisteÅr: grunnlag.ar,
+      sisteÅr: grunnlag.sisteRelevanteÅr,
       pgi: grunnlag.registrerteInntekterSisteRelevanteAr,
       manuelleInntekter: grunnlag.manuelleVurderinger?.årsVurderinger || [],
     }),
