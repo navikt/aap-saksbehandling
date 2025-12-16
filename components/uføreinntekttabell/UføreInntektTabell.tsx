@@ -1,5 +1,5 @@
 import { BodyShort, Table, VStack } from '@navikt/ds-react';
-import { UføreInntekt } from 'lib/types/types';
+import { GjeldendeGrunnbeløp, UføreInntekt } from 'lib/types/types';
 
 import { formaterTilG, formaterTilNok } from 'lib/utils/string';
 import { TableStyled } from 'components/tablestyled/TableStyled';
@@ -10,9 +10,15 @@ interface Props {
   inntekter: Array<UføreInntekt>;
   gjennomsnittSiste3år: number;
   ytterligereNedsattArbeidsevneÅr: string;
+  gjeldendeGrunnbeløp: GjeldendeGrunnbeløp;
 }
 
-export const UføreInntektTabell = ({ inntekter, gjennomsnittSiste3år, ytterligereNedsattArbeidsevneÅr }: Props) => {
+export const UføreInntektTabell = ({
+  inntekter,
+  gjennomsnittSiste3år,
+  ytterligereNedsattArbeidsevneÅr,
+  gjeldendeGrunnbeløp,
+}: Props) => {
   const foersteAar = inntekter.at(0)?.år;
   const sisteAar = inntekter.at(-1)?.år;
 
@@ -66,7 +72,8 @@ export const UføreInntektTabell = ({ inntekter, gjennomsnittSiste3år, ytterlig
                   {formaterTilG(periode.inntektJustertForUføregrad.verdi)})
                 </Table.DataCell>
                 <Table.DataCell align={'right'} textSize={'small'}>
-                  {formaterTilNok(periode.inntektIKroner.verdi)} ({formaterTilG(periode.inntektIKroner.verdi)})
+                  {formaterTilNok(periode.inntektIKroner.verdi)} (
+                  {formaterTilG(periode.inntektIKroner.verdi / gjeldendeGrunnbeløp.grunnbeløp)})
                 </Table.DataCell>
                 <Table.DataCell align={'right'} textSize={'small'}>
                   {formaterTilG(inntekt.justertTilMaks6G)}

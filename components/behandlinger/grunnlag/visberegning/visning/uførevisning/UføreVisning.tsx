@@ -38,6 +38,7 @@ export const UføreVisning = ({ grunnlag, gjeldendeGrunnbeløp }: Props) => {
         inntekter={grunnlag.uføreInntekter}
         gjennomsnittSiste3år={grunnlag.gjennomsnittligInntektSiste3årUfør}
         ytterligereNedsattArbeidsevneÅr={grunnlag.ytterligereNedsattArbeidsevneÅr}
+        gjeldendeGrunnbeløp={gjeldendeGrunnbeløp}
       />
 
       <div className={'flex-column'}>
