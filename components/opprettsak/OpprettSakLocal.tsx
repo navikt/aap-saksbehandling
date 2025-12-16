@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Box, Button, HGrid, HStack, VStack } from '@navikt/ds-react';
+import { Box, Button, HGrid, HStack, VStack } from '@navikt/ds-react';
 import { mutate } from 'swr';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { OpprettSakBarn } from 'components/opprettsak/barn/OpprettSakBarn';
