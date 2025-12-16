@@ -33,6 +33,31 @@ const søkeresultat: SøkeResultat = {
   ],
 };
 
+const søkeresultatUtenSak: SøkeResultat = {
+  harTilgang: false,
+  harAdressebeskyttelse: true,
+  oppgaver: [
+    {
+      label: 'Testoppgave',
+      href: '/oppgave/123',
+      status: 'PÅ_VENT',
+      markeringer: [],
+    },
+  ],
+  person: [
+    {
+      label: 'Testperson',
+      href: null,
+    },
+  ],
+  kontor: [
+    {
+      enhet: 'Testkontor',
+    },
+  ],
+};
+
+
 describe('Kelvinsøkeresultat', () => {
   it('skal ikke lenke til saksside eller behandling når saksbehandler ikke har lesetilgang', () => {
     render(<Kelvinsøkeresultat søkeresultat={{ ...søkeresultat, harTilgang: false }} />);
@@ -67,5 +92,11 @@ describe('Kelvinsøkeresultat', () => {
 
     const infotekst = screen.getByText('Du har ikke tilgang til saken.');
     expect(infotekst).toBeInTheDocument();
+  });
+
+  it('skal ikke lenke til sakside når sak ikke finnes', () => {
+    render(<Kelvinsøkeresultat søkeresultat={søkeresultatUtenSak} />);
+    expect(screen.getByText('Fant ingen saker')).toBeInTheDocument();
+    expect(screen.getByText('Testperson')).toBeInTheDocument();
   });
 });

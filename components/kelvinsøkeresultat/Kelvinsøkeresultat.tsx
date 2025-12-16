@@ -18,7 +18,7 @@ interface Props {
 export const Kelvinsøkeresultat = ({
   søkeresultat: { oppgaver, saker, kontor, person, behandlingsStatus, harTilgang, harAdressebeskyttelse },
 }: Props) => {
-  if (!saker || saker.length == 0) {
+  if ((saker?.length == 0) && (oppgaver?.length == 0)) {
     return (
       <HStack>
         <Alert variant={'info'} size={'small'} className={styles.info}>
@@ -162,12 +162,12 @@ const LenkeHvisHarTilgang = ({
   skalViseLenke,
   className,
 }: {
-  href: string;
+  href: string | null;
   children: React.ReactNode;
   skalViseLenke: boolean;
   className?: string;
 }) => {
-  if (skalViseLenke) {
+  if (skalViseLenke && href) {
     return (
       <Link className={className} href={href}>
         {children}
