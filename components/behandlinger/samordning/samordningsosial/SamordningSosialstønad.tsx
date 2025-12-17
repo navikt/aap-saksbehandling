@@ -45,7 +45,10 @@ export const SamordningSosialstønad = ({ grunnlag }: Props) => {
                         : grunnlag.nåværendeVirkningsTidspunkt
                           ? formaterDatoForFrontend(grunnlag.nåværendeVirkningsTidspunkt)
                           : ''}{' '}
-                      - {vurdering.tom ? formaterDatoForFrontend(vurdering.tom) : 'Vedtaksdato når fattes i saken'}
+                      -{' '}
+                      {vurdering.tom
+                        ? formaterDatoForFrontend(vurdering.tom)
+                        : 'Vedtaksdato (Settes når saken iverksettes)'}
                     </HStack>
                   </Table.DataCell>
                   <Table.DataCell textSize="small">{vurdering.navKontor}</Table.DataCell>
