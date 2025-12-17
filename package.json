@@ -27,7 +27,6 @@
     "@opentelemetry/api-logs": "^0.208.0",
     "@portabletext/react": "^5.0.0",
     "@testing-library/user-event": "14.6.1",
-    "@unleash/nextjs": "^1.6.2",
     "@vercel/otel": "^1.14.0",
     "date-fns": "^4.1.0",
     "fuse.js": "^7.1.0",
@@ -45,6 +44,7 @@
     "react-plotly.js": "^2.6.0",
     "react-select": "^5.10.2",
     "swr": "^2.3.7",
+    "unleash-client": "^6.9.0",
     "uuid": "^11.1.0"
   },
   "devDependencies": {
