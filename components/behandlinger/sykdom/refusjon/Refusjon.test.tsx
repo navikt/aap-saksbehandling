@@ -67,7 +67,7 @@ describe('Refusjonskrav sosialstønad', () => {
     expect(finnGruppeVelgRefusjonskrav()).toBeVisible();
 
     await velgNei(finnGruppeVelgRefusjonskrav());
-    expect(await finnNavkontorListe()).not.toBeInTheDocument();
+    expect(await finnNavkontorListeQuery()).not.toBeInTheDocument();
   });
 
   it('Gir feilmelding ved manglende Nav-kontor', async () => {
@@ -105,7 +105,8 @@ describe('Refusjonskrav sosialstønad', () => {
 
   const finnGruppeVelgRefusjonskrav = () => screen.getByRole('group', { name: 'Er det refusjonskrav fra Nav-kontor?' });
 
-  const finnNavkontorListe = async () => screen.queryByRole('combobox', { name: 'Søk opp Nav-kontor' });
+  const finnNavkontorListe = async () => screen.findByRole('combobox', { name: 'Søk opp Nav-kontor' });
+  const finnNavkontorListeQuery = async () => screen.queryByRole('combobox', { name: 'Søk opp Nav-kontor' });
 
   const trykkPåBekreft = async () => await user.click(screen.getByRole('button', { name: 'Bekreft' }));
 
