@@ -15,93 +15,88 @@ import { logError, logInfo } from 'lib/serverutlis/logger';
 import { apiFetch, apiFetchPdf } from 'lib/services/apiFetch';
 import { isError } from 'lib/utils/api';
 
-const dokumentMottakApiBaseUrl = process.env.DOKUMENTMOTTAK_API_BASE_URL;
-const dokumentMottakApiScope = process.env.DOKUMENTMOTTAK_API_SCOPE ?? '';
+const postmottakApiBaseUrl = process.env.POSTMOTTAK_API_BASE_URL;
+const postmottakApiScope = process.env.POSTMOTTAK_API_SCOPE ?? '';
 
 export const hentBehandling = async (behandlingsReferanse: string) => {
-  const url = `${dokumentMottakApiBaseUrl}/api/behandling/${behandlingsReferanse}`;
-  return await apiFetch<DetaljertBehandlingDto>(url, dokumentMottakApiScope, 'GET');
+  const url = `${postmottakApiBaseUrl}/api/behandling/${behandlingsReferanse}`;
+  return await apiFetch<DetaljertBehandlingDto>(url, postmottakApiScope, 'GET');
 };
 export const hentFlyt = async (behandlingsreferanse: string) => {
-  const url = `${dokumentMottakApiBaseUrl}/api/behandling/${behandlingsreferanse}/flyt`;
-  return await apiFetch<BehandlingFlytOgTilstand>(url, dokumentMottakApiScope, 'GET');
+  const url = `${postmottakApiBaseUrl}/api/behandling/${behandlingsreferanse}/flyt`;
+  return await apiFetch<BehandlingFlytOgTilstand>(url, postmottakApiScope, 'GET');
 };
 
 export const hentAvklarTemaGrunnlag = async (behandlingsreferanse: string) => {
-  const url = `${dokumentMottakApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/avklarTemaVurdering`;
-  return await apiFetch<AvklarTemaGrunnlag>(url, dokumentMottakApiScope, 'GET');
+  const url = `${postmottakApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/avklarTemaVurdering`;
+  return await apiFetch<AvklarTemaGrunnlag>(url, postmottakApiScope, 'GET');
 };
 export const hentFinnSakGrunnlag = async (behandlingsreferanse: string) => {
-  const url = `${dokumentMottakApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/finnSak`;
-  return await apiFetch<FinnSakGrunnlag>(url, dokumentMottakApiScope, 'GET');
+  const url = `${postmottakApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/finnSak`;
+  return await apiFetch<FinnSakGrunnlag>(url, postmottakApiScope, 'GET');
 };
 export const hentOverleveringGrunnlag = async (behandlingsreferanse: string) => {
-  const url = `${dokumentMottakApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/overlevering`;
-  return await apiFetch<OverleveringGrunnlag>(url, dokumentMottakApiScope, 'GET');
+  const url = `${postmottakApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/overlevering`;
+  return await apiFetch<OverleveringGrunnlag>(url, postmottakApiScope, 'GET');
 };
 export const hentDigitaliseringGrunnlag = async (behandlingsreferanse: string) => {
-  const url = `${dokumentMottakApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/digitalisering`;
-  return await apiFetch<DigitaliseringsGrunnlag>(url, dokumentMottakApiScope, 'GET');
+  const url = `${postmottakApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/digitalisering`;
+  return await apiFetch<DigitaliseringsGrunnlag>(url, postmottakApiScope, 'GET');
 };
 export const hentJournalpostInfo = async (behandlingsreferanse: string) => {
-  const url = `${dokumentMottakApiBaseUrl}/api/dokumenter/${behandlingsreferanse}/info`;
-  return apiFetch<JournalpostInfo>(url, dokumentMottakApiScope, 'GET');
+  const url = `${postmottakApiBaseUrl}/api/dokumenter/${behandlingsreferanse}/info`;
+  return apiFetch<JournalpostInfo>(url, postmottakApiScope, 'GET');
 };
 
 export const løsAvklaringsbehov = async (avklaringsBehov: LøsAvklaringsbehovPåBehandling) => {
-  const url = `${dokumentMottakApiBaseUrl}/api/behandling/løs-behov`;
-  return await apiFetch<void>(url, dokumentMottakApiScope, 'POST', avklaringsBehov);
+  const url = `${postmottakApiBaseUrl}/api/behandling/løs-behov`;
+  return await apiFetch<void>(url, postmottakApiScope, 'POST', avklaringsBehov);
 };
 export const settPåVent = async (behandlingsreferanse: string, body: SettPåVentRequest) => {
-  const url = `${dokumentMottakApiBaseUrl}/api/behandling/${behandlingsreferanse}/sett-på-vent`;
-  return await apiFetch<unknown>(url, dokumentMottakApiScope, 'POST', body, [
-    `postmottak/flyt/${behandlingsreferanse}`,
-  ]);
+  const url = `${postmottakApiBaseUrl}/api/behandling/${behandlingsreferanse}/sett-på-vent`;
+  return await apiFetch<unknown>(url, postmottakApiScope, 'POST', body, [`postmottak/flyt/${behandlingsreferanse}`]);
 };
 export const hentVenteInformasjon = async (behandlingsreferanse: string) => {
-  const url = `${dokumentMottakApiBaseUrl}/api/behandling/${behandlingsreferanse}/vente-informasjon`;
-  return await apiFetch<Venteinformasjon>(url, dokumentMottakApiScope, 'GET');
+  const url = `${postmottakApiBaseUrl}/api/behandling/${behandlingsreferanse}/vente-informasjon`;
+  return await apiFetch<Venteinformasjon>(url, postmottakApiScope, 'GET');
 };
 export const hentDokumentFraDokumentInfoId = async (
   journalpostId: number,
   dokumentInfoId: string
 ): Promise<Response> => {
-  return apiFetchPdf(
-    `${dokumentMottakApiBaseUrl}/api/dokumenter/${journalpostId}/${dokumentInfoId}`,
-    dokumentMottakApiScope
-  );
+  return apiFetchPdf(`${postmottakApiBaseUrl}/api/dokumenter/${journalpostId}/${dokumentInfoId}`, postmottakApiScope);
 };
 
 export const endreTema = async (behandlingsreferanse: string) => {
-  const url = `${dokumentMottakApiBaseUrl}/api/behandling/${behandlingsreferanse}/endre-tema`;
-  return await apiFetch<{ redirectUrl: string }>(url, dokumentMottakApiScope, 'POST');
+  const url = `${postmottakApiBaseUrl}/api/behandling/${behandlingsreferanse}/endre-tema`;
+  return await apiFetch<{ redirectUrl: string }>(url, postmottakApiScope, 'POST');
 };
 
 export const hentAlleBehandlinger = async () => {
-  const url = `${dokumentMottakApiBaseUrl}/test/hentAlleBehandlinger`;
+  const url = `${postmottakApiBaseUrl}/test/hentAlleBehandlinger`;
   return await apiFetch<[{ id: string; journalpostId: string; status: string; opprettet: string; steg: string }]>(
     url,
-    dokumentMottakApiScope,
+    postmottakApiScope,
     'GET'
   );
 };
 export const forberedBehandlingOgVentPåProsessering = async (
   referanse: string
 ): Promise<undefined | FlytProsessering> => {
-  const url = `${dokumentMottakApiBaseUrl}/api/behandling/${referanse}/forbered`;
+  const url = `${postmottakApiBaseUrl}/api/behandling/${referanse}/forbered`;
   logInfo(`Forbereder behandling: ${referanse}`);
-  return await apiFetch(url, dokumentMottakApiScope, 'GET').then(() => ventTilProsesseringErFerdig(referanse));
+  return await apiFetch(url, postmottakApiScope, 'GET').then(() => ventTilProsesseringErFerdig(referanse));
 };
 
 export const auditlog = async (journalpostId: number) => {
-  const url = `${dokumentMottakApiBaseUrl}/api/journalpost/${journalpostId}/auditlog`;
-  return await apiFetch(url, dokumentMottakApiScope, 'POST');
+  const url = `${postmottakApiBaseUrl}/api/journalpost/${journalpostId}/auditlog`;
+  return await apiFetch(url, postmottakApiScope, 'POST');
 };
 
 // TODO: Fjern denne - testendepunkt
 export const opprettBehandlingForJournalpost = async (body: { journalpostId: number }) => {
-  const url = `${dokumentMottakApiBaseUrl}/api/behandling`;
-  return await apiFetch<{ referanse: number }>(url, dokumentMottakApiScope, 'POST', body);
+  const url = `${postmottakApiBaseUrl}/api/behandling`;
+  return await apiFetch<{ referanse: number }>(url, postmottakApiScope, 'POST', body);
 };
 
 async function ventTilProsesseringErFerdig(
