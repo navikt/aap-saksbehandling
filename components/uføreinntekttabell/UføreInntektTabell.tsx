@@ -80,12 +80,12 @@ export const UføreInntektTabell = ({
                       {`${uføregrad} %`}
                     </Table.DataCell>
                     <Table.DataCell align={'right'} textSize={'small'}>
-                      {formaterTilNok(inntektJustertForUføregrad.verdi)}
-                      {formaterInntektTilG(inntektJustertForUføregrad.verdi, gjeldendeGrunnbeløp)}
-                    </Table.DataCell>
-                    <Table.DataCell align={'right'} textSize={'small'}>
                       {formaterTilNok(inntektIKroner.verdi)}
                       {formaterInntektTilG(inntektIKroner.verdi, gjeldendeGrunnbeløp)}
+                    </Table.DataCell>
+                    <Table.DataCell align={'right'} textSize={'small'}>
+                      {formaterTilNok(inntektJustertForUføregrad.verdi)}
+                      {formaterInntektTilG(inntektJustertForUføregrad.verdi, gjeldendeGrunnbeløp)}
                     </Table.DataCell>
                     <Table.DataCell align={'right'} textSize={'small'}>
                       {formaterTilG(justertTilMaks6G / inntekt.inntektsPerioder.length)}
