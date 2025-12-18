@@ -27,12 +27,14 @@ export const RefusjonMedDataFetching = async ({ behandlingsReferanse, stegData }
   }
 
   if (!unleashService.isEnabled('SosialRefusjon')) {
-    <GammelRefusjon
-      grunnlag={refusjonGrunnlag.data}
-      readOnly={stegData.readOnly || !refusjonGrunnlag.data.harTilgangTilÅSaksbehandle}
-      behandlingVersjon={stegData.behandlingVersjon}
-      initialMellomlagretVurdering={initialMellomlagretVurdering}
-    />;
+    return (
+      <GammelRefusjon
+        grunnlag={refusjonGrunnlag.data}
+        readOnly={stegData.readOnly || !refusjonGrunnlag.data.harTilgangTilÅSaksbehandle}
+        behandlingVersjon={stegData.behandlingVersjon}
+        initialMellomlagretVurdering={initialMellomlagretVurdering}
+      />
+    );
   } else {
     return (
       <Refusjon
