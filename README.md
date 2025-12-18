@@ -8,9 +8,9 @@ Frontendapplikasjon for ny saksbehandlingsløsning på AAP
 
 For at linting ved commit skal skje må du kjøre `yarn husky` etter å ha klonet repoet
 
+### Linting
 
-### Linting 
-Prosjektet bruker prettier og eslint. I IntelliJ kan du skru på disse to pluginene med "auto" configuration valgt. 
+Prosjektet bruker prettier og eslint. I IntelliJ kan du skru på disse to pluginene med "auto" configuration valgt.
 
 ### Github package registry
 
@@ -49,7 +49,7 @@ følge guiden her https://aap-sysdoc.ansatt.nav.no/funksjonalitet/Behandlingsfly
 OBS: Du må kopiere `.env-template` til `.env.local` for å kunne kjøre lokalt.
 
 ```
-yarn install
+yarn install (eller yarn install --immutable for å gjøre endringer i yarn.lock)
 yarn dev
 ```
 
