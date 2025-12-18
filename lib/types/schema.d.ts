@@ -4317,6 +4317,11 @@ export interface components {
       tjenestePensjon?: boolean | null;
       /** Format: int32 */
       'uf\u00F8re'?: number | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      'uf\u00F8reTidspunkt'?: string | null;
       yrkesskade: boolean;
     };
     'no.nav.aap.behandlingsflyt.TestBarn': {
@@ -9702,7 +9707,8 @@ export interface components {
       inntektIKroner: components['schemas']['no.nav.aap.komponenter.verdityper.Bel\u00F8p'];
       'inntektJustertForUf\u00F8regrad': components['schemas']['no.nav.aap.komponenter.verdityper.Bel\u00F8p'];
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
-      'uf\u00F8regrad': components['schemas']['no.nav.aap.komponenter.verdityper.Prosent'];
+      /** Format: int32 */
+      'uf\u00F8regrad': number;
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.YrkesskadeGrunnlagDTO': {
       'gjennomsnittligInntektSiste3\u00E5r': number;
@@ -14729,7 +14735,6 @@ export interface components {
       /** Format: int32 */
       antall: number;
     };
-    'no.nav.aap.komponenter.verdityper.Prosent': Record<string, never>;
     'no.nav.aap.motor.api.JobbInfoDto': {
       /** Format: int32 */
       'antallFeilendeFors\u00F8k': number;

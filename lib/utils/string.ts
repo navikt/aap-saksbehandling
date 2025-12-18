@@ -36,6 +36,5 @@ export function formaterTilProsent(sum?: number | null): string {
   if (sum === null) {
     return '';
   }
-
   return `${sum} %`;
 }

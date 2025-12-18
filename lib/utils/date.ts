@@ -6,6 +6,7 @@ export const DATO_FORMATER = {
   ddMMMyyyy: 'dd. MMM yyyy',
   ddMMyyyy_HHmm: 'dd.MM.yyyy HH:mm',
   ddMMyyyy_HHmmss: 'dd.MM.yyyy HH:mm:ss',
+  ddMM: 'dd.MM.',
 };
 
 const uendeligSluttString = '2999-01-01';
@@ -20,6 +21,10 @@ export function formaterDatoForFrontend(dato: Date | string): string {
 
 export function formaterDatoMedTidspunktForFrontend(dato: Date | string): string {
   return format(dato, DATO_FORMATER.ddMMyyyy_HHmm, { locale: nb });
+}
+
+export function formaterDatoMedKunDagOgMånedForFrontend(dato: string): string {
+  return format(dato, DATO_FORMATER.ddMM, { locale: nb });
 }
 
 export const formaterDatoForBackend = (dato: Date) => {
