@@ -108,6 +108,7 @@ export const FastsettManuellInntektNy = ({
                 år: år.år,
                 beløp: år.beregnetPGI,
                 eøsBeløp: år.eøsInntekt,
+                ferdigLignetPGI: år.ferdigLignetPGI,
               })),
             },
           },
@@ -152,12 +153,15 @@ export const FastsettManuellInntektNy = ({
           getVurdertDato={(v) => v.vurdertAv.dato}
           grupperPåOpprettetDato={true}
           customElement={(valgtVurderingIndex) => {
-            const pgi = grunnlag.registrerteInntekterSisteRelevanteAr;
-            const tabelldata = byggTabellData({
-              sisteÅr: grunnlag.sisteRelevanteÅr,
-              pgi: pgi,
-              manuelleInntekter: vurderinger.at(valgtVurderingIndex)?.årsVurderinger || [],
-            });
+            const tabelldata: Tabellår[] | undefined = vurderinger
+              .at(valgtVurderingIndex)
+              ?.årsVurderinger.map((år) => ({
+                år: år.år,
+                ferdigLignetPGI: år.ferdigLignetPGI,
+                beregnetPGI: år.beløp,
+                eøsInntekt: år.eøsBeløp,
+              }));
+
             return (
               <>
                 <VStack>
@@ -165,7 +169,7 @@ export const FastsettManuellInntektNy = ({
                   <BodyShort size="small">{vurderinger.at(valgtVurderingIndex)?.begrunnelse}</BodyShort>
                 </VStack>
                 <VStack>
-                  <FastsettManuellInntektTabell form={form} tabellår={tabelldata} låstVisning={true} />
+                  {tabelldata && <FastsettManuellInntektTabell form={form} tabellår={tabelldata} låstVisning={true} />}
                 </VStack>
               </>
             );
@@ -208,7 +212,6 @@ const berikMedManglendeÅr = (sisteÅr: number): Tabellår[] => {
     ferdigLignetPGI: undefined,
     beregnetPGI: undefined,
     eøsInntekt: undefined,
-    totalInntekt: undefined,
   }));
 };
 
@@ -223,7 +226,6 @@ const berikMedPGI = (treÅr: Tabellår[], pgi: ManuellInntektÅr[]): Tabellår[]
       ferdigLignetPGI: inntekter?.beløp,
       beregnetPGI: undefined,
       eøsInntekt: undefined,
-      totalInntekt: undefined,
     };
   });
 };
@@ -239,7 +241,6 @@ const berikMedManuelleInntekter = (treÅr: Tabellår[], manuelleInntekter: Manue
       ferdigLignetPGI: år.ferdigLignetPGI,
       beregnetPGI: inntekter?.beløp,
       eøsInntekt: inntekter?.eøsBeløp,
-      totalInntekt: undefined,
     };
   });
 };

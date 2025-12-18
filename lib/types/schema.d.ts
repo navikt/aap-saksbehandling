@@ -10073,6 +10073,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.\u00C5rData': {
       'bel\u00F8p'?: number | null;
       'e\u00F8sBel\u00F8p'?: number | null;
+      ferdigLignetPGI?: number | null;
       /** Format: int32 */
       '\u00E5r': number;
     };
@@ -10213,9 +10214,11 @@ export interface components {
         | 'VEDTAK_11_23_SJETTE_LEDD'
         | 'FORVALTNINGSMELDING'
         | 'VEDTAK_ENDRING'
+        | 'BARNETILLEGG_SATS_REGULERING'
         | 'KLAGE_AVVIST'
         | 'KLAGE_OPPRETTHOLDELSE'
         | 'KLAGE_TRUKKET'
+        | 'KLAGE_MOTTATT'
         | 'FORHÅNDSVARSEL_KLAGE_FORMKRAV'
         | 'OMGJØRING_VEDTAK_11_9';
       'harTilgangTil\u00C5SendeBrev': boolean;
@@ -10283,12 +10286,12 @@ export interface components {
       underveisavslag?:
         | 'IKKE_GRUNNLEGGENDE_RETT'
         | 'MELDEPLIKT_FRIST_IKKE_PASSERT'
-        | 'SONER_STRAFF'
         | 'VARIGHETSKVOTE_BRUKT_OPP'
         | 'BRUDD_PÅ_AKTIVITETSPLIKT_11_7_STANS'
         | 'BRUDD_PÅ_AKTIVITETSPLIKT_11_7_OPPHØR'
         | 'BRUDD_PÅ_OPPHOLDSKRAV_11_3_STANS'
         | 'BRUDD_PÅ_OPPHOLDSKRAV_11_3_OPPHØR'
+        | 'SONER_STRAFF'
         | 'IKKE_OVERHOLDT_MELDEPLIKT_SANKSJON'
         | 'ARBEIDER_MER_ENN_GRENSEVERDI'
         | null;
@@ -11482,12 +11485,12 @@ export interface components {
       'avslags\u00E5rsak'?:
         | 'IKKE_GRUNNLEGGENDE_RETT'
         | 'MELDEPLIKT_FRIST_IKKE_PASSERT'
-        | 'SONER_STRAFF'
         | 'VARIGHETSKVOTE_BRUKT_OPP'
         | 'BRUDD_PÅ_AKTIVITETSPLIKT_11_7_STANS'
         | 'BRUDD_PÅ_AKTIVITETSPLIKT_11_7_OPPHØR'
         | 'BRUDD_PÅ_OPPHOLDSKRAV_11_3_STANS'
         | 'BRUDD_PÅ_OPPHOLDSKRAV_11_3_OPPHØR'
+        | 'SONER_STRAFF'
         | 'IKKE_OVERHOLDT_MELDEPLIKT_SANKSJON'
         | 'ARBEIDER_MER_ENN_GRENSEVERDI'
         | null;
@@ -12455,6 +12458,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.beregning.\u00C5rsVurdering': {
       'bel\u00F8p'?: number | null;
       'e\u00F8sBel\u00F8p'?: number | null;
+      ferdigLignetPGI?: number | null;
       /** Format: int32 */
       '\u00E5r': number;
     };
