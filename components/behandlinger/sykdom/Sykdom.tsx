@@ -15,7 +15,7 @@ import { SykdomsvurderingBrevMedDataFetching } from 'components/behandlinger/syk
 import { OvergangUforeMedDataFetching } from './overgangufore/OvergangUforeMedDataFetching';
 import { OvergangArbeidMedDataFetching } from './overgangarbeid/OvergangArbeidMedDataFetching';
 import { ArbeidsopptrappingMedDataFetching } from 'components/behandlinger/sykdom/arbeidsopptrapping/ArbeidsopptrappingMedDataFetching';
-import { unleash } from 'lib/services/unleash';
+import { unleashService } from 'lib/services/unleash/unleashService';
 
 interface Props {
   behandlingsReferanse: string;
@@ -38,7 +38,7 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
   const vurderYrkesskadeSteg = getStegData(aktivStegGruppe, 'VURDER_YRKESSKADE', flyt.data);
   const vurderSykepengeerstatningSteg = getStegData(aktivStegGruppe, 'VURDER_SYKEPENGEERSTATNING', flyt.data);
   const overganguføreSteg = getStegData(aktivStegGruppe, 'OVERGANG_UFORE', flyt.data);
-  const overgangarbeidSteg = unleash.isEnabled('OvergangArbeidFrontend')
+  const overgangarbeidSteg = unleashService.isEnabled('OvergangArbeidFrontend')
     ? getStegData(aktivStegGruppe, 'OVERGANG_ARBEID', flyt.data)
     : null;
 
@@ -60,7 +60,7 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
           <BistandsbehovMedDataFetching
             behandlingsReferanse={behandlingsReferanse}
             stegData={vurderBistandsbehovSteg}
-            overgangArbeidEnabled={unleash.isEnabled('OvergangArbeidFrontend')}
+            overgangArbeidEnabled={unleashService.isEnabled('OvergangArbeidFrontend')}
           />
         </StegSuspense>
       )}
@@ -90,7 +90,7 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
           <OvergangUforeMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={overganguføreSteg} />
         </StegSuspense>
       )}
-      {unleash.isEnabled('OvergangArbeidFrontend') &&
+      {unleashService.isEnabled('OvergangArbeidFrontend') &&
         overgangarbeidSteg !== null &&
         overgangarbeidSteg.skalViseSteg && (
           <StegSuspense>

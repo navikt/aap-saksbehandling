@@ -6,7 +6,7 @@ import { SakContextProvider } from 'context/saksbehandling/SakContext';
 import { addDays, format } from 'date-fns';
 import { TildelOppgaverContext } from 'context/oppgave/TildelOppgaverContext';
 import { FeatureFlagProvider } from 'context/UnleashContext';
-import { mockedFlags } from 'lib/services/unleash';
+import { mockedFlags } from 'lib/services/unleash/unleashToggles';
 
 afterEach(() => {
   cleanup();

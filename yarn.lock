@@ -3556,6 +3556,7 @@ __metadata:
     react-hook-form: "npm:7.68.0"
     react-plotly.js: "npm:^2.6.0"
     react-select: "npm:^5.10.2"
+    server-only: "npm:0.0.1"
     swr: "npm:^2.3.7"
     typescript: "npm:^5.9.3"
     unleash-client: "npm:^6.9.0"
@@ -11320,6 +11321,13 @@ __metadata:
     parseurl: "npm:^1.3.3"
     send: "npm:^1.2.0"
   checksum: 10c0/30e2ed1dbff1984836cfd0c65abf5d3f3f83bcd696c99d2d3c97edbd4e2a3ff4d3f87108a7d713640d290a7b6fe6c15ddcbc61165ab2eaad48ea8d3b52c7f913
+  languageName: node
+  linkType: hard
+
+"server-only@npm:0.0.1":
+  version: 0.0.1
+  resolution: "server-only@npm:0.0.1"
+  checksum: 10c0/4704f0ef85da0be981af6d4ed8e739d39bcfd265b9c246a684060acda5642d0fdc6daffc2308e71e2682c5f508090978802eae0a77623c9b90a49f9ae68048d6
   languageName: node
   linkType: hard
 

@@ -1,12 +1,9 @@
+import 'server-only';
 import { Unleash } from 'unleash-client';
 import { isLocal } from 'lib/utils/environment';
+import { FlagNames, FLAGS, Flags, mockedFlags } from 'lib/services/unleash/unleashToggles';
 
-const FLAGS = ['OvergangArbeidFrontend', 'PeriodisertSPEFrontend'] as const;
-
-export type FlagNames = (typeof FLAGS)[number];
-export type Flags = Record<FlagNames, boolean>;
-
-interface IUnleash {
+export interface IUnleash {
   isEnabled(flagName: FlagNames): boolean;
 }
 
@@ -21,11 +18,6 @@ function createRealUnleash(): IUnleash {
   });
 }
 
-export const mockedFlags: Flags = {
-  OvergangArbeidFrontend: true,
-  PeriodisertSPEFrontend: true,
-};
-
 function createMockUnleash(): IUnleash {
   return {
     isEnabled: (flagName: FlagNames) => mockedFlags[flagName],
@@ -33,9 +25,9 @@ function createMockUnleash(): IUnleash {
 }
 
 // Bruk mock-unleash hvis LOKALT og env-variabel ikke er satt, for DEV og PROD bruker den alltid ekte unleash
-export const unleash =
+export const unleashService =
   process.env.UNLEASH_SERVER_API_URL == null && isLocal() ? createMockUnleash() : createRealUnleash();
 
 export function getAllFlags(): Flags {
-  return Object.fromEntries(FLAGS.map((name) => [name, unleash.isEnabled(name)])) as Flags;
+  return Object.fromEntries(FLAGS.map((name) => [name, unleashService.isEnabled(name)])) as Flags;
 }
