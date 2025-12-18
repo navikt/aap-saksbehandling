@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
 import { DetaljertBehandling, FlytVisning, SakPersoninfo, SaksInfo } from 'lib/types/types';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Oppgave } from 'lib/types/oppgaveTypes';
 import {
@@ -9,6 +9,7 @@ import {
   NoNavAapOppgaveOppgaveDtoStatus,
   NoNavAapOppgaveReturInformasjonStatus,
 } from '@navikt/aap-oppgave-typescript-types';
+import { customRender } from 'lib/test/CustomRender';
 
 const personInformasjon: SakPersoninfo = { navn: 'Peder Ås', fnr: '12345678910' };
 const user = userEvent.setup();
@@ -64,7 +65,7 @@ const visning: FlytVisning = {
 
 describe('Saksinfobanner på sak siden', () => {
   beforeEach(() => {
-    render(<SaksinfoBanner personInformasjon={personInformasjon} sak={sak} />);
+    customRender(<SaksinfoBanner personInformasjon={personInformasjon} sak={sak} />);
   });
 
   it('skal vise navn på bruker', () => {
@@ -119,7 +120,7 @@ const avsluttetBehandling: DetaljertBehandling = {
 
 describe('SaksinfoBanner på behandling siden', () => {
   it('skal vise navn på bruker', () => {
-    render(
+    customRender(
       <SaksinfoBanner
         personInformasjon={personInformasjon}
         sak={sak}
@@ -132,7 +133,7 @@ describe('SaksinfoBanner på behandling siden', () => {
   });
 
   it('skal vise ident på bruker', () => {
-    render(
+    customRender(
       <SaksinfoBanner
         personInformasjon={personInformasjon}
         sak={sak}
@@ -145,7 +146,7 @@ describe('SaksinfoBanner på behandling siden', () => {
   });
 
   it('skal vise saksnummer derosm brukeren er på behandlingsiden', () => {
-    render(
+    customRender(
       <SaksinfoBanner
         personInformasjon={personInformasjon}
         sak={sak}
@@ -158,7 +159,7 @@ describe('SaksinfoBanner på behandling siden', () => {
   });
 
   it('skal vise hvilken type behandling', () => {
-    render(
+    customRender(
       <SaksinfoBanner
         personInformasjon={personInformasjon}
         sak={sak}
@@ -171,7 +172,7 @@ describe('SaksinfoBanner på behandling siden', () => {
   });
 
   it('skal vise status', () => {
-    render(
+    customRender(
       <SaksinfoBanner
         personInformasjon={personInformasjon}
         sak={sak}
@@ -184,7 +185,7 @@ describe('SaksinfoBanner på behandling siden', () => {
   });
 
   it('skal ha en knapp for å åpne saksmeny', () => {
-    render(
+    customRender(
       <SaksinfoBanner
         personInformasjon={personInformasjon}
         sak={sak}
@@ -198,7 +199,7 @@ describe('SaksinfoBanner på behandling siden', () => {
   });
 
   it('menyvalg for å trekke søknad vises for førstegangsbehandling', async () => {
-    render(
+    customRender(
       <SaksinfoBanner
         personInformasjon={personInformasjon}
         sak={sak}
@@ -213,7 +214,7 @@ describe('SaksinfoBanner på behandling siden', () => {
   });
 
   it('menyvalg for å trekke søknad vises ikke hvis bruker ikke har saksbehandlertilgang', async () => {
-    render(
+    customRender(
       <SaksinfoBanner
         personInformasjon={personInformasjon}
         sak={sak}
@@ -228,7 +229,7 @@ describe('SaksinfoBanner på behandling siden', () => {
   });
 
   it('menyvalg for å trekke søknad vises ikke for en avsluttet førstegangsbehandling', async () => {
-    render(
+    customRender(
       <SaksinfoBanner
         personInformasjon={personInformasjon}
         sak={avsluttetSak}
@@ -243,7 +244,7 @@ describe('SaksinfoBanner på behandling siden', () => {
   });
 
   it('menyvalg for å trekke søknad vises ikke for revurdering', async () => {
-    render(
+    customRender(
       <SaksinfoBanner
         personInformasjon={personInformasjon}
         sak={sak}
@@ -257,7 +258,7 @@ describe('SaksinfoBanner på behandling siden', () => {
   });
 
   it('menyvalg for å overstyre startstidspunkt vises ikke hvis behandling er iverksatt', async () => {
-    render(
+    customRender(
       <SaksinfoBanner
         personInformasjon={personInformasjon}
         sak={sak}
@@ -273,7 +274,7 @@ describe('SaksinfoBanner på behandling siden', () => {
   });
 
   it('menyvalg for å sette markeringer på behandling vises', async () => {
-    render(
+    customRender(
       <SaksinfoBanner
         personInformasjon={personInformasjon}
         sak={sak}
@@ -289,7 +290,7 @@ describe('SaksinfoBanner på behandling siden', () => {
   });
 
   it('skal ikke vise Arena-tag når brukeren ikke har AAP-Arena-historikk', () => {
-    render(
+    customRender(
       <SaksinfoBanner
         personInformasjon={personInformasjon}
         sak={sak}
@@ -305,7 +306,7 @@ describe('SaksinfoBanner på behandling siden', () => {
 
   it('skal vise Arena-tag når brukeren har AAP-Arena-historikk', () => {
     sak.behandlinger;
-    render(
+    customRender(
       <SaksinfoBanner
         personInformasjon={personInformasjon}
         sak={sak}
@@ -327,7 +328,7 @@ describe('SaksinfoBanner på behandling siden', () => {
 
 describe('Sak status', () => {
   it('skal vise en tag som viser om saken er satt på vent dersom den er det', () => {
-    render(
+    customRender(
       <SaksinfoBanner
         personInformasjon={personInformasjon}
         sak={sak}
@@ -342,7 +343,7 @@ describe('Sak status', () => {
   });
 
   it('skal ikke vise en tag som viser om saken er satt på vent dersom den ikke er det', () => {
-    render(
+    customRender(
       <SaksinfoBanner
         personInformasjon={personInformasjon}
         sak={sak}
@@ -357,7 +358,7 @@ describe('Sak status', () => {
   });
 
   it('skal vise saksbehandlers navn på tildelt-tag dersom oppgaven er reservert', () => {
-    render(
+    customRender(
       <SaksinfoBanner
         personInformasjon={personInformasjon}
         sak={sak}
@@ -374,7 +375,7 @@ describe('Sak status', () => {
   });
 
   it('skal vise saksbehandlers ident på tildelt-tag dersom oppgaven er tildelt og navn ikke finnes', () => {
-    render(
+    customRender(
       <SaksinfoBanner
         personInformasjon={personInformasjon}
         sak={sak}
@@ -391,7 +392,7 @@ describe('Sak status', () => {
   });
 
   it('skal vise en tag som viser om behandlingen er tildelt dersom innnlogget bruker har resertvert den', () => {
-    render(
+    customRender(
       <SaksinfoBanner
         personInformasjon={personInformasjon}
         sak={sak}
@@ -407,7 +408,7 @@ describe('Sak status', () => {
   });
 
   it('skal ikke vise en tag som viser om behandlingen er reservert dersom ingen har reservert den', () => {
-    render(
+    customRender(
       <SaksinfoBanner
         personInformasjon={personInformasjon}
         sak={sak}
@@ -422,7 +423,7 @@ describe('Sak status', () => {
   });
 
   it('viser ikke trukket-tag for en søknad som ikke er trukket', () => {
-    render(
+    customRender(
       <SaksinfoBanner
         personInformasjon={personInformasjon}
         sak={sak}
@@ -436,7 +437,7 @@ describe('Sak status', () => {
 
   it('viser at en søknad er trukket', () => {
     const trukketSøknad = { ...sak, søknadErTrukket: true };
-    render(
+    customRender(
       <SaksinfoBanner
         personInformasjon={personInformasjon}
         sak={trukketSøknad}
@@ -449,7 +450,7 @@ describe('Sak status', () => {
   });
 
   it('skal vise ledig-tag når en oppgave ikke er tildelt noen', () => {
-    render(
+    customRender(
       <SaksinfoBanner
         personInformasjon={personInformasjon}
         sak={sak}
@@ -463,7 +464,7 @@ describe('Sak status', () => {
   });
 
   it('skal vise retur-tag når behandling er sendt tilbake fra kvalitetssikrer', () => {
-    render(
+    customRender(
       <SaksinfoBanner
         personInformasjon={personInformasjon}
         sak={sak}
@@ -486,7 +487,7 @@ describe('Sak status', () => {
   });
 
   it('skal vise retur-tag når behandling er sendt tilbake til kvalitetssikrer', () => {
-    render(
+    customRender(
       <SaksinfoBanner
         personInformasjon={personInformasjon}
         sak={sak}
@@ -509,7 +510,7 @@ describe('Sak status', () => {
   });
 
   it('skal ikke vise retur-tag når oppgave ikke har retur-status', () => {
-    render(
+    customRender(
       <SaksinfoBanner
         personInformasjon={personInformasjon}
         sak={sak}

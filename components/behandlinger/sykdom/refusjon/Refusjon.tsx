@@ -1,29 +1,22 @@
 'use client';
 
 import { useConfigForm } from 'components/form/FormHook';
-import { isBefore, parse, startOfDay } from 'date-fns';
+import { parse } from 'date-fns';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { MellomlagretVurdering, RefusjonkravVurderingResponse, RefusjonskravGrunnlag } from 'lib/types/types';
-import { formaterDatoForBackend, formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
+import { MellomlagretVurdering, RefusjonskravGrunnlag } from 'lib/types/types';
+import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
-import { validerNullableDato } from 'lib/validation/dateValidation';
 import { FormEvent } from 'react';
 import { useSak } from 'hooks/SakHook';
-import { Button, HStack, Radio, VStack } from '@navikt/ds-react';
-import { TrashIcon } from '@navikt/aksel-icons';
-import { useFieldArray } from 'react-hook-form';
+import { BodyLong, Radio, VStack } from '@navikt/ds-react';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
-import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
-import { isError } from 'lib/utils/api';
-import { mapToValuePair, ValuePair } from 'components/form/FormField';
-import { AsyncComboSearch } from 'components/form/asynccombosearch/AsyncComboSearch';
-import { clientHentAlleNavenheter } from 'lib/clientApi';
+
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { Sak } from 'context/saksbehandling/SakContext';
 
-import styles from './Refusjon.module.css';
-import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
+import { Refusjonskrav } from 'components/behandlinger/sykdom/refusjon/RefusjonsKrav';
+import { ValuePair } from 'components/form/FormField';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 
@@ -34,12 +27,12 @@ interface Props {
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
-interface FormFields {
+export interface FormFields {
   harKrav: string;
   refusjoner: Refusjon[];
 }
 
-interface Refusjon {
+export interface Refusjon {
   fom?: string;
   navKontor: ValuePair;
   tom?: string;
@@ -67,10 +60,6 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag, sak);
 
-  const defaultOptions: ValuePair[] = (grunnlag.gjeldendeVurderinger ?? [])
-    .filter((vurdering) => vurdering.navKontor != null)
-    .map((vurdering) => mapToValuePair(vurdering.navKontor!));
-
   const { form } = useConfigForm<FormFields>({
     harKrav: {
       type: 'radio',
@@ -95,7 +84,6 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
               harKrav: data.harKrav === JaEllerNei.Ja,
               navKontor: refusjon.navKontor.value,
               fom: refusjon.fom ? formaterDatoForBackend(parse(refusjon.fom, 'dd.MM.yyyy', new Date())) : null,
-              tom: refusjon.tom ? formaterDatoForBackend(parse(refusjon.tom, 'dd.MM.yyyy', new Date())) : null,
             })),
           },
           behandlingVersjon: behandlingVersjon,
@@ -106,25 +94,11 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
     )(event);
   };
 
-  const kontorSøk = async (input: string) => {
-    if (input.length <= 2) {
-      return [];
-    }
-
-    const response = await clientHentAlleNavenheter(behandlingsreferanse, { navn: input });
-    if (isError(response)) {
-      return [];
-    }
-
-    return response.data.map((kontor) => ({
-      label: `${kontor.navn} - ${kontor.enhetsnummer}`,
-      value: `${kontor.navn} - ${kontor.enhetsnummer}`,
-    }));
-  };
-
-  const { fields, remove, append } = useFieldArray({ control: form.control, name: 'refusjoner' });
-
-  const historiskeVurderinger = grunnlag.historiskeVurderinger;
+  const harKryssetAvØknomiskSosialHjelp = grunnlag.økonomiskSosialHjelp
+    ? 'Ja'
+    : grunnlag.økonomiskSosialHjelp === false
+      ? 'Nei'
+      : 'ingen data';
 
   return (
     <VilkårskortMedFormOgMellomlagringNyVisning
@@ -145,8 +119,16 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
       visningActions={visningActions}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
-      {!!historiskeVurderinger?.length && (
-        <TidligereVurderinger data={historiskeVurderinger} buildFelter={byggFelter} />
+      {grunnlag.økonomiskSosialHjelp && (
+        <VStack>
+          <BodyLong weight={'semibold'} size={'small'}>
+            Relevant informasjon fra søknad:
+          </BodyLong>
+          <BodyLong size={'small'} textColor={'subtle'}>
+            Bruker har krysset av for at de får, eller nylig har søkt om økonomisk sosialhjelp:{' '}
+            {harKryssetAvØknomiskSosialHjelp}
+          </BodyLong>
+        </VStack>
       )}
 
       <RadioGroupWrapper
@@ -160,101 +142,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
         <Radio value={JaEllerNei.Ja}>Ja</Radio>
         <Radio value={JaEllerNei.Nei}>Nei</Radio>
       </RadioGroupWrapper>
-
-      {form.watch('harKrav') === JaEllerNei.Ja &&
-        fields.map((field, index) => {
-          const erFørsterefusjon = index === 0;
-          return (
-            <VStack key={field.id} gap={'6'} className={styles.vurdering}>
-              <AsyncComboSearch
-                label={'Søk opp Nav-kontor'}
-                form={form}
-                name={`refusjoner.${index}.navKontor`}
-                fetcher={kontorSøk}
-                rules={{
-                  validate: {
-                    valgtKontor: (value) => {
-                      if (!value) return 'Du må velge et Nav-kontor';
-                      if (typeof value === 'object' && 'value' in value) {
-                        return value.value?.trim() ? true : 'Du må velge et Nav-kontor';
-                      }
-                    },
-                  },
-                }}
-                size={'small'}
-                defaultOptions={defaultOptions}
-                readOnly={formReadOnly}
-              />
-              <HStack gap={'4'} align={'end'}>
-                <DateInputWrapper
-                  name={`refusjoner.${index}.fom`}
-                  control={form.control}
-                  label={'Refusjonen gjelder fra'}
-                  rules={{
-                    validate: {
-                      gyldigDato: (value) => validerNullableDato(value as string),
-                      kanIkkeVaereFoerSoeknadstidspunkt: (value) => {
-                        const starttidspunkt = startOfDay(new Date(sak.periode.fom));
-                        const vurderingGjelderFra = stringToDate(value as string, 'dd.MM.yyyy');
-                        if (vurderingGjelderFra && isBefore(startOfDay(vurderingGjelderFra), starttidspunkt)) {
-                          return 'Vurderingen kan ikke gjelde fra før starttidspunktet';
-                        }
-                        return true;
-                      },
-                    },
-                  }}
-                  readOnly={formReadOnly}
-                />
-                <DateInputWrapper
-                  name={`refusjoner.${index}.tom`}
-                  control={form.control}
-                  label={'Refusjonen gjelder til'}
-                  rules={{
-                    validate: {
-                      gyldigDato: (value) => validerNullableDato(value as string),
-                      kanIkkeVaereFoerFraDato: (value) => {
-                        const fomValue = form.getValues(`refusjoner.${index}.fom`);
-                        if (!fomValue) {
-                          return true;
-                        }
-                        const fomDate = startOfDay(parse(fomValue, 'dd.MM.yyyy', new Date()));
-                        const vurderingGjelderTil = stringToDate(value as string, 'dd.MM.yyyy');
-                        if (vurderingGjelderTil && isBefore(startOfDay(vurderingGjelderTil), fomDate)) {
-                          return 'Tildato kan ikke være før fradato';
-                        }
-                        return true;
-                      },
-                    },
-                  }}
-                  readOnly={formReadOnly}
-                />
-                {!erFørsterefusjon && !formReadOnly && (
-                  <Button
-                    type={'button'}
-                    icon={<TrashIcon aria-hidden />}
-                    className={'fit-content'}
-                    variant={'tertiary'}
-                    size={'small'}
-                    onClick={() => remove(index)}
-                  >
-                    Fjern Nav-kontor
-                  </Button>
-                )}
-              </HStack>
-            </VStack>
-          );
-        })}
-      {form.watch('harKrav') === JaEllerNei.Ja && !formReadOnly && (
-        <Button
-          type={'button'}
-          className={'fit-content'}
-          variant={'secondary'}
-          size={'small'}
-          onClick={() => append({ navKontor: { label: '', value: '' }, fom: '', tom: '' })}
-        >
-          Legg til nytt Nav-kontor
-        </Button>
-      )}
+      {form.watch('harKrav') === JaEllerNei.Ja && <Refusjonskrav sak={sak} form={form} readOnly={readOnly} />}
     </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };
@@ -270,7 +158,6 @@ function mapVurderingToDraftFormFields(grunnlag: RefusjonskravGrunnlag, sak: Sak
               value: vurdering.navKontor ?? '',
             },
             fom: formaterDatoForFrontend(vurdering.fom ?? sak.periode.fom),
-            tom: formaterDatoForFrontend(vurdering.tom ?? sak.periode.tom),
           }))
         : [
             {
@@ -279,23 +166,8 @@ function mapVurderingToDraftFormFields(grunnlag: RefusjonskravGrunnlag, sak: Sak
                 value: '',
               },
               fom: formaterDatoForFrontend(sak.periode.fom),
-              tom: formaterDatoForFrontend(sak.periode.tom),
+              tom: '',
             },
           ],
   };
 }
-
-const byggFelter = (vurdering: RefusjonkravVurderingResponse): ValuePair[] => [
-  {
-    label: 'Har noen Nav-kontor refusjonskrav for sosialstønad?',
-    value: vurdering.harKrav ? 'Ja' : 'Nei',
-  },
-  {
-    label: 'Nav-kontor',
-    value: vurdering.navKontor ?? '-',
-  },
-  {
-    label: 'Refusjonen gjelder periode',
-    value: `${vurdering.fom ? formaterDatoForFrontend(vurdering.fom) : 'mangler'} - ${vurdering.tom ? formaterDatoForFrontend(vurdering.tom) : 'mangler'}`,
-  },
-];
