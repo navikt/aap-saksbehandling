@@ -29,7 +29,7 @@ const innteker: Array<UføreInntekt> = [
           fom: '2024-12-01',
           tom: '2024-12-31',
         },
-        uføregrad: {},
+        uføregrad: 50,
       },
     ],
   },

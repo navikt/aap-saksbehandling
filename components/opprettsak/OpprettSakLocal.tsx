@@ -39,6 +39,7 @@ export interface OpprettSakFormFields {
   yrkesskade: JaEllerNei;
   student: JaEllerNei;
   uføre: string;
+  uføretidspunkt: Date;
   barn?: Barn[];
   inntekter?: Inntekt[];
   institusjon?: Institusjon[];
@@ -89,6 +90,10 @@ export const OpprettSakLocal = () => {
       uføre: {
         type: 'number',
         label: 'Uføregrad (%)',
+      },
+      uføretidspunkt: {
+        type: 'date',
+        label: 'Uføretidspunkt',
       },
       institusjon: {
         type: 'checkbox',
@@ -232,6 +237,7 @@ export const OpprettSakLocal = () => {
             <FormField form={form} formField={formFields.tjenestePensjon} horizontalRadio={true} />
             <FormField form={form} formField={formFields.institusjon} />
             <FormField form={form} formField={formFields.uføre} />
+            <FormField form={form} formField={formFields.uføretidspunkt} />
           </VStack>
           <VStack gap="4">
             <OpprettSakBarn form={form} />

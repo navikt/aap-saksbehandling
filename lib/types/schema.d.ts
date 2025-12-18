@@ -3260,44 +3260,6 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  '/api/brev/{brevbestillingReferanse}/oppdater-brevmal': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          /** @description brevbestillingReferanse */
-          brevbestillingReferanse: string;
-        };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description OK */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            'application/json': string;
-          };
-        };
-      };
-    };
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
   '/api/brev/{brevbestillingReferanse}/forhandsvis': {
     parameters: {
       query?: never;
@@ -4265,6 +4227,7 @@ export interface components {
       oppholdstype: 'A' | 'D' | 'F' | 'H' | 'P' | 'R' | 'S' | 'V' | 'UKJENT';
     };
     'no.nav.aap.behandlingsflyt.OpprettTestcaseDTO': {
+      andreUtbetalinger?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AndreUtbetalingerDto'];
       barn: components['schemas']['no.nav.aap.behandlingsflyt.TestBarn'][];
       erArbeidsevnenNedsatt: boolean;
       erNedsettelseIArbeidsevneMerEnnHalvparten: boolean;
@@ -4354,6 +4317,11 @@ export interface components {
       tjenestePensjon?: boolean | null;
       /** Format: int32 */
       'uf\u00F8re'?: number | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      'uf\u00F8reTidspunkt'?: string | null;
       yrkesskade: boolean;
     };
     'no.nav.aap.behandlingsflyt.TestBarn': {
@@ -9739,7 +9707,8 @@ export interface components {
       inntektIKroner: components['schemas']['no.nav.aap.komponenter.verdityper.Bel\u00F8p'];
       'inntektJustertForUf\u00F8regrad': components['schemas']['no.nav.aap.komponenter.verdityper.Bel\u00F8p'];
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
-      'uf\u00F8regrad': components['schemas']['no.nav.aap.komponenter.verdityper.Prosent'];
+      /** Format: int32 */
+      'uf\u00F8regrad': number;
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.YrkesskadeGrunnlagDTO': {
       'gjennomsnittligInntektSiste3\u00E5r': number;
@@ -9838,6 +9807,12 @@ export interface components {
       historiskeVurderinger?:
         | components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.refusjon.RefusjonkravVurderingResponse'][]
         | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      'n\u00E5v\u00E6rendeVirkningsTidspunkt'?: string | null;
+      '\u00F8konomiskSosialHjelp'?: boolean | null;
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.refusjon.RefusjonkravVurderingResponse': {
       /**
@@ -10244,9 +10219,11 @@ export interface components {
         | 'VEDTAK_11_23_SJETTE_LEDD'
         | 'FORVALTNINGSMELDING'
         | 'VEDTAK_ENDRING'
+        | 'BARNETILLEGG_SATS_REGULERING'
         | 'KLAGE_AVVIST'
         | 'KLAGE_OPPRETTHOLDELSE'
         | 'KLAGE_TRUKKET'
+        | 'KLAGE_MOTTATT'
         | 'FORHÅNDSVARSEL_KLAGE_FORMKRAV'
         | 'OMGJØRING_VEDTAK_11_9';
       'harTilgangTil\u00C5SendeBrev': boolean;
@@ -10314,12 +10291,12 @@ export interface components {
       underveisavslag?:
         | 'IKKE_GRUNNLEGGENDE_RETT'
         | 'MELDEPLIKT_FRIST_IKKE_PASSERT'
-        | 'SONER_STRAFF'
         | 'VARIGHETSKVOTE_BRUKT_OPP'
         | 'BRUDD_PÅ_AKTIVITETSPLIKT_11_7_STANS'
         | 'BRUDD_PÅ_AKTIVITETSPLIKT_11_7_OPPHØR'
         | 'BRUDD_PÅ_OPPHOLDSKRAV_11_3_STANS'
         | 'BRUDD_PÅ_OPPHOLDSKRAV_11_3_OPPHØR'
+        | 'SONER_STRAFF'
         | 'IKKE_OVERHOLDT_MELDEPLIKT_SANKSJON'
         | 'ARBEIDER_MER_ENN_GRENSEVERDI'
         | null;
@@ -10347,7 +10324,9 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningAndreStatligeYtelserGrunnlagDTO': {
       'harTilgangTil\u00C5Saksbehandle': boolean;
-      historiskeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningAndreStatligeYtelserVurderingDTO'][];
+      historiskeVurderinger?:
+        | components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningAndreStatligeYtelserVurderingDTO'][]
+        | null;
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningAndreStatligeYtelserVurderingDTO'];
     };
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningAndreStatligeYtelserVurderingDTO': {
@@ -11511,12 +11490,12 @@ export interface components {
       'avslags\u00E5rsak'?:
         | 'IKKE_GRUNNLEGGENDE_RETT'
         | 'MELDEPLIKT_FRIST_IKKE_PASSERT'
-        | 'SONER_STRAFF'
         | 'VARIGHETSKVOTE_BRUKT_OPP'
         | 'BRUDD_PÅ_AKTIVITETSPLIKT_11_7_STANS'
         | 'BRUDD_PÅ_AKTIVITETSPLIKT_11_7_OPPHØR'
         | 'BRUDD_PÅ_OPPHOLDSKRAV_11_3_STANS'
         | 'BRUDD_PÅ_OPPHOLDSKRAV_11_3_OPPHØR'
+        | 'SONER_STRAFF'
         | 'IKKE_OVERHOLDT_MELDEPLIKT_SANKSJON'
         | 'ARBEIDER_MER_ENN_GRENSEVERDI'
         | null;
@@ -13630,6 +13609,24 @@ export interface components {
        */
       tilOgMed: string;
     };
+    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AndreUtbetalingerDto': {
+      afp?: string | null;
+      'l\u00F8nn'?: boolean | null;
+      'st\u00F8nad'?:
+        | (
+            | 'ØKONOMISK_SOSIALHJELP'
+            | 'OMSORGSSTØNAD'
+            | 'INTRODUKSJONSSTØNAD'
+            | 'KVALIFISERINGSSTØNAD'
+            | 'VERV'
+            | 'UTLAND'
+            | 'AFP'
+            | 'STIPEND'
+            | 'LÅN'
+            | 'NEI'
+          )[]
+        | null;
+    };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AnkeITrygderettenbehandlingOpprettetDetaljer': {
       /**
        * Format: date-time
@@ -14128,6 +14125,7 @@ export interface components {
       kommeTilbake?: 'Ja' | 'Nei' | 'VetIkke' | null;
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.S\u00F8knadV0': {
+      andreUtbetalinger?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AndreUtbetalingerDto'];
       medlemskap?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.S\u00F8knadMedlemskapDto'];
       oppgitteBarn?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.OppgitteBarn'];
       student?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.S\u00F8knadStudentDto'];
@@ -14586,6 +14584,7 @@ export interface components {
       's\u00F8knadErTrukket'?: boolean | null;
     };
     'no.nav.aap.behandlingsflyt.test.OpprettDummySakDto': {
+      andreUtbetalinger?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AndreUtbetalingerDto'];
       erStudent: boolean;
       harMedlemskap: boolean;
       harYrkesskade: boolean;
@@ -14734,7 +14733,6 @@ export interface components {
       /** Format: int32 */
       antall: number;
     };
-    'no.nav.aap.komponenter.verdityper.Prosent': Record<string, never>;
     'no.nav.aap.motor.api.JobbInfoDto': {
       /** Format: int32 */
       'antallFeilendeFors\u00F8k': number;

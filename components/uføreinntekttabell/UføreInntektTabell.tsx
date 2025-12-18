@@ -77,7 +77,7 @@ export const UføreInntektTabell = ({
                       {formaterDatoMedKunDagOgMånedForFrontend(tom)})
                     </Table.DataCell>
                     <Table.DataCell align={'right'} textSize={'small'}>
-                      {Object.keys(uføregrad).length === 0 ? '-' : `${uføregrad} %`}
+                      {`${uføregrad} %`}
                     </Table.DataCell>
                     <Table.DataCell align={'right'} textSize={'small'}>
                       {formaterTilNok(inntektJustertForUføregrad.verdi)}
