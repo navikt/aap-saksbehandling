@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Box, Button, HGrid, HStack, VStack } from '@navikt/ds-react';
+import { Box, Button, HGrid, HStack, VStack } from '@navikt/ds-react';
 import { mutate } from 'swr';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { OpprettSakBarn } from 'components/opprettsak/barn/OpprettSakBarn';
@@ -34,6 +34,24 @@ interface SamordningSykepenger {
 
 type Institusjon = 'fengsel' | 'sykehus';
 
+enum AndreUtbetalingerYtelser {
+  ØKONOMISK_SOSIALHJELP = 'ØKONOMISK_SOSIALHJELP',
+  OMSORGSSTØNAD = 'OMSORGSSTØNAD',
+  INTRODUKSJONSSTØNAD = 'INTRODUKSJONSSTØNAD',
+  KVALIFISERINGSSTØNAD = 'KVALIFISERINGSSTØNAD',
+  VERV = 'VERV',
+  UTLAND = 'UTLAND',
+  AFP = 'AFP',
+  STIPEND = 'STIPEND',
+  LÅN = 'LÅN',
+  NEI = 'NEI',
+}
+
+export const AndreUtbetalingerYtelserAlternativer = Object.entries(AndreUtbetalingerYtelser).map(([k, v]) => ({
+  value: k,
+  label: v,
+}));
+
 export interface OpprettSakFormFields {
   fødselsdato: Date;
   yrkesskade: JaEllerNei;
@@ -49,6 +67,9 @@ export interface OpprettSakFormFields {
   erArbeidsevnenNedsatt: JaEllerNei;
   erNedsettelseIArbeidsevneMerEnnHalvparten: JaEllerNei;
   steg?: TestcaseSteg;
+  lønn: JaEllerNei;
+  afp: string;
+  stønad: AndreUtbetalingerYtelser[];
 }
 
 export const OpprettSakLocal = () => {
@@ -59,6 +80,23 @@ export const OpprettSakLocal = () => {
         type: 'date',
         label: 'Søknadsdato',
         defaultValue: new Date(),
+      },
+      lønn: {
+        type: 'radio',
+        defaultValue: JaEllerNei.Nei,
+        options: JaEllerNeiOptions,
+        label: 'Har du fått eller skal du få ekstra utbetalinger fra arbeidsgiver?',
+      },
+
+      afp: {
+        type: 'text',
+        defaultValue: '',
+        label: 'Hvor mottar du AFP fra?',
+      },
+      stønad: {
+        type: 'combobox_multiple',
+        label: 'stønad',
+        options: AndreUtbetalingerYtelserAlternativer,
       },
       fødselsdato: {
         type: 'date',
@@ -162,6 +200,11 @@ export const OpprettSakLocal = () => {
   const mapInnhold = (data: OpprettSakFormFields, steg?: TestcaseSteg) => {
     return {
       ...data,
+      andreUtbetalinger: {
+        afp: data.afp,
+        lønn: data.lønn === JaEllerNei.Ja,
+        stønad: data.stønad,
+      },
       søknadsdato: formaterDatoForBackend(data.søknadsdato),
       fødselsdato: formaterDatoForBackend(data.fødselsdato),
       yrkesskade: data.yrkesskade === JaEllerNei.Ja,
@@ -232,6 +275,9 @@ export const OpprettSakLocal = () => {
             <FormField form={form} formField={formFields.tjenestePensjon} horizontalRadio={true} />
             <FormField form={form} formField={formFields.institusjon} />
             <FormField form={form} formField={formFields.uføre} />
+            <FormField form={form} formField={formFields.afp} />
+            <FormField form={form} formField={formFields.lønn} />
+            <FormField form={form} formField={formFields.stønad} />
           </VStack>
           <VStack gap="4">
             <OpprettSakBarn form={form} />
@@ -262,22 +308,9 @@ export const OpprettSakLocal = () => {
             borderColor="border-subtle"
             borderRadius="medium"
           >
-            <HStack gap="4" justify="space-between">
-              <Button type="button" size="small" loading={isLoading} onClick={() => opprett(undefined)}>
-                Opprett og iverksett
-              </Button>
-
-              {form.watch('erArbeidsevnenNedsatt') === JaEllerNei.Nei ||
-              form.watch('erNedsettelseIArbeidsevneMerEnnHalvparten') === JaEllerNei.Nei ? (
-                <Alert variant="error" inline>
-                  Avslag
-                </Alert>
-              ) : (
-                <Alert variant="success" inline>
-                  Innvilgelse
-                </Alert>
-              )}
-            </HStack>
+            <Button type="button" size="small" loading={isLoading} onClick={() => opprett(undefined)}>
+              Opprett og iverksett
+            </Button>
           </Box>
 
           <Box

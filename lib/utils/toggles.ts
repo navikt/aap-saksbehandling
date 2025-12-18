@@ -14,4 +14,5 @@ export const toggles = {
   featureVisArenahistorikkKnapp: !isProd(),
   featureBistandPeriodisert: !isProd(),
   featurePeriodisertOvergangUføre: !isProd(),
+  featureRefusjonNyUi: !isProd(),
 };
