@@ -8,7 +8,7 @@ import { Behovstype } from 'lib/utils/form';
 import { Sykepengeerstatning } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/Sykepengeerstatning';
 import { skalViseSteg, StegData } from 'lib/utils/steg';
 import { SykepengeerstatningOld } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/SykeoengeerstatingOld';
-import { toggles } from 'lib/utils/toggles';
+import { unleash } from 'lib/services/unleash';
 
 interface Props {
   behandlingsReferanse: string;
@@ -34,7 +34,7 @@ export const SykepengeerstatningMedDataFetching = async ({ behandlingsReferanse,
     return null;
   }
 
-  if (!toggles.featurePeriodisertSPE) {
+  if (!unleash.isEnabled('PeriodisertSPEFrontend')) {
     return (
       <SykepengeerstatningOld
         grunnlag={grunnlag.data}

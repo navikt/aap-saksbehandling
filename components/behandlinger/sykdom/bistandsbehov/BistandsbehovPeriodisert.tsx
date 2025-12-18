@@ -3,7 +3,7 @@
 import { BistandsGrunnlag, MellomlagretVurdering } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { FormEvent } from 'react';
-import { formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
+import { parseDatoFraDatePicker } from 'lib/utils/date';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
@@ -21,6 +21,7 @@ import { BistandsbehovTidligereVurdering } from 'components/behandlinger/sykdom/
 import { mapBistandVurderingFormTilDto } from 'components/behandlinger/sykdom/bistandsbehov/bistandsbehov-utils';
 import { Dato } from 'lib/types/Dato';
 import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovMellomlagringParser';
+import { getFraDatoFraGrunnlagForFrontend } from 'lib/utils/periodisering';
 
 interface Props {
   behandlingVersjon: number;
@@ -174,7 +175,7 @@ export const BistandsbehovPeriodisert = ({
         vurderinger: [
           {
             ...emptyBistandVurderingForm(),
-            fraDato: formaterDatoForFrontend(new Date(grunnlag?.behøverVurderinger[0]?.fom!)),
+            fraDato: getFraDatoFraGrunnlagForFrontend(grunnlag),
           },
         ],
       };

@@ -16,6 +16,7 @@ import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerU
 import { useFieldArray } from 'react-hook-form';
 import { FastsettManuellInntektTabell } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/FastsettManuellInntektTabell';
 import { FastsettManuellInntektForm, Tabellår } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/types';
+import { sorterEtterNyesteDato } from 'lib/utils/date';
 
 interface Props {
   behandlingsversjon: number;
@@ -118,18 +119,20 @@ export const FastsettManuellInntektNy = ({
   }
 
   const visHovedinnhold = !formReadOnly || grunnlag.manuelleVurderinger !== null;
-  const historiskeVurderinger = grunnlag.historiskeManuelleVurderinger;
+  const vurderinger = grunnlag.historiskeManuelleVurderinger?.sort((a, b) => {
+    return sorterEtterNyesteDato(a.vurdertAv.dato, b.vurdertAv.dato);
+  });
 
   return (
     <VilkårskortMedFormOgMellomlagringNyVisning
-      heading={'Manglende pensjonsgivende inntekter / EØS inntekter'}
+      heading={'Manglende pensjonsgivende inntekt / EØS-beregnet inntekt'}
       steg={'MANGLENDE_LIGNING'}
       onSubmit={handleSubmit}
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       status={status}
       vilkårTilhørerNavKontor={false}
-      vurdertAvAnsatt={grunnlag.vurdering?.vurdertAv}
+      vurdertAvAnsatt={grunnlag.manuelleVurderinger?.vurdertAv}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() => {
@@ -141,26 +144,25 @@ export const FastsettManuellInntektNy = ({
       visningActions={visningActions}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
-      {behandlingErRevurdering && historiskeVurderinger && (
+      {behandlingErRevurdering && vurderinger && (
         <TidligereVurderinger
-          data={historiskeVurderinger}
-          getErGjeldende={(v) => deepEqual(v, historiskeVurderinger[historiskeVurderinger.length - 1])}
+          data={vurderinger}
+          getErGjeldende={(v) => deepEqual(v, vurderinger.at(0))}
           getVurdertAvIdent={(v) => v.vurdertAv.ident}
           getVurdertDato={(v) => v.vurdertAv.dato}
-          getFomDato={(v) => v.fomDato}
           grupperPåOpprettetDato={true}
-          customElement={(selectedIndex) => {
+          customElement={(valgtVurderingIndex) => {
             const pgi = grunnlag.registrerteInntekterSisteRelevanteAr;
             const tabelldata = byggTabellData({
-              sisteÅr: grunnlag.ar,
+              sisteÅr: grunnlag.sisteRelevanteÅr,
               pgi: pgi,
-              manuelleInntekter: historiskeVurderinger.at(selectedIndex)?.årsVurderinger || [],
+              manuelleInntekter: vurderinger.at(valgtVurderingIndex)?.årsVurderinger || [],
             });
             return (
               <>
                 <VStack>
                   <Label size="small">{formFields.begrunnelse.label}</Label>
-                  <BodyShort size="small">{historiskeVurderinger.at(selectedIndex)?.begrunnelse}</BodyShort>
+                  <BodyShort size="small">{vurderinger.at(valgtVurderingIndex)?.begrunnelse}</BodyShort>
                 </VStack>
                 <VStack>
                   <FastsettManuellInntektTabell form={form} tabellår={tabelldata} låstVisning={true} />
@@ -187,7 +189,7 @@ export const FastsettManuellInntektNy = ({
             target="_blank"
             rel="noopener noreferrer"
           >
-            Du kan lese mer om hvordan EØS inntekt skal beregnes i rundskrivet til § 11-7 (lovdata.no)
+            Du kan lese mer om hvordan EØS-inntekt skal beregnes i kapittel 11.7 av EØS-rundskrivet.
           </Link>
           <FormField form={form} formField={formFields.begrunnelse} />
           <FastsettManuellInntektTabell form={form} tabellår={tabellår} readOnly={formReadOnly} />
@@ -254,7 +256,7 @@ const mapGrunnlagToDraftFormFields = (grunnlag: ManuellInntektGrunnlag): DraftFo
   return {
     begrunnelse: grunnlag.manuelleVurderinger?.begrunnelse,
     tabellår: byggTabellData({
-      sisteÅr: grunnlag.ar,
+      sisteÅr: grunnlag.sisteRelevanteÅr,
       pgi: grunnlag.registrerteInntekterSisteRelevanteAr,
       manuelleInntekter: grunnlag.manuelleVurderinger?.årsVurderinger || [],
     }),

@@ -21,7 +21,7 @@ export interface SøkeResultat {
   harAdressebeskyttelse: boolean;
   saker?: { href: string; label: string }[];
   kontor?: { enhet: string }[];
-  person?: { href: string | null; label: string }[];
+  person?: { href: string; label: string }[];
   behandlingsStatus?: { status?: Behandlingsstatus }[];
 }
 
@@ -91,13 +91,6 @@ async function utledSøkeresultat(søketekst: string, brukerinformasjon?: Bruker
         });
         kontorData.push({ enhet: `${oppgave.oppfølgingsenhet ?? oppgave.enhet}` });
         behandlingsStatusData.push({ status: `${oppgave.status}` });
-        // Hvis sak ikke finnes, hent navn fra oppgave. Skal ikke lenke til noe
-        if (personData?.length == 0) {
-          personData.push({
-            href: null,
-            label: `${oppgave.personNavn}`,
-          });
-        }
       });
     }
   } catch (err) {

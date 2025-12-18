@@ -24,6 +24,14 @@ describe('dato', () => {
     expect(datoen.dato.getDate()).toEqual(17);
   });
 
+  test('kan lage en ny dato fra en iso-string', () => {
+    const refDato = '2025-12-17T17:50:32.439Z';
+    const datoen = new Dato(refDato);
+    expect(datoen.dato.getFullYear()).toEqual(2025);
+    expect(datoen.dato.getMonth()).toEqual(11);
+    expect(datoen.dato.getDate()).toEqual(17);
+  });
+
   test('kan formatere dato for frontend', () => {
     const refDato = new Date('2025-03-17');
     const datoen = new Dato(refDato);
