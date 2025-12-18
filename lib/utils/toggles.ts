@@ -8,5 +8,4 @@ export const toggles = {
   featureRevurderingVurderingsbehov: !isProd(),
   featureFerieISykepengeperiode: !isProd(), // Finnes ikke i unleash - kun frontend-toggle
   featurePostmottakBehandlingerPåVent: !isProd(),
-  featureRefusjonNyUi: !isProd(),
 };
