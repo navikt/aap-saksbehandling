@@ -5,7 +5,7 @@ import { Behovstype } from 'lib/utils/form';
 import { skalViseSteg, StegData } from 'lib/utils/steg';
 import { Refusjon } from 'components/behandlinger/sykdom/refusjon/Refusjon';
 import { GammelRefusjon } from 'components/behandlinger/sykdom/refusjon/GammelRefusjon';
-import { toggles } from 'lib/utils/toggles';
+import { unleashService } from 'lib/services/unleash/unleashService';
 
 interface Props {
   behandlingsReferanse: string;
@@ -26,7 +26,7 @@ export const RefusjonMedDataFetching = async ({ behandlingsReferanse, stegData }
     return null;
   }
 
-  if (!toggles.featureRefusjonNyUi) {
+  if (!unleashService.isEnabled('SosialRefusjon')) {
     <GammelRefusjon
       grunnlag={refusjonGrunnlag.data}
       readOnly={stegData.readOnly || !refusjonGrunnlag.data.harTilgangTilÅSaksbehandle}
