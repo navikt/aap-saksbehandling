@@ -4,7 +4,7 @@ import { KelvinAppHeader } from 'components/kelvinappheader/KelvinAppHeader';
 import { hentBrukerInformasjon, hentRollerForBruker } from 'lib/services/azure/azureUserService';
 import { InnloggetBrukerContextProvider } from 'context/InnloggetBrukerContext';
 import { FeatureFlagProvider } from 'context/UnleashContext';
-import { getAllFlags } from 'lib/services/unleash';
+import { getAllFlags } from 'lib/services/unleash/unleashService';
 
 export const metadata = {
   title: 'Kelvin',
