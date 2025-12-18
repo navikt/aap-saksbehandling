@@ -4227,6 +4227,7 @@ export interface components {
       oppholdstype: 'A' | 'D' | 'F' | 'H' | 'P' | 'R' | 'S' | 'V' | 'UKJENT';
     };
     'no.nav.aap.behandlingsflyt.OpprettTestcaseDTO': {
+      andreUtbetalinger?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AndreUtbetalingerDto'];
       barn: components['schemas']['no.nav.aap.behandlingsflyt.TestBarn'][];
       erArbeidsevnenNedsatt: boolean;
       erNedsettelseIArbeidsevneMerEnnHalvparten: boolean;
@@ -9800,6 +9801,12 @@ export interface components {
       historiskeVurderinger?:
         | components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.refusjon.RefusjonkravVurderingResponse'][]
         | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      'n\u00E5v\u00E6rendeVirkningsTidspunkt'?: string | null;
+      '\u00F8konomiskSosialHjelp'?: boolean | null;
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.refusjon.RefusjonkravVurderingResponse': {
       /**
@@ -10309,7 +10316,9 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningAndreStatligeYtelserGrunnlagDTO': {
       'harTilgangTil\u00C5Saksbehandle': boolean;
-      historiskeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningAndreStatligeYtelserVurderingDTO'][];
+      historiskeVurderinger?:
+        | components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningAndreStatligeYtelserVurderingDTO'][]
+        | null;
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningAndreStatligeYtelserVurderingDTO'];
     };
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningAndreStatligeYtelserVurderingDTO': {
@@ -13592,6 +13601,24 @@ export interface components {
        */
       tilOgMed: string;
     };
+    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AndreUtbetalingerDto': {
+      afp?: string | null;
+      'l\u00F8nn'?: boolean | null;
+      'st\u00F8nad'?:
+        | (
+            | 'ØKONOMISK_SOSIALHJELP'
+            | 'OMSORGSSTØNAD'
+            | 'INTRODUKSJONSSTØNAD'
+            | 'KVALIFISERINGSSTØNAD'
+            | 'VERV'
+            | 'UTLAND'
+            | 'AFP'
+            | 'STIPEND'
+            | 'LÅN'
+            | 'NEI'
+          )[]
+        | null;
+    };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AnkeITrygderettenbehandlingOpprettetDetaljer': {
       /**
        * Format: date-time
@@ -14090,6 +14117,7 @@ export interface components {
       kommeTilbake?: 'Ja' | 'Nei' | 'VetIkke' | null;
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.S\u00F8knadV0': {
+      andreUtbetalinger?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AndreUtbetalingerDto'];
       medlemskap?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.S\u00F8knadMedlemskapDto'];
       oppgitteBarn?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.OppgitteBarn'];
       student?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.S\u00F8knadStudentDto'];
@@ -14548,6 +14576,7 @@ export interface components {
       's\u00F8knadErTrukket'?: boolean | null;
     };
     'no.nav.aap.behandlingsflyt.test.OpprettDummySakDto': {
+      andreUtbetalinger?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AndreUtbetalingerDto'];
       erStudent: boolean;
       harMedlemskap: boolean;
       harYrkesskade: boolean;
