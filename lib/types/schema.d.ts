@@ -10079,6 +10079,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.\u00C5rData': {
       'bel\u00F8p'?: number | null;
       'e\u00F8sBel\u00F8p'?: number | null;
+      ferdigLignetPGI?: number | null;
       /** Format: int32 */
       '\u00E5r': number;
     };
@@ -12463,6 +12464,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.beregning.\u00C5rsVurdering': {
       'bel\u00F8p'?: number | null;
       'e\u00F8sBel\u00F8p'?: number | null;
+      ferdigLignetPGI?: number | null;
       /** Format: int32 */
       '\u00E5r': number;
     };
