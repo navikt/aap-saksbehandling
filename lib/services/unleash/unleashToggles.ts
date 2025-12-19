@@ -3,6 +3,7 @@ export const FLAGS = [
   'PeriodisertSPEFrontend',
   'PeriodisertOvergangUfore',
   'BistandPeriodisert',
+  'PeriodisertNedsattArbeidsevneFrontend',
   'VisArenahistorikkKnapp',
   'PeriodiserteValgfrieKort',
   'ManglendePGIOgEosInntekter',
@@ -16,6 +17,7 @@ export type Flags = Record<FlagNames, boolean>;
 export const mockedFlags: Flags = {
   OvergangArbeidFrontend: true,
   PeriodisertOvergangUfore: true,
+  PeriodisertNedsattArbeidsevneFrontend: true,
   BistandPeriodisert: true,
   PeriodiserteValgfrieKort: true,
   PeriodisertSPEFrontend: true,

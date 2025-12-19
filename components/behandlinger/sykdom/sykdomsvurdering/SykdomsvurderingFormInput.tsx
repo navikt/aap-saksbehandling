@@ -1,0 +1,184 @@
+'use client';
+
+import { Button, HStack, Link, VStack } from '@navikt/ds-react';
+import { erDatoIPeriode, validerDato } from 'lib/validation/dateValidation';
+import { parse, startOfDay } from 'date-fns';
+import { stringToDate } from 'lib/utils/date';
+import { TrashFillIcon } from '@navikt/aksel-icons';
+import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
+import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
+import { UseFormReturn } from 'react-hook-form';
+import { Periode, TypeBehandling } from 'lib/types/types';
+import type { Sykdomsvurderinger } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingPeriodisert';
+import { JaEllerNei } from 'lib/utils/form';
+import { useCallback } from 'react';
+import { Sak } from 'context/saksbehandling/SakContext';
+import { SykdomsvurderingFørstegangsbehandling } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingFørstegangsbehandling';
+import { SykdomsvurderingRevurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingRevurdering';
+import { SykdomsvurderingDiagnosesøk } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingDiagnosesøk';
+import { DateInputWrapperOnBlur } from 'components/form/dateinputwrapper/DateInputWrapperOnBlur';
+
+interface Props {
+  index: number;
+  form: UseFormReturn<Sykdomsvurderinger>;
+  readonly: boolean;
+  onRemove: () => void;
+  ikkeRelevantePerioder?: Periode[];
+  typeBehandling: TypeBehandling;
+  sak: Sak;
+  skalVurdereYrkesskade: boolean;
+  erÅrsakssammenhengYrkesskade: boolean;
+}
+
+export const vilkårsvurderingLabel = 'Vilkårsvurdering';
+export const harSkadeSykdomEllerLyteLabel = 'Har brukeren sykdom, skade eller lyte?';
+export const erArbeidsevnenNedsattLabel = 'Har brukeren nedsatt arbeidsevne?';
+export const erNedsettelseIArbeidsevneMerEnnHalvpartenLabel = 'Er arbeidsevnen nedsatt med minst halvparten?';
+export const erSkadeSykdomEllerLyteVesentligdelLabel =
+  'Er sykdom, skade eller lyte vesentlig medvirkende til at arbeidsevnen er nedsatt?';
+export const erNedsettelseIArbeidsevneAvEnVissVarighetLabel = 'Er den nedsatte arbeidsevnen av en viss varighet?';
+
+export const SykdomsvurderingFormInput = ({
+  erÅrsakssammenhengYrkesskade,
+  skalVurdereYrkesskade,
+  sak,
+  typeBehandling,
+  index,
+  form,
+  readonly,
+  onRemove,
+  ikkeRelevantePerioder,
+}: Props) => {
+  const behandlingErRevurdering = typeBehandling === 'Revurdering';
+  const behandlingErFørstegangsbehandling = typeBehandling === 'Førstegangsbehandling';
+  const vurderingenGjelderFra = form.watch(`vurderinger.${index}.vurderingenGjelderFra`);
+
+  const behandlingErRevurderingAvFørstegangsbehandling = useCallback(() => {
+    if (!behandlingErRevurdering) {
+      return false;
+    }
+    const gjelderFra = stringToDate(vurderingenGjelderFra, 'dd.MM.yyyy');
+    if (!gjelderFra) {
+      return false;
+    }
+    const søknadsdato = startOfDay(new Date(sak.periode.fom));
+    return søknadsdato.getTime() >= startOfDay(gjelderFra).getTime();
+  }, [behandlingErRevurdering, sak, vurderingenGjelderFra]);
+
+  return (
+    <VStack gap={'5'}>
+      <Link href="https://lovdata.no/nav/rundskriv/r11-00#KAPITTEL_7-1" target="_blank">
+        Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-5 (lovdata.no)
+      </Link>
+      <HStack justify={'space-between'}>
+        <DateInputWrapperOnBlur
+          name={`vurderinger.${index}.fraDato`}
+          label="Vurderingen gjelder fra"
+          control={form.control}
+          rules={{
+            required: 'Du må velge fra hvilken dato vurderingen gjelder fra',
+            validate: {
+              validerDato: (value) => validerDato(value as string),
+              validerIkkeRelevantPeriode: (value) => {
+                const parsedInputDato = new Date(parse(value as string, 'dd.MM.yyyy', new Date()));
+                const funnetIkkeRelevantPeriode = ikkeRelevantePerioder?.find((periode) => {
+                  const fom = stringToDate(periode.fom);
+                  const tom = stringToDate(periode.tom);
+                  if (!fom || !tom) return false;
+                  return erDatoIPeriode(parsedInputDato, fom, tom);
+                });
+
+                return funnetIkkeRelevantPeriode
+                  ? `Dato kan ikke være inne i perioden (${funnetIkkeRelevantPeriode.fom} - ${funnetIkkeRelevantPeriode.tom})`
+                  : true;
+              },
+            },
+          }}
+          readOnly={readonly}
+        />
+
+        {!readonly && (
+          <Button
+            aria-label="Fjern vurdering"
+            variant="tertiary"
+            size="small"
+            icon={<TrashFillIcon />}
+            onClick={() => onRemove()}
+            type="button"
+          />
+        )}
+      </HStack>
+      <TextAreaWrapper
+        name={`vurderinger.${index}.begrunnelse`}
+        control={form.control}
+        label={vilkårsvurderingLabel}
+        rules={{
+          required: 'Du må fylle ut en vilkårsvurdering',
+        }}
+        readOnly={readonly}
+        shouldUnregister
+      />
+      <RadioGroupJaNei
+        name={`vurderinger.${index}.harSkadeSykdomEllerLyte`}
+        control={form.control}
+        label={harSkadeSykdomEllerLyteLabel}
+        horisontal={true}
+        rules={{ required: 'Du må svare på om brukeren har sykdom, skade eller lyte' }}
+        readOnly={readonly}
+        shouldUnregister
+      />
+      {form.watch(`vurderinger.${index}.harSkadeSykdomEllerLyte`) === JaEllerNei.Ja && (
+        <>
+          <SykdomsvurderingDiagnosesøk index={index} form={form} readOnly={readonly} />
+          <RadioGroupJaNei
+            name={`vurderinger.${index}.erArbeidsevnenNedsatt`}
+            control={form.control}
+            label={erArbeidsevnenNedsattLabel}
+            horisontal={true}
+            rules={{ required: 'Du må svare på om brukeren har nedsatt arbeidsevne' }}
+            readOnly={readonly}
+            shouldUnregister
+          />
+          {(behandlingErFørstegangsbehandling || behandlingErRevurderingAvFørstegangsbehandling()) && (
+            <SykdomsvurderingFørstegangsbehandling
+              index={index}
+              form={form}
+              readonly={readonly}
+              skalVurdereYrkesskade={skalVurdereYrkesskade}
+            />
+          )}
+          {behandlingErRevurdering && !behandlingErRevurderingAvFørstegangsbehandling() && (
+            <SykdomsvurderingRevurdering
+              index={index}
+              form={form}
+              readonly={readonly}
+              erÅrsakssammenhengYrkesskade={erÅrsakssammenhengYrkesskade}
+            />
+          )}
+        </>
+      )}
+      {/*  kodeverk: {*/}
+      {/*  type: 'radio',*/}
+      {/*  label: 'Velg system for diagnoser',*/}
+      {/*  options: [*/}
+      {/*{ label: 'Primærhelsetjenesten (ICPC2)', value: 'ICPC2' },*/}
+      {/*{ label: 'Spesialisthelsetjenesten (ICD10)', value: 'ICD10' },*/}
+      {/*  ],*/}
+      {/*  defaultValue: defaultValues.kodeverk,*/}
+      {/*  rules: { required: 'Du må velge et system for diagnoser' },*/}
+      {/*  onChange: () => {*/}
+      {/*  form.setValue('hoveddiagnose', null);*/}
+      {/*  form.setValue('bidiagnose', null);*/}
+      {/*},*/}
+      {/*},*/}
+      {/*  hoveddiagnose: {*/}
+      {/*  type: 'async_combobox',*/}
+      {/*  defaultValue: defaultValues.hoveddiagnose !== null ? defaultValues.hoveddiagnose : undefined,*/}
+      {/*},*/}
+      {/*  bidiagnose: {*/}
+      {/*  type: 'async_combobox',*/}
+      {/*  defaultValue: defaultValues.bidiagnose !== null ? defaultValues.bidiagnose : undefined,*/}
+      {/*},*/}
+    </VStack>
+  );
+};

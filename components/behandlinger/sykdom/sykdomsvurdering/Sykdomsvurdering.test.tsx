@@ -3,10 +3,14 @@ import { customRenderWithSøknadstidspunkt, render, screen, within } from 'lib/t
 import { userEvent } from '@testing-library/user-event';
 import { MellomlagretVurderingResponse, SykdomsGrunnlag, Sykdomvurdering } from 'lib/types/types';
 import { format, subDays } from 'date-fns';
-import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
+import {
+  Sykdomsvurdering,
+  SykdomsvurderingFormFields,
+} from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import { FetchResponse } from 'lib/utils/api';
 import createFetchMock from 'vitest-fetch-mock';
 import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
+import { SykdomsvurderingPeriodisert } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingPeriodisert';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
@@ -1111,6 +1115,38 @@ describe('mellomlagring i sykdom', () => {
     expect(lagreKnapp).not.toBeInTheDocument();
     const slettKnapp = screen.queryByRole('button', { name: 'Slett utkast' });
     expect(slettKnapp).not.toBeInTheDocument();
+  });
+
+  it('Skal støtte å bruke gammelt format på mellomlagret data', () => {
+    const dataGammel: Partial<SykdomsvurderingFormFields> = {
+      begrunnelse: 'Dette er en gammel mellomlagret begrunnelse',
+    };
+
+    const mellomlagringGammel: MellomlagretVurderingResponse = {
+      mellomlagretVurdering: {
+        avklaringsbehovkode: '5003',
+        behandlingId: { id: 1 },
+        data: JSON.stringify(dataGammel),
+        vurdertDato: '2025-08-21T12:00:00.000',
+        vurdertAv: 'Jan T. Loven',
+      },
+    };
+
+    render(
+      <SykdomsvurderingPeriodisert
+        typeBehandling={'Førstegangsbehandling'}
+        behandlingVersjon={0}
+        readOnly={false}
+        grunnlag={sykdomsGrunnlagUtenVurdering}
+        initialMellomlagretVurdering={mellomlagringGammel.mellomlagretVurdering}
+      />
+    );
+
+    const begrunnelseFelt = screen.getByRole('textbox', {
+      name: /vilkårsvurdering/i,
+    });
+
+    expect(begrunnelseFelt).toHaveValue(dataGammel.begrunnelse);
   });
 });
 
