@@ -23,7 +23,6 @@ export const SoningsvurderingMedDataFetching = async ({ behandlingsreferanse, st
   if (!skalViseSteg(stegData, grunnlag.data.vurderinger.length > 0)) {
     return null;
   }
-
   return (
     grunnlag.data.soningsforhold.length > 0 && (
       <Soningsvurdering
