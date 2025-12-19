@@ -94,7 +94,16 @@ export const SkriveBrevMedDataFetching = async ({
         }
       />
       {brukNyBrevbygger && (
-        <Brevbygger brevmal={brev.brevmal} brevdata={brev.brevdata} referanse={brev.brevbestillingReferanse} />
+        <Brevbygger
+          brevmal={brev.brevmal}
+          brevdata={brev.brevdata}
+          referanse={brev.brevbestillingReferanse}
+          behovstype={behovstype}
+          mottaker={brev.mottaker}
+          brukerMottaker={bruker}
+          behandlingVersjon={behandlingVersjon}
+          readOnly={readOnlyBrev}
+        />
       )}
       {!brukNyBrevbygger && brev.brev && (
         <SkriveBrev

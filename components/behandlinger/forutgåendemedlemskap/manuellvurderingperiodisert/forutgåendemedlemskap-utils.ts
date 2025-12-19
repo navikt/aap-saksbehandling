@@ -11,19 +11,17 @@ import {
   ForutgåendeMedlemskapVurderingForm,
   ForutgåendeMedlemskapVurderingFormIkkePeriodisert,
 } from 'components/behandlinger/forutgåendemedlemskap/manuellvurderingperiodisert/types';
+import { getFraDatoFraGrunnlagForFrontend } from 'lib/utils/periodisering';
 
 export function getDefaultValuesFromGrunnlag(
   grunnlag?: PeriodisertForutgåendeMedlemskapGrunnlag
 ): ForutgåendeMedlemskapVurderingForm {
   if (grunnlag == null || (grunnlag.nyeVurderinger.length === 0 && grunnlag.sisteVedtatteVurderinger.length === 0)) {
-    // Vi har ingen tidligere vurderinger eller nye vurderinger, legg til en tom-default-periode
-    const fraDato = grunnlag?.behøverVurderinger[0]?.fom;
-
     return {
       vurderinger: [
         {
           begrunnelse: '',
-          fraDato: fraDato && formaterDatoForFrontend(new Date(fraDato)),
+          fraDato: getFraDatoFraGrunnlagForFrontend(grunnlag),
         },
       ],
     };
@@ -87,7 +85,7 @@ export function hentPeriodiserteVerdierFraMellomlagretVurdering(
           begrunnelse: ikkePeriodisertVurdering.begrunnelse,
           harForutgåendeMedlemskap: ikkePeriodisertVurdering.harForutgåendeMedlemskap,
           unntaksvilkår: ikkePeriodisertVurdering.unntaksvilkår,
-          fraDato: grunnlag ? formaterDatoForFrontend(new Date(grunnlag?.kanVurderes[0]?.fom!)) : undefined,
+          fraDato: getFraDatoFraGrunnlagForFrontend(grunnlag),
         },
       ],
     } as ForutgåendeMedlemskapVurderingForm;

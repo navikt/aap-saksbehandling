@@ -10,8 +10,8 @@ import { isError } from 'lib/utils/api';
 import { FastsettManuellInntektMedDataFetching } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/FastsettManuellInntektMedDataFetching';
 import { getStegData, skalViseSteg } from 'lib/utils/steg';
 import { FastsettManuellInntektMedDataFetchingNy } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/FastsettManuellInntektMedDataFetchingNy';
-import { toggles } from 'lib/utils/toggles';
 import { Inntektsbortfall } from './inntektsbortfall/Inntektsbortfall';
+import { unleashService } from 'lib/services/unleash/unleashService';
 
 interface Props {
   behandlingsReferanse: string;
@@ -68,7 +68,7 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
           />
         </StegSuspense>
       )}
-      {!toggles.featureManglendePGIOgEøsInntekter && vurderManglendeLigningSteg.skalViseSteg && (
+      {!unleashService.isEnabled('ManglendePGIOgEosInntekter') && vurderManglendeLigningSteg.skalViseSteg && (
         <StegSuspense>
           <FastsettManuellInntektMedDataFetching
             behandlingsreferanse={behandlingsReferanse}
@@ -76,7 +76,7 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
           />
         </StegSuspense>
       )}
-      {toggles.featureManglendePGIOgEøsInntekter && (
+      {unleashService.isEnabled('ManglendePGIOgEosInntekter') && (
         <StegSuspense>
           <FastsettManuellInntektMedDataFetchingNy
             behandlingsreferanse={behandlingsReferanse}
@@ -89,7 +89,7 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
           <VisBeregning grunnlag={beregningsgrunnlag.data} />
         </StegSuspense>
       )}
-      {toggles.featureMidlertidigStansInntektsbortfall && skalViseInntektsbortfall && (
+      {skalViseInntektsbortfall && (
         <StegSuspense>
           <Inntektsbortfall behandlingVersjon={inntektsbortfall.behandlingVersjon} readOnly={true} />
         </StegSuspense>

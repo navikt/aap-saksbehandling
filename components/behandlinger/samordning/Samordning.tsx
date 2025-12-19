@@ -10,6 +10,7 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { SamordningTjenestePensjonMedDataFetching } from 'components/behandlinger/samordning/samordningtjenestepensjon/SamordningTjenestePensjonMedDataFetching';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { SamordningArbeidsgiverMedDatafetching } from 'components/behandlinger/samordning/samordningArbeidsgiver/SamordningArbeidsgiverMedDatafetching';
+import { SamordningBarnepensjonMedDatafetching } from 'components/behandlinger/samordning/samordningBarnepensjon/SamordningBarnepensjonMedDatafetching';
 
 interface Props {
   behandlingsreferanse: string;
@@ -36,6 +37,10 @@ export const Samordning = async ({ behandlingsreferanse }: Props) => {
       visning={flyt.data.visning}
       aktivtSteg={flyt.data.aktivtSteg}
     >
+      <StegSuspense>
+        <SamordningBarnepensjonMedDatafetching behandlingsreferanse={behandlingsreferanse} />
+      </StegSuspense>
+
       {samordningSosialStønadSteg.skalViseSteg && (
         <StegSuspense>
           <SamordningSosialstønadMedDatafetching

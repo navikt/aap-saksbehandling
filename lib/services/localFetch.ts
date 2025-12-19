@@ -10,7 +10,7 @@ export async function hentLocalToken(scope: string) {
   }
 
   let url = `http://localhost:8081/token/${ident?.value}`;
-  if (scope === process.env.DOKUMENTMOTTAK_API_SCOPE) {
+  if (scope === process.env.POSTMOTTAK_API_SCOPE) {
     url = 'http://localhost:8071/token';
   } else if (scope === process.env.STATISTIKK_API_SCOPE) {
     url = 'http://localhost:8091/token';

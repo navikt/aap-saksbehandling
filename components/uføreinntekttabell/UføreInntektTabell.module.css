@@ -1,0 +1,12 @@
+.rad {
+    height: 60px;
+}
+
+.footer {
+    border-top: 3px solid var(--a-border-divider);
+    border-bottom: 3px solid var(--a-border-divider);
+}
+
+.fetSkrift {
+   font-weight: bold;
+}

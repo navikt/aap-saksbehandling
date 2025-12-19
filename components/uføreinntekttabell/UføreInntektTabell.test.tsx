@@ -3,6 +3,11 @@ import { render, screen } from '@testing-library/react';
 import { UføreInntekt } from 'lib/types/types';
 import { UføreInntektTabell } from 'components/uføreinntekttabell/UføreInntektTabell';
 
+const grunnbeløpFor2025 = {
+  dato: '2025-01-01',
+  grunnbeløp: 130160,
+};
+
 const innteker: Array<UføreInntekt> = [
   {
     år: '2020',
@@ -12,56 +17,126 @@ const innteker: Array<UføreInntekt> = [
     uføreGrad: 30,
     justertForUføreGrad: 500000,
     justertForUføreGradiG: 5,
+    inntektsPerioder: [
+      {
+        inntektIKroner: {
+          verdi: 750000,
+        },
+        inntektJustertForUføregrad: {
+          verdi: 500000,
+        },
+        periode: {
+          fom: '2024-12-01',
+          tom: '2024-12-31',
+        },
+        uføregrad: 50,
+      },
+    ],
   },
 ];
 
 describe('tabell for å vise uføre inntekter', () => {
   it('skal ha en overskrift', () => {
-    render(<UføreInntektTabell inntekter={innteker} gjennomsnittSiste3år={6} ytterligereNedsattArbeidsevneÅr="2021" />);
+    render(
+      <UføreInntektTabell
+        inntekter={innteker}
+        gjennomsnittSiste3år={6}
+        ytterligereNedsattArbeidsevneÅr="2021"
+        gjeldendeGrunnbeløp={grunnbeløpFor2025}
+      />
+    );
     const overskrift = screen.getByText('Grunnlagsberegning § 11-19 etter oppjustering jf. § 11-28 fjerde ledd');
     expect(overskrift).toBeVisible();
   });
 
   it('skal ha en kolonne som heter Periode', () => {
-    render(<UføreInntektTabell inntekter={innteker} gjennomsnittSiste3år={6} ytterligereNedsattArbeidsevneÅr="2021" />);
+    render(
+      <UføreInntektTabell
+        inntekter={innteker}
+        gjennomsnittSiste3år={6}
+        ytterligereNedsattArbeidsevneÅr="2021"
+        gjeldendeGrunnbeløp={grunnbeløpFor2025}
+      />
+    );
     const periodeKolonne = screen.getByRole('columnheader', { name: /periode/i });
     expect(periodeKolonne).toBeVisible();
   });
 
-  // Fiks denne
-  it.skip('skal ha en kolonne som heter Uføregrad', () => {
-    render(<UføreInntektTabell inntekter={innteker} gjennomsnittSiste3år={6} ytterligereNedsattArbeidsevneÅr="2021" />);
-    const uføregradKolonne = screen.getByRole('columnheader', { name: /uføregrad/i });
+  it('skal ha en kolonne som heter Uføregrad', () => {
+    render(
+      <UføreInntektTabell
+        inntekter={innteker}
+        gjennomsnittSiste3år={6}
+        ytterligereNedsattArbeidsevneÅr="2021"
+        gjeldendeGrunnbeløp={grunnbeløpFor2025}
+      />
+    );
+    const uføregradKolonne = screen.getByRole('columnheader', { name: /Uføregrad/i });
     expect(uføregradKolonne).toBeVisible();
   });
 
-  // Fiks denne
-  it.skip('skal ha en kolonne som heter inntekt', () => {
-    render(<UføreInntektTabell inntekter={innteker} gjennomsnittSiste3år={6} ytterligereNedsattArbeidsevneÅr="2021" />);
-    const inntektKolonne = screen.getByRole('columnheader', { name: /inntekt/i });
-    expect(inntektKolonne).toBeVisible();
+  it('skal ha en kolonne som heter Pensjonsgivende inntekt', () => {
+    render(
+      <UføreInntektTabell
+        inntekter={innteker}
+        gjennomsnittSiste3år={6}
+        ytterligereNedsattArbeidsevneÅr="2021"
+        gjeldendeGrunnbeløp={grunnbeløpFor2025}
+      />
+    );
+    const pensjonsgivendeInntektKolonne = screen.getByRole('columnheader', { name: /Pensjonsgivende inntekt/i });
+    expect(pensjonsgivendeInntektKolonne).toBeVisible();
   });
 
-  it('skal ha en kolonne som heter Justert for uføregrad', () => {
-    render(<UføreInntektTabell inntekter={innteker} gjennomsnittSiste3år={6} ytterligereNedsattArbeidsevneÅr="2021" />);
-    const justertForUføregradKolonne = screen.getByRole('columnheader', { name: /justert for uføregrad/i });
-    expect(justertForUføregradKolonne).toBeVisible();
+  it('skal ha en kolonne som heter Oppjustert 100%', () => {
+    render(
+      <UføreInntektTabell
+        inntekter={innteker}
+        gjennomsnittSiste3år={6}
+        ytterligereNedsattArbeidsevneÅr="2021"
+        gjeldendeGrunnbeløp={grunnbeløpFor2025}
+      />
+    );
+    const oppjustertHundreProsentKolonne = screen.getByRole('columnheader', { name: /Oppjustert 100%/i });
+    expect(oppjustertHundreProsentKolonne).toBeVisible();
   });
 
   it('skal ha en kolonne som heter Inntektsgrunnlag (maks 6 G)', () => {
-    render(<UføreInntektTabell inntekter={innteker} gjennomsnittSiste3år={6} ytterligereNedsattArbeidsevneÅr="2021" />);
+    render(
+      <UføreInntektTabell
+        inntekter={innteker}
+        gjennomsnittSiste3år={6}
+        ytterligereNedsattArbeidsevneÅr="2021"
+        gjeldendeGrunnbeløp={grunnbeløpFor2025}
+      />
+    );
     const justertTilMaks6GKolonne = screen.getByRole('columnheader', { name: 'Inntektsgrunnlag (maks 6 G)' });
     expect(justertTilMaks6GKolonne).toBeVisible();
   });
 
-  it('skal ha et felt med gjennomsnittlig inntekt siste 3 år', () => {
-    render(<UføreInntektTabell inntekter={innteker} gjennomsnittSiste3år={6} ytterligereNedsattArbeidsevneÅr="2021" />);
+  // TODO AAP-1377 Avklar om gjennomsnittSiste3år skal brukes
+  it.skip('skal ha et felt med gjennomsnittlig inntekt siste 3 år', () => {
+    render(
+      <UføreInntektTabell
+        inntekter={innteker}
+        gjennomsnittSiste3år={6}
+        ytterligereNedsattArbeidsevneÅr="2021"
+        gjeldendeGrunnbeløp={grunnbeløpFor2025}
+      />
+    );
     const felt = screen.getByText(`Gjennomsnitt ${innteker.at(0)?.år} - ${innteker.at(-1)?.år}`);
     expect(felt).toBeVisible();
   });
 
   it('skal rendre en rad', () => {
-    render(<UføreInntektTabell inntekter={innteker} gjennomsnittSiste3år={6} ytterligereNedsattArbeidsevneÅr="2021" />);
+    render(
+      <UføreInntektTabell
+        inntekter={innteker}
+        gjennomsnittSiste3år={6}
+        ytterligereNedsattArbeidsevneÅr="2021"
+        gjeldendeGrunnbeløp={grunnbeløpFor2025}
+      />
+    );
     const rows = screen.getAllByRole('row');
     expect(rows).toHaveLength(3); // Inneholder headers
   });

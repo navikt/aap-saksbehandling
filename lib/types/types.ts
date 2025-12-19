@@ -491,6 +491,7 @@ export type ArbeidsopptrappingLøsningDto =
 export type BrevdataDto = components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto'];
 export type DelmalDto = components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto.Delmal'];
 export type ValgDto = components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto.Valg'];
+export type FritekstDto = components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto.Fritekst'];
 // ---- HENTET FRA BEHANDLINGSFLYT PeriodiserteVurderingerDto.kt ---
 export interface VurderingDto {
   fom: string;

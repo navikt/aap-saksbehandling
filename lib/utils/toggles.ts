@@ -6,16 +6,6 @@ import { isProd } from 'lib/utils/environment';
 export const toggles = {
   featureSimulering: !isProd(),
   featureRevurderingVurderingsbehov: !isProd(),
-  featureOvergangArbeid: !isProd(),
   featureFerieISykepengeperiode: !isProd(), // Finnes ikke i unleash - kun frontend-toggle
   featurePostmottakBehandlingerPåVent: !isProd(),
-  featureVisAvslagsårsaker: !isProd(),
-  featureManglendePGIOgEøsInntekter: !isProd(),
-  featurePeriodiserteValgfrieKort: !isProd(),
-  featureVisArenahistorikkKnapp: !isProd(),
-  featureBistandPeriodisert: !isProd(),
-  featurePeriodisertSPE: !isProd(),
-  featurePeriodisertOvergangUføre: !isProd(),
-  featureMidlertidigStansInntektsbortfall: !isProd(),
-  featureNedsattArbeidsevnePeriodisert: !isProd(),
 };

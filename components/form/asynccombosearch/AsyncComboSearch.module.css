@@ -13,3 +13,6 @@
   gap: var(--a-spacing-2);
   align-items: center;
 }
+.labelwrapperHide {
+  display: none;
+}

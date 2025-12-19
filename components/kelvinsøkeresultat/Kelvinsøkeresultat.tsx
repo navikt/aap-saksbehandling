@@ -18,7 +18,7 @@ interface Props {
 export const Kelvinsøkeresultat = ({
   søkeresultat: { oppgaver, saker, kontor, person, behandlingsStatus, harTilgang, harAdressebeskyttelse },
 }: Props) => {
-  if (!saker || saker.length === 0) {
+  if (!saker || saker.length == 0) {
     return (
       <HStack>
         <Alert variant={'info'} size={'small'} className={styles.info}>

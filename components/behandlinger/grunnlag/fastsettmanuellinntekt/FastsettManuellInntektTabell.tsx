@@ -10,10 +10,10 @@ interface Props {
   form: UseFormReturn<FastsettManuellInntektForm>;
   tabellår: Tabellår[];
   readOnly?: boolean;
-  visUtenInputFelter?: boolean;
+  låstVisning?: boolean;
 }
 
-export const FastsettManuellInntektTabell = ({ tabellår, form, readOnly, visUtenInputFelter }: Props) => {
+export const FastsettManuellInntektTabell = ({ tabellår, form, readOnly, låstVisning }: Props) => {
   const regnUtTotalbeløpPerÅr = (ferdigLignetPGI: number, beregnetPGI: number, eøsInntekt: number): string => {
     const total =
       beregnetPGI > 0 ? Number(beregnetPGI) + Number(eøsInntekt) : Number(ferdigLignetPGI) + Number(eøsInntekt);
@@ -29,15 +29,15 @@ export const FastsettManuellInntektTabell = ({ tabellår, form, readOnly, visUte
             <Table.HeaderCell textSize={'small'}>År</Table.HeaderCell>
             <Table.HeaderCell textSize={'small'}>Ferdig lignet PGI</Table.HeaderCell>
             <Table.HeaderCell textSize={'small'}>Beregnet PGI</Table.HeaderCell>
-            <Table.HeaderCell textSize={'small'}>EØS inntekt</Table.HeaderCell>
+            <Table.HeaderCell textSize={'small'}>EØS-beregnet inntekt</Table.HeaderCell>
             <Table.HeaderCell textSize={'small'}>Totalt</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body data-testid={'inntektstabell'}>
           {tabellår.map((år, index) => {
-            const ferdigLignetPGI = form.watch(`tabellår.${index}.ferdigLignetPGI`);
-            const beregnetPGI = form.watch(`tabellår.${index}.beregnetPGI`);
-            const eøsInntekt = form.watch(`tabellår.${index}.eøsInntekt`);
+            const ferdigLignetPGI = låstVisning ? år.ferdigLignetPGI : form.watch(`tabellår.${index}.ferdigLignetPGI`);
+            const beregnetPGI = låstVisning ? år.beregnetPGI : form.watch(`tabellår.${index}.beregnetPGI`);
+            const eøsInntekt = låstVisning ? år.eøsInntekt : form.watch(`tabellår.${index}.eøsInntekt`);
             return (
               <Table.Row key={år.år}>
                 <Table.DataCell textSize={'small'}>{år.år}</Table.DataCell>
@@ -45,7 +45,7 @@ export const FastsettManuellInntektTabell = ({ tabellår, form, readOnly, visUte
                   {år.ferdigLignetPGI ? formaterTilNok(år.ferdigLignetPGI) : '-'}
                 </Table.DataCell>
                 <Table.DataCell textSize={'small'} data-testid={'beregnetPGI'}>
-                  {visUtenInputFelter ? (
+                  {låstVisning ? (
                     beregnetPGI ? (
                       formaterTilNok(beregnetPGI)
                     ) : (
@@ -63,7 +63,7 @@ export const FastsettManuellInntektTabell = ({ tabellår, form, readOnly, visUte
                   )}
                 </Table.DataCell>
                 <Table.DataCell textSize={'small'} data-testid={'eøsInntekt'}>
-                  {visUtenInputFelter ? (
+                  {låstVisning ? (
                     eøsInntekt ? (
                       formaterTilNok(eøsInntekt)
                     ) : (

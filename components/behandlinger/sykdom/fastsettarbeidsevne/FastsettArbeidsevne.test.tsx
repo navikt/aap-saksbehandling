@@ -12,8 +12,19 @@ const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
 const user = userEvent.setup();
 
-const grunnlagUtenVurdering: ArbeidsevneGrunnlag = { harTilgangTilÅSaksbehandle: true };
+const grunnlagUtenVurdering: ArbeidsevneGrunnlag = {
+  behøverVurderinger: [],
+  kanVurderes: [],
+  nyeVurderinger: [],
+  sisteVedtatteVurderinger: [],
+  harTilgangTilÅSaksbehandle: true,
+};
+
 const grunnlagMedVurdering: ArbeidsevneGrunnlag = {
+  behøverVurderinger: [],
+  kanVurderes: [],
+  nyeVurderinger: [],
+  sisteVedtatteVurderinger: [],
   harTilgangTilÅSaksbehandle: true,
   vurderinger: [
     {
@@ -55,6 +66,10 @@ describe('FastsettArbeidsevne', () => {
 
     it('steget er åpent for beslutter når det er gjort en vurdering (minst en vurdering og readOnly er true)', () => {
       const grunnlag: ArbeidsevneGrunnlag = {
+        behøverVurderinger: [],
+        kanVurderes: [],
+        nyeVurderinger: [],
+        sisteVedtatteVurderinger: [],
         harTilgangTilÅSaksbehandle: true,
         vurderinger: [
           {
@@ -166,6 +181,10 @@ describe('FastsettArbeidsevne', () => {
       };
 
       const grunnlagMedVurdering: ArbeidsevneGrunnlag = {
+        behøverVurderinger: [],
+        kanVurderes: [],
+        nyeVurderinger: [],
+        sisteVedtatteVurderinger: [],
         harTilgangTilÅSaksbehandle: true,
         vurderinger: [
           {

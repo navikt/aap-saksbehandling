@@ -26,7 +26,7 @@ import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { AvbrytRevurderingModal } from 'components/saksinfobanner/avbrytrevurderingmodal/AvbrytRevurderingModal';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { ReturStatus } from 'components/returstatus/ReturStatus';
-import { toggles } from 'lib/utils/toggles';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   personInformasjon: SakPersoninfo;
@@ -66,6 +66,7 @@ export const SaksinfoBanner = ({
   const avbrytRevurderingSteg = flyt && flyt.find((f) => f.stegGruppe === 'AVBRYT_REVURDERING');
   const behandlerEnSøknadSomSkalTrekkes = søknadStegGruppe && søknadStegGruppe.skalVises;
   const behandlerRevurderingSomSkalAvbrytes = avbrytRevurderingSteg && avbrytRevurderingSteg.skalVises;
+  const visArenahistorikkKnappEnabled = useFeatureFlag('VisArenahistorikkKnapp');
 
   const trekkKlageSteg = flyt && flyt.find((f) => f.stegGruppe === 'TREKK_KLAGE');
   const harAlleredeValgtTrekkKlage = trekkKlageSteg && trekkKlageSteg.skalVises;
@@ -183,7 +184,7 @@ export const SaksinfoBanner = ({
               />
             </div>
           )}
-          {behandling.arenaStatus?.harArenaHistorikk && toggles.featureVisArenahistorikkKnapp && (
+          {behandling.arenaStatus?.harArenaHistorikk && visArenahistorikkKnappEnabled && (
             <div className={styles.oppgavestatus}>
               <ArenaStatus />
             </div>

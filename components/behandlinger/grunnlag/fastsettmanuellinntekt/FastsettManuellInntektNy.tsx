@@ -2,7 +2,7 @@
 
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useConfigForm } from 'components/form/FormHook';
-import { FormField, ValuePair } from 'components/form/FormField';
+import { FormField } from 'components/form/FormField';
 import React, { FormEvent } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
@@ -16,6 +16,7 @@ import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerU
 import { useFieldArray } from 'react-hook-form';
 import { FastsettManuellInntektTabell } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/FastsettManuellInntektTabell';
 import { FastsettManuellInntektForm, Tabellår } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/types';
+import { sorterEtterNyesteDato } from 'lib/utils/date';
 
 interface Props {
   behandlingsversjon: number;
@@ -23,6 +24,12 @@ interface Props {
   readOnly: boolean;
   initialMellomlagretVurdering?: MellomlagretVurdering;
   behandlingErRevurdering: boolean;
+}
+
+interface ByggTabellDataProps {
+  sisteÅr: number;
+  pgi: ManuellInntektÅr[];
+  manuelleInntekter: ManuellInntektÅr[];
 }
 
 type DraftFormFields = Partial<FastsettManuellInntektForm>;
@@ -101,6 +108,7 @@ export const FastsettManuellInntektNy = ({
                 år: år.år,
                 beløp: år.beregnetPGI,
                 eøsBeløp: år.eøsInntekt,
+                ferdigLignetPGI: år.ferdigLignetPGI,
               })),
             },
           },
@@ -112,18 +120,20 @@ export const FastsettManuellInntektNy = ({
   }
 
   const visHovedinnhold = !formReadOnly || grunnlag.manuelleVurderinger !== null;
-  const sisteVurdering = grunnlag.historiskeManuelleVurderinger?.at(-1);
+  const vurderinger = grunnlag.historiskeManuelleVurderinger?.sort((a, b) => {
+    return sorterEtterNyesteDato(a.vurdertAv.dato, b.vurdertAv.dato);
+  });
 
   return (
     <VilkårskortMedFormOgMellomlagringNyVisning
-      heading={'Manglende pensjonsgivende inntekter / EØS inntekter'}
+      heading={'Manglende pensjonsgivende inntekt / EØS-beregnet inntekt'}
       steg={'MANGLENDE_LIGNING'}
       onSubmit={handleSubmit}
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       status={status}
       vilkårTilhørerNavKontor={false}
-      vurdertAvAnsatt={grunnlag.vurdering?.vurdertAv}
+      vurdertAvAnsatt={grunnlag.manuelleVurderinger?.vurdertAv}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() => {
@@ -135,25 +145,35 @@ export const FastsettManuellInntektNy = ({
       visningActions={visningActions}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
-      {behandlingErRevurdering && sisteVurdering && (
+      {behandlingErRevurdering && vurderinger && (
         <TidligereVurderinger
-          data={[sisteVurdering]}
-          buildFelter={byggFelter}
-          getErGjeldende={(v) => deepEqual(v, sisteVurdering)}
+          data={vurderinger}
+          getErGjeldende={(v) => deepEqual(v, vurderinger.at(0))}
           getVurdertAvIdent={(v) => v.vurdertAv.ident}
           getVurdertDato={(v) => v.vurdertAv.dato}
           grupperPåOpprettetDato={true}
-          customElement={
-            <>
-              <VStack>
-                <Label size="small">{formFields.begrunnelse.label}</Label>
-                <BodyShort size="small">{form.getValues('begrunnelse')}</BodyShort>
-              </VStack>
-              <VStack>
-                <FastsettManuellInntektTabell form={form} tabellår={tabellår} visUtenInputFelter={true} />
-              </VStack>
-            </>
-          }
+          customElement={(valgtVurderingIndex) => {
+            const tabelldata: Tabellår[] | undefined = vurderinger
+              .at(valgtVurderingIndex)
+              ?.årsVurderinger.map((år) => ({
+                år: år.år,
+                ferdigLignetPGI: år.ferdigLignetPGI,
+                beregnetPGI: år.beløp,
+                eøsInntekt: år.eøsBeløp,
+              }));
+
+            return (
+              <>
+                <VStack>
+                  <Label size="small">{formFields.begrunnelse.label}</Label>
+                  <BodyShort size="small">{vurderinger.at(valgtVurderingIndex)?.begrunnelse}</BodyShort>
+                </VStack>
+                <VStack>
+                  {tabelldata && <FastsettManuellInntektTabell form={form} tabellår={tabelldata} låstVisning={true} />}
+                </VStack>
+              </>
+            );
+          }}
         />
       )}
       {grunnlag.registrerteInntekterSisteRelevanteAr.length < 3 && (
@@ -173,7 +193,7 @@ export const FastsettManuellInntektNy = ({
             target="_blank"
             rel="noopener noreferrer"
           >
-            Du kan lese mer om hvordan EØS inntekt skal beregnes i rundskrivet til § 11-7 (lovdata.no)
+            Du kan lese mer om hvordan EØS-inntekt skal beregnes i kapittel 11.7 av EØS-rundskrivet.
           </Link>
           <FormField form={form} formField={formFields.begrunnelse} />
           <FastsettManuellInntektTabell form={form} tabellår={tabellår} readOnly={formReadOnly} />
@@ -192,22 +212,20 @@ const berikMedManglendeÅr = (sisteÅr: number): Tabellår[] => {
     ferdigLignetPGI: undefined,
     beregnetPGI: undefined,
     eøsInntekt: undefined,
-    totalInntekt: undefined,
   }));
 };
 
 /**
  * Berik siste tre relevante beregningsår med pensjonsgivende inntekter fra grunnlag dersom de finnes.
  */
-const berikMedInntekterFraGrunnlag = (treÅr: Tabellår[], inntekterFraGrunnlag: ManuellInntektÅr[]): Tabellår[] => {
+const berikMedPGI = (treÅr: Tabellår[], pgi: ManuellInntektÅr[]): Tabellår[] => {
   return treÅr.map((år) => {
-    const inntekter = inntekterFraGrunnlag.find((inntekter) => inntekter.år === år.år);
+    const inntekter = pgi.find((inntekter) => inntekter.år === år.år);
     return {
       år: år.år,
       ferdigLignetPGI: inntekter?.beløp,
       beregnetPGI: undefined,
       eøsInntekt: undefined,
-      totalInntekt: undefined,
     };
   });
 };
@@ -223,18 +241,14 @@ const berikMedManuelleInntekter = (treÅr: Tabellår[], manuelleInntekter: Manue
       ferdigLignetPGI: år.ferdigLignetPGI,
       beregnetPGI: inntekter?.beløp,
       eøsInntekt: inntekter?.eøsBeløp,
-      totalInntekt: undefined,
     };
   });
 };
 
-const byggTabellData = (grunnlag: ManuellInntektGrunnlag): Tabellår[] => {
-  const inntekterFraGrunnlag = grunnlag.registrerteInntekterSisteRelevanteAr;
-  const manuelleInntekter = grunnlag.manuelleVurderinger?.årsVurderinger || [];
-
+const byggTabellData = ({ sisteÅr, pgi, manuelleInntekter }: ByggTabellDataProps): Tabellår[] => {
   let tabellår: Tabellår[] = [];
-  tabellår = berikMedManglendeÅr(grunnlag.ar);
-  tabellår = berikMedInntekterFraGrunnlag(tabellår, inntekterFraGrunnlag);
+  tabellår = berikMedManglendeÅr(sisteÅr);
+  tabellår = berikMedPGI(tabellår, pgi);
   tabellår = berikMedManuelleInntekter(tabellår, manuelleInntekter);
   return tabellår;
 };
@@ -242,7 +256,11 @@ const byggTabellData = (grunnlag: ManuellInntektGrunnlag): Tabellår[] => {
 const mapGrunnlagToDraftFormFields = (grunnlag: ManuellInntektGrunnlag): DraftFormFields => {
   return {
     begrunnelse: grunnlag.manuelleVurderinger?.begrunnelse,
-    tabellår: byggTabellData(grunnlag),
+    tabellår: byggTabellData({
+      sisteÅr: grunnlag.sisteRelevanteÅr,
+      pgi: grunnlag.registrerteInntekterSisteRelevanteAr,
+      manuelleInntekter: grunnlag.manuelleVurderinger?.årsVurderinger || [],
+    }),
   };
 };
 
@@ -252,14 +270,3 @@ const emptyDraftFormFields = (): DraftFormFields => {
     tabellår: [],
   };
 };
-
-const byggFelter = (manuelleVurderinger: ManuellInntektGrunnlag['manuelleVurderinger']): ValuePair[] => [
-  {
-    label: 'Begrunnelse for arbeidsinntekt',
-    value: manuelleVurderinger?.begrunnelse ?? '-',
-  },
-  {
-    label: 'Hvilke år skal inntekt overstyres?',
-    value: '-',
-  },
-];

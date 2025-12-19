@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Button, HGrid } from '@navikt/ds-react';
+import { Alert, Box, Button, HGrid } from '@navikt/ds-react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { Delmal } from 'components/brevbygger/Delmal';
 import {
@@ -10,9 +10,19 @@ import {
   mapDelmalerFraSanity,
 } from 'components/brevbygger/brevmalMapping';
 import { BrevmalType } from 'components/brevbygger/brevmodellTypes';
-import { BrevdataDto } from 'lib/types/types';
+import { BrevdataDto, BrevMottaker, Mottaker } from 'lib/types/types';
 import { ForhåndsvisBrev } from 'components/brevbygger/ForhåndsvisBrev';
-import { clientOppdaterBrevdata } from 'lib/clientApi';
+import { clientKanDistribuereBrev, clientOppdaterBrevdata, clientOppdaterBrevmal } from 'lib/clientApi';
+import { useRouter } from 'next/navigation';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
+import { Behovstype } from 'lib/utils/form';
+import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { useCallback, useEffect, useState } from 'react';
+import { isSuccess } from 'lib/utils/api';
+import { revalidateFlyt } from 'lib/actions/actions';
+import { VelgeMottakere } from 'components/brevbygger/VelgeMottakere';
+import { IkkeSendBrevModal } from 'components/behandlinger/brev/skriveBrev/IkkeSendBrevModal';
+import { Brevbyggermeny } from 'components/brevbygger/Brevbyggermeny';
 
 export interface AlternativFormField {
   verdi: string;
@@ -37,19 +47,69 @@ export interface BrevdataFormFields {
 
 interface BrevbyggerProps {
   referanse: string;
+  behovstype: Behovstype;
+  mottaker: BrevMottaker;
+  behandlingVersjon: number;
+  readOnly: boolean;
+  visAvbryt?: boolean;
+  fullmektigMottaker?: Mottaker;
+  brukerMottaker?: Mottaker;
   brevmal?: string | null;
   brevdata?: BrevdataDto;
 }
 
-export const Brevbygger = ({ referanse, brevmal, brevdata }: BrevbyggerProps) => {
+export const Brevbygger = ({
+  referanse,
+  brevmal,
+  brevdata,
+  behovstype,
+  mottaker,
+  fullmektigMottaker,
+  brukerMottaker,
+  behandlingVersjon,
+  readOnly,
+  visAvbryt = true,
+}: BrevbyggerProps) => {
   const parsedBrevmal: BrevmalType = JSON.parse(brevmal || '');
   const { control, handleSubmit, watch } = useForm<BrevdataFormFields>({
-    defaultValues: {
+    values: {
       delmaler: mapDelmalerFraSanity(parsedBrevmal.delmaler, brevdata),
     },
   });
 
+  const router = useRouter();
+  const [valgteMottakere, setMottakere] = useState<Mottaker[]>([]);
+  const [visKanIkkeDistribuereAdvarsel, setVisKanIkkeDistribuereAdvarsel] = useState(false);
+  const [ikkeSendBrevModalOpen, settIkkeSendBrevModalOpen] = useState(false);
+  const behandlingsReferanse = useBehandlingsReferanse();
   const { fields } = useFieldArray({ control, name: 'delmaler' });
+  const { løsBehovOgGåTilNesteSteg, isLoading } = useLøsBehovOgGåTilNesteSteg('BREV');
+
+  const kanDistribuereBrevRequest = useCallback(async () => {
+    const brukerIdent = brukerMottaker?.ident;
+
+    if (brukerIdent) {
+      const valgteMottakereIdentListe = valgteMottakere
+        .map((mottaker) => mottaker.ident)
+        .filter((ident) => typeof ident === 'string');
+      const mottakerIdentListe = valgteMottakereIdentListe.length > 0 ? valgteMottakereIdentListe : [brukerIdent];
+      const response = await clientKanDistribuereBrev(referanse, {
+        brukerIdent,
+        mottakerIdentListe,
+      });
+
+      if (isSuccess(response)) {
+        const kanDistribuereTilAlleMottakere = !response.data.mottakereDistStatus.some(
+          (distStatus: { mottakerIdent: String; kanDistribuere: boolean }) => !distStatus.kanDistribuere
+        );
+        setVisKanIkkeDistribuereAdvarsel(!kanDistribuereTilAlleMottakere);
+      }
+    }
+  }, [brukerMottaker?.ident, referanse, valgteMottakere]);
+
+  useEffect(() => {
+    kanDistribuereBrevRequest();
+  }, [kanDistribuereBrevRequest]);
 
   const onSubmit = async (formData: BrevdataFormFields) => {
     const obligatoriskeDelmaler = formData.delmaler
@@ -94,9 +154,59 @@ export const Brevbygger = ({ referanse, brevmal, brevdata }: BrevbyggerProps) =>
     });
   };
 
+  const oppdaterBrevmal = async () => {
+    await clientOppdaterBrevmal(referanse);
+    router.refresh();
+  };
+
+  const sendBrev = async () => {
+    løsBehovOgGåTilNesteSteg({
+      behandlingVersjon: behandlingVersjon,
+      behov: {
+        behovstype: behovstype,
+        brevbestillingReferanse: referanse,
+        mottakere: valgteMottakere,
+        handling: 'FERDIGSTILL',
+      },
+      referanse: behandlingsReferanse,
+    });
+  };
+
+  const slettBrev = async () => {
+    løsBehovOgGåTilNesteSteg({
+      behandlingVersjon: behandlingVersjon,
+      behov: {
+        behovstype: behovstype,
+        brevbestillingReferanse: referanse,
+        handling: 'AVBRYT',
+      },
+      referanse: behandlingsReferanse,
+    });
+    await revalidateFlyt(behandlingsReferanse);
+  };
+
   return (
     <HGrid columns={2} gap={'2'} minWidth={'1280px'}>
       <Box>
+        <Brevbyggermeny
+          visAvbryt={visAvbryt}
+          oppdaterBrevmal={oppdaterBrevmal}
+          settIkkeSendBrevModalOpen={settIkkeSendBrevModalOpen}
+        />
+        {fullmektigMottaker && brukerMottaker && (
+          <VelgeMottakere
+            setMottakere={setMottakere}
+            readOnly={readOnly}
+            brukerNavn={mottaker.navn}
+            bruker={brukerMottaker}
+            fullmektig={fullmektigMottaker}
+          />
+        )}
+        {visKanIkkeDistribuereAdvarsel && (
+          <Alert variant={'warning'} size={'small'} className={'fit-content'}>
+            Brevet kan ikke distribueres til alle mottakere. Se rutinebeskrivelse for manuell håndtering.
+          </Alert>
+        )}
         <form
           onSubmit={handleSubmit((data) => {
             onSubmit(data);
@@ -112,10 +222,23 @@ export const Brevbygger = ({ referanse, brevmal, brevdata }: BrevbyggerProps) =>
               brevmal={parsedBrevmal}
             />
           ))}
-          <Button>Oppdater brevdata</Button>
+          <Button variant="secondary">Oppdater brevdata</Button>
         </form>
+        <Button type="button" onClick={() => sendBrev()} loading={isLoading}>
+          Send brev
+        </Button>
       </Box>
       <ForhåndsvisBrev referanse={referanse} />
+
+      <IkkeSendBrevModal
+        isOpen={ikkeSendBrevModalOpen}
+        onClose={() => {
+          settIkkeSendBrevModalOpen(false);
+        }}
+        onDelete={() => {
+          slettBrev();
+        }}
+      />
     </HGrid>
   );
 };

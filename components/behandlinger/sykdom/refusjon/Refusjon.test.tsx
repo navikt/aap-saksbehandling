@@ -3,7 +3,6 @@ import { render, screen, within } from 'lib/test/CustomRender';
 import { Refusjon } from 'components/behandlinger/sykdom/refusjon/Refusjon';
 import { MellomlagretVurderingResponse, RefusjonskravGrunnlag } from 'lib/types/types';
 import { userEvent } from '@testing-library/user-event';
-import { addDays, format, subDays } from 'date-fns';
 import createFetchMock from 'vitest-fetch-mock';
 import { FetchResponse } from 'lib/utils/api';
 import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
@@ -32,7 +31,6 @@ const grunnlagMedVurdering: RefusjonskravGrunnlag = {
     vurdertAv: { ansattnavn: 'Saksbehandler1', dato: '01.01.2026', enhetsnavn: 'Nav Løten', ident: '124567' },
   },
   harTilgangTilÅSaksbehandle: true,
-  historiskeVurderinger: [],
 };
 
 const grunnlagUtenVurdering: RefusjonskravGrunnlag = {
@@ -54,24 +52,6 @@ describe('Refusjonskrav sosialstønad', () => {
     expect(harRefusjonKrav).toBeVisible();
   });
 
-  it('Viser felt for fradato om bruker har refusjonskrav', async () => {
-    render(<Refusjon readOnly={false} behandlingVersjon={0} grunnlag={grunnlagMedVurdering} />);
-
-    expect(finnGruppeVelgRefusjonskrav()).toBeVisible();
-
-    await velgJa(finnGruppeVelgRefusjonskrav());
-    expect(finnTekstfeltForFradato()).toBeInTheDocument();
-  });
-
-  it('Viser felt for tildato om bruker har refusjonskrav', async () => {
-    render(<Refusjon readOnly={false} behandlingVersjon={0} grunnlag={grunnlagMedVurdering} />);
-
-    expect(finnGruppeVelgRefusjonskrav()).toBeVisible();
-
-    await velgJa(finnGruppeVelgRefusjonskrav());
-    expect(finnTekstfeltForTildato()).toBeInTheDocument();
-  });
-
   it('Viser felt for navkontor om bruker har refusjonskrav', async () => {
     render(<Refusjon readOnly={false} behandlingVersjon={0} grunnlag={grunnlagMedVurdering} />);
 
@@ -81,92 +61,13 @@ describe('Refusjonskrav sosialstønad', () => {
     expect(await finnNavkontorListe()).toBeInTheDocument();
   });
 
-  it('Viser ikke felt for fradato om bruker har refusjonskrav', async () => {
-    render(<Refusjon readOnly={false} behandlingVersjon={0} grunnlag={grunnlagMedVurdering} />);
-
-    expect(finnGruppeVelgRefusjonskrav()).toBeVisible();
-
-    await velgNei(finnGruppeVelgRefusjonskrav());
-    expect(finnTekstfeltForFradato()).not.toBeInTheDocument();
-  });
-
-  it('Viser ikke felt for tildato om bruker har refusjonskrav', async () => {
-    render(<Refusjon readOnly={false} behandlingVersjon={0} grunnlag={grunnlagMedVurdering} />);
-
-    expect(finnGruppeVelgRefusjonskrav()).toBeVisible();
-
-    await velgNei(finnGruppeVelgRefusjonskrav());
-    expect(finnTekstfeltForTildato()).not.toBeInTheDocument();
-  });
-
   it('Viser ikke felt for navkontor om bruker har refusjonskrav', async () => {
     render(<Refusjon readOnly={false} behandlingVersjon={0} grunnlag={grunnlagMedVurdering} />);
 
     expect(finnGruppeVelgRefusjonskrav()).toBeVisible();
 
     await velgNei(finnGruppeVelgRefusjonskrav());
-    expect(await finnNavkontorListe()).not.toBeInTheDocument();
-  });
-
-  it('Gir feilmelding ved feil format på fradato', async () => {
-    render(<Refusjon readOnly={false} behandlingVersjon={0} grunnlag={grunnlagMedVurdering} />);
-
-    expect(finnGruppeVelgRefusjonskrav()).toBeVisible();
-
-    await velgJa(finnGruppeVelgRefusjonskrav());
-    await skrivInnDatoForNårVurderingenGjelderFra('21.153.2211');
-    await trykkPåBekreft();
-    const feilmelding = screen.getByText('Datoformatet er ikke gyldig. Dato må være på formatet dd.mm.åååå');
-    expect(feilmelding).toBeVisible();
-  });
-
-  it('Gir ikke feilmelding ved manglende fra- og tildato', async () => {
-    render(<Refusjon readOnly={false} behandlingVersjon={0} grunnlag={grunnlagMedVurdering} />);
-
-    expect(finnGruppeVelgRefusjonskrav()).toBeVisible();
-
-    await velgJa(finnGruppeVelgRefusjonskrav());
-    await trykkPåBekreft();
-    const feilmelding = screen.queryByText('Datoformatet er ikke gyldig. Dato må være på formatet dd.mm.åååå');
-    expect(feilmelding).not.toBeInTheDocument();
-  });
-
-  it('Gir feilmelding ved feil format på tildato', async () => {
-    render(<Refusjon readOnly={false} behandlingVersjon={0} grunnlag={grunnlagMedVurdering} />);
-
-    expect(finnGruppeVelgRefusjonskrav()).toBeVisible();
-
-    await velgJa(finnGruppeVelgRefusjonskrav());
-    await skrivInnDatoForNårVurderingenGjelderTil('Tøysedato');
-    await trykkPåBekreft();
-    const feilmelding = screen.getByText('Datoformatet er ikke gyldig. Dato må være på formatet dd.mm.åååå');
-    expect(feilmelding).toBeVisible();
-  });
-
-  it('Gir feilmelding ved for tidlig fradato', async () => {
-    const ugyldigSøknadstidspunkt = subDays(new Date(), 4);
-    render(<Refusjon readOnly={false} behandlingVersjon={0} grunnlag={grunnlagMedVurdering} />);
-
-    expect(finnGruppeVelgRefusjonskrav()).toBeVisible();
-    await velgJa(finnGruppeVelgRefusjonskrav());
-    await skrivInnDatoForNårVurderingenGjelderFra(format(ugyldigSøknadstidspunkt, 'dd.MM.yyyy'));
-    await trykkPåBekreft();
-    const feilmelding = await screen.findByText('Vurderingen kan ikke gjelde fra før starttidspunktet');
-    expect(feilmelding).toBeVisible();
-  });
-
-  it('Gir feilmelding ved tildato før fradato', async () => {
-    render(<Refusjon readOnly={false} behandlingVersjon={0} grunnlag={grunnlagMedVurdering} />);
-    const gyldigFraDato = addDays(new Date(), 30);
-    const ugyldigTilDato = subDays(gyldigFraDato, 2);
-    expect(finnGruppeVelgRefusjonskrav()).toBeVisible();
-
-    await velgJa(finnGruppeVelgRefusjonskrav());
-    await skrivInnDatoForNårVurderingenGjelderFra(format(gyldigFraDato, 'dd.MM.yyyy'));
-    await skrivInnDatoForNårVurderingenGjelderTil(format(ugyldigTilDato, 'dd.MM.yyyy'));
-    await trykkPåBekreft();
-    const feilmelding = await screen.findByText('Tildato kan ikke være før fradato');
-    expect(feilmelding).toBeVisible();
+    expect(await finnNavkontorListeQuery()).not.toBeInTheDocument();
   });
 
   it('Gir feilmelding ved manglende Nav-kontor', async () => {
@@ -204,17 +105,8 @@ describe('Refusjonskrav sosialstønad', () => {
 
   const finnGruppeVelgRefusjonskrav = () => screen.getByRole('group', { name: 'Er det refusjonskrav fra Nav-kontor?' });
 
-  const finnTekstfeltForFradato = () =>
-    screen.queryByRole('textbox', {
-      name: 'Refusjonen gjelder fra',
-    });
-
-  const finnTekstfeltForTildato = () =>
-    screen.queryByRole('textbox', {
-      name: 'Refusjonen gjelder til',
-    });
-
-  const finnNavkontorListe = async () => screen.queryByRole('combobox', { name: 'Søk opp Nav-kontor' });
+  const finnNavkontorListe = async () => screen.findByRole('combobox', { name: 'Søk opp Nav-kontor' });
+  const finnNavkontorListeQuery = async () => screen.queryByRole('combobox', { name: 'Søk opp Nav-kontor' });
 
   const trykkPåBekreft = async () => await user.click(screen.getByRole('button', { name: 'Bekreft' }));
 
@@ -224,18 +116,6 @@ describe('Refusjonskrav sosialstønad', () => {
 
   const velgNei = async (group: HTMLElement) => {
     await user.click(within(group).getByRole('radio', { name: 'Nei' }));
-  };
-
-  const skrivInnDatoForNårVurderingenGjelderFra = async (dato: string) => {
-    const datofelt = screen.getByRole('textbox', { name: 'Refusjonen gjelder fra' });
-    await user.clear(datofelt);
-    await user.type(datofelt, dato);
-  };
-
-  const skrivInnDatoForNårVurderingenGjelderTil = async (dato: string) => {
-    const datofelt = screen.getByRole('textbox', { name: 'Refusjonen gjelder til' });
-    await user.clear(datofelt);
-    await user.type(datofelt, dato);
   };
 });
 
