@@ -8,8 +8,8 @@ import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 import { skalViseSteg, StegData } from 'lib/utils/steg';
 import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
-import { toggles } from 'lib/utils/toggles';
 import { SykdomsvurderingPeriodisert } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingPeriodisert';
+import { unleashService } from 'lib/services/unleash/unleashService';
 
 interface Props {
   behandlingsReferanse: string;
@@ -45,7 +45,7 @@ export const SykdomsvurderingMedDataFetching = async ({ behandlingsReferanse, st
     return null;
   }
 
-  return toggles.featureNedsattArbeidsevnePeriodisert ? (
+  return unleashService.isEnabled('PeriodisertNedsattArbeidsevneFrontend') ? (
     <SykdomsvurderingPeriodisert
       grunnlag={grunnlag.data}
       readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
