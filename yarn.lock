@@ -1764,10 +1764,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/diagnosekoder@npm:^1.2025.0":
-  version: 1.2025.0
-  resolution: "@navikt/diagnosekoder@npm:1.2025.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fdiagnosekoder%2F1.2025.0%2F2675cb1178884832541008211afed1a73de742b7"
-  checksum: 10c0/071851ecf31e85d26f9f188a11b1f0d5612031e12569ff813a4fb73367c9b2770a03bb784ad4d625e753a999bfa2b50e1449d94acf698257ef3733b75691b502
+"@navikt/diagnosekoder@npm:^1.2026.0":
+  version: 1.2026.0
+  resolution: "@navikt/diagnosekoder@npm:1.2026.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fdiagnosekoder%2F1.2026.0%2Fff31ee0f51e170c68b0f907bf507bcc65c56590c"
+  checksum: 10c0/41c2dc381687fe5e43a4bbefcdbf14131bfa7ed90503998d71f9ad31edba08cbe1b99f4cafc45bdc655fa38e79bb362e375b9b9d70d48e628587ea80bcd517d3
   languageName: node
   linkType: hard
 
@@ -3500,7 +3500,7 @@ __metadata:
     "@navikt/aap-postmottak-backend-typescript-types": "npm:^0.0.557"
     "@navikt/aap-statistikk-typescript-types": "npm:^0.1.533"
     "@navikt/aksel-icons": "npm:7.35.2"
-    "@navikt/diagnosekoder": "npm:^1.2025.0"
+    "@navikt/diagnosekoder": "npm:^1.2026.0"
     "@navikt/ds-css": "npm:7.35.2"
     "@navikt/ds-react": "npm:7.35.2"
     "@navikt/eslint-config-aap": "npm:^5.1.3"
