@@ -1,6 +1,6 @@
 'use client';
 
-import { BodyShort, ExpansionCard, Label, VStack } from '@navikt/ds-react';
+import { BodyShort, ExpansionCard, Label } from '@navikt/ds-react';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { InstitusjonsoppholdTabell } from 'components/behandlinger/institusjonsopphold/InstitusjonsoppholdTabell';
 import { HelseinstitusjonGrunnlag, MellomlagretVurdering, Periode } from 'lib/types/types';
@@ -114,23 +114,19 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
       visningActions={visningActions}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
-      {!oppholdetErMinstFireMaanederOgToMaanederInnI.some((v) => v.isValid) ? (
+      {!oppholdetErMinstFireMaanederOgToMaanederInnI.some((vurdering) => vurdering.isValid) ? (
         <>
           <ExpansionCard
             size={'small'}
             aria-label={'Institusjonsopphold'}
             defaultOpen={true}
-            style={{ backgroundColor: 'var(--a-surface-info-subtle)' }}
+            className={styles.infobox}
           >
-            <ExpansionCard.Header className={styles.header}>
-              <div className={styles.headerContent}>
+            <ExpansionCard.Content className={styles.expansioncardcontent}>
+              <div className={styles.content}>
                 <InformationSquareFillIcon />
-                <span>Vurdering av institusjonsopphold</span>
+                <span>Institusjonsoppholdet varer for kort til å gi reduksjon av AAP.</span>
               </div>
-            </ExpansionCard.Header>
-
-            <ExpansionCard.Content>
-              <VStack gap={'3'}>Institusjonsoppholdet varer for kort til å gi reduksjon av AAP.</VStack>
             </ExpansionCard.Content>
           </ExpansionCard>
 
