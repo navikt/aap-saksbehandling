@@ -1,7 +1,7 @@
 import { ExpansionCard } from '@navikt/ds-react';
 import { InformationSquareFillIcon } from '@navikt/aksel-icons';
 
-import styles from 'components/behandlinger/institusjonsopphold/helseinstitusjon/ManglendeInstitusjonsOpphold.module.css';
+import styles from './ManglendeInstitusjonsOpphold.module.css';
 
 export const ManglendeInstitusjonsOpphold = () => {
   return (
