@@ -84,7 +84,7 @@ describe('Helseinstitusjonsvurdering', () => {
 
   test('viser en liste over institusjonsopphold som er oppdaget', () => {
     expect(
-      screen.getByRole('table', { name: 'Brukeren har følgende institusjonsopphold på helseinstitusjon' })
+      screen.getByRole('table', { name: 'Brukeren har eller har hatt følgende institusjonsopphold' })
     ).toBeVisible();
   });
 
