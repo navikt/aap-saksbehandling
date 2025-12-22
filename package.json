@@ -17,10 +17,10 @@
   "dependencies": {
     "@navikt/aap-breveditor": "^0.10.1",
     "@navikt/aap-breveditor-css": "^0.4.1",
-    "@navikt/aksel-icons": "7.35.2",
+    "@navikt/aksel-icons": "7.36.0",
     "@navikt/diagnosekoder": "^1.2026.0",
-    "@navikt/ds-css": "7.35.2",
-    "@navikt/ds-react": "7.35.2",
+    "@navikt/ds-css": "7.36.0",
+    "@navikt/ds-react": "7.36.0",
     "@navikt/familie-endringslogg": "^14.0.4",
     "@navikt/oasis": "^3.8.0",
     "@opentelemetry/api": "^1.9.0",
