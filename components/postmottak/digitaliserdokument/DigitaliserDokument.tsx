@@ -11,6 +11,8 @@ import { formaterDatoForBackend } from 'lib/utils/date';
 import { DigitaliserAnnetRelevantDokument } from './annetrelevantdokument/DigitaliserAnnetRelevantDokument';
 import { VStack } from '@navikt/ds-react';
 import { DigitaliserKlage } from 'components/postmottak/digitaliserdokument/klage/DigitaliserKlage';
+import { isProd } from 'lib/utils/environment';
+import { DigitaliserMeldekortV2 } from 'components/postmottak/digitaliserdokument/meldekort/DigitaliserMeldekortV2';
 
 interface Props {
   behandlingsVersjon: number;
@@ -23,6 +25,8 @@ interface Props {
 export interface Submittable {
   submit: (kategori: KategoriserDokumentKategori, jsonString: string | null, søknadsdato: Date | null) => void;
 }
+
+const NY_DIGITALISERING_AV_MELDEKORT = !isProd();
 
 export const DigitaliserDokument = ({
   behandlingsVersjon,
@@ -66,8 +70,11 @@ export const DigitaliserDokument = ({
           isLoading={isLoading}
         />
       )}
-      {kategori === 'MELDEKORT' && (
+      {kategori === 'MELDEKORT' && !NY_DIGITALISERING_AV_MELDEKORT && (
         <DigitaliserMeldekort submit={handleSubmit} readOnly={readOnly} isLoading={isLoading} />
+      )}
+      {kategori === 'MELDEKORT' && NY_DIGITALISERING_AV_MELDEKORT && (
+        <DigitaliserMeldekortV2 submit={handleSubmit} readOnly={readOnly} isLoading={isLoading} />
       )}
       {kategori === 'KLAGE' && (
         <DigitaliserKlage
