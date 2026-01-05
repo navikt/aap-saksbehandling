@@ -1,6 +1,6 @@
-# Kelvin frontend
+# Frontend for saksbehandling av AAP (Kelvin)
 
-Dette er frontend-applikasjonen for Kelvin, et saksbehandlingssystem for arbeidsavklaringspenger (AAP) i Nav.
+Dette er frontend-applikasjonen for saksbehandling av arbeidsavklaringspenger (AAP) i Nav.
 
 ## Førstegangsoppsett
 
