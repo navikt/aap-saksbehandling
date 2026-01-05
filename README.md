@@ -70,7 +70,9 @@ For at pre-commit hooks for linting og formatering skal kunne kjøre, må du set
    ```
    Applikasjonen skal nå være tilgjengelig i nettleseren på http://localhost:4000
 
-## Tester
+## Diverse nyttige kommandoer
+
+### Tester
 
 For å kjøre tester lokalt, bruk følgende kommando:
 
@@ -78,7 +80,7 @@ For å kjøre tester lokalt, bruk følgende kommando:
   yarn test
 ```
 
-## Generering av typer
+### Generering av typer
 
 Prosjektet bruker openapi-typescript for å generere TypeScript-typer basert på typer fra backend.
 For å generere typene, kjør følgende kommando:
@@ -89,10 +91,24 @@ For å generere typene, kjør følgende kommando:
 
 **OBS:** Dette krever at backend kjører lokalt.
 
-## Andre ting
+### Oppdatere avhengigheter
 
 For å forhindre utilsiktede endringer i `yarn.lock` er man tvunget til å alltid kjøre følgende kommando for å gjøre endringer i filen:
 
 ```bash
   yarn install --immutable
 ```
+
+## Kode generert av GitHub Copilot
+
+Dette repoet bruker GitHub Copilot til å generere kode.
+
+## Henvendelser
+
+Spørsmål knyttet til koden eller prosjektet kan stilles som issues her på GitHub.
+
+# For Nav-ansatte
+
+Interne henvendelser kan sendes via Slack i kanalen #team-aap-åpen
+
+- kode som implementerer lovendringer og forskrifter som ikke er ferdig behandlet.
