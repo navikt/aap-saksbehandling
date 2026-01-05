@@ -8,7 +8,7 @@ describe('Vurder rettighetsperiode', () => {
   );
   it('har en overskrift', () => {
     expect(
-      screen.getByRole('heading', { name: 'Vurder § 22-13 syvende ledd. Første mulige dato med rett på ytelse ' })
+      screen.getByRole('heading', { name: 'Vurder § 22-13 syvende ledd. Første mulige dato med rett på ytelse' })
     ).toBeVisible();
   });
 
