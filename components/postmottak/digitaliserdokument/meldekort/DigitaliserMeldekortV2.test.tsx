@@ -25,7 +25,7 @@ describe('Digitaliser meldekort v2', () => {
 
   it('felt for når meldekortet ble mottatt er påkrevd', async () => {
     await trykkPåNeste();
-    expect(await screen.findByText('Du må registrere når meldekortet ble mottatt')).toBeVisible();
+    expect(await screen.findByText('Du må registrere når meldekortet ble innsendt')).toBeVisible();
   });
 
   it('må ha minst to perioder for å få sendt inn et digitalisert meldekort', async () => {
