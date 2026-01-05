@@ -1,17 +1,13 @@
-import { ExpansionCard } from '@navikt/ds-react';
-import { InformationSquareFillIcon } from '@navikt/aksel-icons';
+import { Alert } from '@navikt/ds-react';
 
 import styles from './ManglendeInstitusjonsOpphold.module.css';
 
 export const ManglendeInstitusjonsOpphold = () => {
   return (
-    <ExpansionCard size={'small'} aria-label={'Institusjonsopphold'} defaultOpen={true} className={styles.infobox}>
+    <Alert size={'small'} aria-label={'Institusjonsopphold'} variant={'info'} className={styles.infobox}>
       <div className={styles.content}>
-        <InformationSquareFillIcon />
-        <span>
-          Det finnes institusjonsopphold for bruker, men institusjonsoppholdet varer for kort til å gi reduksjon av AAP.
-        </span>
+        <span>Brukeren har et institusjonsopphold, men det varer for kort til at AAP kan reduseres.</span>
       </div>
-    </ExpansionCard>
+    </Alert>
   );
 };

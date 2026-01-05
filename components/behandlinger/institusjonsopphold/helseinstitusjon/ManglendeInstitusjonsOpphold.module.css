@@ -24,8 +24,6 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin-top: 30px;
-  margin-bottom: 30px;
   background-color: var(--a-surface-info-subtle);
   box-shadow: none;
   --a-shadow-small: none;
