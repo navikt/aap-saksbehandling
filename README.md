@@ -1,76 +1,73 @@
-# AAP Saksbehandling
+# Kelvin frontend
 
-Frontendapplikasjon for ny saksbehandlingsløsning på AAP
+Dette er frontend-applikasjonen for Kelvin, et saksbehandlingssystem for arbeidsavklaringspenger (AAP) i Nav.
 
-## Bygge og kjøre app lokalt
+## Førstegangsoppsett
 
-### Husky
+Dette oppsettet forutsetter at du har følgende programvare installert:
 
-For at linting ved commit skal skje må du kjøre `yarn husky` etter å ha klonet repoet
+- Node.js
+- Corepack (Kommer med Node.js og håndterer riktig versjon av yarn for deg, må aktiveres med `corepack enable`)
+- Docker med colima og docker-compose
 
-### Linting
+### Sett opp GitHub token
 
-Prosjektet bruker prettier og eslint. I IntelliJ kan du skru på disse to pluginene med "auto" configuration valgt.
+1. Gå inn på GitHub under brukeren din på Settings -> Developer settings
+2. Velg Personal access tokens -> Tokens (classic) -> Generate new token (classic)
+3. Gi token et navn, sett utløpsdato og huk av for `read:packages`-rettighet
+4. Klikk Generate token og kopier tokenet (Det forsvinner fra siden)
+5. Klikk Configure SSO -> Authorize for navikt-organisasjonen
+6. Legg inn miljøvariabel med token i ~/.bashrc eller ~/.zshrc:
+   ```
+   export NPM_AUTH_TOKEN=<token-her>
+   ```
+   Husk å kjøre `source ~/.bashrc` eller `source ~/.zshrc` etterpå for å laste inn endringene, evt start terminal på nytt.
 
-### Github package registry
+### Prettier og linting
 
-Vi bruker Github sitt package registry for npm-pakker, siden flere av Nav sine pakker kun blir publisert her.
+Prosjektet bruker prettier og eslint. Skru gjerne på "Automatic configuration" for disse i din IDE.
 
-For å kunne kjøre `yarn install` lokalt må du logge inn mot Github package registry. Legg til følgende i .bashrc eller .zshrc lokalt på din maskin:
-I .bashrc eller .zshrc:
+## Kjøre opp lokalt mot lokal backend
 
-`export NPM_AUTH_TOKEN=github_pat`
+1. Kopier `.env-template` til `.env.local`:
+   ```bash
+   cp .env-template .env.local
+   ```
+2. Installer avhengigheter og start applikasjonen:
+   ```bash
+    yarn install
+    yarn dev
+   ```
+   Applikasjonen skal nå være tilgjengelig i nettleseren på http://localhost:3000
 
-Hvor github_pat er din personal access token laget på github (settings -> developer settings). Husk `read:packages`-rettighet og enable SSO når du oppdaterer/lager PAT.
+**OBS:** Husk å starte backend-tjenestene lokalt også, etter egen oppskrift.
 
-### Kjøre lokalt
+## Kjøre opp lokalt mot devmiljø
 
-#### Alternativ 1: Mot dev-gcp
+1. Hent secret (se: https://github.com/navikt/aap-cli)
+   ```bash
+    get-secret
+   ```
+2. Kopier miljøvariabler inn i `.env.local`:
+   ```bash
+   cat .env.dev-gcp .env-template-dev > .env.local
+   ```
+3. Start Wonderwall:
+   ```bash
+   colima start
+   docker-compose up -d
+   ```
+4. Installer avhengigheter og start applikasjonen:
+   ```bash
+    yarn install
+    yarn dev
+   ```
+   Applikasjonen skal nå være tilgjengelig i nettleseren på http://localhost:4000
 
-1. Hent secret med [aap-cli/get-secret.sh](https://github.com/navikt/aap-cli): \
-   `get-secret`
-2. Kopier innhold fra: \
-   `.env.dev-gcp` _og_ `.env-template-dev` inn i `.env.local` (kan gjøres med `cat .env.dev-gcp .env-template-dev > .env.local`)
-3. Start wonderwall med \
-   `docker-compose up -d`
-4. Kjør opp frontend med: \
-   `yarn dev`
-5. Åpne appen via Wonderwall: \
-   http://localhost:4000
+## Andre ting
 
-**OBS**: Må også legge til følgende i `/etc/hosts`: \
-`127.0.0.1   host.docker.internal`
+For å forhindre utilsiktede endringer i `yarn.lock` er man tvunget til å alltid kjøre følgende kommando for å gjøre endringer i filen:
 
-#### Alternativ 2: Mot mock backend
-
-Start `behandlingsflyt`, `postmottak`, e.l. sin backend lokalt ved å kjøre `TestApp`-klassen fra IntelliJ eller
-følge guiden her https://aap-sysdoc.ansatt.nav.no/funksjonalitet/Behandlingsflyt/teknisk/#kj%C3%B8re-lokalt
-
-OBS: Du må kopiere `.env-template` til `.env.local` for å kunne kjøre lokalt.
-
+```bash
+    yarn install --immutable
 ```
-yarn install (eller yarn install --immutable for å gjøre endringer i yarn.lock)
-yarn dev
-```
-
-For å opprette en lokal test-sak, åpne `http://localhost:3000/saksoversikt/` i nettleseren.
-
----
-
-## Kode generert av GitHub Copilot
-
-Dette repoet bruker GitHub Copilot til å generere kode.
-
-# Henvendelser
-
----
-
-Spørsmål knyttet til koden eller prosjektet kan stilles som issues her på GitHub
-
-# For Nav-ansatte
-
----
-
-Interne henvendelser kan sendes via Slack i kanalen #po-aap-team-aap.
-
-- kode som implementerer lovendringer og forskrifter som ikke er ferdig behandlet.
