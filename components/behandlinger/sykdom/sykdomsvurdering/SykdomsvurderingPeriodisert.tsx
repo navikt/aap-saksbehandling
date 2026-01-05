@@ -210,7 +210,7 @@ export const SykdomsvurderingPeriodisert = ({
   function mapGrunnlagTilDefaultvalues(grunnlag: SykdomsGrunnlag): Sykdomsvurderinger {
     if (grunnlag == null || (grunnlag.nyeVurderinger.length === 0 && grunnlag.sisteVedtatteVurderinger.length === 0)) {
       // Vi har ingen tidligere vurderinger eller nye vurderinger, legg til en tom-default-periode
-      const førsteFraDatoSomKanVurderes = grunnlag.kanVurderes[0].fom
+      const førsteFraDatoSomKanVurderes = grunnlag.kanVurderes[0]?.fom
         ? { fraDato: new Dato(grunnlag.kanVurderes[0].fom).formaterForFrontend() }
         : {};
       return {
