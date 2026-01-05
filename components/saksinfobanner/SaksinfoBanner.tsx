@@ -111,6 +111,11 @@ export const SaksinfoBanner = ({
       return { status: 'TRUKKET', label: 'Trukket' };
     } else if (visning?.resultatKode) {
       return { status: 'AVBRUTT', label: 'Avbrutt' };
+    } else if (oppgave?.utløptVentefrist) {
+      return {
+        status: 'VENTEFRIST_UTLØPT',
+        label: `Frist utløpt ${formaterDatoForFrontend(new Date(oppgave.utløptVentefrist))}`,
+      };
     }
   };
 
