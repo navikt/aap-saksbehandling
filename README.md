@@ -30,7 +30,7 @@ Prosjektet bruker prettier og eslint. Skru gjerne på "Automatic configuration" 
 For at pre-commit hooks for linting og formatering skal kunne kjøre, må du sette opp Husky med følgende kommando (trengs bare én gang):
 
 ```bash
-    yarn husky
+  yarn husky
 ```
 
 ## Kjøre opp lokalt mot lokal backend
@@ -41,8 +41,8 @@ For at pre-commit hooks for linting og formatering skal kunne kjøre, må du set
    ```
 2. Installer avhengigheter og start applikasjonen:
    ```bash
-    yarn install
-    yarn dev
+   yarn install
+   yarn dev
    ```
    Applikasjonen skal nå være tilgjengelig i nettleseren på http://localhost:3000
 
@@ -70,10 +70,29 @@ For at pre-commit hooks for linting og formatering skal kunne kjøre, må du set
    ```
    Applikasjonen skal nå være tilgjengelig i nettleseren på http://localhost:4000
 
+## Tester
+
+For å kjøre tester lokalt, bruk følgende kommando:
+
+```bash
+  yarn test
+```
+
+## Generering av typer
+
+Prosjektet bruker openapi-typescript for å generere TypeScript-typer basert på typer fra backend.
+For å generere typene, kjør følgende kommando:
+
+```bash
+  yarn gentypes
+```
+
+**OBS:** Dette krever at backend kjører lokalt.
+
 ## Andre ting
 
 For å forhindre utilsiktede endringer i `yarn.lock` er man tvunget til å alltid kjøre følgende kommando for å gjøre endringer i filen:
 
 ```bash
-    yarn install --immutable
+  yarn install --immutable
 ```
