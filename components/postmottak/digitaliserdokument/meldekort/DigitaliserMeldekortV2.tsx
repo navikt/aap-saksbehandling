@@ -30,11 +30,7 @@ export interface MeldekortFormFields {
 
 export const DigitaliserMeldekortV2 = ({ readOnly, submit, isLoading }: Props) => {
   const antallUkerIInneværendeÅr = getISOWeeksInYear(new Date());
-  const ukeOptions = [
-    ...Array(antallUkerIInneværendeÅr)
-      .keys()
-      .map((ukenummer) => (++ukenummer).toString()),
-  ];
+  const ukeOptions = Array.from({ length: antallUkerIInneværendeÅr }, (_, ukenummer) => (ukenummer + 1).toString());
 
   const { form, formFields } = useConfigForm<MeldekortFormFields>(
     {
