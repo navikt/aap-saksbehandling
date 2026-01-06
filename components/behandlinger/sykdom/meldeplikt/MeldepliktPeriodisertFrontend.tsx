@@ -1,7 +1,6 @@
 'use client';
 
-import { TrashFillIcon } from '@navikt/aksel-icons';
-import { Button, HStack, Link, Radio, VStack } from '@navikt/ds-react';
+import { HStack, Link, Radio, VStack } from '@navikt/ds-react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { FritakMeldepliktGrunnlag, MellomlagretVurdering } from 'lib/types/types';
@@ -120,6 +119,7 @@ export const MeldepliktPeriodisertFrontend = ({
       .filter((el) => el.message);
     return [...acc, ...errors];
   }, []);
+
   return (
     <VilkårskortPeriodisert
       heading={'§ 11-10 tredje ledd. Unntak fra meldeplikt (valgfritt)'}
@@ -169,6 +169,9 @@ export const MeldepliktPeriodisertFrontend = ({
           finnesFeil={finnesFeilForVurdering(index, errorList)}
           readonly={formReadOnly}
           onRemove={() => remove(index)}
+          // vilkåret er valgfritt, kan derfor slette vurderingen selv om det ikke finnes en tidligere vurdering
+          harTidligereVurderinger={true}
+          index={index}
         >
           <HStack justify={'space-between'}>
             <DateInputWrapper

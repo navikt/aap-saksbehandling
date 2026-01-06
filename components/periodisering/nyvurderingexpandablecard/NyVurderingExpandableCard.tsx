@@ -18,6 +18,8 @@ interface Props {
   children: ReactNode;
   readonly: boolean;
   onRemove: () => void;
+  index: number;
+  harTidligereVurderinger: boolean;
 }
 export const NyVurderingExpandableCard = ({
   fraDato,
@@ -29,6 +31,8 @@ export const NyVurderingExpandableCard = ({
   children,
   readonly,
   onRemove,
+  harTidligereVurderinger,
+  index,
 }: Props) => {
   const [cardExpanded, setCardExpanded] = useState<boolean>(true);
   const [spinnerRemove, setSpinnerRemove] = useState(false);
@@ -67,7 +71,7 @@ export const NyVurderingExpandableCard = ({
       <VStack gap={'5'}>
         <HGrid columns={'1fr 30px'}>
           <VStack gap={'5'}>{children}</VStack>
-          {!readonly && (
+          {!readonly && (index !== 0 || harTidligereVurderinger) && (
             <VStack justify={'start'}>
               <Button
                 aria-label="Fjern vurdering"

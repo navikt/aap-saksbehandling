@@ -164,6 +164,8 @@ export const ForutgåendeMedlemskapPeriodisert = ({
           finnesFeil={finnesFeilForVurdering(index, errorList)}
           readonly={formReadOnly}
           onRemove={() => remove(index)}
+          harTidligereVurderinger={tidligereVurderinger.length > 0}
+          index={index}
         >
           <ForutgåendeMedlemskapFormInput
             form={form}

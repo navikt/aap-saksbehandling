@@ -162,6 +162,8 @@ export const LovvalgOgMedlemskapPeriodisert = ({
           vurdertAv={vurdering.vurdertAv}
           finnesFeil={finnesFeilForVurdering(index, errorList)}
           onRemove={() => remove(index)}
+          harTidligereVurderinger={tidligereVurderinger.length > 0}
+          index={index}
           readonly={formReadOnly}
         >
           <LovvalgOgMedlemskapFormInput

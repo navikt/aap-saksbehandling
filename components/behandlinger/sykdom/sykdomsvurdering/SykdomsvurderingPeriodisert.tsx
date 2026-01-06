@@ -146,6 +146,7 @@ export const SykdomsvurderingPeriodisert = ({
   }
 
   const foersteNyePeriode = nyeVurderingerFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
+  const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
 
   return (
     <VilkårskortPeriodisert
@@ -193,6 +194,8 @@ export const SykdomsvurderingPeriodisert = ({
           finnesFeil={finnesFeilForVurdering(index, errorList)}
           readonly={formReadOnly}
           onRemove={() => remove(index)}
+          harTidligereVurderinger={tidligereVurderinger.length > 0}
+          index={index}
         >
           <SykdomsvurderingFormInput
             index={index}

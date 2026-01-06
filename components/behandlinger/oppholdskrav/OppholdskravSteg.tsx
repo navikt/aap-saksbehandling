@@ -109,6 +109,7 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
     });
   }
 
+  const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const foersteNyePeriode = vurderingerFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
   const errorList = mapPeriodiserteVurderingerErrorList<LovOgMedlemskapVurderingForm>(form.formState.errors);
 
@@ -161,6 +162,8 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
           finnesFeil={finnesFeilForVurdering(index, errorList)}
           readonly={formReadOnly}
           onRemove={() => remove(index)}
+          harTidligereVurderinger={tidligereVurderinger.length > 0}
+          index={index}
         >
           <OppholdskravFormInput form={form} readOnly={formReadOnly} index={index} />
         </NyVurderingExpandableCard>

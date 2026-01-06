@@ -91,6 +91,7 @@ export const BistandsbehovPeriodisert = ({
     })(event);
   };
 
+  const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const foersteNyePeriode = fields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
   const errorList = mapPeriodiserteVurderingerErrorList<LovOgMedlemskapVurderingForm>(form.formState.errors);
@@ -158,6 +159,8 @@ export const BistandsbehovPeriodisert = ({
           finnesFeil={finnesFeilForVurdering(index, errorList)}
           readonly={formReadOnly}
           onRemove={() => remove(index)}
+          harTidligereVurderinger={tidligereVurderinger.length > 0}
+          index={index}
         >
           <BistandsbehovVurderingForm form={form} readOnly={formReadOnly} index={index} />
         </NyVurderingExpandableCard>

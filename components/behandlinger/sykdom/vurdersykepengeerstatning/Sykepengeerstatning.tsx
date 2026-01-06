@@ -106,6 +106,7 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
       nullstillMellomlagretVurdering();
     });
   };
+  const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
 
   const errorList = mapPeriodiserteVurderingerErrorList<SykepengeerstatningForm>(form.formState.errors);
 
@@ -166,6 +167,8 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
             finnesFeil={false}
             readonly={formReadOnly}
             onRemove={() => remove(index)}
+            harTidligereVurderinger={tidligereVurderinger.length > 0}
+            index={index}
           >
             <SykepengeerstatningFormInput form={form} readOnly={formReadOnly} index={index} />
           </NyVurderingExpandableCard>

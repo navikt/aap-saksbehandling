@@ -108,6 +108,7 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialM
   };
 
   const errorList = mapPeriodiserteVurderingerErrorList<OvergangArbeidForm>(form.formState.errors);
+  const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
 
   return (
     <VilkårskortPeriodisert
@@ -166,6 +167,8 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialM
             finnesFeil={false}
             readonly={formReadOnly}
             onRemove={() => remove(index)}
+            harTidligereVurderinger={tidligereVurderinger.length > 0}
+            index={index}
           >
             <OvergangArbeidFormInput form={form} readOnly={formReadOnly} index={index} />
           </NyVurderingExpandableCard>
