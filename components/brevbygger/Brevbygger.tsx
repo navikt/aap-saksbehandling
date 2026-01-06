@@ -58,6 +58,22 @@ interface BrevbyggerProps {
   brevdata?: BrevdataDto;
 }
 
+const hentDokument = async (
+  brevbestillingReferanse: string,
+  setDataUri: (uri: string | undefined) => void,
+  setIsLoading: (status: boolean) => void
+) => {
+  let objectURL: string | undefined;
+  const blob = await fetch(`/saksbehandling/api/brev/${brevbestillingReferanse}/forhandsvis/`, {
+    method: 'GET',
+  }).then((res) => res.blob());
+
+  objectURL = URL.createObjectURL(new Blob([blob], { type: 'application/pdf' }));
+  setDataUri(objectURL);
+
+  setIsLoading(false);
+};
+
 export const Brevbygger = ({
   referanse,
   brevmal,
@@ -84,6 +100,17 @@ export const Brevbygger = ({
   const behandlingsReferanse = useBehandlingsReferanse();
   const { fields } = useFieldArray({ control, name: 'delmaler' });
   const { løsBehovOgGåTilNesteSteg, isLoading } = useLøsBehovOgGåTilNesteSteg('BREV');
+
+  const [dataUri, setDataUri] = useState<string>();
+  const [pdfIsLoading, setPdfIsLoading] = useState(false);
+
+  useEffect(() => {
+    return () => {
+      if (dataUri) {
+        URL.revokeObjectURL(dataUri);
+      }
+    };
+  });
 
   const kanDistribuereBrevRequest = useCallback(async () => {
     const brukerIdent = brukerMottaker?.ident;
@@ -144,7 +171,7 @@ export const Brevbygger = ({
       })
       .filter((v) => !!v);
 
-    await clientOppdaterBrevdata(referanse, {
+    const res = await clientOppdaterBrevdata(referanse, {
       delmaler: [...obligatoriskeDelmaler, ...valgteDelmaler],
       valg: valgteValg,
       betingetTekst: [],
@@ -152,6 +179,9 @@ export const Brevbygger = ({
       fritekster: fritekst,
       periodetekster: [],
     });
+    if (isSuccess(res)) {
+      hentDokument(referanse, setDataUri, setPdfIsLoading);
+    }
   };
 
   const oppdaterBrevmal = async () => {
@@ -228,7 +258,7 @@ export const Brevbygger = ({
           Send brev
         </Button>
       </Box>
-      <ForhåndsvisBrev referanse={referanse} />
+      <ForhåndsvisBrev isLoading={pdfIsLoading} dataUri={dataUri} />
 
       <IkkeSendBrevModal
         isOpen={ikkeSendBrevModalOpen}
