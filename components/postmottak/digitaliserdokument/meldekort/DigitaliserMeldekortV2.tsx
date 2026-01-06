@@ -4,9 +4,9 @@ import { MeldekortV0 } from 'lib/types/types';
 import type { Submittable } from 'components/postmottak/digitaliserdokument/DigitaliserDokument';
 import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
 import { useConfigForm } from 'components/form/FormHook';
-import { FormField } from 'components/form/FormField';
+import { FormField, ValuePair } from 'components/form/FormField';
 import { Button } from '@navikt/ds-react';
-import { getISOWeeksInYear } from 'date-fns';
+import { addWeeks, getISOWeek, isBefore, startOfWeek, subMonths } from 'date-fns';
 import { MeldeperioderV2 } from 'components/postmottak/digitaliserdokument/meldekort/MeldePerioderV2';
 import { FormEvent } from 'react';
 
@@ -19,8 +19,8 @@ export type Meldedag = {
   arbeidsTimer: string;
 };
 export type Meldeperiode = {
-  dager: Array<Meldedag>;
-  ukenummer: number;
+  dager: Meldedag[];
+  ukestart: string; // hvis denne er Date funker ikke insert/append i fieldArray
 };
 export interface MeldekortFormFields {
   gjelderForUker: string[];
@@ -28,16 +28,32 @@ export interface MeldekortFormFields {
   meldeperioder: Meldeperiode[];
 }
 
-export const DigitaliserMeldekortV2 = ({ readOnly, submit, isLoading }: Props) => {
-  const antallUkerIInneværendeÅr = getISOWeeksInYear(new Date());
-  const ukeOptions = Array.from({ length: antallUkerIInneværendeÅr }, (_, ukenummer) => (ukenummer + 1).toString());
+export const ukestartSisteHalvår = (): ValuePair[] => {
+  const iDag = new Date();
+  const sisteValgbareUke = addWeeks(iDag, 1);
+  const seksMndSiden = subMonths(iDag, 6);
 
+  let ukestarter: Date[] = [];
+  let gjeldendeUke = seksMndSiden;
+  while (isBefore(gjeldendeUke, sisteValgbareUke)) {
+    ukestarter.push(startOfWeek(gjeldendeUke, { weekStartsOn: 1 }));
+    gjeldendeUke = addWeeks(gjeldendeUke, 1);
+  }
+
+  const opts = ukestarter.map((ukestart) => ({
+    label: getISOWeek(ukestart).toString(),
+    value: ukestart.toISOString(),
+  }));
+  return opts;
+};
+
+export const DigitaliserMeldekortV2 = ({ readOnly, submit, isLoading }: Props) => {
   const { form, formFields } = useConfigForm<MeldekortFormFields>(
     {
       gjelderForUker: {
         type: 'combobox_multiple',
         label: 'Hvilke uker gjelder meldekortet for?',
-        options: ukeOptions,
+        options: ukestartSisteHalvår(),
         rules: { required: 'Du må velge hvilke uker meldekortet gjelder for' },
       },
       innsendtDato: {

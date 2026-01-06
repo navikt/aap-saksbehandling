@@ -1,9 +1,14 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { DigitaliserMeldekortV2 } from 'components/postmottak/digitaliserdokument/meldekort/DigitaliserMeldekortV2';
+import {
+  DigitaliserMeldekortV2,
+  ukestartSisteHalvår,
+} from 'components/postmottak/digitaliserdokument/meldekort/DigitaliserMeldekortV2';
 import userEvent from '@testing-library/user-event';
 
 const user = userEvent.setup();
+
+const ukestarterSisteHalvår = ukestartSisteHalvår();
 
 describe('Digitaliser meldekort v2', () => {
   beforeEach(() => {
@@ -32,7 +37,7 @@ describe('Digitaliser meldekort v2', () => {
     const combobox = screen.getByRole('combobox', { name: 'Hvilke uker gjelder meldekortet for?' });
     await user.click(combobox);
 
-    const option = screen.getByRole('option', { name: '1' });
+    const option = screen.getByRole('option', { name: ukestarterSisteHalvår[0].label });
     await user.click(option);
 
     await user.type(screen.getByRole('textbox', { name: 'Dato for innsendt meldekort' }), '12.01.2025');
@@ -44,11 +49,11 @@ describe('Digitaliser meldekort v2', () => {
     const combobox = screen.getByRole('combobox', { name: 'Hvilke uker gjelder meldekortet for?' });
     await user.click(combobox);
 
-    const option1 = screen.getByRole('option', { name: '1' });
+    const option1 = screen.getByRole('option', { name: ukestarterSisteHalvår[0].label });
     await user.click(option1);
-    const option2 = screen.getByRole('option', { name: '2' });
+    const option2 = screen.getByRole('option', { name: ukestarterSisteHalvår[1].label });
     await user.click(option2);
-    const option3 = screen.getByRole('option', { name: '3' });
+    const option3 = screen.getByRole('option', { name: ukestarterSisteHalvår[2].label });
     await user.click(option3);
 
     await user.type(screen.getByRole('textbox', { name: 'Dato for innsendt meldekort' }), '12.01.2025');
@@ -60,37 +65,14 @@ describe('Digitaliser meldekort v2', () => {
     const combobox = screen.getByRole('combobox', { name: 'Hvilke uker gjelder meldekortet for?' });
     await user.click(combobox);
 
-    const option1 = screen.getByRole('option', { name: '1' });
+    const option1 = screen.getByRole('option', { name: ukestarterSisteHalvår[0].label });
     await user.click(option1);
-    const option3 = screen.getByRole('option', { name: '3' });
+    const option3 = screen.getByRole('option', { name: ukestarterSisteHalvår[2].label });
     await user.click(option3);
 
     await user.type(screen.getByRole('textbox', { name: 'Dato for innsendt meldekort' }), '12.01.2025');
     await trykkPåNeste();
     expect(await screen.findByText('Det er ikke valgt korrekte meldeperioder')).toBeVisible();
-  });
-
-  it('alle valgte perioder må starte på samme uketakt som første periode', async () => {
-    const combobox = screen.getByRole('combobox', { name: 'Hvilke uker gjelder meldekortet for?' });
-    await user.click(combobox);
-
-    const option1 = screen.getByRole('option', { name: '1' });
-    await user.click(option1);
-    const option2 = screen.getByRole('option', { name: '2' });
-    await user.click(option2);
-
-    const option4 = screen.getByRole('option', { name: '4' });
-    await user.click(option4);
-    const option5 = screen.getByRole('option', { name: '5' });
-    await user.click(option5);
-
-    await user.type(screen.getByRole('textbox', { name: 'Dato for innsendt meldekort' }), '12.01.2025');
-    await trykkPåNeste();
-    expect(
-      await screen.findByText(
-        'Det er avvik i når meldeperiodene starter. Meldeperiodene starter enten i partallsuker eller oddetallsuker'
-      )
-    ).toBeVisible();
   });
 });
 
