@@ -11,6 +11,10 @@
   padding-top: 0.5rem;
 }
 
+.knapp:hover {
+  background-color: var(--a-surface-danger-moderate);
+}
+
 .boks > * {
   padding-left: var(--a-spacing-3);
   padding-right: var(--a-spacing-3);
