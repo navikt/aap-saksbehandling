@@ -99,4 +99,14 @@ describe('OppgaveInformasjon', () => {
     render(<OppgaveInformasjon oppgave={{ ...oppgave, enhet: '1783' }} />);
     expect(screen.queryByRole('img', { name: 'Adressebeskyttelse Ikon' })).not.toBeInTheDocument();
   });
+
+  it('skal vise ventefrist utløpt-ikon om ventefrist er utløpt', () => {
+    render(<OppgaveInformasjon oppgave={{ ...oppgave, utløptVentefrist: '04-01-2026' }} />);
+    expect(screen.getByRole('img', { name: 'Ventefrist utløpt' })).toBeVisible();
+  });
+
+  it('skal ikke vise ventefrist utløpt-ikon når oppgave ikke har ventefrist', () => {
+    render(<OppgaveInformasjon oppgave={oppgave} />);
+    expect(screen.queryByRole('img', { name: 'Ventefrist utløpt' })).not.toBeInTheDocument();
+  });
 });
