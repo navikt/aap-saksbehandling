@@ -6232,7 +6232,7 @@ export interface components {
         | '9004';
       soningsvurdering: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.flate.SoningsvurderingerDto'];
     };
-    'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarStudentL\u00F8sning': {
+    'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarStudentEnkelL\u00F8sning': {
       /** @enum {string} */
       behovstype:
         | '4101'
@@ -6303,6 +6303,9 @@ export interface components {
         | '9002'
         | '9003'
         | '9004';
+      'l\u00F8sningerForPerioder'?:
+        | components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.StudentVurderingDTO'][]
+        | null;
       studentvurdering: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.StudentVurderingDTO'];
     };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarSykdomL\u00F8sning': {
@@ -6610,7 +6613,7 @@ export interface components {
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarSamordningGraderingL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarSamordningUf\u00F8reL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarSoningsforholdL\u00F8sning']
-      | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarStudentL\u00F8sning']
+      | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarStudentEnkelL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarSykepengerErstatningL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarYrkesskadeL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.BekreftTotalvurderingKlageL\u00F8sning']
@@ -10803,6 +10806,7 @@ export interface components {
         | 'REVURDER_SAMORDNING_ARBEIDSGIVER'
         | 'REVURDER_SAMORDNING_TJENESTEPENSJON'
         | 'G_REGULERING'
+        | 'AUTOMATISK_OPPDATER_VILKÅR'
         | 'LOVVALG_OG_MEDLEMSKAP'
         | 'FORUTGAENDE_MEDLEMSKAP'
         | 'OPPHOLDSKRAV'
@@ -10842,6 +10846,7 @@ export interface components {
         | 'FRITAK_MELDEPLIKT'
         | 'MELDEKORT'
         | 'AKTIVITETSMELDING'
+        | 'AUTOMATISK_OPPDATER_VILKÅR'
         | 'OPPFØLGINGSOPPGAVE'
         | 'OPPFØLGINGSOPPGAVE_SAMORDNING_GRADERING'
         | 'SVAR_FRA_KLAGEINSTANS'
@@ -11102,6 +11107,7 @@ export interface components {
         | 'REVURDER_SAMORDNING_ARBEIDSGIVER'
         | 'REVURDER_SAMORDNING_TJENESTEPENSJON'
         | 'G_REGULERING'
+        | 'AUTOMATISK_OPPDATER_VILKÅR'
         | 'LOVVALG_OG_MEDLEMSKAP'
         | 'FORUTGAENDE_MEDLEMSKAP'
         | 'OPPHOLDSKRAV'
@@ -11167,6 +11173,7 @@ export interface components {
             | 'REVURDER_SAMORDNING_ARBEIDSGIVER'
             | 'REVURDER_SAMORDNING_TJENESTEPENSJON'
             | 'G_REGULERING'
+            | 'AUTOMATISK_OPPDATER_VILKÅR'
             | 'LOVVALG_OG_MEDLEMSKAP'
             | 'FORUTGAENDE_MEDLEMSKAP'
             | 'OPPHOLDSKRAV'
@@ -11275,8 +11282,6 @@ export interface components {
       'godkjentStudieAvL\u00E5nekassen'?: boolean | null;
       harAvbruttStudie: boolean;
       harBehovForBehandling?: boolean | null;
-      /** Format: int64 */
-      id?: number | null;
       vurdertAv: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.svarfraandreinstans.svarfraandreinstans.SvarFraAndreinstansDto': {
@@ -12689,11 +12694,19 @@ export interface components {
        */
       avbruttStudieDato?: string | null;
       begrunnelse: string;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fom?: string | null;
       'godkjentStudieAvL\u00E5nekassen'?: boolean | null;
       harAvbruttStudie: boolean;
       harBehovForBehandling?: boolean | null;
-      /** Format: int64 */
-      id?: number | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      tom?: string | null;
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.InnhentetSykdomsOpplysninger': {
       innhentedeYrkesskader: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.RegistrertYrkesskade'][];
@@ -13598,6 +13611,9 @@ export interface components {
       /** Format: uuid */
       value: string;
     };
+    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AfpDto': {
+      hvemBetaler?: string | null;
+    };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Aktivitetskort': components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AktivitetskortV0'];
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AktivitetskortV0': {
       /**
@@ -13612,8 +13628,8 @@ export interface components {
       tilOgMed: string;
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AndreUtbetalingerDto': {
-      afp?: string | null;
-      'l\u00F8nn'?: boolean | null;
+      afp?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AfpDto'];
+      'l\u00F8nn'?: string | null;
       'st\u00F8nad'?:
         | (
             | 'ØKONOMISK_SOSIALHJELP'
@@ -13724,6 +13740,7 @@ export interface components {
         | 'OPPHOLDSKRAV'
         | 'EFFEKTUER_AKTIVITETSPLIKT'
         | 'EFFEKTUER_AKTIVITETSPLIKT_11_9'
+        | 'AUTOMATISK_OPPDATER_VILKÅR'
       )[];
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ArbeidIPeriodeV0': {
@@ -13914,6 +13931,7 @@ export interface components {
         | 'OPPHOLDSKRAV'
         | 'EFFEKTUER_AKTIVITETSPLIKT'
         | 'EFFEKTUER_AKTIVITETSPLIKT_11_9'
+        | 'AUTOMATISK_OPPDATER_VILKÅR'
       )[];
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ManueltOppgittBarn': {
@@ -13999,6 +14017,7 @@ export interface components {
         | 'OPPHOLDSKRAV'
         | 'EFFEKTUER_AKTIVITETSPLIKT'
         | 'EFFEKTUER_AKTIVITETSPLIKT_11_9'
+        | 'AUTOMATISK_OPPDATER_VILKÅR'
       )[];
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.OmgjoeringskravbehandlingAvsluttetDetaljer': {
@@ -14065,6 +14084,7 @@ export interface components {
         | 'OPPHOLDSKRAV'
         | 'EFFEKTUER_AKTIVITETSPLIKT'
         | 'EFFEKTUER_AKTIVITETSPLIKT_11_9'
+        | 'AUTOMATISK_OPPDATER_VILKÅR'
       )[];
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Oppf\u00F8lgingsoppgave': components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Oppf\u00F8lgingsoppgaveV0'];
@@ -14245,6 +14265,7 @@ export interface components {
         | 'REVURDER_SAMORDNING_ARBEIDSGIVER'
         | 'REVURDER_SAMORDNING_TJENESTEPENSJON'
         | 'G_REGULERING'
+        | 'AUTOMATISK_OPPDATER_VILKÅR'
         | 'LOVVALG_OG_MEDLEMSKAP'
         | 'FORUTGAENDE_MEDLEMSKAP'
         | 'OPPHOLDSKRAV'
@@ -14292,6 +14313,7 @@ export interface components {
         | 'FRITAK_MELDEPLIKT'
         | 'MELDEKORT'
         | 'AKTIVITETSMELDING'
+        | 'AUTOMATISK_OPPDATER_VILKÅR'
         | 'OPPFØLGINGSOPPGAVE'
         | 'OPPFØLGINGSOPPGAVE_SAMORDNING_GRADERING'
         | 'SVAR_FRA_KLAGEINSTANS'
@@ -14372,6 +14394,7 @@ export interface components {
         | 'REVURDER_SAMORDNING_ARBEIDSGIVER'
         | 'REVURDER_SAMORDNING_TJENESTEPENSJON'
         | 'G_REGULERING'
+        | 'AUTOMATISK_OPPDATER_VILKÅR'
         | 'LOVVALG_OG_MEDLEMSKAP'
         | 'FORUTGAENDE_MEDLEMSKAP'
         | 'OPPHOLDSKRAV'
@@ -14441,6 +14464,7 @@ export interface components {
         | 'REVURDER_SAMORDNING_ARBEIDSGIVER'
         | 'REVURDER_SAMORDNING_TJENESTEPENSJON'
         | 'G_REGULERING'
+        | 'AUTOMATISK_OPPDATER_VILKÅR'
         | 'LOVVALG_OG_MEDLEMSKAP'
         | 'FORUTGAENDE_MEDLEMSKAP'
         | 'OPPHOLDSKRAV'
@@ -14480,6 +14504,7 @@ export interface components {
         | 'FRITAK_MELDEPLIKT'
         | 'MELDEKORT'
         | 'AKTIVITETSMELDING'
+        | 'AUTOMATISK_OPPDATER_VILKÅR'
         | 'OPPFØLGINGSOPPGAVE'
         | 'OPPFØLGINGSOPPGAVE_SAMORDNING_GRADERING'
         | 'SVAR_FRA_KLAGEINSTANS'
