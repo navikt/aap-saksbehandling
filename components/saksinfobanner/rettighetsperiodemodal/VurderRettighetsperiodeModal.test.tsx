@@ -7,11 +7,13 @@ describe('Vurder rettighetsperiode', () => {
     render(<VurderRettighetsperiodeModal behandlingReferanse={'213'} saksnummer={'1'} isOpen={true} onClose={vi.fn} />)
   );
   it('har en overskrift', () => {
-    expect(screen.getByRole('heading', { name: 'Endre starttidspunkt' })).toBeVisible();
+    expect(
+      screen.getByRole('heading', { name: 'Vurder § 22-13 syvende ledd. Første mulige dato med rett på ytelse' })
+    ).toBeVisible();
   });
 
   it('har en knapp for å bekrefte at rettighetsperioden skal endres', () => {
-    expect(screen.getByRole('button', { name: 'Overstyr starttidspunkt' })).toBeVisible();
+    expect(screen.getByRole('button', { name: 'Bekreft' })).toBeVisible();
   });
 
   it('har en knapp for å avbryte', () => {
