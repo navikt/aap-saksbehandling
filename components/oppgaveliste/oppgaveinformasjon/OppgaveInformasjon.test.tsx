@@ -101,7 +101,7 @@ describe('OppgaveInformasjon', () => {
   });
 
   it('skal vise ventefrist utløpt-ikon om ventefrist er utløpt', () => {
-    render(<OppgaveInformasjon oppgave={{ ...oppgave, utløptVentefrist: '04-01-2026' }} />);
+    render(<OppgaveInformasjon oppgave={{ ...oppgave, utløptVentefrist: '2026-01-04' }} />);
     expect(screen.getByRole('img', { name: 'Ventefrist utløpt' })).toBeVisible();
   });
 

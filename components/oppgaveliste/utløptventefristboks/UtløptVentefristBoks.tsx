@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { BodyShort, Button, Popover, Tag, VStack } from '@navikt/ds-react';
 import { HourglassBottomFilledIcon } from '@navikt/aksel-icons';
 import styles from './UtløptVentefristBoks.module.css';
-import { formaterDatoForFrontend } from 'lib/utils/date';
+import { Dato } from 'lib/types/Dato';
 
 interface Props {
   frist: string;
@@ -12,7 +12,7 @@ export const UtløptVentefristBoks = ({ frist }: Props) => {
   const buttonRef = useRef(null);
   const [vis, setVis] = useState(false);
 
-  const fristDate = formaterDatoForFrontend(new Date(frist));
+  const fristDate = new Dato(frist).formaterForFrontend()
 
   return (
     <>

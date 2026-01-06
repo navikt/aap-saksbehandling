@@ -27,6 +27,7 @@ import { AvbrytRevurderingModal } from 'components/saksinfobanner/avbrytrevurder
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { ReturStatus } from 'components/returstatus/ReturStatus';
 import { useFeatureFlag } from 'context/UnleashContext';
+import { Dato } from 'lib/types/Dato';
 
 interface Props {
   personInformasjon: SakPersoninfo;
@@ -114,7 +115,7 @@ export const SaksinfoBanner = ({
     } else if (oppgave?.utløptVentefrist) {
       return {
         status: 'VENTEFRIST_UTLØPT',
-        label: `Frist utløpt ${formaterDatoForFrontend(new Date(oppgave.utløptVentefrist))}`,
+        label: `Frist utløpt ${new Dato(oppgave.utløptVentefrist).formaterForFrontend()}`,
       };
     }
   };
