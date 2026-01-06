@@ -1,6 +1,6 @@
 'use client';
 
-import { BodyShort, ExpansionCard, Label } from '@navikt/ds-react';
+import { Alert, BodyShort, Label } from '@navikt/ds-react';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { InstitusjonsoppholdTabell } from 'components/behandlinger/institusjonsopphold/InstitusjonsoppholdTabell';
 import { HelseinstitusjonGrunnlag, MellomlagretVurdering, Periode } from 'lib/types/types';
@@ -16,7 +16,6 @@ import { useConfigForm } from 'components/form/FormHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
-import { InformationSquareFillIcon } from '@navikt/aksel-icons';
 
 interface Props {
   grunnlag: HelseinstitusjonGrunnlag;
@@ -114,51 +113,33 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
       visningActions={visningActions}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
-      {!oppholdetErMinstFireMaanederOgToMaanederInnI.some((vurdering) => vurdering.isValid) ? (
-        <>
-          <ExpansionCard
-            size={'small'}
-            aria-label={'Institusjonsopphold'}
-            defaultOpen={true}
-            className={styles.infobox}
-          >
-            <ExpansionCard.Content className={styles.expansioncardcontent}>
-              <div className={styles.content}>
-                <InformationSquareFillIcon />
-                <span>Institusjonsoppholdet varer for kort til å gi reduksjon av AAP.</span>
-              </div>
-            </ExpansionCard.Content>
-          </ExpansionCard>
-
-          <InstitusjonsoppholdTabell
-            label={'Brukeren har eller har hatt følgende institusjonsopphold'}
-            beskrivelse={'Opphold over tre måneder på helseinstitusjon kan gi redusert AAP-ytelse.'}
-            instutisjonsopphold={grunnlag.opphold}
-          />
-        </>
-      ) : (
-        <>
-          <InstitusjonsoppholdTabell
-            label={'Brukeren har eller har hatt følgende institusjonsopphold'}
-            beskrivelse={'Opphold over tre måneder på helseinstitusjon kan gi redusert AAP-ytelse.'}
-            instutisjonsopphold={grunnlag.opphold}
-          />
-
-          {fields.map((field, index) => {
-            return (
-              <div key={field.id} className={styles.vurdering}>
-                <div>
-                  <Label size={'medium'}>Periode</Label>
-                  <BodyShort>
-                    {formaterDatoForFrontend(field.periode.fom)} - {formaterDatoForFrontend(field.periode.tom)}
-                  </BodyShort>
-                </div>
-                <Helseinstitusjonsvurdering form={form} helseinstitusjonoppholdIndex={index} readonly={formReadOnly} />
-              </div>
-            );
-          })}
-        </>
+      {!oppholdetErMinstFireMaanederOgToMaanederInnI.some((vurdering) => vurdering.isValid) && (
+        <Alert size={'small'} aria-label={'Institusjonsopphold'} variant={'info'}>
+          <div className={styles.content}>
+            <span>Brukeren har et institusjonsopphold, men det varer for kort til at AAP kan reduseres.</span>
+          </div>
+        </Alert>
       )}
+
+      <InstitusjonsoppholdTabell
+        label={'Brukeren har eller har hatt følgende institusjonsopphold'}
+        beskrivelse={'Opphold over tre måneder på helseinstitusjon kan gi redusert AAP-ytelse.'}
+        instutisjonsopphold={grunnlag.opphold}
+      />
+
+      {fields.map((field, index) => {
+        return (
+          <div key={field.id} className={styles.vurdering}>
+            <div>
+              <Label size={'medium'}>Periode</Label>
+              <BodyShort>
+                {formaterDatoForFrontend(field.periode.fom)} - {formaterDatoForFrontend(field.periode.tom)}
+              </BodyShort>
+            </div>
+            <Helseinstitusjonsvurdering form={form} helseinstitusjonoppholdIndex={index} readonly={formReadOnly} />
+          </div>
+        );
+      })}
     </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };
@@ -184,18 +165,14 @@ function mapVurderingToDraftFormFields(vurderinger: HelseinstitusjonGrunnlag['vu
 }
 
 function vurderingMap(vurderinger: HelseinstitusjonGrunnlag['vurderinger']) {
-  const now = new Date();
-
   return vurderinger.map((v) => {
     const fom = new Date(v.periode.fom);
     const tom = new Date(v.periode.tom);
 
     const durationMonths = monthsBetween(fom, tom);
-    const fomAtLeast2MonthsAgo = monthsBetween(fom, now) >= 2;
-
     return {
       ...v,
-      isValid: durationMonths >= 4 && fomAtLeast2MonthsAgo,
+      isValid: durationMonths >= 4,
     };
   });
 }
