@@ -41,6 +41,7 @@ const behovskodeMap = {
   '5031': '§ 11-18 AAP under behandling av krav om uføretrygd',
   '5032': '§ 11-17 Arbeidsavklaringspenger i perioden som arbeidssøker',
   '5033': 'Avbryt revurdering',
+  '5034': 'Samordning sykstipend',
   '5035': 'Avklar oppholdskrav',
   '5040': '§ 11-4 andre ledd. Krav om inntektsbortfall etter fylte 62 år',
   '5050': 'Skriv brev',
