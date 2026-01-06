@@ -23,7 +23,6 @@ import { LokalBrukerBytte } from 'components/lokalbrukerbytte/LokalBrukerBytte';
 import { Roller } from 'lib/services/azure/azureUserService';
 import { SøkeResultat } from 'app/api/kelvinsok/route';
 import Endringslogg from '@navikt/familie-endringslogg';
-import XmasLights from '../../public/xmas-lights.svg';
 
 interface BrukerInformasjon {
   navn: string;
@@ -97,12 +96,7 @@ export const KelvinAppHeader = ({
           {lokalLenkeTilSaksoversikt && <Link href={`/saksbehandling/saksoversikt`}>Saksoversikt</Link>}
         </HStack>
 
-        {/*
-        TODO:
-          Legg tilbake vanlig spacer når julen er over
-          <Spacer />
-        */}
-        <XMasSpacer />
+        <Spacer />
 
         {brukerInformasjon.NAVident && (
           <InternalHeader.Button
@@ -156,7 +150,3 @@ export const KelvinAppHeader = ({
     </>
   );
 };
-
-const XMasSpacer = () => (
-  <span className="navds-stack__spacer" style={{ backgroundImage: `url(${XmasLights.src})`, opacity: 0.75 }} />
-);
