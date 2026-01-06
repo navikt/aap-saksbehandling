@@ -227,7 +227,7 @@ export const SaksinfoBanner = ({
               >
                 Saksmeny
               </Button>
-              <Dropdown.Menu>
+              <Dropdown.Menu className={styles.saksmenyDropdown}>
                 <Dropdown.Menu.GroupedList>
                   {behandlingErIkkeAvsluttet && (
                     <Dropdown.Menu.GroupedList.Item onClick={() => setSettBehandlingPåVentmodalIsOpen(true)}>
@@ -251,7 +251,7 @@ export const SaksinfoBanner = ({
                   )}
                   {visValgForÅOverstyreStarttidspunkt && (
                     <Dropdown.Menu.GroupedList.Item onClick={() => settVisVurderRettighetsperiodeModal(true)}>
-                      Overstyr starttidspunkt
+                      Vurder § 22-13 syvende ledd
                     </Dropdown.Menu.GroupedList.Item>
                   )}
                   {visValgForÅSetteMarkering && (

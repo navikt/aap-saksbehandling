@@ -206,8 +206,12 @@ export const OpprettSakLocal = () => {
     return {
       ...data,
       andreUtbetalinger: {
-        afp: data.afp,
-        lønn: data.lønn === JaEllerNei.Ja,
+        afp: data.afp
+          ? {
+              hvemBetaler: data.afp,
+            }
+          : undefined,
+        lønn: data.lønn,
         stønad: data.stønad,
       },
       søknadsdato: formaterDatoForBackend(data.søknadsdato),
