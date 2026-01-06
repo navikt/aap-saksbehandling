@@ -270,7 +270,7 @@ describe('SaksinfoBanner på behandling siden', () => {
     );
 
     await user.click(screen.getByRole('button', { name: 'Saksmeny' }));
-    expect(screen.queryByRole('button', { name: 'Overstyr starttidspunkt' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Vurder § 22-13 syvende ledd' })).not.toBeInTheDocument();
   });
 
   it('menyvalg for å sette markeringer på behandling vises', async () => {

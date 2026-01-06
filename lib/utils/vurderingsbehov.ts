@@ -63,7 +63,7 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov): strin
     case 'SØKNAD_TRUKKET':
       return 'Trukket søknad';
     case 'VURDER_RETTIGHETSPERIODE':
-      return 'Starttidspunkt';
+      return 'Vurder § 22-13 syvende ledd';
     case 'KLAGE_TRUKKET':
       return 'Klage trukket';
     case 'REVURDERING_AVBRUTT':
