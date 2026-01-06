@@ -1,33 +1,31 @@
 import { ValuePair } from 'components/form/FormField';
 import type { Vurderingsbehov } from '../types/types';
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
-import { toggles } from 'lib/utils/toggles';
 
 export const vurderingsbehovOptions: ValuePair<Vurderingsbehov>[] = [
   { label: 'Helhetlig vurdering', value: 'HELHETLIG_VURDERING' },
   { label: 'Lovvalg og medlemskap', value: 'LOVVALG_OG_MEDLEMSKAP' },
-  { label: 'Forutgående medlemskap', value: 'FORUTGAENDE_MEDLEMSKAP' },
-  { label: 'Sykdom, arbeidsevne og behov for bistand', value: 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND' },
+  { label: '§ 11-14 Student', value: 'REVURDER_STUDENT' },
+  { label: '§§ 11-5 og 11-6 Sykdom, arbeidsevne og behov for bistand', value: 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND' },
+  { label: '§ 11-22 Yrkesskade', value: 'REVURDER_YRKESSKADE' },
   { label: 'Sykepengeerstatning', value: 'REVURDER_SYKEPENGEERSTATNING' },
-  { label: 'Beregningstidspunkt', value: 'REVURDER_BEREGNING' },
-  { label: 'Barnetillegg', value: 'BARNETILLEGG' },
-  { label: 'Institusjonsopphold', value: 'INSTITUSJONSOPPHOLD' },
-  { label: 'Yrkesskade', value: 'REVURDER_YRKESSKADE' },
+  { label: '§ 11-19 Beregningstidspunkt', value: 'REVURDER_BEREGNING' },
   { label: 'Manuell inntekt', value: 'REVURDER_MANUELL_INNTEKT' },
-  { label: 'Student', value: 'REVURDER_STUDENT' },
+  { label: 'Forutgående medlemskap', value: 'FORUTGAENDE_MEDLEMSKAP' },
+  { label: '§ 11-2 Oppholdskrav', value: 'OPPHOLDSKRAV' } as ValuePair<Vurderingsbehov>,
+  { label: '§ 11-20 Barnetillegg', value: 'BARNETILLEGG' },
+  { label: 'Dødsfall barn', value: 'DØDSFALL_BARN' } as ValuePair<Vurderingsbehov>,
+  { label: '§ 11-25 Institusjonsopphold', value: 'INSTITUSJONSOPPHOLD' },
   { label: 'Overstyr perioder uten overholdt meldeplikt', value: 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN' },
-  { label: 'Forhold andre ytelser - Folketrygdytelser', value: 'REVURDER_SAMORDNING_ANDRE_FOLKETRYGDYTELSER' },
-  { label: 'Forhold andre ytelser - Samordning ufør', value: 'REVURDER_SAMORDNING_UFØRE' },
+  {
+    label: 'Forhold andre ytelser - §§ 11-27 og 11-28 Folketrygdytelser',
+    value: 'REVURDER_SAMORDNING_ANDRE_FOLKETRYGDYTELSER',
+  },
+  { label: 'Forhold andre ytelser - § 11-28 Samordning ufør', value: 'REVURDER_SAMORDNING_UFØRE' },
   { label: 'Forhold andre ytelser - Andre ytelser avregning', value: 'REVURDER_SAMORDNING_ANDRE_STATLIGE_YTELSER' },
-  { label: 'Forhold andre ytelser - Arbeidsgiverytelse', value: 'REVURDER_SAMORDNING_ARBEIDSGIVER' },
+  { label: 'Forhold andre ytelser - § 11-24 Arbeidsgiverytelse', value: 'REVURDER_SAMORDNING_ARBEIDSGIVER' },
   { label: 'Forhold andre ytelser - Tjenestepensjon', value: 'REVURDER_SAMORDNING_TJENESTEPENSJON' },
-  ...(toggles.featureRevurderingVurderingsbehov
-    ? [
-        { label: 'Dødsfall bruker', value: 'DØDSFALL_BRUKER' } as ValuePair<Vurderingsbehov>,
-        { label: 'Dødsfall barn', value: 'DØDSFALL_BARN' } as ValuePair<Vurderingsbehov>,
-        { label: 'Oppholdskrav', value: 'OPPHOLDSKRAV' } as ValuePair<Vurderingsbehov>,
-      ]
-    : []),
+  { label: 'Dødsfall bruker', value: 'DØDSFALL_BRUKER' } as ValuePair<Vurderingsbehov>,
 ];
 
 export const alleVurderingsbehovOptions: ValuePair<Vurderingsbehov>[] = [
