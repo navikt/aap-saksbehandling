@@ -52,7 +52,7 @@ For at pre-commit hooks for linting og formatering skal kunne kjøre, må du set
 
 1. Hent secret (se: https://github.com/navikt/aap-cli)
    ```bash
-    get-secret
+   get-secret
    ```
 2. Kopier miljøvariabler inn i `.env.local`:
    ```bash
@@ -72,7 +72,7 @@ For at pre-commit hooks for linting og formatering skal kunne kjøre, må du set
 
 ## Diverse nyttige kommandoer
 
-### Tester
+### Kjøring av tester
 
 For å kjøre tester lokalt, bruk følgende kommando:
 
@@ -89,11 +89,12 @@ For å generere typene, kjør følgende kommando:
   yarn gentypes
 ```
 
-**OBS:** Dette krever at backend kjører lokalt.
+**OBS:** Dette krever at backend kjører lokalt. Typer for aap-oppgave, aap-postmottak-backend og aap-statistikk ligger i egne pakker
+og må hentes ikke separat med yarn install.
 
 ### Oppdatere avhengigheter
 
-For å forhindre utilsiktede endringer i `yarn.lock` er man tvunget til å alltid kjøre følgende kommando for å gjøre endringer i filen:
+For å forhindre utilsiktede endringer i `yarn.lock` er man tvunget til å alltid kjøre følgende kommando når man vil oppdatere avhengigheter:
 
 ```bash
   yarn install --immutable
@@ -110,5 +111,3 @@ Spørsmål knyttet til koden eller prosjektet kan stilles som issues her på Git
 # For Nav-ansatte
 
 Interne henvendelser kan sendes via Slack i kanalen #team-aap-åpen
-
-- kode som implementerer lovendringer og forskrifter som ikke er ferdig behandlet.
