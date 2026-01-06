@@ -13,7 +13,7 @@ import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date'
 import { Behovstype } from 'lib/utils/form';
 import { parse } from 'date-fns';
 
-import { Button, HStack, Link, VStack } from '@navikt/ds-react';
+import { Button, HStack, Label, Link, VStack } from '@navikt/ds-react';
 import { pipe } from 'lib/utils/functional';
 import { erProsent } from 'lib/utils/validering';
 import { useConfigForm } from 'components/form/FormHook';
@@ -69,7 +69,7 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
   initialMellomlagretVurdering,
 }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
+  const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('FASTSETT_ARBEIDSEVNE');
 
   const { mellomlagretVurdering, lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering } =
@@ -118,24 +118,22 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
-      løsBehovOgGåTilNesteSteg(
-        {
-          behandlingVersjon: behandlingVersjon,
-          referanse: behandlingsreferanse,
-          behov: {
-            behovstype: Behovstype.FASTSETT_ARBEIDSEVNE_KODE,
-            arbeidsevneVurderinger: data.arbeidsevnevurderinger.map((vurdering) => ({
-              arbeidsevne: Number.parseInt(vurdering.arbeidsevne, 10),
-              begrunnelse: vurdering.begrunnelse,
-              fraDato: formaterDatoForBackend(parse(vurdering.fom, 'dd.MM.yyyy', new Date())),
-            })),
-          },
+      løsPeriodisertBehovOgGåTilNesteSteg({
+        behandlingVersjon: behandlingVersjon,
+        referanse: behandlingsreferanse,
+        behov: {
+          behovstype: Behovstype.FASTSETT_ARBEIDSEVNE_KODE,
+          løsningerForPerioder: data.arbeidsevnevurderinger.map((vurdering) => ({
+            arbeidsevne: Number.parseInt(vurdering.arbeidsevne, 10),
+            begrunnelse: vurdering.begrunnelse,
+            fom: formaterDatoForBackend(parse(vurdering.fom, 'dd.MM.yyyy', new Date())),
+          })),
         },
+      }),
         () => {
           nullstillMellomlagretVurdering();
           visningActions.onBekreftClick();
-        }
-      );
+        };
     })(event);
   };
 
@@ -239,27 +237,33 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
             readOnly={formReadOnly}
           />
           <HStack gap={'3'}>
-            <TextFieldWrapper
-              control={form.control}
-              name={`arbeidsevnevurderinger.${index}.arbeidsevne`}
-              type={'text'}
-              label={'Oppgi arbeidsevnen som ikke er utnyttet i prosent'}
-              rules={{
-                required: 'Du må angi hvor stor arbeidsevne brukeren har',
-                validate: (value) => {
-                  const valueAsNumber = Number(value);
-                  if (isNaN(valueAsNumber)) {
-                    return 'Prosent må være et tall';
-                  } else if (!erProsent(valueAsNumber)) {
-                    return 'Prosent kan bare være mellom 0 og 100';
-                  }
-                },
-              }}
-              readOnly={formReadOnly}
-              className="prosent_input"
-            />
-            <VStack paddingBlock={'1'} justify={'end'}>
-              {regnOmTilTimer(form.watch(`arbeidsevnevurderinger.${index}.arbeidsevne`))}
+            <VStack gap={'2'}>
+              <Label size={'small'}>Oppgi arbeidsevnen som ikke er utnyttet i prosent</Label>
+              <HStack gap={'2'}>
+                <TextFieldWrapper
+                  control={form.control}
+                  name={`arbeidsevnevurderinger.${index}.arbeidsevne`}
+                  type={'text'}
+                  label={'Oppgi arbeidsevnen som ikke er utnyttet i prosent'}
+                  hideLabel={true}
+                  rules={{
+                    required: 'Du må angi hvor stor arbeidsevne brukeren har',
+                    validate: (value) => {
+                      const valueAsNumber = Number(value);
+                      if (isNaN(valueAsNumber)) {
+                        return 'Prosent må være et tall';
+                      } else if (!erProsent(valueAsNumber)) {
+                        return 'Prosent kan bare være mellom 0 og 100';
+                      }
+                    },
+                  }}
+                  readOnly={formReadOnly}
+                  className="prosent_input"
+                />
+                <VStack paddingBlock={'1'} justify={'end'}>
+                  {regnOmTilTimer(form.watch(`arbeidsevnevurderinger.${index}.arbeidsevne`))}
+                </VStack>
+              </HStack>
             </VStack>
           </HStack>
         </NyVurderingExpandableCard>
