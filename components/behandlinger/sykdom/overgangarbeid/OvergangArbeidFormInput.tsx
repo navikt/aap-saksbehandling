@@ -6,8 +6,8 @@ import { TrashFillIcon } from '@navikt/aksel-icons';
 import { UseFormReturn } from 'react-hook-form';
 import React, { useState } from 'react';
 import { validerDato } from 'lib/validation/dateValidation';
-import { DateInputWrapperOnBlur } from 'components/form/dateinputwrapper/DateInputWrapperOnBlur';
 import { OvergangArbeidForm } from 'components/behandlinger/sykdom/overgangarbeid/OvergangArbeid-types';
+import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 
 type Props = {
   form: UseFormReturn<OvergangArbeidForm>;
@@ -40,7 +40,7 @@ export const OvergangArbeidFormInput = ({
   return (
     <VStack gap="5">
       <HStack justify={'space-between'}>
-        <DateInputWrapperOnBlur
+        <DateInputWrapper
           name={`vurderinger.${index}.fraDato`}
           label="Vurderingen gjelder fra"
           control={control}
