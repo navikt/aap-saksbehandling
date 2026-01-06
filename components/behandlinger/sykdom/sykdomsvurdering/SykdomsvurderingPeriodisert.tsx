@@ -191,12 +191,13 @@ export const SykdomsvurderingPeriodisert = ({
           isLast={index === nyeVurderingerFields.length - 1}
           vurdertAv={undefined} // TODO:
           finnesFeil={finnesFeilForVurdering(index, errorList)}
+          readonly={formReadOnly}
+          onRemove={() => remove(index)}
         >
           <SykdomsvurderingFormInput
             index={index}
             form={form}
             readonly={formReadOnly}
-            onRemove={() => remove(index)}
             typeBehandling={typeBehandling}
             sak={sak}
             erÅrsakssammenhengYrkesskade={grunnlag.erÅrsakssammenhengYrkesskade}

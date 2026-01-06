@@ -139,13 +139,10 @@ export const OvergangUforePeriodisert = ({
             isLast={index === nyeVurderingFields.length - 1}
             vurdertAv={undefined} // TODO:
             finnesFeil={finnesFeilForVurdering(index, errorList)}
+            readonly={formReadOnly}
+            onRemove={() => remove(index)}
           >
-            <OvergangUforeVurderingFormInput
-              index={index}
-              form={form}
-              readonly={formReadOnly}
-              onRemove={() => remove(index)}
-            />
+            <OvergangUforeVurderingFormInput index={index} form={form} readonly={formReadOnly} />
           </NyVurderingExpandableCard>
         );
       })}

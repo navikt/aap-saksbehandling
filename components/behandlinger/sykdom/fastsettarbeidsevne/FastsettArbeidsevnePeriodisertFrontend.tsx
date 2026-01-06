@@ -203,6 +203,8 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
           isLast={index === arbeidsevneVurderinger.length - 1}
           vurdertAv={undefined}
           finnesFeil={finnesFeilForVurdering(index, errorList)}
+          readonly={formReadOnly}
+          onRemove={() => remove(index)}
         >
           <HStack justify={'space-between'}>
             <DateInputWrapper
@@ -215,17 +217,6 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
               }}
               readOnly={formReadOnly}
             />
-            {!formReadOnly && (
-              <Button
-                aria-label="Fjern vurdering"
-                variant="tertiary"
-                size="small"
-                icon={<TrashFillIcon />}
-                loading={isLoading}
-                onClick={() => remove(index)}
-                type="button"
-              />
-            )}
           </HStack>
           <TextAreaWrapper
             label={'Vilkårsvurdering'}

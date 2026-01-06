@@ -16,36 +16,17 @@ import { DateInputWrapperOnBlur } from 'components/form/dateinputwrapper/DateInp
 type Props = {
   form: UseFormReturn<ForutgåendeMedlemskapVurderingForm>;
   beregningstidspunktGrunnlag?: BeregningTidspunktGrunnlag;
-  visningModus: VisningModus;
   readOnly: boolean;
   index: number;
   harTidligereVurderinger: boolean;
-  onRemove: () => void;
 };
 
-export const ForutgåendeMedlemskapFormInput = ({
-  readOnly,
-  harTidligereVurderinger,
-  index,
-  visningModus,
-  form,
-  onRemove,
-  beregningstidspunktGrunnlag,
-}: Props) => {
+export const ForutgåendeMedlemskapFormInput = ({ readOnly, index, form, beregningstidspunktGrunnlag }: Props) => {
   const { control, watch } = form;
-  const [spinnerRemove, setSpinnerRemove] = useState(false);
-
-  const handleRemove = (): void => {
-    setSpinnerRemove(true);
-    setTimeout(() => {
-      onRemove();
-      setSpinnerRemove(false);
-    }, 500);
-  };
 
   return (
     <VStack gap="4">
-      <HStack justify={'space-between'}>
+      <HStack>
         <DateInputWrapperOnBlur
           name={`vurderinger.${index}.fraDato`}
           label="Vurderingen gjelder fra"
@@ -56,22 +37,6 @@ export const ForutgåendeMedlemskapFormInput = ({
           }}
           readOnly={readOnly}
         />
-        {(visningModus === VisningModus.AKTIV_MED_AVBRYT || visningModus === VisningModus.AKTIV_UTEN_AVBRYT) &&
-          (index !== 0 || harTidligereVurderinger) && (
-            <HStack>
-              <VStack justify={'end'}>
-                <Button
-                  loading={spinnerRemove}
-                  aria-label="Fjern vurdering"
-                  variant="tertiary"
-                  size="small"
-                  icon={<TrashFillIcon />}
-                  onClick={handleRemove}
-                  type="button"
-                ></Button>
-              </VStack>
-            </HStack>
-          )}
       </HStack>
       <ReadMore style={{ maxWidth: '90ch' }} size={'small'} header="Hvordan legge til sluttdato?">
         For å legge til en sluttdato på denne vurderingen velger du “Legg til ny vurdering”. Det oppretter en ny

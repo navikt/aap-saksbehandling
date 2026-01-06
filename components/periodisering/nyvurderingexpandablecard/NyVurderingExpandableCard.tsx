@@ -3,9 +3,10 @@
 import { CustomExpandableCard } from 'components/customexpandablecard/CustomExpandableCard';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { ReactNode, useState } from 'react';
-import { BodyShort, HStack, Tag, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, HGrid, HStack, Tag, VStack } from '@navikt/ds-react';
 import { VurdertAv, VurdertAvShape } from 'components/vurdertav/VurdertAv';
 import { subDays } from 'date-fns';
+import { TrashFillIcon } from '@navikt/aksel-icons';
 
 interface Props {
   fraDato: Date | null;
@@ -15,6 +16,8 @@ interface Props {
   vurdertAv: VurdertAvShape | undefined;
   finnesFeil: boolean;
   children: ReactNode;
+  readonly: boolean;
+  onRemove: () => void;
 }
 export const NyVurderingExpandableCard = ({
   fraDato,
@@ -24,8 +27,18 @@ export const NyVurderingExpandableCard = ({
   vurdertAv,
   finnesFeil,
   children,
+  readonly,
+  onRemove,
 }: Props) => {
   const [cardExpanded, setCardExpanded] = useState<boolean>(true);
+  const [spinnerRemove, setSpinnerRemove] = useState(false);
+  const handleRemove = (): void => {
+    setSpinnerRemove(true);
+    setTimeout(() => {
+      onRemove();
+      setSpinnerRemove(false);
+    }, 500);
+  };
   return (
     <CustomExpandableCard
       key={`${fraDato?.getTime()}`}
@@ -52,7 +65,22 @@ export const NyVurderingExpandableCard = ({
       }
     >
       <VStack gap={'5'}>
-        {children}
+        <HGrid columns={'1fr 30px'}>
+          <VStack gap={'5'}>{children}</VStack>
+          {!readonly && (
+            <VStack justify={'start'}>
+              <Button
+                aria-label="Fjern vurdering"
+                variant="tertiary"
+                size="small"
+                icon={<TrashFillIcon />}
+                onClick={handleRemove}
+                type="button"
+                loading={spinnerRemove}
+              />
+            </VStack>
+          )}
+        </HGrid>
         <VurdertAv vurdertAv={vurdertAv} />
       </VStack>
     </CustomExpandableCard>

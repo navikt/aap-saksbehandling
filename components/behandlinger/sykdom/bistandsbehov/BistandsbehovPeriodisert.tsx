@@ -156,13 +156,10 @@ export const BistandsbehovPeriodisert = ({
           }
           vurdertAv={undefined} //TODO
           finnesFeil={finnesFeilForVurdering(index, errorList)}
+          readonly={formReadOnly}
+          onRemove={() => remove(index)}
         >
-          <BistandsbehovVurderingForm
-            form={form}
-            readOnly={formReadOnly}
-            index={index}
-            onRemove={() => remove(index)}
-          />
+          <BistandsbehovVurderingForm form={form} readOnly={formReadOnly} index={index} />
         </NyVurderingExpandableCard>
       ))}
     </VilkårskortPeriodisert>

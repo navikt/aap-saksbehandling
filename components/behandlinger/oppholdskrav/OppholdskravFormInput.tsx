@@ -1,48 +1,26 @@
-import { Alert, Button, HStack, Link, ReadMore, VStack } from '@navikt/ds-react';
+import { Alert, HStack, Link, ReadMore, VStack } from '@navikt/ds-react';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
 import { JaEllerNei } from 'lib/utils/form';
 import { ComboboxWrapper } from 'components/form/comboboxwrapper/ComboboxWrapper';
 import { isNotEmpty } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
 import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
-import { VisningModus } from 'hooks/saksbehandling/visning/VisningHook';
-import { TrashFillIcon } from '@navikt/aksel-icons';
 import { alleLandUtenNorge } from 'lib/utils/countries';
 import { UseFormReturn } from 'react-hook-form';
 import { OppholdskravForm } from 'components/behandlinger/oppholdskrav/types';
-import { useState } from 'react';
 import { validerDato } from 'lib/validation/dateValidation';
 import { DateInputWrapperOnBlur } from 'components/form/dateinputwrapper/DateInputWrapperOnBlur';
 
 type Props = {
   form: UseFormReturn<OppholdskravForm>;
-  visningModus: VisningModus;
   readOnly: boolean;
   index: number;
-  harTidligereVurderinger: boolean;
-  onRemove: () => void;
 };
 
 const landSelectOptions = [alleLandUtenNorge[0], { label: 'Annet', value: 'ANNET' }, ...alleLandUtenNorge.slice(1)];
 
-export const OppholdskravFormInput = ({
-  readOnly,
-  harTidligereVurderinger,
-  index,
-  visningModus,
-  form,
-  onRemove,
-}: Props) => {
+export const OppholdskravFormInput = ({ readOnly, index, form }: Props) => {
   const { control, watch } = form;
-  const [spinnerRemove, setSpinnerRemove] = useState(false);
-
-  const handleRemove = (): void => {
-    setSpinnerRemove(true);
-    setTimeout(() => {
-      onRemove();
-      setSpinnerRemove(false);
-    }, 500);
-  };
 
   return (
     <VStack gap="5">
@@ -57,22 +35,6 @@ export const OppholdskravFormInput = ({
           }}
           readOnly={readOnly}
         />
-        {(visningModus === VisningModus.AKTIV_MED_AVBRYT || visningModus === VisningModus.AKTIV_UTEN_AVBRYT) &&
-          (index !== 0 || harTidligereVurderinger) && (
-            <HStack>
-              <VStack justify={'end'}>
-                <Button
-                  loading={spinnerRemove}
-                  aria-label="Fjern vurdering"
-                  variant="tertiary"
-                  size="small"
-                  icon={<TrashFillIcon />}
-                  onClick={handleRemove}
-                  type="button"
-                ></Button>
-              </VStack>
-            </HStack>
-          )}
       </HStack>
       <ReadMore style={{ maxWidth: '90ch' }} size={'small'} header="Hvordan legge til sluttdato?">
         For å legge til en sluttdato på denne vurderingen velger du “Legg til ny vurdering”. Det oppretter en ny

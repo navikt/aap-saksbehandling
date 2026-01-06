@@ -57,7 +57,6 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
     reValidateMode: 'onChange',
   });
 
-  const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
 
   const {
@@ -160,15 +159,10 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
           isLast={index === vurderingerFields.length - 1}
           vurdertAv={vurdering.vurdertAv}
           finnesFeil={finnesFeilForVurdering(index, errorList)}
+          readonly={formReadOnly}
+          onRemove={() => remove(index)}
         >
-          <OppholdskravFormInput
-            form={form}
-            readOnly={formReadOnly}
-            index={index}
-            harTidligereVurderinger={tidligereVurderinger.length !== 0}
-            onRemove={() => remove(index)}
-            visningModus={visningModus}
-          />
+          <OppholdskravFormInput form={form} readOnly={formReadOnly} index={index} />
         </NyVurderingExpandableCard>
       ))}
     </VilkårskortPeriodisert>

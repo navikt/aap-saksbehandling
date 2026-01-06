@@ -193,12 +193,13 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
           isLast={index === fields.length - 1}
           vurdertAv={vurdering.vurdertAv}
           finnesFeil={finnesFeilForVurdering(index, errorList)}
+          onRemove={() => remove(index)}
+          readonly={formReadOnly}
         >
           <ArbeidsopptrappingVurderingFormInput
             index={index}
             form={form}
             readonly={formReadOnly}
-            onRemove={() => remove(index)}
             ikkeRelevantePerioder={grunnlag?.ikkeVurderbarePerioder}
           />
         </NyVurderingExpandableCard>
