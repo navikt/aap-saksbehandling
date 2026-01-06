@@ -36,7 +36,7 @@ export const UtløptVentefristBoks = ({ frist }: Props) => {
         <VStack gap={'2'} className={styles.boks}>
           <Tag icon={<HourglassBottomFilledIcon />} variant={'warning-moderate'} size={'medium'} className={styles.tag}>
             <BodyShort size={'small'} weight={'semibold'}>
-              {`Frist utløp ${fristDate}`}
+              {`Frist utløpt ${fristDate}`}
             </BodyShort>
           </Tag>
         </VStack>
