@@ -1,13 +1,11 @@
-import { Button, HStack, Radio, ReadMore, VStack } from '@navikt/ds-react';
+import { HStack, Radio, ReadMore, VStack } from '@navikt/ds-react';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
 import { ComboboxWrapper } from 'components/form/comboboxwrapper/ComboboxWrapper';
 import { isNotEmpty } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
-import { VisningModus } from 'hooks/saksbehandling/visning/VisningHook';
-import { TrashFillIcon } from '@navikt/aksel-icons';
 import { landMedTrygdesamarbeid } from 'lib/utils/countries';
 import { UseFormReturn } from 'react-hook-form';
-import React, { useState } from 'react';
+import React from 'react';
 import { validerDato } from 'lib/validation/dateValidation';
 import { LovOgMedlemskapVurderingForm } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/types';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
@@ -17,10 +15,9 @@ type Props = {
   form: UseFormReturn<LovOgMedlemskapVurderingForm>;
   readOnly: boolean;
   index: number;
-  harTidligereVurderinger: boolean;
 };
 
-export const LovvalgOgMedlemskapFormInput = ({ readOnly, harTidligereVurderinger, index, form }: Props) => {
+export const LovvalgOgMedlemskapFormInput = ({ readOnly, index, form }: Props) => {
   const { control, watch } = form;
 
   return (

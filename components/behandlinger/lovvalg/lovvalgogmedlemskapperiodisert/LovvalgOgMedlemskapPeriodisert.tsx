@@ -166,12 +166,7 @@ export const LovvalgOgMedlemskapPeriodisert = ({
           index={index}
           readonly={formReadOnly}
         >
-          <LovvalgOgMedlemskapFormInput
-            form={form}
-            readOnly={formReadOnly}
-            index={index}
-            harTidligereVurderinger={tidligereVurderinger.length !== 0}
-          />
+          <LovvalgOgMedlemskapFormInput form={form} readOnly={formReadOnly} index={index} />
         </NyVurderingExpandableCard>
       ))}
     </VilkårskortPeriodisert>
