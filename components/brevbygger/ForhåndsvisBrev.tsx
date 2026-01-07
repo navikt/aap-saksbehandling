@@ -1,42 +1,13 @@
-import { BodyShort, Box, Button, Loader } from '@navikt/ds-react';
-import { useEffect, useState } from 'react';
+import { BodyShort, Box, Loader } from '@navikt/ds-react';
 
 import styles from './ForhåndsvisBrev.module.css';
 
 interface Props {
-  referanse: string;
+  dataUri?: string;
+  isLoading: boolean;
 }
 
-const hentDokument = async (
-  brevbestillingReferanse: string,
-  setDataUri: (uri: string | undefined) => void,
-  setIsLoading: (status: boolean) => void
-) => {
-  let objectURL: string | undefined;
-  const blob = await fetch(`/saksbehandling/api/brev/${brevbestillingReferanse}/forhandsvis/`, {
-    method: 'GET',
-  }).then((res) => res.blob());
-
-  objectURL = URL.createObjectURL(new Blob([blob], { type: 'application/pdf' }));
-  setDataUri(objectURL);
-
-  setIsLoading(false);
-};
-
-// TODO Dette skal etterhvert gå automatisk ved endringer, men i første versjon må man be om ny pdf
-export const ForhåndsvisBrev = ({ referanse }: Props) => {
-  const [dataUri, setDataUri] = useState<string>();
-  const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    return () => {
-      if (dataUri) {
-        console.info('Cleaning house...');
-        URL.revokeObjectURL(dataUri);
-      }
-    };
-  });
-
+export const ForhåndsvisBrev = ({ dataUri, isLoading = false }: Props) => {
   return (
     <Box padding={'2'} background={'bg-subtle'} shadow="medium">
       {isLoading && (
@@ -52,9 +23,6 @@ export const ForhåndsvisBrev = ({ referanse }: Props) => {
           </object>
         </div>
       )}
-      <Button type="button" onClick={() => hentDokument(referanse, setDataUri, setIsLoading)}>
-        Oppdater forhåndsvisning
-      </Button>
     </Box>
   );
 };

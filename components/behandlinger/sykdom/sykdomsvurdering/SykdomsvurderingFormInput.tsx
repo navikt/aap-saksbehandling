@@ -1,10 +1,9 @@
 'use client';
 
-import { Button, HStack, Link, VStack } from '@navikt/ds-react';
+import { HStack, Link, VStack } from '@navikt/ds-react';
 import { erDatoIPeriode, validerDato } from 'lib/validation/dateValidation';
 import { parse, startOfDay } from 'date-fns';
 import { stringToDate } from 'lib/utils/date';
-import { TrashFillIcon } from '@navikt/aksel-icons';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
 import { UseFormReturn } from 'react-hook-form';
@@ -16,13 +15,12 @@ import { Sak } from 'context/saksbehandling/SakContext';
 import { SykdomsvurderingFørstegangsbehandling } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingFørstegangsbehandling';
 import { SykdomsvurderingRevurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingRevurdering';
 import { SykdomsvurderingDiagnosesøk } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingDiagnosesøk';
-import { DateInputWrapperOnBlur } from 'components/form/dateinputwrapper/DateInputWrapperOnBlur';
+import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 
 interface Props {
   index: number;
   form: UseFormReturn<Sykdomsvurderinger>;
   readonly: boolean;
-  onRemove: () => void;
   ikkeRelevantePerioder?: Periode[];
   typeBehandling: TypeBehandling;
   sak: Sak;
@@ -46,7 +44,6 @@ export const SykdomsvurderingFormInput = ({
   index,
   form,
   readonly,
-  onRemove,
   ikkeRelevantePerioder,
 }: Props) => {
   const behandlingErRevurdering = typeBehandling === 'Revurdering';
@@ -71,7 +68,7 @@ export const SykdomsvurderingFormInput = ({
         Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-5 (lovdata.no)
       </Link>
       <HStack justify={'space-between'}>
-        <DateInputWrapperOnBlur
+        <DateInputWrapper
           name={`vurderinger.${index}.fraDato`}
           label="Vurderingen gjelder fra"
           control={form.control}
@@ -96,24 +93,13 @@ export const SykdomsvurderingFormInput = ({
           }}
           readOnly={readonly}
         />
-
-        {!readonly && (
-          <Button
-            aria-label="Fjern vurdering"
-            variant="tertiary"
-            size="small"
-            icon={<TrashFillIcon />}
-            onClick={() => onRemove()}
-            type="button"
-          />
-        )}
       </HStack>
       <TextAreaWrapper
         name={`vurderinger.${index}.begrunnelse`}
         control={form.control}
         label={vilkårsvurderingLabel}
         rules={{
-          required: 'Du må fylle ut en vilkårsvurdering',
+          required: 'Du må gjøre en vilkårsvurdering',
         }}
         readOnly={readonly}
         shouldUnregister

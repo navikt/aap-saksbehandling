@@ -1,8 +1,6 @@
 'use client';
 
 import { FormEvent } from 'react';
-
-import { TrashFillIcon } from '@navikt/aksel-icons';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 
 import { useFieldArray } from 'react-hook-form';
@@ -13,7 +11,7 @@ import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date'
 import { Behovstype } from 'lib/utils/form';
 import { parse } from 'date-fns';
 
-import { Button, HStack, Label, Link, VStack } from '@navikt/ds-react';
+import { HStack, Label, Link, VStack } from '@navikt/ds-react';
 import { pipe } from 'lib/utils/functional';
 import { erProsent } from 'lib/utils/validering';
 import { useConfigForm } from 'components/form/FormHook';
@@ -201,6 +199,11 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
           isLast={index === arbeidsevneVurderinger.length - 1}
           vurdertAv={undefined}
           finnesFeil={finnesFeilForVurdering(index, errorList)}
+          readonly={formReadOnly}
+          onRemove={() => remove(index)}
+          // vilkåret er valgfritt, kan derfor slette vurderingen selv om det ikke finnes en tidligere vurdering
+          harTidligereVurderinger={true}
+          index={index}
         >
           <HStack justify={'space-between'}>
             <DateInputWrapper
@@ -213,17 +216,6 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
               }}
               readOnly={formReadOnly}
             />
-            {!formReadOnly && (
-              <Button
-                aria-label="Fjern vurdering"
-                variant="tertiary"
-                size="small"
-                icon={<TrashFillIcon />}
-                loading={isLoading}
-                onClick={() => remove(index)}
-                type="button"
-              />
-            )}
           </HStack>
           <TextAreaWrapper
             label={'Vilkårsvurdering'}

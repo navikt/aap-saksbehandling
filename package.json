@@ -10,7 +10,6 @@
     "start": "next start",
     "lint": "next lint",
     "gentypes": "openapi-typescript http://localhost:8080/openapi.json -o lib/types/schema.d.ts && prettier --write lib/types/schema.d.ts",
-    "prepare": "husky",
     "run-prettier": "prettier --write ."
   },
   "prettier": "@navikt/aap-felles-prettier",
@@ -40,7 +39,7 @@
     "plotly.js": "^3.3.1",
     "react": "19.2.1",
     "react-dom": "19.2.1",
-    "react-hook-form": "7.68.0",
+    "react-hook-form": "7.70.0",
     "react-plotly.js": "^2.6.0",
     "react-select": "^5.10.2",
     "server-only": "0.0.1",

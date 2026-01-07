@@ -146,6 +146,7 @@ export const SykdomsvurderingPeriodisert = ({
   }
 
   const foersteNyePeriode = nyeVurderingerFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
+  const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
 
   return (
     <VilkårskortPeriodisert
@@ -178,6 +179,7 @@ export const SykdomsvurderingPeriodisert = ({
             getJaNeiEllerUndefined(vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten) === JaEllerNei.Ja ||
             getJaNeiEllerUndefined(vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense) === JaEllerNei.Ja
           }
+          defaultCollapsed={nyeVurderingerFields.length > 0}
         >
           <TidligereSykdomsvurdering vurdering={vurdering} />
         </TidligereVurderingExpandableCard>
@@ -191,12 +193,15 @@ export const SykdomsvurderingPeriodisert = ({
           isLast={index === nyeVurderingerFields.length - 1}
           vurdertAv={undefined} // TODO:
           finnesFeil={finnesFeilForVurdering(index, errorList)}
+          readonly={formReadOnly}
+          onRemove={() => remove(index)}
+          harTidligereVurderinger={tidligereVurderinger.length > 0}
+          index={index}
         >
           <SykdomsvurderingFormInput
             index={index}
             form={form}
             readonly={formReadOnly}
-            onRemove={() => remove(index)}
             typeBehandling={typeBehandling}
             sak={sak}
             erÅrsakssammenhengYrkesskade={grunnlag.erÅrsakssammenhengYrkesskade}
@@ -208,9 +213,9 @@ export const SykdomsvurderingPeriodisert = ({
   );
 
   function mapGrunnlagTilDefaultvalues(grunnlag: SykdomsGrunnlag): Sykdomsvurderinger {
-    if (grunnlag == null || (grunnlag.nyeVurderinger.length === 0 && grunnlag.sisteVedtatteVurderinger.length === 0)) {
-      // Vi har ingen tidligere vurderinger eller nye vurderinger, legg til en tom-default-periode
-      const førsteFraDatoSomKanVurderes = grunnlag.kanVurderes[0].fom
+    if (grunnlag == null || grunnlag.nyeVurderinger.length === 0) {
+      // Vi har ingen nye vurderinger, legg til en tom-default-periode
+      const førsteFraDatoSomKanVurderes = grunnlag.kanVurderes[0]?.fom
         ? { fraDato: new Dato(grunnlag.kanVurderes[0].fom).formaterForFrontend() }
         : {};
       return {

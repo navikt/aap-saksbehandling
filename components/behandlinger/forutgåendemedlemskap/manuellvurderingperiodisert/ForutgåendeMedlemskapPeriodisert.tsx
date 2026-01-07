@@ -162,6 +162,10 @@ export const ForutgåendeMedlemskapPeriodisert = ({
           }
           vurdertAv={vurdering.vurdertAv}
           finnesFeil={finnesFeilForVurdering(index, errorList)}
+          readonly={formReadOnly}
+          onRemove={() => remove(index)}
+          harTidligereVurderinger={tidligereVurderinger.length > 0}
+          index={index}
         >
           <ForutgåendeMedlemskapFormInput
             form={form}
@@ -169,8 +173,6 @@ export const ForutgåendeMedlemskapPeriodisert = ({
             readOnly={formReadOnly}
             index={index}
             harTidligereVurderinger={tidligereVurderinger.length !== 0}
-            onRemove={() => remove(index)}
-            visningModus={visningModus}
           />
         </NyVurderingExpandableCard>
       ))}

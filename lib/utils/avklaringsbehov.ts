@@ -34,6 +34,7 @@ export const oppgaveAvklaringsbehov = [
   { value: '5031', label: mapBehovskodeTilBehovstype('5031') },
   { value: '5032', label: mapBehovskodeTilBehovstype('5032') },
   { value: '5033', label: mapBehovskodeTilBehovstype('5033') },
+  { value: '5034', label: mapBehovskodeTilBehovstype('5034') },
   { value: '5050', label: mapBehovskodeTilBehovstype('5050') },
   { value: '5051', label: mapBehovskodeTilBehovstype('5051') },
   { value: '5052', label: mapBehovskodeTilBehovstype('5052') },

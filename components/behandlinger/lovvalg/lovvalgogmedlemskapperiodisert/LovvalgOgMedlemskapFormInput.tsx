@@ -1,50 +1,29 @@
-import { Button, HStack, Radio, ReadMore, VStack } from '@navikt/ds-react';
+import { HStack, Radio, ReadMore, VStack } from '@navikt/ds-react';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
 import { ComboboxWrapper } from 'components/form/comboboxwrapper/ComboboxWrapper';
 import { isNotEmpty } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
-import { VisningModus } from 'hooks/saksbehandling/visning/VisningHook';
-import { TrashFillIcon } from '@navikt/aksel-icons';
 import { landMedTrygdesamarbeid } from 'lib/utils/countries';
 import { UseFormReturn } from 'react-hook-form';
-import React, { useState } from 'react';
+import React from 'react';
 import { validerDato } from 'lib/validation/dateValidation';
 import { LovOgMedlemskapVurderingForm } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/types';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
-import { DateInputWrapperOnBlur } from 'components/form/dateinputwrapper/DateInputWrapperOnBlur';
+import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 
 type Props = {
   form: UseFormReturn<LovOgMedlemskapVurderingForm>;
-  visningModus: VisningModus;
   readOnly: boolean;
   index: number;
-  harTidligereVurderinger: boolean;
-  onRemove: () => void;
 };
 
-export const LovvalgOgMedlemskapFormInput = ({
-  readOnly,
-  harTidligereVurderinger,
-  index,
-  visningModus,
-  form,
-  onRemove,
-}: Props) => {
+export const LovvalgOgMedlemskapFormInput = ({ readOnly, index, form }: Props) => {
   const { control, watch } = form;
-  const [spinnerRemove, setSpinnerRemove] = useState(false);
-
-  const handleRemove = (): void => {
-    setSpinnerRemove(true);
-    setTimeout(() => {
-      onRemove();
-      setSpinnerRemove(false);
-    }, 500);
-  };
 
   return (
     <VStack gap="4">
       <HStack justify={'space-between'}>
-        <DateInputWrapperOnBlur
+        <DateInputWrapper
           name={`vurderinger.${index}.fraDato`}
           label="Vurderingen gjelder fra"
           control={control}
@@ -54,22 +33,6 @@ export const LovvalgOgMedlemskapFormInput = ({
           }}
           readOnly={readOnly}
         />
-        {(visningModus === VisningModus.AKTIV_MED_AVBRYT || visningModus === VisningModus.AKTIV_UTEN_AVBRYT) &&
-          (index !== 0 || harTidligereVurderinger) && (
-            <HStack>
-              <VStack justify={'end'}>
-                <Button
-                  loading={spinnerRemove}
-                  aria-label="Fjern vurdering"
-                  variant="tertiary"
-                  size="small"
-                  icon={<TrashFillIcon />}
-                  onClick={handleRemove}
-                  type="button"
-                ></Button>
-              </VStack>
-            </HStack>
-          )}
       </HStack>
       <ReadMore style={{ maxWidth: '90ch' }} size={'small'} header="Hvordan legge til sluttdato?">
         For å legge til en sluttdato på denne vurderingen velger du “Legg til ny vurdering”. Det oppretter en ny
