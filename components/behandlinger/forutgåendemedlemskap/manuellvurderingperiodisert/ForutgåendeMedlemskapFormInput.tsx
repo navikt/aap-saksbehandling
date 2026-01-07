@@ -1,10 +1,8 @@
-import { Button, HStack, Radio, ReadMore, VStack } from '@navikt/ds-react';
+import { HStack, Radio, ReadMore, VStack } from '@navikt/ds-react';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
-import { VisningModus } from 'hooks/saksbehandling/visning/VisningHook';
-import { TrashFillIcon } from '@navikt/aksel-icons';
 import { UseFormReturn } from 'react-hook-form';
-import React, { useState } from 'react';
+import React from 'react';
 import { validerDato } from 'lib/validation/dateValidation';
 import { ForutgåendeMedlemskapVurderingForm } from 'components/behandlinger/forutgåendemedlemskap/manuellvurderingperiodisert/types';
 import { JaEllerNei } from 'lib/utils/form';
@@ -27,7 +25,7 @@ export const ForutgåendeMedlemskapFormInput = ({ readOnly, index, form, beregni
   return (
     <VStack gap="4">
       <HStack>
-        <DateInputWrapperOnBlur
+        <DateInputWrapper
           name={`vurderinger.${index}.fraDato`}
           label="Vurderingen gjelder fra"
           control={control}
