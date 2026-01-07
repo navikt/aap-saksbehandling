@@ -3,7 +3,7 @@
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
-import React, { FormEvent } from 'react';
+import React, { FormEvent, useEffect } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { ManuellInntektGrunnlag, ManuellInntektÅr, MellomlagretVurdering } from 'lib/types/types';
@@ -93,6 +93,13 @@ export const FastsettManuellInntektNy = ({
       },
     },
   });
+
+  /**
+   * Sikre at tabellår oppdateres dersom grunnlag endres (ved oppdatering av dato for nedsatt arbeidsevne).
+   */
+  useEffect(() => {
+    form.setValue('tabellår', defaultValue.tabellår || []);
+  }, [grunnlag]);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     form.handleSubmit((data) => {
