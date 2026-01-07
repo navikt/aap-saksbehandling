@@ -5,6 +5,7 @@ import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { getStegData } from 'lib/utils/steg';
+import { SykestipendMedDataFetching } from 'components/behandlinger/sykdom/student/sykestipend/SykestipendMedDataFetching';
 
 interface Props {
   behandlingsreferanse: string;
@@ -17,6 +18,7 @@ export const Student = async ({ behandlingsreferanse }: Props) => {
   }
 
   const avklarStudentSteg = getStegData('STUDENT', 'AVKLAR_STUDENT', flyt.data);
+  const sykestipendSteg = getStegData('STUDENT', 'SAMORDNING_SYKESTIPEND', flyt.data);
 
   return (
     <GruppeSteg
@@ -29,6 +31,11 @@ export const Student = async ({ behandlingsreferanse }: Props) => {
       {avklarStudentSteg.skalViseSteg && (
         <StegSuspense>
           <StudentvurderingMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={avklarStudentSteg} />
+        </StegSuspense>
+      )}
+      {sykestipendSteg.skalViseSteg && (
+        <StegSuspense>
+          <SykestipendMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={avklarStudentSteg} />
         </StegSuspense>
       )}
     </GruppeSteg>
