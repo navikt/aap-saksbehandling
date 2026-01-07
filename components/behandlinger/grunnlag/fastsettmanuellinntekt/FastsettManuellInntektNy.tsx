@@ -94,6 +94,9 @@ export const FastsettManuellInntektNy = ({
     },
   });
 
+  /**
+   * Sikre at tabellår oppdateres dersom grunnlag endres (ved oppdatering av dato for nedsatt arbeidsevne).
+   */
   useEffect(() => {
     form.setValue('tabellår', defaultValue.tabellår || []);
   }, [grunnlag]);
