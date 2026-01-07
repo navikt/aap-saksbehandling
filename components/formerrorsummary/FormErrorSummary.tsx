@@ -1,29 +1,21 @@
 'use client';
 
 import { ErrorList } from 'lib/utils/formerrors';
-import { Ref, useEffect, useRef } from 'react';
 import { ErrorSummary } from '@navikt/ds-react';
-import { setFocusHtmlRef } from 'lib/utils/dom';
 
 interface Props {
   errorList: ErrorList;
 }
-export const FormErrorSummary = ({ errorList }: Props) => {
-  const errorSummaryRef: Ref<HTMLDivElement> = useRef(null);
-  const isError = errorList.length > 0;
 
-  useEffect(() => {
-    if (isError) {
-      setFocusHtmlRef(errorSummaryRef);
-    }
-  }, [isError, errorSummaryRef]);
+export const FormErrorSummary = ({ errorList }: Props) => {
+  const isError = errorList.length > 0;
 
   if (!isError) {
     return null;
   }
 
   return (
-    <ErrorSummary size={'small'} ref={errorSummaryRef}>
+    <ErrorSummary size={'small'}>
       {errorList.map((error) => (
         <ErrorSummary.Item key={error.ref} href={error.ref}>
           {error?.message}

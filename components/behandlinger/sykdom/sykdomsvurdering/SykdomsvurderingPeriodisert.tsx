@@ -167,7 +167,7 @@ export const SykdomsvurderingPeriodisert = ({
       visningModus={visningModus}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
       onLeggTilVurdering={() => append(emptySykdomsvurderingForm())}
-      errorList={[]}
+      errorList={errorList}
     >
       {vedtatteVurderinger.map((vurdering) => (
         <TidligereVurderingExpandableCard
