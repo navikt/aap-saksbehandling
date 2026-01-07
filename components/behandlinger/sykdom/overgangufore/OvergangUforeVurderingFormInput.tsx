@@ -1,38 +1,28 @@
 'use client';
 
-import { Alert, Button, HStack, Link, Radio, VStack } from '@navikt/ds-react';
-import { TrashFillIcon } from '@navikt/aksel-icons';
+import { Alert, HStack, Link, Radio, VStack } from '@navikt/ds-react';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
 import { UseFormReturn } from 'react-hook-form';
-import React, { useTransition } from 'react';
+import React from 'react';
 import { OvergangUforeForm } from 'components/behandlinger/sykdom/overgangufore/OvergangUforePeriodisert';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { JaEllerNei } from 'lib/utils/form';
 import { Veiledning } from 'components/veiledning/Veiledning';
-import { DateInputWrapperOnBlur } from 'components/form/dateinputwrapper/DateInputWrapperOnBlur';
+import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 
 interface Props {
   index: number;
   form: UseFormReturn<OvergangUforeForm>;
   readonly: boolean;
-  onRemove: () => void;
 }
 
-export const OvergangUforeVurderingFormInput = ({ index, form, readonly, onRemove }: Props) => {
-  const [isLoading, startTransition] = useTransition();
+export const OvergangUforeVurderingFormInput = ({ index, form, readonly }: Props) => {
   const vilkårsvurderingLabel = 'Vilkårsvurdering';
   const brukerSøktUføretrygdLabel = 'Har brukeren søkt om uføretrygd?';
   const brukerHarFaattVedtakOmUføretrygdLabel = 'Har brukeren fått vedtak på søknaden om uføretrygd?';
   const brukerrettPaaAAPLabel = 'Har brukeren rett på AAP under behandling av krav om uføretrygd etter § 11-18?';
   const virkningsdatoLabel = 'Virkningstidspunkt for vurderingen';
-
-  function handleDelete() {
-    startTransition(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      onRemove();
-    });
-  }
 
   const brukerHarSoktOmUforetrygd = form.watch(`vurderinger.${index}.brukerHarSøktUføretrygd`) === JaEllerNei.Ja;
   const brukerHarFattAvslagPaUforetrygd =
@@ -50,7 +40,7 @@ export const OvergangUforeVurderingFormInput = ({ index, form, readonly, onRemov
         }
       />
       <HStack justify={'space-between'}>
-        <DateInputWrapperOnBlur
+        <DateInputWrapper
           name={`vurderinger.${index}.fraDato`}
           label={virkningsdatoLabel}
           control={form.control}
@@ -59,18 +49,6 @@ export const OvergangUforeVurderingFormInput = ({ index, form, readonly, onRemov
           }}
           readOnly={readonly}
         />
-
-        {!readonly && (
-          <Button
-            aria-label="Fjern vurdering"
-            variant="tertiary"
-            size="small"
-            icon={<TrashFillIcon />}
-            loading={isLoading}
-            onClick={() => handleDelete()}
-            type="button"
-          />
-        )}
       </HStack>
       <TextAreaWrapper
         name={`vurderinger.${index}.begrunnelse`}

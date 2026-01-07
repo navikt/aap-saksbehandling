@@ -57,7 +57,6 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
     reValidateMode: 'onChange',
   });
 
-  const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
 
   const {
@@ -110,6 +109,7 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
     });
   }
 
+  const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const foersteNyePeriode = vurderingerFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
   const errorList = mapPeriodiserteVurderingerErrorList<LovOgMedlemskapVurderingForm>(form.formState.errors);
 
@@ -160,15 +160,12 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
           isLast={index === vurderingerFields.length - 1}
           vurdertAv={vurdering.vurdertAv}
           finnesFeil={finnesFeilForVurdering(index, errorList)}
+          readonly={formReadOnly}
+          onRemove={() => remove(index)}
+          harTidligereVurderinger={tidligereVurderinger.length > 0}
+          index={index}
         >
-          <OppholdskravFormInput
-            form={form}
-            readOnly={formReadOnly}
-            index={index}
-            harTidligereVurderinger={tidligereVurderinger.length !== 0}
-            onRemove={() => remove(index)}
-            visningModus={visningModus}
-          />
+          <OppholdskravFormInput form={form} readOnly={formReadOnly} index={index} />
         </NyVurderingExpandableCard>
       ))}
     </VilkårskortPeriodisert>

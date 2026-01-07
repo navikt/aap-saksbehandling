@@ -1,7 +1,6 @@
 'use client';
 
-import { TrashFillIcon } from '@navikt/aksel-icons';
-import { Button, HStack, Link, Radio, VStack } from '@navikt/ds-react';
+import { HStack, Link, Radio, VStack } from '@navikt/ds-react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import {
@@ -25,11 +24,10 @@ import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib
 import { NyVurderingExpandableCard } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
 import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
-import { LovOgMedlemskapVurderingForm } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/types';
 import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
-import { DateInputWrapperOnBlur } from 'components/form/dateinputwrapper/DateInputWrapperOnBlur';
 import React from 'react';
+import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 
 interface Props {
   behandlingVersjon: number;
@@ -126,7 +124,7 @@ export const MeldepliktPeriodisertFrontend = ({
   }
 
   const foersteNyePeriode = fields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
-  const errorList = mapPeriodiserteVurderingerErrorList<LovOgMedlemskapVurderingForm>(form.formState.errors);
+  const errorList = mapPeriodiserteVurderingerErrorList<FritakMeldepliktVurderingForm>(form.formState.errors);
 
   const sisteFritakVurdertAv = grunnlag?.vurderinger?.[grunnlag.vurderinger.length - 1]?.vurdertAv;
 
@@ -193,9 +191,14 @@ export const MeldepliktPeriodisertFrontend = ({
           isLast={index === vedtatteVurderinger.length - 1}
           vurdertAv={undefined}
           finnesFeil={finnesFeilForVurdering(index, errorList)}
+          readonly={formReadOnly}
+          onRemove={() => remove(index)}
+          // vilkåret er valgfritt, kan derfor slette vurderingen selv om det ikke finnes en tidligere vurdering
+          harTidligereVurderinger={true}
+          index={index}
         >
           <HStack justify={'space-between'}>
-            <DateInputWrapperOnBlur
+            <DateInputWrapper
               name={`vurderinger.${index}.fraDato`}
               label="Vurderingen gjelder fra"
               control={form.control}
@@ -205,17 +208,6 @@ export const MeldepliktPeriodisertFrontend = ({
               }}
               readOnly={formReadOnly}
             />
-            {!formReadOnly && (
-              <Button
-                aria-label="Fjern vurdering"
-                variant="tertiary"
-                size="small"
-                icon={<TrashFillIcon />}
-                loading={isLoading}
-                onClick={() => remove(index)}
-                type="button"
-              />
-            )}
           </HStack>
           <TextAreaWrapper
             label={'Vilkårsvurdering'}

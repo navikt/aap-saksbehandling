@@ -4,7 +4,7 @@ import { Behovstype, getJaNeiEllerUndefined, getStringEllerUndefined, JaEllerNei
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent, useCallback } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
-import { startOfDay } from 'date-fns';
+import { parseISO, startOfDay } from 'date-fns';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { MellomlagretVurdering, SykdomsGrunnlag, TypeBehandling } from 'lib/types/types';
 import { finnDiagnosegrunnlag } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
@@ -21,6 +21,8 @@ import { SykdomsvurderingFormInput } from 'components/behandlinger/sykdom/sykdom
 import { TidligereSykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/TidligereSykdomsvurdering';
 import mapTilPeriodisertVurdering from 'components/behandlinger/sykdom/sykdomsvurdering/periodisertVurderingMapper';
 import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMellomlagringParser';
+import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
+import { parseDatoFraDatePicker } from 'lib/utils/date';
 
 export interface Sykdomsvurderinger {
   vurderinger: Array<SykdomsvurderingForm>;
@@ -142,6 +144,10 @@ export const SykdomsvurderingPeriodisert = ({
       return true;
     }
   }
+
+  const foersteNyePeriode = nyeVurderingerFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
+  const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
+
   return (
     <VilkårskortPeriodisert
       heading={'§ 11-5 Nedsatt arbeidsevne og krav til årsakssammenheng'}
@@ -164,7 +170,18 @@ export const SykdomsvurderingPeriodisert = ({
       errorList={[]}
     >
       {vedtatteVurderinger.map((vurdering) => (
-        <TidligereSykdomsvurdering key={vurdering.fom} vurdering={vurdering} />
+        <TidligereVurderingExpandableCard
+          key={vurdering.fom}
+          fom={new Dato(vurdering.fom).dato}
+          tom={vurdering.tom ? parseISO(vurdering.tom) : undefined}
+          foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+          oppfylt={
+            getJaNeiEllerUndefined(vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten) === JaEllerNei.Ja ||
+            getJaNeiEllerUndefined(vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense) === JaEllerNei.Ja
+          }
+        >
+          <TidligereSykdomsvurdering vurdering={vurdering} />
+        </TidligereVurderingExpandableCard>
       ))}
       {nyeVurderingerFields.map((vurdering, index) => (
         <NyVurderingExpandableCard
@@ -175,12 +192,15 @@ export const SykdomsvurderingPeriodisert = ({
           isLast={index === nyeVurderingerFields.length - 1}
           vurdertAv={undefined} // TODO:
           finnesFeil={finnesFeilForVurdering(index, errorList)}
+          readonly={formReadOnly}
+          onRemove={() => remove(index)}
+          harTidligereVurderinger={tidligereVurderinger.length > 0}
+          index={index}
         >
           <SykdomsvurderingFormInput
             index={index}
             form={form}
             readonly={formReadOnly}
-            onRemove={() => remove(index)}
             typeBehandling={typeBehandling}
             sak={sak}
             erÅrsakssammenhengYrkesskade={grunnlag.erÅrsakssammenhengYrkesskade}
@@ -194,7 +214,7 @@ export const SykdomsvurderingPeriodisert = ({
   function mapGrunnlagTilDefaultvalues(grunnlag: SykdomsGrunnlag): Sykdomsvurderinger {
     if (grunnlag == null || (grunnlag.nyeVurderinger.length === 0 && grunnlag.sisteVedtatteVurderinger.length === 0)) {
       // Vi har ingen tidligere vurderinger eller nye vurderinger, legg til en tom-default-periode
-      const førsteFraDatoSomKanVurderes = grunnlag.kanVurderes[0].fom
+      const førsteFraDatoSomKanVurderes = grunnlag.kanVurderes[0]?.fom
         ? { fraDato: new Dato(grunnlag.kanVurderes[0].fom).formaterForFrontend() }
         : {};
       return {

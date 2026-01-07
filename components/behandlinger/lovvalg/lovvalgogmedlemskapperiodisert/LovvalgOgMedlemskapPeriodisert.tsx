@@ -161,15 +161,12 @@ export const LovvalgOgMedlemskapPeriodisert = ({
           }
           vurdertAv={vurdering.vurdertAv}
           finnesFeil={finnesFeilForVurdering(index, errorList)}
+          onRemove={() => remove(index)}
+          harTidligereVurderinger={tidligereVurderinger.length > 0}
+          index={index}
+          readonly={formReadOnly}
         >
-          <LovvalgOgMedlemskapFormInput
-            form={form}
-            readOnly={formReadOnly}
-            index={index}
-            harTidligereVurderinger={tidligereVurderinger.length !== 0}
-            onRemove={() => remove(index)}
-            visningModus={visningModus}
-          />
+          <LovvalgOgMedlemskapFormInput form={form} readOnly={formReadOnly} index={index} />
         </NyVurderingExpandableCard>
       ))}
     </VilkårskortPeriodisert>
