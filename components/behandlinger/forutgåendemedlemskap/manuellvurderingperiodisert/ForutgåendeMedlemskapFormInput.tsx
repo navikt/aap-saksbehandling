@@ -11,7 +11,7 @@ import { JaEllerNei } from 'lib/utils/form';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { BeregningTidspunktGrunnlag } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import { DateInputWrapperOnBlur } from 'components/form/dateinputwrapper/DateInputWrapperOnBlur';
+import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 
 type Props = {
   form: UseFormReturn<ForutgåendeMedlemskapVurderingForm>;

@@ -15,7 +15,7 @@ import { Sak } from 'context/saksbehandling/SakContext';
 import { SykdomsvurderingFørstegangsbehandling } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingFørstegangsbehandling';
 import { SykdomsvurderingRevurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingRevurdering';
 import { SykdomsvurderingDiagnosesøk } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingDiagnosesøk';
-import { DateInputWrapperOnBlur } from 'components/form/dateinputwrapper/DateInputWrapperOnBlur';
+import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 
 interface Props {
   index: number;
@@ -68,7 +68,7 @@ export const SykdomsvurderingFormInput = ({
         Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-5 (lovdata.no)
       </Link>
       <HStack justify={'space-between'}>
-        <DateInputWrapperOnBlur
+        <DateInputWrapper
           name={`vurderinger.${index}.fraDato`}
           label="Vurderingen gjelder fra"
           control={form.control}

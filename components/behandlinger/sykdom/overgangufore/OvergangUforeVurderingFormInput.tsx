@@ -9,7 +9,7 @@ import { OvergangUforeForm } from 'components/behandlinger/sykdom/overgangufore/
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { JaEllerNei } from 'lib/utils/form';
 import { Veiledning } from 'components/veiledning/Veiledning';
-import { DateInputWrapperOnBlur } from 'components/form/dateinputwrapper/DateInputWrapperOnBlur';
+import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 
 interface Props {
   index: number;
@@ -40,7 +40,7 @@ export const OvergangUforeVurderingFormInput = ({ index, form, readonly }: Props
         }
       />
       <HStack justify={'space-between'}>
-        <DateInputWrapperOnBlur
+        <DateInputWrapper
           name={`vurderinger.${index}.fraDato`}
           label={virkningsdatoLabel}
           control={form.control}

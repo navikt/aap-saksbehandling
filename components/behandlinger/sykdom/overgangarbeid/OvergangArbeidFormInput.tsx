@@ -4,8 +4,8 @@ import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei
 import { UseFormReturn } from 'react-hook-form';
 import React from 'react';
 import { validerDato } from 'lib/validation/dateValidation';
-import { DateInputWrapperOnBlur } from 'components/form/dateinputwrapper/DateInputWrapperOnBlur';
 import { OvergangArbeidForm } from 'components/behandlinger/sykdom/overgangarbeid/OvergangArbeid-types';
+import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 
 type Props = {
   form: UseFormReturn<OvergangArbeidForm>;
@@ -19,7 +19,7 @@ export const OvergangArbeidFormInput = ({ readOnly, index, form }: Props) => {
   return (
     <VStack gap="5">
       <HStack justify={'space-between'}>
-        <DateInputWrapperOnBlur
+        <DateInputWrapper
           name={`vurderinger.${index}.fraDato`}
           label="Vurderingen gjelder fra"
           control={control}

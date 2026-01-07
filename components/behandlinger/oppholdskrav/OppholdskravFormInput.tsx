@@ -9,7 +9,7 @@ import { alleLandUtenNorge } from 'lib/utils/countries';
 import { UseFormReturn } from 'react-hook-form';
 import { OppholdskravForm } from 'components/behandlinger/oppholdskrav/types';
 import { validerDato } from 'lib/validation/dateValidation';
-import { DateInputWrapperOnBlur } from 'components/form/dateinputwrapper/DateInputWrapperOnBlur';
+import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 
 type Props = {
   form: UseFormReturn<OppholdskravForm>;
@@ -25,7 +25,7 @@ export const OppholdskravFormInput = ({ readOnly, index, form }: Props) => {
   return (
     <VStack gap="5">
       <HStack justify={'space-between'}>
-        <DateInputWrapperOnBlur
+        <DateInputWrapper
           name={`vurderinger.${index}.fraDato`}
           label="Vurderingen gjelder fra"
           control={control}

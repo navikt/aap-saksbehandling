@@ -8,7 +8,7 @@ import { validerDato } from 'lib/validation/dateValidation';
 import { SykepengeerstatningForm } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/sykepengererstating-types';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { grunnOptions } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/sykepengererstatning-utils';
-import { DateInputWrapperOnBlur } from 'components/form/dateinputwrapper/DateInputWrapperOnBlur';
+import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 
 type Props = {
   form: UseFormReturn<SykepengeerstatningForm>;
@@ -22,7 +22,7 @@ export const SykepengeerstatningFormInput = ({ readOnly, index, form }: Props) =
   return (
     <VStack gap="5">
       <HStack justify={'space-between'}>
-        <DateInputWrapperOnBlur
+        <DateInputWrapper
           name={`vurderinger.${index}.fraDato`}
           label="Vurderingen gjelder fra"
           control={control}

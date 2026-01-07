@@ -1,7 +1,6 @@
 'use client';
 
 import { JaEllerNei } from 'lib/utils/form';
-import { DateInputWrapperOnBlur } from 'components/form/dateinputwrapper/DateInputWrapperOnBlur';
 import { validerDato } from 'lib/validation/dateValidation';
 import { HStack, Link, VStack } from '@navikt/ds-react';
 import { UseFormReturn } from 'react-hook-form';
@@ -10,6 +9,7 @@ import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei
 import { BistandForm } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovPeriodisert';
 import { BistandsGrunnlag } from 'lib/types/types';
 import { Veiledning } from 'components/veiledning/Veiledning';
+import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 
 type Props = {
   form: UseFormReturn<BistandForm>;
@@ -42,7 +42,7 @@ export const BistandsbehovVurderingForm = ({ form, index, readOnly }: Props) => 
         }
       />
       <HStack justify={'space-between'}>
-        <DateInputWrapperOnBlur
+        <DateInputWrapper
           name={`vurderinger.${index}.fraDato`}
           label="Vurderingen gjelder fra"
           control={form.control}

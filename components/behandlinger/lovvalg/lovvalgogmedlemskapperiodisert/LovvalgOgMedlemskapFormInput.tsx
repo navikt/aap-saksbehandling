@@ -11,7 +11,7 @@ import React, { useState } from 'react';
 import { validerDato } from 'lib/validation/dateValidation';
 import { LovOgMedlemskapVurderingForm } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/types';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
-import { DateInputWrapperOnBlur } from 'components/form/dateinputwrapper/DateInputWrapperOnBlur';
+import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 
 type Props = {
   form: UseFormReturn<LovOgMedlemskapVurderingForm>;
@@ -26,7 +26,7 @@ export const LovvalgOgMedlemskapFormInput = ({ readOnly, harTidligereVurderinger
   return (
     <VStack gap="4">
       <HStack justify={'space-between'}>
-        <DateInputWrapperOnBlur
+        <DateInputWrapper
           name={`vurderinger.${index}.fraDato`}
           label="Vurderingen gjelder fra"
           control={control}

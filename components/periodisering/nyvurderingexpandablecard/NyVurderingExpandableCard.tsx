@@ -45,7 +45,6 @@ export const NyVurderingExpandableCard = ({
   };
   return (
     <CustomExpandableCard
-      key={`${fraDato?.getTime()}`}
       editable
       defaultOpen
       expanded={cardExpanded || finnesFeil}
