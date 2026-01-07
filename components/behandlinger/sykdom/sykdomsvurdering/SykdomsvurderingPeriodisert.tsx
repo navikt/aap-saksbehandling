@@ -148,6 +148,7 @@ export const SykdomsvurderingPeriodisert = ({
   const foersteNyePeriode = nyeVurderingerFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
   const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
 
+  console.log('grunnlag', grunnlag);
   return (
     <VilkårskortPeriodisert
       heading={'§ 11-5 Nedsatt arbeidsevne og krav til årsakssammenheng'}
@@ -179,6 +180,7 @@ export const SykdomsvurderingPeriodisert = ({
             getJaNeiEllerUndefined(vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten) === JaEllerNei.Ja ||
             getJaNeiEllerUndefined(vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense) === JaEllerNei.Ja
           }
+          defaultCollapsed={nyeVurderingerFields.length > 0}
         >
           <TidligereSykdomsvurdering vurdering={vurdering} />
         </TidligereVurderingExpandableCard>
@@ -212,7 +214,7 @@ export const SykdomsvurderingPeriodisert = ({
   );
 
   function mapGrunnlagTilDefaultvalues(grunnlag: SykdomsGrunnlag): Sykdomsvurderinger {
-    if (grunnlag == null || (grunnlag.nyeVurderinger.length === 0 && grunnlag.sisteVedtatteVurderinger.length === 0)) {
+    if (grunnlag == null || grunnlag.nyeVurderinger.length === 0) {
       // Vi har ingen tidligere vurderinger eller nye vurderinger, legg til en tom-default-periode
       const førsteFraDatoSomKanVurderes = grunnlag.kanVurderes[0]?.fom
         ? { fraDato: new Dato(grunnlag.kanVurderes[0].fom).formaterForFrontend() }
