@@ -1,14 +1,14 @@
 import { Alert } from '@navikt/ds-react';
 import { JaEllerNei } from 'lib/utils/form';
 import { UseFormReturn } from 'react-hook-form';
-import type { Sykdomsvurderinger } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingPeriodisert';
+import type { SykdomsvurderingerForm } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingPeriodisert';
 import { Periode } from 'lib/types/types';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 
 interface Props {
   index: number;
-  form: UseFormReturn<Sykdomsvurderinger>;
+  form: UseFormReturn<SykdomsvurderingerForm>;
   readonly: boolean;
   ikkeRelevantePerioder?: Periode[];
   skalVurdereYrkesskade: boolean;

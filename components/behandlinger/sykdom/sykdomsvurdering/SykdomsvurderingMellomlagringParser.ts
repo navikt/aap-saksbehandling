@@ -1,7 +1,7 @@
-import { Sykdomsvurderinger } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingPeriodisert';
+import { SykdomsvurderingerForm } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingPeriodisert';
 import { SykdomsvurderingFormFields } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 
-export function parseOgMigrerMellomlagretData(data: string): Sykdomsvurderinger {
+export function parseOgMigrerMellomlagretData(data: string): SykdomsvurderingerForm {
   const parsedData = JSON.parse(data);
   if (isNewSchema(parsedData)) {
     return parsedData;
@@ -9,7 +9,7 @@ export function parseOgMigrerMellomlagretData(data: string): Sykdomsvurderinger 
   return mapFromOldFormToNewForm(parsedData as SykdomsvurderingFormFields);
 }
 
-function mapFromOldFormToNewForm(oldData: SykdomsvurderingFormFields): Sykdomsvurderinger {
+function mapFromOldFormToNewForm(oldData: SykdomsvurderingFormFields): SykdomsvurderingerForm {
   return {
     vurderinger: [
       {
@@ -20,6 +20,6 @@ function mapFromOldFormToNewForm(oldData: SykdomsvurderingFormFields): Sykdomsvu
   };
 }
 
-function isNewSchema(object: any): object is Sykdomsvurderinger {
+function isNewSchema(object: any): object is SykdomsvurderingerForm {
   return object instanceof Object && object['vurderinger'] != null;
 }
