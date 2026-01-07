@@ -84,7 +84,12 @@ export const BehandlingLayout = async ({ saksId, behandlingsReferanse, children 
     behandling.data.vurderingsbehovOgÅrsaker?.some((e) => e.årsak === 'OMGJØRING_ETTER_KLAGE');
   const visÅrsakTilRevurdering =
     behandling.data.type === 'Revurdering' && behandling.data.vurderingsbehovOgÅrsaker.length > 0;
-  const visÅrsakTilBehandling = visÅrsakTilAktivitetspliktBehandling || visÅrsakTilRevurdering;
+  const visÅrsakTilEndreStartstidspunkt = behandling.data.vurderingsbehovOgÅrsaker
+    ?.flatMap((v) => v.vurderingsbehov)
+    ?.some((v) => v.type === 'VURDER_RETTIGHETSPERIODE');
+
+  const visÅrsakTilBehandling =
+    visÅrsakTilAktivitetspliktBehandling || visÅrsakTilRevurdering || visÅrsakTilEndreStartstidspunkt;
 
   return (
     <SWRConfig

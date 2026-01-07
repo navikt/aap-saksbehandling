@@ -270,7 +270,7 @@ describe('SaksinfoBanner på behandling siden', () => {
     );
 
     await user.click(screen.getByRole('button', { name: 'Saksmeny' }));
-    expect(screen.queryByRole('button', { name: 'Overstyr starttidspunkt' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Vurder § 22-13 syvende ledd' })).not.toBeInTheDocument();
   });
 
   it('menyvalg for å sette markeringer på behandling vises', async () => {
@@ -522,5 +522,35 @@ describe('Sak status', () => {
     );
     const returTag = screen.queryByText('Retur');
     expect(returTag).not.toBeInTheDocument();
+  });
+
+  it('skal vise frist utløpt-tag når oppgave har utløpt ventefrist', () => {
+    customRender(
+      <SaksinfoBanner
+        personInformasjon={personInformasjon}
+        sak={sak}
+        behandling={behandling}
+        brukerInformasjon={{ navn: 'Saksbehandler', NAVident: 'navIdent' }}
+        referanse={'123456'}
+        oppgave={{...oppgave, utløptVentefrist: "2026-01-04"}}
+      />
+    );
+    const fristTag = screen.getByText('Frist utløpt 04.01.2026');
+    expect(fristTag).toBeVisible();
+  });
+
+  it('skal ikke vise frist utløpt-tag når oppgave ikke har utløpt ventefrist', () => {
+    customRender(
+      <SaksinfoBanner
+        personInformasjon={personInformasjon}
+        sak={sak}
+        behandling={behandling}
+        brukerInformasjon={{ navn: 'Saksbehandler', NAVident: 'navIdent' }}
+        referanse={'123456'}
+        oppgave={oppgave}
+      />
+    );
+    const fristTag = screen.queryByText('Frist utløpt 04.01.2026');
+    expect(fristTag).not.toBeInTheDocument()
   });
 });
