@@ -84,6 +84,7 @@ export const OvergangUforePeriodisert = ({
     })(event);
   };
 
+  const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const foersteNyePeriode = nyeVurderingFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
   const errorList = mapPeriodiserteVurderingerErrorList<OvergangUforeForm>(form.formState.errors);
   return (
@@ -139,13 +140,12 @@ export const OvergangUforePeriodisert = ({
             isLast={index === nyeVurderingFields.length - 1}
             vurdertAv={undefined} // TODO:
             finnesFeil={finnesFeilForVurdering(index, errorList)}
+            readonly={formReadOnly}
+            onRemove={() => remove(index)}
+            harTidligereVurderinger={tidligereVurderinger.length > 0}
+            index={index}
           >
-            <OvergangUforeVurderingFormInput
-              index={index}
-              form={form}
-              readonly={formReadOnly}
-              onRemove={() => remove(index)}
-            />
+            <OvergangUforeVurderingFormInput index={index} form={form} readonly={formReadOnly} />
           </NyVurderingExpandableCard>
         );
       })}

@@ -2,9 +2,8 @@
 
 import { JaEllerNei } from 'lib/utils/form';
 import { validerDato } from 'lib/validation/dateValidation';
-import { Button, HStack, Link, VStack } from '@navikt/ds-react';
+import { HStack, Link, VStack } from '@navikt/ds-react';
 import { UseFormReturn } from 'react-hook-form';
-import { TrashFillIcon } from '@navikt/aksel-icons';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
 import { BistandForm } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovPeriodisert';
@@ -16,10 +15,9 @@ type Props = {
   form: UseFormReturn<BistandForm>;
   readOnly: boolean;
   index: number;
-  onRemove: () => void;
   grunnlag?: BistandsGrunnlag;
 };
-export const BistandsbehovVurderingForm = ({ form, index, readOnly, onRemove }: Props) => {
+export const BistandsbehovVurderingForm = ({ form, index, readOnly }: Props) => {
   const vilkårsvurderingLabel = 'Vilkårsvurdering';
   const erBehovForAktivBehandlingLabel = 'a: Har brukeren behov for aktiv behandling?';
   const erBehovForArbeidsrettetTiltakLabel = 'b: Har brukeren behov for arbeidsrettet tiltak?';
@@ -54,18 +52,6 @@ export const BistandsbehovVurderingForm = ({ form, index, readOnly, onRemove }: 
           }}
           readOnly={readOnly}
         />
-        <HStack>
-          <VStack justify={'end'}>
-            <Button
-              aria-label="Fjern vurdering"
-              variant="tertiary"
-              size="small"
-              icon={<TrashFillIcon />}
-              onClick={() => onRemove()}
-              type="button"
-            ></Button>
-          </VStack>
-        </HStack>
       </HStack>
       <TextAreaWrapper
         name={`vurderinger.${index}.begrunnelse`}
