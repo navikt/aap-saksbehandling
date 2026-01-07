@@ -6,7 +6,7 @@ import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { Button } from '@navikt/ds-react';
-import { addWeeks, getISOWeek, isBefore, startOfWeek, subMonths } from 'date-fns';
+import { addWeeks, format, isBefore, startOfWeek, subMonths } from 'date-fns';
 import { MeldeperioderV2 } from 'components/postmottak/digitaliserdokument/meldekort/MeldePerioderV2';
 import { FormEvent } from 'react';
 
@@ -40,8 +40,8 @@ export const ukestartSisteHalvår = (): ValuePair[] => {
     gjeldendeUke = addWeeks(gjeldendeUke, 1);
   }
 
-  const opts = ukestarter.map((ukestart) => ({
-    label: getISOWeek(ukestart).toString(),
+  const opts = ukestarter.reverse().map((ukestart) => ({
+    label: format(ukestart, 'I - yyyy'),
     value: ukestart.toISOString(),
   }));
   return opts;
