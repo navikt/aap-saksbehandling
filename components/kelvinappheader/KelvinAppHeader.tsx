@@ -101,8 +101,7 @@ export const KelvinAppHeader = ({
         {brukerInformasjon.NAVident && (
           <InternalHeader.Button
             as="div"
-            onClick={(e) => {
-              console.log(e, finnEndringslogg());
+            onClick={() => {
               if (!endringsloggÅpen) {
                 finnEndringslogg().click();
               }
