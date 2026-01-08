@@ -3,7 +3,7 @@
 import { BodyShort, Button, CopyButton, Dropdown, HStack, Tag, Tooltip } from '@navikt/ds-react';
 import { useState } from 'react';
 
-import { ChevronDownIcon, ChevronRightIcon, HourglassTopFilledIcon, PaperplaneIcon } from '@navikt/aksel-icons';
+import { ChevronDownIcon, ChevronRightIcon, PaperplaneIcon } from '@navikt/aksel-icons';
 import { JournalpostInfo } from 'lib/types/postmottakTypes';
 
 import styles from './DokumentInfoBanner.module.css';
@@ -11,16 +11,57 @@ import { PostmottakSettBehandllingPVentModal } from 'components/postmottak/postm
 import { formaterDatoForFrontend } from 'lib/utils/date';
 
 import { storForbokstavIHvertOrd } from 'lib/utils/string';
+import { Oppgave } from 'lib/types/oppgaveTypes';
+import { OppgaveStatus, OppgaveStatusType } from 'components/oppgavestatus/OppgaveStatus';
+import { Dato } from 'lib/types/Dato';
 
 interface Props {
   behandlingsreferanse: string;
   behandlingsVersjon: number;
   journalpostInfo: JournalpostInfo;
   påVent: boolean;
+  oppgave: Oppgave;
+  innloggetBrukerIdent?: string;
 }
 
-export const DokumentInfoBanner = ({ behandlingsreferanse, behandlingsVersjon, journalpostInfo, påVent }: Props) => {
+export const DokumentInfoBanner = ({
+  behandlingsreferanse,
+  behandlingsVersjon,
+  journalpostInfo,
+  påVent,
+  oppgave,
+  innloggetBrukerIdent,
+}: Props) => {
   const [settBehandlingPåVentmodalIsOpen, setSettBehandlingPåVentmodalIsOpen] = useState(false);
+
+  const erReservertAvInnloggetBruker = innloggetBrukerIdent === oppgave?.reservertAv;
+
+  const hentOppgaveTildeling = (): OppgaveStatusType | undefined => {
+    if (!oppgave.reservertAv) {
+      return { status: 'LEDIG', label: `Ledig` };
+    } else if (erReservertAvInnloggetBruker) {
+      return {
+        status: 'TILDELT_INNLOGGET_BRUKER',
+        label: `Tildelt: ${oppgave.reservertAvNavn ?? oppgave.reservertAv}`,
+      };
+    } else if (oppgave?.reservertAv && !erReservertAvInnloggetBruker) {
+      return { status: 'TILDELT', label: `Tildelt: ${oppgave.reservertAvNavn ?? oppgave.reservertAv}` };
+    }
+  };
+
+  const hentOppgaveStatus = (): OppgaveStatusType | undefined => {
+    if (påVent) {
+      return { status: 'PÅ_VENT', label: 'På vent' };
+    } else if (oppgave?.utløptVentefrist) {
+      return {
+        status: 'VENTEFRIST_UTLØPT',
+        label: `Frist utløpt ${new Dato(oppgave.utløptVentefrist).formaterForFrontend()}`,
+      };
+    }
+  };
+
+  const tildelingStatus = hentOppgaveTildeling();
+  const oppgaveStatus = hentOppgaveStatus();
 
   return (
     <div className={styles.dokumentinfobanner}>
@@ -58,13 +99,16 @@ export const DokumentInfoBanner = ({ behandlingsreferanse, behandlingsVersjon, j
       </div>
 
       <HStack>
-        <div className={styles.status}>
-          {påVent && (
-            <Tag className={styles.tag} icon={<HourglassTopFilledIcon />} variant={'warning-moderate'} size={'small'}>
-              På vent
-            </Tag>
-          )}
-        </div>
+        {oppgaveStatus && (
+          <div className={styles.oppgavestatus}>
+            <OppgaveStatus oppgaveStatus={oppgaveStatus} />
+          </div>
+        )}
+        {tildelingStatus && (
+          <div className={styles.oppgavestatus}>
+            <OppgaveStatus oppgaveStatus={tildelingStatus} />
+          </div>
+        )}
         <div className={styles.meny}>
           <Dropdown>
             <Button
