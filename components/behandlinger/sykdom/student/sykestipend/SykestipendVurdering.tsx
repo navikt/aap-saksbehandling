@@ -12,6 +12,8 @@ import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårs
 import { VStack } from '@navikt/ds-react';
 import { FormField } from 'components/form/FormField';
 import { SykestipendPeriodeTabell } from 'components/behandlinger/sykdom/student/sykestipend/SykestipendPeriodeTabell';
+import { formaterDatoForBackend } from 'lib/utils/date';
+import { parse } from 'date-fns';
 
 interface Props {
   behandlingVersjon: number;
@@ -61,15 +63,12 @@ export const SykestipendVurdering = ({ behandlingVersjon, readOnly, initialMello
         behandlingVersjon: behandlingVersjon,
         behov: {
           behovstype: Behovstype.AVKLAR_SAMORDNING_SYKESTIPEND_KODE,
-          løsning: {
+          sykestipendVurdering: {
             begrunnelse: data.begrunnelse,
-            // TODO: Støtt innsending av perioder
-            // perioder: data.perioder.map((periode) => ({
-            //   periode: {
-            //     fom: formaterDatoForBackend(parse(periode.fom!, 'dd.MM.yyyy', new Date())),
-            //     tom: formaterDatoForBackend(parse(periode.tom!, 'dd.MM.yyyy', new Date())),
-            //   },
-            // })),
+            perioder: data.perioder.map((periode) => ({
+              fom: formaterDatoForBackend(parse(periode.fom!, 'dd.MM.yyyy', new Date())),
+              tom: formaterDatoForBackend(parse(periode.tom!, 'dd.MM.yyyy', new Date())),
+            })),
           },
         },
         referanse: behandlingsreferanse,
