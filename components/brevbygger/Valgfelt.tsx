@@ -20,7 +20,7 @@ interface ValgfeltProps {
 
 export const Valgfelt = ({ control, delmalIndex, valg, brevmal, watch }: ValgfeltProps) => {
   return (
-    <VStack gap="2">
+    <VStack gap="4" marginBlock={'2'}>
       {valg.map((v, index) => {
         const alternativer = v.alternativer.map((alternativ) => ({
           value: alternativ.verdi,
@@ -38,6 +38,7 @@ export const Valgfelt = ({ control, delmalIndex, valg, brevmal, watch }: Valgfel
               label={finnBeskrivelseForValg(v.noekkel, brevmal)}
               rules={{ required: 'Du må velge et alternativ' }}
               key={v.noekkel}
+              size={'small'}
             >
               {alternativer.map((alternativ) => (
                 <option value={alternativ.value} key={alternativ.value}>
@@ -51,6 +52,7 @@ export const Valgfelt = ({ control, delmalIndex, valg, brevmal, watch }: Valgfel
                   control={control}
                   name={`delmaler.${delmalIndex}.valg.${index}.fritekst`}
                   label="Fritekst"
+                  size={'small'}
                 />
               </>
             )}
