@@ -2,13 +2,15 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { render, screen } from 'lib/test/CustomRender';
 import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 import { Inntektsbortfall } from './Inntektsbortfall';
+import { mockedFlags } from 'lib/services/unleash/unleashToggles';
 
 beforeEach(() => {
   setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'MANGLENDE_LIGNING' });
 });
 
 describe('Inntektsbortfall', () => {
-  beforeEach(() =>
+  beforeEach(() => {
+    mockedFlags.KravOmInntektsbortfall = false;
     render(
       <Inntektsbortfall
         behandlingVersjon={1}
@@ -24,8 +26,8 @@ describe('Inntektsbortfall', () => {
           vurdering: undefined,
         }}
       />
-    )
-  );
+    );
+  });
   it('skal ha en alert', () => {
     const alert = screen.getByText(
       'Brukeren er over 62 år og må vurderes for § 11-4 andre ledd. Det er ikke støttet i Kelvin enda. Saken må settes på vent i påvente av at funksjonaliteten er ferdig utviklet.'
