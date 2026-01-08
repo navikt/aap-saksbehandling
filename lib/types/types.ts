@@ -36,6 +36,10 @@ export type OvergangArbeidGrunnlag =
 
 export type FritakMeldepliktGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.fritakmeldeplikt.FritakMeldepliktGrunnlagResponse'];
+
+export type PeriodisertFritaksvurderingDto =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.meldeplikt.flate.PeriodisertFritaksvurderingDto'];
+
 export type OverstyringMeldepliktGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.underveis.MeldepliktOverstyringGrunnlagResponse'];
 export type MeldepliktOverstyringLøsningDto =
