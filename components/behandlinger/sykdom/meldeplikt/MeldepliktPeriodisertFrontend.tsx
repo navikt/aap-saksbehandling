@@ -126,10 +126,8 @@ export const MeldepliktPeriodisertFrontend = ({
   const foersteNyePeriode = fields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
   const errorList = mapPeriodiserteVurderingerErrorList<FritakMeldepliktVurderingForm>(form.formState.errors);
 
-  const sisteFritakVurdertAv = grunnlag?.vurderinger?.[grunnlag.vurderinger.length - 1]?.vurdertAv;
-
   const showAsOpen =
-    (!!grunnlag?.vurderinger && grunnlag.vurderinger.length > 0) || initialMellomlagretVurdering !== undefined;
+    (grunnlag?.nyeVurderinger && grunnlag.nyeVurderinger.length >= 1) || initialMellomlagretVurdering !== undefined;
 
   return (
     <VilkårskortPeriodisert
@@ -141,7 +139,8 @@ export const MeldepliktPeriodisertFrontend = ({
       status={status}
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      vurdertAvAnsatt={sisteFritakVurdertAv}
+      vurdertAvAnsatt={grunnlag?.sisteVedtatteVurderinger?.[0]?.vurdertAv}
+      kvalitetssikretAv={grunnlag?.sisteVedtatteVurderinger?.[0]?.kvalitetssikretAv}
       mellomlagretVurdering={mellomlagretVurdering}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}
