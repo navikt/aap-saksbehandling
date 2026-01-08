@@ -167,7 +167,7 @@ export const SykdomsvurderingPeriodisert = ({
       visningModus={visningModus}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
       onLeggTilVurdering={() => append(emptySykdomsvurderingForm())}
-      errorList={[]}
+      errorList={errorList}
     >
       {vedtatteVurderinger.map((vurdering) => (
         <TidligereVurderingExpandableCard
@@ -179,6 +179,7 @@ export const SykdomsvurderingPeriodisert = ({
             getJaNeiEllerUndefined(vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten) === JaEllerNei.Ja ||
             getJaNeiEllerUndefined(vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense) === JaEllerNei.Ja
           }
+          defaultCollapsed={nyeVurderingerFields.length > 0}
         >
           <TidligereSykdomsvurdering vurdering={vurdering} />
         </TidligereVurderingExpandableCard>
@@ -212,8 +213,8 @@ export const SykdomsvurderingPeriodisert = ({
   );
 
   function mapGrunnlagTilDefaultvalues(grunnlag: SykdomsGrunnlag): Sykdomsvurderinger {
-    if (grunnlag == null || (grunnlag.nyeVurderinger.length === 0 && grunnlag.sisteVedtatteVurderinger.length === 0)) {
-      // Vi har ingen tidligere vurderinger eller nye vurderinger, legg til en tom-default-periode
+    if (grunnlag == null || grunnlag.nyeVurderinger.length === 0) {
+      // Vi har ingen nye vurderinger, legg til en tom-default-periode
       const førsteFraDatoSomKanVurderes = grunnlag.kanVurderes[0]?.fom
         ? { fraDato: new Dato(grunnlag.kanVurderes[0].fom).formaterForFrontend() }
         : {};

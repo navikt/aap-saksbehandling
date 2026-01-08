@@ -15,6 +15,7 @@ interface Props {
   oppfylt: boolean;
   vurdertAv?: VurdertAvShape;
   children: ReactNode;
+  defaultCollapsed?: boolean;
 }
 export const TidligereVurderingExpandableCard = ({
   fom,
@@ -23,8 +24,9 @@ export const TidligereVurderingExpandableCard = ({
   oppfylt,
   vurdertAv,
   children,
+  defaultCollapsed = false,
 }: Props) => {
-  const [cardExpanded, setCardExpanded] = useState<boolean>(true);
+  const [cardExpanded, setCardExpanded] = useState<boolean>(!defaultCollapsed);
   const formattertFom = formaterDatoForFrontend(fom);
   const strekUtHele = foersteNyePeriodeFraDato ? !isBefore(fom, foersteNyePeriodeFraDato) : false;
   const nySluttdato =
