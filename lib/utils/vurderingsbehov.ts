@@ -163,7 +163,7 @@ export const formaterFrittVurderingsbehov = (vurderingsbehov: String) => {
     case 'SØKNAD_TRUKKET':
       return 'Trukket søknad';
     case 'VURDER_RETTIGHETSPERIODE':
-      return 'Starttidspunkt';
+      return '§ 22-13 syvende ledd';
     case 'KLAGE_TRUKKET':
       return 'Klage trukket';
     case 'MOTTATT_KABAL_HENDELSE':
