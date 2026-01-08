@@ -1320,6 +1320,44 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/behandling/{referanse}/grunnlag/inntektsbortfall': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description referanse */
+          referanse: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.inntektsbortfall.InntektsbortfallGrunnlagResponse'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/behandling/{referanse}/grunnlag/oppholdskrav': {
     parameters: {
       query?: never;
@@ -10696,6 +10734,48 @@ export interface components {
        * @example 2025-04-01
        */
       ytelseIverksattTom?: string | null;
+    };
+    'no.nav.aap.behandlingsflyt.behandling.inntektsbortfall.GjennomsnittInntektSiste3\u00C5rOver3GDto': {
+      gverdi: number;
+      resultat: boolean;
+    };
+    'no.nav.aap.behandlingsflyt.behandling.inntektsbortfall.InntektSiste\u00C5rOver1GDto': {
+      gverdi: number;
+      resultat: boolean;
+    };
+    'no.nav.aap.behandlingsflyt.behandling.inntektsbortfall.InntektsbortfallGrunnlagResponse': {
+      grunnlag: components['schemas']['no.nav.aap.behandlingsflyt.behandling.inntektsbortfall.InntektsbortfallKanBehandlesAutomatiskDto'];
+      'harTilgangTil\u00C5Saksbehandle': boolean;
+      vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.inntektsbortfall.InntektsbortfallVurderingDto'];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.inntektsbortfall.InntektsbortfallKanBehandlesAutomatiskDto': {
+      'gjennomsnittInntektSiste3\u00C5rOver3G': components['schemas']['no.nav.aap.behandlingsflyt.behandling.inntektsbortfall.GjennomsnittInntektSiste3\u00C5rOver3GDto'];
+      'inntektSiste\u00C5rOver1G': components['schemas']['no.nav.aap.behandlingsflyt.behandling.inntektsbortfall.InntektSiste\u00C5rOver1GDto'];
+      kanBehandlesAutomatisk: boolean;
+      'under62\u00C5rVedS\u00F8knadstidspunkt': components['schemas']['no.nav.aap.behandlingsflyt.behandling.inntektsbortfall.Under62\u00C5rVedS\u00F8knadstidspunktDto'];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.inntektsbortfall.InntektsbortfallVurderingDto': {
+      begrunnelse: string;
+      besluttetAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fom: string;
+      kvalitetssikretAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
+      rettTilUttak: boolean;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      tom?: string | null;
+      vurdertAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
+      vurdertIBehandling: components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.behandling.BehandlingId'];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.inntektsbortfall.Under62\u00C5rVedS\u00F8knadstidspunktDto': {
+      /** Format: int32 */
+      alder: number;
+      resultat: boolean;
     };
     'no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.HelseinstitusjonGrunnlagDto': {
       'harTilgangTil\u00C5Saksbehandle': boolean;

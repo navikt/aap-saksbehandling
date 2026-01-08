@@ -10,8 +10,8 @@ import { isError } from 'lib/utils/api';
 import { FastsettManuellInntektMedDataFetching } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/FastsettManuellInntektMedDataFetching';
 import { getStegData, skalViseSteg } from 'lib/utils/steg';
 import { FastsettManuellInntektMedDataFetchingNy } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/FastsettManuellInntektMedDataFetchingNy';
-import { Inntektsbortfall } from './inntektsbortfall/Inntektsbortfall';
 import { unleashService } from 'lib/services/unleash/unleashService';
+import { InntektsbortfallMedDataFetching } from './inntektsbortfall/InntektsbortfallMedDataFetching';
 
 interface Props {
   behandlingsReferanse: string;
@@ -91,7 +91,7 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
       )}
       {skalViseInntektsbortfall && (
         <StegSuspense>
-          <Inntektsbortfall behandlingVersjon={inntektsbortfall.behandlingVersjon} readOnly={true} />
+          <InntektsbortfallMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={inntektsbortfall} />
         </StegSuspense>
       )}
     </GruppeSteg>
