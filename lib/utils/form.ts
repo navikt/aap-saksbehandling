@@ -147,7 +147,7 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
     case '5053':
       return 'Individuell begrunnelse for §§ 11-5 og 11-6 til vedtaksbrev';
     case '5029':
-      return 'Starttidspunkt';
+      return '§ 22-13 syvende ledd';
     case '5999':
       return 'Fastsett påklaget behandling';
     case '6000':

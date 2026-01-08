@@ -36,7 +36,7 @@ const behovskodeMap = {
   '5026': 'Refusjon',
   '5027': 'Samordning annen statlig ytelse',
   '5028': 'Vurder trekk av søknad',
-  '5029': 'Vurder starttidspunkt',
+  '5029': 'Vurder § 22-13 syvende ledd',
   '5030': 'Samordning arbeidsgiver',
   '5031': '§ 11-18 AAP under behandling av krav om uføretrygd',
   '5032': '§ 11-17 Arbeidsavklaringspenger i perioden som arbeidssøker',
@@ -165,7 +165,7 @@ export function mapTilSteggruppeTekst(steggruppe: string) {
     case 'OVERLEVER_TIL_FAGSYSTEM':
       return 'Send til fagsystem';
     case 'RETTIGHETSPERIODE':
-      return 'Starttidspunkt';
+      return '§ 22-13 syvende ledd';
     case 'SAMORDNING':
       return 'Forhold til andre ytelser';
     case 'FORMKRAV':

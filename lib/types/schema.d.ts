@@ -11473,8 +11473,8 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.behandling.rettighetsperiode.RettighetsperiodeVurderingResponse': {
       begrunnelse: string;
-      'harKravP\u00E5Renter'?: boolean | null;
-      'harRettUtoverS\u00F8knadsdato': boolean;
+      /** @enum {string} */
+      harRett: 'Ja' | 'Nei' | 'HarRettIkkeIStandTilÅSøkeTidligere' | 'HarRettMisvisendeOpplysninger';
       /**
        * Format: date
        * @example 2025-04-01
@@ -12849,8 +12849,8 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.rettighetsperiode.RettighetsperiodeVurderingDTO': {
       begrunnelse: string;
-      'harKravP\u00E5Renter'?: boolean | null;
-      'harRettUtoverS\u00F8knadsdato': boolean;
+      /** @enum {string} */
+      harRett: 'Ja' | 'Nei' | 'HarRettIkkeIStandTilÅSøkeTidligere' | 'HarRettMisvisendeOpplysninger';
       /**
        * Format: date
        * @example 2025-04-01
