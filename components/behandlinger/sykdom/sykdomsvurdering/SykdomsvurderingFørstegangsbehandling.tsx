@@ -90,6 +90,7 @@ export const SykdomsvurderingFørstegangsbehandling = ({ form, skalVurdereYrkess
                   name={`vurderinger.${index}.erNedsettelseIArbeidsevneAvEnVissVarighet`}
                   control={form.control}
                   label={'Er den nedsatte arbeidsevnen av en viss varighet?'}
+                  description={'Om du svarer nei, vil brukeren vurderes for AAP som sykepengeerstatning etter § 11-13.'}
                   horisontal={true}
                   rules={{
                     required: 'Du må svare på om den nedsatte arbeidsevnen er av en viss varighet',

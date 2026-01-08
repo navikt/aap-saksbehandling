@@ -12,7 +12,7 @@ import { DigitaliserAnnetRelevantDokument } from './annetrelevantdokument/Digita
 import { VStack } from '@navikt/ds-react';
 import { DigitaliserKlage } from 'components/postmottak/digitaliserdokument/klage/DigitaliserKlage';
 import { DigitaliserMeldekortV2 } from 'components/postmottak/digitaliserdokument/meldekort/DigitaliserMeldekortV2';
-import { toggles } from 'lib/utils/toggles';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   behandlingsVersjon: number;
@@ -35,6 +35,8 @@ export const DigitaliserDokument = ({
 }: Props) => {
   const [kategori, setKategori] = useState<KategoriserDokumentKategori | undefined>(grunnlag.vurdering?.kategori);
   const { løsBehovOgGåTilNesteSteg, status, isLoading } = usePostmottakLøsBehovOgGåTilNesteSteg('DIGITALISER_DOKUMENT');
+
+  const nyDigitaliseringAvMeldekortEnabled = useFeatureFlag('DigitaliseringAvMeldekortV2Frontend');
 
   function handleSubmit(kategori: KategoriserDokumentKategori, jsonString: string | null, søknadsdato: Date | null) {
     løsBehovOgGåTilNesteSteg({
@@ -68,10 +70,10 @@ export const DigitaliserDokument = ({
           isLoading={isLoading}
         />
       )}
-      {kategori === 'MELDEKORT' && !toggles.featureNyDigitaliseringAvMeldekort && (
+      {kategori === 'MELDEKORT' && !nyDigitaliseringAvMeldekortEnabled && (
         <DigitaliserMeldekort submit={handleSubmit} readOnly={readOnly} isLoading={isLoading} />
       )}
-      {kategori === 'MELDEKORT' && toggles.featureNyDigitaliseringAvMeldekort && (
+      {kategori === 'MELDEKORT' && nyDigitaliseringAvMeldekortEnabled && (
         <DigitaliserMeldekortV2 submit={handleSubmit} readOnly={readOnly} isLoading={isLoading} />
       )}
       {kategori === 'KLAGE' && (

@@ -174,10 +174,10 @@ export const Brevbygger = ({
     const res = await clientOppdaterBrevdata(referanse, {
       delmaler: [...obligatoriskeDelmaler, ...valgteDelmaler],
       valg: valgteValg,
-      betingetTekst: [],
-      faktagrunnlag: [],
+      betingetTekst: brevdata?.betingetTekst || [],
+      faktagrunnlag: brevdata?.faktagrunnlag || [],
       fritekster: fritekst,
-      periodetekster: [],
+      periodetekster: brevdata?.periodetekster || [],
     });
     if (isSuccess(res)) {
       hentDokument(referanse, setDataUri, setPdfIsLoading);
