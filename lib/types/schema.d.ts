@@ -11474,7 +11474,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.rettighetsperiode.RettighetsperiodeVurderingResponse': {
       begrunnelse: string;
       /** @enum {string} */
-      harRett: 'Ja' | 'Nei' | 'HarRettÅpenbart' | 'HarRettMisvisendeOpplysninger';
+      harRett: 'Ja' | 'Nei' | 'HarRettIkkeIStandTilÅSøkeTidligere' | 'HarRettMisvisendeOpplysninger';
       /**
        * Format: date
        * @example 2025-04-01
@@ -12850,7 +12850,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.rettighetsperiode.RettighetsperiodeVurderingDTO': {
       begrunnelse: string;
       /** @enum {string} */
-      harRett: 'Ja' | 'Nei' | 'HarRettÅpenbart' | 'HarRettMisvisendeOpplysninger';
+      harRett: 'Ja' | 'Nei' | 'HarRettIkkeIStandTilÅSøkeTidligere' | 'HarRettMisvisendeOpplysninger';
       /**
        * Format: date
        * @example 2025-04-01

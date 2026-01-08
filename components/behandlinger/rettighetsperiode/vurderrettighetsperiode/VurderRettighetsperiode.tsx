@@ -22,7 +22,7 @@ interface Props {
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
-type HarRettOptions = 'Ja' | 'Nei' | 'HarRettÅpenbart' | 'HarRettMisvisendeOpplysninger';
+type HarRettOptions = 'Ja' | 'Nei' | 'HarRettIkkeIStandTilÅSøkeTidligere' | 'HarRettMisvisendeOpplysninger';
 
 interface FormFields {
   begrunnelse: string;
@@ -63,7 +63,7 @@ export const VurderRettighetsperiode = ({
   const commonHarRettOptions = [
     {
       label: 'Ja, bruker ha åpenbart ikke vært i stand til å sette fram krav tidligere',
-      value: 'HarRettÅpenbart',
+      value: 'HarRettIkkeIStandTilÅSøkeTidligere',
     },
     {
       label: 'Ja, bruker har ikke satt fram krav tidligere fordi trygdens organer har gitt misvisende opplysninger',
