@@ -113,33 +113,42 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
       visningActions={visningActions}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
-      {!oppholdetErMinstFireMaanederOgToMaanederInnI.some((vurdering) => vurdering.isValid) && (
-        <Alert size={'small'} aria-label={'Institusjonsopphold'} variant={'info'}>
-          <div className={styles.content}>
-            <span>Brukeren har et institusjonsopphold, men det varer for kort til at AAP kan reduseres.</span>
-          </div>
-        </Alert>
-      )}
-
-      <InstitusjonsoppholdTabell
-        label={'Brukeren har eller har hatt følgende institusjonsopphold'}
-        beskrivelse={'Opphold over tre måneder på helseinstitusjon kan gi redusert AAP-ytelse.'}
-        instutisjonsopphold={grunnlag.opphold}
-      />
-
-      {fields.map((field, index) => {
-        return (
-          <div key={field.id} className={styles.vurdering}>
-            <div>
-              <Label size={'medium'}>Periode</Label>
-              <BodyShort>
-                {formaterDatoForFrontend(field.periode.fom)} - {formaterDatoForFrontend(field.periode.tom)}
-              </BodyShort>
+      {!oppholdetErMinstFireMaanederOgToMaanederInnI.some((vurdering) => vurdering.isValid) ? (
+        <>
+          <Alert size={'small'} aria-label={'Institusjonsopphold'} variant={'info'}>
+            <div className={styles.content}>
+              <span>Brukeren har et institusjonsopphold, men det varer for kort til at AAP kan reduseres.</span>
             </div>
-            <Helseinstitusjonsvurdering form={form} helseinstitusjonoppholdIndex={index} readonly={formReadOnly} />
-          </div>
-        );
-      })}
+          </Alert>
+
+          <InstitusjonsoppholdTabell
+            label={'Brukeren har eller har hatt følgende institusjonsopphold'}
+            beskrivelse={'Opphold over tre måneder på helseinstitusjon kan gi redusert AAP-ytelse.'}
+            instutisjonsopphold={grunnlag.opphold}
+          />
+        </>
+      ) : (
+        <>
+          <InstitusjonsoppholdTabell
+            label={'Brukeren har eller har hatt følgende institusjonsopphold'}
+            beskrivelse={'Opphold over tre måneder på helseinstitusjon kan gi redusert AAP-ytelse.'}
+            instutisjonsopphold={grunnlag.opphold}
+          />
+          {fields.map((field, index) => {
+            return (
+              <div key={field.id} className={styles.vurdering}>
+                <div>
+                  <Label size={'medium'}>Periode</Label>
+                  <BodyShort>
+                    {formaterDatoForFrontend(field.periode.fom)} - {formaterDatoForFrontend(field.periode.tom)}
+                  </BodyShort>
+                </div>
+                <Helseinstitusjonsvurdering form={form} helseinstitusjonoppholdIndex={index} readonly={formReadOnly} />
+              </div>
+            );
+          })}
+        </>
+      )}
     </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };
