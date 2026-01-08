@@ -48,7 +48,7 @@ export const SykdomsvurderingFormInput = ({
 }: Props) => {
   const behandlingErRevurdering = typeBehandling === 'Revurdering';
   const behandlingErFørstegangsbehandling = typeBehandling === 'Førstegangsbehandling';
-  const vurderingenGjelderFra = form.watch(`vurderinger.${index}.vurderingenGjelderFra`);
+  const vurderingenGjelderFra = form.watch(`vurderinger.${index}.fraDato`);
 
   const behandlingErRevurderingAvFørstegangsbehandling = useCallback(() => {
     if (!behandlingErRevurdering) {
