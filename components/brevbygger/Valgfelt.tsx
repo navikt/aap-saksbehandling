@@ -31,7 +31,7 @@ export const Valgfelt = ({ control, delmalIndex, valg, brevmal, watch }: Valgfel
 
         const valgtAlternativ = watch(`delmaler.${delmalIndex}.valg.${index}.valgtAlternativ`);
         return (
-          <>
+          <div key={v.noekkel}>
             <SelectWrapper
               control={control}
               name={`delmaler.${delmalIndex}.valg.${index}.valgtAlternativ`}
@@ -54,7 +54,7 @@ export const Valgfelt = ({ control, delmalIndex, valg, brevmal, watch }: Valgfel
                 />
               </>
             )}
-          </>
+          </div>
         );
       })}
     </VStack>
