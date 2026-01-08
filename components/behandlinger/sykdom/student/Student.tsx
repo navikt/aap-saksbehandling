@@ -6,6 +6,7 @@ import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { getStegData } from 'lib/utils/steg';
 import { SykestipendMedDataFetching } from 'components/behandlinger/sykdom/student/sykestipend/SykestipendMedDataFetching';
+import { unleashService } from 'lib/services/unleash/unleashService';
 
 interface Props {
   behandlingsreferanse: string;
@@ -33,7 +34,7 @@ export const Student = async ({ behandlingsreferanse }: Props) => {
           <StudentvurderingMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={avklarStudentSteg} />
         </StegSuspense>
       )}
-      {sykestipendSteg.skalViseSteg && (
+      {sykestipendSteg.skalViseSteg && unleashService.isEnabled('Sykestipend') && (
         <StegSuspense>
           <SykestipendMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={avklarStudentSteg} />
         </StegSuspense>
