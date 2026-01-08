@@ -98,6 +98,8 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov): strin
       return 'Dødsfall bruker';
     case 'EFFEKTUER_AKTIVITETSPLIKT_11_9':
       return 'Effektuer aktivitetsplikt § 11-9';
+    case 'BARNETILLEGG_SATS_REGULERING':
+      return 'Satsregulering barnetillegg';
     default:
       return vurderingsbehov;
   }
@@ -178,6 +180,8 @@ export const formaterFrittVurderingsbehov = (vurderingsbehov: String) => {
       return 'Overgang til arbeid';
     case 'OVERGANG_UFORE':
       return 'Overgang til uføre';
+    case 'BARNETILLEGG_SATS_REGULERING':
+      return 'Satsregulering barnetillegg';
     default:
       return vurderingsbehov;
   }
