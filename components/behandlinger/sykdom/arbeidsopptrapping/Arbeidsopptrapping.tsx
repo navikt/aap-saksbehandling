@@ -100,7 +100,7 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
     if (!erPerioderGyldige) {
       return;
     }
-    if (data.vurderinger.length === 0) {
+    if (data.vurderinger.length === 0 && nyeVurderinger.length === 0) {
       visningActions.onBekreftClick();
       return;
     }
