@@ -57,7 +57,7 @@ export const OppgaverInnUt = ({ behandlingstyperQuery }: Props) => {
           },
         ]}
         layout={{
-          yaxis: { title: 'Antall', dtick: antallOppgaver.nye > 4 || antallOppgaver.lukkede > 4 ? '' : 1 },
+          yaxis: { title: { text: 'Antall' }, dtick: antallOppgaver.nye > 4 || antallOppgaver.lukkede > 4 ? '' : 1 },
           showlegend: false,
           autosize: true,
         }}

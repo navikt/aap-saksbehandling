@@ -28,7 +28,7 @@ export const TypeBehandlinger = ({ åpneOgGjennomsnitt }: Props) => {
           orientation: 'h',
         }))}
         layout={{
-          yaxis: { title: 'Antall', automargin: true },
+          yaxis: { title: { text: 'Antall' }, automargin: true },
           showlegend: false,
         }}
       />

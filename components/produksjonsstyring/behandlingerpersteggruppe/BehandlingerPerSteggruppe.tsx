@@ -62,7 +62,7 @@ export const BehandlingerPerSteggruppe = ({ data, title }: Props) => {
             orientation: 'h',
           }))}
           layout={{
-            xaxis: { title: 'Antall' },
+            xaxis: { title: { text: 'Antall' } },
             yaxis: { automargin: true },
             showlegend: false,
           }}
