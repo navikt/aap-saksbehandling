@@ -4,12 +4,14 @@ import { isLocal } from 'lib/utils/environment';
 import { getToken } from '@navikt/oasis';
 import { redirect } from 'next/navigation';
 
-let _issuerMetadata: { issuer: string; jwks_uri: string };
 let _remoteJWKSet: GetKeyFunction<JWSHeaderParameters, FlattenedJWSInput>;
 
 export async function validerToken(token: string | Uint8Array) {
+  const issuer = process.env.AZURE_OPENID_CONFIG_ISSUER;
+  if (!issuer) throw new Error('Miljøvariabelen "AZURE_OPENID_CONFIG_ISSUER" må være satt');
+
   return jwtVerify(token, await jwks(), {
-    issuer: (await getIssuerMetadata()).issuer,
+    issuer: issuer,
   });
 }
 
@@ -19,18 +21,6 @@ async function jwks() {
   }
 
   return _remoteJWKSet;
-}
-
-async function getIssuerMetadata() {
-  if (!_issuerMetadata) {
-    const url = process.env.AZURE_APP_WELL_KNOWN_URL;
-    if (!url) throw new Error('Miljøvariabelen "AZURE_APP_WELL_KNOWN_URL" må være satt');
-
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(`Klarte ikke hente AzureAD-issuer fra ${url}`);
-    _issuerMetadata = await res.json();
-  }
-  return _issuerMetadata;
 }
 
 const lokalFakeAccessToken = isLocal();
