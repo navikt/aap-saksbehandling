@@ -1497,22 +1497,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/oasis@npm:4.1.1":
-  version: 4.1.1
-  resolution: "@navikt/oasis@npm:4.1.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Foasis%2F4.1.1%2F970a0555b93c862b7c7b0919349f48fc8e7de53c"
+"@navikt/oasis@npm:3.8.0":
+  version: 3.8.0
+  resolution: "@navikt/oasis@npm:3.8.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Foasis%2F3.8.0%2Ffc6862d934adfbefa382220614af18160688cd1e"
   dependencies:
-    "@navikt/texas": "npm:^4.1.1"
-    "@opentelemetry/api": "npm:^1.9.0"
-    jose: "npm:^6.1.0"
-    prom-client: "npm:^15.1.3"
-  checksum: 10c0/c83a88fd909801de38d0e05044439cf49d06e7274b8cca741045761ea059e8ab2b0eb40e0d29465e9b264996dc159ab21908a2ce447b8335c1c6301a808654db
-  languageName: node
-  linkType: hard
-
-"@navikt/texas@npm:^4.1.1":
-  version: 4.1.1
-  resolution: "@navikt/texas@npm:4.1.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Ftexas%2F4.1.1%2Fa4875c9cc658d6cebf4185bb2c89a17c54f15827"
-  checksum: 10c0/656334257044382dc9de693538f23740a77ea2529e9e6c3e6ad98470dd34da87d5344e995d5f334812e11ef03c8ac07e0dbc9519e3659d23bf31efe5deacb114
+    jose: "npm:^5.2.3"
+    openid-client: "npm:^5.6.5"
+    prom-client: "npm:^15.1.0"
+  checksum: 10c0/225e8e26f3651a795c75c2de39cec0b4d9231b2adfc60ec9dd6ed28a94c1746dfffc0ca6aed0eaeeee2f4d782702345a1d94f32be7bad8f54488a59d550509ae
   languageName: node
   linkType: hard
 
@@ -1675,7 +1667,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@opentelemetry/api@npm:1.9.0, @opentelemetry/api@npm:^1.3.0, @opentelemetry/api@npm:^1.4.0, @opentelemetry/api@npm:^1.9.0":
+"@opentelemetry/api@npm:1.9.0, @opentelemetry/api@npm:^1.3.0, @opentelemetry/api@npm:^1.4.0":
   version: 1.9.0
   resolution: "@opentelemetry/api@npm:1.9.0"
   checksum: 10c0/9aae2fe6e8a3a3eeb6c1fdef78e1939cf05a0f37f8a4fae4d6bf2e09eb1e06f966ece85805626e01ba5fab48072b94f19b835449e58b6d26720ee19a58298add
@@ -3203,7 +3195,7 @@ __metadata:
     "@navikt/ds-react": "npm:7.37.0"
     "@navikt/eslint-config-aap": "npm:5.5.1"
     "@navikt/familie-endringslogg": "npm:14.0.4"
-    "@navikt/oasis": "npm:4.1.1"
+    "@navikt/oasis": "npm:3.8.0"
     "@opentelemetry/api": "npm:1.9.0"
     "@opentelemetry/api-logs": "npm:0.208.0"
     "@portabletext/react": "npm:6.0.2"
@@ -7062,7 +7054,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jose@npm:6.1.3, jose@npm:^6.1.0":
+"jose@npm:6.1.3":
   version: 6.1.3
   resolution: "jose@npm:6.1.3"
   checksum: 10c0/b9577b4a7a5e84131011c23823db9f5951eae3ba796771a6a2401ae5dd50daf71104febc8ded9c38146aa5ebe94a92ac09c725e699e613ef26949b9f5a8bc30f
@@ -7073,6 +7065,13 @@ __metadata:
   version: 4.15.9
   resolution: "jose@npm:4.15.9"
   checksum: 10c0/4ed4ddf4a029db04bd167f2215f65d7245e4dc5f36d7ac3c0126aab38d66309a9e692f52df88975d99429e357e5fd8bab340ff20baab544d17684dd1d940a0f4
+  languageName: node
+  linkType: hard
+
+"jose@npm:^5.2.3":
+  version: 5.10.0
+  resolution: "jose@npm:5.10.0"
+  checksum: 10c0/e20d9fc58d7e402f2e5f04e824b8897d5579aae60e64cb88ebdea1395311c24537bf4892f7de413fab1acf11e922797fb1b42269bc8fc65089a3749265ccb7b0
   languageName: node
   linkType: hard
 
@@ -8258,6 +8257,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"openid-client@npm:^5.6.5":
+  version: 5.7.1
+  resolution: "openid-client@npm:5.7.1"
+  dependencies:
+    jose: "npm:^4.15.9"
+    lru-cache: "npm:^6.0.0"
+    object-hash: "npm:^2.2.0"
+    oidc-token-hash: "npm:^5.0.3"
+  checksum: 10c0/6aae649758562002eace7574b6eda02be7eddbb0df61eef497ae98b7a4a0ae4c6b09f3f0c1b9b6cb7fcc0c70bbde2576691bf31b870db1f19ab634c1def10bc7
+  languageName: node
+  linkType: hard
+
 "optionator@npm:^0.9.3":
   version: 0.9.4
   resolution: "optionator@npm:0.9.4"
@@ -8770,7 +8781,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prom-client@npm:^15.1.3":
+"prom-client@npm:^15.1.0":
   version: 15.1.3
   resolution: "prom-client@npm:15.1.3"
   dependencies:
