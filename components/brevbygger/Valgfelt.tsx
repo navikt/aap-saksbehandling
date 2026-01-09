@@ -27,7 +27,7 @@ export const Valgfelt = ({ control, delmalIndex, valg, brevmal, watch }: Valgfel
           label: finnBeskrivelseForAlternativ(alternativ.verdi, brevmal),
         }));
 
-        alternativer.unshift({ value: '', label: '' });
+        alternativer.unshift({ value: '', label: '- Velg et alternativ -' });
 
         const valgtAlternativ = watch(`delmaler.${delmalIndex}.valg.${index}.valgtAlternativ`);
         return (
