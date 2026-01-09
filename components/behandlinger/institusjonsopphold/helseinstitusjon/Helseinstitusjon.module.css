@@ -12,12 +12,6 @@
   box-shadow: none;
 }
 
-.expansioncardcontent {
-  background-color: var(--a-surface-info-subtle);
-  box-shadow: none;
-  border: 1px solid var(--a-border-subtle);
-}
-
 .content {
   display: flex;
   align-items: center;
