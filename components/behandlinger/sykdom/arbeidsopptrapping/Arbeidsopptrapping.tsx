@@ -74,6 +74,8 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
     defaultValues,
   });
 
+  const nyeVurderinger = grunnlag?.nyeVurderinger ?? [];
+
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const ikkeVurderbarePerioder = grunnlag?.ikkeVurderbarePerioder ?? [];
 
@@ -96,6 +98,10 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
       tidligsteDatoMåMatcheMedRettighetsperiode: false,
     });
     if (!erPerioderGyldige) {
+      return;
+    }
+    if (data.vurderinger.length === 0 && nyeVurderinger.length === 0) {
+      visningActions.onBekreftClick();
       return;
     }
     const losning: LøsPeriodisertBehovPåBehandling = {

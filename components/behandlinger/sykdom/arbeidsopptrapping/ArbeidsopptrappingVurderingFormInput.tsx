@@ -9,7 +9,7 @@ import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrap
 import { erDatoIPeriode, validerDato } from 'lib/validation/dateValidation';
 import { parse } from 'date-fns';
 import { Periode } from 'lib/types/types';
-import { stringToDate } from 'lib/utils/date';
+import { formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
 import { JaEllerNei } from 'lib/utils/form';
 
 interface Props {
@@ -42,7 +42,7 @@ export const ArbeidsopptrappingVurderingFormInput = ({ index, readonly, form, ik
                 });
 
                 return funnetIkkeRelevantPeriode
-                  ? `Dato kan ikke være inne i perioden (${funnetIkkeRelevantPeriode.fom} - ${funnetIkkeRelevantPeriode.tom})`
+                  ? `Dato kan ikke være inne i perioden (${formaterDatoForFrontend(funnetIkkeRelevantPeriode.fom)} - ${formaterDatoForFrontend(funnetIkkeRelevantPeriode.tom)})`
                   : true;
               },
             },
