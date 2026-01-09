@@ -7,7 +7,7 @@ import { AntallDagerFilter } from '../antalldagerfilter/AntallDagerFilter';
 import { ResponsivePlot } from '../responsiveplot/ResponsivePlot';
 import { PlotWrapper } from '../plotwrapper/PlotWrapper';
 import { BehandlingEndringerPerDag } from 'lib/types/statistikkTypes';
-import { filtrerPeriode } from '../../../lib/utils/datefilter';
+import { filtrerPeriode } from 'lib/utils/datefilter';
 
 interface Props {
   behandlingerEndringer: BehandlingEndringerPerDag[];
@@ -55,7 +55,7 @@ export const BehandlingerInnUt = ({ behandlingerEndringer }: Props) => {
           },
         ]}
         layout={{
-          yaxis: { title: 'Antall', dtick: sumAvsluttede > 4 || sumNye > 4 ? '' : 1 },
+          yaxis: { title: { text: 'Antall' }, dtick: sumAvsluttede > 4 || sumNye > 4 ? '' : 1 },
           showlegend: false,
           autosize: true,
         }}

@@ -5,10 +5,10 @@ import { PlotWrapper } from 'components/produksjonsstyring/plotwrapper/PlotWrapp
 import { ResponsivePlot } from 'components/produksjonsstyring/responsiveplot/ResponsivePlot';
 import { useState } from 'react';
 import { AntallDagerFilter, periodeOptions } from '../antalldagerfilter/AntallDagerFilter';
-import { OppslagsPeriode } from '../../../lib/types/statistikkTypes';
-import { antallÅpneBehandlingerPerBehandlingstypeClient, venteÅrsakerClient } from '../../../lib/oppgaveClientApi';
+import { OppslagsPeriode } from 'lib/types/statistikkTypes';
+import { antallÅpneBehandlingerPerBehandlingstypeClient, venteÅrsakerClient } from 'lib/oppgaveClientApi';
 import useSWR from 'swr';
-import { isSuccess } from '../../../lib/utils/api';
+import { isSuccess } from 'lib/utils/api';
 
 interface Props {
   behandlingstyperQuery: string;
@@ -68,7 +68,10 @@ export const ApneBehandlinger = ({ behandlingstyperQuery }: Props) => {
           },
         ]}
         layout={{
-          yaxis: { title: 'Antall', dtick: totaltAntallÅpneBehandlinger > 4 || antallPåVentEllerNull > 4 ? '' : 1 },
+          yaxis: {
+            title: { text: 'Antall' },
+            dtick: totaltAntallÅpneBehandlinger > 4 || antallPåVentEllerNull > 4 ? '' : 1,
+          },
           showlegend: false,
           autosize: true,
         }}
