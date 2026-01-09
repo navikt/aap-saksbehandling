@@ -5,7 +5,7 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgG
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { Behovstype } from 'lib/utils/form';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { MellomlagretVurdering } from 'lib/types/types';
+import { MellomlagretVurdering, SykestipendGrunnlag } from 'lib/types/types';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormEvent } from 'react';
 import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
@@ -16,12 +16,18 @@ import { formaterDatoForBackend } from 'lib/utils/date';
 import { parse } from 'date-fns';
 
 interface Props {
+  grunnlag: SykestipendGrunnlag;
   behandlingVersjon: number;
   readOnly: boolean;
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
-export const SykestipendVurdering = ({ behandlingVersjon, readOnly, initialMellomlagretVurdering }: Props) => {
+export const SykestipendVurdering = ({
+  grunnlag,
+  behandlingVersjon,
+  readOnly,
+  initialMellomlagretVurdering,
+}: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('SAMORDNING_SYKESTIPEND');
@@ -39,10 +45,7 @@ export const SykestipendVurdering = ({ behandlingVersjon, readOnly, initialMello
 
   const defaultValue: SykestipendFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
-    : {
-        begrunnelse: '',
-        perioder: [],
-      };
+    : mapVurderingTilForm(grunnlag?.gjeldendeVurdering);
 
   const { form, formFields } = useConfigForm<SykestipendFormFields>({
     begrunnelse: {
@@ -81,17 +84,20 @@ export const SykestipendVurdering = ({ behandlingVersjon, readOnly, initialMello
       heading={'§ 11-29 Sykestipend fra lånekassen'}
       steg={'SAMORDNING_SYKESTIPEND'}
       onSubmit={handleSubmit}
-      isLoading={isLoading}
       status={status}
+      isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
+      vurdertAvAnsatt={grunnlag?.gjeldendeVurdering?.vurdertAv}
+      mellomlagretVurdering={mellomlagretVurdering}
+      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
+      onDeleteMellomlagringClick={() => {
+        slettMellomlagring(() =>
+          form.reset(grunnlag?.gjeldendeVurdering ? mapVurderingTilForm(grunnlag.gjeldendeVurdering) : tomtForm())
+        );
+      }}
       visningModus={visningModus}
       visningActions={visningActions}
-      onDeleteMellomlagringClick={() => {
-        slettMellomlagring(() => form.reset());
-      }}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
-      mellomlagretVurdering={mellomlagretVurdering}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
       <VStack gap={'6'}>
@@ -108,4 +114,22 @@ export interface SykestipendFormFields {
     fom: string;
     tom: string;
   }[];
+}
+
+function mapVurderingTilForm(vurdering: SykestipendGrunnlag['gjeldendeVurdering']): SykestipendFormFields {
+  return {
+    begrunnelse: vurdering?.begrunnelse ?? '',
+    perioder:
+      vurdering?.perioder.map((periode) => ({
+        fom: periode.fom,
+        tom: periode.tom,
+      })) ?? [],
+  };
+}
+
+function tomtForm(): SykestipendFormFields {
+  return {
+    begrunnelse: '',
+    perioder: [],
+  };
 }

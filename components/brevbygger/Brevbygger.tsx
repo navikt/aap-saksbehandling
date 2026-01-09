@@ -5,6 +5,7 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import { Delmal } from 'components/brevbygger/Delmal';
 import {
   delmalErObligatorisk,
+  delmalSkalVises,
   erValgtIdFritekst,
   finnParentIdForValgtAlternativ,
   mapDelmalerFraSanity,
@@ -242,16 +243,18 @@ export const Brevbygger = ({
             onSubmit(data);
           })}
         >
-          {fields.map((feltet, index) => (
-            <Delmal
-              delmalFelt={feltet}
-              index={index}
-              control={control}
-              key={feltet.id}
-              watch={watch}
-              brevmal={parsedBrevmal}
-            />
-          ))}
+          {fields
+            .filter((feltet) => delmalSkalVises(feltet.noekkel, parsedBrevmal))
+            .map((feltet, index) => (
+              <Delmal
+                delmalFelt={feltet}
+                index={index}
+                control={control}
+                key={feltet.id}
+                watch={watch}
+                brevmal={parsedBrevmal}
+              />
+            ))}
           <Button variant="secondary">Oppdater brevdata</Button>
         </form>
         <Button type="button" onClick={() => sendBrev()} loading={isLoading}>

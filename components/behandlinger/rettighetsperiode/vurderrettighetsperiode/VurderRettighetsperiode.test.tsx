@@ -32,8 +32,8 @@ describe('Vurder rettighetsperiode', () => {
     const RettighetsperiodeGrunnlagMedVurdering: RettighetsperiodeGrunnlag = {
       harTilgangTilÅSaksbehandle: false,
       vurdering: {
+        harRett: 'Nei',
         begrunnelse: 'Dette er min vurdering som er bekreftet',
-        harRettUtoverSøknadsdato: false,
         vurdertAv: { ident: 'Kjell T. Ringen', dato: '2025-08-21' },
       },
     };
@@ -65,7 +65,7 @@ describe('Vurder rettighetsperiode', () => {
       );
 
       await user.type(
-        screen.getByRole('textbox', { name: 'Begrunnelse' }),
+        screen.getByRole('textbox', { name: 'Vilkårsvurdering' }),
         'Her har jeg begynt å skrive en vurdering..'
       );
       expect(screen.queryByText('Utkast lagret 21.08.2025 00:00 (Jan T. Loven)')).not.toBeInTheDocument();
@@ -115,7 +115,7 @@ describe('Vurder rettighetsperiode', () => {
       );
 
       const begrunnelseFelt = screen.getByRole('textbox', {
-        name: /begrunnelse/i,
+        name: /Vilkårsvurdering/i,
       });
 
       expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er mellomlagret');
@@ -131,7 +131,7 @@ describe('Vurder rettighetsperiode', () => {
       );
 
       const begrunnelseFelt = screen.getByRole('textbox', {
-        name: /begrunnelse/i,
+        name: /Vilkårsvurdering/i,
       });
 
       expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er bekreftet');
@@ -147,9 +147,9 @@ describe('Vurder rettighetsperiode', () => {
         />
       );
 
-      await user.type(screen.getByRole('textbox', { name: 'Begrunnelse' }), ' her er ekstra tekst');
+      await user.type(screen.getByRole('textbox', { name: 'Vilkårsvurdering' }), ' her er ekstra tekst');
 
-      expect(screen.getByRole('textbox', { name: 'Begrunnelse' })).toHaveValue(
+      expect(screen.getByRole('textbox', { name: 'Vilkårsvurdering' })).toHaveValue(
         'Dette er min vurdering som er mellomlagret her er ekstra tekst'
       );
 
@@ -157,7 +157,7 @@ describe('Vurder rettighetsperiode', () => {
 
       await user.click(slettKnapp);
 
-      expect(screen.getByRole('textbox', { name: 'Begrunnelse' })).toHaveValue('');
+      expect(screen.getByRole('textbox', { name: 'Vilkårsvurdering' })).toHaveValue('');
     });
 
     it('Skal resette skjema til bekreftet vurdering dersom det finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
@@ -170,9 +170,9 @@ describe('Vurder rettighetsperiode', () => {
         />
       );
 
-      await user.type(screen.getByRole('textbox', { name: 'Begrunnelse' }), ' her er ekstra tekst');
+      await user.type(screen.getByRole('textbox', { name: 'Vilkårsvurdering' }), ' her er ekstra tekst');
 
-      expect(screen.getByRole('textbox', { name: 'Begrunnelse' })).toHaveValue(
+      expect(screen.getByRole('textbox', { name: 'Vilkårsvurdering' })).toHaveValue(
         'Dette er min vurdering som er mellomlagret her er ekstra tekst'
       );
 
@@ -180,7 +180,7 @@ describe('Vurder rettighetsperiode', () => {
 
       await user.click(slettKnapp);
 
-      expect(screen.getByRole('textbox', { name: 'Begrunnelse' })).toHaveValue(
+      expect(screen.getByRole('textbox', { name: 'Vilkårsvurdering' })).toHaveValue(
         'Dette er min vurdering som er bekreftet'
       );
     });

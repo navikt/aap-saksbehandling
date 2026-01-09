@@ -1168,6 +1168,44 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/behandling/{referanse}/grunnlag/sykestipend': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description referanse */
+          referanse: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.student.sykestipend.SykestipendGrunnlagResponse'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/behandling/{referanse}/grunnlag/sykdom/sykdom': {
     parameters: {
       query?: never;
@@ -11553,8 +11591,8 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.behandling.rettighetsperiode.RettighetsperiodeVurderingResponse': {
       begrunnelse: string;
-      'harKravP\u00E5Renter'?: boolean | null;
-      'harRettUtoverS\u00F8knadsdato': boolean;
+      /** @enum {string} */
+      harRett: 'Ja' | 'Nei' | 'HarRettIkkeIStandTilÅSøkeTidligere' | 'HarRettMisvisendeOpplysninger';
       /**
        * Format: date
        * @example 2025-04-01
@@ -11582,6 +11620,16 @@ export interface components {
       'godkjentStudieAvL\u00E5nekassen'?: boolean | null;
       harAvbruttStudie: boolean;
       harBehovForBehandling?: boolean | null;
+      vurdertAv: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.student.sykestipend.SykestipendGrunnlagResponse': {
+      gjeldendeVurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.student.sykestipend.SykestipendvurderingResponse'];
+      'harTilgangTil\u00C5Saksbehandle': boolean;
+      historiskeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.student.sykestipend.SykestipendvurderingResponse'][];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.student.sykestipend.SykestipendvurderingResponse': {
+      begrunnelse: string;
+      perioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
       vurdertAv: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.svarfraandreinstans.svarfraandreinstans.SvarFraAndreinstansDto': {
@@ -12929,8 +12977,8 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.rettighetsperiode.RettighetsperiodeVurderingDTO': {
       begrunnelse: string;
-      'harKravP\u00E5Renter'?: boolean | null;
-      'harRettUtoverS\u00F8knadsdato': boolean;
+      /** @enum {string} */
+      harRett: 'Ja' | 'Nei' | 'HarRettIkkeIStandTilÅSøkeTidligere' | 'HarRettMisvisendeOpplysninger';
       /**
        * Format: date
        * @example 2025-04-01
