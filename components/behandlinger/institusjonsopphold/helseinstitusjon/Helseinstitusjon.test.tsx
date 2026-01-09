@@ -34,6 +34,8 @@ const grunnlagUtenVurdering: HelseinstitusjonGrunnlag = {
       status: 'UAVKLART',
     },
   ],
+  barnetilleggDekkerHelePerioden: false,
+  forKortOpphold: false,
 };
 
 const grunnlagMedVurdering: HelseinstitusjonGrunnlag = {
@@ -67,6 +69,8 @@ const grunnlagMedVurdering: HelseinstitusjonGrunnlag = {
       status: 'UAVKLART',
     },
   ],
+  barnetilleggDekkerHelePerioden: false,
+  forKortOpphold: false,
 };
 
 beforeEach(() => {
