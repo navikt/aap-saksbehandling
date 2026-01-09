@@ -66,8 +66,6 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
     name: 'helseinstitusjonsvurderinger',
   });
 
-  const oppholdetErMinstFireMaanederOgToMaanederInnI = vurderingMap(grunnlag.vurderinger);
-
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
       løsBehovOgGåTilNesteSteg(
@@ -93,7 +91,6 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
       );
     })(event);
   };
-
   return (
     <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'§ 11-25 Helseinstitusjon'}
@@ -103,7 +100,6 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       isLoading={isLoading}
       vilkårTilhørerNavKontor={false}
-      vurdertAvAnsatt={grunnlag.vurdertAv}
       mellomlagretVurdering={mellomlagretVurdering}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() =>
@@ -113,14 +109,22 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
       visningActions={visningActions}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
-      {!oppholdetErMinstFireMaanederOgToMaanederInnI.some((vurdering) => vurdering.isValid) ? (
+      {grunnlag.barnetilleggDekkerHelePerioden && (
+        <Alert size={'small'} aria-label={'Barnetillegg'} variant={'info'}>
+          <div className={styles.content}>
+            <span>Brukeren har et institusjonsopphold, men siden det gis barnetillegg kan ikke AAP reduseres.</span>
+          </div>
+        </Alert>
+      )}
+      {grunnlag.forKortOpphold && (
+        <Alert size={'small'} aria-label={'Institusjonsopphold'} variant={'info'}>
+          <div className={styles.content}>
+            <span>Brukeren har et institusjonsopphold, men det varer for kort til at AAP kan reduseres.</span>
+          </div>
+        </Alert>
+      )}
+      {grunnlag.barnetilleggDekkerHelePerioden || grunnlag.forKortOpphold ? (
         <>
-          <Alert size={'small'} aria-label={'Institusjonsopphold'} variant={'info'}>
-            <div className={styles.content}>
-              <span>Brukeren har et institusjonsopphold, men det varer for kort til at AAP kan reduseres.</span>
-            </div>
-          </Alert>
-
           <InstitusjonsoppholdTabell
             label={'Brukeren har eller har hatt følgende institusjonsopphold'}
             beskrivelse={'Opphold over tre måneder på helseinstitusjon kan gi redusert AAP-ytelse.'}
@@ -171,21 +175,4 @@ function mapVurderingToDraftFormFields(vurderinger: HelseinstitusjonGrunnlag['vu
       }
     }),
   };
-}
-
-function vurderingMap(vurderinger: HelseinstitusjonGrunnlag['vurderinger']) {
-  return vurderinger.map((v) => {
-    const fom = new Date(v.periode.fom);
-    const tom = new Date(v.periode.tom);
-
-    const durationMonths = monthsBetween(fom, tom);
-    return {
-      ...v,
-      isValid: durationMonths >= 4,
-    };
-  });
-}
-
-function monthsBetween(start: Date, end: Date): number {
-  return (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
 }

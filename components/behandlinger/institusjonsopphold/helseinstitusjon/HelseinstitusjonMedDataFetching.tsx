@@ -25,7 +25,6 @@ export const HelseinstitusjonMedDataFetching = async ({ behandlingsreferanse, st
   if (!skalViseSteg(stegData, grunnlag.data.vurderinger.length > 0)) {
     return null;
   }
-
   return (
     <Helseinstitusjon
       grunnlag={grunnlag.data}
