@@ -72,6 +72,7 @@ import {
   SykdomsGrunnlag,
   SykdomsvurderingBrevGrunnlag,
   SykepengeerstatningGrunnlag,
+  SykestipendGrunnlag,
   SøkPåSakInfo,
   TilkjentYtelseGrunnlag,
   TrekkKlageGrunnlag,
@@ -171,6 +172,11 @@ export const hentYrkesskadeVurderingGrunnlag = async (behandlingsReferanse: stri
 export const hentStudentGrunnlag = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/student`;
   return await apiFetch<StudentGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentSykestipendGrunnlag = async (behandlingsReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/sykestipend`;
+  return await apiFetch<SykestipendGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentSykdomsGrunnlag = async (behandlingsReferanse: string) => {
