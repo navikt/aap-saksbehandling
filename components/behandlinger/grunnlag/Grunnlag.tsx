@@ -41,8 +41,12 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
     Behovstype.FASTSETT_YRKESSKADEINNTEKT
   );
   const vurderManglendeLigningSteg = getStegData(aktivStegGruppe, 'MANGLENDE_LIGNING', flyt.data);
-  const inntektsbortfall = getStegData(aktivStegGruppe, 'VURDER_INNTEKTSBORTFALL', flyt.data);
-  const skalViseInntektsbortfall = skalViseSteg(inntektsbortfall, false); // TODO: Må oppdateres når Del 2 lages
+  const inntektsbortfall = getStegData(
+    aktivStegGruppe,
+    'VURDER_INNTEKTSBORTFALL',
+    flyt.data,
+    Behovstype.VURDER_INNTEKTSBORTFALL
+  );
 
   return (
     <GruppeSteg
@@ -89,7 +93,7 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
           <VisBeregning grunnlag={beregningsgrunnlag.data} />
         </StegSuspense>
       )}
-      {skalViseInntektsbortfall && (
+      {inntektsbortfall.skalViseSteg && (
         <StegSuspense>
           <InntektsbortfallMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={inntektsbortfall} />
         </StegSuspense>
