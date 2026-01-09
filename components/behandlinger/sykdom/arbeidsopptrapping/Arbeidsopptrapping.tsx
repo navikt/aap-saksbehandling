@@ -74,6 +74,8 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
     defaultValues,
   });
 
+  const nyeVurderinger = grunnlag?.nyeVurderinger ?? [];
+
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const ikkeVurderbarePerioder = grunnlag?.ikkeVurderbarePerioder ?? [];
 
