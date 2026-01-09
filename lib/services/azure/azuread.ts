@@ -1,16 +1,15 @@
-import { Client, Issuer } from 'openid-client';
 import { JWSHeaderParameters, jwtVerify, createRemoteJWKSet, FlattenedJWSInput } from 'jose';
 import { GetKeyFunction } from 'jose/dist/types/types';
 import { isLocal } from 'lib/utils/environment';
 import { getToken } from '@navikt/oasis';
 import { redirect } from 'next/navigation';
 
-let _issuer: Issuer<Client>;
+let _issuerMetadata: { issuer: string; jwks_uri: string };
 let _remoteJWKSet: GetKeyFunction<JWSHeaderParameters, FlattenedJWSInput>;
 
 export async function validerToken(token: string | Uint8Array) {
   return jwtVerify(token, await jwks(), {
-    issuer: (await issuer()).metadata.issuer,
+    issuer: (await getIssuerMetadata()).issuer,
   });
 }
 
@@ -22,13 +21,16 @@ async function jwks() {
   return _remoteJWKSet;
 }
 
-async function issuer() {
-  if (typeof _issuer === 'undefined') {
-    if (!process.env.AZURE_APP_WELL_KNOWN_URL)
-      throw new Error(`Miljøvariabelen "AZURE_APP_WELL_KNOWN_URL" må være satt`);
-    _issuer = await Issuer.discover(process.env.AZURE_APP_WELL_KNOWN_URL);
+async function getIssuerMetadata() {
+  if (!_issuerMetadata) {
+    const url = process.env.AZURE_APP_WELL_KNOWN_URL;
+    if (!url) throw new Error('Miljøvariabelen "AZURE_APP_WELL_KNOWN_URL" må være satt');
+
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`Klarte ikke hente AzureAD-issuer fra ${url}`);
+    _issuerMetadata = await res.json();
   }
-  return _issuer;
+  return _issuerMetadata;
 }
 
 const lokalFakeAccessToken = isLocal();
