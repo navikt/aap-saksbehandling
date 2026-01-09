@@ -24,7 +24,7 @@ interface Props {
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
-function ikonForSjekk(verdi: boolean) {
+function AvslåttOppfylltIkon({ verdi }: { verdi: boolean }) {
   return verdi ? (
     <XMarkOctagonIcon className={styles.avslåttIcon} />
   ) : (
@@ -157,7 +157,7 @@ export const Inntektsbortfall = ({
                 <Table.DataCell textSize={'small'}>{under62År.alder} år</Table.DataCell>
                 <Table.DataCell textSize={'small'}>
                   <div className={styles.utfall}>
-                    {ikonForSjekk(!under62År.resultat)}
+                    <AvslåttOppfylltIkon verdi={!under62År.resultat} />
                     {under62År.resultat ? 'Under 62 år' : 'Over 62 år'}
                   </div>
                 </Table.DataCell>
@@ -169,7 +169,7 @@ export const Inntektsbortfall = ({
                 </Table.DataCell>
                 <Table.DataCell textSize={'small'}>
                   <div className={styles.utfall}>
-                    {ikonForSjekk(!inntektSisteTreÅr.resultat)}
+                    <AvslåttOppfylltIkon verdi={!inntektSisteTreÅr.resultat} />
                     {inntektSisteTreÅr.resultat ? 'Inntekt er under 3 G' : 'Inntekt er over 3 G'}
                   </div>
                 </Table.DataCell>
@@ -181,7 +181,7 @@ export const Inntektsbortfall = ({
                 </Table.DataCell>
                 <Table.DataCell textSize={'small'}>
                   <div className={styles.utfall}>
-                    {ikonForSjekk(!inntektSisteÅr.resultat)}
+                    <AvslåttOppfylltIkon verdi={!inntektSisteÅr.resultat} />
                     {inntektSisteÅr.resultat ? 'Inntekt er under 1 G' : 'Inntekt er over 1 G'}
                   </div>
                 </Table.DataCell>
