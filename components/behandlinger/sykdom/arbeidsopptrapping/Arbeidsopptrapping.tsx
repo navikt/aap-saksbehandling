@@ -99,6 +99,7 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
       return;
     }
     if (data.vurderinger.length === 0) {
+      visningActions.onBekreftClick();
       return;
     }
     const losning: LøsPeriodisertBehovPåBehandling = {
