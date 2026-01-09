@@ -24,12 +24,20 @@ export function formaterTilNok(sum: number | null | undefined): string {
   return `${sum.toLocaleString(`nb-NO`, { style: 'currency', currency: 'NOK', trailingZeroDisplay: 'stripIfInteger' })}`;
 }
 
-export function formaterTilG(sum: number): string {
-  const formatedSum = sum.toFixed(3);
-  if (formatedSum.endsWith('.000')) {
-    return `${formatedSum.slice(0, -4)} G`;
-  }
-  return `${formatedSum} G`;
+type FormaterTilGOptions = {
+  antallDesimaler: number;
+};
+
+export function formaterTilG(sum: number, options?: FormaterTilGOptions): string {
+  const antallDesimaler = options?.antallDesimaler ?? 3;
+  const toDesimalerString = sum.toLocaleString('no-NB', {
+    style: 'decimal',
+    maximumFractionDigits: antallDesimaler,
+    minimumFractionDigits: antallDesimaler,
+    trailingZeroDisplay: 'stripIfInteger',
+  });
+
+  return `${toDesimalerString} G`;
 }
 
 export function formaterTilProsent(sum?: number | null): string {

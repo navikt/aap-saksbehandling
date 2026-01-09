@@ -30,6 +30,7 @@ import {
   FritakMeldepliktGrunnlag,
   FullmektigGrunnlag,
   HelseinstitusjonGrunnlag,
+  InntektsbortfallResponse,
   KabalKlageResultat,
   KanDistribuereBrevRequest,
   KanDistribuereBrevResponse,
@@ -312,6 +313,11 @@ export const hentBeregningstidspunktVurdering = async (behandlingsReferanse: str
 export const hentBeregningYrkesskadeVurdering = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/beregning/yrkesskade`;
   return await apiFetch<YrkeskadeBeregningGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentInntektsBortfallGrunnlag = async (behandlingsReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/inntektsbortfall`;
+  return await apiFetch<InntektsbortfallResponse>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentHelseInstitusjonsVurdering = async (behandlingsReferanse: string) => {
