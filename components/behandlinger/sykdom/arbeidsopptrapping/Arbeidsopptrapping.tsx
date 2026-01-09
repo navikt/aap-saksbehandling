@@ -120,6 +120,7 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
     };
 
     løsPeriodisertBehovOgGåTilNesteSteg(losning, () => {
+      visningActions.onBekreftClick();
       nullstillMellomlagretVurdering();
     });
   }
