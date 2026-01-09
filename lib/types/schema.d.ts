@@ -10821,6 +10821,8 @@ export interface components {
       resultat: boolean;
     };
     'no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.HelseinstitusjonGrunnlagDto': {
+      barnetilleggDekkerHelePerioden: boolean;
+      forKortOpphold: boolean;
       'harTilgangTil\u00C5Saksbehandle': boolean;
       opphold: components['schemas']['no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.InstitusjonsoppholdDto'][];
       vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.HelseoppholdDto'][];
