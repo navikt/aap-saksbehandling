@@ -15,7 +15,7 @@ export function validerPeriodiserteVurderingerRekkefølge({
   grunnlag,
   nyeVurderinger,
   tidligsteDatoMåMatcheMedRettighetsperiode = true,
-  vurderingerKanIkkeVæreFørKanVurderes = true,
+  vurderingerKanIkkeVæreFørKanVurderes = false,
 }: {
   form: UseFormReturn<any>;
   grunnlag?: PeriodiserteVurderingerDto<VurderingDto>;

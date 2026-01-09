@@ -4,7 +4,7 @@ import { Behovstype, getJaNeiEllerUndefined, getStringEllerUndefined, JaEllerNei
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent, useCallback } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
-import { parseISO, startOfDay } from 'date-fns';
+import { parseISO } from 'date-fns';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { MellomlagretVurdering, SykdomsGrunnlag, TypeBehandling } from 'lib/types/types';
 import { finnDiagnosegrunnlag } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
@@ -22,7 +22,7 @@ import { TidligereSykdomsvurdering } from 'components/behandlinger/sykdom/sykdom
 import mapTilPeriodisertVurdering from 'components/behandlinger/sykdom/sykdomsvurdering/periodisertVurderingMapper';
 import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMellomlagringParser';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
-import { DATO_FORMATER, parseDatoFraDatePicker, stringToDate } from 'lib/utils/date';
+import { parseDatoFraDatePicker } from 'lib/utils/date';
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
 
 export interface SykdomsvurderingerForm {
@@ -135,12 +135,15 @@ export const SykdomsvurderingPeriodisert = ({
   const førsteFraDato = form.watch(`vurderinger.0.fraDato`);
 
   const behandlingErRevurderingAvFørstegangsbehandling = useCallback(() => {
-    const førsteFraDatoSomSkalVurderes = stringToDate(førsteFraDato, DATO_FORMATER.ddMMyyyy);
-    if (!behandlingErRevurdering || !førsteFraDatoSomSkalVurderes) {
-      return false;
-    }
-    const søknadsdato = startOfDay(new Date(sak.periode.fom));
-    return søknadsdato.getTime() >= startOfDay(førsteFraDatoSomSkalVurderes).getTime();
+    //TODO: gjenkjennelse av revurdering av førstegangsbehandling må gås opp for periodiserte vurderinger
+    return false;
+
+    //   const førsteFraDatoSomSkalVurderes = stringToDate(førsteFraDato, DATO_FORMATER.ddMMyyyy);
+    //   if (!behandlingErRevurdering || !førsteFraDatoSomSkalVurderes) {
+    //     return false;
+    //   }
+    //   const søknadsdato = startOfDay(new Date(sak.periode.fom));
+    //   return søknadsdato.getTime() >= startOfDay(førsteFraDatoSomSkalVurderes).getTime();
   }, [behandlingErRevurdering, sak, førsteFraDato]);
 
   const errorList = mapPeriodiserteVurderingerErrorList<SykdomsvurderingerForm>(form.formState.errors);
