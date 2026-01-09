@@ -26,6 +26,7 @@ interface Props {
   sak: Sak;
   skalVurdereYrkesskade: boolean;
   erÅrsakssammenhengYrkesskade: boolean;
+  erRevurderingAvFørstegangsbehandling: boolean;
 }
 
 export const vilkårsvurderingLabel = 'Vilkårsvurdering';
@@ -45,22 +46,10 @@ export const SykdomsvurderingFormInput = ({
   form,
   readonly,
   ikkeRelevantePerioder,
+  erRevurderingAvFørstegangsbehandling,
 }: Props) => {
   const behandlingErRevurdering = typeBehandling === 'Revurdering';
   const behandlingErFørstegangsbehandling = typeBehandling === 'Førstegangsbehandling';
-  const vurderingenGjelderFra = form.watch(`vurderinger.${index}.vurderingenGjelderFra`);
-
-  const behandlingErRevurderingAvFørstegangsbehandling = useCallback(() => {
-    if (!behandlingErRevurdering) {
-      return false;
-    }
-    const gjelderFra = stringToDate(vurderingenGjelderFra, 'dd.MM.yyyy');
-    if (!gjelderFra) {
-      return false;
-    }
-    const søknadsdato = startOfDay(new Date(sak.periode.fom));
-    return søknadsdato.getTime() >= startOfDay(gjelderFra).getTime();
-  }, [behandlingErRevurdering, sak, vurderingenGjelderFra]);
 
   return (
     <VStack gap={'5'}>
@@ -125,7 +114,7 @@ export const SykdomsvurderingFormInput = ({
             readOnly={readonly}
             shouldUnregister
           />
-          {(behandlingErFørstegangsbehandling || behandlingErRevurderingAvFørstegangsbehandling()) && (
+          {(behandlingErFørstegangsbehandling || erRevurderingAvFørstegangsbehandling) && (
             <SykdomsvurderingFørstegangsbehandling
               index={index}
               form={form}
@@ -133,7 +122,7 @@ export const SykdomsvurderingFormInput = ({
               skalVurdereYrkesskade={skalVurdereYrkesskade}
             />
           )}
-          {behandlingErRevurdering && !behandlingErRevurderingAvFørstegangsbehandling() && (
+          {behandlingErRevurdering && !erRevurderingAvFørstegangsbehandling && (
             <SykdomsvurderingRevurdering
               index={index}
               form={form}
