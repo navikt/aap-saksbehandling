@@ -19,11 +19,10 @@ export const StudentVurderingFelter = ({ index }: Props) => {
 
   return (
     <VStack gap={'4'}>
-      <TextFieldWrapper
+      <DateInputWrapper
         name={`vurderinger.${index}.gjelderFra`}
         control={form.control}
         label={'Vurderingen gjelder fra'}
-        type={'text'}
       />
 
       <TextAreaWrapper
