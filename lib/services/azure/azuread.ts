@@ -1,16 +1,17 @@
-import { Client, Issuer } from 'openid-client';
 import { JWSHeaderParameters, jwtVerify, createRemoteJWKSet, FlattenedJWSInput } from 'jose';
 import { GetKeyFunction } from 'jose/dist/types/types';
 import { isLocal } from 'lib/utils/environment';
 import { getToken } from '@navikt/oasis';
 import { redirect } from 'next/navigation';
 
-let _issuer: Issuer<Client>;
 let _remoteJWKSet: GetKeyFunction<JWSHeaderParameters, FlattenedJWSInput>;
 
 export async function validerToken(token: string | Uint8Array) {
+  const issuer = process.env.AZURE_OPENID_CONFIG_ISSUER;
+  if (!issuer) throw new Error('Miljøvariabelen "AZURE_OPENID_CONFIG_ISSUER" må være satt');
+
   return jwtVerify(token, await jwks(), {
-    issuer: (await issuer()).metadata.issuer,
+    issuer: issuer,
   });
 }
 
@@ -20,15 +21,6 @@ async function jwks() {
   }
 
   return _remoteJWKSet;
-}
-
-async function issuer() {
-  if (typeof _issuer === 'undefined') {
-    if (!process.env.AZURE_APP_WELL_KNOWN_URL)
-      throw new Error(`Miljøvariabelen "AZURE_APP_WELL_KNOWN_URL" må være satt`);
-    _issuer = await Issuer.discover(process.env.AZURE_APP_WELL_KNOWN_URL);
-  }
-  return _issuer;
 }
 
 const lokalFakeAccessToken = isLocal();
