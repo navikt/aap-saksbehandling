@@ -44,6 +44,11 @@ export interface Sykdomsvurdering {
   erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense?: JaEllerNei;
   erNedsettelseIArbeidsevneMerEnnFørtiProsent?: JaEllerNei;
   yrkesskadeBegrunnelse?: string;
+  vurdertAv?: {
+    ansattnavn: string | null | undefined;
+    ident: string;
+    dato: string;
+  };
 }
 
 interface SykdomProps {
@@ -202,7 +207,7 @@ export const SykdomsvurderingPeriodisert = ({
           oppfylt={erVurderingOppfylt(form.watch(`vurderinger.${index}`))}
           nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
           isLast={index === nyeVurderingerFields.length - 1}
-          vurdertAv={undefined} // TODO:
+          vurdertAv={vurdering.vurdertAv}
           finnesFeil={finnesFeilForVurdering(index, errorList)}
           readonly={formReadOnly}
           onRemove={() => remove(index)}
@@ -264,6 +269,14 @@ export const SykdomsvurderingPeriodisert = ({
           vurdering?.erNedsettelseIArbeidsevneMerEnnHalvparten
         ),
         yrkesskadeBegrunnelse: getStringEllerUndefined(vurdering?.yrkesskadeBegrunnelse),
+        vurdertAv:
+          vurdering.vurdertAv != null
+            ? {
+                ansattnavn: vurdering.vurdertAv.ansattnavn,
+                ident: vurdering.vurdertAv.ident,
+                dato: vurdering.vurdertAv.dato,
+              }
+            : undefined,
       })),
     };
   }

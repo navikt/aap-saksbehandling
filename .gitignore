@@ -49,3 +49,6 @@ yarn-error.log*
 #ignorer co-author hook
 .husky/prepare-commit-msg
 .git-co-authors.yaml
+
+#bytte mellom lokalt og dev-miljø
+switch.sh
