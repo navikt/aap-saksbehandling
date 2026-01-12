@@ -8,7 +8,7 @@
     "test": "vitest --run",
     "test:watch": "vitest --watch",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint app components context hooks lib",
     "gentypes": "openapi-typescript http://localhost:8080/openapi.json -o lib/types/schema.d.ts && prettier --write lib/types/schema.d.ts",
     "run-prettier": "prettier --write ."
   },

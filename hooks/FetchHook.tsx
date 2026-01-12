@@ -1,11 +1,6 @@
 import { useState } from 'react';
-import {
-  clientBestillDialogmelding,
-  clientOpprettDummySak,
-  clientOpprettSak,
-  clientPurrPåLegeerklæring,
-} from 'lib/clientApi';
-import { BestillLegeerklæring, OpprettDummySakDto, OpprettTestcase } from 'lib/types/types';
+import { clientOpprettDummySak, clientOpprettSak, clientPurrPåLegeerklæring } from 'lib/clientApi';
+import { OpprettDummySakDto, OpprettTestcase } from 'lib/types/types';
 import { getErrorMessage } from 'lib/utils/errorUtil';
 import { FetchResponse, isError, isSuccess } from 'lib/utils/api';
 import { postmottakEndreTemaClient, postmottakSettPåVentClient } from 'lib/postmottakClientApi';
