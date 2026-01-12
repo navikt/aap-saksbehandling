@@ -66,9 +66,7 @@ const config = [
       'no-redeclare': 'off',
       'react-hooks/refs': 'off',
       'react-hooks/set-state-in-effect': 'warn',
-      'react-hooks/exhaustive-deps': 'warn',
       'react-hooks/incompatible-library': 'warn',
-      'react-hooks/preserve-manual-memoization': 'warn',
     },
   },
 ];

@@ -14,9 +14,15 @@ interface Props {
 
 export const EnheterSelect = ({ enheter, aktiveEnheter, setAktiveEnheter, className }: Props) => {
   const [value, setValue] = useState('');
-  const enheterOptions = enheter.map((enhet) => ({ value: enhet.enhetNr, label: enhet.navn }));
+  const enheterOptions = useMemo(
+    () => enheter.map((enhet) => ({ value: enhet.enhetNr, label: enhet.navn })),
+    [enheter]
+  );
 
-  const filteredOptions = useMemo(() => enheterOptions.filter((option) => option.label.includes(value)), [value]);
+  const filteredOptions = useMemo(
+    () => enheterOptions.filter((option) => option.label.includes(value)),
+    [value, enheterOptions]
+  );
   const onToggleSelected = (option: string, isSelected: boolean) => {
     const labelAndValue: ComboOption = {
       value: option,

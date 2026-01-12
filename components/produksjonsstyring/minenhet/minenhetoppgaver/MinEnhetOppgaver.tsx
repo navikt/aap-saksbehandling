@@ -35,7 +35,7 @@ export const MinEnhetOppgaver = ({ listeVisning, aktiveEnheter }: Props) => {
         oppgaveTyper: filter.oppgaveType,
         ...(aktiveEnheter.length ? { enheter: [...aktiveEnheter] } : {}),
       }),
-    [filter]
+    [filter, aktiveEnheter]
   );
 
   const behandlingerPerSteggruppe = useSWR(
