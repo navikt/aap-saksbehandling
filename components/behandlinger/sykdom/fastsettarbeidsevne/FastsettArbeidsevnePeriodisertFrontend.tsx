@@ -85,6 +85,8 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
     mellomlagretVurdering
   );
 
+  const nyeVurderinger = grunnlag?.nyeVurderinger ?? [];
+
   const defaultValues =
     initialMellomlagretVurdering != null
       ? (JSON.parse(initialMellomlagretVurdering.data) as FastsettArbeidsevneForm)
@@ -114,6 +116,11 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
       tidligsteDatoMåMatcheMedRettighetsperiode: false,
     });
     if (!erPerioderGyldige) {
+      return;
+    }
+
+    if (data.vurderinger.length === 0 && nyeVurderinger.length === 0) {
+      visningActions.onBekreftClick();
       return;
     }
     const losning: LøsPeriodisertBehovPåBehandling = {

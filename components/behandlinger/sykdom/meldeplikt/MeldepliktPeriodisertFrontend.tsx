@@ -71,6 +71,8 @@ export const MeldepliktPeriodisertFrontend = ({
     mellomlagretVurdering
   );
 
+  const nyeVurderinger = grunnlag?.nyeVurderinger ?? [];
+
   const defaultValues =
     initialMellomlagretVurdering != null
       ? (JSON.parse(initialMellomlagretVurdering.data) as FritakMeldepliktForm)
@@ -102,6 +104,12 @@ export const MeldepliktPeriodisertFrontend = ({
     if (!erPerioderGyldige) {
       return;
     }
+
+    if (data.vurderinger.length === 0 && nyeVurderinger.length === 0) {
+      visningActions.onBekreftClick();
+      return;
+    }
+
     const losning: LøsPeriodisertBehovPåBehandling = {
       behandlingVersjon: behandlingVersjon,
       referanse: behandlingsreferanse,
