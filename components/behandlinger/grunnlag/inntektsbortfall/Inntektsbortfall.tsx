@@ -170,7 +170,7 @@ export const Inntektsbortfall = ({
                 <Table.DataCell textSize={'small'}>
                   <div className={styles.utfall}>
                     <AvslåttOppfylltIkon verdi={!inntektSisteTreÅr.resultat} />
-                    {inntektSisteTreÅr.resultat ? 'Inntekt er under 3 G' : 'Inntekt er over 3 G'}
+                    {inntektSisteTreÅr.resultat ? 'Inntekt er over 3 G' : 'Inntekt er under 3 G'}
                   </div>
                 </Table.DataCell>
               </Table.Row>
@@ -182,7 +182,7 @@ export const Inntektsbortfall = ({
                 <Table.DataCell textSize={'small'}>
                   <div className={styles.utfall}>
                     <AvslåttOppfylltIkon verdi={!inntektSisteÅr.resultat} />
-                    {inntektSisteÅr.resultat ? 'Inntekt er under 1 G' : 'Inntekt er over 1 G'}
+                    {inntektSisteÅr.resultat ? 'Inntekt er over 1 G' : 'Inntekt er under 1 G'}
                   </div>
                 </Table.DataCell>
               </Table.Row>
