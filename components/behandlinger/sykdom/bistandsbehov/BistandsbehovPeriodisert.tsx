@@ -22,6 +22,7 @@ import { mapBistandVurderingFormTilDto } from 'components/behandlinger/sykdom/bi
 import { Dato } from 'lib/types/Dato';
 import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovMellomlagringParser';
 import { getFraDatoFraGrunnlagForFrontend } from 'lib/utils/periodisering';
+import { vurdertAvFraPeriodisertVurdering } from 'lib/utils/vurdert-av';
 
 interface Props {
   behandlingVersjon: number;
@@ -40,6 +41,11 @@ export interface BistandVurderingForm {
   erBehovForAnnenOppfølging?: JaEllerNei | undefined;
   overgangBegrunnelse?: string;
   skalVurdereAapIOvergangTilArbeid?: JaEllerNei | undefined;
+  vurdertAv?: {
+    ansattnavn: string | null | undefined;
+    ident: string;
+    dato: string;
+  };
 }
 
 export const BistandsbehovPeriodisert = ({
@@ -105,7 +111,6 @@ export const BistandsbehovPeriodisert = ({
       status={status}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={true}
-      vurdertAvAnsatt={grunnlag?.vurderinger[0]?.vurdertAv}
       kvalitetssikretAv={grunnlag?.nyeVurderinger[0]?.kvalitetssikretAv}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
@@ -155,7 +160,7 @@ export const BistandsbehovPeriodisert = ({
                 form.watch(`vurderinger.${index}.erBehovForAnnenOppfølging`) === JaEllerNei.Ja
               : undefined
           }
-          vurdertAv={undefined} //TODO
+          vurdertAv={vurdering.vurdertAv}
           finnesFeil={finnesFeilForVurdering(index, errorList)}
           readonly={formReadOnly}
           onRemove={() => remove(index)}
@@ -191,6 +196,7 @@ export const BistandsbehovPeriodisert = ({
         overgangBegrunnelse: vurdering?.overgangBegrunnelse || '',
         skalVurdereAapIOvergangTilArbeid: getJaNeiEllerUndefined(vurdering?.skalVurdereAapIOvergangTilArbeid),
         erBehovForArbeidsrettetTiltak: getJaNeiEllerUndefined(vurdering?.erBehovForArbeidsrettetTiltak),
+        vurdertAv: vurdertAvFraPeriodisertVurdering(vurdering.vurdertAv),
       })),
     };
   }
