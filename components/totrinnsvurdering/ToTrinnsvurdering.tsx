@@ -119,6 +119,10 @@ export function behovstypeTilVilkårskortLink(behovstype: Behovstype): string {
       return 'AKTIVITETSPLIKT_11_7';
     case Behovstype.OPPHOLDSKRAV_KODE:
       return 'OPPHOLDSKRAV';
+    case Behovstype.AVKLAR_STUDENT_KODE:
+      return 'STUDENT/#AVKLAR_STUDENT';
+    case Behovstype.AVKLAR_SAMORDNING_SYKESTIPEND_KODE:
+      return 'STUDENT/#SAMORDNING_SYKESTIPEND';
     default:
       return 'SYKDOM';
   }
