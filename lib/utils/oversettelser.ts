@@ -268,6 +268,8 @@ export function mapGrunnTilString(grunn: string): string {
       return 'Mangelfull begrunnelse';
     case 'MANGLENDE_UTREDNING':
       return 'Manglende utredning';
+    case 'SKRIVEFEIL':
+      return 'Skrivefeil';
     default:
       return grunn;
   }
