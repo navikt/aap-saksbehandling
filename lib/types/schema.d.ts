@@ -10773,7 +10773,7 @@ export interface components {
        */
       ytelseIverksattTom?: string | null;
     };
-    'no.nav.aap.behandlingsflyt.behandling.inntektsbortfall.GjennomsnittInntektSiste3\u00C5rOver3GDto': {
+    'no.nav.aap.behandlingsflyt.behandling.inntektsbortfall.InntektSiste3\u00C5rOver3GDto': {
       gverdi: number;
       resultat: boolean;
     };
@@ -10787,7 +10787,7 @@ export interface components {
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.inntektsbortfall.InntektsbortfallVurderingDto'];
     };
     'no.nav.aap.behandlingsflyt.behandling.inntektsbortfall.InntektsbortfallKanBehandlesAutomatiskDto': {
-      'gjennomsnittInntektSiste3\u00C5rOver3G': components['schemas']['no.nav.aap.behandlingsflyt.behandling.inntektsbortfall.GjennomsnittInntektSiste3\u00C5rOver3GDto'];
+      'inntektSiste3\u00C5rOver3G': components['schemas']['no.nav.aap.behandlingsflyt.behandling.inntektsbortfall.InntektSiste3\u00C5rOver3GDto'];
       'inntektSiste\u00C5rOver1G': components['schemas']['no.nav.aap.behandlingsflyt.behandling.inntektsbortfall.InntektSiste\u00C5rOver1GDto'];
       kanBehandlesAutomatisk: boolean;
       'under62\u00C5rVedS\u00F8knadstidspunkt': components['schemas']['no.nav.aap.behandlingsflyt.behandling.inntektsbortfall.Under62\u00C5rVedS\u00F8knadstidspunktDto'];
@@ -11191,6 +11191,7 @@ export interface components {
         | 'AKTIVITETSPLIKT'
         | 'AKTIVITETSPLIKT_11_9'
         | 'TILBAKEKREVING_HENDELSE'
+        | 'FAGSYSTEMINFO_BEHOV_HENDELSE'
         | null;
     };
     'no.nav.aap.behandlingsflyt.behandling.klage.p\u00E5klagetbehandling.P\u00E5klagetBehandlingGrunnlagDto': {
@@ -12202,6 +12203,7 @@ export interface components {
         | 'IKKE_OPPFYLT_OPPHOLDSKRAV_EØS'
         | 'NORGE_IKKE_KOMPETENT_STAT'
         | 'ANNEN_FULL_YTELSE'
+        | 'INNTEKTSTAP_DEKKES_ETTER_ANNEN_LOVGIVNING'
         | 'IKKE_RETT_PA_AAP_UNDER_BEHANDLING_AV_UFORE'
         | 'VARIGHET_OVERSKREDET_OVERGANG_UFORE'
         | 'VARIGHET_OVERSKREDET_ARBEIDSSØKER'
@@ -13700,6 +13702,7 @@ export interface components {
         | 'MEDLEMSKAP'
         | 'GRUNNLAGET'
         | 'SAMORDNING'
+        | 'SAMORDNING_ANNEN_LOVGIVNING'
         | 'SYKEPENGEERSTATNING'
         | 'STRAFFEGJENNOMFØRING'
         | 'AKTIVITETSPLIKT'
@@ -13727,6 +13730,7 @@ export interface components {
         | 'IKKE_OPPFYLT_OPPHOLDSKRAV_EØS'
         | 'NORGE_IKKE_KOMPETENT_STAT'
         | 'ANNEN_FULL_YTELSE'
+        | 'INNTEKTSTAP_DEKKES_ETTER_ANNEN_LOVGIVNING'
         | 'IKKE_RETT_PA_AAP_UNDER_BEHANDLING_AV_UFORE'
         | 'VARIGHET_OVERSKREDET_OVERGANG_UFORE'
         | 'VARIGHET_OVERSKREDET_ARBEIDSSØKER'
@@ -13968,7 +13972,8 @@ export interface components {
         | 'SAKSBEHANDLER_KELVIN_REFERANSE'
         | 'MANUELL_OPPRETTELSE'
         | 'KABAL_HENDELSE_ID'
-        | 'TILBAKEKREING_HENDELSE_ID'
+        | 'TILBAKEKREVING_HENDELSE_ID'
+        | 'FAGSYSTEMINFO_BEHOV_HENDELSE_ID'
         | 'PDL_HENDELSE_ID';
       verdi: string;
     };
@@ -14162,6 +14167,18 @@ export interface components {
       /** @enum {string} */
       type: 'KLAGE' | 'ANKE' | 'ANKE_I_TRYGDERETTEN' | 'BEHANDLING_ETTER_TRYGDERETTEN_OPPHEVET' | 'OMGJOERINGSKRAV';
     };
+    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.FagsysteminfoBehovV0': {
+      eksternFagsakId: string;
+      /**
+       * Format: date-time
+       * @example 2025-04-01T12:30:00
+       */
+      hendelseOpprettet: string;
+      hendelsestype: string;
+      kravgrunnlagReferanse: string;
+      /** Format: int32 */
+      versjon: number;
+    };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Ident': {
       identifikator: string;
     };
@@ -14191,6 +14208,7 @@ export interface components {
         | 'NY_ÅRSAK_TIL_BEHANDLING'
         | 'KABAL_HENDELSE'
         | 'TILBAKEKREVING_HENDELSE'
+        | 'FAGSYSTEMINFO_BEHOV_HENDELSE'
         | 'PDL_HENDELSE_DODSFALL_BRUKER'
         | 'PDL_HENDELSE_DODSFALL_BARN'
         | 'OPPFØLGINGSOPPGAVE';
@@ -14492,6 +14510,7 @@ export interface components {
         | 'NY_ÅRSAK_TIL_BEHANDLING'
         | 'KABAL_HENDELSE'
         | 'TILBAKEKREVING_HENDELSE'
+        | 'FAGSYSTEMINFO_BEHOV_HENDELSE'
         | 'PDL_HENDELSE_DODSFALL_BRUKER'
         | 'PDL_HENDELSE_DODSFALL_BARN'
         | 'OPPFØLGINGSOPPGAVE';
@@ -14519,7 +14538,9 @@ export interface components {
       student?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.S\u00F8knadStudentDto'];
       yrkesskade: string;
     };
-    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.TilbakekrevingHendelse': components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.TilbakekrevingHendelseV0'];
+    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.TilbakekrevingHendelse':
+      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.FagsysteminfoBehovV0']
+      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.TilbakekrevingHendelseV0'];
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.TilbakekrevingHendelseV0': {
       eksternBehandlingId?: string | null;
       eksternFagsakId: string;
@@ -14686,7 +14707,8 @@ export interface components {
         | 'KLAGE'
         | 'AKTIVITETSPLIKT'
         | 'AKTIVITETSPLIKT_11_9'
-        | 'TILBAKEKREVING_HENDELSE';
+        | 'TILBAKEKREVING_HENDELSE'
+        | 'FAGSYSTEMINFO_BEHOV_HENDELSE';
     };
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlingAvTypeDTO': {
       /** Format: uuid */
@@ -14878,6 +14900,7 @@ export interface components {
         | 'AKTIVITETSPLIKT'
         | 'AKTIVITETSPLIKT_11_9'
         | 'TILBAKEKREVING_HENDELSE'
+        | 'FAGSYSTEMINFO_BEHOV_HENDELSE'
         | null;
     };
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.FinnBehandlingForIdentDTO': {

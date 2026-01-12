@@ -92,7 +92,7 @@ export const Inntektsbortfall = ({
 
   const under62År = grunnlag.under62ÅrVedSøknadstidspunkt;
   const inntektSisteÅr = grunnlag.inntektSisteÅrOver1G;
-  const inntektSisteTreÅr = grunnlag.gjennomsnittInntektSiste3ÅrOver3G;
+  const inntektSisteTreÅr = grunnlag.inntektSiste3ÅrOver3G;
 
   return (
     <VilkårskortMedFormOgMellomlagringNyVisning
