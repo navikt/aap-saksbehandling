@@ -3,13 +3,13 @@ import { DiagnoseSystem, diagnoseSøker, ingenDiagnoseCode } from 'lib/diagnoses
 import { JaEllerNei } from 'lib/utils/form';
 import { UseFormReturn } from 'react-hook-form';
 import { ValuePair } from 'components/form/FormField';
-import { Sykdomsvurderinger } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingPeriodisert';
+import { SykdomsvurderingerForm } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingPeriodisert';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { Radio } from '@navikt/ds-react';
 
 interface Props {
   index: number;
-  form: UseFormReturn<Sykdomsvurderinger>;
+  form: UseFormReturn<SykdomsvurderingerForm>;
   readOnly: boolean;
   hoveddiagnoseDefaultOptions?: ValuePair[];
 }

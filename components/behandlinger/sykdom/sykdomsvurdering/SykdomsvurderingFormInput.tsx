@@ -2,15 +2,14 @@
 
 import { HStack, Link, VStack } from '@navikt/ds-react';
 import { erDatoIPeriode, validerDato } from 'lib/validation/dateValidation';
-import { parse, startOfDay } from 'date-fns';
+import { parse } from 'date-fns';
 import { stringToDate } from 'lib/utils/date';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
 import { UseFormReturn } from 'react-hook-form';
 import { Periode, TypeBehandling } from 'lib/types/types';
-import type { Sykdomsvurderinger } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingPeriodisert';
+import type { SykdomsvurderingerForm } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingPeriodisert';
 import { JaEllerNei } from 'lib/utils/form';
-import { useCallback } from 'react';
 import { Sak } from 'context/saksbehandling/SakContext';
 import { SykdomsvurderingFørstegangsbehandling } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingFørstegangsbehandling';
 import { SykdomsvurderingRevurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingRevurdering';
@@ -19,13 +18,14 @@ import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrap
 
 interface Props {
   index: number;
-  form: UseFormReturn<Sykdomsvurderinger>;
+  form: UseFormReturn<SykdomsvurderingerForm>;
   readonly: boolean;
   ikkeRelevantePerioder?: Periode[];
   typeBehandling: TypeBehandling;
   sak: Sak;
   skalVurdereYrkesskade: boolean;
   erÅrsakssammenhengYrkesskade: boolean;
+  erRevurderingAvFørstegangsbehandling: boolean;
 }
 
 export const vilkårsvurderingLabel = 'Vilkårsvurdering';
@@ -39,28 +39,15 @@ export const erNedsettelseIArbeidsevneAvEnVissVarighetLabel = 'Er den nedsatte a
 export const SykdomsvurderingFormInput = ({
   erÅrsakssammenhengYrkesskade,
   skalVurdereYrkesskade,
-  sak,
   typeBehandling,
   index,
   form,
   readonly,
   ikkeRelevantePerioder,
+  erRevurderingAvFørstegangsbehandling,
 }: Props) => {
   const behandlingErRevurdering = typeBehandling === 'Revurdering';
   const behandlingErFørstegangsbehandling = typeBehandling === 'Førstegangsbehandling';
-  const vurderingenGjelderFra = form.watch(`vurderinger.${index}.fraDato`);
-
-  const behandlingErRevurderingAvFørstegangsbehandling = useCallback(() => {
-    if (!behandlingErRevurdering) {
-      return false;
-    }
-    const gjelderFra = stringToDate(vurderingenGjelderFra, 'dd.MM.yyyy');
-    if (!gjelderFra) {
-      return false;
-    }
-    const søknadsdato = startOfDay(new Date(sak.periode.fom));
-    return søknadsdato.getTime() >= startOfDay(gjelderFra).getTime();
-  }, [behandlingErRevurdering, sak, vurderingenGjelderFra]);
 
   return (
     <VStack gap={'5'}>
@@ -125,7 +112,7 @@ export const SykdomsvurderingFormInput = ({
             readOnly={readonly}
             shouldUnregister
           />
-          {(behandlingErFørstegangsbehandling || behandlingErRevurderingAvFørstegangsbehandling()) && (
+          {(behandlingErFørstegangsbehandling || erRevurderingAvFørstegangsbehandling) && (
             <SykdomsvurderingFørstegangsbehandling
               index={index}
               form={form}
@@ -133,7 +120,7 @@ export const SykdomsvurderingFormInput = ({
               skalVurdereYrkesskade={skalVurdereYrkesskade}
             />
           )}
-          {behandlingErRevurdering && !behandlingErRevurderingAvFørstegangsbehandling() && (
+          {behandlingErRevurdering && !erRevurderingAvFørstegangsbehandling && (
             <SykdomsvurderingRevurdering
               index={index}
               form={form}
@@ -143,28 +130,6 @@ export const SykdomsvurderingFormInput = ({
           )}
         </>
       )}
-      {/*  kodeverk: {*/}
-      {/*  type: 'radio',*/}
-      {/*  label: 'Velg system for diagnoser',*/}
-      {/*  options: [*/}
-      {/*{ label: 'Primærhelsetjenesten (ICPC2)', value: 'ICPC2' },*/}
-      {/*{ label: 'Spesialisthelsetjenesten (ICD10)', value: 'ICD10' },*/}
-      {/*  ],*/}
-      {/*  defaultValue: defaultValues.kodeverk,*/}
-      {/*  rules: { required: 'Du må velge et system for diagnoser' },*/}
-      {/*  onChange: () => {*/}
-      {/*  form.setValue('hoveddiagnose', null);*/}
-      {/*  form.setValue('bidiagnose', null);*/}
-      {/*},*/}
-      {/*},*/}
-      {/*  hoveddiagnose: {*/}
-      {/*  type: 'async_combobox',*/}
-      {/*  defaultValue: defaultValues.hoveddiagnose !== null ? defaultValues.hoveddiagnose : undefined,*/}
-      {/*},*/}
-      {/*  bidiagnose: {*/}
-      {/*  type: 'async_combobox',*/}
-      {/*  defaultValue: defaultValues.bidiagnose !== null ? defaultValues.bidiagnose : undefined,*/}
-      {/*},*/}
     </VStack>
   );
 };

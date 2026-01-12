@@ -1,10 +1,10 @@
 import { getTrueFalseEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { SykdomsvurderingLøsningDto } from 'lib/types/types';
-import { SykdomsvurderingForm } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingPeriodisert';
+import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingPeriodisert';
 import { Dato } from 'lib/types/Dato';
 
 function mapForFørstegangsbehandling(
-  data: SykdomsvurderingForm,
+  data: Sykdomsvurdering,
   erArbeidsevnenNedsatt: undefined | boolean,
   skalVurdereYrkesskade: boolean
 ): Pick<
@@ -49,7 +49,7 @@ function mapForFørstegangsbehandling(
 }
 
 function mapForRevurdering(
-  data: SykdomsvurderingForm,
+  data: Sykdomsvurdering,
   erArbeidsevnenNedsatt: undefined | boolean,
   erÅrsakssammenhengYrkesskade: boolean
 ): Pick<
@@ -80,7 +80,7 @@ function mapForRevurdering(
 }
 
 function mapTilPeriodisertVurdering(
-  data: SykdomsvurderingForm,
+  data: Sykdomsvurdering,
   skalVurdereYrkesskade: boolean,
   erÅrsakssammenhengYrkesskade: boolean,
   behandlingErFørstegangsbehandling: boolean,

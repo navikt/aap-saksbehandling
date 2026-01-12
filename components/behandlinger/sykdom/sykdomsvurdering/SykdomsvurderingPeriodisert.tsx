@@ -4,7 +4,7 @@ import { Behovstype, getJaNeiEllerUndefined, getStringEllerUndefined, JaEllerNei
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent, useCallback } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
-import { parseISO, startOfDay } from 'date-fns';
+import { parseISO } from 'date-fns';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { MellomlagretVurdering, SykdomsGrunnlag, TypeBehandling } from 'lib/types/types';
 import { finnDiagnosegrunnlag } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
@@ -23,12 +23,13 @@ import mapTilPeriodisertVurdering from 'components/behandlinger/sykdom/sykdomsvu
 import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMellomlagringParser';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { parseDatoFraDatePicker } from 'lib/utils/date';
+import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
 
-export interface Sykdomsvurderinger {
-  vurderinger: Array<SykdomsvurderingForm>;
+export interface SykdomsvurderingerForm {
+  vurderinger: Array<Sykdomsvurdering>;
 }
 
-export interface SykdomsvurderingForm {
+export interface Sykdomsvurdering {
   fraDato: string;
   begrunnelse: string;
   vurderingenGjelderFra?: string;
@@ -73,7 +74,6 @@ export const SykdomsvurderingPeriodisert = ({
     useMellomlagring(Behovstype.AVKLAR_SYKDOM_KODE, initialMellomlagretVurdering);
 
   const diagnosegrunnlag = finnDiagnosegrunnlag(typeBehandling, grunnlag);
-  const sykdomsvurdering = grunnlag.sykdomsvurderinger.at(-1);
 
   const { visningModus, visningActions, formReadOnly } = useVilkårskortVisning(
     readOnly,
@@ -81,11 +81,11 @@ export const SykdomsvurderingPeriodisert = ({
     mellomlagretVurdering
   );
 
-  const defaultValues: Sykdomsvurderinger = mellomlagretVurdering
+  const defaultValues: SykdomsvurderingerForm = mellomlagretVurdering
     ? parseOgMigrerMellomlagretData(mellomlagretVurdering.data)
     : mapGrunnlagTilDefaultvalues(grunnlag);
 
-  const form = useForm<Sykdomsvurderinger>({ defaultValues });
+  const form = useForm<SykdomsvurderingerForm>({ defaultValues });
   const {
     fields: nyeVurderingerFields,
     remove,
@@ -97,6 +97,15 @@ export const SykdomsvurderingPeriodisert = ({
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
+      const erPerioderGyldige = validerPeriodiserteVurderingerRekkefølge({
+        form,
+        nyeVurderinger: data.vurderinger,
+        grunnlag,
+        vurderingerKanIkkeVæreFørKanVurderes: true,
+      });
+      if (!erPerioderGyldige) {
+        return;
+      }
       løsPeriodisertBehovOgGåTilNesteSteg(
         {
           behandlingVersjon: behandlingVersjon,
@@ -126,17 +135,20 @@ export const SykdomsvurderingPeriodisert = ({
   const førsteFraDato = form.watch(`vurderinger.0.fraDato`);
 
   const behandlingErRevurderingAvFørstegangsbehandling = useCallback(() => {
-    if (!behandlingErRevurdering) {
-      return false;
-    }
-    const søknadsdato = startOfDay(new Date(sak.periode.fom));
-    const førsteFraDatoSomSkalVurderes = new Dato(førsteFraDato);
-    return søknadsdato.getTime() >= startOfDay(førsteFraDatoSomSkalVurderes.dato).getTime();
+    //TODO: gjenkjennelse av revurdering av førstegangsbehandling må gås opp for periodiserte vurderinger
+    return false;
+
+    //   const førsteFraDatoSomSkalVurderes = stringToDate(førsteFraDato, DATO_FORMATER.ddMMyyyy);
+    //   if (!behandlingErRevurdering || !førsteFraDatoSomSkalVurderes) {
+    //     return false;
+    //   }
+    //   const søknadsdato = startOfDay(new Date(sak.periode.fom));
+    //   return søknadsdato.getTime() >= startOfDay(førsteFraDatoSomSkalVurderes).getTime();
   }, [behandlingErRevurdering, sak, førsteFraDato]);
 
-  const errorList = mapPeriodiserteVurderingerErrorList<Sykdomsvurderinger>(form.formState.errors);
+  const errorList = mapPeriodiserteVurderingerErrorList<SykdomsvurderingerForm>(form.formState.errors);
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
-  function erVurderingOppfylt(vurdering: SykdomsvurderingForm): boolean | undefined {
+  function erVurderingOppfylt(vurdering: Sykdomsvurdering): boolean | undefined {
     if (
       vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten === JaEllerNei.Ja ||
       vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense === JaEllerNei.Ja
@@ -157,7 +169,6 @@ export const SykdomsvurderingPeriodisert = ({
       status={status}
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      vurdertAvAnsatt={sykdomsvurdering?.vurdertAv}
       knappTekst={'Bekreft'}
       kvalitetssikretAv={grunnlag.kvalitetssikretAv}
       mellomlagretVurdering={mellomlagretVurdering}
@@ -165,8 +176,8 @@ export const SykdomsvurderingPeriodisert = ({
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(mapGrunnlagTilDefaultvalues(grunnlag)))}
       visningActions={visningActions}
       visningModus={visningModus}
-      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
-      onLeggTilVurdering={() => append(emptySykdomsvurderingForm())}
+      formReset={() => form.reset(mapGrunnlagTilDefaultvalues(grunnlag))}
+      onLeggTilVurdering={() => append(emptySykdomsvurdering())}
       errorList={errorList}
     >
       {vedtatteVurderinger.map((vurdering) => (
@@ -206,13 +217,14 @@ export const SykdomsvurderingPeriodisert = ({
             sak={sak}
             erÅrsakssammenhengYrkesskade={grunnlag.erÅrsakssammenhengYrkesskade}
             skalVurdereYrkesskade={grunnlag.skalVurdereYrkesskade}
+            erRevurderingAvFørstegangsbehandling={behandlingErRevurderingAvFørstegangsbehandling()}
           />
         </NyVurderingExpandableCard>
       ))}
     </VilkårskortPeriodisert>
   );
 
-  function mapGrunnlagTilDefaultvalues(grunnlag: SykdomsGrunnlag): Sykdomsvurderinger {
+  function mapGrunnlagTilDefaultvalues(grunnlag: SykdomsGrunnlag): SykdomsvurderingerForm {
     if (grunnlag == null || grunnlag.nyeVurderinger.length === 0) {
       // Vi har ingen nye vurderinger, legg til en tom-default-periode
       const førsteFraDatoSomKanVurderes = grunnlag.kanVurderes[0]?.fom
@@ -221,7 +233,7 @@ export const SykdomsvurderingPeriodisert = ({
       return {
         vurderinger: [
           {
-            ...emptySykdomsvurderingForm(),
+            ...emptySykdomsvurdering(),
             ...førsteFraDatoSomKanVurderes,
           },
         ],
@@ -257,7 +269,7 @@ export const SykdomsvurderingPeriodisert = ({
   }
 };
 
-function emptySykdomsvurderingForm(): SykdomsvurderingForm {
+function emptySykdomsvurdering(): Sykdomsvurdering {
   return {
     fraDato: '',
     begrunnelse: '',

@@ -1,7 +1,8 @@
 import { formaterDatoForFrontend, parseDatoFraDatePicker, stringToDate } from 'lib/utils/date';
-import { isAfter, min, parseISO } from 'date-fns';
+import { isAfter, isBefore, min, parseISO } from 'date-fns';
 import { PeriodiserteVurderingerDto, PeriodisertVurderingFormFields, VurderingDto } from 'lib/types/types';
 import { UseFormReturn } from 'react-hook-form';
+import { Dato } from 'lib/types/Dato';
 
 export function erProsent(value: number): boolean {
   return value >= 0 && value <= 100;
@@ -14,11 +15,13 @@ export function validerPeriodiserteVurderingerRekkefølge({
   grunnlag,
   nyeVurderinger,
   tidligsteDatoMåMatcheMedRettighetsperiode = true,
+  vurderingerKanIkkeVæreFørKanVurderes = false,
 }: {
   form: UseFormReturn<any>;
   grunnlag?: PeriodiserteVurderingerDto<VurderingDto>;
   nyeVurderinger: Array<PeriodisertVurderingFormFields>;
   tidligsteDatoMåMatcheMedRettighetsperiode?: boolean;
+  vurderingerKanIkkeVæreFørKanVurderes?: boolean;
 }) {
   const sorterteVurderinger = nyeVurderinger.toSorted((a, b) => {
     const aParsed = stringToDate(a.fraDato, 'dd.MM.yyyy')!;
@@ -34,6 +37,20 @@ export function validerPeriodiserteVurderingerRekkefølge({
       });
     });
     return false;
+  }
+
+  if (vurderingerKanIkkeVæreFørKanVurderes) {
+    const tidligsteDato = sorterteVurderinger[0]?.fraDato ? new Dato(sorterteVurderinger[0]?.fraDato).dato : null;
+
+    const tidligsteDatoSomKanVurderes = new Date(grunnlag?.kanVurderes[0]?.fom!);
+    if (tidligsteDato && tidligsteDatoSomKanVurderes && isBefore(tidligsteDato, tidligsteDatoSomKanVurderes)) {
+      nyeVurderinger.forEach((_, index) => {
+        form.setError(`vurderinger.${index}.fraDato`, {
+          message: `Vurderingene du har laget starter før perioden du kan vurdere. Tidligste vurderte dato er ${formaterDatoForFrontend(tidligsteDato)} men tidligste dato som kan vurderes er ${formaterDatoForFrontend(tidligsteDatoSomKanVurderes)}.`,
+        });
+      });
+      return false;
+    }
   }
 
   if (tidligsteDatoMåMatcheMedRettighetsperiode) {
