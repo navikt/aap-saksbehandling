@@ -532,7 +532,7 @@ describe('Sak status', () => {
         behandling={behandling}
         brukerInformasjon={{ navn: 'Saksbehandler', NAVident: 'navIdent' }}
         referanse={'123456'}
-        oppgave={{...oppgave, utløptVentefrist: "2026-01-04"}}
+        oppgave={{ ...oppgave, utløptVentefrist: '2026-01-04' }}
       />
     );
     const fristTag = screen.getByText('Frist utløpt 04.01.2026');
@@ -551,6 +551,6 @@ describe('Sak status', () => {
       />
     );
     const fristTag = screen.queryByText('Frist utløpt 04.01.2026');
-    expect(fristTag).not.toBeInTheDocument()
+    expect(fristTag).not.toBeInTheDocument();
   });
 });

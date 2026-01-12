@@ -12,7 +12,7 @@ export const UtløptVentefristBoks = ({ frist }: Props) => {
   const buttonRef = useRef(null);
   const [vis, setVis] = useState(false);
 
-  const fristDate = new Dato(frist).formaterForFrontend()
+  const fristDate = new Dato(frist).formaterForFrontend();
 
   return (
     <>

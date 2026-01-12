@@ -1,9 +1,11 @@
-import { components } from './schema';
+import { components, paths } from './schema';
 import { components as oppgave } from '@navikt/aap-oppgave-typescript-types';
 
 // Grunnlag
 export type StudentGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.student.StudentGrunnlagResponse'];
+export type SykestipendGrunnlag =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.student.sykestipend.SykestipendGrunnlagResponse'];
 export type SykdomsGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomGrunnlagResponse'];
 export type Sykdomvurdering =
@@ -36,6 +38,10 @@ export type OvergangArbeidGrunnlag =
 
 export type FritakMeldepliktGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.fritakmeldeplikt.FritakMeldepliktGrunnlagResponse'];
+
+export type PeriodisertFritaksvurderingDto =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.meldeplikt.flate.PeriodisertFritaksvurderingDto'];
+
 export type OverstyringMeldepliktGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.underveis.MeldepliktOverstyringGrunnlagResponse'];
 export type MeldepliktOverstyringLøsningDto =
@@ -47,6 +53,8 @@ export type ArbeidsevneGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.arbeidsevne.ArbeidsevneGrunnlagDto'];
 export type ArbeidsevneVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.arbeidsevne.ArbeidsevneVurderingDto'];
+export type PeriodisertArbeidsevneVurderingDto =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.arbeidsevne.flate.PeriodisertFastsettArbeidsevneDto'];
 export type RefusjonskravGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.refusjon.RefusjonkravGrunnlagResponse'];
 export type RefusjonkravVurderingResponse =
@@ -308,6 +316,9 @@ export type YrkeskadeBeregningGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.tidspunkt.BeregningYrkesskadeAvklaringResponse'];
 export type YrkesskadeBeløpVurderingResponse =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.tidspunkt.YrkesskadeBel\u00F8pVurderingResponse'];
+
+export type InntektsbortfallResponse =
+  paths['/api/behandling/{referanse}/grunnlag/inntektsbortfall']['get']['responses']['200']['content']['application/json'];
 
 export type BestillLegeerklæring =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.dokumentinnhenting.BestillLegeerklæringDto'];

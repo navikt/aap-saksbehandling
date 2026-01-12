@@ -4,7 +4,7 @@ import { Detail, VStack } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 
 export type VurdertAvShape = {
-  ansattnavn: string | null | undefined;
+  ansattnavn?: string | null;
   ident: string;
   dato: string;
 };

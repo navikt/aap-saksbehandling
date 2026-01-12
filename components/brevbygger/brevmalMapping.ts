@@ -96,6 +96,21 @@ export function delmalErObligatorisk(noekkel: string, brevmal: BrevmalType): boo
   return !!brevmal.delmaler.find((delmal) => delmal.delmal._id === noekkel)?.obligatorisk;
 }
 
+export function delmalHarAlternativer(noekkel: string, brevmal: BrevmalType): boolean {
+  const delmal = brevmal.delmaler.find((delmal) => delmal.delmal._id === noekkel);
+  return !!delmal?.delmal.teksteditor.filter((teksteditor) => teksteditor._type === 'valgRef').length;
+}
+
+export function delmalSkalVises(noekkel: string, brevmal: BrevmalType): boolean {
+  const erObligatorisk = delmalErObligatorisk(noekkel, brevmal);
+  const delmalHarValg = delmalHarAlternativer(noekkel, brevmal);
+
+  const obligatoriskDelmalMedValg = erObligatorisk && delmalHarValg;
+  const skalViseDelmalvelger = !erObligatorisk || obligatoriskDelmalMedValg;
+
+  return skalViseDelmalvelger;
+}
+
 export function finnBeskrivelseForValg(noekkel: string, brevmal: BrevmalType): string {
   const beskrivelse = finnAlleValgRefs(brevmal).find((valg) => valg.valg._id === noekkel)?.valg.beskrivelse;
 

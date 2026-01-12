@@ -33,8 +33,8 @@ export const FordelingLukkedeBehandlingerPerDag = ({ fordelingLukkedeBehandlinge
           },
         ]}
         layout={{
-          yaxis: { title: 'Antall' },
-          xaxis: { title: 'Alder (uker)' },
+          yaxis: { title: { text: 'Antall' } },
+          xaxis: { title: { text: 'Alder (uker)' } },
         }}
       />
     </PlotWrapper>

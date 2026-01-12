@@ -15,6 +15,8 @@ import { FlytProsesseringAlert } from 'components/flytprosesseringalert/FlytPros
 import { VStack } from '@navikt/ds-react';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+import { hentOppgave } from 'lib/services/oppgaveservice/oppgaveservice';
+import { hentBrukerInformasjon } from 'lib/services/azure/azureUserService';
 
 interface LayoutProps {
   children: ReactNode;
@@ -25,9 +27,14 @@ const Layout = async (props: LayoutProps) => {
   const params = await props.params;
   const { children } = props;
 
-  const behandling = await hentBehandling(params.behandlingsreferanse);
-  if (isError(behandling)) {
-    return <ApiException apiResponses={[behandling]} />;
+  const [behandling, oppgave, brukerInformasjon] = await Promise.all([
+    hentBehandling(params.behandlingsreferanse),
+    hentOppgave(params.behandlingsreferanse),
+    hentBrukerInformasjon(),
+  ]);
+
+  if (isError(behandling) || isError(oppgave)) {
+    return <ApiException apiResponses={[behandling, oppgave]} />;
   }
 
   if (behandling.data.skalForberede) {
@@ -45,7 +52,7 @@ const Layout = async (props: LayoutProps) => {
   if (isError(flytResponse) || isError(journalpostInfo)) {
     return <ApiException apiResponses={[journalpostInfo, flytResponse]} />;
   }
-  auditlog(journalpostInfo.data.journalpostId);
+  await auditlog(journalpostInfo.data.journalpostId);
 
   const stegGrupper = flytResponse.data.flyt.map((steg) => steg);
   const dokumenter = journalpostInfo.data.dokumenter;
@@ -57,6 +64,8 @@ const Layout = async (props: LayoutProps) => {
         behandlingsVersjon={flytResponse.data.behandlingVersjon}
         journalpostInfo={journalpostInfo.data}
         påVent={flytResponse.data.visning.visVentekort}
+        oppgave={oppgave.data}
+        innloggetBrukerIdent={brukerInformasjon.NAVident}
       />
       <StegGruppeIndikatorAksel
         behandlingsreferanse={params.behandlingsreferanse}

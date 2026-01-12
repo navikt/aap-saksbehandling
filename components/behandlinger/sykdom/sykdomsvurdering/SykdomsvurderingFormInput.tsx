@@ -50,7 +50,7 @@ export const SykdomsvurderingFormInput = ({
 }: Props) => {
   const behandlingErRevurdering = typeBehandling === 'Revurdering';
   const behandlingErFørstegangsbehandling = typeBehandling === 'Førstegangsbehandling';
-
+  
   return (
     <VStack gap={'5'}>
       <Link href="https://lovdata.no/nav/rundskriv/r11-00#KAPITTEL_7-1" target="_blank">

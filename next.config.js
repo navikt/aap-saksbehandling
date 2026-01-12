@@ -8,6 +8,7 @@ const nextConfig = {
   experimental: {
     optimizePackageImports: ['@navikt/ds-react', '@navikt/aksel-icons'],
   },
+  turbopack: {},
   webpack: (config) => {
     config.module.rules.push({
       test: /\.node$/,

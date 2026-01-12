@@ -2,6 +2,7 @@ import { Brevbygger } from 'components/brevbygger/Brevbygger';
 import { BrevmalType } from 'components/brevbygger/brevmodellTypes';
 import {
   obligatoriskDelmal,
+  obligatoriskDelmalMedAlternativer,
   sanityAttrs,
   valgfriDelmal,
   valgfriDelmalMedAlternativer,
@@ -47,7 +48,6 @@ describe('Delmalvelger', () => {
       />
     );
     expect(screen.getByRole('heading', { name: valgfriDelmal.delmal.beskrivelse })).toBeVisible();
-    expect(screen.getByRole('heading', { name: obligatoriskDelmal.delmal.beskrivelse })).toBeVisible();
   });
 
   test('Valgfrie delmaler har en checkbox (Switch fra Aksel)', () => {
@@ -71,7 +71,7 @@ describe('Delmalvelger', () => {
     }
   });
 
-  test('Obligatoriske delmaler har ikke en checkbox (Switch fra Aksel)', () => {
+  test('Obligatoriske delmaler uten valg vises ikke', () => {
     render(
       <Brevbygger
         referanse={'1234'}
@@ -83,13 +83,7 @@ describe('Delmalvelger', () => {
         readOnly={false}
       />
     );
-    const kort = screen.getByRole('heading', { name: obligatoriskDelmal.delmal.beskrivelse }).closest('div');
-
-    if (kort) {
-      expect(within(kort).queryByRole('checkbox', { name: 'Inkluder i brev' })).not.toBeInTheDocument();
-    } else {
-      expect(kort).not.toBeNull();
-    }
+    expect(screen.queryByText(obligatoriskDelmal.delmal.beskrivelse)).not.toBeInTheDocument();
   });
 
   test('Valgfrie delmaler er ikke valgt initielt', () => {
@@ -174,6 +168,61 @@ describe('Delmaler med valg', () => {
       />
     );
     expect(screen.getByRole('combobox', { name: 'Beskrivelse av alternativ' })).toBeInTheDocument();
+  });
+
+  test('obligatoriske delmaler med valg vises', () => {
+    const brevmalMedObligatoriskDelmalMedAlternativer: BrevmalType = {
+      ...sanityAttrs,
+      _id: 'brevmal-id',
+      beskrivelse: 'En beskrivelse',
+      overskrift: 'En overskrift',
+      journalposttittel: 'jp-tittel',
+      kanSendesAutomatisk: false,
+      delmaler: [obligatoriskDelmalMedAlternativer],
+    };
+    render(
+      <Brevbygger
+        referanse={'1234'}
+        brevmal={JSON.stringify(brevmalMedObligatoriskDelmalMedAlternativer)}
+        brevdata={brevdata}
+        behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
+        mottaker={{ ident: '1234', navn: 'Navn' }}
+        behandlingVersjon={1}
+        readOnly={false}
+      />
+    );
+    expect(screen.getByRole('heading', { name: obligatoriskDelmalMedAlternativer.delmal.beskrivelse })).toBeVisible();
+    expect(screen.getByText('Alternativ 1')).toBeVisible();
+  });
+
+  test('Obligatoriske delmaler har ikke en checkbox (Switch fra Aksel)', () => {
+    const brevmalMedObligatoriskDelmalMedAlternativer: BrevmalType = {
+      ...sanityAttrs,
+      _id: 'brevmal-id',
+      beskrivelse: 'En beskrivelse',
+      overskrift: 'En overskrift',
+      journalposttittel: 'jp-tittel',
+      kanSendesAutomatisk: false,
+      delmaler: [obligatoriskDelmalMedAlternativer],
+    };
+    render(
+      <Brevbygger
+        referanse={'1234'}
+        brevmal={JSON.stringify(brevmalMedObligatoriskDelmalMedAlternativer)}
+        brevdata={brevdata}
+        behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
+        mottaker={{ ident: '1234', navn: 'Navn' }}
+        behandlingVersjon={1}
+        readOnly={false}
+      />
+    );
+    const kort = screen.getByRole('heading', { name: obligatoriskDelmal.delmal.beskrivelse }).closest('div');
+
+    if (kort) {
+      expect(within(kort).queryByRole('checkbox', { name: 'Inkluder i brev' })).not.toBeInTheDocument();
+    } else {
+      expect(kort).not.toBeNull();
+    }
   });
 
   test('alternativer hentes fra brevmalen', () => {

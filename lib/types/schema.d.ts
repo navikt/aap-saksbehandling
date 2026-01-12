@@ -1168,6 +1168,44 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/behandling/{referanse}/grunnlag/sykestipend': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description referanse */
+          referanse: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.student.sykestipend.SykestipendGrunnlagResponse'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/behandling/{referanse}/grunnlag/sykdom/sykdom': {
     parameters: {
       query?: never;
@@ -1308,6 +1346,44 @@ export interface paths {
           };
           content: {
             'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykepengergrunnlag.SykepengerGrunnlagResponse'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/behandling/{referanse}/grunnlag/inntektsbortfall': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description referanse */
+          referanse: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.inntektsbortfall.InntektsbortfallGrunnlagResponse'];
           };
         };
       };
@@ -6180,7 +6256,7 @@ export interface components {
         | '9002'
         | '9003'
         | '9004';
-      'l\u00F8sning': components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.sykestipend.SamordningSykestipendVurderingDto'];
+      sykestipendVurdering: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.sykestipend.SamordningSykestipendVurderingDto'];
     };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarSamordningUf\u00F8reL\u00F8sning': {
       /** @enum {string} */
@@ -6754,6 +6830,7 @@ export interface components {
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.VurderBrudd11_7L\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.VurderBrudd11_9L\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.VurderFormkravL\u00F8sning']
+      | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.VurderInntektsbortfallL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.VurderKlageKontorL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.VurderKlageNayL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.VurderRettighetsperiodeL\u00F8sning'];
@@ -9490,6 +9567,80 @@ export interface components {
         | '9004';
       formkravVurdering: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.formkrav.FormkravVurderingL\u00F8sningDto'];
     };
+    'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.VurderInntektsbortfallL\u00F8sning': {
+      /** @enum {string} */
+      behovstype:
+        | '4101'
+        | '4102'
+        | '4201'
+        | '5001'
+        | '5002'
+        | '5003'
+        | '5004'
+        | '5005'
+        | '5006'
+        | '5007'
+        | '5008'
+        | '5009'
+        | '5010'
+        | '5011'
+        | '5012'
+        | '5013'
+        | '5014'
+        | '5015'
+        | '5016'
+        | '5017'
+        | '5018'
+        | '5019'
+        | '5020'
+        | '5021'
+        | '5022'
+        | '5023'
+        | '5024'
+        | '5025'
+        | '5026'
+        | '5027'
+        | '5028'
+        | '5029'
+        | '5030'
+        | '5031'
+        | '5032'
+        | '5033'
+        | '5034'
+        | '5035'
+        | '5040'
+        | '5050'
+        | '5051'
+        | '5052'
+        | '5053'
+        | '5056'
+        | '5057'
+        | '5096'
+        | '5097'
+        | '5098'
+        | '5099'
+        | '5999'
+        | '6000'
+        | '6001'
+        | '6002'
+        | '6003'
+        | '6004'
+        | '6005'
+        | '6006'
+        | '6007'
+        | '6008'
+        | '6009'
+        | '6010'
+        | '7001'
+        | '8001'
+        | '8002'
+        | '8003'
+        | '9001'
+        | '9002'
+        | '9003'
+        | '9004';
+      vurdering: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.beregning.InntektsbortfallVurderingDto'];
+    };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.VurderKlageKontorL\u00F8sning': {
       /** @enum {string} */
       behovstype:
@@ -10622,6 +10773,48 @@ export interface components {
        */
       ytelseIverksattTom?: string | null;
     };
+    'no.nav.aap.behandlingsflyt.behandling.inntektsbortfall.GjennomsnittInntektSiste3\u00C5rOver3GDto': {
+      gverdi: number;
+      resultat: boolean;
+    };
+    'no.nav.aap.behandlingsflyt.behandling.inntektsbortfall.InntektSiste\u00C5rOver1GDto': {
+      gverdi: number;
+      resultat: boolean;
+    };
+    'no.nav.aap.behandlingsflyt.behandling.inntektsbortfall.InntektsbortfallGrunnlagResponse': {
+      grunnlag: components['schemas']['no.nav.aap.behandlingsflyt.behandling.inntektsbortfall.InntektsbortfallKanBehandlesAutomatiskDto'];
+      'harTilgangTil\u00C5Saksbehandle': boolean;
+      vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.inntektsbortfall.InntektsbortfallVurderingDto'];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.inntektsbortfall.InntektsbortfallKanBehandlesAutomatiskDto': {
+      'gjennomsnittInntektSiste3\u00C5rOver3G': components['schemas']['no.nav.aap.behandlingsflyt.behandling.inntektsbortfall.GjennomsnittInntektSiste3\u00C5rOver3GDto'];
+      'inntektSiste\u00C5rOver1G': components['schemas']['no.nav.aap.behandlingsflyt.behandling.inntektsbortfall.InntektSiste\u00C5rOver1GDto'];
+      kanBehandlesAutomatisk: boolean;
+      'under62\u00C5rVedS\u00F8knadstidspunkt': components['schemas']['no.nav.aap.behandlingsflyt.behandling.inntektsbortfall.Under62\u00C5rVedS\u00F8knadstidspunktDto'];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.inntektsbortfall.InntektsbortfallVurderingDto': {
+      begrunnelse: string;
+      besluttetAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fom: string;
+      kvalitetssikretAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
+      rettTilUttak: boolean;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      tom?: string | null;
+      vurdertAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
+      vurdertIBehandling: components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.behandling.BehandlingId'];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.inntektsbortfall.Under62\u00C5rVedS\u00F8knadstidspunktDto': {
+      /** Format: int32 */
+      alder: number;
+      resultat: boolean;
+    };
     'no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.HelseinstitusjonGrunnlagDto': {
       'harTilgangTil\u00C5Saksbehandle': boolean;
       opphold: components['schemas']['no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.InstitusjonsoppholdDto'][];
@@ -11398,8 +11591,8 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.behandling.rettighetsperiode.RettighetsperiodeVurderingResponse': {
       begrunnelse: string;
-      'harKravP\u00E5Renter'?: boolean | null;
-      'harRettUtoverS\u00F8knadsdato': boolean;
+      /** @enum {string} */
+      harRett: 'Ja' | 'Nei' | 'HarRettIkkeIStandTilÅSøkeTidligere' | 'HarRettMisvisendeOpplysninger';
       /**
        * Format: date
        * @example 2025-04-01
@@ -11427,6 +11620,16 @@ export interface components {
       'godkjentStudieAvL\u00E5nekassen'?: boolean | null;
       harAvbruttStudie: boolean;
       harBehovForBehandling?: boolean | null;
+      vurdertAv: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.student.sykestipend.SykestipendGrunnlagResponse': {
+      gjeldendeVurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.student.sykestipend.SykestipendvurderingResponse'];
+      'harTilgangTil\u00C5Saksbehandle': boolean;
+      historiskeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.student.sykestipend.SykestipendvurderingResponse'][];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.student.sykestipend.SykestipendvurderingResponse': {
+      begrunnelse: string;
+      perioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
       vurdertAv: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.svarfraandreinstans.svarfraandreinstans.SvarFraAndreinstansDto': {
@@ -12008,6 +12211,7 @@ export interface components {
         | 'BRUDD_PÅ_AKTIVITETSPLIKT_OPPHØR'
         | 'BRUDD_PÅ_OPPHOLDSKRAV_STANS'
         | 'BRUDD_PÅ_OPPHOLDSKRAV_OPPHØR'
+        | 'HAR_RETT_TIL_FULLT_UTTAK_ALDERSPENSJON'
         | null;
       begrunnelse?: string | null;
       /** @enum {string|null} */
@@ -12600,6 +12804,10 @@ export interface components {
       ytterligereNedsattArbeidsevneDato?: string | null;
       ytterligereNedsattBegrunnelse?: string | null;
     };
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.beregning.InntektsbortfallVurderingDto': {
+      begrunnelse: string;
+      rettTilUttak: boolean;
+    };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.beregning.ManuellInntektVurderingDto': {
       begrunnelse: string;
       belop?: number | null;
@@ -12769,8 +12977,8 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.rettighetsperiode.RettighetsperiodeVurderingDTO': {
       begrunnelse: string;
-      'harKravP\u00E5Renter'?: boolean | null;
-      'harRettUtoverS\u00F8knadsdato': boolean;
+      /** @enum {string} */
+      harRett: 'Ja' | 'Nei' | 'HarRettIkkeIStandTilÅSøkeTidligere' | 'HarRettMisvisendeOpplysninger';
       /**
        * Format: date
        * @example 2025-04-01
@@ -12856,6 +13064,7 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.sykestipend.SamordningSykestipendVurderingDto': {
       begrunnelse: string;
+      perioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.InnhentetSykdomsOpplysninger': {
       innhentedeYrkesskader: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.RegistrertYrkesskade'][];
@@ -13494,7 +13703,8 @@ export interface components {
         | 'SYKEPENGEERSTATNING'
         | 'STRAFFEGJENNOMFØRING'
         | 'AKTIVITETSPLIKT'
-        | 'OPPHOLDSKRAV';
+        | 'OPPHOLDSKRAV'
+        | 'INNTEKTSBORTFALL';
       /**
        * Format: date
        * @example 2025-04-01
@@ -13526,6 +13736,7 @@ export interface components {
         | 'BRUDD_PÅ_AKTIVITETSPLIKT_OPPHØR'
         | 'BRUDD_PÅ_OPPHOLDSKRAV_STANS'
         | 'BRUDD_PÅ_OPPHOLDSKRAV_OPPHØR'
+        | 'HAR_RETT_TIL_FULLT_UTTAK_ALDERSPENSJON'
         | null;
       begrunnelse?: string | null;
       /** @enum {string|null} */
