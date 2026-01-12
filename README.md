@@ -97,7 +97,7 @@ og må hentes ikke separat med yarn install.
 For å forhindre utilsiktede endringer i `yarn.lock` er man tvunget til å alltid kjøre følgende kommando når man vil oppdatere avhengigheter:
 
 ```bash
-  yarn install --immutable
+  yarn install --no-immutable
 ```
 
 ## Kode generert av GitHub Copilot
