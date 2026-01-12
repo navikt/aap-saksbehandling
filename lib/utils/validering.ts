@@ -1,5 +1,5 @@
 import { formaterDatoForFrontend, parseDatoFraDatePicker, stringToDate } from 'lib/utils/date';
-import { isAfter, isBefore, min, parseISO } from 'date-fns';
+import { isAfter, isBefore, min, parseISO, startOfDay } from 'date-fns';
 import { PeriodiserteVurderingerDto, PeriodisertVurderingFormFields, VurderingDto } from 'lib/types/types';
 import { UseFormReturn } from 'react-hook-form';
 import { Dato } from 'lib/types/Dato';
@@ -43,7 +43,11 @@ export function validerPeriodiserteVurderingerRekkefølge({
     const tidligsteDato = sorterteVurderinger[0]?.fraDato ? new Dato(sorterteVurderinger[0]?.fraDato).dato : null;
 
     const tidligsteDatoSomKanVurderes = new Date(grunnlag?.kanVurderes[0]?.fom!);
-    if (tidligsteDato && tidligsteDatoSomKanVurderes && isBefore(tidligsteDato, tidligsteDatoSomKanVurderes)) {
+    if (
+      tidligsteDato &&
+      tidligsteDatoSomKanVurderes &&
+      isBefore(tidligsteDato, startOfDay(tidligsteDatoSomKanVurderes))
+    ) {
       nyeVurderinger.forEach((_, index) => {
         form.setError(`vurderinger.${index}.fraDato`, {
           message: `Vurderingene du har laget starter før perioden du kan vurdere. Tidligste vurderte dato er ${formaterDatoForFrontend(tidligsteDato)} men tidligste dato som kan vurderes er ${formaterDatoForFrontend(tidligsteDatoSomKanVurderes)}.`,
