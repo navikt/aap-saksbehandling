@@ -163,7 +163,7 @@ export const Inntektsbortfall = ({
                 </Table.DataCell>
               </Table.Row>
               <Table.Row>
-                <Table.DataCell textSize={'small'}>Gjennomsnittsinntekt siste 3 år over 3 G</Table.DataCell>
+                <Table.DataCell textSize={'small'}>Inntekt siste 3 år over 3 G</Table.DataCell>
                 <Table.DataCell textSize={'small'}>
                   {formaterTilG(inntektSisteTreÅr.gverdi, { antallDesimaler: 2 })}
                 </Table.DataCell>
