@@ -37,15 +37,15 @@ export const DokumentInfoBanner = ({
   const erReservertAvInnloggetBruker = innloggetBrukerIdent === oppgave?.reservertAv;
 
   const hentOppgaveTildeling = (): OppgaveStatusType | undefined => {
-    if (!oppgave.reservertAv) {
+    if (!oppgave?.reservertAv ) {
       return { status: 'LEDIG', label: `Ledig` };
     } else if (erReservertAvInnloggetBruker) {
       return {
         status: 'TILDELT_INNLOGGET_BRUKER',
-        label: `Tildelt: ${oppgave.reservertAvNavn ?? oppgave.reservertAv}`,
+        label: `Tildelt: ${oppgave?.reservertAvNavn ?? oppgave?.reservertAv}`,
       };
     } else if (oppgave?.reservertAv && !erReservertAvInnloggetBruker) {
-      return { status: 'TILDELT', label: `Tildelt: ${oppgave.reservertAvNavn ?? oppgave.reservertAv}` };
+      return { status: 'TILDELT', label: `Tildelt: ${oppgave?.reservertAvNavn ?? oppgave?.reservertAv}` };
     }
   };
 
