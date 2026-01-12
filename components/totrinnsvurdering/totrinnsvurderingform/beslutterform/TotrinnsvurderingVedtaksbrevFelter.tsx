@@ -32,9 +32,13 @@ export const TotrinnsvurderingVedtaksbrevFelter = ({
     { label: 'Skrivefeil', value: 'SKRIVEFEIL' },
     { label: 'For detaljerte beskrivelser', value: 'FOR_DETALJERT' },
     { label: 'Ikke individuell og konkret nok', value: 'IKKE_INDIVIDUELL_OG_KONKRET' },
+    { label: 'Annen returårsak', value: 'ANNET' },
   ];
 
   const vurderingErIkkeGodkjent = form.watch(`totrinnsvurderinger.${index}.godkjent`) === JaEllerNei.Nei;
+  const annetGrunnErValgt =
+    form.watch(`totrinnsvurderinger.${index}.grunner`) &&
+    form.watch(`totrinnsvurderinger.${index}.grunner`)?.includes('ANNET');
 
   return (
     <div className={styles.totrinnsvurderingform}>
@@ -80,6 +84,23 @@ export const TotrinnsvurderingVedtaksbrevFelter = ({
                 </Checkbox>
               ))}
             </CheckboxWrapper>
+            {annetGrunnErValgt && (
+              <TextAreaWrapper
+                label={'Annen returårsak'}
+                description={'Kort beskrivelse (maks 50 tegn)'}
+                readOnly={readOnly}
+                control={form.control}
+                maxLength={50}
+                name={`totrinnsvurderinger.${index}.årsakFritekst`}
+                rules={{
+                  required: 'Annen returårsak må fylles ut',
+                  maxLength: {
+                    value: 50,
+                    message: 'Kan bestå av maks 50 tegn. Utfyllende begrunnelse skal i feltet over.',
+                  },
+                }}
+              />
+            )}{' '}
           </>
         )}
       </div>

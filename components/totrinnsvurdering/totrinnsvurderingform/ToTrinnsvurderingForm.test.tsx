@@ -282,6 +282,23 @@ describe('Totrinnsvurdering av vedtaksbrev', () => {
     expect(screen.getByRole('checkbox', { name: /Skrivefeil/ })).toBeVisible();
     expect(screen.getByRole('checkbox', { name: /For detaljerte beskrivelser/ })).toBeVisible();
     expect(screen.getByRole('checkbox', { name: /Ikke individuell og konkret nok/ })).toBeVisible();
+    expect(screen.getByRole('checkbox', { name: /Annen returårsak/ })).toBeVisible();
+  });
+
+  it('skal dukke opp et fritekst felt for å skrive inn en grunn dersom ANNET er valgt', async () => {
+    render(
+      <TotrinnsvurderingForm grunnlag={grunnlagUtenVurdering} erKvalitetssikring={false} link={link} readOnly={false} />
+    );
+
+    const vurderPåNyttValg = screen.getByRole('radio', { name: 'Nei' });
+    await user.click(vurderPåNyttValg);
+
+    expect(screen.queryByRole('textbox', { name: 'Annen returårsak' })).not.toBeInTheDocument();
+
+    const annetValg = screen.getByRole('checkbox', { name: 'Annen returårsak' });
+    await user.click(annetValg);
+
+    expect(screen.getByRole('textbox', { name: 'Annen returårsak' })).toBeVisible();
   });
 });
 
