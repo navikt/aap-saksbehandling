@@ -19,7 +19,7 @@ describe('Inntektsbortfall', () => {
           harTilgangTilÅSaksbehandle: true,
           grunnlag: {
             kanBehandlesAutomatisk: true,
-            gjennomsnittInntektSiste3ÅrOver3G: { resultat: true, gverdi: 4 },
+            inntektSiste3ÅrOver3G: { resultat: true, gverdi: 4 },
             inntektSisteÅrOver1G: { resultat: true, gverdi: 3 },
             under62ÅrVedSøknadstidspunkt: { resultat: false, alder: 62 },
           },

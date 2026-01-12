@@ -92,7 +92,7 @@ export const Inntektsbortfall = ({
 
   const under62År = grunnlag.under62ÅrVedSøknadstidspunkt;
   const inntektSisteÅr = grunnlag.inntektSisteÅrOver1G;
-  const inntektSisteTreÅr = grunnlag.gjennomsnittInntektSiste3ÅrOver3G;
+  const inntektSisteTreÅr = grunnlag.inntektSiste3ÅrOver3G;
 
   return (
     <VilkårskortMedFormOgMellomlagringNyVisning
@@ -163,7 +163,7 @@ export const Inntektsbortfall = ({
                 </Table.DataCell>
               </Table.Row>
               <Table.Row>
-                <Table.DataCell textSize={'small'}>Gjennomsnittsinntekt siste 3 år over 3 G</Table.DataCell>
+                <Table.DataCell textSize={'small'}>Inntekt siste 3 år over 3 G</Table.DataCell>
                 <Table.DataCell textSize={'small'}>
                   {formaterTilG(inntektSisteTreÅr.gverdi, { antallDesimaler: 2 })}
                 </Table.DataCell>
