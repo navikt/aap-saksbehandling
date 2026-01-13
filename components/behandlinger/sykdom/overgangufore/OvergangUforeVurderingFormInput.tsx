@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, HStack, Link, Radio, VStack } from '@navikt/ds-react';
+import { Alert, HStack, Radio, VStack } from '@navikt/ds-react';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
 import { UseFormReturn } from 'react-hook-form';
@@ -8,7 +8,6 @@ import React from 'react';
 import { OvergangUforeForm } from 'components/behandlinger/sykdom/overgangufore/OvergangUforePeriodisert';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { JaEllerNei } from 'lib/utils/form';
-import { Veiledning } from 'components/veiledning/Veiledning';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 
 interface Props {
@@ -29,20 +28,11 @@ export const OvergangUforeVurderingFormInput = ({ index, form, readonly }: Props
     form.watch(`vurderinger.${index}.brukerHarFåttVedtakOmUføretrygd`) === 'JA_AVSLAG';
   return (
     <VStack gap={'5'}>
-      <Veiledning
-        defaultOpen={false}
-        tekst={
-          <div>
-            <Link href="https://lovdata.no/pro/lov/1997-02-28-19/%C2%A711-18" target="_blank">
-              Du kan lese om hvordan vilkåret skal vurderes i rundskrivet til § 11-18
-            </Link>
-          </div>
-        }
-      />
       <HStack justify={'space-between'}>
         <DateInputWrapper
           name={`vurderinger.${index}.fraDato`}
           label={virkningsdatoLabel}
+          description={'Datoen må samsvare med søknadstidspunktet for uføretrygd'}
           control={form.control}
           rules={{
             required: 'Du må velge fra hvilken dato vurderingen gjelder fra',
