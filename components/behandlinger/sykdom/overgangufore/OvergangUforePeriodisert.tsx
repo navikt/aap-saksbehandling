@@ -107,6 +107,7 @@ export const OvergangUforePeriodisert = ({
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
       onLeggTilVurdering={() => append(emptyOvergangUføreVurdering())}
       errorList={errorList}
+      kvalitetssikretAv={grunnlag.kvalitetssikretAv}
     >
       <VStack gap={'4'}>
         <Veiledning
