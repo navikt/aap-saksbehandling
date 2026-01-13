@@ -31,7 +31,7 @@ export const BistandsbehovVurderingForm = ({ form, index, readOnly }: Props) => 
           label="Virkningstidspunkt for vurderingen"
           control={form.control}
           rules={{
-            required: 'Vennligst velg et virkningstidspunkt for vurderingene',
+            required: 'Vennligst velg et virkningstidspunkt for vurderingen',
             validate: (value) => validerDato(value as string),
           }}
           readOnly={readOnly}

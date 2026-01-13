@@ -218,7 +218,7 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
               name={`vurderinger.${index}.fraDato`}
               label={'Virkningstidspunkt for vurderingen'}
               rules={{
-                required: 'Vennligst velg et virkningstidspunkt for vurderingene',
+                required: 'Vennligst velg et virkningstidspunkt for vurderingen',
                 validate: (value) => validerDato(value as string),
               }}
               readOnly={formReadOnly}

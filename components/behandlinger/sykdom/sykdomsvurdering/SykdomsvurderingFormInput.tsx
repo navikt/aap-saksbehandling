@@ -57,7 +57,7 @@ export const SykdomsvurderingFormInput = ({
           label="Virkningstidspunkt for vurderingen"
           control={form.control}
           rules={{
-            required: 'Vennligst velg et virkningstidspunkt for vurderingene',
+            required: 'Vennligst velg et virkningstidspunkt for vurderingen',
             validate: {
               validerDato: (value) => validerDato(value as string),
               validerIkkeRelevantPeriode: (value) => {
