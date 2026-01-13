@@ -30,8 +30,8 @@ const grunnlagUtenYrkesskade: SykdomsGrunnlag = {
 };
 
 const grunnlagMedYrkesskade: SykdomsGrunnlag = {
-  behøverVurderinger: [{ fom: format(new Date(), 'yyyy-dd-MM'), tom: '2099-01-01' }],
-  kanVurderes: [{ fom: format(new Date(), 'yyyy-dd-MM'), tom: '2099-01-01' }],
+  behøverVurderinger: [{ fom: format(new Date(), 'yyyy-MM-dd'), tom: '2099-01-01' }],
+  kanVurderes: [{ fom: format(new Date(), 'yyyy-MM-dd'), tom: '2099-01-01' }],
   nyeVurderinger: [],
   sisteVedtatteVurderinger: [],
   perioderSomIkkeErTilstrekkeligVurdert: [],
