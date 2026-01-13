@@ -10557,6 +10557,7 @@ export interface components {
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.SykdomsvurderingForBrevVurderingDto'];
     };
     'no.nav.aap.behandlingsflyt.behandling.brev.SykdomsvurderingForBrevVurderingDto': {
+      kvalitetssikretAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
       vurdering?: string | null;
       vurdertAv: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
     };
