@@ -63,7 +63,9 @@ export const VilkårskortPeriodisert = ({
         <form onSubmit={onSubmit} id={steg} autoComplete="off">
           <VStack gap="4">
             {/* innhold i vilkårskortet */}
-            <VStack style={{ borderTop: '1px solid lightgray' }}>{children}</VStack>
+            <VStack style={{ borderTop: '1px solid lightgray' }} paddingBlock={'4 0'}>
+              {children}
+            </VStack>
 
             {/* Status / feil */}
             <LøsBehovOgGåTilNesteStegStatusAlert

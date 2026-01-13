@@ -2,13 +2,12 @@
 
 import { JaEllerNei } from 'lib/utils/form';
 import { validerDato } from 'lib/validation/dateValidation';
-import { HStack, Link, VStack } from '@navikt/ds-react';
+import { HStack, VStack } from '@navikt/ds-react';
 import { UseFormReturn } from 'react-hook-form';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
 import { BistandForm } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovPeriodisert';
 import { BistandsGrunnlag } from 'lib/types/types';
-import { Veiledning } from 'components/veiledning/Veiledning';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 
 type Props = {
@@ -26,21 +25,6 @@ export const BistandsbehovVurderingForm = ({ form, index, readOnly }: Props) => 
 
   return (
     <VStack gap={'4'}>
-      <Veiledning
-        defaultOpen={false}
-        tekst={
-          <div>
-            Vilkårene i § 11-6 første ledd bokstav a til c er tre alternative vilkår. Det vil si at det er nok at
-            brukeren oppfyller ett av dem for å fylle vilkåret i § 11-6.Først skal du vurdere om vilkårene i bokstav a
-            (aktiv behandling) og bokstav b (arbeidsrettet tiltak) er oppfylte. Hvis du svarer ja på ett eller begge
-            vilkårene, er § 11-6 oppfylt. Hvis du svarer nei på a og b, må du vurdere om bokstav c er oppfylt. Hvis du
-            svarer nei på alle tre vilkårene, er § 11-6 ikke oppfylt.{' '}
-            <Link href="https://lovdata.no/nav/rundskriv/r11-00#KAPITTEL_8" target="_blank">
-              Du kan lese om hvordan vilkåret skal vurderes i rundskrivet til § 11-6 (lovdata.no)
-            </Link>
-          </div>
-        }
-      />
       <HStack justify={'space-between'}>
         <DateInputWrapper
           name={`vurderinger.${index}.fraDato`}

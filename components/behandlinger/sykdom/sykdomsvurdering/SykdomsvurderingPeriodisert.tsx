@@ -24,6 +24,7 @@ import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/sy
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { parseDatoFraDatePicker } from 'lib/utils/date';
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
+import { Link, VStack } from '@navikt/ds-react';
 
 export interface SykdomsvurderingerForm {
   vurderinger: Array<Sykdomsvurdering>;
@@ -185,47 +186,52 @@ export const SykdomsvurderingPeriodisert = ({
       onLeggTilVurdering={() => append(emptySykdomsvurdering())}
       errorList={errorList}
     >
-      {vedtatteVurderinger.map((vurdering) => (
-        <TidligereVurderingExpandableCard
-          key={vurdering.fom}
-          fom={new Dato(vurdering.fom).dato}
-          tom={vurdering.tom ? parseISO(vurdering.tom) : undefined}
-          foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-          oppfylt={
-            getJaNeiEllerUndefined(vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten) === JaEllerNei.Ja ||
-            getJaNeiEllerUndefined(vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense) === JaEllerNei.Ja
-          }
-          defaultCollapsed={nyeVurderingerFields.length > 0}
-        >
-          <TidligereSykdomsvurdering vurdering={vurdering} />
-        </TidligereVurderingExpandableCard>
-      ))}
-      {nyeVurderingerFields.map((vurdering, index) => (
-        <NyVurderingExpandableCard
-          key={vurdering.id}
-          fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-          oppfylt={erVurderingOppfylt(form.watch(`vurderinger.${index}`))}
-          nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
-          isLast={index === nyeVurderingerFields.length - 1}
-          vurdertAv={vurdering.vurdertAv}
-          finnesFeil={finnesFeilForVurdering(index, errorList)}
-          readonly={formReadOnly}
-          onRemove={() => remove(index)}
-          harTidligereVurderinger={tidligereVurderinger.length > 0}
-          index={index}
-        >
-          <SykdomsvurderingFormInput
-            index={index}
-            form={form}
+      <VStack gap={'4'}>
+        <Link href="https://lovdata.no/nav/rundskriv/r11-00#KAPITTEL_7-1" target="_blank">
+          Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-5 (lovdata.no)
+        </Link>
+        {vedtatteVurderinger.map((vurdering) => (
+          <TidligereVurderingExpandableCard
+            key={vurdering.fom}
+            fom={new Dato(vurdering.fom).dato}
+            tom={vurdering.tom ? parseISO(vurdering.tom) : undefined}
+            foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+            oppfylt={
+              getJaNeiEllerUndefined(vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten) === JaEllerNei.Ja ||
+              getJaNeiEllerUndefined(vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense) === JaEllerNei.Ja
+            }
+            defaultCollapsed={nyeVurderingerFields.length > 0}
+          >
+            <TidligereSykdomsvurdering vurdering={vurdering} />
+          </TidligereVurderingExpandableCard>
+        ))}
+        {nyeVurderingerFields.map((vurdering, index) => (
+          <NyVurderingExpandableCard
+            key={vurdering.id}
+            fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
+            oppfylt={erVurderingOppfylt(form.watch(`vurderinger.${index}`))}
+            nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
+            isLast={index === nyeVurderingerFields.length - 1}
+            vurdertAv={vurdering.vurdertAv}
+            finnesFeil={finnesFeilForVurdering(index, errorList)}
             readonly={formReadOnly}
-            typeBehandling={typeBehandling}
-            sak={sak}
-            erÅrsakssammenhengYrkesskade={grunnlag.erÅrsakssammenhengYrkesskade}
-            skalVurdereYrkesskade={grunnlag.skalVurdereYrkesskade}
-            erRevurderingAvFørstegangsbehandling={behandlingErRevurderingAvFørstegangsbehandling()}
-          />
-        </NyVurderingExpandableCard>
-      ))}
+            onRemove={() => remove(index)}
+            harTidligereVurderinger={tidligereVurderinger.length > 0}
+            index={index}
+          >
+            <SykdomsvurderingFormInput
+              index={index}
+              form={form}
+              readonly={formReadOnly}
+              typeBehandling={typeBehandling}
+              sak={sak}
+              erÅrsakssammenhengYrkesskade={grunnlag.erÅrsakssammenhengYrkesskade}
+              skalVurdereYrkesskade={grunnlag.skalVurdereYrkesskade}
+              erRevurderingAvFørstegangsbehandling={behandlingErRevurderingAvFørstegangsbehandling()}
+            />
+          </NyVurderingExpandableCard>
+        ))}
+      </VStack>
     </VilkårskortPeriodisert>
   );
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { HStack, Link, VStack } from '@navikt/ds-react';
+import { HStack, VStack } from '@navikt/ds-react';
 import { erDatoIPeriode, validerDato } from 'lib/validation/dateValidation';
 import { parse } from 'date-fns';
 import { stringToDate } from 'lib/utils/date';
@@ -51,9 +51,6 @@ export const SykdomsvurderingFormInput = ({
 
   return (
     <VStack gap={'5'}>
-      <Link href="https://lovdata.no/nav/rundskriv/r11-00#KAPITTEL_7-1" target="_blank">
-        Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-5 (lovdata.no)
-      </Link>
       <HStack justify={'space-between'}>
         <DateInputWrapper
           name={`vurderinger.${index}.fraDato`}
