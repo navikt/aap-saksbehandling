@@ -26,6 +26,7 @@ import { Link, VStack } from '@navikt/ds-react';
 import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
 import { IkkeVurderbarPeriode } from 'components/periodisering/IkkeVurderbarPeriode';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
+import { vurdertAvFraPeriodisertVurdering } from 'lib/utils/vurdert-av';
 
 interface Props {
   behandlingVersjon: number;
@@ -142,7 +143,7 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}
       visningModus={visningModus}
       visningActions={visningActions}
-      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
+      formReset={() => form.reset(getDefaultValuesFromGrunnlag(grunnlag))}
       onLeggTilVurdering={onAddPeriode}
       errorList={errorList}
     >
@@ -235,14 +236,7 @@ function getDefaultValuesFromGrunnlag(
       fraDato: formaterDatoForFrontend(vurdering.fom),
       reellMulighetTilOpptrapping: getJaNeiEllerUndefined(vurdering.reellMulighetTilOpptrapping),
       rettPaaAAPIOpptrapping: getJaNeiEllerUndefined(vurdering.rettPaaAAPIOpptrapping),
-      vurdertAv:
-        vurdering.vurdertAv != null
-          ? {
-              ansattnavn: vurdering.vurdertAv.ansattnavn,
-              ident: vurdering.vurdertAv.ident,
-              dato: vurdering.vurdertAv.dato,
-            }
-          : undefined,
+      vurdertAv: vurdertAvFraPeriodisertVurdering(vurdering.vurdertAv),
     })),
   };
 }
