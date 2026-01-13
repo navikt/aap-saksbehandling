@@ -86,7 +86,6 @@ export function TidligereVurderinger({
   const [selectedIndex, setSelectedIndex] = useState(0);
   const selected = mappedVurderinger[selectedIndex];
 
-  console.log('selected', selected);
   return (
     <ExpansionCard
       aria-label="Tidligere vurderinger"
