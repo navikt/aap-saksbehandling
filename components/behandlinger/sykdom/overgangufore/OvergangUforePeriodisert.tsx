@@ -19,6 +19,7 @@ import { TidligereVurderingExpandableCard } from 'components/periodisering/tidli
 import { OvergangUforeTidligereVurdering } from 'components/behandlinger/sykdom/overgangufore/OvergangUforeTidligereVurdering';
 import { Link, VStack } from '@navikt/ds-react';
 import { Veiledning } from 'components/veiledning/Veiledning';
+import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
 
 interface Props {
   behandlingVersjon: number;
@@ -73,13 +74,20 @@ export const OvergangUforePeriodisert = ({
           referanse: behandlingsReferanse,
           behov: {
             behovstype: Behovstype.OVERGANG_UFORE,
-            løsningerForPerioder: data.vurderinger.map((vurdering) => ({
-              fom: formaterDatoForBackend(parse(vurdering.fraDato, 'dd.MM.yyyy', new Date())),
-              begrunnelse: vurdering.begrunnelse,
-              brukerHarSøktOmUføretrygd: vurdering.brukerHarSøktUføretrygd === JaEllerNei.Ja,
-              brukerHarFåttVedtakOmUføretrygd: vurdering.brukerHarFåttVedtakOmUføretrygd,
-              brukerRettPåAAP: vurdering.brukerRettPåAAP === JaEllerNei.Ja,
-            })),
+            løsningerForPerioder: data.vurderinger.map((vurdering, index) => {
+              const isLast = index === data.vurderinger.length - 1;
+              const tilDato = isLast
+                ? undefined
+                : parseDatoFraDatePickerOgTrekkFra1Dag(data.vurderinger[index + 1].fraDato);
+              return {
+                fom: formaterDatoForBackend(parse(vurdering.fraDato, 'dd.MM.yyyy', new Date())),
+                tom: tilDato ? formaterDatoForBackend(tilDato) : undefined,
+                begrunnelse: vurdering.begrunnelse,
+                brukerHarSøktOmUføretrygd: vurdering.brukerHarSøktUføretrygd === JaEllerNei.Ja,
+                brukerHarFåttVedtakOmUføretrygd: vurdering.brukerHarFåttVedtakOmUføretrygd,
+                brukerRettPåAAP: vurdering.brukerRettPåAAP === JaEllerNei.Ja,
+              };
+            }),
           },
         },
         () => nullstillMellomlagretVurdering()
