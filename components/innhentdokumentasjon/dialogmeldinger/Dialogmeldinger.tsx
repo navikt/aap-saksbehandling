@@ -48,7 +48,8 @@ const Dialogmelding = ({ melding }: { melding: LegeerklæringStatus }) => {
   };
 
   const behandlingsreferanse = useBehandlingsReferanse();
-  const { purrPåDialogmelding, isLoading } = usePurrPåDialogmelding();
+  const { purrPåDialogmelding, isLoading, error } = usePurrPåDialogmelding();
+
   return (
     <Table.Row>
       <Table.DataCell textSize={'small'} className={styles.status}>
@@ -73,6 +74,12 @@ const Dialogmelding = ({ melding }: { melding: LegeerklæringStatus }) => {
               loading={isLoading}
               onClick={handlePurringClick}
             />
+          )}
+
+          {error && (
+            <Alert variant={'error'} size={'small'}>
+              {error}
+            </Alert>
           )}
         </HStack>
       </Table.DataCell>
