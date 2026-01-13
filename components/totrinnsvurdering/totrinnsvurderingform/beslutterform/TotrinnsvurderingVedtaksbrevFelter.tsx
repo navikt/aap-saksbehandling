@@ -68,7 +68,15 @@ export const TotrinnsvurderingVedtaksbrevFelter = ({
               readOnly={readOnly}
               control={form.control}
               name={`totrinnsvurderinger.${index}.begrunnelse`}
-              rules={{ required: 'Du må skrive en grunn for retur' }}
+              rules={{
+                required: 'Du må skrive en grunn for retur',
+                validate: {
+                  ikkeKunWhitespace: (value) =>
+                    value && (value as string).trim().length === 0
+                      ? 'Begrunnelse kan ikke være tom eller kun inneholde mellomrom'
+                      : true,
+                },
+              }}
               className={'begrunnelse'}
             />
             <CheckboxWrapper
