@@ -46,7 +46,12 @@ For at pre-commit hooks for linting og formatering skal kunne kjøre, må du set
    ```
    Applikasjonen skal nå være tilgjengelig i nettleseren på http://localhost:3000
 
-**OBS:** Husk å starte backend-tjenestene lokalt også, etter egen oppskrift.
+**OBS:** Husk å starte backend-tjenestene lokalt også, etter egen oppskrift.\
+Dersom du har kjørt opp mot devmiljø tidligere kan det hende du må drepe Wonderwall:
+
+```bash
+  docker-compose down
+```
 
 ## Kjøre opp lokalt mot devmiljø
 
