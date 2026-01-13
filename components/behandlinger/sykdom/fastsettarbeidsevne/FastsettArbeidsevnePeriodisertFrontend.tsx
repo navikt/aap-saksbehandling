@@ -160,7 +160,7 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
       status={status}
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      kvalitetssikretAv={grunnlag?.sisteVedtatteVurderinger?.[0]?.kvalitetssikretAv}
+      kvalitetssikretAv={grunnlag?.kvalitetssikretAv}
       mellomlagretVurdering={mellomlagretVurdering}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}

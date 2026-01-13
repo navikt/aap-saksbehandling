@@ -146,6 +146,7 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
       formReset={() => form.reset(getDefaultValuesFromGrunnlag(grunnlag))}
       onLeggTilVurdering={onAddPeriode}
       errorList={errorList}
+      kvalitetssikretAv={grunnlag?.kvalitetssikretAv}
     >
       {!formReadOnly && (
         <VStack paddingBlock={'4'}>
