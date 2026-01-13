@@ -1,6 +1,6 @@
 'use client';
 
-import { MellomlagretVurdering, OvergangUforeGrunnlag } from 'lib/types/types';
+import { MellomlagretVurdering, OvergangUforeGrunnlag, VurdertAvAnsatt } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
@@ -34,6 +34,7 @@ interface OvergangUforeVurderingForm {
   brukerHarSøktUføretrygd: JaEllerNei | undefined;
   brukerHarFåttVedtakOmUføretrygd: string;
   brukerRettPåAAP?: JaEllerNei | undefined;
+  vurdertAv?: VurdertAvAnsatt;
 }
 
 export const OvergangUforePeriodisert = ({
@@ -138,7 +139,7 @@ export const OvergangUforePeriodisert = ({
             }
             nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
             isLast={index === nyeVurderingFields.length - 1}
-            vurdertAv={undefined} // TODO:
+            vurdertAv={vurdering.vurdertAv}
             finnesFeil={finnesFeilForVurdering(index, errorList)}
             readonly={formReadOnly}
             onRemove={() => remove(index)}
@@ -171,6 +172,7 @@ export const OvergangUforePeriodisert = ({
         brukerRettPåAAP: getJaNeiEllerUndefined(vurdering?.brukerRettPåAAP),
         brukerHarSøktUføretrygd: getJaNeiEllerUndefined(vurdering?.brukerHarSøktUføretrygd),
         brukerHarFåttVedtakOmUføretrygd: vurdering?.brukerHarFåttVedtakOmUføretrygd || '',
+        vurdertAv: vurdering.vurdertAv,
       })),
     };
   }
