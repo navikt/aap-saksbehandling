@@ -126,7 +126,6 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
     });
   }
 
-  const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const foersteNyePeriode = fields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
   const errorList = mapPeriodiserteVurderingerErrorList<LovOgMedlemskapVurderingForm>(form.formState.errors);
   return (
@@ -205,7 +204,7 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
           finnesFeil={finnesFeilForVurdering(index, errorList)}
           onRemove={() => remove(index)}
           readonly={formReadOnly}
-          harTidligereVurderinger={tidligereVurderinger.length > 0}
+          harTidligereVurderinger={true}
           index={index}
         >
           <ArbeidsopptrappingVurderingFormInput
