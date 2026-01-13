@@ -28,10 +28,10 @@ export const BistandsbehovVurderingForm = ({ form, index, readOnly }: Props) => 
       <HStack justify={'space-between'}>
         <DateInputWrapper
           name={`vurderinger.${index}.fraDato`}
-          label="Vurderingen gjelder fra"
+          label="Virkningstidspunkt for vurderingen"
           control={form.control}
           rules={{
-            required: 'Du må velge fra hvilken dato vurderingen gjelder fra',
+            required: 'Vennligst velg et virkningstidspunkt for vurderingene',
             validate: (value) => validerDato(value as string),
           }}
           readOnly={readOnly}

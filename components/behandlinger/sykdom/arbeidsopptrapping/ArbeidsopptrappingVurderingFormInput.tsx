@@ -26,10 +26,10 @@ export const ArbeidsopptrappingVurderingFormInput = ({ index, readonly, form, ik
       <HStack justify={'space-between'}>
         <DateInputWrapper
           name={`vurderinger.${index}.fraDato`}
-          label="Vurderingen gjelder fra"
+          label="Virkningstidspunkt for vurderingen"
           control={form.control}
           rules={{
-            required: 'Du må velge fra hvilken dato vurderingen gjelder fra',
+            required: 'Vennligst velg et virkningstidspunkt for vurderingene',
             validate: {
               validerDato: (value) => validerDato(value as string),
               validerIkkeRelevantPeriode: (value) => {

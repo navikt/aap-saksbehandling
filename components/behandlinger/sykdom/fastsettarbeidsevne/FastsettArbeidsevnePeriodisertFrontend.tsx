@@ -216,9 +216,9 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
             <DateInputWrapper
               control={form.control}
               name={`vurderinger.${index}.fraDato`}
-              label={'Vurderingen gjelder fra'}
+              label={'Virkningstidspunkt for vurderingen'}
               rules={{
-                required: 'Du må angi datoen arbeidsevnen gjelder fra',
+                required: 'Vennligst velg et virkningstidspunkt for vurderingene',
                 validate: (value) => validerDato(value as string),
               }}
               readOnly={formReadOnly}
