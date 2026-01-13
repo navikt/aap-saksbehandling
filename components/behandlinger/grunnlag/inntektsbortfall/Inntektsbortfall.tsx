@@ -6,7 +6,7 @@ import styles from './Inntektsbortfall.module.css';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { FormEvent } from 'react';
 import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
-import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { useVilkårskortVisning, VisningModus } from 'hooks/saksbehandling/visning/VisningHook';
 import { Alert, Table } from '@navikt/ds-react';
 import { InntektsbortfallResponse, MellomlagretVurdering } from 'lib/types/types';
 import { TableStyled } from 'components/tablestyled/TableStyled';
@@ -102,7 +102,7 @@ export const Inntektsbortfall = ({
       status={status}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       isLoading={isLoading}
-      vurdertAutomatisk={true}
+      vurdertAutomatisk={grunnlag.kanBehandlesAutomatisk}
       vurdertAvAnsatt={vurdering?.vurdertAv}
       onSubmit={(event: FormEvent<HTMLFormElement>) => {
         form.handleSubmit(
@@ -123,7 +123,7 @@ export const Inntektsbortfall = ({
         )(event);
       }}
       mellomlagretVurdering={mellomlagretVurdering}
-      visningModus={visningModus}
+      visningModus={enabled ? visningModus : VisningModus.LÅST_UTEN_ENDRE}
       visningActions={visningActions}
       formReset={() => {
         form.reset(vurdering ? mapVurderingToDraftFormFields(vurdering) : {});

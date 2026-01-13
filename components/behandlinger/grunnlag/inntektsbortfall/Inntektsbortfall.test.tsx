@@ -1,17 +1,21 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render, screen } from 'lib/test/CustomRender';
 import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 import { Inntektsbortfall } from './Inntektsbortfall';
+import { InntektsbortfallMedDataFetching } from './InntektsbortfallMedDataFetching';
 import { mockedFlags } from 'lib/services/unleash/unleashToggles';
+import * as saksbehandlingService from 'lib/services/saksbehandlingservice/saksbehandlingService';
 
 beforeEach(() => {
   setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'MANGLENDE_LIGNING' });
 });
 
 describe('Inntektsbortfall', () => {
-  beforeEach(() => {
+  it('skal ha en alert', async () => {
+    setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'MANGLENDE_LIGNING' });
     mockedFlags.KravOmInntektsbortfall = false;
-    render(
+
+    const { findByText } = render(
       <Inntektsbortfall
         behandlingVersjon={1}
         readOnly={true}
@@ -27,11 +31,70 @@ describe('Inntektsbortfall', () => {
         }}
       />
     );
-  });
-  it('skal ha en alert', () => {
-    const alert = screen.getByText(
-      'Brukeren er over 62 år og må vurderes for § 11-4 andre ledd. Det er ikke støttet i Kelvin enda. Saken må settes på vent i påvente av at funksjonaliteten er ferdig utviklet.'
-    );
+
+    const alert = await findByText(/Brukeren er over 62 år og må vurderes for § 11-4 andre ledd/);
     expect(alert).toBeVisible();
+  });
+});
+
+describe('InntektsbortfallMedDataFetching', () => {
+  it('skal vise Inntektsbortfall når bruker er under 62 år', async () => {
+    vi.spyOn(saksbehandlingService, 'hentInntektsBortfallGrunnlag').mockResolvedValue({
+      type: 'SUCCESS',
+      data: {
+        harTilgangTilÅSaksbehandle: true,
+        grunnlag: {
+          kanBehandlesAutomatisk: true,
+          inntektSiste3ÅrOver3G: { resultat: true, gverdi: 4 },
+          inntektSisteÅrOver1G: { resultat: true, gverdi: 3 },
+          under62ÅrVedSøknadstidspunkt: { resultat: true, alder: 60 },
+        },
+        vurdering: undefined,
+      },
+    });
+    vi.spyOn(saksbehandlingService, 'hentMellomlagring').mockResolvedValue(undefined);
+
+    const result = await InntektsbortfallMedDataFetching({
+      behandlingsReferanse: 'test-ref',
+      stegData: {
+        readOnly: false,
+        behandlingVersjon: 1,
+        typeBehandling: 'Førstegangsbehandling',
+        avklaringsbehov: [],
+        skalViseSteg: true,
+      },
+    });
+
+    expect(result).not.toBeNull();
+  });
+
+  it('skal ikke vise Inntektsbortfall når bruker er over 62 år', async () => {
+    vi.spyOn(saksbehandlingService, 'hentInntektsBortfallGrunnlag').mockResolvedValue({
+      type: 'SUCCESS',
+      data: {
+        harTilgangTilÅSaksbehandle: true,
+        grunnlag: {
+          kanBehandlesAutomatisk: true,
+          inntektSiste3ÅrOver3G: { resultat: true, gverdi: 4 },
+          inntektSisteÅrOver1G: { resultat: true, gverdi: 3 },
+          under62ÅrVedSøknadstidspunkt: { resultat: false, alder: 63 },
+        },
+        vurdering: undefined,
+      },
+    });
+    vi.spyOn(saksbehandlingService, 'hentMellomlagring').mockResolvedValue(undefined);
+
+    const result = await InntektsbortfallMedDataFetching({
+      behandlingsReferanse: 'test-ref',
+      stegData: {
+        readOnly: false,
+        behandlingVersjon: 1,
+        typeBehandling: 'Førstegangsbehandling',
+        avklaringsbehov: [],
+        skalViseSteg: true,
+      },
+    });
+
+    expect(result).toBeNull();
   });
 });

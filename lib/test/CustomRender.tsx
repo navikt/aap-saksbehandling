@@ -16,7 +16,7 @@ const today = format(new Date(), 'yyyy-MM-dd');
 const tomorrow = format(addDays(new Date(), 1), 'yyyy-MM-dd');
 
 export function customRender(ui: ReactElement) {
-  render(
+  return render(
     <FeatureFlagProvider flags={mockedFlags}>
       <IngenFlereOppgaverModalContextProvider>
         <SakContextProvider
