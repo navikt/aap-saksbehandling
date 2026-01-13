@@ -55,7 +55,9 @@ export const getStegData = (
   const harAvklaringsbehov = avklaringsbehov.length > 0;
   const typeBehandling = behandlingFlytOgTilstand.visning.typeBehandling;
   const readOnly =
-    behandlingFlytOgTilstand.visning.saksbehandlerReadOnly || (typeBehandling === 'Revurdering' && !harAvklaringsbehov);
+    behandlingFlytOgTilstand.visning.saksbehandlerReadOnly ||
+    (typeBehandling === 'Revurdering' && !harAvklaringsbehov) ||
+    avklaringsbehov[0]?.status === 'KVALITETSSIKRET';
 
   return {
     behandlingVersjon: behandlingFlytOgTilstand.behandlingVersjon,
