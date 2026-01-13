@@ -22,7 +22,7 @@ export const OvergangUforeVurderingFormInput = ({ index, form, readonly }: Props
   const brukerSøktUføretrygdLabel = 'Har brukeren søkt om uføretrygd?';
   const brukerHarFaattVedtakOmUføretrygdLabel = 'Har brukeren fått vedtak på søknaden om uføretrygd?';
   const brukerrettPaaAAPLabel = 'Har brukeren rett på AAP under behandling av krav om uføretrygd etter § 11-18?';
-  const virkningsdatoLabel = 'Virkningstidspunkt for vurderingen';
+  const virkningsdatoLabel = 'Vurderingen gjelder fra';
 
   const brukerHarSoktOmUforetrygd = form.watch(`vurderinger.${index}.brukerHarSøktUføretrygd`) === JaEllerNei.Ja;
   const brukerHarFattAvslagPaUforetrygd =

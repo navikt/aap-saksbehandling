@@ -54,10 +54,10 @@ export const SykdomsvurderingFormInput = ({
       <HStack justify={'space-between'}>
         <DateInputWrapper
           name={`vurderinger.${index}.fraDato`}
-          label="Virkningstidspunkt for vurderingen"
+          label="Vurderingen gjelder fra"
           control={form.control}
           rules={{
-            required: 'Vennligst velg et virkningstidspunkt for vurderingen',
+            required: 'Vennligst velg en dato for når vurderingen gjelder fra',
             validate: {
               validerDato: (value) => validerDato(value as string),
               validerIkkeRelevantPeriode: (value) => {

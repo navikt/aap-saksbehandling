@@ -673,7 +673,7 @@ describe('revurdering', () => {
       />
     );
 
-    expect(screen.getByRole('textbox', { name: 'Virkningstidspunkt for vurderingen' })).toBeVisible();
+    expect(screen.getByRole('textbox', { name: 'Vurderingen gjelder fra' })).toBeVisible();
   });
 
   it('viser feilmelding dersom dato for når vurderingen gjelder fra er før søknadstidspunkt', async () => {
@@ -720,7 +720,7 @@ describe('revurdering', () => {
       format(subDays(new Date(), 4), 'yyyy-MM-dd')
     );
 
-    const datofelt = screen.getByRole('textbox', { name: 'Virkningstidspunkt for vurderingen' });
+    const datofelt = screen.getByRole('textbox', { name: 'Vurderingen gjelder fra' });
     const datoForVurderingInput = format(new Date(), 'ddMMyy');
     await user.type(datofelt, datoForVurderingInput);
     await velgBekreft();
@@ -739,7 +739,7 @@ describe('revurdering', () => {
       format(søknadstidspunkt, 'yyyy-MM-dd')
     );
 
-    const datofelt = screen.getByRole('textbox', { name: 'Virkningstidspunkt for vurderingen' });
+    const datofelt = screen.getByRole('textbox', { name: 'Vurderingen gjelder fra' });
     const datoForVurderingInput = format(søknadstidspunkt, 'ddMMyy');
     await user.type(datofelt, datoForVurderingInput);
     await velgBekreft();
@@ -1209,7 +1209,7 @@ const velgAtArbeidsevnenErNedsattMedMinstFørtiProsent = async () =>
   await velgJaIGruppe(screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt med minst 40 prosent?' }));
 
 const skrivInnDatoForNårVurderingenGjelderFra = async (dato: string) => {
-  const datofelt = screen.getByRole('textbox', { name: 'Virkningstidspunkt for vurderingen' });
+  const datofelt = screen.getByRole('textbox', { name: 'Vurderingen gjelder fra' });
   await user.clear(datofelt);
   await user.type(datofelt, dato);
 };

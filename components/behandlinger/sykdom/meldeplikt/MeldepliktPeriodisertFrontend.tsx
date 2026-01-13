@@ -206,10 +206,10 @@ export const MeldepliktPeriodisertFrontend = ({
           <HStack justify={'space-between'}>
             <DateInputWrapper
               name={`vurderinger.${index}.fraDato`}
-              label="Virkningstidspunkt for vurderingen"
+              label="Vurderingen gjelder fra"
               control={form.control}
               rules={{
-                required: 'Vennligst velg et virkningstidspunkt for vurderingen',
+                required: 'Vennligst velg en dato for når vurderingen gjelder fra',
                 validate: (value) => validerDato(value as string),
               }}
               readOnly={formReadOnly}
