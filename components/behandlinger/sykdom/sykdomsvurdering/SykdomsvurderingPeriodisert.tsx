@@ -22,9 +22,10 @@ import { TidligereSykdomsvurdering } from 'components/behandlinger/sykdom/sykdom
 import mapTilPeriodisertVurdering from 'components/behandlinger/sykdom/sykdomsvurdering/periodisertVurderingMapper';
 import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMellomlagringParser';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
-import { parseDatoFraDatePicker } from 'lib/utils/date';
+import { formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
 import { Link, VStack } from '@navikt/ds-react';
+import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
 
 export interface SykdomsvurderingerForm {
   vurderinger: Array<Sykdomsvurdering>;
@@ -117,16 +118,21 @@ export const SykdomsvurderingPeriodisert = ({
           behandlingVersjon: behandlingVersjon,
           behov: {
             behovstype: Behovstype.AVKLAR_SYKDOM_KODE,
-            løsningerForPerioder: data.vurderinger.map((vurdering) =>
-              mapTilPeriodisertVurdering(
+            løsningerForPerioder: data.vurderinger.map((vurdering, index) => {
+              const isLast = index === data.vurderinger.length - 1;
+              const tilDato = isLast
+                ? undefined
+                : parseDatoFraDatePickerOgTrekkFra1Dag(data.vurderinger[index + 1].fraDato);
+              return mapTilPeriodisertVurdering(
                 vurdering,
                 grunnlag.skalVurdereYrkesskade,
                 grunnlag.erÅrsakssammenhengYrkesskade,
                 behandlingErFørstegangsbehandling,
                 behandlingErRevurdering,
-                behandlingErRevurderingAvFørstegangsbehandling()
-              )
-            ),
+                behandlingErRevurderingAvFørstegangsbehandling(),
+                tilDato ? formaterDatoForBackend(tilDato) : undefined
+              );
+            }),
           },
           referanse: behandlingsReferanse,
         },
