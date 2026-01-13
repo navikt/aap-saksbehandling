@@ -147,7 +147,6 @@ export const MeldepliktPeriodisertFrontend = ({
       status={status}
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      vurdertAvAnsatt={grunnlag?.sisteVedtatteVurderinger?.[0]?.vurdertAv}
       kvalitetssikretAv={grunnlag?.sisteVedtatteVurderinger?.[0]?.kvalitetssikretAv}
       mellomlagretVurdering={mellomlagretVurdering}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
