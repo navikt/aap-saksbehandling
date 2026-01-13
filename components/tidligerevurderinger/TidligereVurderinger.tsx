@@ -82,9 +82,11 @@ export function TidligereVurderinger({
     erGjeldendeVurdering: getErGjeldende(v),
     felter: buildFelter && buildFelter(v),
   }));
+
   const [selectedIndex, setSelectedIndex] = useState(0);
   const selected = mappedVurderinger[selectedIndex];
 
+  console.log('selected', selected);
   return (
     <ExpansionCard
       aria-label="Tidligere vurderinger"
@@ -143,8 +145,8 @@ export function TidligereVurderinger({
                   ))}
             </div>
             <Detail className={styles.footer} align="end">
-              {`Vurdert av ${selected.vurdertAvIdent}${
-                selected.vurdertDato ? `, ${formaterDatoForFrontend(selected.vurdertDato)}` : ''
+              {`Vurdert av ${selected?.vurdertAvIdent}${
+                selected?.vurdertDato ? `, ${formaterDatoForFrontend(selected.vurdertDato)}` : ''
               }`}
             </Detail>
           </div>
