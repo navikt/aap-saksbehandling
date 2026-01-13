@@ -1,6 +1,6 @@
 import { mellomlagreBrev } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { NextRequest, NextResponse } from 'next/server';
-import { logError } from 'lib/serverutlis/logger';
+import { logError, logInfo } from 'lib/serverutlis/logger';
 import { isError } from 'lib/utils/api';
 
 export async function POST(req: NextRequest, props: { params: Promise<{ brevbestillingReferanse: string }> }) {
@@ -9,6 +9,11 @@ export async function POST(req: NextRequest, props: { params: Promise<{ brevbest
   try {
     const res = await mellomlagreBrev(params.brevbestillingReferanse, body);
     if (isError(res)) {
+      if (res.status === 403) {
+        logInfo(
+          `/api/brev/brevbestillingsreferanse/oppdater ${res.status} ${res.apiException.code}: ${res.apiException.message}`
+        );
+      }
       logError(
         `/api/brev/brevbestillingsreferanse/oppdater ${res.status} - ${res.apiException.code}: ${res.apiException.message}`
       );

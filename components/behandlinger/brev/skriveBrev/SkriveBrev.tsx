@@ -95,14 +95,16 @@ export const SkriveBrev = ({
   const { løsBehovOgGåTilNesteSteg, isLoading } = useLøsBehovOgGåTilNesteSteg('BREV');
 
   useEffect(() => {
-    if (kanMellomlagreBrev) {
+    if (kanMellomlagreBrev && !readOnly) {
       mellomlagreBackendRequest();
     }
-  }, [debouncedBrev, mellomlagreBackendRequest, kanMellomlagreBrev]);
+  }, [debouncedBrev, mellomlagreBackendRequest, kanMellomlagreBrev, readOnly]);
 
   useEffect(() => {
-    kanDistribuereBrevRequest();
-  }, [kanDistribuereBrevRequest]);
+    if (!readOnly) {
+      kanDistribuereBrevRequest();
+    }
+  }, [kanDistribuereBrevRequest, readOnly]);
 
   const onChange = (brev: Brev) => {
     setBrev(brev);
