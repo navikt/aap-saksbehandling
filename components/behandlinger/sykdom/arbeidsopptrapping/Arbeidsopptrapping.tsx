@@ -205,7 +205,7 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
           finnesFeil={finnesFeilForVurdering(index, errorList)}
           onRemove={() => remove(index)}
           readonly={formReadOnly}
-          harTidligereVurderinger={tidligereVurderinger.length > 0}
+          harTidligereVurderinger={true}
           index={index}
         >
           <ArbeidsopptrappingVurderingFormInput

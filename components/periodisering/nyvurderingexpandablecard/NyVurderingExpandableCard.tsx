@@ -19,7 +19,7 @@ interface Props {
   readonly: boolean;
   onRemove: () => void;
   index: number;
-  harTidligereVurderinger: boolean;
+  harTidligereVurderinger?: boolean;
 }
 export const NyVurderingExpandableCard = ({
   fraDato,
@@ -31,7 +31,7 @@ export const NyVurderingExpandableCard = ({
   children,
   readonly,
   onRemove,
-  harTidligereVurderinger,
+  harTidligereVurderinger = false,
   index,
 }: Props) => {
   const [cardExpanded, setCardExpanded] = useState<boolean>(true);
