@@ -3,7 +3,7 @@
 import { MellomlagretVurdering, OvergangUforeGrunnlag, VurdertAvAnsatt } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { FormEvent } from 'react';
+import React, { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
@@ -17,6 +17,8 @@ import { OvergangUforeVurderingFormInput } from 'components/behandlinger/sykdom/
 import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { OvergangUforeTidligereVurdering } from 'components/behandlinger/sykdom/overgangufore/OvergangUforeTidligereVurdering';
+import { Link, VStack } from '@navikt/ds-react';
+import { Veiledning } from 'components/veiledning/Veiledning';
 
 interface Props {
   behandlingVersjon: number;
@@ -106,49 +108,63 @@ export const OvergangUforePeriodisert = ({
       onLeggTilVurdering={() => append(emptyOvergangUføreVurdering())}
       errorList={errorList}
     >
-      {grunnlag.sisteVedtatteVurderinger.map((vurdering) => (
-        <TidligereVurderingExpandableCard
-          key={vurdering.fom}
-          fom={parseISO(vurdering.fom)}
-          tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
-          foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-          oppfylt={!!vurdering.brukerRettPåAAP}
-        >
-          <OvergangUforeTidligereVurdering
-            fraDato={vurdering.fom}
-            begrunnelse={vurdering.begrunnelse}
-            brukerHarSøktOmUføretrygd={vurdering.brukerHarSøktUføretrygd}
-            brukerHarFåttVedtakOmUføretrygd={vurdering.brukerHarFåttVedtakOmUføretrygd}
-            brukerRettPåAAP={vurdering.brukerRettPåAAP}
-          />
-        </TidligereVurderingExpandableCard>
-      ))}
-      {nyeVurderingFields.map((vurdering, index) => {
-        return (
-          <NyVurderingExpandableCard
-            key={vurdering.id}
-            fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-            oppfylt={
-              form.watch(`vurderinger.${index}.brukerRettPåAAP`)
-                ? form.watch(`vurderinger.${index}.brukerRettPåAAP`) === JaEllerNei.Ja
-                : form.watch(`vurderinger.${index}.brukerHarSøktUføretrygd`) === JaEllerNei.Nei ||
-                    form.watch(`vurderinger.${index}.brukerHarFåttVedtakOmUføretrygd`) === 'NEI'
-                  ? false
-                  : undefined
-            }
-            nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
-            isLast={index === nyeVurderingFields.length - 1}
-            vurdertAv={vurdering.vurdertAv}
-            finnesFeil={finnesFeilForVurdering(index, errorList)}
-            readonly={formReadOnly}
-            onRemove={() => remove(index)}
-            harTidligereVurderinger={tidligereVurderinger.length > 0}
-            index={index}
+      <VStack gap={'4'}>
+        <Veiledning
+          defaultOpen={false}
+          tekst={
+            <div>
+              <Link href="https://lovdata.no/pro/lov/1997-02-28-19/%C2%A711-18" target="_blank">
+                Du kan lese om hvordan vilkåret skal vurderes i rundskrivet til § 11-18
+              </Link>
+            </div>
+          }
+        />
+
+        {grunnlag.sisteVedtatteVurderinger.map((vurdering) => (
+          <TidligereVurderingExpandableCard
+            key={vurdering.fom}
+            fom={parseISO(vurdering.fom)}
+            tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
+            foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+            oppfylt={!!vurdering.brukerRettPåAAP}
           >
-            <OvergangUforeVurderingFormInput index={index} form={form} readonly={formReadOnly} />
-          </NyVurderingExpandableCard>
-        );
-      })}
+            <OvergangUforeTidligereVurdering
+              fraDato={vurdering.fom}
+              begrunnelse={vurdering.begrunnelse}
+              brukerHarSøktOmUføretrygd={vurdering.brukerHarSøktUføretrygd}
+              brukerHarFåttVedtakOmUføretrygd={vurdering.brukerHarFåttVedtakOmUføretrygd}
+              brukerRettPåAAP={vurdering.brukerRettPåAAP}
+            />
+          </TidligereVurderingExpandableCard>
+        ))}
+
+        {nyeVurderingFields.map((vurdering, index) => {
+          return (
+            <NyVurderingExpandableCard
+              key={vurdering.id}
+              fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
+              oppfylt={
+                form.watch(`vurderinger.${index}.brukerRettPåAAP`)
+                  ? form.watch(`vurderinger.${index}.brukerRettPåAAP`) === JaEllerNei.Ja
+                  : form.watch(`vurderinger.${index}.brukerHarSøktUføretrygd`) === JaEllerNei.Nei ||
+                      form.watch(`vurderinger.${index}.brukerHarFåttVedtakOmUføretrygd`) === 'NEI'
+                    ? false
+                    : undefined
+              }
+              nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
+              isLast={index === nyeVurderingFields.length - 1}
+              vurdertAv={vurdering.vurdertAv}
+              finnesFeil={finnesFeilForVurdering(index, errorList)}
+              readonly={formReadOnly}
+              onRemove={() => remove(index)}
+              harTidligereVurderinger={tidligereVurderinger.length > 0}
+              index={index}
+            >
+              <OvergangUforeVurderingFormInput index={index} form={form} readonly={formReadOnly} />
+            </NyVurderingExpandableCard>
+          );
+        })}
+      </VStack>
     </VilkårskortPeriodisert>
   );
 
