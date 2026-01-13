@@ -127,7 +127,7 @@ export const BistandsbehovPeriodisert = ({
       mellomlagretVurdering={mellomlagretVurdering}
       visningModus={visningModus}
       visningActions={visningActions}
-      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
+      formReset={() => form.reset(mapVurderingerToBistandForm(grunnlag))}
       onLeggTilVurdering={() => append(emptyBistandVurderingForm())}
       errorList={errorList}
     >

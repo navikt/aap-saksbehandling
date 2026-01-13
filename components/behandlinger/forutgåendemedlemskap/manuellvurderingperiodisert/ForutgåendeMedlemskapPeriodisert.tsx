@@ -132,7 +132,7 @@ export const ForutgåendeMedlemskapPeriodisert = ({
       visningActions={visningActions}
       onLeggTilVurdering={onAddPeriode}
       errorList={errorList}
-      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
+      formReset={() => form.reset(getDefaultValuesFromGrunnlag(grunnlag))}
     >
       {vedtatteVurderinger.map((vurdering) => (
         <TidligereVurderingExpandableCard
