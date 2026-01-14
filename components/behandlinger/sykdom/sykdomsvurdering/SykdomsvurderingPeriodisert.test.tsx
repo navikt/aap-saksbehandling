@@ -1092,9 +1092,6 @@ const velgAtBrukerHarSykdomSkadeLyte = async () => {
 const velgAtBrukerHarNedsattArbeidsevne = async () =>
   await velgJaIGruppe(screen.getByRole('group', { name: 'Har brukeren nedsatt arbeidsevne?' }));
 
-const velgAtArbeidsevnenErNedsattMedMinstFørtiProsent = async () =>
-  await velgJaIGruppe(screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt med minst 40 prosent?' }));
-
 const skrivInnDatoForNårVurderingenGjelderFra = async (dato: string) => {
   const datofelt = screen.getByRole('textbox', { name: 'Vurderingen gjelder fra' });
   await user.clear(datofelt);
