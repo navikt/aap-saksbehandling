@@ -136,6 +136,7 @@ export function erValgtIdFritekst(noekkel: string, brevmal: BrevmalType): boolea
   return (
     finnAlleValgRefs(brevmal)
       .flatMap((valg) => valg.valg.alternativer.find((alternativ) => noekkel === alternativ._key))
+      .filter((v) => !!v)
       .at(0)?._type === 'fritekst'
   );
 }

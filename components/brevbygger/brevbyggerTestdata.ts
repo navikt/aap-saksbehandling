@@ -38,9 +38,18 @@ export const obligatoriskDelmal: DelmalReferanse = {
     beskrivelse: 'En obligatorisk delmal',
     teksteditor: [
       {
-        _key: 'teksteditor-key',
-        _type: 'fritekst',
-        fritekst: '',
+        _key: 'obligatoriskTekstEditorKey',
+        _type: 'block',
+        style: 'normal',
+        children: [
+          {
+            _key: 'obligatoriskBlockKey',
+            text: 'Tekst fra obligatorisk delmal',
+            _type: 'span',
+            marks: [],
+          },
+        ],
+        markDefs: [],
       },
     ],
   },
