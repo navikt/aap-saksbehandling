@@ -1,6 +1,6 @@
 'use client';
 
-import { BodyShort, Box, Heading, Page, VStack } from '@navikt/ds-react';
+import { Box, Heading, Page, VStack } from '@navikt/ds-react';
 import { MinusIcon } from '@navikt/aksel-icons';
 import Link from 'next/link';
 
