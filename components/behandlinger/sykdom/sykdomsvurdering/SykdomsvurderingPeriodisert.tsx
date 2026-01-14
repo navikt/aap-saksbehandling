@@ -161,12 +161,18 @@ export const SykdomsvurderingPeriodisert = ({
   const errorList = mapPeriodiserteVurderingerErrorList<SykdomsvurderingerForm>(form.formState.errors);
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   function erVurderingOppfylt(vurdering: Sykdomsvurdering): boolean | undefined {
-    if (vurdering.harSkadeSykdomEllerLyte === JaEllerNei.Nei) {
+    console.log(vurdering);
+    if (
+      vurdering.harSkadeSykdomEllerLyte === JaEllerNei.Nei ||
+      vurdering.erArbeidsevnenNedsatt === JaEllerNei.Nei ||
+      vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten === JaEllerNei.Nei ||
+      vurdering.erSkadeSykdomEllerLyteVesentligdel === JaEllerNei.Nei
+    ) {
       return false;
     }
 
     if (
-      vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten === JaEllerNei.Ja ||
+      vurdering.erNedsettelseIArbeidsevneAvEnVissVarighet === JaEllerNei.Ja ||
       vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense === JaEllerNei.Ja
     ) {
       return true;
