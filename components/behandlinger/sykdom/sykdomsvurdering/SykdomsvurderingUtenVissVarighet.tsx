@@ -10,7 +10,7 @@ interface Props {
   erÅrsakssammenhengYrkesskade: boolean;
 }
 
-export const SykdomsvurderingRevurdering = ({ form, index, erÅrsakssammenhengYrkesskade, readonly }: Props) => {
+export const SykdomsvurderingUtenVissVarighet = ({ form, index, erÅrsakssammenhengYrkesskade, readonly }: Props) => {
   return (
     form.watch(`vurderinger.${index}.erArbeidsevnenNedsatt`) === JaEllerNei.Ja && (
       <>

@@ -14,7 +14,7 @@ interface Props {
   skalVurdereYrkesskade: boolean;
 }
 
-export const SykdomsvurderingFørstegangsbehandling = ({ form, skalVurdereYrkesskade, index, readonly }: Props) => {
+export const SykdomsvurderingMedVissVarighet = ({ form, skalVurdereYrkesskade, index, readonly }: Props) => {
   return (
     <>
       {form.watch(`vurderinger.${index}.erArbeidsevnenNedsatt`) === JaEllerNei.Nei && (

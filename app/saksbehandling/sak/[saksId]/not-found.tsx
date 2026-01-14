@@ -1,19 +1,25 @@
 'use client';
 
-import { Alert, Box, Button, Page, VStack } from '@navikt/ds-react';
-import Link from 'next/link';
+import { BodyShort, Box, Heading, Link, Page, VStack } from '@navikt/ds-react';
+import { useParams } from 'next/navigation';
 
 const SakIkkeFunnet = () => {
+  const { saksId } = useParams<{ saksId: string }>();
+
   return (
     <Page>
       <Page.Block width="md">
-        <Box marginBlock="8">
-          <VStack align="center" gap="4" marginBlock="8" justify="center">
-            <Alert variant="warning">Saken finnes ikke</Alert>
+        <Box marginBlock="8" padding="4">
+          <VStack gap="4" marginBlock="8">
+            <Heading level="2" size="large">
+              {saksId ? `Fant ikke sak med saksnummer '${saksId}'` : 'Fant ikke saken'}
+            </Heading>
 
-            <Button as={Link} variant="tertiary" size="small" href={`/`}>
-              Gå tilbake til oppgavelisten
-            </Button>
+            <BodyShort textColor="subtle">
+              Dersom du mener dette er en feil kan du melde det i Porten med skjermbilde av denne siden.
+            </BodyShort>
+
+            <Link href={`/`}>Gå tilbake til oppgavelisten</Link>
           </VStack>
         </Box>
       </Page.Block>

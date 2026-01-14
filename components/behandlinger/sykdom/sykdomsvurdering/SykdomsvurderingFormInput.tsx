@@ -2,17 +2,17 @@
 
 import { HStack, VStack } from '@navikt/ds-react';
 import { erDatoIPeriode, validerDato } from 'lib/validation/dateValidation';
-import { parse } from 'date-fns';
-import { stringToDate } from 'lib/utils/date';
+import { isAfter, parse } from 'date-fns';
+import { parseDatoFraDatePicker, stringToDate } from 'lib/utils/date';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
 import { UseFormReturn } from 'react-hook-form';
-import { Periode, TypeBehandling } from 'lib/types/types';
+import { Periode } from 'lib/types/types';
 import type { SykdomsvurderingerForm } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingPeriodisert';
 import { JaEllerNei } from 'lib/utils/form';
 import { Sak } from 'context/saksbehandling/SakContext';
-import { SykdomsvurderingFørstegangsbehandling } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingFørstegangsbehandling';
-import { SykdomsvurderingRevurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingRevurdering';
+import { SykdomsvurderingMedVissVarighet } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedVissVarighet';
+import { SykdomsvurderingUtenVissVarighet } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingUtenVissVarighet';
 import { SykdomsvurderingDiagnosesøk } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingDiagnosesøk';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 
@@ -21,11 +21,10 @@ interface Props {
   form: UseFormReturn<SykdomsvurderingerForm>;
   readonly: boolean;
   ikkeRelevantePerioder?: Periode[];
-  typeBehandling: TypeBehandling;
   sak: Sak;
   skalVurdereYrkesskade: boolean;
   erÅrsakssammenhengYrkesskade: boolean;
-  erRevurderingAvFørstegangsbehandling: boolean;
+  rettighetsperiopdeStartdato: Date;
 }
 
 export const vilkårsvurderingLabel = 'Vilkårsvurdering';
@@ -39,15 +38,14 @@ export const erNedsettelseIArbeidsevneAvEnVissVarighetLabel = 'Er den nedsatte a
 export const SykdomsvurderingFormInput = ({
   erÅrsakssammenhengYrkesskade,
   skalVurdereYrkesskade,
-  typeBehandling,
   index,
   form,
   readonly,
   ikkeRelevantePerioder,
-  erRevurderingAvFørstegangsbehandling,
+  rettighetsperiopdeStartdato,
 }: Props) => {
-  const behandlingErRevurdering = typeBehandling === 'Revurdering';
-  const behandlingErFørstegangsbehandling = typeBehandling === 'Førstegangsbehandling';
+  const valgtDato = parseDatoFraDatePicker(form.watch(`vurderinger.${index}.fraDato`));
+  const skalVurdereVissVarighet = valgtDato != null ? !isAfter(valgtDato, rettighetsperiopdeStartdato) : true;
 
   return (
     <VStack gap={'5'}>
@@ -109,16 +107,16 @@ export const SykdomsvurderingFormInput = ({
             readOnly={readonly}
             shouldUnregister
           />
-          {(behandlingErFørstegangsbehandling || erRevurderingAvFørstegangsbehandling) && (
-            <SykdomsvurderingFørstegangsbehandling
+          {skalVurdereVissVarighet && (
+            <SykdomsvurderingMedVissVarighet
               index={index}
               form={form}
               readonly={readonly}
               skalVurdereYrkesskade={skalVurdereYrkesskade}
             />
           )}
-          {behandlingErRevurdering && !erRevurderingAvFørstegangsbehandling && (
-            <SykdomsvurderingRevurdering
+          {!skalVurdereVissVarighet && (
+            <SykdomsvurderingUtenVissVarighet
               index={index}
               form={form}
               readonly={readonly}
