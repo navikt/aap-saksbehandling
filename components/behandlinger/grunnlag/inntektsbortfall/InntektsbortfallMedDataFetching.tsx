@@ -23,7 +23,7 @@ export const InntektsbortfallMedDataFetching = async ({ behandlingsReferanse, st
     return <ApiException apiResponses={[grunnlag]} />;
   }
 
-  if (!grunnlag.data.grunnlag.under62ÅrVedSøknadstidspunkt.resultat) {
+  if (grunnlag.data.grunnlag.under62ÅrVedSøknadstidspunkt.resultat) {
     return null;
   }
 

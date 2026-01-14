@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { render, screen } from 'lib/test/CustomRender';
+import { render } from 'lib/test/CustomRender';
 import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 import { Inntektsbortfall } from './Inntektsbortfall';
 import { InntektsbortfallMedDataFetching } from './InntektsbortfallMedDataFetching';
@@ -38,7 +38,7 @@ describe('Inntektsbortfall', () => {
 });
 
 describe('InntektsbortfallMedDataFetching', () => {
-  it('skal vise Inntektsbortfall når bruker er under 62 år', async () => {
+  it('skal ikke vise Inntektsbortfall når bruker er under 62 år', async () => {
     vi.spyOn(saksbehandlingService, 'hentInntektsBortfallGrunnlag').mockResolvedValue({
       type: 'SUCCESS',
       data: {
@@ -65,10 +65,10 @@ describe('InntektsbortfallMedDataFetching', () => {
       },
     });
 
-    expect(result).not.toBeNull();
+    expect(result).toBeNull();
   });
 
-  it('skal ikke vise Inntektsbortfall når bruker er over 62 år', async () => {
+  it('skal vise Inntektsbortfall når bruker er over 62 år', async () => {
     vi.spyOn(saksbehandlingService, 'hentInntektsBortfallGrunnlag').mockResolvedValue({
       type: 'SUCCESS',
       data: {
@@ -95,6 +95,6 @@ describe('InntektsbortfallMedDataFetching', () => {
       },
     });
 
-    expect(result).toBeNull();
+    expect(result).not.toBeNull();
   });
 });
