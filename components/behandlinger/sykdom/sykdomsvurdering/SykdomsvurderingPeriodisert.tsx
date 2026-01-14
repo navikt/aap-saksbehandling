@@ -161,6 +161,10 @@ export const SykdomsvurderingPeriodisert = ({
   const errorList = mapPeriodiserteVurderingerErrorList<SykdomsvurderingerForm>(form.formState.errors);
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   function erVurderingOppfylt(vurdering: Sykdomsvurdering): boolean | undefined {
+    if (vurdering.harSkadeSykdomEllerLyte === JaEllerNei.Nei) {
+      return false;
+    }
+
     if (
       vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten === JaEllerNei.Ja ||
       vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense === JaEllerNei.Ja
