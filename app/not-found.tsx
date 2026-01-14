@@ -10,16 +10,14 @@ const NotFound = () => {
     <Page>
       <Page.Block width="md" gutters>
         <Box marginBlock="8" padding="4">
-          <VStack align="center" gap="4" marginBlock="8" justify="center">
-            <Heading level="2" size="medium">
+          <VStack gap="4" marginBlock="8">
+            <Heading level="2" size="large">
               Denne siden finnes ikke
             </Heading>
 
             <MinusIcon />
 
-            <BodyShort textColor="subtle" align="center">
-              <Link href="/">Gå til forsiden</Link>
-            </BodyShort>
+            <Link href="/">Gå til forsiden</Link>
           </VStack>
         </Box>
       </Page.Block>
