@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { render, screen, within } from 'lib/test/CustomRender';
+import { render, screen } from 'lib/test/CustomRender';
 import { userEvent } from '@testing-library/user-event';
 import { ArbeidsevneGrunnlag, MellomlagretVurderingResponse } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
@@ -18,26 +18,6 @@ const grunnlagUtenVurdering: ArbeidsevneGrunnlag = {
   nyeVurderinger: [],
   sisteVedtatteVurderinger: [],
   harTilgangTilÅSaksbehandle: true,
-};
-
-const grunnlagMedVurdering: ArbeidsevneGrunnlag = {
-  behøverVurderinger: [],
-  kanVurderes: [],
-  nyeVurderinger: [],
-  sisteVedtatteVurderinger: [],
-  harTilgangTilÅSaksbehandle: true,
-  vurderinger: [
-    {
-      arbeidsevne: 20,
-      begrunnelse: 'Dette er min vurdering som er bekreftet',
-      fraDato: '2025-08-21',
-      vurderingsTidspunkt: '2025-08-21',
-      vurdertAv: {
-        ident: 'Saksbehandler',
-        dato: '2025-08-21',
-      },
-    },
-  ],
 };
 
 beforeEach(() => {
@@ -80,20 +60,19 @@ describe('FastsettArbeidsevne', () => {
       const grunnlag: ArbeidsevneGrunnlag = {
         behøverVurderinger: [],
         kanVurderes: [],
-        nyeVurderinger: [],
-        sisteVedtatteVurderinger: [],
-        harTilgangTilÅSaksbehandle: true,
-        vurderinger: [
+        nyeVurderinger: [
           {
-            begrunnelse: 'Grunn',
-            fraDato: '2024-08-10',
-            arbeidsevne: 80,
-            vurderingsTidspunkt: '2024-08-10',
-            vurdertAv: { ident: 'saksbehandler', dato: '2024-08-10' },
+            arbeidsevne: 20,
+            begrunnelse: 'Dette er min vurdering som er bekreftet',
+            fom: '2025-08-21',
+            vurdertAv: {
+              ident: 'Saksbehandler',
+              dato: '2025-08-21',
+            },
           },
         ],
-        historikk: [],
-        gjeldendeVedtatteVurderinger: [],
+        sisteVedtatteVurderinger: [],
+        harTilgangTilÅSaksbehandle: true,
       };
       render(<FastsettArbeidsevnePeriodisertFrontend readOnly={true} behandlingVersjon={0} grunnlag={grunnlag} />);
       expect(screen.getByText('Vilkårsvurdering')).toBeVisible();
@@ -102,9 +81,27 @@ describe('FastsettArbeidsevne', () => {
     it('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
       setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'SYKDOMSVURDERING_BREV' });
 
+      const grunnlagMedNyVurdering: ArbeidsevneGrunnlag = {
+        behøverVurderinger: [],
+        kanVurderes: [],
+        nyeVurderinger: [
+          {
+            arbeidsevne: 20,
+            begrunnelse: 'Dette er min vurdering som er bekreftet',
+            fom: '2025-08-21',
+            vurdertAv: {
+              ident: 'Saksbehandler',
+              dato: '2025-08-21',
+            },
+          },
+        ],
+        sisteVedtatteVurderinger: [],
+        harTilgangTilÅSaksbehandle: true,
+      };
+
       render(
         <FastsettArbeidsevnePeriodisertFrontend
-          grunnlag={grunnlagMedVurdering}
+          grunnlag={grunnlagMedNyVurdering}
           readOnly={false}
           behandlingVersjon={0}
         />
@@ -135,7 +132,6 @@ describe('FastsettArbeidsevne', () => {
           grunnlag={grunnlagUtenVurdering}
         />
       );
-      await åpneVilkårskort();
       await klikkPåNyVurdering();
       expect(screen.getByRole('textbox', { name: 'Vilkårsvurdering' })).toBeVisible();
     });
@@ -148,7 +144,6 @@ describe('FastsettArbeidsevne', () => {
           grunnlag={grunnlagUtenVurdering}
         />
       );
-      await åpneVilkårskort();
       await klikkPåNyVurdering();
       expect(
         screen.getByText(
@@ -165,7 +160,6 @@ describe('FastsettArbeidsevne', () => {
           grunnlag={grunnlagUtenVurdering}
         />
       );
-      await åpneVilkårskort();
       await klikkPåNyVurdering();
       expect(
         screen.getByRole('textbox', {
@@ -182,7 +176,6 @@ describe('FastsettArbeidsevne', () => {
           grunnlag={grunnlagUtenVurdering}
         />
       );
-      await åpneVilkårskort();
       await klikkPåNyVurdering();
       expect(screen.getByRole('textbox', { name: 'Vurderingen gjelder fra' })).toBeVisible();
     });
@@ -195,10 +188,10 @@ describe('FastsettArbeidsevne', () => {
           grunnlag={grunnlagUtenVurdering}
         />
       );
-      await åpneVilkårskort();
       await klikkPåNyVurdering();
       await klikkPåBekreft();
-      expect(screen.getByText('Du må begrunne vurderingen din')).toBeVisible();
+      const errors = screen.getAllByText('Du må begrunne vurderingen din');
+      expect(errors[0]).toBeVisible();
     });
 
     it('viser feilmelding når arbeidsevne ikke er besvart', async () => {
@@ -209,10 +202,10 @@ describe('FastsettArbeidsevne', () => {
           grunnlag={grunnlagUtenVurdering}
         />
       );
-      await åpneVilkårskort();
       await klikkPåNyVurdering();
       await klikkPåBekreft();
-      expect(screen.getByText('Du må angi hvor stor arbeidsevne brukeren har')).toBeVisible();
+      const errors = screen.getAllByText('Du må angi hvor stor arbeidsevne brukeren har');
+      expect(errors[0]).toBeVisible();
     });
 
     it('viser feilmelding dersom datoen da arbeidsevnen gjelder fra ikke er besvart', async () => {
@@ -223,10 +216,15 @@ describe('FastsettArbeidsevne', () => {
           grunnlag={grunnlagUtenVurdering}
         />
       );
-      await åpneVilkårskort();
       await klikkPåNyVurdering();
+
+      // Clear the auto-filled date
+      const dateFelt = screen.getByRole('textbox', { name: 'Vurderingen gjelder fra' });
+      await user.clear(dateFelt);
+
       await klikkPåBekreft();
-      expect(screen.getByText('Du må angi datoen arbeidsevnen gjelder fra')).toBeVisible();
+      const errors = screen.getAllByText('Du må angi datoen arbeidsevnen gjelder fra');
+      expect(errors[0]).toBeVisible();
     });
 
     describe('mellomlagring', () => {
@@ -234,7 +232,7 @@ describe('FastsettArbeidsevne', () => {
         mellomlagretVurdering: {
           avklaringsbehovkode: Behovstype.VURDER_TREKK_AV_SØKNAD_KODE,
           behandlingId: { id: 1 },
-          data: '{"arbeidsevnevurderinger": [{"begrunnelse":"Dette er min vurdering som er mellomlagret"}]}',
+          data: '{"vurderinger": [{"begrunnelse":"Dette er min vurdering som er mellomlagret", "fraDato":"21.08.2025", "arbeidsevne":20}]}',
           vurdertDato: '2025-08-21T12:00:00.000',
           vurdertAv: 'Jan T. Loven',
         },
@@ -243,21 +241,19 @@ describe('FastsettArbeidsevne', () => {
       const grunnlagMedVurdering: ArbeidsevneGrunnlag = {
         behøverVurderinger: [],
         kanVurderes: [],
-        nyeVurderinger: [],
-        sisteVedtatteVurderinger: [],
-        harTilgangTilÅSaksbehandle: true,
-        vurderinger: [
+        nyeVurderinger: [
           {
             arbeidsevne: 20,
             begrunnelse: 'Dette er min vurdering som er bekreftet',
-            fraDato: '2025-08-21',
-            vurderingsTidspunkt: '2025-08-21',
+            fom: '2025-08-21',
             vurdertAv: {
               ident: 'Saksbehandler',
               dato: '2025-08-21',
             },
           },
         ],
+        sisteVedtatteVurderinger: [],
+        harTilgangTilÅSaksbehandle: true,
       };
 
       it('Skal vise en tekst om hvem som har gjort vurderingen dersom det finnes en mellomlagring', () => {
@@ -282,7 +278,6 @@ describe('FastsettArbeidsevne', () => {
           />
         );
 
-        await åpneVilkårskort();
         await klikkPåNyVurdering();
 
         await user.type(
@@ -444,13 +439,5 @@ describe('FastsettArbeidsevne', () => {
   async function klikkPåBekreft() {
     const bekreftKnapp = screen.getByRole('button', { name: 'Bekreft' });
     await user.click(bekreftKnapp);
-  }
-
-  async function åpneVilkårskort() {
-    const region = screen.getByRole('region', {
-      name: '§ 11-23 andre ledd. Arbeidsevne som ikke er utnyttet (valgfritt)',
-    });
-    const button = within(region).getByRole('button');
-    await user.click(button);
   }
 });

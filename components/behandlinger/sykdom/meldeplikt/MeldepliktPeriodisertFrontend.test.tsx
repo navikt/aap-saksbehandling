@@ -34,20 +34,19 @@ describe('Meldeplikt', () => {
       const meldepliktGrunnlag: FritakMeldepliktGrunnlag = {
         behøverVurderinger: [],
         kanVurderes: [],
-        nyeVurderinger: [],
-        sisteVedtatteVurderinger: [],
-        harTilgangTilÅSaksbehandle: true,
-        vurderinger: [
+        nyeVurderinger: [
           {
             begrunnelse: 'Grunn',
-            fraDato: '2024-08-10',
+            fom: '2024-08-10',
             harFritak: true,
             vurdertAv: { ident: 'saksbehandler', dato: '2024-08-10' },
-            vurderingsTidspunkt: '2024-08-10',
           },
         ],
+        sisteVedtatteVurderinger: [],
+        harTilgangTilÅSaksbehandle: true,
         gjeldendeVedtatteVurderinger: [],
         historikk: [],
+        vurderinger: [],
       };
       render(<MeldepliktPeriodisertFrontend behandlingVersjon={0} readOnly={true} grunnlag={meldepliktGrunnlag} />);
       expect(screen.queryByRole('textbox', { name: 'Vilkårsvurdering' })).toBeVisible();
@@ -57,20 +56,19 @@ describe('Meldeplikt', () => {
       const grunnlagMedVurdering: FritakMeldepliktGrunnlag = {
         behøverVurderinger: [],
         kanVurderes: [],
-        nyeVurderinger: [],
-        sisteVedtatteVurderinger: [],
-        harTilgangTilÅSaksbehandle: true,
-        vurderinger: [
+        nyeVurderinger: [
           {
             begrunnelse: 'en god begrunnelse',
-            fraDato: '2024-08-10',
+            fom: '2024-08-10',
             harFritak: true,
             vurdertAv: { ident: 'saksbehandler', dato: '2024-08-10' },
-            vurderingsTidspunkt: '2024-08-10',
           },
         ],
+        sisteVedtatteVurderinger: [],
+        harTilgangTilÅSaksbehandle: true,
         gjeldendeVedtatteVurderinger: [],
         historikk: [],
+        vurderinger: [],
       };
 
       setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'AVKLAR_SYKDOM' });
@@ -96,21 +94,18 @@ describe('Meldeplikt', () => {
   describe('felter', () => {
     it('har et felt for begrunnelse', async () => {
       render(<MeldepliktPeriodisertFrontend behandlingVersjon={0} readOnly={false} />);
-      await åpneVilkårskort();
       await klikkPåNyPeriode();
       expect(screen.getByRole('textbox', { name: 'Vilkårsvurdering' })).toBeVisible();
     });
 
     it('har valg for å avgjøre om brukeren skal få fritak fra meldeplikt eller ikke', async () => {
       render(<MeldepliktPeriodisertFrontend behandlingVersjon={0} readOnly={false} />);
-      await åpneVilkårskort();
       await klikkPåNyPeriode();
       expect(screen.getByRole('group', { name: 'Skal brukeren få fritak fra meldeplikt?' })).toBeVisible();
     });
 
     it('har et valg for å si at brukeren skal få fritak fra meldeplikt', async () => {
       render(<MeldepliktPeriodisertFrontend behandlingVersjon={0} readOnly={false} />);
-      await åpneVilkårskort();
       await klikkPåNyPeriode();
       const fritakGruppe = screen.getByRole('group', { name: 'Skal brukeren få fritak fra meldeplikt?' });
       expect(within(fritakGruppe).getByRole('radio', { name: 'Ja' })).toBeVisible();
@@ -118,7 +113,6 @@ describe('Meldeplikt', () => {
 
     it('har et valg for å si at brukeren ikke skal ha fritak fra meldeplikt', async () => {
       render(<MeldepliktPeriodisertFrontend behandlingVersjon={0} readOnly={false} />);
-      await åpneVilkårskort();
       await klikkPåNyPeriode();
       const fritakGruppe = screen.getByRole('group', { name: 'Skal brukeren få fritak fra meldeplikt?' });
       expect(within(fritakGruppe).getByRole('radio', { name: 'Nei' })).toBeVisible();
@@ -126,7 +120,6 @@ describe('Meldeplikt', () => {
 
     it('har et felt for å fylle inn en dato for når vurderingen gjelder fra', async () => {
       render(<MeldepliktPeriodisertFrontend behandlingVersjon={0} readOnly={false} />);
-      await åpneVilkårskort();
       await klikkPåNyPeriode();
       expect(screen.getByRole('textbox', { name: 'Vurderingen gjelder fra' })).toBeVisible();
     });
@@ -137,7 +130,7 @@ describe('Meldeplikt', () => {
       mellomlagretVurdering: {
         avklaringsbehovkode: Behovstype.VURDER_TREKK_AV_SØKNAD_KODE,
         behandlingId: { id: 1 },
-        data: '{"fritaksvurderinger": [{"begrunnelse":"Dette er min vurdering som er mellomlagret"}]}',
+        data: '{"vurderinger": [{"begrunnelse":"Dette er min vurdering som er mellomlagret", "fraDato":"21.08.2025", "harFritak":"Ja"}]}',
         vurdertDato: '2025-08-21T12:00:00.000',
         vurdertAv: 'Jan T. Loven',
       },
@@ -145,23 +138,22 @@ describe('Meldeplikt', () => {
     const grunnlagMedVurdering: FritakMeldepliktGrunnlag = {
       behøverVurderinger: [],
       kanVurderes: [],
-      nyeVurderinger: [],
-      sisteVedtatteVurderinger: [],
-      gjeldendeVedtatteVurderinger: [],
-      harTilgangTilÅSaksbehandle: true,
-      historikk: [],
-      vurderinger: [
+      nyeVurderinger: [
         {
           begrunnelse: 'Dette er min vurdering som er bekreftet',
-          fraDato: '2025-08-21',
+          fom: '2025-08-21',
           harFritak: true,
-          vurderingsTidspunkt: '2025-08-21',
           vurdertAv: {
             dato: '2025-08-21',
             ident: 'Saksbehandler',
           },
         },
       ],
+      sisteVedtatteVurderinger: [],
+      gjeldendeVedtatteVurderinger: [],
+      harTilgangTilÅSaksbehandle: true,
+      historikk: [],
+      vurderinger: [],
     };
 
     const grunnlagUtenVurdering: FritakMeldepliktGrunnlag = {
@@ -191,7 +183,6 @@ describe('Meldeplikt', () => {
     it('Skal vise en tekst om hvem som har lagret vurdering dersom bruker trykker på lagre mellomlagring', async () => {
       render(<MeldepliktPeriodisertFrontend readOnly={false} behandlingVersjon={0} grunnlag={grunnlagUtenVurdering} />);
 
-      await åpneVilkårskort();
       await klikkPåNyPeriode();
 
       await user.type(
@@ -341,11 +332,5 @@ describe('Meldeplikt', () => {
 });
 
 async function klikkPåNyPeriode() {
-  await user.click(screen.getByRole('button', { name: 'Legg til periode' }));
-}
-
-async function åpneVilkårskort() {
-  const region = screen.getByRole('region', { name: '§ 11-10 tredje ledd. Unntak fra meldeplikt (valgfritt)' });
-  const button = within(region).getByRole('button');
-  await user.click(button);
+  await user.click(screen.getByRole('button', { name: 'Legg til ny vurdering' }));
 }
