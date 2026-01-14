@@ -123,7 +123,13 @@ export const Inntektsbortfall = ({
         )(event);
       }}
       mellomlagretVurdering={mellomlagretVurdering}
-      visningModus={enabled ? visningModus : VisningModus.LÅST_UTEN_ENDRE}
+      visningModus={
+        enabled
+          ? grunnlag.kanBehandlesAutomatisk
+            ? VisningModus.LÅST_UTEN_ENDRE
+            : visningModus
+          : VisningModus.LÅST_UTEN_ENDRE
+      }
       visningActions={visningActions}
       formReset={() => {
         form.reset(vurdering ? mapVurderingToDraftFormFields(vurdering) : {});
