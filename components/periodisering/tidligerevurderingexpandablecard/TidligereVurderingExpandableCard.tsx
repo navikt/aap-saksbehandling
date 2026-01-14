@@ -12,7 +12,7 @@ interface Props {
   fom: Date;
   tom: Date | null | undefined;
   foersteNyePeriodeFraDato: Date | null | undefined;
-  oppfylt: boolean | undefined;
+  oppfylt: boolean | null | undefined;
   vurdertAv?: VurdertAvShape;
   children: ReactNode;
   defaultCollapsed?: boolean;
