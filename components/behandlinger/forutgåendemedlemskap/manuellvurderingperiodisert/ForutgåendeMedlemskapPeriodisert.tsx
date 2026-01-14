@@ -161,6 +161,7 @@ export const ForutgåendeMedlemskapPeriodisert = ({
             form.watch(`vurderinger.${index}.unntaksvilkår`) === 'B'
           }
           vurdertAv={vurdering.vurdertAv}
+          kvalitetssikretAv={vurdering.kvalitetssikretAv}
           finnesFeil={finnesFeilForVurdering(index, errorList)}
           readonly={formReadOnly}
           onRemove={() => remove(index)}

@@ -6,14 +6,15 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 import { ReactNode, useState } from 'react';
 import { BodyShort, HStack, Tag, VStack } from '@navikt/ds-react';
 import styles from 'components/behandlinger/oppholdskrav/oppholdskrav.module.css';
-import { VurdertAv, VurdertAvShape } from 'components/vurdertav/VurdertAv';
+import { VurdertAvAnsattDetail } from 'components/vurdertav/VurdertAvAnsattDetail';
+import { VurdertAvAnsatt } from 'lib/types/types';
 
 interface Props {
   fom: Date;
   tom: Date | null | undefined;
   foersteNyePeriodeFraDato: Date | null | undefined;
   oppfylt: boolean;
-  vurdertAv?: VurdertAvShape;
+  vurdertAv?: VurdertAvAnsatt;
   children: ReactNode;
   defaultCollapsed?: boolean;
 }
@@ -58,7 +59,7 @@ export const TidligereVurderingExpandableCard = ({
     >
       <VStack>
         {children}
-        <VurdertAv vurdertAv={vurdertAv} />
+        <VurdertAvAnsattDetail variant={'VURDERING'} vurdertAv={vurdertAv} />
       </VStack>
     </CustomExpandableCard>
   );

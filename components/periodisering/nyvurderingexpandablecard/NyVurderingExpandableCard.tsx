@@ -4,16 +4,18 @@ import { CustomExpandableCard } from 'components/customexpandablecard/CustomExpa
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { ReactNode, useState } from 'react';
 import { BodyShort, Button, HGrid, HStack, Tag, VStack } from '@navikt/ds-react';
-import { VurdertAv, VurdertAvShape } from 'components/vurdertav/VurdertAv';
+import { VurdertAvAnsattDetail } from 'components/vurdertav/VurdertAvAnsattDetail';
 import { subDays } from 'date-fns';
 import { TrashFillIcon } from '@navikt/aksel-icons';
+import { VurdertAvAnsatt } from 'lib/types/types';
 
 interface Props {
   fraDato: Date | null;
   nestePeriodeFraDato: Date | null;
   isLast: boolean;
   oppfylt: boolean | undefined;
-  vurdertAv: VurdertAvShape | undefined;
+  vurdertAv: VurdertAvAnsatt | undefined;
+  kvalitetssikretAv: VurdertAvAnsatt | undefined;
   finnesFeil: boolean;
   children: ReactNode;
   readonly: boolean;
@@ -27,6 +29,7 @@ export const NyVurderingExpandableCard = ({
   isLast,
   oppfylt,
   vurdertAv,
+  kvalitetssikretAv,
   finnesFeil,
   children,
   readonly,
@@ -84,7 +87,11 @@ export const NyVurderingExpandableCard = ({
             </VStack>
           )}
         </HGrid>
-        <VurdertAv vurdertAv={vurdertAv} />
+
+        <VStack>
+          <VurdertAvAnsattDetail vurdertAv={vurdertAv} variant={'VURDERING'} />
+          <VurdertAvAnsattDetail vurdertAv={kvalitetssikretAv} variant={'KVALITETSSIKRER'} />
+        </VStack>
       </VStack>
     </CustomExpandableCard>
   );

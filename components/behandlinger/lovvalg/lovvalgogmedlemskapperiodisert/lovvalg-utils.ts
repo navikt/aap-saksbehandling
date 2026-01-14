@@ -49,14 +49,8 @@ export function getDefaultValuesFromGrunnlag(
           begrunnelse: vurdering.medlemskap?.begrunnelse ?? '',
           varMedlemIFolketrygd: getJaNeiEllerUndefined(vurdering.medlemskap?.varMedlemIFolketrygd) ?? JaEllerNei.Nei,
         },
-        vurdertAv:
-          vurdering.vurdertAv != null
-            ? {
-                ansattnavn: vurdering.vurdertAv.ansattnavn,
-                ident: vurdering.vurdertAv.ident,
-                dato: vurdering.vurdertAv.dato,
-              }
-            : undefined,
+        vurdertAv: vurdering.vurdertAv,
+        kvalitetssikretAv: vurdering.kvalitetssikretAv,
       })) || [],
   };
 }
