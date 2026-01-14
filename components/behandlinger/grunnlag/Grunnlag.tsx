@@ -93,11 +93,10 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
           <VisBeregning grunnlag={beregningsgrunnlag.data} />
         </StegSuspense>
       )}
-      {inntektsbortfall.skalViseSteg && (
-        <StegSuspense>
-          <InntektsbortfallMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={inntektsbortfall} />
-        </StegSuspense>
-      )}
+
+      <StegSuspense>
+        <InntektsbortfallMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={inntektsbortfall} />
+      </StegSuspense>
     </GruppeSteg>
   );
 };

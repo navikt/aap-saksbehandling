@@ -243,6 +243,16 @@ describe('Delmaler med valg', () => {
   });
 
   test('viser fritekstfelt når fritekst er valgt', async () => {
+    const brevmal: BrevmalType = {
+      ...sanityAttrs,
+      _id: 'brevmal-id',
+      beskrivelse: 'En beskrivelse',
+      overskrift: 'En overskrift',
+      journalposttittel: 'jp-tittel',
+      kanSendesAutomatisk: false,
+      delmaler: [obligatoriskDelmal, valgfriDelmalMedAlternativer],
+    };
+
     render(
       <Brevbygger
         referanse={'1234'}
@@ -254,6 +264,8 @@ describe('Delmaler med valg', () => {
         readOnly={false}
       />
     );
+
+    await user.click(screen.getByRole('checkbox', { name: 'Inkluder i brev' }));
 
     await user.selectOptions(screen.getByRole('combobox', { name: 'Beskrivelse av alternativ' }), ['alt3-key']);
     expect(screen.getByRole('textbox', { name: 'Fritekst' })).toBeVisible();

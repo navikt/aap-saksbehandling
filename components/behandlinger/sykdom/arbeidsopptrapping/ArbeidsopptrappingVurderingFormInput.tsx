@@ -29,7 +29,7 @@ export const ArbeidsopptrappingVurderingFormInput = ({ index, readonly, form, ik
           label="Vurderingen gjelder fra"
           control={form.control}
           rules={{
-            required: 'Du må velge fra hvilken dato vurderingen gjelder fra',
+            required: 'Vennligst velg en dato for når vurderingen gjelder fra',
             validate: {
               validerDato: (value) => validerDato(value as string),
               validerIkkeRelevantPeriode: (value) => {

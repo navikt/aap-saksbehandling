@@ -119,7 +119,6 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
-      vurdertAvAnsatt={grunnlag?.sisteVedtatteVurderinger[0]?.vurdertAv}
       kvalitetssikretAv={grunnlag?.sisteVedtatteVurderinger[0]?.kvalitetssikretAv}
       mellomlagretVurdering={mellomlagretVurdering}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
@@ -130,7 +129,7 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
       }}
       visningModus={visningModus}
       visningActions={visningActions}
-      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
+      formReset={() => form.reset(getDefaultValuesFromGrunnlag(grunnlag))}
       onLeggTilVurdering={onAddPeriode}
       errorList={errorList}
     >

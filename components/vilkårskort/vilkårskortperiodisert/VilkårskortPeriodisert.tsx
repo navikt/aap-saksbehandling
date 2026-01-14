@@ -29,7 +29,7 @@ export const VilkårskortPeriodisert = ({
   løsBehovOgGåTilNesteStegError,
   vilkårTilhørerNavKontor,
   knappTekst = 'Bekreft',
-  vurdertAvAnsatt,
+  // vurdertAvAnsatt,
   vurdertAutomatisk = false,
   kvalitetssikretAv,
   onDeleteMellomlagringClick,
@@ -40,7 +40,7 @@ export const VilkårskortPeriodisert = ({
   onLeggTilVurdering,
   formReset,
   errorList,
-}: VilkårsKortPeriodisertProps) => {
+}: Omit<VilkårsKortPeriodisertProps, 'vurdertAvAnsatt'>) => {
   const classNameBasertPåEnhet = vilkårTilhørerNavKontor ? styles.vilkårsKortNAV : styles.vilkårsKortNAY;
   const erAktivtSteg = visningModus === 'AKTIV_UTEN_AVBRYT' || visningModus === 'AKTIV_MED_AVBRYT';
 
@@ -63,7 +63,9 @@ export const VilkårskortPeriodisert = ({
         <form onSubmit={onSubmit} id={steg} autoComplete="off">
           <VStack gap="4">
             {/* innhold i vilkårskortet */}
-            <VStack style={{ borderTop: '1px solid lightgray' }}>{children}</VStack>
+            <VStack style={{ borderTop: '1px solid lightgray' }} paddingBlock={'4 0'}>
+              {children}
+            </VStack>
 
             {/* Status / feil */}
             <LøsBehovOgGåTilNesteStegStatusAlert
@@ -149,11 +151,6 @@ export const VilkårskortPeriodisert = ({
               {/* Høyre kolonne: vurdert av / kvalitetssikret av */}
               <VStack align="baseline" paddingBlock={'2 0'}>
                 {vurdertAutomatisk && <Detail>Vurdert automatisk</Detail>}
-                {vurdertAvAnsatt && (
-                  <Detail>
-                    {`Vurdert av ${utledVurdertAv(vurdertAvAnsatt)}, ${formaterDatoForFrontend(vurdertAvAnsatt.dato)}`}
-                  </Detail>
-                )}
                 {kvalitetssikretAv && (
                   <Detail>
                     {`Kvalitetssikret av ${utledVurdertAv(kvalitetssikretAv)}, ${formaterDatoForFrontend(

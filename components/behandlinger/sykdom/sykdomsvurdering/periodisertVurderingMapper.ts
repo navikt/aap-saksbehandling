@@ -85,7 +85,8 @@ function mapTilPeriodisertVurdering(
   erÅrsakssammenhengYrkesskade: boolean,
   behandlingErFørstegangsbehandling: boolean,
   behandlingErRevurdering: boolean,
-  behandlingErRevurderingAvFørstegangsbehandling: boolean
+  behandlingErRevurderingAvFørstegangsbehandling: boolean,
+  tilDato?: string
 ): SykdomsvurderingLøsningDto {
   // Denne overstyrer alle verdiene under. Hvis false skal alt nulles ut.
   const harSkadeSykdomEllerLyte = data.harSkadeSykdomEllerLyte === JaEllerNei.Ja;
@@ -113,6 +114,7 @@ function mapTilPeriodisertVurdering(
     ...nedsattArbeidsevneOgYrkesskade,
     begrunnelse: data.begrunnelse,
     fom: new Dato(data.fraDato).formaterForBackend(),
+    tom: tilDato,
     harSkadeSykdomEllerLyte,
     kodeverk,
     hoveddiagnose,

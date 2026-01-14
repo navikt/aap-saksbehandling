@@ -23,6 +23,8 @@ import { Dato } from 'lib/types/Dato';
 import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovMellomlagringParser';
 import { getFraDatoFraGrunnlagForFrontend } from 'lib/utils/periodisering';
 import { vurdertAvFraPeriodisertVurdering } from 'lib/utils/vurdert-av';
+import { Link, VStack } from '@navikt/ds-react';
+import { Veiledning } from 'components/veiledning/Veiledning';
 
 interface Props {
   behandlingVersjon: number;
@@ -125,51 +127,69 @@ export const BistandsbehovPeriodisert = ({
       mellomlagretVurdering={mellomlagretVurdering}
       visningModus={visningModus}
       visningActions={visningActions}
-      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
+      formReset={() => form.reset(mapVurderingerToBistandForm(grunnlag))}
       onLeggTilVurdering={() => append(emptyBistandVurderingForm())}
       errorList={errorList}
     >
-      {vedtatteVurderinger.map((vurdering) => (
-        <TidligereVurderingExpandableCard
-          key={vurdering.fom}
-          fom={parseISO(vurdering.fom)}
-          tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
-          foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-          oppfylt={
-            !!(
-              vurdering.erBehovForAktivBehandling ||
-              vurdering.erBehovForArbeidsrettetTiltak ||
-              vurdering.erBehovForAnnenOppfølging
-            )
+      <VStack gap={'4'}>
+        <Veiledning
+          defaultOpen={false}
+          tekst={
+            <div>
+              Vilkårene i § 11-6 første ledd bokstav a til c er tre alternative vilkår. Det vil si at det er nok at
+              brukeren oppfyller ett av dem for å fylle vilkåret i § 11-6.Først skal du vurdere om vilkårene i bokstav a
+              (aktiv behandling) og bokstav b (arbeidsrettet tiltak) er oppfylte. Hvis du svarer ja på ett eller begge
+              vilkårene, er § 11-6 oppfylt. Hvis du svarer nei på a og b, må du vurdere om bokstav c er oppfylt. Hvis du
+              svarer nei på alle tre vilkårene, er § 11-6 ikke oppfylt.{' '}
+              <Link href="https://lovdata.no/nav/rundskriv/r11-00#KAPITTEL_8" target="_blank">
+                Du kan lese om hvordan vilkåret skal vurderes i rundskrivet til § 11-6 (lovdata.no)
+              </Link>
+            </div>
           }
-        >
-          <BistandsbehovTidligereVurdering vurdering={vurdering} />
-        </TidligereVurderingExpandableCard>
-      ))}
-      {fields.map((vurdering, index) => (
-        <NyVurderingExpandableCard
-          key={vurdering.id}
-          fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-          nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
-          isLast={index === fields.length - 1}
-          oppfylt={
-            form.watch(`vurderinger.${index}.erBehovForAktivBehandling`) &&
-            form.watch(`vurderinger.${index}.erBehovForArbeidsrettetTiltak`)
-              ? form.watch(`vurderinger.${index}.erBehovForAktivBehandling`) === JaEllerNei.Ja ||
-                form.watch(`vurderinger.${index}.erBehovForArbeidsrettetTiltak`) === JaEllerNei.Ja ||
-                form.watch(`vurderinger.${index}.erBehovForAnnenOppfølging`) === JaEllerNei.Ja
-              : undefined
-          }
-          vurdertAv={vurdering.vurdertAv}
-          finnesFeil={finnesFeilForVurdering(index, errorList)}
-          readonly={formReadOnly}
-          onRemove={() => remove(index)}
-          harTidligereVurderinger={tidligereVurderinger.length > 0}
-          index={index}
-        >
-          <BistandsbehovVurderingForm form={form} readOnly={formReadOnly} index={index} />
-        </NyVurderingExpandableCard>
-      ))}
+        />
+
+        {vedtatteVurderinger.map((vurdering) => (
+          <TidligereVurderingExpandableCard
+            key={vurdering.fom}
+            fom={parseISO(vurdering.fom)}
+            tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
+            foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+            oppfylt={
+              !!(
+                vurdering.erBehovForAktivBehandling ||
+                vurdering.erBehovForArbeidsrettetTiltak ||
+                vurdering.erBehovForAnnenOppfølging
+              )
+            }
+          >
+            <BistandsbehovTidligereVurdering vurdering={vurdering} />
+          </TidligereVurderingExpandableCard>
+        ))}
+        {fields.map((vurdering, index) => (
+          <NyVurderingExpandableCard
+            key={vurdering.id}
+            fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
+            nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
+            isLast={index === fields.length - 1}
+            oppfylt={
+              form.watch(`vurderinger.${index}.erBehovForAktivBehandling`) &&
+              form.watch(`vurderinger.${index}.erBehovForArbeidsrettetTiltak`)
+                ? form.watch(`vurderinger.${index}.erBehovForAktivBehandling`) === JaEllerNei.Ja ||
+                  form.watch(`vurderinger.${index}.erBehovForArbeidsrettetTiltak`) === JaEllerNei.Ja ||
+                  form.watch(`vurderinger.${index}.erBehovForAnnenOppfølging`) === JaEllerNei.Ja
+                : undefined
+            }
+            vurdertAv={vurdering.vurdertAv}
+            finnesFeil={finnesFeilForVurdering(index, errorList)}
+            readonly={formReadOnly}
+            onRemove={() => remove(index)}
+            harTidligereVurderinger={tidligereVurderinger.length > 0}
+            index={index}
+          >
+            <BistandsbehovVurderingForm form={form} readOnly={formReadOnly} index={index} />
+          </NyVurderingExpandableCard>
+        ))}
+      </VStack>
     </VilkårskortPeriodisert>
   );
 

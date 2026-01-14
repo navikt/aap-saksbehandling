@@ -147,14 +147,13 @@ export const MeldepliktPeriodisertFrontend = ({
       status={status}
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      vurdertAvAnsatt={grunnlag?.sisteVedtatteVurderinger?.[0]?.vurdertAv}
-      kvalitetssikretAv={grunnlag?.sisteVedtatteVurderinger?.[0]?.kvalitetssikretAv}
+      kvalitetssikretAv={grunnlag?.kvalitetssikretAv}
       mellomlagretVurdering={mellomlagretVurdering}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}
       visningModus={visningModus}
       visningActions={visningActions}
-      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
+      formReset={() => form.reset(getDefaultValuesFromGrunnlag(grunnlag))}
       onLeggTilVurdering={onAddPeriode}
       errorList={errorList}
     >
@@ -196,7 +195,7 @@ export const MeldepliktPeriodisertFrontend = ({
           }
           nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
           isLast={index === vedtatteVurderinger.length - 1}
-          vurdertAv={undefined}
+          vurdertAv={vurdering.vurdertAv}
           finnesFeil={finnesFeilForVurdering(index, errorList)}
           readonly={formReadOnly}
           onRemove={() => remove(index)}
@@ -210,7 +209,7 @@ export const MeldepliktPeriodisertFrontend = ({
               label="Vurderingen gjelder fra"
               control={form.control}
               rules={{
-                required: 'Du må velge fra hvilken dato vurderingen gjelder fra',
+                required: 'Vennligst velg en dato for når vurderingen gjelder fra',
                 validate: (value) => validerDato(value as string),
               }}
               readOnly={formReadOnly}
