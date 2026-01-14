@@ -20,7 +20,7 @@ interface Props {
   visOverstyrKnapp?: boolean;
   initialMellomlagretVurdering?: MellomlagretVurdering;
   children: ReactNode;
-  behovstype: Behovstype;
+  behovstype: Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP | Behovstype.MANUELL_OVERSTYRING_LOVVALG;
 }
 
 export const LovvalgOgMedlemskapPeriodisertOverstyringswrapper = ({

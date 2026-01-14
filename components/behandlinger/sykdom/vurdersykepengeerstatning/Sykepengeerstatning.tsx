@@ -1,7 +1,7 @@
 'use client';
 
 import { Behovstype, JaEllerNei } from 'lib/utils/form';
-import { LøsPeriodisertBehovPåBehandling, MellomlagretVurdering, SykepengeerstatningGrunnlag } from 'lib/types/types';
+import { MellomlagretVurdering, SykepengeerstatningGrunnlag } from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
@@ -23,6 +23,7 @@ import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering'
 import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
 import { OppholdskravSykepengererstatninbgTidligereVurdering } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/SykepengererstatningTidligereVurdering';
 import { mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
+import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 
 interface Props {
   behandlingVersjon: number;
@@ -87,7 +88,7 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
     if (!erPerioderGyldige) {
       return;
     }
-    const losning: LøsPeriodisertBehovPåBehandling = {
+    const losning: LøsningerForPerioder = {
       behandlingVersjon: behandlingVersjon,
       referanse: behandlingsReferanse,
       behov: {

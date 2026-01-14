@@ -23,7 +23,7 @@ interface Props {
   harYrkesskade: boolean;
   children: ReactNode;
   initialMellomlagretVurdering?: MellomlagretVurdering;
-  behovstype: Behovstype;
+  behovstype: Behovstype.AVKLAR_FORUTGÅENDE_MEDLEMSKAP | Behovstype.MANUELL_OVERSTYRING_MEDLEMSKAP;
   rettighetsperiodeGrunnlag?: RettighetsperiodeGrunnlag;
   beregningstidspunktGrunnlag?: BeregningTidspunktGrunnlag;
 }

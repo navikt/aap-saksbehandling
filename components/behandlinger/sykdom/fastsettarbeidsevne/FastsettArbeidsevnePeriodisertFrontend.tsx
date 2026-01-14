@@ -4,12 +4,7 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgG
 
 import { useFieldArray, useForm } from 'react-hook-form';
 import { gyldigDatoEllerNull, validerDato } from 'lib/validation/dateValidation';
-import {
-  ArbeidsevneGrunnlag,
-  LøsPeriodisertBehovPåBehandling,
-  MellomlagretVurdering,
-  PeriodisertArbeidsevneVurderingDto,
-} from 'lib/types/types';
+import { ArbeidsevneGrunnlag, MellomlagretVurdering, PeriodisertArbeidsevneVurderingDto } from 'lib/types/types';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { Behovstype } from 'lib/utils/form';
@@ -29,6 +24,7 @@ import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib
 import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
+import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 
 interface Props {
   grunnlag: ArbeidsevneGrunnlag;
@@ -123,7 +119,7 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
       visningActions.onBekreftClick();
       return;
     }
-    const losning: LøsPeriodisertBehovPåBehandling = {
+    const losning: LøsningerForPerioder = {
       behandlingVersjon: behandlingVersjon,
       referanse: behandlingsreferanse,
       behov: {
