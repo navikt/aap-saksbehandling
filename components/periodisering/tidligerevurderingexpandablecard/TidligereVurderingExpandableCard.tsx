@@ -12,7 +12,7 @@ interface Props {
   fom: Date;
   tom: Date | null | undefined;
   foersteNyePeriodeFraDato: Date | null | undefined;
-  oppfylt: boolean;
+  oppfylt: boolean | undefined;
   vurdertAv?: VurdertAvShape;
   children: ReactNode;
   defaultCollapsed?: boolean;
@@ -48,7 +48,7 @@ export const TidligereVurderingExpandableCard = ({
             )}
             {nySluttdato && <span> {formaterDatoForFrontend(sub(foersteNyePeriodeFraDato, { days: 1 }))}</span>}
           </BodyShort>
-          {oppfylt !== null && (
+          {oppfylt != null && (
             <Tag size="xsmall" variant={oppfylt ? 'success-moderate' : 'error-moderate'}>
               {oppfylt ? 'Oppfylt' : 'Ikke oppfylt'}
             </Tag>
