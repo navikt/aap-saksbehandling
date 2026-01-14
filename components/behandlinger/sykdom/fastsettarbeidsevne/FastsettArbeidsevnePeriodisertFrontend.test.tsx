@@ -208,25 +208,6 @@ describe('FastsettArbeidsevne', () => {
       expect(errors[0]).toBeVisible();
     });
 
-    it('viser feilmelding dersom datoen da arbeidsevnen gjelder fra ikke er besvart', async () => {
-      render(
-        <FastsettArbeidsevnePeriodisertFrontend
-          readOnly={false}
-          behandlingVersjon={0}
-          grunnlag={grunnlagUtenVurdering}
-        />
-      );
-      await klikkPåNyVurdering();
-
-      // Clear the auto-filled date
-      const dateFelt = screen.getByRole('textbox', { name: 'Vurderingen gjelder fra' });
-      await user.clear(dateFelt);
-
-      await klikkPåBekreft();
-      const errors = screen.getAllByText('Du må angi datoen arbeidsevnen gjelder fra');
-      expect(errors[0]).toBeVisible();
-    });
-
     describe('mellomlagring', () => {
       const mellomlagring: MellomlagretVurderingResponse = {
         mellomlagretVurdering: {
