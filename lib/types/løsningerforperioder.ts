@@ -4,6 +4,7 @@ import {
   AvklarPeriodisertForutgåendeMedlemskapLøsning,
   AvklarPeriodisertLovvalgMedlemskapLøsning,
   BistandsbehovLøsning,
+  LøsPeriodisertBehovPåBehandling,
   OvergangArbeidLøsning,
   OvergangUforeLøsning,
   PeriodisertArbeidsevneVurderingDto,
@@ -13,10 +14,9 @@ import {
 } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
 
-export interface LøsningerForPerioder {
-  behandlingVersjon: number;
-  ingenEndringIGruppe?: boolean | null;
-  referanse: string;
+type BaseLøsPeriodisertBehovPåBehandling = Omit<LøsPeriodisertBehovPåBehandling, 'behov'>;
+
+export interface LøsningerForPerioder extends BaseLøsPeriodisertBehovPåBehandling {
   behov: Behov;
 }
 
