@@ -117,6 +117,10 @@ export function finnBeskrivelseForValg(noekkel: string, brevmal: BrevmalType): s
   return beskrivelse || `Fant ikke beskrivelse for valg med id ${noekkel}`;
 }
 
+export function valgErObligatorisk(noekkel: string, brevmal: BrevmalType): boolean {
+  return !!finnAlleValgRefs(brevmal).find((valg) => valg.valg._id === noekkel)?.obligatorisk;
+}
+
 export function finnBeskrivelseForAlternativ(noekkel: string, brevmal: BrevmalType): string {
   const beskrivelse = finnAlleValgRefs(brevmal)
     .flatMap((valg) => valg.valg.alternativer.find((alternativ) => alternativ._key === noekkel))
@@ -136,6 +140,7 @@ export function erValgtIdFritekst(noekkel: string, brevmal: BrevmalType): boolea
   return (
     finnAlleValgRefs(brevmal)
       .flatMap((valg) => valg.valg.alternativer.find((alternativ) => noekkel === alternativ._key))
+      .filter((v) => !!v)
       .at(0)?._type === 'fritekst'
   );
 }

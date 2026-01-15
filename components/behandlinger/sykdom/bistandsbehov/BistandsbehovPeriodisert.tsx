@@ -73,7 +73,7 @@ export const BistandsbehovPeriodisert = ({
     ? parseOgMigrerMellomlagretData(initialMellomlagretVurdering.data, grunnlag?.behøverVurderinger?.[0]?.fom)
     : mapVurderingerToBistandForm(grunnlag);
 
-  const form = useForm<BistandForm>({ defaultValues });
+  const form = useForm<BistandForm>({ defaultValues, shouldUnregister: true });
   const { fields, append, remove } = useFieldArray({ name: 'vurderinger', control: form.control });
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {

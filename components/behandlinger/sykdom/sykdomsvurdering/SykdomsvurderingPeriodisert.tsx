@@ -2,7 +2,7 @@
 
 import { Behovstype, getJaNeiEllerUndefined, getStringEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { FormEvent, useCallback } from 'react';
+import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { parseISO } from 'date-fns';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
@@ -99,8 +99,8 @@ export const SykdomsvurderingPeriodisert = ({
     append,
   } = useFieldArray({ name: 'vurderinger', control: form.control });
 
-  const behandlingErRevurdering = typeBehandling === 'Revurdering';
-  const behandlingErFørstegangsbehandling = typeBehandling === 'Førstegangsbehandling';
+  const førsteDatoSomKanVurderes =
+    grunnlag.kanVurderes[0]?.fom != null ? parseISO(grunnlag.kanVurderes[0].fom) : new Date();
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
@@ -127,9 +127,7 @@ export const SykdomsvurderingPeriodisert = ({
                 vurdering,
                 grunnlag.skalVurdereYrkesskade,
                 grunnlag.erÅrsakssammenhengYrkesskade,
-                behandlingErFørstegangsbehandling,
-                behandlingErRevurdering,
-                behandlingErRevurderingAvFørstegangsbehandling(),
+                førsteDatoSomKanVurderes,
                 tilDato ? formaterDatoForBackend(tilDato) : undefined
               );
             }),
@@ -143,20 +141,6 @@ export const SykdomsvurderingPeriodisert = ({
       );
     })(event);
   };
-
-  const førsteFraDato = form.watch(`vurderinger.0.fraDato`);
-
-  const behandlingErRevurderingAvFørstegangsbehandling = useCallback(() => {
-    //TODO: gjenkjennelse av revurdering av førstegangsbehandling må gås opp for periodiserte vurderinger
-    return false;
-
-    //   const førsteFraDatoSomSkalVurderes = stringToDate(førsteFraDato, DATO_FORMATER.ddMMyyyy);
-    //   if (!behandlingErRevurdering || !førsteFraDatoSomSkalVurderes) {
-    //     return false;
-    //   }
-    //   const søknadsdato = startOfDay(new Date(sak.periode.fom));
-    //   return søknadsdato.getTime() >= startOfDay(førsteFraDatoSomSkalVurderes).getTime();
-  }, [behandlingErRevurdering, sak, førsteFraDato]);
 
   const errorList = mapPeriodiserteVurderingerErrorList<SykdomsvurderingerForm>(form.formState.errors);
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
@@ -212,10 +196,7 @@ export const SykdomsvurderingPeriodisert = ({
             fom={new Dato(vurdering.fom).dato}
             tom={vurdering.tom ? parseISO(vurdering.tom) : undefined}
             foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-            oppfylt={
-              getJaNeiEllerUndefined(vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten) === JaEllerNei.Ja ||
-              getJaNeiEllerUndefined(vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense) === JaEllerNei.Ja
-            }
+            oppfylt={undefined}
             defaultCollapsed={nyeVurderingerFields.length > 0}
           >
             <TidligereSykdomsvurdering vurdering={vurdering} />
@@ -225,7 +206,7 @@ export const SykdomsvurderingPeriodisert = ({
           <NyVurderingExpandableCard
             key={vurdering.id}
             fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-            oppfylt={erVurderingOppfylt(form.watch(`vurderinger.${index}`))}
+            oppfylt={undefined}
             nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
             isLast={index === nyeVurderingerFields.length - 1}
             vurdertAv={vurdering.vurdertAv}
@@ -239,11 +220,10 @@ export const SykdomsvurderingPeriodisert = ({
               index={index}
               form={form}
               readonly={formReadOnly}
-              typeBehandling={typeBehandling}
               sak={sak}
               erÅrsakssammenhengYrkesskade={grunnlag.erÅrsakssammenhengYrkesskade}
               skalVurdereYrkesskade={grunnlag.skalVurdereYrkesskade}
-              erRevurderingAvFørstegangsbehandling={behandlingErRevurderingAvFørstegangsbehandling()}
+              rettighetsperiopdeStartdato={førsteDatoSomKanVurderes}
             />
           </NyVurderingExpandableCard>
         ))}

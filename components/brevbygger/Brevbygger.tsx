@@ -1,7 +1,7 @@
 'use client';
 
 import { Alert, Box, Button, HGrid } from '@navikt/ds-react';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { Delmal } from 'components/brevbygger/Delmal';
 import {
   delmalErObligatorisk,
@@ -11,7 +11,7 @@ import {
   mapDelmalerFraSanity,
 } from 'components/brevbygger/brevmalMapping';
 import { BrevmalType } from 'components/brevbygger/brevmodellTypes';
-import { BrevdataDto, BrevMottaker, Mottaker } from 'lib/types/types';
+import { BrevdataDto, BrevMottaker, FritekstDto, Mottaker } from 'lib/types/types';
 import { ForhåndsvisBrev } from 'components/brevbygger/ForhåndsvisBrev';
 import { clientKanDistribuereBrev, clientOppdaterBrevdata, clientOppdaterBrevmal } from 'lib/clientApi';
 import { useRouter } from 'next/navigation';
@@ -24,6 +24,7 @@ import { revalidateFlyt } from 'lib/actions/actions';
 import { VelgeMottakere } from 'components/brevbygger/VelgeMottakere';
 import { IkkeSendBrevModal } from 'components/behandlinger/brev/skriveBrev/IkkeSendBrevModal';
 import { Brevbyggermeny } from 'components/brevbygger/Brevbyggermeny';
+import { useDebounce } from 'hooks/DebounceHook';
 
 export interface AlternativFormField {
   verdi: string;
@@ -155,19 +156,19 @@ export const Brevbygger = ({
         key: valg.valgtAlternativ,
       }));
 
-    const fritekst = formData.delmaler
+    const fritekst: FritekstDto[] = formData.delmaler
       .filter((delmal) => delmal.valgt)
-      .map((delmal) => {
+      .flatMap((delmal) => {
         const fritekstValg = delmal.valg
           ?.filter((alternativ) => alternativ.valgtAlternativ !== '')
-          .filter((alternativ) => erValgtIdFritekst(alternativ.valgtAlternativ, parsedBrevmal))
-          .at(0);
+          .filter((alternativ) => erValgtIdFritekst(alternativ.valgtAlternativ, parsedBrevmal));
+
         if (fritekstValg) {
-          return {
-            fritekst: JSON.stringify({ tekst: fritekstValg.fritekst || '' }),
-            key: fritekstValg.valgtAlternativ,
-            parentId: finnParentIdForValgtAlternativ(fritekstValg.valgtAlternativ, parsedBrevmal),
-          };
+          return fritekstValg.map((fritekst) => ({
+            fritekst: JSON.stringify({ tekst: fritekst.fritekst || '' }),
+            key: fritekst.valgtAlternativ,
+            parentId: finnParentIdForValgtAlternativ(fritekst.valgtAlternativ, parsedBrevmal),
+          }));
         }
       })
       .filter((v) => !!v);
@@ -184,6 +185,13 @@ export const Brevbygger = ({
       hentDokument(referanse, setDataUri, setPdfIsLoading);
     }
   };
+
+  const formValues = useWatch({ control });
+  const debouncedFormData = useDebounce(formValues);
+
+  useEffect(() => {
+    onSubmit(debouncedFormData as BrevdataFormFields);
+  }, [debouncedFormData]);
 
   const oppdaterBrevmal = async () => {
     await clientOppdaterBrevmal(referanse);
@@ -255,7 +263,6 @@ export const Brevbygger = ({
                 brevmal={parsedBrevmal}
               />
             ))}
-          <Button variant="secondary">Oppdater brevdata</Button>
         </form>
         <Button type="button" onClick={() => sendBrev()} loading={isLoading}>
           Send brev

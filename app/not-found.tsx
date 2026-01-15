@@ -1,27 +1,27 @@
 'use client';
 
-import Image from 'next/image';
-import { Heading } from '@navikt/ds-react';
-
-import ErrorBilde from '../public/error.jpg';
+import { Box, Heading, Page, VStack } from '@navikt/ds-react';
+import { MinusIcon } from '@navikt/aksel-icons';
+import Link from 'next/link';
 
 //404 Page
 const NotFound = () => {
   return (
-    <div
-      style={{
-        display: 'flex',
-        width: '100%',
-        alignItems: 'center',
-        flexDirection: 'column',
-        marginBlockStart: '2rem',
-      }}
-    >
-      <Heading level="2" size="medium" spacing>
-        Denne siden finnes ikke.
-      </Heading>
-      <Image src={ErrorBilde} alt="404" width={500} height={500} />
-    </div>
+    <Page>
+      <Page.Block width="md" gutters>
+        <Box marginBlock="8" padding="4">
+          <VStack gap="4" marginBlock="8">
+            <Heading level="2" size="large">
+              Denne siden finnes ikke
+            </Heading>
+
+            <MinusIcon />
+
+            <Link href="/">Gå til forsiden</Link>
+          </VStack>
+        </Box>
+      </Page.Block>
+    </Page>
   );
 };
 

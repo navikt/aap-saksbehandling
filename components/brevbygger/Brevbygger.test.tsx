@@ -6,6 +6,7 @@ import {
   sanityAttrs,
   valgfriDelmal,
   valgfriDelmalMedAlternativer,
+  valgfriDelmalMedValgfrieAlternativer,
 } from 'components/brevbygger/brevbyggerTestdata';
 import { render, screen, within } from 'lib/test/CustomRender';
 import { BrevdataDto } from 'lib/types/types';
@@ -243,6 +244,16 @@ describe('Delmaler med valg', () => {
   });
 
   test('viser fritekstfelt når fritekst er valgt', async () => {
+    const brevmal: BrevmalType = {
+      ...sanityAttrs,
+      _id: 'brevmal-id',
+      beskrivelse: 'En beskrivelse',
+      overskrift: 'En overskrift',
+      journalposttittel: 'jp-tittel',
+      kanSendesAutomatisk: false,
+      delmaler: [obligatoriskDelmal, valgfriDelmalMedAlternativer],
+    };
+
     render(
       <Brevbygger
         referanse={'1234'}
@@ -254,6 +265,8 @@ describe('Delmaler med valg', () => {
         readOnly={false}
       />
     );
+
+    await user.click(screen.getByRole('checkbox', { name: 'Inkluder i brev' }));
 
     await user.selectOptions(screen.getByRole('combobox', { name: 'Beskrivelse av alternativ' }), ['alt3-key']);
     expect(screen.getByRole('textbox', { name: 'Fritekst' })).toBeVisible();
@@ -318,5 +331,59 @@ describe('Delmaler med valg', () => {
     expect((screen.getByRole('option', { name: 'Fritekst' }) as HTMLOptionElement).selected).toBe(true);
     expect(screen.getByRole('textbox', { name: 'Fritekst' })).toBeVisible();
     expect(screen.getByText('Her kommer det litt fritekst')).toBeVisible();
+  });
+
+  // må se litt mer på hvordan dette skal håndteres når oppdatering av data går automatisk...
+  test.skip('viser en feilmelding når man ikke har valgt et alternativ i et obligatorisk valg', async () => {
+    const brevmal: BrevmalType = {
+      ...sanityAttrs,
+      _id: 'brevmal-id',
+      beskrivelse: 'En beskrivelse',
+      overskrift: 'En overskrift',
+      journalposttittel: 'jp-tittel',
+      kanSendesAutomatisk: false,
+      delmaler: [valgfriDelmalMedAlternativer],
+    };
+    render(
+      <Brevbygger
+        referanse={'1234'}
+        brevmal={JSON.stringify(brevmal)}
+        behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
+        mottaker={{ ident: '1234', navn: 'Navn' }}
+        behandlingVersjon={1}
+        readOnly={false}
+      />
+    );
+    await user.click(screen.getByRole('checkbox', { name: 'Inkluder i brev' }));
+    expect(screen.getByText('Beskrivelse av alternativ')).toBeVisible();
+    await user.click(screen.getByRole('button', { name: 'Oppdater brevdata' }));
+    expect(screen.getByText('Du må velge et alternativ')).toBeVisible();
+  });
+
+  // må se litt mer på hvordan dette skal håndteres når oppdatering av data går automatisk...
+  test.skip('viser ikke feilmelding for ikke-obligatoriske valg', async () => {
+    const brevmal: BrevmalType = {
+      ...sanityAttrs,
+      _id: 'brevmal-id',
+      beskrivelse: 'En beskrivelse',
+      overskrift: 'En overskrift',
+      journalposttittel: 'jp-tittel',
+      kanSendesAutomatisk: false,
+      delmaler: [valgfriDelmalMedValgfrieAlternativer],
+    };
+    render(
+      <Brevbygger
+        referanse={'1234'}
+        brevmal={JSON.stringify(brevmal)}
+        behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
+        mottaker={{ ident: '1234', navn: 'Navn' }}
+        behandlingVersjon={1}
+        readOnly={false}
+      />
+    );
+    await user.click(screen.getByRole('checkbox', { name: 'Inkluder i brev' }));
+    expect(screen.getByText('Beskrivelse av alternativ')).toBeVisible();
+    await user.click(screen.getByRole('button', { name: 'Oppdater brevdata' }));
+    expect(screen.queryByText('Du må velge et alternativ')).not.toBeInTheDocument();
   });
 });
