@@ -9,14 +9,15 @@ export async function POST(req: NextRequest, props: { params: Promise<{ brevbest
   try {
     const res = await mellomlagreBrev(params.brevbestillingReferanse, body);
     if (isError(res)) {
-      if (res.status === 403) {
+      if (res.status >= 500) {
         logInfo(
           `/api/brev/brevbestillingsreferanse/oppdater ${res.status} ${res.apiException.code}: ${res.apiException.message}`
         );
+      } else {
+        logError(
+          `/api/brev/brevbestillingsreferanse/oppdater ${res.status} - ${res.apiException.code}: ${res.apiException.message}`
+        );
       }
-      logError(
-        `/api/brev/brevbestillingsreferanse/oppdater ${res.status} - ${res.apiException.code}: ${res.apiException.message}`
-      );
     }
 
     return NextResponse.json(res, { status: res.status });
