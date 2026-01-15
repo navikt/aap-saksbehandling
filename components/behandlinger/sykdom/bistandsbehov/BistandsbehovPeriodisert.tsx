@@ -175,7 +175,7 @@ export const BistandsbehovPeriodisert = ({
                 : undefined
             }
             vurdertAv={vurdering.vurdertAv}
-            kvalitetssikretAv={undefined} // TODO Denne mangler
+            kvalitetssikretAv={vurdering.kvalitetssikretAv}
             finnesFeil={finnesFeilForVurdering(index, errorList)}
             readonly={formReadOnly}
             onRemove={() => remove(index)}
