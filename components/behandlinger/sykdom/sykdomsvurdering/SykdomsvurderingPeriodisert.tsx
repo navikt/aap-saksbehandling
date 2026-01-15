@@ -141,6 +141,25 @@ export const SykdomsvurderingPeriodisert = ({
 
   const errorList = mapPeriodiserteVurderingerErrorList<SykdomsvurderingerForm>(form.formState.errors);
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
+  function erVurderingOppfylt(vurdering: Sykdomsvurdering): boolean | undefined {
+    if (
+      vurdering.harSkadeSykdomEllerLyte === JaEllerNei.Nei ||
+      vurdering.erArbeidsevnenNedsatt === JaEllerNei.Nei ||
+      vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten === JaEllerNei.Nei ||
+      vurdering.erSkadeSykdomEllerLyteVesentligdel === JaEllerNei.Nei ||
+      vurdering.erNedsettelseIArbeidsevneMerEnnFørtiProsent === JaEllerNei.Nei ||
+      vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense === JaEllerNei.Nei
+    ) {
+      return false;
+    }
+
+    if (
+      vurdering.erNedsettelseIArbeidsevneAvEnVissVarighet === JaEllerNei.Ja ||
+      vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense === JaEllerNei.Ja
+    ) {
+      return true;
+    }
+  }
 
   const foersteNyePeriode = nyeVurderingerFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
   const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
@@ -184,7 +203,7 @@ export const SykdomsvurderingPeriodisert = ({
           <NyVurderingExpandableCard
             key={vurdering.id}
             fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-            oppfylt={undefined}
+            oppfylt={erVurderingOppfylt(form.watch(`vurderinger.${index}`))}
             nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
             isLast={index === nyeVurderingerFields.length - 1}
             vurdertAv={vurdering.vurdertAv}
