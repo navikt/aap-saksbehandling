@@ -1,7 +1,7 @@
 'use client';
 
 import { Alert, Box, Button, HGrid } from '@navikt/ds-react';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { Delmal } from 'components/brevbygger/Delmal';
 import {
   delmalErObligatorisk,
@@ -24,6 +24,7 @@ import { revalidateFlyt } from 'lib/actions/actions';
 import { VelgeMottakere } from 'components/brevbygger/VelgeMottakere';
 import { IkkeSendBrevModal } from 'components/behandlinger/brev/skriveBrev/IkkeSendBrevModal';
 import { Brevbyggermeny } from 'components/brevbygger/Brevbyggermeny';
+import { useDebounce } from 'hooks/DebounceHook';
 
 export interface AlternativFormField {
   verdi: string;
@@ -185,6 +186,13 @@ export const Brevbygger = ({
     }
   };
 
+  const formValues = useWatch({ control });
+  const debouncedFormData = useDebounce(formValues);
+
+  useEffect(() => {
+    onSubmit(debouncedFormData as BrevdataFormFields);
+  }, [debouncedFormData]);
+
   const oppdaterBrevmal = async () => {
     await clientOppdaterBrevmal(referanse);
     router.refresh();
@@ -255,7 +263,6 @@ export const Brevbygger = ({
                 brevmal={parsedBrevmal}
               />
             ))}
-          <Button variant="secondary">Oppdater brevdata</Button>
         </form>
         <Button type="button" onClick={() => sendBrev()} loading={isLoading}>
           Send brev
