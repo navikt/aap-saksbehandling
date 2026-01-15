@@ -118,7 +118,7 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialM
       status={status}
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      vilkårTilhørerNavKontor={false}
+      vilkårTilhørerNavKontor={true}
       mellomlagretVurdering={mellomlagretVurdering}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
