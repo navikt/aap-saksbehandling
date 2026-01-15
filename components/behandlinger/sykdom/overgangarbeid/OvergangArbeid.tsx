@@ -1,7 +1,7 @@
 'use client';
 
 import { Behovstype, JaEllerNei } from 'lib/utils/form';
-import { LøsPeriodisertBehovPåBehandling, MellomlagretVurdering, OvergangArbeidGrunnlag } from 'lib/types/types';
+import { MellomlagretVurdering, OvergangArbeidGrunnlag } from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
@@ -24,6 +24,7 @@ import {
 import { OvergangArbeidTidligereVurdering } from 'components/behandlinger/sykdom/overgangarbeid/OvergangArbeidTidligereVurderinger';
 import { OvergangArbeidFormInput } from 'components/behandlinger/sykdom/overgangarbeid/OvergangArbeidFormInput';
 import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/overgangarbeid/OvergangArbeidMellomlagringParser';
+import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 
 interface Props {
   behandlingVersjon: number;
@@ -87,7 +88,7 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialM
     if (!erPerioderGyldige) {
       return;
     }
-    const losning: LøsPeriodisertBehovPåBehandling = {
+    const losning: LøsningerForPerioder = {
       behandlingVersjon: behandlingVersjon,
       referanse: behandlingsReferanse,
       behov: {

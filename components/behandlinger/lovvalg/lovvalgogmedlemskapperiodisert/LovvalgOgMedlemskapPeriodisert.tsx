@@ -3,11 +3,7 @@
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { Behovstype, JaEllerNei } from 'lib/utils/form';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
-import {
-  LøsPeriodisertBehovPåBehandling,
-  MellomlagretVurdering,
-  PeriodisertLovvalgMedlemskapGrunnlag,
-} from 'lib/types/types';
+import { MellomlagretVurdering, PeriodisertLovvalgMedlemskapGrunnlag } from 'lib/types/types';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { useFieldArray, useForm } from 'react-hook-form';
@@ -27,6 +23,7 @@ import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortper
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
 import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
+import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 
 interface Props {
   behandlingVersjon: number;
@@ -34,7 +31,7 @@ interface Props {
   grunnlag?: PeriodisertLovvalgMedlemskapGrunnlag;
   overstyring: boolean;
   initialMellomlagretVurdering?: MellomlagretVurdering;
-  behovstype: Behovstype;
+  behovstype: Behovstype.MANUELL_OVERSTYRING_LOVVALG | Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP;
 }
 
 export const LovvalgOgMedlemskapPeriodisert = ({
@@ -90,7 +87,7 @@ export const LovvalgOgMedlemskapPeriodisert = ({
     if (!erPerioderGyldige) {
       return;
     }
-    const losning: LøsPeriodisertBehovPåBehandling = {
+    const losning: LøsningerForPerioder = {
       behandlingVersjon: behandlingVersjon,
       referanse: behandlingsReferanse,
 

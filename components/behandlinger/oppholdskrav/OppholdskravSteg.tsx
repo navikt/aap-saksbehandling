@@ -5,7 +5,7 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgG
 import { Behovstype, JaEllerNei } from 'lib/utils/form';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { OppholdskravForm } from 'components/behandlinger/oppholdskrav/types';
-import { LøsPeriodisertBehovPåBehandling, MellomlagretVurdering, OppholdskravGrunnlagResponse } from 'lib/types/types';
+import { MellomlagretVurdering, OppholdskravGrunnlagResponse } from 'lib/types/types';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import {
@@ -24,6 +24,7 @@ import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering'
 import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
 import { LovOgMedlemskapVurderingForm } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/types';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
+import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 
 type Props = {
   grunnlag: OppholdskravGrunnlagResponse | undefined;
@@ -89,7 +90,7 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
     if (!erPerioderGyldige) {
       return;
     }
-    const losning: LøsPeriodisertBehovPåBehandling = {
+    const losning: LøsningerForPerioder = {
       behandlingVersjon: behandlingVersjon,
       referanse: behandlingsreferanse,
       behov: {
