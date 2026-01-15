@@ -5,10 +5,8 @@ import {
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
-import { FastsettArbeidsevne } from 'components/behandlinger/sykdom/fastsettarbeidsevne/FastsettArbeidsevneGammel';
 import { StegData } from 'lib/utils/steg';
 import { FastsettArbeidsevnePeriodisertFrontend } from 'components/behandlinger/sykdom/fastsettarbeidsevne/FastsettArbeidsevnePeriodisertFrontend';
-import { unleashService } from 'lib/services/unleash/unleashService';
 
 interface Props {
   behandlingsReferanse: string;
@@ -25,15 +23,8 @@ export const FastsettArbeidsevneMedDataFetching = async ({ behandlingsReferanse,
     return <ApiException apiResponses={[grunnlag]} />;
   }
 
-  return unleashService.isEnabled('PeriodiserteValgfrieKort') ? (
+  return (
     <FastsettArbeidsevnePeriodisertFrontend
-      grunnlag={grunnlag.data}
-      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
-      behandlingVersjon={stegData.behandlingVersjon}
-      initialMellomlagretVurdering={initialMellomlagretVurdering}
-    />
-  ) : (
-    <FastsettArbeidsevne
       grunnlag={grunnlag.data}
       readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       behandlingVersjon={stegData.behandlingVersjon}

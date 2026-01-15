@@ -1,4 +1,5 @@
 import { JaEllerNei } from 'lib/utils/form';
+import { VurdertAvAnsatt } from 'lib/types/types';
 
 export type ForutgåendeMedlemskapVurderingForm = {
   vurderinger: ForutgåendeMedlemskapManuellVurderingForm[];
@@ -9,11 +10,8 @@ export type ForutgåendeMedlemskapManuellVurderingForm = {
   harForutgåendeMedlemskap?: JaEllerNei;
   unntaksvilkår?: 'A' | 'B' | 'Nei';
   fraDato?: string;
-  vurdertAv?: {
-    ansattnavn: string | null | undefined;
-    ident: string;
-    dato: string;
-  };
+  vurdertAv?: VurdertAvAnsatt;
+  kvalitetssikretAv?: VurdertAvAnsatt;
 };
 
 // TODO denne er midlertidig inntil alle mellomlagrede vurderinger har blitt periodisert (https://jira.adeo.no/browse/FAGSYSTEM-405014)

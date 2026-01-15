@@ -8,6 +8,7 @@ import {
   LøsPeriodisertBehovPåBehandling,
   MellomlagretVurdering,
   PeriodisertFritaksvurderingDto,
+  VurdertAvAnsatt,
 } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { gyldigDatoEllerNull, validerDato } from 'lib/validation/dateValidation';
@@ -44,11 +45,8 @@ export interface FritakMeldepliktVurderingForm {
   begrunnelse: string;
   harFritak: string | undefined;
   fraDato: string | undefined;
-  vurdertAv?: {
-    ansattnavn: string | null | undefined;
-    ident: string;
-    dato: string;
-  };
+  vurdertAv?: VurdertAvAnsatt;
+  kvalitetssikretAv?: VurdertAvAnsatt;
 }
 
 export const MeldepliktPeriodisertFrontend = ({
@@ -147,7 +145,6 @@ export const MeldepliktPeriodisertFrontend = ({
       status={status}
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      kvalitetssikretAv={grunnlag?.kvalitetssikretAv}
       mellomlagretVurdering={mellomlagretVurdering}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}
@@ -196,9 +193,10 @@ export const MeldepliktPeriodisertFrontend = ({
           nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
           isLast={index === vedtatteVurderinger.length - 1}
           vurdertAv={vurdering.vurdertAv}
+          kvalitetssikretAv={vurdering.kvalitetssikretAv}
           finnesFeil={finnesFeilForVurdering(index, errorList)}
           readonly={formReadOnly}
-          onRemove={() => remove(index)}
+          onSlettVurdering={() => remove(index)}
           // vilkåret er valgfritt, kan derfor slette vurderingen selv om det ikke finnes en tidligere vurdering
           harTidligereVurderinger={true}
           index={index}
@@ -254,14 +252,8 @@ function getDefaultValuesFromGrunnlag(grunnlag: FritakMeldepliktGrunnlag | undef
       begrunnelse: vurdering.begrunnelse,
       fraDato: formaterDatoForFrontend(vurdering.fom),
       harFritak: vurdering.harFritak ? JaEllerNei.Ja : JaEllerNei.Nei,
-      vurdertAv:
-        vurdering.vurdertAv != null
-          ? {
-              ansattnavn: vurdering.vurdertAv.ansattnavn,
-              ident: vurdering.vurdertAv.ident,
-              dato: vurdering.vurdertAv.dato,
-            }
-          : undefined,
+      vurdertAv: vurdering.vurdertAv,
+      kvalitetssikretAv: vurdering.kvalitetssikretAv,
     })),
   };
 }

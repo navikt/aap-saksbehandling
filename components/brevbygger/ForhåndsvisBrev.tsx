@@ -17,11 +17,9 @@ export const ForhåndsvisBrev = ({ dataUri, isLoading = false }: Props) => {
         </div>
       )}
       {dataUri && (
-        <div className={styles.pdf}>
-          <object data={`${dataUri}`} type="application/pdf">
-            <p>Forhåndsvisning av brev</p>
-          </object>
-        </div>
+        <object data={`${dataUri}`} type="application/pdf" className={styles.pdf}>
+          <p>Forhåndsvisning av brev</p>
+        </object>
       )}
     </Box>
   );

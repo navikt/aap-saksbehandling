@@ -173,7 +173,7 @@ export const Brevbygger = ({
       })
       .filter((v) => !!v);
 
-    const res = await clientOppdaterBrevdata(referanse, {
+    return await clientOppdaterBrevdata(referanse, {
       delmaler: [...obligatoriskeDelmaler, ...valgteDelmaler],
       valg: valgteValg,
       betingetTekst: brevdata?.betingetTekst || [],
@@ -181,16 +181,19 @@ export const Brevbygger = ({
       fritekster: fritekst,
       periodetekster: brevdata?.periodetekster || [],
     });
-    if (isSuccess(res)) {
-      hentDokument(referanse, setDataUri, setPdfIsLoading);
-    }
   };
 
   const formValues = useWatch({ control });
   const debouncedFormData = useDebounce(formValues);
 
   useEffect(() => {
-    onSubmit(debouncedFormData as BrevdataFormFields);
+    const oppdaterBrevdataOgForhåndsvisning = async () => {
+      const res = await onSubmit(debouncedFormData as BrevdataFormFields);
+      if (isSuccess(res)) {
+        await hentDokument(referanse, setDataUri, setPdfIsLoading);
+      }
+    };
+    oppdaterBrevdataOgForhåndsvisning();
   }, [debouncedFormData]);
 
   const oppdaterBrevmal = async () => {

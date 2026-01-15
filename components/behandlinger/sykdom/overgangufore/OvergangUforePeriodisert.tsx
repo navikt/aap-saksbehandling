@@ -38,6 +38,7 @@ interface OvergangUforeVurderingForm {
   brukerHarFåttVedtakOmUføretrygd: string;
   brukerRettPåAAP?: JaEllerNei | undefined;
   vurdertAv?: VurdertAvAnsatt;
+  kvalitetssikretAv?: VurdertAvAnsatt;
 }
 
 export const OvergangUforePeriodisert = ({
@@ -115,7 +116,6 @@ export const OvergangUforePeriodisert = ({
       formReset={() => form.reset(getDefaultValuesFromGrunnlag(grunnlag))}
       onLeggTilVurdering={() => append(emptyOvergangUføreVurdering())}
       errorList={errorList}
-      kvalitetssikretAv={grunnlag.kvalitetssikretAv}
     >
       <VStack gap={'4'}>
         <Veiledning
@@ -163,9 +163,10 @@ export const OvergangUforePeriodisert = ({
               nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
               isLast={index === nyeVurderingFields.length - 1}
               vurdertAv={vurdering.vurdertAv}
+              kvalitetssikretAv={vurdering.kvalitetssikretAv}
               finnesFeil={finnesFeilForVurdering(index, errorList)}
               readonly={formReadOnly}
-              onRemove={() => remove(index)}
+              onSlettVurdering={() => remove(index)}
               harTidligereVurderinger={tidligereVurderinger.length > 0}
               index={index}
             >
@@ -197,6 +198,7 @@ export const OvergangUforePeriodisert = ({
         brukerHarSøktUføretrygd: getJaNeiEllerUndefined(vurdering?.brukerHarSøktUføretrygd),
         brukerHarFåttVedtakOmUføretrygd: vurdering?.brukerHarFåttVedtakOmUføretrygd || '',
         vurdertAv: vurdering.vurdertAv,
+        kvalitetssikretAv: vurdering.kvalitetssikretAv,
       })),
     };
   }

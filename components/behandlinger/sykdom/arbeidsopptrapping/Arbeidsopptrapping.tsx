@@ -5,6 +5,7 @@ import {
   ArbeidsopptrappingLøsningDto,
   LøsPeriodisertBehovPåBehandling,
   MellomlagretVurdering,
+  VurdertAvAnsatt,
 } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { useFieldArray, useForm } from 'react-hook-form';
@@ -26,7 +27,6 @@ import { Link, VStack } from '@navikt/ds-react';
 import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
 import { IkkeVurderbarPeriode } from 'components/periodisering/IkkeVurderbarPeriode';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
-import { vurdertAvFraPeriodisertVurdering } from 'lib/utils/vurdert-av';
 
 interface Props {
   behandlingVersjon: number;
@@ -44,11 +44,8 @@ export interface ArbeidsopptrappingVurderingForm {
   fraDato: string | undefined;
   reellMulighetTilOpptrapping: JaEllerNei | undefined;
   rettPaaAAPIOpptrapping: JaEllerNei | undefined;
-  vurdertAv?: {
-    ansattnavn: string | null | undefined;
-    ident: string;
-    dato: string;
-  };
+  vurdertAv?: VurdertAvAnsatt;
+  kvalitetssikretAv?: VurdertAvAnsatt;
 }
 
 export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, initialMellomlagretVurdering }: Props) => {
@@ -145,7 +142,6 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
       formReset={() => form.reset(getDefaultValuesFromGrunnlag(grunnlag))}
       onLeggTilVurdering={onAddPeriode}
       errorList={errorList}
-      kvalitetssikretAv={grunnlag?.kvalitetssikretAv}
     >
       {!formReadOnly && (
         <VStack paddingBlock={'4'}>
@@ -201,8 +197,9 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
           nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
           isLast={index === fields.length - 1}
           vurdertAv={vurdering.vurdertAv}
+          kvalitetssikretAv={vurdering.kvalitetssikretAv}
           finnesFeil={finnesFeilForVurdering(index, errorList)}
-          onRemove={() => remove(index)}
+          onSlettVurdering={() => remove(index)}
           readonly={formReadOnly}
           harTidligereVurderinger={true}
           index={index}
@@ -236,7 +233,8 @@ function getDefaultValuesFromGrunnlag(
       fraDato: formaterDatoForFrontend(vurdering.fom),
       reellMulighetTilOpptrapping: getJaNeiEllerUndefined(vurdering.reellMulighetTilOpptrapping),
       rettPaaAAPIOpptrapping: getJaNeiEllerUndefined(vurdering.rettPaaAAPIOpptrapping),
-      vurdertAv: vurdertAvFraPeriodisertVurdering(vurdering.vurdertAv),
+      vurdertAv: vurdering.vurdertAv,
+      kvalitetssikretAv: vurdering.kvalitetssikretAv,
     })),
   };
 }

@@ -1,12 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { FastsettArbeidsevne } from 'components/behandlinger/sykdom/fastsettarbeidsevne/FastsettArbeidsevneGammel';
-import { render, screen, within } from 'lib/test/CustomRender';
+import { render, screen } from 'lib/test/CustomRender';
 import { userEvent } from '@testing-library/user-event';
 import { ArbeidsevneGrunnlag, MellomlagretVurderingResponse } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
 import { FetchResponse } from 'lib/utils/api';
 import createFetchMock from 'vitest-fetch-mock';
 import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
+import { FastsettArbeidsevnePeriodisertFrontend } from 'components/behandlinger/sykdom/fastsettarbeidsevne/FastsettArbeidsevnePeriodisertFrontend';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
@@ -20,26 +20,6 @@ const grunnlagUtenVurdering: ArbeidsevneGrunnlag = {
   harTilgangTilÅSaksbehandle: true,
 };
 
-const grunnlagMedVurdering: ArbeidsevneGrunnlag = {
-  behøverVurderinger: [],
-  kanVurderes: [],
-  nyeVurderinger: [],
-  sisteVedtatteVurderinger: [],
-  harTilgangTilÅSaksbehandle: true,
-  vurderinger: [
-    {
-      arbeidsevne: 20,
-      begrunnelse: 'Dette er min vurdering som er bekreftet',
-      fraDato: '2025-08-21',
-      vurderingsTidspunkt: '2025-08-21',
-      vurdertAv: {
-        ident: 'Saksbehandler',
-        dato: '2025-08-21',
-      },
-    },
-  ],
-};
-
 beforeEach(() => {
   setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'FASTSETT_ARBEIDSEVNE' });
 });
@@ -47,7 +27,13 @@ beforeEach(() => {
 describe('FastsettArbeidsevne', () => {
   describe('Generelt', () => {
     it('Skal ha riktig heading', () => {
-      render(<FastsettArbeidsevne readOnly={false} behandlingVersjon={0} grunnlag={grunnlagUtenVurdering} />);
+      render(
+        <FastsettArbeidsevnePeriodisertFrontend
+          readOnly={false}
+          behandlingVersjon={0}
+          grunnlag={grunnlagUtenVurdering}
+        />
+      );
       const heading = screen.getByRole('heading', {
         name: '§ 11-23 andre ledd. Arbeidsevne som ikke er utnyttet (valgfritt)',
         level: 3,
@@ -56,7 +42,13 @@ describe('FastsettArbeidsevne', () => {
     });
 
     it('Steget skal være default lukket', () => {
-      render(<FastsettArbeidsevne readOnly={false} behandlingVersjon={0} grunnlag={grunnlagUtenVurdering} />);
+      render(
+        <FastsettArbeidsevnePeriodisertFrontend
+          readOnly={false}
+          behandlingVersjon={0}
+          grunnlag={grunnlagUtenVurdering}
+        />
+      );
       expect(
         screen.queryByRole('textbox', {
           name: 'Vilkårsvurdering',
@@ -68,29 +60,52 @@ describe('FastsettArbeidsevne', () => {
       const grunnlag: ArbeidsevneGrunnlag = {
         behøverVurderinger: [],
         kanVurderes: [],
-        nyeVurderinger: [],
-        sisteVedtatteVurderinger: [],
-        harTilgangTilÅSaksbehandle: true,
-        vurderinger: [
+        nyeVurderinger: [
           {
-            begrunnelse: 'Grunn',
-            fraDato: '2024-08-10',
-            arbeidsevne: 80,
-            vurderingsTidspunkt: '2024-08-10',
-            vurdertAv: { ident: 'saksbehandler', dato: '2024-08-10' },
+            arbeidsevne: 20,
+            begrunnelse: 'Dette er min vurdering som er bekreftet',
+            fom: '2025-08-21',
+            vurdertAv: {
+              ident: 'Saksbehandler',
+              dato: '2025-08-21',
+            },
           },
         ],
-        historikk: [],
-        gjeldendeVedtatteVurderinger: [],
+        sisteVedtatteVurderinger: [],
+        harTilgangTilÅSaksbehandle: true,
       };
-      render(<FastsettArbeidsevne readOnly={true} behandlingVersjon={0} grunnlag={grunnlag} />);
+      render(<FastsettArbeidsevnePeriodisertFrontend readOnly={true} behandlingVersjon={0} grunnlag={grunnlag} />);
       expect(screen.getByText('Vilkårsvurdering')).toBeVisible();
     });
 
     it('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
       setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'SYKDOMSVURDERING_BREV' });
 
-      render(<FastsettArbeidsevne grunnlag={grunnlagMedVurdering} readOnly={false} behandlingVersjon={0} />);
+      const grunnlagMedNyVurdering: ArbeidsevneGrunnlag = {
+        behøverVurderinger: [],
+        kanVurderes: [],
+        nyeVurderinger: [
+          {
+            arbeidsevne: 20,
+            begrunnelse: 'Dette er min vurdering som er bekreftet',
+            fom: '2025-08-21',
+            vurdertAv: {
+              ident: 'Saksbehandler',
+              dato: '2025-08-21',
+            },
+          },
+        ],
+        sisteVedtatteVurderinger: [],
+        harTilgangTilÅSaksbehandle: true,
+      };
+
+      render(
+        <FastsettArbeidsevnePeriodisertFrontend
+          grunnlag={grunnlagMedNyVurdering}
+          readOnly={false}
+          behandlingVersjon={0}
+        />
+      );
 
       const endreKnapp = screen.getByRole('button', { name: 'Endre' });
       await user.click(endreKnapp);
@@ -110,15 +125,25 @@ describe('FastsettArbeidsevne', () => {
 
   describe('Felter', () => {
     it('har et felt hvor saksbehandler skal begrunne om brukeren har arbeidsevne', async () => {
-      render(<FastsettArbeidsevne readOnly={false} behandlingVersjon={0} grunnlag={grunnlagUtenVurdering} />);
-      await åpneVilkårskort();
+      render(
+        <FastsettArbeidsevnePeriodisertFrontend
+          readOnly={false}
+          behandlingVersjon={0}
+          grunnlag={grunnlagUtenVurdering}
+        />
+      );
       await klikkPåNyVurdering();
       expect(screen.getByRole('textbox', { name: 'Vilkårsvurdering' })).toBeVisible();
     });
 
     it('begrunnelsesfeltet har en beskrivelse', async () => {
-      render(<FastsettArbeidsevne readOnly={false} behandlingVersjon={0} grunnlag={grunnlagUtenVurdering} />);
-      await åpneVilkårskort();
+      render(
+        <FastsettArbeidsevnePeriodisertFrontend
+          readOnly={false}
+          behandlingVersjon={0}
+          grunnlag={grunnlagUtenVurdering}
+        />
+      );
       await klikkPåNyVurdering();
       expect(
         screen.getByText(
@@ -128,8 +153,13 @@ describe('FastsettArbeidsevne', () => {
     });
 
     it('har et felt for å angi arbeidsevne', async () => {
-      render(<FastsettArbeidsevne readOnly={false} behandlingVersjon={0} grunnlag={grunnlagUtenVurdering} />);
-      await åpneVilkårskort();
+      render(
+        <FastsettArbeidsevnePeriodisertFrontend
+          readOnly={false}
+          behandlingVersjon={0}
+          grunnlag={grunnlagUtenVurdering}
+        />
+      );
       await klikkPåNyVurdering();
       expect(
         screen.getByRole('textbox', {
@@ -139,34 +169,43 @@ describe('FastsettArbeidsevne', () => {
     });
 
     it('har et felt for å angi når arbeidsevnen gjelder fra', async () => {
-      render(<FastsettArbeidsevne readOnly={false} behandlingVersjon={0} grunnlag={grunnlagUtenVurdering} />);
-      await åpneVilkårskort();
+      render(
+        <FastsettArbeidsevnePeriodisertFrontend
+          readOnly={false}
+          behandlingVersjon={0}
+          grunnlag={grunnlagUtenVurdering}
+        />
+      );
       await klikkPåNyVurdering();
       expect(screen.getByRole('textbox', { name: 'Vurderingen gjelder fra' })).toBeVisible();
     });
 
     it('viser feilmelding dersom begrunnelse ikke er fylt ut', async () => {
-      render(<FastsettArbeidsevne readOnly={false} behandlingVersjon={0} grunnlag={grunnlagUtenVurdering} />);
-      await åpneVilkårskort();
+      render(
+        <FastsettArbeidsevnePeriodisertFrontend
+          readOnly={false}
+          behandlingVersjon={0}
+          grunnlag={grunnlagUtenVurdering}
+        />
+      );
       await klikkPåNyVurdering();
       await klikkPåBekreft();
-      expect(screen.getByText('Du må begrunne vurderingen din')).toBeVisible();
+      const errors = screen.getAllByText('Du må begrunne vurderingen din');
+      expect(errors[0]).toBeVisible();
     });
 
     it('viser feilmelding når arbeidsevne ikke er besvart', async () => {
-      render(<FastsettArbeidsevne readOnly={false} behandlingVersjon={0} grunnlag={grunnlagUtenVurdering} />);
-      await åpneVilkårskort();
+      render(
+        <FastsettArbeidsevnePeriodisertFrontend
+          readOnly={false}
+          behandlingVersjon={0}
+          grunnlag={grunnlagUtenVurdering}
+        />
+      );
       await klikkPåNyVurdering();
       await klikkPåBekreft();
-      expect(screen.getByText('Du må angi hvor stor arbeidsevne brukeren har')).toBeVisible();
-    });
-
-    it('viser feilmelding dersom datoen da arbeidsevnen gjelder fra ikke er besvart', async () => {
-      render(<FastsettArbeidsevne readOnly={false} behandlingVersjon={0} grunnlag={grunnlagUtenVurdering} />);
-      await åpneVilkårskort();
-      await klikkPåNyVurdering();
-      await klikkPåBekreft();
-      expect(screen.getByText('Du må angi datoen arbeidsevnen gjelder fra')).toBeVisible();
+      const errors = screen.getAllByText('Du må angi hvor stor arbeidsevne brukeren har');
+      expect(errors[0]).toBeVisible();
     });
 
     describe('mellomlagring', () => {
@@ -174,7 +213,7 @@ describe('FastsettArbeidsevne', () => {
         mellomlagretVurdering: {
           avklaringsbehovkode: Behovstype.VURDER_TREKK_AV_SØKNAD_KODE,
           behandlingId: { id: 1 },
-          data: '{"arbeidsevnevurderinger": [{"begrunnelse":"Dette er min vurdering som er mellomlagret"}]}',
+          data: '{"vurderinger": [{"begrunnelse":"Dette er min vurdering som er mellomlagret", "fraDato":"21.08.2025", "arbeidsevne":20}]}',
           vurdertDato: '2025-08-21T12:00:00.000',
           vurdertAv: 'Jan T. Loven',
         },
@@ -183,26 +222,24 @@ describe('FastsettArbeidsevne', () => {
       const grunnlagMedVurdering: ArbeidsevneGrunnlag = {
         behøverVurderinger: [],
         kanVurderes: [],
-        nyeVurderinger: [],
-        sisteVedtatteVurderinger: [],
-        harTilgangTilÅSaksbehandle: true,
-        vurderinger: [
+        nyeVurderinger: [
           {
             arbeidsevne: 20,
             begrunnelse: 'Dette er min vurdering som er bekreftet',
-            fraDato: '2025-08-21',
-            vurderingsTidspunkt: '2025-08-21',
+            fom: '2025-08-21',
             vurdertAv: {
               ident: 'Saksbehandler',
               dato: '2025-08-21',
             },
           },
         ],
+        sisteVedtatteVurderinger: [],
+        harTilgangTilÅSaksbehandle: true,
       };
 
       it('Skal vise en tekst om hvem som har gjort vurderingen dersom det finnes en mellomlagring', () => {
         render(
-          <FastsettArbeidsevne
+          <FastsettArbeidsevnePeriodisertFrontend
             readOnly={false}
             behandlingVersjon={0}
             grunnlag={grunnlagUtenVurdering}
@@ -214,9 +251,14 @@ describe('FastsettArbeidsevne', () => {
       });
 
       it('Skal vise en tekst om hvem som har lagret vurdering dersom bruker trykker på lagre mellomlagring', async () => {
-        render(<FastsettArbeidsevne readOnly={false} behandlingVersjon={0} grunnlag={grunnlagUtenVurdering} />);
+        render(
+          <FastsettArbeidsevnePeriodisertFrontend
+            readOnly={false}
+            behandlingVersjon={0}
+            grunnlag={grunnlagUtenVurdering}
+          />
+        );
 
-        await åpneVilkårskort();
         await klikkPåNyVurdering();
 
         await user.type(
@@ -240,7 +282,7 @@ describe('FastsettArbeidsevne', () => {
 
       it('Skal ikke vise tekst om hvem som har gjort mellomlagring dersom bruker trykker på slett mellomlagring', async () => {
         render(
-          <FastsettArbeidsevne
+          <FastsettArbeidsevnePeriodisertFrontend
             readOnly={false}
             behandlingVersjon={0}
             grunnlag={grunnlagUtenVurdering}
@@ -261,7 +303,7 @@ describe('FastsettArbeidsevne', () => {
 
       it('Skal bruke mellomlagring som defaultValue i skjema dersom det finnes', () => {
         render(
-          <FastsettArbeidsevne
+          <FastsettArbeidsevnePeriodisertFrontend
             readOnly={false}
             behandlingVersjon={0}
             grunnlag={grunnlagUtenVurdering}
@@ -277,7 +319,13 @@ describe('FastsettArbeidsevne', () => {
       });
 
       it('Skal bruke bekreftet vurdering fra grunnlag som defaultValue i skjema dersom mellomlagring ikke finnes', () => {
-        render(<FastsettArbeidsevne readOnly={false} behandlingVersjon={0} grunnlag={grunnlagMedVurdering} />);
+        render(
+          <FastsettArbeidsevnePeriodisertFrontend
+            readOnly={false}
+            behandlingVersjon={0}
+            grunnlag={grunnlagMedVurdering}
+          />
+        );
 
         const begrunnelseFelt = screen.getByRole('textbox', {
           name: 'Vilkårsvurdering',
@@ -288,7 +336,7 @@ describe('FastsettArbeidsevne', () => {
 
       it('Skal resette skjema til tomt skjema dersom det ikke finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
         render(
-          <FastsettArbeidsevne
+          <FastsettArbeidsevnePeriodisertFrontend
             readOnly={false}
             behandlingVersjon={0}
             grunnlag={grunnlagUtenVurdering}
@@ -311,7 +359,7 @@ describe('FastsettArbeidsevne', () => {
 
       it('Skal resette skjema til bekreftet vurdering dersom det finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
         render(
-          <FastsettArbeidsevne
+          <FastsettArbeidsevnePeriodisertFrontend
             readOnly={false}
             behandlingVersjon={0}
             grunnlag={grunnlagMedVurdering}
@@ -336,7 +384,7 @@ describe('FastsettArbeidsevne', () => {
 
       it('Skal ikke være mulig å lagre eller slette mellomlagring hvis det er readOnly', () => {
         render(
-          <FastsettArbeidsevne
+          <FastsettArbeidsevnePeriodisertFrontend
             readOnly={true}
             behandlingVersjon={0}
             grunnlag={grunnlagMedVurdering}
@@ -352,7 +400,7 @@ describe('FastsettArbeidsevne', () => {
 
       it('Vilkårskortet skal være default åpen dersom det finnes en mellomlagret vurdering', () => {
         render(
-          <FastsettArbeidsevne
+          <FastsettArbeidsevnePeriodisertFrontend
             readOnly={true}
             behandlingVersjon={0}
             grunnlag={grunnlagUtenVurdering}
@@ -372,13 +420,5 @@ describe('FastsettArbeidsevne', () => {
   async function klikkPåBekreft() {
     const bekreftKnapp = screen.getByRole('button', { name: 'Bekreft' });
     await user.click(bekreftKnapp);
-  }
-
-  async function åpneVilkårskort() {
-    const region = screen.getByRole('region', {
-      name: '§ 11-23 andre ledd. Arbeidsevne som ikke er utnyttet (valgfritt)',
-    });
-    const button = within(region).getByRole('button');
-    await user.click(button);
   }
 });

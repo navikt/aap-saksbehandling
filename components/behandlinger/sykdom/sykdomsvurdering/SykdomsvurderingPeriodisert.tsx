@@ -6,7 +6,7 @@ import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { parseISO } from 'date-fns';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
-import { MellomlagretVurdering, SykdomsGrunnlag, TypeBehandling } from 'lib/types/types';
+import { MellomlagretVurdering, SykdomsGrunnlag, TypeBehandling, VurdertAvAnsatt } from 'lib/types/types';
 import { finnDiagnosegrunnlag } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
 import { ValuePair } from 'components/form/FormField';
 import { useSak } from 'hooks/SakHook';
@@ -46,11 +46,8 @@ export interface Sykdomsvurdering {
   erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense?: JaEllerNei;
   erNedsettelseIArbeidsevneMerEnnFørtiProsent?: JaEllerNei;
   yrkesskadeBegrunnelse?: string;
-  vurdertAv?: {
-    ansattnavn: string | null | undefined;
-    ident: string;
-    dato: string;
-  };
+  vurdertAv?: VurdertAvAnsatt;
+  kvalitetssikretAv?: VurdertAvAnsatt;
 }
 
 interface SykdomProps {
@@ -177,7 +174,6 @@ export const SykdomsvurderingPeriodisert = ({
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       knappTekst={'Bekreft'}
-      kvalitetssikretAv={grunnlag.kvalitetssikretAv}
       mellomlagretVurdering={mellomlagretVurdering}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(mapGrunnlagTilDefaultvalues(grunnlag)))}
@@ -211,9 +207,10 @@ export const SykdomsvurderingPeriodisert = ({
             nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
             isLast={index === nyeVurderingerFields.length - 1}
             vurdertAv={vurdering.vurdertAv}
+            kvalitetssikretAv={vurdering.kvalitetssikretAv}
             finnesFeil={finnesFeilForVurdering(index, errorList)}
             readonly={formReadOnly}
-            onRemove={() => remove(index)}
+            onSlettVurdering={() => remove(index)}
             harTidligereVurderinger={tidligereVurderinger.length > 0}
             index={index}
           >
@@ -272,14 +269,8 @@ export const SykdomsvurderingPeriodisert = ({
           vurdering?.erNedsettelseIArbeidsevneMerEnnHalvparten
         ),
         yrkesskadeBegrunnelse: getStringEllerUndefined(vurdering?.yrkesskadeBegrunnelse),
-        vurdertAv:
-          vurdering.vurdertAv != null
-            ? {
-                ansattnavn: vurdering.vurdertAv.ansattnavn,
-                ident: vurdering.vurdertAv.ident,
-                dato: vurdering.vurdertAv.dato,
-              }
-            : undefined,
+        vurdertAv: vurdering.vurdertAv,
+        kvalitetssikretAv: vurdering.kvalitetssikretAv,
       })),
     };
   }
