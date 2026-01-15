@@ -2,7 +2,7 @@ import { Alert, Button, Loader, Modal } from '@navikt/ds-react';
 import { clientForhåndsvisDialogmelding } from 'lib/clientApi';
 import { useRef } from 'react';
 import useSWR from 'swr';
-import { isSuccess } from 'lib/utils/api';
+import { isError, isSuccess } from 'lib/utils/api';
 
 type Props = {
   saksnummer: string;
@@ -43,14 +43,17 @@ export const Forhåndsvisning = ({ saksnummer, fritekst, dokumentasjonsType, vis
     >
       <Modal.Body>
         {isLoading && <Loader />}
-        {!isLoading && data && isSuccess(data) ? (
+
+        {!isLoading && isSuccess(data) && (
           <div style={{ whiteSpace: 'pre-wrap' }}>
             {formaterTekst(data.data.konstruertBrev).map((part, index) => (
               <p key={index}>{part}</p>
             ))}
           </div>
-        ) : (
-          <Alert variant="error">Klarte ikke å forhåndsvise melding</Alert>
+        )}
+
+        {isError(data) && (
+          <Alert variant="error">{data.apiException.message || 'En ukjent feil oppsto ved forhåndsvisning'}</Alert>
         )}
       </Modal.Body>
       <Modal.Footer>

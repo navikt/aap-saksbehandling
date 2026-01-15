@@ -1,7 +1,7 @@
 'use client';
 
 import { CustomExpandableCard } from 'components/customexpandablecard/CustomExpandableCard';
-import { formaterDatoForFrontend } from 'lib/utils/date';
+import { formatDatoMedMånedsnavn } from 'lib/utils/date';
 import { ReactNode, useState } from 'react';
 import { BodyShort, Button, HGrid, HStack, Tag, VStack } from '@navikt/ds-react';
 import { VurdertAv, VurdertAvShape } from 'components/vurdertav/VurdertAv';
@@ -52,9 +52,9 @@ export const NyVurderingExpandableCard = ({
       heading={
         <HStack justify={'space-between'} padding={'2'}>
           <BodyShort size={'small'}>
-            Ny vurdering: {fraDato ? `${formaterDatoForFrontend(fraDato)} – ` : '[Ikke valgt]'}
+            Ny vurdering: {fraDato ? `${formatDatoMedMånedsnavn(fraDato)} – ` : '[Ikke valgt]'}
             {nestePeriodeFraDato ? (
-              <span>{formaterDatoForFrontend(subDays(nestePeriodeFraDato, 1))}</span>
+              <span>{formatDatoMedMånedsnavn(subDays(nestePeriodeFraDato, 1))}</span>
             ) : (
               <span>{isLast ? ' ' : '[Ikke valgt]'}</span>
             )}

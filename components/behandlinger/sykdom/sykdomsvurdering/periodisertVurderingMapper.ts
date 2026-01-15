@@ -2,8 +2,10 @@ import { getTrueFalseEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { SykdomsvurderingLøsningDto } from 'lib/types/types';
 import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingPeriodisert';
 import { Dato } from 'lib/types/Dato';
+import { parseDatoFraDatePicker } from 'lib/utils/date';
+import { isAfter } from 'date-fns';
 
-function mapForFørstegangsbehandling(
+function mapMedVissVarighet(
   data: Sykdomsvurdering,
   erArbeidsevnenNedsatt: undefined | boolean,
   skalVurdereYrkesskade: boolean
@@ -48,7 +50,7 @@ function mapForFørstegangsbehandling(
   };
 }
 
-function mapForRevurdering(
+function mapUtenVissVarighet(
   data: Sykdomsvurdering,
   erArbeidsevnenNedsatt: undefined | boolean,
   erÅrsakssammenhengYrkesskade: boolean
@@ -83,9 +85,7 @@ function mapTilPeriodisertVurdering(
   data: Sykdomsvurdering,
   skalVurdereYrkesskade: boolean,
   erÅrsakssammenhengYrkesskade: boolean,
-  behandlingErFørstegangsbehandling: boolean,
-  behandlingErRevurdering: boolean,
-  behandlingErRevurderingAvFørstegangsbehandling: boolean,
+  førsteDatoSomKanVurderes: Date,
   tilDato?: string
 ): SykdomsvurderingLøsningDto {
   // Denne overstyrer alle verdiene under. Hvis false skal alt nulles ut.
@@ -95,6 +95,9 @@ function mapTilPeriodisertVurdering(
   const hoveddiagnose = harSkadeSykdomEllerLyte ? data?.hoveddiagnose?.value : undefined;
   const bidiagnoser = harSkadeSykdomEllerLyte ? data.bidiagnose?.map((diagnose) => diagnose.value) : undefined;
 
+  const fraDato = parseDatoFraDatePicker(data.fraDato);
+  const skalVurdereVissVarighet = fraDato != null ? !isAfter(fraDato, førsteDatoSomKanVurderes) : false;
+
   // Denne overstyrer de under. Hvis false skal alt nulles ut.
   const erArbeidsevnenNedsatt = harSkadeSykdomEllerLyte
     ? getTrueFalseEllerUndefined(data.erArbeidsevnenNedsatt)
@@ -102,11 +105,10 @@ function mapTilPeriodisertVurdering(
 
   let nedsattArbeidsevneOgYrkesskade = {};
   if (harSkadeSykdomEllerLyte) {
-    if (behandlingErFørstegangsbehandling || behandlingErRevurderingAvFørstegangsbehandling) {
-      nedsattArbeidsevneOgYrkesskade = mapForFørstegangsbehandling(data, erArbeidsevnenNedsatt, skalVurdereYrkesskade);
-    }
-    if (behandlingErRevurdering && !behandlingErRevurderingAvFørstegangsbehandling) {
-      nedsattArbeidsevneOgYrkesskade = mapForRevurdering(data, erArbeidsevnenNedsatt, erÅrsakssammenhengYrkesskade);
+    if (skalVurdereVissVarighet) {
+      nedsattArbeidsevneOgYrkesskade = mapMedVissVarighet(data, erArbeidsevnenNedsatt, skalVurdereYrkesskade);
+    } else {
+      nedsattArbeidsevneOgYrkesskade = mapUtenVissVarighet(data, erArbeidsevnenNedsatt, erÅrsakssammenhengYrkesskade);
     }
   }
 

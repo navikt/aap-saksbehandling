@@ -190,3 +190,68 @@ export const obligatoriskDelmalMedAlternativer: DelmalReferanse = {
   },
   obligatorisk: true,
 };
+
+export const valgfriDelmalMedValgfrieAlternativer: DelmalReferanse = {
+  _key: 'valgfriDelmalMedValgfrieAlternativerKey',
+  _type: 'delmalRef',
+  delmal: {
+    ...sanityAttrs,
+    _id: '1',
+    beskrivelse: 'Valgfri delmal med valgfrie alternativer',
+    teksteditor: [
+      {
+        _key: 'valgfriValgRef-key',
+        _type: 'valgRef',
+        obligatorisk: false,
+        valg: {
+          ...sanityAttrs,
+          _id: 'valgfriValgref-1',
+          beskrivelse: 'Beskrivelse av alternativ',
+          alternativer: [
+            {
+              _key: 'valgfriAlt1-key',
+              _type: 'kategorisertTekstRef',
+              kategori: null,
+              tekst: {
+                ...sanityAttrs,
+                _id: 'valgfriTekstid-1',
+                beskrivelse: 'Alternativ 1',
+                teksteditor: [
+                  {
+                    _id: 'valgfriText-1',
+                    _key: 'valgfriText-key-1',
+                    _type: 'block',
+                    children: [],
+                    markDefs: [],
+                    style: 'none',
+                  },
+                ],
+              },
+            },
+            {
+              _key: 'valgfriAlt2-key',
+              _type: 'kategorisertTekstRef',
+              kategori: null,
+              tekst: {
+                ...sanityAttrs,
+                _id: 'valgfriTekstid-2',
+                beskrivelse: 'Alternativ 2',
+                teksteditor: [
+                  {
+                    _id: 'valgfriText-2',
+                    _key: 'valgfriText-key-2',
+                    _type: 'block',
+                    children: [],
+                    markDefs: [],
+                    style: 'none',
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      },
+    ],
+  },
+  obligatorisk: false,
+};

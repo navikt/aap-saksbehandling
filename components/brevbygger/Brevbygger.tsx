@@ -1,7 +1,7 @@
 'use client';
 
 import { Alert, Box, Button, HGrid } from '@navikt/ds-react';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { Delmal } from 'components/brevbygger/Delmal';
 import {
   delmalErObligatorisk,
@@ -24,6 +24,7 @@ import { revalidateFlyt } from 'lib/actions/actions';
 import { VelgeMottakere } from 'components/brevbygger/VelgeMottakere';
 import { IkkeSendBrevModal } from 'components/behandlinger/brev/skriveBrev/IkkeSendBrevModal';
 import { Brevbyggermeny } from 'components/brevbygger/Brevbyggermeny';
+import { useDebounce } from 'hooks/DebounceHook';
 
 export interface AlternativFormField {
   verdi: string;
@@ -172,7 +173,7 @@ export const Brevbygger = ({
       })
       .filter((v) => !!v);
 
-    const res = await clientOppdaterBrevdata(referanse, {
+    return await clientOppdaterBrevdata(referanse, {
       delmaler: [...obligatoriskeDelmaler, ...valgteDelmaler],
       valg: valgteValg,
       betingetTekst: brevdata?.betingetTekst || [],
@@ -180,10 +181,20 @@ export const Brevbygger = ({
       fritekster: fritekst,
       periodetekster: brevdata?.periodetekster || [],
     });
-    if (isSuccess(res)) {
-      hentDokument(referanse, setDataUri, setPdfIsLoading);
-    }
   };
+
+  const formValues = useWatch({ control });
+  const debouncedFormData = useDebounce(formValues);
+
+  useEffect(() => {
+    const oppdaterBrevdataOgForhåndsvisning = async () => {
+      const res = await onSubmit(debouncedFormData as BrevdataFormFields);
+      if (isSuccess(res)) {
+        await hentDokument(referanse, setDataUri, setPdfIsLoading);
+      }
+    };
+    oppdaterBrevdataOgForhåndsvisning();
+  }, [debouncedFormData]);
 
   const oppdaterBrevmal = async () => {
     await clientOppdaterBrevmal(referanse);
@@ -255,7 +266,6 @@ export const Brevbygger = ({
                 brevmal={parsedBrevmal}
               />
             ))}
-          <Button variant="secondary">Oppdater brevdata</Button>
         </form>
         <Button type="button" onClick={() => sendBrev()} loading={isLoading}>
           Send brev
