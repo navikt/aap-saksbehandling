@@ -160,6 +160,7 @@ export const LovvalgOgMedlemskapPeriodisert = ({
               : undefined
           }
           vurdertAv={vurdering.vurdertAv}
+          kvalitetssikretAv={vurdering.kvalitetssikretAv}
           finnesFeil={finnesFeilForVurdering(index, errorList)}
           onRemove={() => remove(index)}
           harTidligereVurderinger={tidligereVurderinger.length > 0}

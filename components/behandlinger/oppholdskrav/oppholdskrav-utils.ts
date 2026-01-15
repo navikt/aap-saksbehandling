@@ -28,14 +28,8 @@ export function getDefaultValuesFromGrunnlag(grunnlag?: OppholdskravGrunnlagResp
         oppfyller: getJaNeiEllerUndefined(vurdering.oppfylt),
         land: vurdering.land ? getLandkodeOrAnnet(vurdering.land) : '',
         landAnnet: vurdering.land ?? '',
-        vurdertAv:
-          vurdering.vurdertAv != null
-            ? {
-                ansattnavn: vurdering.vurdertAv.ansattnavn,
-                ident: vurdering.vurdertAv.ident,
-                dato: vurdering.vurdertAv.dato,
-              }
-            : undefined,
+        vurdertAv: vurdering.vurdertAv,
+        kvalitetssikretAv: vurdering.kvalitetssikretAv,
       })) || [],
   };
 }
