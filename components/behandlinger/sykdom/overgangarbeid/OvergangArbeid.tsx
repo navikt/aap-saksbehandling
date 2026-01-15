@@ -119,8 +119,7 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialM
       status={status}
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      vilkårTilhørerNavKontor={false}
-      kvalitetssikretAv={grunnlag?.sisteVedtatteVurderinger[0]?.kvalitetssikretAv}
+      vilkårTilhørerNavKontor={true}
       mellomlagretVurdering={mellomlagretVurdering}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
@@ -164,9 +163,10 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialM
             nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
             isLast={index === vurderingerFields.length - 1}
             vurdertAv={vurdering.vurdertAv}
+            kvalitetssikretAv={vurdering.kvalitetssikretAv}
             finnesFeil={false}
             readonly={formReadOnly}
-            onRemove={() => remove(index)}
+            onSlettVurdering={() => remove(index)}
             harTidligereVurderinger={tidligereVurderinger.length > 0}
             index={index}
           >

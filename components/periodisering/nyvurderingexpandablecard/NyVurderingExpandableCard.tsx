@@ -2,22 +2,25 @@
 
 import { CustomExpandableCard } from 'components/customexpandablecard/CustomExpandableCard';
 import { formatDatoMedMånedsnavn } from 'lib/utils/date';
-import { ReactNode, useState } from 'react';
+import { ReactNode, useRef, useState } from 'react';
 import { BodyShort, Button, HGrid, HStack, Tag, VStack } from '@navikt/ds-react';
-import { VurdertAv, VurdertAvShape } from 'components/vurdertav/VurdertAv';
+import { VurdertAvAnsattDetail } from 'components/vurdertav/VurdertAvAnsattDetail';
 import { subDays } from 'date-fns';
 import { TrashFillIcon } from '@navikt/aksel-icons';
+import { VurdertAvAnsatt } from 'lib/types/types';
+import { SlettVurderingModal } from 'components/periodisering/slettvurderingmodal/SlettVurderingModal';
 
 interface Props {
   fraDato: Date | null;
   nestePeriodeFraDato: Date | null;
   isLast: boolean;
   oppfylt: boolean | undefined;
-  vurdertAv: VurdertAvShape | undefined;
+  vurdertAv: VurdertAvAnsatt | undefined;
+  kvalitetssikretAv: VurdertAvAnsatt | undefined;
   finnesFeil: boolean;
   children: ReactNode;
   readonly: boolean;
-  onRemove: () => void;
+  onSlettVurdering: () => void;
   index: number;
   harTidligereVurderinger?: boolean;
 }
@@ -27,22 +30,18 @@ export const NyVurderingExpandableCard = ({
   isLast,
   oppfylt,
   vurdertAv,
+  kvalitetssikretAv,
   finnesFeil,
   children,
   readonly,
-  onRemove,
+  onSlettVurdering,
   harTidligereVurderinger = false,
   index,
 }: Props) => {
   const [cardExpanded, setCardExpanded] = useState<boolean>(true);
-  const [spinnerRemove, setSpinnerRemove] = useState(false);
-  const handleRemove = (): void => {
-    setSpinnerRemove(true);
-    setTimeout(() => {
-      onRemove();
-      setSpinnerRemove(false);
-    }, 500);
-  };
+
+  const ref = useRef<HTMLDialogElement>(null);
+
   return (
     <CustomExpandableCard
       editable
@@ -77,14 +76,18 @@ export const NyVurderingExpandableCard = ({
                 variant="tertiary"
                 size="small"
                 icon={<TrashFillIcon />}
-                onClick={handleRemove}
+                onClick={() => ref.current?.showModal()}
                 type="button"
-                loading={spinnerRemove}
               />
+              <SlettVurderingModal ref={ref} onSlettVurdering={() => onSlettVurdering()} />{' '}
             </VStack>
           )}
         </HGrid>
-        <VurdertAv vurdertAv={vurdertAv} />
+
+        <VStack>
+          <VurdertAvAnsattDetail vurdertAv={vurdertAv} variant={'VURDERING'} />
+          <VurdertAvAnsattDetail vurdertAv={kvalitetssikretAv} variant={'KVALITETSSIKRER'} />
+        </VStack>
       </VStack>
     </CustomExpandableCard>
   );

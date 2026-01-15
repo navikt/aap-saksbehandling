@@ -1,6 +1,6 @@
 'use client';
 
-import { BistandsGrunnlag, MellomlagretVurdering } from 'lib/types/types';
+import { BistandsGrunnlag, MellomlagretVurdering, VurdertAvAnsatt } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { FormEvent } from 'react';
 import { parseDatoFraDatePicker } from 'lib/utils/date';
@@ -22,7 +22,6 @@ import { mapBistandVurderingFormTilDto } from 'components/behandlinger/sykdom/bi
 import { Dato } from 'lib/types/Dato';
 import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovMellomlagringParser';
 import { getFraDatoFraGrunnlagForFrontend } from 'lib/utils/periodisering';
-import { vurdertAvFraPeriodisertVurdering } from 'lib/utils/vurdert-av';
 import { Link, VStack } from '@navikt/ds-react';
 import { Veiledning } from 'components/veiledning/Veiledning';
 
@@ -43,11 +42,8 @@ export interface BistandVurderingForm {
   erBehovForAnnenOppfølging?: JaEllerNei | undefined;
   overgangBegrunnelse?: string;
   skalVurdereAapIOvergangTilArbeid?: JaEllerNei | undefined;
-  vurdertAv?: {
-    ansattnavn: string | null | undefined;
-    ident: string;
-    dato: string;
-  };
+  vurdertAv?: VurdertAvAnsatt;
+  kvalitetssikretAv?: VurdertAvAnsatt;
 }
 
 export const BistandsbehovPeriodisert = ({
@@ -113,7 +109,6 @@ export const BistandsbehovPeriodisert = ({
       status={status}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={true}
-      kvalitetssikretAv={grunnlag?.nyeVurderinger[0]?.kvalitetssikretAv}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() => {
@@ -180,9 +175,10 @@ export const BistandsbehovPeriodisert = ({
                 : undefined
             }
             vurdertAv={vurdering.vurdertAv}
+            kvalitetssikretAv={vurdering.kvalitetssikretAv}
             finnesFeil={finnesFeilForVurdering(index, errorList)}
             readonly={formReadOnly}
-            onRemove={() => remove(index)}
+            onSlettVurdering={() => remove(index)}
             harTidligereVurderinger={tidligereVurderinger.length > 0}
             index={index}
           >
@@ -216,7 +212,8 @@ export const BistandsbehovPeriodisert = ({
         overgangBegrunnelse: vurdering?.overgangBegrunnelse || '',
         skalVurdereAapIOvergangTilArbeid: getJaNeiEllerUndefined(vurdering?.skalVurdereAapIOvergangTilArbeid),
         erBehovForArbeidsrettetTiltak: getJaNeiEllerUndefined(vurdering?.erBehovForArbeidsrettetTiltak),
-        vurdertAv: vurdertAvFraPeriodisertVurdering(vurdering.vurdertAv),
+        vurdertAv: vurdering.vurdertAv,
+        kvalitetssikretAv: vurdering.kvalitetssikretAv,
       })),
     };
   }
