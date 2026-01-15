@@ -17,6 +17,7 @@ interface Props {
   oppfylt: boolean | undefined;
   vurdertAv: VurdertAvAnsatt | undefined;
   kvalitetssikretAv: VurdertAvAnsatt | undefined;
+  besluttetAv: VurdertAvAnsatt | undefined;
   finnesFeil: boolean;
   children: ReactNode;
   readonly: boolean;
@@ -31,6 +32,7 @@ export const NyVurderingExpandableCard = ({
   oppfylt,
   vurdertAv,
   kvalitetssikretAv,
+  besluttetAv,
   finnesFeil,
   children,
   readonly,
@@ -87,6 +89,7 @@ export const NyVurderingExpandableCard = ({
         <VStack>
           <VurdertAvAnsattDetail vurdertAv={vurdertAv} variant={'VURDERING'} />
           <VurdertAvAnsattDetail vurdertAv={kvalitetssikretAv} variant={'KVALITETSSIKRER'} />
+          <VurdertAvAnsattDetail vurdertAv={besluttetAv} variant={'BESLUTTER'} />
         </VStack>
       </VStack>
     </CustomExpandableCard>

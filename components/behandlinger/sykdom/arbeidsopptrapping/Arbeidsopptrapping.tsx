@@ -46,6 +46,7 @@ export interface ArbeidsopptrappingVurderingForm {
   rettPaaAAPIOpptrapping: JaEllerNei | undefined;
   vurdertAv?: VurdertAvAnsatt;
   kvalitetssikretAv?: VurdertAvAnsatt;
+  besluttetAv?: VurdertAvAnsatt;
 }
 
 export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, initialMellomlagretVurdering }: Props) => {
@@ -198,6 +199,7 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
           isLast={index === fields.length - 1}
           vurdertAv={vurdering.vurdertAv}
           kvalitetssikretAv={vurdering.kvalitetssikretAv}
+          besluttetAv={vurdering.besluttetAv}
           finnesFeil={finnesFeilForVurdering(index, errorList)}
           onSlettVurdering={() => remove(index)}
           readonly={formReadOnly}
@@ -235,6 +237,7 @@ function getDefaultValuesFromGrunnlag(
       rettPaaAAPIOpptrapping: getJaNeiEllerUndefined(vurdering.rettPaaAAPIOpptrapping),
       vurdertAv: vurdering.vurdertAv,
       kvalitetssikretAv: vurdering.kvalitetssikretAv,
+      besluttetAv: vurdering.besluttetAv,
     })),
   };
 }

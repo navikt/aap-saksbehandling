@@ -41,11 +41,9 @@ export function getDefaultValuesFromGrunnlag(grunnlag?: OvergangArbeidGrunnlag):
         begrunnelse: vurdering.begrunnelse,
         fraDato: formaterDatoForFrontend(vurdering.fom),
         brukerRettPåAAP: vurdering.brukerRettPåAAP ? JaEllerNei.Ja : JaEllerNei.Nei,
-        vurdertAv: {
-          ansattnavn: vurdering.vurdertAv.ansattnavn,
-          ident: vurdering.vurdertAv.ident,
-          dato: vurdering.vurdertAv.dato,
-        },
+        vurdertAv: vurdering.vurdertAv,
+        kvalitetssikretAv: vurdering.kvalitetssikretAv,
+        besluttetAv: vurdering.besluttetAv,
       })) || [],
   };
 }

@@ -44,6 +44,7 @@ export interface BistandVurderingForm {
   skalVurdereAapIOvergangTilArbeid?: JaEllerNei | undefined;
   vurdertAv?: VurdertAvAnsatt;
   kvalitetssikretAv?: VurdertAvAnsatt;
+  besluttetAv?: VurdertAvAnsatt;
 }
 
 export const BistandsbehovPeriodisert = ({
@@ -176,6 +177,7 @@ export const BistandsbehovPeriodisert = ({
             }
             vurdertAv={vurdering.vurdertAv}
             kvalitetssikretAv={vurdering.kvalitetssikretAv}
+            besluttetAv={vurdering.besluttetAv}
             finnesFeil={finnesFeilForVurdering(index, errorList)}
             readonly={formReadOnly}
             onSlettVurdering={() => remove(index)}
@@ -214,6 +216,7 @@ export const BistandsbehovPeriodisert = ({
         erBehovForArbeidsrettetTiltak: getJaNeiEllerUndefined(vurdering?.erBehovForArbeidsrettetTiltak),
         vurdertAv: vurdering.vurdertAv,
         kvalitetssikretAv: vurdering.kvalitetssikretAv,
+        besluttetAv: vurdering.besluttetAv,
       })),
     };
   }

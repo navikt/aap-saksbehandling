@@ -63,6 +63,7 @@ export const LovvalgOgMedlemskapPeriodisert = ({
       ? hentPeriodiserteVerdierFraMellomlagretVurdering(mellomlagretVurdering, grunnlag)
       : getDefaultValuesFromGrunnlag(grunnlag);
 
+  console.log(grunnlag);
   const form = useForm<LovOgMedlemskapVurderingForm>({
     defaultValues,
     reValidateMode: 'onChange',
@@ -161,12 +162,14 @@ export const LovvalgOgMedlemskapPeriodisert = ({
           }
           vurdertAv={vurdering.vurdertAv}
           kvalitetssikretAv={vurdering.kvalitetssikretAv}
+          besluttetAv={vurdering.besluttetAv}
           finnesFeil={finnesFeilForVurdering(index, errorList)}
           onSlettVurdering={() => remove(index)}
           harTidligereVurderinger={tidligereVurderinger.length > 0}
           index={index}
           readonly={formReadOnly}
         >
+          {JSON.stringify(vurdering)}
           <LovvalgOgMedlemskapFormInput form={form} readOnly={formReadOnly} index={index} />
         </NyVurderingExpandableCard>
       ))}

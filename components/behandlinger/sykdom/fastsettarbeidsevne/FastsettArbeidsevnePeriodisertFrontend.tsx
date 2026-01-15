@@ -44,6 +44,7 @@ interface ArbeidsevneVurderingForm {
   fraDato: string | undefined;
   vurdertAv?: VurdertAvAnsatt;
   kvalitetssikretAv?: VurdertAvAnsatt;
+  besluttetAv?: VurdertAvAnsatt;
 }
 
 interface FastsettArbeidsevneForm {
@@ -202,6 +203,7 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
           isLast={index === vedtatteVurderinger.length - 1}
           vurdertAv={vurdering.vurdertAv}
           kvalitetssikretAv={vurdering.kvalitetssikretAv}
+          besluttetAv={vurdering.besluttetAv}
           finnesFeil={finnesFeilForVurdering(index, errorList)}
           readonly={formReadOnly}
           onSlettVurdering={() => remove(index)}
@@ -284,6 +286,7 @@ function getDefaultValuesFromGrunnlag(grunnlag: ArbeidsevneGrunnlag | undefined)
       arbeidsevne: vurdering.arbeidsevne,
       vurdertAv: vurdering.vurdertAv,
       kvalitetssikretAv: vurdering.kvalitetssikretAv,
+      besluttetAv: vurdering.besluttetAv,
     })),
   };
 }

@@ -163,6 +163,7 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialM
             isLast={index === vurderingerFields.length - 1}
             vurdertAv={vurdering.vurdertAv}
             kvalitetssikretAv={vurdering.kvalitetssikretAv}
+            besluttetAv={vurdering.besluttetAv}
             finnesFeil={false}
             readonly={formReadOnly}
             onSlettVurdering={() => remove(index)}

@@ -51,6 +51,7 @@ export function getDefaultValuesFromGrunnlag(grunnlag?: SykepengeerstatningGrunn
         grunn: vurdering.grunn,
         vurdertAv: vurdering.vurdertAv,
         kvalitetssikretAv: vurdering.kvalitetssikretAv,
+        besluttetAv: vurdering.besluttetAv,
       })) || [],
   };
 }

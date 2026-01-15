@@ -11,4 +11,5 @@ export type SykepengeerstatningVurderingForm = {
   grunn?: SykepengeerstatningVurderingGrunn;
   vurdertAv?: VurdertAvAnsatt;
   kvalitetssikretAv?: VurdertAvAnsatt;
+  besluttetAv?: VurdertAvAnsatt;
 };

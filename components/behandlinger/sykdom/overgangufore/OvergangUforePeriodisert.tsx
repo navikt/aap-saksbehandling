@@ -39,6 +39,7 @@ interface OvergangUforeVurderingForm {
   brukerRettPåAAP?: JaEllerNei | undefined;
   vurdertAv?: VurdertAvAnsatt;
   kvalitetssikretAv?: VurdertAvAnsatt;
+  besluttetAv?: VurdertAvAnsatt;
 }
 
 export const OvergangUforePeriodisert = ({
@@ -164,6 +165,7 @@ export const OvergangUforePeriodisert = ({
               isLast={index === nyeVurderingFields.length - 1}
               vurdertAv={vurdering.vurdertAv}
               kvalitetssikretAv={vurdering.kvalitetssikretAv}
+              besluttetAv={vurdering.besluttetAv}
               finnesFeil={finnesFeilForVurdering(index, errorList)}
               readonly={formReadOnly}
               onSlettVurdering={() => remove(index)}
@@ -199,6 +201,7 @@ export const OvergangUforePeriodisert = ({
         brukerHarFåttVedtakOmUføretrygd: vurdering?.brukerHarFåttVedtakOmUføretrygd || '',
         vurdertAv: vurdering.vurdertAv,
         kvalitetssikretAv: vurdering.kvalitetssikretAv,
+        besluttetAv: vurdering.besluttetAv,
       })),
     };
   }
