@@ -4,7 +4,12 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgG
 
 import { useFieldArray, useForm } from 'react-hook-form';
 import { gyldigDatoEllerNull, validerDato } from 'lib/validation/dateValidation';
-import { ArbeidsevneGrunnlag, MellomlagretVurdering, PeriodisertArbeidsevneVurderingDto } from 'lib/types/types';
+import {
+  ArbeidsevneGrunnlag,
+  MellomlagretVurdering,
+  PeriodisertArbeidsevneVurderingDto,
+  VurdertAvAnsatt,
+} from 'lib/types/types';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { Behovstype } from 'lib/utils/form';

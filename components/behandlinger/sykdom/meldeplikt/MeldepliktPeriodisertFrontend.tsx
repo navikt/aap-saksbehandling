@@ -3,7 +3,12 @@
 import { HStack, Link, Radio, VStack } from '@navikt/ds-react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { FritakMeldepliktGrunnlag, MellomlagretVurdering, PeriodisertFritaksvurderingDto } from 'lib/types/types';
+import {
+  FritakMeldepliktGrunnlag,
+  MellomlagretVurdering,
+  PeriodisertFritaksvurderingDto,
+  VurdertAvAnsatt,
+} from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { gyldigDatoEllerNull, validerDato } from 'lib/validation/dateValidation';
 import { useFieldArray, useForm } from 'react-hook-form';
