@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { BodyShort, Chips, Detail, ExpansionCard, Label, VStack } from '@navikt/ds-react';
 import styles from './TidligereVurderinger.module.css';
-import { formaterDatoForFrontend, sorterEtterNyesteDato } from 'lib/utils/date';
+import { formatDatoMedMånedsnavn, formaterDatoForFrontend, sorterEtterNyesteDato } from 'lib/utils/date';
 import { ClockDashedIcon } from '@navikt/aksel-icons';
 import { ValuePair } from '../form/FormField';
 import { format, parse, subDays } from 'date-fns';
@@ -107,8 +107,8 @@ export function TidligereVurderinger({
             <VStack gap={'1'}>
               {mappedVurderinger.map((v, index) => {
                 const periode = grupperPåOpprettetDato
-                  ? `${formaterDatoForFrontend(v.vurdertDato)}`
-                  : `${formaterDatoForFrontend(v.periode.fom)} - ${v.periode.tom ? formaterDatoForFrontend(v.periode.tom) : ''}`;
+                  ? `${formatDatoMedMånedsnavn(v.vurdertDato)}`
+                  : `${formatDatoMedMånedsnavn(v.periode.fom)} - ${v.periode.tom ? formatDatoMedMånedsnavn(v.periode.tom) : ''}`;
                 const flereVurderinger = mappedVurderinger.length > 1;
                 return (
                   <Chips.Toggle
