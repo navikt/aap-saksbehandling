@@ -166,7 +166,7 @@ export const OvergangUforePeriodisert = ({
               kvalitetssikretAv={vurdering.kvalitetssikretAv}
               finnesFeil={finnesFeilForVurdering(index, errorList)}
               readonly={formReadOnly}
-              onRemove={() => remove(index)}
+              onSlettVurdering={() => remove(index)}
               harTidligereVurderinger={tidligereVurderinger.length > 0}
               index={index}
             >

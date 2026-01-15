@@ -196,7 +196,7 @@ export const MeldepliktPeriodisertFrontend = ({
           kvalitetssikretAv={vurdering.kvalitetssikretAv}
           finnesFeil={finnesFeilForVurdering(index, errorList)}
           readonly={formReadOnly}
-          onRemove={() => remove(index)}
+          onSlettVurdering={() => remove(index)}
           // vilkåret er valgfritt, kan derfor slette vurderingen selv om det ikke finnes en tidligere vurdering
           harTidligereVurderinger={true}
           index={index}

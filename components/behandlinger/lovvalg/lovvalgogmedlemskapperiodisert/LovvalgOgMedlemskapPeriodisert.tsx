@@ -162,7 +162,7 @@ export const LovvalgOgMedlemskapPeriodisert = ({
           vurdertAv={vurdering.vurdertAv}
           kvalitetssikretAv={vurdering.kvalitetssikretAv}
           finnesFeil={finnesFeilForVurdering(index, errorList)}
-          onRemove={() => remove(index)}
+          onSlettVurdering={() => remove(index)}
           harTidligereVurderinger={tidligereVurderinger.length > 0}
           index={index}
           readonly={formReadOnly}

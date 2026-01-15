@@ -199,7 +199,7 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
           vurdertAv={vurdering.vurdertAv}
           kvalitetssikretAv={vurdering.kvalitetssikretAv}
           finnesFeil={finnesFeilForVurdering(index, errorList)}
-          onRemove={() => remove(index)}
+          onSlettVurdering={() => remove(index)}
           readonly={formReadOnly}
           harTidligereVurderinger={true}
           index={index}
