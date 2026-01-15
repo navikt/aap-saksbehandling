@@ -1522,18 +1522,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/familie-endringslogg@npm:14.0.4":
-  version: 14.0.4
-  resolution: "@navikt/familie-endringslogg@npm:14.0.4::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Ffamilie-endringslogg%2F14.0.4%2F49927037064e688be0f84a50b2192044da4a49a1"
+"@navikt/familie-endringslogg@npm:14.0.5":
+  version: 14.0.5
+  resolution: "@navikt/familie-endringslogg@npm:14.0.5::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Ffamilie-endringslogg%2F14.0.5%2Fdf2b325da238afc302f13081649e8cfdc9638295"
   dependencies:
-    "@portabletext/react": "npm:^5.0.0"
+    "@portabletext/react": "npm:^6.0.0"
     classnames: "npm:^2.5.1"
   peerDependencies:
     "@navikt/aksel-icons": 7.x
     "@navikt/ds-react": 7.x
     "@types/react": 18.x || 19.x
     react: 18.x || 19.x
-  checksum: 10c0/df8484356884c36c1bfa1d71dbf6b7928ce4f6cd54babe16488e478c37f864edfa6b21029667322002962afdb221443c4074c0e9a6d492a787910ce337714439
+  checksum: 10c0/bee8d91097dbf4874e7d4fe8a70853b6797a3c143c30b274b6580136640a722930b79d953ed7df05b3657f8ea134a1cbe31f72075872b186d94eecaf63ef6d81
   languageName: node
   linkType: hard
 
@@ -1820,7 +1820,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@portabletext/react@npm:6.0.2":
+"@portabletext/react@npm:6.0.2, @portabletext/react@npm:^6.0.0":
   version: 6.0.2
   resolution: "@portabletext/react@npm:6.0.2"
   dependencies:
@@ -1832,40 +1832,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@portabletext/react@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "@portabletext/react@npm:5.0.0"
-  dependencies:
-    "@portabletext/toolkit": "npm:^4.0.0"
-    "@portabletext/types": "npm:^3.0.0"
-  peerDependencies:
-    react: ^18.2 || ^19
-  checksum: 10c0/04ed924e7c3cc63b92f9630a8fa47a7c68795e2aafe0d99bf33f66ea99e5f50b9f37a1dd81da201ffb99cb40d295e7899c807c5fae586795073b58b1e4b9bc74
-  languageName: node
-  linkType: hard
-
-"@portabletext/toolkit@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "@portabletext/toolkit@npm:4.0.0"
-  dependencies:
-    "@portabletext/types": "npm:^3.0.0"
-  checksum: 10c0/4d4bd55f1f12e9c297d48a3e8eb9de485ec78dc10004e91a7d2e6da936660d7cdc860b7734f352086238791af3b6d83813c9a51be2de7745ef7086816b166dc3
-  languageName: node
-  linkType: hard
-
 "@portabletext/toolkit@npm:^5.0.1":
   version: 5.0.1
   resolution: "@portabletext/toolkit@npm:5.0.1"
   dependencies:
     "@portabletext/types": "npm:^4.0.1"
   checksum: 10c0/f7a476512d2ebfb6451aa7c93da3c351af048d526e0d71f03a603217de136e70a310f136d7a66acf967e953edc48acfafe011ee591ac16ba6ec79438eed78d98
-  languageName: node
-  linkType: hard
-
-"@portabletext/types@npm:^3.0.0":
-  version: 3.0.1
-  resolution: "@portabletext/types@npm:3.0.1"
-  checksum: 10c0/8c69106abc04b263a743385cd56773e9983a9c86b91d75374c2ec205d6dae596e8c528b8183a03d8fd4c3eac7a71a603e84d49a80b67c1cbcecfd804c99406b5
   languageName: node
   linkType: hard
 
@@ -3234,7 +3206,7 @@ __metadata:
     "@navikt/ds-css": "npm:7.38.0"
     "@navikt/ds-react": "npm:7.38.0"
     "@navikt/eslint-config-aap": "npm:5.5.1"
-    "@navikt/familie-endringslogg": "npm:14.0.4"
+    "@navikt/familie-endringslogg": "npm:14.0.5"
     "@navikt/oasis": "npm:3.8.0"
     "@opentelemetry/api": "npm:1.9.0"
     "@opentelemetry/api-logs": "npm:0.209.0"
