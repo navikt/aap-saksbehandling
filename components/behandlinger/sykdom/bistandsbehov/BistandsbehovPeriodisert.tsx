@@ -22,7 +22,6 @@ import { mapBistandVurderingFormTilDto } from 'components/behandlinger/sykdom/bi
 import { Dato } from 'lib/types/Dato';
 import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovMellomlagringParser';
 import { getFraDatoFraGrunnlagForFrontend } from 'lib/utils/periodisering';
-import { vurdertAvFraPeriodisertVurdering } from 'lib/utils/vurdert-av';
 import { Link, VStack } from '@navikt/ds-react';
 import { Veiledning } from 'components/veiledning/Veiledning';
 
@@ -213,7 +212,8 @@ export const BistandsbehovPeriodisert = ({
         overgangBegrunnelse: vurdering?.overgangBegrunnelse || '',
         skalVurdereAapIOvergangTilArbeid: getJaNeiEllerUndefined(vurdering?.skalVurdereAapIOvergangTilArbeid),
         erBehovForArbeidsrettetTiltak: getJaNeiEllerUndefined(vurdering?.erBehovForArbeidsrettetTiltak),
-        vurdertAv: vurdertAvFraPeriodisertVurdering(vurdering.vurdertAv),
+        vurdertAv: vurdering.vurdertAv,
+        kvalitetssikretAv: vurdering.kvalitetssikretAv,
       })),
     };
   }
