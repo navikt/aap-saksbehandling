@@ -44,9 +44,6 @@ describe('Meldeplikt', () => {
         ],
         sisteVedtatteVurderinger: [],
         harTilgangTilÅSaksbehandle: true,
-        gjeldendeVedtatteVurderinger: [],
-        historikk: [],
-        vurderinger: [],
       };
       render(<MeldepliktPeriodisertFrontend behandlingVersjon={0} readOnly={true} grunnlag={meldepliktGrunnlag} />);
       expect(screen.queryByRole('textbox', { name: 'Vilkårsvurdering' })).toBeVisible();
@@ -66,9 +63,6 @@ describe('Meldeplikt', () => {
         ],
         sisteVedtatteVurderinger: [],
         harTilgangTilÅSaksbehandle: true,
-        gjeldendeVedtatteVurderinger: [],
-        historikk: [],
-        vurderinger: [],
       };
 
       setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'AVKLAR_SYKDOM' });
@@ -150,10 +144,7 @@ describe('Meldeplikt', () => {
         },
       ],
       sisteVedtatteVurderinger: [],
-      gjeldendeVedtatteVurderinger: [],
       harTilgangTilÅSaksbehandle: true,
-      historikk: [],
-      vurderinger: [],
     };
 
     const grunnlagUtenVurdering: FritakMeldepliktGrunnlag = {
@@ -161,10 +152,7 @@ describe('Meldeplikt', () => {
       kanVurderes: [],
       nyeVurderinger: [],
       sisteVedtatteVurderinger: [],
-      gjeldendeVedtatteVurderinger: [],
       harTilgangTilÅSaksbehandle: true,
-      historikk: [],
-      vurderinger: [],
     };
 
     it('Skal vise en tekst om hvem som har gjort vurderingen dersom det finnes en mellomlagring', () => {
