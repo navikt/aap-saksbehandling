@@ -63,7 +63,6 @@ export const LovvalgOgMedlemskapPeriodisert = ({
       ? hentPeriodiserteVerdierFraMellomlagretVurdering(mellomlagretVurdering, grunnlag)
       : getDefaultValuesFromGrunnlag(grunnlag);
 
-  console.log(grunnlag);
   const form = useForm<LovOgMedlemskapVurderingForm>({
     defaultValues,
     reValidateMode: 'onChange',
@@ -169,7 +168,6 @@ export const LovvalgOgMedlemskapPeriodisert = ({
           index={index}
           readonly={formReadOnly}
         >
-          {JSON.stringify(vurdering)}
           <LovvalgOgMedlemskapFormInput form={form} readOnly={formReadOnly} index={index} />
         </NyVurderingExpandableCard>
       ))}
