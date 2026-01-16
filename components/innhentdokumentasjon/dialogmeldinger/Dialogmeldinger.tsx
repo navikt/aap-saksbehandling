@@ -3,7 +3,7 @@ import { LegeerklæringStatus } from 'lib/types/types';
 import { ReactNode, useState } from 'react';
 
 import styles from './Dialogmeldinger.module.css';
-import { TimerPauseFillIcon, TimerPauseIcon } from '@navikt/aksel-icons';
+import { PaperplaneIcon } from '@navikt/aksel-icons';
 import { formaterDatoForFrontend, sorterEtterNyesteDato } from 'lib/utils/date';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { isBefore, subDays } from 'date-fns';
@@ -61,23 +61,29 @@ const Dialogmelding = ({ melding }: { melding: LegeerklæringStatus }) => {
       <Table.DataCell textSize={'small'} className={styles.behandlernavn}>
         {melding.behandlerNavn}
       </Table.DataCell>
-      <Table.DataCell textSize={'small'}>
-        <HStack gap={'2'}>
-          {kanSendePurring(melding.opprettet) && (
+      <Table.DataCell textSize={'small'} align="right">
+        <HStack gap={'2'} justify="end">
+          {kanSendePurring(melding.opprettet) && !purringSent && (
             <Button
               variant="secondary"
               type="button"
               size="small"
-              icon={
-                purringSent ? <TimerPauseFillIcon title="Purring sendt" /> : <TimerPauseIcon title="Send purring" />
-              }
+              icon={<PaperplaneIcon title="Send purring" />}
               loading={isLoading}
               onClick={handlePurringClick}
-            />
+            >
+              Send purring
+            </Button>
+          )}
+
+          {purringSent && !error && (
+            <Alert variant="success" size="small">
+              Purring sendt
+            </Alert>
           )}
 
           {error && (
-            <Alert variant={'error'} size={'small'}>
+            <Alert variant="error" size="small">
               {error}
             </Alert>
           )}
@@ -99,7 +105,9 @@ export const Dialogmeldinger = ({ dialogmeldinger }: Props) => {
           <Table.HeaderCell textSize={'small'}>Status</Table.HeaderCell>
           <Table.HeaderCell textSize={'small'}>Bestilt</Table.HeaderCell>
           <Table.HeaderCell textSize={'small'}>Behandler</Table.HeaderCell>
-          <Table.HeaderCell textSize={'small'}>Handling</Table.HeaderCell>
+          <Table.HeaderCell textSize={'small'} align="right">
+            Handling
+          </Table.HeaderCell>
         </Table.Row>
       </Table.Header>
       <Table.Body>
