@@ -16,4 +16,5 @@ export type OvergangArbeidVurderingForm = {
   fraDato: string;
   vurdertAv?: VurdertAvAnsatt;
   kvalitetssikretAv?: VurdertAvAnsatt;
+  besluttetAv?: VurdertAvAnsatt;
 };

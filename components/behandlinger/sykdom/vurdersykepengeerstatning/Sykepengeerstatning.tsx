@@ -164,6 +164,7 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
             isLast={index === vurderingerFields.length - 1}
             vurdertAv={vurdering.vurdertAv}
             kvalitetssikretAv={vurdering.kvalitetssikretAv}
+            besluttetAv={vurdering.besluttetAv}
             finnesFeil={false}
             readonly={formReadOnly}
             onSlettVurdering={() => remove(index)}

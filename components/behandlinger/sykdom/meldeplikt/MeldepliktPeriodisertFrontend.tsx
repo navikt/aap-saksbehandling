@@ -47,6 +47,7 @@ export interface FritakMeldepliktVurderingForm {
   fraDato: string | undefined;
   vurdertAv?: VurdertAvAnsatt;
   kvalitetssikretAv?: VurdertAvAnsatt;
+  besluttetAv?: VurdertAvAnsatt;
 }
 
 export const MeldepliktPeriodisertFrontend = ({
@@ -194,6 +195,7 @@ export const MeldepliktPeriodisertFrontend = ({
           isLast={index === vedtatteVurderinger.length - 1}
           vurdertAv={vurdering.vurdertAv}
           kvalitetssikretAv={vurdering.kvalitetssikretAv}
+          besluttetAv={vurdering.besluttetAv}
           finnesFeil={finnesFeilForVurdering(index, errorList)}
           readonly={formReadOnly}
           onSlettVurdering={() => remove(index)}
@@ -254,6 +256,7 @@ function getDefaultValuesFromGrunnlag(grunnlag: FritakMeldepliktGrunnlag | undef
       harFritak: vurdering.harFritak ? JaEllerNei.Ja : JaEllerNei.Nei,
       vurdertAv: vurdering.vurdertAv,
       kvalitetssikretAv: vurdering.kvalitetssikretAv,
+      besluttetAv: vurdering.besluttetAv,
     })),
   };
 }

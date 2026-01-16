@@ -30,6 +30,7 @@ export function getDefaultValuesFromGrunnlag(grunnlag?: OppholdskravGrunnlagResp
         landAnnet: vurdering.land ?? '',
         vurdertAv: vurdering.vurdertAv,
         kvalitetssikretAv: vurdering.kvalitetssikretAv,
+        besluttetAv: vurdering.besluttetAv,
       })) || [],
   };
 }

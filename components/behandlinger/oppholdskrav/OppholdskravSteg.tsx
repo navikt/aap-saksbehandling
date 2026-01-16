@@ -161,6 +161,7 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
           isLast={index === vurderingerFields.length - 1}
           vurdertAv={vurdering.vurdertAv}
           kvalitetssikretAv={vurdering.kvalitetssikretAv}
+          besluttetAv={vurdering.besluttetAv}
           finnesFeil={finnesFeilForVurdering(index, errorList)}
           readonly={formReadOnly}
           onSlettVurdering={() => remove(index)}

@@ -41,6 +41,7 @@ export function getDefaultValuesFromGrunnlag(
         ),
         vurdertAv: vurdering.vurdertAv,
         kvalitetssikretAv: vurdering.kvalitetssikretAv,
+        besluttetAv: vurdering.besluttetAv,
       })) || [],
   };
 }

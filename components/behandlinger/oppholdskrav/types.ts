@@ -13,4 +13,5 @@ export type OppholdskravVurderingForm = {
   fraDato?: string;
   vurdertAv?: VurdertAvAnsatt;
   kvalitetssikretAv?: VurdertAvAnsatt;
+  besluttetAv?: VurdertAvAnsatt;
 };
