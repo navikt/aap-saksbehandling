@@ -26,6 +26,11 @@ import { formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
 import { Link, VStack } from '@navikt/ds-react';
 import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
+import {
+  emptySykdomsvurdering,
+  erNyVurderingOppfylt,
+  erTidligereVurderingOppfylt,
+} from 'components/behandlinger/sykdom/sykdomsvurdering/sykdomsvurdering-utils';
 
 export interface SykdomsvurderingerForm {
   vurderinger: Array<Sykdomsvurdering>;
@@ -141,25 +146,6 @@ export const SykdomsvurderingPeriodisert = ({
 
   const errorList = mapPeriodiserteVurderingerErrorList<SykdomsvurderingerForm>(form.formState.errors);
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
-  function erVurderingOppfylt(vurdering: Sykdomsvurdering): boolean | undefined {
-    if (
-      vurdering.harSkadeSykdomEllerLyte === JaEllerNei.Nei ||
-      vurdering.erArbeidsevnenNedsatt === JaEllerNei.Nei ||
-      vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten === JaEllerNei.Nei ||
-      vurdering.erSkadeSykdomEllerLyteVesentligdel === JaEllerNei.Nei ||
-      vurdering.erNedsettelseIArbeidsevneMerEnnFørtiProsent === JaEllerNei.Nei ||
-      vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense === JaEllerNei.Nei
-    ) {
-      return false;
-    }
-
-    if (
-      vurdering.erNedsettelseIArbeidsevneAvEnVissVarighet === JaEllerNei.Ja ||
-      vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense === JaEllerNei.Ja
-    ) {
-      return true;
-    }
-  }
 
   const foersteNyePeriode = nyeVurderingerFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
   const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
@@ -193,7 +179,7 @@ export const SykdomsvurderingPeriodisert = ({
             fom={new Dato(vurdering.fom).dato}
             tom={vurdering.tom ? parseISO(vurdering.tom) : undefined}
             foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-            oppfylt={undefined}
+            oppfylt={erTidligereVurderingOppfylt(vurdering)}
             defaultCollapsed={nyeVurderingerFields.length > 0}
           >
             <TidligereSykdomsvurdering vurdering={vurdering} />
@@ -203,7 +189,7 @@ export const SykdomsvurderingPeriodisert = ({
           <NyVurderingExpandableCard
             key={vurdering.id}
             fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-            oppfylt={erVurderingOppfylt(form.watch(`vurderinger.${index}`))}
+            oppfylt={erNyVurderingOppfylt(form.watch(`vurderinger.${index}`))}
             nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
             isLast={index === nyeVurderingerFields.length - 1}
             vurdertAv={vurdering.vurdertAv}
@@ -275,22 +261,3 @@ export const SykdomsvurderingPeriodisert = ({
     };
   }
 };
-
-function emptySykdomsvurdering(): Sykdomsvurdering {
-  return {
-    fraDato: '',
-    begrunnelse: '',
-    vurderingenGjelderFra: '',
-    harSkadeSykdomEllerLyte: '',
-    erArbeidsevnenNedsatt: undefined,
-    erNedsettelseIArbeidsevneMerEnnHalvparten: undefined,
-    erSkadeSykdomEllerLyteVesentligdel: undefined,
-    kodeverk: '',
-    hoveddiagnose: undefined,
-    bidiagnose: [],
-    erNedsettelseIArbeidsevneAvEnVissVarighet: undefined,
-    erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense: undefined,
-    erNedsettelseIArbeidsevneMerEnnFørtiProsent: undefined,
-    yrkesskadeBegrunnelse: '',
-  };
-}

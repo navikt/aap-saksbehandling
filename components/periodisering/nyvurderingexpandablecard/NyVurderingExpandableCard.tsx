@@ -3,12 +3,13 @@
 import { CustomExpandableCard } from 'components/customexpandablecard/CustomExpandableCard';
 import { formatDatoMedMånedsnavn } from 'lib/utils/date';
 import { ReactNode, useRef, useState } from 'react';
-import { BodyShort, Button, HGrid, HStack, Tag, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, HGrid, HStack, VStack } from '@navikt/ds-react';
 import { VurdertAvAnsattDetail } from 'components/vurdertav/VurdertAvAnsattDetail';
 import { subDays } from 'date-fns';
 import { TrashFillIcon } from '@navikt/aksel-icons';
 import { VurdertAvAnsatt } from 'lib/types/types';
 import { SlettVurderingModal } from 'components/periodisering/slettvurderingmodal/SlettVurderingModal';
+import { VurderingStatusTag } from 'components/periodisering/VurderingStatusTag';
 
 interface Props {
   fraDato: Date | null;
@@ -58,11 +59,7 @@ export const NyVurderingExpandableCard = ({
               <span>{isLast ? ' ' : '[Ikke valgt]'}</span>
             )}
           </BodyShort>
-          {oppfylt !== undefined && (
-            <Tag size="xsmall" variant={oppfylt ? 'success-moderate' : 'error-moderate'}>
-              {oppfylt === true ? 'Oppfylt' : 'Ikke oppfylt'}
-            </Tag>
-          )}
+          <VurderingStatusTag oppfylt={oppfylt} />
         </HStack>
       }
     >

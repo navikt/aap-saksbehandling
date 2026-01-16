@@ -4,10 +4,11 @@ import { CustomExpandableCard } from 'components/customexpandablecard/CustomExpa
 import { isBefore, isSameDay, sub } from 'date-fns';
 import { formatDatoMedMånedsnavn, formaterDatoForFrontend } from 'lib/utils/date';
 import { ReactNode, useState } from 'react';
-import { BodyShort, HStack, Tag, VStack } from '@navikt/ds-react';
+import { BodyShort, HStack, VStack } from '@navikt/ds-react';
 import styles from 'components/behandlinger/oppholdskrav/oppholdskrav.module.css';
 import { VurdertAvAnsattDetail } from 'components/vurdertav/VurdertAvAnsattDetail';
 import { VurdertAvAnsatt } from 'lib/types/types';
+import { VurderingStatusTag } from 'components/periodisering/VurderingStatusTag';
 
 interface Props {
   fom: Date;
@@ -49,11 +50,7 @@ export const TidligereVurderingExpandableCard = ({
             )}
             {nySluttdato && <span> {formatDatoMedMånedsnavn(sub(foersteNyePeriodeFraDato, { days: 1 }))}</span>}
           </BodyShort>
-          {oppfylt != null && (
-            <Tag size="xsmall" variant={oppfylt ? 'success-moderate' : 'error-moderate'}>
-              {oppfylt ? 'Oppfylt' : 'Ikke oppfylt'}
-            </Tag>
-          )}
+          <VurderingStatusTag oppfylt={oppfylt} overskrevet={strekUtHele} />
         </HStack>
       }
     >
