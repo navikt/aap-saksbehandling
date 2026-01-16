@@ -34,8 +34,8 @@ export interface SamordningAndreStatligeYtelserFormFields {
 
 export interface AnnenStatligYtelse {
   ytelse?: SamordningAndreStatligeYtelserYtelse;
-  fom?: string;
-  tom?: string;
+  fom: string;
+  tom: string;
 }
 
 type DraftFormFields = Partial<SamordningAndreStatligeYtelserFormFields>;
@@ -141,7 +141,6 @@ export const SamordningAndreStatligeYtelser = ({
           grupperPåOpprettetDato={true}
         />
       )}
-
       <ReadMore size={'small'} header="Hva skal vurderes?">
         Det må undersøkes om bruker har hatt andre ytelser i perioden med AAP som kan gi fradrag i AAP utbetalingen.
       </ReadMore>

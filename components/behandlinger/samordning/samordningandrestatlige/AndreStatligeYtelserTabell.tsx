@@ -6,7 +6,7 @@ import { BodyLong, Button, HStack, Label, Table, VStack } from '@navikt/ds-react
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
-import { validerDato } from 'lib/validation/dateValidation';
+import { erDatoFoerDato, validerDato } from 'lib/validation/dateValidation';
 import { ValuePair } from 'components/form/FormField';
 import { SamordningAndreStatligeYtelserYtelse } from 'lib/types/types';
 import { TableStyled } from 'components/tablestyled/TableStyled';
@@ -103,8 +103,12 @@ export const AndreStatligeYtelserTabell = ({ form, readOnly }: Props) => {
                     hideLabel={true}
                     rules={{
                       required: 'Du må velge dato for periodestart',
-                      validate: (value) => {
-                        return validerDato(value as string);
+                      validate: {
+                        gyldigDato: (value) => validerDato(value as string),
+                        ikkeFoerStart: (value, formValues) =>
+                          value && erDatoFoerDato(formValues.vurderteSamordninger[index].tom, value as string)
+                            ? 'Fra og med dato kan ikke være etter til og med dato'
+                            : undefined,
                       },
                     }}
                     readOnly={readOnly}
