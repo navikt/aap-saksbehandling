@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Box, Button, HGrid } from '@navikt/ds-react';
+import { Alert, Box, Button, HGrid, VStack } from '@navikt/ds-react';
 import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { Delmal } from 'components/brevbygger/Delmal';
 import {
@@ -25,6 +25,7 @@ import { VelgeMottakere } from 'components/brevbygger/VelgeMottakere';
 import { IkkeSendBrevModal } from 'components/behandlinger/brev/skriveBrev/IkkeSendBrevModal';
 import { Brevbyggermeny } from 'components/brevbygger/Brevbyggermeny';
 import { useDebounce } from 'hooks/DebounceHook';
+import { ExpandIcon, ShrinkIcon } from '@navikt/aksel-icons';
 
 export interface AlternativFormField {
   verdi: string;
@@ -89,7 +90,7 @@ export const Brevbygger = ({
   visAvbryt = true,
 }: BrevbyggerProps) => {
   const parsedBrevmal: BrevmalType = JSON.parse(brevmal || '');
-  const { control, handleSubmit, watch } = useForm<BrevdataFormFields>({
+  const { control, handleSubmit, trigger, watch } = useForm<BrevdataFormFields>({
     values: {
       delmaler: mapDelmalerFraSanity(parsedBrevmal.delmaler, brevdata),
     },
@@ -99,6 +100,7 @@ export const Brevbygger = ({
   const [valgteMottakere, setMottakere] = useState<Mottaker[]>([]);
   const [visKanIkkeDistribuereAdvarsel, setVisKanIkkeDistribuereAdvarsel] = useState(false);
   const [ikkeSendBrevModalOpen, settIkkeSendBrevModalOpen] = useState(false);
+  const [pdfViewExpanded, togglePdfVievExpanded] = useState(false);
   const behandlingsReferanse = useBehandlingsReferanse();
   const { fields } = useFieldArray({ control, name: 'delmaler' });
   const { løsBehovOgGåTilNesteSteg, isLoading } = useLøsBehovOgGåTilNesteSteg('BREV');
@@ -202,16 +204,20 @@ export const Brevbygger = ({
   };
 
   const sendBrev = async () => {
-    løsBehovOgGåTilNesteSteg({
-      behandlingVersjon: behandlingVersjon,
-      behov: {
-        behovstype: behovstype,
-        brevbestillingReferanse: referanse,
-        mottakere: valgteMottakere,
-        handling: 'FERDIGSTILL',
-      },
-      referanse: behandlingsReferanse,
-    });
+    // valider skjema før vi sender brevet
+    const isValid = await trigger();
+    if (isValid) {
+      løsBehovOgGåTilNesteSteg({
+        behandlingVersjon: behandlingVersjon,
+        behov: {
+          behovstype: behovstype,
+          brevbestillingReferanse: referanse,
+          mottakere: valgteMottakere,
+          handling: 'FERDIGSTILL',
+        },
+        referanse: behandlingsReferanse,
+      });
+    }
   };
 
   const slettBrev = async () => {
@@ -228,7 +234,7 @@ export const Brevbygger = ({
   };
 
   return (
-    <HGrid columns={2} gap={'2'} minWidth={'1280px'}>
+    <HGrid columns={pdfViewExpanded ? '1fr 3fr' : '1fr 1fr'} gap={'2'}>
       <Box>
         <Brevbyggermeny
           visAvbryt={visAvbryt}
@@ -271,7 +277,18 @@ export const Brevbygger = ({
           Send brev
         </Button>
       </Box>
-      <ForhåndsvisBrev isLoading={pdfIsLoading} dataUri={dataUri} />
+      <VStack gap={'2'}>
+        <div>
+          <Button
+            type="button"
+            onClick={() => togglePdfVievExpanded(!pdfViewExpanded)}
+            size={'small'}
+            variant={'tertiary'}
+            icon={pdfViewExpanded ? <ShrinkIcon /> : <ExpandIcon />}
+          />
+        </div>
+        <ForhåndsvisBrev isLoading={pdfIsLoading} dataUri={dataUri} />
+      </VStack>
 
       <IkkeSendBrevModal
         isOpen={ikkeSendBrevModalOpen}

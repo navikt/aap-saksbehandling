@@ -86,13 +86,15 @@ export const SkriveBrevMedDataFetching = async ({
 
   return (
     <div className={styles.flex}>
-      <SaksopplysningerKolonne
-        refusjonGrunnlag={refusjonGrunnlag.data}
-        sykdomsvurderingBrevGrunnlag={sykdomsvurderingBrevGrunnlag.data}
-        aktivitetsplikt11_7Grunnlag={
-          behandlingstype === 'Aktivitetsplikt' ? aktivitetsplikt11_7Grunnlag.data : undefined
-        }
-      />
+      {!brukNyBrevbygger && (
+        <SaksopplysningerKolonne
+          refusjonGrunnlag={refusjonGrunnlag.data}
+          sykdomsvurderingBrevGrunnlag={sykdomsvurderingBrevGrunnlag.data}
+          aktivitetsplikt11_7Grunnlag={
+            behandlingstype === 'Aktivitetsplikt' ? aktivitetsplikt11_7Grunnlag.data : undefined
+          }
+        />
+      )}
       {brukNyBrevbygger && (
         <Brevbygger
           brevmal={brev.brevmal}

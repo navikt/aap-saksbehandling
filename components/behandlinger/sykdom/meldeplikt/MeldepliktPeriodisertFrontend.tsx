@@ -5,7 +5,6 @@ import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import {
   FritakMeldepliktGrunnlag,
-  LøsPeriodisertBehovPåBehandling,
   MellomlagretVurdering,
   PeriodisertFritaksvurderingDto,
   VurdertAvAnsatt,
@@ -29,6 +28,7 @@ import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import React from 'react';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
+import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 
 interface Props {
   behandlingVersjon: number;
@@ -109,7 +109,7 @@ export const MeldepliktPeriodisertFrontend = ({
       return;
     }
 
-    const losning: LøsPeriodisertBehovPåBehandling = {
+    const losning: LøsningerForPerioder = {
       behandlingVersjon: behandlingVersjon,
       referanse: behandlingsreferanse,
       behov: {
