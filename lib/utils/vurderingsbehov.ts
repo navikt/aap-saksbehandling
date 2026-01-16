@@ -100,6 +100,8 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov): strin
       return 'Effektuer aktivitetsplikt § 11-9';
     case 'BARNETILLEGG_SATS_REGULERING':
       return 'Satsregulering barnetillegg';
+    case 'UTVID_VEDTAKSLENGDE':
+      return 'Utvid vedtakslengde';
     default:
       return vurderingsbehov;
   }
