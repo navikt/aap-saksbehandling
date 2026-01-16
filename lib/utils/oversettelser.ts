@@ -257,6 +257,8 @@ export function mapTilÅrsakTilOpprettelseTilTekst(årsakTilOpprettelse: ÅrsakT
       return 'Endring i register';
     case 'AKTIVITETSPLIKT':
       return 'Aktivitetsplikt';
+    case 'UTVID_VEDTAKSLENGDE':
+      return 'Utvid vedtakslengde';
   }
 }
 
