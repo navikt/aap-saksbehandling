@@ -231,7 +231,12 @@ export const SykdomsvurderingPeriodisert = ({
 
   function mapGrunnlagTilDefaultvalues(grunnlag: SykdomsGrunnlag): SykdomsvurderingerForm {
     if (grunnlag == null || grunnlag.nyeVurderinger.length === 0) {
-      // Vi har ingen nye vurderinger, legg til en tom-default-periode
+      // Vi har ingen nye vurderinger, men har tidligere vurderinger. Ikke ha noen preutfyllte vurderunger
+      if (grunnlag.gjeldendeVedtatteSykdomsvurderinger.length > 0) {
+        return { vurderinger: [] };
+      }
+
+      // Vi har ingen nye vurderinger, og heller ingen tidligere vurderinger:  legg til en tom-default-periode
       const førsteFraDatoSomKanVurderes = grunnlag.kanVurderes[0]?.fom
         ? { fraDato: new Dato(grunnlag.kanVurderes[0].fom).formaterForFrontend() }
         : {};
