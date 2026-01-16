@@ -333,8 +333,7 @@ describe('Delmaler med valg', () => {
     expect(screen.getByText('Her kommer det litt fritekst')).toBeVisible();
   });
 
-  // må se litt mer på hvordan dette skal håndteres når oppdatering av data går automatisk...
-  test.skip('viser en feilmelding når man ikke har valgt et alternativ i et obligatorisk valg', async () => {
+  test('viser en feilmelding når man ikke har valgt et alternativ i et obligatorisk valg', async () => {
     const brevmal: BrevmalType = {
       ...sanityAttrs,
       _id: 'brevmal-id',
@@ -356,12 +355,11 @@ describe('Delmaler med valg', () => {
     );
     await user.click(screen.getByRole('checkbox', { name: 'Inkluder i brev' }));
     expect(screen.getByText('Beskrivelse av alternativ')).toBeVisible();
-    await user.click(screen.getByRole('button', { name: 'Oppdater brevdata' }));
+    await user.click(screen.getByRole('button', { name: 'Send brev' }));
     expect(screen.getByText('Du må velge et alternativ')).toBeVisible();
   });
 
-  // må se litt mer på hvordan dette skal håndteres når oppdatering av data går automatisk...
-  test.skip('viser ikke feilmelding for ikke-obligatoriske valg', async () => {
+  test('viser ikke feilmelding for ikke-obligatoriske valg', async () => {
     const brevmal: BrevmalType = {
       ...sanityAttrs,
       _id: 'brevmal-id',
@@ -383,7 +381,7 @@ describe('Delmaler med valg', () => {
     );
     await user.click(screen.getByRole('checkbox', { name: 'Inkluder i brev' }));
     expect(screen.getByText('Beskrivelse av alternativ')).toBeVisible();
-    await user.click(screen.getByRole('button', { name: 'Oppdater brevdata' }));
+    await user.click(screen.getByRole('button', { name: 'Send brev' }));
     expect(screen.queryByText('Du må velge et alternativ')).not.toBeInTheDocument();
   });
 });

@@ -9,7 +9,7 @@ interface Props {
 
 export const ForhåndsvisBrev = ({ dataUri, isLoading = false }: Props) => {
   return (
-    <Box padding={'2'} background={'bg-subtle'} shadow="medium">
+    <Box padding={'2'} background={'bg-subtle'} shadow="medium" minHeight={'100%'}>
       {isLoading && (
         <div>
           <Loader size="xlarge" title="Laster forhåndsvisning av brev..." />

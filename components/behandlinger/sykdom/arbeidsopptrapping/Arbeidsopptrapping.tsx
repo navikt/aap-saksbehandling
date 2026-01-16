@@ -3,7 +3,6 @@
 import {
   ArbeidsopptrappingGrunnlagResponse,
   ArbeidsopptrappingLøsningDto,
-  LøsPeriodisertBehovPåBehandling,
   MellomlagretVurdering,
   VurdertAvAnsatt,
 } from 'lib/types/types';
@@ -27,6 +26,7 @@ import { Link, VStack } from '@navikt/ds-react';
 import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
 import { IkkeVurderbarPeriode } from 'components/periodisering/IkkeVurderbarPeriode';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
+import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 
 interface Props {
   behandlingVersjon: number;
@@ -103,7 +103,7 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
       visningActions.onBekreftClick();
       return;
     }
-    const losning: LøsPeriodisertBehovPåBehandling = {
+    const losning: LøsningerForPerioder = {
       behandlingVersjon: behandlingVersjon,
       referanse: behandlingsreferanse,
       behov: {
