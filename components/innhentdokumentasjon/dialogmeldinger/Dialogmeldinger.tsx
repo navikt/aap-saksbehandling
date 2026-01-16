@@ -68,7 +68,7 @@ const Dialogmelding = ({ melding }: { melding: LegeerklæringStatus }) => {
               variant="secondary"
               type="button"
               size="small"
-              icon={<PaperplaneIcon title="Send purring" />}
+              icon={<PaperplaneIcon />}
               loading={isLoading}
               onClick={handlePurringClick}
             >
