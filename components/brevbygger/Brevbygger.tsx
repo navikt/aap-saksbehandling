@@ -89,7 +89,7 @@ export const Brevbygger = ({
   visAvbryt = true,
 }: BrevbyggerProps) => {
   const parsedBrevmal: BrevmalType = JSON.parse(brevmal || '');
-  const { control, handleSubmit, watch } = useForm<BrevdataFormFields>({
+  const { control, handleSubmit, trigger, watch } = useForm<BrevdataFormFields>({
     values: {
       delmaler: mapDelmalerFraSanity(parsedBrevmal.delmaler, brevdata),
     },
@@ -202,16 +202,20 @@ export const Brevbygger = ({
   };
 
   const sendBrev = async () => {
-    løsBehovOgGåTilNesteSteg({
-      behandlingVersjon: behandlingVersjon,
-      behov: {
-        behovstype: behovstype,
-        brevbestillingReferanse: referanse,
-        mottakere: valgteMottakere,
-        handling: 'FERDIGSTILL',
-      },
-      referanse: behandlingsReferanse,
-    });
+    // valider skjema før vi sender brevet
+    const isValid = await trigger();
+    if (isValid) {
+      løsBehovOgGåTilNesteSteg({
+        behandlingVersjon: behandlingVersjon,
+        behov: {
+          behovstype: behovstype,
+          brevbestillingReferanse: referanse,
+          mottakere: valgteMottakere,
+          handling: 'FERDIGSTILL',
+        },
+        referanse: behandlingsReferanse,
+      });
+    }
   };
 
   const slettBrev = async () => {
@@ -228,7 +232,7 @@ export const Brevbygger = ({
   };
 
   return (
-    <HGrid columns={2} gap={'2'} minWidth={'1280px'}>
+    <HGrid columns={'1fr 2fr'} gap={'2'}>
       <Box>
         <Brevbyggermeny
           visAvbryt={visAvbryt}

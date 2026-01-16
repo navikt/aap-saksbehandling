@@ -25,6 +25,7 @@ const valideringsregler = (noekkel: string, brevmal: BrevmalType): Object | unde
   }
   return undefined;
 };
+
 export const Valgfelt = ({ control, delmalIndex, valg, brevmal, watch }: ValgfeltProps) => {
   return (
     <VStack gap="4" marginBlock={'2'}>
