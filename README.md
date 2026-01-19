@@ -44,14 +44,8 @@ For at pre-commit hooks for linting og formatering skal kunne kjøre, må du set
    yarn install
    yarn dev
    ```
-   Applikasjonen skal nå være tilgjengelig i nettleseren på http://localhost:3000
-
-**OBS:** Husk å starte backend-tjenestene lokalt også, etter egen oppskrift.\
-Dersom du har kjørt opp mot devmiljø tidligere kan det hende du må drepe Wonderwall:
-
-```bash
-  docker-compose down
-```
+   Applikasjonen skal nå være tilgjengelig i nettleseren på http://localhost:3000 \
+   **OBS:** Husk å starte backend-tjenestene lokalt også, etter egen oppskrift.
 
 ## Kjøre opp lokalt mot devmiljø
 
@@ -74,6 +68,19 @@ Dersom du har kjørt opp mot devmiljø tidligere kan det hende du må drepe Wond
     yarn dev
    ```
    Applikasjonen skal nå være tilgjengelig i nettleseren på http://localhost:4000
+
+## Rydd opp før ny oppstart
+
+Dersom du opplever rare feilmeldinger kan det hende at ting er kjørt opp i feil rekkefølge eller at noe har hengt seg opp.
+Disse kommandoene kan hjelpe deg med å rydde opp før du prøver på nytt:
+
+```bash
+    docker-compose down
+```
+
+```bash
+    pkill -9 ^next-server
+```
 
 ## Diverse nyttige kommandoer
 
