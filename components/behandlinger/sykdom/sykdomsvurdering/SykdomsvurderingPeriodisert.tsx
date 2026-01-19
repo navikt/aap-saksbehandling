@@ -2,7 +2,7 @@
 
 import { Behovstype, getJaNeiEllerUndefined, getStringEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { FormEvent } from 'react';
+import { FormEvent, useState } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { parseISO } from 'date-fns';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
@@ -31,6 +31,7 @@ import {
   erNyVurderingOppfylt,
   erTidligereVurderingOppfylt,
 } from 'components/behandlinger/sykdom/sykdomsvurdering/sykdomsvurdering-utils';
+import { AccordionGroup } from 'components/accordiongroup/AccordionGroup';
 
 export interface SykdomsvurderingerForm {
   vurderinger: Array<Sykdomsvurdering>;
@@ -77,6 +78,9 @@ export const SykdomsvurderingPeriodisert = ({
 }: SykdomProps) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { sak } = useSak();
+
+  const [accordionOpen, setAccordionOpen] = useState(false);
+
   const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('AVKLAR_SYKDOM');
 
@@ -138,6 +142,7 @@ export const SykdomsvurderingPeriodisert = ({
           referanse: behandlingsReferanse,
         },
         () => {
+          setAccordionOpen(false);
           nullstillMellomlagretVurdering();
           visningActions.onBekreftClick();
         }
@@ -186,33 +191,35 @@ export const SykdomsvurderingPeriodisert = ({
             <TidligereSykdomsvurdering vurdering={vurdering} />
           </TidligereVurderingExpandableCard>
         ))}
-        {nyeVurderingerFields.map((vurdering, index) => (
-          <NyVurderingExpandableCard
-            key={vurdering.id}
-            fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-            oppfylt={erNyVurderingOppfylt(form.watch(`vurderinger.${index}`))}
-            nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
-            isLast={index === nyeVurderingerFields.length - 1}
-            vurdertAv={vurdering.vurdertAv}
-            kvalitetssikretAv={vurdering.kvalitetssikretAv}
-            besluttetAv={vurdering.besluttetAv}
-            finnesFeil={finnesFeilForVurdering(index, errorList)}
-            readonly={formReadOnly}
-            onSlettVurdering={() => remove(index)}
-            harTidligereVurderinger={tidligereVurderinger.length > 0}
-            index={index}
-          >
-            <SykdomsvurderingFormInput
-              index={index}
-              form={form}
+        <AccordionGroup setIsOpen={setAccordionOpen} isOpen={accordionOpen}>
+          {nyeVurderingerFields.map((vurdering, index) => (
+            <NyVurderingExpandableCard
+              key={vurdering.id}
+              fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
+              oppfylt={erNyVurderingOppfylt(form.watch(`vurderinger.${index}`))}
+              nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
+              isLast={index === nyeVurderingerFields.length - 1}
+              vurdertAv={vurdering.vurdertAv}
+              kvalitetssikretAv={vurdering.kvalitetssikretAv}
+              besluttetAv={vurdering.besluttetAv}
+              finnesFeil={finnesFeilForVurdering(index, errorList)}
               readonly={formReadOnly}
-              sak={sak}
-              erÅrsakssammenhengYrkesskade={grunnlag.erÅrsakssammenhengYrkesskade}
-              skalVurdereYrkesskade={grunnlag.skalVurdereYrkesskade}
-              rettighetsperiopdeStartdato={førsteDatoSomKanVurderes}
-            />
-          </NyVurderingExpandableCard>
-        ))}
+              onSlettVurdering={() => remove(index)}
+              harTidligereVurderinger={tidligereVurderinger.length > 0}
+              index={index}
+            >
+              <SykdomsvurderingFormInput
+                index={index}
+                form={form}
+                readonly={formReadOnly}
+                sak={sak}
+                erÅrsakssammenhengYrkesskade={grunnlag.erÅrsakssammenhengYrkesskade}
+                skalVurdereYrkesskade={grunnlag.skalVurdereYrkesskade}
+                rettighetsperiopdeStartdato={førsteDatoSomKanVurderes}
+              />
+            </NyVurderingExpandableCard>
+          ))}
+        </AccordionGroup>
       </VStack>
     </VilkårskortPeriodisert>
   );

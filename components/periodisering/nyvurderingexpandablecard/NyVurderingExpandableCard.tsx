@@ -10,6 +10,7 @@ import { TrashFillIcon } from '@navikt/aksel-icons';
 import { VurdertAvAnsatt } from 'lib/types/types';
 import { SlettVurderingModal } from 'components/periodisering/slettvurderingmodal/SlettVurderingModal';
 import { VurderingStatusTag } from 'components/periodisering/VurderingStatusTag';
+import { useGloablAccordionTilstand } from 'hooks/saksbehandling/AccordionTilstandHook';
 
 interface Props {
   fraDato: Date | null;
@@ -41,7 +42,11 @@ export const NyVurderingExpandableCard = ({
   harTidligereVurderinger = false,
   index,
 }: Props) => {
-  const [cardExpanded, setCardExpanded] = useState<boolean>(true);
+  const { isOpen } = useGloablAccordionTilstand();
+
+  const [localCardExpanded, setLocalCardExpanded] = useState<boolean>();
+
+  const cardExpanded = isOpen || localCardExpanded;
 
   const ref = useRef<HTMLDialogElement>(null);
 
@@ -50,7 +55,7 @@ export const NyVurderingExpandableCard = ({
       editable
       defaultOpen
       expanded={cardExpanded || finnesFeil}
-      setExpanded={setCardExpanded}
+      setExpanded={setLocalCardExpanded}
       heading={
         <HStack justify={'space-between'} padding={'2'}>
           <BodyShort size={'small'}>

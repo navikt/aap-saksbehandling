@@ -28,6 +28,8 @@ import {
 import { ForutgåendeMedlemskapTidligereVurdering } from 'components/behandlinger/forutgåendemedlemskap/manuellvurderingperiodisert/ForutgåendeMedlemskapTidligereVurdering';
 import { ForutgåendeMedlemskapFormInput } from 'components/behandlinger/forutgåendemedlemskap/manuellvurderingperiodisert/ForutgåendeMedlemskapFormInput';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
+import { AccordionGroup } from 'components/accordiongroup/AccordionGroup';
+import { useState } from 'react';
 
 interface Props {
   behandlingVersjon: number;
@@ -60,6 +62,8 @@ export const ForutgåendeMedlemskapPeriodisert = ({
     'VURDER_MEDLEMSKAP',
     mellomlagretVurdering
   );
+
+  const [isOpen, setIsOpen] = useState(true);
 
   const defaultValues =
     mellomlagretVurdering != null
@@ -149,35 +153,37 @@ export const ForutgåendeMedlemskapPeriodisert = ({
           <ForutgåendeMedlemskapTidligereVurdering vurdering={vurdering} />
         </TidligereVurderingExpandableCard>
       ))}
-      {vurderingerFields.map((vurdering, index) => (
-        <NyVurderingExpandableCard
-          key={vurdering.id}
-          fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-          nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
-          isLast={index === vurderingerFields.length - 1}
-          oppfylt={
-            form.watch(`vurderinger.${index}.harForutgåendeMedlemskap`) === JaEllerNei.Ja ||
-            form.watch(`vurderinger.${index}.unntaksvilkår`) === 'A' ||
-            form.watch(`vurderinger.${index}.unntaksvilkår`) === 'B'
-          }
-          vurdertAv={vurdering.vurdertAv}
-          kvalitetssikretAv={vurdering.kvalitetssikretAv}
-          besluttetAv={vurdering.besluttetAv}
-          finnesFeil={finnesFeilForVurdering(index, errorList)}
-          readonly={formReadOnly}
-          onSlettVurdering={() => remove(index)}
-          harTidligereVurderinger={tidligereVurderinger.length > 0}
-          index={index}
-        >
-          <ForutgåendeMedlemskapFormInput
-            form={form}
-            beregningstidspunktGrunnlag={beregningstidspunktGrunnlag}
-            readOnly={formReadOnly}
+      <AccordionGroup isOpen={isOpen} setIsOpen={setIsOpen}>
+        {vurderingerFields.map((vurdering, index) => (
+          <NyVurderingExpandableCard
+            key={vurdering.id}
+            fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
+            nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
+            isLast={index === vurderingerFields.length - 1}
+            oppfylt={
+              form.watch(`vurderinger.${index}.harForutgåendeMedlemskap`) === JaEllerNei.Ja ||
+              form.watch(`vurderinger.${index}.unntaksvilkår`) === 'A' ||
+              form.watch(`vurderinger.${index}.unntaksvilkår`) === 'B'
+            }
+            vurdertAv={vurdering.vurdertAv}
+            kvalitetssikretAv={vurdering.kvalitetssikretAv}
+            besluttetAv={vurdering.besluttetAv}
+            finnesFeil={finnesFeilForVurdering(index, errorList)}
+            readonly={formReadOnly}
+            onSlettVurdering={() => remove(index)}
+            harTidligereVurderinger={tidligereVurderinger.length > 0}
             index={index}
-            harTidligereVurderinger={tidligereVurderinger.length !== 0}
-          />
-        </NyVurderingExpandableCard>
-      ))}
+          >
+            <ForutgåendeMedlemskapFormInput
+              form={form}
+              beregningstidspunktGrunnlag={beregningstidspunktGrunnlag}
+              readOnly={formReadOnly}
+              index={index}
+              harTidligereVurderinger={tidligereVurderinger.length !== 0}
+            />
+          </NyVurderingExpandableCard>
+        ))}
+      </AccordionGroup>
     </VilkårskortPeriodisert>
   );
 };

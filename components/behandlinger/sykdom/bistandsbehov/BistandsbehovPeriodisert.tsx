@@ -2,7 +2,7 @@
 
 import { BistandsGrunnlag, MellomlagretVurdering, VurdertAvAnsatt } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
-import { FormEvent } from 'react';
+import { FormEvent, useState } from 'react';
 import { parseDatoFraDatePicker } from 'lib/utils/date';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
@@ -24,6 +24,7 @@ import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/bi
 import { getFraDatoFraGrunnlagForFrontend } from 'lib/utils/periodisering';
 import { Link, VStack } from '@navikt/ds-react';
 import { Veiledning } from 'components/veiledning/Veiledning';
+import { AccordionGroup } from 'components/accordiongroup/AccordionGroup';
 
 interface Props {
   behandlingVersjon: number;
@@ -101,6 +102,8 @@ export const BistandsbehovPeriodisert = ({
   const foersteNyePeriode = fields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
   const errorList = mapPeriodiserteVurderingerErrorList<LovOgMedlemskapVurderingForm>(form.formState.errors);
 
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <VilkårskortPeriodisert
       heading={'§ 11-6 Behov for bistand til å skaffe seg eller beholde arbeid'}
@@ -161,32 +164,34 @@ export const BistandsbehovPeriodisert = ({
             <BistandsbehovTidligereVurdering vurdering={vurdering} />
           </TidligereVurderingExpandableCard>
         ))}
-        {fields.map((vurdering, index) => (
-          <NyVurderingExpandableCard
-            key={vurdering.id}
-            fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-            nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
-            isLast={index === fields.length - 1}
-            oppfylt={
-              form.watch(`vurderinger.${index}.erBehovForAktivBehandling`) &&
-              form.watch(`vurderinger.${index}.erBehovForArbeidsrettetTiltak`)
-                ? form.watch(`vurderinger.${index}.erBehovForAktivBehandling`) === JaEllerNei.Ja ||
-                  form.watch(`vurderinger.${index}.erBehovForArbeidsrettetTiltak`) === JaEllerNei.Ja ||
-                  form.watch(`vurderinger.${index}.erBehovForAnnenOppfølging`) === JaEllerNei.Ja
-                : undefined
-            }
-            vurdertAv={vurdering.vurdertAv}
-            kvalitetssikretAv={vurdering.kvalitetssikretAv}
-            besluttetAv={vurdering.besluttetAv}
-            finnesFeil={finnesFeilForVurdering(index, errorList)}
-            readonly={formReadOnly}
-            onSlettVurdering={() => remove(index)}
-            harTidligereVurderinger={tidligereVurderinger.length > 0}
-            index={index}
-          >
-            <BistandsbehovVurderingForm form={form} readOnly={formReadOnly} index={index} />
-          </NyVurderingExpandableCard>
-        ))}
+        <AccordionGroup isOpen={isOpen} setIsOpen={setIsOpen}>
+          {fields.map((vurdering, index) => (
+            <NyVurderingExpandableCard
+              key={vurdering.id}
+              fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
+              nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
+              isLast={index === fields.length - 1}
+              oppfylt={
+                form.watch(`vurderinger.${index}.erBehovForAktivBehandling`) &&
+                form.watch(`vurderinger.${index}.erBehovForArbeidsrettetTiltak`)
+                  ? form.watch(`vurderinger.${index}.erBehovForAktivBehandling`) === JaEllerNei.Ja ||
+                    form.watch(`vurderinger.${index}.erBehovForArbeidsrettetTiltak`) === JaEllerNei.Ja ||
+                    form.watch(`vurderinger.${index}.erBehovForAnnenOppfølging`) === JaEllerNei.Ja
+                  : undefined
+              }
+              vurdertAv={vurdering.vurdertAv}
+              kvalitetssikretAv={vurdering.kvalitetssikretAv}
+              besluttetAv={vurdering.besluttetAv}
+              finnesFeil={finnesFeilForVurdering(index, errorList)}
+              readonly={formReadOnly}
+              onSlettVurdering={() => remove(index)}
+              harTidligereVurderinger={tidligereVurderinger.length > 0}
+              index={index}
+            >
+              <BistandsbehovVurderingForm form={form} readOnly={formReadOnly} index={index} />
+            </NyVurderingExpandableCard>
+          ))}
+        </AccordionGroup>
       </VStack>
     </VilkårskortPeriodisert>
   );
