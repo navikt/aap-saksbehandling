@@ -9,9 +9,7 @@ interface Props {
 }
 
 export const VurderingStatusTag = ({ oppfylt, overskrevet = false }: Props) => {
-  console.log('oppfylt', oppfylt);
   const status = getVurderingStatus(oppfylt, overskrevet);
-  console.log('status', status);
   if (!status) {
     return null;
   }
