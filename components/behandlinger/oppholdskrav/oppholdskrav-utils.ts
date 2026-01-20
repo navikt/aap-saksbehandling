@@ -14,6 +14,7 @@ export function getDefaultValuesFromGrunnlag(grunnlag?: OppholdskravGrunnlagResp
           begrunnelse: '',
           fraDato: getFraDatoFraGrunnlagForFrontend(grunnlag),
           land: '',
+          erNyVurdering: true,
         },
       ],
     };
