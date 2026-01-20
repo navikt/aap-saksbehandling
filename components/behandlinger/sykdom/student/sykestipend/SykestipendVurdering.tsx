@@ -12,7 +12,7 @@ import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårs
 import { VStack } from '@navikt/ds-react';
 import { FormField } from 'components/form/FormField';
 import { SykestipendPeriodeTabell } from 'components/behandlinger/sykdom/student/sykestipend/SykestipendPeriodeTabell';
-import { formaterDatoForBackend } from 'lib/utils/date';
+import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { parse } from 'date-fns';
 
 interface Props {
@@ -121,8 +121,8 @@ function mapVurderingTilForm(vurdering: SykestipendGrunnlag['gjeldendeVurdering'
     begrunnelse: vurdering?.begrunnelse ?? '',
     perioder:
       vurdering?.perioder.map((periode) => ({
-        fom: periode.fom,
-        tom: periode.tom,
+        fom: formaterDatoForFrontend(periode.fom),
+        tom: formaterDatoForFrontend(periode.tom),
       })) ?? [],
   };
 }
