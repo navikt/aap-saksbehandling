@@ -51,7 +51,7 @@ export const LeggTilMockInstitusjonsopphold = ({ saksnummer }: { saksnummer: str
 
   return (
     <VStack gap="2">
-      <Heading size="small">Legg til institusjonsopphold</Heading>
+      <Heading size="small">Institusjonsopphold</Heading>
       <FormField form={form} formField={formFields.institusjonstype} horizontalRadio={true} />
 
       <HStack gap="2">

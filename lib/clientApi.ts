@@ -85,6 +85,10 @@ export function clientLeggTilInstitusjonsopphold(saksnummer: string, body: Objec
   return clientFetch(`${BASE_URL}/api/test/endre/${saksnummer}/legg-til-institusjonsopphold`, 'POST', body);
 }
 
+export function clientLeggTilYrkesskade(saksnummer: string) {
+  return clientFetch(`${BASE_URL}/api/test/endre/${saksnummer}/legg-til-yrkesskade`, 'POST');
+}
+
 export function clientOpprettDummySak(sak: OpprettDummySakDto) {
   return clientFetch(`${BASE_URL}/api/test/opprettDummySak`, 'POST', sak);
 }
