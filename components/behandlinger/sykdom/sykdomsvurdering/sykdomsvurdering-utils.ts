@@ -60,5 +60,6 @@ export function emptySykdomsvurdering(): Sykdomsvurdering {
     erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense: undefined,
     erNedsettelseIArbeidsevneMerEnnFørtiProsent: undefined,
     yrkesskadeBegrunnelse: '',
+    erNyVurdering: true,
   };
 }
