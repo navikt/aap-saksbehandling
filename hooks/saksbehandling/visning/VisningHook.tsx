@@ -13,7 +13,7 @@ interface VisningState {
   visningModus: VisningModus;
   formReadOnly: boolean;
   visningActions: VisningActions;
-  erAktiv: boolean;
+  erAktivUtenAvbryt: boolean;
 }
 
 export interface VisningActions {
@@ -67,7 +67,7 @@ export function useVilkårskortVisning(
       onEndreClick: onEndreClick,
       onBekreftClick: onBekreftClick,
     },
-    erAktiv: visning === VisningModus.AKTIV_UTEN_AVBRYT,
+    erAktivUtenAvbryt: visning === VisningModus.AKTIV_UTEN_AVBRYT,
   };
 }
 

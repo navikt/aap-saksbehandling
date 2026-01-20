@@ -11,7 +11,10 @@ import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook
 import { useFieldArray, useForm } from 'react-hook-form';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 import { BistandsbehovVurderingForm } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovVurderingForm';
-import { NyVurderingExpandableCard } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
+import {
+  NyVurderingExpandableCard,
+  skalVæreInitiellEkspandert,
+} from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { parseISO } from 'date-fns';
@@ -24,7 +27,7 @@ import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/bi
 import { getFraDatoFraGrunnlagForFrontend } from 'lib/utils/periodisering';
 import { Link, VStack } from '@navikt/ds-react';
 import { Veiledning } from 'components/veiledning/Veiledning';
-import { AccordionGroup } from 'components/accordiongroup/AccordionGroup';
+import { AccordionTilstandProvider } from 'context/saksbehandling/AccordionTilstandContext';
 
 interface Props {
   behandlingVersjon: number;
@@ -46,6 +49,7 @@ export interface BistandVurderingForm {
   vurdertAv?: VurdertAvAnsatt;
   kvalitetssikretAv?: VurdertAvAnsatt;
   besluttetAv?: VurdertAvAnsatt;
+  erNyVurdering?: boolean;
 }
 
 export const BistandsbehovPeriodisert = ({
@@ -61,7 +65,9 @@ export const BistandsbehovPeriodisert = ({
   const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
     useMellomlagring(Behovstype.AVKLAR_BISTANDSBEHOV_KODE, initialMellomlagretVurdering);
 
-  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+  const [isOpen, setIsOpen] = useState<boolean>();
+
+  const { visningActions, formReadOnly, visningModus, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'VURDER_BISTANDSBEHOV',
     mellomlagretVurdering
@@ -92,6 +98,7 @@ export const BistandsbehovPeriodisert = ({
         () => {
           nullstillMellomlagretVurdering();
           visningActions.onBekreftClick();
+          setIsOpen(false);
         }
       );
     })(event);
@@ -101,8 +108,6 @@ export const BistandsbehovPeriodisert = ({
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const foersteNyePeriode = fields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
   const errorList = mapPeriodiserteVurderingerErrorList<LovOgMedlemskapVurderingForm>(form.formState.errors);
-
-  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <VilkårskortPeriodisert
@@ -164,7 +169,8 @@ export const BistandsbehovPeriodisert = ({
             <BistandsbehovTidligereVurdering vurdering={vurdering} />
           </TidligereVurderingExpandableCard>
         ))}
-        <AccordionGroup isOpen={isOpen} setIsOpen={setIsOpen}>
+
+        <AccordionTilstandProvider isOpen={isOpen} setIsOpen={setIsOpen}>
           {fields.map((vurdering, index) => (
             <NyVurderingExpandableCard
               key={vurdering.id}
@@ -182,16 +188,20 @@ export const BistandsbehovPeriodisert = ({
               vurdertAv={vurdering.vurdertAv}
               kvalitetssikretAv={vurdering.kvalitetssikretAv}
               besluttetAv={vurdering.besluttetAv}
-              finnesFeil={finnesFeilForVurdering(index, errorList)}
               readonly={formReadOnly}
               onSlettVurdering={() => remove(index)}
               harTidligereVurderinger={tidligereVurderinger.length > 0}
               index={index}
+              initiellEkspandert={skalVæreInitiellEkspandert(
+                vurdering.erNyVurdering,
+                erAktivUtenAvbryt,
+                finnesFeilForVurdering(index, errorList)
+              )}
             >
               <BistandsbehovVurderingForm form={form} readOnly={formReadOnly} index={index} />
             </NyVurderingExpandableCard>
           ))}
-        </AccordionGroup>
+        </AccordionTilstandProvider>
       </VStack>
     </VilkårskortPeriodisert>
   );
@@ -235,6 +245,7 @@ export const BistandsbehovPeriodisert = ({
       overgangBegrunnelse: '',
       skalVurdereAapIOvergangTilArbeid: undefined,
       erBehovForArbeidsrettetTiltak: undefined,
+      erNyVurdering: true,
     };
   }
 };

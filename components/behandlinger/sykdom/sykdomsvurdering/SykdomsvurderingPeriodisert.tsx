@@ -93,7 +93,7 @@ export const SykdomsvurderingPeriodisert = ({
 
   const diagnosegrunnlag = finnDiagnosegrunnlag(typeBehandling, grunnlag);
 
-  const { visningModus, visningActions, formReadOnly, erAktiv } = useVilkårskortVisning(
+  const { visningModus, visningActions, formReadOnly, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'AVKLAR_SYKDOM',
     mellomlagretVurdering
@@ -213,7 +213,7 @@ export const SykdomsvurderingPeriodisert = ({
               index={index}
               initiellEkspandert={skalVæreInitiellEkspandert(
                 vurdering.erNyVurdering,
-                erAktiv,
+                erAktivUtenAvbryt,
                 finnesFeilForVurdering(index, errorList)
               )}
             >
