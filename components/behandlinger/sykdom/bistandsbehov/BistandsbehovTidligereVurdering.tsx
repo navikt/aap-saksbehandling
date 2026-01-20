@@ -23,13 +23,12 @@ export const BistandsbehovTidligereVurdering = ({ vurdering }: Props) => {
         spørsmål="b: Har brukeren behov for arbeidsrettet tiltak?"
         svar={getJaNeiEllerUndefined(vurdering.erBehovForArbeidsrettetTiltak)!}
       />
-      {vurdering.erBehovForAnnenOppfølging === true ||
-        (vurdering.erBehovForAnnenOppfølging === false && (
-          <SpørsmålOgSvar
-            spørsmål="c: Kan brukeren anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra Nav?"
-            svar={getJaNeiEllerUndefined(vurdering.erBehovForAnnenOppfølging)!}
-          />
-        ))}
+      {!vurdering.erBehovForArbeidsrettetTiltak && !vurdering.erBehovForAktivBehandling && (
+        <SpørsmålOgSvar
+          spørsmål="c: Kan brukeren anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra Nav?"
+          svar={getJaNeiEllerUndefined(vurdering.erBehovForAnnenOppfølging)!}
+        />
+      )}
       {vurdering.overgangBegrunnelse && (
         <SpørsmålOgSvar spørsmål="Vilkårsvurdering" svar={vurdering.overgangBegrunnelse!} />
       )}
