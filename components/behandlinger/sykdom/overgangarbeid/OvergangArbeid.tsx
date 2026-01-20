@@ -11,11 +11,14 @@ import { parseISO } from 'date-fns';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { NyVurderingExpandableCard } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
+import {
+  NyVurderingExpandableCard,
+  skalVæreInitiellEkspandert,
+} from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
 import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
-import { mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
+import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
 import { OvergangArbeidForm } from 'components/behandlinger/sykdom/overgangarbeid/OvergangArbeid-types';
 import {
   getDefaultValuesFromGrunnlag,
@@ -25,6 +28,8 @@ import { OvergangArbeidTidligereVurdering } from 'components/behandlinger/sykdom
 import { OvergangArbeidFormInput } from 'components/behandlinger/sykdom/overgangarbeid/OvergangArbeidFormInput';
 import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/overgangarbeid/OvergangArbeidMellomlagringParser';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
+import { AccordionTilstandProvider } from 'context/saksbehandling/AccordionTilstandContext';
+import { useState } from 'react';
 
 interface Props {
   behandlingVersjon: number;
@@ -41,7 +46,9 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialM
   const { lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
     useMellomlagring(Behovstype.OVERGANG_ARBEID, initialMellomlagretVurdering);
 
-  const { visningActions, visningModus, formReadOnly } = useVilkårskortVisning(
+  const [isOpen, setIsOpen] = useState<boolean>();
+
+  const { visningActions, visningModus, formReadOnly, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'OVERGANG_ARBEID',
     mellomlagretVurdering
@@ -133,24 +140,24 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialM
       onLeggTilVurdering={onAddPeriode}
       errorList={errorList}
     >
-      <>
-        {vedtatteVurderinger?.map((vurdering) => (
-          <TidligereVurderingExpandableCard
-            key={vurdering.fom}
-            fom={parseISO(vurdering.fom)}
-            tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
-            foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-            oppfylt={vurdering.brukerRettPåAAP}
-          >
-            <OvergangArbeidTidligereVurdering
-              fraDato={vurdering.fom}
-              tilDato={vurdering.tom}
-              begrunnelse={vurdering.begrunnelse}
-              oppfyller={vurdering.brukerRettPåAAP}
-            />
-          </TidligereVurderingExpandableCard>
-        ))}
+      {vedtatteVurderinger?.map((vurdering) => (
+        <TidligereVurderingExpandableCard
+          key={vurdering.fom}
+          fom={parseISO(vurdering.fom)}
+          tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
+          foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+          oppfylt={vurdering.brukerRettPåAAP}
+        >
+          <OvergangArbeidTidligereVurdering
+            fraDato={vurdering.fom}
+            tilDato={vurdering.tom}
+            begrunnelse={vurdering.begrunnelse}
+            oppfyller={vurdering.brukerRettPåAAP}
+          />
+        </TidligereVurderingExpandableCard>
+      ))}
 
+      <AccordionTilstandProvider isOpen={isOpen} setIsOpen={setIsOpen}>
         {vurderingerFields.map((vurdering, index) => (
           <NyVurderingExpandableCard
             key={vurdering.id}
@@ -165,16 +172,17 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialM
             vurdertAv={vurdering.vurdertAv}
             kvalitetssikretAv={vurdering.kvalitetssikretAv}
             besluttetAv={vurdering.besluttetAv}
-            finnesFeil={false}
             readonly={formReadOnly}
             onSlettVurdering={() => remove(index)}
             harTidligereVurderinger={tidligereVurderinger.length > 0}
             index={index}
+            finnesFeil={finnesFeilForVurdering(index, errorList)}
+            initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
           >
             <OvergangArbeidFormInput form={form} readOnly={formReadOnly} index={index} />
           </NyVurderingExpandableCard>
         ))}
-      </>
+      </AccordionTilstandProvider>
     </VilkårskortPeriodisert>
   );
 };

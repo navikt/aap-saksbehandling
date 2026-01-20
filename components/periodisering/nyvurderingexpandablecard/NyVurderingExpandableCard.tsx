@@ -17,6 +17,7 @@ interface Props {
   fraDato: Date | null;
   nestePeriodeFraDato: Date | null;
   isLast: boolean;
+  finnesFeil: boolean;
   oppfylt: boolean | undefined;
   vurdertAv: VurdertAvAnsatt | undefined;
   kvalitetssikretAv: VurdertAvAnsatt | undefined;
@@ -38,6 +39,7 @@ export const NyVurderingExpandableCard = ({
   besluttetAv,
   children,
   readonly,
+  finnesFeil,
   onSlettVurdering,
   harTidligereVurderinger = false,
   initiellEkspandert = false,
@@ -57,7 +59,7 @@ export const NyVurderingExpandableCard = ({
     <CustomExpandableCard
       editable
       defaultOpen
-      expanded={cardExpanded}
+      expanded={cardExpanded || finnesFeil}
       setExpanded={setLocalCardExpanded}
       heading={
         <HStack justify={'space-between'} padding={'2'}>
@@ -101,6 +103,6 @@ export const NyVurderingExpandableCard = ({
   );
 };
 
-export function skalVæreInitiellEkspandert(erNyVurdering: boolean | undefined, erAktiv: boolean, finnesFeil: boolean) {
-  return erNyVurdering === true || erAktiv || finnesFeil;
+export function skalVæreInitiellEkspandert(erNyVurdering: boolean | undefined, erAktiv: boolean) {
+  return erNyVurdering === true || erAktiv;
 }
