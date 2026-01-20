@@ -73,9 +73,11 @@ export const DigitaliserAnnetRelevantDokument = ({ grunnlag, readOnly, submit, i
       <form onSubmit={handleSubmit}>
         <VStack gap={'6'}>
           <FormField form={form} formField={formFields.årsaker} />
-          <Button loading={isLoading} className={'fit-content'}>
-            Send inn
-          </Button>
+          {!readOnly && (
+            <Button loading={isLoading} className={'fit-content'}>
+              Send inn
+            </Button>
+          )}
         </VStack>
       </form>
     </VilkårsKort>

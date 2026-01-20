@@ -86,9 +86,12 @@ export const DigitaliserKlage = ({ readOnly, submit, grunnlag, isLoading, regist
         <FormField form={form} formField={formFields.kravMottatt} />
         <FormField form={form} formField={formFields.behandlingsreferanse} />
         <FormField form={form} formField={formFields.beskrivelse} />
-        <Button loading={isLoading} className={'fit-content'}>
-          Neste
-        </Button>
+
+        {!readOnly && (
+          <Button loading={isLoading} className={'fit-content'}>
+            Neste
+          </Button>
+        )}
       </form>
     </VilkårsKort>
   );
