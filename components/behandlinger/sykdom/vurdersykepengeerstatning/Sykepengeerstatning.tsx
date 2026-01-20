@@ -16,14 +16,19 @@ import {
   getDefaultValuesFromGrunnlag,
   mapFormTilDto,
 } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/sykepengererstatning-utils';
-import { NyVurderingExpandableCard } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
+import {
+  NyVurderingExpandableCard,
+  skalVæreInitiellEkspandert,
+} from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { SykepengeerstatningFormInput } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/SykepengeerstatningFormInput';
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
 import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
 import { OppholdskravSykepengererstatninbgTidligereVurdering } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/SykepengererstatningTidligereVurdering';
-import { mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
+import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
+import { AccordionTilstandProvider } from 'context/saksbehandling/AccordionTilstandContext';
+import { useState } from 'react';
 
 interface Props {
   behandlingVersjon: number;
@@ -40,7 +45,9 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
   const { lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
     useMellomlagring(Behovstype.VURDER_SYKEPENGEERSTATNING_KODE, initialMellomlagretVurdering);
 
-  const { visningActions, visningModus, formReadOnly } = useVilkårskortVisning(
+  const [isOpen, setIsOpen] = useState<boolean>();
+
+  const { visningActions, visningModus, formReadOnly, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'VURDER_SYKEPENGEERSTATNING',
     mellomlagretVurdering
@@ -105,6 +112,7 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
 
     løsPeriodisertBehovOgGåTilNesteSteg(losning, () => {
       nullstillMellomlagretVurdering();
+      setIsOpen(false);
     });
   };
   const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
@@ -133,24 +141,24 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
       onLeggTilVurdering={onAddPeriode}
       errorList={errorList}
     >
-      <>
-        {vedtatteVurderinger?.map((vurdering) => (
-          <TidligereVurderingExpandableCard
-            key={vurdering.fom}
-            fom={parseISO(vurdering.fom)}
-            tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
-            foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-            oppfylt={vurdering.harRettPå}
-          >
-            <OppholdskravSykepengererstatninbgTidligereVurdering
-              fraDato={vurdering.fom}
-              begrunnelse={vurdering.begrunnelse}
-              oppfyller={vurdering.harRettPå}
-              grunn={vurdering.grunn}
-            />
-          </TidligereVurderingExpandableCard>
-        ))}
+      {vedtatteVurderinger?.map((vurdering) => (
+        <TidligereVurderingExpandableCard
+          key={vurdering.fom}
+          fom={parseISO(vurdering.fom)}
+          tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
+          foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+          oppfylt={vurdering.harRettPå}
+        >
+          <OppholdskravSykepengererstatninbgTidligereVurdering
+            fraDato={vurdering.fom}
+            begrunnelse={vurdering.begrunnelse}
+            oppfyller={vurdering.harRettPå}
+            grunn={vurdering.grunn}
+          />
+        </TidligereVurderingExpandableCard>
+      ))}
 
+      <AccordionTilstandProvider isOpen={isOpen} setIsOpen={setIsOpen}>
         {vurderingerFields.map((vurdering, index) => (
           <NyVurderingExpandableCard
             key={vurdering.id}
@@ -165,16 +173,17 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
             vurdertAv={vurdering.vurdertAv}
             kvalitetssikretAv={vurdering.kvalitetssikretAv}
             besluttetAv={vurdering.besluttetAv}
-            finnesFeil={false}
+            finnesFeil={finnesFeilForVurdering(index, errorList)}
             readonly={formReadOnly}
             onSlettVurdering={() => remove(index)}
             harTidligereVurderinger={tidligereVurderinger.length > 0}
             index={index}
+            initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
           >
             <SykepengeerstatningFormInput form={form} readOnly={formReadOnly} index={index} />
           </NyVurderingExpandableCard>
         ))}
-      </>
+      </AccordionTilstandProvider>
     </VilkårskortPeriodisert>
   );
 };

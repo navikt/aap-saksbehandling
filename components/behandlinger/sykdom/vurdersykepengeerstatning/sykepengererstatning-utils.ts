@@ -22,6 +22,7 @@ export function getDefaultValuesFromGrunnlag(grunnlag?: SykepengeerstatningGrunn
           fraDato: '',
           grunn: null,
           erOppfylt: '',
+          erNyVurdering: true,
         },
       ],
     };
