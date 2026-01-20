@@ -44,6 +44,8 @@ export const Opprettholdelse = async ({ behandlingsreferanse }: Props) => {
     if (flyt.aktivtSteg === 'OPPRETTHOLDELSE') {
       if (flyt.prosessering.status === 'JOBBER') {
         return 'Sender klagen til Nav Klageinstans...';
+      } else if (flyt.prosessering.status === 'FERDIG') {
+        return 'Klagen er sendt til Nav Klageinstans.';
       } else {
         return '';
       }

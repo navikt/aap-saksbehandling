@@ -1,7 +1,7 @@
 'use client';
 
 import { Behovstype, JaEllerNei } from 'lib/utils/form';
-import { LøsPeriodisertBehovPåBehandling, MellomlagretVurdering, OvergangArbeidGrunnlag } from 'lib/types/types';
+import { MellomlagretVurdering, OvergangArbeidGrunnlag } from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
@@ -24,6 +24,7 @@ import {
 import { OvergangArbeidTidligereVurdering } from 'components/behandlinger/sykdom/overgangarbeid/OvergangArbeidTidligereVurderinger';
 import { OvergangArbeidFormInput } from 'components/behandlinger/sykdom/overgangarbeid/OvergangArbeidFormInput';
 import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/overgangarbeid/OvergangArbeidMellomlagringParser';
+import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 
 interface Props {
   behandlingVersjon: number;
@@ -87,7 +88,7 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialM
     if (!erPerioderGyldige) {
       return;
     }
-    const losning: LøsPeriodisertBehovPåBehandling = {
+    const losning: LøsningerForPerioder = {
       behandlingVersjon: behandlingVersjon,
       referanse: behandlingsReferanse,
       behov: {
@@ -108,6 +109,7 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialM
   };
 
   const errorList = mapPeriodiserteVurderingerErrorList<OvergangArbeidForm>(form.formState.errors);
+  const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
 
   return (
     <VilkårskortPeriodisert
@@ -117,9 +119,7 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialM
       status={status}
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      vilkårTilhørerNavKontor={false}
-      vurdertAvAnsatt={grunnlag?.sisteVedtatteVurderinger[0]?.vurdertAv}
-      kvalitetssikretAv={grunnlag?.sisteVedtatteVurderinger[0]?.kvalitetssikretAv}
+      vilkårTilhørerNavKontor={true}
       mellomlagretVurdering={mellomlagretVurdering}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
@@ -129,7 +129,7 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialM
       }}
       visningModus={visningModus}
       visningActions={visningActions}
-      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
+      formReset={() => form.reset(getDefaultValuesFromGrunnlag(grunnlag))}
       onLeggTilVurdering={onAddPeriode}
       errorList={errorList}
     >
@@ -163,16 +163,15 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialM
             nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
             isLast={index === vurderingerFields.length - 1}
             vurdertAv={vurdering.vurdertAv}
+            kvalitetssikretAv={vurdering.kvalitetssikretAv}
+            besluttetAv={vurdering.besluttetAv}
             finnesFeil={false}
+            readonly={formReadOnly}
+            onSlettVurdering={() => remove(index)}
+            harTidligereVurderinger={tidligereVurderinger.length > 0}
+            index={index}
           >
-            <OvergangArbeidFormInput
-              form={form}
-              visningModus={visningModus}
-              readOnly={formReadOnly}
-              index={index}
-              harTidligereVurderinger={vedtatteVurderinger.length !== 0}
-              onRemove={() => remove(index)}
-            />
+            <OvergangArbeidFormInput form={form} readOnly={formReadOnly} index={index} />
           </NyVurderingExpandableCard>
         ))}
       </>

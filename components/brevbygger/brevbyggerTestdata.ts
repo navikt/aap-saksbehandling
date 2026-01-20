@@ -38,9 +38,18 @@ export const obligatoriskDelmal: DelmalReferanse = {
     beskrivelse: 'En obligatorisk delmal',
     teksteditor: [
       {
-        _key: 'teksteditor-key',
-        _type: 'fritekst',
-        fritekst: '',
+        _key: 'obligatoriskTekstEditorKey',
+        _type: 'block',
+        style: 'normal',
+        children: [
+          {
+            _key: 'obligatoriskBlockKey',
+            text: 'Tekst fra obligatorisk delmal',
+            _type: 'span',
+            marks: [],
+          },
+        ],
+        markDefs: [],
       },
     ],
   },
@@ -108,6 +117,136 @@ export const valgfriDelmalMedAlternativer: DelmalReferanse = {
               _key: 'alt3-key',
               _type: 'fritekst',
               fritekst: '',
+            },
+          ],
+        },
+      },
+    ],
+  },
+  obligatorisk: false,
+};
+
+export const obligatoriskDelmalMedAlternativer: DelmalReferanse = {
+  _key: 'obligatoriskDelmalKey',
+  _type: 'delmalRef',
+  delmal: {
+    ...sanityAttrs,
+    _id: '1',
+    beskrivelse: 'En obligatorisk delmal',
+    teksteditor: [
+      {
+        _key: 'valgRef-key',
+        _type: 'valgRef',
+        obligatorisk: true,
+        valg: {
+          ...sanityAttrs,
+          _id: 'valgref-1',
+          beskrivelse: 'Beskrivelse av alternativ',
+          alternativer: [
+            {
+              _key: 'alt1-key',
+              _type: 'kategorisertTekstRef',
+              kategori: null,
+              tekst: {
+                ...sanityAttrs,
+                _id: 'tekstid-1',
+                beskrivelse: 'Alternativ 1',
+                teksteditor: [
+                  {
+                    _id: 'text-1',
+                    _key: 'text-key-1',
+                    _type: 'block',
+                    children: [],
+                    markDefs: [],
+                    style: 'none',
+                  },
+                ],
+              },
+            },
+            {
+              _key: 'alt2-key',
+              _type: 'kategorisertTekstRef',
+              kategori: null,
+              tekst: {
+                ...sanityAttrs,
+                _id: 'tekstid-2',
+                beskrivelse: 'Alternativ 2',
+                teksteditor: [
+                  {
+                    _id: 'text-2',
+                    _key: 'text-key-2',
+                    _type: 'block',
+                    children: [],
+                    markDefs: [],
+                    style: 'none',
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      },
+    ],
+  },
+  obligatorisk: true,
+};
+
+export const valgfriDelmalMedValgfrieAlternativer: DelmalReferanse = {
+  _key: 'valgfriDelmalMedValgfrieAlternativerKey',
+  _type: 'delmalRef',
+  delmal: {
+    ...sanityAttrs,
+    _id: '1',
+    beskrivelse: 'Valgfri delmal med valgfrie alternativer',
+    teksteditor: [
+      {
+        _key: 'valgfriValgRef-key',
+        _type: 'valgRef',
+        obligatorisk: false,
+        valg: {
+          ...sanityAttrs,
+          _id: 'valgfriValgref-1',
+          beskrivelse: 'Beskrivelse av alternativ',
+          alternativer: [
+            {
+              _key: 'valgfriAlt1-key',
+              _type: 'kategorisertTekstRef',
+              kategori: null,
+              tekst: {
+                ...sanityAttrs,
+                _id: 'valgfriTekstid-1',
+                beskrivelse: 'Alternativ 1',
+                teksteditor: [
+                  {
+                    _id: 'valgfriText-1',
+                    _key: 'valgfriText-key-1',
+                    _type: 'block',
+                    children: [],
+                    markDefs: [],
+                    style: 'none',
+                  },
+                ],
+              },
+            },
+            {
+              _key: 'valgfriAlt2-key',
+              _type: 'kategorisertTekstRef',
+              kategori: null,
+              tekst: {
+                ...sanityAttrs,
+                _id: 'valgfriTekstid-2',
+                beskrivelse: 'Alternativ 2',
+                teksteditor: [
+                  {
+                    _id: 'valgfriText-2',
+                    _key: 'valgfriText-key-2',
+                    _type: 'block',
+                    children: [],
+                    markDefs: [],
+                    style: 'none',
+                  },
+                ],
+              },
             },
           ],
         },

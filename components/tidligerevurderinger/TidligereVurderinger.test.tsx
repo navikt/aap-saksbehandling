@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, it, expect, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { TidligereVurderinger } from './TidligereVurderinger';
-import { format } from 'date-fns';
+import { formatDatoMedMånedsnavn } from 'lib/utils/date';
 
 const user = userEvent.setup();
 
@@ -67,8 +67,8 @@ describe('TidligereVurderinger', () => {
 
   it('kan vise alle vurderingsperioder', () => {
     const perioder = vurderinger.map((v) => {
-      const fom = format(new Date(v.periode.fom), 'dd.MM.yyyy');
-      const tom = v.periode.tom ? ' ' + format(new Date(v.periode.tom), 'dd.MM.yyyy') : '';
+      const fom = formatDatoMedMånedsnavn(new Date(v.periode.fom));
+      const tom = v.periode.tom ? ' ' + formatDatoMedMånedsnavn(new Date(v.periode.tom)) : '';
       return `${fom} -${tom}`;
     });
 
@@ -86,7 +86,7 @@ describe('TidligereVurderinger', () => {
   });
 
   it('Kan vise forskjellige felter i vurderingskortet', async () => {
-    const secondChip = screen.getByText('01.01.2025 - 01.02.2025');
+    const secondChip = screen.getByText('1. januar 2025 - 1. februar 2025');
     await user.click(secondChip);
 
     expect(screen.getByText('Vilkår')).toBeInTheDocument();
@@ -97,12 +97,12 @@ describe('TidligereVurderinger', () => {
   });
 
   it('kan stryke ut ikke-gjeldende vurderinger', () => {
-    const struckText = screen.getByText('01.01.2025 - 01.02.2025').parentElement;
+    const struckText = screen.getByText('1. januar 2025 - 1. februar 2025').parentElement;
     expect(struckText).toHaveStyle('text-decoration: line-through');
   });
 
   it('stryker ikke ut gjeldende vurdering', () => {
-    const unstruckText = screen.getByText('02.02.2025 -');
+    const unstruckText = screen.getByText('2. februar 2025 -');
     expect(unstruckText).not.toHaveStyle('text-decoration: line-through');
   });
 });

@@ -5,7 +5,6 @@ import { Behovstype, JaEllerNei } from 'lib/utils/form';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import {
   BeregningTidspunktGrunnlag,
-  LøsPeriodisertBehovPåBehandling,
   MellomlagretVurdering,
   PeriodisertForutgåendeMedlemskapGrunnlag,
 } from 'lib/types/types';
@@ -28,6 +27,7 @@ import {
 } from 'components/behandlinger/forutgåendemedlemskap/manuellvurderingperiodisert/forutgåendemedlemskap-utils';
 import { ForutgåendeMedlemskapTidligereVurdering } from 'components/behandlinger/forutgåendemedlemskap/manuellvurderingperiodisert/ForutgåendeMedlemskapTidligereVurdering';
 import { ForutgåendeMedlemskapFormInput } from 'components/behandlinger/forutgåendemedlemskap/manuellvurderingperiodisert/ForutgåendeMedlemskapFormInput';
+import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 
 interface Props {
   behandlingVersjon: number;
@@ -35,7 +35,7 @@ interface Props {
   grunnlag?: PeriodisertForutgåendeMedlemskapGrunnlag;
   overstyring: boolean;
   initialMellomlagretVurdering?: MellomlagretVurdering;
-  behovstype: Behovstype;
+  behovstype: Behovstype.AVKLAR_FORUTGÅENDE_MEDLEMSKAP | Behovstype.MANUELL_OVERSTYRING_MEDLEMSKAP;
   beregningstidspunktGrunnlag?: BeregningTidspunktGrunnlag;
 }
 
@@ -90,7 +90,7 @@ export const ForutgåendeMedlemskapPeriodisert = ({
     if (!erPerioderGyldige) {
       return;
     }
-    const losning: LøsPeriodisertBehovPåBehandling = {
+    const losning: LøsningerForPerioder = {
       behandlingVersjon: behandlingVersjon,
       referanse: behandlingsReferanse,
 
@@ -132,7 +132,7 @@ export const ForutgåendeMedlemskapPeriodisert = ({
       visningActions={visningActions}
       onLeggTilVurdering={onAddPeriode}
       errorList={errorList}
-      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
+      formReset={() => form.reset(getDefaultValuesFromGrunnlag(grunnlag))}
     >
       {vedtatteVurderinger.map((vurdering) => (
         <TidligereVurderingExpandableCard
@@ -161,7 +161,13 @@ export const ForutgåendeMedlemskapPeriodisert = ({
             form.watch(`vurderinger.${index}.unntaksvilkår`) === 'B'
           }
           vurdertAv={vurdering.vurdertAv}
+          kvalitetssikretAv={vurdering.kvalitetssikretAv}
+          besluttetAv={vurdering.besluttetAv}
           finnesFeil={finnesFeilForVurdering(index, errorList)}
+          readonly={formReadOnly}
+          onSlettVurdering={() => remove(index)}
+          harTidligereVurderinger={tidligereVurderinger.length > 0}
+          index={index}
         >
           <ForutgåendeMedlemskapFormInput
             form={form}
@@ -169,8 +175,6 @@ export const ForutgåendeMedlemskapPeriodisert = ({
             readOnly={formReadOnly}
             index={index}
             harTidligereVurderinger={tidligereVurderinger.length !== 0}
-            onRemove={() => remove(index)}
-            visningModus={visningModus}
           />
         </NyVurderingExpandableCard>
       ))}

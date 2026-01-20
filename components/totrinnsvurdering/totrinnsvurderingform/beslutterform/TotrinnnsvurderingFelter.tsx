@@ -61,7 +61,15 @@ export const TotrinnnsvurderingFelter = ({ readOnly, link, erKvalitetssikring, f
               readOnly={readOnly}
               control={form.control}
               name={`totrinnsvurderinger.${index}.begrunnelse`}
-              rules={{ required: 'Du må gi en begrunnelse' }}
+              rules={{
+                required: 'Du må gi en begrunnelse',
+                validate: {
+                  ikkeKunWhitespace: (value) =>
+                    value && (value as string).trim().length === 0
+                      ? 'Begrunnelse kan ikke være tom eller kun inneholde mellomrom'
+                      : true,
+                },
+              }}
               className={'begrunnelse'}
             />
             <CheckboxWrapper

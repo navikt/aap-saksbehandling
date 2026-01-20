@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const res = await purrPåLegeerklæring(body);
-    if (isError(res)) {
+    if (isError(res) && res.status !== 403) {
       logError(`/dokumentinnhenting/purring ${res.status} - ${res.apiException.code}: ${res.apiException.message}`);
     }
     return NextResponse.json(res, { status: res.status });

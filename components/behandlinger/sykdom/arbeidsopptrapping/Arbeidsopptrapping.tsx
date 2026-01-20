@@ -3,8 +3,8 @@
 import {
   ArbeidsopptrappingGrunnlagResponse,
   ArbeidsopptrappingLøsningDto,
-  LøsPeriodisertBehovPåBehandling,
   MellomlagretVurdering,
+  VurdertAvAnsatt,
 } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { useFieldArray, useForm } from 'react-hook-form';
@@ -26,6 +26,7 @@ import { Link, VStack } from '@navikt/ds-react';
 import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
 import { IkkeVurderbarPeriode } from 'components/periodisering/IkkeVurderbarPeriode';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
+import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 
 interface Props {
   behandlingVersjon: number;
@@ -43,11 +44,9 @@ export interface ArbeidsopptrappingVurderingForm {
   fraDato: string | undefined;
   reellMulighetTilOpptrapping: JaEllerNei | undefined;
   rettPaaAAPIOpptrapping: JaEllerNei | undefined;
-  vurdertAv?: {
-    ansattnavn: string | null | undefined;
-    ident: string;
-    dato: string;
-  };
+  vurdertAv?: VurdertAvAnsatt;
+  kvalitetssikretAv?: VurdertAvAnsatt;
+  besluttetAv?: VurdertAvAnsatt;
 }
 
 export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, initialMellomlagretVurdering }: Props) => {
@@ -74,6 +73,8 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
     defaultValues,
   });
 
+  const nyeVurderinger = grunnlag?.nyeVurderinger ?? [];
+
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const ikkeVurderbarePerioder = grunnlag?.ikkeVurderbarePerioder ?? [];
 
@@ -98,7 +99,11 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
     if (!erPerioderGyldige) {
       return;
     }
-    const losning: LøsPeriodisertBehovPåBehandling = {
+    if (data.vurderinger.length === 0 && nyeVurderinger.length === 0) {
+      visningActions.onBekreftClick();
+      return;
+    }
+    const losning: LøsningerForPerioder = {
       behandlingVersjon: behandlingVersjon,
       referanse: behandlingsreferanse,
       behov: {
@@ -114,6 +119,7 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
     };
 
     løsPeriodisertBehovOgGåTilNesteSteg(losning, () => {
+      visningActions.onBekreftClick();
       nullstillMellomlagretVurdering();
     });
   }
@@ -134,7 +140,7 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}
       visningModus={visningModus}
       visningActions={visningActions}
-      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
+      formReset={() => form.reset(getDefaultValuesFromGrunnlag(grunnlag))}
       onLeggTilVurdering={onAddPeriode}
       errorList={errorList}
     >
@@ -192,13 +198,18 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
           nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
           isLast={index === fields.length - 1}
           vurdertAv={vurdering.vurdertAv}
+          kvalitetssikretAv={vurdering.kvalitetssikretAv}
+          besluttetAv={vurdering.besluttetAv}
           finnesFeil={finnesFeilForVurdering(index, errorList)}
+          onSlettVurdering={() => remove(index)}
+          readonly={formReadOnly}
+          harTidligereVurderinger={true}
+          index={index}
         >
           <ArbeidsopptrappingVurderingFormInput
             index={index}
             form={form}
             readonly={formReadOnly}
-            onRemove={() => remove(index)}
             ikkeRelevantePerioder={grunnlag?.ikkeVurderbarePerioder}
           />
         </NyVurderingExpandableCard>
@@ -224,14 +235,9 @@ function getDefaultValuesFromGrunnlag(
       fraDato: formaterDatoForFrontend(vurdering.fom),
       reellMulighetTilOpptrapping: getJaNeiEllerUndefined(vurdering.reellMulighetTilOpptrapping),
       rettPaaAAPIOpptrapping: getJaNeiEllerUndefined(vurdering.rettPaaAAPIOpptrapping),
-      vurdertAv:
-        vurdering.vurdertAv != null
-          ? {
-              ansattnavn: vurdering.vurdertAv.ansattnavn,
-              ident: vurdering.vurdertAv.ident,
-              dato: vurdering.vurdertAv.dato,
-            }
-          : undefined,
+      vurdertAv: vurdering.vurdertAv,
+      kvalitetssikretAv: vurdering.kvalitetssikretAv,
+      besluttetAv: vurdering.besluttetAv,
     })),
   };
 }

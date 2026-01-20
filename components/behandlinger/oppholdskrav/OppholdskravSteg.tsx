@@ -5,7 +5,7 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgG
 import { Behovstype, JaEllerNei } from 'lib/utils/form';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { OppholdskravForm } from 'components/behandlinger/oppholdskrav/types';
-import { LøsPeriodisertBehovPåBehandling, MellomlagretVurdering, OppholdskravGrunnlagResponse } from 'lib/types/types';
+import { MellomlagretVurdering, OppholdskravGrunnlagResponse } from 'lib/types/types';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import {
@@ -24,6 +24,7 @@ import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering'
 import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
 import { LovOgMedlemskapVurderingForm } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/types';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
+import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 
 type Props = {
   grunnlag: OppholdskravGrunnlagResponse | undefined;
@@ -57,7 +58,6 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
     reValidateMode: 'onChange',
   });
 
-  const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
 
   const {
@@ -90,7 +90,7 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
     if (!erPerioderGyldige) {
       return;
     }
-    const losning: LøsPeriodisertBehovPåBehandling = {
+    const losning: LøsningerForPerioder = {
       behandlingVersjon: behandlingVersjon,
       referanse: behandlingsreferanse,
       behov: {
@@ -110,6 +110,7 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
     });
   }
 
+  const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const foersteNyePeriode = vurderingerFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
   const errorList = mapPeriodiserteVurderingerErrorList<LovOgMedlemskapVurderingForm>(form.formState.errors);
 
@@ -127,7 +128,7 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}
       visningModus={visningModus}
       visningActions={visningActions}
-      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
+      formReset={() => form.reset(getDefaultValuesFromGrunnlag(grunnlag))}
       onLeggTilVurdering={onAddPeriode}
       errorList={errorList}
     >
@@ -159,16 +160,15 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
           nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
           isLast={index === vurderingerFields.length - 1}
           vurdertAv={vurdering.vurdertAv}
+          kvalitetssikretAv={vurdering.kvalitetssikretAv}
+          besluttetAv={vurdering.besluttetAv}
           finnesFeil={finnesFeilForVurdering(index, errorList)}
+          readonly={formReadOnly}
+          onSlettVurdering={() => remove(index)}
+          harTidligereVurderinger={tidligereVurderinger.length > 0}
+          index={index}
         >
-          <OppholdskravFormInput
-            form={form}
-            readOnly={formReadOnly}
-            index={index}
-            harTidligereVurderinger={tidligereVurderinger.length !== 0}
-            onRemove={() => remove(index)}
-            visningModus={visningModus}
-          />
+          <OppholdskravFormInput form={form} readOnly={formReadOnly} index={index} />
         </NyVurderingExpandableCard>
       ))}
     </VilkårskortPeriodisert>

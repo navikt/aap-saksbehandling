@@ -1,24 +1,22 @@
 'use client';
 
 import { BrevbyggerBeta } from '@navikt/aap-breveditor/';
-import { ActionMenu, Alert, Button, Label, Loader, VStack } from '@navikt/ds-react';
+import { ActionMenu, Alert, Button, HStack, Label, Loader, VStack } from '@navikt/ds-react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useDebounce } from 'hooks/DebounceHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { clientHentFlyt, clientMellomlagreBrev, clientKanDistribuereBrev } from 'lib/clientApi';
+import { clientHentFlyt, clientKanDistribuereBrev, clientMellomlagreBrev } from 'lib/clientApi';
 import { Brev, BrevMottaker, BrevStatus, Mottaker, Signatur } from 'lib/types/types';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { Behovstype } from 'lib/utils/form';
 
 import NavLogo from 'public/nav_logo.png';
 import { useCallback, useEffect, useState } from 'react';
-
-import style from './SkrivBrev.module.css';
 import { revalidateFlyt } from 'lib/actions/actions';
 import { ChevronDownIcon, GlassIcon, TrashIcon } from '@navikt/aksel-icons';
 import { ForhåndsvisBrevModal } from 'components/behandlinger/brev/skriveBrev/ForhåndsvisBrevModal';
 import { IkkeSendBrevModal } from 'components/behandlinger/brev/skriveBrev/IkkeSendBrevModal';
-import { isSuccess } from 'lib/utils/api';
+import { isError, isSuccess } from 'lib/utils/api';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 
@@ -53,6 +51,7 @@ export const SkriveBrev = ({
   const [brev, setBrev] = useState<Brev>(grunnlag);
   const [sistLagret, setSistLagret] = useState<Date | undefined>();
   const [isSaving, setIsSaving] = useState(false);
+  const [error, setError] = useState<string>();
   const debouncedBrev = useDebounce<Brev>(brev, 2000);
   const [kanMellomlagreBrev, setKanMellomlagreBrev] = useState(true);
   const [valgteMottakere, setMottakere] = useState<Mottaker[]>([]);
@@ -66,6 +65,9 @@ export const SkriveBrev = ({
     const res = await clientMellomlagreBrev(referanse, debouncedBrev);
     if (isSuccess(res) && res.data != undefined) {
       setSistLagret(new Date());
+      setError(undefined);
+    } else if (isError(res)) {
+      setError(`Feil ved mellomlagring av brevet. ${res.apiException.message}`);
     }
     setIsSaving(false);
   }, [debouncedBrev, referanse]);
@@ -95,14 +97,16 @@ export const SkriveBrev = ({
   const { løsBehovOgGåTilNesteSteg, isLoading } = useLøsBehovOgGåTilNesteSteg('BREV');
 
   useEffect(() => {
-    if (kanMellomlagreBrev) {
+    if (kanMellomlagreBrev && !readOnly) {
       mellomlagreBackendRequest();
     }
-  }, [debouncedBrev, mellomlagreBackendRequest, kanMellomlagreBrev]);
+  }, [debouncedBrev, mellomlagreBackendRequest, kanMellomlagreBrev, readOnly]);
 
   useEffect(() => {
-    kanDistribuereBrevRequest();
-  }, [kanDistribuereBrevRequest]);
+    if (!readOnly) {
+      kanDistribuereBrevRequest();
+    }
+  }, [kanDistribuereBrevRequest, readOnly]);
 
   const onChange = (brev: Brev) => {
     setBrev(brev);
@@ -133,12 +137,17 @@ export const SkriveBrev = ({
           fullmektig={fullmektigMottaker}
         />
       )}
-      <div className={style.brevbygger}>
-        <div className={style.topBar}>
-          <div className={style.sistLagret}>
+      <div>
+        <HStack gap="4" justify="space-between" wrap={false} align="center" marginBlock="0 4">
+          <HStack gap="2">
             {sistLagret && <Label as="p">Sist lagret: {formaterDatoMedTidspunktForFrontend(sistLagret)}</Label>}
             {isSaving && <Loader />}
-          </div>
+            {error && (
+              <Alert variant="error" size="small">
+                {error}
+              </Alert>
+            )}
+          </HStack>
           {!readOnly && (
             <ActionMenu>
               <ActionMenu.Trigger>
@@ -169,7 +178,7 @@ export const SkriveBrev = ({
               </ActionMenu.Content>
             </ActionMenu>
           )}
-        </div>
+        </HStack>
 
         <VStack gap={'4'}>
           <BrevbyggerBeta

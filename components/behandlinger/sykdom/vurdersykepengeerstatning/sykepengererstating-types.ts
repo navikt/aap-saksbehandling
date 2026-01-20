@@ -1,4 +1,4 @@
-import { SykepengeerstatningVurderingGrunn } from 'lib/types/types';
+import { SykepengeerstatningVurderingGrunn, VurdertAvAnsatt } from 'lib/types/types';
 
 export type SykepengeerstatningForm = {
   vurderinger: SykepengeerstatningVurderingForm[];
@@ -9,9 +9,7 @@ export type SykepengeerstatningVurderingForm = {
   erOppfylt: string;
   fraDato: string;
   grunn?: SykepengeerstatningVurderingGrunn;
-  vurdertAv?: {
-    ansattnavn: string | null | undefined;
-    ident: string;
-    dato: string;
-  };
+  vurdertAv?: VurdertAvAnsatt;
+  kvalitetssikretAv?: VurdertAvAnsatt;
+  besluttetAv?: VurdertAvAnsatt;
 };

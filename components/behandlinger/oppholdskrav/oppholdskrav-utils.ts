@@ -4,17 +4,15 @@ import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker
 import { alleLandUtenNorge } from 'lib/utils/countries';
 import { parse, sub } from 'date-fns';
 import { getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
+import { getFraDatoFraGrunnlagForFrontend } from 'lib/utils/periodisering';
 
 export function getDefaultValuesFromGrunnlag(grunnlag?: OppholdskravGrunnlagResponse): OppholdskravForm {
   if (grunnlag == null || (grunnlag.nyeVurderinger.length === 0 && grunnlag.sisteVedtatteVurderinger.length === 0)) {
-    // Vi har ingen tidligere vurderinger eller nye vurderinger, legg til en tom-default-periode
-    const fraDato = grunnlag?.behøverVurderinger[0]?.fom;
-
     return {
       vurderinger: [
         {
           begrunnelse: '',
-          fraDato: fraDato && formaterDatoForFrontend(new Date(fraDato)),
+          fraDato: getFraDatoFraGrunnlagForFrontend(grunnlag),
           land: '',
         },
       ],
@@ -30,14 +28,9 @@ export function getDefaultValuesFromGrunnlag(grunnlag?: OppholdskravGrunnlagResp
         oppfyller: getJaNeiEllerUndefined(vurdering.oppfylt),
         land: vurdering.land ? getLandkodeOrAnnet(vurdering.land) : '',
         landAnnet: vurdering.land ?? '',
-        vurdertAv:
-          vurdering.vurdertAv != null
-            ? {
-                ansattnavn: vurdering.vurdertAv.ansattnavn,
-                ident: vurdering.vurdertAv.ident,
-                dato: vurdering.vurdertAv.dato,
-              }
-            : undefined,
+        vurdertAv: vurdering.vurdertAv,
+        kvalitetssikretAv: vurdering.kvalitetssikretAv,
+        besluttetAv: vurdering.besluttetAv,
       })) || [],
   };
 }

@@ -4,6 +4,8 @@ import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 import { skalViseSteg, StegData } from 'lib/utils/steg';
 import { Refusjon } from 'components/behandlinger/sykdom/refusjon/Refusjon';
+import { GammelRefusjon } from 'components/behandlinger/sykdom/refusjon/GammelRefusjon';
+import { unleashService } from 'lib/services/unleash/unleashService';
 
 interface Props {
   behandlingsReferanse: string;
@@ -24,12 +26,23 @@ export const RefusjonMedDataFetching = async ({ behandlingsReferanse, stegData }
     return null;
   }
 
-  return (
-    <Refusjon
-      grunnlag={refusjonGrunnlag.data}
-      readOnly={stegData.readOnly || !refusjonGrunnlag.data.harTilgangTilÅSaksbehandle}
-      behandlingVersjon={stegData.behandlingVersjon}
-      initialMellomlagretVurdering={initialMellomlagretVurdering}
-    />
-  );
+  if (!unleashService.isEnabled('SosialRefusjon')) {
+    return (
+      <GammelRefusjon
+        grunnlag={refusjonGrunnlag.data}
+        readOnly={stegData.readOnly || !refusjonGrunnlag.data.harTilgangTilÅSaksbehandle}
+        behandlingVersjon={stegData.behandlingVersjon}
+        initialMellomlagretVurdering={initialMellomlagretVurdering}
+      />
+    );
+  } else {
+    return (
+      <Refusjon
+        grunnlag={refusjonGrunnlag.data}
+        readOnly={stegData.readOnly || !refusjonGrunnlag.data.harTilgangTilÅSaksbehandle}
+        behandlingVersjon={stegData.behandlingVersjon}
+        initialMellomlagretVurdering={initialMellomlagretVurdering}
+      />
+    );
+  }
 };

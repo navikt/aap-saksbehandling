@@ -1,4 +1,5 @@
 import { JaEllerNei } from 'lib/utils/form';
+import { VurdertAvAnsatt } from 'lib/types/types';
 
 export type OppholdskravForm = {
   vurderinger: OppholdskravVurderingForm[];
@@ -10,9 +11,7 @@ export type OppholdskravVurderingForm = {
   land: string;
   landAnnet?: string;
   fraDato?: string;
-  vurdertAv?: {
-    ansattnavn: string | null | undefined;
-    ident: string;
-    dato: string;
-  };
+  vurdertAv?: VurdertAvAnsatt;
+  kvalitetssikretAv?: VurdertAvAnsatt;
+  besluttetAv?: VurdertAvAnsatt;
 };

@@ -6,6 +6,8 @@ import { Returboks } from '../returboks/Returboks';
 import { AdressebeskyttelseInfoBoks } from 'components/oppgaveliste/adressebeskyttelse/AdressebeskyttelseInfoBoks';
 import { utledAdressebeskyttelse } from 'lib/utils/adressebeskyttelse';
 import { MarkeringInfoboks } from 'components/markeringinfoboks/MarkeringInfoboks';
+import { UtløptVentefristBoks } from 'components/oppgaveliste/utløptventefristboks/UtløptVentefristBoks';
+import { toggles } from 'lib/utils/toggles';
 
 interface Props {
   oppgave: Oppgave;
@@ -18,6 +20,9 @@ export const OppgaveInformasjon = ({ oppgave }: Props) => {
     <HStack gap={'1'}>
       {oppgave.påVentTil && (
         <PåVentInfoboks frist={oppgave.påVentTil} årsak={oppgave.påVentÅrsak} begrunnelse={oppgave.venteBegrunnelse} />
+      )}
+      {oppgave.utløptVentefrist && toggles.featureUtløptVentefrist && (
+        <UtløptVentefristBoks frist={oppgave.utløptVentefrist} />
       )}
       {oppgave.harUlesteDokumenter && <SvarFraBehandler />}
       {oppgave.returInformasjon && <Returboks oppgave={oppgave} />}

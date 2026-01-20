@@ -132,6 +132,11 @@ export const AlleOppgaver = ({ enheter }: Props) => {
     return () => fieldValues.unsubscribe();
   }, [form, lagreAktivUtvidetFilter]);
 
+  const oppdaterKøId = (id: number) => {
+    setAktivKøId(id);
+    lagreAktivKøId(id);
+  };
+
   useEffect(() => {
     if (!køer || (køer && isError(køer))) {
       return;
@@ -145,11 +150,6 @@ export const AlleOppgaver = ({ enheter }: Props) => {
       oppdaterKøId(køId);
     }
   }, [køer]);
-
-  const oppdaterKøId = (id: number) => {
-    setAktivKøId(id);
-    lagreAktivKøId(id);
-  };
 
   if (isError(køer)) {
     return <Alert variant="error">{køer.apiException.message}</Alert>;

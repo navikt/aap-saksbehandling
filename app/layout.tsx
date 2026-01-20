@@ -3,6 +3,8 @@ import './app.css';
 import { KelvinAppHeader } from 'components/kelvinappheader/KelvinAppHeader';
 import { hentBrukerInformasjon, hentRollerForBruker } from 'lib/services/azure/azureUserService';
 import { InnloggetBrukerContextProvider } from 'context/InnloggetBrukerContext';
+import { FeatureFlagProvider } from 'context/UnleashContext';
+import { getAllFlags } from 'lib/services/unleash/unleashService';
 
 export const metadata = {
   title: 'Kelvin',
@@ -15,10 +17,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="nb">
       <body>
-        <InnloggetBrukerContextProvider bruker={brukerInformasjon}>
-          <KelvinAppHeader brukerInformasjon={brukerInformasjon} roller={roller} />
-          {children}
-        </InnloggetBrukerContextProvider>
+        <FeatureFlagProvider flags={getAllFlags()}>
+          <InnloggetBrukerContextProvider bruker={brukerInformasjon}>
+            <KelvinAppHeader brukerInformasjon={brukerInformasjon} roller={roller} />
+            {children}
+          </InnloggetBrukerContextProvider>
+        </FeatureFlagProvider>
       </body>
     </html>
   );

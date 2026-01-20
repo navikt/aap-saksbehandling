@@ -63,7 +63,7 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov): strin
     case 'SØKNAD_TRUKKET':
       return 'Trukket søknad';
     case 'VURDER_RETTIGHETSPERIODE':
-      return 'Starttidspunkt';
+      return 'Vurder § 22-13 syvende ledd';
     case 'KLAGE_TRUKKET':
       return 'Klage trukket';
     case 'REVURDERING_AVBRUTT':
@@ -98,6 +98,10 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov): strin
       return 'Dødsfall bruker';
     case 'EFFEKTUER_AKTIVITETSPLIKT_11_9':
       return 'Effektuer aktivitetsplikt § 11-9';
+    case 'BARNETILLEGG_SATS_REGULERING':
+      return 'Satsregulering barnetillegg';
+    case 'UTVID_VEDTAKSLENGDE':
+      return 'Utvid vedtakslengde';
     default:
       return vurderingsbehov;
   }
@@ -163,7 +167,7 @@ export const formaterFrittVurderingsbehov = (vurderingsbehov: String) => {
     case 'SØKNAD_TRUKKET':
       return 'Trukket søknad';
     case 'VURDER_RETTIGHETSPERIODE':
-      return 'Starttidspunkt';
+      return '§ 22-13 syvende ledd';
     case 'KLAGE_TRUKKET':
       return 'Klage trukket';
     case 'MOTTATT_KABAL_HENDELSE':
@@ -178,6 +182,8 @@ export const formaterFrittVurderingsbehov = (vurderingsbehov: String) => {
       return 'Overgang til arbeid';
     case 'OVERGANG_UFORE':
       return 'Overgang til uføre';
+    case 'BARNETILLEGG_SATS_REGULERING':
+      return 'Satsregulering barnetillegg';
     default:
       return vurderingsbehov;
   }

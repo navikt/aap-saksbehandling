@@ -1,7 +1,8 @@
 import { BistandVurderingForm } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovPeriodisert';
 import { subDays } from 'date-fns';
-import { Dato, formaterDatoForBackend } from 'lib/utils/date';
+import { formaterDatoForBackend } from 'lib/utils/date';
 import { JaEllerNei } from 'lib/utils/form';
+import { Dato } from 'lib/types/Dato';
 
 export function mapBistandVurderingFormTilDto(vurdering: BistandVurderingForm, tilDato: string | undefined) {
   return {

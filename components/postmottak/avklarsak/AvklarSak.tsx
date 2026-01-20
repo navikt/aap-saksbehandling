@@ -229,9 +229,11 @@ export const AvklarSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, 
 
           {error && <Alert variant="error">{error.message}</Alert>}
 
-          <Button loading={isLoading} className={'fit-content'}>
-            Send inn
-          </Button>
+          {!readOnly && (
+            <Button loading={isLoading} className={'fit-content'}>
+              Send inn
+            </Button>
+          )}
         </VStack>
       </form>
     </VilkårsKort>

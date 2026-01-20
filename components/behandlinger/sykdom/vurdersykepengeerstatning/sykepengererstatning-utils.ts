@@ -11,6 +11,7 @@ import {
 } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/sykepengererstating-types';
 import { parse } from 'date-fns';
 import { ValuePair } from 'components/form/FormField';
+import { getFraDatoFraGrunnlagForFrontend } from 'lib/utils/periodisering';
 
 export function getDefaultValuesFromGrunnlag(grunnlag?: SykepengeerstatningGrunnlag): SykepengeerstatningForm {
   if (grunnlag == null) {
@@ -32,7 +33,7 @@ export function getDefaultValuesFromGrunnlag(grunnlag?: SykepengeerstatningGrunn
       vurderinger: [
         {
           begrunnelse: '',
-          fraDato: formaterDatoForFrontend(new Date(grunnlag?.behøverVurderinger[0]?.fom!)),
+          fraDato: getFraDatoFraGrunnlagForFrontend(grunnlag),
           grunn: null,
           erOppfylt: '',
         },
@@ -48,11 +49,9 @@ export function getDefaultValuesFromGrunnlag(grunnlag?: SykepengeerstatningGrunn
         fraDato: formaterDatoForFrontend(vurdering.fom),
         erOppfylt: vurdering.harRettPå ? JaEllerNei.Ja : JaEllerNei.Nei,
         grunn: vurdering.grunn,
-        vurdertAv: {
-          ansattnavn: vurdering.vurdertAv.ansattnavn,
-          ident: vurdering.vurdertAv.ident,
-          dato: vurdering.vurdertAv.dato,
-        },
+        vurdertAv: vurdering.vurdertAv,
+        kvalitetssikretAv: vurdering.kvalitetssikretAv,
+        besluttetAv: vurdering.besluttetAv,
       })) || [],
   };
 }

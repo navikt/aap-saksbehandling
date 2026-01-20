@@ -14,8 +14,8 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { SykdomsvurderingBrevMedDataFetching } from 'components/behandlinger/sykdom/sykdomsvurderingbrev/SykdomsvurderingBrevMedDataFetching';
 import { OvergangUforeMedDataFetching } from './overgangufore/OvergangUforeMedDataFetching';
 import { OvergangArbeidMedDataFetching } from './overgangarbeid/OvergangArbeidMedDataFetching';
-import { toggles } from 'lib/utils/toggles';
 import { ArbeidsopptrappingMedDataFetching } from 'components/behandlinger/sykdom/arbeidsopptrapping/ArbeidsopptrappingMedDataFetching';
+import { unleashService } from 'lib/services/unleash/unleashService';
 
 interface Props {
   behandlingsReferanse: string;
@@ -38,7 +38,7 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
   const vurderYrkesskadeSteg = getStegData(aktivStegGruppe, 'VURDER_YRKESSKADE', flyt.data);
   const vurderSykepengeerstatningSteg = getStegData(aktivStegGruppe, 'VURDER_SYKEPENGEERSTATNING', flyt.data);
   const overganguføreSteg = getStegData(aktivStegGruppe, 'OVERGANG_UFORE', flyt.data);
-  const overgangarbeidSteg = toggles.featureOvergangArbeid
+  const overgangarbeidSteg = unleashService.isEnabled('OvergangArbeidFrontend')
     ? getStegData(aktivStegGruppe, 'OVERGANG_ARBEID', flyt.data)
     : null;
 
@@ -60,7 +60,7 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
           <BistandsbehovMedDataFetching
             behandlingsReferanse={behandlingsReferanse}
             stegData={vurderBistandsbehovSteg}
-            overgangArbeidEnabled={toggles.featureOvergangArbeid}
+            overgangArbeidEnabled={unleashService.isEnabled('OvergangArbeidFrontend')}
           />
         </StegSuspense>
       )}
@@ -90,11 +90,13 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
           <OvergangUforeMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={overganguføreSteg} />
         </StegSuspense>
       )}
-      {toggles.featureOvergangArbeid && overgangarbeidSteg !== null && overgangarbeidSteg.skalViseSteg && (
-        <StegSuspense>
-          <OvergangArbeidMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={overgangarbeidSteg} />
-        </StegSuspense>
-      )}
+      {unleashService.isEnabled('OvergangArbeidFrontend') &&
+        overgangarbeidSteg !== null &&
+        overgangarbeidSteg.skalViseSteg && (
+          <StegSuspense>
+            <OvergangArbeidMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={overgangarbeidSteg} />
+          </StegSuspense>
+        )}
       {refusjonskravSteg.skalViseSteg && (
         <StegSuspense>
           <RefusjonMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={refusjonskravSteg} />

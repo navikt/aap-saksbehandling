@@ -1,46 +1,12 @@
 import { useState } from 'react';
-import {
-  clientBestillDialogmelding,
-  clientOpprettDummySak,
-  clientOpprettSak,
-  clientPurrPåLegeerklæring,
-} from 'lib/clientApi';
-import { BestillLegeerklæring, OpprettDummySakDto, OpprettTestcase } from 'lib/types/types';
+import { clientOpprettDummySak, clientOpprettSak, clientPurrPåLegeerklæring } from 'lib/clientApi';
+import { OpprettDummySakDto, OpprettTestcase } from 'lib/types/types';
 import { getErrorMessage } from 'lib/utils/errorUtil';
 import { FetchResponse, isError, isSuccess } from 'lib/utils/api';
 import { postmottakEndreTemaClient, postmottakSettPåVentClient } from 'lib/postmottakClientApi';
 import { SettPåVentRequest } from 'lib/types/postmottakTypes';
 import { clientMottattDokumenterLest } from 'lib/oppgaveClientApi';
 
-export function useFetch<FunctionParameters extends any[], ResponseBody>(
-  fetchFunction: (...functionParameters: FunctionParameters) => Promise<ResponseBody>
-): {
-  method: (...functionParameters: FunctionParameters) => Promise<void>;
-  isLoading: boolean;
-  data?: ResponseBody;
-  error?: string;
-} {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string>();
-  const [data, setData] = useState<ResponseBody>();
-
-  async function method(...functionParameters: FunctionParameters) {
-    setIsLoading(true);
-
-    try {
-      const dataFromFetch = await fetchFunction(...functionParameters);
-      if (dataFromFetch) {
-        setData(dataFromFetch);
-      }
-    } catch (error) {
-      setError(getErrorMessage(error));
-    }
-
-    setIsLoading(false);
-  }
-
-  return { isLoading, error, data, method };
-}
 export function useFetchV2<FunctionParameters extends any[], ResponseBody>(
   fetchFunction: (...functionParameters: FunctionParameters) => Promise<FetchResponse<ResponseBody>>
 ): {
@@ -61,7 +27,7 @@ export function useFetchV2<FunctionParameters extends any[], ResponseBody>(
     try {
       const dataFromFetch = await fetchFunction(...functionParameters);
       if (isError(dataFromFetch)) {
-        setError(`${dataFromFetch.apiException.code}: ${dataFromFetch.apiException.message}`);
+        setError(dataFromFetch.apiException.message);
         ok = false;
       }
       if (isSuccess(dataFromFetch)) {

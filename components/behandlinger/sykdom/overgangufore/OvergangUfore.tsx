@@ -49,7 +49,7 @@ export const OvergangUfore = ({ behandlingVersjon, grunnlag, readOnly, initialMe
   const brukerSøktUføretrygdLabel = 'Har brukeren søkt om uføretrygd?';
   const brukerHarFaattVedtakOmUføretrygdLabel = 'Har brukeren fått vedtak på søknaden om uføretrygd?';
   const brukerrettPaaAAPLabel = 'Har brukeren rett på AAP under behandling av krav om uføretrygd etter § 11-18?';
-  const virkningsdatoLabel = 'Virkningstidspunkt for vurderingen';
+  const virkningsdatoLabel = 'Vurderingen gjelder fra';
 
   const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
     useMellomlagring(Behovstype.OVERGANG_UFORE, initialMellomlagretVurdering);
@@ -201,7 +201,7 @@ export const OvergangUfore = ({ behandlingVersjon, grunnlag, readOnly, initialMe
         <DateInputWrapper
           name={`virkningsdato`}
           control={form.control}
-          label={'Virkningstidspunkt for vurderingen'}
+          label={'Vurderingen gjelder fra'}
           rules={{
             validate: {
               gyldigDato: (value) => validerDato(value as string),

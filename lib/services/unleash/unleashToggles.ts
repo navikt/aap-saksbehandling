@@ -1,0 +1,32 @@
+export const FLAGS = [
+  'OvergangArbeidFrontend',
+  'PeriodisertSPEFrontend',
+  'PeriodisertOvergangUfore',
+  'BistandPeriodisert',
+  'PeriodisertNedsattArbeidsevneFrontend',
+  'VisArenahistorikkKnapp',
+  'ManglendePGIOgEosInntekter',
+  'VisAvslagsaarsaker',
+  'SosialRefusjon',
+  'DigitaliseringAvMeldekortV2Frontend',
+  'Sykestipend',
+  'KravOmInntektsbortfall',
+] as const;
+
+export type FlagNames = (typeof FLAGS)[number];
+export type Flags = Record<FlagNames, boolean>;
+
+export const mockedFlags: Flags = {
+  OvergangArbeidFrontend: true,
+  PeriodisertOvergangUfore: true,
+  PeriodisertNedsattArbeidsevneFrontend: true,
+  BistandPeriodisert: true,
+  PeriodisertSPEFrontend: true,
+  VisArenahistorikkKnapp: true,
+  ManglendePGIOgEosInntekter: true,
+  VisAvslagsaarsaker: true,
+  SosialRefusjon: true,
+  DigitaliseringAvMeldekortV2Frontend: true,
+  Sykestipend: true,
+  KravOmInntektsbortfall: true,
+};

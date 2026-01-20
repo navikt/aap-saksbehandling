@@ -12,6 +12,7 @@ import {
   LovvalgOgMedlemskapManuellVurderingForm,
 } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/types';
 import { parse, sub } from 'date-fns';
+import { getFraDatoFraGrunnlagForFrontend } from 'lib/utils/periodisering';
 
 export function getDefaultValuesFromGrunnlag(
   grunnlag?: PeriodisertLovvalgMedlemskapGrunnlag
@@ -26,7 +27,7 @@ export function getDefaultValuesFromGrunnlag(
             lovvalgsEØSLand: '',
           },
           medlemskap: undefined,
-          fraDato: formaterDatoForFrontend(new Date(grunnlag?.kanVurderes[0]?.fom!)),
+          fraDato: getFraDatoFraGrunnlagForFrontend(grunnlag),
         },
       ],
     };
@@ -48,14 +49,9 @@ export function getDefaultValuesFromGrunnlag(
           begrunnelse: vurdering.medlemskap?.begrunnelse ?? '',
           varMedlemIFolketrygd: getJaNeiEllerUndefined(vurdering.medlemskap?.varMedlemIFolketrygd) ?? JaEllerNei.Nei,
         },
-        vurdertAv:
-          vurdering.vurdertAv != null
-            ? {
-                ansattnavn: vurdering.vurdertAv.ansattnavn,
-                ident: vurdering.vurdertAv.ident,
-                dato: vurdering.vurdertAv.dato,
-              }
-            : undefined,
+        vurdertAv: vurdering.vurdertAv,
+        kvalitetssikretAv: vurdering.kvalitetssikretAv,
+        besluttetAv: vurdering.besluttetAv,
       })) || [],
   };
 }
@@ -119,7 +115,7 @@ export function hentPeriodiserteVerdierFraMellomlagretVurdering(
             begrunnelse: ikkePeriodisertVurdering.medlemskapBegrunnelse,
             varMedlemIFolketrygd: ikkePeriodisertVurdering.medlemAvFolkeTrygdenVedSøknadstidspunkt,
           },
-          fraDato: grunnlag ? formaterDatoForFrontend(new Date(grunnlag?.kanVurderes[0]?.fom!)) : undefined,
+          fraDato: getFraDatoFraGrunnlagForFrontend(grunnlag),
         },
       ],
     } as LovOgMedlemskapVurderingForm;

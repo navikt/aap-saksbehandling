@@ -5,7 +5,7 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgG
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { FormEvent } from 'react';
-import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
+import { Behovstype } from 'lib/utils/form';
 import { validerDato } from 'lib/validation/dateValidation';
 import { MellomlagretVurdering, RettighetsperiodeGrunnlag } from 'lib/types/types';
 import { addYears, isBefore, parse, startOfDay } from 'date-fns';
@@ -22,11 +22,12 @@ interface Props {
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
+type HarRettOptions = 'Ja' | 'Nei' | 'HarRettIkkeIStandTilÅSøkeTidligere' | 'HarRettMisvisendeOpplysninger';
+
 interface FormFields {
   begrunnelse: string;
   startDato: string;
-  harRettUtoverSøknadsdato: string;
-  harKravPåRenter: string;
+  harRett: HarRettOptions;
 }
 
 type DraftFormfields = Partial<FormFields>;
@@ -54,31 +55,48 @@ export const VurderRettighetsperiode = ({
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag?.vurdering);
 
+  const legacyHarRettOption = {
+    label: 'Ja',
+    value: 'Ja',
+  };
+
+  const commonHarRettOptions = [
+    {
+      label: 'Ja, bruker ha åpenbart ikke vært i stand til å sette fram krav tidligere',
+      value: 'HarRettIkkeIStandTilÅSøkeTidligere',
+    },
+    {
+      label: 'Ja, bruker har ikke satt fram krav tidligere fordi trygdens organer har gitt misvisende opplysninger',
+      value: 'HarRettMisvisendeOpplysninger',
+    },
+    {
+      label: 'Nei',
+      value: 'Nei',
+    },
+  ];
+
+  const useLegacyOptions = formReadOnly && grunnlag?.vurdering?.harRett === 'Ja';
+  const harRettOptions = useLegacyOptions ? [legacyHarRettOption, ...commonHarRettOptions] : commonHarRettOptions;
+
   const { form, formFields } = useConfigForm<FormFields>(
     {
       begrunnelse: {
         type: 'textarea',
-        label: 'Begrunnelse',
+        label: 'Vilkårsvurdering',
+        description: 'Vurder om første mulige dato med rett på ytelse skal tilbakedateres etter § 22-13 7. ledd',
         rules: { required: 'Du må begrunne hvorfor starttidspunktet for saken skal endres' },
         defaultValue: defaultValues.begrunnelse,
       },
-      harRettUtoverSøknadsdato: {
+      harRett: {
         type: 'radio',
-        label: 'Har brukeren rett på AAP fra en annen dato enn søknadsdatoen?',
+        label: 'Skal brukerens rett på ytelse tilbakedateres før søknadstidspunkt?',
         rules: { required: 'Du må ta stilling til om brukeren har rett på AAP fra en annen dato enn søknadsdatoen' },
-        options: JaEllerNeiOptions,
-        defaultValue: defaultValues.harRettUtoverSøknadsdato,
-      },
-      harKravPåRenter: {
-        type: 'radio',
-        label: 'Har brukeren krav på renter etter § 22-17?',
-        rules: { required: 'Du må ta stilling til om brukeren har rett på renter' },
-        options: JaEllerNeiOptions,
-        defaultValue: defaultValues.harKravPåRenter,
+        options: harRettOptions,
+        defaultValue: defaultValues.harRett,
       },
       startDato: {
         type: 'date_input',
-        label: 'Sett ny startdato for saken',
+        label: 'Bruker har tidligst rett på AAP fra',
         rules: {
           required: 'Du må sette en dato for behandlingen',
           validate: {
@@ -103,6 +121,8 @@ export const VurderRettighetsperiode = ({
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
+      const harRett = data.harRett !== 'Nei';
+
       løsBehovOgGåTilNesteSteg(
         {
           behandlingVersjon: behandlingVersjon,
@@ -110,13 +130,8 @@ export const VurderRettighetsperiode = ({
             behovstype: Behovstype.VURDER_RETTIGHETSPERIODE,
             rettighetsperiodeVurdering: {
               begrunnelse: data.begrunnelse,
-              startDato:
-                data.harRettUtoverSøknadsdato === JaEllerNei.Ja
-                  ? formaterDatoForBackend(parse(data.startDato, 'dd.MM.yyyy', new Date()))
-                  : null,
-              harRettUtoverSøknadsdato: data.harRettUtoverSøknadsdato === JaEllerNei.Ja,
-              harKravPåRenter:
-                data.harRettUtoverSøknadsdato === JaEllerNei.Ja ? data.harKravPåRenter === JaEllerNei.Ja : null,
+              startDato: harRett ? formaterDatoForBackend(parse(data.startDato, 'dd.MM.yyyy', new Date())) : null,
+              harRett: data.harRett,
             },
           },
           referanse: behandlingsReferanse,
@@ -126,9 +141,12 @@ export const VurderRettighetsperiode = ({
     })(event);
   };
 
+  const harRettFormValue = form.watch('harRett');
+  const harRett = harRettFormValue != null && harRettFormValue !== 'Nei';
+
   return (
     <VilkårskortMedFormOgMellomlagringNyVisning
-      heading={'Starttidspunkt'}
+      heading={'§ 22-13 syvende ledd. Første mulige dato med rett på ytelse'}
       steg={'VURDER_RETTIGHETSPERIODE'}
       onSubmit={handleSubmit}
       status={status}
@@ -158,20 +176,17 @@ export const VurderRettighetsperiode = ({
         <BodyShort size={'small'}>{grunnlag?.søknadsdato && formaterDatoForFrontend(grunnlag.søknadsdato)}</BodyShort>
       </VStack>
       <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
-      <FormField form={form} formField={formFields.harRettUtoverSøknadsdato} horizontalRadio />
-      {form.watch('harRettUtoverSøknadsdato') === JaEllerNei.Ja && (
-        <FormField form={form} formField={formFields.startDato} />
-      )}
-      {form.watch('harRettUtoverSøknadsdato') === JaEllerNei.Ja && (
-        <FormField form={form} formField={formFields.harKravPåRenter} horizontalRadio />
-      )}
-      {form.watch('harKravPåRenter') === JaEllerNei.Ja && (
-        <HStack>
-          <Alert variant={'warning'} size={'small'}>
-            Det er ikke støtte for beregning av renter i Kelvin ennå. Følg samme rutine som brukes på Arena-saker (via
-            Gosys).
-          </Alert>
-        </HStack>
+      <FormField form={form} formField={formFields.harRett} />
+      {harRett && (
+        <>
+          <FormField form={form} formField={formFields.startDato} />
+          <HStack>
+            <Alert variant={'warning'} size={'small'}>
+              Det er ikke støtte for beregning av renter i Kelvin ennå. Følg samme rutine som brukes på Arena-saker (via
+              Gosys).
+            </Alert>
+          </HStack>
+        </>
       )}
     </VilkårskortMedFormOgMellomlagringNyVisning>
   );
@@ -180,17 +195,14 @@ export const VurderRettighetsperiode = ({
 function mapVurderingToDraftFormFields(vurdering: RettighetsperiodeGrunnlag['vurdering']): DraftFormfields {
   return {
     begrunnelse: vurdering?.begrunnelse,
-    harRettUtoverSøknadsdato: getJaNeiEllerUndefined(vurdering?.harRettUtoverSøknadsdato),
+    harRett: vurdering?.harRett,
     startDato: (vurdering?.startDato && formaterDatoForFrontend(vurdering.startDato)) || undefined,
-    harKravPåRenter: getJaNeiEllerUndefined(vurdering?.harKravPåRenter),
   };
 }
 
 function emptyDraftFormFields(): DraftFormfields {
   return {
     begrunnelse: '',
-    harKravPåRenter: '',
-    harRettUtoverSøknadsdato: '',
     startDato: '',
   };
 }

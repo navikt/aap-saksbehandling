@@ -10,7 +10,7 @@ import { FetchResponse } from 'lib/utils/api';
 
 const user = userEvent.setup();
 
-describe('Manglende pensjonsgivende inntekter / EØS-inntekter', () => {
+describe('Manglende pensjonsgivende inntekt / EØS-beregnet inntekt', () => {
   const grunnlag: ManuellInntektGrunnlag = {
     sisteRelevanteÅr: 2024,
     ar: 2024,

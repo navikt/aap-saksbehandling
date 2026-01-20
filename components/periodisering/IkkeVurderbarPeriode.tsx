@@ -2,7 +2,7 @@
 
 import { CustomExpandableCard } from 'components/customexpandablecard/CustomExpandableCard';
 import { isBefore, isSameDay, sub } from 'date-fns';
-import { formaterDatoForFrontend } from 'lib/utils/date';
+import { formatDatoMedMånedsnavn, formaterDatoForFrontend } from 'lib/utils/date';
 import { useState } from 'react';
 import { Alert, BodyShort, HStack, Tag, VStack } from '@navikt/ds-react';
 import styles from 'components/behandlinger/oppholdskrav/oppholdskrav.module.css';
@@ -30,11 +30,11 @@ export const IkkeVurderbarPeriode = ({ fom, tom, foersteNyePeriodeFraDato, alert
       heading={
         <HStack justify={'space-between'} padding={'2'}>
           <BodyShort size={'small'} className={''}>
-            {formaterDatoForFrontend(fom)} –{' '}
+            {formatDatoMedMånedsnavn(fom)} –{' '}
             {tom != null && (
-              <span className={nySluttdato ? styles.streketUtTekst : ''}>{formaterDatoForFrontend(tom)}</span>
+              <span className={nySluttdato ? styles.streketUtTekst : ''}>{formatDatoMedMånedsnavn(tom)}</span>
             )}
-            {nySluttdato && <span> {formaterDatoForFrontend(sub(foersteNyePeriodeFraDato, { days: 1 }))}</span>}
+            {nySluttdato && <span> {formatDatoMedMånedsnavn(sub(foersteNyePeriodeFraDato, { days: 1 }))}</span>}
           </BodyShort>
           <Tag size="xsmall" variant={'neutral-moderate'}>
             Ikke relevant

@@ -1,9 +1,9 @@
-import { MellomlagretVurdering, VurdertAvAnsatt } from 'lib/types/types';
+import { MellomlagretVurdering } from 'lib/types/types';
 import { VisningActions, VisningModus } from 'hooks/saksbehandling/visning/VisningHook';
 import styles from './VilkårskortPeriodisert.module.css';
 import { Button, Detail, Heading, HGrid, HStack, VStack } from '@navikt/ds-react';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
-import { formaterDatoForFrontend, formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
+import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { PlusIcon } from '@navikt/aksel-icons';
 import { ErrorList } from 'lib/utils/formerrors';
 import { FormErrorSummary } from 'components/formerrorsummary/FormErrorSummary';
@@ -29,9 +29,7 @@ export const VilkårskortPeriodisert = ({
   løsBehovOgGåTilNesteStegError,
   vilkårTilhørerNavKontor,
   knappTekst = 'Bekreft',
-  vurdertAvAnsatt,
   vurdertAutomatisk = false,
-  kvalitetssikretAv,
   onDeleteMellomlagringClick,
   onLagreMellomLagringClick,
   mellomlagretVurdering,
@@ -40,7 +38,7 @@ export const VilkårskortPeriodisert = ({
   onLeggTilVurdering,
   formReset,
   errorList,
-}: VilkårsKortPeriodisertProps) => {
+}: Omit<VilkårsKortPeriodisertProps, 'vurdertAvAnsatt' | 'kvalitetssikretAv'>) => {
   const classNameBasertPåEnhet = vilkårTilhørerNavKontor ? styles.vilkårsKortNAV : styles.vilkårsKortNAY;
   const erAktivtSteg = visningModus === 'AKTIV_UTEN_AVBRYT' || visningModus === 'AKTIV_MED_AVBRYT';
 
@@ -63,7 +61,9 @@ export const VilkårskortPeriodisert = ({
         <form onSubmit={onSubmit} id={steg} autoComplete="off">
           <VStack gap="4">
             {/* innhold i vilkårskortet */}
-            <VStack style={{ borderTop: '1px solid lightgray' }}>{children}</VStack>
+            <VStack style={{ borderTop: '1px solid lightgray' }} paddingBlock={'4 0'}>
+              {children}
+            </VStack>
 
             {/* Status / feil */}
             <LøsBehovOgGåTilNesteStegStatusAlert
@@ -146,21 +146,8 @@ export const VilkårskortPeriodisert = ({
                 )}
               </VStack>
 
-              {/* Høyre kolonne: vurdert av / kvalitetssikret av */}
               <VStack align="baseline" paddingBlock={'2 0'}>
                 {vurdertAutomatisk && <Detail>Vurdert automatisk</Detail>}
-                {vurdertAvAnsatt && (
-                  <Detail>
-                    {`Vurdert av ${utledVurdertAv(vurdertAvAnsatt)}, ${formaterDatoForFrontend(vurdertAvAnsatt.dato)}`}
-                  </Detail>
-                )}
-                {kvalitetssikretAv && (
-                  <Detail>
-                    {`Kvalitetssikret av ${utledVurdertAv(kvalitetssikretAv)}, ${formaterDatoForFrontend(
-                      kvalitetssikretAv.dato
-                    )}`}
-                  </Detail>
-                )}
               </VStack>
             </HStack>
           </VStack>
@@ -169,7 +156,3 @@ export const VilkårskortPeriodisert = ({
     </VStack>
   );
 };
-
-function utledVurdertAv(vurdertAvAnsatt: VurdertAvAnsatt): string {
-  return vurdertAvAnsatt.ansattnavn ? vurdertAvAnsatt.ansattnavn : vurdertAvAnsatt.ident;
-}

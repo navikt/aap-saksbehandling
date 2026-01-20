@@ -1,9 +1,9 @@
 'use client';
 
-import { MellomlagretVurdering, OvergangUforeGrunnlag } from 'lib/types/types';
+import { MellomlagretVurdering, OvergangUforeGrunnlag, VurdertAvAnsatt } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { FormEvent } from 'react';
+import React, { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
@@ -17,6 +17,9 @@ import { OvergangUforeVurderingFormInput } from 'components/behandlinger/sykdom/
 import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { OvergangUforeTidligereVurdering } from 'components/behandlinger/sykdom/overgangufore/OvergangUforeTidligereVurdering';
+import { Link, VStack } from '@navikt/ds-react';
+import { Veiledning } from 'components/veiledning/Veiledning';
+import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
 
 interface Props {
   behandlingVersjon: number;
@@ -34,6 +37,9 @@ interface OvergangUforeVurderingForm {
   brukerHarSøktUføretrygd: JaEllerNei | undefined;
   brukerHarFåttVedtakOmUføretrygd: string;
   brukerRettPåAAP?: JaEllerNei | undefined;
+  vurdertAv?: VurdertAvAnsatt;
+  kvalitetssikretAv?: VurdertAvAnsatt;
+  besluttetAv?: VurdertAvAnsatt;
 }
 
 export const OvergangUforePeriodisert = ({
@@ -70,13 +76,20 @@ export const OvergangUforePeriodisert = ({
           referanse: behandlingsReferanse,
           behov: {
             behovstype: Behovstype.OVERGANG_UFORE,
-            løsningerForPerioder: data.vurderinger.map((vurdering) => ({
-              fom: formaterDatoForBackend(parse(vurdering.fraDato, 'dd.MM.yyyy', new Date())),
-              begrunnelse: vurdering.begrunnelse,
-              brukerHarSøktOmUføretrygd: vurdering.brukerHarSøktUføretrygd === JaEllerNei.Ja,
-              brukerHarFåttVedtakOmUføretrygd: vurdering.brukerHarFåttVedtakOmUføretrygd,
-              brukerRettPåAAP: vurdering.brukerRettPåAAP === JaEllerNei.Ja,
-            })),
+            løsningerForPerioder: data.vurderinger.map((vurdering, index) => {
+              const isLast = index === data.vurderinger.length - 1;
+              const tilDato = isLast
+                ? undefined
+                : parseDatoFraDatePickerOgTrekkFra1Dag(data.vurderinger[index + 1].fraDato);
+              return {
+                fom: formaterDatoForBackend(parse(vurdering.fraDato, 'dd.MM.yyyy', new Date())),
+                tom: tilDato ? formaterDatoForBackend(tilDato) : undefined,
+                begrunnelse: vurdering.begrunnelse,
+                brukerHarSøktOmUføretrygd: vurdering.brukerHarSøktUføretrygd === JaEllerNei.Ja,
+                brukerHarFåttVedtakOmUføretrygd: vurdering.brukerHarFåttVedtakOmUføretrygd,
+                brukerRettPåAAP: vurdering.brukerRettPåAAP === JaEllerNei.Ja,
+              };
+            }),
           },
         },
         () => nullstillMellomlagretVurdering()
@@ -84,6 +97,7 @@ export const OvergangUforePeriodisert = ({
     })(event);
   };
 
+  const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const foersteNyePeriode = nyeVurderingFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
   const errorList = mapPeriodiserteVurderingerErrorList<OvergangUforeForm>(form.formState.errors);
   return (
@@ -95,60 +109,74 @@ export const OvergangUforePeriodisert = ({
       status={status}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={true}
-      vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}
       mellomlagretVurdering={mellomlagretVurdering}
       visningModus={visningModus}
       visningActions={visningActions}
-      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
+      formReset={() => form.reset(getDefaultValuesFromGrunnlag(grunnlag))}
       onLeggTilVurdering={() => append(emptyOvergangUføreVurdering())}
       errorList={errorList}
     >
-      {grunnlag.sisteVedtatteVurderinger.map((vurdering) => (
-        <TidligereVurderingExpandableCard
-          key={vurdering.fom}
-          fom={parseISO(vurdering.fom)}
-          tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
-          foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-          oppfylt={!!vurdering.brukerRettPåAAP}
-        >
-          <OvergangUforeTidligereVurdering
-            fraDato={vurdering.fom}
-            begrunnelse={vurdering.begrunnelse}
-            brukerHarSøktOmUføretrygd={vurdering.brukerHarSøktUføretrygd}
-            brukerHarFåttVedtakOmUføretrygd={vurdering.brukerHarFåttVedtakOmUføretrygd}
-            brukerRettPåAAP={vurdering.brukerRettPåAAP}
-          />
-        </TidligereVurderingExpandableCard>
-      ))}
-      {nyeVurderingFields.map((vurdering, index) => {
-        return (
-          <NyVurderingExpandableCard
-            key={vurdering.id}
-            fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-            oppfylt={
-              form.watch(`vurderinger.${index}.brukerRettPåAAP`)
-                ? form.watch(`vurderinger.${index}.brukerRettPåAAP`) === JaEllerNei.Ja
-                : form.watch(`vurderinger.${index}.brukerHarSøktUføretrygd`) === JaEllerNei.Nei ||
-                    form.watch(`vurderinger.${index}.brukerHarFåttVedtakOmUføretrygd`) === 'NEI'
-                  ? false
-                  : undefined
-            }
-            nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
-            isLast={index === nyeVurderingFields.length - 1}
-            vurdertAv={undefined} // TODO:
-            finnesFeil={finnesFeilForVurdering(index, errorList)}
+      <VStack gap={'4'}>
+        <Veiledning
+          defaultOpen={false}
+          tekst={
+            <div>
+              <Link href="https://lovdata.no/pro/lov/1997-02-28-19/%C2%A711-18" target="_blank">
+                Du kan lese om hvordan vilkåret skal vurderes i rundskrivet til § 11-18
+              </Link>
+            </div>
+          }
+        />
+
+        {grunnlag.sisteVedtatteVurderinger.map((vurdering) => (
+          <TidligereVurderingExpandableCard
+            key={vurdering.fom}
+            fom={parseISO(vurdering.fom)}
+            tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
+            foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+            oppfylt={!!vurdering.brukerRettPåAAP}
           >
-            <OvergangUforeVurderingFormInput
-              index={index}
-              form={form}
-              readonly={formReadOnly}
-              onRemove={() => remove(index)}
+            <OvergangUforeTidligereVurdering
+              fraDato={vurdering.fom}
+              begrunnelse={vurdering.begrunnelse}
+              brukerHarSøktOmUføretrygd={vurdering.brukerHarSøktUføretrygd}
+              brukerHarFåttVedtakOmUføretrygd={vurdering.brukerHarFåttVedtakOmUføretrygd}
+              brukerRettPåAAP={vurdering.brukerRettPåAAP}
             />
-          </NyVurderingExpandableCard>
-        );
-      })}
+          </TidligereVurderingExpandableCard>
+        ))}
+
+        {nyeVurderingFields.map((vurdering, index) => {
+          return (
+            <NyVurderingExpandableCard
+              key={vurdering.id}
+              fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
+              oppfylt={
+                form.watch(`vurderinger.${index}.brukerRettPåAAP`)
+                  ? form.watch(`vurderinger.${index}.brukerRettPåAAP`) === JaEllerNei.Ja
+                  : form.watch(`vurderinger.${index}.brukerHarSøktUføretrygd`) === JaEllerNei.Nei ||
+                      form.watch(`vurderinger.${index}.brukerHarFåttVedtakOmUføretrygd`) === 'NEI'
+                    ? false
+                    : undefined
+              }
+              nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
+              isLast={index === nyeVurderingFields.length - 1}
+              vurdertAv={vurdering.vurdertAv}
+              kvalitetssikretAv={vurdering.kvalitetssikretAv}
+              besluttetAv={vurdering.besluttetAv}
+              finnesFeil={finnesFeilForVurdering(index, errorList)}
+              readonly={formReadOnly}
+              onSlettVurdering={() => remove(index)}
+              harTidligereVurderinger={tidligereVurderinger.length > 0}
+              index={index}
+            >
+              <OvergangUforeVurderingFormInput index={index} form={form} readonly={formReadOnly} />
+            </NyVurderingExpandableCard>
+          );
+        })}
+      </VStack>
     </VilkårskortPeriodisert>
   );
 
@@ -171,6 +199,9 @@ export const OvergangUforePeriodisert = ({
         brukerRettPåAAP: getJaNeiEllerUndefined(vurdering?.brukerRettPåAAP),
         brukerHarSøktUføretrygd: getJaNeiEllerUndefined(vurdering?.brukerHarSøktUføretrygd),
         brukerHarFåttVedtakOmUføretrygd: vurdering?.brukerHarFåttVedtakOmUføretrygd || '',
+        vurdertAv: vurdering.vurdertAv,
+        kvalitetssikretAv: vurdering.kvalitetssikretAv,
+        besluttetAv: vurdering.besluttetAv,
       })),
     };
   }

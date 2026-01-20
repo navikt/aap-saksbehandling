@@ -22,6 +22,7 @@ import { useIngenFlereOppgaverModal } from 'hooks/saksbehandling/IngenFlereOppga
 import { ApiException, isError, isSuccess } from 'lib/utils/api';
 import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
 import { Behovstype } from 'lib/utils/form';
+import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 
 export type LøsBehovOgGåTilNesteStegStatus = ServerSentEventStatus | undefined;
 
@@ -30,7 +31,7 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
   status: LøsBehovOgGåTilNesteStegStatus;
   isLoading: boolean;
   løsBehovOgGåTilNesteSteg: (behov: LøsAvklaringsbehovPåBehandling, callback?: () => void) => void;
-  løsPeriodisertBehovOgGåTilNesteSteg: (behov: LøsPeriodisertBehovPåBehandling, callback?: () => void) => void;
+  løsPeriodisertBehovOgGåTilNesteSteg: (behov: LøsningerForPerioder, callback?: () => void) => void;
 } {
   const params = useParams<{ aktivGruppe: string; behandlingsReferanse: string; saksId: string }>();
   const router = useRouter();

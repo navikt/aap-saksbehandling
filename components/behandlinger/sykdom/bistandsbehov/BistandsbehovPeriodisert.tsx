@@ -1,9 +1,9 @@
 'use client';
 
-import { BistandsGrunnlag, MellomlagretVurdering } from 'lib/types/types';
+import { BistandsGrunnlag, MellomlagretVurdering, VurdertAvAnsatt } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { FormEvent } from 'react';
-import { formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
+import { parseDatoFraDatePicker } from 'lib/utils/date';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
@@ -21,6 +21,9 @@ import { BistandsbehovTidligereVurdering } from 'components/behandlinger/sykdom/
 import { mapBistandVurderingFormTilDto } from 'components/behandlinger/sykdom/bistandsbehov/bistandsbehov-utils';
 import { Dato } from 'lib/types/Dato';
 import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovMellomlagringParser';
+import { getFraDatoFraGrunnlagForFrontend } from 'lib/utils/periodisering';
+import { Link, VStack } from '@navikt/ds-react';
+import { Veiledning } from 'components/veiledning/Veiledning';
 
 interface Props {
   behandlingVersjon: number;
@@ -39,6 +42,9 @@ export interface BistandVurderingForm {
   erBehovForAnnenOppfølging?: JaEllerNei | undefined;
   overgangBegrunnelse?: string;
   skalVurdereAapIOvergangTilArbeid?: JaEllerNei | undefined;
+  vurdertAv?: VurdertAvAnsatt;
+  kvalitetssikretAv?: VurdertAvAnsatt;
+  besluttetAv?: VurdertAvAnsatt;
 }
 
 export const BistandsbehovPeriodisert = ({
@@ -64,7 +70,7 @@ export const BistandsbehovPeriodisert = ({
     ? parseOgMigrerMellomlagretData(initialMellomlagretVurdering.data, grunnlag?.behøverVurderinger?.[0]?.fom)
     : mapVurderingerToBistandForm(grunnlag);
 
-  const form = useForm<BistandForm>({ defaultValues });
+  const form = useForm<BistandForm>({ defaultValues, shouldUnregister: true });
   const { fields, append, remove } = useFieldArray({ name: 'vurderinger', control: form.control });
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -90,6 +96,7 @@ export const BistandsbehovPeriodisert = ({
     })(event);
   };
 
+  const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const foersteNyePeriode = fields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
   const errorList = mapPeriodiserteVurderingerErrorList<LovOgMedlemskapVurderingForm>(form.formState.errors);
@@ -103,8 +110,6 @@ export const BistandsbehovPeriodisert = ({
       status={status}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={true}
-      vurdertAvAnsatt={grunnlag?.vurderinger[0]?.vurdertAv}
-      kvalitetssikretAv={grunnlag?.nyeVurderinger[0]?.kvalitetssikretAv}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() => {
@@ -118,52 +123,71 @@ export const BistandsbehovPeriodisert = ({
       mellomlagretVurdering={mellomlagretVurdering}
       visningModus={visningModus}
       visningActions={visningActions}
-      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
+      formReset={() => form.reset(mapVurderingerToBistandForm(grunnlag))}
       onLeggTilVurdering={() => append(emptyBistandVurderingForm())}
       errorList={errorList}
     >
-      {vedtatteVurderinger.map((vurdering) => (
-        <TidligereVurderingExpandableCard
-          key={vurdering.fom}
-          fom={parseISO(vurdering.fom)}
-          tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
-          foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-          oppfylt={
-            !!(
-              vurdering.erBehovForAktivBehandling ||
-              vurdering.erBehovForArbeidsrettetTiltak ||
-              vurdering.erBehovForAnnenOppfølging
-            )
+      <VStack gap={'4'}>
+        <Veiledning
+          defaultOpen={false}
+          tekst={
+            <div>
+              Vilkårene i § 11-6 første ledd bokstav a til c er tre alternative vilkår. Det vil si at det er nok at
+              brukeren oppfyller ett av dem for å fylle vilkåret i § 11-6.Først skal du vurdere om vilkårene i bokstav a
+              (aktiv behandling) og bokstav b (arbeidsrettet tiltak) er oppfylte. Hvis du svarer ja på ett eller begge
+              vilkårene, er § 11-6 oppfylt. Hvis du svarer nei på a og b, må du vurdere om bokstav c er oppfylt. Hvis du
+              svarer nei på alle tre vilkårene, er § 11-6 ikke oppfylt.{' '}
+              <Link href="https://lovdata.no/nav/rundskriv/r11-00#KAPITTEL_8" target="_blank">
+                Du kan lese om hvordan vilkåret skal vurderes i rundskrivet til § 11-6 (lovdata.no)
+              </Link>
+            </div>
           }
-        >
-          <BistandsbehovTidligereVurdering vurdering={vurdering} />
-        </TidligereVurderingExpandableCard>
-      ))}
-      {fields.map((vurdering, index) => (
-        <NyVurderingExpandableCard
-          key={vurdering.id}
-          fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-          nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
-          isLast={index === fields.length - 1}
-          oppfylt={
-            form.watch(`vurderinger.${index}.erBehovForAktivBehandling`) &&
-            form.watch(`vurderinger.${index}.erBehovForArbeidsrettetTiltak`)
-              ? form.watch(`vurderinger.${index}.erBehovForAktivBehandling`) === JaEllerNei.Ja ||
-                form.watch(`vurderinger.${index}.erBehovForArbeidsrettetTiltak`) === JaEllerNei.Ja ||
-                form.watch(`vurderinger.${index}.erBehovForAnnenOppfølging`) === JaEllerNei.Ja
-              : undefined
-          }
-          vurdertAv={undefined} //TODO
-          finnesFeil={finnesFeilForVurdering(index, errorList)}
-        >
-          <BistandsbehovVurderingForm
-            form={form}
-            readOnly={formReadOnly}
+        />
+
+        {vedtatteVurderinger.map((vurdering) => (
+          <TidligereVurderingExpandableCard
+            key={vurdering.fom}
+            fom={parseISO(vurdering.fom)}
+            tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
+            foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+            oppfylt={
+              !!(
+                vurdering.erBehovForAktivBehandling ||
+                vurdering.erBehovForArbeidsrettetTiltak ||
+                vurdering.erBehovForAnnenOppfølging
+              )
+            }
+          >
+            <BistandsbehovTidligereVurdering vurdering={vurdering} />
+          </TidligereVurderingExpandableCard>
+        ))}
+        {fields.map((vurdering, index) => (
+          <NyVurderingExpandableCard
+            key={vurdering.id}
+            fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
+            nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
+            isLast={index === fields.length - 1}
+            oppfylt={
+              form.watch(`vurderinger.${index}.erBehovForAktivBehandling`) &&
+              form.watch(`vurderinger.${index}.erBehovForArbeidsrettetTiltak`)
+                ? form.watch(`vurderinger.${index}.erBehovForAktivBehandling`) === JaEllerNei.Ja ||
+                  form.watch(`vurderinger.${index}.erBehovForArbeidsrettetTiltak`) === JaEllerNei.Ja ||
+                  form.watch(`vurderinger.${index}.erBehovForAnnenOppfølging`) === JaEllerNei.Ja
+                : undefined
+            }
+            vurdertAv={vurdering.vurdertAv}
+            kvalitetssikretAv={vurdering.kvalitetssikretAv}
+            besluttetAv={vurdering.besluttetAv}
+            finnesFeil={finnesFeilForVurdering(index, errorList)}
+            readonly={formReadOnly}
+            onSlettVurdering={() => remove(index)}
+            harTidligereVurderinger={tidligereVurderinger.length > 0}
             index={index}
-            onRemove={() => remove(index)}
-          />
-        </NyVurderingExpandableCard>
-      ))}
+          >
+            <BistandsbehovVurderingForm form={form} readOnly={formReadOnly} index={index} />
+          </NyVurderingExpandableCard>
+        ))}
+      </VStack>
     </VilkårskortPeriodisert>
   );
 
@@ -174,7 +198,7 @@ export const BistandsbehovPeriodisert = ({
         vurderinger: [
           {
             ...emptyBistandVurderingForm(),
-            fraDato: formaterDatoForFrontend(new Date(grunnlag?.behøverVurderinger[0]?.fom!)),
+            fraDato: getFraDatoFraGrunnlagForFrontend(grunnlag),
           },
         ],
       };
@@ -190,6 +214,9 @@ export const BistandsbehovPeriodisert = ({
         overgangBegrunnelse: vurdering?.overgangBegrunnelse || '',
         skalVurdereAapIOvergangTilArbeid: getJaNeiEllerUndefined(vurdering?.skalVurdereAapIOvergangTilArbeid),
         erBehovForArbeidsrettetTiltak: getJaNeiEllerUndefined(vurdering?.erBehovForArbeidsrettetTiltak),
+        vurdertAv: vurdering.vurdertAv,
+        kvalitetssikretAv: vurdering.kvalitetssikretAv,
+        besluttetAv: vurdering.besluttetAv,
       })),
     };
   }

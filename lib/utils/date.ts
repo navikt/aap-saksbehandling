@@ -6,6 +6,8 @@ export const DATO_FORMATER = {
   ddMMMyyyy: 'dd. MMM yyyy',
   ddMMyyyy_HHmm: 'dd.MM.yyyy HH:mm',
   ddMMyyyy_HHmmss: 'dd.MM.yyyy HH:mm:ss',
+  ddMM: 'dd.MM.',
+  dMMMMyyyy: 'd. MMMM yyyy', // 1. februar 2026
 };
 
 const uendeligSluttString = '2999-01-01';
@@ -20,6 +22,14 @@ export function formaterDatoForFrontend(dato: Date | string): string {
 
 export function formaterDatoMedTidspunktForFrontend(dato: Date | string): string {
   return format(dato, DATO_FORMATER.ddMMyyyy_HHmm, { locale: nb });
+}
+
+export function formaterDatoMedKunDagOgMånedForFrontend(dato: string): string {
+  return format(dato, DATO_FORMATER.ddMM, { locale: nb });
+}
+
+export function formatDatoMedMånedsnavn(dato: string | Date): string {
+  return format(dato, DATO_FORMATER.dMMMMyyyy, { locale: nb });
 }
 
 export const formaterDatoForBackend = (dato: Date) => {
@@ -56,33 +66,5 @@ export function formaterPeriode(dato1?: string | null, dato2?: string | null): s
     return `${formaterDatoForFrontend(dato1)} - ${formaterDatoForFrontend(dato2)}`;
   } else {
     return '';
-  }
-}
-
-export class Dato {
-  dato: Date;
-
-  constructor(dato: string);
-  constructor(dato: Date);
-  constructor(dato: string | Date) {
-    if (dato instanceof Date) {
-      this.dato = dato;
-    } else {
-      if (dato.match(/\d{2}.\d{2}.\d{4}/)) {
-        this.dato = parse(dato, 'dd.MM.yyyy', new Date());
-      } else if (dato.match(/\d{4}-\d{2}-\d{2}/)) {
-        this.dato = parse(dato, 'yyyy-MM-dd', new Date());
-      } else {
-        throw Error('Ugyldig dato');
-      }
-    }
-  }
-
-  formaterForFrontend() {
-    return format(this.dato, 'dd.MM.yyyy');
-  }
-
-  formaterForBackend() {
-    return format(this.dato, 'yyyy-MM-dd');
   }
 }

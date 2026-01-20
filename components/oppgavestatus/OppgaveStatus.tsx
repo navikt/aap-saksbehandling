@@ -1,10 +1,16 @@
 import { Tag, TagProps } from '@navikt/ds-react';
-import { HourglassTopFilledIcon, PadlockLockedFillIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
+import {
+  HourglassBottomFilledIcon,
+  HourglassTopFilledIcon,
+  PadlockLockedFillIcon,
+  XMarkOctagonIcon,
+} from '@navikt/aksel-icons';
 
 import styles from './OppgaveStatus.module.css';
+import { toggles } from 'lib/utils/toggles';
 
 export interface OppgaveStatusType {
-  status: 'PÅ_VENT' | 'TILDELT' | 'TRUKKET' | 'AVBRUTT' | 'LEDIG' | 'TILDELT_INNLOGGET_BRUKER';
+  status: 'PÅ_VENT' | 'TILDELT' | 'TRUKKET' | 'AVBRUTT' | 'LEDIG' | 'TILDELT_INNLOGGET_BRUKER' | 'VENTEFRIST_UTLØPT';
   label: string;
 }
 
@@ -21,6 +27,14 @@ export const OppgaveStatus = ({ oppgaveStatus, size = 'small', showLabel = true 
         <Tag className={styles.tag} icon={<HourglassTopFilledIcon />} variant={'warning-moderate'} size={size}>
           {showLabel && oppgaveStatus.label}
         </Tag>
+      );
+    case 'VENTEFRIST_UTLØPT':
+      return (
+        toggles.featureUtløptVentefrist && (
+          <Tag className={styles.tag} icon={<HourglassBottomFilledIcon />} variant={'error-moderate'} size={size}>
+            {showLabel && oppgaveStatus.label}
+          </Tag>
+        )
       );
     case 'TILDELT':
       return (

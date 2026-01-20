@@ -36,11 +36,12 @@ const behovskodeMap = {
   '5026': 'Refusjon',
   '5027': 'Samordning annen statlig ytelse',
   '5028': 'Vurder trekk av søknad',
-  '5029': 'Vurder starttidspunkt',
+  '5029': 'Vurder § 22-13 syvende ledd',
   '5030': 'Samordning arbeidsgiver',
   '5031': '§ 11-18 AAP under behandling av krav om uføretrygd',
   '5032': '§ 11-17 Arbeidsavklaringspenger i perioden som arbeidssøker',
   '5033': 'Avbryt revurdering',
+  '5034': 'Avklar samordning sykestipend',
   '5035': 'Avklar oppholdskrav',
   '5040': '§ 11-4 andre ledd. Krav om inntektsbortfall etter fylte 62 år',
   '5050': 'Skriv brev',
@@ -164,7 +165,7 @@ export function mapTilSteggruppeTekst(steggruppe: string) {
     case 'OVERLEVER_TIL_FAGSYSTEM':
       return 'Send til fagsystem';
     case 'RETTIGHETSPERIODE':
-      return 'Starttidspunkt';
+      return '§ 22-13 syvende ledd';
     case 'SAMORDNING':
       return 'Forhold til andre ytelser';
     case 'FORMKRAV':
@@ -256,6 +257,8 @@ export function mapTilÅrsakTilOpprettelseTilTekst(årsakTilOpprettelse: ÅrsakT
       return 'Endring i register';
     case 'AKTIVITETSPLIKT':
       return 'Aktivitetsplikt';
+    case 'UTVID_VEDTAKSLENGDE':
+      return 'Utvid vedtakslengde';
   }
 }
 
@@ -267,6 +270,8 @@ export function mapGrunnTilString(grunn: string): string {
       return 'Mangelfull begrunnelse';
     case 'MANGLENDE_UTREDNING':
       return 'Manglende utredning';
+    case 'SKRIVEFEIL':
+      return 'Skrivefeil';
     default:
       return grunn;
   }

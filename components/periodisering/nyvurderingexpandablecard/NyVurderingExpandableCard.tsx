@@ -1,20 +1,30 @@
 'use client';
 
 import { CustomExpandableCard } from 'components/customexpandablecard/CustomExpandableCard';
-import { formaterDatoForFrontend } from 'lib/utils/date';
-import { ReactNode, useState } from 'react';
-import { BodyShort, HStack, Tag, VStack } from '@navikt/ds-react';
-import { VurdertAv, VurdertAvShape } from 'components/vurdertav/VurdertAv';
+import { formatDatoMedMånedsnavn } from 'lib/utils/date';
+import { ReactNode, useRef, useState } from 'react';
+import { BodyShort, Button, HGrid, HStack, VStack } from '@navikt/ds-react';
+import { VurdertAvAnsattDetail } from 'components/vurdertav/VurdertAvAnsattDetail';
 import { subDays } from 'date-fns';
+import { TrashFillIcon } from '@navikt/aksel-icons';
+import { VurdertAvAnsatt } from 'lib/types/types';
+import { SlettVurderingModal } from 'components/periodisering/slettvurderingmodal/SlettVurderingModal';
+import { VurderingStatusTag } from 'components/periodisering/VurderingStatusTag';
 
 interface Props {
   fraDato: Date | null;
   nestePeriodeFraDato: Date | null;
   isLast: boolean;
   oppfylt: boolean | undefined;
-  vurdertAv: VurdertAvShape | undefined;
+  vurdertAv: VurdertAvAnsatt | undefined;
+  kvalitetssikretAv: VurdertAvAnsatt | undefined;
+  besluttetAv: VurdertAvAnsatt | undefined;
   finnesFeil: boolean;
   children: ReactNode;
+  readonly: boolean;
+  onSlettVurdering: () => void;
+  index: number;
+  harTidligereVurderinger?: boolean;
 }
 export const NyVurderingExpandableCard = ({
   fraDato,
@@ -22,13 +32,21 @@ export const NyVurderingExpandableCard = ({
   isLast,
   oppfylt,
   vurdertAv,
+  kvalitetssikretAv,
+  besluttetAv,
   finnesFeil,
   children,
+  readonly,
+  onSlettVurdering,
+  harTidligereVurderinger = false,
+  index,
 }: Props) => {
   const [cardExpanded, setCardExpanded] = useState<boolean>(true);
+
+  const ref = useRef<HTMLDialogElement>(null);
+
   return (
     <CustomExpandableCard
-      key={`${fraDato?.getTime()}`}
       editable
       defaultOpen
       expanded={cardExpanded || finnesFeil}
@@ -36,24 +54,40 @@ export const NyVurderingExpandableCard = ({
       heading={
         <HStack justify={'space-between'} padding={'2'}>
           <BodyShort size={'small'}>
-            Ny vurdering: {fraDato ? `${formaterDatoForFrontend(fraDato)} – ` : '[Ikke valgt]'}
+            Ny vurdering: {fraDato ? `${formatDatoMedMånedsnavn(fraDato)} – ` : '[Ikke valgt]'}
             {nestePeriodeFraDato ? (
-              <span>{formaterDatoForFrontend(subDays(nestePeriodeFraDato, 1))}</span>
+              <span>{formatDatoMedMånedsnavn(subDays(nestePeriodeFraDato, 1))}</span>
             ) : (
               <span>{isLast ? ' ' : '[Ikke valgt]'}</span>
             )}
           </BodyShort>
-          {oppfylt !== undefined && (
-            <Tag size="xsmall" variant={oppfylt ? 'success-moderate' : 'error-moderate'}>
-              {oppfylt === true ? 'Oppfylt' : 'Ikke oppfylt'}
-            </Tag>
-          )}
+          <VurderingStatusTag oppfylt={oppfylt} />
         </HStack>
       }
     >
       <VStack gap={'5'}>
-        {children}
-        <VurdertAv vurdertAv={vurdertAv} />
+        <HGrid columns={'1fr 30px'}>
+          <VStack gap={'5'}>{children}</VStack>
+          {!readonly && (index !== 0 || harTidligereVurderinger) && (
+            <VStack justify={'start'}>
+              <Button
+                aria-label="Fjern vurdering"
+                variant="tertiary"
+                size="small"
+                icon={<TrashFillIcon />}
+                onClick={() => ref.current?.showModal()}
+                type="button"
+              />
+              <SlettVurderingModal ref={ref} onSlettVurdering={() => onSlettVurdering()} />{' '}
+            </VStack>
+          )}
+        </HGrid>
+
+        <VStack>
+          <VurdertAvAnsattDetail vurdertAv={vurdertAv} variant={'VURDERING'} />
+          <VurdertAvAnsattDetail vurdertAv={kvalitetssikretAv} variant={'KVALITETSSIKRER'} />
+          <VurdertAvAnsattDetail vurdertAv={besluttetAv} variant={'BESLUTTER'} />
+        </VStack>
       </VStack>
     </CustomExpandableCard>
   );

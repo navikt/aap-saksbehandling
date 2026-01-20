@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { ForeslåVedtakGrunnlag } from 'lib/types/types';
 import { ForeslåVedtakTabell } from 'components/behandlinger/vedtak/foreslåvedtak/foreslåvedtaktabell/ForeslåVedtakTabell';
+import { customRender } from 'lib/test/CustomRender';
 
 const foreslåVedtakGrunnlag: ForeslåVedtakGrunnlag = {
   perioder: [
@@ -34,7 +35,7 @@ const foreslåVedtakGrunnlag: ForeslåVedtakGrunnlag = {
 
 describe('Foreslå vedtak', () => {
   it('Skal vise tabellrader for perioder med innvilget og avslått AAP', () => {
-    render(<ForeslåVedtakTabell grunnlag={foreslåVedtakGrunnlag} />);
+    customRender(<ForeslåVedtakTabell grunnlag={foreslåVedtakGrunnlag} />);
     const innvilget = screen.getByText('AAP innvilget');
     expect(innvilget).toBeVisible();
 
@@ -43,7 +44,7 @@ describe('Foreslå vedtak', () => {
   });
 
   it('Skal vise avslått AAP om ingen perioder i grunnlag', () => {
-    render(
+    customRender(
       <ForeslåVedtakTabell
         grunnlag={{
           perioder: [],
@@ -55,7 +56,7 @@ describe('Foreslå vedtak', () => {
   });
 
   it('Skal vise rettighetstype på innvilget AAP', () => {
-    render(<ForeslåVedtakTabell grunnlag={foreslåVedtakGrunnlag} />);
+    customRender(<ForeslåVedtakTabell grunnlag={foreslåVedtakGrunnlag} />);
     const innvilgetÅrsak = screen.getByText('§ 11-6');
     expect(innvilgetÅrsak).toBeVisible();
   });

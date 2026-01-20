@@ -4,38 +4,23 @@ import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper
 import { UseFormReturn } from 'react-hook-form';
 import { ArbeidsopptrappingForm } from 'components/behandlinger/sykdom/arbeidsopptrapping/Arbeidsopptrapping';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
-import { Alert, Button, HStack, VStack } from '@navikt/ds-react';
+import { Alert, HStack, VStack } from '@navikt/ds-react';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { erDatoIPeriode, validerDato } from 'lib/validation/dateValidation';
-import { TrashFillIcon } from '@navikt/aksel-icons';
 import { parse } from 'date-fns';
 import { Periode } from 'lib/types/types';
-import { stringToDate } from 'lib/utils/date';
+import { formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
 import { JaEllerNei } from 'lib/utils/form';
-import { useTransition } from 'react';
 
 interface Props {
   index: number;
   form: UseFormReturn<ArbeidsopptrappingForm>;
   readonly: boolean;
-  onRemove: () => void;
   ikkeRelevantePerioder?: Periode[];
 }
-export const ArbeidsopptrappingVurderingFormInput = ({
-  index,
-  readonly,
-  form,
-  onRemove,
-  ikkeRelevantePerioder,
-}: Props) => {
+export const ArbeidsopptrappingVurderingFormInput = ({ index, readonly, form, ikkeRelevantePerioder }: Props) => {
   const rettPåAAPIOpptrapping = form.watch(`vurderinger.${index}.rettPaaAAPIOpptrapping`);
-  const [isLoading, startTransition] = useTransition();
-  function handleDelete() {
-    startTransition(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      onRemove();
-    });
-  }
+
   return (
     <VStack gap={'5'}>
       <HStack justify={'space-between'}>
@@ -44,7 +29,7 @@ export const ArbeidsopptrappingVurderingFormInput = ({
           label="Vurderingen gjelder fra"
           control={form.control}
           rules={{
-            required: 'Du må velge fra hvilken dato vurderingen gjelder fra',
+            required: 'Vennligst velg en dato for når vurderingen gjelder fra',
             validate: {
               validerDato: (value) => validerDato(value as string),
               validerIkkeRelevantPeriode: (value) => {
@@ -57,25 +42,13 @@ export const ArbeidsopptrappingVurderingFormInput = ({
                 });
 
                 return funnetIkkeRelevantPeriode
-                  ? `Dato kan ikke være inne i perioden (${funnetIkkeRelevantPeriode.fom} - ${funnetIkkeRelevantPeriode.tom})`
+                  ? `Dato kan ikke være inne i perioden (${formaterDatoForFrontend(funnetIkkeRelevantPeriode.fom)} - ${formaterDatoForFrontend(funnetIkkeRelevantPeriode.tom)})`
                   : true;
               },
             },
           }}
           readOnly={readonly}
         />
-
-        {!readonly && (
-          <Button
-            aria-label="Fjern vurdering"
-            variant="tertiary"
-            size="small"
-            icon={<TrashFillIcon />}
-            loading={isLoading}
-            onClick={() => handleDelete()}
-            type="button"
-          />
-        )}
       </HStack>
       <TextAreaWrapper
         name={`vurderinger.${index}.begrunnelse`}

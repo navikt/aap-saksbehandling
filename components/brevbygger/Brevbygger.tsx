@@ -1,16 +1,17 @@
 'use client';
 
-import { Alert, Box, Button, HGrid } from '@navikt/ds-react';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { Alert, Box, Button, HGrid, VStack } from '@navikt/ds-react';
+import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { Delmal } from 'components/brevbygger/Delmal';
 import {
   delmalErObligatorisk,
+  delmalSkalVises,
   erValgtIdFritekst,
   finnParentIdForValgtAlternativ,
   mapDelmalerFraSanity,
 } from 'components/brevbygger/brevmalMapping';
 import { BrevmalType } from 'components/brevbygger/brevmodellTypes';
-import { BrevdataDto, BrevMottaker, Mottaker } from 'lib/types/types';
+import { BrevdataDto, BrevMottaker, FritekstDto, Mottaker } from 'lib/types/types';
 import { ForhåndsvisBrev } from 'components/brevbygger/ForhåndsvisBrev';
 import { clientKanDistribuereBrev, clientOppdaterBrevdata, clientOppdaterBrevmal } from 'lib/clientApi';
 import { useRouter } from 'next/navigation';
@@ -23,6 +24,8 @@ import { revalidateFlyt } from 'lib/actions/actions';
 import { VelgeMottakere } from 'components/brevbygger/VelgeMottakere';
 import { IkkeSendBrevModal } from 'components/behandlinger/brev/skriveBrev/IkkeSendBrevModal';
 import { Brevbyggermeny } from 'components/brevbygger/Brevbyggermeny';
+import { useDebounce } from 'hooks/DebounceHook';
+import { ExpandIcon, ShrinkIcon } from '@navikt/aksel-icons';
 
 export interface AlternativFormField {
   verdi: string;
@@ -58,6 +61,22 @@ interface BrevbyggerProps {
   brevdata?: BrevdataDto;
 }
 
+const hentDokument = async (
+  brevbestillingReferanse: string,
+  setDataUri: (uri: string | undefined) => void,
+  setIsLoading: (status: boolean) => void
+) => {
+  let objectURL: string | undefined;
+  const blob = await fetch(`/saksbehandling/api/brev/${brevbestillingReferanse}/forhandsvis/`, {
+    method: 'GET',
+  }).then((res) => res.blob());
+
+  objectURL = URL.createObjectURL(new Blob([blob], { type: 'application/pdf' }));
+  setDataUri(objectURL);
+
+  setIsLoading(false);
+};
+
 export const Brevbygger = ({
   referanse,
   brevmal,
@@ -71,7 +90,7 @@ export const Brevbygger = ({
   visAvbryt = true,
 }: BrevbyggerProps) => {
   const parsedBrevmal: BrevmalType = JSON.parse(brevmal || '');
-  const { control, handleSubmit, watch } = useForm<BrevdataFormFields>({
+  const { control, handleSubmit, trigger, watch } = useForm<BrevdataFormFields>({
     values: {
       delmaler: mapDelmalerFraSanity(parsedBrevmal.delmaler, brevdata),
     },
@@ -81,9 +100,21 @@ export const Brevbygger = ({
   const [valgteMottakere, setMottakere] = useState<Mottaker[]>([]);
   const [visKanIkkeDistribuereAdvarsel, setVisKanIkkeDistribuereAdvarsel] = useState(false);
   const [ikkeSendBrevModalOpen, settIkkeSendBrevModalOpen] = useState(false);
+  const [pdfViewExpanded, togglePdfVievExpanded] = useState(false);
   const behandlingsReferanse = useBehandlingsReferanse();
   const { fields } = useFieldArray({ control, name: 'delmaler' });
   const { løsBehovOgGåTilNesteSteg, isLoading } = useLøsBehovOgGåTilNesteSteg('BREV');
+
+  const [dataUri, setDataUri] = useState<string>();
+  const [pdfIsLoading, setPdfIsLoading] = useState(false);
+
+  useEffect(() => {
+    return () => {
+      if (dataUri) {
+        URL.revokeObjectURL(dataUri);
+      }
+    };
+  });
 
   const kanDistribuereBrevRequest = useCallback(async () => {
     const brukerIdent = brukerMottaker?.ident;
@@ -127,32 +158,45 @@ export const Brevbygger = ({
         key: valg.valgtAlternativ,
       }));
 
-    const fritekst = formData.delmaler
+    const fritekst: FritekstDto[] = formData.delmaler
       .filter((delmal) => delmal.valgt)
-      .map((delmal) => {
+      .flatMap((delmal) => {
         const fritekstValg = delmal.valg
           ?.filter((alternativ) => alternativ.valgtAlternativ !== '')
-          .filter((alternativ) => erValgtIdFritekst(alternativ.valgtAlternativ, parsedBrevmal))
-          .at(0);
+          .filter((alternativ) => erValgtIdFritekst(alternativ.valgtAlternativ, parsedBrevmal));
+
         if (fritekstValg) {
-          return {
-            fritekst: JSON.stringify({ tekst: fritekstValg.fritekst || '' }),
-            key: fritekstValg.valgtAlternativ,
-            parentId: finnParentIdForValgtAlternativ(fritekstValg.valgtAlternativ, parsedBrevmal),
-          };
+          return fritekstValg.map((fritekst) => ({
+            fritekst: JSON.stringify({ tekst: fritekst.fritekst || '' }),
+            key: fritekst.valgtAlternativ,
+            parentId: finnParentIdForValgtAlternativ(fritekst.valgtAlternativ, parsedBrevmal),
+          }));
         }
       })
       .filter((v) => !!v);
 
-    await clientOppdaterBrevdata(referanse, {
+    return await clientOppdaterBrevdata(referanse, {
       delmaler: [...obligatoriskeDelmaler, ...valgteDelmaler],
       valg: valgteValg,
-      betingetTekst: [],
-      faktagrunnlag: [],
+      betingetTekst: brevdata?.betingetTekst || [],
+      faktagrunnlag: brevdata?.faktagrunnlag || [],
       fritekster: fritekst,
-      periodetekster: [],
+      periodetekster: brevdata?.periodetekster || [],
     });
   };
+
+  const formValues = useWatch({ control });
+  const debouncedFormData = useDebounce(formValues);
+
+  useEffect(() => {
+    const oppdaterBrevdataOgForhåndsvisning = async () => {
+      const res = await onSubmit(debouncedFormData as BrevdataFormFields);
+      if (isSuccess(res)) {
+        await hentDokument(referanse, setDataUri, setPdfIsLoading);
+      }
+    };
+    oppdaterBrevdataOgForhåndsvisning();
+  }, [debouncedFormData]);
 
   const oppdaterBrevmal = async () => {
     await clientOppdaterBrevmal(referanse);
@@ -160,16 +204,20 @@ export const Brevbygger = ({
   };
 
   const sendBrev = async () => {
-    løsBehovOgGåTilNesteSteg({
-      behandlingVersjon: behandlingVersjon,
-      behov: {
-        behovstype: behovstype,
-        brevbestillingReferanse: referanse,
-        mottakere: valgteMottakere,
-        handling: 'FERDIGSTILL',
-      },
-      referanse: behandlingsReferanse,
-    });
+    // valider skjema før vi sender brevet
+    const isValid = await trigger();
+    if (isValid) {
+      løsBehovOgGåTilNesteSteg({
+        behandlingVersjon: behandlingVersjon,
+        behov: {
+          behovstype: behovstype,
+          brevbestillingReferanse: referanse,
+          mottakere: valgteMottakere,
+          handling: 'FERDIGSTILL',
+        },
+        referanse: behandlingsReferanse,
+      });
+    }
   };
 
   const slettBrev = async () => {
@@ -186,7 +234,7 @@ export const Brevbygger = ({
   };
 
   return (
-    <HGrid columns={2} gap={'2'} minWidth={'1280px'}>
+    <HGrid columns={pdfViewExpanded ? '1fr 3fr' : '1fr 1fr'} gap={'2'}>
       <Box>
         <Brevbyggermeny
           visAvbryt={visAvbryt}
@@ -212,23 +260,35 @@ export const Brevbygger = ({
             onSubmit(data);
           })}
         >
-          {fields.map((feltet, index) => (
-            <Delmal
-              delmalFelt={feltet}
-              index={index}
-              control={control}
-              key={feltet.id}
-              watch={watch}
-              brevmal={parsedBrevmal}
-            />
-          ))}
-          <Button variant="secondary">Oppdater brevdata</Button>
+          {fields
+            .filter((feltet) => delmalSkalVises(feltet.noekkel, parsedBrevmal))
+            .map((feltet, index) => (
+              <Delmal
+                delmalFelt={feltet}
+                index={index}
+                control={control}
+                key={feltet.id}
+                watch={watch}
+                brevmal={parsedBrevmal}
+              />
+            ))}
         </form>
         <Button type="button" onClick={() => sendBrev()} loading={isLoading}>
           Send brev
         </Button>
       </Box>
-      <ForhåndsvisBrev referanse={referanse} />
+      <VStack gap={'2'}>
+        <div>
+          <Button
+            type="button"
+            onClick={() => togglePdfVievExpanded(!pdfViewExpanded)}
+            size={'small'}
+            variant={'tertiary'}
+            icon={pdfViewExpanded ? <ShrinkIcon /> : <ExpandIcon />}
+          />
+        </div>
+        <ForhåndsvisBrev isLoading={pdfIsLoading} dataUri={dataUri} />
+      </VStack>
 
       <IkkeSendBrevModal
         isOpen={ikkeSendBrevModalOpen}

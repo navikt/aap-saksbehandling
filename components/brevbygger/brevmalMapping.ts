@@ -96,10 +96,29 @@ export function delmalErObligatorisk(noekkel: string, brevmal: BrevmalType): boo
   return !!brevmal.delmaler.find((delmal) => delmal.delmal._id === noekkel)?.obligatorisk;
 }
 
+export function delmalHarAlternativer(noekkel: string, brevmal: BrevmalType): boolean {
+  const delmal = brevmal.delmaler.find((delmal) => delmal.delmal._id === noekkel);
+  return !!delmal?.delmal.teksteditor.filter((teksteditor) => teksteditor._type === 'valgRef').length;
+}
+
+export function delmalSkalVises(noekkel: string, brevmal: BrevmalType): boolean {
+  const erObligatorisk = delmalErObligatorisk(noekkel, brevmal);
+  const delmalHarValg = delmalHarAlternativer(noekkel, brevmal);
+
+  const obligatoriskDelmalMedValg = erObligatorisk && delmalHarValg;
+  const skalViseDelmalvelger = !erObligatorisk || obligatoriskDelmalMedValg;
+
+  return skalViseDelmalvelger;
+}
+
 export function finnBeskrivelseForValg(noekkel: string, brevmal: BrevmalType): string {
   const beskrivelse = finnAlleValgRefs(brevmal).find((valg) => valg.valg._id === noekkel)?.valg.beskrivelse;
 
   return beskrivelse || `Fant ikke beskrivelse for valg med id ${noekkel}`;
+}
+
+export function valgErObligatorisk(noekkel: string, brevmal: BrevmalType): boolean {
+  return !!finnAlleValgRefs(brevmal).find((valg) => valg.valg._id === noekkel)?.obligatorisk;
 }
 
 export function finnBeskrivelseForAlternativ(noekkel: string, brevmal: BrevmalType): string {
@@ -121,6 +140,7 @@ export function erValgtIdFritekst(noekkel: string, brevmal: BrevmalType): boolea
   return (
     finnAlleValgRefs(brevmal)
       .flatMap((valg) => valg.valg.alternativer.find((alternativ) => noekkel === alternativ._key))
+      .filter((v) => !!v)
       .at(0)?._type === 'fritekst'
   );
 }

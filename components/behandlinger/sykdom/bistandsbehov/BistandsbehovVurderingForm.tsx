@@ -1,25 +1,22 @@
 'use client';
 
 import { JaEllerNei } from 'lib/utils/form';
-import { DateInputWrapperOnBlur } from 'components/form/dateinputwrapper/DateInputWrapperOnBlur';
 import { validerDato } from 'lib/validation/dateValidation';
-import { Button, HStack, Link, VStack } from '@navikt/ds-react';
+import { HStack, VStack } from '@navikt/ds-react';
 import { UseFormReturn } from 'react-hook-form';
-import { TrashFillIcon } from '@navikt/aksel-icons';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
 import { BistandForm } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovPeriodisert';
 import { BistandsGrunnlag } from 'lib/types/types';
-import { Veiledning } from 'components/veiledning/Veiledning';
+import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 
 type Props = {
   form: UseFormReturn<BistandForm>;
   readOnly: boolean;
   index: number;
-  onRemove: () => void;
   grunnlag?: BistandsGrunnlag;
 };
-export const BistandsbehovVurderingForm = ({ form, index, readOnly, onRemove }: Props) => {
+export const BistandsbehovVurderingForm = ({ form, index, readOnly }: Props) => {
   const vilkårsvurderingLabel = 'Vilkårsvurdering';
   const erBehovForAktivBehandlingLabel = 'a: Har brukeren behov for aktiv behandling?';
   const erBehovForArbeidsrettetTiltakLabel = 'b: Har brukeren behov for arbeidsrettet tiltak?';
@@ -28,44 +25,17 @@ export const BistandsbehovVurderingForm = ({ form, index, readOnly, onRemove }: 
 
   return (
     <VStack gap={'4'}>
-      <Veiledning
-        defaultOpen={false}
-        tekst={
-          <div>
-            Vilkårene i § 11-6 første ledd bokstav a til c er tre alternative vilkår. Det vil si at det er nok at
-            brukeren oppfyller ett av dem for å fylle vilkåret i § 11-6.Først skal du vurdere om vilkårene i bokstav a
-            (aktiv behandling) og bokstav b (arbeidsrettet tiltak) er oppfylte. Hvis du svarer ja på ett eller begge
-            vilkårene, er § 11-6 oppfylt. Hvis du svarer nei på a og b, må du vurdere om bokstav c er oppfylt. Hvis du
-            svarer nei på alle tre vilkårene, er § 11-6 ikke oppfylt.{' '}
-            <Link href="https://lovdata.no/nav/rundskriv/r11-00#KAPITTEL_8" target="_blank">
-              Du kan lese om hvordan vilkåret skal vurderes i rundskrivet til § 11-6 (lovdata.no)
-            </Link>
-          </div>
-        }
-      />
       <HStack justify={'space-between'}>
-        <DateInputWrapperOnBlur
+        <DateInputWrapper
           name={`vurderinger.${index}.fraDato`}
           label="Vurderingen gjelder fra"
           control={form.control}
           rules={{
-            required: 'Du må velge fra hvilken dato vurderingen gjelder fra',
+            required: 'Vennligst velg en dato for når vurderingen gjelder fra',
             validate: (value) => validerDato(value as string),
           }}
           readOnly={readOnly}
         />
-        <HStack>
-          <VStack justify={'end'}>
-            <Button
-              aria-label="Fjern vurdering"
-              variant="tertiary"
-              size="small"
-              icon={<TrashFillIcon />}
-              onClick={() => onRemove()}
-              type="button"
-            ></Button>
-          </VStack>
-        </HStack>
       </HStack>
       <TextAreaWrapper
         name={`vurderinger.${index}.begrunnelse`}

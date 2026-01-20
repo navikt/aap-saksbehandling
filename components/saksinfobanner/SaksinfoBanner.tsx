@@ -26,7 +26,8 @@ import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { AvbrytRevurderingModal } from 'components/saksinfobanner/avbrytrevurderingmodal/AvbrytRevurderingModal';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { ReturStatus } from 'components/returstatus/ReturStatus';
-import { toggles } from 'lib/utils/toggles';
+import { useFeatureFlag } from 'context/UnleashContext';
+import { Dato } from 'lib/types/Dato';
 
 interface Props {
   personInformasjon: SakPersoninfo;
@@ -66,6 +67,7 @@ export const SaksinfoBanner = ({
   const avbrytRevurderingSteg = flyt && flyt.find((f) => f.stegGruppe === 'AVBRYT_REVURDERING');
   const behandlerEnSøknadSomSkalTrekkes = søknadStegGruppe && søknadStegGruppe.skalVises;
   const behandlerRevurderingSomSkalAvbrytes = avbrytRevurderingSteg && avbrytRevurderingSteg.skalVises;
+  const visArenahistorikkKnappEnabled = useFeatureFlag('VisArenahistorikkKnapp');
 
   const trekkKlageSteg = flyt && flyt.find((f) => f.stegGruppe === 'TREKK_KLAGE');
   const harAlleredeValgtTrekkKlage = trekkKlageSteg && trekkKlageSteg.skalVises;
@@ -110,6 +112,11 @@ export const SaksinfoBanner = ({
       return { status: 'TRUKKET', label: 'Trukket' };
     } else if (visning?.resultatKode) {
       return { status: 'AVBRUTT', label: 'Avbrutt' };
+    } else if (oppgave?.utløptVentefrist) {
+      return {
+        status: 'VENTEFRIST_UTLØPT',
+        label: `Frist utløpt ${new Dato(oppgave.utløptVentefrist).formaterForFrontend()}`,
+      };
     }
   };
 
@@ -183,7 +190,7 @@ export const SaksinfoBanner = ({
               />
             </div>
           )}
-          {behandling.arenaStatus?.harArenaHistorikk && toggles.featureVisArenahistorikkKnapp && (
+          {behandling.arenaStatus?.harArenaHistorikk && visArenahistorikkKnappEnabled && (
             <div className={styles.oppgavestatus}>
               <ArenaStatus />
             </div>
@@ -220,7 +227,7 @@ export const SaksinfoBanner = ({
               >
                 Saksmeny
               </Button>
-              <Dropdown.Menu>
+              <Dropdown.Menu className={styles.saksmenyDropdown}>
                 <Dropdown.Menu.GroupedList>
                   {behandlingErIkkeAvsluttet && (
                     <Dropdown.Menu.GroupedList.Item onClick={() => setSettBehandlingPåVentmodalIsOpen(true)}>
@@ -244,7 +251,7 @@ export const SaksinfoBanner = ({
                   )}
                   {visValgForÅOverstyreStarttidspunkt && (
                     <Dropdown.Menu.GroupedList.Item onClick={() => settVisVurderRettighetsperiodeModal(true)}>
-                      Overstyr starttidspunkt
+                      Vurder § 22-13 syvende ledd
                     </Dropdown.Menu.GroupedList.Item>
                   )}
                   {visValgForÅSetteMarkering && (

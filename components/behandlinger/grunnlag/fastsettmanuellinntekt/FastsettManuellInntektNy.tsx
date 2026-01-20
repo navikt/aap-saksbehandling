@@ -3,7 +3,7 @@
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
-import React, { FormEvent } from 'react';
+import React, { FormEvent, useEffect } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { ManuellInntektGrunnlag, ManuellInntektÅr, MellomlagretVurdering } from 'lib/types/types';
@@ -16,6 +16,7 @@ import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerU
 import { useFieldArray } from 'react-hook-form';
 import { FastsettManuellInntektTabell } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/FastsettManuellInntektTabell';
 import { FastsettManuellInntektForm, Tabellår } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/types';
+import { sorterEtterNyesteDato } from 'lib/utils/date';
 
 interface Props {
   behandlingsversjon: number;
@@ -93,6 +94,13 @@ export const FastsettManuellInntektNy = ({
     },
   });
 
+  /**
+   * Sikre at tabellår oppdateres dersom grunnlag endres (ved oppdatering av dato for nedsatt arbeidsevne).
+   */
+  useEffect(() => {
+    form.setValue('tabellår', defaultValue.tabellår || []);
+  }, [grunnlag]);
+
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     form.handleSubmit((data) => {
       løsBehovOgGåTilNesteSteg(
@@ -107,6 +115,7 @@ export const FastsettManuellInntektNy = ({
                 år: år.år,
                 beløp: år.beregnetPGI,
                 eøsBeløp: år.eøsInntekt,
+                ferdigLignetPGI: år.ferdigLignetPGI,
               })),
             },
           },
@@ -118,11 +127,13 @@ export const FastsettManuellInntektNy = ({
   }
 
   const visHovedinnhold = !formReadOnly || grunnlag.manuelleVurderinger !== null;
-  const historiskeVurderinger = grunnlag.historiskeManuelleVurderinger;
+  const vurderinger = grunnlag.historiskeManuelleVurderinger?.sort((a, b) => {
+    return sorterEtterNyesteDato(a.vurdertAv.dato, b.vurdertAv.dato);
+  });
 
   return (
     <VilkårskortMedFormOgMellomlagringNyVisning
-      heading={'Manglende pensjonsgivende inntekter / EØS-inntekter'}
+      heading={'Manglende pensjonsgivende inntekt / EØS-beregnet inntekt'}
       steg={'MANGLENDE_LIGNING'}
       onSubmit={handleSubmit}
       isLoading={isLoading}
@@ -141,29 +152,31 @@ export const FastsettManuellInntektNy = ({
       visningActions={visningActions}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
-      {behandlingErRevurdering && historiskeVurderinger && (
+      {behandlingErRevurdering && vurderinger && (
         <TidligereVurderinger
-          data={historiskeVurderinger}
-          getErGjeldende={(v) => deepEqual(v, historiskeVurderinger[historiskeVurderinger.length - 1])}
+          data={vurderinger}
+          getErGjeldende={(v) => deepEqual(v, vurderinger.at(0))}
           getVurdertAvIdent={(v) => v.vurdertAv.ident}
           getVurdertDato={(v) => v.vurdertAv.dato}
-          getFomDato={(v) => v.fomDato}
           grupperPåOpprettetDato={true}
-          customElement={(selectedIndex) => {
-            const pgi = grunnlag.registrerteInntekterSisteRelevanteAr;
-            const tabelldata = byggTabellData({
-              sisteÅr: grunnlag.sisteRelevanteÅr,
-              pgi: pgi,
-              manuelleInntekter: historiskeVurderinger.at(selectedIndex)?.årsVurderinger || [],
-            });
+          customElement={(valgtVurderingIndex) => {
+            const tabelldata: Tabellår[] | undefined = vurderinger
+              .at(valgtVurderingIndex)
+              ?.årsVurderinger.map((år) => ({
+                år: år.år,
+                ferdigLignetPGI: år.ferdigLignetPGI,
+                beregnetPGI: år.beløp,
+                eøsInntekt: år.eøsBeløp,
+              }));
+
             return (
               <>
                 <VStack>
                   <Label size="small">{formFields.begrunnelse.label}</Label>
-                  <BodyShort size="small">{historiskeVurderinger.at(selectedIndex)?.begrunnelse}</BodyShort>
+                  <BodyShort size="small">{vurderinger.at(valgtVurderingIndex)?.begrunnelse}</BodyShort>
                 </VStack>
                 <VStack>
-                  <FastsettManuellInntektTabell form={form} tabellår={tabelldata} låstVisning={true} />
+                  {tabelldata && <FastsettManuellInntektTabell form={form} tabellår={tabelldata} låstVisning={true} />}
                 </VStack>
               </>
             );
@@ -187,7 +200,7 @@ export const FastsettManuellInntektNy = ({
             target="_blank"
             rel="noopener noreferrer"
           >
-            Du kan lese mer om hvordan EØS-inntekt skal beregnes i rundskrivet til § 11-7 (lovdata.no).
+            Du kan lese mer om hvordan EØS-inntekt skal beregnes i kapittel 11.7 av EØS-rundskrivet.
           </Link>
           <FormField form={form} formField={formFields.begrunnelse} />
           <FastsettManuellInntektTabell form={form} tabellår={tabellår} readOnly={formReadOnly} />
@@ -206,7 +219,6 @@ const berikMedManglendeÅr = (sisteÅr: number): Tabellår[] => {
     ferdigLignetPGI: undefined,
     beregnetPGI: undefined,
     eøsInntekt: undefined,
-    totalInntekt: undefined,
   }));
 };
 
@@ -221,7 +233,6 @@ const berikMedPGI = (treÅr: Tabellår[], pgi: ManuellInntektÅr[]): Tabellår[]
       ferdigLignetPGI: inntekter?.beløp,
       beregnetPGI: undefined,
       eøsInntekt: undefined,
-      totalInntekt: undefined,
     };
   });
 };
@@ -237,7 +248,6 @@ const berikMedManuelleInntekter = (treÅr: Tabellår[], manuelleInntekter: Manue
       ferdigLignetPGI: år.ferdigLignetPGI,
       beregnetPGI: inntekter?.beløp,
       eøsInntekt: inntekter?.eøsBeløp,
-      totalInntekt: undefined,
     };
   });
 };
