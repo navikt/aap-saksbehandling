@@ -47,18 +47,21 @@ export const SykestipendVurdering = ({
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingTilForm(grunnlag?.gjeldendeVurdering);
 
-  const { form, formFields } = useConfigForm<SykestipendFormFields>({
-    begrunnelse: {
-      type: 'textarea',
-      label: 'Vurder om brukeren har rett på sykestipend',
-      rules: { required: 'Du må skrive en begrunnelse' },
-      defaultValue: defaultValue.begrunnelse,
+  const { form, formFields } = useConfigForm<SykestipendFormFields>(
+    {
+      begrunnelse: {
+        type: 'textarea',
+        label: 'Vurder om brukeren har rett på sykestipend',
+        rules: { required: 'Du må skrive en begrunnelse' },
+        defaultValue: defaultValue.begrunnelse,
+      },
+      perioder: {
+        type: 'fieldArray',
+        defaultValue: defaultValue.perioder,
+      },
     },
-    perioder: {
-      type: 'fieldArray',
-      defaultValue: defaultValue.perioder,
-    },
-  });
+    { readOnly: formReadOnly }
+  );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit(async (data) =>
