@@ -10,7 +10,6 @@ import { TrashFillIcon } from '@navikt/aksel-icons';
 import { VurdertAvAnsatt } from 'lib/types/types';
 import { SlettVurderingModal } from 'components/periodisering/slettvurderingmodal/SlettVurderingModal';
 import { VurderingStatusTag } from 'components/periodisering/VurderingStatusTag';
-import { useAccordionTilstand } from 'hooks/saksbehandling/AccordionTilstandHook';
 
 interface Props {
   initiellEkspandert: boolean;
@@ -26,6 +25,7 @@ interface Props {
   readonly: boolean;
   onSlettVurdering: () => void;
   index: number;
+  allAccordionsOpenSignal: boolean | undefined;
   harTidligereVurderinger?: boolean;
 }
 
@@ -44,14 +44,13 @@ export const NyVurderingExpandableCard = ({
   harTidligereVurderinger = false,
   initiellEkspandert = false,
   index,
+  allAccordionsOpenSignal,
 }: Props) => {
-  const { isOpen } = useAccordionTilstand();
-
   const [localCardExpanded, setLocalCardExpanded] = useState<boolean>(initiellEkspandert);
 
-  // useAccordionTilstand fra context kan overstyre åpen/lukket tilstand via isOpen.
-  // Når isOpen er undefined, styrer komponenten seg selv lokalt.
-  const cardExpanded = isOpen ?? localCardExpanded;
+  // allAccordionsOpenSignal  kan overstyre åpen/lukket tilstand via isOpen.
+  // Når allAccordionsOpenSignal er undefined, styrer komponenten seg selv lokalt.
+  const cardExpanded = allAccordionsOpenSignal ?? localCardExpanded;
 
   const ref = useRef<HTMLDialogElement>(null);
 

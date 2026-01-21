@@ -32,7 +32,6 @@ import { ForutgåendeMedlemskapTidligereVurdering } from 'components/behandlinge
 import { ForutgåendeMedlemskapFormInput } from 'components/behandlinger/forutgåendemedlemskap/manuellvurderingperiodisert/ForutgåendeMedlemskapFormInput';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import { useState } from 'react';
-import { AccordionTilstandProvider } from 'context/saksbehandling/AccordionTilstandContext';
 
 interface Props {
   behandlingVersjon: number;
@@ -66,7 +65,7 @@ export const ForutgåendeMedlemskapPeriodisert = ({
     mellomlagretVurdering
   );
 
-  const [isOpen, setIsOpen] = useState<boolean>();
+  const [allAccordionsOpenSignal, setAllAccordionsOpenSignal] = useState<boolean>();
 
   const defaultValues =
     mellomlagretVurdering != null
@@ -113,7 +112,7 @@ export const ForutgåendeMedlemskapPeriodisert = ({
     };
 
     løsPeriodisertBehovOgGåTilNesteSteg(losning, () => {
-      setIsOpen(false);
+      setAllAccordionsOpenSignal(false);
       nullstillMellomlagretVurdering();
     });
   }
@@ -158,38 +157,38 @@ export const ForutgåendeMedlemskapPeriodisert = ({
           <ForutgåendeMedlemskapTidligereVurdering vurdering={vurdering} />
         </TidligereVurderingExpandableCard>
       ))}
-      <AccordionTilstandProvider isOpen={isOpen} setIsOpen={setIsOpen}>
-        {vurderingerFields.map((vurdering, index) => (
-          <NyVurderingExpandableCard
-            key={vurdering.id}
-            fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-            nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
-            isLast={index === vurderingerFields.length - 1}
-            oppfylt={
-              form.watch(`vurderinger.${index}.harForutgåendeMedlemskap`) === JaEllerNei.Ja ||
-              form.watch(`vurderinger.${index}.unntaksvilkår`) === 'A' ||
-              form.watch(`vurderinger.${index}.unntaksvilkår`) === 'B'
-            }
-            vurdertAv={vurdering.vurdertAv}
-            kvalitetssikretAv={vurdering.kvalitetssikretAv}
-            besluttetAv={vurdering.besluttetAv}
-            finnesFeil={finnesFeilForVurdering(index, errorList)}
-            readonly={formReadOnly}
-            onSlettVurdering={() => remove(index)}
-            harTidligereVurderinger={tidligereVurderinger.length > 0}
+
+      {vurderingerFields.map((vurdering, index) => (
+        <NyVurderingExpandableCard
+          key={vurdering.id}
+          allAccordionsOpenSignal={allAccordionsOpenSignal}
+          fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
+          nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
+          isLast={index === vurderingerFields.length - 1}
+          oppfylt={
+            form.watch(`vurderinger.${index}.harForutgåendeMedlemskap`) === JaEllerNei.Ja ||
+            form.watch(`vurderinger.${index}.unntaksvilkår`) === 'A' ||
+            form.watch(`vurderinger.${index}.unntaksvilkår`) === 'B'
+          }
+          vurdertAv={vurdering.vurdertAv}
+          kvalitetssikretAv={vurdering.kvalitetssikretAv}
+          besluttetAv={vurdering.besluttetAv}
+          finnesFeil={finnesFeilForVurdering(index, errorList)}
+          readonly={formReadOnly}
+          onSlettVurdering={() => remove(index)}
+          harTidligereVurderinger={tidligereVurderinger.length > 0}
+          index={index}
+          initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
+        >
+          <ForutgåendeMedlemskapFormInput
+            form={form}
+            beregningstidspunktGrunnlag={beregningstidspunktGrunnlag}
+            readOnly={formReadOnly}
             index={index}
-            initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
-          >
-            <ForutgåendeMedlemskapFormInput
-              form={form}
-              beregningstidspunktGrunnlag={beregningstidspunktGrunnlag}
-              readOnly={formReadOnly}
-              index={index}
-              harTidligereVurderinger={tidligereVurderinger.length !== 0}
-            />
-          </NyVurderingExpandableCard>
-        ))}
-      </AccordionTilstandProvider>
+            harTidligereVurderinger={tidligereVurderinger.length !== 0}
+          />
+        </NyVurderingExpandableCard>
+      ))}
     </VilkårskortPeriodisert>
   );
 };

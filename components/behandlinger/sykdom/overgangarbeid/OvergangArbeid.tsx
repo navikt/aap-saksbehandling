@@ -28,7 +28,6 @@ import { OvergangArbeidTidligereVurdering } from 'components/behandlinger/sykdom
 import { OvergangArbeidFormInput } from 'components/behandlinger/sykdom/overgangarbeid/OvergangArbeidFormInput';
 import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/overgangarbeid/OvergangArbeidMellomlagringParser';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
-import { AccordionTilstandProvider } from 'context/saksbehandling/AccordionTilstandContext';
 import { useState } from 'react';
 
 interface Props {
@@ -46,7 +45,7 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialM
   const { lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
     useMellomlagring(Behovstype.OVERGANG_ARBEID, initialMellomlagretVurdering);
 
-  const [isOpen, setIsOpen] = useState<boolean>();
+  const [allAccordionsOpenSignal, setAllAccordionsOpenSignal] = useState<boolean>();
 
   const { visningActions, visningModus, formReadOnly, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
@@ -111,7 +110,7 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialM
     };
 
     løsPeriodisertBehovOgGåTilNesteSteg(losning, () => {
-      setIsOpen(false);
+      setAllAccordionsOpenSignal(false);
       visningActions.onBekreftClick();
       nullstillMellomlagretVurdering();
     });
@@ -159,32 +158,31 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialM
         </TidligereVurderingExpandableCard>
       ))}
 
-      <AccordionTilstandProvider isOpen={isOpen} setIsOpen={setIsOpen}>
-        {vurderingerFields.map((vurdering, index) => (
-          <NyVurderingExpandableCard
-            key={vurdering.id}
-            fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-            oppfylt={
-              form.watch(`vurderinger.${index}.brukerRettPåAAP`)
-                ? form.watch(`vurderinger.${index}.brukerRettPåAAP`) === JaEllerNei.Ja
-                : undefined
-            }
-            nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
-            isLast={index === vurderingerFields.length - 1}
-            vurdertAv={vurdering.vurdertAv}
-            kvalitetssikretAv={vurdering.kvalitetssikretAv}
-            besluttetAv={vurdering.besluttetAv}
-            readonly={formReadOnly}
-            onSlettVurdering={() => remove(index)}
-            harTidligereVurderinger={tidligereVurderinger.length > 0}
-            index={index}
-            finnesFeil={finnesFeilForVurdering(index, errorList)}
-            initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
-          >
-            <OvergangArbeidFormInput form={form} readOnly={formReadOnly} index={index} />
-          </NyVurderingExpandableCard>
-        ))}
-      </AccordionTilstandProvider>
+      {vurderingerFields.map((vurdering, index) => (
+        <NyVurderingExpandableCard
+          key={vurdering.id}
+          allAccordionsOpenSignal={allAccordionsOpenSignal}
+          fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
+          oppfylt={
+            form.watch(`vurderinger.${index}.brukerRettPåAAP`)
+              ? form.watch(`vurderinger.${index}.brukerRettPåAAP`) === JaEllerNei.Ja
+              : undefined
+          }
+          nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
+          isLast={index === vurderingerFields.length - 1}
+          vurdertAv={vurdering.vurdertAv}
+          kvalitetssikretAv={vurdering.kvalitetssikretAv}
+          besluttetAv={vurdering.besluttetAv}
+          readonly={formReadOnly}
+          onSlettVurdering={() => remove(index)}
+          harTidligereVurderinger={tidligereVurderinger.length > 0}
+          index={index}
+          finnesFeil={finnesFeilForVurdering(index, errorList)}
+          initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
+        >
+          <OvergangArbeidFormInput form={form} readOnly={formReadOnly} index={index} />
+        </NyVurderingExpandableCard>
+      ))}
     </VilkårskortPeriodisert>
   );
 };

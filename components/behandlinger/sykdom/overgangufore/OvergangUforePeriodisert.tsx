@@ -23,7 +23,6 @@ import { OvergangUforeTidligereVurdering } from 'components/behandlinger/sykdom/
 import { Link, VStack } from '@navikt/ds-react';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
-import { AccordionTilstandProvider } from 'context/saksbehandling/AccordionTilstandContext';
 
 interface Props {
   behandlingVersjon: number;
@@ -60,7 +59,7 @@ export const OvergangUforePeriodisert = ({
   const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
     useMellomlagring(Behovstype.OVERGANG_UFORE, initialMellomlagretVurdering);
 
-  const [isOpen, setIsOpen] = useState<boolean>();
+  const [allAccordionsOpenSignal, setAllAccordionsOpenSignal] = useState<boolean>();
 
   const { visningActions, formReadOnly, visningModus, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
@@ -100,7 +99,7 @@ export const OvergangUforePeriodisert = ({
           },
         },
         () => {
-          setIsOpen(false);
+          setAllAccordionsOpenSignal(false);
           nullstillMellomlagretVurdering();
         }
       );
@@ -158,37 +157,36 @@ export const OvergangUforePeriodisert = ({
           </TidligereVurderingExpandableCard>
         ))}
 
-        <AccordionTilstandProvider isOpen={isOpen} setIsOpen={setIsOpen}>
-          {nyeVurderingFields.map((vurdering, index) => {
-            return (
-              <NyVurderingExpandableCard
-                key={vurdering.id}
-                fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-                oppfylt={
-                  form.watch(`vurderinger.${index}.brukerRettPåAAP`)
-                    ? form.watch(`vurderinger.${index}.brukerRettPåAAP`) === JaEllerNei.Ja
-                    : form.watch(`vurderinger.${index}.brukerHarSøktUføretrygd`) === JaEllerNei.Nei ||
-                        form.watch(`vurderinger.${index}.brukerHarFåttVedtakOmUføretrygd`) === 'NEI'
-                      ? false
-                      : undefined
-                }
-                nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
-                isLast={index === nyeVurderingFields.length - 1}
-                vurdertAv={vurdering.vurdertAv}
-                kvalitetssikretAv={vurdering.kvalitetssikretAv}
-                besluttetAv={vurdering.besluttetAv}
-                finnesFeil={finnesFeilForVurdering(index, errorList)}
-                readonly={formReadOnly}
-                onSlettVurdering={() => remove(index)}
-                harTidligereVurderinger={tidligereVurderinger.length > 0}
-                index={index}
-                initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
-              >
-                <OvergangUforeVurderingFormInput index={index} form={form} readonly={formReadOnly} />
-              </NyVurderingExpandableCard>
-            );
-          })}
-        </AccordionTilstandProvider>
+        {nyeVurderingFields.map((vurdering, index) => {
+          return (
+            <NyVurderingExpandableCard
+              key={vurdering.id}
+              allAccordionsOpenSignal={allAccordionsOpenSignal}
+              fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
+              oppfylt={
+                form.watch(`vurderinger.${index}.brukerRettPåAAP`)
+                  ? form.watch(`vurderinger.${index}.brukerRettPåAAP`) === JaEllerNei.Ja
+                  : form.watch(`vurderinger.${index}.brukerHarSøktUføretrygd`) === JaEllerNei.Nei ||
+                      form.watch(`vurderinger.${index}.brukerHarFåttVedtakOmUføretrygd`) === 'NEI'
+                    ? false
+                    : undefined
+              }
+              nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
+              isLast={index === nyeVurderingFields.length - 1}
+              vurdertAv={vurdering.vurdertAv}
+              kvalitetssikretAv={vurdering.kvalitetssikretAv}
+              besluttetAv={vurdering.besluttetAv}
+              finnesFeil={finnesFeilForVurdering(index, errorList)}
+              readonly={formReadOnly}
+              onSlettVurdering={() => remove(index)}
+              harTidligereVurderinger={tidligereVurderinger.length > 0}
+              index={index}
+              initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
+            >
+              <OvergangUforeVurderingFormInput index={index} form={form} readonly={formReadOnly} />
+            </NyVurderingExpandableCard>
+          );
+        })}
       </VStack>
     </VilkårskortPeriodisert>
   );
