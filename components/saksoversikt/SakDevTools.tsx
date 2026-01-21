@@ -4,6 +4,7 @@ import { SendNySoknad } from 'components/devtools/SendNySoknad';
 import { SendNySoknadUtenMedlemskap } from 'components/devtools/SendNySoknadUtenMedlemskap';
 import { DummyKabalEvent } from 'components/devtools/DummyKabalEvent';
 import { LeggTilMockInstitusjonsopphold } from 'components/devtools/LeggTilMockInstitusjonsopphold';
+import { LeggTilMockYrkesskade } from 'components/devtools/LeggTilMockYrkesskade';
 
 export const SakDevTools = ({
   saksnummer,
@@ -35,6 +36,7 @@ export const SakDevTools = ({
 
         <VStack gap="4">
           <LeggTilMockInstitusjonsopphold saksnummer={saksnummer} />
+          <LeggTilMockYrkesskade saksnummer={saksnummer} />
         </VStack>
       </HGrid>
     </Box>

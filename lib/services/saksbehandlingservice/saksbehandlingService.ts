@@ -483,6 +483,11 @@ export const leggTilDummyInst = async (saksnummer: string, body: object) => {
   return await apiFetch<void>(url, saksbehandlingApiScope, 'POST', body);
 };
 
+export const leggTilDummyYrkesskade = async (saksnummer: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/test/endre/${saksnummer}/legg-til-yrkesskade`;
+  return await apiFetch<void>(url, saksbehandlingApiScope, 'POST');
+};
+
 export const opprettDummySakTest = async (sak: OpprettDummySakDto) => {
   const url = `${saksbehandlingApiBaseUrl}/api/test/opprettDummySak`;
   return await apiFetch<void>(url, saksbehandlingApiScope, 'POST', sak);
