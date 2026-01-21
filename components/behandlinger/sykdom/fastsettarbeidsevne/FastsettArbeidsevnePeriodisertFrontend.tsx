@@ -156,15 +156,11 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
   const foersteNyePeriode = fields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
   const errorList = mapPeriodiserteVurderingerErrorList<FastsettArbeidsevneForm>(form.formState.errors);
 
-  const showAsOpen =
-    (grunnlag?.nyeVurderinger && grunnlag.nyeVurderinger.length >= 1) || initialMellomlagretVurdering !== undefined;
-
   return (
     <VilkårskortPeriodisert
       heading={'§ 11-23 andre ledd. Arbeidsevne som ikke er utnyttet (valgfritt)'}
       steg={'FASTSETT_ARBEIDSEVNE'}
       vilkårTilhørerNavKontor={true}
-      defaultOpen={showAsOpen}
       onSubmit={form.handleSubmit(onSubmit)}
       status={status}
       isLoading={isLoading}

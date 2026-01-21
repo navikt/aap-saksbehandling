@@ -262,6 +262,12 @@ describe('Førstegangsbehandling', () => {
     const endreKnapp = screen.getByRole('button', { name: 'Endre' });
     await user.click(endreKnapp);
 
+    await user.click(
+      screen.getByRole('button', {
+        name: /ny vurdering: 19. august 2025/i,
+      })
+    );
+
     const begrunnelseFelt = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
     await user.clear(begrunnelseFelt);
     await user.type(begrunnelseFelt, 'Dette er en ny begrunnelse');
@@ -269,6 +275,12 @@ describe('Førstegangsbehandling', () => {
 
     const avbrytKnapp = screen.getByRole('button', { name: 'Avbryt' });
     await user.click(avbrytKnapp);
+
+    await user.click(
+      screen.getByRole('button', {
+        name: /ny vurdering: 19. august 2025/i,
+      })
+    );
 
     const begrunnelseFeltEtterAvbryt = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
     expect(begrunnelseFeltEtterAvbryt).toHaveValue('Dette er min vurdering som er bekreftet');

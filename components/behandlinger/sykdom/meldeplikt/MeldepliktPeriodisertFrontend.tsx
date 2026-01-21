@@ -142,15 +142,11 @@ export const MeldepliktPeriodisertFrontend = ({
   const foersteNyePeriode = fields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
   const errorList = mapPeriodiserteVurderingerErrorList<FritakMeldepliktVurderingForm>(form.formState.errors);
 
-  const showAsOpen =
-    (grunnlag?.nyeVurderinger && grunnlag.nyeVurderinger.length >= 1) || initialMellomlagretVurdering !== undefined;
-
   return (
     <VilkårskortPeriodisert
       heading={'§ 11-10 tredje ledd. Unntak fra meldeplikt (valgfritt)'}
       steg="FRITAK_MELDEPLIKT"
       vilkårTilhørerNavKontor={true}
-      defaultOpen={showAsOpen}
       onSubmit={form.handleSubmit(onSubmit)}
       status={status}
       isLoading={isLoading}
