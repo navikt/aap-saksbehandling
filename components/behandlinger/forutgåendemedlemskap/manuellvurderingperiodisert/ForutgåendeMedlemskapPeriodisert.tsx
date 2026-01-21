@@ -14,7 +14,10 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import { parseISO } from 'date-fns';
 import { parseDatoFraDatePicker } from 'lib/utils/date';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
-import { NyVurderingExpandableCard } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
+import {
+  NyVurderingExpandableCard,
+  skalVæreInitiellEkspandert,
+} from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
 import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
@@ -28,8 +31,8 @@ import {
 import { ForutgåendeMedlemskapTidligereVurdering } from 'components/behandlinger/forutgåendemedlemskap/manuellvurderingperiodisert/ForutgåendeMedlemskapTidligereVurdering';
 import { ForutgåendeMedlemskapFormInput } from 'components/behandlinger/forutgåendemedlemskap/manuellvurderingperiodisert/ForutgåendeMedlemskapFormInput';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
-import { AccordionGroup } from 'components/accordiongroup/AccordionGroup';
 import { useState } from 'react';
+import { AccordionTilstandProvider } from 'context/saksbehandling/AccordionTilstandContext';
 
 interface Props {
   behandlingVersjon: number;
@@ -57,13 +60,13 @@ export const ForutgåendeMedlemskapPeriodisert = ({
   const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
     useMellomlagring(Behovstype.AVKLAR_FORUTGÅENDE_MEDLEMSKAP, initialMellomlagretVurdering);
 
-  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+  const { visningActions, formReadOnly, visningModus, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'VURDER_MEDLEMSKAP',
     mellomlagretVurdering
   );
 
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState<boolean>();
 
   const defaultValues =
     mellomlagretVurdering != null
@@ -81,6 +84,7 @@ export const ForutgåendeMedlemskapPeriodisert = ({
     append({
       begrunnelse: '',
       fraDato: undefined,
+      erNyVurdering: true,
     });
   }
 
@@ -109,6 +113,7 @@ export const ForutgåendeMedlemskapPeriodisert = ({
     };
 
     løsPeriodisertBehovOgGåTilNesteSteg(losning, () => {
+      setIsOpen(false);
       nullstillMellomlagretVurdering();
     });
   }
@@ -153,7 +158,7 @@ export const ForutgåendeMedlemskapPeriodisert = ({
           <ForutgåendeMedlemskapTidligereVurdering vurdering={vurdering} />
         </TidligereVurderingExpandableCard>
       ))}
-      <AccordionGroup isOpen={isOpen} setIsOpen={setIsOpen}>
+      <AccordionTilstandProvider isOpen={isOpen} setIsOpen={setIsOpen}>
         {vurderingerFields.map((vurdering, index) => (
           <NyVurderingExpandableCard
             key={vurdering.id}
@@ -173,6 +178,7 @@ export const ForutgåendeMedlemskapPeriodisert = ({
             onSlettVurdering={() => remove(index)}
             harTidligereVurderinger={tidligereVurderinger.length > 0}
             index={index}
+            initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
           >
             <ForutgåendeMedlemskapFormInput
               form={form}
@@ -183,7 +189,7 @@ export const ForutgåendeMedlemskapPeriodisert = ({
             />
           </NyVurderingExpandableCard>
         ))}
-      </AccordionGroup>
+      </AccordionTilstandProvider>
     </VilkårskortPeriodisert>
   );
 };
