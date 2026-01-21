@@ -80,6 +80,7 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
       fraDato: '',
       grunn: null,
       erOppfylt: '',
+      erNyVurdering: true,
     });
   }
 
