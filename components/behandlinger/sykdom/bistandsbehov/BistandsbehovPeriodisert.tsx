@@ -192,11 +192,8 @@ export const BistandsbehovPeriodisert = ({
               onSlettVurdering={() => remove(index)}
               harTidligereVurderinger={tidligereVurderinger.length > 0}
               index={index}
-              initiellEkspandert={skalVæreInitiellEkspandert(
-                vurdering.erNyVurdering,
-                erAktivUtenAvbryt,
-                finnesFeilForVurdering(index, errorList)
-              )}
+              finnesFeil={finnesFeilForVurdering(index, errorList)}
+              initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
             >
               <BistandsbehovVurderingForm form={form} readOnly={formReadOnly} index={index} />
             </NyVurderingExpandableCard>
