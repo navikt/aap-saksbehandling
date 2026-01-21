@@ -6,7 +6,7 @@ import { TableStyled } from 'components/tablestyled/TableStyled';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { validerDato } from 'lib/validation/dateValidation';
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
-import { SykestipendFormFields } from 'components/behandlinger/sykdom/student/sykestipend/SykestipendVurdering';
+import { SykestipendFormFields } from 'components/behandlinger/samordning/sykestipend/SykestipendVurdering';
 
 interface Props {
   form: UseFormReturn<SykestipendFormFields>;
