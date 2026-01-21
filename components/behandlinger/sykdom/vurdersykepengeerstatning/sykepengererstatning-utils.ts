@@ -13,21 +13,7 @@ import { parse } from 'date-fns';
 import { ValuePair } from 'components/form/FormField';
 import { getFraDatoFraGrunnlagForFrontend } from 'lib/utils/periodisering';
 
-export function getDefaultValuesFromGrunnlag(grunnlag?: SykepengeerstatningGrunnlag): SykepengeerstatningForm {
-  if (grunnlag == null) {
-    return {
-      vurderinger: [
-        {
-          begrunnelse: '',
-          fraDato: '',
-          grunn: null,
-          erOppfylt: '',
-          erNyVurdering: true,
-        },
-      ],
-    };
-  }
-
+export function getDefaultValuesFromGrunnlag(grunnlag: SykepengeerstatningGrunnlag): SykepengeerstatningForm {
   if (grunnlag.nyeVurderinger.length === 0 && grunnlag.sisteVedtatteVurderinger.length === 0) {
     // Vi har ingen tidligere vurderinger eller nye vurderinger, legg til en tom-default-periode
     return {

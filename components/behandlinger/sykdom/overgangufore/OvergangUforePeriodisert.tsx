@@ -23,6 +23,7 @@ import { OvergangUforeTidligereVurdering } from 'components/behandlinger/sykdom/
 import { Link, VStack } from '@navikt/ds-react';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
+import { getFraDatoFraGrunnlagForFrontend } from 'lib/utils/periodisering';
 
 interface Props {
   behandlingVersjon: number;
@@ -198,7 +199,7 @@ export const OvergangUforePeriodisert = ({
         vurderinger: [
           {
             ...emptyOvergangUføreVurdering(),
-            //TODO: fraDato: dagens dato?
+            fraDato: getFraDatoFraGrunnlagForFrontend(grunnlag),
           },
         ],
       };

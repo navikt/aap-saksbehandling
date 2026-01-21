@@ -31,7 +31,7 @@ import { useState } from 'react';
 
 interface Props {
   behandlingVersjon: number;
-  grunnlag?: SykepengeerstatningGrunnlag;
+  grunnlag: SykepengeerstatningGrunnlag;
   readOnly: boolean;
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }
