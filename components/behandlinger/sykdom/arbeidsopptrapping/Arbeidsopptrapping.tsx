@@ -20,13 +20,18 @@ import { LovOgMedlemskapVurderingForm } from 'components/behandlinger/lovvalg/lo
 import { parse, parseISO } from 'date-fns';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
-import { NyVurderingExpandableCard } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
+import {
+  NyVurderingExpandableCard,
+  skalVæreInitiellEkspandert,
+} from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { ArbeidsopptrappingVurderingFormInput } from 'components/behandlinger/sykdom/arbeidsopptrapping/ArbeidsopptrappingVurderingFormInput';
 import { Link, VStack } from '@navikt/ds-react';
 import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
 import { IkkeVurderbarPeriode } from 'components/periodisering/IkkeVurderbarPeriode';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
+import { useState } from 'react';
+import { AccordionTilstandProvider } from 'context/saksbehandling/AccordionTilstandContext';
 
 interface Props {
   behandlingVersjon: number;
@@ -47,6 +52,7 @@ export interface ArbeidsopptrappingVurderingForm {
   vurdertAv?: VurdertAvAnsatt;
   kvalitetssikretAv?: VurdertAvAnsatt;
   besluttetAv?: VurdertAvAnsatt;
+  erNyVurdering?: boolean;
 }
 
 export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, initialMellomlagretVurdering }: Props) => {
@@ -58,7 +64,9 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
     useMellomlagring(Behovstype.ARBEIDSOPPTRAPPING_KODE, initialMellomlagretVurdering);
 
-  const { visningActions, visningModus, formReadOnly } = useVilkårskortVisning(
+  const [isOpen, setIsOpen] = useState<boolean>();
+
+  const { visningActions, visningModus, formReadOnly, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'ARBEIDSOPPTRAPPING',
     mellomlagretVurdering
@@ -86,6 +94,7 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
       fraDato: fields.length === 0 ? formaterDatoForFrontend(new Date()) : undefined,
       reellMulighetTilOpptrapping: undefined,
       rettPaaAAPIOpptrapping: undefined,
+      erNyVurdering: true,
     });
   }
 
@@ -120,12 +129,14 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
 
     løsPeriodisertBehovOgGåTilNesteSteg(losning, () => {
       visningActions.onBekreftClick();
+      setIsOpen(false);
       nullstillMellomlagretVurdering();
     });
   }
 
   const foersteNyePeriode = fields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
   const errorList = mapPeriodiserteVurderingerErrorList<LovOgMedlemskapVurderingForm>(form.formState.errors);
+
   return (
     <VilkårskortPeriodisert
       heading={'§ 11-23 sjette ledd. Arbeidsopptrapping (valgfritt)'}
@@ -184,36 +195,40 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
           </VStack>
         </TidligereVurderingExpandableCard>
       ))}
-      {fields.map((vurdering, index) => (
-        <NyVurderingExpandableCard
-          key={vurdering.id}
-          fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-          oppfylt={
-            form.watch(`vurderinger.${index}.reellMulighetTilOpptrapping`) &&
-            form.watch(`vurderinger.${index}.rettPaaAAPIOpptrapping`)
-              ? form.watch(`vurderinger.${index}.reellMulighetTilOpptrapping`) === JaEllerNei.Ja &&
-                form.watch(`vurderinger.${index}.rettPaaAAPIOpptrapping`) === JaEllerNei.Ja
-              : undefined
-          }
-          nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
-          isLast={index === fields.length - 1}
-          vurdertAv={vurdering.vurdertAv}
-          kvalitetssikretAv={vurdering.kvalitetssikretAv}
-          besluttetAv={vurdering.besluttetAv}
-          finnesFeil={finnesFeilForVurdering(index, errorList)}
-          onSlettVurdering={() => remove(index)}
-          readonly={formReadOnly}
-          harTidligereVurderinger={true}
-          index={index}
-        >
-          <ArbeidsopptrappingVurderingFormInput
-            index={index}
-            form={form}
+
+      <AccordionTilstandProvider isOpen={isOpen} setIsOpen={setIsOpen}>
+        {fields.map((vurdering, index) => (
+          <NyVurderingExpandableCard
+            key={vurdering.id}
+            fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
+            oppfylt={
+              form.watch(`vurderinger.${index}.reellMulighetTilOpptrapping`) &&
+              form.watch(`vurderinger.${index}.rettPaaAAPIOpptrapping`)
+                ? form.watch(`vurderinger.${index}.reellMulighetTilOpptrapping`) === JaEllerNei.Ja &&
+                  form.watch(`vurderinger.${index}.rettPaaAAPIOpptrapping`) === JaEllerNei.Ja
+                : undefined
+            }
+            nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
+            isLast={index === fields.length - 1}
+            vurdertAv={vurdering.vurdertAv}
+            kvalitetssikretAv={vurdering.kvalitetssikretAv}
+            besluttetAv={vurdering.besluttetAv}
+            finnesFeil={finnesFeilForVurdering(index, errorList)}
+            onSlettVurdering={() => remove(index)}
             readonly={formReadOnly}
-            ikkeRelevantePerioder={grunnlag?.ikkeVurderbarePerioder}
-          />
-        </NyVurderingExpandableCard>
-      ))}
+            harTidligereVurderinger={true}
+            index={index}
+            initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
+          >
+            <ArbeidsopptrappingVurderingFormInput
+              index={index}
+              form={form}
+              readonly={formReadOnly}
+              ikkeRelevantePerioder={grunnlag?.ikkeVurderbarePerioder}
+            />
+          </NyVurderingExpandableCard>
+        ))}
+      </AccordionTilstandProvider>
     </VilkårskortPeriodisert>
   );
 };
