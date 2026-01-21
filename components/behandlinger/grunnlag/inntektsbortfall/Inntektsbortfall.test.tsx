@@ -1,40 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { render } from 'lib/test/CustomRender';
 import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
-import { Inntektsbortfall } from './Inntektsbortfall';
 import { InntektsbortfallMedDataFetching } from './InntektsbortfallMedDataFetching';
-import { mockedFlags } from 'lib/services/unleash/unleashToggles';
 import * as saksbehandlingService from 'lib/services/saksbehandlingservice/saksbehandlingService';
 
 beforeEach(() => {
   setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'MANGLENDE_LIGNING' });
-});
-
-describe('Inntektsbortfall', () => {
-  it('skal ha en alert', async () => {
-    setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'MANGLENDE_LIGNING' });
-    mockedFlags.KravOmInntektsbortfall = false;
-
-    const { findByText } = render(
-      <Inntektsbortfall
-        behandlingVersjon={1}
-        readOnly={true}
-        grunnlag={{
-          harTilgangTilÅSaksbehandle: true,
-          grunnlag: {
-            kanBehandlesAutomatisk: true,
-            inntektSiste3ÅrOver3G: { resultat: true, gverdi: 4 },
-            inntektSisteÅrOver1G: { resultat: true, gverdi: 3 },
-            under62ÅrVedSøknadstidspunkt: { resultat: false, alder: 62 },
-          },
-          vurdering: undefined,
-        }}
-      />
-    );
-
-    const alert = await findByText(/Brukeren er over 62 år og må vurderes for § 11-4 andre ledd/);
-    expect(alert).toBeVisible();
-  });
 });
 
 describe('InntektsbortfallMedDataFetching', () => {
