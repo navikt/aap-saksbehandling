@@ -111,6 +111,8 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialM
     };
 
     løsPeriodisertBehovOgGåTilNesteSteg(losning, () => {
+      setIsOpen(false);
+      visningActions.onBekreftClick();
       nullstillMellomlagretVurdering();
     });
   };

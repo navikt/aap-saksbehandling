@@ -19,6 +19,7 @@ interface Props {
   children: ReactNode;
   defaultCollapsed?: boolean;
 }
+
 export const TidligereVurderingExpandableCard = ({
   fom,
   tom,
@@ -28,13 +29,15 @@ export const TidligereVurderingExpandableCard = ({
   children,
   defaultCollapsed = false,
 }: Props) => {
-  const [cardExpanded, setCardExpanded] = useState<boolean>(!defaultCollapsed);
+  const [cardExpanded, setCardExpanded] = useState<boolean>(defaultCollapsed);
+
   const formattertFom = formaterDatoForFrontend(fom);
   const strekUtHele = foersteNyePeriodeFraDato ? !isBefore(fom, foersteNyePeriodeFraDato) : false;
   const nySluttdato =
     !strekUtHele &&
     foersteNyePeriodeFraDato &&
     (tom == null || isBefore(foersteNyePeriodeFraDato, tom) || isSameDay(foersteNyePeriodeFraDato, tom));
+
   return (
     <CustomExpandableCard
       key={formattertFom}
