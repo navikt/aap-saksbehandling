@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { render, screen } from 'lib/test/CustomRender';
-import { SykestipendVurdering } from './SykestipendVurdering';
+import { SykestipendVurdering } from 'components/behandlinger/samordning/sykestipend/SykestipendVurdering';
 import { MellomlagretVurdering, SykestipendGrunnlag } from 'lib/types/types';
 import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 

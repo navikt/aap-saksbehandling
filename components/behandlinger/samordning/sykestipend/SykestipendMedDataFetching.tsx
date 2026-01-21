@@ -1,7 +1,7 @@
 import { hentMellomlagring, hentSykestipendGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { Behovstype } from 'lib/utils/form';
 import { skalViseSteg, StegData } from 'lib/utils/steg';
-import { SykestipendVurdering } from 'components/behandlinger/sykdom/student/sykestipend/SykestipendVurdering';
+import { SykestipendVurdering } from 'components/behandlinger/samordning/sykestipend/SykestipendVurdering';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 

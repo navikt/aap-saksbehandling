@@ -11,7 +11,7 @@ import { FormEvent } from 'react';
 import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 import { VStack } from '@navikt/ds-react';
 import { FormField } from 'components/form/FormField';
-import { SykestipendPeriodeTabell } from 'components/behandlinger/sykdom/student/sykestipend/SykestipendPeriodeTabell';
+import { SykestipendPeriodeTabell } from 'components/behandlinger/samordning/sykestipend/SykestipendPeriodeTabell';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { parse } from 'date-fns';
 
