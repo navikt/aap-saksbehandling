@@ -66,6 +66,7 @@ const hentDokument = async (
   setDataUri: (uri: string | undefined) => void,
   setIsLoading: (status: boolean) => void
 ) => {
+  setIsLoading(true);
   let objectURL: string | undefined;
   const blob = await fetch(`/saksbehandling/api/brev/${brevbestillingReferanse}/forhandsvis/`, {
     method: 'GET',
