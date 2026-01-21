@@ -208,14 +208,11 @@ export const SykdomsvurderingPeriodisert = ({
               kvalitetssikretAv={vurdering.kvalitetssikretAv}
               besluttetAv={vurdering.besluttetAv}
               readonly={formReadOnly}
+              finnesFeil={finnesFeilForVurdering(index, errorList)}
               onSlettVurdering={() => remove(index)}
               harTidligereVurderinger={tidligereVurderinger.length > 0}
               index={index}
-              initiellEkspandert={skalVæreInitiellEkspandert(
-                vurdering.erNyVurdering,
-                erAktivUtenAvbryt,
-                finnesFeilForVurdering(index, errorList)
-              )}
+              initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
             >
               <SykdomsvurderingFormInput
                 index={index}

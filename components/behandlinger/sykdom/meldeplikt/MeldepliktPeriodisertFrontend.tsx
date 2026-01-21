@@ -21,14 +21,18 @@ import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
-import { NyVurderingExpandableCard } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
+import {
+  NyVurderingExpandableCard,
+  skalVæreInitiellEkspandert,
+} from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
 import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
 import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
-import React from 'react';
+import React, { useState } from 'react';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
+import { AccordionTilstandProvider } from 'context/saksbehandling/AccordionTilstandContext';
 
 interface Props {
   behandlingVersjon: number;
@@ -48,6 +52,7 @@ export interface FritakMeldepliktVurderingForm {
   vurdertAv?: VurdertAvAnsatt;
   kvalitetssikretAv?: VurdertAvAnsatt;
   besluttetAv?: VurdertAvAnsatt;
+  erNyVurdering?: boolean;
 }
 
 export const MeldepliktPeriodisertFrontend = ({
@@ -64,11 +69,13 @@ export const MeldepliktPeriodisertFrontend = ({
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
     useMellomlagring(Behovstype.FRITAK_MELDEPLIKT_KODE, initialMellomlagretVurdering);
 
-  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+  const { visningActions, formReadOnly, visningModus, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'FRITAK_MELDEPLIKT',
     mellomlagretVurdering
   );
+
+  const [isOpen, setIsOpen] = useState<boolean>();
 
   const nyeVurderinger = grunnlag?.nyeVurderinger ?? [];
 
@@ -90,6 +97,7 @@ export const MeldepliktPeriodisertFrontend = ({
       begrunnelse: '',
       fraDato: fields.length === 0 ? formaterDatoForFrontend(new Date()) : undefined,
       harFritak: undefined,
+      erNyVurdering: true,
     });
   }
 
@@ -126,6 +134,7 @@ export const MeldepliktPeriodisertFrontend = ({
 
     løsPeriodisertBehovOgGåTilNesteSteg(losning, () => {
       nullstillMellomlagretVurdering();
+      setIsOpen(false);
       visningActions.onBekreftClick();
     });
   }
@@ -182,60 +191,63 @@ export const MeldepliktPeriodisertFrontend = ({
         </TidligereVurderingExpandableCard>
       ))}
 
-      {fields.map((vurdering, index) => (
-        <NyVurderingExpandableCard
-          key={vurdering.id}
-          fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-          oppfylt={
-            form.watch(`vurderinger.${index}.harFritak`)
-              ? form.watch(`vurderinger.${index}.harFritak`) === JaEllerNei.Ja
-              : undefined
-          }
-          nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
-          isLast={index === vedtatteVurderinger.length - 1}
-          vurdertAv={vurdering.vurdertAv}
-          kvalitetssikretAv={vurdering.kvalitetssikretAv}
-          besluttetAv={vurdering.besluttetAv}
-          finnesFeil={finnesFeilForVurdering(index, errorList)}
-          readonly={formReadOnly}
-          onSlettVurdering={() => remove(index)}
-          // vilkåret er valgfritt, kan derfor slette vurderingen selv om det ikke finnes en tidligere vurdering
-          harTidligereVurderinger={true}
-          index={index}
-        >
-          <HStack justify={'space-between'}>
-            <DateInputWrapper
-              name={`vurderinger.${index}.fraDato`}
-              label="Vurderingen gjelder fra"
+      <AccordionTilstandProvider isOpen={isOpen} setIsOpen={setIsOpen}>
+        {fields.map((vurdering, index) => (
+          <NyVurderingExpandableCard
+            key={vurdering.id}
+            fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
+            oppfylt={
+              form.watch(`vurderinger.${index}.harFritak`)
+                ? form.watch(`vurderinger.${index}.harFritak`) === JaEllerNei.Ja
+                : undefined
+            }
+            nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
+            isLast={index === vedtatteVurderinger.length - 1}
+            vurdertAv={vurdering.vurdertAv}
+            kvalitetssikretAv={vurdering.kvalitetssikretAv}
+            besluttetAv={vurdering.besluttetAv}
+            finnesFeil={finnesFeilForVurdering(index, errorList)}
+            readonly={formReadOnly}
+            onSlettVurdering={() => remove(index)}
+            // vilkåret er valgfritt, kan derfor slette vurderingen selv om det ikke finnes en tidligere vurdering
+            harTidligereVurderinger={true}
+            index={index}
+            initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
+          >
+            <HStack justify={'space-between'}>
+              <DateInputWrapper
+                name={`vurderinger.${index}.fraDato`}
+                label="Vurderingen gjelder fra"
+                control={form.control}
+                rules={{
+                  required: 'Vennligst velg en dato for når vurderingen gjelder fra',
+                  validate: (value) => validerDato(value as string),
+                }}
+                readOnly={formReadOnly}
+              />
+            </HStack>
+            <TextAreaWrapper
+              label={'Vilkårsvurdering'}
               control={form.control}
-              rules={{
-                required: 'Vennligst velg en dato for når vurderingen gjelder fra',
-                validate: (value) => validerDato(value as string),
-              }}
+              name={`vurderinger.${index}.begrunnelse`}
+              rules={{ required: 'Du må begrunne vurderingen din' }}
+              className={'begrunnelse'}
               readOnly={formReadOnly}
             />
-          </HStack>
-          <TextAreaWrapper
-            label={'Vilkårsvurdering'}
-            control={form.control}
-            name={`vurderinger.${index}.begrunnelse`}
-            rules={{ required: 'Du må begrunne vurderingen din' }}
-            className={'begrunnelse'}
-            readOnly={formReadOnly}
-          />
-          <RadioGroupWrapper
-            label={'Skal brukeren få fritak fra meldeplikt?'}
-            control={form.control}
-            name={`vurderinger.${index}.harFritak`}
-            rules={{ required: 'Du må svare på om brukeren skal få fritak fra meldeplikt' }}
-            readOnly={formReadOnly}
-            horisontal
-          >
-            <Radio value={JaEllerNei.Ja}>Ja</Radio>
-            <Radio value={JaEllerNei.Nei}>Nei</Radio>
-          </RadioGroupWrapper>
-        </NyVurderingExpandableCard>
-      ))}
+            <RadioGroupWrapper
+              label={'Skal brukeren få fritak fra meldeplikt?'}
+              control={form.control}
+              name={`vurderinger.${index}.harFritak`}
+              rules={{ required: 'Du må svare på om brukeren skal få fritak fra meldeplikt' }}
+              readOnly={formReadOnly}
+              horisontal
+            >
+              <Radio value={JaEllerNei.Ja}>Ja</Radio>
+              <Radio value={JaEllerNei.Nei}>Nei</Radio>
+            </RadioGroupWrapper>
+          </NyVurderingExpandableCard>
+        ))}
+      </AccordionTilstandProvider>
     </VilkårskortPeriodisert>
   );
 };
