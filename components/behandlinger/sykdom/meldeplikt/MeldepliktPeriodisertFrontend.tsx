@@ -21,12 +21,15 @@ import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
-import { NyVurderingExpandableCard } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
+import {
+  NyVurderingExpandableCard,
+  skalVæreInitiellEkspandert,
+} from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
 import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
 import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
-import React from 'react';
+import React, { useState } from 'react';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 
@@ -48,6 +51,7 @@ export interface FritakMeldepliktVurderingForm {
   vurdertAv?: VurdertAvAnsatt;
   kvalitetssikretAv?: VurdertAvAnsatt;
   besluttetAv?: VurdertAvAnsatt;
+  erNyVurdering?: boolean;
 }
 
 export const MeldepliktPeriodisertFrontend = ({
@@ -64,11 +68,13 @@ export const MeldepliktPeriodisertFrontend = ({
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
     useMellomlagring(Behovstype.FRITAK_MELDEPLIKT_KODE, initialMellomlagretVurdering);
 
-  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+  const { visningActions, formReadOnly, visningModus, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'FRITAK_MELDEPLIKT',
     mellomlagretVurdering
   );
+
+  const [allAccordionsOpenSignal, setAllAccordionsOpenSignal] = useState<boolean>();
 
   const nyeVurderinger = grunnlag?.nyeVurderinger ?? [];
 
@@ -90,6 +96,7 @@ export const MeldepliktPeriodisertFrontend = ({
       begrunnelse: '',
       fraDato: fields.length === 0 ? formaterDatoForFrontend(new Date()) : undefined,
       harFritak: undefined,
+      erNyVurdering: true,
     });
   }
 
@@ -126,6 +133,7 @@ export const MeldepliktPeriodisertFrontend = ({
 
     løsPeriodisertBehovOgGåTilNesteSteg(losning, () => {
       nullstillMellomlagretVurdering();
+      setAllAccordionsOpenSignal(false);
       visningActions.onBekreftClick();
     });
   }
@@ -133,15 +141,11 @@ export const MeldepliktPeriodisertFrontend = ({
   const foersteNyePeriode = fields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
   const errorList = mapPeriodiserteVurderingerErrorList<FritakMeldepliktVurderingForm>(form.formState.errors);
 
-  const showAsOpen =
-    (grunnlag?.nyeVurderinger && grunnlag.nyeVurderinger.length >= 1) || initialMellomlagretVurdering !== undefined;
-
   return (
     <VilkårskortPeriodisert
       heading={'§ 11-10 tredje ledd. Unntak fra meldeplikt (valgfritt)'}
       steg="FRITAK_MELDEPLIKT"
       vilkårTilhørerNavKontor={true}
-      defaultOpen={showAsOpen}
       onSubmit={form.handleSubmit(onSubmit)}
       status={status}
       isLoading={isLoading}
@@ -185,6 +189,7 @@ export const MeldepliktPeriodisertFrontend = ({
       {fields.map((vurdering, index) => (
         <NyVurderingExpandableCard
           key={vurdering.id}
+          allAccordionsOpenSignal={allAccordionsOpenSignal}
           fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
           oppfylt={
             form.watch(`vurderinger.${index}.harFritak`)
@@ -202,6 +207,7 @@ export const MeldepliktPeriodisertFrontend = ({
           // vilkåret er valgfritt, kan derfor slette vurderingen selv om det ikke finnes en tidligere vurdering
           harTidligereVurderinger={true}
           index={index}
+          initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
         >
           <HStack justify={'space-between'}>
             <DateInputWrapper

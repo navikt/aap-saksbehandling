@@ -18,12 +18,16 @@ import { parseDatoFraDatePicker } from 'lib/utils/date';
 import { LovvalgOgMedlemskapFormInput } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/LovvalgOgMedlemskapFormInput';
 import { LovvalgOgMedlemskapTidligereVurdering } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/LovvalgOgMedlemskapTidligereVurdering';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
-import { NyVurderingExpandableCard } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
+import {
+  NyVurderingExpandableCard,
+  skalVæreInitiellEkspandert,
+} from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
 import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
+import { useState } from 'react';
 
 interface Props {
   behandlingVersjon: number;
@@ -49,7 +53,9 @@ export const LovvalgOgMedlemskapPeriodisert = ({
   const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
     useMellomlagring(Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP, initialMellomlagretVurdering);
 
-  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+  const [allAccordionsOpenSignal, setAllAccordionsOpenSignal] = useState<boolean>();
+
+  const { visningActions, formReadOnly, visningModus, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'VURDER_LOVVALG',
     mellomlagretVurdering
@@ -75,6 +81,7 @@ export const LovvalgOgMedlemskapPeriodisert = ({
       },
       medlemskap: undefined,
       fraDato: undefined,
+      erNyVurdering: true,
     });
   }
 
@@ -102,6 +109,7 @@ export const LovvalgOgMedlemskapPeriodisert = ({
     };
 
     løsPeriodisertBehovOgGåTilNesteSteg(losning, () => {
+      setAllAccordionsOpenSignal(false);
       nullstillMellomlagretVurdering();
     });
   }
@@ -145,9 +153,11 @@ export const LovvalgOgMedlemskapPeriodisert = ({
           <LovvalgOgMedlemskapTidligereVurdering vurdering={vurdering} />
         </TidligereVurderingExpandableCard>
       ))}
+
       {vurderingerFields.map((vurdering, index) => (
         <NyVurderingExpandableCard
           key={vurdering.id}
+          allAccordionsOpenSignal={allAccordionsOpenSignal}
           fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
           nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
           isLast={index === vurderingerFields.length - 1}
@@ -164,6 +174,7 @@ export const LovvalgOgMedlemskapPeriodisert = ({
           harTidligereVurderinger={tidligereVurderinger.length > 0}
           index={index}
           readonly={formReadOnly}
+          initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
         >
           <LovvalgOgMedlemskapFormInput form={form} readOnly={formReadOnly} index={index} />
         </NyVurderingExpandableCard>

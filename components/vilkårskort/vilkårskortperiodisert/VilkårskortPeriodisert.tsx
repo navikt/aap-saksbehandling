@@ -38,7 +38,7 @@ export const VilkårskortPeriodisert = ({
   onLeggTilVurdering,
   formReset,
   errorList,
-}: Omit<VilkårsKortPeriodisertProps, 'vurdertAvAnsatt' | 'kvalitetssikretAv'>) => {
+}: Omit<VilkårsKortPeriodisertProps, 'vurdertAvAnsatt' | 'kvalitetssikretAv' | 'defaultOpen'>) => {
   const classNameBasertPåEnhet = vilkårTilhørerNavKontor ? styles.vilkårsKortNAV : styles.vilkårsKortNAY;
   const erAktivtSteg = visningModus === 'AKTIV_UTEN_AVBRYT' || visningModus === 'AKTIV_MED_AVBRYT';
 

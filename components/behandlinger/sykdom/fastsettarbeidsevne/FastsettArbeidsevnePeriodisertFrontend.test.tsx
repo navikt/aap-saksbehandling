@@ -56,28 +56,6 @@ describe('FastsettArbeidsevne', () => {
       ).not.toBeInTheDocument();
     });
 
-    it('steget er åpent for beslutter når det er gjort en vurdering (minst en vurdering og readOnly er true)', () => {
-      const grunnlag: ArbeidsevneGrunnlag = {
-        behøverVurderinger: [],
-        kanVurderes: [],
-        nyeVurderinger: [
-          {
-            arbeidsevne: 20,
-            begrunnelse: 'Dette er min vurdering som er bekreftet',
-            fom: '2025-08-21',
-            vurdertAv: {
-              ident: 'Saksbehandler',
-              dato: '2025-08-21',
-            },
-          },
-        ],
-        sisteVedtatteVurderinger: [],
-        harTilgangTilÅSaksbehandle: true,
-      };
-      render(<FastsettArbeidsevnePeriodisertFrontend readOnly={true} behandlingVersjon={0} grunnlag={grunnlag} />);
-      expect(screen.getByText('Vilkårsvurdering')).toBeVisible();
-    });
-
     it('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
       setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'SYKDOMSVURDERING_BREV' });
 
@@ -110,6 +88,13 @@ describe('FastsettArbeidsevne', () => {
       const endreKnapp = screen.getByRole('button', { name: 'Endre' });
       await user.click(endreKnapp);
 
+      // Accordion lukker seg når det ikke er aktivt
+      await user.click(
+        screen.getByRole('button', {
+          name: /ny vurdering: 21. august 2025/i,
+        })
+      );
+
       const begrunnelseFelt = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
       await user.clear(begrunnelseFelt);
       await user.type(begrunnelseFelt, 'Dette er en ny begrunnelse');
@@ -117,6 +102,13 @@ describe('FastsettArbeidsevne', () => {
 
       const avbrytKnapp = screen.getByRole('button', { name: 'Avbryt' });
       await user.click(avbrytKnapp);
+
+      // Accordion lukker seg når det ikke er aktivt
+      await user.click(
+        screen.getByRole('button', {
+          name: /ny vurdering: 21. august 2025/i,
+        })
+      );
 
       const begrunnelseFeltEtterAvbryt = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
       expect(begrunnelseFeltEtterAvbryt).toHaveValue('Dette er min vurdering som er bekreftet');
@@ -396,19 +388,6 @@ describe('FastsettArbeidsevne', () => {
         expect(lagreKnapp).not.toBeInTheDocument();
         const slettKnapp = screen.queryByRole('button', { name: 'Slett utkast' });
         expect(slettKnapp).not.toBeInTheDocument();
-      });
-
-      it('Vilkårskortet skal være default åpen dersom det finnes en mellomlagret vurdering', () => {
-        render(
-          <FastsettArbeidsevnePeriodisertFrontend
-            readOnly={true}
-            behandlingVersjon={0}
-            grunnlag={grunnlagUtenVurdering}
-            initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
-          />
-        );
-
-        expect(screen.getByRole('textbox', { name: 'Vilkårsvurdering' })).toBeVisible();
       });
     });
   });

@@ -29,6 +29,7 @@ export function getDefaultValuesFromGrunnlag(grunnlag?: OvergangArbeidGrunnlag):
           begrunnelse: '',
           fraDato: getFraDatoFraGrunnlagForFrontend(grunnlag),
           brukerRettPåAAP: '',
+          erNyVurdering: true,
         },
       ],
     };

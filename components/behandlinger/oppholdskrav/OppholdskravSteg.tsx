@@ -18,13 +18,17 @@ import { OppholdskravTidligereVurdering } from 'components/behandlinger/oppholds
 import { parseISO } from 'date-fns';
 import { formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
-import { NyVurderingExpandableCard } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
+import {
+  NyVurderingExpandableCard,
+  skalVæreInitiellEkspandert,
+} from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
 import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
 import { LovOgMedlemskapVurderingForm } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/types';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
+import { useState } from 'react';
 
 type Props = {
   grunnlag: OppholdskravGrunnlagResponse | undefined;
@@ -42,7 +46,9 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
     useMellomlagring(Behovstype.OPPHOLDSKRAV_KODE, initialMellomlagring);
 
-  const { visningActions, visningModus, formReadOnly } = useVilkårskortVisning(
+  const [allAccordionsOpenSignal, setAllAccordionsOpenSignal] = useState<boolean>();
+
+  const { visningActions, visningModus, formReadOnly, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'VURDER_OPPHOLDSKRAV',
     mellomlagretVurdering
@@ -107,6 +113,7 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
 
     løsPeriodisertBehovOgGåTilNesteSteg(losning, () => {
       nullstillMellomlagretVurdering();
+      setAllAccordionsOpenSignal(false);
     });
   }
 
@@ -148,9 +155,11 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
           />
         </TidligereVurderingExpandableCard>
       ))}
+
       {vurderingerFields.map((vurdering, index) => (
         <NyVurderingExpandableCard
           key={vurdering.id}
+          allAccordionsOpenSignal={allAccordionsOpenSignal}
           fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
           oppfylt={
             form.watch(`vurderinger.${index}.oppfyller`)
@@ -167,6 +176,7 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
           onSlettVurdering={() => remove(index)}
           harTidligereVurderinger={tidligereVurderinger.length > 0}
           index={index}
+          initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
         >
           <OppholdskravFormInput form={form} readOnly={formReadOnly} index={index} />
         </NyVurderingExpandableCard>

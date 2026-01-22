@@ -3,7 +3,7 @@
 import { MellomlagretVurdering, OvergangUforeGrunnlag, VurdertAvAnsatt } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import React, { FormEvent } from 'react';
+import React, { FormEvent, useState } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
@@ -12,7 +12,10 @@ import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
-import { NyVurderingExpandableCard } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
+import {
+  NyVurderingExpandableCard,
+  skalVæreInitiellEkspandert,
+} from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { OvergangUforeVurderingFormInput } from 'components/behandlinger/sykdom/overgangufore/OvergangUforeVurderingFormInput';
 import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
@@ -41,6 +44,7 @@ interface OvergangUforeVurderingForm {
   vurdertAv?: VurdertAvAnsatt;
   kvalitetssikretAv?: VurdertAvAnsatt;
   besluttetAv?: VurdertAvAnsatt;
+  erNyVurdering?: boolean;
 }
 
 export const OvergangUforePeriodisert = ({
@@ -56,7 +60,9 @@ export const OvergangUforePeriodisert = ({
   const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
     useMellomlagring(Behovstype.OVERGANG_UFORE, initialMellomlagretVurdering);
 
-  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+  const [allAccordionsOpenSignal, setAllAccordionsOpenSignal] = useState<boolean>();
+
+  const { visningActions, formReadOnly, visningModus, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'OVERGANG_UFORE',
     mellomlagretVurdering
@@ -93,7 +99,10 @@ export const OvergangUforePeriodisert = ({
             }),
           },
         },
-        () => nullstillMellomlagretVurdering()
+        () => {
+          setAllAccordionsOpenSignal(false);
+          nullstillMellomlagretVurdering();
+        }
       );
     })(event);
   };
@@ -153,6 +162,7 @@ export const OvergangUforePeriodisert = ({
           return (
             <NyVurderingExpandableCard
               key={vurdering.id}
+              allAccordionsOpenSignal={allAccordionsOpenSignal}
               fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
               oppfylt={
                 form.watch(`vurderinger.${index}.brukerRettPåAAP`)
@@ -172,6 +182,7 @@ export const OvergangUforePeriodisert = ({
               onSlettVurdering={() => remove(index)}
               harTidligereVurderinger={tidligereVurderinger.length > 0}
               index={index}
+              initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
             >
               <OvergangUforeVurderingFormInput index={index} form={form} readonly={formReadOnly} />
             </NyVurderingExpandableCard>

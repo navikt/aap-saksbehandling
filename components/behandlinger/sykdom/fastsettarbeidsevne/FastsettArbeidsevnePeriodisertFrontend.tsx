@@ -24,12 +24,16 @@ import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrap
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
-import { NyVurderingExpandableCard } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
+import {
+  NyVurderingExpandableCard,
+  skalVæreInitiellEkspandert,
+} from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
 import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
+import { useState } from 'react';
 
 interface Props {
   grunnlag: ArbeidsevneGrunnlag;
@@ -45,6 +49,7 @@ interface ArbeidsevneVurderingForm {
   vurdertAv?: VurdertAvAnsatt;
   kvalitetssikretAv?: VurdertAvAnsatt;
   besluttetAv?: VurdertAvAnsatt;
+  erNyVurdering?: boolean;
 }
 
 interface FastsettArbeidsevneForm {
@@ -78,7 +83,9 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
   const { mellomlagretVurdering, lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering } =
     useMellomlagring(Behovstype.FASTSETT_ARBEIDSEVNE_KODE, initialMellomlagretVurdering);
 
-  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+  const [allAccordionsOpenSignal, setAllAccordionsOpenSignal] = useState<boolean>();
+
+  const { visningActions, formReadOnly, visningModus, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'FASTSETT_ARBEIDSEVNE',
     mellomlagretVurdering
@@ -104,6 +111,7 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
       begrunnelse: '',
       fraDato: fields.length === 0 ? formaterDatoForFrontend(new Date()) : undefined,
       arbeidsevne: undefined,
+      erNyVurdering: true,
     });
   }
 
@@ -139,6 +147,7 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
 
     løsPeriodisertBehovOgGåTilNesteSteg(losning, () => {
       nullstillMellomlagretVurdering();
+      setAllAccordionsOpenSignal(false);
       visningActions.onBekreftClick();
     });
   }
@@ -146,15 +155,11 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
   const foersteNyePeriode = fields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
   const errorList = mapPeriodiserteVurderingerErrorList<FastsettArbeidsevneForm>(form.formState.errors);
 
-  const showAsOpen =
-    (grunnlag?.nyeVurderinger && grunnlag.nyeVurderinger.length >= 1) || initialMellomlagretVurdering !== undefined;
-
   return (
     <VilkårskortPeriodisert
       heading={'§ 11-23 andre ledd. Arbeidsevne som ikke er utnyttet (valgfritt)'}
       steg={'FASTSETT_ARBEIDSEVNE'}
       vilkårTilhørerNavKontor={true}
-      defaultOpen={showAsOpen}
       onSubmit={form.handleSubmit(onSubmit)}
       status={status}
       isLoading={isLoading}
@@ -194,9 +199,11 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
           </VStack>
         </TidligereVurderingExpandableCard>
       ))}
+
       {fields.map((vurdering, index) => (
         <NyVurderingExpandableCard
           key={vurdering.id}
+          allAccordionsOpenSignal={allAccordionsOpenSignal}
           fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
           oppfylt={undefined}
           nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
@@ -210,6 +217,7 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
           // vilkåret er valgfritt, kan derfor slette vurderingen selv om det ikke finnes en tidligere vurdering
           harTidligereVurderinger={true}
           index={index}
+          initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
         >
           <HStack justify={'space-between'}>
             <DateInputWrapper

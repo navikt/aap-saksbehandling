@@ -2,7 +2,7 @@
 
 import { Behovstype, getJaNeiEllerUndefined, getStringEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { FormEvent } from 'react';
+import { FormEvent, useState } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { parseISO } from 'date-fns';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
@@ -14,7 +14,10 @@ import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { NyVurderingExpandableCard } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
+import {
+  NyVurderingExpandableCard,
+  skalVæreInitiellEkspandert,
+} from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { Dato } from 'lib/types/Dato';
 import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
 import { SykdomsvurderingFormInput } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingFormInput';
@@ -54,6 +57,7 @@ export interface Sykdomsvurdering {
   vurdertAv?: VurdertAvAnsatt;
   kvalitetssikretAv?: VurdertAvAnsatt;
   besluttetAv?: VurdertAvAnsatt;
+  erNyVurdering?: boolean;
 }
 
 interface SykdomProps {
@@ -77,6 +81,9 @@ export const SykdomsvurderingPeriodisert = ({
 }: SykdomProps) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { sak } = useSak();
+
+  const [allAccordionsOpenSignal, setAllAccordionsOpenSignal] = useState<boolean>();
+
   const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('AVKLAR_SYKDOM');
 
@@ -85,7 +92,7 @@ export const SykdomsvurderingPeriodisert = ({
 
   const diagnosegrunnlag = finnDiagnosegrunnlag(typeBehandling, grunnlag);
 
-  const { visningModus, visningActions, formReadOnly } = useVilkårskortVisning(
+  const { visningModus, visningActions, formReadOnly, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'AVKLAR_SYKDOM',
     mellomlagretVurdering
@@ -138,6 +145,7 @@ export const SykdomsvurderingPeriodisert = ({
           referanse: behandlingsReferanse,
         },
         () => {
+          setAllAccordionsOpenSignal(false);
           nullstillMellomlagretVurdering();
           visningActions.onBekreftClick();
         }
@@ -186,9 +194,11 @@ export const SykdomsvurderingPeriodisert = ({
             <TidligereSykdomsvurdering vurdering={vurdering} />
           </TidligereVurderingExpandableCard>
         ))}
+
         {nyeVurderingerFields.map((vurdering, index) => (
           <NyVurderingExpandableCard
             key={vurdering.id}
+            allAccordionsOpenSignal={allAccordionsOpenSignal}
             fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
             oppfylt={erNyVurderingOppfylt(form.watch(`vurderinger.${index}`))}
             nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
@@ -196,11 +206,12 @@ export const SykdomsvurderingPeriodisert = ({
             vurdertAv={vurdering.vurdertAv}
             kvalitetssikretAv={vurdering.kvalitetssikretAv}
             besluttetAv={vurdering.besluttetAv}
-            finnesFeil={finnesFeilForVurdering(index, errorList)}
             readonly={formReadOnly}
+            finnesFeil={finnesFeilForVurdering(index, errorList)}
             onSlettVurdering={() => remove(index)}
             harTidligereVurderinger={tidligereVurderinger.length > 0}
             index={index}
+            initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
           >
             <SykdomsvurderingFormInput
               index={index}

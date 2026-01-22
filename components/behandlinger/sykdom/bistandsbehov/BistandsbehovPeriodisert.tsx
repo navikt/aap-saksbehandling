@@ -2,7 +2,7 @@
 
 import { BistandsGrunnlag, MellomlagretVurdering, VurdertAvAnsatt } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
-import { FormEvent } from 'react';
+import { FormEvent, useState } from 'react';
 import { parseDatoFraDatePicker } from 'lib/utils/date';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
@@ -11,7 +11,10 @@ import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook
 import { useFieldArray, useForm } from 'react-hook-form';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 import { BistandsbehovVurderingForm } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovVurderingForm';
-import { NyVurderingExpandableCard } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
+import {
+  NyVurderingExpandableCard,
+  skalVæreInitiellEkspandert,
+} from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { parseISO } from 'date-fns';
@@ -45,6 +48,7 @@ export interface BistandVurderingForm {
   vurdertAv?: VurdertAvAnsatt;
   kvalitetssikretAv?: VurdertAvAnsatt;
   besluttetAv?: VurdertAvAnsatt;
+  erNyVurdering?: boolean;
 }
 
 export const BistandsbehovPeriodisert = ({
@@ -60,7 +64,9 @@ export const BistandsbehovPeriodisert = ({
   const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
     useMellomlagring(Behovstype.AVKLAR_BISTANDSBEHOV_KODE, initialMellomlagretVurdering);
 
-  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+  const [allAccordionsOpenSignal, setAllAccordionsOpenSignal] = useState<boolean>();
+
+  const { visningActions, formReadOnly, visningModus, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'VURDER_BISTANDSBEHOV',
     mellomlagretVurdering
@@ -91,6 +97,7 @@ export const BistandsbehovPeriodisert = ({
         () => {
           nullstillMellomlagretVurdering();
           visningActions.onBekreftClick();
+          setAllAccordionsOpenSignal(false);
         }
       );
     })(event);
@@ -161,9 +168,11 @@ export const BistandsbehovPeriodisert = ({
             <BistandsbehovTidligereVurdering vurdering={vurdering} />
           </TidligereVurderingExpandableCard>
         ))}
+
         {fields.map((vurdering, index) => (
           <NyVurderingExpandableCard
             key={vurdering.id}
+            allAccordionsOpenSignal={allAccordionsOpenSignal}
             fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
             nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
             isLast={index === fields.length - 1}
@@ -178,11 +187,12 @@ export const BistandsbehovPeriodisert = ({
             vurdertAv={vurdering.vurdertAv}
             kvalitetssikretAv={vurdering.kvalitetssikretAv}
             besluttetAv={vurdering.besluttetAv}
-            finnesFeil={finnesFeilForVurdering(index, errorList)}
             readonly={formReadOnly}
             onSlettVurdering={() => remove(index)}
             harTidligereVurderinger={tidligereVurderinger.length > 0}
             index={index}
+            finnesFeil={finnesFeilForVurdering(index, errorList)}
+            initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
           >
             <BistandsbehovVurderingForm form={form} readOnly={formReadOnly} index={index} />
           </NyVurderingExpandableCard>
@@ -230,6 +240,7 @@ export const BistandsbehovPeriodisert = ({
       overgangBegrunnelse: '',
       skalVurdereAapIOvergangTilArbeid: undefined,
       erBehovForArbeidsrettetTiltak: undefined,
+      erNyVurdering: true,
     };
   }
 };

@@ -12,20 +12,23 @@ import { SlettVurderingModal } from 'components/periodisering/slettvurderingmoda
 import { VurderingStatusTag } from 'components/periodisering/VurderingStatusTag';
 
 interface Props {
+  initiellEkspandert: boolean;
   fraDato: Date | null;
   nestePeriodeFraDato: Date | null;
   isLast: boolean;
+  finnesFeil: boolean;
   oppfylt: boolean | undefined;
   vurdertAv: VurdertAvAnsatt | undefined;
   kvalitetssikretAv: VurdertAvAnsatt | undefined;
   besluttetAv: VurdertAvAnsatt | undefined;
-  finnesFeil: boolean;
   children: ReactNode;
   readonly: boolean;
   onSlettVurdering: () => void;
   index: number;
+  allAccordionsOpenSignal: boolean | undefined;
   harTidligereVurderinger?: boolean;
 }
+
 export const NyVurderingExpandableCard = ({
   fraDato,
   nestePeriodeFraDato,
@@ -34,14 +37,20 @@ export const NyVurderingExpandableCard = ({
   vurdertAv,
   kvalitetssikretAv,
   besluttetAv,
-  finnesFeil,
   children,
   readonly,
+  finnesFeil,
   onSlettVurdering,
   harTidligereVurderinger = false,
+  initiellEkspandert = false,
   index,
+  allAccordionsOpenSignal,
 }: Props) => {
-  const [cardExpanded, setCardExpanded] = useState<boolean>(true);
+  const [localCardExpanded, setLocalCardExpanded] = useState<boolean>(initiellEkspandert);
+
+  // allAccordionsOpenSignal  kan overstyre åpen/lukket tilstand via isOpen.
+  // Når allAccordionsOpenSignal er undefined, styrer komponenten seg selv lokalt.
+  const cardExpanded = allAccordionsOpenSignal ?? localCardExpanded;
 
   const ref = useRef<HTMLDialogElement>(null);
 
@@ -50,7 +59,7 @@ export const NyVurderingExpandableCard = ({
       editable
       defaultOpen
       expanded={cardExpanded || finnesFeil}
-      setExpanded={setCardExpanded}
+      setExpanded={setLocalCardExpanded}
       heading={
         <HStack justify={'space-between'} padding={'2'}>
           <BodyShort size={'small'}>
@@ -92,3 +101,7 @@ export const NyVurderingExpandableCard = ({
     </CustomExpandableCard>
   );
 };
+
+export function skalVæreInitiellEkspandert(erNyVurdering: boolean | undefined, erAktiv: boolean) {
+  return erNyVurdering === true || erAktiv;
+}

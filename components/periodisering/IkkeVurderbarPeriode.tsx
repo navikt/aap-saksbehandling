@@ -2,7 +2,7 @@
 
 import { CustomExpandableCard } from 'components/customexpandablecard/CustomExpandableCard';
 import { isBefore, isSameDay, sub } from 'date-fns';
-import { formatDatoMedMånedsnavn, formaterDatoForFrontend } from 'lib/utils/date';
+import { formatDatoMedMånedsnavn } from 'lib/utils/date';
 import { useState } from 'react';
 import { Alert, BodyShort, HStack, Tag, VStack } from '@navikt/ds-react';
 import styles from 'components/behandlinger/oppholdskrav/oppholdskrav.module.css';
@@ -15,14 +15,13 @@ interface Props {
 }
 
 export const IkkeVurderbarPeriode = ({ fom, tom, foersteNyePeriodeFraDato, alertMelding }: Props) => {
-  const [cardExpanded, setCardExpanded] = useState<boolean>(true);
-  const formattertFom = formaterDatoForFrontend(fom);
+  const [cardExpanded, setCardExpanded] = useState<boolean>(false);
   const nySluttdato =
     foersteNyePeriodeFraDato &&
     (tom == null || isBefore(foersteNyePeriodeFraDato, tom) || isSameDay(foersteNyePeriodeFraDato, tom));
+
   return (
     <CustomExpandableCard
-      key={formattertFom}
       editable={false}
       disabled={true}
       expanded={cardExpanded}

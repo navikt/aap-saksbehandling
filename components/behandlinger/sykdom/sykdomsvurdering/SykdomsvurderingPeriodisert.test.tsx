@@ -144,6 +144,12 @@ describe('generelt', () => {
     const endreKnapp = screen.getByRole('button', { name: 'Endre' });
     await user.click(endreKnapp);
 
+    await user.click(
+      screen.getByRole('button', {
+        name: /ny vurdering: 1. januar 2025/i,
+      })
+    );
+
     const begrunnelseFelt = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
     await user.clear(begrunnelseFelt);
     await user.type(begrunnelseFelt, 'Dette er en ny begrunnelse');
@@ -151,6 +157,12 @@ describe('generelt', () => {
 
     const avbrytKnapp = screen.getByRole('button', { name: 'Avbryt' });
     await user.click(avbrytKnapp);
+
+    await user.click(
+      screen.getByRole('button', {
+        name: /ny vurdering: 1. januar 2025/i,
+      })
+    );
 
     const begrunnelseFeltEtterAvbryt = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
     expect(begrunnelseFeltEtterAvbryt).toHaveValue('Dette er en tidligere begrunnelse');

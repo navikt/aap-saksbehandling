@@ -30,25 +30,6 @@ describe('Meldeplikt', () => {
       expect(screen.queryByRole('textbox', { name: 'Vilkårsvurdering' })).not.toBeInTheDocument();
     });
 
-    it('vises som åpent når det skal kvalitetssikres (readOnly er true og minst en vurdering finnes)', () => {
-      const meldepliktGrunnlag: FritakMeldepliktGrunnlag = {
-        behøverVurderinger: [],
-        kanVurderes: [],
-        nyeVurderinger: [
-          {
-            begrunnelse: 'Grunn',
-            fom: '2024-08-10',
-            harFritak: true,
-            vurdertAv: { ident: 'saksbehandler', dato: '2024-08-10' },
-          },
-        ],
-        sisteVedtatteVurderinger: [],
-        harTilgangTilÅSaksbehandle: true,
-      };
-      render(<MeldepliktPeriodisertFrontend behandlingVersjon={0} readOnly={true} grunnlag={meldepliktGrunnlag} />);
-      expect(screen.queryByRole('textbox', { name: 'Vilkårsvurdering' })).toBeVisible();
-    });
-
     it('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
       const grunnlagMedVurdering: FritakMeldepliktGrunnlag = {
         behøverVurderinger: [],
@@ -72,6 +53,12 @@ describe('Meldeplikt', () => {
       const endreKnapp = screen.getByRole('button', { name: 'Endre' });
       await user.click(endreKnapp);
 
+      await user.click(
+        screen.getByRole('button', {
+          name: /ny vurdering: 10. august 2024/i,
+        })
+      );
+
       const begrunnelseFelt = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
       await user.clear(begrunnelseFelt);
       await user.type(begrunnelseFelt, 'Dette er en ny begrunnelse');
@@ -79,6 +66,12 @@ describe('Meldeplikt', () => {
 
       const avbrytKnapp = screen.getByRole('button', { name: 'Avbryt' });
       await user.click(avbrytKnapp);
+
+      await user.click(
+        screen.getByRole('button', {
+          name: /ny vurdering: 10. august 2024/i,
+        })
+      );
 
       const begrunnelseFeltEtterAvbryt = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
       expect(begrunnelseFeltEtterAvbryt).toHaveValue('en god begrunnelse');
@@ -302,19 +295,6 @@ describe('Meldeplikt', () => {
       expect(lagreKnapp).not.toBeInTheDocument();
       const slettKnapp = screen.queryByRole('button', { name: 'Slett utkast' });
       expect(slettKnapp).not.toBeInTheDocument();
-    });
-
-    it('Vilkårskortet skal være default åpen dersom det finnes en mellomlagret vurdering', () => {
-      render(
-        <MeldepliktPeriodisertFrontend
-          readOnly={true}
-          behandlingVersjon={0}
-          grunnlag={grunnlagUtenVurdering}
-          initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
-        />
-      );
-
-      expect(screen.getByRole('textbox', { name: 'Vilkårsvurdering' })).toBeVisible();
     });
   });
 });
