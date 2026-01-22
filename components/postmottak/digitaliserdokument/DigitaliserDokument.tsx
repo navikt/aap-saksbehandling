@@ -39,7 +39,6 @@ export const DigitaliserDokument = ({
   const nyDigitaliseringAvMeldekortEnabled = useFeatureFlag('DigitaliseringAvMeldekortV2Frontend');
 
   function handleSubmit(kategori: KategoriserDokumentKategori, jsonString: string | null, søknadsdato: Date | null) {
-    console.log(søknadsdato);
     løsBehovOgGåTilNesteSteg({
       behandlingVersjon: behandlingsVersjon,
       behov: {
