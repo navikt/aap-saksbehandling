@@ -128,9 +128,12 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
               {error}
             </Alert>
           )}
-          <Button loading={isLoading || endreTemaIsLoading} className={'fit-content'}>
-            Neste
-          </Button>
+
+          {!readOnly && (
+            <Button loading={isLoading || endreTemaIsLoading} className={'fit-content'}>
+              Neste
+            </Button>
+          )}
         </VStack>
       </form>
     </VilkårsKort>

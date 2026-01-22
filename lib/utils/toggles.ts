@@ -7,7 +7,6 @@ import { isProd } from 'lib/utils/environment';
 // Deprecated: Om mulig bruk heller feature-toggles fra unleash. Disse ligger in "lib/services/unleash/unleashToggles.ts"
 export const toggles = {
   featureSimulering: !isProd(),
-  featureFerieISykepengeperiode: !isProd(), // Finnes ikke i unleash - kun frontend-toggle
   featurePostmottakBehandlingerPåVent: !isProd(),
   featureUtløptVentefrist: !isProd(),
 };

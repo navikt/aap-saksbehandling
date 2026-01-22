@@ -11,21 +11,11 @@ import { useFieldArray, UseFormReturn } from 'react-hook-form';
 
 import styles from 'components/behandlinger/samordning/samordninggradering/YtelseTabell.module.css';
 import { TableStyled } from 'components/tablestyled/TableStyled';
-import { toggles } from 'lib/utils/toggles';
 
 interface Props {
   form: UseFormReturn<SamordningGraderingFormfields>;
   readOnly: boolean;
 }
-
-const sykepengerOptions: ValuePair<SamordningYtelsestype | undefined>[] = toggles.featureFerieISykepengeperiode
-  ? [
-      {
-        value: 'FERIE_I_SYKEPENGEPERIODE',
-        label: 'Ferie i sykepengeperiode',
-      },
-    ]
-  : [];
 
 const ytelsesoptions: ValuePair<SamordningYtelsestype | undefined>[] = [
   {
@@ -56,7 +46,10 @@ const ytelsesoptions: ValuePair<SamordningYtelsestype | undefined>[] = [
     value: 'OPPLÆRINGSPENGER',
     label: 'Opplæringspenger',
   },
-  ...sykepengerOptions,
+  {
+    value: 'FERIE_I_SYKEPENGEPERIODE',
+    label: 'Ferie i sykepengeperiode',
+  },
 ];
 
 export const Ytelsesvurderinger = ({ form, readOnly }: Props) => {

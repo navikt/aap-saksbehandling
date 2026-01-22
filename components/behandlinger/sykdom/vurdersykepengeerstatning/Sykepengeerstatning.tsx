@@ -27,7 +27,7 @@ import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 
 interface Props {
   behandlingVersjon: number;
-  grunnlag?: SykepengeerstatningGrunnlag;
+  grunnlag: SykepengeerstatningGrunnlag;
   readOnly: boolean;
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }

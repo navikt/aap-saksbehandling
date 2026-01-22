@@ -1,4 +1,4 @@
-import { BodyShort, Box, Loader } from '@navikt/ds-react';
+import { Box, Loader } from '@navikt/ds-react';
 
 import styles from './ForhåndsvisBrev.module.css';
 
@@ -9,11 +9,10 @@ interface Props {
 
 export const ForhåndsvisBrev = ({ dataUri, isLoading = false }: Props) => {
   return (
-    <Box padding={'2'} background={'bg-subtle'} shadow="medium" minHeight={'100%'}>
+    <Box padding={'2'} background={'bg-subtle'} shadow="medium" minHeight={'100%'} className={styles.pdfBox}>
       {isLoading && (
-        <div>
-          <Loader size="xlarge" title="Laster forhåndsvisning av brev..." />
-          <BodyShort spacing>Laster forhåndsvising av brev</BodyShort>
+        <div className={styles.overlay}>
+          <Loader size="2xlarge" title="Laster forhåndsvisning av brev..." transparent />
         </div>
       )}
       {dataUri && (

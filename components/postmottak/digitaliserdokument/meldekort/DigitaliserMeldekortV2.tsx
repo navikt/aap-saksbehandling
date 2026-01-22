@@ -96,9 +96,12 @@ export const DigitaliserMeldekortV2 = ({ readOnly, submit, isLoading }: Props) =
         <FormField form={form} formField={formFields.gjelderForUker} />
         <FormField form={form} formField={formFields.innsendtDato} />
         <MeldeperioderV2 form={form} readOnly={readOnly} />
-        <Button loading={isLoading} className={'fit-content'}>
-          Neste
-        </Button>
+
+        {!readOnly && (
+          <Button loading={isLoading} className={'fit-content'}>
+            Neste
+          </Button>
+        )}
       </form>
     </VilkårsKort>
   );

@@ -11,14 +11,22 @@ import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
 const user = userEvent.setup();
+const grunnlag: SykepengeerstatningGrunnlag = {
+  behøverVurderinger: [],
+  harTilgangTilÅSaksbehandle: false,
+  kanVurderes: [],
+  nyeVurderinger: [],
+  sisteVedtatteVurderinger: [],
+  vedtatteVurderinger: [],
+  vurderinger: [],
+};
 
 beforeEach(() => {
   setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'VURDER_SYKEPENGEERSTATNING' });
 });
-
 describe('Sykepengeerstatning', () => {
   beforeEach(() => {
-    render(<Sykepengeerstatning readOnly={false} behandlingVersjon={0} />);
+    render(<Sykepengeerstatning grunnlag={grunnlag} readOnly={false} behandlingVersjon={0} />);
   });
 
   it('har en overskrift', () => {
