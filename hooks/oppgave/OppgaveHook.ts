@@ -3,9 +3,16 @@ import useSWRInfinite from 'swr/infinite';
 import { hentMineOppgaverClient, hentOppgaverClient } from 'lib/oppgaveClientApi';
 import useSWR from 'swr';
 import { isError, isSuccess } from 'lib/utils/api';
+import { string } from 'zod';
+import { ScopedSortState } from 'hooks/oppgave/BackendSorteringHook';
+import { SortState } from '@navikt/ds-react';
 
 const PAGE_SIZE = 50;
 
+type Oppgavesortering = {
+  sortBy: string;
+  sortOrder: string;
+};
 type UseOppgaverOptions = {
   aktiveEnheter: string[];
   visKunOppgaverSomBrukerErVeilederPå?: boolean;
@@ -13,6 +20,7 @@ type UseOppgaverOptions = {
   aktivKøId: number;
   kunLedigeOppgaver?: boolean;
   utvidetFilter?: OppgavelisteRequest['utvidetFilter'];
+  sortering?: SortState;
 };
 
 function lagUrlSuffix(filter: OppgavelisteRequest['utvidetFilter']): string {
@@ -61,6 +69,7 @@ export function useOppgaver({
   kunLedigeOppgaver = true,
   type,
   utvidetFilter,
+  sortering,
 }: UseOppgaverOptions): {
   kanLasteInnFlereOppgaver: boolean;
   antallOppgaver: number;
@@ -80,7 +89,10 @@ export function useOppgaver({
     const typeSuffix = `/${type}`;
     const utvidetFilterSuffix = lagUrlSuffix(utvidetFilter);
     const paging = utvidetFilterSuffix.length > 0 ? `&side=${pageIndex}` : `?side=${pageIndex}`;
-    return `${base}${suffix}${typeSuffix}${utvidetFilterSuffix}${paging}`;
+    const sortBy = sortering?.orderBy ? `&sortby=${sortering.orderBy}` : '';
+    const sortOrder = sortering?.orderBy ? `&sortorder=${sortering.orderBy}` : '';
+    const key = `${base}${suffix}${typeSuffix}${utvidetFilterSuffix}${paging}${sortBy}${sortOrder}`;
+    return key;
   };
 
   const {
@@ -108,6 +120,9 @@ export function useOppgaver({
         veileder: visKunOppgaverSomBrukerErVeilederPå,
         paging: paging,
         utvidetFilter: utvidetFilter,
+        sortering: sortering?.orderBy
+          ? { sortBy: sortering.orderBy, sortOrder: mapSortOrderTilBackend(sortering.direction) }
+          : null,
       };
 
       return hentOppgaverClient(payload);
@@ -115,6 +130,16 @@ export function useOppgaver({
     { revalidateOnFocus: true, refreshInterval: 10000 }
   );
 
+  function mapSortOrderTilBackend(sortOrder: 'ascending' | 'descending') {
+    switch (sortOrder) {
+      case 'ascending':
+        return 'ASC';
+      case 'descending':
+        return 'DESC';
+      default:
+        return undefined;
+    }
+  }
   const oppgaverFlatMap =
     oppgaverValgtKø
       ?.filter((res) => isSuccess(res))
@@ -159,7 +184,8 @@ export function useLedigeOppgaver(
 export function useAlleOppgaverForEnhet(
   aktiveEnheter: string[],
   aktivKøId: number,
-  utvidetFilter?: OppgavelisteRequest['utvidetFilter']
+  utvidetFilter?: OppgavelisteRequest['utvidetFilter'],
+  sortering?: ScopedSortState<Oppgave>
 ) {
   return useOppgaver({
     aktiveEnheter,
@@ -168,6 +194,7 @@ export function useAlleOppgaverForEnhet(
     kunLedigeOppgaver: false,
     type: 'ALLE_OPPGAVER',
     utvidetFilter: utvidetFilter,
+    sortering,
   });
 }
 

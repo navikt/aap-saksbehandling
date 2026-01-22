@@ -1,6 +1,6 @@
 'use client';
 
-import { Enhet } from 'lib/types/oppgaveTypes';
+import { Enhet, Oppgave } from 'lib/types/oppgaveTypes';
 import { useEffect, useState } from 'react';
 import { Alert, BodyShort, Box, Button, HStack, Label, VStack } from '@navikt/ds-react';
 import { AlleOppgaverTabell } from 'components/oppgaveliste/alleoppgaver/alleoppgavertabell/AlleOppgaverTabell';
@@ -29,6 +29,7 @@ import { useLagreAktivUtvidetFilter } from 'hooks/oppgave/aktivUtvidetFilterHook
 import { ComboOption } from 'components/produksjonsstyring/minenhet/MineEnheter';
 import { useLagreAktiveEnheter } from 'hooks/oppgave/aktiveEnheterHook';
 import { EnheterSelect } from 'components/oppgaveliste/enheterselect/EnheterSelect';
+import { ScopedSortState, useBackendSortering } from 'hooks/oppgave/BackendSorteringHook';
 
 interface Props {
   enheter: Enhet[];
@@ -42,6 +43,8 @@ export const AlleOppgaver = ({ enheter }: Props) => {
   const [aktivKøId, setAktivKøId] = useState<number>(ALLE_OPPGAVER_ID);
   const [valgteRader, setValgteRader] = useState<number[]>([]);
   const lagretUtvidetFilter = hentAktivUtvidetFilter();
+
+  const { sort, setSort } = useBackendSortering();
 
   function førsteEnhetTilComboOption(enheter: Enhet[]): ComboOption[] | null {
     const førsteEnhet = enheter.find((e) => e);
@@ -119,7 +122,7 @@ export const AlleOppgaver = ({ enheter }: Props) => {
       : undefined;
 
   const { antallOppgaver, oppgaver, size, setSize, isLoading, isValidating, kanLasteInnFlereOppgaver, mutate } =
-    useAlleOppgaverForEnhet(aktiveEnhetsnumre, aktivKøId, utvidetFilter);
+    useAlleOppgaverForEnhet(aktiveEnhetsnumre, aktivKøId, utvidetFilter, sort);
 
   const { data: køer } = useSWR(`api/filter?${queryParamsArray('enheter', aktiveEnhetsnumre)}`, () =>
     hentKøerForEnheterClient(aktiveEnhetsnumre)
@@ -205,6 +208,8 @@ export const AlleOppgaver = ({ enheter }: Props) => {
               revalidateFunction={mutate}
               valgteRader={valgteRader}
               setValgteRader={setValgteRader}
+              setSortBy={setSort}
+              sort={sort}
             />
           ) : (
             <BodyShort size={'small'} className={styles.ingenoppgaver}>

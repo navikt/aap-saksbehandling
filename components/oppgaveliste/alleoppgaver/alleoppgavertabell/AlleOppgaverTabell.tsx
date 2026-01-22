@@ -1,5 +1,5 @@
 import { Oppgave, Vurderingsbehov, ÅrsakTilOpprettelse } from 'lib/types/types';
-import { BodyShort, Checkbox, CopyButton, Table, Tooltip } from '@navikt/ds-react';
+import { BodyShort, Checkbox, CopyButton, SortState, Table, Tooltip } from '@navikt/ds-react';
 import {
   mapBehovskodeTilBehovstype,
   mapTilOppgaveBehandlingstypeTekst,
@@ -15,6 +15,8 @@ import { OppgaveInformasjon } from 'components/oppgaveliste/oppgaveinformasjon/O
 import { Dispatch, SetStateAction, useState } from 'react';
 import { SynkroniserEnhetModal } from 'components/oppgaveliste/synkroniserenhetmodal/SynkroniserEnhetModal';
 import { TildelOppgaveModal } from 'components/tildeloppgavemodal/TildelOppgaveModal';
+import { useBackendSortering } from 'hooks/oppgave/BackendSorteringHook';
+import { useAlleOppgaverForEnhet } from 'hooks/oppgave/OppgaveHook';
 
 export interface OppgaveTilSortering extends Omit<Oppgave, 'behandlingstype' | 'årsakerTilBehandling'> {
   behandlingstype: string;
@@ -27,6 +29,8 @@ interface Props {
   revalidateFunction: () => Promise<unknown>;
   setValgteRader: Dispatch<SetStateAction<number[]>>;
   valgteRader: number[];
+  setSortBy: Dispatch<SetStateAction<string>>;
+  sort: SortState | undefined;
 }
 
 const mapTilSorterbarOppgave = (oppgave: Oppgave): OppgaveTilSortering => ({
@@ -40,9 +44,16 @@ const mapTilSorterbarOppgave = (oppgave: Oppgave): OppgaveTilSortering => ({
   originalOppgave: oppgave,
 });
 
-export const AlleOppgaverTabell = ({ oppgaver, revalidateFunction, setValgteRader, valgteRader }: Props) => {
+export const AlleOppgaverTabell = ({
+  oppgaver,
+  revalidateFunction,
+  setValgteRader,
+  valgteRader,
+  setSortBy,
+  sort,
+}: Props) => {
   const oppgaverTilSortering: OppgaveTilSortering[] = oppgaver.map(mapTilSorterbarOppgave);
-  const { sort, sortertListe, settSorteringskriterier } = useSortertListe(oppgaverTilSortering);
+  // const { sort, sortertListe, settSorteringskriterier } = useSortertListe(oppgaverTilSortering);
   const [visSynkroniserEnhetModal, setVisSynkroniserEnhetModal] = useState<boolean>(false);
 
   const toggleValgtRad = (oppgaveId: number) => {
@@ -67,7 +78,8 @@ export const AlleOppgaverTabell = ({ oppgaver, revalidateFunction, setValgteRade
         size={'small'}
         zebraStripes
         sort={sort}
-        onSortChange={(sortKey) => settSorteringskriterier(sortKey as ScopedSortState<Oppgave>['orderBy'])}
+        // onSortChange={(sortKey) => settSorteringskriterier(sortKey as ScopedSortState<Oppgave>['orderBy'])}
+        onSortChange={(sortKey) => setSortBy(sortKey)}
       >
         <Table.Header>
           <Table.Row>
@@ -76,33 +88,29 @@ export const AlleOppgaverTabell = ({ oppgaver, revalidateFunction, setValgteRade
             <Table.ColumnHeader sortKey={'personIdent'} sortable={true} textSize={'small'}>
               Fnr
             </Table.ColumnHeader>
-            <Table.ColumnHeader sortKey={'behandlingstype'} sortable={true}>
+            <Table.ColumnHeader sortKey={'BEHANDLINGSTYPE'} sortable={true}>
               Behandlingstype
             </Table.ColumnHeader>
-            <Table.ColumnHeader sortKey={'behandlingOpprettet'} sortable={true}>
+            <Table.ColumnHeader sortKey={'BEHANDLING_OPPRETTET'} sortable={true}>
               Beh. opprettet
             </Table.ColumnHeader>
-            <Table.ColumnHeader sortKey={'årsakTilOpprettelse'} sortable={true}>
+            <Table.ColumnHeader sortKey={'ÅRSAK_TIL_OPPRETTELSE'} sortable={true}>
               Årsak
             </Table.ColumnHeader>
-            <Table.ColumnHeader sortKey={'årsakerTilBehandling'} sortable={true}>
-              Vurderingsbehov
-            </Table.ColumnHeader>
-            <Table.ColumnHeader sortKey={'avklaringsbehovKode'} sortable={true}>
+            <Table.ColumnHeader>Vurderingsbehov</Table.ColumnHeader>
+            <Table.ColumnHeader sortKey={'AVKLARINGSBEHOV_KODE'} sortable={true}>
               Oppgave
             </Table.ColumnHeader>
-            <Table.ColumnHeader sortKey={'opprettetTidspunkt'} sortable={true}>
+            <Table.ColumnHeader sortKey={'OPPRETTET_TIDSPUNKT'} sortable={true}>
               Oppg. opprettet
             </Table.ColumnHeader>
-            <Table.ColumnHeader sortKey={'reservertAvNavn'} sortable={true}>
-              Veileder/Saksbehandler
-            </Table.ColumnHeader>
+            <Table.ColumnHeader>Veileder/Saksbehandler</Table.ColumnHeader>
             <Table.HeaderCell></Table.HeaderCell>
             <Table.HeaderCell></Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {sortertListe.map((oppgave, i) => (
+          {oppgaver.map((oppgave, i) => (
             <Table.Row key={`oppgave-${i}`} selected={oppgave.id ? valgteRader.includes(oppgave.id) : false}>
               <Table.DataCell>
                 <Checkbox
@@ -136,7 +144,7 @@ export const AlleOppgaverTabell = ({ oppgaver, revalidateFunction, setValgteRade
               <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(oppgave.behandlingOpprettet)}</Table.DataCell>
               <Table.DataCell textSize={'small'}>{oppgave.årsakTilOpprettelse ?? '-'}</Table.DataCell>
               <Table.DataCell style={{ maxWidth: '150px' }} textSize={'small'}>
-                <Tooltip content={oppgave.årsakerTilBehandling}>
+                <Tooltip content={oppgave.årsakerTilBehandling.join(', ')}>
                   <BodyShort truncate size={'small'}>
                     {oppgave.årsakerTilBehandling}
                   </BodyShort>
@@ -158,11 +166,11 @@ export const AlleOppgaverTabell = ({ oppgaver, revalidateFunction, setValgteRade
                 </Tooltip>
               </Table.DataCell>
               <Table.DataCell textSize={'small'}>
-                <OppgaveInformasjon oppgave={oppgave.originalOppgave} />
+                <OppgaveInformasjon oppgave={oppgave} />
               </Table.DataCell>
               <Table.DataCell textSize={'small'} align={'right'}>
                 <AlleOppgaverActionMenu
-                  oppgave={oppgave.originalOppgave}
+                  oppgave={oppgave}
                   revalidateFunction={revalidateFunction}
                   setVisSynkroniserEnhetModal={setVisSynkroniserEnhetModal}
                 />
