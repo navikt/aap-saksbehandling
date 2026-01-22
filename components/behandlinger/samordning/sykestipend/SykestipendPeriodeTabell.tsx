@@ -41,7 +41,7 @@ export const SykestipendPeriodeTabell = ({ form, readOnly }: Props) => {
         <Table.Body>
           {fields.map((field, index) => (
             <Table.Row key={`${field.id}-${index}`}>
-              <Table.DataCell>Sykestipend inkludert karanteperiode</Table.DataCell>
+              <Table.DataCell>Sykestipend inkludert karanteneperiode</Table.DataCell>
               <Table.DataCell>
                 <HStack align={'center'} gap={'1'}>
                   <DateInputWrapper
