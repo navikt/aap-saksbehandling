@@ -35,6 +35,7 @@ export const hentKøer = async (enheter: string[]) => {
 };
 
 export const hentOppgaverForFilter = async (data: OppgavelisteRequest) => {
+  console.log('cocacola');
   const url = `${oppgaveApiBaseURL}/oppgaveliste`;
   return await apiFetch<OppgavelisteResponse>(url, oppgaveApiScope, 'POST', data);
 };

@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server';
 import { BehandlingsTyperOption } from 'lib/utils/behandlingstyper';
 import { AvklaringsbehovReferanse, FilterTidsEnhet, Oppgave } from 'lib/types/oppgaveTypes';
 import { BehandlingstyperRequestQuery, OppslagsPeriode } from 'lib/types/statistikkTypes';
+import { SortState } from '@navikt/ds-react';
 
 export function queryParamsArray(key: string, values: (string | number)[]) {
   const filtered = values.filter((value) => value !== undefined && value !== null && value !== '');
@@ -85,7 +86,26 @@ export function hentStatistikkQueryParams(req: NextRequest): StatistikkQueryPara
     oppgaveTyper,
   };
 }
-
+// TODO: hent denne fra backend
+export type MineOppgaverQueryParams = {
+  sortBy?: string;
+  sortOrder?: 'ASC' | 'DESC';
+};
+export function mineOppgaverQueryParams(sortering: SortState) {
+  const sortBy = sortering?.orderBy ? `sortby=${sortering.orderBy}` : '';
+  const sortOrder = sortering?.direction ? `sortorder=${sortering.direction}` : '';
+  const string = [sortBy, sortOrder].filter((value) => value).join('&');
+  return encodeURI(string);
+}
+export function hentMineOppgaverQueryParams(req: NextRequest): MineOppgaverQueryParams {
+  const params = req.nextUrl.searchParams;
+  const sortBy = params.get('sortBy');
+  const sortOrder = params.get('sortOrder') as MineOppgaverQueryParams['sortOrder'];
+  return {
+    ...(sortBy ? { sortBy } : {}),
+    ...(sortOrder ? { sortOrder } : {}),
+  };
+}
 function buildSaksbehandlingsURL(oppgave: Oppgave | AvklaringsbehovReferanse): string {
   // @ts-ignore
   return `/saksbehandling/sak/${oppgave.saksnummer}/${oppgave?.behandlingRef ?? oppgave?.referanse}`;

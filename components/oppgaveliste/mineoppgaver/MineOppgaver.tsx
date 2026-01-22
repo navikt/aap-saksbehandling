@@ -15,6 +15,8 @@ import { alleVurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
 import { TabellSkeleton } from 'components/oppgaveliste/tabellskeleton/TabellSkeleton';
 import { useLagreAktivUtvidetFilter } from 'hooks/oppgave/aktivUtvidetFilterHook';
 import { useEffect } from 'react';
+import { useBackendSortering } from 'hooks/oppgave/BackendSorteringHook';
+import { Oppgave } from 'lib/types/oppgaveTypes';
 
 export interface FormFieldsFilter {
   behandlingstyper?: string[];
@@ -26,7 +28,8 @@ export interface FormFieldsFilter {
 }
 
 export const MineOppgaver = () => {
-  const { oppgaver, mutate, isLoading, error } = useMineOppgaver();
+  const { sort, setSort } = useBackendSortering<Oppgave>();
+  const { oppgaver, mutate, isLoading, error } = useMineOppgaver(sort);
   const { hentAktivUtvidetFilter, lagreAktivUtvidetFilter } = useLagreAktivUtvidetFilter();
   const lagretUtvidetFilter = hentAktivUtvidetFilter();
 
@@ -99,7 +102,7 @@ export const MineOppgaver = () => {
 
       {!isLoading &&
         (filtrerteOppgaver?.length > 0 ? (
-          <MineOppgaverTabell oppgaver={filtrerteOppgaver} revalidateFunction={mutate} />
+          <MineOppgaverTabell oppgaver={filtrerteOppgaver} revalidateFunction={mutate} setSortBy={setSort} />
         ) : (
           <BodyShort className={styles.ingenreserverteoppgaver}>Ingen reserverte oppgaver.</BodyShort>
         ))}

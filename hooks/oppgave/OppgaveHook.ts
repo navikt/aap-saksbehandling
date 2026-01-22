@@ -6,6 +6,7 @@ import { isError, isSuccess } from 'lib/utils/api';
 import { string } from 'zod';
 import { ScopedSortState } from 'hooks/oppgave/BackendSorteringHook';
 import { SortState } from '@navikt/ds-react';
+import { mineOppgaverQueryParams } from 'lib/utils/request';
 
 const PAGE_SIZE = 50;
 
@@ -89,10 +90,8 @@ export function useOppgaver({
     const typeSuffix = `/${type}`;
     const utvidetFilterSuffix = lagUrlSuffix(utvidetFilter);
     const paging = utvidetFilterSuffix.length > 0 ? `&side=${pageIndex}` : `?side=${pageIndex}`;
-    const sortBy = sortering?.orderBy ? `&sortby=${sortering.orderBy}` : '';
-    const sortOrder = sortering?.orderBy ? `&sortorder=${sortering.orderBy}` : '';
-    const key = `${base}${suffix}${typeSuffix}${utvidetFilterSuffix}${paging}${sortBy}${sortOrder}`;
-    return key;
+    const sorteringParams = sortering ? mineOppgaverQueryParams(sortering) : '';
+    return `${base}${suffix}${typeSuffix}${utvidetFilterSuffix}${paging}${sorteringParams}`;
   };
 
   const {
@@ -198,8 +197,9 @@ export function useAlleOppgaverForEnhet(
   });
 }
 
-export const useMineOppgaver = () => {
-  const { data, mutate, isLoading } = useSWR('api/mine-oppgaver', hentMineOppgaverClient);
+export const useMineOppgaver = (sortering?: SortState) => {
+  const query = sortering ? mineOppgaverQueryParams(sortering) : '';
+  const { data, mutate, isLoading } = useSWR(`api/mine-oppgaver${query}`, () => hentMineOppgaverClient(sortering));
   const oppgaver = isSuccess(data) ? data?.data?.oppgaver?.flat() : [];
 
   return { oppgaver, mutate, isLoading, error: isError(data) ? data.apiException.message : undefined };

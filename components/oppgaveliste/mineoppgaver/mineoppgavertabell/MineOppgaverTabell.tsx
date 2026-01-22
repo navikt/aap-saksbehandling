@@ -1,6 +1,6 @@
 import { Oppgave } from 'lib/types/oppgaveTypes';
-import { useState } from 'react';
-import { Alert, Table, VStack } from '@navikt/ds-react';
+import { Dispatch, SetStateAction, useState } from 'react';
+import { Alert, SortState, Table, VStack } from '@navikt/ds-react';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { ScopedSortState, useSortertListe } from 'hooks/oppgave/SorteringHook';
 import { ManglerTilgangModal } from 'components/oppgaveliste/manglertilgangmodal/ManglerTilgangModal';
@@ -10,11 +10,12 @@ import { TildelOppgaveModal } from 'components/tildeloppgavemodal/TildelOppgaveM
 interface Props {
   oppgaver: Oppgave[];
   revalidateFunction: () => void;
+  setSortBy: Dispatch<SetStateAction<string>>;
+  sort: SortState | undefined;
 }
 
-export const MineOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) => {
+export const MineOppgaverTabell = ({ oppgaver, revalidateFunction, setSortBy, sort }: Props) => {
   const [feilmelding, setFeilmelding] = useState<string | undefined>();
-  const { sort, settSorteringskriterier, sortertListe } = useSortertListe(oppgaver);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
@@ -26,12 +27,7 @@ export const MineOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) => {
       />
       <TildelOppgaveModal revalidateFunction={revalidateFunction} />
       {feilmelding && <Alert variant={'error'}>{feilmelding}</Alert>}
-      <TableStyled
-        size={'small'}
-        zebraStripes
-        sort={sort}
-        onSortChange={(sortKey) => settSorteringskriterier(sortKey as ScopedSortState<Oppgave>['orderBy'])}
-      >
+      <TableStyled size={'small'} zebraStripes sort={sort} onSortChange={(sortKey) => setSortBy(sortKey)}>
         <Table.Header>
           <Table.Row>
             <Table.ColumnHeader sortKey={'personNavn'} sortable={true} textSize={'small'}>
@@ -66,7 +62,7 @@ export const MineOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {sortertListe.map((oppgave) => (
+          {oppgaver.map((oppgave) => (
             <MineOppgaverTabellRad
               key={oppgave.id}
               oppgave={oppgave}

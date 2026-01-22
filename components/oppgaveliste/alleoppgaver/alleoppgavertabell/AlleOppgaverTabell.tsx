@@ -52,8 +52,6 @@ export const AlleOppgaverTabell = ({
   setSortBy,
   sort,
 }: Props) => {
-  const oppgaverTilSortering: OppgaveTilSortering[] = oppgaver.map(mapTilSorterbarOppgave);
-  // const { sort, sortertListe, settSorteringskriterier } = useSortertListe(oppgaverTilSortering);
   const [visSynkroniserEnhetModal, setVisSynkroniserEnhetModal] = useState<boolean>(false);
 
   const toggleValgtRad = (oppgaveId: number) => {

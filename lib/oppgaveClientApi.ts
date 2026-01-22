@@ -19,8 +19,9 @@ import {
   VenteÅrsakOgGjennomsnitt,
 } from './types/statistikkTypes';
 import { BehandlingEndringerPerDag } from 'lib/types/statistikkTypes';
-import { queryParamsArray } from './utils/request';
+import { mineOppgaverQueryParams, queryParamsArray } from './utils/request';
 import { clientFetch } from 'lib/clientApi';
+import { SortState } from '@navikt/ds-react';
 
 // statistikk
 export async function antallÅpneBehandlingerPerBehandlingstypeClient(url: string) {
@@ -67,8 +68,9 @@ export async function hentOppgaveClient(behandlingsreferanse: string) {
   return clientFetch<Oppgave>(`/oppgave/api/oppgave/${behandlingsreferanse}/hent`, 'GET');
 }
 
-export async function hentMineOppgaverClient() {
-  return clientFetch<OppgavelisteResponse>('/oppgave/api/oppgave/mine-oppgaver', 'GET');
+export async function hentMineOppgaverClient(sortering?: SortState) {
+  const query = sortering ? mineOppgaverQueryParams(sortering) : '';
+  return clientFetch<OppgavelisteResponse>(`/oppgave/api/oppgave/mine-oppgaver?${query}`, 'GET');
 }
 
 export async function avreserverOppgaveClient(oppgaver: number[]) {
