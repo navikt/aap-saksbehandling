@@ -1,7 +1,7 @@
 // Postmottak
 
 import { clientFetch } from 'lib/clientApi';
-import { LøsAvklaringsbehovPåBehandling, SettPåVentRequest } from 'lib/types/postmottakTypes';
+import { LøsAvklaringsbehovPåBehandling, SettPåVentRequest, BehandlingFlytOgTilstand } from 'lib/types/postmottakTypes';
 
 // TODO: Test-endepunkt - skal fjernes
 export function postmottakOpprettBehandlingClient(journalpostId: number) {
@@ -26,4 +26,8 @@ export function postmottakHentDokumentClient(journalpostId: number, dokumentInfo
   return fetch(`/postmottak/api/post/dokumenter/${journalpostId}/${dokumentInfoId}`, { method: 'GET' }).then((res) =>
     res.blob()
   );
+}
+
+export function postmottakHentFlyt(behandlingsreferanse: string) {
+  return clientFetch<BehandlingFlytOgTilstand>(`/postmottak/api/post/${behandlingsreferanse}/flyt`, 'GET');
 }

@@ -11,10 +11,11 @@ import { VisningActions, VisningModus } from 'hooks/saksbehandling/visning/Visni
 import { FormEvent, ReactNode } from 'react';
 import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { ApiException } from 'lib/utils/api';
+import { StegType as PostmottakStegType } from 'lib/types/postmottakTypes';
 
 export interface VilkårsKortMedFormOgMellomlagringProps {
   heading: string;
-  steg: StegType;
+  steg: StegType | PostmottakStegType;
   children: ReactNode;
   onSubmit: (e: FormEvent<HTMLFormElement>) => void;
   isLoading: boolean;
@@ -32,7 +33,7 @@ export interface VilkårsKortMedFormOgMellomlagringProps {
   onLagreMellomLagringClick: (() => void) | undefined;
   mellomlagretVurdering: MellomlagretVurdering | undefined;
   extraActions?: ReactNode;
-  formReset: () => void;
+  formReset: (() => void) | undefined;
 }
 
 export const VilkårskortMedFormOgMellomlagringNyVisning = ({

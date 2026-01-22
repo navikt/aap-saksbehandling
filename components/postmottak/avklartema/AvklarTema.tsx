@@ -1,6 +1,5 @@
 'use client';
 
-import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/postmottakForm';
 import { FormEvent, FormEventHandler, useState } from 'react';
 import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/PostmottakLøsBehovOgGåTilNesteStegHook';
@@ -13,6 +12,8 @@ import { FormField } from 'components/form/FormField';
 import { usePostmottakEndreTema } from 'hooks/FetchHook';
 import { CheckmarkCircleIcon } from '@navikt/aksel-icons';
 import { toggles } from 'lib/utils/toggles';
+import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { useVilkårskortVisning } from 'hooks/postmottak/VisningHook';
 
 interface Props {
   behandlingsVersjon: number;
@@ -26,6 +27,13 @@ interface FormFields {
 }
 
 export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, readOnly }: Props) => {
+  const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
+    usePostmottakLøsBehovOgGåTilNesteSteg('AVKLAR_TEMA');
+  const { postmottakEndreTema, error, isLoading: endreTemaIsLoading, data } = usePostmottakEndreTema();
+  const [visModal, setVisModal] = useState<boolean>(grunnlag?.vurdering?.skalTilAap === false || false);
+
+  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(readOnly, 'AVKLAR_TEMA');
+
   const { formFields, form } = useConfigForm<FormFields>(
     {
       erTemaAAP: {
@@ -36,11 +44,8 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
         options: JaEllerNeiOptions,
       },
     },
-    { readOnly }
+    { readOnly: formReadOnly }
   );
-  const { løsBehovOgGåTilNesteSteg, status, isLoading } = usePostmottakLøsBehovOgGåTilNesteSteg('AVKLAR_TEMA');
-  const { postmottakEndreTema, error, isLoading: endreTemaIsLoading, data } = usePostmottakEndreTema();
-  const [visModal, setVisModal] = useState<boolean>(grunnlag?.vurdering?.skalTilAap === false || false);
 
   const onSubmit: FormEventHandler<HTMLFormElement> = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
@@ -79,7 +84,22 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
   const settesPåVent = toggles.featurePostmottakBehandlingerPåVent;
 
   return (
-    <VilkårsKort heading={'Avklar tema'}>
+    <VilkårskortMedFormOgMellomlagringNyVisning
+      heading={'Avklar tema'}
+      steg={'AVKLAR_TEMA'}
+      onSubmit={onSubmit}
+      isLoading={isLoading}
+      status={status}
+      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      knappTekst={'Neste'}
+      vilkårTilhørerNavKontor={false}
+      visningModus={visningModus}
+      visningActions={visningActions}
+      onDeleteMellomlagringClick={undefined}
+      onLagreMellomLagringClick={undefined}
+      mellomlagretVurdering={undefined}
+      formReset={undefined}
+    >
       <Modal
         open={visModal}
         header={{
@@ -136,6 +156,6 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
           )}
         </VStack>
       </form>
-    </VilkårsKort>
+    </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };
