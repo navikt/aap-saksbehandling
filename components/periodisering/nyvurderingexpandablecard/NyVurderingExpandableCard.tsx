@@ -87,7 +87,7 @@ export const NyVurderingExpandableCard = ({
                 onClick={() => ref.current?.showModal()}
                 type="button"
               />
-              <SlettVurderingModal ref={ref} onSlettVurdering={() => onSlettVurdering()} />{' '}
+              <SlettVurderingModal ref={ref} onSlettVurdering={onSlettVurdering} />
             </VStack>
           )}
         </HGrid>
