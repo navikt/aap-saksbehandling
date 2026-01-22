@@ -1,4 +1,4 @@
-import { HStack, Radio, ReadMore, VStack } from '@navikt/ds-react';
+import { HStack, Radio, VStack } from '@navikt/ds-react';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
 import { JaEllerNei } from 'lib/utils/form';
@@ -9,6 +9,7 @@ import { SykepengeerstatningForm } from 'components/behandlinger/sykdom/vurdersy
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { grunnOptions } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/sykepengererstatning-utils';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
+import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
 
 type Props = {
   form: UseFormReturn<SykepengeerstatningForm>;
@@ -33,12 +34,9 @@ export const SykepengeerstatningFormInput = ({ readOnly, index, form }: Props) =
           readOnly={readOnly}
         />
       </HStack>
-      <ReadMore style={{ maxWidth: '90ch' }} size={'small'} header="Hvordan legge til sluttdato?">
-        For å legge til en sluttdato på denne vurderingen velger du “Legg til ny vurdering”. Det oppretter en ny
-        vurdering, der du kan ha et annet utfall og en ny “gjelder fra” dato, som da vil gi sluttdato på den foregående
-        (denne) vurderingen. Sluttdatoen for denne vurderingen blir satt til dagen før den nye vurderingen sin “gjelder
-        fra” dato.
-      </ReadMore>
+
+      <HvordanLeggeTilSluttdatoReadMore />
+
       <TextAreaWrapper
         name={`vurderinger.${index}.begrunnelse`}
         control={control}
@@ -57,7 +55,6 @@ export const SykepengeerstatningFormInput = ({ readOnly, index, form }: Props) =
         rules={{ required: 'Du må ta stilling til om brukeren har rett på AAP som sykepengeerstatning.' }}
         readOnly={readOnly}
       />
-
       {watch(`vurderinger.${index}.erOppfylt`) === JaEllerNei.Ja && (
         <RadioGroupWrapper
           name={`vurderinger.${index}.grunn`}

@@ -33,7 +33,8 @@ import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/op
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
 
 interface Props {
   grunnlag: ArbeidsevneGrunnlag;
@@ -219,18 +220,19 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
           index={index}
           initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
         >
-          <HStack justify={'space-between'}>
-            <DateInputWrapper
-              control={form.control}
-              name={`vurderinger.${index}.fraDato`}
-              label={'Vurderingen gjelder fra'}
-              rules={{
-                required: 'Vennligst velg en dato for når vurderingen gjelder fra',
-                validate: (value) => validerDato(value as string),
-              }}
-              readOnly={formReadOnly}
-            />
-          </HStack>
+          <DateInputWrapper
+            control={form.control}
+            name={`vurderinger.${index}.fraDato`}
+            label={'Vurderingen gjelder fra'}
+            rules={{
+              required: 'Vennligst velg en dato for når vurderingen gjelder fra',
+              validate: (value) => validerDato(value as string),
+            }}
+            readOnly={formReadOnly}
+          />
+
+          <HvordanLeggeTilSluttdatoReadMore />
+
           <TextAreaWrapper
             label={'Vilkårsvurdering'}
             description={

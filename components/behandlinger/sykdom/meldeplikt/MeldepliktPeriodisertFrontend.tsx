@@ -1,6 +1,6 @@
 'use client';
 
-import { HStack, Link, Radio, VStack } from '@navikt/ds-react';
+import { Link, Radio, VStack } from '@navikt/ds-react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import {
@@ -32,6 +32,7 @@ import { TidligereVurderingExpandableCard } from 'components/periodisering/tidli
 import React, { useState } from 'react';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
+import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
 
 interface Props {
   behandlingVersjon: number;
@@ -209,18 +210,19 @@ export const MeldepliktPeriodisertFrontend = ({
           index={index}
           initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
         >
-          <HStack justify={'space-between'}>
-            <DateInputWrapper
-              name={`vurderinger.${index}.fraDato`}
-              label="Vurderingen gjelder fra"
-              control={form.control}
-              rules={{
-                required: 'Vennligst velg en dato for når vurderingen gjelder fra',
-                validate: (value) => validerDato(value as string),
-              }}
-              readOnly={formReadOnly}
-            />
-          </HStack>
+          <DateInputWrapper
+            name={`vurderinger.${index}.fraDato`}
+            label="Vurderingen gjelder fra"
+            control={form.control}
+            rules={{
+              required: 'Vennligst velg en dato for når vurderingen gjelder fra',
+              validate: (value) => validerDato(value as string),
+            }}
+            readOnly={formReadOnly}
+          />
+
+          <HvordanLeggeTilSluttdatoReadMore />
+
           <TextAreaWrapper
             label={'Vilkårsvurdering'}
             control={form.control}

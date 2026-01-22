@@ -1,6 +1,6 @@
 'use client';
 
-import { HStack, VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react';
 import { erDatoIPeriode, validerDato } from 'lib/validation/dateValidation';
 import { isAfter, parse } from 'date-fns';
 import { parseDatoFraDatePicker, stringToDate } from 'lib/utils/date';
@@ -15,6 +15,8 @@ import { SykdomsvurderingMedVissVarighet } from 'components/behandlinger/sykdom/
 import { SykdomsvurderingUtenVissVarighet } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingUtenVissVarighet';
 import { SykdomsvurderingDiagnosesøk } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingDiagnosesøk';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
+import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
+import React from 'react';
 
 interface Props {
   index: number;
@@ -49,33 +51,34 @@ export const SykdomsvurderingFormInput = ({
 
   return (
     <VStack gap={'5'}>
-      <HStack justify={'space-between'}>
-        <DateInputWrapper
-          name={`vurderinger.${index}.fraDato`}
-          label="Vurderingen gjelder fra"
-          control={form.control}
-          rules={{
-            required: 'Vennligst velg en dato for når vurderingen gjelder fra',
-            validate: {
-              validerDato: (value) => validerDato(value as string),
-              validerIkkeRelevantPeriode: (value) => {
-                const parsedInputDato = new Date(parse(value as string, 'dd.MM.yyyy', new Date()));
-                const funnetIkkeRelevantPeriode = ikkeRelevantePerioder?.find((periode) => {
-                  const fom = stringToDate(periode.fom);
-                  const tom = stringToDate(periode.tom);
-                  if (!fom || !tom) return false;
-                  return erDatoIPeriode(parsedInputDato, fom, tom);
-                });
+      <DateInputWrapper
+        name={`vurderinger.${index}.fraDato`}
+        label="Vurderingen gjelder fra"
+        control={form.control}
+        rules={{
+          required: 'Vennligst velg en dato for når vurderingen gjelder fra',
+          validate: {
+            validerDato: (value) => validerDato(value as string),
+            validerIkkeRelevantPeriode: (value) => {
+              const parsedInputDato = new Date(parse(value as string, 'dd.MM.yyyy', new Date()));
+              const funnetIkkeRelevantPeriode = ikkeRelevantePerioder?.find((periode) => {
+                const fom = stringToDate(periode.fom);
+                const tom = stringToDate(periode.tom);
+                if (!fom || !tom) return false;
+                return erDatoIPeriode(parsedInputDato, fom, tom);
+              });
 
-                return funnetIkkeRelevantPeriode
-                  ? `Dato kan ikke være inne i perioden (${funnetIkkeRelevantPeriode.fom} - ${funnetIkkeRelevantPeriode.tom})`
-                  : true;
-              },
+              return funnetIkkeRelevantPeriode
+                ? `Dato kan ikke være inne i perioden (${funnetIkkeRelevantPeriode.fom} - ${funnetIkkeRelevantPeriode.tom})`
+                : true;
             },
-          }}
-          readOnly={readonly}
-        />
-      </HStack>
+          },
+        }}
+        readOnly={readonly}
+      />
+
+      <HvordanLeggeTilSluttdatoReadMore />
+
       <TextAreaWrapper
         name={`vurderinger.${index}.begrunnelse`}
         control={form.control}
