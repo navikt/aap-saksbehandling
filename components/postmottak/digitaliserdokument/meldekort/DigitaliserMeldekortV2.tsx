@@ -57,7 +57,7 @@ export const DigitaliserMeldekortV2 = ({ readOnly, submit, isLoading }: Props) =
         rules: { required: 'Du må velge hvilke uker meldekortet gjelder for' },
       },
       innsendtDato: {
-        type: 'date_input',
+        type: 'date',
         label: 'Dato for innsendt meldekort',
         rules: { required: 'Du må registrere når meldekortet ble innsendt' },
       },
@@ -87,7 +87,7 @@ export const DigitaliserMeldekortV2 = ({ readOnly, submit, isLoading }: Props) =
   }
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    form.handleSubmit((data) => submit('MELDEKORT', mapTilMeldekortKontrakt(data), null))(event);
+    form.handleSubmit((data) => submit('MELDEKORT', mapTilMeldekortKontrakt(data), data.innsendtDato))(event);
   };
 
   return (
