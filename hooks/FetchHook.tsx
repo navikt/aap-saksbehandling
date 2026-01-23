@@ -117,7 +117,7 @@ export function usePostmottakSettPåVent(): {
 
 export function usePostmottakEndreTema(): {
   postmottakEndreTema: (behandlingsreferanse: string) => Promise<{ ok: boolean }>;
-  isLoading: boolean;
+  isLoading: boolean; // TODO deprecated
   error?: string;
   data?: { redirectUrl: string };
 } {

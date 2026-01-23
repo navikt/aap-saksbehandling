@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useRequiredFlyt } from 'hooks/postmottak/FlytHook';
+import { usePostmottakRequiredFlyt } from 'hooks/postmottak/PostmottakFlytHook';
 import { StegType } from 'lib/types/postmottakTypes';
 
 export enum VisningModus {
@@ -21,8 +21,8 @@ export interface VisningActions {
   onBekreftClick: () => void;
 }
 
-export function useVilkårskortVisning(readOnly: boolean, steg: StegType): VisningState {
-  const { flyt } = useRequiredFlyt();
+export function usePostmottakVilkårskortVisning(readOnly: boolean, steg: StegType): VisningState {
+  const { flyt } = usePostmottakRequiredFlyt();
 
   const erAktivtSteg = flyt.aktivtSteg === steg;
   const initialVisningModus = hentVisning(readOnly, erAktivtSteg);

@@ -12,8 +12,8 @@ import { FormField } from 'components/form/FormField';
 import { usePostmottakEndreTema } from 'hooks/FetchHook';
 import { CheckmarkCircleIcon } from '@navikt/aksel-icons';
 import { toggles } from 'lib/utils/toggles';
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
-import { useVilkårskortVisning } from 'hooks/postmottak/VisningHook';
+import { PostmottakVilkårskort } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/PostmottakVilkårskort';
+import { usePostmottakVilkårskortVisning } from 'hooks/postmottak/PostmottakVisningHook';
 
 interface Props {
   behandlingsVersjon: number;
@@ -29,10 +29,10 @@ interface FormFields {
 export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, readOnly }: Props) => {
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     usePostmottakLøsBehovOgGåTilNesteSteg('AVKLAR_TEMA');
-  const { postmottakEndreTema, error, isLoading: endreTemaIsLoading, data } = usePostmottakEndreTema();
+  const { postmottakEndreTema, error, data } = usePostmottakEndreTema();
   const [visModal, setVisModal] = useState<boolean>(grunnlag?.vurdering?.skalTilAap === false || false);
 
-  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(readOnly, 'AVKLAR_TEMA');
+  const { visningActions, formReadOnly, visningModus } = usePostmottakVilkårskortVisning(readOnly, 'AVKLAR_TEMA');
 
   const { formFields, form } = useConfigForm<FormFields>(
     {
@@ -84,7 +84,7 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
   const settesPåVent = toggles.featurePostmottakBehandlingerPåVent;
 
   return (
-    <VilkårskortMedFormOgMellomlagringNyVisning
+    <PostmottakVilkårskort
       heading={'Avklar tema'}
       steg={'AVKLAR_TEMA'}
       onSubmit={onSubmit}
@@ -138,24 +138,16 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
           </Button>
         </Modal.Footer>
       </Modal>
-      <form onSubmit={onSubmit}>
-        <VStack gap={'6'}>
-          <LøsBehovOgGåTilNesteStegStatusAlert status={status} />
-          <FormField form={form} formField={formFields.erTemaAAP} />
-          {error && (
-            <Alert size={'small'} variant={'error'} title={''}>
-              <BodyShort size={'small'}>Noe gikk galt ved endring av tema</BodyShort>
-              {error}
-            </Alert>
-          )}
-
-          {!readOnly && (
-            <Button loading={isLoading || endreTemaIsLoading} className={'fit-content'}>
-              Neste
-            </Button>
-          )}
-        </VStack>
-      </form>
-    </VilkårskortMedFormOgMellomlagringNyVisning>
+      <VStack gap={'6'}>
+        <LøsBehovOgGåTilNesteStegStatusAlert status={status} />
+        <FormField form={form} formField={formFields.erTemaAAP} />
+        {error && (
+          <Alert size={'small'} variant={'error'} title={''}>
+            <BodyShort size={'small'}>Noe gikk galt ved endring av tema</BodyShort>
+            {error}
+          </Alert>
+        )}
+      </VStack>
+    </PostmottakVilkårskort>
   );
 };
