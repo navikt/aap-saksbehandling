@@ -147,6 +147,10 @@ export function clientBestillDialogmelding(bestilling: BestillLegeerklæring) {
   return clientFetch(`${BASE_URL}/api/dokumentinnhenting/bestill`, 'POST', bestilling);
 }
 
+export function clientHentRettighetsdata(saksnummer: string) {
+  return clientFetch(`${BASE_URL}/api/sak/${saksnummer}/rettighet`, 'GET');
+}
+
 export function clientForhåndsvisDialogmelding(dialogmelding: ForhåndsvisDialogmelding) {
   return clientFetch<ForhåndsvisDialogmeldingResponse>(
     `${BASE_URL}/api/dokumentinnhenting/forhaandsvis`,

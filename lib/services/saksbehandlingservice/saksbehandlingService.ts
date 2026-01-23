@@ -58,6 +58,7 @@ import {
   PeriodisertLovvalgMedlemskapGrunnlag,
   PåklagetBehandlingGrunnlag,
   RefusjonskravGrunnlag,
+  RettighetDto,
   RettighetsperiodeGrunnlag,
   SakPersoninfo,
   SaksInfo,
@@ -416,6 +417,11 @@ export const hentAktivitetsplikt11_7Grunnlag = async (behandlingsreferanse: stri
 export const hentAktivitetsplikt11_9Grunnlag = async (behandlingsreferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/aktivitetsplikt/${behandlingsreferanse}/grunnlag/brudd-11-9`;
   return await apiFetch<Aktivitetsplikt11_9Grunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentRettighetGrunnlag = async (behandlingsreferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/rettighet`;
+  return await apiFetch<RettighetDto>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentSvarFraAndreinstansGrunnlag = async (behandlingsReferanse: string) => {

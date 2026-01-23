@@ -8,6 +8,7 @@ import { DokumentOversikt } from 'components/saksoversikt/dokumentoversikt/Dokum
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { AktivitetspliktTrekk } from 'components/saksoversikt/aktivitetsplikttrekk/AktivitetspliktTrekk';
+import { Rettighetsoversikt } from 'components/saksoversikt/Rettighetsoversikt';
 
 enum Tab {
   OVERSIKT = 'OVERSIKT',
@@ -38,6 +39,7 @@ export const SakOversiktContainer = ({ sak }: { sak: SaksInfo }) => {
 
           <Box marginBlock="8">
             <Tabs.Panel value={Tab.OVERSIKT}>
+              <Rettighetsoversikt saksnummer={sak.saksnummer} />
               <SakMedBehandlinger sak={sak} />
             </Tabs.Panel>
 
