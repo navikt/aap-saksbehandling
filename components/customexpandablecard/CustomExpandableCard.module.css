@@ -2,6 +2,10 @@
     border-bottom: 1px solid var(--a-border-divider);
 }
 
+.noBorder {
+    border-bottom: none;
+}
+
 .headingButton{
     background: none;
     border: none;

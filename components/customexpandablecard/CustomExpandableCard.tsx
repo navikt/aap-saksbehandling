@@ -13,10 +13,24 @@ interface Props {
   setExpanded: (expanded: boolean) => void;
   children: ReactNode;
   disabled?: boolean;
+  noBorder?: boolean;
 }
-export const CustomExpandableCard = ({ heading, children, expanded, setExpanded, editable, disabled }: Props) => {
+export const CustomExpandableCard = ({
+  heading,
+  children,
+  expanded,
+  setExpanded,
+  editable,
+  disabled,
+  noBorder = false,
+}: Props) => {
   return (
-    <VStack gap={'4'} justify={'center'} className={styles.container} padding={'0'}>
+    <VStack
+      gap={'4'}
+      justify={'center'}
+      className={`${styles.container} ${noBorder ? styles.noBorder :  ''}`}
+      padding={'0'}
+    >
       <button className={styles.headingButton} type="button" onClick={() => setExpanded(!expanded)}>
         <HGrid columns={'1fr 16px'} align={'center'} gap={'1'}>
           <HGrid columns={'16px 1fr'} align={'center'} gap={'1'}>
