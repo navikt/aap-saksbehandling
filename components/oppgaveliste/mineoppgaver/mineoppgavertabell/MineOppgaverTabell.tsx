@@ -30,31 +30,27 @@ export const MineOppgaverTabell = ({ oppgaver, revalidateFunction, setSortBy, so
       <TableStyled size={'small'} zebraStripes sort={sort} onSortChange={(sortKey) => setSortBy(sortKey)}>
         <Table.Header>
           <Table.Row>
-            <Table.ColumnHeader sortKey={'personNavn'} sortable={true} textSize={'small'}>
-              Navn
-            </Table.ColumnHeader>
-            <Table.ColumnHeader sortKey={'personIdent'} sortable={true} textSize={'small'}>
+            <Table.ColumnHeader textSize={'small'}>Navn</Table.ColumnHeader>
+            <Table.ColumnHeader sortKey={'PERSONIDENT'} sortable={true} textSize={'small'}>
               Fnr
             </Table.ColumnHeader>
-            <Table.ColumnHeader sortKey={'saksnummer'} sortable={true}>
+            <Table.ColumnHeader sortKey={'SAKSNUMMER'} sortable={true}>
               Sak
             </Table.ColumnHeader>
-            <Table.ColumnHeader sortKey={'behandlingstype'} sortable={true}>
+            <Table.ColumnHeader sortKey={'BEHANDLINGSTYPE'} sortable={true}>
               Behandlingstype
             </Table.ColumnHeader>
-            <Table.ColumnHeader sortKey={'behandlingOpprettet'} sortable={true}>
+            <Table.ColumnHeader sortKey={'BEHANDLING_OPPRETTET'} sortable={true}>
               Beh. opprettet
             </Table.ColumnHeader>
-            <Table.ColumnHeader sortKey={'årsakTilOpprettelse'} sortable={true}>
+            <Table.ColumnHeader sortKey={'ÅRSAK_TIL_OPPRETTELSE'} sortable={true}>
               Årsak
             </Table.ColumnHeader>
-            <Table.ColumnHeader sortKey={'årsak'} sortable={true}>
-              Vurderingsbehov
-            </Table.ColumnHeader>
-            <Table.ColumnHeader sortKey={'avklaringsbehovKode'} sortable={true}>
+            <Table.ColumnHeader>Vurderingsbehov</Table.ColumnHeader>
+            <Table.ColumnHeader sortKey={'AVKLARINGSBEHOV_KODE'} sortable={true}>
               Oppgave
             </Table.ColumnHeader>
-            <Table.ColumnHeader sortKey={'opprettetTidspunkt'} sortable={true}>
+            <Table.ColumnHeader sortKey={'OPPRETTET_TIDSPUNKT'} sortable={true}>
               Oppg. opprettet
             </Table.ColumnHeader>
             <Table.HeaderCell></Table.HeaderCell>
