@@ -21,15 +21,16 @@ export type PliktPeriode = {
   dager: Array<PliktDag>;
 };
 export interface PliktkortFormFields {
-  innsendtDato?: Date;
+  innsendtDato: Date;
   pliktPerioder?: PliktPeriode[];
 }
 export const DigitaliserMeldekort = ({ readOnly, submit, isLoading }: Props) => {
   const { form, formFields } = useConfigForm<PliktkortFormFields>(
     {
       innsendtDato: {
-        type: 'date_input',
+        type: 'date',
         label: 'Dato for innsendt meldekort',
+        rules: { required: 'Du må registrere når meldekortet ble innsendt' },
       },
       pliktPerioder: {
         type: 'fieldArray',
@@ -57,7 +58,7 @@ export const DigitaliserMeldekort = ({ readOnly, submit, isLoading }: Props) => 
   }
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    form.handleSubmit((data) => submit('MELDEKORT', mapTilPliktkortKontrakt(data), null))(event);
+    form.handleSubmit((data) => submit('MELDEKORT', mapTilPliktkortKontrakt(data), data.innsendtDato))(event);
   };
   return (
     <VilkårsKort heading={'Meldekort'}>

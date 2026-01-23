@@ -3,7 +3,6 @@ import { JaEllerNei } from 'lib/utils/form';
 import { Sykdomvurdering } from 'lib/types/types';
 
 export function erNyVurderingOppfylt(vurdering: Sykdomsvurdering): boolean | undefined {
-  console.log(vurdering);
   if (
     vurdering.harSkadeSykdomEllerLyte === JaEllerNei.Nei ||
     vurdering.erArbeidsevnenNedsatt === JaEllerNei.Nei ||
