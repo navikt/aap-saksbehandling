@@ -59,6 +59,7 @@ export const VilkårskortMedFormOgMellomlagringNyVisning = ({
   formReset,
 }: VilkårsKortMedFormOgMellomlagringProps) => {
   const classNameBasertPåEnhet = vilkårTilhørerNavKontor ? styles.vilkårsKortNAV : styles.vilkårsKortNAY;
+  // TODO Martin, denne på være useRequiredFlyt fra postmottak
   const { flyt } = useRequiredFlyt();
   const erAktivtSteg = flyt.aktivtSteg === steg || visningModus === 'AKTIV_MED_AVBRYT';
 
