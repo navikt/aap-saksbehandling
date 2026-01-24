@@ -33,8 +33,9 @@ import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/op
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
-import React, { useState } from 'react';
+import React from 'react';
 import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
+import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 
 interface Props {
   grunnlag: ArbeidsevneGrunnlag;
@@ -84,7 +85,7 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
   const { mellomlagretVurdering, lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering } =
     useMellomlagring(Behovstype.FASTSETT_ARBEIDSEVNE_KODE, initialMellomlagretVurdering);
 
-  const [allAccordionsOpenSignal, setAllAccordionsOpenSignal] = useState<boolean>();
+  const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
   const { visningActions, formReadOnly, visningModus, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
@@ -148,7 +149,7 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
 
     løsPeriodisertBehovOgGåTilNesteSteg(losning, () => {
       nullstillMellomlagretVurdering();
-      setAllAccordionsOpenSignal(false);
+      closeAllAccordions();
       visningActions.onBekreftClick();
     });
   }
@@ -204,7 +205,7 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
       {fields.map((vurdering, index) => (
         <NyVurderingExpandableCard
           key={vurdering.id}
-          allAccordionsOpenSignal={allAccordionsOpenSignal}
+          accordionsSignal={accordionsSignal}
           fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
           oppfylt={undefined}
           nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}

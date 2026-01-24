@@ -31,7 +31,7 @@ import {
 import { ForutgåendeMedlemskapTidligereVurdering } from 'components/behandlinger/forutgåendemedlemskap/manuellvurderingperiodisert/ForutgåendeMedlemskapTidligereVurdering';
 import { ForutgåendeMedlemskapFormInput } from 'components/behandlinger/forutgåendemedlemskap/manuellvurderingperiodisert/ForutgåendeMedlemskapFormInput';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
-import { useState } from 'react';
+import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 
 interface Props {
   behandlingVersjon: number;
@@ -65,7 +65,7 @@ export const ForutgåendeMedlemskapPeriodisert = ({
     mellomlagretVurdering
   );
 
-  const [allAccordionsOpenSignal, setAllAccordionsOpenSignal] = useState<boolean>();
+  const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
   const defaultValues =
     mellomlagretVurdering != null
@@ -112,7 +112,7 @@ export const ForutgåendeMedlemskapPeriodisert = ({
     };
 
     løsPeriodisertBehovOgGåTilNesteSteg(losning, () => {
-      setAllAccordionsOpenSignal(false);
+      closeAllAccordions();
       nullstillMellomlagretVurdering();
     });
   }
@@ -161,7 +161,7 @@ export const ForutgåendeMedlemskapPeriodisert = ({
       {vurderingerFields.map((vurdering, index) => (
         <NyVurderingExpandableCard
           key={vurdering.id}
-          allAccordionsOpenSignal={allAccordionsOpenSignal}
+          accordionsSignal={accordionsSignal}
           fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
           nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
           isLast={index === vurderingerFields.length - 1}
