@@ -2,7 +2,7 @@
 
 import { CustomExpandableCard } from 'components/customexpandablecard/CustomExpandableCard';
 import { formatDatoMedMånedsnavn } from 'lib/utils/date';
-import { ReactNode, useRef, useState } from 'react';
+import { ReactNode, useRef } from 'react';
 import { BodyShort, Button, HGrid, HStack, VStack } from '@navikt/ds-react';
 import { VurdertAvAnsattDetail } from 'components/vurdertav/VurdertAvAnsattDetail';
 import { subDays } from 'date-fns';
@@ -12,7 +12,8 @@ import { SlettVurderingModal } from 'components/periodisering/slettvurderingmoda
 import { VurderingStatusTag } from 'components/periodisering/VurderingStatusTag';
 
 interface Props {
-  initiellEkspandert: boolean;
+  isOpen: boolean;
+  setIsOpen: () => void;
   fraDato: Date | null;
   nestePeriodeFraDato: Date | null;
   isLast: boolean;
@@ -25,7 +26,6 @@ interface Props {
   readonly: boolean;
   onSlettVurdering: () => void;
   index: number;
-  allAccordionsOpenSignal: boolean | undefined;
   harTidligereVurderinger?: boolean;
 }
 
@@ -42,24 +42,18 @@ export const NyVurderingExpandableCard = ({
   finnesFeil,
   onSlettVurdering,
   harTidligereVurderinger = false,
-  initiellEkspandert = false,
   index,
-  allAccordionsOpenSignal,
+  isOpen,
+  setIsOpen,
 }: Props) => {
-  const [localCardExpanded, setLocalCardExpanded] = useState<boolean>(initiellEkspandert);
-
-  // allAccordionsOpenSignal  kan overstyre åpen/lukket tilstand via isOpen.
-  // Når allAccordionsOpenSignal er undefined, styrer komponenten seg selv lokalt.
-  const cardExpanded = allAccordionsOpenSignal ?? localCardExpanded;
-
   const ref = useRef<HTMLDialogElement>(null);
 
   return (
     <CustomExpandableCard
       editable
       defaultOpen
-      expanded={cardExpanded || finnesFeil}
-      setExpanded={setLocalCardExpanded}
+      expanded={isOpen || finnesFeil}
+      setExpanded={setIsOpen}
       heading={
         <HStack justify={'space-between'} padding={'2'}>
           <BodyShort size={'small'}>

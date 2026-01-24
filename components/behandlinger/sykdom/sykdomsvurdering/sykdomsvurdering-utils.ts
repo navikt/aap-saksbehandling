@@ -1,6 +1,7 @@
 import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingPeriodisert';
 import { JaEllerNei } from 'lib/utils/form';
 import { Sykdomvurdering } from 'lib/types/types';
+import { v4 as uuidv4 } from 'uuid';
 
 export function erNyVurderingOppfylt(vurdering: Sykdomsvurdering): boolean | undefined {
   if (
@@ -59,6 +60,6 @@ export function emptySykdomsvurdering(): Sykdomsvurdering {
     erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense: undefined,
     erNedsettelseIArbeidsevneMerEnnFørtiProsent: undefined,
     yrkesskadeBegrunnelse: '',
-    erNyVurdering: true,
+    accordionId: uuidv4(),
   };
 }

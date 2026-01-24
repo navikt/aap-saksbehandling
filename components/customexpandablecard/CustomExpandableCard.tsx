@@ -10,14 +10,15 @@ interface Props {
   editable: boolean;
   heading: ReactNode;
   expanded: boolean;
-  setExpanded: (expanded: boolean) => void;
+  setExpanded: () => void;
   children: ReactNode;
   disabled?: boolean;
 }
+
 export const CustomExpandableCard = ({ heading, children, expanded, setExpanded, editable, disabled }: Props) => {
   return (
     <VStack gap={'4'} justify={'center'} className={styles.container} padding={'0'}>
-      <button className={styles.headingButton} type="button" onClick={() => setExpanded(!expanded)}>
+      <button className={styles.headingButton} type="button" onClick={setExpanded}>
         <HGrid columns={'1fr 16px'} align={'center'} gap={'1'}>
           <HGrid columns={'16px 1fr'} align={'center'} gap={'1'}>
             {disabled ? (

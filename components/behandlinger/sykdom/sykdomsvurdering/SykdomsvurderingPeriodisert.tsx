@@ -2,7 +2,7 @@
 
 import { Behovstype, getJaNeiEllerUndefined, getStringEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { FormEvent, useState } from 'react';
+import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { parseISO } from 'date-fns';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
@@ -34,6 +34,8 @@ import {
   erNyVurderingOppfylt,
   erTidligereVurderingOppfylt,
 } from 'components/behandlinger/sykdom/sykdomsvurdering/sykdomsvurdering-utils';
+import { useAccordionsReducer } from 'components/periodisering/nyvurderingexpandablecard/AccordionStateHook';
+import { v4 as uuidv4 } from 'uuid';
 
 export interface SykdomsvurderingerForm {
   vurderinger: Array<Sykdomsvurdering>;
@@ -57,7 +59,7 @@ export interface Sykdomsvurdering {
   vurdertAv?: VurdertAvAnsatt;
   kvalitetssikretAv?: VurdertAvAnsatt;
   besluttetAv?: VurdertAvAnsatt;
-  erNyVurdering?: boolean;
+  accordionId: string;
 }
 
 interface SykdomProps {
@@ -81,8 +83,6 @@ export const SykdomsvurderingPeriodisert = ({
 }: SykdomProps) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { sak } = useSak();
-
-  const [allAccordionsOpenSignal, setAllAccordionsOpenSignal] = useState<boolean>();
 
   const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('AVKLAR_SYKDOM');
@@ -108,6 +108,13 @@ export const SykdomsvurderingPeriodisert = ({
     remove,
     append,
   } = useFieldArray({ name: 'vurderinger', control: form.control });
+
+  const { accordionsState, setOpen, closeAllAccordions, addAccordion, removeAccordion } = useAccordionsReducer(
+    nyeVurderingerFields.map((vurdering) => ({
+      id: vurdering.accordionId,
+      initialOpen: skalVæreInitiellEkspandert(false, erAktivUtenAvbryt),
+    }))
+  );
 
   const førsteDatoSomKanVurderes =
     grunnlag.kanVurderes[0]?.fom != null ? parseISO(grunnlag.kanVurderes[0].fom) : new Date();
@@ -145,7 +152,7 @@ export const SykdomsvurderingPeriodisert = ({
           referanse: behandlingsReferanse,
         },
         () => {
-          setAllAccordionsOpenSignal(false);
+          closeAllAccordions();
           nullstillMellomlagretVurdering();
           visningActions.onBekreftClick();
         }
@@ -159,6 +166,7 @@ export const SykdomsvurderingPeriodisert = ({
   const foersteNyePeriode = nyeVurderingerFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
   const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
 
+  console.log(accordionsState);
   return (
     <VilkårskortPeriodisert
       heading={'§ 11-5 Nedsatt arbeidsevne og krav til årsakssammenheng'}
@@ -175,7 +183,11 @@ export const SykdomsvurderingPeriodisert = ({
       visningActions={visningActions}
       visningModus={visningModus}
       formReset={() => form.reset(mapGrunnlagTilDefaultvalues(grunnlag))}
-      onLeggTilVurdering={() => append(emptySykdomsvurdering())}
+      onLeggTilVurdering={() => {
+        const emptySykdomsvurderingObject = emptySykdomsvurdering();
+        addAccordion(emptySykdomsvurderingObject.accordionId, skalVæreInitiellEkspandert(true, erAktivUtenAvbryt));
+        append(emptySykdomsvurderingObject);
+      }}
       errorList={errorList}
     >
       <VStack gap={'4'}>
@@ -195,35 +207,46 @@ export const SykdomsvurderingPeriodisert = ({
           </TidligereVurderingExpandableCard>
         ))}
 
-        {nyeVurderingerFields.map((vurdering, index) => (
-          <NyVurderingExpandableCard
-            key={vurdering.id}
-            allAccordionsOpenSignal={allAccordionsOpenSignal}
-            fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-            oppfylt={erNyVurderingOppfylt(form.watch(`vurderinger.${index}`))}
-            nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
-            isLast={index === nyeVurderingerFields.length - 1}
-            vurdertAv={vurdering.vurdertAv}
-            kvalitetssikretAv={vurdering.kvalitetssikretAv}
-            besluttetAv={vurdering.besluttetAv}
-            readonly={formReadOnly}
-            finnesFeil={finnesFeilForVurdering(index, errorList)}
-            onSlettVurdering={() => remove(index)}
-            harTidligereVurderinger={tidligereVurderinger.length > 0}
-            index={index}
-            initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
-          >
-            <SykdomsvurderingFormInput
-              index={index}
-              form={form}
+        {nyeVurderingerFields.map((vurdering, index) => {
+          const accordionState = accordionsState[vurdering.accordionId];
+          console.log('i vurderingen accordionstate', accordionState)
+          console.log('vurdering', vurdering)
+
+          return (
+            <NyVurderingExpandableCard
+              key={vurdering.id}
+              fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
+              oppfylt={erNyVurderingOppfylt(form.watch(`vurderinger.${index}`))}
+              nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
+              isLast={index === nyeVurderingerFields.length - 1}
+              vurdertAv={vurdering.vurdertAv}
+              kvalitetssikretAv={vurdering.kvalitetssikretAv}
+              besluttetAv={vurdering.besluttetAv}
               readonly={formReadOnly}
-              sak={sak}
-              erÅrsakssammenhengYrkesskade={grunnlag.erÅrsakssammenhengYrkesskade}
-              skalVurdereYrkesskade={grunnlag.skalVurdereYrkesskade}
-              rettighetsperiopdeStartdato={førsteDatoSomKanVurderes}
-            />
-          </NyVurderingExpandableCard>
-        ))}
+              finnesFeil={finnesFeilForVurdering(index, errorList)}
+              onSlettVurdering={() => {
+                remove(index);
+                removeAccordion(vurdering.accordionId);
+              }}
+              harTidligereVurderinger={tidligereVurderinger.length > 0}
+              index={index}
+              isOpen={accordionState.isOpen}
+              setIsOpen={() => {
+                setOpen(vurdering.accordionId, !accordionState.isOpen);
+              }}
+            >
+              <SykdomsvurderingFormInput
+                index={index}
+                form={form}
+                readonly={formReadOnly}
+                sak={sak}
+                erÅrsakssammenhengYrkesskade={grunnlag.erÅrsakssammenhengYrkesskade}
+                skalVurdereYrkesskade={grunnlag.skalVurdereYrkesskade}
+                rettighetsperiopdeStartdato={førsteDatoSomKanVurderes}
+              />
+            </NyVurderingExpandableCard>
+          );
+        })}
       </VStack>
     </VilkårskortPeriodisert>
   );
@@ -248,6 +271,7 @@ export const SykdomsvurderingPeriodisert = ({
         ],
       };
     }
+
     return {
       vurderinger: grunnlag.nyeVurderinger.map((vurdering) => ({
         fraDato: new Dato(vurdering.vurderingenGjelderFra || vurdering.fom).formaterForFrontend(),
@@ -276,6 +300,7 @@ export const SykdomsvurderingPeriodisert = ({
         vurdertAv: vurdering.vurdertAv,
         kvalitetssikretAv: vurdering.kvalitetssikretAv,
         besluttetAv: vurdering.besluttetAv,
+        accordionId: uuidv4(),
       })),
     };
   }

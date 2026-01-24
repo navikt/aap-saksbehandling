@@ -1,5 +1,6 @@
 import { SykdomsvurderingerForm } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingPeriodisert';
 import { SykdomsvurderingFormFields } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
+import { v4 as uuidv4 } from 'uuid';
 
 export function parseOgMigrerMellomlagretData(data: string): SykdomsvurderingerForm {
   const parsedData = JSON.parse(data);
@@ -15,6 +16,7 @@ function mapFromOldFormToNewForm(oldData: SykdomsvurderingFormFields): Sykdomsvu
       {
         ...oldData,
         fraDato: oldData.vurderingenGjelderFra,
+        accordionId: uuidv4(),
       },
     ],
   };

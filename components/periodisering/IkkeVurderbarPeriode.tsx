@@ -25,7 +25,7 @@ export const IkkeVurderbarPeriode = ({ fom, tom, foersteNyePeriodeFraDato, alert
       editable={false}
       disabled={true}
       expanded={cardExpanded}
-      setExpanded={setCardExpanded}
+      setExpanded={() => setCardExpanded(!cardExpanded)}
       heading={
         <HStack justify={'space-between'} padding={'2'}>
           <BodyShort size={'small'} className={''}>

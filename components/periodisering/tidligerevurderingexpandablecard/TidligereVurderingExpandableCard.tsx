@@ -43,7 +43,7 @@ export const TidligereVurderingExpandableCard = ({
       key={formattertFom}
       editable={false}
       expanded={cardExpanded}
-      setExpanded={setCardExpanded}
+      setExpanded={() => setCardExpanded(!cardExpanded)}
       heading={
         <HStack justify={'space-between'} padding={'2'}>
           <BodyShort size={'small'} className={strekUtHele ? styles.streketUtTekst : ''}>
