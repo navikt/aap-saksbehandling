@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { hentVisning, VisningModus } from 'hooks/saksbehandling/visning/VisningHook';
 import { MellomlagretVurdering } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
+import { hentVisning } from 'lib/utils/visning';
+import { VisningModus } from 'lib/types/visningTypes';
 
 const mellomlagring: MellomlagretVurdering = {
   avklaringsbehovkode: Behovstype.AVKLAR_SYKDOM_KODE,

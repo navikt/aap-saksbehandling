@@ -7,11 +7,11 @@ import { formaterDatoForFrontend, formaterDatoMedTidspunktForFrontend } from 'li
 
 import styles from 'components/vilkårskort/Vilkårskort.module.css';
 import { usePostmottakRequiredFlyt } from 'hooks/postmottak/PostmottakFlytHook';
-import { VisningActions, VisningModus } from 'hooks/saksbehandling/visning/VisningHook';
 import { FormEvent, ReactNode } from 'react';
 import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { ApiException } from 'lib/utils/api';
 import { StegType as PostmottakStegType } from 'lib/types/postmottakTypes';
+import { VisningActions, VisningModus } from 'lib/types/visningTypes';
 
 export interface VilkårsKortMedFormOgMellomlagringProps {
   heading: string;

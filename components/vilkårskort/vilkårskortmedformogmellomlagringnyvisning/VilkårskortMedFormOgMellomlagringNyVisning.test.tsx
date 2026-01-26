@@ -1,10 +1,10 @@
 import { describe, expect, it, vitest } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { VisningModus } from 'hooks/saksbehandling/visning/VisningHook';
 import {
   VilkårskortMedFormOgMellomlagringNyVisning,
   VilkårsKortMedFormOgMellomlagringProps,
 } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { VisningModus } from 'lib/types/visningTypes';
 
 describe('Vilkårskort med form', () => {
   it('skal ha en overskrift', () => {

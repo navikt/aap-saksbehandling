@@ -1,40 +1,22 @@
 import { useEffect, useState } from 'react';
 import { usePostmottakRequiredFlyt } from 'hooks/postmottak/PostmottakFlytHook';
 import { StegType } from 'lib/types/postmottakTypes';
-
-export enum VisningModus {
-  AKTIV_UTEN_AVBRYT = 'AKTIV_UTEN_AVBRYT',
-  AKTIV_MED_AVBRYT = 'AKTIV_MED_AVBRYT',
-  LÅST_MED_ENDRE = 'LÅST_MED_ENDRE',
-  LÅST_UTEN_ENDRE = 'LÅST_UTEN_ENDRE',
-}
-
-interface VisningState {
-  visningModus: VisningModus;
-  formReadOnly: boolean;
-  visningActions: VisningActions;
-}
-
-export interface VisningActions {
-  avbrytEndringClick: () => void;
-  onEndreClick: () => void;
-  onBekreftClick: () => void;
-}
+import { VisningModus, VisningState } from 'lib/types/visningTypes';
+import { hentVisning, isFormReadOnly } from 'lib/utils/visning';
 
 export function usePostmottakVilkårskortVisning(readOnly: boolean, steg: StegType): VisningState {
   const { flyt } = usePostmottakRequiredFlyt();
 
   const erAktivtSteg = flyt.aktivtSteg === steg;
-  const initialVisningModus = hentVisning(readOnly, erAktivtSteg);
-  const initialFormReadOnly =
-    initialVisningModus === VisningModus.LÅST_MED_ENDRE || initialVisningModus === VisningModus.LÅST_UTEN_ENDRE;
+  const initialVisningModus = hentVisning(readOnly, erAktivtSteg, undefined);
+  const initialFormReadOnly = isFormReadOnly(initialVisningModus);
 
   const [visning, setVisning] = useState<VisningModus>(initialVisningModus);
   const [formReadOnly, setFormReadOnly] = useState<boolean>(initialFormReadOnly);
 
   useEffect(() => {
-    const visning = hentVisning(readOnly, erAktivtSteg);
-    const formReadOnly = visning === VisningModus.LÅST_MED_ENDRE || visning === VisningModus.LÅST_UTEN_ENDRE;
+    const visning = hentVisning(readOnly, erAktivtSteg, undefined);
+    const formReadOnly = isFormReadOnly(visning);
     setVisning(visning);
     setFormReadOnly(formReadOnly);
   }, [flyt.aktivtSteg, readOnly, erAktivtSteg]);
@@ -63,31 +45,4 @@ export function usePostmottakVilkårskortVisning(readOnly: boolean, steg: StegTy
       onBekreftClick: onBekreftClick,
     },
   };
-}
-
-/**
- * Frontend antar at steget inneholder en tidligere vurdering dersom det har blitt rendret og ikke er aktivtSteg
- *
- * | readOnly | erAktivtSteg | mellomlagring  | resultat            |
- * |----------|--------------|----------------|----------------------
- * | False    | False        | True           | AKTIV_MED_AVBRYT    |
- * | True     | True         | True           | LÅST_UTEN_ENDRE     | // TODO Hva skal vi gjøre her?
- * | True     | False        | True           | LÅST_UTEN_ENDRE     |
- * | False    | True         | True           | AKTIV_UTEN_AVBRYT   |
- * | True     | True         | False          | LÅST_UTEN_ENDRE     |
- * | False    | True         | False          | AKTIV_UTEN_AVBRYT   |
- * | True     | False        | False          | LÅST_UTEN_ENDRE     |
- * | False    | False        | False          | LÅST__MED_ENDRE     |
- */
-
-export function hentVisning(readOnly: boolean, erAktivtSteg: boolean): VisningModus {
-  if (readOnly) {
-    return VisningModus.LÅST_UTEN_ENDRE;
-  }
-
-  if (erAktivtSteg) {
-    return VisningModus.AKTIV_UTEN_AVBRYT;
-  }
-
-  return VisningModus.LÅST_MED_ENDRE;
 }
