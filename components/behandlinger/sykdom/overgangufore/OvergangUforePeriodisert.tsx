@@ -10,7 +10,7 @@ import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { parse, parseISO } from 'date-fns';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { useFieldArray, useForm, UseFormReturn } from 'react-hook-form';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 import {
   NyVurderingExpandableCard,
@@ -25,6 +25,7 @@ import { Veiledning } from 'components/veiledning/Veiledning';
 import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
 import { getFraDatoFraGrunnlagForFrontend } from 'lib/utils/periodisering';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
+import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 
 interface Props {
   behandlingVersjon: number;
@@ -147,7 +148,7 @@ export const OvergangUforePeriodisert = ({
             fom={parseISO(vurdering.fom)}
             tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
             foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-            oppfylt={!!vurdering.brukerRettPåAAP}
+            vurderingStatus={getErOppfyltEllerIkkeStatus(!!vurdering.brukerRettPåAAP)}
           >
             <OvergangUforeTidligereVurdering
               fraDato={vurdering.fom}
@@ -165,14 +166,7 @@ export const OvergangUforePeriodisert = ({
               key={vurdering.id}
               accordionsSignal={accordionsSignal}
               fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-              oppfylt={
-                form.watch(`vurderinger.${index}.brukerRettPåAAP`)
-                  ? form.watch(`vurderinger.${index}.brukerRettPåAAP`) === JaEllerNei.Ja
-                  : form.watch(`vurderinger.${index}.brukerHarSøktUføretrygd`) === JaEllerNei.Nei ||
-                      form.watch(`vurderinger.${index}.brukerHarFåttVedtakOmUføretrygd`) === 'NEI'
-                    ? false
-                    : undefined
-              }
+              vurderingStatus={getErOppfyltEllerIkkeStatus(erVurderingOppfylt(form, index))}
               nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
               isLast={index === nyeVurderingFields.length - 1}
               vurdertAv={vurdering.vurdertAv}
@@ -229,3 +223,19 @@ export const OvergangUforePeriodisert = ({
     };
   }
 };
+
+function erVurderingOppfylt(form: UseFormReturn<OvergangUforeForm>, index: number) {
+  const brukerRettPåAAP = form.watch(`vurderinger.${index}.brukerRettPåAAP`);
+  const harSøktUføretrygd = form.watch(`vurderinger.${index}.brukerHarSøktUføretrygd`);
+  const harFåttVedtakUføretrygd = form.watch(`vurderinger.${index}.brukerHarFåttVedtakOmUføretrygd`);
+
+  if (brukerRettPåAAP) {
+    return brukerRettPåAAP === JaEllerNei.Ja;
+  }
+
+  if (harSøktUføretrygd === JaEllerNei.Nei || harFåttVedtakUføretrygd === JaEllerNei.Nei) {
+    return false;
+  }
+
+  return undefined;
+}

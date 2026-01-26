@@ -32,6 +32,7 @@ import { ForutgåendeMedlemskapTidligereVurdering } from 'components/behandlinge
 import { ForutgåendeMedlemskapFormInput } from 'components/behandlinger/forutgåendemedlemskap/manuellvurderingperiodisert/ForutgåendeMedlemskapFormInput';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
+import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 
 interface Props {
   behandlingVersjon: number;
@@ -148,11 +149,11 @@ export const ForutgåendeMedlemskapPeriodisert = ({
           fom={parseISO(vurdering.fom)}
           tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
           foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-          oppfylt={
+          vurderingStatus={getErOppfyltEllerIkkeStatus(
             vurdering.harForutgåendeMedlemskap ||
-            vurdering.varMedlemMedNedsattArbeidsevne === true ||
-            vurdering.medlemMedUnntakAvMaksFemAar === true
-          }
+              vurdering.varMedlemMedNedsattArbeidsevne === true ||
+              vurdering.medlemMedUnntakAvMaksFemAar === true
+          )}
         >
           <ForutgåendeMedlemskapTidligereVurdering vurdering={vurdering} />
         </TidligereVurderingExpandableCard>
@@ -165,11 +166,11 @@ export const ForutgåendeMedlemskapPeriodisert = ({
           fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
           nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
           isLast={index === vurderingerFields.length - 1}
-          oppfylt={
+          vurderingStatus={getErOppfyltEllerIkkeStatus(
             form.watch(`vurderinger.${index}.harForutgåendeMedlemskap`) === JaEllerNei.Ja ||
-            form.watch(`vurderinger.${index}.unntaksvilkår`) === 'A' ||
-            form.watch(`vurderinger.${index}.unntaksvilkår`) === 'B'
-          }
+              form.watch(`vurderinger.${index}.unntaksvilkår`) === 'A' ||
+              form.watch(`vurderinger.${index}.unntaksvilkår`) === 'B'
+          )}
           vurdertAv={vurdering.vurdertAv}
           kvalitetssikretAv={vurdering.kvalitetssikretAv}
           besluttetAv={vurdering.besluttetAv}

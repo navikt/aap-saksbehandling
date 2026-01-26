@@ -29,6 +29,7 @@ import { OvergangArbeidFormInput } from 'components/behandlinger/sykdom/overgang
 import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/overgangarbeid/OvergangArbeidMellomlagringParser';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
+import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 
 interface Props {
   behandlingVersjon: number;
@@ -147,7 +148,7 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialM
           fom={parseISO(vurdering.fom)}
           tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
           foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-          oppfylt={vurdering.brukerRettPåAAP}
+          vurderingStatus={getErOppfyltEllerIkkeStatus(vurdering.brukerRettPåAAP)}
         >
           <OvergangArbeidTidligereVurdering
             fraDato={vurdering.fom}
@@ -163,11 +164,11 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialM
           key={vurdering.id}
           accordionsSignal={accordionsSignal}
           fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-          oppfylt={
+          vurderingStatus={getErOppfyltEllerIkkeStatus(
             form.watch(`vurderinger.${index}.brukerRettPåAAP`)
               ? form.watch(`vurderinger.${index}.brukerRettPåAAP`) === JaEllerNei.Ja
               : undefined
-          }
+          )}
           nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
           isLast={index === vurderingerFields.length - 1}
           vurdertAv={vurdering.vurdertAv}

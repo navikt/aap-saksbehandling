@@ -9,7 +9,7 @@ import { subDays } from 'date-fns';
 import { TrashFillIcon } from '@navikt/aksel-icons';
 import { VurdertAvAnsatt } from 'lib/types/types';
 import { SlettVurderingModal } from 'components/periodisering/slettvurderingmodal/SlettVurderingModal';
-import { VurderingStatusTag } from 'components/periodisering/VurderingStatusTag';
+import { VurderingStatus, VurderingStatusTag } from 'components/periodisering/VurderingStatusTag';
 import { AccordionsSignal } from 'hooks/AccordionSignalHook';
 
 interface Props {
@@ -18,7 +18,7 @@ interface Props {
   nestePeriodeFraDato: Date | null;
   isLast: boolean;
   finnesFeil: boolean;
-  oppfylt: boolean | undefined;
+  vurderingStatus: VurderingStatus | undefined;
   vurdertAv: VurdertAvAnsatt | undefined;
   kvalitetssikretAv: VurdertAvAnsatt | undefined;
   besluttetAv: VurdertAvAnsatt | undefined;
@@ -34,7 +34,7 @@ export const NyVurderingExpandableCard = ({
   fraDato,
   nestePeriodeFraDato,
   isLast,
-  oppfylt,
+  vurderingStatus,
   vurdertAv,
   kvalitetssikretAv,
   besluttetAv,
@@ -74,7 +74,7 @@ export const NyVurderingExpandableCard = ({
               <span>{isLast ? ' ' : '[Ikke valgt]'}</span>
             )}
           </BodyShort>
-          <VurderingStatusTag oppfylt={oppfylt} />
+          <VurderingStatusTag status={vurderingStatus} />
         </HStack>
       }
     >
