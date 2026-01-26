@@ -4,7 +4,6 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgG
 import { InstitusjonsoppholdTabell } from 'components/behandlinger/institusjonsopphold/InstitusjonsoppholdTabell';
 import { HelseinstitusjonGrunnlag, MellomlagretVurdering, Periode } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
-import { useFieldArray } from 'react-hook-form';
 import { HelseinstitusjonOppholdGruppe } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/helseinstitusjonOppholdGruppe/HelseinstitusjonOppholdGruppe';
 import { DATO_FORMATER, formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 
@@ -16,6 +15,7 @@ import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook
 import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 import { parse } from 'date-fns';
 import { beregnTidligsteReduksjonsdato } from 'lib/utils/institusjonsopphold';
+import { useFieldArray } from 'react-hook-form';
 
 interface Props {
   grunnlag: HelseinstitusjonGrunnlag;
@@ -25,22 +25,23 @@ interface Props {
 }
 
 export interface HelseinstitusjonsFormFields {
-  helseinstitusjonsvurderinger: oppholdMedVurdering[];
+  helseinstitusjonsvurderinger: oppholdMedVurderinger[];
 }
 
-interface oppholdMedVurdering {
+interface oppholdMedVurderinger {
   oppholdId: string;
   periode: Periode;
   vurderinger: Vurdering[];
 }
 
-interface Vurdering {
+export interface Vurdering {
   oppholdId: string;
   periode: Periode;
   begrunnelse: string;
   harFasteUtgifter?: JaEllerNei;
   forsoergerEktefelle?: JaEllerNei;
   faarFriKostOgLosji?: JaEllerNei;
+  status?: 'UAVKLART' | 'AVSLÅTT' | 'GODKJENT';
 }
 
 type DraftFormFields = Partial<HelseinstitusjonsFormFields>;
@@ -70,53 +71,34 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
     },
   });
 
-  const { fields, remove, insert } = useFieldArray({
+  const { fields: oppholdFields } = useFieldArray({
     control: form.control,
     name: 'helseinstitusjonsvurderinger',
   });
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
-      const vurderinger = data.helseinstitusjonsvurderinger.map((vurdering) => {
-        // Valider at datoer er satt
-        if (!parse(vurdering.periode.fom, DATO_FORMATER.ddMMyyyy, new Date()) || !parse(vurdering.periode.tom, DATO_FORMATER.ddMMyyyy, new Date())) {
-          throw new Error('Periode mangler fom eller tom dato');
+      const vurderinger = data.helseinstitusjonsvurderinger.flatMap((opphold) => {
+        // Hent alle vurderinger for dette oppholdet
+        if (!opphold.vurderinger || opphold.vurderinger.length === 0) {
+          throw new Error('Mangler vurderinger for opphold');
         }
 
-        if (parse(vurdering.periode.fom, DATO_FORMATER.ddMMyyyy, new Date()) > parse(vurdering.periode.tom, DATO_FORMATER.ddMMyyyy, new Date())) {
-          throw new Error(
-            `Ugyldig periode: fom-dato ${vurdering.periode.fom} er etter tom-dato ${vurdering.periode.tom}`
-          );
-        }
+        return opphold.vurderinger.map((vurdering) => {
+          const { fomDate, tomDate } = parseOgValiderPeriode(vurdering.periode);
 
-        if (parse(vurdering.periode.tom, DATO_FORMATER.ddMMyyyy, new Date()) < parse(vurdering.periode.fom, DATO_FORMATER.ddMMyyyy, new Date())) {
-          throw new Error(
-            `Ugyldig periode: tom-dato ${vurdering.periode.tom} er før fom-dato ${vurdering.periode.fom}`
-          );
-        }
-
-        // Parse datoer
-        const fomDate = parse(vurdering.periode.fom, DATO_FORMATER.ddMMyyyy, new Date());
-        const tomDate = parse(vurdering.periode.tom, DATO_FORMATER.ddMMyyyy, new Date());
-
-        // Valider at parsing var vellykket
-        if (isNaN(fomDate.getTime())) {
-          throw new Error(`Ugyldig fom-dato: ${vurdering.periode.fom}`);
-        }
-        if (isNaN(tomDate.getTime())) {
-          throw new Error(`Ugyldig tom-dato: ${vurdering.periode.tom}`);
-        }
-
-        return {
-          begrunnelse: vurdering.begrunnelse,
-          harFasteUtgifter: vurdering.harFasteUtgifter === JaEllerNei.Ja,
-          faarFriKostOgLosji: vurdering.faarFriKostOgLosji === JaEllerNei.Ja,
-          forsoergerEktefelle: vurdering.forsoergerEktefelle === JaEllerNei.Ja,
-          periode: {
-            fom: formaterDatoForBackend(fomDate),
-            tom: formaterDatoForBackend(tomDate),
-          },
-        };
+          return {
+            oppholdId: vurdering.oppholdId,
+            begrunnelse: vurdering.begrunnelse,
+            harFasteUtgifter: vurdering.harFasteUtgifter === JaEllerNei.Ja,
+            faarFriKostOgLosji: vurdering.faarFriKostOgLosji === JaEllerNei.Ja,
+            forsoergerEktefelle: vurdering.forsoergerEktefelle === JaEllerNei.Ja,
+            periode: {
+              fom: formaterDatoForBackend(fomDate),
+              tom: formaterDatoForBackend(tomDate),
+            },
+          };
+        });
       });
 
       løsBehovOgGåTilNesteSteg(
@@ -134,48 +116,6 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
       );
     })(event);
   };
-
-  const vurderingerPerOpphold = grunnlag.opphold.map((opphold, oppholdIndex) => {
-    const vurderinger: Array<{
-      field: (typeof fields)[0];
-      index: number;
-      vurdering: oppholdMedVurdering[];
-    }> = [];
-
-    fields.forEach((field, index) => {
-      const vurdering = grunnlag.vurderinger.find((v) => v.oppholdId === field.oppholdId);
-      const ikkeValgt =
-        field.faarFriKostOgLosji === undefined &&
-        field.forsoergerEktefelle === undefined &&
-        field.harFasteUtgifter === undefined;
-
-      if (ikkeValgt) {
-        const nyVurdering = vurdering && {
-          ...vurdering,
-          status: 'UAVKLART' as 'UAVKLART',
-          vurderinger: [] as HelseinstitusjonGrunnlag['vurderinger'][0]['vurderinger'],
-        };
-
-        const oppholdId = opphold.oppholdId;
-        if (field.oppholdId === oppholdId && nyVurdering) {
-          vurderinger.push({ field, index, vurdering: nyVurdering });
-        }
-
-      } else {
-        const oppholdId = opphold.oppholdId;
-        if (field.oppholdId === oppholdId && vurdering) {
-          vurderinger.push({ field, index, vurdering: vurdering });
-        }
-      }
-    });
-
-    return {
-      opphold,
-      vurderinger,
-      oppholdIndex,
-    };
-  });
-
 
   return (
     <VilkårskortMedFormOgMellomlagringNyVisning
@@ -203,35 +143,57 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
       />
       <div style={{ marginTop: 'var(--a-spacing-0)' }} />
 
-      {vurderingerPerOpphold.map((gruppe) => (
+      {oppholdFields.map((oppholdField, oppholdIndex) => (
         <HelseinstitusjonOppholdGruppe
-          key={`${gruppe.opphold.kildeinstitusjon}-${gruppe.opphold.oppholdFra}`}
-          opphold={gruppe.opphold}
-          vurderinger={gruppe.vurderinger}
-          oppholdIndex={gruppe.oppholdIndex}
-          alleOpphold={grunnlag.opphold}
-          fields={fields}
+          key={oppholdField.id}
+          opphold={grunnlag.opphold.find((o) => o.oppholdId === oppholdField.oppholdId)!}
+          oppholdIndex={oppholdIndex}
           form={form}
-          formReadOnly={formReadOnly}
-          onRemove={remove}
-          onInsert={insert}
+          readonly={formReadOnly}
+          alleOpphold={grunnlag.opphold}
         />
       ))}
     </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };
 
+function parseOgValiderPeriode(periode: Periode) {
+  const fomDate = parse(periode.fom, DATO_FORMATER.ddMMyyyy, new Date());
+  const tomDate = parse(periode.tom, DATO_FORMATER.ddMMyyyy, new Date());
+
+  // Valider at datoer er satt og gyldige
+  if (isNaN(fomDate.getTime())) {
+    throw new Error(`Ugyldig fom-dato: ${periode.fom}`);
+  }
+  if (isNaN(tomDate.getTime())) {
+    throw new Error(`Ugyldig tom-dato: ${periode.tom}`);
+  }
+
+  // Valider at fom ikke er etter tom
+  if (fomDate > tomDate) {
+    throw new Error(`Ugyldig periode: fom-dato ${periode.fom} er etter tom-dato ${periode.tom}`);
+  }
+
+  // Valider at tom ikke er før fom (redundant, men beholdt for klarhet)
+  if (tomDate < fomDate) {
+    throw new Error(`Ugyldig periode: tom-dato ${periode.tom} er før fom-dato ${periode.fom}`);
+  }
+
+  return { fomDate, tomDate };
+}
+
 function mapVurderingToDraftFormFields(
   vurderinger: HelseinstitusjonGrunnlag['vurderinger'],
   opphold: HelseinstitusjonGrunnlag['opphold']
 ): DraftFormFields {
   return {
-    helseinstitusjonsvurderinger: vurderinger.flatMap((item) => {
+    helseinstitusjonsvurderinger: vurderinger.map((item) => {
       const matchendeOpphold = opphold.find((o) => o.oppholdId === item.oppholdId);
 
       // Hvis det finnes vurderinger, bruk dem
+      let vurderingerArray: Vurdering[];
       if (item.vurderinger && item.vurderinger.length > 0) {
-        return item.vurderinger.map((vurdering) => ({
+        vurderingerArray = item.vurderinger.map((vurdering) => ({
           oppholdId: vurdering.oppholdId,
           begrunnelse: vurdering.begrunnelse,
           harFasteUtgifter: getJaNeiEllerUndefined(vurdering.harFasteUtgifter),
@@ -241,27 +203,38 @@ function mapVurderingToDraftFormFields(
             fom: formaterDatoForFrontend(vurdering.periode.fom),
             tom: formaterDatoForFrontend(vurdering.periode.tom),
           },
+          status: item.status,
         }));
+      } else {
+        // Ingen vurderinger - beregn tidligste reduksjonsdato
+        const tidligsteReduksjonsdato = matchendeOpphold
+          ? beregnTidligsteReduksjonsdato(matchendeOpphold.oppholdFra) // TODO Thao: Her må jeg bruke finnRiktigReduksjonsdatoFom
+          : formaterDatoForFrontend(item.periode.fom);
+
+        vurderingerArray = [
+          {
+            oppholdId: matchendeOpphold?.oppholdId ?? '',
+            begrunnelse: '',
+            harFasteUtgifter: undefined,
+            forsoergerEktefelle: undefined,
+            faarFriKostOgLosji: undefined,
+            periode: {
+              fom: tidligsteReduksjonsdato,
+              tom: formaterDatoForFrontend(matchendeOpphold?.avsluttetDato ?? matchendeOpphold?.oppholdFra ?? ''),
+            },
+            status: 'UAVKLART',
+          },
+        ];
       }
 
-      // Ingen vurderinger - beregn tidligste reduksjonsdato
-      const tidligsteReduksjonsdato = matchendeOpphold
-        ? beregnTidligsteReduksjonsdato(matchendeOpphold.oppholdFra) // TODO Thao: Her må jeg bruke finnRiktigReduksjonsdatoFom
-        : formaterDatoForFrontend(item.periode.fom);
-
-      return [
-        {
-          oppholdId: matchendeOpphold?.oppholdId ?? '', //TODO Thao: Hva skjer hvis vi ikke finner oppholdId her?
-          begrunnelse: '',
-          harFasteUtgifter: undefined,
-          forsoergerEktefelle: undefined,
-          faarFriKostOgLosji: undefined,
-          periode: {
-            fom: tidligsteReduksjonsdato,
-            tom: formaterDatoForFrontend(item.periode.tom),
-          },
+      return {
+        oppholdId: item.oppholdId,
+        periode: {
+          fom: formaterDatoForFrontend(item.periode.fom),
+          tom: formaterDatoForFrontend(item.periode.tom),
         },
-      ];
+        vurderinger: vurderingerArray,
+      };
     }),
   };
 }

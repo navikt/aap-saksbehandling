@@ -11,31 +11,49 @@ import { validerDato } from 'lib/validation/dateValidation';
 
 interface Props {
   form: UseFormReturn<HelseinstitusjonsFormFields>;
-  helseinstitusjonoppholdIndex: number;
+  oppholdIndex: number;
+  vurderingIndex: number;
   readonly: boolean;
   opphold: HelseinstitusjonGrunnlag['opphold'][0];
-  forrigeVurderingStatus?: string;
   minFomDato?: string;
 }
 
 export const Helseinstitusjonsvurdering = ({
   form,
-  helseinstitusjonoppholdIndex,
+  oppholdIndex,
+  vurderingIndex,
   readonly,
   opphold,
-  forrigeVurderingStatus,
   minFomDato,
 }: Props) => {
   const faarFriKostOgLosji = form.watch(
-    `helseinstitusjonsvurderinger.${helseinstitusjonoppholdIndex}.faarFriKostOgLosji`
+    `helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.faarFriKostOgLosji`
   );
   const forsoergerEktefelle = form.watch(
-    `helseinstitusjonsvurderinger.${helseinstitusjonoppholdIndex}.forsoergerEktefelle`
+    `helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.forsoergerEktefelle`
   );
-  const harFasteUtgifter = form.watch(`helseinstitusjonsvurderinger.${helseinstitusjonoppholdIndex}.harFasteUtgifter`);
+  const harFasteUtgifter = form.watch(
+    `helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.harFasteUtgifter`
+  );
 
-  // Sjekk om det er påfølgende vurdering med forrige status AVSLÅTT
-  const erPåfølgendeVurderingMedReduksjon = forrigeVurderingStatus === 'AVSLÅTT';
+  const forrigeFaarFriKostOgLosji =
+    vurderingIndex > 0
+      ? form.watch(`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex - 1}.faarFriKostOgLosji`)
+      : undefined;
+  const forrigeForsoergerEktefelle =
+    vurderingIndex > 0
+      ? form.watch(`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex - 1}.forsoergerEktefelle`)
+      : undefined;
+  const forrigeHarFasteUtgifter =
+    vurderingIndex > 0
+      ? form.watch(`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex - 1}.harFasteUtgifter`)
+      : undefined;
+
+  // Sjekk om det er påfølgende vurdering med forrige status reduksjon
+  const erPåfølgendeVurderingMedReduksjon =
+    (forrigeFaarFriKostOgLosji === JaEllerNei.Ja &&
+      forrigeForsoergerEktefelle === JaEllerNei.Nei &&
+      forrigeHarFasteUtgifter === JaEllerNei.Nei);
 
   const visForsørgerEktefelleSpørsmål = faarFriKostOgLosji === JaEllerNei.Ja;
   const visHarFasteUtgifterSpørsmål = faarFriKostOgLosji === JaEllerNei.Ja && forsoergerEktefelle === JaEllerNei.Nei;
@@ -49,7 +67,7 @@ export const Helseinstitusjonsvurdering = ({
   return (
     <div className={'flex-column'}>
       <TextAreaWrapper
-        name={`helseinstitusjonsvurderinger.${helseinstitusjonoppholdIndex}.begrunnelse`}
+        name={`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.begrunnelse`}
         control={form.control}
         description={'Vurder §11-25 og om det skal gis reduksjon av ytelsen'}
         label={'Vilkårsvurdering'}
@@ -58,7 +76,7 @@ export const Helseinstitusjonsvurdering = ({
       />
 
       <RadioGroupWrapper
-        name={`helseinstitusjonsvurderinger.${helseinstitusjonoppholdIndex}.faarFriKostOgLosji`}
+        name={`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.faarFriKostOgLosji`}
         control={form.control}
         label={'Får brukeren fri kost og losji?'}
         rules={{ required: 'Du må svare på om brukeren får fri kost og losji' }}
@@ -71,7 +89,7 @@ export const Helseinstitusjonsvurdering = ({
 
       {visForsørgerEktefelleSpørsmål && (
         <RadioGroupWrapper
-          name={`helseinstitusjonsvurderinger.${helseinstitusjonoppholdIndex}.forsoergerEktefelle`}
+          name={`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.forsoergerEktefelle`}
           control={form.control}
           label={'Forsørger brukeren ektefelle eller tilsvarende?'}
           rules={{ required: 'Du må svare på om brukeren forsørger ektefelle eller tilsvarende' }}
@@ -85,7 +103,7 @@ export const Helseinstitusjonsvurdering = ({
 
       {visHarFasteUtgifterSpørsmål && (
         <RadioGroupWrapper
-          name={`helseinstitusjonsvurderinger.${helseinstitusjonoppholdIndex}.harFasteUtgifter`}
+          name={`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.harFasteUtgifter`}
           control={form.control}
           label={'Har brukeren faste utgifter nødvendig for å beholde bolig og andre eiendeler?'}
           rules={{
@@ -102,7 +120,7 @@ export const Helseinstitusjonsvurdering = ({
       {visDatoSpørsmål && !erPåfølgendeVurderingMedReduksjon && (
         <>
           <DateInputWrapper
-            name={`helseinstitusjonsvurderinger.${helseinstitusjonoppholdIndex}.periode.fom`}
+            name={`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.periode.fom`}
             control={form.control}
             label={'Oppgi dato for reduksjon av AAP'}
             description={reduksjonsBeskrivelse}
@@ -124,7 +142,7 @@ export const Helseinstitusjonsvurdering = ({
 
       {erPåfølgendeVurderingMedReduksjon && (
         <DateInputWrapper
-          name={`helseinstitusjonsvurderinger.${helseinstitusjonoppholdIndex}.periode.fom`}
+          name={`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.periode.fom`}
           control={form.control}
           label={'Når skal reduksjonen stoppes?'}
           rules={{
