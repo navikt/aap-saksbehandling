@@ -1,8 +1,20 @@
 import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingPeriodisert';
 import { JaEllerNei } from 'lib/utils/form';
 import { Sykdomvurdering } from 'lib/types/types';
+import { parseDatoFraDatePicker } from 'lib/utils/date';
+import { isAfter } from 'date-fns';
 
-export function erNyVurderingOppfylt(vurdering: Sykdomsvurdering): boolean | undefined {
+export function skalVurdereVissVarighetSjekk(
+  valgtFraDato: string | Date | undefined,
+  rettighetsperiopdeStartdato: Date
+) {
+  const valgtDato = parseDatoFraDatePicker(valgtFraDato);
+  return valgtDato != null ? !isAfter(valgtDato, rettighetsperiopdeStartdato) : true;
+}
+export function erNyVurderingOppfylt(
+  vurdering: Sykdomsvurdering,
+  rettighetsperiodeStartDato: Date
+): boolean | undefined {
   if (
     vurdering.harSkadeSykdomEllerLyte === JaEllerNei.Nei ||
     vurdering.erArbeidsevnenNedsatt === JaEllerNei.Nei ||
@@ -18,6 +30,13 @@ export function erNyVurderingOppfylt(vurdering: Sykdomsvurdering): boolean | und
   if (
     vurdering.erNedsettelseIArbeidsevneAvEnVissVarighet === JaEllerNei.Ja ||
     vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense === JaEllerNei.Ja
+  ) {
+    return true;
+  }
+
+  if (
+    !skalVurdereVissVarighetSjekk(vurdering.fraDato, rettighetsperiodeStartDato) &&
+    vurdering.erSkadeSykdomEllerLyteVesentligdel === JaEllerNei.Ja
   ) {
     return true;
   }
@@ -38,6 +57,13 @@ export function erTidligereVurderingOppfylt(vurdering: Sykdomvurdering): boolean
   if (
     vurdering.erNedsettelseIArbeidsevneAvEnVissVarighet === true ||
     vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense === true
+  ) {
+    return true;
+  }
+
+  if (
+    vurdering.erSkadeSykdomEllerLyteVesentligdel === true &&
+    vurdering.erNedsettelseIArbeidsevneAvEnVissVarighet == null
   ) {
     return true;
   }
