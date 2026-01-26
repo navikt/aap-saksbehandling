@@ -27,7 +27,7 @@ import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering'
 import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
-import { useState } from 'react';
+import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 
 interface Props {
   behandlingVersjon: number;
@@ -53,7 +53,7 @@ export const LovvalgOgMedlemskapPeriodisert = ({
   const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
     useMellomlagring(Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP, initialMellomlagretVurdering);
 
-  const [allAccordionsOpenSignal, setAllAccordionsOpenSignal] = useState<boolean>();
+  const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
   const { visningActions, formReadOnly, visningModus, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
@@ -109,7 +109,7 @@ export const LovvalgOgMedlemskapPeriodisert = ({
     };
 
     løsPeriodisertBehovOgGåTilNesteSteg(losning, () => {
-      setAllAccordionsOpenSignal(false);
+      closeAllAccordions();
       nullstillMellomlagretVurdering();
     });
   }
@@ -157,7 +157,7 @@ export const LovvalgOgMedlemskapPeriodisert = ({
       {vurderingerFields.map((vurdering, index) => (
         <NyVurderingExpandableCard
           key={vurdering.id}
-          allAccordionsOpenSignal={allAccordionsOpenSignal}
+          accordionsSignal={accordionsSignal}
           fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
           nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
           isLast={index === vurderingerFields.length - 1}

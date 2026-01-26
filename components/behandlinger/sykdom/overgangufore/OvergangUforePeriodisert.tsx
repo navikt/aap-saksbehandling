@@ -3,7 +3,7 @@
 import { MellomlagretVurdering, OvergangUforeGrunnlag, VurdertAvAnsatt } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
@@ -24,6 +24,7 @@ import { Link, VStack } from '@navikt/ds-react';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
 import { getFraDatoFraGrunnlagForFrontend } from 'lib/utils/periodisering';
+import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 
 interface Props {
   behandlingVersjon: number;
@@ -60,7 +61,7 @@ export const OvergangUforePeriodisert = ({
   const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
     useMellomlagring(Behovstype.OVERGANG_UFORE, initialMellomlagretVurdering);
 
-  const [allAccordionsOpenSignal, setAllAccordionsOpenSignal] = useState<boolean>();
+  const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
   const { visningActions, formReadOnly, visningModus, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
@@ -100,7 +101,7 @@ export const OvergangUforePeriodisert = ({
           },
         },
         () => {
-          setAllAccordionsOpenSignal(false);
+          closeAllAccordions();
           nullstillMellomlagretVurdering();
         }
       );
@@ -162,7 +163,7 @@ export const OvergangUforePeriodisert = ({
           return (
             <NyVurderingExpandableCard
               key={vurdering.id}
-              allAccordionsOpenSignal={allAccordionsOpenSignal}
+              accordionsSignal={accordionsSignal}
               fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
               oppfylt={
                 form.watch(`vurderinger.${index}.brukerRettPåAAP`)

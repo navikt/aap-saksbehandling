@@ -2,7 +2,7 @@
 
 import { BistandsGrunnlag, MellomlagretVurdering, VurdertAvAnsatt } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
-import { FormEvent, useState } from 'react';
+import { FormEvent } from 'react';
 import { parseDatoFraDatePicker } from 'lib/utils/date';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
@@ -27,6 +27,7 @@ import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/bi
 import { getFraDatoFraGrunnlagForFrontend } from 'lib/utils/periodisering';
 import { Link, VStack } from '@navikt/ds-react';
 import { Veiledning } from 'components/veiledning/Veiledning';
+import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 
 interface Props {
   behandlingVersjon: number;
@@ -64,7 +65,7 @@ export const BistandsbehovPeriodisert = ({
   const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
     useMellomlagring(Behovstype.AVKLAR_BISTANDSBEHOV_KODE, initialMellomlagretVurdering);
 
-  const [allAccordionsOpenSignal, setAllAccordionsOpenSignal] = useState<boolean>();
+  const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
   const { visningActions, formReadOnly, visningModus, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
@@ -97,7 +98,7 @@ export const BistandsbehovPeriodisert = ({
         () => {
           nullstillMellomlagretVurdering();
           visningActions.onBekreftClick();
-          setAllAccordionsOpenSignal(false);
+          closeAllAccordions();
         }
       );
     })(event);
@@ -172,7 +173,7 @@ export const BistandsbehovPeriodisert = ({
         {fields.map((vurdering, index) => (
           <NyVurderingExpandableCard
             key={vurdering.id}
-            allAccordionsOpenSignal={allAccordionsOpenSignal}
+            accordionsSignal={accordionsSignal}
             fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
             nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
             isLast={index === fields.length - 1}

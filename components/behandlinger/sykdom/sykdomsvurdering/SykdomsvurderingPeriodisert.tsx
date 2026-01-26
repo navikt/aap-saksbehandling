@@ -2,7 +2,7 @@
 
 import { Behovstype, getJaNeiEllerUndefined, getStringEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { FormEvent, useState } from 'react';
+import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { parseISO } from 'date-fns';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
@@ -34,6 +34,7 @@ import {
   erNyVurderingOppfylt,
   erTidligereVurderingOppfylt,
 } from 'components/behandlinger/sykdom/sykdomsvurdering/sykdomsvurdering-utils';
+import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 
 export interface SykdomsvurderingerForm {
   vurderinger: Array<Sykdomsvurdering>;
@@ -82,7 +83,7 @@ export const SykdomsvurderingPeriodisert = ({
   const behandlingsReferanse = useBehandlingsReferanse();
   const { sak } = useSak();
 
-  const [allAccordionsOpenSignal, setAllAccordionsOpenSignal] = useState<boolean>();
+  const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
   const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('AVKLAR_SYKDOM');
@@ -145,7 +146,7 @@ export const SykdomsvurderingPeriodisert = ({
           referanse: behandlingsReferanse,
         },
         () => {
-          setAllAccordionsOpenSignal(false);
+          closeAllAccordions();
           nullstillMellomlagretVurdering();
           visningActions.onBekreftClick();
         }
@@ -198,7 +199,7 @@ export const SykdomsvurderingPeriodisert = ({
         {nyeVurderingerFields.map((vurdering, index) => (
           <NyVurderingExpandableCard
             key={vurdering.id}
-            allAccordionsOpenSignal={allAccordionsOpenSignal}
+            accordionsSignal={accordionsSignal}
             fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
             oppfylt={erNyVurderingOppfylt(form.watch(`vurderinger.${index}`))}
             nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
