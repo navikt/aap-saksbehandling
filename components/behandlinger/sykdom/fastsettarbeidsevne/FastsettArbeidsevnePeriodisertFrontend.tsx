@@ -36,6 +36,7 @@ import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import React from 'react';
 import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
+import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 
 interface Props {
   grunnlag: ArbeidsevneGrunnlag;
@@ -188,7 +189,7 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
           fom={parseISO(vurdering.fom)}
           tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
           foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-          oppfylt={vurdering.arbeidsevne > 0}
+          vurderingStatus={getErOppfyltEllerIkkeStatus(vurdering.arbeidsevne > 0)}
           vurdertAv={vurdering.vurdertAv}
         >
           <VStack gap={'5'}>
@@ -207,7 +208,7 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
           key={vurdering.id}
           accordionsSignal={accordionsSignal}
           fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-          oppfylt={undefined}
+          vurderingStatus={undefined}
           nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
           isLast={index === vedtatteVurderinger.length - 1}
           vurdertAv={vurdering.vurdertAv}

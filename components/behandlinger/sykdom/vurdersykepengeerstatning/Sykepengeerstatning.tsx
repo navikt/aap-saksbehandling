@@ -28,6 +28,7 @@ import { OppholdskravSykepengererstatninbgTidligereVurdering } from 'components/
 import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
+import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 
 interface Props {
   behandlingVersjon: number;
@@ -147,7 +148,7 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
           fom={parseISO(vurdering.fom)}
           tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
           foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-          oppfylt={vurdering.harRettPå}
+          vurderingStatus={getErOppfyltEllerIkkeStatus(vurdering.harRettPå)}
         >
           <OppholdskravSykepengererstatninbgTidligereVurdering
             fraDato={vurdering.fom}
@@ -162,11 +163,7 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
         <NyVurderingExpandableCard
           key={vurdering.id}
           fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-          oppfylt={
-            form.watch(`vurderinger.${index}.erOppfylt`)
-              ? form.watch(`vurderinger.${index}.erOppfylt`) === JaEllerNei.Ja
-              : undefined
-          }
+          vurderingStatus={getErOppfyltEllerIkkeStatus(form.watch(`vurderinger.${index}.erOppfylt`) === JaEllerNei.Ja)}
           nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
           isLast={index === vurderingerFields.length - 1}
           accordionsSignal={accordionsSignal}

@@ -28,6 +28,7 @@ import { getFraDatoFraGrunnlagForFrontend } from 'lib/utils/periodisering';
 import { Link, VStack } from '@navikt/ds-react';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
+import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 
 interface Props {
   behandlingVersjon: number;
@@ -158,13 +159,13 @@ export const BistandsbehovPeriodisert = ({
             fom={parseISO(vurdering.fom)}
             tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
             foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-            oppfylt={
+            vurderingStatus={getErOppfyltEllerIkkeStatus(
               !!(
                 vurdering.erBehovForAktivBehandling ||
                 vurdering.erBehovForArbeidsrettetTiltak ||
                 vurdering.erBehovForAnnenOppfølging
               )
-            }
+            )}
           >
             <BistandsbehovTidligereVurdering vurdering={vurdering} />
           </TidligereVurderingExpandableCard>
@@ -177,14 +178,14 @@ export const BistandsbehovPeriodisert = ({
             fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
             nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
             isLast={index === fields.length - 1}
-            oppfylt={
+            vurderingStatus={getErOppfyltEllerIkkeStatus(
               form.watch(`vurderinger.${index}.erBehovForAktivBehandling`) &&
-              form.watch(`vurderinger.${index}.erBehovForArbeidsrettetTiltak`)
+                form.watch(`vurderinger.${index}.erBehovForArbeidsrettetTiltak`)
                 ? form.watch(`vurderinger.${index}.erBehovForAktivBehandling`) === JaEllerNei.Ja ||
-                  form.watch(`vurderinger.${index}.erBehovForArbeidsrettetTiltak`) === JaEllerNei.Ja ||
-                  form.watch(`vurderinger.${index}.erBehovForAnnenOppfølging`) === JaEllerNei.Ja
+                    form.watch(`vurderinger.${index}.erBehovForArbeidsrettetTiltak`) === JaEllerNei.Ja ||
+                    form.watch(`vurderinger.${index}.erBehovForAnnenOppfølging`) === JaEllerNei.Ja
                 : undefined
-            }
+            )}
             vurdertAv={vurdering.vurdertAv}
             kvalitetssikretAv={vurdering.kvalitetssikretAv}
             besluttetAv={vurdering.besluttetAv}

@@ -8,13 +8,13 @@ import { BodyShort, HStack, VStack } from '@navikt/ds-react';
 import styles from 'components/behandlinger/oppholdskrav/oppholdskrav.module.css';
 import { VurdertAvAnsattDetail } from 'components/vurdertav/VurdertAvAnsattDetail';
 import { VurdertAvAnsatt } from 'lib/types/types';
-import { VurderingStatusTag } from 'components/periodisering/VurderingStatusTag';
+import { VurderingStatus, VurderingStatusTag } from 'components/periodisering/VurderingStatusTag';
 
 interface Props {
   fom: Date;
   tom: Date | null | undefined;
   foersteNyePeriodeFraDato: Date | null | undefined;
-  oppfylt: boolean | null | undefined;
+  vurderingStatus: VurderingStatus | undefined;
   vurdertAv?: VurdertAvAnsatt;
   children: ReactNode;
   defaultCollapsed?: boolean;
@@ -24,7 +24,7 @@ export const TidligereVurderingExpandableCard = ({
   fom,
   tom,
   foersteNyePeriodeFraDato,
-  oppfylt,
+  vurderingStatus,
   vurdertAv,
   children,
   defaultCollapsed = false,
@@ -53,7 +53,7 @@ export const TidligereVurderingExpandableCard = ({
             )}
             {nySluttdato && <span> {formatDatoMedMånedsnavn(sub(foersteNyePeriodeFraDato, { days: 1 }))}</span>}
           </BodyShort>
-          <VurderingStatusTag oppfylt={oppfylt} overskrevet={strekUtHele} />
+          <VurderingStatusTag status={vurderingStatus} />
         </HStack>
       }
     >
