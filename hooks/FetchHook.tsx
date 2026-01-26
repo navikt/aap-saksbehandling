@@ -117,15 +117,14 @@ export function usePostmottakSettPåVent(): {
 
 export function usePostmottakEndreTema(): {
   postmottakEndreTema: (behandlingsreferanse: string) => Promise<{ ok: boolean }>;
-  isLoading: boolean; // TODO deprecated
   error?: string;
   data?: { redirectUrl: string };
 } {
-  const { method, isLoading, error, data } = useFetchV2(postmottakEndreTemaClient);
+  const { method, error, data } = useFetchV2(postmottakEndreTemaClient);
 
   async function endreTema(behandlingsreferanse: string) {
     return await method(behandlingsreferanse);
   }
 
-  return { postmottakEndreTema: endreTema, isLoading, error, data };
+  return { postmottakEndreTema: endreTema, error, data };
 }

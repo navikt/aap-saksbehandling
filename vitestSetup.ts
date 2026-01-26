@@ -55,8 +55,8 @@ beforeAll(() => {
   vi.mock('next/navigation', () => ({
     useParams: vi
       .fn()
-      // Vi bruker dessverre både behandlingsReferanse og behandlingsreferanse i appen
-      // TODO: Må slås sammen på et eller annet tidspunkt
+      // TODO: Vi bruker dessverre både behandlingsReferanse og behandlingsreferanse i appen
+      // Må slås sammen på et eller annet tidspunkt
       .mockReturnValue({
         saksId: '123',
         behandlingsReferanse: '123',

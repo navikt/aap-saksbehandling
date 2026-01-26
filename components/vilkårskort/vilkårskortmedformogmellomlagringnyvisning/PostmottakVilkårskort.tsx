@@ -1,7 +1,7 @@
 'use client';
 
 import { Button, Detail, ExpansionCard, HStack, VStack } from '@navikt/ds-react';
-import { MellomlagretVurdering, StegType, VurdertAvAnsatt } from 'lib/types/types';
+import { MellomlagretVurdering, VurdertAvAnsatt } from 'lib/types/types';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { formaterDatoForFrontend, formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 
@@ -15,7 +15,7 @@ import { StegType as PostmottakStegType } from 'lib/types/postmottakTypes';
 
 export interface VilkårsKortMedFormOgMellomlagringProps {
   heading: string;
-  steg: StegType | PostmottakStegType;
+  steg: PostmottakStegType;
   children: ReactNode;
   onSubmit: (e: FormEvent<HTMLFormElement>) => void;
   isLoading: boolean;

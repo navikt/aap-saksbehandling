@@ -11,11 +11,10 @@ import { VisningActions, VisningModus } from 'hooks/saksbehandling/visning/Visni
 import { FormEvent, ReactNode } from 'react';
 import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { ApiException } from 'lib/utils/api';
-import { StegType as PostmottakStegType } from 'lib/types/postmottakTypes';
 
 export interface VilkårsKortMedFormOgMellomlagringProps {
   heading: string;
-  steg: StegType | PostmottakStegType;
+  steg: StegType;
   children: ReactNode;
   onSubmit: (e: FormEvent<HTMLFormElement>) => void;
   isLoading: boolean;
@@ -33,7 +32,7 @@ export interface VilkårsKortMedFormOgMellomlagringProps {
   onLagreMellomLagringClick: (() => void) | undefined;
   mellomlagretVurdering: MellomlagretVurdering | undefined;
   extraActions?: ReactNode;
-  formReset: (() => void) | undefined;
+  formReset: () => void;
 }
 
 export const VilkårskortMedFormOgMellomlagringNyVisning = ({
@@ -59,7 +58,6 @@ export const VilkårskortMedFormOgMellomlagringNyVisning = ({
   formReset,
 }: VilkårsKortMedFormOgMellomlagringProps) => {
   const classNameBasertPåEnhet = vilkårTilhørerNavKontor ? styles.vilkårsKortNAV : styles.vilkårsKortNAY;
-  // TODO Martin, denne på være useRequiredFlyt fra postmottak
   const { flyt } = useRequiredFlyt();
   const erAktivtSteg = flyt.aktivtSteg === steg || visningModus === 'AKTIV_MED_AVBRYT';
 
