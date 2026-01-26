@@ -14,7 +14,7 @@ import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 import { parse } from 'date-fns';
-import { beregnTidligsteReduksjonsdato } from 'lib/utils/institusjonsopphold';
+import { beregnReduksjonsdatoVedNyttOpphold, beregnTidligsteReduksjonsdato } from 'lib/utils/institusjonsopphold';
 import { useFieldArray } from 'react-hook-form';
 
 interface Props {
@@ -187,7 +187,8 @@ function mapVurderingToDraftFormFields(
   opphold: HelseinstitusjonGrunnlag['opphold']
 ): DraftFormFields {
   return {
-    helseinstitusjonsvurderinger: vurderinger.map((item) => {
+    helseinstitusjonsvurderinger: vurderinger.map((item, oppholdIndex) => {
+      const erFørsteOpphold = oppholdIndex === 0;
       const matchendeOpphold = opphold.find((o) => o.oppholdId === item.oppholdId);
 
       // Hvis det finnes vurderinger, bruk dem
@@ -207,9 +208,15 @@ function mapVurderingToDraftFormFields(
         }));
       } else {
         // Ingen vurderinger - beregn tidligste reduksjonsdato
-        const tidligsteReduksjonsdato = matchendeOpphold
-          ? beregnTidligsteReduksjonsdato(matchendeOpphold.oppholdFra) // TODO Thao: Her må jeg bruke finnRiktigReduksjonsdatoFom
-          : formaterDatoForFrontend(item.periode.fom);
+        const tidligsteReduksjonsdato = (() => {
+          if (!matchendeOpphold) return '';
+          if (oppholdIndex === 0) {
+            return beregnTidligsteReduksjonsdato(matchendeOpphold.oppholdFra);
+          }
+          const forrigeOppholdAvsluttet = opphold[oppholdIndex - 1]?.avsluttetDato ?? '';
+          const nåværendeOppholdFra = matchendeOpphold.oppholdFra ?? '';
+          return beregnReduksjonsdatoVedNyttOpphold(forrigeOppholdAvsluttet, nåværendeOppholdFra);
+        })();
 
         vurderingerArray = [
           {

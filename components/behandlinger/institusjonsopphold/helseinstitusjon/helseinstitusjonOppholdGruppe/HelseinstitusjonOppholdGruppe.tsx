@@ -4,14 +4,21 @@ import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { Helseinstitusjonsvurdering } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/helseinstitusjonsvurdering/Helseinstitusjonsvurdering';
 import { HelseinstitusjonsFormFields } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/Helseinstitusjon';
 import { HelseinstitusjonGrunnlag } from 'lib/types/types';
-import React, { useState } from 'react';
+import React from 'react';
 import styles from 'components/behandlinger/institusjonsopphold/helseinstitusjon/helseinstitusjonOppholdGruppe/HelseinstitusjonOppholdGruppe.module.css';
-import { DATO_FORMATER, formaterDatoForFrontend } from 'lib/utils/date';
+import {
+  DATO_FORMATER,
+  formatDatoMedMånedsnavn,
+  formaterDatoForFrontend,
+  formaterDatoMedKunDagOgMånedForFrontend,
+} from 'lib/utils/date';
 import { JaEllerNei } from 'lib/utils/form';
 import { beregnReduksjonsdatoVedNyttOpphold, beregnTidligsteReduksjonsdato } from 'lib/utils/institusjonsopphold';
 import { parse } from 'date-fns';
 import { NyVurderingExpandableCard } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
+import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
+import { getErReduksjonEllerIkke } from 'components/periodisering/VurderingStatusTag';
 
 interface Props {
   form: UseFormReturn<HelseinstitusjonsFormFields>;
@@ -27,9 +34,9 @@ export const HelseinstitusjonOppholdGruppe = ({
   oppholdIndex,
   readonly: formReadOnly,
   opphold,
-  alleOpphold
+  alleOpphold,
 }: Props) => {
-  const [allAccordionsOpenSignal, setAllAccordionsOpenSignal] = useState<boolean>();
+  const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
   // Beregn riktig fom for ny vurdering
   const beregnFomForNyVurdering = () => {
@@ -51,7 +58,11 @@ export const HelseinstitusjonOppholdGruppe = ({
     return beregnTidligsteReduksjonsdato(opphold.oppholdFra);
   };
 
-  const { fields: vurderinger, append, remove } = useFieldArray({
+  const {
+    fields: vurderinger,
+    append,
+    remove,
+  } = useFieldArray({
     control: form.control,
     name: `helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger`,
   });
@@ -74,8 +85,8 @@ export const HelseinstitusjonOppholdGruppe = ({
               {opphold.kildeinstitusjon} - {opphold.oppholdstype}
             </BodyShort>
             <Label size="medium">
-              Vurder perioden {formaterDatoForFrontend(opphold.oppholdFra)} -{' '}
-              {opphold.avsluttetDato ? formaterDatoForFrontend(opphold.avsluttetDato) : 'Pågående'}
+              Vurder perioden {formatDatoMedMånedsnavn(opphold.oppholdFra)} -{' '}
+              {opphold.avsluttetDato ? formatDatoMedMånedsnavn(opphold.avsluttetDato) : 'Pågående'}
             </Label>
           </div>
         </HStack>
@@ -131,7 +142,7 @@ export const HelseinstitusjonOppholdGruppe = ({
               <div key={vurderingIndex} className={styles.vurderingRad}>
                 <NyVurderingExpandableCard
                   key={vurdering.id || vurderingIndex}
-                  allAccordionsOpenSignal={allAccordionsOpenSignal}
+                  accordionsSignal={accordionsSignal}
                   fraDato={gyldigDatoEllerNull(
                     form.watch(`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.periode.fom`)
                   )}
@@ -141,7 +152,7 @@ export const HelseinstitusjonOppholdGruppe = ({
                     )
                   )}
                   isLast={vurderingIndex === vurderinger.length - 1}
-                  oppfylt={reduksjon}
+                  vurderingStatus={getErReduksjonEllerIkke(reduksjon)}
                   vurdertAv={undefined}
                   kvalitetssikretAv={undefined}
                   besluttetAv={undefined}
@@ -177,18 +188,20 @@ export const HelseinstitusjonOppholdGruppe = ({
             className="fit-content"
             variant="secondary"
             size="small"
-            onClick={() => append({
-              oppholdId: opphold.oppholdId,
-              begrunnelse: '',
-              harFasteUtgifter: undefined,
-              forsoergerEktefelle: undefined,
-              faarFriKostOgLosji: undefined,
-              periode: {
-                fom: beregnFomForNyVurdering(),
-                tom: formaterDatoForFrontend(opphold.avsluttetDato || opphold.oppholdFra),
-              },
-              status: "UAVKLART",
-            })}
+            onClick={() =>
+              append({
+                oppholdId: opphold.oppholdId,
+                begrunnelse: '',
+                harFasteUtgifter: undefined,
+                forsoergerEktefelle: undefined,
+                faarFriKostOgLosji: undefined,
+                periode: {
+                  fom: beregnFomForNyVurdering(),
+                  tom: formaterDatoForFrontend(opphold.avsluttetDato || opphold.oppholdFra),
+                },
+                status: 'UAVKLART',
+              })
+            }
           >
             Legg til ny vurdering
           </Button>

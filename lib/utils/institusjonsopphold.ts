@@ -52,7 +52,7 @@ export function lagReduksjonsBeskrivelse(oppholdFra: string): string {
 export function beregnReduksjonsdatoVedNyttOpphold(
   utskrevetDato: string,
   nyttOppholdFra: string
-): string | undefined {
+): string {
   const utskrevet = utskrevetDato.includes('-') ? new Date(utskrevetDato) : parse(utskrevetDato, 'dd.MM.yyyy', new Date());
   const nyttOpphold = nyttOppholdFra.includes('-') ? new Date(nyttOppholdFra) : parse(nyttOppholdFra, 'dd.MM.yyyy', new Date());
 
@@ -63,7 +63,7 @@ export function beregnReduksjonsdatoVedNyttOpphold(
     const nesteMnd = addMonths(startOfMonth(nyttOpphold), 1);
     return format(nesteMnd, 'dd.MM.yyyy');
   }
-  return undefined;
+  return format(nyttOppholdFra, 'dd.MM.yyyy');
 }
 
 /**

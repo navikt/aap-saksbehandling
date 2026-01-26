@@ -153,7 +153,8 @@ export const Helseinstitusjonsvurdering = ({
                 if (minFomDato && value && value <= minFomDato) {
                   return 'Dato må være etter ' + minFomDato;
                 }
-                return validerReduksjonsdatoInnenforOpphold(value, opphold.oppholdFra, opphold.avsluttetDato);
+                // return validerReduksjonsdatoInnenforOpphold(value, opphold.oppholdFra, opphold.avsluttetDato); // FIXME Thao: sjekk om det er behov for denne
+                return '';
               },
             },
           }}
