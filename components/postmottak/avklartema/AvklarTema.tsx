@@ -95,10 +95,7 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
       vilkårTilhørerNavKontor={false}
       visningModus={visningModus}
       visningActions={visningActions}
-      onDeleteMellomlagringClick={undefined}
-      onLagreMellomLagringClick={undefined}
-      mellomlagretVurdering={undefined}
-      formReset={undefined}
+      formReset={() => form.reset({ erTemaAAP: getJaNeiEllerUndefined(grunnlag.vurdering?.skalTilAap) })}
     >
       <Modal
         open={visModal}
