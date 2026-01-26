@@ -40,7 +40,7 @@ export const resetMockFlytResponse = () => {
 beforeAll(() => {
   vi.mock('swr', () => ({
     default: vi.fn((key) => {
-      if (key?.startsWith('api/flyt')) {
+      if (key?.startsWith('api/flyt') || key?.startsWith('postmottak/api/post/')) {
         return {
           data: { type: 'SUCCESS', status: 200, data: mockFlytResponse },
           error: undefined,
