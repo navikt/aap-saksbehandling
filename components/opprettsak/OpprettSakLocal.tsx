@@ -68,7 +68,7 @@ export interface OpprettSakFormFields {
   erArbeidsevnenNedsatt: JaEllerNei;
   erNedsettelseIArbeidsevneMerEnnHalvparten: JaEllerNei;
   steg?: TestcaseSteg;
-  lønn: JaEllerNei;
+  lønn: 'Ja' | 'Nei';
   afp: string;
   stønad: AndreUtbetalingerYtelser[];
 }
@@ -84,8 +84,11 @@ export const OpprettSakLocal = () => {
       },
       lønn: {
         type: 'radio',
-        defaultValue: JaEllerNei.Nei,
-        options: JaEllerNeiOptions,
+        defaultValue: 'Nei',
+        options: [
+          { label: 'Ja', value: 'Ja' },
+          { label: 'Nei', value: 'Nei' },
+        ],
         label: 'Har du fått eller skal du få ekstra utbetalinger fra arbeidsgiver?',
       },
 

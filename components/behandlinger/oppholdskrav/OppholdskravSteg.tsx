@@ -28,8 +28,8 @@ import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib
 import { LovOgMedlemskapVurderingForm } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/types';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
-import { useState } from 'react';
 import { Link, VStack } from '@navikt/ds-react';
+import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 
 type Props = {
   grunnlag: OppholdskravGrunnlagResponse | undefined;
@@ -47,7 +47,7 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
     useMellomlagring(Behovstype.OPPHOLDSKRAV_KODE, initialMellomlagring);
 
-  const [allAccordionsOpenSignal, setAllAccordionsOpenSignal] = useState<boolean>();
+  const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
   const { visningActions, visningModus, formReadOnly, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
@@ -114,7 +114,7 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
 
     løsPeriodisertBehovOgGåTilNesteSteg(losning, () => {
       nullstillMellomlagretVurdering();
-      setAllAccordionsOpenSignal(false);
+      closeAllAccordions();
     });
   }
 
@@ -165,7 +165,7 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
         {vurderingerFields.map((vurdering, index) => (
           <NyVurderingExpandableCard
             key={vurdering.id}
-            allAccordionsOpenSignal={allAccordionsOpenSignal}
+            accordionsSignal={accordionsSignal}
             fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
             oppfylt={
               form.watch(`vurderinger.${index}.oppfyller`)

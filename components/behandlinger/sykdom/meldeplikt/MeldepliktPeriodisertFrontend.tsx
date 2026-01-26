@@ -29,10 +29,11 @@ import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering'
 import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
 import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
-import React, { useState } from 'react';
+import React from 'react';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
+import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 
 interface Props {
   behandlingVersjon: number;
@@ -75,7 +76,7 @@ export const MeldepliktPeriodisertFrontend = ({
     mellomlagretVurdering
   );
 
-  const [allAccordionsOpenSignal, setAllAccordionsOpenSignal] = useState<boolean>();
+  const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
   const nyeVurderinger = grunnlag?.nyeVurderinger ?? [];
 
@@ -134,7 +135,7 @@ export const MeldepliktPeriodisertFrontend = ({
 
     løsPeriodisertBehovOgGåTilNesteSteg(losning, () => {
       nullstillMellomlagretVurdering();
-      setAllAccordionsOpenSignal(false);
+      closeAllAccordions();
       visningActions.onBekreftClick();
     });
   }
@@ -190,7 +191,7 @@ export const MeldepliktPeriodisertFrontend = ({
       {fields.map((vurdering, index) => (
         <NyVurderingExpandableCard
           key={vurdering.id}
-          allAccordionsOpenSignal={allAccordionsOpenSignal}
+          accordionsSignal={accordionsSignal}
           fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
           oppfylt={
             form.watch(`vurderinger.${index}.harFritak`)

@@ -28,7 +28,7 @@ import { OvergangArbeidTidligereVurdering } from 'components/behandlinger/sykdom
 import { OvergangArbeidFormInput } from 'components/behandlinger/sykdom/overgangarbeid/OvergangArbeidFormInput';
 import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/overgangarbeid/OvergangArbeidMellomlagringParser';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
-import { useState } from 'react';
+import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 
 interface Props {
   behandlingVersjon: number;
@@ -45,7 +45,7 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialM
   const { lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
     useMellomlagring(Behovstype.OVERGANG_ARBEID, initialMellomlagretVurdering);
 
-  const [allAccordionsOpenSignal, setAllAccordionsOpenSignal] = useState<boolean>();
+  const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
   const { visningActions, visningModus, formReadOnly, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
@@ -110,7 +110,7 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialM
     };
 
     løsPeriodisertBehovOgGåTilNesteSteg(losning, () => {
-      setAllAccordionsOpenSignal(false);
+      closeAllAccordions();
       visningActions.onBekreftClick();
       nullstillMellomlagretVurdering();
     });
@@ -161,7 +161,7 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialM
       {vurderingerFields.map((vurdering, index) => (
         <NyVurderingExpandableCard
           key={vurdering.id}
-          allAccordionsOpenSignal={allAccordionsOpenSignal}
+          accordionsSignal={accordionsSignal}
           fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
           oppfylt={
             form.watch(`vurderinger.${index}.brukerRettPåAAP`)

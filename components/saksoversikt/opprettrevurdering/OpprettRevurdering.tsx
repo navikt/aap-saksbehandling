@@ -12,6 +12,7 @@ import { useRouter } from 'next/navigation';
 import styles from './OpprettRevurdering.module.css';
 import { isSuccess } from 'lib/utils/api';
 import { vurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 export interface ManuellRevurderingFormFields {
   årsaker: string[];
@@ -66,6 +67,8 @@ export const OpprettRevurdering = ({
     }
   }
 
+  const isRevurderingStarttidspunktEnabled = useFeatureFlag('RevurderStarttidspunkt');
+
   const { form, formFields } = useConfigForm<ManuellRevurderingFormFields>({
     beskrivelse: {
       type: 'textarea',
@@ -78,7 +81,7 @@ export const OpprettRevurdering = ({
     årsaker: {
       type: 'combobox_multiple',
       label: 'Hvilke opplysninger skal revurderes?',
-      options: vurderingsbehovOptions,
+      options: vurderingsbehovOptions(isRevurderingStarttidspunktEnabled),
       defaultValue: defaultÅrsaker,
       rules: {
         required: 'Velg opplysning som er grunnlaget for revurdering',

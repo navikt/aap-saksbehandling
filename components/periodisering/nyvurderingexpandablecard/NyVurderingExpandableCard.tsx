@@ -10,6 +10,7 @@ import { TrashFillIcon } from '@navikt/aksel-icons';
 import { VurdertAvAnsatt } from 'lib/types/types';
 import { SlettVurderingModal } from 'components/periodisering/slettvurderingmodal/SlettVurderingModal';
 import { VurderingStatusTag } from 'components/periodisering/VurderingStatusTag';
+import { AccordionsSignal } from 'hooks/AccordionSignalHook';
 
 interface Props {
   initiellEkspandert: boolean;
@@ -25,7 +26,7 @@ interface Props {
   readonly: boolean;
   onSlettVurdering: () => void;
   index: number;
-  allAccordionsOpenSignal: boolean | undefined;
+  accordionsSignal: AccordionsSignal;
   harTidligereVurderinger?: boolean;
 }
 
@@ -44,13 +45,16 @@ export const NyVurderingExpandableCard = ({
   harTidligereVurderinger = false,
   initiellEkspandert = false,
   index,
-  allAccordionsOpenSignal,
+  accordionsSignal,
 }: Props) => {
-  const [localCardExpanded, setLocalCardExpanded] = useState<boolean>(initiellEkspandert);
+  const [isOpen, setIsOpen] = useState<boolean>(initiellEkspandert);
 
-  // allAccordionsOpenSignal  kan overstyre åpen/lukket tilstand via isOpen.
-  // Når allAccordionsOpenSignal er undefined, styrer komponenten seg selv lokalt.
-  const cardExpanded = allAccordionsOpenSignal ?? localCardExpanded;
+  const sisteAccordionSignalVersion = useRef(accordionsSignal.version);
+
+  if (accordionsSignal.version !== sisteAccordionSignalVersion.current) {
+    setIsOpen(accordionsSignal.action === 'open');
+    sisteAccordionSignalVersion.current = accordionsSignal.version;
+  }
 
   const ref = useRef<HTMLDialogElement>(null);
 
@@ -58,8 +62,8 @@ export const NyVurderingExpandableCard = ({
     <CustomExpandableCard
       editable
       defaultOpen
-      expanded={cardExpanded || finnesFeil}
-      setExpanded={setLocalCardExpanded}
+      expanded={isOpen || finnesFeil}
+      setExpanded={setIsOpen}
       heading={
         <HStack justify={'space-between'} padding={'2'}>
           <BodyShort size={'small'}>
