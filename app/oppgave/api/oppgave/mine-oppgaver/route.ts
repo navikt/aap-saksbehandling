@@ -1,11 +1,13 @@
 import { hentMineOppgaver } from 'lib/services/oppgaveservice/oppgaveservice';
 import { logError } from 'lib/serverutlis/logger';
 import { isError } from 'lib/utils/api';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { hentMineOppgaverQueryParams } from 'lib/utils/request';
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const { sortBy, sortOrder } = hentMineOppgaverQueryParams(req);
   try {
-    const res = await hentMineOppgaver();
+    const res = await hentMineOppgaver({ sortBy, sortOrder });
     if (isError(res)) {
       logError(`/api/oppgave/mine-oppgaver`, res.apiException);
     }
