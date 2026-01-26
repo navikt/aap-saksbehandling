@@ -30,6 +30,7 @@ import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import { Link, VStack } from '@navikt/ds-react';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
+import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 
 type Props = {
   grunnlag: OppholdskravGrunnlagResponse | undefined;
@@ -151,7 +152,7 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
             fom={parseISO(vurdering.fom)}
             tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
             foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-            oppfylt={vurdering.oppfylt}
+            vurderingStatus={getErOppfyltEllerIkkeStatus(vurdering.oppfylt)}
           >
             <OppholdskravTidligereVurdering
               fraDato={vurdering.fom}
@@ -167,11 +168,11 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
             key={vurdering.id}
             accordionsSignal={accordionsSignal}
             fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-            oppfylt={
+            vurderingStatus={getErOppfyltEllerIkkeStatus(
               form.watch(`vurderinger.${index}.oppfyller`)
                 ? form.watch(`vurderinger.${index}.oppfyller`) === JaEllerNei.Ja
                 : undefined
-            }
+            )}
             nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
             isLast={index === vurderingerFields.length - 1}
             vurdertAv={vurdering.vurdertAv}

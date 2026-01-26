@@ -34,6 +34,7 @@ import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrap
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
+import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 
 interface Props {
   behandlingVersjon: number;
@@ -175,7 +176,7 @@ export const MeldepliktPeriodisertFrontend = ({
           fom={parseISO(vurdering.fom)}
           tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
           foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-          oppfylt={vurdering.harFritak}
+          vurderingStatus={getErOppfyltEllerIkkeStatus(vurdering.harFritak)}
         >
           <VStack gap={'5'}>
             <SpørsmålOgSvar spørsmål="Vurderingen gjelder fra?" svar={formaterDatoForFrontend(vurdering.fom)} />
@@ -193,11 +194,11 @@ export const MeldepliktPeriodisertFrontend = ({
           key={vurdering.id}
           accordionsSignal={accordionsSignal}
           fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-          oppfylt={
+          vurderingStatus={getErOppfyltEllerIkkeStatus(
             form.watch(`vurderinger.${index}.harFritak`)
               ? form.watch(`vurderinger.${index}.harFritak`) === JaEllerNei.Ja
               : undefined
-          }
+          )}
           nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
           isLast={index === vedtatteVurderinger.length - 1}
           vurdertAv={vurdering.vurdertAv}

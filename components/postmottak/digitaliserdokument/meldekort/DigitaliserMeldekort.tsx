@@ -8,6 +8,7 @@ import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { Button } from '@navikt/ds-react';
 import { FormEvent } from 'react';
+import { Dato } from 'lib/types/Dato';
 
 interface Props extends Submittable {
   readOnly: boolean;
@@ -44,8 +45,8 @@ export const DigitaliserMeldekort = ({ readOnly, submit, isLoading }: Props) => 
     const dager: MeldekortV0['timerArbeidPerPeriode'] = (data.pliktPerioder ?? [])
       .flatMap((uke) => uke.dager)
       .map(({ dato, arbeidsTimer }) => ({
-        fraOgMedDato: dato!.toISOString().slice(0, 10),
-        tilOgMedDato: dato!.toISOString().slice(0, 10),
+        fraOgMedDato: new Dato(dato!).formaterForBackend(),
+        tilOgMedDato: new Dato(dato!).formaterForBackend(),
         timerArbeid: arbeidsTimer ?? 0,
       }));
 

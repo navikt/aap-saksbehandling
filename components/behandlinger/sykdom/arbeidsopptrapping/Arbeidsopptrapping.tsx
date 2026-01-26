@@ -31,6 +31,7 @@ import { IkkeVurderbarPeriode } from 'components/periodisering/IkkeVurderbarPeri
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
+import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 
 interface Props {
   behandlingVersjon: number;
@@ -178,7 +179,9 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
           fom={parseISO(vurdering.fom)}
           tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
           foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-          oppfylt={vurdering.reellMulighetTilOpptrapping && vurdering.rettPaaAAPIOpptrapping}
+          vurderingStatus={getErOppfyltEllerIkkeStatus(
+            vurdering.reellMulighetTilOpptrapping && vurdering.rettPaaAAPIOpptrapping
+          )}
         >
           <VStack gap={'5'}>
             <SpørsmålOgSvar spørsmål="Vurderingen gjelder fra?" svar={formaterDatoForFrontend(vurdering.fom)} />
@@ -200,13 +203,13 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
           key={vurdering.id}
           accordionsSignal={accordionsSignal}
           fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-          oppfylt={
+          vurderingStatus={getErOppfyltEllerIkkeStatus(
             form.watch(`vurderinger.${index}.reellMulighetTilOpptrapping`) &&
-            form.watch(`vurderinger.${index}.rettPaaAAPIOpptrapping`)
+              form.watch(`vurderinger.${index}.rettPaaAAPIOpptrapping`)
               ? form.watch(`vurderinger.${index}.reellMulighetTilOpptrapping`) === JaEllerNei.Ja &&
-                form.watch(`vurderinger.${index}.rettPaaAAPIOpptrapping`) === JaEllerNei.Ja
+                  form.watch(`vurderinger.${index}.rettPaaAAPIOpptrapping`) === JaEllerNei.Ja
               : undefined
-          }
+          )}
           nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
           isLast={index === fields.length - 1}
           vurdertAv={vurdering.vurdertAv}
