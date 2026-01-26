@@ -1,38 +1,77 @@
 'use client';
 
-import { Tag } from '@navikt/ds-react';
+import { Tag, TagProps } from '@navikt/ds-react';
 
-export type VurderingStatus = 'Oppfylt' | 'Ikke oppfylt' | 'Overskrevet';
-interface Props {
-  oppfylt: boolean | null | undefined;
-  overskrevet?: boolean;
+export enum VurderingStatus {
+  Oppfylt = 'Oppfylt',
+  IkkeOppfylt = 'Ikke oppfylt',
+  Overskrevet = 'Overskrevet',
+  Reduksjon = 'Reduksjon',
+  IkkeReduksjon = 'Ikke reduksjon',
 }
 
-export const VurderingStatusTag = ({ oppfylt, overskrevet = false }: Props) => {
-  const status = getVurderingStatus(oppfylt, overskrevet);
+interface Props {
+  status?: VurderingStatus | null;
+}
+
+export const VurderingStatusTag = ({ status }: Props) => {
   if (!status) {
     return null;
   }
+
   return (
-    <Tag size={'xsmall'} variant={getTagVariant(status)}>
-      {status}
+    <Tag size="xsmall" variant={getTagVariant(status)}>
+      {mapVurderingStatusToVurderingTekst(status)}
     </Tag>
   );
 };
 
-function getTagVariant(status: VurderingStatus) {
+function getTagVariant(status: VurderingStatus): TagProps['variant'] {
   switch (status) {
-    case 'Oppfylt':
+    case VurderingStatus.Oppfylt:
       return 'success-moderate';
-    case 'Ikke oppfylt':
+    case VurderingStatus.IkkeOppfylt:
       return 'error-moderate';
-    case 'Overskrevet':
+    case VurderingStatus.Overskrevet:
+      return 'neutral-moderate';
+    case VurderingStatus.Reduksjon:
+      return 'warning-moderate';
+    case VurderingStatus.IkkeReduksjon:
       return 'neutral-moderate';
   }
 }
-function getVurderingStatus(oppfylt: boolean | undefined | null, strekUtHele: boolean) {
-  if (strekUtHele) return 'Overskrevet';
-  if (oppfylt != null) {
-    return oppfylt ? 'Oppfylt' : 'Ikke oppfylt';
+
+function mapVurderingStatusToVurderingTekst(status: VurderingStatus): string {
+  switch (status) {
+    case VurderingStatus.Reduksjon:
+      return 'Reduksjon';
+    case VurderingStatus.IkkeReduksjon:
+      return 'Ikke reduksjon';
+    case VurderingStatus.Oppfylt:
+      return 'Oppfylt';
+    case VurderingStatus.IkkeOppfylt:
+      return 'Ikke oppfylt';
+    case VurderingStatus.Overskrevet:
+      return 'Overskrevet';
   }
+}
+
+export function getErReduksjonEllerIkke(
+  erReduksjon: boolean
+): VurderingStatus.Reduksjon | VurderingStatus.IkkeReduksjon | undefined {
+  if (erReduksjon === undefined) {
+    return undefined;
+  }
+
+  return erReduksjon ? VurderingStatus.Reduksjon : VurderingStatus.IkkeReduksjon;
+}
+
+export function getErOppfyltEllerIkkeStatus(
+  oppfylt: boolean | undefined
+): VurderingStatus.Oppfylt | VurderingStatus.IkkeOppfylt | undefined {
+  if (oppfylt === undefined) {
+    return undefined;
+  }
+
+  return oppfylt ? VurderingStatus.Oppfylt : VurderingStatus.IkkeOppfylt;
 }
