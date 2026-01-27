@@ -106,6 +106,6 @@ export const NyVurderingExpandableCard = ({
   );
 };
 
-export function skalVæreInitiellEkspandert(erNyVurdering: boolean | undefined, erAktiv: boolean) {
+export function skalVæreInitiellEkspandert(erNyVurdering: boolean | undefined, erAktiv: boolean): boolean {
   return erNyVurdering === true || erAktiv;
 }

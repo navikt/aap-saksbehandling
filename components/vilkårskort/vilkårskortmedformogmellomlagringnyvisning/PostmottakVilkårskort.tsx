@@ -1,20 +1,21 @@
 'use client';
 
 import { Button, Detail, ExpansionCard, HStack, VStack } from '@navikt/ds-react';
-import { MellomlagretVurdering, StegType, VurdertAvAnsatt } from 'lib/types/types';
+import { VurdertAvAnsatt } from 'lib/types/types';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
-import { formaterDatoForFrontend, formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 
 import styles from 'components/vilkårskort/Vilkårskort.module.css';
-import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
+import { usePostmottakRequiredFlyt } from 'hooks/postmottak/PostmottakFlytHook';
 import { FormEvent, ReactNode } from 'react';
 import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { ApiException } from 'lib/utils/api';
+import { StegType as PostmottakStegType } from 'lib/types/postmottakTypes';
 import { VisningActions, VisningModus } from 'lib/types/visningTypes';
 
-export interface VilkårsKortMedFormOgMellomlagringProps {
+interface PostmottakVilkårskortProps {
   heading: string;
-  steg: StegType;
+  steg: PostmottakStegType;
   children: ReactNode;
   onSubmit: (e: FormEvent<HTMLFormElement>) => void;
   isLoading: boolean;
@@ -28,14 +29,11 @@ export interface VilkårsKortMedFormOgMellomlagringProps {
   kvalitetssikretAv?: VurdertAvAnsatt;
   visningModus: VisningModus;
   visningActions: VisningActions;
-  onDeleteMellomlagringClick: (() => void) | undefined;
-  onLagreMellomLagringClick: (() => void) | undefined;
-  mellomlagretVurdering: MellomlagretVurdering | undefined;
   extraActions?: ReactNode;
   formReset: () => void;
 }
 
-export const VilkårskortMedFormOgMellomlagringNyVisning = ({
+export const PostmottakVilkårskort = ({
   heading,
   steg,
   children,
@@ -49,19 +47,14 @@ export const VilkårskortMedFormOgMellomlagringNyVisning = ({
   vurdertAvAnsatt,
   vurdertAutomatisk = false,
   kvalitetssikretAv,
-  onDeleteMellomlagringClick,
-  onLagreMellomLagringClick,
-  mellomlagretVurdering,
   visningModus,
   visningActions,
   extraActions,
   formReset,
-}: VilkårsKortMedFormOgMellomlagringProps) => {
+}: PostmottakVilkårskortProps) => {
   const classNameBasertPåEnhet = vilkårTilhørerNavKontor ? styles.vilkårsKortNAV : styles.vilkårsKortNAY;
-  const { flyt } = useRequiredFlyt();
+  const { flyt } = usePostmottakRequiredFlyt();
   const erAktivtSteg = flyt.aktivtSteg === steg || visningModus === 'AKTIV_MED_AVBRYT';
-
-  const readOnly = visningModus === 'LÅST_MED_ENDRE' || visningModus === 'LÅST_UTEN_ENDRE';
 
   return (
     <ExpansionCard
@@ -100,11 +93,6 @@ export const VilkårskortMedFormOgMellomlagringNyVisning = ({
                     <>
                       <Button loading={isLoading}>{knappTekst}</Button>
                       {extraActions != null && extraActions}
-                      {onLagreMellomLagringClick && (
-                        <Button type="button" variant="tertiary" onClick={onLagreMellomLagringClick}>
-                          Lagre utkast
-                        </Button>
-                      )}
                     </>
                   )}
 
@@ -124,11 +112,6 @@ export const VilkårskortMedFormOgMellomlagringNyVisning = ({
                         </Button>
                       )}
                       {extraActions != null && extraActions}
-                      {onLagreMellomLagringClick && (
-                        <Button type="button" variant="tertiary" onClick={onLagreMellomLagringClick}>
-                          Lagre utkast
-                        </Button>
-                      )}
                     </>
                   )}
 
@@ -140,20 +123,6 @@ export const VilkårskortMedFormOgMellomlagringNyVisning = ({
 
                   {visningModus === 'LÅST_UTEN_ENDRE' && null}
                 </HStack>
-
-                {/* Utkast-info */}
-                {!readOnly && mellomlagretVurdering && onDeleteMellomlagringClick && (
-                  <HStack align="baseline">
-                    <Detail>
-                      {`Utkast lagret ${formaterDatoMedTidspunktForFrontend(
-                        mellomlagretVurdering.vurdertDato
-                      )} (${mellomlagretVurdering.vurdertAv})`}
-                    </Detail>
-                    <Button type="button" size="small" variant="tertiary" onClick={onDeleteMellomlagringClick}>
-                      Slett utkast
-                    </Button>
-                  </HStack>
-                )}
               </VStack>
 
               {/* Høyre kolonne: vurdert av / kvalitetssikret av */}
