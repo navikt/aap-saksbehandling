@@ -6,23 +6,10 @@ import {
   OvergangArbeidForm,
   OvergangArbeidVurderingForm,
 } from 'components/behandlinger/sykdom/overgangarbeid/OvergangArbeid-types';
-import { getFraDatoFraGrunnlagForFrontend } from 'lib/utils/periodisering';
+import { getFraDatoFraGrunnlagForFrontend, trengerTomPeriodisertVurdering } from 'lib/utils/periodisering';
 
-export function getDefaultValuesFromGrunnlag(grunnlag?: OvergangArbeidGrunnlag): OvergangArbeidForm {
-  if (grunnlag == null) {
-    return {
-      vurderinger: [
-        {
-          begrunnelse: '',
-          fraDato: '',
-          brukerRettPåAAP: '',
-        },
-      ],
-    };
-  }
-
-  if (grunnlag.nyeVurderinger.length === 0 && grunnlag.sisteVedtatteVurderinger.length === 0) {
-    // Vi har ingen tidligere vurderinger eller nye vurderinger, legg til en tom-default-periode
+export function getDefaultValuesFromGrunnlag(grunnlag: OvergangArbeidGrunnlag): OvergangArbeidForm {
+  if (trengerTomPeriodisertVurdering(grunnlag)) {
     return {
       vurderinger: [
         {
