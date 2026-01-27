@@ -23,7 +23,7 @@ export function usePostmottakRequiredFlyt(): { flyt: BehandlingFlytOgTilstand } 
   );
 
   if (isError(flyt) || !flyt) {
-    throw new Error('Kunne ikke finne påkrevd flyt');
+    throw new Error('Kunne ikke finne påkrevd flyt i postmottak.');
   }
 
   return { flyt: flyt.data };
