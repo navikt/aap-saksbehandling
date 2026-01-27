@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Box, Button, HGrid, VStack } from '@navikt/ds-react';
+import { Alert, Box, Button, HGrid, HStack, VStack } from '@navikt/ds-react';
 import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { Delmal } from 'components/brevbygger/Delmal';
 import {
@@ -11,7 +11,7 @@ import {
   mapDelmalerFraSanity,
 } from 'components/brevbygger/brevmalMapping';
 import { BrevmalType } from 'components/brevbygger/brevmodellTypes';
-import { BrevdataDto, BrevMottaker, FritekstDto, Mottaker } from 'lib/types/types';
+import { BrevdataDto, BrevMottaker, FritekstDto, Mottaker, RefusjonskravGrunnlag } from 'lib/types/types';
 import { ForhåndsvisBrev } from 'components/brevbygger/ForhåndsvisBrev';
 import { clientKanDistribuereBrev, clientOppdaterBrevdata, clientOppdaterBrevmal } from 'lib/clientApi';
 import { useRouter } from 'next/navigation';
@@ -23,9 +23,9 @@ import { isSuccess } from 'lib/utils/api';
 import { revalidateFlyt } from 'lib/actions/actions';
 import { VelgeMottakere } from 'components/brevbygger/VelgeMottakere';
 import { IkkeSendBrevModal } from 'components/behandlinger/brev/skriveBrev/IkkeSendBrevModal';
-import { Brevbyggermeny } from 'components/brevbygger/Brevbyggermeny';
 import { useDebounce } from 'hooks/DebounceHook';
 import { ExpandIcon, ShrinkIcon } from '@navikt/aksel-icons';
+import { RefusjonskravVisning } from 'components/brevbygger/RefusjonskravVisning';
 
 export interface AlternativFormField {
   verdi: string;
@@ -59,6 +59,7 @@ interface BrevbyggerProps {
   brukerMottaker?: Mottaker;
   brevmal?: string | null;
   brevdata?: BrevdataDto;
+  refusjonskravgrunnlag?: RefusjonskravGrunnlag;
 }
 
 const hentDokument = async (
@@ -89,6 +90,7 @@ export const Brevbygger = ({
   behandlingVersjon,
   readOnly,
   visAvbryt = true,
+  refusjonskravgrunnlag,
 }: BrevbyggerProps) => {
   const parsedBrevmal: BrevmalType = JSON.parse(brevmal || '');
   const { control, handleSubmit, trigger, watch } = useForm<BrevdataFormFields>({
@@ -237,11 +239,6 @@ export const Brevbygger = ({
   return (
     <HGrid columns={pdfViewExpanded ? '1fr 3fr' : '1fr 1fr'} gap={'2'}>
       <Box>
-        <Brevbyggermeny
-          visAvbryt={visAvbryt}
-          oppdaterBrevmal={oppdaterBrevmal}
-          settIkkeSendBrevModalOpen={settIkkeSendBrevModalOpen}
-        />
         {fullmektigMottaker && brukerMottaker && (
           <VelgeMottakere
             setMottakere={setMottakere}
@@ -261,22 +258,49 @@ export const Brevbygger = ({
             onSubmit(data);
           })}
         >
-          {fields
-            .filter((feltet) => delmalSkalVises(feltet.noekkel, parsedBrevmal))
-            .map((feltet, index) => (
-              <Delmal
-                delmalFelt={feltet}
-                index={index}
-                control={control}
-                key={feltet.id}
-                watch={watch}
-                brevmal={parsedBrevmal}
-              />
-            ))}
+          <VStack gap={'4'}>
+            <RefusjonskravVisning refusjonskravgrunnlag={refusjonskravgrunnlag} />
+            {fields
+              .filter((feltet) => delmalSkalVises(feltet.noekkel, parsedBrevmal))
+              .map((feltet, index) => (
+                <Delmal
+                  delmalFelt={feltet}
+                  index={index}
+                  control={control}
+                  key={feltet.id}
+                  watch={watch}
+                  brevmal={parsedBrevmal}
+                />
+              ))}
+          </VStack>
         </form>
-        <Button type="button" onClick={() => sendBrev()} loading={isLoading}>
-          Send brev
-        </Button>
+        <HStack gap={'2'} justify={'space-between'} marginBlock={'4'}>
+          <HStack gap={'2'}>
+            {visAvbryt && (
+              <Button
+                type="button"
+                onClick={() => settIkkeSendBrevModalOpen(true)}
+                variant="danger"
+                size="small"
+                disabled={isLoading}
+              >
+                Ikke send brev
+              </Button>
+            )}
+            <Button
+              type="button"
+              variant={'secondary'}
+              onClick={() => oppdaterBrevmal()}
+              size="small"
+              disabled={isLoading}
+            >
+              Oppdater brevmal
+            </Button>
+          </HStack>
+          <Button type="button" onClick={() => sendBrev()} loading={isLoading} size="small">
+            Send brev
+          </Button>
+        </HStack>
       </Box>
       <VStack gap={'2'}>
         <div>

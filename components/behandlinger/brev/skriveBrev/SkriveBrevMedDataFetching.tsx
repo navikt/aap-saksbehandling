@@ -105,6 +105,7 @@ export const SkriveBrevMedDataFetching = async ({
           brukerMottaker={bruker}
           behandlingVersjon={behandlingVersjon}
           readOnly={readOnlyBrev}
+          refusjonskravgrunnlag={refusjonGrunnlag.data}
         />
       )}
       {!brukNyBrevbygger && brev.brev && (
