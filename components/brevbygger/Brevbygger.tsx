@@ -260,9 +260,11 @@ export const Brevbygger = ({
         >
           <VStack gap={'4'}>
             <RefusjonskravVisning refusjonskravgrunnlag={refusjonskravgrunnlag} />
-            {fields
-              .filter((feltet) => delmalSkalVises(feltet.noekkel, parsedBrevmal))
-              .map((feltet, index) => (
+            {fields.map((feltet, index) => {
+              if (!delmalSkalVises(feltet.noekkel, parsedBrevmal)) {
+                return null;
+              }
+              return (
                 <Delmal
                   delmalFelt={feltet}
                   index={index}
@@ -271,7 +273,8 @@ export const Brevbygger = ({
                   watch={watch}
                   brevmal={parsedBrevmal}
                 />
-              ))}
+              );
+            })}
           </VStack>
         </form>
         <HStack gap={'2'} justify={'space-between'} marginBlock={'4'}>
