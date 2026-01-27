@@ -14,7 +14,6 @@ import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 import { parse } from 'date-fns';
-import { beregnReduksjonsdatoVedNyttOpphold, beregnTidligsteReduksjonsdato } from 'lib/utils/institusjonsopphold';
 import { useFieldArray } from 'react-hook-form';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 
@@ -198,60 +197,29 @@ function mapVurderingToDraftFormFields(
   opphold: HelseinstitusjonGrunnlag['opphold']
 ): DraftFormFields {
   return {
-    helseinstitusjonsvurderinger: vurderinger.map((item, oppholdIndex) => {
+    helseinstitusjonsvurderinger: vurderinger.map((item) => {
       const matchendeOpphold = opphold.find((o) => o.oppholdId === item.oppholdId);
 
-      // Hvis det finnes vurderinger, bruk dem
-      let vurderingerArray: Vurdering[];
       if (item.vurderinger && item.vurderinger.length > 0) {
-        vurderingerArray = item.vurderinger.map((vurdering) => ({
-          oppholdId: vurdering.oppholdId,
-          begrunnelse: vurdering.begrunnelse,
-          harFasteUtgifter: getJaNeiEllerUndefined(vurdering.harFasteUtgifter),
-          forsoergerEktefelle: getJaNeiEllerUndefined(vurdering.forsoergerEktefelle),
-          faarFriKostOgLosji: getJaNeiEllerUndefined(vurdering.faarFriKostOgLosji),
+        return {
+          oppholdId: item.oppholdId,
           periode: {
-            fom: formaterDatoForFrontend(vurdering.periode.fom),
-            tom: formaterDatoForFrontend(vurdering.periode.tom),
+            fom: formaterDatoForFrontend(item.periode.fom),
+            tom: formaterDatoForFrontend(item.periode.tom),
           },
-          status: item.status,
-        }));
-      } else {
-        // Ingen vurderinger - beregn tidligste reduksjonsdato
-        const tidligsteReduksjonsdato = (() => {
-          if (!matchendeOpphold) return '';
-          if (oppholdIndex === 0) {
-            return beregnTidligsteReduksjonsdato(matchendeOpphold.oppholdFra);
-          }
-          const forrigeOppholdAvsluttet = opphold[oppholdIndex - 1]?.avsluttetDato ?? '';
-          const nåværendeOppholdFra = matchendeOpphold.oppholdFra ?? '';
-          return beregnReduksjonsdatoVedNyttOpphold(forrigeOppholdAvsluttet, nåværendeOppholdFra);
-        })();
-
-        const beregnetFomDato =
-          tidligsteReduksjonsdato //&& // FIXME Thao: Her må jeg bruke watch for å sjekke hva som har blitt valgt. Kanskje legge denne i Helseinstitusjonsvurdering?
-          // vurdering.harFasteUtgifter === JaEllerNei.Ja &&
-          // JaEllerNei.Nei === undefined &&
-          // JaEllerNei.Nei === undefined
-            ? tidligsteReduksjonsdato
-            : formaterDatoForFrontend(item.periode.fom);
-
-        vurderingerArray = [
-          {
-            oppholdId: matchendeOpphold?.oppholdId ?? '',
-            begrunnelse: '',
-            harFasteUtgifter: undefined,
-            forsoergerEktefelle: undefined,
-            faarFriKostOgLosji: undefined,
+          vurderinger: item.vurderinger.map((vurdering) => ({
+            oppholdId: vurdering.oppholdId,
+            begrunnelse: vurdering.begrunnelse,
+            harFasteUtgifter: getJaNeiEllerUndefined(vurdering.harFasteUtgifter),
+            forsoergerEktefelle: getJaNeiEllerUndefined(vurdering.forsoergerEktefelle),
+            faarFriKostOgLosji: getJaNeiEllerUndefined(vurdering.faarFriKostOgLosji),
             periode: {
-              // fom: tidligsteReduksjonsdato,
-              // fom: beregnetFomDato,
-              fom: formaterDatoForFrontend(item.periode.fom),
-              tom: formaterDatoForFrontend(matchendeOpphold?.avsluttetDato ?? matchendeOpphold?.oppholdFra ?? ''),
+              fom: formaterDatoForFrontend(vurdering.periode.fom),
+              tom: formaterDatoForFrontend(vurdering.periode.tom),
             },
-            status: 'UAVKLART',
-          },
-        ];
+            status: item.status,
+          })),
+        };
       }
 
       return {
@@ -260,7 +228,20 @@ function mapVurderingToDraftFormFields(
           fom: formaterDatoForFrontend(item.periode.fom),
           tom: formaterDatoForFrontend(item.periode.tom),
         },
-        vurderinger: vurderingerArray,
+        vurderinger: [
+          {
+            oppholdId: matchendeOpphold?.oppholdId ?? '',
+            begrunnelse: '',
+            harFasteUtgifter: undefined,
+            forsoergerEktefelle: undefined,
+            faarFriKostOgLosji: undefined,
+            periode: {
+              fom: formaterDatoForFrontend(item.periode.fom),
+              tom: formaterDatoForFrontend(matchendeOpphold?.avsluttetDato ?? matchendeOpphold?.oppholdFra ?? ''),
+            },
+            status: 'UAVKLART',
+          },
+        ],
       };
     }),
   };

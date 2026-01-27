@@ -100,7 +100,7 @@ export const HelseinstitusjonOppholdGruppe = ({
                 key={vurdering.oppholdId}
                 fom={new Dato(vurdering.periode.fom).dato}
                 tom={new Dato(vurdering.periode.tom).dato}
-                foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+                foersteNyePeriodeFraDato={foersteNyePeriode == null ? null : parseDatoFraDatePicker(foersteNyePeriode)}
                 vurderingStatus={VurderingStatus.Reduksjon}
               >
                 <HelseinstitusjonTidligereVurdering vurdering={vurdering} />
@@ -181,6 +181,15 @@ export const HelseinstitusjonOppholdGruppe = ({
                         readonly={formReadOnly}
                         opphold={opphold}
                         minFomDato={vurderingIndex > 0 ? vurderinger[vurderingIndex - 1]?.periode?.fom : undefined}
+                        /*minFomDato={
+                          vurderingIndex > 0
+                            ? gyldigDatoEllerNull(
+                                form.watch(
+                                  `helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex - 1}.periode.fom`
+                                )
+                              )
+                            : undefined
+                        }*/
                         alleOpphold={alleOpphold}
                       />
                     </div>

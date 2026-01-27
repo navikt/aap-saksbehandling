@@ -14,7 +14,8 @@ import {
 import { HelseinstitusjonGrunnlag } from 'lib/types/types';
 import { validerDato } from 'lib/validation/dateValidation';
 import { useEffect } from 'react';
-import { formaterDatoForFrontend } from 'lib/utils/date';
+import { formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
+import { addDays } from 'date-fns';
 
 interface Props {
   form: UseFormReturn<HelseinstitusjonsFormFields>;
@@ -22,6 +23,7 @@ interface Props {
   vurderingIndex: number;
   readonly: boolean;
   opphold: HelseinstitusjonGrunnlag['opphold'][0];
+  // minFomDato?: Date | null; // TODO Thao
   minFomDato?: string;
   alleOpphold: HelseinstitusjonGrunnlag['opphold'];
 }
@@ -83,13 +85,17 @@ export const Helseinstitusjonsvurdering = ({
 
   // *** Autofyll FOM om det blir reduksjon ***
   const defaultFom = minFomDato
-    ? formaterDatoForFrontend(new Date(new Date(minFomDato).getTime() + 24 * 60 * 60 * 1000))
+    ? ''//formaterDatoForFrontend(addDays(minFomDato, 1))
     : formaterDatoForFrontend(opphold.oppholdFra);
   useEffect(() => {
     const periodeFomFeltNavn = `helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.periode.fom`;
     const currentFom = form.getValues(periodeFomFeltNavn as any);
     if (reduksjon && currentFom !== tidligsteReduksjonsdato) {
-      form.setValue(periodeFomFeltNavn as any, tidligsteReduksjonsdato, { shouldValidate: true });
+      if (currentFom > tidligsteReduksjonsdato) {
+        form.setValue(periodeFomFeltNavn as any, currentFom, { shouldValidate: true });
+      } else {
+        form.setValue(periodeFomFeltNavn as any, tidligsteReduksjonsdato, { shouldValidate: true });
+      }
     } else if (!reduksjon && currentFom !== defaultFom) {
       // Sett tilbake til default
       form.setValue(periodeFomFeltNavn as any, defaultFom, { shouldValidate: true });
