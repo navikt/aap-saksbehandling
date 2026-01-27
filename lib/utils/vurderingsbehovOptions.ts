@@ -5,7 +5,7 @@ import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
 export const vurderingsbehovOptions = (isRevurderingStarttidspunktEnabled: boolean): ValuePair<Vurderingsbehov>[] =>
   [
     // TODO fjerner denne inntil det er avklart om denne skal brukes { label: 'Helhetlig vurdering', value: 'HELHETLIG_VURDERING' },
-    { label: 'Starttidspunkt', value: 'VURDER_RETTIGHETSPERIODE' },
+    { label: 'Vurder § 22-13 syvende ledd', value: 'VURDER_RETTIGHETSPERIODE' },
     { label: 'Lovvalg og medlemskap', value: 'LOVVALG_OG_MEDLEMSKAP' },
     { label: '§ 11-14 Student', value: 'REVURDER_STUDENT' },
     { label: '§§ 11-5 og 11-6 Sykdom, arbeidsevne og behov for bistand', value: 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND' },
