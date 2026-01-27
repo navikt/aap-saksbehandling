@@ -22,7 +22,6 @@ import { isLocal, isProd } from 'lib/utils/environment';
 import { LokalBrukerBytte } from 'components/lokalbrukerbytte/LokalBrukerBytte';
 import { Roller } from 'lib/services/azure/azureUserService';
 import { SøkeResultat } from 'app/api/kelvinsok/route';
-import Endringslogg from '@navikt/familie-endringslogg';
 
 interface BrukerInformasjon {
   navn: string;
@@ -97,30 +96,6 @@ export const KelvinAppHeader = ({
         </HStack>
 
         <Spacer />
-
-        {brukerInformasjon.NAVident && (
-          <InternalHeader.Button
-            as="div"
-            onClick={() => {
-              if (!endringsloggÅpen) {
-                finnEndringslogg().click();
-              }
-              setEndringsloggÅpen(!endringsloggÅpen);
-            }}
-          >
-            <Endringslogg
-              userId={brukerInformasjon.NAVident}
-              dataFetchingIntervalSeconds={60 * 15}
-              appId={'AAP'}
-              backendUrl={'/saksbehandling/api'}
-              dataset={'production'}
-              maxEntries={50}
-              appName={'Kelvin'}
-              alignLeft={true}
-              stil={'lys'}
-            />
-          </InternalHeader.Button>
-        )}
         <AppSwitcher />
         <Brukermeny brukerInformasjon={brukerInformasjon} roller={roller} />
       </InternalHeader>

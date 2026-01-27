@@ -419,9 +419,9 @@ export const hentAktivitetsplikt11_9Grunnlag = async (behandlingsreferanse: stri
   return await apiFetch<Aktivitetsplikt11_9Grunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
-export const hentRettighetGrunnlag = async (behandlingsreferanse: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/rettighet`;
-  return await apiFetch<RettighetDto>(url, saksbehandlingApiScope, 'GET');
+export const hentRettighetsdata = async (saksnummer: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${saksnummer}/rettighet`;
+  return await apiFetch<RettighetDto[]>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentSvarFraAndreinstansGrunnlag = async (behandlingsReferanse: string) => {
