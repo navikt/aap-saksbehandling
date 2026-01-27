@@ -77,6 +77,7 @@ export const ForutgåendeMedlemskapPeriodisert = ({
   const form = useForm<ForutgåendeMedlemskapVurderingForm>({
     defaultValues,
     reValidateMode: 'onChange',
+    shouldUnregister: true,
   });
 
   const { fields: vurderingerFields, append, remove } = useFieldArray({ control: form.control, name: 'vurderinger' });
