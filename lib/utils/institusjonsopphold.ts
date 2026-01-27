@@ -1,7 +1,7 @@
 import { addMonths, format, isAfter, isBefore, parse, startOfMonth } from 'date-fns';
 import { nb } from 'date-fns/locale';
 import { validerDato } from 'lib/validation/dateValidation';
-import { formaterDatoForFrontend } from 'lib/utils/date';
+import { formatDatoMedMånedsnavn, formaterDatoForFrontend } from 'lib/utils/date';
 
 /**
  * Beregner tidligste dato for reduksjon av AAP ved institusjonsopphold.
@@ -38,7 +38,7 @@ export function lagReduksjonsBeskrivelse(oppholdFra: string): string {
   const opphold = oppholdFra.includes('-') ? new Date(oppholdFra) : parse(oppholdFra, 'dd.MM.yyyy', new Date());
 
   const innleggelsesmåned = format(startOfMonth(opphold), 'MMMM yyyy', { locale: nb });
-  const tidligsteReduksjon = beregnTidligsteReduksjonsdato(oppholdFra);
+  const tidligsteReduksjon = formatDatoMedMånedsnavn(parse(beregnTidligsteReduksjonsdato(oppholdFra), 'dd.MM.yyyy', new Date()));
 
   return `Innleggelsesmåned: ${innleggelsesmåned}. Reduksjon kan tidligst starte: ${tidligsteReduksjon}`;
 }

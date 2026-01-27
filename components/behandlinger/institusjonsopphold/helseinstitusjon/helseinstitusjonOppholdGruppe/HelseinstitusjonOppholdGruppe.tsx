@@ -30,7 +30,6 @@ interface Props {
   opphold: HelseinstitusjonGrunnlag['opphold'][0];
   tidligereVurderinger?: HelseInstiusjonVurdering[] | null;
   accordionsSignal: AccordionsSignal;
-  minFomDato?: string;
   alleOpphold: HelseinstitusjonGrunnlag['opphold'];
 }
 
@@ -44,24 +43,14 @@ export const HelseinstitusjonOppholdGruppe = ({
   alleOpphold,
 }: Props) => {
   // Beregn riktig fom for ny vurdering
-  const beregnFomForNyVurdering = () => {
-    // Hvis det er første opphold, bruk standard regel
+  const tidligsteReduksjonsdato = (() => {
     if (oppholdIndex === 0) {
       return beregnTidligsteReduksjonsdato(opphold.oppholdFra);
     }
-
-    // Hvis det er påfølgende opphold, sjekk om forrige opphold har sluttdato
-    const forrigeOpphold = alleOpphold[oppholdIndex - 1]; //FIXME Thao: Sjekk om denne stemmer for andre opphold
-    if (forrigeOpphold?.avsluttetDato) {
-      const reduksjonsdato = beregnReduksjonsdatoVedNyttOpphold(forrigeOpphold.avsluttetDato, opphold.oppholdFra);
-      // Hvis regelen gjelder (opphold innen 3 mnd), bruk den
-      if (reduksjonsdato) {
-        return reduksjonsdato;
-      }
-    }
-    // Ellers bruk standard regel
-    return beregnTidligsteReduksjonsdato(opphold.oppholdFra);
-  };
+    const forrigeOppholdAvsluttet = alleOpphold[oppholdIndex - 1]?.avsluttetDato ?? '';
+    const nåværendeOppholdFra = opphold.oppholdFra ?? '';
+    return beregnReduksjonsdatoVedNyttOpphold(forrigeOppholdAvsluttet, nåværendeOppholdFra);
+  })();
 
   const {
     fields: vurderinger,
@@ -120,8 +109,6 @@ export const HelseinstitusjonOppholdGruppe = ({
           })}
 
           {vurderinger.map((vurdering, vurderingIndex) => {
-            const erFørsteVurdering = vurderingIndex === 0;
-
             const faarFriKostOgLosji = form.watch(
               `helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.faarFriKostOgLosji`
             );
@@ -132,15 +119,14 @@ export const HelseinstitusjonOppholdGruppe = ({
               `helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.harFasteUtgifter`
             );
 
-            const { ikkeValgt, reduksjon, ikkeReduksjon } = (() => {
+            const { ikkeValgt, reduksjon } = (() => {
               const ikkeValgt =
                 faarFriKostOgLosji === undefined && forsoergerEktefelle === undefined && harFasteUtgifter === undefined;
               const reduksjon =
                 faarFriKostOgLosji === JaEllerNei.Ja &&
                 forsoergerEktefelle === JaEllerNei.Nei &&
                 harFasteUtgifter === JaEllerNei.Nei;
-              const ikkeReduksjon = !reduksjon;
-              return { ikkeValgt, reduksjon, ikkeReduksjon };
+              return { ikkeValgt, reduksjon };
             })();
 
             const erNyVurdering =
@@ -195,6 +181,7 @@ export const HelseinstitusjonOppholdGruppe = ({
                         readonly={formReadOnly}
                         opphold={opphold}
                         minFomDato={vurderingIndex > 0 ? vurderinger[vurderingIndex - 1]?.periode?.fom : undefined}
+                        alleOpphold={alleOpphold}
                       />
                     </div>
                   </div>
@@ -220,8 +207,8 @@ export const HelseinstitusjonOppholdGruppe = ({
                 forsoergerEktefelle: undefined,
                 faarFriKostOgLosji: undefined,
                 periode: {
-                  fom: beregnFomForNyVurdering(),
-                  tom: formaterDatoForFrontend(opphold.avsluttetDato || opphold.oppholdFra),
+                  fom: tidligsteReduksjonsdato,
+                  tom: formaterDatoForFrontend(opphold.avsluttetDato || ''),
                 },
                 status: 'UAVKLART',
               })

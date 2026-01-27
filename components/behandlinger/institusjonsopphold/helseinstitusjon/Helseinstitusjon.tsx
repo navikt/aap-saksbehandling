@@ -199,7 +199,6 @@ function mapVurderingToDraftFormFields(
 ): DraftFormFields {
   return {
     helseinstitusjonsvurderinger: vurderinger.map((item, oppholdIndex) => {
-      const erFørsteOpphold = oppholdIndex === 0;
       const matchendeOpphold = opphold.find((o) => o.oppholdId === item.oppholdId);
 
       // Hvis det finnes vurderinger, bruk dem
@@ -229,6 +228,14 @@ function mapVurderingToDraftFormFields(
           return beregnReduksjonsdatoVedNyttOpphold(forrigeOppholdAvsluttet, nåværendeOppholdFra);
         })();
 
+        const beregnetFomDato =
+          tidligsteReduksjonsdato //&& // FIXME Thao: Her må jeg bruke watch for å sjekke hva som har blitt valgt. Kanskje legge denne i Helseinstitusjonsvurdering?
+          // vurdering.harFasteUtgifter === JaEllerNei.Ja &&
+          // JaEllerNei.Nei === undefined &&
+          // JaEllerNei.Nei === undefined
+            ? tidligsteReduksjonsdato
+            : formaterDatoForFrontend(item.periode.fom);
+
         vurderingerArray = [
           {
             oppholdId: matchendeOpphold?.oppholdId ?? '',
@@ -237,7 +244,9 @@ function mapVurderingToDraftFormFields(
             forsoergerEktefelle: undefined,
             faarFriKostOgLosji: undefined,
             periode: {
-              fom: tidligsteReduksjonsdato,
+              // fom: tidligsteReduksjonsdato,
+              // fom: beregnetFomDato,
+              fom: formaterDatoForFrontend(item.periode.fom),
               tom: formaterDatoForFrontend(matchendeOpphold?.avsluttetDato ?? matchendeOpphold?.oppholdFra ?? ''),
             },
             status: 'UAVKLART',
