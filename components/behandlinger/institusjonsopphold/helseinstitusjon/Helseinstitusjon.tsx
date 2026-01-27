@@ -16,6 +16,7 @@ import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårs
 import { parse } from 'date-fns';
 import { beregnReduksjonsdatoVedNyttOpphold, beregnTidligsteReduksjonsdato } from 'lib/utils/institusjonsopphold';
 import { useFieldArray } from 'react-hook-form';
+import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 
 interface Props {
   grunnlag: HelseinstitusjonGrunnlag;
@@ -53,6 +54,8 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
 
   const { lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
     useMellomlagring(Behovstype.AVKLAR_HELSEINSTITUSJON, initialMellomlagretVurdering);
+
+  const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
@@ -112,7 +115,10 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
           },
           referanse: behandlingsreferanse,
         },
-        () => nullstillMellomlagretVurdering()
+        () => {
+          closeAllAccordions();
+          nullstillMellomlagretVurdering();
+        }
       );
     })(event);
   };
@@ -147,6 +153,7 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
         <HelseinstitusjonOppholdGruppe
           key={oppholdField.id}
           opphold={grunnlag.opphold.find((o) => o.oppholdId === oppholdField.oppholdId)!}
+          accordionsSignal={accordionsSignal}
           oppholdIndex={oppholdIndex}
           form={form}
           readonly={formReadOnly}

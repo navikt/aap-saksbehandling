@@ -19,12 +19,14 @@ import { NyVurderingExpandableCard } from 'components/periodisering/nyvurderinge
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErReduksjonEllerIkke } from 'components/periodisering/VurderingStatusTag';
+import { AccordionsSignal } from 'hooks/AccordionSignalHook';
 
 interface Props {
   form: UseFormReturn<HelseinstitusjonsFormFields>;
   oppholdIndex: number;
   readonly: boolean;
   opphold: HelseinstitusjonGrunnlag['opphold'][0];
+  accordionsSignal: AccordionsSignal;
   minFomDato?: string;
   alleOpphold: HelseinstitusjonGrunnlag['opphold'];
 }
@@ -32,12 +34,11 @@ interface Props {
 export const HelseinstitusjonOppholdGruppe = ({
   form,
   oppholdIndex,
+  accordionsSignal,
   readonly: formReadOnly,
   opphold,
   alleOpphold,
 }: Props) => {
-  const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
-
   // Beregn riktig fom for ny vurdering
   const beregnFomForNyVurdering = () => {
     // Hvis det er første opphold, bruk standard regel
