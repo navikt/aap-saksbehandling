@@ -14,8 +14,7 @@ import {
 import { HelseinstitusjonGrunnlag } from 'lib/types/types';
 import { validerDato } from 'lib/validation/dateValidation';
 import { useEffect } from 'react';
-import { formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
-import { addDays } from 'date-fns';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 
 interface Props {
   form: UseFormReturn<HelseinstitusjonsFormFields>;
@@ -85,7 +84,7 @@ export const Helseinstitusjonsvurdering = ({
 
   // *** Autofyll FOM om det blir reduksjon ***
   const defaultFom = minFomDato
-    ? ''//formaterDatoForFrontend(addDays(minFomDato, 1))
+    ? '' //formaterDatoForFrontend(addDays(minFomDato, 1))
     : formaterDatoForFrontend(opphold.oppholdFra);
   useEffect(() => {
     const periodeFomFeltNavn = `helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.periode.fom`;

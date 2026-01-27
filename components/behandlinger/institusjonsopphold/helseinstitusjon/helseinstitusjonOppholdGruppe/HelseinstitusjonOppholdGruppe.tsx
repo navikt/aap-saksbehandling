@@ -181,15 +181,6 @@ export const HelseinstitusjonOppholdGruppe = ({
                         readonly={formReadOnly}
                         opphold={opphold}
                         minFomDato={vurderingIndex > 0 ? vurderinger[vurderingIndex - 1]?.periode?.fom : undefined}
-                        /*minFomDato={
-                          vurderingIndex > 0
-                            ? gyldigDatoEllerNull(
-                                form.watch(
-                                  `helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex - 1}.periode.fom`
-                                )
-                              )
-                            : undefined
-                        }*/
                         alleOpphold={alleOpphold}
                       />
                     </div>
