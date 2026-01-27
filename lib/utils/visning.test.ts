@@ -12,7 +12,7 @@ const mellomlagring: MellomlagretVurdering = {
   vurdertDato: '',
 };
 
-describe('Visning av vilkårskort i førstegangsbehandling', () => {
+describe('Visning av vilkårskort', () => {
   it('skal være LÅST_MED_ENDRE hvis readOnly=false, erAktivtSteg=false, mellomlagring=undefined', () => {
     const verdi = hentVisning(false, false, undefined);
     expect(verdi).toBe(VisningModus.LÅST_MED_ENDRE);
