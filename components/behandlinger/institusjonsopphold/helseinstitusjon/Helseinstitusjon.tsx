@@ -153,6 +153,10 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
         <HelseinstitusjonOppholdGruppe
           key={oppholdField.id}
           opphold={grunnlag.opphold.find((o) => o.oppholdId === oppholdField.oppholdId)!}
+          tidligereVurderinger={
+            grunnlag.vedtatteVurderinger.find((vurdering) => vurdering.oppholdId === oppholdField.oppholdId)
+              ?.vurderinger
+          }
           accordionsSignal={accordionsSignal}
           oppholdIndex={oppholdIndex}
           form={form}

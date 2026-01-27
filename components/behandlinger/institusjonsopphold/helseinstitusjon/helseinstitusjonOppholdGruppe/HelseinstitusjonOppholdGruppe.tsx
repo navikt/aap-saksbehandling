@@ -3,29 +3,32 @@ import { Buildings3Icon } from '@navikt/aksel-icons';
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { Helseinstitusjonsvurdering } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/helseinstitusjonsvurdering/Helseinstitusjonsvurdering';
 import { HelseinstitusjonsFormFields } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/Helseinstitusjon';
-import { HelseinstitusjonGrunnlag } from 'lib/types/types';
+import { HelseinstitusjonGrunnlag, HelseInstiusjonVurdering } from 'lib/types/types';
 import React from 'react';
 import styles from 'components/behandlinger/institusjonsopphold/helseinstitusjon/helseinstitusjonOppholdGruppe/HelseinstitusjonOppholdGruppe.module.css';
 import {
   DATO_FORMATER,
   formatDatoMedMånedsnavn,
   formaterDatoForFrontend,
-  formaterDatoMedKunDagOgMånedForFrontend,
+  parseDatoFraDatePicker,
 } from 'lib/utils/date';
 import { JaEllerNei } from 'lib/utils/form';
 import { beregnReduksjonsdatoVedNyttOpphold, beregnTidligsteReduksjonsdato } from 'lib/utils/institusjonsopphold';
 import { parse } from 'date-fns';
 import { NyVurderingExpandableCard } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
-import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
-import { getErReduksjonEllerIkke } from 'components/periodisering/VurderingStatusTag';
 import { AccordionsSignal } from 'hooks/AccordionSignalHook';
+import { getErReduksjonEllerIkke, VurderingStatus } from 'components/periodisering/VurderingStatusTag';
+import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
+import { HelseinstitusjonTidligereVurdering } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/helseinstitusjontidligerevurdering/HelseinstitusjonTidligereVurdering';
+import { Dato } from 'lib/types/Dato';
 
 interface Props {
   form: UseFormReturn<HelseinstitusjonsFormFields>;
   oppholdIndex: number;
   readonly: boolean;
   opphold: HelseinstitusjonGrunnlag['opphold'][0];
+  tidligereVurderinger?: HelseInstiusjonVurdering[] | null;
   accordionsSignal: AccordionsSignal;
   minFomDato?: string;
   alleOpphold: HelseinstitusjonGrunnlag['opphold'];
@@ -34,6 +37,7 @@ interface Props {
 export const HelseinstitusjonOppholdGruppe = ({
   form,
   oppholdIndex,
+  tidligereVurderinger,
   accordionsSignal,
   readonly: formReadOnly,
   opphold,
@@ -68,6 +72,11 @@ export const HelseinstitusjonOppholdGruppe = ({
     name: `helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger`,
   });
 
+  const foersteNyePeriode =
+    vurderinger.length > 0
+      ? form.watch(`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.0.periode.fom`)
+      : null;
+
   return (
     <Box
       background="surface-default"
@@ -96,6 +105,20 @@ export const HelseinstitusjonOppholdGruppe = ({
       {/* VURDERINGER */}
       <Box padding="4">
         <VStack gap="0">
+          {tidligereVurderinger?.map((vurdering) => {
+            return (
+              <TidligereVurderingExpandableCard
+                key={vurdering.oppholdId}
+                fom={new Dato(vurdering.periode.fom).dato}
+                tom={new Dato(vurdering.periode.tom).dato}
+                foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+                vurderingStatus={VurderingStatus.Reduksjon}
+              >
+                <HelseinstitusjonTidligereVurdering vurdering={vurdering} />
+              </TidligereVurderingExpandableCard>
+            );
+          })}
+
           {vurderinger.map((vurdering, vurderingIndex) => {
             const erFørsteVurdering = vurderingIndex === 0;
 

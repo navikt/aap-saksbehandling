@@ -81,6 +81,8 @@ export type Soningsgrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.SoningsGrunnlagDto'];
 export type HelseinstitusjonGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.HelseinstitusjonGrunnlagDto'];
+export type HelseInstiusjonVurdering =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.HelseinstitusjonVurderingDto'];
 export type Institusjonsopphold =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.InstitusjonsoppholdDto'];
 

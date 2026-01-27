@@ -4116,44 +4116,6 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  '/api/drift/behandling/{referanse}/info': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          /** @description referanse */
-          referanse: string;
-        };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description OK */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.drift.BehandlingDriftsinfoDTO'];
-          };
-        };
-      };
-    };
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
   '/api/behandling/{referanse}/utbetaling/simulering': {
     parameters: {
       query?: never;
@@ -10816,6 +10778,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.HelseinstitusjonGrunnlagDto': {
       'harTilgangTil\u00C5Saksbehandle': boolean;
       opphold: components['schemas']['no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.InstitusjonsoppholdDto'][];
+      vedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.HelseoppholdDto'][];
       vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.HelseoppholdDto'][];
       vurdertAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
     };
@@ -12025,10 +11988,6 @@ export interface components {
       dato: string;
       enhetsnavn?: string | null;
       ident: string;
-    };
-    'no.nav.aap.behandlingsflyt.drift.BehandlingDriftsinfoDTO': {
-      avklaringsbehov: components['schemas']['no.nav.aap.behandlingsflyt.flyt.AvklaringsbehovDTO'][];
-      behandling: components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO'];
     };
     'no.nav.aap.behandlingsflyt.drift.`DriftApiKt$driftApi$1$KjorFraSteg`': {
       /** @enum {string} */
@@ -14002,8 +13961,7 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AndreUtbetalingerDto': {
       afp?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AfpDto'];
-      /** @enum {string|null} */
-      'l\u00F8nn'?: 'Ja' | 'Nei' | null;
+      'l\u00F8nn'?: string | null;
       'st\u00F8nad'?:
         | (
             | 'ØKONOMISK_SOSIALHJELP'
@@ -14220,16 +14178,39 @@ export interface components {
         | 'INSTITUSJONSOPPHOLD';
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Inst2KafkaDto': {
+      avdelingsnavn?: string | null;
+      endretAv?: string | null;
+      /**
+       * Format: date-time
+       * @example 2025-04-01T12:30:00
+       */
+      endringstidspunkt?: string | null;
       /**
        * Format: date
        * @example 2025-04-01
        */
-      sluttdato?: string | null;
+      faktiskSluttdato?: string | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      forventetSluttdato?: string | null;
+      institusjonsnavn?: string | null;
+      institusjonstype?: string | null;
+      kategori?: string | null;
+      kilde?: string | null;
+      /** Format: int64 */
+      oppholdId: number;
+      organisasjonsnummer?: string | null;
+      overfoert?: boolean | null;
+      registrertAv?: string | null;
       /**
        * Format: date
        * @example 2025-04-01
        */
       startdato: string;
+      tssEksternId: string;
+      varighet?: string | null;
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.InstitusjonsOppholdHendelse': components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.InstitusjonsOppholdHendelseV0'];
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.InstitusjonsOppholdHendelseV0': {
