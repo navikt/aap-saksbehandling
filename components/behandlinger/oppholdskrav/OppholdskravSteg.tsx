@@ -170,11 +170,11 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
             key={vurdering.id}
             accordionsSignal={accordionsSignal}
             fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-            vurderingStatus={getErOppfyltEllerIkkeStatus(
+            vurderingStatus={
               form.watch(`vurderinger.${index}.oppfyller`)
-                ? form.watch(`vurderinger.${index}.oppfyller`) === JaEllerNei.Ja
+                ? getErOppfyltEllerIkkeStatus(form.watch(`vurderinger.${index}.oppfyller`) === JaEllerNei.Ja)
                 : undefined
-            )}
+            }
             nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
             isLast={index === vurderingerFields.length - 1}
             vurdertAv={vurdering.vurdertAv}
