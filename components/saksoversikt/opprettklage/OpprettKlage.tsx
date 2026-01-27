@@ -12,7 +12,6 @@ import styles from './OpprettKlage.module.css';
 import { isSuccess } from 'lib/utils/api';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { parse } from 'date-fns';
-import { v4 as uuid } from 'uuid';
 
 export interface KlageFormFields {
   kravMottatt: string;
@@ -30,7 +29,7 @@ export const OpprettKlage = ({ sak }: { sak: SaksInfo }) => {
       saksnummer: sak.saksnummer,
       referanse: {
         type: 'MANUELL_OPPRETTELSE',
-        verdi: uuid(),
+        verdi: crypto.randomUUID(),
       },
       type: 'KLAGE',
       kanal: 'DIGITAL',
