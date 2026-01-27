@@ -64,6 +64,7 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
   const form = useForm<OppholdskravForm>({
     defaultValues,
     reValidateMode: 'onChange',
+    shouldUnregister: true,
   });
 
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
@@ -85,6 +86,7 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
       land: '',
       landAnnet: undefined,
       fraDato: undefined,
+      erNyVurdering: true,
     });
   }
 
