@@ -89,6 +89,8 @@ export function formatterÅrsakTilOpprettelseTilTekst(årsakTilOpprettelse: Års
       return 'Aktivitetsplikt 11-9';
     case 'TILBAKEKREVING_HENDELSE':
       return 'Mulig feilutbetaling';
+    case 'UTVID_VEDTAKSLENGDE':
+      return 'Utvid vedtakslengde';
     default:
       return 'Ukjent årsak';
   }
