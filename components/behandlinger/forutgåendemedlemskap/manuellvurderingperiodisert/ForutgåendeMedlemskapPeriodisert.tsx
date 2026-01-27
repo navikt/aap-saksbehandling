@@ -1,7 +1,7 @@
 'use client';
 
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { Behovstype, JaEllerNei } from 'lib/utils/form';
+import { Behovstype } from 'lib/utils/form';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import {
   BeregningTidspunktGrunnlag,
@@ -24,6 +24,7 @@ import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { ForutgåendeMedlemskapVurderingForm } from 'components/behandlinger/forutgåendemedlemskap/manuellvurderingperiodisert/types';
 import {
+  erNyVurderingOppfylt,
   getDefaultValuesFromGrunnlag,
   hentPeriodiserteVerdierFraMellomlagretVurdering,
   mapFormTilDto,
@@ -167,9 +168,10 @@ export const ForutgåendeMedlemskapPeriodisert = ({
           nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
           isLast={index === vurderingerFields.length - 1}
           vurderingStatus={getErOppfyltEllerIkkeStatus(
-            form.watch(`vurderinger.${index}.harForutgåendeMedlemskap`) === JaEllerNei.Ja ||
-              form.watch(`vurderinger.${index}.unntaksvilkår`) === 'A' ||
-              form.watch(`vurderinger.${index}.unntaksvilkår`) === 'B'
+            erNyVurderingOppfylt(
+              form.watch(`vurderinger.${index}.harForutgåendeMedlemskap`),
+              form.watch(`vurderinger.${index}.unntaksvilkår`)
+            )
           )}
           vurdertAv={vurdering.vurdertAv}
           kvalitetssikretAv={vurdering.kvalitetssikretAv}
