@@ -61,7 +61,7 @@ export const valgfriDelmalMedAlternativer: DelmalReferanse = {
   _type: 'delmalRef',
   delmal: {
     ...sanityAttrs,
-    _id: '1',
+    _id: 'valgfriDelmalKey-1',
     beskrivelse: 'En valgfri delmal',
     teksteditor: [
       {
