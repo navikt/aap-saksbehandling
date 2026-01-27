@@ -9,7 +9,7 @@ export interface VisningState {
   visningModus: VisningModus;
   formReadOnly: boolean;
   visningActions: VisningActions;
-  erAktivUtenAvbryt?: boolean;
+  erAktivUtenAvbryt: boolean;
 }
 
 export interface VisningActions {

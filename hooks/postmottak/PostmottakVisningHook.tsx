@@ -44,5 +44,6 @@ export function usePostmottakVilkårskortVisning(readOnly: boolean, steg: StegTy
       onEndreClick: onEndreClick,
       onBekreftClick: onBekreftClick,
     },
+    erAktivUtenAvbryt: visning === VisningModus.AKTIV_UTEN_AVBRYT,
   };
 }
