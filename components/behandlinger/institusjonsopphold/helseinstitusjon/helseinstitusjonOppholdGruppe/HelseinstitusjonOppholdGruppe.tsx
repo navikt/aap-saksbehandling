@@ -6,15 +6,9 @@ import { HelseinstitusjonsFormFields } from 'components/behandlinger/institusjon
 import { HelseinstitusjonGrunnlag, HelseInstiusjonVurdering } from 'lib/types/types';
 import React from 'react';
 import styles from 'components/behandlinger/institusjonsopphold/helseinstitusjon/helseinstitusjonOppholdGruppe/HelseinstitusjonOppholdGruppe.module.css';
-import {
-  DATO_FORMATER,
-  formatDatoMedMånedsnavn,
-  formaterDatoForFrontend,
-  parseDatoFraDatePicker,
-} from 'lib/utils/date';
+import { formatDatoMedMånedsnavn, formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { JaEllerNei } from 'lib/utils/form';
-import { beregnReduksjonsdatoVedNyttOpphold, beregnTidligsteReduksjonsdato } from 'lib/utils/institusjonsopphold';
-import { parse } from 'date-fns';
+import { addDays } from 'date-fns';
 import { NyVurderingExpandableCard } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { AccordionsSignal } from 'hooks/AccordionSignalHook';
@@ -30,7 +24,6 @@ interface Props {
   opphold: HelseinstitusjonGrunnlag['opphold'][0];
   tidligereVurderinger?: HelseInstiusjonVurdering[] | null;
   accordionsSignal: AccordionsSignal;
-  alleOpphold: HelseinstitusjonGrunnlag['opphold'];
 }
 
 export const HelseinstitusjonOppholdGruppe = ({
@@ -40,18 +33,7 @@ export const HelseinstitusjonOppholdGruppe = ({
   accordionsSignal,
   readonly: formReadOnly,
   opphold,
-  alleOpphold,
 }: Props) => {
-  // Beregn riktig fom for ny vurdering
-  const tidligsteReduksjonsdato = (() => {
-    if (oppholdIndex === 0) {
-      return beregnTidligsteReduksjonsdato(opphold.oppholdFra);
-    }
-    const forrigeOppholdAvsluttet = alleOpphold[oppholdIndex - 1]?.avsluttetDato ?? '';
-    const nåværendeOppholdFra = opphold.oppholdFra ?? '';
-    return beregnReduksjonsdatoVedNyttOpphold(forrigeOppholdAvsluttet, nåværendeOppholdFra);
-  })();
-
   const {
     fields: vurderinger,
     append,
@@ -60,6 +42,15 @@ export const HelseinstitusjonOppholdGruppe = ({
     control: form.control,
     name: `helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger`,
   });
+
+  function beregnFraOgMedDatoForNyVurdering() {
+    const oppholdForm = form.watch(`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger`);
+    const forrigeFom = form.watch(
+      `helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${oppholdForm.length - 1}.periode.fom`
+    );
+
+    return formaterDatoForFrontend(addDays(new Dato(forrigeFom).dato, 1));
+  }
 
   const foersteNyePeriode =
     vurderinger.length > 0
@@ -119,34 +110,10 @@ export const HelseinstitusjonOppholdGruppe = ({
               `helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.harFasteUtgifter`
             );
 
-            const { ikkeValgt, reduksjon } = (() => {
-              const ikkeValgt =
-                faarFriKostOgLosji === undefined && forsoergerEktefelle === undefined && harFasteUtgifter === undefined;
-              const reduksjon =
-                faarFriKostOgLosji === JaEllerNei.Ja &&
-                forsoergerEktefelle === JaEllerNei.Nei &&
-                harFasteUtgifter === JaEllerNei.Nei;
-              return { ikkeValgt, reduksjon };
-            })();
-
-            const erNyVurdering =
-              vurdering?.status === 'UAVKLART' ||
-              !vurdering?.status ||
-              !vurdering.begrunnelse ||
-              vurdering.begrunnelse.trim() === '';
-            const periodeLabel = erNyVurdering ? 'Ny vurdering:' : 'Vurdering:';
-            const periodeTekst = (() => {
-              if (ikkeValgt || !vurdering?.periode.fom) return '[Ikke valgt]';
-
-              const fomDate = parse(vurdering.periode.fom, DATO_FORMATER.ddMMyyyy, new Date());
-              const tomDate = parse(vurdering.periode.tom, DATO_FORMATER.ddMMyyyy, new Date());
-              const fom = Number.isNaN(fomDate.getTime()) ? '[Ugyldig dato]' : formaterDatoForFrontend(fomDate);
-              const tom =
-                vurdering.periode.tom && !Number.isNaN(tomDate.getTime())
-                  ? ` – ${formaterDatoForFrontend(tomDate)}`
-                  : '';
-              return `${fom}${tom}`;
-            })();
+            const reduksjon =
+              faarFriKostOgLosji === JaEllerNei.Ja &&
+              forsoergerEktefelle === JaEllerNei.Nei &&
+              harFasteUtgifter === JaEllerNei.Nei;
 
             return (
               <div key={vurderingIndex} className={styles.vurderingRad}>
@@ -180,8 +147,6 @@ export const HelseinstitusjonOppholdGruppe = ({
                         vurderingIndex={vurderingIndex}
                         readonly={formReadOnly}
                         opphold={opphold}
-                        minFomDato={vurderingIndex > 0 ? vurderinger[vurderingIndex - 1]?.periode?.fom : undefined}
-                        alleOpphold={alleOpphold}
                       />
                     </div>
                   </div>
@@ -207,10 +172,9 @@ export const HelseinstitusjonOppholdGruppe = ({
                 forsoergerEktefelle: undefined,
                 faarFriKostOgLosji: undefined,
                 periode: {
-                  fom: tidligsteReduksjonsdato,
+                  fom: beregnFraOgMedDatoForNyVurdering(),
                   tom: formaterDatoForFrontend(opphold.avsluttetDato || ''),
                 },
-                status: 'UAVKLART',
               })
             }
           >

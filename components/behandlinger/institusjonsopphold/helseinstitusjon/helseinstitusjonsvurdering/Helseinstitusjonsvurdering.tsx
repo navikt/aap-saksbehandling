@@ -6,7 +6,6 @@ import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import {
-  beregnReduksjonsdatoVedNyttOpphold,
   beregnTidligsteReduksjonsdato,
   lagReduksjonsBeskrivelse,
   validerReduksjonsdatoInnenforOpphold,
@@ -14,7 +13,7 @@ import {
 import { HelseinstitusjonGrunnlag } from 'lib/types/types';
 import { validerDato } from 'lib/validation/dateValidation';
 import { useEffect } from 'react';
-import { formaterDatoForFrontend } from 'lib/utils/date';
+import { Dato } from 'lib/types/Dato';
 
 interface Props {
   form: UseFormReturn<HelseinstitusjonsFormFields>;
@@ -22,20 +21,10 @@ interface Props {
   vurderingIndex: number;
   readonly: boolean;
   opphold: HelseinstitusjonGrunnlag['opphold'][0];
-  // minFomDato?: Date | null; // TODO Thao
   minFomDato?: string;
-  alleOpphold: HelseinstitusjonGrunnlag['opphold'];
 }
 
-export const Helseinstitusjonsvurdering = ({
-  form,
-  oppholdIndex,
-  vurderingIndex,
-  readonly,
-  opphold,
-  minFomDato,
-  alleOpphold,
-}: Props) => {
+export const Helseinstitusjonsvurdering = ({ form, oppholdIndex, vurderingIndex, readonly, opphold }: Props) => {
   const faarFriKostOgLosji = form.watch(
     `helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.faarFriKostOgLosji`
   );
@@ -72,36 +61,19 @@ export const Helseinstitusjonsvurdering = ({
     forsoergerEktefelle === JaEllerNei.Nei &&
     harFasteUtgifter === JaEllerNei.Nei;
 
-  // Beregn riktig fom for ny vurdering
-  const tidligsteReduksjonsdato = (() => {
-    if (oppholdIndex === 0) {
-      return beregnTidligsteReduksjonsdato(opphold.oppholdFra);
-    }
-    const forrigeOppholdAvsluttet = alleOpphold[oppholdIndex - 1]?.avsluttetDato ?? '';
-    const nåværendeOppholdFra = opphold.oppholdFra ?? '';
-    return beregnReduksjonsdatoVedNyttOpphold(forrigeOppholdAvsluttet, nåværendeOppholdFra);
-  })();
-
-  // *** Autofyll FOM om det blir reduksjon ***
-  const defaultFom = minFomDato
-    ? '' //formaterDatoForFrontend(addDays(minFomDato, 1))
-    : formaterDatoForFrontend(opphold.oppholdFra);
-  useEffect(() => {
-    const periodeFomFeltNavn = `helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.periode.fom`;
-    const currentFom = form.getValues(periodeFomFeltNavn as any);
-    if (reduksjon && currentFom !== tidligsteReduksjonsdato) {
-      if (currentFom > tidligsteReduksjonsdato) {
-        form.setValue(periodeFomFeltNavn as any, currentFom, { shouldValidate: true });
-      } else {
-        form.setValue(periodeFomFeltNavn as any, tidligsteReduksjonsdato, { shouldValidate: true });
-      }
-    } else if (!reduksjon && currentFom !== defaultFom) {
-      // Sett tilbake til default
-      form.setValue(periodeFomFeltNavn as any, defaultFom, { shouldValidate: true });
-    }
-  }, [reduksjon, tidligsteReduksjonsdato, defaultFom, form, oppholdIndex, vurderingIndex]);
-
   const reduksjonsBeskrivelse = lagReduksjonsBeskrivelse(opphold.oppholdFra);
+
+  useEffect(() => {
+    // Vi setter bare fom dato på denne måten i den første vurderingen
+    if (vurderingIndex === 0) {
+      form.setValue(
+        `helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.periode.fom`,
+        reduksjon
+          ? beregnTidligsteReduksjonsdato(opphold.oppholdFra)
+          : new Dato(opphold.oppholdFra).formaterForFrontend()
+      );
+    }
+  }, [opphold.oppholdFra, vurderingIndex, reduksjon, oppholdIndex]);
 
   return (
     <div className={'flex-column'}>
@@ -187,12 +159,12 @@ export const Helseinstitusjonsvurdering = ({
             required: 'Du må sette en dato for når reduksjonen skal stoppes',
             validate: {
               gyldigDato: (value) => validerDato(value as string),
-              etterMinDato: (value) => {
-                if (minFomDato && value && value <= minFomDato) {
-                  return 'Dato må være etter ' + minFomDato;
-                }
-                return '';
-              },
+              // etterMinDato: (value) => {
+              //   if (minFomDato && value && value <= minFomDato) {
+              //     return 'Dato må være etter ' + minFomDato;
+              //   }
+              //   return '';
+              // },
             },
           }}
           readOnly={readonly}

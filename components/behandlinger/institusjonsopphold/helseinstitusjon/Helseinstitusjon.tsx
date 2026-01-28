@@ -2,10 +2,10 @@
 
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { InstitusjonsoppholdTabell } from 'components/behandlinger/institusjonsopphold/InstitusjonsoppholdTabell';
-import { HelseinstitusjonGrunnlag, MellomlagretVurdering, Periode } from 'lib/types/types';
+import { HelseinstitusjonGrunnlag, HelseInstiusjonVurdering, MellomlagretVurdering, Periode } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { HelseinstitusjonOppholdGruppe } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/helseinstitusjonOppholdGruppe/HelseinstitusjonOppholdGruppe';
-import { DATO_FORMATER, formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
+import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 
 import React, { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
@@ -13,9 +13,10 @@ import { useConfigForm } from 'components/form/FormHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
-import { parse } from 'date-fns';
+import { parse, subDays } from 'date-fns';
 import { useFieldArray } from 'react-hook-form';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
+import { Dato } from 'lib/types/Dato';
 
 interface Props {
   grunnlag: HelseinstitusjonGrunnlag;
@@ -41,7 +42,6 @@ export interface Vurdering {
   harFasteUtgifter?: JaEllerNei;
   forsoergerEktefelle?: JaEllerNei;
   faarFriKostOgLosji?: JaEllerNei;
-  status?: 'UAVKLART' | 'AVSLÅTT' | 'GODKJENT';
 }
 
 type DraftFormFields = Partial<HelseinstitusjonsFormFields>;
@@ -80,24 +80,26 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
-      const vurderinger = data.helseinstitusjonsvurderinger.flatMap((opphold) => {
-        // Hent alle vurderinger for dette oppholdet
-        if (!opphold.vurderinger || opphold.vurderinger.length === 0) {
-          throw new Error('Mangler vurderinger for opphold');
-        }
+      const vurderinger: HelseInstiusjonVurdering[] = data.helseinstitusjonsvurderinger.flatMap((opphold) => {
+        return opphold.vurderinger.map((vurdering, index) => {
+          const nesteVurdering = opphold.vurderinger.at(index + 1);
 
-        return opphold.vurderinger.map((vurdering) => {
-          const { fomDate, tomDate } = parseOgValiderPeriode(vurdering.periode);
+          const fom = formaterDatoForBackend(parse(vurdering.periode.fom, 'dd.MM.yyyy', new Date()));
+          const tom = !nesteVurdering
+            ? // tom dato for siste vurdering skal alltid være siste dag i oppholdet
+              formaterDatoForBackend(parse(opphold.periode.tom, 'dd.MM.yyyy', new Date()))
+            : // tom skal være dagen før fom i neste vurdering
+              formaterDatoForBackend(subDays(new Dato(nesteVurdering.periode.fom).dato, 1));
 
           return {
             oppholdId: vurdering.oppholdId,
             begrunnelse: vurdering.begrunnelse,
-            harFasteUtgifter: vurdering.harFasteUtgifter === JaEllerNei.Ja,
             faarFriKostOgLosji: vurdering.faarFriKostOgLosji === JaEllerNei.Ja,
             forsoergerEktefelle: vurdering.forsoergerEktefelle === JaEllerNei.Ja,
+            harFasteUtgifter: vurdering.harFasteUtgifter === JaEllerNei.Ja,
             periode: {
-              fom: formaterDatoForBackend(fomDate),
-              tom: formaterDatoForBackend(tomDate),
+              fom: fom,
+              tom: tom,
             },
           };
         });
@@ -109,7 +111,7 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
           behov: {
             behovstype: Behovstype.AVKLAR_HELSEINSTITUSJON,
             helseinstitusjonVurdering: {
-              vurderinger,
+              vurderinger: vurderinger,
             },
           },
           referanse: behandlingsreferanse,
@@ -160,37 +162,11 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
           oppholdIndex={oppholdIndex}
           form={form}
           readonly={formReadOnly}
-          alleOpphold={grunnlag.opphold}
         />
       ))}
     </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };
-
-function parseOgValiderPeriode(periode: Periode) {
-  const fomDate = parse(periode.fom, DATO_FORMATER.ddMMyyyy, new Date());
-  const tomDate = parse(periode.tom, DATO_FORMATER.ddMMyyyy, new Date());
-
-  // Valider at datoer er satt og gyldige
-  if (isNaN(fomDate.getTime())) {
-    throw new Error(`Ugyldig fom-dato: ${periode.fom}`);
-  }
-  if (isNaN(tomDate.getTime())) {
-    throw new Error(`Ugyldig tom-dato: ${periode.tom}`);
-  }
-
-  // Valider at fom ikke er etter tom
-  if (fomDate > tomDate) {
-    throw new Error(`Ugyldig periode: fom-dato ${periode.fom} er etter tom-dato ${periode.tom}`);
-  }
-
-  // Valider at tom ikke er før fom (redundant, men beholdt for klarhet)
-  if (tomDate < fomDate) {
-    throw new Error(`Ugyldig periode: tom-dato ${periode.tom} er før fom-dato ${periode.fom}`);
-  }
-
-  return { fomDate, tomDate };
-}
 
 function mapVurderingToDraftFormFields(
   vurderinger: HelseinstitusjonGrunnlag['vurderinger'],
@@ -217,7 +193,6 @@ function mapVurderingToDraftFormFields(
               fom: formaterDatoForFrontend(vurdering.periode.fom),
               tom: formaterDatoForFrontend(vurdering.periode.tom),
             },
-            status: item.status,
           })),
         };
       }
@@ -232,14 +207,13 @@ function mapVurderingToDraftFormFields(
           {
             oppholdId: matchendeOpphold?.oppholdId ?? '',
             begrunnelse: '',
+            faarFriKostOgLosji: undefined,
             harFasteUtgifter: undefined,
             forsoergerEktefelle: undefined,
-            faarFriKostOgLosji: undefined,
             periode: {
-              fom: formaterDatoForFrontend(item.periode.fom),
+              fom: '',
               tom: formaterDatoForFrontend(matchendeOpphold?.avsluttetDato ?? matchendeOpphold?.oppholdFra ?? ''),
             },
-            status: 'UAVKLART',
           },
         ],
       };
