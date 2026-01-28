@@ -14,10 +14,12 @@ const user = userEvent.setup();
 
 const grunnlagUtenVurdering: HelseinstitusjonGrunnlag = {
   harTilgangTilÅSaksbehandle: true,
+  vedtatteVurderinger: [],
   opphold: [
     {
       institusjonstype: 'Helseinstitusjon',
       oppholdstype: 'Heldøgnpasient',
+      oppholdId: '123',
       status: 'AKTIV',
       oppholdFra: '2022-10-24',
       avsluttetDato: '2025-10-24',
@@ -26,6 +28,7 @@ const grunnlagUtenVurdering: HelseinstitusjonGrunnlag = {
   ],
   vurderinger: [
     {
+      oppholdId: '123',
       periode: {
         fom: '2022-10-24',
         tom: '2024-10-23',
@@ -38,24 +41,28 @@ const grunnlagUtenVurdering: HelseinstitusjonGrunnlag = {
 
 const grunnlagMedVurdering: HelseinstitusjonGrunnlag = {
   harTilgangTilÅSaksbehandle: true,
+  vedtatteVurderinger: [],
   opphold: [
     {
       institusjonstype: 'Helseinstitusjon',
       oppholdstype: 'Heldøgnpasient',
       status: 'AKTIV',
       oppholdFra: '2022-10-24',
+      oppholdId: '123',
       avsluttetDato: '2025-10-24',
       kildeinstitusjon: 'St. Mungos Hospital',
     },
   ],
   vurderinger: [
     {
+      oppholdId: '123',
       periode: {
         fom: '2022-10-24',
         tom: '2024-10-23',
       },
       vurderinger: [
         {
+          oppholdId: '123',
           begrunnelse: 'Dette er min vurdering som er bekreftet',
           periode: {
             fom: '2022-10-24',
