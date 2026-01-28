@@ -31,7 +31,7 @@ export function trengerTomPeriodisertVurdering(grunnlag: PeriodisertGrunnlag | u
   //
   if (
     !grunnlag ||
-    grunnlag.behøverVurderinger.length > 0 ||
+    (grunnlag.nyeVurderinger.length === 0 && grunnlag.behøverVurderinger.length > 0) ||
     (grunnlag.nyeVurderinger.length === 0 && grunnlag.sisteVedtatteVurderinger.length === 0)
   ) {
     return true;
