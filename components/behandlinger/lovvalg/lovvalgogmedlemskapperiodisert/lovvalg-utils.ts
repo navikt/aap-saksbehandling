@@ -12,13 +12,12 @@ import {
   LovvalgOgMedlemskapManuellVurderingForm,
 } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/types';
 import { parse, sub } from 'date-fns';
-import { getFraDatoFraGrunnlagForFrontend } from 'lib/utils/periodisering';
+import { getFraDatoFraGrunnlagForFrontend, trengerTomPeriodisertVurdering } from 'lib/utils/periodisering';
 
 export function getDefaultValuesFromGrunnlag(
   grunnlag?: PeriodisertLovvalgMedlemskapGrunnlag
 ): LovOgMedlemskapVurderingForm {
-  if (grunnlag == null || (grunnlag.nyeVurderinger.length === 0 && grunnlag.sisteVedtatteVurderinger.length === 0)) {
-    // Vi har ingen tidligere vurderinger eller nye vurderinger, legg til en tom-default-periode
+  if (trengerTomPeriodisertVurdering(grunnlag)) {
     return {
       vurderinger: [
         {

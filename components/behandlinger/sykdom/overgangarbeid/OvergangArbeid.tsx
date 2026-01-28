@@ -33,7 +33,7 @@ import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingS
 
 interface Props {
   behandlingVersjon: number;
-  grunnlag?: OvergangArbeidGrunnlag;
+  grunnlag: OvergangArbeidGrunnlag;
   readOnly: boolean;
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }

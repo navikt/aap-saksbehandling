@@ -27,7 +27,7 @@ import {
 } from 'components/behandlinger/sykdom/bistandsbehov/bistandsbehov-utils';
 import { Dato } from 'lib/types/Dato';
 import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovMellomlagringParser';
-import { getFraDatoFraGrunnlagForFrontend } from 'lib/utils/periodisering';
+import { getFraDatoFraGrunnlagForFrontend, trengerTomPeriodisertVurdering } from 'lib/utils/periodisering';
 import { Link, VStack } from '@navikt/ds-react';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
@@ -36,7 +36,7 @@ import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingS
 interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
-  grunnlag?: BistandsGrunnlag;
+  grunnlag: BistandsGrunnlag;
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 export interface BistandForm {
@@ -199,9 +199,8 @@ export const BistandsbehovPeriodisert = ({
     </VilkårskortPeriodisert>
   );
 
-  function mapVurderingerToBistandForm(grunnlag?: BistandsGrunnlag): BistandForm {
-    if (!grunnlag || (grunnlag.nyeVurderinger.length === 0 && grunnlag.sisteVedtatteVurderinger.length === 0)) {
-      // Vi har ingen tidligere vurderinger eller nye vurderinger, legg til en tom-default-periode
+  function mapVurderingerToBistandForm(grunnlag: BistandsGrunnlag): BistandForm {
+    if (trengerTomPeriodisertVurdering(grunnlag)) {
       return {
         vurderinger: [
           {
