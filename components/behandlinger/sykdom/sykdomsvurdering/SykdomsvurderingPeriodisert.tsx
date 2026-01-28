@@ -204,7 +204,11 @@ export const SykdomsvurderingPeriodisert = ({
             accordionsSignal={accordionsSignal}
             fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
             vurderingStatus={getErOppfyltEllerIkkeStatus(
-              erNyVurderingOppfylt(form.watch(`vurderinger.${index}`), førsteDatoSomKanVurderes)
+              erNyVurderingOppfylt(
+                form.watch(`vurderinger.${index}`),
+                førsteDatoSomKanVurderes,
+                grunnlag.skalVurdereYrkesskade
+              )
             )}
             nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
             isLast={index === nyeVurderingerFields.length - 1}

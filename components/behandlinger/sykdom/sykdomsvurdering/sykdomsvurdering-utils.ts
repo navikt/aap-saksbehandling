@@ -13,12 +13,13 @@ export function skalVurdereVissVarighetSjekk(
 }
 export function erNyVurderingOppfylt(
   vurdering: Sykdomsvurdering,
-  rettighetsperiodeStartDato: Date
+  rettighetsperiodeStartDato: Date,
+  skalVurdereYrkesskade: boolean
 ): boolean | undefined {
   if (
     vurdering.harSkadeSykdomEllerLyte === JaEllerNei.Nei ||
     vurdering.erArbeidsevnenNedsatt === JaEllerNei.Nei ||
-    vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten === JaEllerNei.Nei ||
+    (!skalVurdereYrkesskade && vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten === JaEllerNei.Nei) ||
     vurdering.erSkadeSykdomEllerLyteVesentligdel === JaEllerNei.Nei ||
     vurdering.erNedsettelseIArbeidsevneAvEnVissVarighet === JaEllerNei.Nei ||
     vurdering.erNedsettelseIArbeidsevneMerEnnFørtiProsent === JaEllerNei.Nei ||
@@ -27,10 +28,7 @@ export function erNyVurderingOppfylt(
     return false;
   }
 
-  if (
-    vurdering.erNedsettelseIArbeidsevneAvEnVissVarighet === JaEllerNei.Ja ||
-    vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense === JaEllerNei.Ja
-  ) {
+  if (vurdering.erNedsettelseIArbeidsevneAvEnVissVarighet === JaEllerNei.Ja) {
     return true;
   }
 
