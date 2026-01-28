@@ -10,7 +10,6 @@ import { FormField } from 'components/form/FormField';
 import { VStack } from '@navikt/ds-react';
 import { FormEvent } from 'react';
 import { parse } from 'date-fns';
-import { v4 as uuidv4 } from 'uuid';
 import { Brudd } from 'lib/types/types';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 
@@ -64,7 +63,7 @@ export const Mellomlagre11_9Skjema = ({
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
       lagre({
-        id: uuidv4(),
+        id: crypto.randomUUID(),
         begrunnelse: data.begrunnelse,
         dato: formaterDatoForBackend(parse(data.dato, 'dd.MM.yyyy', new Date())),
         brudd: data.brudd as Brudd,

@@ -1,5 +1,4 @@
 import { MellomlagretVurdering, StegType } from 'lib/types/types';
-import { VisningActions, VisningModus } from 'hooks/saksbehandling/visning/VisningHook';
 import styles from './VilkårskortPeriodisert.module.css';
 import { Button, Detail, Heading, HGrid, HStack, VStack } from '@navikt/ds-react';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
@@ -10,6 +9,7 @@ import { FormErrorSummary } from 'components/formerrorsummary/FormErrorSummary';
 import { FormEvent, ReactNode } from 'react';
 import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { ApiException } from 'lib/utils/api';
+import { VisningActions, VisningModus } from 'lib/types/visningTypes';
 
 interface VilkårsKortPeriodisertProps {
   heading: string;
@@ -51,7 +51,7 @@ export const VilkårskortPeriodisert = ({
   onLeggTilVurdering,
   formReset,
   errorList,
-}: VilkårsKortPeriodisertProps) => {
+}: Omit<VilkårsKortPeriodisertProps, 'vurdertAvAnsatt' | 'kvalitetssikretAv'>) => {
   const classNameBasertPåEnhet = vilkårTilhørerNavKontor ? styles.vilkårsKortNAV : styles.vilkårsKortNAY;
   const erAktivtSteg = visningModus === 'AKTIV_UTEN_AVBRYT' || visningModus === 'AKTIV_MED_AVBRYT';
 

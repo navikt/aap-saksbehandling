@@ -6,7 +6,6 @@ import { DetaljertBehandling, NyÅrsakTilBehandlingV0 } from 'lib/types/types';
 import { useSendHendelseOgVentPåProsessering } from 'hooks/saksbehandling/SendHendelseOgVentPåProsessering';
 import styles from './VurderRettighetsperiodeModal.module.css';
 import { Behovstype } from 'lib/utils/form';
-import { v4 as uuid } from 'uuid';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { FormEvent } from 'react';
@@ -57,7 +56,7 @@ export const VurderRettighetsperiodeModal = ({
             saksnummer: saksnummer,
             referanse: {
               type: 'SAKSBEHANDLER_KELVIN_REFERANSE',
-              verdi: uuid(),
+              verdi: crypto.randomUUID(),
             },
             type: 'NY_ÅRSAK_TIL_BEHANDLING',
             kanal: 'DIGITAL',

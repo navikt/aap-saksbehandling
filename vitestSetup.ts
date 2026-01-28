@@ -40,7 +40,7 @@ export const resetMockFlytResponse = () => {
 beforeAll(() => {
   vi.mock('swr', () => ({
     default: vi.fn((key) => {
-      if (key?.startsWith('api/flyt')) {
+      if (key?.startsWith('api/flyt') || key?.startsWith('postmottak/api/post/')) {
         return {
           data: { type: 'SUCCESS', status: 200, data: mockFlytResponse },
           error: undefined,
@@ -55,7 +55,14 @@ beforeAll(() => {
   vi.mock('next/navigation', () => ({
     useParams: vi
       .fn()
-      .mockReturnValue({ saksId: '123', behandlingsReferanse: '123', behandlingsType: 'AVKLAR_SYKDOM' }),
+      // TODO: Vi bruker dessverre både behandlingsReferanse og behandlingsreferanse i appen
+      // Må slås sammen på et eller annet tidspunkt
+      .mockReturnValue({
+        saksId: '123',
+        behandlingsReferanse: '123',
+        behandlingsreferanse: '123',
+        behandlingsType: 'AVKLAR_SYKDOM',
+      }),
     useRouter: vi.fn(),
   }));
 

@@ -1,28 +1,25 @@
 import { useEffect, useState } from 'react';
-import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
-import { MellomlagretVurdering, StegType } from 'lib/types/types';
+import { usePostmottakRequiredFlyt } from 'hooks/postmottak/PostmottakFlytHook';
+import { StegType } from 'lib/types/postmottakTypes';
 import { VisningModus, VisningState } from 'lib/types/visningTypes';
 import { hentVisning, isFormReadOnly } from 'lib/utils/visning';
 
-export function useVilkårskortVisning(
-  readOnly: boolean,
-  steg: StegType,
-  mellomlagring: MellomlagretVurdering | undefined
-): VisningState {
-  const { flyt } = useRequiredFlyt();
+export function usePostmottakVilkårskortVisning(readOnly: boolean, steg: StegType): VisningState {
+  const { flyt } = usePostmottakRequiredFlyt();
 
   const erAktivtSteg = flyt.aktivtSteg === steg;
-  const initialVisningModus = hentVisning(readOnly, erAktivtSteg, mellomlagring);
+  const initialVisningModus = hentVisning(readOnly, erAktivtSteg, undefined);
   const initialFormReadOnly = isFormReadOnly(initialVisningModus);
+
   const [visning, setVisning] = useState<VisningModus>(initialVisningModus);
   const [formReadOnly, setFormReadOnly] = useState<boolean>(initialFormReadOnly);
 
   useEffect(() => {
-    const visning = hentVisning(readOnly, erAktivtSteg, mellomlagring);
+    const visning = hentVisning(readOnly, erAktivtSteg, undefined);
     const formReadOnly = isFormReadOnly(visning);
     setVisning(visning);
     setFormReadOnly(formReadOnly);
-  }, [flyt.aktivtSteg, readOnly, erAktivtSteg, mellomlagring]);
+  }, [flyt.aktivtSteg, readOnly, erAktivtSteg]);
 
   function avbrytEndringClick() {
     setVisning(VisningModus.LÅST_MED_ENDRE);

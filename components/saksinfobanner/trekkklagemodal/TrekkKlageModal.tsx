@@ -5,7 +5,6 @@ import { NyÅrsakTilBehandlingV0 } from 'lib/types/types';
 import { useSendHendelseOgVentPåProsessering } from 'hooks/saksbehandling/SendHendelseOgVentPåProsessering';
 
 import styles from './TrekkKlageModal.module.css';
-import { v4 as uuid } from 'uuid';
 
 interface Props {
   saksnummer: string;
@@ -46,7 +45,7 @@ export const TrekkKlageModal = ({ saksnummer, behandlingReferanse, isOpen, onClo
                 saksnummer: saksnummer,
                 referanse: {
                   type: 'SAKSBEHANDLER_KELVIN_REFERANSE',
-                  verdi: uuid(),
+                  verdi: crypto.randomUUID(),
                 },
                 type: 'NY_ÅRSAK_TIL_BEHANDLING',
                 kanal: 'DIGITAL',
