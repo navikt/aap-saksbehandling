@@ -9,5 +9,4 @@ export const toggles = {
   featureSimulering: !isProd(),
   featureFerieISykepengeperiode: !isProd(), // Finnes ikke i unleash - kun frontend-toggle
   featurePostmottakBehandlingerPåVent: !isProd(),
-  featureUtløptVentefrist: !isProd(),
 };
