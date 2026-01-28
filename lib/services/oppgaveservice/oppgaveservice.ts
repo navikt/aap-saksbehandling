@@ -4,8 +4,6 @@ import {
   EnhetSynkroniseringOppgave,
   Kø,
   Markering,
-  NesteOppgaveRequestBody,
-  NesteOppgaveResponse,
   Oppgave,
   OppgaveAvklaringsbehovKode,
   OppgaveBehandlingstype,
@@ -118,10 +116,6 @@ export async function tildelTilSaksbehandler(data: TildelOppgaveRequest) {
 export async function avreserverOppgave({ oppgaver }: AvreserverOppgaveDto) {
   const url = `${oppgaveApiBaseURL}/avreserver-oppgaver`;
   return await apiFetch<unknown>(url, oppgaveApiScope, 'POST', { oppgaver: oppgaver });
-}
-export async function velgNesteOppgave({ filterId, enheter }: NesteOppgaveRequestBody) {
-  const url = `${oppgaveApiBaseURL}/neste-oppgave`;
-  return await apiFetch<NesteOppgaveResponse>(url, oppgaveApiScope, 'POST', { filterId, enheter });
 }
 export async function plukkOppgave(oppgaveId: number, versjon: number) {
   const url = `${oppgaveApiBaseURL}/plukk-oppgave`;
