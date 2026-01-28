@@ -10,7 +10,6 @@ import { Spinner } from 'components/felles/Spinner';
 import { useRouter } from 'next/navigation';
 import { isSuccess } from 'lib/utils/api';
 import { formaterDatoForBackend } from 'lib/utils/date';
-import { v4 as uuid } from 'uuid';
 import { parse } from 'date-fns';
 import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { erDatoIFremtiden, validerDato } from 'lib/validation/dateValidation';
@@ -72,7 +71,7 @@ export const OpprettOppfølgingsBehandling = ({
       saksnummer: saksnummer,
       referanse: {
         type: 'BEHANDLING_REFERANSE',
-        verdi: uuid(),
+        verdi: crypto.randomUUID(),
       },
       type: 'OPPFØLGINGSOPPGAVE',
       kanal: 'DIGITAL',

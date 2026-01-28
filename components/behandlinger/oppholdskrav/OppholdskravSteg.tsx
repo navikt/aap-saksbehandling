@@ -64,6 +64,7 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
   const form = useForm<OppholdskravForm>({
     defaultValues,
     reValidateMode: 'onChange',
+    shouldUnregister: true,
   });
 
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
@@ -85,6 +86,7 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
       land: '',
       landAnnet: undefined,
       fraDato: undefined,
+      erNyVurdering: true,
     });
   }
 
@@ -168,11 +170,11 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
             key={vurdering.id}
             accordionsSignal={accordionsSignal}
             fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-            vurderingStatus={getErOppfyltEllerIkkeStatus(
+            vurderingStatus={
               form.watch(`vurderinger.${index}.oppfyller`)
-                ? form.watch(`vurderinger.${index}.oppfyller`) === JaEllerNei.Ja
+                ? getErOppfyltEllerIkkeStatus(form.watch(`vurderinger.${index}.oppfyller`) === JaEllerNei.Ja)
                 : undefined
-            )}
+            }
             nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
             isLast={index === vurderingerFields.length - 1}
             vurdertAv={vurdering.vurdertAv}

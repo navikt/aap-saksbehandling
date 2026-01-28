@@ -11,12 +11,23 @@ import {
   ForutgåendeMedlemskapVurderingForm,
   ForutgåendeMedlemskapVurderingFormIkkePeriodisert,
 } from 'components/behandlinger/forutgåendemedlemskap/manuellvurderingperiodisert/types';
-import { getFraDatoFraGrunnlagForFrontend } from 'lib/utils/periodisering';
+import { getFraDatoFraGrunnlagForFrontend, trengerTomPeriodisertVurdering } from 'lib/utils/periodisering';
 
+export function erNyVurderingOppfylt(
+  harForutgåendeMedlemskap: JaEllerNei | undefined,
+  unntaksvilkår: 'A' | 'B' | 'Nei' | undefined
+) {
+  if (harForutgåendeMedlemskap === JaEllerNei.Nei && unntaksvilkår === 'Nei') {
+    return false;
+  }
+  if (harForutgåendeMedlemskap === JaEllerNei.Ja || unntaksvilkår === 'A' || unntaksvilkår === 'B') {
+    return true;
+  }
+}
 export function getDefaultValuesFromGrunnlag(
   grunnlag?: PeriodisertForutgåendeMedlemskapGrunnlag
 ): ForutgåendeMedlemskapVurderingForm {
-  if (grunnlag == null || (grunnlag.nyeVurderinger.length === 0 && grunnlag.sisteVedtatteVurderinger.length === 0)) {
+  if (trengerTomPeriodisertVurdering(grunnlag)) {
     return {
       vurderinger: [
         {

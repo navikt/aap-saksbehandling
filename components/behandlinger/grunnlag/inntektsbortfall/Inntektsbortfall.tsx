@@ -6,7 +6,7 @@ import styles from './Inntektsbortfall.module.css';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { FormEvent } from 'react';
 import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
-import { useVilkårskortVisning, VisningModus } from 'hooks/saksbehandling/visning/VisningHook';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { Alert, Table } from '@navikt/ds-react';
 import { InntektsbortfallResponse, MellomlagretVurdering } from 'lib/types/types';
 import { TableStyled } from 'components/tablestyled/TableStyled';
@@ -15,6 +15,7 @@ import { formaterTilG } from 'lib/utils/string';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
+import { VisningModus } from 'lib/types/visningTypes';
 
 interface Props {
   behandlingVersjon: number;

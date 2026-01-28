@@ -1,12 +1,13 @@
 .container {
-    border-bottom: 1px solid var(--a-border-divider);
+  border-bottom: 1px solid var(--a-border-divider);
 }
 
 .noBorder {
-    border-bottom: none;
+  border-bottom: none;
 }
 
-.headingButton{
-    background: none;
-    border: none;
+.headingButton {
+  background: none;
+  border: none;
+  cursor: pointer;
 }

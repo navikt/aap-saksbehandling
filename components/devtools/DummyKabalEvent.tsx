@@ -5,7 +5,6 @@ import { useConfigForm } from 'components/form/FormHook';
 import { FormEvent } from 'react';
 import { FormField } from 'components/form/FormField';
 import { KabalBehandlingDetaljer, KabalSvarType } from 'lib/types/types';
-import { v4 as uuidv4 } from 'uuid';
 
 interface FormFields {
   kildereferanse: string;
@@ -139,7 +138,7 @@ export function DummyKabalEvent({
   );
 
   async function publiserKabalEvent(kildereferanse: string, type: KabalSvarType) {
-    const id = uuidv4();
+    const id = crypto.randomUUID();
     const reqBody = {
       saksnummer: saksnummer,
       referanse: {

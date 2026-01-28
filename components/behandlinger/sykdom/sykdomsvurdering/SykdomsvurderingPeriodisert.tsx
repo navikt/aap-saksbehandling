@@ -36,6 +36,7 @@ import {
 } from 'components/behandlinger/sykdom/sykdomsvurdering/sykdomsvurdering-utils';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
+import { getFraDatoFraGrunnlagForFrontend, trengerTomPeriodisertVurdering } from 'lib/utils/periodisering';
 
 export interface SykdomsvurderingerForm {
   vurderinger: Array<Sykdomsvurdering>;
@@ -202,7 +203,13 @@ export const SykdomsvurderingPeriodisert = ({
             key={vurdering.id}
             accordionsSignal={accordionsSignal}
             fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-            vurderingStatus={getErOppfyltEllerIkkeStatus(erNyVurderingOppfylt(form.watch(`vurderinger.${index}`)))}
+            vurderingStatus={getErOppfyltEllerIkkeStatus(
+              erNyVurderingOppfylt(
+                form.watch(`vurderinger.${index}`),
+                førsteDatoSomKanVurderes,
+                grunnlag.skalVurdereYrkesskade
+              )
+            )}
             nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
             isLast={index === nyeVurderingerFields.length - 1}
             vurdertAv={vurdering.vurdertAv}
@@ -231,21 +238,12 @@ export const SykdomsvurderingPeriodisert = ({
   );
 
   function mapGrunnlagTilDefaultvalues(grunnlag: SykdomsGrunnlag): SykdomsvurderingerForm {
-    if (grunnlag == null || grunnlag.nyeVurderinger.length === 0) {
-      // Vi har ingen nye vurderinger, men har tidligere vurderinger. Ikke ha noen preutfyllte vurderunger
-      if (grunnlag.gjeldendeVedtatteSykdomsvurderinger.length > 0) {
-        return { vurderinger: [] };
-      }
-
-      // Vi har ingen nye vurderinger, og heller ingen tidligere vurderinger:  legg til en tom-default-periode
-      const førsteFraDatoSomKanVurderes = grunnlag.kanVurderes[0]?.fom
-        ? { fraDato: new Dato(grunnlag.kanVurderes[0].fom).formaterForFrontend() }
-        : {};
+    if (trengerTomPeriodisertVurdering(grunnlag)) {
       return {
         vurderinger: [
           {
             ...emptySykdomsvurdering(),
-            ...førsteFraDatoSomKanVurderes,
+            fraDato: getFraDatoFraGrunnlagForFrontend(grunnlag),
           },
         ],
       };

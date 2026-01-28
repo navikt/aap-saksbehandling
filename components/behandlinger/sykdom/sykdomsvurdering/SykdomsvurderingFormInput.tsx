@@ -2,7 +2,7 @@
 
 import { VStack } from '@navikt/ds-react';
 import { erDatoIPeriode, validerDato } from 'lib/validation/dateValidation';
-import { isAfter, parse } from 'date-fns';
+import { parse } from 'date-fns';
 import { parseDatoFraDatePicker, stringToDate } from 'lib/utils/date';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
@@ -17,6 +17,7 @@ import { SykdomsvurderingDiagnosesøk } from 'components/behandlinger/sykdom/syk
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
 import React from 'react';
+import { skalVurdereVissVarighetSjekk } from 'components/behandlinger/sykdom/sykdomsvurdering/sykdomsvurdering-utils';
 
 interface Props {
   index: number;
@@ -47,7 +48,7 @@ export const SykdomsvurderingFormInput = ({
   rettighetsperiopdeStartdato,
 }: Props) => {
   const valgtDato = parseDatoFraDatePicker(form.watch(`vurderinger.${index}.fraDato`));
-  const skalVurdereVissVarighet = valgtDato != null ? !isAfter(valgtDato, rettighetsperiopdeStartdato) : true;
+  const skalVurdereVissVarighet = skalVurdereVissVarighetSjekk(valgtDato, rettighetsperiopdeStartdato);
 
   return (
     <VStack gap={'5'}>
