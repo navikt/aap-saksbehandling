@@ -1,4 +1,4 @@
-import { addMonths, format, isAfter, isBefore, parse, startOfMonth } from 'date-fns';
+import { addMonths, format, isAfter, isBefore, isEqual, parse, startOfMonth } from 'date-fns';
 import { nb } from 'date-fns/locale';
 import { formatDatoMedMånedsnavn, formaterDatoForFrontend } from 'lib/utils/date';
 import { Dato } from 'lib/types/Dato';
@@ -65,6 +65,24 @@ export const validerDatoErInnenforOpphold = (
     return `Dato kan ikke være før innleggelsesdato: ${formaterDatoForFrontend(oppholdFraDato)}`;
   } else if (oppholdSluttDato && isAfter(valgtDato, oppholdSluttDato)) {
     return `Dato kan ikke være etter oppholdets sluttdato: ${formaterDatoForFrontend(oppholdSluttDato)}`;
+  }
+
+  return true;
+};
+
+export const validerErIKronologiskRekkeFølge = (value: string, forrigeVurderingFom?: string) => {
+  if (!forrigeVurderingFom) {
+    return true;
+  }
+
+  const inputValue = new Dato(value);
+  const forrigeVurderingFomValue = new Dato(forrigeVurderingFom);
+
+  if (
+    isBefore(inputValue.dato, forrigeVurderingFomValue.dato) ||
+    isEqual(inputValue.dato, forrigeVurderingFomValue.dato)
+  ) {
+    return `Dato kan ikke være tidligere eller samme dato som forrige vurdering: ${forrigeVurderingFomValue.formaterForFrontend()}`;
   }
 
   return true;

@@ -9,6 +9,7 @@ import {
   beregnTidligsteReduksjonsdato,
   lagReduksjonsBeskrivelse,
   validerDatoErInnenforOpphold,
+  validerErIKronologiskRekkeFølge,
 } from 'lib/utils/institusjonsopphold';
 import { HelseinstitusjonGrunnlag } from 'lib/types/types';
 import { validerDato } from 'lib/validation/dateValidation';
@@ -35,18 +36,14 @@ export const Helseinstitusjonsvurdering = ({ form, oppholdIndex, vurderingIndex,
     `helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.harFasteUtgifter`
   );
 
-  const forrigeFaarFriKostOgLosji =
+  const forrigeVurdering =
     vurderingIndex > 0
-      ? form.watch(`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex - 1}.faarFriKostOgLosji`)
+      ? form.watch(`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex - 1}`)
       : undefined;
-  const forrigeForsoergerEktefelle =
-    vurderingIndex > 0
-      ? form.watch(`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex - 1}.forsoergerEktefelle`)
-      : undefined;
-  const forrigeHarFasteUtgifter =
-    vurderingIndex > 0
-      ? form.watch(`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex - 1}.harFasteUtgifter`)
-      : undefined;
+
+  const forrigeFaarFriKostOgLosji = forrigeVurdering ? forrigeVurdering.faarFriKostOgLosji : undefined;
+  const forrigeForsoergerEktefelle = forrigeVurdering ? forrigeVurdering.forsoergerEktefelle : undefined;
+  const forrigeHarFasteUtgifter = forrigeVurdering ? forrigeVurdering.harFasteUtgifter : undefined;
 
   // Sjekk om det er påfølgende vurdering med forrige status reduksjon
   const erReduksjonEtterForrigeVurdering =
@@ -141,6 +138,8 @@ export const Helseinstitusjonsvurdering = ({ form, oppholdIndex, vurderingIndex,
                 gyldigDato: (value) => validerDato(value as string),
                 validerInnenforOpphold: (value) =>
                   validerDatoErInnenforOpphold(value as string, opphold.oppholdFra, opphold.avsluttetDato),
+                validerKronologiskRekkefølge: (value) =>
+                  validerErIKronologiskRekkeFølge(value as string, forrigeVurdering?.periode.fom),
               },
             }}
             readOnly={readonly}
@@ -164,6 +163,8 @@ export const Helseinstitusjonsvurdering = ({ form, oppholdIndex, vurderingIndex,
               gyldigDato: (value) => validerDato(value as string),
               validerInnenforOpphold: (value) =>
                 validerDatoErInnenforOpphold(value as string, opphold.oppholdFra, opphold.avsluttetDato),
+              validerKronologiskRekkefølge: (value) =>
+                validerErIKronologiskRekkeFølge(value as string, forrigeVurdering?.periode.fom),
             },
           }}
           readOnly={readonly}

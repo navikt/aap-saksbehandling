@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { beregnTidligsteReduksjonsdato, validerDatoErInnenforOpphold } from 'lib/utils/institusjonsopphold';
+import {
+  beregnTidligsteReduksjonsdato,
+  validerDatoErInnenforOpphold,
+  validerErIKronologiskRekkeFølge,
+} from 'lib/utils/institusjonsopphold';
 import { Dato } from 'lib/types/Dato';
 
 describe('beregnTidligsteReduksjonsdato', () => {
@@ -35,6 +39,28 @@ describe('validerReduksjonsdatoInnenforOpphold', () => {
   it('skal returnere true dersom reduksjonsdato er innenfor perioden', () => {
     const inputValue = new Dato('2025-06-01').formaterForFrontend();
     const value = validerDatoErInnenforOpphold(inputValue, oppholdFra, avsluttetDato);
+    expect(value).toBeTruthy();
+  });
+});
+
+describe('validerReduksjonsdatoInnenforOpphold', () => {
+  const forrigevurderingFom = new Dato('2025-02-01').formaterForFrontend();
+
+  it('skal vise en feilmelding dersom input value er tidligere enn forrige vurdering fom', () => {
+    const inputValue = new Dato('2025-01-01').formaterForFrontend();
+    const value = validerErIKronologiskRekkeFølge(inputValue, forrigevurderingFom);
+    expect(value).toBe('Dato kan ikke være tidligere eller samme dato som forrige vurdering: 01.02.2025');
+  });
+
+  it('skal vise en feilmelding dersom input value er samme dato som forrige vurdering fom', () => {
+    const inputValue = new Dato('2025-02-01').formaterForFrontend();
+    const value = validerErIKronologiskRekkeFølge(inputValue, forrigevurderingFom);
+    expect(value).toBe('Dato kan ikke være tidligere eller samme dato som forrige vurdering: 01.02.2025');
+  });
+
+  it('skal returnere true dersom input value er etter forrige vurdering fom', () => {
+    const inputValue = new Dato('2025-06-01').formaterForFrontend();
+    const value = validerErIKronologiskRekkeFølge(inputValue, forrigevurderingFom);
     expect(value).toBeTruthy();
   });
 });
