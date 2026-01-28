@@ -9,7 +9,10 @@ import styles from 'components/behandlinger/institusjonsopphold/helseinstitusjon
 import { formatDatoMedMånedsnavn, formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { JaEllerNei } from 'lib/utils/form';
 import { addDays } from 'date-fns';
-import { NyVurderingExpandableCard } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
+import {
+  NyVurderingExpandableCard,
+  skalVæreInitiellEkspandert,
+} from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { AccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErReduksjonEllerIkke, VurderingStatus } from 'components/periodisering/VurderingStatusTag';
@@ -24,6 +27,7 @@ interface Props {
   opphold: HelseinstitusjonGrunnlag['opphold'][0];
   tidligereVurderinger?: HelseInstiusjonVurdering[] | null;
   accordionsSignal: AccordionsSignal;
+  erAktivUtenAvbryt: boolean;
 }
 
 export const HelseinstitusjonOppholdGruppe = ({
@@ -33,6 +37,7 @@ export const HelseinstitusjonOppholdGruppe = ({
   accordionsSignal,
   readonly: formReadOnly,
   opphold,
+  erAktivUtenAvbryt,
 }: Props) => {
   const {
     fields: vurderinger,
@@ -137,7 +142,7 @@ export const HelseinstitusjonOppholdGruppe = ({
                   onSlettVurdering={() => remove(vurderingIndex)}
                   index={vurderingIndex}
                   readonly={formReadOnly}
-                  initiellEkspandert={true}
+                  initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
                 >
                   <div className={styles.vurderingWrapper}>
                     <div className={styles.vurderingContent}>
@@ -175,6 +180,7 @@ export const HelseinstitusjonOppholdGruppe = ({
                   fom: beregnFraOgMedDatoForNyVurdering(),
                   tom: formaterDatoForFrontend(opphold.avsluttetDato || ''),
                 },
+                erNyVurdering: true,
               })
             }
           >

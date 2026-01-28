@@ -42,6 +42,7 @@ export interface Vurdering {
   harFasteUtgifter?: JaEllerNei;
   forsoergerEktefelle?: JaEllerNei;
   faarFriKostOgLosji?: JaEllerNei;
+  erNyVurdering?: boolean;
 }
 
 type DraftFormFields = Partial<HelseinstitusjonsFormFields>;
@@ -56,7 +57,7 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
-  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+  const { visningActions, formReadOnly, visningModus, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'DU_ER_ET_ANNET_STED',
     mellomlagretVurdering
@@ -162,6 +163,7 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
           oppholdIndex={oppholdIndex}
           form={form}
           readonly={formReadOnly}
+          erAktivUtenAvbryt={erAktivUtenAvbryt}
         />
       ))}
     </VilkårskortMedFormOgMellomlagringNyVisning>
