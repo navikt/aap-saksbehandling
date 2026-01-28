@@ -8,7 +8,7 @@ import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrap
 import {
   beregnTidligsteReduksjonsdato,
   lagReduksjonsBeskrivelse,
-  validerReduksjonsdatoInnenforOpphold,
+  validerDatoErInnenforOpphold,
 } from 'lib/utils/institusjonsopphold';
 import { HelseinstitusjonGrunnlag } from 'lib/types/types';
 import { validerDato } from 'lib/validation/dateValidation';
@@ -137,8 +137,11 @@ export const Helseinstitusjonsvurdering = ({ form, oppholdIndex, vurderingIndex,
             description={reduksjonsBeskrivelse}
             rules={{
               required: 'Du må sette en dato for når reduksjonen skal gjelde fra',
-              validate: (value) =>
-                validerReduksjonsdatoInnenforOpphold(value, opphold.oppholdFra, opphold.avsluttetDato),
+              validate: {
+                gyldigDato: (value) => validerDato(value as string),
+                validerInnenforOpphold: (value) =>
+                  validerDatoErInnenforOpphold(value as string, opphold.oppholdFra, opphold.avsluttetDato),
+              },
             }}
             readOnly={readonly}
           />
@@ -159,12 +162,8 @@ export const Helseinstitusjonsvurdering = ({ form, oppholdIndex, vurderingIndex,
             required: 'Du må sette en dato for når reduksjonen skal stoppes',
             validate: {
               gyldigDato: (value) => validerDato(value as string),
-              // etterMinDato: (value) => {
-              //   if (minFomDato && value && value <= minFomDato) {
-              //     return 'Dato må være etter ' + minFomDato;
-              //   }
-              //   return '';
-              // },
+              validerInnenforOpphold: (value) =>
+                validerDatoErInnenforOpphold(value as string, opphold.oppholdFra, opphold.avsluttetDato),
             },
           }}
           readOnly={readonly}
