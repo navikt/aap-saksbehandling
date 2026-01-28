@@ -7,56 +7,50 @@
   padding: var(--a-spacing-2) var(--a-spacing-4);
 }
 
-
 .oppholdGruppe {
-    margin-bottom: var(--a-spacing-3);
-    /*border-left: none;*/
+  margin-bottom: var(--a-spacing-3);
+  /*border-left: none;*/
 }
 
 .vurderingRad {
-    margin-bottom: var(--a-spacing-4);
+  margin-bottom: var(--a-spacing-4);
 }
 
 .vurderingRad:last-child {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 .detailgray {
-    color: var(--a-text-subtle);
+  color: var(--a-text-subtle);
 }
 
 .helseinstitusjonheading {
-    display: flex;
-    gap: var(--a-spacing-4);
-    align-items: center;
+  display: flex;
+  gap: var(--a-spacing-4);
+  align-items: center;
 }
 
 .oppholdHeader {
-    border-top-left-radius: var(--a-border-radius-xlarge);
-    border-top-right-radius: var(--a-border-radius-xlarge);
-    border-bottom:  1px solid var(--a-border-subtle);
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-}
-
-.oppholdButtom {
-    border-top:  1px solid var(--a-border-subtle);
+  border-top-left-radius: var(--a-border-radius-xlarge);
+  border-top-right-radius: var(--a-border-radius-xlarge);
+  border-bottom: 1px solid var(--a-border-subtle);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
 }
 
 .vurderingWrapper {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    width: 100%;
-    gap: var(--a-spacing-4);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  gap: var(--a-spacing-4);
 }
 
 .vurderingContent {
-    flex: 1;
-    min-width: 0;
+  flex: 1;
+  min-width: 0;
 }
 
 .deleteButton {
-    flex-shrink: 0;
+  flex-shrink: 0;
 }
-

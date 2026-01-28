@@ -163,7 +163,7 @@ export const HelseinstitusjonOppholdGruppe = ({
       </Box>
 
       {!formReadOnly && vurderinger.length > 0 && (
-        <Box padding="3" className={styles.oppholdButtom}>
+        <Box padding="3">
           <Button
             type="button"
             className="fit-content"
