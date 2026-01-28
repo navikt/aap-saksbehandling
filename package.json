@@ -44,8 +44,7 @@
     "react-select": "5.10.2",
     "server-only": "0.0.1",
     "swr": "2.3.8",
-    "unleash-client": "6.9.3",
-    "uuid": "13.0.0"
+    "unleash-client": "6.9.3"
   },
   "devDependencies": {
     "@eslint/eslintrc": "3.3.3",
@@ -64,7 +63,6 @@
     "@types/react": "19.2.3",
     "@types/react-dom": "19.2.3",
     "@types/react-plotly.js": "2.6.4",
-    "@types/uuid": "11.0.0",
     "@typescript-eslint/eslint-plugin": "8.52.0",
     "@typescript-eslint/parser": "8.52.0",
     "@vitejs/plugin-react": "5.1.2",

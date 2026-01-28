@@ -6,7 +6,6 @@ import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { clientSendHendelse } from 'lib/clientApi';
 import { useState } from 'react';
-import { v4 as uuid } from 'uuid';
 import { Spinner } from 'components/felles/Spinner';
 import { useRouter } from 'next/navigation';
 import styles from './OpprettRevurdering.module.css';
@@ -42,7 +41,7 @@ export const OpprettRevurdering = ({
       saksnummer: sak.saksnummer,
       referanse: {
         type: 'REVURDERING_ID',
-        verdi: uuid(),
+        verdi: crypto.randomUUID(),
       },
       type: 'MANUELL_REVURDERING',
       kanal: 'DIGITAL',
