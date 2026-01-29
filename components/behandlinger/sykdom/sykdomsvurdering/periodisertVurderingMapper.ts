@@ -37,9 +37,10 @@ function mapMedVissVarighet(
       ? getTrueFalseEllerUndefined(data.erSkadeSykdomEllerLyteVesentligdel)
       : undefined;
 
-  const erNedsettelseIArbeidsevneAvEnVissVarighet = erSkadeSykdomEllerLyteVesentligdel
-    ? getTrueFalseEllerUndefined(data.erNedsettelseIArbeidsevneAvEnVissVarighet)
-    : undefined;
+  const erNedsettelseIArbeidsevneAvEnVissVarighet =
+    erSkadeSykdomEllerLyteVesentligdel || erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense
+      ? getTrueFalseEllerUndefined(data.erNedsettelseIArbeidsevneAvEnVissVarighet)
+      : undefined;
 
   return {
     erNedsettelseIArbeidsevneMerEnnHalvparten,
