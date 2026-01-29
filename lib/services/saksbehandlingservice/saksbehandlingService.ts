@@ -420,7 +420,7 @@ export const hentAktivitetsplikt11_9Grunnlag = async (behandlingsreferanse: stri
 };
 
 export const hentRettighetsdata = async (saksnummer: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${saksnummer}/rettighet`;
+  const url = `${saksbehandlingApiBaseUrl}/api/sak/${saksnummer}/rettighet`;
   return await apiFetch<RettighetDto[]>(url, saksbehandlingApiScope, 'GET');
 };
 
