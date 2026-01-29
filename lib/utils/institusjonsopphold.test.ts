@@ -1,10 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import {
   beregnTidligsteReduksjonsdato,
+  erReduksjon,
   validerDatoErInnenforOpphold,
   validerErIKronologiskRekkeFølge,
 } from 'lib/utils/institusjonsopphold';
 import { Dato } from 'lib/types/Dato';
+import { HelseInstiusjonVurdering } from 'lib/types/types';
 
 describe('beregnTidligsteReduksjonsdato', () => {
   it('Skal returnere 1. mai dersom vi sender inn 1. januar', () => {
@@ -62,5 +64,77 @@ describe('validerReduksjonsdatoInnenforOpphold', () => {
     const inputValue = new Dato('2025-06-01').formaterForFrontend();
     const value = validerErIKronologiskRekkeFølge(inputValue, forrigevurderingFom);
     expect(value).toBeTruthy();
+  });
+});
+
+describe('erReduksjon', () => {
+  const defaultVurdering: HelseInstiusjonVurdering = {
+    begrunnelse: 'Hello Pello',
+    faarFriKostOgLosji: false,
+    oppholdId: '123',
+    periode: {
+      fom: '2025-01-01',
+      tom: '2025-08-01',
+    },
+  };
+
+  it('returnerer true når faarFriKostOgLosji er true og de andre er false', () => {
+    expect(
+      erReduksjon({
+        ...defaultVurdering,
+        faarFriKostOgLosji: true,
+        forsoergerEktefelle: false,
+        harFasteUtgifter: false,
+      })
+    ).toBe(true);
+  });
+
+  it('returnerer false når faarFriKostOgLosji er false', () => {
+    expect(
+      erReduksjon({
+        ...defaultVurdering,
+        faarFriKostOgLosji: false,
+        forsoergerEktefelle: false,
+        harFasteUtgifter: false,
+      })
+    ).toBe(false);
+  });
+
+  it('returnerer false når forsoergerEktefelle er true', () => {
+    expect(
+      erReduksjon({ ...defaultVurdering, faarFriKostOgLosji: true, forsoergerEktefelle: true, harFasteUtgifter: false })
+    ).toBe(false);
+  });
+
+  it('returnerer false når harFasteUtgifter er true', () => {
+    expect(
+      erReduksjon({ ...defaultVurdering, faarFriKostOgLosji: true, forsoergerEktefelle: false, harFasteUtgifter: true })
+    ).toBe(false);
+  });
+
+  it('returnerer false når forsoergerEktefelle er undefined', () => {
+    expect(erReduksjon({ ...defaultVurdering, faarFriKostOgLosji: true, harFasteUtgifter: false })).toBe(false);
+  });
+
+  it('returnerer false når harFasteUtgifter er undefined', () => {
+    expect(erReduksjon({ ...defaultVurdering, faarFriKostOgLosji: true, forsoergerEktefelle: false })).toBe(false);
+  });
+
+  it('returnerer false når forsoergerEktefelle er null', () => {
+    expect(
+      erReduksjon({ ...defaultVurdering, faarFriKostOgLosji: true, forsoergerEktefelle: null, harFasteUtgifter: false })
+    ).toBe(false);
+  });
+
+  it('returnerer false når harFasteUtgifter er null', () => {
+    expect(
+      erReduksjon({ ...defaultVurdering, faarFriKostOgLosji: true, forsoergerEktefelle: false, harFasteUtgifter: null })
+    ).toBe(false);
+  });
+
+  it('returnerer false når begge valgfrie felter er null', () => {
+    expect(
+      erReduksjon({ ...defaultVurdering, faarFriKostOgLosji: true, forsoergerEktefelle: null, harFasteUtgifter: null })
+    ).toBe(false);
   });
 });

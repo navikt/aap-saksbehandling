@@ -2,6 +2,7 @@ import { addMonths, format, isAfter, isBefore, isEqual, parse, startOfMonth } fr
 import { nb } from 'date-fns/locale';
 import { formatDatoMedMånedsnavn, formaterDatoForFrontend } from 'lib/utils/date';
 import { Dato } from 'lib/types/Dato';
+import { HelseInstiusjonVurdering } from 'lib/types/types';
 
 /**
  * Beregner tidligste dato for reduksjon av AAP ved institusjonsopphold.
@@ -87,3 +88,7 @@ export const validerErIKronologiskRekkeFølge = (value: string, forrigeVurdering
 
   return true;
 };
+
+export function erReduksjon(data: HelseInstiusjonVurdering): boolean {
+  return data.faarFriKostOgLosji && data.forsoergerEktefelle === false && data.harFasteUtgifter === false;
+}

@@ -2,12 +2,16 @@ import { VStack } from '@navikt/ds-react';
 import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
 import { HelseInstiusjonVurdering } from 'lib/types/types';
 import { getJaEllerNei } from 'lib/utils/form';
+import { formaterDatoForFrontend } from 'lib/utils/date';
+import { erReduksjon } from 'lib/utils/institusjonsopphold';
 
 interface Props {
   vurdering: HelseInstiusjonVurdering;
 }
 
 export const HelseinstitusjonTidligereVurdering = ({ vurdering }: Props) => {
+  const vurderingErReduksjon = erReduksjon(vurdering);
+
   return (
     <VStack gap={'4'}>
       <SpørsmålOgSvar spørsmål={'Begrunnelse'} svar={vurdering.begrunnelse} />
@@ -25,7 +29,12 @@ export const HelseinstitusjonTidligereVurdering = ({ vurdering }: Props) => {
         />
       )}
 
-      <SpørsmålOgSvar spørsmål={'Oppgi dato for reduksjon av AAP'} svar={'Hva skal vi bruke her?'} />
+      {vurderingErReduksjon && (
+        <SpørsmålOgSvar
+          spørsmål={'Oppgi dato for reduksjon av AAP'}
+          svar={formaterDatoForFrontend(vurdering.periode.fom)}
+        />
+      )}
     </VStack>
   );
 };

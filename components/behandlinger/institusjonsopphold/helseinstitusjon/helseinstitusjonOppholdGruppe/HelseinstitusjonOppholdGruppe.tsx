@@ -15,10 +15,11 @@ import {
 } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { AccordionsSignal } from 'hooks/AccordionSignalHook';
-import { getErReduksjonEllerIkke, VurderingStatus } from 'components/periodisering/VurderingStatusTag';
+import { getErReduksjonEllerIkke } from 'components/periodisering/VurderingStatusTag';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { HelseinstitusjonTidligereVurdering } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/helseinstitusjontidligerevurdering/HelseinstitusjonTidligereVurdering';
 import { Dato } from 'lib/types/Dato';
+import { erReduksjon } from 'lib/utils/institusjonsopphold';
 
 interface Props {
   form: UseFormReturn<HelseinstitusjonsFormFields>;
@@ -93,11 +94,11 @@ export const HelseinstitusjonOppholdGruppe = ({
           {tidligereVurderinger?.map((vurdering) => {
             return (
               <TidligereVurderingExpandableCard
-                key={vurdering.oppholdId}
+                key={vurdering.periode.fom}
                 fom={new Dato(vurdering.periode.fom).dato}
                 tom={new Dato(vurdering.periode.tom).dato}
                 foersteNyePeriodeFraDato={foersteNyePeriode == null ? null : parseDatoFraDatePicker(foersteNyePeriode)}
-                vurderingStatus={VurderingStatus.Reduksjon}
+                vurderingStatus={getErReduksjonEllerIkke(erReduksjon(vurdering))}
               >
                 <HelseinstitusjonTidligereVurdering vurdering={vurdering} />
               </TidligereVurderingExpandableCard>
