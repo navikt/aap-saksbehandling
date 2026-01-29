@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { screen } from '@testing-library/react';
-import { AutomatiskLovvalgOgMedlemskapVurdering } from 'lib/types/types';
+import { AutomatiskLovvalgOgMedlemskapVurdering, PeriodisertLovvalgMedlemskapGrunnlag } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
 import { customRender } from 'lib/test/CustomRender';
 import { LovvalgOgMedlemskapPeriodisertOverstyringswrapper } from 'components/behandlinger/lovvalg/LovvalgOgMedlemskapPeriodisertOverstyringswrapper';
@@ -9,11 +9,20 @@ const automatiskLovvalgOgMedlemskapVurdering: AutomatiskLovvalgOgMedlemskapVurde
   tilhørighetVurdering: [],
   kanBehandlesAutomatisk: true,
 };
+const tomtGrunnlag: PeriodisertLovvalgMedlemskapGrunnlag = {
+  behøverVurderinger: [],
+  harTilgangTilÅSaksbehandle: false,
+  kanVurderes: [],
+  nyeVurderinger: [],
+  overstyrt: false,
+  sisteVedtatteVurderinger: [],
+};
 
 describe('Lovvalg og medlemskap wrapper', () => {
   it('Skal vise vilkårskortet dersom det finnes en mellomlagring', () => {
     customRender(
       <LovvalgOgMedlemskapPeriodisertOverstyringswrapper
+        grunnlag={tomtGrunnlag}
         behandlingsReferanse={'123'}
         behandlingVersjon={1}
         readOnly={false}
@@ -42,6 +51,7 @@ describe('Lovvalg og medlemskap wrapper', () => {
   it('Skal ikke vise vilkårskortet dersom det ikke finnes en mellomlagring', () => {
     customRender(
       <LovvalgOgMedlemskapPeriodisertOverstyringswrapper
+        grunnlag={tomtGrunnlag}
         behandlingsReferanse={'123'}
         behandlingVersjon={1}
         readOnly={false}
