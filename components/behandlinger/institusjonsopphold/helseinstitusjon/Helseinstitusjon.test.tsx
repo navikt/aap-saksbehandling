@@ -34,7 +34,6 @@ const grunnlagUtenVurdering: HelseinstitusjonGrunnlag = {
         tom: '2024-10-23',
       },
       vurderinger: [],
-      status: 'UAVKLART',
     },
   ],
 };
@@ -71,7 +70,6 @@ const grunnlagMedVurdering: HelseinstitusjonGrunnlag = {
           faarFriKostOgLosji: true,
         },
       ],
-      status: 'UAVKLART',
     },
   ],
 };
