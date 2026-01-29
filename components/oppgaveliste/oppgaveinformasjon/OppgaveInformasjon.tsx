@@ -7,7 +7,6 @@ import { AdressebeskyttelseInfoBoks } from 'components/oppgaveliste/adressebesky
 import { utledAdressebeskyttelse } from 'lib/utils/adressebeskyttelse';
 import { MarkeringInfoboks } from 'components/markeringinfoboks/MarkeringInfoboks';
 import { UtløptVentefristBoks } from 'components/oppgaveliste/utløptventefristboks/UtløptVentefristBoks';
-import { toggles } from 'lib/utils/toggles';
 
 interface Props {
   oppgave: Oppgave;
@@ -21,7 +20,7 @@ export const OppgaveInformasjon = ({ oppgave }: Props) => {
       {oppgave.påVentTil && (
         <PåVentInfoboks frist={oppgave.påVentTil} årsak={oppgave.påVentÅrsak} begrunnelse={oppgave.venteBegrunnelse} />
       )}
-      {oppgave.utløptVentefrist && toggles.featureUtløptVentefrist && (
+      {oppgave.utløptVentefrist && (
         <UtløptVentefristBoks frist={oppgave.utløptVentefrist} />
       )}
       {oppgave.harUlesteDokumenter && <SvarFraBehandler />}

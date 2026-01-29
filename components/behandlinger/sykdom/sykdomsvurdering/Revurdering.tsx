@@ -26,7 +26,8 @@ export const Revurdering = ({ form, formFields, erÅrsakssammenhengYrkesskade }:
           />
         )}
 
-        {form.watch('erNedsettelseIArbeidsevneMerEnnFørtiProsent') === JaEllerNei.Ja && (
+        {(form.watch('erNedsettelseIArbeidsevneMerEnnFørtiProsent') === JaEllerNei.Ja ||
+          form.watch('erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense') === JaEllerNei.Ja) && (
           <FormField form={form} formField={formFields.erSkadeSykdomEllerLyteVesentligdel} horizontalRadio />
         )}
       </>

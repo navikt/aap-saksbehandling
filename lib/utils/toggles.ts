@@ -8,5 +8,4 @@ import { isProd } from 'lib/utils/environment';
 export const toggles = {
   featureSimulering: !isProd(),
   featurePostmottakBehandlingerPåVent: !isProd(),
-  featureUtløptVentefrist: !isProd(),
 };
