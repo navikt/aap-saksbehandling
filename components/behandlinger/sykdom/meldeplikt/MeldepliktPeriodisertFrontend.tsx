@@ -1,6 +1,6 @@
 'use client';
 
-import { Link, Radio, VStack } from '@navikt/ds-react';
+import { BodyLong, Link, Radio, VStack } from '@navikt/ds-react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import {
@@ -164,9 +164,11 @@ export const MeldepliktPeriodisertFrontend = ({
     >
       {!formReadOnly && (
         <VStack paddingBlock={'4'}>
-          <Link href={'https://lovdata.no/pro/rundskriv/r11-00/KAPITTEL_12'} target="_blank">
-            Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-10 (lovdata.no)
-          </Link>
+          <BodyLong size={'small'}>
+            <Link href={'https://lovdata.no/pro/rundskriv/r11-00/KAPITTEL_12'} target="_blank">
+              Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-10 (lovdata.no)
+            </Link>
+          </BodyLong>
         </VStack>
       )}
 

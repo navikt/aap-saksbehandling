@@ -25,7 +25,7 @@ import {
   skalVæreInitiellEkspandert,
 } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { ArbeidsopptrappingVurderingFormInput } from 'components/behandlinger/sykdom/arbeidsopptrapping/ArbeidsopptrappingVurderingFormInput';
-import { Link, VStack } from '@navikt/ds-react';
+import { BodyLong, Link, VStack } from '@navikt/ds-react';
 import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
 import { IkkeVurderbarPeriode } from 'components/periodisering/IkkeVurderbarPeriode';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
@@ -157,9 +157,11 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
     >
       {!formReadOnly && (
         <VStack paddingBlock={'4'}>
-          <Link href="https://lovdata.no/nav/rundskriv/r11-00#KAPITTEL_26-7" target="_blank">
-            Du kan lese om hvordan vilkåret skal vurderes i rundskrivet til § 11-23 (lovdata.no)
-          </Link>
+          <BodyLong size={'small'}>
+            <Link href="https://lovdata.no/nav/rundskriv/r11-00#KAPITTEL_26-7" target="_blank">
+              Du kan lese om hvordan vilkåret skal vurderes i rundskrivet til § 11-23 (lovdata.no)
+            </Link>
+          </BodyLong>
         </VStack>
       )}
       {ikkeVurderbarePerioder.map((vurdering) => (
