@@ -258,7 +258,7 @@ describe('Delmaler med valg', () => {
       <Brevbygger
         referanse={'1234'}
         brevmal={JSON.stringify(brevmal)}
-        brevdata={{ ...brevdata, delmaler: [{ id: valgfriDelmalMedAlternativer.delmal._id }] }}
+        brevdata={brevdata}
         behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
         mottaker={{ ident: '1234', navn: 'Navn' }}
         behandlingVersjon={1}

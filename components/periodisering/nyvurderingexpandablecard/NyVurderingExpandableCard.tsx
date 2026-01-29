@@ -9,39 +9,52 @@ import { subDays } from 'date-fns';
 import { TrashFillIcon } from '@navikt/aksel-icons';
 import { VurdertAvAnsatt } from 'lib/types/types';
 import { SlettVurderingModal } from 'components/periodisering/slettvurderingmodal/SlettVurderingModal';
-import { VurderingStatusTag } from 'components/periodisering/VurderingStatusTag';
+import { VurderingStatus, VurderingStatusTag } from 'components/periodisering/VurderingStatusTag';
+import { AccordionsSignal } from 'hooks/AccordionSignalHook';
 
 interface Props {
+  initiellEkspandert: boolean;
   fraDato: Date | null;
   nestePeriodeFraDato: Date | null;
   isLast: boolean;
-  oppfylt: boolean | undefined;
+  finnesFeil: boolean;
+  vurderingStatus: VurderingStatus | undefined;
   vurdertAv: VurdertAvAnsatt | undefined;
   kvalitetssikretAv: VurdertAvAnsatt | undefined;
   besluttetAv: VurdertAvAnsatt | undefined;
-  finnesFeil: boolean;
   children: ReactNode;
   readonly: boolean;
   onSlettVurdering: () => void;
   index: number;
+  accordionsSignal: AccordionsSignal;
   harTidligereVurderinger?: boolean;
 }
+
 export const NyVurderingExpandableCard = ({
   fraDato,
   nestePeriodeFraDato,
   isLast,
-  oppfylt,
+  vurderingStatus,
   vurdertAv,
   kvalitetssikretAv,
   besluttetAv,
-  finnesFeil,
   children,
   readonly,
+  finnesFeil,
   onSlettVurdering,
   harTidligereVurderinger = false,
+  initiellEkspandert = false,
   index,
+  accordionsSignal,
 }: Props) => {
-  const [cardExpanded, setCardExpanded] = useState<boolean>(true);
+  const [isOpen, setIsOpen] = useState<boolean>(initiellEkspandert);
+
+  const sisteAccordionSignalVersion = useRef(accordionsSignal.version);
+
+  if (accordionsSignal.version !== sisteAccordionSignalVersion.current) {
+    setIsOpen(accordionsSignal.action === 'open');
+    sisteAccordionSignalVersion.current = accordionsSignal.version;
+  }
 
   const ref = useRef<HTMLDialogElement>(null);
 
@@ -49,8 +62,8 @@ export const NyVurderingExpandableCard = ({
     <CustomExpandableCard
       editable
       defaultOpen
-      expanded={cardExpanded || finnesFeil}
-      setExpanded={setCardExpanded}
+      expanded={isOpen || finnesFeil}
+      setExpanded={setIsOpen}
       heading={
         <HStack justify={'space-between'} padding={'2'}>
           <BodyShort size={'small'}>
@@ -61,7 +74,7 @@ export const NyVurderingExpandableCard = ({
               <span>{isLast ? ' ' : '[Ikke valgt]'}</span>
             )}
           </BodyShort>
-          <VurderingStatusTag oppfylt={oppfylt} />
+          <VurderingStatusTag status={vurderingStatus} />
         </HStack>
       }
     >
@@ -78,7 +91,7 @@ export const NyVurderingExpandableCard = ({
                 onClick={() => ref.current?.showModal()}
                 type="button"
               />
-              <SlettVurderingModal ref={ref} onSlettVurdering={() => onSlettVurdering()} />{' '}
+              <SlettVurderingModal ref={ref} onSlettVurdering={onSlettVurdering} />
             </VStack>
           )}
         </HGrid>
@@ -92,3 +105,7 @@ export const NyVurderingExpandableCard = ({
     </CustomExpandableCard>
   );
 };
+
+export function skalVæreInitiellEkspandert(erNyVurdering: boolean | undefined, erAktiv: boolean): boolean {
+  return erNyVurdering === true || erAktiv;
+}

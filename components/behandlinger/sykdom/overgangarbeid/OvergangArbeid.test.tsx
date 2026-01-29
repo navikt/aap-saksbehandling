@@ -16,6 +16,14 @@ beforeEach(() => {
   setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'OVERGANG_ARBEID' });
 });
 
+const grunnlagTomt: OvergangArbeidGrunnlag = {
+  nyeVurderinger: [],
+  gjeldendeSykdsomsvurderinger: [],
+  sisteVedtatteVurderinger: [],
+  harTilgangTilÅSaksbehandle: true,
+  behøverVurderinger: [],
+  kanVurderes: [],
+};
 const overgangArbeidgrunnlag: OvergangArbeidGrunnlag = {
   nyeVurderinger: [
     {
@@ -46,6 +54,7 @@ describe('mellomlagring i overgang arbeid', () => {
   it('Skal vise en tekst om hvem som har gjort vurderingen dersom det finnes en mellomlagring', () => {
     render(
       <OvergangArbeid
+        grunnlag={grunnlagTomt}
         readOnly={false}
         behandlingVersjon={0}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
@@ -58,7 +67,7 @@ describe('mellomlagring i overgang arbeid', () => {
   it(
     'Skal vise en tekst om hvem som har lagret vurdering dersom bruker trykker på lagre ' + 'mellomlagring',
     async () => {
-      render(<OvergangArbeid behandlingVersjon={0} readOnly={false} />);
+      render(<OvergangArbeid grunnlag={grunnlagTomt} behandlingVersjon={0} readOnly={false} />);
 
       await user.type(
         screen.getByRole('textbox', { name: 'Vilkårsvurdering' }),
@@ -83,6 +92,7 @@ describe('mellomlagring i overgang arbeid', () => {
   it('Skal ikke vise tekst om hvem som har gjort mellomlagring dersom bruker trykker på slett mellomlagring', async () => {
     render(
       <OvergangArbeid
+        grunnlag={grunnlagTomt}
         behandlingVersjon={0}
         readOnly={false}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
@@ -163,6 +173,7 @@ describe('mellomlagring i overgang arbeid', () => {
   it('Skal resette skjema til tomt skjema dersom det ikke finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
     render(
       <OvergangArbeid
+        grunnlag={grunnlagTomt}
         behandlingVersjon={0}
         readOnly={false}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
@@ -226,20 +237,20 @@ describe('mellomlagring i overgang arbeid', () => {
 
 describe('Førstegangsbehandling', () => {
   it('Skal ha en overskrift', () => {
-    render(<OvergangArbeid readOnly={false} behandlingVersjon={0} />);
+    render(<OvergangArbeid grunnlag={grunnlagTomt} readOnly={false} behandlingVersjon={0} />);
 
     const heading = screen.getByText('§ 11-17 AAP i perioden som arbeidssøker');
     expect(heading).toBeVisible();
   });
 
   it('Skal ha felt for begrunnelse', () => {
-    render(<OvergangArbeid readOnly={false} behandlingVersjon={0} />);
+    render(<OvergangArbeid grunnlag={grunnlagTomt} readOnly={false} behandlingVersjon={0} />);
     const begrunnelse = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
     expect(begrunnelse).toBeVisible();
   });
 
   it('Skal ha felt for om brukeren har rett på AAP', () => {
-    render(<OvergangArbeid readOnly={false} behandlingVersjon={0} />);
+    render(<OvergangArbeid grunnlag={grunnlagTomt} readOnly={false} behandlingVersjon={0} />);
     const felt = screen.getByRole('group', {
       name: 'Har brukeren rett på AAP i perioden som arbeidssøker etter § 11-17?',
     });
@@ -247,7 +258,7 @@ describe('Førstegangsbehandling', () => {
   });
 
   it('Skal ha felt for virkningsdato', () => {
-    render(<OvergangArbeid readOnly={false} behandlingVersjon={0} />);
+    render(<OvergangArbeid grunnlag={grunnlagTomt} readOnly={false} behandlingVersjon={0} />);
     const felt = screen.queryByRole('textbox', {
       name: 'Vurderingen gjelder fra',
     });
@@ -262,6 +273,12 @@ describe('Førstegangsbehandling', () => {
     const endreKnapp = screen.getByRole('button', { name: 'Endre' });
     await user.click(endreKnapp);
 
+    await user.click(
+      screen.getByRole('button', {
+        name: /ny vurdering: 19. august 2025/i,
+      })
+    );
+
     const begrunnelseFelt = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
     await user.clear(begrunnelseFelt);
     await user.type(begrunnelseFelt, 'Dette er en ny begrunnelse');
@@ -269,6 +286,12 @@ describe('Førstegangsbehandling', () => {
 
     const avbrytKnapp = screen.getByRole('button', { name: 'Avbryt' });
     await user.click(avbrytKnapp);
+
+    await user.click(
+      screen.getByRole('button', {
+        name: /ny vurdering: 19. august 2025/i,
+      })
+    );
 
     const begrunnelseFeltEtterAvbryt = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
     expect(begrunnelseFeltEtterAvbryt).toHaveValue('Dette er min vurdering som er bekreftet');

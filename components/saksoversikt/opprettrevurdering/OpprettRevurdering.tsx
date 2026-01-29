@@ -6,12 +6,12 @@ import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { clientSendHendelse } from 'lib/clientApi';
 import { useState } from 'react';
-import { v4 as uuid } from 'uuid';
 import { Spinner } from 'components/felles/Spinner';
 import { useRouter } from 'next/navigation';
 import styles from './OpprettRevurdering.module.css';
 import { isSuccess } from 'lib/utils/api';
 import { vurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 export interface ManuellRevurderingFormFields {
   årsaker: string[];
@@ -41,7 +41,7 @@ export const OpprettRevurdering = ({
       saksnummer: sak.saksnummer,
       referanse: {
         type: 'REVURDERING_ID',
-        verdi: uuid(),
+        verdi: crypto.randomUUID(),
       },
       type: 'MANUELL_REVURDERING',
       kanal: 'DIGITAL',
@@ -66,6 +66,8 @@ export const OpprettRevurdering = ({
     }
   }
 
+  const isRevurderingStarttidspunktEnabled = useFeatureFlag('RevurderStarttidspunkt');
+
   const { form, formFields } = useConfigForm<ManuellRevurderingFormFields>({
     beskrivelse: {
       type: 'textarea',
@@ -78,7 +80,7 @@ export const OpprettRevurdering = ({
     årsaker: {
       type: 'combobox_multiple',
       label: 'Hvilke opplysninger skal revurderes?',
-      options: vurderingsbehovOptions,
+      options: vurderingsbehovOptions(isRevurderingStarttidspunktEnabled),
       defaultValue: defaultÅrsaker,
       rules: {
         required: 'Velg opplysning som er grunnlaget for revurdering',

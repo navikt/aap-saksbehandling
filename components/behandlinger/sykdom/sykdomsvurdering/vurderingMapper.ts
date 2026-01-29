@@ -69,9 +69,10 @@ function mapForRevurdering(
       ? getTrueFalseEllerUndefined(data.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense)
       : undefined;
 
-  const erSkadeSykdomEllerLyteVesentligdel = erNedsettelseIArbeidsevneMerEnnHalvparten
-    ? getTrueFalseEllerUndefined(data.erSkadeSykdomEllerLyteVesentligdel)
-    : undefined;
+  const erSkadeSykdomEllerLyteVesentligdel =
+    erNedsettelseIArbeidsevneMerEnnHalvparten || erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense
+      ? getTrueFalseEllerUndefined(data.erSkadeSykdomEllerLyteVesentligdel)
+      : undefined;
 
   return {
     erNedsettelseIArbeidsevneMerEnnHalvparten,

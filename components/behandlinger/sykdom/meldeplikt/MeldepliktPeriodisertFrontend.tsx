@@ -1,6 +1,6 @@
 'use client';
 
-import { HStack, Link, Radio, VStack } from '@navikt/ds-react';
+import { Link, Radio, VStack } from '@navikt/ds-react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import {
@@ -21,7 +21,10 @@ import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
-import { NyVurderingExpandableCard } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
+import {
+  NyVurderingExpandableCard,
+  skalVæreInitiellEkspandert,
+} from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
 import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
 import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
@@ -29,6 +32,9 @@ import { TidligereVurderingExpandableCard } from 'components/periodisering/tidli
 import React from 'react';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
+import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
+import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
+import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 
 interface Props {
   behandlingVersjon: number;
@@ -48,6 +54,7 @@ export interface FritakMeldepliktVurderingForm {
   vurdertAv?: VurdertAvAnsatt;
   kvalitetssikretAv?: VurdertAvAnsatt;
   besluttetAv?: VurdertAvAnsatt;
+  erNyVurdering?: boolean;
 }
 
 export const MeldepliktPeriodisertFrontend = ({
@@ -64,11 +71,13 @@ export const MeldepliktPeriodisertFrontend = ({
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
     useMellomlagring(Behovstype.FRITAK_MELDEPLIKT_KODE, initialMellomlagretVurdering);
 
-  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+  const { visningActions, formReadOnly, visningModus, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'FRITAK_MELDEPLIKT',
     mellomlagretVurdering
   );
+
+  const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
   const nyeVurderinger = grunnlag?.nyeVurderinger ?? [];
 
@@ -90,6 +99,7 @@ export const MeldepliktPeriodisertFrontend = ({
       begrunnelse: '',
       fraDato: fields.length === 0 ? formaterDatoForFrontend(new Date()) : undefined,
       harFritak: undefined,
+      erNyVurdering: true,
     });
   }
 
@@ -126,6 +136,7 @@ export const MeldepliktPeriodisertFrontend = ({
 
     løsPeriodisertBehovOgGåTilNesteSteg(losning, () => {
       nullstillMellomlagretVurdering();
+      closeAllAccordions();
       visningActions.onBekreftClick();
     });
   }
@@ -133,15 +144,11 @@ export const MeldepliktPeriodisertFrontend = ({
   const foersteNyePeriode = fields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
   const errorList = mapPeriodiserteVurderingerErrorList<FritakMeldepliktVurderingForm>(form.formState.errors);
 
-  const showAsOpen =
-    (grunnlag?.nyeVurderinger && grunnlag.nyeVurderinger.length >= 1) || initialMellomlagretVurdering !== undefined;
-
   return (
     <VilkårskortPeriodisert
       heading={'§ 11-10 tredje ledd. Unntak fra meldeplikt (valgfritt)'}
       steg="FRITAK_MELDEPLIKT"
       vilkårTilhørerNavKontor={true}
-      defaultOpen={showAsOpen}
       onSubmit={form.handleSubmit(onSubmit)}
       status={status}
       isLoading={isLoading}
@@ -169,7 +176,7 @@ export const MeldepliktPeriodisertFrontend = ({
           fom={parseISO(vurdering.fom)}
           tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
           foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-          oppfylt={vurdering.harFritak}
+          vurderingStatus={getErOppfyltEllerIkkeStatus(vurdering.harFritak)}
         >
           <VStack gap={'5'}>
             <SpørsmålOgSvar spørsmål="Vurderingen gjelder fra?" svar={formaterDatoForFrontend(vurdering.fom)} />
@@ -185,12 +192,13 @@ export const MeldepliktPeriodisertFrontend = ({
       {fields.map((vurdering, index) => (
         <NyVurderingExpandableCard
           key={vurdering.id}
+          accordionsSignal={accordionsSignal}
           fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-          oppfylt={
+          vurderingStatus={getErOppfyltEllerIkkeStatus(
             form.watch(`vurderinger.${index}.harFritak`)
               ? form.watch(`vurderinger.${index}.harFritak`) === JaEllerNei.Ja
               : undefined
-          }
+          )}
           nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
           isLast={index === vedtatteVurderinger.length - 1}
           vurdertAv={vurdering.vurdertAv}
@@ -202,19 +210,21 @@ export const MeldepliktPeriodisertFrontend = ({
           // vilkåret er valgfritt, kan derfor slette vurderingen selv om det ikke finnes en tidligere vurdering
           harTidligereVurderinger={true}
           index={index}
+          initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
         >
-          <HStack justify={'space-between'}>
-            <DateInputWrapper
-              name={`vurderinger.${index}.fraDato`}
-              label="Vurderingen gjelder fra"
-              control={form.control}
-              rules={{
-                required: 'Vennligst velg en dato for når vurderingen gjelder fra',
-                validate: (value) => validerDato(value as string),
-              }}
-              readOnly={formReadOnly}
-            />
-          </HStack>
+          <DateInputWrapper
+            name={`vurderinger.${index}.fraDato`}
+            label="Vurderingen gjelder fra"
+            control={form.control}
+            rules={{
+              required: 'Vennligst velg en dato for når vurderingen gjelder fra',
+              validate: (value) => validerDato(value as string),
+            }}
+            readOnly={formReadOnly}
+          />
+
+          <HvordanLeggeTilSluttdatoReadMore />
+
           <TextAreaWrapper
             label={'Vilkårsvurdering'}
             control={form.control}

@@ -1,4 +1,4 @@
-import { HStack, Radio, ReadMore, VStack } from '@navikt/ds-react';
+import { HStack, Radio, VStack } from '@navikt/ds-react';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
 import { UseFormReturn } from 'react-hook-form';
@@ -10,6 +10,7 @@ import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupW
 import { BeregningTidspunktGrunnlag } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
+import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
 
 type Props = {
   form: UseFormReturn<ForutgåendeMedlemskapVurderingForm>;
@@ -36,12 +37,9 @@ export const ForutgåendeMedlemskapFormInput = ({ readOnly, index, form, beregni
           readOnly={readOnly}
         />
       </HStack>
-      <ReadMore style={{ maxWidth: '90ch' }} size={'small'} header="Hvordan legge til sluttdato?">
-        For å legge til en sluttdato på denne vurderingen velger du “Legg til ny vurdering”. Det oppretter en ny
-        vurdering, der du kan ha et annet utfall og en ny “gjelder fra” dato, som da vil gi sluttdato på den foregående
-        (denne) vurderingen. Sluttdatoen for denne vurderingen blir satt til dagen før den nye vurderingen sin “gjelder
-        fra” dato.
-      </ReadMore>
+
+      <HvordanLeggeTilSluttdatoReadMore />
+
       <TextAreaWrapper
         name={`vurderinger.${index}.begrunnelse`}
         control={control}

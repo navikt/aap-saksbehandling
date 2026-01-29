@@ -13,7 +13,6 @@ import { Behovstype } from 'lib/utils/form';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { Vurdering11_9 } from 'components/behandlinger/aktivitetsplikt/11-9/Vurder11_9/Vurder11_9MedDataFetching';
 import { omit } from 'lodash';
-import { v4 as uuidv4 } from 'uuid';
 
 type Props = {
   grunnlag?: Aktivitetsplikt11_9Grunnlag;
@@ -26,7 +25,7 @@ export const Vurder11_9 = ({ readOnly, grunnlag, initialMellomlagretVurdering, b
   const vedtatteGjeldendeVurderinger: Vurdering11_9[] =
     grunnlag?.vedtatteVurderinger.map((v) => ({
       ...v,
-      id: uuidv4(),
+      id: crypto.randomUUID(),
     })) ?? [];
   const vurderingerSendtTilBeslutter =
     grunnlag?.vurderinger.map((v) => ({

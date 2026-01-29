@@ -96,8 +96,6 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
       setIsLoading(true);
       const result = await clientBestillDialogmelding(body).finally(() => setIsLoading(false));
 
-      console.log(result);
-
       if (isError(result)) {
         setError(result.apiException.message);
       } else {

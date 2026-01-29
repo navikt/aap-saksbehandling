@@ -7,10 +7,10 @@ import { formaterDatoForFrontend, formaterDatoMedTidspunktForFrontend } from 'li
 
 import styles from 'components/vilkårskort/Vilkårskort.module.css';
 import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
-import { VisningActions, VisningModus } from 'hooks/saksbehandling/visning/VisningHook';
 import { FormEvent, ReactNode } from 'react';
 import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { ApiException } from 'lib/utils/api';
+import { VisningActions, VisningModus } from 'lib/types/visningTypes';
 
 export interface VilkårsKortMedFormOgMellomlagringProps {
   heading: string;

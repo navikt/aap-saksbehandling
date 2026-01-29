@@ -6,7 +6,7 @@ import { TableStyled } from 'components/tablestyled/TableStyled';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { validerDato } from 'lib/validation/dateValidation';
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
-import { SykestipendFormFields } from 'components/behandlinger/sykdom/student/sykestipend/SykestipendVurdering';
+import { SykestipendFormFields } from 'components/behandlinger/samordning/sykestipend/SykestipendVurdering';
 
 interface Props {
   form: UseFormReturn<SykestipendFormFields>;
@@ -23,14 +23,11 @@ export const SykestipendPeriodeTabell = ({ form, readOnly }: Props) => {
   }
   return (
     <VStack gap={'2'}>
-      <Label size={'small'}>Legg periode med sykestipend</Label>
+      <Label size={'small'}>Legg til periode med sykestipend</Label>
 
       <VStack gap={'0'}>
         <BodyLong size={'small'}>Legg til perioder der brukeren har rett på sykestipend.</BodyLong>
-        <BodyLong size={'small'}>
-          Perioder med sykestipend gir ikke rett på AAP etter § 11-14, og vil dermed forskyve virkningsdato.
-        </BodyLong>
-        <BodyLong size={'small'}>Rettighet etter § 11-14 starter aldri før sykestipendperioden.</BodyLong>
+        <BodyLong size={'small'}>Perioder med sykestipend gir ikke rett på AAP.</BodyLong>
       </VStack>
 
       <TableStyled>
@@ -44,7 +41,7 @@ export const SykestipendPeriodeTabell = ({ form, readOnly }: Props) => {
         <Table.Body>
           {fields.map((field, index) => (
             <Table.Row key={`${field.id}-${index}`}>
-              <Table.DataCell>Sykestipend</Table.DataCell>
+              <Table.DataCell>Sykestipend inkludert karanteneperiode</Table.DataCell>
               <Table.DataCell>
                 <HStack align={'center'} gap={'1'}>
                   <DateInputWrapper

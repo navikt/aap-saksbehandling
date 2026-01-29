@@ -1,0 +1,11 @@
+.refusjonsliste {
+  margin-block: 0;
+}
+
+.liste_tittel {
+  font-weight: var(--a-font-weight-bold);
+}
+
+.refusjonskrav + .refusjonskrav {
+  margin-top: var(--ax-space-4);
+}

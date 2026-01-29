@@ -1,5 +1,4 @@
-import { MellomlagretVurdering } from 'lib/types/types';
-import { VisningActions, VisningModus } from 'hooks/saksbehandling/visning/VisningHook';
+import { MellomlagretVurdering, StegType } from 'lib/types/types';
 import styles from './VilkårskortPeriodisert.module.css';
 import { Button, Detail, Heading, HGrid, HStack, VStack } from '@navikt/ds-react';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
@@ -7,14 +6,28 @@ import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { PlusIcon } from '@navikt/aksel-icons';
 import { ErrorList } from 'lib/utils/formerrors';
 import { FormErrorSummary } from 'components/formerrorsummary/FormErrorSummary';
-import { VilkårsKortMedFormOgMellomlagringProps } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { FormEvent, ReactNode } from 'react';
+import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
+import { ApiException } from 'lib/utils/api';
+import { VisningActions, VisningModus } from 'lib/types/visningTypes';
 
-export interface VilkårsKortPeriodisertProps extends VilkårsKortMedFormOgMellomlagringProps {
-  onDeleteMellomlagringClick: () => void;
-  onLagreMellomLagringClick: () => void;
-  mellomlagretVurdering: MellomlagretVurdering | undefined;
+interface VilkårsKortPeriodisertProps {
+  heading: string;
+  steg: StegType;
+  children: ReactNode;
+  onSubmit: (e: FormEvent<HTMLFormElement>) => void;
+  isLoading: boolean;
+  status: LøsBehovOgGåTilNesteStegStatus;
+  løsBehovOgGåTilNesteStegError: ApiException | undefined;
+  knappTekst?: string;
+  vilkårTilhørerNavKontor: boolean;
   visningModus: VisningModus;
   visningActions: VisningActions;
+  onDeleteMellomlagringClick: (() => void) | undefined;
+  onLagreMellomLagringClick: (() => void) | undefined;
+  mellomlagretVurdering: MellomlagretVurdering | undefined;
+  formReset: () => void;
+  vurdertAutomatisk?: boolean;
   onLeggTilVurdering: () => void;
   errorList: ErrorList;
 }

@@ -1,7 +1,7 @@
 'use client';
 
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { Behovstype, JaEllerNei } from 'lib/utils/form';
+import { Behovstype } from 'lib/utils/form';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import {
   BeregningTidspunktGrunnlag,
@@ -14,13 +14,17 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import { parseISO } from 'date-fns';
 import { parseDatoFraDatePicker } from 'lib/utils/date';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
-import { NyVurderingExpandableCard } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
+import {
+  NyVurderingExpandableCard,
+  skalVæreInitiellEkspandert,
+} from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
 import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { ForutgåendeMedlemskapVurderingForm } from 'components/behandlinger/forutgåendemedlemskap/manuellvurderingperiodisert/types';
 import {
+  erNyVurderingOppfylt,
   getDefaultValuesFromGrunnlag,
   hentPeriodiserteVerdierFraMellomlagretVurdering,
   mapFormTilDto,
@@ -28,6 +32,8 @@ import {
 import { ForutgåendeMedlemskapTidligereVurdering } from 'components/behandlinger/forutgåendemedlemskap/manuellvurderingperiodisert/ForutgåendeMedlemskapTidligereVurdering';
 import { ForutgåendeMedlemskapFormInput } from 'components/behandlinger/forutgåendemedlemskap/manuellvurderingperiodisert/ForutgåendeMedlemskapFormInput';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
+import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
+import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 
 interface Props {
   behandlingVersjon: number;
@@ -55,11 +61,13 @@ export const ForutgåendeMedlemskapPeriodisert = ({
   const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
     useMellomlagring(Behovstype.AVKLAR_FORUTGÅENDE_MEDLEMSKAP, initialMellomlagretVurdering);
 
-  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+  const { visningActions, formReadOnly, visningModus, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'VURDER_MEDLEMSKAP',
     mellomlagretVurdering
   );
+
+  const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
   const defaultValues =
     mellomlagretVurdering != null
@@ -69,6 +77,7 @@ export const ForutgåendeMedlemskapPeriodisert = ({
   const form = useForm<ForutgåendeMedlemskapVurderingForm>({
     defaultValues,
     reValidateMode: 'onChange',
+    shouldUnregister: true,
   });
 
   const { fields: vurderingerFields, append, remove } = useFieldArray({ control: form.control, name: 'vurderinger' });
@@ -77,6 +86,7 @@ export const ForutgåendeMedlemskapPeriodisert = ({
     append({
       begrunnelse: '',
       fraDato: undefined,
+      erNyVurdering: true,
     });
   }
 
@@ -105,6 +115,7 @@ export const ForutgåendeMedlemskapPeriodisert = ({
     };
 
     løsPeriodisertBehovOgGåTilNesteSteg(losning, () => {
+      closeAllAccordions();
       nullstillMellomlagretVurdering();
     });
   }
@@ -140,26 +151,29 @@ export const ForutgåendeMedlemskapPeriodisert = ({
           fom={parseISO(vurdering.fom)}
           tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
           foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-          oppfylt={
+          vurderingStatus={getErOppfyltEllerIkkeStatus(
             vurdering.harForutgåendeMedlemskap ||
-            vurdering.varMedlemMedNedsattArbeidsevne === true ||
-            vurdering.medlemMedUnntakAvMaksFemAar === true
-          }
+              vurdering.varMedlemMedNedsattArbeidsevne === true ||
+              vurdering.medlemMedUnntakAvMaksFemAar === true
+          )}
         >
           <ForutgåendeMedlemskapTidligereVurdering vurdering={vurdering} />
         </TidligereVurderingExpandableCard>
       ))}
+
       {vurderingerFields.map((vurdering, index) => (
         <NyVurderingExpandableCard
           key={vurdering.id}
+          accordionsSignal={accordionsSignal}
           fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
           nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
           isLast={index === vurderingerFields.length - 1}
-          oppfylt={
-            form.watch(`vurderinger.${index}.harForutgåendeMedlemskap`) === JaEllerNei.Ja ||
-            form.watch(`vurderinger.${index}.unntaksvilkår`) === 'A' ||
-            form.watch(`vurderinger.${index}.unntaksvilkår`) === 'B'
-          }
+          vurderingStatus={getErOppfyltEllerIkkeStatus(
+            erNyVurderingOppfylt(
+              form.watch(`vurderinger.${index}.harForutgåendeMedlemskap`),
+              form.watch(`vurderinger.${index}.unntaksvilkår`)
+            )
+          )}
           vurdertAv={vurdering.vurdertAv}
           kvalitetssikretAv={vurdering.kvalitetssikretAv}
           besluttetAv={vurdering.besluttetAv}
@@ -168,6 +182,7 @@ export const ForutgåendeMedlemskapPeriodisert = ({
           onSlettVurdering={() => remove(index)}
           harTidligereVurderinger={tidligereVurderinger.length > 0}
           index={index}
+          initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
         >
           <ForutgåendeMedlemskapFormInput
             form={form}

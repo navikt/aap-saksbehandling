@@ -6,16 +6,16 @@ import styles from './Inntektsbortfall.module.css';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { FormEvent } from 'react';
 import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
-import { useVilkårskortVisning, VisningModus } from 'hooks/saksbehandling/visning/VisningHook';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { Alert, Table } from '@navikt/ds-react';
 import { InntektsbortfallResponse, MellomlagretVurdering } from 'lib/types/types';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { CheckmarkCircleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
-import { useFeatureFlag } from 'context/UnleashContext';
 import { formaterTilG } from 'lib/utils/string';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
+import { VisningModus } from 'lib/types/visningTypes';
 
 interface Props {
   behandlingVersjon: number;
@@ -88,8 +88,6 @@ export const Inntektsbortfall = ({
     { readOnly: formReadOnly, shouldUnregister: true }
   );
 
-  const enabled = useFeatureFlag('KravOmInntektsbortfall');
-
   const under62År = grunnlag.under62ÅrVedSøknadstidspunkt;
   const inntektSisteÅr = grunnlag.inntektSisteÅrOver1G;
   const inntektSisteTreÅr = grunnlag.inntektSiste3ÅrOver3G;
@@ -123,13 +121,7 @@ export const Inntektsbortfall = ({
         )(event);
       }}
       mellomlagretVurdering={mellomlagretVurdering}
-      visningModus={
-        enabled
-          ? grunnlag.kanBehandlesAutomatisk
-            ? VisningModus.LÅST_UTEN_ENDRE
-            : visningModus
-          : VisningModus.LÅST_UTEN_ENDRE
-      }
+      visningModus={grunnlag.kanBehandlesAutomatisk ? VisningModus.LÅST_UTEN_ENDRE : visningModus}
       visningActions={visningActions}
       formReset={() => {
         form.reset(vurdering ? mapVurderingToDraftFormFields(vurdering) : {});
@@ -141,67 +133,59 @@ export const Inntektsbortfall = ({
       }}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
     >
-      {!enabled && (
+      <>
+        <TableStyled>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell scope="col">Beskrivelse</Table.HeaderCell>
+              <Table.HeaderCell scope="col">Verdi</Table.HeaderCell>
+              <Table.HeaderCell scope="col">Vurdering</Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            <Table.Row>
+              <Table.DataCell textSize={'small'}>Under 62 år ved søknadstidspunkt</Table.DataCell>
+              <Table.DataCell textSize={'small'}>{under62År.alder} år</Table.DataCell>
+              <Table.DataCell textSize={'small'}>
+                <div className={styles.utfall}>
+                  <AvslåttOppfylltIkon verdi={!under62År.resultat} />
+                  {under62År.resultat ? 'Under 62 år' : 'Over 62 år'}
+                </div>
+              </Table.DataCell>
+            </Table.Row>
+            <Table.Row>
+              <Table.DataCell textSize={'small'}>Inntekt siste 3 år over 3 G</Table.DataCell>
+              <Table.DataCell textSize={'small'}>
+                {formaterTilG(inntektSisteTreÅr.gverdi, { antallDesimaler: 2 })}
+              </Table.DataCell>
+              <Table.DataCell textSize={'small'}>
+                <div className={styles.utfall}>
+                  <AvslåttOppfylltIkon verdi={!inntektSisteTreÅr.resultat} />
+                  {inntektSisteTreÅr.resultat ? 'Inntekt er over 3 G' : 'Inntekt er under 3 G'}
+                </div>
+              </Table.DataCell>
+            </Table.Row>
+            <Table.Row>
+              <Table.DataCell textSize={'small'}>Inntekt siste år over 1 G</Table.DataCell>
+              <Table.DataCell textSize={'small'}>
+                {formaterTilG(inntektSisteÅr.gverdi, { antallDesimaler: 2 })}
+              </Table.DataCell>
+              <Table.DataCell textSize={'small'}>
+                <div className={styles.utfall}>
+                  <AvslåttOppfylltIkon verdi={!inntektSisteÅr.resultat} />
+                  {inntektSisteÅr.resultat ? 'Inntekt er over 1 G' : 'Inntekt er under 1 G'}
+                </div>
+              </Table.DataCell>
+            </Table.Row>
+          </Table.Body>
+        </TableStyled>
         <Alert variant="info">
-          Brukeren er over 62 år og må vurderes for § 11-4 andre ledd. Det er ikke støttet i Kelvin enda. Saken må
-          settes på vent i påvente av at funksjonaliteten er ferdig utviklet.
+          Brukeren har ikke hatt inntekt over 1 G siste år / 3 G siste 3 år. Det må vurderes om brukeren har rett til å
+          ta ut full alderspensjon.
         </Alert>
-      )}
-      {enabled && (
-        <>
-          <TableStyled>
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell scope="col">Beskrivelse</Table.HeaderCell>
-                <Table.HeaderCell scope="col">Verdi</Table.HeaderCell>
-                <Table.HeaderCell scope="col">Vurdering</Table.HeaderCell>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              <Table.Row>
-                <Table.DataCell textSize={'small'}>Under 62 år ved søknadstidspunkt</Table.DataCell>
-                <Table.DataCell textSize={'small'}>{under62År.alder} år</Table.DataCell>
-                <Table.DataCell textSize={'small'}>
-                  <div className={styles.utfall}>
-                    <AvslåttOppfylltIkon verdi={!under62År.resultat} />
-                    {under62År.resultat ? 'Under 62 år' : 'Over 62 år'}
-                  </div>
-                </Table.DataCell>
-              </Table.Row>
-              <Table.Row>
-                <Table.DataCell textSize={'small'}>Inntekt siste 3 år over 3 G</Table.DataCell>
-                <Table.DataCell textSize={'small'}>
-                  {formaterTilG(inntektSisteTreÅr.gverdi, { antallDesimaler: 2 })}
-                </Table.DataCell>
-                <Table.DataCell textSize={'small'}>
-                  <div className={styles.utfall}>
-                    <AvslåttOppfylltIkon verdi={!inntektSisteTreÅr.resultat} />
-                    {inntektSisteTreÅr.resultat ? 'Inntekt er over 3 G' : 'Inntekt er under 3 G'}
-                  </div>
-                </Table.DataCell>
-              </Table.Row>
-              <Table.Row>
-                <Table.DataCell textSize={'small'}>Inntekt siste år over 1 G</Table.DataCell>
-                <Table.DataCell textSize={'small'}>
-                  {formaterTilG(inntektSisteÅr.gverdi, { antallDesimaler: 2 })}
-                </Table.DataCell>
-                <Table.DataCell textSize={'small'}>
-                  <div className={styles.utfall}>
-                    <AvslåttOppfylltIkon verdi={!inntektSisteÅr.resultat} />
-                    {inntektSisteÅr.resultat ? 'Inntekt er over 1 G' : 'Inntekt er under 1 G'}
-                  </div>
-                </Table.DataCell>
-              </Table.Row>
-            </Table.Body>
-          </TableStyled>
-          <Alert variant="info">
-            Brukeren har ikke hatt inntekt over 1 G siste år / 3 G siste 3 år. Det må vurderes om brukeren har rett til
-            å ta ut full alderspensjon.
-          </Alert>
-          <FormField form={form} formField={formFields.begrunnelse} />
-          <FormField form={form} formField={formFields.rettTilUttak} />
-        </>
-      )}
+        <FormField form={form} formField={formFields.begrunnelse} />
+        <FormField form={form} formField={formFields.rettTilUttak} />
+      </>
     </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };

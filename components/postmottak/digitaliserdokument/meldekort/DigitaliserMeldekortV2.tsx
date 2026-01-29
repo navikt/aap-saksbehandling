@@ -9,6 +9,7 @@ import { Button } from '@navikt/ds-react';
 import { addWeeks, format, isBefore, startOfWeek, subMonths } from 'date-fns';
 import { MeldeperioderV2 } from 'components/postmottak/digitaliserdokument/meldekort/MeldePerioderV2';
 import { FormEvent } from 'react';
+import { Dato } from 'lib/types/Dato';
 
 interface Props extends Submittable {
   readOnly: boolean;
@@ -57,7 +58,7 @@ export const DigitaliserMeldekortV2 = ({ readOnly, submit, isLoading }: Props) =
         rules: { required: 'Du må velge hvilke uker meldekortet gjelder for' },
       },
       innsendtDato: {
-        type: 'date_input',
+        type: 'date',
         label: 'Dato for innsendt meldekort',
         rules: { required: 'Du må registrere når meldekortet ble innsendt' },
       },
@@ -73,8 +74,8 @@ export const DigitaliserMeldekortV2 = ({ readOnly, submit, isLoading }: Props) =
     const dager: MeldekortV0['timerArbeidPerPeriode'] = (data.meldeperioder ?? [])
       .flatMap((uke) => uke.dager)
       .map(({ dato, arbeidsTimer }) => ({
-        fraOgMedDato: dato.toISOString().slice(0, 10),
-        tilOgMedDato: dato.toISOString().slice(0, 10),
+        fraOgMedDato: new Dato(dato).formaterForBackend(),
+        tilOgMedDato: new Dato(dato).formaterForBackend(),
         timerArbeid: Number(arbeidsTimer),
       }));
 
@@ -87,7 +88,7 @@ export const DigitaliserMeldekortV2 = ({ readOnly, submit, isLoading }: Props) =
   }
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    form.handleSubmit((data) => submit('MELDEKORT', mapTilMeldekortKontrakt(data), null))(event);
+    form.handleSubmit((data) => submit('MELDEKORT', mapTilMeldekortKontrakt(data), data.innsendtDato))(event);
   };
 
   return (

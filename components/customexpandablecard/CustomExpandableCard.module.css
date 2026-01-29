@@ -1,8 +1,9 @@
 .container {
-    border-bottom: 1px solid var(--a-border-divider);
+  border-bottom: 1px solid var(--a-border-divider);
 }
 
-.headingButton{
-    background: none;
-    border: none;
+.headingButton {
+  background: none;
+  border: none;
+  cursor: pointer;
 }

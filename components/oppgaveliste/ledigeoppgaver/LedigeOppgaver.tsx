@@ -1,14 +1,13 @@
 'use client';
 
-import { useEffect, useState, useTransition } from 'react';
+import { useEffect, useState } from 'react';
 import useSWR from 'swr';
 import { Alert, BodyShort, Box, Button, HStack, Label, Switch, VStack } from '@navikt/ds-react';
 import { KøSelect } from 'components/oppgaveliste/køselect/KøSelect';
-import { byggKelvinURL, queryParamsArray } from 'lib/utils/request';
+import { queryParamsArray } from 'lib/utils/request';
 import { Enhet } from 'lib/types/oppgaveTypes';
-import { hentKøerForEnheterClient, plukkNesteOppgaveClient } from 'lib/oppgaveClientApi';
+import { hentKøerForEnheterClient } from 'lib/oppgaveClientApi';
 import { useLagreAktivKø } from 'hooks/oppgave/aktivkøHook';
-import { useRouter } from 'next/navigation';
 import { isError, isSuccess } from 'lib/utils/api';
 import { useLedigeOppgaver } from 'hooks/oppgave/OppgaveHook';
 import { LedigeOppgaverTabell } from 'components/oppgaveliste/ledigeoppgaver/ledigeoppgavertabell/LedigeOppgaverTabell';
@@ -27,7 +26,7 @@ import {
 import { LedigeOppgaverFiltrering } from 'components/oppgaveliste/filtrering/ledigeoppgaverfiltrering/LedigeOppgaverFiltrering';
 import { TabellSkeleton } from 'components/oppgaveliste/tabellskeleton/TabellSkeleton';
 import { ALLE_OPPGAVER_ID } from 'components/oppgaveliste/filtrering/filtreringUtils';
-import { useLagreAktivUtvidetFilter } from '../../../hooks/oppgave/aktivUtvidetFilterHook';
+import { useLagreAktivUtvidetFilter } from 'hooks/oppgave/aktivUtvidetFilterHook';
 import { EnheterSelect } from 'components/oppgaveliste/enheterselect/EnheterSelect';
 import { ComboOption } from 'components/produksjonsstyring/minenhet/MineEnheter';
 import { useLagreAktiveEnheter } from 'hooks/oppgave/aktiveEnheterHook';
@@ -40,9 +39,6 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
   const { hentLagretAktivKø, lagreAktivKøId } = useLagreAktivKø();
   const { hentAktivUtvidetFilter, lagreAktivUtvidetFilter } = useLagreAktivUtvidetFilter();
   const { hentLagredeAktiveEnheter, lagreAktiveEnheter } = useLagreAktiveEnheter();
-
-  const router = useRouter();
-  const [isPending, startTransition] = useTransition();
 
   const [veilederFilter, setVeilederFilter] = useState<string>('');
   const [aktivKøId, setAktivKøId] = useState<number>(ALLE_OPPGAVER_ID);
@@ -105,7 +101,7 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
 
   const behandlingOpprettetTom = form.watch('behandlingOpprettetTom');
   const behandlingOpprettetFom = form.watch('behandlingOpprettetFom');
-  const andreStatusTyper = ['VENT', 'ER_HASTESAK'];
+  const andreStatusTyper = ['VENT', 'ER_HASTESAK', 'VENTEFRIST_UTLØPT'];
 
   const utvidetFilter =
     aktivKøId === ALLE_OPPGAVER_ID
@@ -121,6 +117,7 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
           årsaker: form.watch('årsaker') || [],
           avklaringsbehovKoder: form.watch('avklaringsbehov') || [],
           markertHaster: form.watch('statuser')?.includes('ER_HASTESAK'),
+          ventefristUtløpt: form.watch('statuser')?.includes('VENTEFRIST_UTLØPT'),
         }
       : undefined;
 
@@ -156,17 +153,6 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
       oppdaterKøId(køId);
     }
   }, [køer]);
-
-  async function plukkOgGåTilOppgave() {
-    startTransition(async () => {
-      if (aktiveEnhetsnumre && aktivKøId) {
-        const nesteOppgaveRes = await plukkNesteOppgaveClient(aktivKøId, aktiveEnhetsnumre);
-        if (isSuccess(nesteOppgaveRes) && nesteOppgaveRes.data) {
-          router.push(byggKelvinURL(nesteOppgaveRes.data.avklaringsbehovReferanse));
-        }
-      }
-    });
-  }
 
   if (isError(køer)) {
     return <Alert variant="error">{køer.apiException.message}</Alert>;
@@ -208,10 +194,6 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
                 Vis kun oppgaver jeg er veileder på
               </Switch>
             </HStack>
-
-            <Button size="medium" onClick={() => plukkOgGåTilOppgave()} loading={isPending}>
-              Behandle neste oppgave
-            </Button>
           </HStack>
           <HStack gap={'2'} paddingInline={'4'} paddingBlock={'2'}>
             <Label as="p" size={'small'}>

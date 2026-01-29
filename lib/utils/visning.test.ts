@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { hentVisning, VisningModus } from 'hooks/saksbehandling/visning/VisningHook';
 import { MellomlagretVurdering } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
+import { hentVisning } from 'lib/utils/visning';
+import { VisningModus } from 'lib/types/visningTypes';
 
 const mellomlagring: MellomlagretVurdering = {
   avklaringsbehovkode: Behovstype.AVKLAR_SYKDOM_KODE,
@@ -11,7 +12,7 @@ const mellomlagring: MellomlagretVurdering = {
   vurdertDato: '',
 };
 
-describe('Visning av vilkårskort i førstegangsbehandling', () => {
+describe('Visning av vilkårskort', () => {
   it('skal være LÅST_MED_ENDRE hvis readOnly=false, erAktivtSteg=false, mellomlagring=undefined', () => {
     const verdi = hentVisning(false, false, undefined);
     expect(verdi).toBe(VisningModus.LÅST_MED_ENDRE);

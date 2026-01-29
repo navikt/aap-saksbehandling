@@ -1,8 +1,6 @@
 import {
   AvreserverOppgaveDto,
   Kø,
-  NesteOppgaveRequestBody,
-  NesteOppgaveResponse,
   Oppgave,
   OppgavelisteRequest,
   OppgavelisteResponse,
@@ -82,11 +80,6 @@ export async function avreserverOppgaveClient(oppgaver: number[]) {
 export async function hentKøerForEnheterClient(enheter: string[]) {
   const url = `/oppgave/api/filter?${queryParamsArray('enheter', enheter)}`;
   return clientFetch<Kø[]>(url, 'GET');
-}
-
-export async function plukkNesteOppgaveClient(filterId: number, valgteEnhetsnumre: string[]) {
-  const payload: NesteOppgaveRequestBody = { filterId, enheter: valgteEnhetsnumre };
-  return await clientFetch<NesteOppgaveResponse | null>('/oppgave/api/oppgave/neste', 'POST', payload);
 }
 export async function plukkOppgaveClient(oppgaveId: number, versjon: number) {
   const payload: PlukkOppgaveDto = { oppgaveId, versjon };

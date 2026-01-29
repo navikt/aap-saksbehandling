@@ -291,6 +291,13 @@ describe('Førstegangsbehandling', () => {
     const endreKnapp = screen.getByRole('button', { name: 'Endre' });
     await user.click(endreKnapp);
 
+    // Accordion lukker seg når det ikke er aktivt
+    await user.click(
+      screen.getByRole('button', {
+        name: /ny vurdering: 10. oktober 2025/i,
+      })
+    );
+
     const begrunnelseFelt = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
     await user.clear(begrunnelseFelt);
     await user.type(begrunnelseFelt, 'Dette er en ny begrunnelse');
@@ -298,6 +305,13 @@ describe('Førstegangsbehandling', () => {
 
     const avbrytKnapp = screen.getByRole('button', { name: 'Avbryt' });
     await user.click(avbrytKnapp);
+
+    // Accordion lukker seg når det ikke er aktivt
+    await user.click(
+      screen.getByRole('button', {
+        name: /ny vurdering: 10. oktober 2025/i,
+      })
+    );
 
     const begrunnelseFeltEtterAvbryt = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
     expect(begrunnelseFeltEtterAvbryt).toHaveValue('Dette er min vurdering som er bekreftet');

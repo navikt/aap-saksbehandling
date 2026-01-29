@@ -14,7 +14,10 @@ import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { NyVurderingExpandableCard } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
+import {
+  NyVurderingExpandableCard,
+  skalVæreInitiellEkspandert,
+} from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { Dato } from 'lib/types/Dato';
 import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
 import { SykdomsvurderingFormInput } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingFormInput';
@@ -31,6 +34,9 @@ import {
   erNyVurderingOppfylt,
   erTidligereVurderingOppfylt,
 } from 'components/behandlinger/sykdom/sykdomsvurdering/sykdomsvurdering-utils';
+import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
+import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
+import { getFraDatoFraGrunnlagForFrontend, trengerTomPeriodisertVurdering } from 'lib/utils/periodisering';
 
 export interface SykdomsvurderingerForm {
   vurderinger: Array<Sykdomsvurdering>;
@@ -54,6 +60,7 @@ export interface Sykdomsvurdering {
   vurdertAv?: VurdertAvAnsatt;
   kvalitetssikretAv?: VurdertAvAnsatt;
   besluttetAv?: VurdertAvAnsatt;
+  erNyVurdering?: boolean;
 }
 
 interface SykdomProps {
@@ -77,6 +84,9 @@ export const SykdomsvurderingPeriodisert = ({
 }: SykdomProps) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { sak } = useSak();
+
+  const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
+
   const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('AVKLAR_SYKDOM');
 
@@ -85,7 +95,7 @@ export const SykdomsvurderingPeriodisert = ({
 
   const diagnosegrunnlag = finnDiagnosegrunnlag(typeBehandling, grunnlag);
 
-  const { visningModus, visningActions, formReadOnly } = useVilkårskortVisning(
+  const { visningModus, visningActions, formReadOnly, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'AVKLAR_SYKDOM',
     mellomlagretVurdering
@@ -138,6 +148,7 @@ export const SykdomsvurderingPeriodisert = ({
           referanse: behandlingsReferanse,
         },
         () => {
+          closeAllAccordions();
           nullstillMellomlagretVurdering();
           visningActions.onBekreftClick();
         }
@@ -180,27 +191,36 @@ export const SykdomsvurderingPeriodisert = ({
             fom={new Dato(vurdering.fom).dato}
             tom={vurdering.tom ? parseISO(vurdering.tom) : undefined}
             foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-            oppfylt={erTidligereVurderingOppfylt(vurdering)}
+            vurderingStatus={getErOppfyltEllerIkkeStatus(erTidligereVurderingOppfylt(vurdering))}
             defaultCollapsed={nyeVurderingerFields.length > 0}
           >
             <TidligereSykdomsvurdering vurdering={vurdering} />
           </TidligereVurderingExpandableCard>
         ))}
+
         {nyeVurderingerFields.map((vurdering, index) => (
           <NyVurderingExpandableCard
             key={vurdering.id}
+            accordionsSignal={accordionsSignal}
             fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-            oppfylt={erNyVurderingOppfylt(form.watch(`vurderinger.${index}`))}
+            vurderingStatus={getErOppfyltEllerIkkeStatus(
+              erNyVurderingOppfylt(
+                form.watch(`vurderinger.${index}`),
+                førsteDatoSomKanVurderes,
+                grunnlag.skalVurdereYrkesskade
+              )
+            )}
             nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
             isLast={index === nyeVurderingerFields.length - 1}
             vurdertAv={vurdering.vurdertAv}
             kvalitetssikretAv={vurdering.kvalitetssikretAv}
             besluttetAv={vurdering.besluttetAv}
-            finnesFeil={finnesFeilForVurdering(index, errorList)}
             readonly={formReadOnly}
+            finnesFeil={finnesFeilForVurdering(index, errorList)}
             onSlettVurdering={() => remove(index)}
             harTidligereVurderinger={tidligereVurderinger.length > 0}
             index={index}
+            initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
           >
             <SykdomsvurderingFormInput
               index={index}
@@ -218,21 +238,12 @@ export const SykdomsvurderingPeriodisert = ({
   );
 
   function mapGrunnlagTilDefaultvalues(grunnlag: SykdomsGrunnlag): SykdomsvurderingerForm {
-    if (grunnlag == null || grunnlag.nyeVurderinger.length === 0) {
-      // Vi har ingen nye vurderinger, men har tidligere vurderinger. Ikke ha noen preutfyllte vurderunger
-      if (grunnlag.gjeldendeVedtatteSykdomsvurderinger.length > 0) {
-        return { vurderinger: [] };
-      }
-
-      // Vi har ingen nye vurderinger, og heller ingen tidligere vurderinger:  legg til en tom-default-periode
-      const førsteFraDatoSomKanVurderes = grunnlag.kanVurderes[0]?.fom
-        ? { fraDato: new Dato(grunnlag.kanVurderes[0].fom).formaterForFrontend() }
-        : {};
+    if (trengerTomPeriodisertVurdering(grunnlag)) {
       return {
         vurderinger: [
           {
             ...emptySykdomsvurdering(),
-            ...førsteFraDatoSomKanVurderes,
+            fraDato: getFraDatoFraGrunnlagForFrontend(grunnlag),
           },
         ],
       };

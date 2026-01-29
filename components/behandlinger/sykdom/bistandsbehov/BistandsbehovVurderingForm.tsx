@@ -2,13 +2,15 @@
 
 import { JaEllerNei } from 'lib/utils/form';
 import { validerDato } from 'lib/validation/dateValidation';
-import { HStack, VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react';
 import { UseFormReturn } from 'react-hook-form';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
 import { BistandForm } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovPeriodisert';
 import { BistandsGrunnlag } from 'lib/types/types';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
+import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
+import React from 'react';
 
 type Props = {
   form: UseFormReturn<BistandForm>;
@@ -25,18 +27,19 @@ export const BistandsbehovVurderingForm = ({ form, index, readOnly }: Props) => 
 
   return (
     <VStack gap={'4'}>
-      <HStack justify={'space-between'}>
-        <DateInputWrapper
-          name={`vurderinger.${index}.fraDato`}
-          label="Vurderingen gjelder fra"
-          control={form.control}
-          rules={{
-            required: 'Vennligst velg en dato for når vurderingen gjelder fra',
-            validate: (value) => validerDato(value as string),
-          }}
-          readOnly={readOnly}
-        />
-      </HStack>
+      <DateInputWrapper
+        name={`vurderinger.${index}.fraDato`}
+        label="Vurderingen gjelder fra"
+        control={form.control}
+        rules={{
+          required: 'Vennligst velg en dato for når vurderingen gjelder fra',
+          validate: (value) => validerDato(value as string),
+        }}
+        readOnly={readOnly}
+      />
+
+      <HvordanLeggeTilSluttdatoReadMore />
+
       <TextAreaWrapper
         name={`vurderinger.${index}.begrunnelse`}
         control={form.control}

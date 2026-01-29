@@ -168,6 +168,12 @@ describe('Generelt', () => {
     const endreKnapp = screen.getByRole('button', { name: 'Endre' });
     await user.click(endreKnapp);
 
+    await user.click(
+      screen.getByRole('button', {
+        name: /ny vurdering: 1. november 2025/i,
+      })
+    );
+
     const begrunnelseFelt = screen.getByRole('textbox', {
       name: 'Vurder brukerens forutgående medlemskap',
     });
@@ -177,6 +183,12 @@ describe('Generelt', () => {
 
     const avbrytKnapp = screen.getByRole('button', { name: 'Avbryt' });
     await user.click(avbrytKnapp);
+
+    await user.click(
+      screen.getByRole('button', {
+        name: /ny vurdering: 1. november 2025/i,
+      })
+    );
 
     const begrunnelseFeltEtterAvbryt = screen.getByRole('textbox', {
       name: 'Vurder brukerens forutgående medlemskap',

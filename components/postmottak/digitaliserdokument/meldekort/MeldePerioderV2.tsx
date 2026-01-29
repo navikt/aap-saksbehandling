@@ -24,8 +24,6 @@ export const MeldeperioderV2 = ({ form, readOnly }: Props) => {
         harValgtPåfølgendeUke: (meldeperioder) => {
           for (let i = 0; i < meldeperioder.length; i += 2) {
             if (getISOWeek(addWeeks(meldeperioder[i].ukestart, 1)) !== getISOWeek(meldeperioder[i + 1].ukestart)) {
-              console.log(getISOWeek(meldeperioder[i].ukestart));
-              console.log(getISOWeek(meldeperioder[i + 1].ukestart));
               return 'Det er ikke valgt korrekte meldeperioder';
             }
           }

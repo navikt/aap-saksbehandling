@@ -18,12 +18,17 @@ import { parseDatoFraDatePicker } from 'lib/utils/date';
 import { LovvalgOgMedlemskapFormInput } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/LovvalgOgMedlemskapFormInput';
 import { LovvalgOgMedlemskapTidligereVurdering } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/LovvalgOgMedlemskapTidligereVurdering';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
-import { NyVurderingExpandableCard } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
+import {
+  NyVurderingExpandableCard,
+  skalVæreInitiellEkspandert,
+} from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
 import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
+import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
+import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 
 interface Props {
   behandlingVersjon: number;
@@ -49,7 +54,9 @@ export const LovvalgOgMedlemskapPeriodisert = ({
   const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
     useMellomlagring(Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP, initialMellomlagretVurdering);
 
-  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+  const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
+
+  const { visningActions, formReadOnly, visningModus, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'VURDER_LOVVALG',
     mellomlagretVurdering
@@ -75,6 +82,7 @@ export const LovvalgOgMedlemskapPeriodisert = ({
       },
       medlemskap: undefined,
       fraDato: undefined,
+      erNyVurdering: true,
     });
   }
 
@@ -102,6 +110,7 @@ export const LovvalgOgMedlemskapPeriodisert = ({
     };
 
     løsPeriodisertBehovOgGåTilNesteSteg(losning, () => {
+      closeAllAccordions();
       nullstillMellomlagretVurdering();
     });
   }
@@ -137,25 +146,27 @@ export const LovvalgOgMedlemskapPeriodisert = ({
           fom={parseISO(vurdering.fom)}
           tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
           foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-          oppfylt={
+          vurderingStatus={getErOppfyltEllerIkkeStatus(
             vurdering.lovvalg.lovvalgsEØSLandEllerLandMedAvtale === 'NOR' &&
-            vurdering.medlemskap?.varMedlemIFolketrygd === true
-          }
+              vurdering.medlemskap?.varMedlemIFolketrygd === true
+          )}
         >
           <LovvalgOgMedlemskapTidligereVurdering vurdering={vurdering} />
         </TidligereVurderingExpandableCard>
       ))}
+
       {vurderingerFields.map((vurdering, index) => (
         <NyVurderingExpandableCard
           key={vurdering.id}
+          accordionsSignal={accordionsSignal}
           fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
           nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
           isLast={index === vurderingerFields.length - 1}
-          oppfylt={
+          vurderingStatus={getErOppfyltEllerIkkeStatus(
             form.watch(`vurderinger.${index}.medlemskap.varMedlemIFolketrygd`)
               ? form.watch(`vurderinger.${index}.medlemskap.varMedlemIFolketrygd`) === JaEllerNei.Ja
               : undefined
-          }
+          )}
           vurdertAv={vurdering.vurdertAv}
           kvalitetssikretAv={vurdering.kvalitetssikretAv}
           besluttetAv={vurdering.besluttetAv}
@@ -164,6 +175,7 @@ export const LovvalgOgMedlemskapPeriodisert = ({
           harTidligereVurderinger={tidligereVurderinger.length > 0}
           index={index}
           readonly={formReadOnly}
+          initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
         >
           <LovvalgOgMedlemskapFormInput form={form} readOnly={formReadOnly} index={index} />
         </NyVurderingExpandableCard>

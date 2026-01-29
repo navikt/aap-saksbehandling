@@ -1,4 +1,4 @@
-import { Alert, HStack, Link, ReadMore, VStack } from '@navikt/ds-react';
+import { Alert, HStack, VStack } from '@navikt/ds-react';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
 import { JaEllerNei } from 'lib/utils/form';
@@ -10,6 +10,8 @@ import { UseFormReturn } from 'react-hook-form';
 import { OppholdskravForm } from 'components/behandlinger/oppholdskrav/types';
 import { validerDato } from 'lib/validation/dateValidation';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
+import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
+import React from 'react';
 
 type Props = {
   form: UseFormReturn<OppholdskravForm>;
@@ -36,15 +38,9 @@ export const OppholdskravFormInput = ({ readOnly, index, form }: Props) => {
           readOnly={readOnly}
         />
       </HStack>
-      <ReadMore style={{ maxWidth: '90ch' }} size={'small'} header="Hvordan legge til sluttdato?">
-        For å legge til en sluttdato på denne vurderingen velger du “Legg til ny vurdering”. Det oppretter en ny
-        vurdering, der du kan ha et annet utfall og en ny “gjelder fra” dato, som da vil gi sluttdato på den foregående
-        (denne) vurderingen. Sluttdatoen for denne vurderingen blir satt til dagen før den nye vurderingen sin “gjelder
-        fra” dato.
-      </ReadMore>
-      <Link href="https://lovdata.no/nav/rundskriv/r11-00#ref/lov/1997-02-28-19/%C2%A711-3" target="_blank">
-        Du kan lese om hvordan vilkåret skal vurderes i rundskrivet til § 11-3 (lovdata.no)
-      </Link>
+
+      <HvordanLeggeTilSluttdatoReadMore />
+
       <TextAreaWrapper
         name={`vurderinger.${index}.begrunnelse`}
         control={control}
@@ -63,7 +59,6 @@ export const OppholdskravFormInput = ({ readOnly, index, form }: Props) => {
         rules={{ required: 'Du må ta stilling til om brukeren oppfyller vilkårene' }}
         readOnly={readOnly}
       />
-
       {watch(`vurderinger.${index}.oppfyller`) === JaEllerNei.Nei && (
         <>
           <HStack>

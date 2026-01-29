@@ -42,7 +42,8 @@ export const SykdomsvurderingUtenVissVarighet = ({ form, index, erÅrsakssammenh
           />
         )}
 
-        {form.watch(`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnFørtiProsent`) === JaEllerNei.Ja && (
+        {(form.watch(`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnFørtiProsent`) === JaEllerNei.Ja ||
+          form.watch(`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense`) === JaEllerNei.Ja) && (
           <RadioGroupJaNei
             name={`vurderinger.${index}.erSkadeSykdomEllerLyteVesentligdel`}
             control={form.control}

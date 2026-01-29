@@ -10,7 +10,7 @@ export const FLAGS = [
   'SosialRefusjon',
   'DigitaliseringAvMeldekortV2Frontend',
   'Sykestipend',
-  'KravOmInntektsbortfall',
+  'RevurderStarttidspunkt',
 ] as const;
 
 export type FlagNames = (typeof FLAGS)[number];
@@ -28,5 +28,5 @@ export const mockedFlags: Flags = {
   SosialRefusjon: true,
   DigitaliseringAvMeldekortV2Frontend: true,
   Sykestipend: true,
-  KravOmInntektsbortfall: true,
+  RevurderStarttidspunkt: true,
 };

@@ -11,24 +11,32 @@ import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook
 import { useFieldArray, useForm } from 'react-hook-form';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 import { BistandsbehovVurderingForm } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovVurderingForm';
-import { NyVurderingExpandableCard } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
+import {
+  NyVurderingExpandableCard,
+  skalVæreInitiellEkspandert,
+} from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { parseISO } from 'date-fns';
 import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
 import { LovOgMedlemskapVurderingForm } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/types';
 import { BistandsbehovTidligereVurdering } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovTidligereVurdering';
-import { mapBistandVurderingFormTilDto } from 'components/behandlinger/sykdom/bistandsbehov/bistandsbehov-utils';
+import {
+  erNyVurderingErOppfylt,
+  mapBistandVurderingFormTilDto,
+} from 'components/behandlinger/sykdom/bistandsbehov/bistandsbehov-utils';
 import { Dato } from 'lib/types/Dato';
 import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovMellomlagringParser';
-import { getFraDatoFraGrunnlagForFrontend } from 'lib/utils/periodisering';
+import { getFraDatoFraGrunnlagForFrontend, trengerTomPeriodisertVurdering } from 'lib/utils/periodisering';
 import { Link, VStack } from '@navikt/ds-react';
 import { Veiledning } from 'components/veiledning/Veiledning';
+import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
+import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 
 interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
-  grunnlag?: BistandsGrunnlag;
+  grunnlag: BistandsGrunnlag;
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 export interface BistandForm {
@@ -45,6 +53,7 @@ export interface BistandVurderingForm {
   vurdertAv?: VurdertAvAnsatt;
   kvalitetssikretAv?: VurdertAvAnsatt;
   besluttetAv?: VurdertAvAnsatt;
+  erNyVurdering?: boolean;
 }
 
 export const BistandsbehovPeriodisert = ({
@@ -60,7 +69,9 @@ export const BistandsbehovPeriodisert = ({
   const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
     useMellomlagring(Behovstype.AVKLAR_BISTANDSBEHOV_KODE, initialMellomlagretVurdering);
 
-  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+  const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
+
+  const { visningActions, formReadOnly, visningModus, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'VURDER_BISTANDSBEHOV',
     mellomlagretVurdering
@@ -91,6 +102,7 @@ export const BistandsbehovPeriodisert = ({
         () => {
           nullstillMellomlagretVurdering();
           visningActions.onBekreftClick();
+          closeAllAccordions();
         }
       );
     })(event);
@@ -150,39 +162,35 @@ export const BistandsbehovPeriodisert = ({
             fom={parseISO(vurdering.fom)}
             tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
             foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-            oppfylt={
+            vurderingStatus={getErOppfyltEllerIkkeStatus(
               !!(
                 vurdering.erBehovForAktivBehandling ||
                 vurdering.erBehovForArbeidsrettetTiltak ||
                 vurdering.erBehovForAnnenOppfølging
               )
-            }
+            )}
           >
             <BistandsbehovTidligereVurdering vurdering={vurdering} />
           </TidligereVurderingExpandableCard>
         ))}
+
         {fields.map((vurdering, index) => (
           <NyVurderingExpandableCard
             key={vurdering.id}
+            accordionsSignal={accordionsSignal}
             fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
             nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
             isLast={index === fields.length - 1}
-            oppfylt={
-              form.watch(`vurderinger.${index}.erBehovForAktivBehandling`) &&
-              form.watch(`vurderinger.${index}.erBehovForArbeidsrettetTiltak`)
-                ? form.watch(`vurderinger.${index}.erBehovForAktivBehandling`) === JaEllerNei.Ja ||
-                  form.watch(`vurderinger.${index}.erBehovForArbeidsrettetTiltak`) === JaEllerNei.Ja ||
-                  form.watch(`vurderinger.${index}.erBehovForAnnenOppfølging`) === JaEllerNei.Ja
-                : undefined
-            }
+            vurderingStatus={getErOppfyltEllerIkkeStatus(erNyVurderingErOppfylt(form.watch(`vurderinger.${index}`)))}
             vurdertAv={vurdering.vurdertAv}
             kvalitetssikretAv={vurdering.kvalitetssikretAv}
             besluttetAv={vurdering.besluttetAv}
-            finnesFeil={finnesFeilForVurdering(index, errorList)}
             readonly={formReadOnly}
             onSlettVurdering={() => remove(index)}
             harTidligereVurderinger={tidligereVurderinger.length > 0}
             index={index}
+            finnesFeil={finnesFeilForVurdering(index, errorList)}
+            initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
           >
             <BistandsbehovVurderingForm form={form} readOnly={formReadOnly} index={index} />
           </NyVurderingExpandableCard>
@@ -191,9 +199,8 @@ export const BistandsbehovPeriodisert = ({
     </VilkårskortPeriodisert>
   );
 
-  function mapVurderingerToBistandForm(grunnlag?: BistandsGrunnlag): BistandForm {
-    if (!grunnlag || (grunnlag.nyeVurderinger.length === 0 && grunnlag.sisteVedtatteVurderinger.length === 0)) {
-      // Vi har ingen tidligere vurderinger eller nye vurderinger, legg til en tom-default-periode
+  function mapVurderingerToBistandForm(grunnlag: BistandsGrunnlag): BistandForm {
+    if (trengerTomPeriodisertVurdering(grunnlag)) {
       return {
         vurderinger: [
           {
@@ -230,6 +237,7 @@ export const BistandsbehovPeriodisert = ({
       overgangBegrunnelse: '',
       skalVurdereAapIOvergangTilArbeid: undefined,
       erBehovForArbeidsrettetTiltak: undefined,
+      erNyVurdering: true,
     };
   }
 };

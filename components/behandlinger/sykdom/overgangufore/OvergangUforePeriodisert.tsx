@@ -10,9 +10,12 @@ import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { parse, parseISO } from 'date-fns';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { useFieldArray, useForm, UseFormReturn } from 'react-hook-form';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
-import { NyVurderingExpandableCard } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
+import {
+  NyVurderingExpandableCard,
+  skalVæreInitiellEkspandert,
+} from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { OvergangUforeVurderingFormInput } from 'components/behandlinger/sykdom/overgangufore/OvergangUforeVurderingFormInput';
 import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
@@ -20,7 +23,9 @@ import { OvergangUforeTidligereVurdering } from 'components/behandlinger/sykdom/
 import { Link, VStack } from '@navikt/ds-react';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
-import { getFraDatoFraGrunnlagForFrontend } from 'lib/utils/periodisering';
+import { getFraDatoFraGrunnlagForFrontend, trengerTomPeriodisertVurdering } from 'lib/utils/periodisering';
+import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
+import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 
 interface Props {
   behandlingVersjon: number;
@@ -41,6 +46,7 @@ interface OvergangUforeVurderingForm {
   vurdertAv?: VurdertAvAnsatt;
   kvalitetssikretAv?: VurdertAvAnsatt;
   besluttetAv?: VurdertAvAnsatt;
+  erNyVurdering?: boolean;
 }
 
 export const OvergangUforePeriodisert = ({
@@ -56,7 +62,9 @@ export const OvergangUforePeriodisert = ({
   const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
     useMellomlagring(Behovstype.OVERGANG_UFORE, initialMellomlagretVurdering);
 
-  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+  const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
+
+  const { visningActions, formReadOnly, visningModus, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'OVERGANG_UFORE',
     mellomlagretVurdering
@@ -93,7 +101,10 @@ export const OvergangUforePeriodisert = ({
             }),
           },
         },
-        () => nullstillMellomlagretVurdering()
+        () => {
+          closeAllAccordions();
+          nullstillMellomlagretVurdering();
+        }
       );
     })(event);
   };
@@ -137,7 +148,7 @@ export const OvergangUforePeriodisert = ({
             fom={parseISO(vurdering.fom)}
             tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
             foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-            oppfylt={!!vurdering.brukerRettPåAAP}
+            vurderingStatus={getErOppfyltEllerIkkeStatus(!!vurdering.brukerRettPåAAP)}
           >
             <OvergangUforeTidligereVurdering
               fraDato={vurdering.fom}
@@ -153,15 +164,9 @@ export const OvergangUforePeriodisert = ({
           return (
             <NyVurderingExpandableCard
               key={vurdering.id}
+              accordionsSignal={accordionsSignal}
               fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-              oppfylt={
-                form.watch(`vurderinger.${index}.brukerRettPåAAP`)
-                  ? form.watch(`vurderinger.${index}.brukerRettPåAAP`) === JaEllerNei.Ja
-                  : form.watch(`vurderinger.${index}.brukerHarSøktUføretrygd`) === JaEllerNei.Nei ||
-                      form.watch(`vurderinger.${index}.brukerHarFåttVedtakOmUføretrygd`) === 'NEI'
-                    ? false
-                    : undefined
-              }
+              vurderingStatus={getErOppfyltEllerIkkeStatus(erVurderingOppfylt(form, index))}
               nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
               isLast={index === nyeVurderingFields.length - 1}
               vurdertAv={vurdering.vurdertAv}
@@ -172,6 +177,7 @@ export const OvergangUforePeriodisert = ({
               onSlettVurdering={() => remove(index)}
               harTidligereVurderinger={tidligereVurderinger.length > 0}
               index={index}
+              initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
             >
               <OvergangUforeVurderingFormInput index={index} form={form} readonly={formReadOnly} />
             </NyVurderingExpandableCard>
@@ -182,8 +188,7 @@ export const OvergangUforePeriodisert = ({
   );
 
   function getDefaultValuesFromGrunnlag(grunnlag: OvergangUforeGrunnlag): OvergangUforeForm {
-    if (grunnlag == null || (grunnlag.nyeVurderinger.length === 0 && grunnlag.sisteVedtatteVurderinger.length === 0)) {
-      // Vi har ingen tidligere vurderinger eller nye vurderinger, legg til en tom-default-periode
+    if (trengerTomPeriodisertVurdering(grunnlag)) {
       return {
         vurderinger: [
           {
@@ -217,3 +222,19 @@ export const OvergangUforePeriodisert = ({
     };
   }
 };
+
+function erVurderingOppfylt(form: UseFormReturn<OvergangUforeForm>, index: number) {
+  const brukerRettPåAAP = form.watch(`vurderinger.${index}.brukerRettPåAAP`);
+  const harSøktUføretrygd = form.watch(`vurderinger.${index}.brukerHarSøktUføretrygd`);
+  const harFåttVedtakUføretrygd = form.watch(`vurderinger.${index}.brukerHarFåttVedtakOmUføretrygd`);
+
+  if (brukerRettPåAAP) {
+    return brukerRettPåAAP === JaEllerNei.Ja;
+  }
+
+  if (harSøktUføretrygd === JaEllerNei.Nei || harFåttVedtakUføretrygd === JaEllerNei.Nei) {
+    return false;
+  }
+
+  return undefined;
+}

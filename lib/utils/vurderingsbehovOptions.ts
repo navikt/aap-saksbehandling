@@ -2,28 +2,35 @@ import { ValuePair } from 'components/form/FormField';
 import type { Vurderingsbehov } from '../types/types';
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
 
-export const vurderingsbehovOptions: ValuePair<Vurderingsbehov>[] = [
-  { label: 'Helhetlig vurdering', value: 'HELHETLIG_VURDERING' },
-  { label: 'Lovvalg og medlemskap', value: 'LOVVALG_OG_MEDLEMSKAP' },
-  { label: '§ 11-14 Student', value: 'REVURDER_STUDENT' },
-  { label: '§§ 11-5 og 11-6 Sykdom, arbeidsevne og behov for bistand', value: 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND' },
-  { label: '§ 11-22 Yrkesskade', value: 'REVURDER_YRKESSKADE' },
-  { label: '§ 11-13 Sykepengeerstatning', value: 'REVURDER_SYKEPENGEERSTATNING' },
-  { label: '§ 11-19 Beregningstidspunkt', value: 'REVURDER_BEREGNING' },
-  { label: 'Manuell inntekt', value: 'REVURDER_MANUELL_INNTEKT' },
-  { label: '§ 11-2 Forutgående medlemskap', value: 'FORUTGAENDE_MEDLEMSKAP' },
-  { label: '§ 11-3 Oppholdskrav', value: 'OPPHOLDSKRAV' } as ValuePair<Vurderingsbehov>,
-  { label: '§ 11-20 Barnetillegg', value: 'BARNETILLEGG' },
-  { label: 'Dødsfall barn', value: 'DØDSFALL_BARN' } as ValuePair<Vurderingsbehov>,
-  { label: '§ 11-25 Institusjonsopphold', value: 'INSTITUSJONSOPPHOLD' },
-  { label: '§§ 11-27 og 11-28 Folketrygdytelser', value: 'REVURDER_SAMORDNING_ANDRE_FOLKETRYGDYTELSER' },
-  { label: '§ 11-28 Samordning med delvis uføre', value: 'REVURDER_SAMORDNING_UFØRE' },
-  { label: '§ 11-10 Overstyr perioder uten overholdt meldeplikt', value: 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN' },
-  { label: 'Fradrag ved andre statlige ytelser', value: 'REVURDER_SAMORDNING_ANDRE_STATLIGE_YTELSER' },
-  { label: '§ 11-24 Reduksjon av AAP på grunn av ytelse fra arbeidsgiver', value: 'REVURDER_SAMORDNING_ARBEIDSGIVER' },
-  { label: '§ 11-29 Refusjonskrav tjenestepensjonsordning', value: 'REVURDER_SAMORDNING_TJENESTEPENSJON' },
-  { label: 'Dødsfall bruker', value: 'DØDSFALL_BRUKER' } as ValuePair<Vurderingsbehov>,
-];
+export const vurderingsbehovOptions = (isRevurderingStarttidspunktEnabled: boolean): ValuePair<Vurderingsbehov>[] =>
+  [
+    // TODO fjerner denne inntil det er avklart om denne skal brukes { label: 'Helhetlig vurdering', value: 'HELHETLIG_VURDERING' },
+    { label: '§ 22-13 syvende ledd', value: 'VURDER_RETTIGHETSPERIODE' },
+    { label: 'Lovvalg og medlemskap', value: 'LOVVALG_OG_MEDLEMSKAP' },
+    { label: '§ 11-14 Student', value: 'REVURDER_STUDENT' },
+    { label: '§§ 11-5 og 11-6 Sykdom, arbeidsevne og behov for bistand', value: 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND' },
+    { label: '§ 11-22 Yrkesskade', value: 'REVURDER_YRKESSKADE' },
+    { label: '§ 11-13 Sykepengeerstatning', value: 'REVURDER_SYKEPENGEERSTATNING' },
+    { label: '§ 11-19 Beregningstidspunkt', value: 'REVURDER_BEREGNING' },
+    { label: 'Manuell inntekt', value: 'REVURDER_MANUELL_INNTEKT' },
+    { label: '§ 11-2 Forutgående medlemskap', value: 'FORUTGAENDE_MEDLEMSKAP' },
+    { label: '§ 11-3 Oppholdskrav', value: 'OPPHOLDSKRAV' },
+    { label: '§ 11-20 Barnetillegg', value: 'BARNETILLEGG' },
+    { label: 'Dødsfall barn', value: 'DØDSFALL_BARN' },
+    { label: '§ 11-25 Institusjonsopphold', value: 'INSTITUSJONSOPPHOLD' },
+    { label: '§§ 11-27 og 11-28 Folketrygdytelser', value: 'REVURDER_SAMORDNING_ANDRE_FOLKETRYGDYTELSER' },
+    { label: '§ 11-28 Samordning med delvis uføre', value: 'REVURDER_SAMORDNING_UFØRE' },
+    { label: '§ 11-10 Overstyr perioder uten overholdt meldeplikt', value: 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN' },
+    { label: 'Fradrag ved andre statlige ytelser', value: 'REVURDER_SAMORDNING_ANDRE_STATLIGE_YTELSER' },
+    {
+      label: '§ 11-24 Reduksjon av AAP på grunn av ytelse fra arbeidsgiver',
+      value: 'REVURDER_SAMORDNING_ARBEIDSGIVER',
+    },
+    { label: '§ 11-29 Refusjonskrav tjenestepensjonsordning', value: 'REVURDER_SAMORDNING_TJENESTEPENSJON' },
+    { label: 'Dødsfall bruker', value: 'DØDSFALL_BRUKER' },
+  ].filter(
+    (option) => isRevurderingStarttidspunktEnabled || option.value !== 'VURDER_RETTIGHETSPERIODE'
+  ) as ValuePair<Vurderingsbehov>[];
 
 export const alleVurderingsbehovOptions: ValuePair<Vurderingsbehov>[] = [
   { value: 'MOTTATT_SØKNAD', label: formaterVurderingsbehov('MOTTATT_SØKNAD') },

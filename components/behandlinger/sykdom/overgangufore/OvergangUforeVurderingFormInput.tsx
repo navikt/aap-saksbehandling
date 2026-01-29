@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, HStack, Radio, VStack } from '@navikt/ds-react';
+import { Alert, Radio, VStack } from '@navikt/ds-react';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
 import { UseFormReturn } from 'react-hook-form';
@@ -9,6 +9,7 @@ import { OvergangUforeForm } from 'components/behandlinger/sykdom/overgangufore/
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { JaEllerNei } from 'lib/utils/form';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
+import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
 
 interface Props {
   index: number;
@@ -28,18 +29,19 @@ export const OvergangUforeVurderingFormInput = ({ index, form, readonly }: Props
     form.watch(`vurderinger.${index}.brukerHarFåttVedtakOmUføretrygd`) === 'JA_AVSLAG';
   return (
     <VStack gap={'5'}>
-      <HStack justify={'space-between'}>
-        <DateInputWrapper
-          name={`vurderinger.${index}.fraDato`}
-          label={virkningsdatoLabel}
-          description={'Datoen må samsvare med søknadstidspunktet for uføretrygd'}
-          control={form.control}
-          rules={{
-            required: 'Du må velge fra hvilken dato vurderingen gjelder fra',
-          }}
-          readOnly={readonly}
-        />
-      </HStack>
+      <DateInputWrapper
+        name={`vurderinger.${index}.fraDato`}
+        label={virkningsdatoLabel}
+        description={'Datoen må samsvare med søknadstidspunktet for uføretrygd'}
+        control={form.control}
+        rules={{
+          required: 'Du må velge fra hvilken dato vurderingen gjelder fra',
+        }}
+        readOnly={readonly}
+      />
+
+      <HvordanLeggeTilSluttdatoReadMore />
+
       <TextAreaWrapper
         name={`vurderinger.${index}.begrunnelse`}
         control={form.control}

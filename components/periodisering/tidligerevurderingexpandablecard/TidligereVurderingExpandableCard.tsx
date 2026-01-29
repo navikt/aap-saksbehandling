@@ -8,33 +8,36 @@ import { BodyShort, HStack, VStack } from '@navikt/ds-react';
 import styles from 'components/behandlinger/oppholdskrav/oppholdskrav.module.css';
 import { VurdertAvAnsattDetail } from 'components/vurdertav/VurdertAvAnsattDetail';
 import { VurdertAvAnsatt } from 'lib/types/types';
-import { VurderingStatusTag } from 'components/periodisering/VurderingStatusTag';
+import { VurderingStatus, VurderingStatusTag } from 'components/periodisering/VurderingStatusTag';
 
 interface Props {
   fom: Date;
   tom: Date | null | undefined;
   foersteNyePeriodeFraDato: Date | null | undefined;
-  oppfylt: boolean | null | undefined;
+  vurderingStatus: VurderingStatus | undefined;
   vurdertAv?: VurdertAvAnsatt;
   children: ReactNode;
   defaultCollapsed?: boolean;
 }
+
 export const TidligereVurderingExpandableCard = ({
   fom,
   tom,
   foersteNyePeriodeFraDato,
-  oppfylt,
+  vurderingStatus,
   vurdertAv,
   children,
   defaultCollapsed = false,
 }: Props) => {
-  const [cardExpanded, setCardExpanded] = useState<boolean>(!defaultCollapsed);
+  const [cardExpanded, setCardExpanded] = useState<boolean>(defaultCollapsed);
+
   const formattertFom = formaterDatoForFrontend(fom);
   const strekUtHele = foersteNyePeriodeFraDato ? !isBefore(fom, foersteNyePeriodeFraDato) : false;
   const nySluttdato =
     !strekUtHele &&
     foersteNyePeriodeFraDato &&
     (tom == null || isBefore(foersteNyePeriodeFraDato, tom) || isSameDay(foersteNyePeriodeFraDato, tom));
+
   return (
     <CustomExpandableCard
       key={formattertFom}
@@ -50,7 +53,7 @@ export const TidligereVurderingExpandableCard = ({
             )}
             {nySluttdato && <span> {formatDatoMedMånedsnavn(sub(foersteNyePeriodeFraDato, { days: 1 }))}</span>}
           </BodyShort>
-          <VurderingStatusTag oppfylt={oppfylt} overskrevet={strekUtHele} />
+          <VurderingStatusTag status={vurderingStatus} />
         </HStack>
       }
     >
