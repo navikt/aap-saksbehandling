@@ -7,7 +7,6 @@ import {
 } from '@navikt/aksel-icons';
 
 import styles from './OppgaveStatus.module.css';
-import { toggles } from 'lib/utils/toggles';
 
 export interface OppgaveStatusType {
   status: 'PÅ_VENT' | 'TILDELT' | 'TRUKKET' | 'AVBRUTT' | 'LEDIG' | 'TILDELT_INNLOGGET_BRUKER' | 'VENTEFRIST_UTLØPT';
@@ -30,11 +29,9 @@ export const OppgaveStatus = ({ oppgaveStatus, size = 'small', showLabel = true 
       );
     case 'VENTEFRIST_UTLØPT':
       return (
-        toggles.featureUtløptVentefrist && (
-          <Tag className={styles.tag} icon={<HourglassBottomFilledIcon />} variant={'error-moderate'} size={size}>
-            {showLabel && oppgaveStatus.label}
-          </Tag>
-        )
+        <Tag className={styles.tag} icon={<HourglassBottomFilledIcon />} variant={'error-moderate'} size={size}>
+          {showLabel && oppgaveStatus.label}
+        </Tag>
       );
     case 'TILDELT':
       return (

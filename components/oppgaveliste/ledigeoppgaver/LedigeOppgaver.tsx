@@ -26,7 +26,7 @@ import {
 import { LedigeOppgaverFiltrering } from 'components/oppgaveliste/filtrering/ledigeoppgaverfiltrering/LedigeOppgaverFiltrering';
 import { TabellSkeleton } from 'components/oppgaveliste/tabellskeleton/TabellSkeleton';
 import { ALLE_OPPGAVER_ID } from 'components/oppgaveliste/filtrering/filtreringUtils';
-import { useLagreAktivUtvidetFilter } from '../../../hooks/oppgave/aktivUtvidetFilterHook';
+import { useLagreAktivUtvidetFilter } from 'hooks/oppgave/aktivUtvidetFilterHook';
 import { EnheterSelect } from 'components/oppgaveliste/enheterselect/EnheterSelect';
 import { ComboOption } from 'components/produksjonsstyring/minenhet/MineEnheter';
 import { useLagreAktiveEnheter } from 'hooks/oppgave/aktiveEnheterHook';
@@ -101,7 +101,7 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
 
   const behandlingOpprettetTom = form.watch('behandlingOpprettetTom');
   const behandlingOpprettetFom = form.watch('behandlingOpprettetFom');
-  const andreStatusTyper = ['VENT', 'ER_HASTESAK'];
+  const andreStatusTyper = ['VENT', 'ER_HASTESAK', 'VENTEFRIST_UTLØPT'];
 
   const utvidetFilter =
     aktivKøId === ALLE_OPPGAVER_ID
@@ -117,6 +117,7 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
           årsaker: form.watch('årsaker') || [],
           avklaringsbehovKoder: form.watch('avklaringsbehov') || [],
           markertHaster: form.watch('statuser')?.includes('ER_HASTESAK'),
+          ventefristUtløpt: form.watch('statuser')?.includes('VENTEFRIST_UTLØPT'),
         }
       : undefined;
 

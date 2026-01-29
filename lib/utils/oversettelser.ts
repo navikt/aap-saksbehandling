@@ -334,7 +334,7 @@ export function mapTypeBehandlingTilTekst(typeBehandling: TypeBehandling) {
 }
 
 export function mapStatusTilTekst(
-  status: 'VENT' | 'RETUR_FRA_KVALITETSSIKRER' | 'RETUR_FRA_BESLUTTER' | 'ER_HASTESAK'
+  status: 'VENT' | 'RETUR_FRA_KVALITETSSIKRER' | 'RETUR_FRA_BESLUTTER' | 'ER_HASTESAK' | 'VENTEFRIST_UTLØPT'
 ): string {
   switch (status) {
     case 'VENT':
@@ -345,6 +345,8 @@ export function mapStatusTilTekst(
       return 'Retur fra beslutter';
     case 'ER_HASTESAK':
       return 'Hastesak';
+    case 'VENTEFRIST_UTLØPT':
+      return 'Ventefrist utløpt'
   }
 }
 
