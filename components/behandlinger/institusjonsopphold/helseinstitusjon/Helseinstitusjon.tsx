@@ -171,14 +171,41 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
 };
 
 function mapVurderingToDraftFormFields(
-  vurderinger: HelseinstitusjonGrunnlag['vurderinger'],
+  vurderingerFraGrunnlag: HelseinstitusjonGrunnlag['vurderinger'],
   opphold: HelseinstitusjonGrunnlag['opphold']
 ): DraftFormFields {
   return {
     helseinstitusjonsvurderinger: opphold.map((opphold) => {
-      const vurderingerForOpphold = vurderinger.find(
+      const vurderingerForOpphold = vurderingerFraGrunnlag.find(
         (vurdering) => vurdering.oppholdId === opphold.oppholdId
       )?.vurderinger;
+
+      const vurderinger =
+        vurderingerForOpphold && vurderingerForOpphold.length > 0
+          ? vurderingerForOpphold?.map((vurdering) => ({
+              oppholdId: vurdering.oppholdId,
+              begrunnelse: vurdering.begrunnelse,
+              harFasteUtgifter: getJaNeiEllerUndefined(vurdering.harFasteUtgifter),
+              forsoergerEktefelle: getJaNeiEllerUndefined(vurdering.forsoergerEktefelle),
+              faarFriKostOgLosji: getJaNeiEllerUndefined(vurdering.faarFriKostOgLosji),
+              periode: {
+                fom: formaterDatoForFrontend(vurdering.periode.fom),
+                tom: formaterDatoForFrontend(vurdering.periode.tom),
+              },
+            }))
+          : [
+              {
+                oppholdId: opphold.oppholdId,
+                begrunnelse: '',
+                faarFriKostOgLosji: undefined,
+                harFasteUtgifter: undefined,
+                forsoergerEktefelle: undefined,
+                periode: {
+                  fom: '',
+                  tom: formaterDatoForFrontend(opphold?.avsluttetDato ?? opphold?.oppholdFra ?? ''),
+                },
+              },
+            ];
 
       return {
         oppholdId: opphold.oppholdId,
@@ -186,29 +213,7 @@ function mapVurderingToDraftFormFields(
           fom: formaterDatoForFrontend(opphold.oppholdFra),
           tom: opphold.avsluttetDato ? formaterDatoForFrontend(opphold.avsluttetDato) : '',
         },
-        vurderinger: vurderingerForOpphold?.map((vurdering) => ({
-          oppholdId: vurdering.oppholdId,
-          begrunnelse: vurdering.begrunnelse,
-          harFasteUtgifter: getJaNeiEllerUndefined(vurdering.harFasteUtgifter),
-          forsoergerEktefelle: getJaNeiEllerUndefined(vurdering.forsoergerEktefelle),
-          faarFriKostOgLosji: getJaNeiEllerUndefined(vurdering.faarFriKostOgLosji),
-          periode: {
-            fom: formaterDatoForFrontend(vurdering.periode.fom),
-            tom: formaterDatoForFrontend(vurdering.periode.tom),
-          },
-        })) || [
-          {
-            oppholdId: opphold.oppholdId,
-            begrunnelse: '',
-            faarFriKostOgLosji: undefined,
-            harFasteUtgifter: undefined,
-            forsoergerEktefelle: undefined,
-            periode: {
-              fom: '',
-              tom: formaterDatoForFrontend(opphold?.avsluttetDato ?? opphold?.oppholdFra ?? ''),
-            },
-          },
-        ],
+        vurderinger: vurderinger,
       };
     }),
   };
