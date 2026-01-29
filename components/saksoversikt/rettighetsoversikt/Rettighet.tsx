@@ -1,4 +1,4 @@
-import { Heading, HStack, Table } from '@navikt/ds-react';
+import { Heading, HStack } from '@navikt/ds-react';
 import { RettighetDto } from 'lib/types/types';
 import { formaterDatoForFrontend, formaterPeriode } from 'lib/utils/date';
 import styles from './Rettighetsoversikt.module.css';

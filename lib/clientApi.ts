@@ -22,6 +22,7 @@ import {
   OpprettAktivitetspliktBehandlingDto,
   OpprettDummySakDto,
   OpprettTestcase,
+  RettighetDto,
   SaksInfo,
   SettPåVent,
 } from './types/types';
@@ -140,7 +141,7 @@ export function clientHentTilgangForKvalitetssikring(referanse: string) {
 }
 
 export function clientHentSakshistorikk(saksnummer: string) {
-  return clientFetch<Array<BehandlingsHistorikk>>(`${BASE_URL}/api/sak/${saksnummer}/historikk`, 'GET');
+  return clientFetch<Array<BehandlingsHistorikk>>(`${BASE_URL}/api/sak/${saksnummer}historikk/`, 'GET');
 }
 
 export function clientBestillDialogmelding(bestilling: BestillLegeerklæring) {
@@ -148,7 +149,7 @@ export function clientBestillDialogmelding(bestilling: BestillLegeerklæring) {
 }
 
 export function clientHentRettighetsdata(saksnummer: string) {
-  return clientFetch(`${BASE_URL}/api/sak/${saksnummer}/rettighet`, 'GET');
+  return clientFetch<Array<RettighetDto>>(`${BASE_URL}/api/sak/${saksnummer}/rettighet`, 'GET');
 }
 
 export function clientForhåndsvisDialogmelding(dialogmelding: ForhåndsvisDialogmelding) {
