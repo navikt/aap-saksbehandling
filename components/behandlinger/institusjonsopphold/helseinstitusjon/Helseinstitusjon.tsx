@@ -175,46 +175,37 @@ function mapVurderingToDraftFormFields(
   opphold: HelseinstitusjonGrunnlag['opphold']
 ): DraftFormFields {
   return {
-    helseinstitusjonsvurderinger: vurderinger.map((item) => {
-      const matchendeOpphold = opphold.find((o) => o.oppholdId === item.oppholdId);
-
-      if (item.vurderinger && item.vurderinger.length > 0) {
-        return {
-          oppholdId: item.oppholdId,
-          periode: {
-            fom: formaterDatoForFrontend(item.periode.fom),
-            tom: formaterDatoForFrontend(item.periode.tom),
-          },
-          vurderinger: item.vurderinger.map((vurdering) => ({
-            oppholdId: vurdering.oppholdId,
-            begrunnelse: vurdering.begrunnelse,
-            harFasteUtgifter: getJaNeiEllerUndefined(vurdering.harFasteUtgifter),
-            forsoergerEktefelle: getJaNeiEllerUndefined(vurdering.forsoergerEktefelle),
-            faarFriKostOgLosji: getJaNeiEllerUndefined(vurdering.faarFriKostOgLosji),
-            periode: {
-              fom: formaterDatoForFrontend(vurdering.periode.fom),
-              tom: formaterDatoForFrontend(vurdering.periode.tom),
-            },
-          })),
-        };
-      }
+    helseinstitusjonsvurderinger: opphold.map((opphold) => {
+      const vurderingerForOpphold = vurderinger.find(
+        (vurdering) => vurdering.oppholdId === opphold.oppholdId
+      )?.vurderinger;
 
       return {
-        oppholdId: item.oppholdId,
+        oppholdId: opphold.oppholdId,
         periode: {
-          fom: formaterDatoForFrontend(item.periode.fom),
-          tom: formaterDatoForFrontend(item.periode.tom),
+          fom: formaterDatoForFrontend(opphold.oppholdFra),
+          tom: opphold.avsluttetDato ? formaterDatoForFrontend(opphold.avsluttetDato) : '',
         },
-        vurderinger: [
+        vurderinger: vurderingerForOpphold?.map((vurdering) => ({
+          oppholdId: vurdering.oppholdId,
+          begrunnelse: vurdering.begrunnelse,
+          harFasteUtgifter: getJaNeiEllerUndefined(vurdering.harFasteUtgifter),
+          forsoergerEktefelle: getJaNeiEllerUndefined(vurdering.forsoergerEktefelle),
+          faarFriKostOgLosji: getJaNeiEllerUndefined(vurdering.faarFriKostOgLosji),
+          periode: {
+            fom: formaterDatoForFrontend(vurdering.periode.fom),
+            tom: formaterDatoForFrontend(vurdering.periode.tom),
+          },
+        })) || [
           {
-            oppholdId: matchendeOpphold?.oppholdId ?? '',
+            oppholdId: opphold.oppholdId,
             begrunnelse: '',
             faarFriKostOgLosji: undefined,
             harFasteUtgifter: undefined,
             forsoergerEktefelle: undefined,
             periode: {
               fom: '',
-              tom: formaterDatoForFrontend(matchendeOpphold?.avsluttetDato ?? matchendeOpphold?.oppholdFra ?? ''),
+              tom: formaterDatoForFrontend(opphold?.avsluttetDato ?? opphold?.oppholdFra ?? ''),
             },
           },
         ],
