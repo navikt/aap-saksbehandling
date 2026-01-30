@@ -6,7 +6,9 @@ import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import {
+  beregnReduksjonsdatoVedNyttOpphold,
   beregnTidligsteReduksjonsdato,
+  erNyttOppholdInnenfor3MaanederEtterSistOpphold,
   lagReduksjonsBeskrivelse,
   validerDatoErInnenforOpphold,
   validerErIKronologiskRekkeFølge,
@@ -61,14 +63,33 @@ export const Helseinstitusjonsvurdering = ({ form, oppholdIndex, vurderingIndex,
   const reduksjonsBeskrivelse = lagReduksjonsBeskrivelse(opphold.oppholdFra);
 
   useEffect(() => {
-    // Vi setter bare fom dato på denne måten i den første vurderingen
-    if (vurderingIndex === 0) {
-      form.setValue(
-        `helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.periode.fom`,
-        reduksjon
-          ? beregnTidligsteReduksjonsdato(opphold.oppholdFra)
-          : new Dato(opphold.oppholdFra).formaterForFrontend()
+    // Vi setter bare fom-dato automatisk for første vurdering
+    if (vurderingIndex !== 0) {
+      return;
+    }
+
+    // Sjekk om dette er et nytt opphold innen 3 måneder etter forrige
+    if (oppholdIndex > 0) {
+      const forrigeOppholdTom = form.watch(`helseinstitusjonsvurderinger.${oppholdIndex - 1}.periode.tom`);
+
+      const erInnenforTreMaaneder = erNyttOppholdInnenfor3MaanederEtterSistOpphold(
+        forrigeOppholdTom,
+        opphold.oppholdFra
       );
+
+      if (erInnenforTreMaaneder) {
+        const dato = reduksjon
+          ? beregnReduksjonsdatoVedNyttOpphold(forrigeOppholdTom, opphold.oppholdFra)
+          : new Dato(opphold.oppholdFra).formaterForFrontend();
+
+        form.setValue(`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.periode.fom`, dato);
+      }
+    } else {
+      const fomDato = reduksjon
+        ? beregnTidligsteReduksjonsdato(opphold.oppholdFra)
+        : new Dato(opphold.oppholdFra).formaterForFrontend();
+
+      form.setValue(`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.periode.fom`, fomDato);
     }
   }, [opphold.oppholdFra, vurderingIndex, reduksjon, oppholdIndex]);
 

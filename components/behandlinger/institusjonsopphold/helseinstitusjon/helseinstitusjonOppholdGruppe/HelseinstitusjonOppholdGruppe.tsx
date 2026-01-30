@@ -7,7 +7,6 @@ import { HelseinstitusjonGrunnlag, HelseInstiusjonVurdering } from 'lib/types/ty
 import React from 'react';
 import styles from 'components/behandlinger/institusjonsopphold/helseinstitusjon/helseinstitusjonOppholdGruppe/HelseinstitusjonOppholdGruppe.module.css';
 import { formatDatoMedMånedsnavn, formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
-import { JaEllerNei } from 'lib/utils/form';
 import { addDays } from 'date-fns';
 import {
   NyVurderingExpandableCard,
@@ -19,7 +18,7 @@ import { getErReduksjonEllerIkke } from 'components/periodisering/VurderingStatu
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { HelseinstitusjonTidligereVurdering } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/helseinstitusjontidligerevurdering/HelseinstitusjonTidligereVurdering';
 import { Dato } from 'lib/types/Dato';
-import { erReduksjon } from 'lib/utils/institusjonsopphold';
+import { erReduksjonUtIFraFormFields, erReduksjonUtIFraVurdering } from 'lib/utils/institusjonsopphold';
 
 interface Props {
   form: UseFormReturn<HelseinstitusjonsFormFields>;
@@ -98,7 +97,7 @@ export const HelseinstitusjonOppholdGruppe = ({
                 fom={new Dato(vurdering.periode.fom).dato}
                 tom={new Dato(vurdering.periode.tom).dato}
                 foersteNyePeriodeFraDato={foersteNyePeriode == null ? null : parseDatoFraDatePicker(foersteNyePeriode)}
-                vurderingStatus={getErReduksjonEllerIkke(erReduksjon(vurdering))}
+                vurderingStatus={getErReduksjonEllerIkke(erReduksjonUtIFraVurdering(vurdering))}
               >
                 <HelseinstitusjonTidligereVurdering vurdering={vurdering} />
               </TidligereVurderingExpandableCard>
@@ -106,20 +105,7 @@ export const HelseinstitusjonOppholdGruppe = ({
           })}
 
           {vurderinger.map((vurdering, vurderingIndex) => {
-            const faarFriKostOgLosji = form.watch(
-              `helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.faarFriKostOgLosji`
-            );
-            const forsoergerEktefelle = form.watch(
-              `helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.forsoergerEktefelle`
-            );
-            const harFasteUtgifter = form.watch(
-              `helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.harFasteUtgifter`
-            );
-
-            const reduksjon =
-              faarFriKostOgLosji === JaEllerNei.Ja &&
-              forsoergerEktefelle === JaEllerNei.Nei &&
-              harFasteUtgifter === JaEllerNei.Nei;
+            const reduksjon = erReduksjonUtIFraFormFields(vurdering);
 
             return (
               <div key={vurderingIndex} className={styles.vurderingRad}>

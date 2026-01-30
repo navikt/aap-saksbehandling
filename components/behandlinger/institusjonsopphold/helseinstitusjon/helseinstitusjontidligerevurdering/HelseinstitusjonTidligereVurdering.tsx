@@ -3,14 +3,14 @@ import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
 import { HelseInstiusjonVurdering } from 'lib/types/types';
 import { getJaEllerNei } from 'lib/utils/form';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import { erReduksjon } from 'lib/utils/institusjonsopphold';
+import { erReduksjonUtIFraVurdering } from 'lib/utils/institusjonsopphold';
 
 interface Props {
   vurdering: HelseInstiusjonVurdering;
 }
 
 export const HelseinstitusjonTidligereVurdering = ({ vurdering }: Props) => {
-  const vurderingErReduksjon = erReduksjon(vurdering);
+  const vurderingErReduksjon = erReduksjonUtIFraVurdering(vurdering);
 
   return (
     <VStack gap={'4'}>

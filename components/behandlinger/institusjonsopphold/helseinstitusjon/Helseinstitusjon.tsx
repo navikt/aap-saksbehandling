@@ -17,6 +17,7 @@ import { parse, subDays } from 'date-fns';
 import { useFieldArray } from 'react-hook-form';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { Dato } from 'lib/types/Dato';
+import { VStack } from '@navikt/ds-react';
 
 interface Props {
   grunnlag: HelseinstitusjonGrunnlag;
@@ -32,10 +33,10 @@ export interface HelseinstitusjonsFormFields {
 interface oppholdMedVurderinger {
   oppholdId: string;
   periode: Periode;
-  vurderinger: Vurdering[];
+  vurderinger: OppholdVurdering[];
 }
 
-export interface Vurdering {
+export interface OppholdVurdering {
   oppholdId: string;
   periode: Periode;
   begrunnelse: string;
@@ -144,28 +145,29 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
       visningActions={visningActions}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
-      <InstitusjonsoppholdTabell
-        label={'Brukeren har følgende institusjonsopphold på helseinstitusjon'}
-        beskrivelse={'Opphold over tre måneder på helseinstitusjon kan gi redusert AAP-ytelse. '}
-        instutisjonsopphold={grunnlag.opphold}
-      />
-      <div style={{ marginTop: 'var(--a-spacing-0)' }} />
-
-      {oppholdFields.map((oppholdField, oppholdIndex) => (
-        <HelseinstitusjonOppholdGruppe
-          key={oppholdField.id}
-          opphold={grunnlag.opphold.find((o) => o.oppholdId === oppholdField.oppholdId)!}
-          tidligereVurderinger={
-            grunnlag.vedtatteVurderinger.find((vurdering) => vurdering.oppholdId === oppholdField.oppholdId)
-              ?.vurderinger
-          }
-          accordionsSignal={accordionsSignal}
-          oppholdIndex={oppholdIndex}
-          form={form}
-          readonly={formReadOnly}
-          erAktivUtenAvbryt={erAktivUtenAvbryt}
+      <VStack gap={'6'}>
+        <InstitusjonsoppholdTabell
+          label={'Brukeren har følgende institusjonsopphold på helseinstitusjon'}
+          beskrivelse={'Opphold over tre måneder på helseinstitusjon kan gi redusert AAP-ytelse. '}
+          instutisjonsopphold={grunnlag.opphold}
         />
-      ))}
+
+        {oppholdFields.map((oppholdField, oppholdIndex) => (
+          <HelseinstitusjonOppholdGruppe
+            key={oppholdField.id}
+            opphold={grunnlag.opphold.find((o) => o.oppholdId === oppholdField.oppholdId)!}
+            tidligereVurderinger={
+              grunnlag.vedtatteVurderinger.find((vurdering) => vurdering.oppholdId === oppholdField.oppholdId)
+                ?.vurderinger
+            }
+            accordionsSignal={accordionsSignal}
+            oppholdIndex={oppholdIndex}
+            form={form}
+            readonly={formReadOnly}
+            erAktivUtenAvbryt={erAktivUtenAvbryt}
+          />
+        ))}
+      </VStack>
     </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };

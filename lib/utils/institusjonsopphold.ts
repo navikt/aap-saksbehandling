@@ -4,6 +4,9 @@ import { formatDatoMedMånedsnavn, formaterDatoForFrontend } from 'lib/utils/dat
 import { Dato } from 'lib/types/Dato';
 import { HelseInstiusjonVurdering } from 'lib/types/types';
 
+import { JaEllerNei } from 'lib/utils/form';
+import { OppholdVurdering } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/Helseinstitusjon';
+
 /**
  * Beregner tidligste dato for reduksjon av AAP ved institusjonsopphold.
  *
@@ -71,6 +74,26 @@ export const validerDatoErInnenforOpphold = (
   return true;
 };
 
+/**
+ * Beregner reduksjonsdato ved nytt opphold innen tre måneder etter utskrivelse.
+ * @param utskrevetDato Dato for utskrivelse (YYYY-MM-DD)
+ * @param nyttOppholdFra Dato for nytt opphold (YYYY-MM-DD)
+ * @returns Reduksjonsdato (dd.MM.yyyy) eller undefined hvis regelen ikke gjelder
+ */
+export function beregnReduksjonsdatoVedNyttOpphold(utskrevetDato: string, nyttOppholdFra: string): string {
+  const utskrevet = new Dato(utskrevetDato).dato;
+  const nyttOpphold = new Dato(nyttOppholdFra).dato;
+
+  // Sjekk om nytt opphold starter innen 3 måneder etter utskrivelse
+  const treMndEtterUtskrivelse = addMonths(utskrevet, 3);
+  if (nyttOpphold <= treMndEtterUtskrivelse) {
+    // Reduksjon fra og med måneden etter nytt opphold
+    const nesteMnd = new Dato(addMonths(startOfMonth(nyttOpphold), 1));
+    return nesteMnd.formaterForFrontend();
+  }
+  return formaterDatoForFrontend(nyttOppholdFra);
+}
+
 export const validerErIKronologiskRekkeFølge = (value: string, forrigeVurderingFom?: string) => {
   if (!forrigeVurderingFom) {
     return true;
@@ -89,6 +112,23 @@ export const validerErIKronologiskRekkeFølge = (value: string, forrigeVurdering
   return true;
 };
 
-export function erReduksjon(data: HelseInstiusjonVurdering): boolean {
+export function erReduksjonUtIFraVurdering(data: HelseInstiusjonVurdering): boolean {
   return data.faarFriKostOgLosji && data.forsoergerEktefelle === false && data.harFasteUtgifter === false;
+}
+
+export function erReduksjonUtIFraFormFields(data: OppholdVurdering): boolean {
+  return (
+    data.faarFriKostOgLosji === JaEllerNei.Ja &&
+    data.forsoergerEktefelle === JaEllerNei.Nei &&
+    data.harFasteUtgifter === JaEllerNei.Nei
+  );
+}
+
+export function erNyttOppholdInnenfor3MaanederEtterSistOpphold(utskrevetDato: string, nyttOppholdFra: string): boolean {
+  const utskrevet = new Dato(utskrevetDato).dato;
+  const nyttOpphold = new Dato(nyttOppholdFra).dato;
+
+  const treMndEtterUtskrivelse = addMonths(utskrevet, 3);
+
+  return nyttOpphold <= treMndEtterUtskrivelse;
 }
