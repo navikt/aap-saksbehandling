@@ -14,10 +14,16 @@ interface Props {
 }
 
 export const Rettighetsoversikt = (props: Props) => {
-  const { data } = useSWR(`/api/sak/${props.saksnummer}/rettighet`, () => clientHentRettighetsdata(props.saksnummer));
+  const { data, isLoading } = useSWR(`/api/sak/${props.saksnummer}/rettighet`, () =>
+    clientHentRettighetsdata(props.saksnummer)
+  );
 
   if (isError(data)) {
     return <ApiException apiResponses={[data]} />;
+  }
+
+  if (isLoading) {
+    return <Loader />;
   }
 
   const rettighetListe = data?.data as RettighetDto[];

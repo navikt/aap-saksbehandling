@@ -8,7 +8,7 @@ export async function GET(_: NextRequest, props: { params: Promise<{ saksnummer:
   const respons = await hentRettighetsdata(params.saksnummer);
 
   if (isError(respons)) {
-    logError(`/api/behandling/${params.saksnummer}/rettighet`, respons.apiException);
+    logError(`/api/sak/${params.saksnummer}/rettighet`, respons.apiException);
   }
   return NextResponse.json(respons, { status: respons.status });
 }
