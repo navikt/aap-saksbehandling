@@ -10,7 +10,7 @@ import { ManuellInntektGrunnlag, ManuellInntektÅr, MellomlagretVurdering } from
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
-import { Alert, BodyShort, Label, Link, VStack } from '@navikt/ds-react';
+import { Alert, BodyLong, BodyShort, Label, Link, VStack } from '@navikt/ds-react';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
 import { useFieldArray } from 'react-hook-form';
@@ -195,13 +195,15 @@ export const FastsettManuellInntektNy = ({
       </BodyShort>
       {visHovedinnhold && (
         <>
-          <Link
-            href="https://lovdata.no/pro/rundskriv/r45-00/KAPITTEL_10-7-3'"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Du kan lese mer om hvordan EØS-inntekt skal beregnes i kapittel 11.7 av EØS-rundskrivet.
-          </Link>
+          <BodyLong size={'small'}>
+            <Link
+              href="https://lovdata.no/pro/rundskriv/r45-00/KAPITTEL_10-7-3'"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Du kan lese mer om hvordan EØS-inntekt skal beregnes i kapittel 11.7 av EØS-rundskrivet.
+            </Link>
+          </BodyLong>
           <FormField form={form} formField={formFields.begrunnelse} />
           <FastsettManuellInntektTabell form={form} tabellår={tabellår} readOnly={formReadOnly} />
         </>

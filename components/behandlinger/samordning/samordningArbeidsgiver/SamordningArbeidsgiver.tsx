@@ -154,9 +154,8 @@ export const SamordningArbeidsgiver = ({
             */}
           </VStack>
 
-          <BodyLong>
+          <BodyLong size={'small'}>
             <Link href={'https://lovdata.no/nav/rundskriv/r11-00#ref/lov/1997-02-28-19/%C2%A711-24'}>
-              {' '}
               Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-24 (lovdata.no)
             </Link>
           </BodyLong>

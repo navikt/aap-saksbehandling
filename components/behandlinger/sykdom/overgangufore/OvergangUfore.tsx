@@ -8,11 +8,10 @@ import {
   JaEllerNei,
   JaEllerNeiOptions,
 } from 'lib/utils/form';
-import { Veiledning } from 'components/veiledning/Veiledning';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
-import { Alert, Link } from '@navikt/ds-react';
+import { Alert, BodyLong, Link } from '@navikt/ds-react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
@@ -185,16 +184,13 @@ export const OvergangUfore = ({ behandlingVersjon, grunnlag, readOnly, initialMe
           getVurdertDato={(v) => v.vurdering?.vurdertAv.dato}
         />
       )}
-      <Veiledning
-        defaultOpen={false}
-        tekst={
-          <div>
-            <Link href="https://lovdata.no/pro/lov/1997-02-28-19/%C2%A711-18" target="_blank">
-              Du kan lese om hvordan vilkåret skal vurderes i rundskrivet til § 11-18
-            </Link>
-          </div>
-        }
-      />
+
+      <BodyLong size={'small'}>
+        <Link href="https://lovdata.no/pro/lov/1997-02-28-19/%C2%A711-18" target="_blank">
+          Du kan lese om hvordan vilkåret skal vurderes i rundskrivet til § 11-18
+        </Link>
+      </BodyLong>
+
       <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
       <FormField form={form} formField={formFields.brukerHarSøktUføretrygd} horizontalRadio />
       {brukerHarSoktOmUforetrygd && (
