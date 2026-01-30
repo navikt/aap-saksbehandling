@@ -4,7 +4,6 @@ import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { OppholdskravStegMedDataFatching } from 'components/behandlinger/oppholdskrav/OppholdskravStegMedDataFatching';
-import { getStegSomSkalVises } from 'lib/utils/steg';
 
 interface Props {
   behandlingsreferanse: string;
@@ -16,7 +15,7 @@ export const OppholdskravStegGruppe = async ({ behandlingsreferanse }: Props) =>
     return <ApiException apiResponses={[flyt]} />;
   }
 
-  const stegSomSkalVises = getStegSomSkalVises('OPPHOLDSKRAV', flyt.data);
+  console.log(flyt);
 
   return (
     <GruppeSteg
@@ -26,15 +25,13 @@ export const OppholdskravStegGruppe = async ({ behandlingsreferanse }: Props) =>
       visning={flyt.data.visning}
       aktivtSteg={flyt.data.aktivtSteg}
     >
-      {stegSomSkalVises.includes('VURDER_OPPHOLDSKRAV') && (
-        <StegSuspense>
-          <OppholdskravStegMedDataFatching
-            behandlingsreferanse={behandlingsreferanse}
-            behandlingVersjon={flyt.data.behandlingVersjon}
-            readOnly={flyt.data.visning.saksbehandlerReadOnly}
-          />
-        </StegSuspense>
-      )}
+      <StegSuspense>
+        <OppholdskravStegMedDataFatching
+          behandlingsreferanse={behandlingsreferanse}
+          behandlingVersjon={flyt.data.behandlingVersjon}
+          readOnly={flyt.data.visning.saksbehandlerReadOnly}
+        />
+      </StegSuspense>
     </GruppeSteg>
   );
 };

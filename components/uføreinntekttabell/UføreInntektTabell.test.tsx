@@ -14,7 +14,6 @@ const innteker: Array<UføreInntekt> = [
     justertTilMaks6G: 6,
     inntektIG: 6,
     inntektIKroner: 1000000,
-    uføreGrad: 30,
     justertForUføreGrad: 500000,
     justertForUføreGradiG: 5,
     inntektsPerioder: [

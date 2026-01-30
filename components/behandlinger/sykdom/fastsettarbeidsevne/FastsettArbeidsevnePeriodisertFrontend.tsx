@@ -15,7 +15,7 @@ import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker
 import { Behovstype } from 'lib/utils/form';
 import { parse, parseISO } from 'date-fns';
 
-import { HStack, Label, Link, VStack } from '@navikt/ds-react';
+import { BodyLong, HStack, Label, Link, VStack } from '@navikt/ds-react';
 import { pipe } from 'lib/utils/functional';
 import { erProsent, validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
@@ -178,9 +178,11 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
     >
       {!formReadOnly && (
         <VStack paddingBlock={'4'}>
-          <Link href={'https://lovdata.no/pro/rundskriv/r11-00/KAPITTEL_26-3'} target="_blank">
-            Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-23 (lovdata.no)
-          </Link>
+          <BodyLong size={'small'}>
+            <Link href={'https://lovdata.no/pro/rundskriv/r11-00/KAPITTEL_26-3'} target="_blank">
+              Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-23 (lovdata.no)
+            </Link>
+          </BodyLong>
         </VStack>
       )}
       {vedtatteVurderinger.map((vurdering) => (

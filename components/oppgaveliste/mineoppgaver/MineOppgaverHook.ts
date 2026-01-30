@@ -17,6 +17,7 @@ const oppgaveStatus = {
     oppgave.returStatus === NoNavAapOppgaveOppgaveDtoReturStatus.RETUR_FRA_BESLUTTER,
   ER_HASTESAK: (oppgave: Oppgave) =>
     oppgave.markeringer.some((it) => it.markeringType === NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.HASTER),
+  VENTEFRIST_UTLØPT: (oppgave: Oppgave) => oppgave.utløptVentefrist != null
 } as const;
 
 interface Props {

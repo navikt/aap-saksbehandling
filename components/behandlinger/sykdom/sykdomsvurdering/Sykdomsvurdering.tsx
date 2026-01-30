@@ -11,7 +11,7 @@ import {
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent, useCallback } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
-import { Link } from '@navikt/ds-react';
+import { BodyLong, Link } from '@navikt/ds-react';
 import { DiagnoseSystem, diagnoseSøker } from 'lib/diagnosesøker/DiagnoseSøker';
 import { formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
 import { isAfter, isBefore, startOfDay } from 'date-fns';
@@ -310,9 +310,12 @@ export const Sykdomsvurdering = ({
           getVurdertDato={(v) => v.vurdertAv.dato}
         />
       )}
-      <Link href="https://lovdata.no/nav/rundskriv/r11-00#KAPITTEL_7-1" target="_blank">
-        Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-5 (lovdata.no)
-      </Link>
+
+      <BodyLong size={'small'}>
+        <Link href="https://lovdata.no/nav/rundskriv/r11-00#KAPITTEL_7-1" target="_blank">
+          Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-5 (lovdata.no)
+        </Link>
+      </BodyLong>
 
       <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
 

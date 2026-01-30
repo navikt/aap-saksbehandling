@@ -73,4 +73,5 @@ export const OppgaveStatuser: ValuePair[] = [
   { label: 'Retur fra veileder', value: 'RETUR_FRA_VEILEDER' },
   { label: 'Retur fra saksbehandler', value: 'RETUR_FRA_SAKSBEHANDLER' },
   { label: 'Hastesak', value: 'ER_HASTESAK' },
+  { label: 'Ventefrist utløpt', value: 'VENTEFRIST_UTLØPT'}
 ];

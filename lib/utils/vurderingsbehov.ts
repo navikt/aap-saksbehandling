@@ -103,7 +103,7 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov): strin
     case 'UTVID_VEDTAKSLENGDE':
       return 'Utvid vedtakslengde';
     case 'MIGRER_RETTIGHETSPERIODE':
-      return 'Korrigering av rettighetsperiode (Teknisk behandling)';
+      return 'Korrigering av teknisk periode (automatisk behandling)';
     default:
       return vurderingsbehov;
   }
@@ -187,7 +187,7 @@ export const formaterFrittVurderingsbehov = (vurderingsbehov: String) => {
     case 'BARNETILLEGG_SATS_REGULERING':
       return 'Satsregulering barnetillegg';
     case 'MIGRER_RETTIGHETSPERIODE':
-      return 'Korrigering av rettighetsperiode (Teknisk behandling)';
+      return 'Korrigering av teknisk periode (automatisk behandling)';
     default:
       return vurderingsbehov;
   }

@@ -20,8 +20,7 @@ import { OvergangUforeVurderingFormInput } from 'components/behandlinger/sykdom/
 import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { OvergangUforeTidligereVurdering } from 'components/behandlinger/sykdom/overgangufore/OvergangUforeTidligereVurdering';
-import { Link, VStack } from '@navikt/ds-react';
-import { Veiledning } from 'components/veiledning/Veiledning';
+import { BodyLong, Link, VStack } from '@navikt/ds-react';
 import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
 import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
@@ -131,16 +130,11 @@ export const OvergangUforePeriodisert = ({
       errorList={errorList}
     >
       <VStack gap={'4'}>
-        <Veiledning
-          defaultOpen={false}
-          tekst={
-            <div>
-              <Link href="https://lovdata.no/pro/lov/1997-02-28-19/%C2%A711-18" target="_blank">
-                Du kan lese om hvordan vilkåret skal vurderes i rundskrivet til § 11-18
-              </Link>
-            </div>
-          }
-        />
+        <BodyLong size={'small'}>
+          <Link href="https://lovdata.no/pro/lov/1997-02-28-19/%C2%A711-18" target="_blank">
+            Du kan lese om hvordan vilkåret skal vurderes i rundskrivet til § 11-18
+          </Link>
+        </BodyLong>
 
         {grunnlag.sisteVedtatteVurderinger.map((vurdering) => (
           <TidligereVurderingExpandableCard

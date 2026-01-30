@@ -27,7 +27,7 @@ import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/sy
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
-import { Link, VStack } from '@navikt/ds-react';
+import { BodyLong, Link, VStack } from '@navikt/ds-react';
 import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
 import {
   emptySykdomsvurdering,
@@ -182,9 +182,12 @@ export const SykdomsvurderingPeriodisert = ({
       errorList={errorList}
     >
       <VStack gap={'4'}>
-        <Link href="https://lovdata.no/nav/rundskriv/r11-00#KAPITTEL_7-1" target="_blank">
-          Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-5 (lovdata.no)
-        </Link>
+        <BodyLong size={'small'}>
+          <Link href="https://lovdata.no/nav/rundskriv/r11-00#KAPITTEL_7-1" target="_blank">
+            Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-5 (lovdata.no)
+          </Link>
+        </BodyLong>
+
         {vedtatteVurderinger.map((vurdering) => (
           <TidligereVurderingExpandableCard
             key={vurdering.fom}

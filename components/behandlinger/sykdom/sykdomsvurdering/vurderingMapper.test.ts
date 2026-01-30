@@ -245,7 +245,7 @@ describe('revurdering', () => {
     expect(vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten).toBeUndefined();
     expect(vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense).toBe(true);
     expect(vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten).toBeUndefined();
-    expect(vurdering.erSkadeSykdomEllerLyteVesentligdel).toBeUndefined();
+    expect(vurdering.erSkadeSykdomEllerLyteVesentligdel).toBe(true);
     expect(vurdering.erNedsettelseIArbeidsevneAvEnVissVarighet).toBeUndefined();
     expect(vurdering.yrkesskadeBegrunnelse).toBeUndefined();
   });
