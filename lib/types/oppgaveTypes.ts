@@ -18,7 +18,6 @@ export type OppgavelisteRequest = oppgave['schemas']['no.nav.aap.oppgave.liste.O
 export type OppgavelisteResponse = oppgave['schemas']['no.nav.aap.oppgave.liste.OppgavelisteRespons'];
 export type Paging = OppgavelisteRequest['paging'];
 export type Enhet = oppgave['schemas']['no.nav.aap.oppgave.enhet.EnhetDto'];
-export type AvklaringsbehovReferanse = oppgave['schemas']['no.nav.aap.oppgave.AvklaringsbehovReferanseDto'];
 export type PlukkOppgaveDto = oppgave['schemas']['no.nav.aap.oppgave.plukk.PlukkOppgaveDto'];
 export type SøkResponse = oppgave['schemas']['no.nav.aap.oppgave.SøkResponse'];
 export type AvreserverOppgaveDto = oppgave['schemas']['no.nav.aap.oppgave.AvreserverOppgaveDto'];
