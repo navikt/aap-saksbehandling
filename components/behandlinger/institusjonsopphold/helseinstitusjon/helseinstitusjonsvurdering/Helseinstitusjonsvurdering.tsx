@@ -76,6 +76,15 @@ export const Helseinstitusjonsvurdering = ({ form, oppholdIndex, vurderingIndex,
       return;
     }
 
+    const fraOgMedDato = form.watch(
+      `helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.periode.fom`
+    );
+
+    // Vi setter ikke fom dato dersom den finnes fra før av
+    if (fraOgMedDato !== undefined) {
+      return;
+    }
+
     // Sjekk om dette er et nytt opphold innen 3 måneder etter forrige
     if (oppholdIndex > 0) {
       const forrigeOppholdTom = form.watch(`helseinstitusjonsvurderinger.${oppholdIndex - 1}.periode.tom`);
