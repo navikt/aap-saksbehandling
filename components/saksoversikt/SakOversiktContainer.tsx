@@ -9,6 +9,7 @@ import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { AktivitetspliktTrekk } from 'components/saksoversikt/aktivitetsplikttrekk/AktivitetspliktTrekk';
 import { Rettighetsoversikt } from 'components/saksoversikt/rettighetsoversikt/Rettighetsoversikt';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 enum Tab {
   OVERSIKT = 'OVERSIKT',
@@ -19,6 +20,7 @@ enum Tab {
 export const SakOversiktContainer = ({ sak }: { sak: SaksInfo }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const visRettigheterForVedtak = useFeatureFlag('VisRettigheterForVedtak');
 
   const [tab, setTab] = useState(searchParams.get('t') || Tab.OVERSIKT);
 
@@ -39,7 +41,7 @@ export const SakOversiktContainer = ({ sak }: { sak: SaksInfo }) => {
 
           <Box marginBlock="8">
             <Tabs.Panel value={Tab.OVERSIKT}>
-              <Rettighetsoversikt saksnummer={sak.saksnummer} />
+              {visRettigheterForVedtak && <Rettighetsoversikt saksnummer={sak.saksnummer} />}
               <SakMedBehandlinger sak={sak} />
             </Tabs.Panel>
 

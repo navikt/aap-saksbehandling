@@ -13,9 +13,8 @@ interface Props {
 }
 
 export const Rettighetsoversikt = (props: Props) => {
-  const { saksnummer } = props;
-  const url = `/api/sak/${saksnummer}/rettighet`;
-  const { data } = useSWR(url, () => clientHentRettighetsdata(saksnummer));
+  const url = `/api/sak/${props.saksnummer}/rettighet`;
+  const { data } = useSWR(url, () => clientHentRettighetsdata(props.saksnummer));
 
   if (isError(data)) {
     return;
