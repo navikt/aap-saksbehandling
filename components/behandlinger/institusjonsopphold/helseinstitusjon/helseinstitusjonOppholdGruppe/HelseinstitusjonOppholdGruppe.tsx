@@ -105,7 +105,9 @@ export const HelseinstitusjonOppholdGruppe = ({
           })}
 
           {vurderinger.map((vurdering, vurderingIndex) => {
-            const reduksjon = erReduksjonUtIFraFormFields(vurdering);
+            const reduksjon = erReduksjonUtIFraFormFields(
+              form.watch(`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}`)
+            );
 
             return (
               <div key={vurderingIndex} className={styles.vurderingRad}>
