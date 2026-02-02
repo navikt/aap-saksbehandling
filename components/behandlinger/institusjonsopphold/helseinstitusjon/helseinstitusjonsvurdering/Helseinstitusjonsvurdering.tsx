@@ -9,13 +9,14 @@ import {
   beregnReduksjonsdatoVedNyttOpphold,
   beregnTidligsteReduksjonsdato,
   erNyttOppholdInnenfor3MaanederEtterSistOpphold,
+  lagReduksjonBeskrivelseNyttOpphold,
   lagReduksjonsBeskrivelse,
   validerDatoErInnenforOpphold,
   validerErIKronologiskRekkeFølge,
 } from 'lib/utils/institusjonsopphold';
 import { HelseinstitusjonGrunnlag } from 'lib/types/types';
 import { validerDato } from 'lib/validation/dateValidation';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Dato } from 'lib/types/Dato';
 
 interface Props {
@@ -60,7 +61,14 @@ export const Helseinstitusjonsvurdering = ({ form, oppholdIndex, vurderingIndex,
     forsoergerEktefelle === JaEllerNei.Nei &&
     harFasteUtgifter === JaEllerNei.Nei;
 
-  const reduksjonsBeskrivelse = lagReduksjonsBeskrivelse(opphold.oppholdFra);
+  const forrigeOppholdTom = form.watch(`helseinstitusjonsvurderinger.${oppholdIndex - 1}.periode.tom`);
+  const reduksjonsBeskrivelse = useMemo(() => {
+    if (oppholdIndex > 0 && erNyttOppholdInnenfor3MaanederEtterSistOpphold(forrigeOppholdTom, opphold.oppholdFra)) {
+      return lagReduksjonBeskrivelseNyttOpphold(forrigeOppholdTom, opphold.oppholdFra);
+    } else {
+      return lagReduksjonsBeskrivelse(opphold.oppholdFra);
+    }
+  }, [opphold.oppholdFra, forrigeOppholdTom, oppholdIndex]);
 
   useEffect(() => {
     // Vi setter bare fom-dato automatisk for første vurdering

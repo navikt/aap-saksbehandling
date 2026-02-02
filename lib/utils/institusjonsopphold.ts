@@ -48,6 +48,15 @@ export function lagReduksjonsBeskrivelse(oppholdFra: string): string {
   return `Innleggelsesmåned: ${innleggelsesmåned}. Reduksjon kan tidligst starte: ${tidligsteReduksjon}`;
 }
 
+export function lagReduksjonBeskrivelseNyttOpphold(utskrevet: string, oppholdFra: string): string {
+  const oppholdDato = new Dato(oppholdFra).dato;
+
+  const innleggelsesmåned = format(startOfMonth(oppholdDato), 'MMMM yyyy', { locale: nb });
+  const tidligsteReduksjon = beregnReduksjonsdatoVedNyttOpphold(utskrevet, oppholdFra);
+
+  return `Innleggelsesmåned: ${innleggelsesmåned}. Reduksjon kan tidligst starte: ${formatDatoMedMånedsnavn(tidligsteReduksjon)}`;
+}
+
 /**
  * Validerer at en dato er innenfor oppholdsperioden.
  *
