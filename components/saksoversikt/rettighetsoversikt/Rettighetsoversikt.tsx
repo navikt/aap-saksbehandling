@@ -32,7 +32,7 @@ export const Rettighetsoversikt = (props: Props) => {
           </p>
         </div>
         <HStack>
-          {rettighetListe?.map((rettighetdata: RettighetDto) => (
+          {rettighetListe.map((rettighetdata: RettighetDto) => (
             <Rettighet key={uuidv4()} rettighetsdata={rettighetdata} />
           ))}
         </HStack>

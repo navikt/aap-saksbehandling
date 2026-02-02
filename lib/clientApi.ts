@@ -141,7 +141,7 @@ export function clientHentTilgangForKvalitetssikring(referanse: string) {
 }
 
 export function clientHentSakshistorikk(saksnummer: string) {
-  return clientFetch<Array<BehandlingsHistorikk>>(`${BASE_URL}/api/sak/${saksnummer}historikk/`, 'GET');
+  return clientFetch<Array<BehandlingsHistorikk>>(`${BASE_URL}/api/sak/${saksnummer}/historikk`, 'GET');
 }
 
 export function clientBestillDialogmelding(bestilling: BestillLegeerklæring) {

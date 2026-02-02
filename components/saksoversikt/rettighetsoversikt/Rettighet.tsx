@@ -24,26 +24,24 @@ export const Rettighet = ({ rettighetsdata }: Props) => {
     <div className={styles.rettighet}>
       <Heading size="small">{hentRettighetstypeVisning(rettighetsdata)}</Heading>
       {erRettighetKvotebasert && (
-        <>
-          <HStack>
-            <div className={styles.data}>
-              <p>Kvote</p>
-              <p>{rettighetsdata.kvote}</p>
-            </div>
-            <div className={styles.data}>
-              <p>Brukt til nå</p>
-              <p>{rettighetsdata.bruktKvote}</p>
-            </div>
-            <div className={styles.data}>
-              <p>Gjenstående</p>
-              <p>{rettighetsdata.gjenværendeKvote}</p>
-            </div>
-            <div className={`${styles.data} ${styles.marginTop}`}>
-              <p>Maksdato:</p>
-              <p className={styles.fetSkrift}>{formaterDatoForFrontend(rettighetsdata.maksDato)}</p>
-            </div>
-          </HStack>
-        </>
+        <HStack>
+          <div className={styles.data}>
+            <p>Kvote</p>
+            <p>{rettighetsdata.kvote}</p>
+          </div>
+          <div className={styles.data}>
+            <p>Brukt til nå</p>
+            <p>{rettighetsdata.bruktKvote}</p>
+          </div>
+          <div className={styles.data}>
+            <p>Gjenstående</p>
+            <p>{rettighetsdata.gjenværendeKvote}</p>
+          </div>
+          <div className={`${styles.data} ${styles.marginTop}`}>
+            <p>Maksdato:</p>
+            <p className={styles.fetSkrift}>{formaterDatoForFrontend(rettighetsdata.maksDato)}</p>
+          </div>
+        </HStack>
       )}
       {!erRettighetKvotebasert && (
         <div className={styles.data}>
