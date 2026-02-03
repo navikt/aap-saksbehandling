@@ -66,7 +66,7 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
-    : mapVurderingToDraftFormFields(grunnlag.vurderinger, grunnlag.opphold);
+    : mapVurderingToDraftFormFields(grunnlag, grunnlag.opphold);
 
   const { form } = useConfigForm<HelseinstitusjonsFormFields>({
     helseinstitusjonsvurderinger: {
@@ -139,7 +139,7 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
       mellomlagretVurdering={mellomlagretVurdering}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() =>
-        slettMellomlagring(() => form.reset(mapVurderingToDraftFormFields(grunnlag.vurderinger, grunnlag.opphold)))
+        slettMellomlagring(() => form.reset(mapVurderingToDraftFormFields(grunnlag, grunnlag.opphold)))
       }
       visningModus={visningModus}
       visningActions={visningActions}
@@ -173,12 +173,14 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
 };
 
 function mapVurderingToDraftFormFields(
-  vurderingerFraGrunnlag: HelseinstitusjonGrunnlag['vurderinger'],
+  grunnlag: HelseinstitusjonGrunnlag,
   opphold: HelseinstitusjonGrunnlag['opphold']
 ): DraftFormFields {
+  const harTidligerevurderinger = grunnlag.vedtatteVurderinger && grunnlag.vedtatteVurderinger.length > 0;
+
   return {
     helseinstitusjonsvurderinger: opphold.map((opphold) => {
-      const vurderingerForOpphold = vurderingerFraGrunnlag.find(
+      const vurderingerForOpphold = grunnlag.vurderinger.find(
         (vurdering) => vurdering.oppholdId === opphold.oppholdId
       )?.vurderinger;
 
@@ -204,7 +206,7 @@ function mapVurderingToDraftFormFields(
                 forsoergerEktefelle: undefined,
                 periode: {
                   fom: '',
-                  tom: formaterDatoForFrontend(opphold?.avsluttetDato ?? opphold?.oppholdFra ?? ''),
+                  tom: formaterDatoForFrontend(opphold?.avsluttetDato || ''),
                 },
               },
             ];
@@ -215,7 +217,7 @@ function mapVurderingToDraftFormFields(
           fom: formaterDatoForFrontend(opphold.oppholdFra),
           tom: opphold.avsluttetDato ? formaterDatoForFrontend(opphold.avsluttetDato) : '',
         },
-        vurderinger: vurderinger,
+        vurderinger: harTidligerevurderinger ? [] : vurderinger,
       };
     }),
   };
