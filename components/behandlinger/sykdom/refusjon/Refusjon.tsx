@@ -134,7 +134,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
       <RadioGroupWrapper
         name={`harKrav`}
         control={form.control}
-        label={'Er det refusjonskrav fra Nav-kontor?'}
+        label={'Har noen Nav-kontor refusjonskrav for sosialstønad?'}
         rules={{ required: 'Du må velge om brukeren har refusjonskrav' }}
         readOnly={formReadOnly}
         horisontal
