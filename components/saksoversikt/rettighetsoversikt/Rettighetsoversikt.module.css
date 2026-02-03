@@ -2,12 +2,12 @@
     display: flex;
     justify-content: space-between;
     width: 100%;
-    height: 1.4em;
+    height: var(--a-spacing-6);
 }
 
 .rettighet {
     width: 14.5em;
-    margin: 0 4em 3em 0;
+    margin: 0 var(--a-spacing-18) var(--a-spacing-14) 0;
 }
 
 .alignHøyre {
@@ -19,7 +19,7 @@
 }
 
 .marginTop {
-    margin-top: 0.8em;
+    margin-top: var(--a-spacing-3);
 }
 
 .fetSkrift {
@@ -27,14 +27,13 @@
 }
 
 .vedtaksperiode {
-    margin-left: 1.6em;
+    margin: var(--a-spacing-2) 0 0 var(--a-spacing-4);
     vertical-align: top;
-    margin-top: 0.4em;
 }
 
 .gjeldendeVedtak {
     display: flex;
     border-bottom: 1px solid var(--a-border-subtle);
-    height: 2.4em;
+    height: var(--a-spacing-10);
 }
 

@@ -3,7 +3,6 @@ import { RettighetDto } from 'lib/types/types';
 import { formaterPeriode } from 'lib/utils/date';
 import { Rettighet } from 'components/saksoversikt/rettighetsoversikt/Rettighet';
 import styles from './Rettighetsoversikt.module.css';
-import { v4 as uuidv4 } from 'uuid';
 import { isError } from 'lib/utils/api';
 import useSWR from 'swr';
 import { clientHentRettighetsdata } from 'lib/clientApi';
@@ -20,7 +19,7 @@ export const Rettighetsoversikt = (props: Props) => {
     return;
   }
 
-  const rettighetListe = data?.data as RettighetDto[];
+  const rettighetListe = data?.data;
 
   if (rettighetListe != null && rettighetListe.length > 0) {
     return (
@@ -32,8 +31,8 @@ export const Rettighetsoversikt = (props: Props) => {
           </p>
         </div>
         <HStack>
-          {rettighetListe.map((rettighetdata: RettighetDto) => (
-            <Rettighet key={uuidv4()} rettighetsdata={rettighetdata} />
+          {rettighetListe.map((rettighetdata: RettighetDto, index: number) => (
+            <Rettighet key={index} rettighetsdata={rettighetdata} />
           ))}
         </HStack>
       </VStack>

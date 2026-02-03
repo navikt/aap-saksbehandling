@@ -25,29 +25,31 @@ export const Rettighet = ({ rettighetsdata }: Props) => {
       <Heading size="small">{hentRettighetstypeVisning(rettighetsdata)}</Heading>
       {erRettighetKvotebasert && (
         <HStack>
-          <div className={styles.data}>
+          <HStack className={styles.data}>
             <p>Kvote</p>
             <p>{rettighetsdata.kvote}</p>
-          </div>
-          <div className={styles.data}>
+          </HStack>
+          <HStack className={styles.data}>
             <p>Brukt til nå</p>
             <p>{rettighetsdata.bruktKvote}</p>
-          </div>
-          <div className={styles.data}>
+          </HStack>
+          <HStack className={styles.data}>
             <p>Gjenstående</p>
             <p>{rettighetsdata.gjenværendeKvote}</p>
-          </div>
-          <div className={`${styles.data} ${styles.marginTop}`}>
+          </HStack>
+          <HStack className={`${styles.data} ${styles.marginTop}`}>
             <p>Maksdato:</p>
-            <p className={styles.fetSkrift}>{formaterDatoForFrontend(rettighetsdata.maksDato)}</p>
-          </div>
+            <p className={styles.fetSkrift}>
+              {rettighetsdata.maksDato != null ? formaterDatoForFrontend(rettighetsdata.maksDato) : ''}
+            </p>
+          </HStack>
         </HStack>
       )}
       {!erRettighetKvotebasert && (
-        <div className={styles.data}>
+        <HStack className={styles.data}>
           <p>Rettighet</p>
           <p>{formaterPeriode(rettighetsdata.startDato, rettighetsdata.maksDato)}</p>
-        </div>
+        </HStack>
       )}
     </div>
   );

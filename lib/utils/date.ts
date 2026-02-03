@@ -13,8 +13,8 @@ export const DATO_FORMATER = {
 const uendeligSluttString = '2999-01-01';
 const uendeligSlutt = new Date(uendeligSluttString);
 
-export function formaterDatoForFrontend(dato: Date | string | null | undefined): string {
-  if (dato === uendeligSluttString || dato === uendeligSlutt || dato === null || dato == undefined) {
+export function formaterDatoForFrontend(dato: Date | string): string {
+  if (dato === uendeligSluttString || dato === uendeligSlutt) {
     return '';
   }
   return format(dato, DATO_FORMATER.ddMMyyyy, { locale: nb });
