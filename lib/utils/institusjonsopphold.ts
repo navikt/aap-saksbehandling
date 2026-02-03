@@ -93,6 +93,20 @@ export const validerDatoForStoppAvReduksjon = (reduksjonDato: string, oppholdfra
   }
 };
 
+export const validerDatoForStoppAvReduksjonVedNyttOpphold = (
+  reduksjonDato: string,
+  nyttOppholdFra: string,
+  utskrevetDato: string
+) => {
+  const dato = new Dato(reduksjonDato).dato;
+
+  const tidligsteReduksjonsdato = new Dato(beregnReduksjonsdatoVedNyttOpphold(utskrevetDato, nyttOppholdFra)).dato;
+
+  if (isBefore(dato, tidligsteReduksjonsdato)) {
+    return `Tidligste dato for reduksjon er: ${formaterDatoForFrontend(tidligsteReduksjonsdato)}`;
+  }
+};
+
 /**
  * Beregner reduksjonsdato ved nytt opphold innen tre måneder etter utskrivelse.
  * @param utskrevetDato Dato for utskrivelse (YYYY-MM-DD)

@@ -11,6 +11,7 @@ import {
   lagReduksjonsBeskrivelse,
   validerDatoErInnenforOpphold,
   validerDatoForStoppAvReduksjon,
+  validerDatoForStoppAvReduksjonVedNyttOpphold,
   validerErIKronologiskRekkeFølge,
 } from 'lib/utils/institusjonsopphold';
 import { HelseinstitusjonGrunnlag } from 'lib/types/types';
@@ -159,7 +160,20 @@ export const Helseinstitusjonsvurdering = ({ form, oppholdIndex, vurderingIndex,
                   validerDatoErInnenforOpphold(value as string, opphold.oppholdFra, opphold.avsluttetDato),
                 validerKronologiskRekkefølge: (value) =>
                   validerErIKronologiskRekkeFølge(value as string, forrigeVurdering?.periode.fom),
-                validerReduksjonsdato: (value) => validerDatoForStoppAvReduksjon(value as string, opphold.oppholdFra),
+                validerReduksjonsdato: (value) => {
+                  if (
+                    oppholdIndex > 0 &&
+                    erNyttOppholdInnenfor3MaanederEtterSistOpphold(forrigeOppholdTom, opphold.oppholdFra)
+                  ) {
+                    return validerDatoForStoppAvReduksjonVedNyttOpphold(
+                      value as string,
+                      opphold.oppholdFra,
+                      forrigeOppholdTom
+                    );
+                  } else {
+                    return validerDatoForStoppAvReduksjon(value as string, opphold.oppholdFra);
+                  }
+                },
               },
             }}
             readOnly={readonly}
