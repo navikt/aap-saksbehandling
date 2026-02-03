@@ -30,9 +30,9 @@ export function trengerTomPeriodisertVurdering(grunnlag: PeriodisertGrunnlag | u
     return true;
   }
 
-  const harNyeVurderinger = grunnlag.nyeVurderinger.length > 0; // false
-  const behøverVurderinger = grunnlag.behøverVurderinger.length > 0; // true
-  const harVedtatteVurderinger = grunnlag.sisteVedtatteVurderinger.length > 0; // true
+  const harNyeVurderinger = grunnlag.nyeVurderinger.length > 0;
+  const behøverVurderinger = grunnlag.behøverVurderinger.length > 0;
+  const harVedtatteVurderinger = grunnlag.sisteVedtatteVurderinger.length > 0;
 
   if (harNyeVurderinger) {
     return false;
