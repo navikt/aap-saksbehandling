@@ -133,17 +133,13 @@ export const HelseinstitusjonOppholdGruppe = ({
                   readonly={formReadOnly}
                   initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
                 >
-                  <div className={styles.vurderingWrapper}>
-                    <div className={styles.vurderingContent}>
-                      <Helseinstitusjonsvurdering
-                        form={form}
-                        oppholdIndex={oppholdIndex}
-                        vurderingIndex={vurderingIndex}
-                        readonly={formReadOnly}
-                        opphold={opphold}
-                      />
-                    </div>
-                  </div>
+                  <Helseinstitusjonsvurdering
+                    form={form}
+                    oppholdIndex={oppholdIndex}
+                    vurderingIndex={vurderingIndex}
+                    readonly={formReadOnly}
+                    opphold={opphold}
+                  />
                 </NyVurderingExpandableCard>
               </div>
             );

@@ -1,6 +1,6 @@
 import { UseFormReturn } from 'react-hook-form';
 import { HelseinstitusjonsFormFields } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/Helseinstitusjon';
-import { Radio, ReadMore } from '@navikt/ds-react';
+import { Radio, ReadMore, VStack } from '@navikt/ds-react';
 import { JaEllerNei } from 'lib/utils/form';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
@@ -111,7 +111,7 @@ export const Helseinstitusjonsvurdering = ({ form, oppholdIndex, vurderingIndex,
   }, [opphold.oppholdFra, vurderingIndex, reduksjon, oppholdIndex]);
 
   return (
-    <div className={'flex-column'}>
+    <VStack gap={'4'}>
       <TextAreaWrapper
         name={`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.begrunnelse`}
         control={form.control}
@@ -208,6 +208,6 @@ export const Helseinstitusjonsvurdering = ({ form, oppholdIndex, vurderingIndex,
           readOnly={readonly}
         />
       )}
-    </div>
+    </VStack>
   );
 };

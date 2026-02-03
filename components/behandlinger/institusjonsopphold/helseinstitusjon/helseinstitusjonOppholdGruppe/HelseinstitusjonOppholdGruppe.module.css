@@ -38,19 +38,6 @@
   border-bottom-right-radius: 0;
 }
 
-.vurderingWrapper {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  width: 100%;
-  gap: var(--a-spacing-4);
-}
-
-.vurderingContent {
-  flex: 1;
-  min-width: 0;
-}
-
 .deleteButton {
   flex-shrink: 0;
 }
