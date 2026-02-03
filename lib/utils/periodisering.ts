@@ -25,14 +25,18 @@ export function getFraDatoFraGrunnlagForFrontend(grunnlag: PeriodisertGrunnlag |
   return '';
 }
 
-export function trengerTomPeriodisertVurdering(grunnlag: PeriodisertGrunnlag | undefined) {
+export function trengerTomPeriodisertVurdering(grunnlag: PeriodisertGrunnlag | undefined): boolean {
   if (!grunnlag) {
     return true;
   }
 
-  const harNye = grunnlag.nyeVurderinger.length > 0;
-  const harVedtatte = grunnlag.sisteVedtatteVurderinger.length > 0;
-  const harBehov = grunnlag.behøverVurderinger.length > 0;
+  const harNyeVurderinger = grunnlag.nyeVurderinger.length > 0; // false
+  const behøverVurderinger = grunnlag.behøverVurderinger.length > 0; // true
+  const harVedtatteVurderinger = grunnlag.sisteVedtatteVurderinger.length > 0; // true
 
-  return !harNye && !harVedtatte && harBehov;
+  if (harNyeVurderinger) {
+    return false;
+  }
+
+  return behøverVurderinger || !harVedtatteVurderinger;
 }
