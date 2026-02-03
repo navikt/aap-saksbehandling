@@ -28,7 +28,7 @@ import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib
 import { LovOgMedlemskapVurderingForm } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/types';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
-import { Link, VStack } from '@navikt/ds-react';
+import { BodyLong, Link, VStack } from '@navikt/ds-react';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 
@@ -144,9 +144,11 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
       errorList={errorList}
     >
       <VStack gap={'4'}>
-        <Link href="https://lovdata.no/nav/rundskriv/r11-00#ref/lov/1997-02-28-19/%C2%A711-3" target="_blank">
-          Du kan lese om hvordan vilkåret skal vurderes i rundskrivet til § 11-3 (lovdata.no)
-        </Link>
+        <BodyLong size={'small'}>
+          <Link href="https://lovdata.no/nav/rundskriv/r11-00#ref/lov/1997-02-28-19/%C2%A711-3" target="_blank">
+            Du kan lese om hvordan vilkåret skal vurderes i rundskrivet til § 11-3 (lovdata.no)
+          </Link>
+        </BodyLong>
 
         {vedtatteVurderinger.map((vurdering) => (
           <TidligereVurderingExpandableCard

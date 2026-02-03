@@ -2,7 +2,7 @@
 
 import { Periode, MeldepliktOverstyringLøsningDto, OverstyringMeldepliktGrunnlag } from 'lib/types/types';
 import { FormEvent } from 'react';
-import { Link, VStack } from '@navikt/ds-react';
+import { BodyLong, Link, VStack } from '@navikt/ds-react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { IkkeMeldtPerioderTable } from 'components/behandlinger/underveis/ikkeoppfyltmeldeplikt/IkkeMeldtPerioderTable';
@@ -161,9 +161,11 @@ export const IkkeOppfyltMeldeplikt = ({ grunnlag, behandlingVersjon, readOnly }:
       formReset={() => form.reset()}
     >
       <VStack gap={'4'}>
-        <Link href={'https://lovdata.no/pro/rundskriv/r11-00/KAPITTEL_12'} target="_blank">
-          Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-10 (lovdata.no)
-        </Link>
+        <BodyLong size={'small'}>
+          <Link href={'https://lovdata.no/pro/rundskriv/r11-00/KAPITTEL_12'} target="_blank">
+            Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-10 (lovdata.no)
+          </Link>
+        </BodyLong>
         <VStack gap={'10'}>
           <IkkeMeldtPerioderTable
             ikkeMeldtPerioder={ikkeMeldtPerioderSomSkalVises}
