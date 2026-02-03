@@ -149,7 +149,7 @@ export const HelseinstitusjonOppholdGruppe = ({
         </VStack>
       </Box>
 
-      {!formReadOnly && vurderinger.length > 0 && (
+      {!formReadOnly && (
         <Box padding="3">
           <Button
             type="button"
