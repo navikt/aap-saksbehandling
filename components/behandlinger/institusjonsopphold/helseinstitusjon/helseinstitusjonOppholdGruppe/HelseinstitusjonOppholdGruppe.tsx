@@ -54,7 +54,9 @@ export const HelseinstitusjonOppholdGruppe = ({
       `helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${oppholdForm.length - 1}.periode.fom`
     );
 
-    return formaterDatoForFrontend(addDays(new Dato(forrigeFom).dato, 1));
+    return forrigeFom
+      ? formaterDatoForFrontend(addDays(new Dato(forrigeFom).dato, 1))
+      : new Dato(opphold.oppholdFra).formaterForFrontend();
   }
 
   const foersteNyePeriode =
