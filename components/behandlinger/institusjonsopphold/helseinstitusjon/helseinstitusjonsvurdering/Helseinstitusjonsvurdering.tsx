@@ -179,7 +179,7 @@ export const Helseinstitusjonsvurdering = ({ form, oppholdIndex, vurderingIndex,
             readOnly={readonly}
           />
           <ReadMore header="Når skal AAP reduseres fra?" size="small">
-            AAP skal ikke reduseres før tre månedene etter innleggelsesmåneden. Deretter blir ytelsen redusert med 50
+            AAP skal ikke reduseres før tre måneder etter innleggelsesmåneden. Deretter blir ytelsen redusert med 50
             prosent inntil institusjonsoppholdet avsluttes. Dersom medlemmet innen tre måneder etter utskrivelse på nytt
             kommer i institusjon, gis det reduksjon fra og med måneden etter at det nye oppholdet tar til.
           </ReadMore>
