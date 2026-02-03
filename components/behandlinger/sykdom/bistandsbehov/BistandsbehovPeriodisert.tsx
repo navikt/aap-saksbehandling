@@ -201,7 +201,6 @@ export const BistandsbehovPeriodisert = ({
 
   function mapVurderingerToBistandForm(grunnlag: BistandsGrunnlag): BistandForm {
     if (trengerTomPeriodisertVurdering(grunnlag)) {
-      console.log(grunnlag);
       return {
         vurderinger: [
           {
