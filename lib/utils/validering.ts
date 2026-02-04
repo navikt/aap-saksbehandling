@@ -50,7 +50,7 @@ export function validerPeriodiserteVurderingerRekkefølge({
     ) {
       nyeVurderinger.forEach((_, index) => {
         form.setError(`vurderinger.${index}.fraDato`, {
-          message: `Vurderingene du har laget starter før perioden du kan vurdere. Tidligste vurderte dato er ${formaterDatoForFrontend(tidligsteDato)} men tidligste dato som kan vurderes er ${formaterDatoForFrontend(tidligsteDatoSomKanVurderes)}.`,
+          message: `Datoen som er satt er tidligere enn perioden som skal vurderes. Vurderingen kan tidligst gjelde fra ${formaterDatoForFrontend(tidligsteDatoSomKanVurderes)}.`,
         });
       });
       return false;
@@ -67,7 +67,7 @@ export function validerPeriodiserteVurderingerRekkefølge({
     if (isAfter(tidligsteDato, tidligsteDatoSomMåVurderes)) {
       nyeVurderinger.forEach((_, index) => {
         form.setError(`vurderinger.${index}.fraDato`, {
-          message: `Periodene du har lagt inn dekker ikke hele perioden som må vurderes. Tidligste vurderte dato er ${formaterDatoForFrontend(tidligsteDato)} men hele perioden fra ${formaterDatoForFrontend(tidligsteDatoSomMåVurderes)} behøver vurdering.`,
+          message: `Datoen som er satt dekker ikke hele perioden. Vurderingen kan senest gjelde fra ${formaterDatoForFrontend(tidligsteDatoSomMåVurderes)}.`,
         });
       });
       return false;
