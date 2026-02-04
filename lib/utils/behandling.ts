@@ -1,4 +1,4 @@
-import { BehandlingInfo, SaksInfo, ÅrsakTilOpprettelse } from 'lib/types/types';
+import { BehandlingInfo, ÅrsakTilOpprettelse } from 'lib/types/types';
 
 // TODO: Oppdater BehandlinginfoDTO til å returnere enum i stedet for string slik at vi kan få disse fra backend
 export enum Behandlingstype {
