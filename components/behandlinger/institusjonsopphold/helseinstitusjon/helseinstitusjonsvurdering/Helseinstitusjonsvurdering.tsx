@@ -7,6 +7,7 @@ import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupW
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import {
   erNyttOppholdInnenfor3MaanederEtterSistOpphold,
+  erReduksjonUtIFraFormFields,
   lagReduksjonBeskrivelseNyttOpphold,
   lagReduksjonsBeskrivelse,
   validerDatoErInnenforOpphold,
@@ -39,10 +40,12 @@ export const Helseinstitusjonsvurdering = ({ form, oppholdIndex, vurderingIndex,
   const visHarFasteUtgifterSpørsmål =
     vurdering.faarFriKostOgLosji === JaEllerNei.Ja && vurdering.forsoergerEktefelle === JaEllerNei.Nei;
 
-  const erReduksjon =
-    vurdering.faarFriKostOgLosji === JaEllerNei.Ja &&
-    vurdering.forsoergerEktefelle === JaEllerNei.Nei &&
-    vurdering.harFasteUtgifter === JaEllerNei.Nei;
+  const forrigeVurderingErReduksjon = forrigeVurdering ? erReduksjonUtIFraFormFields(forrigeVurdering) : false;
+
+  const erReduksjon = erReduksjonUtIFraFormFields(vurdering);
+
+  const skalViseDatoFeltForStoppAvReduksjon = forrigeVurderingErReduksjon && !erReduksjon;
+  const skalViseDatoFeltForStartAvReduksjon = !forrigeVurderingErReduksjon && erReduksjon;
 
   const forrigeOppholdTom = form.watch(`helseinstitusjonsvurderinger.${oppholdIndex - 1}.periode.tom`);
 
@@ -107,7 +110,7 @@ export const Helseinstitusjonsvurdering = ({ form, oppholdIndex, vurderingIndex,
         </RadioGroupWrapper>
       )}
 
-      {erReduksjon && (
+      {skalViseDatoFeltForStartAvReduksjon && (
         <>
           <DateInputWrapper
             name={`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.periode.fom`}
@@ -148,7 +151,7 @@ export const Helseinstitusjonsvurdering = ({ form, oppholdIndex, vurderingIndex,
         </>
       )}
 
-      {!erReduksjon && (
+      {skalViseDatoFeltForStoppAvReduksjon && (
         <DateInputWrapper
           name={`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.periode.fom`}
           control={form.control}

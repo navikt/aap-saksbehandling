@@ -86,7 +86,10 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
         return opphold.vurderinger.map((vurdering, index) => {
           const nesteVurdering = opphold.vurderinger.at(index + 1);
 
-          const fom = formaterDatoForBackend(parse(vurdering.periode.fom, 'dd.MM.yyyy', new Date()));
+          const fom = vurdering.periode.fom
+            ? formaterDatoForBackend(parse(vurdering.periode.fom, 'dd.MM.yyyy', new Date()))
+            : formaterDatoForBackend(parse(opphold.periode.fom, 'dd.MM.yyyy', new Date()));
+
           const tom = !nesteVurdering
             ? // tom dato for siste vurdering skal alltid være siste dag i oppholdet
               formaterDatoForBackend(parse(opphold.periode.tom, 'dd.MM.yyyy', new Date()))

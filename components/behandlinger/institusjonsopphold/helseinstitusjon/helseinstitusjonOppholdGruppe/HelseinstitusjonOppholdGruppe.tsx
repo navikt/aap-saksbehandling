@@ -50,9 +50,13 @@ export const HelseinstitusjonOppholdGruppe = ({
 
   function beregnFraOgMedDatoForNyVurdering() {
     const oppholdForm = form.watch(`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger`);
-    const forrigeFom = form.watch(
-      `helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${oppholdForm.length - 1}.periode.fom`
+    const forrigeVurdering = form.watch(
+      `helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${oppholdForm.length - 1}`
     );
+
+    // TODO Fiks her ved revurdering så skal fom dato være dagen etter forrige (tidligere vurderinger)
+
+    const forrigeFom = forrigeVurdering?.periode.fom;
 
     return forrigeFom
       ? formaterDatoForFrontend(addDays(new Dato(forrigeFom).dato, 1))
