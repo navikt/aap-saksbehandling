@@ -47,15 +47,16 @@ export const Helseinstitusjonsvurdering = ({ form, oppholdIndex, vurderingIndex,
   const skalViseDatoFeltForStoppAvReduksjon = forrigeVurderingErReduksjon && !erReduksjon;
   const skalViseDatoFeltForStartAvReduksjon = !forrigeVurderingErReduksjon && erReduksjon;
 
-  const forrigeOppholdTom = form.watch(`helseinstitusjonsvurderinger.${oppholdIndex - 1}.periode.tom`);
+  const forrigeOppholdTom =
+    oppholdIndex > 0 ? form.getValues(`helseinstitusjonsvurderinger.${oppholdIndex - 1}.periode.tom`) : undefined;
 
   const reduksjonsBeskrivelse = useMemo(() => {
-    if (oppholdIndex > 0 && erNyttOppholdInnenfor3MaanederEtterSistOpphold(forrigeOppholdTom, opphold.oppholdFra)) {
+    if (forrigeOppholdTom && erNyttOppholdInnenfor3MaanederEtterSistOpphold(forrigeOppholdTom, opphold.oppholdFra)) {
       return lagReduksjonBeskrivelseNyttOpphold(forrigeOppholdTom, opphold.oppholdFra);
     } else {
       return lagReduksjonsBeskrivelse(opphold.oppholdFra);
     }
-  }, [opphold.oppholdFra, forrigeOppholdTom, oppholdIndex]);
+  }, [opphold.oppholdFra, forrigeOppholdTom]);
 
   return (
     <VStack gap={'4'}>
@@ -127,7 +128,7 @@ export const Helseinstitusjonsvurdering = ({ form, oppholdIndex, vurderingIndex,
                   validerErIKronologiskRekkeFølge(value as string, forrigeVurdering?.periode.fom),
                 validerReduksjonsdato: (value) => {
                   if (
-                    oppholdIndex > 0 &&
+                    forrigeOppholdTom &&
                     erNyttOppholdInnenfor3MaanederEtterSistOpphold(forrigeOppholdTom, opphold.oppholdFra)
                   ) {
                     return validerDatoForStoppAvReduksjonVedNyttOpphold(

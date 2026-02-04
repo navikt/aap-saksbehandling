@@ -68,12 +68,15 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag, grunnlag.opphold);
 
-  const { form } = useConfigForm<HelseinstitusjonsFormFields>({
-    helseinstitusjonsvurderinger: {
-      type: 'fieldArray',
-      defaultValue: defaultValue.helseinstitusjonsvurderinger,
+  const { form } = useConfigForm<HelseinstitusjonsFormFields>(
+    {
+      helseinstitusjonsvurderinger: {
+        type: 'fieldArray',
+        defaultValue: defaultValue.helseinstitusjonsvurderinger,
+      },
     },
-  });
+    { shouldUnregister: true }
+  );
 
   const { fields: oppholdFields } = useFieldArray({
     control: form.control,
@@ -128,6 +131,8 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
       );
     })(event);
   };
+
+  console.log(oppholdFields);
 
   return (
     <VilkårskortMedFormOgMellomlagringNyVisning
