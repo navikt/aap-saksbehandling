@@ -19,6 +19,7 @@ import { IkkeSendBrevModal } from 'components/behandlinger/brev/skriveBrev/IkkeS
 import { isError, isSuccess } from 'lib/utils/api';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
+import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 
 export const SkriveBrev = ({
   referanse,
@@ -94,7 +95,12 @@ export const SkriveBrev = ({
     }
   }, [brukerMottaker?.ident, referanse, valgteMottakere]);
 
-  const { løsBehovOgGåTilNesteSteg, isLoading } = useLøsBehovOgGåTilNesteSteg('BREV');
+  const {
+    løsBehovOgGåTilNesteSteg,
+    status: løsBehovStatus,
+    isLoading,
+    løsBehovOgGåTilNesteStegError,
+  } = useLøsBehovOgGåTilNesteSteg('BREV');
 
   useEffect(() => {
     if (kanMellomlagreBrev && !readOnly) {
@@ -189,6 +195,10 @@ export const SkriveBrev = ({
             logo={NavLogo}
             signatur={signaturer}
             readonly={readOnly}
+          />
+          <LøsBehovOgGåTilNesteStegStatusAlert
+            status={løsBehovStatus}
+            løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
           />
           {visKanIkkeDistribuereAdvarsel && (
             <Alert variant={'warning'} size={'small'} className={'fit-content'}>

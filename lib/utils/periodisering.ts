@@ -2,7 +2,7 @@ import { components } from 'lib/types/schema';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { parseISO } from 'date-fns';
 
-type PeriodisertGrunnlag = {
+export type PeriodisertGrunnlag = {
   behøverVurderinger: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
   kanVurderes: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
   nyeVurderinger: Array<unknown>;
@@ -25,16 +25,18 @@ export function getFraDatoFraGrunnlagForFrontend(grunnlag: PeriodisertGrunnlag |
   return '';
 }
 
-export function trengerTomPeriodisertVurdering(grunnlag: PeriodisertGrunnlag | undefined) {
-  // Trenger tom vurdering hvis vi ikke har tidligere vurderinger eller nye vurderinger,
-  // eller vi har minst en periode som behøver vurdering
-  //
-  if (
-    !grunnlag ||
-    (grunnlag.nyeVurderinger.length === 0 && grunnlag.behøverVurderinger.length > 0) ||
-    (grunnlag.nyeVurderinger.length === 0 && grunnlag.sisteVedtatteVurderinger.length === 0)
-  ) {
+export function trengerTomPeriodisertVurdering(grunnlag: PeriodisertGrunnlag | undefined): boolean {
+  if (!grunnlag) {
     return true;
   }
-  return false;
+
+  const harNyeVurderinger = grunnlag.nyeVurderinger.length > 0;
+  const behøverVurderinger = grunnlag.behøverVurderinger.length > 0;
+  const harVedtatteVurderinger = grunnlag.sisteVedtatteVurderinger.length > 0;
+
+  if (harNyeVurderinger) {
+    return false;
+  }
+
+  return behøverVurderinger || !harVedtatteVurderinger;
 }
