@@ -1926,6 +1926,44 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/behandling/grunnlag/andrestatligeytelser/{referanse}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description referanse */
+          referanse: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.andrestatligeytelser.AndreStatligeYtelserGrunnlagDto'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/barnetillegg/grunnlag/{referanse}': {
     parameters: {
       query?: never;
@@ -4135,7 +4173,11 @@ export interface paths {
         };
         cookie?: never;
       };
-      requestBody?: never;
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['no.nav.aap.behandlingsflyt.drift.`DriftApiKt$driftApi$1$AvbrytBrevBody`'];
+        };
+      };
       responses: {
         /** @description OK */
         200: {
@@ -4644,6 +4686,28 @@ export interface components {
       grunn: 'IKKE_RIMELIG_GRUNN' | 'RIMELIG_GRUNN';
       registrertTrekk?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_9.AktivitetspliktTrekkDto'];
       vurdertAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.andrestatligeytelser.AndreStatligeYtelserGrunnlagDto': {
+      dagpengerPerioder: components['schemas']['no.nav.aap.behandlingsflyt.behandling.andrestatligeytelser.DagpengerPeriodeDto'][];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.andrestatligeytelser.DagpengerPeriodeDto': {
+      /** @enum {string} */
+      dagpengerYtelseType:
+        | 'DAGPENGER_ARBEIDSSOKER_ORDINAER'
+        | 'DAGPENGER_PERMITTERING_ORDINAER'
+        | 'DAGPENGER_PERMITTERING_FISKEINDUSTRI';
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fom: string;
+      /** @enum {string} */
+      kilde: 'ARENA' | 'DP_SAK';
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      tom: string;
     };
     'no.nav.aap.behandlingsflyt.behandling.arbeidsevne.ArbeidsevneGrunnlagDto': {
       'beh\u00F8verVurderinger': components['schemas']['no.nav.aap.komponenter.type.Periode'][];
@@ -8661,6 +8725,7 @@ export interface components {
       mottakere: components['schemas']['no.nav.aap.brev.kontrakt.MottakerDto'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.SkrivVedtaksbrevL\u00F8sning': {
+      begrunnelse?: string | null;
       /** @enum {string} */
       behovstype:
         | '4101'
@@ -12210,6 +12275,9 @@ export interface components {
       /** @enum {string} */
       status: 'OPPRETTET' | 'UTREDES' | 'LØPENDE' | 'AVSLUTTET';
     };
+    'no.nav.aap.behandlingsflyt.drift.`DriftApiKt$driftApi$1$AvbrytBrevBody`': {
+      begrunnelse: string;
+    };
     'no.nav.aap.behandlingsflyt.drift.`DriftApiKt$driftApi$1$KjorFraSteg`': {
       /** @enum {string} */
       steg:
@@ -14372,6 +14440,7 @@ export interface components {
       identifikator: string;
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Innsending': {
+      digitalisertAvPostmottak?: boolean | null;
       /** @enum {string} */
       kanal: 'DIGITAL' | 'PAPIR';
       melding?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Melding'];
@@ -14843,6 +14912,11 @@ export interface components {
       id: number;
     };
     'no.nav.aap.behandlingsflyt.sakogbehandling.behandling.VurderingsbehovMedPeriode': {
+      /**
+       * Format: date-time
+       * @example 2025-04-01T12:30:00
+       */
+      oppdatertTid: string;
       periode?: components['schemas']['no.nav.aap.komponenter.type.Periode'];
       /** @enum {string} */
       type:
