@@ -56,7 +56,7 @@ export const HelseinstitusjonOppholdGruppe = ({
 
     // TODO Fiks her ved revurdering så skal fom dato være dagen etter forrige (tidligere vurderinger)
 
-    const forrigeFom = forrigeVurdering?.periode.fom;
+    const forrigeFom = forrigeVurdering?.periode?.fom;
 
     return forrigeFom
       ? formaterDatoForFrontend(addDays(new Dato(forrigeFom).dato, 1))
