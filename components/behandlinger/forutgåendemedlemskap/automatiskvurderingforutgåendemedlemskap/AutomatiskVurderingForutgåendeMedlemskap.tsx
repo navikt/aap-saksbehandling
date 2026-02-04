@@ -3,7 +3,7 @@
 import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
 import { Alert, BodyShort, Button, Detail, HStack, VStack } from '@navikt/ds-react';
 import { AutomatiskLovvalgOgMedlemskapVurdering } from 'lib/types/types';
-import { TilhørigetsVurderingTabell } from 'components/behandlinger/lovvalg/automatiskvurderingavlovvalgogmedlemskap/TilhørigetsVurderingTabell';
+import { TilhørighetsVurderingTabell } from 'components/behandlinger/lovvalg/automatiskvurderingavlovvalgogmedlemskap/TilhørighetsVurderingTabell';
 import { Dispatch, SetStateAction } from 'react';
 
 interface Props {
@@ -40,7 +40,7 @@ export const AutomatiskVurderingForutgåendeMedlemskap = ({
           <BodyShort spacing weight={'semibold'} size={'small'}>
             Indikasjoner på tilhørighet til Norge
           </BodyShort>
-          <TilhørigetsVurderingTabell
+          <TilhørighetsVurderingTabell
             vurdering={vurdering.tilhørighetVurdering.filter((e) => e.indikasjon === 'I_NORGE')}
             oppfyllerOpplysningeneKraveneTekst={'Tilsier opplysningene at brukeren oppfyller kravene til medlemskap?'}
             oppfyllerOpplysningeneKravene={vurdering.tilhørighetVurdering
@@ -52,7 +52,7 @@ export const AutomatiskVurderingForutgåendeMedlemskap = ({
           <BodyShort weight={'semibold'} spacing size={'small'}>
             Indikasjoner på tilhørighet utenfor Norge
           </BodyShort>
-          <TilhørigetsVurderingTabell
+          <TilhørighetsVurderingTabell
             vurdering={vurdering.tilhørighetVurdering.filter((e) => e.indikasjon === 'UTENFOR_NORGE')}
             oppfyllerOpplysningeneKraveneTekst={'Tilsier opplysningene at brukeren har tilhørighet til Norge?'}
             oppfyllerOpplysningeneKravene={vurdering.tilhørighetVurdering

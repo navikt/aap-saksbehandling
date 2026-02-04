@@ -14,7 +14,7 @@ interface Props {
   oppfyllerOpplysningeneKraveneTekst: string;
 }
 
-export const TilhørigetsVurderingTabell = ({
+export const TilhørighetsVurderingTabell = ({
   vurdering,
   oppfyllerOpplysningeneKravene,
   oppfyllerOpplysningeneKraveneTekst,
