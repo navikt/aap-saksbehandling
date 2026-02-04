@@ -34,7 +34,7 @@ const grunnlagUtenVurdering: RefusjonskravGrunnlag = {
 describe('Refusjonskrav sosialstønad', () => {
   it('Skal ha korrekt overskrift', () => {
     render(<Refusjon readOnly={false} behandlingVersjon={0} grunnlag={grunnlagMedVurdering} />);
-    const heading = screen.getByText('Sosialstønad refusjonskrav');
+    const heading = screen.getByText('Refusjonskrav sosialstønad');
     expect(heading).toBeVisible();
   });
 

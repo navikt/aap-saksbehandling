@@ -102,7 +102,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
 
   return (
     <VilkårskortMedFormOgMellomlagringNyVisning
-      heading={'Sosialstønad refusjonskrav'}
+      heading={'Refusjonskrav sosialstønad'}
       steg="REFUSJON_KRAV"
       vilkårTilhørerNavKontor={true}
       onSubmit={handleSubmit}
