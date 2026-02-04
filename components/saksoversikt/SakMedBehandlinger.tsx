@@ -11,6 +11,7 @@ import { isLocal } from 'lib/utils/environment';
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
 import {
   Behandlingstype,
+  erAktivFørstegangsbehandling,
   erAvsluttetFørstegangsbehandling,
   erFørstegangsbehandling,
   erTrukket,
@@ -57,7 +58,7 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
               size="small"
               onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/revurdering`)}
             >
-              Opprett revurdering
+              Opprett {erAktivFørstegangsbehandling(sak.behandlinger) ? 'vurdering' : 'revurdering'}
             </Button>
           )}
 
