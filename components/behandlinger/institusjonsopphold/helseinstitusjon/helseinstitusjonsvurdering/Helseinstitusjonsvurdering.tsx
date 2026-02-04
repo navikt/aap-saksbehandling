@@ -54,44 +54,6 @@ export const Helseinstitusjonsvurdering = ({ form, oppholdIndex, vurderingIndex,
     }
   }, [opphold.oppholdFra, forrigeOppholdTom, oppholdIndex]);
 
-  // useEffect(() => {
-  //   // Vi setter bare fom-dato automatisk for første vurdering
-  //   if (vurderingIndex !== 0) {
-  //     return;
-  //   }
-  //
-  //   const fraOgMedDato = vurdering.periode.fom;
-  //
-  //   // Vi setter ikke fom dato dersom den finnes fra før av
-  //   if (fraOgMedDato !== undefined) {
-  //     return;
-  //   }
-  //
-  //   // Sjekk om dette er et nytt opphold innen 3 måneder etter forrige
-  //   if (oppholdIndex > 0) {
-  //     const forrigeOppholdTom = form.watch(`helseinstitusjonsvurderinger.${oppholdIndex - 1}.periode.tom`);
-  //
-  //     const erInnenforTreMaaneder = erNyttOppholdInnenfor3MaanederEtterSistOpphold(
-  //       forrigeOppholdTom,
-  //       opphold.oppholdFra
-  //     );
-  //
-  //     if (erInnenforTreMaaneder) {
-  //       const dato = erReduksjon
-  //         ? beregnReduksjonsdatoVedNyttOpphold(forrigeOppholdTom, opphold.oppholdFra)
-  //         : new Dato(opphold.oppholdFra).formaterForFrontend();
-  //
-  //       form.setValue(`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.periode.fom`, dato);
-  //     }
-  //   } else {
-  //     const fomDato = erReduksjon
-  //       ? beregnTidligsteReduksjonsdato(opphold.oppholdFra)
-  //       : new Dato(opphold.oppholdFra).formaterForFrontend();
-  //
-  //     form.setValue(`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.periode.fom`, fomDato);
-  //   }
-  // }, [opphold.oppholdFra, vurderingIndex, erReduksjon, oppholdIndex]);
-
   return (
     <VStack gap={'4'}>
       <TextAreaWrapper
