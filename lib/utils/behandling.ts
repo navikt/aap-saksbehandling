@@ -1,4 +1,4 @@
-import { BehandlingInfo, ÅrsakTilOpprettelse } from 'lib/types/types';
+import { BehandlingInfo, SaksInfo, ÅrsakTilOpprettelse } from 'lib/types/types';
 
 // TODO: Oppdater BehandlinginfoDTO til å returnere enum i stedet for string slik at vi kan få disse fra backend
 export enum Behandlingstype {
@@ -26,6 +26,10 @@ export function erTrukket(behandling: BehandlingInfo) {
 
 export function erAvsluttetFørstegangsbehandling(behandling: BehandlingInfo): boolean {
   return erFørstegangsbehandling(behandling) && erAvsluttet(behandling) && !erTrukket(behandling);
+}
+
+export function erAktivFørstegangsbehandling(behandlinger: BehandlingInfo[]): boolean {
+  return behandlinger.some((b) => erFørstegangsbehandling(b) && !erAvsluttet(b));
 }
 
 export function formaterBehandlingType(behandlingtype: Behandlingstype): string {
