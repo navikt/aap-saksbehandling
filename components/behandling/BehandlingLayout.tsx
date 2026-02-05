@@ -22,7 +22,7 @@ import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { hentBrukerInformasjon, hentRollerForBruker, Roller } from 'lib/services/azure/azureUserService';
 import { hentOppgave } from 'lib/services/oppgaveservice/oppgaveservice';
-import { StegGruppe } from 'lib/types/types';
+import { DetaljertBehandling, StegGruppe } from 'lib/types/types';
 import { SakContextProvider } from 'context/saksbehandling/SakContext';
 import { KlageBehandlingInfo } from 'components/behandlingsinfo/KlageBehandlingInfo';
 import { ÅrsakTilBehandling } from 'components/revurderingsinfo/ÅrsakTilBehandling';
@@ -31,6 +31,19 @@ interface Props {
   saksId: string;
   behandlingsReferanse: string;
   children: ReactNode;
+}
+
+function visÅrsakTilVurdering(behandling: DetaljertBehandling): boolean {
+  if (behandling.type != 'Førstegangsbehandling') {
+    return true;
+  }
+
+  const medBegrunnelse = behandling.vurderingsbehovOgÅrsaker.filter((årsak) => !!årsak.beskrivelse).length > 0;
+  if (medBegrunnelse) {
+    return true;
+  }
+
+  return false;
 }
 
 export const BehandlingLayout = async ({ saksId, behandlingsReferanse, children }: Props) => {
@@ -82,8 +95,7 @@ export const BehandlingLayout = async ({ saksId, behandlingsReferanse, children 
   const visÅrsakTilAktivitetspliktBehandling =
     ['Aktivitetsplikt', 'Aktivitetsplikt11_9'].includes(behandling.data.type) &&
     behandling.data.vurderingsbehovOgÅrsaker?.some((e) => e.årsak === 'OMGJØRING_ETTER_KLAGE');
-  const visÅrsakTilRevurdering =
-    behandling.data.vurderingsbehovOgÅrsaker.length > 0 && behandling.data.type != 'Førstegangsbehandling';
+  const visÅrsakTilRevurdering = visÅrsakTilVurdering(behandling.data);
   const visÅrsakTilEndreStartstidspunkt = behandling.data.vurderingsbehovOgÅrsaker
     ?.flatMap((v) => v.vurderingsbehov)
     ?.some((v) => v.type === 'VURDER_RETTIGHETSPERIODE');
