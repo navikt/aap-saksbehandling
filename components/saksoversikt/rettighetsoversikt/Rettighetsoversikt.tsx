@@ -1,5 +1,5 @@
 import { Heading, HStack, VStack } from '@navikt/ds-react';
-import { RettighetDto } from 'lib/types/types';
+import { RettighetDto, SaksInfo } from 'lib/types/types';
 import { formaterPeriode } from 'lib/utils/date';
 import { Rettighet } from 'components/saksoversikt/rettighetsoversikt/Rettighet';
 import styles from './Rettighetsoversikt.module.css';
@@ -8,12 +8,13 @@ import useSWR from 'swr';
 import { clientHentRettighetsdata } from 'lib/clientApi';
 
 interface Props {
-  saksnummer: string;
+  sak: SaksInfo;
 }
 
 export const Rettighetsoversikt = (props: Props) => {
-  const url = `/api/sak/${props.saksnummer}/rettighet`;
-  const { data } = useSWR(url, () => clientHentRettighetsdata(props.saksnummer));
+  const { saksnummer, periode } = props.sak;
+  const url = `/api/sak/${saksnummer}/rettighet`;
+  const { data } = useSWR(url, () => clientHentRettighetsdata(saksnummer));
 
   if (isError(data)) {
     return;
@@ -26,9 +27,7 @@ export const Rettighetsoversikt = (props: Props) => {
       <VStack gap="6">
         <div className={styles.gjeldendeVedtak}>
           <Heading size="medium">Gjeldende vedtak</Heading>
-          <p className={styles.vedtaksperiode}>
-            {formaterPeriode(rettighetListe?.at(0)?.startDato, rettighetListe?.at(-1)?.maksDato)}
-          </p>
+          <p className={styles.vedtaksperiode}>{formaterPeriode(periode.fom, periode.tom)}</p>
         </div>
         <HStack>
           {rettighetListe.map((rettighetdata: RettighetDto, index: number) => (
