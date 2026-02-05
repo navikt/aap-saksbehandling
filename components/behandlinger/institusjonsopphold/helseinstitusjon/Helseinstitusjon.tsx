@@ -68,15 +68,12 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag, grunnlag.opphold);
 
-  const { form } = useConfigForm<HelseinstitusjonsFormFields>(
-    {
-      helseinstitusjonsvurderinger: {
-        type: 'fieldArray',
-        defaultValue: defaultValue.helseinstitusjonsvurderinger,
-      },
+  const { form } = useConfigForm<HelseinstitusjonsFormFields>({
+    helseinstitusjonsvurderinger: {
+      type: 'fieldArray',
+      defaultValue: defaultValue.helseinstitusjonsvurderinger,
     },
-    { shouldUnregister: true }
-  );
+  });
 
   const { fields: oppholdFields } = useFieldArray({
     control: form.control,
@@ -85,11 +82,13 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
+      console.log('data', data);
       const vurderinger: HelseInstiusjonVurdering[] = data.helseinstitusjonsvurderinger.flatMap((opphold) => {
+        console.log('opphold', opphold);
         return opphold.vurderinger.map((vurdering, index) => {
           const nesteVurdering = opphold.vurderinger.at(index + 1);
 
-          const fom = vurdering.periode.fom
+          const fom = vurdering.periode?.fom
             ? formaterDatoForBackend(parse(vurdering.periode.fom, 'dd.MM.yyyy', new Date()))
             : formaterDatoForBackend(parse(opphold.periode.fom, 'dd.MM.yyyy', new Date()));
 
@@ -132,7 +131,7 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
     })(event);
   };
 
-  console.log(oppholdFields);
+  console.log('jupp', form.watch());
 
   return (
     <VilkårskortMedFormOgMellomlagringNyVisning
@@ -213,7 +212,7 @@ function mapVurderingToDraftFormFields(
                 harFasteUtgifter: undefined,
                 forsoergerEktefelle: undefined,
                 periode: {
-                  fom: '',
+                  fom: '', // TODO Skal vi sette en fom dato initielt?
                   tom: formaterDatoForFrontend(opphold?.avsluttetDato || ''),
                 },
               },
