@@ -41,7 +41,7 @@ export const SakOversiktContainer = ({ sak }: { sak: SaksInfo }) => {
 
           <Box marginBlock="8">
             <Tabs.Panel value={Tab.OVERSIKT}>
-              {isVisRettigheterForVedtakEnabled && <Rettighetsoversikt saksnummer={sak.saksnummer} />}
+              {isVisRettigheterForVedtakEnabled && <Rettighetsoversikt sak={sak} />}
               <SakMedBehandlinger sak={sak} />
             </Tabs.Panel>
 
