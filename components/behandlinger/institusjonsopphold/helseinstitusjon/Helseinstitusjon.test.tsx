@@ -145,6 +145,7 @@ describe('Helseinstitusjonsvurdering', () => {
       await svarReduksjon(0);
 
       const datoFelt = screen.getByRole('textbox', { name: 'Oppgi dato for reduksjon av AAP' });
+      await user.clear(datoFelt);
       await user.type(datoFelt, '01.04.2025');
 
       await user.click(screen.getByRole('button', { name: 'Bekreft' }));
@@ -157,6 +158,7 @@ describe('Helseinstitusjonsvurdering', () => {
       await svarReduksjon(0);
 
       const datoFelt = screen.getByRole('textbox', { name: 'Oppgi dato for reduksjon av AAP' });
+      await user.clear(datoFelt);
       await user.type(datoFelt, '01.05.2025');
 
       const leggTilVurderingKnapp = screen.getByRole('button', { name: 'Legg til ny vurdering' });

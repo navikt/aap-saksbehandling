@@ -125,7 +125,8 @@ export function beregnReduksjonsdatoVedNyttOpphold(utskrevetDato: string, nyttOp
 
     return nesteMnd.formaterForFrontend();
   }
-  return formaterDatoForFrontend(nyttOppholdFra);
+
+  return formaterDatoForFrontend(nyttOpphold);
 }
 
 export const validerErIKronologiskRekkeFølge = (value: string, forrigeVurderingFom?: string) => {
