@@ -9,15 +9,10 @@
 
 .oppholdGruppe {
   margin-bottom: var(--a-spacing-3);
-  /*border-left: none;*/
 }
 
-.vurderingRad {
+.vurderingRad:not(:last-child) {
   margin-bottom: var(--a-spacing-4);
-}
-
-.vurderingRad:last-child {
-  margin-bottom: 0;
 }
 
 .detailgray {
