@@ -54,9 +54,11 @@ export const HelseinstitusjonOppholdGruppe = ({
       `helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${oppholdForm.length - 1}`
     );
 
-    // TODO Fiks her ved revurdering så skal fom dato være dagen etter forrige (tidligere vurderinger)
+    // Hvis det ikke finnes vurdering fra før, men det finnes tidligere vurderinger,
+    // så bruker vi fom på siste tidligere vurdering.
+    const sisteTidligereVurdering = tidligereVurderinger?.at(-1);
 
-    const forrigeFom = forrigeVurdering?.periode?.fom;
+    const forrigeFom = forrigeVurdering?.periode?.fom ?? sisteTidligereVurdering?.periode?.fom;
 
     return forrigeFom
       ? formaterDatoForFrontend(addDays(new Dato(forrigeFom).dato, 2))
@@ -145,6 +147,7 @@ export const HelseinstitusjonOppholdGruppe = ({
                     vurderingIndex={vurderingIndex}
                     readonly={formReadOnly}
                     opphold={opphold}
+                    finnesTidligereVurderinger={Array.isArray(tidligereVurderinger) && tidligereVurderinger.length > 0}
                   />
                 </NyVurderingExpandableCard>
               </div>

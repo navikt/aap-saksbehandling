@@ -131,8 +131,6 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
     })(event);
   };
 
-  console.log('jupp', form.watch());
-
   return (
     <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'§ 11-25 Helseinstitusjon'}

@@ -211,12 +211,31 @@ describe('revurdering', () => {
     expect(screen.queryByRole('textbox', { name: 'Vilkårsvurdering' })).not.toBeInTheDocument();
   });
 
-  /**
-   * Fom Dato skal være satt til dagen etter tom på siste vurdering
-   *
-   */
+  it('Skal vise dato felt initielt når man legger til ny vurdering', async () => {
+    render(<Helseinstitusjon grunnlag={grunnlagMedTidligereVurdering} behandlingVersjon={0} readOnly={false} />);
+    const leggTilKnapp = screen.getByRole('button', { name: 'Legg til ny vurdering' });
+    await user.click(leggTilKnapp);
+    const datoFelt = screen.getByRole('textbox', { name: 'Når skal reduksjonen stoppes?' });
+    expect(datoFelt).toBeVisible();
+  });
 
-  it('Skal ', () => {});
+  it('Skal vise fom dato etter siste vedtatte vurdering fom dato når bruker legger til ny vurdering', async () => {
+    render(<Helseinstitusjon grunnlag={grunnlagMedTidligereVurdering} behandlingVersjon={0} readOnly={false} />);
+    const leggTilKnapp = screen.getByRole('button', { name: 'Legg til ny vurdering' });
+    await user.click(leggTilKnapp);
+
+    // Vedtatt vurdering, 1. januar
+    const vedtattVurdering = screen.getByRole('button', {
+      name: /1\. januar 2025 – 1\. august 20252\. januar 2025 ikke reduksjon/i,
+    });
+    expect(vedtattVurdering).toBeVisible();
+
+    // 3. januar
+    const nyVurdering = screen.getByRole('button', {
+      name: /ny vurdering: 3\. januar 2025 – ikke reduksjon/i,
+    });
+    expect(nyVurdering).toBeVisible();
+  });
 });
 
 describe('form med reduksjon', () => {

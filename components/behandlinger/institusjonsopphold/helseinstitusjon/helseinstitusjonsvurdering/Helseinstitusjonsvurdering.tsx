@@ -26,9 +26,17 @@ interface Props {
   readonly: boolean;
   opphold: HelseinstitusjonGrunnlag['opphold'][0];
   minFomDato?: string;
+  finnesTidligereVurderinger: boolean;
 }
 
-export const Helseinstitusjonsvurdering = ({ form, oppholdIndex, vurderingIndex, readonly, opphold }: Props) => {
+export const Helseinstitusjonsvurdering = ({
+  form,
+  oppholdIndex,
+  vurderingIndex,
+  readonly,
+  opphold,
+  finnesTidligereVurderinger,
+}: Props) => {
   const vurdering = form.watch(`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}`);
 
   const forrigeVurdering =
@@ -44,7 +52,8 @@ export const Helseinstitusjonsvurdering = ({ form, oppholdIndex, vurderingIndex,
 
   const erReduksjon = erReduksjonUtIFraFormFields(vurdering);
 
-  const skalViseDatoFeltForStoppAvReduksjon = forrigeVurderingErReduksjon && !erReduksjon;
+  const skalViseDatoFeltForStoppAvReduksjon =
+    (forrigeVurderingErReduksjon && !erReduksjon) || (finnesTidligereVurderinger && vurderingIndex === 0);
   const skalViseDatoFeltForStartAvReduksjon = !forrigeVurderingErReduksjon && erReduksjon;
 
   const forrigeOppholdTom =
