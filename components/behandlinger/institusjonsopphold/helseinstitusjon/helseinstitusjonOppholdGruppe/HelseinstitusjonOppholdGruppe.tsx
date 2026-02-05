@@ -59,7 +59,7 @@ export const HelseinstitusjonOppholdGruppe = ({
     const forrigeFom = forrigeVurdering?.periode?.fom;
 
     return forrigeFom
-      ? formaterDatoForFrontend(addDays(new Dato(forrigeFom).dato, 1))
+      ? formaterDatoForFrontend(addDays(new Dato(forrigeFom).dato, 2))
       : new Dato(opphold.oppholdFra).formaterForFrontend();
   }
 
