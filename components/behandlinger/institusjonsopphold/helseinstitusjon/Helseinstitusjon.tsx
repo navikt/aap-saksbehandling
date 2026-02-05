@@ -212,7 +212,7 @@ function mapVurderingToDraftFormFields(
                 harFasteUtgifter: undefined,
                 forsoergerEktefelle: undefined,
                 periode: {
-                  fom: '', // TODO Skal vi sette en fom dato initielt?
+                  fom: formaterDatoForFrontend(opphold.oppholdFra),
                   tom: formaterDatoForFrontend(opphold?.avsluttetDato || ''),
                 },
               },
