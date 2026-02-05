@@ -33,13 +33,13 @@ describe('visÅrsakTilVurdering', () => {
       type: 'Førstegangsbehandling',
       vurderingsbehovOgÅrsaker: [
         {
-          årsak: 'ENDRING_INNTEKT',
+          årsak: 'SØKNAD',
           opprettet: '2026-01-01',
           vurderingsbehov: [],
           beskrivelse: undefined,
         },
         {
-          årsak: 'ENDRING_YRKESSKADE',
+          årsak: 'MELDEKORT',
           opprettet: '2026-01-01',
           vurderingsbehov: [],
           beskrivelse: undefined,
@@ -54,13 +54,13 @@ describe('visÅrsakTilVurdering', () => {
       type: 'Førstegangsbehandling',
       vurderingsbehovOgÅrsaker: [
         {
-          årsak: 'ENDRING_INNTEKT',
+          årsak: 'SØKNAD',
           opprettet: '2026-01-01',
           vurderingsbehov: [],
           beskrivelse: 'Dette er en begrunnelse',
         },
         {
-          årsak: 'ENDRING_YRKESSKADE',
+          årsak: 'MELDEKORT',
           opprettet: '2026-01-01',
           vurderingsbehov: [],
           beskrivelse: undefined,
@@ -75,13 +75,13 @@ describe('visÅrsakTilVurdering', () => {
       type: 'Førstegangsbehandling',
       vurderingsbehovOgÅrsaker: [
         {
-          årsak: 'ENDRING_INNTEKT',
+          årsak: 'SØKNAD',
           opprettet: '2026-01-01',
           vurderingsbehov: [],
           beskrivelse: 'Dette er en begrunnelse',
         },
         {
-          årsak: 'ENDRING_YRKESSKADE',
+          årsak: 'MELDEKORT',
           opprettet: '2026-01-01',
           vurderingsbehov: [],
           beskrivelse: 'En annen begrunnelse',
@@ -96,7 +96,7 @@ describe('visÅrsakTilVurdering', () => {
       type: 'Førstegangsbehandling',
       vurderingsbehovOgÅrsaker: [
         {
-          årsak: 'ENDRING_INNTEKT',
+          årsak: 'SØKNAD',
           opprettet: '2026-01-01',
           vurderingsbehov: [],
           beskrivelse: 'Dette er en begrunnelse',

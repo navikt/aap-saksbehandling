@@ -4,16 +4,16 @@ import { filtrerÅrsakerForBehandlingType } from './ÅrsakTilBehandling';
 
 describe('ÅrsakTilBehandling filtering logic', () => {
   const årsakMedBeskrivelse: VurderingsbehovOgÅrsak = {
-    årsak: 'ENDRING_INNTEKT',
+    årsak: 'SØKNAD',
     opprettet: '2026-01-01',
-    vurderingsbehov: [{ type: 'VURDER_SYKDOM' }],
+    vurderingsbehov: [{ type: 'VURDER_RETTIGHETSPERIODE', oppdatertTid: '2026-01-01' }],
     beskrivelse: 'Dette er en begrunnelse',
   };
 
   const årsakUtenBeskrivelse: VurderingsbehovOgÅrsak = {
-    årsak: 'ENDRING_YRKESSKADE',
+    årsak: 'MELDEKORT',
     opprettet: '2026-01-02',
-    vurderingsbehov: [{ type: 'VURDER_INNTEKT' }],
+    vurderingsbehov: [{ type: 'BARNETILLEGG', oppdatertTid: '2026-01-02' }],
     beskrivelse: undefined,
   };
 
