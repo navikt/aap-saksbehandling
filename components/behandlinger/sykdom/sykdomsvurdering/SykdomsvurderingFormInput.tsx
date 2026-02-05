@@ -27,7 +27,7 @@ interface Props {
   sak: Sak;
   skalVurdereYrkesskade: boolean;
   erÅrsakssammenhengYrkesskade: boolean;
-  rettighetsperiopdeStartdato: Date;
+  rettighetsperiodeStartdato: Date;
 }
 
 export const vilkårsvurderingLabel = 'Vilkårsvurdering';
@@ -45,10 +45,10 @@ export const SykdomsvurderingFormInput = ({
   form,
   readonly,
   ikkeRelevantePerioder,
-  rettighetsperiopdeStartdato,
+  rettighetsperiodeStartdato,
 }: Props) => {
   const valgtDato = parseDatoFraDatePicker(form.watch(`vurderinger.${index}.fraDato`));
-  const skalVurdereVissVarighet = skalVurdereVissVarighetSjekk(valgtDato, rettighetsperiopdeStartdato);
+  const skalVurdereVissVarighet = skalVurdereVissVarighetSjekk(valgtDato, rettighetsperiodeStartdato);
 
   return (
     <VStack gap={'5'}>

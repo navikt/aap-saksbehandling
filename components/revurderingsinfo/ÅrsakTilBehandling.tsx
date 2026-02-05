@@ -13,7 +13,12 @@ interface Props {
 }
 
 export const ÅrsakTilBehandling = ({ vurderingsbehovOgÅrsaker, behandlingType }: Props) => {
-  const tittel = behandlingType === 'Revurdering' ? 'Årsak til revurdering' : 'Årsak til opprettelse';
+  const tittel =
+    behandlingType === 'Revurdering'
+      ? 'Årsak til revurdering'
+      : vurderingsbehovOgÅrsaker.length > 1
+        ? 'Årsak til vurdering'
+        : 'Årsak til opprettelse';
 
   return (
     <ExpansionCard

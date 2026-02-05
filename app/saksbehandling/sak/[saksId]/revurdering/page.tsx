@@ -3,6 +3,7 @@ import { hentSak, hentSakPersoninfo } from 'lib/services/saksbehandlingservice/s
 import { OpprettRevurdering } from 'components/saksoversikt/opprettrevurdering/OpprettRevurdering';
 import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
 import { hentBrukerInformasjon } from 'lib/services/azure/azureUserService';
+import { erAktivFørstegangsbehandling } from 'lib/utils/behandling';
 
 export default async function Page(props: { params: Promise<{ saksId: string }> }) {
   const params = await props.params;
@@ -17,7 +18,12 @@ export default async function Page(props: { params: Promise<{ saksId: string }> 
       <SaksinfoBanner personInformasjon={personInfo} sak={sak} />
 
       <Box marginBlock="8">
-        <OpprettRevurdering sak={sak} redirect={true} navIdent={brukerInformasjon.NAVident} />
+        <OpprettRevurdering
+          sak={sak}
+          erFørstegangsbehandling={erAktivFørstegangsbehandling(sak.behandlinger)}
+          redirect={true}
+          navIdent={brukerInformasjon.NAVident}
+        />
       </Box>
     </AkselPage>
   );

@@ -102,7 +102,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
 
   return (
     <VilkårskortMedFormOgMellomlagringNyVisning
-      heading={'Sosialstønad refusjonskrav'}
+      heading={'Refusjonskrav sosialstønad'}
       steg="REFUSJON_KRAV"
       vilkårTilhørerNavKontor={true}
       onSubmit={handleSubmit}
@@ -134,7 +134,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
       <RadioGroupWrapper
         name={`harKrav`}
         control={form.control}
-        label={'Er det refusjonskrav fra Nav-kontor?'}
+        label={'Har noen Nav-kontor refusjonskrav for sosialstønad?'}
         rules={{ required: 'Du må velge om brukeren har refusjonskrav' }}
         readOnly={formReadOnly}
         horisontal
@@ -149,7 +149,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
 
 function mapVurderingToDraftFormFields(grunnlag: RefusjonskravGrunnlag, sak: Sak): DraftFormFields {
   return {
-    harKrav: getJaNeiEllerUndefined(grunnlag.gjeldendeVurdering?.harKrav),
+    harKrav: getJaNeiEllerUndefined(grunnlag.gjeldendeVurderinger?.[0]?.harKrav),
     refusjoner:
       Array.isArray(grunnlag.gjeldendeVurderinger) && grunnlag.gjeldendeVurderinger.length > 0
         ? grunnlag.gjeldendeVurderinger.map((vurdering) => ({

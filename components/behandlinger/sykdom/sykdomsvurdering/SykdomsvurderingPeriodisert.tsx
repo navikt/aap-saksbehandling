@@ -232,7 +232,7 @@ export const SykdomsvurderingPeriodisert = ({
               sak={sak}
               erÅrsakssammenhengYrkesskade={grunnlag.erÅrsakssammenhengYrkesskade}
               skalVurdereYrkesskade={grunnlag.skalVurdereYrkesskade}
-              rettighetsperiopdeStartdato={førsteDatoSomKanVurderes}
+              rettighetsperiodeStartdato={førsteDatoSomKanVurderes}
             />
           </NyVurderingExpandableCard>
         ))}

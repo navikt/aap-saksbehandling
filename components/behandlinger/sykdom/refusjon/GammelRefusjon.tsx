@@ -261,7 +261,7 @@ export const GammelRefusjon = ({ behandlingVersjon, grunnlag, readOnly, initialM
 
 function mapVurderingToDraftFormFields(grunnlag: RefusjonskravGrunnlag, sak: Sak): DraftFormFields {
   return {
-    harKrav: getJaNeiEllerUndefined(grunnlag.gjeldendeVurdering?.harKrav),
+    harKrav: getJaNeiEllerUndefined(grunnlag.gjeldendeVurderinger?.[0]?.harKrav),
     refusjoner:
       Array.isArray(grunnlag.gjeldendeVurderinger) && grunnlag.gjeldendeVurderinger.length > 0
         ? grunnlag.gjeldendeVurderinger.map((vurdering) => ({
