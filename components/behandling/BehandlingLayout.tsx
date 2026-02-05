@@ -82,7 +82,8 @@ export const BehandlingLayout = async ({ saksId, behandlingsReferanse, children 
   const visÅrsakTilAktivitetspliktBehandling =
     ['Aktivitetsplikt', 'Aktivitetsplikt11_9'].includes(behandling.data.type) &&
     behandling.data.vurderingsbehovOgÅrsaker?.some((e) => e.årsak === 'OMGJØRING_ETTER_KLAGE');
-  const visÅrsakTilRevurdering = behandling.data.vurderingsbehovOgÅrsaker.length > 0;
+  const visÅrsakTilRevurdering =
+    behandling.data.vurderingsbehovOgÅrsaker.length > 0 && behandling.data.type != 'Førstegangsbehandling';
   const visÅrsakTilEndreStartstidspunkt = behandling.data.vurderingsbehovOgÅrsaker
     ?.flatMap((v) => v.vurderingsbehov)
     ?.some((v) => v.type === 'VURDER_RETTIGHETSPERIODE');
