@@ -77,7 +77,7 @@ export const Yrkesskade = ({
         type: 'radio',
         label: 'Finnes det en årsakssammenheng mellom yrkesskade og nedsatt arbeidsevne?',
         options: JaEllerNeiOptions,
-        defaultValue: getJaNeiEllerUndefined(grunnlag.yrkesskadeVurdering?.erÅrsakssammenheng),
+        defaultValue: defaultValues.erÅrsakssammenheng,
         rules: { required: 'Du må svare på om det finnes en årsakssammenheng' },
       },
       relevanteSaker: {
@@ -97,7 +97,7 @@ export const Yrkesskade = ({
       andelAvNedsettelsen: {
         type: 'text',
         label: 'Hvor stor andel totalt av nedsatt arbeidsevne skyldes yrkesskadene? (%)',
-        defaultValue: grunnlag.yrkesskadeVurdering?.andelAvNedsettelsen?.toString(),
+        defaultValue: defaultValues.andelAvNedsettelsen?.toString(),
         rules: {
           required: 'Du må svare på hvor stor andel av den nedsatte arbeidsevnen skyldes yrkesskadene',
           validate: (value) => {
@@ -189,9 +189,7 @@ export const Yrkesskade = ({
       mellomlagretVurdering={mellomlagretVurdering}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
-        slettMellomlagring(() => {
-          form.reset(grunnlag?.yrkesskadeVurdering ? mapVurderingToDraftFormFields(grunnlag) : emptyDraftFormFields());
-        });
+        slettMellomlagring(() => form.reset(mapVurderingToDraftFormFields(grunnlag)));
       }}
       visningModus={visningModus}
       visningActions={visningActions}
@@ -221,21 +219,11 @@ export const Yrkesskade = ({
 
 function mapVurderingToDraftFormFields(grunnlag?: YrkesskadeVurderingGrunnlag): DraftFormFields {
   return {
-    begrunnelse: grunnlag?.yrkesskadeVurdering?.begrunnelse,
-    erÅrsakssammenheng: getJaNeiEllerUndefined(grunnlag?.yrkesskadeVurdering?.erÅrsakssammenheng),
-    relevanteSaker: grunnlag?.yrkesskadeVurdering?.relevanteSaker,
+    begrunnelse: grunnlag?.yrkesskadeVurdering?.begrunnelse ?? '',
+    erÅrsakssammenheng: getJaNeiEllerUndefined(grunnlag?.yrkesskadeVurdering?.erÅrsakssammenheng) ?? '',
+    relevanteSaker: grunnlag?.yrkesskadeVurdering?.relevanteSaker ?? [],
     relevanteYrkesskadeSaker: hentDefaultYrkesskadesakerFraVurderingerEllerGrunnlag(grunnlag),
     andelAvNedsettelsen: grunnlag?.yrkesskadeVurdering?.andelAvNedsettelsen ?? undefined,
-  };
-}
-
-function emptyDraftFormFields(): DraftFormFields {
-  return {
-    begrunnelse: '',
-    erÅrsakssammenheng: '',
-    relevanteSaker: [],
-    relevanteYrkesskadeSaker: [],
-    andelAvNedsettelsen: undefined,
   };
 }
 
