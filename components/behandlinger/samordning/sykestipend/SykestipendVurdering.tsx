@@ -9,7 +9,7 @@ import { MellomlagretVurdering, SykestipendGrunnlag } from 'lib/types/types';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormEvent } from 'react';
 import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
-import { VStack } from '@navikt/ds-react';
+import { BodyLong, VStack } from '@navikt/ds-react';
 import { FormField } from 'components/form/FormField';
 import { SykestipendPeriodeTabell } from 'components/behandlinger/samordning/sykestipend/SykestipendPeriodeTabell';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
@@ -36,6 +36,11 @@ export const SykestipendVurdering = ({
     Behovstype.AVKLAR_SAMORDNING_SYKESTIPEND_KODE,
     initialMellomlagretVurdering
   );
+  const harSvartJaISøknad = grunnlag.sykeStipendSvarFraSøknad
+    ? 'Ja'
+    : grunnlag.sykeStipendSvarFraSøknad === false
+      ? 'Nei'
+      : 'ingen data';
 
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
@@ -104,6 +109,16 @@ export const SykestipendVurdering = ({
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
       <VStack gap={'6'}>
+        {grunnlag.sykeStipendSvarFraSøknad && (
+          <VStack>
+            <BodyLong weight={'semibold'} size={'small'}>
+              Relevant informasjon fra søknad:
+            </BodyLong>
+            <BodyLong size={'small'} textColor={'subtle'}>
+              Bruker har krysset av for at de får, eller nylig har søkt om sykestipend i søknad: {harSvartJaISøknad}
+            </BodyLong>
+          </VStack>
+        )}
         <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
         <SykestipendPeriodeTabell form={form} readOnly={formReadOnly} />
       </VStack>

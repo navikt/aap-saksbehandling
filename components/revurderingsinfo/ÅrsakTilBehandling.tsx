@@ -12,11 +12,22 @@ interface Props {
   behandlingType: TypeBehandling;
 }
 
+export function filtrerÅrsakerForBehandlingType(
+  vurderingsbehovOgÅrsaker: VurderingsbehovOgÅrsak[],
+  behandlingType: TypeBehandling
+): VurderingsbehovOgÅrsak[] {
+  return behandlingType === 'Førstegangsbehandling'
+    ? vurderingsbehovOgÅrsaker.filter((årsak) => !!årsak.beskrivelse)
+    : vurderingsbehovOgÅrsaker;
+}
+
 export const ÅrsakTilBehandling = ({ vurderingsbehovOgÅrsaker, behandlingType }: Props) => {
+  const filtrerteÅrsaker = filtrerÅrsakerForBehandlingType(vurderingsbehovOgÅrsaker, behandlingType);
+
   const tittel =
     behandlingType === 'Revurdering'
       ? 'Årsak til revurdering'
-      : vurderingsbehovOgÅrsaker.length > 1
+      : filtrerteÅrsaker.length > 1
         ? 'Årsak til vurdering'
         : 'Årsak til opprettelse';
 
@@ -37,7 +48,7 @@ export const ÅrsakTilBehandling = ({ vurderingsbehovOgÅrsaker, behandlingType 
       </ExpansionCard.Header>
       <ExpansionCard.Content>
         <VStack gap={'3'}>
-          {vurderingsbehovOgÅrsaker
+          {filtrerteÅrsaker
             .filter(({ vurderingsbehov }) => !vurderingsbehov.some((v) => v.type === 'REVURDERING_AVBRUTT'))
             .map(({ vurderingsbehov, opprettet, årsak, beskrivelse }, index) => {
               return (

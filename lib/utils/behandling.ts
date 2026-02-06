@@ -28,6 +28,10 @@ export function erAvsluttetFørstegangsbehandling(behandling: BehandlingInfo): b
   return erFørstegangsbehandling(behandling) && erAvsluttet(behandling) && !erTrukket(behandling);
 }
 
+export function erAktivFørstegangsbehandling(behandlinger: BehandlingInfo[]): boolean {
+  return behandlinger.some((b) => erFørstegangsbehandling(b) && !erAvsluttet(b));
+}
+
 export function formaterBehandlingType(behandlingtype: Behandlingstype): string {
   switch (behandlingtype) {
     case Behandlingstype.Førstegangsbehandling:
