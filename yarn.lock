@@ -3366,7 +3366,7 @@ __metadata:
     server-only: "npm:0.0.1"
     swr: "npm:2.4.0"
     typescript: "npm:5.9.3"
-    unleash-client: "npm:6.9.5"
+    unleash-client: "npm:6.9.6"
     vite-tsconfig-paths: "npm:6.0.5"
     vitest: "npm:4.0.18"
     vitest-fetch-mock: "npm:0.4.5"
@@ -10678,9 +10678,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"unleash-client@npm:6.9.5":
-  version: 6.9.5
-  resolution: "unleash-client@npm:6.9.5"
+"unleash-client@npm:6.9.6":
+  version: 6.9.6
+  resolution: "unleash-client@npm:6.9.6"
   dependencies:
     http-proxy-agent: "npm:^7.0.2"
     https-proxy-agent: "npm:^7.0.5"
@@ -10690,7 +10690,7 @@ __metadata:
     murmurhash3js: "npm:^3.0.1"
     proxy-from-env: "npm:^1.1.0"
     semver: "npm:^7.7.3"
-  checksum: 10c0/99fe7ebd3c79c54d014170033cef79cb943e13248ee960794578ec71167f9ed957a343c971bd57de9286e35c6cfd5d8e4c27a9db12c3201438ec4a6b205d7996
+  checksum: 10c0/9c17290b43a4b1e96c8d73d5fe52b1b938b1eaa8280cbdf50db95baae3f9d171a10e4f1a2862f459eb8665b94a81794ab7531dab26e03849073ce52c0b44537c
   languageName: node
   linkType: hard
 
