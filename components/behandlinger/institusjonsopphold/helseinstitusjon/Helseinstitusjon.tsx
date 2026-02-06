@@ -216,13 +216,16 @@ function mapVurderingToDraftFormFields(
               },
             ];
 
+      // Tom vurdering skal ikke legges til dersom det finnes tidligere vurderinger
+      const harTidligereVurderingerOgIngenNåværendeVurderinger = harTidligerevurderinger && vurderinger?.length > 0;
+
       return {
         oppholdId: opphold.oppholdId,
         periode: {
           fom: formaterDatoForFrontend(opphold.oppholdFra),
           tom: opphold.avsluttetDato ? formaterDatoForFrontend(opphold.avsluttetDato) : '',
         },
-        vurderinger: harTidligerevurderinger && !vurderinger ? [] : vurderinger,
+        vurderinger: harTidligereVurderingerOgIngenNåværendeVurderinger ? [] : vurderinger,
       };
     }),
   };
