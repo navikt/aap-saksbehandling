@@ -53,7 +53,8 @@ export const Helseinstitusjonsvurdering = ({
   const erReduksjon = erReduksjonUtIFraFormFields(vurdering);
 
   const skalViseDatoFeltForStoppAvReduksjon =
-    (forrigeVurderingErReduksjon && !erReduksjon) || (finnesTidligereVurderinger && vurderingIndex === 0);
+    !erReduksjon && (forrigeVurderingErReduksjon || (finnesTidligereVurderinger && vurderingIndex === 0));
+
   const skalViseDatoFeltForStartAvReduksjon = !forrigeVurderingErReduksjon && erReduksjon;
 
   const forrigeOppholdTom =
