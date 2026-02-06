@@ -4194,6 +4194,44 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/drift/behandling/{referanse}/vilk\u00E5r': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description referanse */
+          referanse: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.drift.Vilk\u00E5rDriftsinfoDTO'][];
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/drift/sak/{saksnummer}/info': {
     parameters: {
       query?: never;
@@ -11035,6 +11073,7 @@ export interface components {
       begrunnelse: string;
       /** @enum {string} */
       innstilling: 'OPPRETTHOLD' | 'OMGJØR' | 'DELVIS_OMGJØR';
+      kvalitetssikretAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
       notat?: string | null;
       'vilk\u00E5rSomOmgj\u00F8res': (
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
@@ -12264,6 +12303,50 @@ export interface components {
        */
       tidsstempel: string;
     };
+    'no.nav.aap.behandlingsflyt.drift.ForenkletVilk\u00E5rsperiode': {
+      /** @enum {string|null} */
+      'avslags\u00E5rsak'?:
+        | 'BRUKER_UNDER_18'
+        | 'BRUKER_OVER_67'
+        | 'MANGLENDE_DOKUMENTASJON'
+        | 'IKKE_RETT_PA_SYKEPENGEERSTATNING'
+        | 'IKKE_RETT_PA_STUDENT'
+        | 'VARIGHET_OVERSKREDET_STUDENT'
+        | 'IKKE_SYKDOM_AV_VISS_VARIGHET'
+        | 'IKKE_SYKDOM_SKADE_LYTE_VESENTLIGDEL'
+        | 'IKKE_NOK_REDUSERT_ARBEIDSEVNE'
+        | 'IKKE_BEHOV_FOR_OPPFOLGING'
+        | 'IKKE_MEDLEM_FORUTGÅENDE'
+        | 'IKKE_MEDLEM'
+        | 'IKKE_OPPFYLT_OPPHOLDSKRAV_EØS'
+        | 'NORGE_IKKE_KOMPETENT_STAT'
+        | 'ANNEN_FULL_YTELSE'
+        | 'INNTEKTSTAP_DEKKES_ETTER_ANNEN_LOVGIVNING'
+        | 'IKKE_RETT_PA_AAP_UNDER_BEHANDLING_AV_UFORE'
+        | 'VARIGHET_OVERSKREDET_OVERGANG_UFORE'
+        | 'VARIGHET_OVERSKREDET_ARBEIDSSØKER'
+        | 'IKKE_RETT_PA_AAP_I_PERIODE_SOM_ARBEIDSSOKER'
+        | 'IKKE_RETT_UNDER_STRAFFEGJENNOMFØRING'
+        | 'BRUDD_PÅ_AKTIVITETSPLIKT_STANS'
+        | 'BRUDD_PÅ_AKTIVITETSPLIKT_OPPHØR'
+        | 'BRUDD_PÅ_OPPHOLDSKRAV_STANS'
+        | 'BRUDD_PÅ_OPPHOLDSKRAV_OPPHØR'
+        | 'HAR_RETT_TIL_FULLT_UTTAK_ALDERSPENSJON'
+        | 'ORDINÆRKVOTE_BRUKT_OPP'
+        | 'SYKEPENGEERSTATNINGKVOTE_BRUKT_OPP'
+        | null;
+      /** @enum {string|null} */
+      'innvilgelses\u00E5rsak'?:
+        | 'YRKESSKADE_ÅRSAKSSAMMENHENG'
+        | 'SYKEPENGEERSTATNING'
+        | 'VURDERES_FOR_UFØRETRYGD'
+        | 'STUDENT'
+        | null;
+      manuellVurdering: boolean;
+      periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
+      /** @enum {string} */
+      utfall: 'IKKE_VURDERT' | 'IKKE_RELEVANT' | 'OPPFYLT' | 'IKKE_OPPFYLT';
+    };
     'no.nav.aap.behandlingsflyt.drift.SakDriftsinfoDTO': {
       behandlinger: components['schemas']['no.nav.aap.behandlingsflyt.drift.BehandlingDriftsinfo'][];
       /**
@@ -12275,6 +12358,34 @@ export interface components {
       saksnummer: string;
       /** @enum {string} */
       status: 'OPPRETTET' | 'UTREDES' | 'LØPENDE' | 'AVSLUTTET';
+    };
+    'no.nav.aap.behandlingsflyt.drift.Vilk\u00E5rDriftsinfoDTO': {
+      perioder: components['schemas']['no.nav.aap.behandlingsflyt.drift.ForenkletVilk\u00E5rsperiode'][];
+      /** @enum {string} */
+      type:
+        | 'ALDERSVILKÅRET'
+        | 'LOVVALG'
+        | 'SYKDOMSVILKÅRET'
+        | 'BISTANDSVILKÅRET'
+        | 'OVERGANGARBEIDVILKÅRET'
+        | 'OVERGANGUFØREVILKÅRET'
+        | 'MEDLEMSKAP'
+        | 'GRUNNLAGET'
+        | 'SAMORDNING'
+        | 'SAMORDNING_ANNEN_LOVGIVNING'
+        | 'SYKEPENGEERSTATNING'
+        | 'STUDENT'
+        | 'STRAFFEGJENNOMFØRING'
+        | 'AKTIVITETSPLIKT'
+        | 'OPPHOLDSKRAV'
+        | 'INNTEKTSBORTFALL'
+        | 'ORDINÆR_KVOTE'
+        | 'SYKEPENGEERSTATNING_KVOTE';
+      /**
+       * Format: date-time
+       * @example 2025-04-01T12:30:00
+       */
+      vurdertTidspunkt?: string | null;
     };
     'no.nav.aap.behandlingsflyt.drift.`DriftApiKt$driftApi$1$AvbrytBrevBody`': {
       begrunnelse: string;
@@ -13410,6 +13521,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.flyt.AvklaringsbehovDTO': {
       definisjon: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.avklaringsbehov.Definisjon'];
       endringer: components['schemas']['no.nav.aap.behandlingsflyt.flyt.EndringDTO'][];
+      perioder?: components['schemas']['no.nav.aap.behandlingsflyt.flyt.AvklaringsbehovPeriodeDTO'][] | null;
       /** @enum {string} */
       status:
         | 'OPPRETTET'
@@ -13419,6 +13531,11 @@ export interface components {
         | 'KVALITETSSIKRET'
         | 'SENDT_TILBAKE_FRA_KVALITETSSIKRER'
         | 'AVBRUTT';
+    };
+    'no.nav.aap.behandlingsflyt.flyt.AvklaringsbehovPeriodeDTO': {
+      periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
+      /** @enum {string} */
+      relevans: 'RELEVANT' | 'IKKE_RELEVANT';
     };
     'no.nav.aap.behandlingsflyt.flyt.BehandlingFlytOgTilstandDto': {
       /** @enum {string} */
@@ -13968,7 +14085,9 @@ export interface components {
         | 'STRAFFEGJENNOMFØRING'
         | 'AKTIVITETSPLIKT'
         | 'OPPHOLDSKRAV'
-        | 'INNTEKTSBORTFALL';
+        | 'INNTEKTSBORTFALL'
+        | 'ORDINÆR_KVOTE'
+        | 'SYKEPENGEERSTATNING_KVOTE';
       /**
        * Format: date
        * @example 2025-04-01
