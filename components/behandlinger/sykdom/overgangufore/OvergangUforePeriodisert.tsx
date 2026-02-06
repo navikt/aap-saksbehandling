@@ -22,7 +22,7 @@ import { TidligereVurderingExpandableCard } from 'components/periodisering/tidli
 import { OvergangUforeTidligereVurdering } from 'components/behandlinger/sykdom/overgangufore/OvergangUforeTidligereVurdering';
 import { BodyLong, Link, VStack } from '@navikt/ds-react';
 import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
-import { getFraDatoFraGrunnlagForFrontend, trengerTomPeriodisertVurdering } from 'lib/utils/periodisering';
+import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 
@@ -182,16 +182,10 @@ export const OvergangUforePeriodisert = ({
   );
 
   function getDefaultValuesFromGrunnlag(grunnlag: OvergangUforeGrunnlag): OvergangUforeForm {
-    if (trengerTomPeriodisertVurdering(grunnlag)) {
-      return {
-        vurderinger: [
-          {
-            ...emptyOvergangUføreVurdering(),
-            fraDato: getFraDatoFraGrunnlagForFrontend(grunnlag),
-          },
-        ],
-      };
+    if (trengerVurderingsForslag(grunnlag)) {
+      return hentPerioderSomTrengerVurdering<OvergangUforeVurderingForm>(grunnlag, emptyOvergangUføreVurdering);
     }
+
     return {
       vurderinger: grunnlag.nyeVurderinger.map((vurdering) => ({
         fraDato: formaterDatoForFrontend(vurdering.fom),

@@ -17,7 +17,7 @@ interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
   automatiskVurdering: AutomatiskLovvalgOgMedlemskapVurdering;
-  grunnlag?: PeriodisertForutgåendeMedlemskapGrunnlag;
+  grunnlag: PeriodisertForutgåendeMedlemskapGrunnlag;
   harAvklaringsbehov: boolean;
   visOverstyrKnapp: boolean;
   harYrkesskade: boolean;

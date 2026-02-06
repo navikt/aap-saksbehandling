@@ -33,7 +33,7 @@ import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingS
 interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
-  grunnlag?: PeriodisertLovvalgMedlemskapGrunnlag;
+  grunnlag: PeriodisertLovvalgMedlemskapGrunnlag;
   overstyring: boolean;
   initialMellomlagretVurdering?: MellomlagretVurdering;
   behovstype: Behovstype.MANUELL_OVERSTYRING_LOVVALG | Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP;

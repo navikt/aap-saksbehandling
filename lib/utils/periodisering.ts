@@ -1,6 +1,7 @@
 import { components } from 'lib/types/schema';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { parseISO } from 'date-fns';
+import { Dato } from 'lib/types/Dato';
 
 export type PeriodisertGrunnlag = {
   behøverVurderinger: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
@@ -25,8 +26,15 @@ export function getFraDatoFraGrunnlagForFrontend(grunnlag: PeriodisertGrunnlag |
   return '';
 }
 
-export function trengerTomPeriodisertVurdering(grunnlag: PeriodisertGrunnlag | undefined): boolean {
-  if (!grunnlag) {
+export function trengerVurderingsForslag(grunnlag: PeriodisertGrunnlag | undefined) {
+  // Trenger tom vurdering hvis vi ikke har tidligere vurderinger eller nye vurderinger,
+  // eller vi har minst en periode som behøver vurdering
+  //
+  if (
+    !grunnlag ||
+    (grunnlag.nyeVurderinger.length === 0 && grunnlag.behøverVurderinger.length > 0) ||
+    (grunnlag.nyeVurderinger.length === 0 && grunnlag.sisteVedtatteVurderinger.length === 0)
+  ) {
     return true;
   }
 
@@ -39,4 +47,25 @@ export function trengerTomPeriodisertVurdering(grunnlag: PeriodisertGrunnlag | u
   }
 
   return behøverVurderinger || !harVedtatteVurderinger;
+}
+
+export function hentPerioderSomTrengerVurdering<T>(
+  grunnlag: PeriodisertGrunnlag,
+  tomVurdering: () => T
+): { vurderinger: Array<T> } {
+  // Hvis det finnes perioder i grunnlag.behøverVurderinger brukes disse som utgangspunkt, hvis ikke
+  // lager vi en tom vurdering med fraDato fra grunnlag.kanVurderes
+  const initielleVurderinger =
+    grunnlag.behøverVurderinger.length > 0
+      ? grunnlag.behøverVurderinger.map((periode) => ({
+          fraDato: new Dato(periode.fom).formaterForFrontend(),
+          behøverVurdering: true,
+        }))
+      : [{ fraDato: getFraDatoFraGrunnlagForFrontend(grunnlag), behøverVurdering: null }];
+  return {
+    vurderinger: initielleVurderinger.map((periode) => ({
+      ...tomVurdering(),
+      ...periode,
+    })),
+  };
 }

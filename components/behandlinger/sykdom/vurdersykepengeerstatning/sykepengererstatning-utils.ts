@@ -11,20 +11,16 @@ import {
 } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/sykepengererstating-types';
 import { parse } from 'date-fns';
 import { ValuePair } from 'components/form/FormField';
-import { getFraDatoFraGrunnlagForFrontend, trengerTomPeriodisertVurdering } from 'lib/utils/periodisering';
+import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
 
 export function getDefaultValuesFromGrunnlag(grunnlag: SykepengeerstatningGrunnlag): SykepengeerstatningForm {
-  if (trengerTomPeriodisertVurdering(grunnlag)) {
-    return {
-      vurderinger: [
-        {
-          begrunnelse: '',
-          fraDato: getFraDatoFraGrunnlagForFrontend(grunnlag),
-          grunn: null,
-          erOppfylt: '',
-        },
-      ],
-    };
+  if (trengerVurderingsForslag(grunnlag)) {
+    return hentPerioderSomTrengerVurdering<SykepengeerstatningVurderingForm>(grunnlag, () => ({
+      begrunnelse: '',
+      fraDato: '',
+      grunn: null,
+      erOppfylt: '',
+    }));
   }
 
   // Vi har allerede data lagret, vis enten de som er lagret i grunnlaget her eller tom liste
