@@ -4792,6 +4792,7 @@ export interface components {
       kanVurderes: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
       nyeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.arbeidsevne.PeriodisertArbeidsevneVurderingDto'][];
       sisteVedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.arbeidsevne.PeriodisertArbeidsevneVurderingDto'][];
+      ikkeRelevantePerioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.arbeidsevne.PeriodisertArbeidsevneVurderingDto': {
       /** Format: int32 */
@@ -4819,6 +4820,7 @@ export interface components {
       kvalitetssikretAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
       nyeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.arbeidsopptrapping.ArbeidsopptrappingVurderingResponse'][];
       sisteVedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.arbeidsopptrapping.ArbeidsopptrappingVurderingResponse'][];
+      ikkeRelevantePerioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.arbeidsopptrapping.ArbeidsopptrappingVurderingResponse': {
       begrunnelse: string;
@@ -10019,6 +10021,7 @@ export interface components {
       kanVurderes: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
       nyeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.fritakmeldeplikt.PeriodisertFritakMeldepliktVurderingResponse'][];
       sisteVedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.fritakmeldeplikt.PeriodisertFritakMeldepliktVurderingResponse'][];
+      ikkeRelevantePerioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.fritakmeldeplikt.PeriodisertFritakMeldepliktVurderingResponse': {
       begrunnelse: string;
@@ -10080,6 +10083,7 @@ export interface components {
       kanVurderes: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
       nyeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.bistand.BistandVurderingResponse'][];
       sisteVedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.bistand.BistandVurderingResponse'][];
+      ikkeRelevantePerioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.bistand.BistandVurderingResponse': {
       begrunnelse: string;
@@ -10114,6 +10118,7 @@ export interface components {
       kanVurderes: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
       nyeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangarbeid.OvergangArbeidVurderingResponse'][];
       sisteVedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangarbeid.OvergangArbeidVurderingResponse'][];
+      ikkeRelevantePerioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangarbeid.OvergangArbeidVurderingResponse': {
       begrunnelse: string;
@@ -10138,6 +10143,7 @@ export interface components {
       gjeldendeVedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.OvergangUf\u00F8reVurderingResponse'][];
       'harTilgangTil\u00C5Saksbehandle': boolean;
       historiskeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.OvergangUf\u00F8reVurderingResponse'][];
+      ikkeRelevantePerioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
       kanVurderes: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
       kvalitetssikretAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
       nyeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.OvergangUf\u00F8reVurderingResponse'][];
@@ -10179,6 +10185,7 @@ export interface components {
       'beh\u00F8verVurderinger': components['schemas']['no.nav.aap.komponenter.type.Periode'][];
       'er\u00C5rsakssammenhengYrkesskade': boolean;
       'harTilgangTil\u00C5Saksbehandle': boolean;
+      ikkeRelevantePerioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
       kanVurderes: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
       nyeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomsvurderingResponse'][];
       opplysninger: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.InnhentetSykdomsOpplysninger'];
@@ -10247,6 +10254,7 @@ export interface components {
       sisteVedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykepengergrunnlag.SykepengerVurderingResponse'][];
       vedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykepengergrunnlag.SykepengerVurderingResponse'][];
       vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykepengergrunnlag.SykepengerVurderingResponse'][];
+      ikkeRelevantePerioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykepengergrunnlag.SykepengerVurderingResponse': {
       begrunnelse: string;
@@ -11225,6 +11233,7 @@ export interface components {
       nyeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.PeriodisertManuellVurderingForForutg\u00E5endeMedlemskapResponse'][];
       overstyrt: boolean;
       sisteVedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.PeriodisertManuellVurderingForForutg\u00E5endeMedlemskapResponse'][];
+      ikkeRelevantePerioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.PeriodisertLovvalgMedlemskapGrunnlagResponse': {
       'beh\u00F8verVurderinger': components['schemas']['no.nav.aap.komponenter.type.Periode'][];
@@ -11233,6 +11242,7 @@ export interface components {
       nyeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.PeriodisertManuellVurderingForLovvalgMedlemskapResponse'][];
       overstyrt: boolean;
       sisteVedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.PeriodisertManuellVurderingForLovvalgMedlemskapResponse'][];
+      ikkeRelevantePerioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.PeriodisertManuellVurderingForForutg\u00E5endeMedlemskapResponse': {
       begrunnelse: string;
@@ -11522,6 +11532,7 @@ export interface components {
       kanVurderes: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
       nyeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.oppholdskrav.OppholdskravVurderingDto'][];
       sisteVedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.oppholdskrav.OppholdskravVurderingDto'][];
+      ikkeRelevantePerioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.oppholdskrav.OppholdskravVurderingDto': {
       begrunnelse: string;
@@ -11593,9 +11604,14 @@ export interface components {
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.avbrytrevurdering.flate.AvbrytRevurderingVurderingDto'];
     };
     'no.nav.aap.behandlingsflyt.behandling.student.StudentGrunnlagResponse': {
+      'beh\u00F8verVurderinger': components['schemas']['no.nav.aap.komponenter.type.Periode'][];
       'harTilgangTil\u00C5Saksbehandle': boolean;
+      kanVurderes: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
+      nyeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.student.StudentVurderingResponse'][];
       oppgittStudent?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.OppgittStudent'];
+      sisteVedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.student.StudentVurderingResponse'][];
       studentvurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.student.StudentVurderingResponse'];
+      ikkeRelevantePerioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.student.StudentVurderingResponse': {
       'avbruddMerEnn6M\u00E5neder'?: boolean | null;
@@ -11606,9 +11622,21 @@ export interface components {
        */
       avbruttStudieDato?: string | null;
       begrunnelse: string;
+      besluttetAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fom: string;
       'godkjentStudieAvL\u00E5nekassen'?: boolean | null;
       harAvbruttStudie: boolean;
       harBehovForBehandling?: boolean | null;
+      kvalitetssikretAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      tom?: string | null;
       vurdertAv: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.student.sykestipend.SykestipendGrunnlagResponse': {

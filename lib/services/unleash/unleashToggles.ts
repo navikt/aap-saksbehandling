@@ -6,6 +6,7 @@ export const FLAGS = [
   'RevurderStarttidspunkt',
   'VisRettigheterForVedtak',
   'PeriodiseringHelseinstitusjonOpphold',
+  'VisIkkeRelevantPeriode',
 ] as const;
 
 export type FlagNames = (typeof FLAGS)[number];
@@ -19,4 +20,5 @@ export const mockedFlags: Flags = {
   RevurderStarttidspunkt: true,
   VisRettigheterForVedtak: true,
   PeriodiseringHelseinstitusjonOpphold: true,
+  VisIkkeRelevantPeriode: true
 };

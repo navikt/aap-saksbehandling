@@ -37,6 +37,7 @@ import {
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
+import { VurderingerListe } from 'components/periodisering/VurderingerListe';
 
 export interface SykdomsvurderingerForm {
   vurderinger: Array<Sykdomsvurdering>;
@@ -187,56 +188,64 @@ export const Sykdomsvurdering = ({
             Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-5 (lovdata.no)
           </Link>
         </BodyLong>
-
-        {vedtatteVurderinger.map((vurdering) => (
-          <TidligereVurderingExpandableCard
-            key={vurdering.fom}
-            fom={new Dato(vurdering.fom).dato}
-            tom={vurdering.tom ? parseISO(vurdering.tom) : undefined}
-            foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-            vurderingStatus={getErOppfyltEllerIkkeStatus(erTidligereVurderingOppfylt(vurdering))}
-            defaultCollapsed={nyeVurderingerFields.length > 0}
-            vurdertAv={vurdering.vurdertAv}
-          >
-            <TidligereSykdomsvurdering vurdering={vurdering} />
-          </TidligereVurderingExpandableCard>
-        ))}
-
-        {nyeVurderingerFields.map((vurdering, index) => (
-          <NyVurderingExpandableCard
-            key={vurdering.id}
-            accordionsSignal={accordionsSignal}
-            fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-            vurderingStatus={getErOppfyltEllerIkkeStatus(
-              erNyVurderingOppfylt(
-                form.watch(`vurderinger.${index}`),
-                førsteDatoSomKanVurderes,
-                grunnlag.skalVurdereYrkesskade
-              )
-            )}
-            nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
-            isLast={index === nyeVurderingerFields.length - 1}
-            vurdertAv={vurdering.vurdertAv}
-            kvalitetssikretAv={vurdering.kvalitetssikretAv}
-            besluttetAv={vurdering.besluttetAv}
-            readonly={formReadOnly}
-            finnesFeil={finnesFeilForVurdering(index, errorList)}
-            onSlettVurdering={() => remove(index)}
-            harTidligereVurderinger={tidligereVurderinger.length > 0}
-            index={index}
-            initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
-          >
-            <SykdomsvurderingFormInput
-              index={index}
-              form={form}
-              readonly={formReadOnly}
-              sak={sak}
-              erÅrsakssammenhengYrkesskade={grunnlag.erÅrsakssammenhengYrkesskade}
-              skalVurdereYrkesskade={grunnlag.skalVurdereYrkesskade}
-              rettighetsperiodeStartdato={førsteDatoSomKanVurderes}
-            />
-          </NyVurderingExpandableCard>
-        ))}
+        <VurderingerListe
+          startDato={parseISO(sak.periode.fom)}
+          ikkeRelevantePerioder={grunnlag.ikkeRelevantePerioder}
+          vedtatteVurderinger={vedtatteVurderinger}
+          nyeVurderinger={nyeVurderingerFields}
+          renderVedtattVurdering={(vurdering) => {
+            return (
+              <TidligereVurderingExpandableCard
+                key={vurdering.fom}
+                fom={new Dato(vurdering.fom).dato}
+                tom={vurdering.tom ? parseISO(vurdering.tom) : undefined}
+                foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+                vurderingStatus={getErOppfyltEllerIkkeStatus(erTidligereVurderingOppfylt(vurdering))}
+                defaultCollapsed={nyeVurderingerFields.length > 0}
+                vurdertAv={vurdering.vurdertAv}
+              >
+                <TidligereSykdomsvurdering vurdering={vurdering} />
+              </TidligereVurderingExpandableCard>
+            );
+          }}
+          renderNyVurdering={(vurdering, index) => {
+            return (
+              <NyVurderingExpandableCard
+                key={vurdering.id}
+                accordionsSignal={accordionsSignal}
+                fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
+                vurderingStatus={getErOppfyltEllerIkkeStatus(
+                  erNyVurderingOppfylt(
+                    form.watch(`vurderinger.${index}`),
+                    førsteDatoSomKanVurderes,
+                    grunnlag.skalVurdereYrkesskade
+                  )
+                )}
+                nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
+                isLast={index === nyeVurderingerFields.length - 1}
+                vurdertAv={vurdering.vurdertAv}
+                kvalitetssikretAv={vurdering.kvalitetssikretAv}
+                besluttetAv={vurdering.besluttetAv}
+                readonly={formReadOnly}
+                finnesFeil={finnesFeilForVurdering(index, errorList)}
+                onSlettVurdering={() => remove(index)}
+                harTidligereVurderinger={tidligereVurderinger.length > 0}
+                index={index}
+                initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
+              >
+                <SykdomsvurderingFormInput
+                  index={index}
+                  form={form}
+                  readonly={formReadOnly}
+                  sak={sak}
+                  erÅrsakssammenhengYrkesskade={grunnlag.erÅrsakssammenhengYrkesskade}
+                  skalVurdereYrkesskade={grunnlag.skalVurdereYrkesskade}
+                  rettighetsperiodeStartdato={førsteDatoSomKanVurderes}
+                />
+              </NyVurderingExpandableCard>
+            );
+          }}
+        />
       </VStack>
     </VilkårskortPeriodisert>
   );
