@@ -130,7 +130,7 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
     }
 
     if (data.vurderinger.length === 0 && nyeVurderinger.length === 0) {
-      visningActions.onBekreftClick();
+      visningActions.avbrytEndringClick();
       return;
     }
     const losning: LøsningerForPerioder = {
