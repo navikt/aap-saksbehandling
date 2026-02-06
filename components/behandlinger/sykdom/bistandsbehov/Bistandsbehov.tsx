@@ -148,7 +148,6 @@ export const Bistandsbehov = ({
         },
         () => {
           nullstillMellomlagretVurdering();
-          visningActions.onBekreftClick();
         }
       );
     })(event);
