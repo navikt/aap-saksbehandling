@@ -20,12 +20,14 @@ export interface ManuellRevurderingFormFields {
 
 export const OpprettRevurdering = ({
   sak,
+  erFørstegangsbehandling,
   defaultÅrsaker,
   defaultBegrunnelse,
   redirect = false,
   navIdent,
 }: {
   sak: SaksInfo;
+  erFørstegangsbehandling?: boolean;
   defaultÅrsaker?: string[];
   defaultBegrunnelse?: string;
   redirect?: boolean;
@@ -67,29 +69,30 @@ export const OpprettRevurdering = ({
   }
 
   const isRevurderingStarttidspunktEnabled = useFeatureFlag('RevurderStarttidspunkt');
+  const variant = erFørstegangsbehandling ? 'vurdering' : 'revurdering';
 
   const { form, formFields } = useConfigForm<ManuellRevurderingFormFields>({
     beskrivelse: {
       type: 'textarea',
       label: 'Hva er årsaken?',
       rules: {
-        required: 'Skriv litt om hvorfor du skal starte en revurdering',
+        required: `Skriv litt om hvorfor du skal ${erFørstegangsbehandling ? 'opprette vurdering' : 'revurdere saken'}`,
       },
       defaultValue: defaultBegrunnelse ?? '',
     },
     årsaker: {
       type: 'combobox_multiple',
-      label: 'Hvilke opplysninger skal revurderes?',
+      label: `Hvilke opplysninger skal ${erFørstegangsbehandling ? 'vurderes' : 'revurderes'}?`,
       options: vurderingsbehovOptions(isRevurderingStarttidspunktEnabled),
       defaultValue: defaultÅrsaker,
       rules: {
-        required: 'Velg opplysning som er grunnlaget for revurdering',
+        required: `Velg opplysning som er grunnlaget for ${variant}en`,
       },
     },
   });
 
   if (isLoading) {
-    return <Spinner label="Oppretter revurdering ..." />;
+    return <Spinner label={`Oppretter ${variant}...`} />;
   }
 
   return (
@@ -97,13 +100,13 @@ export const OpprettRevurdering = ({
       <form onSubmit={form.handleSubmit((data) => sendHendelse(data))}>
         <VStack gap="4">
           <ExpansionCard
-            aria-label="Opprett revurdering"
+            aria-label={`Opprett ${variant}`}
             size={'small'}
             defaultOpen={true}
             className={styles.opprettRevurderingKort}
           >
             <ExpansionCard.Header className={styles.header}>
-              <ExpansionCard.Title size="small">Opprett revurdering</ExpansionCard.Title>
+              <ExpansionCard.Title size="small">Opprett {variant}</ExpansionCard.Title>
             </ExpansionCard.Header>
 
             <ExpansionCard.Content className={styles.content}>
@@ -130,7 +133,7 @@ export const OpprettRevurdering = ({
             >
               Avbryt
             </Button>
-            <Button type="submit">Opprett revurdering</Button>
+            <Button type="submit">Opprett {variant}</Button>
           </HStack>
         </VStack>
       </form>

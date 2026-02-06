@@ -24,12 +24,6 @@ const grunnlagMedVurdering: RefusjonskravGrunnlag = {
       vurdertAv: { ansattnavn: 'Saksbehandler1', dato: '01.01.2026', enhetsnavn: 'Nav Løten', ident: '124567' },
     },
   ],
-  gjeldendeVurdering: {
-    fom: null,
-    tom: null,
-    harKrav: true,
-    vurdertAv: { ansattnavn: 'Saksbehandler1', dato: '01.01.2026', enhetsnavn: 'Nav Løten', ident: '124567' },
-  },
   harTilgangTilÅSaksbehandle: true,
 };
 
@@ -40,14 +34,14 @@ const grunnlagUtenVurdering: RefusjonskravGrunnlag = {
 describe('Refusjonskrav sosialstønad', () => {
   it('Skal ha korrekt overskrift', () => {
     render(<Refusjon readOnly={false} behandlingVersjon={0} grunnlag={grunnlagMedVurdering} />);
-    const heading = screen.getByText('Sosialstønad refusjonskrav');
+    const heading = screen.getByText('Refusjonskrav sosialstønad');
     expect(heading).toBeVisible();
   });
 
   it('Skal ha felt for om det er refusjonskrav', () => {
     render(<Refusjon readOnly={false} behandlingVersjon={0} grunnlag={grunnlagMedVurdering} />);
     const harRefusjonKrav = screen.getByRole('group', {
-      name: 'Er det refusjonskrav fra Nav-kontor?',
+      name: 'Har noen Nav-kontor refusjonskrav for sosialstønad?',
     });
     expect(harRefusjonKrav).toBeVisible();
   });
@@ -97,13 +91,14 @@ describe('Refusjonskrav sosialstønad', () => {
 
     const refusjonskravEtterAvbryt = within(
       screen.getByRole('group', {
-        name: /Er det refusjonskrav fra Nav-kontor?/,
+        name: /Har noen Nav-kontor refusjonskrav for sosialstønad?/,
       })
     ).getByRole('radio', { name: 'Ja' });
     expect(refusjonskravEtterAvbryt).toBeChecked();
   });
 
-  const finnGruppeVelgRefusjonskrav = () => screen.getByRole('group', { name: 'Er det refusjonskrav fra Nav-kontor?' });
+  const finnGruppeVelgRefusjonskrav = () =>
+    screen.getByRole('group', { name: 'Har noen Nav-kontor refusjonskrav for sosialstønad?' });
 
   const finnNavkontorListe = async () => screen.findByRole('combobox', { name: 'Søk opp Nav-kontor' });
   const finnNavkontorListeQuery = async () => screen.queryByRole('combobox', { name: 'Søk opp Nav-kontor' });
@@ -152,7 +147,7 @@ describe('mellomlagring', () => {
       await user.click(
         within(
           screen.getByRole('group', {
-            name: 'Er det refusjonskrav fra Nav-kontor?',
+            name: 'Har noen Nav-kontor refusjonskrav for sosialstønad?',
           })
         ).getByRole('radio', { name: 'Ja' })
       );
@@ -206,7 +201,7 @@ describe('mellomlagring', () => {
 
     const refusjonskravFelt = within(
       screen.getByRole('group', {
-        name: 'Er det refusjonskrav fra Nav-kontor?',
+        name: 'Har noen Nav-kontor refusjonskrav for sosialstønad?',
       })
     ).getByRole('radio', { name: 'Nei' });
 
@@ -218,7 +213,7 @@ describe('mellomlagring', () => {
 
     const refusjonskravFelt = within(
       screen.getByRole('group', {
-        name: 'Er det refusjonskrav fra Nav-kontor?',
+        name: 'Har noen Nav-kontor refusjonskrav for sosialstønad?',
       })
     ).getByRole('radio', { name: 'Ja' });
 
@@ -237,7 +232,7 @@ describe('mellomlagring', () => {
 
     const refusjonskravFelt = within(
       screen.getByRole('group', {
-        name: 'Er det refusjonskrav fra Nav-kontor?',
+        name: 'Har noen Nav-kontor refusjonskrav for sosialstønad?',
       })
     ).getByRole('radio', { name: 'Ja' });
 
@@ -246,7 +241,7 @@ describe('mellomlagring', () => {
     expect(
       within(
         screen.getByRole('group', {
-          name: 'Er det refusjonskrav fra Nav-kontor?',
+          name: 'Har noen Nav-kontor refusjonskrav for sosialstønad?',
         })
       ).getByRole('radio', { name: 'Ja' })
     ).toBeChecked();
@@ -260,7 +255,7 @@ describe('mellomlagring', () => {
     expect(
       within(
         screen.getByRole('group', {
-          name: 'Er det refusjonskrav fra Nav-kontor?',
+          name: 'Har noen Nav-kontor refusjonskrav for sosialstønad?',
         })
       ).getByRole('radio', { name: 'Ja' })
     ).not.toBeChecked();
@@ -279,7 +274,7 @@ describe('mellomlagring', () => {
     await user.click(
       within(
         screen.getByRole('group', {
-          name: 'Er det refusjonskrav fra Nav-kontor?',
+          name: 'Har noen Nav-kontor refusjonskrav for sosialstønad?',
         })
       ).getByRole('radio', { name: 'Nei' })
     );
@@ -287,7 +282,7 @@ describe('mellomlagring', () => {
     expect(
       within(
         screen.getByRole('group', {
-          name: 'Er det refusjonskrav fra Nav-kontor?',
+          name: 'Har noen Nav-kontor refusjonskrav for sosialstønad?',
         })
       ).getByRole('radio', { name: 'Nei' })
     ).toBeChecked();
@@ -301,7 +296,7 @@ describe('mellomlagring', () => {
     expect(
       within(
         screen.getByRole('group', {
-          name: 'Er det refusjonskrav fra Nav-kontor?',
+          name: 'Har noen Nav-kontor refusjonskrav for sosialstønad?',
         })
       ).getByRole('radio', { name: 'Ja' })
     ).toBeChecked();

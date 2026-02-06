@@ -3,7 +3,7 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 import { parseISO } from 'date-fns';
 import { Dato } from 'lib/types/Dato';
 
-type PeriodisertGrunnlag = {
+export type PeriodisertGrunnlag = {
   behøverVurderinger: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
   kanVurderes: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
   nyeVurderinger: Array<unknown>;
@@ -37,7 +37,16 @@ export function trengerVurderingsForslag(grunnlag: PeriodisertGrunnlag | undefin
   ) {
     return true;
   }
-  return false;
+
+  const harNyeVurderinger = grunnlag.nyeVurderinger.length > 0;
+  const behøverVurderinger = grunnlag.behøverVurderinger.length > 0;
+  const harVedtatteVurderinger = grunnlag.sisteVedtatteVurderinger.length > 0;
+
+  if (harNyeVurderinger) {
+    return false;
+  }
+
+  return behøverVurderinger || !harVedtatteVurderinger;
 }
 
 export function harPerioderSomTrengerVurdering(grunnlag: PeriodisertGrunnlag): boolean {

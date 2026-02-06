@@ -5,6 +5,7 @@ import { formaterTilNok } from 'lib/utils/string';
 import { getLandNavn } from 'lib/utils/countries';
 
 import styles from './OpplysningerContent.module.css';
+import countries from 'i18n-iso-countries';
 
 interface Props {
   opplysning: tilhørighetVurdering;
@@ -128,7 +129,11 @@ export const OpplysningerContent = ({ opplysning }: Props) => {
             <VStack gap={'1'} key={index} className={styles.sideDivider}>
               <LabelValue
                 label={'Adresse:'}
-                value={`${utenlandsAdresse.adresseNavn} ${utenlandsAdresse.landkode} ${utenlandsAdresse.postkode}`}
+                value={`${utenlandsAdresse.adresseNavn} ${
+                  utenlandsAdresse.landkode
+                    ? countries.getName(utenlandsAdresse.landkode, 'no', { select: 'official' }) || ''
+                    : 'Ukjent landkode'
+                } ${utenlandsAdresse.postkode}`}
               />
               {utenlandsAdresse.bySted && <LabelValue label={'By/sted:'} value={utenlandsAdresse.bySted} />}
               <LabelValue
