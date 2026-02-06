@@ -222,7 +222,7 @@ function mapVurderingToDraftFormFields(
           fom: formaterDatoForFrontend(opphold.oppholdFra),
           tom: opphold.avsluttetDato ? formaterDatoForFrontend(opphold.avsluttetDato) : '',
         },
-        vurderinger: harTidligerevurderinger ? [] : vurderinger,
+        vurderinger: harTidligerevurderinger && !vurderinger ? [] : vurderinger,
       };
     }),
   };
