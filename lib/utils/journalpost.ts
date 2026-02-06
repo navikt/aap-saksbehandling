@@ -12,16 +12,6 @@ export const erFerdigstilt = (status: Journalstatus) => {
   }
 };
 
-export const kanRedigeres = (status: Journalstatus) => {
-  switch (status) {
-    case 'MOTTATT':
-    case 'UNDER_ARBEID':
-      return true;
-    default:
-      return false;
-  }
-};
-
 export const formaterJournalpostType = (type: Journalposttype) => {
   switch (type) {
     case Journalposttype.I:
