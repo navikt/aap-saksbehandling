@@ -86,7 +86,7 @@ export const OvergangUforeVurderingFormInput = ({ index, form, readonly }: Props
         </RadioGroupWrapper>
       )}
       {brukerHarFattAvslagPaUforetrygd && (
-        <Alert variant="warning">
+        <Alert variant="warning" size={'small'}>
           Hvis bruker har fått avslag på uføretrygd på bakgrunn av § 12-5, så må § 11-6 vurderes til oppfylt fra dato på
           uføretrygdvedtaket.
         </Alert>
