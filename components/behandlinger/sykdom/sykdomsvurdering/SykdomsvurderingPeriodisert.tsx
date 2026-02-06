@@ -150,7 +150,6 @@ export const SykdomsvurderingPeriodisert = ({
         () => {
           closeAllAccordions();
           nullstillMellomlagretVurdering();
-          visningActions.onBekreftClick();
         }
       );
     })(event);
