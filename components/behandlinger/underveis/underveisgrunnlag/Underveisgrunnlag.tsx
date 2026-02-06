@@ -1,18 +1,22 @@
 'use client';
 
 import { BodyShort, Table } from '@navikt/ds-react';
-import { UnderveisAvslagsÅrsak, UnderveisGrunnlag } from 'lib/types/types';
-import { formaterDatoForFrontend } from 'lib/utils/date';
+import { RettighetDto, UnderveisAvslagsÅrsak, UnderveisGrunnlag } from 'lib/types/types';
+import { antallHverdagerIPeriode, formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
 import { mapUtfallTilTekst } from 'lib/utils/oversettelser';
 import { exhaustiveCheck } from 'lib/utils/typescript';
 import { FormEvent } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import styles from 'components/behandlinger/vedtak/foreslåvedtak/ForeslåVedtak.module.css';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { useBehandlingsReferanse, useSaksnummer } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { clientHentRettighetsdata } from 'lib/clientApi';
+import { isSuccess } from 'lib/utils/api';
+import { useFeatureFlag } from 'context/UnleashContext';
+import useSWR from 'swr';
 
 type Props = {
   grunnlag: UnderveisGrunnlag[];
@@ -20,7 +24,15 @@ type Props = {
   behandlingVersjon: number;
 };
 
-const Perioderad = ({ periode }: { periode: UnderveisGrunnlag }) => (
+const Perioderad = ({
+  periode,
+  gjenværendeKvote,
+  isVisRettigheterForVedtakEnabled,
+}: {
+  periode: UnderveisGrunnlag;
+  gjenværendeKvote: string;
+  isVisRettigheterForVedtakEnabled: boolean;
+}) => (
   <Table.Row>
     <Table.HeaderCell>
       {formaterDatoForFrontend(periode.periode.fom)} - {formaterDatoForFrontend(periode.periode.tom)}
@@ -35,6 +47,7 @@ const Perioderad = ({ periode }: { periode: UnderveisGrunnlag }) => (
     </Table.DataCell>
     <Table.DataCell>{periode.trekk.antall}</Table.DataCell>
     <Table.DataCell>{periode.rettighetsType?.hjemmel}</Table.DataCell>
+    {isVisRettigheterForVedtakEnabled && <Table.DataCell>{gjenværendeKvote}</Table.DataCell>}
     <Table.DataCell>
       {formaterDatoForFrontend(periode.meldePeriode.fom)} - {formaterDatoForFrontend(periode.meldePeriode.tom)}
     </Table.DataCell>
@@ -42,10 +55,18 @@ const Perioderad = ({ periode }: { periode: UnderveisGrunnlag }) => (
 );
 
 export const Underveisgrunnlag = ({ grunnlag, readOnly, behandlingVersjon }: Props) => {
+  // TODO AAP-1709 Fjern feature toggle etter verifisering i dev
+  const isVisRettigheterForVedtakEnabled = useFeatureFlag('VisRettigheterForVedtak');
+  const saksnummer = useSaksnummer();
   const behandlingsReferanse = useBehandlingsReferanse();
+
   const { status, løsBehovOgGåTilNesteSteg, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('FASTSETT_UTTAK');
 
+  const hentRettigheterRespons = useSWR(`/api/sak/${saksnummer}/rettighet`, () =>
+    clientHentRettighetsdata(saksnummer)
+  ).data;
+  const rettigheter = isSuccess(hentRettigheterRespons) ? hentRettigheterRespons.data : [];
   const { visningModus, visningActions } = useVilkårskortVisning(readOnly, 'FASTSETT_UTTAK', undefined);
 
   return (
@@ -83,12 +104,18 @@ export const Underveisgrunnlag = ({ grunnlag, readOnly, behandlingVersjon }: Pro
             <Table.HeaderCell>Gradering</Table.HeaderCell>
             <Table.HeaderCell>Trekk (dagsatser)</Table.HeaderCell>
             <Table.HeaderCell>Rettighetstype</Table.HeaderCell>
+            {isVisRettigheterForVedtakEnabled && <Table.HeaderCell>Dager igjen</Table.HeaderCell>}
             <Table.HeaderCell>Meldeperiode</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
           {grunnlag.map((periode, index) => (
-            <Perioderad key={index} periode={periode} />
+            <Perioderad
+              key={index}
+              periode={periode}
+              gjenværendeKvote={utledGjenværendeKvote(rettigheter, grunnlag, periode)}
+              isVisRettigheterForVedtakEnabled={isVisRettigheterForVedtakEnabled}
+            />
           ))}
         </Table.Body>
       </Table>
@@ -102,6 +129,33 @@ export const Underveisgrunnlag = ({ grunnlag, readOnly, behandlingVersjon }: Pro
     </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 };
+
+function utledGjenværendeKvote(
+  rettigheter: RettighetDto[],
+  perioder: UnderveisGrunnlag[],
+  gjeldendePeriode: UnderveisGrunnlag
+): string {
+  const rettighetForPeriode = rettigheter.find(
+    (rettighet) => rettighet.type === gjeldendePeriode.rettighetsType?.rettighetsType
+  );
+  const totalKvoteForRettighet = rettighetForPeriode?.kvote;
+  const perioderTilOgMedGjeldende = perioder.filter((periode) => {
+    const periodeSluttDato = stringToDate(periode.periode.tom);
+    const gjeldendePeriodeSluttDato = stringToDate(gjeldendePeriode.periode.tom);
+    return (
+      periode.rettighetsType === gjeldendePeriode.rettighetsType?.rettighetsType &&
+      !!periodeSluttDato &&
+      !!gjeldendePeriodeSluttDato &&
+      periodeSluttDato <= gjeldendePeriodeSluttDato
+    );
+  });
+  const brukteKvoter = perioderTilOgMedGjeldende.map((periode) => {
+    return antallHverdagerIPeriode(periode.periode.fom, periode.periode.tom);
+  });
+
+  const totaltBruktKvote = brukteKvoter.reduce((kvote1, kvote2) => kvote1 + kvote2);
+  return totalKvoteForRettighet ? (totalKvoteForRettighet - totaltBruktKvote).toString() : '';
+}
 
 function årsakTilString(avslagsÅrsak: UnderveisAvslagsÅrsak): string {
   switch (avslagsÅrsak) {
