@@ -10779,6 +10779,7 @@ export interface components {
       /** @enum {string} */
       ytelse:
         | 'SYKEPENGER'
+        | 'FORELDREPENGER'
         | 'TILTAKSPENGER'
         | 'OMSTILLINGSSTØNAD'
         | 'OVERGANGSSTØNAD'
@@ -12494,6 +12495,7 @@ export interface components {
       /** @enum {string} */
       ytelse:
         | 'SYKEPENGER'
+        | 'FORELDREPENGER'
         | 'TILTAKSPENGER'
         | 'OMSTILLINGSSTØNAD'
         | 'OVERGANGSSTØNAD'

@@ -26,6 +26,10 @@ const ytelsesoptions: ValuePair<SamordningAndreStatligeYtelserYtelse | undefined
     label: 'Sykepenger',
   },
   {
+    value: 'FORELDREPENGER',
+    label: 'Foreldrepenger',
+  },
+  {
     value: 'TILTAKSPENGER',
     label: 'Tiltakspenger',
   },
