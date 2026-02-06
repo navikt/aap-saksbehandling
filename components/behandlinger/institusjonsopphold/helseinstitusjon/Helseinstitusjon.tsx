@@ -217,7 +217,7 @@ function mapVurderingToDraftFormFields(
             ];
 
       // Tom vurdering skal ikke legges til dersom det finnes tidligere vurderinger
-      const harTidligereVurderingerOgIngenNåværendeVurderinger = harTidligerevurderinger && vurderinger?.length > 0;
+      const harTidligereVurderingerOgIngenNåværendeVurderinger = harTidligerevurderinger && !vurderingerForOpphold;
 
       return {
         oppholdId: opphold.oppholdId,
