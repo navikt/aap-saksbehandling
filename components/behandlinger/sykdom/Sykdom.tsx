@@ -64,14 +64,6 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
           />
         </StegSuspense>
       )}
-      {arbeidsopptrappingSteg.skalViseSteg && (
-        <StegSuspense>
-          <ArbeidsopptrappingMedDataFetching
-            behandlingsreferanse={behandlingsReferanse}
-            stegData={arbeidsopptrappingSteg}
-          />
-        </StegSuspense>
-      )}
       {fritakMeldepliktSteg.skalViseSteg && (
         <StegSuspense>
           <MeldepliktMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={fritakMeldepliktSteg} />
@@ -82,6 +74,14 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
           <FastsettArbeidsevneMedDataFetching
             behandlingsReferanse={behandlingsReferanse}
             stegData={fastsettArbeidsevneSteg}
+          />
+        </StegSuspense>
+      )}
+      {arbeidsopptrappingSteg.skalViseSteg && (
+        <StegSuspense>
+          <ArbeidsopptrappingMedDataFetching
+            behandlingsreferanse={behandlingsReferanse}
+            stegData={arbeidsopptrappingSteg}
           />
         </StegSuspense>
       )}
