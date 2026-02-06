@@ -49,10 +49,6 @@ export function trengerVurderingsForslag(grunnlag: PeriodisertGrunnlag | undefin
   return behøverVurderinger || !harVedtatteVurderinger;
 }
 
-export function harPerioderSomTrengerVurdering(grunnlag: PeriodisertGrunnlag): boolean {
-  return grunnlag.behøverVurderinger.length >= 1;
-}
-
 export function hentPerioderSomTrengerVurdering<T>(
   grunnlag: PeriodisertGrunnlag,
   tomVurdering: () => T
