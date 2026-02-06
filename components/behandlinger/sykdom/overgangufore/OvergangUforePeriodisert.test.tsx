@@ -317,20 +317,6 @@ describe('Førstegangsbehandling', () => {
     expect(begrunnelseFeltEtterAvbryt).toHaveValue('Dette er min vurdering som er bekreftet');
   });
 
-  const finnGruppeForSoktOmUforetrygd = () => screen.getByRole('group', { name: 'Har brukeren søkt om uføretrygd?' });
-
-  const finnGruppeForVedtakOmUforetrygd = () =>
-    screen.getByRole('group', { name: 'Har brukeren fått vedtak på søknaden om uføretrygd?' });
-
-  const finnGruppeForRettPåAAP = () =>
-    screen.getByRole('group', {
-      name: 'Har brukeren rett på AAP under behandling av krav om uføretrygd etter § 11-18?',
-    });
-
-  const velgJa = async (group: HTMLElement) => {
-    await user.click(within(group).getByRole('radio', { name: 'Ja' }));
-  };
-
   it('Skal vise en info alert hvis bruker har uføre vedtak etter søknad', async () => {
     render(<OvergangUforePeriodisert grunnlag={overganguforeGrunnlag} readOnly={false} behandlingVersjon={0} />);
     const harBrukerSøktOmUføretrygd = finnGruppeForSoktOmUforetrygd();
@@ -369,4 +355,18 @@ describe('Førstegangsbehandling', () => {
 
     expect(infoTekst).toBeVisible();
   });
+
+  const finnGruppeForSoktOmUforetrygd = () => screen.getByRole('group', { name: 'Har brukeren søkt om uføretrygd?' });
+
+  const finnGruppeForVedtakOmUforetrygd = () =>
+    screen.getByRole('group', { name: 'Har brukeren fått vedtak på søknaden om uføretrygd?' });
+
+  const finnGruppeForRettPåAAP = () =>
+    screen.getByRole('group', {
+      name: 'Har brukeren rett på AAP under behandling av krav om uføretrygd etter § 11-18?',
+    });
+
+  const velgJa = async (group: HTMLElement) => {
+    await user.click(within(group).getByRole('radio', { name: 'Ja' }));
+  };
 });
