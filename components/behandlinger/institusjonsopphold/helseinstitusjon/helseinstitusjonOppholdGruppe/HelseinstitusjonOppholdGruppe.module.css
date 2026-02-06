@@ -1,12 +1,3 @@
-/*Sjekk om denne brukes. Slett også fra test klasse*/
-.vurdering {
-  display: flex;
-  flex-direction: column;
-  gap: var(--a-spacing-4);
-  border-left: 1px solid var(--a-border-subtle);
-  padding: var(--a-spacing-2) var(--a-spacing-4);
-}
-
 .oppholdGruppe {
   margin-bottom: var(--a-spacing-3);
 }
@@ -19,20 +10,7 @@
   color: var(--a-text-subtle);
 }
 
-.helseinstitusjonheading {
-  display: flex;
-  gap: var(--a-spacing-4);
-  align-items: center;
-}
-
 .oppholdHeader {
-  border-top-left-radius: var(--a-border-radius-xlarge);
-  border-top-right-radius: var(--a-border-radius-xlarge);
   border-bottom: 1px solid var(--a-border-subtle);
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-}
-
-.deleteButton {
-  flex-shrink: 0;
+  border-radius: var(--a-border-radius-xlarge) var(--a-border-radius-xlarge) 0 0;
 }
