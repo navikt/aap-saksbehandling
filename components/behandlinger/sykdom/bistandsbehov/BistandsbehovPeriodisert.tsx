@@ -27,7 +27,7 @@ import {
 } from 'components/behandlinger/sykdom/bistandsbehov/bistandsbehov-utils';
 import { Dato } from 'lib/types/Dato';
 import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovMellomlagringParser';
-import { getFraDatoFraGrunnlagForFrontend, trengerTomPeriodisertVurdering } from 'lib/utils/periodisering';
+import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
 import { Link, VStack } from '@navikt/ds-react';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
@@ -200,15 +200,8 @@ export const BistandsbehovPeriodisert = ({
   );
 
   function mapVurderingerToBistandForm(grunnlag: BistandsGrunnlag): BistandForm {
-    if (trengerTomPeriodisertVurdering(grunnlag)) {
-      return {
-        vurderinger: [
-          {
-            ...emptyBistandVurderingForm(),
-            fraDato: getFraDatoFraGrunnlagForFrontend(grunnlag),
-          },
-        ],
-      };
+    if (trengerVurderingsForslag(grunnlag)) {
+      return hentPerioderSomTrengerVurdering<BistandVurderingForm>(grunnlag, emptyBistandVurderingForm);
     }
 
     // Vi har allerede data lagret, vis enten de som er lagret i grunnlaget her eller tom liste

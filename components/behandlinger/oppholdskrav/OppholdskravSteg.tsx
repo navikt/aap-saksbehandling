@@ -33,7 +33,7 @@ import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 
 type Props = {
-  grunnlag: OppholdskravGrunnlagResponse | undefined;
+  grunnlag: OppholdskravGrunnlagResponse;
   initialMellomlagring?: MellomlagretVurdering;
   behandlingVersjon: number;
   readOnly: boolean;

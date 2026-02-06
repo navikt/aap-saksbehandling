@@ -6,20 +6,16 @@ import {
   OvergangArbeidForm,
   OvergangArbeidVurderingForm,
 } from 'components/behandlinger/sykdom/overgangarbeid/OvergangArbeid-types';
-import { getFraDatoFraGrunnlagForFrontend, trengerTomPeriodisertVurdering } from 'lib/utils/periodisering';
+import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
 
 export function getDefaultValuesFromGrunnlag(grunnlag: OvergangArbeidGrunnlag): OvergangArbeidForm {
-  if (trengerTomPeriodisertVurdering(grunnlag)) {
-    return {
-      vurderinger: [
-        {
-          begrunnelse: '',
-          fraDato: getFraDatoFraGrunnlagForFrontend(grunnlag),
-          brukerRettPåAAP: '',
-          erNyVurdering: true,
-        },
-      ],
-    };
+  if (trengerVurderingsForslag(grunnlag)) {
+    return hentPerioderSomTrengerVurdering<OvergangArbeidVurderingForm>(grunnlag, () => ({
+      begrunnelse: '',
+      fraDato: '',
+      brukerRettPåAAP: '',
+      erNyVurdering: true,
+    }));
   }
 
   // Vi har allerede data lagret, vis enten de som er lagret i grunnlaget her eller tom liste
