@@ -106,13 +106,13 @@ export const OvergangUforeVurderingFormInput = ({ index, form, readonly }: Props
 
       {harUforeVedtakEtterSoknad && (
         <Alert variant={'info'} size={'small'}>
-          Pass på at datoen vurderingen gjelder fra er samme som søknadsdato om uføretrygd.
+          Pass på at datoen vurderingen gjelder fra skal være samme som vedtaksdato på uførevedtaket.
         </Alert>
       )}
 
       {venterPaUforeVedtakMenHarAAP && (
         <Alert variant={'info'} size={'small'}>
-          Pass på at datoen vurderingen gjelder fra skal være samme som vedtaksdato på uførevedtaket.
+          Pass på at datoen vurderingen gjelder fra er samme som søknadsdato om uføretrygd.
         </Alert>
       )}
     </VStack>

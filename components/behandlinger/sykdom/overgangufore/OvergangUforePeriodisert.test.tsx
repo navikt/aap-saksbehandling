@@ -329,7 +329,7 @@ describe('Førstegangsbehandling', () => {
     await user.click(jaValg);
 
     const infoTekst = screen.getByText(
-      'Pass på at datoen vurderingen gjelder fra er samme som søknadsdato om uføretrygd.'
+      'Pass på at datoen vurderingen gjelder fra skal være samme som vedtaksdato på uførevedtaket.'
     );
 
     expect(infoTekst).toBeVisible();
@@ -350,7 +350,7 @@ describe('Førstegangsbehandling', () => {
     await velgJa(harBrukerRettPåAAP);
 
     const infoTekst = screen.getByText(
-      'Pass på at datoen vurderingen gjelder fra skal være samme som vedtaksdato på uførevedtaket.'
+      'Pass på at datoen vurderingen gjelder fra er samme som søknadsdato om uføretrygd.'
     );
 
     expect(infoTekst).toBeVisible();
