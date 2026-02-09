@@ -61,9 +61,6 @@ export async function POST(req: NextRequest) {
   }
   const body = await req.json();
   const res = await hentBehandleroppslag(body);
-  if (isError(res)) {
-    logError(`/dokumentinnhenting/behandleroppslag`, res.apiException.message);
-  }
 
   return NextResponse.json(res, { status: 200 });
 }

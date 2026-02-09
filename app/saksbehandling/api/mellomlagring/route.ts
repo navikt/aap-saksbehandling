@@ -3,7 +3,6 @@ import { Behovstype } from 'lib/utils/form';
 import { MellomlagretVurderingRequest } from 'lib/types/types';
 import { lagreMellomlagring, slettMellomlagring } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isSuccess } from 'lib/utils/api';
-import { logError } from 'lib/serverutlis/logger';
 
 export interface MellomLagringIdentifikator {
   behandlingsreferanse: string;
@@ -15,21 +14,7 @@ export async function POST(request: NextRequest) {
 
   const res = await lagreMellomlagring(payload);
 
-  if (isSuccess(res)) {
-    return NextResponse.json(res, {
-      status: 200,
-    });
-  } else {
-    logError(
-      `Noe gikk galt ved lagring av mellomlagring i behov ${payload.avklaringsbehovkode} og behandlingsreferanse ${payload.behandlingsReferanse}: ${res.apiException.message}`
-    );
-    return NextResponse.json(
-      { message: 'Noe gikk galt av lagring av mellomlagring' },
-      {
-        status: 500,
-      }
-    );
-  }
+  return NextResponse.json(res, { status: res.status });
 }
 
 export async function DELETE(request: NextRequest) {
