@@ -11,7 +11,7 @@ import {
   SettPåVentRequest,
   Venteinformasjon,
 } from 'lib/types/postmottakTypes';
-import { logError, logInfo } from 'lib/serverutlis/logger';
+import { logError, logInfo, logWarning } from 'lib/serverutlis/logger';
 import { apiFetch, apiFetchPdf } from 'lib/services/apiFetch';
 import { isError } from 'lib/utils/api';
 
@@ -110,12 +110,16 @@ async function ventTilProsesseringErFerdig(
   while (forsøk < maksAntallForsøk) {
     forsøk++;
 
-    logInfo(`ventTilProsesseringErFerdig, orsøk nummer: ${forsøk}`);
+    logInfo(`ventTilProsesseringErFerdig, forsøk nummer: ${forsøk}`);
     const response = await hentFlyt(behandlingsreferanse);
     if (isError(response)) {
-      logError(
-        `ventTilProsseseringErFerdig hentFlyt ${response.status} - ${response.apiException.code}: ${response.apiException.message}`
-      );
+      if (response.status === 408) {
+        logWarning(`ventTilProsseseringErFerdig hentFlyt tok for lang tid: ${response.apiException.message}`);
+      } else {
+        logError(
+          `ventTilProsseseringErFerdig hentFlyt ${response.status} - ${response.apiException.code}: ${response.apiException.message}`
+        );
+      }
       prosessering = { status: 'FEILET', ventendeOppgaver: [] };
       break;
     }
