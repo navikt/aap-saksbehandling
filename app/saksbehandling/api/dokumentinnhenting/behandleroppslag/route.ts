@@ -2,8 +2,7 @@ import { Behandler } from 'components/innhentdokumentasjon/innhentdokumentasjons
 import { hentBehandleroppslag } from 'lib/services/dokumentinnhentingservice/dokumentinnhentingservice';
 import { isLocal } from 'lib/utils/environment';
 import { NextRequest, NextResponse } from 'next/server';
-import { logError } from 'lib/serverutlis/logger';
-import { FetchResponse, isError } from 'lib/utils/api';
+import { FetchResponse } from 'lib/utils/api';
 
 const testdata: Behandler[] = [
   {
