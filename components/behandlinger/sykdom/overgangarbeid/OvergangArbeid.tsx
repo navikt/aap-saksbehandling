@@ -112,7 +112,6 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialM
 
     løsPeriodisertBehovOgGåTilNesteSteg(losning, () => {
       closeAllAccordions();
-      visningActions.onBekreftClick();
       nullstillMellomlagretVurdering();
     });
   };

@@ -253,7 +253,6 @@ export const Sykdomsvurdering = ({
         },
         () => {
           nullstillMellomlagretVurdering();
-          visningActions.onBekreftClick();
         }
       );
     })(event);

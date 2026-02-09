@@ -101,7 +101,6 @@ export const BistandsbehovPeriodisert = ({
         },
         () => {
           nullstillMellomlagretVurdering();
-          visningActions.onBekreftClick();
           closeAllAccordions();
         }
       );
