@@ -45,7 +45,7 @@ const overganguforeGrunnlagMedBekreftetVurdering: OvergangUforeGrunnlag = {
     {
       begrunnelse: 'Dette er min vurdering som er bekreftet',
       brukerHarSøktUføretrygd: true,
-      brukerHarFåttVedtakOmUføretrygd: 'JA',
+      brukerHarFåttVedtakOmUføretrygd: 'JA_INNVILGET_FULL',
       brukerRettPåAAP: true,
       virkningsdato: '',
       fom: '2025-10-10',
