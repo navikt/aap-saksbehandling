@@ -11,7 +11,6 @@ import { SamordningTjenestePensjonMedDataFetching } from 'components/behandlinge
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { SamordningArbeidsgiverMedDatafetching } from 'components/behandlinger/samordning/samordningArbeidsgiver/SamordningArbeidsgiverMedDatafetching';
 import { SamordningBarnepensjonMedDatafetching } from 'components/behandlinger/samordning/samordningBarnepensjon/SamordningBarnepensjonMedDatafetching';
-import { unleashService } from 'lib/services/unleash/unleashService';
 import { SykestipendMedDataFetching } from 'components/behandlinger/samordning/sykestipend/SykestipendMedDataFetching';
 
 interface Props {
@@ -80,7 +79,7 @@ export const Samordning = async ({ behandlingsreferanse }: Props) => {
         </StegSuspense>
       )}
 
-      {sykestipendSteg.skalViseSteg && unleashService.isEnabled('Sykestipend') && (
+      {sykestipendSteg.skalViseSteg && (
         <StegSuspense>
           <SykestipendMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={sykestipendSteg} />
         </StegSuspense>
