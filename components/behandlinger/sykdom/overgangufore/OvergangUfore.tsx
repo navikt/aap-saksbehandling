@@ -1,6 +1,12 @@
 'use client';
 
-import { MellomlagretVurdering, OvergangUforeGrunnlag, OvergangUføreVurdering, TypeBehandling } from 'lib/types/types';
+import {
+  MellomlagretVurdering,
+  OvergangUforeGrunnlag,
+  OvergangUføreVedtakResultat,
+  OvergangUføreVurdering,
+  TypeBehandling,
+} from 'lib/types/types';
 import {
   Behovstype,
   getJaNeiEllerIkkeBesvart,
@@ -34,7 +40,7 @@ interface Props {
 interface FormFields {
   begrunnelse: string;
   brukerHarSøktUføretrygd: string;
-  brukerHarFåttVedtakOmUføretrygd: string;
+  brukerHarFåttVedtakOmUføretrygd: OvergangUføreVedtakResultat | null | undefined;
   brukerRettPåAAP?: string;
   virkningsdato: string;
 }
@@ -224,7 +230,7 @@ export const OvergangUfore = ({ behandlingVersjon, grunnlag, readOnly, initialMe
       begrunnelse: vurdering?.begrunnelse,
       brukerRettPåAAP: getJaNeiEllerUndefined(vurdering?.brukerRettPåAAP),
       brukerHarSøktUføretrygd: getJaNeiEllerUndefined(vurdering?.brukerHarSøktUføretrygd),
-      brukerHarFåttVedtakOmUføretrygd: vurdering?.brukerHarFåttVedtakOmUføretrygd || '',
+      brukerHarFåttVedtakOmUføretrygd: vurdering?.brukerHarFåttVedtakOmUføretrygd || null,
       virkningsdato: vurdering?.virkningsdato || '',
     };
   }
@@ -233,7 +239,7 @@ export const OvergangUfore = ({ behandlingVersjon, grunnlag, readOnly, initialMe
     return {
       begrunnelse: '',
       brukerHarSøktUføretrygd: '',
-      brukerHarFåttVedtakOmUføretrygd: '',
+      brukerHarFåttVedtakOmUføretrygd: null,
       brukerRettPåAAP: '',
       virkningsdato: '',
     };
