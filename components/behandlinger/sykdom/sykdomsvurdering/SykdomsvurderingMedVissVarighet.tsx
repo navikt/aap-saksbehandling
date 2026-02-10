@@ -32,7 +32,6 @@ export const SykdomsvurderingMedVissVarighet = ({ form, skalVurdereYrkesskade, i
             horisontal={true}
             rules={{ required: 'Du må svare på om arbeidsevnen er nedsatt med minst halvparten' }}
             readOnly={readonly}
-            shouldUnregister
           />
 
           {skalVurdereYrkesskade &&
@@ -50,7 +49,6 @@ export const SykdomsvurderingMedVissVarighet = ({ form, skalVurdereYrkesskade, i
                   }}
                   className={'begrunnelse'}
                   readOnly={readonly}
-                  shouldUnregister
                 />
 
                 <RadioGroupJaNei
@@ -62,7 +60,6 @@ export const SykdomsvurderingMedVissVarighet = ({ form, skalVurdereYrkesskade, i
                     required: 'Du må svare på om den nedsatte arbeidsevnen er nedsatt med minst 30 prosent.',
                   }}
                   readOnly={readonly}
-                  shouldUnregister
                 />
               </>
             )}
@@ -82,7 +79,6 @@ export const SykdomsvurderingMedVissVarighet = ({ form, skalVurdereYrkesskade, i
                     'Du må svare på om sykdom, skade eller lyte er vesentlig medvirkende til nedsatt arbeidsevne',
                 }}
                 readOnly={readonly}
-                shouldUnregister
               />
 
               {form.watch(`vurderinger.${index}.erSkadeSykdomEllerLyteVesentligdel`) === JaEllerNei.Ja && (
@@ -96,7 +92,6 @@ export const SykdomsvurderingMedVissVarighet = ({ form, skalVurdereYrkesskade, i
                     required: 'Du må svare på om den nedsatte arbeidsevnen er av en viss varighet',
                   }}
                   readOnly={readonly}
-                  shouldUnregister
                 />
               )}
             </>

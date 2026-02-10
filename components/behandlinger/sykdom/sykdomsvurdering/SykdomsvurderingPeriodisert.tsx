@@ -7,7 +7,7 @@ import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { parseISO } from 'date-fns';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { MellomlagretVurdering, SykdomsGrunnlag, TypeBehandling, VurdertAvAnsatt } from 'lib/types/types';
-import { finnDiagnosegrunnlag } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
+import { finnDiagnosegrunnlagPeriodisert } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
 import { ValuePair } from 'components/form/FormField';
 import { useSak } from 'hooks/SakHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
@@ -93,7 +93,7 @@ export const SykdomsvurderingPeriodisert = ({
   const { slettMellomlagring, lagreMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
     useMellomlagring(Behovstype.AVKLAR_SYKDOM_KODE, initialMellomlagretVurdering);
 
-  const diagnosegrunnlag = finnDiagnosegrunnlag(typeBehandling, grunnlag);
+  const diagnosegrunnlag = finnDiagnosegrunnlagPeriodisert(typeBehandling, grunnlag);
 
   const { visningModus, visningActions, formReadOnly, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
@@ -161,6 +161,9 @@ export const SykdomsvurderingPeriodisert = ({
   const foersteNyePeriode = nyeVurderingerFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
   const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
 
+  console.log('hoveddiagnoseDefaultOptions', hoveddiagnoseDefaultOptions);
+  console.log('bidiagnoseDefaultOptions', bidiagnoserDeafultOptions);
+  console.log('grunnlag', grunnlag);
   return (
     <VilkårskortPeriodisert
       heading={'§ 11-5 Nedsatt arbeidsevne og krav til årsakssammenheng'}
@@ -177,7 +180,7 @@ export const SykdomsvurderingPeriodisert = ({
       visningActions={visningActions}
       visningModus={visningModus}
       formReset={() => form.reset(mapGrunnlagTilDefaultvalues(grunnlag))}
-      onLeggTilVurdering={() => append(emptySykdomsvurdering())}
+      onLeggTilVurdering={() => append(emptySykdomsvurdering(utledDiagnoserForVurdering()))}
       errorList={errorList}
     >
       <VStack gap={'4'}>
@@ -239,9 +242,21 @@ export const SykdomsvurderingPeriodisert = ({
     </VilkårskortPeriodisert>
   );
 
+  function utledDiagnoserForVurdering() {
+    const kodeverk = getStringEllerUndefined(diagnosegrunnlag?.kodeverk);
+    const hoveddiagnose = hoveddiagnoseDefaultOptions?.find((value) => value.value === diagnosegrunnlag?.hoveddiagnose);
+    const bidiagnose = bidiagnoserDeafultOptions?.filter((option) =>
+      diagnosegrunnlag?.bidiagnoser?.includes(option.value)
+    );
+
+    return { kodeverk, hoveddiagnose, bidiagnose };
+  }
+
   function mapGrunnlagTilDefaultvalues(grunnlag: SykdomsGrunnlag): SykdomsvurderingerForm {
+    const diagnoser = utledDiagnoserForVurdering();
+
     if (trengerVurderingsForslag(grunnlag)) {
-      return hentPerioderSomTrengerVurdering<Sykdomsvurdering>(grunnlag, emptySykdomsvurdering);
+      return hentPerioderSomTrengerVurdering<Sykdomsvurdering>(grunnlag, () => emptySykdomsvurdering(diagnoser));
     }
 
     // Vi har allerede data lagret, vis enten de som er lagret i grunnlaget her eller tom liste
@@ -255,11 +270,9 @@ export const SykdomsvurderingPeriodisert = ({
           vurdering?.erNedsettelseIArbeidsevneMerEnnHalvparten
         ),
         erSkadeSykdomEllerLyteVesentligdel: getJaNeiEllerUndefined(vurdering?.erSkadeSykdomEllerLyteVesentligdel),
-        kodeverk: getStringEllerUndefined(diagnosegrunnlag?.kodeverk),
-        hoveddiagnose: hoveddiagnoseDefaultOptions?.find((value) => value.value === diagnosegrunnlag?.hoveddiagnose),
-        bidiagnose: bidiagnoserDeafultOptions?.filter((option) =>
-          diagnosegrunnlag?.bidiagnoser?.includes(option.value)
-        ),
+        kodeverk: diagnoser.kodeverk,
+        hoveddiagnose: diagnoser.hoveddiagnose,
+        bidiagnose: diagnoser.bidiagnose,
         erNedsettelseIArbeidsevneAvEnVissVarighet: getJaNeiEllerUndefined(
           vurdering?.erNedsettelseIArbeidsevneAvEnVissVarighet
         ),
