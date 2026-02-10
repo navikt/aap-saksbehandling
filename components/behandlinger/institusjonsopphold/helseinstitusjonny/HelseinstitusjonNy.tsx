@@ -19,6 +19,7 @@ import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { Dato } from 'lib/types/Dato';
 import { VStack } from '@navikt/ds-react';
 import { HelseinstitusjonOppholdGruppe } from 'components/behandlinger/institusjonsopphold/helseinstitusjonny/helseinstitusjonoppholdgruppe/HelseinstitusjonOppholdGruppe';
+import { parseOgMigrerHelseinstitusjonMellomlagretData } from 'components/behandlinger/institusjonsopphold/helseinstitusjonny/helseinstitusjonmigrering';
 
 interface Props {
   grunnlag: HelseinstitusjonGrunnlag;
@@ -28,10 +29,10 @@ interface Props {
 }
 
 export interface HelseinstitusjonsFormFieldsNy {
-  helseinstitusjonsvurderinger: oppholdMedVurderinger[];
+  helseinstitusjonsvurderinger: OppholdMedVurderinger[];
 }
 
-interface oppholdMedVurderinger {
+export interface OppholdMedVurderinger {
   oppholdId: string;
   periode: Periode;
   vurderinger: OppholdVurdering[];
@@ -66,7 +67,7 @@ export const HelseinstitusjonNy = ({ grunnlag, readOnly, behandlingVersjon, init
   );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
-    ? JSON.parse(initialMellomlagretVurdering.data)
+    ? parseOgMigrerHelseinstitusjonMellomlagretData(initialMellomlagretVurdering, grunnlag)
     : mapVurderingToDraftFormFields(grunnlag, grunnlag.opphold);
 
   const { form } = useConfigForm<HelseinstitusjonsFormFieldsNy>({
@@ -83,9 +84,7 @@ export const HelseinstitusjonNy = ({ grunnlag, readOnly, behandlingVersjon, init
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
-      console.log('data', data);
       const vurderinger: HelseInstiusjonVurdering[] = data.helseinstitusjonsvurderinger.flatMap((opphold) => {
-        console.log('opphold', opphold);
         return opphold.vurderinger.map((vurdering, index) => {
           const nesteVurdering = opphold.vurderinger.at(index + 1);
 
