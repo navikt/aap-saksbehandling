@@ -35,7 +35,7 @@ export const OvergangUforeVurderingFormInput = ({ index, form, readonly }: Props
 
   const venterPaUforeVedtakMenHarAAP =
     form.watch(`vurderinger.${index}.brukerHarSøktUføretrygd`) === JaEllerNei.Ja &&
-    form.watch(`vurderinger.${index}.brukerHarFåttVedtakOmUføretrygd`) === JaEllerNei.Nei &&
+    form.watch(`vurderinger.${index}.brukerHarFåttVedtakOmUføretrygd`) === 'NEI' &&
     form.watch(`vurderinger.${index}.brukerRettPåAAP`) === JaEllerNei.Ja;
 
   return (
@@ -79,7 +79,7 @@ export const OvergangUforeVurderingFormInput = ({ index, form, readonly }: Props
           readOnly={readonly}
           size={'small'}
         >
-          <Radio value={JaEllerNei.Nei}>Nei</Radio>
+          <Radio value={'NEI'}>Nei</Radio>
           <Radio value={'JA_INNVILGET_FULL'}>Ja, brukeren har fått innvilget full uføretrygd</Radio>
           <Radio value={'JA_INNVILGET_GRADERT'}>Ja, brukeren har fått innvilget gradert uføretrygd</Radio>
           <Radio value={'JA_AVSLAG'}>Ja, brukeren har fått avslag på uføretrygd</Radio>
@@ -91,18 +91,17 @@ export const OvergangUforeVurderingFormInput = ({ index, form, readonly }: Props
           uføretrygdvedtaket.
         </Alert>
       )}
-      {brukerHarSoktOmUforetrygd &&
-        form.watch(`vurderinger.${index}.brukerHarFåttVedtakOmUføretrygd`) === JaEllerNei.Nei && (
-          <RadioGroupJaNei
-            name={`vurderinger.${index}.brukerRettPåAAP`}
-            control={form.control}
-            label={brukerrettPaaAAPLabel}
-            horisontal={true}
-            rules={{ required: 'Du må svare på om brukeren har krav på AAP etter vedtak om uføretrygd etter § 11-18' }}
-            readOnly={readonly}
-            shouldUnregister
-          />
-        )}
+      {brukerHarSoktOmUforetrygd && form.watch(`vurderinger.${index}.brukerHarFåttVedtakOmUføretrygd`) === 'NEI' && (
+        <RadioGroupJaNei
+          name={`vurderinger.${index}.brukerRettPåAAP`}
+          control={form.control}
+          label={brukerrettPaaAAPLabel}
+          horisontal={true}
+          rules={{ required: 'Du må svare på om brukeren har krav på AAP etter vedtak om uføretrygd etter § 11-18' }}
+          readOnly={readonly}
+          shouldUnregister
+        />
+      )}
 
       {harUforeVedtakEtterSoknad && (
         <Alert variant={'info'} size={'small'}>

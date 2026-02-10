@@ -4581,6 +4581,7 @@ export interface components {
         | 'SAMORDNING_ANDRE_STATLIGE_YTELSER'
         | 'SAMORDNING_ARBEIDSGIVER'
         | 'SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV'
+        | 'FASTSETT_RETTIGHETSTYPE'
         | 'IKKE_OPPFYLT_MELDEPLIKT'
         | 'FASTSETT_VEDTAKSLENGDE'
         | 'FASTSETT_UTTAK'
@@ -10344,7 +10345,13 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.OvergangUf\u00F8reVurderingResponse': {
       begrunnelse: string;
       besluttetAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
-      'brukerHarF\u00E5ttVedtakOmUf\u00F8retrygd'?: string | null;
+      /** @enum {string|null} */
+      'brukerHarF\u00E5ttVedtakOmUf\u00F8retrygd'?:
+        | 'JA_AVSLAG'
+        | 'JA_INNVILGET_GRADERT'
+        | 'JA_INNVILGET_FULL'
+        | 'NEI'
+        | null;
       'brukerHarS\u00F8ktUf\u00F8retrygd': boolean;
       'brukerRettP\u00E5AAP'?: boolean | null;
       /**
@@ -12430,6 +12437,7 @@ export interface components {
         | 'SAMORDNING_ANDRE_STATLIGE_YTELSER'
         | 'SAMORDNING_ARBEIDSGIVER'
         | 'SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV'
+        | 'FASTSETT_RETTIGHETSTYPE'
         | 'IKKE_OPPFYLT_MELDEPLIKT'
         | 'FASTSETT_VEDTAKSLENGDE'
         | 'FASTSETT_UTTAK'
@@ -13295,7 +13303,13 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.overgangufore.flate.OvergangUf\u00F8reL\u00F8sningDto': {
       begrunnelse: string;
-      'brukerHarF\u00E5ttVedtakOmUf\u00F8retrygd'?: string | null;
+      /** @enum {string|null} */
+      'brukerHarF\u00E5ttVedtakOmUf\u00F8retrygd'?:
+        | 'JA_AVSLAG'
+        | 'JA_INNVILGET_GRADERT'
+        | 'JA_INNVILGET_FULL'
+        | 'NEI'
+        | null;
       'brukerHarS\u00F8ktOmUf\u00F8retrygd': boolean;
       'brukerRettP\u00E5AAP'?: boolean | null;
       /**
@@ -13312,7 +13326,13 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.overgangufore.flate.OvergangUf\u00F8reVurderingL\u00F8sningDto': {
       begrunnelse: string;
-      'brukerHarF\u00E5ttVedtakOmUf\u00F8retrygd'?: string | null;
+      /** @enum {string|null} */
+      'brukerHarF\u00E5ttVedtakOmUf\u00F8retrygd'?:
+        | 'JA_AVSLAG'
+        | 'JA_INNVILGET_GRADERT'
+        | 'JA_INNVILGET_FULL'
+        | 'NEI'
+        | null;
       'brukerHarS\u00F8ktOmUf\u00F8retrygd': boolean;
       'brukerRettP\u00E5AAP'?: boolean | null;
       /**
@@ -13616,6 +13636,7 @@ export interface components {
         | 'SAMORDNING_ANDRE_STATLIGE_YTELSER'
         | 'SAMORDNING_ARBEIDSGIVER'
         | 'SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV'
+        | 'FASTSETT_RETTIGHETSTYPE'
         | 'IKKE_OPPFYLT_MELDEPLIKT'
         | 'FASTSETT_VEDTAKSLENGDE'
         | 'FASTSETT_UTTAK'
@@ -13730,6 +13751,7 @@ export interface components {
         | 'SAMORDNING_ANDRE_STATLIGE_YTELSER'
         | 'SAMORDNING_ARBEIDSGIVER'
         | 'SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV'
+        | 'FASTSETT_RETTIGHETSTYPE'
         | 'IKKE_OPPFYLT_MELDEPLIKT'
         | 'FASTSETT_VEDTAKSLENGDE'
         | 'FASTSETT_UTTAK'
@@ -13811,6 +13833,7 @@ export interface components {
         | 'SAMORDNING_ANDRE_STATLIGE_YTELSER'
         | 'SAMORDNING_ARBEIDSGIVER'
         | 'SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV'
+        | 'FASTSETT_RETTIGHETSTYPE'
         | 'IKKE_OPPFYLT_MELDEPLIKT'
         | 'FASTSETT_VEDTAKSLENGDE'
         | 'FASTSETT_UTTAK'
@@ -13987,6 +14010,7 @@ export interface components {
         | 'SAMORDNING_ANDRE_STATLIGE_YTELSER'
         | 'SAMORDNING_ARBEIDSGIVER'
         | 'SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV'
+        | 'FASTSETT_RETTIGHETSTYPE'
         | 'IKKE_OPPFYLT_MELDEPLIKT'
         | 'FASTSETT_VEDTAKSLENGDE'
         | 'FASTSETT_UTTAK'
@@ -14295,6 +14319,7 @@ export interface components {
         | 'SAMORDNING_ANDRE_STATLIGE_YTELSER'
         | 'SAMORDNING_ARBEIDSGIVER'
         | 'SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV'
+        | 'FASTSETT_RETTIGHETSTYPE'
         | 'IKKE_OPPFYLT_MELDEPLIKT'
         | 'FASTSETT_VEDTAKSLENGDE'
         | 'FASTSETT_UTTAK'

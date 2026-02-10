@@ -1,6 +1,11 @@
 'use client';
 
-import { MellomlagretVurdering, OvergangUforeGrunnlag, VurdertAvAnsatt } from 'lib/types/types';
+import {
+  MellomlagretVurdering,
+  OvergangUforeGrunnlag,
+  OvergangUføreVedtakResultat,
+  VurdertAvAnsatt,
+} from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import React, { FormEvent } from 'react';
@@ -40,7 +45,7 @@ interface OvergangUforeVurderingForm {
   fraDato: string;
   begrunnelse: string;
   brukerHarSøktUføretrygd: JaEllerNei | undefined;
-  brukerHarFåttVedtakOmUføretrygd: string;
+  brukerHarFåttVedtakOmUføretrygd: OvergangUføreVedtakResultat | null;
   brukerRettPåAAP?: JaEllerNei | undefined;
   vurdertAv?: VurdertAvAnsatt;
   kvalitetssikretAv?: VurdertAvAnsatt;
@@ -192,7 +197,7 @@ export const OvergangUforePeriodisert = ({
         begrunnelse: vurdering?.begrunnelse,
         brukerRettPåAAP: getJaNeiEllerUndefined(vurdering?.brukerRettPåAAP),
         brukerHarSøktUføretrygd: getJaNeiEllerUndefined(vurdering?.brukerHarSøktUføretrygd),
-        brukerHarFåttVedtakOmUføretrygd: vurdering?.brukerHarFåttVedtakOmUføretrygd || '',
+        brukerHarFåttVedtakOmUføretrygd: vurdering?.brukerHarFåttVedtakOmUføretrygd || null,
         vurdertAv: vurdering.vurdertAv,
         kvalitetssikretAv: vurdering.kvalitetssikretAv,
         besluttetAv: vurdering.besluttetAv,
@@ -205,7 +210,7 @@ export const OvergangUforePeriodisert = ({
       fraDato: '',
       begrunnelse: '',
       brukerHarSøktUføretrygd: undefined,
-      brukerHarFåttVedtakOmUføretrygd: '',
+      brukerHarFåttVedtakOmUføretrygd: null,
       brukerRettPåAAP: undefined,
     };
   }
@@ -220,7 +225,7 @@ function erVurderingOppfylt(form: UseFormReturn<OvergangUforeForm>, index: numbe
     return brukerRettPåAAP === JaEllerNei.Ja;
   }
 
-  if (harSøktUføretrygd === JaEllerNei.Nei || harFåttVedtakUføretrygd === JaEllerNei.Nei) {
+  if (harSøktUføretrygd === JaEllerNei.Nei || harFåttVedtakUføretrygd === 'NEI') {
     return false;
   }
 
