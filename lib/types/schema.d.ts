@@ -10345,13 +10345,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.OvergangUf\u00F8reVurderingResponse': {
       begrunnelse: string;
       besluttetAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
-      /** @enum {string|null} */
-      'brukerHarF\u00E5ttVedtakOmUf\u00F8retrygd'?:
-        | 'JA_AVSLAG'
-        | 'JA_INNVILGET_GRADERT'
-        | 'JA_INNVILGET_FULL'
-        | 'NEI'
-        | null;
+      'brukerHarF\u00E5ttVedtakOmUf\u00F8retrygd'?: string | null;
       'brukerHarS\u00F8ktUf\u00F8retrygd': boolean;
       'brukerRettP\u00E5AAP'?: boolean | null;
       /**
@@ -10967,20 +10961,21 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.HelseinstitusjonGrunnlagDto': {
       'harTilgangTil\u00C5Saksbehandle': boolean;
       opphold: components['schemas']['no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.InstitusjonsoppholdDto'][];
+      vedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.HelseoppholdDto'][];
       vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.HelseoppholdDto'][];
-      vurdertAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.HelseinstitusjonVurderingDto': {
       begrunnelse: string;
       faarFriKostOgLosji: boolean;
       forsoergerEktefelle?: boolean | null;
       harFasteUtgifter?: boolean | null;
+      oppholdId: string;
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
+      vurdertAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.HelseoppholdDto': {
+      oppholdId: string;
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
-      /** @enum {string} */
-      status: 'AVSLÅTT' | 'GODKJENT' | 'UAVKLART';
       vurderinger?:
         | components['schemas']['no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.HelseinstitusjonVurderingDto'][]
         | null;
@@ -10998,6 +10993,7 @@ export interface components {
        * @example 2025-04-01
        */
       oppholdFra: string;
+      oppholdId: string;
       oppholdstype: string;
       status: string;
     };
@@ -13303,13 +13299,7 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.overgangufore.flate.OvergangUf\u00F8reL\u00F8sningDto': {
       begrunnelse: string;
-      /** @enum {string|null} */
-      'brukerHarF\u00E5ttVedtakOmUf\u00F8retrygd'?:
-        | 'JA_AVSLAG'
-        | 'JA_INNVILGET_GRADERT'
-        | 'JA_INNVILGET_FULL'
-        | 'NEI'
-        | null;
+      'brukerHarF\u00E5ttVedtakOmUf\u00F8retrygd'?: string | null;
       'brukerHarS\u00F8ktOmUf\u00F8retrygd': boolean;
       'brukerRettP\u00E5AAP'?: boolean | null;
       /**
@@ -13326,13 +13316,7 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.overgangufore.flate.OvergangUf\u00F8reVurderingL\u00F8sningDto': {
       begrunnelse: string;
-      /** @enum {string|null} */
-      'brukerHarF\u00E5ttVedtakOmUf\u00F8retrygd'?:
-        | 'JA_AVSLAG'
-        | 'JA_INNVILGET_GRADERT'
-        | 'JA_INNVILGET_FULL'
-        | 'NEI'
-        | null;
+      'brukerHarF\u00E5ttVedtakOmUf\u00F8retrygd'?: string | null;
       'brukerHarS\u00F8ktOmUf\u00F8retrygd': boolean;
       'brukerRettP\u00E5AAP'?: boolean | null;
       /**

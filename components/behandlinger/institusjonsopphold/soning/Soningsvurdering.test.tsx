@@ -18,6 +18,7 @@ const grunnlagUtenVurdering: Soningsgrunnlag = {
     {
       institusjonstype: 'Fengsel',
       oppholdstype: 'Soningsfange',
+      oppholdId: 'hello',
       status: 'AKTIV',
       oppholdFra: '2022-10-23',
       avsluttetDato: '2025-10-23',
@@ -38,6 +39,7 @@ const grunnlagMedVurdering: Soningsgrunnlag = {
   soningsforhold: [
     {
       institusjonstype: 'Fengsel',
+      oppholdId: '123',
       oppholdstype: 'Soningsfange',
       status: 'AKTIV',
       oppholdFra: '2022-10-23',
