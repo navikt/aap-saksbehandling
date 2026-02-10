@@ -133,7 +133,12 @@ export const VilkårskortMedFormOgMellomlagringNyVisning = ({
                   )}
 
                   {visningModus === 'LÅST_MED_ENDRE' && (
-                    <Button type="button" variant={'secondary'} onClick={visningActions.onEndreClick}>
+                    <Button
+                      type="button"
+                      variant={'secondary'}
+                      onClick={visningActions.onEndreClick}
+                      loading={isLoading}
+                    >
                       Endre
                     </Button>
                   )}
