@@ -89,7 +89,10 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
           },
           referanse: behandlingsreferanse,
         },
-        () => nullstillMellomlagretVurdering()
+        () => {
+          nullstillMellomlagretVurdering();
+          visningActions.onBekreftClick();
+        }
       );
     })(event);
   };

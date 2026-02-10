@@ -71,19 +71,22 @@ export const SykdomsvurderingBrev = ({
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    form.handleSubmit(
-      (data) => {
-        løsBehovOgGåTilNesteSteg({
+    form.handleSubmit((data) => {
+      løsBehovOgGåTilNesteSteg(
+        {
           behandlingVersjon: behandlingVersjon,
           referanse: behandlingsreferanse,
           behov: {
             behovstype: Behovstype.SYKDOMSVURDERING_BREV_KODE,
             vurdering: data.vurdering,
           },
-        });
-      },
-      () => nullstillMellomlagretVurdering()
-    )(event);
+        },
+        () => {
+          visningActions.onBekreftClick();
+          nullstillMellomlagretVurdering();
+        }
+      );
+    })(event);
   };
 
   const historiskeVurderinger = grunnlag?.historiskeVurderinger;

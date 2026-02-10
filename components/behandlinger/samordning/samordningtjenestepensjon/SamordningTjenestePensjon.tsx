@@ -86,7 +86,10 @@ export const SamordningTjenestePensjon = ({
           },
           referanse: behandlingsReferanse,
         },
-        () => nullstillMellomlagretVurdering()
+        () => {
+          visningActions.onBekreftClick();
+          nullstillMellomlagretVurdering();
+        }
       )
     )(event);
   };

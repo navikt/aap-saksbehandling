@@ -145,7 +145,10 @@ export const KlagebehandlingVurderingNay = ({
           },
           referanse: behandlingsreferanse,
         },
-        () => nullstillMellomlagretVurdering()
+        () => {
+          visningActions.onBekreftClick();
+          nullstillMellomlagretVurdering();
+        }
       );
     })(event);
   };

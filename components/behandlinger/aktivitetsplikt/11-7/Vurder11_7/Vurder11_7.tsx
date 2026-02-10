@@ -79,7 +79,10 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
             },
           },
         },
-        () => nullstillMellomlagretVurdering()
+        () => {
+          visningActions.onBekreftClick();
+          nullstillMellomlagretVurdering();
+        }
       );
     })(event);
   };

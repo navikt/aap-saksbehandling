@@ -128,7 +128,10 @@ export const FormkravVurdering = ({ behandlingVersjon, grunnlag, readOnly, initi
           },
           referanse: behandlingsreferanse,
         },
-        () => nullstillMellomlagretVurdering()
+        () => {
+          visningActions.onBekreftClick();
+          nullstillMellomlagretVurdering();
+        }
       );
     })(event);
   };

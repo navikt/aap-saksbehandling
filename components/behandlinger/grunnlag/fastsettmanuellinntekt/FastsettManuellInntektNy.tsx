@@ -121,7 +121,10 @@ export const FastsettManuellInntektNy = ({
           },
           referanse: behandlingsReferanse,
         },
-        () => nullstillMellomlagretVurdering()
+        () => {
+          visningActions.onBekreftClick();
+          nullstillMellomlagretVurdering();
+        }
       );
     })(event);
   }
