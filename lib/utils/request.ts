@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 import { BehandlingsTyperOption } from 'lib/utils/behandlingstyper';
-import { AvklaringsbehovReferanse, FilterTidsEnhet, Oppgave } from 'lib/types/oppgaveTypes';
+import { FilterTidsEnhet, Oppgave } from 'lib/types/oppgaveTypes';
 import { BehandlingstyperRequestQuery, OppslagsPeriode } from 'lib/types/statistikkTypes';
 
 export function queryParamsArray(key: string, values: (string | number)[]) {
@@ -86,15 +86,13 @@ export function hentStatistikkQueryParams(req: NextRequest): StatistikkQueryPara
   };
 }
 
-function buildSaksbehandlingsURL(oppgave: Oppgave | AvklaringsbehovReferanse): string {
-  // @ts-ignore
-  return `/saksbehandling/sak/${oppgave.saksnummer}/${oppgave?.behandlingRef ?? oppgave?.referanse}`;
+function buildSaksbehandlingsURL(oppgave: Oppgave): string {
+  return `/saksbehandling/sak/${oppgave.saksnummer}/${oppgave?.behandlingRef}`;
 }
-function buildPostmottakURL(oppgave: Oppgave | AvklaringsbehovReferanse): string {
-  // @ts-ignore
-  return `/postmottak/${oppgave?.behandlingRef ?? oppgave?.referanse}`;
+function buildPostmottakURL(oppgave: Oppgave): string {
+  return `/postmottak/${oppgave?.behandlingRef}`;
 }
-export function byggKelvinURL(oppgave: Oppgave | AvklaringsbehovReferanse): string {
+export function byggKelvinURL(oppgave: Oppgave): string {
   if (oppgave.journalpostId) {
     return buildPostmottakURL(oppgave);
   } else {
