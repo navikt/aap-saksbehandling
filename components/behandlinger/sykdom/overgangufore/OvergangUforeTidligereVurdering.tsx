@@ -1,12 +1,13 @@
 import { VStack } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
+import { OvergangUføreVedtakResultat } from 'lib/types/types';
 
 type Props = {
   fraDato: string;
   begrunnelse: string;
   brukerHarSøktOmUføretrygd: boolean;
-  brukerHarFåttVedtakOmUføretrygd: string | undefined | null;
+  brukerHarFåttVedtakOmUføretrygd: OvergangUføreVedtakResultat | undefined | null;
   brukerRettPåAAP: boolean | undefined | null;
 };
 

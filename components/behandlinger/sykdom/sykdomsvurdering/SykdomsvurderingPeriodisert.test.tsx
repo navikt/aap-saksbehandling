@@ -717,7 +717,9 @@ describe('vurderinger uten viss varighet', () => {
 
     await velgBekreft();
 
-    const feilmeldinger = screen.getAllByText(/Vurderingene du har laget starter før perioden du kan vurdere/i);
+    const feilmeldinger = screen.getAllByText(
+      /Datoen som er satt er tidligere enn perioden som skal vurderes. Vurderingen kan tidligst gjelde fra/i
+    );
     await expect(feilmeldinger.length).toBe(2);
     await expect(feilmeldinger[0]).toBeVisible();
   });

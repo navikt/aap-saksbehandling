@@ -11,7 +11,11 @@ import {
   ForutgåendeMedlemskapVurderingForm,
   ForutgåendeMedlemskapVurderingFormIkkePeriodisert,
 } from 'components/behandlinger/forutgåendemedlemskap/manuellvurderingperiodisert/types';
-import { getFraDatoFraGrunnlagForFrontend, trengerTomPeriodisertVurdering } from 'lib/utils/periodisering';
+import {
+  getFraDatoFraGrunnlagForFrontend,
+  hentPerioderSomTrengerVurdering,
+  trengerVurderingsForslag,
+} from 'lib/utils/periodisering';
 
 export function erNyVurderingOppfylt(
   harForutgåendeMedlemskap: JaEllerNei | undefined,
@@ -25,17 +29,13 @@ export function erNyVurderingOppfylt(
   }
 }
 export function getDefaultValuesFromGrunnlag(
-  grunnlag?: PeriodisertForutgåendeMedlemskapGrunnlag
+  grunnlag: PeriodisertForutgåendeMedlemskapGrunnlag
 ): ForutgåendeMedlemskapVurderingForm {
-  if (trengerTomPeriodisertVurdering(grunnlag)) {
-    return {
-      vurderinger: [
-        {
-          begrunnelse: '',
-          fraDato: getFraDatoFraGrunnlagForFrontend(grunnlag),
-        },
-      ],
-    };
+  if (trengerVurderingsForslag(grunnlag)) {
+    return hentPerioderSomTrengerVurdering<ForutgåendeMedlemskapManuellVurderingForm>(grunnlag, () => ({
+      begrunnelse: '',
+      fraDato: '',
+    }));
   }
 
   // Vi har allerede data lagret, vis enten de som er lagret i grunnlaget her eller tom liste

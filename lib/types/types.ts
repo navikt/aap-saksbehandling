@@ -141,6 +141,8 @@ export type TrukketSøknadVudering =
 export type AvbrytRevurderingGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.revurdering.AvbrytRevurderingGrunnlagDto'];
 
+export type RettighetDto = components['schemas']['no.nav.aap.behandlingsflyt.behandling.rettighet.RettighetDto'];
+
 export type RettighetsperiodeGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.rettighetsperiode.RettighetsperiodeGrunnlagResponse'];
 export type FullmektigGrunnlag =
@@ -384,6 +386,9 @@ export type BistandsbehovLøsning =
 
 export type OvergangUføreVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.OvergangUføreVurderingResponse'];
+
+export type OvergangUføreVedtakResultat =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.OvergangUføreVurderingResponse']['brukerHarFåttVedtakOmUføretrygd'];
 
 export type OvergangArbeidVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangarbeid.OvergangArbeidVurderingResponse'];

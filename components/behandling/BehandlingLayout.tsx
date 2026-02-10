@@ -26,6 +26,7 @@ import { StegGruppe } from 'lib/types/types';
 import { SakContextProvider } from 'context/saksbehandling/SakContext';
 import { KlageBehandlingInfo } from 'components/behandlingsinfo/KlageBehandlingInfo';
 import { ÅrsakTilBehandling } from 'components/revurderingsinfo/ÅrsakTilBehandling';
+import { visÅrsakTilVurdering } from './visÅrsakTilVurdering';
 
 interface Props {
   saksId: string;
@@ -82,8 +83,7 @@ export const BehandlingLayout = async ({ saksId, behandlingsReferanse, children 
   const visÅrsakTilAktivitetspliktBehandling =
     ['Aktivitetsplikt', 'Aktivitetsplikt11_9'].includes(behandling.data.type) &&
     behandling.data.vurderingsbehovOgÅrsaker?.some((e) => e.årsak === 'OMGJØRING_ETTER_KLAGE');
-  const visÅrsakTilRevurdering =
-    behandling.data.type === 'Revurdering' && behandling.data.vurderingsbehovOgÅrsaker.length > 0;
+  const visÅrsakTilRevurdering = visÅrsakTilVurdering(behandling.data);
   const visÅrsakTilEndreStartstidspunkt = behandling.data.vurderingsbehovOgÅrsaker
     ?.flatMap((v) => v.vurderingsbehov)
     ?.some((v) => v.type === 'VURDER_RETTIGHETSPERIODE');

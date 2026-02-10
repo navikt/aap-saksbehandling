@@ -22,12 +22,12 @@ import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib
 import { LovOgMedlemskapVurderingForm } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/types';
 import { BistandsbehovTidligereVurdering } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovTidligereVurdering';
 import {
-  erNyVurderingErOppfylt,
+  erNyVurderingOppfylt,
   mapBistandVurderingFormTilDto,
 } from 'components/behandlinger/sykdom/bistandsbehov/bistandsbehov-utils';
 import { Dato } from 'lib/types/Dato';
 import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovMellomlagringParser';
-import { getFraDatoFraGrunnlagForFrontend, trengerTomPeriodisertVurdering } from 'lib/utils/periodisering';
+import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
 import { Link, VStack } from '@navikt/ds-react';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
@@ -101,7 +101,6 @@ export const BistandsbehovPeriodisert = ({
         },
         () => {
           nullstillMellomlagretVurdering();
-          visningActions.onBekreftClick();
           closeAllAccordions();
         }
       );
@@ -181,7 +180,7 @@ export const BistandsbehovPeriodisert = ({
             fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
             nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
             isLast={index === fields.length - 1}
-            vurderingStatus={getErOppfyltEllerIkkeStatus(erNyVurderingErOppfylt(form.watch(`vurderinger.${index}`)))}
+            vurderingStatus={getErOppfyltEllerIkkeStatus(erNyVurderingOppfylt(form.watch(`vurderinger.${index}`)))}
             vurdertAv={vurdering.vurdertAv}
             kvalitetssikretAv={vurdering.kvalitetssikretAv}
             besluttetAv={vurdering.besluttetAv}
@@ -200,15 +199,8 @@ export const BistandsbehovPeriodisert = ({
   );
 
   function mapVurderingerToBistandForm(grunnlag: BistandsGrunnlag): BistandForm {
-    if (trengerTomPeriodisertVurdering(grunnlag)) {
-      return {
-        vurderinger: [
-          {
-            ...emptyBistandVurderingForm(),
-            fraDato: getFraDatoFraGrunnlagForFrontend(grunnlag),
-          },
-        ],
-      };
+    if (trengerVurderingsForslag(grunnlag)) {
+      return hentPerioderSomTrengerVurdering<BistandVurderingForm>(grunnlag, emptyBistandVurderingForm);
     }
 
     // Vi har allerede data lagret, vis enten de som er lagret i grunnlaget her eller tom liste

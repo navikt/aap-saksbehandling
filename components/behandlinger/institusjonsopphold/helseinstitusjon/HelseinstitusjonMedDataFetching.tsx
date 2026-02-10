@@ -18,7 +18,6 @@ export const HelseinstitusjonMedDataFetching = async ({ behandlingsreferanse, st
     hentHelseInstitusjonsVurdering(behandlingsreferanse),
     hentMellomlagring(behandlingsreferanse, Behovstype.AVKLAR_HELSEINSTITUSJON),
   ]);
-
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
   }

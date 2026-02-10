@@ -109,7 +109,7 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
       return;
     }
     if (data.vurderinger.length === 0 && nyeVurderinger.length === 0) {
-      visningActions.onBekreftClick();
+      visningActions.avbrytEndringClick();
       return;
     }
     const losning: LøsningerForPerioder = {

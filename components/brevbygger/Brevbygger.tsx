@@ -26,6 +26,7 @@ import { IkkeSendBrevModal } from 'components/behandlinger/brev/skriveBrev/IkkeS
 import { useDebounce } from 'hooks/DebounceHook';
 import { ExpandIcon, ShrinkIcon } from '@navikt/aksel-icons';
 import { RefusjonskravVisning } from 'components/brevbygger/RefusjonskravVisning';
+import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 
 export interface AlternativFormField {
   verdi: string;
@@ -106,7 +107,12 @@ export const Brevbygger = ({
   const [pdfViewExpanded, togglePdfVievExpanded] = useState(false);
   const behandlingsReferanse = useBehandlingsReferanse();
   const { fields } = useFieldArray({ control, name: 'delmaler' });
-  const { løsBehovOgGåTilNesteSteg, isLoading } = useLøsBehovOgGåTilNesteSteg('BREV');
+  const {
+    løsBehovOgGåTilNesteSteg,
+    status: løsBehovStatus,
+    isLoading,
+    løsBehovOgGåTilNesteStegError,
+  } = useLøsBehovOgGåTilNesteSteg('BREV');
 
   const [dataUri, setDataUri] = useState<string>();
   const [pdfIsLoading, setPdfIsLoading] = useState(false);
@@ -278,6 +284,10 @@ export const Brevbygger = ({
           </VStack>
         </form>
         <HStack gap={'2'} justify={'space-between'} marginBlock={'4'}>
+          <LøsBehovOgGåTilNesteStegStatusAlert
+            status={løsBehovStatus}
+            løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+          />
           <HStack gap={'2'}>
             {visAvbryt && (
               <Button

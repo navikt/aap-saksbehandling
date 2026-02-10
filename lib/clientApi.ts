@@ -22,6 +22,7 @@ import {
   OpprettAktivitetspliktBehandlingDto,
   OpprettDummySakDto,
   OpprettTestcase,
+  RettighetDto,
   SaksInfo,
   SettPåVent,
 } from './types/types';
@@ -56,13 +57,6 @@ export async function clientFetch<ResponseBody>(
       },
     };
   }
-}
-
-export function clientHentMellomlagring(request: MellomLagringIdentifikator) {
-  return clientFetch<MellomlagretVurderingResponse>(
-    `${BASE_URL}/api/mellomlagring/${request.behandlingsreferanse}/${request.behovstype}`,
-    'GET'
-  );
 }
 
 export function clientLagreMellomlagring(request: MellomlagretVurderingRequest) {
@@ -145,6 +139,10 @@ export function clientHentSakshistorikk(saksnummer: string) {
 
 export function clientBestillDialogmelding(bestilling: BestillLegeerklæring) {
   return clientFetch(`${BASE_URL}/api/dokumentinnhenting/bestill`, 'POST', bestilling);
+}
+
+export function clientHentRettighetsdata(saksnummer: string) {
+  return clientFetch<Array<RettighetDto>>(`${BASE_URL}/api/sak/${saksnummer}/rettighet`, 'GET');
 }
 
 export function clientForhåndsvisDialogmelding(dialogmelding: ForhåndsvisDialogmelding) {

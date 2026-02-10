@@ -51,14 +51,17 @@ export const Refusjonskrav = ({ form, readOnly }: Props) => {
     <Box>
       <VStack gap={'4'}>
         <BodyLong size={'small'} weight={'semibold'}>
-          Hvilke kontor kan ha refusjonskrav?
+          Legg til refusjonskrav
         </BodyLong>
         <VStack>
           <BodyLong size="small" textColor={'subtle'}>
-            Hvis det er flere kontorer som kan ha refusjonskrav, legg til flere.
+            Hvis det er flere kontorer som kan ha refusjonskrav, legg til alle relevante kontor.
           </BodyLong>
           <BodyLong size="small" textColor={'subtle'}>
-            Refusjonskrav vil kun være på etterbetaling av AAP.
+            Etterbetalingsperioden som holdes igjen blir fra virkningsdato til dagen før vedtak om AAP.
+          </BodyLong>
+          <BodyLong size="small" textColor={'subtle'}>
+            Hvis virkningsdato er etter vedtak, så blir det ingen etterbetalingsperiode.
           </BodyLong>
         </VStack>
       </VStack>

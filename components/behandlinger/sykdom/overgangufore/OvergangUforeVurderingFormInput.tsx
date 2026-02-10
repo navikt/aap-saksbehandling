@@ -9,7 +9,6 @@ import { OvergangUforeForm } from 'components/behandlinger/sykdom/overgangufore/
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { JaEllerNei } from 'lib/utils/form';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
-import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
 
 interface Props {
   index: number;
@@ -27,20 +26,29 @@ export const OvergangUforeVurderingFormInput = ({ index, form, readonly }: Props
   const brukerHarSoktOmUforetrygd = form.watch(`vurderinger.${index}.brukerHarSøktUføretrygd`) === JaEllerNei.Ja;
   const brukerHarFattAvslagPaUforetrygd =
     form.watch(`vurderinger.${index}.brukerHarFåttVedtakOmUføretrygd`) === 'JA_AVSLAG';
+
+  const harUforeVedtakEtterSoknad =
+    form.watch(`vurderinger.${index}.brukerHarSøktUføretrygd`) === JaEllerNei.Ja &&
+    (form.watch(`vurderinger.${index}.brukerHarFåttVedtakOmUføretrygd`) === 'JA_AVSLAG' ||
+      form.watch(`vurderinger.${index}.brukerHarFåttVedtakOmUføretrygd`) === 'JA_INNVILGET_FULL' ||
+      form.watch(`vurderinger.${index}.brukerHarFåttVedtakOmUføretrygd`) === 'JA_INNVILGET_GRADERT');
+
+  const venterPaUforeVedtakMenHarAAP =
+    form.watch(`vurderinger.${index}.brukerHarSøktUføretrygd`) === JaEllerNei.Ja &&
+    form.watch(`vurderinger.${index}.brukerHarFåttVedtakOmUføretrygd`) === 'NEI' &&
+    form.watch(`vurderinger.${index}.brukerRettPåAAP`) === JaEllerNei.Ja;
+
   return (
     <VStack gap={'5'}>
       <DateInputWrapper
         name={`vurderinger.${index}.fraDato`}
         label={virkningsdatoLabel}
-        description={'Datoen må samsvare med søknadstidspunktet for uføretrygd'}
         control={form.control}
         rules={{
           required: 'Du må velge fra hvilken dato vurderingen gjelder fra',
         }}
         readOnly={readonly}
       />
-
-      <HvordanLeggeTilSluttdatoReadMore />
 
       <TextAreaWrapper
         name={`vurderinger.${index}.begrunnelse`}
@@ -78,7 +86,7 @@ export const OvergangUforeVurderingFormInput = ({ index, form, readonly }: Props
         </RadioGroupWrapper>
       )}
       {brukerHarFattAvslagPaUforetrygd && (
-        <Alert variant="warning">
+        <Alert variant="warning" size={'small'}>
           Hvis bruker har fått avslag på uføretrygd på bakgrunn av § 12-5, så må § 11-6 vurderes til oppfylt fra dato på
           uføretrygdvedtaket.
         </Alert>
@@ -93,6 +101,18 @@ export const OvergangUforeVurderingFormInput = ({ index, form, readonly }: Props
           readOnly={readonly}
           shouldUnregister
         />
+      )}
+
+      {harUforeVedtakEtterSoknad && (
+        <Alert variant={'info'} size={'small'}>
+          Pass på at datoen vurderingen gjelder fra skal være samme som vedtaksdato på uførevedtaket.
+        </Alert>
+      )}
+
+      {venterPaUforeVedtakMenHarAAP && (
+        <Alert variant={'info'} size={'small'}>
+          Pass på at datoen vurderingen gjelder fra er samme som søknadsdato om uføretrygd.
+        </Alert>
       )}
     </VStack>
   );

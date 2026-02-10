@@ -45,7 +45,7 @@ const overganguforeGrunnlagMedBekreftetVurdering: OvergangUforeGrunnlag = {
     {
       begrunnelse: 'Dette er min vurdering som er bekreftet',
       brukerHarSøktUføretrygd: true,
-      brukerHarFåttVedtakOmUføretrygd: 'JA',
+      brukerHarFåttVedtakOmUføretrygd: 'JA_INNVILGET_FULL',
       brukerRettPåAAP: true,
       virkningsdato: '',
       fom: '2025-10-10',
@@ -317,9 +317,50 @@ describe('Førstegangsbehandling', () => {
     expect(begrunnelseFeltEtterAvbryt).toHaveValue('Dette er min vurdering som er bekreftet');
   });
 
+  it('Skal vise en info alert hvis bruker har uføre vedtak etter søknad', async () => {
+    render(<OvergangUforePeriodisert grunnlag={overganguforeGrunnlag} readOnly={false} behandlingVersjon={0} />);
+    const harBrukerSøktOmUføretrygd = finnGruppeForSoktOmUforetrygd();
+    await velgJa(harBrukerSøktOmUføretrygd);
+
+    const harBrukerFåttVedtakPåSøknadenOmUføretrygd = finnGruppeForVedtakOmUforetrygd();
+    const jaValg = within(harBrukerFåttVedtakPåSøknadenOmUføretrygd).getByRole('radio', {
+      name: 'Ja, brukeren har fått innvilget full uføretrygd',
+    });
+    await user.click(jaValg);
+
+    const infoTekst = screen.getByText(
+      'Pass på at datoen vurderingen gjelder fra skal være samme som vedtaksdato på uførevedtaket.'
+    );
+
+    expect(infoTekst).toBeVisible();
+  });
+
+  it('Skal vise en info alert hvis bruker venter på uføre vedtak, men har AAP', async () => {
+    render(<OvergangUforePeriodisert grunnlag={overganguforeGrunnlag} readOnly={false} behandlingVersjon={0} />);
+    const harBrukerSøktOmUføretrygd = finnGruppeForSoktOmUforetrygd();
+    await velgJa(harBrukerSøktOmUføretrygd);
+
+    const harBrukerFåttVedtakPåSøknadenOmUføretrygd = finnGruppeForVedtakOmUforetrygd();
+    const neiValg = within(harBrukerFåttVedtakPåSøknadenOmUføretrygd).getByRole('radio', {
+      name: 'Nei',
+    });
+    await user.click(neiValg);
+
+    const harBrukerRettPåAAP = finnGruppeForRettPåAAP();
+    await velgJa(harBrukerRettPåAAP);
+
+    const infoTekst = screen.getByText(
+      'Pass på at datoen vurderingen gjelder fra er samme som søknadsdato om uføretrygd.'
+    );
+
+    expect(infoTekst).toBeVisible();
+  });
+
   const finnGruppeForSoktOmUforetrygd = () => screen.getByRole('group', { name: 'Har brukeren søkt om uføretrygd?' });
+
   const finnGruppeForVedtakOmUforetrygd = () =>
     screen.getByRole('group', { name: 'Har brukeren fått vedtak på søknaden om uføretrygd?' });
+
   const finnGruppeForRettPåAAP = () =>
     screen.getByRole('group', {
       name: 'Har brukeren rett på AAP under behandling av krav om uføretrygd etter § 11-18?',
