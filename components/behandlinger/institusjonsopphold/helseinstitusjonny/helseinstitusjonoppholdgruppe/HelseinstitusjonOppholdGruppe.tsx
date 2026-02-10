@@ -3,7 +3,7 @@ import { Buildings3Icon } from '@navikt/aksel-icons';
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { HelseinstitusjonGrunnlag, HelseInstiusjonVurdering } from 'lib/types/types';
 import React from 'react';
-import styles from 'components/behandlinger/institusjonsopphold/helseinstitusjon/helseinstitusjonOppholdGruppe/HelseinstitusjonOppholdGruppe.module.css';
+import styles from './HelseinstitusjonOppholdGruppe.module.css';
 import { formatDatoMedMånedsnavn, formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { addDays } from 'date-fns';
 import {
