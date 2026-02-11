@@ -4,37 +4,47 @@ import {
   OppholdMedVurderinger,
   OppholdVurdering,
 } from 'components/behandlinger/institusjonsopphold/helseinstitusjonny/HelseinstitusjonNy';
-import { getJaNeiEllerUndefined } from 'lib/utils/form';
+import { Dato } from 'lib/types/Dato';
+import { isEqual } from 'date-fns';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 
+/**
+ *
+ * Vurder om vi i det hele tatt trenger å gjøre dette. Hvor mange har mellomlagring i helse i dag?
+ *
+ */
 export function parseOgMigrerHelseinstitusjonMellomlagretData(
   mellomlagretVurdering: MellomlagretVurdering,
   grunnlag: HelseinstitusjonGrunnlag
 ): HelseinstitusjonsFormFieldsNy {
   const parsedData = JSON.parse(mellomlagretVurdering.data);
 
-  const vurdertDato = new Date(mellomlagretVurdering.vurdertDato);
-  const dagensDato = new Date(); // TODO Endre denne til den dagen vi går i prod eller finn en bedre måte å returnere korrekt data på
+  // Hvis oppholdId har en verdi så er det ny versjon
+  const erNyVersjon = parsedData?.helseinstitusjonsvurderinger?.some((v: any) => v.oppholdId != null);
 
-  if (vurdertDato > dagensDato) {
+  if (erNyVersjon) {
     return parsedData;
   }
 
-  // @ts-expect-error
-  const oppholdVurderinger: OppholdVurdering[] = parsedData.helseinstitusjonsvurderinger.map((vurdering) => {
-    const opphold = grunnlag.opphold.find((opphold) => opphold.oppholdFra === vurdering.periode.fom);
+  const oppholdVurderinger: OppholdVurdering[] = parsedData.helseinstitusjonsvurderinger.map((vurdering: any) => {
+    const currentOpphold = grunnlag.opphold.find((opphold) => {
+      // Datoene er ikke lik
+      isEqual(new Dato(opphold.oppholdFra).dato, new Dato(vurdering.periode.fom).dato);
+    });
 
     return {
-      begrunnelse: vurdering.begrunnelse,
-      faarFriKostOgLosji: getJaNeiEllerUndefined(vurdering.faarFriKostOgLosji),
-      forsoergerEktefelle: getJaNeiEllerUndefined(vurdering.forsoergerEktefelle),
-      harFasteUtgifter: getJaNeiEllerUndefined(vurdering.harFasteUtgifter),
-      oppholdId: opphold?.oppholdId || '',
-      periode: vurdering.periode,
+      ...vurdering,
+      oppholdId: currentOpphold?.oppholdId || '',
+      periode: {
+        fom: formaterDatoForFrontend(vurdering.periode.fom),
+        tom: formaterDatoForFrontend(vurdering.periode.tom),
+      },
     };
   });
 
   const gruppertOppholdVurderinger: Record<string, OppholdVurdering[]> = {};
 
+  console.log(oppholdVurderinger);
   oppholdVurderinger.forEach((vurdering) => {
     if (!gruppertOppholdVurderinger[vurdering.oppholdId]) {
       gruppertOppholdVurderinger[vurdering.oppholdId] = [
