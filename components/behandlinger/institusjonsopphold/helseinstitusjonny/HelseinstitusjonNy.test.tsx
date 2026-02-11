@@ -308,14 +308,14 @@ async function svarIkkeReduksjon(index: number) {
   await svarPåSpørsmålOmFriKostOgLosji(false, index);
 }
 
-describe.skip('mellomlagring', () => {
+describe('mellomlagring', () => {
   const mellomlagring: MellomlagretVurderingResponse = {
     mellomlagretVurdering: {
-      avklaringsbehovkode: Behovstype.AVKLAR_HELSEINSTITUSJON,
       behandlingId: { id: 1 },
-      data: '{"helseinstitusjonsvurderinger": [{"begrunnelse": "Dette er min vurdering som er mellomlagret", "periode": {"fom": "2022-10-24", "tom": "2024-10-23"}}]}',
-      vurdertDato: '2025-08-21T12:00:00.000',
+      avklaringsbehovkode: Behovstype.AVKLAR_HELSEINSTITUSJON,
+      data: '{"helseinstitusjonsvurderinger": [{"periode": {"fom": "11.02.2024", "tom": "11.02.2027"}, "oppholdId": "123", "vurderinger": [{"periode": {"fom": "11.02.2024", "tom": "11.02.2027"}, "oppholdId": "St. Mungos Hospital::2024-02-11", "begrunnelse": "Dette er min vurdering som er mellomlagret"}]}]}',
       vurdertAv: 'Jan T. Loven',
+      vurdertDato: '2025-08-21T12:00:00.000',
     },
   };
 
@@ -336,7 +336,7 @@ describe.skip('mellomlagring', () => {
     render(<HelseinstitusjonNy behandlingVersjon={1} grunnlag={grunnlagUtenVurdering} readOnly={false} />);
     await user.type(
       screen.getByRole('textbox', {
-        name: 'Vurder §11-25 og om det skal gis reduksjon av ytelsen',
+        name: 'Vilkårsvurdering',
       }),
       'Her har jeg begynt å skrive en vurdering..'
     );
@@ -385,9 +385,9 @@ describe.skip('mellomlagring', () => {
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
       />
     );
-
+    screen.logTestingPlaygroundURL();
     const begrunnelseFelt = screen.getByRole('textbox', {
-      name: 'Vurder §11-25 og om det skal gis reduksjon av ytelsen',
+      name: 'Vilkårsvurdering',
     });
 
     expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er mellomlagret');
@@ -396,7 +396,7 @@ describe.skip('mellomlagring', () => {
   it('Skal bruke bekreftet vurdering fra grunnlag som defaultValue i skjema dersom mellomlagring ikke finnes', () => {
     render(<HelseinstitusjonNy behandlingVersjon={1} readOnly={false} grunnlag={grunnlagMedVurdering} />);
     const begrunnelseFelt = screen.getByRole('textbox', {
-      name: 'Vurder §11-25 og om det skal gis reduksjon av ytelsen',
+      name: 'Vilkårsvurdering',
     });
 
     expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er bekreftet');
@@ -414,14 +414,14 @@ describe.skip('mellomlagring', () => {
 
     await user.type(
       screen.getByRole('textbox', {
-        name: 'Vurder §11-25 og om det skal gis reduksjon av ytelsen',
+        name: 'Vilkårsvurdering',
       }),
       ' her er ekstra tekst'
     );
 
     expect(
       screen.getByRole('textbox', {
-        name: 'Vurder §11-25 og om det skal gis reduksjon av ytelsen',
+        name: 'Vilkårsvurdering',
       })
     ).toHaveValue('Dette er min vurdering som er mellomlagret her er ekstra tekst');
 
@@ -431,7 +431,7 @@ describe.skip('mellomlagring', () => {
 
     expect(
       screen.getByRole('textbox', {
-        name: 'Vurder §11-25 og om det skal gis reduksjon av ytelsen',
+        name: 'Vilkårsvurdering',
       })
     ).toHaveValue('');
   });
@@ -448,14 +448,14 @@ describe.skip('mellomlagring', () => {
 
     await user.type(
       screen.getByRole('textbox', {
-        name: 'Vurder §11-25 og om det skal gis reduksjon av ytelsen',
+        name: 'Vilkårsvurdering',
       }),
       ' her er ekstra tekst'
     );
 
     expect(
       screen.getByRole('textbox', {
-        name: 'Vurder §11-25 og om det skal gis reduksjon av ytelsen',
+        name: 'Vilkårsvurdering',
       })
     ).toHaveValue('Dette er min vurdering som er mellomlagret her er ekstra tekst');
 
@@ -465,7 +465,7 @@ describe.skip('mellomlagring', () => {
 
     expect(
       screen.getByRole('textbox', {
-        name: 'Vurder §11-25 og om det skal gis reduksjon av ytelsen',
+        name: 'Vilkårsvurdering',
       })
     ).toHaveValue('Dette er min vurdering som er bekreftet');
   });
