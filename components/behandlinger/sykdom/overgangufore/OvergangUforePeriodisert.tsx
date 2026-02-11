@@ -106,6 +106,7 @@ export const OvergangUforePeriodisert = ({
           },
         },
         () => {
+          visningActions.onBekreftClick();
           closeAllAccordions();
           nullstillMellomlagretVurdering();
         }

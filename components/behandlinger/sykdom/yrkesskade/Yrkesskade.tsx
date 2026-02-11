@@ -147,9 +147,9 @@ export const Yrkesskade = ({
   }, [erÅrsakssammenheng]);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    form.handleSubmit(
-      (data) => {
-        løsBehovOgGåTilNesteSteg({
+    form.handleSubmit((data) => {
+      løsBehovOgGåTilNesteSteg(
+        {
           behov: {
             behovstype: Behovstype.YRKESSKADE_KODE,
             yrkesskadesvurdering: {
@@ -170,10 +170,13 @@ export const Yrkesskade = ({
           },
           behandlingVersjon: behandlingVersjon,
           referanse: behandlingsReferanse,
-        });
-      },
-      () => nullstillMellomlagretVurdering()
-    )(event);
+        },
+        () => {
+          visningActions.onBekreftClick();
+          nullstillMellomlagretVurdering();
+        }
+      );
+    })(event);
   };
 
   return (
