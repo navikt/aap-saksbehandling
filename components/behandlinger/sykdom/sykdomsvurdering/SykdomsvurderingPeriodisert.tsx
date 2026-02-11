@@ -161,9 +161,6 @@ export const SykdomsvurderingPeriodisert = ({
   const foersteNyePeriode = nyeVurderingerFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
   const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
 
-  console.log('hoveddiagnoseDefaultOptions', hoveddiagnoseDefaultOptions);
-  console.log('bidiagnoseDefaultOptions', bidiagnoserDeafultOptions);
-  console.log('grunnlag', grunnlag);
   return (
     <VilkårskortPeriodisert
       heading={'§ 11-5 Nedsatt arbeidsevne og krav til årsakssammenheng'}
