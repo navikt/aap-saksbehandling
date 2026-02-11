@@ -56,12 +56,7 @@ export interface BistandVurderingForm {
   erNyVurdering?: boolean;
 }
 
-export const BistandsbehovPeriodisert = ({
-  behandlingVersjon,
-  grunnlag,
-  readOnly,
-  initialMellomlagretVurdering,
-}: Props) => {
+export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, initialMellomlagretVurdering }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_BISTANDSBEHOV');

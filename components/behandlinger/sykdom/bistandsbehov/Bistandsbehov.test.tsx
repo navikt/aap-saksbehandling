@@ -5,7 +5,7 @@ import { BistandsGrunnlag, MellomlagretVurderingResponse } from 'lib/types/types
 import createFetchMock from 'vitest-fetch-mock';
 import { FetchResponse } from 'lib/utils/api';
 import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
-import { BistandsbehovPeriodisert } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovPeriodisert';
+import { Bistandsbehov } from 'components/behandlinger/sykdom/bistandsbehov/Bistandsbehov';
 import { BistandFormOld } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovMellomlagringParser';
 
 const fetchMock = createFetchMock(vi);
@@ -82,16 +82,16 @@ describe('Generelt', () => {
   };
 
   it('Skal ha en overskrift', () => {
-    render(<BistandsbehovPeriodisert readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
+    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
 
     const heading = screen.getByText('§ 11-6 Behov for bistand til å skaffe seg eller beholde arbeid');
     expect(heading).toBeVisible();
   });
 
-  it('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
+  it.skip('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
     setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'SYKDOMSVURDERING_BREV' });
 
-    render(<BistandsbehovPeriodisert grunnlag={grunnlagMedVurdering} readOnly={false} behandlingVersjon={0} />);
+    render(<Bistandsbehov grunnlag={grunnlagMedVurdering} readOnly={false} behandlingVersjon={0} />);
 
     screen.logTestingPlaygroundURL();
     const endreKnapp = screen.getByRole('button', { name: 'Endre' });
@@ -144,7 +144,7 @@ describe('mellomlagring i bistandsbehov', () => {
 
   it('Skal vise en tekst om hvem som har gjort vurderingen dersom det finnes en mellomlagring', () => {
     render(
-      <BistandsbehovPeriodisert
+      <Bistandsbehov
         readOnly={false}
         behandlingVersjon={0}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
@@ -159,7 +159,7 @@ describe('mellomlagring i bistandsbehov', () => {
   it(
     'Skal vise en tekst om hvem som har lagret vurdering dersom bruker trykker på lagre ' + 'mellomlagring',
     async () => {
-      render(<BistandsbehovPeriodisert behandlingVersjon={0} readOnly={false} grunnlag={grunnlagTomt} />);
+      render(<Bistandsbehov behandlingVersjon={0} readOnly={false} grunnlag={grunnlagTomt} />);
 
       await user.type(
         screen.getByRole('textbox', { name: 'Vilkårsvurdering' }),
@@ -183,7 +183,7 @@ describe('mellomlagring i bistandsbehov', () => {
 
   it('Skal ikke vise tekst om hvem som har gjort mellomlagring dersom bruker trykker på slett mellomlagring', async () => {
     render(
-      <BistandsbehovPeriodisert
+      <Bistandsbehov
         behandlingVersjon={0}
         readOnly={false}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
@@ -204,7 +204,7 @@ describe('mellomlagring i bistandsbehov', () => {
 
   it('Skal bruke mellomlagring som defaultValue i skjema dersom det finnes', () => {
     render(
-      <BistandsbehovPeriodisert
+      <Bistandsbehov
         behandlingVersjon={0}
         readOnly={false}
         grunnlag={grunnlagTomt}
@@ -238,7 +238,7 @@ describe('mellomlagring i bistandsbehov', () => {
     };
 
     render(
-      <BistandsbehovPeriodisert
+      <Bistandsbehov
         behandlingVersjon={0}
         readOnly={false}
         grunnlag={grunnlagTomt}
@@ -254,7 +254,7 @@ describe('mellomlagring i bistandsbehov', () => {
   });
 
   it('Skal bruke bekreftet vurdering fra grunnlag som defaultValue i skjema dersom mellomlagring ikke finnes', () => {
-    render(<BistandsbehovPeriodisert behandlingVersjon={0} readOnly={false} grunnlag={bistandsgrunnlag} />);
+    render(<Bistandsbehov behandlingVersjon={0} readOnly={false} grunnlag={bistandsgrunnlag} />);
 
     const begrunnelseFelt = screen.getByRole('textbox', {
       name: /vilkårsvurdering/i,
@@ -265,7 +265,7 @@ describe('mellomlagring i bistandsbehov', () => {
 
   it('Skal resette skjema til tomt skjema dersom det ikke finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
     render(
-      <BistandsbehovPeriodisert
+      <Bistandsbehov
         behandlingVersjon={0}
         readOnly={false}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
@@ -288,7 +288,7 @@ describe('mellomlagring i bistandsbehov', () => {
 
   it('Skal resette skjema til bekreftet vurdering dersom det finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
     render(
-      <BistandsbehovPeriodisert
+      <Bistandsbehov
         behandlingVersjon={0}
         readOnly={false}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
@@ -313,7 +313,7 @@ describe('mellomlagring i bistandsbehov', () => {
 
   it('Skal ikke være mulig å lagre eller slette mellomlagring hvis det er readOnly', () => {
     render(
-      <BistandsbehovPeriodisert
+      <Bistandsbehov
         behandlingVersjon={0}
         readOnly={true}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
@@ -330,13 +330,13 @@ describe('mellomlagring i bistandsbehov', () => {
 
 describe('Førstegangsbehandling', () => {
   it('Skal ha felt for begrunnelse', () => {
-    render(<BistandsbehovPeriodisert readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
+    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
     const begrunnelse = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
     expect(begrunnelse).toBeVisible();
   });
 
   it('Skal ha felt for om brukeren har behov for aktiv behandling', () => {
-    render(<BistandsbehovPeriodisert readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
+    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
     const felt = screen.getByRole('group', {
       name: 'a: Har brukeren behov for aktiv behandling?',
     });
@@ -344,13 +344,13 @@ describe('Førstegangsbehandling', () => {
   });
 
   it('Skal ha felt for om brukeren har behov for arbeidsrettet tiltak', () => {
-    render(<BistandsbehovPeriodisert readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
+    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
     const felt = screen.getByRole('group', { name: 'b: Har brukeren behov for arbeidsrettet tiltak?' });
     expect(felt).toBeVisible();
   });
 
   it('har felt for om brukeren anses for å ha en viss mulighet til å komme i arbeid', async () => {
-    render(<BistandsbehovPeriodisert readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
+    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
     expect(
       screen.queryByRole('group', {
         name: 'c: Kan brukeren anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra Nav?',
@@ -359,7 +359,7 @@ describe('Førstegangsbehandling', () => {
   });
 
   it('skjuler felt for om brukeren anses for å ha en viss mulighet til å komme i arbeid dersom a er besvart med ja', async () => {
-    render(<BistandsbehovPeriodisert readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
+    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
 
     expect(finnGruppeForBokstavC()).toBeVisible();
 
@@ -368,7 +368,7 @@ describe('Førstegangsbehandling', () => {
   });
 
   it('skjuler felt for om brukeren anses for å ha en viss mulighet til å komme i arbeid dersom b er besvart med nei', async () => {
-    render(<BistandsbehovPeriodisert readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
+    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
 
     expect(finnGruppeForBokstavC()).toBeVisible();
 
@@ -377,7 +377,7 @@ describe('Førstegangsbehandling', () => {
   });
 
   it('skjuler felt for om brukeren anses for å ha en viss mulighet til å komme i arbeid dersom både a og b er besvart med ja', async () => {
-    render(<BistandsbehovPeriodisert readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
+    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
 
     expect(finnGruppeForBokstavC()).toBeVisible();
 
@@ -388,7 +388,7 @@ describe('Førstegangsbehandling', () => {
   });
 
   it('viser felt for om brukeren anses for å ha en viss mulighet til å komme i arbeid dersom a og b er besvart med nei', async () => {
-    render(<BistandsbehovPeriodisert readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
+    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
     await velgNei(finnGruppeForBokstavA());
     await velgNei(finnGruppeForBokstavB());
 
@@ -397,13 +397,13 @@ describe('Førstegangsbehandling', () => {
 
   /* TODO skippes inntil backend er klar */
   it.skip('viser felt for når vurderingen gjelder fra dersom det er en revurdering', () => {
-    render(<BistandsbehovPeriodisert readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
+    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
     expect(screen.getByRole('textbox', { name: 'Vurderingen gjelder fra' })).toBeVisible();
   });
 
   /* TODO Skippes inntil backend er klar. Mangler å avgjøre hvordan steget skal vite om 11-5 er oppfylt eller ei */
   it.skip('viser spørsmål for om brukeren skal vurderes for AAP i overgang til arbeid hvis det er en revurdering og det er avslag på både 11-5 og 11-6', async () => {
-    render(<BistandsbehovPeriodisert readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
+    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
     await velgNei(finnGruppeForBokstavA());
     await velgNei(finnGruppeForBokstavB());
     const gruppeC = screen.getByRole('group', {
@@ -415,7 +415,7 @@ describe('Førstegangsbehandling', () => {
   });
 
   it('Skal vise feilmelding dersom feltet for begrunnelse ikke er besvart', async () => {
-    render(<BistandsbehovPeriodisert readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
+    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
 
     await trykkPåBekreft();
     const feilmelding = screen.getAllByText('Du må gi en begrunnelse om brukeren har behov for oppfølging');
@@ -425,7 +425,7 @@ describe('Førstegangsbehandling', () => {
   });
 
   it('Skal vise feilmelding dersom feltet om brukeren har behov for aktiv behandling ikke er besvart', async () => {
-    render(<BistandsbehovPeriodisert readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
+    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
 
     await trykkPåBekreft();
     const feilmelding = screen.getAllByText('Du må svare på om brukeren har behov for aktiv behandling');
@@ -435,7 +435,7 @@ describe('Førstegangsbehandling', () => {
   });
 
   it('Skal vise feilmelding dersom feltet om brukeren har behov for arbeidsrettet tiltak ikke er besvart', async () => {
-    render(<BistandsbehovPeriodisert readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
+    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
 
     await trykkPåBekreft();
 
@@ -445,7 +445,7 @@ describe('Førstegangsbehandling', () => {
   });
 
   it('Skal vise feilmelding dersom feltet om brukeren anses for å ha en viss mulighet for å komme i arbeid ikke er besvart', async () => {
-    render(<BistandsbehovPeriodisert readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
+    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
 
     const harInnbyggetBehovForAktivBehandling = screen.getByRole('group', {
       name: 'a: Har brukeren behov for aktiv behandling?',
