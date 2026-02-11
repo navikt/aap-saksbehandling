@@ -7,7 +7,7 @@ import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { parseISO } from 'date-fns';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { MellomlagretVurdering, SykdomsGrunnlag, TypeBehandling, VurdertAvAnsatt } from 'lib/types/types';
-import { finnDiagnosegrunnlagPeriodisert } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
+import { finnDiagnosegrunnlag } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
 import { ValuePair } from 'components/form/FormField';
 import { useSak } from 'hooks/SakHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
@@ -93,7 +93,7 @@ export const SykdomsvurderingPeriodisert = ({
   const { slettMellomlagring, lagreMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
     useMellomlagring(Behovstype.AVKLAR_SYKDOM_KODE, initialMellomlagretVurdering);
 
-  const diagnosegrunnlag = finnDiagnosegrunnlagPeriodisert(typeBehandling, grunnlag);
+  const diagnosegrunnlag = finnDiagnosegrunnlag(typeBehandling, grunnlag);
 
   const { visningModus, visningActions, formReadOnly, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
@@ -196,6 +196,7 @@ export const SykdomsvurderingPeriodisert = ({
             foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
             vurderingStatus={getErOppfyltEllerIkkeStatus(erTidligereVurderingOppfylt(vurdering))}
             defaultCollapsed={nyeVurderingerFields.length > 0}
+            vurdertAv={vurdering.vurdertAv}
           >
             <TidligereSykdomsvurdering vurdering={vurdering} />
           </TidligereVurderingExpandableCard>

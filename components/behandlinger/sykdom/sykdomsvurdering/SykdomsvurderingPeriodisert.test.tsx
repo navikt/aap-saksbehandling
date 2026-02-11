@@ -2,8 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { customRenderWithSøknadstidspunkt, render, screen, within } from 'lib/test/CustomRender';
 import { userEvent } from '@testing-library/user-event';
 import { MellomlagretVurderingResponse, SykdomsGrunnlag, Sykdomvurdering } from 'lib/types/types';
-import { format, subDays, addDays } from 'date-fns';
-import { SykdomsvurderingFormFields } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
+import { addDays, format, subDays } from 'date-fns';
 import { FetchResponse } from 'lib/utils/api';
 import createFetchMock from 'vitest-fetch-mock';
 import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
@@ -1056,7 +1055,7 @@ describe('mellomlagring i sykdom', () => {
   });
 
   it('Skal støtte å bruke gammelt format på mellomlagret data', () => {
-    const dataGammel: Partial<SykdomsvurderingFormFields> = {
+    const dataGammel: Partial<any> = {
       begrunnelse: 'Dette er en gammel mellomlagret begrunnelse',
     };
 

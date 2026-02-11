@@ -1,15 +1,14 @@
 import { SykdomsvurderingerForm } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingPeriodisert';
-import { SykdomsvurderingFormFields } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 
 export function parseOgMigrerMellomlagretData(data: string): SykdomsvurderingerForm {
   const parsedData = JSON.parse(data);
   if (isNewSchema(parsedData)) {
     return parsedData;
   }
-  return mapFromOldFormToNewForm(parsedData as SykdomsvurderingFormFields);
+  return mapFromOldFormToNewForm(parsedData as any);
 }
 
-function mapFromOldFormToNewForm(oldData: SykdomsvurderingFormFields): SykdomsvurderingerForm {
+function mapFromOldFormToNewForm(oldData: any): SykdomsvurderingerForm {
   return {
     vurderinger: [
       {
