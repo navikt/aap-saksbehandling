@@ -36,8 +36,7 @@ export const SykdomsvurderingMedDataFetching = async ({ behandlingsReferanse, st
   );
 
   const harTidligereVurderinger =
-    grunnlag.data.gjeldendeVedtatteSykdomsvurderinger != null &&
-    grunnlag.data.gjeldendeVedtatteSykdomsvurderinger.length > 0;
+    grunnlag.data.sisteVedtatteVurderinger != null && grunnlag.data.sisteVedtatteVurderinger.length > 0;
 
   if (!skalViseSteg(stegData, harTidligereVurderinger)) {
     return null;
