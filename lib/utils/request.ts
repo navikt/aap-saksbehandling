@@ -9,7 +9,6 @@ import {
   PathsMineOppgaverGetParametersQuerySortby,
   PathsMineOppgaverGetParametersQuerySortorder,
 } from '@navikt/aap-oppgave-typescript-types';
-import { exhaustiveCheck } from 'lib/utils/typescript';
 
 export function queryParamsArray(key: string, values: (string | number)[]) {
   const filtered = values.filter((value) => value !== undefined && value !== null && value !== '');
@@ -154,13 +153,13 @@ export function hentMineOppgaverQueryParams(req: NextRequest): MineOppgaverQuery
   const params = req.nextUrl.searchParams;
   const kunPåVent = params.get('kunPaaVent');
   const sortByStr = params.get('sortby');
-  const sortBy = sortByStr ? validerSortByQueryParamEnum(sortByStr) : null;
+  const sortby = sortByStr ? validerSortByQueryParamEnum(sortByStr) : null;
   const sortOrderStr = params.get('sortorder');
-  const sortOrder = sortOrderStr ? validerSortOrderQueryParamEnum(sortOrderStr) : null;
+  const sortorder = sortOrderStr ? validerSortOrderQueryParamEnum(sortOrderStr) : null;
   return {
     ...(kunPåVent ? { kunPaaVent: kunPåVent === 'true' } : {}),
-    ...(sortBy ? { sortBy } : {}),
-    ...(sortOrder ? { sortOrder } : {}),
+    ...(sortby ? { sortby } : {}),
+    ...(sortorder ? { sortorder } : {}),
   };
 }
 function validerSortByQueryParamEnum(str: string): PathsMineOppgaverGetParametersQuerySortby {

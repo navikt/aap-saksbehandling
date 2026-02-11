@@ -16,7 +16,7 @@ import {
   TildelOppgaveRequest,
   TildelOppgaveResponse,
 } from 'lib/types/oppgaveTypes';
-import { mapSortStateDirectionTilQueryParamEnum, mineOppgaverQueryParams, queryParamsArray } from 'lib/utils/request';
+import { mineOppgaverQueryParams, queryParamsArray } from 'lib/utils/request';
 import { apiFetch } from 'lib/services/apiFetch';
 import { isLocal } from 'lib/utils/environment';
 import { FetchResponse } from 'lib/utils/api';
@@ -80,7 +80,7 @@ export const hentMineOppgaver = async (queryParams: MineOppgaverQueryParams) => 
     ? mineOppgaverQueryParams({ sortby: queryParams?.sortby, sortorder: queryParams.sortorder })
     : '';
   const url = `${oppgaveApiBaseURL}/mine-oppgaver${query ? `?${query}` : ''}`;
-  return await apiFetch<OppgavelisteResponse>(url, oppgaveApiScope, 'GET', undefined, ['oppgaveservice/mine-oppgaver']);
+  return await apiFetch<OppgavelisteResponse>(url, oppgaveApiScope, 'GET');
 };
 
 export async function hentEnheter() {
