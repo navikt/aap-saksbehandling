@@ -10377,7 +10377,6 @@ export interface components {
       'er\u00C5rsakssammenhengYrkesskade': boolean;
       'harTilgangTil\u00C5Saksbehandle': boolean;
       kanVurderes: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
-      kvalitetssikretAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
       nyeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomsvurderingResponse'][];
       opplysninger: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.InnhentetSykdomsOpplysninger'];
       sisteVedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomsvurderingResponse'][];
