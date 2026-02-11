@@ -16,13 +16,14 @@ export const UnderveisgrunnlagMedDataFetching = async ({
   behandlingVersjon,
   saksnummer,
 }: Props) => {
-  const grunnlag = await hentUnderveisGrunnlag(behandlingsreferanse);
+  const [grunnlag, rettighetsdataRespons] = await Promise.all([
+    hentUnderveisGrunnlag(behandlingsreferanse),
+    hentRettighetsdata(saksnummer),
+  ]);
 
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
   }
-
-  const rettighetsdataRespons = await hentRettighetsdata(saksnummer);
 
   return (
     <Underveisgrunnlag
