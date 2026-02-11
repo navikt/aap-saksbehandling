@@ -1,4 +1,4 @@
-import { Alert, Button, Heading } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, Heading, Link } from '@navikt/ds-react';
 import { FormEvent, useState } from 'react';
 
 import styles from './InnhentDokumentasjonSkjema.module.css';
@@ -10,6 +10,7 @@ import { AsyncComboSearch } from 'components/form/asynccombosearch/AsyncComboSea
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { isError } from 'lib/utils/api';
+import { ExternalLinkIcon } from '@navikt/aksel-icons';
 
 export type Behandler = {
   type?: string;
@@ -132,6 +133,15 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
       <Heading level={'3'} size={'small'}>
         Be om opplysninger fra behandler
       </Heading>
+      <Link
+        href={
+          'https://navno.sharepoint.com/sites/fag-og-ytelser-radgivende-legetjeneste/SitePages/Felles-rutine-for-innhenting-av-helseopplysninger.aspx?&xsdata=MDV8MDJ8fGIwNWFkNTJkZjczMTQzNjhiNTg5MDhkZTY4N2Y1MzAzfDYyMzY2NTM0MWVjMzQ5NjI4ODY5OWI1NTM1Mjc5ZDBifDB8MHw2MzkwNjMwOTMxOTYwNzY0MjV8VW5rbm93bnxWR1ZoYlhOVFpXTjFjbWwwZVZObGNuWnBZMlY4ZXlKRFFTSTZJbFJsWVcxelgwRlVVRk5sY25acFkyVmZVMUJQVEU5R0lpd2lWaUk2SWpBdU1DNHdNREF3SWl3aVVDSTZJbGRwYmpNeUlpd2lRVTRpT2lKUGRHaGxjaUlzSWxkVUlqb3hNWDA9fDF8TDJOb1lYUnpMekU1T20xbFpYUnBibWRmV2tSVmQxbDZUWGxOUkVGMFRXcFZNRmw1TURCTmFteHRURlJuZWs5WFVYUk9SMUV5V2xSa2ExbFhWVFZPZWtwcVFIUm9jbVZoWkM1Mk1pOXRaWE56WVdkbGN5OHhOemN3TnpFeU5URTNPRFF4fDg3ZDNjODMyYWZjNjRjZjk1MzQxMDhkZTY4N2Y1MzAxfDViMjBjYjYwZGEyODQ2ZDU4NjI1MDIzYzQ1YWFjNTdk&sdata=TktPbXp3NHJQU0hMOFRJS0dUTUxpaEFYZkoyRnA0RHNWcWNMcThtRXhaMD0%3D'
+        }
+        target={'_blank'}
+      >
+        <BodyShort size={'small'}>Rutiner for innhenting av helseopplysninger</BodyShort>
+        <ExternalLinkIcon />
+      </Link>
       <form onSubmit={handleSubmit} className={'flex-column'} autoComplete={'off'}>
         <AsyncComboSearch
           label={'Velg behandler som skal motta meldingen'}
