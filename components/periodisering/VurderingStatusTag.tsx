@@ -56,6 +56,16 @@ function mapVurderingStatusToVurderingTekst(status: VurderingStatus): string {
   }
 }
 
+export function getErReduksjonEllerIkke(
+  erReduksjon: boolean
+): VurderingStatus.Reduksjon | VurderingStatus.IkkeReduksjon | undefined {
+  if (erReduksjon === undefined) {
+    return undefined;
+  }
+
+  return erReduksjon ? VurderingStatus.Reduksjon : VurderingStatus.IkkeReduksjon;
+}
+
 export function getErOppfyltEllerIkkeStatus(
   oppfylt: boolean | undefined
 ): VurderingStatus.Oppfylt | VurderingStatus.IkkeOppfylt | undefined {
