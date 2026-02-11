@@ -88,7 +88,6 @@ export const SykdomsvurderingFormInput = ({
           required: 'Du må gjøre en vilkårsvurdering',
         }}
         readOnly={readonly}
-        shouldUnregister
       />
       <RadioGroupJaNei
         name={`vurderinger.${index}.harSkadeSykdomEllerLyte`}
@@ -97,7 +96,6 @@ export const SykdomsvurderingFormInput = ({
         horisontal={true}
         rules={{ required: 'Du må svare på om brukeren har sykdom, skade eller lyte' }}
         readOnly={readonly}
-        shouldUnregister
       />
       {form.watch(`vurderinger.${index}.harSkadeSykdomEllerLyte`) === JaEllerNei.Ja && (
         <>
@@ -109,7 +107,6 @@ export const SykdomsvurderingFormInput = ({
             horisontal={true}
             rules={{ required: 'Du må svare på om brukeren har nedsatt arbeidsevne' }}
             readOnly={readonly}
-            shouldUnregister
           />
           {skalVurdereVissVarighet && (
             <SykdomsvurderingMedVissVarighet

@@ -123,9 +123,9 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly, initia
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    form.handleSubmit(
-      (data) => {
-        løsBehovOgGåTilNesteSteg({
+    form.handleSubmit((data) => {
+      løsBehovOgGåTilNesteSteg(
+        {
           behandlingVersjon: behandlingVersjon,
           behov: {
             behovstype: Behovstype.AVKLAR_STUDENT_KODE,
@@ -149,10 +149,13 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly, initia
             },
           },
           referanse: behandlingsReferanse,
-        });
-      },
-      () => nullstillMellomlagretVurdering()
-    )(event);
+        },
+        () => {
+          visningActions.onBekreftClick();
+          nullstillMellomlagretVurdering();
+        }
+      );
+    })(event);
   };
 
   return (

@@ -146,7 +146,10 @@ export const KlagebehandlingVurderingKontor = ({
           },
           referanse: behandlingsreferanse,
         },
-        () => nullstillMellomlagretVurdering()
+        () => {
+          nullstillMellomlagretVurdering();
+          visningActions.onBekreftClick();
+        }
       );
     })(event);
   };

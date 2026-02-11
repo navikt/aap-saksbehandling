@@ -75,9 +75,9 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
   });
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    form.handleSubmit(
-      (data) => {
-        løsBehovOgGåTilNesteSteg({
+    form.handleSubmit((data) => {
+      løsBehovOgGåTilNesteSteg(
+        {
           behov: {
             behovstype: Behovstype.REFUSJON_KRAV_KODE,
             refusjonkravVurderinger: data.refusjoner.map((refusjon) => ({
@@ -88,10 +88,13 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
           },
           behandlingVersjon: behandlingVersjon,
           referanse: behandlingsreferanse,
-        });
-      },
-      () => nullstillMellomlagretVurdering()
-    )(event);
+        },
+        () => {
+          visningActions.onBekreftClick();
+          nullstillMellomlagretVurdering();
+        }
+      );
+    })(event);
   };
 
   const harKryssetAvØknomiskSosialHjelp = grunnlag.økonomiskSosialHjelp

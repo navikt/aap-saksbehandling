@@ -87,7 +87,10 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon, initi
           behandlingVersjon: behandlingsversjon,
           referanse: behandlingsreferanse,
         },
-        () => nullstillMellomlagretVurdering()
+        () => {
+          nullstillMellomlagretVurdering();
+          visningActions.onBekreftClick();
+        }
       );
     })(event);
   };

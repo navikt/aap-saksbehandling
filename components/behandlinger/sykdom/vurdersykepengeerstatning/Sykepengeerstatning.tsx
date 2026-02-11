@@ -114,6 +114,7 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
 
     løsPeriodisertBehovOgGåTilNesteSteg(losning, () => {
       nullstillMellomlagretVurdering();
+      visningActions.onBekreftClick();
       closeAllAccordions();
     });
   };

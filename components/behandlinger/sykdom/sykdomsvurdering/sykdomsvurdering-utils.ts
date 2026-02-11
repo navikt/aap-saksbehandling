@@ -3,6 +3,7 @@ import { JaEllerNei } from 'lib/utils/form';
 import { Sykdomvurdering } from 'lib/types/types';
 import { parseDatoFraDatePicker } from 'lib/utils/date';
 import { isAfter } from 'date-fns';
+import { ValuePair } from 'components/form/FormField';
 
 export function skalVurdereVissVarighetSjekk(
   valgtFraDato: string | Date | undefined,
@@ -67,7 +68,11 @@ export function erTidligereVurderingOppfylt(vurdering: Sykdomvurdering): boolean
   }
 }
 
-export function emptySykdomsvurdering(): Sykdomsvurdering {
+export function emptySykdomsvurdering(diagnoser: {
+  kodeverk?: string;
+  hoveddiagnose?: ValuePair | null;
+  bidiagnose?: ValuePair[] | null;
+}): Sykdomsvurdering {
   return {
     fraDato: '',
     begrunnelse: '',
@@ -76,9 +81,9 @@ export function emptySykdomsvurdering(): Sykdomsvurdering {
     erArbeidsevnenNedsatt: undefined,
     erNedsettelseIArbeidsevneMerEnnHalvparten: undefined,
     erSkadeSykdomEllerLyteVesentligdel: undefined,
-    kodeverk: '',
-    hoveddiagnose: undefined,
-    bidiagnose: [],
+    kodeverk: diagnoser.kodeverk,
+    hoveddiagnose: diagnoser.hoveddiagnose,
+    bidiagnose: diagnoser.bidiagnose,
     erNedsettelseIArbeidsevneAvEnVissVarighet: undefined,
     erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense: undefined,
     erNedsettelseIArbeidsevneMerEnnFørtiProsent: undefined,

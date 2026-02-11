@@ -100,7 +100,10 @@ export const SamordningAndreStatligeYtelser = ({
           },
           referanse: behandlingsreferanse,
         },
-        () => nullstillMellomlagretVurdering()
+        () => {
+          nullstillMellomlagretVurdering();
+          visningActions.onBekreftClick();
+        }
       )
     )(event);
   };

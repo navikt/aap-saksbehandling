@@ -91,9 +91,9 @@ export const AvklaroppfolgingVurdering = ({
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    form.handleSubmit(
-      (data) => {
-        løsBehovOgGåTilNesteSteg({
+    form.handleSubmit((data) => {
+      løsBehovOgGåTilNesteSteg(
+        {
           behandlingVersjon: behandlingVersjon,
           behov: {
             behovstype: behovsType,
@@ -104,10 +104,13 @@ export const AvklaroppfolgingVurdering = ({
             },
           },
           referanse: behandlingsReferanse,
-        });
-      },
-      () => nullstillMellomlagretVurdering()
-    )(event);
+        },
+        () => {
+          visningActions.onBekreftClick();
+          nullstillMellomlagretVurdering();
+        }
+      );
+    })(event);
   };
 
   return (
