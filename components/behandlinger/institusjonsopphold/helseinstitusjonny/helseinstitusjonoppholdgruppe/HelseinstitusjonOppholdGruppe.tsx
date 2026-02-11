@@ -167,7 +167,7 @@ export const HelseinstitusjonOppholdGruppe = ({
             size="small"
             onClick={() =>
               append({
-                oppholdId: opphold.oppholdId,
+                oppholdId: opphold.oppholdId || '', // TODO Gjør om oppholdId til required i backend når ny helseinstitusjon er ute i prod
                 begrunnelse: '',
                 harFasteUtgifter: undefined,
                 forsoergerEktefelle: undefined,

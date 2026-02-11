@@ -19,6 +19,7 @@ export function parseOgMigrerHelseinstitusjonMellomlagretData(
     return parsedData;
   }
 
+  // @ts-expect-error
   const oppholdVurderinger: OppholdVurdering[] = parsedData.helseinstitusjonsvurderinger.map((vurdering) => {
     const opphold = grunnlag.opphold.find((opphold) => opphold.oppholdFra === vurdering.periode.fom);
 
@@ -52,7 +53,7 @@ export function parseOgMigrerHelseinstitusjonMellomlagretData(
       .filter((x) => x.oppholdId === opphold.oppholdId);
 
     return {
-      oppholdId: opphold.oppholdId,
+      oppholdId: opphold.oppholdId || '', // TODO Gjør om oppholdId til required i backend når ny helseinstitusjon er ute i prod
       periode: { fom: opphold.oppholdFra, tom: opphold.avsluttetDato || '' },
       vurderinger: vurderinger,
     };

@@ -189,13 +189,11 @@ function mapVurderingToDraftFormFields(
       )?.vurderinger;
 
       const oppholdHentetFraGrunnlag = grunnlag.vurderinger.find((v) => v.oppholdId === opphold.oppholdId);
-      console.log(oppholdHentetFraGrunnlag);
-      console.log(opphold.oppholdFra);
 
       const vurderinger =
         vurderingerForOpphold && vurderingerForOpphold.length > 0
           ? vurderingerForOpphold?.map((vurdering) => ({
-              oppholdId: vurdering.oppholdId,
+              oppholdId: vurdering.oppholdId || '', // TODO Gjør om oppholdId til required i backend når ny helseinstitusjon er ute i prod
               begrunnelse: vurdering.begrunnelse,
               harFasteUtgifter: getJaNeiEllerUndefined(vurdering.harFasteUtgifter),
               forsoergerEktefelle: getJaNeiEllerUndefined(vurdering.forsoergerEktefelle),
@@ -207,7 +205,7 @@ function mapVurderingToDraftFormFields(
             }))
           : [
               {
-                oppholdId: opphold.oppholdId,
+                oppholdId: opphold.oppholdId || '', // TODO Gjør om oppholdId til required i backend når ny helseinstitusjon er ute i prod
                 begrunnelse: '',
                 faarFriKostOgLosji: undefined,
                 harFasteUtgifter: undefined,
@@ -223,7 +221,7 @@ function mapVurderingToDraftFormFields(
       const harTidligereVurderingerOgIngenNåværendeVurderinger = harTidligerevurderinger && !vurderingerForOpphold;
 
       return {
-        oppholdId: opphold.oppholdId,
+        oppholdId: opphold.oppholdId || '', // TODO Gjør om oppholdId til required i backend når ny helseinstitusjon er ute i prod
         periode: {
           fom: formaterDatoForFrontend(oppholdHentetFraGrunnlag?.periode.fom || opphold.oppholdFra),
           tom: formaterDatoForFrontend(oppholdHentetFraGrunnlag?.periode.tom || opphold?.avsluttetDato || ''),

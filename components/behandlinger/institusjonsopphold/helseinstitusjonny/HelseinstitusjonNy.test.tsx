@@ -27,16 +27,7 @@ const grunnlagUtenVurdering: HelseinstitusjonGrunnlag = {
       kildeinstitusjon: 'St. Mungos Hospital',
     },
   ],
-  vurderinger: [
-    {
-      oppholdId: '123',
-      periode: {
-        fom: '2022-10-24',
-        tom: '2024-10-23',
-      },
-      vurderinger: [],
-    },
-  ],
+  vurderinger: [],
 };
 
 const grunnlagMedVurdering: HelseinstitusjonGrunnlag = {
@@ -56,6 +47,7 @@ const grunnlagMedVurdering: HelseinstitusjonGrunnlag = {
   vurderinger: [
     {
       oppholdId: '123',
+      status: 'UAVKLART',
       periode: {
         fom: '2022-10-24',
         tom: '2024-10-23',
@@ -186,6 +178,7 @@ describe('revurdering', () => {
     ...grunnlagUtenVurdering,
     vedtatteVurderinger: [
       {
+        status: 'UAVKLART',
         periode: { fom: '2025-01-01', tom: '2025-08-01' },
         oppholdId: '123',
         vurderinger: [
