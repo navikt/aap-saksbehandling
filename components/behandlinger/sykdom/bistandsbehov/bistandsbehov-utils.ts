@@ -23,7 +23,7 @@ export function mapBistandVurderingFormTilDto(vurdering: BistandVurderingForm, t
   };
 }
 
-export function erNyVurderingErOppfylt(vurdering?: BistandVurderingForm): boolean | undefined {
+export function erNyVurderingOppfylt(vurdering?: BistandVurderingForm): boolean | undefined {
   if (
     vurdering?.erBehovForAktivBehandling === JaEllerNei.Nei &&
     vurdering?.erBehovForArbeidsrettetTiltak === JaEllerNei.Nei &&
@@ -31,10 +31,14 @@ export function erNyVurderingErOppfylt(vurdering?: BistandVurderingForm): boolea
   ) {
     return false;
   }
-  if (
-    vurdering?.erBehovForAktivBehandling === JaEllerNei.Ja &&
-    vurdering?.erBehovForArbeidsrettetTiltak === JaEllerNei.Ja
-  ) {
-    return true;
+
+  if (vurdering?.erBehovForAktivBehandling && vurdering?.erBehovForArbeidsrettetTiltak) {
+    if (
+      vurdering?.erBehovForAktivBehandling === JaEllerNei.Ja ||
+      vurdering?.erBehovForArbeidsrettetTiltak === JaEllerNei.Ja ||
+      vurdering?.erBehovForAnnenOppfølging === JaEllerNei.Ja
+    ) {
+      return true;
+    }
   }
 }

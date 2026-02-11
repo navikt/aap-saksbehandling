@@ -61,6 +61,7 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
   const form = useForm<SykepengeerstatningForm>({
     defaultValues,
     reValidateMode: 'onChange',
+    shouldUnregister: true,
   });
 
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];

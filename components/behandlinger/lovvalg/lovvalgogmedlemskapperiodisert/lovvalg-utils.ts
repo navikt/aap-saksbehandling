@@ -12,24 +12,31 @@ import {
   LovvalgOgMedlemskapManuellVurderingForm,
 } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/types';
 import { parse, sub } from 'date-fns';
-import { getFraDatoFraGrunnlagForFrontend, trengerTomPeriodisertVurdering } from 'lib/utils/periodisering';
+import {
+  getFraDatoFraGrunnlagForFrontend,
+  hentPerioderSomTrengerVurdering,
+  trengerVurderingsForslag,
+} from 'lib/utils/periodisering';
+
+function tomLovvalgMedlemskapVurdering(): LovvalgOgMedlemskapManuellVurderingForm {
+  return {
+    lovvalg: {
+      begrunnelse: '',
+      lovvalgsEØSLand: '',
+    },
+    medlemskap: undefined,
+    fraDato: '',
+  };
+}
 
 export function getDefaultValuesFromGrunnlag(
-  grunnlag?: PeriodisertLovvalgMedlemskapGrunnlag
+  grunnlag: PeriodisertLovvalgMedlemskapGrunnlag
 ): LovOgMedlemskapVurderingForm {
-  if (trengerTomPeriodisertVurdering(grunnlag)) {
-    return {
-      vurderinger: [
-        {
-          lovvalg: {
-            begrunnelse: '',
-            lovvalgsEØSLand: '',
-          },
-          medlemskap: undefined,
-          fraDato: getFraDatoFraGrunnlagForFrontend(grunnlag),
-        },
-      ],
-    };
+  if (trengerVurderingsForslag(grunnlag)) {
+    return hentPerioderSomTrengerVurdering<LovvalgOgMedlemskapManuellVurderingForm>(
+      grunnlag,
+      tomLovvalgMedlemskapVurdering
+    );
   }
 
   // Vi har allerede data lagret, vis enten de som er lagret i grunnlaget her eller tom liste

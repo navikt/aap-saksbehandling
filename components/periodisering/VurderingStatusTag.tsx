@@ -37,7 +37,7 @@ function getTagVariant(status: VurderingStatus): TagProps['variant'] {
     case VurderingStatus.Reduksjon:
       return 'warning-moderate';
     case VurderingStatus.IkkeReduksjon:
-      return 'neutral-moderate';
+      return 'success-moderate';
   }
 }
 

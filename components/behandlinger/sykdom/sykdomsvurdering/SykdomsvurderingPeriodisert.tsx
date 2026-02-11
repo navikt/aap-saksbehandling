@@ -36,7 +36,7 @@ import {
 } from 'components/behandlinger/sykdom/sykdomsvurdering/sykdomsvurdering-utils';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
-import { getFraDatoFraGrunnlagForFrontend, trengerTomPeriodisertVurdering } from 'lib/utils/periodisering';
+import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
 
 export interface SykdomsvurderingerForm {
   vurderinger: Array<Sykdomsvurdering>;
@@ -150,7 +150,6 @@ export const SykdomsvurderingPeriodisert = ({
         () => {
           closeAllAccordions();
           nullstillMellomlagretVurdering();
-          visningActions.onBekreftClick();
         }
       );
     })(event);
@@ -241,16 +240,11 @@ export const SykdomsvurderingPeriodisert = ({
   );
 
   function mapGrunnlagTilDefaultvalues(grunnlag: SykdomsGrunnlag): SykdomsvurderingerForm {
-    if (trengerTomPeriodisertVurdering(grunnlag)) {
-      return {
-        vurderinger: [
-          {
-            ...emptySykdomsvurdering(),
-            fraDato: getFraDatoFraGrunnlagForFrontend(grunnlag),
-          },
-        ],
-      };
+    if (trengerVurderingsForslag(grunnlag)) {
+      return hentPerioderSomTrengerVurdering<Sykdomsvurdering>(grunnlag, emptySykdomsvurdering);
     }
+
+    // Vi har allerede data lagret, vis enten de som er lagret i grunnlaget her eller tom liste
     return {
       vurderinger: grunnlag.nyeVurderinger.map((vurdering) => ({
         fraDato: new Dato(vurdering.vurderingenGjelderFra || vurdering.fom).formaterForFrontend(),

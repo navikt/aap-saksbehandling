@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { screen } from '@testing-library/react';
-import { AutomatiskLovvalgOgMedlemskapVurdering } from 'lib/types/types';
+import { AutomatiskLovvalgOgMedlemskapVurdering, PeriodisertForutgåendeMedlemskapGrunnlag } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
 import { customRender } from 'lib/test/CustomRender';
 import { PeriodisertForutgåendemedlemskapOverstyringswrapper } from 'components/behandlinger/forutgåendemedlemskap/PeriodisertForutgåendemedlemskapOverstyringswrapper';
@@ -10,10 +10,20 @@ const automatiskLovvalgOgMedlemskapVurdering: AutomatiskLovvalgOgMedlemskapVurde
   kanBehandlesAutomatisk: true,
 };
 
+const tomtGrunnlag: PeriodisertForutgåendeMedlemskapGrunnlag = {
+  behøverVurderinger: [],
+  harTilgangTilÅSaksbehandle: false,
+  kanVurderes: [],
+  nyeVurderinger: [],
+  overstyrt: false,
+  sisteVedtatteVurderinger: [],
+};
+
 describe('Forutgående medlemskap wrapper', () => {
   it('Skal vise vilkårskortet dersom det finnes en mellomlagring', () => {
     customRender(
       <PeriodisertForutgåendemedlemskapOverstyringswrapper
+        grunnlag={tomtGrunnlag}
         behandlingsReferanse={'123'}
         behandlingVersjon={1}
         readOnly={false}
@@ -44,6 +54,7 @@ describe('Forutgående medlemskap wrapper', () => {
   it('Skal ikke vise vilkårskortet dersom det ikke finnes en mellomlagring', () => {
     customRender(
       <PeriodisertForutgåendemedlemskapOverstyringswrapper
+        grunnlag={tomtGrunnlag}
         behandlingsReferanse={'123'}
         behandlingVersjon={1}
         readOnly={false}

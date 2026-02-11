@@ -4,20 +4,16 @@ import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker
 import { alleLandUtenNorge } from 'lib/utils/countries';
 import { parse, sub } from 'date-fns';
 import { getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
-import { getFraDatoFraGrunnlagForFrontend, trengerTomPeriodisertVurdering } from 'lib/utils/periodisering';
+import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
 
-export function getDefaultValuesFromGrunnlag(grunnlag?: OppholdskravGrunnlagResponse): OppholdskravForm {
-  if (trengerTomPeriodisertVurdering(grunnlag)) {
-    return {
-      vurderinger: [
-        {
-          begrunnelse: '',
-          fraDato: getFraDatoFraGrunnlagForFrontend(grunnlag),
-          land: '',
-          erNyVurdering: true,
-        },
-      ],
-    };
+export function getDefaultValuesFromGrunnlag(grunnlag: OppholdskravGrunnlagResponse): OppholdskravForm {
+  if (trengerVurderingsForslag(grunnlag)) {
+    return hentPerioderSomTrengerVurdering<OppholdskravVurderingForm>(grunnlag, () => ({
+      begrunnelse: '',
+      fraDato: '',
+      land: '',
+      erNyVurdering: true,
+    }));
   }
 
   // Vi har allerede data lagret, vis enten de som er lagret i grunnlaget her eller tom liste
