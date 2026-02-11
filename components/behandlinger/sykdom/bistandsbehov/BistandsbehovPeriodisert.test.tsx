@@ -1,7 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render, screen, within } from 'lib/test/CustomRender';
 import { userEvent } from '@testing-library/user-event';
-import { Bistandsbehov } from 'components/behandlinger/sykdom/bistandsbehov/Bistandsbehov';
 import { BistandsGrunnlag, MellomlagretVurderingResponse } from 'lib/types/types';
 import createFetchMock from 'vitest-fetch-mock';
 import { FetchResponse } from 'lib/utils/api';
@@ -92,15 +91,9 @@ describe('Generelt', () => {
   it('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
     setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'SYKDOMSVURDERING_BREV' });
 
-    render(
-      <Bistandsbehov
-        grunnlag={grunnlagMedVurdering}
-        readOnly={false}
-        behandlingVersjon={0}
-        typeBehandling={'Førstegangsbehandling'}
-      />
-    );
+    render(<BistandsbehovPeriodisert grunnlag={grunnlagMedVurdering} readOnly={false} behandlingVersjon={0} />);
 
+    screen.logTestingPlaygroundURL();
     const endreKnapp = screen.getByRole('button', { name: 'Endre' });
     await user.click(endreKnapp);
 
