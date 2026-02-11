@@ -111,6 +111,7 @@ export const LovvalgOgMedlemskapPeriodisert = ({
 
     løsPeriodisertBehovOgGåTilNesteSteg(losning, () => {
       closeAllAccordions();
+      visningActions.onBekreftClick();
       nullstillMellomlagretVurdering();
     });
   }

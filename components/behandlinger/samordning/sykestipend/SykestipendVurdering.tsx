@@ -32,10 +32,8 @@ export const SykestipendVurdering = ({
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('SAMORDNING_SYKESTIPEND');
 
-  const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering } = useMellomlagring(
-    Behovstype.AVKLAR_SAMORDNING_SYKESTIPEND_KODE,
-    initialMellomlagretVurdering
-  );
+  const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
+    useMellomlagring(Behovstype.AVKLAR_SAMORDNING_SYKESTIPEND_KODE, initialMellomlagretVurdering);
   const harSvartJaISøknad = grunnlag.sykeStipendSvarFraSøknad
     ? 'Ja'
     : grunnlag.sykeStipendSvarFraSøknad === false
@@ -70,20 +68,26 @@ export const SykestipendVurdering = ({
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit(async (data) =>
-      løsBehovOgGåTilNesteSteg({
-        behandlingVersjon: behandlingVersjon,
-        behov: {
-          behovstype: Behovstype.AVKLAR_SAMORDNING_SYKESTIPEND_KODE,
-          sykestipendVurdering: {
-            begrunnelse: data.begrunnelse,
-            perioder: data.perioder.map((periode) => ({
-              fom: formaterDatoForBackend(parse(periode.fom!, 'dd.MM.yyyy', new Date())),
-              tom: formaterDatoForBackend(parse(periode.tom!, 'dd.MM.yyyy', new Date())),
-            })),
+      løsBehovOgGåTilNesteSteg(
+        {
+          behandlingVersjon: behandlingVersjon,
+          behov: {
+            behovstype: Behovstype.AVKLAR_SAMORDNING_SYKESTIPEND_KODE,
+            sykestipendVurdering: {
+              begrunnelse: data.begrunnelse,
+              perioder: data.perioder.map((periode) => ({
+                fom: formaterDatoForBackend(parse(periode.fom!, 'dd.MM.yyyy', new Date())),
+                tom: formaterDatoForBackend(parse(periode.tom!, 'dd.MM.yyyy', new Date())),
+              })),
+            },
           },
+          referanse: behandlingsreferanse,
         },
-        referanse: behandlingsreferanse,
-      })
+        () => {
+          nullstillMellomlagretVurdering();
+          visningActions.onBekreftClick();
+        }
+      )
     )(event);
   };
 

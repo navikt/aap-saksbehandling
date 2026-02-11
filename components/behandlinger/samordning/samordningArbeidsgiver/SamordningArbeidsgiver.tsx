@@ -100,7 +100,10 @@ export const SamordningArbeidsgiver = ({
           },
           referanse: behandlingsreferanse,
         },
-        () => nullstillMellomlagretVurdering()
+        () => {
+          visningActions.onBekreftClick();
+          nullstillMellomlagretVurdering();
+        }
       )
     )(event);
   };

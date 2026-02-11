@@ -60,7 +60,6 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
           <BistandsbehovMedDataFetching
             behandlingsReferanse={behandlingsReferanse}
             stegData={vurderBistandsbehovSteg}
-            overgangArbeidEnabled={unleashService.isEnabled('OvergangArbeidFrontend')}
           />
         </StegSuspense>
       )}

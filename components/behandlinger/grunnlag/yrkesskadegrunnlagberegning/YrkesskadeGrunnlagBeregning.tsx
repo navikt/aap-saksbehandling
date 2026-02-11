@@ -103,7 +103,10 @@ export const YrkesskadeGrunnlagBeregning = ({
             referanse: behandlingsReferanse,
             behandlingVersjon: behandlingVersjon,
           },
-          () => nullstillMellomlagretVurdering()
+          () => {
+            nullstillMellomlagretVurdering();
+            visningActions.onBekreftClick();
+          }
         );
       })}
       status={status}

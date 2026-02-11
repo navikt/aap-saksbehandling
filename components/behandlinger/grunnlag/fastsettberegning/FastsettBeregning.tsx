@@ -112,9 +112,9 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly, initi
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    form.handleSubmit(
-      (data) => {
-        løsBehovOgGåTilNesteSteg({
+    form.handleSubmit((data) => {
+      løsBehovOgGåTilNesteSteg(
+        {
           behandlingVersjon: behandlingVersjon,
           behov: {
             behovstype: Behovstype.FASTSETT_BEREGNINGSTIDSPUNKT_KODE,
@@ -130,10 +130,13 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly, initi
             },
           },
           referanse: behandlingsReferanse,
-        });
-      },
-      () => nullstillMellomlagretVurdering()
-    )(event);
+        },
+        () => {
+          visningActions.onBekreftClick();
+          nullstillMellomlagretVurdering();
+        }
+      );
+    })(event);
   };
 
   const heading = grunnlag?.skalVurdereYtterligere

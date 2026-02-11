@@ -200,7 +200,10 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly, ini
           },
           referanse: behandlingsreferanse,
         },
-        () => nullstillMellomlagretVurdering()
+        () => {
+          nullstillMellomlagretVurdering();
+          visningActions.onBekreftClick();
+        }
       );
     })(event);
   };

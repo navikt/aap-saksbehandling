@@ -1,6 +1,6 @@
 import { JaEllerNei } from 'lib/utils/form';
 import { UseFormReturn } from 'react-hook-form';
-import type { SykdomsvurderingerForm } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingPeriodisert';
+import type { SykdomsvurderingerForm } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
 
 interface Props {
@@ -24,7 +24,6 @@ export const SykdomsvurderingUtenVissVarighet = ({ form, index, erÅrsakssammenh
               required: 'Du må svare på om den nedsatte arbeidsevnen er nedsatt med minst 40 prosent.',
             }}
             readOnly={readonly}
-            shouldUnregister
           />
         )}
 
@@ -38,7 +37,6 @@ export const SykdomsvurderingUtenVissVarighet = ({ form, index, erÅrsakssammenh
               required: 'Du må svare på om den nedsatte arbeidsevnen er nedsatt med minst 30 prosent.',
             }}
             readOnly={readonly}
-            shouldUnregister
           />
         )}
 
@@ -53,7 +51,6 @@ export const SykdomsvurderingUtenVissVarighet = ({ form, index, erÅrsakssammenh
               required: 'Du må svare på om sykdom, skade eller lyte er vesentlig medvirkende til nedsatt arbeidsevne',
             }}
             readOnly={readonly}
-            shouldUnregister
           />
         )}
       </>

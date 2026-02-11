@@ -8,7 +8,7 @@ import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
 import { UseFormReturn } from 'react-hook-form';
 import { Periode } from 'lib/types/types';
-import type { SykdomsvurderingerForm } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingPeriodisert';
+import type { SykdomsvurderingerForm } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import { JaEllerNei } from 'lib/utils/form';
 import { Sak } from 'context/saksbehandling/SakContext';
 import { SykdomsvurderingMedVissVarighet } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedVissVarighet';
@@ -88,7 +88,6 @@ export const SykdomsvurderingFormInput = ({
           required: 'Du må gjøre en vilkårsvurdering',
         }}
         readOnly={readonly}
-        shouldUnregister
       />
       <RadioGroupJaNei
         name={`vurderinger.${index}.harSkadeSykdomEllerLyte`}
@@ -97,7 +96,6 @@ export const SykdomsvurderingFormInput = ({
         horisontal={true}
         rules={{ required: 'Du må svare på om brukeren har sykdom, skade eller lyte' }}
         readOnly={readonly}
-        shouldUnregister
       />
       {form.watch(`vurderinger.${index}.harSkadeSykdomEllerLyte`) === JaEllerNei.Ja && (
         <>
@@ -109,7 +107,6 @@ export const SykdomsvurderingFormInput = ({
             horisontal={true}
             rules={{ required: 'Du må svare på om brukeren har nedsatt arbeidsevne' }}
             readOnly={readonly}
-            shouldUnregister
           />
           {skalVurdereVissVarighet && (
             <SykdomsvurderingMedVissVarighet

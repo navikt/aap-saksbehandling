@@ -4,20 +4,13 @@ import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 import { skalViseSteg, StegData } from 'lib/utils/steg';
 import { Bistandsbehov } from 'components/behandlinger/sykdom/bistandsbehov/Bistandsbehov';
-import { BistandsbehovPeriodisert } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovPeriodisert';
-import { unleashService } from 'lib/services/unleash/unleashService';
 
 interface Props {
   behandlingsReferanse: string;
   stegData: StegData;
-  overgangArbeidEnabled: Boolean;
 }
 
-export const BistandsbehovMedDataFetching = async ({
-  behandlingsReferanse,
-  stegData,
-  overgangArbeidEnabled,
-}: Props) => {
+export const BistandsbehovMedDataFetching = async ({ behandlingsReferanse, stegData }: Props) => {
   const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
     hentBistandsbehovGrunnlag(behandlingsReferanse),
     hentMellomlagring(behandlingsReferanse, Behovstype.AVKLAR_BISTANDSBEHOV_KODE),
@@ -34,21 +27,12 @@ export const BistandsbehovMedDataFetching = async ({
     return null;
   }
 
-  return unleashService.isEnabled('BistandPeriodisert') ? (
-    <BistandsbehovPeriodisert
-      grunnlag={grunnlag.data}
-      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
-      behandlingVersjon={stegData.behandlingVersjon}
-      initialMellomlagretVurdering={initialMellomlagretVurdering}
-    />
-  ) : (
+  return (
     <Bistandsbehov
       grunnlag={grunnlag.data}
       readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       behandlingVersjon={stegData.behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
-      typeBehandling={stegData.typeBehandling}
-      overgangArbeidEnabled={overgangArbeidEnabled}
     />
   );
 };

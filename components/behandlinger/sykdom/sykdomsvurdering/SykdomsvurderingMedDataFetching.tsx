@@ -8,8 +8,6 @@ import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 import { skalViseSteg, StegData } from 'lib/utils/steg';
 import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
-import { SykdomsvurderingPeriodisert } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingPeriodisert';
-import { unleashService } from 'lib/services/unleash/unleashService';
 
 interface Props {
   behandlingsReferanse: string;
@@ -38,24 +36,13 @@ export const SykdomsvurderingMedDataFetching = async ({ behandlingsReferanse, st
   );
 
   const harTidligereVurderinger =
-    grunnlag.data.gjeldendeVedtatteSykdomsvurderinger != null &&
-    grunnlag.data.gjeldendeVedtatteSykdomsvurderinger.length > 0;
+    grunnlag.data.sisteVedtatteVurderinger != null && grunnlag.data.sisteVedtatteVurderinger.length > 0;
 
   if (!skalViseSteg(stegData, harTidligereVurderinger)) {
     return null;
   }
 
-  return unleashService.isEnabled('PeriodisertNedsattArbeidsevneFrontend') ? (
-    <SykdomsvurderingPeriodisert
-      grunnlag={grunnlag.data}
-      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
-      behandlingVersjon={stegData.behandlingVersjon}
-      bidiagnoserDeafultOptions={bidiagnoserDefaultOptions}
-      hoveddiagnoseDefaultOptions={hovedDiagnoseDefaultOptions}
-      typeBehandling={typeBehandling}
-      initialMellomlagretVurdering={initialMellomlagretVurdering}
-    />
-  ) : (
+  return (
     <Sykdomsvurdering
       grunnlag={grunnlag.data}
       readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}

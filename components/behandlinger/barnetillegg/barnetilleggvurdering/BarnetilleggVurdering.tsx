@@ -165,7 +165,10 @@ export const BarnetilleggVurdering = ({
           },
           referanse: behandlingsReferanse,
         },
-        () => nullstillMellomlagretVurdering()
+        () => {
+          visningActions.onBekreftClick();
+          nullstillMellomlagretVurdering();
+        }
       );
     })(event);
   }

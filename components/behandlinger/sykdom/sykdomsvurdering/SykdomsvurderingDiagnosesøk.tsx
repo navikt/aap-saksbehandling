@@ -3,7 +3,7 @@ import { DiagnoseSystem, diagnoseSøker, ingenDiagnoseCode } from 'lib/diagnoses
 import { JaEllerNei } from 'lib/utils/form';
 import { UseFormReturn } from 'react-hook-form';
 import { ValuePair } from 'components/form/FormField';
-import { SykdomsvurderingerForm } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingPeriodisert';
+import { SykdomsvurderingerForm } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { Radio } from '@navikt/ds-react';
 
@@ -32,7 +32,6 @@ export const SykdomsvurderingDiagnosesøk = ({ index, form, readOnly, hoveddiagn
         control={form.control}
         label={'Velg system for diagnoser'}
         rules={{ required: 'Du må velge et system for diagnoser' }}
-        shouldUnregister={true}
         readOnly={readOnly}
         size={'small'}
         horisontal={true}
@@ -40,6 +39,7 @@ export const SykdomsvurderingDiagnosesøk = ({ index, form, readOnly, hoveddiagn
         <Radio value={'ICPC2'}>{'Primærhelsetjenesten (ICPC2)'}</Radio>
         <Radio value={'ICD10'}>{'Spesialisthelsetjenesten (ICD10)'}</Radio>
       </RadioGroupWrapper>
+
       {kodeverkValue != null && harSkadeEllerLyte && (
         <>
           <AsyncComboSearch

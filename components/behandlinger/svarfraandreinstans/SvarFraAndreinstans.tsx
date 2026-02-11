@@ -92,9 +92,9 @@ export const SvarFraAndreinstans = ({ grunnlag, readOnly, behandlingVersjon, ini
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    form.handleSubmit(
-      (data) => {
-        løsBehovOgGåTilNesteSteg({
+    form.handleSubmit((data) => {
+      løsBehovOgGåTilNesteSteg(
+        {
           behandlingVersjon: behandlingVersjon,
           behov: {
             behovstype: Behovstype.HÅNDTER_SVAR_FRA_ANDREINSTANS,
@@ -105,10 +105,13 @@ export const SvarFraAndreinstans = ({ grunnlag, readOnly, behandlingVersjon, ini
             },
           },
           referanse: behandlingsreferanse,
-        });
-      },
-      () => nullstillMellomlagretVurdering()
-    )(event);
+        },
+        () => {
+          visningActions.onBekreftClick();
+          nullstillMellomlagretVurdering();
+        }
+      );
+    })(event);
   };
 
   const konsekvens = form.watch('konsekvens');
