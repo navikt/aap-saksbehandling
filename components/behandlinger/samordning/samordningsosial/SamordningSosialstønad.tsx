@@ -11,7 +11,7 @@ interface Props {
 }
 
 export const SamordningSosialstønad = ({ grunnlag }: Props) => {
-  if (!grunnlag.gjeldendeVurdering?.harKrav) return null;
+  if (!grunnlag.gjeldendeVurderinger?.[0]?.harKrav) return null;
   const vurderinger = grunnlag.gjeldendeVurderinger;
 
   return (
