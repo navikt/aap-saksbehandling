@@ -68,17 +68,3 @@ export function formaterPeriode(dato1?: string | null, dato2?: string | null): s
     return '';
   }
 }
-
-export function antallHverdagerIPeriode(startdato: string, sluttdato: string): number {
-  let antallHverdager = 0;
-  const gjeldendeDato = new Date(startdato);
-
-  while (gjeldendeDato <= new Date(sluttdato)!) {
-    if (gjeldendeDato.getDay() >= 1 && gjeldendeDato.getDay() <= 5) {
-      antallHverdager++;
-    }
-    gjeldendeDato.setDate(gjeldendeDato.getDate() + 1);
-  }
-
-  return antallHverdager;
-}
