@@ -19,14 +19,10 @@ const grunnlagUtenYrkesskade: SykdomsGrunnlag = {
   kanVurderes: [],
   nyeVurderinger: [],
   sisteVedtatteVurderinger: [],
-  perioderSomIkkeErTilstrekkeligVurdert: [],
   harTilgangTilÅSaksbehandle: true,
   skalVurdereYrkesskade: false,
   erÅrsakssammenhengYrkesskade: false,
   opplysninger: { innhentedeYrkesskader: [], oppgittYrkesskadeISøknad: false },
-  gjeldendeVedtatteSykdomsvurderinger: [],
-  sykdomsvurderinger: [],
-  historikkSykdomsvurderinger: [],
 };
 
 const grunnlagMedYrkesskade: SykdomsGrunnlag = {
@@ -34,14 +30,10 @@ const grunnlagMedYrkesskade: SykdomsGrunnlag = {
   kanVurderes: [{ fom: format(new Date(), 'yyyy-MM-dd'), tom: '2099-01-01' }],
   nyeVurderinger: [],
   sisteVedtatteVurderinger: [],
-  perioderSomIkkeErTilstrekkeligVurdert: [],
   harTilgangTilÅSaksbehandle: true,
   skalVurdereYrkesskade: true,
   erÅrsakssammenhengYrkesskade: false,
   opplysninger: { innhentedeYrkesskader: [], oppgittYrkesskadeISøknad: true },
-  gjeldendeVedtatteSykdomsvurderinger: [],
-  sykdomsvurderinger: [],
-  historikkSykdomsvurderinger: [],
 };
 
 const grunnlagMedTidligereVurdering: SykdomsGrunnlag = {
@@ -60,14 +52,10 @@ const grunnlagMedTidligereVurdering: SykdomsGrunnlag = {
     },
   ],
   sisteVedtatteVurderinger: [],
-  perioderSomIkkeErTilstrekkeligVurdert: [],
   harTilgangTilÅSaksbehandle: true,
   skalVurdereYrkesskade: false,
   erÅrsakssammenhengYrkesskade: false,
   opplysninger: { innhentedeYrkesskader: [], oppgittYrkesskadeISøknad: false },
-  gjeldendeVedtatteSykdomsvurderinger: [],
-  sykdomsvurderinger: [],
-  historikkSykdomsvurderinger: [],
 };
 
 beforeEach(() => {
@@ -787,14 +775,10 @@ describe('vurderinger uten viss varighet', () => {
       kanVurderes: [{ fom: formaterDatoForBackend(søknadstidspunkt), tom: '' }],
       nyeVurderinger: [],
       sisteVedtatteVurderinger: [],
-      perioderSomIkkeErTilstrekkeligVurdert: [],
       harTilgangTilÅSaksbehandle: true,
       skalVurdereYrkesskade: true,
       erÅrsakssammenhengYrkesskade: true,
       opplysninger: { innhentedeYrkesskader: [], oppgittYrkesskadeISøknad: true },
-      gjeldendeVedtatteSykdomsvurderinger: [],
-      sykdomsvurderinger: [],
-      historikkSykdomsvurderinger: [],
     };
 
     customRenderWithSøknadstidspunkt(
@@ -861,14 +845,10 @@ describe('mellomlagring i sykdom', () => {
     kanVurderes: [],
     nyeVurderinger: [sykdomsvurdering],
     sisteVedtatteVurderinger: [],
-    perioderSomIkkeErTilstrekkeligVurdert: [],
-    gjeldendeVedtatteSykdomsvurderinger: [],
     harTilgangTilÅSaksbehandle: false,
-    historikkSykdomsvurderinger: [],
     opplysninger: { innhentedeYrkesskader: [], oppgittYrkesskadeISøknad: false },
     skalVurdereYrkesskade: false,
     erÅrsakssammenhengYrkesskade: false,
-    sykdomsvurderinger: [sykdomsvurdering],
   };
 
   const sykdomsGrunnlagUtenVurdering: SykdomsGrunnlag = {
@@ -876,14 +856,10 @@ describe('mellomlagring i sykdom', () => {
     kanVurderes: [{ fom: new Dato(new Date()).formaterForBackend(), tom: '2099-01-01' }],
     nyeVurderinger: [],
     sisteVedtatteVurderinger: [],
-    perioderSomIkkeErTilstrekkeligVurdert: [],
-    gjeldendeVedtatteSykdomsvurderinger: [],
     harTilgangTilÅSaksbehandle: false,
-    historikkSykdomsvurderinger: [],
     opplysninger: { innhentedeYrkesskader: [], oppgittYrkesskadeISøknad: false },
     skalVurdereYrkesskade: false,
     erÅrsakssammenhengYrkesskade: false,
-    sykdomsvurderinger: [],
   };
 
   it('Skal vise en tekst om hvem som har gjort vurderingen dersom det finnes en mellomlagring', () => {

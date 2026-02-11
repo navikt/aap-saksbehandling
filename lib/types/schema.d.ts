@@ -10375,17 +10375,13 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomGrunnlagResponse': {
       'beh\u00F8verVurderinger': components['schemas']['no.nav.aap.komponenter.type.Periode'][];
       'er\u00C5rsakssammenhengYrkesskade': boolean;
-      gjeldendeVedtatteSykdomsvurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomsvurderingResponse'][];
       'harTilgangTil\u00C5Saksbehandle': boolean;
-      historikkSykdomsvurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomsvurderingResponse'][];
       kanVurderes: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
       kvalitetssikretAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
       nyeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomsvurderingResponse'][];
       opplysninger: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.InnhentetSykdomsOpplysninger'];
-      perioderSomIkkeErTilstrekkeligVurdert: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
       sisteVedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomsvurderingResponse'][];
       skalVurdereYrkesskade: boolean;
-      sykdomsvurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomsvurderingResponse'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomsvurderingResponse': {
       begrunnelse: string;
@@ -11757,6 +11753,7 @@ export interface components {
        * @example 2025-04-01
        */
       maksDato?: string | null;
+      periodeKvoter: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.underveis.PeriodeKvote'][];
       /**
        * Format: date
        * @example 2025-04-01
@@ -12569,6 +12566,13 @@ export interface components {
        * @example 2025-04-01
        */
       virkningstidspunkt: string;
+    };
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.underveis.PeriodeKvote': {
+      /** Format: int32 */
+      bruktKvote: number;
+      /** Format: int32 */
+      'gjenv\u00E6rendeKvote'?: number | null;
+      periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.vilk\u00E5rsresultat.Vilk\u00E5rsperiode': {
       /** @enum {string|null} */
