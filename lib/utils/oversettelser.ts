@@ -1,4 +1,4 @@
-import { AvslagÅrsak, SettPåVentÅrsaker, TypeBehandling, VilkårUtfall, ÅrsakTilOpprettelse } from 'lib/types/types';
+import { SettPåVentÅrsaker, TypeBehandling, VilkårUtfall, ÅrsakTilOpprettelse } from 'lib/types/types';
 import { exhaustiveCheck } from 'lib/utils/typescript';
 import { OppgaveAvklaringsbehovKode, OppgaveBehandlingstype } from 'lib/types/oppgaveTypes';
 import { PostmottakSettPåVentÅrsaker } from 'lib/types/postmottakTypes';
@@ -301,21 +301,6 @@ export function mapUtfallTilTekst(utfall: VilkårUtfall): string {
   }
 }
 
-export function mapAvslagÅrsakTilTekst(årsak: AvslagÅrsak | null | undefined): string | undefined | null {
-  switch (årsak) {
-    case 'BRUKER_UNDER_18':
-      return 'brukeren under 18 år';
-    case 'BRUKER_OVER_67':
-      return 'Brukeren over 67 år';
-    case 'MANGLENDE_DOKUMENTASJON':
-      return 'Manglende dokumentasjon';
-    case 'IKKE_SYKDOM_AV_VISS_VARIGHET':
-      return 'Ikke sykdom av viss varighet';
-    default:
-      return årsak;
-  }
-}
-
 export function mapTypeBehandlingTilTekst(typeBehandling: TypeBehandling) {
   switch (typeBehandling) {
     case 'Førstegangsbehandling':
@@ -346,7 +331,7 @@ export function mapStatusTilTekst(
     case 'ER_HASTESAK':
       return 'Hastesak';
     case 'VENTEFRIST_UTLØPT':
-      return 'Ventefrist utløpt'
+      return 'Ventefrist utløpt';
   }
 }
 
