@@ -43,7 +43,10 @@ const oppgaver: Oppgave[] = [
 
 describe('Mine oppgaver tabell', () => {
   beforeEach(() =>
-    customRenderWithTildelOppgaveContext(<MineOppgaverTabell oppgaver={oppgaver} revalidateFunction={vi.fn()} />, false)
+    customRenderWithTildelOppgaveContext(
+      <MineOppgaverTabell oppgaver={oppgaver} setSortBy={() => {}} sort={undefined} revalidateFunction={vi.fn()} />,
+      false
+    )
   );
 
   it('Skal inneholde korrekte kolonner ', () => {

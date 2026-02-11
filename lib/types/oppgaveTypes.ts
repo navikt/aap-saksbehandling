@@ -1,6 +1,7 @@
 import { components as postmottak } from '@navikt/aap-postmottak-backend-typescript-types';
 import {
   components as oppgave,
+  paths,
   NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType,
   NoNavAapOppgaveOppgaveDtoBehandlingstype,
   NoNavAapOppgaveOppgaveDtoStatus,
@@ -16,6 +17,7 @@ export type Kø = oppgave['schemas']['no.nav.aap.oppgave.filter.FilterDto'];
 export type Oppgave = oppgave['schemas']['no.nav.aap.oppgave.OppgaveDto'];
 export type OppgavelisteRequest = oppgave['schemas']['no.nav.aap.oppgave.liste.OppgavelisteRequest'];
 export type OppgavelisteResponse = oppgave['schemas']['no.nav.aap.oppgave.liste.OppgavelisteRespons'];
+export type OppgavelisteSortering = oppgave['schemas']['no.nav.aap.oppgave.liste.OppgaveSortering'];
 export type Paging = OppgavelisteRequest['paging'];
 export type Enhet = oppgave['schemas']['no.nav.aap.oppgave.enhet.EnhetDto'];
 export type PlukkOppgaveDto = oppgave['schemas']['no.nav.aap.oppgave.plukk.PlukkOppgaveDto'];
@@ -36,3 +38,5 @@ export type MarkeringType = `${NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType
 
 export type OppgaveAvklaringsbehovKode = BehandlingsFlytAvklaringsbehovKode | PostmottakAvklaringsbehovKode;
 export type FilterTidsEnhet = 'DAG' | 'UKE' | 'MÅNED' | 'ÅR';
+
+export type MineOppgaverQueryParams = paths['/mine-oppgaver']['get']['parameters']['query'];

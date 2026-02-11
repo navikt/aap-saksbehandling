@@ -1,18 +1,18 @@
 import { SortState } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
 
-export interface ScopedSortState<T> extends SortState {
-  orderBy: Extract<keyof T, string>;
+export interface ScopedBackendSortState<T> {
+  orderBy: T;
+  direction: SortState['direction'];
 }
 
 export function useBackendSortering<T>(): {
-  sort: ScopedSortState<T> | undefined;
-  setSort: (orderBy: Extract<keyof T, string>) => void;
+  sort: ScopedBackendSortState<T> | undefined;
+  setSort: (orderBy: T) => void;
 } {
-  const [sort, setSort] = useState<ScopedSortState<T> | undefined>();
+  const [sort, setSort] = useState<ScopedBackendSortState<T> | undefined>();
 
-  function settSortering(sortKey: ScopedSortState<T>['orderBy']) {
-    console.log('sortering', sort?.orderBy, sort?.direction);
+  function settSortering(sortKey: ScopedBackendSortState<T>['orderBy']) {
     const sortering =
       sort && sortKey === sort.orderBy && sort.direction === 'descending'
         ? undefined
@@ -20,9 +20,8 @@ export function useBackendSortering<T>(): {
             orderBy: sortKey,
             direction: sort && sortKey === sort.orderBy && sort.direction === 'ascending' ? 'descending' : 'ascending',
           };
-    console.log('ny sortering', sortering?.orderBy, sortering?.direction);
 
-    setSort(sortering as ScopedSortState<T>);
+    setSort(sortering as ScopedBackendSortState<T>);
   }
 
   return { sort, setSort: settSortering };

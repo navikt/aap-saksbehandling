@@ -17,6 +17,7 @@ import { oppgaveBehandlingstyper, OppgaveStatuser } from 'lib/utils/behandlingst
 import { alleVurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
 import { oppgaveAvklaringsbehov } from 'lib/utils/avklaringsbehov';
 import {
+  NoNavAapOppgaveListeOppgaveSorteringSortBy,
   NoNavAapOppgaveListeUtvidetOppgavelisteFilterBehandlingstyper,
   NoNavAapOppgaveListeUtvidetOppgavelisteFilterReturStatuser,
 } from '@navikt/aap-oppgave-typescript-types';
@@ -29,7 +30,7 @@ import { useLagreAktivUtvidetFilter } from 'hooks/oppgave/aktivUtvidetFilterHook
 import { ComboOption } from 'components/produksjonsstyring/minenhet/MineEnheter';
 import { useLagreAktiveEnheter } from 'hooks/oppgave/aktiveEnheterHook';
 import { EnheterSelect } from 'components/oppgaveliste/enheterselect/EnheterSelect';
-import { ScopedSortState, useBackendSortering } from 'hooks/oppgave/BackendSorteringHook';
+import { useBackendSortering } from 'hooks/oppgave/BackendSorteringHook';
 
 interface Props {
   enheter: Enhet[];
@@ -44,7 +45,7 @@ export const AlleOppgaver = ({ enheter }: Props) => {
   const [valgteRader, setValgteRader] = useState<number[]>([]);
   const lagretUtvidetFilter = hentAktivUtvidetFilter();
 
-  const { sort, setSort } = useBackendSortering();
+  const { sort, setSort } = useBackendSortering<NoNavAapOppgaveListeOppgaveSorteringSortBy>();
 
   function førsteEnhetTilComboOption(enheter: Enhet[]): ComboOption[] | null {
     const førsteEnhet = enheter.find((e) => e);
@@ -202,21 +203,20 @@ export const AlleOppgaver = ({ enheter }: Props) => {
         />
         {isLoading && <TabellSkeleton />}
 
-        {!isLoading &&
-          (oppgaver.length > 0 ? (
-            <AlleOppgaverTabell
-              oppgaver={oppgaver}
-              revalidateFunction={mutate}
-              valgteRader={valgteRader}
-              setValgteRader={setValgteRader}
-              setSortBy={setSort}
-              sort={sort}
-            />
-          ) : (
-            <BodyShort size={'small'} className={styles.ingenoppgaver}>
-              Ingen oppgaver i valgt kø for valgt enhet
-            </BodyShort>
-          ))}
+        {!isLoading && oppgaver.length > 0 ? (
+          <AlleOppgaverTabell
+            oppgaver={oppgaver}
+            revalidateFunction={mutate}
+            valgteRader={valgteRader}
+            setValgteRader={setValgteRader}
+            setSortBy={setSort}
+            sort={sort}
+          />
+        ) : (
+          <BodyShort size={'small'} className={styles.ingenoppgaver}>
+            Ingen oppgaver i valgt kø for valgt enhet
+          </BodyShort>
+        )}
       </div>
 
       {kanLasteInnFlereOppgaver && (

@@ -1,6 +1,7 @@
 import {
   AvreserverOppgaveDto,
   Kø,
+  MineOppgaverQueryParams,
   Oppgave,
   OppgavelisteRequest,
   OppgavelisteResponse,
@@ -17,9 +18,10 @@ import {
   VenteÅrsakOgGjennomsnitt,
 } from './types/statistikkTypes';
 import { BehandlingEndringerPerDag } from 'lib/types/statistikkTypes';
-import { mineOppgaverQueryParams, queryParamsArray } from './utils/request';
+import { mapSortStateDirectionTilQueryParamEnum, mineOppgaverQueryParams, queryParamsArray } from './utils/request';
 import { clientFetch } from 'lib/clientApi';
-import { SortState } from '@navikt/ds-react';
+import { PathsMineOppgaverGetParametersQuerySortby } from '@navikt/aap-oppgave-typescript-types';
+import { ScopedBackendSortState } from 'hooks/oppgave/BackendSorteringHook';
 
 // statistikk
 export async function antallÅpneBehandlingerPerBehandlingstypeClient(url: string) {
@@ -66,8 +68,14 @@ export async function hentOppgaveClient(behandlingsreferanse: string) {
   return clientFetch<Oppgave>(`/oppgave/api/oppgave/${behandlingsreferanse}/hent`, 'GET');
 }
 
-export async function hentMineOppgaverClient(sortering?: SortState) {
-  const query = sortering ? mineOppgaverQueryParams(sortering) : '';
+export async function hentMineOppgaverClient(
+  sortering?: ScopedBackendSortState<PathsMineOppgaverGetParametersQuerySortby>
+) {
+  const sortParams: MineOppgaverQueryParams = {
+    sortby: sortering?.orderBy,
+    sortorder: sortering?.direction ? mapSortStateDirectionTilQueryParamEnum(sortering.direction) : undefined,
+  };
+  const query = sortParams.sortby ? mineOppgaverQueryParams(sortParams) : '';
   return clientFetch<OppgavelisteResponse>(`/oppgave/api/oppgave/mine-oppgaver?${query}`, 'GET');
 }
 

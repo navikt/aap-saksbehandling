@@ -4,6 +4,7 @@ import {
   EnhetSynkroniseringOppgave,
   Kø,
   Markering,
+  MineOppgaverQueryParams,
   Oppgave,
   OppgaveAvklaringsbehovKode,
   OppgaveBehandlingstype,
@@ -15,7 +16,7 @@ import {
   TildelOppgaveRequest,
   TildelOppgaveResponse,
 } from 'lib/types/oppgaveTypes';
-import { mineOppgaverQueryParams, queryParamsArray } from 'lib/utils/request';
+import { mapSortStateDirectionTilQueryParamEnum, mineOppgaverQueryParams, queryParamsArray } from 'lib/utils/request';
 import { apiFetch } from 'lib/services/apiFetch';
 import { isLocal } from 'lib/utils/environment';
 import { FetchResponse } from 'lib/utils/api';
@@ -33,7 +34,6 @@ export const hentKøer = async (enheter: string[]) => {
 };
 
 export const hentOppgaverForFilter = async (data: OppgavelisteRequest) => {
-  console.log('cocacola');
   const url = `${oppgaveApiBaseURL}/oppgaveliste`;
   return await apiFetch<OppgavelisteResponse>(url, oppgaveApiScope, 'POST', data);
 };
@@ -75,8 +75,10 @@ export async function hentAntallOppgaver(behandlingstype?: string) {
   });
 }
 
-export const hentMineOppgaver = async ({ sortBy, sortOrder }: { sortBy: string; sortOrder: string }) => {
-  const query = mineOppgaverQueryParams({ orderBy: sortBy, direction: sortOrder });
+export const hentMineOppgaver = async (queryParams: MineOppgaverQueryParams) => {
+  const query = queryParams?.sortby
+    ? mineOppgaverQueryParams({ sortby: queryParams?.sortby, sortorder: queryParams.sortorder })
+    : '';
   const url = `${oppgaveApiBaseURL}/mine-oppgaver${query ? `?${query}` : ''}`;
   return await apiFetch<OppgavelisteResponse>(url, oppgaveApiScope, 'GET', undefined, ['oppgaveservice/mine-oppgaver']);
 };
