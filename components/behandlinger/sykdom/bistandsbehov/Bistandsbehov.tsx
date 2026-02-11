@@ -201,7 +201,7 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, initialMe
 
     // Vi har allerede data lagret, vis enten de som er lagret i grunnlaget her eller tom liste
     return {
-      vurderinger: grunnlag.vurderinger.map((vurdering) => ({
+      vurderinger: grunnlag.nyeVurderinger.map((vurdering) => ({
         fraDato: new Dato(vurdering.fom).formaterForFrontend(),
         begrunnelse: vurdering?.begrunnelse,
         erBehovForAktivBehandling: getJaNeiEllerUndefined(vurdering?.erBehovForAktivBehandling),
