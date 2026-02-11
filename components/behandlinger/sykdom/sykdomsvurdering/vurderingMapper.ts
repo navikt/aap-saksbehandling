@@ -1,6 +1,6 @@
 import { getTrueFalseEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { SykdomsvurderingLøsningDto } from 'lib/types/types';
-import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingPeriodisert';
+import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import { Dato } from 'lib/types/Dato';
 import { parseDatoFraDatePicker } from 'lib/utils/date';
 import { isAfter } from 'date-fns';
