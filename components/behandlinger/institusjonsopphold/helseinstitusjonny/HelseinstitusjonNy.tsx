@@ -188,6 +188,8 @@ function mapVurderingToDraftFormFields(
         (vurdering) => vurdering.oppholdId === opphold.oppholdId
       )?.vurderinger;
 
+      const oppholdHentetFraGrunnlag = grunnlag.vurderinger.find((v) => v.oppholdId === opphold.oppholdId);
+
       const vurderinger =
         vurderingerForOpphold && vurderingerForOpphold.length > 0
           ? vurderingerForOpphold?.map((vurdering) => ({
@@ -209,8 +211,8 @@ function mapVurderingToDraftFormFields(
                 harFasteUtgifter: undefined,
                 forsoergerEktefelle: undefined,
                 periode: {
-                  fom: formaterDatoForFrontend(opphold.oppholdFra),
-                  tom: formaterDatoForFrontend(opphold?.avsluttetDato || ''),
+                  fom: formaterDatoForFrontend(oppholdHentetFraGrunnlag?.periode.fom || opphold.oppholdFra),
+                  tom: formaterDatoForFrontend(oppholdHentetFraGrunnlag?.periode.tom || opphold?.avsluttetDato || ''),
                 },
               },
             ];
@@ -221,8 +223,8 @@ function mapVurderingToDraftFormFields(
       return {
         oppholdId: opphold.oppholdId,
         periode: {
-          fom: formaterDatoForFrontend(opphold.oppholdFra),
-          tom: opphold.avsluttetDato ? formaterDatoForFrontend(opphold.avsluttetDato) : '',
+          fom: formaterDatoForFrontend(oppholdHentetFraGrunnlag?.periode.fom || opphold.oppholdFra),
+          tom: formaterDatoForFrontend(oppholdHentetFraGrunnlag?.periode.tom || opphold?.avsluttetDato || ''),
         },
         vurderinger: harTidligereVurderingerOgIngenNåværendeVurderinger ? [] : vurderinger,
       };
