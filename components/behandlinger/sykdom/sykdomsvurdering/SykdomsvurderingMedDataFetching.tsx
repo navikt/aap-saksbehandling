@@ -7,7 +7,7 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 import { skalViseSteg, StegData } from 'lib/utils/steg';
-import { SykdomsvurderingPeriodisert } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingPeriodisert';
+import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 
 interface Props {
   behandlingsReferanse: string;
@@ -44,7 +44,7 @@ export const SykdomsvurderingMedDataFetching = async ({ behandlingsReferanse, st
   }
 
   return (
-    <SykdomsvurderingPeriodisert
+    <Sykdomsvurdering
       grunnlag={grunnlag.data}
       readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       behandlingVersjon={stegData.behandlingVersjon}

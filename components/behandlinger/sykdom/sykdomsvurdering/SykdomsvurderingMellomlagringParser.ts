@@ -1,4 +1,4 @@
-import { SykdomsvurderingerForm } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingPeriodisert';
+import { SykdomsvurderingerForm } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 
 export function parseOgMigrerMellomlagretData(data: string): SykdomsvurderingerForm {
   const parsedData = JSON.parse(data);

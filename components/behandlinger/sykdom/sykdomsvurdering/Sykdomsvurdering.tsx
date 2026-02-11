@@ -22,7 +22,7 @@ import { Dato } from 'lib/types/Dato';
 import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
 import { SykdomsvurderingFormInput } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingFormInput';
 import { TidligereSykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/TidligereSykdomsvurdering';
-import mapTilPeriodisertVurdering from 'components/behandlinger/sykdom/sykdomsvurdering/periodisertVurderingMapper';
+import mapTilPeriodisertVurdering from 'components/behandlinger/sykdom/sykdomsvurdering/vurderingMapper';
 import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMellomlagringParser';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
@@ -73,7 +73,7 @@ interface SykdomProps {
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
-export const SykdomsvurderingPeriodisert = ({
+export const Sykdomsvurdering = ({
   grunnlag,
   behandlingVersjon,
   readOnly,

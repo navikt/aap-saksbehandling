@@ -3,7 +3,7 @@ import { DiagnoseSystem, diagnoseSøker, ingenDiagnoseCode } from 'lib/diagnoses
 import { JaEllerNei } from 'lib/utils/form';
 import { UseFormReturn } from 'react-hook-form';
 import { ValuePair } from 'components/form/FormField';
-import { SykdomsvurderingerForm } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingPeriodisert';
+import { SykdomsvurderingerForm } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { Radio } from '@navikt/ds-react';
 

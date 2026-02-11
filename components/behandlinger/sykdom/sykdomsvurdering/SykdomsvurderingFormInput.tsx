@@ -8,7 +8,7 @@ import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
 import { UseFormReturn } from 'react-hook-form';
 import { Periode } from 'lib/types/types';
-import type { SykdomsvurderingerForm } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingPeriodisert';
+import type { SykdomsvurderingerForm } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import { JaEllerNei } from 'lib/utils/form';
 import { Sak } from 'context/saksbehandling/SakContext';
 import { SykdomsvurderingMedVissVarighet } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedVissVarighet';

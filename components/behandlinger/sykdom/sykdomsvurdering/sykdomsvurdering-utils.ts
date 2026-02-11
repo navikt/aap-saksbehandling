@@ -1,4 +1,4 @@
-import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingPeriodisert';
+import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import { JaEllerNei } from 'lib/utils/form';
 import { Sykdomvurdering } from 'lib/types/types';
 import { parseDatoFraDatePicker } from 'lib/utils/date';

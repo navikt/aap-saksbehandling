@@ -6,7 +6,7 @@ import { addDays, format, subDays } from 'date-fns';
 import { FetchResponse } from 'lib/utils/api';
 import createFetchMock from 'vitest-fetch-mock';
 import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
-import { SykdomsvurderingPeriodisert } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingPeriodisert';
+import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import { Dato } from 'lib/types/Dato';
 import { formaterDatoForBackend } from 'lib/utils/date';
 
@@ -77,7 +77,7 @@ beforeEach(() => {
 describe('generelt', () => {
   it('Skal ha korrekt heading', () => {
     render(
-      <SykdomsvurderingPeriodisert
+      <Sykdomsvurdering
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -90,7 +90,7 @@ describe('generelt', () => {
 
   it('skal vise en lenke som viser hvordan vilkåret skal vurderes', () => {
     render(
-      <SykdomsvurderingPeriodisert
+      <Sykdomsvurdering
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -106,7 +106,7 @@ describe('generelt', () => {
 
   it('skal vise en informasjonsvarsling dersom det blir besvart av brukeren ikke har nedsatt arbeidsevne', async () => {
     render(
-      <SykdomsvurderingPeriodisert
+      <Sykdomsvurdering
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -132,7 +132,7 @@ describe('generelt', () => {
     setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'VURDER_BISTANDSBEHOV' });
 
     render(
-      <SykdomsvurderingPeriodisert
+      <Sykdomsvurdering
         grunnlag={grunnlagMedTidligereVurdering}
         readOnly={false}
         behandlingVersjon={0}
@@ -171,7 +171,7 @@ describe('generelt', () => {
 describe('felt for begrunnelse', () => {
   it('Skal ha et begrunnelsefelt', () => {
     render(
-      <SykdomsvurderingPeriodisert
+      <Sykdomsvurdering
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -184,7 +184,7 @@ describe('felt for begrunnelse', () => {
 
   it('Skal vise feilmelding dersom begrunnelse felt ikke har blitt besvart', async () => {
     render(
-      <SykdomsvurderingPeriodisert
+      <Sykdomsvurdering
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -204,7 +204,7 @@ describe('felt for begrunnelse', () => {
 describe('felt for om brukeren har sykdom, skade eller lyte', () => {
   it('har et felt for om brukeren har sykdom, skade eller lyte', () => {
     render(
-      <SykdomsvurderingPeriodisert
+      <Sykdomsvurdering
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -216,7 +216,7 @@ describe('felt for om brukeren har sykdom, skade eller lyte', () => {
 
   it('Skal vise feilmelding dersom felt om at spørsmål om brukeren har sykdom, skade eller lyte ikke har blitt besvart', async () => {
     render(
-      <SykdomsvurderingPeriodisert
+      <Sykdomsvurdering
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -233,7 +233,7 @@ describe('felt for om brukeren har sykdom, skade eller lyte', () => {
 describe('felt for om arbeidsevnen er nedsatt', () => {
   it('Skal ha et felt for om arbeidsevnen er nedsatt dersom brukeren har sykdom, skade eller lyte', async () => {
     render(
-      <SykdomsvurderingPeriodisert
+      <Sykdomsvurdering
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -247,7 +247,7 @@ describe('felt for om arbeidsevnen er nedsatt', () => {
 
   it('viser feilmelding dersom felt om arbeidsevnen er nedsatt ikke er besvart', async () => {
     render(
-      <SykdomsvurderingPeriodisert
+      <Sykdomsvurdering
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -266,7 +266,7 @@ describe('felt for om arbeidsevnen er nedsatt', () => {
 describe('felt for å sette diagnoser', () => {
   it('felt for å sette diagnoser vises ikke initielt', async () => {
     render(
-      <SykdomsvurderingPeriodisert
+      <Sykdomsvurdering
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -279,7 +279,7 @@ describe('felt for å sette diagnoser', () => {
 
   it('skal ha et felt for å velge et system for diagnoser når man har svart ja på at brukeren har sykdom, skade eller lyte', async () => {
     render(
-      <SykdomsvurderingPeriodisert
+      <Sykdomsvurdering
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -294,7 +294,7 @@ describe('felt for å sette diagnoser', () => {
 
   it('skal vise en feilmelding dersom felt for å velge system ikke er valgt', async () => {
     render(
-      <SykdomsvurderingPeriodisert
+      <Sykdomsvurdering
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -312,7 +312,7 @@ describe('felt for å sette diagnoser', () => {
 
   it('skal ha et felt for å sette en hoveddiagnose dersom brukeren har sykdom, skade eller lyte', async () => {
     render(
-      <SykdomsvurderingPeriodisert
+      <Sykdomsvurdering
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -329,7 +329,7 @@ describe('felt for å sette diagnoser', () => {
 
   it('skal ha vise en feilmelding dersom det ikke har blitt satt en hoveddiagnose', async () => {
     render(
-      <SykdomsvurderingPeriodisert
+      <Sykdomsvurdering
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -349,7 +349,7 @@ describe('felt for å sette diagnoser', () => {
 
   it('skal ha et felt for å sette bidiagnoser dersom brukeren har sykdom, skade eller lyte', async () => {
     render(
-      <SykdomsvurderingPeriodisert
+      <Sykdomsvurdering
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -366,7 +366,7 @@ describe('felt for å sette diagnoser', () => {
 
   it('skal ikke vise felt for bidiagnose dersom det har blitt valgt ingen diagnose på hoveddiagnose', async () => {
     render(
-      <SykdomsvurderingPeriodisert
+      <Sykdomsvurdering
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -389,7 +389,7 @@ describe('felt for å sette diagnoser', () => {
 
   it('skal vise felt for bidiagnose dersom det har blitt valgt noe annet enn ingen diagnose på hoveddiagnose', async () => {
     render(
-      <SykdomsvurderingPeriodisert
+      <Sykdomsvurdering
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -416,7 +416,7 @@ describe('felt for å sette diagnoser', () => {
 describe('felt for nedsettelsen er av en viss varighet', () => {
   it('feltet skal vises', async () => {
     render(
-      <SykdomsvurderingPeriodisert
+      <Sykdomsvurdering
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -445,7 +445,7 @@ describe('felt for nedsettelsen er av en viss varighet', () => {
 
   it('skal vise en feilmelding hvis feltet ikke er besvart', async () => {
     render(
-      <SykdomsvurderingPeriodisert
+      <Sykdomsvurdering
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -478,7 +478,7 @@ describe('felt for nedsettelsen er av en viss varighet', () => {
 describe('felt for om arbeidsevnen er nedsatt med minst halvparten', () => {
   it('Skal ha et felt for om arbeidsevnen er nedsatt med minst halvparten', async () => {
     render(
-      <SykdomsvurderingPeriodisert
+      <Sykdomsvurdering
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -493,7 +493,7 @@ describe('felt for om arbeidsevnen er nedsatt med minst halvparten', () => {
 
   it('Skal vise feilmelding dersom felt for om arbeidsevnen er nedsatt med minst halvparten ikke er besvart', async () => {
     render(
-      <SykdomsvurderingPeriodisert
+      <Sykdomsvurdering
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -513,7 +513,7 @@ describe('felt for om arbeidsevnen er nedsatt med minst halvparten', () => {
 describe('felt for om sykdom, skade eller lyte er vestenlig medvirkende til at arbeidsevnen er nedsatt', () => {
   it('feltet skal vises dersom arbeidsevnen er nedsatt med minst halvparten', async () => {
     render(
-      <SykdomsvurderingPeriodisert
+      <Sykdomsvurdering
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -533,7 +533,7 @@ describe('felt for om sykdom, skade eller lyte er vestenlig medvirkende til at a
 
   it('feltet skal vises dersom arbeidsevnen ikke er nedsatt med minst halvparten, men nedsatt med 30 prosent', async () => {
     render(
-      <SykdomsvurderingPeriodisert
+      <Sykdomsvurdering
         grunnlag={grunnlagMedYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -554,7 +554,7 @@ describe('felt for om sykdom, skade eller lyte er vestenlig medvirkende til at a
 
   it('viser en feilmelding dersom feltet ikke er besvart', async () => {
     render(
-      <SykdomsvurderingPeriodisert
+      <Sykdomsvurdering
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -578,7 +578,7 @@ describe('yrkesskade', () => {
   describe('felt for begrunnelse i yrkesskade', () => {
     it('skal ha et felt for begrunnelse dersom det finnes yrkesskade og arbeidsevnen ikke er nedsatt med halvparten', async () => {
       render(
-        <SykdomsvurderingPeriodisert
+        <Sykdomsvurdering
           grunnlag={grunnlagMedYrkesskade}
           readOnly={false}
           behandlingVersjon={0}
@@ -594,7 +594,7 @@ describe('yrkesskade', () => {
 
     it('skal vise description', async () => {
       render(
-        <SykdomsvurderingPeriodisert
+        <Sykdomsvurdering
           grunnlag={grunnlagMedYrkesskade}
           readOnly={false}
           behandlingVersjon={0}
@@ -614,7 +614,7 @@ describe('yrkesskade', () => {
 
     it('skal vise feilmelding hvis det ikke er besvart', async () => {
       render(
-        <SykdomsvurderingPeriodisert
+        <Sykdomsvurdering
           grunnlag={grunnlagMedYrkesskade}
           readOnly={false}
           behandlingVersjon={0}
@@ -637,7 +637,7 @@ describe('yrkesskade', () => {
   describe('felt for om arbeidsevnen er nedsatt med minst 30 prosent', () => {
     it('skal vise feltet dersom det finnes yrkesskade og arbeidsevnen er ikke nedsatt med minst halvparten', async () => {
       render(
-        <SykdomsvurderingPeriodisert
+        <Sykdomsvurdering
           grunnlag={grunnlagMedYrkesskade}
           readOnly={false}
           behandlingVersjon={0}
@@ -653,7 +653,7 @@ describe('yrkesskade', () => {
 
     it('skal vise feilmelding dersom det ikke er besvart', async () => {
       render(
-        <SykdomsvurderingPeriodisert
+        <Sykdomsvurdering
           grunnlag={grunnlagMedYrkesskade}
           readOnly={false}
           behandlingVersjon={0}
@@ -677,7 +677,7 @@ describe('yrkesskade', () => {
 describe('vurderinger uten viss varighet', () => {
   it('viser datofelt får når vurderingen gjelder fra', () => {
     render(
-      <SykdomsvurderingPeriodisert
+      <Sykdomsvurdering
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -691,7 +691,7 @@ describe('vurderinger uten viss varighet', () => {
   it('viser feilmelding dersom dato for når vurderingen gjelder fra er før søknadstidspunkt', async () => {
     const today = format(new Date(), 'yyyy-MM-dd');
     customRenderWithSøknadstidspunkt(
-      <SykdomsvurderingPeriodisert
+      <Sykdomsvurdering
         grunnlag={grunnlagMedYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -725,7 +725,7 @@ describe('vurderinger uten viss varighet', () => {
 
   it('viser ikke feilmelding når dato for vurderingen er etter søknadstidspunkt', async () => {
     customRenderWithSøknadstidspunkt(
-      <SykdomsvurderingPeriodisert
+      <Sykdomsvurdering
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -744,7 +744,7 @@ describe('vurderinger uten viss varighet', () => {
   it('viser ikke feilmelding når dato for vurderingen er lik søknadstidspunkt', async () => {
     const søknadstidspunkt = subDays(new Date(), 4);
     customRenderWithSøknadstidspunkt(
-      <SykdomsvurderingPeriodisert
+      <Sykdomsvurdering
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -763,7 +763,7 @@ describe('vurderinger uten viss varighet', () => {
   it('viser spørsmål om den nedsatte arbeidsevnen er minst 40 prosent når det ikke skal vurderes mot yrkesskade', async () => {
     const søknadstidspunkt = subDays(new Date(), 14);
     customRenderWithSøknadstidspunkt(
-      <SykdomsvurderingPeriodisert
+      <Sykdomsvurdering
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -798,7 +798,7 @@ describe('vurderinger uten viss varighet', () => {
     };
 
     customRenderWithSøknadstidspunkt(
-      <SykdomsvurderingPeriodisert
+      <Sykdomsvurdering
         grunnlag={grunnlagMedYrkesskadeOgÅrsakssammenheng}
         readOnly={false}
         behandlingVersjon={0}
@@ -818,7 +818,7 @@ describe('vurderinger uten viss varighet', () => {
   it('viser ikke felt for en viss varighet når det gjøres en revurdering', async () => {
     const søknadstidspunkt = subDays(new Date(), 14);
     customRenderWithSøknadstidspunkt(
-      <SykdomsvurderingPeriodisert
+      <Sykdomsvurdering
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -888,7 +888,7 @@ describe('mellomlagring i sykdom', () => {
 
   it('Skal vise en tekst om hvem som har gjort vurderingen dersom det finnes en mellomlagring', () => {
     render(
-      <SykdomsvurderingPeriodisert
+      <Sykdomsvurdering
         grunnlag={sykdomsGrunnlagUtenVurdering}
         readOnly={false}
         behandlingVersjon={0}
@@ -902,7 +902,7 @@ describe('mellomlagring i sykdom', () => {
 
   it('Skal vise en tekst om hvem som har lagret vurdering dersom bruker trykker på lagre mellomlagring', async () => {
     render(
-      <SykdomsvurderingPeriodisert
+      <Sykdomsvurdering
         readOnly={false}
         behandlingVersjon={0}
         typeBehandling={'Førstegangsbehandling'}
@@ -931,7 +931,7 @@ describe('mellomlagring i sykdom', () => {
 
   it('Skal ikke vise en tekst om hvem som har gjort mellomlagring dersom bruker trykker på slett mellomlagring', async () => {
     render(
-      <SykdomsvurderingPeriodisert
+      <Sykdomsvurdering
         readOnly={false}
         behandlingVersjon={0}
         grunnlag={sykdomsGrunnlagUtenVurdering}
@@ -953,7 +953,7 @@ describe('mellomlagring i sykdom', () => {
 
   it('Skal bruke mellomlagring som defaultValue i skjema dersom det finnes', () => {
     render(
-      <SykdomsvurderingPeriodisert
+      <Sykdomsvurdering
         grunnlag={sykdomsGrunnlagMedVurdering}
         readOnly={false}
         behandlingVersjon={0}
@@ -970,7 +970,7 @@ describe('mellomlagring i sykdom', () => {
 
   it('Skal bruke bekreftet vurdering fra grunnlag som defaultValue i skjema dersom mellomlagring ikke finnes', () => {
     render(
-      <SykdomsvurderingPeriodisert
+      <Sykdomsvurdering
         grunnlag={sykdomsGrunnlagMedVurdering}
         readOnly={false}
         behandlingVersjon={0}
@@ -986,7 +986,7 @@ describe('mellomlagring i sykdom', () => {
 
   it('Skal resette skjema til tomt skjema dersom det ikke finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
     render(
-      <SykdomsvurderingPeriodisert
+      <Sykdomsvurdering
         readOnly={false}
         grunnlag={sykdomsGrunnlagUtenVurdering}
         behandlingVersjon={0}
@@ -1012,7 +1012,7 @@ describe('mellomlagring i sykdom', () => {
 
   it('Skal resette skjema til bekreftet vurdering dersom det finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
     render(
-      <SykdomsvurderingPeriodisert
+      <Sykdomsvurdering
         grunnlag={sykdomsGrunnlagMedVurdering}
         readOnly={false}
         behandlingVersjon={0}
@@ -1039,7 +1039,7 @@ describe('mellomlagring i sykdom', () => {
 
   it('Skal ikke være mulig å lagre eller slette mellomlagring hvis det er readOnly', () => {
     render(
-      <SykdomsvurderingPeriodisert
+      <Sykdomsvurdering
         grunnlag={sykdomsGrunnlagMedVurdering}
         readOnly={true}
         behandlingVersjon={0}
@@ -1070,7 +1070,7 @@ describe('mellomlagring i sykdom', () => {
     };
 
     render(
-      <SykdomsvurderingPeriodisert
+      <Sykdomsvurdering
         typeBehandling={'Førstegangsbehandling'}
         behandlingVersjon={0}
         readOnly={false}

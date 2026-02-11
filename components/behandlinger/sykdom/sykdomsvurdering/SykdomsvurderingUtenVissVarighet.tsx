@@ -1,6 +1,6 @@
 import { JaEllerNei } from 'lib/utils/form';
 import { UseFormReturn } from 'react-hook-form';
-import type { SykdomsvurderingerForm } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingPeriodisert';
+import type { SykdomsvurderingerForm } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
 
 interface Props {
