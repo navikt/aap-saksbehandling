@@ -1,14 +1,13 @@
 import { VStack } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
-import { SykepengeerstatningVurderingGrunn } from 'lib/types/types';
 import { grunnOptions } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/sykepengererstatning-utils';
 
 type Props = {
   fraDato: string;
   begrunnelse: string;
   oppfyller: boolean;
-  grunn: SykepengeerstatningVurderingGrunn | null | undefined;
+  grunn: string | null | undefined;
 };
 
 export const OppholdskravSykepengererstatninbgTidligereVurdering = ({
