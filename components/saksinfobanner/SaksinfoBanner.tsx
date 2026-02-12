@@ -24,10 +24,13 @@ import { MarkeringInfoboks } from 'components/markeringinfoboks/MarkeringInfobok
 import { ArenaStatus } from 'components/arenastatus/ArenaStatus';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { AvbrytRevurderingModal } from 'components/saksinfobanner/avbrytrevurderingmodal/AvbrytRevurderingModal';
-import { formaterDatoForFrontend } from 'lib/utils/date';
+import { formaterDatoForFrontend, sorterEtterNyesteDato } from 'lib/utils/date';
 import { ReturStatus } from 'components/returstatus/ReturStatus';
 import { useFeatureFlag } from 'context/UnleashContext';
 import { Dato } from 'lib/types/Dato';
+import { hentRettighetsdata } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { isSuccess } from 'lib/utils/api';
+import useSWR from 'swr';
 
 interface Props {
   personInformasjon: SakPersoninfo;
@@ -79,6 +82,7 @@ export const SaksinfoBanner = ({
   const behandlingErIkkeIverksatt = behandling && behandling.status !== 'IVERKSETTES';
 
   const adressebeskyttelser = oppgave ? utledAdressebeskyttelse(oppgave) : [];
+  const rettighetsdata = useSWR(`/api/sak/${sak.saksnummer}/rettighet`, hentRettighetsdata).data;
 
   const visValgForÅTrekkeSøknad =
     !behandlerEnSøknadSomSkalTrekkes &&
@@ -133,9 +137,26 @@ export const SaksinfoBanner = ({
     }
   };
 
+  const hentMaksdato = (): string | null | undefined => {
+    if (isSuccess(rettighetsdata)) {
+      const ytelsesbehandlingTyper = ['Førstegangsbehandling', 'Revurdering'];
+      
+      const gjeldendeVedtak = sak.behandlinger
+        .filter((behandling) => ytelsesbehandlingTyper.includes(behandling.type) && behandling.status === 'AVSLUTTET')
+        .sort((b1, b2) => sorterEtterNyesteDato(b1.opprettet, b2.opprettet))[0];
+      const gjeldendeRettighet = rettighetsdata.data.find(
+        (rettighet) => rettighet.startDato === gjeldendeVedtak.opprettet
+      );
+      return gjeldendeRettighet?.maksDato;
+    }
+    return undefined;
+  };
+
   const behandlingsreferanse = useBehandlingsReferanse();
   const oppgaveStatus = hentOppgaveStatus();
   const oppgaveTildelingStatus = hentOppgaveTildeling();
+  const isVisRettigheterForVedtakEnabled = useFeatureFlag('VisRettigheterForVedtak');
+  const maksdato = isVisRettigheterForVedtakEnabled ? hentMaksdato() : undefined;
 
   const erPåBehandlingSiden = referanse !== undefined;
   return (
@@ -177,6 +198,13 @@ export const SaksinfoBanner = ({
 
       {erPåBehandlingSiden && behandling && (
         <HStack>
+          {maksdato && (
+            <div className={styles.oppgavestatus}>
+              <Tag className={styles.maksdatoTag} variant={'info'} size={'small'}>
+                {`Maksdato: ${formaterDatoForFrontend(maksdato)}`}
+              </Tag>
+            </div>
+          )}
           {adressebeskyttelser?.map((adressebeskyttelse) => (
             <div key={adressebeskyttelse} className={styles.oppgavestatus}>
               <AdressebeskyttelseStatus adressebeskyttelsesGrad={adressebeskyttelse} />
