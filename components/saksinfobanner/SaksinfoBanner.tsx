@@ -28,9 +28,9 @@ import { formaterDatoForFrontend, sorterEtterNyesteDato } from 'lib/utils/date';
 import { ReturStatus } from 'components/returstatus/ReturStatus';
 import { useFeatureFlag } from 'context/UnleashContext';
 import { Dato } from 'lib/types/Dato';
-import { hentRettighetsdata } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isSuccess } from 'lib/utils/api';
 import useSWR from 'swr';
+import { clientHentRettighetsdata } from 'lib/clientApi';
 
 interface Props {
   personInformasjon: SakPersoninfo;
@@ -82,7 +82,9 @@ export const SaksinfoBanner = ({
   const behandlingErIkkeIverksatt = behandling && behandling.status !== 'IVERKSETTES';
 
   const adressebeskyttelser = oppgave ? utledAdressebeskyttelse(oppgave) : [];
-  const rettighetsdata = useSWR(`/api/sak/${sak.saksnummer}/rettighet`, () => hentRettighetsdata(sak.saksnummer)).data;
+  const rettighetsdata = useSWR(`/api/sak/${sak.saksnummer}/rettighet`, () =>
+    clientHentRettighetsdata(sak.saksnummer)
+  ).data;
 
   const visValgForÅTrekkeSøknad =
     !behandlerEnSøknadSomSkalTrekkes &&
