@@ -16,7 +16,12 @@ const user = userEvent.setup();
 
 const grunnlagMedVurdering: StudentGrunnlag = {
   harTilgangTilÅSaksbehandle: true,
+  nyeVurderinger: [],
+  sisteVedtatteVurderinger: [],
+  behøverVurderinger: [],
+  kanVurderes: [],
   studentvurdering: {
+    fom: '2025-01-01',
     begrunnelse: 'en god begrunnelse',
     harAvbruttStudie: true,
     vurdertAv: {
@@ -207,7 +212,14 @@ describe('Student', () => {
         <Studentvurdering
           behandlingVersjon={0}
           readOnly={false}
-          grunnlag={{ harTilgangTilÅSaksbehandle: true, oppgittStudent: { erStudentStatus: 'JA' } }}
+          grunnlag={{
+            harTilgangTilÅSaksbehandle: true,
+            oppgittStudent: { erStudentStatus: 'JA' },
+            nyeVurderinger: [],
+            sisteVedtatteVurderinger: [],
+            behøverVurderinger: [],
+            kanVurderes: [],
+          }}
         />
       );
       const tekst = screen.getByText('Er brukeren student: Ja, helt eller delvis');
@@ -219,7 +231,14 @@ describe('Student', () => {
         <Studentvurdering
           behandlingVersjon={0}
           readOnly={false}
-          grunnlag={{ harTilgangTilÅSaksbehandle: true, oppgittStudent: { erStudentStatus: 'AVBRUTT' } }}
+          grunnlag={{
+            harTilgangTilÅSaksbehandle: true,
+            oppgittStudent: { erStudentStatus: 'AVBRUTT' },
+            nyeVurderinger: [],
+            sisteVedtatteVurderinger: [],
+            behøverVurderinger: [],
+            kanVurderes: [],
+          }}
         />
       );
       const tekst = screen.getByText('Er brukeren student: Ja, men har avbrutt studiet helt på grunn av sykdom');
@@ -231,7 +250,14 @@ describe('Student', () => {
         <Studentvurdering
           behandlingVersjon={0}
           readOnly={false}
-          grunnlag={{ harTilgangTilÅSaksbehandle: true, oppgittStudent: { erStudentStatus: 'NEI' } }}
+          grunnlag={{
+            harTilgangTilÅSaksbehandle: true,
+            oppgittStudent: { erStudentStatus: 'NEI' },
+            nyeVurderinger: [],
+            sisteVedtatteVurderinger: [],
+            behøverVurderinger: [],
+            kanVurderes: [],
+          }}
         />
       );
 
@@ -244,7 +270,14 @@ describe('Student', () => {
         <Studentvurdering
           behandlingVersjon={0}
           readOnly={false}
-          grunnlag={{ harTilgangTilÅSaksbehandle: true, oppgittStudent: { erStudentStatus: 'AVBRUTT' } }}
+          grunnlag={{
+            harTilgangTilÅSaksbehandle: true,
+            oppgittStudent: { erStudentStatus: 'AVBRUTT' },
+            nyeVurderinger: [],
+            sisteVedtatteVurderinger: [],
+            behøverVurderinger: [],
+            kanVurderes: [],
+          }}
         />
       );
       await velgAtSøkerHarAvbruttEtStudie();
@@ -271,7 +304,14 @@ describe('Student', () => {
         <Studentvurdering
           behandlingVersjon={0}
           readOnly={false}
-          grunnlag={{ harTilgangTilÅSaksbehandle: true, oppgittStudent: { erStudentStatus: 'AVBRUTT' } }}
+          grunnlag={{
+            harTilgangTilÅSaksbehandle: true,
+            oppgittStudent: { erStudentStatus: 'AVBRUTT' },
+            nyeVurderinger: [],
+            sisteVedtatteVurderinger: [],
+            behøverVurderinger: [],
+            kanVurderes: [],
+          }}
         />
       );
 
@@ -306,7 +346,12 @@ describe('Student', () => {
 
     const grunnlagMedVurdering: StudentGrunnlag = {
       harTilgangTilÅSaksbehandle: true,
+      nyeVurderinger: [],
+      sisteVedtatteVurderinger: [],
+      behøverVurderinger: [],
+      kanVurderes: [],
       studentvurdering: {
+        fom: '2025-01-01',
         begrunnelse: 'Dette er min vurdering som er bekreftet',
         harAvbruttStudie: false,
         vurdertAv: {
@@ -318,7 +363,13 @@ describe('Student', () => {
       },
     };
 
-    const grunnlagUtenVurdering: StudentGrunnlag = { harTilgangTilÅSaksbehandle: true };
+    const grunnlagUtenVurdering: StudentGrunnlag = {
+      harTilgangTilÅSaksbehandle: true,
+      nyeVurderinger: [],
+      sisteVedtatteVurderinger: [],
+      behøverVurderinger: [],
+      kanVurderes: [],
+    };
 
     it('Skal vise en tekst om hvem som har gjort vurderingen dersom det finnes en mellomlagring', () => {
       render(
