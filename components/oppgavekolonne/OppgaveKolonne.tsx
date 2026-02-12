@@ -34,68 +34,65 @@ import { PeriodisertForutgåendeMedlemskap } from 'components/behandlinger/forut
 
 interface Props {
   behandlingsReferanse: string;
+  saksnummer: string;
   aktivGruppe: StegGruppe;
   className: string;
 }
 
-export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe, className }: Props) => {
-  return (
-    <section className={className}>
-      {aktivGruppe === 'START_BEHANDLING' && <StartBehandling behandlingsReferanse={behandlingsReferanse} />}
-      {aktivGruppe === 'SØKNAD' && <Søknad behandlingsReferanse={behandlingsReferanse} />}
-      {aktivGruppe === 'AVBRYT_REVURDERING' && <AvbrytRevurdering behandlingsreferanse={behandlingsReferanse} />}
-      {aktivGruppe === 'LOVVALG' && (
-        <StegSuspense>
-          <LovvalgPeriodisert behandlingsReferanse={behandlingsReferanse} />
-        </StegSuspense>
-      )}
-      {aktivGruppe === 'RETTIGHETSPERIODE' && <Rettighetsperiode behandlingsReferanse={behandlingsReferanse} />}
-      {aktivGruppe === 'ALDER' && (
-        <StegSuspense>
-          <AlderMedDataFetching behandlingsReferanse={behandlingsReferanse} />
-        </StegSuspense>
-      )}
-      {aktivGruppe === 'STUDENT' && <Student behandlingsreferanse={behandlingsReferanse} />}
-      {aktivGruppe === 'SYKDOM' && <Sykdom behandlingsReferanse={behandlingsReferanse} />}
-      {aktivGruppe === 'MEDLEMSKAP' && (
-        <StegSuspense>
-          <PeriodisertForutgåendeMedlemskap behandlingsReferanse={behandlingsReferanse} />
-        </StegSuspense>
-      )}
-      {aktivGruppe === 'OPPHOLDSKRAV' && <OppholdskravStegGruppe behandlingsreferanse={behandlingsReferanse} />}
-      {aktivGruppe === 'GRUNNLAG' && <Grunnlag behandlingsReferanse={behandlingsReferanse} />}
-      {aktivGruppe === 'UNDERVEIS' && <Underveis behandlingsreferanse={behandlingsReferanse} />}
-      {aktivGruppe === 'SAMORDNING' && <Samordning behandlingsreferanse={behandlingsReferanse} />}
-      {aktivGruppe === 'ET_ANNET_STED' && <Institusjonsopphold behandlingsreferanse={behandlingsReferanse} />}
-      {aktivGruppe === 'BARNETILLEGG' && <Barnetillegg behandlingsreferanse={behandlingsReferanse} />}
-      {aktivGruppe === 'TILKJENT_YTELSE' && <TilkjentYtelse behandlingsReferanse={behandlingsReferanse} />}
-      {aktivGruppe === 'SIMULERING' && <Simulering behandlingsReferanse={behandlingsReferanse} />}
-      {aktivGruppe === 'VEDTAK' && <Vedtak behandlingsReferanse={behandlingsReferanse} />}
-      {aktivGruppe === 'FATTE_VEDTAK' && <FatteVedtak behandlingsReferanse={behandlingsReferanse} />}
-      {aktivGruppe === 'IVERKSETT_VEDTAK' && <div>Behandling avsluttet</div>}
-      {aktivGruppe === 'BREV' && <Brev behandlingsReferanse={behandlingsReferanse} />}
-      {/* Klage */}
-      {aktivGruppe === 'FORMKRAV' && <Formkrav behandlingsreferanse={behandlingsReferanse} />}
-      {aktivGruppe === 'KLAGEBEHANDLING_KONTOR' && (
-        <KlagebehandlingKontor behandlingsreferanse={behandlingsReferanse} />
-      )}
-      {aktivGruppe === 'KLAGEBEHANDLING_NAY' && <KlagebehandlingNay behandlingsreferanse={behandlingsReferanse} />}
-      {aktivGruppe === 'OMGJØRING' && <Omgjøring behandlingsreferanse={behandlingsReferanse} />}
-      {aktivGruppe === 'OPPRETTHOLDELSE' && <Opprettholdelse behandlingsreferanse={behandlingsReferanse} />}
-      {aktivGruppe === 'TREKK_KLAGE' && <TrekkKlage behandlingsreferanse={behandlingsReferanse} />}
-      {aktivGruppe === 'SVAR_FRA_ANDREINSTANS' && (
-        <SvarFraAndreinstansGruppe behandlingsreferanse={behandlingsReferanse} />
-      )}
-      {aktivGruppe === 'IVERKSETT_KONSEKVENS' && (
-        <KabalIverksettKonsekvensSteg behandlingsreferanse={behandlingsReferanse} />
-      )}
-      {/* Oppfølgingsbehandling */}
-      {(aktivGruppe === 'START_OPPFØLGINGSBEHANDLING' || aktivGruppe === 'AVKLAR_OPPPFØLGING') && (
-        <AvklarOppfolgingsSteg behandlingsreferanse={behandlingsReferanse} />
-      )}
-      {/* Aktivitetsplikt */}
-      {aktivGruppe === 'AKTIVITETSPLIKT_11_7' && <Aktivitetsplikt11_7 behandlingsreferanse={behandlingsReferanse} />}
-      {aktivGruppe === 'AKTIVITETSPLIKT_11_9' && <Aktivitetsplikt11_9 behandlingsreferanse={behandlingsReferanse} />}
-    </section>
-  );
-};
+export const OppgaveKolonne = async ({ behandlingsReferanse, saksnummer, aktivGruppe, className }: Props) => (
+  <section className={className}>
+    {aktivGruppe === 'START_BEHANDLING' && <StartBehandling behandlingsReferanse={behandlingsReferanse} />}
+    {aktivGruppe === 'SØKNAD' && <Søknad behandlingsReferanse={behandlingsReferanse} />}
+    {aktivGruppe === 'AVBRYT_REVURDERING' && <AvbrytRevurdering behandlingsreferanse={behandlingsReferanse} />}
+    {aktivGruppe === 'LOVVALG' && (
+      <StegSuspense>
+        <LovvalgPeriodisert behandlingsReferanse={behandlingsReferanse} />
+      </StegSuspense>
+    )}
+    {aktivGruppe === 'RETTIGHETSPERIODE' && <Rettighetsperiode behandlingsReferanse={behandlingsReferanse} />}
+    {aktivGruppe === 'ALDER' && (
+      <StegSuspense>
+        <AlderMedDataFetching behandlingsReferanse={behandlingsReferanse} />
+      </StegSuspense>
+    )}
+    {aktivGruppe === 'STUDENT' && <Student behandlingsreferanse={behandlingsReferanse} />}
+    {aktivGruppe === 'SYKDOM' && <Sykdom behandlingsReferanse={behandlingsReferanse} />}
+    {aktivGruppe === 'MEDLEMSKAP' && (
+      <StegSuspense>
+        <PeriodisertForutgåendeMedlemskap behandlingsReferanse={behandlingsReferanse} />
+      </StegSuspense>
+    )}
+    {aktivGruppe === 'OPPHOLDSKRAV' && <OppholdskravStegGruppe behandlingsreferanse={behandlingsReferanse} />}
+    {aktivGruppe === 'GRUNNLAG' && <Grunnlag behandlingsReferanse={behandlingsReferanse} />}
+    {aktivGruppe === 'UNDERVEIS' && <Underveis behandlingsreferanse={behandlingsReferanse} saksnummer={saksnummer} />}
+    {aktivGruppe === 'SAMORDNING' && <Samordning behandlingsreferanse={behandlingsReferanse} />}
+    {aktivGruppe === 'ET_ANNET_STED' && <Institusjonsopphold behandlingsreferanse={behandlingsReferanse} />}
+    {aktivGruppe === 'BARNETILLEGG' && <Barnetillegg behandlingsreferanse={behandlingsReferanse} />}
+    {aktivGruppe === 'TILKJENT_YTELSE' && <TilkjentYtelse behandlingsReferanse={behandlingsReferanse} />}
+    {aktivGruppe === 'SIMULERING' && <Simulering behandlingsReferanse={behandlingsReferanse} />}
+    {aktivGruppe === 'VEDTAK' && <Vedtak behandlingsReferanse={behandlingsReferanse} />}
+    {aktivGruppe === 'FATTE_VEDTAK' && <FatteVedtak behandlingsReferanse={behandlingsReferanse} />}
+    {aktivGruppe === 'IVERKSETT_VEDTAK' && <div>Behandling avsluttet</div>}
+    {aktivGruppe === 'BREV' && <Brev behandlingsReferanse={behandlingsReferanse} />}
+    {/* Klage */}
+    {aktivGruppe === 'FORMKRAV' && <Formkrav behandlingsreferanse={behandlingsReferanse} />}
+    {aktivGruppe === 'KLAGEBEHANDLING_KONTOR' && <KlagebehandlingKontor behandlingsreferanse={behandlingsReferanse} />}
+    {aktivGruppe === 'KLAGEBEHANDLING_NAY' && <KlagebehandlingNay behandlingsreferanse={behandlingsReferanse} />}
+    {aktivGruppe === 'OMGJØRING' && <Omgjøring behandlingsreferanse={behandlingsReferanse} />}
+    {aktivGruppe === 'OPPRETTHOLDELSE' && <Opprettholdelse behandlingsreferanse={behandlingsReferanse} />}
+    {aktivGruppe === 'TREKK_KLAGE' && <TrekkKlage behandlingsreferanse={behandlingsReferanse} />}
+    {aktivGruppe === 'SVAR_FRA_ANDREINSTANS' && (
+      <SvarFraAndreinstansGruppe behandlingsreferanse={behandlingsReferanse} />
+    )}
+    {aktivGruppe === 'IVERKSETT_KONSEKVENS' && (
+      <KabalIverksettKonsekvensSteg behandlingsreferanse={behandlingsReferanse} />
+    )}
+    {/* Oppfølgingsbehandling */}
+    {(aktivGruppe === 'START_OPPFØLGINGSBEHANDLING' || aktivGruppe === 'AVKLAR_OPPPFØLGING') && (
+      <AvklarOppfolgingsSteg behandlingsreferanse={behandlingsReferanse} />
+    )}
+    {/* Aktivitetsplikt */}
+    {aktivGruppe === 'AKTIVITETSPLIKT_11_7' && <Aktivitetsplikt11_7 behandlingsreferanse={behandlingsReferanse} />}
+    {aktivGruppe === 'AKTIVITETSPLIKT_11_9' && <Aktivitetsplikt11_9 behandlingsreferanse={behandlingsReferanse} />}
+  </section>
+);
