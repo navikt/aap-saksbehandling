@@ -52,6 +52,7 @@ export enum Behovstype {
   FASTSETT_FULLMEKTIG = '6009',
   TREKK_KLAGE_KODE = '6010',
   SAMORDNING_REFUSJONS_KRAV = '5056',
+  ETABLERING_EGEN_VIRKSOMHET_KODE = '5058',
   FASTSETT_MANUELL_INNTEKT = '7001',
   AVKLAR_OPPFØLGINGSBEHOV_NAY = '8002',
   AVKLAR_OPPFØLGINGSBEHOV_LOKALKONTOR = '8001',
@@ -178,6 +179,8 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
       return 'Avklar oppfølgingsbehov NAY';
     case '5057':
       return '§ 11-23 sjette ledd. Arbeidsopptrapping (valgfritt)';
+    case '5058':
+      return '§ 11-15 Etablering av egen virksomhet (valgfritt)';
   }
 }
 

@@ -1,0 +1,83 @@
+import { EtableringEgenVirksomhetGrunnlagResponse, EtableringEgenVirksomhetLøsningDto } from 'lib/types/types';
+import {
+  EtableringAvEgenVirksomhetForm,
+  EtableringAvEgenVirksomhetVurderingForm,
+} from 'components/behandlinger/sykdom/etableringegenvirksomhet/EtableringAvEgenVirksomhet';
+import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
+import { getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
+import { Dato } from 'lib/types/Dato';
+
+export function getDefaultValuesFromGrunnlag(
+  grunnlag: EtableringEgenVirksomhetGrunnlagResponse
+): EtableringAvEgenVirksomhetForm {
+  if (trengerVurderingsForslag(grunnlag)) {
+    return {
+      ...hentPerioderSomTrengerVurdering<EtableringAvEgenVirksomhetVurderingForm>(
+        grunnlag,
+        tomEtableringAvEgenVirksomhetVurdering
+      ),
+      virksomhetNavn: '',
+    };
+  }
+
+  // Vi har allerede data lagret, vis enten de som er lagret i grunnlaget her eller tom liste
+  return {
+    virksomhetNavn: grunnlag.nyeVurderinger.find((e) => e.virksomhetNavn)?.virksomhetNavn || '',
+    vurderinger: grunnlag.nyeVurderinger.map((vurdering) => ({
+      fraDato: new Dato(vurdering.fom).formaterForFrontend(),
+      begrunnelse: vurdering.begrunnelse,
+      erVirksomhetenNy: getJaNeiEllerUndefined(vurdering.virksomhetErNy),
+      foreliggerEnNæringsfagligVurdering: getJaNeiEllerUndefined(vurdering.foreliggerFagligVurdering),
+      //TODO:
+      eierBrukerVirksomheten: vurdering.brukerEierVirksomheten,
+      antasDetAtEtableringenFørerTilSelvforsørgelse: getJaNeiEllerUndefined(vurdering.kanFøreTilSelvforsørget),
+      utviklingsperioder: vurdering.utviklingsPeriode.map((periode) => ({
+        fom: new Dato(periode.fom).formaterForFrontend(),
+        tom: periode.tom ? new Dato(periode.tom).formaterForFrontend() : '',
+      })),
+      oppstartsperioder: vurdering.oppstartsPeriode.map((periode) => ({
+        fom: new Dato(periode.fom).formaterForFrontend(),
+        tom: periode.tom ? new Dato(periode.tom).formaterForFrontend() : '',
+      })),
+    })),
+  };
+}
+export function mapEtableringEgenVirksomhetVurderingTilDto(
+  vurdering: EtableringAvEgenVirksomhetVurderingForm,
+  tilDato: string | undefined
+): EtableringEgenVirksomhetLøsningDto {
+  return {
+    fom: new Dato(vurdering.fraDato!).formaterForBackend(),
+    tom: tilDato ? new Dato(tilDato).formaterForBackend() : null,
+    begrunnelse: vurdering.begrunnelse,
+    virksomhetErNy: vurdering.erVirksomhetenNy === JaEllerNei.Ja,
+    //TODO:
+    brukerEierVirksomheten: vurdering.eierBrukerVirksomheten,
+    foreliggerFagligVurdering: vurdering.foreliggerEnNæringsfagligVurdering === JaEllerNei.Ja,
+    kanFøreTilSelvforsørget: vurdering.antasDetAtEtableringenFørerTilSelvforsørgelse === JaEllerNei.Ja,
+    oppstartsPerioder: vurdering.oppstartsperioder.map((periode) => ({
+      fom: new Dato(periode.fom).formaterForBackend(),
+      tom: new Dato(periode.tom).formaterForBackend(),
+    })),
+    utviklingsPerioder: vurdering.utviklingsperioder.map((periode) => ({
+      fom: new Dato(periode.fom).formaterForBackend(),
+      tom: new Dato(periode.tom).formaterForBackend(),
+    })),
+    //TODO:
+    virksomhetNavn: '',
+  };
+}
+
+export function tomEtableringAvEgenVirksomhetVurdering(): EtableringAvEgenVirksomhetVurderingForm {
+  return {
+    antasDetAtEtableringenFørerTilSelvforsørgelse: undefined,
+    begrunnelse: '',
+    eierBrukerVirksomheten: undefined,
+    erVirksomhetenNy: undefined,
+    foreliggerEnNæringsfagligVurdering: undefined,
+    fraDato: undefined,
+    oppstartsperioder: [],
+    utviklingsperioder: [],
+    erNyVurdering: true,
+  };
+}

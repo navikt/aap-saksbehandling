@@ -366,6 +366,12 @@ export type PeriodisertForutgåendeMedlemskapGrunnlag =
 export type PeriodisertManuellVurderingForForutgåendeMedlemskapResponse =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.PeriodisertManuellVurderingForForutgåendeMedlemskapResponse'];
 
+export type EtableringEgenVirksomhetGrunnlagResponse =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.etableringegenvirksomhet.EtableringEgenVirksomhetGrunnlagResponse'];
+
+export type EtableringEgenVirksomhetLøsningDto =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.etableringegenvirksomhet.EtableringEgenVirksomhetLøsningDto'];
+
 export type SykdomBrevVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.SykdomsvurderingForBrevVurderingDto'];
 
