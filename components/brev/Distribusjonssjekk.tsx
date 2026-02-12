@@ -76,8 +76,10 @@ export const Distribusjonssjekk = ({
             Det har oppstått en feil
           </Heading>
           <VStack space-between justify={'start'}>
-            <BodyShort>Vi kunne ikke avgjøre om brevet kan sendes til mottakeren. Feilmeldingen var:</BodyShort>
-            {distribusjonssjekkFeil}
+            <BodyShort>
+              Vi kunne ikke avgjøre om brevet kan sendes til mottakeren nå. Vent noen minutter, og trykk på knappen
+              under for å prøve på nytt. Ta kontakt med brukerstøtte hvis feilen vedvarer.
+            </BodyShort>
             <Button
               onClick={() => rekjørDistribuerBrevSjekk()}
               size="small"
