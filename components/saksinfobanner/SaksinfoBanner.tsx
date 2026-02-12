@@ -24,13 +24,10 @@ import { MarkeringInfoboks } from 'components/markeringinfoboks/MarkeringInfobok
 import { ArenaStatus } from 'components/arenastatus/ArenaStatus';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { AvbrytRevurderingModal } from 'components/saksinfobanner/avbrytrevurderingmodal/AvbrytRevurderingModal';
-import { formaterDatoForFrontend, sorterEtterNyesteDato } from 'lib/utils/date';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 import { ReturStatus } from 'components/returstatus/ReturStatus';
 import { useFeatureFlag } from 'context/UnleashContext';
 import { Dato } from 'lib/types/Dato';
-import { isSuccess } from 'lib/utils/api';
-import useSWR from 'swr';
-import { clientHentRettighetsdata } from 'lib/clientApi';
 
 interface Props {
   personInformasjon: SakPersoninfo;
@@ -82,9 +79,11 @@ export const SaksinfoBanner = ({
   const behandlingErIkkeIverksatt = behandling && behandling.status !== 'IVERKSETTES';
 
   const adressebeskyttelser = oppgave ? utledAdressebeskyttelse(oppgave) : [];
+  /* TODO: Det er for mange bugs tilknyttet rettighetsdata. Må fikses før dette kan kommenteres ut igjen.
   const rettighetsdata = useSWR(`/api/sak/${sak.saksnummer}/rettighet`, () =>
     clientHentRettighetsdata(sak.saksnummer)
   ).data;
+*/
 
   const visValgForÅTrekkeSøknad =
     !behandlerEnSøknadSomSkalTrekkes &&
@@ -140,6 +139,8 @@ export const SaksinfoBanner = ({
   };
 
   const hentMaksdato = (): string | null | undefined => {
+    /*
+    TODO: Det er for mange bugs tilknyttet rettighetsdata. Må fikses før dette kan kommenteres ut igjen.
     if (isSuccess(rettighetsdata)) {
       const ytelsesbehandlingTyper = ['Førstegangsbehandling', 'Revurdering'];
 
@@ -151,6 +152,7 @@ export const SaksinfoBanner = ({
       );
       return gjeldendeRettighet?.maksDato;
     }
+*/
     return undefined;
   };
 
