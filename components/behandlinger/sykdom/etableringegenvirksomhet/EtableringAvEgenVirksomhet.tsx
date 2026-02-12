@@ -141,17 +141,17 @@ export const EtableringAvEgenVirksomhet = ({
               Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-15 (lovdata.no)
             </Link>
           </BodyLong>
-          <HStack>
-            <TextFieldWrapper
-              name={'virksomhetNavn'}
-              control={form.control}
-              type={'text'}
-              label={'Virksomheten det søkes for'}
-            />
-          </HStack>
+          {nyeVurderinger.length > 0 && (
+            <HStack>
+              <TextFieldWrapper
+                name={'virksomhetNavn'}
+                control={form.control}
+                type={'text'}
+                label={'Virksomheten det søkes for'}
+              />
+            </HStack>
+          )}
         </VStack>
-        // <HStack paddingInline={'5'}>
-        // </HStack>
       )}
       {nyeVurderinger.map((vurdering, index) => (
         <NyVurderingExpandableCard

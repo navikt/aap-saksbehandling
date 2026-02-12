@@ -14,6 +14,7 @@ import {
   EtableringAvEgenVirksomhetForm,
 } from 'components/behandlinger/sykdom/etableringegenvirksomhet/EtableringAvEgenVirksomhet';
 import { PeriodeFieldArrayDateInput } from 'components/behandlinger/sykdom/etableringegenvirksomhet/PeriodeFieldArrayDateInput';
+import { JaEllerNei } from 'lib/utils/form';
 
 type Props = {
   form: UseFormReturn<EtableringAvEgenVirksomhetForm>;
@@ -57,56 +58,69 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly }: P
         rules={{ required: 'Du må svare på om det foreligger en nøringsfaglig vurdering' }}
         readOnly={readOnly}
       />
-      <RadioGroupJaNei
-        name={`vurderinger.${index}.erVirksomhetenNy`}
-        control={form.control}
-        label={'Er virksomheten ny?'}
-        horisontal={true}
-        rules={{ required: 'Du må svare på om virksomheten er ny' }}
-        readOnly={readOnly}
-      />
-      <RadioGroupWrapper
-        name={`vurderinger.${index}.eierBrukerVirksomheten`}
-        control={form.control}
-        label={'Eier bruker virksomheten?'}
-        rules={{ required: 'Du må svare på om bruker eier virksomheten' }}
-        readOnly={readOnly}
-      >
-        <Radio value={EierBrukerVirksomheten.JA_MINST_50_PROSENT}>Ja, bruker eier minst 50% av virksomheten</Radio>
-        <Radio value={EierBrukerVirksomheten.JA_MINST_50_PROSENT_MED_ANDRE}>
-          Ja, bruker eier minst 50% av virksomheten sammen med andre AAP og/eller dagpengemottakere
-        </Radio>
-        <Radio value={EierBrukerVirksomheten.NEI}>Nei</Radio>
-      </RadioGroupWrapper>
-      <RadioGroupJaNei
-        name={`vurderinger.${index}.antasDetAtEtableringenFørerTilSelvforsørgelse`}
-        control={form.control}
-        label={'Antas det at etablering av virksomheten vil føre til at bruker blir selvforsørget?'}
-        horisontal={true}
-        rules={{ required: 'Du må svare på om det antas at etablering vil føre til at bruker blir selvforsørget' }}
-        readOnly={readOnly}
-      />
-      <Heading level={'2'} size={'medium'}>
-        Etableringsplan
-      </Heading>
-      <VStack gap={'4'}>
-        <VStack>
-          <Label size={'small'}>Utviklingsperiode</Label>
-          <BodyShort textColor={'subtle'} size={'small'}>
-            Kan gis for inntil 6 måneder
-          </BodyShort>
-        </VStack>
-        <PeriodeFieldArrayDateInput form={form} vurderingIndex={index} fieldArray={utviklingsperioder} />
-      </VStack>
-      <VStack gap={'4'}>
-        <VStack>
-          <Label size={'small'}>Oppstartsperiode</Label>
-          <BodyShort textColor={'subtle'} size={'small'}>
-            Kan gis for inntil 3 måneder
-          </BodyShort>
-        </VStack>
-        <PeriodeFieldArrayDateInput form={form} vurderingIndex={index} fieldArray={oppstartsperioder} />
-      </VStack>
+      {form.watch(`vurderinger.${index}.foreliggerEnNæringsfagligVurdering`) === JaEllerNei.Ja && (
+        <RadioGroupJaNei
+          name={`vurderinger.${index}.erVirksomhetenNy`}
+          control={form.control}
+          label={'Er virksomheten ny?'}
+          horisontal={true}
+          rules={{ required: 'Du må svare på om virksomheten er ny' }}
+          readOnly={readOnly}
+        />
+      )}
+      {form.watch(`vurderinger.${index}.erVirksomhetenNy`) === JaEllerNei.Ja && (
+        <RadioGroupWrapper
+          name={`vurderinger.${index}.eierBrukerVirksomheten`}
+          control={form.control}
+          label={'Eier bruker virksomheten?'}
+          rules={{ required: 'Du må svare på om bruker eier virksomheten' }}
+          readOnly={readOnly}
+        >
+          <Radio value={EierBrukerVirksomheten.JA_MINST_50_PROSENT}>Ja, bruker eier minst 50% av virksomheten</Radio>
+          <Radio value={EierBrukerVirksomheten.JA_MINST_50_PROSENT_MED_ANDRE}>
+            Ja, bruker eier minst 50% av virksomheten sammen med andre AAP og/eller dagpengemottakere
+          </Radio>
+          <Radio value={EierBrukerVirksomheten.NEI}>Nei</Radio>
+        </RadioGroupWrapper>
+      )}
+
+      {(form.watch(`vurderinger.${index}.eierBrukerVirksomheten`) === EierBrukerVirksomheten.JA_MINST_50_PROSENT ||
+        form.watch(`vurderinger.${index}.eierBrukerVirksomheten`) ===
+          EierBrukerVirksomheten.JA_MINST_50_PROSENT_MED_ANDRE) && (
+        <RadioGroupJaNei
+          name={`vurderinger.${index}.antasDetAtEtableringenFørerTilSelvforsørgelse`}
+          control={form.control}
+          label={'Antas det at etablering av virksomheten vil føre til at bruker blir selvforsørget?'}
+          horisontal={true}
+          rules={{ required: 'Du må svare på om det antas at etablering vil føre til at bruker blir selvforsørget' }}
+          readOnly={readOnly}
+        />
+      )}
+      {form.watch(`vurderinger.${index}.antasDetAtEtableringenFørerTilSelvforsørgelse`) === JaEllerNei.Ja && (
+        <>
+          <Heading level={'2'} size={'medium'}>
+            Etableringsplan
+          </Heading>
+          <VStack gap={'4'}>
+            <VStack>
+              <Label size={'small'}>Utviklingsperiode</Label>
+              <BodyShort textColor={'subtle'} size={'small'}>
+                Kan gis for inntil 6 måneder
+              </BodyShort>
+            </VStack>
+            <PeriodeFieldArrayDateInput form={form} vurderingIndex={index} fieldArray={utviklingsperioder} />
+          </VStack>
+          <VStack gap={'4'}>
+            <VStack>
+              <Label size={'small'}>Oppstartsperiode</Label>
+              <BodyShort textColor={'subtle'} size={'small'}>
+                Kan gis for inntil 3 måneder
+              </BodyShort>
+            </VStack>
+            <PeriodeFieldArrayDateInput form={form} vurderingIndex={index} fieldArray={oppstartsperioder} />
+          </VStack>
+        </>
+      )}
     </VStack>
   );
 };
