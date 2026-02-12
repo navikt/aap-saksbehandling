@@ -19,7 +19,6 @@ import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { Dato } from 'lib/types/Dato';
 import { VStack } from '@navikt/ds-react';
 import { HelseinstitusjonOppholdGruppe } from 'components/behandlinger/institusjonsopphold/helseinstitusjonny/helseinstitusjonoppholdgruppe/HelseinstitusjonOppholdGruppe';
-import { parseOgMigrerHelseinstitusjonMellomlagretData } from 'components/behandlinger/institusjonsopphold/helseinstitusjonny/helseinstitusjonmigrering';
 
 interface Props {
   grunnlag: HelseinstitusjonGrunnlag;
@@ -67,7 +66,7 @@ export const HelseinstitusjonNy = ({ grunnlag, readOnly, behandlingVersjon, init
   );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
-    ? parseOgMigrerHelseinstitusjonMellomlagretData(initialMellomlagretVurdering, grunnlag)
+    ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag, grunnlag.opphold);
 
   const { form } = useConfigForm<HelseinstitusjonsFormFieldsNy>({
