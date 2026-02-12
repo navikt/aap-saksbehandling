@@ -17,8 +17,6 @@ import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { hentOppgave } from 'lib/services/oppgaveservice/oppgaveservice';
 import { hentBrukerInformasjon } from 'lib/services/azure/azureUserService';
-import { hentRettighetsdata } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { useSaksnummer } from 'hooks/saksbehandling/BehandlingHook';
 import { SWRConfig } from 'swr';
 
 interface LayoutProps {
@@ -34,7 +32,6 @@ const Layout = async (props: LayoutProps) => {
     hentBehandling(params.behandlingsreferanse),
     hentOppgave(params.behandlingsreferanse),
     hentBrukerInformasjon(),
-    hentRettighetsdata(useSaksnummer()),
   ]);
 
   if (isError(behandling) || isError(oppgave)) {

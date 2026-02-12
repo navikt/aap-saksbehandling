@@ -24,7 +24,7 @@ import { MarkeringInfoboks } from 'components/markeringinfoboks/MarkeringInfobok
 import { ArenaStatus } from 'components/arenastatus/ArenaStatus';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { AvbrytRevurderingModal } from 'components/saksinfobanner/avbrytrevurderingmodal/AvbrytRevurderingModal';
-import { formaterDatoForFrontend, sorterEtterNyesteDato, stringToDate } from 'lib/utils/date';
+import { formaterDatoForFrontend, sorterEtterNyesteDato } from 'lib/utils/date';
 import { ReturStatus } from 'components/returstatus/ReturStatus';
 import { useFeatureFlag } from 'context/UnleashContext';
 import { Dato } from 'lib/types/Dato';
@@ -82,6 +82,7 @@ export const SaksinfoBanner = ({
   const behandlingErIkkeIverksatt = behandling && behandling.status !== 'IVERKSETTES';
 
   const adressebeskyttelser = oppgave ? utledAdressebeskyttelse(oppgave) : [];
+  const rettighetsdata = useSWR(`/api/sak/${sak.saksnummer}/rettighet`, hentRettighetsdata).data;
 
   const visValgForÅTrekkeSøknad =
     !behandlerEnSøknadSomSkalTrekkes &&
@@ -137,14 +138,11 @@ export const SaksinfoBanner = ({
   };
 
   const hentMaksdato = (): string | null | undefined => {
-    const ytelsesbehandlingTyper = ['Førstegangsbehandling', 'Revurdering'];
-    const rettighetsdata = useSWR(`/api/sak/${sak.saksnummer}/rettighet`, hentRettighetsdata).data;
-
-    const gjeldendeVedtak = sak.behandlinger
-      .filter((behandling) => ytelsesbehandlingTyper.includes(behandling.type) && behandling.status === 'AVSLUTTET')
-      .sort((b1, b2) => sorterEtterNyesteDato(b1.opprettet, b2.opprettet))[0];
-
     if (isSuccess(rettighetsdata)) {
+      const ytelsesbehandlingTyper = ['Førstegangsbehandling', 'Revurdering'];
+      const gjeldendeVedtak = sak.behandlinger
+        .filter((behandling) => ytelsesbehandlingTyper.includes(behandling.type) && behandling.status === 'AVSLUTTET')
+        .sort((b1, b2) => sorterEtterNyesteDato(b1.opprettet, b2.opprettet))[0];
       const gjeldendeRettighet = rettighetsdata.data.find(
         (rettighet) => rettighet.startDato === gjeldendeVedtak.opprettet
       );
