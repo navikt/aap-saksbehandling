@@ -29,6 +29,13 @@
 .saksmenyDropdown {
   width: 30ch;
 }
+
 .oppgavestatus {
   padding: var(--a-spacing-3) var(--a-spacing-3) var(--a-spacing-2) var(--a-spacing-3);
+}
+
+.maksdatoTag {
+  border: none;
+  border-radius: var(--a-border-radius-medium);
+  background-color: var(--a-surface-alt-3-subtle);
 }
