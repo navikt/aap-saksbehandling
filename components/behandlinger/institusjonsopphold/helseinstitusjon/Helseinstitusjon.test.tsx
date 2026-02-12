@@ -13,6 +13,7 @@ fetchMock.enableMocks();
 const user = userEvent.setup();
 
 const grunnlagUtenVurdering: HelseinstitusjonGrunnlag = {
+  vedtatteVurderinger: [],
   harTilgangTilÅSaksbehandle: true,
   opphold: [
     {
@@ -37,6 +38,7 @@ const grunnlagUtenVurdering: HelseinstitusjonGrunnlag = {
 };
 
 const grunnlagMedVurdering: HelseinstitusjonGrunnlag = {
+  vedtatteVurderinger: [],
   harTilgangTilÅSaksbehandle: true,
   opphold: [
     {
