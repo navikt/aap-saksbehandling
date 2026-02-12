@@ -116,6 +116,7 @@ export const ForutgåendeMedlemskapPeriodisert = ({
 
     løsPeriodisertBehovOgGåTilNesteSteg(losning, () => {
       closeAllAccordions();
+      visningActions.onBekreftClick();
       nullstillMellomlagretVurdering();
     });
   }

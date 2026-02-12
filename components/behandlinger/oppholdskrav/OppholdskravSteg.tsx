@@ -117,6 +117,7 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
 
     løsPeriodisertBehovOgGåTilNesteSteg(losning, () => {
       nullstillMellomlagretVurdering();
+      visningActions.onBekreftClick();
       closeAllAccordions();
     });
   }

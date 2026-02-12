@@ -37,7 +37,7 @@ export const DokumentInfoBanner = ({
   const erReservertAvInnloggetBruker = innloggetBrukerIdent === oppgave?.reservertAv;
 
   const hentOppgaveTildeling = (): OppgaveStatusType | undefined => {
-    if (!oppgave?.reservertAv ) {
+    if (!oppgave?.reservertAv) {
       return { status: 'LEDIG', label: `Ledig` };
     } else if (erReservertAvInnloggetBruker) {
       return {

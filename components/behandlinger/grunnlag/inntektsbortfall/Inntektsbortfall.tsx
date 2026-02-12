@@ -103,9 +103,9 @@ export const Inntektsbortfall = ({
       vurdertAutomatisk={grunnlag.kanBehandlesAutomatisk}
       vurdertAvAnsatt={vurdering?.vurdertAv}
       onSubmit={(event: FormEvent<HTMLFormElement>) => {
-        form.handleSubmit(
-          (data) => {
-            løsBehovOgGåTilNesteSteg({
+        form.handleSubmit((data) => {
+          løsBehovOgGåTilNesteSteg(
+            {
               behandlingVersjon: behandlingVersjon,
               behov: {
                 behovstype: Behovstype.VURDER_INNTEKTSBORTFALL,
@@ -115,10 +115,13 @@ export const Inntektsbortfall = ({
                 },
               },
               referanse: behandlingsReferanse,
-            });
-          },
-          () => nullstillMellomlagretVurdering()
-        )(event);
+            },
+            () => {
+              visningActions.onBekreftClick();
+              nullstillMellomlagretVurdering();
+            }
+          );
+        })(event);
       }}
       mellomlagretVurdering={mellomlagretVurdering}
       visningModus={grunnlag.kanBehandlesAutomatisk ? VisningModus.LÅST_UTEN_ENDRE : visningModus}

@@ -92,7 +92,10 @@ export const TrekkKlageVurdering = ({ behandlingVersjon, readOnly, grunnlag, ini
           },
           referanse: behandlingsreferanse,
         },
-        () => nullstillMellomlagretVurdering()
+        () => {
+          visningActions.onBekreftClick();
+          nullstillMellomlagretVurdering();
+        }
       );
     })(event);
   };

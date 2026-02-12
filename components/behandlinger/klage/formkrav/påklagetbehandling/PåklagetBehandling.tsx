@@ -63,7 +63,10 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, ini
           },
         },
       },
-      () => nullstillMellomlagretVurdering()
+      () => {
+        visningActions.onBekreftClick();
+        nullstillMellomlagretVurdering();
+      }
     );
   };
 

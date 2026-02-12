@@ -139,7 +139,10 @@ export const SamordningGradering = ({
             },
             referanse: behandlingsreferanse,
           },
-          () => nullstillMellomlagretVurdering()
+          () => {
+            visningActions.onBekreftClick();
+            nullstillMellomlagretVurdering();
+          }
         );
       }
     })(event);

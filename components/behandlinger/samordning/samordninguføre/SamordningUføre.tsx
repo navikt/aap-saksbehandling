@@ -87,7 +87,10 @@ export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly, initia
           },
           referanse: behandlingsreferanse,
         },
-        () => nullstillMellomlagretVurdering()
+        () => {
+          visningActions.onBekreftClick();
+          nullstillMellomlagretVurdering();
+        }
       )
     )(event);
   }

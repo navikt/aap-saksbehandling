@@ -62,19 +62,22 @@ export const BehandlendeEnhet = ({ behandlingVersjon, grunnlag, readOnly, initia
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    form.handleSubmit(
-      (data) => {
-        løsBehovOgGåTilNesteSteg({
+    form.handleSubmit((data) => {
+      løsBehovOgGåTilNesteSteg(
+        {
           behandlingVersjon: behandlingVersjon,
           behov: {
             behovstype: Behovstype.FASTSETT_BEHANDLENDE_ENHET,
             behandlendeEnhetVurdering: mapValgTilBehandlendeEnhetVurdering(data.hvemSkalBehandle),
           },
           referanse: behandlingsreferanse,
-        });
-      },
-      () => nullstillMellomlagretVurdering()
-    )(event);
+        },
+        () => {
+          visningActions.onBekreftClick();
+          nullstillMellomlagretVurdering();
+        }
+      );
+    })(event);
   };
 
   return (

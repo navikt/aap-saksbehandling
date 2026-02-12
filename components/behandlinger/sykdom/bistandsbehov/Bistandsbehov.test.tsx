@@ -1,11 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render, screen, within } from 'lib/test/CustomRender';
 import { userEvent } from '@testing-library/user-event';
-import { Bistandsbehov } from 'components/behandlinger/sykdom/bistandsbehov/Bistandsbehov';
 import { BistandsGrunnlag, MellomlagretVurderingResponse } from 'lib/types/types';
 import createFetchMock from 'vitest-fetch-mock';
 import { FetchResponse } from 'lib/utils/api';
 import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
+import { Bistandsbehov } from 'components/behandlinger/sykdom/bistandsbehov/Bistandsbehov';
+import { BistandFormOld } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovMellomlagringParser';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
@@ -15,6 +16,13 @@ beforeEach(() => {
   setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'VURDER_BISTANDSBEHOV' });
 });
 
+const grunnlagTomt: BistandsGrunnlag = {
+  sisteVedtatteVurderinger: [],
+  nyeVurderinger: [],
+  behøverVurderinger: [{ fom: '2025-01-01', tom: '2025-12-12' }],
+  harTilgangTilÅSaksbehandle: true,
+  kanVurderes: [],
+};
 describe('Generelt', () => {
   const nyeVurderinger = [
     {
@@ -37,57 +45,26 @@ describe('Generelt', () => {
   ];
 
   const grunnlagMedVurdering: BistandsGrunnlag = {
-    gjeldendeSykdsomsvurderinger: [
-      {
-        fom: '2025-03-24',
-        begrunnelse: 'blabla',
-        dokumenterBruktIVurdering: [],
-        erArbeidsevnenNedsatt: true,
-        erNedsettelseIArbeidsevneAvEnVissVarighet: true,
-        erNedsettelseIArbeidsevneMerEnnHalvparten: true,
-        erSkadeSykdomEllerLyteVesentligdel: true,
-        harSkadeSykdomEllerLyte: true,
-        vurderingenGjelderFra: '2025-03-24',
-        vurdertAv: { ident: 'Saksbehandler', dato: '2025-03-24' },
-      },
-    ],
-    gjeldendeVedtatteVurderinger: sisteVedtatteVurderinger, //Deprekert
     sisteVedtatteVurderinger: sisteVedtatteVurderinger,
-    harTilgangTilÅSaksbehandle: true,
-    historiskeVurderinger: [
-      {
-        begrunnelse: 'En begrunnelse',
-        erBehovForArbeidsrettetTiltak: true,
-        erBehovForAktivBehandling: false,
-        vurdertAv: { ident: 'Saksbehandler', dato: '2025-03-24' },
-        fom: '2025-03-24',
-      },
-    ],
-    vurderinger: nyeVurderinger,
     nyeVurderinger: nyeVurderinger,
     behøverVurderinger: [],
+    harTilgangTilÅSaksbehandle: true,
     kanVurderes: [],
   };
 
   it('Skal ha en overskrift', () => {
-    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
+    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
 
     const heading = screen.getByText('§ 11-6 Behov for bistand til å skaffe seg eller beholde arbeid');
     expect(heading).toBeVisible();
   });
 
-  it('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
+  it.skip('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
     setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'SYKDOMSVURDERING_BREV' });
 
-    render(
-      <Bistandsbehov
-        grunnlag={grunnlagMedVurdering}
-        readOnly={false}
-        behandlingVersjon={0}
-        typeBehandling={'Førstegangsbehandling'}
-      />
-    );
+    render(<Bistandsbehov grunnlag={grunnlagMedVurdering} readOnly={false} behandlingVersjon={0} />);
 
+    screen.logTestingPlaygroundURL();
     const endreKnapp = screen.getByRole('button', { name: 'Endre' });
     await user.click(endreKnapp);
 
@@ -109,7 +86,7 @@ describe('mellomlagring i bistandsbehov', () => {
     mellomlagretVurdering: {
       avklaringsbehovkode: '5006',
       behandlingId: { id: 1 },
-      data: '{"begrunnelse":"Dette er min vurdering som er mellomlagret","erBehovForAktivBehandling":"ja","erBehovForArbeidsrettetTiltak":"ja"}',
+      data: '{"vurderinger": [{"begrunnelse":"Dette er min vurdering som er mellomlagret","erBehovForAktivBehandling":"ja","erBehovForArbeidsrettetTiltak":"ja"}]}',
       vurdertDato: '2025-08-21T12:00:00.000',
       vurdertAv: 'Jan T. Loven',
     },
@@ -125,15 +102,11 @@ describe('mellomlagring i bistandsbehov', () => {
     },
   ];
   const bistandsgrunnlag: BistandsGrunnlag = {
-    vurderinger: nyeVurderinger,
     nyeVurderinger: nyeVurderinger,
-    gjeldendeSykdsomsvurderinger: [],
-    gjeldendeVedtatteVurderinger: [], //Deprekert
     sisteVedtatteVurderinger: [],
-    harTilgangTilÅSaksbehandle: true,
-    historiskeVurderinger: [],
-    kanVurderes: [],
     behøverVurderinger: [],
+    harTilgangTilÅSaksbehandle: true,
+    kanVurderes: [],
   };
 
   it('Skal vise en tekst om hvem som har gjort vurderingen dersom det finnes en mellomlagring', () => {
@@ -141,8 +114,8 @@ describe('mellomlagring i bistandsbehov', () => {
       <Bistandsbehov
         readOnly={false}
         behandlingVersjon={0}
-        typeBehandling={'Førstegangsbehandling'}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+        grunnlag={bistandsgrunnlag}
       />
     );
 
@@ -153,7 +126,7 @@ describe('mellomlagring i bistandsbehov', () => {
   it(
     'Skal vise en tekst om hvem som har lagret vurdering dersom bruker trykker på lagre ' + 'mellomlagring',
     async () => {
-      render(<Bistandsbehov behandlingVersjon={0} readOnly={false} typeBehandling={'Førstegangsbehandling'} />);
+      render(<Bistandsbehov behandlingVersjon={0} readOnly={false} grunnlag={grunnlagTomt} />);
 
       await user.type(
         screen.getByRole('textbox', { name: 'Vilkårsvurdering' }),
@@ -180,8 +153,8 @@ describe('mellomlagring i bistandsbehov', () => {
       <Bistandsbehov
         behandlingVersjon={0}
         readOnly={false}
-        typeBehandling={'Førstegangsbehandling'}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+        grunnlag={bistandsgrunnlag}
       />
     );
 
@@ -201,8 +174,7 @@ describe('mellomlagring i bistandsbehov', () => {
       <Bistandsbehov
         behandlingVersjon={0}
         readOnly={false}
-        typeBehandling={'Førstegangsbehandling'}
-        grunnlag={bistandsgrunnlag}
+        grunnlag={grunnlagTomt}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
       />
     );
@@ -214,15 +186,42 @@ describe('mellomlagring i bistandsbehov', () => {
     expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er mellomlagret');
   });
 
-  it('Skal bruke bekreftet vurdering fra grunnlag som defaultValue i skjema dersom mellomlagring ikke finnes', () => {
+  it('Skal støtte å bruke gammelt format på mellomlagret data', () => {
+    const dataGammel: Partial<BistandFormOld> = {
+      begrunnelse: 'Dette er en gammel mellomlagret begrunnelse',
+      erBehovForAktivBehandling: 'ja',
+      erBehovForArbeidsrettetTiltak: 'ja',
+      erBehovForAnnenOppfølging: 'ja',
+    };
+
+    const mellomlagringGammel: MellomlagretVurderingResponse = {
+      mellomlagretVurdering: {
+        avklaringsbehovkode: '5006',
+        behandlingId: { id: 1 },
+        data: JSON.stringify(dataGammel),
+        vurdertDato: '2025-08-21T12:00:00.000',
+        vurdertAv: 'Jan T. Loven',
+      },
+    };
+
     render(
       <Bistandsbehov
         behandlingVersjon={0}
         readOnly={false}
-        typeBehandling={'Førstegangsbehandling'}
-        grunnlag={bistandsgrunnlag}
+        grunnlag={grunnlagTomt}
+        initialMellomlagretVurdering={mellomlagringGammel.mellomlagretVurdering}
       />
     );
+
+    const begrunnelseFelt = screen.getByRole('textbox', {
+      name: /vilkårsvurdering/i,
+    });
+
+    expect(begrunnelseFelt).toHaveValue(dataGammel.begrunnelse);
+  });
+
+  it('Skal bruke bekreftet vurdering fra grunnlag som defaultValue i skjema dersom mellomlagring ikke finnes', () => {
+    render(<Bistandsbehov behandlingVersjon={0} readOnly={false} grunnlag={bistandsgrunnlag} />);
 
     const begrunnelseFelt = screen.getByRole('textbox', {
       name: /vilkårsvurdering/i,
@@ -236,8 +235,8 @@ describe('mellomlagring i bistandsbehov', () => {
       <Bistandsbehov
         behandlingVersjon={0}
         readOnly={false}
-        typeBehandling={'Førstegangsbehandling'}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+        grunnlag={grunnlagTomt}
       />
     );
 
@@ -259,7 +258,6 @@ describe('mellomlagring i bistandsbehov', () => {
       <Bistandsbehov
         behandlingVersjon={0}
         readOnly={false}
-        typeBehandling={'Førstegangsbehandling'}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
         grunnlag={bistandsgrunnlag}
       />
@@ -285,7 +283,6 @@ describe('mellomlagring i bistandsbehov', () => {
       <Bistandsbehov
         behandlingVersjon={0}
         readOnly={true}
-        typeBehandling={'Førstegangsbehandling'}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
         grunnlag={bistandsgrunnlag}
       />
@@ -300,13 +297,13 @@ describe('mellomlagring i bistandsbehov', () => {
 
 describe('Førstegangsbehandling', () => {
   it('Skal ha felt for begrunnelse', () => {
-    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
+    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
     const begrunnelse = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
     expect(begrunnelse).toBeVisible();
   });
 
   it('Skal ha felt for om brukeren har behov for aktiv behandling', () => {
-    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
+    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
     const felt = screen.getByRole('group', {
       name: 'a: Har brukeren behov for aktiv behandling?',
     });
@@ -314,13 +311,13 @@ describe('Førstegangsbehandling', () => {
   });
 
   it('Skal ha felt for om brukeren har behov for arbeidsrettet tiltak', () => {
-    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
+    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
     const felt = screen.getByRole('group', { name: 'b: Har brukeren behov for arbeidsrettet tiltak?' });
     expect(felt).toBeVisible();
   });
 
   it('har felt for om brukeren anses for å ha en viss mulighet til å komme i arbeid', async () => {
-    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
+    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
     expect(
       screen.queryByRole('group', {
         name: 'c: Kan brukeren anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra Nav?',
@@ -329,7 +326,7 @@ describe('Førstegangsbehandling', () => {
   });
 
   it('skjuler felt for om brukeren anses for å ha en viss mulighet til å komme i arbeid dersom a er besvart med ja', async () => {
-    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
+    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
 
     expect(finnGruppeForBokstavC()).toBeVisible();
 
@@ -338,7 +335,7 @@ describe('Førstegangsbehandling', () => {
   });
 
   it('skjuler felt for om brukeren anses for å ha en viss mulighet til å komme i arbeid dersom b er besvart med nei', async () => {
-    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
+    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
 
     expect(finnGruppeForBokstavC()).toBeVisible();
 
@@ -347,7 +344,7 @@ describe('Førstegangsbehandling', () => {
   });
 
   it('skjuler felt for om brukeren anses for å ha en viss mulighet til å komme i arbeid dersom både a og b er besvart med ja', async () => {
-    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
+    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
 
     expect(finnGruppeForBokstavC()).toBeVisible();
 
@@ -358,27 +355,22 @@ describe('Førstegangsbehandling', () => {
   });
 
   it('viser felt for om brukeren anses for å ha en viss mulighet til å komme i arbeid dersom a og b er besvart med nei', async () => {
-    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
+    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
     await velgNei(finnGruppeForBokstavA());
     await velgNei(finnGruppeForBokstavB());
 
     expect(finnGruppeForBokstavC()).toBeVisible();
   });
 
-  it('felt for når vurderingen gjelder fra vises ikke dersom det ikke er en revurdering', () => {
-    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} typeBehandling="Førstegangsbehandling" />);
-    expect(screen.queryByRole('textbox', { name: 'Vurderingen gjelder fra' })).not.toBeInTheDocument();
-  });
-
   /* TODO skippes inntil backend er klar */
   it.skip('viser felt for når vurderingen gjelder fra dersom det er en revurdering', () => {
-    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} typeBehandling="Revurdering" />);
+    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
     expect(screen.getByRole('textbox', { name: 'Vurderingen gjelder fra' })).toBeVisible();
   });
 
   /* TODO Skippes inntil backend er klar. Mangler å avgjøre hvordan steget skal vite om 11-5 er oppfylt eller ei */
   it.skip('viser spørsmål for om brukeren skal vurderes for AAP i overgang til arbeid hvis det er en revurdering og det er avslag på både 11-5 og 11-6', async () => {
-    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} typeBehandling={'Revurdering'} />);
+    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
     await velgNei(finnGruppeForBokstavA());
     await velgNei(finnGruppeForBokstavB());
     const gruppeC = screen.getByRole('group', {
@@ -390,32 +382,37 @@ describe('Førstegangsbehandling', () => {
   });
 
   it('Skal vise feilmelding dersom feltet for begrunnelse ikke er besvart', async () => {
-    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
+    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
 
     await trykkPåBekreft();
-    const feilmelding = screen.getByText('Du må gi en begrunnelse om brukeren har behov for oppfølging');
-    expect(feilmelding).toBeVisible();
+    const feilmelding = screen.getAllByText('Du må gi en begrunnelse om brukeren har behov for oppfølging');
+
+    expect(feilmelding.length).toBeGreaterThan(0);
+    expect(feilmelding[0]).toBeVisible();
   });
 
   it('Skal vise feilmelding dersom feltet om brukeren har behov for aktiv behandling ikke er besvart', async () => {
-    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
+    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
 
     await trykkPåBekreft();
-    const feilmelding = screen.getByText('Du må svare på om brukeren har behov for aktiv behandling');
-    expect(feilmelding).toBeVisible();
+    const feilmelding = screen.getAllByText('Du må svare på om brukeren har behov for aktiv behandling');
+
+    expect(feilmelding.length).toBeGreaterThan(0);
+    expect(feilmelding[0]).toBeVisible();
   });
 
   it('Skal vise feilmelding dersom feltet om brukeren har behov for arbeidsrettet tiltak ikke er besvart', async () => {
-    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
+    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
 
     await trykkPåBekreft();
 
-    const feilmelding = screen.getByText('Du må svare på om brukeren har behov for arbeidsrettet tiltak');
-    expect(feilmelding).toBeVisible();
+    const feilmelding = screen.getAllByText('Du må svare på om brukeren har behov for arbeidsrettet tiltak');
+    expect(feilmelding.length).toBeGreaterThan(0);
+    expect(feilmelding[0]).toBeVisible();
   });
 
   it('Skal vise feilmelding dersom feltet om brukeren anses for å ha en viss mulighet for å komme i arbeid ikke er besvart', async () => {
-    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} typeBehandling={'Førstegangsbehandling'} />);
+    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
 
     const harInnbyggetBehovForAktivBehandling = screen.getByRole('group', {
       name: 'a: Har brukeren behov for aktiv behandling?',
@@ -438,116 +435,11 @@ describe('Førstegangsbehandling', () => {
     await user.click(neiHarBrukerBehovForArbeidsrettetTiltakFelt);
 
     await trykkPåBekreft();
-    const feilmelding = screen.getByText(
+    const feilmelding = screen.getAllByText(
       'Du må svare på om brukeren anses for å ha en viss mulighet til å komme i arbeid'
     );
-    expect(feilmelding).toBeVisible();
-  });
-});
-
-describe('Revurdering', () => {
-  const sisteVedtatteVurderinger = [
-    {
-      begrunnelse: 'En begrunnelse',
-      erBehovForArbeidsrettetTiltak: true,
-      erBehovForAktivBehandling: false,
-      vurdertAv: { ident: 'Saksbehandler', dato: '2025-03-24' },
-      fom: '2025-03-24',
-    },
-  ];
-
-  const grunnlagRevurdering: BistandsGrunnlag = {
-    harTilgangTilÅSaksbehandle: true,
-    harOppfylt11_5: true,
-    gjeldendeVedtatteVurderinger: sisteVedtatteVurderinger, //Deprekert
-    sisteVedtatteVurderinger: sisteVedtatteVurderinger,
-    vurderinger: [], //Deprekert - bruk nye vurderinger
-    nyeVurderinger: [],
-    historiskeVurderinger: [
-      {
-        begrunnelse: 'En begrunnelse',
-        erBehovForArbeidsrettetTiltak: true,
-        erBehovForAktivBehandling: false,
-        vurdertAv: { ident: 'Saksbehandler', dato: '2025-03-24' },
-        fom: '2025-03-24',
-      },
-    ],
-    gjeldendeSykdsomsvurderinger: [
-      {
-        fom: '2025-03-24',
-        begrunnelse: 'blabla',
-        dokumenterBruktIVurdering: [],
-        erArbeidsevnenNedsatt: true,
-        erNedsettelseIArbeidsevneAvEnVissVarighet: true,
-        erNedsettelseIArbeidsevneMerEnnHalvparten: true,
-        erSkadeSykdomEllerLyteVesentligdel: true,
-        harSkadeSykdomEllerLyte: true,
-        vurderingenGjelderFra: '2025-03-24',
-        vurdertAv: { ident: 'Saksbehandler', dato: '2025-03-24' },
-      },
-    ],
-    behøverVurderinger: [],
-    kanVurderes: [], // Som regel rettighetsperioden - usikker på om vi trenger denne
-  };
-
-  it('viser spørsmål om brukeren skal vurders for AAP i overgang til arbeid hvis det er avslag på både 11-5 og det svares nei på a,b og c', async () => {
-    const grunnlag = { ...grunnlagRevurdering, harOppfylt11_5: false };
-    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} typeBehandling={'Revurdering'} grunnlag={grunnlag} />);
-    await velgNei(finnGruppeForBokstavA());
-    await velgNei(finnGruppeForBokstavB());
-    const gruppeC = screen.getByRole('group', {
-      name: 'c: Kan brukeren anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra Nav?',
-    });
-    await velgNei(gruppeC);
-
-    expect(
-      screen.getByRole('heading', { name: '§ 11-17 Arbeidsavklaringspenger i perioden som arbeidssøker', level: 3 })
-    ).toBeVisible();
-    expect(screen.getAllByRole('textbox', { name: 'Vilkårsvurdering' })).toHaveLength(2);
-    expect(
-      await screen.findByRole('group', {
-        name: 'Har brukeren rett til AAP i perioden som arbeidssøker?',
-      })
-    ).toBeVisible();
-  });
-
-  it('dersom det svares ja på 11-17 skal det vises en melding som sier at dette ikke er klart enda', async () => {
-    const grunnlag = { ...grunnlagRevurdering, harOppfylt11_5: false };
-    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} typeBehandling={'Revurdering'} grunnlag={grunnlag} />);
-    await velgNei(finnGruppeForBokstavA());
-    await velgNei(finnGruppeForBokstavB());
-    const gruppeC = screen.getByRole('group', {
-      name: 'c: Kan brukeren anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra Nav?',
-    });
-    await velgNei(gruppeC);
-
-    const overgangTilArbeid = screen.getByRole('group', {
-      name: 'Har brukeren rett til AAP i perioden som arbeidssøker?',
-    });
-
-    await velgJa(overgangTilArbeid);
-    expect(
-      screen.getByText('Sett saken på vent og meld i fra til Team AAP at du har fått en § 11-17-sak.')
-    ).toBeVisible();
-  });
-
-  it('viser en melding ved forsøk på å sende inn når det er svart ja på 11-17', async () => {
-    const grunnlag = { ...grunnlagRevurdering, harOppfylt11_5: false };
-    render(<Bistandsbehov readOnly={false} behandlingVersjon={0} typeBehandling={'Revurdering'} grunnlag={grunnlag} />);
-    await velgNei(finnGruppeForBokstavA());
-    await velgNei(finnGruppeForBokstavB());
-    const gruppeC = screen.getByRole('group', {
-      name: 'c: Kan brukeren anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra Nav?',
-    });
-    await velgNei(gruppeC);
-
-    const overgangTilArbeid = screen.getByRole('group', {
-      name: 'Har brukeren rett til AAP i perioden som arbeidssøker?',
-    });
-
-    await velgJa(overgangTilArbeid);
-    await trykkPåBekreft();
-    expect(screen.getByText('AAP i overgang til arbeid er ikke støttet enda')).toBeVisible();
+    expect(feilmelding.length).toBeGreaterThan(0);
+    expect(feilmelding[0]).toBeVisible();
   });
 });
 

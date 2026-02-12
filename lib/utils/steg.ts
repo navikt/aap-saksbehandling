@@ -36,15 +36,6 @@ const getAvklaringsbehovForSteg = (
   );
 };
 
-export const getStegDataForBehovstype = (
-  stegGruppe: StegGruppe,
-  stegType: StegType,
-  behovstype: Behovstype,
-  behandlingFlytOgTilstand: BehandlingFlytOgTilstand
-): StegData => {
-  return getStegData(stegGruppe, stegType, behandlingFlytOgTilstand, behovstype);
-};
-
 export const getStegData = (
   stegGruppe: StegGruppe,
   stegType: StegType,

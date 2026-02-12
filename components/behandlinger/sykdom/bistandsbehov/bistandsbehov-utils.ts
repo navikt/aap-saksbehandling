@@ -1,4 +1,4 @@
-import { BistandVurderingForm } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovPeriodisert';
+import { BistandVurderingForm } from 'components/behandlinger/sykdom/bistandsbehov/Bistandsbehov';
 import { subDays } from 'date-fns';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { JaEllerNei } from 'lib/utils/form';

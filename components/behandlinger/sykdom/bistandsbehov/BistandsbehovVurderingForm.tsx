@@ -6,7 +6,7 @@ import { VStack } from '@navikt/ds-react';
 import { UseFormReturn } from 'react-hook-form';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
-import { BistandForm } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovPeriodisert';
+import { BistandForm } from 'components/behandlinger/sykdom/bistandsbehov/Bistandsbehov';
 import { BistandsGrunnlag } from 'lib/types/types';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';

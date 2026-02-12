@@ -1,4 +1,4 @@
-import { BistandForm } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovPeriodisert';
+import { BistandForm } from 'components/behandlinger/sykdom/bistandsbehov/Bistandsbehov';
 import { JaEllerNei } from 'lib/utils/form';
 
 export interface BistandFormOld {

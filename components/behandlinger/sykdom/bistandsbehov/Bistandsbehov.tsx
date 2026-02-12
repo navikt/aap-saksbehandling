@@ -1,171 +1,115 @@
 'use client';
 
-import { BistandsbehovVurdering, BistandsGrunnlag, MellomlagretVurdering, TypeBehandling } from 'lib/types/types';
-import {
-  Behovstype,
-  getJaNeiEllerIkkeBesvart,
-  getJaNeiEllerUndefined,
-  JaEllerNei,
-  JaEllerNeiOptions,
-} from 'lib/utils/form';
+import { BistandsGrunnlag, MellomlagretVurdering, VurdertAvAnsatt } from 'lib/types/types';
+import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { FormEvent } from 'react';
-import { Alert, BodyShort, Heading, Link, VStack } from '@navikt/ds-react';
-import { useConfigForm } from 'components/form/FormHook';
-import { FormField, ValuePair } from 'components/form/FormField';
-import { formaterDatoForFrontend } from 'lib/utils/date';
+import { parseDatoFraDatePicker } from 'lib/utils/date';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
-import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
-import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
-import { Veiledning } from 'components/veiledning/Veiledning';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { useFieldArray, useForm } from 'react-hook-form';
+import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
+import { BistandsbehovVurderingForm } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovVurderingForm';
+import {
+  NyVurderingExpandableCard,
+  skalVæreInitiellEkspandert,
+} from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
+import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
+import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
+import { parseISO } from 'date-fns';
+import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
+import { LovOgMedlemskapVurderingForm } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/types';
+import { BistandsbehovTidligereVurdering } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovTidligereVurdering';
+import {
+  erNyVurderingOppfylt,
+  mapBistandVurderingFormTilDto,
+} from 'components/behandlinger/sykdom/bistandsbehov/bistandsbehov-utils';
+import { Dato } from 'lib/types/Dato';
+import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovMellomlagringParser';
+import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
+import { Link, VStack } from '@navikt/ds-react';
+import { Veiledning } from 'components/veiledning/Veiledning';
+import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
+import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 
 interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
-  typeBehandling: TypeBehandling;
-  grunnlag?: BistandsGrunnlag;
+  grunnlag: BistandsGrunnlag;
   initialMellomlagretVurdering?: MellomlagretVurdering;
-  overgangArbeidEnabled?: Boolean;
 }
-
-interface FormFields {
+export interface BistandForm {
+  vurderinger: Array<BistandVurderingForm>;
+}
+export interface BistandVurderingForm {
+  fraDato: string;
   begrunnelse: string;
-  erBehovForAktivBehandling: string;
-  erBehovForArbeidsrettetTiltak: string;
-  erBehovForAnnenOppfølging?: string;
+  erBehovForAktivBehandling: JaEllerNei | undefined;
+  erBehovForArbeidsrettetTiltak: JaEllerNei | undefined;
+  erBehovForAnnenOppfølging?: JaEllerNei | undefined;
   overgangBegrunnelse?: string;
-  skalVurdereAapIOvergangTilArbeid?: string;
+  skalVurdereAapIOvergangTilArbeid?: JaEllerNei | undefined;
+  vurdertAv?: VurdertAvAnsatt;
+  kvalitetssikretAv?: VurdertAvAnsatt;
+  besluttetAv?: VurdertAvAnsatt;
+  erNyVurdering?: boolean;
 }
 
-type DraftFormFields = Partial<FormFields>;
-
-export const Bistandsbehov = ({
-  behandlingVersjon,
-  grunnlag,
-  readOnly,
-  typeBehandling,
-  initialMellomlagretVurdering,
-  overgangArbeidEnabled = false,
-}: Props) => {
+export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, initialMellomlagretVurdering }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
+  const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_BISTANDSBEHOV');
 
   const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
     useMellomlagring(Behovstype.AVKLAR_BISTANDSBEHOV_KODE, initialMellomlagretVurdering);
 
-  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+  const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
+
+  const { visningActions, formReadOnly, visningModus, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'VURDER_BISTANDSBEHOV',
     mellomlagretVurdering
   );
 
-  const vilkårsvurderingLabel = 'Vilkårsvurdering';
-  const erBehovForAktivBehandlingLabel = 'a: Har brukeren behov for aktiv behandling?';
-  const erBehovForArbeidsrettetTiltakLabel = 'b: Har brukeren behov for arbeidsrettet tiltak?';
-  const erBehovForAnnenOppfølgingLabel =
-    'c: Kan brukeren anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra Nav?';
-  const vurderAAPIOvergangTilArbeidLabel = 'Har brukeren rett til AAP i perioden som arbeidssøker?';
+  const defaultValues: BistandForm = initialMellomlagretVurdering
+    ? parseOgMigrerMellomlagretData(initialMellomlagretVurdering.data, grunnlag?.behøverVurderinger?.[0]?.fom)
+    : mapVurderingerToBistandForm(grunnlag);
 
-  const defaultValue: DraftFormFields = initialMellomlagretVurdering
-    ? JSON.parse(initialMellomlagretVurdering.data)
-    : mapVurderingToDraftFormFields(grunnlag?.vurderinger[0]);
-
-  const { formFields, form } = useConfigForm<FormFields>(
-    {
-      begrunnelse: {
-        type: 'textarea',
-        label: vilkårsvurderingLabel,
-        defaultValue: defaultValue?.begrunnelse,
-        rules: { required: 'Du må gi en begrunnelse om brukeren har behov for oppfølging' },
-      },
-      erBehovForAktivBehandling: {
-        type: 'radio',
-        label: erBehovForAktivBehandlingLabel,
-        defaultValue: defaultValue.erBehovForAktivBehandling,
-        rules: { required: 'Du må svare på om brukeren har behov for aktiv behandling' },
-        options: JaEllerNeiOptions,
-      },
-      erBehovForArbeidsrettetTiltak: {
-        type: 'radio',
-        label: erBehovForArbeidsrettetTiltakLabel,
-        options: JaEllerNeiOptions,
-        defaultValue: defaultValue.erBehovForArbeidsrettetTiltak,
-        rules: { required: 'Du må svare på om brukeren har behov for arbeidsrettet tiltak' },
-      },
-      erBehovForAnnenOppfølging: {
-        type: 'radio',
-        label: erBehovForAnnenOppfølgingLabel,
-        options: JaEllerNeiOptions,
-        defaultValue: defaultValue?.erBehovForAnnenOppfølging,
-        rules: { required: 'Du må svare på om brukeren anses for å ha en viss mulighet til å komme i arbeid' },
-      },
-      overgangBegrunnelse: {
-        type: 'textarea',
-        label: vilkårsvurderingLabel,
-        defaultValue: defaultValue?.overgangBegrunnelse || undefined,
-        rules: { required: 'Du må gjøre en vilkårsvurdering' },
-      },
-      skalVurdereAapIOvergangTilArbeid: {
-        type: 'radio',
-        label: vurderAAPIOvergangTilArbeidLabel,
-        options: JaEllerNeiOptions,
-        defaultValue: defaultValue?.skalVurdereAapIOvergangTilArbeid,
-        rules: {
-          required: 'Du må svare på om brukeren har rett på AAP i overgang til arbeid',
-          validate: (value) => (value === JaEllerNei.Ja ? 'AAP i overgang til arbeid er ikke støttet enda' : undefined),
-        },
-      },
-    },
-    { readOnly: formReadOnly, shouldUnregister: true }
-  );
+  const form = useForm<BistandForm>({ defaultValues, shouldUnregister: true });
+  const { fields, append, remove } = useFieldArray({ name: 'vurderinger', control: form.control });
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
-      løsBehovOgGåTilNesteSteg(
+      løsPeriodisertBehovOgGåTilNesteSteg(
         {
           behandlingVersjon: behandlingVersjon,
           behov: {
             behovstype: Behovstype.AVKLAR_BISTANDSBEHOV_KODE,
-            bistandsVurdering: {
-              fom: vurderingenGjelderFra!,
-              begrunnelse: data.begrunnelse,
-              erBehovForAktivBehandling: data.erBehovForAktivBehandling === JaEllerNei.Ja,
-              erBehovForArbeidsrettetTiltak: data.erBehovForArbeidsrettetTiltak === JaEllerNei.Ja,
-              erBehovForAnnenOppfølging: data.erBehovForAnnenOppfølging
-                ? data.erBehovForAnnenOppfølging === JaEllerNei.Ja
-                : undefined,
-              ...(bistandsbehovErIkkeOppfylt && {
-                skalVurdereAapIOvergangTilArbeid: data.skalVurdereAapIOvergangTilArbeid === JaEllerNei.Ja,
-                overgangBegrunnelse: data.overgangBegrunnelse,
-              }),
-            },
+            løsningerForPerioder: data.vurderinger.map((vurdering, index) => {
+              const isLast = index === data.vurderinger.length - 1;
+              const tilDato = isLast ? undefined : data.vurderinger[index + 1].fraDato;
+              return mapBistandVurderingFormTilDto(vurdering, tilDato);
+            }),
           },
           referanse: behandlingsReferanse,
         },
         () => {
           nullstillMellomlagretVurdering();
+          visningActions.onBekreftClick();
+          closeAllAccordions();
         }
       );
     })(event);
   };
 
-  const erBehovForAktivBehandling = form.watch('erBehovForAktivBehandling') === JaEllerNei.Nei;
-  const erBehovForArbeidsrettetTiltak = form.watch('erBehovForArbeidsrettetTiltak') === JaEllerNei.Nei;
-  const erBehovForAnnenOppfølging = form.watch('erBehovForAnnenOppfølging') === JaEllerNei.Nei;
-
-  const bistandsbehovErIkkeOppfylt =
-    erBehovForAktivBehandling && erBehovForArbeidsrettetTiltak && erBehovForAnnenOppfølging;
-
-  const gjeldendeSykdomsvurdering = grunnlag?.gjeldendeSykdsomsvurderinger.at(-1);
-  const vurderingenGjelderFra = gjeldendeSykdomsvurdering?.vurderingenGjelderFra;
-  const historiskeVurderinger = grunnlag?.historiskeVurderinger;
+  const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
+  const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
+  const foersteNyePeriode = fields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
+  const errorList = mapPeriodiserteVurderingerErrorList<LovOgMedlemskapVurderingForm>(form.formState.errors);
 
   return (
-    <VilkårskortMedFormOgMellomlagringNyVisning
+    <VilkårskortPeriodisert
       heading={'§ 11-6 Behov for bistand til å skaffe seg eller beholde arbeid'}
       steg={'VURDER_BISTANDSBEHOV'}
       onSubmit={handleSubmit}
@@ -173,135 +117,115 @@ export const Bistandsbehov = ({
       status={status}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={true}
-      vurdertAvAnsatt={grunnlag?.nyeVurderinger?.[0]?.vurdertAv}
-      kvalitetssikretAv={grunnlag?.nyeVurderinger?.[0]?.kvalitetssikretAv}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() => {
           form.reset(
             grunnlag?.nyeVurderinger[0]
-              ? mapVurderingToDraftFormFields(grunnlag.vurderinger[0])
-              : emptyDraftFormFields()
+              ? mapVurderingerToBistandForm(grunnlag)
+              : { vurderinger: [emptyBistandVurderingForm()] }
           );
         });
       }}
       mellomlagretVurdering={mellomlagretVurdering}
       visningModus={visningModus}
       visningActions={visningActions}
-      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
+      formReset={() => form.reset(mapVurderingerToBistandForm(grunnlag))}
+      onLeggTilVurdering={() => append(emptyBistandVurderingForm())}
+      errorList={errorList}
     >
-      {historiskeVurderinger && historiskeVurderinger.length > 0 && (
-        <TidligereVurderinger
-          data={historiskeVurderinger}
-          buildFelter={byggFelter}
-          getErGjeldende={(v) =>
-            grunnlag?.sisteVedtatteVurderinger.some((gjeldendeVurdering) => deepEqual(v, gjeldendeVurdering, ['dato']))
+      <VStack gap={'4'}>
+        <Veiledning
+          defaultOpen={false}
+          tekst={
+            <div>
+              Vilkårene i § 11-6 første ledd bokstav a til c er tre alternative vilkår. Det vil si at det er nok at
+              brukeren oppfyller ett av dem for å fylle vilkåret i § 11-6.Først skal du vurdere om vilkårene i bokstav a
+              (aktiv behandling) og bokstav b (arbeidsrettet tiltak) er oppfylte. Hvis du svarer ja på ett eller begge
+              vilkårene, er § 11-6 oppfylt. Hvis du svarer nei på a og b, må du vurdere om bokstav c er oppfylt. Hvis du
+              svarer nei på alle tre vilkårene, er § 11-6 ikke oppfylt.{' '}
+              <Link href="https://lovdata.no/nav/rundskriv/r11-00#KAPITTEL_8" target="_blank">
+                Du kan lese om hvordan vilkåret skal vurderes i rundskrivet til § 11-6 (lovdata.no)
+              </Link>
+            </div>
           }
-          getFomDato={(v) => v.fom ?? v.vurdertAv.dato}
-          getVurdertAvIdent={(v) => v.vurdertAv.ident}
-          getVurdertDato={(v) => v.vurdertAv.dato}
         />
-      )}
-      <Veiledning
-        defaultOpen={false}
-        tekst={
-          <div>
-            Vilkårene i § 11-6 første ledd bokstav a til c er tre alternative vilkår. Det vil si at det er nok at
-            brukeren oppfyller ett av dem for å fylle vilkåret i § 11-6.Først skal du vurdere om vilkårene i bokstav a
-            (aktiv behandling) og bokstav b (arbeidsrettet tiltak) er oppfylte. Hvis du svarer ja på ett eller begge
-            vilkårene, er § 11-6 oppfylt. Hvis du svarer nei på a og b, må du vurdere om bokstav c er oppfylt. Hvis du
-            svarer nei på alle tre vilkårene, er § 11-6 ikke oppfylt.{' '}
-            <Link href="https://lovdata.no/nav/rundskriv/r11-00#KAPITTEL_8" target="_blank">
-              Du kan lese om hvordan vilkåret skal vurderes i rundskrivet til § 11-6 (lovdata.no)
-            </Link>
-          </div>
-        }
-      />
-      {typeBehandling === 'Revurdering' && (
-        <BodyShort>
-          Vurderingen gjelder fra {vurderingenGjelderFra && formaterDatoForFrontend(vurderingenGjelderFra)}
-        </BodyShort>
-      )}
-      <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
-      <FormField form={form} formField={formFields.erBehovForAktivBehandling} horizontalRadio />
-      <FormField form={form} formField={formFields.erBehovForArbeidsrettetTiltak} horizontalRadio />
-      {form.watch('erBehovForAktivBehandling') !== JaEllerNei.Ja &&
-        form.watch('erBehovForArbeidsrettetTiltak') !== JaEllerNei.Ja && (
-          <FormField form={form} formField={formFields.erBehovForAnnenOppfølging} horizontalRadio />
-        )}
-      {!overgangArbeidEnabled &&
-        typeBehandling === 'Revurdering' &&
-        !grunnlag?.harOppfylt11_5 &&
-        bistandsbehovErIkkeOppfylt && (
-          <VStack gap={'4'} as={'section'}>
-            <Heading level={'3'} size="small">
-              § 11-17 Arbeidsavklaringspenger i perioden som arbeidssøker
-            </Heading>
-            <FormField form={form} formField={formFields.overgangBegrunnelse} className="begrunnelse" />
-            <FormField form={form} formField={formFields.skalVurdereAapIOvergangTilArbeid} horizontalRadio />
-            {form.watch('skalVurdereAapIOvergangTilArbeid') === JaEllerNei.Ja && (
-              <Alert variant="warning">
-                Sett saken på vent og meld i fra til Team AAP at du har fått en § 11-17-sak.
-              </Alert>
+
+        {vedtatteVurderinger.map((vurdering) => (
+          <TidligereVurderingExpandableCard
+            key={vurdering.fom}
+            fom={parseISO(vurdering.fom)}
+            tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
+            foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+            vurderingStatus={getErOppfyltEllerIkkeStatus(
+              !!(
+                vurdering.erBehovForAktivBehandling ||
+                vurdering.erBehovForArbeidsrettetTiltak ||
+                vurdering.erBehovForAnnenOppfølging
+              )
             )}
-          </VStack>
-        )}
-    </VilkårskortMedFormOgMellomlagringNyVisning>
+          >
+            <BistandsbehovTidligereVurdering vurdering={vurdering} />
+          </TidligereVurderingExpandableCard>
+        ))}
+
+        {fields.map((vurdering, index) => (
+          <NyVurderingExpandableCard
+            key={vurdering.id}
+            accordionsSignal={accordionsSignal}
+            fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
+            nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
+            isLast={index === fields.length - 1}
+            vurderingStatus={getErOppfyltEllerIkkeStatus(erNyVurderingOppfylt(form.watch(`vurderinger.${index}`)))}
+            vurdertAv={vurdering.vurdertAv}
+            kvalitetssikretAv={vurdering.kvalitetssikretAv}
+            besluttetAv={vurdering.besluttetAv}
+            readonly={formReadOnly}
+            onSlettVurdering={() => remove(index)}
+            harTidligereVurderinger={tidligereVurderinger.length > 0}
+            index={index}
+            finnesFeil={finnesFeilForVurdering(index, errorList)}
+            initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
+          >
+            <BistandsbehovVurderingForm form={form} readOnly={formReadOnly} index={index} />
+          </NyVurderingExpandableCard>
+        ))}
+      </VStack>
+    </VilkårskortPeriodisert>
   );
 
-  function mapVurderingToDraftFormFields(vurdering?: BistandsbehovVurdering): DraftFormFields {
-    return {
-      begrunnelse: vurdering?.begrunnelse,
-      erBehovForAktivBehandling: getJaNeiEllerUndefined(vurdering?.erBehovForAktivBehandling),
-      erBehovForAnnenOppfølging: getJaNeiEllerUndefined(vurdering?.erBehovForAnnenOppfølging),
-      overgangBegrunnelse: vurdering?.overgangBegrunnelse || '',
-      skalVurdereAapIOvergangTilArbeid: getJaNeiEllerUndefined(vurdering?.skalVurdereAapIOvergangTilArbeid),
-      erBehovForArbeidsrettetTiltak: getJaNeiEllerUndefined(vurdering?.erBehovForArbeidsrettetTiltak),
-    };
-  }
-
-  function emptyDraftFormFields(): DraftFormFields {
-    return {
-      begrunnelse: '',
-      erBehovForAktivBehandling: '',
-      erBehovForAnnenOppfølging: '',
-      overgangBegrunnelse: '',
-      skalVurdereAapIOvergangTilArbeid: '',
-      erBehovForArbeidsrettetTiltak: '',
-    };
-  }
-
-  function byggFelter(vurdering: BistandsbehovVurdering): ValuePair[] {
-    const felter = [
-      {
-        label: vilkårsvurderingLabel,
-        value: vurdering.begrunnelse,
-      },
-      {
-        label: erBehovForAktivBehandlingLabel,
-        value: getJaNeiEllerIkkeBesvart(vurdering.erBehovForAktivBehandling),
-      },
-      {
-        label: erBehovForArbeidsrettetTiltakLabel,
-        value: getJaNeiEllerIkkeBesvart(vurdering.erBehovForArbeidsrettetTiltak),
-      },
-      {
-        label: erBehovForAnnenOppfølgingLabel,
-        value: getJaNeiEllerIkkeBesvart(vurdering.erBehovForAnnenOppfølging),
-      },
-    ];
-
-    if (harVurdertOvergangArbeid(vurdering)) {
-      felter.push({
-        label: vurderAAPIOvergangTilArbeidLabel,
-        value: getJaNeiEllerIkkeBesvart(vurdering.skalVurdereAapIOvergangTilArbeid),
-      });
+  function mapVurderingerToBistandForm(grunnlag: BistandsGrunnlag): BistandForm {
+    if (trengerVurderingsForslag(grunnlag)) {
+      return hentPerioderSomTrengerVurdering<BistandVurderingForm>(grunnlag, emptyBistandVurderingForm);
     }
 
-    return felter;
+    // Vi har allerede data lagret, vis enten de som er lagret i grunnlaget her eller tom liste
+    return {
+      vurderinger: grunnlag.nyeVurderinger.map((vurdering) => ({
+        fraDato: new Dato(vurdering.fom).formaterForFrontend(),
+        begrunnelse: vurdering?.begrunnelse,
+        erBehovForAktivBehandling: getJaNeiEllerUndefined(vurdering?.erBehovForAktivBehandling),
+        erBehovForAnnenOppfølging: getJaNeiEllerUndefined(vurdering?.erBehovForAnnenOppfølging),
+        overgangBegrunnelse: vurdering?.overgangBegrunnelse || '',
+        skalVurdereAapIOvergangTilArbeid: getJaNeiEllerUndefined(vurdering?.skalVurdereAapIOvergangTilArbeid),
+        erBehovForArbeidsrettetTiltak: getJaNeiEllerUndefined(vurdering?.erBehovForArbeidsrettetTiltak),
+        vurdertAv: vurdering.vurdertAv,
+        kvalitetssikretAv: vurdering.kvalitetssikretAv,
+        besluttetAv: vurdering.besluttetAv,
+      })),
+    };
   }
 
-  function harVurdertOvergangArbeid(vurdering: BistandsbehovVurdering) {
-    return vurdering.skalVurdereAapIOvergangTilArbeid === false || vurdering.skalVurdereAapIOvergangTilArbeid === true;
+  function emptyBistandVurderingForm(): BistandVurderingForm {
+    return {
+      fraDato: '',
+      begrunnelse: '',
+      erBehovForAktivBehandling: undefined,
+      erBehovForAnnenOppfølging: undefined,
+      overgangBegrunnelse: '',
+      skalVurdereAapIOvergangTilArbeid: undefined,
+      erBehovForArbeidsrettetTiltak: undefined,
+      erNyVurdering: true,
+    };
   }
 };

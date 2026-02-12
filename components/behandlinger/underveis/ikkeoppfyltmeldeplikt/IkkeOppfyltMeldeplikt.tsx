@@ -114,14 +114,19 @@ export const IkkeOppfyltMeldeplikt = ({ grunnlag, behandlingVersjon, readOnly }:
           })),
       };
 
-      løsBehovOgGåTilNesteSteg({
-        behandlingVersjon: behandlingVersjon,
-        referanse: behandlingsreferanse,
-        behov: {
-          behovstype: Behovstype.OVERSTYR_IKKE_OPPFYLT_MELDEPLIKT_KODE,
-          meldepliktOverstyringVurdering: meldepliktOverstyringDto,
+      løsBehovOgGåTilNesteSteg(
+        {
+          behandlingVersjon: behandlingVersjon,
+          referanse: behandlingsreferanse,
+          behov: {
+            behovstype: Behovstype.OVERSTYR_IKKE_OPPFYLT_MELDEPLIKT_KODE,
+            meldepliktOverstyringVurdering: meldepliktOverstyringDto,
+          },
         },
-      });
+        () => {
+          visningActions.onBekreftClick();
+        }
+      );
     })(event);
   };
 

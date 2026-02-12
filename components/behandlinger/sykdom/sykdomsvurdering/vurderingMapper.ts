@@ -1,11 +1,12 @@
 import { getTrueFalseEllerUndefined, JaEllerNei } from 'lib/utils/form';
-import { formaterDatoForBackend } from 'lib/utils/date';
-import { parse } from 'date-fns';
-import { SykdomsvurderingFormFields } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import { SykdomsvurderingLøsningDto } from 'lib/types/types';
+import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
+import { Dato } from 'lib/types/Dato';
+import { parseDatoFraDatePicker } from 'lib/utils/date';
+import { isAfter } from 'date-fns';
 
-function mapForFørstegangsbehandling(
-  data: SykdomsvurderingFormFields,
+function mapMedVissVarighet(
+  data: Sykdomsvurdering,
   erArbeidsevnenNedsatt: undefined | boolean,
   skalVurdereYrkesskade: boolean
 ): Pick<
@@ -36,9 +37,10 @@ function mapForFørstegangsbehandling(
       ? getTrueFalseEllerUndefined(data.erSkadeSykdomEllerLyteVesentligdel)
       : undefined;
 
-  const erNedsettelseIArbeidsevneAvEnVissVarighet = erSkadeSykdomEllerLyteVesentligdel
-    ? getTrueFalseEllerUndefined(data.erNedsettelseIArbeidsevneAvEnVissVarighet)
-    : undefined;
+  const erNedsettelseIArbeidsevneAvEnVissVarighet =
+    erSkadeSykdomEllerLyteVesentligdel || erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense
+      ? getTrueFalseEllerUndefined(data.erNedsettelseIArbeidsevneAvEnVissVarighet)
+      : undefined;
 
   return {
     erNedsettelseIArbeidsevneMerEnnHalvparten,
@@ -49,8 +51,8 @@ function mapForFørstegangsbehandling(
   };
 }
 
-function mapForRevurdering(
-  data: SykdomsvurderingFormFields,
+function mapUtenVissVarighet(
+  data: Sykdomsvurdering,
   erArbeidsevnenNedsatt: undefined | boolean,
   erÅrsakssammenhengYrkesskade: boolean
 ): Pick<
@@ -69,10 +71,9 @@ function mapForRevurdering(
       ? getTrueFalseEllerUndefined(data.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense)
       : undefined;
 
-  const erSkadeSykdomEllerLyteVesentligdel =
-    erNedsettelseIArbeidsevneMerEnnHalvparten || erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense
-      ? getTrueFalseEllerUndefined(data.erSkadeSykdomEllerLyteVesentligdel)
-      : undefined;
+  const erSkadeSykdomEllerLyteVesentligdel = erNedsettelseIArbeidsevneMerEnnHalvparten
+    ? getTrueFalseEllerUndefined(data.erSkadeSykdomEllerLyteVesentligdel)
+    : undefined;
 
   return {
     erNedsettelseIArbeidsevneMerEnnHalvparten,
@@ -81,13 +82,12 @@ function mapForRevurdering(
   };
 }
 
-function mapTilVurdering(
-  data: SykdomsvurderingFormFields,
+function mapTilPeriodisertVurdering(
+  data: Sykdomsvurdering,
   skalVurdereYrkesskade: boolean,
   erÅrsakssammenhengYrkesskade: boolean,
-  behandlingErFørstegangsbehandling: boolean,
-  behandlingErRevurdering: boolean,
-  behandlingErRevurderingAvFørstegangsbehandling: boolean
+  førsteDatoSomKanVurderes: Date,
+  tilDato?: string
 ): SykdomsvurderingLøsningDto {
   // Denne overstyrer alle verdiene under. Hvis false skal alt nulles ut.
   const harSkadeSykdomEllerLyte = data.harSkadeSykdomEllerLyte === JaEllerNei.Ja;
@@ -96,6 +96,9 @@ function mapTilVurdering(
   const hoveddiagnose = harSkadeSykdomEllerLyte ? data?.hoveddiagnose?.value : undefined;
   const bidiagnoser = harSkadeSykdomEllerLyte ? data.bidiagnose?.map((diagnose) => diagnose.value) : undefined;
 
+  const fraDato = parseDatoFraDatePicker(data.fraDato);
+  const skalVurdereVissVarighet = fraDato != null ? !isAfter(fraDato, førsteDatoSomKanVurderes) : false;
+
   // Denne overstyrer de under. Hvis false skal alt nulles ut.
   const erArbeidsevnenNedsatt = harSkadeSykdomEllerLyte
     ? getTrueFalseEllerUndefined(data.erArbeidsevnenNedsatt)
@@ -103,18 +106,18 @@ function mapTilVurdering(
 
   let nedsattArbeidsevneOgYrkesskade = {};
   if (harSkadeSykdomEllerLyte) {
-    if (behandlingErFørstegangsbehandling || behandlingErRevurderingAvFørstegangsbehandling) {
-      nedsattArbeidsevneOgYrkesskade = mapForFørstegangsbehandling(data, erArbeidsevnenNedsatt, skalVurdereYrkesskade);
-    }
-    if (behandlingErRevurdering && !behandlingErRevurderingAvFørstegangsbehandling) {
-      nedsattArbeidsevneOgYrkesskade = mapForRevurdering(data, erArbeidsevnenNedsatt, erÅrsakssammenhengYrkesskade);
+    if (skalVurdereVissVarighet) {
+      nedsattArbeidsevneOgYrkesskade = mapMedVissVarighet(data, erArbeidsevnenNedsatt, skalVurdereYrkesskade);
+    } else {
+      nedsattArbeidsevneOgYrkesskade = mapUtenVissVarighet(data, erArbeidsevnenNedsatt, erÅrsakssammenhengYrkesskade);
     }
   }
 
   return {
     ...nedsattArbeidsevneOgYrkesskade,
     begrunnelse: data.begrunnelse,
-    fom: formaterDatoForBackend(parse(data.vurderingenGjelderFra, 'dd.MM.yyyy', new Date())),
+    fom: new Dato(data.fraDato).formaterForBackend(),
+    tom: tilDato,
     harSkadeSykdomEllerLyte,
     kodeverk,
     hoveddiagnose,
@@ -124,4 +127,4 @@ function mapTilVurdering(
   };
 }
 
-export default mapTilVurdering;
+export default mapTilPeriodisertVurdering;
