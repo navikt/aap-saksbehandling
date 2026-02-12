@@ -17,14 +17,10 @@ beforeEach(() => {
 });
 
 const grunnlagTomt: BistandsGrunnlag = {
-  gjeldendeSykdsomsvurderinger: [],
-  gjeldendeVedtatteVurderinger: [],
   sisteVedtatteVurderinger: [],
-  harTilgangTilÅSaksbehandle: true,
-  historiskeVurderinger: [],
-  vurderinger: [],
   nyeVurderinger: [],
   behøverVurderinger: [{ fom: '2025-01-01', tom: '2025-12-12' }],
+  harTilgangTilÅSaksbehandle: true,
   kanVurderes: [],
 };
 describe('Generelt', () => {
@@ -49,35 +45,10 @@ describe('Generelt', () => {
   ];
 
   const grunnlagMedVurdering: BistandsGrunnlag = {
-    gjeldendeSykdsomsvurderinger: [
-      {
-        fom: '2025-03-24',
-        begrunnelse: 'blabla',
-        dokumenterBruktIVurdering: [],
-        erArbeidsevnenNedsatt: true,
-        erNedsettelseIArbeidsevneAvEnVissVarighet: true,
-        erNedsettelseIArbeidsevneMerEnnHalvparten: true,
-        erSkadeSykdomEllerLyteVesentligdel: true,
-        harSkadeSykdomEllerLyte: true,
-        vurderingenGjelderFra: '2025-03-24',
-        vurdertAv: { ident: 'Saksbehandler', dato: '2025-03-24' },
-      },
-    ],
-    gjeldendeVedtatteVurderinger: sisteVedtatteVurderinger, //Deprekert
     sisteVedtatteVurderinger: sisteVedtatteVurderinger,
-    harTilgangTilÅSaksbehandle: true,
-    historiskeVurderinger: [
-      {
-        begrunnelse: 'En begrunnelse',
-        erBehovForArbeidsrettetTiltak: true,
-        erBehovForAktivBehandling: false,
-        vurdertAv: { ident: 'Saksbehandler', dato: '2025-03-24' },
-        fom: '2025-03-24',
-      },
-    ],
-    vurderinger: nyeVurderinger,
     nyeVurderinger: nyeVurderinger,
     behøverVurderinger: [],
+    harTilgangTilÅSaksbehandle: true,
     kanVurderes: [],
   };
 
@@ -131,15 +102,11 @@ describe('mellomlagring i bistandsbehov', () => {
     },
   ];
   const bistandsgrunnlag: BistandsGrunnlag = {
-    vurderinger: nyeVurderinger,
     nyeVurderinger: nyeVurderinger,
-    gjeldendeSykdsomsvurderinger: [],
-    gjeldendeVedtatteVurderinger: [], //Deprekert
     sisteVedtatteVurderinger: [],
-    harTilgangTilÅSaksbehandle: true,
-    historiskeVurderinger: [],
-    kanVurderes: [],
     behøverVurderinger: [],
+    harTilgangTilÅSaksbehandle: true,
+    kanVurderes: [],
   };
 
   it('Skal vise en tekst om hvem som har gjort vurderingen dersom det finnes en mellomlagring', () => {

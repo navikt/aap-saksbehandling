@@ -322,8 +322,13 @@ export const hentInntektsBortfallGrunnlag = async (behandlingsReferanse: string)
   return await apiFetch<InntektsbortfallResponse>(url, saksbehandlingApiScope, 'GET');
 };
 
-export const hentHelseInstitusjonsVurdering = async (behandlingsReferanse: string) => {
+export const hentHelseInstitusjonsGrunnlagGammel = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/institusjon/helse`;
+  return apiFetch<HelseinstitusjonGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentHelseInstitusjonsGrunnlagNy = async (behandlingsReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/institusjon/helseny`;
   return apiFetch<HelseinstitusjonGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 

@@ -15,7 +15,6 @@ import { SykdomsvurderingBrevMedDataFetching } from 'components/behandlinger/syk
 import { OvergangUforeMedDataFetching } from './overgangufore/OvergangUforeMedDataFetching';
 import { OvergangArbeidMedDataFetching } from './overgangarbeid/OvergangArbeidMedDataFetching';
 import { ArbeidsopptrappingMedDataFetching } from 'components/behandlinger/sykdom/arbeidsopptrapping/ArbeidsopptrappingMedDataFetching';
-import { unleashService } from 'lib/services/unleash/unleashService';
 import { EtableringAvEgenVirksomhetMedDatafetching } from 'components/behandlinger/sykdom/etableringegenvirksomhet/EtableringAvEgenVirksomhetMedDatafetching';
 
 interface Props {
@@ -40,9 +39,7 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
   const vurderYrkesskadeSteg = getStegData(aktivStegGruppe, 'VURDER_YRKESSKADE', flyt.data);
   const vurderSykepengeerstatningSteg = getStegData(aktivStegGruppe, 'VURDER_SYKEPENGEERSTATNING', flyt.data);
   const overganguføreSteg = getStegData(aktivStegGruppe, 'OVERGANG_UFORE', flyt.data);
-  const overgangarbeidSteg = unleashService.isEnabled('OvergangArbeidFrontend')
-    ? getStegData(aktivStegGruppe, 'OVERGANG_ARBEID', flyt.data)
-    : null;
+  const overgangarbeidSteg = getStegData(aktivStegGruppe, 'OVERGANG_ARBEID', flyt.data);
 
   return (
     <GruppeSteg
@@ -99,13 +96,12 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
           <OvergangUforeMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={overganguføreSteg} />
         </StegSuspense>
       )}
-      {unleashService.isEnabled('OvergangArbeidFrontend') &&
-        overgangarbeidSteg !== null &&
-        overgangarbeidSteg.skalViseSteg && (
-          <StegSuspense>
-            <OvergangArbeidMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={overgangarbeidSteg} />
-          </StegSuspense>
-        )}
+
+      {overgangarbeidSteg.skalViseSteg && (
+        <StegSuspense>
+          <OvergangArbeidMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={overgangarbeidSteg} />
+        </StegSuspense>
+      )}
       {refusjonskravSteg.skalViseSteg && (
         <StegSuspense>
           <RefusjonMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={refusjonskravSteg} />

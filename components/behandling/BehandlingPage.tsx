@@ -8,10 +8,11 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 
 interface Props {
   behandlingsReferanse: string;
+  saksnummer: string;
   aktivGruppe: StegGruppe;
 }
 
-export const BehandlingPage = async ({ behandlingsReferanse, aktivGruppe }: Props) => {
+export const BehandlingPage = async ({ behandlingsReferanse, saksnummer, aktivGruppe }: Props) => {
   const flytResponse = await hentFlyt(behandlingsReferanse);
 
   if (isError(flytResponse)) {
@@ -34,6 +35,7 @@ export const BehandlingPage = async ({ behandlingsReferanse, aktivGruppe }: Prop
     <OppgaveKolonne
       className={styles.oppgavekolonne}
       behandlingsReferanse={behandlingsReferanse}
+      saksnummer={saksnummer}
       aktivGruppe={decodeURIComponent(aktivGruppe) as StegGruppe}
     />
   );

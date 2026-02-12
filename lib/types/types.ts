@@ -24,7 +24,7 @@ export type SykdomsvurderingLøsningDto =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.SykdomsvurderingL\u00F8sningDto'];
 
 export type SykepengeerstatningVurderingGrunn =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.SykepengerVurderingDto']['grunn'];
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykepengergrunnlag.SykepengerVurderingResponse']['grunn'];
 export type BistandsGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.bistand.BistandGrunnlagResponse'];
 export type BistandVurderingResponse =
@@ -83,6 +83,8 @@ export type HelseinstitusjonGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.HelseinstitusjonGrunnlagDto'];
 export type Institusjonsopphold =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.InstitusjonsoppholdDto'];
+export type HelseInstiusjonVurdering =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.HelseinstitusjonVurderingDto'];
 
 export type FatteVedtakGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.FatteVedtakGrunnlagDto'];

@@ -3,9 +3,7 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 import { skalViseSteg, StegData } from 'lib/utils/steg';
-import { OvergangUfore } from 'components/behandlinger/sykdom/overgangufore/OvergangUfore';
 import { OvergangUforePeriodisert } from 'components/behandlinger/sykdom/overgangufore/OvergangUforePeriodisert';
-import { unleashService } from 'lib/services/unleash/unleashService';
 
 interface Props {
   behandlingsReferanse: string;
@@ -28,20 +26,12 @@ export const OvergangUforeMedDataFetching = async ({ behandlingsReferanse, stegD
     return null;
   }
 
-  return unleashService.isEnabled('PeriodisertOvergangUfore') ? (
+  return (
     <OvergangUforePeriodisert
       grunnlag={grunnlag.data}
       readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       behandlingVersjon={stegData.behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
-    />
-  ) : (
-    <OvergangUfore
-      grunnlag={grunnlag.data}
-      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
-      behandlingVersjon={stegData.behandlingVersjon}
-      initialMellomlagretVurdering={initialMellomlagretVurdering}
-      typeBehandling={stegData.typeBehandling}
     />
   );
 };

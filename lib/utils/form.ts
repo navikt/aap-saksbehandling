@@ -201,6 +201,10 @@ export const getTrueFalseEllerUndefined = (value?: JaEllerNei): boolean | undefi
   return value === JaEllerNei.Ja;
 };
 
+export const getJaEllerNei = (value: boolean) => {
+  return value ? JaEllerNei.Ja : JaEllerNei.Nei;
+};
+
 export const getJaNeiEllerUndefined = (value?: boolean | null) => {
   if (value === undefined || value === null) {
     return undefined;
