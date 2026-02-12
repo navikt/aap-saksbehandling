@@ -82,7 +82,7 @@ export const SaksinfoBanner = ({
   const behandlingErIkkeIverksatt = behandling && behandling.status !== 'IVERKSETTES';
 
   const adressebeskyttelser = oppgave ? utledAdressebeskyttelse(oppgave) : [];
-  const rettighetsdata = useSWR(`/api/sak/${sak.saksnummer}/rettighet`, hentRettighetsdata).data;
+  const rettighetsdata = useSWR(`/api/sak/${sak.saksnummer}/rettighet`, () => hentRettighetsdata(sak.saksnummer)).data;
 
   const visValgForÅTrekkeSøknad =
     !behandlerEnSøknadSomSkalTrekkes &&
@@ -140,7 +140,7 @@ export const SaksinfoBanner = ({
   const hentMaksdato = (): string | null | undefined => {
     if (isSuccess(rettighetsdata)) {
       const ytelsesbehandlingTyper = ['Førstegangsbehandling', 'Revurdering'];
-      
+
       const gjeldendeVedtak = sak.behandlinger
         .filter((behandling) => ytelsesbehandlingTyper.includes(behandling.type) && behandling.status === 'AVSLUTTET')
         .sort((b1, b2) => sorterEtterNyesteDato(b1.opprettet, b2.opprettet))[0];
