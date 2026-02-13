@@ -1,3 +1,5 @@
+import 'server-only';
+
 import { statistikkQueryparams } from 'lib/utils/request';
 import {
   AntallÅpneOgGjennomsnitt,
