@@ -24,10 +24,14 @@ import { MarkeringInfoboks } from 'components/markeringinfoboks/MarkeringInfobok
 import { ArenaStatus } from 'components/arenastatus/ArenaStatus';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { AvbrytRevurderingModal } from 'components/saksinfobanner/avbrytrevurderingmodal/AvbrytRevurderingModal';
-import { formaterDatoForFrontend } from 'lib/utils/date';
+import { formaterDatoForFrontend, sorterEtterNyesteDato, stringToDate } from 'lib/utils/date';
 import { ReturStatus } from 'components/returstatus/ReturStatus';
 import { useFeatureFlag } from 'context/UnleashContext';
 import { Dato } from 'lib/types/Dato';
+import { isSuccess } from 'lib/utils/api';
+import { clientHentRettighetsdata } from 'lib/clientApi';
+import { Behandlingstype, behandlingstypeFraId } from 'lib/utils/behandling';
+import useSWR from 'swr';
 
 interface Props {
   personInformasjon: SakPersoninfo;
@@ -79,11 +83,10 @@ export const SaksinfoBanner = ({
   const behandlingErIkkeIverksatt = behandling && behandling.status !== 'IVERKSETTES';
 
   const adressebeskyttelser = oppgave ? utledAdressebeskyttelse(oppgave) : [];
-  /* TODO: Det er for mange bugs tilknyttet rettighetsdata. Må fikses før dette kan kommenteres ut igjen.
-  const rettighetsdata = useSWR(`/api/sak/${sak.saksnummer}/rettighet`, () =>
-    clientHentRettighetsdata(sak.saksnummer)
-  ).data;
-*/
+  const isVisRettigheterForVedtakEnabled = useFeatureFlag('VisRettigheterForVedtak'); // TODO AAP-1709 Fjerne feature toggle etter verifisering i dev
+  const rettighetsdata = isVisRettigheterForVedtakEnabled
+    ? useSWR(`/api/sak/${sak.saksnummer}/rettighet`, () => clientHentRettighetsdata(sak.saksnummer)).data
+    : undefined;
 
   const visValgForÅTrekkeSøknad =
     !behandlerEnSøknadSomSkalTrekkes &&
@@ -139,27 +142,31 @@ export const SaksinfoBanner = ({
   };
 
   const hentMaksdato = (): string | null | undefined => {
-    /*
-    TODO: Det er for mange bugs tilknyttet rettighetsdata. Må fikses før dette kan kommenteres ut igjen.
-    if (isSuccess(rettighetsdata)) {
-      const ytelsesbehandlingTyper = ['Førstegangsbehandling', 'Revurdering'];
+    if (isVisRettigheterForVedtakEnabled && isSuccess(rettighetsdata)) {
+      const ytelsesbehandlingTyper = [Behandlingstype.Førstegangsbehandling, Behandlingstype.Revurdering];
 
       const gjeldendeVedtak = sak.behandlinger
-        .filter((behandling) => ytelsesbehandlingTyper.includes(behandling.type) && behandling.status === 'AVSLUTTET')
+        .filter((behandling) => {
+          const behandlingstype = behandlingstypeFraId(behandling?.type);
+          return (
+            behandlingstype && ytelsesbehandlingTyper.includes(behandlingstype) && behandling.status === 'AVSLUTTET'
+          );
+        })
         .sort((b1, b2) => sorterEtterNyesteDato(b1.opprettet, b2.opprettet))[0];
+
       const gjeldendeRettighet = rettighetsdata.data.find(
-        (rettighet) => rettighet.startDato === gjeldendeVedtak.opprettet
+        (rettighet) =>
+          stringToDate(rettighet.startDato)?.toDateString() === new Date(gjeldendeVedtak?.opprettet).toDateString()
       );
+
       return gjeldendeRettighet?.maksDato;
     }
-*/
     return undefined;
   };
 
   const behandlingsreferanse = useBehandlingsReferanse();
   const oppgaveStatus = hentOppgaveStatus();
   const oppgaveTildelingStatus = hentOppgaveTildeling();
-  const isVisRettigheterForVedtakEnabled = useFeatureFlag('VisRettigheterForVedtak');
   const maksdato = isVisRettigheterForVedtakEnabled ? hentMaksdato() : undefined;
 
   const erPåBehandlingSiden = referanse !== undefined;
