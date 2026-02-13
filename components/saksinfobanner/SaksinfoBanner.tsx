@@ -79,6 +79,11 @@ export const SaksinfoBanner = ({
   const behandlingErIkkeIverksatt = behandling && behandling.status !== 'IVERKSETTES';
 
   const adressebeskyttelser = oppgave ? utledAdressebeskyttelse(oppgave) : [];
+  /* TODO: Det er for mange bugs tilknyttet rettighetsdata. Må fikses før dette kan kommenteres ut igjen.
+  const rettighetsdata = useSWR(`/api/sak/${sak.saksnummer}/rettighet`, () =>
+    clientHentRettighetsdata(sak.saksnummer)
+  ).data;
+*/
 
   const visValgForÅTrekkeSøknad =
     !behandlerEnSøknadSomSkalTrekkes &&
@@ -133,9 +138,29 @@ export const SaksinfoBanner = ({
     }
   };
 
+  const hentMaksdato = (): string | null | undefined => {
+    /*
+    TODO: Det er for mange bugs tilknyttet rettighetsdata. Må fikses før dette kan kommenteres ut igjen.
+    if (isSuccess(rettighetsdata)) {
+      const ytelsesbehandlingTyper = ['Førstegangsbehandling', 'Revurdering'];
+
+      const gjeldendeVedtak = sak.behandlinger
+        .filter((behandling) => ytelsesbehandlingTyper.includes(behandling.type) && behandling.status === 'AVSLUTTET')
+        .sort((b1, b2) => sorterEtterNyesteDato(b1.opprettet, b2.opprettet))[0];
+      const gjeldendeRettighet = rettighetsdata.data.find(
+        (rettighet) => rettighet.startDato === gjeldendeVedtak.opprettet
+      );
+      return gjeldendeRettighet?.maksDato;
+    }
+*/
+    return undefined;
+  };
+
   const behandlingsreferanse = useBehandlingsReferanse();
   const oppgaveStatus = hentOppgaveStatus();
   const oppgaveTildelingStatus = hentOppgaveTildeling();
+  const isVisRettigheterForVedtakEnabled = useFeatureFlag('VisRettigheterForVedtak');
+  const maksdato = isVisRettigheterForVedtakEnabled ? hentMaksdato() : undefined;
 
   const erPåBehandlingSiden = referanse !== undefined;
   return (
@@ -177,6 +202,13 @@ export const SaksinfoBanner = ({
 
       {erPåBehandlingSiden && behandling && (
         <HStack>
+          {maksdato && (
+            <div className={styles.oppgavestatus}>
+              <Tag className={styles.maksdatoTag} variant={'info'} size={'small'}>
+                {`Maksdato: ${formaterDatoForFrontend(maksdato)}`}
+              </Tag>
+            </div>
+          )}
           {adressebeskyttelser?.map((adressebeskyttelse) => (
             <div key={adressebeskyttelse} className={styles.oppgavestatus}>
               <AdressebeskyttelseStatus adressebeskyttelsesGrad={adressebeskyttelse} />

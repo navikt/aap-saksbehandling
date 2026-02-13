@@ -1,3 +1,5 @@
+import 'server-only';
+
 import { isLocal } from 'lib/utils/environment';
 import { apiFetch } from 'lib/services/apiFetch';
 import { FetchResponse } from 'lib/utils/api';

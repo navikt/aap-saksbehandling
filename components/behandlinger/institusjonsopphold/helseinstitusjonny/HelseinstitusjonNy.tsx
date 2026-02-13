@@ -5,7 +5,7 @@ import { InstitusjonsoppholdTabell } from 'components/behandlinger/institusjonso
 import { HelseinstitusjonGrunnlag, HelseInstiusjonVurdering, MellomlagretVurdering, Periode } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 
-import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
+import { DATO_FORMATER, formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 
 import React, { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
@@ -13,12 +13,13 @@ import { useConfigForm } from 'components/form/FormHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
-import { parse, subDays } from 'date-fns';
+import { format, parse, subDays } from 'date-fns';
 import { useFieldArray } from 'react-hook-form';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { Dato } from 'lib/types/Dato';
 import { VStack } from '@navikt/ds-react';
 import { HelseinstitusjonOppholdGruppe } from 'components/behandlinger/institusjonsopphold/helseinstitusjonny/helseinstitusjonoppholdgruppe/HelseinstitusjonOppholdGruppe';
+import { nb } from 'date-fns/locale';
 
 interface Props {
   grunnlag: HelseinstitusjonGrunnlag;
@@ -211,7 +212,9 @@ function mapVurderingToDraftFormFields(
                 forsoergerEktefelle: undefined,
                 periode: {
                   fom: formaterDatoForFrontend(oppholdHentetFraGrunnlag?.periode.fom || opphold.oppholdFra),
-                  tom: formaterDatoForFrontend(oppholdHentetFraGrunnlag?.periode.tom || opphold?.avsluttetDato || ''),
+                  tom: formaterDatoForFrontendMedStøtteForUendeligSlutt(
+                    oppholdHentetFraGrunnlag?.periode.tom || opphold?.avsluttetDato || ''
+                  ),
                 },
               },
             ];
@@ -223,10 +226,14 @@ function mapVurderingToDraftFormFields(
         oppholdId: opphold.oppholdId || '', // TODO Gjør om oppholdId til required i backend når ny helseinstitusjon er ute i prod
         periode: {
           fom: formaterDatoForFrontend(oppholdHentetFraGrunnlag?.periode.fom || opphold.oppholdFra),
-          tom: formaterDatoForFrontend(oppholdHentetFraGrunnlag?.periode.tom || opphold?.avsluttetDato || ''),
+          tom: formaterDatoForFrontend(oppholdHentetFraGrunnlag?.periode.tom || opphold.avsluttetDato),
         },
         vurderinger: harTidligereVurderingerOgIngenNåværendeVurderinger ? [] : vurderinger,
       };
     }),
   };
+}
+
+export function formaterDatoForFrontendMedStøtteForUendeligSlutt(dato: Date | string): string {
+  return format(dato, DATO_FORMATER.ddMMyyyy, { locale: nb });
 }

@@ -1,3 +1,5 @@
+import 'server-only';
+
 import {
   Aktivitetsplikt11_7Grunnlag,
   Aktivitetsplikt11_9Grunnlag,
