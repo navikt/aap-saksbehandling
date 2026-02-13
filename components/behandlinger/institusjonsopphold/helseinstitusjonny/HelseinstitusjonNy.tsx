@@ -91,11 +91,22 @@ export const HelseinstitusjonNy = ({ grunnlag, readOnly, behandlingVersjon, init
             ? formaterDatoForBackend(parse(vurdering.periode.fom, 'dd.MM.yyyy', new Date()))
             : formaterDatoForBackend(parse(opphold.periode.fom, 'dd.MM.yyyy', new Date()));
 
-          const tom = !nesteVurdering
-            ? // tom dato for siste vurdering skal alltid være siste dag i oppholdet
-              formaterDatoForBackend(parse(vurdering.periode?.tom ?? opphold.periode.tom, 'dd.MM.yyyy', new Date()))
-            : // tom skal være dagen før fom i neste vurdering
-              formaterDatoForBackend(subDays(new Dato(nesteVurdering.periode.fom).dato, 1));
+          let tom: string | undefined;
+          const TID_MAKS = '01.01.2999';
+
+          if (!nesteVurdering) {
+            // tom dato for siste vurdering skal alltid være siste dag i oppholdet
+            const sisteTom = vurdering.periode?.tom ?? opphold.periode?.tom;
+
+            if (sisteTom) {
+              tom = formaterDatoForBackend(parse(sisteTom, 'dd.MM.yyyy', new Date()));
+            } else {
+              tom = formaterDatoForBackend(parse(TID_MAKS, 'dd.MM.yyyy', new Date()));
+            }
+          } else {
+            // tom skal være dagen før fom i neste vurdering
+            tom = formaterDatoForBackend(subDays(new Dato(nesteVurdering.periode.fom).dato, 1));
+          }
 
           return {
             oppholdId: vurdering.oppholdId,
