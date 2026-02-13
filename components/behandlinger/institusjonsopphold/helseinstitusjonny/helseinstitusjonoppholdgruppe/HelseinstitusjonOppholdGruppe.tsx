@@ -96,7 +96,7 @@ export const HelseinstitusjonOppholdGruppe = ({
             </BodyShort>
             <Label size="medium">
               Vurder perioden {formatDatoMedMånedsnavn(opphold.oppholdFra)} -{' '}
-              {opphold.avsluttetDato && !datoErUendeligSlutt(opphold.avsluttetDato)
+              {!datoErUendeligSlutt(opphold.avsluttetDato)
                 ? formatDatoMedMånedsnavn(opphold.avsluttetDato)
                 : 'Pågående'}
             </Label>

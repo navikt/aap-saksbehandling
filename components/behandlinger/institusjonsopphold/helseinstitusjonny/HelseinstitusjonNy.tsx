@@ -226,7 +226,7 @@ function mapVurderingToDraftFormFields(
         oppholdId: opphold.oppholdId || '', // TODO Gjør om oppholdId til required i backend når ny helseinstitusjon er ute i prod
         periode: {
           fom: formaterDatoForFrontend(oppholdHentetFraGrunnlag?.periode.fom || opphold.oppholdFra),
-          tom: formaterDatoForFrontend(oppholdHentetFraGrunnlag?.periode.tom || opphold?.avsluttetDato || ''),
+          tom: formaterDatoForFrontend(oppholdHentetFraGrunnlag?.periode.tom || opphold.avsluttetDato),
         },
         vurderinger: harTidligereVurderingerOgIngenNåværendeVurderinger ? [] : vurderinger,
       };
