@@ -4,7 +4,12 @@ import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { HelseinstitusjonGrunnlag, HelseInstiusjonVurdering } from 'lib/types/types';
 import React from 'react';
 import styles from './HelseinstitusjonOppholdGruppe.module.css';
-import { formatDatoMedMånedsnavn, formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
+import {
+  formatDatoMedMånedsnavn,
+  formaterDatoForFrontend,
+  parseDatoFraDatePicker,
+  uendeligSluttString,
+} from 'lib/utils/date';
 import { addDays } from 'date-fns';
 import {
   NyVurderingExpandableCard,
@@ -91,7 +96,9 @@ export const HelseinstitusjonOppholdGruppe = ({
             </BodyShort>
             <Label size="medium">
               Vurder perioden {formatDatoMedMånedsnavn(opphold.oppholdFra)} -{' '}
-              {opphold.avsluttetDato ? formatDatoMedMånedsnavn(opphold.avsluttetDato) : 'Pågående'}
+              {opphold.avsluttetDato && !datoErUendeligSlutt(opphold.avsluttetDato)
+                ? formatDatoMedMånedsnavn(opphold.avsluttetDato)
+                : 'Pågående'}
             </Label>
           </div>
         </HStack>
@@ -187,3 +194,7 @@ export const HelseinstitusjonOppholdGruppe = ({
     </Box>
   );
 };
+
+function datoErUendeligSlutt(date: string) {
+  return date === uendeligSluttString;
+}
