@@ -11,7 +11,7 @@ export const DATO_FORMATER = {
 };
 
 export const uendeligSluttString = '2999-01-01';
-export const uendeligSlutt = new Date(uendeligSluttString);
+const uendeligSlutt = new Date(uendeligSluttString);
 
 export function formaterDatoForFrontend(dato: Date | string): string {
   if (dato === uendeligSluttString || dato === uendeligSlutt) {

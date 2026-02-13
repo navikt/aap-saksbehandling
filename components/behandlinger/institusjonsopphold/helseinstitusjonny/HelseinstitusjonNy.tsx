@@ -82,15 +82,11 @@ export const HelseinstitusjonNy = ({ grunnlag, readOnly, behandlingVersjon, init
     name: 'helseinstitusjonsvurderinger',
   });
 
-  console.log(form.watch());
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
       const vurderinger: HelseInstiusjonVurdering[] = data.helseinstitusjonsvurderinger.flatMap((opphold) => {
         return opphold.vurderinger.map((vurdering, index) => {
           const nesteVurdering = opphold.vurderinger.at(index + 1);
-
-          console.log('opphold i handlesubmit', opphold);
-          console.log('vurdering i handlesubmit', vurdering);
 
           const fom = vurdering.periode?.fom
             ? formaterDatoForBackend(parse(vurdering.periode.fom, 'dd.MM.yyyy', new Date()))
