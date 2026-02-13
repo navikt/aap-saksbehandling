@@ -5,6 +5,9 @@ import { logError, logWarning } from 'lib/serverutlis/logger';
 
 vi.mock('lib/services/token');
 vi.mock('lib/serverutlis/logger');
+vi.mock('server-only', () => {
+  return {};
+});
 
 global.fetch = vi.fn();
 

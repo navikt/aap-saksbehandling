@@ -1,3 +1,5 @@
+import 'server-only';
+
 import { JWSHeaderParameters, jwtVerify, createRemoteJWKSet, FlattenedJWSInput } from 'jose';
 import { GetKeyFunction } from 'jose/dist/types/types';
 import { isLocal } from 'lib/utils/environment';
