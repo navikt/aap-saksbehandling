@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Box, Button, HGrid, HStack, VStack } from '@navikt/ds-react';
+import { Box, Button, HGrid, HStack, VStack } from '@navikt/ds-react';
 import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { Delmal } from 'components/brevbygger/Delmal';
 import {
@@ -13,12 +13,12 @@ import {
 import { BrevmalType } from 'components/brevbygger/brevmodellTypes';
 import { BrevdataDto, BrevMottaker, FritekstDto, Mottaker, RefusjonskravGrunnlag } from 'lib/types/types';
 import { ForhåndsvisBrev } from 'components/brevbygger/ForhåndsvisBrev';
-import { clientKanDistribuereBrev, clientOppdaterBrevdata, clientOppdaterBrevmal } from 'lib/clientApi';
+import { clientOppdaterBrevdata, clientOppdaterBrevmal } from 'lib/clientApi';
 import { useRouter } from 'next/navigation';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { Behovstype } from 'lib/utils/form';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { isSuccess } from 'lib/utils/api';
 import { revalidateFlyt } from 'lib/actions/actions';
 import { VelgeMottakere } from 'components/brevbygger/VelgeMottakere';
@@ -27,6 +27,7 @@ import { useDebounce } from 'hooks/DebounceHook';
 import { ExpandIcon, ShrinkIcon } from '@navikt/aksel-icons';
 import { RefusjonskravVisning } from 'components/brevbygger/RefusjonskravVisning';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
+import { Distribusjonssjekk } from 'components/brev/Distribusjonssjekk';
 
 export interface AlternativFormField {
   verdi: string;
@@ -102,7 +103,7 @@ export const Brevbygger = ({
 
   const router = useRouter();
   const [valgteMottakere, setMottakere] = useState<Mottaker[]>([]);
-  const [visKanIkkeDistribuereAdvarsel, setVisKanIkkeDistribuereAdvarsel] = useState(false);
+  const [distribusjonssjekkFeil, setDistribusjonssjekkFeil] = useState<string | undefined>();
   const [ikkeSendBrevModalOpen, settIkkeSendBrevModalOpen] = useState(false);
   const [pdfViewExpanded, togglePdfVievExpanded] = useState(false);
   const behandlingsReferanse = useBehandlingsReferanse();
@@ -124,32 +125,6 @@ export const Brevbygger = ({
       }
     };
   });
-
-  const kanDistribuereBrevRequest = useCallback(async () => {
-    const brukerIdent = brukerMottaker?.ident;
-
-    if (brukerIdent) {
-      const valgteMottakereIdentListe = valgteMottakere
-        .map((mottaker) => mottaker.ident)
-        .filter((ident) => typeof ident === 'string');
-      const mottakerIdentListe = valgteMottakereIdentListe.length > 0 ? valgteMottakereIdentListe : [brukerIdent];
-      const response = await clientKanDistribuereBrev(referanse, {
-        brukerIdent,
-        mottakerIdentListe,
-      });
-
-      if (isSuccess(response)) {
-        const kanDistribuereTilAlleMottakere = !response.data.mottakereDistStatus.some(
-          (distStatus: { mottakerIdent: String; kanDistribuere: boolean }) => !distStatus.kanDistribuere
-        );
-        setVisKanIkkeDistribuereAdvarsel(!kanDistribuereTilAlleMottakere);
-      }
-    }
-  }, [brukerMottaker?.ident, referanse, valgteMottakere]);
-
-  useEffect(() => {
-    kanDistribuereBrevRequest();
-  }, [kanDistribuereBrevRequest]);
 
   const onSubmit = async (formData: BrevdataFormFields) => {
     const obligatoriskeDelmaler = formData.delmaler
@@ -254,11 +229,6 @@ export const Brevbygger = ({
             fullmektig={fullmektigMottaker}
           />
         )}
-        {visKanIkkeDistribuereAdvarsel && (
-          <Alert variant={'warning'} size={'small'} className={'fit-content'}>
-            Brevet kan ikke distribueres til alle mottakere. Se rutinebeskrivelse for manuell håndtering.
-          </Alert>
-        )}
         <form
           onSubmit={handleSubmit((data) => {
             onSubmit(data);
@@ -288,6 +258,14 @@ export const Brevbygger = ({
             status={løsBehovStatus}
             løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
           />
+          <Distribusjonssjekk
+            readOnly={readOnly}
+            referanse={referanse}
+            valgteMottakere={valgteMottakere}
+            distribusjonssjekkFeil={distribusjonssjekkFeil}
+            setDistribusjonssjekkFeil={setDistribusjonssjekkFeil}
+            brukerMottaker={brukerMottaker}
+          />
           <HStack gap={'2'}>
             {visAvbryt && (
               <Button
@@ -310,7 +288,13 @@ export const Brevbygger = ({
               Oppdater brevmal
             </Button>
           </HStack>
-          <Button type="button" onClick={() => sendBrev()} loading={isLoading} size="small">
+          <Button
+            type="button"
+            onClick={() => sendBrev()}
+            loading={isLoading}
+            size="small"
+            disabled={!!distribusjonssjekkFeil}
+          >
             Send brev
           </Button>
         </HStack>
