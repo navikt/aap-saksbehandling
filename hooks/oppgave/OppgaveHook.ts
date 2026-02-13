@@ -24,6 +24,49 @@ type UseOppgaverOptions = {
   sortering?: SortState;
 };
 
+function lagUrlSuffix(filter: OppgavelisteRequest['utvidetFilter']): string {
+  const params = new URLSearchParams();
+
+  if (filter?.avklaringsbehovKoder?.length) {
+    filter.avklaringsbehovKoder.forEach((kode) => params.append('avklaringsbehovKoder', kode));
+  }
+
+  if (filter?.behandlingstyper?.length) {
+    filter.behandlingstyper.forEach((bt) => params.append('behandlingstyper', bt));
+  }
+
+  if (filter?.fom) {
+    params.append('fom', filter.fom);
+  }
+
+  if (filter?.tom) {
+    params.append('tom', filter.tom);
+  }
+
+  if (filter?.returStatuser?.length) {
+    filter.returStatuser.forEach((status) => params.append('returStatuser', status));
+  }
+
+  if (filter?.påVent) {
+    params.append('påVent', filter.påVent.toString());
+  }
+
+  if (filter?.markertHaster) {
+    params.append('markertHaster', filter.markertHaster.toString());
+  }
+
+  if (filter?.årsaker?.length) {
+    filter.årsaker.forEach((årsak) => params.append('årsaker', årsak));
+  }
+
+  if (filter?.ventefristUtløpt) {
+    params.append('ventefristUtløpt', filter.ventefristUtløpt.toString());
+  }
+
+  const queryString = params.toString();
+  return queryString ? `?${queryString}` : '';
+}
+
 export function useOppgaver({
   aktiveEnheter,
   visKunOppgaverSomBrukerErVeilederPå = false,
@@ -46,18 +89,16 @@ export function useOppgaver({
     if (previousPageData && previousPageData.length === 0) return null;
     if (!aktivKøId) return null;
 
-    return [
-      `api/oppgave/oppgaveliste?side=${pageIndex}`,
-      {
-        aktiveEnheter,
-        visKunOppgaverSomBrukerErVeilederPå,
-        aktivKøId,
-        kunLedigeOppgaver,
-        type,
-        utvidetFilter,
-        sortering,
-      },
-    ];
+    const base = `api/oppgave/oppgaveliste/${aktivKøId}/${aktiveEnheter.join(',')}`;
+    const suffix = visKunOppgaverSomBrukerErVeilederPå ? '/veileder/' : '/';
+    const typeSuffix = `/${type}`;
+    const utvidetFilterSuffix = lagUrlSuffix(utvidetFilter);
+    const paging = utvidetFilterSuffix.length > 0 ? `&side=${pageIndex}` : `?side=${pageIndex}`;
+    const sortSuffix = sortering?.orderBy ? `&sortby=${sortering.orderBy}&direction${sortering.direction}` : '';
+    const url = `${base}${suffix}${typeSuffix}${utvidetFilterSuffix}${paging}${sortSuffix}`;
+    console.log('heihei', url);
+
+    return url;
   };
 
   const {
@@ -70,8 +111,10 @@ export function useOppgaver({
   } = useSWRInfinite(
     getKey,
     (key) => {
-      const url = new URL('api/oppgave/oppgaveliste', window.location.origin);
+      const url = new URL(key, window.location.origin);
       const side = Number(url.searchParams.get('side'));
+      console.log('url', url);
+      console.log('side', side);
 
       const paging: Paging = {
         antallPerSide: PAGE_SIZE,
@@ -91,7 +134,7 @@ export function useOppgaver({
 
       return hentOppgaverClient(payload);
     },
-    { revalidateOnFocus: true, refreshInterval: 10000 }
+    { revalidateOnFocus: true, refreshInterval: 10000, revalidateAll: true, persistSize: true }
   );
 
   const oppgaverFlatMap =
