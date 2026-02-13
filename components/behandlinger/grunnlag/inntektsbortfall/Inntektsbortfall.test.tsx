@@ -7,6 +7,10 @@ beforeEach(() => {
   setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'MANGLENDE_LIGNING' });
 });
 
+vi.mock('server-only', () => {
+  return {};
+});
+
 describe('InntektsbortfallMedDataFetching', () => {
   it('skal ikke vise Inntektsbortfall når bruker er under 62 år', async () => {
     vi.spyOn(saksbehandlingService, 'hentInntektsBortfallGrunnlag').mockResolvedValue({
