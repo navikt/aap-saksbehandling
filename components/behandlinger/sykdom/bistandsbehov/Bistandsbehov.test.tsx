@@ -64,7 +64,6 @@ describe('Generelt', () => {
 
     render(<Bistandsbehov grunnlag={grunnlagMedVurdering} readOnly={false} behandlingVersjon={0} />);
 
-    screen.logTestingPlaygroundURL();
     const endreKnapp = screen.getByRole('button', { name: 'Endre' });
     await user.click(endreKnapp);
 

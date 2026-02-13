@@ -385,7 +385,6 @@ describe('mellomlagring', () => {
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
       />
     );
-    screen.logTestingPlaygroundURL();
     const begrunnelseFelt = screen.getByRole('textbox', {
       name: 'Vilkårsvurdering',
     });

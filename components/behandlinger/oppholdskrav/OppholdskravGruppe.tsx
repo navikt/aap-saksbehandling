@@ -15,8 +15,6 @@ export const OppholdskravStegGruppe = async ({ behandlingsreferanse }: Props) =>
     return <ApiException apiResponses={[flyt]} />;
   }
 
-  console.log(flyt);
-
   return (
     <GruppeSteg
       behandlingVersjon={flyt.data.behandlingVersjon}
