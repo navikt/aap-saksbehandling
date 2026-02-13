@@ -108,6 +108,8 @@ export function mapTilVenteÅrsakTekst(årsak: SettPåVentÅrsaker | PostmottakS
       return 'Venter på klageimplementasjon';
     case 'VENTER_PÅ_SVAR_PÅ_FORHÅNDSVARSEL':
       return 'Venter på svar på forhåndsvarsel';
+    case 'VENTER_PÅ_FUNKSJONALITET_AVSLAG_11_27':
+      return 'Venter på manglende funksjonalitet for å avslå på § 11-27';
     case 'VENTER_PÅ_FUNKSJONALITET':
       return 'Venter på manglende funksjonalitet';
     case 'VENTER_PÅ_BEHANDLING_I_GOSYS':
