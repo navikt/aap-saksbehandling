@@ -15149,7 +15149,6 @@ export interface components {
       referanse: string;
       /** @enum {string} */
       status: 'OPPRETTET' | 'UTREDES' | 'IVERKSETTES' | 'AVSLUTTET';
-      type: string;
       /** @enum {string} */
       typeBehandling:
         | 'Førstegangsbehandling'
