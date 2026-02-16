@@ -10,14 +10,13 @@ import { BehandlingButtons } from 'components/saksoversikt/BehandlingButtons';
 import { isLocal } from 'lib/utils/environment';
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
 import {
-  Behandlingstype,
   erAktivFørstegangsbehandling,
   erAvsluttetFørstegangsbehandling,
   erFørstegangsbehandling,
   erTrukket,
-  formaterBehandlingType,
   formatterÅrsakTilOpprettelseTilTekst,
 } from 'lib/utils/behandling';
+import { mapTypeBehandlingTilTekst } from 'lib/utils/oversettelser';
 
 const lokalDevToolsForBehandlingOgSak = isLocal();
 export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
@@ -90,7 +89,7 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
           {sak?.behandlinger?.map((behandling) => (
             <Table.Row key={behandling.referanse}>
               <Table.DataCell>{formaterDatoMedTidspunktForFrontend(behandling.opprettet)}</Table.DataCell>
-              <Table.DataCell>{formaterBehandlingType(behandling.type as Behandlingstype)}</Table.DataCell>
+              <Table.DataCell>{mapTypeBehandlingTilTekst(behandling.typeBehandling)}</Table.DataCell>
               <Table.DataCell>{formatterÅrsakTilOpprettelseTilTekst(behandling.årsakTilOpprettelse)}</Table.DataCell>
               <Table.DataCell>{capitalize(behandling.status)}</Table.DataCell>
               <Table.DataCell>

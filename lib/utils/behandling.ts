@@ -1,19 +1,7 @@
 import { BehandlingInfo, ÅrsakTilOpprettelse } from 'lib/types/types';
 
-// TODO: Oppdater BehandlinginfoDTO til å returnere enum i stedet for string slik at vi kan få disse fra backend
-export enum Behandlingstype {
-  Førstegangsbehandling = 'ae0034',
-  Revurdering = 'ae0028',
-  Klage = 'ae0058',
-  SvarFraAndreinstans = 'svar-fra-andreinstans',
-  Oppfølgingsbehandling = 'oppfølgingsbehandling',
-  Aktivitetsplikt11_7 = 'aktivitetsplikt',
-  Aktivitetsplikt11_9 = 'aktivitetsplikt11-9',
-  Tilbakekreving = 'ae0203',
-}
-
 export function erFørstegangsbehandling(behandling: BehandlingInfo): boolean {
-  return behandling.type === Behandlingstype.Førstegangsbehandling;
+  return behandling.typeBehandling === 'Førstegangsbehandling';
 }
 
 export function erAvsluttet(behandling: BehandlingInfo) {
@@ -30,51 +18,6 @@ export function erAvsluttetFørstegangsbehandling(behandling: BehandlingInfo): b
 
 export function erAktivFørstegangsbehandling(behandlinger: BehandlingInfo[]): boolean {
   return behandlinger.some((b) => erFørstegangsbehandling(b) && !erAvsluttet(b));
-}
-
-export function behandlingstypeFraId(id: string) {
-  switch (id) {
-    case 'ae0034':
-      return Behandlingstype.Førstegangsbehandling;
-    case 'ae0028':
-      return Behandlingstype.Revurdering;
-    case 'ae0203':
-      return Behandlingstype.Tilbakekreving;
-    case 'ae0058':
-      return Behandlingstype.Klage;
-    case 'svar-fra-andreinstans':
-      return Behandlingstype.SvarFraAndreinstans;
-    case 'oppfølgingsbehandling':
-      return Behandlingstype.Oppfølgingsbehandling;
-    case 'aktivitetsplikt11-9':
-      return Behandlingstype.Aktivitetsplikt11_9;
-    case 'aktivitetsplikt11-7':
-      return Behandlingstype.Aktivitetsplikt11_7;
-  }
-  return undefined;
-}
-
-export function formaterBehandlingType(behandlingtype: Behandlingstype): string {
-  switch (behandlingtype) {
-    case Behandlingstype.Førstegangsbehandling:
-      return 'Førstegangsbehandling';
-    case Behandlingstype.Revurdering:
-      return 'Revurdering';
-    case Behandlingstype.Klage:
-      return 'Klage';
-    case Behandlingstype.SvarFraAndreinstans:
-      return 'Svar fra Nav Klageinstans';
-    case Behandlingstype.Oppfølgingsbehandling:
-      return 'Oppfølgingsoppgave';
-    case Behandlingstype.Aktivitetsplikt11_7:
-      return 'Aktivitetsplikt § 11-7';
-    case Behandlingstype.Aktivitetsplikt11_9:
-      return 'Aktivitetsplikt § 11-9';
-    case Behandlingstype.Tilbakekreving:
-      return 'Tilbakekreving';
-    default:
-      return `Ukjent behandlingtype (${behandlingtype})`;
-  }
 }
 
 export function formatterÅrsakTilOpprettelseTilTekst(årsakTilOpprettelse: ÅrsakTilOpprettelse): string {
