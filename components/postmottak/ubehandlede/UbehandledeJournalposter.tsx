@@ -16,7 +16,6 @@ export const UbehandledeJournalposter = ({ journalposter }: { journalposter: any
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>Journalpost ID</Table.HeaderCell>
-              <Table.HeaderCell>Status</Table.HeaderCell>
               <Table.HeaderCell>Kanal</Table.HeaderCell>
               <Table.HeaderCell>Dato</Table.HeaderCell>
               <Table.HeaderCell align="right">Handlinger</Table.HeaderCell>
@@ -26,7 +25,6 @@ export const UbehandledeJournalposter = ({ journalposter }: { journalposter: any
             {journalposter.map((jp) => (
               <Table.Row key={`${jp.journalpostId}`}>
                 <Table.DataCell>{jp.journalpostId}</Table.DataCell>
-                <Table.DataCell>{jp.journalStatus}</Table.DataCell>
                 <Table.DataCell>{jp.mottaksKanal}</Table.DataCell>
                 <Table.DataCell>
                   {jp.datoOpprettet ? formaterDatoMedTidspunktForFrontend(jp.datoOpprettet) : 'Ukjent dato'}

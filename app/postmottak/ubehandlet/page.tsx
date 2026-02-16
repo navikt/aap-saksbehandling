@@ -4,6 +4,9 @@ import { UbehandledeJournalposter } from 'components/postmottak/ubehandlede/Ubeh
 import { isError } from 'lib/utils/api';
 import { Alert } from '@navikt/ds-react';
 
+/**
+ * Grensesnitt for uthenting av Kelvin journalposter som har ligget lenge utbehandlet.
+ **/
 const Page = async () => {
   const result = await hentUbehandledeJournalposter();
 
