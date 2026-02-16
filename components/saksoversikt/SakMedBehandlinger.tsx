@@ -107,7 +107,7 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
       {lokalDevToolsForBehandlingOgSak && (
         <SakDevTools
           saksnummer={sak.saksnummer}
-          behandlinger={sak.behandlinger.map((e) => ({ referanse: e.referanse, type: e.type }))}
+          behandlinger={sak.behandlinger.map((e) => ({ referanse: e.referanse, type: e.typeBehandling }))}
         />
       )}
     </VStack>
