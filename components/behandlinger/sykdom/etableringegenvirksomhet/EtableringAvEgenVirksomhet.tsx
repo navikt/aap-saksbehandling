@@ -27,9 +27,11 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgG
 import {
   getDefaultValuesFromGrunnlag,
   mapEtableringEgenVirksomhetVurderingTilDto,
+  nyVurderingErOppfylt,
   tomEtableringAvEgenVirksomhetVurdering,
 } from 'components/behandlinger/sykdom/etableringegenvirksomhet/etablering-av-egen-virksomhet-utils';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 
 interface Props {
   behandlingVersjon: number;
@@ -69,6 +71,10 @@ export const EtableringAvEgenVirksomhet = ({
   const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('ETABLERING_EGEN_VIRKSOMHET');
 
+  const defaultValues: EtableringAvEgenVirksomhetForm = initialMellomlagretVurdering
+    ? JSON.parse(initialMellomlagretVurdering.data)
+    : getDefaultValuesFromGrunnlag(grunnlag);
+
   const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
     useMellomlagring(Behovstype.ETABLERING_EGEN_VIRKSOMHET_KODE, initialMellomlagretVurdering);
 
@@ -78,7 +84,7 @@ export const EtableringAvEgenVirksomhet = ({
     mellomlagretVurdering
   );
 
-  const form = useForm<EtableringAvEgenVirksomhetForm>({ shouldUnregister: true });
+  const form = useForm<EtableringAvEgenVirksomhetForm>({ defaultValues, shouldUnregister: true });
   const { fields: nyeVurderinger, append, remove } = useFieldArray({ control: form.control, name: 'vurderinger' });
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -91,7 +97,7 @@ export const EtableringAvEgenVirksomhet = ({
             løsningerForPerioder: data.vurderinger.map((vurdering, index) => {
               const isLast = index === data.vurderinger.length - 1;
               const tilDato = isLast ? undefined : data.vurderinger[index + 1].fraDato;
-              return mapEtableringEgenVirksomhetVurderingTilDto(vurdering, data.virksomhetNavn, tilDato);
+              return mapEtableringEgenVirksomhetVurderingTilDto(vurdering, data.virksomhetNavn!, tilDato);
             }),
           },
           referanse: behandlingsReferanse,
@@ -109,7 +115,6 @@ export const EtableringAvEgenVirksomhet = ({
     append(tomEtableringAvEgenVirksomhetVurdering());
   }
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
-  const foersteNyePeriode = nyeVurderinger.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
   const errorList = mapPeriodiserteVurderingerErrorList<EtableringAvEgenVirksomhetForm>(form.formState.errors);
 
   return (
@@ -154,7 +159,7 @@ export const EtableringAvEgenVirksomhet = ({
           key={vurdering.id}
           accordionsSignal={accordionsSignal}
           fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-          vurderingStatus={undefined}
+          vurderingStatus={getErOppfyltEllerIkkeStatus(nyVurderingErOppfylt(form.watch(`vurderinger.${index}`)))}
           nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
           isLast={index === vedtatteVurderinger.length - 1}
           vurdertAv={vurdering.vurdertAv}

@@ -6,6 +6,7 @@ import {
 import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
 import { getJaNeiEllerUndefined, getTrueFalseEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { Dato } from 'lib/types/Dato';
+import { subDays } from 'date-fns';
 
 export function getDefaultValuesFromGrunnlag(
   grunnlag: EtableringEgenVirksomhetGrunnlagResponse
@@ -48,7 +49,7 @@ export function mapEtableringEgenVirksomhetVurderingTilDto(
 ): EtableringEgenVirksomhetLøsningDto {
   return {
     fom: new Dato(vurdering.fraDato!).formaterForBackend(),
-    tom: tilDato ? new Dato(tilDato).formaterForBackend() : null,
+    tom: tilDato ? new Dato(subDays(new Dato(tilDato).dato, 1)).formaterForBackend() : null,
     begrunnelse: vurdering.begrunnelse,
     virksomhetErNy: vurdering.erVirksomhetenNy === JaEllerNei.Ja,
     brukerEierVirksomheten: vurdering.eierBrukerVirksomheten || null,
@@ -78,4 +79,25 @@ export function tomEtableringAvEgenVirksomhetVurdering(): EtableringAvEgenVirkso
     utviklingsperioder: [],
     erNyVurdering: true,
   };
+}
+
+export function nyVurderingErOppfylt(vurdering: EtableringAvEgenVirksomhetVurderingForm): boolean | undefined {
+  if (
+    vurdering.foreliggerEnNæringsfagligVurdering === JaEllerNei.Nei ||
+    vurdering.erVirksomhetenNy === JaEllerNei.Nei ||
+    vurdering.eierBrukerVirksomheten === 'NEI' ||
+    vurdering.antasDetAtEtableringenFørerTilSelvforsørgelse === JaEllerNei.Nei
+  ) {
+    return false;
+  }
+
+  if (
+    vurdering.foreliggerEnNæringsfagligVurdering === JaEllerNei.Ja &&
+    vurdering.erVirksomhetenNy === JaEllerNei.Ja &&
+    (vurdering.eierBrukerVirksomheten === 'EIER_MINST_50_PROSENT' ||
+      vurdering.eierBrukerVirksomheten === 'EIER_MINST_50_PROSENT_MED_FLER') &&
+    vurdering.antasDetAtEtableringenFørerTilSelvforsørgelse === JaEllerNei.Ja
+  ) {
+    return true;
+  }
 }

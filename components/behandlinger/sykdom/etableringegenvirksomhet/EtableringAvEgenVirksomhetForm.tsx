@@ -1,6 +1,6 @@
 'use client';
 
-import { BodyShort, Heading, Label, Radio, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, Heading, HStack, Label, Radio, Table, VStack } from '@navikt/ds-react';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { validerDato } from 'lib/validation/dateValidation';
 import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
@@ -10,9 +10,9 @@ import React from 'react';
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { EtableringAvEgenVirksomhetForm } from 'components/behandlinger/sykdom/etableringegenvirksomhet/EtableringAvEgenVirksomhet';
-import { PeriodeFieldArrayDateInput } from 'components/behandlinger/sykdom/etableringegenvirksomhet/PeriodeFieldArrayDateInput';
 import { JaEllerNei } from 'lib/utils/form';
 import { EtableringEierBrukerVirksomheten, lagEnumObjektFraUnionType } from 'lib/types/types';
+import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 
 const EierBrukerVirsomheten = lagEnumObjektFraUnionType<NonNullable<EtableringEierBrukerVirksomheten>>({
   EIER_MINST_50_PROSENT: 'EIER_MINST_50_PROSENT',
@@ -112,7 +112,61 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly }: P
                 Kan gis for inntil 6 måneder
               </BodyShort>
             </VStack>
-            <PeriodeFieldArrayDateInput form={form} vurderingIndex={index} fieldArray={utviklingsperioder} />
+            <VStack gap={'4'}>
+              <Table size="small">
+                <Table.Header>
+                  <Table.Row>
+                    <Table.HeaderCell scope="col" textSize={'small'}>
+                      <BodyShort textColor={'subtle'} size={'small'}>
+                        Periode
+                      </BodyShort>
+                    </Table.HeaderCell>
+                    <Table.HeaderCell />
+                  </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                  {utviklingsperioder.fields.map(({ id }, i) => {
+                    return (
+                      <Table.Row key={id}>
+                        <Table.DataCell>
+                          <HStack gap={'2'} align={'center'}>
+                            <DateInputWrapper
+                              name={`vurderinger.${index}.utviklingsperioder.${i}.fom`}
+                              control={form.control}
+                            />
+                            {'-'}
+                            <DateInputWrapper
+                              name={`vurderinger.${index}.utviklingsperioder.${i}.tom`}
+                              control={form.control}
+                            />
+                          </HStack>
+                        </Table.DataCell>
+                        <Table.DataCell>
+                          <Button
+                            size={'small'}
+                            variant={'secondary'}
+                            type={'button'}
+                            icon={<TrashIcon />}
+                            onClick={() => utviklingsperioder.remove(i)}
+                          />
+                        </Table.DataCell>
+                      </Table.Row>
+                    );
+                  })}
+                </Table.Body>
+              </Table>
+              <HStack>
+                <Button
+                  size={'small'}
+                  variant={'secondary'}
+                  type={'button'}
+                  icon={<PlusCircleIcon />}
+                  onClick={() => utviklingsperioder.append({ fom: '', tom: '' })}
+                >
+                  Legg til ny periode
+                </Button>
+              </HStack>
+            </VStack>
           </VStack>
           <VStack gap={'4'}>
             <VStack>
@@ -121,7 +175,61 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly }: P
                 Kan gis for inntil 3 måneder
               </BodyShort>
             </VStack>
-            <PeriodeFieldArrayDateInput form={form} vurderingIndex={index} fieldArray={oppstartsperioder} />
+            <VStack gap={'4'}>
+              <Table size="small">
+                <Table.Header>
+                  <Table.Row>
+                    <Table.HeaderCell scope="col" textSize={'small'}>
+                      <BodyShort textColor={'subtle'} size={'small'}>
+                        Periode
+                      </BodyShort>
+                    </Table.HeaderCell>
+                    <Table.HeaderCell />
+                  </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                  {oppstartsperioder.fields.map(({ id }, i) => {
+                    return (
+                      <Table.Row key={id}>
+                        <Table.DataCell>
+                          <HStack gap={'2'} align={'center'}>
+                            <DateInputWrapper
+                              name={`vurderinger.${index}.oppstartsperioder.${i}.fom`}
+                              control={form.control}
+                            />
+                            {'-'}
+                            <DateInputWrapper
+                              name={`vurderinger.${index}.oppstartsperioder.${i}.tom`}
+                              control={form.control}
+                            />
+                          </HStack>
+                        </Table.DataCell>
+                        <Table.DataCell>
+                          <Button
+                            size={'small'}
+                            variant={'secondary'}
+                            type={'button'}
+                            icon={<TrashIcon />}
+                            onClick={() => oppstartsperioder.remove(i)}
+                          />
+                        </Table.DataCell>
+                      </Table.Row>
+                    );
+                  })}
+                </Table.Body>
+              </Table>
+              <HStack>
+                <Button
+                  size={'small'}
+                  variant={'secondary'}
+                  type={'button'}
+                  icon={<PlusCircleIcon />}
+                  onClick={() => oppstartsperioder.append({ fom: '', tom: '' })}
+                >
+                  Legg til ny periode
+                </Button>
+              </HStack>
+            </VStack>
           </VStack>
         </>
       )}
