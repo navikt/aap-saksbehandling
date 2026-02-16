@@ -42,7 +42,7 @@ export interface EtableringAvEgenVirksomhetVurderingForm {
   begrunnelse: string;
   foreliggerEnNæringsfagligVurdering: JaEllerNei | undefined;
   erVirksomhetenNy: JaEllerNei | undefined;
-  eierBrukerVirksomheten: EtableringEierBrukerVirksomheten | undefined;
+  eierBrukerVirksomheten: EtableringEierBrukerVirksomheten;
   antasDetAtEtableringenFørerTilSelvforsørgelse: JaEllerNei | undefined;
   utviklingsperioder: Periode[];
   oppstartsperioder: Periode[];
@@ -117,7 +117,7 @@ export const EtableringAvEgenVirksomhet = ({
       heading={'§ 11-15 Etablering av egen virksomhet (valgfritt)'}
       steg={'ETABLERING_EGEN_VIRKSOMHET'}
       vilkårTilhørerNavKontor={true}
-      onSubmit={() => {}}
+      onSubmit={handleSubmit}
       status={status}
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}

@@ -10800,15 +10800,15 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.etableringegenvirksomhet.EtableringEgenVirksomhetVurderingResponse': {
       begrunnelse: string;
       besluttetAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
-      /** @enum {string} */
-      brukerEierVirksomheten: 'EIER_MINST_50_PROSENT' | 'EIER_MINST_50_PROSENT_MED_FLER' | 'NEI';
+      /** @enum {string|null} */
+      brukerEierVirksomheten?: 'EIER_MINST_50_PROSENT' | 'EIER_MINST_50_PROSENT_MED_FLER' | 'NEI' | null;
       /**
        * Format: date
        * @example 2025-04-01
        */
       fom: string;
       foreliggerFagligVurdering: boolean;
-      'kanF\u00F8reTilSelvfors\u00F8rget': boolean;
+      'kanF\u00F8reTilSelvfors\u00F8rget'?: boolean | null;
       kvalitetssikretAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
       oppfylt: boolean;
       oppstartsPeriode: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
@@ -10819,7 +10819,7 @@ export interface components {
        */
       tom?: string | null;
       utviklingsPeriode: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
-      virksomhetErNy: boolean;
+      virksomhetErNy?: boolean | null;
       virksomhetNavn: string;
       vurdertAv: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
     };
@@ -13351,15 +13351,15 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.etableringegenvirksomhet.EtableringEgenVirksomhetL\u00F8sningDto': {
       begrunnelse: string;
-      /** @enum {string} */
-      brukerEierVirksomheten: 'EIER_MINST_50_PROSENT' | 'EIER_MINST_50_PROSENT_MED_FLER' | 'NEI';
+      /** @enum {string|null} */
+      brukerEierVirksomheten?: 'EIER_MINST_50_PROSENT' | 'EIER_MINST_50_PROSENT_MED_FLER' | 'NEI' | null;
       /**
        * Format: date
        * @example 2025-04-01
        */
       fom: string;
       foreliggerFagligVurdering: boolean;
-      'kanF\u00F8reTilSelvfors\u00F8rget': boolean;
+      'kanF\u00F8reTilSelvfors\u00F8rget'?: boolean | null;
       oppstartsPerioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
       orgNr?: string | null;
       /**
@@ -13368,7 +13368,7 @@ export interface components {
        */
       tom?: string | null;
       utviklingsPerioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
-      virksomhetErNy: boolean;
+      virksomhetErNy?: boolean | null;
       virksomhetNavn: string;
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.flate.HelseinstitusjonVurderingDto': {
@@ -15407,6 +15407,16 @@ export interface components {
       /** @enum {string} */
       status: 'OPPRETTET' | 'UTREDES' | 'IVERKSETTES' | 'AVSLUTTET';
       type: string;
+      /** @enum {string} */
+      typeBehandling:
+        | 'Førstegangsbehandling'
+        | 'Revurdering'
+        | 'Tilbakekreving'
+        | 'Klage'
+        | 'SvarFraAndreinstans'
+        | 'OppfølgingsBehandling'
+        | 'Aktivitetsplikt'
+        | 'Aktivitetsplikt11_9';
       vurderingsbehov: (
         | 'MOTTATT_SØKNAD'
         | 'HELHETLIG_VURDERING'

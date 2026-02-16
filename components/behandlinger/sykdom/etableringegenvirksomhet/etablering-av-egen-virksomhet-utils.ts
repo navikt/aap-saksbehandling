@@ -4,7 +4,7 @@ import {
   EtableringAvEgenVirksomhetVurderingForm,
 } from 'components/behandlinger/sykdom/etableringegenvirksomhet/EtableringAvEgenVirksomhet';
 import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
-import { getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
+import { getJaNeiEllerUndefined, getTrueFalseEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { Dato } from 'lib/types/Dato';
 
 export function getDefaultValuesFromGrunnlag(
@@ -28,7 +28,6 @@ export function getDefaultValuesFromGrunnlag(
       begrunnelse: vurdering.begrunnelse,
       erVirksomhetenNy: getJaNeiEllerUndefined(vurdering.virksomhetErNy),
       foreliggerEnNæringsfagligVurdering: getJaNeiEllerUndefined(vurdering.foreliggerFagligVurdering),
-      //TODO:
       eierBrukerVirksomheten: vurdering.brukerEierVirksomheten,
       antasDetAtEtableringenFørerTilSelvforsørgelse: getJaNeiEllerUndefined(vurdering.kanFøreTilSelvforsørget),
       utviklingsperioder: vurdering.utviklingsPeriode.map((periode) => ({
@@ -44,7 +43,7 @@ export function getDefaultValuesFromGrunnlag(
 }
 export function mapEtableringEgenVirksomhetVurderingTilDto(
   vurdering: EtableringAvEgenVirksomhetVurderingForm,
-  virksomhetsNavn: string,
+  virksomhetNavn: string,
   tilDato: string | undefined
 ): EtableringEgenVirksomhetLøsningDto {
   return {
@@ -52,10 +51,9 @@ export function mapEtableringEgenVirksomhetVurderingTilDto(
     tom: tilDato ? new Dato(tilDato).formaterForBackend() : null,
     begrunnelse: vurdering.begrunnelse,
     virksomhetErNy: vurdering.erVirksomhetenNy === JaEllerNei.Ja,
-    //TODO:
-    brukerEierVirksomheten: vurdering.eierBrukerVirksomheten,
+    brukerEierVirksomheten: vurdering.eierBrukerVirksomheten || null,
     foreliggerFagligVurdering: vurdering.foreliggerEnNæringsfagligVurdering === JaEllerNei.Ja,
-    kanFøreTilSelvforsørget: vurdering.antasDetAtEtableringenFørerTilSelvforsørgelse === JaEllerNei.Ja,
+    kanFøreTilSelvforsørget: getTrueFalseEllerUndefined(vurdering.antasDetAtEtableringenFørerTilSelvforsørgelse),
     oppstartsPerioder: vurdering.oppstartsperioder.map((periode) => ({
       fom: new Dato(periode.fom).formaterForBackend(),
       tom: new Dato(periode.tom).formaterForBackend(),

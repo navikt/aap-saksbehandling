@@ -14,7 +14,7 @@ import { PeriodeFieldArrayDateInput } from 'components/behandlinger/sykdom/etabl
 import { JaEllerNei } from 'lib/utils/form';
 import { EtableringEierBrukerVirksomheten, lagEnumObjektFraUnionType } from 'lib/types/types';
 
-const EierBrukerVirsomheten = lagEnumObjektFraUnionType<EtableringEierBrukerVirksomheten>({
+const EierBrukerVirsomheten = lagEnumObjektFraUnionType<NonNullable<EtableringEierBrukerVirksomheten>>({
   EIER_MINST_50_PROSENT: 'EIER_MINST_50_PROSENT',
   EIER_MINST_50_PROSENT_MED_FLER: 'EIER_MINST_50_PROSENT_MED_FLER',
   NEI: 'NEI',
