@@ -10,6 +10,7 @@ const automatiskLovvalgOgMedlemskapVurdering: AutomatiskLovvalgOgMedlemskapVurde
   kanBehandlesAutomatisk: true,
 };
 const tomtGrunnlag: PeriodisertLovvalgMedlemskapGrunnlag = {
+  ikkeRelevantePerioder: [],
   behøverVurderinger: [],
   harTilgangTilÅSaksbehandle: false,
   kanVurderes: [],

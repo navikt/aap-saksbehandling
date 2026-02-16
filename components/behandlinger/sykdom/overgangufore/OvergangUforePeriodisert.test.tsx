@@ -16,6 +16,7 @@ beforeEach(() => {
 });
 
 const overganguforeGrunnlag: OvergangUforeGrunnlag = {
+  ikkeRelevantePerioder: [],
   gjeldendeSykdsomsvurderinger: [],
   gjeldendeVedtatteVurderinger: [],
   historiskeVurderinger: [],
@@ -37,6 +38,7 @@ const overganguforeGrunnlag: OvergangUforeGrunnlag = {
   harTilgangTilÅSaksbehandle: true,
 };
 const overganguforeGrunnlagMedBekreftetVurdering: OvergangUforeGrunnlag = {
+  ikkeRelevantePerioder: [],
   gjeldendeSykdsomsvurderinger: [],
   gjeldendeVedtatteVurderinger: [],
   historiskeVurderinger: [],
