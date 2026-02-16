@@ -31,29 +31,33 @@ const Perioderad = ({
   rettighetsdata: RettighetDto[];
   isVisRettigheterForVedtakEnabled: boolean;
 }) => {
+  const { rettighetsType, gradering, trekk, utfall, avslagsårsak, meldePeriode } = periode;
+
   const gjenværendeKvote =
     rettighetsdata
-      ?.find((rettighet) => rettighet.type === periode.rettighetsType?.rettighetsType)
-      ?.periodeKvoter.find((kvote) => kvote.periode === periode.periode)?.gjenværendeKvote || '';
+      ?.find((rettighet) => rettighet.type === rettighetsType?.rettighetsType)
+      ?.periodeKvoter.find(
+        (kvote) => kvote.periode.fom === periode.periode.fom && kvote.periode.tom === periode.periode.tom
+      )?.gjenværendeKvote || '';
 
   return (
     <Table.Row>
       <Table.HeaderCell>
         {formaterDatoForFrontend(periode.periode.fom)} - {formaterDatoForFrontend(periode.periode.tom)}
       </Table.HeaderCell>
-      <Table.DataCell>{mapUtfallTilTekst(periode.utfall)}</Table.DataCell>
-      <Table.DataCell>{periode.avslagsårsak && årsakTilString(periode.avslagsårsak)}</Table.DataCell>
+      <Table.DataCell>{mapUtfallTilTekst(utfall)}</Table.DataCell>
+      <Table.DataCell>{avslagsårsak && årsakTilString(avslagsårsak)}</Table.DataCell>
       <Table.DataCell>
-        <div>Gradering: {periode.gradering.gradering}%</div>
-        <div>Andel arbeid: {periode.gradering.andelArbeid}%</div>
-        <div>Fastsatt arbeidsevne: {periode.gradering.fastsattArbeidsevne}%</div>
-        <div>Grenseverdi: {periode.gradering.grenseverdi}%</div>
+        <div>Gradering: {gradering.gradering}%</div>
+        <div>Andel arbeid: {gradering.andelArbeid}%</div>
+        <div>Fastsatt arbeidsevne: {gradering.fastsattArbeidsevne}%</div>
+        <div>Grenseverdi: {gradering.grenseverdi}%</div>
       </Table.DataCell>
-      <Table.DataCell>{periode.trekk.antall}</Table.DataCell>
-      <Table.DataCell>{periode.rettighetsType?.hjemmel}</Table.DataCell>
+      <Table.DataCell>{trekk.antall}</Table.DataCell>
+      <Table.DataCell>{rettighetsType?.hjemmel}</Table.DataCell>
       {isVisRettigheterForVedtakEnabled && <Table.DataCell>{gjenværendeKvote}</Table.DataCell>}
       <Table.DataCell>
-        {formaterDatoForFrontend(periode.meldePeriode.fom)} - {formaterDatoForFrontend(periode.meldePeriode.tom)}
+        {formaterDatoForFrontend(meldePeriode.fom)} - {formaterDatoForFrontend(meldePeriode.tom)}
       </Table.DataCell>
     </Table.Row>
   );
