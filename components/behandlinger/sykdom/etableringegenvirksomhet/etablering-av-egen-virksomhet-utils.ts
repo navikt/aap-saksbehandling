@@ -44,6 +44,7 @@ export function getDefaultValuesFromGrunnlag(
 }
 export function mapEtableringEgenVirksomhetVurderingTilDto(
   vurdering: EtableringAvEgenVirksomhetVurderingForm,
+  virksomhetsNavn: string,
   tilDato: string | undefined
 ): EtableringEgenVirksomhetLøsningDto {
   return {
@@ -63,8 +64,7 @@ export function mapEtableringEgenVirksomhetVurderingTilDto(
       fom: new Dato(periode.fom).formaterForBackend(),
       tom: new Dato(periode.tom).formaterForBackend(),
     })),
-    //TODO:
-    virksomhetNavn: '',
+    virksomhetNavn,
   };
 }
 

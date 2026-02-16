@@ -11,6 +11,7 @@ import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib
 import React, { FormEvent } from 'react';
 import {
   EtableringEgenVirksomhetGrunnlagResponse,
+  EtableringEierBrukerVirksomheten,
   MellomlagretVurdering,
   Periode,
   VurdertAvAnsatt,
@@ -41,7 +42,7 @@ export interface EtableringAvEgenVirksomhetVurderingForm {
   begrunnelse: string;
   foreliggerEnNæringsfagligVurdering: JaEllerNei | undefined;
   erVirksomhetenNy: JaEllerNei | undefined;
-  eierBrukerVirksomheten: EierBrukerVirksomheten | undefined;
+  eierBrukerVirksomheten: EtableringEierBrukerVirksomheten | undefined;
   antasDetAtEtableringenFørerTilSelvforsørgelse: JaEllerNei | undefined;
   utviklingsperioder: Periode[];
   oppstartsperioder: Periode[];
@@ -49,11 +50,6 @@ export interface EtableringAvEgenVirksomhetVurderingForm {
   kvalitetssikretAv?: VurdertAvAnsatt;
   besluttetAv?: VurdertAvAnsatt;
   erNyVurdering?: boolean;
-}
-export enum EierBrukerVirksomheten {
-  JA_MINST_50_PROSENT = 'JA_MINST_50_PROSENT',
-  JA_MINST_50_PROSENT_MED_ANDRE = 'JA_MINST_50_PROSENT_MED_ANDRE',
-  NEI = 'NEI',
 }
 
 export interface EtableringAvEgenVirksomhetForm {
@@ -95,7 +91,7 @@ export const EtableringAvEgenVirksomhet = ({
             løsningerForPerioder: data.vurderinger.map((vurdering, index) => {
               const isLast = index === data.vurderinger.length - 1;
               const tilDato = isLast ? undefined : data.vurderinger[index + 1].fraDato;
-              return mapEtableringEgenVirksomhetVurderingTilDto(vurdering, tilDato);
+              return mapEtableringEgenVirksomhetVurderingTilDto(vurdering, data.virksomhetNavn, tilDato);
             }),
           },
           referanse: behandlingsReferanse,

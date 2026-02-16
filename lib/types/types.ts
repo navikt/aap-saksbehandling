@@ -374,6 +374,8 @@ export type EtableringEgenVirksomhetGrunnlagResponse =
 export type EtableringEgenVirksomhetLøsningDto =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.etableringegenvirksomhet.EtableringEgenVirksomhetLøsningDto'];
 
+export type EtableringEierBrukerVirksomheten = EtableringEgenVirksomhetLøsningDto['brukerEierVirksomheten'];
+
 export type SykdomBrevVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.SykdomsvurderingForBrevVurderingDto'];
 
@@ -541,4 +543,10 @@ export type PeriodiserteVurderingerDto<T extends VurderingDto> = {
 export interface PeriodisertVurderingFormFields {
   fraDato?: string;
   tilDato?: string | null;
+}
+// Gjør at vi kan lage et typesikkert "enum-objekt" med union types generert fra backend. feks const minEnum = lagEnumObjektFraUnionType<StegGruppe>({ SYKDOM: 'SYKDOM' ...})
+export function lagEnumObjektFraUnionType<UnionType extends string>(o: { [P in UnionType]: P }): {
+  [P in UnionType]: P;
+} {
+  return o;
 }

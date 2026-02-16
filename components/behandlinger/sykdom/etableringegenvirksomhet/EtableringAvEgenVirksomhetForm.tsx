@@ -9,12 +9,16 @@ import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei
 import React from 'react';
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
-import {
-  EierBrukerVirksomheten,
-  EtableringAvEgenVirksomhetForm,
-} from 'components/behandlinger/sykdom/etableringegenvirksomhet/EtableringAvEgenVirksomhet';
+import { EtableringAvEgenVirksomhetForm } from 'components/behandlinger/sykdom/etableringegenvirksomhet/EtableringAvEgenVirksomhet';
 import { PeriodeFieldArrayDateInput } from 'components/behandlinger/sykdom/etableringegenvirksomhet/PeriodeFieldArrayDateInput';
 import { JaEllerNei } from 'lib/utils/form';
+import { EtableringEierBrukerVirksomheten, lagEnumObjektFraUnionType } from 'lib/types/types';
+
+const EierBrukerVirsomheten = lagEnumObjektFraUnionType<EtableringEierBrukerVirksomheten>({
+  EIER_MINST_50_PROSENT: 'EIER_MINST_50_PROSENT',
+  EIER_MINST_50_PROSENT_MED_FLER: 'EIER_MINST_50_PROSENT_MED_FLER',
+  NEI: 'NEI',
+});
 
 type Props = {
   form: UseFormReturn<EtableringAvEgenVirksomhetForm>;
@@ -76,17 +80,17 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly }: P
           rules={{ required: 'Du må svare på om bruker eier virksomheten' }}
           readOnly={readOnly}
         >
-          <Radio value={EierBrukerVirksomheten.JA_MINST_50_PROSENT}>Ja, bruker eier minst 50% av virksomheten</Radio>
-          <Radio value={EierBrukerVirksomheten.JA_MINST_50_PROSENT_MED_ANDRE}>
+          <Radio value={EierBrukerVirsomheten.EIER_MINST_50_PROSENT}>Ja, bruker eier minst 50% av virksomheten</Radio>
+          <Radio value={EierBrukerVirsomheten.EIER_MINST_50_PROSENT_MED_FLER}>
             Ja, bruker eier minst 50% av virksomheten sammen med andre AAP og/eller dagpengemottakere
           </Radio>
-          <Radio value={EierBrukerVirksomheten.NEI}>Nei</Radio>
+          <Radio value={EierBrukerVirsomheten.NEI}>Nei</Radio>
         </RadioGroupWrapper>
       )}
 
-      {(form.watch(`vurderinger.${index}.eierBrukerVirksomheten`) === EierBrukerVirksomheten.JA_MINST_50_PROSENT ||
+      {(form.watch(`vurderinger.${index}.eierBrukerVirksomheten`) === EierBrukerVirsomheten.EIER_MINST_50_PROSENT ||
         form.watch(`vurderinger.${index}.eierBrukerVirksomheten`) ===
-          EierBrukerVirksomheten.JA_MINST_50_PROSENT_MED_ANDRE) && (
+          EierBrukerVirsomheten.EIER_MINST_50_PROSENT_MED_FLER) && (
         <RadioGroupJaNei
           name={`vurderinger.${index}.antasDetAtEtableringenFørerTilSelvforsørgelse`}
           control={form.control}

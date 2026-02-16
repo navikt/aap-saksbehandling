@@ -6661,9 +6661,84 @@ export interface components {
         | '9003'
         | '9004';
       'l\u00F8sningerForPerioder'?:
-        | components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.StudentVurderingDTO'][]
+        | components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.PeriodisertStudentDto'][]
         | null;
       studentvurdering: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.StudentVurderingDTO'];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarStudentL\u00F8sning': {
+      /** @enum {string} */
+      behovstype:
+        | '4101'
+        | '4102'
+        | '4201'
+        | '5001'
+        | '5002'
+        | '5003'
+        | '5004'
+        | '5005'
+        | '5006'
+        | '5007'
+        | '5008'
+        | '5009'
+        | '5010'
+        | '5011'
+        | '5012'
+        | '5013'
+        | '5014'
+        | '5015'
+        | '5016'
+        | '5017'
+        | '5018'
+        | '5019'
+        | '5020'
+        | '5021'
+        | '5022'
+        | '5023'
+        | '5024'
+        | '5025'
+        | '5026'
+        | '5027'
+        | '5028'
+        | '5029'
+        | '5030'
+        | '5031'
+        | '5032'
+        | '5033'
+        | '5034'
+        | '5035'
+        | '5040'
+        | '5050'
+        | '5051'
+        | '5052'
+        | '5053'
+        | '5056'
+        | '5057'
+        | '5058'
+        | '5096'
+        | '5097'
+        | '5098'
+        | '5099'
+        | '5999'
+        | '6000'
+        | '6001'
+        | '6002'
+        | '6003'
+        | '6004'
+        | '6005'
+        | '6006'
+        | '6007'
+        | '6008'
+        | '6009'
+        | '6010'
+        | '7001'
+        | '8001'
+        | '8002'
+        | '8003'
+        | '9001'
+        | '9002'
+        | '9003'
+        | '9004';
+      'l\u00F8sningerForPerioder': components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.PeriodisertStudentDto'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarSykdomL\u00F8sning': {
       /** @enum {string} */
@@ -8121,6 +8196,7 @@ export interface components {
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarPeriodisertLovvalgMedlemskapL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarPeriodisertOverstyrtForutg\u00E5endeMedlemskapL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarPeriodisertOverstyrtLovvalgMedlemskapL\u00F8sning']
+      | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarStudentL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarSykdomL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.EtableringEgenVirksomhetL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.PeriodisertAvklarSykepengerErstatningL\u00F8sning']
@@ -10358,17 +10434,12 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomGrunnlagResponse': {
       'beh\u00F8verVurderinger': components['schemas']['no.nav.aap.komponenter.type.Periode'][];
       'er\u00C5rsakssammenhengYrkesskade': boolean;
-      gjeldendeVedtatteSykdomsvurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomsvurderingResponse'][];
       'harTilgangTil\u00C5Saksbehandle': boolean;
-      historikkSykdomsvurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomsvurderingResponse'][];
       kanVurderes: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
-      kvalitetssikretAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
       nyeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomsvurderingResponse'][];
       opplysninger: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.InnhentetSykdomsOpplysninger'];
-      perioderSomIkkeErTilstrekkeligVurdert: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
       sisteVedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomsvurderingResponse'][];
       skalVurdereYrkesskade: boolean;
-      sykdomsvurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomsvurderingResponse'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomsvurderingResponse': {
       begrunnelse: string;
@@ -10729,7 +10800,8 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.etableringegenvirksomhet.EtableringEgenVirksomhetVurderingResponse': {
       begrunnelse: string;
       besluttetAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
-      brukerEierVirksomheten: boolean;
+      /** @enum {string} */
+      brukerEierVirksomheten: 'EIER_MINST_50_PROSENT' | 'EIER_MINST_50_PROSENT_MED_FLER' | 'NEI';
       /**
        * Format: date
        * @example 2025-04-01
@@ -10738,6 +10810,7 @@ export interface components {
       foreliggerFagligVurdering: boolean;
       'kanF\u00F8reTilSelvfors\u00F8rget': boolean;
       kvalitetssikretAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
+      oppfylt: boolean;
       oppstartsPeriode: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
       orgNr?: string | null;
       /**
@@ -11342,6 +11415,7 @@ export interface components {
         | 'DØDSFALL_BARN'
         | 'BARNETILLEGG_SATS_REGULERING'
         | 'REVURDER_SYKESTIPEND'
+        | 'ETABLERING_EGEN_VIRKSOMHET'
       )[];
       /** @enum {string|null} */
       '\u00E5rsakTilOpprettelse'?:
@@ -11649,6 +11723,7 @@ export interface components {
         | 'DØDSFALL_BARN'
         | 'BARNETILLEGG_SATS_REGULERING'
         | 'REVURDER_SYKESTIPEND'
+        | 'ETABLERING_EGEN_VIRKSOMHET'
       )[];
       vurdertAv: string;
       '\u00E5rsak'?: string | null;
@@ -11717,6 +11792,7 @@ export interface components {
             | 'DØDSFALL_BARN'
             | 'BARNETILLEGG_SATS_REGULERING'
             | 'REVURDER_SYKESTIPEND'
+            | 'ETABLERING_EGEN_VIRKSOMHET'
           )[]
         | null;
       '\u00E5rsak'?: string | null;
@@ -11780,6 +11856,7 @@ export interface components {
        * @example 2025-04-01
        */
       maksDato?: string | null;
+      periodeKvoter: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.underveis.PeriodeKvote'][];
       /**
        * Format: date
        * @example 2025-04-01
@@ -12305,6 +12382,7 @@ export interface components {
         | 'DØDSFALL_BARN'
         | 'BARNETILLEGG_SATS_REGULERING'
         | 'REVURDER_SYKESTIPEND'
+        | 'ETABLERING_EGEN_VIRKSOMHET'
       )[];
       /** @enum {string|null} */
       '\u00E5rsakTilOpprettelse'?:
@@ -12609,6 +12687,13 @@ export interface components {
        * @example 2025-04-01
        */
       virkningstidspunkt: string;
+    };
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.underveis.PeriodeKvote': {
+      /** Format: int32 */
+      bruktKvote: number;
+      /** Format: int32 */
+      'gjenv\u00E6rendeKvote'?: number | null;
+      periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.vilk\u00E5rsresultat.Vilk\u00E5rsperiode': {
       /** @enum {string|null} */
@@ -13266,7 +13351,8 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.etableringegenvirksomhet.EtableringEgenVirksomhetL\u00F8sningDto': {
       begrunnelse: string;
-      brukerEierVirksomheten: boolean;
+      /** @enum {string} */
+      brukerEierVirksomheten: 'EIER_MINST_50_PROSENT' | 'EIER_MINST_50_PROSENT_MED_FLER' | 'NEI';
       /**
        * Format: date
        * @example 2025-04-01
@@ -13462,6 +13548,29 @@ export interface components {
       id?: number | null;
       /** @enum {string|null} */
       skalGjenopptaStudieStatus?: 'JA' | 'NEI' | 'VET_IKKE' | 'IKKE_OPPGITT' | null;
+    };
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.PeriodisertStudentDto': {
+      'avbruddMerEnn6M\u00E5neder'?: boolean | null;
+      avbruttPgaSykdomEllerSkade?: boolean | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      avbruttStudieDato?: string | null;
+      begrunnelse: string;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fom: string;
+      'godkjentStudieAvL\u00E5nekassen'?: boolean | null;
+      harAvbruttStudie: boolean;
+      harBehovForBehandling?: boolean | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      tom?: string | null;
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.StudentVurderingDTO': {
       'avbruddMerEnn6M\u00E5neder'?: boolean | null;
@@ -14537,6 +14646,7 @@ export interface components {
         | 'UTVID_VEDTAKSLENGDE'
         | 'MIGRER_RETTIGHETSPERIODE'
         | 'REVURDER_SYKESTIPEND'
+        | 'ETABLERING_EGEN_VIRKSOMHET'
       )[];
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ArbeidIPeriodeV0': {
@@ -14766,6 +14876,7 @@ export interface components {
         | 'UTVID_VEDTAKSLENGDE'
         | 'MIGRER_RETTIGHETSPERIODE'
         | 'REVURDER_SYKESTIPEND'
+        | 'ETABLERING_EGEN_VIRKSOMHET'
       )[];
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ManueltOppgittBarn': {
@@ -14855,6 +14966,7 @@ export interface components {
         | 'UTVID_VEDTAKSLENGDE'
         | 'MIGRER_RETTIGHETSPERIODE'
         | 'REVURDER_SYKESTIPEND'
+        | 'ETABLERING_EGEN_VIRKSOMHET'
       )[];
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.OmgjoeringskravbehandlingAvsluttetDetaljer': {
@@ -14924,6 +15036,7 @@ export interface components {
         | 'UTVID_VEDTAKSLENGDE'
         | 'MIGRER_RETTIGHETSPERIODE'
         | 'REVURDER_SYKESTIPEND'
+        | 'ETABLERING_EGEN_VIRKSOMHET'
       )[];
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Oppf\u00F8lgingsoppgave': components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Oppf\u00F8lgingsoppgaveV0'];
@@ -15139,7 +15252,8 @@ export interface components {
         | 'DØDSFALL_BRUKER'
         | 'DØDSFALL_BARN'
         | 'BARNETILLEGG_SATS_REGULERING'
-        | 'REVURDER_SYKESTIPEND';
+        | 'REVURDER_SYKESTIPEND'
+        | 'ETABLERING_EGEN_VIRKSOMHET';
     };
     'no.nav.aap.behandlingsflyt.sakogbehandling.behandling.VurderingsbehovOg\u00C5rsak': {
       beskrivelse?: string | null;
@@ -15273,6 +15387,7 @@ export interface components {
         | 'DØDSFALL_BARN'
         | 'BARNETILLEGG_SATS_REGULERING'
         | 'REVURDER_SYKESTIPEND'
+        | 'ETABLERING_EGEN_VIRKSOMHET'
         | null
       )[];
       '\u00E5rsakerTilRetur': components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.\u00C5rsakTilRetur'][];
@@ -15345,6 +15460,7 @@ export interface components {
         | 'DØDSFALL_BARN'
         | 'BARNETILLEGG_SATS_REGULERING'
         | 'REVURDER_SYKESTIPEND'
+        | 'ETABLERING_EGEN_VIRKSOMHET'
       )[];
       /** @enum {string|null} */
       '\u00E5rsakTilOpprettelse'?:
