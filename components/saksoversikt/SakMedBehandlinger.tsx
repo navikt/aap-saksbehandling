@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Heading, HStack, Table, VStack } from '@navikt/ds-react';
+import { Button, Chips, Heading, HStack, Table, VStack } from '@navikt/ds-react';
 import { SaksInfo } from 'lib/types/types';
 import { capitalize } from 'lodash';
 import { SakDevTools } from 'components/saksoversikt/SakDevTools';
@@ -18,25 +18,31 @@ import {
   formatterÅrsakTilOpprettelseTilTekst,
 } from 'lib/utils/behandling';
 import { mapTypeBehandlingTilTekst } from 'lib/utils/oversettelser';
+import { useState } from 'react';
 
 const lokalDevToolsForBehandlingOgSak = isLocal();
 export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
   const router = useRouter();
 
-  const kanRevurdere = sak.behandlinger.some(
+  const [visMeldekortbehandlinger, setVisMeldekortbehandlinger] = useState(false);
+
+  const alleBehandlinger = visMeldekortbehandlinger
+    ? sak.behandlinger || []
+    : sak.behandlinger.filter((b) => b.årsakTilOpprettelse != 'MELDEKORT');
+
+  const kanRevurdere = alleBehandlinger.some(
     (behandling) => erFørstegangsbehandling(behandling) && behandling.status !== 'OPPRETTET' && !erTrukket(behandling)
   );
 
-  const kanRegistrerebrudd = sak.behandlinger.some((behandling) => erAvsluttetFørstegangsbehandling(behandling));
+  const kanRegistrerebrudd = alleBehandlinger.some((behandling) => erAvsluttetFørstegangsbehandling(behandling));
 
-  const åpne = sak?.behandlinger?.filter((b) => !erAvsluttet(b)) || [];
-  const avsluttede = sak?.behandlinger?.filter((b) => erAvsluttet(b)) || [];
+  const åpne = alleBehandlinger.filter((b) => !erAvsluttet(b));
+  const avsluttede = alleBehandlinger?.filter((b) => erAvsluttet(b));
 
   return (
     <VStack gap="8">
       <HStack justify="space-between">
         <Heading size="large">Sak {sak.saksnummer}</Heading>
-
         <HStack gap="4">
           <Button
             variant="secondary"
@@ -77,6 +83,14 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
         </HStack>
       </HStack>
 
+      <Chips>
+        <Chips.Toggle
+          selected={visMeldekortbehandlinger}
+          onClick={() => setVisMeldekortbehandlinger(!visMeldekortbehandlinger)}
+        >
+          Vis meldekortbehandlinger
+        </Chips.Toggle>
+      </Chips>
       <Table>
         <Table.Header>
           <Table.Row>
