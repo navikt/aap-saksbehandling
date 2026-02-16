@@ -6,6 +6,11 @@ import jsxA11y from 'eslint-plugin-jsx-a11y';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
 import jest from 'eslint-plugin-jest';
 import tsParser from '@typescript-eslint/parser';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const config = [
   {
@@ -23,6 +28,8 @@ const config = [
     languageOptions: {
       parser: tsParser,
       parserOptions: {
+        projectService: true,
+        tsconfigRootDir: __dirname,
         ecmaVersion: 2026,
         sourceType: 'module',
         ecmaFeatures: { jsx: true },
@@ -52,6 +59,7 @@ const config = [
       ...jsxA11y.configs.recommended.rules,
       ...reactHooks.configs.recommended.rules,
       'react/jsx-indent-props': ['error', 2],
+      '@typescript-eslint/no-unnecessary-type-conversion': ['error'],
       'react/jsx-uses-react': 'off',
       'react/react-in-jsx-scope': 'off',
       'no-unused-vars': 'off',

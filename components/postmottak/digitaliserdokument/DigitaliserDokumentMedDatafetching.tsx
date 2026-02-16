@@ -20,7 +20,7 @@ export const DigitaliserDokumentMedDatafetching = async ({ behandlingsreferanse 
     return <ApiException apiResponses={[flyt, grunnlag]} />;
   }
 
-  const isReadOnly: boolean = !!flyt.data.visning.readOnly;
+  const isReadOnly: boolean = flyt.data.visning.readOnly;
   return (
     <DigitaliserDokument
       behandlingsVersjon={flyt.data.behandlingVersjon}

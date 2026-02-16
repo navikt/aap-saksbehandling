@@ -61,7 +61,7 @@ export const PeriodisertForutgåendeMedlemskap = async ({ behandlingsReferanse }
     vurderMedlemskapSteg.avklaringsbehov
   );
 
-  const erOverstyrt = !!grunnlag?.data.overstyrt || erOverstyrtTilbakeførtVurdering;
+  const erOverstyrt = grunnlag?.data.overstyrt || erOverstyrtTilbakeførtVurdering;
   const behovstype =
     flyt.data.visning.typeBehandling === 'Førstegangsbehandling' && erOverstyrt
       ? Behovstype.MANUELL_OVERSTYRING_MEDLEMSKAP
