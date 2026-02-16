@@ -11,6 +11,7 @@ import { isLocal } from 'lib/utils/environment';
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
 import {
   erAktivFørstegangsbehandling,
+  erAvsluttet,
   erAvsluttetFørstegangsbehandling,
   erFørstegangsbehandling,
   erTrukket,
@@ -27,6 +28,9 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
   );
 
   const kanRegistrerebrudd = sak.behandlinger.some((behandling) => erAvsluttetFørstegangsbehandling(behandling));
+
+  const åpne = sak?.behandlinger?.filter((b) => !erAvsluttet(b)) || [];
+  const avsluttede = sak?.behandlinger?.filter((b) => erAvsluttet(b)) || [];
 
   return (
     <VStack gap="8">
@@ -86,7 +90,7 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
         </Table.Header>
 
         <Table.Body>
-          {sak?.behandlinger?.map((behandling) => (
+          {åpne.concat(avsluttede).map((behandling) => (
             <Table.Row key={behandling.referanse}>
               <Table.DataCell>{formaterDatoMedTidspunktForFrontend(behandling.opprettet)}</Table.DataCell>
               <Table.DataCell>{mapTypeBehandlingTilTekst(behandling.typeBehandling)}</Table.DataCell>
