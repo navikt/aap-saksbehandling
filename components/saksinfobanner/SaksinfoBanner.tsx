@@ -1,7 +1,14 @@
 'use client';
 
 import { BodyShort, Button, CopyButton, Dropdown, HStack, Label, Link, Tag } from '@navikt/ds-react';
-import { DetaljertBehandling, FlytGruppe, FlytVisning, SakPersoninfo, SaksInfo as SaksInfoType } from 'lib/types/types';
+import {
+  DetaljertBehandling,
+  FlytGruppe,
+  FlytVisning,
+  SakPersoninfo,
+  SaksInfo as SaksInfoType,
+  TypeBehandling,
+} from 'lib/types/types';
 import { useState } from 'react';
 import { SettBehandlingPåVentModal } from 'components/settbehandlingpåventmodal/SettBehandlingPåVentModal';
 import { ChevronDownIcon, ChevronRightIcon } from '@navikt/aksel-icons';
@@ -30,7 +37,6 @@ import { useFeatureFlag } from 'context/UnleashContext';
 import { Dato } from 'lib/types/Dato';
 import { isSuccess } from 'lib/utils/api';
 import { clientHentRettighetsdata } from 'lib/clientApi';
-import { Behandlingstype, behandlingstypeFraId } from 'lib/utils/behandling';
 import useSWR from 'swr';
 
 interface Props {
@@ -143,11 +149,11 @@ export const SaksinfoBanner = ({
 
   const hentMaksdato = (): string | null | undefined => {
     if (isVisRettigheterForVedtakEnabled && isSuccess(rettighetsdata)) {
-      const ytelsesbehandlingTyper = [Behandlingstype.Førstegangsbehandling, Behandlingstype.Revurdering];
+      const ytelsesbehandlingTyper: TypeBehandling[] = ['Førstegangsbehandling', 'Revurdering'];
 
       const gjeldendeVedtak = sak.behandlinger
         .filter((behandling) => {
-          const behandlingstype = behandlingstypeFraId(behandling?.type);
+          const behandlingstype = behandling?.typeBehandling;
           return (
             behandlingstype && ytelsesbehandlingTyper.includes(behandlingstype) && behandling.status === 'AVSLUTTET'
           );

@@ -10,14 +10,14 @@ import { BehandlingButtons } from 'components/saksoversikt/BehandlingButtons';
 import { isLocal } from 'lib/utils/environment';
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
 import {
-  Behandlingstype,
   erAktivFørstegangsbehandling,
+  erAvsluttet,
   erAvsluttetFørstegangsbehandling,
   erFørstegangsbehandling,
   erTrukket,
-  formaterBehandlingType,
   formatterÅrsakTilOpprettelseTilTekst,
 } from 'lib/utils/behandling';
+import { mapTypeBehandlingTilTekst } from 'lib/utils/oversettelser';
 
 const lokalDevToolsForBehandlingOgSak = isLocal();
 export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
@@ -28,6 +28,9 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
   );
 
   const kanRegistrerebrudd = sak.behandlinger.some((behandling) => erAvsluttetFørstegangsbehandling(behandling));
+
+  const åpne = sak?.behandlinger?.filter((b) => !erAvsluttet(b)) || [];
+  const avsluttede = sak?.behandlinger?.filter((b) => erAvsluttet(b)) || [];
 
   return (
     <VStack gap="8">
@@ -87,10 +90,10 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
         </Table.Header>
 
         <Table.Body>
-          {sak?.behandlinger?.map((behandling) => (
+          {åpne.concat(avsluttede).map((behandling) => (
             <Table.Row key={behandling.referanse}>
               <Table.DataCell>{formaterDatoMedTidspunktForFrontend(behandling.opprettet)}</Table.DataCell>
-              <Table.DataCell>{formaterBehandlingType(behandling.type as Behandlingstype)}</Table.DataCell>
+              <Table.DataCell>{mapTypeBehandlingTilTekst(behandling.typeBehandling)}</Table.DataCell>
               <Table.DataCell>{formatterÅrsakTilOpprettelseTilTekst(behandling.årsakTilOpprettelse)}</Table.DataCell>
               <Table.DataCell>{capitalize(behandling.status)}</Table.DataCell>
               <Table.DataCell>
@@ -108,7 +111,7 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
       {lokalDevToolsForBehandlingOgSak && (
         <SakDevTools
           saksnummer={sak.saksnummer}
-          behandlinger={sak.behandlinger.map((e) => ({ referanse: e.referanse, type: e.type }))}
+          behandlinger={sak.behandlinger.map((e) => ({ referanse: e.referanse, type: e.typeBehandling }))}
         />
       )}
     </VStack>

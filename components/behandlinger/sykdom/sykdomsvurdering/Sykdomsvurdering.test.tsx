@@ -15,6 +15,7 @@ fetchMock.enableMocks();
 const user = userEvent.setup();
 
 const grunnlagUtenYrkesskade: SykdomsGrunnlag = {
+  ikkeRelevantePerioder: [],
   behøverVurderinger: [{ fom: new Dato(new Date()).formaterForBackend(), tom: '2099-01-01' }],
   kanVurderes: [],
   nyeVurderinger: [],
@@ -26,6 +27,7 @@ const grunnlagUtenYrkesskade: SykdomsGrunnlag = {
 };
 
 const grunnlagMedYrkesskade: SykdomsGrunnlag = {
+  ikkeRelevantePerioder: [],
   behøverVurderinger: [{ fom: format(new Date(), 'yyyy-MM-dd'), tom: '2099-01-01' }],
   kanVurderes: [{ fom: format(new Date(), 'yyyy-MM-dd'), tom: '2099-01-01' }],
   nyeVurderinger: [],
@@ -37,6 +39,7 @@ const grunnlagMedYrkesskade: SykdomsGrunnlag = {
 };
 
 const grunnlagMedTidligereVurdering: SykdomsGrunnlag = {
+  ikkeRelevantePerioder: [],
   behøverVurderinger: [],
   kanVurderes: [],
   nyeVurderinger: [
@@ -771,6 +774,7 @@ describe('vurderinger uten viss varighet', () => {
   it('viser spørsmål om den nedsatte arbeidsevnen er minst 30 prosent når det skal vurderes mot yrkesskade', async () => {
     const søknadstidspunkt = subDays(new Date(), 14);
     const grunnlagMedYrkesskadeOgÅrsakssammenheng: SykdomsGrunnlag = {
+      ikkeRelevantePerioder: [],
       behøverVurderinger: [],
       kanVurderes: [{ fom: formaterDatoForBackend(søknadstidspunkt), tom: '' }],
       nyeVurderinger: [],
@@ -841,6 +845,7 @@ describe('mellomlagring i sykdom', () => {
   };
 
   const sykdomsGrunnlagMedVurdering: SykdomsGrunnlag = {
+    ikkeRelevantePerioder: [],
     behøverVurderinger: [],
     kanVurderes: [],
     nyeVurderinger: [sykdomsvurdering],
@@ -852,6 +857,7 @@ describe('mellomlagring i sykdom', () => {
   };
 
   const sykdomsGrunnlagUtenVurdering: SykdomsGrunnlag = {
+    ikkeRelevantePerioder: [],
     behøverVurderinger: [],
     kanVurderes: [{ fom: new Dato(new Date()).formaterForBackend(), tom: '2099-01-01' }],
     nyeVurderinger: [],

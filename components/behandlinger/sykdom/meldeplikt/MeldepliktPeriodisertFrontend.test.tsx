@@ -32,6 +32,7 @@ describe('Meldeplikt', () => {
 
     it('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
       const grunnlagMedVurdering: FritakMeldepliktGrunnlag = {
+        ikkeRelevantePerioder: [],
         behøverVurderinger: [],
         kanVurderes: [],
         nyeVurderinger: [
@@ -123,6 +124,7 @@ describe('Meldeplikt', () => {
       },
     };
     const grunnlagMedVurdering: FritakMeldepliktGrunnlag = {
+      ikkeRelevantePerioder: [],
       behøverVurderinger: [],
       kanVurderes: [],
       nyeVurderinger: [
@@ -141,6 +143,7 @@ describe('Meldeplikt', () => {
     };
 
     const grunnlagUtenVurdering: FritakMeldepliktGrunnlag = {
+      ikkeRelevantePerioder: [],
       behøverVurderinger: [],
       kanVurderes: [],
       nyeVurderinger: [],

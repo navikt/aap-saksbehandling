@@ -17,6 +17,7 @@ beforeEach(() => {
 });
 
 const grunnlagTomt: OvergangArbeidGrunnlag = {
+  ikkeRelevantePerioder: [],
   nyeVurderinger: [],
   gjeldendeSykdsomsvurderinger: [],
   sisteVedtatteVurderinger: [],
@@ -25,6 +26,7 @@ const grunnlagTomt: OvergangArbeidGrunnlag = {
   kanVurderes: [],
 };
 const overgangArbeidgrunnlag: OvergangArbeidGrunnlag = {
+  ikkeRelevantePerioder: [],
   nyeVurderinger: [
     {
       begrunnelse: 'Dette er min vurdering som er bekreftet',
