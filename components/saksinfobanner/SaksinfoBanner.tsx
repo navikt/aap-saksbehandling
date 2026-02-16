@@ -83,7 +83,10 @@ export const SaksinfoBanner = ({
   const behandlingErIkkeIverksatt = behandling && behandling.status !== 'IVERKSETTES';
 
   const adressebeskyttelser = oppgave ? utledAdressebeskyttelse(oppgave) : [];
-  const rettighetsdata = useSWR(`/api/sak/${sak.saksnummer}/rettighet`, () => clientHentRettighetsdata(sak.saksnummer)).data;
+  const isVisRettigheterForVedtakEnabled = useFeatureFlag('VisRettigheterForVedtak'); // TODO AAP-1709 Fjerne feature toggle etter verifisering i dev
+  const rettighetsdata = useSWR(isVisRettigheterForVedtakEnabled ? `/api/sak/${sak.saksnummer}/rettighet` : null, () =>
+    clientHentRettighetsdata(sak.saksnummer)
+  ).data;
 
   const visValgForÅTrekkeSøknad =
     !behandlerEnSøknadSomSkalTrekkes &&
@@ -139,7 +142,6 @@ export const SaksinfoBanner = ({
   };
 
   const hentMaksdato = (): string | null | undefined => {
-    const isVisRettigheterForVedtakEnabled = useFeatureFlag('VisRettigheterForVedtak'); // TODO AAP-1709 Fjerne feature toggle etter verifisering i dev
     if (isVisRettigheterForVedtakEnabled && isSuccess(rettighetsdata)) {
       const ytelsesbehandlingTyper = [Behandlingstype.Førstegangsbehandling, Behandlingstype.Revurdering];
 
