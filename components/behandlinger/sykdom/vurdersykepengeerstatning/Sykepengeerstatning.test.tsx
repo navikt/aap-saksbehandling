@@ -12,6 +12,7 @@ const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
 const user = userEvent.setup();
 const grunnlag: SykepengeerstatningGrunnlag = {
+  ikkeRelevantePerioder: [],
   behøverVurderinger: [],
   harTilgangTilÅSaksbehandle: false,
   kanVurderes: [],
@@ -100,6 +101,7 @@ describe('mellomlagring', () => {
   };
 
   const grunnlagMedVurdering: SykepengeerstatningGrunnlag = {
+    ikkeRelevantePerioder: [],
     harTilgangTilÅSaksbehandle: true,
     kanVurderes: [],
     behøverVurderinger: [],
@@ -144,6 +146,7 @@ describe('mellomlagring', () => {
   };
 
   const grunnlagUtenVurdering: SykepengeerstatningGrunnlag = {
+    ikkeRelevantePerioder: [],
     harTilgangTilÅSaksbehandle: true,
     vurderinger: [],
     vedtatteVurderinger: [],

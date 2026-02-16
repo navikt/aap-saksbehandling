@@ -15,6 +15,7 @@ fetchMock.enableMocks();
 const user = userEvent.setup();
 
 const grunnlagMedVurdering: StudentGrunnlag = {
+  ikkeRelevantePerioder: [],
   behøverVurderinger: [],
   kanVurderes: [],
   nyeVurderinger: [],
@@ -213,6 +214,7 @@ describe('Student', () => {
           behandlingVersjon={0}
           readOnly={false}
           grunnlag={{
+            ikkeRelevantePerioder: [],
             behøverVurderinger: [],
             kanVurderes: [],
             nyeVurderinger: [],
@@ -232,6 +234,7 @@ describe('Student', () => {
           behandlingVersjon={0}
           readOnly={false}
           grunnlag={{
+            ikkeRelevantePerioder: [],
             behøverVurderinger: [],
             kanVurderes: [],
             nyeVurderinger: [],
@@ -251,6 +254,7 @@ describe('Student', () => {
           behandlingVersjon={0}
           readOnly={false}
           grunnlag={{
+            ikkeRelevantePerioder: [],
             behøverVurderinger: [],
             kanVurderes: [],
             nyeVurderinger: [],
@@ -271,6 +275,7 @@ describe('Student', () => {
           behandlingVersjon={0}
           readOnly={false}
           grunnlag={{
+            ikkeRelevantePerioder: [],
             behøverVurderinger: [],
             kanVurderes: [],
             nyeVurderinger: [],
@@ -305,6 +310,7 @@ describe('Student', () => {
           behandlingVersjon={0}
           readOnly={false}
           grunnlag={{
+            ikkeRelevantePerioder: [],
             behøverVurderinger: [],
             kanVurderes: [],
             nyeVurderinger: [],
@@ -345,6 +351,7 @@ describe('Student', () => {
     };
 
     const grunnlagMedVurdering: StudentGrunnlag = {
+      ikkeRelevantePerioder: [],
       behøverVurderinger: [],
       kanVurderes: [],
       nyeVurderinger: [],
@@ -364,6 +371,7 @@ describe('Student', () => {
     };
 
     const grunnlagUtenVurdering: StudentGrunnlag = {
+      ikkeRelevantePerioder: [],
       behøverVurderinger: [],
       kanVurderes: [],
       nyeVurderinger: [],
