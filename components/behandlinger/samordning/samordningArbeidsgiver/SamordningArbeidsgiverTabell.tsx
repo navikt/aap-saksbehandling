@@ -135,8 +135,8 @@ const AutoFillTomRow = ({ index, form, readOnly, remove }: AutoFillTomRowProps) 
       return;
     }
 
-    const days = parseInt(String(antallDager), 10);
-    const startDate = parse(String(fom), 'dd.MM.yyyy', new Date());
+    const days = parseInt(antallDager, 10);
+    const startDate = parse(fom, 'dd.MM.yyyy', new Date());
 
     if (isNaN(days) || days <= 0 || !isValid(startDate)) {
       resetTomDate();

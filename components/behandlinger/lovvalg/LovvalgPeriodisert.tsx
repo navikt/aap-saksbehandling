@@ -43,7 +43,7 @@ export const LovvalgPeriodisert = async ({ behandlingsReferanse }: Props) => {
     vurderLovvalgSteg.avklaringsbehov
   );
 
-  const erOverstyrt = !!grunnlag?.data.overstyrt || erOverstyrtTilbakeførtVurdering;
+  const erOverstyrt = grunnlag?.data.overstyrt || erOverstyrtTilbakeførtVurdering;
 
   const behovstype =
     flyt.data.visning.typeBehandling === 'Førstegangsbehandling' && erOverstyrt

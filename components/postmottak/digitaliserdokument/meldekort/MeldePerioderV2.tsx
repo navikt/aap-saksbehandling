@@ -56,7 +56,7 @@ export const MeldeperioderV2 = ({ form, readOnly }: Props) => {
     // sletter meldeperioder når man fjerner en valgt uke
     const meldeperioder = form.getValues('meldeperioder');
     const indexerSomSkalSlettes = meldeperioder
-      .map((meldeperiode, index) => (!valgteUker.includes(meldeperiode.ukestart.toString()) ? index : null))
+      .map((meldeperiode, index) => (!valgteUker.includes(meldeperiode.ukestart) ? index : null))
       .filter((index) => index !== null);
 
     if (indexerSomSkalSlettes) {
