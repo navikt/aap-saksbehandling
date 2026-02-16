@@ -50,6 +50,11 @@ export const hentJournalpostInfo = async (behandlingsreferanse: string) => {
   return apiFetch<JournalpostInfo>(url, postmottakApiScope, 'GET');
 };
 
+export const hentUbehandledeJournalposter = async () => {
+  const url = `${postmottakApiBaseUrl}/api/dokumenter/finn-ubehandlede`;
+  return await apiFetch<any[]>(url, postmottakApiScope, 'GET');
+};
+
 export const løsAvklaringsbehov = async (avklaringsBehov: LøsAvklaringsbehovPåBehandling) => {
   const url = `${postmottakApiBaseUrl}/api/behandling/løs-behov`;
   return await apiFetch<void>(url, postmottakApiScope, 'POST', avklaringsBehov);
