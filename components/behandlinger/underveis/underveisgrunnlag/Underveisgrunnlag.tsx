@@ -34,7 +34,9 @@ const Perioderad = ({
   const gjenværendeKvote =
     rettighetsdata
       ?.find((rettighet) => rettighet.type === periode.rettighetsType?.rettighetsType)
-      ?.periodeKvoter.find((kvote) => kvote.periode === periode.periode)?.gjenværendeKvote || '';
+      ?.periodeKvoter.find(
+        (kvote) => kvote.periode.fom === periode.periode.fom && kvote.periode.tom === periode.periode.tom
+      )?.gjenværendeKvote || '';
 
   return (
     <Table.Row>
