@@ -32,6 +32,28 @@ export function erAktivFørstegangsbehandling(behandlinger: BehandlingInfo[]): b
   return behandlinger.some((b) => erFørstegangsbehandling(b) && !erAvsluttet(b));
 }
 
+export function behandlingstypeFraId(id: string) {
+  switch (id) {
+    case 'ae0034':
+      return Behandlingstype.Førstegangsbehandling;
+    case 'ae0028':
+      return Behandlingstype.Revurdering;
+    case 'ae0203':
+      return Behandlingstype.Tilbakekreving;
+    case 'ae0058':
+      return Behandlingstype.Klage;
+    case 'svar-fra-andreinstans':
+      return Behandlingstype.SvarFraAndreinstans;
+    case 'oppfølgingsbehandling':
+      return Behandlingstype.Oppfølgingsbehandling;
+    case 'aktivitetsplikt11-9':
+      return Behandlingstype.Aktivitetsplikt11_9;
+    case 'aktivitetsplikt11-7':
+      return Behandlingstype.Aktivitetsplikt11_7;
+  }
+  return undefined;
+}
+
 export function formaterBehandlingType(behandlingtype: Behandlingstype): string {
   switch (behandlingtype) {
     case Behandlingstype.Førstegangsbehandling:
