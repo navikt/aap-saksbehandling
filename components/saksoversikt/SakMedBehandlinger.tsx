@@ -26,18 +26,18 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
 
   const [visMeldekortbehandlinger, setVisMeldekortbehandlinger] = useState(false);
 
-  const alleBehandlinger = visMeldekortbehandlinger
+  const behandlinger = visMeldekortbehandlinger
     ? sak.behandlinger || []
-    : sak.behandlinger.filter((b) => b.årsakTilOpprettelse != 'MELDEKORT');
+    : sak.behandlinger.filter((b) => b.årsakTilOpprettelse !== 'MELDEKORT');
 
-  const kanRevurdere = alleBehandlinger.some(
+  const kanRevurdere = behandlinger.some(
     (behandling) => erFørstegangsbehandling(behandling) && behandling.status !== 'OPPRETTET' && !erTrukket(behandling)
   );
 
-  const kanRegistrerebrudd = alleBehandlinger.some((behandling) => erAvsluttetFørstegangsbehandling(behandling));
+  const kanRegistrerebrudd = sak.behandlinger.some((behandling) => erAvsluttetFørstegangsbehandling(behandling));
 
-  const åpne = alleBehandlinger.filter((b) => !erAvsluttet(b));
-  const avsluttede = alleBehandlinger?.filter((b) => erAvsluttet(b));
+  const åpne = behandlinger.filter((b) => !erAvsluttet(b));
+  const avsluttede = behandlinger?.filter((b) => erAvsluttet(b));
 
   return (
     <VStack gap="8">
