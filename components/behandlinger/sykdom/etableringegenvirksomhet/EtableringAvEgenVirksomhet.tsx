@@ -28,10 +28,15 @@ import {
   getDefaultValuesFromGrunnlag,
   mapEtableringEgenVirksomhetVurderingTilDto,
   nyVurderingErOppfylt,
+  tidligereVurderingErOppfylt,
   tomEtableringAvEgenVirksomhetVurdering,
 } from 'components/behandlinger/sykdom/etableringegenvirksomhet/etablering-av-egen-virksomhet-utils';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
+import { EtableringEgenVirksomhetTidligereVurdering } from 'components/behandlinger/sykdom/etableringegenvirksomhet/EtableringAvEgenVirksomhetTidligereVurdering';
+import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
+import { parseISO } from 'date-fns';
+import { parseDatoFraDatePicker } from 'lib/utils/date';
 
 interface Props {
   behandlingVersjon: number;
@@ -115,6 +120,7 @@ export const EtableringAvEgenVirksomhet = ({
     append(tomEtableringAvEgenVirksomhetVurdering());
   }
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
+  const foersteNyePeriode = nyeVurderinger.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
   const errorList = mapPeriodiserteVurderingerErrorList<EtableringAvEgenVirksomhetForm>(form.formState.errors);
 
   return (
@@ -154,6 +160,17 @@ export const EtableringAvEgenVirksomhet = ({
           )}
         </VStack>
       )}
+      {vedtatteVurderinger.map((vurdering) => (
+        <TidligereVurderingExpandableCard
+          key={vurdering.fom}
+          fom={parseISO(vurdering.fom)}
+          tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
+          foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+          vurderingStatus={getErOppfyltEllerIkkeStatus(tidligereVurderingErOppfylt(vurdering))}
+        >
+          <EtableringEgenVirksomhetTidligereVurdering vurdering={vurdering} />
+        </TidligereVurderingExpandableCard>
+      ))}
       {nyeVurderinger.map((vurdering, index) => (
         <NyVurderingExpandableCard
           key={vurdering.id}

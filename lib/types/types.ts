@@ -371,6 +371,9 @@ export type PeriodisertManuellVurderingForForutgåendeMedlemskapResponse =
 export type EtableringEgenVirksomhetGrunnlagResponse =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.etableringegenvirksomhet.EtableringEgenVirksomhetGrunnlagResponse'];
 
+export type EtableringEgenVirksomhetVurderingResponse =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.etableringegenvirksomhet.EtableringEgenVirksomhetVurderingResponse'];
+
 export type EtableringEgenVirksomhetLøsningDto =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.etableringegenvirksomhet.EtableringEgenVirksomhetLøsningDto'];
 

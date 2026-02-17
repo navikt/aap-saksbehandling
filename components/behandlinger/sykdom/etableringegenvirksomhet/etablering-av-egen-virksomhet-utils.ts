@@ -1,4 +1,8 @@
-import { EtableringEgenVirksomhetGrunnlagResponse, EtableringEgenVirksomhetLøsningDto } from 'lib/types/types';
+import {
+  EtableringEgenVirksomhetGrunnlagResponse,
+  EtableringEgenVirksomhetLøsningDto,
+  EtableringEgenVirksomhetVurderingResponse,
+} from 'lib/types/types';
 import {
   EtableringAvEgenVirksomhetForm,
   EtableringAvEgenVirksomhetVurderingForm,
@@ -97,6 +101,27 @@ export function nyVurderingErOppfylt(vurdering: EtableringAvEgenVirksomhetVurder
     (vurdering.eierBrukerVirksomheten === 'EIER_MINST_50_PROSENT' ||
       vurdering.eierBrukerVirksomheten === 'EIER_MINST_50_PROSENT_MED_FLER') &&
     vurdering.antasDetAtEtableringenFørerTilSelvforsørgelse === JaEllerNei.Ja
+  ) {
+    return true;
+  }
+}
+
+export function tidligereVurderingErOppfylt(vurdering: EtableringEgenVirksomhetVurderingResponse): boolean | undefined {
+  if (
+    vurdering.foreliggerFagligVurdering === false ||
+    vurdering.virksomhetErNy === false ||
+    vurdering.brukerEierVirksomheten === 'NEI' ||
+    vurdering.kanFøreTilSelvforsørget === false
+  ) {
+    return false;
+  }
+
+  if (
+    vurdering.foreliggerFagligVurdering === true &&
+    vurdering.virksomhetErNy === true &&
+    (vurdering.brukerEierVirksomheten === 'EIER_MINST_50_PROSENT' ||
+      vurdering.brukerEierVirksomheten === 'EIER_MINST_50_PROSENT_MED_FLER') &&
+    vurdering.kanFøreTilSelvforsørget === true
   ) {
     return true;
   }
