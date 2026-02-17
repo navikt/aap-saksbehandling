@@ -7,7 +7,7 @@ import {
   EtableringAvEgenVirksomhetForm,
   EtableringAvEgenVirksomhetVurderingForm,
 } from 'components/behandlinger/sykdom/etableringegenvirksomhet/EtableringAvEgenVirksomhet';
-import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
+import { hentPerioderSomTrengerVurdering } from 'lib/utils/periodisering';
 import { getJaNeiEllerUndefined, getTrueFalseEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { Dato } from 'lib/types/Dato';
 import { subDays } from 'date-fns';
@@ -85,7 +85,10 @@ export function tomEtableringAvEgenVirksomhetVurdering(): EtableringAvEgenVirkso
   };
 }
 
-export function nyVurderingErOppfylt(vurdering: EtableringAvEgenVirksomhetVurderingForm): boolean | undefined {
+export function nyVurderingErOppfylt(vurdering?: EtableringAvEgenVirksomhetVurderingForm): boolean | undefined {
+  if (!vurdering) {
+    return undefined;
+  }
   if (
     vurdering.foreliggerEnNæringsfagligVurdering === JaEllerNei.Nei ||
     vurdering.erVirksomhetenNy === JaEllerNei.Nei ||
