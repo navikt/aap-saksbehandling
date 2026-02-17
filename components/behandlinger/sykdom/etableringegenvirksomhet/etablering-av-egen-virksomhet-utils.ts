@@ -15,7 +15,7 @@ import { subDays } from 'date-fns';
 export function getDefaultValuesFromGrunnlag(
   grunnlag: EtableringEgenVirksomhetGrunnlagResponse
 ): EtableringAvEgenVirksomhetForm {
-  if (trengerVurderingsForslag(grunnlag)) {
+  if (grunnlag.behøverVurderinger.length > 0) {
     return {
       ...hentPerioderSomTrengerVurdering<EtableringAvEgenVirksomhetVurderingForm>(
         grunnlag,
