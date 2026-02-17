@@ -37,6 +37,7 @@ import { EtableringEgenVirksomhetTidligereVurdering } from 'components/behandlin
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { parseISO } from 'date-fns';
 import { parseDatoFraDatePicker } from 'lib/utils/date';
+import { IkkeVurderbarPeriode } from 'components/periodisering/IkkeVurderbarPeriode';
 
 interface Props {
   behandlingVersjon: number;
@@ -148,6 +149,32 @@ export const EtableringAvEgenVirksomhet = ({
               Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-15 (lovdata.no)
             </Link>
           </BodyLong>
+        </VStack>
+      )}
+      {grunnlag.ikkeVurderbarePerioder.map((vurdering) => (
+        <IkkeVurderbarPeriode
+          key={vurdering.fom}
+          fom={parseISO(vurdering.fom)}
+          tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
+          alertMelding={
+            'Vilkåret kan ikke vurderes for denne perioden. For å vurdere vilkåret må § 11-6 b være oppfylt.'
+          }
+          foersteNyePeriodeFraDato={undefined}
+        ></IkkeVurderbarPeriode>
+      ))}
+      {vedtatteVurderinger.map((vurdering) => (
+        <TidligereVurderingExpandableCard
+          key={vurdering.fom}
+          fom={parseISO(vurdering.fom)}
+          tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
+          foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+          vurderingStatus={getErOppfyltEllerIkkeStatus(tidligereVurderingErOppfylt(vurdering))}
+        >
+          <EtableringEgenVirksomhetTidligereVurdering vurdering={vurdering} />
+        </TidligereVurderingExpandableCard>
+      ))}
+      {!formReadOnly && (
+        <VStack paddingBlock={'4'} paddingInline={'5'} gap={'4'}>
           {nyeVurderinger.length > 0 && (
             <HStack>
               <TextFieldWrapper
@@ -160,17 +187,6 @@ export const EtableringAvEgenVirksomhet = ({
           )}
         </VStack>
       )}
-      {vedtatteVurderinger.map((vurdering) => (
-        <TidligereVurderingExpandableCard
-          key={vurdering.fom}
-          fom={parseISO(vurdering.fom)}
-          tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
-          foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-          vurderingStatus={getErOppfyltEllerIkkeStatus(tidligereVurderingErOppfylt(vurdering))}
-        >
-          <EtableringEgenVirksomhetTidligereVurdering vurdering={vurdering} />
-        </TidligereVurderingExpandableCard>
-      ))}
       {nyeVurderinger.map((vurdering, index) => (
         <NyVurderingExpandableCard
           key={vurdering.id}
