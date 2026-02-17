@@ -9,6 +9,7 @@ import { Behovstype } from 'lib/utils/form';
 import { ForutgåendeMedlemskapPeriodisert } from 'components/behandlinger/forutgåendemedlemskap/manuellvurderingperiodisert/ForutgåendeMedlemskapPeriodisert';
 
 const grunnlag: PeriodisertForutgåendeMedlemskapGrunnlag = {
+  ikkeRelevantePerioder: [],
   nyeVurderinger: [],
   kanVurderes: [
     {
@@ -27,6 +28,7 @@ const grunnlag: PeriodisertForutgåendeMedlemskapGrunnlag = {
   overstyrt: false,
 };
 const grunnlagMedBekreftetVurdering: PeriodisertForutgåendeMedlemskapGrunnlag = {
+  ikkeRelevantePerioder: [],
   nyeVurderinger: [
     {
       fom: '2025-11-01',

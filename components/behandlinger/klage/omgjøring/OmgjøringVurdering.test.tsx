@@ -16,7 +16,7 @@ describe('Klage - omgjøring', () => {
             {
               referanse: 'uuid-2',
               opprettet: '2023-10-01T12:00:00Z',
-              type: 'Førstegangsbehandling',
+              typeBehandling: 'Førstegangsbehandling',
               status: 'AVSLUTTET',
               vurderingsbehov: ['MOTTATT_SØKNAD'],
             },
@@ -49,7 +49,7 @@ describe('Klage - omgjøring', () => {
             {
               referanse: 'uuid-2',
               opprettet: '2023-10-01T12:00:00Z',
-              type: 'Førstegangsbehandling',
+              typeBehandling: 'Førstegangsbehandling',
               status: 'AVSLUTTET',
               vurderingsbehov: ['MOTTATT_SØKNAD'],
             },

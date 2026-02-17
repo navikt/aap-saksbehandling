@@ -9,6 +9,7 @@ import { OppholdskravSteg } from 'components/behandlinger/oppholdskrav/Oppholdsk
 import { Behovstype } from 'lib/utils/form';
 
 const oppholdskravGrunnlag: OppholdskravGrunnlagResponse = {
+  ikkeRelevantePerioder: [],
   nyeVurderinger: [],
   kanVurderes: [
     {
@@ -26,6 +27,7 @@ const oppholdskravGrunnlag: OppholdskravGrunnlagResponse = {
   harTilgangTilÅSaksbehandle: true,
 };
 const oppholdskravGrunnlagMedBekreftetVurdering: OppholdskravGrunnlagResponse = {
+  ikkeRelevantePerioder: [],
   nyeVurderinger: [{ begrunnelse: 'Dette er min vurdering som er bekreftet', oppfylt: true, fom: '2025-10-10' }],
   kanVurderes: [
     {

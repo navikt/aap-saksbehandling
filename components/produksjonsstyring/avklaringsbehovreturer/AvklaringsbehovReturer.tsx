@@ -62,7 +62,7 @@ export const AvklaringsbehovReturer = ({ data }: Props) => {
                 {rowIdx === 0 && (
                   <>
                     <Table.DataCell rowSpan={avklaringsbehov.returerPerAvklaringsbehov.length}>
-                      {mapBehovskodeTilBehovstype(row.avklaringsbehov.toString())}
+                      {mapBehovskodeTilBehovstype(row.avklaringsbehov)}
                     </Table.DataCell>
                     <Table.DataCell rowSpan={avklaringsbehov.returerPerAvklaringsbehov.length}>
                       {avklaringsbehov.totalt}

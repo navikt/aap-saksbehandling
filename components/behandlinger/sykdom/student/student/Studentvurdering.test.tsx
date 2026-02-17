@@ -15,6 +15,11 @@ fetchMock.enableMocks();
 const user = userEvent.setup();
 
 const grunnlagMedVurdering: StudentGrunnlag = {
+  ikkeRelevantePerioder: [],
+  behøverVurderinger: [],
+  kanVurderes: [],
+  nyeVurderinger: [],
+  sisteVedtatteVurderinger: [],
   harTilgangTilÅSaksbehandle: true,
   studentvurdering: {
     begrunnelse: 'en god begrunnelse',
@@ -23,6 +28,7 @@ const grunnlagMedVurdering: StudentGrunnlag = {
       dato: '2025-11-03',
       ident: 'Saksbehandler',
     },
+    fom: '',
   },
 };
 
@@ -207,7 +213,15 @@ describe('Student', () => {
         <Studentvurdering
           behandlingVersjon={0}
           readOnly={false}
-          grunnlag={{ harTilgangTilÅSaksbehandle: true, oppgittStudent: { erStudentStatus: 'JA' } }}
+          grunnlag={{
+            ikkeRelevantePerioder: [],
+            behøverVurderinger: [],
+            kanVurderes: [],
+            nyeVurderinger: [],
+            sisteVedtatteVurderinger: [],
+            harTilgangTilÅSaksbehandle: true,
+            oppgittStudent: { erStudentStatus: 'JA' },
+          }}
         />
       );
       const tekst = screen.getByText('Er brukeren student: Ja, helt eller delvis');
@@ -219,7 +233,15 @@ describe('Student', () => {
         <Studentvurdering
           behandlingVersjon={0}
           readOnly={false}
-          grunnlag={{ harTilgangTilÅSaksbehandle: true, oppgittStudent: { erStudentStatus: 'AVBRUTT' } }}
+          grunnlag={{
+            ikkeRelevantePerioder: [],
+            behøverVurderinger: [],
+            kanVurderes: [],
+            nyeVurderinger: [],
+            sisteVedtatteVurderinger: [],
+            harTilgangTilÅSaksbehandle: true,
+            oppgittStudent: { erStudentStatus: 'AVBRUTT' },
+          }}
         />
       );
       const tekst = screen.getByText('Er brukeren student: Ja, men har avbrutt studiet helt på grunn av sykdom');
@@ -231,7 +253,15 @@ describe('Student', () => {
         <Studentvurdering
           behandlingVersjon={0}
           readOnly={false}
-          grunnlag={{ harTilgangTilÅSaksbehandle: true, oppgittStudent: { erStudentStatus: 'NEI' } }}
+          grunnlag={{
+            ikkeRelevantePerioder: [],
+            behøverVurderinger: [],
+            kanVurderes: [],
+            nyeVurderinger: [],
+            sisteVedtatteVurderinger: [],
+            harTilgangTilÅSaksbehandle: true,
+            oppgittStudent: { erStudentStatus: 'NEI' },
+          }}
         />
       );
 
@@ -244,7 +274,15 @@ describe('Student', () => {
         <Studentvurdering
           behandlingVersjon={0}
           readOnly={false}
-          grunnlag={{ harTilgangTilÅSaksbehandle: true, oppgittStudent: { erStudentStatus: 'AVBRUTT' } }}
+          grunnlag={{
+            ikkeRelevantePerioder: [],
+            behøverVurderinger: [],
+            kanVurderes: [],
+            nyeVurderinger: [],
+            sisteVedtatteVurderinger: [],
+            harTilgangTilÅSaksbehandle: true,
+            oppgittStudent: { erStudentStatus: 'AVBRUTT' },
+          }}
         />
       );
       await velgAtSøkerHarAvbruttEtStudie();
@@ -271,7 +309,15 @@ describe('Student', () => {
         <Studentvurdering
           behandlingVersjon={0}
           readOnly={false}
-          grunnlag={{ harTilgangTilÅSaksbehandle: true, oppgittStudent: { erStudentStatus: 'AVBRUTT' } }}
+          grunnlag={{
+            ikkeRelevantePerioder: [],
+            behøverVurderinger: [],
+            kanVurderes: [],
+            nyeVurderinger: [],
+            sisteVedtatteVurderinger: [],
+            harTilgangTilÅSaksbehandle: true,
+            oppgittStudent: { erStudentStatus: 'AVBRUTT' },
+          }}
         />
       );
 
@@ -305,6 +351,11 @@ describe('Student', () => {
     };
 
     const grunnlagMedVurdering: StudentGrunnlag = {
+      ikkeRelevantePerioder: [],
+      behøverVurderinger: [],
+      kanVurderes: [],
+      nyeVurderinger: [],
+      sisteVedtatteVurderinger: [],
       harTilgangTilÅSaksbehandle: true,
       studentvurdering: {
         begrunnelse: 'Dette er min vurdering som er bekreftet',
@@ -315,10 +366,18 @@ describe('Student', () => {
           enhetsnavn: undefined,
           ident: '',
         },
+        fom: '',
       },
     };
 
-    const grunnlagUtenVurdering: StudentGrunnlag = { harTilgangTilÅSaksbehandle: true };
+    const grunnlagUtenVurdering: StudentGrunnlag = {
+      ikkeRelevantePerioder: [],
+      behøverVurderinger: [],
+      kanVurderes: [],
+      nyeVurderinger: [],
+      sisteVedtatteVurderinger: [],
+      harTilgangTilÅSaksbehandle: true,
+    };
 
     it('Skal vise en tekst om hvem som har gjort vurderingen dersom det finnes en mellomlagring', () => {
       render(

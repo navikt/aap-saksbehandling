@@ -16,7 +16,7 @@ interface Props {
 export const FastsettManuellInntektTabell = ({ tabellår, form, readOnly, låstVisning }: Props) => {
   const regnUtTotalbeløpPerÅr = (ferdigLignetPGI: number, beregnetPGI: number, eøsInntekt: number): string => {
     const total =
-      beregnetPGI > 0 ? Number(beregnetPGI) + Number(eøsInntekt) : Number(ferdigLignetPGI) + Number(eøsInntekt);
+      beregnetPGI > 0 ? beregnetPGI + eøsInntekt : ferdigLignetPGI + eøsInntekt;
     return formaterTilNok(total);
   };
 

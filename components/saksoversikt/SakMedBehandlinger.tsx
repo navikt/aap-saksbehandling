@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Heading, HStack, Table, VStack } from '@navikt/ds-react';
+import { Button, Chips, Heading, HStack, Table, VStack } from '@navikt/ds-react';
 import { SaksInfo } from 'lib/types/types';
 import { capitalize } from 'lodash';
 import { SakDevTools } from 'components/saksoversikt/SakDevTools';
@@ -10,30 +10,39 @@ import { BehandlingButtons } from 'components/saksoversikt/BehandlingButtons';
 import { isLocal } from 'lib/utils/environment';
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
 import {
-  Behandlingstype,
   erAktivFørstegangsbehandling,
+  erAvsluttet,
   erAvsluttetFørstegangsbehandling,
   erFørstegangsbehandling,
   erTrukket,
-  formaterBehandlingType,
   formatterÅrsakTilOpprettelseTilTekst,
 } from 'lib/utils/behandling';
+import { mapTypeBehandlingTilTekst } from 'lib/utils/oversettelser';
+import { useState } from 'react';
 
 const lokalDevToolsForBehandlingOgSak = isLocal();
 export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
   const router = useRouter();
 
-  const kanRevurdere = sak.behandlinger.some(
+  const [visMeldekortbehandlinger, setVisMeldekortbehandlinger] = useState(false);
+
+  const behandlinger = visMeldekortbehandlinger
+    ? sak.behandlinger || []
+    : sak.behandlinger.filter((b) => b.årsakTilOpprettelse !== 'MELDEKORT');
+
+  const kanRevurdere = behandlinger.some(
     (behandling) => erFørstegangsbehandling(behandling) && behandling.status !== 'OPPRETTET' && !erTrukket(behandling)
   );
 
   const kanRegistrerebrudd = sak.behandlinger.some((behandling) => erAvsluttetFørstegangsbehandling(behandling));
 
+  const åpne = behandlinger.filter((b) => !erAvsluttet(b));
+  const avsluttede = behandlinger?.filter((b) => erAvsluttet(b));
+
   return (
     <VStack gap="8">
       <HStack justify="space-between">
         <Heading size="large">Sak {sak.saksnummer}</Heading>
-
         <HStack gap="4">
           <Button
             variant="secondary"
@@ -74,6 +83,14 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
         </HStack>
       </HStack>
 
+      <Chips>
+        <Chips.Toggle
+          selected={visMeldekortbehandlinger}
+          onClick={() => setVisMeldekortbehandlinger(!visMeldekortbehandlinger)}
+        >
+          Vis meldekortbehandlinger
+        </Chips.Toggle>
+      </Chips>
       <Table>
         <Table.Header>
           <Table.Row>
@@ -87,10 +104,10 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
         </Table.Header>
 
         <Table.Body>
-          {sak?.behandlinger?.map((behandling) => (
+          {åpne.concat(avsluttede).map((behandling) => (
             <Table.Row key={behandling.referanse}>
               <Table.DataCell>{formaterDatoMedTidspunktForFrontend(behandling.opprettet)}</Table.DataCell>
-              <Table.DataCell>{formaterBehandlingType(behandling.type as Behandlingstype)}</Table.DataCell>
+              <Table.DataCell>{mapTypeBehandlingTilTekst(behandling.typeBehandling)}</Table.DataCell>
               <Table.DataCell>{formatterÅrsakTilOpprettelseTilTekst(behandling.årsakTilOpprettelse)}</Table.DataCell>
               <Table.DataCell>{capitalize(behandling.status)}</Table.DataCell>
               <Table.DataCell>
@@ -108,7 +125,7 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
       {lokalDevToolsForBehandlingOgSak && (
         <SakDevTools
           saksnummer={sak.saksnummer}
-          behandlinger={sak.behandlinger.map((e) => ({ referanse: e.referanse, type: e.type }))}
+          behandlinger={sak.behandlinger.map((e) => ({ referanse: e.referanse, type: e.typeBehandling }))}
         />
       )}
     </VStack>

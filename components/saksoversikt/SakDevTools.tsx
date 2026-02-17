@@ -5,15 +5,15 @@ import { SendNySoknadUtenMedlemskap } from 'components/devtools/SendNySoknadUten
 import { DummyKabalEvent } from 'components/devtools/DummyKabalEvent';
 import { LeggTilMockInstitusjonsopphold } from 'components/devtools/LeggTilMockInstitusjonsopphold';
 import { LeggTilMockYrkesskade } from 'components/devtools/LeggTilMockYrkesskade';
+import { TypeBehandling } from 'lib/types/types';
 
 export const SakDevTools = ({
   saksnummer,
   behandlinger,
 }: {
   saksnummer: string;
-  behandlinger: { referanse: string; type: string }[];
+  behandlinger: { referanse: string; type: TypeBehandling }[];
 }) => {
-  const klage = 'ae0058';
   return (
     <Box background="bg-subtle" padding="4" borderWidth="1" borderRadius="large" borderColor="border-divider">
       <Heading size={'medium'}>Utviklerverktøy</Heading>
@@ -29,7 +29,7 @@ export const SakDevTools = ({
           {behandlinger && (
             <DummyKabalEvent
               saksnummer={saksnummer}
-              klagebehandlinger={behandlinger.filter((e) => e.type === klage).map((e) => e.referanse)}
+              klagebehandlinger={behandlinger.filter((e) => e.type === 'Klage').map((e) => e.referanse)}
             />
           )}
         </VStack>
