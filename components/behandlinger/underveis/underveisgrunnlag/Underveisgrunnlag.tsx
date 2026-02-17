@@ -32,11 +32,13 @@ const Perioderad = ({
   isVisRettigheterForVedtakEnabled: boolean;
 }) => {
   const gjenværendeKvote =
-    rettighetsdata
-      ?.find((rettighet) => rettighet.type === periode.rettighetsType?.rettighetsType)
-      ?.periodeKvoter.find(
-        (kvote) => kvote.periode.fom === periode.periode.fom && kvote.periode.tom === periode.periode.tom
-      )?.gjenværendeKvote || '';
+    periode.utfall === 'OPPFYLT'
+      ? (rettighetsdata
+          ?.find((rettighet) => rettighet.type === periode.rettighetsType?.rettighetsType)
+          ?.periodeKvoter.find(
+            (kvote) => kvote.periode.fom === periode.periode.fom && kvote.periode.tom === periode.periode.tom
+          )?.gjenværendeKvote ?? <InlineMessage status="error">Kunne ikke hente data</InlineMessage>)
+      : undefined;
 
   return (
     <Table.Row>
@@ -53,11 +55,7 @@ const Perioderad = ({
       </Table.DataCell>
       <Table.DataCell>{periode.trekk.antall}</Table.DataCell>
       <Table.DataCell>{periode.rettighetsType?.hjemmel}</Table.DataCell>
-      {isVisRettigheterForVedtakEnabled && (
-        <Table.DataCell>
-          {gjenværendeKvote ? gjenværendeKvote : <InlineMessage status="error">Kunne ikke hente data</InlineMessage>}
-        </Table.DataCell>
-      )}
+      {isVisRettigheterForVedtakEnabled && <Table.DataCell>{gjenværendeKvote}</Table.DataCell>}
       <Table.DataCell>
         {formaterDatoForFrontend(periode.meldePeriode.fom)} - {formaterDatoForFrontend(periode.meldePeriode.tom)}
       </Table.DataCell>
