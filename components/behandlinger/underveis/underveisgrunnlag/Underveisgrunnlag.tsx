@@ -1,19 +1,19 @@
 'use client';
 
-import { BodyShort, Table } from '@navikt/ds-react';
+import { BodyShort, InlineMessage, Table } from '@navikt/ds-react';
 import { RettighetDto, UnderveisAvslagsÅrsak, UnderveisGrunnlag } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { mapUtfallTilTekst } from 'lib/utils/oversettelser';
 import { exhaustiveCheck } from 'lib/utils/typescript';
 import { FormEvent } from 'react';
 import { Behovstype } from 'lib/utils/form';
-import styles from 'components/behandlinger/vedtak/foreslåvedtak/ForeslåVedtak.module.css';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { useFeatureFlag } from 'context/UnleashContext';
+import styles from 'components/behandlinger/vedtak/foreslåvedtak/ForeslåVedtak.module.css';
 
 type Props = {
   grunnlag: UnderveisGrunnlag[];
@@ -53,7 +53,11 @@ const Perioderad = ({
       </Table.DataCell>
       <Table.DataCell>{periode.trekk.antall}</Table.DataCell>
       <Table.DataCell>{periode.rettighetsType?.hjemmel}</Table.DataCell>
-      {isVisRettigheterForVedtakEnabled && <Table.DataCell>{gjenværendeKvote}</Table.DataCell>}
+      {isVisRettigheterForVedtakEnabled && (
+        <Table.DataCell>
+          {gjenværendeKvote ? gjenværendeKvote : <InlineMessage status="error">Kunne ikke hente data</InlineMessage>}
+        </Table.DataCell>
+      )}
       <Table.DataCell>
         {formaterDatoForFrontend(periode.meldePeriode.fom)} - {formaterDatoForFrontend(periode.meldePeriode.tom)}
       </Table.DataCell>
