@@ -1,4 +1,4 @@
-import { add, parseISO, sub } from 'date-fns';
+import { parseISO } from 'date-fns';
 import { parseDatoFraDatePicker } from 'lib/utils/date';
 import { DatePeriode, parsePeriode } from 'lib/utils/datePeriode';
 import { IkkeVurderbarPeriode } from './IkkeVurderbarPeriode';
