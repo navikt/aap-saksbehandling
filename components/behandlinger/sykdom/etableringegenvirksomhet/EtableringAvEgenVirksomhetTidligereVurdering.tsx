@@ -35,24 +35,24 @@ export const EtableringEgenVirksomhetTidligereVurdering = ({ vurdering }: Props)
       {vurdering.utviklingsPeriode.length > 0 && (
         <>
           {vurdering.utviklingsPeriode.map((periode) => (
-            <>
+            <VStack key={periode.fom}>
               <Label size={'small'}>Utviklingsperiode</Label>
               <BodyShort
                 size={'small'}
               >{`${new Dato(periode.fom).formaterForFrontend()} - ${new Dato(periode.tom).formaterForFrontend()}`}</BodyShort>
-            </>
+            </VStack>
           ))}
         </>
       )}
       {vurdering.oppstartsPeriode.length > 0 && (
         <>
           {vurdering.oppstartsPeriode.map((periode) => (
-            <>
+            <VStack key={periode.fom}>
               <Label size={'small'}>Oppstartsperiode</Label>
               <BodyShort
                 size={'small'}
               >{`${new Dato(periode.fom).formaterForFrontend()} - ${new Dato(periode.tom).formaterForFrontend()}`}</BodyShort>
-            </>
+            </VStack>
           ))}
         </>
       )}
