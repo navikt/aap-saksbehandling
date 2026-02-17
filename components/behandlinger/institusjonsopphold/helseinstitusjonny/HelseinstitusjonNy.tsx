@@ -94,7 +94,7 @@ export const HelseinstitusjonNy = ({ grunnlag, readOnly, behandlingVersjon, init
 
           const tom = !nesteVurdering
             ? // tom dato for siste vurdering skal alltid være siste dag i oppholdet
-              formaterDatoForBackend(parse(vurdering.periode?.tom ?? opphold.periode.tom, 'dd.MM.yyyy', new Date()))
+              formaterDatoForBackend(parse(vurdering.periode?.tom || opphold.periode.tom, 'dd.MM.yyyy', new Date()))
             : // tom skal være dagen før fom i neste vurdering
               formaterDatoForBackend(subDays(new Dato(nesteVurdering.periode.fom).dato, 1));
 
@@ -213,7 +213,7 @@ function mapVurderingToDraftFormFields(
                 periode: {
                   fom: formaterDatoForFrontend(oppholdHentetFraGrunnlag?.periode.fom || opphold.oppholdFra),
                   tom: formaterDatoForFrontendMedStøtteForUendeligSlutt(
-                    oppholdHentetFraGrunnlag?.periode.tom || opphold?.avsluttetDato || ''
+                    oppholdHentetFraGrunnlag?.periode.tom || opphold.avsluttetDato
                   ),
                 },
               },
@@ -226,7 +226,9 @@ function mapVurderingToDraftFormFields(
         oppholdId: opphold.oppholdId || '', // TODO Gjør om oppholdId til required i backend når ny helseinstitusjon er ute i prod
         periode: {
           fom: formaterDatoForFrontend(oppholdHentetFraGrunnlag?.periode.fom || opphold.oppholdFra),
-          tom: formaterDatoForFrontend(oppholdHentetFraGrunnlag?.periode.tom || opphold.avsluttetDato),
+          tom: formaterDatoForFrontendMedStøtteForUendeligSlutt(
+            oppholdHentetFraGrunnlag?.periode.tom || opphold.avsluttetDato
+          ),
         },
         vurderinger: harTidligereVurderingerOgIngenNåværendeVurderinger ? [] : vurderinger,
       };
