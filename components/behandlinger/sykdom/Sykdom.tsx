@@ -16,6 +16,7 @@ import { OvergangUforeMedDataFetching } from './overgangufore/OvergangUforeMedDa
 import { OvergangArbeidMedDataFetching } from './overgangarbeid/OvergangArbeidMedDataFetching';
 import { ArbeidsopptrappingMedDataFetching } from 'components/behandlinger/sykdom/arbeidsopptrapping/ArbeidsopptrappingMedDataFetching';
 import { EtableringAvEgenVirksomhetMedDatafetching } from 'components/behandlinger/sykdom/etableringegenvirksomhet/EtableringAvEgenVirksomhetMedDatafetching';
+import { unleashService } from 'lib/services/unleash/unleashService';
 
 interface Props {
   behandlingsReferanse: string;
@@ -67,7 +68,7 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
           <MeldepliktMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={fritakMeldepliktSteg} />
         </StegSuspense>
       )}
-      {etableringAvEgenVirksomhetSteg.skalViseSteg && (
+      {unleashService.isEnabled('VirksomhetsEtablering') && etableringAvEgenVirksomhetSteg.skalViseSteg && (
         <StegSuspense>
           <EtableringAvEgenVirksomhetMedDatafetching
             behandlingsReferanse={behandlingsReferanse}
