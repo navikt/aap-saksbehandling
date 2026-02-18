@@ -38,6 +38,7 @@ import { TidligereVurderingExpandableCard } from 'components/periodisering/tidli
 import { parseISO } from 'date-fns';
 import { parseDatoFraDatePicker } from 'lib/utils/date';
 import { IkkeVurderbarPeriode } from 'components/periodisering/IkkeVurderbarPeriode';
+import { validerPeriodiserteVurderingerMotIkkeRelevantePerioder } from 'lib/utils/validering';
 
 interface Props {
   behandlingVersjon: number;
@@ -95,6 +96,14 @@ export const EtableringAvEgenVirksomhet = ({
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
+      const validering = validerPeriodiserteVurderingerMotIkkeRelevantePerioder({
+        nyeVurderinger: data.vurderinger,
+        form,
+        grunnlag,
+      });
+      if (!validering) {
+        return;
+      }
       løsPeriodisertBehovOgGåTilNesteSteg(
         {
           behandlingVersjon: behandlingVersjon,
@@ -151,7 +160,7 @@ export const EtableringAvEgenVirksomhet = ({
           </BodyLong>
         </VStack>
       )}
-      {grunnlag.ikkeVurderbarePerioder.map((vurdering) => (
+      {grunnlag.ikkeRelevantePerioder.map((vurdering) => (
         <IkkeVurderbarPeriode
           key={vurdering.fom}
           fom={parseISO(vurdering.fom)}

@@ -541,6 +541,7 @@ export type PeriodiserteVurderingerDto<T extends VurderingDto> = {
   nyeVurderinger: Array<T>;
   kanVurderes: Array<Periode>;
   behøverVurderinger: Array<Periode>;
+  ikkeRelevantePerioder: Array<Periode>;
 };
 
 export interface PeriodisertVurderingFormFields {

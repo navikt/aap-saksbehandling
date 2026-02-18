@@ -76,3 +76,31 @@ export function validerPeriodiserteVurderingerRekkefølge({
 
   return true;
 }
+
+export function validerPeriodiserteVurderingerMotIkkeRelevantePerioder({
+  nyeVurderinger,
+  form,
+  grunnlag,
+}: {
+  form: UseFormReturn<any>;
+  grunnlag: PeriodiserteVurderingerDto<VurderingDto>;
+  nyeVurderinger: Array<PeriodisertVurderingFormFields>;
+}) {
+  let validering = true;
+  grunnlag.ikkeRelevantePerioder.forEach((periode) => {
+    const ikkeRelevantFra = startOfDay(new Dato(periode.fom).dato);
+    const ikkeRelevantTil = startOfDay(new Dato(periode.tom).dato);
+
+    nyeVurderinger.forEach((vurdering, index) => {
+      const vurderingFra = startOfDay(new Dato(vurdering.fraDato!).dato);
+      if (isAfter(vurderingFra, ikkeRelevantFra) && isBefore(vurderingFra, ikkeRelevantTil)) {
+        form.setError(`vurderinger.${index}.fraDato`, {
+          type: 'custom',
+          message: 'Vurderingen overlapper med en ikke-relevant periode',
+        });
+        validering = false;
+      }
+    });
+  });
+  return validering;
+}
