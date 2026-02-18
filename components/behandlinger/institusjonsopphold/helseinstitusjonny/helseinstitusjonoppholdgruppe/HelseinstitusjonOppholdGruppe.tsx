@@ -10,7 +10,6 @@ import {
   parseDatoFraDatePicker,
   uendeligSluttString,
 } from 'lib/utils/date';
-import { addDays } from 'date-fns';
 import {
   NyVurderingExpandableCard,
   skalVæreInitiellEkspandert,
@@ -54,23 +53,6 @@ export const HelseinstitusjonOppholdGruppe = ({
     control: form.control,
     name: `helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger`,
   });
-
-  function beregnFraOgMedDatoForNyVurdering() {
-    const oppholdForm = form.watch(`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger`);
-    const forrigeVurdering = form.watch(
-      `helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${oppholdForm.length - 1}`
-    );
-
-    // Hvis det ikke finnes vurdering fra før, men det finnes tidligere vurderinger,
-    // så bruker vi fom på siste tidligere vurdering.
-    const sisteTidligereVurdering = tidligereVurderinger?.at(-1);
-
-    const forrigeFom = forrigeVurdering?.periode?.fom ?? sisteTidligereVurdering?.periode?.fom;
-
-    return forrigeFom
-      ? formaterDatoForFrontend(addDays(new Dato(forrigeFom).dato, 2))
-      : new Dato(opphold.oppholdFra).formaterForFrontend();
-  }
 
   const foersteNyePeriode =
     vurderinger.length > 0
@@ -131,9 +113,13 @@ export const HelseinstitusjonOppholdGruppe = ({
                 <NyVurderingExpandableCard
                   key={vurdering.id || vurderingIndex}
                   accordionsSignal={accordionsSignal}
-                  fraDato={gyldigDatoEllerNull(
-                    form.watch(`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.periode.fom`)
-                  )}
+                  fraDato={
+                    gyldigDatoEllerNull(
+                      form.watch(
+                        `helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.periode.fom`
+                      )
+                    ) || (vurderingIndex === 0 ? new Dato(opphold.oppholdFra).dato : null)
+                  }
                   nestePeriodeFraDato={gyldigDatoEllerNull(
                     form.watch(
                       `helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex + 1}.periode.fom`
@@ -180,7 +166,7 @@ export const HelseinstitusjonOppholdGruppe = ({
                 forsoergerEktefelle: undefined,
                 faarFriKostOgLosji: undefined,
                 periode: {
-                  fom: beregnFraOgMedDatoForNyVurdering(),
+                  fom: '',
                   tom: formaterDatoForFrontend(opphold.avsluttetDato || ''),
                 },
                 erNyVurdering: true,

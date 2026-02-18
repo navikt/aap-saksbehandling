@@ -10,8 +10,8 @@ import {
   lagReduksjonBeskrivelseNyttOpphold,
   lagReduksjonsBeskrivelse,
   validerDatoErInnenforOpphold,
-  validerDatoForStoppAvReduksjon,
   validerDatoForStartAvReduksjonVedNyttOpphold,
+  validerDatoForStoppAvReduksjon,
   validerErIKronologiskRekkeFølge,
 } from 'lib/utils/institusjonopphold';
 import { HelseinstitusjonGrunnlag } from 'lib/types/types';
@@ -41,18 +41,15 @@ export const HelseinstitusjonsvurderingNy = ({
   const visForsørgerEktefelleSpørsmål = vurdering.faarFriKostOgLosji === JaEllerNei.Ja;
   const visHarFasteUtgifterSpørsmål =
     vurdering.faarFriKostOgLosji === JaEllerNei.Ja && vurdering.forsoergerEktefelle === JaEllerNei.Nei;
+
   const erReduksjon = erReduksjonUtIFraFormFields(vurdering);
 
   const forrigeVurdering =
     vurderingIndex > 0
       ? form.watch(`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex - 1}`)
       : undefined;
-  const forrigeVurderingErReduksjon = forrigeVurdering ? erReduksjonUtIFraFormFields(forrigeVurdering) : false;
 
-  const skalViseDatoFeltForStoppAvReduksjon =
-    !erReduksjon && (forrigeVurderingErReduksjon || (finnesTidligereVurderinger && vurderingIndex === 0));
-
-  const skalViseDatoFeltForStartAvReduksjon = !forrigeVurderingErReduksjon && erReduksjon;
+  const skalViseDatoFeltForStoppAvReduksjon = !erReduksjon && !finnesTidligereVurderinger && vurderingIndex !== 0;
 
   const forrigeOppholdSisteVurdering = form
     .getValues(`helseinstitusjonsvurderinger.${oppholdIndex - 1}`)
@@ -130,7 +127,7 @@ export const HelseinstitusjonsvurderingNy = ({
         </RadioGroupWrapper>
       )}
 
-      {skalViseDatoFeltForStartAvReduksjon && (
+      {erReduksjon && (
         <>
           <DateInputWrapper
             name={`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.periode.fom`}

@@ -219,7 +219,7 @@ function mapVurderingToDraftFormFields(
                 harFasteUtgifter: undefined,
                 forsoergerEktefelle: undefined,
                 periode: {
-                  fom: formaterDatoForFrontend(oppholdHentetFraGrunnlag?.periode.fom || opphold.oppholdFra),
+                  fom: '',
                   tom: formaterDatoForFrontendMedStøtteForUendeligSlutt(
                     oppholdHentetFraGrunnlag?.periode.tom || opphold.avsluttetDato
                   ),
