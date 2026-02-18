@@ -3,7 +3,7 @@
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
-import React, { FormEvent, useEffect } from 'react';
+import { FormEvent, useEffect } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { ManuellInntektGrunnlag, ManuellInntektÅr, MellomlagretVurdering } from 'lib/types/types';
@@ -110,12 +110,11 @@ export const FastsettManuellInntektNy = ({
             behovstype: Behovstype.FASTSETT_MANUELL_INNTEKT,
             manuellVurderingForManglendeInntekt: {
               begrunnelse: data.begrunnelse,
-              belop: 0, // TODO Deprecated
               vurderinger: data.tabellår.map((år) => ({
                 år: år.år,
-                beløp: år.beregnetPGI,
-                eøsBeløp: år.eøsInntekt,
-                ferdigLignetPGI: år.ferdigLignetPGI,
+                beløp: Number(år.beregnetPGI),
+                eøsBeløp: Number(år.eøsInntekt),
+                ferdigLignetPGI: Number(år.ferdigLignetPGI),
               })),
             },
           },

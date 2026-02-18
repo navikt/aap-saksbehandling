@@ -36,16 +36,17 @@ export const SettBehandlingPåVentModal = ({ behandlingsReferanse, reservert, is
   const { flyt } = useFlyt();
 
   const grunnOptions: ValuePair<SettPåVentÅrsaker>[] = [
-    { label: 'Venter på medisinske opplysninger', value: 'VENTER_PÅ_MEDISINSKE_OPPLYSNINGER' },
-    { label: 'Venter på opplysninger', value: 'VENTER_PÅ_OPPLYSNINGER' },
-    { label: 'Venter på vurdering fra rådgivende overlege', value: 'VENTER_PÅ_VURDERING_AV_ROL' },
+    { label: 'Medisinske opplysninger', value: 'VENTER_PÅ_MEDISINSKE_OPPLYSNINGER' },
+    { label: 'Opplysninger', value: 'VENTER_PÅ_OPPLYSNINGER' },
+    { label: 'Vurdering fra rådgivende overlege', value: 'VENTER_PÅ_VURDERING_AV_ROL' },
     {
-      label: 'Venter på opplysninger fra utenlandske myndigheter',
+      label: 'Opplysninger fra utenlandske myndigheter',
       value: 'VENTER_PÅ_OPPLYSNINGER_FRA_UTENLANDSKE_MYNDIGHETER',
     },
-    { label: 'Venter på svar fra bruker', value: 'VENTER_PÅ_SVAR_FRA_BRUKER' },
-    { label: 'Venter på svar på forhåndsvarsel', value: 'VENTER_PÅ_SVAR_PÅ_FORHÅNDSVARSEL' },
-    { label: 'Venter på manglende funksjonalitet', value: 'VENTER_PÅ_FUNKSJONALITET' },
+    { label: 'Svar fra bruker', value: 'VENTER_PÅ_SVAR_FRA_BRUKER' },
+    { label: 'Svar på forhåndsvarsel', value: 'VENTER_PÅ_SVAR_PÅ_FORHÅNDSVARSEL' },
+    { label: 'Manglende funksjonalitet for å avslå på § 11-27', value: 'VENTER_PÅ_FUNKSJONALITET_AVSLAG_11_27' },
+    { label: 'Annen manglende funksjonalitet', value: 'VENTER_PÅ_FUNKSJONALITET' },
   ];
 
   const { form, formFields } = useConfigForm<FormFields>({
@@ -73,7 +74,7 @@ export const SettBehandlingPåVentModal = ({ behandlingsReferanse, reservert, is
     },
     grunn: {
       type: 'select',
-      label: 'Velg en årsak',
+      label: 'Hva venter behandlingen på?',
       options: [{ label: '', value: '' }, ...grunnOptions],
       rules: { required: 'Du må velge en årsak' },
     },

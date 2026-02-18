@@ -17,6 +17,7 @@ beforeEach(() => {
 });
 
 const grunnlagTomt: BistandsGrunnlag = {
+  ikkeRelevantePerioder: [],
   sisteVedtatteVurderinger: [],
   nyeVurderinger: [],
   behøverVurderinger: [{ fom: '2025-01-01', tom: '2025-12-12' }],
@@ -45,6 +46,7 @@ describe('Generelt', () => {
   ];
 
   const grunnlagMedVurdering: BistandsGrunnlag = {
+    ikkeRelevantePerioder: [],
     sisteVedtatteVurderinger: sisteVedtatteVurderinger,
     nyeVurderinger: nyeVurderinger,
     behøverVurderinger: [],
@@ -64,7 +66,6 @@ describe('Generelt', () => {
 
     render(<Bistandsbehov grunnlag={grunnlagMedVurdering} readOnly={false} behandlingVersjon={0} />);
 
-    screen.logTestingPlaygroundURL();
     const endreKnapp = screen.getByRole('button', { name: 'Endre' });
     await user.click(endreKnapp);
 
@@ -102,6 +103,7 @@ describe('mellomlagring i bistandsbehov', () => {
     },
   ];
   const bistandsgrunnlag: BistandsGrunnlag = {
+    ikkeRelevantePerioder: [],
     nyeVurderinger: nyeVurderinger,
     sisteVedtatteVurderinger: [],
     behøverVurderinger: [],

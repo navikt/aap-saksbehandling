@@ -1,3 +1,5 @@
+import 'server-only';
+
 import {
   AvklarTemaGrunnlag,
   BehandlingFlytOgTilstand,
@@ -46,6 +48,11 @@ export const hentDigitaliseringGrunnlag = async (behandlingsreferanse: string) =
 export const hentJournalpostInfo = async (behandlingsreferanse: string) => {
   const url = `${postmottakApiBaseUrl}/api/dokumenter/${behandlingsreferanse}/info`;
   return apiFetch<JournalpostInfo>(url, postmottakApiScope, 'GET');
+};
+
+export const hentUbehandledeJournalposter = async () => {
+  const url = `${postmottakApiBaseUrl}/api/dokumenter/finn-ubehandlede`;
+  return await apiFetch<any[]>(url, postmottakApiScope, 'GET');
 };
 
 export const løsAvklaringsbehov = async (avklaringsBehov: LøsAvklaringsbehovPåBehandling) => {

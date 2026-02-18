@@ -1,7 +1,14 @@
 'use client';
 
 import { BodyShort, Button, CopyButton, Dropdown, HStack, Label, Link, Tag } from '@navikt/ds-react';
-import { DetaljertBehandling, FlytGruppe, FlytVisning, SakPersoninfo, SaksInfo as SaksInfoType } from 'lib/types/types';
+import {
+  DetaljertBehandling,
+  FlytGruppe,
+  FlytVisning,
+  SakPersoninfo,
+  SaksInfo as SaksInfoType,
+  TypeBehandling,
+} from 'lib/types/types';
 import { useState } from 'react';
 import { SettBehandlingPåVentModal } from 'components/settbehandlingpåventmodal/SettBehandlingPåVentModal';
 import { ChevronDownIcon, ChevronRightIcon } from '@navikt/aksel-icons';
@@ -24,12 +31,12 @@ import { MarkeringInfoboks } from 'components/markeringinfoboks/MarkeringInfobok
 import { ArenaStatus } from 'components/arenastatus/ArenaStatus';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { AvbrytRevurderingModal } from 'components/saksinfobanner/avbrytrevurderingmodal/AvbrytRevurderingModal';
-import { formaterDatoForFrontend, sorterEtterNyesteDato } from 'lib/utils/date';
+import { formaterDatoForFrontend, sorterEtterNyesteDato, stringToDate } from 'lib/utils/date';
 import { ReturStatus } from 'components/returstatus/ReturStatus';
 import { useFeatureFlag } from 'context/UnleashContext';
 import { Dato } from 'lib/types/Dato';
-import { hentRettighetsdata } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isSuccess } from 'lib/utils/api';
+import { clientHentRettighetsdata } from 'lib/clientApi';
 import useSWR from 'swr';
 
 interface Props {
@@ -82,7 +89,10 @@ export const SaksinfoBanner = ({
   const behandlingErIkkeIverksatt = behandling && behandling.status !== 'IVERKSETTES';
 
   const adressebeskyttelser = oppgave ? utledAdressebeskyttelse(oppgave) : [];
-  const rettighetsdata = useSWR(`/api/sak/${sak.saksnummer}/rettighet`, hentRettighetsdata).data;
+  const isVisRettigheterForVedtakEnabled = useFeatureFlag('VisRettigheterForVedtak'); // TODO AAP-1709 Fjerne feature toggle etter verifisering i dev
+  const rettighetsdata = useSWR(isVisRettigheterForVedtakEnabled ? `/api/sak/${sak.saksnummer}/rettighet` : null, () =>
+    clientHentRettighetsdata(sak.saksnummer)
+  ).data;
 
   const visValgForÅTrekkeSøknad =
     !behandlerEnSøknadSomSkalTrekkes &&
@@ -138,15 +148,23 @@ export const SaksinfoBanner = ({
   };
 
   const hentMaksdato = (): string | null | undefined => {
-    if (isSuccess(rettighetsdata)) {
-      const ytelsesbehandlingTyper = ['Førstegangsbehandling', 'Revurdering'];
-      
+    if (isVisRettigheterForVedtakEnabled && isSuccess(rettighetsdata)) {
+      const ytelsesbehandlingTyper: TypeBehandling[] = ['Førstegangsbehandling', 'Revurdering'];
+
       const gjeldendeVedtak = sak.behandlinger
-        .filter((behandling) => ytelsesbehandlingTyper.includes(behandling.type) && behandling.status === 'AVSLUTTET')
+        .filter((behandling) => {
+          const behandlingstype = behandling?.typeBehandling;
+          return (
+            behandlingstype && ytelsesbehandlingTyper.includes(behandlingstype) && behandling.status === 'AVSLUTTET'
+          );
+        })
         .sort((b1, b2) => sorterEtterNyesteDato(b1.opprettet, b2.opprettet))[0];
+
       const gjeldendeRettighet = rettighetsdata.data.find(
-        (rettighet) => rettighet.startDato === gjeldendeVedtak.opprettet
+        (rettighet) =>
+          stringToDate(rettighet.startDato)?.toDateString() === new Date(gjeldendeVedtak?.opprettet).toDateString()
       );
+
       return gjeldendeRettighet?.maksDato;
     }
     return undefined;
@@ -155,7 +173,6 @@ export const SaksinfoBanner = ({
   const behandlingsreferanse = useBehandlingsReferanse();
   const oppgaveStatus = hentOppgaveStatus();
   const oppgaveTildelingStatus = hentOppgaveTildeling();
-  const isVisRettigheterForVedtakEnabled = useFeatureFlag('VisRettigheterForVedtak');
   const maksdato = isVisRettigheterForVedtakEnabled ? hentMaksdato() : undefined;
 
   const erPåBehandlingSiden = referanse !== undefined;

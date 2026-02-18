@@ -1,19 +1,19 @@
 'use client';
 
-import { BodyShort, Table } from '@navikt/ds-react';
+import { BodyShort, InlineMessage, Table } from '@navikt/ds-react';
 import { RettighetDto, UnderveisAvslagsÅrsak, UnderveisGrunnlag } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { mapUtfallTilTekst } from 'lib/utils/oversettelser';
 import { exhaustiveCheck } from 'lib/utils/typescript';
 import { FormEvent } from 'react';
 import { Behovstype } from 'lib/utils/form';
-import styles from 'components/behandlinger/vedtak/foreslåvedtak/ForeslåVedtak.module.css';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { useFeatureFlag } from 'context/UnleashContext';
+import styles from 'components/behandlinger/vedtak/foreslåvedtak/ForeslåVedtak.module.css';
 
 type Props = {
   grunnlag: UnderveisGrunnlag[];
@@ -32,9 +32,13 @@ const Perioderad = ({
   isVisRettigheterForVedtakEnabled: boolean;
 }) => {
   const gjenværendeKvote =
-    rettighetsdata
-      ?.find((rettighet) => rettighet.type === periode.rettighetsType?.rettighetsType)
-      ?.periodeKvoter.find((kvote) => kvote.periode === periode.periode)?.gjenværendeKvote || '';
+    periode.utfall === 'OPPFYLT'
+      ? (rettighetsdata
+          ?.find((rettighet) => rettighet.type === periode.rettighetsType?.rettighetsType)
+          ?.periodeKvoter.find(
+            (kvote) => kvote.periode.fom === periode.periode.fom && kvote.periode.tom === periode.periode.tom
+          )?.gjenværendeKvote ?? <InlineMessage status="error">Kunne ikke hente data</InlineMessage>)
+      : undefined;
 
   return (
     <Table.Row>

@@ -118,6 +118,22 @@ describe('Manglende pensjonsgivende inntekt / EØS-beregnet inntekt', () => {
       const totalCells = rader.map((rad) => within(rad).getByTestId('totalt').textContent);
       expect(totalCells).toEqual(['230 000 kr', '250 000 kr', '300 000 kr']);
     });
+
+    it('skal oppdatere total-kolonnen når bruker taster inn verdier', async () => {
+      const tabell = screen.getByTestId('inntektstabell');
+      const rader = within(tabell).getAllByRole('row');
+
+      // Rad 3 (2024) har ingen ferdig lignet PGI, så beregnetPGI og eøsInntekt er redigerbare
+      const beregnetPGIInput = within(rader[2]).getByTestId('beregnetPGI').querySelector('input')!;
+      const eøsInntektInput = within(rader[2]).getByTestId('eøsInntekt').querySelector('input')!;
+
+      await user.clear(beregnetPGIInput);
+      await user.type(beregnetPGIInput, '400000');
+      await user.clear(eøsInntektInput);
+      await user.type(eøsInntektInput, '100000');
+
+      expect(within(rader[2]).getByTestId('totalt').textContent).toBe('500 000 kr');
+    });
   });
 
   // TODO skriv tester for historiske vurderinger

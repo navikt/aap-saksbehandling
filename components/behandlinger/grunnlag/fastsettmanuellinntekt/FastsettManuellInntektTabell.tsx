@@ -15,8 +15,7 @@ interface Props {
 
 export const FastsettManuellInntektTabell = ({ tabellår, form, readOnly, låstVisning }: Props) => {
   const regnUtTotalbeløpPerÅr = (ferdigLignetPGI: number, beregnetPGI: number, eøsInntekt: number): string => {
-    const total =
-      beregnetPGI > 0 ? Number(beregnetPGI) + Number(eøsInntekt) : Number(ferdigLignetPGI) + Number(eøsInntekt);
+    const total = beregnetPGI > 0 ? beregnetPGI + eøsInntekt : ferdigLignetPGI + eøsInntekt;
     return formaterTilNok(total);
   };
 
@@ -47,7 +46,7 @@ export const FastsettManuellInntektTabell = ({ tabellår, form, readOnly, låstV
                 <Table.DataCell textSize={'small'} data-testid={'beregnetPGI'}>
                   {låstVisning ? (
                     beregnetPGI ? (
-                      formaterTilNok(beregnetPGI)
+                      formaterTilNok(Number(beregnetPGI))
                     ) : (
                       '-'
                     )
@@ -65,7 +64,7 @@ export const FastsettManuellInntektTabell = ({ tabellår, form, readOnly, låstV
                 <Table.DataCell textSize={'small'} data-testid={'eøsInntekt'}>
                   {låstVisning ? (
                     eøsInntekt ? (
-                      formaterTilNok(eøsInntekt)
+                      formaterTilNok(Number(eøsInntekt))
                     ) : (
                       '-'
                     )
@@ -81,7 +80,7 @@ export const FastsettManuellInntektTabell = ({ tabellår, form, readOnly, låstV
                   )}
                 </Table.DataCell>
                 <Table.DataCell data-testid={'totalt'} textSize={'small'}>
-                  {regnUtTotalbeløpPerÅr(ferdigLignetPGI ?? 0, beregnetPGI ?? 0, eøsInntekt ?? 0)}
+                  {regnUtTotalbeløpPerÅr(ferdigLignetPGI ?? 0, Number(beregnetPGI ?? 0), Number(eøsInntekt ?? 0))}
                 </Table.DataCell>
               </Table.Row>
             );

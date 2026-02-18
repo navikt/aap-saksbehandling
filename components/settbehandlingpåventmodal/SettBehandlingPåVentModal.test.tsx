@@ -22,7 +22,7 @@ describe('settBehandlingPåVentModal', () => {
   });
 
   it('skal ha et felt for årsak', () => {
-    const årsakFelt = screen.getByRole('combobox', { name: /Velg en årsak/i });
+    const årsakFelt = screen.getByRole('combobox', { name: /Hva venter behandlingen på?/i });
     expect(årsakFelt).toBeVisible();
   });
 });

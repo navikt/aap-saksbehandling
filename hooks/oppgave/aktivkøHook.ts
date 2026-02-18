@@ -33,7 +33,7 @@ export function useLagreAktivKø(): {
     try {
       const obj = JSON.parse(localStorage[KEY]) as LagretAktivKøId;
       if (obj.user === bruker.NAVident && new Date().getTime() < obj.timestamp + MAKS_LEVETID) {
-        return isNaN(obj.id) ? undefined : Number(obj.id);
+        return isNaN(obj.id) ? undefined : obj.id;
       } else {
         localStorage.removeItem(KEY);
         return undefined;

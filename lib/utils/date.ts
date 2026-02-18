@@ -10,7 +10,7 @@ export const DATO_FORMATER = {
   dMMMMyyyy: 'd. MMMM yyyy', // 1. februar 2026
 };
 
-const uendeligSluttString = '2999-01-01';
+export const uendeligSluttString = '2999-01-01';
 const uendeligSlutt = new Date(uendeligSluttString);
 
 export function formaterDatoForFrontend(dato: Date | string): string {

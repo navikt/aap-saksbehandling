@@ -13,6 +13,7 @@ fetchMock.enableMocks();
 const user = userEvent.setup();
 
 const grunnlagUtenVurdering: ArbeidsevneGrunnlag = {
+  ikkeRelevantePerioder: [],
   behøverVurderinger: [],
   kanVurderes: [],
   nyeVurderinger: [],
@@ -60,6 +61,7 @@ describe('FastsettArbeidsevne', () => {
       setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'SYKDOMSVURDERING_BREV' });
 
       const grunnlagMedNyVurdering: ArbeidsevneGrunnlag = {
+        ikkeRelevantePerioder: [],
         behøverVurderinger: [],
         kanVurderes: [],
         nyeVurderinger: [
@@ -212,6 +214,7 @@ describe('FastsettArbeidsevne', () => {
       };
 
       const grunnlagMedVurdering: ArbeidsevneGrunnlag = {
+        ikkeRelevantePerioder: [],
         behøverVurderinger: [],
         kanVurderes: [],
         nyeVurderinger: [
