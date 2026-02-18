@@ -16,7 +16,7 @@ enum Rettighetstype {
 }
 
 export const Rettighet = ({ rettighetsdata }: Props) => {
-  const erRettighetKvotebasert = [Rettighetstype.ARBEIDSSØKER, Rettighetstype.SYKEPENGEERSTATNING].includes(
+  const erRettighetKvotebasert = [Rettighetstype.BISTANDSBEHOV, Rettighetstype.SYKEPENGEERSTATNING].includes(
     Rettighetstype[rettighetsdata.type]
   );
 
