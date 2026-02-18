@@ -1,5 +1,5 @@
 import { formaterDatoForFrontend, parseDatoFraDatePicker, stringToDate } from 'lib/utils/date';
-import { isAfter, isBefore, min, parseISO, startOfDay } from 'date-fns';
+import { isAfter, isBefore, isSameDay, min, parseISO, startOfDay } from 'date-fns';
 import { PeriodiserteVurderingerDto, PeriodisertVurderingFormFields, VurderingDto } from 'lib/types/types';
 import { UseFormReturn } from 'react-hook-form';
 import { Dato } from 'lib/types/Dato';
@@ -93,7 +93,10 @@ export function validerPeriodiserteVurderingerMotIkkeRelevantePerioder({
 
     nyeVurderinger.forEach((vurdering, index) => {
       const vurderingFra = startOfDay(new Dato(vurdering.fraDato!).dato);
-      if (isAfter(vurderingFra, ikkeRelevantFra) && isBefore(vurderingFra, ikkeRelevantTil)) {
+      if (
+        (isAfter(vurderingFra, ikkeRelevantFra) && isBefore(vurderingFra, ikkeRelevantTil)) ||
+        (isSameDay(vurderingFra, ikkeRelevantFra) && isSameDay(vurderingFra, ikkeRelevantTil))
+      ) {
         form.setError(`vurderinger.${index}.fraDato`, {
           type: 'custom',
           message: 'Vurderingen overlapper med en ikke-relevant periode',

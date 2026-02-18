@@ -60,13 +60,34 @@ describe('validerPeriodiserteVurderingerMotIkkeRelevantePerioder', () => {
     const validering = validerPeriodiserteVurderingerMotIkkeRelevantePerioder({ grunnlag, form, nyeVurderinger });
     expect(validering).toBe(true);
   });
-  it('i ikke-relevant periode skal gi true', () => {
+  it('i ikke-relevant periode skal gi false', () => {
     const nyeVurderinger: Array<PeriodisertVurderingFormFields> = [
       {
         fraDato: '20.02.2026',
       },
     ];
     const validering = validerPeriodiserteVurderingerMotIkkeRelevantePerioder({ grunnlag, form, nyeVurderinger });
+    expect(validering).toBe(false);
+  });
+  it('i ikke-relevant periode på kun en dag skal gi false', () => {
+    const enDagsGrunnlag: PeriodiserteVurderingerDto<VurderingDto> = {
+      behøverVurderinger: [],
+      harTilgangTilÅSaksbehandle: false,
+      ikkeRelevantePerioder: [{ fom: '2026-02-18', tom: '2026-02-18' }],
+      kanVurderes: [],
+      nyeVurderinger: [],
+      sisteVedtatteVurderinger: [],
+    };
+    const nyeVurderinger: Array<PeriodisertVurderingFormFields> = [
+      {
+        fraDato: '18.02.2026',
+      },
+    ];
+    const validering = validerPeriodiserteVurderingerMotIkkeRelevantePerioder({
+      grunnlag: enDagsGrunnlag,
+      form,
+      nyeVurderinger,
+    });
     expect(validering).toBe(false);
   });
 });
