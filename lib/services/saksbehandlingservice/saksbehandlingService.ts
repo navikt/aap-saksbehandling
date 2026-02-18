@@ -23,6 +23,7 @@ import {
   BrevdataDto,
   BrevGrunnlag,
   DetaljertBehandling,
+  EtableringEgenVirksomhetGrunnlagResponse,
   FatteVedtakGrunnlag,
   FlytProsessering,
   ForeslåVedtakGrunnlag,
@@ -434,6 +435,11 @@ export const hentRettighetsdata = async (saksnummer: string) => {
 export const hentSvarFraAndreinstansGrunnlag = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/svar-fra-andreinstans/${behandlingsReferanse}/grunnlag/svar-fra-andreinstans`;
   return await apiFetch<SvarFraAndreinstansGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentEtableringEgenVirksomhetGrunnlag = async (behandlingsReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/etableringegenvirksomhet`;
+  return await apiFetch<EtableringEgenVirksomhetGrunnlagResponse>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentFlyt = async (behandlingsReferanse: string) => {

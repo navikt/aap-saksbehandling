@@ -21,6 +21,7 @@ export const vurderingsbehovOptions = (isRevurderingStarttidspunktEnabled: boole
     { label: '§§ 11-27 og 11-28 Folketrygdytelser', value: 'REVURDER_SAMORDNING_ANDRE_FOLKETRYGDYTELSER' },
     { label: '§ 11-28 Samordning med delvis uføre', value: 'REVURDER_SAMORDNING_UFØRE' },
     { label: '§ 11-10 Overstyr perioder uten overholdt meldeplikt', value: 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN' },
+    { label: '§ 11-15 Etablering av egen virksomhet', value: 'ETABLERING_EGEN_VIRKSOMHET' },
     { label: 'Fradrag ved andre statlige ytelser', value: 'REVURDER_SAMORDNING_ANDRE_STATLIGE_YTELSER' },
     {
       label: '§ 11-24 Reduksjon av AAP på grunn av ytelse fra arbeidsgiver',
