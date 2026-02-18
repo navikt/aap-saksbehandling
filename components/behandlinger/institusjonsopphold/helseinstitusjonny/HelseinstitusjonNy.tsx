@@ -2,7 +2,13 @@
 
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { InstitusjonsoppholdTabell } from 'components/behandlinger/institusjonsopphold/InstitusjonsoppholdTabell';
-import { HelseinstitusjonGrunnlag, HelseInstiusjonVurdering, MellomlagretVurdering, Periode } from 'lib/types/types';
+import {
+  HelseinstitusjonGrunnlag,
+  HelseInstiusjonVurdering,
+  MellomlagretVurdering,
+  Periode,
+  VurdertAvAnsatt,
+} from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 
 import { DATO_FORMATER, formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
@@ -46,6 +52,7 @@ export interface OppholdVurdering {
   forsoergerEktefelle?: JaEllerNei;
   faarFriKostOgLosji?: JaEllerNei;
   erNyVurdering?: boolean;
+  vurdertAv?: VurdertAvAnsatt;
 }
 
 type DraftFormFields = Partial<HelseinstitusjonsFormFieldsNy>;
@@ -202,6 +209,7 @@ function mapVurderingToDraftFormFields(
                 fom: formaterDatoForFrontend(vurdering.periode.fom),
                 tom: formaterDatoForFrontend(vurdering.periode.tom),
               },
+              vurdertAv: vurdering.vurdertAv,
             }))
           : [
               {
