@@ -1,6 +1,6 @@
 'use client';
 
-import { BodyShort, Button, Heading, HStack, Label, Radio, Table, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, Heading, HStack, Label, Radio, Table, VStack } from '@navikt/ds-react';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { validerDato } from 'lib/validation/dateValidation';
 import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
@@ -105,6 +105,9 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly }: P
           <Heading level={'2'} size={'medium'}>
             Etableringsplan
           </Heading>
+          {form.formState.errors.vurderinger?.[index]?.utviklingsperioder && (
+            <Alert variant={'error'}>{form.formState.errors.vurderinger[index].utviklingsperioder.message}</Alert>
+          )}
           <VStack gap={'4'}>
             <VStack>
               <Label size={'small'}>Utviklingsperiode</Label>
@@ -161,7 +164,10 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly }: P
                   variant={'secondary'}
                   type={'button'}
                   icon={<PlusCircleIcon />}
-                  onClick={() => utviklingsperioder.append({ fom: '', tom: '' })}
+                  onClick={() => {
+                    form.clearErrors();
+                    utviklingsperioder.append({ fom: '', tom: '' });
+                  }}
                 >
                   Legg til ny periode
                 </Button>
@@ -224,7 +230,10 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly }: P
                   variant={'secondary'}
                   type={'button'}
                   icon={<PlusCircleIcon />}
-                  onClick={() => oppstartsperioder.append({ fom: '', tom: '' })}
+                  onClick={() => {
+                    form.clearErrors();
+                    oppstartsperioder.append({ fom: '', tom: '' });
+                  }}
                 >
                   Legg til ny periode
                 </Button>

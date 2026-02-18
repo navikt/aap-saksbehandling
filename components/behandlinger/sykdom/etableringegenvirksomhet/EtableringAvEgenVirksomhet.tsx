@@ -96,6 +96,23 @@ export const EtableringAvEgenVirksomhet = ({
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
+      // Må finnes minst en oppstart eller utviklingsperiode hvis vilkår er oppfylt
+      let validerTidsplan = true;
+      data.vurderinger.forEach((vurdering, index) => {
+        const erOppfylt = nyVurderingErOppfylt(vurdering);
+        if (erOppfylt) {
+          if (vurdering.utviklingsperioder.length === 0 && vurdering.oppstartsperioder.length === 0) {
+            validerTidsplan = false;
+            form.setError(`vurderinger.${index}.utviklingsperioder`, {
+              type: 'custom',
+              message: 'Det må være minst en periode lagt i oppstartperiode eller uviklingsperiode',
+            });
+          }
+        }
+      });
+      if (!validerTidsplan) {
+        return;
+      }
       const validering = validerPeriodiserteVurderingerMotIkkeRelevantePerioder({
         nyeVurderinger: data.vurderinger,
         form,
