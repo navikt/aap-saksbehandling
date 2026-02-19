@@ -81,7 +81,7 @@ export const OpprettKlage = ({ sak }: { sak: SaksInfo }) => {
             className={styles.opprettKlageKort}
           >
             <ExpansionCard.Header className={styles.header}>
-              <ExpansionCard.Title size="small">Opprett Klage</ExpansionCard.Title>
+              <ExpansionCard.Title size="small">Opprett klage</ExpansionCard.Title>
             </ExpansionCard.Header>
 
             <ExpansionCard.Content className={styles.content}>
@@ -99,6 +99,7 @@ export const OpprettKlage = ({ sak }: { sak: SaksInfo }) => {
           )}
 
           <HStack gap="4">
+            <Button type="submit">Opprett klage</Button>
             <Button
               type="button"
               variant="secondary"
@@ -106,7 +107,6 @@ export const OpprettKlage = ({ sak }: { sak: SaksInfo }) => {
             >
               Avbryt
             </Button>
-            <Button type="submit">Opprett klage</Button>
           </HStack>
         </VStack>
       </form>

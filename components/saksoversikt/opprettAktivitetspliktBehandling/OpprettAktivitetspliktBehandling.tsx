@@ -63,7 +63,12 @@ export const OpprettAktivitetspliktBehandling = ({ sak }: { sak: SaksInfo }) => 
         }}
       >
         <VStack gap="4">
-          <ExpansionCard aria-label="Opprett vurdering av aktivitetsplikten" size={'small'} defaultOpen={true}>
+          <ExpansionCard
+            aria-label="Opprett vurdering av aktivitetsplikten"
+            size={'small'}
+            defaultOpen={true}
+            className={styles.opprettKlageKort}
+          >
             <ExpansionCard.Header className={styles.header}>
               <ExpansionCard.Title size="small">Opprett vurdering av aktivitetsplikten</ExpansionCard.Title>
             </ExpansionCard.Header>
