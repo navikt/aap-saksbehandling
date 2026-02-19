@@ -88,13 +88,7 @@ export const OpprettAktivitetspliktBehandling = ({ sak }: { sak: SaksInfo }) => 
 
           <HStack gap="4">
             <Button type="submit">Bekreft</Button>
-            <Button
-              as="a"
-              href={`/saksbehandling/sak/${sak.saksnummer}`}
-              rel="noreferrer noopener"
-              size="small"
-              variant="secondary"
-            >
+            <Button as="a" href={`/saksbehandling/sak/${sak.saksnummer}`} rel="noreferrer noopener" variant="secondary">
               Avbryt
             </Button>
           </HStack>
