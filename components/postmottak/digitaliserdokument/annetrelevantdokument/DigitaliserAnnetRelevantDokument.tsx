@@ -66,6 +66,7 @@ export const DigitaliserAnnetRelevantDokument = ({ grunnlag, readOnly, submit, i
       begrunnelse: {
         type: 'textarea',
         label: 'Begrunnelse',
+        defaultValue: annetRelevantDokumentGrunnlag.begrunnelse || '',
         rules: { required: 'Du må oppgi begrunnelse.' },
       },
     },
