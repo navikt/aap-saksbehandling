@@ -9,6 +9,9 @@ export const vurderingsbehovOptions = (isRevurderingStarttidspunktEnabled: boole
     { label: 'Lovvalg og medlemskap', value: 'LOVVALG_OG_MEDLEMSKAP' },
     { label: '§ 11-14 Student', value: 'REVURDER_STUDENT' },
     { label: '§§ 11-5 og 11-6 Sykdom, arbeidsevne og behov for bistand', value: 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND' },
+    { label: '§ 11-10 tredje ledd. Unntak fra meldeplikt', value: 'FRITAK_MELDEPLIKT' },
+    { label: '§ 11-23 andre ledd. Arbeidsevne som ikke er utnyttet', value: 'FASTSETT_ARBEIDSEVNE' },
+    { label: '§ 11-23 sjette ledd. Arbeidsopptrapping', value: 'ARBEIDSOPPTRAPPING' },
     { label: '§ 11-22 Yrkesskade', value: 'REVURDER_YRKESSKADE' },
     { label: '§ 11-13 Sykepengeerstatning', value: 'REVURDER_SYKEPENGEERSTATNING' },
     { label: '§ 11-19 Beregningstidspunkt', value: 'REVURDER_BEREGNING' },
@@ -21,6 +24,7 @@ export const vurderingsbehovOptions = (isRevurderingStarttidspunktEnabled: boole
     { label: '§§ 11-27 og 11-28 Folketrygdytelser', value: 'REVURDER_SAMORDNING_ANDRE_FOLKETRYGDYTELSER' },
     { label: '§ 11-28 Samordning med delvis uføre', value: 'REVURDER_SAMORDNING_UFØRE' },
     { label: '§ 11-10 Overstyr perioder uten overholdt meldeplikt', value: 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN' },
+    { label: '§ 11-15 Etablering av egen virksomhet', value: 'ETABLERING_EGEN_VIRKSOMHET' },
     { label: 'Fradrag ved andre statlige ytelser', value: 'REVURDER_SAMORDNING_ANDRE_STATLIGE_YTELSER' },
     {
       label: '§ 11-24 Reduksjon av AAP på grunn av ytelse fra arbeidsgiver',
