@@ -206,6 +206,14 @@ describe('revurdering', () => {
     render(<HelseinstitusjonNy grunnlag={grunnlagMedTidligereVurdering} behandlingVersjon={0} readOnly={false} />);
     expect(screen.queryByRole('textbox', { name: 'Vilkårsvurdering' })).not.toBeInTheDocument();
   });
+
+  it('Skal vise dato felt initielt når man legger til ny vurdering', async () => {
+    render(<HelseinstitusjonNy grunnlag={grunnlagMedTidligereVurdering} behandlingVersjon={0} readOnly={false} />);
+    const leggTilKnapp = screen.getByRole('button', { name: 'Legg til ny vurdering' });
+    await user.click(leggTilKnapp);
+    const datoFelt = screen.getByRole('textbox', { name: 'Når skal reduksjonen stoppes?' });
+    expect(datoFelt).toBeVisible();
+  });
 });
 
 describe('form med reduksjon', () => {

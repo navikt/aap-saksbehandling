@@ -108,18 +108,20 @@ export const HelseinstitusjonOppholdGruppe = ({
               form.watch(`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}`)
             );
 
+            const vurderingFom = form.watch(
+              `helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.periode.fom`
+            );
+
+            const fraDato =
+              gyldigDatoEllerNull(vurderingFom) ??
+              (vurderingIndex === 0 && !tidligereVurderinger?.length ? new Dato(opphold.oppholdFra).dato : null);
+
             return (
               <div key={vurderingIndex} className={styles.vurderingRad}>
                 <NyVurderingExpandableCard
                   key={vurdering.id || vurderingIndex}
                   accordionsSignal={accordionsSignal}
-                  fraDato={
-                    gyldigDatoEllerNull(
-                      form.watch(
-                        `helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.periode.fom`
-                      )
-                    ) || (vurderingIndex === 0 ? new Dato(opphold.oppholdFra).dato : null)
-                  }
+                  fraDato={fraDato}
                   nestePeriodeFraDato={gyldigDatoEllerNull(
                     form.watch(
                       `helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex + 1}.periode.fom`
