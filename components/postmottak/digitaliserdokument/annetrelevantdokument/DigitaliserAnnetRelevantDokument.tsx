@@ -3,7 +3,7 @@
 import { DigitaliseringsGrunnlag } from 'lib/types/postmottakTypes';
 
 import { Button, VStack } from '@navikt/ds-react';
-import { AnnetRelevantDokumentV0, DokumentÅrsakTilBehandling } from 'lib/types/types';
+import { AnnetRelevantDokument, DokumentÅrsakTilBehandling } from 'lib/types/types';
 import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
 import type { Submittable } from 'components/postmottak/digitaliserdokument/DigitaliserDokument';
 import { FormField, ValuePair } from 'components/form/FormField';
@@ -12,6 +12,7 @@ import { FormEvent } from 'react';
 
 export interface AnnetRelevantDokumentFormFields {
   årsaker: string[];
+  begrunnelse: string;
 }
 
 interface Props extends Submittable {
@@ -21,12 +22,14 @@ interface Props extends Submittable {
 }
 
 function mapTilAnnetRelevantDokumentKontrakt(data: AnnetRelevantDokumentFormFields) {
-  const dokument: AnnetRelevantDokumentV0 = {
-    meldingType: 'AnnetRelevantDokumentV0',
+  const dokument: AnnetRelevantDokument = {
+    meldingType: 'AnnetRelevantDokumentV1',
     årsakerTilBehandling: data.årsaker.map((årsak) => årsak as DokumentÅrsakTilBehandling),
-  };
+    begrunnelse: data.begrunnelse,
+  } satisfies AnnetRelevantDokument;
   return JSON.stringify(dokument);
 }
+
 // TODO: Avklar hvilke årsaker som saksbehandler skal kunne sette
 const årsakOptions: ValuePair<DokumentÅrsakTilBehandling>[] = [
   { label: 'Yrkesskade', value: 'REVURDER_YRKESSKADE' },
@@ -43,7 +46,7 @@ const årsakOptions: ValuePair<DokumentÅrsakTilBehandling>[] = [
 ];
 
 export const DigitaliserAnnetRelevantDokument = ({ grunnlag, readOnly, submit, isLoading }: Props) => {
-  const annetRelevantDokumentGrunnlag: AnnetRelevantDokumentV0 = grunnlag.vurdering?.strukturertDokumentJson
+  const annetRelevantDokumentGrunnlag: AnnetRelevantDokument = grunnlag.vurdering?.strukturertDokumentJson
     ? JSON.parse(grunnlag.vurdering?.strukturertDokumentJson)
     : {};
   const defaultÅrsakOptions: string[] = (annetRelevantDokumentGrunnlag.årsakerTilBehandling || [])
@@ -60,6 +63,11 @@ export const DigitaliserAnnetRelevantDokument = ({ grunnlag, readOnly, submit, i
         defaultValue: defaultÅrsakOptions,
         rules: { required: 'Du må velge minst en årsak' },
       },
+      begrunnelse: {
+        type: 'textarea',
+        label: 'Begrunnelse',
+        rules: { required: 'Du må oppgi begrunnelse.' },
+      },
     },
     { readOnly }
   );
@@ -74,6 +82,7 @@ export const DigitaliserAnnetRelevantDokument = ({ grunnlag, readOnly, submit, i
       <form onSubmit={handleSubmit}>
         <VStack gap={'6'}>
           <FormField form={form} formField={formFields.årsaker} />
+          <FormField form={form} formField={formFields.begrunnelse} />
           {!readOnly && (
             <Button loading={isLoading} className={'fit-content'}>
               Send inn

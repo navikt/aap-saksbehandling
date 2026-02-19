@@ -18,7 +18,7 @@ Dette oppsettet forutsetter at du har følgende programvare installert:
 4. Klikk Generate token og kopier tokenet (Det forsvinner fra siden)
 5. Klikk Configure SSO -> Authorize for navikt-organisasjonen
 6. Legg inn miljøvariabel med token i ~/.bashrc eller ~/.zshrc:
-   ```
+   ```env
    export NPM_AUTH_TOKEN=<token-her>
    ```
    Husk å kjøre `source ~/.bashrc` eller `source ~/.zshrc` etterpå for å laste inn endringene, evt start terminal på nytt.
@@ -68,6 +68,17 @@ For at pre-commit hooks for linting og formatering skal kunne kjøre, må du set
     yarn dev
    ```
    Applikasjonen skal nå være tilgjengelig i nettleseren på http://localhost:4000
+
+### Teste postmottak lokalt
+
+Kjør opp postmottak med TestApp. Den skal starte på port 8070. Husk å oppdatere `.env.local` med
+
+```env
+POSTMOTTAK_API_BASE_URL="http://localhost:8070"
+POSTMOTTAK_API_SCOPE="dev-gcp:aap:postmottak-backend"
+```
+
+Deretter, det logges i postmottak i TestApp, referansen på en dummy-behandling. Se i loggene og se etter referansen. Naviger deretter inn på `http://localhost:3000/postmottak/<referansen>/`.
 
 ## Rydd opp før ny oppstart
 
