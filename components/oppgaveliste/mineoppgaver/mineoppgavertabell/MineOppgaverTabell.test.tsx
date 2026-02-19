@@ -59,7 +59,7 @@ describe('Mine oppgaver tabell', () => {
   });
 
   it('Skal inneholde kolonner som kan sorteres ', () => {
-    const kolonnerSomKanSorteres = ['Navn', 'Fnr', 'Sak', 'Beh. opprettet', 'Vurderingsbehov'];
+    const kolonnerSomKanSorteres = ['Fnr', 'Sak', 'Beh. opprettet', 'Årsak', 'Oppgave', 'Oppg. opprettet'];
     kolonnerSomKanSorteres.forEach((kolonne) => {
       const column = screen.getByRole('button', { name: kolonne });
       expect(column).toBeVisible();
