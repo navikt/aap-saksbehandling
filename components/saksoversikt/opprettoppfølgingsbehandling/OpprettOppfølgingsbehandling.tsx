@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, BodyLong, Box, Button, ExpansionCard, HStack, Page, VStack } from '@navikt/ds-react';
+import { Alert, BodyLong, Button, ExpansionCard, HStack, Page, VStack } from '@navikt/ds-react';
 import { OppfølgingsoppgaveV0 } from 'lib/types/types';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
