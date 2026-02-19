@@ -126,6 +126,7 @@ export const OpprettRevurdering = ({
           )}
 
           <HStack gap="4">
+            <Button type="submit">Opprett {variant}</Button>
             <Button
               type="button"
               variant="secondary"
@@ -133,7 +134,6 @@ export const OpprettRevurdering = ({
             >
               Avbryt
             </Button>
-            <Button type="submit">Opprett {variant}</Button>
           </HStack>
         </VStack>
       </form>
