@@ -49,7 +49,9 @@ export const HelseinstitusjonsvurderingNy = ({
       ? form.watch(`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex - 1}`)
       : undefined;
 
-  const skalViseDatoFeltForStoppAvReduksjon = !erReduksjon && !finnesTidligereVurderinger && vurderingIndex !== 0;
+  const erFørsteVurdering = vurderingIndex === 0;
+
+  const skalViseDatoFeltForStoppAvReduksjon = !erReduksjon && (finnesTidligereVurderinger || !erFørsteVurdering);
 
   const forrigeOppholdSisteVurdering = form
     .getValues(`helseinstitusjonsvurderinger.${oppholdIndex - 1}`)

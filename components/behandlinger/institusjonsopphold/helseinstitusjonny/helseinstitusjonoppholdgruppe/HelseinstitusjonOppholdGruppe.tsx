@@ -128,6 +128,7 @@ export const HelseinstitusjonOppholdGruppe = ({
                   isLast={vurderingIndex === vurderinger.length - 1}
                   vurderingStatus={getErReduksjonEllerIkke(reduksjon)}
                   vurdertAv={vurdering.vurdertAv}
+                  harTidligereVurderinger={!!(tidligereVurderinger && tidligereVurderinger.length > 0)}
                   kvalitetssikretAv={undefined}
                   besluttetAv={undefined}
                   finnesFeil={false}
