@@ -22,7 +22,7 @@ interface Props extends Submittable {
 }
 
 function mapTilAnnetRelevantDokumentKontrakt(data: AnnetRelevantDokumentFormFields) {
-  const dokument: AnnetRelevantDokument = {
+  const dokument = {
     meldingType: 'AnnetRelevantDokumentV1',
     årsakerTilBehandling: data.årsaker.map((årsak) => årsak as DokumentÅrsakTilBehandling),
     begrunnelse: data.begrunnelse,
