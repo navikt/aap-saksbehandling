@@ -46,7 +46,6 @@ export const Overlevering = ({ behandlingsVersjon, behandlingsreferanse, grunnla
           behovstype: Behovstype.AVKLAR_OVERLEVERING,
           skalOverleveres: data.skalOverleveres === JaEllerNei.Ja,
         },
-        // @ts-ignore
         referanse: behandlingsreferanse,
       });
     })(event);
