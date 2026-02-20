@@ -114,12 +114,9 @@ export const BistandsbehovMedReactiveSortertListe = ({
   const foersteNyePeriode = fields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
   const errorList = mapPeriodiserteVurderingerErrorList<LovOgMedlemskapVurderingForm>(form.formState.errors);
 
-  const sorterteVurderinger = useSorterteVurderinger<BistandForm, BistandVurderingResponse>(
-    // @ts-expect-error
-    fields,
+  const sorterteVurderinger = useSorterteVurderinger<BistandVurderingResponse>(
     sisteVedtatteVurderinger,
-    grunnlag.ikkeRelevantePerioder,
-    form
+    grunnlag.ikkeRelevantePerioder
   );
 
   return (
@@ -167,31 +164,6 @@ export const BistandsbehovMedReactiveSortertListe = ({
 
         {sorterteVurderinger.map((item, index) => {
           switch (item.type) {
-            case 'NY_VURDERING':
-              return (
-                <NyVurderingExpandableCard
-                  key={item.id}
-                  accordionsSignal={accordionsSignal}
-                  fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${item.index}.fraDato`))}
-                  nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${item.index + 1}.fraDato`))}
-                  isLast={item.index === fields.length - 1}
-                  vurderingStatus={getErOppfyltEllerIkkeStatus(
-                    erNyVurderingOppfylt(form.watch(`vurderinger.${item.index}`))
-                  )}
-                  vurdertAv={item.vurderingForm.vurdertAv}
-                  kvalitetssikretAv={item.vurderingForm.kvalitetssikretAv}
-                  besluttetAv={item.vurderingForm.besluttetAv}
-                  readonly={formReadOnly}
-                  onSlettVurdering={() => remove(item.index)}
-                  harTidligereVurderinger={sisteVedtatteVurderinger.length > 0}
-                  index={item.index}
-                  finnesFeil={finnesFeilForVurdering(item.index, errorList)}
-                  initiellEkspandert={skalVæreInitiellEkspandert(item.vurderingForm.erNyVurdering, erAktivUtenAvbryt)}
-                >
-                  <BistandsbehovVurderingForm form={form} readOnly={formReadOnly} index={item.index} />
-                </NyVurderingExpandableCard>
-              );
-
             case 'TIDLIGERE_VURDERING':
               return (
                 <TidligereVurderingExpandableCard
@@ -224,6 +196,30 @@ export const BistandsbehovMedReactiveSortertListe = ({
                 ></IkkeVurderbarPeriode>
               );
           }
+        })}
+
+        {fields.map((field, index) => {
+          return (
+            <NyVurderingExpandableCard
+              key={field.id}
+              accordionsSignal={accordionsSignal}
+              fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
+              nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
+              isLast={index === fields.length - 1}
+              vurderingStatus={getErOppfyltEllerIkkeStatus(erNyVurderingOppfylt(form.watch(`vurderinger.${index}`)))}
+              vurdertAv={field.vurdertAv}
+              kvalitetssikretAv={field.kvalitetssikretAv}
+              besluttetAv={field.besluttetAv}
+              readonly={formReadOnly}
+              onSlettVurdering={() => remove(index)}
+              harTidligereVurderinger={sisteVedtatteVurderinger.length > 0}
+              index={index}
+              finnesFeil={finnesFeilForVurdering(index, errorList)}
+              initiellEkspandert={skalVæreInitiellEkspandert(field.erNyVurdering, erAktivUtenAvbryt)}
+            >
+              <BistandsbehovVurderingForm form={form} readOnly={formReadOnly} index={index} />
+            </NyVurderingExpandableCard>
+          );
         })}
       </VStack>
     </VilkårskortPeriodisert>

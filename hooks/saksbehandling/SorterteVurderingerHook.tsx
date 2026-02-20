@@ -1,83 +1,50 @@
 import { Periode } from 'lib/types/types';
-import { FieldArrayWithId, UseFormReturn, useWatch } from 'react-hook-form';
-import { FieldValues } from 'react-hook-form/dist/types';
-import { Dato } from 'lib/types/Dato';
-import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { useMemo } from 'react';
+import { sorterEtterNyesteDato } from 'lib/utils/date';
 
-interface BaseSortertVurdering {
+interface TidligereVurdering<TidligereVurderingType> {
+  type: 'TIDLIGERE_VURDERING';
+  vurdering: TidligereVurderingType;
   fom: string;
 }
 
-interface TidligereVurdering<TidligereVurderingType> extends BaseSortertVurdering {
-  type: 'TIDLIGERE_VURDERING';
-  vurdering: TidligereVurderingType;
-}
-
-interface NyVurdering<NyVurderingType extends FieldValues> extends BaseSortertVurdering {
-  type: 'NY_VURDERING';
-  index: number;
-  id: string;
-  vurderingForm: FieldArrayWithId<NyVurderingType>;
-}
-
-interface IkkeRelevantePerioder extends BaseSortertVurdering {
+interface IkkeRelevantePerioder {
   type: 'IKKE_RELEVANT_PERIODE';
   periode: Periode;
+  fom: string;
 }
 
-type SortertVurdering<NyVurderingType extends FieldValues, TidligereVurderingType> =
-  | TidligereVurdering<TidligereVurderingType>
-  | NyVurdering<NyVurderingType>
-  | IkkeRelevantePerioder;
+type SortertVurdering<TidligereVurderingType> = TidligereVurdering<TidligereVurderingType> | IkkeRelevantePerioder;
 
-type SorterteVurderinger<NyVurderingType extends FieldValues, TidligereVurderingType> = SortertVurdering<
-  NyVurderingType,
-  TidligereVurderingType
->[];
+type SorterteVurderinger<TidligereVurderingType> = SortertVurdering<TidligereVurderingType>[];
 
-export function useSorterteVurderinger<NyVurderingType extends FieldValues, TidligereVurderingType>(
-  nyeVurderinger: NyVurderingType[],
+// Denne brukes for å sikre at alle typene vi sender inn har feltet fom
+interface TidligereVurderingFom {
+  fom: string;
+}
+
+export function useSorterteVurderinger<TidligereVurderingType extends TidligereVurderingFom>(
   tidligereVurderinger: TidligereVurderingType[],
-  ikkeRelevantePerioder: Periode[],
-  form: UseFormReturn<any>
-): SorterteVurderinger<NyVurderingType, TidligereVurderingType> {
-  const watch = useWatch({ control: form.control, name: 'vurderinger' });
+  ikkeRelevantePerioder: Periode[]
+): SorterteVurderinger<TidligereVurderingType> {
+  const sorterteVurderinger = useMemo(() => {
+    return [...tidligereVurderinger.map(lagTidligereVurdering), ...ikkeRelevantePerioder.map(lagIkkeRelevantPeriode)];
+  }, [tidligereVurderinger, ikkeRelevantePerioder]);
 
-  // @ts-expect-error
-  const sorterteVurderinger: SorterteVurderinger<NyVurderingType, TidligereVurderingType> = useMemo(() => {
-    return [
-      ...(nyeVurderinger ?? []).map((field, index) => {
-        const values = watch?.[index] ?? field;
-        return {
-          type: 'NY_VURDERING',
-          index: index,
-          id: field.id,
-          vurderingForm: field,
-          fom: gyldigDatoEllerNull(values?.fraDato) ? new Dato(values.fraDato).formaterForBackend() : '',
-        };
-      }),
-      ...(tidligereVurderinger ?? []).map((vurdering) => {
-        return {
-          type: 'TIDLIGERE_VURDERING',
-          vurdering: vurdering,
-          // @ts-expect-error
-          fom: vurdering.fom,
-        };
-      }),
-      ...(ikkeRelevantePerioder ?? []).map((periode) => {
-        return {
-          type: 'IKKE_RELEVANT_PERIODE',
-          periode: periode,
-          fom: periode.fom,
-        };
-      }),
-    ];
-  }, [ikkeRelevantePerioder, nyeVurderinger, tidligereVurderinger, watch]);
+  return sorterteVurderinger.toSorted((a, b) => sorterEtterNyesteDato(a.fom, b.fom));
+}
+function lagTidligereVurdering<T extends TidligereVurderingFom>(vurdering: T): TidligereVurdering<T> {
+  return {
+    type: 'TIDLIGERE_VURDERING',
+    vurdering,
+    fom: vurdering.fom,
+  };
+}
 
-  return sorterteVurderinger.sort((a, b) => {
-    const aDato = a.fom ? new Date(a.fom).getTime() : Infinity;
-    const bDato = b.fom ? new Date(b.fom).getTime() : Infinity;
-    return aDato - bDato;
-  });
+function lagIkkeRelevantPeriode(periode: Periode): IkkeRelevantePerioder {
+  return {
+    type: 'IKKE_RELEVANT_PERIODE',
+    periode,
+    fom: periode.fom,
+  };
 }
