@@ -52,6 +52,8 @@ describe('AlleOppgaverTabell', () => {
         revalidateFunction={vi.fn()}
         setValgteRader={vi.fn()}
         valgteRader={[]}
+        setSortBy={() => {}}
+        sort={undefined}
       />,
       false
     );
@@ -69,6 +71,8 @@ describe('AlleOppgaverTabell', () => {
         revalidateFunction={vi.fn()}
         setValgteRader={vi.fn()}
         valgteRader={[]}
+        setSortBy={() => {}}
+        sort={undefined}
       />,
       false
     );
