@@ -25,6 +25,7 @@ export const Institusjonsopphold = async ({ behandlingsreferanse }: Props) => {
     flyt.data,
     Behovstype.AVKLAR_HELSEINSTITUSJON
   );
+
   const vurderSoningSteg = getStegData(
     'ET_ANNET_STED',
     'DU_ER_ET_ANNET_STED',

@@ -3,7 +3,6 @@
 import { Alert } from '@navikt/ds-react';
 import styles from './Helseinstitusjon.module.css';
 import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
-
 export const ManglendeInstitusjonsOpphold = () => {
   return (
     <VilkårsKort heading={'§ 11-25 Helseinstitusjon'} steg={'DU_ER_ET_ANNET_STED'}>
