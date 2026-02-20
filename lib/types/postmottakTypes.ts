@@ -12,7 +12,7 @@ export type StegGruppe = postmottak['schemas']['no.nav.aap.postmottak.api.flyt.F
 export type StegType = postmottak['schemas']['no.nav.aap.postmottak.api.flyt.FlytSteg']['stegType'];
 
 export type LøsAvklaringsbehovPåBehandling =
-  postmottak['schemas']['no.nav.aap.postmottak.avklaringsbehov.flate.L\u00F8sAvklaringsbehovP\u00E5Behandling'];
+  postmottak['schemas']['no.nav.aap.postmottak.api.flyt.L\u00F8sAvklaringsbehovP\u00E5Behandling'];
 
 export type SettPåVentRequest = postmottak['schemas']['no.nav.aap.postmottak.api.flyt.SettP\u00E5VentRequest'];
 export type PostmottakSettPåVentÅrsaker =
@@ -35,3 +35,12 @@ export type OverleveringGrunnlag =
 
 export type AvsenderMottakerIdType =
   postmottak['schemas']['no.nav.aap.postmottak.gateway.AvsenderMottakerDto']['idType'];
+
+export type IdentRequest = postmottak['schemas']['no.nav.aap.postmottak.api.faktagrunnlag.sak.IdentRequest'];
+
+export type FinnBehandlingerRespons =
+  postmottak['schemas']['no.nav.aap.postmottak.api.faktagrunnlag.sak.FinnBehandlingerResponse'];
+
+export type PostmottakBehandlingInfo = FinnBehandlingerRespons['behandlinger'][number];
+
+export type PostmottakTypeBehandling = PostmottakBehandlingInfo['typeBehandling'];

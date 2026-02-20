@@ -27,7 +27,7 @@ export const AktivitetspliktTrekk = ({ sak }: { sak: SaksInfo }) => {
   const vurderingerMedTrekk = aktivitetspliktMedTrekk?.data?.vurderingerMedTrekk || [];
 
   return vurderingerMedTrekk.length === 0 ? (
-    <div>Ingen brudd på aktivitetsplikt 11-9 er registrert</div>
+    <div>Ingen brudd på aktivitetsplikt 11-9 er registrert.</div>
   ) : (
     <VStack gap="4">
       <Heading size="large">Aktivitetsplikt 11-9 med trekk</Heading>
