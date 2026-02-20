@@ -29,6 +29,8 @@ import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
+import { VurderingerListe } from 'components/periodisering/VurderingerListe';
+import { useSak } from 'hooks/SakHook';
 
 interface Props {
   behandlingVersjon: number;
@@ -47,6 +49,7 @@ export const LovvalgOgMedlemskapPeriodisert = ({
   initialMellomlagretVurdering,
   behovstype,
 }: Props) => {
+  const { sak } = useSak();
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsPeriodisertBehovOgGåTilNesteSteg, status, løsBehovOgGåTilNesteStegError, isLoading } =
     useLøsBehovOgGåTilNesteSteg('VURDER_LOVVALG');
@@ -141,46 +144,55 @@ export const LovvalgOgMedlemskapPeriodisert = ({
       errorList={errorList}
       formReset={() => form.reset(getDefaultValuesFromGrunnlag(grunnlag))}
     >
-      {vedtatteVurderinger.map((vurdering) => (
-        <TidligereVurderingExpandableCard
-          key={vurdering.fom}
-          fom={parseISO(vurdering.fom)}
-          tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
-          foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-          vurderingStatus={getErOppfyltEllerIkkeStatus(
-            vurdering.lovvalg.lovvalgsEØSLandEllerLandMedAvtale === 'NOR' &&
-              vurdering.medlemskap?.varMedlemIFolketrygd === true
-          )}
-        >
-          <LovvalgOgMedlemskapTidligereVurdering vurdering={vurdering} />
-        </TidligereVurderingExpandableCard>
-      ))}
-
-      {vurderingerFields.map((vurdering, index) => (
-        <NyVurderingExpandableCard
-          key={vurdering.id}
-          accordionsSignal={accordionsSignal}
-          fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-          nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
-          isLast={index === vurderingerFields.length - 1}
-          vurderingStatus={getErOppfyltEllerIkkeStatus(
-            form.watch(`vurderinger.${index}.medlemskap.varMedlemIFolketrygd`)
-              ? form.watch(`vurderinger.${index}.medlemskap.varMedlemIFolketrygd`) === JaEllerNei.Ja
-              : undefined
-          )}
-          vurdertAv={vurdering.vurdertAv}
-          kvalitetssikretAv={vurdering.kvalitetssikretAv}
-          besluttetAv={vurdering.besluttetAv}
-          finnesFeil={finnesFeilForVurdering(index, errorList)}
-          onSlettVurdering={() => remove(index)}
-          harTidligereVurderinger={tidligereVurderinger.length > 0}
-          index={index}
-          readonly={formReadOnly}
-          initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
-        >
-          <LovvalgOgMedlemskapFormInput form={form} readOnly={formReadOnly} index={index} />
-        </NyVurderingExpandableCard>
-      ))}
+      <VurderingerListe
+        startDato={parseISO(sak.periode.fom)}
+        ikkeRelevantePerioder={grunnlag.ikkeRelevantePerioder}
+        vedtatteVurderinger={vedtatteVurderinger}
+        nyeVurderinger={vurderingerFields}
+        renderVedtattVurdering={(vurdering) => {
+          return (
+            <TidligereVurderingExpandableCard
+              key={vurdering.fom}
+              fom={parseISO(vurdering.fom)}
+              tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
+              foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+              vurderingStatus={getErOppfyltEllerIkkeStatus(
+                vurdering.lovvalg.lovvalgsEØSLandEllerLandMedAvtale === 'NOR' &&
+                  vurdering.medlemskap?.varMedlemIFolketrygd === true
+              )}
+            >
+              <LovvalgOgMedlemskapTidligereVurdering vurdering={vurdering} />
+            </TidligereVurderingExpandableCard>
+          );
+        }}
+        renderNyVurdering={(vurdering, index) => {
+          return (
+            <NyVurderingExpandableCard
+              key={vurdering.id}
+              accordionsSignal={accordionsSignal}
+              fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
+              nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
+              isLast={index === vurderingerFields.length - 1}
+              vurderingStatus={getErOppfyltEllerIkkeStatus(
+                form.watch(`vurderinger.${index}.medlemskap.varMedlemIFolketrygd`)
+                  ? form.watch(`vurderinger.${index}.medlemskap.varMedlemIFolketrygd`) === JaEllerNei.Ja
+                  : undefined
+              )}
+              vurdertAv={vurdering.vurdertAv}
+              kvalitetssikretAv={vurdering.kvalitetssikretAv}
+              besluttetAv={vurdering.besluttetAv}
+              finnesFeil={finnesFeilForVurdering(index, errorList)}
+              onSlettVurdering={() => remove(index)}
+              harTidligereVurderinger={tidligereVurderinger.length > 0}
+              index={index}
+              readonly={formReadOnly}
+              initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
+            >
+              <LovvalgOgMedlemskapFormInput form={form} readOnly={formReadOnly} index={index} />
+            </NyVurderingExpandableCard>
+          );
+        }}
+      />
     </VilkårskortPeriodisert>
   );
 };

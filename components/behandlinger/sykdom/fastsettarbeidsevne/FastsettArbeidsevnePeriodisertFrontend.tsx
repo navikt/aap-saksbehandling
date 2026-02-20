@@ -37,6 +37,8 @@ import React from 'react';
 import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
+import { VurderingerListe } from 'components/periodisering/VurderingerListe';
+import { useSak } from 'hooks/SakHook';
 
 interface Props {
   grunnlag: ArbeidsevneGrunnlag;
@@ -79,6 +81,7 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
   readOnly,
   initialMellomlagretVurdering,
 }: Props) => {
+  const { sak } = useSak();
   const behandlingsreferanse = useBehandlingsReferanse();
   const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('FASTSETT_ARBEIDSEVNE');
@@ -185,101 +188,110 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
           </BodyLong>
         </VStack>
       )}
-      {vedtatteVurderinger.map((vurdering) => (
-        <TidligereVurderingExpandableCard
-          key={vurdering.fom}
-          fom={parseISO(vurdering.fom)}
-          tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
-          foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-          vurderingStatus={getErOppfyltEllerIkkeStatus(vurdering.arbeidsevne > 0)}
-          vurdertAv={vurdering.vurdertAv}
-        >
-          <VStack gap={'5'}>
-            <SpørsmålOgSvar spørsmål="Vurderingen gjelder fra?" svar={formaterDatoForFrontend(vurdering.fom)} />
-            <SpørsmålOgSvar spørsmål="Vilkårsvurdering" svar={vurdering.begrunnelse} />
-            <SpørsmålOgSvar
-              spørsmål="Oppgi arbeidsevnen som ikke er utnyttet i prosent"
-              svar={vurdering.arbeidsevne.toString()}
-            />
-          </VStack>
-        </TidligereVurderingExpandableCard>
-      ))}
-
-      {fields.map((vurdering, index) => (
-        <NyVurderingExpandableCard
-          key={vurdering.id}
-          accordionsSignal={accordionsSignal}
-          fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-          vurderingStatus={undefined}
-          nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
-          isLast={index === vedtatteVurderinger.length - 1}
-          vurdertAv={vurdering.vurdertAv}
-          kvalitetssikretAv={vurdering.kvalitetssikretAv}
-          besluttetAv={vurdering.besluttetAv}
-          finnesFeil={finnesFeilForVurdering(index, errorList)}
-          readonly={formReadOnly}
-          onSlettVurdering={() => remove(index)}
-          // vilkåret er valgfritt, kan derfor slette vurderingen selv om det ikke finnes en tidligere vurdering
-          harTidligereVurderinger={true}
-          index={index}
-          initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
-        >
-          <DateInputWrapper
-            control={form.control}
-            name={`vurderinger.${index}.fraDato`}
-            label={'Vurderingen gjelder fra'}
-            rules={{
-              required: 'Vennligst velg en dato for når vurderingen gjelder fra',
-              validate: (value) => validerDato(value as string),
-            }}
-            readOnly={formReadOnly}
-          />
-
-          <HvordanLeggeTilSluttdatoReadMore />
-
-          <TextAreaWrapper
-            label={'Vilkårsvurdering'}
-            description={
-              'Vurder om brukeren har en arbeidsevne som ikke er utnyttet. Hvis det ikke legges inn en vurdering, har brukeren rett på full ytelse.'
-            }
-            control={form.control}
-            name={`vurderinger.${index}.begrunnelse`}
-            rules={{ required: 'Du må begrunne vurderingen din' }}
-            className={'begrunnelse'}
-            readOnly={formReadOnly}
-          />
-          <HStack gap={'3'}>
-            <VStack gap={'2'}>
-              <Label size={'small'}>Oppgi arbeidsevnen som ikke er utnyttet i prosent</Label>
-              <HStack gap={'2'}>
-                <TextFieldWrapper
-                  control={form.control}
-                  name={`vurderinger.${index}.arbeidsevne`}
-                  type={'text'}
-                  label={'Oppgi arbeidsevnen som ikke er utnyttet i prosent'}
-                  hideLabel={true}
-                  rules={{
-                    required: 'Du må angi hvor stor arbeidsevne brukeren har',
-                    validate: (value) => {
-                      const valueAsNumber = Number(value);
-                      if (isNaN(valueAsNumber)) {
-                        return 'Prosent må være et tall';
-                      } else if (!erProsent(valueAsNumber)) {
-                        return 'Prosent kan bare være mellom 0 og 100';
-                      }
-                    },
-                  }}
-                  readOnly={formReadOnly}
-                  className="prosent_input"
+      <VurderingerListe
+        startDato={parseISO(sak.periode.fom)}
+        ikkeRelevantePerioder={grunnlag.ikkeRelevantePerioder}
+        vedtatteVurderinger={vedtatteVurderinger}
+        nyeVurderinger={fields}
+        renderVedtattVurdering={(vurdering) => {
+          return (
+            <TidligereVurderingExpandableCard
+              key={vurdering.fom}
+              fom={parseISO(vurdering.fom)}
+              tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
+              foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+              vurderingStatus={getErOppfyltEllerIkkeStatus(vurdering.arbeidsevne > 0)}
+              vurdertAv={vurdering.vurdertAv}
+            >
+              <VStack gap={'5'}>
+                <SpørsmålOgSvar spørsmål="Vurderingen gjelder fra?" svar={formaterDatoForFrontend(vurdering.fom)} />
+                <SpørsmålOgSvar spørsmål="Vilkårsvurdering" svar={vurdering.begrunnelse} />
+                <SpørsmålOgSvar
+                  spørsmål="Oppgi arbeidsevnen som ikke er utnyttet i prosent"
+                  svar={vurdering.arbeidsevne.toString()}
                 />
-                <VStack paddingBlock={'1'} justify={'end'}>
-                  {regnOmTilTimer(form.watch(`vurderinger.${index}.arbeidsevne`)?.toString() ?? '')}
+              </VStack>
+            </TidligereVurderingExpandableCard>
+          );
+        }}
+        renderNyVurdering={(vurdering, index) => {
+          return (
+            <NyVurderingExpandableCard
+              key={vurdering.id}
+              accordionsSignal={accordionsSignal}
+              fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
+              vurderingStatus={undefined}
+              nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
+              isLast={index === vedtatteVurderinger.length - 1}
+              vurdertAv={vurdering.vurdertAv}
+              kvalitetssikretAv={vurdering.kvalitetssikretAv}
+              besluttetAv={vurdering.besluttetAv}
+              finnesFeil={finnesFeilForVurdering(index, errorList)}
+              readonly={formReadOnly}
+              onSlettVurdering={() => remove(index)}
+              // vilkåret er valgfritt, kan derfor slette vurderingen selv om det ikke finnes en tidligere vurdering
+              harTidligereVurderinger={true}
+              index={index}
+              initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
+            >
+              <DateInputWrapper
+                control={form.control}
+                name={`vurderinger.${index}.fraDato`}
+                label={'Vurderingen gjelder fra'}
+                rules={{
+                  required: 'Vennligst velg en dato for når vurderingen gjelder fra',
+                  validate: (value) => validerDato(value as string),
+                }}
+                readOnly={formReadOnly}
+              />
+
+              <HvordanLeggeTilSluttdatoReadMore />
+
+              <TextAreaWrapper
+                label={'Vilkårsvurdering'}
+                description={
+                  'Vurder om brukeren har en arbeidsevne som ikke er utnyttet. Hvis det ikke legges inn en vurdering, har brukeren rett på full ytelse.'
+                }
+                control={form.control}
+                name={`vurderinger.${index}.begrunnelse`}
+                rules={{ required: 'Du må begrunne vurderingen din' }}
+                className={'begrunnelse'}
+                readOnly={formReadOnly}
+              />
+              <HStack gap={'3'}>
+                <VStack gap={'2'}>
+                  <Label size={'small'}>Oppgi arbeidsevnen som ikke er utnyttet i prosent</Label>
+                  <HStack gap={'2'}>
+                    <TextFieldWrapper
+                      control={form.control}
+                      name={`vurderinger.${index}.arbeidsevne`}
+                      type={'text'}
+                      label={'Oppgi arbeidsevnen som ikke er utnyttet i prosent'}
+                      hideLabel={true}
+                      rules={{
+                        required: 'Du må angi hvor stor arbeidsevne brukeren har',
+                        validate: (value) => {
+                          const valueAsNumber = Number(value);
+                          if (isNaN(valueAsNumber)) {
+                            return 'Prosent må være et tall';
+                          } else if (!erProsent(valueAsNumber)) {
+                            return 'Prosent kan bare være mellom 0 og 100';
+                          }
+                        },
+                      }}
+                      readOnly={formReadOnly}
+                      className="prosent_input"
+                    />
+                    <VStack paddingBlock={'1'} justify={'end'}>
+                      {regnOmTilTimer(form.watch(`vurderinger.${index}.arbeidsevne`)?.toString() ?? '')}
+                    </VStack>
+                  </HStack>
                 </VStack>
               </HStack>
-            </VStack>
-          </HStack>
-        </NyVurderingExpandableCard>
-      ))}
+            </NyVurderingExpandableCard>
+          );
+        }}
+      />
     </VilkårskortPeriodisert>
   );
 };

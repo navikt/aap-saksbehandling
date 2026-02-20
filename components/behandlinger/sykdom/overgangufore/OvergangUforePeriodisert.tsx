@@ -30,6 +30,8 @@ import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/op
 import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
+import { useSak } from 'hooks/SakHook';
+import { VurderingerListe } from 'components/periodisering/VurderingerListe';
 
 interface Props {
   behandlingVersjon: number;
@@ -59,6 +61,7 @@ export const OvergangUforePeriodisert = ({
   readOnly,
   initialMellomlagretVurdering,
 }: Props) => {
+  const { sak } = useSak();
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('OVERGANG_UFORE');
@@ -142,47 +145,54 @@ export const OvergangUforePeriodisert = ({
           </Link>
         </BodyLong>
 
-        {grunnlag.sisteVedtatteVurderinger.map((vurdering) => (
-          <TidligereVurderingExpandableCard
-            key={vurdering.fom}
-            fom={parseISO(vurdering.fom)}
-            tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
-            foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-            vurderingStatus={getErOppfyltEllerIkkeStatus(!!vurdering.brukerRettPåAAP)}
-          >
-            <OvergangUforeTidligereVurdering
-              fraDato={vurdering.fom}
-              begrunnelse={vurdering.begrunnelse}
-              brukerHarSøktOmUføretrygd={vurdering.brukerHarSøktUføretrygd}
-              brukerHarFåttVedtakOmUføretrygd={vurdering.brukerHarFåttVedtakOmUføretrygd}
-              brukerRettPåAAP={vurdering.brukerRettPåAAP}
-            />
-          </TidligereVurderingExpandableCard>
-        ))}
-
-        {nyeVurderingFields.map((vurdering, index) => {
-          return (
-            <NyVurderingExpandableCard
-              key={vurdering.id}
-              accordionsSignal={accordionsSignal}
-              fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-              vurderingStatus={getErOppfyltEllerIkkeStatus(erVurderingOppfylt(form, index))}
-              nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
-              isLast={index === nyeVurderingFields.length - 1}
-              vurdertAv={vurdering.vurdertAv}
-              kvalitetssikretAv={vurdering.kvalitetssikretAv}
-              besluttetAv={vurdering.besluttetAv}
-              finnesFeil={finnesFeilForVurdering(index, errorList)}
-              readonly={formReadOnly}
-              onSlettVurdering={() => remove(index)}
-              harTidligereVurderinger={tidligereVurderinger.length > 0}
-              index={index}
-              initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
-            >
-              <OvergangUforeVurderingFormInput index={index} form={form} readonly={formReadOnly} />
-            </NyVurderingExpandableCard>
-          );
-        })}
+        <VurderingerListe
+          startDato={parseISO(sak.periode.fom)}
+          ikkeRelevantePerioder={grunnlag.ikkeRelevantePerioder}
+          vedtatteVurderinger={grunnlag.sisteVedtatteVurderinger}
+          nyeVurderinger={nyeVurderingFields}
+          renderVedtattVurdering={(vurdering) => {
+            return (
+              <TidligereVurderingExpandableCard
+                key={vurdering.fom}
+                fom={parseISO(vurdering.fom)}
+                tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
+                foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+                vurderingStatus={getErOppfyltEllerIkkeStatus(!!vurdering.brukerRettPåAAP)}
+              >
+                <OvergangUforeTidligereVurdering
+                  fraDato={vurdering.fom}
+                  begrunnelse={vurdering.begrunnelse}
+                  brukerHarSøktOmUføretrygd={vurdering.brukerHarSøktUføretrygd}
+                  brukerHarFåttVedtakOmUføretrygd={vurdering.brukerHarFåttVedtakOmUføretrygd}
+                  brukerRettPåAAP={vurdering.brukerRettPåAAP}
+                />
+              </TidligereVurderingExpandableCard>
+            );
+          }}
+          renderNyVurdering={(vurdering, index) => {
+            return (
+              <NyVurderingExpandableCard
+                key={vurdering.id}
+                accordionsSignal={accordionsSignal}
+                fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
+                vurderingStatus={getErOppfyltEllerIkkeStatus(erVurderingOppfylt(form, index))}
+                nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
+                isLast={index === nyeVurderingFields.length - 1}
+                vurdertAv={vurdering.vurdertAv}
+                kvalitetssikretAv={vurdering.kvalitetssikretAv}
+                besluttetAv={vurdering.besluttetAv}
+                finnesFeil={finnesFeilForVurdering(index, errorList)}
+                readonly={formReadOnly}
+                onSlettVurdering={() => remove(index)}
+                harTidligereVurderinger={tidligereVurderinger.length > 0}
+                index={index}
+                initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
+              >
+                <OvergangUforeVurderingFormInput index={index} form={form} readonly={formReadOnly} />
+              </NyVurderingExpandableCard>
+            );
+          }}
+        />
       </VStack>
     </VilkårskortPeriodisert>
   );
