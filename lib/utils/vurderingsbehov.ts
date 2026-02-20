@@ -104,6 +104,8 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov): strin
       return 'Utvid vedtakslengde';
     case 'MIGRER_RETTIGHETSPERIODE':
       return 'Korrigering av teknisk periode (automatisk behandling)';
+    case 'ETABLERING_EGEN_VIRKSOMHET':
+      return '§ 11-15 Etablering av egen virksomhet';
     default:
       return vurderingsbehov;
   }

@@ -40,11 +40,11 @@ export async function GET(_: NextRequest, props: { params: Promise<{ saksnummer:
     return NextResponse.json(response, { status: 200 });
   }
 
-  const data = await hentAlleDialogmeldingerPåSak(params.saksnummer);
+  const res = await hentAlleDialogmeldingerPåSak(params.saksnummer);
 
-  if (isError(data)) {
-    logError(`/dokumentinnhenting/behandleroppslag`, data.apiException.message);
+  if (isError(res) && res.status >= 500) {
+    logError(`/dokumentinnhenting/behandleroppslag`, res.apiException);
   }
 
-  return NextResponse.json(data, { status: 200 });
+  return NextResponse.json(res, { status: res.status });
 }

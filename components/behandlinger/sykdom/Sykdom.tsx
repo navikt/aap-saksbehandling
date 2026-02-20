@@ -15,6 +15,8 @@ import { SykdomsvurderingBrevMedDataFetching } from 'components/behandlinger/syk
 import { OvergangUforeMedDataFetching } from './overgangufore/OvergangUforeMedDataFetching';
 import { OvergangArbeidMedDataFetching } from './overgangarbeid/OvergangArbeidMedDataFetching';
 import { ArbeidsopptrappingMedDataFetching } from 'components/behandlinger/sykdom/arbeidsopptrapping/ArbeidsopptrappingMedDataFetching';
+import { EtableringAvEgenVirksomhetMedDatafetching } from 'components/behandlinger/sykdom/etableringegenvirksomhet/EtableringAvEgenVirksomhetMedDatafetching';
+import { unleashService } from 'lib/services/unleash/unleashService';
 
 interface Props {
   behandlingsReferanse: string;
@@ -31,6 +33,7 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
   const vurderBistandsbehovSteg = getStegData(aktivStegGruppe, 'VURDER_BISTANDSBEHOV', flyt.data);
   const arbeidsopptrappingSteg = getStegData(aktivStegGruppe, 'ARBEIDSOPPTRAPPING', flyt.data);
   const fritakMeldepliktSteg = getStegData(aktivStegGruppe, 'FRITAK_MELDEPLIKT', flyt.data);
+  const etableringAvEgenVirksomhetSteg = getStegData(aktivStegGruppe, 'ETABLERING_EGEN_VIRKSOMHET', flyt.data);
   const fastsettArbeidsevneSteg = getStegData(aktivStegGruppe, 'FASTSETT_ARBEIDSEVNE', flyt.data);
   const refusjonskravSteg = getStegData(aktivStegGruppe, 'REFUSJON_KRAV', flyt.data);
   const sykdomsvurderingBrevSteg = getStegData(aktivStegGruppe, 'SYKDOMSVURDERING_BREV', flyt.data);
@@ -63,6 +66,14 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
       {fritakMeldepliktSteg.skalViseSteg && (
         <StegSuspense>
           <MeldepliktMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={fritakMeldepliktSteg} />
+        </StegSuspense>
+      )}
+      {unleashService.isEnabled('VirksomhetsEtablering') && etableringAvEgenVirksomhetSteg.skalViseSteg && (
+        <StegSuspense>
+          <EtableringAvEgenVirksomhetMedDatafetching
+            behandlingsReferanse={behandlingsReferanse}
+            stegData={etableringAvEgenVirksomhetSteg}
+          />
         </StegSuspense>
       )}
       {fastsettArbeidsevneSteg.skalViseSteg && (

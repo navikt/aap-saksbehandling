@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, BodyLong, Box, Button, HStack, Page, VStack } from '@navikt/ds-react';
+import { Alert, BodyLong, Button, ExpansionCard, HStack, Page, VStack } from '@navikt/ds-react';
 import { OppfølgingsoppgaveV0 } from 'lib/types/types';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
@@ -14,6 +14,7 @@ import { parse } from 'date-fns';
 import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { erDatoIFremtiden, validerDato } from 'lib/validation/dateValidation';
 import { Behovstype } from 'lib/utils/form';
+import styles from './OpprettOppfølgingsbehandling.module.css';
 
 interface Props {
   saksnummer: string;
@@ -172,20 +173,30 @@ export const OpprettOppfølgingsBehandling = ({
     <Page.Block width="md">
       <form onSubmit={form.handleSubmit((data) => sendHendelse(data))}>
         <VStack gap="4">
-          <Box>
-            <VStack gap="4">
-              <div>
-                <BodyLong>Oppfølgingsoppgaven ligger på vent til ønsket dato.</BodyLong>
-              </div>
-              <FormField form={form} formField={formFields.datoForOppfølging} size="medium" />
-              <FormField form={form} formField={formFields.hvaSkalFølgesOpp} size="medium" />
-              <FormField form={form} formField={formFields.hvemSkalFølgeOpp} size="medium" />
-              {behovsType !== Behovstype.AVKLAR_SAMORDNING_GRADERING && (
-                <FormField form={form} formField={formFields.reserverTilMeg} size="medium" />
-              )}
-            </VStack>
-          </Box>
+          <ExpansionCard
+            aria-label="Opprett oppfølgingsopgave"
+            size={'small'}
+            defaultOpen
+            className={styles.opprettKort}
+          >
+            <ExpansionCard.Header className={styles.header}>
+              <ExpansionCard.Title size="small">Opprett oppfølgingsoppgave</ExpansionCard.Title>
+            </ExpansionCard.Header>
 
+            <ExpansionCard.Content className={styles.content}>
+              <VStack gap="4">
+                <div>
+                  <BodyLong>Oppfølgingsoppgaven ligger på vent til ønsket dato.</BodyLong>
+                </div>
+                <FormField form={form} formField={formFields.datoForOppfølging} size="medium" />
+                <FormField form={form} formField={formFields.hvaSkalFølgesOpp} size="medium" />
+                <FormField form={form} formField={formFields.hvemSkalFølgeOpp} size="medium" />
+                {behovsType !== Behovstype.AVKLAR_SAMORDNING_GRADERING && (
+                  <FormField form={form} formField={formFields.reserverTilMeg} size="medium" />
+                )}
+              </VStack>
+            </ExpansionCard.Content>
+          </ExpansionCard>
           {error && (
             <Alert variant={'error'} size={'small'}>
               {error}

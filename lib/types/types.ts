@@ -103,7 +103,7 @@ export type KanDistribuereBrevRequest = components['schemas']['no.nav.aap.brev.k
 export type KanDistribuereBrevResponse = components['schemas']['no.nav.aap.brev.kontrakt.KanDistribuereBrevReponse'];
 export type Signatur = components['schemas']['no.nav.aap.brev.kontrakt.Signatur'];
 export type Mottaker =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.SkrivBrevLøsning']['mottakere'][number];
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.SkrivVedtaksbrevLøsning']['mottakere'][number];
 export type SamordningTjenestePensjonGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.TjenestepensjonGrunnlagDTO'];
 export type SamordningGraderingGrunnlag =
@@ -368,6 +368,17 @@ export type PeriodisertForutgåendeMedlemskapGrunnlag =
 export type PeriodisertManuellVurderingForForutgåendeMedlemskapResponse =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.PeriodisertManuellVurderingForForutgåendeMedlemskapResponse'];
 
+export type EtableringEgenVirksomhetGrunnlagResponse =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.etableringegenvirksomhet.EtableringEgenVirksomhetGrunnlagResponse'];
+
+export type EtableringEgenVirksomhetVurderingResponse =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.etableringegenvirksomhet.EtableringEgenVirksomhetVurderingResponse'];
+
+export type EtableringEgenVirksomhetLøsningDto =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.etableringegenvirksomhet.EtableringEgenVirksomhetLøsningDto'];
+
+export type EtableringEierBrukerVirksomheten = EtableringEgenVirksomhetLøsningDto['brukerEierVirksomheten'];
+
 export type SykdomBrevVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.SykdomsvurderingForBrevVurderingDto'];
 
@@ -421,10 +432,9 @@ export type KlageV0 =
     meldingType: typeof KlageV0 /* Hadde vært fint om dette kom med i kontrakten ... */;
   };
 
-export const AnnetRelevantDokumentV0 = 'AnnetRelevantDokumentV0';
-export type AnnetRelevantDokumentV0 =
-  components['schemas'][`no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.${typeof AnnetRelevantDokumentV0}`] & {
-    meldingType: typeof AnnetRelevantDokumentV0 /* Hadde vært fint om dette kom med i kontrakten ... */;
+export type AnnetRelevantDokument =
+  components['schemas'][`no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AnnetRelevantDokument`] & {
+    meldingType: 'AnnetRelevantDokumentV1' /* Hadde vært fint om dette kom med i kontrakten ... */;
   };
 
 export const ManuellRevurderingV0 = 'ManuellRevurderingV0';
@@ -470,7 +480,7 @@ export type Aktivitetsplikt11_7Vurdering =
 export type OpprettAktivitetspliktBehandlingDto =
   components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.OpprettAktivitetspliktBehandlingDto'];
 
-export type DokumentÅrsakTilBehandling = AnnetRelevantDokumentV0['årsakerTilBehandling'][number];
+export type DokumentÅrsakTilBehandling = AnnetRelevantDokument['årsakerTilBehandling'][number];
 
 export type BehandlingInfo =
   components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO'];
@@ -530,9 +540,16 @@ export type PeriodiserteVurderingerDto<T extends VurderingDto> = {
   nyeVurderinger: Array<T>;
   kanVurderes: Array<Periode>;
   behøverVurderinger: Array<Periode>;
+  ikkeRelevantePerioder: Array<Periode>;
 };
 
 export interface PeriodisertVurderingFormFields {
   fraDato?: string;
   tilDato?: string | null;
+}
+// Gjør at vi kan lage et typesikkert "enum-objekt" med union types generert fra backend. feks const minEnum = lagEnumObjektFraUnionType<StegGruppe>({ SYKDOM: 'SYKDOM' ...})
+export function lagEnumObjektFraUnionType<UnionType extends string>(o: { [P in UnionType]: P }): {
+  [P in UnionType]: P;
+} {
+  return o;
 }

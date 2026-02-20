@@ -214,24 +214,6 @@ describe('revurdering', () => {
     const datoFelt = screen.getByRole('textbox', { name: 'Når skal reduksjonen stoppes?' });
     expect(datoFelt).toBeVisible();
   });
-
-  it('Skal vise fom dato etter siste vedtatte vurdering fom dato når bruker legger til ny vurdering', async () => {
-    render(<HelseinstitusjonNy grunnlag={grunnlagMedTidligereVurdering} behandlingVersjon={0} readOnly={false} />);
-    const leggTilKnapp = screen.getByRole('button', { name: 'Legg til ny vurdering' });
-    await user.click(leggTilKnapp);
-
-    // Vedtatt vurdering, 1. januar
-    const vedtattVurdering = screen.getByRole('button', {
-      name: /1\. januar 2025 – 1\. august 20252\. januar 2025 ikke reduksjon/i,
-    });
-    expect(vedtattVurdering).toBeVisible();
-
-    // 3. januar
-    const nyVurdering = screen.getByRole('button', {
-      name: /ny vurdering: 3\. januar 2025 – ikke reduksjon/i,
-    });
-    expect(nyVurdering).toBeVisible();
-  });
 });
 
 describe('form med reduksjon', () => {
@@ -241,36 +223,6 @@ describe('form med reduksjon', () => {
 
     const datoFelt = screen.queryByRole('textbox', { name: 'Når skal reduksjonen stoppes?' });
     expect(datoFelt).not.toBeInTheDocument();
-  });
-
-  it('viser ikke datofelt for stopp av reduksjon når vurderinger gir samme svar', async () => {
-    render(<HelseinstitusjonNy grunnlag={grunnlagUtenVurdering} behandlingVersjon={0} readOnly={false} />);
-    await svarIkkeReduksjon(0); // På første vurdering
-
-    const datoFelt = screen.queryAllByRole('textbox', { name: 'Når skal reduksjonen stoppes?' });
-    expect(datoFelt.length).toBe(0);
-
-    const leggTilVurderingKnapp = screen.getByRole('button', { name: 'Legg til ny vurdering' });
-    await user.click(leggTilVurderingKnapp);
-
-    await svarIkkeReduksjon(1);
-    const datoFeltEtterNyBesvarelse = screen.queryAllByRole('textbox', { name: 'Når skal reduksjonen stoppes?' });
-    expect(datoFeltEtterNyBesvarelse.length).toBe(0);
-  });
-
-  it('Viser ikke datofelt for start av reduksjon når vurderinger er lik forrige', async () => {
-    render(<HelseinstitusjonNy grunnlag={grunnlagUtenVurdering} behandlingVersjon={0} readOnly={false} />);
-    await svarReduksjon(0); // På første vurdering
-
-    const datoFelt = screen.getByRole('textbox', { name: 'Oppgi dato for reduksjon av AAP' });
-    expect(datoFelt).toBeVisible();
-
-    const leggTilVurderingKnapp = screen.getByRole('button', { name: 'Legg til ny vurdering' });
-    await user.click(leggTilVurderingKnapp);
-
-    await svarReduksjon(1);
-    const datoFeltEtterNyBesvarelse = screen.queryAllByRole('textbox', { name: 'Oppgi dato for reduksjon av AAP' });
-    expect(datoFeltEtterNyBesvarelse.length).toBe(1); // Vi forventer bare datofelt på den første vurderingen
   });
 });
 

@@ -4,15 +4,15 @@ import { formaterPeriode } from 'lib/utils/date';
 import { Rettighet } from 'components/saksoversikt/rettighetsoversikt/Rettighet';
 import styles from './Rettighetsoversikt.module.css';
 import { isError } from 'lib/utils/api';
-import useSWR from 'swr';
 import { clientHentRettighetsdata } from 'lib/clientApi';
+import useSWR from 'swr';
 
 interface Props {
   sak: SaksInfo;
 }
 
 export const Rettighetsoversikt = (props: Props) => {
-  const { saksnummer, periode } = props.sak;
+  const { saksnummer } = props.sak;
   const url = `/api/sak/${saksnummer}/rettighet`;
   const { data } = useSWR(url, () => clientHentRettighetsdata(saksnummer));
 
@@ -21,13 +21,18 @@ export const Rettighetsoversikt = (props: Props) => {
   }
 
   const rettighetListe = data?.data;
+  const vedtakStartdato = rettighetListe?.map((rettighet) => rettighet.startDato).sort()[0];
+  const vedtakSluttdato = rettighetListe
+    ?.map((rettighet) => rettighet.periodeKvoter.at(-1)?.periode.tom)
+    .sort()
+    .at(-1);
 
   if (rettighetListe != null && rettighetListe.length > 0) {
     return (
       <VStack gap="6">
         <div className={styles.gjeldendeVedtak}>
           <Heading size="medium">Gjeldende vedtak</Heading>
-          <p className={styles.vedtaksperiode}>{formaterPeriode(periode.fom, periode.tom)}</p>
+          <p className={styles.vedtaksperiode}>{formaterPeriode(vedtakStartdato, vedtakSluttdato)}</p>
         </div>
         <HStack>
           {rettighetListe.map((rettighetdata: RettighetDto, index: number) => (

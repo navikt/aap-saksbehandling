@@ -17,34 +17,34 @@ type Props = {
 };
 
 export const HelseinstitusjonMedDataFetching = async ({ behandlingsreferanse, stegData }: Props) => {
-  const [grunnlagGammel, grunnlagNy, initialMellomlagretVurdering] = await Promise.all([
-    hentHelseInstitusjonsGrunnlagGammel(behandlingsreferanse),
-    hentHelseInstitusjonsGrunnlagNy(behandlingsreferanse),
+  const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
+    unleashService.isEnabled('PeriodiseringHelseinstitusjonOpphold')
+      ? hentHelseInstitusjonsGrunnlagNy(behandlingsreferanse)
+      : hentHelseInstitusjonsGrunnlagGammel(behandlingsreferanse),
     hentMellomlagring(behandlingsreferanse, Behovstype.AVKLAR_HELSEINSTITUSJON),
   ]);
-  if (isError(grunnlagGammel) || isError(grunnlagNy)) {
-    return <ApiException apiResponses={[grunnlagGammel]} />;
+  if (isError(grunnlag)) {
+    return <ApiException apiResponses={[grunnlag]} />;
   }
 
-  const vurderinger = unleashService.isEnabled('PeriodiseringHelseinstitusjonOpphold')
-    ? grunnlagNy.data.vurderinger
-    : grunnlagGammel.data.vurderinger;
+  const vurderinger = grunnlag.data.vurderinger;
+  const vedtatteVurderinger = grunnlag.data.vedtatteVurderinger;
 
-  if (!skalViseSteg(stegData, vurderinger.length > 0)) {
+  if (!skalViseSteg(stegData, vurderinger.length > 0 || vedtatteVurderinger.length > 0)) {
     return null;
   }
 
   return unleashService.isEnabled('PeriodiseringHelseinstitusjonOpphold') ? (
     <HelseinstitusjonNy
-      grunnlag={grunnlagNy.data}
-      readOnly={stegData.readOnly || !grunnlagNy.data.harTilgangTilÅSaksbehandle}
+      grunnlag={grunnlag.data}
+      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       behandlingVersjon={stegData.behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
     />
   ) : (
     <Helseinstitusjon
-      grunnlag={grunnlagGammel.data}
-      readOnly={stegData.readOnly || !grunnlagGammel.data.harTilgangTilÅSaksbehandle}
+      grunnlag={grunnlag.data}
+      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       behandlingVersjon={stegData.behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
     />
