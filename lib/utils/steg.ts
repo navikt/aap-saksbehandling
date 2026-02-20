@@ -49,6 +49,7 @@ export const getStegData = (
     behandlingFlytOgTilstand.visning.saksbehandlerReadOnly || (typeBehandling === 'Revurdering' && !harAvklaringsbehov);
 
   return {
+    stegType: stegType,
     behandlingVersjon: behandlingFlytOgTilstand.behandlingVersjon,
     typeBehandling: typeBehandling,
     avklaringsbehov: avklaringsbehov,
@@ -62,6 +63,7 @@ export const skalViseSteg = (stegData: StegData, harTidligereVurdering: boolean)
 };
 
 export interface StegData {
+  stegType: StegType;
   behandlingVersjon: number;
   typeBehandling: TypeBehandling;
   avklaringsbehov: Array<Avklaringsbehov>;

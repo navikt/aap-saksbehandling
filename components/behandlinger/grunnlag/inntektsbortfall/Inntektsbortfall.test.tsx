@@ -31,6 +31,7 @@ describe('InntektsbortfallMedDataFetching', () => {
     const result = await InntektsbortfallMedDataFetching({
       behandlingsReferanse: 'test-ref',
       stegData: {
+        stegType: 'MANGLENDE_LIGNING',
         readOnly: false,
         behandlingVersjon: 1,
         typeBehandling: 'Førstegangsbehandling',
@@ -61,6 +62,7 @@ describe('InntektsbortfallMedDataFetching', () => {
     const result = await InntektsbortfallMedDataFetching({
       behandlingsReferanse: 'test-ref',
       stegData: {
+        stegType: 'MANGLENDE_LIGNING',
         readOnly: false,
         behandlingVersjon: 1,
         typeBehandling: 'Førstegangsbehandling',
