@@ -10,9 +10,7 @@ import { Behovstype } from 'lib/utils/form';
 import { skalViseSteg, StegData } from 'lib/utils/steg';
 import { HelseinstitusjonNy } from 'components/behandlinger/institusjonsopphold/helseinstitusjonny/HelseinstitusjonNy';
 import { unleashService } from 'lib/services/unleash/unleashService';
-import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
-import { Alert } from '@navikt/ds-react';
-import styles from 'components/behandlinger/institusjonsopphold/helseinstitusjon/Helseinstitusjon.module.css';
+import { ManglendeOpphold } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/ManglendeOpphold';
 
 type Props = {
   behandlingsreferanse: string;
@@ -34,18 +32,7 @@ export const HelseinstitusjonMedDataFetching = async ({ behandlingsreferanse, st
   const vedtatteVurderinger = grunnlag.data.vedtatteVurderinger;
 
   if (!skalViseSteg(stegData, vurderinger.length > 0 || vedtatteVurderinger.length > 0)) {
-    return (
-      <VilkårsKort heading={'§ 11-25 Helseinstitusjon'} steg={'DU_ER_ET_ANNET_STED'}>
-        <Alert size={'small'} aria-label={'Institusjonsopphold'} variant={'info'} className={styles.infobox}>
-          <div className={styles.content}>
-            <span>
-              Brukeren har et institusjonsopphold, men brukeren kan enten ha barnetillegg, eller at oppholdet varer for
-              kort til at AAP kan reduseres.
-            </span>
-          </div>
-        </Alert>
-      </VilkårsKort>
-    );
+    return <ManglendeOpphold />;
   }
 
   return unleashService.isEnabled('PeriodiseringHelseinstitusjonOpphold') ? (
