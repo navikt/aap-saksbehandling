@@ -2,7 +2,7 @@
 
 import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
-import { BodyLong, VStack } from '@navikt/ds-react';
+import { BodyLong, BodyShort, VStack } from '@navikt/ds-react';
 import { FormEvent } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
@@ -83,6 +83,8 @@ export const SamordningArbeidsgiver = ({
     { readOnly: formReadOnly }
   );
 
+  const harFåttEkstrautbetalingFraArbeidsgiver = grunnlag.harFåttEkstrautbetalingFraArbeidsgiver ? 'Ja' : 'Nei';
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit(async (data) =>
       løsBehovOgGåTilNesteSteg(
@@ -145,17 +147,18 @@ export const SamordningArbeidsgiver = ({
             />
           )}
 
-          <VStack>
-            {/* TODO: Skal legges til senere
-            <BodyShort size={'small'} weight={'semibold'}>
-              Relevant informasjon fra søknad:
-            </BodyShort>
+          {grunnlag.harFåttEkstrautbetalingFraArbeidsgiver && (
+            <VStack>
+              <BodyShort size={'small'} weight={'semibold'}>
+                Relevant informasjon fra søknad:
+              </BodyShort>
 
-            <BodyShort textColor={'subtle'} size={'small'} weight={'semibold'}>
-              Har du fått eller skal du få ekstra utbetalinger fra arbeidsgiver? Ja
-            </BodyShort>
-            */}
-          </VStack>
+              <BodyShort textColor={'subtle'} size={'small'} weight={'semibold'}>
+                Har du fått eller skal du få ekstra utbetalinger fra arbeidsgiver?{' '}
+                {harFåttEkstrautbetalingFraArbeidsgiver}
+              </BodyShort>
+            </VStack>
+          )}
 
           <BodyLong size={'small'}>
             <Link href={'https://lovdata.no/nav/rundskriv/r11-00#ref/lov/1997-02-28-19/%C2%A711-24'}>
