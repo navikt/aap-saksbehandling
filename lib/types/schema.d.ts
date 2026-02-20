@@ -6998,7 +6998,6 @@ export interface components {
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.RefusjonkravL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.SamordningVentPaVirkningstidspunktL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.SattP\u00E5VentL\u00F8sning']
-      | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.SkrivBrevL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.SkrivForh\u00E5ndsvarselBruddAktivitetspliktBrevL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.SkrivForh\u00E5ndsvarselKlageFormkravBrevL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.SkrivVedtaksbrevL\u00F8sning']
@@ -8576,85 +8575,6 @@ export interface components {
         | '9002'
         | '9003'
         | '9004';
-    };
-    'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.SkrivBrevL\u00F8sning': {
-      /** @enum {string} */
-      behovstype:
-        | '4101'
-        | '4102'
-        | '4201'
-        | '5001'
-        | '5002'
-        | '5003'
-        | '5004'
-        | '5005'
-        | '5006'
-        | '5007'
-        | '5008'
-        | '5009'
-        | '5010'
-        | '5011'
-        | '5012'
-        | '5013'
-        | '5014'
-        | '5015'
-        | '5016'
-        | '5017'
-        | '5018'
-        | '5019'
-        | '5020'
-        | '5021'
-        | '5022'
-        | '5023'
-        | '5024'
-        | '5025'
-        | '5026'
-        | '5027'
-        | '5028'
-        | '5029'
-        | '5030'
-        | '5031'
-        | '5032'
-        | '5033'
-        | '5034'
-        | '5035'
-        | '5040'
-        | '5050'
-        | '5051'
-        | '5052'
-        | '5053'
-        | '5056'
-        | '5057'
-        | '5058'
-        | '5096'
-        | '5097'
-        | '5098'
-        | '5099'
-        | '5999'
-        | '6000'
-        | '6001'
-        | '6002'
-        | '6003'
-        | '6004'
-        | '6005'
-        | '6006'
-        | '6007'
-        | '6008'
-        | '6009'
-        | '6010'
-        | '7001'
-        | '8001'
-        | '8002'
-        | '8003'
-        | '9001'
-        | '9002'
-        | '9003'
-        | '9004';
-      /** Format: uuid */
-      brevbestillingReferanse: string;
-      /** @enum {string} */
-      handling: 'AVBRYT' | 'FERDIGSTILL';
-      mottakere: components['schemas']['no.nav.aap.brev.kontrakt.MottakerDto'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.SkrivForh\u00E5ndsvarselBruddAktivitetspliktBrevL\u00F8sning': {
       /** @enum {string} */
@@ -14597,8 +14517,68 @@ export interface components {
        */
       mottattKlageinstans: string;
     };
-    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AnnetRelevantDokument': components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AnnetRelevantDokumentV0'];
+    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AnnetRelevantDokument':
+      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AnnetRelevantDokumentV0']
+      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AnnetRelevantDokumentV1'];
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AnnetRelevantDokumentV0': {
+      begrunnelse?: string | null;
+      '\u00E5rsakerTilBehandling': (
+        | 'AKTIVITETSMELDING'
+        | 'AKTIVITETSPLIKT_11_7'
+        | 'AKTIVITETSPLIKT_11_9'
+        | 'AVVIST_LEGEERKLÆRING'
+        | 'BARNETILLEGG'
+        | 'BARNETILLEGG_SATS_REGULERING'
+        | 'DIALOGMELDING'
+        | 'DØDSFALL_BARN'
+        | 'DØDSFALL_BRUKER'
+        | 'EFFEKTUER_AKTIVITETSPLIKT'
+        | 'EFFEKTUER_AKTIVITETSPLIKT_11_9'
+        | 'ETABLERING_EGEN_VIRKSOMHET'
+        | 'FORUTGAENDE_MEDLEMSKAP'
+        | 'FRITAK_MELDEPLIKT'
+        | 'G_REGULERING'
+        | 'HELHETLIG_VURDERING'
+        | 'INSTITUSJONSOPPHOLD'
+        | 'KLAGE'
+        | 'KLAGE_TRUKKET'
+        | 'LEGEERKLÆRING'
+        | 'LOVVALG_OG_MEDLEMSKAP'
+        | 'MELDEKORT'
+        | 'MIGRER_RETTIGHETSPERIODE'
+        | 'MOTTATT_KABAL_HENDELSE'
+        | 'OPPFØLGINGSOPPGAVE'
+        | 'OPPHOLDSKRAV'
+        | 'OVERGANG_ARBEID'
+        | 'OVERGANG_UFORE'
+        | 'REFUSJONSKRAV'
+        | 'REVURDERING_AVBRUTT'
+        | 'REVURDER_BEREGNING'
+        | 'REVURDER_LOVVALG'
+        | 'REVURDER_MANUELL_INNTEKT'
+        | 'REVURDER_MEDLEMSKAP'
+        | 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN'
+        | 'REVURDER_SAMORDNING'
+        | 'REVURDER_SAMORDNING_ANDRE_FOLKETRYGDYTELSER'
+        | 'REVURDER_SAMORDNING_ANDRE_STATLIGE_YTELSER'
+        | 'REVURDER_SAMORDNING_ARBEIDSGIVER'
+        | 'REVURDER_SAMORDNING_TJENESTEPENSJON'
+        | 'REVURDER_SAMORDNING_UFØRE'
+        | 'REVURDER_STUDENT'
+        | 'REVURDER_SYKEPENGEERSTATNING'
+        | 'REVURDER_SYKESTIPEND'
+        | 'REVURDER_YRKESSKADE'
+        | 'SAMORDNING_OG_AVREGNING'
+        | 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND'
+        | 'SØKNAD'
+        | 'SØKNAD_TRUKKET'
+        | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
+        | 'UTVID_VEDTAKSLENGDE'
+        | 'VURDER_RETTIGHETSPERIODE'
+      )[];
+    };
+    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AnnetRelevantDokumentV1': {
+      begrunnelse: string;
       '\u00E5rsakerTilBehandling': (
         | 'AKTIVITETSMELDING'
         | 'AKTIVITETSPLIKT_11_7'
@@ -14986,11 +14966,74 @@ export interface components {
       /** @enum {string} */
       utfall: 'MEDHOLD_ETTER_FVL_35';
     };
-    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Omgj\u00F8ringKlageRevurdering': components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Omgj\u00F8ringKlageRevurderingV0'];
+    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Omgj\u00F8ringKlageRevurdering':
+      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Omgj\u00F8ringKlageRevurderingV0']
+      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Omgj\u00F8ringKlageRevurderingV1'];
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Omgj\u00F8ringKlageRevurderingV0': {
       beskrivelse: string;
       /** @enum {string} */
       kilde: 'KELVIN' | 'KLAGEINSTANS';
+      vurderingsbehov: (
+        | 'AKTIVITETSMELDING'
+        | 'AKTIVITETSPLIKT_11_7'
+        | 'AKTIVITETSPLIKT_11_9'
+        | 'AVVIST_LEGEERKLÆRING'
+        | 'BARNETILLEGG'
+        | 'BARNETILLEGG_SATS_REGULERING'
+        | 'DIALOGMELDING'
+        | 'DØDSFALL_BARN'
+        | 'DØDSFALL_BRUKER'
+        | 'EFFEKTUER_AKTIVITETSPLIKT'
+        | 'EFFEKTUER_AKTIVITETSPLIKT_11_9'
+        | 'ETABLERING_EGEN_VIRKSOMHET'
+        | 'FORUTGAENDE_MEDLEMSKAP'
+        | 'FRITAK_MELDEPLIKT'
+        | 'G_REGULERING'
+        | 'HELHETLIG_VURDERING'
+        | 'INSTITUSJONSOPPHOLD'
+        | 'KLAGE'
+        | 'KLAGE_TRUKKET'
+        | 'LEGEERKLÆRING'
+        | 'LOVVALG_OG_MEDLEMSKAP'
+        | 'MELDEKORT'
+        | 'MIGRER_RETTIGHETSPERIODE'
+        | 'MOTTATT_KABAL_HENDELSE'
+        | 'OPPFØLGINGSOPPGAVE'
+        | 'OPPHOLDSKRAV'
+        | 'OVERGANG_ARBEID'
+        | 'OVERGANG_UFORE'
+        | 'REFUSJONSKRAV'
+        | 'REVURDERING_AVBRUTT'
+        | 'REVURDER_BEREGNING'
+        | 'REVURDER_LOVVALG'
+        | 'REVURDER_MANUELL_INNTEKT'
+        | 'REVURDER_MEDLEMSKAP'
+        | 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN'
+        | 'REVURDER_SAMORDNING'
+        | 'REVURDER_SAMORDNING_ANDRE_FOLKETRYGDYTELSER'
+        | 'REVURDER_SAMORDNING_ANDRE_STATLIGE_YTELSER'
+        | 'REVURDER_SAMORDNING_ARBEIDSGIVER'
+        | 'REVURDER_SAMORDNING_TJENESTEPENSJON'
+        | 'REVURDER_SAMORDNING_UFØRE'
+        | 'REVURDER_STUDENT'
+        | 'REVURDER_SYKEPENGEERSTATNING'
+        | 'REVURDER_SYKESTIPEND'
+        | 'REVURDER_YRKESSKADE'
+        | 'SAMORDNING_OG_AVREGNING'
+        | 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND'
+        | 'SØKNAD'
+        | 'SØKNAD_TRUKKET'
+        | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
+        | 'UTVID_VEDTAKSLENGDE'
+        | 'VURDER_RETTIGHETSPERIODE'
+      )[];
+    };
+    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Omgj\u00F8ringKlageRevurderingV1': {
+      beskrivelse: string;
+      /** @enum {string} */
+      kilde: 'KELVIN' | 'KLAGEINSTANS';
+      /** Format: uuid */
+      kildeReferanse: string;
       vurderingsbehov: (
         | 'AKTIVITETSMELDING'
         | 'AKTIVITETSPLIKT_11_7'
@@ -15146,7 +15189,7 @@ export interface components {
       /** Format: uuid */
       behandlingId: string;
       /** @enum {string} */
-      behandlingsstatus: 'AVSLUTTET' | 'OPPRETTET' | 'TIL_BEHANDLING';
+      behandlingsstatus: 'AVSLUTTET' | 'OPPRETTET' | 'RETUR_FRA_BESLUTTER' | 'TIL_BEHANDLING' | 'TIL_BESLUTTER';
       fullstendigPeriode: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.TilbakekrevingPeriode'];
       /**
        * Format: date-time
