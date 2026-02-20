@@ -3,7 +3,11 @@
 import { Behovstype } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
-import { AvklarOppfolgingsoppgaveGrunnlagResponse, MellomlagretVurdering, Vurderingsbehov } from 'lib/types/types';
+import {
+  AvklarOppfolgingsoppgaveGrunnlagResponse,
+  MellomlagretVurdering,
+  VurderingsbehovIntern,
+} from 'lib/types/types';
 import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormEvent } from 'react';
@@ -25,7 +29,8 @@ interface Props {
 interface FormFields {
   årsak: string;
   konsekvens: Konsekvens;
-  hvaSkalRevurderes: Vurderingsbehov[];
+  // Når backend bruker kontrakt-enum i stedet, kan denne fjernes.
+  hvaSkalRevurderes: VurderingsbehovIntern[];
 }
 
 type Konsekvens = 'INGEN' | 'OPPRETT_VURDERINGSBEHOV';

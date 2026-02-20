@@ -26,8 +26,8 @@ export const Overlevering = ({ behandlingsVersjon, behandlingsreferanse, grunnla
     {
       skalOverleveres: {
         type: 'radio',
-        label: 'Skal dokumentet sendes til fagsystem?',
-        description: 'Hvis dokumentet sendes til fagsystemet kan det føre til en revurdering',
+        label: 'Bør saken vurderes på nytt på bakgrunn av dokumentet?',
+        description: 'Velger du "Ja" kan det føre til en ny vurdering/revurdering.',
         rules: { required: 'Du må svare på om dokumentet skal overleveres til fagsystem' },
         defaultValue: getJaNeiEllerUndefined(grunnlag.vurdering?.skalOverleveres),
         options: JaEllerNeiOptions,

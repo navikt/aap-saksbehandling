@@ -1,7 +1,7 @@
 import { SettPåVentÅrsaker, TypeBehandling, VilkårUtfall, ÅrsakTilOpprettelse } from 'lib/types/types';
 import { exhaustiveCheck } from 'lib/utils/typescript';
 import { OppgaveAvklaringsbehovKode, OppgaveBehandlingstype } from 'lib/types/oppgaveTypes';
-import { PostmottakSettPåVentÅrsaker } from 'lib/types/postmottakTypes';
+import { PostmottakSettPåVentÅrsaker, PostmottakTypeBehandling } from 'lib/types/postmottakTypes';
 
 const behovskodeMap = {
   // Behandlingsflyt
@@ -304,7 +304,7 @@ export function mapUtfallTilTekst(utfall: VilkårUtfall): string {
   }
 }
 
-export function mapTypeBehandlingTilTekst(typeBehandling: TypeBehandling) {
+export function mapTypeBehandlingTilTekst(typeBehandling: TypeBehandling | PostmottakTypeBehandling) {
   switch (typeBehandling) {
     case 'Førstegangsbehandling':
       return 'Førstegangsbehandling';
@@ -322,6 +322,8 @@ export function mapTypeBehandlingTilTekst(typeBehandling: TypeBehandling) {
       return 'Aktivitetsplikt § 11-7';
     case 'Aktivitetsplikt11_9':
       return 'Aktivitetsplikt § 11-9';
+    case 'DokumentHåndtering':
+      return 'Dokumenthåndtering';
     default:
       return typeBehandling;
   }

@@ -19,16 +19,48 @@ import {
 } from 'lib/utils/behandling';
 import { mapTypeBehandlingTilTekst } from 'lib/utils/oversettelser';
 import { useState } from 'react';
+/* import { usePostmottakAlleBehandlinger } from 'hooks/FetchHook'; */
+import useSWR from 'swr';
+import { postmottakAlleBehandlinger } from 'lib/postmottakClientApi';
+import { BeggeBehandling } from './types';
+
+function usePostmottakBehandlinger(ident: string) {
+  const { data: postmottakBehandlinger } = useSWR(
+    `alle-behandlinger-${ident}`,
+    () => postmottakAlleBehandlinger(ident),
+    {
+      revalidateOnFocus: true,
+      shouldRetryOnError: true,
+    }
+  );
+
+  return postmottakBehandlinger?.type === 'SUCCESS' ? postmottakBehandlinger.data.behandlinger : [];
+}
 
 const lokalDevToolsForBehandlingOgSak = isLocal();
 export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
   const router = useRouter();
 
   const [visMeldekortbehandlinger, setVisMeldekortbehandlinger] = useState(false);
+  const [visPostmottakBehandlinger, setVisPostmottakBehandlinger] = useState(true);
 
   const behandlinger = visMeldekortbehandlinger
     ? sak.behandlinger || []
     : sak.behandlinger.filter((b) => b.årsakTilOpprettelse !== 'MELDEKORT');
+
+  const pbehandlinger: BeggeBehandling[] = usePostmottakBehandlinger(sak.ident).map((b) => ({
+    kilde: 'POSTMOTTAK',
+    behandling: b,
+  }));
+
+  const behandlinger2: BeggeBehandling[] = behandlinger.map((b) => ({
+    kilde: 'BEHANDLINGSFLYT',
+    behandling: b,
+  }));
+
+  const alleBehandlinger: BeggeBehandling[] = behandlinger2.concat(
+    pbehandlinger.filter((b) => !erAvsluttet(b.behandling) || visPostmottakBehandlinger)
+  );
 
   const kanRevurdere = behandlinger.some(
     (behandling) => erFørstegangsbehandling(behandling) && behandling.status !== 'OPPRETTET' && !erTrukket(behandling)
@@ -36,8 +68,8 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
 
   const kanRegistrerebrudd = sak.behandlinger.some((behandling) => erAvsluttetFørstegangsbehandling(behandling));
 
-  const åpne = behandlinger.filter((b) => !erAvsluttet(b));
-  const avsluttede = behandlinger?.filter((b) => erAvsluttet(b));
+  const åpne = alleBehandlinger.filter((b) => !erAvsluttet(b.behandling));
+  const avsluttede = alleBehandlinger?.filter((b) => erAvsluttet(b.behandling));
 
   return (
     <VStack gap="8">
@@ -90,6 +122,12 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
         >
           Vis meldekortbehandlinger
         </Chips.Toggle>
+        <Chips.Toggle
+          selected={visPostmottakBehandlinger}
+          onClick={() => setVisPostmottakBehandlinger(!visPostmottakBehandlinger)}
+        >
+          Vis avsluttede postmottakbehandlinger
+        </Chips.Toggle>
       </Chips>
       <Table>
         <Table.Header>
@@ -105,17 +143,27 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
 
         <Table.Body>
           {åpne.concat(avsluttede).map((behandling) => (
-            <Table.Row key={behandling.referanse}>
-              <Table.DataCell>{formaterDatoMedTidspunktForFrontend(behandling.opprettet)}</Table.DataCell>
-              <Table.DataCell>{mapTypeBehandlingTilTekst(behandling.typeBehandling)}</Table.DataCell>
-              <Table.DataCell>{formatterÅrsakTilOpprettelseTilTekst(behandling.årsakTilOpprettelse)}</Table.DataCell>
-              <Table.DataCell>{capitalize(behandling.status)}</Table.DataCell>
+            <Table.Row key={behandling.behandling.referanse}>
+              <Table.DataCell>{formaterDatoMedTidspunktForFrontend(behandling.behandling.opprettet)}</Table.DataCell>
+              <Table.DataCell>{mapTypeBehandlingTilTekst(behandling.behandling.typeBehandling)}</Table.DataCell>
               <Table.DataCell>
-                {behandling.vurderingsbehov.map((behov) => formaterVurderingsbehov(behov)).join(', ')}
+                {behandling.kilde === 'BEHANDLINGSFLYT'
+                  ? formatterÅrsakTilOpprettelseTilTekst(behandling.behandling.årsakTilOpprettelse)
+                  : null}
+              </Table.DataCell>
+              <Table.DataCell>{capitalize(behandling.behandling.status)}</Table.DataCell>
+              <Table.DataCell>
+                {behandling.kilde === 'BEHANDLINGSFLYT'
+                  ? behandling.behandling.vurderingsbehov.map((behov) => formaterVurderingsbehov(behov)).join(', ')
+                  : null}
               </Table.DataCell>
 
               <Table.DataCell>
-                <BehandlingButtons key={behandling.referanse} sak={sak} behandling={behandling}></BehandlingButtons>
+                <BehandlingButtons
+                  key={behandling.behandling.referanse}
+                  sak={sak}
+                  behandling={behandling}
+                ></BehandlingButtons>
               </Table.DataCell>
             </Table.Row>
           ))}

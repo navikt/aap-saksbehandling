@@ -486,6 +486,13 @@ export type BehandlingInfo =
   components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO'];
 
 export type Vurderingsbehov =
+  components['schemas'][`no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Ny\u00C5rsakTilBehandling`]['årsakerTilBehandling'][number];
+
+/**
+ * @deprecated Unngå denne i frontend. Får ikke fjernet den helt ennå fordi noen av løserne forventer denne. Men alt av dokumenter
+ * til behandlingsflyt forventer `Vurderingsbehov`.
+ */
+export type VurderingsbehovIntern =
   components['schemas'][`no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO`]['vurderingsbehov'][number];
 
 export type VurderingsbehovMedPeriode =

@@ -3,7 +3,7 @@ import { clientLeggTilInstitusjonsopphold } from 'lib/clientApi';
 import { useConfigForm } from 'components/form/FormHook';
 import { addMonths } from 'date-fns';
 import { FormField } from 'components/form/FormField';
-import { useFetchV2 } from 'hooks/FetchHook';
+import { useFetch } from 'hooks/FetchHook';
 
 type Institusjon = 'FO' | 'HS';
 
@@ -14,7 +14,7 @@ interface Institusjonsopphold {
 }
 
 export const LeggTilMockInstitusjonsopphold = ({ saksnummer }: { saksnummer: string }) => {
-  const { method: leggTilInst, isLoading, error } = useFetchV2(clientLeggTilInstitusjonsopphold);
+  const { method: leggTilInst, isLoading, error } = useFetch(clientLeggTilInstitusjonsopphold);
 
   const { formFields, form } = useConfigForm<Institusjonsopphold>({
     institusjonstype: {
