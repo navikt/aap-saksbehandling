@@ -216,7 +216,7 @@ function mapMellomlagringToDraftFormFields(mellomlagring: FormFieldsToTrinnsVurd
       return {
         ...vurdering,
         godkjent:
-          // @ts-ignore migrering for true og false verdier i mellomlagring, endret til JaEllerNei
+          // @ts-expect-error migrering for true og false verdier i mellomlagring, endret til JaEllerNei
           vurdering.godkjent === 'true' || vurdering.godkjent === 'false'
             ? mapTrueFalseStringTilJaNei(vurdering.godkjent)
             : vurdering.godkjent,

@@ -136,12 +136,12 @@ export async function oppgaveTekstSøk(søketekst: string) {
       {
         avklaringsbehovKode: '',
         behandlingOpprettet: '',
-        //@ts-ignore Fiks type i backend
+        // @ts-expect-error Fiks type i backend
         behandlingstype: 'DOKUMENT_H\u00C5NDTERING',
         enhet: '',
         opprettetAv: '',
         opprettetTidspunkt: '',
-        //@ts-ignore Fiks type i backend
+        // @ts-expect-error Fiks type i backend
         status: 'OPPRETTET',
         versjon: 0,
       },

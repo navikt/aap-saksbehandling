@@ -22,7 +22,7 @@ export function postmottakEndreTemaClient(behandlingsreferanse: string) {
   return clientFetch<{ redirectUrl: string }>(`/postmottak/api/post/${behandlingsreferanse}/endre-tema`, 'POST', {});
 }
 
-export function postmottakHentDokumentClient(journalpostId: number, dokumentInfoId: string): Promise<Blob> {
+export async function postmottakHentDokumentClient(journalpostId: number, dokumentInfoId: string): Promise<Blob> {
   return fetch(`/postmottak/api/post/dokumenter/${journalpostId}/${dokumentInfoId}`, { method: 'GET' }).then((res) =>
     res.blob()
   );
