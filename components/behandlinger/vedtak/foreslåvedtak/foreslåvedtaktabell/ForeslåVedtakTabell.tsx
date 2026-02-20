@@ -6,6 +6,7 @@ import { CheckmarkCircleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 import styles from './ForeslåVedtakTabell.module.css';
 import { exhaustiveCheck } from 'lib/utils/typescript';
 import { useFeatureFlag } from 'context/UnleashContext';
+import { mapRettighetsTypeTilTekst } from 'lib/utils/rettighetstype';
 
 interface Props {
   grunnlag: ForeslåVedtakGrunnlag;
@@ -75,32 +76,6 @@ function mapUtfallTilTekst(utfall: string) {
       return 'AAP innvilget';
     case 'IKKE_OPPFYLT':
       return 'Ikke rett på AAP';
-  }
-}
-
-function mapRettighetsTypeTilTekst(
-  rettighetsType:
-    | 'BISTANDSBEHOV'
-    | 'SYKEPENGEERSTATNING'
-    | 'STUDENT'
-    | 'ARBEIDSSØKER'
-    | 'VURDERES_FOR_UFØRETRYGD'
-    | null
-    | undefined
-) {
-  switch (rettighetsType) {
-    case 'BISTANDSBEHOV':
-      return '§ 11-6';
-    case 'SYKEPENGEERSTATNING':
-      return '§ 11-13';
-    case 'STUDENT':
-      return '§ 11-14';
-    case 'ARBEIDSSØKER':
-      return '§ 11-17';
-    case 'VURDERES_FOR_UFØRETRYGD':
-      return '§ 11-18';
-    default:
-      return '-';
   }
 }
 
