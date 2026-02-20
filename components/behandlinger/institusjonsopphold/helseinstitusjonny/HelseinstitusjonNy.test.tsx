@@ -173,6 +173,86 @@ describe('Helseinstitusjonsvurdering', () => {
   });
 });
 
+describe('Helseinstitusjonsvurdering med flere opphold', () => {
+  const opphold1 = {
+    oppholdId: 'St. Mungos Hospital::2025-10-01',
+    institusjonstype: 'Helseinstitusjon',
+    oppholdstype: 'Heldøgnpasient',
+    status: 'AKTIV',
+    oppholdFra: '2025-10-01',
+    avsluttetDato: '2026-06-01',
+    kildeinstitusjon: 'St. Mungos Hospital',
+  };
+
+  const opphold2 = {
+    oppholdId: 'Hello Pello sykehus::2026-06-15',
+    institusjonstype: 'Helseinstitusjon',
+    oppholdstype: 'Heldøgnpasient',
+    status: 'AKTIV',
+    oppholdFra: '2026-06-15',
+    avsluttetDato: '2026-12-01',
+    kildeinstitusjon: 'Hello Pello sykehus',
+  };
+
+  const grunnlagMedToOpphold = {
+    harTilgangTilÅSaksbehandle: true,
+    opphold: [opphold1, opphold2],
+    vurderinger: [],
+    vedtatteVurderinger: [],
+  };
+
+  it('Skal vise en description av tidligste reduksjonsdato på neste opphold hvis det ikke er innenfor 3 måneder', async () => {
+    render(
+      <HelseinstitusjonNy
+        grunnlag={{ ...grunnlagMedToOpphold, opphold: [opphold1, { ...opphold2, oppholdFra: '2026-10-15' }] }}
+        behandlingVersjon={123}
+        readOnly={false}
+      />
+    );
+
+    await svarReduksjon(0);
+    await svarReduksjon(1);
+
+    const description = screen.getByText(
+      'Innleggelsesmåned: oktober 2026. Reduksjon kan tidligst starte: 1. februar 2027'
+    );
+
+    expect(description).toBeVisible();
+  });
+
+  it('Skal vise en description av tidligste reduksjonsdato på neste opphold hvis det er innenfor 3 måneder', async () => {
+    render(<HelseinstitusjonNy grunnlag={grunnlagMedToOpphold} behandlingVersjon={123} readOnly={false} />);
+
+    await svarReduksjon(0);
+    await svarReduksjon(1);
+
+    const description = screen.getByText('Innleggelsesmåned: juni 2026.');
+    expect(description).toBeVisible();
+  });
+
+  it('Skal vise en feilmleding hvis bruker skriver inn en dato som er tidligere enn tidligste reduksjonsdato på neste opphold hvis det er etter 3 måneder', async () => {
+    render(
+      <HelseinstitusjonNy
+        grunnlag={{ ...grunnlagMedToOpphold, opphold: [opphold1, { ...opphold2, oppholdFra: '2026-10-15' }] }}
+        behandlingVersjon={123}
+        readOnly={false}
+      />
+    );
+
+    await svarReduksjon(0);
+    await svarReduksjon(1);
+
+    const datoFelt = screen.getAllByRole('textbox', { name: 'Oppgi dato for reduksjon av AAP' })[1];
+    await user.type(datoFelt, '01.12.2026');
+
+    const bekreftKnapp = screen.getByRole('button', { name: 'Bekreft' });
+    await user.click(bekreftKnapp);
+
+    const feilmelding = screen.getByText('Tidligste dato for reduksjon er: 01.02.2027');
+    expect(feilmelding).toBeVisible();
+  });
+});
+
 describe('revurdering', () => {
   const grunnlagMedTidligereVurdering: HelseinstitusjonGrunnlag = {
     ...grunnlagUtenVurdering,
