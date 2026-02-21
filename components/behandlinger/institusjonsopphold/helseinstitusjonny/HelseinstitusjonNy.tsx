@@ -188,12 +188,16 @@ function mapVurderingToDraftFormFields(
   opphold: HelseinstitusjonGrunnlag['opphold']
 ): DraftFormFields {
   const harTidligerevurderinger = grunnlag.vedtatteVurderinger && grunnlag.vedtatteVurderinger.length > 0;
+  const oppholdMedUavklartPeriode = opphold.filter((o) =>
+    grunnlag.vurderinger.some(
+      (vurdering) => vurdering.oppholdId === o.oppholdId && o.status !== 'UAVKLART'
+    )
+  );
 
   return {
-    helseinstitusjonsvurderinger: opphold.map((opphold) => {
+    helseinstitusjonsvurderinger: oppholdMedUavklartPeriode.map((opphold) => {
       const vurderingerForOpphold = grunnlag.vurderinger.find(
-        (vurdering) => vurdering.oppholdId === opphold.oppholdId
-      )?.vurderinger;
+        (vurdering) => vurdering.oppholdId === opphold.oppholdId)?.vurderinger;
 
       const oppholdHentetFraGrunnlag = grunnlag.vurderinger.find((v) => v.oppholdId === opphold.oppholdId);
 
