@@ -13,7 +13,7 @@ import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 
-import { formaterDatoForBackend } from 'lib/utils/date';
+import { formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { Dato } from 'lib/types/Dato';
 import { VStack } from '@navikt/ds-react';
 import {
@@ -26,10 +26,12 @@ import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { RelevantInformasjonStudent } from 'components/behandlinger/sykdom/student/studentperiodisert/RelevantInformasjonStudent';
 import { StudentVurderingFelter } from 'components/behandlinger/sykdom/student/studentperiodisert/StudentVurderingFelter';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
-import { parse } from 'date-fns';
+import { parse, parseISO } from 'date-fns';
 import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
 import { mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
 import { VurderingStatus } from 'components/periodisering/VurderingStatusTag';
+import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
+import { VedtattStudentVurderinger } from 'components/behandlinger/sykdom/student/studentperiodisert/VedtattStudentVurderinger';
 
 interface Props {
   behandlingVersjon: number;
@@ -42,7 +44,7 @@ export interface StudentFormFields {
   vurderinger: StudentVurdering[];
 }
 
-interface StudentVurdering {
+export interface StudentVurdering {
   gjelderFra: string;
   begrunnelse: string;
   harAvbruttStudie?: string;
@@ -87,7 +89,7 @@ export const StudentVurderingPeriodisert = ({
 
   const form = useForm<StudentFormFields>({ defaultValues, shouldUnregister: true });
 
-  const { fields, remove, append } = useFieldArray({ control: form.control, name: 'vurderinger' });
+  const { fields: nyeVurderinger, remove, append } = useFieldArray({ control: form.control, name: 'vurderinger' });
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
@@ -141,6 +143,8 @@ export const StudentVurderingPeriodisert = ({
   const sistevedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger;
   const finnesSisteVedtatteVurderinger = sistevedtatteVurderinger && sistevedtatteVurderinger?.length > 0;
 
+  const foersteNyePeriode = nyeVurderinger.length > 0 ? form.watch('vurderinger.0.gjelderFra') : null;
+
   return (
     <VilkårskortPeriodisert
       onDeleteMellomlagringClick={() => slettMellomlagring()}
@@ -162,14 +166,29 @@ export const StudentVurderingPeriodisert = ({
       <VStack gap={'4'}>
         <RelevantInformasjonStudent opplysninger={grunnlag?.oppgittStudent} />
 
+        {sistevedtatteVurderinger?.map((vurdering, index) => {
+          return (
+            <TidligereVurderingExpandableCard
+              key={index}
+              fom={new Dato(vurdering.fom).dato}
+              tom={vurdering.tom ? parseISO(vurdering.tom) : undefined}
+              foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+              vurderingStatus={hentVurderingStatusForVedtattVurdering(vurdering)}
+              vurdertAv={vurdering.vurdertAv}
+            >
+              <VedtattStudentVurderinger vurdering={vurdering} />
+            </TidligereVurderingExpandableCard>
+          );
+        })}
+
         <FormProvider {...form}>
-          {fields.map((vurdering, index) => {
+          {nyeVurderinger.map((vurdering, index) => {
             return (
               <NyVurderingExpandableCard
                 key={vurdering.id}
                 fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.gjelderFra`))}
                 nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.gjelderFra`))}
-                isLast={index === fields.length - 1}
+                isLast={index === nyeVurderinger.length - 1}
                 vurdertAv={vurdering.vurdertAv}
                 finnesFeil={errorList.length > 0}
                 readonly={formReadOnly}
@@ -242,6 +261,24 @@ function hentVurderingStatus(
   }
 
   if (values.harAvbruttStudie === JaEllerNei.Nei) {
+    return VurderingStatus.IkkeOppfylt;
+  }
+}
+
+function hentVurderingStatusForVedtattVurdering(
+  values: StudentGrunnlag['nyeVurderinger'][0]
+): VurderingStatus.Oppfylt | VurderingStatus.IkkeOppfylt | undefined {
+  if (
+    values.harAvbruttStudie &&
+    values.godkjentStudieAvLånekassen &&
+    values.avbruttPgaSykdomEllerSkade &&
+    values.harBehovForBehandling &&
+    values.avbruddMerEnn6Måneder
+  ) {
+    return VurderingStatus.Oppfylt;
+  }
+
+  if (!values.harAvbruttStudie) {
     return VurderingStatus.IkkeOppfylt;
   }
 }
