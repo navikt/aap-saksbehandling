@@ -10,7 +10,6 @@ import {
   lagReduksjonBeskrivelseNyttOpphold,
   lagReduksjonsBeskrivelse,
   validerDatoErInnenforOpphold,
-  validerDatoForStartAvReduksjonVedNyttOpphold,
   validerDatoForStoppAvReduksjon,
   validerErIKronologiskRekkeFølge,
 } from 'lib/utils/institusjonopphold';
@@ -53,28 +52,16 @@ export const HelseinstitusjonsvurderingNy = ({
 
   const skalViseDatoFeltForStoppAvReduksjon = !erReduksjon && (finnesTidligereVurderinger || !erFørsteVurdering);
 
-  const forrigeOppholdSisteVurdering = form
-    .getValues(`helseinstitusjonsvurderinger.${oppholdIndex - 1}`)
-    ?.vurderinger.at(-1);
-
-  const forrigeOppholdHaddeReduksjonVedOppholdetsslutt = forrigeOppholdSisteVurdering
-    ? erReduksjonUtIFraFormFields(forrigeOppholdSisteVurdering)
-    : undefined;
-
   const forrigeOppholdTom =
     oppholdIndex > 0 ? form.getValues(`helseinstitusjonsvurderinger.${oppholdIndex - 1}.periode.tom`) : undefined;
 
   const reduksjonsBeskrivelse = useMemo(() => {
     if (forrigeOppholdTom && erNyttOppholdInnenfor3MaanederEtterSistOpphold(forrigeOppholdTom, opphold.oppholdFra)) {
-      return lagReduksjonBeskrivelseNyttOpphold(
-        forrigeOppholdTom,
-        opphold.oppholdFra,
-        forrigeOppholdHaddeReduksjonVedOppholdetsslutt
-      );
+      return lagReduksjonBeskrivelseNyttOpphold(opphold.oppholdFra);
     } else {
       return lagReduksjonsBeskrivelse(opphold.oppholdFra);
     }
-  }, [opphold.oppholdFra, forrigeOppholdTom, forrigeOppholdHaddeReduksjonVedOppholdetsslutt]);
+  }, [opphold.oppholdFra, forrigeOppholdTom]);
 
   return (
     <VStack gap={'4'}>
@@ -146,16 +133,9 @@ export const HelseinstitusjonsvurderingNy = ({
                   validerErIKronologiskRekkeFølge(value as string, forrigeVurdering?.periode.fom),
                 validerReduksjonsdato: (value) => {
                   if (
-                    forrigeOppholdTom &&
-                    erNyttOppholdInnenfor3MaanederEtterSistOpphold(forrigeOppholdTom, opphold.oppholdFra)
+                    !forrigeOppholdTom ||
+                    !erNyttOppholdInnenfor3MaanederEtterSistOpphold(forrigeOppholdTom, opphold.oppholdFra)
                   ) {
-                    return validerDatoForStartAvReduksjonVedNyttOpphold(
-                      value as string,
-                      opphold.oppholdFra,
-                      forrigeOppholdTom,
-                      forrigeOppholdHaddeReduksjonVedOppholdetsslutt
-                    );
-                  } else {
                     return validerDatoForStoppAvReduksjon(value as string, opphold.oppholdFra);
                   }
                 },
