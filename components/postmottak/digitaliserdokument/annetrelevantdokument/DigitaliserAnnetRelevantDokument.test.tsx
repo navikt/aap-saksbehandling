@@ -19,28 +19,38 @@ describe('DigitaliserAnnetDokument', () => {
   it('at det går an å velge flere alternativer', async () => {
     const submit = vi.fn(() => {});
 
-    render(<DigitaliserAnnetRelevantDokument submit={submit} grunnlag={grunnlag} readOnly={false} isLoading={false} />);
+    render(
+      <DigitaliserAnnetRelevantDokument
+        submit={submit}
+        grunnlag={grunnlag}
+        readOnly={false}
+        isLoading={false}
+        isRevurderingStarttidspunktEnabled={true}
+      />
+    );
 
     await user.click(screen.getByRole('combobox'));
     await user.click(screen.getByText(/Yrkesskade/));
-    await user.click(screen.getByText(/Samordning og avregning/));
+    await user.click(screen.getByText(/11-28 Folketrygdytelser/));
 
     const list = screen.getByRole('list');
     expect(within(list).getByText(/Yrkesskade/i)).toBeVisible();
-    expect(within(list).getByText(/Samordning og avregning/i)).toBeVisible();
+    expect(within(list).getByText(/11-28 Folketrygdytelser/i)).toBeVisible();
+
+    const nesteKnapp = screen.getByRole('button', { name: /Neste/ });
 
     // Submitter før begrunnelse
-    await user.click(screen.getByRole('button', { name: /Send inn/ }));
+    await user.click(nesteKnapp);
     expect(submit).not.toHaveBeenCalled();
 
     await user.type(screen.getByLabelText('Begrunnelse'), 'begrunnelse');
 
-    await user.click(screen.getByRole('button', { name: /Send inn/ }));
+    await user.click(nesteKnapp);
     expect(submit).toHaveBeenCalled();
 
     expect(submit).toHaveBeenCalledExactlyOnceWith(
       'ANNET_RELEVANT_DOKUMENT',
-      '{"meldingType":"AnnetRelevantDokumentV1","årsakerTilBehandling":["REVURDER_YRKESSKADE","SAMORDNING_OG_AVREGNING"],"begrunnelse":"begrunnelse"}',
+      '{"meldingType":"AnnetRelevantDokumentV1","årsakerTilBehandling":["REVURDER_YRKESSKADE","REVURDER_SAMORDNING_ANDRE_FOLKETRYGDYTELSER"],"begrunnelse":"begrunnelse"}',
       null
     );
   });

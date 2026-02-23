@@ -6,9 +6,10 @@ import { Button, VStack } from '@navikt/ds-react';
 import { AnnetRelevantDokument, DokumentÅrsakTilBehandling } from 'lib/types/types';
 import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
 import type { Submittable } from 'components/postmottak/digitaliserdokument/DigitaliserDokument';
-import { FormField, ValuePair } from 'components/form/FormField';
+import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormEvent } from 'react';
+import { vurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
 
 export interface AnnetRelevantDokumentFormFields {
   årsaker: string[];
@@ -16,6 +17,7 @@ export interface AnnetRelevantDokumentFormFields {
 }
 
 interface Props extends Submittable {
+  isRevurderingStarttidspunktEnabled: boolean;
   grunnlag: DigitaliseringsGrunnlag;
   readOnly: boolean;
   isLoading: boolean;
@@ -30,27 +32,20 @@ function mapTilAnnetRelevantDokumentKontrakt(data: AnnetRelevantDokumentFormFiel
   return JSON.stringify(dokument);
 }
 
-// TODO: Avklar hvilke årsaker som saksbehandler skal kunne sette
-const årsakOptions: ValuePair<DokumentÅrsakTilBehandling>[] = [
-  { label: 'Yrkesskade', value: 'REVURDER_YRKESSKADE' },
-  { label: 'Beregningstidspunkt', value: 'REVURDER_BEREGNING' },
-  { value: 'LOVVALG_OG_MEDLEMSKAP', label: 'Lovvalg og medlemskap' },
-  { value: 'FORUTGAENDE_MEDLEMSKAP', label: 'Forutgående medlemskap' },
-  { value: 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND', label: 'Sykdom, arbeidsevne og behov for bistand' },
-  { value: 'BARNETILLEGG', label: 'Barnetillegg' },
-  { value: 'INSTITUSJONSOPPHOLD', label: 'Institusjonsopphold' },
-  { value: 'SAMORDNING_OG_AVREGNING', label: 'Samordning og avregning' },
-  { value: 'REVURDER_MANUELL_INNTEKT', label: 'Manuell inntekt' },
-  { value: 'REVURDER_STUDENT', label: 'Student' },
-  // { value: '', label: 'Journalfør på saken uten å starte revurdering' }, venter på enum i behandlingsflyt
-];
-
-export const DigitaliserAnnetRelevantDokument = ({ grunnlag, readOnly, submit, isLoading }: Props) => {
+export const DigitaliserAnnetRelevantDokument = ({
+  grunnlag,
+  readOnly,
+  submit,
+  isLoading,
+  isRevurderingStarttidspunktEnabled,
+}: Props) => {
   const annetRelevantDokumentGrunnlag: AnnetRelevantDokument = grunnlag.vurdering?.strukturertDokumentJson
     ? JSON.parse(grunnlag.vurdering?.strukturertDokumentJson)
     : {};
+
+  const vurderingsbehov = vurderingsbehovOptions(isRevurderingStarttidspunktEnabled);
   const defaultÅrsakOptions: string[] = (annetRelevantDokumentGrunnlag.årsakerTilBehandling || [])
-    .map((årsakFraGrunnlag) => årsakOptions.find((årsak) => årsak.value === årsakFraGrunnlag))
+    .map((årsakFraGrunnlag) => vurderingsbehov.find((årsak) => årsak.value === årsakFraGrunnlag))
     .filter((e) => e !== undefined)
     .map((e) => e.value);
 
@@ -59,7 +54,9 @@ export const DigitaliserAnnetRelevantDokument = ({ grunnlag, readOnly, submit, i
       årsaker: {
         type: 'combobox_multiple',
         label: 'Hvilke opplysninger inneholder dokumentet?',
-        options: [{ label: '', value: '' }, ...årsakOptions],
+        description:
+          'Valget du tar her bestemmer hva som eventuelt skal vurderes på nytt. Om det skal opprettes en ny vurdering/revurdering velger du i neste steg.',
+        options: vurderingsbehov,
         defaultValue: defaultÅrsakOptions,
         rules: { required: 'Du må velge minst en årsak' },
       },
@@ -78,6 +75,7 @@ export const DigitaliserAnnetRelevantDokument = ({ grunnlag, readOnly, submit, i
       event
     );
   };
+
   return (
     <VilkårsKort heading={'Annet relevant dokument'}>
       <form onSubmit={handleSubmit}>
@@ -86,7 +84,7 @@ export const DigitaliserAnnetRelevantDokument = ({ grunnlag, readOnly, submit, i
           <FormField form={form} formField={formFields.begrunnelse} />
           {!readOnly && (
             <Button loading={isLoading} className={'fit-content'}>
-              Send inn
+              Neste
             </Button>
           )}
         </VStack>
