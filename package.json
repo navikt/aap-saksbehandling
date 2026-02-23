@@ -48,7 +48,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "3.3.3",
-    "@eslint/js": "9.39.2",
+    "@eslint/js": "9.39.3",
     "@navikt/aap-felles-prettier": "5.6.0",
     "@navikt/aap-oppgave-typescript-types": "0.0.616",
     "@navikt/aap-postmottak-backend-typescript-types": "0.0.613",
