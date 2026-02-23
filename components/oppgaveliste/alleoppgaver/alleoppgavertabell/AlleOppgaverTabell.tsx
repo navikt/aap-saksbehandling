@@ -42,7 +42,7 @@ const mapTilSorterbarOppgave = (oppgave: Oppgave): OppgaveTilSortering => ({
 
 export const AlleOppgaverTabell = ({ oppgaver, revalidateFunction, setValgteRader, valgteRader }: Props) => {
   const oppgaverTilSortering: OppgaveTilSortering[] = oppgaver.map(mapTilSorterbarOppgave);
-  const { sort, sortertListe, settSorteringskriterier } = useSortertListe(oppgaverTilSortering);
+  const { sort, sortertListe, settSorteringskriterier } = useSortertListe(oppgaverTilSortering, 'alle-oppgaver');
   const [visSynkroniserEnhetModal, setVisSynkroniserEnhetModal] = useState<boolean>(false);
 
   const toggleValgtRad = (oppgaveId: number) => {

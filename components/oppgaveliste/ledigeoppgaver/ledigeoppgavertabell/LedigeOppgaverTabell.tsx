@@ -27,7 +27,7 @@ interface Props {
 
 export const LedigeOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) => {
   const [feilmelding, setFeilmelding] = useState<string>();
-  const { sort, sortertListe, settSorteringskriterier } = useSortertListe(oppgaver);
+  const { sort, sortertListe, settSorteringskriterier } = useSortertListe(oppgaver, 'ledige-oppgaver');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [visSynkroniserEnhetModal, setVisSynkroniserEnhetModal] = useState<boolean>(false);
   const [saksbehandlerNavn, setSaksbehandlerNavn] = useState<string>();
