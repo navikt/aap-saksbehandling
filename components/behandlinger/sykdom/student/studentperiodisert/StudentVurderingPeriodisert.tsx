@@ -28,6 +28,8 @@ import { StudentVurderingFelter } from 'components/behandlinger/sykdom/student/s
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { parse } from 'date-fns';
 import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
+import { mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
+import { VurderingStatus } from 'components/periodisering/VurderingStatusTag';
 
 interface Props {
   behandlingVersjon: number;
@@ -135,6 +137,10 @@ export const StudentVurderingPeriodisert = ({
     })(event);
   };
 
+  const errorList = mapPeriodiserteVurderingerErrorList<StudentFormFields>(form.formState.errors);
+  const sistevedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger;
+  const finnesSisteVedtatteVurderinger = sistevedtatteVurderinger && sistevedtatteVurderinger?.length > 0;
+
   return (
     <VilkårskortPeriodisert
       onDeleteMellomlagringClick={() => slettMellomlagring()}
@@ -143,7 +149,7 @@ export const StudentVurderingPeriodisert = ({
       visningModus={visningModus}
       visningActions={visningActions}
       onLeggTilVurdering={() => append(emptyStudentVurdering())}
-      errorList={[]} // TODO Denne mangler
+      errorList={errorList}
       heading={'§ 11-14 Student'}
       steg={'AVKLAR_STUDENT'}
       onSubmit={handleSubmit}
@@ -157,26 +163,24 @@ export const StudentVurderingPeriodisert = ({
         <RelevantInformasjonStudent opplysninger={grunnlag?.oppgittStudent} />
 
         <FormProvider {...form}>
-          {fields.map((field, index) => {
+          {fields.map((vurdering, index) => {
             return (
               <NyVurderingExpandableCard
-                key={field.id}
+                key={vurdering.id}
                 fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.gjelderFra`))}
                 nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.gjelderFra`))}
                 isLast={index === fields.length - 1}
-                vurdertAv={field.vurdertAv}
-                finnesFeil={false} // TODO Fiks denne
+                vurdertAv={vurdering.vurdertAv}
+                finnesFeil={errorList.length > 0}
                 readonly={formReadOnly}
                 onSlettVurdering={() => remove(index)}
                 index={index}
-                harTidligereVurderinger={
-                  grunnlag?.sisteVedtatteVurderinger && grunnlag.sisteVedtatteVurderinger.length > 0
-                }
+                harTidligereVurderinger={finnesSisteVedtatteVurderinger}
                 accordionsSignal={accordionsSignal}
-                initiellEkspandert={skalVæreInitiellEkspandert(field.erNyVurdering, erAktivUtenAvbryt)}
-                vurderingStatus={undefined} // TODO Denne må fikses
-                kvalitetssikretAv={field.kvalitetssikretAv}
-                besluttetAv={field.besluttetAv}
+                initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
+                vurderingStatus={hentVurderingStatus(vurdering)}
+                kvalitetssikretAv={vurdering.kvalitetssikretAv}
+                besluttetAv={vurdering.besluttetAv}
               >
                 <StudentVurderingFelter index={index} readOnly={readOnly} />
               </NyVurderingExpandableCard>
@@ -222,4 +226,22 @@ function emptyStudentVurdering(): StudentVurdering {
     harBehovForBehandling: '',
     erNyVurdering: true,
   };
+}
+
+function hentVurderingStatus(
+  values: StudentVurdering
+): VurderingStatus.Oppfylt | VurderingStatus.IkkeOppfylt | undefined {
+  if (
+    values.harAvbruttStudie &&
+    values.godkjentStudieAvLånekassen == JaEllerNei.Ja &&
+    values.avbruttPgaSykdomEllerSkade == JaEllerNei.Ja &&
+    values.harBehovForBehandling == JaEllerNei.Ja &&
+    values.avbruddMerEnn6Måneder == JaEllerNei.Ja
+  ) {
+    return VurderingStatus.Oppfylt;
+  }
+
+  if (values.harAvbruttStudie === JaEllerNei.Nei) {
+    return VurderingStatus.IkkeOppfylt;
+  }
 }
