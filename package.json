@@ -39,7 +39,7 @@
     "plotly.js": "3.3.1",
     "react": "19.2.3",
     "react-dom": "19.2.3",
-    "react-hook-form": "7.71.1",
+    "react-hook-form": "7.71.2",
     "react-plotly.js": "2.6.0",
     "react-select": "5.10.2",
     "server-only": "0.0.1",
@@ -48,7 +48,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "3.3.3",
-    "@eslint/js": "9.39.2",
+    "@eslint/js": "9.39.3",
     "@navikt/aap-felles-prettier": "5.6.0",
     "@navikt/aap-oppgave-typescript-types": "0.0.616",
     "@navikt/aap-postmottak-backend-typescript-types": "0.0.613",
