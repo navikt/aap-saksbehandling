@@ -5,10 +5,16 @@ import { Button, HStack } from '@navikt/ds-react';
 import { isLocal } from 'lib/utils/environment';
 import { BestillBrevTestKnapp } from 'components/behandlinger/brev/BestillBrevTestKnapp';
 import { ExternalLinkIcon, EyeIcon } from '@navikt/aksel-icons';
-import { BeggeBehandling } from './types';
+import { BehandlingsflytEllerPostmottakBehandling } from './types';
 
 const lokalBrevBestillingKnapp = isLocal();
-export const BehandlingButtons = ({ sak, behandling }: { sak: SaksInfo; behandling: BeggeBehandling }) => {
+export const BehandlingButtons = ({
+  sak,
+  behandling,
+}: {
+  sak: SaksInfo;
+  behandling: BehandlingsflytEllerPostmottakBehandling;
+}) => {
   const router = useRouter();
   const [isPendingBehandling, startTransitionBehandling] = useTransition();
   const behandlingErÅpen = behandling.behandling.status === 'OPPRETTET' || behandling.behandling.status === 'UTREDES';

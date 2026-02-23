@@ -18,7 +18,7 @@ import {
 } from 'lib/utils/behandling';
 import { mapTypeBehandlingTilTekst } from 'lib/utils/oversettelser';
 import { useState } from 'react';
-import { BeggeBehandling } from './types';
+import { BehandlingsflytEllerPostmottakBehandling } from './types';
 import { usePostmottakBehandlinger } from 'hooks/postmottak/PostmottakBehandlingerHook';
 
 const lokalDevToolsForBehandlingOgSak = isLocal();
@@ -32,14 +32,14 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
     ? sak.behandlinger || []
     : sak.behandlinger.filter((b) => b.årsakTilOpprettelse !== 'MELDEKORT');
 
-  const postmottakBehandlinger: BeggeBehandling[] = usePostmottakBehandlinger(sak.ident);
+  const postmottakBehandlinger: BehandlingsflytEllerPostmottakBehandling[] = usePostmottakBehandlinger(sak.ident);
 
-  const behandlingerMapped: BeggeBehandling[] = behandlinger.map((behandling) => ({
+  const behandlingerMapped: BehandlingsflytEllerPostmottakBehandling[] = behandlinger.map((behandling) => ({
     kilde: 'BEHANDLINGSFLYT',
     behandling: behandling,
   }));
 
-  const alleBehandlinger: BeggeBehandling[] = behandlingerMapped.concat(
+  const alleBehandlinger: BehandlingsflytEllerPostmottakBehandling[] = behandlingerMapped.concat(
     postmottakBehandlinger.filter((b) => !erAvsluttet(b.behandling) || visPostmottakBehandlinger)
   );
 

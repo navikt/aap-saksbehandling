@@ -11,4 +11,4 @@ export type PostmottakBehandling = {
   behandling: PostmottakBehandlingInfo;
 };
 
-export type BeggeBehandling = BehandlingsflytBehandling | PostmottakBehandling;
+export type BehandlingsflytEllerPostmottakBehandling = BehandlingsflytBehandling | PostmottakBehandling;
