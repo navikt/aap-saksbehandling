@@ -18,24 +18,8 @@ import {
 } from 'lib/utils/behandling';
 import { mapTypeBehandlingTilTekst } from 'lib/utils/oversettelser';
 import { useState } from 'react';
-import useSWR from 'swr';
-import { postmottakAlleBehandlinger } from 'lib/postmottakClientApi';
 import { BeggeBehandling } from './types';
-
-function usePostmottakBehandlinger(ident: string): BeggeBehandling[] {
-  const { data: postmottakBehandlinger } = useSWR(
-    `alle-behandlinger-${ident}`,
-    () => postmottakAlleBehandlinger(ident),
-    {
-      revalidateOnFocus: true,
-      shouldRetryOnError: true,
-    }
-  );
-
-  return postmottakBehandlinger?.type === 'SUCCESS'
-    ? postmottakBehandlinger.data.behandlinger.map((behandling) => ({ kilde: 'POSTMOTTAK', behandling: behandling }))
-    : [];
-}
+import { usePostmottakBehandlinger } from 'hooks/postmottak/PostmottakBehandlingerHook';
 
 const lokalDevToolsForBehandlingOgSak = isLocal();
 export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
