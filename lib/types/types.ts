@@ -432,10 +432,9 @@ export type KlageV0 =
     meldingType: typeof KlageV0 /* Hadde vært fint om dette kom med i kontrakten ... */;
   };
 
-export const AnnetRelevantDokumentV0 = 'AnnetRelevantDokumentV0';
-export type AnnetRelevantDokumentV0 =
-  components['schemas'][`no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.${typeof AnnetRelevantDokumentV0}`] & {
-    meldingType: typeof AnnetRelevantDokumentV0 /* Hadde vært fint om dette kom med i kontrakten ... */;
+export type AnnetRelevantDokument =
+  components['schemas'][`no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AnnetRelevantDokument`] & {
+    meldingType: 'AnnetRelevantDokumentV1' /* Hadde vært fint om dette kom med i kontrakten ... */;
   };
 
 export const ManuellRevurderingV0 = 'ManuellRevurderingV0';
@@ -481,7 +480,7 @@ export type Aktivitetsplikt11_7Vurdering =
 export type OpprettAktivitetspliktBehandlingDto =
   components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.OpprettAktivitetspliktBehandlingDto'];
 
-export type DokumentÅrsakTilBehandling = AnnetRelevantDokumentV0['årsakerTilBehandling'][number];
+export type DokumentÅrsakTilBehandling = AnnetRelevantDokument['årsakerTilBehandling'][number];
 
 export type BehandlingInfo =
   components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO'];

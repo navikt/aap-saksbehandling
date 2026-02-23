@@ -56,7 +56,6 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
             behovstype: Behovstype.AVKLAR_TEMA,
             skalTilAap: data.erTemaAAP === JaEllerNei.Ja,
           },
-          // @ts-ignore
           referanse: behandlingsreferanse,
         });
       } else {
@@ -68,7 +67,6 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
             behovstype: Behovstype.AVKLAR_TEMA,
             skalTilAap: data.erTemaAAP === JaEllerNei.Ja,
           },
-          // @ts-ignore
           referanse: behandlingsreferanse,
         }).then(() =>
           postmottakEndreTema(behandlingsreferanse).then((res) => {

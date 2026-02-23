@@ -962,6 +962,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@eslint/js@npm:9.39.3":
+  version: 9.39.3
+  resolution: "@eslint/js@npm:9.39.3"
+  checksum: 10c0/df1c70d6681c8daf4a3c86dfac159fcd98a73c4620c4fbe2be6caab1f30a34c7de0ad88ab0e81162376d2cde1a2eed1c32eff5f917ca369870930a51f8e818f1
+  languageName: node
+  linkType: hard
+
 "@eslint/object-schema@npm:^2.1.7":
   version: 2.1.7
   resolution: "@eslint/object-schema@npm:2.1.7"
@@ -1522,24 +1529,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aap-oppgave-typescript-types@npm:0.0.612":
-  version: 0.0.612
-  resolution: "@navikt/aap-oppgave-typescript-types@npm:0.0.612::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-oppgave-typescript-types%2F0.0.612%2Fb9bb2e29ca6b89679c9d584c90a5f972420e8b70"
-  checksum: 10c0/97bc83871e763cbefc9f2214c46cc59d6d09d4b3a1b17d50f0d82bd174cd5df1b1e3dcc30a6cb72704dc5f1cd1723e2fa6529bdf65c5ffeaf636db0201da68f1
+"@navikt/aap-oppgave-typescript-types@npm:0.0.616":
+  version: 0.0.616
+  resolution: "@navikt/aap-oppgave-typescript-types@npm:0.0.616::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-oppgave-typescript-types%2F0.0.616%2F30b7276be2e28514a925068fa7aca46210502d29"
+  checksum: 10c0/3df299b40a77a073cb2e3aea13d264446c1f3c1be22364558fc2349bc0a9dbbdcf42954837c17498f88995575f2bb7b3fa59852ed11f688ddd4a0769a35c9d30
   languageName: node
   linkType: hard
 
-"@navikt/aap-postmottak-backend-typescript-types@npm:0.0.606":
-  version: 0.0.606
-  resolution: "@navikt/aap-postmottak-backend-typescript-types@npm:0.0.606::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-postmottak-backend-typescript-types%2F0.0.606%2F1baee3528b2de5e0b870ff1279033c5547d26bbb"
-  checksum: 10c0/5afaacac4c96a182d626771e073ae9800593adb4d0f7acb1760293e630b4a6ba89fc98119a3ba82ea5f328b06b2596c794e9c7a43230448d79ea1a4360e041a1
+"@navikt/aap-postmottak-backend-typescript-types@npm:0.0.613":
+  version: 0.0.613
+  resolution: "@navikt/aap-postmottak-backend-typescript-types@npm:0.0.613::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-postmottak-backend-typescript-types%2F0.0.613%2Ffd7f50bf6ce025c47a23e3b8228be7dfec02e052"
+  checksum: 10c0/8d84bdabb866f36868bf46a9b09cba6c0b5be2facf24f61db1a753546bdc8fc191dadcacbcd17b67e8ef3d55782d2e12de09b336c728195526c3641b9667d517
   languageName: node
   linkType: hard
 
-"@navikt/aap-statistikk-typescript-types@npm:0.1.659":
-  version: 0.1.659
-  resolution: "@navikt/aap-statistikk-typescript-types@npm:0.1.659::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-statistikk-typescript-types%2F0.1.659%2Ffa5611e4eb4d086e245e46fbf3edade89eb1829c"
-  checksum: 10c0/7f9183232a9a11c867e696cbfb07b434e36c0ad73d205c49c464b67088ce05b4450121d2268f73dedbb13f602b3c3df9979a97ec6f39272cf80c776100bec349
+"@navikt/aap-statistikk-typescript-types@npm:0.1.661":
+  version: 0.1.661
+  resolution: "@navikt/aap-statistikk-typescript-types@npm:0.1.661::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-statistikk-typescript-types%2F0.1.661%2F250efe46af9e758596edbf90af3cd67c0cfa5f40"
+  checksum: 10c0/0524723627f9c1f10d5906076ecd96fb5d0990fd8ba4d775772113c9d0198660c2294af750ed840f68e8eb2ff0df74706e7f694434fc9e52e196b0860aebe550
   languageName: node
   linkType: hard
 
@@ -3291,13 +3298,13 @@ __metadata:
   resolution: "aap-saksbehandling@workspace:."
   dependencies:
     "@eslint/eslintrc": "npm:3.3.3"
-    "@eslint/js": "npm:9.39.2"
+    "@eslint/js": "npm:9.39.3"
     "@navikt/aap-breveditor": "npm:0.10.1"
     "@navikt/aap-breveditor-css": "npm:0.4.1"
     "@navikt/aap-felles-prettier": "npm:5.6.0"
-    "@navikt/aap-oppgave-typescript-types": "npm:0.0.612"
-    "@navikt/aap-postmottak-backend-typescript-types": "npm:0.0.606"
-    "@navikt/aap-statistikk-typescript-types": "npm:0.1.659"
+    "@navikt/aap-oppgave-typescript-types": "npm:0.0.616"
+    "@navikt/aap-postmottak-backend-typescript-types": "npm:0.0.613"
+    "@navikt/aap-statistikk-typescript-types": "npm:0.1.661"
     "@navikt/aksel-icons": "npm:7.40.0"
     "@navikt/diagnosekoder": "npm:1.2026.0"
     "@navikt/ds-css": "npm:7.40.0"
@@ -3350,7 +3357,7 @@ __metadata:
     prettier: "npm:3.7.4"
     react: "npm:19.2.3"
     react-dom: "npm:19.2.3"
-    react-hook-form: "npm:7.71.1"
+    react-hook-form: "npm:7.71.2"
     react-plotly.js: "npm:2.6.0"
     react-select: "npm:5.10.2"
     server-only: "npm:0.0.1"
@@ -8921,12 +8928,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:7.71.1":
-  version: 7.71.1
-  resolution: "react-hook-form@npm:7.71.1"
+"react-hook-form@npm:7.71.2":
+  version: 7.71.2
+  resolution: "react-hook-form@npm:7.71.2"
   peerDependencies:
     react: ^16.8.0 || ^17 || ^18 || ^19
-  checksum: 10c0/6c8fc0fa740d299481de3ed32bae98f7c6331240822c602363e5cd221746d875dc3c5e65d0039902b7f7a44dc9ac9a4932e00e9ad9af3051bed1987858ce78c7
+  checksum: 10c0/bff61c229f5f2516e650325e0c450146cb8a08dc323e5e9aa0753eb937be0b66fe17f40a7b4be9aabc2b5cb770d03de07db7f4912c6c9452a86924072cc1cb46
   languageName: node
   linkType: hard
 
