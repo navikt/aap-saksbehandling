@@ -1,14 +1,19 @@
 'use client';
 
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
-import { AvklarPeriodisertStudentLøsning, MellomlagretVurdering, StudentGrunnlag } from 'lib/types/types';
+import {
+  AvklarPeriodisertStudentLøsning,
+  MellomlagretVurdering,
+  StudentGrunnlag,
+  VurdertAvAnsatt,
+} from 'lib/types/types';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 
-import { formaterDatoForFrontend } from 'lib/utils/date';
+import { formaterDatoForBackend } from 'lib/utils/date';
 import { Dato } from 'lib/types/Dato';
 import { VStack } from '@navikt/ds-react';
 import {
@@ -21,6 +26,8 @@ import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { RelevantInformasjonStudent } from 'components/behandlinger/sykdom/student/studentperiodisert/RelevantInformasjonStudent';
 import { StudentVurderingFelter } from 'components/behandlinger/sykdom/student/studentperiodisert/StudentVurderingFelter';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
+import { parse } from 'date-fns';
+import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
 
 interface Props {
   behandlingVersjon: number;
@@ -43,6 +50,9 @@ interface StudentVurdering {
   avbruttDato?: string;
   avbruddMerEnn6Måneder?: string;
   erNyVurdering?: boolean;
+  vurdertAv?: VurdertAvAnsatt;
+  kvalitetssikretAv?: VurdertAvAnsatt;
+  besluttetAv?: VurdertAvAnsatt;
 }
 
 type DraftFormFields = Partial<StudentFormFields>;
@@ -71,7 +81,7 @@ export const StudentVurderingPeriodisert = ({
 
   const defaultValues: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
-    : mapVurderingToDraftFormFields(grunnlag?.studentvurdering);
+    : mapVurderingToDraftFormFields(grunnlag?.nyeVurderinger);
 
   const form = useForm<StudentFormFields>({ defaultValues, shouldUnregister: true });
 
@@ -79,15 +89,31 @@ export const StudentVurderingPeriodisert = ({
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
-      const løsning: AvklarPeriodisertStudentLøsning[] = data.vurderinger.map((vurdering) => {
+      const løsning: AvklarPeriodisertStudentLøsning[] = data.vurderinger.map((vurdering, index) => {
+        const isLast = index === data.vurderinger.length - 1;
+        const tilDato = isLast
+          ? undefined
+          : parseDatoFraDatePickerOgTrekkFra1Dag(data.vurderinger[index + 1].gjelderFra);
+
         return {
+          fom: formaterDatoForBackend(parse(vurdering.gjelderFra, 'dd.MM.yyyy', new Date())),
+          tom: tilDato ? formaterDatoForBackend(tilDato) : undefined,
           begrunnelse: vurdering.begrunnelse,
-          avbruddMerEnn6Måneder: vurdering.avbruddMerEnn6Måneder === JaEllerNei.Ja,
           harAvbruttStudie: vurdering.harAvbruttStudie === JaEllerNei.Ja,
-          avbruttStudieDato: vurdering.avbruttDato,
-          avbruttPgaSykdomEllerSkade: vurdering.avbruttPgaSykdomEllerSkade === JaEllerNei.Ja,
-          fom: vurdering.gjelderFra,
-          godkjentStudieAvLånekassen: vurdering.godkjentStudieAvLånekassen === JaEllerNei.Ja,
+          avbruttStudieDato:
+            vurdering.avbruttDato && formaterDatoForBackend(parse(vurdering.avbruttDato, 'dd.MM.yyyy', new Date())),
+          harBehovForBehandling: vurdering.harBehovForBehandling
+            ? vurdering.harBehovForBehandling === JaEllerNei.Ja
+            : undefined,
+          avbruddMerEnn6Måneder: vurdering.avbruddMerEnn6Måneder
+            ? vurdering.avbruddMerEnn6Måneder === JaEllerNei.Ja
+            : undefined,
+          avbruttPgaSykdomEllerSkade: vurdering.avbruttPgaSykdomEllerSkade
+            ? vurdering.avbruttPgaSykdomEllerSkade === JaEllerNei.Ja
+            : undefined,
+          godkjentStudieAvLånekassen: vurdering.godkjentStudieAvLånekassen
+            ? vurdering.godkjentStudieAvLånekassen === JaEllerNei.Ja
+            : undefined,
         };
       });
 
@@ -125,7 +151,7 @@ export const StudentVurderingPeriodisert = ({
       status={status}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
-      formReset={() => console.log('Denne mangler')}
+      formReset={() => form.reset()}
     >
       <VStack gap={'4'}>
         <RelevantInformasjonStudent opplysninger={grunnlag?.oppgittStudent} />
@@ -138,19 +164,21 @@ export const StudentVurderingPeriodisert = ({
                 fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.gjelderFra`))}
                 nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.gjelderFra`))}
                 isLast={index === fields.length - 1}
-                vurdertAv={grunnlag?.studentvurdering?.vurdertAv}
+                vurdertAv={field.vurdertAv}
                 finnesFeil={false} // TODO Fiks denne
                 readonly={formReadOnly}
                 onSlettVurdering={() => remove(index)}
                 index={index}
-                harTidligereVurderinger={false} // TODO Fiks denne
+                harTidligereVurderinger={
+                  grunnlag?.sisteVedtatteVurderinger && grunnlag.sisteVedtatteVurderinger.length > 0
+                }
                 accordionsSignal={accordionsSignal}
                 initiellEkspandert={skalVæreInitiellEkspandert(field.erNyVurdering, erAktivUtenAvbryt)}
-                vurderingStatus={undefined}
-                kvalitetssikretAv={undefined}
-                besluttetAv={undefined}
+                vurderingStatus={undefined} // TODO Denne må fikses
+                kvalitetssikretAv={field.kvalitetssikretAv}
+                besluttetAv={field.besluttetAv}
               >
-                <StudentVurderingFelter index={index} />
+                <StudentVurderingFelter index={index} readOnly={readOnly} />
               </NyVurderingExpandableCard>
             );
           })}
@@ -160,26 +188,31 @@ export const StudentVurderingPeriodisert = ({
   );
 };
 
-function mapVurderingToDraftFormFields(vurdering: StudentGrunnlag['studentvurdering']): DraftFormFields {
+function mapVurderingToDraftFormFields(nyeVurderinger?: StudentGrunnlag['nyeVurderinger']): DraftFormFields {
   return {
-    vurderinger: [
-      {
-        gjelderFra: new Dato(new Date()).formaterForFrontend(),
+    vurderinger: nyeVurderinger?.map((vurdering) => {
+      return {
+        gjelderFra: vurdering?.fom ? new Dato(vurdering.fom).formaterForFrontend() : '',
         begrunnelse: vurdering?.begrunnelse || '',
         harAvbruttStudie: getJaNeiEllerUndefined(vurdering?.harAvbruttStudie),
         godkjentStudieAvLånekassen: getJaNeiEllerUndefined(vurdering?.godkjentStudieAvLånekassen),
         avbruttPgaSykdomEllerSkade: getJaNeiEllerUndefined(vurdering?.avbruttPgaSykdomEllerSkade),
         harBehovForBehandling: getJaNeiEllerUndefined(vurdering?.harBehovForBehandling),
         avbruddMerEnn6Måneder: getJaNeiEllerUndefined(vurdering?.avbruddMerEnn6Måneder),
-        avbruttDato: vurdering?.avbruttStudieDato ? formaterDatoForFrontend(vurdering.avbruttStudieDato) : undefined,
-      },
-    ],
+        avbruttDato: vurdering?.avbruttStudieDato
+          ? new Dato(vurdering.avbruttStudieDato).formaterForFrontend()
+          : undefined,
+        vurdertAv: vurdering?.vurdertAv,
+        kvalitetssikretAv: vurdering?.kvalitetssikretAv,
+        besluttetAv: vurdering?.besluttetAv,
+      };
+    }),
   };
 }
 
-function emptyStudentVurdering() {
+function emptyStudentVurdering(): StudentVurdering {
   return {
-    gjelderFra: new Dato(new Date()).formaterForFrontend(),
+    gjelderFra: '',
     begrunnelse: '',
     avbruddMerEnn6Måneder: '',
     avbruttDato: '',

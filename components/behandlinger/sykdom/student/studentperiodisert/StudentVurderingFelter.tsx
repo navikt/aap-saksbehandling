@@ -11,9 +11,10 @@ import { StudentFormFields } from 'components/behandlinger/sykdom/student/studen
 
 interface Props {
   index: number;
+  readOnly: boolean;
 }
 
-export const StudentVurderingFelter = ({ index }: Props) => {
+export const StudentVurderingFelter = ({ index, readOnly }: Props) => {
   const form = useFormContext<StudentFormFields>();
 
   return (
@@ -22,6 +23,7 @@ export const StudentVurderingFelter = ({ index }: Props) => {
         name={`vurderinger.${index}.gjelderFra`}
         control={form.control}
         label={'Vurderingen gjelder fra'}
+        readOnly={readOnly}
       />
 
       <TextAreaWrapper
@@ -30,6 +32,7 @@ export const StudentVurderingFelter = ({ index }: Props) => {
         label={'Vurder §11-14 og vilkårene i §7 i forskriften'}
         rules={{ required: 'Du må gjøre en vilkårsvurdering' }}
         className={'begrunnelse'}
+        readOnly={readOnly}
       />
 
       <RadioGroupWrapper
@@ -37,6 +40,7 @@ export const StudentVurderingFelter = ({ index }: Props) => {
         control={form.control}
         label={'Har brukeren avbrutt et studie?'}
         rules={{ required: 'Du må svare på om brukeren har avbrutt studie.' }}
+        readOnly={readOnly}
       >
         {JaEllerNeiOptions.map((option) => (
           <Radio key={option.value} value={option.value}>
@@ -51,6 +55,7 @@ export const StudentVurderingFelter = ({ index }: Props) => {
           control={form.control}
           label={'Er studiet godkjent av Lånekassen?'}
           rules={{ required: 'Du må svare på om studiet er godkjent av Lånekassen.' }}
+          readOnly={readOnly}
         >
           {JaEllerNeiOptions.map((option) => (
             <Radio key={option.value} value={option.value}>
@@ -66,6 +71,7 @@ export const StudentVurderingFelter = ({ index }: Props) => {
           control={form.control}
           label={'Er studie avbrutt pga sykdom eller skade?'}
           rules={{ required: 'Du må svare på om brukeren har avbrutt studie på grunn av sykdom eller skade.' }}
+          readOnly={readOnly}
         >
           {JaEllerNeiOptions.map((option) => (
             <Radio key={option.value} value={option.value}>
@@ -81,6 +87,7 @@ export const StudentVurderingFelter = ({ index }: Props) => {
           control={form.control}
           label={'Har brukeren behov for behandling for å gjenoppta studiet?'}
           rules={{ required: 'Du må svare på om brukeren har behov for behandling for å gjenoppta studiet.' }}
+          readOnly={readOnly}
         >
           {JaEllerNeiOptions.map((option) => (
             <Radio key={option.value} value={option.value}>
@@ -96,6 +103,7 @@ export const StudentVurderingFelter = ({ index }: Props) => {
           control={form.control}
           label={'Er det forventet at brukeren kan gjenoppta studiet innen 6 måneder?'}
           rules={{ required: 'Du må svare på om avbruddet er forventet å vare i mer enn 6 måneder.' }}
+          readOnly={readOnly}
         >
           {JaEllerNeiOptions.map((option) => (
             <Radio key={option.value} value={option.value}>
@@ -126,6 +134,7 @@ export const StudentVurderingFelter = ({ index }: Props) => {
               }
             },
           }}
+          readOnly={readOnly}
         />
       )}
     </VStack>
