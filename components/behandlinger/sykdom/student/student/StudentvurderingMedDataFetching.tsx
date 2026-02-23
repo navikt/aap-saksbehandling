@@ -28,7 +28,7 @@ export const StudentvurderingMedDataFetching = async ({ behandlingsreferanse, st
     return null;
   }
 
-  return unleashService.isEnabled('periodisertStudentVurdering') ? (
+  return unleashService.isEnabled('studentVurderingPeriodisert') ? (
     <StudentVurderingPeriodisert
       grunnlag={grunnlag.data}
       readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
