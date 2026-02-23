@@ -10,7 +10,6 @@ import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormEvent } from 'react';
 import { vurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
-import { useFeatureFlag } from 'context/UnleashContext';
 
 export interface AnnetRelevantDokumentFormFields {
   årsaker: string[];
@@ -18,6 +17,7 @@ export interface AnnetRelevantDokumentFormFields {
 }
 
 interface Props extends Submittable {
+  isRevurderingStarttidspunktEnabled: boolean;
   grunnlag: DigitaliseringsGrunnlag;
   readOnly: boolean;
   isLoading: boolean;
@@ -32,8 +32,13 @@ function mapTilAnnetRelevantDokumentKontrakt(data: AnnetRelevantDokumentFormFiel
   return JSON.stringify(dokument);
 }
 
-export const DigitaliserAnnetRelevantDokument = ({ grunnlag, readOnly, submit, isLoading }: Props) => {
-  const isRevurderingStarttidspunktEnabled = useFeatureFlag('RevurderStarttidspunkt');
+export const DigitaliserAnnetRelevantDokument = ({
+  grunnlag,
+  readOnly,
+  submit,
+  isLoading,
+  isRevurderingStarttidspunktEnabled,
+}: Props) => {
   const annetRelevantDokumentGrunnlag: AnnetRelevantDokument = grunnlag.vurdering?.strukturertDokumentJson
     ? JSON.parse(grunnlag.vurdering?.strukturertDokumentJson)
     : {};
@@ -70,6 +75,7 @@ export const DigitaliserAnnetRelevantDokument = ({ grunnlag, readOnly, submit, i
       event
     );
   };
+
   return (
     <VilkårsKort heading={'Annet relevant dokument'}>
       <form onSubmit={handleSubmit}>

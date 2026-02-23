@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Button, Chips, Heading, HStack, Table, VStack } from '@navikt/ds-react';
+import { Button, Chips, Heading, HStack, Table, VStack } from '@navikt/ds-react';
 import { SaksInfo } from 'lib/types/types';
 import { capitalize } from 'lodash';
 import { SakDevTools } from 'components/saksoversikt/SakDevTools';
@@ -19,7 +19,6 @@ import {
 } from 'lib/utils/behandling';
 import { mapTypeBehandlingTilTekst } from 'lib/utils/oversettelser';
 import { useState } from 'react';
-/* import { usePostmottakAlleBehandlinger } from 'hooks/FetchHook'; */
 import useSWR from 'swr';
 import { postmottakAlleBehandlinger } from 'lib/postmottakClientApi';
 import { BeggeBehandling } from './types';
@@ -114,7 +113,7 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
           )}
         </HStack>
       </HStack>
-      <Box>
+      <VStack gap="4">
         <Heading size="xsmall">Behandlinger</Heading>
         <Chips>
           <Chips.Toggle
@@ -130,7 +129,7 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
             Journalføring og dokumenthåndtering
           </Chips.Toggle>
         </Chips>
-      </Box>
+      </VStack>
       <Table>
         <Table.Header>
           <Table.Row>
