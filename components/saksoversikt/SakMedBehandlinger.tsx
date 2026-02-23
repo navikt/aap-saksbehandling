@@ -26,7 +26,7 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
   const router = useRouter();
 
   const [visMeldekortbehandlinger, setVisMeldekortbehandlinger] = useState(false);
-  const [visPostmottakBehandlinger, setVisPostmottakBehandlinger] = useState(true);
+  const [visPostmottakBehandlinger, setVisPostmottakBehandlinger] = useState(false);
 
   const behandlinger = visMeldekortbehandlinger
     ? sak.behandlinger || []
