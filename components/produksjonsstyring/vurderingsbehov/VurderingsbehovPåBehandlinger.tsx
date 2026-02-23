@@ -13,7 +13,7 @@ interface Props {
 }
 
 export const VurderingsbehovPåBehandlinger = ({ vurderingsbehov }: Props) => {
-  const { sort, settSorteringskriterier, sortertListe } = useSortertListe(vurderingsbehov);
+  const { sort, settSorteringskriterier, sortertListe } = useSortertListe(vurderingsbehov, 'vurderingsbehov');
 
   return (
     <PlotWrapper>
