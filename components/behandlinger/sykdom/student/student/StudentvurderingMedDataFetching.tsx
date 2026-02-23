@@ -4,6 +4,9 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { Behovstype } from 'lib/utils/form';
 import { skalViseSteg, StegData } from 'lib/utils/steg';
 import { Studentvurdering } from 'components/behandlinger/sykdom/student/student/Studentvurdering';
+import { StudentVurderingPeriodisert } from 'components/behandlinger/sykdom/student/studentperiodisert/StudentVurderingPeriodisert';
+import { VStack } from '@navikt/ds-react';
+import { unleashService } from 'lib/services/unleash/unleashService';
 
 interface Props {
   behandlingsreferanse: string;
@@ -24,7 +27,22 @@ export const StudentvurderingMedDataFetching = async ({ behandlingsreferanse, st
     return null;
   }
 
-  return (
+  return unleashService.isEnabled('periodisertStudentVurdering') ? (
+    <VStack gap={'2'}>
+      <StudentVurderingPeriodisert
+        grunnlag={grunnlag.data}
+        readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+        behandlingVersjon={stegData.behandlingVersjon}
+        initialMellomlagretVurdering={initialMellomlagretVurdering}
+      />
+      <Studentvurdering
+        grunnlag={grunnlag.data}
+        readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+        behandlingVersjon={stegData.behandlingVersjon}
+        initialMellomlagretVurdering={initialMellomlagretVurdering}
+      />
+    </VStack>
+  ) : (
     <Studentvurdering
       grunnlag={grunnlag.data}
       readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
