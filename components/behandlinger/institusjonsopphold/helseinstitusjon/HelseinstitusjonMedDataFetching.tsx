@@ -10,6 +10,7 @@ import { Behovstype } from 'lib/utils/form';
 import { skalViseSteg, StegData } from 'lib/utils/steg';
 import { HelseinstitusjonNy } from 'components/behandlinger/institusjonsopphold/helseinstitusjonny/HelseinstitusjonNy';
 import { unleashService } from 'lib/services/unleash/unleashService';
+import { ManglendeOpphold } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/ManglendeOpphold';
 
 type Props = {
   behandlingsreferanse: string;
@@ -31,7 +32,7 @@ export const HelseinstitusjonMedDataFetching = async ({ behandlingsreferanse, st
   const vedtatteVurderinger = grunnlag.data.vedtatteVurderinger;
 
   if (!skalViseSteg(stegData, vurderinger.length > 0 || vedtatteVurderinger.length > 0)) {
-    return null;
+    return <ManglendeOpphold />;
   }
 
   return unleashService.isEnabled('PeriodiseringHelseinstitusjonOpphold') ? (
