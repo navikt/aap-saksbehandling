@@ -13,9 +13,8 @@ import {
   erAktivFørstegangsbehandling,
   erAvsluttet,
   erAvsluttetFørstegangsbehandling,
-  erFørstegangsbehandling,
-  erTrukket,
   formatterÅrsakTilOpprettelseTilTekst,
+  kanRevurdereSak,
 } from 'lib/utils/behandling';
 import { mapTypeBehandlingTilTekst } from 'lib/utils/oversettelser';
 import { useState } from 'react';
@@ -23,7 +22,7 @@ import useSWR from 'swr';
 import { postmottakAlleBehandlinger } from 'lib/postmottakClientApi';
 import { BeggeBehandling } from './types';
 
-function usePostmottakBehandlinger(ident: string) {
+function usePostmottakBehandlinger(ident: string): BeggeBehandling[] {
   const { data: postmottakBehandlinger } = useSWR(
     `alle-behandlinger-${ident}`,
     () => postmottakAlleBehandlinger(ident),
@@ -33,7 +32,9 @@ function usePostmottakBehandlinger(ident: string) {
     }
   );
 
-  return postmottakBehandlinger?.type === 'SUCCESS' ? postmottakBehandlinger.data.behandlinger : [];
+  return postmottakBehandlinger?.type === 'SUCCESS'
+    ? postmottakBehandlinger.data.behandlinger.map((behandling) => ({ kilde: 'POSTMOTTAK', behandling: behandling }))
+    : [];
 }
 
 const lokalDevToolsForBehandlingOgSak = isLocal();
@@ -47,23 +48,18 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
     ? sak.behandlinger || []
     : sak.behandlinger.filter((b) => b.årsakTilOpprettelse !== 'MELDEKORT');
 
-  const pbehandlinger: BeggeBehandling[] = usePostmottakBehandlinger(sak.ident).map((b) => ({
-    kilde: 'POSTMOTTAK',
-    behandling: b,
-  }));
+  const postmottakBehandlinger: BeggeBehandling[] = usePostmottakBehandlinger(sak.ident);
 
-  const behandlinger2: BeggeBehandling[] = behandlinger.map((b) => ({
+  const behandlingerMapped: BeggeBehandling[] = behandlinger.map((behandling) => ({
     kilde: 'BEHANDLINGSFLYT',
-    behandling: b,
+    behandling: behandling,
   }));
 
-  const alleBehandlinger: BeggeBehandling[] = behandlinger2.concat(
-    pbehandlinger.filter((b) => !erAvsluttet(b.behandling) || visPostmottakBehandlinger)
+  const alleBehandlinger: BeggeBehandling[] = behandlingerMapped.concat(
+    postmottakBehandlinger.filter((b) => !erAvsluttet(b.behandling) || visPostmottakBehandlinger)
   );
 
-  const kanRevurdere = behandlinger.some(
-    (behandling) => erFørstegangsbehandling(behandling) && behandling.status !== 'OPPRETTET' && !erTrukket(behandling)
-  );
+  const kanRevurdere = kanRevurdereSak(behandlinger);
 
   const kanRegistrerebrudd = sak.behandlinger.some((behandling) => erAvsluttetFørstegangsbehandling(behandling));
 
