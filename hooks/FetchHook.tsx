@@ -7,7 +7,7 @@ import { postmottakEndreTemaClient, postmottakSettPåVentClient } from 'lib/post
 import { SettPåVentRequest } from 'lib/types/postmottakTypes';
 import { clientMottattDokumenterLest } from 'lib/oppgaveClientApi';
 
-export function useFetchV2<FunctionParameters extends any[], ResponseBody>(
+export function useFetch<FunctionParameters extends any[], ResponseBody>(
   fetchFunction: (...functionParameters: FunctionParameters) => Promise<FetchResponse<ResponseBody>>
 ): {
   method: (...functionParameters: FunctionParameters) => Promise<{ ok: boolean }>;
@@ -49,7 +49,7 @@ export function useOpprettSak(): {
   opprettSakOgBehandling: (opprettTestCase: OpprettTestcase) => Promise<void>;
   isLoading: boolean;
 } {
-  const { method, isLoading } = useFetchV2(clientOpprettSak);
+  const { method, isLoading } = useFetch(clientOpprettSak);
 
   async function opprettSakMethod(body: OpprettTestcase) {
     await method(body);
@@ -64,7 +64,7 @@ export function useOpprettDummySak(): {
   error?: string;
   isLoading: boolean;
 } {
-  const { method, isLoading, data, error } = useFetchV2(clientOpprettDummySak);
+  const { method, isLoading, data, error } = useFetch(clientOpprettDummySak);
 
   async function opprettSakMethod(body: OpprettDummySakDto) {
     return await method(body);
@@ -78,7 +78,7 @@ export function usePurrPåDialogmelding(): {
   isLoading: boolean;
   error?: string;
 } {
-  const { method, isLoading, error } = useFetchV2(clientPurrPåLegeerklæring);
+  const { method, isLoading, error } = useFetch(clientPurrPåLegeerklæring);
 
   async function purr(dialogmeldingUuid: string, behandlingsreferanse: string) {
     return await method(dialogmeldingUuid, behandlingsreferanse);
@@ -92,7 +92,7 @@ export function useMottattDokumenterLest(): {
   isLoading: boolean;
   error?: string;
 } {
-  const { method, isLoading, error } = useFetchV2(clientMottattDokumenterLest);
+  const { method, isLoading, error } = useFetch(clientMottattDokumenterLest);
 
   async function markerLest(behandlingsreferanse: string) {
     return await method(behandlingsreferanse);
@@ -106,7 +106,7 @@ export function usePostmottakSettPåVent(): {
   isLoading: boolean;
   error?: string;
 } {
-  const { method, isLoading, error } = useFetchV2(postmottakSettPåVentClient);
+  const { method, isLoading, error } = useFetch(postmottakSettPåVentClient);
 
   async function settPåVent(behandlingsreferanse: string, body: SettPåVentRequest) {
     return await method(behandlingsreferanse, body);
@@ -120,7 +120,7 @@ export function usePostmottakEndreTema(): {
   error?: string;
   data?: { redirectUrl: string };
 } {
-  const { method, error, data } = useFetchV2(postmottakEndreTemaClient);
+  const { method, error, data } = useFetch(postmottakEndreTemaClient);
 
   async function endreTema(behandlingsreferanse: string) {
     return await method(behandlingsreferanse);
