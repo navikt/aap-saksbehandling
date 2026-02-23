@@ -14,7 +14,7 @@ interface Props {
 
 export const MineOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) => {
   const [feilmelding, setFeilmelding] = useState<string | undefined>();
-  const { sort, settSorteringskriterier, sortertListe } = useSortertListe(oppgaver);
+  const { sort, settSorteringskriterier, sortertListe } = useSortertListe(oppgaver, 'mine-oppgaver');
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (

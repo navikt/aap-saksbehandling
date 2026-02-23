@@ -14,7 +14,7 @@ interface Props {
 
 export const VenteÅrsaker = ({ venteÅrsaker }: Props) => {
   const totalt = venteÅrsaker.reduce((sum, e) => sum + (e.antall || 0), 0);
-  const { sort, settSorteringskriterier, sortertListe } = useSortertListe(venteÅrsaker);
+  const { sort, settSorteringskriterier, sortertListe } = useSortertListe(venteÅrsaker, 'venteaarsaker');
 
   return (
     <PlotWrapper>
