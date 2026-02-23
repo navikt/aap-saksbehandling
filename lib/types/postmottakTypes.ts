@@ -35,3 +35,12 @@ export type OverleveringGrunnlag =
 
 export type AvsenderMottakerIdType =
   postmottak['schemas']['no.nav.aap.postmottak.gateway.AvsenderMottakerDto']['idType'];
+
+export type IdentRequest = postmottak['schemas']['no.nav.aap.postmottak.api.faktagrunnlag.sak.IdentRequest'];
+
+export type FinnBehandlingerRespons =
+  postmottak['schemas']['no.nav.aap.postmottak.api.faktagrunnlag.sak.FinnBehandlingerResponse'];
+
+export type PostmottakBehandlingInfo = FinnBehandlingerRespons['behandlinger'][number];
+
+export type PostmottakTypeBehandling = PostmottakBehandlingInfo['typeBehandling'];
