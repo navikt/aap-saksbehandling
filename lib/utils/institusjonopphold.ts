@@ -53,7 +53,10 @@ export function lagReduksjonBeskrivelseNyttOpphold(oppholdFra: string): string {
 
   const innleggelsesmåned = format(startOfMonth(oppholdDato), 'MMMM yyyy', { locale: nb });
 
-  return `Innleggelsesmåned: ${innleggelsesmåned}.`; // TODO Venter på design her
+  const énMånedEtterInnleggelsesmåned = startOfMonth(addMonths(oppholdDato, 1));
+  const fireMånederEtterInnleggelsesmåned = startOfMonth(addMonths(oppholdDato, 4));
+
+  return `Innleggelsesmåned: ${innleggelsesmåned}. Reduksjonen bør som regel starte ${formatDatoMedMånedsnavn(énMånedEtterInnleggelsesmåned)} ved reduksjon i forrige opphold, ellers ${formatDatoMedMånedsnavn(fireMånederEtterInnleggelsesmåned)}. Det finnes likevel unntak.`;
 }
 
 /**

@@ -226,7 +226,9 @@ describe('Helseinstitusjonsvurdering med flere opphold', () => {
     await svarReduksjon(0);
     await svarReduksjon(1);
 
-    const description = screen.getByText('Innleggelsesmåned: juni 2026.');
+    const description = screen.getByText(
+      'Innleggelsesmåned: juni 2026. Reduksjonen bør som regel starte 1. juli 2026 ved reduksjon i forrige opphold, ellers 1. oktober 2026. Det finnes likevel unntak.'
+    );
     expect(description).toBeVisible();
   });
 
