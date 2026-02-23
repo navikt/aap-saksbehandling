@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Chips, Heading, HStack, Table, VStack } from '@navikt/ds-react';
+import { Box, Button, Chips, Heading, HStack, Table, VStack } from '@navikt/ds-react';
 import { SaksInfo } from 'lib/types/types';
 import { capitalize } from 'lodash';
 import { SakDevTools } from 'components/saksoversikt/SakDevTools';
@@ -114,21 +114,23 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
           )}
         </HStack>
       </HStack>
-
-      <Chips>
-        <Chips.Toggle
-          selected={visMeldekortbehandlinger}
-          onClick={() => setVisMeldekortbehandlinger(!visMeldekortbehandlinger)}
-        >
-          Vis meldekortbehandlinger
-        </Chips.Toggle>
-        <Chips.Toggle
-          selected={visPostmottakBehandlinger}
-          onClick={() => setVisPostmottakBehandlinger(!visPostmottakBehandlinger)}
-        >
-          Vis avsluttede postmottakbehandlinger
-        </Chips.Toggle>
-      </Chips>
+      <Box>
+        <Heading size="xsmall">Behandlinger</Heading>
+        <Chips>
+          <Chips.Toggle
+            selected={visMeldekortbehandlinger}
+            onClick={() => setVisMeldekortbehandlinger(!visMeldekortbehandlinger)}
+          >
+            Meldekortbehandlinger
+          </Chips.Toggle>
+          <Chips.Toggle
+            selected={visPostmottakBehandlinger}
+            onClick={() => setVisPostmottakBehandlinger(!visPostmottakBehandlinger)}
+          >
+            Journalføring og dokumenthåndtering
+          </Chips.Toggle>
+        </Chips>
+      </Box>
       <Table>
         <Table.Header>
           <Table.Row>
