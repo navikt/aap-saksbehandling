@@ -199,18 +199,8 @@ describe('lagReduksjonBeskrivelseNyttOpphold', () => {
   it('bruker standard regel når forrigeOppholdSisteVurderingVarRedukjson er undefined', () => {
     const resultat = lagReduksjonBeskrivelseNyttOpphold('01.07.2026');
 
-    expect(resultat).toBe('Innleggelsesmåned: juli 2026.');
-  });
-
-  it('bruker standard regel når forrigeOppholdSisteVurderingVarRedukjson er false', () => {
-    const resultat = lagReduksjonBeskrivelseNyttOpphold('01.07.2026');
-
-    expect(resultat).toBe('Innleggelsesmåned: juli 2026.');
-  });
-
-  it('bruker nytt opphold-regel når forrigeOppholdSisteVurderingVarRedukjson er true', () => {
-    const resultat = lagReduksjonBeskrivelseNyttOpphold('01.07.2026');
-
-    expect(resultat).toBe('Innleggelsesmåned: juli 2026.');
+    expect(resultat).toBe(
+      'Innleggelsesmåned: juli 2026. Reduksjonen bør som regel starte 1. august 2026 ved reduksjon i forrige opphold, ellers 1. november 2026. Det finnes likevel unntak.'
+    );
   });
 });
