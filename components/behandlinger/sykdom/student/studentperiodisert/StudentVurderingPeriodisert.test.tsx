@@ -13,21 +13,36 @@ const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
 const user = userEvent.setup();
 
+const grunnlagUtenVurdering: StudentGrunnlag = {
+  harTilgangTilÅSaksbehandle: true,
+  nyeVurderinger: [],
+  sisteVedtatteVurderinger: [],
+  kanVurderes: [
+    {
+      fom: '2026-02-24',
+      tom: '2999-01-01',
+    },
+  ],
+  ikkeRelevantePerioder: [],
+  behøverVurderinger: [],
+};
+
 const grunnlagMedVurdering: StudentGrunnlag = {
   harTilgangTilÅSaksbehandle: true,
-  studentvurdering: {
-    begrunnelse: 'en god begrunnelse',
-    harAvbruttStudie: true,
-    vurdertAv: {
-      dato: '2025-11-03',
-      ident: 'Saksbehandler',
-    },
-    fom: '',
-  },
   behøverVurderinger: [],
   ikkeRelevantePerioder: [],
   kanVurderes: [],
-  nyeVurderinger: [],
+  nyeVurderinger: [
+    {
+      begrunnelse: 'en god begrunnelse',
+      harAvbruttStudie: true,
+      vurdertAv: {
+        dato: '2026-01-01',
+        ident: 'Saksbehandler',
+      },
+      fom: '2026-01-01',
+    },
+  ],
   sisteVedtatteVurderinger: [],
 };
 
@@ -38,7 +53,7 @@ beforeEach(() => {
 describe('Student', () => {
   describe('Generelt', () => {
     it('skal ha en overskrift', () => {
-      render(<StudentVurderingPeriodisert readOnly={false} behandlingVersjon={0} />);
+      render(<StudentVurderingPeriodisert grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
       const heading = screen.getByText('§ 11-14 Student');
       expect(heading).toBeVisible();
     });
@@ -51,6 +66,12 @@ describe('Student', () => {
       const endreKnapp = screen.getByRole('button', { name: 'Endre' });
       await user.click(endreKnapp);
 
+      await user.click(
+        screen.getByRole('button', {
+          name: 'Ny vurdering: 1. januar 2026 –',
+        })
+      );
+
       const begrunnelseFelt = screen.getByRole('textbox', { name: 'Vurder §11-14 og vilkårene i §7 i forskriften' });
       await user.clear(begrunnelseFelt);
       await user.type(begrunnelseFelt, 'Dette er en ny begrunnelse');
@@ -58,6 +79,12 @@ describe('Student', () => {
 
       const avbrytKnapp = screen.getByRole('button', { name: 'Avbryt' });
       await user.click(avbrytKnapp);
+
+      await user.click(
+        screen.getByRole('button', {
+          name: 'Ny vurdering: 1. januar 2026 –',
+        })
+      );
 
       const begrunnelseFeltEtterAvbryt = screen.getByRole('textbox', {
         name: 'Vurder §11-14 og vilkårene i §7 i forskriften',
@@ -68,30 +95,30 @@ describe('Student', () => {
 
   describe('Felter', () => {
     it('har et fritekstfelt for vurdering av vilkåret', () => {
-      render(<StudentVurderingPeriodisert readOnly={false} behandlingVersjon={0} />);
+      render(<StudentVurderingPeriodisert grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
       expect(screen.getByRole('textbox', { name: 'Vurder §11-14 og vilkårene i §7 i forskriften' })).toBeVisible();
     });
 
     it('har et valg for om brukeren har avbrutt et studie', () => {
-      render(<StudentVurderingPeriodisert readOnly={false} behandlingVersjon={0} />);
+      render(<StudentVurderingPeriodisert grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
       expect(screen.getByRole('group', { name: 'Har brukeren avbrutt et studie?' })).toBeVisible();
     });
 
     it('har et valg for om studiet er godkjent av Lånekassen', async () => {
-      render(<StudentVurderingPeriodisert readOnly={false} behandlingVersjon={0} />);
+      render(<StudentVurderingPeriodisert grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
       await velgAtSøkerHarAvbruttEtStudie();
       expect(screen.getByRole('group', { name: 'Er studiet godkjent av Lånekassen?' })).toBeVisible();
     });
 
     it('har et valg for om studie er avbrutt pga sykdom eller skade', async () => {
-      render(<StudentVurderingPeriodisert readOnly={false} behandlingVersjon={0} />);
+      render(<StudentVurderingPeriodisert grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
       await velgAtSøkerHarAvbruttEtStudie();
       await velgAtStudieErGodkjentAvLånekassen();
       expect(screen.getByRole('group', { name: 'Er studie avbrutt pga sykdom eller skade?' })).toBeVisible();
     });
 
     it('har et valg for om brukeren har behov for behandling', async () => {
-      render(<StudentVurderingPeriodisert readOnly={false} behandlingVersjon={0} />);
+      render(<StudentVurderingPeriodisert grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
       await velgAtSøkerHarAvbruttEtStudie();
       await velgAtStudieErGodkjentAvLånekassen();
       await velgAtStudieErAvbruttPgaSykdomEllerSkade();
@@ -101,7 +128,7 @@ describe('Student', () => {
     });
 
     it('har et felt for å sette når studieevnen ble nedsatt fra', async () => {
-      render(<StudentVurderingPeriodisert readOnly={false} behandlingVersjon={0} />);
+      render(<StudentVurderingPeriodisert grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
       await velgAtSøkerHarAvbruttEtStudie();
       await velgAtStudieErGodkjentAvLånekassen();
       await velgAtStudieErAvbruttPgaSykdomEllerSkade();
@@ -113,7 +140,7 @@ describe('Student', () => {
     });
 
     it('spør om avbruddet er forventet å vare mer enn 6 mnd', async () => {
-      render(<StudentVurderingPeriodisert readOnly={false} behandlingVersjon={0} />);
+      render(<StudentVurderingPeriodisert grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
       await velgAtSøkerHarAvbruttEtStudie();
       await velgAtStudieErGodkjentAvLånekassen();
       await velgAtStudieErAvbruttPgaSykdomEllerSkade();
@@ -124,45 +151,50 @@ describe('Student', () => {
     });
 
     it('viser en feilmelding dersom det ikke er lagt inn en begrunnelse', async () => {
-      render(<StudentVurderingPeriodisert readOnly={false} behandlingVersjon={0} />);
+      render(<StudentVurderingPeriodisert grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
       const button = screen.getByRole('button', { name: /Bekreft/ });
       await user.click(button);
 
-      expect(await screen.findByText('Du må gjøre en vilkårsvurdering')).toBeVisible();
+      const feilmelding = screen.getAllByText('Du må gjøre en vilkårsvurdering')[0];
+      expect(feilmelding).toBeVisible();
     });
 
     it('viser feilemdling hvis det ikke er svart på om studiet er avbrutt', async () => {
-      render(<StudentVurderingPeriodisert readOnly={false} behandlingVersjon={0} />);
+      render(<StudentVurderingPeriodisert grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
       const button = screen.getByRole('button', { name: /Bekreft/ });
       await user.click(button);
 
-      expect(await screen.findByText('Du må svare på om brukeren har avbrutt studie.')).toBeVisible();
+      const feilmelding = screen.getAllByText('Du må svare på om brukeren har avbrutt studie.')[0];
+      expect(feilmelding).toBeVisible();
     });
 
     it('viser feilmelding hvis det ikke er svart på om studiet er godkjent av Lånekassen', async () => {
-      render(<StudentVurderingPeriodisert readOnly={false} behandlingVersjon={0} />);
+      render(<StudentVurderingPeriodisert grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
       await velgAtSøkerHarAvbruttEtStudie();
       const button = screen.getByRole('button', { name: /Bekreft/ });
       await user.click(button);
 
-      expect(await screen.findByText('Du må svare på om studiet er godkjent av Lånekassen.')).toBeVisible();
+      const feilmelding = screen.getAllByText('Du må svare på om studiet er godkjent av Lånekassen.')[0];
+      expect(feilmelding).toBeVisible();
     });
 
     it('viser feilemdling hvis det ikke er svart på om studiet er avbrutt pga sykdom eller skade', async () => {
-      render(<StudentVurderingPeriodisert readOnly={false} behandlingVersjon={0} />);
+      render(<StudentVurderingPeriodisert grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
       await velgAtSøkerHarAvbruttEtStudie();
       await velgAtStudieErGodkjentAvLånekassen();
 
       const button = screen.getByRole('button', { name: /Bekreft/ });
       await user.click(button);
 
-      expect(
-        await screen.findByText('Du må svare på om brukeren har avbrutt studie på grunn av sykdom eller skade.')
-      ).toBeVisible();
+      const feilmelding = screen.getAllByText(
+        'Du må svare på om brukeren har avbrutt studie på grunn av sykdom eller skade.'
+      )[0];
+
+      expect(feilmelding).toBeVisible();
     });
 
     it('viser feilmelding hvis det ikke er svart på om brukeren trenger behandling for å gjenoppta studiet', async () => {
-      render(<StudentVurderingPeriodisert readOnly={false} behandlingVersjon={0} />);
+      render(<StudentVurderingPeriodisert grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
 
       await velgAtSøkerHarAvbruttEtStudie();
       await velgAtStudieErGodkjentAvLånekassen();
@@ -171,13 +203,15 @@ describe('Student', () => {
       const button = screen.getByRole('button', { name: /Bekreft/ });
       await user.click(button);
 
-      expect(
-        await screen.findByText('Du må svare på om brukeren har behov for behandling for å gjenoppta studiet.')
-      ).toBeVisible();
+      const feilmelding = screen.getAllByText(
+        'Du må svare på om brukeren har behov for behandling for å gjenoppta studiet.'
+      )[0];
+
+      expect(feilmelding).toBeVisible();
     });
 
     it('viser feilmelding hvis det ikke er svart på når studieevnen ble nedsatt', async () => {
-      render(<StudentVurderingPeriodisert readOnly={false} behandlingVersjon={0} />);
+      render(<StudentVurderingPeriodisert grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
       await velgAtSøkerHarAvbruttEtStudie();
       await velgAtStudieErGodkjentAvLånekassen();
       await velgAtStudieErAvbruttPgaSykdomEllerSkade();
@@ -187,13 +221,15 @@ describe('Student', () => {
       const button = screen.getByRole('button', { name: /Bekreft/ });
       await user.click(button);
 
-      expect(
-        await screen.findByText('Du må svare på når studieevnen ble 100% nedsatt, eller når studiet ble avbrutt.')
-      ).toBeVisible();
+      const feilmelding = screen.getAllByText(
+        'Du må svare på når studieevnen ble 100% nedsatt, eller når studiet ble avbrutt.'
+      )[0];
+
+      expect(feilmelding).toBeVisible();
     });
 
     it('viser feilmelding hvis det ikke er svart på om det er forventet at fraværet blir over 6 mnd', async () => {
-      render(<StudentVurderingPeriodisert readOnly={false} behandlingVersjon={0} />);
+      render(<StudentVurderingPeriodisert grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
       await velgAtSøkerHarAvbruttEtStudie();
       await velgAtStudieErGodkjentAvLånekassen();
       await velgAtStudieErAvbruttPgaSykdomEllerSkade();
@@ -202,9 +238,10 @@ describe('Student', () => {
       const button = screen.getByRole('button', { name: /Bekreft/ });
       await user.click(button);
 
-      expect(
-        await screen.findByText('Du må svare på om avbruddet er forventet å vare i mer enn 6 måneder.')
-      ).toBeVisible();
+      const feilmelding = screen.getAllByText(
+        'Du må svare på om avbruddet er forventet å vare i mer enn 6 måneder.'
+      )[0];
+      expect(feilmelding).toBeVisible();
     });
 
     it('skal vise korrekt informasjon fra søknaden dersom det har blitt besvart ja i søknaden', async () => {
@@ -298,9 +335,11 @@ describe('Student', () => {
       const button = screen.getByRole('button', { name: /Bekreft/ });
       await user.click(button);
 
-      expect(
-        screen.getByText('Dato for når stuideevnen ble 100% nedsatt / avbrutt kan ikke være frem i tid.')
-      ).toBeVisible();
+      const feilmelding = screen.getAllByText(
+        'Dato for når stuideevnen ble 100% nedsatt / avbrutt kan ikke være frem i tid.'
+      )[0];
+
+      expect(feilmelding).toBeVisible();
     });
 
     it('viser feilmelding dersom dato for avbrutt studie er ugyldig', async () => {
@@ -334,16 +373,17 @@ describe('Student', () => {
       const button = screen.getByRole('button', { name: /Bekreft/ });
       await user.click(button);
 
-      expect(screen.getByText('Datoformatet er ikke gyldig. Dato må være på formatet dd.mm.åååå')).toBeVisible();
+      const feilmelding = screen.getAllByText('Datoformatet er ikke gyldig. Dato må være på formatet dd.mm.åååå')[0];
+      expect(feilmelding).toBeVisible();
     });
   });
 
   describe('mellomlagring', () => {
     const mellomlagring: MellomlagretVurderingResponse = {
       mellomlagretVurdering: {
-        avklaringsbehovkode: '5006',
         behandlingId: { id: 1 },
-        data: '{"begrunnelse":"Dette er min vurdering som er mellomlagret"}',
+        avklaringsbehovkode: '5006',
+        data: '{"vurderinger":[{"fraDato":"24.02.2026","begrunnelse":"Dette er min vurdering som er mellomlagret"}]}',
         vurdertDato: '2025-08-21T12:00:00.000',
         vurdertAv: 'Jan T. Loven',
       },
@@ -351,21 +391,22 @@ describe('Student', () => {
 
     const grunnlagMedVurdering: StudentGrunnlag = {
       harTilgangTilÅSaksbehandle: true,
-      studentvurdering: {
-        begrunnelse: 'Dette er min vurdering som er bekreftet',
-        harAvbruttStudie: false,
-        vurdertAv: {
-          ansattnavn: 'Kjell T. Ringen',
-          dato: '2025-08-21',
-          enhetsnavn: undefined,
-          ident: '',
-        },
-        fom: '',
-      },
       behøverVurderinger: [],
       ikkeRelevantePerioder: [],
       kanVurderes: [],
-      nyeVurderinger: [],
+      nyeVurderinger: [
+        {
+          begrunnelse: 'Dette er min vurdering som er bekreftet',
+          harAvbruttStudie: false,
+          vurdertAv: {
+            ansattnavn: 'Kjell T. Ringen',
+            dato: '2025-08-21',
+            enhetsnavn: undefined,
+            ident: '',
+          },
+          fom: '',
+        },
+      ],
       sisteVedtatteVurderinger: [],
     };
 
