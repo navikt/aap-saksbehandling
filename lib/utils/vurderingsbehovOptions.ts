@@ -1,5 +1,5 @@
 import { ValuePair } from 'components/form/FormField';
-import type { Vurderingsbehov } from '../types/types';
+import type { Vurderingsbehov, VurderingsbehovIntern } from '../types/types';
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
 
 export const vurderingsbehovOptions = (isRevurderingStarttidspunktEnabled: boolean): ValuePair<Vurderingsbehov>[] =>
@@ -33,8 +33,8 @@ export const vurderingsbehovOptions = (isRevurderingStarttidspunktEnabled: boole
     (option) => isRevurderingStarttidspunktEnabled || option.value !== 'VURDER_RETTIGHETSPERIODE'
   ) as ValuePair<Vurderingsbehov>[];
 
-export const alleVurderingsbehovOptions: ValuePair<Vurderingsbehov>[] = [
-  { value: 'MOTTATT_SØKNAD', label: formaterVurderingsbehov('MOTTATT_SØKNAD') },
+export const alleVurderingsbehovOptions: ValuePair<Vurderingsbehov | VurderingsbehovIntern>[] = [
+  { value: 'SØKNAD', label: formaterVurderingsbehov('MOTTATT_SØKNAD') },
   { value: 'MOTTATT_AKTIVITETSMELDING', label: formaterVurderingsbehov('MOTTATT_AKTIVITETSMELDING') },
   { value: 'MOTTATT_MELDEKORT', label: formaterVurderingsbehov('MOTTATT_MELDEKORT') },
   { value: 'MOTTATT_LEGEERKLÆRING', label: formaterVurderingsbehov('MOTTATT_LEGEERKLÆRING') },
