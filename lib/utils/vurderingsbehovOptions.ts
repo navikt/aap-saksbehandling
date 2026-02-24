@@ -1,5 +1,5 @@
 import { ValuePair } from 'components/form/FormField';
-import type { Vurderingsbehov } from '../types/types';
+import type { Vurderingsbehov, VurderingsbehovIntern } from '../types/types';
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
 
 export const vurderingsbehovOptions = (isRevurderingStarttidspunktEnabled: boolean): ValuePair<Vurderingsbehov>[] =>
@@ -9,9 +9,6 @@ export const vurderingsbehovOptions = (isRevurderingStarttidspunktEnabled: boole
     { label: 'Lovvalg og medlemskap', value: 'LOVVALG_OG_MEDLEMSKAP' },
     { label: '§ 11-14 Student', value: 'REVURDER_STUDENT' },
     { label: '§§ 11-5 og 11-6 Sykdom, arbeidsevne og behov for bistand', value: 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND' },
-    { label: '§ 11-10 tredje ledd. Unntak fra meldeplikt', value: 'FRITAK_MELDEPLIKT' },
-    { label: '§ 11-23 andre ledd. Arbeidsevne som ikke er utnyttet', value: 'FASTSETT_ARBEIDSEVNE' },
-    { label: '§ 11-23 sjette ledd. Arbeidsopptrapping', value: 'ARBEIDSOPPTRAPPING' },
     { label: '§ 11-22 Yrkesskade', value: 'REVURDER_YRKESSKADE' },
     { label: '§ 11-13 Sykepengeerstatning', value: 'REVURDER_SYKEPENGEERSTATNING' },
     { label: '§ 11-19 Beregningstidspunkt', value: 'REVURDER_BEREGNING' },
@@ -36,8 +33,8 @@ export const vurderingsbehovOptions = (isRevurderingStarttidspunktEnabled: boole
     (option) => isRevurderingStarttidspunktEnabled || option.value !== 'VURDER_RETTIGHETSPERIODE'
   ) as ValuePair<Vurderingsbehov>[];
 
-export const alleVurderingsbehovOptions: ValuePair<Vurderingsbehov>[] = [
-  { value: 'MOTTATT_SØKNAD', label: formaterVurderingsbehov('MOTTATT_SØKNAD') },
+export const alleVurderingsbehovOptions: ValuePair<Vurderingsbehov | VurderingsbehovIntern>[] = [
+  { value: 'SØKNAD', label: formaterVurderingsbehov('MOTTATT_SØKNAD') },
   { value: 'MOTTATT_AKTIVITETSMELDING', label: formaterVurderingsbehov('MOTTATT_AKTIVITETSMELDING') },
   { value: 'MOTTATT_MELDEKORT', label: formaterVurderingsbehov('MOTTATT_MELDEKORT') },
   { value: 'MOTTATT_LEGEERKLÆRING', label: formaterVurderingsbehov('MOTTATT_LEGEERKLÆRING') },

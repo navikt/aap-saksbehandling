@@ -1,6 +1,6 @@
 'use client';
 
-import { Enhet, Oppgave } from 'lib/types/oppgaveTypes';
+import { Enhet } from 'lib/types/oppgaveTypes';
 import { useEffect, useState } from 'react';
 import { Alert, BodyShort, Box, Button, HStack, Label, VStack } from '@navikt/ds-react';
 import { AlleOppgaverTabell } from 'components/oppgaveliste/alleoppgaver/alleoppgavertabell/AlleOppgaverTabell';
@@ -45,7 +45,7 @@ export const AlleOppgaver = ({ enheter }: Props) => {
   const [valgteRader, setValgteRader] = useState<number[]>([]);
   const lagretUtvidetFilter = hentAktivUtvidetFilter();
 
-  const { sort, setSort } = useBackendSortering<NoNavAapOppgaveListeOppgaveSorteringSortBy>();
+  const { sort, setSort } = useBackendSortering<NoNavAapOppgaveListeOppgaveSorteringSortBy>('alle-oppgaver');
 
   function førsteEnhetTilComboOption(enheter: Enhet[]): ComboOption[] | null {
     const førsteEnhet = enheter.find((e) => e);

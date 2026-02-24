@@ -1,20 +1,32 @@
-import { Vurderingsbehov } from 'lib/types/types';
+import { Vurderingsbehov, VurderingsbehovIntern } from 'lib/types/types';
 
-export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov): string => {
+export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov | VurderingsbehovIntern): string => {
   switch (vurderingsbehov) {
     case 'MOTTATT_SØKNAD':
       return 'Søknad';
+    case 'SØKNAD':
+      return 'Søknad';
     case 'MOTTATT_AKTIVITETSMELDING':
+      return 'Aktivitetsmelding';
+    case 'AKTIVITETSMELDING':
       return 'Aktivitetsmelding';
     case 'FASTSATT_PERIODE_PASSERT':
       return 'Fastsatt periode passert';
     case 'MOTTATT_MELDEKORT':
       return 'Meldekort';
+    case 'MELDEKORT':
+      return 'Meldekort';
     case 'MOTTATT_LEGEERKLÆRING':
+      return 'Legeerklæring';
+    case 'LEGEERKLÆRING':
       return 'Legeerklæring';
     case 'MOTTATT_AVVIST_LEGEERKLÆRING':
       return 'Avvist legeerklæring';
+    case 'AVVIST_LEGEERKLÆRING':
+      return 'Avvist legeerklæring';
     case 'MOTTATT_DIALOGMELDING':
+      return 'Dialogmelding';
+    case 'DIALOGMELDING':
       return 'Dialogmelding';
     case 'G_REGULERING':
       return 'G-regulering';
@@ -41,6 +53,8 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov): strin
     case 'REVURDER_STUDENT':
       return 'Revurder student';
     case 'MOTATT_KLAGE':
+      return 'Klage';
+    case 'KLAGE':
       return 'Klage';
     case 'LOVVALG_OG_MEDLEMSKAP':
       return 'Lovvalg og medlemskap';
@@ -106,6 +120,8 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov): strin
       return 'Korrigering av teknisk periode (automatisk behandling)';
     case 'ETABLERING_EGEN_VIRKSOMHET':
       return '§ 11-15 Etablering av egen virksomhet';
+    case 'REVURDER_SYKESTIPEND':
+      return 'Revurder sykestipend';
     default:
       return vurderingsbehov;
   }

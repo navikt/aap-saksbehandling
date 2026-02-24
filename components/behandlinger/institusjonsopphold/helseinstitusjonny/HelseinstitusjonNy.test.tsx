@@ -173,6 +173,88 @@ describe('Helseinstitusjonsvurdering', () => {
   });
 });
 
+describe('Helseinstitusjonsvurdering med flere opphold', () => {
+  const opphold1 = {
+    oppholdId: 'St. Mungos Hospital::2025-10-01',
+    institusjonstype: 'Helseinstitusjon',
+    oppholdstype: 'Heldøgnpasient',
+    status: 'AKTIV',
+    oppholdFra: '2025-10-01',
+    avsluttetDato: '2026-06-01',
+    kildeinstitusjon: 'St. Mungos Hospital',
+  };
+
+  const opphold2 = {
+    oppholdId: 'Hello Pello sykehus::2026-06-15',
+    institusjonstype: 'Helseinstitusjon',
+    oppholdstype: 'Heldøgnpasient',
+    status: 'AKTIV',
+    oppholdFra: '2026-06-15',
+    avsluttetDato: '2026-12-01',
+    kildeinstitusjon: 'Hello Pello sykehus',
+  };
+
+  const grunnlagMedToOpphold = {
+    harTilgangTilÅSaksbehandle: true,
+    opphold: [opphold1, opphold2],
+    vurderinger: [],
+    vedtatteVurderinger: [],
+  };
+
+  it('Skal vise en description av tidligste reduksjonsdato på neste opphold hvis det ikke er innenfor 3 måneder', async () => {
+    render(
+      <HelseinstitusjonNy
+        grunnlag={{ ...grunnlagMedToOpphold, opphold: [opphold1, { ...opphold2, oppholdFra: '2026-10-15' }] }}
+        behandlingVersjon={123}
+        readOnly={false}
+      />
+    );
+
+    await svarReduksjon(0);
+    await svarReduksjon(1);
+
+    const description = screen.getByText(
+      'Innleggelsesmåned: oktober 2026. Reduksjon kan tidligst starte: 1. februar 2027'
+    );
+
+    expect(description).toBeVisible();
+  });
+
+  it('Skal vise en description av tidligste reduksjonsdato på neste opphold hvis det er innenfor 3 måneder', async () => {
+    render(<HelseinstitusjonNy grunnlag={grunnlagMedToOpphold} behandlingVersjon={123} readOnly={false} />);
+
+    await svarReduksjon(0);
+    await svarReduksjon(1);
+
+    const description = screen.getByText(
+      'Innleggelsesmåned: juni 2026. Reduksjonen bør som regel starte 1. juli 2026 ved reduksjon i forrige opphold, ellers 1. oktober 2026. Det finnes likevel unntak.'
+    );
+    expect(description).toBeVisible();
+  });
+
+  it('Skal vise en feilmleding hvis bruker skriver inn en dato som er tidligere enn tidligste reduksjonsdato på neste opphold hvis det er etter 3 måneder', async () => {
+    render(
+      <HelseinstitusjonNy
+        grunnlag={{ ...grunnlagMedToOpphold, opphold: [opphold1, { ...opphold2, oppholdFra: '2026-10-15' }] }}
+        behandlingVersjon={123}
+        readOnly={false}
+      />
+    );
+
+    await svarReduksjon(0);
+    await svarReduksjon(1);
+
+    const datoFelt = screen.getAllByRole('textbox', { name: 'Oppgi dato for reduksjon av AAP' })[1];
+    await user.type(datoFelt, '01.12.2026');
+
+    const bekreftKnapp = screen.getByRole('button', { name: 'Bekreft' });
+    await user.click(bekreftKnapp);
+
+    const feilmelding = screen.getByText('Tidligste dato for reduksjon er: 01.02.2027');
+    expect(feilmelding).toBeVisible();
+  });
+});
+
 describe('revurdering', () => {
   const grunnlagMedTidligereVurdering: HelseinstitusjonGrunnlag = {
     ...grunnlagUtenVurdering,
@@ -214,24 +296,6 @@ describe('revurdering', () => {
     const datoFelt = screen.getByRole('textbox', { name: 'Når skal reduksjonen stoppes?' });
     expect(datoFelt).toBeVisible();
   });
-
-  it('Skal vise fom dato etter siste vedtatte vurdering fom dato når bruker legger til ny vurdering', async () => {
-    render(<HelseinstitusjonNy grunnlag={grunnlagMedTidligereVurdering} behandlingVersjon={0} readOnly={false} />);
-    const leggTilKnapp = screen.getByRole('button', { name: 'Legg til ny vurdering' });
-    await user.click(leggTilKnapp);
-
-    // Vedtatt vurdering, 1. januar
-    const vedtattVurdering = screen.getByRole('button', {
-      name: /1\. januar 2025 – 1\. august 20252\. januar 2025 ikke reduksjon/i,
-    });
-    expect(vedtattVurdering).toBeVisible();
-
-    // 3. januar
-    const nyVurdering = screen.getByRole('button', {
-      name: /ny vurdering: 3\. januar 2025 – ikke reduksjon/i,
-    });
-    expect(nyVurdering).toBeVisible();
-  });
 });
 
 describe('form med reduksjon', () => {
@@ -241,36 +305,6 @@ describe('form med reduksjon', () => {
 
     const datoFelt = screen.queryByRole('textbox', { name: 'Når skal reduksjonen stoppes?' });
     expect(datoFelt).not.toBeInTheDocument();
-  });
-
-  it('viser ikke datofelt for stopp av reduksjon når vurderinger gir samme svar', async () => {
-    render(<HelseinstitusjonNy grunnlag={grunnlagUtenVurdering} behandlingVersjon={0} readOnly={false} />);
-    await svarIkkeReduksjon(0); // På første vurdering
-
-    const datoFelt = screen.queryAllByRole('textbox', { name: 'Når skal reduksjonen stoppes?' });
-    expect(datoFelt.length).toBe(0);
-
-    const leggTilVurderingKnapp = screen.getByRole('button', { name: 'Legg til ny vurdering' });
-    await user.click(leggTilVurderingKnapp);
-
-    await svarIkkeReduksjon(1);
-    const datoFeltEtterNyBesvarelse = screen.queryAllByRole('textbox', { name: 'Når skal reduksjonen stoppes?' });
-    expect(datoFeltEtterNyBesvarelse.length).toBe(0);
-  });
-
-  it('Viser ikke datofelt for start av reduksjon når vurderinger er lik forrige', async () => {
-    render(<HelseinstitusjonNy grunnlag={grunnlagUtenVurdering} behandlingVersjon={0} readOnly={false} />);
-    await svarReduksjon(0); // På første vurdering
-
-    const datoFelt = screen.getByRole('textbox', { name: 'Oppgi dato for reduksjon av AAP' });
-    expect(datoFelt).toBeVisible();
-
-    const leggTilVurderingKnapp = screen.getByRole('button', { name: 'Legg til ny vurdering' });
-    await user.click(leggTilVurderingKnapp);
-
-    await svarReduksjon(1);
-    const datoFeltEtterNyBesvarelse = screen.queryAllByRole('textbox', { name: 'Oppgi dato for reduksjon av AAP' });
-    expect(datoFeltEtterNyBesvarelse.length).toBe(1); // Vi forventer bare datofelt på den første vurderingen
   });
 });
 

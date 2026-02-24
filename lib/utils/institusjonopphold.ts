@@ -48,25 +48,15 @@ export function lagReduksjonsBeskrivelse(oppholdFra: string): string {
   return `Innleggelsesmåned: ${innleggelsesmåned}. Reduksjon kan tidligst starte: ${tidligsteReduksjon}`;
 }
 
-export function lagReduksjonBeskrivelseNyttOpphold(
-  inputDato: string,
-  oppholdFra: string,
-  forrigeOppholdSisteVurderingVarRedukjson?: boolean
-): string {
+export function lagReduksjonBeskrivelseNyttOpphold(oppholdFra: string): string {
   const oppholdDato = new Dato(oppholdFra).dato;
-  const tidligsteReduksjonsdatoVedNyttOppholdRegel = new Dato(
-    beregnReduksjonsdatoVedNyttOpphold(inputDato, oppholdFra)
-  );
-
-  const tidligsteReduksjonsdatoEtterStandardRegel = new Dato(beregnTidligsteReduksjonsdato(oppholdFra));
-
-  const tidligsteReduksjonsdato = forrigeOppholdSisteVurderingVarRedukjson
-    ? tidligsteReduksjonsdatoVedNyttOppholdRegel.dato
-    : tidligsteReduksjonsdatoEtterStandardRegel.dato;
 
   const innleggelsesmåned = format(startOfMonth(oppholdDato), 'MMMM yyyy', { locale: nb });
 
-  return `Innleggelsesmåned: ${innleggelsesmåned}. Reduksjon kan tidligst starte: ${formatDatoMedMånedsnavn(tidligsteReduksjonsdato)}`;
+  const énMånedEtterInnleggelsesmåned = startOfMonth(addMonths(oppholdDato, 1));
+  const fireMånederEtterInnleggelsesmåned = startOfMonth(addMonths(oppholdDato, 4));
+
+  return `Innleggelsesmåned: ${innleggelsesmåned}. Reduksjonen bør som regel starte ${formatDatoMedMånedsnavn(énMånedEtterInnleggelsesmåned)} ved reduksjon i forrige opphold, ellers ${formatDatoMedMånedsnavn(fireMånederEtterInnleggelsesmåned)}. Det finnes likevel unntak.`;
 }
 
 /**
@@ -99,29 +89,6 @@ export const validerDatoForStoppAvReduksjon = (reduksjonDato: string, oppholdfra
   const dato = new Dato(reduksjonDato).dato;
 
   const tidligsteReduksjonsdato = new Dato(beregnTidligsteReduksjonsdato(oppholdfra)).dato;
-
-  if (isBefore(dato, tidligsteReduksjonsdato)) {
-    return `Tidligste dato for reduksjon er: ${formaterDatoForFrontend(tidligsteReduksjonsdato)}`;
-  }
-};
-
-export const validerDatoForStartAvReduksjonVedNyttOpphold = (
-  inputDato: string,
-  nyttOppholdFra: string,
-  utskrevetDato: string,
-  forrigeOppholdSisteVurderingVarRedukjson?: boolean
-) => {
-  const dato = new Dato(inputDato).dato;
-
-  const tidligsteReduksjonsdatoVedNyttOppholdRegel = new Dato(
-    beregnReduksjonsdatoVedNyttOpphold(utskrevetDato, nyttOppholdFra)
-  );
-
-  const tidligsteReduksjonsdatoEtterStandardRegel = new Dato(beregnTidligsteReduksjonsdato(nyttOppholdFra));
-
-  const tidligsteReduksjonsdato = forrigeOppholdSisteVurderingVarRedukjson
-    ? tidligsteReduksjonsdatoVedNyttOppholdRegel.dato
-    : tidligsteReduksjonsdatoEtterStandardRegel.dato;
 
   if (isBefore(dato, tidligsteReduksjonsdato)) {
     return `Tidligste dato for reduksjon er: ${formaterDatoForFrontend(tidligsteReduksjonsdato)}`;

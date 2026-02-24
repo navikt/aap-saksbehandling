@@ -1,8 +1,14 @@
 import { SortState } from '@navikt/ds-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useInnloggetBruker } from 'hooks/BrukerHook';
 
 export interface ScopedSortState<T> extends SortState {
   orderBy: Extract<keyof T, string>;
+}
+
+interface StoredSortState<T> {
+  sortState: ScopedSortState<T>;
+  user: string;
 }
 
 function comparator<T>(a: T, b: T, orderBy: keyof T): number {
@@ -15,12 +21,61 @@ function comparator<T>(a: T, b: T, orderBy: keyof T): number {
   return 0;
 }
 
-export function useSortertListe<T>(elementer: T[]): {
+function sortStorageKey(scope: string): string {
+  return `OPPGAVE_SORTERING:${scope.toUpperCase()}`;
+}
+
+function hentSortering<T>(navIdent: string | undefined, scope: string): ScopedSortState<T> | undefined {
+  if (typeof window === 'undefined' || !navIdent) return undefined;
+
+  try {
+    const lagretState = localStorage.getItem(sortStorageKey(scope));
+    if (lagretState) {
+      const data: StoredSortState<T> = JSON.parse(lagretState);
+      if (data.user === navIdent) {
+        return data.sortState;
+      }
+      localStorage.removeItem(sortStorageKey(scope));
+    }
+  } catch (error) {
+    console.error('Kunne ikke hente sortering fra localStorage:', error);
+  }
+  return undefined;
+}
+
+function lagreSortering<T>(
+  navIdent: string | undefined,
+  sortState: ScopedSortState<T> | undefined,
+  scope: string
+): void {
+  if (typeof window === 'undefined' || !navIdent) return;
+
+  try {
+    if (sortState) {
+      const data: StoredSortState<T> = { sortState, user: navIdent };
+      localStorage.setItem(sortStorageKey(scope), JSON.stringify(data));
+    } else {
+      localStorage.removeItem(sortStorageKey(scope));
+    }
+  } catch (error) {
+    console.error('Kunne ikke lagre sortering i localStorage:', error);
+  }
+}
+
+export function useSortertListe<T>(
+  elementer: T[],
+  scope: string
+): {
   sort: ScopedSortState<T> | undefined;
   sortertListe: T[];
   settSorteringskriterier: (sortKey: ScopedSortState<T>['orderBy']) => void;
 } {
-  const [sort, setSort] = useState<ScopedSortState<T> | undefined>();
+  const bruker = useInnloggetBruker();
+  const [sort, setSort] = useState<ScopedSortState<T> | undefined>(() => hentSortering<T>(bruker?.NAVident, scope));
+
+  useEffect(() => {
+    lagreSortering(bruker?.NAVident, sort, scope);
+  }, [sort, bruker?.NAVident]);
 
   function settSorteringskriterier(sortKey: ScopedSortState<T>['orderBy']) {
     const sortering =
@@ -37,7 +92,7 @@ export function useSortertListe<T>(elementer: T[]): {
   function utførSortering(elementer: T[]) {
     if (!sort) return elementer;
 
-    const sorterteElementer = elementer.sort((a, b) => {
+    return elementer.sort((a, b) => {
       if (typeof a[sort.orderBy] === 'string' && typeof b[sort.orderBy] === 'string') {
         const valueA = a[sort.orderBy] as string;
         const valueB = b[sort.orderBy] as string;
@@ -46,8 +101,6 @@ export function useSortertListe<T>(elementer: T[]): {
 
       return sort.direction === 'ascending' ? comparator(a, b, sort.orderBy) : comparator(b, a, sort.orderBy);
     });
-
-    return sorterteElementer;
   }
 
   const sortertListe = utførSortering(elementer);

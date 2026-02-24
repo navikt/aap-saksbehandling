@@ -38,7 +38,7 @@ interface Props {
 }
 
 export const LedigeOppgaver = ({ enheter }: Props) => {
-  const { sort, setSort } = useBackendSortering<NoNavAapOppgaveListeOppgaveSorteringSortBy>();
+  const { sort, setSort } = useBackendSortering<NoNavAapOppgaveListeOppgaveSorteringSortBy>('ledige-oppgaver');
   const { hentLagretAktivKø, lagreAktivKøId } = useLagreAktivKø();
   const { hentAktivUtvidetFilter, lagreAktivUtvidetFilter } = useLagreAktivUtvidetFilter();
   const { hentLagredeAktiveEnheter, lagreAktiveEnheter } = useLagreAktiveEnheter();

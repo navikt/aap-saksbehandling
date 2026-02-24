@@ -7,6 +7,7 @@ import { addDays, format } from 'date-fns';
 import { TildelOppgaverContext } from 'context/oppgave/TildelOppgaverContext';
 import { FeatureFlagProvider } from 'context/UnleashContext';
 import { mockedFlags } from 'lib/services/unleash/unleashToggles';
+import { InnloggetBrukerContextProvider } from 'context/InnloggetBrukerContext';
 
 afterEach(() => {
   cleanup();
@@ -55,15 +56,17 @@ export function customRenderWithSøknadstidspunkt(ui: ReactElement, søknadstids
   );
 }
 
-export function customRenderWithTildelOppgaveContext(ui: ReactElement, visModal: boolean) {
+export function customRenderWithTildelOppgaveContext(ui: ReactElement, visModal: boolean, bruker?: string) {
   render(
-    <FeatureFlagProvider flags={mockedFlags}>
-      <TildelOppgaverContext.Provider
-        value={{ oppgaveIder: [], setOppgaveIder: () => {}, visModal, setVisModal: () => {} }}
-      >
-        {ui}
-      </TildelOppgaverContext.Provider>
-    </FeatureFlagProvider>
+    <InnloggetBrukerContextProvider bruker={{ NAVident: bruker || 'Z000000', navn: 'Test Testesen' }}>
+      <FeatureFlagProvider flags={mockedFlags}>
+        <TildelOppgaverContext.Provider
+          value={{ oppgaveIder: [], setOppgaveIder: () => {}, visModal, setVisModal: () => {} }}
+        >
+          {ui}
+        </TildelOppgaverContext.Provider>
+      </FeatureFlagProvider>
+    </InnloggetBrukerContextProvider>
   );
 }
 

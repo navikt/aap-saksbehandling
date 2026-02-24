@@ -28,7 +28,7 @@ export interface FormFieldsFilter {
 }
 
 export const MineOppgaver = () => {
-  const { sort, setSort } = useBackendSortering<PathsMineOppgaverGetParametersQuerySortby>();
+  const { sort, setSort } = useBackendSortering<PathsMineOppgaverGetParametersQuerySortby>('mine-oppgaver');
   const { oppgaver, mutate, isLoading, error } = useMineOppgaver(sort);
   const { hentAktivUtvidetFilter, lagreAktivUtvidetFilter } = useLagreAktivUtvidetFilter();
   const lagretUtvidetFilter = hentAktivUtvidetFilter();

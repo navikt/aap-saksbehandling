@@ -20,7 +20,7 @@ export const VisBeregning = ({ grunnlag }: Props) => {
     <>
       <VilkårsKort
         heading={finnHeading(beregningsVisning)}
-        // @ts-ignore-line TODO Finne ut hvordan vi skal vise disse kortene
+        // @ts-expect-error-line TODO Finne ut hvordan vi skal vise disse kortene
         steg={'VIS_BEREGNING'}
         icon={<SackKronerIcon title="beregning-ikon" fontSize={'inherit'} aria-hidden />}
       >

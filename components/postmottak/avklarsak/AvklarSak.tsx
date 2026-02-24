@@ -115,7 +115,6 @@ export const AvklarSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, 
             : undefined,
           dokumenter: data.dokumenter,
         },
-        // @ts-ignore
         referanse: behandlingsreferanse,
       });
     })(event);

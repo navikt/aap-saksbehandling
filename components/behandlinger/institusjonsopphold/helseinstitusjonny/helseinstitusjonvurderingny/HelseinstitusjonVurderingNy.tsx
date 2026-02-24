@@ -11,7 +11,6 @@ import {
   lagReduksjonsBeskrivelse,
   validerDatoErInnenforOpphold,
   validerDatoForStoppAvReduksjon,
-  validerDatoForStartAvReduksjonVedNyttOpphold,
   validerErIKronologiskRekkeFølge,
 } from 'lib/utils/institusjonopphold';
 import { HelseinstitusjonGrunnlag } from 'lib/types/types';
@@ -41,41 +40,28 @@ export const HelseinstitusjonsvurderingNy = ({
   const visForsørgerEktefelleSpørsmål = vurdering.faarFriKostOgLosji === JaEllerNei.Ja;
   const visHarFasteUtgifterSpørsmål =
     vurdering.faarFriKostOgLosji === JaEllerNei.Ja && vurdering.forsoergerEktefelle === JaEllerNei.Nei;
+
   const erReduksjon = erReduksjonUtIFraFormFields(vurdering);
 
   const forrigeVurdering =
     vurderingIndex > 0
       ? form.watch(`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex - 1}`)
       : undefined;
-  const forrigeVurderingErReduksjon = forrigeVurdering ? erReduksjonUtIFraFormFields(forrigeVurdering) : false;
 
-  const skalViseDatoFeltForStoppAvReduksjon =
-    !erReduksjon && (forrigeVurderingErReduksjon || (finnesTidligereVurderinger && vurderingIndex === 0));
+  const erFørsteVurdering = vurderingIndex === 0;
 
-  const skalViseDatoFeltForStartAvReduksjon = !forrigeVurderingErReduksjon && erReduksjon;
-
-  const forrigeOppholdSisteVurdering = form
-    .getValues(`helseinstitusjonsvurderinger.${oppholdIndex - 1}`)
-    ?.vurderinger.at(-1);
-
-  const forrigeOppholdHaddeReduksjonVedOppholdetsslutt = forrigeOppholdSisteVurdering
-    ? erReduksjonUtIFraFormFields(forrigeOppholdSisteVurdering)
-    : undefined;
+  const skalViseDatoFeltForStoppAvReduksjon = !erReduksjon && (finnesTidligereVurderinger || !erFørsteVurdering);
 
   const forrigeOppholdTom =
     oppholdIndex > 0 ? form.getValues(`helseinstitusjonsvurderinger.${oppholdIndex - 1}.periode.tom`) : undefined;
 
   const reduksjonsBeskrivelse = useMemo(() => {
     if (forrigeOppholdTom && erNyttOppholdInnenfor3MaanederEtterSistOpphold(forrigeOppholdTom, opphold.oppholdFra)) {
-      return lagReduksjonBeskrivelseNyttOpphold(
-        forrigeOppholdTom,
-        opphold.oppholdFra,
-        forrigeOppholdHaddeReduksjonVedOppholdetsslutt
-      );
+      return lagReduksjonBeskrivelseNyttOpphold(opphold.oppholdFra);
     } else {
       return lagReduksjonsBeskrivelse(opphold.oppholdFra);
     }
-  }, [opphold.oppholdFra, forrigeOppholdTom, forrigeOppholdHaddeReduksjonVedOppholdetsslutt]);
+  }, [opphold.oppholdFra, forrigeOppholdTom]);
 
   return (
     <VStack gap={'4'}>
@@ -130,7 +116,7 @@ export const HelseinstitusjonsvurderingNy = ({
         </RadioGroupWrapper>
       )}
 
-      {skalViseDatoFeltForStartAvReduksjon && (
+      {erReduksjon && (
         <>
           <DateInputWrapper
             name={`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.periode.fom`}
@@ -147,16 +133,9 @@ export const HelseinstitusjonsvurderingNy = ({
                   validerErIKronologiskRekkeFølge(value as string, forrigeVurdering?.periode.fom),
                 validerReduksjonsdato: (value) => {
                   if (
-                    forrigeOppholdTom &&
-                    erNyttOppholdInnenfor3MaanederEtterSistOpphold(forrigeOppholdTom, opphold.oppholdFra)
+                    !forrigeOppholdTom ||
+                    !erNyttOppholdInnenfor3MaanederEtterSistOpphold(forrigeOppholdTom, opphold.oppholdFra)
                   ) {
-                    return validerDatoForStartAvReduksjonVedNyttOpphold(
-                      value as string,
-                      opphold.oppholdFra,
-                      forrigeOppholdTom,
-                      forrigeOppholdHaddeReduksjonVedOppholdetsslutt
-                    );
-                  } else {
                     return validerDatoForStoppAvReduksjon(value as string, opphold.oppholdFra);
                   }
                 },
