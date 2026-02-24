@@ -5,6 +5,7 @@ import {
   AvklarPeriodisertStudentLøsning,
   MellomlagretVurdering,
   StudentGrunnlag,
+  StudentVurderingResponse,
   VurdertAvAnsatt,
 } from 'lib/types/types';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
@@ -272,7 +273,7 @@ function hentVurderingStatus(
 }
 
 function hentVurderingStatusForVedtattVurdering(
-  values: StudentGrunnlag['nyeVurderinger'][0]
+  values: StudentVurderingResponse
 ): VurderingStatus.Oppfylt | VurderingStatus.IkkeOppfylt | undefined {
   if (
     values.harAvbruttStudie &&

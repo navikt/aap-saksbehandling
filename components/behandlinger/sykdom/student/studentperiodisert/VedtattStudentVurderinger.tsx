@@ -2,11 +2,11 @@ import { VStack } from '@navikt/ds-react';
 import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
 import { Dato } from 'lib/types/Dato';
 import { getJaNeiEllerIkkeBesvart } from 'lib/utils/form';
-import { StudentGrunnlag } from 'lib/types/types';
+import { StudentVurderingResponse } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 
 interface Props {
-  vurdering: StudentGrunnlag['sisteVedtatteVurderinger'][0];
+  vurdering: StudentVurderingResponse;
 }
 
 export const VedtattStudentVurderinger = ({ vurdering }: Props) => {
