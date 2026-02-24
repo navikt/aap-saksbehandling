@@ -32,10 +32,11 @@ import { mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
 import { VurderingStatus } from 'components/periodisering/VurderingStatusTag';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { VedtattStudentVurderinger } from 'components/behandlinger/sykdom/student/studentperiodisert/VedtattStudentVurderinger';
+import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
 
 interface Props {
   behandlingVersjon: number;
-  grunnlag?: StudentGrunnlag;
+  grunnlag: StudentGrunnlag;
   readOnly: boolean;
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }
@@ -45,7 +46,7 @@ export interface StudentFormFields {
 }
 
 export interface StudentVurdering {
-  gjelderFra: string;
+  fraDato: string;
   begrunnelse: string;
   harAvbruttStudie?: string;
   godkjentStudieAvLånekassen?: string;
@@ -85,7 +86,7 @@ export const StudentVurderingPeriodisert = ({
 
   const defaultValues: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
-    : mapVurderingToDraftFormFields(grunnlag?.nyeVurderinger);
+    : mapVurderingToDraftFormFields(grunnlag);
 
   const form = useForm<StudentFormFields>({ defaultValues, shouldUnregister: true });
 
@@ -95,12 +96,10 @@ export const StudentVurderingPeriodisert = ({
     form.handleSubmit((data) => {
       const løsning: AvklarPeriodisertStudentLøsning[] = data.vurderinger.map((vurdering, index) => {
         const isLast = index === data.vurderinger.length - 1;
-        const tilDato = isLast
-          ? undefined
-          : parseDatoFraDatePickerOgTrekkFra1Dag(data.vurderinger[index + 1].gjelderFra);
+        const tilDato = isLast ? undefined : parseDatoFraDatePickerOgTrekkFra1Dag(data.vurderinger[index + 1].fraDato);
 
         return {
-          fom: formaterDatoForBackend(parse(vurdering.gjelderFra, 'dd.MM.yyyy', new Date())),
+          fom: formaterDatoForBackend(parse(vurdering.fraDato, 'dd.MM.yyyy', new Date())),
           tom: tilDato ? formaterDatoForBackend(tilDato) : undefined,
           begrunnelse: vurdering.begrunnelse,
           harAvbruttStudie: vurdering.harAvbruttStudie === JaEllerNei.Ja,
@@ -140,14 +139,14 @@ export const StudentVurderingPeriodisert = ({
   };
 
   const errorList = mapPeriodiserteVurderingerErrorList<StudentFormFields>(form.formState.errors);
-  const sistevedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger;
+  const sistevedtatteVurderinger = grunnlag.sisteVedtatteVurderinger;
   const finnesSisteVedtatteVurderinger = sistevedtatteVurderinger && sistevedtatteVurderinger?.length > 0;
 
-  const foersteNyePeriode = nyeVurderinger.length > 0 ? form.watch('vurderinger.0.gjelderFra') : null;
+  const foersteNyePeriode = nyeVurderinger.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
 
   return (
     <VilkårskortPeriodisert
-      onDeleteMellomlagringClick={() => slettMellomlagring()}
+      onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(mapVurderingToDraftFormFields(grunnlag)))}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       mellomlagretVurdering={mellomlagretVurdering}
       visningModus={visningModus}
@@ -164,7 +163,7 @@ export const StudentVurderingPeriodisert = ({
       formReset={() => form.reset()}
     >
       <VStack gap={'4'}>
-        <RelevantInformasjonStudent opplysninger={grunnlag?.oppgittStudent} />
+        <RelevantInformasjonStudent opplysninger={grunnlag.oppgittStudent} />
 
         {sistevedtatteVurderinger?.map((vurdering, index) => {
           return (
@@ -186,8 +185,8 @@ export const StudentVurderingPeriodisert = ({
             return (
               <NyVurderingExpandableCard
                 key={vurdering.id}
-                fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.gjelderFra`))}
-                nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.gjelderFra`))}
+                fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
+                nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
                 isLast={index === nyeVurderinger.length - 1}
                 vurdertAv={vurdering.vurdertAv}
                 finnesFeil={errorList.length > 0}
@@ -211,11 +210,15 @@ export const StudentVurderingPeriodisert = ({
   );
 };
 
-function mapVurderingToDraftFormFields(nyeVurderinger?: StudentGrunnlag['nyeVurderinger']): DraftFormFields {
+function mapVurderingToDraftFormFields(grunnlag: StudentGrunnlag): DraftFormFields {
+  if (trengerVurderingsForslag(grunnlag)) {
+    return hentPerioderSomTrengerVurdering(grunnlag, () => emptyStudentVurdering());
+  }
+
   return {
-    vurderinger: nyeVurderinger?.map((vurdering) => {
+    vurderinger: grunnlag.nyeVurderinger?.map((vurdering) => {
       return {
-        gjelderFra: vurdering?.fom ? new Dato(vurdering.fom).formaterForFrontend() : '',
+        fraDato: vurdering?.fom ? new Dato(vurdering.fom).formaterForFrontend() : '',
         begrunnelse: vurdering?.begrunnelse || '',
         harAvbruttStudie: getJaNeiEllerUndefined(vurdering?.harAvbruttStudie),
         godkjentStudieAvLånekassen: getJaNeiEllerUndefined(vurdering?.godkjentStudieAvLånekassen),
@@ -235,7 +238,7 @@ function mapVurderingToDraftFormFields(nyeVurderinger?: StudentGrunnlag['nyeVurd
 
 function emptyStudentVurdering(): StudentVurdering {
   return {
-    gjelderFra: '',
+    fraDato: '',
     begrunnelse: '',
     avbruddMerEnn6Måneder: '',
     avbruttDato: '',

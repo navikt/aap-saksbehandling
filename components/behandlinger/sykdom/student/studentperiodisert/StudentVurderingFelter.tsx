@@ -20,7 +20,7 @@ export const StudentVurderingFelter = ({ index, readOnly }: Props) => {
   return (
     <VStack gap={'4'}>
       <DateInputWrapper
-        name={`vurderinger.${index}.gjelderFra`}
+        name={`vurderinger.${index}.fraDato`}
         control={form.control}
         label={'Vurderingen gjelder fra'}
         readOnly={readOnly}
