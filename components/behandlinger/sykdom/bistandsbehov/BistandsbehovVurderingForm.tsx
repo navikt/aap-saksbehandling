@@ -2,7 +2,7 @@
 
 import { JaEllerNei } from 'lib/utils/form';
 import { validerDato } from 'lib/validation/dateValidation';
-import { VStack } from '@navikt/ds-react';
+import { Alert, VStack } from '@navikt/ds-react';
 import { UseFormReturn } from 'react-hook-form';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
@@ -17,8 +17,9 @@ type Props = {
   readOnly: boolean;
   index: number;
   grunnlag?: BistandsGrunnlag;
+  behøverVurdering: boolean;
 };
-export const BistandsbehovVurderingForm = ({ form, index, readOnly }: Props) => {
+export const BistandsbehovVurderingForm = ({ form, index, readOnly, behøverVurdering }: Props) => {
   const vilkårsvurderingLabel = 'Vilkårsvurdering';
   const erBehovForAktivBehandlingLabel = 'a: Har brukeren behov for aktiv behandling?';
   const erBehovForArbeidsrettetTiltakLabel = 'b: Har brukeren behov for arbeidsrettet tiltak?';
@@ -27,6 +28,9 @@ export const BistandsbehovVurderingForm = ({ form, index, readOnly }: Props) => 
 
   return (
     <VStack gap={'4'}>
+      {behøverVurdering && (
+        <Alert variant={'info'}>{`Perioden fra ${form.watch(`vurderinger.${index}.fraDato`)} må vurderes`}</Alert>
+      )}
       <DateInputWrapper
         name={`vurderinger.${index}.fraDato`}
         label="Vurderingen gjelder fra"

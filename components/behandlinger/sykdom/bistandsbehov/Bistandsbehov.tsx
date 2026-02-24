@@ -1,6 +1,6 @@
 'use client';
 
-import { BistandsGrunnlag, MellomlagretVurdering, VurdertAvAnsatt } from 'lib/types/types';
+import { BistandsGrunnlag, MellomlagretVurdering, PeriodisertVurderingMeta, VurdertAvAnsatt } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { FormEvent } from 'react';
 import { parseDatoFraDatePicker } from 'lib/utils/date';
@@ -42,7 +42,7 @@ interface Props {
 export interface BistandForm {
   vurderinger: Array<BistandVurderingForm>;
 }
-export interface BistandVurderingForm {
+export interface BistandVurderingForm extends PeriodisertVurderingMeta {
   fraDato: string;
   begrunnelse: string;
   erBehovForAktivBehandling: JaEllerNei | undefined;
@@ -53,7 +53,6 @@ export interface BistandVurderingForm {
   vurdertAv?: VurdertAvAnsatt;
   kvalitetssikretAv?: VurdertAvAnsatt;
   besluttetAv?: VurdertAvAnsatt;
-  erNyVurdering?: boolean;
 }
 
 export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, initialMellomlagretVurdering }: Props) => {
@@ -187,7 +186,12 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, initialMe
             finnesFeil={finnesFeilForVurdering(index, errorList)}
             initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
           >
-            <BistandsbehovVurderingForm form={form} readOnly={formReadOnly} index={index} />
+            <BistandsbehovVurderingForm
+              form={form}
+              readOnly={formReadOnly}
+              index={index}
+              behøverVurdering={vurdering.behøverVurdering}
+            />
           </NyVurderingExpandableCard>
         ))}
       </VStack>
@@ -212,6 +216,8 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, initialMe
         vurdertAv: vurdering.vurdertAv,
         kvalitetssikretAv: vurdering.kvalitetssikretAv,
         besluttetAv: vurdering.besluttetAv,
+        erNyVurdering: false,
+        behøverVurdering: false,
       })),
     };
   }
@@ -226,6 +232,7 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, initialMe
       skalVurdereAapIOvergangTilArbeid: undefined,
       erBehovForArbeidsrettetTiltak: undefined,
       erNyVurdering: true,
+      behøverVurdering: false,
     };
   }
 };
