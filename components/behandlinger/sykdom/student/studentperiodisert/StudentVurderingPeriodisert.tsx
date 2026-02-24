@@ -182,11 +182,14 @@ export const StudentVurderingPeriodisert = ({
 
         <FormProvider {...form}>
           {nyeVurderinger.map((vurdering, index) => {
+            const vurderingValues = form.getValues(`vurderinger.${index}`);
+            const nesteVurderingValues = form.getValues(`vurderinger.${index + 1}`);
+
             return (
               <NyVurderingExpandableCard
                 key={vurdering.id}
-                fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-                nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
+                fraDato={gyldigDatoEllerNull(vurderingValues.fraDato)}
+                nestePeriodeFraDato={gyldigDatoEllerNull(nesteVurderingValues.fraDato)}
                 isLast={index === nyeVurderinger.length - 1}
                 vurdertAv={vurdering.vurdertAv}
                 finnesFeil={errorList.length > 0}
@@ -196,7 +199,7 @@ export const StudentVurderingPeriodisert = ({
                 harTidligereVurderinger={finnesSisteVedtatteVurderinger}
                 accordionsSignal={accordionsSignal}
                 initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
-                vurderingStatus={hentVurderingStatus(vurdering)}
+                vurderingStatus={hentVurderingStatus(vurderingValues)}
                 kvalitetssikretAv={vurdering.kvalitetssikretAv}
                 besluttetAv={vurdering.besluttetAv}
               >
@@ -253,6 +256,7 @@ function emptyStudentVurdering(): StudentVurdering {
 function hentVurderingStatus(
   values: StudentVurdering
 ): VurderingStatus.Oppfylt | VurderingStatus.IkkeOppfylt | undefined {
+  console.log(values);
   if (
     values.harAvbruttStudie &&
     values.godkjentStudieAvLånekassen == JaEllerNei.Ja &&
@@ -264,6 +268,7 @@ function hentVurderingStatus(
   }
 
   if (values.harAvbruttStudie === JaEllerNei.Nei) {
+    console.log('skjer dette');
     return VurderingStatus.IkkeOppfylt;
   }
 }
