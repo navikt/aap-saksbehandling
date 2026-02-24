@@ -182,13 +182,13 @@ export const StudentVurderingPeriodisert = ({
 
         <FormProvider {...form}>
           {nyeVurderinger.map((vurdering, index) => {
-            const vurderingValues = form.getValues(`vurderinger.${index}`);
-            const nesteVurderingValues = form.getValues(`vurderinger.${index + 1}`);
+            const vurderingValues = form.watch(`vurderinger.${index}`);
+            const nesteVurderingValues = form.watch(`vurderinger.${index + 1}`);
 
             return (
               <NyVurderingExpandableCard
                 key={vurdering.id}
-                fraDato={gyldigDatoEllerNull(vurderingValues.fraDato)}
+                fraDato={gyldigDatoEllerNull(vurderingValues?.fraDato)}
                 nestePeriodeFraDato={gyldigDatoEllerNull(nesteVurderingValues?.fraDato)}
                 isLast={index === nyeVurderinger.length - 1}
                 vurdertAv={vurdering.vurdertAv}
@@ -254,21 +254,19 @@ function emptyStudentVurdering(): StudentVurdering {
 }
 
 function hentVurderingStatus(
-  values: StudentVurdering
+  values?: StudentVurdering
 ): VurderingStatus.Oppfylt | VurderingStatus.IkkeOppfylt | undefined {
-  console.log(values);
   if (
-    values.harAvbruttStudie &&
-    values.godkjentStudieAvLånekassen == JaEllerNei.Ja &&
-    values.avbruttPgaSykdomEllerSkade == JaEllerNei.Ja &&
-    values.harBehovForBehandling == JaEllerNei.Ja &&
-    values.avbruddMerEnn6Måneder == JaEllerNei.Ja
+    values?.harAvbruttStudie == JaEllerNei.Ja &&
+    values?.godkjentStudieAvLånekassen == JaEllerNei.Ja &&
+    values?.avbruttPgaSykdomEllerSkade == JaEllerNei.Ja &&
+    values?.harBehovForBehandling == JaEllerNei.Ja &&
+    values?.avbruddMerEnn6Måneder == JaEllerNei.Ja
   ) {
     return VurderingStatus.Oppfylt;
   }
 
-  if (values.harAvbruttStudie === JaEllerNei.Nei) {
-    console.log('skjer dette');
+  if (values?.harAvbruttStudie === JaEllerNei.Nei) {
     return VurderingStatus.IkkeOppfylt;
   }
 }
