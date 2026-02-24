@@ -11,7 +11,7 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
 import { OppgaveInformasjon } from 'components/oppgaveliste/oppgaveinformasjon/OppgaveInformasjon';
 import { MineOppgaverMeny } from 'components/oppgaveliste/mineoppgaver/mineoppgavermeny/MineOppgaverMeny';
-import { Vurderingsbehov, ÅrsakTilOpprettelse } from 'lib/types/types';
+import { VurderingsbehovIntern, ÅrsakTilOpprettelse } from 'lib/types/types';
 import { memo } from 'react';
 
 const OppgaveRad = ({
@@ -51,12 +51,12 @@ const OppgaveRad = ({
       </Table.DataCell>
       <Table.DataCell style={{ maxWidth: '150px' }} textSize={'small'}>
         <Tooltip
-          content={oppgave.årsakerTilBehandling
-            .map((årsak) => formaterVurderingsbehov(årsak as Vurderingsbehov))
+          content={oppgave.vurderingsbehov
+            .map((årsak) => formaterVurderingsbehov(årsak as VurderingsbehovIntern))
             .join(', ')}
         >
           <BodyShort truncate size={'small'}>
-            {oppgave.årsakerTilBehandling.map((årsak) => formaterVurderingsbehov(årsak as Vurderingsbehov)).join(', ')}
+            {oppgave.vurderingsbehov.map((årsak) => formaterVurderingsbehov(årsak as VurderingsbehovIntern)).join(', ')}
           </BodyShort>
         </Tooltip>
       </Table.DataCell>
