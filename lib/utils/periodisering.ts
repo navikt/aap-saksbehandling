@@ -61,7 +61,7 @@ export function hentPerioderSomTrengerVurdering<T>(
           fraDato: new Dato(periode.fom).formaterForFrontend(),
           behøverVurdering: true,
         }))
-      : [{ fraDato: getFraDatoFraGrunnlagForFrontend(grunnlag), behøverVurdering: null }];
+      : [{ fraDato: getFraDatoFraGrunnlagForFrontend(grunnlag), behøverVurdering: false }];
   return {
     vurderinger: initielleVurderinger.map((periode) => ({
       ...tomVurdering(),
