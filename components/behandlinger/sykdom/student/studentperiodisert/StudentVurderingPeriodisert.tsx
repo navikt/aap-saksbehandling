@@ -189,7 +189,7 @@ export const StudentVurderingPeriodisert = ({
               <NyVurderingExpandableCard
                 key={vurdering.id}
                 fraDato={gyldigDatoEllerNull(vurderingValues.fraDato)}
-                nestePeriodeFraDato={gyldigDatoEllerNull(nesteVurderingValues.fraDato)}
+                nestePeriodeFraDato={gyldigDatoEllerNull(nesteVurderingValues?.fraDato)}
                 isLast={index === nyeVurderinger.length - 1}
                 vurdertAv={vurdering.vurdertAv}
                 finnesFeil={errorList.length > 0}
