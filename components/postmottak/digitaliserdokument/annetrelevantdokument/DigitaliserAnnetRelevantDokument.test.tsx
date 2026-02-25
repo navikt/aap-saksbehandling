@@ -19,15 +19,7 @@ describe('DigitaliserAnnetDokument', () => {
   it('at det går an å velge flere alternativer', async () => {
     const submit = vi.fn(() => {});
 
-    render(
-      <DigitaliserAnnetRelevantDokument
-        submit={submit}
-        grunnlag={grunnlag}
-        readOnly={false}
-        isLoading={false}
-        isRevurderingStarttidspunktEnabled={true}
-      />
-    );
+    render(<DigitaliserAnnetRelevantDokument submit={submit} grunnlag={grunnlag} readOnly={false} isLoading={false} />);
 
     await user.click(screen.getByRole('combobox'));
     await user.click(screen.getByText(/Yrkesskade/));
