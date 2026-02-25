@@ -7,7 +7,7 @@ import { Alert, BodyShort, Button, HGrid, HStack, VStack } from '@navikt/ds-reac
 import { VurdertAvAnsattDetail } from 'components/vurdertav/VurdertAvAnsattDetail';
 import { subDays } from 'date-fns';
 import { TrashFillIcon } from '@navikt/aksel-icons';
-import { PeriodisertVurderingMeta, VurdertAvAnsatt } from 'lib/types/types';
+import { PeriodisertVurderingMeta } from 'lib/types/types';
 import { SlettVurderingModal } from 'components/periodisering/slettvurderingmodal/SlettVurderingModal';
 import { VurderingStatus, VurderingStatusTag } from 'components/periodisering/VurderingStatusTag';
 import { AccordionsSignal } from 'hooks/AccordionSignalHook';
@@ -83,7 +83,7 @@ export const NyVurderingExpandableCard = ({
             {vurdering.behøverVurdering && (
               <Alert
                 variant={'info'}
-              >{`Perioden fra ${fraDato ? formatDatoMedMånedsnavn(fraDato) : ''} må vurderes`}</Alert>
+              >{`Perioden fra ${fraDato ? formatDatoMedMånedsnavn(fraDato) : ''} mangler vurdering og må vurderes`}</Alert>
             )}
             {children}
           </VStack>
