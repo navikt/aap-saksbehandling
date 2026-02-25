@@ -41,7 +41,7 @@ describe('hentPerioderSomTrengerVurdering', () => {
       sisteVedtatteVurderinger: [],
       kanVurderes: [{ fom: '2026-01-01', tom: '2999-01-01' }],
     };
-    const res = hentPerioderSomTrengerVurdering(grunnlag, () => ({}));
+    const res = hentPerioderSomTrengerVurdering(grunnlag, () => ({ fraDato: '' }));
     expect(res).toEqual({ vurderinger: [{ fraDato: '01.01.2026', behøverVurdering: false }] });
   });
   it('skal returnere vurdering med fraDato fra  behøverVurdering hvis vi har perioder der', () => {
