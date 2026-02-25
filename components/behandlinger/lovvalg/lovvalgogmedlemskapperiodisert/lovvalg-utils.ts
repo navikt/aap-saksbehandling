@@ -26,6 +26,8 @@ function tomLovvalgMedlemskapVurdering(): LovvalgOgMedlemskapManuellVurderingFor
     },
     medlemskap: undefined,
     fraDato: '',
+    erNyVurdering: true,
+    behøverVurdering: false,
   };
 }
 
@@ -58,6 +60,8 @@ export function getDefaultValuesFromGrunnlag(
         vurdertAv: vurdering.vurdertAv,
         kvalitetssikretAv: vurdering.kvalitetssikretAv,
         besluttetAv: vurdering.besluttetAv,
+        erNyVurdering: false,
+        behøverVurdering: false,
       })) || [],
   };
 }

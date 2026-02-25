@@ -1,11 +1,11 @@
 import { JaEllerNei } from 'lib/utils/form';
-import { VurdertAvAnsatt } from 'lib/types/types';
+import { PeriodisertVurderingMeta, VurdertAvAnsatt } from 'lib/types/types';
 
 export type LovOgMedlemskapVurderingForm = {
   vurderinger: LovvalgOgMedlemskapManuellVurderingForm[];
 };
 
-export type LovvalgOgMedlemskapManuellVurderingForm = {
+export interface LovvalgOgMedlemskapManuellVurderingForm extends PeriodisertVurderingMeta {
   lovvalg: {
     begrunnelse: string;
     lovvalgsEØSLand: string;
@@ -16,11 +16,7 @@ export type LovvalgOgMedlemskapManuellVurderingForm = {
     varMedlemIFolketrygd: JaEllerNei;
   };
   fraDato?: string;
-  vurdertAv?: VurdertAvAnsatt;
-  kvalitetssikretAv?: VurdertAvAnsatt;
-  besluttetAv?: VurdertAvAnsatt;
-  erNyVurdering?: boolean;
-};
+}
 
 // TODO denne er midlertidig inntil alle mellomlagrede vurderinger har blitt periodisert (https://jira.adeo.no/browse/FAGSYSTEM-405014)
 export type LovOgMedlemskapVurderingFormIkkePeriodisert = {
