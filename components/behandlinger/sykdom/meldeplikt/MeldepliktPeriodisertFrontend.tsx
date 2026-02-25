@@ -7,6 +7,7 @@ import {
   FritakMeldepliktGrunnlag,
   MellomlagretVurdering,
   PeriodisertFritaksvurderingDto,
+  PeriodisertVurderingMeta,
   VurdertAvAnsatt,
 } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
@@ -47,14 +48,10 @@ export interface FritakMeldepliktForm {
   vurderinger: FritakMeldepliktVurderingForm[];
 }
 
-export interface FritakMeldepliktVurderingForm {
+export interface FritakMeldepliktVurderingForm extends PeriodisertVurderingMeta {
   begrunnelse: string;
   harFritak: string | undefined;
   fraDato: string | undefined;
-  vurdertAv?: VurdertAvAnsatt;
-  kvalitetssikretAv?: VurdertAvAnsatt;
-  besluttetAv?: VurdertAvAnsatt;
-  erNyVurdering?: boolean;
 }
 
 export const MeldepliktPeriodisertFrontend = ({
@@ -100,6 +97,7 @@ export const MeldepliktPeriodisertFrontend = ({
       fraDato: fields.length === 0 ? formaterDatoForFrontend(new Date()) : undefined,
       harFritak: undefined,
       erNyVurdering: true,
+      behøverVurdering: false,
     });
   }
 
@@ -203,9 +201,7 @@ export const MeldepliktPeriodisertFrontend = ({
           )}
           nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
           isLast={index === vedtatteVurderinger.length - 1}
-          vurdertAv={vurdering.vurdertAv}
-          kvalitetssikretAv={vurdering.kvalitetssikretAv}
-          besluttetAv={vurdering.besluttetAv}
+          vurdering={vurdering}
           finnesFeil={finnesFeilForVurdering(index, errorList)}
           readonly={formReadOnly}
           onSlettVurdering={() => remove(index)}
@@ -269,6 +265,8 @@ function getDefaultValuesFromGrunnlag(grunnlag: FritakMeldepliktGrunnlag | undef
       vurdertAv: vurdering.vurdertAv,
       kvalitetssikretAv: vurdering.kvalitetssikretAv,
       besluttetAv: vurdering.besluttetAv,
+      erNyVurdering: false,
+      behøverVurdering: false,
     })),
   };
 }
