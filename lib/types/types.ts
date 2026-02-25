@@ -558,6 +558,9 @@ export interface PeriodisertVurderingFormFields {
 export interface PeriodisertVurderingMeta {
   behøverVurdering: boolean;
   erNyVurdering: boolean;
+  vurdertAv?: VurdertAvAnsatt;
+  kvalitetssikretAv?: VurdertAvAnsatt;
+  besluttetAv?: VurdertAvAnsatt;
 }
 
 // Gjør at vi kan lage et typesikkert "enum-objekt" med union types generert fra backend. feks const minEnum = lagEnumObjektFraUnionType<StegGruppe>({ SYKDOM: 'SYKDOM' ...})

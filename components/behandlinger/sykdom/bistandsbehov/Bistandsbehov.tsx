@@ -176,9 +176,7 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, initialMe
             nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
             isLast={index === fields.length - 1}
             vurderingStatus={getErOppfyltEllerIkkeStatus(erNyVurderingOppfylt(form.watch(`vurderinger.${index}`)))}
-            vurdertAv={vurdering.vurdertAv}
-            kvalitetssikretAv={vurdering.kvalitetssikretAv}
-            besluttetAv={vurdering.besluttetAv}
+            vurdering={vurdering}
             readonly={formReadOnly}
             onSlettVurdering={() => remove(index)}
             harTidligereVurderinger={tidligereVurderinger.length > 0}
@@ -186,12 +184,7 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, initialMe
             finnesFeil={finnesFeilForVurdering(index, errorList)}
             initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
           >
-            <BistandsbehovVurderingForm
-              form={form}
-              readOnly={formReadOnly}
-              index={index}
-              behøverVurdering={vurdering.behøverVurdering}
-            />
+            <BistandsbehovVurderingForm form={form} readOnly={formReadOnly} index={index} />
           </NyVurderingExpandableCard>
         ))}
       </VStack>
