@@ -1,4 +1,4 @@
-import { Oppgave, Vurderingsbehov, ÅrsakTilOpprettelse } from 'lib/types/types';
+import { Oppgave, VurderingsbehovIntern, ÅrsakTilOpprettelse } from 'lib/types/types';
 import { BodyShort, Checkbox, CopyButton, Table, Tooltip } from '@navikt/ds-react';
 import {
   mapBehovskodeTilBehovstype,
@@ -33,8 +33,8 @@ const mapTilSorterbarOppgave = (oppgave: Oppgave): OppgaveTilSortering => ({
   ...oppgave,
   behandlingstype: mapTilOppgaveBehandlingstypeTekst(oppgave.behandlingstype),
   årsakTilOpprettelse: mapTilÅrsakTilOpprettelseTilTekst(oppgave.årsakTilOpprettelse as ÅrsakTilOpprettelse),
-  årsakerTilBehandling: oppgave.årsakerTilBehandling
-    .map((årsak) => formaterVurderingsbehov(årsak as Vurderingsbehov))
+  årsakerTilBehandling: oppgave.vurderingsbehov
+    .map((årsak) => formaterVurderingsbehov(årsak as VurderingsbehovIntern))
     .join(', '),
   avklaringsbehovKode: mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode),
   originalOppgave: oppgave,

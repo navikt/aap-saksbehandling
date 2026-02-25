@@ -17,7 +17,7 @@ const oppgaveStatus = {
     oppgave.returStatus === NoNavAapOppgaveOppgaveDtoReturStatus.RETUR_FRA_BESLUTTER,
   ER_HASTESAK: (oppgave: Oppgave) =>
     oppgave.markeringer.some((it) => it.markeringType === NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.HASTER),
-  VENTEFRIST_UTLØPT: (oppgave: Oppgave) => oppgave.utløptVentefrist != null
+  VENTEFRIST_UTLØPT: (oppgave: Oppgave) => oppgave.utløptVentefrist != null,
 } as const;
 
 interface Props {
@@ -46,7 +46,7 @@ export const useFiltrerteOppgaver = ({ oppgaver, filter }: Props) => {
         return false;
       }
 
-      if (årsaker?.length && !oppgave.årsakerTilBehandling.some((årsak) => årsaker.includes(årsak))) {
+      if (årsaker?.length && !oppgave.vurderingsbehov.some((årsak) => årsaker.includes(årsak))) {
         return false;
       }
 
