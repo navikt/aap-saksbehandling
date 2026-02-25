@@ -7,8 +7,7 @@ import {
   FritakMeldepliktGrunnlag,
   MellomlagretVurdering,
   PeriodisertFritaksvurderingDto,
-  PeriodisertVurderingMeta,
-  VurdertAvAnsatt,
+  VurderingMeta,
 } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { gyldigDatoEllerNull, validerDato } from 'lib/validation/dateValidation';
@@ -48,7 +47,7 @@ export interface FritakMeldepliktForm {
   vurderinger: FritakMeldepliktVurderingForm[];
 }
 
-export interface FritakMeldepliktVurderingForm extends PeriodisertVurderingMeta {
+export interface FritakMeldepliktVurderingForm extends VurderingMeta {
   begrunnelse: string;
   harFritak: string | undefined;
   fraDato: string | undefined;

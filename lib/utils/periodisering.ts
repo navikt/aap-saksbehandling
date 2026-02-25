@@ -48,6 +48,11 @@ export function trengerVurderingsForslag(grunnlag: PeriodisertGrunnlag | undefin
 
   return behøverVurderinger || !harVedtatteVurderinger;
 }
+// TODO: innfør denne i hentPerioderSomTrengerVurdering<T extends PåkrevdeFelter(
+// interface PåkrevdeFelter {
+//   fraDato: string;
+//   behøverVurdering: boolean;
+// }
 
 export function hentPerioderSomTrengerVurdering<T>(
   grunnlag: PeriodisertGrunnlag,

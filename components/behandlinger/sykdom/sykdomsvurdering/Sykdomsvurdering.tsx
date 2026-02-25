@@ -6,13 +6,7 @@ import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { parseISO } from 'date-fns';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
-import {
-  MellomlagretVurdering,
-  PeriodisertVurderingMeta,
-  SykdomsGrunnlag,
-  TypeBehandling,
-  VurdertAvAnsatt,
-} from 'lib/types/types';
+import { MellomlagretVurdering, SykdomsGrunnlag, TypeBehandling, VurderingMeta } from 'lib/types/types';
 import { finnDiagnosegrunnlag } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
 import { ValuePair } from 'components/form/FormField';
 import { useSak } from 'hooks/SakHook';
@@ -48,7 +42,7 @@ export interface SykdomsvurderingerForm {
   vurderinger: Array<Sykdomsvurdering>;
 }
 
-export interface Sykdomsvurdering extends PeriodisertVurderingMeta {
+export interface Sykdomsvurdering extends VurderingMeta {
   fraDato: string;
   begrunnelse: string;
   vurderingenGjelderFra?: string;

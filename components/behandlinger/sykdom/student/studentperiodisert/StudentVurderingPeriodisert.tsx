@@ -4,10 +4,9 @@ import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
 import {
   AvklarPeriodisertStudentLøsning,
   MellomlagretVurdering,
-  PeriodisertVurderingMeta,
   StudentGrunnlag,
   StudentVurderingResponse,
-  VurdertAvAnsatt,
+  VurderingMeta,
 } from 'lib/types/types';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
@@ -47,7 +46,7 @@ export interface StudentFormFields {
   vurderinger: StudentVurdering[];
 }
 
-export interface StudentVurdering extends PeriodisertVurderingMeta {
+export interface StudentVurdering extends VurderingMeta {
   fraDato: string;
   begrunnelse: string;
   harAvbruttStudie?: string;

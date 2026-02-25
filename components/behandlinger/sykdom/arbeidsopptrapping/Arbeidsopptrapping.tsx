@@ -4,8 +4,7 @@ import {
   ArbeidsopptrappingGrunnlagResponse,
   ArbeidsopptrappingLøsningDto,
   MellomlagretVurdering,
-  PeriodisertVurderingMeta,
-  VurdertAvAnsatt,
+  VurderingMeta,
 } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { useFieldArray, useForm } from 'react-hook-form';
@@ -45,7 +44,7 @@ export interface ArbeidsopptrappingForm {
   vurderinger: ArbeidsopptrappingVurderingForm[];
 }
 
-export interface ArbeidsopptrappingVurderingForm extends PeriodisertVurderingMeta {
+export interface ArbeidsopptrappingVurderingForm extends VurderingMeta {
   begrunnelse: string;
   fraDato: string | undefined;
   reellMulighetTilOpptrapping: JaEllerNei | undefined;

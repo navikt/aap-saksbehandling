@@ -7,8 +7,7 @@ import {
   HelseInstiusjonVurdering,
   MellomlagretVurdering,
   Periode,
-  PeriodisertVurderingMeta,
-  VurdertAvAnsatt,
+  VurderingMeta,
 } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 
@@ -45,7 +44,7 @@ export interface OppholdMedVurderinger {
   vurderinger: OppholdVurdering[];
 }
 
-export interface OppholdVurdering extends PeriodisertVurderingMeta {
+export interface OppholdVurdering extends VurderingMeta {
   oppholdId: string;
   periode: Periode;
   begrunnelse: string;

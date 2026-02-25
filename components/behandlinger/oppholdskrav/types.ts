@@ -1,11 +1,11 @@
 import { JaEllerNei } from 'lib/utils/form';
-import { PeriodisertVurderingMeta, VurdertAvAnsatt } from 'lib/types/types';
+import { VurderingMeta } from 'lib/types/types';
 
 export type OppholdskravForm = {
   vurderinger: OppholdskravVurderingForm[];
 };
 
-export interface OppholdskravVurderingForm extends PeriodisertVurderingMeta {
+export interface OppholdskravVurderingForm extends VurderingMeta {
   begrunnelse: string;
   oppfyller?: JaEllerNei | null;
   land: string;

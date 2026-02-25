@@ -561,7 +561,7 @@ export interface PeriodisertVurderingFormFields {
   tilDato?: string | null;
 }
 
-export interface PeriodisertVurderingMeta {
+export interface VurderingMeta {
   behøverVurdering: boolean;
   erNyVurdering: boolean;
   vurdertAv?: VurdertAvAnsatt;

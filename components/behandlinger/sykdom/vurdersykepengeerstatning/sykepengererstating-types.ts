@@ -1,10 +1,10 @@
-import { PeriodisertVurderingMeta, SykepengeerstatningVurderingGrunn, VurdertAvAnsatt } from 'lib/types/types';
+import { VurderingMeta, SykepengeerstatningVurderingGrunn } from 'lib/types/types';
 
 export type SykepengeerstatningForm = {
   vurderinger: SykepengeerstatningVurderingForm[];
 };
 
-export interface SykepengeerstatningVurderingForm extends PeriodisertVurderingMeta {
+export interface SykepengeerstatningVurderingForm extends VurderingMeta {
   begrunnelse: string;
   erOppfylt: string;
   fraDato: string;

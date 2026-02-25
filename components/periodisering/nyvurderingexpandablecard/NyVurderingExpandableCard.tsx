@@ -7,7 +7,7 @@ import { Alert, BodyShort, Button, HGrid, HStack, VStack } from '@navikt/ds-reac
 import { VurdertAvAnsattDetail } from 'components/vurdertav/VurdertAvAnsattDetail';
 import { subDays } from 'date-fns';
 import { TrashFillIcon } from '@navikt/aksel-icons';
-import { PeriodisertVurderingMeta } from 'lib/types/types';
+import { VurderingMeta } from 'lib/types/types';
 import { SlettVurderingModal } from 'components/periodisering/slettvurderingmodal/SlettVurderingModal';
 import { VurderingStatus, VurderingStatusTag } from 'components/periodisering/VurderingStatusTag';
 import { AccordionsSignal } from 'hooks/AccordionSignalHook';
@@ -19,7 +19,7 @@ interface Props {
   isLast: boolean;
   finnesFeil: boolean;
   vurderingStatus: VurderingStatus | undefined;
-  vurdering: PeriodisertVurderingMeta;
+  vurdering: VurderingMeta;
   children: ReactNode;
   readonly: boolean;
   onSlettVurdering: () => void;
@@ -34,9 +34,6 @@ export const NyVurderingExpandableCard = ({
   isLast,
   vurderingStatus,
   vurdering,
-  // vurdertAv,
-  // kvalitetssikretAv,
-  // besluttetAv,
   children,
   readonly,
   finnesFeil,
