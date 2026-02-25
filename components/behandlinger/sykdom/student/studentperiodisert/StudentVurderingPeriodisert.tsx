@@ -259,26 +259,50 @@ function hentVurderingStatus(
 ): VurderingStatus.Oppfylt | VurderingStatus.IkkeOppfylt | undefined {
   if (!values) return undefined;
 
-  if (values.harAvbruttStudie === JaEllerNei.Nei) {
-    return VurderingStatus.IkkeOppfylt;
+  return utledStatus(
+    [
+      values.harAvbruttStudie,
+      values.godkjentStudieAvLånekassen,
+      values.avbruttPgaSykdomEllerSkade,
+      values.harBehovForBehandling,
+      values.avbruddMerEnn6Måneder,
+    ],
+    JaEllerNei.Ja,
+    JaEllerNei.Nei
+  );
+}
+
+function hentVurderingStatusForVedtattVurdering(
+  values: StudentVurderingResponse
+): VurderingStatus.Oppfylt | VurderingStatus.IkkeOppfylt | undefined {
+  if (!values) {
+    return undefined;
   }
 
-  const felt: (keyof StudentVurdering)[] = [
-    'harAvbruttStudie',
-    'godkjentStudieAvLånekassen',
-    'avbruttPgaSykdomEllerSkade',
-    'harBehovForBehandling',
-    'avbruddMerEnn6Måneder',
-  ];
+  return utledStatus(
+    [
+      values.harAvbruttStudie,
+      values.godkjentStudieAvLånekassen,
+      values.avbruttPgaSykdomEllerSkade,
+      values.harBehovForBehandling,
+      values.avbruddMerEnn6Måneder,
+    ],
+    true,
+    false
+  );
+}
 
-  for (const key of felt) {
-    const svar = values[key];
-
-    if (svar === JaEllerNei.Nei) {
+function utledStatus<T extends string | boolean>(
+  felt: (T | undefined | null)[],
+  oppfyltVerdi: T,
+  ikkeOppfyltVerdi: T
+): VurderingStatus.Oppfylt | VurderingStatus.IkkeOppfylt | undefined {
+  for (const feltVerdi of felt) {
+    if (feltVerdi === ikkeOppfyltVerdi) {
       return VurderingStatus.IkkeOppfylt;
     }
 
-    if (svar !== JaEllerNei.Ja) {
+    if (feltVerdi !== oppfyltVerdi) {
       return undefined;
     }
   }
