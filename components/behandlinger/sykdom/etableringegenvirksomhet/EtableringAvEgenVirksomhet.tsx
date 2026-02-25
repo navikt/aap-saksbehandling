@@ -47,7 +47,7 @@ interface Props {
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 export interface EtableringAvEgenVirksomhetVurderingForm {
-  fraDato: string | undefined;
+  fraDato: string;
   begrunnelse: string;
   foreliggerEnNæringsfagligVurdering: JaEllerNei | undefined;
   erVirksomhetenNy: JaEllerNei | undefined;
