@@ -6,7 +6,13 @@ import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { parseISO } from 'date-fns';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
-import { MellomlagretVurdering, SykdomsGrunnlag, TypeBehandling, VurdertAvAnsatt } from 'lib/types/types';
+import {
+  MellomlagretVurdering,
+  PeriodisertVurderingMeta,
+  SykdomsGrunnlag,
+  TypeBehandling,
+  VurdertAvAnsatt,
+} from 'lib/types/types';
 import { finnDiagnosegrunnlag } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
 import { ValuePair } from 'components/form/FormField';
 import { useSak } from 'hooks/SakHook';
@@ -42,7 +48,7 @@ export interface SykdomsvurderingerForm {
   vurderinger: Array<Sykdomsvurdering>;
 }
 
-export interface Sykdomsvurdering {
+export interface Sykdomsvurdering extends PeriodisertVurderingMeta {
   fraDato: string;
   begrunnelse: string;
   vurderingenGjelderFra?: string;
@@ -57,10 +63,6 @@ export interface Sykdomsvurdering {
   erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense?: JaEllerNei;
   erNedsettelseIArbeidsevneMerEnnFørtiProsent?: JaEllerNei;
   yrkesskadeBegrunnelse?: string;
-  vurdertAv?: VurdertAvAnsatt;
-  kvalitetssikretAv?: VurdertAvAnsatt;
-  besluttetAv?: VurdertAvAnsatt;
-  erNyVurdering?: boolean;
 }
 
 interface SykdomProps {
@@ -216,9 +218,7 @@ export const Sykdomsvurdering = ({
             )}
             nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
             isLast={index === nyeVurderingerFields.length - 1}
-            vurdertAv={vurdering.vurdertAv}
-            kvalitetssikretAv={vurdering.kvalitetssikretAv}
-            besluttetAv={vurdering.besluttetAv}
+            vurdering={vurdering}
             readonly={formReadOnly}
             finnesFeil={finnesFeilForVurdering(index, errorList)}
             onSlettVurdering={() => remove(index)}
@@ -285,6 +285,8 @@ export const Sykdomsvurdering = ({
         vurdertAv: vurdering.vurdertAv,
         kvalitetssikretAv: vurdering.kvalitetssikretAv,
         besluttetAv: vurdering.besluttetAv,
+        erNyVurdering: false,
+        behøverVurdering: false,
       })),
     };
   }
