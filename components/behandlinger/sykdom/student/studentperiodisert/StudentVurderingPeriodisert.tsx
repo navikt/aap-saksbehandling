@@ -309,21 +309,3 @@ function utledStatus<T extends string | boolean>(
 
   return VurderingStatus.Oppfylt;
 }
-
-function hentVurderingStatusForVedtattVurdering(
-  values: StudentVurderingResponse
-): VurderingStatus.Oppfylt | VurderingStatus.IkkeOppfylt | undefined {
-  if (
-    values.harAvbruttStudie &&
-    values.godkjentStudieAvLånekassen &&
-    values.avbruttPgaSykdomEllerSkade &&
-    values.harBehovForBehandling &&
-    values.avbruddMerEnn6Måneder
-  ) {
-    return VurderingStatus.Oppfylt;
-  }
-
-  if (!values.harAvbruttStudie) {
-    return VurderingStatus.IkkeOppfylt;
-  }
-}
