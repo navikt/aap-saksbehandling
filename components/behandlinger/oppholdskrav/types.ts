@@ -10,5 +10,5 @@ export interface OppholdskravVurderingForm extends VurderingMeta {
   oppfyller?: JaEllerNei | null;
   land: string;
   landAnnet?: string;
-  fraDato?: string;
+  fraDato: string;
 }

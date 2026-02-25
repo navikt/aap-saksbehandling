@@ -35,10 +35,7 @@ export function getDefaultValuesFromGrunnlag(
   grunnlag: PeriodisertLovvalgMedlemskapGrunnlag
 ): LovOgMedlemskapVurderingForm {
   if (trengerVurderingsForslag(grunnlag)) {
-    return hentPerioderSomTrengerVurdering<LovvalgOgMedlemskapManuellVurderingForm>(
-      grunnlag,
-      tomLovvalgMedlemskapVurdering
-    );
+    return hentPerioderSomTrengerVurdering(grunnlag, tomLovvalgMedlemskapVurdering);
   }
 
   // Vi har allerede data lagret, vis enten de som er lagret i grunnlaget her eller tom liste

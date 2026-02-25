@@ -9,7 +9,7 @@ export interface ForutgåendeMedlemskapManuellVurderingForm extends VurderingMet
   begrunnelse: string;
   harForutgåendeMedlemskap?: JaEllerNei;
   unntaksvilkår?: 'A' | 'B' | 'Nei';
-  fraDato?: string;
+  fraDato: string;
 }
 
 // TODO denne er midlertidig inntil alle mellomlagrede vurderinger har blitt periodisert (https://jira.adeo.no/browse/FAGSYSTEM-405014)

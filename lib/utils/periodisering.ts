@@ -54,7 +54,11 @@ export function trengerVurderingsForslag(grunnlag: PeriodisertGrunnlag | undefin
 //   behøverVurdering: boolean;
 // }
 
-export function hentPerioderSomTrengerVurdering<T>(
+interface PåkrevdeFelter {
+  fraDato: string;
+}
+
+export function hentPerioderSomTrengerVurdering<T extends PåkrevdeFelter>(
   grunnlag: PeriodisertGrunnlag,
   tomVurdering: () => T
 ): { vurderinger: Array<T> } {

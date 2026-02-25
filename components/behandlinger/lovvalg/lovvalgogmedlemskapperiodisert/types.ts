@@ -15,7 +15,7 @@ export interface LovvalgOgMedlemskapManuellVurderingForm extends VurderingMeta {
     begrunnelse: string;
     varMedlemIFolketrygd: JaEllerNei;
   };
-  fraDato?: string;
+  fraDato: string;
 }
 
 // TODO denne er midlertidig inntil alle mellomlagrede vurderinger har blitt periodisert (https://jira.adeo.no/browse/FAGSYSTEM-405014)

@@ -32,7 +32,7 @@ export function getDefaultValuesFromGrunnlag(
   grunnlag: PeriodisertForutgåendeMedlemskapGrunnlag
 ): ForutgåendeMedlemskapVurderingForm {
   if (trengerVurderingsForslag(grunnlag)) {
-    return hentPerioderSomTrengerVurdering<ForutgåendeMedlemskapManuellVurderingForm>(grunnlag, () => ({
+    return hentPerioderSomTrengerVurdering(grunnlag, () => ({
       begrunnelse: '',
       fraDato: '',
       erNyVurdering: true,
