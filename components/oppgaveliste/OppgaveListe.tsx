@@ -8,6 +8,8 @@ import { LedigeOppgaver } from 'components/oppgaveliste/ledigeoppgaver/LedigeOpp
 import { AlleOppgaver } from 'components/oppgaveliste/alleoppgaver/AlleOppgaver';
 import { useLagreAktivTab } from 'hooks/oppgave/aktivTabHook';
 import { TildelOppgaverProvider } from 'context/oppgave/TildelOppgaverContext';
+import { unleashService } from 'lib/services/unleash/unleashService';
+import { AlleOppgaverNy } from 'components/oppgaveliste/alleoppgaverny/AlleOppgaverNy';
 
 interface Props {
   enheter: Enhet[];
@@ -52,7 +54,12 @@ export const OppgaveListe = ({ enheter }: Props) => {
 
         {selected === 'Mine oppgaver' && <MineOppgaver />}
         {selected === 'Ledige oppgaver' && <LedigeOppgaver enheter={enheter} />}
-        {selected === 'Alle oppgaver' && <AlleOppgaver enheter={enheter} />}
+        {selected === 'Alle oppgaver' && unleashService.isEnabled('OppgavelisteBackendsorteringFrontend') && (
+          <AlleOppgaverNy enheter={enheter} />
+        )}
+        {selected === 'Alle oppgaver' && !unleashService.isEnabled('OppgavelisteBackendsorteringFrontend') && (
+          <AlleOppgaver enheter={enheter} />
+        )}
       </TildelOppgaverProvider>
     </VStack>
   );

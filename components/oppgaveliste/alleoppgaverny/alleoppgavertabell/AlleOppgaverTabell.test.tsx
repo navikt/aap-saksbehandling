@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { customRenderWithTildelOppgaveContext } from 'lib/test/CustomRender';
 import { screen } from '@testing-library/react';
-import { AlleOppgaverTabell } from 'components/oppgaveliste/alleoppgaver/alleoppgavertabell/AlleOppgaverTabell';
+import { AlleOppgaverTabellNy } from 'components/oppgaveliste/alleoppgaverny/alleoppgavertabell/AlleOppgaverTabellNy';
 import { Oppgave } from 'lib/types/oppgaveTypes';
 import {
   NoNavAapOppgaveOppgaveDtoBehandlingstype,
@@ -47,11 +47,13 @@ const oppgaver: Oppgave[] = [
 describe('AlleOppgaverTabell', () => {
   it('skal vise saksbehandlers navn når det finnes', async () => {
     customRenderWithTildelOppgaveContext(
-      <AlleOppgaverTabell
+      <AlleOppgaverTabellNy
         oppgaver={[oppgaver[0]]}
         revalidateFunction={vi.fn()}
         setValgteRader={vi.fn()}
         valgteRader={[]}
+        setSortBy={() => {}}
+        sort={undefined}
       />,
       false
     );
@@ -64,11 +66,13 @@ describe('AlleOppgaverTabell', () => {
 
   it('skal vise saksbehandlers ident når navn ikke finnes', async () => {
     customRenderWithTildelOppgaveContext(
-      <AlleOppgaverTabell
+      <AlleOppgaverTabellNy
         oppgaver={[oppgaver[1]]}
         revalidateFunction={vi.fn()}
         setValgteRader={vi.fn()}
         valgteRader={[]}
+        setSortBy={() => {}}
+        sort={undefined}
       />,
       false
     );
