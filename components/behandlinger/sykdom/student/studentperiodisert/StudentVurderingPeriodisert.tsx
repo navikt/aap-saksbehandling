@@ -204,7 +204,7 @@ export const StudentVurderingPeriodisert = ({
                 kvalitetssikretAv={vurdering.kvalitetssikretAv}
                 besluttetAv={vurdering.besluttetAv}
               >
-                <StudentVurderingFelter index={index} readOnly={readOnly} />
+                <StudentVurderingFelter index={index} readOnly={formReadOnly} />
               </NyVurderingExpandableCard>
             );
           })}
