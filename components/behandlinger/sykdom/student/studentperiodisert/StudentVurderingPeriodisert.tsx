@@ -86,7 +86,7 @@ export const StudentVurderingPeriodisert = ({
     useLøsBehovOgGåTilNesteSteg('AVKLAR_STUDENT');
 
   const defaultValues: DraftFormFields = initialMellomlagretVurdering
-    ? JSON.parse(initialMellomlagretVurdering.data)
+    ? parseOgMigrerMellomlagring(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag);
 
   const form = useForm<StudentFormFields>({ defaultValues, shouldUnregister: true });
@@ -308,4 +308,23 @@ function utledStatus<T extends string | boolean>(
   }
 
   return VurderingStatus.Oppfylt;
+}
+
+function parseOgMigrerMellomlagring(mellomlagring: string): DraftFormFields {
+  const parsedData = JSON.parse(mellomlagring);
+  if (erPeriodisertVersjon(parsedData)) {
+    return parsedData;
+  } else {
+    return {
+      vurderinger: [
+        {
+          ...parsedData,
+        },
+      ],
+    };
+  }
+}
+
+function erPeriodisertVersjon(object: any): object is StudentFormFields {
+  return object instanceof Object && object['vurderinger'] != null;
 }
