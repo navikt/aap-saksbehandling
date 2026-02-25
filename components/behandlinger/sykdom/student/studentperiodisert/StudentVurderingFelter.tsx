@@ -23,6 +23,7 @@ export const StudentVurderingFelter = ({ index, readOnly }: Props) => {
         name={`vurderinger.${index}.fraDato`}
         control={form.control}
         label={'Vurderingen gjelder fra'}
+        rules={{ required: 'Du må sette en dato for når vurderinger gjelder fra' }}
         readOnly={readOnly}
       />
 

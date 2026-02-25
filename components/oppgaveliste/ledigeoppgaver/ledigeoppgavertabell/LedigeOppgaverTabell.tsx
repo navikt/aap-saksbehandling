@@ -9,7 +9,7 @@ import {
 } from 'lib/utils/oversettelser';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
-import { AvklaringsbehovKode, Vurderingsbehov, ÅrsakTilOpprettelse } from 'lib/types/types';
+import { AvklaringsbehovKode, VurderingsbehovIntern, ÅrsakTilOpprettelse } from 'lib/types/types';
 import { Oppgave } from 'lib/types/oppgaveTypes';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { LedigeOppgaverMeny } from 'components/oppgaveliste/ledigeoppgaver/ledigeoppgavermeny/LedigeOppgaverMeny';
@@ -143,13 +143,13 @@ export const LedigeOppgaverTabell = ({ oppgaver, revalidateFunction, setSortBy, 
               </Table.DataCell>
               <Table.DataCell style={{ maxWidth: '150px' }} textSize={'small'}>
                 <Tooltip
-                  content={oppgave.årsakerTilBehandling
-                    .map((årsak) => formaterVurderingsbehov(årsak as Vurderingsbehov))
+                  content={oppgave.vurderingsbehov
+                    .map((årsak) => formaterVurderingsbehov(årsak as VurderingsbehovIntern))
                     .join(', ')}
                 >
                   <BodyShort truncate size={'small'}>
-                    {oppgave.årsakerTilBehandling
-                      .map((årsak) => formaterVurderingsbehov(årsak as Vurderingsbehov))
+                    {oppgave.vurderingsbehov
+                      .map((årsak) => formaterVurderingsbehov(årsak as VurderingsbehovIntern))
                       .join(', ')}
                   </BodyShort>
                 </Tooltip>

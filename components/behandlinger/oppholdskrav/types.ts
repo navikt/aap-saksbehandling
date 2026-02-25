@@ -10,7 +10,7 @@ export type OppholdskravVurderingForm = {
   oppfyller?: JaEllerNei | null;
   land: string;
   landAnnet?: string;
-  fraDato?: string;
+  fraDato: string;
   vurdertAv?: VurdertAvAnsatt;
   kvalitetssikretAv?: VurdertAvAnsatt;
   besluttetAv?: VurdertAvAnsatt;

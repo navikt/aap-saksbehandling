@@ -85,7 +85,7 @@ export const ForutgåendeMedlemskapPeriodisert = ({
   function onAddPeriode() {
     append({
       begrunnelse: '',
-      fraDato: undefined,
+      fraDato: '',
       erNyVurdering: true,
     });
   }

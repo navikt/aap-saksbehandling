@@ -85,7 +85,7 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
       oppfyller: undefined,
       land: '',
       landAnnet: undefined,
-      fraDato: undefined,
+      fraDato: '',
       erNyVurdering: true,
     });
   }
