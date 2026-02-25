@@ -81,7 +81,7 @@ export const LovvalgOgMedlemskapPeriodisert = ({
         lovvalgsEØSLand: '',
       },
       medlemskap: undefined,
-      fraDato: undefined,
+      fraDato: '',
       erNyVurdering: true,
     });
   }

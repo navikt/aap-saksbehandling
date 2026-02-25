@@ -9,7 +9,7 @@ export type ForutgåendeMedlemskapManuellVurderingForm = {
   begrunnelse: string;
   harForutgåendeMedlemskap?: JaEllerNei;
   unntaksvilkår?: 'A' | 'B' | 'Nei';
-  fraDato?: string;
+  fraDato: string;
   vurdertAv?: VurdertAvAnsatt;
   kvalitetssikretAv?: VurdertAvAnsatt;
   besluttetAv?: VurdertAvAnsatt;
