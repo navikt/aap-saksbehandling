@@ -14,6 +14,7 @@ import {
   EtableringEierBrukerVirksomheten,
   MellomlagretVurdering,
   Periode,
+  PeriodisertVurderingMeta,
   VurdertAvAnsatt,
 } from 'lib/types/types';
 import { useFieldArray, useForm } from 'react-hook-form';
@@ -46,7 +47,7 @@ interface Props {
   grunnlag: EtableringEgenVirksomhetGrunnlagResponse;
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }
-export interface EtableringAvEgenVirksomhetVurderingForm {
+export interface EtableringAvEgenVirksomhetVurderingForm extends PeriodisertVurderingMeta {
   fraDato: string | undefined;
   begrunnelse: string;
   foreliggerEnNæringsfagligVurdering: JaEllerNei | undefined;
@@ -55,10 +56,6 @@ export interface EtableringAvEgenVirksomhetVurderingForm {
   antasDetAtEtableringenFørerTilSelvforsørgelse: JaEllerNei | undefined;
   utviklingsperioder: Periode[];
   oppstartsperioder: Periode[];
-  vurdertAv?: VurdertAvAnsatt;
-  kvalitetssikretAv?: VurdertAvAnsatt;
-  besluttetAv?: VurdertAvAnsatt;
-  erNyVurdering?: boolean;
 }
 
 export interface EtableringAvEgenVirksomhetForm {
@@ -221,9 +218,7 @@ export const EtableringAvEgenVirksomhet = ({
           vurderingStatus={getErOppfyltEllerIkkeStatus(nyVurderingErOppfylt(form.watch(`vurderinger.${index}`)))}
           nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
           isLast={index === vedtatteVurderinger.length - 1}
-          vurdertAv={vurdering.vurdertAv}
-          kvalitetssikretAv={vurdering.kvalitetssikretAv}
-          besluttetAv={vurdering.besluttetAv}
+          vurdering={vurdering}
           finnesFeil={finnesFeilForVurdering(index, errorList)}
           readonly={formReadOnly}
           onSlettVurdering={() => remove(index)}

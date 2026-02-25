@@ -35,7 +35,7 @@ export function getDefaultValuesFromGrunnlag(
     return hentPerioderSomTrengerVurdering<ForutgåendeMedlemskapManuellVurderingForm>(grunnlag, () => ({
       begrunnelse: '',
       fraDato: '',
-      erNyVurdering: false,
+      erNyVurdering: true,
       behøverVurdering: false,
     }));
   }
