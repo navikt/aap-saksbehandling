@@ -350,6 +350,12 @@ export type AutomatiskLovvalgOgMedlemskapVurdering =
 export type tilhørighetVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.Tilh\u00F8righetVurdering'];
 
+export type AvklarPeriodisertStudentLøsning =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.PeriodisertStudentDto'];
+
+export type StudentVurderingResponse =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.student.StudentVurderingResponse'];
+
 export type AvklarPeriodisertLovvalgMedlemskapLøsning =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.lovvalgmedlemskap.PeriodisertManuellVurderingForLovvalgMedlemskapDto'];
 
