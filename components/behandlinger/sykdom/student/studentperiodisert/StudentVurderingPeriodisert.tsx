@@ -257,19 +257,33 @@ function emptyStudentVurdering(): StudentVurdering {
 function hentVurderingStatus(
   values?: StudentVurdering
 ): VurderingStatus.Oppfylt | VurderingStatus.IkkeOppfylt | undefined {
-  if (
-    values?.harAvbruttStudie == JaEllerNei.Ja &&
-    values?.godkjentStudieAvLånekassen == JaEllerNei.Ja &&
-    values?.avbruttPgaSykdomEllerSkade == JaEllerNei.Ja &&
-    values?.harBehovForBehandling == JaEllerNei.Ja &&
-    values?.avbruddMerEnn6Måneder == JaEllerNei.Ja
-  ) {
-    return VurderingStatus.Oppfylt;
-  }
+  if (!values) return undefined;
 
-  if (values?.harAvbruttStudie === JaEllerNei.Nei) {
+  if (values.harAvbruttStudie === JaEllerNei.Nei) {
     return VurderingStatus.IkkeOppfylt;
   }
+
+  const felt: (keyof StudentVurdering)[] = [
+    'harAvbruttStudie',
+    'godkjentStudieAvLånekassen',
+    'avbruttPgaSykdomEllerSkade',
+    'harBehovForBehandling',
+    'avbruddMerEnn6Måneder',
+  ];
+
+  for (const key of felt) {
+    const svar = values[key];
+
+    if (svar === JaEllerNei.Nei) {
+      return VurderingStatus.IkkeOppfylt;
+    }
+
+    if (svar !== JaEllerNei.Ja) {
+      return undefined;
+    }
+  }
+
+  return VurderingStatus.Oppfylt;
 }
 
 function hentVurderingStatusForVedtattVurdering(
