@@ -35,6 +35,8 @@ export function getDefaultValuesFromGrunnlag(
     return hentPerioderSomTrengerVurdering<ForutgåendeMedlemskapManuellVurderingForm>(grunnlag, () => ({
       begrunnelse: '',
       fraDato: '',
+      erNyVurdering: false,
+      behøverVurdering: false,
     }));
   }
 
@@ -53,6 +55,8 @@ export function getDefaultValuesFromGrunnlag(
         vurdertAv: vurdering.vurdertAv,
         kvalitetssikretAv: vurdering.kvalitetssikretAv,
         besluttetAv: vurdering.besluttetAv,
+        erNyVurdering: false,
+        behøverVurdering: false,
       })) || [],
   };
 }

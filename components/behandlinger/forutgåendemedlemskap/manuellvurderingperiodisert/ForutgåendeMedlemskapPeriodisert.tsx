@@ -84,6 +84,7 @@ export const ForutgåendeMedlemskapPeriodisert = ({
 
   function onAddPeriode() {
     append({
+      behøverVurdering: false,
       begrunnelse: '',
       fraDato: undefined,
       erNyVurdering: true,
@@ -175,9 +176,7 @@ export const ForutgåendeMedlemskapPeriodisert = ({
               form.watch(`vurderinger.${index}.unntaksvilkår`)
             )
           )}
-          vurdertAv={vurdering.vurdertAv}
-          kvalitetssikretAv={vurdering.kvalitetssikretAv}
-          besluttetAv={vurdering.besluttetAv}
+          vurdering={vurdering}
           finnesFeil={finnesFeilForVurdering(index, errorList)}
           readonly={formReadOnly}
           onSlettVurdering={() => remove(index)}
