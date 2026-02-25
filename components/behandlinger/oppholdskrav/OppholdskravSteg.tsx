@@ -87,6 +87,7 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
       landAnnet: undefined,
       fraDato: undefined,
       erNyVurdering: true,
+      behøverVurdering: false,
     });
   }
 
@@ -180,9 +181,7 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
             }
             nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
             isLast={index === vurderingerFields.length - 1}
-            vurdertAv={vurdering.vurdertAv}
-            kvalitetssikretAv={vurdering.kvalitetssikretAv}
-            besluttetAv={vurdering.besluttetAv}
+            vurdering={vurdering}
             finnesFeil={finnesFeilForVurdering(index, errorList)}
             readonly={formReadOnly}
             onSlettVurdering={() => remove(index)}

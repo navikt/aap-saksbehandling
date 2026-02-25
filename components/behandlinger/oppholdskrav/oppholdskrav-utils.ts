@@ -13,6 +13,7 @@ export function getDefaultValuesFromGrunnlag(grunnlag: OppholdskravGrunnlagRespo
       fraDato: '',
       land: '',
       erNyVurdering: true,
+      behøverVurdering: false,
     }));
   }
 
@@ -28,6 +29,8 @@ export function getDefaultValuesFromGrunnlag(grunnlag: OppholdskravGrunnlagRespo
         vurdertAv: vurdering.vurdertAv,
         kvalitetssikretAv: vurdering.kvalitetssikretAv,
         besluttetAv: vurdering.besluttetAv,
+        erNyVurdering: false,
+        behøverVurdering: false,
       })) || [],
   };
 }
