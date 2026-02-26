@@ -36,7 +36,7 @@ import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingS
 import { EtableringEgenVirksomhetTidligereVurdering } from 'components/behandlinger/sykdom/etableringegenvirksomhet/EtableringAvEgenVirksomhetTidligereVurdering';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { parseISO } from 'date-fns';
-import { parseDatoFraDatePicker, summerPerioderVarighet } from 'lib/utils/date';
+import { parseDatoFraDatePicker, summerPerioderVarighetIArbeidsdager } from 'lib/utils/date';
 import { IkkeVurderbarPeriode } from 'components/periodisering/IkkeVurderbarPeriode';
 import { validerPeriodiserteVurderingerMotIkkeRelevantePerioder } from 'lib/utils/validering';
 
@@ -112,12 +112,8 @@ export const EtableringAvEgenVirksomhet = ({
       });
       data.vurderinger.forEach((vurdering, vurderingIndex) => {
         // valider at utviklingsperioder ikke er lengre enn 6 mnd
-        const utviklingsperioderDuration = summerPerioderVarighet(vurdering.utviklingsperioder);
-        if (
-          utviklingsperioderDuration.years > 0 ||
-          utviklingsperioderDuration.months > 6 ||
-          (utviklingsperioderDuration.months === 6 && utviklingsperioderDuration.days > 0)
-        ) {
+        const utviklingsperioderDuration = summerPerioderVarighetIArbeidsdager(vurdering.utviklingsperioder);
+        if (utviklingsperioderDuration > 131) {
           validerTidsplan = false;
           form.setError(`vurderinger.${vurderingIndex}.utviklingsperioder`, {
             type: 'custom',
@@ -126,12 +122,8 @@ export const EtableringAvEgenVirksomhet = ({
         }
 
         // valider at oppstartsperioder ikke er lengre enn 3 mnd
-        const oppstartsperioderDuration = summerPerioderVarighet(vurdering.oppstartsperioder);
-        if (
-          oppstartsperioderDuration.years > 0 ||
-          oppstartsperioderDuration.months > 3 ||
-          (oppstartsperioderDuration.months === 3 && oppstartsperioderDuration.days > 0)
-        ) {
+        const oppstartsperioderDuration = summerPerioderVarighetIArbeidsdager(vurdering.oppstartsperioder);
+        if (oppstartsperioderDuration > 66) {
           validerTidsplan = false;
           form.setError(`vurderinger.${vurderingIndex}.oppstartsperioder`, {
             type: 'custom',

@@ -4,7 +4,7 @@ import {
   parseDatoFraDatePicker,
   sorterEtterNyesteDato,
   stringToDate,
-  summerPerioderVarighet,
+  summerPerioderVarighetIArbeidsdager,
 } from 'lib/utils/date';
 
 describe('formaterDatoForBackend', () => {
@@ -76,26 +76,20 @@ describe('parseDateFraDatePicker', () => {
 
 describe('summerPerioderVarighet', () => {
   it('summerPeriodeVarighet', () => {
-    const result = summerPerioderVarighet([
+    const result = summerPerioderVarighetIArbeidsdager([
       {
-        fom: '2026-01-01', // 8 dager
+        fom: '2026-01-01',
         tom: '2026-01-09',
       },
       {
-        fom: '2026-03-01', // en måned
+        fom: '2026-03-01',
         tom: '2026-04-01',
       },
       {
-        fom: '2026-05-01', // 4 dager
+        fom: '2026-05-01',
         tom: '2026-05-05',
       },
-      {
-        fom: '2026-07-01', // ett år og 4 dager
-        tom: '2027-07-05',
-      },
     ]);
-    expect(result.years).toBe(1);
-    expect(result.months).toBe(1);
-    expect(result.days).toBe(16);
+    expect(result).toBe(30);
   });
 });

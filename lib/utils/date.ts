@@ -1,4 +1,4 @@
-import { format, intervalToDuration, isValid, parse } from 'date-fns';
+import { differenceInBusinessDays, format, isValid, parse } from 'date-fns';
 import { nb } from 'date-fns/locale';
 import { Dato } from 'lib/types/Dato';
 
@@ -78,22 +78,11 @@ export function formaterPeriode(dato1?: string | null, dato2?: string | null): s
   }
 }
 
-export function summerPerioderVarighet(perioder: { fom: string; tom: string }[]): {
-  years: number;
-  months: number;
-  days: number;
-} {
-  return perioder.reduce(
-    (acc, periode) => {
-      const start = new Dato(periode.fom).dato;
-      const end = new Dato(periode.tom).dato;
-      const duration = intervalToDuration({ start, end });
-      return {
-        years: acc.years + (duration.years || 0),
-        months: acc.months + (duration.months || 0),
-        days: acc.days + (duration.days || 0),
-      };
-    },
-    { years: 0, months: 0, days: 0 }
-  );
+export function summerPerioderVarighetIArbeidsdager(perioder: { fom: string; tom: string }[]): number {
+  return perioder.reduce((acc, periode) => {
+    const start = new Dato(periode.fom).dato;
+    const end = new Dato(periode.tom).dato;
+    const duration = differenceInBusinessDays(end, start);
+    return acc + duration;
+  }, 0);
 }
