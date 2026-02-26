@@ -1,7 +1,7 @@
 'use client';
 
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
-import { BodyLong, HStack, Link, VStack } from '@navikt/ds-react';
+import { Alert, BodyLong, HStack, Link, VStack } from '@navikt/ds-react';
 import {
   NyVurderingExpandableCard,
   skalVæreInitiellEkspandert,
@@ -36,7 +36,7 @@ import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingS
 import { EtableringEgenVirksomhetTidligereVurdering } from 'components/behandlinger/sykdom/etableringegenvirksomhet/EtableringAvEgenVirksomhetTidligereVurdering';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { parseISO } from 'date-fns';
-import { parseDatoFraDatePicker } from 'lib/utils/date';
+import { parseDatoFraDatePicker, summerPerioderVarighetIArbeidsdager } from 'lib/utils/date';
 import { IkkeVurderbarPeriode } from 'components/periodisering/IkkeVurderbarPeriode';
 import { validerPeriodiserteVurderingerMotIkkeRelevantePerioder } from 'lib/utils/validering';
 
@@ -110,6 +110,29 @@ export const EtableringAvEgenVirksomhet = ({
           }
         }
       });
+      // valider at summan av alle utviklingsperioder ikke er lengre enn 6 mnd
+      const alleUtviklingsperioder = data.vurderinger.map((vurdering) => vurdering.utviklingsperioder).flat();
+      const utviklingsperioderDuration = summerPerioderVarighetIArbeidsdager(alleUtviklingsperioder);
+      console.log('utviklingsperioder', utviklingsperioderDuration);
+      if (utviklingsperioderDuration + (grunnlag.bruktUtviklingsDager || 0) > 131) {
+        validerTidsplan = false;
+        form.setError(`vurderinger`, {
+          type: 'custom',
+          message: 'Utviklingsperiode kan ikke være lengre enn 6 mnd',
+        });
+      }
+
+      // valider at summen av alle oppstartsperioder ikke er lengre enn 3 mnd
+      const alleOppstartsperioder = data.vurderinger.map((vurdering) => vurdering.oppstartsperioder).flat();
+      const oppstartsperioderDuration = summerPerioderVarighetIArbeidsdager(alleOppstartsperioder);
+      console.log('oppstart', oppstartsperioderDuration);
+      if (oppstartsperioderDuration + (grunnlag.bruktOppstartsdager || 0) > 66) {
+        validerTidsplan = false;
+        form.setError(`vurderinger`, {
+          type: 'custom',
+          message: 'Oppstartsperiode kan ikke være lengre enn 3 mnd',
+        });
+      }
       if (!validerTidsplan) {
         return;
       }
@@ -235,6 +258,9 @@ export const EtableringAvEgenVirksomhet = ({
           <EtableringAvEgenVirksomhetFormInput form={form} readOnly={formReadOnly} index={index} />
         </NyVurderingExpandableCard>
       ))}
+      {form.formState.errors.vurderinger && (
+        <Alert variant={'error'}>{form.formState.errors.vurderinger.message}</Alert>
+      )}
     </VilkårskortPeriodisert>
   );
 };
