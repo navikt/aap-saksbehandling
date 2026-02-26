@@ -168,15 +168,6 @@ export const EtableringAvEgenVirksomhet = ({
       onLeggTilVurdering={onAddPeriode}
       errorList={errorList}
     >
-      {!formReadOnly && (
-        <VStack paddingBlock={'4'} paddingInline={'5'} gap={'4'}>
-          <BodyLong size={'small'}>
-            <Link href={'https://lovdata.no/pro/rundskriv/r11-00/KAPITTEL_18'} target="_blank">
-              Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-15 (lovdata.no)
-            </Link>
-          </BodyLong>
-        </VStack>
-      )}
       {grunnlag.ikkeRelevantePerioder.map((vurdering) => (
         <IkkeVurderbarPeriode
           key={vurdering.fom}
@@ -188,6 +179,15 @@ export const EtableringAvEgenVirksomhet = ({
           foersteNyePeriodeFraDato={undefined}
         ></IkkeVurderbarPeriode>
       ))}
+      {!formReadOnly && (
+        <VStack paddingBlock={'4'} paddingInline={'5'} gap={'4'}>
+          <BodyLong size={'small'}>
+            <Link href={'https://lovdata.no/pro/rundskriv/r11-00/KAPITTEL_18'} target="_blank">
+              Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-15 (lovdata.no)
+            </Link>
+          </BodyLong>
+        </VStack>
+      )}
       {vedtatteVurderinger.map((vurdering) => (
         <TidligereVurderingExpandableCard
           key={vurdering.fom}
