@@ -6,13 +6,13 @@ import { validerDato } from 'lib/validation/dateValidation';
 import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
-import { useEffect } from 'react';
 import { useFieldArray, UseFormReturn, useWatch } from 'react-hook-form';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { EtableringAvEgenVirksomhetForm } from 'components/behandlinger/sykdom/etableringegenvirksomhet/EtableringAvEgenVirksomhet';
 import { JaEllerNei } from 'lib/utils/form';
 import { EtableringEierBrukerVirksomheten, lagEnumObjektFraUnionType } from 'lib/types/types';
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
+import { useEffect } from 'react';
 
 const EierBrukerVirsomheten = lagEnumObjektFraUnionType<NonNullable<EtableringEierBrukerVirksomheten>>({
   EIER_MINST_50_PROSENT: 'EIER_MINST_50_PROSENT',
@@ -40,12 +40,8 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly }: P
   });
 
   useEffect(() => {
-    form.clearErrors(`vurderinger.${index}.utviklingsperioder`);
-  }, [utviklingperiodeList, form.clearErrors]);
-
-  useEffect(() => {
-    form.clearErrors(`vurderinger.${index}.oppstartsperioder`);
-  }, [oppstartsperiodeList, form.clearErrors]);
+    form.clearErrors(`vurderinger`);
+  }, [utviklingperiodeList, oppstartsperiodeList, form.clearErrors]);
 
   return (
     <VStack gap={'4'}>
