@@ -89,7 +89,7 @@ export function summerPerioderVarighet(perioder: { fom: string; tom: string }[])
       const end = new Dato(periode.tom).dato;
       const duration = intervalToDuration({ start, end });
       return {
-        years: duration.years || 0,
+        years: acc.years + (duration.years || 0),
         months: acc.months + (duration.months || 0),
         days: acc.days + (duration.days || 0),
       };
