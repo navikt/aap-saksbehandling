@@ -114,7 +114,7 @@ export const SykdomsvurderingBrev = ({
       }}
       visningModus={visningModus}
       visningActions={visningActions}
-      knappTekst={'Bekreft og send videre'}
+      knappTekst={'Bekreft'}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
       <VStack gap={'4'}>

@@ -40,10 +40,14 @@ export const getStegData = (
   stegGruppe: StegGruppe,
   stegType: StegType,
   behandlingFlytOgTilstand: BehandlingFlytOgTilstand,
-  behovstype?: Behovstype
+  behovstype?: Behovstype,
+  kunVisHvisÅpentAvklaringsbehov = false
 ): StegData => {
   const avklaringsbehov = getAvklaringsbehovForSteg(stegGruppe, stegType, behandlingFlytOgTilstand, behovstype);
   const harAvklaringsbehov = avklaringsbehov.length > 0;
+  const harÅpentAvklaringsbehov = avklaringsbehov.some(
+    (avklaringsbehov) => avklaringsbehov.endringer[avklaringsbehov.endringer.length - 1]?.status === 'OPPRETTET'
+  );
   const typeBehandling = behandlingFlytOgTilstand.visning.typeBehandling;
   const readOnly =
     behandlingFlytOgTilstand.visning.saksbehandlerReadOnly || (typeBehandling === 'Revurdering' && !harAvklaringsbehov);
@@ -52,7 +56,9 @@ export const getStegData = (
     behandlingVersjon: behandlingFlytOgTilstand.behandlingVersjon,
     typeBehandling: typeBehandling,
     avklaringsbehov: avklaringsbehov,
-    skalViseSteg: harAvklaringsbehov || behandlingFlytOgTilstand.visning.typeBehandling === 'Revurdering',
+    skalViseSteg: kunVisHvisÅpentAvklaringsbehov
+      ? harÅpentAvklaringsbehov
+      : harAvklaringsbehov || behandlingFlytOgTilstand.visning.typeBehandling === 'Revurdering',
     readOnly: readOnly,
   };
 };
