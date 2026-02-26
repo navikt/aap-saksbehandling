@@ -8,7 +8,7 @@ import { FilterIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { FormFields } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { FieldPath, UseFormReturn } from 'react-hook-form';
-import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
+import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaverny/MineOppgaverNy';
 import { aktiveFiltreringer } from 'components/oppgaveliste/filtrering/filtreringUtils';
 import { avreserverOppgaveClient } from 'lib/oppgaveClientApi';
 import { isSuccess } from 'lib/utils/api';

@@ -17,7 +17,16 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const res = await hentOppgaverForFilter(data);
+    const payload: OppgavelisteRequest = {
+      enheter: data.enheter,
+      paging: data.paging,
+      veileder: data.veileder,
+      filterId: data.filterId,
+      sortering: data.sortering,
+      kunLedigeOppgaver: data.kunLedigeOppgaver,
+      utvidetFilter: data.utvidetFilter,
+    };
+    const res = await hentOppgaverForFilter(payload);
     if (isError(res)) {
       logWarning(`/api/oppgave/oppgaveliste`, res.apiException);
     }

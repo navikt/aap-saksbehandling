@@ -3,8 +3,8 @@
 import { Enhet } from 'lib/types/oppgaveTypes';
 import { useEffect, useState } from 'react';
 import { Alert, BodyShort, Box, Button, HStack, Label, VStack } from '@navikt/ds-react';
-import { AlleOppgaverTabell } from 'components/oppgaveliste/alleoppgaver/alleoppgavertabell/AlleOppgaverTabell';
-import { useAlleOppgaverForEnhet } from 'hooks/oppgave/OppgaveHook';
+import { AlleOppgaverTabellNy } from 'components/oppgaveliste/alleoppgaverny/alleoppgavertabellny/AlleOppgaverTabellNy';
+import { useAlleOppgaverForEnhetNy } from 'hooks/oppgave/OppgaveHookNy';
 import { KøSelect } from 'components/oppgaveliste/køselect/KøSelect';
 import { isError, isSuccess } from 'lib/utils/api';
 import useSWR from 'swr';
@@ -17,6 +17,7 @@ import { oppgaveBehandlingstyper, OppgaveStatuser } from 'lib/utils/behandlingst
 import { alleVurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
 import { oppgaveAvklaringsbehov } from 'lib/utils/avklaringsbehov';
 import {
+  NoNavAapOppgaveListeOppgaveSorteringSortBy,
   NoNavAapOppgaveListeUtvidetOppgavelisteFilterBehandlingstyper,
   NoNavAapOppgaveListeUtvidetOppgavelisteFilterReturStatuser,
 } from '@navikt/aap-oppgave-typescript-types';
@@ -29,12 +30,13 @@ import { useLagreAktivUtvidetFilter } from 'hooks/oppgave/aktivUtvidetFilterHook
 import { ComboOption } from 'components/produksjonsstyring/minenhet/MineEnheter';
 import { useLagreAktiveEnheter } from 'hooks/oppgave/aktiveEnheterHook';
 import { EnheterSelect } from 'components/oppgaveliste/enheterselect/EnheterSelect';
+import { useBackendSortering } from 'hooks/oppgave/BackendSorteringHook';
 
 interface Props {
   enheter: Enhet[];
 }
 
-export const AlleOppgaver = ({ enheter }: Props) => {
+export const AlleOppgaverNy = ({ enheter }: Props) => {
   const { hentLagretAktivKø, lagreAktivKøId } = useLagreAktivKø();
   const { hentAktivUtvidetFilter, lagreAktivUtvidetFilter } = useLagreAktivUtvidetFilter();
   const { hentLagredeAktiveEnheter, lagreAktiveEnheter } = useLagreAktiveEnheter();
@@ -42,6 +44,9 @@ export const AlleOppgaver = ({ enheter }: Props) => {
   const [aktivKøId, setAktivKøId] = useState<number>(ALLE_OPPGAVER_ID);
   const [valgteRader, setValgteRader] = useState<number[]>([]);
   const lagretUtvidetFilter = hentAktivUtvidetFilter();
+
+  const { sort, setSort } =
+    useBackendSortering<NoNavAapOppgaveListeOppgaveSorteringSortBy>('alle-oppgaver-backendsort');
 
   function førsteEnhetTilComboOption(enheter: Enhet[]): ComboOption[] | null {
     const førsteEnhet = enheter.find((e) => e);
@@ -120,7 +125,7 @@ export const AlleOppgaver = ({ enheter }: Props) => {
       : undefined;
 
   const { antallOppgaver, oppgaver, size, setSize, isLoading, isValidating, kanLasteInnFlereOppgaver, mutate } =
-    useAlleOppgaverForEnhet(aktiveEnhetsnumre, aktivKøId, utvidetFilter);
+    useAlleOppgaverForEnhetNy(aktiveEnhetsnumre, aktivKøId, utvidetFilter, sort);
 
   const { data: køer } = useSWR(`api/filter?${queryParamsArray('enheter', aktiveEnhetsnumre)}`, () =>
     hentKøerForEnheterClient(aktiveEnhetsnumre)
@@ -199,19 +204,20 @@ export const AlleOppgaver = ({ enheter }: Props) => {
         />
         {isLoading && <TabellSkeleton />}
 
-        {!isLoading &&
-          (oppgaver.length > 0 ? (
-            <AlleOppgaverTabell
-              oppgaver={oppgaver}
-              revalidateFunction={mutate}
-              valgteRader={valgteRader}
-              setValgteRader={setValgteRader}
-            />
-          ) : (
-            <BodyShort size={'small'} className={styles.ingenoppgaver}>
-              Ingen oppgaver i valgt kø for valgt enhet
-            </BodyShort>
-          ))}
+        {!isLoading && oppgaver.length > 0 ? (
+          <AlleOppgaverTabellNy
+            oppgaver={oppgaver}
+            revalidateFunction={mutate}
+            valgteRader={valgteRader}
+            setValgteRader={setValgteRader}
+            setSortBy={setSort}
+            sort={sort}
+          />
+        ) : (
+          <BodyShort size={'small'} className={styles.ingenoppgaver}>
+            Ingen oppgaver i valgt kø for valgt enhet
+          </BodyShort>
+        )}
       </div>
 
       {kanLasteInnFlereOppgaver && (

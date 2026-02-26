@@ -1,46 +1,51 @@
 'use client';
 
-import { Enhet } from 'lib/types/oppgaveTypes';
 import { useEffect, useState } from 'react';
-import { Alert, BodyShort, Box, Button, HStack, Label, VStack } from '@navikt/ds-react';
-import { AlleOppgaverTabell } from 'components/oppgaveliste/alleoppgaver/alleoppgavertabell/AlleOppgaverTabell';
-import { useAlleOppgaverForEnhet } from 'hooks/oppgave/OppgaveHook';
-import { KøSelect } from 'components/oppgaveliste/køselect/KøSelect';
-import { isError, isSuccess } from 'lib/utils/api';
 import useSWR from 'swr';
+import { Alert, BodyShort, Box, Button, HStack, Label, Switch, VStack } from '@navikt/ds-react';
+import { KøSelect } from 'components/oppgaveliste/køselect/KøSelect';
 import { queryParamsArray } from 'lib/utils/request';
+import { Enhet } from 'lib/types/oppgaveTypes';
 import { hentKøerForEnheterClient } from 'lib/oppgaveClientApi';
 import { useLagreAktivKø } from 'hooks/oppgave/aktivkøHook';
+import { isError, isSuccess } from 'lib/utils/api';
+import { useLedigeOppgaverNy } from 'hooks/oppgave/OppgaveHookNy';
+import { LedigeOppgaverTabellNy } from 'components/oppgaveliste/ledigeoppgaverny/ledigeoppgavertabellny/LedigeOppgaverTabellNy';
 import { useConfigForm } from 'components/form/FormHook';
-import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaverny/MineOppgaverNy';
 import { oppgaveBehandlingstyper, OppgaveStatuser } from 'lib/utils/behandlingstyper';
 import { alleVurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
 import { oppgaveAvklaringsbehov } from 'lib/utils/avklaringsbehov';
+import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaverny/MineOppgaverNy';
+import { formaterDatoForBackend } from 'lib/utils/date';
+
+import styles from 'components/oppgaveliste/ledigeoppgaverny/LedigeOppgaver.module.css';
 import {
+  NoNavAapOppgaveListeOppgaveSorteringSortBy,
   NoNavAapOppgaveListeUtvidetOppgavelisteFilterBehandlingstyper,
   NoNavAapOppgaveListeUtvidetOppgavelisteFilterReturStatuser,
 } from '@navikt/aap-oppgave-typescript-types';
-import { formaterDatoForBackend } from 'lib/utils/date';
-import styles from 'components/oppgaveliste/ledigeoppgaverny/LedigeOppgaver.module.css';
+import { LedigeOppgaverFiltrering } from 'components/oppgaveliste/filtrering/ledigeoppgaverfiltrering/LedigeOppgaverFiltrering';
 import { TabellSkeleton } from 'components/oppgaveliste/tabellskeleton/TabellSkeleton';
-import { AlleOppgaverFiltrering } from 'components/oppgaveliste/filtrering/alleoppgaverfiltrering/AlleOppgaverFiltrering';
 import { ALLE_OPPGAVER_ID } from 'components/oppgaveliste/filtrering/filtreringUtils';
 import { useLagreAktivUtvidetFilter } from 'hooks/oppgave/aktivUtvidetFilterHook';
+import { EnheterSelect } from 'components/oppgaveliste/enheterselect/EnheterSelect';
 import { ComboOption } from 'components/produksjonsstyring/minenhet/MineEnheter';
 import { useLagreAktiveEnheter } from 'hooks/oppgave/aktiveEnheterHook';
-import { EnheterSelect } from 'components/oppgaveliste/enheterselect/EnheterSelect';
+import { useBackendSortering } from 'hooks/oppgave/BackendSorteringHook';
 
 interface Props {
   enheter: Enhet[];
 }
 
-export const AlleOppgaver = ({ enheter }: Props) => {
+export const LedigeOppgaverNy = ({ enheter }: Props) => {
+  const { sort, setSort } =
+    useBackendSortering<NoNavAapOppgaveListeOppgaveSorteringSortBy>('ledige-oppgaver-backendsort');
   const { hentLagretAktivKø, lagreAktivKøId } = useLagreAktivKø();
   const { hentAktivUtvidetFilter, lagreAktivUtvidetFilter } = useLagreAktivUtvidetFilter();
   const { hentLagredeAktiveEnheter, lagreAktiveEnheter } = useLagreAktiveEnheter();
 
+  const [veilederFilter, setVeilederFilter] = useState<string>('');
   const [aktivKøId, setAktivKøId] = useState<number>(ALLE_OPPGAVER_ID);
-  const [valgteRader, setValgteRader] = useState<number[]>([]);
   const lagretUtvidetFilter = hentAktivUtvidetFilter();
 
   function førsteEnhetTilComboOption(enheter: Enhet[]): ComboOption[] | null {
@@ -53,6 +58,7 @@ export const AlleOppgaver = ({ enheter }: Props) => {
   const [aktiveEnheter, setAktiveEnheter] = useState<ComboOption[]>(
     hentLagredeAktiveEnheter() ?? førsteEnhetTilComboOption(enheter) ?? []
   );
+
   const aktiveEnhetsnumre = aktiveEnheter.map((enhet) => enhet.value);
   const oppdaterEnheter = (enheter: ComboOption[]) => {
     setAktiveEnheter(enheter);
@@ -120,7 +126,7 @@ export const AlleOppgaver = ({ enheter }: Props) => {
       : undefined;
 
   const { antallOppgaver, oppgaver, size, setSize, isLoading, isValidating, kanLasteInnFlereOppgaver, mutate } =
-    useAlleOppgaverForEnhet(aktiveEnhetsnumre, aktivKøId, utvidetFilter);
+    useLedigeOppgaverNy(aktiveEnhetsnumre, veilederFilter === 'veileder', aktivKøId, utvidetFilter, sort);
 
   const { data: køer } = useSWR(`api/filter?${queryParamsArray('enheter', aktiveEnhetsnumre)}`, () =>
     hentKøerForEnheterClient(aktiveEnhetsnumre)
@@ -159,23 +165,39 @@ export const AlleOppgaver = ({ enheter }: Props) => {
   const oppgaveKøer = isSuccess(køer) ? køer.data : undefined;
 
   return (
-    <VStack gap={'4'}>
+    <VStack gap={'5'}>
       <Box borderColor="border-divider" borderWidth="1" borderRadius={'xlarge'}>
         <VStack>
-          <HStack paddingInline={'4'} paddingBlock={'2'} gap={'4'} style={{ borderBottom: '1px solid #071A3636' }}>
-            <EnheterSelect
-              enheter={enheter}
-              aktiveEnheter={aktiveEnheter}
-              setAktiveEnheter={oppdaterEnheter}
-              className={styles.velgenhet}
-            />
-            <KøSelect
-              label={'Velg kø'}
-              køer={oppgaveKøer || []}
-              aktivKøId={aktivKøId}
-              setAktivKø={oppdaterKøId}
-              form={form}
-            />
+          <HStack
+            justify={'space-between'}
+            align={'end'}
+            paddingInline={'4'}
+            paddingBlock={'2'}
+            style={{ borderBottom: '1px solid #071A3636' }}
+          >
+            <HStack gap={'4'} align={'end'}>
+              <EnheterSelect
+                enheter={enheter}
+                aktiveEnheter={aktiveEnheter}
+                setAktiveEnheter={oppdaterEnheter}
+                className={styles.velgenhet}
+              />
+              <KøSelect
+                label={'Velg kø'}
+                køer={oppgaveKøer || []}
+                aktivKøId={aktivKøId}
+                setAktivKø={oppdaterKøId}
+                form={form}
+              />
+              <Switch
+                value="veileder"
+                checked={veilederFilter === 'veileder'}
+                onChange={(e) => setVeilederFilter((prevState) => (prevState ? '' : e.target.value))}
+                size={'small'}
+              >
+                Vis kun oppgaver jeg er veileder på
+              </Switch>
+            </HStack>
           </HStack>
           <HStack gap={'2'} paddingInline={'4'} paddingBlock={'2'}>
             <Label as="p" size={'small'}>
@@ -187,26 +209,18 @@ export const AlleOppgaver = ({ enheter }: Props) => {
       </Box>
 
       <div className={styles.tabell}>
-        <AlleOppgaverFiltrering
+        <LedigeOppgaverFiltrering
           form={form}
           formFields={formFields}
           antallOppgaver={antallOppgaver}
           kanFiltrere={aktivKøId === ALLE_OPPGAVER_ID}
           onFiltrerClick={() => oppdaterKøId(ALLE_OPPGAVER_ID)}
-          valgteRader={valgteRader}
-          setValgteRader={setValgteRader}
-          revalidateFunction={mutate}
         />
         {isLoading && <TabellSkeleton />}
 
         {!isLoading &&
           (oppgaver.length > 0 ? (
-            <AlleOppgaverTabell
-              oppgaver={oppgaver}
-              revalidateFunction={mutate}
-              valgteRader={valgteRader}
-              setValgteRader={setValgteRader}
-            />
+            <LedigeOppgaverTabellNy oppgaver={oppgaver} setSortBy={setSort} sort={sort} revalidateFunction={mutate} />
           ) : (
             <BodyShort size={'small'} className={styles.ingenoppgaver}>
               Ingen oppgaver i valgt kø for valgt enhet
