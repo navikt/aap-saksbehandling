@@ -7,7 +7,7 @@ import {
   NoNavAapOppgaveOppgaveDtoStatus,
 } from '@navikt/aap-oppgave-typescript-types';
 import { customRenderWithTildelOppgaveContext } from 'lib/test/CustomRender';
-import { MineOppgaverTabell } from 'components/oppgaveliste/mineoppgaver/mineoppgavertabell/MineOppgaverTabell';
+import { MineOppgaverTabellNy } from 'components/oppgaveliste/mineoppgaverny/mineoppgavertabellny/MineOppgaverTabellNy';
 
 const oppgaver: Oppgave[] = [
   {
@@ -43,7 +43,10 @@ const oppgaver: Oppgave[] = [
 
 describe('Mine oppgaver tabell', () => {
   beforeEach(() =>
-    customRenderWithTildelOppgaveContext(<MineOppgaverTabell oppgaver={oppgaver} revalidateFunction={vi.fn()} />, false)
+    customRenderWithTildelOppgaveContext(
+      <MineOppgaverTabellNy oppgaver={oppgaver} setSortBy={() => {}} sort={undefined} revalidateFunction={vi.fn()} />,
+      false
+    )
   );
 
   it('Skal inneholde korrekte kolonner ', () => {
@@ -56,7 +59,7 @@ describe('Mine oppgaver tabell', () => {
   });
 
   it('Skal inneholde kolonner som kan sorteres ', () => {
-    const kolonnerSomKanSorteres = ['Navn', 'Fnr', 'Sak', 'Beh. opprettet', 'Vurderingsbehov'];
+    const kolonnerSomKanSorteres = ['Fnr', 'Sak', 'Beh. opprettet', 'Årsak', 'Oppgave', 'Oppg. opprettet'];
     kolonnerSomKanSorteres.forEach((kolonne) => {
       const column = screen.getByRole('button', { name: kolonne });
       expect(column).toBeVisible();

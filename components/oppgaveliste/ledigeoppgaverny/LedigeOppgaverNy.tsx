@@ -9,17 +9,18 @@ import { Enhet } from 'lib/types/oppgaveTypes';
 import { hentKøerForEnheterClient } from 'lib/oppgaveClientApi';
 import { useLagreAktivKø } from 'hooks/oppgave/aktivkøHook';
 import { isError, isSuccess } from 'lib/utils/api';
-import { useLedigeOppgaver } from 'hooks/oppgave/OppgaveHook';
-import { LedigeOppgaverTabell } from 'components/oppgaveliste/ledigeoppgaver/ledigeoppgavertabell/LedigeOppgaverTabell';
+import { useLedigeOppgaverNy } from 'hooks/oppgave/OppgaveHookNy';
+import { LedigeOppgaverTabellNy } from 'components/oppgaveliste/ledigeoppgaverny/ledigeoppgavertabellny/LedigeOppgaverTabellNy';
 import { useConfigForm } from 'components/form/FormHook';
 import { oppgaveBehandlingstyper, OppgaveStatuser } from 'lib/utils/behandlingstyper';
 import { alleVurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
 import { oppgaveAvklaringsbehov } from 'lib/utils/avklaringsbehov';
-import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
+import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaverny/MineOppgaverNy';
 import { formaterDatoForBackend } from 'lib/utils/date';
 
-import styles from 'components/oppgaveliste/ledigeoppgaver/LedigeOppgaver.module.css';
+import styles from 'components/oppgaveliste/ledigeoppgaverny/LedigeOppgaver.module.css';
 import {
+  NoNavAapOppgaveListeOppgaveSorteringSortBy,
   NoNavAapOppgaveListeUtvidetOppgavelisteFilterBehandlingstyper,
   NoNavAapOppgaveListeUtvidetOppgavelisteFilterReturStatuser,
 } from '@navikt/aap-oppgave-typescript-types';
@@ -30,12 +31,15 @@ import { useLagreAktivUtvidetFilter } from 'hooks/oppgave/aktivUtvidetFilterHook
 import { EnheterSelect } from 'components/oppgaveliste/enheterselect/EnheterSelect';
 import { ComboOption } from 'components/produksjonsstyring/minenhet/MineEnheter';
 import { useLagreAktiveEnheter } from 'hooks/oppgave/aktiveEnheterHook';
+import { useBackendSortering } from 'hooks/oppgave/BackendSorteringHook';
 
 interface Props {
   enheter: Enhet[];
 }
 
-export const LedigeOppgaver = ({ enheter }: Props) => {
+export const LedigeOppgaverNy = ({ enheter }: Props) => {
+  const { sort, setSort } =
+    useBackendSortering<NoNavAapOppgaveListeOppgaveSorteringSortBy>('ledige-oppgaver-backendsort');
   const { hentLagretAktivKø, lagreAktivKøId } = useLagreAktivKø();
   const { hentAktivUtvidetFilter, lagreAktivUtvidetFilter } = useLagreAktivUtvidetFilter();
   const { hentLagredeAktiveEnheter, lagreAktiveEnheter } = useLagreAktiveEnheter();
@@ -122,7 +126,7 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
       : undefined;
 
   const { antallOppgaver, oppgaver, size, setSize, isLoading, isValidating, kanLasteInnFlereOppgaver, mutate } =
-    useLedigeOppgaver(aktiveEnhetsnumre, veilederFilter === 'veileder', aktivKøId, utvidetFilter);
+    useLedigeOppgaverNy(aktiveEnhetsnumre, veilederFilter === 'veileder', aktivKøId, utvidetFilter, sort);
 
   const { data: køer } = useSWR(`api/filter?${queryParamsArray('enheter', aktiveEnhetsnumre)}`, () =>
     hentKøerForEnheterClient(aktiveEnhetsnumre)
@@ -216,7 +220,7 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
 
         {!isLoading &&
           (oppgaver.length > 0 ? (
-            <LedigeOppgaverTabell oppgaver={oppgaver} revalidateFunction={mutate} />
+            <LedigeOppgaverTabellNy oppgaver={oppgaver} setSortBy={setSort} sort={sort} revalidateFunction={mutate} />
           ) : (
             <BodyShort size={'small'} className={styles.ingenoppgaver}>
               Ingen oppgaver i valgt kø for valgt enhet

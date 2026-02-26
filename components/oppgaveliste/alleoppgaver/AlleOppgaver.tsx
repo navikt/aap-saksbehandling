@@ -12,7 +12,7 @@ import { queryParamsArray } from 'lib/utils/request';
 import { hentKøerForEnheterClient } from 'lib/oppgaveClientApi';
 import { useLagreAktivKø } from 'hooks/oppgave/aktivkøHook';
 import { useConfigForm } from 'components/form/FormHook';
-import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
+import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaverny/MineOppgaverNy';
 import { oppgaveBehandlingstyper, OppgaveStatuser } from 'lib/utils/behandlingstyper';
 import { alleVurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
 import { oppgaveAvklaringsbehov } from 'lib/utils/avklaringsbehov';
@@ -21,7 +21,7 @@ import {
   NoNavAapOppgaveListeUtvidetOppgavelisteFilterReturStatuser,
 } from '@navikt/aap-oppgave-typescript-types';
 import { formaterDatoForBackend } from 'lib/utils/date';
-import styles from 'components/oppgaveliste/ledigeoppgaver/LedigeOppgaver.module.css';
+import styles from 'components/oppgaveliste/ledigeoppgaverny/LedigeOppgaver.module.css';
 import { TabellSkeleton } from 'components/oppgaveliste/tabellskeleton/TabellSkeleton';
 import { AlleOppgaverFiltrering } from 'components/oppgaveliste/filtrering/alleoppgaverfiltrering/AlleOppgaverFiltrering';
 import { ALLE_OPPGAVER_ID } from 'components/oppgaveliste/filtrering/filtreringUtils';

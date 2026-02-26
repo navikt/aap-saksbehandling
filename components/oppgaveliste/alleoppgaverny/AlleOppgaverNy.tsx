@@ -3,8 +3,8 @@
 import { Enhet } from 'lib/types/oppgaveTypes';
 import { useEffect, useState } from 'react';
 import { Alert, BodyShort, Box, Button, HStack, Label, VStack } from '@navikt/ds-react';
-import { AlleOppgaverTabellNy } from 'components/oppgaveliste/alleoppgaverny/alleoppgavertabell/AlleOppgaverTabellNy';
-import { useAlleOppgaverForEnhet } from 'hooks/oppgave/OppgaveHook';
+import { AlleOppgaverTabellNy } from 'components/oppgaveliste/alleoppgaverny/alleoppgavertabellny/AlleOppgaverTabellNy';
+import { useAlleOppgaverForEnhetNy } from 'hooks/oppgave/OppgaveHookNy';
 import { KøSelect } from 'components/oppgaveliste/køselect/KøSelect';
 import { isError, isSuccess } from 'lib/utils/api';
 import useSWR from 'swr';
@@ -12,7 +12,7 @@ import { queryParamsArray } from 'lib/utils/request';
 import { hentKøerForEnheterClient } from 'lib/oppgaveClientApi';
 import { useLagreAktivKø } from 'hooks/oppgave/aktivkøHook';
 import { useConfigForm } from 'components/form/FormHook';
-import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
+import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaverny/MineOppgaverNy';
 import { oppgaveBehandlingstyper, OppgaveStatuser } from 'lib/utils/behandlingstyper';
 import { alleVurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
 import { oppgaveAvklaringsbehov } from 'lib/utils/avklaringsbehov';
@@ -22,7 +22,7 @@ import {
   NoNavAapOppgaveListeUtvidetOppgavelisteFilterReturStatuser,
 } from '@navikt/aap-oppgave-typescript-types';
 import { formaterDatoForBackend } from 'lib/utils/date';
-import styles from 'components/oppgaveliste/ledigeoppgaver/LedigeOppgaver.module.css';
+import styles from 'components/oppgaveliste/ledigeoppgaverny/LedigeOppgaver.module.css';
 import { TabellSkeleton } from 'components/oppgaveliste/tabellskeleton/TabellSkeleton';
 import { AlleOppgaverFiltrering } from 'components/oppgaveliste/filtrering/alleoppgaverfiltrering/AlleOppgaverFiltrering';
 import { ALLE_OPPGAVER_ID } from 'components/oppgaveliste/filtrering/filtreringUtils';
@@ -45,7 +45,8 @@ export const AlleOppgaverNy = ({ enheter }: Props) => {
   const [valgteRader, setValgteRader] = useState<number[]>([]);
   const lagretUtvidetFilter = hentAktivUtvidetFilter();
 
-  const { sort, setSort } = useBackendSortering<NoNavAapOppgaveListeOppgaveSorteringSortBy>('alle-oppgaver');
+  const { sort, setSort } =
+    useBackendSortering<NoNavAapOppgaveListeOppgaveSorteringSortBy>('alle-oppgaver-backendsort');
 
   function førsteEnhetTilComboOption(enheter: Enhet[]): ComboOption[] | null {
     const førsteEnhet = enheter.find((e) => e);
@@ -124,7 +125,7 @@ export const AlleOppgaverNy = ({ enheter }: Props) => {
       : undefined;
 
   const { antallOppgaver, oppgaver, size, setSize, isLoading, isValidating, kanLasteInnFlereOppgaver, mutate } =
-    useAlleOppgaverForEnhet(aktiveEnhetsnumre, aktivKøId, utvidetFilter, sort);
+    useAlleOppgaverForEnhetNy(aktiveEnhetsnumre, aktivKøId, utvidetFilter, sort);
 
   const { data: køer } = useSWR(`api/filter?${queryParamsArray('enheter', aktiveEnhetsnumre)}`, () =>
     hentKøerForEnheterClient(aktiveEnhetsnumre)

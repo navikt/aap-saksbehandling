@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { customRenderWithTildelOppgaveContext } from 'lib/test/CustomRender';
 import { screen } from '@testing-library/react';
-import { AlleOppgaverTabellNy } from 'components/oppgaveliste/alleoppgaverny/alleoppgavertabell/AlleOppgaverTabellNy';
+import { AlleOppgaverTabellNy } from 'components/oppgaveliste/alleoppgaverny/alleoppgavertabellny/AlleOppgaverTabellNy';
 import { Oppgave } from 'lib/types/oppgaveTypes';
 import {
   NoNavAapOppgaveOppgaveDtoBehandlingstype,

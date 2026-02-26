@@ -1,20 +1,22 @@
 'use client';
 
 import { Alert, BodyShort } from '@navikt/ds-react';
-import { MineOppgaverTabell } from 'components/oppgaveliste/mineoppgaver/mineoppgavertabell/MineOppgaverTabell';
+import { MineOppgaverTabellNy } from 'components/oppgaveliste/mineoppgaverny/mineoppgavertabellny/MineOppgaverTabellNy';
 import { useConfigForm } from 'components/form/FormHook';
 import { oppgaveBehandlingstyper, OppgaveStatuser } from 'lib/utils/behandlingstyper';
 import { MineOppgaverFiltrering } from 'components/oppgaveliste/filtrering/mineoppgaverfiltrering/MineOppgaverFiltrering';
 import { useWatch } from 'react-hook-form';
 
-import styles from 'components/oppgaveliste/mineoppgaver/MineOppgaver.module.css';
+import styles from 'components/oppgaveliste/mineoppgaverny/MineOppgaver.module.css';
 import { oppgaveAvklaringsbehov } from 'lib/utils/avklaringsbehov';
-import { useFiltrerteOppgaver } from './MineOppgaverHook';
-import { useMineOppgaver } from 'hooks/oppgave/OppgaveHook';
+import { useFiltrerteOppgaverNy } from './MineOppgaverHook';
+import { useMineOppgaverNy } from 'hooks/oppgave/OppgaveHookNy';
 import { alleVurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
 import { TabellSkeleton } from 'components/oppgaveliste/tabellskeleton/TabellSkeleton';
 import { useLagreAktivUtvidetFilter } from 'hooks/oppgave/aktivUtvidetFilterHook';
 import { useEffect } from 'react';
+import { useBackendSortering } from 'hooks/oppgave/BackendSorteringHook';
+import { PathsMineOppgaverGetParametersQuerySortby } from '@navikt/aap-oppgave-typescript-types';
 
 export interface FormFieldsFilter {
   behandlingstyper?: string[];
@@ -25,8 +27,9 @@ export interface FormFieldsFilter {
   statuser?: string[];
 }
 
-export const MineOppgaver = () => {
-  const { oppgaver, mutate, isLoading, error } = useMineOppgaver();
+export const MineOppgaverNy = () => {
+  const { sort, setSort } = useBackendSortering<PathsMineOppgaverGetParametersQuerySortby>('mine-oppgaver-backendsort');
+  const { oppgaver, mutate, isLoading, error } = useMineOppgaverNy(sort);
   const { hentAktivUtvidetFilter, lagreAktivUtvidetFilter } = useLagreAktivUtvidetFilter();
   const lagretUtvidetFilter = hentAktivUtvidetFilter();
 
@@ -77,7 +80,7 @@ export const MineOppgaver = () => {
     return () => fieldValues.unsubscribe();
   }, [form, lagreAktivUtvidetFilter]);
 
-  const filtrerteOppgaver = useFiltrerteOppgaver({
+  const filtrerteOppgaver = useFiltrerteOppgaverNy({
     oppgaver,
     filter: watchedValues,
   });
@@ -99,7 +102,12 @@ export const MineOppgaver = () => {
 
       {!isLoading &&
         (filtrerteOppgaver?.length > 0 ? (
-          <MineOppgaverTabell oppgaver={filtrerteOppgaver} revalidateFunction={mutate} />
+          <MineOppgaverTabellNy
+            oppgaver={filtrerteOppgaver}
+            revalidateFunction={mutate}
+            sort={sort}
+            setSortBy={setSort}
+          />
         ) : (
           <BodyShort className={styles.ingenreserverteoppgaver}>Ingen reserverte oppgaver.</BodyShort>
         ))}

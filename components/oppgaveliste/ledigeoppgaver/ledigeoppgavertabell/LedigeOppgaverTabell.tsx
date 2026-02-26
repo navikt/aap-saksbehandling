@@ -1,4 +1,4 @@
-import { Alert, BodyShort, CopyButton, SortState, Table, Tooltip } from '@navikt/ds-react';
+import { Alert, BodyShort, CopyButton, Table, Tooltip } from '@navikt/ds-react';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import Link from 'next/link';
 import { storForbokstavIHvertOrd } from 'lib/utils/string';
@@ -11,27 +11,23 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
 import { AvklaringsbehovKode, VurderingsbehovIntern, ÅrsakTilOpprettelse } from 'lib/types/types';
 import { Oppgave } from 'lib/types/oppgaveTypes';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { useState } from 'react';
+import { ScopedSortState, useSortertListe } from 'hooks/oppgave/SorteringHook';
 import { LedigeOppgaverMeny } from 'components/oppgaveliste/ledigeoppgaver/ledigeoppgavermeny/LedigeOppgaverMeny';
 import { OppgaveInformasjon } from 'components/oppgaveliste/oppgaveinformasjon/OppgaveInformasjon';
 import { ManglerTilgangModal } from 'components/oppgaveliste/manglertilgangmodal/ManglerTilgangModal';
 import { SynkroniserEnhetModal } from 'components/oppgaveliste/synkroniserenhetmodal/SynkroniserEnhetModal';
 import { TildelOppgaveModal } from 'components/tildeloppgavemodal/TildelOppgaveModal';
 import { OppgaveIkkeLedigModal } from 'components/oppgaveliste/oppgaveikkeledigmodal/OppgaveIkkeLedigModal';
-import {
-  NoNavAapOppgaveListeOppgaveSorteringSortBy,
-  PathsMineOppgaverGetParametersQuerySortby,
-} from '@navikt/aap-oppgave-typescript-types';
 
 interface Props {
   oppgaver: Oppgave[];
   revalidateFunction: () => void;
-  setSortBy: (orderBy: NoNavAapOppgaveListeOppgaveSorteringSortBy) => void;
-  sort: SortState | undefined;
 }
 
-export const LedigeOppgaverTabell = ({ oppgaver, revalidateFunction, setSortBy, sort }: Props) => {
+export const LedigeOppgaverTabell = ({ oppgaver, revalidateFunction }: Props) => {
   const [feilmelding, setFeilmelding] = useState<string>();
+  const { sort, sortertListe, settSorteringskriterier } = useSortertListe(oppgaver, 'ledige-oppgaver');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [visSynkroniserEnhetModal, setVisSynkroniserEnhetModal] = useState<boolean>(false);
   const [saksbehandlerNavn, setSaksbehandlerNavn] = useState<string>();
@@ -60,47 +56,35 @@ export const LedigeOppgaverTabell = ({ oppgaver, revalidateFunction, setSortBy, 
         size={'small'}
         zebraStripes
         sort={sort}
-        onSortChange={(sortKey) => setSortBy(sortKey as NoNavAapOppgaveListeOppgaveSorteringSortBy)}
+        onSortChange={(sortKey) => settSorteringskriterier(sortKey as ScopedSortState<Oppgave>['orderBy'])}
       >
         <Table.Header>
           <Table.Row>
-            <Table.ColumnHeader textSize={'small'}>Navn</Table.ColumnHeader>
-            <Table.ColumnHeader
-              sortKey={NoNavAapOppgaveListeOppgaveSorteringSortBy.PERSONIDENT}
-              sortable={true}
-              textSize={'small'}
-            >
+            <Table.ColumnHeader sortKey={'personNavn'} sortable={true} textSize={'small'}>
+              Navn
+            </Table.ColumnHeader>
+            <Table.ColumnHeader sortKey={'personIdent'} sortable={true} textSize={'small'}>
               Fnr
             </Table.ColumnHeader>
-            <Table.ColumnHeader sortKey={NoNavAapOppgaveListeOppgaveSorteringSortBy.SAKSNUMMER} sortable={true}>
+            <Table.ColumnHeader sortKey={'saksnummer'} sortable={true}>
               Sak
             </Table.ColumnHeader>
-            <Table.ColumnHeader sortKey={NoNavAapOppgaveListeOppgaveSorteringSortBy.BEHANDLINGSTYPE} sortable={true}>
+            <Table.ColumnHeader sortKey={'behandlingstype'} sortable={true}>
               Behandlingstype
             </Table.ColumnHeader>
-            <Table.ColumnHeader
-              sortKey={NoNavAapOppgaveListeOppgaveSorteringSortBy.BEHANDLING_OPPRETTET}
-              sortable={true}
-            >
+            <Table.ColumnHeader sortKey={'behandlingOpprettet'} sortable={true}>
               Beh. opprettet
             </Table.ColumnHeader>
-            <Table.ColumnHeader
-              sortKey={NoNavAapOppgaveListeOppgaveSorteringSortBy._RSAK_TIL_OPPRETTELSE}
-              sortable={true}
-            >
+            <Table.ColumnHeader sortKey={'årsakTilOpprettelse'} sortable={true}>
               Årsak
             </Table.ColumnHeader>
-            <Table.ColumnHeader>Vurderingsbehov</Table.ColumnHeader>
-            <Table.ColumnHeader
-              sortKey={NoNavAapOppgaveListeOppgaveSorteringSortBy.AVKLARINGSBEHOV_KODE}
-              sortable={true}
-            >
+            <Table.ColumnHeader sortKey={'årsak'} sortable={true}>
+              Vurderingsbehov
+            </Table.ColumnHeader>
+            <Table.ColumnHeader sortKey={'avklaringsbehovKode'} sortable={true}>
               Oppgave
             </Table.ColumnHeader>
-            <Table.ColumnHeader
-              sortKey={NoNavAapOppgaveListeOppgaveSorteringSortBy.OPPRETTET_TIDSPUNKT}
-              sortable={true}
-            >
+            <Table.ColumnHeader sortKey={'opprettetTidspunkt'} sortable={true}>
               Oppg. opprettet
             </Table.ColumnHeader>
             <Table.HeaderCell></Table.HeaderCell>
@@ -108,7 +92,7 @@ export const LedigeOppgaverTabell = ({ oppgaver, revalidateFunction, setSortBy, 
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {oppgaver.map((oppgave, i) => (
+          {sortertListe.map((oppgave, i) => (
             <Table.Row key={`oppgave-${i}`}>
               <Table.DataCell textSize={'small'}>
                 {oppgave.saksnummer ? (
