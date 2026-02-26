@@ -17,6 +17,8 @@ import { OvergangArbeidMedDataFetching } from './overgangarbeid/OvergangArbeidMe
 import { ArbeidsopptrappingMedDataFetching } from 'components/behandlinger/sykdom/arbeidsopptrapping/ArbeidsopptrappingMedDataFetching';
 import { EtableringAvEgenVirksomhetMedDatafetching } from 'components/behandlinger/sykdom/etableringegenvirksomhet/EtableringAvEgenVirksomhetMedDatafetching';
 import { unleashService } from 'lib/services/unleash/unleashService';
+import { BekreftVurderingerOppfølging } from 'components/behandlinger/sykdom/bekreftvurderingeroppfølging/BekreftVurderingerOppfølging';
+import { Behovstype } from 'lib/utils/form';
 
 interface Props {
   behandlingsReferanse: string;
@@ -37,6 +39,13 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
   const fastsettArbeidsevneSteg = getStegData(aktivStegGruppe, 'FASTSETT_ARBEIDSEVNE', flyt.data);
   const refusjonskravSteg = getStegData(aktivStegGruppe, 'REFUSJON_KRAV', flyt.data);
   const sykdomsvurderingBrevSteg = getStegData(aktivStegGruppe, 'SYKDOMSVURDERING_BREV', flyt.data);
+  const bekreftVurderingerOppfølgingSteg = getStegData(
+    aktivStegGruppe,
+    'BEKREFT_VURDERINGER_OPPFØLGING',
+    flyt.data,
+    Behovstype.BEKREFT_VURDERINGER_OPPFØLGING,
+    true
+  );
   const vurderYrkesskadeSteg = getStegData(aktivStegGruppe, 'VURDER_YRKESSKADE', flyt.data);
   const vurderSykepengeerstatningSteg = getStegData(aktivStegGruppe, 'VURDER_SYKEPENGEERSTATNING', flyt.data);
   const overganguføreSteg = getStegData(aktivStegGruppe, 'OVERGANG_UFORE', flyt.data);
@@ -113,6 +122,14 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
           <SykdomsvurderingBrevMedDataFetching
             behandlingsReferanse={behandlingsReferanse}
             stegData={sykdomsvurderingBrevSteg}
+          />
+        </StegSuspense>
+      )}
+      {bekreftVurderingerOppfølgingSteg.skalViseSteg && !bekreftVurderingerOppfølgingSteg.readOnly && (
+        <StegSuspense>
+          <BekreftVurderingerOppfølging
+            behandlingVersjon={bekreftVurderingerOppfølgingSteg.behandlingVersjon}
+            readOnly={bekreftVurderingerOppfølgingSteg.readOnly}
           />
         </StegSuspense>
       )}
