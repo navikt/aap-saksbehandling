@@ -72,7 +72,9 @@ describe('parseDateFraDatePicker', () => {
     const result = parseDatoFraDatePicker('20238-92');
     expect(result).toBeUndefined();
   });
+});
 
+describe('summerPerioderVarighet', () => {
   it('summerPeriodeVarighet', () => {
     const result = summerPerioderVarighet([
       {
