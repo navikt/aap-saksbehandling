@@ -183,7 +183,7 @@ export const EtableringAvEgenVirksomhet = ({
           fom={parseISO(vurdering.fom)}
           tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
           alertMelding={
-            'Vilkåret kan ikke vurderes for denne perioden. For å vurdere vilkåret må § 11-6 b være oppfylt.'
+            'Vilkåret kan ikke vurderes for denne perioden. For å vurdere vilkåret i perioden må §§ 11-5 og 11-6 b være oppfylt.'
           }
           foersteNyePeriodeFraDato={undefined}
         ></IkkeVurderbarPeriode>
