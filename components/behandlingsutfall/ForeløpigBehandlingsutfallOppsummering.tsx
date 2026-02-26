@@ -1,7 +1,7 @@
 import { ForeløpigBehandlingsutfall } from 'lib/types/types';
 import { HStack, Table } from '@navikt/ds-react';
 import { TableStyled } from 'components/tablestyled/TableStyled';
-import { CheckmarkCircleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
+import { CheckmarkCircleIcon, QuestionmarkCircleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 import styles from 'components/behandlinger/vedtak/foreslåvedtak/foreslåvedtaktabell/ForeslåVedtakTabell.module.css';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { mapRettighetsTypeTilTekst } from 'lib/utils/rettighetstype';
@@ -11,24 +11,12 @@ export const ForeløpigBehandlingsutfallOppsummering = ({
 }: {
   foreløpigBehandlingsutfall: ForeløpigBehandlingsutfall;
 }) => {
-  function mapUtfallTilTekst(utfall: ForeløpigBehandlingsutfall['tidligereVurderinger'][0]['utfall']) {
-    switch (utfall) {
-      case 'POTENSIELT_OPPFYLT':
-        return 'AAP innvilget (foreløpig resultat)';
-      case 'IKKE_BEHANDLINGSGRUNNLAG':
-        return 'Ikke behandlingsgrunnlag';
-      case 'UUNGÅELIG_AVSLAG':
-        return 'Ikke rett på AAP';
-    }
-  }
-
   return (
     <TableStyled>
       <Table.Header>
         <Table.Row>
           <Table.HeaderCell>Foreløpig resultat</Table.HeaderCell>
           <Table.HeaderCell>Periode</Table.HeaderCell>
-          <Table.HeaderCell>Type</Table.HeaderCell>
         </Table.Row>
       </Table.Header>
       <Table.Body>
@@ -49,17 +37,20 @@ export const ForeløpigBehandlingsutfallOppsummering = ({
               <Table.DataCell>
                 <HStack gap={'2'} align={'center'}>
                   {segment.utfall == 'POTENSIELT_OPPFYLT' ? (
-                    <CheckmarkCircleIcon className={styles.godkjentIcon} />
+                    segment.rettighetstype ? (
+                      <CheckmarkCircleIcon className={styles.godkjentIcon} />
+                    ) : (
+                      <QuestionmarkCircleIcon className={styles.iconSubtle} />
+                    )
                   ) : (
                     <XMarkOctagonIcon className={styles.avslåttIcon} />
                   )}
-                  {mapUtfallTilTekst(segment.utfall)}
+                  {mapTidligereVurderingTilTekst(segment)}
                 </HStack>
               </Table.DataCell>
               <Table.DataCell>
                 {formaterDatoForFrontend(segment.periode.fom)} - {formaterDatoForFrontend(segment.periode.tom)}
               </Table.DataCell>
-              <Table.DataCell>{mapRettighetsTypeTilTekst(segment.rettighetstype)}</Table.DataCell>
             </Table.Row>
           ))
         )}
@@ -67,3 +58,18 @@ export const ForeløpigBehandlingsutfallOppsummering = ({
     </TableStyled>
   );
 };
+
+function mapTidligereVurderingTilTekst(tidligereVurdering: ForeløpigBehandlingsutfall['tidligereVurderinger'][0]) {
+  switch (tidligereVurdering.utfall) {
+    case 'POTENSIELT_OPPFYLT':
+      if (tidligereVurdering.rettighetstype) {
+        return `Oppfyller ${mapRettighetsTypeTilTekst(tidligereVurdering.rettighetstype)}`;
+      } else {
+        return 'Bruker blir vurdert for AAP etter § 11-13'; // Eneste mulige rettighetstype dersom ingen er satt til nå
+      }
+    case 'IKKE_BEHANDLINGSGRUNNLAG':
+      return 'Ikke behandlingsgrunnlag';
+    case 'UUNNGÅELIG_AVSLAG':
+      return 'Ingen rettighet';
+  }
+}

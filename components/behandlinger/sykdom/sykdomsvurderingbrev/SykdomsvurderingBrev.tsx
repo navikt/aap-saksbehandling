@@ -1,6 +1,6 @@
 'use client';
 
-import { BodyLong, Box, Heading, Label, List, VStack } from '@navikt/ds-react';
+import { BodyLong, BodyShort, Box, Heading, Label, List, VStack } from '@navikt/ds-react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import {
@@ -129,7 +129,10 @@ export const SykdomsvurderingBrev = ({
       <VStack gap={'4'}>
         {visOppsummering && (
           <>
-            <Label size={'small'}>Oppsummering av veileders vurderinger</Label>
+            <BodyShort size={'small'}>
+              Tabellen viser hvilke perioder brukeren har blitt vurdert til å oppfylle kjernevilkår for ulike
+              rettighetstyper. Resultatet kan endre seg videre i behandlingen.
+            </BodyShort>
             <ForeløpigBehandlingsutfallOppsummering foreløpigBehandlingsutfall={foreløpigBehandlingsutfall} />
             <Label size={'small'}>Skriv en individuell begrunnelse</Label>
           </>
