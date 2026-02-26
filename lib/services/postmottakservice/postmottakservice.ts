@@ -54,6 +54,14 @@ export const hentUbehandledeJournalposter = async () => {
   const url = `${postmottakApiBaseUrl}/api/dokumenter/finn-ubehandlede`;
   return await apiFetch<any[]>(url, postmottakApiScope, 'GET');
 };
+export const redigitaliser = async (journalpostId: number, saksnummer: string) => {
+  const url = `${postmottakApiBaseUrl}/api/redigitalisering`;
+
+  return await apiFetch<void>(url, postmottakApiScope, 'POST', {
+    journalpostId: journalpostId,
+    saksnummer: saksnummer,
+  });
+};
 
 export const løsAvklaringsbehov = async (avklaringsBehov: LøsAvklaringsbehovPåBehandling) => {
   const url = `${postmottakApiBaseUrl}/api/behandling/løs-behov`;
