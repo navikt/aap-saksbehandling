@@ -631,9 +631,13 @@ export const hentMellomlagring = async (behandlingsReferanse: string, kode: stri
   }
 };
 
-export const hentForeløpigBehandlingsutfall = async (behandlingsReferanse: string, steg: StegType) => {
+export const hentForeløpigBehandlingsutfall = async (
+  behandlingsReferanse: string,
+  førSteg: StegType,
+  etterSteg: StegType
+) => {
   return apiFetch<ForeløpigBehandlingsutfall>(
-    `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/tidligere-vurderinger?stegType=${steg}`,
+    `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/tidligere-vurderinger?førSteg=${førSteg}&etterSteg=${etterSteg}`,
     saksbehandlingApiScope
   );
 };

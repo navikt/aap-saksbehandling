@@ -18,7 +18,7 @@ export const SykdomsvurderingBrevMedDataFetching = async ({ behandlingsReferanse
   const [grunnlag, initialMellomlagretVurdering, foreløpigBehandlingsutfall] = await Promise.all([
     hentSykdomsvurderingBrevGrunnlag(behandlingsReferanse),
     hentMellomlagring(behandlingsReferanse, Behovstype.SYKDOMSVURDERING_BREV_KODE),
-    hentForeløpigBehandlingsutfall(behandlingsReferanse, stegData.stegType),
+    hentForeløpigBehandlingsutfall(behandlingsReferanse, stegData.stegType, 'VURDER_ALDER'),
   ]);
 
   if (isError(grunnlag) || isError(foreløpigBehandlingsutfall)) {
