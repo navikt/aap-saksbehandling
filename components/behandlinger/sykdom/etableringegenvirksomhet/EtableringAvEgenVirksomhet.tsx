@@ -131,7 +131,6 @@ export const EtableringAvEgenVirksomhet = ({
           });
         }
       });
-      // valider at oppstartsperioder ikke er lengre enn 3 mnd
       if (!validerTidsplan) {
         return;
       }
