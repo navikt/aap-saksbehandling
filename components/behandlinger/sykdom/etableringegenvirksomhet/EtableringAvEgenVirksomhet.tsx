@@ -36,7 +36,7 @@ import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingS
 import { EtableringEgenVirksomhetTidligereVurdering } from 'components/behandlinger/sykdom/etableringegenvirksomhet/EtableringAvEgenVirksomhetTidligereVurdering';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { parseISO } from 'date-fns';
-import { parseDatoFraDatePicker } from 'lib/utils/date';
+import { parseDatoFraDatePicker, summerPerioderVarighet } from 'lib/utils/date';
 import { IkkeVurderbarPeriode } from 'components/periodisering/IkkeVurderbarPeriode';
 import { validerPeriodiserteVurderingerMotIkkeRelevantePerioder } from 'lib/utils/validering';
 
@@ -110,6 +110,36 @@ export const EtableringAvEgenVirksomhet = ({
           }
         }
       });
+      data.vurderinger.forEach((vurdering, vurderingIndex) => {
+        // valider at utviklingsperioder ikke er lengre enn 6 mnd
+        const utviklingsperioderDuration = summerPerioderVarighet(vurdering.utviklingsperioder);
+        if (
+          utviklingsperioderDuration.years > 0 ||
+          utviklingsperioderDuration.months > 6 ||
+          (utviklingsperioderDuration.months === 6 && utviklingsperioderDuration.days > 0)
+        ) {
+          validerTidsplan = false;
+          form.setError(`vurderinger.${vurderingIndex}.utviklingsperioder`, {
+            type: 'custom',
+            message: 'Utviklingsperiode kan ikke være lengre enn 6 mnd',
+          });
+        }
+
+        // valider at oppstartsperioder ikke er lengre enn 3 mnd
+        const oppstartsperioderDuration = summerPerioderVarighet(vurdering.oppstartsperioder);
+        if (
+          oppstartsperioderDuration.years > 0 ||
+          oppstartsperioderDuration.months > 3 ||
+          (oppstartsperioderDuration.months === 3 && oppstartsperioderDuration.days > 0)
+        ) {
+          validerTidsplan = false;
+          form.setError(`vurderinger.${vurderingIndex}.oppstartsperioder`, {
+            type: 'custom',
+            message: 'Oppstartsperiode kan ikke være lengre enn 3 mnd',
+          });
+        }
+      });
+      // valider at oppstartsperioder ikke er lengre enn 3 mnd
       if (!validerTidsplan) {
         return;
       }

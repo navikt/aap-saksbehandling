@@ -170,6 +170,9 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly }: P
             </HStack>
           </VStack>
         </VStack>
+        {form.formState.errors.vurderinger?.[index]?.oppstartsperioder && (
+          <Alert variant={'error'}>{form.formState.errors.vurderinger[index].oppstartsperioder.message}</Alert>
+        )}
         <VStack gap={'4'}>
           <VStack>
             <Label size={'small'}>Oppstartsperiode</Label>
