@@ -40,12 +40,12 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly }: P
   });
 
   useEffect(() => {
-    form.clearErrors();
-  }, [utviklingperiodeList]);
+    form.clearErrors(`vurderinger.${index}.utviklingsperioder`);
+  }, [utviklingperiodeList, form.clearErrors]);
 
   useEffect(() => {
-    form.clearErrors();
-  }, [oppstartsperiodeList]);
+    form.clearErrors(`vurderinger.${index}.oppstartsperioder`);
+  }, [oppstartsperiodeList, form.clearErrors]);
 
   return (
     <VStack gap={'4'}>
