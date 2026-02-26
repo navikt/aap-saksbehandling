@@ -114,7 +114,7 @@ export const EtableringAvEgenVirksomhet = ({
       const alleUtviklingsperioder = data.vurderinger.map((vurdering) => vurdering.utviklingsperioder).flat();
       const utviklingsperioderDuration = summerPerioderVarighetIArbeidsdager(alleUtviklingsperioder);
       console.log('utviklingsperioder', utviklingsperioderDuration);
-      if (utviklingsperioderDuration > 131) {
+      if (utviklingsperioderDuration + (grunnlag.bruktUtviklingsDager || 0) > 131) {
         validerTidsplan = false;
         form.setError(`vurderinger`, {
           type: 'custom',
@@ -126,7 +126,7 @@ export const EtableringAvEgenVirksomhet = ({
       const alleOppstartsperioder = data.vurderinger.map((vurdering) => vurdering.oppstartsperioder).flat();
       const oppstartsperioderDuration = summerPerioderVarighetIArbeidsdager(alleOppstartsperioder);
       console.log('oppstart', oppstartsperioderDuration);
-      if (oppstartsperioderDuration > 66) {
+      if (oppstartsperioderDuration + (grunnlag.bruktOppstartsdager || 0) > 66) {
         validerTidsplan = false;
         form.setError(`vurderinger`, {
           type: 'custom',
