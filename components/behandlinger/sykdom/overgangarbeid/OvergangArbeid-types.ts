@@ -1,4 +1,4 @@
-import { VurdertAvAnsatt } from 'lib/types/types';
+import { VurderingMeta } from 'lib/types/types';
 
 export type OvergangArbeidForm = {
   vurderinger: OvergangArbeidVurderingForm[];
@@ -10,12 +10,8 @@ export type OvergangArbeidFormOld = {
   fom: string;
 };
 
-export type OvergangArbeidVurderingForm = {
+export interface OvergangArbeidVurderingForm extends VurderingMeta {
   begrunnelse: string;
   brukerRettPåAAP: string;
   fraDato: string;
-  vurdertAv?: VurdertAvAnsatt;
-  kvalitetssikretAv?: VurdertAvAnsatt;
-  besluttetAv?: VurdertAvAnsatt;
-  erNyVurdering?: boolean;
-};
+}

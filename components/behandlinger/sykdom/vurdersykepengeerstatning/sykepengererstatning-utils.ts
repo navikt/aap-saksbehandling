@@ -20,6 +20,8 @@ export function getDefaultValuesFromGrunnlag(grunnlag: SykepengeerstatningGrunnl
       fraDato: '',
       grunn: null,
       erOppfylt: '',
+      erNyVurdering: true,
+      behøverVurdering: false,
     }));
   }
 
@@ -34,6 +36,8 @@ export function getDefaultValuesFromGrunnlag(grunnlag: SykepengeerstatningGrunnl
         vurdertAv: vurdering.vurdertAv,
         kvalitetssikretAv: vurdering.kvalitetssikretAv,
         besluttetAv: vurdering.besluttetAv,
+        erNyVurdering: false,
+        behøverVurdering: false,
       })) || [],
   };
 }

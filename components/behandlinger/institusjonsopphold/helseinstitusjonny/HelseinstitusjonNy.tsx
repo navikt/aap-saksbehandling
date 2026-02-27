@@ -7,7 +7,7 @@ import {
   HelseInstiusjonVurdering,
   MellomlagretVurdering,
   Periode,
-  VurdertAvAnsatt,
+  VurderingMeta,
 } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 
@@ -44,15 +44,13 @@ export interface OppholdMedVurderinger {
   vurderinger: OppholdVurdering[];
 }
 
-export interface OppholdVurdering {
+export interface OppholdVurdering extends VurderingMeta {
   oppholdId: string;
   periode: Periode;
   begrunnelse: string;
   harFasteUtgifter?: JaEllerNei;
   forsoergerEktefelle?: JaEllerNei;
   faarFriKostOgLosji?: JaEllerNei;
-  erNyVurdering?: boolean;
-  vurdertAv?: VurdertAvAnsatt;
 }
 
 type DraftFormFields = Partial<HelseinstitusjonsFormFieldsNy>;
@@ -210,6 +208,8 @@ function mapVurderingToDraftFormFields(
                 tom: formaterDatoForFrontend(vurdering.periode.tom),
               },
               vurdertAv: vurdering.vurdertAv,
+              erNyVurdering: false,
+              behøverVurdering: false,
             }))
           : [
               {
@@ -224,6 +224,8 @@ function mapVurderingToDraftFormFields(
                     oppholdHentetFraGrunnlag?.periode.tom || opphold.avsluttetDato
                   ),
                 },
+                erNyVurdering: true,
+                behøverVurdering: false,
               },
             ];
 

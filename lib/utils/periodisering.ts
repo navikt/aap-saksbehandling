@@ -48,6 +48,11 @@ export function trengerVurderingsForslag(grunnlag: PeriodisertGrunnlag | undefin
 
   return behøverVurderinger || !harVedtatteVurderinger;
 }
+// TODO: innfør denne i hentPerioderSomTrengerVurdering<T extends PåkrevdeFelter(
+// interface PåkrevdeFelter {
+//   fraDato: string;
+//   behøverVurdering: boolean;
+// }
 
 interface PåkrevdeFelter {
   fraDato: string;
@@ -65,8 +70,7 @@ export function hentPerioderSomTrengerVurdering<T extends PåkrevdeFelter>(
           fraDato: new Dato(periode.fom).formaterForFrontend(),
           behøverVurdering: true,
         }))
-      : [{ fraDato: getFraDatoFraGrunnlagForFrontend(grunnlag), behøverVurdering: null }];
-
+      : [{ fraDato: getFraDatoFraGrunnlagForFrontend(grunnlag), behøverVurdering: false }];
   return {
     vurderinger: initiellePerioder.map((periode) => ({
       ...tomVurdering(),

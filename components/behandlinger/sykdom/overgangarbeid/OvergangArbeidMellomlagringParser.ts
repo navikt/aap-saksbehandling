@@ -18,6 +18,8 @@ function mapFromOldFormToNewForm(oldData: OvergangArbeidFormOld): OvergangArbeid
         fraDato: oldData.fom,
         begrunnelse: oldData.begrunnelse,
         brukerRettPåAAP: oldData.brukerRettPåAAP || '',
+        erNyVurdering: false,
+        behøverVurdering: false,
       },
     ],
   };

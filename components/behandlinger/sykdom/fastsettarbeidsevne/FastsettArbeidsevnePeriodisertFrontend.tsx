@@ -8,7 +8,7 @@ import {
   ArbeidsevneGrunnlag,
   MellomlagretVurdering,
   PeriodisertArbeidsevneVurderingDto,
-  VurdertAvAnsatt,
+  VurderingMeta,
 } from 'lib/types/types';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
@@ -45,14 +45,10 @@ interface Props {
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
-interface ArbeidsevneVurderingForm {
+interface ArbeidsevneVurderingForm extends VurderingMeta {
   begrunnelse: string;
   arbeidsevne: number | undefined;
   fraDato: string | undefined;
-  vurdertAv?: VurdertAvAnsatt;
-  kvalitetssikretAv?: VurdertAvAnsatt;
-  besluttetAv?: VurdertAvAnsatt;
-  erNyVurdering?: boolean;
 }
 
 interface FastsettArbeidsevneForm {
@@ -115,6 +111,7 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
       fraDato: fields.length === 0 ? formaterDatoForFrontend(new Date()) : undefined,
       arbeidsevne: undefined,
       erNyVurdering: true,
+      behøverVurdering: false,
     });
   }
 
@@ -213,9 +210,7 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
           vurderingStatus={undefined}
           nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
           isLast={index === vedtatteVurderinger.length - 1}
-          vurdertAv={vurdering.vurdertAv}
-          kvalitetssikretAv={vurdering.kvalitetssikretAv}
-          besluttetAv={vurdering.besluttetAv}
+          vurdering={vurdering}
           finnesFeil={finnesFeilForVurdering(index, errorList)}
           readonly={formReadOnly}
           onSlettVurdering={() => remove(index)}
@@ -301,6 +296,8 @@ function getDefaultValuesFromGrunnlag(grunnlag: ArbeidsevneGrunnlag | undefined)
       vurdertAv: vurdering.vurdertAv,
       kvalitetssikretAv: vurdering.kvalitetssikretAv,
       besluttetAv: vurdering.besluttetAv,
+      erNyVurdering: false,
+      behøverVurdering: false,
     })),
   };
 }

@@ -4,7 +4,7 @@ import {
   MellomlagretVurdering,
   OvergangUforeGrunnlag,
   OvergangUføreVedtakResultat,
-  VurdertAvAnsatt,
+  VurderingMeta,
 } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
@@ -41,16 +41,12 @@ interface Props {
 export interface OvergangUforeForm {
   vurderinger: Array<OvergangUforeVurderingForm>;
 }
-interface OvergangUforeVurderingForm {
+interface OvergangUforeVurderingForm extends VurderingMeta {
   fraDato: string;
   begrunnelse: string;
   brukerHarSøktUføretrygd: JaEllerNei | undefined;
   brukerHarFåttVedtakOmUføretrygd: OvergangUføreVedtakResultat | null;
   brukerRettPåAAP?: JaEllerNei | undefined;
-  vurdertAv?: VurdertAvAnsatt;
-  kvalitetssikretAv?: VurdertAvAnsatt;
-  besluttetAv?: VurdertAvAnsatt;
-  erNyVurdering?: boolean;
 }
 
 export const OvergangUforePeriodisert = ({
@@ -169,9 +165,7 @@ export const OvergangUforePeriodisert = ({
               vurderingStatus={getErOppfyltEllerIkkeStatus(erVurderingOppfylt(form, index))}
               nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
               isLast={index === nyeVurderingFields.length - 1}
-              vurdertAv={vurdering.vurdertAv}
-              kvalitetssikretAv={vurdering.kvalitetssikretAv}
-              besluttetAv={vurdering.besluttetAv}
+              vurdering={vurdering}
               finnesFeil={finnesFeilForVurdering(index, errorList)}
               readonly={formReadOnly}
               onSlettVurdering={() => remove(index)}
@@ -202,6 +196,8 @@ export const OvergangUforePeriodisert = ({
         vurdertAv: vurdering.vurdertAv,
         kvalitetssikretAv: vurdering.kvalitetssikretAv,
         besluttetAv: vurdering.besluttetAv,
+        erNyVurdering: false,
+        behøverVurdering: false,
       })),
     };
   }
@@ -213,6 +209,8 @@ export const OvergangUforePeriodisert = ({
       brukerHarSøktUføretrygd: undefined,
       brukerHarFåttVedtakOmUføretrygd: null,
       brukerRettPåAAP: undefined,
+      erNyVurdering: true,
+      behøverVurdering: false,
     };
   }
 };

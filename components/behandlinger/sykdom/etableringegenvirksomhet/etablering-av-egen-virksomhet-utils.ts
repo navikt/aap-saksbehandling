@@ -40,6 +40,8 @@ export function getDefaultValuesFromGrunnlag(
         fom: new Dato(periode.fom).formaterForFrontend(),
         tom: periode.tom ? new Dato(periode.tom).formaterForFrontend() : '',
       })),
+      erNyVurdering: false,
+      behøverVurdering: false,
     })),
   };
 }
@@ -79,6 +81,7 @@ export function tomEtableringAvEgenVirksomhetVurdering(): EtableringAvEgenVirkso
     oppstartsperioder: [],
     utviklingsperioder: [],
     erNyVurdering: true,
+    behøverVurdering: false,
   };
 }
 
