@@ -145,7 +145,10 @@ async function ventTilProsesseringErFerdig(
     }
 
     if (status === 'FEILET') {
-      logError(`Prosessering feilet: ${JSON.stringify(response.data.prosessering.ventendeOppgaver)}`);
+      logError(
+        'Prosessering av behandling i postmottak feilet: ',
+        Error(JSON.stringify(response.data.prosessering.ventendeOppgaver))
+      );
       prosessering = response.data.prosessering;
       break;
     }
