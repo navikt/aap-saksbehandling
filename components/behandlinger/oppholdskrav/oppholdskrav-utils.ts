@@ -8,7 +8,7 @@ import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/u
 
 export function getDefaultValuesFromGrunnlag(grunnlag: OppholdskravGrunnlagResponse): OppholdskravForm {
   if (trengerVurderingsForslag(grunnlag)) {
-    return hentPerioderSomTrengerVurdering<OppholdskravVurderingForm>(grunnlag, () => ({
+    return hentPerioderSomTrengerVurdering(grunnlag, () => ({
       begrunnelse: '',
       fraDato: '',
       land: '',

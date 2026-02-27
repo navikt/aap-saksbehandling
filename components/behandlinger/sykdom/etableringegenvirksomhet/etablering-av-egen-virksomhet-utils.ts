@@ -17,10 +17,7 @@ export function getDefaultValuesFromGrunnlag(
 ): EtableringAvEgenVirksomhetForm {
   if (grunnlag.behøverVurderinger.length > 0) {
     return {
-      ...hentPerioderSomTrengerVurdering<EtableringAvEgenVirksomhetVurderingForm>(
-        grunnlag,
-        tomEtableringAvEgenVirksomhetVurdering
-      ),
+      ...hentPerioderSomTrengerVurdering(grunnlag, tomEtableringAvEgenVirksomhetVurdering),
       virksomhetNavn: '',
     };
   }
@@ -78,7 +75,7 @@ export function tomEtableringAvEgenVirksomhetVurdering(): EtableringAvEgenVirkso
     eierBrukerVirksomheten: undefined,
     erVirksomhetenNy: undefined,
     foreliggerEnNæringsfagligVurdering: undefined,
-    fraDato: undefined,
+    fraDato: '',
     oppstartsperioder: [],
     utviklingsperioder: [],
     erNyVurdering: true,

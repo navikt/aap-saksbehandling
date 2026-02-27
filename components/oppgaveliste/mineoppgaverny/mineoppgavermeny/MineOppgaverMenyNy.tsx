@@ -1,0 +1,95 @@
+import { Button, Dropdown, HStack, Loader } from '@navikt/ds-react';
+import { ChevronDownIcon } from '@navikt/aksel-icons';
+import { Oppgave } from 'lib/types/oppgaveTypes';
+import { avreserverOppgaveClient, plukkOppgaveClient } from 'lib/oppgaveClientApi';
+import { isSuccess } from 'lib/utils/api';
+import { byggKelvinURL } from 'lib/utils/request';
+import { Dispatch, SetStateAction, useTransition } from 'react';
+import { useRouter } from 'next/navigation';
+import styles from './MineOppgaverMeny.module.css';
+import { useTildelOppgaver } from 'context/oppgave/TildelOppgaverContext';
+
+interface Props {
+  oppgave: Oppgave;
+  setFeilmelding: Dispatch<SetStateAction<string | undefined>>;
+  setÅpenModal: Dispatch<SetStateAction<boolean>>;
+  revalidateFunction: () => void;
+}
+
+export const MineOppgaverMenyNy = ({ oppgave, setFeilmelding, setÅpenModal, revalidateFunction }: Props) => {
+  const [isPendingFrigi, startTransitionFrigi] = useTransition();
+  const [isPendingBehandle, startTransitionBehandle] = useTransition();
+
+  const { setOppgaveIder, visModal } = useTildelOppgaver();
+  const router = useRouter();
+
+  async function frigiOppgave(oppgave: Oppgave) {
+    startTransitionFrigi(async () => {
+      if (oppgave.id) {
+        const res = await avreserverOppgaveClient([oppgave.id]);
+
+        if (isSuccess(res)) {
+          if (revalidateFunction) {
+            revalidateFunction();
+          }
+        } else if (res.status == 401) {
+          setÅpenModal(true);
+        } else {
+          setFeilmelding(`Feil ved avreservering av oppgave: ${res.apiException.message}`);
+        }
+      } else {
+        setFeilmelding('Feil ved avreservering av oppgave: OppgaveId mangler');
+      }
+    });
+  }
+
+  async function plukkOgGåTilOppgave(oppgave: Oppgave) {
+    startTransitionBehandle(async () => {
+      if (oppgave.id !== undefined && oppgave.id !== null && oppgave.versjon >= 0) {
+        const plukketOppgave = await plukkOppgaveClient(oppgave.id, oppgave.versjon);
+        if (isSuccess(plukketOppgave)) {
+          router.push(byggKelvinURL(plukketOppgave.data));
+        } else if (plukketOppgave.status == 401) {
+          setÅpenModal(true);
+        } else {
+          setFeilmelding(`Feil ved plukking av oppgave: ${plukketOppgave.apiException.message}`);
+        }
+      }
+    });
+  }
+  return (
+    <div className={styles.comboButton}>
+      <Button
+        type={'button'}
+        size={'small'}
+        variant={'secondary'}
+        onClick={() => plukkOgGåTilOppgave(oppgave)}
+        loading={isPendingBehandle}
+      >
+        Behandle
+      </Button>
+      <Dropdown>
+        <Button as={Dropdown.Toggle} size="small" variant="secondary">
+          <HStack align={'center'}>
+            {isPendingFrigi ? <Loader size={'xsmall'} /> : <ChevronDownIcon title="Meny" />}
+          </HStack>
+        </Button>
+        <Dropdown.Menu>
+          <Dropdown.Menu.GroupedList>
+            <Dropdown.Menu.GroupedList.Item onClick={() => frigiOppgave(oppgave)}>
+              Frigi oppgave
+            </Dropdown.Menu.GroupedList.Item>
+            <Dropdown.Menu.GroupedList.Item
+              onClick={() => {
+                oppgave.id && setOppgaveIder([oppgave.id]);
+                visModal();
+              }}
+            >
+              Tildel oppgave
+            </Dropdown.Menu.GroupedList.Item>
+          </Dropdown.Menu.GroupedList>
+        </Dropdown.Menu>
+      </Dropdown>
+    </div>
+  );
+};

@@ -6,13 +6,13 @@ import { validerDato } from 'lib/validation/dateValidation';
 import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
-import React from 'react';
-import { useFieldArray, UseFormReturn } from 'react-hook-form';
+import { useFieldArray, UseFormReturn, useWatch } from 'react-hook-form';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { EtableringAvEgenVirksomhetForm } from 'components/behandlinger/sykdom/etableringegenvirksomhet/EtableringAvEgenVirksomhet';
 import { JaEllerNei } from 'lib/utils/form';
 import { EtableringEierBrukerVirksomheten, lagEnumObjektFraUnionType } from 'lib/types/types';
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
+import { useEffect } from 'react';
 
 const EierBrukerVirsomheten = lagEnumObjektFraUnionType<NonNullable<EtableringEierBrukerVirksomheten>>({
   EIER_MINST_50_PROSENT: 'EIER_MINST_50_PROSENT',
@@ -28,11 +28,23 @@ type Props = {
 export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly }: Props) => {
   const utviklingsperioder = useFieldArray({ control: form.control, name: `vurderinger.${index}.utviklingsperioder` });
   const oppstartsperioder = useFieldArray({ control: form.control, name: `vurderinger.${index}.oppstartsperioder` });
+
+  const utviklingperiodeList = useWatch({
+    control: form.control,
+    name: `vurderinger.${index}.utviklingsperioder`,
+  });
+
+  const oppstartsperiodeList = useWatch({
+    control: form.control,
+    name: `vurderinger.${index}.oppstartsperioder`,
+  });
+
+  useEffect(() => {
+    form.clearErrors(`vurderinger`);
+  }, [utviklingperiodeList, oppstartsperiodeList, form.clearErrors]);
+
   return (
     <VStack gap={'4'}>
-      <Heading level={'2'} size={'medium'}>
-        Vilkårsvurdering
-      </Heading>
       <DateInputWrapper
         name={`vurderinger.${index}.fraDato`}
         label="Vurderingen gjelder fra"
@@ -100,148 +112,156 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly }: P
           readOnly={readOnly}
         />
       )}
-      {form.watch(`vurderinger.${index}.antasDetAtEtableringenFørerTilSelvforsørgelse`) === JaEllerNei.Ja && (
-        <>
-          <Heading level={'2'} size={'medium'}>
-            Etableringsplan
-          </Heading>
+      <VStack gap={'4'} paddingBlock={'4 0'}>
+        <Heading level={'2'} size={'small'}>
+          Etableringsplan
+        </Heading>
+        <VStack gap={'4'}>
+          <VStack>
+            <Label size={'small'}>Utviklingsperiode</Label>
+            <BodyShort textColor={'subtle'} size={'small'}>
+              Kan gis for inntil 6 måneder
+            </BodyShort>
+          </VStack>
           {form.formState.errors.vurderinger?.[index]?.utviklingsperioder && (
             <Alert variant={'error'}>{form.formState.errors.vurderinger[index].utviklingsperioder.message}</Alert>
           )}
           <VStack gap={'4'}>
-            <VStack>
-              <Label size={'small'}>Utviklingsperiode</Label>
-              <BodyShort textColor={'subtle'} size={'small'}>
-                Kan gis for inntil 6 måneder
-              </BodyShort>
-            </VStack>
-            <VStack gap={'4'}>
-              <Table size="small">
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell scope="col" textSize={'small'}>
-                      <BodyShort textColor={'subtle'} size={'small'}>
-                        Periode
-                      </BodyShort>
-                    </Table.HeaderCell>
-                    <Table.HeaderCell />
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                  {utviklingsperioder.fields.map(({ id }, i) => {
-                    return (
-                      <Table.Row key={id}>
-                        <Table.DataCell>
-                          <HStack gap={'2'} align={'center'}>
-                            <DateInputWrapper
-                              name={`vurderinger.${index}.utviklingsperioder.${i}.fom`}
-                              control={form.control}
-                            />
-                            {'-'}
-                            <DateInputWrapper
-                              name={`vurderinger.${index}.utviklingsperioder.${i}.tom`}
-                              control={form.control}
-                            />
-                          </HStack>
-                        </Table.DataCell>
-                        <Table.DataCell>
-                          <Button
-                            size={'small'}
-                            variant={'secondary'}
-                            type={'button'}
-                            icon={<TrashIcon />}
-                            onClick={() => utviklingsperioder.remove(i)}
+            <Table size="small">
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell scope="col" textSize={'small'}>
+                    <BodyShort textColor={'subtle'} size={'small'}>
+                      Periode
+                    </BodyShort>
+                  </Table.HeaderCell>
+                  <Table.HeaderCell />
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                {utviklingsperioder.fields.map(({ id }, i) => {
+                  return (
+                    <Table.Row key={id}>
+                      <Table.DataCell>
+                        <HStack gap={'2'} align={'center'}>
+                          <DateInputWrapper
+                            name={`vurderinger.${index}.utviklingsperioder.${i}.fom`}
+                            control={form.control}
                           />
-                        </Table.DataCell>
-                      </Table.Row>
-                    );
-                  })}
-                </Table.Body>
-              </Table>
-              <HStack>
-                <Button
-                  size={'small'}
-                  variant={'secondary'}
-                  type={'button'}
-                  icon={<PlusCircleIcon />}
-                  onClick={() => {
-                    form.clearErrors();
-                    utviklingsperioder.append({ fom: '', tom: '' });
-                  }}
-                >
-                  Legg til ny periode
-                </Button>
-              </HStack>
-            </VStack>
+                          {'-'}
+                          <DateInputWrapper
+                            name={`vurderinger.${index}.utviklingsperioder.${i}.tom`}
+                            control={form.control}
+                          />
+                        </HStack>
+                      </Table.DataCell>
+                      <Table.DataCell>
+                        <Button
+                          size={'small'}
+                          variant={'secondary'}
+                          type={'button'}
+                          icon={<TrashIcon />}
+                          onClick={() => utviklingsperioder.remove(i)}
+                        />
+                      </Table.DataCell>
+                    </Table.Row>
+                  );
+                })}
+              </Table.Body>
+            </Table>
+            <HStack>
+              <Button
+                size={'small'}
+                variant={'secondary'}
+                type={'button'}
+                icon={<PlusCircleIcon />}
+                onClick={() => {
+                  form.clearErrors();
+                  utviklingsperioder.append({ fom: '', tom: '' });
+                }}
+              >
+                Legg til ny periode
+              </Button>
+            </HStack>
           </VStack>
+        </VStack>
+        <VStack gap={'4'}>
+          <VStack>
+            <Label size={'small'}>Oppstartsperiode</Label>
+            <BodyShort textColor={'subtle'} size={'small'}>
+              Kan gis for inntil 3 måneder
+            </BodyShort>
+          </VStack>
+          {form.formState.errors.vurderinger?.[index]?.oppstartsperioder && (
+            <Alert variant={'error'}>{form.formState.errors.vurderinger[index].oppstartsperioder.message}</Alert>
+          )}
           <VStack gap={'4'}>
-            <VStack>
-              <Label size={'small'}>Oppstartsperiode</Label>
-              <BodyShort textColor={'subtle'} size={'small'}>
-                Kan gis for inntil 3 måneder
-              </BodyShort>
-            </VStack>
-            <VStack gap={'4'}>
-              <Table size="small">
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell scope="col" textSize={'small'}>
-                      <BodyShort textColor={'subtle'} size={'small'}>
-                        Periode
-                      </BodyShort>
-                    </Table.HeaderCell>
-                    <Table.HeaderCell />
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                  {oppstartsperioder.fields.map(({ id }, i) => {
-                    return (
-                      <Table.Row key={id}>
-                        <Table.DataCell>
-                          <HStack gap={'2'} align={'center'}>
-                            <DateInputWrapper
-                              name={`vurderinger.${index}.oppstartsperioder.${i}.fom`}
-                              control={form.control}
-                            />
-                            {'-'}
-                            <DateInputWrapper
-                              name={`vurderinger.${index}.oppstartsperioder.${i}.tom`}
-                              control={form.control}
-                            />
-                          </HStack>
-                        </Table.DataCell>
-                        <Table.DataCell>
-                          <Button
-                            size={'small'}
-                            variant={'secondary'}
-                            type={'button'}
-                            icon={<TrashIcon />}
-                            onClick={() => oppstartsperioder.remove(i)}
+            <Table size="small">
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell scope="col" textSize={'small'}>
+                    <BodyShort textColor={'subtle'} size={'small'}>
+                      Periode
+                    </BodyShort>
+                  </Table.HeaderCell>
+                  <Table.HeaderCell />
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                {oppstartsperioder.fields.map(({ id }, i) => {
+                  return (
+                    <Table.Row key={id}>
+                      <Table.DataCell>
+                        <HStack gap={'2'} align={'center'}>
+                          <DateInputWrapper
+                            name={`vurderinger.${index}.oppstartsperioder.${i}.fom`}
+                            control={form.control}
                           />
-                        </Table.DataCell>
-                      </Table.Row>
-                    );
-                  })}
-                </Table.Body>
-              </Table>
-              <HStack>
-                <Button
-                  size={'small'}
-                  variant={'secondary'}
-                  type={'button'}
-                  icon={<PlusCircleIcon />}
-                  onClick={() => {
-                    form.clearErrors();
-                    oppstartsperioder.append({ fom: '', tom: '' });
-                  }}
-                >
-                  Legg til ny periode
-                </Button>
-              </HStack>
-            </VStack>
+                          {'-'}
+                          <DateInputWrapper
+                            name={`vurderinger.${index}.oppstartsperioder.${i}.tom`}
+                            control={form.control}
+                          />
+                        </HStack>
+                      </Table.DataCell>
+                      <Table.DataCell>
+                        <Button
+                          size={'small'}
+                          variant={'secondary'}
+                          type={'button'}
+                          icon={<TrashIcon />}
+                          onClick={() => oppstartsperioder.remove(i)}
+                        />
+                      </Table.DataCell>
+                    </Table.Row>
+                  );
+                })}
+              </Table.Body>
+            </Table>
+            <HStack>
+              <Button
+                size={'small'}
+                variant={'secondary'}
+                type={'button'}
+                icon={<PlusCircleIcon />}
+                onClick={() => {
+                  form.clearErrors();
+                  oppstartsperioder.append({ fom: '', tom: '' });
+                }}
+              >
+                Legg til ny periode
+              </Button>
+            </HStack>
           </VStack>
-        </>
-      )}
+        </VStack>
+        <Alert variant={'info'}>
+          <VStack>
+            <BodyShort>{'Har du husket å '}</BodyShort>
+            <BodyShort>{'- registrere etableringen i aktivitetsplanen?'}</BodyShort>
+            <BodyShort>{'- opprette en oppfølgingsoppgave før utgangen av neste periode?'}</BodyShort>
+          </VStack>
+        </Alert>
+      </VStack>
     </VStack>
   );
 };

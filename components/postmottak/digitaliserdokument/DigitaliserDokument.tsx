@@ -35,7 +35,6 @@ export const DigitaliserDokument = ({
 }: Props) => {
   const [kategori, setKategori] = useState<KategoriserDokumentKategori | undefined>(grunnlag.vurdering?.kategori);
   const { løsBehovOgGåTilNesteSteg, status, isLoading } = usePostmottakLøsBehovOgGåTilNesteSteg('DIGITALISER_DOKUMENT');
-  const isRevurderingStarttidspunktEnabled = useFeatureFlag('RevurderStarttidspunkt');
 
   const nyDigitaliseringAvMeldekortEnabled = useFeatureFlag('DigitaliseringAvMeldekortV2Frontend');
 
@@ -91,7 +90,6 @@ export const DigitaliserDokument = ({
           grunnlag={grunnlag}
           readOnly={readOnly}
           isLoading={isLoading}
-          isRevurderingStarttidspunktEnabled={isRevurderingStarttidspunktEnabled}
         />
       )}
     </VStack>

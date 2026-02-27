@@ -4456,6 +4456,44 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/drift/sak/{saksnummer}/mottatte-dokumenter': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description saksnummer */
+          saksnummer: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.drift.MottattDokumentDriftsinfoDTO'][];
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/behandling/{referanse}/utbetaling/simulering': {
     parameters: {
       query?: never;
@@ -10826,6 +10864,10 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.behandling.etableringegenvirksomhet.EtableringEgenVirksomhetGrunnlagResponse': {
       'beh\u00F8verVurderinger': components['schemas']['no.nav.aap.komponenter.type.Periode'][];
+      /** Format: int32 */
+      bruktOppstartsdager?: number | null;
+      /** Format: int32 */
+      bruktUtviklingsDager?: number | null;
       'harTilgangTil\u00C5Saksbehandle': boolean;
       ikkeRelevantePerioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
       kanVurderes: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
@@ -12527,6 +12569,39 @@ export interface components {
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
       /** @enum {string} */
       utfall: 'IKKE_OPPFYLT' | 'IKKE_RELEVANT' | 'IKKE_VURDERT' | 'OPPFYLT';
+    };
+    'no.nav.aap.behandlingsflyt.drift.MottattDokumentDriftsinfoDTO': {
+      /** @enum {string} */
+      kanal: 'DIGITAL' | 'PAPIR';
+      /**
+       * Format: date-time
+       * @example 2025-04-01T12:30:00
+       */
+      mottattTidspunkt: string;
+      referanse: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.InnsendingReferanse'];
+      /** @enum {string} */
+      status: 'BEHANDLET' | 'MOTTATT';
+      /** @enum {string} */
+      type:
+        | 'AKTIVITETSKORT'
+        | 'ANNET_RELEVANT_DOKUMENT'
+        | 'DIALOGMELDING'
+        | 'FAGSYSTEMINFO_BEHOV_HENDELSE'
+        | 'INSTITUSJONSOPPHOLD'
+        | 'KABAL_HENDELSE'
+        | 'KLAGE'
+        | 'LEGEERKLÆRING'
+        | 'LEGEERKLÆRING_AVVIST'
+        | 'MANUELL_REVURDERING'
+        | 'MELDEKORT'
+        | 'NY_ÅRSAK_TIL_BEHANDLING'
+        | 'OMGJØRING_KLAGE_REVURDERING'
+        | 'OPPFØLGINGSOPPGAVE'
+        | 'PDL_HENDELSE_DODSFALL_BARN'
+        | 'PDL_HENDELSE_DODSFALL_BRUKER'
+        | 'SYKEPENGE_VEDTAK_HENDELSE'
+        | 'SØKNAD'
+        | 'TILBAKEKREVING_HENDELSE';
     };
     'no.nav.aap.behandlingsflyt.drift.SakDriftsinfoDTO': {
       behandlinger: components['schemas']['no.nav.aap.behandlingsflyt.drift.BehandlingDriftsinfo'][];

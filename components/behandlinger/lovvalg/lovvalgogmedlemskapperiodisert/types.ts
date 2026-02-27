@@ -15,7 +15,7 @@ export type LovvalgOgMedlemskapManuellVurderingForm = {
     begrunnelse: string;
     varMedlemIFolketrygd: JaEllerNei;
   };
-  fraDato?: string;
+  fraDato: string;
   vurdertAv?: VurdertAvAnsatt;
   kvalitetssikretAv?: VurdertAvAnsatt;
   besluttetAv?: VurdertAvAnsatt;
