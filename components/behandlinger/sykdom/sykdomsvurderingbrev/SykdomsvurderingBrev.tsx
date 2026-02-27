@@ -130,8 +130,8 @@ export const SykdomsvurderingBrev = ({
         {visOppsummering && (
           <>
             <BodyShort size={'small'}>
-              Tabellen viser hvilke perioder brukeren har blitt vurdert til å oppfylle kjernevilkår for ulike
-              rettighetstyper. Resultatet kan endre seg videre i behandlingen.
+              Tabellen viser hvilke perioder brukeren har blitt vurdert til å oppfylle vilkår for ulike rettighetstyper.
+              Resultatet kan endre seg videre i behandlingen.
             </BodyShort>
             <ForeløpigBehandlingsutfallOppsummering foreløpigBehandlingsutfall={foreløpigBehandlingsutfall} />
             <Label size={'small'}>Skriv en individuell begrunnelse</Label>
