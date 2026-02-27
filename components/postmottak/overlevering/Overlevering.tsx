@@ -4,11 +4,12 @@ import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } fro
 import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/PostmottakLøsBehovOgGåTilNesteStegHook';
 import { OverleveringGrunnlag } from 'lib/types/postmottakTypes';
 import { FormEvent, FormEventHandler } from 'react';
-import { Button, VStack } from '@navikt/ds-react';
-import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
+import { VStack } from '@navikt/ds-react';
 import { ServerSentEventStatusAlert } from 'components/postmottak/serversenteventstatusalert/ServerSentEventStatusAlert';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
+import { PostmottakVilkårskort } from 'components/postmottak/vilkårskort/PostmottakVilkårskort';
+import { usePostmottakVilkårskortVisning } from 'hooks/postmottak/PostmottakVisningHook';
 
 interface Props {
   behandlingsVersjon: number;
@@ -35,8 +36,11 @@ export const Overlevering = ({ behandlingsVersjon, behandlingsreferanse, grunnla
     },
     { readOnly }
   );
-  const { løsBehovOgGåTilNesteSteg, status, isLoading } =
+
+  const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     usePostmottakLøsBehovOgGåTilNesteSteg('OVERLEVER_TIL_FAGSYSTEM');
+
+  const { visningActions, visningModus } = usePostmottakVilkårskortVisning(readOnly, 'OVERLEVER_TIL_FAGSYSTEM');
 
   const onSubmit: FormEventHandler<HTMLFormElement> = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
@@ -52,18 +56,22 @@ export const Overlevering = ({ behandlingsVersjon, behandlingsreferanse, grunnla
   };
 
   return (
-    <VilkårsKort heading={'Send dokument'}>
-      <form onSubmit={onSubmit}>
-        <VStack gap={'6'}>
-          <ServerSentEventStatusAlert status={status} />
-          <FormField form={form} formField={formFields.skalOverleveres} />
-          {!readOnly && (
-            <Button loading={isLoading} className={'fit-content'}>
-              Send inn
-            </Button>
-          )}
-        </VStack>
-      </form>
-    </VilkårsKort>
+    <PostmottakVilkårskort
+      heading={'Send dokument'}
+      steg={'OVERLEVER_TIL_FAGSYSTEM'}
+      onSubmit={onSubmit}
+      isLoading={isLoading}
+      status={status}
+      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      knappTekst={'Send inn'}
+      visningModus={visningModus}
+      visningActions={visningActions}
+      formReset={() => {}}
+    >
+      <VStack gap={'6'}>
+        <ServerSentEventStatusAlert status={status} />
+        <FormField form={form} formField={formFields.skalOverleveres} />
+      </VStack>
+    </PostmottakVilkårskort>
   );
 };
