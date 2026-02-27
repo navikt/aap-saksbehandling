@@ -72,6 +72,7 @@ import {
   SamordningUføreGrunnlag,
   SettPåVent,
   Soningsgrunnlag,
+  StegType,
   StudentGrunnlag,
   SvarFraAndreinstansGrunnlag,
   SykdomsGrunnlag,
@@ -79,6 +80,7 @@ import {
   SykepengeerstatningGrunnlag,
   SykestipendGrunnlag,
   SøkPåSakInfo,
+  ForeløpigBehandlingsutfall,
   TilkjentYtelseGrunnlag,
   TrekkKlageGrunnlag,
   TrukketSøknadGrunnlag,
@@ -627,6 +629,17 @@ export const hentMellomlagring = async (behandlingsReferanse: string, kode: stri
 
     return undefined;
   }
+};
+
+export const hentForeløpigBehandlingsutfall = async (
+  behandlingsReferanse: string,
+  førSteg: StegType,
+  etterSteg: StegType
+) => {
+  return apiFetch<ForeløpigBehandlingsutfall>(
+    `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/tidligere-vurderinger?førSteg=${førSteg}&etterSteg=${etterSteg}`,
+    saksbehandlingApiScope
+  );
 };
 
 export const hentOppfølgningsOppgaverOpprinselsePåBehandlingsReferanse = async (

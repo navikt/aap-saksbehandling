@@ -7,6 +7,7 @@ export const FLAGS = [
   'PeriodiseringHelseinstitusjonOpphold',
   'VirksomhetsEtablering',
   'studentVurderingPeriodisert',
+  'NyTidligereVurderinger',
   'OppgavelisteBackendsorteringFrontend',
 ] as const;
 
@@ -22,5 +23,6 @@ export const mockedFlags: Flags = {
   PeriodiseringHelseinstitusjonOpphold: true,
   VirksomhetsEtablering: true,
   studentVurderingPeriodisert: true,
+  NyTidligereVurderinger: true,
   OppgavelisteBackendsorteringFrontend: true,
 };

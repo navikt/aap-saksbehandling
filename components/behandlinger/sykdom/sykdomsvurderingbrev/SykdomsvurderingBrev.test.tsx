@@ -26,6 +26,7 @@ describe('sykdomsvurdering for brev', () => {
   it('Skal vise vurderingsfelt', async () => {
     render(
       <SykdomsvurderingBrev
+        foreløpigBehandlingsutfall={{ tidligereVurderinger: [] }}
         grunnlag={grunnlag}
         typeBehandling={'Førstegangsbehandling'}
         readOnly={false}
@@ -39,6 +40,7 @@ describe('sykdomsvurdering for brev', () => {
   it('Skal vise feilmelding dersom vurderingsfeltet ikke har blitt besvart', async () => {
     render(
       <SykdomsvurderingBrev
+        foreløpigBehandlingsutfall={{ tidligereVurderinger: [] }}
         grunnlag={grunnlag}
         typeBehandling={'Førstegangsbehandling'}
         readOnly={false}
@@ -81,6 +83,7 @@ it('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
 
   render(
     <SykdomsvurderingBrev
+      foreløpigBehandlingsutfall={{ tidligereVurderinger: [] }}
       grunnlag={grunnlagMedVurdering}
       readOnly={false}
       behandlingVersjon={0}
@@ -109,6 +112,7 @@ describe('mellomlagring', () => {
   it('Skal vise en tekst om hvem som har gjort vurderingen dersom det finnes en mellomlagring', () => {
     render(
       <SykdomsvurderingBrev
+        foreløpigBehandlingsutfall={{ tidligereVurderinger: [] }}
         typeBehandling={'Førstegangsbehandling'}
         readOnly={false}
         behandlingVersjon={0}
@@ -123,6 +127,7 @@ describe('mellomlagring', () => {
   it('Skal vise en tekst om hvem som har lagret vurdering dersom bruker trykker på lagre mellomlagring', async () => {
     render(
       <SykdomsvurderingBrev
+        foreløpigBehandlingsutfall={{ tidligereVurderinger: [] }}
         typeBehandling={'Førstegangsbehandling'}
         readOnly={false}
         behandlingVersjon={0}
@@ -152,6 +157,7 @@ describe('mellomlagring', () => {
   it('Skal ikke vise tekst om hvem som har gjort mellomlagring dersom bruker trykker på slett mellomlagring', async () => {
     render(
       <SykdomsvurderingBrev
+        foreløpigBehandlingsutfall={{ tidligereVurderinger: [] }}
         typeBehandling={'Førstegangsbehandling'}
         readOnly={false}
         behandlingVersjon={0}
@@ -174,6 +180,7 @@ describe('mellomlagring', () => {
   it('Skal bruke mellomlagring som defaultValue i skjema dersom det finnes', () => {
     render(
       <SykdomsvurderingBrev
+        foreløpigBehandlingsutfall={{ tidligereVurderinger: [] }}
         typeBehandling={'Førstegangsbehandling'}
         readOnly={false}
         behandlingVersjon={0}
@@ -192,6 +199,7 @@ describe('mellomlagring', () => {
   it('Skal bruke bekreftet vurdering fra grunnlag som defaultValue i skjema dersom mellomlagring ikke finnes', () => {
     render(
       <SykdomsvurderingBrev
+        foreløpigBehandlingsutfall={{ tidligereVurderinger: [] }}
         typeBehandling={'Førstegangsbehandling'}
         readOnly={false}
         behandlingVersjon={0}
@@ -209,6 +217,7 @@ describe('mellomlagring', () => {
   it('Skal resette skjema til tomt skjema dersom det ikke finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
     render(
       <SykdomsvurderingBrev
+        foreløpigBehandlingsutfall={{ tidligereVurderinger: [] }}
         typeBehandling={'Førstegangsbehandling'}
         readOnly={false}
         behandlingVersjon={0}
@@ -235,6 +244,7 @@ describe('mellomlagring', () => {
   it('Skal resette skjema til bekreftet vurdering dersom det finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
     render(
       <SykdomsvurderingBrev
+        foreløpigBehandlingsutfall={{ tidligereVurderinger: [] }}
         typeBehandling={'Førstegangsbehandling'}
         readOnly={false}
         behandlingVersjon={0}
@@ -269,6 +279,7 @@ describe('mellomlagring', () => {
   it('Skal ikke være mulig å lagre eller slette mellomlagring hvis det er readOnly', () => {
     render(
       <SykdomsvurderingBrev
+        foreløpigBehandlingsutfall={{ tidligereVurderinger: [] }}
         typeBehandling={'Førstegangsbehandling'}
         readOnly={true}
         behandlingVersjon={0}
