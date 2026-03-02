@@ -331,7 +331,14 @@ export function mapTypeBehandlingTilTekst(typeBehandling: TypeBehandling | Postm
 }
 
 export function mapStatusTilTekst(
-  status: 'VENT' | 'RETUR_FRA_KVALITETSSIKRER' | 'RETUR_FRA_BESLUTTER' | 'ER_HASTESAK' | 'VENTEFRIST_UTLØPT'
+  status:
+    | 'VENT'
+    | 'RETUR_FRA_KVALITETSSIKRER'
+    | 'RETUR_FRA_BESLUTTER'
+    | 'ER_HASTESAK'
+    | 'VENTEFRIST_UTLØPT'
+    | 'RETUR_FRA_VEILEDER'
+    | 'RETUR_FRA_SAKSBEHANDLER'
 ): string {
   switch (status) {
     case 'VENT':
@@ -344,6 +351,10 @@ export function mapStatusTilTekst(
       return 'Hastesak';
     case 'VENTEFRIST_UTLØPT':
       return 'Ventefrist utløpt';
+    case 'RETUR_FRA_VEILEDER':
+      return 'Retur fra veileder';
+    case 'RETUR_FRA_SAKSBEHANDLER':
+      return 'Retur fra saksbehandler';
   }
 }
 
