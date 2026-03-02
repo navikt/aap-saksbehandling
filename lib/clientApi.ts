@@ -33,6 +33,7 @@ import { TilgangResponse } from 'lib/services/tilgangservice/tilgangsService';
 import { Markering, SaksbehandlerSøkRespons, TildelOppgaveRequest } from 'lib/types/oppgaveTypes';
 import { MellomLagringIdentifikator } from 'app/saksbehandling/api/mellomlagring/route';
 import { isLocal } from 'lib/utils/environment';
+import { ValuePair } from 'components/form/FormField';
 
 const BASE_URL = '/saksbehandling';
 
@@ -241,4 +242,10 @@ export function clientTildelTilSaksbehandler(oppgaver: number[], saksbehandlerId
 
 export function clientHentAktivitetspliktMedTrekk(saksnummer: string) {
   return clientFetch<AktivitetspliktMedTrekkRespons>(`${BASE_URL}/api/aktivitetsplikt/trekk/${saksnummer}`, 'GET');
+}
+
+export function clientSaksbehandlerSøk(søketekst: string) {
+  return clientFetch<ValuePair[]>(`/api/saksbehandlersok`, 'POST', {
+    søketekst: søketekst,
+  });
 }

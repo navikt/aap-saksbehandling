@@ -25,6 +25,7 @@ export interface FormFieldsFilter {
   årsaker?: string[];
   avklaringsbehov?: string[];
   statuser?: string[];
+  saksbehandlere?: string[];
 }
 
 export const MineOppgaverNy = () => {
@@ -68,6 +69,9 @@ export const MineOppgaverNy = () => {
       label: 'Markering',
       options: OppgaveStatuser,
       defaultValue: lagretUtvidetFilter?.statuser ?? [],
+    },
+    saksbehandlere: {
+      type: 'fieldArray',
     },
   });
 

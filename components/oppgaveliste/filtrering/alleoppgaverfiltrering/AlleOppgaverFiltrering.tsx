@@ -13,6 +13,7 @@ import { aktiveFiltreringer } from 'components/oppgaveliste/filtrering/filtrerin
 import { avreserverOppgaveClient } from 'lib/oppgaveClientApi';
 import { isSuccess } from 'lib/utils/api';
 import { useTildelOppgaver } from 'context/oppgave/TildelOppgaverContext';
+import { SaksbehandlerFilterSøk } from 'components/oppgaveliste/filtrering/alleoppgaverfiltrering/SaksbehandlerFilterSøk';
 
 interface Props {
   form: UseFormReturn<FormFieldsFilter>;
@@ -152,6 +153,7 @@ export const AlleOppgaverFiltrering = ({
                   </BoxWrapper>
                   <BoxWrapper>
                     <FormField form={form} formField={formFields.årsaker} />
+                    <SaksbehandlerFilterSøk form={form} />
                   </BoxWrapper>
                   <BoxWrapper>
                     <FormField form={form} formField={formFields.avklaringsbehov} />
