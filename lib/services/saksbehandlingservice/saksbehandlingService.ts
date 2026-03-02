@@ -327,7 +327,7 @@ export const hentInntektsBortfallGrunnlag = async (behandlingsReferanse: string)
 };
 
 export const hentHelseInstitusjonsGrunnlagNy = async (behandlingsReferanse: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/institusjon/helseny`;
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/institusjon/helse`;
   return apiFetch<HelseinstitusjonGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
