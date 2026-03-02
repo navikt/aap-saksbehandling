@@ -19,6 +19,39 @@ export const BekreftVurderingerOppfølging = ({ behandlingVersjon, readOnly }: P
     'BEKREFT_VURDERINGER_OPPFØLGING'
   );
 
+  return (
+    <VilkårsKort heading={'Bekreft vurderinger'} steg={'BEKREFT_VURDERINGER_OPPFØLGING'}>
+      {!readOnly && (
+        <Button
+          variant={'primary'}
+          onClick={() =>
+            løsBehovOgGåTilNesteSteg({
+              behandlingVersjon: behandlingVersjon,
+              behov: {
+                behovstype: Behovstype.BEKREFT_VURDERINGER_OPPFØLGING,
+              },
+              referanse: behandlingsReferanse,
+            })
+          }
+          loading={isLoading}
+        >
+          Bekreft vurderinger og send videre
+        </Button>
+      )}
+
+      <LøsBehovOgGåTilNesteStegStatusAlert
+        status={status}
+        løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      />
+    </VilkårsKort>
+  );
+};
+
+  const behandlingsReferanse = useBehandlingsReferanse();
+  const { status, løsBehovOgGåTilNesteSteg, isLoading, løsBehovOgGåTilNesteStegError } = useLøsBehovOgGåTilNesteSteg(
+    'BEKREFT_VURDERINGER_OPPFØLGING'
+  );
+
   const { visningActions, visningModus } = useVilkårskortVisning(readOnly, 'BEKREFT_VURDERINGER_OPPFØLGING', undefined);
 
   return (
