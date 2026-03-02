@@ -2727,8 +2727,80 @@ export interface paths {
     get: {
       parameters: {
         query: {
-          /** @description Tidligere vurderinger frem til steg */
-          stegType:
+          /** @description Tidligere vurderinger frem til */
+          'f\u00F8rSteg':
+            | 'ARBEIDSOPPTRAPPING'
+            | 'AVBRYT_REVURDERING'
+            | 'AVKLAR_OPPFØLGING'
+            | 'AVKLAR_STUDENT'
+            | 'AVKLAR_SYKDOM'
+            | 'BARNETILLEGG'
+            | 'BEHANDLENDE_ENHET'
+            | 'BEKREFT_VURDERINGER_OPPFØLGING'
+            | 'BEREGN_TILKJENT_YTELSE'
+            | 'BREV'
+            | 'DU_ER_ET_ANNET_STED'
+            | 'EFFEKTUER_11_7'
+            | 'ETABLERING_EGEN_VIRKSOMHET'
+            | 'FASTSETT_ARBEIDSEVNE'
+            | 'FASTSETT_BEREGNINGSTIDSPUNKT'
+            | 'FASTSETT_GRUNNLAG'
+            | 'FASTSETT_MELDEPERIODER'
+            | 'FASTSETT_RETTIGHETSTYPE'
+            | 'FASTSETT_SYKDOMSVILKÅRET'
+            | 'FASTSETT_UTTAK'
+            | 'FASTSETT_VEDTAKSLENGDE'
+            | 'FATTE_VEDTAK'
+            | 'FORESLÅ_VEDTAK'
+            | 'FORMKRAV'
+            | 'FRITAK_MELDEPLIKT'
+            | 'FULLMEKTIG'
+            | 'IKKE_OPPFYLT_MELDEPLIKT'
+            | 'IVERKSETT_BRUDD'
+            | 'IVERKSETT_KONSEKVENS'
+            | 'IVERKSETT_VEDTAK'
+            | 'KLAGEBEHANDLING_KONTOR'
+            | 'KLAGEBEHANDLING_NAY'
+            | 'KLAGEBEHANDLING_OPPSUMMERING'
+            | 'KVALITETSSIKRING'
+            | 'MANGLENDE_LIGNING'
+            | 'OMGJØRING'
+            | 'OPPRETTHOLDELSE'
+            | 'OPPRETT_REVURDERING'
+            | 'OVERGANG_ARBEID'
+            | 'OVERGANG_UFORE'
+            | 'PÅKLAGET_BEHANDLING'
+            | 'REFUSJON_KRAV'
+            | 'SAMORDNING_ANDRE_STATLIGE_YTELSER'
+            | 'SAMORDNING_ARBEIDSGIVER'
+            | 'SAMORDNING_AVSLAG'
+            | 'SAMORDNING_GRADERING'
+            | 'SAMORDNING_SYKESTIPEND'
+            | 'SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV'
+            | 'SAMORDNING_UFØRE'
+            | 'SEND_FORVALTNINGSMELDING'
+            | 'SIMULERING'
+            | 'START_BEHANDLING'
+            | 'START_OPPFØLGINGSBEHANDLING'
+            | 'SVAR_FRA_ANDREINSTANS'
+            | 'SYKDOMSVURDERING_BREV'
+            | 'SØKNAD'
+            | 'TREKK_KLAGE'
+            | 'UDEFINERT'
+            | 'VIS_GRUNNLAG'
+            | 'VURDER_AKTIVITETSPLIKT_11_7'
+            | 'VURDER_AKTIVITETSPLIKT_11_9'
+            | 'VURDER_ALDER'
+            | 'VURDER_BISTANDSBEHOV'
+            | 'VURDER_INNTEKTSBORTFALL'
+            | 'VURDER_LOVVALG'
+            | 'VURDER_MEDLEMSKAP'
+            | 'VURDER_OPPHOLDSKRAV'
+            | 'VURDER_RETTIGHETSPERIODE'
+            | 'VURDER_SYKEPENGEERSTATNING'
+            | 'VURDER_YRKESSKADE';
+          /** @description Tidligere vurderinger etter */
+          etterSteg:
             | 'ARBEIDSOPPTRAPPING'
             | 'AVBRYT_REVURDERING'
             | 'AVKLAR_OPPFØLGING'
@@ -4447,6 +4519,44 @@ export interface paths {
           };
           content: {
             'application/json': components['schemas']['no.nav.aap.behandlingsflyt.drift.SakDriftsinfoDTO'];
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/drift/sak/{saksnummer}/mottatte-dokumenter': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description saksnummer */
+          saksnummer: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.drift.MottattDokumentDriftsinfoDTO'][];
           };
         };
       };
@@ -10971,6 +11081,10 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.behandling.etableringegenvirksomhet.EtableringEgenVirksomhetGrunnlagResponse': {
       'beh\u00F8verVurderinger': components['schemas']['no.nav.aap.komponenter.type.Periode'][];
+      /** Format: int32 */
+      bruktOppstartsdager?: number | null;
+      /** Format: int32 */
+      bruktUtviklingsDager?: number | null;
       'harTilgangTil\u00C5Saksbehandle': boolean;
       ikkeRelevantePerioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
       kanVurderes: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
@@ -11036,6 +11150,51 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.behandling.foresl\u00E5vedtak.Foresl\u00E5VedtakResponse': {
       perioder: components['schemas']['no.nav.aap.behandlingsflyt.behandling.foresl\u00E5vedtak.Foresl\u00E5VedtakDto'][];
+      'stansOpph\u00F8r': components['schemas']['no.nav.aap.behandlingsflyt.behandling.foresl\u00E5vedtak.StansOpph\u00F8rDto'][];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.foresl\u00E5vedtak.StansOpph\u00F8rDto': {
+      historikk: components['schemas']['no.nav.aap.behandlingsflyt.behandling.foresl\u00E5vedtak.StansOpph\u00F8rVurderingDto'][];
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      'stansOpph\u00F8rFraOgMed': string;
+    };
+    'no.nav.aap.behandlingsflyt.behandling.foresl\u00E5vedtak.StansOpph\u00F8rVurderingDto': {
+      /** Format: uuid */
+      behandlingReferanse: string;
+      /** @enum {string} */
+      type: 'OPPHEVET' | 'OPPHØR' | 'STANS';
+      '\u00E5rsaker': (
+        | 'ANNEN_FULL_YTELSE'
+        | 'BRUDD_PÅ_AKTIVITETSPLIKT_OPPHØR'
+        | 'BRUDD_PÅ_AKTIVITETSPLIKT_STANS'
+        | 'BRUDD_PÅ_OPPHOLDSKRAV_OPPHØR'
+        | 'BRUDD_PÅ_OPPHOLDSKRAV_STANS'
+        | 'BRUKER_OVER_67'
+        | 'BRUKER_UNDER_18'
+        | 'HAR_RETT_TIL_FULLT_UTTAK_ALDERSPENSJON'
+        | 'IKKE_BEHOV_FOR_OPPFOLGING'
+        | 'IKKE_MEDLEM'
+        | 'IKKE_MEDLEM_FORUTGÅENDE'
+        | 'IKKE_NOK_REDUSERT_ARBEIDSEVNE'
+        | 'IKKE_OPPFYLT_OPPHOLDSKRAV_EØS'
+        | 'IKKE_RETT_PA_AAP_I_PERIODE_SOM_ARBEIDSSOKER'
+        | 'IKKE_RETT_PA_AAP_UNDER_BEHANDLING_AV_UFORE'
+        | 'IKKE_RETT_PA_STUDENT'
+        | 'IKKE_RETT_PA_SYKEPENGEERSTATNING'
+        | 'IKKE_RETT_UNDER_STRAFFEGJENNOMFØRING'
+        | 'IKKE_SYKDOM_AV_VISS_VARIGHET'
+        | 'IKKE_SYKDOM_SKADE_LYTE_VESENTLIGDEL'
+        | 'INNTEKTSTAP_DEKKES_ETTER_ANNEN_LOVGIVNING'
+        | 'MANGLENDE_DOKUMENTASJON'
+        | 'NORGE_IKKE_KOMPETENT_STAT'
+        | 'ORDINÆRKVOTE_BRUKT_OPP'
+        | 'SYKEPENGEERSTATNINGKVOTE_BRUKT_OPP'
+        | 'VARIGHET_OVERSKREDET_ARBEIDSSØKER'
+        | 'VARIGHET_OVERSKREDET_OVERGANG_UFORE'
+        | 'VARIGHET_OVERSKREDET_STUDENT'
+      )[];
     };
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.medlemskap.MedlemskapGrunnlagDto': {
       medlemskap: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.register.medlemskap.MedlemskapUnntakGrunnlag'];
@@ -12231,7 +12390,7 @@ export interface components {
         | 'VURDERES_FOR_UFØRETRYGD'
         | null;
       /** @enum {string} */
-      utfall: 'IKKE_BEHANDLINGSGRUNNLAG' | 'POTENSIELT_OPPFYLT' | 'UUNGÅELIG_AVSLAG';
+      utfall: 'IKKE_BEHANDLINGSGRUNNLAG' | 'POTENSIELT_OPPFYLT' | 'UUNNGÅELIG_AVSLAG';
     };
     'no.nav.aap.behandlingsflyt.behandling.tidligerevurderinger.TidligereVurderingerDto': {
       tidligereVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.tidligerevurderinger.TidligereVurderingDto'][];
@@ -12673,6 +12832,39 @@ export interface components {
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
       /** @enum {string} */
       utfall: 'IKKE_OPPFYLT' | 'IKKE_RELEVANT' | 'IKKE_VURDERT' | 'OPPFYLT';
+    };
+    'no.nav.aap.behandlingsflyt.drift.MottattDokumentDriftsinfoDTO': {
+      /** @enum {string} */
+      kanal: 'DIGITAL' | 'PAPIR';
+      /**
+       * Format: date-time
+       * @example 2025-04-01T12:30:00
+       */
+      mottattTidspunkt: string;
+      referanse: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.InnsendingReferanse'];
+      /** @enum {string} */
+      status: 'BEHANDLET' | 'MOTTATT';
+      /** @enum {string} */
+      type:
+        | 'AKTIVITETSKORT'
+        | 'ANNET_RELEVANT_DOKUMENT'
+        | 'DIALOGMELDING'
+        | 'FAGSYSTEMINFO_BEHOV_HENDELSE'
+        | 'INSTITUSJONSOPPHOLD'
+        | 'KABAL_HENDELSE'
+        | 'KLAGE'
+        | 'LEGEERKLÆRING'
+        | 'LEGEERKLÆRING_AVVIST'
+        | 'MANUELL_REVURDERING'
+        | 'MELDEKORT'
+        | 'NY_ÅRSAK_TIL_BEHANDLING'
+        | 'OMGJØRING_KLAGE_REVURDERING'
+        | 'OPPFØLGINGSOPPGAVE'
+        | 'PDL_HENDELSE_DODSFALL_BARN'
+        | 'PDL_HENDELSE_DODSFALL_BRUKER'
+        | 'SYKEPENGE_VEDTAK_HENDELSE'
+        | 'SØKNAD'
+        | 'TILBAKEKREVING_HENDELSE';
     };
     'no.nav.aap.behandlingsflyt.drift.SakDriftsinfoDTO': {
       behandlinger: components['schemas']['no.nav.aap.behandlingsflyt.drift.BehandlingDriftsinfo'][];

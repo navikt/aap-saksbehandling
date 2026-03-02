@@ -1,7 +1,7 @@
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { SykdomsvurderingMedDataFetching } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedDataFetching';
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { getStegData } from 'lib/utils/steg';
+import { getAvklaringsbehovForSteg, getStegData } from 'lib/utils/steg';
 import { BistandsbehovMedDataFetching } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovMedDataFetching';
 import { MeldepliktMedDataFetching } from 'components/behandlinger/sykdom/meldeplikt/MeldepliktMedDataFetching';
 import { SykepengeerstatningMedDataFetching } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/SykepengeerstatningMedDataFetching';
@@ -19,6 +19,7 @@ import { EtableringAvEgenVirksomhetMedDatafetching } from 'components/behandling
 import { unleashService } from 'lib/services/unleash/unleashService';
 import { BekreftVurderingerOppfølging } from 'components/behandlinger/sykdom/bekreftvurderingeroppfølging/BekreftVurderingerOppfølging';
 import { Behovstype } from 'lib/utils/form';
+import { BehandlingFlytOgTilstand, StegGruppe } from 'lib/types/types';
 
 interface Props {
   behandlingsReferanse: string;
@@ -39,13 +40,7 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
   const fastsettArbeidsevneSteg = getStegData(aktivStegGruppe, 'FASTSETT_ARBEIDSEVNE', flyt.data);
   const refusjonskravSteg = getStegData(aktivStegGruppe, 'REFUSJON_KRAV', flyt.data);
   const sykdomsvurderingBrevSteg = getStegData(aktivStegGruppe, 'SYKDOMSVURDERING_BREV', flyt.data);
-const bekreftVurderingerOppfølgingSteg = getStegDataForBekreftVurderingerOppfølgingSteg(aktivStegGruppe, flyt.data);```
-    aktivStegGruppe,
-    'BEKREFT_VURDERINGER_OPPFØLGING',
-    flyt.data,
-    Behovstype.BEKREFT_VURDERINGER_OPPFØLGING,
-    true
-  );
+  const bekreftVurderingerOppfølgingSteg = getStegDataForBekreftVurderingerOppfølgingSteg(aktivStegGruppe, flyt.data);
   const vurderYrkesskadeSteg = getStegData(aktivStegGruppe, 'VURDER_YRKESSKADE', flyt.data);
   const vurderSykepengeerstatningSteg = getStegData(aktivStegGruppe, 'VURDER_SYKEPENGEERSTATNING', flyt.data);
   const overganguføreSteg = getStegData(aktivStegGruppe, 'OVERGANG_UFORE', flyt.data);
@@ -148,7 +143,12 @@ const bekreftVurderingerOppfølgingSteg = getStegDataForBekreftVurderingerOppfø
       )}
     </GruppeSteg>
   );
-function getStegDataForBekreftVurderingerOppfølgingSteg(aktivStegGruppe: StegGruppe, flyt: BehandlingFlytOgTilstand) {
+};
+
+export function getStegDataForBekreftVurderingerOppfølgingSteg(
+  aktivStegGruppe: StegGruppe,
+  flyt: BehandlingFlytOgTilstand
+) {
   const avklaringsbehov = getAvklaringsbehovForSteg(
     aktivStegGruppe,
     'BEKREFT_VURDERINGER_OPPFØLGING',
@@ -170,4 +170,3 @@ function getStegDataForBekreftVurderingerOppfølgingSteg(aktivStegGruppe: StegGr
     behandlingVersjon: flyt.behandlingVersjon,
   };
 }
-

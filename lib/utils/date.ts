@@ -1,5 +1,6 @@
-import { format, isValid, parse } from 'date-fns';
+import { differenceInBusinessDays, format, isValid, parse } from 'date-fns';
 import { nb } from 'date-fns/locale';
+import { Dato } from 'lib/types/Dato';
 
 export const DATO_FORMATER = {
   ddMMyyyy: 'dd.MM.yyyy',
@@ -75,4 +76,13 @@ export function formaterPeriode(dato1?: string | null, dato2?: string | null): s
   } else {
     return '';
   }
+}
+
+export function summerPerioderVarighetIArbeidsdager(perioder: { fom: string; tom: string }[]): number {
+  return perioder.reduce((acc, periode) => {
+    const start = new Dato(periode.fom).dato;
+    const end = new Dato(periode.tom).dato;
+    const duration = differenceInBusinessDays(end, start);
+    return acc + duration;
+  }, 0);
 }

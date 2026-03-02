@@ -1,4 +1,5 @@
 import {
+  hentForeløpigBehandlingsutfall,
   hentMellomlagring,
   hentSykdomsvurderingBrevGrunnlag,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
@@ -14,17 +15,19 @@ interface Props {
 }
 
 export const SykdomsvurderingBrevMedDataFetching = async ({ behandlingsReferanse, stegData }: Props) => {
-  const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
+  const [grunnlag, initialMellomlagretVurdering, foreløpigBehandlingsutfall] = await Promise.all([
     hentSykdomsvurderingBrevGrunnlag(behandlingsReferanse),
     hentMellomlagring(behandlingsReferanse, Behovstype.SYKDOMSVURDERING_BREV_KODE),
+    hentForeløpigBehandlingsutfall(behandlingsReferanse, stegData.stegType, 'VURDER_ALDER'),
   ]);
 
-  if (isError(grunnlag)) {
-    return <ApiException apiResponses={[grunnlag]} />;
+  if (isError(grunnlag) || isError(foreløpigBehandlingsutfall)) {
+    return <ApiException apiResponses={[grunnlag, foreløpigBehandlingsutfall]} />;
   }
 
   return (
     <SykdomsvurderingBrev
+      foreløpigBehandlingsutfall={foreløpigBehandlingsutfall.data}
       grunnlag={grunnlag.data}
       typeBehandling={stegData.typeBehandling}
       readOnly={stegData.readOnly || !grunnlag.data.kanSaksbehandle}

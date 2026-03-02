@@ -6,13 +6,13 @@ import { validerDato } from 'lib/validation/dateValidation';
 import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
-import React from 'react';
-import { useFieldArray, UseFormReturn } from 'react-hook-form';
+import { useFieldArray, UseFormReturn, useWatch } from 'react-hook-form';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { EtableringAvEgenVirksomhetForm } from 'components/behandlinger/sykdom/etableringegenvirksomhet/EtableringAvEgenVirksomhet';
 import { JaEllerNei } from 'lib/utils/form';
 import { EtableringEierBrukerVirksomheten, lagEnumObjektFraUnionType } from 'lib/types/types';
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
+import { useEffect } from 'react';
 
 const EierBrukerVirsomheten = lagEnumObjektFraUnionType<NonNullable<EtableringEierBrukerVirksomheten>>({
   EIER_MINST_50_PROSENT: 'EIER_MINST_50_PROSENT',
@@ -28,6 +28,21 @@ type Props = {
 export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly }: Props) => {
   const utviklingsperioder = useFieldArray({ control: form.control, name: `vurderinger.${index}.utviklingsperioder` });
   const oppstartsperioder = useFieldArray({ control: form.control, name: `vurderinger.${index}.oppstartsperioder` });
+
+  const utviklingperiodeList = useWatch({
+    control: form.control,
+    name: `vurderinger.${index}.utviklingsperioder`,
+  });
+
+  const oppstartsperiodeList = useWatch({
+    control: form.control,
+    name: `vurderinger.${index}.oppstartsperioder`,
+  });
+
+  useEffect(() => {
+    form.clearErrors(`vurderinger`);
+  }, [utviklingperiodeList, oppstartsperiodeList, form.clearErrors]);
+
   return (
     <VStack gap={'4'}>
       <DateInputWrapper
@@ -97,13 +112,10 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly }: P
           readOnly={readOnly}
         />
       )}
-      <VStack gap={'2'}>
+      <VStack gap={'4'} paddingBlock={'4 0'}>
         <Heading level={'2'} size={'small'}>
           Etableringsplan
         </Heading>
-        {form.formState.errors.vurderinger?.[index]?.utviklingsperioder && (
-          <Alert variant={'error'}>{form.formState.errors.vurderinger[index].utviklingsperioder.message}</Alert>
-        )}
         <VStack gap={'4'}>
           <VStack>
             <Label size={'small'}>Utviklingsperiode</Label>
@@ -111,6 +123,9 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly }: P
               Kan gis for inntil 6 måneder
             </BodyShort>
           </VStack>
+          {form.formState.errors.vurderinger?.[index]?.utviklingsperioder && (
+            <Alert variant={'error'}>{form.formState.errors.vurderinger[index].utviklingsperioder.message}</Alert>
+          )}
           <VStack gap={'4'}>
             <Table size="small">
               <Table.Header>
@@ -177,6 +192,9 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly }: P
               Kan gis for inntil 3 måneder
             </BodyShort>
           </VStack>
+          {form.formState.errors.vurderinger?.[index]?.oppstartsperioder && (
+            <Alert variant={'error'}>{form.formState.errors.vurderinger[index].oppstartsperioder.message}</Alert>
+          )}
           <VStack gap={'4'}>
             <Table size="small">
               <Table.Header>
