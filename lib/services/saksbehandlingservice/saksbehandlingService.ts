@@ -26,6 +26,7 @@ import {
   EtableringEgenVirksomhetGrunnlagResponse,
   FatteVedtakGrunnlag,
   FlytProsessering,
+  ForeløpigBehandlingsutfall,
   ForeslåVedtakGrunnlag,
   ForhåndsvisDialogmelding,
   ForhåndsvisDialogmeldingResponse,
@@ -80,7 +81,6 @@ import {
   SykepengeerstatningGrunnlag,
   SykestipendGrunnlag,
   SøkPåSakInfo,
-  ForeløpigBehandlingsutfall,
   TilkjentYtelseGrunnlag,
   TrekkKlageGrunnlag,
   TrukketSøknadGrunnlag,
@@ -324,11 +324,6 @@ export const hentBeregningYrkesskadeVurdering = async (behandlingsReferanse: str
 export const hentInntektsBortfallGrunnlag = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/inntektsbortfall`;
   return await apiFetch<InntektsbortfallResponse>(url, saksbehandlingApiScope, 'GET');
-};
-
-export const hentHelseInstitusjonsGrunnlagGammel = async (behandlingsReferanse: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/institusjon/helse`;
-  return apiFetch<HelseinstitusjonGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentHelseInstitusjonsGrunnlagNy = async (behandlingsReferanse: string) => {

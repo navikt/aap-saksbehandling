@@ -16,7 +16,7 @@ import {
 import { HelseinstitusjonGrunnlag } from 'lib/types/types';
 import { validerDato } from 'lib/validation/dateValidation';
 import { useMemo } from 'react';
-import { HelseinstitusjonsFormFieldsNy } from 'components/behandlinger/institusjonsopphold/helseinstitusjonny/HelseinstitusjonNy';
+import { HelseinstitusjonsFormFieldsNy } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/Helseinstitusjon';
 
 interface Props {
   form: UseFormReturn<HelseinstitusjonsFormFieldsNy>;
