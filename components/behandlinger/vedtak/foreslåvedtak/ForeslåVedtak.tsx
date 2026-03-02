@@ -26,7 +26,7 @@ export const ForeslåVedtak = ({ behandlingVersjon, readOnly, grunnlag }: Props)
   const behandlingsReferanse = useBehandlingsReferanse();
   const { status, løsBehovOgGåTilNesteSteg, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('FORESLÅ_VEDTAK');
-  const visStansOpphørFeature = useFeatureFlag('VisStansOpphørFrontend');
+  const visStansOpphørFeature = useFeatureFlag('VisStansOpphorFrontend');
 
   const { visningActions, visningModus } = useVilkårskortVisning(readOnly, 'FORESLÅ_VEDTAK', undefined);
 

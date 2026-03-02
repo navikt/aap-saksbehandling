@@ -9,7 +9,7 @@ export const FLAGS = [
   'NyTidligereVurderinger',
   'OppgavelisteBackendsorteringFrontend',
   'LenkeMetabase',
-  'VisStansOpphørFrontend',
+  'VisStansOpphorFrontend',
 ] as const;
 
 export type FlagNames = (typeof FLAGS)[number];
@@ -26,5 +26,5 @@ export const mockedFlags: Flags = {
   NyTidligereVurderinger: true,
   OppgavelisteBackendsorteringFrontend: true,
   LenkeMetabase: true,
-  VisStansOpphørFrontend: true,
+  VisStansOpphorFrontend: true,
 };
