@@ -8,10 +8,12 @@ import { erFerdigstilt } from 'lib/utils/journalpost';
 import { FeilregistrerJournalpostModal } from 'components/saksoversikt/dokumentoversikt/FeilregistrerJournalpost';
 import { KnyttTilSakModal } from 'components/saksoversikt/dokumentoversikt/KnyttTilSakModal';
 import { Journalpost } from 'lib/types/journalpost';
+import { RedigitaliserJournalpost } from './RedigitaliserJournalpost';
 
 export const HandlingerDokumentButton = ({ sak, journalpost }: { sak: SaksInfo; journalpost: Journalpost }) => {
   const [knyttTilSakOpen, setKnyttTilSakOpen] = useState(false);
   const [feilregistrerOpen, setFeilregistrerOpen] = useState(false);
+  const [redigitaliserOpen, setRedigitaliserOpen] = useState(false);
 
   return (
     <>
@@ -42,6 +44,7 @@ export const HandlingerDokumentButton = ({ sak, journalpost }: { sak: SaksInfo; 
                     Feilregistrer sakstilknytning
                   </ActionMenu.Item>
                 )}
+                <ActionMenu.Item onSelect={() => setRedigitaliserOpen(true)}>Redigitaliser dokument</ActionMenu.Item>
               </>
             )}
           </ActionMenu.Group>
@@ -62,6 +65,12 @@ export const HandlingerDokumentButton = ({ sak, journalpost }: { sak: SaksInfo; 
         journalpost={journalpost}
         isOpen={feilregistrerOpen}
         onClose={() => setFeilregistrerOpen(false)}
+      />
+      <RedigitaliserJournalpost
+        sak={sak}
+        journalpost={journalpost}
+        isOpen={redigitaliserOpen}
+        onClose={() => setRedigitaliserOpen(false)}
       />
     </>
   );
