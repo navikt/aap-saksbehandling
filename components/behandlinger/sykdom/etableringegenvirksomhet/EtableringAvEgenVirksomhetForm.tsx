@@ -118,7 +118,7 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly }: P
         </Heading>
         <VStack gap={'4'}>
           <VStack>
-            <Label size={'small'}>Utviklingsperiode</Label>
+            <Label size={'small'}>Utviklingsfase</Label>
             <BodyShort textColor={'subtle'} size={'small'}>
               Kan gis for inntil 6 måneder
             </BodyShort>
@@ -187,7 +187,7 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly }: P
         </VStack>
         <VStack gap={'4'}>
           <VStack>
-            <Label size={'small'}>Oppstartsperiode</Label>
+            <Label size={'small'}>Oppstartsfase</Label>
             <BodyShort textColor={'subtle'} size={'small'}>
               Kan gis for inntil 3 måneder
             </BodyShort>
