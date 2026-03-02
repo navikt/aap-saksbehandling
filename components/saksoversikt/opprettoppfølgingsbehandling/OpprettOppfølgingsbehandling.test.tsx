@@ -15,6 +15,7 @@ describe('opprett oppfølgingsbehandling', () => {
       <OpprettOppfølgingsBehandling
         saksnummer="ABCDEFG"
         brukerInformasjon={{ navn: 'Navn på bruker', NAVident: 'minident' }}
+        brukerHarNayTilgang={true}
       />
     );
 
@@ -31,11 +32,12 @@ describe('opprett oppfølgingsbehandling', () => {
     await user.clear(datotekstboks);
     await user.type(datotekstboks, '13.02.2100');
 
-    const checkbox = screen.getByRole('checkbox', { name: 'Reserver oppgaven til meg' });
-    expect(checkbox).toBeChecked();
-
     await user.click(screen.getByRole('combobox', { name: 'Hvem følger opp?' }));
     await user.click(screen.getByRole('option', { name: 'NAY' }));
+
+    const checkbox = screen.getByRole('checkbox', { name: 'Reserver oppgaven til meg' });
+    expect(checkbox).not.toBeChecked();
+    await user.click(checkbox);
 
     const beskrivelse = screen.getByRole('textbox', { name: 'Hva skal følges opp?' });
     await user.type(beskrivelse, 'Dette er en ny beskrivelse');
@@ -61,6 +63,7 @@ describe('opprett oppfølgingsbehandling', () => {
       <OpprettOppfølgingsBehandling
         saksnummer="ABCDEFG"
         brukerInformasjon={{ navn: 'Navn på bruker', NAVident: 'minident' }}
+        brukerHarNayTilgang={false}
       />
     );
 
@@ -77,7 +80,6 @@ describe('opprett oppfølgingsbehandling', () => {
     await user.type(beskrivelse, 'Dette er en ny beskrivelse');
 
     const checkbox = screen.getByRole('checkbox', { name: 'Reserver oppgaven til meg' });
-    await user.click(checkbox);
     expect(checkbox).not.toBeChecked();
 
     await user.click(screen.getByRole('button', { name: 'Bekreft' }));
