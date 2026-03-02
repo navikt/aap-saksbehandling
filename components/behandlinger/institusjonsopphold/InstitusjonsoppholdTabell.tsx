@@ -3,11 +3,11 @@ import { Institusjonsopphold } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 
-interface Props {
+type Props = {
   label: string;
   beskrivelse: string;
   instutisjonsopphold: Institusjonsopphold[];
-}
+};
 
 export const InstitusjonsoppholdTabell = ({ label, beskrivelse, instutisjonsopphold }: Props) => {
   return (

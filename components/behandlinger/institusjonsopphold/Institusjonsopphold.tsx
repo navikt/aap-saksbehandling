@@ -7,7 +7,7 @@ import { Behovstype } from 'lib/utils/form';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { getStegData } from 'lib/utils/steg';
-import { ManglendeOpphold } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/ManglendeOpphold';
+import { ManglendeInstitusjonsOpphold } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/ManglendeInstitusjonsOpphold';
 
 interface Props {
   behandlingsreferanse: string;
@@ -55,7 +55,7 @@ export const Institusjonsopphold = async ({ behandlingsreferanse }: Props) => {
       )}
       {!vurderHelseinstitusjonSteg.skalViseSteg && !vurderSoningSteg.skalViseSteg && (
         <StegSuspense>
-          <ManglendeOpphold />
+          <ManglendeInstitusjonsOpphold />
         </StegSuspense>
       )}
     </GruppeSteg>

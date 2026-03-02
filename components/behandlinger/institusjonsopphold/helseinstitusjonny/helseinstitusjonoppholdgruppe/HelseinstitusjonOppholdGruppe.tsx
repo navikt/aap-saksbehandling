@@ -21,10 +21,10 @@ import { TidligereVurderingExpandableCard } from 'components/periodisering/tidli
 
 import { Dato } from 'lib/types/Dato';
 
-import { HelseinstitusjonsFormFieldsNy } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/Helseinstitusjon';
-import { HelseinstitusjonsvurderingNy } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/helseinstitusjonvurdering/HelseinstitusjonVurdering';
+import { HelseinstitusjonsFormFieldsNy } from 'components/behandlinger/institusjonsopphold/helseinstitusjonny/HelseinstitusjonNy';
+import { HelseinstitusjonsvurderingNy } from 'components/behandlinger/institusjonsopphold/helseinstitusjonny/helseinstitusjonvurderingny/HelseinstitusjonVurderingNy';
 import { erReduksjonUtIFraFormFields, erReduksjonUtIFraVurdering } from 'lib/utils/institusjonopphold';
-import { HelseinstitusjonTidligereVurdering } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/helseinstitusjontidligerevurdering/HelseinstitusjonTidligereVurdering';
+import { HelseinstitusjonTidligereVurdering } from 'components/behandlinger/institusjonsopphold/helseinstitusjonny/helseinstitusjontidligerevurdering/HelseinstitusjonTidligereVurdering';
 
 interface Props {
   form: UseFormReturn<HelseinstitusjonsFormFieldsNy>;
