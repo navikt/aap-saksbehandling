@@ -19,7 +19,7 @@ export const SvarFraBehandler = () => {
         size="xsmall"
       />
       <Popover
-        onClose={() => setVis(vis)}
+        onClose={() => setVis(false)}
         open={vis}
         anchorEl={buttonRef.current}
         arrow={false}
