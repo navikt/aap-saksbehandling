@@ -14,7 +14,7 @@ export default async function Page(props: { params: Promise<{ saksId: string }> 
     hentRollerForBruker(),
   ]);
 
-  const brukerharNayTilgang = roller.includes(Roller.SAKSBEHANDLER_NASJONAL || roller.includes(Roller.BESLUTTER));
+  const brukerharNayTilgang = roller.includes(Roller.SAKSBEHANDLER_NASJONAL) || roller.includes(Roller.BESLUTTER);
   return (
     <AkselPage>
       <SaksinfoBanner personInformasjon={personInfo} sak={sak} />
