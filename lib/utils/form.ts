@@ -35,6 +35,7 @@ export enum Behovstype {
   SKRIV_BREV_KODE = '5050',
   SKRIV_VEDTAKSBREV_KODE = '5051',
   SKRIV_FORHÅNDSVARSEL_AKTIVITETSPLIKT_BREV_KODE = '5052',
+  BEKREFT_VURDERINGER_OPPFØLGING = '5054',
   FORESLÅ_UTTAK_KODE = '5096',
   KVALITETSSIKRING_KODE = '5097',
   FORESLÅ_VEDTAK_KODE = '5098',
@@ -147,6 +148,8 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
       return 'Skriv forhåndsvarsel aktivitetsplikt';
     case '5053':
       return 'Individuell begrunnelse for §§ 11-5 og 11-6 til vedtaksbrev';
+    case '5054':
+      return 'Bekreft vurderinger';
     case '5029':
       return '§ 22-13 syvende ledd';
     case '5999':

@@ -14,7 +14,7 @@ export const getStegSomSkalVises = (
   );
 };
 
-const getAvklaringsbehovForSteg = (
+export const getAvklaringsbehovForSteg = (
   aktivStegGruppe: StegGruppe,
   stegType: StegType,
   behandlingFlytOgTilstand: BehandlingFlytOgTilstand,
