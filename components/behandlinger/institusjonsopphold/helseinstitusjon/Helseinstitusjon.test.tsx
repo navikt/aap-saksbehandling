@@ -93,7 +93,6 @@ describe('Helseinstitusjonsvurdering', () => {
 
   test('spør om brukeren forsørger ektefelle dersom det er besvart ja på om bruker får fri kost og losji og nei på faste utgifter', async () => {
     await svarPåSpørsmålOmFriKostOgLosji(true, 0);
-    screen.logTestingPlaygroundURL();
     await svarPåSpørsmålOmBrukerHarFasteUtgifter(false, 0);
     expect(screen.getByRole('group', { name: 'Forsørger brukeren ektefelle eller tilsvarende?' })).toBeVisible();
   });
