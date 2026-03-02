@@ -148,4 +148,26 @@ const bekreftVurderingerOppfølgingSteg = getStegDataForBekreftVurderingerOppfø
       )}
     </GruppeSteg>
   );
-};
+function getStegDataForBekreftVurderingerOppfølgingSteg(aktivStegGruppe: StegGruppe, flyt: BehandlingFlytOgTilstand) {
+  const avklaringsbehov = getAvklaringsbehovForSteg(
+    aktivStegGruppe,
+    'BEKREFT_VURDERINGER_OPPFØLGING',
+    flyt,
+    Behovstype.BEKREFT_VURDERINGER_OPPFØLGING
+  );
+
+  const harAvklaringsbehov = avklaringsbehov.length > 0;
+  const typeBehandling = flyt.visning.typeBehandling;
+  const readOnly = flyt.visning.saksbehandlerReadOnly || (typeBehandling === 'Revurdering' && !harAvklaringsbehov);
+
+  const harÅpentAvklaringsbehov = avklaringsbehov.some(
+    (avklaringsbehov) => avklaringsbehov.endringer[avklaringsbehov.endringer.length - 1]?.status === 'OPPRETTET'
+  );
+
+  return {
+    skalViseSteg: harÅpentAvklaringsbehov,
+    readOnly: readOnly,
+    behandlingVersjon: flyt.behandlingVersjon,
+  };
+}
+
