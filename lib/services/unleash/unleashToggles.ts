@@ -9,6 +9,7 @@ export const FLAGS = [
   'studentVurderingPeriodisert',
   'NyTidligereVurderinger',
   'OppgavelisteBackendsorteringFrontend',
+  'LenkeMetabase',
 ] as const;
 
 export type FlagNames = (typeof FLAGS)[number];
@@ -25,4 +26,5 @@ export const mockedFlags: Flags = {
   studentVurderingPeriodisert: true,
   NyTidligereVurderinger: true,
   OppgavelisteBackendsorteringFrontend: true,
+  LenkeMetabase: true,
 };
