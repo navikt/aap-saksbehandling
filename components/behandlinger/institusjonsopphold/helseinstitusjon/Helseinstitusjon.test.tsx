@@ -86,22 +86,23 @@ describe('Helseinstitusjonsvurdering', () => {
     expect(
       screen.getByRole('textbox', {
         name: 'Vilkårsvurdering',
-        description: 'Vurder §11-25 og om det skal gis reduksjon av ytelsen',
+        description: 'Vurder §11-25 og om det skal gis reduksjon av ytelsen.',
       })
     ).toBeVisible();
   });
 
-  test('spør om brukeren forsørger ektefelle dersom det er besvart ja på om bruker får fri kost og losji', async () => {
+  test('spør om brukeren forsørger ektefelle dersom det er besvart ja på om bruker får fri kost og losji og nei på faste utgifter', async () => {
     await svarPåSpørsmålOmFriKostOgLosji(true, 0);
+    screen.logTestingPlaygroundURL();
+    await svarPåSpørsmålOmBrukerHarFasteUtgifter(false, 0);
     expect(screen.getByRole('group', { name: 'Forsørger brukeren ektefelle eller tilsvarende?' })).toBeVisible();
   });
 
   test('spør om brukeren har faste utgifter for å beholde bolig eller andre eiendeler', async () => {
     await svarPåSpørsmålOmFriKostOgLosji(true, 0);
-    await svarPåSpørsmålOmBrukerForsørgerEktefelleEllerTilsvarende(false, 0);
     expect(
       screen.getByRole('group', {
-        name: 'Har brukeren faste utgifter nødvendig for å beholde bolig og andre eiendeler?',
+        name: /har bruker faste utgifter som er nødvendig for å beholde bolig eller eiendeler\? vurder om utgiftene gjør at aap ikke skal reduseres\./i,
       })
     ).toBeVisible();
   });
@@ -119,13 +120,13 @@ describe('Helseinstitusjonsvurdering', () => {
 
     test('viser feilmelding hvis man ikke har svart på om brukeren forsørger ektefelle', async () => {
       await svarPåSpørsmålOmFriKostOgLosji(true, 0);
+      await svarPåSpørsmålOmBrukerHarFasteUtgifter(false, 0);
       await user.click(screen.getByRole('button', { name: 'Bekreft' }));
       expect(screen.getByText('Du må svare på om brukeren forsørger ektefelle eller tilsvarende')).toBeVisible();
     });
 
     test('viser feilmelding hvis man ikke har svart på om brukeren har faste utgifter', async () => {
       await svarPåSpørsmålOmFriKostOgLosji(true, 0);
-      await svarPåSpørsmålOmBrukerForsørgerEktefelleEllerTilsvarende(false, 0);
       await user.click(screen.getByRole('button', { name: 'Bekreft' }));
       expect(
         screen.getByText(
@@ -326,7 +327,7 @@ async function svarPåSpørsmålOmBrukerForsørgerEktefelleEllerTilsvarende(valu
 
 async function svarPåSpørsmålOmBrukerHarFasteUtgifter(value: boolean, index: number) {
   const gruppe = screen.getAllByRole('group', {
-    name: 'Har brukeren faste utgifter nødvendig for å beholde bolig og andre eiendeler?',
+    name: /har bruker faste utgifter som er nødvendig for å beholde bolig eller eiendeler\? vurder om utgiftene gjør at aap ikke skal reduseres\./i,
   })[index];
 
   await user.click(within(gruppe).getByRole('radio', { name: value ? 'Ja' : 'Nei' }));
@@ -334,8 +335,8 @@ async function svarPåSpørsmålOmBrukerHarFasteUtgifter(value: boolean, index: 
 
 async function svarReduksjon(index: number) {
   await svarPåSpørsmålOmFriKostOgLosji(true, index);
-  await svarPåSpørsmålOmBrukerForsørgerEktefelleEllerTilsvarende(false, index);
   await svarPåSpørsmålOmBrukerHarFasteUtgifter(false, index);
+  await svarPåSpørsmålOmBrukerForsørgerEktefelleEllerTilsvarende(false, index);
 }
 
 async function svarIkkeReduksjon(index: number) {

@@ -16,10 +16,10 @@ import {
 import { HelseinstitusjonGrunnlag } from 'lib/types/types';
 import { validerDato } from 'lib/validation/dateValidation';
 import { useMemo } from 'react';
-import { HelseinstitusjonsFormFieldsNy } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/Helseinstitusjon';
+import { HelseinstitusjonsFormFields } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/Helseinstitusjon';
 
 interface Props {
-  form: UseFormReturn<HelseinstitusjonsFormFieldsNy>;
+  form: UseFormReturn<HelseinstitusjonsFormFields>;
   oppholdIndex: number;
   vurderingIndex: number;
   readonly: boolean;
@@ -28,7 +28,7 @@ interface Props {
   finnesTidligereVurderinger: boolean;
 }
 
-export const HelseinstitusjonsvurderingNy = ({
+export const Helseinstitusjonsvurdering = ({
   form,
   oppholdIndex,
   vurderingIndex,
@@ -37,9 +37,9 @@ export const HelseinstitusjonsvurderingNy = ({
   finnesTidligereVurderinger,
 }: Props) => {
   const vurdering = form.watch(`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}`);
-  const visForsørgerEktefelleSpørsmål = vurdering.faarFriKostOgLosji === JaEllerNei.Ja;
-  const visHarFasteUtgifterSpørsmål =
-    vurdering.faarFriKostOgLosji === JaEllerNei.Ja && vurdering.forsoergerEktefelle === JaEllerNei.Nei;
+  const visHarFasteUtgifterSpørsmål = vurdering.faarFriKostOgLosji === JaEllerNei.Ja;
+  const visForsørgerEktefelleSpørsmål =
+    vurdering.faarFriKostOgLosji === JaEllerNei.Ja && vurdering.harFasteUtgifter === JaEllerNei.Nei;
 
   const erReduksjon = erReduksjonUtIFraFormFields(vurdering);
 
@@ -68,7 +68,7 @@ export const HelseinstitusjonsvurderingNy = ({
       <TextAreaWrapper
         name={`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.begrunnelse`}
         control={form.control}
-        description={'Vurder §11-25 og om det skal gis reduksjon av ytelsen'}
+        description={'Vurder §11-25 og om det skal gis reduksjon av ytelsen.'}
         label={'Vilkårsvurdering'}
         rules={{ required: 'Du må begrunne vurderingen din' }}
         readOnly={readonly}
@@ -86,12 +86,15 @@ export const HelseinstitusjonsvurderingNy = ({
         <Radio value={JaEllerNei.Nei}>Nei</Radio>
       </RadioGroupWrapper>
 
-      {visForsørgerEktefelleSpørsmål && (
+      {visHarFasteUtgifterSpørsmål && (
         <RadioGroupWrapper
-          name={`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.forsoergerEktefelle`}
+          name={`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.harFasteUtgifter`}
           control={form.control}
-          label={'Forsørger brukeren ektefelle eller tilsvarende?'}
-          rules={{ required: 'Du må svare på om brukeren forsørger ektefelle eller tilsvarende' }}
+          label={'Har bruker faste utgifter som er nødvendig for å beholde bolig eller eiendeler?'}
+          description={'Vurder om utgiftene gjør at AAP ikke skal reduseres.'}
+          rules={{
+            required: 'Du må svare på om brukeren har faste utgifter nødvendig for å beholde bolig og andre eiendeler',
+          }}
           readOnly={readonly}
           horisontal
         >
@@ -100,14 +103,12 @@ export const HelseinstitusjonsvurderingNy = ({
         </RadioGroupWrapper>
       )}
 
-      {visHarFasteUtgifterSpørsmål && (
+      {visForsørgerEktefelleSpørsmål && (
         <RadioGroupWrapper
-          name={`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.harFasteUtgifter`}
+          name={`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.forsoergerEktefelle`}
           control={form.control}
-          label={'Har brukeren faste utgifter nødvendig for å beholde bolig og andre eiendeler?'}
-          rules={{
-            required: 'Du må svare på om brukeren har faste utgifter nødvendig for å beholde bolig og andre eiendeler',
-          }}
+          label={'Forsørger brukeren ektefelle eller tilsvarende?'}
+          rules={{ required: 'Du må svare på om brukeren forsørger ektefelle eller tilsvarende' }}
           readOnly={readonly}
           horisontal
         >

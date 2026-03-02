@@ -34,7 +34,7 @@ interface Props {
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
-export interface HelseinstitusjonsFormFieldsNy {
+export interface HelseinstitusjonsFormFields {
   helseinstitusjonsvurderinger: OppholdMedVurderinger[];
 }
 
@@ -55,7 +55,7 @@ export interface OppholdVurdering {
   vurdertAv?: VurdertAvAnsatt;
 }
 
-type DraftFormFields = Partial<HelseinstitusjonsFormFieldsNy>;
+type DraftFormFields = Partial<HelseinstitusjonsFormFields>;
 
 export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initialMellomlagretVurdering }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
@@ -77,7 +77,7 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag, grunnlag.opphold);
 
-  const { form } = useConfigForm<HelseinstitusjonsFormFieldsNy>({
+  const { form } = useConfigForm<HelseinstitusjonsFormFields>({
     helseinstitusjonsvurderinger: {
       type: 'fieldArray',
       defaultValue: defaultValue.helseinstitusjonsvurderinger,

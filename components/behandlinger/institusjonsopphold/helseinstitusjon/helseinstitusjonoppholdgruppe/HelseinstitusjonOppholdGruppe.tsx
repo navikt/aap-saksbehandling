@@ -21,13 +21,13 @@ import { TidligereVurderingExpandableCard } from 'components/periodisering/tidli
 
 import { Dato } from 'lib/types/Dato';
 
-import { HelseinstitusjonsFormFieldsNy } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/Helseinstitusjon';
-import { HelseinstitusjonsvurderingNy } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/helseinstitusjonvurdering/HelseinstitusjonVurdering';
+import { HelseinstitusjonsFormFields } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/Helseinstitusjon';
+import { Helseinstitusjonsvurdering } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/helseinstitusjonvurdering/HelseinstitusjonVurdering';
 import { erReduksjonUtIFraFormFields, erReduksjonUtIFraVurdering } from 'lib/utils/institusjonopphold';
 import { HelseinstitusjonTidligereVurdering } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/helseinstitusjontidligerevurdering/HelseinstitusjonTidligereVurdering';
 
 interface Props {
-  form: UseFormReturn<HelseinstitusjonsFormFieldsNy>;
+  form: UseFormReturn<HelseinstitusjonsFormFields>;
   oppholdIndex: number;
   readonly: boolean;
   opphold: HelseinstitusjonGrunnlag['opphold'][0];
@@ -139,7 +139,7 @@ export const HelseinstitusjonOppholdGruppe = ({
                   readonly={formReadOnly}
                   initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
                 >
-                  <HelseinstitusjonsvurderingNy
+                  <Helseinstitusjonsvurdering
                     form={form}
                     oppholdIndex={oppholdIndex}
                     vurderingIndex={vurderingIndex}
