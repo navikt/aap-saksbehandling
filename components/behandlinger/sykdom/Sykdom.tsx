@@ -39,7 +39,7 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
   const fastsettArbeidsevneSteg = getStegData(aktivStegGruppe, 'FASTSETT_ARBEIDSEVNE', flyt.data);
   const refusjonskravSteg = getStegData(aktivStegGruppe, 'REFUSJON_KRAV', flyt.data);
   const sykdomsvurderingBrevSteg = getStegData(aktivStegGruppe, 'SYKDOMSVURDERING_BREV', flyt.data);
-  const bekreftVurderingerOppfølgingSteg = getStegData(
+const bekreftVurderingerOppfølgingSteg = getStegDataForBekreftVurderingerOppfølgingSteg(aktivStegGruppe, flyt.data);```
     aktivStegGruppe,
     'BEKREFT_VURDERINGER_OPPFØLGING',
     flyt.data,
