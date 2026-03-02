@@ -6,6 +6,7 @@ import {
   AvklarPeriodisertStudentLøsning,
   BistandsbehovLøsning,
   EtableringEgenVirksomhetLøsningDto,
+  HelseInstiusjonVurdering,
   LøsPeriodisertBehovPåBehandling,
   OvergangArbeidLøsning,
   OvergangUforeLøsning,
@@ -87,6 +88,11 @@ interface ForutgåendeMedlemskapMedOverstyring {
   løsningerForPerioder: AvklarPeriodisertForutgåendeMedlemskapLøsning[];
 }
 
+interface Helseinstitusjon {
+  behovstype: Behovstype.AVKLAR_HELSEINSTITUSJON;
+  løsningerForPerioder: HelseInstiusjonVurdering[];
+}
+
 type Behov =
   | LovvalgOgMedlemskapBehov
   | StudentBehov
@@ -100,4 +106,5 @@ type Behov =
   | Arbeidsopptrapping
   | OvergangUføre
   | OppholdskravvurderingBehov
+  | Helseinstitusjon
   | ForutgåendeMedlemskapMedOverstyring;
