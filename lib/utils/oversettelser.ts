@@ -1,8 +1,6 @@
 import { SettPåVentÅrsaker, TypeBehandling, VilkårUtfall, ÅrsakTilOpprettelse } from 'lib/types/types';
 import { exhaustiveCheck } from 'lib/utils/typescript';
 import { OppgaveAvklaringsbehovKode, OppgaveBehandlingstype } from 'lib/types/oppgaveTypes';
-import { PostmottakSettPåVentÅrsaker, PostmottakTypeBehandling } from 'lib/types/postmottakTypes';
-
 const behovskodeMap = {
   // Behandlingsflyt
   '4101': '§ 11-7 Aktivitetsplikt',
@@ -76,6 +74,8 @@ const behovskodeMap = {
   '9002': 'Bestill brev',
   '9003': 'Bestill legeerklæring',
   '9004': 'Opprett hendelse på sak',
+  '9082': 'Vurder tilbakekreving',
+  '9083': 'Vurder tilbakekreving beslutter',
 
   // Postmottak
   '1337': 'Kategoriser dokument',
@@ -85,6 +85,8 @@ const behovskodeMap = {
   '1341': 'Endre tema',
   '1342': 'Vent på Gosys',
 } as const;
+
+import { PostmottakSettPåVentÅrsaker, PostmottakTypeBehandling } from 'lib/types/postmottakTypes';
 
 export function mapBehovskodeTilBehovstype(kode: OppgaveAvklaringsbehovKode | string): string {
   return behovskodeMap[kode as OppgaveAvklaringsbehovKode] ?? 'Ukjent behovstype';
