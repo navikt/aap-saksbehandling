@@ -65,6 +65,7 @@ export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering }: Props) 
       steg={'BREV'} // TODO Fiks når steget er lagt inn i backend
       onSubmit={form.handleSubmit((data) => {
         console.log(data);
+        nullstillMellomlagretVurdering();
       })}
       isLoading={isLoading}
       status={status}
@@ -74,7 +75,7 @@ export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering }: Props) 
       visningActions={visningActions}
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset())}
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
-      mellomlagretVurdering={initialMellomlagretVurdering}
+      mellomlagretVurdering={mellomlagretVurdering}
       formReset={() => form.reset()}
     >
       <VStack gap={'8'}>
