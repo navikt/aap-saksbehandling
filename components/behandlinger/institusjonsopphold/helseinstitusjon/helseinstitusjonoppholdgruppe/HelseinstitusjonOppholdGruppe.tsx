@@ -129,10 +129,8 @@ export const HelseinstitusjonOppholdGruppe = ({
                   )}
                   isLast={vurderingIndex === vurderinger.length - 1}
                   vurderingStatus={getErReduksjonEllerIkke(reduksjon)}
-                  vurdertAv={vurdering.vurdertAv}
+                  vurdering={vurdering}
                   harTidligereVurderinger={!!(tidligereVurderinger && tidligereVurderinger.length > 0)}
-                  kvalitetssikretAv={undefined}
-                  besluttetAv={undefined}
                   finnesFeil={false}
                   onSlettVurdering={() => remove(vurderingIndex)}
                   index={vurderingIndex}
@@ -173,6 +171,7 @@ export const HelseinstitusjonOppholdGruppe = ({
                   tom: formaterDatoForFrontend(opphold.avsluttetDato || ''),
                 },
                 erNyVurdering: true,
+                behøverVurdering: false,
               })
             }
           >

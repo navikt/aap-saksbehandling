@@ -6,7 +6,7 @@ import {
   MellomlagretVurdering,
   StudentGrunnlag,
   StudentVurderingResponse,
-  VurdertAvAnsatt,
+  VurderingMeta,
 } from 'lib/types/types';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
@@ -46,7 +46,7 @@ export interface StudentFormFields {
   vurderinger: StudentVurdering[];
 }
 
-export interface StudentVurdering {
+export interface StudentVurdering extends VurderingMeta {
   fraDato: string;
   begrunnelse: string;
   harAvbruttStudie?: string;
@@ -55,10 +55,6 @@ export interface StudentVurdering {
   harBehovForBehandling?: string;
   avbruttDato?: string;
   avbruddMerEnn6Måneder?: string;
-  erNyVurdering?: boolean;
-  vurdertAv?: VurdertAvAnsatt;
-  kvalitetssikretAv?: VurdertAvAnsatt;
-  besluttetAv?: VurdertAvAnsatt;
 }
 
 type DraftFormFields = Partial<StudentFormFields>;
@@ -192,7 +188,7 @@ export const StudentVurderingPeriodisert = ({
                 fraDato={gyldigDatoEllerNull(vurderingValues?.fraDato)}
                 nestePeriodeFraDato={gyldigDatoEllerNull(nesteVurderingValues?.fraDato)}
                 isLast={index === nyeVurderinger.length - 1}
-                vurdertAv={vurdering.vurdertAv}
+                vurdering={vurdering}
                 finnesFeil={errorList.length > 0}
                 readonly={formReadOnly}
                 onSlettVurdering={() => remove(index)}
@@ -201,8 +197,6 @@ export const StudentVurderingPeriodisert = ({
                 accordionsSignal={accordionsSignal}
                 initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
                 vurderingStatus={hentVurderingStatus(vurderingValues)}
-                kvalitetssikretAv={vurdering.kvalitetssikretAv}
-                besluttetAv={vurdering.besluttetAv}
               >
                 <StudentVurderingFelter index={index} readOnly={formReadOnly} />
               </NyVurderingExpandableCard>
@@ -235,6 +229,8 @@ function mapVurderingToDraftFormFields(grunnlag: StudentGrunnlag): DraftFormFiel
         vurdertAv: vurdering?.vurdertAv,
         kvalitetssikretAv: vurdering?.kvalitetssikretAv,
         besluttetAv: vurdering?.besluttetAv,
+        erNyVurdering: false,
+        behøverVurdering: false,
       };
     }),
   };
@@ -251,6 +247,7 @@ function emptyStudentVurdering(): StudentVurdering {
     harAvbruttStudie: '',
     harBehovForBehandling: '',
     erNyVurdering: true,
+    behøverVurdering: false,
   };
 }
 
