@@ -296,7 +296,7 @@ describe('felt for å sette diagnoser', () => {
     await velgAtBrukerHarSykdomSkadeLyte();
     await velgBekreft();
 
-    const feilmeldinger = await screen.findAllByText('Du må velge et system for diagnoser');
+    const feilmeldinger = await screen.findAllByText('Du må velge et system for diagnoser.');
     expect(feilmeldinger.length).toBe(2);
     expect(feilmeldinger[0]).toBeVisible();
   });
@@ -333,7 +333,7 @@ describe('felt for å sette diagnoser', () => {
     await user.click(ICD10option);
     await velgBekreft();
 
-    const feilmeldinger = await screen.findAllByText('Du må velge en hoveddiagnose');
+    const feilmeldinger = await screen.findAllByText('Du må velge en hoveddiagnose.');
     expect(feilmeldinger.length).toBe(2);
     expect(feilmeldinger[0]).toBeVisible();
   });
