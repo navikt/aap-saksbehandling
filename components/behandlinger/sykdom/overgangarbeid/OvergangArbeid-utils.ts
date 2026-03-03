@@ -15,6 +15,7 @@ export function getDefaultValuesFromGrunnlag(grunnlag: OvergangArbeidGrunnlag): 
       fraDato: '',
       brukerRettPåAAP: '',
       erNyVurdering: true,
+      behøverVurdering: false,
     }));
   }
 
@@ -28,6 +29,8 @@ export function getDefaultValuesFromGrunnlag(grunnlag: OvergangArbeidGrunnlag): 
         vurdertAv: vurdering.vurdertAv,
         kvalitetssikretAv: vurdering.kvalitetssikretAv,
         besluttetAv: vurdering.besluttetAv,
+        erNyVurdering: false,
+        behøverVurdering: false,
       })) || [],
   };
 }

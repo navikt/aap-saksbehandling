@@ -60,7 +60,7 @@ export const AvklaroppfolgingVurdering = ({
     mellomlagretVurdering
   );
 
-  const skalVurderesAvNavKontor = grunnlag.hvemSkalFølgeOpp == 'Lokalkontor'
+  const skalVurderesAvNavKontor = grunnlag.hvemSkalFølgeOpp == 'Lokalkontor';
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)

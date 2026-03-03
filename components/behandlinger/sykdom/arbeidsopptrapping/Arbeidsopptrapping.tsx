@@ -4,7 +4,7 @@ import {
   ArbeidsopptrappingGrunnlagResponse,
   ArbeidsopptrappingLøsningDto,
   MellomlagretVurdering,
-  VurdertAvAnsatt,
+  VurderingMeta,
 } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { useFieldArray, useForm } from 'react-hook-form';
@@ -44,15 +44,11 @@ export interface ArbeidsopptrappingForm {
   vurderinger: ArbeidsopptrappingVurderingForm[];
 }
 
-export interface ArbeidsopptrappingVurderingForm {
+export interface ArbeidsopptrappingVurderingForm extends VurderingMeta {
   begrunnelse: string;
   fraDato: string | undefined;
   reellMulighetTilOpptrapping: JaEllerNei | undefined;
   rettPaaAAPIOpptrapping: JaEllerNei | undefined;
-  vurdertAv?: VurdertAvAnsatt;
-  kvalitetssikretAv?: VurdertAvAnsatt;
-  besluttetAv?: VurdertAvAnsatt;
-  erNyVurdering?: boolean;
 }
 
 export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, initialMellomlagretVurdering }: Props) => {
@@ -95,6 +91,7 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
       reellMulighetTilOpptrapping: undefined,
       rettPaaAAPIOpptrapping: undefined,
       erNyVurdering: true,
+      behøverVurdering: false,
     });
   }
 
@@ -214,9 +211,7 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
           )}
           nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
           isLast={index === fields.length - 1}
-          vurdertAv={vurdering.vurdertAv}
-          kvalitetssikretAv={vurdering.kvalitetssikretAv}
-          besluttetAv={vurdering.besluttetAv}
+          vurdering={vurdering}
           finnesFeil={finnesFeilForVurdering(index, errorList)}
           onSlettVurdering={() => remove(index)}
           readonly={formReadOnly}
@@ -256,6 +251,8 @@ function getDefaultValuesFromGrunnlag(
       vurdertAv: vurdering.vurdertAv,
       kvalitetssikretAv: vurdering.kvalitetssikretAv,
       besluttetAv: vurdering.besluttetAv,
+      erNyVurdering: false,
+      behøverVurdering: false,
     })),
   };
 }
