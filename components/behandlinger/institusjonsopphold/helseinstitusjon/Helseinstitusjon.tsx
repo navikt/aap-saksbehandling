@@ -57,7 +57,7 @@ type DraftFormFields = Partial<HelseinstitusjonsFormFields>;
 
 export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initialMellomlagretVurdering }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
+  const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('DU_ER_ET_ANNET_STED');
 
   const { lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
@@ -117,14 +117,12 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
         });
       });
 
-      løsBehovOgGåTilNesteSteg(
+      løsPeriodisertBehovOgGåTilNesteSteg(
         {
           behandlingVersjon: behandlingVersjon,
           behov: {
             behovstype: Behovstype.AVKLAR_HELSEINSTITUSJON,
-            helseinstitusjonVurdering: {
-              vurderinger: vurderinger,
-            },
+            løsningerForPerioder: vurderinger,
           },
           referanse: behandlingsreferanse,
         },
