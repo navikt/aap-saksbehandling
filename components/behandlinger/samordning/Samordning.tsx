@@ -12,6 +12,7 @@ import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { SamordningArbeidsgiverMedDatafetching } from 'components/behandlinger/samordning/samordningArbeidsgiver/SamordningArbeidsgiverMedDatafetching';
 import { SamordningBarnepensjonMedDatafetching } from 'components/behandlinger/samordning/samordningBarnepensjon/SamordningBarnepensjonMedDatafetching';
 import { SykestipendMedDataFetching } from 'components/behandlinger/samordning/sykestipend/SykestipendMedDataFetching';
+import { BarnePensjonMedDataFetching } from 'components/behandlinger/samordning/barnepensjon/BarnepensjonMedDataFetching';
 
 interface Props {
   behandlingsreferanse: string;
@@ -39,6 +40,10 @@ export const Samordning = async ({ behandlingsreferanse }: Props) => {
       visning={flyt.data.visning}
       aktivtSteg={flyt.data.aktivtSteg}
     >
+      <StegSuspense>
+        <BarnePensjonMedDataFetching behandlingsreferanse={behandlingsreferanse} />
+      </StegSuspense>
+
       <StegSuspense>
         <SamordningBarnepensjonMedDatafetching behandlingsreferanse={behandlingsreferanse} />
       </StegSuspense>
