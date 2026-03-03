@@ -23,7 +23,6 @@ import { LokalBrukerBytte } from 'components/lokalbrukerbytte/LokalBrukerBytte';
 import { Roller } from 'lib/services/azure/azureUserService';
 import { SøkeResultat } from 'app/api/kelvinsok/route';
 import Endringslogg from '@navikt/familie-endringslogg';
-import { useFeatureFlag } from 'context/UnleashContext';
 
 interface BrukerInformasjon {
   navn: string;
@@ -85,7 +84,6 @@ export const KelvinAppHeader = ({
   const [søkeresultat, setSøkeresultat] = useState<SøkeResultat | undefined>(undefined);
   const [endringsloggÅpen, setEndringsloggÅpen] = useState<boolean>(false);
 
-  const lenkeMetabase = useFeatureFlag('LenkeMetabase');
   return (
     <>
       <InternalHeader>
@@ -95,16 +93,12 @@ export const KelvinAppHeader = ({
           <Kelvinsøk setSøkeresultat={setSøkeresultat} />
           <Link href={`/oppgave/`}>Oppgaveliste</Link>
 
-          {lenkeMetabase ? (
-            <Link
-              href={'https://metabase.ansatt.nav.no/public/dashboard/da1ad654-13a9-492c-bfa0-8cc828aab274?'}
-              target="_blank"
-            >
-              Produksjonsstyring <ExternalLinkIcon />
-            </Link>
-          ) : (
-            <Link href={`/oppgave/produksjonsstyring`}>Produksjonsstyring</Link>
-          )}
+          <Link
+            href={'https://metabase.ansatt.nav.no/public/dashboard/da1ad654-13a9-492c-bfa0-8cc828aab274?'}
+            target="_blank"
+          >
+            Produksjonsstyring <ExternalLinkIcon />
+          </Link>
 
           {lokalLenkeTilSaksoversikt && <Link href={`/saksbehandling/saksoversikt`}>Saksoversikt</Link>}
         </HStack>

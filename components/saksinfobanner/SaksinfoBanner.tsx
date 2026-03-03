@@ -77,7 +77,6 @@ export const SaksinfoBanner = ({
   const avbrytRevurderingSteg = flyt && flyt.find((f) => f.stegGruppe === 'AVBRYT_REVURDERING');
   const behandlerEnSøknadSomSkalTrekkes = søknadStegGruppe && søknadStegGruppe.skalVises;
   const behandlerRevurderingSomSkalAvbrytes = avbrytRevurderingSteg && avbrytRevurderingSteg.skalVises;
-  const visArenahistorikkKnappEnabled = useFeatureFlag('VisArenahistorikkKnapp');
 
   const trekkKlageSteg = flyt && flyt.find((f) => f.stegGruppe === 'TREKK_KLAGE');
   const harAlleredeValgtTrekkKlage = trekkKlageSteg && trekkKlageSteg.skalVises;
@@ -235,7 +234,7 @@ export const SaksinfoBanner = ({
               />
             </div>
           )}
-          {behandling.arenaStatus?.harArenaHistorikk && visArenahistorikkKnappEnabled && (
+          {behandling.arenaStatus?.harArenaHistorikk && (
             <div className={styles.oppgavestatus}>
               <ArenaStatus />
             </div>
