@@ -7,7 +7,7 @@ import { MellomlagretVurderingResponse, StudentGrunnlag } from 'lib/types/types'
 import { FetchResponse } from 'lib/utils/api';
 import createFetchMock from 'vitest-fetch-mock';
 import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
-import { StudentVurderingPeriodisert } from 'components/behandlinger/sykdom/student/studentperiodisert/StudentVurderingPeriodisert';
+import { StudentVurdering } from 'components/behandlinger/sykdom/student/studentvurdering/StudentVurdering';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
@@ -53,7 +53,7 @@ beforeEach(() => {
 describe('Student', () => {
   describe('Generelt', () => {
     it('skal ha en overskrift', () => {
-      render(<StudentVurderingPeriodisert grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
+      render(<StudentVurdering grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
       const heading = screen.getByText('§ 11-14 Student');
       expect(heading).toBeVisible();
     });
@@ -61,7 +61,7 @@ describe('Student', () => {
     it('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
       setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'AVKLAR_SYKDOM' });
 
-      render(<StudentVurderingPeriodisert grunnlag={grunnlagMedVurdering} readOnly={false} behandlingVersjon={0} />);
+      render(<StudentVurdering grunnlag={grunnlagMedVurdering} readOnly={false} behandlingVersjon={0} />);
 
       const endreKnapp = screen.getByRole('button', { name: 'Endre' });
       await user.click(endreKnapp);
@@ -95,30 +95,30 @@ describe('Student', () => {
 
   describe('Felter', () => {
     it('har et fritekstfelt for vurdering av vilkåret', () => {
-      render(<StudentVurderingPeriodisert grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
+      render(<StudentVurdering grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
       expect(screen.getByRole('textbox', { name: 'Vurder §11-14 og vilkårene i §7 i forskriften' })).toBeVisible();
     });
 
     it('har et valg for om brukeren har avbrutt et studie', () => {
-      render(<StudentVurderingPeriodisert grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
+      render(<StudentVurdering grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
       expect(screen.getByRole('group', { name: 'Har brukeren avbrutt et studie?' })).toBeVisible();
     });
 
     it('har et valg for om studiet er godkjent av Lånekassen', async () => {
-      render(<StudentVurderingPeriodisert grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
+      render(<StudentVurdering grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
       await velgAtSøkerHarAvbruttEtStudie();
       expect(screen.getByRole('group', { name: 'Er studiet godkjent av Lånekassen?' })).toBeVisible();
     });
 
     it('har et valg for om studie er avbrutt pga sykdom eller skade', async () => {
-      render(<StudentVurderingPeriodisert grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
+      render(<StudentVurdering grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
       await velgAtSøkerHarAvbruttEtStudie();
       await velgAtStudieErGodkjentAvLånekassen();
       expect(screen.getByRole('group', { name: 'Er studie avbrutt pga sykdom eller skade?' })).toBeVisible();
     });
 
     it('har et valg for om brukeren har behov for behandling', async () => {
-      render(<StudentVurderingPeriodisert grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
+      render(<StudentVurdering grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
       await velgAtSøkerHarAvbruttEtStudie();
       await velgAtStudieErGodkjentAvLånekassen();
       await velgAtStudieErAvbruttPgaSykdomEllerSkade();
@@ -128,7 +128,7 @@ describe('Student', () => {
     });
 
     it('har et felt for å sette når studieevnen ble nedsatt fra', async () => {
-      render(<StudentVurderingPeriodisert grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
+      render(<StudentVurdering grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
       await velgAtSøkerHarAvbruttEtStudie();
       await velgAtStudieErGodkjentAvLånekassen();
       await velgAtStudieErAvbruttPgaSykdomEllerSkade();
@@ -140,7 +140,7 @@ describe('Student', () => {
     });
 
     it('spør om avbruddet er forventet å vare mer enn 6 mnd', async () => {
-      render(<StudentVurderingPeriodisert grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
+      render(<StudentVurdering grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
       await velgAtSøkerHarAvbruttEtStudie();
       await velgAtStudieErGodkjentAvLånekassen();
       await velgAtStudieErAvbruttPgaSykdomEllerSkade();
@@ -151,7 +151,7 @@ describe('Student', () => {
     });
 
     it('viser en feilmelding dersom det ikke er lagt inn en begrunnelse', async () => {
-      render(<StudentVurderingPeriodisert grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
+      render(<StudentVurdering grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
       const button = screen.getByRole('button', { name: /Bekreft/ });
       await user.click(button);
 
@@ -160,7 +160,7 @@ describe('Student', () => {
     });
 
     it('viser feilemdling hvis det ikke er svart på om studiet er avbrutt', async () => {
-      render(<StudentVurderingPeriodisert grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
+      render(<StudentVurdering grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
       const button = screen.getByRole('button', { name: /Bekreft/ });
       await user.click(button);
 
@@ -169,7 +169,7 @@ describe('Student', () => {
     });
 
     it('viser feilmelding hvis det ikke er svart på om studiet er godkjent av Lånekassen', async () => {
-      render(<StudentVurderingPeriodisert grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
+      render(<StudentVurdering grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
       await velgAtSøkerHarAvbruttEtStudie();
       const button = screen.getByRole('button', { name: /Bekreft/ });
       await user.click(button);
@@ -179,7 +179,7 @@ describe('Student', () => {
     });
 
     it('viser feilemdling hvis det ikke er svart på om studiet er avbrutt pga sykdom eller skade', async () => {
-      render(<StudentVurderingPeriodisert grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
+      render(<StudentVurdering grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
       await velgAtSøkerHarAvbruttEtStudie();
       await velgAtStudieErGodkjentAvLånekassen();
 
@@ -194,7 +194,7 @@ describe('Student', () => {
     });
 
     it('viser feilmelding hvis det ikke er svart på om brukeren trenger behandling for å gjenoppta studiet', async () => {
-      render(<StudentVurderingPeriodisert grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
+      render(<StudentVurdering grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
 
       await velgAtSøkerHarAvbruttEtStudie();
       await velgAtStudieErGodkjentAvLånekassen();
@@ -211,7 +211,7 @@ describe('Student', () => {
     });
 
     it('viser feilmelding hvis det ikke er svart på når studieevnen ble nedsatt', async () => {
-      render(<StudentVurderingPeriodisert grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
+      render(<StudentVurdering grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
       await velgAtSøkerHarAvbruttEtStudie();
       await velgAtStudieErGodkjentAvLånekassen();
       await velgAtStudieErAvbruttPgaSykdomEllerSkade();
@@ -229,7 +229,7 @@ describe('Student', () => {
     });
 
     it('viser feilmelding hvis det ikke er svart på om det er forventet at fraværet blir over 6 mnd', async () => {
-      render(<StudentVurderingPeriodisert grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
+      render(<StudentVurdering grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
       await velgAtSøkerHarAvbruttEtStudie();
       await velgAtStudieErGodkjentAvLånekassen();
       await velgAtStudieErAvbruttPgaSykdomEllerSkade();
@@ -246,7 +246,7 @@ describe('Student', () => {
 
     it('skal vise korrekt informasjon fra søknaden dersom det har blitt besvart ja i søknaden', async () => {
       render(
-        <StudentVurderingPeriodisert
+        <StudentVurdering
           behandlingVersjon={0}
           readOnly={false}
           grunnlag={{
@@ -266,7 +266,7 @@ describe('Student', () => {
 
     it('skal vise korrekt informasjon fra søknaden dersom det har blitt besvart avbrutt i søknaden', async () => {
       render(
-        <StudentVurderingPeriodisert
+        <StudentVurdering
           behandlingVersjon={0}
           readOnly={false}
           grunnlag={{
@@ -286,7 +286,7 @@ describe('Student', () => {
 
     it('skal vise korrekt informasjon fra søknaden dersom det har blitt besvart nei i søknaden', async () => {
       render(
-        <StudentVurderingPeriodisert
+        <StudentVurdering
           behandlingVersjon={0}
           readOnly={false}
           grunnlag={{
@@ -307,7 +307,7 @@ describe('Student', () => {
 
     it('viser feilmelding dersom dato for avbrutt studie settes frem i tid', async () => {
       render(
-        <StudentVurderingPeriodisert
+        <StudentVurdering
           behandlingVersjon={0}
           readOnly={false}
           grunnlag={{
@@ -344,7 +344,7 @@ describe('Student', () => {
 
     it('viser feilmelding dersom dato for avbrutt studie er ugyldig', async () => {
       render(
-        <StudentVurderingPeriodisert
+        <StudentVurdering
           behandlingVersjon={0}
           readOnly={false}
           grunnlag={{
@@ -421,7 +421,7 @@ describe('Student', () => {
 
     it('Skal vise en tekst om hvem som har gjort vurderingen dersom det finnes en mellomlagring', () => {
       render(
-        <StudentVurderingPeriodisert
+        <StudentVurdering
           readOnly={false}
           behandlingVersjon={0}
           grunnlag={grunnlagUtenVurdering}
@@ -433,7 +433,7 @@ describe('Student', () => {
     });
 
     it('Skal vise en tekst om hvem som har lagret vurdering dersom bruker trykker på lagre mellomlagring', async () => {
-      render(<StudentVurderingPeriodisert readOnly={false} behandlingVersjon={0} grunnlag={grunnlagUtenVurdering} />);
+      render(<StudentVurdering readOnly={false} behandlingVersjon={0} grunnlag={grunnlagUtenVurdering} />);
 
       await user.type(
         screen.getByRole('textbox', { name: 'Vurder §11-14 og vilkårene i §7 i forskriften' }),
@@ -456,7 +456,7 @@ describe('Student', () => {
 
     it('Skal ikke vise tekst om hvem som har gjort mellomlagring dersom bruker trykker på slett mellomlagring', async () => {
       render(
-        <StudentVurderingPeriodisert
+        <StudentVurdering
           readOnly={false}
           behandlingVersjon={0}
           grunnlag={grunnlagUtenVurdering}
@@ -477,7 +477,7 @@ describe('Student', () => {
 
     it('Skal bruke mellomlagring som defaultValue i skjema dersom det finnes', () => {
       render(
-        <StudentVurderingPeriodisert
+        <StudentVurdering
           readOnly={false}
           behandlingVersjon={0}
           grunnlag={grunnlagMedVurdering}
@@ -492,7 +492,7 @@ describe('Student', () => {
     });
 
     it('Skal bruke bekreftet vurdering fra grunnlag som defaultValue i skjema dersom mellomlagring ikke finnes', () => {
-      render(<StudentVurderingPeriodisert readOnly={false} behandlingVersjon={0} grunnlag={grunnlagMedVurdering} />);
+      render(<StudentVurdering readOnly={false} behandlingVersjon={0} grunnlag={grunnlagMedVurdering} />);
 
       const begrunnelseFelt = screen.getByRole('textbox', {
         name: 'Vurder §11-14 og vilkårene i §7 i forskriften',
@@ -503,7 +503,7 @@ describe('Student', () => {
 
     it('Skal resette skjema til tomt skjema dersom det ikke finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
       render(
-        <StudentVurderingPeriodisert
+        <StudentVurdering
           readOnly={false}
           behandlingVersjon={0}
           grunnlag={grunnlagUtenVurdering}
@@ -529,7 +529,7 @@ describe('Student', () => {
 
     it('Skal resette skjema til bekreftet vurdering dersom det finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
       render(
-        <StudentVurderingPeriodisert
+        <StudentVurdering
           readOnly={false}
           behandlingVersjon={0}
           grunnlag={grunnlagMedVurdering}
@@ -556,7 +556,7 @@ describe('Student', () => {
 
     it('Skal ikke være mulig å lagre eller slette mellomlagring hvis det er readOnly', () => {
       render(
-        <StudentVurderingPeriodisert
+        <StudentVurdering
           readOnly={true}
           behandlingVersjon={0}
           grunnlag={grunnlagMedVurdering}

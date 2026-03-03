@@ -26,15 +26,15 @@ import {
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
-import { RelevantInformasjonStudent } from 'components/behandlinger/sykdom/student/studentperiodisert/RelevantInformasjonStudent';
-import { StudentVurderingFelter } from 'components/behandlinger/sykdom/student/studentperiodisert/StudentVurderingFelter';
+import { RelevantInformasjonStudent } from 'components/behandlinger/sykdom/student/studentvurdering/RelevantInformasjonStudent';
+import { StudentVurderingFelter } from 'components/behandlinger/sykdom/student/studentvurdering/StudentVurderingFelter';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { parse } from 'date-fns';
 import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
 import { mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
 import { VurderingStatus } from 'components/periodisering/VurderingStatusTag';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
-import { VedtattStudentVurderinger } from 'components/behandlinger/sykdom/student/studentperiodisert/VedtattStudentVurderinger';
+import { VedtattStudentVurderinger } from 'components/behandlinger/sykdom/student/studentvurdering/VedtattStudentVurderinger';
 import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
 
 interface Props {
@@ -64,12 +64,7 @@ export interface StudentVurdering extends VurderingMeta {
 
 type DraftFormFields = Partial<StudentFormFields>;
 
-export const StudentVurderingPeriodisert = ({
-  readOnly,
-  initialMellomlagretVurdering,
-  grunnlag,
-  behandlingVersjon,
-}: Props) => {
+export const StudentVurdering = ({ readOnly, initialMellomlagretVurdering, grunnlag, behandlingVersjon }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
 
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =

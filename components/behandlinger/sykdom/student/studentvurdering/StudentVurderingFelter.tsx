@@ -7,7 +7,7 @@ import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrap
 import { validerDato } from 'lib/validation/dateValidation';
 import { parseDatoFraDatePicker } from 'lib/utils/date';
 import { isAfter } from 'date-fns';
-import { StudentFormFields } from 'components/behandlinger/sykdom/student/studentperiodisert/StudentVurderingPeriodisert';
+import { StudentFormFields } from 'components/behandlinger/sykdom/student/studentvurdering/StudentVurdering';
 import { diagnoseSøker, ingenDiagnoseCode } from 'lib/diagnosesøker/DiagnoseSøker';
 import { AsyncComboSearch } from 'components/form/asynccombosearch/AsyncComboSearch';
 
