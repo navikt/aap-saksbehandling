@@ -93,7 +93,7 @@ export const StudentVurderingFelter = ({ index, readOnly }: Props) => {
             name={`vurderinger.${index}.kodeverk`}
             control={form.control}
             label={'Velg system for diagnoser'}
-            rules={{ required: 'Du må velge et system for diagnoser' }}
+            rules={{ required: 'Du må velge et system for diagnoser.' }}
             readOnly={readOnly}
             size={'small'}
             horisontal={true}
@@ -109,7 +109,7 @@ export const StudentVurderingFelter = ({ index, readOnly }: Props) => {
                 name={`vurderinger.${index}.hoveddiagnose`}
                 fetcher={async (value) => (kodeverkValue ? diagnoseSøker(kodeverkValue, value) : [])}
                 defaultOptions={defaultOptionsHoveddiagnose}
-                rules={{ required: 'Du må velge en hoveddiagnose' }}
+                rules={{ required: 'Du må velge en hoveddiagnose.' }}
                 readOnly={readOnly}
               />
               {form.watch(`vurderinger.${index}.hoveddiagnose`)?.value !== ingenDiagnoseCode && (

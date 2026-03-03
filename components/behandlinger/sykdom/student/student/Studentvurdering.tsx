@@ -141,7 +141,7 @@ export const Studentvurdering = ({
           { value: 'ICD10', label: 'Spesialisthelsetjenesten (ICD10)' },
         ],
         defaultValue: defaultValues.kodeverk,
-        rules: { required: 'Du må velge et system for diagnoser' },
+        rules: { required: 'Du må velge et system for diagnoser.' },
       },
       hoveddiagnose: {
         type: 'async_combobox',
@@ -261,7 +261,7 @@ export const Studentvurdering = ({
             name={'kodeverk'}
             control={form.control}
             label={'Velg system for diagnoser'}
-            rules={{ required: 'Du må velge et system for diagnoser' }}
+            rules={{ required: 'Du må velge et system for diagnoser.' }}
             readOnly={formReadOnly}
             size={'small'}
             horisontal={true}
@@ -277,7 +277,7 @@ export const Studentvurdering = ({
                 name={'hoveddiagnose'}
                 fetcher={async (value) => diagnoseSøker(kodeverkValue, value)}
                 defaultOptions={defaultOptionsHoveddiagnose}
-                rules={{ required: 'Du må velge en hoveddiagnose' }}
+                rules={{ required: 'Du må velge en hoveddiagnose.' }}
                 readOnly={formReadOnly}
               />
               {form.watch(`hoveddiagnose`)?.value !== ingenDiagnoseCode && (
