@@ -109,24 +109,22 @@ export const EtableringAvEgenVirksomhet = ({
       // valider at summan av alle utviklingsperioder ikke er lengre enn 6 mnd
       const alleUtviklingsperioder = data.vurderinger.map((vurdering) => vurdering.utviklingsperioder).flat();
       const utviklingsperioderDuration = summerPerioderVarighetIArbeidsdager(alleUtviklingsperioder);
-      console.log('utviklingsperioder', utviklingsperioderDuration);
       if (utviklingsperioderDuration + (grunnlag.bruktUtviklingsDager || 0) > 131) {
         validerTidsplan = false;
         form.setError(`vurderinger`, {
           type: 'custom',
-          message: 'Utviklingsperiode kan ikke være lengre enn 6 mnd',
+          message: `Utviklingsfase kan ikke være lengre enn 6 mnd. Du legger til ${utviklingsperioderDuration} dager. Allerede brukte uviklingsdager: ${grunnlag.bruktUtviklingsDager}.`,
         });
       }
 
       // valider at summen av alle oppstartsperioder ikke er lengre enn 3 mnd
       const alleOppstartsperioder = data.vurderinger.map((vurdering) => vurdering.oppstartsperioder).flat();
       const oppstartsperioderDuration = summerPerioderVarighetIArbeidsdager(alleOppstartsperioder);
-      console.log('oppstart', oppstartsperioderDuration);
       if (oppstartsperioderDuration + (grunnlag.bruktOppstartsdager || 0) > 66) {
         validerTidsplan = false;
         form.setError(`vurderinger`, {
           type: 'custom',
-          message: 'Oppstartsperiode kan ikke være lengre enn 3 mnd',
+          message: `Oppstartsfase kan ikke være lengre enn 3 mnd. Du legger til ${oppstartsperioderDuration} dager. Allerede brukte oppstartsdager: ${grunnlag.bruktOppstartsdager}.`,
         });
       }
       if (!validerTidsplan) {
