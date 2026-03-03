@@ -14,7 +14,7 @@ import {
   VStack,
 } from '@navikt/ds-react';
 import { Kelvinsøk } from 'components/kelvinsøkeresultat/Kelvinsøk';
-import { ArrowRightLeftIcon, LeaveIcon, XMarkIcon } from '@navikt/aksel-icons';
+import { ArrowRightLeftIcon, LeaveIcon, XMarkIcon, ExternalLinkIcon } from '@navikt/aksel-icons';
 import { Kelvinsøkeresultat } from 'components/kelvinsøkeresultat/Kelvinsøkeresultat';
 import styles from './KelvinAppHeader.module.css';
 import { AppSwitcher } from 'components/kelvinappheader/AppSwitcher';
@@ -23,6 +23,7 @@ import { LokalBrukerBytte } from 'components/lokalbrukerbytte/LokalBrukerBytte';
 import { Roller } from 'lib/services/azure/azureUserService';
 import { SøkeResultat } from 'app/api/kelvinsok/route';
 import Endringslogg from '@navikt/familie-endringslogg';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 interface BrukerInformasjon {
   navn: string;
@@ -84,6 +85,7 @@ export const KelvinAppHeader = ({
   const [søkeresultat, setSøkeresultat] = useState<SøkeResultat | undefined>(undefined);
   const [endringsloggÅpen, setEndringsloggÅpen] = useState<boolean>(false);
 
+  const lenkeMetabase = useFeatureFlag('LenkeMetabase');
   return (
     <>
       <InternalHeader>
@@ -92,7 +94,18 @@ export const KelvinAppHeader = ({
         <HStack gap="4" marginInline="4" className={styles.kelvinAppHeaderMenuItems}>
           <Kelvinsøk setSøkeresultat={setSøkeresultat} />
           <Link href={`/oppgave/`}>Oppgaveliste</Link>
-          <Link href={`/oppgave/produksjonsstyring`}>Produksjonsstyring</Link>
+
+          {lenkeMetabase ? (
+            <Link
+              href={'https://metabase.ansatt.nav.no/public/dashboard/da1ad654-13a9-492c-bfa0-8cc828aab274?'}
+              target="_blank"
+            >
+              Produksjonsstyring <ExternalLinkIcon />
+            </Link>
+          ) : (
+            <Link href={`/oppgave/produksjonsstyring`}>Produksjonsstyring</Link>
+          )}
+
           {lokalLenkeTilSaksoversikt && <Link href={`/saksbehandling/saksoversikt`}>Saksoversikt</Link>}
         </HStack>
 

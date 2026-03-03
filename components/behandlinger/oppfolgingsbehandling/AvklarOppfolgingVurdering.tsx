@@ -60,6 +60,8 @@ export const AvklaroppfolgingVurdering = ({
     mellomlagretVurdering
   );
 
+  const skalVurderesAvNavKontor = grunnlag.hvemSkalFølgeOpp == 'Lokalkontor';
+
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag.grunnlag);
@@ -119,7 +121,7 @@ export const AvklaroppfolgingVurdering = ({
     <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'Avklar oppfølgingsoppgave'}
       steg="AVKLAR_OPPFØLGING"
-      vilkårTilhørerNavKontor={true}
+      vilkårTilhørerNavKontor={skalVurderesAvNavKontor}
       onSubmit={handleSubmit}
       status={status}
       isLoading={isLoading}
