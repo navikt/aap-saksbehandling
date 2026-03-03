@@ -109,22 +109,22 @@ export const EtableringAvEgenVirksomhet = ({
       // valider at summan av alle utviklingsperioder ikke er lengre enn 6 mnd
       const alleUtviklingsperioder = data.vurderinger.map((vurdering) => vurdering.utviklingsperioder).flat();
       const utviklingsperioderDuration = summerPerioderVarighetIArbeidsdager(alleUtviklingsperioder);
-      if (utviklingsperioderDuration + (grunnlag.bruktUtviklingsDager || 0) > 131) {
+      if (utviklingsperioderDuration > 131) {
         validerTidsplan = false;
         form.setError(`vurderinger`, {
           type: 'custom',
-          message: `Utviklingsfase kan ikke være lengre enn 6 mnd. Du legger til ${utviklingsperioderDuration} dager. Allerede brukte uviklingsdager: ${grunnlag.bruktUtviklingsDager}.`,
+          message: `Utviklingsfase kan ikke være lengre enn 6 mnd. Du legger til ${utviklingsperioderDuration} arbeidsdager. Maks antall dager totalt er 131.`,
         });
       }
 
       // valider at summen av alle oppstartsperioder ikke er lengre enn 3 mnd
       const alleOppstartsperioder = data.vurderinger.map((vurdering) => vurdering.oppstartsperioder).flat();
       const oppstartsperioderDuration = summerPerioderVarighetIArbeidsdager(alleOppstartsperioder);
-      if (oppstartsperioderDuration + (grunnlag.bruktOppstartsdager || 0) > 66) {
+      if (oppstartsperioderDuration > 66) {
         validerTidsplan = false;
         form.setError(`vurderinger`, {
           type: 'custom',
-          message: `Oppstartsfase kan ikke være lengre enn 3 mnd. Du legger til ${oppstartsperioderDuration} dager. Allerede brukte oppstartsdager: ${grunnlag.bruktOppstartsdager}.`,
+          message: `Oppstartsfase kan ikke være lengre enn 3 mnd. Du legger til ${oppstartsperioderDuration} arbeidsdager. Maks antall dager totalt er 66.`,
         });
       }
       if (!validerTidsplan) {
@@ -247,7 +247,7 @@ export const EtableringAvEgenVirksomhet = ({
           index={index}
           initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
         >
-          <EtableringAvEgenVirksomhetFormInput form={form} readOnly={formReadOnly} index={index} />
+          <EtableringAvEgenVirksomhetFormInput form={form} readOnly={formReadOnly} index={index} grunnlag={grunnlag} />
         </NyVurderingExpandableCard>
       ))}
       {form.formState.errors.vurderinger && (

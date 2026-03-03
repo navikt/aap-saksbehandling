@@ -10,7 +10,11 @@ import { useFieldArray, UseFormReturn, useWatch } from 'react-hook-form';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { EtableringAvEgenVirksomhetForm } from 'components/behandlinger/sykdom/etableringegenvirksomhet/EtableringAvEgenVirksomhet';
 import { JaEllerNei } from 'lib/utils/form';
-import { EtableringEierBrukerVirksomheten, lagEnumObjektFraUnionType } from 'lib/types/types';
+import {
+  EtableringEgenVirksomhetGrunnlagResponse,
+  EtableringEierBrukerVirksomheten,
+  lagEnumObjektFraUnionType,
+} from 'lib/types/types';
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { useEffect } from 'react';
 
@@ -24,8 +28,9 @@ type Props = {
   form: UseFormReturn<EtableringAvEgenVirksomhetForm>;
   readOnly: boolean;
   index: number;
+  grunnlag: EtableringEgenVirksomhetGrunnlagResponse;
 };
-export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly }: Props) => {
+export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly, grunnlag }: Props) => {
   const utviklingsperioder = useFieldArray({ control: form.control, name: `vurderinger.${index}.utviklingsperioder` });
   const oppstartsperioder = useFieldArray({ control: form.control, name: `vurderinger.${index}.oppstartsperioder` });
 
@@ -119,9 +124,17 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly }: P
         <VStack gap={'4'}>
           <VStack>
             <Label size={'small'}>Utviklingsfase</Label>
-            <BodyShort textColor={'subtle'} size={'small'}>
-              Kan gis for inntil 6 måneder
-            </BodyShort>
+            <VStack gap={'1'}>
+              <BodyShort textColor={'subtle'} size={'small'}>
+                Kan gis for inntil 6 måneder
+              </BodyShort>
+              {grunnlag.bruktUtviklingsDager && grunnlag.bruktUtviklingsDager > 0 ? (
+                <BodyShort
+                  textColor={'subtle'}
+                  size={'small'}
+                >{`Brukt: ${grunnlag.bruktUtviklingsDager} arbeidsdager`}</BodyShort>
+              ) : null}
+            </VStack>
           </VStack>
           {form.formState.errors.vurderinger?.[index]?.utviklingsperioder && (
             <Alert variant={'error'}>{form.formState.errors.vurderinger[index].utviklingsperioder.message}</Alert>
@@ -192,9 +205,17 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly }: P
         <VStack gap={'4'}>
           <VStack>
             <Label size={'small'}>Oppstartsfase</Label>
-            <BodyShort textColor={'subtle'} size={'small'}>
-              Kan gis for inntil 3 måneder
-            </BodyShort>
+            <VStack gap={'1'}>
+              <BodyShort textColor={'subtle'} size={'small'}>
+                Kan gis for inntil 3 måneder.
+              </BodyShort>
+              {grunnlag.bruktOppstartsdager && grunnlag.bruktOppstartsdager > 0 ? (
+                <BodyShort
+                  textColor={'subtle'}
+                  size={'small'}
+                >{`Brukt: ${grunnlag.bruktOppstartsdager} arbeidsdager`}</BodyShort>
+              ) : null}
+            </VStack>
           </VStack>
           {form.formState.errors.vurderinger?.[index]?.oppstartsperioder && (
             <Alert variant={'error'}>{form.formState.errors.vurderinger[index].oppstartsperioder.message}</Alert>
