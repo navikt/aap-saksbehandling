@@ -8,6 +8,8 @@ import { validerDato } from 'lib/validation/dateValidation';
 import { parseDatoFraDatePicker } from 'lib/utils/date';
 import { isAfter } from 'date-fns';
 import { StudentFormFields } from 'components/behandlinger/sykdom/student/studentperiodisert/StudentVurderingPeriodisert';
+import { diagnoseSøker, ingenDiagnoseCode } from 'lib/diagnosesøker/DiagnoseSøker';
+import { AsyncComboSearch } from 'components/form/asynccombosearch/AsyncComboSearch';
 
 interface Props {
   index: number;
@@ -16,6 +18,9 @@ interface Props {
 
 export const StudentVurderingFelter = ({ index, readOnly }: Props) => {
   const form = useFormContext<StudentFormFields>();
+  const kodeverkValue = form.watch(`vurderinger.${index}.kodeverk`);
+  const defaultOptionsHoveddiagnose = kodeverkValue ? diagnoseSøker(kodeverkValue, '') : [];
+  const defaultOptionsBidiagnose = kodeverkValue ? diagnoseSøker(kodeverkValue, '') : [];
 
   return (
     <VStack gap={'4'}>
@@ -83,20 +88,59 @@ export const StudentVurderingFelter = ({ index, readOnly }: Props) => {
       )}
 
       {form.watch(`vurderinger.${index}.avbruttPgaSykdomEllerSkade`) === JaEllerNei.Ja && (
-        <RadioGroupWrapper
-          name={`vurderinger.${index}.harBehovForBehandling`}
-          control={form.control}
-          label={'Har brukeren behov for behandling for å gjenoppta studiet?'}
-          rules={{ required: 'Du må svare på om brukeren har behov for behandling for å gjenoppta studiet.' }}
-          readOnly={readOnly}
-        >
-          {JaEllerNeiOptions.map((option) => (
-            <Radio key={option.value} value={option.value}>
-              {option.label}
-            </Radio>
-          ))}
-        </RadioGroupWrapper>
+        <>
+          <RadioGroupWrapper
+            name={`vurderinger.${index}.kodeverk`}
+            control={form.control}
+            label={'Velg system for diagnoser'}
+            rules={{ required: 'Du må velge et system for diagnoser' }}
+            readOnly={readOnly}
+            size={'small'}
+            horisontal={true}
+          >
+            <Radio value={'ICPC2'}>{'Primærhelsetjenesten (ICPC2)'}</Radio>
+            <Radio value={'ICD10'}>{'Spesialisthelsetjenesten (ICD10)'}</Radio>
+          </RadioGroupWrapper>
+          {kodeverkValue != null && (
+            <>
+              <AsyncComboSearch
+                label={'Hoveddiagnose'}
+                form={form}
+                name={`vurderinger.${index}.hoveddiagnose`}
+                fetcher={async (value) => (kodeverkValue ? diagnoseSøker(kodeverkValue, value) : [])}
+                defaultOptions={defaultOptionsHoveddiagnose}
+                rules={{ required: 'Du må velge en hoveddiagnose' }}
+                readOnly={readOnly}
+              />
+              {form.watch(`vurderinger.${index}.hoveddiagnose`)?.value !== ingenDiagnoseCode && (
+                <AsyncComboSearch
+                  label={'Bidiagnoser'}
+                  form={form}
+                  isMulti={true}
+                  name={`vurderinger.${index}.bidiagnose`}
+                  fetcher={async (value) => (kodeverkValue ? diagnoseSøker(kodeverkValue, value) : [])}
+                  defaultOptions={defaultOptionsBidiagnose}
+                  readOnly={readOnly}
+                />
+              )}
+            </>
+          )}
+        </>
       )}
+
+      <RadioGroupWrapper
+        name={`vurderinger.${index}.harBehovForBehandling`}
+        control={form.control}
+        label={'Har brukeren behov for behandling for å gjenoppta studiet?'}
+        rules={{ required: 'Du må svare på om brukeren har behov for behandling for å gjenoppta studiet.' }}
+        readOnly={readOnly}
+      >
+        {JaEllerNeiOptions.map((option) => (
+          <Radio key={option.value} value={option.value}>
+            {option.label}
+          </Radio>
+        ))}
+      </RadioGroupWrapper>
 
       {form.watch(`vurderinger.${index}.harBehovForBehandling`) === JaEllerNei.Ja && (
         <RadioGroupWrapper

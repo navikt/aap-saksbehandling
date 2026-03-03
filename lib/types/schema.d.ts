@@ -2075,6 +2075,41 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/drift/api/jobb/feilende/antall': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': number;
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/drift/api/jobb/planlagte-jobber': {
     parameters: {
       query?: never;
@@ -12352,6 +12387,7 @@ export interface components {
       avbruttStudieDato?: string | null;
       begrunnelse: string;
       besluttetAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
+      bidiagnoser?: string[] | null;
       /**
        * Format: date
        * @example 2025-04-01
@@ -12360,6 +12396,8 @@ export interface components {
       'godkjentStudieAvL\u00E5nekassen'?: boolean | null;
       harAvbruttStudie: boolean;
       harBehovForBehandling?: boolean | null;
+      hoveddiagnose?: string | null;
+      kodeverk?: string | null;
       kvalitetssikretAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
       /**
        * Format: date
@@ -14044,6 +14082,7 @@ export interface components {
        */
       avbruttStudieDato?: string | null;
       begrunnelse: string;
+      bidiagnoser?: string[] | null;
       /**
        * Format: date
        * @example 2025-04-01
@@ -14052,6 +14091,8 @@ export interface components {
       'godkjentStudieAvL\u00E5nekassen'?: boolean | null;
       harAvbruttStudie: boolean;
       harBehovForBehandling?: boolean | null;
+      hoveddiagnose?: string | null;
+      kodeverk?: string | null;
       /**
        * Format: date
        * @example 2025-04-01
@@ -14067,6 +14108,7 @@ export interface components {
        */
       avbruttStudieDato?: string | null;
       begrunnelse: string;
+      bidiagnoser?: string[] | null;
       /**
        * Format: date
        * @example 2025-04-01
@@ -14075,6 +14117,8 @@ export interface components {
       'godkjentStudieAvL\u00E5nekassen'?: boolean | null;
       harAvbruttStudie: boolean;
       harBehovForBehandling?: boolean | null;
+      hoveddiagnose?: string | null;
+      kodeverk?: string | null;
       /**
        * Format: date
        * @example 2025-04-01

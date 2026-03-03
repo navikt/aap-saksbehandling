@@ -13,6 +13,8 @@ import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
+import { DiagnoseSystem, diagnoseSøker } from 'lib/diagnosesøker/DiagnoseSøker';
+import { ValuePair } from 'components/form/FormField';
 
 import { erUendeligSlutt, formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { Dato } from 'lib/types/Dato';
@@ -59,6 +61,9 @@ export interface StudentVurdering {
   vurdertAv?: VurdertAvAnsatt;
   kvalitetssikretAv?: VurdertAvAnsatt;
   besluttetAv?: VurdertAvAnsatt;
+  kodeverk?: DiagnoseSystem;
+  hoveddiagnose?: ValuePair;
+  bidiagnose?: ValuePair[];
 }
 
 type DraftFormFields = Partial<StudentFormFields>;
@@ -118,6 +123,9 @@ export const StudentVurderingPeriodisert = ({
           godkjentStudieAvLånekassen: vurdering.godkjentStudieAvLånekassen
             ? vurdering.godkjentStudieAvLånekassen === JaEllerNei.Ja
             : undefined,
+          kodeverk: vurdering.kodeverk,
+          hoveddiagnose: vurdering.hoveddiagnose?.value,
+          bidiagnoser: vurdering.bidiagnose?.map((d) => d.value),
         };
       });
 
@@ -218,7 +226,6 @@ function mapVurderingToDraftFormFields(grunnlag: StudentGrunnlag): DraftFormFiel
   if (trengerVurderingsForslag(grunnlag)) {
     return hentPerioderSomTrengerVurdering(grunnlag, () => emptyStudentVurdering());
   }
-
   return {
     vurderinger: grunnlag.nyeVurderinger?.map((vurdering) => {
       return {
@@ -235,6 +242,21 @@ function mapVurderingToDraftFormFields(grunnlag: StudentGrunnlag): DraftFormFiel
         vurdertAv: vurdering?.vurdertAv,
         kvalitetssikretAv: vurdering?.kvalitetssikretAv,
         besluttetAv: vurdering?.besluttetAv,
+        kodeverk: (vurdering?.kodeverk as DiagnoseSystem) ?? undefined,
+        hoveddiagnose: vurdering?.hoveddiagnose
+          ? {
+              value: vurdering.hoveddiagnose,
+              label:
+                diagnoseSøker((vurdering.kodeverk as DiagnoseSystem) ?? 'ICPC2', vurdering.hoveddiagnose)[0]?.label ||
+                vurdering.hoveddiagnose,
+            }
+          : undefined,
+        bidiagnose: vurdering?.bidiagnoser
+          ? vurdering.bidiagnoser.map((d) => ({
+              value: d,
+              label: diagnoseSøker((vurdering.kodeverk as DiagnoseSystem) ?? 'ICPC2', d)[0]?.label || d,
+            }))
+          : undefined,
       };
     }),
   };
@@ -251,6 +273,9 @@ function emptyStudentVurdering(): StudentVurdering {
     harAvbruttStudie: '',
     harBehovForBehandling: '',
     erNyVurdering: true,
+    kodeverk: undefined,
+    hoveddiagnose: undefined,
+    bidiagnose: undefined,
   };
 }
 

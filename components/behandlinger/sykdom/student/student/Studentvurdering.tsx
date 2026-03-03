@@ -7,19 +7,24 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgG
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
-import { BodyShort, Label } from '@navikt/ds-react';
+import { BodyShort, Label, Radio } from '@navikt/ds-react';
 import { validerDato } from 'lib/validation/dateValidation';
 import { useConfigForm } from 'components/form/FormHook';
-import { FormField } from 'components/form/FormField';
+import { FormField, ValuePair } from 'components/form/FormField';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { diagnoseSøker, DiagnoseSystem, ingenDiagnoseCode } from 'lib/diagnosesøker/DiagnoseSøker';
+import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
+import { AsyncComboSearch } from 'components/form/asynccombosearch/AsyncComboSearch';
 
 interface Props {
   behandlingVersjon: number;
   grunnlag?: StudentGrunnlag;
   readOnly: boolean;
   initialMellomlagretVurdering?: MellomlagretVurdering;
+  hoveddiagnoseDefaultOptions?: ValuePair[];
+  bidiagnoserDeafultOptions?: ValuePair[];
 }
 
 interface FormFields {
@@ -30,11 +35,21 @@ interface FormFields {
   harBehovForBehandling?: string;
   avbruttDato?: string;
   avbruddMerEnn6Måneder?: string;
+  kodeverk?: DiagnoseSystem;
+  hoveddiagnose?: ValuePair;
+  bidiagnose?: ValuePair[];
 }
 
 type DraftFormFields = Partial<FormFields>;
 
-export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly, initialMellomlagretVurdering }: Props) => {
+export const Studentvurdering = ({
+  behandlingVersjon,
+  grunnlag,
+  readOnly,
+  initialMellomlagretVurdering,
+  hoveddiagnoseDefaultOptions,
+  bidiagnoserDeafultOptions,
+}: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('AVKLAR_STUDENT');
@@ -102,7 +117,7 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly, initia
               return valideringsresultat;
             }
 
-            const inputDato = parseDatoFraDatePicker(value);
+            const inputDato = parseDatoFraDatePicker(value as string);
             if (inputDato) {
               return isAfter(inputDato, new Date())
                 ? 'Dato for når stuideevnen ble 100% nedsatt / avbrutt kan ikke være frem i tid.'
@@ -117,6 +132,24 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly, initia
         options: JaEllerNeiOptions,
         defaultValue: defaultValues.avbruddMerEnn6Måneder,
         rules: { required: 'Du må svare på om avbruddet er forventet å vare i mer enn 6 måneder.' },
+      },
+      kodeverk: {
+        type: 'radio',
+        label: 'Velg system for diagnoser',
+        options: [
+          { value: 'ICPC2', label: 'Primærhelsetjenesten (ICPC2)' },
+          { value: 'ICD10', label: 'Spesialisthelsetjenesten (ICD10)' },
+        ],
+        defaultValue: defaultValues.kodeverk,
+        rules: { required: 'Du må velge et system for diagnoser' },
+      },
+      hoveddiagnose: {
+        type: 'async_combobox',
+        defaultValue: defaultValues.hoveddiagnose,
+      },
+      bidiagnose: {
+        type: 'async_combobox',
+        defaultValue: defaultValues.bidiagnose,
       },
     },
     { readOnly: formReadOnly, shouldUnregister: true }
@@ -146,6 +179,9 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly, initia
               godkjentStudieAvLånekassen: data.godkjentStudieAvLånekassen
                 ? data.godkjentStudieAvLånekassen === JaEllerNei.Ja
                 : undefined,
+              kodeverk: data.kodeverk,
+              hoveddiagnose: data.hoveddiagnose?.value,
+              bidiagnoser: data.bidiagnose?.map((d) => d.value),
             },
           },
           referanse: behandlingsReferanse,
@@ -157,6 +193,19 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly, initia
       );
     })(event);
   };
+
+  const kodeverkValue = form.watch('kodeverk');
+  console.log(kodeverkValue);
+  const defaultOptionsHoveddiagnose = hoveddiagnoseDefaultOptions
+    ? hoveddiagnoseDefaultOptions
+    : kodeverkValue
+      ? diagnoseSøker(kodeverkValue, '')
+      : [];
+  const defaultOptionsBidiagnose = bidiagnoserDeafultOptions
+    ? bidiagnoserDeafultOptions
+    : kodeverkValue
+      ? diagnoseSøker(kodeverkValue, '')
+      : [];
 
   return (
     <VilkårskortMedFormOgMellomlagringNyVisning
@@ -207,7 +256,45 @@ export const Studentvurdering = ({ behandlingVersjon, grunnlag, readOnly, initia
         <FormField form={form} formField={formFields.avbruttPgaSykdomEllerSkade} horizontalRadio />
       )}
       {form.watch('avbruttPgaSykdomEllerSkade') === JaEllerNei.Ja && (
-        <FormField form={form} formField={formFields.harBehovForBehandling} horizontalRadio />
+        <>
+          <RadioGroupWrapper
+            name={'kodeverk'}
+            control={form.control}
+            label={'Velg system for diagnoser'}
+            rules={{ required: 'Du må velge et system for diagnoser' }}
+            readOnly={formReadOnly}
+            size={'small'}
+            horisontal={true}
+          >
+            <Radio value={'ICPC2'}>{'Primærhelsetjenesten (ICPC2)'}</Radio>
+            <Radio value={'ICD10'}>{'Spesialisthelsetjenesten (ICD10)'}</Radio>
+          </RadioGroupWrapper>
+          {kodeverkValue != null && (
+            <>
+              <AsyncComboSearch
+                label={'Hoveddiagnose'}
+                form={form}
+                name={'hoveddiagnose'}
+                fetcher={async (value) => diagnoseSøker(kodeverkValue, value)}
+                defaultOptions={defaultOptionsHoveddiagnose}
+                rules={{ required: 'Du må velge en hoveddiagnose' }}
+                readOnly={formReadOnly}
+              />
+              {form.watch(`hoveddiagnose`)?.value !== ingenDiagnoseCode && (
+                <AsyncComboSearch
+                  label={'Bidiagnoser'}
+                  form={form}
+                  isMulti={true}
+                  name={'bidiagnose'}
+                  fetcher={async (value) => diagnoseSøker(kodeverkValue, value)}
+                  defaultOptions={defaultOptionsBidiagnose}
+                  readOnly={formReadOnly}
+                />
+              )}
+            </>
+          )}
+          <FormField form={form} formField={formFields.harBehovForBehandling} horizontalRadio />
+        </>
       )}
       {form.watch('harBehovForBehandling') === JaEllerNei.Ja && (
         <FormField form={form} formField={formFields.avbruddMerEnn6Måneder} horizontalRadio />
@@ -251,6 +338,21 @@ function mapVurderingToDraftFormFields(vurdering: StudentGrunnlag['studentvurder
     harBehovForBehandling: getJaNeiEllerUndefined(vurdering?.harBehovForBehandling),
     avbruddMerEnn6Måneder: getJaNeiEllerUndefined(vurdering?.avbruddMerEnn6Måneder),
     avbruttDato: vurdering?.avbruttStudieDato ? formaterDatoForFrontend(vurdering.avbruttStudieDato) : undefined,
+    kodeverk: (vurdering?.kodeverk as DiagnoseSystem) ?? undefined,
+    hoveddiagnose: vurdering?.hoveddiagnose
+      ? {
+          value: vurdering.hoveddiagnose,
+          label:
+            diagnoseSøker((vurdering.kodeverk as DiagnoseSystem) ?? 'ICPC2', vurdering.hoveddiagnose)[0]?.label ||
+            vurdering.hoveddiagnose,
+        }
+      : undefined,
+    bidiagnose: vurdering?.bidiagnoser
+      ? vurdering.bidiagnoser.map((d) => ({
+          value: d,
+          label: diagnoseSøker((vurdering.kodeverk as DiagnoseSystem) ?? 'ICPC2', d)[0]?.label || d,
+        }))
+      : undefined,
   };
 }
 
@@ -263,5 +365,8 @@ function emptyDraftFormFields(): DraftFormFields {
     godkjentStudieAvLånekassen: '',
     harAvbruttStudie: '',
     harBehovForBehandling: '',
+    kodeverk: undefined,
+    hoveddiagnose: undefined,
+    bidiagnose: undefined,
   };
 }
