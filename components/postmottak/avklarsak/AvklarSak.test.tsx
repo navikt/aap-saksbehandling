@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { AvklarSak } from 'components/postmottak/avklarsak/AvklarSak';
 import { FinnSakGrunnlag } from 'lib/types/postmottakTypes';
+import { PostmottakFlytResponse, setPostmottakMockFlytResponse } from 'vitestSetup';
 
 describe('Avklar sak', () => {
   const grunnlag: FinnSakGrunnlag = {
@@ -18,6 +19,8 @@ describe('Avklar sak', () => {
   });
 
   it('Har et valg for å knytte dokumentet til sak', () => {
+    setPostmottakMockFlytResponse(PostmottakFlytResponse);
+
     render(<AvklarSak behandlingsVersjon={1} behandlingsreferanse={'123'} grunnlag={grunnlag} readOnly={false} />);
     expect(screen.getByRole('group', { name: 'Hvor skal dokumentet journalføres?' })).toBeVisible();
   });
