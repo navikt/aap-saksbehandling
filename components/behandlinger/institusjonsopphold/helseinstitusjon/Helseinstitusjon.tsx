@@ -99,7 +99,7 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
 
           const tom = !nesteVurdering
             ? // tom dato for siste vurdering skal alltid være siste dag i oppholdet
-              formaterDatoForBackend(parse(vurdering.periode?.tom || opphold.periode.tom, 'dd.MM.yyyy', new Date()))
+              formaterDatoForBackend(parse(opphold.periode.tom, 'dd.MM.yyyy', new Date()))
             : // tom skal være dagen før fom i neste vurdering
               formaterDatoForBackend(subDays(new Dato(nesteVurdering.periode.fom).dato, 1));
 
