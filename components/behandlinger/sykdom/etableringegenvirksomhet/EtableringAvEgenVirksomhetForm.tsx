@@ -145,11 +145,13 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly }: P
                       <Table.DataCell>
                         <HStack gap={'2'} align={'center'}>
                           <DateInputWrapper
+                            readOnly={readOnly}
                             name={`vurderinger.${index}.utviklingsperioder.${i}.fom`}
                             control={form.control}
                           />
                           {'-'}
                           <DateInputWrapper
+                            readOnly={readOnly}
                             name={`vurderinger.${index}.utviklingsperioder.${i}.tom`}
                             control={form.control}
                           />
@@ -157,6 +159,7 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly }: P
                       </Table.DataCell>
                       <Table.DataCell>
                         <Button
+                          disabled={readOnly}
                           size={'small'}
                           variant={'secondary'}
                           type={'button'}
@@ -171,6 +174,7 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly }: P
             </Table>
             <HStack>
               <Button
+                disabled={readOnly}
                 size={'small'}
                 variant={'secondary'}
                 type={'button'}
@@ -214,11 +218,13 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly }: P
                       <Table.DataCell>
                         <HStack gap={'2'} align={'center'}>
                           <DateInputWrapper
+                            readOnly={readOnly}
                             name={`vurderinger.${index}.oppstartsperioder.${i}.fom`}
                             control={form.control}
                           />
                           {'-'}
                           <DateInputWrapper
+                            readOnly={readOnly}
                             name={`vurderinger.${index}.oppstartsperioder.${i}.tom`}
                             control={form.control}
                           />
@@ -226,6 +232,7 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly }: P
                       </Table.DataCell>
                       <Table.DataCell>
                         <Button
+                          disabled={readOnly}
                           size={'small'}
                           variant={'secondary'}
                           type={'button'}
@@ -240,6 +247,7 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly }: P
             </Table>
             <HStack>
               <Button
+                disabled={readOnly}
                 size={'small'}
                 variant={'secondary'}
                 type={'button'}
