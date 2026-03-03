@@ -315,7 +315,6 @@ function mapErStudentStatusTilString(status: ErStudentStatus): string {
     case 'NEI':
       return 'Nei';
   }
-  return '';
 }
 
 function mapSkalGjenopptaStudieStatus(status: SkalGjenopptaStudieStatus): string | undefined {
