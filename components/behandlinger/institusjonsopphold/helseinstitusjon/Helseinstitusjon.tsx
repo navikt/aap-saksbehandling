@@ -8,7 +8,6 @@ import {
   MellomlagretVurdering,
   Periode,
   VurderingMeta,
-  VurdertAvAnsatt,
 } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 
