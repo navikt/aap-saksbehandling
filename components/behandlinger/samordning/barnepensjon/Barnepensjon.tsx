@@ -13,6 +13,7 @@ import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
 import { BodyLong, BodyShort, Button, Label, Table, VStack } from '@navikt/ds-react';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
+import { MonthPickerWrapper } from 'components/form/monthpickerwrapper/MonthPickerWrapper';
 
 interface Props {
   behandlingVersjon: number;
@@ -59,6 +60,7 @@ export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering }: Props) 
 
   const { fields, remove, append } = useFieldArray({ control: form.control, name: 'barnepensjon' });
 
+  console.log(form.watch());
   return (
     <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'§ 11-27 Samordning barnepensjon (valgfritt)'}
@@ -103,10 +105,22 @@ export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering }: Props) 
                       <BodyShort>Barnepensjon</BodyShort>
                     </Table.DataCell>
                     <Table.DataCell>
-                      <div>PLACEHOLDER fom</div>
+                      <MonthPickerWrapper
+                        name={`barnepensjon.${index}.periode.fom`}
+                        control={form.control}
+                        size={'small'}
+                        hideLabel={true}
+                        label={'Fra og med dato for barnepensjon'}
+                      />
                     </Table.DataCell>
                     <Table.DataCell>
-                      <div>PLACEHOLDER tom</div>
+                      <MonthPickerWrapper
+                        name={`barnepensjon.${index}.periode.tom`}
+                        control={form.control}
+                        size={'small'}
+                        hideLabel={true}
+                        label={'Til og med dato for barnepensjon'}
+                      />
                     </Table.DataCell>
                     <Table.DataCell>
                       <SelectWrapper name={`barnepensjon.${index}.månedsytelse`} control={form.control}>
