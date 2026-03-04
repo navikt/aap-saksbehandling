@@ -32,15 +32,12 @@ interface FormFields {
 }
 
 export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering }: Props) => {
-  // TODO Fiks rikitg behovstype backend har opprettet dette
   const { mellomlagretVurdering, lagreMellomlagring, nullstillMellomlagretVurdering, slettMellomlagring } =
-    useMellomlagring(Behovstype.AVKLAR_HELSEINSTITUSJON);
-  // TODO Fiks rikitg steg når backend har opprettet dette
-  const { status, løsBehovOgGåTilNesteStegError, isLoading } = useLøsBehovOgGåTilNesteSteg('BREV');
-  // TODO Fiks rikitg steg når backend har opprettet dette
+    useMellomlagring(Behovstype.AVKLAR_SAMORDNING_BARNEPENSJON_KODE);
+  const { status, løsBehovOgGåTilNesteStegError, isLoading } = useLøsBehovOgGåTilNesteSteg('SAMORDNING_BARNEPENSJON');
   const { visningModus, visningActions, formReadOnly } = useVilkårskortVisning(
     readOnly,
-    'BREV',
+    'SAMORDNING_BARNEPENSJON',
     initialMellomlagretVurdering
   );
 
@@ -60,11 +57,10 @@ export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering }: Props) 
 
   const { fields, remove, append } = useFieldArray({ control: form.control, name: 'barnepensjon' });
 
-  console.log(form.watch());
   return (
     <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'§ 11-27 Samordning barnepensjon (valgfritt)'}
-      steg={'BREV'} // TODO Fiks når steget er lagt inn i backend
+      steg={'SAMORDNING_BARNEPENSJON'}
       onSubmit={form.handleSubmit((data) => {
         console.log(data);
         nullstillMellomlagretVurdering();
