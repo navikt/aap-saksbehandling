@@ -16,6 +16,7 @@ export const BarnePensjonMedDataFetching = async ({ behandlingsreferanse, stegDa
 
   return (
     <Barnepensjon
+      grunnlag={{}}
       behandlingVersjon={stegData.behandlingVersjon}
       readOnly={stegData.readOnly}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
