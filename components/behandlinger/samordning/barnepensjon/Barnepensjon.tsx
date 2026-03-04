@@ -10,6 +10,7 @@ import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { Behovstype } from 'lib/utils/form';
 import { VStack } from '@navikt/ds-react';
 import { BarnepensjonTabell } from 'components/behandlinger/samordning/barnepensjon/BarnepensjonTabell';
+import { BarnepensjonTidligereVurdering } from 'components/behandlinger/samordning/barnepensjon/BarnepensjonTidligereVurdering';
 
 interface Props {
   behandlingVersjon: number;
@@ -51,6 +52,8 @@ export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering }: Props) 
     { readOnly: formReadOnly }
   );
 
+  const tidligereVurderinger: any[] = []; // TODO Denne skal komme fra grunnlaget
+
   return (
     <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'§ 11-27 Samordning barnepensjon (valgfritt)'}
@@ -71,6 +74,9 @@ export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering }: Props) 
       formReset={() => form.reset()}
     >
       <VStack gap={'8'}>
+        {tidligereVurderinger.map((vurdering, index) => (
+          <BarnepensjonTidligereVurdering key={index} vurdering={vurdering} />
+        ))}
         <FormField form={form} formField={formFields.begrunnelse} />
         <BarnepensjonTabell form={form} readOnly={formReadOnly} />
       </VStack>
