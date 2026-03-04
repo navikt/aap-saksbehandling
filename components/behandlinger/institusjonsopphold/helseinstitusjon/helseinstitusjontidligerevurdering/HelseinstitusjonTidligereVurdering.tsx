@@ -1,12 +1,12 @@
 import { VStack } from '@navikt/ds-react';
 import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
-import { HelseInstiusjonVurdering } from 'lib/types/types';
+import { AvklarPeriodisertHelseinstitusjonLøsning } from 'lib/types/types';
 import { getJaEllerNei } from 'lib/utils/form';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { erReduksjonUtIFraVurdering } from 'lib/utils/institusjonopphold';
 
 interface Props {
-  vurdering: HelseInstiusjonVurdering;
+  vurdering: AvklarPeriodisertHelseinstitusjonLøsning;
 }
 
 export const HelseinstitusjonTidligereVurdering = ({ vurdering }: Props) => {
@@ -32,7 +32,7 @@ export const HelseinstitusjonTidligereVurdering = ({ vurdering }: Props) => {
       {vurderingErReduksjon && (
         <SpørsmålOgSvar
           spørsmål={'Oppgi dato for reduksjon av AAP'}
-          svar={formaterDatoForFrontend(vurdering.periode.fom)}
+          svar={formaterDatoForFrontend(vurdering.fom)}
         />
       )}
     </VStack>

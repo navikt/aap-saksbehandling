@@ -2,7 +2,7 @@ import { addMonths, format, isAfter, isBefore, isEqual, parse, startOfMonth } fr
 import { nb } from 'date-fns/locale';
 import { formatDatoMedMånedsnavn, formaterDatoForFrontend } from 'lib/utils/date';
 import { Dato } from 'lib/types/Dato';
-import { HelseInstiusjonVurdering } from 'lib/types/types';
+import { AvklarPeriodisertHelseinstitusjonLøsning } from 'lib/types/types';
 
 import { JaEllerNei } from 'lib/utils/form';
 import { OppholdVurdering } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/Helseinstitusjon';
@@ -135,7 +135,7 @@ export const validerErIKronologiskRekkeFølge = (value: string, forrigeVurdering
   return true;
 };
 
-export function erReduksjonUtIFraVurdering(data: HelseInstiusjonVurdering): boolean {
+export function erReduksjonUtIFraVurdering(data: AvklarPeriodisertHelseinstitusjonLøsning): boolean {
   return data.faarFriKostOgLosji && data.forsoergerEktefelle === false && data.harFasteUtgifter === false;
 }
 

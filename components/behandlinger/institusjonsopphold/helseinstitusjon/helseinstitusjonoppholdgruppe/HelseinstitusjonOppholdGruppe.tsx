@@ -1,7 +1,7 @@
 import { BodyShort, Box, Button, HStack, Label, VStack } from '@navikt/ds-react';
 import { Buildings3Icon } from '@navikt/aksel-icons';
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
-import { HelseinstitusjonGrunnlag, HelseInstiusjonVurdering } from 'lib/types/types';
+import { AvklarPeriodisertHelseinstitusjonLøsning, HelseinstitusjonGrunnlag } from 'lib/types/types';
 import React from 'react';
 import styles from './HelseinstitusjonOppholdGruppe.module.css';
 import {
@@ -31,7 +31,7 @@ interface Props {
   oppholdIndex: number;
   readonly: boolean;
   opphold: HelseinstitusjonGrunnlag['opphold'][0];
-  tidligereVurderinger?: HelseInstiusjonVurdering[] | null;
+  tidligereVurderinger?: AvklarPeriodisertHelseinstitusjonLøsning[] | null;
   accordionsSignal: AccordionsSignal;
   erAktivUtenAvbryt: boolean;
 }
@@ -92,9 +92,9 @@ export const HelseinstitusjonOppholdGruppe = ({
           {tidligereVurderinger?.map((vurdering) => {
             return (
               <TidligereVurderingExpandableCard
-                key={vurdering.periode.fom}
-                fom={new Dato(vurdering.periode.fom).dato}
-                tom={new Dato(vurdering.periode.tom).dato}
+                key={vurdering.fom}
+                fom={new Dato(vurdering.fom).dato}
+                tom={new Dato(vurdering.tom).dato}
                 foersteNyePeriodeFraDato={foersteNyePeriode == null ? null : parseDatoFraDatePicker(foersteNyePeriode)}
                 vurderingStatus={getErReduksjonEllerIkke(erReduksjonUtIFraVurdering(vurdering))}
               >

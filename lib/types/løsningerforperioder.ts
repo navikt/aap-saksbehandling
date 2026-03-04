@@ -2,11 +2,11 @@ import {
   ArbeidsopptrappingLøsningDto,
   AvklarOppholdkravLøsning,
   AvklarPeriodisertForutgåendeMedlemskapLøsning,
+  AvklarPeriodisertHelseinstitusjonLøsning,
   AvklarPeriodisertLovvalgMedlemskapLøsning,
   AvklarPeriodisertStudentLøsning,
   BistandsbehovLøsning,
   EtableringEgenVirksomhetLøsningDto,
-  HelseInstiusjonVurdering,
   LøsPeriodisertBehovPåBehandling,
   OvergangArbeidLøsning,
   OvergangUforeLøsning,
@@ -90,7 +90,7 @@ interface ForutgåendeMedlemskapMedOverstyring {
 
 interface Helseinstitusjon {
   behovstype: Behovstype.AVKLAR_HELSEINSTITUSJON;
-  løsningerForPerioder: HelseInstiusjonVurdering[];
+  løsningerForPerioder: AvklarPeriodisertHelseinstitusjonLøsning[];
 }
 
 type Behov =

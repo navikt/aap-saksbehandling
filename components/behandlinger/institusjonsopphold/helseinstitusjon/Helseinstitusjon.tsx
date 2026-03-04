@@ -3,8 +3,8 @@
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { InstitusjonsoppholdTabell } from 'components/behandlinger/institusjonsopphold/InstitusjonsoppholdTabell';
 import {
+  AvklarPeriodisertHelseinstitusjonLøsning,
   HelseinstitusjonGrunnlag,
-  HelseInstiusjonVurdering,
   MellomlagretVurdering,
   Periode,
   VurderingMeta,
@@ -89,33 +89,33 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
-      const vurderinger: HelseInstiusjonVurdering[] = data.helseinstitusjonsvurderinger.flatMap((opphold) => {
-        return opphold.vurderinger.map((vurdering, index) => {
-          const nesteVurdering = opphold.vurderinger.at(index + 1);
+      const vurderinger: AvklarPeriodisertHelseinstitusjonLøsning[] = data.helseinstitusjonsvurderinger.flatMap(
+        (opphold) => {
+          return opphold.vurderinger.map((vurdering, index) => {
+            const nesteVurdering = opphold.vurderinger.at(index + 1);
 
-          const fom = vurdering.periode?.fom
-            ? formaterDatoForBackend(parse(vurdering.periode.fom, 'dd.MM.yyyy', new Date()))
-            : formaterDatoForBackend(parse(opphold.periode.fom, 'dd.MM.yyyy', new Date()));
+            const fom = vurdering.periode?.fom
+              ? formaterDatoForBackend(parse(vurdering.periode.fom, 'dd.MM.yyyy', new Date()))
+              : formaterDatoForBackend(parse(opphold.periode.fom, 'dd.MM.yyyy', new Date()));
 
-          const tom = !nesteVurdering
-            ? // tom dato for siste vurdering skal alltid være siste dag i oppholdet
-              formaterDatoForBackend(parse(vurdering.periode?.tom || opphold.periode.tom, 'dd.MM.yyyy', new Date()))
-            : // tom skal være dagen før fom i neste vurdering
-              formaterDatoForBackend(subDays(new Dato(nesteVurdering.periode.fom).dato, 1));
+            const tom = !nesteVurdering
+              ? // tom dato for siste vurdering skal alltid være siste dag i oppholdet
+                formaterDatoForBackend(parse(vurdering.periode?.tom || opphold.periode.tom, 'dd.MM.yyyy', new Date()))
+              : // tom skal være dagen før fom i neste vurdering
+                formaterDatoForBackend(subDays(new Dato(nesteVurdering.periode.fom).dato, 1));
 
-          return {
-            oppholdId: vurdering.oppholdId,
-            begrunnelse: vurdering.begrunnelse,
-            faarFriKostOgLosji: vurdering.faarFriKostOgLosji === JaEllerNei.Ja,
-            forsoergerEktefelle: vurdering.forsoergerEktefelle === JaEllerNei.Ja,
-            harFasteUtgifter: vurdering.harFasteUtgifter === JaEllerNei.Ja,
-            periode: {
+            return {
+              oppholdId: vurdering.oppholdId,
+              begrunnelse: vurdering.begrunnelse,
+              faarFriKostOgLosji: vurdering.faarFriKostOgLosji === JaEllerNei.Ja,
+              forsoergerEktefelle: vurdering.forsoergerEktefelle === JaEllerNei.Ja,
+              harFasteUtgifter: vurdering.harFasteUtgifter === JaEllerNei.Ja,
               fom: fom,
               tom: tom,
-            },
-          };
-        });
-      });
+            };
+          });
+        }
+      );
 
       løsPeriodisertBehovOgGåTilNesteSteg(
         {
@@ -163,10 +163,13 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
           <HelseinstitusjonOppholdGruppe
             key={oppholdField.id}
             opphold={grunnlag.opphold.find((o) => o.oppholdId === oppholdField.oppholdId)!}
-            tidligereVurderinger={
-              grunnlag.vedtatteVurderinger.find((vurdering) => vurdering.oppholdId === oppholdField.oppholdId)
-                ?.vurderinger
-            }
+            tidligereVurderinger={grunnlag.vedtatteVurderinger
+              .find((vurdering) => vurdering.oppholdId === oppholdField.oppholdId)
+              ?.vurderinger?.map((v) => ({
+                ...v,
+                fom: v.periode.fom,
+                tom: v.periode.tom,
+              }))}
             accordionsSignal={accordionsSignal}
             oppholdIndex={oppholdIndex}
             form={form}

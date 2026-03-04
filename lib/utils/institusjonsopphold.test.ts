@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { Dato } from 'lib/types/Dato';
-import { HelseInstiusjonVurdering } from 'lib/types/types';
+import { AvklarPeriodisertHelseinstitusjonLøsning } from 'lib/types/types';
 import {
   beregnReduksjonsdatoVedNyttOpphold,
   beregnTidligsteReduksjonsdato,
@@ -72,14 +72,11 @@ describe('validerReduksjonsdatoInnenforOpphold', () => {
 });
 
 describe('erReduksjon', () => {
-  const defaultVurdering: HelseInstiusjonVurdering = {
+  const defaultVurdering: AvklarPeriodisertHelseinstitusjonLøsning = {
     begrunnelse: 'Hello Pello',
     faarFriKostOgLosji: false,
-    oppholdId: '123',
-    periode: {
-      fom: '2025-01-01',
-      tom: '2025-08-01',
-    },
+    fom: '2025-01-01',
+    tom: '2025-08-01',
   };
 
   it('returnerer true når faarFriKostOgLosji er true og de andre er false', () => {
