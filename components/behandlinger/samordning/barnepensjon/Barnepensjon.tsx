@@ -9,11 +9,11 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgG
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { Behovstype } from 'lib/utils/form';
-import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
-import { BodyLong, BodyShort, Button, HStack, Label, Table, VStack } from '@navikt/ds-react';
+import { BodyLong, Button, HStack, Label, Table, VStack } from '@navikt/ds-react';
 import { TableStyled } from 'components/tablestyled/TableStyled';
-import { PlusCircleIcon } from '@navikt/aksel-icons';
+import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { MonthPickerWrapper } from 'components/form/monthpickerwrapper/MonthPickerWrapper';
+import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
 
 interface Props {
   behandlingVersjon: number;
@@ -97,11 +97,9 @@ export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering }: Props) 
               {fields.map((field, index) => {
                 return (
                   <Table.Row key={field.id}>
-                    <Table.DataCell textSize={'small'}>
-                      <BodyShort>Barnepensjon</BodyShort>
-                    </Table.DataCell>
+                    <Table.DataCell textSize={'small'}>Barnepensjon</Table.DataCell>
                     <Table.DataCell>
-                      <HStack gap={'2'}>
+                      <HStack gap={'2'} align={'center'}>
                         <MonthPickerWrapper
                           name={`barnepensjon.${index}.periode.fom`}
                           control={form.control}
@@ -123,24 +121,22 @@ export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering }: Props) 
                     </Table.DataCell>
                     <Table.DataCell></Table.DataCell>
                     <Table.DataCell>
-                      <SelectWrapper
-                        name={`barnepensjon.${index}.månedsytelse`}
+                      <TextFieldWrapper
                         control={form.control}
+                        name={`barnepensjon.${index}.månedsytelse`}
                         label={'Hvilken månedsytelse'}
                         hideLabel
-                      >
-                        <option value=""></option>
-                        <option value="hei">Hei</option>
-                        <option value="hå">Hå</option>
-                      </SelectWrapper>
+                        type={'number'}
+                      />
                     </Table.DataCell>
+                    <Table.DataCell>Dagsats</Table.DataCell>
                     <Table.DataCell>
-                      <div>PLACEHOLDER DAGSATS</div>
-                    </Table.DataCell>
-                    <Table.DataCell>
-                      <Button variant={'tertiary'} onClick={() => remove(index)}>
-                        Fjern
-                      </Button>
+                      <Button
+                        variant={'tertiary'}
+                        type={'button'}
+                        icon={<TrashIcon fontSize={'1.5rem'} />}
+                        onClick={() => remove(index)}
+                      />
                     </Table.DataCell>
                   </Table.Row>
                 );
