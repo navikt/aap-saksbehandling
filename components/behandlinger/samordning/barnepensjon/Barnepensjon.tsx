@@ -4,16 +4,12 @@ import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårs
 import { MellomlagretVurdering, Periode } from 'lib/types/types';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
-import { useFieldArray } from 'react-hook-form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { Behovstype } from 'lib/utils/form';
-import { BodyLong, Button, HStack, Label, Table, VStack } from '@navikt/ds-react';
-import { TableStyled } from 'components/tablestyled/TableStyled';
-import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
-import { MonthPickerWrapper } from 'components/form/monthpickerwrapper/MonthPickerWrapper';
-import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
+import { VStack } from '@navikt/ds-react';
+import { BarnepensjonTabell } from 'components/behandlinger/samordning/barnepensjon/BarnepensjonTabell';
 
 interface Props {
   behandlingVersjon: number;
@@ -26,7 +22,7 @@ interface Barnepensjon {
   månedsytelse: string;
 }
 
-interface FormFields {
+export interface BarnePensjonFormFields {
   begrunnelse: string;
   barnepensjon: Barnepensjon[];
 }
@@ -41,7 +37,7 @@ export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering }: Props) 
     initialMellomlagretVurdering
   );
 
-  const { form, formFields } = useConfigForm<FormFields>(
+  const { form, formFields } = useConfigForm<BarnePensjonFormFields>(
     {
       begrunnelse: {
         type: 'textarea',
@@ -54,8 +50,6 @@ export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering }: Props) 
     },
     { readOnly: formReadOnly }
   );
-
-  const { fields, remove, append } = useFieldArray({ control: form.control, name: 'barnepensjon' });
 
   return (
     <VilkårskortMedFormOgMellomlagringNyVisning
@@ -78,88 +72,7 @@ export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering }: Props) 
     >
       <VStack gap={'8'}>
         <FormField form={form} formField={formFields.begrunnelse} />
-
-        <VStack gap={'space-8'}>
-          <Label size={'small'}>Legg til periode med samordning av barnepensjon</Label>
-          <BodyLong size={'small'}>Legg til perioder med barnepensjon som skal samordnes med AAP.</BodyLong>
-          <TableStyled size={'small'}>
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell>Ytelse</Table.HeaderCell>
-                <Table.HeaderCell>Periode</Table.HeaderCell>
-                <Table.HeaderCell></Table.HeaderCell>
-                <Table.HeaderCell>Månedsytelse</Table.HeaderCell>
-                <Table.HeaderCell>Dagsats</Table.HeaderCell>
-                <Table.HeaderCell></Table.HeaderCell>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {fields.map((field, index) => {
-                return (
-                  <Table.Row key={field.id}>
-                    <Table.DataCell textSize={'small'}>Barnepensjon</Table.DataCell>
-                    <Table.DataCell>
-                      <HStack gap={'2'} align={'center'}>
-                        <MonthPickerWrapper
-                          name={`barnepensjon.${index}.periode.fom`}
-                          control={form.control}
-                          form={form}
-                          size={'small'}
-                          hideLabel={true}
-                          label={'Fra og med dato for barnepensjon'}
-                        />
-                        <div>-</div>
-                        <MonthPickerWrapper
-                          name={`barnepensjon.${index}.periode.tom`}
-                          control={form.control}
-                          form={form}
-                          size={'small'}
-                          hideLabel={true}
-                          label={'Til og med dato for barnepensjon'}
-                        />
-                      </HStack>
-                    </Table.DataCell>
-                    <Table.DataCell></Table.DataCell>
-                    <Table.DataCell>
-                      <TextFieldWrapper
-                        control={form.control}
-                        name={`barnepensjon.${index}.månedsytelse`}
-                        label={'Hvilken månedsytelse'}
-                        hideLabel
-                        type={'number'}
-                      />
-                    </Table.DataCell>
-                    <Table.DataCell>Dagsats</Table.DataCell>
-                    <Table.DataCell>
-                      <Button
-                        variant={'tertiary'}
-                        type={'button'}
-                        icon={<TrashIcon fontSize={'1.5rem'} />}
-                        onClick={() => remove(index)}
-                      />
-                    </Table.DataCell>
-                  </Table.Row>
-                );
-              })}
-            </Table.Body>
-          </TableStyled>
-          <div>
-            <Button
-              onClick={() =>
-                append({
-                  periode: { fom: '', tom: '' },
-                  månedsytelse: '',
-                })
-              }
-              variant={'tertiary'}
-              type={'button'}
-              icon={<PlusCircleIcon />}
-              size={'small'}
-            >
-              Legg til
-            </Button>
-          </div>
-        </VStack>
+        <BarnepensjonTabell form={form} readOnly={formReadOnly} />
       </VStack>
     </VilkårskortMedFormOgMellomlagringNyVisning>
   );
