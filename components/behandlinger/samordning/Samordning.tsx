@@ -13,6 +13,7 @@ import { SamordningArbeidsgiverMedDatafetching } from 'components/behandlinger/s
 import { SamordningBarnepensjonMedDatafetching } from 'components/behandlinger/samordning/samordningBarnepensjon/SamordningBarnepensjonMedDatafetching';
 import { SykestipendMedDataFetching } from 'components/behandlinger/samordning/sykestipend/SykestipendMedDataFetching';
 import { BarnePensjonMedDataFetching } from 'components/behandlinger/samordning/barnepensjon/BarnepensjonMedDataFetching';
+import { unleashService } from 'lib/services/unleash/unleashService';
 
 interface Props {
   behandlingsreferanse: string;
@@ -40,10 +41,11 @@ export const Samordning = async ({ behandlingsreferanse }: Props) => {
       visning={flyt.data.visning}
       aktivtSteg={flyt.data.aktivtSteg}
     >
-      <StegSuspense>
-        <BarnePensjonMedDataFetching behandlingsreferanse={behandlingsreferanse} />
-      </StegSuspense>
-
+      {unleashService.isEnabled('SamordningBarnepensjon') && (
+        <StegSuspense>
+          <BarnePensjonMedDataFetching behandlingsreferanse={behandlingsreferanse} />
+        </StegSuspense>
+      )}
       <StegSuspense>
         <SamordningBarnepensjonMedDatafetching behandlingsreferanse={behandlingsreferanse} />
       </StegSuspense>
