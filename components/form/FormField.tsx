@@ -125,6 +125,7 @@ export const FormField = <FormFieldIds extends FieldValues>(props: Props<FormFie
           name={formField.name}
           label={formField.label}
           control={form.control}
+          form={form}
           rules={formField.rules}
           size={size}
           hideLabel={formField.hideLabel}

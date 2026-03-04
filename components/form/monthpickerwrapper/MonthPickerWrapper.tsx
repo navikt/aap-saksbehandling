@@ -1,5 +1,5 @@
 import { MonthPicker, useMonthpicker } from '@navikt/ds-react';
-import { Control, FieldPath, FieldValues, RegisterOptions, useController } from 'react-hook-form';
+import { Control, FieldPath, FieldValues, RegisterOptions, useController, UseFormReturn } from 'react-hook-form';
 import React from 'react';
 import { format, isValid } from 'date-fns';
 import { isDate } from 'lodash';
@@ -10,6 +10,7 @@ const formatDateToLocaleDateOrEmptyString = (date: Date | undefined) =>
 export interface MonthPickerProps<FormFieldValues extends FieldValues> {
   control: Control<FormFieldValues>;
   name: FieldPath<FormFieldValues>;
+  form: UseFormReturn<FormFieldValues>;
   label?: string;
   description?: React.ReactNode;
   disableWeekends?: boolean;
@@ -33,11 +34,9 @@ export function MonthPickerWrapper<FormFieldValues extends FieldValues>({
   description,
   label,
   readOnly,
+  form,
 }: MonthPickerProps<FormFieldValues>) {
-  const {
-    field,
-    fieldState: { error },
-  } = useController({
+  const { field, fieldState } = useController({
     name,
     control,
     rules: {
@@ -49,6 +48,13 @@ export function MonthPickerWrapper<FormFieldValues extends FieldValues>({
   const { monthpickerProps, inputProps } = useMonthpicker({
     onMonthChange: (date) => date && field.onChange(formatDateToLocaleDateOrEmptyString(date)),
     defaultSelected: field.value ? new Date(field.value) : undefined,
+    onValidate: (val) => {
+      if (!val.isValidMonth) {
+        form.setError(name, { message: 'Ugyldig datoformat' });
+      } else {
+        form.clearErrors(name);
+      }
+    },
   });
 
   return (
@@ -59,7 +65,7 @@ export function MonthPickerWrapper<FormFieldValues extends FieldValues>({
         label={label}
         description={description}
         hideLabel={hideLabel}
-        error={error?.message}
+        error={fieldState.error?.message}
         readOnly={readOnly}
         size={size}
       />

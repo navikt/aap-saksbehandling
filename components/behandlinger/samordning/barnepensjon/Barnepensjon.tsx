@@ -10,7 +10,7 @@ import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { Behovstype } from 'lib/utils/form';
 import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
-import { BodyLong, BodyShort, Button, Label, Table, VStack } from '@navikt/ds-react';
+import { BodyLong, BodyShort, Button, HStack, Label, Table, VStack } from '@navikt/ds-react';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { MonthPickerWrapper } from 'components/form/monthpickerwrapper/MonthPickerWrapper';
@@ -105,25 +105,34 @@ export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering }: Props) 
                       <BodyShort>Barnepensjon</BodyShort>
                     </Table.DataCell>
                     <Table.DataCell>
-                      <MonthPickerWrapper
-                        name={`barnepensjon.${index}.periode.fom`}
-                        control={form.control}
-                        size={'small'}
-                        hideLabel={true}
-                        label={'Fra og med dato for barnepensjon'}
-                      />
+                      <HStack gap={'2'}>
+                        <MonthPickerWrapper
+                          name={`barnepensjon.${index}.periode.fom`}
+                          control={form.control}
+                          form={form}
+                          size={'small'}
+                          hideLabel={true}
+                          label={'Fra og med dato for barnepensjon'}
+                        />
+                        <div>-</div>
+                        <MonthPickerWrapper
+                          name={`barnepensjon.${index}.periode.tom`}
+                          control={form.control}
+                          form={form}
+                          size={'small'}
+                          hideLabel={true}
+                          label={'Til og med dato for barnepensjon'}
+                        />
+                      </HStack>
                     </Table.DataCell>
+                    <Table.DataCell></Table.DataCell>
                     <Table.DataCell>
-                      <MonthPickerWrapper
-                        name={`barnepensjon.${index}.periode.tom`}
+                      <SelectWrapper
+                        name={`barnepensjon.${index}.månedsytelse`}
                         control={form.control}
-                        size={'small'}
-                        hideLabel={true}
-                        label={'Til og med dato for barnepensjon'}
-                      />
-                    </Table.DataCell>
-                    <Table.DataCell>
-                      <SelectWrapper name={`barnepensjon.${index}.månedsytelse`} control={form.control}>
+                        label={'Hvilken månedsytelse'}
+                        hideLabel
+                      >
                         <option value=""></option>
                         <option value="hei">Hei</option>
                         <option value="hå">Hå</option>
