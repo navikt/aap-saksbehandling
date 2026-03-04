@@ -35,9 +35,11 @@ type DraftFormFields = Partial<BarnePensjonFormFields>;
 export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering, behandlingVersjon, grunnlag }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
   const { mellomlagretVurdering, lagreMellomlagring, nullstillMellomlagretVurdering, slettMellomlagring } =
-    useMellomlagring(Behovstype.AVKLAR_SAMORDNING_BARNEPENSJON_KODE);
+    useMellomlagring(Behovstype.AVKLAR_SAMORDNING_BARNEPENSJON_KODE, initialMellomlagretVurdering);
+
   const { løsBehovOgGåTilNesteSteg, status, løsBehovOgGåTilNesteStegError, isLoading } =
     useLøsBehovOgGåTilNesteSteg('SAMORDNING_BARNEPENSJON');
+
   const { visningModus, visningActions, formReadOnly } = useVilkårskortVisning(
     readOnly,
     'SAMORDNING_BARNEPENSJON',
