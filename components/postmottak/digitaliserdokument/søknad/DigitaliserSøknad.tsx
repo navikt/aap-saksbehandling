@@ -78,13 +78,19 @@ function mapTilSøknadKontrakt(data: SøknadFormFields) {
       harArbeidetINorgeSiste5År: data.harArbeidetINorgeSiste5År === JaNeiIkkeOppgitt.JA ? 'Ja' : 'Nei',
       harBoddINorgeSiste5År: data.harBoddINorgeSiste5År === JaNeiIkkeOppgitt.JA ? 'Ja' : 'Nei',
       iTilleggArbeidUtenforNorge: data.iTilleggArbeidUtenforNorge === JaNeiIkkeOppgitt.JA ? 'Ja' : 'Nei',
-      utenlandsOpphold: data.utenlandsOpphold.map((u) => ({
-        land: u.land,
-        fraDato: formaterDatoForBackend(parse(u.fraDato, 'dd.MM.yyyy', new Date())),
-        tilDato: formaterDatoForBackend(parse(u.tilDato, 'dd.MM.yyyy', new Date())),
-        iArbeid: u.iArbeid,
-        utenlandsId: u.utenlandsId || undefined,
-      })),
+      utenlandsOpphold: data.utenlandsOpphold.map((u) => {
+        const fraDato = formaterDatoForBackend(parse(u.fraDato, 'dd.MM.yyyy', new Date()));
+        const tilDato = formaterDatoForBackend(parse(u.tilDato, 'dd.MM.yyyy', new Date()));
+        return {
+          land: u.land,
+          fraDato,
+          fraDatoLocalDate: fraDato,
+          tilDato,
+          tilDatoLocalDate: tilDato,
+          iArbeid: u.iArbeid,
+          utenlandsId: u.utenlandsId || undefined,
+        };
+      }),
     },
     oppgitteBarn: {
       identer: [],
