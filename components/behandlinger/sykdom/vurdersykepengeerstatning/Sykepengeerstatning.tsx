@@ -29,8 +29,7 @@ import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
-import { VurderingerListe } from 'components/periodisering/VurderingerListe';
-import { useSak } from 'hooks/SakHook';
+import { TidligereVurderingerListe } from 'components/periodisering/TidligereVurderingerListe';
 
 interface Props {
   behandlingVersjon: number;
@@ -40,7 +39,6 @@ interface Props {
 }
 
 export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, initialMellomlagretVurdering }: Props) => {
-  const { sak } = useSak();
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsPeriodisertBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_SYKEPENGEERSTATNING');
@@ -66,8 +64,6 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
     reValidateMode: 'onChange',
     shouldUnregister: true,
   });
-
-  const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
 
   const {
     fields: vurderingerFields,
@@ -148,31 +144,27 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
       onLeggTilVurdering={onAddPeriode}
       errorList={errorList}
     >
-      <VurderingerListe
-        startDato={parseISO(sak.periode.fom)}
-        ikkeRelevantePerioder={grunnlag.ikkeRelevantePerioder}
-        vedtatteVurderinger={vedtatteVurderinger}
-        nyeVurderinger={vurderingerFields}
-        renderVedtattVurdering={(vurdering) => {
-          return (
-            <TidligereVurderingExpandableCard
-              key={vurdering.fom}
-              fom={parseISO(vurdering.fom)}
-              tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
-              foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-              vurderingStatus={getErOppfyltEllerIkkeStatus(vurdering.harRettPå)}
-            >
-              <OppholdskravSykepengererstatninbgTidligereVurdering
-                fraDato={vurdering.fom}
-                begrunnelse={vurdering.begrunnelse}
-                oppfyller={vurdering.harRettPå}
-                grunn={vurdering.grunn}
-              />
-            </TidligereVurderingExpandableCard>
-          );
-        }}
-        renderNyVurdering={(vurdering, index) => {
-          const erOppfyltFelt = form.watch(`vurderinger.${index}.erOppfylt`);
+      <TidligereVurderingerListe
+        grunnlag={grunnlag}
+        renderVedtattVurdering={(vurdering) => (
+          <TidligereVurderingExpandableCard
+            key={vurdering.fom}
+            fom={parseISO(vurdering.fom)}
+            tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
+            foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+            vurderingStatus={getErOppfyltEllerIkkeStatus(vurdering.harRettPå)}
+          >
+            <OppholdskravSykepengererstatninbgTidligereVurdering
+              fraDato={vurdering.fom}
+              begrunnelse={vurdering.begrunnelse}
+              oppfyller={vurdering.harRettPå}
+              grunn={vurdering.grunn}
+            />
+          </TidligereVurderingExpandableCard>
+        )}
+      />
+      {vurderingerFields.map((vurdering, index) => {
+        const erOppfyltFelt = form.watch(`vurderinger.${index}.erOppfylt`);
 
         return (
           <NyVurderingExpandableCard
@@ -194,29 +186,6 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
           </NyVurderingExpandableCard>
         );
       })}
-          return (
-            <NyVurderingExpandableCard
-              key={vurdering.id}
-              fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-              vurderingStatus={erOppfyltFelt ? getErOppfyltEllerIkkeStatus(erOppfyltFelt === JaEllerNei.Ja) : undefined}
-              nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
-              isLast={index === vurderingerFields.length - 1}
-              accordionsSignal={accordionsSignal}
-              vurdertAv={vurdering.vurdertAv}
-              kvalitetssikretAv={vurdering.kvalitetssikretAv}
-              besluttetAv={vurdering.besluttetAv}
-              finnesFeil={finnesFeilForVurdering(index, errorList)}
-              readonly={formReadOnly}
-              onSlettVurdering={() => remove(index)}
-              harTidligereVurderinger={tidligereVurderinger.length > 0}
-              index={index}
-              initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
-            >
-              <SykepengeerstatningFormInput form={form} readOnly={formReadOnly} index={index} />
-            </NyVurderingExpandableCard>
-          );
-        }}
-      />
     </VilkårskortPeriodisert>
   );
 };

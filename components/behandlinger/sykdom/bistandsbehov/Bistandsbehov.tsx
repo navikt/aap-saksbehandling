@@ -32,8 +32,7 @@ import { Link, VStack } from '@navikt/ds-react';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
-import { useSak } from 'hooks/SakHook';
-import { VurderingerListe } from 'components/periodisering/VurderingerListe';
+import { TidligereVurderingerListe } from 'components/periodisering/TidligereVurderingerListe';
 
 interface Props {
   behandlingVersjon: number;
@@ -58,7 +57,6 @@ export interface BistandVurderingForm extends VurderingMeta {
 }
 
 export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, initialMellomlagretVurdering }: Props) => {
-  const { sak } = useSak();
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_BISTANDSBEHOV');
@@ -106,7 +104,6 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, initialMe
   };
 
   const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
-  const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const foersteNyePeriode = fields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
   const errorList = mapPeriodiserteVurderingerErrorList<LovOgMedlemskapVurderingForm>(form.formState.errors);
 
@@ -153,23 +150,26 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, initialMe
           }
         />
 
-        {vedtatteVurderinger.map((vurdering) => (
-          <TidligereVurderingExpandableCard
-            key={vurdering.fom}
-            fom={parseISO(vurdering.fom)}
-            tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
-            foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-            vurderingStatus={getErOppfyltEllerIkkeStatus(
-              !!(
-                vurdering.erBehovForAktivBehandling ||
-                vurdering.erBehovForArbeidsrettetTiltak ||
-                vurdering.erBehovForAnnenOppfølging
-              )
-            )}
-          >
-            <BistandsbehovTidligereVurdering vurdering={vurdering} />
-          </TidligereVurderingExpandableCard>
-        ))}
+        <TidligereVurderingerListe
+          grunnlag={grunnlag}
+          renderVedtattVurdering={(vurdering) => (
+            <TidligereVurderingExpandableCard
+              key={vurdering.fom}
+              fom={parseISO(vurdering.fom)}
+              tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
+              foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+              vurderingStatus={getErOppfyltEllerIkkeStatus(
+                !!(
+                  vurdering.erBehovForAktivBehandling ||
+                  vurdering.erBehovForArbeidsrettetTiltak ||
+                  vurdering.erBehovForAnnenOppfølging
+                )
+              )}
+            >
+              <BistandsbehovTidligereVurdering vurdering={vurdering} />
+            </TidligereVurderingExpandableCard>
+          )}
+        />
 
         {fields.map((vurdering, index) => (
           <NyVurderingExpandableCard
@@ -190,54 +190,6 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, initialMe
             <BistandsbehovVurderingForm form={form} readOnly={formReadOnly} index={index} />
           </NyVurderingExpandableCard>
         ))}
-        <VurderingerListe
-          startDato={parseISO(sak.periode.fom)}
-          ikkeRelevantePerioder={grunnlag.ikkeRelevantePerioder}
-          vedtatteVurderinger={vedtatteVurderinger}
-          nyeVurderinger={fields}
-          renderVedtattVurdering={(vurdering) => {
-            return (
-              <TidligereVurderingExpandableCard
-                key={vurdering.fom}
-                fom={parseISO(vurdering.fom)}
-                tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
-                foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-                vurderingStatus={getErOppfyltEllerIkkeStatus(
-                  !!(
-                    vurdering.erBehovForAktivBehandling ||
-                    vurdering.erBehovForArbeidsrettetTiltak ||
-                    vurdering.erBehovForAnnenOppfølging
-                  )
-                )}
-              >
-                <BistandsbehovTidligereVurdering vurdering={vurdering} />
-              </TidligereVurderingExpandableCard>
-            );
-          }}
-          renderNyVurdering={(vurdering, index) => {
-            return (
-              <NyVurderingExpandableCard
-                key={vurdering.id}
-                accordionsSignal={accordionsSignal}
-                fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-                nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
-                isLast={index === fields.length - 1}
-                vurderingStatus={getErOppfyltEllerIkkeStatus(erNyVurderingOppfylt(form.watch(`vurderinger.${index}`)))}
-                vurdertAv={vurdering.vurdertAv}
-                kvalitetssikretAv={vurdering.kvalitetssikretAv}
-                besluttetAv={vurdering.besluttetAv}
-                readonly={formReadOnly}
-                onSlettVurdering={() => remove(index)}
-                harTidligereVurderinger={tidligereVurderinger.length > 0}
-                index={index}
-                finnesFeil={finnesFeilForVurdering(index, errorList)}
-                initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
-              >
-                <BistandsbehovVurderingForm form={form} readOnly={formReadOnly} index={index} />
-              </NyVurderingExpandableCard>
-            );
-          }}
-        />
       </VStack>
     </VilkårskortPeriodisert>
   );

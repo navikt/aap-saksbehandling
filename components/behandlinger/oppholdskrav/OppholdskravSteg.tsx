@@ -31,8 +31,7 @@ import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import { BodyLong, Link, VStack } from '@navikt/ds-react';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
-import { VurderingerListe } from 'components/periodisering/VurderingerListe';
-import { useSak } from 'hooks/SakHook';
+import { TidligereVurderingerListe } from 'components/periodisering/TidligereVurderingerListe';
 
 type Props = {
   grunnlag: OppholdskravGrunnlagResponse;
@@ -42,7 +41,6 @@ type Props = {
 };
 
 export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVersjon, readOnly }: Props) => {
-  const { sak } = useSak();
   const behandlingsreferanse = useBehandlingsReferanse();
 
   const { løsPeriodisertBehovOgGåTilNesteSteg, status, løsBehovOgGåTilNesteStegError, isLoading } =
@@ -69,8 +67,6 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
     reValidateMode: 'onChange',
     shouldUnregister: true,
   });
-
-  const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
 
   const {
     fields: vurderingerFields,
@@ -154,74 +150,25 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
             Du kan lese om hvordan vilkåret skal vurderes i rundskrivet til § 11-3 (lovdata.no)
           </Link>
         </BodyLong>
-
-        <VurderingerListe
-          startDato={parseISO(sak.periode.fom)}
-          ikkeRelevantePerioder={grunnlag.ikkeRelevantePerioder}
-          vedtatteVurderinger={vedtatteVurderinger}
-          nyeVurderinger={vurderingerFields}
-          renderVedtattVurdering={(vurdering) => {
-            return (
-              <TidligereVurderingExpandableCard
-                key={vurdering.fom}
-                fom={parseISO(vurdering.fom)}
-                tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
-                foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-                vurderingStatus={getErOppfyltEllerIkkeStatus(vurdering.oppfylt)}
-              >
-                <OppholdskravTidligereVurdering
-                  fraDato={vurdering.fom}
-                  begrunnelse={vurdering.begrunnelse}
-                  land={vurdering.land}
-                  oppfyller={vurdering.oppfylt}
-                />
-              </TidligereVurderingExpandableCard>
-            );
-          }}
-          renderNyVurdering={(vurdering, index) => {
-            return (
-              <NyVurderingExpandableCard
-                key={vurdering.id}
-                accordionsSignal={accordionsSignal}
-                fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-                vurderingStatus={
-                  form.watch(`vurderinger.${index}.oppfyller`)
-                    ? getErOppfyltEllerIkkeStatus(form.watch(`vurderinger.${index}.oppfyller`) === JaEllerNei.Ja)
-                    : undefined
-                }
-                nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
-                isLast={index === vurderingerFields.length - 1}
-                vurdertAv={vurdering.vurdertAv}
-                kvalitetssikretAv={vurdering.kvalitetssikretAv}
-                besluttetAv={vurdering.besluttetAv}
-                finnesFeil={finnesFeilForVurdering(index, errorList)}
-                readonly={formReadOnly}
-                onSlettVurdering={() => remove(index)}
-                harTidligereVurderinger={tidligereVurderinger.length > 0}
-                index={index}
-                initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
-              >
-                <OppholdskravFormInput form={form} readOnly={formReadOnly} index={index} />
-              </NyVurderingExpandableCard>
-            );
-          }}
+        <TidligereVurderingerListe
+          grunnlag={grunnlag}
+          renderVedtattVurdering={(vurdering) => (
+            <TidligereVurderingExpandableCard
+              key={vurdering.fom}
+              fom={parseISO(vurdering.fom)}
+              tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
+              foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+              vurderingStatus={getErOppfyltEllerIkkeStatus(vurdering.oppfylt)}
+            >
+              <OppholdskravTidligereVurdering
+                fraDato={vurdering.fom}
+                begrunnelse={vurdering.begrunnelse}
+                land={vurdering.land}
+                oppfyller={vurdering.oppfylt}
+              />
+            </TidligereVurderingExpandableCard>
+          )}
         />
-        {vedtatteVurderinger.map((vurdering) => (
-          <TidligereVurderingExpandableCard
-            key={vurdering.fom}
-            fom={parseISO(vurdering.fom)}
-            tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
-            foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-            vurderingStatus={getErOppfyltEllerIkkeStatus(vurdering.oppfylt)}
-          >
-            <OppholdskravTidligereVurdering
-              fraDato={vurdering.fom}
-              begrunnelse={vurdering.begrunnelse}
-              land={vurdering.land}
-              oppfyller={vurdering.oppfylt}
-            />
-          </TidligereVurderingExpandableCard>
-        ))}
 
         {vurderingerFields.map((vurdering, index) => (
           <NyVurderingExpandableCard

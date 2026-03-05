@@ -16,7 +16,6 @@ export const mockedFlags: Flags = {
   VisAvslagsaarsaker: true,
   DigitaliseringAvMeldekortV2Frontend: true,
   VisRettigheterForVedtak: true,
-  PeriodiseringHelseinstitusjonOpphold: true,
   VisIkkeRelevantPeriode: true,
   VirksomhetsEtablering: true,
   NyTidligereVurderinger: true,
