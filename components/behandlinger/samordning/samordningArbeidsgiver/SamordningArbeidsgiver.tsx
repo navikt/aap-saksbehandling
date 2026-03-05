@@ -147,7 +147,7 @@ export const SamordningArbeidsgiver = ({
             />
           )}
 
-          {grunnlag.harFåttEkstrautbetalingFraArbeidsgiver && (
+          {grunnlag.harFåttEkstrautbetalingFraArbeidsgiver != null && (
             <VStack>
               <BodyShort size={'small'} weight={'semibold'}>
                 Relevant informasjon fra søknad:
