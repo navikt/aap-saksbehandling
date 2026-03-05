@@ -2,7 +2,7 @@ import { Button, HStack, Label, VStack } from '@navikt/ds-react';
 import { PlusCircleFillIcon } from '@navikt/aksel-icons';
 import { FieldPath, useFieldArray, UseFormReturn } from 'react-hook-form';
 import { SøknadFormFields } from './DigitaliserSøknad';
-import { JaEllerNei, JaNeiIkkeOppgitt } from 'lib/postmottakForm';
+import { JaEllerNei } from 'lib/postmottakForm';
 import { FormFields } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { LeggTilUtenlandsOpphold } from './LeggTilUtenlandsOpphold';
@@ -23,28 +23,22 @@ export const Medlemskap = ({ form, formFields, readOnly }: Props) => {
   return (
     <VStack gap={'3'}>
       <FormField form={form} formField={formFields.harBoddINorgeSiste5År} />
-      {harBoddINorgeSiste5År === JaNeiIkkeOppgitt.JA && (
+      {harBoddINorgeSiste5År === JaEllerNei.Ja && (
         <>
           <FormField form={form} formField={formFields.harArbeidetINorgeSiste5År} />
           <FormField form={form} formField={formFields.arbeidetUtenforNorgeFørSykdom} />
         </>
       )}
-      {harBoddINorgeSiste5År === JaNeiIkkeOppgitt.NEI && harArbeidetINorgeSiste5År === JaNeiIkkeOppgitt.JA && (
+      {harBoddINorgeSiste5År === JaEllerNei.Nei && harArbeidetINorgeSiste5År === JaEllerNei.Ja && (
         <FormField form={form} formField={formFields.iTilleggArbeidUtenforNorge} />
       )}
-      {(iTilleggArbeidUtenforNorge === JaNeiIkkeOppgitt.JA ||
-        harArbeidetINorgeSiste5År === JaNeiIkkeOppgitt.JA ||
-        arbeidetUtenforNorgeFørSykdom === JaNeiIkkeOppgitt.JA) && (
+      {(iTilleggArbeidUtenforNorge === JaEllerNei.Ja ||
+        harArbeidetINorgeSiste5År === JaEllerNei.Ja ||
+        arbeidetUtenforNorgeFørSykdom === JaEllerNei.Ja) && (
         <VStack gap={'2'}>
           <Label size={'small'}>Utenlandsopphold</Label>
           {fields.map((field, i) => (
-            <LeggTilUtenlandsOpphold
-              key={field.id}
-              i={i}
-              form={form}
-              readOnly={readOnly}
-              remove={remove}
-            />
+            <LeggTilUtenlandsOpphold key={field.id} i={i} form={form} readOnly={readOnly} remove={remove} />
           ))}
           <HStack>
             <Button
