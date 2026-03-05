@@ -5,8 +5,10 @@ import {
   JaNeiAvbruttIkkeOppgitt,
   JaNeiEllerIkkeOppgittOptions,
   JaEllerNei,
+  JaEllerNeiOptions,
   JaNeiIkkeOppgitt,
   JaNeiVetIkke,
+  stringToJaEllerNei,
   stringToJaNeiAvbruttIkkeOppgitt,
   stringToJaNeiIkkeOppgitt,
   stringToJaNeiVetikke,
@@ -169,36 +171,36 @@ export const DigitaliserSøknad = ({ grunnlag, registrertDato, readOnly, submit,
       arbeidetUtenforNorgeFørSykdom: {
         type: 'radio',
         label: 'Arbeidet søker utenfor Norge de siste fem årene?',
-        options: JaNeiEllerIkkeOppgittOptions,
+        options: JaEllerNeiOptions,
         defaultValue: søknadGrunnlag.medlemskap?.arbeidetUtenforNorgeFørSykdom
-          ? stringToJaNeiIkkeOppgitt(søknadGrunnlag.medlemskap.arbeidetUtenforNorgeFørSykdom)
+          ? stringToJaEllerNei(søknadGrunnlag.medlemskap.arbeidetUtenforNorgeFørSykdom)
           : undefined,
         rules: { required: 'Du må velge et alternativ.' },
       },
       harArbeidetINorgeSiste5År: {
         type: 'radio',
         label: 'Har søker arbeidet sammenhengende i Norge siste 5 år?',
-        options: JaNeiEllerIkkeOppgittOptions,
+        options: JaEllerNeiOptions,
         defaultValue: søknadGrunnlag.medlemskap?.harArbeidetINorgeSiste5År
-          ? stringToJaNeiIkkeOppgitt(søknadGrunnlag.medlemskap.harArbeidetINorgeSiste5År)
+          ? stringToJaEllerNei(søknadGrunnlag.medlemskap.harArbeidetINorgeSiste5År)
           : undefined,
         rules: { required: 'Du må velge et alternativ.' },
       },
       harBoddINorgeSiste5År: {
         type: 'radio',
         label: 'Har søker bodd sammenhengende i Norge siste 5 år?',
-        options: JaNeiEllerIkkeOppgittOptions,
+        options: JaEllerNeiOptions,
         defaultValue: søknadGrunnlag.medlemskap?.harBoddINorgeSiste5År
-          ? stringToJaNeiIkkeOppgitt(søknadGrunnlag.medlemskap.harBoddINorgeSiste5År)
+          ? stringToJaEllerNei(søknadGrunnlag.medlemskap.harBoddINorgeSiste5År)
           : undefined,
         rules: { required: 'Du må velge et alternativ.' },
       },
       iTilleggArbeidUtenforNorge: {
         type: 'radio',
         label: 'Har søker i tillegg jobbet utenfor Norge i de siste fem årene?',
-        options: JaNeiEllerIkkeOppgittOptions,
+        options: JaEllerNeiOptions,
         defaultValue: søknadGrunnlag.medlemskap?.iTilleggArbeidUtenforNorge
-          ? stringToJaNeiIkkeOppgitt(søknadGrunnlag.medlemskap.iTilleggArbeidUtenforNorge)
+          ? stringToJaEllerNei(søknadGrunnlag.medlemskap.iTilleggArbeidUtenforNorge)
           : undefined,
         rules: { required: 'Du må velge et alternativ.' },
       },

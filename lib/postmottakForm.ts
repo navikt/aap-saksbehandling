@@ -81,6 +81,17 @@ export const JaEllerNeiOptions: ValuePair[] = [
   { label: 'Nei', value: JaEllerNei.Nei },
 ];
 
+export function stringToJaEllerNei(value: string): JaEllerNei | undefined {
+  switch (value) {
+    case 'Ja':
+      return JaEllerNei.Ja;
+    case 'Nei':
+      return JaEllerNei.Nei;
+    default:
+      return undefined;
+  }
+}
+
 export enum Behovstype {
   KATEGORISER_DOKUMENT = '1337',
   DIGITALISER_DOKUMENT = '1338',
