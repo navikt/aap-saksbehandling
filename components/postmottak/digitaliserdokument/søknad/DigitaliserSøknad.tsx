@@ -49,10 +49,10 @@ export interface SøknadFormFields {
   erStudent: JaNeiAvbruttIkkeOppgitt;
   studentKommeTilbake: JaNeiVetIkke;
   oppgitteBarn: Barn[];
-  arbeidetUtenforNorgeFørSykdom: JaNeiIkkeOppgitt;
-  harArbeidetINorgeSiste5År: JaNeiIkkeOppgitt;
-  harBoddINorgeSiste5År: JaNeiIkkeOppgitt;
-  iTilleggArbeidUtenforNorge: JaNeiIkkeOppgitt;
+  arbeidetUtenforNorgeFørSykdom: JaEllerNei;
+  harArbeidetINorgeSiste5År: JaEllerNei;
+  harBoddINorgeSiste5År: JaEllerNei;
+  iTilleggArbeidUtenforNorge: JaEllerNei;
   utenlandsOpphold: Utenlandsopphold[];
 }
 
@@ -74,10 +74,10 @@ function mapTilSøknadKontrakt(data: SøknadFormFields) {
           },
     yrkesskade: data.yrkesSkade,
     medlemskap: {
-      arbeidetUtenforNorgeFørSykdom: data.arbeidetUtenforNorgeFørSykdom === JaNeiIkkeOppgitt.JA ? 'Ja' : 'Nei',
-      harArbeidetINorgeSiste5År: data.harArbeidetINorgeSiste5År === JaNeiIkkeOppgitt.JA ? 'Ja' : 'Nei',
-      harBoddINorgeSiste5År: data.harBoddINorgeSiste5År === JaNeiIkkeOppgitt.JA ? 'Ja' : 'Nei',
-      iTilleggArbeidUtenforNorge: data.iTilleggArbeidUtenforNorge === JaNeiIkkeOppgitt.JA ? 'Ja' : 'Nei',
+      arbeidetUtenforNorgeFørSykdom: data.arbeidetUtenforNorgeFørSykdom,
+      harArbeidetINorgeSiste5År: data.harArbeidetINorgeSiste5År,
+      harBoddINorgeSiste5År: data.harBoddINorgeSiste5År,
+      iTilleggArbeidUtenforNorge: data.iTilleggArbeidUtenforNorge,
       utenlandsOpphold: data.utenlandsOpphold.map((u) => {
         const fraDato = formaterDatoForBackend(parse(u.fraDato, 'dd.MM.yyyy', new Date()));
         const tilDato = formaterDatoForBackend(parse(u.tilDato, 'dd.MM.yyyy', new Date()));
