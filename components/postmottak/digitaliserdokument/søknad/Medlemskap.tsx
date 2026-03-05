@@ -29,17 +29,17 @@ export const Medlemskap = ({ form, formFields, readOnly }: Props) => {
           <FormField form={form} formField={formFields.arbeidetUtenforNorgeFørSykdom} />
         </>
       )}
-      {harBoddINorgeSiste5År == JaNeiIkkeOppgitt.NEI && harArbeidetINorgeSiste5År == JaNeiIkkeOppgitt.JA && (
+      {harBoddINorgeSiste5År === JaNeiIkkeOppgitt.NEI && harArbeidetINorgeSiste5År === JaNeiIkkeOppgitt.JA && (
         <FormField form={form} formField={formFields.iTilleggArbeidUtenforNorge} />
       )}
       {(iTilleggArbeidUtenforNorge === JaNeiIkkeOppgitt.JA ||
-        harArbeidetINorgeSiste5År == JaNeiIkkeOppgitt.JA ||
-        arbeidetUtenforNorgeFørSykdom == JaNeiIkkeOppgitt.JA) && (
+        harArbeidetINorgeSiste5År === JaNeiIkkeOppgitt.JA ||
+        arbeidetUtenforNorgeFørSykdom === JaNeiIkkeOppgitt.JA) && (
         <VStack gap={'2'}>
           <Label size={'small'}>Utenlandsopphold</Label>
-          {fields.map((_, i) => (
+          {fields.map((field, i) => (
             <LeggTilUtenlandsOpphold
-              key={`utenlandsopphold-${i}`}
+              key={field.id}
               i={i}
               form={form}
               readOnly={readOnly}

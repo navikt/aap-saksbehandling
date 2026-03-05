@@ -76,8 +76,8 @@ function mapTilSøknadKontrakt(data: SøknadFormFields) {
     medlemskap: {
       arbeidetUtenforNorgeFørSykdom: data.arbeidetUtenforNorgeFørSykdom === JaNeiIkkeOppgitt.JA ? 'Ja' : 'Nei',
       harArbeidetINorgeSiste5År: data.harArbeidetINorgeSiste5År === JaNeiIkkeOppgitt.JA ? 'Ja' : 'Nei',
-      harBoddINorgeSiste5År: data.harBoddINorgeSiste5År,
-      iTilleggArbeidUtenforNorge: data.iTilleggArbeidUtenforNorge,
+      harBoddINorgeSiste5År: data.harBoddINorgeSiste5År === JaNeiIkkeOppgitt.JA ? 'Ja' : 'Nei',
+      iTilleggArbeidUtenforNorge: data.iTilleggArbeidUtenforNorge === JaNeiIkkeOppgitt.JA ? 'Ja' : 'Nei',
       utenlandsOpphold: data.utenlandsOpphold.map((u) => ({
         land: u.land,
         fraDato: formaterDatoForBackend(parse(u.fraDato, 'dd.MM.yyyy', new Date())),
