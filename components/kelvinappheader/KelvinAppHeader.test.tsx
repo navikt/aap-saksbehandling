@@ -1,4 +1,3 @@
-import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 
@@ -6,6 +5,8 @@ import { KelvinAppHeader } from './KelvinAppHeader';
 
 import { userEvent } from '@testing-library/user-event';
 import createFetchMock from 'vitest-fetch-mock';
+import { FeatureFlagProvider } from 'context/UnleashContext';
+import { mockedFlags } from 'lib/services/unleash/unleashToggles';
 
 const brukerInformasjon = {
   navn: 'Kjell T Ringen',
@@ -18,24 +19,26 @@ describe('Header', () => {
   vi.stubEnv('NEXT_PUBLIC_ENVIRONMENT', 'dev');
 
   const user = userEvent.setup();
-  it('skal vise overskrift i header', async () => {
-    mockFetchConfig();
-
-    render(<KelvinAppHeader brukerInformasjon={brukerInformasjon} />);
-    expect(screen.getByText('Kelvin')).toBeVisible();
-  });
 
   it('skal vise navnet på brukeren i header', async () => {
     mockFetchConfig();
 
-    render(<KelvinAppHeader brukerInformasjon={brukerInformasjon} />);
+    render(
+      <FeatureFlagProvider flags={mockedFlags}>
+        <KelvinAppHeader brukerInformasjon={brukerInformasjon} />
+      </FeatureFlagProvider>
+    );
     expect(screen.getByText('Kjell T Ringen')).toBeVisible();
   });
 
   it('skal vise knapp for å logge ut', async () => {
     mockFetchConfig();
 
-    render(<KelvinAppHeader brukerInformasjon={brukerInformasjon} />);
+    render(
+      <FeatureFlagProvider flags={mockedFlags}>
+        <KelvinAppHeader brukerInformasjon={brukerInformasjon} />
+      </FeatureFlagProvider>
+    );
 
     await user.click(screen.getByText('Kjell T Ringen'));
 

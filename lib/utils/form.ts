@@ -30,11 +30,13 @@ export enum Behovstype {
   OVERGANG_ARBEID = '5032',
   AVBRYT_REVURDERING_KODE = '5033',
   AVKLAR_SAMORDNING_SYKESTIPEND_KODE = '5034',
+  AVKLAR_SAMORDNING_BARNEPENSJON_KODE = '5036',
   SYKDOMSVURDERING_BREV_KODE = '5053',
   OVERGANG_UFORE = '5031',
   SKRIV_BREV_KODE = '5050',
   SKRIV_VEDTAKSBREV_KODE = '5051',
   SKRIV_FORHÅNDSVARSEL_AKTIVITETSPLIKT_BREV_KODE = '5052',
+  BEKREFT_VURDERINGER_OPPFØLGING = '5054',
   FORESLÅ_UTTAK_KODE = '5096',
   KVALITETSSIKRING_KODE = '5097',
   FORESLÅ_VEDTAK_KODE = '5098',
@@ -137,6 +139,8 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
       return '§ 11-29 Sykestipend fra lånekassen';
     case '5035':
       return '§ 11-3 Oppholdskrav';
+    case '5036':
+      return '§ 11-27 Samordning barnepensjon';
     case '5040':
       return '§ 11-4 andre ledd. Krav om inntektsbortfall etter fylte 62 år';
     case '5050':
@@ -147,6 +151,8 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
       return 'Skriv forhåndsvarsel aktivitetsplikt';
     case '5053':
       return 'Individuell begrunnelse for §§ 11-5 og 11-6 til vedtaksbrev';
+    case '5054':
+      return 'Bekreft vurderinger';
     case '5029':
       return '§ 22-13 syvende ledd';
     case '5999':

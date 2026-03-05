@@ -12,7 +12,7 @@ import { FormField } from 'components/form/FormField';
 import { usePostmottakEndreTema } from 'hooks/FetchHook';
 import { CheckmarkCircleIcon } from '@navikt/aksel-icons';
 import { toggles } from 'lib/utils/toggles';
-import { PostmottakVilkårskort } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/PostmottakVilkårskort';
+import { PostmottakVilkårskort } from 'components/postmottak/vilkårskort/PostmottakVilkårskort';
 import { usePostmottakVilkårskortVisning } from 'hooks/postmottak/PostmottakVisningHook';
 
 interface Props {
@@ -56,7 +56,6 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
             behovstype: Behovstype.AVKLAR_TEMA,
             skalTilAap: data.erTemaAAP === JaEllerNei.Ja,
           },
-          // @ts-ignore
           referanse: behandlingsreferanse,
         });
       } else {
@@ -68,7 +67,6 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
             behovstype: Behovstype.AVKLAR_TEMA,
             skalTilAap: data.erTemaAAP === JaEllerNei.Ja,
           },
-          // @ts-ignore
           referanse: behandlingsreferanse,
         }).then(() =>
           postmottakEndreTema(behandlingsreferanse).then((res) => {
@@ -92,7 +90,6 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
       status={status}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       knappTekst={'Neste'}
-      vilkårTilhørerNavKontor={false}
       visningModus={visningModus}
       visningActions={visningActions}
       formReset={() => form.reset({ erTemaAAP: getJaNeiEllerUndefined(grunnlag.vurdering?.skalTilAap) })}

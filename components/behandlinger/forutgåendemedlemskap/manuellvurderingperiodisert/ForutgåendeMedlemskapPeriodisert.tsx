@@ -87,8 +87,9 @@ export const ForutgåendeMedlemskapPeriodisert = ({
 
   function onAddPeriode() {
     append({
+      behøverVurdering: false,
       begrunnelse: '',
-      fraDato: undefined,
+      fraDato: '',
       erNyVurdering: true,
     });
   }
@@ -149,6 +150,52 @@ export const ForutgåendeMedlemskapPeriodisert = ({
       errorList={errorList}
       formReset={() => form.reset(getDefaultValuesFromGrunnlag(grunnlag))}
     >
+      {vedtatteVurderinger.map((vurdering) => (
+        <TidligereVurderingExpandableCard
+          key={vurdering.fom}
+          fom={parseISO(vurdering.fom)}
+          tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
+          foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+          vurderingStatus={getErOppfyltEllerIkkeStatus(
+            vurdering.harForutgåendeMedlemskap ||
+              vurdering.varMedlemMedNedsattArbeidsevne === true ||
+              vurdering.medlemMedUnntakAvMaksFemAar === true
+          )}
+        >
+          <ForutgåendeMedlemskapTidligereVurdering vurdering={vurdering} />
+        </TidligereVurderingExpandableCard>
+      ))}
+
+      {vurderingerFields.map((vurdering, index) => (
+        <NyVurderingExpandableCard
+          key={vurdering.id}
+          accordionsSignal={accordionsSignal}
+          fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
+          nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
+          isLast={index === vurderingerFields.length - 1}
+          vurderingStatus={getErOppfyltEllerIkkeStatus(
+            erNyVurderingOppfylt(
+              form.watch(`vurderinger.${index}.harForutgåendeMedlemskap`),
+              form.watch(`vurderinger.${index}.unntaksvilkår`)
+            )
+          )}
+          vurdering={vurdering}
+          finnesFeil={finnesFeilForVurdering(index, errorList)}
+          readonly={formReadOnly}
+          onSlettVurdering={() => remove(index)}
+          harTidligereVurderinger={tidligereVurderinger.length > 0}
+          index={index}
+          initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
+        >
+          <ForutgåendeMedlemskapFormInput
+            form={form}
+            beregningstidspunktGrunnlag={beregningstidspunktGrunnlag}
+            readOnly={formReadOnly}
+            index={index}
+            harTidligereVurderinger={tidligereVurderinger.length !== 0}
+          />
+        </NyVurderingExpandableCard>
+      ))}
       <VurderingerListe
         startDato={parseISO(sak.periode.fom)}
         ikkeRelevantePerioder={grunnlag.ikkeRelevantePerioder}

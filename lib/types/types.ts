@@ -350,6 +350,12 @@ export type AutomatiskLovvalgOgMedlemskapVurdering =
 export type tilhørighetVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.Tilh\u00F8righetVurdering'];
 
+export type AvklarPeriodisertStudentLøsning =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.PeriodisertStudentDto'];
+
+export type StudentVurderingResponse =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.student.StudentVurderingResponse'];
+
 export type AvklarPeriodisertLovvalgMedlemskapLøsning =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.lovvalgmedlemskap.PeriodisertManuellVurderingForLovvalgMedlemskapDto'];
 
@@ -486,6 +492,13 @@ export type BehandlingInfo =
   components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO'];
 
 export type Vurderingsbehov =
+  components['schemas'][`no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Ny\u00C5rsakTilBehandling`]['årsakerTilBehandling'][number];
+
+/**
+ * @deprecated Unngå denne i frontend. Får ikke fjernet den helt ennå fordi noen av løserne forventer denne. Men alt av dokumenter
+ * til behandlingsflyt forventer `Vurderingsbehov`.
+ */
+export type VurderingsbehovIntern =
   components['schemas'][`no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO`]['vurderingsbehov'][number];
 
 export type VurderingsbehovMedPeriode =
@@ -522,6 +535,9 @@ export type ArbeidsopptrappingGrunnlagResponse =
 export type ArbeidsopptrappingLøsningDto =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.arbeidsopptrapping.ArbeidsopptrappingL\u00F8sningDto'];
 
+export type ForeløpigBehandlingsutfall =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.tidligerevurderinger.TidligereVurderingerDto'];
+
 export type BrevdataDto = components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto'];
 export type DelmalDto = components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto.Delmal'];
 export type ValgDto = components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto.Valg'];
@@ -547,6 +563,15 @@ export interface PeriodisertVurderingFormFields {
   fraDato?: string;
   tilDato?: string | null;
 }
+
+export interface VurderingMeta {
+  behøverVurdering: boolean;
+  erNyVurdering: boolean;
+  vurdertAv?: VurdertAvAnsatt;
+  kvalitetssikretAv?: VurdertAvAnsatt;
+  besluttetAv?: VurdertAvAnsatt;
+}
+
 // Gjør at vi kan lage et typesikkert "enum-objekt" med union types generert fra backend. feks const minEnum = lagEnumObjektFraUnionType<StegGruppe>({ SYKDOM: 'SYKDOM' ...})
 export function lagEnumObjektFraUnionType<UnionType extends string>(o: { [P in UnionType]: P }): {
   [P in UnionType]: P;

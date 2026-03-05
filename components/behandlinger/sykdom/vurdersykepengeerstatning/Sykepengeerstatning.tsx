@@ -86,6 +86,7 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
       grunn: null,
       erOppfylt: '',
       erNyVurdering: true,
+      behøverVurdering: false,
     });
   }
 
@@ -173,6 +174,26 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
         renderNyVurdering={(vurdering, index) => {
           const erOppfyltFelt = form.watch(`vurderinger.${index}.erOppfylt`);
 
+        return (
+          <NyVurderingExpandableCard
+            key={vurdering.id}
+            fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
+            vurderingStatus={erOppfyltFelt ? getErOppfyltEllerIkkeStatus(erOppfyltFelt === JaEllerNei.Ja) : undefined}
+            nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
+            isLast={index === vurderingerFields.length - 1}
+            accordionsSignal={accordionsSignal}
+            vurdering={vurdering}
+            finnesFeil={finnesFeilForVurdering(index, errorList)}
+            readonly={formReadOnly}
+            onSlettVurdering={() => remove(index)}
+            harTidligereVurderinger={tidligereVurderinger.length > 0}
+            index={index}
+            initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
+          >
+            <SykepengeerstatningFormInput form={form} readOnly={formReadOnly} index={index} />
+          </NyVurderingExpandableCard>
+        );
+      })}
           return (
             <NyVurderingExpandableCard
               key={vurdering.id}

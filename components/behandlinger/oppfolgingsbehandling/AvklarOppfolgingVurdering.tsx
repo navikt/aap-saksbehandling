@@ -3,7 +3,11 @@
 import { Behovstype } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
-import { AvklarOppfolgingsoppgaveGrunnlagResponse, MellomlagretVurdering, Vurderingsbehov } from 'lib/types/types';
+import {
+  AvklarOppfolgingsoppgaveGrunnlagResponse,
+  MellomlagretVurdering,
+  VurderingsbehovIntern,
+} from 'lib/types/types';
 import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormEvent } from 'react';
@@ -13,7 +17,6 @@ import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
-import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   behandlingVersjon: number;
@@ -25,7 +28,8 @@ interface Props {
 interface FormFields {
   årsak: string;
   konsekvens: Konsekvens;
-  hvaSkalRevurderes: Vurderingsbehov[];
+  // Når backend bruker kontrakt-enum i stedet, kan denne fjernes.
+  hvaSkalRevurderes: VurderingsbehovIntern[];
 }
 
 type Konsekvens = 'INGEN' | 'OPPRETT_VURDERINGSBEHOV';
@@ -56,11 +60,11 @@ export const AvklaroppfolgingVurdering = ({
     mellomlagretVurdering
   );
 
+  const skalVurderesAvNavKontor = grunnlag.hvemSkalFølgeOpp == 'Lokalkontor';
+
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag.grunnlag);
-
-  const isRevurderingStarttidspunktEnabled = useFeatureFlag('RevurderStarttidspunkt');
 
   const { form, formFields } = useConfigForm<FormFields>(
     {
@@ -83,7 +87,7 @@ export const AvklaroppfolgingVurdering = ({
       hvaSkalRevurderes: {
         type: 'combobox_multiple',
         label: 'Hvilke opplysninger skal revurderes?',
-        options: vurderingsbehovOptions(isRevurderingStarttidspunktEnabled),
+        options: vurderingsbehovOptions(),
         defaultValue: defaultValue.hvaSkalRevurderes,
       },
     },
@@ -117,7 +121,7 @@ export const AvklaroppfolgingVurdering = ({
     <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'Avklar oppfølgingsoppgave'}
       steg="AVKLAR_OPPFØLGING"
-      vilkårTilhørerNavKontor={true}
+      vilkårTilhørerNavKontor={skalVurderesAvNavKontor}
       onSubmit={handleSubmit}
       status={status}
       isLoading={isLoading}

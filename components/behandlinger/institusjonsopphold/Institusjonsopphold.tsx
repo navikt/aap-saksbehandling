@@ -7,7 +7,7 @@ import { Behovstype } from 'lib/utils/form';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { getStegData } from 'lib/utils/steg';
-import { ManglendeInstitusjonsOpphold } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/ManglendeInstitusjonsOpphold';
+import { ManglendeOpphold } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/ManglendeOpphold';
 
 interface Props {
   behandlingsreferanse: string;
@@ -25,6 +25,7 @@ export const Institusjonsopphold = async ({ behandlingsreferanse }: Props) => {
     flyt.data,
     Behovstype.AVKLAR_HELSEINSTITUSJON
   );
+
   const vurderSoningSteg = getStegData(
     'ET_ANNET_STED',
     'DU_ER_ET_ANNET_STED',
@@ -54,7 +55,7 @@ export const Institusjonsopphold = async ({ behandlingsreferanse }: Props) => {
       )}
       {!vurderHelseinstitusjonSteg.skalViseSteg && !vurderSoningSteg.skalViseSteg && (
         <StegSuspense>
-          <ManglendeInstitusjonsOpphold />
+          <ManglendeOpphold />
         </StegSuspense>
       )}
     </GruppeSteg>

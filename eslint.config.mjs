@@ -60,6 +60,7 @@ const config = [
       ...reactHooks.configs.recommended.rules,
       'react/jsx-indent-props': ['error', 2],
       '@typescript-eslint/no-unnecessary-type-conversion': ['error'],
+      '@typescript-eslint/prefer-ts-expect-error': ['error'],
       'react/jsx-uses-react': 'off',
       'react/react-in-jsx-scope': 'off',
       'no-unused-vars': 'off',

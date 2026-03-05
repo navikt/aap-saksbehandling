@@ -37,7 +37,8 @@ const grunnlag: PeriodiserteVurderingerDto<VurderingDto> = {
   nyeVurderinger: [],
   sisteVedtatteVurderinger: [],
 };
-// @ts-ignore
+
+// @ts-expect-error
 const form: UseFormReturn<any> = {
   setError: () => {},
 };

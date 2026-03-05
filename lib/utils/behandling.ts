@@ -1,11 +1,18 @@
+import { PostmottakBehandlingInfo } from 'lib/types/postmottakTypes';
 import { BehandlingInfo, ÅrsakTilOpprettelse } from 'lib/types/types';
 
 export function erFørstegangsbehandling(behandling: BehandlingInfo): boolean {
   return behandling.typeBehandling === 'Førstegangsbehandling';
 }
 
-export function erAvsluttet(behandling: BehandlingInfo) {
+export function erAvsluttet(behandling: BehandlingInfo | PostmottakBehandlingInfo) {
   return ['IVERKSETTES', 'AVSLUTTET'].includes(behandling.status);
+}
+
+export function kanRevurdereSak(behandlinger: BehandlingInfo[]): boolean {
+  return behandlinger.some(
+    (behandling) => erFørstegangsbehandling(behandling) && behandling.status !== 'OPPRETTET' && !erTrukket(behandling)
+  );
 }
 
 export function erTrukket(behandling: BehandlingInfo) {

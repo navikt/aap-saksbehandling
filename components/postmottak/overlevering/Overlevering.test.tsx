@@ -14,6 +14,6 @@ describe('Overlevering', () => {
   });
   it('Har et valg om dokumentet skal overleveres til fagsystem', () => {
     render(<Overlevering behandlingsVersjon={1} behandlingsreferanse={'123'} grunnlag={grunnlag} readOnly={false} />);
-    expect(screen.getByText('Skal dokumentet sendes til fagsystem?')).toBeVisible();
+    expect(screen.getByText('Bør saken vurderes på nytt på bakgrunn av dokumentet?')).toBeVisible();
   });
 });

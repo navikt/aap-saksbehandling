@@ -6,8 +6,8 @@ import { Dato } from 'lib/types/Dato';
 export type PeriodisertGrunnlag = {
   behøverVurderinger: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
   kanVurderes: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
-  nyeVurderinger: Array<unknown>;
-  sisteVedtatteVurderinger: Array<unknown>;
+  nyeVurderinger: Array<object>;
+  sisteVedtatteVurderinger: Array<object>;
 };
 
 export function getFraDatoFraGrunnlagForFrontend(grunnlag: PeriodisertGrunnlag | null | undefined): string {
@@ -48,22 +48,31 @@ export function trengerVurderingsForslag(grunnlag: PeriodisertGrunnlag | undefin
 
   return behøverVurderinger || !harVedtatteVurderinger;
 }
+// TODO: innfør denne i hentPerioderSomTrengerVurdering<T extends PåkrevdeFelter(
+// interface PåkrevdeFelter {
+//   fraDato: string;
+//   behøverVurdering: boolean;
+// }
 
-export function hentPerioderSomTrengerVurdering<T>(
+interface PåkrevdeFelter {
+  fraDato: string;
+}
+
+export function hentPerioderSomTrengerVurdering<T extends PåkrevdeFelter>(
   grunnlag: PeriodisertGrunnlag,
   tomVurdering: () => T
 ): { vurderinger: Array<T> } {
   // Hvis det finnes perioder i grunnlag.behøverVurderinger brukes disse som utgangspunkt, hvis ikke
   // lager vi en tom vurdering med fraDato fra grunnlag.kanVurderes
-  const initielleVurderinger =
+  const initiellePerioder =
     grunnlag.behøverVurderinger.length > 0
       ? grunnlag.behøverVurderinger.map((periode) => ({
           fraDato: new Dato(periode.fom).formaterForFrontend(),
           behøverVurdering: true,
         }))
-      : [{ fraDato: getFraDatoFraGrunnlagForFrontend(grunnlag), behøverVurdering: null }];
+      : [{ fraDato: getFraDatoFraGrunnlagForFrontend(grunnlag), behøverVurdering: false }];
   return {
-    vurderinger: initielleVurderinger.map((periode) => ({
+    vurderinger: initiellePerioder.map((periode) => ({
       ...tomVurdering(),
       ...periode,
     })),

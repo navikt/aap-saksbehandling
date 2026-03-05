@@ -3,6 +3,7 @@ import {
   AvklarOppholdkravLøsning,
   AvklarPeriodisertForutgåendeMedlemskapLøsning,
   AvklarPeriodisertLovvalgMedlemskapLøsning,
+  AvklarPeriodisertStudentLøsning,
   BistandsbehovLøsning,
   EtableringEgenVirksomhetLøsningDto,
   LøsPeriodisertBehovPåBehandling,
@@ -26,9 +27,14 @@ interface LovvalgOgMedlemskapBehov {
   løsningerForPerioder: AvklarPeriodisertLovvalgMedlemskapLøsning[];
 }
 
+interface StudentBehov {
+  behovstype: Behovstype.AVKLAR_STUDENT_KODE;
+  løsningerForPerioder: AvklarPeriodisertStudentLøsning[];
+}
+
 interface SykdomsvurderingBehov {
   behovstype: Behovstype.AVKLAR_SYKDOM_KODE;
-  løsningerForPerioder: SykdomsvurderingLøsningDto[]; // typen fra types.ts
+  løsningerForPerioder: SykdomsvurderingLøsningDto[];
 }
 
 interface Bistandsbehov {
@@ -83,6 +89,7 @@ interface ForutgåendeMedlemskapMedOverstyring {
 
 type Behov =
   | LovvalgOgMedlemskapBehov
+  | StudentBehov
   | SykdomsvurderingBehov
   | Bistandsbehov
   | FastsettArbeidsevne

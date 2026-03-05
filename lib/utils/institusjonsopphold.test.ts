@@ -9,7 +9,6 @@ import {
   erReduksjonUtIFraVurdering,
   lagReduksjonBeskrivelseNyttOpphold,
   validerDatoErInnenforOpphold,
-  validerDatoForStartAvReduksjonVedNyttOpphold,
   validerErIKronologiskRekkeFølge,
 } from 'lib/utils/institusjonopphold';
 
@@ -196,54 +195,12 @@ describe('erNyttOppholdInnenfor3MaanederEtterSistOpphold', () => {
   });
 });
 
-describe('validerDatoForStartAvReduksjonVedNyttOpphold', () => {
-  it('returnerer feilmelding hvis dato er før tidligste reduksjonsdato (ikke videreført reduksjon)', () => {
-    const resultat = validerDatoForStartAvReduksjonVedNyttOpphold('01.07.2026', '01.07.2026', '01.06.2026', false);
-
-    expect(resultat).toBe('Tidligste dato for reduksjon er: 01.11.2026');
-  });
-
-  it('returnerer feilmelding hvis dato er før tidligste reduksjonsdato (videreført reduksjon)', () => {
-    const resultat = validerDatoForStartAvReduksjonVedNyttOpphold('01.07.2026', '01.07.2026', '01.06.2026', true);
-
-    expect(resultat).toBe('Tidligste dato for reduksjon er: 01.08.2026');
-  });
-
-  it('returnerer undefined hvis dato er lik tidligste reduksjonsdato', () => {
-    const resultat = validerDatoForStartAvReduksjonVedNyttOpphold('01.11.2026', '01.07.2026', '01.06.2026', false);
-
-    expect(resultat).toBeUndefined();
-  });
-
-  it('returnerer undefined hvis dato er etter tidligste reduksjonsdato', () => {
-    const resultat = validerDatoForStartAvReduksjonVedNyttOpphold('01.12.2026', '01.07.2026', '01.06.2026', false);
-
-    expect(resultat).toBeUndefined();
-  });
-
-  it('bruker standard regel når forrigeOppholdSisteVurderingVarRedukjson er undefined', () => {
-    const resultat = validerDatoForStartAvReduksjonVedNyttOpphold('01.07.2026', '01.07.2026', '01.06.2026');
-
-    expect(resultat).toBe('Tidligste dato for reduksjon er: 01.11.2026');
-  });
-});
-
 describe('lagReduksjonBeskrivelseNyttOpphold', () => {
   it('bruker standard regel når forrigeOppholdSisteVurderingVarRedukjson er undefined', () => {
-    const resultat = lagReduksjonBeskrivelseNyttOpphold('01.06.2026', '01.07.2026');
+    const resultat = lagReduksjonBeskrivelseNyttOpphold('01.07.2026');
 
-    expect(resultat).toBe('Innleggelsesmåned: juli 2026. Reduksjon kan tidligst starte: 1. november 2026');
-  });
-
-  it('bruker standard regel når forrigeOppholdSisteVurderingVarRedukjson er false', () => {
-    const resultat = lagReduksjonBeskrivelseNyttOpphold('01.06.2026', '01.07.2026', false);
-
-    expect(resultat).toBe('Innleggelsesmåned: juli 2026. Reduksjon kan tidligst starte: 1. november 2026');
-  });
-
-  it('bruker nytt opphold-regel når forrigeOppholdSisteVurderingVarRedukjson er true', () => {
-    const resultat = lagReduksjonBeskrivelseNyttOpphold('01.06.2026', '01.07.2026', true);
-
-    expect(resultat).toBe('Innleggelsesmåned: juli 2026. Reduksjon kan tidligst starte: 1. august 2026');
+    expect(resultat).toBe(
+      'Innleggelsesmåned: juli 2026. Reduksjonen bør som regel starte 1. august 2026 ved reduksjon i forrige opphold, ellers 1. november 2026. Det finnes likevel unntak.'
+    );
   });
 });

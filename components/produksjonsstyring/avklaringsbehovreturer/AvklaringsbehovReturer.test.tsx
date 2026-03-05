@@ -2,6 +2,7 @@ import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { AvklaringsbehovReturer } from './AvklaringsbehovReturer';
+import { InnloggetBrukerContextProvider } from 'context/InnloggetBrukerContext';
 
 const user = userEvent.setup();
 
@@ -22,7 +23,11 @@ const data = [
 
 describe('AvklaringsbehovReturer', () => {
   beforeEach(() => {
-    render(<AvklaringsbehovReturer data={data} />);
+    render(
+      <InnloggetBrukerContextProvider bruker={{ navn: 'Test Testesen', NAVident: 'Z123456' }}>
+        <AvklaringsbehovReturer data={data} />
+      </InnloggetBrukerContextProvider>
+    );
   });
 
   it('kan switche av årsak ', async () => {

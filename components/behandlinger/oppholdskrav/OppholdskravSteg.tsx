@@ -88,8 +88,9 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
       oppfyller: undefined,
       land: '',
       landAnnet: undefined,
-      fraDato: undefined,
+      fraDato: '',
       erNyVurdering: true,
+      behøverVurdering: false,
     });
   }
 
@@ -205,6 +206,46 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
             );
           }}
         />
+        {vedtatteVurderinger.map((vurdering) => (
+          <TidligereVurderingExpandableCard
+            key={vurdering.fom}
+            fom={parseISO(vurdering.fom)}
+            tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
+            foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+            vurderingStatus={getErOppfyltEllerIkkeStatus(vurdering.oppfylt)}
+          >
+            <OppholdskravTidligereVurdering
+              fraDato={vurdering.fom}
+              begrunnelse={vurdering.begrunnelse}
+              land={vurdering.land}
+              oppfyller={vurdering.oppfylt}
+            />
+          </TidligereVurderingExpandableCard>
+        ))}
+
+        {vurderingerFields.map((vurdering, index) => (
+          <NyVurderingExpandableCard
+            key={vurdering.id}
+            accordionsSignal={accordionsSignal}
+            fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
+            vurderingStatus={
+              form.watch(`vurderinger.${index}.oppfyller`)
+                ? getErOppfyltEllerIkkeStatus(form.watch(`vurderinger.${index}.oppfyller`) === JaEllerNei.Ja)
+                : undefined
+            }
+            nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
+            isLast={index === vurderingerFields.length - 1}
+            vurdering={vurdering}
+            finnesFeil={finnesFeilForVurdering(index, errorList)}
+            readonly={formReadOnly}
+            onSlettVurdering={() => remove(index)}
+            harTidligereVurderinger={tidligereVurderinger.length > 0}
+            index={index}
+            initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
+          >
+            <OppholdskravFormInput form={form} readOnly={formReadOnly} index={index} />
+          </NyVurderingExpandableCard>
+        ))}
       </VStack>
     </VilkårskortPeriodisert>
   );

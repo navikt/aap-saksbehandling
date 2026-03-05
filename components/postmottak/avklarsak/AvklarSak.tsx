@@ -1,10 +1,9 @@
 'use client';
 
-import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
 import { FormEvent, FormEventHandler } from 'react';
 import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/PostmottakLøsBehovOgGåTilNesteStegHook';
 import { AvsenderMottakerIdType, FinnSakGrunnlag, Saksinfo } from 'lib/types/postmottakTypes';
-import { Alert, Button, Detail, Label, Radio, VStack } from '@navikt/ds-react';
+import { Alert, Detail, Label, Radio, VStack } from '@navikt/ds-react';
 import { ServerSentEventStatusAlert } from 'components/postmottak/serversenteventstatusalert/ServerSentEventStatusAlert';
 import { FormFieldRadioOptions } from 'components/form/FormHook';
 import { formaterDatoForFrontend } from 'lib/utils/date';
@@ -12,6 +11,8 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import { TextFieldToggle } from 'components/form/TextFieldToggle';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { Behovstype } from 'lib/postmottakForm';
+import { PostmottakVilkårskort } from 'components/postmottak/vilkårskort/PostmottakVilkårskort';
+import { usePostmottakVilkårskortVisning } from 'hooks/postmottak/PostmottakVisningHook';
 
 interface Props {
   behandlingsVersjon: number;
@@ -115,128 +116,132 @@ export const AvklarSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, 
             : undefined,
           dokumenter: data.dokumenter,
         },
-        // @ts-ignore
         referanse: behandlingsreferanse,
       });
     })(event);
   };
 
+  const { visningActions, formReadOnly, visningModus } = usePostmottakVilkårskortVisning(readOnly, 'AVKLAR_SAK');
+
   const valgtIdType = form.watch('avsenderMottaker.idType');
 
   return (
-    <VilkårsKort heading={'Avklar sak og journalpostdetaljer'}>
-      <form onSubmit={onSubmit}>
-        <VStack gap={'6'}>
-          <ServerSentEventStatusAlert status={status} />
+    <PostmottakVilkårskort
+      heading={'Avklar sak og journalpostdetaljer'}
+      steg={'AVKLAR_SAK'}
+      onSubmit={onSubmit}
+      isLoading={isLoading}
+      status={status}
+      løsBehovOgGåTilNesteStegError={error}
+      knappTekst={'Send inn'}
+      visningModus={visningModus}
+      visningActions={visningActions}
+      formReset={() => {}}
+    >
+      <VStack gap={'6'}>
+        <ServerSentEventStatusAlert status={status} />
 
-          <RadioGroupWrapper
-            label="Hvor skal dokumentet journalføres?"
-            rules={{ required: 'Du må svare på hvilken sak dokumentet skal knyttes til' }}
-            name={'knyttTilSak'}
-            control={form.control}
-            readOnly={readOnly}
-          >
-            {[
-              ...nySakOption,
-              ...grunnlag.saksinfo.map(mapSaksinfoToOptions),
-              { label: 'Journalfør på generell sak', value: GENERELL },
-            ].map((option, i) => (
-              <Radio key={`knytttilsak-${i}`} value={option.value}>
-                {option.label}
-              </Radio>
-            ))}
-          </RadioGroupWrapper>
+        <RadioGroupWrapper
+          label="Hvor skal dokumentet journalføres?"
+          rules={{ required: 'Du må svare på hvilken sak dokumentet skal knyttes til' }}
+          name={'knyttTilSak'}
+          control={form.control}
+          readOnly={formReadOnly}
+        >
+          {[
+            ...nySakOption,
+            ...grunnlag.saksinfo.map(mapSaksinfoToOptions),
+            { label: 'Journalfør på generell sak', value: GENERELL },
+          ].map((option, i) => (
+            <Radio key={`knytttilsak-${i}`} value={option.value}>
+              {option.label}
+            </Radio>
+          ))}
+        </RadioGroupWrapper>
 
-          <div>
+        <div>
+          <TextFieldToggle
+            form={form}
+            rules={{ required: 'Journalposttittel må være satt' }}
+            name={'journalpostTittel'}
+            label="Journalposttittel"
+            buttonLabel="Endre journalposttittel"
+            readOnly={formReadOnly}
+          />
+        </div>
+
+        <VStack gap="2">
+          <Label size="small">Dokumenttittel</Label>
+          <Detail textColor="subtle">Tittel på dokumenter er synlig for sluttbruker på nav.no</Detail>
+
+          {dokumenterFields.map((_, i) => (
+            <TextFieldToggle
+              key={`dok-${i}`}
+              form={form}
+              name={`dokumenter.${i}.tittel`}
+              rules={{ required: 'Dokumenttittel må være satt' }}
+              buttonLabel="Endre dokumenttittel"
+              readOnly={formReadOnly}
+            />
+          ))}
+        </VStack>
+
+        {grunnlag.kanEndreAvsenderMottaker && (
+          <VStack gap="2">
+            <Label size="small">Avsender</Label>
+            <RadioGroupWrapper
+              label="Avsendertype"
+              rules={{ required: 'Du må velge avsendertype' }}
+              name={'avsenderMottaker.idType'}
+              control={form.control}
+              readOnly={formReadOnly}
+            >
+              <Radio value={IdType.FNR}>Privatperson (Fødselsnummer)</Radio>
+              <Radio value={IdType.ORGNR}>Organisasjon (Organisasjonsnummer)</Radio>
+              <Radio value={IdType.UKJENT}>Annet</Radio>
+            </RadioGroupWrapper>
+
+            {valgtIdType === IdType.FNR && (
+              <TextFieldToggle
+                form={form}
+                rules={{
+                  required: 'Fødselsnummer må være satt',
+                  minLength: { value: 11, message: 'Fødselsnummer må bestå av 11 siffer' },
+                  maxLength: { value: 11, message: 'Fødselsnummer må bestå av 11 siffer' },
+                }}
+                name={'avsenderMottaker.id'}
+                label="Fødselsnummer"
+                readOnly={formReadOnly}
+              />
+            )}
+
+            {valgtIdType === IdType.ORGNR && (
+              <TextFieldToggle
+                form={form}
+                rules={{
+                  required: 'Orgnr. må være satt',
+                  minLength: { value: 9, message: 'Orgnr. må bestå av 9 siffer' },
+                  maxLength: { value: 9, message: 'Orgnr. må bestå av 9 siffer' },
+                }}
+                name={'avsenderMottaker.id'}
+                label="Organisasjonsnummer"
+                readOnly={formReadOnly}
+              />
+            )}
+
             <TextFieldToggle
               form={form}
-              rules={{ required: 'Journalposttittel må være satt' }}
-              name={'journalpostTittel'}
-              label="Journalposttittel"
-              buttonLabel="Endre journalposttittel"
-              readOnly={readOnly}
+              rules={{ required: 'Navn må være satt' }}
+              name={'avsenderMottaker.navn'}
+              label="Navn"
+              readOnly={formReadOnly}
             />
-          </div>
-
-          <VStack gap="2">
-            <Label size="small">Dokumenttittel</Label>
-            <Detail textColor="subtle">Tittel på dokumenter er synlig for sluttbruker på nav.no</Detail>
-
-            {dokumenterFields.map((_, i) => (
-              <TextFieldToggle
-                key={`dok-${i}`}
-                form={form}
-                name={`dokumenter.${i}.tittel`}
-                rules={{ required: 'Dokumenttittel må være satt' }}
-                buttonLabel="Endre dokumenttittel"
-                readOnly={readOnly}
-              />
-            ))}
           </VStack>
+        )}
 
-          {grunnlag.kanEndreAvsenderMottaker && (
-            <VStack gap="2">
-              <Label size="small">Avsender</Label>
-              <RadioGroupWrapper
-                label="Avsendertype"
-                rules={{ required: 'Du må velge avsendertype' }}
-                name={'avsenderMottaker.idType'}
-                control={form.control}
-                readOnly={readOnly}
-              >
-                <Radio value={IdType.FNR}>Privatperson (Fødselsnummer)</Radio>
-                <Radio value={IdType.ORGNR}>Organisasjon (Organisasjonsnummer)</Radio>
-                <Radio value={IdType.UKJENT}>Annet</Radio>
-              </RadioGroupWrapper>
-
-              {valgtIdType === IdType.FNR && (
-                <TextFieldToggle
-                  form={form}
-                  rules={{
-                    required: 'Fødselsnummer må være satt',
-                    minLength: { value: 11, message: 'Fødselsnummer må bestå av 11 siffer' },
-                    maxLength: { value: 11, message: 'Fødselsnummer må bestå av 11 siffer' },
-                  }}
-                  name={'avsenderMottaker.id'}
-                  label="Fødselsnummer"
-                  readOnly={readOnly}
-                />
-              )}
-
-              {valgtIdType === IdType.ORGNR && (
-                <TextFieldToggle
-                  form={form}
-                  rules={{
-                    required: 'Orgnr. må være satt',
-                    minLength: { value: 9, message: 'Orgnr. må bestå av 9 siffer' },
-                    maxLength: { value: 9, message: 'Orgnr. må bestå av 9 siffer' },
-                  }}
-                  name={'avsenderMottaker.id'}
-                  label="Organisasjonsnummer"
-                  readOnly={readOnly}
-                />
-              )}
-
-              <TextFieldToggle
-                form={form}
-                rules={{ required: 'Navn må være satt' }}
-                name={'avsenderMottaker.navn'}
-                label="Navn"
-                readOnly={readOnly}
-              />
-            </VStack>
-          )}
-
-          {error && <Alert variant="error">{error.message}</Alert>}
-
-          {!readOnly && (
-            <Button loading={isLoading} className={'fit-content'}>
-              Send inn
-            </Button>
-          )}
-        </VStack>
-      </form>
-    </VilkårsKort>
+        {error && <Alert variant="error">{error.message}</Alert>}
+      </VStack>
+    </PostmottakVilkårskort>
   );
 };
 

@@ -5,6 +5,7 @@ import { ApiException, FetchResponse } from 'lib/utils/api';
 import { getToken } from 'lib/services/token';
 
 const NUMBER_OF_RETRIES = 3;
+const REQUEST_TIMEOUT_MS = 60_000; // 60 sekunder, samme som RestClient default i Kelvin komponenter
 
 export const apiFetch = async <ResponseType>(
   url: string,
@@ -38,7 +39,10 @@ const fetchWithRetry = async <ResponseType>(
   retries: number
 ): Promise<FetchResponse<ResponseType>> => {
   try {
-    const response = await fetch(url, options);
+    const timeoutSignal = AbortSignal.timeout(REQUEST_TIMEOUT_MS);
+    const combinedSignal = options.signal ? AbortSignal.any([options.signal, timeoutSignal]) : timeoutSignal;
+
+    const response = await fetch(url, { ...options, signal: combinedSignal });
 
     if (response.status === 204) {
       return { type: 'SUCCESS', status: response.status, data: undefined as ResponseType };
@@ -64,6 +68,16 @@ const fetchWithRetry = async <ResponseType>(
 
     return { type: 'SUCCESS', status: response.status, data: responseJson };
   } catch (error) {
+    if (error instanceof DOMException && error.name === 'TimeoutError') {
+      logWarning(`Timeout mot ${url} etter ${REQUEST_TIMEOUT_MS / 1000} sekunder.`);
+
+      return {
+        type: 'ERROR',
+        apiException: { message: 'Det tok for lang tid å få svar fra tjenesten. Prøv igjen om litt.' },
+        status: 408, // Request Timeout
+      };
+    }
+
     // Fanger uhåndterte nettverksfeil som f.eks.: ECONNRESET, ETIMEDOUT, osv.
     logWarning(`Nettverksfeil mot ${url}: `, error);
 
@@ -76,7 +90,7 @@ const fetchWithRetry = async <ResponseType>(
     logWarning(`For mange nettverksfeil (${options.method} ${url}): `, error);
     return {
       type: 'ERROR',
-      apiException: { message: `Fikk ikke svar fra tjenesten. Prøv igjen.` },
+      apiException: { message: `Fikk ikke svar fra tjenesten. Prøv igjen om litt.` },
       status: 503, // Service Unavailable
     };
   }

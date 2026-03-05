@@ -1,0 +1,60 @@
+import { describe, expect, it, vi } from 'vitest';
+import { customRenderWithTildelOppgaveContext } from 'lib/test/CustomRender';
+import { MineOppgaverMenyNy } from 'components/oppgaveliste/mineoppgaverny/mineoppgavermeny/MineOppgaverMenyNy';
+import { Oppgave } from 'lib/types/oppgaveTypes';
+import {
+  NoNavAapOppgaveOppgaveDtoBehandlingstype,
+  NoNavAapOppgaveOppgaveDtoStatus,
+} from '@navikt/aap-oppgave-typescript-types';
+import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+
+const oppgaver: Oppgave = {
+  vurderingsbehov: [],
+  avklaringsbehovKode: '',
+  behandlingOpprettet: '',
+  behandlingstype: NoNavAapOppgaveOppgaveDtoBehandlingstype.F_RSTEGANGSBEHANDLING,
+  enhet: '',
+  opprettetAv: '',
+  opprettetTidspunkt: '',
+  status: NoNavAapOppgaveOppgaveDtoStatus.OPPRETTET,
+  versjon: 0,
+  årsakerTilBehandling: [],
+  markeringer: [],
+  enhetForKø: '4491',
+  erPåVent: false,
+};
+
+describe('MineOppgaverMeny', () => {
+  const user = userEvent.setup();
+
+  it('skal ha en knapp for å behandle oppgaven', () => {
+    customRenderWithTildelOppgaveContext(
+      <MineOppgaverMenyNy
+        oppgave={oppgaver}
+        setFeilmelding={vi.fn()}
+        revalidateFunction={vi.fn()}
+        setÅpenModal={vi.fn()}
+      />,
+      false
+    );
+    const button = screen.getByRole('button', { name: 'Behandle' });
+    expect(button).toBeVisible();
+  });
+
+  it('skal ha en knapp for å frigi oppgaven', async () => {
+    customRenderWithTildelOppgaveContext(
+      <MineOppgaverMenyNy
+        oppgave={oppgaver}
+        setFeilmelding={vi.fn()}
+        revalidateFunction={vi.fn()}
+        setÅpenModal={vi.fn()}
+      />,
+      false
+    );
+    const menu = screen.getByRole('img', { name: 'Meny' });
+    await user.click(menu);
+    const button = screen.getByRole('button', { name: 'Frigi oppgave' });
+    expect(button).toBeVisible();
+  });
+});

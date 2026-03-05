@@ -16,7 +16,7 @@ interface Props {
 export const AvklaringsbehovReturer = ({ data }: Props) => {
   const [visning, setVisningMedÅrsak] = useState<string>('medÅrsak');
   const dataMapped = visning === 'medÅrsak' ? data : slåSammenÅrsak(data);
-  const { sort, settSorteringskriterier, sortertListe } = useSortertListe(dataMapped);
+  const { sort, settSorteringskriterier, sortertListe } = useSortertListe(dataMapped, 'avklaringsbehov-returer');
 
   return (
     <PlotWrapper>

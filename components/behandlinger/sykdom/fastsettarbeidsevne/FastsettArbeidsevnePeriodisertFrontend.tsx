@@ -8,7 +8,7 @@ import {
   ArbeidsevneGrunnlag,
   MellomlagretVurdering,
   PeriodisertArbeidsevneVurderingDto,
-  VurdertAvAnsatt,
+  VurderingMeta,
 } from 'lib/types/types';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
@@ -47,14 +47,10 @@ interface Props {
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
-interface ArbeidsevneVurderingForm {
+interface ArbeidsevneVurderingForm extends VurderingMeta {
   begrunnelse: string;
   arbeidsevne: number | undefined;
   fraDato: string | undefined;
-  vurdertAv?: VurdertAvAnsatt;
-  kvalitetssikretAv?: VurdertAvAnsatt;
-  besluttetAv?: VurdertAvAnsatt;
-  erNyVurdering?: boolean;
 }
 
 interface FastsettArbeidsevneForm {
@@ -118,6 +114,7 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
       fraDato: fields.length === 0 ? formaterDatoForFrontend(new Date()) : undefined,
       arbeidsevne: undefined,
       erNyVurdering: true,
+      behøverVurdering: false,
     });
   }
 
@@ -188,6 +185,53 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
           </BodyLong>
         </VStack>
       )}
+      {vedtatteVurderinger.map((vurdering) => (
+        <TidligereVurderingExpandableCard
+          key={vurdering.fom}
+          fom={parseISO(vurdering.fom)}
+          tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
+          foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+          vurderingStatus={getErOppfyltEllerIkkeStatus(vurdering.arbeidsevne > 0)}
+          vurdertAv={vurdering.vurdertAv}
+        >
+          <VStack gap={'5'}>
+            <SpørsmålOgSvar spørsmål="Vurderingen gjelder fra?" svar={formaterDatoForFrontend(vurdering.fom)} />
+            <SpørsmålOgSvar spørsmål="Vilkårsvurdering" svar={vurdering.begrunnelse} />
+            <SpørsmålOgSvar
+              spørsmål="Oppgi arbeidsevnen som ikke er utnyttet i prosent"
+              svar={vurdering.arbeidsevne.toString()}
+            />
+          </VStack>
+        </TidligereVurderingExpandableCard>
+      ))}
+
+      {fields.map((vurdering, index) => (
+        <NyVurderingExpandableCard
+          key={vurdering.id}
+          accordionsSignal={accordionsSignal}
+          fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
+          vurderingStatus={undefined}
+          nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
+          isLast={index === vedtatteVurderinger.length - 1}
+          vurdering={vurdering}
+          finnesFeil={finnesFeilForVurdering(index, errorList)}
+          readonly={formReadOnly}
+          onSlettVurdering={() => remove(index)}
+          // vilkåret er valgfritt, kan derfor slette vurderingen selv om det ikke finnes en tidligere vurdering
+          harTidligereVurderinger={true}
+          index={index}
+          initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
+        >
+          <DateInputWrapper
+            control={form.control}
+            name={`vurderinger.${index}.fraDato`}
+            label={'Vurderingen gjelder fra'}
+            rules={{
+              required: 'Vennligst velg en dato for når vurderingen gjelder fra',
+              validate: (value) => validerDato(value as string),
+            }}
+            readOnly={formReadOnly}
+          />
       <VurderingerListe
         startDato={parseISO(sak.periode.fom)}
         ikkeRelevantePerioder={grunnlag.ikkeRelevantePerioder}
@@ -313,6 +357,8 @@ function getDefaultValuesFromGrunnlag(grunnlag: ArbeidsevneGrunnlag | undefined)
       vurdertAv: vurdering.vurdertAv,
       kvalitetssikretAv: vurdering.kvalitetssikretAv,
       besluttetAv: vurdering.besluttetAv,
+      erNyVurdering: false,
+      behøverVurdering: false,
     })),
   };
 }

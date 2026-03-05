@@ -47,7 +47,6 @@ export const DigitaliserDokument = ({
         strukturertDokument: jsonString,
         søknadsdato: søknadsdato && formaterDatoForBackend(søknadsdato),
       },
-      // @ts-ignore
       referanse: behandlingsreferanse,
     });
   }

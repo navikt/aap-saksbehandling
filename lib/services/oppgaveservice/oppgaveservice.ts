@@ -6,6 +6,7 @@ import {
   EnhetSynkroniseringOppgave,
   Kø,
   Markering,
+  MineOppgaverQueryParams,
   Oppgave,
   OppgaveAvklaringsbehovKode,
   OppgaveBehandlingstype,
@@ -17,7 +18,7 @@ import {
   TildelOppgaveRequest,
   TildelOppgaveResponse,
 } from 'lib/types/oppgaveTypes';
-import { queryParamsArray } from 'lib/utils/request';
+import { mineOppgaverQueryParams, queryParamsArray } from 'lib/utils/request';
 import { apiFetch } from 'lib/services/apiFetch';
 import { isLocal } from 'lib/utils/environment';
 import { FetchResponse } from 'lib/utils/api';
@@ -76,9 +77,12 @@ export async function hentAntallOppgaver(behandlingstype?: string) {
   });
 }
 
-export const hentMineOppgaver = async () => {
-  const url = `${oppgaveApiBaseURL}/mine-oppgaver`;
-  return await apiFetch<OppgavelisteResponse>(url, oppgaveApiScope, 'GET', undefined, ['oppgaveservice/mine-oppgaver']);
+export const hentMineOppgaver = async (queryParams: MineOppgaverQueryParams) => {
+  const query = queryParams?.sortby
+    ? mineOppgaverQueryParams({ sortby: queryParams?.sortby, sortorder: queryParams.sortorder })
+    : '';
+  const url = `${oppgaveApiBaseURL}/mine-oppgaver${query ? `?${query}` : ''}`;
+  return await apiFetch<OppgavelisteResponse>(url, oppgaveApiScope, 'GET');
 };
 
 export async function hentEnheter() {
@@ -136,12 +140,12 @@ export async function oppgaveTekstSøk(søketekst: string) {
       {
         avklaringsbehovKode: '',
         behandlingOpprettet: '',
-        //@ts-ignore Fiks type i backend
+        // @ts-expect-error Fiks type i backend
         behandlingstype: 'DOKUMENT_H\u00C5NDTERING',
         enhet: '',
         opprettetAv: '',
         opprettetTidspunkt: '',
-        //@ts-ignore Fiks type i backend
+        // @ts-expect-error Fiks type i backend
         status: 'OPPRETTET',
         versjon: 0,
       },

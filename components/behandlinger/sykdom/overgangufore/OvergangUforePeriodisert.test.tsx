@@ -331,7 +331,7 @@ describe('Førstegangsbehandling', () => {
     await user.click(jaValg);
 
     const infoTekst = screen.getByText(
-      'Pass på at datoen vurderingen gjelder fra skal være samme som vedtaksdato på uførevedtaket.'
+      'Pass på at datoen vurderingen gjelder fra er virkningstidspunktet på uføretrygd.'
     );
 
     expect(infoTekst).toBeVisible();

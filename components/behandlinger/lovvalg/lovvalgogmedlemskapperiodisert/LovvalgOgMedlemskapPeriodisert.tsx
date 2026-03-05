@@ -84,8 +84,9 @@ export const LovvalgOgMedlemskapPeriodisert = ({
         lovvalgsEØSLand: '',
       },
       medlemskap: undefined,
-      fraDato: undefined,
+      fraDato: '',
       erNyVurdering: true,
+      behøverVurdering: false,
     });
   }
 
@@ -144,6 +145,44 @@ export const LovvalgOgMedlemskapPeriodisert = ({
       errorList={errorList}
       formReset={() => form.reset(getDefaultValuesFromGrunnlag(grunnlag))}
     >
+      {vedtatteVurderinger.map((vurdering) => (
+        <TidligereVurderingExpandableCard
+          key={vurdering.fom}
+          fom={parseISO(vurdering.fom)}
+          tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
+          foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+          vurderingStatus={getErOppfyltEllerIkkeStatus(
+            vurdering.lovvalg.lovvalgsEØSLandEllerLandMedAvtale === 'NOR' &&
+              vurdering.medlemskap?.varMedlemIFolketrygd === true
+          )}
+        >
+          <LovvalgOgMedlemskapTidligereVurdering vurdering={vurdering} />
+        </TidligereVurderingExpandableCard>
+      ))}
+
+      {vurderingerFields.map((vurdering, index) => (
+        <NyVurderingExpandableCard
+          key={vurdering.id}
+          accordionsSignal={accordionsSignal}
+          fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
+          nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
+          isLast={index === vurderingerFields.length - 1}
+          vurderingStatus={getErOppfyltEllerIkkeStatus(
+            form.watch(`vurderinger.${index}.medlemskap.varMedlemIFolketrygd`)
+              ? form.watch(`vurderinger.${index}.medlemskap.varMedlemIFolketrygd`) === JaEllerNei.Ja
+              : undefined
+          )}
+          vurdering={vurdering}
+          finnesFeil={finnesFeilForVurdering(index, errorList)}
+          onSlettVurdering={() => remove(index)}
+          harTidligereVurderinger={tidligereVurderinger.length > 0}
+          index={index}
+          readonly={formReadOnly}
+          initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
+        >
+          <LovvalgOgMedlemskapFormInput form={form} readOnly={formReadOnly} index={index} />
+        </NyVurderingExpandableCard>
+      ))}
       <VurderingerListe
         startDato={parseISO(sak.periode.fom)}
         ikkeRelevantePerioder={grunnlag.ikkeRelevantePerioder}

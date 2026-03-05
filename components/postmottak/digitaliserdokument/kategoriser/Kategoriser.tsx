@@ -56,6 +56,8 @@ export const Kategoriser = ({ kategori, readOnly, submit, onKategoriChange, stat
       kategori: {
         type: 'combobox',
         label: 'Velg kategori for dokument',
+        description:
+          'Finner du ingen passende kategori, velger du «Annet relevant dokument». Da får du flere valgmuligheter.',
         rules: { required: 'Du må velge kategori' },
         options: kategorier,
         defaultValue: kategori,

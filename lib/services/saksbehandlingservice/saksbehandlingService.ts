@@ -26,6 +26,7 @@ import {
   EtableringEgenVirksomhetGrunnlagResponse,
   FatteVedtakGrunnlag,
   FlytProsessering,
+  ForeløpigBehandlingsutfall,
   ForeslåVedtakGrunnlag,
   ForhåndsvisDialogmelding,
   ForhåndsvisDialogmeldingResponse,
@@ -72,6 +73,7 @@ import {
   SamordningUføreGrunnlag,
   SettPåVent,
   Soningsgrunnlag,
+  StegType,
   StudentGrunnlag,
   SvarFraAndreinstansGrunnlag,
   SykdomsGrunnlag,
@@ -324,13 +326,8 @@ export const hentInntektsBortfallGrunnlag = async (behandlingsReferanse: string)
   return await apiFetch<InntektsbortfallResponse>(url, saksbehandlingApiScope, 'GET');
 };
 
-export const hentHelseInstitusjonsGrunnlagGammel = async (behandlingsReferanse: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/institusjon/helse`;
-  return apiFetch<HelseinstitusjonGrunnlag>(url, saksbehandlingApiScope, 'GET');
-};
-
 export const hentHelseInstitusjonsGrunnlagNy = async (behandlingsReferanse: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/institusjon/helseny`;
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/institusjon/helse`;
   return apiFetch<HelseinstitusjonGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
@@ -627,6 +624,17 @@ export const hentMellomlagring = async (behandlingsReferanse: string, kode: stri
 
     return undefined;
   }
+};
+
+export const hentForeløpigBehandlingsutfall = async (
+  behandlingsReferanse: string,
+  førSteg: StegType,
+  etterSteg: StegType
+) => {
+  return apiFetch<ForeløpigBehandlingsutfall>(
+    `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/tidligere-vurderinger?førSteg=${førSteg}&etterSteg=${etterSteg}`,
+    saksbehandlingApiScope
+  );
 };
 
 export const hentOppfølgningsOppgaverOpprinselsePåBehandlingsReferanse = async (

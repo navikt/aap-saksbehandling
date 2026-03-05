@@ -31,7 +31,7 @@ export const SykdomsvurderingDiagnosesøk = ({ index, form, readOnly, hoveddiagn
         name={`vurderinger.${index}.kodeverk`}
         control={form.control}
         label={'Velg system for diagnoser'}
-        rules={{ required: 'Du må velge et system for diagnoser' }}
+        rules={{ required: 'Du må velge et system for diagnoser.' }}
         readOnly={readOnly}
         size={'small'}
         horisontal={true}
@@ -48,7 +48,7 @@ export const SykdomsvurderingDiagnosesøk = ({ index, form, readOnly, hoveddiagn
             name={`vurderinger.${index}.hoveddiagnose`}
             fetcher={async (value) => diagnoseSøker(kodeverkValue, value)}
             defaultOptions={defaultOptionsHoveddiagnose}
-            rules={{ required: 'Du må velge en hoveddiagnose' }}
+            rules={{ required: 'Du må velge en hoveddiagnose.' }}
             readOnly={readOnly}
           />
           {form.watch(`vurderinger.${index}.hoveddiagnose`)?.value !== ingenDiagnoseCode && (

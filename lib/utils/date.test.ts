@@ -1,5 +1,11 @@
 import { describe, it, expect } from 'vitest';
-import { formaterDatoForBackend, parseDatoFraDatePicker, sorterEtterNyesteDato, stringToDate } from 'lib/utils/date';
+import {
+  formaterDatoForBackend,
+  parseDatoFraDatePicker,
+  sorterEtterNyesteDato,
+  stringToDate,
+  summerPerioderVarighetIArbeidsdager,
+} from 'lib/utils/date';
 
 describe('formaterDatoForBackend', () => {
   it('skal returnere dato på korrekt format', () => {
@@ -65,5 +71,25 @@ describe('parseDateFraDatePicker', () => {
   it('gir undefined tilbake når string-input ikke er en gyldig dato', () => {
     const result = parseDatoFraDatePicker('20238-92');
     expect(result).toBeUndefined();
+  });
+});
+
+describe('summerPerioderVarighet', () => {
+  it('summerPeriodeVarighet', () => {
+    const result = summerPerioderVarighetIArbeidsdager([
+      {
+        fom: '2026-01-01',
+        tom: '2026-01-09',
+      },
+      {
+        fom: '2026-03-01',
+        tom: '2026-04-01',
+      },
+      {
+        fom: '2026-05-01',
+        tom: '2026-05-05',
+      },
+    ]);
+    expect(result).toBe(30);
   });
 });

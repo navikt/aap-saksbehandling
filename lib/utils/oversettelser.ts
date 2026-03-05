@@ -1,8 +1,6 @@
 import { SettPåVentÅrsaker, TypeBehandling, VilkårUtfall, ÅrsakTilOpprettelse } from 'lib/types/types';
 import { exhaustiveCheck } from 'lib/utils/typescript';
 import { OppgaveAvklaringsbehovKode, OppgaveBehandlingstype } from 'lib/types/oppgaveTypes';
-import { PostmottakSettPåVentÅrsaker } from 'lib/types/postmottakTypes';
-
 const behovskodeMap = {
   // Behandlingsflyt
   '4101': '§ 11-7 Aktivitetsplikt',
@@ -43,11 +41,13 @@ const behovskodeMap = {
   '5033': 'Avbryt revurdering',
   '5034': 'Avklar samordning sykestipend',
   '5035': 'Avklar oppholdskrav',
+  '5036': 'Samordning barnepensjon',
   '5040': '§ 11-4 andre ledd. Krav om inntektsbortfall etter fylte 62 år',
   '5050': 'Skriv brev',
   '5051': 'Skriv vedtaksbrev',
   '5052': 'Skriv forhåndsvarsel brudd aktivitetsplikt',
   '5053': 'Skriv sykdomsvurdering brev',
+  '5054': 'Bekreft vurderinger',
   '5056': 'Samordning refusjonskrav',
   '5057': 'Arbeidsopptrapping',
   '5058': '§ 11-15 Etablering av egen virksomhet',
@@ -75,6 +75,8 @@ const behovskodeMap = {
   '9002': 'Bestill brev',
   '9003': 'Bestill legeerklæring',
   '9004': 'Opprett hendelse på sak',
+  '9082': 'Vurder tilbakekreving',
+  '9083': 'Vurder tilbakekreving beslutter',
 
   // Postmottak
   '1337': 'Kategoriser dokument',
@@ -84,6 +86,8 @@ const behovskodeMap = {
   '1341': 'Endre tema',
   '1342': 'Vent på Gosys',
 } as const;
+
+import { PostmottakSettPåVentÅrsaker, PostmottakTypeBehandling } from 'lib/types/postmottakTypes';
 
 export function mapBehovskodeTilBehovstype(kode: OppgaveAvklaringsbehovKode | string): string {
   return behovskodeMap[kode as OppgaveAvklaringsbehovKode] ?? 'Ukjent behovstype';
@@ -304,7 +308,7 @@ export function mapUtfallTilTekst(utfall: VilkårUtfall): string {
   }
 }
 
-export function mapTypeBehandlingTilTekst(typeBehandling: TypeBehandling) {
+export function mapTypeBehandlingTilTekst(typeBehandling: TypeBehandling | PostmottakTypeBehandling) {
   switch (typeBehandling) {
     case 'Førstegangsbehandling':
       return 'Førstegangsbehandling';
@@ -322,13 +326,22 @@ export function mapTypeBehandlingTilTekst(typeBehandling: TypeBehandling) {
       return 'Aktivitetsplikt § 11-7';
     case 'Aktivitetsplikt11_9':
       return 'Aktivitetsplikt § 11-9';
+    case 'DokumentHåndtering':
+      return 'Dokumenthåndtering';
     default:
       return typeBehandling;
   }
 }
 
 export function mapStatusTilTekst(
-  status: 'VENT' | 'RETUR_FRA_KVALITETSSIKRER' | 'RETUR_FRA_BESLUTTER' | 'ER_HASTESAK' | 'VENTEFRIST_UTLØPT'
+  status:
+    | 'VENT'
+    | 'RETUR_FRA_KVALITETSSIKRER'
+    | 'RETUR_FRA_BESLUTTER'
+    | 'ER_HASTESAK'
+    | 'VENTEFRIST_UTLØPT'
+    | 'RETUR_FRA_VEILEDER'
+    | 'RETUR_FRA_SAKSBEHANDLER'
 ): string {
   switch (status) {
     case 'VENT':
@@ -341,6 +354,10 @@ export function mapStatusTilTekst(
       return 'Hastesak';
     case 'VENTEFRIST_UTLØPT':
       return 'Ventefrist utløpt';
+    case 'RETUR_FRA_VEILEDER':
+      return 'Retur fra veileder';
+    case 'RETUR_FRA_SAKSBEHANDLER':
+      return 'Retur fra saksbehandler';
   }
 }
 

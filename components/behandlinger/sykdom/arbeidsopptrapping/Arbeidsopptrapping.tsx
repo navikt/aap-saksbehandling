@@ -4,7 +4,7 @@ import {
   ArbeidsopptrappingGrunnlagResponse,
   ArbeidsopptrappingLøsningDto,
   MellomlagretVurdering,
-  VurdertAvAnsatt,
+  VurderingMeta,
 } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { useFieldArray, useForm } from 'react-hook-form';
@@ -51,15 +51,11 @@ export interface ArbeidsopptrappingForm {
   vurderinger: ArbeidsopptrappingVurderingForm[];
 }
 
-export interface ArbeidsopptrappingVurderingForm {
+export interface ArbeidsopptrappingVurderingForm extends VurderingMeta {
   begrunnelse: string;
   fraDato: string | undefined;
   reellMulighetTilOpptrapping: JaEllerNei | undefined;
   rettPaaAAPIOpptrapping: JaEllerNei | undefined;
-  vurdertAv?: VurdertAvAnsatt;
-  kvalitetssikretAv?: VurdertAvAnsatt;
-  besluttetAv?: VurdertAvAnsatt;
-  erNyVurdering?: boolean;
 }
 
 export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, initialMellomlagretVurdering }: Props) => {
@@ -104,6 +100,7 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
       reellMulighetTilOpptrapping: undefined,
       rettPaaAAPIOpptrapping: undefined,
       erNyVurdering: true,
+      behøverVurdering: false,
     });
   }
 
@@ -173,6 +170,72 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
           </BodyLong>
         </VStack>
       )}
+      {ikkeVurderbarePerioder.map((vurdering) => (
+        <IkkeVurderbarPeriode
+          key={vurdering.fom}
+          fom={parseISO(vurdering.fom)}
+          tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
+          alertMelding={
+            'Vilkåret kan ikke vurderes for denne perioden. For å vurdere vilkåret må §§ 11-5 og 11-6 være oppfylt.'
+          }
+          foersteNyePeriodeFraDato={undefined}
+        ></IkkeVurderbarPeriode>
+      ))}
+      {vedtatteVurderinger.map((vurdering) => (
+        <TidligereVurderingExpandableCard
+          key={vurdering.fom}
+          fom={parseISO(vurdering.fom)}
+          tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
+          foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+          vurderingStatus={getErOppfyltEllerIkkeStatus(
+            vurdering.reellMulighetTilOpptrapping && vurdering.rettPaaAAPIOpptrapping
+          )}
+        >
+          <VStack gap={'5'}>
+            <SpørsmålOgSvar spørsmål="Vurderingen gjelder fra?" svar={formaterDatoForFrontend(vurdering.fom)} />
+            <SpørsmålOgSvar spørsmål="Vilkårsvurdering" svar={vurdering.begrunnelse} />
+            <SpørsmålOgSvar
+              spørsmål="Har brukeren en reell mulighet til å trappe opp til en 100% stilling?"
+              svar={getJaNeiEllerUndefined(vurdering.reellMulighetTilOpptrapping)!}
+            />
+            <SpørsmålOgSvar
+              spørsmål="Har brukeren rett på AAP i arbeidsopptrapping etter § 11-23 6. ledd?"
+              svar={getJaNeiEllerUndefined(vurdering.rettPaaAAPIOpptrapping)!}
+            />
+          </VStack>
+        </TidligereVurderingExpandableCard>
+      ))}
+
+      {fields.map((vurdering, index) => (
+        <NyVurderingExpandableCard
+          key={vurdering.id}
+          accordionsSignal={accordionsSignal}
+          fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
+          vurderingStatus={getErOppfyltEllerIkkeStatus(
+            form.watch(`vurderinger.${index}.reellMulighetTilOpptrapping`) &&
+              form.watch(`vurderinger.${index}.rettPaaAAPIOpptrapping`)
+              ? form.watch(`vurderinger.${index}.reellMulighetTilOpptrapping`) === JaEllerNei.Ja &&
+                  form.watch(`vurderinger.${index}.rettPaaAAPIOpptrapping`) === JaEllerNei.Ja
+              : undefined
+          )}
+          nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
+          isLast={index === fields.length - 1}
+          vurdering={vurdering}
+          finnesFeil={finnesFeilForVurdering(index, errorList)}
+          onSlettVurdering={() => remove(index)}
+          readonly={formReadOnly}
+          harTidligereVurderinger={true}
+          index={index}
+          initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
+        >
+          <ArbeidsopptrappingVurderingFormInput
+            index={index}
+            form={form}
+            readonly={formReadOnly}
+            ikkeRelevantePerioder={grunnlag?.ikkeVurderbarePerioder}
+          />
+        </NyVurderingExpandableCard>
+      ))}
       {visIkkeRelevantPeriode ||  ikkeVurderbarePerioder.map((vurdering) => (
           <IkkeVurderbarPeriode
             key={vurdering.fom}
@@ -275,6 +338,8 @@ function getDefaultValuesFromGrunnlag(
       vurdertAv: vurdering.vurdertAv,
       kvalitetssikretAv: vurdering.kvalitetssikretAv,
       besluttetAv: vurdering.besluttetAv,
+      erNyVurdering: false,
+      behøverVurdering: false,
     })),
   };
 }

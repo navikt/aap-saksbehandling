@@ -11,28 +11,26 @@ interface ErrorListElement {
 }
 export type ErrorList = ErrorListElement[];
 
+type ErrorParent = { errField?: { ref?: { name?: string }; message?: string } };
+
 export function mapPeriodiserteVurderingerErrorList<T extends FieldValues>(
   formstateErrors: VurderingerErrors<T>
 ): ErrorList {
   return formstateErrors.vurderinger && Array.isArray(formstateErrors.vurderinger)
     ? formstateErrors.vurderinger.reduce((acc, errVurdering, index) => {
         const nestedErrors = Object.values(errVurdering || {})
-          // @ts-ignore
+          // @ts-expect-error
           .filter((val) => !val?.ref && !val?.message)
           .map((nestedErrorParent) =>
-            // @ts-ignore
-            Object.values(nestedErrorParent).map((errField) => ({
-              // @ts-ignore
+            Object.values(nestedErrorParent as ErrorListElement).map((errField) => ({
               ref: `#${errField?.ref?.name}`,
-              // @ts-ignore
               message: errField?.message,
               index,
             }))
           )
           .flat()
           .filter((el) => el.message);
-        const errors = Object.values(errVurdering || {})
-          // @ts-ignore
+        const errors = Object.values((errVurdering as ErrorParent) || {})
           .map((errField) => ({ ref: `#${errField?.ref?.name}`, message: errField?.message }))
           .filter((el) => el.message);
         return [...acc, ...errors, ...nestedErrors];

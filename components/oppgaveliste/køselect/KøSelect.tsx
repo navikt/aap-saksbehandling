@@ -4,7 +4,7 @@ import { Select } from '@navikt/ds-react';
 import { Kø } from 'lib/types/oppgaveTypes';
 import { UseFormReturn } from 'react-hook-form';
 import { ALLE_OPPGAVER_ID } from 'components/oppgaveliste/filtrering/filtreringUtils';
-import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
+import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaverny/MineOppgaverNy';
 
 interface Props {
   køer: Kø[];

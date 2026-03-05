@@ -1,6 +1,6 @@
 'use client';
 
-import { BistandsGrunnlag, MellomlagretVurdering, VurdertAvAnsatt } from 'lib/types/types';
+import { BistandsGrunnlag, MellomlagretVurdering, VurderingMeta, VurdertAvAnsatt } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { FormEvent } from 'react';
 import { parseDatoFraDatePicker } from 'lib/utils/date';
@@ -44,7 +44,7 @@ interface Props {
 export interface BistandForm {
   vurderinger: Array<BistandVurderingForm>;
 }
-export interface BistandVurderingForm {
+export interface BistandVurderingForm extends VurderingMeta {
   fraDato: string;
   begrunnelse: string;
   erBehovForAktivBehandling: JaEllerNei | undefined;
@@ -55,7 +55,6 @@ export interface BistandVurderingForm {
   vurdertAv?: VurdertAvAnsatt;
   kvalitetssikretAv?: VurdertAvAnsatt;
   besluttetAv?: VurdertAvAnsatt;
-  erNyVurdering?: boolean;
 }
 
 export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, initialMellomlagretVurdering }: Props) => {
@@ -154,6 +153,43 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, initialMe
           }
         />
 
+        {vedtatteVurderinger.map((vurdering) => (
+          <TidligereVurderingExpandableCard
+            key={vurdering.fom}
+            fom={parseISO(vurdering.fom)}
+            tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
+            foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+            vurderingStatus={getErOppfyltEllerIkkeStatus(
+              !!(
+                vurdering.erBehovForAktivBehandling ||
+                vurdering.erBehovForArbeidsrettetTiltak ||
+                vurdering.erBehovForAnnenOppfølging
+              )
+            )}
+          >
+            <BistandsbehovTidligereVurdering vurdering={vurdering} />
+          </TidligereVurderingExpandableCard>
+        ))}
+
+        {fields.map((vurdering, index) => (
+          <NyVurderingExpandableCard
+            key={vurdering.id}
+            accordionsSignal={accordionsSignal}
+            fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
+            nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
+            isLast={index === fields.length - 1}
+            vurderingStatus={getErOppfyltEllerIkkeStatus(erNyVurderingOppfylt(form.watch(`vurderinger.${index}`)))}
+            vurdering={vurdering}
+            readonly={formReadOnly}
+            onSlettVurdering={() => remove(index)}
+            harTidligereVurderinger={tidligereVurderinger.length > 0}
+            index={index}
+            finnesFeil={finnesFeilForVurdering(index, errorList)}
+            initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
+          >
+            <BistandsbehovVurderingForm form={form} readOnly={formReadOnly} index={index} />
+          </NyVurderingExpandableCard>
+        ))}
         <VurderingerListe
           startDato={parseISO(sak.periode.fom)}
           ikkeRelevantePerioder={grunnlag.ikkeRelevantePerioder}
@@ -224,6 +260,8 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, initialMe
         vurdertAv: vurdering.vurdertAv,
         kvalitetssikretAv: vurdering.kvalitetssikretAv,
         besluttetAv: vurdering.besluttetAv,
+        erNyVurdering: false,
+        behøverVurdering: false,
       })),
     };
   }
@@ -238,6 +276,7 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, initialMe
       skalVurdereAapIOvergangTilArbeid: undefined,
       erBehovForArbeidsrettetTiltak: undefined,
       erNyVurdering: true,
+      behøverVurdering: false,
     };
   }
 };

@@ -6,7 +6,7 @@ import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { parseISO } from 'date-fns';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
-import { MellomlagretVurdering, SykdomsGrunnlag, TypeBehandling, VurdertAvAnsatt } from 'lib/types/types';
+import { MellomlagretVurdering, SykdomsGrunnlag, TypeBehandling, VurderingMeta } from 'lib/types/types';
 import { finnDiagnosegrunnlag } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
 import { ValuePair } from 'components/form/FormField';
 import { useSak } from 'hooks/SakHook';
@@ -43,7 +43,7 @@ export interface SykdomsvurderingerForm {
   vurderinger: Array<Sykdomsvurdering>;
 }
 
-export interface Sykdomsvurdering {
+export interface Sykdomsvurdering extends VurderingMeta {
   fraDato: string;
   begrunnelse: string;
   vurderingenGjelderFra?: string;
@@ -58,10 +58,6 @@ export interface Sykdomsvurdering {
   erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense?: JaEllerNei;
   erNedsettelseIArbeidsevneMerEnnFørtiProsent?: JaEllerNei;
   yrkesskadeBegrunnelse?: string;
-  vurdertAv?: VurdertAvAnsatt;
-  kvalitetssikretAv?: VurdertAvAnsatt;
-  besluttetAv?: VurdertAvAnsatt;
-  erNyVurdering?: boolean;
 }
 
 interface SykdomProps {
@@ -246,6 +242,54 @@ export const Sykdomsvurdering = ({
             );
           }}
         />
+
+        {vedtatteVurderinger.map((vurdering) => (
+          <TidligereVurderingExpandableCard
+            key={vurdering.fom}
+            fom={new Dato(vurdering.fom).dato}
+            tom={vurdering.tom ? parseISO(vurdering.tom) : undefined}
+            foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+            vurderingStatus={getErOppfyltEllerIkkeStatus(erTidligereVurderingOppfylt(vurdering))}
+            defaultCollapsed={nyeVurderingerFields.length > 0}
+            vurdertAv={vurdering.vurdertAv}
+          >
+            <TidligereSykdomsvurdering vurdering={vurdering} />
+          </TidligereVurderingExpandableCard>
+        ))}
+
+        {nyeVurderingerFields.map((vurdering, index) => (
+          <NyVurderingExpandableCard
+            key={vurdering.id}
+            accordionsSignal={accordionsSignal}
+            fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
+            vurderingStatus={getErOppfyltEllerIkkeStatus(
+              erNyVurderingOppfylt(
+                form.watch(`vurderinger.${index}`),
+                førsteDatoSomKanVurderes,
+                grunnlag.skalVurdereYrkesskade
+              )
+            )}
+            nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
+            isLast={index === nyeVurderingerFields.length - 1}
+            vurdering={vurdering}
+            readonly={formReadOnly}
+            finnesFeil={finnesFeilForVurdering(index, errorList)}
+            onSlettVurdering={() => remove(index)}
+            harTidligereVurderinger={tidligereVurderinger.length > 0}
+            index={index}
+            initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
+          >
+            <SykdomsvurderingFormInput
+              index={index}
+              form={form}
+              readonly={formReadOnly}
+              sak={sak}
+              erÅrsakssammenhengYrkesskade={grunnlag.erÅrsakssammenhengYrkesskade}
+              skalVurdereYrkesskade={grunnlag.skalVurdereYrkesskade}
+              rettighetsperiodeStartdato={førsteDatoSomKanVurderes}
+            />
+          </NyVurderingExpandableCard>
+        ))}
       </VStack>
     </VilkårskortPeriodisert>
   );
@@ -294,6 +338,8 @@ export const Sykdomsvurdering = ({
         vurdertAv: vurdering.vurdertAv,
         kvalitetssikretAv: vurdering.kvalitetssikretAv,
         besluttetAv: vurdering.besluttetAv,
+        erNyVurdering: false,
+        behøverVurdering: false,
       })),
     };
   }

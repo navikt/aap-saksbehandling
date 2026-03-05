@@ -79,6 +79,12 @@ export const endreTema = async (behandlingsreferanse: string) => {
   return await apiFetch<{ redirectUrl: string }>(url, postmottakApiScope, 'POST');
 };
 
+export const alleBehandlinger = async (ident: string) => {
+  const url = `${postmottakApiBaseUrl}/api/alle-behandlinger`;
+  const body = { ident: ident };
+  return await apiFetch<{ redirectUrl: string }>(url, postmottakApiScope, 'POST', body);
+};
+
 export const hentAlleBehandlinger = async () => {
   const url = `${postmottakApiBaseUrl}/test/hentAlleBehandlinger`;
   return await apiFetch<[{ id: string; journalpostId: string; status: string; opprettet: string; steg: string }]>(
@@ -139,7 +145,10 @@ async function ventTilProsesseringErFerdig(
     }
 
     if (status === 'FEILET') {
-      logError(`Prosessering feilet: ${JSON.stringify(response.data.prosessering.ventendeOppgaver)}`);
+      logError(
+        'Prosessering av behandling i postmottak feilet: ',
+        Error(JSON.stringify(response.data.prosessering.ventendeOppgaver))
+      );
       prosessering = response.data.prosessering;
       break;
     }
