@@ -17,6 +17,7 @@ import { useLagreAktivUtvidetFilter } from 'hooks/oppgave/aktivUtvidetFilterHook
 import { useEffect } from 'react';
 import { useBackendSortering } from 'hooks/oppgave/BackendSorteringHook';
 import { PathsMineOppgaverGetParametersQuerySortby } from '@navikt/aap-oppgave-typescript-types';
+import { ValuePair } from 'components/form/FormField';
 
 export interface FormFieldsFilter {
   behandlingstyper?: string[];
@@ -25,7 +26,7 @@ export interface FormFieldsFilter {
   årsaker?: string[];
   avklaringsbehov?: string[];
   statuser?: string[];
-  saksbehandlere?: string[];
+  saksbehandlere?: ValuePair[];
 }
 
 export const MineOppgaverNy = () => {

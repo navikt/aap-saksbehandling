@@ -60,15 +60,15 @@ export async function POST(req: Request, brukerinformasjon: Props) {
     data: [
       {
         label: 'Kari Johansen',
-        value: 'IG54GJ',
+        value: 'Z990601',
       },
       {
         label: 'Egil Olsen',
-        value: 'IG543GJ',
+        value: 'Z990530',
       },
       {
         label: 'Tor Idland',
-        value: 'I163764',
+        value: 'Z993105',
       },
     ],
   };

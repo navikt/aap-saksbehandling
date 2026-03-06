@@ -63,6 +63,10 @@ function lagUrlSuffix(filter: OppgavelisteRequest['utvidetFilter']): string {
     params.append('ventefristUtløpt', filter.ventefristUtløpt.toString());
   }
 
+  if (filter?.saksbehandlere?.length) {
+    filter.saksbehandlere.forEach((ident) => params.append('saksbehandlere', ident));
+  }
+
   const queryString = params.toString();
   return queryString ? `?${queryString}` : '';
 }
