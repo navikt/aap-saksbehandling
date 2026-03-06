@@ -17,6 +17,7 @@ import {
 } from 'lib/types/types';
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { useEffect } from 'react';
+import { nyVurderingErOppfylt } from 'components/behandlinger/sykdom/etableringegenvirksomhet/etablering-av-egen-virksomhet-utils';
 
 const EierBrukerVirsomheten = lagEnumObjektFraUnionType<NonNullable<EtableringEierBrukerVirksomheten>>({
   EIER_MINST_50_PROSENT: 'EIER_MINST_50_PROSENT',
@@ -117,180 +118,182 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly, gru
           readOnly={readOnly}
         />
       )}
-      <VStack gap={'4'} paddingBlock={'4 0'}>
-        <Heading level={'2'} size={'small'}>
-          Etableringsplan
-        </Heading>
-        <VStack gap={'4'}>
-          <VStack>
-            <Label size={'small'}>Utviklingsfase</Label>
-            <VStack gap={'1'}>
-              <BodyShort textColor={'subtle'} size={'small'}>
-                Kan gis for inntil 6 måneder
-              </BodyShort>
-              {grunnlag.bruktUtviklingsDager && grunnlag.bruktUtviklingsDager > 0 ? (
-                <BodyShort
-                  textColor={'subtle'}
+      {nyVurderingErOppfylt(form.watch(`vurderinger.${index}`)) && (
+        <VStack gap={'4'} paddingBlock={'4 0'}>
+          <Heading level={'2'} size={'small'}>
+            Etableringsplan
+          </Heading>
+          <VStack gap={'4'}>
+            <VStack>
+              <Label size={'small'}>Utviklingsfase</Label>
+              <VStack gap={'1'}>
+                <BodyShort textColor={'subtle'} size={'small'}>
+                  Kan gis for inntil 6 måneder
+                </BodyShort>
+                {grunnlag.bruktUtviklingsDager && grunnlag.bruktUtviklingsDager > 0 ? (
+                  <BodyShort
+                    textColor={'subtle'}
+                    size={'small'}
+                  >{`Brukt: ${grunnlag.bruktUtviklingsDager} arbeidsdager`}</BodyShort>
+                ) : null}
+              </VStack>
+            </VStack>
+            {form.formState.errors.vurderinger?.[index]?.utviklingsperioder && (
+              <Alert variant={'error'}>{form.formState.errors.vurderinger[index].utviklingsperioder.message}</Alert>
+            )}
+            <VStack gap={'4'}>
+              <Table size="small">
+                <Table.Header>
+                  <Table.Row>
+                    <Table.HeaderCell scope="col" textSize={'small'}>
+                      <BodyShort textColor={'subtle'} size={'small'}>
+                        Periode
+                      </BodyShort>
+                    </Table.HeaderCell>
+                    <Table.HeaderCell />
+                  </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                  {utviklingsperioder.fields.map(({ id }, i) => {
+                    return (
+                      <Table.Row key={id}>
+                        <Table.DataCell>
+                          <HStack gap={'2'} align={'center'}>
+                            <DateInputWrapper
+                              readOnly={readOnly}
+                              name={`vurderinger.${index}.utviklingsperioder.${i}.fom`}
+                              control={form.control}
+                            />
+                            {'-'}
+                            <DateInputWrapper
+                              readOnly={readOnly}
+                              name={`vurderinger.${index}.utviklingsperioder.${i}.tom`}
+                              control={form.control}
+                            />
+                          </HStack>
+                        </Table.DataCell>
+                        <Table.DataCell>
+                          <Button
+                            disabled={readOnly}
+                            size={'small'}
+                            variant={'secondary'}
+                            type={'button'}
+                            icon={<TrashIcon />}
+                            onClick={() => utviklingsperioder.remove(i)}
+                          />
+                        </Table.DataCell>
+                      </Table.Row>
+                    );
+                  })}
+                </Table.Body>
+              </Table>
+              <HStack>
+                <Button
+                  disabled={readOnly}
                   size={'small'}
-                >{`Brukt: ${grunnlag.bruktUtviklingsDager} arbeidsdager`}</BodyShort>
-              ) : null}
+                  variant={'secondary'}
+                  type={'button'}
+                  icon={<PlusCircleIcon />}
+                  onClick={() => {
+                    form.clearErrors();
+                    utviklingsperioder.append({ fom: '', tom: '' });
+                  }}
+                >
+                  Legg til ny periode
+                </Button>
+              </HStack>
             </VStack>
           </VStack>
-          {form.formState.errors.vurderinger?.[index]?.utviklingsperioder && (
-            <Alert variant={'error'}>{form.formState.errors.vurderinger[index].utviklingsperioder.message}</Alert>
-          )}
           <VStack gap={'4'}>
-            <Table size="small">
-              <Table.Header>
-                <Table.Row>
-                  <Table.HeaderCell scope="col" textSize={'small'}>
-                    <BodyShort textColor={'subtle'} size={'small'}>
-                      Periode
-                    </BodyShort>
-                  </Table.HeaderCell>
-                  <Table.HeaderCell />
-                </Table.Row>
-              </Table.Header>
-              <Table.Body>
-                {utviklingsperioder.fields.map(({ id }, i) => {
-                  return (
-                    <Table.Row key={id}>
-                      <Table.DataCell>
-                        <HStack gap={'2'} align={'center'}>
-                          <DateInputWrapper
-                            readOnly={readOnly}
-                            name={`vurderinger.${index}.utviklingsperioder.${i}.fom`}
-                            control={form.control}
+            <VStack>
+              <Label size={'small'}>Oppstartsfase</Label>
+              <VStack gap={'1'}>
+                <BodyShort textColor={'subtle'} size={'small'}>
+                  Kan gis for inntil 3 måneder.
+                </BodyShort>
+                {grunnlag.bruktOppstartsdager && grunnlag.bruktOppstartsdager > 0 ? (
+                  <BodyShort
+                    textColor={'subtle'}
+                    size={'small'}
+                  >{`Brukt: ${grunnlag.bruktOppstartsdager} arbeidsdager`}</BodyShort>
+                ) : null}
+              </VStack>
+            </VStack>
+            {form.formState.errors.vurderinger?.[index]?.oppstartsperioder && (
+              <Alert variant={'error'}>{form.formState.errors.vurderinger[index].oppstartsperioder.message}</Alert>
+            )}
+            <VStack gap={'4'}>
+              <Table size="small">
+                <Table.Header>
+                  <Table.Row>
+                    <Table.HeaderCell scope="col" textSize={'small'}>
+                      <BodyShort textColor={'subtle'} size={'small'}>
+                        Periode
+                      </BodyShort>
+                    </Table.HeaderCell>
+                    <Table.HeaderCell />
+                  </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                  {oppstartsperioder.fields.map(({ id }, i) => {
+                    return (
+                      <Table.Row key={id}>
+                        <Table.DataCell>
+                          <HStack gap={'2'} align={'center'}>
+                            <DateInputWrapper
+                              readOnly={readOnly}
+                              name={`vurderinger.${index}.oppstartsperioder.${i}.fom`}
+                              control={form.control}
+                            />
+                            {'-'}
+                            <DateInputWrapper
+                              readOnly={readOnly}
+                              name={`vurderinger.${index}.oppstartsperioder.${i}.tom`}
+                              control={form.control}
+                            />
+                          </HStack>
+                        </Table.DataCell>
+                        <Table.DataCell>
+                          <Button
+                            disabled={readOnly}
+                            size={'small'}
+                            variant={'secondary'}
+                            type={'button'}
+                            icon={<TrashIcon />}
+                            onClick={() => oppstartsperioder.remove(i)}
                           />
-                          {'-'}
-                          <DateInputWrapper
-                            readOnly={readOnly}
-                            name={`vurderinger.${index}.utviklingsperioder.${i}.tom`}
-                            control={form.control}
-                          />
-                        </HStack>
-                      </Table.DataCell>
-                      <Table.DataCell>
-                        <Button
-                          disabled={readOnly}
-                          size={'small'}
-                          variant={'secondary'}
-                          type={'button'}
-                          icon={<TrashIcon />}
-                          onClick={() => utviklingsperioder.remove(i)}
-                        />
-                      </Table.DataCell>
-                    </Table.Row>
-                  );
-                })}
-              </Table.Body>
-            </Table>
-            <HStack>
-              <Button
-                disabled={readOnly}
-                size={'small'}
-                variant={'secondary'}
-                type={'button'}
-                icon={<PlusCircleIcon />}
-                onClick={() => {
-                  form.clearErrors();
-                  utviklingsperioder.append({ fom: '', tom: '' });
-                }}
-              >
-                Legg til ny periode
-              </Button>
-            </HStack>
-          </VStack>
-        </VStack>
-        <VStack gap={'4'}>
-          <VStack>
-            <Label size={'small'}>Oppstartsfase</Label>
-            <VStack gap={'1'}>
-              <BodyShort textColor={'subtle'} size={'small'}>
-                Kan gis for inntil 3 måneder.
-              </BodyShort>
-              {grunnlag.bruktOppstartsdager && grunnlag.bruktOppstartsdager > 0 ? (
-                <BodyShort
-                  textColor={'subtle'}
+                        </Table.DataCell>
+                      </Table.Row>
+                    );
+                  })}
+                </Table.Body>
+              </Table>
+              <HStack>
+                <Button
+                  disabled={readOnly}
                   size={'small'}
-                >{`Brukt: ${grunnlag.bruktOppstartsdager} arbeidsdager`}</BodyShort>
-              ) : null}
+                  variant={'secondary'}
+                  type={'button'}
+                  icon={<PlusCircleIcon />}
+                  onClick={() => {
+                    form.clearErrors();
+                    oppstartsperioder.append({ fom: '', tom: '' });
+                  }}
+                >
+                  Legg til ny periode
+                </Button>
+              </HStack>
             </VStack>
           </VStack>
-          {form.formState.errors.vurderinger?.[index]?.oppstartsperioder && (
-            <Alert variant={'error'}>{form.formState.errors.vurderinger[index].oppstartsperioder.message}</Alert>
-          )}
-          <VStack gap={'4'}>
-            <Table size="small">
-              <Table.Header>
-                <Table.Row>
-                  <Table.HeaderCell scope="col" textSize={'small'}>
-                    <BodyShort textColor={'subtle'} size={'small'}>
-                      Periode
-                    </BodyShort>
-                  </Table.HeaderCell>
-                  <Table.HeaderCell />
-                </Table.Row>
-              </Table.Header>
-              <Table.Body>
-                {oppstartsperioder.fields.map(({ id }, i) => {
-                  return (
-                    <Table.Row key={id}>
-                      <Table.DataCell>
-                        <HStack gap={'2'} align={'center'}>
-                          <DateInputWrapper
-                            readOnly={readOnly}
-                            name={`vurderinger.${index}.oppstartsperioder.${i}.fom`}
-                            control={form.control}
-                          />
-                          {'-'}
-                          <DateInputWrapper
-                            readOnly={readOnly}
-                            name={`vurderinger.${index}.oppstartsperioder.${i}.tom`}
-                            control={form.control}
-                          />
-                        </HStack>
-                      </Table.DataCell>
-                      <Table.DataCell>
-                        <Button
-                          disabled={readOnly}
-                          size={'small'}
-                          variant={'secondary'}
-                          type={'button'}
-                          icon={<TrashIcon />}
-                          onClick={() => oppstartsperioder.remove(i)}
-                        />
-                      </Table.DataCell>
-                    </Table.Row>
-                  );
-                })}
-              </Table.Body>
-            </Table>
-            <HStack>
-              <Button
-                disabled={readOnly}
-                size={'small'}
-                variant={'secondary'}
-                type={'button'}
-                icon={<PlusCircleIcon />}
-                onClick={() => {
-                  form.clearErrors();
-                  oppstartsperioder.append({ fom: '', tom: '' });
-                }}
-              >
-                Legg til ny periode
-              </Button>
-            </HStack>
-          </VStack>
+          <Alert variant={'info'}>
+            <VStack>
+              <BodyShort>{'Har du husket å '}</BodyShort>
+              <BodyShort>{'- registrere etableringen i aktivitetsplanen?'}</BodyShort>
+              <BodyShort>{'- opprette en oppfølgingsoppgave før utgangen av neste periode?'}</BodyShort>
+            </VStack>
+          </Alert>
         </VStack>
-        <Alert variant={'info'}>
-          <VStack>
-            <BodyShort>{'Har du husket å '}</BodyShort>
-            <BodyShort>{'- registrere etableringen i aktivitetsplanen?'}</BodyShort>
-            <BodyShort>{'- opprette en oppfølgingsoppgave før utgangen av neste periode?'}</BodyShort>
-          </VStack>
-        </Alert>
-      </VStack>
+      )}
     </VStack>
   );
 };
