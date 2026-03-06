@@ -14,6 +14,7 @@ import { ComboboxWrapper } from './comboboxwrapper/ComboboxWrapper';
 import { MultipleComboboxWrapper } from './multiplecomboboxwrapper/MultipleComboboxWrapper';
 import { DateInputWrapper } from './dateinputwrapper/DateInputWrapper';
 import { SwitchWrapper } from 'components/form/switchwrapper/SwitchWrapper';
+import { MonthPickerWrapper } from 'components/form/monthpickerwrapper/MonthPickerWrapper';
 
 export interface ValuePair<Enum = string> {
   value: Enum;
@@ -105,6 +106,26 @@ export const FormField = <FormFieldIds extends FieldValues>(props: Props<FormFie
           name={formField.name}
           label={formField.label}
           control={form.control}
+          rules={formField.rules}
+          size={size}
+          hideLabel={formField.hideLabel}
+          description={formField.description}
+          fromDate={formField.fromDate}
+          toDate={formField.toDate}
+          disableWeekends={formField.disableWeekends}
+          selected={form.getValues(formField.name)}
+          readOnly={formField.readOnly}
+          strategy={formField.strategy}
+          onChangeCustom={formField.onChange}
+        />
+      )}
+
+      {formField.type === 'date_month_picker' && (
+        <MonthPickerWrapper
+          name={formField.name}
+          label={formField.label}
+          control={form.control}
+          form={form}
           rules={formField.rules}
           size={size}
           hideLabel={formField.hideLabel}

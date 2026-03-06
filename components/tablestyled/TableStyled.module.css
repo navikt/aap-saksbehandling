@@ -1,3 +1,7 @@
+.fixed {
+  table-layout: fixed;
+}
+
 .styledTabell th {
   font-size: var(--a-font-size-small);
   color: var(--a-text-subtle);
