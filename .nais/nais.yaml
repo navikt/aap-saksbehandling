@@ -71,8 +71,8 @@ spec:
         - application: saksbehandling-pdfgen
         - application: dokumentinnhenting
         - application: tilgang
-        - application: familie-endringslogg
-          namespace: teamfamilie
+        - application: endringslogg
+          namespace: k9saksbehandling
       external:
         - host: cdn.nav.no
         - host: aap-unleash-api.nav.cloud.nais.io
