@@ -22,7 +22,7 @@ import { isLocal, isProd } from 'lib/utils/environment';
 import { LokalBrukerBytte } from 'components/lokalbrukerbytte/LokalBrukerBytte';
 import { Roller } from 'lib/services/azure/azureUserService';
 import { SøkeResultat } from 'app/api/kelvinsok/route';
-import Endringslogg from '@navikt/familie-endringslogg';
+import Endringslogg from '@navikt/endringslogg';
 
 interface BrukerInformasjon {
   navn: string;
