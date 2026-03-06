@@ -1,18 +1,30 @@
 import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import { JaEllerNei } from 'lib/utils/form';
-import { Sykdomvurdering } from 'lib/types/types';
+import { Sykdomvurdering, TypeBehandling } from 'lib/types/types';
 import { parseDatoFraDatePicker } from 'lib/utils/date';
 import { isAfter } from 'date-fns';
 import { ValuePair } from 'components/form/FormField';
 
 export function skalVurdereVissVarighetSjekk(
+  typeBehandling: TypeBehandling,
   valgtFraDato: string | Date | undefined,
   rettighetsperiopdeStartdato: Date
 ) {
   const valgtDato = parseDatoFraDatePicker(valgtFraDato);
-  return valgtDato != null ? !isAfter(valgtDato, rettighetsperiopdeStartdato) : true;
+
+  if (valgtDato == null) {
+    return false;
+  } else {
+    /*
+     * Midletidig sjekk på førstegangsbehandling for å sikre at det er mulig å ha en ikke-oppfylt periode fra start
+     * og deretter en oppfylt periode, som igjen skal trigge 11-6.
+     */
+    return typeBehandling === 'Førstegangsbehandling' || !isAfter(valgtDato, rettighetsperiopdeStartdato);
+  }
 }
+
 export function erNyVurderingOppfylt(
+  typeBehandling: TypeBehandling,
   vurdering: Sykdomsvurdering,
   rettighetsperiodeStartDato: Date,
   skalVurdereYrkesskade: boolean
@@ -34,7 +46,7 @@ export function erNyVurderingOppfylt(
   }
 
   if (
-    !skalVurdereVissVarighetSjekk(vurdering.fraDato, rettighetsperiodeStartDato) &&
+    !skalVurdereVissVarighetSjekk(typeBehandling, vurdering.fraDato, rettighetsperiodeStartDato) &&
     vurdering.erSkadeSykdomEllerLyteVesentligdel === JaEllerNei.Ja
   ) {
     return true;

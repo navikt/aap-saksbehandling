@@ -134,6 +134,7 @@ export const Sykdomsvurdering = ({
                 : parseDatoFraDatePickerOgTrekkFra1Dag(data.vurderinger[index + 1].fraDato);
               return mapTilPeriodisertVurdering(
                 vurdering,
+                typeBehandling,
                 grunnlag.skalVurdereYrkesskade,
                 grunnlag.erÅrsakssammenhengYrkesskade,
                 førsteDatoSomKanVurderes,
@@ -205,6 +206,7 @@ export const Sykdomsvurdering = ({
             fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
             vurderingStatus={getErOppfyltEllerIkkeStatus(
               erNyVurderingOppfylt(
+                typeBehandling,
                 form.watch(`vurderinger.${index}`),
                 førsteDatoSomKanVurderes,
                 grunnlag.skalVurdereYrkesskade
@@ -225,6 +227,7 @@ export const Sykdomsvurdering = ({
               form={form}
               readonly={formReadOnly}
               sak={sak}
+              typeBehandling={typeBehandling}
               erÅrsakssammenhengYrkesskade={grunnlag.erÅrsakssammenhengYrkesskade}
               skalVurdereYrkesskade={grunnlag.skalVurdereYrkesskade}
               rettighetsperiodeStartdato={førsteDatoSomKanVurderes}
@@ -246,6 +249,8 @@ export const Sykdomsvurdering = ({
   }
 
   function mapGrunnlagTilDefaultvalues(grunnlag: SykdomsGrunnlag): SykdomsvurderingerForm {
+    console.log('grunnlag: ', grunnlag);
+
     const diagnoser = utledDiagnoserForVurdering();
 
     if (trengerVurderingsForslag(grunnlag)) {

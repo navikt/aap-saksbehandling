@@ -7,7 +7,7 @@ import { parseDatoFraDatePicker, stringToDate } from 'lib/utils/date';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
 import { UseFormReturn } from 'react-hook-form';
-import { Periode } from 'lib/types/types';
+import { Periode, TypeBehandling } from 'lib/types/types';
 import type { SykdomsvurderingerForm } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import { JaEllerNei } from 'lib/utils/form';
 import { Sak } from 'context/saksbehandling/SakContext';
@@ -25,6 +25,7 @@ interface Props {
   readonly: boolean;
   ikkeRelevantePerioder?: Periode[];
   sak: Sak;
+  typeBehandling: TypeBehandling;
   skalVurdereYrkesskade: boolean;
   erÅrsakssammenhengYrkesskade: boolean;
   rettighetsperiodeStartdato: Date;
@@ -46,9 +47,10 @@ export const SykdomsvurderingFormInput = ({
   readonly,
   ikkeRelevantePerioder,
   rettighetsperiodeStartdato,
+  typeBehandling,
 }: Props) => {
   const valgtDato = parseDatoFraDatePicker(form.watch(`vurderinger.${index}.fraDato`));
-  const skalVurdereVissVarighet = skalVurdereVissVarighetSjekk(valgtDato, rettighetsperiodeStartdato);
+  const skalVurdereVissVarighet = skalVurdereVissVarighetSjekk(typeBehandling, valgtDato, rettighetsperiodeStartdato);
 
   return (
     <VStack gap={'5'}>
