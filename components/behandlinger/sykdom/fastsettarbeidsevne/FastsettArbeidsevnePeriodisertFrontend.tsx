@@ -37,6 +37,7 @@ import React from 'react';
 import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
+import { TidligereVurderingerListe } from 'components/periodisering/TidligereVurderingerListe';
 
 interface Props {
   grunnlag: ArbeidsevneGrunnlag;
@@ -182,25 +183,28 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
           </BodyLong>
         </VStack>
       )}
-      {vedtatteVurderinger.map((vurdering) => (
-        <TidligereVurderingExpandableCard
-          key={vurdering.fom}
-          fom={parseISO(vurdering.fom)}
-          tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
-          foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-          vurderingStatus={getErOppfyltEllerIkkeStatus(vurdering.arbeidsevne > 0)}
-          vurdertAv={vurdering.vurdertAv}
-        >
-          <VStack gap={'5'}>
-            <SpørsmålOgSvar spørsmål="Vurderingen gjelder fra?" svar={formaterDatoForFrontend(vurdering.fom)} />
-            <SpørsmålOgSvar spørsmål="Vilkårsvurdering" svar={vurdering.begrunnelse} />
-            <SpørsmålOgSvar
-              spørsmål="Oppgi arbeidsevnen som ikke er utnyttet i prosent"
-              svar={vurdering.arbeidsevne.toString()}
-            />
-          </VStack>
-        </TidligereVurderingExpandableCard>
-      ))}
+      <TidligereVurderingerListe
+        grunnlag={grunnlag}
+        renderVedtattVurdering={(vurdering) => (
+          <TidligereVurderingExpandableCard
+            key={vurdering.fom}
+            fom={parseISO(vurdering.fom)}
+            tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
+            foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+            vurderingStatus={getErOppfyltEllerIkkeStatus(vurdering.arbeidsevne > 0)}
+            vurdertAv={vurdering.vurdertAv}
+          >
+            <VStack gap={'5'}>
+              <SpørsmålOgSvar spørsmål="Vurderingen gjelder fra?" svar={formaterDatoForFrontend(vurdering.fom)} />
+              <SpørsmålOgSvar spørsmål="Vilkårsvurdering" svar={vurdering.begrunnelse} />
+              <SpørsmålOgSvar
+                spørsmål="Oppgi arbeidsevnen som ikke er utnyttet i prosent"
+                svar={vurdering.arbeidsevne.toString()}
+              />
+            </VStack>
+          </TidligereVurderingExpandableCard>
+        )}
+      />
 
       {fields.map((vurdering, index) => (
         <NyVurderingExpandableCard

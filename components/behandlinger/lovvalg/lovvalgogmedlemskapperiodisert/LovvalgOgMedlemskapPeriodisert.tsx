@@ -29,6 +29,7 @@ import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
+import { TidligereVurderingerListe } from 'components/periodisering/TidligereVurderingerListe';
 
 interface Props {
   behandlingVersjon: number;
@@ -120,7 +121,7 @@ export const LovvalgOgMedlemskapPeriodisert = ({
   const heading = overstyring ? 'Overstyring av lovvalg og medlemskap' : 'Lovvalg og medlemskap';
 
   const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
-  const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
+
   const foersteNyePeriode = vurderingerFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
   const errorList = mapPeriodiserteVurderingerErrorList<LovOgMedlemskapVurderingForm>(form.formState.errors);
 
@@ -142,20 +143,23 @@ export const LovvalgOgMedlemskapPeriodisert = ({
       errorList={errorList}
       formReset={() => form.reset(getDefaultValuesFromGrunnlag(grunnlag))}
     >
-      {vedtatteVurderinger.map((vurdering) => (
-        <TidligereVurderingExpandableCard
-          key={vurdering.fom}
-          fom={parseISO(vurdering.fom)}
-          tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
-          foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-          vurderingStatus={getErOppfyltEllerIkkeStatus(
-            vurdering.lovvalg.lovvalgsEØSLandEllerLandMedAvtale === 'NOR' &&
+      <TidligereVurderingerListe
+        grunnlag={grunnlag}
+        renderVedtattVurdering={(vurdering) => (
+          <TidligereVurderingExpandableCard
+            key={vurdering.fom}
+            fom={parseISO(vurdering.fom)}
+            tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
+            foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+            vurderingStatus={getErOppfyltEllerIkkeStatus(
+              vurdering.lovvalg.lovvalgsEØSLandEllerLandMedAvtale === 'NOR' &&
               vurdering.medlemskap?.varMedlemIFolketrygd === true
-          )}
-        >
-          <LovvalgOgMedlemskapTidligereVurdering vurdering={vurdering} />
-        </TidligereVurderingExpandableCard>
-      ))}
+            )}
+          >
+            <LovvalgOgMedlemskapTidligereVurdering vurdering={vurdering} />
+          </TidligereVurderingExpandableCard>
+        )}
+      />
 
       {vurderingerFields.map((vurdering, index) => (
         <NyVurderingExpandableCard

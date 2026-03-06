@@ -39,6 +39,8 @@ import { parseISO } from 'date-fns';
 import { parseDatoFraDatePicker, summerPerioderVarighetIArbeidsdager } from 'lib/utils/date';
 import { IkkeVurderbarPeriode } from 'components/periodisering/IkkeVurderbarPeriode';
 import { validerPeriodiserteVurderingerMotIkkeRelevantePerioder } from 'lib/utils/validering';
+import { useFeatureFlag } from 'context/UnleashContext';
+import { TidligereVurderingerListe } from 'components/periodisering/TidligereVurderingerListe';
 
 interface Props {
   behandlingVersjon: number;
@@ -67,6 +69,7 @@ export const EtableringAvEgenVirksomhet = ({
   grunnlag,
   behandlingVersjon,
 }: Props) => {
+  const visIkkeRelevantPeriode = useFeatureFlag('VisIkkeRelevantPeriode');
   const behandlingsReferanse = useBehandlingsReferanse();
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
@@ -185,7 +188,7 @@ export const EtableringAvEgenVirksomhet = ({
       onLeggTilVurdering={onAddPeriode}
       errorList={errorList}
     >
-      {grunnlag.ikkeRelevantePerioder.map((vurdering) => (
+      {!visIkkeRelevantPeriode && grunnlag.ikkeRelevantePerioder.map((vurdering) => (
         <IkkeVurderbarPeriode
           key={vurdering.fom}
           fom={parseISO(vurdering.fom)}
@@ -205,17 +208,20 @@ export const EtableringAvEgenVirksomhet = ({
           </BodyLong>
         </VStack>
       )}
-      {vedtatteVurderinger.map((vurdering) => (
-        <TidligereVurderingExpandableCard
-          key={vurdering.fom}
-          fom={parseISO(vurdering.fom)}
-          tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
-          foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-          vurderingStatus={getErOppfyltEllerIkkeStatus(tidligereVurderingErOppfylt(vurdering))}
-        >
-          <EtableringEgenVirksomhetTidligereVurdering vurdering={vurdering} />
-        </TidligereVurderingExpandableCard>
-      ))}
+      <TidligereVurderingerListe
+        grunnlag={grunnlag}
+        renderVedtattVurdering={(vurdering) => (
+          <TidligereVurderingExpandableCard
+            key={vurdering.fom}
+            fom={parseISO(vurdering.fom)}
+            tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
+            foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+            vurderingStatus={getErOppfyltEllerIkkeStatus(tidligereVurderingErOppfylt(vurdering))}
+          >
+            <EtableringEgenVirksomhetTidligereVurdering vurdering={vurdering} />
+          </TidligereVurderingExpandableCard>
+        )}
+      />
       {!formReadOnly && (
         <VStack paddingBlock={'4'} paddingInline={'5'} gap={'4'}>
           {nyeVurderinger.length > 0 && (

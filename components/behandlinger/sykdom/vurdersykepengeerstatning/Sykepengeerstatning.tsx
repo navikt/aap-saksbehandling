@@ -29,6 +29,7 @@ import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
+import { TidligereVurderingerListe } from 'components/periodisering/TidligereVurderingerListe';
 
 interface Props {
   behandlingVersjon: number;
@@ -63,8 +64,6 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
     reValidateMode: 'onChange',
     shouldUnregister: true,
   });
-
-  const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
 
   const {
     fields: vurderingerFields,
@@ -145,23 +144,25 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
       onLeggTilVurdering={onAddPeriode}
       errorList={errorList}
     >
-      {vedtatteVurderinger?.map((vurdering) => (
-        <TidligereVurderingExpandableCard
-          key={vurdering.fom}
-          fom={parseISO(vurdering.fom)}
-          tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
-          foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-          vurderingStatus={getErOppfyltEllerIkkeStatus(vurdering.harRettPå)}
-        >
-          <OppholdskravSykepengererstatninbgTidligereVurdering
-            fraDato={vurdering.fom}
-            begrunnelse={vurdering.begrunnelse}
-            oppfyller={vurdering.harRettPå}
-            grunn={vurdering.grunn}
-          />
-        </TidligereVurderingExpandableCard>
-      ))}
-
+      <TidligereVurderingerListe
+        grunnlag={grunnlag}
+        renderVedtattVurdering={(vurdering) => (
+          <TidligereVurderingExpandableCard
+            key={vurdering.fom}
+            fom={parseISO(vurdering.fom)}
+            tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
+            foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+            vurderingStatus={getErOppfyltEllerIkkeStatus(vurdering.harRettPå)}
+          >
+            <OppholdskravSykepengererstatninbgTidligereVurdering
+              fraDato={vurdering.fom}
+              begrunnelse={vurdering.begrunnelse}
+              oppfyller={vurdering.harRettPå}
+              grunn={vurdering.grunn}
+            />
+          </TidligereVurderingExpandableCard>
+        )}
+      />
       {vurderingerFields.map((vurdering, index) => {
         const erOppfyltFelt = form.watch(`vurderinger.${index}.erOppfylt`);
 

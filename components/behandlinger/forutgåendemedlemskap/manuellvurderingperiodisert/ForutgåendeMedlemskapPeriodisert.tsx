@@ -34,6 +34,7 @@ import { ForutgåendeMedlemskapFormInput } from 'components/behandlinger/forutg�
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
+import { TidligereVurderingerListe } from 'components/periodisering/TidligereVurderingerListe';
 
 interface Props {
   behandlingVersjon: number;
@@ -125,7 +126,6 @@ export const ForutgåendeMedlemskapPeriodisert = ({
   const heading = overstyring ? 'Overstyring av § 11-2 Forutgående medlemskap' : '§ 11-2 Forutgående medlemskap';
 
   const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
-  const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const foersteNyePeriode = vurderingerFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
   const errorList = mapPeriodiserteVurderingerErrorList<ForutgåendeMedlemskapVurderingForm>(form.formState.errors);
 
@@ -147,21 +147,24 @@ export const ForutgåendeMedlemskapPeriodisert = ({
       errorList={errorList}
       formReset={() => form.reset(getDefaultValuesFromGrunnlag(grunnlag))}
     >
-      {vedtatteVurderinger.map((vurdering) => (
-        <TidligereVurderingExpandableCard
-          key={vurdering.fom}
-          fom={parseISO(vurdering.fom)}
-          tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
-          foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-          vurderingStatus={getErOppfyltEllerIkkeStatus(
-            vurdering.harForutgåendeMedlemskap ||
-              vurdering.varMedlemMedNedsattArbeidsevne === true ||
-              vurdering.medlemMedUnntakAvMaksFemAar === true
-          )}
-        >
-          <ForutgåendeMedlemskapTidligereVurdering vurdering={vurdering} />
-        </TidligereVurderingExpandableCard>
-      ))}
+      <TidligereVurderingerListe
+        grunnlag={grunnlag}
+        renderVedtattVurdering={(vurdering) => (
+              <TidligereVurderingExpandableCard
+                key={vurdering.fom}
+                fom={parseISO(vurdering.fom)}
+                tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
+                foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+                vurderingStatus={getErOppfyltEllerIkkeStatus(
+                  vurdering.harForutgåendeMedlemskap ||
+                  vurdering.varMedlemMedNedsattArbeidsevne === true ||
+                  vurdering.medlemMedUnntakAvMaksFemAar === true
+                )}
+              >
+                <ForutgåendeMedlemskapTidligereVurdering vurdering={vurdering} />
+              </TidligereVurderingExpandableCard>
+            )}
+      />
 
       {vurderingerFields.map((vurdering, index) => (
         <NyVurderingExpandableCard

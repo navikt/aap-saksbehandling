@@ -37,6 +37,7 @@ import {
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
+import { TidligereVurderingerListe } from 'components/periodisering/TidligereVurderingerListe';
 
 export interface SykdomsvurderingerForm {
   vurderinger: Array<Sykdomsvurdering>;
@@ -153,7 +154,7 @@ export const Sykdomsvurdering = ({
   };
 
   const errorList = mapPeriodiserteVurderingerErrorList<SykdomsvurderingerForm>(form.formState.errors);
-  const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
+
 
   const foersteNyePeriode = nyeVurderingerFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
   const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
@@ -183,20 +184,24 @@ export const Sykdomsvurdering = ({
             Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-5 (lovdata.no)
           </Link>
         </BodyLong>
-
-        {vedtatteVurderinger.map((vurdering) => (
-          <TidligereVurderingExpandableCard
-            key={vurdering.fom}
-            fom={new Dato(vurdering.fom).dato}
-            tom={vurdering.tom ? parseISO(vurdering.tom) : undefined}
-            foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-            vurderingStatus={getErOppfyltEllerIkkeStatus(erTidligereVurderingOppfylt(vurdering))}
-            defaultCollapsed={nyeVurderingerFields.length > 0}
-            vurdertAv={vurdering.vurdertAv}
-          >
-            <TidligereSykdomsvurdering vurdering={vurdering} />
-          </TidligereVurderingExpandableCard>
-        ))}
+        <TidligereVurderingerListe
+          grunnlag={grunnlag}
+          renderVedtattVurdering={(vurdering) => {
+            return (
+              <TidligereVurderingExpandableCard
+                key={vurdering.fom}
+                fom={new Dato(vurdering.fom).dato}
+                tom={vurdering.tom ? parseISO(vurdering.tom) : undefined}
+                foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+                vurderingStatus={getErOppfyltEllerIkkeStatus(erTidligereVurderingOppfylt(vurdering))}
+                defaultCollapsed={nyeVurderingerFields.length > 0}
+                vurdertAv={vurdering.vurdertAv}
+              >
+                <TidligereSykdomsvurdering vurdering={vurdering} />
+              </TidligereVurderingExpandableCard>
+            );
+          }}
+        />
 
         {nyeVurderingerFields.map((vurdering, index) => (
           <NyVurderingExpandableCard

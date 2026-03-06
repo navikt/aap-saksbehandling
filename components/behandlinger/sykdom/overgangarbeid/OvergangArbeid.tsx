@@ -30,6 +30,7 @@ import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/ov
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
+import { TidligereVurderingerListe } from 'components/periodisering/TidligereVurderingerListe';
 
 interface Props {
   behandlingVersjon: number;
@@ -63,8 +64,6 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialM
     defaultValues,
     reValidateMode: 'onChange',
   });
-
-  const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
 
   const {
     fields: vurderingerFields,
@@ -144,22 +143,25 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialM
       onLeggTilVurdering={onAddPeriode}
       errorList={errorList}
     >
-      {vedtatteVurderinger?.map((vurdering) => (
-        <TidligereVurderingExpandableCard
-          key={vurdering.fom}
-          fom={parseISO(vurdering.fom)}
-          tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
-          foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-          vurderingStatus={getErOppfyltEllerIkkeStatus(vurdering.brukerRettPåAAP)}
-        >
-          <OvergangArbeidTidligereVurdering
-            fraDato={vurdering.fom}
-            tilDato={vurdering.tom}
-            begrunnelse={vurdering.begrunnelse}
-            oppfyller={vurdering.brukerRettPåAAP}
-          />
-        </TidligereVurderingExpandableCard>
-      ))}
+      <TidligereVurderingerListe
+        grunnlag={grunnlag}
+        renderVedtattVurdering={(vurdering) => (
+          <TidligereVurderingExpandableCard
+            key={vurdering.fom}
+            fom={parseISO(vurdering.fom)}
+            tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
+            foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+            vurderingStatus={getErOppfyltEllerIkkeStatus(vurdering.brukerRettPåAAP)}
+          >
+            <OvergangArbeidTidligereVurdering
+              fraDato={vurdering.fom}
+              tilDato={vurdering.tom}
+              begrunnelse={vurdering.begrunnelse}
+              oppfyller={vurdering.brukerRettPåAAP}
+            />
+          </TidligereVurderingExpandableCard>
+        )}
+      />
 
       {vurderingerFields.map((vurdering, index) => (
         <NyVurderingExpandableCard

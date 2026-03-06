@@ -32,6 +32,7 @@ import { Link, VStack } from '@navikt/ds-react';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
+import { TidligereVurderingerListe } from 'components/periodisering/TidligereVurderingerListe';
 
 interface Props {
   behandlingVersjon: number;
@@ -103,7 +104,6 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, initialMe
   };
 
   const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
-  const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const foersteNyePeriode = fields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
   const errorList = mapPeriodiserteVurderingerErrorList<LovOgMedlemskapVurderingForm>(form.formState.errors);
 
@@ -150,23 +150,26 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, initialMe
           }
         />
 
-        {vedtatteVurderinger.map((vurdering) => (
-          <TidligereVurderingExpandableCard
-            key={vurdering.fom}
-            fom={parseISO(vurdering.fom)}
-            tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
-            foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-            vurderingStatus={getErOppfyltEllerIkkeStatus(
-              !!(
-                vurdering.erBehovForAktivBehandling ||
-                vurdering.erBehovForArbeidsrettetTiltak ||
-                vurdering.erBehovForAnnenOppfølging
-              )
-            )}
-          >
-            <BistandsbehovTidligereVurdering vurdering={vurdering} />
-          </TidligereVurderingExpandableCard>
-        ))}
+        <TidligereVurderingerListe
+          grunnlag={grunnlag}
+          renderVedtattVurdering={(vurdering) => (
+            <TidligereVurderingExpandableCard
+              key={vurdering.fom}
+              fom={parseISO(vurdering.fom)}
+              tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
+              foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+              vurderingStatus={getErOppfyltEllerIkkeStatus(
+                !!(
+                  vurdering.erBehovForAktivBehandling ||
+                  vurdering.erBehovForArbeidsrettetTiltak ||
+                  vurdering.erBehovForAnnenOppfølging
+                )
+              )}
+            >
+              <BistandsbehovTidligereVurdering vurdering={vurdering} />
+            </TidligereVurderingExpandableCard>
+          )}
+        />
 
         {fields.map((vurdering, index) => (
           <NyVurderingExpandableCard

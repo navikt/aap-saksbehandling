@@ -27,11 +27,13 @@ import {
 import { ArbeidsopptrappingVurderingFormInput } from 'components/behandlinger/sykdom/arbeidsopptrapping/ArbeidsopptrappingVurderingFormInput';
 import { BodyLong, Link, VStack } from '@navikt/ds-react';
 import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
-import { IkkeVurderbarPeriode } from 'components/periodisering/IkkeVurderbarPeriode';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
+import { useFeatureFlag } from 'context/UnleashContext';
+import { IkkeVurderbarPeriode } from 'components/periodisering/IkkeVurderbarPeriode';
+import { TidligereVurderingerListe } from 'components/periodisering/TidligereVurderingerListe';
 
 interface Props {
   behandlingVersjon: number;
@@ -52,6 +54,7 @@ export interface ArbeidsopptrappingVurderingForm extends VurderingMeta {
 }
 
 export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, initialMellomlagretVurdering }: Props) => {
+  const visIkkeRelevantPeriode = useFeatureFlag('VisIkkeRelevantPeriode');
   const behandlingsreferanse = useBehandlingsReferanse();
 
   const { løsPeriodisertBehovOgGåTilNesteSteg, status, løsBehovOgGåTilNesteStegError, isLoading } =
@@ -79,7 +82,6 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
 
   const nyeVurderinger = grunnlag?.nyeVurderinger ?? [];
 
-  const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const ikkeVurderbarePerioder = grunnlag?.ikkeVurderbarePerioder ?? [];
 
   const { fields, append, remove } = useFieldArray({ name: 'vurderinger', control: form.control });
@@ -161,41 +163,46 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
           </BodyLong>
         </VStack>
       )}
-      {ikkeVurderbarePerioder.map((vurdering) => (
-        <IkkeVurderbarPeriode
-          key={vurdering.fom}
-          fom={parseISO(vurdering.fom)}
-          tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
-          alertMelding={
-            'Vilkåret kan ikke vurderes for denne perioden. For å vurdere vilkåret må §§ 11-5 og 11-6 være oppfylt.'
-          }
-          foersteNyePeriodeFraDato={undefined}
-        ></IkkeVurderbarPeriode>
-      ))}
-      {vedtatteVurderinger.map((vurdering) => (
-        <TidligereVurderingExpandableCard
-          key={vurdering.fom}
-          fom={parseISO(vurdering.fom)}
-          tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
-          foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-          vurderingStatus={getErOppfyltEllerIkkeStatus(
-            vurdering.reellMulighetTilOpptrapping && vurdering.rettPaaAAPIOpptrapping
-          )}
-        >
-          <VStack gap={'5'}>
-            <SpørsmålOgSvar spørsmål="Vurderingen gjelder fra?" svar={formaterDatoForFrontend(vurdering.fom)} />
-            <SpørsmålOgSvar spørsmål="Vilkårsvurdering" svar={vurdering.begrunnelse} />
-            <SpørsmålOgSvar
-              spørsmål="Har brukeren en reell mulighet til å trappe opp til en 100% stilling?"
-              svar={getJaNeiEllerUndefined(vurdering.reellMulighetTilOpptrapping)!}
-            />
-            <SpørsmålOgSvar
-              spørsmål="Har brukeren rett på AAP i arbeidsopptrapping etter § 11-23 6. ledd?"
-              svar={getJaNeiEllerUndefined(vurdering.rettPaaAAPIOpptrapping)!}
-            />
-          </VStack>
-        </TidligereVurderingExpandableCard>
-      ))}
+      {!visIkkeRelevantPeriode &&
+        ikkeVurderbarePerioder.map((vurdering) => (
+          <IkkeVurderbarPeriode
+            key={vurdering.fom}
+            fom={parseISO(vurdering.fom)}
+            tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
+            alertMelding={
+              'Vilkåret kan ikke vurderes for denne perioden. For å vurdere vilkåret må §§ 11-5 og 11-6 være oppfylt.'
+            }
+            foersteNyePeriodeFraDato={undefined}
+          ></IkkeVurderbarPeriode>
+        ))}
+      <TidligereVurderingerListe
+        grunnlag={grunnlag}
+        ikkeRelevantBeskjed={'Vilkåret kan ikke vurderes for denne perioden. For å vurdere vilkåret må §§ 11-5 og 11-6 være oppfylt.'}
+        renderVedtattVurdering={(vurdering) => (
+          <TidligereVurderingExpandableCard
+            key={vurdering.fom}
+            fom={parseISO(vurdering.fom)}
+            tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
+            foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+            vurderingStatus={getErOppfyltEllerIkkeStatus(
+              vurdering.reellMulighetTilOpptrapping && vurdering.rettPaaAAPIOpptrapping
+            )}
+          >
+            <VStack gap={'5'}>
+              <SpørsmålOgSvar spørsmål="Vurderingen gjelder fra?" svar={formaterDatoForFrontend(vurdering.fom)} />
+              <SpørsmålOgSvar spørsmål="Vilkårsvurdering" svar={vurdering.begrunnelse} />
+              <SpørsmålOgSvar
+                spørsmål="Har brukeren en reell mulighet til å trappe opp til en 100% stilling?"
+                svar={getJaNeiEllerUndefined(vurdering.reellMulighetTilOpptrapping)!}
+              />
+              <SpørsmålOgSvar
+                spørsmål="Har brukeren rett på AAP i arbeidsopptrapping etter § 11-23 6. ledd?"
+                svar={getJaNeiEllerUndefined(vurdering.rettPaaAAPIOpptrapping)!}
+              />
+            </VStack>
+          </TidligereVurderingExpandableCard>
+        )}
+      />
 
       {fields.map((vurdering, index) => (
         <NyVurderingExpandableCard

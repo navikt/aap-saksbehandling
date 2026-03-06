@@ -31,6 +31,7 @@ import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import { BodyLong, Link, VStack } from '@navikt/ds-react';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
+import { TidligereVurderingerListe } from 'components/periodisering/TidligereVurderingerListe';
 
 type Props = {
   grunnlag: OppholdskravGrunnlagResponse;
@@ -66,8 +67,6 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
     reValidateMode: 'onChange',
     shouldUnregister: true,
   });
-
-  const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
 
   const {
     fields: vurderingerFields,
@@ -151,23 +150,25 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
             Du kan lese om hvordan vilkåret skal vurderes i rundskrivet til § 11-3 (lovdata.no)
           </Link>
         </BodyLong>
-
-        {vedtatteVurderinger.map((vurdering) => (
-          <TidligereVurderingExpandableCard
-            key={vurdering.fom}
-            fom={parseISO(vurdering.fom)}
-            tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
-            foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-            vurderingStatus={getErOppfyltEllerIkkeStatus(vurdering.oppfylt)}
-          >
-            <OppholdskravTidligereVurdering
-              fraDato={vurdering.fom}
-              begrunnelse={vurdering.begrunnelse}
-              land={vurdering.land}
-              oppfyller={vurdering.oppfylt}
-            />
-          </TidligereVurderingExpandableCard>
-        ))}
+        <TidligereVurderingerListe
+          grunnlag={grunnlag}
+          renderVedtattVurdering={(vurdering) => (
+            <TidligereVurderingExpandableCard
+              key={vurdering.fom}
+              fom={parseISO(vurdering.fom)}
+              tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
+              foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+              vurderingStatus={getErOppfyltEllerIkkeStatus(vurdering.oppfylt)}
+            >
+              <OppholdskravTidligereVurdering
+                fraDato={vurdering.fom}
+                begrunnelse={vurdering.begrunnelse}
+                land={vurdering.land}
+                oppfyller={vurdering.oppfylt}
+              />
+            </TidligereVurderingExpandableCard>
+          )}
+        />
 
         {vurderingerFields.map((vurdering, index) => (
           <NyVurderingExpandableCard

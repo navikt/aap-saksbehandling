@@ -30,6 +30,7 @@ import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/op
 import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
+import { TidligereVurderingerListe } from 'components/periodisering/TidligereVurderingerListe';
 
 interface Props {
   behandlingVersjon: number;
@@ -137,24 +138,26 @@ export const OvergangUforePeriodisert = ({
             Du kan lese om hvordan vilkåret skal vurderes i rundskrivet til § 11-18
           </Link>
         </BodyLong>
-
-        {grunnlag.sisteVedtatteVurderinger.map((vurdering) => (
-          <TidligereVurderingExpandableCard
-            key={vurdering.fom}
-            fom={parseISO(vurdering.fom)}
-            tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
-            foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-            vurderingStatus={getErOppfyltEllerIkkeStatus(!!vurdering.brukerRettPåAAP)}
-          >
-            <OvergangUforeTidligereVurdering
-              fraDato={vurdering.fom}
-              begrunnelse={vurdering.begrunnelse}
-              brukerHarSøktOmUføretrygd={vurdering.brukerHarSøktUføretrygd}
-              brukerHarFåttVedtakOmUføretrygd={vurdering.brukerHarFåttVedtakOmUføretrygd}
-              brukerRettPåAAP={vurdering.brukerRettPåAAP}
-            />
-          </TidligereVurderingExpandableCard>
-        ))}
+        <TidligereVurderingerListe
+          grunnlag={grunnlag}
+          renderVedtattVurdering={(vurdering) => (
+            <TidligereVurderingExpandableCard
+              key={vurdering.fom}
+              fom={parseISO(vurdering.fom)}
+              tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
+              foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+              vurderingStatus={getErOppfyltEllerIkkeStatus(!!vurdering.brukerRettPåAAP)}
+            >
+              <OvergangUforeTidligereVurdering
+                fraDato={vurdering.fom}
+                begrunnelse={vurdering.begrunnelse}
+                brukerHarSøktOmUføretrygd={vurdering.brukerHarSøktUføretrygd}
+                brukerHarFåttVedtakOmUføretrygd={vurdering.brukerHarFåttVedtakOmUføretrygd}
+                brukerRettPåAAP={vurdering.brukerRettPåAAP}
+              />
+            </TidligereVurderingExpandableCard>
+          )}
+        />
 
         {nyeVurderingFields.map((vurdering, index) => {
           return (
