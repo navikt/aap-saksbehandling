@@ -100,7 +100,7 @@ export const LedigeOppgaverFiltreringNy = ({ form, formFields, antallOppgaver }:
             </HStack>
           </div>
         </div>
-      )}{' '}
+      )}
     </div>
   );
 };
