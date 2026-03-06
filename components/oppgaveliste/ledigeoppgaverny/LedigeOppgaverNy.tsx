@@ -207,7 +207,12 @@ export const LedigeOppgaverNy = ({ enheter }: Props) => {
       </Box>
 
       <div className={styles.tabell}>
-        <LedigeOppgaverFiltreringNy form={form} formFields={formFields} antallOppgaver={antallOppgaver} />
+        <LedigeOppgaverFiltreringNy
+          form={form}
+          formFields={formFields}
+          antallOppgaver={antallOppgaver}
+          aktivKøId={aktivKøId}
+        />
         {isLoading && <TabellSkeleton />}
 
         {!isLoading &&

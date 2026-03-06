@@ -9,15 +9,16 @@ import { FormFields } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { FieldPath, UseFormReturn } from 'react-hook-form';
 import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaverny/MineOppgaverNy';
-import { aktiveFiltreringer } from 'components/oppgaveliste/filtrering/filtreringUtils';
+import { aktiveFiltreringer, ALLE_OPPGAVER_ID } from 'components/oppgaveliste/filtrering/filtreringUtils';
 
 interface Props {
   form: UseFormReturn<FormFieldsFilter>;
   formFields: FormFields<FieldPath<FormFieldsFilter>, FormFieldsFilter>;
   antallOppgaver?: number;
+  aktivKøId: number;
 }
 
-export const LedigeOppgaverFiltreringNy = ({ form, formFields, antallOppgaver }: Props) => {
+export const LedigeOppgaverFiltreringNy = ({ form, formFields, antallOppgaver, aktivKøId }: Props) => {
   const [åpneFilter, setÅpneFilter] = useState(false);
 
   const aktiveFilter = aktiveFiltreringer(form.watch());
@@ -66,7 +67,11 @@ export const LedigeOppgaverFiltreringNy = ({ form, formFields, antallOppgaver }:
           <div className={styles.filtrering}>
             <HGrid columns={{ sm: 1, md: 2, lg: 4, xl: 5 }} gap={'2'}>
               <BoxWrapper>
-                <FormField form={form} formField={formFields.behandlingstyper} />
+                <FormField
+                  form={form}
+                  formField={formFields.behandlingstyper}
+                  readOnly={ALLE_OPPGAVER_ID !== aktivKøId}
+                />
               </BoxWrapper>
               <BoxWrapper>
                 <VStack gap={'4'}>
