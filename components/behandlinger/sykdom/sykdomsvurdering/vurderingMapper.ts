@@ -1,9 +1,8 @@
 import { getTrueFalseEllerUndefined, JaEllerNei } from 'lib/utils/form';
-import { SykdomsvurderingLøsningDto } from 'lib/types/types';
+import { SykdomsvurderingLøsningDto, TypeBehandling } from 'lib/types/types';
 import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import { Dato } from 'lib/types/Dato';
-import { parseDatoFraDatePicker } from 'lib/utils/date';
-import { isAfter } from 'date-fns';
+import { skalVurdereVissVarighetSjekk } from 'components/behandlinger/sykdom/sykdomsvurdering/sykdomsvurdering-utils';
 
 function mapMedVissVarighet(
   data: Sykdomsvurdering,
@@ -84,6 +83,7 @@ function mapUtenVissVarighet(
 
 function mapTilPeriodisertVurdering(
   data: Sykdomsvurdering,
+  typeBehandling: TypeBehandling,
   skalVurdereYrkesskade: boolean,
   erÅrsakssammenhengYrkesskade: boolean,
   førsteDatoSomKanVurderes: Date,
@@ -96,8 +96,7 @@ function mapTilPeriodisertVurdering(
   const hoveddiagnose = harSkadeSykdomEllerLyte ? data?.hoveddiagnose?.value : undefined;
   const bidiagnoser = harSkadeSykdomEllerLyte ? data.bidiagnose?.map((diagnose) => diagnose.value) : undefined;
 
-  const fraDato = parseDatoFraDatePicker(data.fraDato);
-  const skalVurdereVissVarighet = fraDato != null ? !isAfter(fraDato, førsteDatoSomKanVurderes) : false;
+  const skalVurdereVissVarighet = skalVurdereVissVarighetSjekk(typeBehandling, data.fraDato, førsteDatoSomKanVurderes);
 
   // Denne overstyrer de under. Hvis false skal alt nulles ut.
   const erArbeidsevnenNedsatt = harSkadeSykdomEllerLyte
