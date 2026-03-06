@@ -9,7 +9,7 @@ import { FormFields } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { FieldPath, UseFormReturn } from 'react-hook-form';
 import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaverny/MineOppgaverNy';
-import { aktiveFiltreringer } from 'components/oppgaveliste/filtrering/filtreringUtils';
+import { aktiveFiltreringer, ALLE_OPPGAVER_ID } from 'components/oppgaveliste/filtrering/filtreringUtils';
 import { avreserverOppgaveClient } from 'lib/oppgaveClientApi';
 import { isSuccess } from 'lib/utils/api';
 import { useTildelOppgaver } from 'context/oppgave/TildelOppgaverContext';
@@ -21,6 +21,7 @@ interface Props {
   valgteRader: number[];
   setValgteRader: Dispatch<SetStateAction<number[]>>;
   revalidateFunction: () => void;
+  aktivKøId: number;
 }
 
 export const AlleOppgaverFiltreringNy = ({
@@ -30,6 +31,7 @@ export const AlleOppgaverFiltreringNy = ({
   valgteRader,
   revalidateFunction,
   setValgteRader,
+  aktivKøId,
 }: Props) => {
   const [åpneFilter, setÅpneFilter] = useState(false);
   const [isPendingFrigi, startTransitionFrigi] = useTransition();
@@ -124,7 +126,11 @@ export const AlleOppgaverFiltreringNy = ({
           <div className={styles.filtrering}>
             <HGrid columns={{ sm: 1, md: 2, lg: 4, xl: 5 }} gap={'2'}>
               <BoxWrapper>
-                <FormField form={form} formField={formFields.behandlingstyper} />
+                <FormField
+                  form={form}
+                  formField={formFields.behandlingstyper}
+                  readOnly={ALLE_OPPGAVER_ID !== aktivKøId}
+                />
               </BoxWrapper>
               <BoxWrapper>
                 <VStack gap={'4'}>
