@@ -214,18 +214,17 @@ export const EtableringAvEgenVirksomhet = ({
           <EtableringEgenVirksomhetTidligereVurdering vurdering={vurdering} />
         </TidligereVurderingExpandableCard>
       ))}
-      {!formReadOnly && (
+      {nyeVurderinger.length > 0 && (
         <VStack paddingBlock={'4'} paddingInline={'5'} gap={'4'}>
-          {nyeVurderinger.length > 0 && (
-            <HStack>
-              <TextFieldWrapper
-                name={'virksomhetNavn'}
-                control={form.control}
-                type={'text'}
-                label={'Virksomheten det søkes for'}
-              />
-            </HStack>
-          )}
+          <HStack>
+            <TextFieldWrapper
+              name={'virksomhetNavn'}
+              control={form.control}
+              type={'text'}
+              label={'Virksomheten det søkes for'}
+              readOnly={formReadOnly}
+            />
+          </HStack>
         </VStack>
       )}
       {nyeVurderinger.map((vurdering, index) => (
