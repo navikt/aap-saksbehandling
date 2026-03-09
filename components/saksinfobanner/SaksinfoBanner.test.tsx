@@ -33,6 +33,7 @@ const avsluttetSak: SaksInfo = {
 };
 
 const oppgave: Oppgave = {
+  behandlingRef: 'gasg',
   vurderingsbehov: [],
   avklaringsbehovKode: '',
   behandlingOpprettet: '',
@@ -47,6 +48,7 @@ const oppgave: Oppgave = {
   reservertAv: 'navIdent',
   enhetForKø: '0300',
   erPåVent: false,
+  erÅpen: true,
 };
 
 const visning: FlytVisning = {

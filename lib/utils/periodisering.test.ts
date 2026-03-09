@@ -44,12 +44,22 @@ describe('hentPerioderSomTrengerVurdering', () => {
     const res = hentPerioderSomTrengerVurdering(grunnlag, () => ({ fraDato: '' }));
     expect(res).toEqual({ vurderinger: [{ fraDato: '01.01.2026', behøverVurdering: false }] });
   });
-  it('skal returnere vurdering med fraDato fra  behøverVurdering hvis vi har perioder der', () => {
+  it('skal ikke returnere vurdering med fraDato fra  behøverVurdering hvis perioden varer til TID_MAKS', () => {
     const grunnlag = {
       kanVurderes: [{ fom: '2026-01-01', tom: '2999-01-01' }],
       nyeVurderinger: [],
       sisteVedtatteVurderinger: [],
       behøverVurderinger: [{ fom: '2026-02-01', tom: '2999-01-01' }],
+    };
+    const res = hentPerioderSomTrengerVurdering(grunnlag, () => ({ fraDato: '' }));
+    expect(res).toEqual({ vurderinger: [{ fraDato: '01.01.2026', behøverVurdering: false }] });
+  });
+  it('skal returnere vurdering med fraDato fra  behøverVurdering hvis vi har perioder der', () => {
+    const grunnlag = {
+      kanVurderes: [{ fom: '2026-01-01', tom: '2999-01-01' }],
+      nyeVurderinger: [],
+      sisteVedtatteVurderinger: [],
+      behøverVurderinger: [{ fom: '2026-02-01', tom: '2027-01-01' }],
     };
     const res = hentPerioderSomTrengerVurdering(grunnlag, () => ({ fraDato: '' }));
     expect(res).toEqual({ vurderinger: [{ fraDato: '01.02.2026', behøverVurdering: true }] });
