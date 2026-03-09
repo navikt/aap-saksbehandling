@@ -1951,19 +1951,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@portabletext/react@npm:6.0.2":
-  version: 6.0.2
-  resolution: "@portabletext/react@npm:6.0.2"
+"@portabletext/react@npm:6.0.3":
+  version: 6.0.3
+  resolution: "@portabletext/react@npm:6.0.3"
   dependencies:
-    "@portabletext/toolkit": "npm:^5.0.1"
-    "@portabletext/types": "npm:^4.0.1"
+    "@portabletext/toolkit": "npm:^5.0.2"
+    "@portabletext/types": "npm:^4.0.2"
   peerDependencies:
     react: ^18.2 || ^19
-  checksum: 10c0/daf5bc948a04edba176f207beaa4e31457cc3ddb19f160133c9540e0f65edf09f80d307f128c845877fd722ff054b823962c3442aa64fed65e2c9d8bb279896b
+  checksum: 10c0/7736f5c6fc5b44e8ec86c743de8fcfd964df2d7cdcdecd96b7fb931ba78788588659844413e3f0393b130f00e8df8f5d0ace1de7cabbe60cc5744748ae761cd8
   languageName: node
   linkType: hard
 
-"@portabletext/toolkit@npm:^5.0.0, @portabletext/toolkit@npm:^5.0.1":
+"@portabletext/toolkit@npm:^5.0.0":
   version: 5.0.1
   resolution: "@portabletext/toolkit@npm:5.0.1"
   dependencies:
@@ -1972,10 +1972,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@portabletext/toolkit@npm:^5.0.2":
+  version: 5.0.2
+  resolution: "@portabletext/toolkit@npm:5.0.2"
+  dependencies:
+    "@portabletext/types": "npm:^4.0.2"
+  checksum: 10c0/c6786aacae35bac42c2d79bf7dde8f0f4fad52fae264348d34e7a900dc3f47da8f1f261b05c96314ae561c84464b299f100f22b94301c103cabb664b17536b64
+  languageName: node
+  linkType: hard
+
 "@portabletext/types@npm:^4.0.0, @portabletext/types@npm:^4.0.1":
   version: 4.0.1
   resolution: "@portabletext/types@npm:4.0.1"
   checksum: 10c0/d49ba925afaa49c322fe2202a54766bd87f768ec4cb6d3bbf93a3c421bda23ed4732a64d8c287e0ce275502c939a707b5ead341080735a51ada7d68c7d6918de
+  languageName: node
+  linkType: hard
+
+"@portabletext/types@npm:^4.0.2":
+  version: 4.0.2
+  resolution: "@portabletext/types@npm:4.0.2"
+  checksum: 10c0/dae2c3372dfa988f9f98915b1d4efa0af12219d7f1a2b41a074cba1b030fb543b0ef92e49a35eaa2e6be800e2fd90997616c68faca944406a9536f29fe6c0e3d
   languageName: node
   linkType: hard
 
@@ -3331,7 +3347,7 @@ __metadata:
     "@navikt/oasis": "npm:3.8.0"
     "@opentelemetry/api": "npm:1.9.0"
     "@opentelemetry/api-logs": "npm:0.213.0"
-    "@portabletext/react": "npm:6.0.2"
+    "@portabletext/react": "npm:6.0.3"
     "@testing-library/dom": "npm:10.4.1"
     "@testing-library/jest-dom": "npm:6.9.1"
     "@testing-library/react": "npm:16.3.2"
