@@ -1,7 +1,7 @@
 'use client';
 
 import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaverny/MineOppgaverNy';
-import { clientSaksbehandlerSøk } from 'lib/clientApi';
+import { clientSøkPåSaksbehandler } from 'lib/clientApi';
 import { AsyncComboSearch } from 'components/form/asynccombosearch/AsyncComboSearch';
 import { UseFormReturn } from 'react-hook-form';
 import { ValuePair } from 'components/form/FormField';
@@ -10,11 +10,16 @@ import { useCallback } from 'react';
 interface Props {
   form: UseFormReturn<FormFieldsFilter>;
   defaultOptions?: ValuePair[];
+  enheter: string[];
 }
 
-export const SaksbehandlerFilterSøk = ({ form, defaultOptions }: Props) => {
+export const SaksbehandlerFilterSøk = ({ form, defaultOptions, enheter }: Props) => {
   function hentOptions(søkestring: string) {
-    return clientSaksbehandlerSøk(søkestring).then((res) => (res.type === 'SUCCESS' ? res.data : []));
+    return clientSøkPåSaksbehandler([], søkestring, enheter).then((res) =>
+      res.type === 'SUCCESS'
+        ? res.data.saksbehandlere.map((saksbehandler) => ({ label: saksbehandler.navn, value: saksbehandler.navIdent }))
+        : []
+    );
   }
 
   const loadOptionsDebounced = useCallback(

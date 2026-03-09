@@ -204,6 +204,7 @@ export const AlleOppgaverNy = ({ enheter }: Props) => {
           valgteRader={valgteRader}
           setValgteRader={setValgteRader}
           revalidateFunction={mutate}
+          aktiveEnheter={aktiveEnhetsnumre}
         />
         {isLoading && <TabellSkeleton />}
 

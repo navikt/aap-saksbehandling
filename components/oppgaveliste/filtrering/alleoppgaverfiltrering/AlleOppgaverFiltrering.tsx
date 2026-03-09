@@ -24,6 +24,7 @@ interface Props {
   valgteRader: number[];
   setValgteRader: Dispatch<SetStateAction<number[]>>;
   revalidateFunction: () => void;
+  aktiveEnheter: string[];
 }
 
 export const AlleOppgaverFiltrering = ({
@@ -35,6 +36,7 @@ export const AlleOppgaverFiltrering = ({
   valgteRader,
   revalidateFunction,
   setValgteRader,
+  aktiveEnheter,
 }: Props) => {
   const [åpneFilter, setÅpneFilter] = useState(false);
   const [kanBrukerFiltrere, setKanBrukerFiltrere] = useState<boolean>();
@@ -153,7 +155,7 @@ export const AlleOppgaverFiltrering = ({
                   </BoxWrapper>
                   <BoxWrapper>
                     <FormField form={form} formField={formFields.årsaker} />
-                    <SaksbehandlerFilterSøk form={form} />
+                    <SaksbehandlerFilterSøk form={form} enheter={aktiveEnheter} />
                   </BoxWrapper>
                   <BoxWrapper>
                     <FormField form={form} formField={formFields.avklaringsbehov} />
