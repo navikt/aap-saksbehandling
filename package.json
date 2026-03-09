@@ -47,7 +47,7 @@
     "unleash-client": "6.10.1"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "3.3.4",
+    "@eslint/eslintrc": "3.3.5",
     "@eslint/js": "9.39.4",
     "@navikt/aap-felles-prettier": "5.6.0",
     "@navikt/aap-oppgave-typescript-types": "0.0.631",
