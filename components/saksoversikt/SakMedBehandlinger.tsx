@@ -20,6 +20,7 @@ import { mapTypeBehandlingTilTekst } from 'lib/utils/oversettelser';
 import { useState } from 'react';
 import { BehandlingsflytEllerPostmottakBehandling } from './types';
 import { usePostmottakBehandlinger } from 'hooks/postmottak/PostmottakBehandlingerHook';
+import { useHentOppgaverForBehandlinger } from 'hooks/oppgave/OppgaverPåSakHook';
 
 const lokalDevToolsForBehandlingOgSak = isLocal();
 export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
@@ -48,7 +49,14 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
   const kanRegistrerebrudd = sak.behandlinger.some((behandling) => erAvsluttetFørstegangsbehandling(behandling));
 
   const åpne = alleBehandlinger.filter((b) => !erAvsluttet(b.behandling));
+
+  const oppgaverPerBehandling = useHentOppgaverForBehandlinger(åpne.map((b) => b.behandling.referanse));
   const avsluttede = alleBehandlinger?.filter((b) => erAvsluttet(b.behandling));
+
+  function hentTildeling(referanse: string) {
+    const oppgaveInfo = oppgaverPerBehandling.get(referanse);
+    return oppgaveInfo ? (oppgaveInfo.feilmelding ?? oppgaveInfo.reservertAv ?? 'Ledig') : null;
+  }
 
   return (
     <VStack gap="8">
@@ -118,6 +126,7 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
             <Table.HeaderCell>Årsak</Table.HeaderCell>
             <Table.HeaderCell>Status</Table.HeaderCell>
             <Table.HeaderCell>Vurderingsbehov</Table.HeaderCell>
+            <Table.HeaderCell>Tildelt</Table.HeaderCell>
             <Table.HeaderCell align="right">Handlinger</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
@@ -138,7 +147,10 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
                   ? behandling.behandling.vurderingsbehov.map((behov) => formaterVurderingsbehov(behov)).join(', ')
                   : null}
               </Table.DataCell>
-
+              <Table.DataCell>
+                {!erAvsluttet(behandling.behandling) &&
+                  hentTildeling(behandling.behandling.referanse)}
+              </Table.DataCell>
               <Table.DataCell>
                 <BehandlingButtons
                   key={behandling.behandling.referanse}

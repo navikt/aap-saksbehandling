@@ -1,9 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { SakMedBehandlinger } from './SakMedBehandlinger';
 import { render, screen, within } from 'lib/test/CustomRender';
-import { SaksInfo, BehandlingInfo } from 'lib/types/types';
+import { BehandlingInfo, SaksInfo } from 'lib/types/types';
 
-const lagBehandling = (overrides: Partial<BehandlingInfo> & Pick<BehandlingInfo, 'status' | 'referanse'>): BehandlingInfo =>
+const lagBehandling = (
+  overrides: Partial<BehandlingInfo> & Pick<BehandlingInfo, 'status' | 'referanse'>
+): BehandlingInfo =>
   ({
     opprettet: '2026-01-01T12:00:00',
     typeBehandling: 'Førstegangsbehandling',
