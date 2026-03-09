@@ -10,6 +10,7 @@ import { useOpprettSak } from 'hooks/FetchHook';
 import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { Sykepenger } from 'components/opprettsak/samordning/Sykepenger';
+import { Dagpenger } from 'components/opprettsak/samordning/Dagpenger';
 import { parse } from 'date-fns';
 import { OpprettTestcase, TestcaseSteg } from 'lib/types/types';
 
@@ -32,6 +33,15 @@ interface SamordningSykepenger {
   };
 }
 
+interface SamordningDagpenger {
+  dagpengerYtelseType: DagpengerYtelseType;
+  dagpengerKilde: DagpengerKilde;
+  periode: {
+    fom: string;
+    tom: string;
+  };
+}
+
 type Institusjon = 'fengsel' | 'sykehus';
 
 enum AndreUtbetalingerYtelser {
@@ -45,6 +55,17 @@ enum AndreUtbetalingerYtelser {
   STIPEND = 'STIPEND',
   LÅN = 'LÅN',
   NEI = 'NEI',
+}
+
+enum DagpengerYtelseType {
+  DAGPENGER_ARBEIDSSOKER_ORDINAER = 'DAGPENGER_ARBEIDSSOKER_ORDINAER',
+  DAGPENGER_PERMITTERING_ORDINAER = 'DAGPENGER_PERMITTERING_ORDINAER',
+  DAGPENGER_PERMITTERING_FISKEINDUSTRI = 'DAGPENGER_PERMITTERING_FISKEINDUSTRI',
+}
+
+enum DagpengerKilde {
+  ARENA = 'ARENA',
+  DP_SAK = 'DP_SAK',
 }
 
 export const AndreUtbetalingerYtelserAlternativer = Object.entries(AndreUtbetalingerYtelser).map(([k, v]) => ({
@@ -64,6 +85,7 @@ export interface OpprettSakFormFields {
   medlemskap?: JaEllerNei;
   søknadsdato: Date;
   sykepenger?: SamordningSykepenger[];
+  dagpenger?: SamordningDagpenger[];
   tjenestePensjon?: JaEllerNei;
   erArbeidsevnenNedsatt: JaEllerNei;
   erNedsettelseIArbeidsevneMerEnnHalvparten: JaEllerNei;
@@ -153,6 +175,21 @@ export const OpprettSakLocal = () => {
       sykepenger: {
         type: 'fieldArray',
         defaultValue: [{ grad: 50, periode: { fom: '14.03.2025', tom: '31.03.2025' } }],
+      },
+      dagpenger: {
+        type: 'fieldArray',
+        defaultValue: [
+          {
+            dagpengerYtelseType: DagpengerYtelseType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
+            dagpengerKilde: DagpengerKilde.DP_SAK,
+            periode: { fom: '01.05.2025', tom: '14.05.2025' },
+          },
+          {
+            dagpengerYtelseType: DagpengerYtelseType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
+            dagpengerKilde: DagpengerKilde.ARENA,
+            periode: { fom: '15.05.2025', tom: '28.05.2025' },
+          },
+        ],
       },
       tjenestePensjon: {
         type: 'radio',
@@ -247,6 +284,15 @@ export const OpprettSakLocal = () => {
             tom: formaterDatoForBackend(parse(samordning.periode.tom, 'dd.MM.yyyy', new Date())),
           },
         })) || [],
+      dagpenger:
+        data.dagpenger?.map((samordning) => ({
+          dagpengerYtelseType: samordning.dagpengerYtelseType,
+          dagpengerKilde: samordning.dagpengerKilde,
+          periode: {
+            fom: formaterDatoForBackend(parse(samordning.periode.fom, 'dd.MM.yyyy', new Date())),
+            tom: formaterDatoForBackend(parse(samordning.periode.tom, 'dd.MM.yyyy', new Date())),
+          },
+        })) || [],
       tjenestePensjon: getTrueFalseEllerUndefined(data.tjenestePensjon),
       erArbeidsevnenNedsatt: data.erArbeidsevnenNedsatt === JaEllerNei.Ja,
       erNedsettelseIArbeidsevneMerEnnHalvparten: data.erNedsettelseIArbeidsevneMerEnnHalvparten === JaEllerNei.Ja,
@@ -297,6 +343,7 @@ export const OpprettSakLocal = () => {
             <OpprettSakBarn form={form} />
             <OpprettInntekter form={form} />
             <Sykepenger form={form} />
+            <Dagpenger form={form} />
           </VStack>
         </HGrid>
 
