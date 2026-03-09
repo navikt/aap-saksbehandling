@@ -16,7 +16,7 @@ export function getFraDatoFraGrunnlagForFrontend(grunnlag: PeriodisertGrunnlag |
     return '';
   }
 
-  if (grunnlag.behøverVurderinger.length >= 1) {
+  if (grunnlag.behøverVurderinger.length >= 1 && grunnlag.behøverVurderinger[0].tom !== TID_MAKS_BACKEND_STRING) {
     return formaterDatoForFrontend(parseISO(grunnlag.behøverVurderinger[0].fom));
   }
 
