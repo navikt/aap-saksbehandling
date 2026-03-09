@@ -55,6 +55,13 @@ export const Helseinstitusjonsvurdering = ({
   const forrigeOppholdTom =
     oppholdIndex > 0 ? form.getValues(`helseinstitusjonsvurderinger.${oppholdIndex - 1}.periode.tom`) : undefined;
 
+
+  console.log(
+    forrigeOppholdTom && erNyttOppholdInnenfor3MaanederEtterSistOpphold(forrigeOppholdTom, opphold.oppholdFra)
+  );
+
+  console.log(form.watch())
+
   const reduksjonsBeskrivelse = useMemo(() => {
     if (forrigeOppholdTom && erNyttOppholdInnenfor3MaanederEtterSistOpphold(forrigeOppholdTom, opphold.oppholdFra)) {
       return lagReduksjonBeskrivelseNyttOpphold(opphold.oppholdFra);
