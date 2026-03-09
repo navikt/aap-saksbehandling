@@ -24,7 +24,6 @@ import {
   NoNavAapOppgaveListeUtvidetOppgavelisteFilterBehandlingstyper,
   NoNavAapOppgaveListeUtvidetOppgavelisteFilterReturStatuser,
 } from '@navikt/aap-oppgave-typescript-types';
-import { LedigeOppgaverFiltrering } from 'components/oppgaveliste/filtrering/ledigeoppgaverfiltrering/LedigeOppgaverFiltrering';
 import { TabellSkeleton } from 'components/oppgaveliste/tabellskeleton/TabellSkeleton';
 import { ALLE_OPPGAVER_ID } from 'components/oppgaveliste/filtrering/filtreringUtils';
 import { useLagreAktivUtvidetFilter } from 'hooks/oppgave/aktivUtvidetFilterHook';
@@ -32,6 +31,7 @@ import { EnheterSelect } from 'components/oppgaveliste/enheterselect/EnheterSele
 import { ComboOption } from 'components/produksjonsstyring/minenhet/MineEnheter';
 import { useLagreAktiveEnheter } from 'hooks/oppgave/aktiveEnheterHook';
 import { useBackendSortering } from 'hooks/oppgave/BackendSorteringHook';
+import { LedigeOppgaverFiltreringNy } from 'components/oppgaveliste/filtrering/ledigeoppgaverfiltrering/LedigeOppgaverFiltreringNy';
 
 interface Props {
   enheter: Enhet[];
@@ -55,6 +55,7 @@ export const LedigeOppgaverNy = ({ enheter }: Props) => {
     }
     return null;
   }
+
   const [aktiveEnheter, setAktiveEnheter] = useState<ComboOption[]>(
     hentLagredeAktiveEnheter() ?? førsteEnhetTilComboOption(enheter) ?? []
   );
@@ -107,23 +108,20 @@ export const LedigeOppgaverNy = ({ enheter }: Props) => {
   const behandlingOpprettetFom = form.watch('behandlingOpprettetFom');
   const andreStatusTyper = ['VENT', 'ER_HASTESAK', 'VENTEFRIST_UTLØPT'];
 
-  const utvidetFilter =
-    aktivKøId === ALLE_OPPGAVER_ID
-      ? {
-          behandlingstyper: (form.watch('behandlingstyper') ||
-            []) as NoNavAapOppgaveListeUtvidetOppgavelisteFilterBehandlingstyper[],
-          tom: behandlingOpprettetTom ? formaterDatoForBackend(behandlingOpprettetTom) : undefined,
-          fom: behandlingOpprettetFom ? formaterDatoForBackend(behandlingOpprettetFom) : undefined,
-          returStatuser: (
-            (form.watch('statuser') || []) as NoNavAapOppgaveListeUtvidetOppgavelisteFilterReturStatuser[]
-          ).filter((status) => !andreStatusTyper.includes(status.valueOf())),
-          påVent: form.watch('statuser')?.includes('VENT'),
-          årsaker: form.watch('årsaker') || [],
-          avklaringsbehovKoder: form.watch('avklaringsbehov') || [],
-          markertHaster: form.watch('statuser')?.includes('ER_HASTESAK'),
-          ventefristUtløpt: form.watch('statuser')?.includes('VENTEFRIST_UTLØPT'),
-        }
-      : undefined;
+  const utvidetFilter = {
+    behandlingstyper: (form.watch('behandlingstyper') ||
+      []) as NoNavAapOppgaveListeUtvidetOppgavelisteFilterBehandlingstyper[],
+    tom: behandlingOpprettetTom ? formaterDatoForBackend(behandlingOpprettetTom) : undefined,
+    fom: behandlingOpprettetFom ? formaterDatoForBackend(behandlingOpprettetFom) : undefined,
+    returStatuser: (
+      (form.watch('statuser') || []) as NoNavAapOppgaveListeUtvidetOppgavelisteFilterReturStatuser[]
+    ).filter((status) => !andreStatusTyper.includes(status.valueOf())),
+    påVent: form.watch('statuser')?.includes('VENT'),
+    årsaker: form.watch('årsaker') || [],
+    avklaringsbehovKoder: form.watch('avklaringsbehov') || [],
+    markertHaster: form.watch('statuser')?.includes('ER_HASTESAK'),
+    ventefristUtløpt: form.watch('statuser')?.includes('VENTEFRIST_UTLØPT'),
+  };
 
   const { antallOppgaver, oppgaver, size, setSize, isLoading, isValidating, kanLasteInnFlereOppgaver, mutate } =
     useLedigeOppgaverNy(aktiveEnhetsnumre, veilederFilter === 'veileder', aktivKøId, utvidetFilter, sort);
@@ -209,12 +207,11 @@ export const LedigeOppgaverNy = ({ enheter }: Props) => {
       </Box>
 
       <div className={styles.tabell}>
-        <LedigeOppgaverFiltrering
+        <LedigeOppgaverFiltreringNy
           form={form}
           formFields={formFields}
           antallOppgaver={antallOppgaver}
-          kanFiltrere={aktivKøId === ALLE_OPPGAVER_ID}
-          onFiltrerClick={() => oppdaterKøId(ALLE_OPPGAVER_ID)}
+          aktivKøId={aktivKøId}
         />
         {isLoading && <TabellSkeleton />}
 
