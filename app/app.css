@@ -2,7 +2,7 @@
 @import '@navikt/aap-breveditor-css';
 @import 'styles/globals.css';
 
-div .endringslogg {
+div.endringslogg {
   margin-right: 0;
   margin-top: 0.2rem;
 }
@@ -12,7 +12,7 @@ div .endringslogg {
   width: 1em;
 }
 
-div .endringslogg-content {
+div.endringslogg-content {
   background: var(--a-bg-default);
   color: var(--a-text-default);
 }
