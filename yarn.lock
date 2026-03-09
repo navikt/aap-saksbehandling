@@ -3380,7 +3380,7 @@ __metadata:
     server-only: "npm:0.0.1"
     swr: "npm:2.4.1"
     typescript: "npm:5.9.3"
-    unleash-client: "npm:6.9.6"
+    unleash-client: "npm:6.10.1"
     vite-tsconfig-paths: "npm:6.1.1"
     vitest: "npm:4.0.18"
     vitest-fetch-mock: "npm:0.4.5"
@@ -7414,6 +7414,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lru-cache@npm:^11.2.5":
+  version: 11.2.6
+  resolution: "lru-cache@npm:11.2.6"
+  checksum: 10c0/73bbffb298760e71b2bfe8ebc16a311c6a60ceddbba919cfedfd8635c2d125fbfb5a39b71818200e67973b11f8d59c5a9e31d6f90722e340e90393663a66e5cd
+  languageName: node
+  linkType: hard
+
 "lru-cache@npm:^5.1.1":
   version: 5.1.1
   resolution: "lru-cache@npm:5.1.1"
@@ -8913,6 +8920,13 @@ __metadata:
   dependencies:
     performance-now: "npm:^2.1.0"
   checksum: 10c0/337f0853c9e6a77647b0f499beedafea5d6facfb9f2d488a624f88b03df2be72b8a0e7f9118a3ff811377d534912039a3311815700d2b6d2313f82f736f9eb6e
+  languageName: node
+  linkType: hard
+
+"re2js@npm:^1.2.2":
+  version: 1.2.2
+  resolution: "re2js@npm:1.2.2"
+  checksum: 10c0/423b058c205cb35b5d89b401268f0587798d33cefe94e43863c428b9bd0eb993102658201b52ffd13338e657a8e81d4a99a2de11d43a71303ad155065d8ea95c
   languageName: node
   linkType: hard
 
@@ -10651,19 +10665,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"unleash-client@npm:6.9.6":
-  version: 6.9.6
-  resolution: "unleash-client@npm:6.9.6"
+"unleash-client@npm:6.10.1":
+  version: 6.10.1
+  resolution: "unleash-client@npm:6.10.1"
   dependencies:
     http-proxy-agent: "npm:^7.0.2"
     https-proxy-agent: "npm:^7.0.5"
     ip-address: "npm:^9.0.5"
     launchdarkly-eventsource: "npm:2.2.0"
+    lru-cache: "npm:^11.2.5"
     make-fetch-happen: "npm:^15.0.3"
     murmurhash3js: "npm:^3.0.1"
     proxy-from-env: "npm:^1.1.0"
+    re2js: "npm:^1.2.2"
     semver: "npm:^7.7.3"
-  checksum: 10c0/9c17290b43a4b1e96c8d73d5fe52b1b938b1eaa8280cbdf50db95baae3f9d171a10e4f1a2862f459eb8665b94a81794ab7531dab26e03849073ce52c0b44537c
+  checksum: 10c0/66a6f988edc678117acbafa5d546a9ff9320f9e48a7a5d9799492ea08a7108218c191df7a73dce762c3727e6924cfda22dc75ecbe239ed22110162148cc2c219
   languageName: node
   linkType: hard
 
