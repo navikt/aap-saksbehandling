@@ -10,6 +10,7 @@ import { screen } from '@testing-library/react';
 import { AlleOppgaverActionMenuNy } from 'components/oppgaveliste/alleoppgaverny/alleoppgaveractionmenuny/AlleOppgaverActionMenuNy';
 
 const oppgave: Oppgave = {
+  behandlingRef: 'sdgasd',
   vurderingsbehov: [],
   avklaringsbehovKode: '',
   behandlingOpprettet: '',
@@ -23,6 +24,7 @@ const oppgave: Oppgave = {
   markeringer: [],
   enhetForKø: '4491',
   erPåVent: false,
+  erÅpen: true,
 };
 
 const setSync = () => undefined;
