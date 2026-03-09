@@ -193,9 +193,6 @@ function mapVurderingToDraftFormFields(
         (vurdering) => vurdering.oppholdId === opphold.oppholdId
       )?.vurderinger;
 
-      const oppholdHentetFraGrunnlag = grunnlag.vurderinger.find((v) => v.oppholdId === opphold.oppholdId);
-      console.log(oppholdHentetFraGrunnlag);
-
       const vurderinger =
         vurderingerForOpphold && vurderingerForOpphold.length > 0
           ? vurderingerForOpphold?.map((vurdering) => ({
