@@ -16,6 +16,7 @@ import {
   BehandlingFlytOgTilstand,
   BehandlingPersoninfo,
   BehandlingsHistorikk,
+  BekreftVurderingerOppfølgingGrunnlag,
   BeregningsGrunnlag,
   BeregningTidspunktGrunnlag,
   BestillLegeerklæring,
@@ -225,6 +226,11 @@ export const hentSykepengerErstatningGrunnlag = async (behandlingsReferanse: str
 export const hentAlderGrunnlag = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/alder`;
   return await apiFetch<AlderGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentBekreftVurderingerOppfølgingGrunnlag = async (behandlingsReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/bekreft-vurderinger-oppfolging`;
+  return await apiFetch<BekreftVurderingerOppfølgingGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentUnntakMeldepliktGrunnlag = async (behandlingsReferanse: string) => {
