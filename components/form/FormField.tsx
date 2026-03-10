@@ -29,10 +29,11 @@ interface Props<FormFieldIds extends FieldValues> {
   size?: 'small' | 'medium';
   className?: string;
   autocomplete?: HTMLInputAutoCompleteAttribute;
+  readOnly?: boolean;
 }
 
 export const FormField = <FormFieldIds extends FieldValues>(props: Props<FormFieldIds>) => {
-  const { formField, form, children, className, horizontalRadio, size, autocomplete = 'off' } = props;
+  const { formField, form, children, className, horizontalRadio, size, autocomplete = 'off', readOnly = false } = props;
 
   return (
     <>
@@ -46,7 +47,7 @@ export const FormField = <FormFieldIds extends FieldValues>(props: Props<FormFie
           size={size}
           hideLabel={formField.hideLabel}
           description={formField.description}
-          readOnly={formField.readOnly}
+          readOnly={formField.readOnly || readOnly}
           className={className}
           autocomplete={autocomplete}
           onChangeCustom={formField.onChange}
@@ -61,7 +62,7 @@ export const FormField = <FormFieldIds extends FieldValues>(props: Props<FormFie
           size={size}
           hideLabel={formField.hideLabel}
           description={formField.description}
-          readOnly={formField.readOnly}
+          readOnly={formField.readOnly || readOnly}
           className={className}
           autocomplete={autocomplete}
           onChangeCustom={formField.onChange}
@@ -76,7 +77,7 @@ export const FormField = <FormFieldIds extends FieldValues>(props: Props<FormFie
           control={form.control}
           rules={formField.rules}
           size={size}
-          readOnly={formField.readOnly}
+          readOnly={formField.readOnly || readOnly}
           className={className}
         />
       )}
@@ -91,7 +92,7 @@ export const FormField = <FormFieldIds extends FieldValues>(props: Props<FormFie
           rules={formField.rules}
           size={size}
           horisontal={horizontalRadio}
-          readOnly={formField.readOnly}
+          readOnly={formField.readOnly || readOnly}
           onChangeCustom={formField.onChange}
         >
           {formField.options.map((option) => (
@@ -114,7 +115,7 @@ export const FormField = <FormFieldIds extends FieldValues>(props: Props<FormFie
           toDate={formField.toDate}
           disableWeekends={formField.disableWeekends}
           selected={form.getValues(formField.name)}
-          readOnly={formField.readOnly}
+          readOnly={formField.readOnly || readOnly}
           strategy={formField.strategy}
           onChangeCustom={formField.onChange}
         />
@@ -148,7 +149,7 @@ export const FormField = <FormFieldIds extends FieldValues>(props: Props<FormFie
           size={size}
           hideLabel={formField.hideLabel}
           description={formField.description}
-          readOnly={formField.readOnly}
+          readOnly={formField.readOnly || readOnly}
           className={className}
           autocomplete={autocomplete}
           onChangeCustom={formField.onChange}
@@ -163,7 +164,7 @@ export const FormField = <FormFieldIds extends FieldValues>(props: Props<FormFie
           rules={formField.rules}
           size={size}
           description={formField.description}
-          readOnly={formField.readOnly}
+          readOnly={formField.readOnly || readOnly}
           className={className}
           onChangeCustom={formField.onChange}
         >
@@ -183,7 +184,7 @@ export const FormField = <FormFieldIds extends FieldValues>(props: Props<FormFie
           control={form.control}
           rules={formField.rules}
           size={size}
-          readOnly={formField.readOnly}
+          readOnly={formField.readOnly || readOnly}
           className={className}
           autocomplete={autocomplete}
         >
@@ -203,7 +204,7 @@ export const FormField = <FormFieldIds extends FieldValues>(props: Props<FormFie
           control={form.control}
           rules={formField.rules}
           size={size}
-          readOnly={formField.readOnly}
+          readOnly={formField.readOnly || readOnly}
           className={className}
           onChangeCustom={formField.onChange}
         >
@@ -220,7 +221,7 @@ export const FormField = <FormFieldIds extends FieldValues>(props: Props<FormFie
           rules={formField.rules}
           size={size}
           hideLabel={formField.hideLabel}
-          readOnly={formField.readOnly}
+          readOnly={formField.readOnly || readOnly}
           className={className}
         >
           {children}
@@ -236,7 +237,7 @@ export const FormField = <FormFieldIds extends FieldValues>(props: Props<FormFie
           rules={formField.rules}
           size={size}
           description={formField.description}
-          readOnly={formField.readOnly}
+          readOnly={formField.readOnly || readOnly}
           options={formField.options.map((option) => mapToValuePair(option))}
         />
       )}
@@ -250,7 +251,7 @@ export const FormField = <FormFieldIds extends FieldValues>(props: Props<FormFie
           rules={formField.rules}
           size={size}
           description={formField.description}
-          readOnly={formField.readOnly}
+          readOnly={formField.readOnly || readOnly}
           options={formField.options.map((option) => mapToValuePair(option))}
         />
       )}

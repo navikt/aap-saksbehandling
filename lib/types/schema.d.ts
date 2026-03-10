@@ -2899,6 +2899,44 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/behandling/{referanse}/grunnlag/barnepensjon': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description referanse */
+          referanse: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnepensjon.BarnepensjonGrunnlagDto'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/klage/{referanse}/grunnlag/p\u00E5klaget-behandling': {
     parameters: {
       query?: never;
@@ -4801,6 +4839,7 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
   schemas: {
+    'java.time.YearMonth': Record<string, never>;
     'no.nav.aap.behandlingsflyt.InntektPer\u00C5rDto': {
       'bel\u00F8p': components['schemas']['no.nav.aap.komponenter.verdityper.Bel\u00F8p'];
       /** Format: int32 */
@@ -6582,6 +6621,7 @@ export interface components {
       samordningArbeidsgiverVurdering: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.samordning.arbeidsgiver.SamordningArbeidsgiverVurderingerDTO'];
     };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarSamordningBarnepensjonL\u00F8sning': {
+      barnepensjonVurdering: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.barnepensjon.BarnepensjonL\u00F8sningDto'];
       /** @enum {string} */
       behovstype:
         | '4101'
@@ -10680,6 +10720,19 @@ export interface components {
         | 'SKRIVEFEIL';
       '\u00E5rsakFritekst'?: string | null;
     };
+    'no.nav.aap.behandlingsflyt.behandling.barnepensjon.BarnepensjonGrunnlagDto': {
+      'harTilgangTil\u00C5Saksbehandle': boolean;
+      vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnepensjon.BarnepensjonVurderingDto'];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.barnepensjon.BarnepensjonVurderingDto': {
+      begrunnelse: string;
+      perioder: components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnepensjon.BarnepensjonVurderingPeriodeDto'][];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.barnepensjon.BarnepensjonVurderingPeriodeDto': {
+      fom: components['schemas']['java.time.YearMonth'];
+      'm\u00E5nedsbel\u00F8p': components['schemas']['no.nav.aap.komponenter.verdityper.Bel\u00F8p'];
+      tom: components['schemas']['java.time.YearMonth'];
+    };
     'no.nav.aap.behandlingsflyt.behandling.barnetillegg.BarnetilleggDto': {
       barnSomTrengerVurdering: components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnetillegg.IdentifiserteBarnDto'][];
       folkeregisterbarn: components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnetillegg.IdentifiserteBarnDto'][];
@@ -11293,6 +11346,7 @@ export interface components {
         | 'KLAGE_OPPRETTHOLDELSE'
         | 'KLAGE_TRUKKET'
         | 'OMGJØRING_VEDTAK_11_9'
+        | 'STANS_AV_YTELSE'
         | 'VARSEL_OM_BESTILLING'
         | 'VEDTAK_11_17'
         | 'VEDTAK_11_18'
@@ -11482,7 +11536,29 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.medlemskap.MedlemskapGrunnlagDto': {
       medlemskap: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.register.medlemskap.MedlemskapUnntakGrunnlag'];
     };
+    'no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.DagpengerPeriodeDto': {
+      /** @enum {string} */
+      dagpengerYtelseType:
+        | 'DAGPENGER_ARBEIDSSOKER_ORDINAER'
+        | 'DAGPENGER_PERMITTERING_FISKEINDUSTRI'
+        | 'DAGPENGER_PERMITTERING_ORDINAER';
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fom: string;
+      /** @enum {string} */
+      kilde: 'ARENA' | 'DP_SAK';
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      tom: string;
+    };
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningAndreStatligeYtelserGrunnlagDTO': {
+      dagpengerPerioder?:
+        | components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.DagpengerPeriodeDto'][]
+        | null;
       'harTilgangTil\u00C5Saksbehandle': boolean;
       historiskeVurderinger?:
         | components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningAndreStatligeYtelserVurderingDTO'][]
@@ -11508,6 +11584,7 @@ export interface components {
         | 'TILTAKSPENGER';
     };
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningArbeidsgiverGrunnlagDTO': {
+      'harF\u00E5ttEkstrautbetalingFraArbeidsgiver'?: boolean | null;
       'harTilgangTil\u00C5Saksbehandle': boolean;
       historiskeVurderinger?:
         | components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningArbeidsgiverVurderingDTO'][]
@@ -11682,7 +11759,6 @@ export interface components {
       opphold: components['schemas']['no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.InstitusjonsoppholdDto'][];
       vedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.HelseoppholdDto'][];
       vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.HelseoppholdDto'][];
-      vurdertAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.HelseinstitusjonVurderingDto': {
       begrunnelse: string;
@@ -13067,6 +13143,8 @@ export interface components {
     'no.nav.aap.behandlingsflyt.drift.ForenkletAvklaringsbehov': {
       definisjon: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.avklaringsbehov.Definisjon'];
       endretAv: string;
+      perioderKreverVurdering?: components['schemas']['no.nav.aap.komponenter.type.Periode'][] | null;
+      perioderUgyldigVurdering?: components['schemas']['no.nav.aap.komponenter.type.Periode'][] | null;
       /** @enum {string} */
       status:
         | 'AVBRUTT'
@@ -13081,6 +13159,20 @@ export interface components {
        * @example 2025-04-01T12:30:00
        */
       tidsstempel: string;
+      /** @enum {string|null} */
+      '\u00E5rsakTilSettP\u00E5Vent'?:
+        | 'VENTER_PÅ_FUNKSJONALITET'
+        | 'VENTER_PÅ_FUNKSJONALITET_AVSLAG_11_27'
+        | 'VENTER_PÅ_KLAGE_IMPLEMENTASJON'
+        | 'VENTER_PÅ_MASKINELL_AVKLARING'
+        | 'VENTER_PÅ_MEDISINSKE_OPPLYSNINGER'
+        | 'VENTER_PÅ_OPPLYSNINGER'
+        | 'VENTER_PÅ_OPPLYSNINGER_FRA_UTENLANDSKE_MYNDIGHETER'
+        | 'VENTER_PÅ_SVAR_FRA_BRUKER'
+        | 'VENTER_PÅ_SVAR_PÅ_FORHÅNDSVARSEL'
+        | 'VENTER_PÅ_UTENLANDSK_VIDEREFORING_AVKLARING'
+        | 'VENTER_PÅ_VURDERING_AV_ROL'
+        | null;
     };
     'no.nav.aap.behandlingsflyt.drift.ForenkletVilk\u00E5rsperiode': {
       /** @enum {string|null} */
@@ -13978,6 +14070,15 @@ export interface components {
       /** @enum {string|null} */
       oppgittForeldreRelasjon?: 'FORELDER' | 'FOSTERFORELDER' | null;
       vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.barn.VurderingAvForeldreAnsvarDto'][];
+    };
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.barnepensjon.BarnepensjonL\u00F8sningDto': {
+      begrunnelse: string;
+      perioder: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.barnepensjon.BarnepensjonL\u00F8sningPeriodeDto'][];
+    };
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.barnepensjon.BarnepensjonL\u00F8sningPeriodeDto': {
+      fom: components['schemas']['java.time.YearMonth'];
+      'm\u00E5nedsbel\u00F8p': components['schemas']['no.nav.aap.komponenter.verdityper.Bel\u00F8p'];
+      tom?: components['schemas']['java.time.YearMonth'];
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.beregning.BeregningYrkeskaderBel\u00F8pVurderingDTO': {
       /** Format: int64 */
@@ -15750,7 +15851,7 @@ export interface components {
       avsluttet: string;
       journalpostReferanser: string[];
       /** @enum {string} */
-      utfall: 'MEDHOLD_ETTER_FVL_35';
+      utfall: 'MEDHOLD_ETTER_FVL_35' | 'UGUNST';
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Omgj\u00F8ringKlageRevurdering':
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Omgj\u00F8ringKlageRevurderingV0']

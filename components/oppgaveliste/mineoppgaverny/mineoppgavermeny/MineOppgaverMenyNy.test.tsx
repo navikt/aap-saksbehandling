@@ -10,6 +10,7 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 const oppgaver: Oppgave = {
+  behandlingRef: 'asdf',
   vurderingsbehov: [],
   avklaringsbehovKode: '',
   behandlingOpprettet: '',
@@ -22,6 +23,7 @@ const oppgaver: Oppgave = {
   årsakerTilBehandling: [],
   markeringer: [],
   enhetForKø: '4491',
+  erÅpen: true,
   erPåVent: false,
 };
 

@@ -190,9 +190,7 @@ export const EtableringAvEgenVirksomhet = ({
           key={vurdering.fom}
           fom={parseISO(vurdering.fom)}
           tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
-          alertMelding={
-            'Vilkåret kan ikke vurderes for denne perioden. For å vurdere vilkåret i perioden må §§ 11-5 og 11-6 b være oppfylt.'
-          }
+          alertMelding={'Vilkåret kan ikke vurderes for denne perioden.'}
           foersteNyePeriodeFraDato={undefined}
         ></IkkeVurderbarPeriode>
       ))}
@@ -216,18 +214,17 @@ export const EtableringAvEgenVirksomhet = ({
           <EtableringEgenVirksomhetTidligereVurdering vurdering={vurdering} />
         </TidligereVurderingExpandableCard>
       ))}
-      {!formReadOnly && (
+      {nyeVurderinger.length > 0 && (
         <VStack paddingBlock={'4'} paddingInline={'5'} gap={'4'}>
-          {nyeVurderinger.length > 0 && (
-            <HStack>
-              <TextFieldWrapper
-                name={'virksomhetNavn'}
-                control={form.control}
-                type={'text'}
-                label={'Virksomheten det søkes for'}
-              />
-            </HStack>
-          )}
+          <HStack>
+            <TextFieldWrapper
+              name={'virksomhetNavn'}
+              control={form.control}
+              type={'text'}
+              label={'Virksomheten det søkes for'}
+              readOnly={formReadOnly}
+            />
+          </HStack>
         </VStack>
       )}
       {nyeVurderinger.map((vurdering, index) => (
