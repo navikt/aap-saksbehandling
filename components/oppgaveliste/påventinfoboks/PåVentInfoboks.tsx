@@ -35,7 +35,7 @@ export const PåVentInfoboks = ({ frist, årsak, begrunnelse }: Props) => {
         {formaterDatoForFrontend(frist)}
       </Button>
       <Popover
-        onClose={() => setVis(vis)}
+        onClose={() => setVis(false)}
         open={vis}
         anchorEl={buttonRef.current}
         arrow={false}

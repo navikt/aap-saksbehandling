@@ -3,9 +3,7 @@ import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { Behovstype } from 'lib/utils/form';
 import { skalViseSteg, StegData } from 'lib/utils/steg';
-import { Studentvurdering } from 'components/behandlinger/sykdom/student/student/Studentvurdering';
-import { StudentVurderingPeriodisert } from 'components/behandlinger/sykdom/student/studentperiodisert/StudentVurderingPeriodisert';
-import { unleashService } from 'lib/services/unleash/unleashService';
+import { StudentVurdering } from 'components/behandlinger/sykdom/student/studentvurdering/StudentVurdering';
 
 interface Props {
   behandlingsreferanse: string;
@@ -28,15 +26,8 @@ export const StudentvurderingMedDataFetching = async ({ behandlingsreferanse, st
     return null;
   }
 
-  return unleashService.isEnabled('studentVurderingPeriodisert') ? (
-    <StudentVurderingPeriodisert
-      grunnlag={grunnlag.data}
-      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
-      behandlingVersjon={stegData.behandlingVersjon}
-      initialMellomlagretVurdering={initialMellomlagretVurdering}
-    />
-  ) : (
-    <Studentvurdering
+  return (
+    <StudentVurdering
       grunnlag={grunnlag.data}
       readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       behandlingVersjon={stegData.behandlingVersjon}

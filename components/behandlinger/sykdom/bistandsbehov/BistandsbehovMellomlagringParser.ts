@@ -29,6 +29,8 @@ function mapFromOldFormToNewForm(oldData: BistandFormOld, foersteFraDato: string
         erBehovForAnnenOppfølging: oldData.erBehovForAnnenOppfølging as JaEllerNei,
         overgangBegrunnelse: oldData.overgangBegrunnelse,
         skalVurdereAapIOvergangTilArbeid: oldData.skalVurdereAapIOvergangTilArbeid as JaEllerNei,
+        erNyVurdering: false,
+        behøverVurdering: false,
       },
     ],
   };

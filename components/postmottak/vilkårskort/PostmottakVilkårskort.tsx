@@ -1,11 +1,9 @@
 'use client';
 
-import { Button, Detail, ExpansionCard, HStack, VStack } from '@navikt/ds-react';
-import { VurdertAvAnsatt } from 'lib/types/types';
+import { Button, ExpansionCard, HStack, VStack } from '@navikt/ds-react';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
-import { formaterDatoForFrontend } from 'lib/utils/date';
 
-import styles from 'components/vilkårskort/Vilkårskort.module.css';
+import styles from './VilkårsKort.module.css';
 import { usePostmottakRequiredFlyt } from 'hooks/postmottak/PostmottakFlytHook';
 import { FormEvent, ReactNode } from 'react';
 import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
@@ -21,12 +19,7 @@ interface PostmottakVilkårskortProps {
   isLoading: boolean;
   status: LøsBehovOgGåTilNesteStegStatus;
   løsBehovOgGåTilNesteStegError: ApiException | undefined;
-  knappTekst?: string;
-  defaultOpen?: boolean;
-  vilkårTilhørerNavKontor: boolean;
-  vurdertAvAnsatt?: VurdertAvAnsatt;
-  vurdertAutomatisk?: boolean;
-  kvalitetssikretAv?: VurdertAvAnsatt;
+  knappTekst: string;
   visningModus: VisningModus;
   visningActions: VisningActions;
   extraActions?: ReactNode;
@@ -41,27 +34,21 @@ export const PostmottakVilkårskort = ({
   isLoading,
   status,
   løsBehovOgGåTilNesteStegError,
-  vilkårTilhørerNavKontor,
-  knappTekst = 'Bekreft',
-  defaultOpen = true,
-  vurdertAvAnsatt,
-  vurdertAutomatisk = false,
-  kvalitetssikretAv,
+  knappTekst,
   visningModus,
   visningActions,
   extraActions,
   formReset,
 }: PostmottakVilkårskortProps) => {
-  const classNameBasertPåEnhet = vilkårTilhørerNavKontor ? styles.vilkårsKortNAV : styles.vilkårsKortNAY;
   const { flyt } = usePostmottakRequiredFlyt();
   const erAktivtSteg = flyt.aktivtSteg === steg || visningModus === 'AKTIV_MED_AVBRYT';
 
   return (
     <ExpansionCard
       aria-label={heading}
-      className={erAktivtSteg ? classNameBasertPåEnhet : styles.vilkårsKort}
+      className={erAktivtSteg ? `${styles.vilkårsKort} ${styles.blå}` : styles.vilkårsKort}
       size="small"
-      defaultOpen={defaultOpen}
+      defaultOpen={true}
       id={steg}
     >
       <ExpansionCard.Header className={styles.header}>
@@ -124,23 +111,6 @@ export const PostmottakVilkårskort = ({
                   {visningModus === 'LÅST_UTEN_ENDRE' && null}
                 </HStack>
               </VStack>
-
-              {/* Høyre kolonne: vurdert av / kvalitetssikret av */}
-              <VStack align="baseline">
-                {vurdertAutomatisk && <Detail>Vurdert automatisk</Detail>}
-                {vurdertAvAnsatt && (
-                  <Detail>
-                    {`Vurdert av ${utledVurdertAv(vurdertAvAnsatt)}, ${formaterDatoForFrontend(vurdertAvAnsatt.dato)}`}
-                  </Detail>
-                )}
-                {kvalitetssikretAv && (
-                  <Detail>
-                    {`Kvalitetssikret av ${utledVurdertAv(kvalitetssikretAv)}, ${formaterDatoForFrontend(
-                      kvalitetssikretAv.dato
-                    )}`}
-                  </Detail>
-                )}
-              </VStack>
             </HStack>
           </VStack>
         </form>
@@ -148,7 +118,3 @@ export const PostmottakVilkårskort = ({
     </ExpansionCard>
   );
 };
-
-function utledVurdertAv(vurdertAvAnsatt: VurdertAvAnsatt): string {
-  return vurdertAvAnsatt.ansattnavn ? vurdertAvAnsatt.ansattnavn : vurdertAvAnsatt.ident;
-}

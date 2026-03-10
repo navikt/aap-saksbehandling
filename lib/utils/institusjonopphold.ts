@@ -5,7 +5,7 @@ import { Dato } from 'lib/types/Dato';
 import { HelseInstiusjonVurdering } from 'lib/types/types';
 
 import { JaEllerNei } from 'lib/utils/form';
-import { OppholdVurdering } from 'components/behandlinger/institusjonsopphold/helseinstitusjonny/HelseinstitusjonNy';
+import { OppholdVurdering } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/Helseinstitusjon';
 
 /**
  * Beregner tidligste dato for reduksjon av AAP ved institusjonsopphold.

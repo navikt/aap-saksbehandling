@@ -81,6 +81,8 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialM
       begrunnelse: '',
       fraDato: '',
       brukerRettPåAAP: '',
+      erNyVurdering: true,
+      behøverVurdering: false,
     });
   }
 
@@ -144,7 +146,7 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialM
     >
       {vedtatteVurderinger?.map((vurdering) => (
         <TidligereVurderingExpandableCard
-          key={vurdering.fom}
+          key={crypto.randomUUID()}
           fom={parseISO(vurdering.fom)}
           tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
           foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
@@ -171,9 +173,7 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialM
           )}
           nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
           isLast={index === vurderingerFields.length - 1}
-          vurdertAv={vurdering.vurdertAv}
-          kvalitetssikretAv={vurdering.kvalitetssikretAv}
-          besluttetAv={vurdering.besluttetAv}
+          vurdering={vurdering}
           readonly={formReadOnly}
           onSlettVurdering={() => remove(index)}
           harTidligereVurderinger={tidligereVurderinger.length > 0}

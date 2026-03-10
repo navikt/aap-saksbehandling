@@ -12,6 +12,7 @@ import { OppgaveInformasjon } from 'components/oppgaveliste/oppgaveinformasjon/O
 import userEvent from '@testing-library/user-event';
 
 const oppgave: Oppgave = {
+  behandlingRef: 'dsfadf',
   vurderingsbehov: [],
   avklaringsbehovKode: '',
   behandlingOpprettet: '',
@@ -25,6 +26,7 @@ const oppgave: Oppgave = {
   markeringer: [],
   enhetForKø: '4491',
   erPåVent: false,
+  erÅpen: true,
 };
 
 const user = userEvent.setup();

@@ -174,7 +174,7 @@ export const TotrinnsvurderingForm = ({
         <>
           <HStack gap={'2'}>
             <Button size={'medium'} className={'fit-content'} loading={isLoading}>
-              Bekreft
+              Bekreft og send videre
             </Button>
 
             <Button

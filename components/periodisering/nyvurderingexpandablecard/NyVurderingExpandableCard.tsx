@@ -3,11 +3,11 @@
 import { CustomExpandableCard } from 'components/customexpandablecard/CustomExpandableCard';
 import { formatDatoMedMånedsnavn } from 'lib/utils/date';
 import { ReactNode, useRef, useState } from 'react';
-import { BodyShort, Button, HGrid, HStack, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, HGrid, HStack, VStack } from '@navikt/ds-react';
 import { VurdertAvAnsattDetail } from 'components/vurdertav/VurdertAvAnsattDetail';
 import { subDays } from 'date-fns';
 import { TrashFillIcon } from '@navikt/aksel-icons';
-import { VurdertAvAnsatt } from 'lib/types/types';
+import { VurderingMeta } from 'lib/types/types';
 import { SlettVurderingModal } from 'components/periodisering/slettvurderingmodal/SlettVurderingModal';
 import { VurderingStatus, VurderingStatusTag } from 'components/periodisering/VurderingStatusTag';
 import { AccordionsSignal } from 'hooks/AccordionSignalHook';
@@ -19,9 +19,7 @@ interface Props {
   isLast: boolean;
   finnesFeil: boolean;
   vurderingStatus: VurderingStatus | undefined;
-  vurdertAv: VurdertAvAnsatt | undefined;
-  kvalitetssikretAv: VurdertAvAnsatt | undefined;
-  besluttetAv: VurdertAvAnsatt | undefined;
+  vurdering: VurderingMeta;
   children: ReactNode;
   readonly: boolean;
   onSlettVurdering: () => void;
@@ -35,9 +33,7 @@ export const NyVurderingExpandableCard = ({
   nestePeriodeFraDato,
   isLast,
   vurderingStatus,
-  vurdertAv,
-  kvalitetssikretAv,
-  besluttetAv,
+  vurdering,
   children,
   readonly,
   finnesFeil,
@@ -80,7 +76,14 @@ export const NyVurderingExpandableCard = ({
     >
       <VStack gap={'5'}>
         <HGrid columns={'1fr 30px'}>
-          <VStack gap={'5'}>{children}</VStack>
+          <VStack gap={'5'}>
+            {vurdering.behøverVurdering && (
+              <Alert
+                variant={'info'}
+              >{`Perioden fra ${fraDato ? formatDatoMedMånedsnavn(fraDato) : ''} mangler vurdering og må vurderes`}</Alert>
+            )}
+            {children}
+          </VStack>
           {!readonly && (index !== 0 || harTidligereVurderinger) && (
             <VStack justify={'start'}>
               <Button
@@ -97,9 +100,9 @@ export const NyVurderingExpandableCard = ({
         </HGrid>
 
         <VStack>
-          <VurdertAvAnsattDetail vurdertAv={vurdertAv} variant={'VURDERING'} />
-          <VurdertAvAnsattDetail vurdertAv={kvalitetssikretAv} variant={'KVALITETSSIKRER'} />
-          <VurdertAvAnsattDetail vurdertAv={besluttetAv} variant={'BESLUTTER'} />
+          <VurdertAvAnsattDetail vurdertAv={vurdering.vurdertAv} variant={'VURDERING'} />
+          <VurdertAvAnsattDetail vurdertAv={vurdering.kvalitetssikretAv} variant={'KVALITETSSIKRER'} />
+          <VurdertAvAnsattDetail vurdertAv={vurdering.besluttetAv} variant={'BESLUTTER'} />
         </VStack>
       </VStack>
     </CustomExpandableCard>

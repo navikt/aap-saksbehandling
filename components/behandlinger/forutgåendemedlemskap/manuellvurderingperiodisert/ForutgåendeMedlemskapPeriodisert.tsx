@@ -84,6 +84,7 @@ export const ForutgåendeMedlemskapPeriodisert = ({
 
   function onAddPeriode() {
     append({
+      behøverVurdering: false,
       begrunnelse: '',
       fraDato: '',
       erNyVurdering: true,
@@ -148,7 +149,7 @@ export const ForutgåendeMedlemskapPeriodisert = ({
     >
       {vedtatteVurderinger.map((vurdering) => (
         <TidligereVurderingExpandableCard
-          key={vurdering.fom}
+          key={crypto.randomUUID()}
           fom={parseISO(vurdering.fom)}
           tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
           foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
@@ -175,9 +176,7 @@ export const ForutgåendeMedlemskapPeriodisert = ({
               form.watch(`vurderinger.${index}.unntaksvilkår`)
             )
           )}
-          vurdertAv={vurdering.vurdertAv}
-          kvalitetssikretAv={vurdering.kvalitetssikretAv}
-          besluttetAv={vurdering.besluttetAv}
+          vurdering={vurdering}
           finnesFeil={finnesFeilForVurdering(index, errorList)}
           readonly={formReadOnly}
           onSlettVurdering={() => remove(index)}

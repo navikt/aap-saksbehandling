@@ -135,7 +135,7 @@ describe('apiFetch', () => {
 
     expect(result).toEqual({
       type: 'ERROR',
-      apiException: { message: 'Fikk ikke svar fra tjenesten. Prøv igjen.' },
+      apiException: { message: 'Fikk ikke svar fra tjenesten. Prøv igjen om litt.' },
       status: 503,
     });
     expect(fetch).toHaveBeenCalledTimes(3);

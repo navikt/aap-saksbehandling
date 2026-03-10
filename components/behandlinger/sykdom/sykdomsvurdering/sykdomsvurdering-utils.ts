@@ -89,5 +89,6 @@ export function emptySykdomsvurdering(diagnoser: {
     erNedsettelseIArbeidsevneMerEnnFørtiProsent: undefined,
     yrkesskadeBegrunnelse: '',
     erNyVurdering: true,
+    behøverVurdering: false,
   };
 }

@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { DigitaliserSøknad } from './DigitaliserSøknad';
 import { render, screen, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
@@ -79,5 +79,65 @@ describe('DigitaliserSøknad', () => {
 
     const slettKnapp = screen.getByRole('img', { name: /Fjern barn/i });
     await user.click(slettKnapp);
+  });
+
+  it('fraDatoLocalDate og tilDatoLocalDate er satt i utenlandsopphold ved innsending', async () => {
+    const submitMock = vi.fn();
+    render(<DigitaliserSøknad submit={submitMock} grunnlag={grunnlag} readOnly={false} isLoading={false} />);
+
+    // Søknadsdato
+    await user.type(screen.getByRole('textbox', { name: /søknadsdato/i }), '01.01.2024');
+
+    // Yrkesskade
+    const yrkesSkadeGruppe = screen.getByRole('group', { name: /Har søker yrkesskade?/i });
+    await user.click(within(yrkesSkadeGruppe).getByText('Nei'));
+
+    // harBoddINorgeSiste5År = Ja → viser harArbeidetINorgeSiste5År og arbeidetUtenforNorgeFørSykdom
+    const harBoddGruppe = screen.getByRole('group', { name: /Har søker bodd sammenhengende i Norge siste 5 år?/i });
+    await user.click(within(harBoddGruppe).getByText('Ja'));
+
+    const harArbeidetGruppe = screen.getByRole('group', {
+      name: /Har søker arbeidet sammenhengende i Norge siste 5 år?/i,
+    });
+    await user.click(within(harArbeidetGruppe).getByText('Nei'));
+
+    // arbeidetUtenforNorgeFørSykdom = Ja → viser "Legg til utenlandsopphold"
+    const arbeidetUtenforGruppe = screen.getByRole('group', {
+      name: /Arbeidet søker utenfor Norge de siste fem årene?/i,
+    });
+    await user.click(within(arbeidetUtenforGruppe).getByText('Ja'));
+
+    // erStudent = Nei
+    const erStudentGruppe = screen.getByRole('group', { name: /Er søkeren student?/i });
+    await user.click(within(erStudentGruppe).getByText('Nei'));
+
+    // Legg til utenlandsopphold
+    await user.click(screen.getByRole('button', { name: /Legg til utenlandsopphold/i }));
+
+    // Land (combobox)
+    const landCombobox = screen.getByRole('combobox', { name: /Land/i });
+    await user.click(landCombobox);
+    await user.type(landCombobox, 'Sverige');
+    await user.click(await screen.findByRole('option', { name: /Sverige/i }));
+
+    // Fra dato
+    await user.type(screen.getByRole('textbox', { name: /Fra dato/i }), '01.01.2020');
+
+    // Til dato
+    await user.type(screen.getByRole('textbox', { name: /Til dato/i }), '31.12.2020');
+
+    // iArbeid
+    const iArbeidGruppe = screen.getByRole('group', { name: /Var søker i arbeid i utlandet?/i });
+    await user.click(within(iArbeidGruppe).getByText('Ja'));
+
+    // Submit
+    await user.click(screen.getByRole('button', { name: /Neste/i }));
+
+    expect(submitMock).toHaveBeenCalledOnce();
+    const submittedJson = submitMock.mock.calls[0][1];
+    const submitted = JSON.parse(submittedJson);
+    const opphold = submitted.medlemskap.utenlandsOpphold[0];
+    expect(opphold.fraDatoLocalDate).toBe('2020-01-01');
+    expect(opphold.tilDatoLocalDate).toBe('2020-12-31');
   });
 });

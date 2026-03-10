@@ -6,13 +6,15 @@ import {
   MellomlagretVurdering,
   StudentGrunnlag,
   StudentVurderingResponse,
-  VurdertAvAnsatt,
+  VurderingMeta,
 } from 'lib/types/types';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
+import { DiagnoseSystem, diagnoseSøker } from 'lib/diagnosesøker/DiagnoseSøker';
+import { ValuePair } from 'components/form/FormField';
 
 import { erUendeligSlutt, formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { Dato } from 'lib/types/Dato';
@@ -24,15 +26,15 @@ import {
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
-import { RelevantInformasjonStudent } from 'components/behandlinger/sykdom/student/studentperiodisert/RelevantInformasjonStudent';
-import { StudentVurderingFelter } from 'components/behandlinger/sykdom/student/studentperiodisert/StudentVurderingFelter';
+import { RelevantInformasjonStudent } from 'components/behandlinger/sykdom/student/studentvurdering/RelevantInformasjonStudent';
+import { StudentVurderingFelter } from 'components/behandlinger/sykdom/student/studentvurdering/StudentVurderingFelter';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { parse } from 'date-fns';
 import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
 import { mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
 import { VurderingStatus } from 'components/periodisering/VurderingStatusTag';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
-import { VedtattStudentVurderinger } from 'components/behandlinger/sykdom/student/studentperiodisert/VedtattStudentVurderinger';
+import { VedtattStudentVurderinger } from 'components/behandlinger/sykdom/student/studentvurdering/VedtattStudentVurderinger';
 import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
 
 interface Props {
@@ -46,7 +48,7 @@ export interface StudentFormFields {
   vurderinger: StudentVurdering[];
 }
 
-export interface StudentVurdering {
+export interface StudentVurdering extends VurderingMeta {
   fraDato: string;
   begrunnelse: string;
   harAvbruttStudie?: string;
@@ -55,20 +57,14 @@ export interface StudentVurdering {
   harBehovForBehandling?: string;
   avbruttDato?: string;
   avbruddMerEnn6Måneder?: string;
-  erNyVurdering?: boolean;
-  vurdertAv?: VurdertAvAnsatt;
-  kvalitetssikretAv?: VurdertAvAnsatt;
-  besluttetAv?: VurdertAvAnsatt;
+  kodeverk?: DiagnoseSystem;
+  hoveddiagnose?: ValuePair;
+  bidiagnose?: ValuePair[];
 }
 
 type DraftFormFields = Partial<StudentFormFields>;
 
-export const StudentVurderingPeriodisert = ({
-  readOnly,
-  initialMellomlagretVurdering,
-  grunnlag,
-  behandlingVersjon,
-}: Props) => {
+export const StudentVurdering = ({ readOnly, initialMellomlagretVurdering, grunnlag, behandlingVersjon }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
 
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
@@ -118,6 +114,9 @@ export const StudentVurderingPeriodisert = ({
           godkjentStudieAvLånekassen: vurdering.godkjentStudieAvLånekassen
             ? vurdering.godkjentStudieAvLånekassen === JaEllerNei.Ja
             : undefined,
+          kodeverk: vurdering.kodeverk,
+          hoveddiagnose: vurdering.hoveddiagnose?.value,
+          bidiagnoser: vurdering.bidiagnose?.map((d) => d.value),
         };
       });
 
@@ -192,7 +191,7 @@ export const StudentVurderingPeriodisert = ({
                 fraDato={gyldigDatoEllerNull(vurderingValues?.fraDato)}
                 nestePeriodeFraDato={gyldigDatoEllerNull(nesteVurderingValues?.fraDato)}
                 isLast={index === nyeVurderinger.length - 1}
-                vurdertAv={vurdering.vurdertAv}
+                vurdering={vurdering}
                 finnesFeil={errorList.length > 0}
                 readonly={formReadOnly}
                 onSlettVurdering={() => remove(index)}
@@ -201,8 +200,6 @@ export const StudentVurderingPeriodisert = ({
                 accordionsSignal={accordionsSignal}
                 initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
                 vurderingStatus={hentVurderingStatus(vurderingValues)}
-                kvalitetssikretAv={vurdering.kvalitetssikretAv}
-                besluttetAv={vurdering.besluttetAv}
               >
                 <StudentVurderingFelter index={index} readOnly={formReadOnly} />
               </NyVurderingExpandableCard>
@@ -218,7 +215,6 @@ function mapVurderingToDraftFormFields(grunnlag: StudentGrunnlag): DraftFormFiel
   if (trengerVurderingsForslag(grunnlag)) {
     return hentPerioderSomTrengerVurdering(grunnlag, () => emptyStudentVurdering());
   }
-
   return {
     vurderinger: grunnlag.nyeVurderinger?.map((vurdering) => {
       return {
@@ -235,6 +231,23 @@ function mapVurderingToDraftFormFields(grunnlag: StudentGrunnlag): DraftFormFiel
         vurdertAv: vurdering?.vurdertAv,
         kvalitetssikretAv: vurdering?.kvalitetssikretAv,
         besluttetAv: vurdering?.besluttetAv,
+        kodeverk: (vurdering?.kodeverk as DiagnoseSystem) ?? undefined,
+        hoveddiagnose: vurdering?.hoveddiagnose
+          ? {
+              value: vurdering.hoveddiagnose,
+              label:
+                diagnoseSøker((vurdering.kodeverk as DiagnoseSystem) ?? 'ICPC2', vurdering.hoveddiagnose)[0]?.label ||
+                vurdering.hoveddiagnose,
+            }
+          : undefined,
+        bidiagnose: vurdering?.bidiagnoser
+          ? vurdering.bidiagnoser.map((d) => ({
+              value: d,
+              label: diagnoseSøker((vurdering.kodeverk as DiagnoseSystem) ?? 'ICPC2', d)[0]?.label || d,
+            }))
+          : undefined,
+        erNyVurdering: false,
+        behøverVurdering: false,
       };
     }),
   };
@@ -251,6 +264,10 @@ function emptyStudentVurdering(): StudentVurdering {
     harAvbruttStudie: '',
     harBehovForBehandling: '',
     erNyVurdering: true,
+    kodeverk: undefined,
+    hoveddiagnose: undefined,
+    bidiagnose: undefined,
+    behøverVurdering: false,
   };
 }
 

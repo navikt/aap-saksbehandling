@@ -1,6 +1,6 @@
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
-import { StudentvurderingMedDataFetching } from 'components/behandlinger/sykdom/student/student/StudentvurderingMedDataFetching';
+import { StudentvurderingMedDataFetching } from 'components/behandlinger/sykdom/student/studentvurdering/StudentvurderingMedDataFetching';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';

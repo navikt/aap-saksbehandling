@@ -87,6 +87,7 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
       landAnnet: undefined,
       fraDato: '',
       erNyVurdering: true,
+      behøverVurdering: false,
     });
   }
 
@@ -153,7 +154,7 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
 
         {vedtatteVurderinger.map((vurdering) => (
           <TidligereVurderingExpandableCard
-            key={vurdering.fom}
+            key={crypto.randomUUID()}
             fom={parseISO(vurdering.fom)}
             tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
             foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
@@ -180,9 +181,7 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
             }
             nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
             isLast={index === vurderingerFields.length - 1}
-            vurdertAv={vurdering.vurdertAv}
-            kvalitetssikretAv={vurdering.kvalitetssikretAv}
-            besluttetAv={vurdering.besluttetAv}
+            vurdering={vurdering}
             finnesFeil={finnesFeilForVurdering(index, errorList)}
             readonly={formReadOnly}
             onSlettVurdering={() => remove(index)}

@@ -1,6 +1,7 @@
 import { beforeAll, beforeEach, vi } from 'vitest';
 import '@testing-library/jest-dom/vitest';
 import { BehandlingFlytOgTilstand } from 'lib/types/types';
+import { BehandlingFlytOgTilstand as PostmottakBehandlingFlytOgTilstand } from 'lib/types/postmottakTypes';
 
 export const defaultFlytResponse: BehandlingFlytOgTilstand = {
   behandlingVersjon: 5,
@@ -27,22 +28,56 @@ export const defaultFlytResponse: BehandlingFlytOgTilstand = {
   },
 };
 
+export const PostmottakFlytResponse: PostmottakBehandlingFlytOgTilstand = {
+  aktivGruppe: 'AVKLAR_SAK',
+  aktivtSteg: 'AVKLAR_SAK',
+  behandlingVersjon: 1,
+  flyt: [],
+  nesteBehandlingId: null,
+  prosessering: {
+    status: 'FERDIG',
+    ventendeOppgaver: [],
+  },
+  visning: {
+    readOnly: false,
+    typeBehandling: 'Journalføring',
+    visVentekort: false,
+  },
+};
+
 let mockFlytResponse: BehandlingFlytOgTilstand = defaultFlytResponse;
+let postmottakMockFlytResponse: PostmottakBehandlingFlytOgTilstand = PostmottakFlytResponse;
 
 export function setMockFlytResponse(flyt: BehandlingFlytOgTilstand) {
   mockFlytResponse = flyt;
+}
+
+export function setPostmottakMockFlytResponse(flyt: PostmottakBehandlingFlytOgTilstand) {
+  postmottakMockFlytResponse = flyt;
 }
 
 export const resetMockFlytResponse = () => {
   mockFlytResponse = defaultFlytResponse;
 };
 
+const resetPostmottakMockFlytResponse = () => {
+  postmottakMockFlytResponse = PostmottakFlytResponse;
+};
+
 beforeAll(() => {
   vi.mock('swr', () => ({
     default: vi.fn((key) => {
-      if (key?.startsWith('api/flyt') || key?.startsWith('postmottak/api/post/')) {
+      if (key?.startsWith('api/flyt')) {
         return {
           data: { type: 'SUCCESS', status: 200, data: mockFlytResponse },
+          error: undefined,
+          mutate: vi.fn(),
+        };
+      }
+
+      if (key?.startsWith('postmottak/api/post/')) {
+        return {
+          data: { type: 'SUCCESS', status: 200, data: postmottakMockFlytResponse },
           error: undefined,
           mutate: vi.fn(),
         };
@@ -81,4 +116,5 @@ beforeAll(() => {
 
 beforeEach(() => {
   resetMockFlytResponse();
+  resetPostmottakMockFlytResponse();
 });

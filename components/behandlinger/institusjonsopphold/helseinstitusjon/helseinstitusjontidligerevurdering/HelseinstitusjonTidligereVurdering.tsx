@@ -5,7 +5,6 @@ import { getJaEllerNei } from 'lib/utils/form';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { erReduksjonUtIFraVurdering } from 'lib/utils/institusjonopphold';
 
-
 interface Props {
   vurdering: HelseInstiusjonVurdering;
 }

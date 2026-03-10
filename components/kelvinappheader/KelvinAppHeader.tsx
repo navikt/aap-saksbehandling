@@ -14,7 +14,7 @@ import {
   VStack,
 } from '@navikt/ds-react';
 import { Kelvinsøk } from 'components/kelvinsøkeresultat/Kelvinsøk';
-import { ArrowRightLeftIcon, LeaveIcon, XMarkIcon } from '@navikt/aksel-icons';
+import { ArrowRightLeftIcon, LeaveIcon, XMarkIcon, ExternalLinkIcon } from '@navikt/aksel-icons';
 import { Kelvinsøkeresultat } from 'components/kelvinsøkeresultat/Kelvinsøkeresultat';
 import styles from './KelvinAppHeader.module.css';
 import { AppSwitcher } from 'components/kelvinappheader/AppSwitcher';
@@ -22,7 +22,7 @@ import { isLocal, isProd } from 'lib/utils/environment';
 import { LokalBrukerBytte } from 'components/lokalbrukerbytte/LokalBrukerBytte';
 import { Roller } from 'lib/services/azure/azureUserService';
 import { SøkeResultat } from 'app/api/kelvinsok/route';
-import Endringslogg from '@navikt/familie-endringslogg';
+import Endringslogg from '@navikt/endringslogg';
 
 interface BrukerInformasjon {
   navn: string;
@@ -92,7 +92,14 @@ export const KelvinAppHeader = ({
         <HStack gap="4" marginInline="4" className={styles.kelvinAppHeaderMenuItems}>
           <Kelvinsøk setSøkeresultat={setSøkeresultat} />
           <Link href={`/oppgave/`}>Oppgaveliste</Link>
-          <Link href={`/oppgave/produksjonsstyring`}>Produksjonsstyring</Link>
+
+          <Link
+            href={'https://metabase.ansatt.nav.no/public/dashboard/da1ad654-13a9-492c-bfa0-8cc828aab274?'}
+            target="_blank"
+          >
+            Produksjonsstyring <ExternalLinkIcon />
+          </Link>
+
           {lokalLenkeTilSaksoversikt && <Link href={`/saksbehandling/saksoversikt`}>Saksoversikt</Link>}
         </HStack>
 
