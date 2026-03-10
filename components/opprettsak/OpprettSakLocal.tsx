@@ -35,7 +35,7 @@ interface SamordningSykepenger {
 
 interface SamordningDagpenger {
   dagpengerYtelseType: DagpengerYtelseType;
-  dagpengerKilde: DagpengerKilde;
+  kilde: DagpengerKilde;
   periode: {
     fom: string;
     tom: string;
@@ -181,12 +181,12 @@ export const OpprettSakLocal = () => {
         defaultValue: [
           {
             dagpengerYtelseType: DagpengerYtelseType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
-            dagpengerKilde: DagpengerKilde.DP_SAK,
+            kilde: DagpengerKilde.DP_SAK,
             periode: { fom: '01.05.2025', tom: '14.05.2025' },
           },
           {
             dagpengerYtelseType: DagpengerYtelseType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
-            dagpengerKilde: DagpengerKilde.ARENA,
+            kilde: DagpengerKilde.ARENA,
             periode: { fom: '15.05.2025', tom: '28.05.2025' },
           },
         ],
@@ -287,7 +287,7 @@ export const OpprettSakLocal = () => {
       dagpenger:
         data.dagpenger?.map((samordning) => ({
           dagpengerYtelseType: samordning.dagpengerYtelseType,
-          dagpengerKilde: samordning.dagpengerKilde,
+          kilde: samordning.kilde,
           periode: {
             fom: formaterDatoForBackend(parse(samordning.periode.fom, 'dd.MM.yyyy', new Date())),
             tom: formaterDatoForBackend(parse(samordning.periode.tom, 'dd.MM.yyyy', new Date())),

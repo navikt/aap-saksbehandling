@@ -53,7 +53,7 @@ export const Dagpenger = ({ form }: Props) => {
               label="Kilde"
               size={'small'}
               control={form.control}
-              name={`dagpenger.${index}.dagpengerKilde`}
+              name={`dagpenger.${index}.kilde`}
               rules={{ required: 'Du må velge en kilde' }}
             >
               {kildeOptions.map((ytelse, index) => (
@@ -96,7 +96,7 @@ export const Dagpenger = ({ form }: Props) => {
         onClick={() => {
           append({
             dagpengerYtelseType: ytelsesOptions[0].value,
-            dagpengerKilde: kildeOptions[0].value,
+            kilde: kildeOptions[0].value,
             periode: { fom: '', tom: '' },
           });
         }}
