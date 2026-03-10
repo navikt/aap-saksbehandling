@@ -11536,7 +11536,29 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.medlemskap.MedlemskapGrunnlagDto': {
       medlemskap: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.register.medlemskap.MedlemskapUnntakGrunnlag'];
     };
+    'no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.DagpengerPeriodeDto': {
+      /** @enum {string} */
+      dagpengerYtelseType:
+        | 'DAGPENGER_ARBEIDSSOKER_ORDINAER'
+        | 'DAGPENGER_PERMITTERING_FISKEINDUSTRI'
+        | 'DAGPENGER_PERMITTERING_ORDINAER';
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fom: string;
+      /** @enum {string} */
+      kilde: 'ARENA' | 'DP_SAK';
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      tom: string;
+    };
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningAndreStatligeYtelserGrunnlagDTO': {
+      dagpengerPerioder?:
+        | components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.DagpengerPeriodeDto'][]
+        | null;
       'harTilgangTil\u00C5Saksbehandle': boolean;
       historiskeVurderinger?:
         | components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningAndreStatligeYtelserVurderingDTO'][]
@@ -11737,7 +11759,6 @@ export interface components {
       opphold: components['schemas']['no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.InstitusjonsoppholdDto'][];
       vedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.HelseoppholdDto'][];
       vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.HelseoppholdDto'][];
-      vurdertAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.HelseinstitusjonVurderingDto': {
       begrunnelse: string;
@@ -15830,7 +15851,7 @@ export interface components {
       avsluttet: string;
       journalpostReferanser: string[];
       /** @enum {string} */
-      utfall: 'MEDHOLD_ETTER_FVL_35';
+      utfall: 'MEDHOLD_ETTER_FVL_35' | 'UGUNST';
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Omgj\u00F8ringKlageRevurdering':
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Omgj\u00F8ringKlageRevurderingV0']

@@ -116,6 +116,7 @@ export const AlleOppgaver = ({ enheter }: Props) => {
           avklaringsbehovKoder: form.watch('avklaringsbehov') || [],
           markertHaster: form.watch('statuser')?.includes('ER_HASTESAK'),
           ventefristUtløpt: form.watch('statuser')?.includes('VENTEFRIST_UTLØPT'),
+          saksbehandlere: [],
         }
       : undefined;
 

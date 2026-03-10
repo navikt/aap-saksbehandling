@@ -187,7 +187,7 @@ export const EtableringAvEgenVirksomhet = ({
     >
       {grunnlag.ikkeRelevantePerioder.map((vurdering) => (
         <IkkeVurderbarPeriode
-          key={vurdering.fom}
+          key={crypto.randomUUID()}
           fom={parseISO(vurdering.fom)}
           tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
           alertMelding={'Vilkåret kan ikke vurderes for denne perioden.'}
@@ -205,7 +205,7 @@ export const EtableringAvEgenVirksomhet = ({
       )}
       {vedtatteVurderinger.map((vurdering) => (
         <TidligereVurderingExpandableCard
-          key={vurdering.fom}
+          key={crypto.randomUUID()}
           fom={parseISO(vurdering.fom)}
           tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
           foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
