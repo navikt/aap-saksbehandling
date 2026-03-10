@@ -152,6 +152,9 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
           tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
           foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
           vurderingStatus={getErOppfyltEllerIkkeStatus(vurdering.harRettPå)}
+          vurdertAv={vurdering.vurdertAv}
+          kvalitetssikretAv={vurdering.kvalitetssikretAv}
+          besluttetAv={vurdering.besluttetAv}
         >
           <OppholdskravSykepengererstatninbgTidligereVurdering
             fraDato={vurdering.fom}

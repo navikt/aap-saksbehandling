@@ -127,8 +127,17 @@ export const LedigeOppgaverNy = ({ enheter }: Props) => {
     saksbehandlere: [],
   };
 
-  const { antallOppgaver, oppgaver, size, setSize, isLoading, isValidating, kanLasteInnFlereOppgaver, mutate } =
-    useLedigeOppgaverNy(aktiveEnhetsnumre, veilederFilter === 'veileder', aktivKøId, utvidetFilter, sort);
+  const {
+    antallOppgaver,
+    oppgaver,
+    size,
+    setSize,
+    isLoading,
+    isValidating,
+    kanLasteInnFlereOppgaver,
+    mutate,
+    behandlingstyperFilterFraBackend,
+  } = useLedigeOppgaverNy(aktiveEnhetsnumre, veilederFilter === 'veileder', aktivKøId, utvidetFilter, sort);
 
   const { data: køer } = useSWR(`api/filter?${queryParamsArray('enheter', aktiveEnhetsnumre)}`, () =>
     hentKøerForEnheterClient(aktiveEnhetsnumre)
@@ -216,6 +225,7 @@ export const LedigeOppgaverNy = ({ enheter }: Props) => {
           formFields={formFields}
           antallOppgaver={antallOppgaver}
           aktivKøId={aktivKøId}
+          sattBehandlingstyperFilter={behandlingstyperFilterFraBackend}
         />
         {isLoading && <TabellSkeleton />}
 

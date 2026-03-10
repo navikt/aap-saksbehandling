@@ -74,7 +74,7 @@ interface FormFieldCheckboxWithNestedOptions<FormFieldIds extends FieldValues> e
 }
 
 interface FormFieldDate<FormFieldIds extends FieldValues> extends BaseFormField<FormFieldIds> {
-  type: 'date';
+  type: 'date' | 'date_month_picker';
   fromDate?: Date;
   toDate?: Date;
   defaultValue?: Date;
@@ -104,8 +104,10 @@ interface FormFieldAsyncCombobox<FormFieldIds extends FieldValues> extends BaseF
   defaultValue?: ValuePair | Array<ValuePair>;
 }
 
-interface FormFieldArray<FormFieldId extends keyof FormFieldIds, FormFieldIds extends FieldValues>
-  extends BaseFormField<FormFieldIds> {
+interface FormFieldArray<
+  FormFieldId extends keyof FormFieldIds,
+  FormFieldIds extends FieldValues,
+> extends BaseFormField<FormFieldIds> {
   type: 'fieldArray';
   defaultValue?: FormFieldIds[FormFieldId];
 }

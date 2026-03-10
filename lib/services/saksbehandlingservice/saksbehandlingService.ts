@@ -10,6 +10,7 @@ import {
   AutomatiskLovvalgOgMedlemskapVurdering,
   AvbrytRevurderingGrunnlag,
   AvklarOppfolgingsoppgaveGrunnlagResponse,
+  BarnepensjonGrunnlag,
   BarnetilleggGrunnlag,
   BehandlendeEnhetGrunnlag,
   BehandlingFlytOgTilstand,
@@ -565,6 +566,11 @@ export const purrPåLegeerklæring = async (requestBody: { dialogmeldingPurringU
 export const hentUnderveisGrunnlag = async (behandlingsreferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/underveis/${behandlingsreferanse}`;
   return await apiFetch<UnderveisGrunnlag[]>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentBarnepensjonGrunnlag = async (behandlingsreferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/barnepensjon`;
+  return await apiFetch<BarnepensjonGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentForeslåVedtakGrunnlag = async (behandlingsreferanse: string) => {

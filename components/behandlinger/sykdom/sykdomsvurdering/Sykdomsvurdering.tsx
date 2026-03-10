@@ -193,6 +193,8 @@ export const Sykdomsvurdering = ({
             vurderingStatus={getErOppfyltEllerIkkeStatus(erTidligereVurderingOppfylt(vurdering))}
             defaultCollapsed={nyeVurderingerFields.length > 0}
             vurdertAv={vurdering.vurdertAv}
+            kvalitetssikretAv={vurdering.kvalitetssikretAv}
+            besluttetAv={vurdering.besluttetAv}
           >
             <TidligereSykdomsvurdering vurdering={vurdering} />
           </TidligereVurderingExpandableCard>

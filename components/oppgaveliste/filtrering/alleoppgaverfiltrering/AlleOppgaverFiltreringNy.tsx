@@ -3,10 +3,10 @@
 import { BodyShort, Box, Button, Chips, Detail, HGrid, HStack, VStack } from '@navikt/ds-react';
 
 import styles from '../Filtrering.module.css';
-import { Dispatch, SetStateAction, useState, useTransition } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState, useTransition } from 'react';
 import { FilterIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { FormFields } from 'components/form/FormHook';
-import { FormField, ValuePair } from 'components/form/FormField';
+import { FormField } from 'components/form/FormField';
 import { FieldPath, UseFormReturn } from 'react-hook-form';
 import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaverny/MineOppgaverNy';
 import { aktiveFiltreringer, ALLE_OPPGAVER_ID } from 'components/oppgaveliste/filtrering/filtreringUtils';
@@ -23,6 +23,7 @@ interface Props {
   setValgteRader: Dispatch<SetStateAction<number[]>>;
   revalidateFunction: () => void;
   aktivKøId: number;
+  sattBehandlingstyperFilter: string[];
   aktiveEnheter: string[];
 }
 
@@ -34,6 +35,7 @@ export const AlleOppgaverFiltreringNy = ({
   revalidateFunction,
   setValgteRader,
   aktivKøId,
+  sattBehandlingstyperFilter,
   aktiveEnheter,
 }: Props) => {
   const [åpneFilter, setÅpneFilter] = useState(false);
@@ -41,6 +43,12 @@ export const AlleOppgaverFiltreringNy = ({
   const { visModal, setOppgaveIder } = useTildelOppgaver();
 
   const aktiveFilter = aktiveFiltreringer(form.watch());
+
+  useEffect(() => {
+    if (sattBehandlingstyperFilter?.length) {
+      form.setValue('behandlingstyper', sattBehandlingstyperFilter);
+    }
+  }, [sattBehandlingstyperFilter, form]);
 
   const frigiValgteOppgaver = async (oppgaver: number[]) => {
     startTransitionFrigi(async () => {
@@ -101,7 +109,8 @@ export const AlleOppgaverFiltreringNy = ({
                 <BodyShort>Filtre: </BodyShort>
                 <Chips size={'small'}>
                   {aktiveFilter.map((filter) =>
-                    filter.key === 'saksbehandlere' ? (
+                    filter.key === 'saksbehandlere' ||
+                    (aktivKøId !== ALLE_OPPGAVER_ID && filter.key === 'behandlingstyper') ? (
                       <Chips.Toggle checkmark={false} selected={true} key={filter.value}>
                         {filter.label}
                       </Chips.Toggle>

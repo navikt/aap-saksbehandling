@@ -3,7 +3,7 @@
 import { BodyShort, Box, Button, Chips, Detail, HGrid, HStack, VStack } from '@navikt/ds-react';
 
 import styles from '../Filtrering.module.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FilterIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { FormFields } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
@@ -16,12 +16,24 @@ interface Props {
   formFields: FormFields<FieldPath<FormFieldsFilter>, FormFieldsFilter>;
   antallOppgaver?: number;
   aktivKøId: number;
+  sattBehandlingstyperFilter: string[];
 }
 
-export const LedigeOppgaverFiltreringNy = ({ form, formFields, antallOppgaver, aktivKøId }: Props) => {
+export const LedigeOppgaverFiltreringNy = ({
+  form,
+  formFields,
+  antallOppgaver,
+  aktivKøId,
+  sattBehandlingstyperFilter,
+}: Props) => {
   const [åpneFilter, setÅpneFilter] = useState(false);
 
   const aktiveFilter = aktiveFiltreringer(form.watch());
+  useEffect(() => {
+    if (sattBehandlingstyperFilter?.length) {
+      form.setValue('behandlingstyper', sattBehandlingstyperFilter);
+    }
+  }, [sattBehandlingstyperFilter, form]);
 
   return (
     <div className={styles.wrapper}>
@@ -40,23 +52,29 @@ export const LedigeOppgaverFiltreringNy = ({ form, formFields, antallOppgaver, a
             <HStack gap={'2'}>
               <BodyShort>Filtre: </BodyShort>
               <Chips size={'small'}>
-                {aktiveFilter.map((filter) => (
-                  <Chips.Removable
-                    key={filter.value}
-                    onClick={() => {
-                      const values = form.watch(filter.key);
-                      if (Array.isArray(values)) {
-                        const arrayUtenValgtFilter = values.filter((value) => value !== filter.value);
-                        // saksbehandlere er ikke i mineoppgaverfilteret og vi har derfor alltid string[]
-                        form.setValue(filter.key, arrayUtenValgtFilter as string[]);
-                      } else {
-                        form.setValue(filter.key, undefined);
-                      }
-                    }}
-                  >
-                    {filter.label}
-                  </Chips.Removable>
-                ))}
+                {aktiveFilter.map((filter) => {
+                  return aktivKøId !== ALLE_OPPGAVER_ID && filter.key === 'behandlingstyper' ? (
+                    <Chips.Toggle key={filter.value} checkmark={false} selected={true}>
+                      {filter.label}
+                    </Chips.Toggle>
+                  ) : (
+                    <Chips.Removable
+                      key={filter.value}
+                      onClick={() => {
+                        const values = form.watch(filter.key);
+                        if (Array.isArray(values)) {
+                          const arrayUtenValgtFilter = values.filter((value) => value !== filter.value);
+                          // saksbehandlere er ikke i mineoppgaverfilteret og vi har derfor alltid string[]
+                          form.setValue(filter.key, arrayUtenValgtFilter as string[]);
+                        } else {
+                          form.setValue(filter.key, undefined);
+                        }
+                      }}
+                    >
+                      {filter.label}
+                    </Chips.Removable>
+                  );
+                })}
               </Chips>
             </HStack>
           )}

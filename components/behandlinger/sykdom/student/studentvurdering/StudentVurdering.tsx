@@ -174,6 +174,8 @@ export const StudentVurdering = ({ readOnly, initialMellomlagretVurdering, grunn
               foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
               vurderingStatus={hentVurderingStatusForVedtattVurdering(vurdering)}
               vurdertAv={vurdering.vurdertAv}
+              kvalitetssikretAv={vurdering.kvalitetssikretAv}
+              besluttetAv={vurdering.besluttetAv}
             >
               <VedtattStudentVurderinger vurdering={vurdering} />
             </TidligereVurderingExpandableCard>
