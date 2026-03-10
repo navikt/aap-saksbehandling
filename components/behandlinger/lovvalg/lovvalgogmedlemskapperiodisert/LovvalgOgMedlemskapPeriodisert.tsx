@@ -152,6 +152,9 @@ export const LovvalgOgMedlemskapPeriodisert = ({
             vurdering.lovvalg.lovvalgsEØSLandEllerLandMedAvtale === 'NOR' &&
               vurdering.medlemskap?.varMedlemIFolketrygd === true
           )}
+          vurdertAv={vurdering.vurdertAv}
+          kvalitetssikretAv={vurdering.kvalitetssikretAv}
+          besluttetAv={vurdering.besluttetAv}
         >
           <LovvalgOgMedlemskapTidligereVurdering vurdering={vurdering} />
         </TidligereVurderingExpandableCard>

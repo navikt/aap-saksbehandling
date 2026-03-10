@@ -158,6 +158,9 @@ export const ForutgåendeMedlemskapPeriodisert = ({
               vurdering.varMedlemMedNedsattArbeidsevne === true ||
               vurdering.medlemMedUnntakAvMaksFemAar === true
           )}
+          vurdertAv={vurdering.vurdertAv}
+          kvalitetssikretAv={vurdering.kvalitetssikretAv}
+          besluttetAv={vurdering.besluttetAv}
         >
           <ForutgåendeMedlemskapTidligereVurdering vurdering={vurdering} />
         </TidligereVurderingExpandableCard>

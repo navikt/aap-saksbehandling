@@ -181,6 +181,9 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
           vurderingStatus={getErOppfyltEllerIkkeStatus(
             vurdering.reellMulighetTilOpptrapping && vurdering.rettPaaAAPIOpptrapping
           )}
+          vurdertAv={vurdering.vurdertAv}
+          kvalitetssikretAv={vurdering.kvalitetssikretAv}
+          besluttetAv={vurdering.besluttetAv}
         >
           <VStack gap={'5'}>
             <SpørsmålOgSvar spørsmål="Vurderingen gjelder fra?" svar={formaterDatoForFrontend(vurdering.fom)} />

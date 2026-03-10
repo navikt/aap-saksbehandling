@@ -163,6 +163,9 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, initialMe
                 vurdering.erBehovForAnnenOppfølging
               )
             )}
+            vurdertAv={vurdering.vurdertAv}
+            kvalitetssikretAv={vurdering.kvalitetssikretAv}
+            besluttetAv={vurdering.besluttetAv}
           >
             <BistandsbehovTidligereVurdering vurdering={vurdering} />
           </TidligereVurderingExpandableCard>

@@ -151,6 +151,9 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialM
           tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
           foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
           vurderingStatus={getErOppfyltEllerIkkeStatus(vurdering.brukerRettPåAAP)}
+          vurdertAv={vurdering.vurdertAv}
+          kvalitetssikretAv={vurdering.kvalitetssikretAv}
+          besluttetAv={vurdering.besluttetAv}
         >
           <OvergangArbeidTidligereVurdering
             fraDato={vurdering.fom}

@@ -210,6 +210,9 @@ export const EtableringAvEgenVirksomhet = ({
           tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
           foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
           vurderingStatus={getErOppfyltEllerIkkeStatus(tidligereVurderingErOppfylt(vurdering))}
+          vurdertAv={vurdering.vurdertAv}
+          kvalitetssikretAv={vurdering.kvalitetssikretAv}
+          besluttetAv={vurdering.besluttetAv}
         >
           <EtableringEgenVirksomhetTidligereVurdering vurdering={vurdering} />
         </TidligereVurderingExpandableCard>
