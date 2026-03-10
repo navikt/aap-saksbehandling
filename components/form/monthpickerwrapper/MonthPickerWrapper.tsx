@@ -1,28 +1,23 @@
 import { MonthPicker, useMonthpicker } from '@navikt/ds-react';
 import { Control, FieldPath, FieldValues, RegisterOptions, useController, UseFormReturn } from 'react-hook-form';
 import React from 'react';
-import { format, isValid } from 'date-fns';
-import { isDate } from 'lodash';
+import { format } from 'date-fns';
 
 const formatDateToLocaleDateOrEmptyString = (date: Date | undefined) =>
-  date === undefined ? '' : format(date, 'yyyy-MM-dd'); // TODO HVilket format er best?
+  date === undefined ? '' : format(date, 'yyyy-MM');
 
 export interface MonthPickerProps<FormFieldValues extends FieldValues> {
   control: Control<FormFieldValues>;
   name: FieldPath<FormFieldValues>;
   form: UseFormReturn<FormFieldValues>;
+  className?: string;
+  hideErrorMessage?: boolean;
   label?: string;
   description?: React.ReactNode;
-  disableWeekends?: boolean;
-  rules?: Omit<RegisterOptions<FormFieldValues>, 'validate'>;
-  fromDate?: Date;
+  rules?: RegisterOptions<FormFieldValues>;
   size?: 'small' | 'medium';
-  toDate?: Date;
   hideLabel?: boolean;
-  selected?: Date;
   readOnly?: boolean;
-  strategy?: 'absolute' | 'fixed';
-  onChangeCustom?: (event: React.SyntheticEvent) => void;
 }
 
 export function MonthPickerWrapper<FormFieldValues extends FieldValues>({
@@ -35,13 +30,14 @@ export function MonthPickerWrapper<FormFieldValues extends FieldValues>({
   label,
   readOnly,
   form,
+  className,
+  hideErrorMessage = false,
 }: MonthPickerProps<FormFieldValues>) {
   const { field, fieldState } = useController({
     name,
     control,
     rules: {
       ...rules,
-      validate: (value) => (isDate(value) && isValid(value)) || 'Ugyldig dato',
     },
   });
 
@@ -49,6 +45,7 @@ export function MonthPickerWrapper<FormFieldValues extends FieldValues>({
     onMonthChange: (date) => date && field.onChange(formatDateToLocaleDateOrEmptyString(date)),
     defaultSelected: field.value ? new Date(field.value) : undefined,
     onValidate: (val) => {
+      console.log('val', val);
       if (!val.isValidMonth) {
         form.setError(name, { message: 'Ugyldig datoformat' });
       } else {
@@ -65,7 +62,8 @@ export function MonthPickerWrapper<FormFieldValues extends FieldValues>({
         label={label}
         description={description}
         hideLabel={hideLabel}
-        error={fieldState.error?.message}
+        error={hideErrorMessage ? '' : fieldState.error?.message}
+        className={className}
         readOnly={readOnly}
         size={size}
       />

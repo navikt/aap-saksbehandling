@@ -41,3 +41,29 @@ export function mapPeriodiserteVurderingerErrorList<T extends FieldValues>(
 export function finnesFeilForVurdering(index: number, errorList: ErrorList) {
   return !!errorList.find((err) => err.index === index);
 }
+
+type FlatError = { name: string; message: string };
+
+export function flattenErrors(errors: unknown): FlatError[] {
+  const flatErrors: FlatError[] = [];
+
+  function samleFeilmeldinger(obj: any) {
+    if (!obj) return;
+
+    if (Array.isArray(obj)) {
+      obj.forEach(samleFeilmeldinger);
+      return;
+    }
+
+    if (typeof obj === 'object') {
+      if (obj.message && obj.ref?.name) {
+        flatErrors.push({ name: obj.ref.name, message: obj.message });
+      }
+
+      Object.values(obj).forEach(samleFeilmeldinger);
+    }
+  }
+
+  samleFeilmeldinger(errors);
+  return flatErrors;
+}
