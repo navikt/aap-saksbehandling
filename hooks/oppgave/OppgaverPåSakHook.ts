@@ -26,10 +26,16 @@ export interface OppgaveInfo {
 async function utledOppgaveInfo(behandlingsreferanser: string[]): Promise<Map<string, OppgaveInfo>> {
   const oppgaveInfoMap = new Map<string, OppgaveInfo>();
 
-  const oppgaver = await Promise.all(behandlingsreferanser.map((referanse) => hentOppgaveClient(referanse)));
-  oppgaver.forEach((oppgave, index) => {
+  const oppgaver = await Promise.all(
+    behandlingsreferanser.map(async (referanse) => {
+      const oppgave = await hentOppgaveClient(referanse);
+      return [referanse, oppgave] as const;
+    })
+  );
+
+  oppgaver.forEach(([referanse, oppgave]) => {
     if (isSuccess(oppgave)) {
-      oppgaveInfoMap.set(behandlingsreferanser[index], {
+      oppgaveInfoMap.set(referanse, {
         reservertAvNavn: oppgave.data.reservertAvNavn ?? null,
         reservertAvIdent: oppgave.data.reservertAv ?? null,
         id: oppgave.data.id ?? null,
@@ -37,7 +43,7 @@ async function utledOppgaveInfo(behandlingsreferanser: string[]): Promise<Map<st
       });
     } else {
       // trenger ikke krasje hvis oppgave ikke kan hentes
-      oppgaveInfoMap.set(behandlingsreferanser[index], {
+      oppgaveInfoMap.set(referanse, {
         reservertAvNavn: null,
         reservertAvIdent: null,
         id: null,
