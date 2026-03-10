@@ -10,7 +10,7 @@ interface Props {
   stegData: StegData;
 }
 
-export const BarnePensjonMedDataFetching = async ({ behandlingsreferanse, stegData }: Props) => {
+export const BarnepensjonMedDataFetching = async ({ behandlingsreferanse, stegData }: Props) => {
   const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
     hentBarnepensjonGrunnlag(behandlingsreferanse),
     hentMellomlagring(behandlingsreferanse, Behovstype.AVKLAR_SAMORDNING_BARNEPENSJON_KODE),
