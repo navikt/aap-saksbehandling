@@ -13,7 +13,6 @@ import { aktiveFiltreringer } from 'components/oppgaveliste/filtrering/filtrerin
 import { avreserverOppgaveClient } from 'lib/oppgaveClientApi';
 import { isSuccess } from 'lib/utils/api';
 import { useTildelOppgaver } from 'context/oppgave/TildelOppgaverContext';
-import { SaksbehandlerFilterSøk } from 'components/oppgaveliste/filtrering/alleoppgaverfiltrering/SaksbehandlerFilterSøk';
 
 interface Props {
   form: UseFormReturn<FormFieldsFilter>;
@@ -116,7 +115,7 @@ export const AlleOppgaverFiltrering = ({
                         const values = form.watch(filter.key);
                         if (Array.isArray(values)) {
                           const arrayUtenValgtFilter = values.filter((value) => value !== filter.value);
-                          // @ts-ignore fikses i AlleOppgaverFiltreringNy
+                          // @ts-expect-error fikses i AlleOppgaverFiltreringNy
                           form.setValue(filter.key, arrayUtenValgtFilter);
                         } else {
                           form.setValue(filter.key, undefined);

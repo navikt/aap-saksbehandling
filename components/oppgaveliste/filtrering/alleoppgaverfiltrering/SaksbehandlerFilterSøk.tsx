@@ -5,7 +5,6 @@ import { clientSøkPåSaksbehandler } from 'lib/clientApi';
 import { AsyncComboSearch } from 'components/form/asynccombosearch/AsyncComboSearch';
 import { UseFormReturn } from 'react-hook-form';
 import { ValuePair } from 'components/form/FormField';
-import { useCallback } from 'react';
 
 interface Props {
   form: UseFormReturn<FormFieldsFilter>;
@@ -24,12 +23,9 @@ export const SaksbehandlerFilterSøk = ({ form, enheter }: Props) => {
     );
   }
 
-  const loadOptionsDebounced = useCallback(
-    debounce((inputValue: string, callback: (options: ValuePair[]) => void) => {
-      hentOptions(inputValue).then((options) => callback(options));
-    }, 3000),
-    []
-  );
+  const loadOptionsDebounced = debounce((inputValue: string, callback: (options: ValuePair[]) => void) => {
+    hentOptions(inputValue).then((options) => callback(options));
+  }, 3000);
 
   return (
     <AsyncComboSearch
@@ -37,7 +33,7 @@ export const SaksbehandlerFilterSøk = ({ form, enheter }: Props) => {
       isMulti={true}
       form={form}
       name={`saksbehandlere`}
-      // @ts-ignore
+      // @ts-expect-error
       fetcher={loadOptionsDebounced}
     />
   );
