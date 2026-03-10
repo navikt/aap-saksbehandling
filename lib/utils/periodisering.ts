@@ -2,6 +2,7 @@ import { components } from 'lib/types/schema';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { parseISO } from 'date-fns';
 import { Dato } from 'lib/types/Dato';
+import { TID_MAKS_BACKEND_STRING } from 'lib/utils/time';
 
 export type PeriodisertGrunnlag = {
   behøverVurderinger: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
@@ -15,7 +16,7 @@ export function getFraDatoFraGrunnlagForFrontend(grunnlag: PeriodisertGrunnlag |
     return '';
   }
 
-  if (grunnlag.behøverVurderinger.length >= 1) {
+  if (grunnlag.behøverVurderinger.length >= 1 && grunnlag.behøverVurderinger[0].tom !== TID_MAKS_BACKEND_STRING) {
     return formaterDatoForFrontend(parseISO(grunnlag.behøverVurderinger[0].fom));
   }
 
@@ -62,11 +63,15 @@ export function hentPerioderSomTrengerVurdering<T extends PåkrevdeFelter>(
   grunnlag: PeriodisertGrunnlag,
   tomVurdering: () => T
 ): { vurderinger: Array<T> } {
+  // ignorerer perioder som varer til TID_MAKS, de trenger vi ikke vise noe alert for
+  const behøverVurderingPerioder = (grunnlag.behøverVurderinger || []).filter(
+    (vurdering) => vurdering.tom !== TID_MAKS_BACKEND_STRING
+  );
   // Hvis det finnes perioder i grunnlag.behøverVurderinger brukes disse som utgangspunkt, hvis ikke
   // lager vi en tom vurdering med fraDato fra grunnlag.kanVurderes
   const initiellePerioder =
-    grunnlag.behøverVurderinger.length > 0
-      ? grunnlag.behøverVurderinger.map((periode) => ({
+    behøverVurderingPerioder.length > 0
+      ? behøverVurderingPerioder.map((periode) => ({
           fraDato: new Dato(periode.fom).formaterForFrontend(),
           behøverVurdering: true,
         }))

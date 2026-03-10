@@ -10,6 +10,7 @@ import {
 
 const oppgaver: Oppgave[] = [
   {
+    behandlingRef: 'fdsfds',
     vurderingsbehov: [],
     avklaringsbehovKode: '',
     behandlingOpprettet: '2025-02-09',
@@ -25,8 +26,10 @@ const oppgaver: Oppgave[] = [
     reservertAvNavn: 'Test Testesen',
     enhetForKø: '4491',
     erPåVent: false,
+    erÅpen: true,
   },
   {
+    behandlingRef: 'fdsfds',
     vurderingsbehov: [],
     avklaringsbehovKode: '',
     behandlingOpprettet: '2025-02-09',
@@ -41,6 +44,7 @@ const oppgaver: Oppgave[] = [
     reservertAv: 'ident2',
     enhetForKø: '4491',
     erPåVent: false,
+    erÅpen: true,
   },
 ];
 
