@@ -10,7 +10,6 @@ import { plukkOppgaveClient } from 'lib/oppgaveClientApi';
 import { isSuccess } from 'lib/utils/api';
 import { byggKelvinURL } from 'lib/utils/request';
 import { OppgaveInfo } from 'hooks/oppgave/OppgaverPåSakHook';
-import { useInnloggetBruker } from 'hooks/BrukerHook';
 
 const lokalBrevBestillingKnapp = isLocal();
 export const BehandlingButtons = ({
@@ -18,18 +17,19 @@ export const BehandlingButtons = ({
   behandling,
   oppgaveInfo,
   setFeilmelding,
+  innloggetBrukerIdent
 }: {
   sak: SaksInfo;
   behandling: BehandlingsflytEllerPostmottakBehandling;
   oppgaveInfo?: OppgaveInfo;
   setFeilmelding: Dispatch<SetStateAction<string | undefined>>;
+  innloggetBrukerIdent: string | undefined;
 }) => {
   const router = useRouter();
   const [isPendingBehandling, startTransitionBehandling] = useTransition();
   const [isPendingPlukk, startTransitionPlukk] = useTransition();
   const behandlingErÅpen = behandling.behandling.status === 'OPPRETTET' || behandling.behandling.status === 'UTREDES';
   const kildeErBehandlingsflyt = behandling.kilde === 'BEHANDLINGSFLYT';
-  const innloggetBrukerIdent = useInnloggetBruker().NAVident;
   const oppgaveReservertAvInnloggetBruker = oppgaveInfo?.reservertAvIdent === innloggetBrukerIdent;
 
   async function gåTilBehandling(behandlingsReferanse: string) {
@@ -65,10 +65,8 @@ export const BehandlingButtons = ({
       }
     });
   }
-
-  const bruker = useInnloggetBruker();
   const visBehandleKnapp =
-    behandlingErÅpen && (!oppgaveInfo?.reservertAvIdent || oppgaveInfo.reservertAvIdent == bruker.NAVident);
+    behandlingErÅpen && (!oppgaveInfo?.reservertAvIdent || oppgaveReservertAvInnloggetBruker);
 
   if (kildeErBehandlingsflyt && behandling.behandling.eksternSaksbehandlingsløsningUrl) {
     return (
