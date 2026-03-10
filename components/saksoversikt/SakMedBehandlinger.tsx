@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Chips, Heading, HStack, Table, VStack } from '@navikt/ds-react';
+import { Alert, Button, Chips, Heading, HStack, Table, VStack } from '@navikt/ds-react';
 import { SaksInfo } from 'lib/types/types';
 import { capitalize } from 'lodash';
 import { SakDevTools } from 'components/saksoversikt/SakDevTools';
@@ -28,6 +28,7 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
 
   const [visMeldekortbehandlinger, setVisMeldekortbehandlinger] = useState(false);
   const [visPostmottakBehandlinger, setVisPostmottakBehandlinger] = useState(false);
+  const [feilmelding, setFeilmelding] = useState<string | undefined>(undefined);
 
   const behandlinger = visMeldekortbehandlinger
     ? sak.behandlinger || []
@@ -55,7 +56,8 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
 
   function hentTildeling(referanse: string) {
     const oppgaveInfo = oppgaverPerBehandling.get(referanse);
-    return oppgaveInfo ? (oppgaveInfo.feilmelding ?? oppgaveInfo.reservertAv ?? 'Ledig') : null;
+    if (!oppgaveInfo) return null;
+    return oppgaveInfo.feilmelding ?? oppgaveInfo.reservertAvNavn ?? oppgaveInfo.reservertAvIdent ?? 'Ledig';
   }
 
   return (
@@ -103,6 +105,7 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
       </HStack>
       <VStack gap="4">
         <Heading size="xsmall">Behandlinger</Heading>
+        {feilmelding && <Alert variant={'error'}>{feilmelding}</Alert>}
         <Chips>
           <Chips.Toggle
             selected={visMeldekortbehandlinger}
@@ -148,14 +151,15 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
                   : null}
               </Table.DataCell>
               <Table.DataCell>
-                {!erAvsluttet(behandling.behandling) &&
-                  hentTildeling(behandling.behandling.referanse)}
+                {!erAvsluttet(behandling.behandling) && hentTildeling(behandling.behandling.referanse)}
               </Table.DataCell>
               <Table.DataCell>
                 <BehandlingButtons
                   key={behandling.behandling.referanse}
                   sak={sak}
                   behandling={behandling}
+                  oppgaveInfo={oppgaverPerBehandling.get(behandling.behandling.referanse)}
+                  setFeilmelding={setFeilmelding}
                 ></BehandlingButtons>
               </Table.DataCell>
             </Table.Row>
