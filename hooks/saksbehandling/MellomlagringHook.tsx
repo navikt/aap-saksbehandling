@@ -9,7 +9,7 @@ import { useState } from 'react';
 
 export function useMellomlagring(
   behovstype: Behovstype,
-  initialMellomlagring?: MellomlagretVurdering
+  initialMellomlagring: MellomlagretVurdering | undefined
 ): {
   lagreMellomlagring: (vurdering: object) => void;
   slettMellomlagring: (callback?: () => void) => void;
