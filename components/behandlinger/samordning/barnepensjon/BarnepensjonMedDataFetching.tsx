@@ -1,7 +1,9 @@
 import { Barnepensjon } from 'components/behandlinger/samordning/barnepensjon/Barnepensjon';
 import { StegData } from 'lib/utils/steg';
-import { hentMellomlagring } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { hentBarnepensjonGrunnlag, hentMellomlagring } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { Behovstype } from 'lib/utils/form';
+import { isError } from 'lib/utils/api';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 interface Props {
   behandlingsreferanse: string;
@@ -9,16 +11,20 @@ interface Props {
 }
 
 export const BarnePensjonMedDataFetching = async ({ behandlingsreferanse, stegData }: Props) => {
-  // TODO Hent grunnlag når det er klar fra backend
-  const [initialMellomlagretVurdering] = await Promise.all([
+  const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
+    hentBarnepensjonGrunnlag(behandlingsreferanse),
     hentMellomlagring(behandlingsreferanse, Behovstype.AVKLAR_SAMORDNING_BARNEPENSJON_KODE),
   ]);
 
+  if (isError(grunnlag)) {
+    return <ApiException apiResponses={[grunnlag]} />;
+  }
+
   return (
     <Barnepensjon
-      grunnlag={{}}
+      grunnlag={grunnlag.data}
       behandlingVersjon={stegData.behandlingVersjon}
-      readOnly={stegData.readOnly}
+      readOnly={stegData.readOnly && !grunnlag.data.harTilgangTilÅSaksbehandle}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
     />
   );

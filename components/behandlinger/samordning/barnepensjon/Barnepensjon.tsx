@@ -1,7 +1,7 @@
 'use client';
 
 import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
-import { MellomlagretVurdering, Periode } from 'lib/types/types';
+import { BarnepensjonGrunnlag, MellomlagretVurdering } from 'lib/types/types';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
@@ -14,23 +14,24 @@ import { BarnepensjonTidligereVurdering } from 'components/behandlinger/samordni
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 
 interface Props {
-  grunnlag: any; // TODO Endre denne til korrekt type når det er klart i backend
+  grunnlag: BarnepensjonGrunnlag;
   behandlingVersjon: number;
   readOnly: boolean;
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
-interface Barnepensjon {
-  periode: Periode;
-  månedsytelse: string;
+interface BarnepensjonPeriode {
+  fom: string;
+  tom: string;
+  månedsbeløp: string;
 }
 
-export interface BarnePensjonFormFields {
+export interface BarnepensjonFormFields {
   begrunnelse: string;
-  barnepensjon: Barnepensjon[];
+  barnepensjonPerioder: BarnepensjonPeriode[];
 }
 
-type DraftFormFields = Partial<BarnePensjonFormFields>;
+type DraftFormFields = Partial<BarnepensjonFormFields>;
 
 export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering, behandlingVersjon, grunnlag }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
@@ -50,7 +51,7 @@ export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering, behandlin
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag);
 
-  const { form, formFields } = useConfigForm<BarnePensjonFormFields>(
+  const { form, formFields } = useConfigForm<BarnepensjonFormFields>(
     {
       begrunnelse: {
         type: 'textarea',
@@ -58,9 +59,9 @@ export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering, behandlin
         rules: { required: 'Du må vurdere samordning med barnepensjon.' },
         defaultValue: defaultValue.begrunnelse,
       },
-      barnepensjon: {
+      barnepensjonPerioder: {
         type: 'fieldArray',
-        defaultValue: defaultValue.barnepensjon,
+        defaultValue: defaultValue.barnepensjonPerioder,
       },
     },
     { readOnly: formReadOnly }
@@ -73,14 +74,23 @@ export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering, behandlin
       heading={'§ 11-27 Samordning barnepensjon (valgfritt)'}
       steg={'SAMORDNING_BARNEPENSJON'}
       onSubmit={form.handleSubmit((data) => {
-        console.log(data);
-        // TODO Legg til resten av typene i behov når det er klart i backend
         løsBehovOgGåTilNesteSteg(
           {
             behandlingVersjon: behandlingVersjon,
             referanse: behandlingsreferanse,
             behov: {
               behovstype: Behovstype.AVKLAR_SAMORDNING_BARNEPENSJON_KODE,
+              barnepensjonVurdering: {
+                begrunnelse: data.begrunnelse,
+                // @ts-expect-error fiks type på fom og tom i bakcend
+                perioder: data.barnepensjonPerioder.map((periode) => {
+                  return {
+                    tom: periode.tom,
+                    fom: periode.fom,
+                    månedsbeløp: periode.månedsbeløp,
+                  };
+                }),
+              },
             },
           },
           () => {
@@ -96,7 +106,7 @@ export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering, behandlin
       onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() =>
-          form.reset(grunnlag ? mapVurderingToDraftFormFields(grunnlag) : emptyDraftFormFields())
+          form.reset(grunnlag.vurdering ? mapVurderingToDraftFormFields(grunnlag) : emptyDraftFormFields())
         );
       }}
       visningModus={visningModus}
@@ -116,15 +126,23 @@ export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering, behandlin
   );
 };
 
-// TODO Endre typen til denne når backend er klar
-function mapVurderingToDraftFormFields(grunnlag: any): DraftFormFields {
-  console.log(grunnlag);
-  return emptyDraftFormFields();
+function mapVurderingToDraftFormFields(grunnlag: BarnepensjonGrunnlag): DraftFormFields {
+  return {
+    begrunnelse: grunnlag.vurdering?.begrunnelse,
+    // @ts-expect-error fiks type på fom og tom i backend
+    barnepensjonPerioder: grunnlag.vurdering?.perioder.map((periode) => {
+      return {
+        fom: periode.fom,
+        tom: periode.tom,
+        månedsytelse: periode.månedsbeløp,
+      };
+    }),
+  };
 }
 
 function emptyDraftFormFields(): DraftFormFields {
   return {
     begrunnelse: '',
-    barnepensjon: [],
+    barnepensjonPerioder: [],
   };
 }

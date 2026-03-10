@@ -4,18 +4,18 @@ import { MonthPickerWrapper } from 'components/form/monthpickerwrapper/MonthPick
 import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
-import { BarnePensjonFormFields } from 'components/behandlinger/samordning/barnepensjon/Barnepensjon';
+import { BarnepensjonFormFields } from 'components/behandlinger/samordning/barnepensjon/Barnepensjon';
 import { formaterTilNok } from 'lib/utils/string';
 
 import styles from './Barnepensjon.module.css';
 
 interface Props {
-  form: UseFormReturn<BarnePensjonFormFields>;
+  form: UseFormReturn<BarnepensjonFormFields>;
   readOnly: boolean;
 }
 
 export const BarnepensjonTabell = ({ form, readOnly }: Props) => {
-  const { fields, remove, append } = useFieldArray({ control: form.control, name: 'barnepensjon' });
+  const { fields, remove, append } = useFieldArray({ control: form.control, name: 'barnepensjonPerioder' });
 
   return (
     <VStack gap={'space-8'}>
@@ -33,7 +33,7 @@ export const BarnepensjonTabell = ({ form, readOnly }: Props) => {
         </Table.Header>
         <Table.Body>
           {fields.map((field, index) => {
-            const månedsytelse = form.watch(`barnepensjon.${index}.månedsytelse`);
+            const månedsytelse = form.watch(`barnepensjonPerioder.${index}.månedsbeløp`);
             const dagSats = formaterTilNok((Number(månedsytelse) * 12) / 260);
 
             return (
@@ -42,7 +42,7 @@ export const BarnepensjonTabell = ({ form, readOnly }: Props) => {
                 <Table.DataCell colSpan={3}>
                   <HStack gap={'2'}>
                     <MonthPickerWrapper
-                      name={`barnepensjon.${index}.periode.fom`}
+                      name={`barnepensjonPerioder.${index}.fom`}
                       control={form.control}
                       form={form}
                       size={'small'}
@@ -53,7 +53,7 @@ export const BarnepensjonTabell = ({ form, readOnly }: Props) => {
                     />
                     <span>-</span>
                     <MonthPickerWrapper
-                      name={`barnepensjon.${index}.periode.tom`}
+                      name={`barnepensjonPerioder.${index}.tom`}
                       control={form.control}
                       form={form}
                       size={'small'}
@@ -68,7 +68,7 @@ export const BarnepensjonTabell = ({ form, readOnly }: Props) => {
                 <Table.DataCell>
                   <TextFieldWrapper
                     control={form.control}
-                    name={`barnepensjon.${index}.månedsytelse`}
+                    name={`barnepensjonPerioder.${index}.månedsbeløp`}
                     label={'Hvilken månedsytelse'}
                     hideLabel
                     type={'number'}
@@ -98,8 +98,9 @@ export const BarnepensjonTabell = ({ form, readOnly }: Props) => {
           <Button
             onClick={() =>
               append({
-                periode: { fom: '', tom: '' },
-                månedsytelse: '',
+                fom: '',
+                tom: '',
+                månedsbeløp: '',
               })
             }
             variant={'tertiary'}
