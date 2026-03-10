@@ -84,6 +84,7 @@ export function useOppgaverNy({
   isLoading: boolean;
   isValidating: boolean;
   mutate: () => Promise<unknown>;
+  behandlingstyperFilterFraBackend: string[];
 } {
   const getKey = (pageIndex: number, previousPageData: any) => {
     if (previousPageData && previousPageData.length === 0) return null;
@@ -143,6 +144,8 @@ export function useOppgaverNy({
       })) ?? [];
 
   const antallOppgaver = oppgaverValgtKø?.filter((res) => isSuccess(res))[0].data.antallTotalt ?? 0;
+  const behandlingstyperFilterFraBackend =
+    oppgaverValgtKø?.filter((res) => isSuccess(res))[0].data.sattFilterBehandlingstyper ?? [];
 
   const oppgaver = oppgaverFlatMap.flatMap(({ oppgaver }) => oppgaver);
   const sisteKallMotOppgave = oppgaverFlatMap.at(-1);
@@ -157,6 +160,7 @@ export function useOppgaverNy({
     isValidating,
     kanLasteInnFlereOppgaver,
     mutate,
+    behandlingstyperFilterFraBackend,
   };
 }
 

@@ -3,7 +3,7 @@
 import { BodyShort, Box, Button, Chips, Detail, HGrid, HStack, VStack } from '@navikt/ds-react';
 
 import styles from '../Filtrering.module.css';
-import { Dispatch, SetStateAction, useState, useTransition } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState, useTransition } from 'react';
 import { FilterIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { FormFields } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
@@ -22,6 +22,7 @@ interface Props {
   setValgteRader: Dispatch<SetStateAction<number[]>>;
   revalidateFunction: () => void;
   aktivKøId: number;
+  sattBehandlingstyperFilter: string[];
 }
 
 export const AlleOppgaverFiltreringNy = ({
@@ -32,12 +33,19 @@ export const AlleOppgaverFiltreringNy = ({
   revalidateFunction,
   setValgteRader,
   aktivKøId,
+  sattBehandlingstyperFilter,
 }: Props) => {
   const [åpneFilter, setÅpneFilter] = useState(false);
   const [isPendingFrigi, startTransitionFrigi] = useTransition();
   const { visModal, setOppgaveIder } = useTildelOppgaver();
 
   const aktiveFilter = aktiveFiltreringer(form.watch());
+
+  useEffect(() => {
+    if (sattBehandlingstyperFilter?.length) {
+      form.setValue('behandlingstyper', sattBehandlingstyperFilter);
+    }
+  }, [sattBehandlingstyperFilter, form]);
 
   const frigiValgteOppgaver = async (oppgaver: number[]) => {
     startTransitionFrigi(async () => {
@@ -100,6 +108,7 @@ export const AlleOppgaverFiltreringNy = ({
                   {aktiveFilter.map((filter) => (
                     <Chips.Removable
                       key={filter.value}
+                      disabled={aktivKøId !== ALLE_OPPGAVER_ID && filter.key === 'behandlingstyper'}
                       onClick={() => {
                         const values = form.watch(filter.key);
                         if (Array.isArray(values)) {
