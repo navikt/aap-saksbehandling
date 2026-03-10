@@ -52,23 +52,28 @@ export const LedigeOppgaverFiltreringNy = ({
             <HStack gap={'2'}>
               <BodyShort>Filtre: </BodyShort>
               <Chips size={'small'}>
-                {aktiveFilter.map((filter) => (
-                  <Chips.Removable
-                    key={filter.value}
-                    disabled={aktivKøId !== ALLE_OPPGAVER_ID && filter.key === 'behandlingstyper'}
-                    onClick={() => {
-                      const values = form.watch(filter.key);
-                      if (Array.isArray(values)) {
-                        const arrayUtenValgtFilter = values.filter((value) => value !== filter.value);
-                        form.setValue(filter.key, arrayUtenValgtFilter);
-                      } else {
-                        form.setValue(filter.key, undefined);
-                      }
-                    }}
-                  >
-                    {filter.label}
-                  </Chips.Removable>
-                ))}
+                {aktiveFilter.map((filter) => {
+                  return aktivKøId !== ALLE_OPPGAVER_ID && filter.key === 'behandlingstyper' ? (
+                    <Chips.Toggle key={filter.value} checkmark={false} selected={true}>
+                      {filter.label}
+                    </Chips.Toggle>
+                  ) : (
+                    <Chips.Removable
+                      key={filter.value}
+                      onClick={() => {
+                        const values = form.watch(filter.key);
+                        if (Array.isArray(values)) {
+                          const arrayUtenValgtFilter = values.filter((value) => value !== filter.value);
+                          form.setValue(filter.key, arrayUtenValgtFilter);
+                        } else {
+                          form.setValue(filter.key, undefined);
+                        }
+                      }}
+                    >
+                      {filter.label}
+                    </Chips.Removable>
+                  );
+                })}
               </Chips>
             </HStack>
           )}
