@@ -22,7 +22,7 @@ export default defineConfig({
     setupFiles: ['vitestSetup.ts'],
     server: {
       deps: {
-        inline: ['@navikt/familie-endringslogg'],
+        inline: ['@navikt/endringslogg'],
       },
     },
   },
