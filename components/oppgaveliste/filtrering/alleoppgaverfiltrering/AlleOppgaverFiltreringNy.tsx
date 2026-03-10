@@ -6,7 +6,7 @@ import styles from '../Filtrering.module.css';
 import { Dispatch, SetStateAction, useState, useTransition } from 'react';
 import { FilterIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { FormFields } from 'components/form/FormHook';
-import { FormField } from 'components/form/FormField';
+import { FormField, ValuePair } from 'components/form/FormField';
 import { FieldPath, UseFormReturn } from 'react-hook-form';
 import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaverny/MineOppgaverNy';
 import { aktiveFiltreringer, ALLE_OPPGAVER_ID } from 'components/oppgaveliste/filtrering/filtreringUtils';
@@ -100,22 +100,28 @@ export const AlleOppgaverFiltreringNy = ({
               <HStack gap={'2'}>
                 <BodyShort>Filtre: </BodyShort>
                 <Chips size={'small'}>
-                  {aktiveFilter.map((filter) => (
-                    <Chips.Removable
-                      key={filter.value}
-                      onClick={() => {
-                        const values = form.watch(filter.key);
-                        if (Array.isArray(values)) {
-                          const arrayUtenValgtFilter = values.filter((value) => value !== filter.value);
-                          form.setValue(filter.key, arrayUtenValgtFilter);
-                        } else {
-                          form.setValue(filter.key, undefined);
-                        }
-                      }}
-                    >
-                      {filter.label}
-                    </Chips.Removable>
-                  ))}
+                  {aktiveFilter.map((filter) =>
+                    filter.key === 'saksbehandlere' ? (
+                      <Chips.Toggle checkmark={false} selected={true} key={filter.value}>
+                        {filter.label}
+                      </Chips.Toggle>
+                    ) : (
+                      <Chips.Removable
+                        key={filter.value}
+                        onClick={() => {
+                          const values = form.watch(filter.key);
+                          if (Array.isArray(values)) {
+                            const arrayUtenValgtFilter = values.filter((value) => value !== filter.value);
+                            form.setValue(filter.key, arrayUtenValgtFilter as string[]);
+                          } else {
+                            form.setValue(filter.key, undefined);
+                          }
+                        }}
+                      >
+                        {filter.label}
+                      </Chips.Removable>
+                    )
+                  )}
                 </Chips>
               </HStack>
             )}

@@ -10,6 +10,17 @@ export async function POST(req: Request) {
     oppgaver: body.oppgaver,
     enheter: body.enheter,
   });
+  // const saksbehandlerResponse = {
+  //   type: 'SUCCESS',
+  //   status: 200,
+  //   data: {
+  //     saksbehandlere: [
+  //       { navn: 'hei heisen', navIdent: 'aGDLG' },
+  //       { navn: 'godag godagsen', navIdent: 'LKHLKL' },
+  //       { navn: 'hallo hallosen', navIdent: 'GDGSSFkk' },
+  //     ],
+  //   },
+  // };
 
   return NextResponse.json(saksbehandlerResponse, { status: saksbehandlerResponse.status });
 }

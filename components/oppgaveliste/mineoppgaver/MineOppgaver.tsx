@@ -5,7 +5,6 @@ import { MineOppgaverTabell } from 'components/oppgaveliste/mineoppgaver/mineopp
 import { useConfigForm } from 'components/form/FormHook';
 import { oppgaveBehandlingstyper, OppgaveStatuser } from 'lib/utils/behandlingstyper';
 import { MineOppgaverFiltrering } from 'components/oppgaveliste/filtrering/mineoppgaverfiltrering/MineOppgaverFiltrering';
-import { useWatch } from 'react-hook-form';
 
 import styles from 'components/oppgaveliste/mineoppgaver/MineOppgaver.module.css';
 import { oppgaveAvklaringsbehov } from 'lib/utils/avklaringsbehov';
@@ -15,6 +14,7 @@ import { alleVurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
 import { TabellSkeleton } from 'components/oppgaveliste/tabellskeleton/TabellSkeleton';
 import { useLagreAktivUtvidetFilter } from 'hooks/oppgave/aktivUtvidetFilterHook';
 import { useEffect } from 'react';
+import { ValuePair } from 'components/form/FormField';
 
 export interface FormFieldsFilter {
   behandlingstyper?: string[];
@@ -23,7 +23,7 @@ export interface FormFieldsFilter {
   årsaker?: string[];
   avklaringsbehov?: string[];
   statuser?: string[];
-  saksbehandlere?: string[];
+  saksbehandlere?: ValuePair[];
 }
 
 export const MineOppgaver = () => {
@@ -69,10 +69,11 @@ export const MineOppgaver = () => {
     },
     saksbehandlere: {
       type: 'fieldArray',
+      defaultValue: [],
     },
   });
 
-  const watchedValues = useWatch({ control: form.control });
+  const watchedValues = form.watch();
 
   useEffect(() => {
     const fieldValues = form.watch((values) => {
