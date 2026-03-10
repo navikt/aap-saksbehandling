@@ -13,6 +13,7 @@ import { aktiveFiltreringer, ALLE_OPPGAVER_ID } from 'components/oppgaveliste/fi
 import { avreserverOppgaveClient } from 'lib/oppgaveClientApi';
 import { isSuccess } from 'lib/utils/api';
 import { useTildelOppgaver } from 'context/oppgave/TildelOppgaverContext';
+import { SaksbehandlerFilterSøk } from 'components/oppgaveliste/filtrering/alleoppgaverfiltrering/SaksbehandlerFilterSøk';
 
 interface Props {
   form: UseFormReturn<FormFieldsFilter>;
@@ -22,6 +23,7 @@ interface Props {
   setValgteRader: Dispatch<SetStateAction<number[]>>;
   revalidateFunction: () => void;
   aktivKøId: number;
+  aktiveEnheter: string[];
 }
 
 export const AlleOppgaverFiltreringNy = ({
@@ -32,6 +34,7 @@ export const AlleOppgaverFiltreringNy = ({
   revalidateFunction,
   setValgteRader,
   aktivKøId,
+  aktiveEnheter,
 }: Props) => {
   const [åpneFilter, setÅpneFilter] = useState(false);
   const [isPendingFrigi, startTransitionFrigi] = useTransition();
@@ -143,6 +146,7 @@ export const AlleOppgaverFiltreringNy = ({
               </BoxWrapper>
               <BoxWrapper>
                 <FormField form={form} formField={formFields.årsaker} />
+                <SaksbehandlerFilterSøk form={form} enheter={aktiveEnheter} />
               </BoxWrapper>
               <BoxWrapper>
                 <FormField form={form} formField={formFields.avklaringsbehov} />

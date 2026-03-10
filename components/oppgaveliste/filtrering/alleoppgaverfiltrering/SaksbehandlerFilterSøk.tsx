@@ -9,15 +9,17 @@ import { useCallback } from 'react';
 
 interface Props {
   form: UseFormReturn<FormFieldsFilter>;
-  defaultOptions?: ValuePair[];
   enheter: string[];
 }
 
-export const SaksbehandlerFilterSøk = ({ form, defaultOptions, enheter }: Props) => {
+export const SaksbehandlerFilterSøk = ({ form, enheter }: Props) => {
   function hentOptions(søkestring: string) {
     return clientSøkPåSaksbehandler([], søkestring, enheter).then((res) =>
       res.type === 'SUCCESS'
-        ? res.data.saksbehandlere.map((saksbehandler) => ({ label: saksbehandler.navn, value: saksbehandler.navIdent }))
+        ? res.data.saksbehandlere.map((saksbehandler) => ({
+            label: saksbehandler.navn || 'Ukjent',
+            value: saksbehandler.navIdent,
+          }))
         : []
     );
   }
@@ -37,7 +39,6 @@ export const SaksbehandlerFilterSøk = ({ form, defaultOptions, enheter }: Props
       name={`saksbehandlere`}
       // @ts-ignore
       fetcher={loadOptionsDebounced}
-      defaultOptions={defaultOptions}
     />
   );
 };
