@@ -186,7 +186,7 @@ export const Sykdomsvurdering = ({
 
         {vedtatteVurderinger.map((vurdering) => (
           <TidligereVurderingExpandableCard
-            key={vurdering.fom}
+            key={crypto.randomUUID()}
             fom={new Dato(vurdering.fom).dato}
             tom={vurdering.tom ? parseISO(vurdering.tom) : undefined}
             foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
