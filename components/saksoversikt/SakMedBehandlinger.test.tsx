@@ -3,7 +3,7 @@ import { SakMedBehandlinger } from './SakMedBehandlinger';
 import { render, screen, within } from 'lib/test/CustomRender';
 import { BehandlingInfo, SaksInfo } from 'lib/types/types';
 
-const lagBehandling = (
+export const lagBehandling = (
   overrides: Partial<BehandlingInfo> & Pick<BehandlingInfo, 'status' | 'referanse'>
 ): BehandlingInfo =>
   ({
@@ -14,7 +14,7 @@ const lagBehandling = (
     ...overrides,
   }) as BehandlingInfo;
 
-const lagSak = (behandlinger: BehandlingInfo[]): SaksInfo =>
+export const lagSak = (behandlinger: BehandlingInfo[]): SaksInfo =>
   ({
     saksnummer: '12345',
     ident: '12345678910',
@@ -33,7 +33,7 @@ describe('SakMedBehandlinger', () => {
       lagBehandling({ status: 'UTREDES', referanse: 'åpen-2', opprettet: '2026-01-04T10:00:00' }),
     ]);
 
-    render(<SakMedBehandlinger sak={sak} />);
+    render(<SakMedBehandlinger sak={sak} innloggetBrukerIdent={'z123'}/>);
 
     const rows = screen.getAllByRole('row');
     // Første rad er header, resten er behandlinger
