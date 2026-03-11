@@ -28,7 +28,7 @@ interface VilkårsKortPeriodisertProps {
   mellomlagretVurdering: MellomlagretVurdering | undefined;
   formReset: () => void;
   vurdertAutomatisk?: boolean;
-  onLeggTilVurdering: () => void;
+  onLeggTilVurdering?: () => void;
   errorList: ErrorList;
 }
 

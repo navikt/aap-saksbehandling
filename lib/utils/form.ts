@@ -61,6 +61,7 @@ export enum Behovstype {
   OPPHOLDSKRAV_KODE = '5035',
   ARBEIDSOPPTRAPPING_KODE = '5057',
   VURDER_INNTEKTSBORTFALL = '5040',
+  FASTSETT_VEDTAKSLENGDE = '5059',
 }
 
 type BehovsKode = `${Behovstype}`;
@@ -187,6 +188,8 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
       return '§ 11-23 sjette ledd. Arbeidsopptrapping (valgfritt)';
     case '5058':
       return '§ 11-15 Etablering av egen virksomhet (valgfritt)';
+    case '5059':
+      return 'Utvid vedtakslengde';
   }
 }
 

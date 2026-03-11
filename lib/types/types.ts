@@ -342,6 +342,15 @@ export type ForhåndsvisDialogmeldingResponse =
 export type UnderveisGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.underveis.UnderveisperiodeDto'];
 
+export type VedtakslengdeGrunnlag =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.vedtakslengde.VedtakslengdeGrunnlagResponse'];
+
+export type VedtakslengdeVurderingResponse =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.vedtakslengde.VedtakslengdeVurderingResponse'];
+
+export type VedtakslengdeVurderingDto =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.vedtakslengde.VedtakslengdeVurderingDto'];
+
 export type ForeslåVedtakGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.ForeslåVedtakResponse'];
 

@@ -87,6 +87,7 @@ import {
   TrukketSøknadGrunnlag,
   UnderveisGrunnlag,
   UtbetalingOgSimuleringGrunnlag,
+  VedtakslengdeGrunnlag,
   VenteInformasjon,
   YrkeskadeBeregningGrunnlag,
   YrkesskadeVurderingGrunnlag,
@@ -571,6 +572,11 @@ export const hentUnderveisGrunnlag = async (behandlingsreferanse: string) => {
 export const hentBarnepensjonGrunnlag = async (behandlingsreferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/barnepensjon`;
   return await apiFetch<BarnepensjonGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentVedtakslengdeGrunnlag = async (behandlingsreferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/vedtakslengde`;
+  return await apiFetch<VedtakslengdeGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentForeslåVedtakGrunnlag = async (behandlingsreferanse: string) => {

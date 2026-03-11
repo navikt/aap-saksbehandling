@@ -5,6 +5,7 @@ import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { IkkeOppfyltMeldepliktMedDataFetching } from 'components/behandlinger/underveis/ikkeoppfyltmeldeplikt/IkkeOppfyltMeldepliktMedDataFetching';
+import { VedtakslengdeMedDataFetching } from 'components/behandlinger/vedtakslengde/VedtakslengdeMedDataFetching';
 
 interface Props {
   behandlingsreferanse: string;
@@ -27,6 +28,13 @@ export const Underveis = async ({ behandlingsreferanse, saksnummer }: Props) => 
     >
       <StegSuspense>
         <IkkeOppfyltMeldepliktMedDataFetching
+          behandlingsreferanse={behandlingsreferanse}
+          behandlingVersjon={flyt.data.behandlingVersjon}
+          readOnly={flyt.data.visning.saksbehandlerReadOnly}
+        />
+      </StegSuspense>
+      <StegSuspense>
+        <VedtakslengdeMedDataFetching
           behandlingsreferanse={behandlingsreferanse}
           behandlingVersjon={flyt.data.behandlingVersjon}
           readOnly={flyt.data.visning.saksbehandlerReadOnly}
