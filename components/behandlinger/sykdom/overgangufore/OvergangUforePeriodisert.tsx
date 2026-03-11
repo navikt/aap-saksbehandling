@@ -22,7 +22,7 @@ import {
   skalVæreInitiellEkspandert,
 } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { OvergangUforeVurderingFormInput } from 'components/behandlinger/sykdom/overgangufore/OvergangUforeVurderingFormInput';
-import { finnesFeilForVurdering, flattenErrors } from 'lib/utils/formerrors';
+import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { OvergangUforeTidligereVurdering } from 'components/behandlinger/sykdom/overgangufore/OvergangUforeTidligereVurdering';
 import { BodyLong, Link, VStack } from '@navikt/ds-react';
@@ -112,7 +112,7 @@ export const OvergangUforePeriodisert = ({
 
   const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const foersteNyePeriode = nyeVurderingFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
-  const errorList = flattenErrors(form.formState.errors);
+  const errorList = hentFeilmeldingerForForm(form.formState.errors);
   return (
     <VilkårskortPeriodisert
       heading={'§ 11-18 AAP under behandling av krav om uføretrygd'}

@@ -20,7 +20,7 @@ import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
-import { finnesFeilForVurdering, flattenErrors } from 'lib/utils/formerrors';
+import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import {
   NyVurderingExpandableCard,
   skalVæreInitiellEkspandert,
@@ -139,7 +139,7 @@ export const MeldepliktPeriodisertFrontend = ({
   }
 
   const foersteNyePeriode = fields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
-  const errorList = flattenErrors(form.formState.errors);
+  const errorList = hentFeilmeldingerForForm(form.formState.errors);
 
   return (
     <VilkårskortPeriodisert

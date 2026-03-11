@@ -7,7 +7,7 @@ import {
   skalVæreInitiellEkspandert,
 } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
-import { finnesFeilForVurdering, flattenErrors } from 'lib/utils/formerrors';
+import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import React, { FormEvent } from 'react';
 import {
   EtableringEgenVirksomhetGrunnlagResponse,
@@ -165,7 +165,7 @@ export const EtableringAvEgenVirksomhet = ({
   }
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const foersteNyePeriode = nyeVurderinger.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
-  const errorList = flattenErrors(form.formState.errors);
+  const errorList = hentFeilmeldingerForForm(form.formState.errors);
 
   return (
     <VilkårskortPeriodisert

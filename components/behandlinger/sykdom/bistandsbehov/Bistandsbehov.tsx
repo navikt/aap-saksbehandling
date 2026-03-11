@@ -18,7 +18,7 @@ import {
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { parseISO } from 'date-fns';
-import { finnesFeilForVurdering, flattenErrors } from 'lib/utils/formerrors';
+import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import { BistandsbehovTidligereVurdering } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovTidligereVurdering';
 import {
   erNyVurderingOppfylt,
@@ -104,7 +104,7 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, initialMe
   const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const foersteNyePeriode = fields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
-  const errorList = flattenErrors(form.formState.errors);
+  const errorList = hentFeilmeldingerForForm(form.formState.errors);
 
   return (
     <VilkårskortPeriodisert

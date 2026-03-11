@@ -6,7 +6,11 @@ export function finnesFeilForVurdering(index: number, errorList: ErrorList) {
   return !!errorList.find((err) => err.index === index);
 }
 
-export function flattenErrors(errors: unknown): FlatError[] {
+/**
+ * Funksjon for å hente ut feilmeldinger fra formstate i react hook form.
+ * @param errors må være fra errors objektet til rhf (form.formstate.errors)
+ */
+export function hentFeilmeldingerForForm(errors: unknown): FlatError[] {
   const flatErrors: FlatError[] = [];
 
   function samleFeilmeldinger(obj: any, index?: number) {

@@ -13,7 +13,7 @@ import { BarnepensjonTabell } from 'components/behandlinger/samordning/barnepens
 import { BarnepensjonTidligereVurdering } from 'components/behandlinger/samordning/barnepensjon/BarnepensjonTidligereVurdering';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { replaceCommasWithDots } from 'lib/utils/string';
-import { flattenErrors } from 'lib/utils/formerrors';
+import { hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 
 interface Props {
   grunnlag: BarnepensjonGrunnlag;
@@ -69,7 +69,7 @@ export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering, behandlin
     { readOnly: formReadOnly }
   );
 
-  const feilmeldinger = flattenErrors(form.formState.errors);
+  const feilmeldinger = hentFeilmeldingerForForm(form.formState.errors);
 
   return (
     <VilkårskortMedFormOgMellomlagringNyVisning

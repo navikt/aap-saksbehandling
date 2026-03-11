@@ -17,7 +17,7 @@ export const FormErrorSummary = ({ errorList }: Props) => {
   return (
     <ErrorSummary size={'small'}>
       {errorList.map((error) => (
-        <ErrorSummary.Item key={error.name} href={error.name}>
+        <ErrorSummary.Item key={error.name} href={`#${error.name}`}>
           {error?.message}
         </ErrorSummary.Item>
       ))}

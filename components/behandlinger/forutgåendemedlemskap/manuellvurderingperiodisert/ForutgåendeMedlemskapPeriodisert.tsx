@@ -20,7 +20,7 @@ import {
 } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
-import { finnesFeilForVurdering, flattenErrors } from 'lib/utils/formerrors';
+import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { ForutgåendeMedlemskapVurderingForm } from 'components/behandlinger/forutgåendemedlemskap/manuellvurderingperiodisert/types';
 import {
@@ -127,7 +127,7 @@ export const ForutgåendeMedlemskapPeriodisert = ({
   const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const foersteNyePeriode = vurderingerFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
-  const errorList = flattenErrors(form.formState.errors);
+  const errorList = hentFeilmeldingerForForm(form.formState.errors);
 
   return (
     <VilkårskortPeriodisert
