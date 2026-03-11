@@ -225,10 +225,12 @@ export function clientFjernMarkeringForBehandling(referanse: string, markering: 
   return clientFetch(`${BASE_URL}/api/behandling/${referanse}/markering/fjern`, 'POST', markering);
 }
 
-export function clientSøkPåSaksbehandler(oppgaver: number[], søketekst: string) {
+export function clientSøkPåSaksbehandler(oppgaver: number[], søketekst: string, enheter?: string[]) {
+  console.log(enheter);
   return clientFetch<SaksbehandlerSøkRespons>(`${BASE_URL}/api/saksbehandler/finn-saksbehandler`, 'POST', {
     oppgaver: oppgaver,
     søketekst: søketekst,
+    enheter,
   });
 }
 
