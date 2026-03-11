@@ -11,7 +11,6 @@ import { VurderingMeta } from 'lib/types/types';
 import { SlettVurderingModal } from 'components/periodisering/slettvurderingmodal/SlettVurderingModal';
 import { VurderingStatus, VurderingStatusTag } from 'components/periodisering/VurderingStatusTag';
 import { AccordionsSignal } from 'hooks/AccordionSignalHook';
-import styles from 'components/behandlinger/oppholdskrav/oppholdskrav.module.css';
 
 interface Props {
   initiellEkspandert: boolean;
@@ -27,7 +26,6 @@ interface Props {
   index: number;
   accordionsSignal: AccordionsSignal;
   harTidligereVurderinger?: boolean;
-  overstyrt?: boolean;
 }
 
 export const NyVurderingExpandableCard = ({
@@ -42,7 +40,6 @@ export const NyVurderingExpandableCard = ({
   onSlettVurdering,
   harTidligereVurderinger = false,
   initiellEkspandert = false,
-  overstyrt = false,
   index,
   accordionsSignal,
 }: Props) => {
@@ -65,7 +62,7 @@ export const NyVurderingExpandableCard = ({
       setExpanded={setIsOpen}
       heading={
         <HStack justify={'space-between'} padding={'2'}>
-          <BodyShort size={'small'} className={overstyrt ? styles.streketUtTekst : undefined}>
+          <BodyShort size={'small'}>
             Ny vurdering: {fraDato ? `${formatDatoMedMånedsnavn(fraDato)} – ` : '[Ikke valgt]'}
             {nestePeriodeFraDato ? (
               <span>{formatDatoMedMånedsnavn(subDays(nestePeriodeFraDato, 1))}</span>

@@ -6,6 +6,7 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { IkkeOppfyltMeldepliktMedDataFetching } from 'components/behandlinger/underveis/ikkeoppfyltmeldeplikt/IkkeOppfyltMeldepliktMedDataFetching';
 import { VedtakslengdeMedDataFetching } from 'components/behandlinger/vedtakslengde/VedtakslengdeMedDataFetching';
+import { unleashService } from 'lib/services/unleash/unleashService';
 
 interface Props {
   behandlingsreferanse: string;
@@ -33,13 +34,15 @@ export const Underveis = async ({ behandlingsreferanse, saksnummer }: Props) => 
           readOnly={flyt.data.visning.saksbehandlerReadOnly}
         />
       </StegSuspense>
-      <StegSuspense>
-        <VedtakslengdeMedDataFetching
-          behandlingsreferanse={behandlingsreferanse}
-          behandlingVersjon={flyt.data.behandlingVersjon}
-          readOnly={flyt.data.visning.saksbehandlerReadOnly}
-        />
-      </StegSuspense>
+      {unleashService.isEnabled('VedtakslengdeAvklaringsbehov') && (
+        <StegSuspense>
+          <VedtakslengdeMedDataFetching
+            behandlingsreferanse={behandlingsreferanse}
+            behandlingVersjon={flyt.data.behandlingVersjon}
+            readOnly={flyt.data.visning.saksbehandlerReadOnly}
+          />
+        </StegSuspense>
+      )}
       <StegSuspense>
         <UnderveisgrunnlagMedDataFetching
           readOnly={flyt.data.visning.saksbehandlerReadOnly}
