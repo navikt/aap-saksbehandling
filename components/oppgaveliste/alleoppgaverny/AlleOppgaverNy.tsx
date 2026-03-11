@@ -101,6 +101,9 @@ export const AlleOppgaverNy = ({ enheter }: Props) => {
       options: OppgaveStatuser,
       defaultValue: lagretUtvidetFilter?.statuser ?? [],
     },
+    saksbehandlere: {
+      type: 'fieldArray',
+    },
   });
 
   const behandlingOpprettetTom = form.watch('behandlingOpprettetTom');
@@ -120,7 +123,7 @@ export const AlleOppgaverNy = ({ enheter }: Props) => {
     avklaringsbehovKoder: form.watch('avklaringsbehov') || [],
     markertHaster: form.watch('statuser')?.includes('ER_HASTESAK'),
     ventefristUtløpt: form.watch('statuser')?.includes('VENTEFRIST_UTLØPT'),
-    saksbehandlere: [],
+    saksbehandlere: (form.watch('saksbehandlere') || []).map((option) => option.value),
   };
 
   const {
@@ -208,6 +211,7 @@ export const AlleOppgaverNy = ({ enheter }: Props) => {
           setValgteRader={setValgteRader}
           revalidateFunction={mutate}
           aktivKøId={aktivKøId}
+          aktiveEnheter={aktiveEnhetsnumre}
           sattBehandlingstyperFilter={behandlingstyperFilterFraBackend}
         />
         {isLoading && <TabellSkeleton />}

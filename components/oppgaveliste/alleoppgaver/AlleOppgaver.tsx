@@ -95,6 +95,9 @@ export const AlleOppgaver = ({ enheter }: Props) => {
       options: OppgaveStatuser,
       defaultValue: lagretUtvidetFilter?.statuser ?? [],
     },
+    saksbehandlere: {
+      type: 'fieldArray',
+    },
   });
 
   const behandlingOpprettetTom = form.watch('behandlingOpprettetTom');

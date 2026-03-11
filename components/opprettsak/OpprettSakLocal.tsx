@@ -11,7 +11,7 @@ import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { Sykepenger } from 'components/opprettsak/samordning/Sykepenger';
 import { parse } from 'date-fns';
-import { TestcaseSteg } from 'lib/types/types';
+import { OpprettTestcase, TestcaseSteg } from 'lib/types/types';
 
 interface Barn {
   fodselsdato: string;
@@ -205,8 +205,9 @@ export const OpprettSakLocal = () => {
     }
   );
 
-  const mapInnhold = (data: OpprettSakFormFields, steg?: TestcaseSteg) => {
+  function mapInnhold(data: OpprettSakFormFields, steg?: TestcaseSteg): OpprettTestcase {
     return {
+      dagpenger: [],
       ...data,
       andreUtbetalinger: {
         afp: data.afp
@@ -251,7 +252,7 @@ export const OpprettSakLocal = () => {
       erNedsettelseIArbeidsevneMerEnnHalvparten: data.erNedsettelseIArbeidsevneMerEnnHalvparten === JaEllerNei.Ja,
       steg: steg,
     };
-  };
+  }
 
   const opprett = async (steg?: TestcaseSteg) => {
     const innhold = mapInnhold(form.getValues(), steg);

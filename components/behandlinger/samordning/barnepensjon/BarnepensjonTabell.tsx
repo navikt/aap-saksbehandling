@@ -8,6 +8,7 @@ import { BarnepensjonFormFields } from 'components/behandlinger/samordning/barne
 import { formaterTilNok } from 'lib/utils/string';
 
 import styles from './Barnepensjon.module.css';
+import { isBefore } from 'date-fns';
 
 interface Props {
   form: UseFormReturn<BarnepensjonFormFields>;
@@ -34,7 +35,9 @@ export const BarnepensjonTabell = ({ form, readOnly }: Props) => {
         <Table.Body>
           {fields.map((field, index) => {
             const månedsytelse = form.watch(`barnepensjonPerioder.${index}.månedsbeløp`);
-            const dagSats = formaterTilNok((Number(månedsytelse) * 12) / 260);
+            const dagSats = beregnDagsats(månedsytelse);
+
+            const errorForRad = form.formState.errors.barnepensjonPerioder?.[index];
 
             return (
               <Table.Row key={field.id}>
@@ -50,6 +53,8 @@ export const BarnepensjonTabell = ({ form, readOnly }: Props) => {
                       label={'Fra og med dato for barnepensjon'}
                       readOnly={readOnly}
                       rules={{ required: 'Du må sette en fra og med dato' }}
+                      className={errorForRad?.fom ? 'navds-date__field--error' : ''}
+                      hideErrorMessage={true}
                     />
                     <span>-</span>
                     <MonthPickerWrapper
@@ -57,10 +62,24 @@ export const BarnepensjonTabell = ({ form, readOnly }: Props) => {
                       control={form.control}
                       form={form}
                       size={'small'}
-                      hideLabel={true}
+                      hideLabel
                       label={'Til og med dato for barnepensjon'}
                       readOnly={readOnly}
-                      rules={{ required: 'Du må sette en til og med dato' }}
+                      className={errorForRad?.tom && 'navds-date__field--error'}
+                      hideErrorMessage
+                      rules={{
+                        required: 'Du må sette en til og med dato.',
+                        validate: {
+                          validerKronologiskRekkefølge: (value, formValues) => {
+                            const fraOgMedDato = formValues.barnepensjonPerioder[index].fom;
+                            const tilOgMedDato = value as string;
+
+                            if (isBefore(new Date(tilOgMedDato), new Date(fraOgMedDato))) {
+                              return 'Til og med dato kan ikke være før fra og med dato';
+                            }
+                          },
+                        },
+                      }}
                     />
                   </HStack>
                 </Table.DataCell>
@@ -71,9 +90,10 @@ export const BarnepensjonTabell = ({ form, readOnly }: Props) => {
                     name={`barnepensjonPerioder.${index}.månedsbeløp`}
                     label={'Hvilken månedsytelse'}
                     hideLabel
+                    hideErrorMessage
                     type={'number'}
                     readOnly={readOnly}
-                    className={styles.månedytelseTextField}
+                    className={`${styles.månedytelseTextField} ${errorForRad?.månedsbeløp && 'navds-text-field--error'}`}
                     rules={{ required: 'Du må fylle ut månedsytelsen' }}
                   />
                 </Table.DataCell>
@@ -115,3 +135,8 @@ export const BarnepensjonTabell = ({ form, readOnly }: Props) => {
     </VStack>
   );
 };
+
+export function beregnDagsats(månedsytelse: string) {
+  const dagSats = Math.ceil((Number(månedsytelse) * 12) / 260);
+  return formaterTilNok(dagSats);
+}

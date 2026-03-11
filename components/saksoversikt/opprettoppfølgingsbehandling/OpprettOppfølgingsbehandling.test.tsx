@@ -116,14 +116,14 @@ describe('opprett oppfølgingsbehandling', () => {
     const beskrivelse = screen.getByRole('textbox', { name: 'Hva skal følges opp?' });
     await user.type(beskrivelse, 'Dette er en ny beskrivelse');
 
-    const checkboxNay = screen.queryByText("Reserver oppgaven til meg")
-    expect(checkboxNay).not.toBeInTheDocument()
+    const checkboxNay = screen.queryByText('Reserver oppgaven til meg');
+    expect(checkboxNay).not.toBeInTheDocument();
 
     await user.click(screen.getByRole('combobox', { name: 'Hvem følger opp?' }));
     await user.click(screen.getByRole('option', { name: 'Lokalkontor' }));
 
-    const checkboxLokal = screen.getByText("Reserver oppgaven til meg")
-    expect(checkboxLokal).toBeVisible()
+    const checkboxLokal = screen.getByText('Reserver oppgaven til meg');
+    expect(checkboxLokal).toBeVisible();
   });
 
   it('hvis lokal skal følge opp og bruker er NAY-saksbehandler, ikke vis reserver til meg-boksen', async () => {

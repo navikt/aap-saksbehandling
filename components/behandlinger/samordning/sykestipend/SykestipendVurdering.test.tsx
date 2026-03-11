@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { render, screen } from 'lib/test/CustomRender';
 import { SykestipendVurdering } from 'components/behandlinger/samordning/sykestipend/SykestipendVurdering';
 import { MellomlagretVurdering, SykestipendGrunnlag } from 'lib/types/types';
@@ -65,8 +65,9 @@ describe('SykestipendVurdering', () => {
 
   it('deaktiverer legg til- og slett-knapper ved readOnly true', () => {
     render(<SykestipendVurdering grunnlag={grunnlagMedVurdering} behandlingVersjon={0} readOnly={true} />);
-    expect(screen.getByRole('button', { name: /legg til/i })).toBeDisabled();
-    expect(screen.getAllByRole('button', { name: /slett/i })[0]).toBeDisabled();
+    expect(screen.queryByRole('button', { name: /legg til/i })).not.toBeInTheDocument();
+    const slettKnapper = screen.queryAllByRole('button', { name: /slett/i });
+    expect(slettKnapper.length).toBe(0);
   });
 
   it('aktiverer legg til- og slett-knapper ved readOnly false', () => {

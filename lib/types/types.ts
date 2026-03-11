@@ -61,6 +61,9 @@ export type PeriodisertArbeidsevneVurderingDto =
 export type BarnepensjonGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnepensjon.BarnepensjonGrunnlagDto'];
 
+export type BarnepensjonVurdering =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnepensjon.BarnepensjonVurderingDto'];
+
 export type RefusjonskravGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.refusjon.RefusjonkravGrunnlagResponse'];
 export type RefusjonkravVurderingResponse =

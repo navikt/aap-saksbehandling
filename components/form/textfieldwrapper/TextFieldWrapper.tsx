@@ -7,6 +7,7 @@ export interface TextFieldProps<FormFieldValues extends FieldValues> {
   name: FieldPath<FormFieldValues>;
   label?: string;
   hideLabel?: boolean;
+  hideErrorMessage?: boolean;
   control: Control<FormFieldValues>;
   type: 'text' | 'number';
   size?: 'small' | 'medium';
@@ -29,6 +30,7 @@ export const TextFieldWrapper = <FormFieldValues extends FieldValues>({
   rules,
   readOnly,
   className,
+  hideErrorMessage,
   autocomplete,
   onChangeCustom,
 }: TextFieldProps<FormFieldValues>) => (
@@ -51,7 +53,7 @@ export const TextFieldWrapper = <FormFieldValues extends FieldValues>({
           size={size}
           label={label}
           type={type}
-          error={error?.message}
+          error={hideErrorMessage ? undefined : error?.message}
           hideLabel={hideLabel}
           value={!isNullOrUndefined(value) ? value : ''}
           onChange={handleChange}

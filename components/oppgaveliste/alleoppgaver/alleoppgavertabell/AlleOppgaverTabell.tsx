@@ -95,7 +95,7 @@ export const AlleOppgaverTabell = ({ oppgaver, revalidateFunction, setValgteRade
               Oppg. opprettet
             </Table.ColumnHeader>
             <Table.ColumnHeader sortKey={'reservertAvNavn'} sortable={true}>
-              Veileder/Saksbehandler
+              Tildelt
             </Table.ColumnHeader>
             <Table.HeaderCell></Table.HeaderCell>
             <Table.HeaderCell></Table.HeaderCell>

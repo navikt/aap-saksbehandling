@@ -24,7 +24,7 @@ export const BarnepensjonMedDataFetching = async ({ behandlingsreferanse, stegDa
     <Barnepensjon
       grunnlag={grunnlag.data}
       behandlingVersjon={stegData.behandlingVersjon}
-      readOnly={stegData.readOnly && !grunnlag.data.harTilgangTilÅSaksbehandle}
+      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
     />
   );
