@@ -290,17 +290,13 @@ export const SamordningGradering = ({
         {!visForm && (
           <VStack gap={'2'}>
             <Detail>Vi finner ingen ytelser fra folketrygden</Detail>
-            <HStack>
-              <Button
-                size={'small'}
-                type={'button'}
-                variant={'secondary'}
-                onClick={() => setVisForm(true)}
-                disabled={formReadOnly}
-              >
-                Legg til folketrygdytelse
-              </Button>
-            </HStack>
+            {!formReadOnly && (
+              <HStack>
+                <Button size={'small'} type={'button'} variant={'secondary'} onClick={() => setVisForm(true)}>
+                  Legg til folketrygdytelse
+                </Button>
+              </HStack>
+            )}
           </VStack>
         )}
       </VilkårskortMedFormOgMellomlagringNyVisning>
