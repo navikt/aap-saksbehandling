@@ -331,7 +331,7 @@ describe('Førstegangsbehandling', () => {
     await user.click(jaValg);
 
     const infoTekst = screen.getByText(
-      'Pass på at datoen vurderingen gjelder fra er virkningstidspunktet på uføretrygd.'
+      'Hovedregelen er at datoen vurderingen gjelder fra er virkningstidspunktet for uføretrygd. Sjekk posteringsgrunnlaget og Kelvin-rutinen for mer informasjon.'
     );
 
     expect(infoTekst).toBeVisible();
