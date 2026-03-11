@@ -2,26 +2,35 @@ import { AsyncComboSearch } from 'components/form/asynccombosearch/AsyncComboSea
 import { DiagnoseSystem, diagnoseSøker, ingenDiagnoseCode } from 'lib/diagnosesøker/DiagnoseSøker';
 import { JaEllerNei } from 'lib/utils/form';
 import { UseFormReturn } from 'react-hook-form';
-import { ValuePair } from 'components/form/FormField';
 import { SykdomsvurderingerForm } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { Radio } from '@navikt/ds-react';
+import { DiagnoserDefaultOptions } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedDataFetching';
 
 interface Props {
   index: number;
   form: UseFormReturn<SykdomsvurderingerForm>;
   readOnly: boolean;
-  hoveddiagnoseDefaultOptions?: ValuePair[];
+  bidiagnoserDeafultOptions?: DiagnoserDefaultOptions;
+  hoveddiagnoseDefaultOptions?: DiagnoserDefaultOptions;
 }
 
-export const SykdomsvurderingDiagnosesøk = ({ index, form, readOnly, hoveddiagnoseDefaultOptions }: Props) => {
+export const SykdomsvurderingDiagnosesøk = ({
+  index,
+  form,
+  readOnly,
+  hoveddiagnoseDefaultOptions,
+  bidiagnoserDeafultOptions,
+}: Props) => {
   const kodeverkValue = form.watch(`vurderinger.${index}.kodeverk`) as DiagnoseSystem;
-  const defaultOptionsHoveddiagnose = hoveddiagnoseDefaultOptions
-    ? hoveddiagnoseDefaultOptions
-    : diagnoseSøker(kodeverkValue, '');
-  const defaultOptionsBidiagnose = hoveddiagnoseDefaultOptions
-    ? hoveddiagnoseDefaultOptions
-    : diagnoseSøker(kodeverkValue, '');
+
+  const kodeverk = kodeverkValue as keyof DiagnoserDefaultOptions | undefined;
+
+  const defaultOptionsHoveddiagnose =
+    (kodeverk && hoveddiagnoseDefaultOptions?.[kodeverk].hoveddiagnoserOptions) ?? diagnoseSøker(kodeverkValue, '');
+
+  const defaultOptionsBidiagnose =
+    (kodeverk && bidiagnoserDeafultOptions?.[kodeverk].bidiagnoserOptions) ?? diagnoseSøker(kodeverkValue, '');
 
   const harSkadeEllerLyte = form.watch(`vurderinger.${index}.harSkadeSykdomEllerLyte`) === JaEllerNei.Ja;
 
