@@ -25,7 +25,7 @@ export const SaksbehandlerFilterSøk = ({ form, enheter }: Props) => {
 
   const loadOptionsDebounced = debounce((inputValue: string, callback: (options: ValuePair[]) => void) => {
     hentOptions(inputValue).then((options) => callback(options));
-  }, 3000);
+  }, 500);
 
   return (
     <AsyncComboSearch
