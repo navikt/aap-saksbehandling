@@ -174,7 +174,7 @@ export const Sykdomsvurdering = ({
       visningActions={visningActions}
       visningModus={visningModus}
       formReset={() => form.reset(mapGrunnlagTilDefaultvalues(grunnlag))}
-      onLeggTilVurdering={() => append(emptySykdomsvurdering(utledDiagnoserForVurdering()))}
+      onLeggTilVurdering={() => append(emptySykdomsvurdering(utledDiagnoserForNyVurdering()))}
       errorList={errorList}
     >
       <VStack gap={'4'}>
@@ -237,7 +237,7 @@ export const Sykdomsvurdering = ({
     </VilkårskortPeriodisert>
   );
 
-  function utledDiagnoserForVurdering() {
+  function utledDiagnoserForNyVurdering() {
     const kodeverk = getStringEllerUndefined(diagnosegrunnlag?.kodeverk);
     const hoveddiagnose = hoveddiagnoseDefaultOptions?.find((value) => value.value === diagnosegrunnlag?.hoveddiagnose);
     const bidiagnose = bidiagnoserDeafultOptions?.filter((option) =>
@@ -248,42 +248,51 @@ export const Sykdomsvurdering = ({
   }
 
   function mapGrunnlagTilDefaultvalues(grunnlag: SykdomsGrunnlag): SykdomsvurderingerForm {
-    const diagnoser = utledDiagnoserForVurdering();
+    const diagnoserForNyVurdering = utledDiagnoserForNyVurdering();
 
     if (trengerVurderingsForslag(grunnlag)) {
-      return hentPerioderSomTrengerVurdering<Sykdomsvurdering>(grunnlag, () => emptySykdomsvurdering(diagnoser));
+      return hentPerioderSomTrengerVurdering<Sykdomsvurdering>(grunnlag, () =>
+        emptySykdomsvurdering(diagnoserForNyVurdering)
+      );
     }
 
     // Vi har allerede data lagret, vis enten de som er lagret i grunnlaget her eller tom liste
     return {
-      vurderinger: grunnlag.nyeVurderinger.map((vurdering) => ({
-        fraDato: new Dato(vurdering.vurderingenGjelderFra || vurdering.fom).formaterForFrontend(),
-        begrunnelse: vurdering?.begrunnelse,
-        harSkadeSykdomEllerLyte: getJaNeiEllerUndefined(vurdering?.harSkadeSykdomEllerLyte)!,
-        erArbeidsevnenNedsatt: getJaNeiEllerUndefined(vurdering?.erArbeidsevnenNedsatt),
-        erNedsettelseIArbeidsevneMerEnnHalvparten: getJaNeiEllerUndefined(
-          vurdering?.erNedsettelseIArbeidsevneMerEnnHalvparten
-        ),
-        erSkadeSykdomEllerLyteVesentligdel: getJaNeiEllerUndefined(vurdering?.erSkadeSykdomEllerLyteVesentligdel),
-        kodeverk: diagnoser.kodeverk,
-        hoveddiagnose: diagnoser.hoveddiagnose,
-        bidiagnose: diagnoser.bidiagnose,
-        erNedsettelseIArbeidsevneAvEnVissVarighet: getJaNeiEllerUndefined(
-          vurdering?.erNedsettelseIArbeidsevneAvEnVissVarighet
-        ),
-        erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense: getJaNeiEllerUndefined(
-          vurdering?.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense
-        ),
-        erNedsettelseIArbeidsevneMerEnnFørtiProsent: getJaNeiEllerUndefined(
-          vurdering?.erNedsettelseIArbeidsevneMerEnnHalvparten
-        ),
-        yrkesskadeBegrunnelse: getStringEllerUndefined(vurdering?.yrkesskadeBegrunnelse),
-        vurdertAv: vurdering.vurdertAv,
-        kvalitetssikretAv: vurdering.kvalitetssikretAv,
-        besluttetAv: vurdering.besluttetAv,
-        erNyVurdering: false,
-        behøverVurdering: false,
-      })),
+      vurderinger: grunnlag.nyeVurderinger.map((vurdering) => {
+        const hoveddiagnose = hoveddiagnoseDefaultOptions?.find((value) => value.value === vurdering?.hoveddiagnose);
+        const bidiagnose = bidiagnoserDeafultOptions?.filter((option) =>
+          vurdering?.bidiagnoser?.includes(option.value)
+        );
+
+        return {
+          fraDato: new Dato(vurdering.vurderingenGjelderFra || vurdering.fom).formaterForFrontend(),
+          begrunnelse: vurdering?.begrunnelse,
+          harSkadeSykdomEllerLyte: getJaNeiEllerUndefined(vurdering?.harSkadeSykdomEllerLyte)!,
+          erArbeidsevnenNedsatt: getJaNeiEllerUndefined(vurdering?.erArbeidsevnenNedsatt),
+          erNedsettelseIArbeidsevneMerEnnHalvparten: getJaNeiEllerUndefined(
+            vurdering?.erNedsettelseIArbeidsevneMerEnnHalvparten
+          ),
+          erSkadeSykdomEllerLyteVesentligdel: getJaNeiEllerUndefined(vurdering?.erSkadeSykdomEllerLyteVesentligdel),
+          kodeverk: getStringEllerUndefined(vurdering.kodeverk),
+          hoveddiagnose: hoveddiagnose,
+          bidiagnose: bidiagnose,
+          erNedsettelseIArbeidsevneAvEnVissVarighet: getJaNeiEllerUndefined(
+            vurdering?.erNedsettelseIArbeidsevneAvEnVissVarighet
+          ),
+          erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense: getJaNeiEllerUndefined(
+            vurdering?.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense
+          ),
+          erNedsettelseIArbeidsevneMerEnnFørtiProsent: getJaNeiEllerUndefined(
+            vurdering?.erNedsettelseIArbeidsevneMerEnnHalvparten
+          ),
+          yrkesskadeBegrunnelse: getStringEllerUndefined(vurdering?.yrkesskadeBegrunnelse),
+          vurdertAv: vurdering.vurdertAv,
+          kvalitetssikretAv: vurdering.kvalitetssikretAv,
+          besluttetAv: vurdering.besluttetAv,
+          erNyVurdering: false,
+          behøverVurdering: false,
+        };
+      }),
     };
   }
 };
