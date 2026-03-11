@@ -31,11 +31,12 @@ import { StudentVurderingFelter } from 'components/behandlinger/sykdom/student/s
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { parse } from 'date-fns';
 import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
-import { mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
+
 import { VurderingStatus } from 'components/periodisering/VurderingStatusTag';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { VedtattStudentVurderinger } from 'components/behandlinger/sykdom/student/studentvurdering/VedtattStudentVurderinger';
 import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
+import { flattenErrors } from 'lib/utils/formerrors';
 
 interface Props {
   behandlingVersjon: number;
@@ -138,7 +139,7 @@ export const StudentVurdering = ({ readOnly, initialMellomlagretVurdering, grunn
     })(event);
   };
 
-  const errorList = mapPeriodiserteVurderingerErrorList<StudentFormFields>(form.formState.errors);
+  const errorList = flattenErrors(form.formState.errors);
   const sistevedtatteVurderinger = grunnlag.sisteVedtatteVurderinger;
   const finnesSisteVedtatteVurderinger = sistevedtatteVurderinger && sistevedtatteVurderinger?.length > 0;
 

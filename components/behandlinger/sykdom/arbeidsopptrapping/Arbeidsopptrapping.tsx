@@ -15,8 +15,7 @@ import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook
 import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
 import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
-import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
-import { LovOgMedlemskapVurderingForm } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/types';
+import { finnesFeilForVurdering, flattenErrors } from 'lib/utils/formerrors';
 import { parse, parseISO } from 'date-fns';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
@@ -132,7 +131,7 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
   }
 
   const foersteNyePeriode = fields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
-  const errorList = mapPeriodiserteVurderingerErrorList<LovOgMedlemskapVurderingForm>(form.formState.errors);
+  const errorList = flattenErrors(form.formState.errors);
 
   return (
     <VilkårskortPeriodisert
