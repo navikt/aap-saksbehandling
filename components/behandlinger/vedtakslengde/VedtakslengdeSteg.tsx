@@ -93,6 +93,7 @@ function getDefaultValuesFromGrunnlag(
 export const VedtakslengdeSteg = ({ grunnlag, behandlingVersjon, readOnly, initialMellomlagretVurdering }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
 
+  console.log(grunnlag);
   const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('FASTSETT_VEDTAKSLENGDE');
 
@@ -234,7 +235,9 @@ export const VedtakslengdeSteg = ({ grunnlag, behandlingVersjon, readOnly, initi
               ? vurdering.erNyVurdering
                 ? undefined
                 : VurderingStatus.VedtakslengdeManuell
-              : VurderingStatus.VedtakslengdeAutomatisk
+              : harManuellVurdering
+                ? VurderingStatus.Overskrevet
+                : VurderingStatus.VedtakslengdeAutomatisk
           }
           vurdering={vurdering}
           readonly={!vurdering.manuellVurdering || formReadOnly}
@@ -242,6 +245,7 @@ export const VedtakslengdeSteg = ({ grunnlag, behandlingVersjon, readOnly, initi
           harTidligereVurderinger={grunnlag.sisteVedtatteVurderinger.length > 0 || index > 0}
           index={index}
           accordionsSignal={accordionsSignal}
+          overstyrt={!vurdering.manuellVurdering && harManuellVurdering}
         >
           {vurdering.manuellVurdering ? (
             <VStack gap={'4'}>
