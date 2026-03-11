@@ -124,6 +124,8 @@ export type SamordningUføreGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningUføreVurderingGrunnlagDTO'];
 export type SamordningAndreStatligeYtelserGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningAndreStatligeYtelserGrunnlagDTO'];
+export type AndreStatligeYtelserPeriodeDto =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.AndreStatligeYtelserPeriodeDto'];
 export type DagpengerYtelseType =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.andrestatligeytelser.DagpengerPeriodeDto']['dagpengerYtelseType'];
 export type DagpengerKilde =
