@@ -1,17 +1,42 @@
-import { VStack } from '@navikt/ds-react';
-import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
+import { BarnepensjonVurdering } from 'lib/types/types';
+import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
+import { ValuePair } from 'components/form/FormField';
+import { formaterDatoMedMånedOgÅr } from 'lib/utils/date';
+import { formaterTilNok } from 'lib/utils/string';
+import { beregnDagsats } from 'components/behandlinger/samordning/barnepensjon/BarnepensjonTabell';
 
 interface Props {
-  vurdering: any; // TODO Fiks riktig type fra backend når den er klar
+  vurderinger: BarnepensjonVurdering[];
 }
 
-export const BarnepensjonTidligereVurdering = ({ vurdering }: Props) => {
-  console.log(vurdering);
+export const BarnepensjonTidligereVurdering = ({ vurderinger }: Props) => {
   return (
-    <VStack>
-      <SpørsmålOgSvar spørsmål={'Periode'} svar={'sett inn korrekt svar her'} />
-      <SpørsmålOgSvar spørsmål={'Månedsytelse'} svar={'sett inn korrekt svar her'} />
-      <SpørsmålOgSvar spørsmål={'Dagsats'} svar={'sett inn korrekt svar her'} />
-    </VStack>
+    <TidligereVurderinger
+      data={vurderinger}
+      buildFelter={byggFelter}
+      getErGjeldende={() => true}
+      getVurdertAvIdent={(v) => v.vurdertAv.ident}
+      grupperPåOpprettetDato={true}
+    />
   );
 };
+
+function byggFelter(vurdering: BarnepensjonVurdering): ValuePair[] {
+  return [
+    { label: 'Begrunnelse', value: vurdering.begrunnelse },
+    ...vurdering.perioder.flatMap((periode) => [
+      {
+        label: 'Periode',
+        value: `${formaterDatoMedMånedOgÅr(periode.fom)} - ${formaterDatoMedMånedOgÅr(periode.tom || '')}`,
+      },
+      {
+        label: 'Månedsytelse',
+        value: formaterTilNok(periode.månedsbeløp.verdi),
+      },
+      {
+        label: 'Dagsats',
+        value: formaterTilNok(beregnDagsats(periode.månedsbeløp.verdi.toString())),
+      },
+    ]),
+  ];
+}

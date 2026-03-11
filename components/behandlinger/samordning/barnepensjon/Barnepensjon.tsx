@@ -8,10 +8,12 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgG
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { Behovstype } from 'lib/utils/form';
-import { VStack } from '@navikt/ds-react';
+import { ErrorSummary, VStack } from '@navikt/ds-react';
 import { BarnepensjonTabell } from 'components/behandlinger/samordning/barnepensjon/BarnepensjonTabell';
 import { BarnepensjonTidligereVurdering } from 'components/behandlinger/samordning/barnepensjon/BarnepensjonTidligereVurdering';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { replaceCommasWithDots } from 'lib/utils/string';
+import { flattenErrors } from 'lib/utils/formerrors';
 
 interface Props {
   grunnlag: BarnepensjonGrunnlag;
@@ -67,7 +69,7 @@ export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering, behandlin
     { readOnly: formReadOnly }
   );
 
-  const tidligereVurderinger: any[] = []; // TODO Denne skal komme fra grunnlaget
+  const feilmeldinger = flattenErrors(form.formState.errors);
 
   return (
     <VilkårskortMedFormOgMellomlagringNyVisning
@@ -82,12 +84,11 @@ export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering, behandlin
               behovstype: Behovstype.AVKLAR_SAMORDNING_BARNEPENSJON_KODE,
               barnepensjonVurdering: {
                 begrunnelse: data.begrunnelse,
-                // @ts-expect-error fiks type på fom og tom i bakcend
                 perioder: data.barnepensjonPerioder.map((periode) => {
                   return {
                     tom: periode.tom,
                     fom: periode.fom,
-                    månedsbeløp: periode.månedsbeløp,
+                    månedsbeløp: { verdi: Number(replaceCommasWithDots(periode.månedsbeløp)) },
                   };
                 }),
               },
@@ -95,6 +96,7 @@ export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering, behandlin
           },
           () => {
             nullstillMellomlagretVurdering();
+            visningActions.onBekreftClick();
           }
         );
       })}
@@ -116,11 +118,21 @@ export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering, behandlin
       }
     >
       <VStack gap={'8'}>
-        {tidligereVurderinger.map((vurdering, index) => (
-          <BarnepensjonTidligereVurdering key={index} vurdering={vurdering} />
-        ))}
+        {grunnlag.historiskeVurderinger && grunnlag.historiskeVurderinger.length > 0 && (
+          <BarnepensjonTidligereVurdering vurderinger={grunnlag.historiskeVurderinger} />
+        )}
         <FormField form={form} formField={formFields.begrunnelse} />
         <BarnepensjonTabell form={form} readOnly={formReadOnly} />
+
+        {feilmeldinger && feilmeldinger.length > 0 && (
+          <ErrorSummary size={'small'}>
+            {feilmeldinger.map((error) => (
+              <ErrorSummary.Item key={error.name} href={`#${error.name}`}>
+                {error.message}
+              </ErrorSummary.Item>
+            ))}
+          </ErrorSummary>
+        )}
       </VStack>
     </VilkårskortMedFormOgMellomlagringNyVisning>
   );
@@ -129,12 +141,11 @@ export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering, behandlin
 function mapVurderingToDraftFormFields(grunnlag: BarnepensjonGrunnlag): DraftFormFields {
   return {
     begrunnelse: grunnlag.vurdering?.begrunnelse,
-    // @ts-expect-error fiks type på fom og tom i backend
     barnepensjonPerioder: grunnlag.vurdering?.perioder.map((periode) => {
       return {
         fom: periode.fom,
-        tom: periode.tom,
-        månedsytelse: periode.månedsbeløp,
+        tom: periode.tom || '',
+        månedsbeløp: periode.månedsbeløp.verdi.toString(),
       };
     }),
   };

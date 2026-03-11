@@ -131,13 +131,7 @@ export const FormField = <FormFieldIds extends FieldValues>(props: Props<FormFie
           size={size}
           hideLabel={formField.hideLabel}
           description={formField.description}
-          fromDate={formField.fromDate}
-          toDate={formField.toDate}
-          disableWeekends={formField.disableWeekends}
-          selected={form.getValues(formField.name)}
           readOnly={formField.readOnly}
-          strategy={formField.strategy}
-          onChangeCustom={formField.onChange}
         />
       )}
       {formField.type === 'date_input' && (

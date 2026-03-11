@@ -1560,10 +1560,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aap-statistikk-typescript-types@npm:0.1.684":
-  version: 0.1.684
-  resolution: "@navikt/aap-statistikk-typescript-types@npm:0.1.684::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-statistikk-typescript-types%2F0.1.684%2F564278035a5c65bc63448c1cc3f8fd0742a57975"
-  checksum: 10c0/e74c081dc809e350b5bd19ee67c7df01f9ee2ae377d54e6057403905884e31597fdb733f7270c0d36f5d71b01ac0afc2cb79c04e0ece66c7615099830508f371
+"@navikt/aap-statistikk-typescript-types@npm:0.1.686":
+  version: 0.1.686
+  resolution: "@navikt/aap-statistikk-typescript-types@npm:0.1.686::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-statistikk-typescript-types%2F0.1.686%2F3ed040f8f0d98c28edd38e65c7c73d7bf65f0bef"
+  checksum: 10c0/96e0ee39cc377edb8a924c6a656b4c2350a55d192ab2e9a17fc005b226d5f83f0aaa65e5b9008299bcf9fcfad1d84038438fec40428a2acd3a6c8e87c844503a
   languageName: node
   linkType: hard
 
@@ -3328,7 +3328,7 @@ __metadata:
     "@navikt/aap-felles-prettier": "npm:5.6.0"
     "@navikt/aap-oppgave-typescript-types": "npm:0.0.651"
     "@navikt/aap-postmottak-backend-typescript-types": "npm:0.0.644"
-    "@navikt/aap-statistikk-typescript-types": "npm:0.1.684"
+    "@navikt/aap-statistikk-typescript-types": "npm:0.1.686"
     "@navikt/aksel-icons": "npm:7.40.0"
     "@navikt/diagnosekoder": "npm:1.2026.0"
     "@navikt/ds-css": "npm:7.40.0"
@@ -10246,15 +10246,15 @@ __metadata:
   linkType: hard
 
 "tar@npm:^7.5.2":
-  version: 7.5.9
-  resolution: "tar@npm:7.5.9"
+  version: 7.5.11
+  resolution: "tar@npm:7.5.11"
   dependencies:
     "@isaacs/fs-minipass": "npm:^4.0.0"
     chownr: "npm:^3.0.0"
     minipass: "npm:^7.1.2"
     minizlib: "npm:^3.1.0"
     yallist: "npm:^5.0.0"
-  checksum: 10c0/e870beb1b2477135ca2abe86b2d18f7b35d0a4e3a37bbc523d3b8f7adca268dfab543f26528a431d569897f8c53a7cac745cdfbc4411c2f89aeeacc652b81b0a
+  checksum: 10c0/b6bb420550ef50ef23356018155e956cd83282c97b6128d8d5cfe5740c57582d806a244b2ef0bf686a74ce526babe8b8b9061527623e935e850008d86d838929
   languageName: node
   linkType: hard
 

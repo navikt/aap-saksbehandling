@@ -287,9 +287,11 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly, gru
           </VStack>
           <Alert variant={'info'}>
             <VStack>
-              <BodyShort>{'Har du husket å '}</BodyShort>
-              <BodyShort>{'- registrere etableringen i aktivitetsplanen?'}</BodyShort>
-              <BodyShort>{'- opprette en oppfølgingsoppgave før utgangen av neste periode?'}</BodyShort>
+              <BodyShort>{'Har du husket'}</BodyShort>
+              <BodyShort>
+                {'- at når AAP under etablering er vedtatt skal det registreres i aktivitetsplanen?'}
+              </BodyShort>
+              <BodyShort>{'- å opprette en oppfølgingsoppgave før utgangen av neste periode?'}</BodyShort>
             </VStack>
           </Alert>
         </VStack>
