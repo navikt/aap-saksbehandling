@@ -17,7 +17,7 @@ export const BehandlingButtons = ({
   behandling,
   oppgaveInfo,
   setFeilmelding,
-  innloggetBrukerIdent
+  innloggetBrukerIdent,
 }: {
   sak: SaksInfo;
   behandling: BehandlingsflytEllerPostmottakBehandling;
@@ -65,8 +65,7 @@ export const BehandlingButtons = ({
       }
     });
   }
-  const visBehandleKnapp =
-    behandlingErÅpen && (!oppgaveInfo?.reservertAvIdent || oppgaveReservertAvInnloggetBruker);
+  const visBehandleKnapp = behandlingErÅpen && (!oppgaveInfo?.reservertAvIdent || oppgaveReservertAvInnloggetBruker);
 
   if (kildeErBehandlingsflyt && behandling.behandling.eksternSaksbehandlingsløsningUrl) {
     return (
@@ -91,18 +90,6 @@ export const BehandlingButtons = ({
     return (
       <HStack gap="2" justify="end">
         {lokalBrevBestillingKnapp && <BestillBrevTestKnapp behandlingReferanse={behandling.behandling.referanse} />}
-        {visBehandleKnapp && oppgaveInfo && (
-          <Button
-            size="small"
-            type={'button'}
-            icon={!behandlingErÅpen && <EyeIcon />}
-            onClick={() => plukkOgGåTilBehandling(oppgaveInfo)}
-            variant={'primary'}
-            loading={isPendingPlukk}
-          >
-            Behandle
-          </Button>
-        )}
         {!oppgaveReservertAvInnloggetBruker &&
           (kildeErBehandlingsflyt ? (
             <Button
@@ -127,6 +114,18 @@ export const BehandlingButtons = ({
               {behandlingErÅpen ? 'Åpne' : 'Vis'}
             </Button>
           ))}
+        {visBehandleKnapp && oppgaveInfo && (
+          <Button
+            size="small"
+            type={'button'}
+            icon={!behandlingErÅpen && <EyeIcon />}
+            onClick={() => plukkOgGåTilBehandling(oppgaveInfo)}
+            variant={'primary'}
+            loading={isPendingPlukk}
+          >
+            Behandle
+          </Button>
+        )}
       </HStack>
     );
   }
