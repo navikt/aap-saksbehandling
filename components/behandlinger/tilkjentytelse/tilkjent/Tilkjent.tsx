@@ -25,6 +25,7 @@ export const Tilkjent = ({ grunnlag }: Props) => {
             <Table.HeaderCell>Vurdert periode</Table.HeaderCell>
             <Table.HeaderCell>Dagsats</Table.HeaderCell>
             <Table.HeaderCell>Barnetillegg</Table.HeaderCell>
+            <Table.HeaderCell>Barnepensjon</Table.HeaderCell>
             <Table.HeaderCell>Arbeid</Table.HeaderCell>
             <Table.HeaderCell>Samordning</Table.HeaderCell>
             <Table.HeaderCell>Institusjon</Table.HeaderCell>
@@ -56,6 +57,9 @@ export const Tilkjent = ({ grunnlag }: Props) => {
                   <Table.DataCell textSize={'small'}>{formaterTilNok(vurdertPeriode.felter.dagsats)}</Table.DataCell>
                   <Table.DataCell textSize={'small'}>
                     {formaterTilNok(vurdertPeriode.felter.barnetillegg)}
+                  </Table.DataCell>
+                  <Table.DataCell textSize={'small'}>
+                    {formaterTilNok(vurdertPeriode.felter.barnepensjonDagsats)}
                   </Table.DataCell>
                   <Table.DataCell textSize={'small'}>
                     {formaterTilProsent(vurdertPeriode.felter.arbeidGradering)}

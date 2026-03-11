@@ -35,7 +35,7 @@ export const BarnepensjonTabell = ({ form, readOnly }: Props) => {
         <Table.Body>
           {fields.map((field, index) => {
             const månedsytelse = form.watch(`barnepensjonPerioder.${index}.månedsbeløp`);
-            const dagSats = formaterTilNok(beregnDagsats(månedsytelse));
+            const dagSats = beregnDagsats(månedsytelse);
 
             const errorForRad = form.formState.errors.barnepensjonPerioder?.[index];
 
@@ -137,5 +137,6 @@ export const BarnepensjonTabell = ({ form, readOnly }: Props) => {
 };
 
 export function beregnDagsats(månedsytelse: string) {
-  return (Number(månedsytelse) * 12) / 260;
+  const dagSats = Math.ceil((Number(månedsytelse) * 12) / 260);
+  return formaterTilNok(dagSats);
 }
