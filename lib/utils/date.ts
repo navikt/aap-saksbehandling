@@ -9,6 +9,7 @@ export const DATO_FORMATER = {
   ddMMyyyy_HHmmss: 'dd.MM.yyyy HH:mm:ss',
   ddMM: 'dd.MM.',
   dMMMMyyyy: 'd. MMMM yyyy', // 1. februar 2026
+  LLLL_yyyy: 'LLLL yyyy', // februar 2026
 };
 
 export const uendeligSluttString = '2999-01-01';
@@ -39,6 +40,14 @@ export function formatDatoMedMånedsnavn(dato: string | Date): string {
   }
 
   return format(dato, DATO_FORMATER.dMMMMyyyy, { locale: nb });
+}
+
+export function formaterDatoMedMånedOgÅr(dato: string | Date): string {
+  if (dato === uendeligSluttString || dato === uendeligSlutt) {
+    return '';
+  }
+
+  return format(dato, DATO_FORMATER.LLLL_yyyy, { locale: nb });
 }
 
 export const formaterDatoForBackend = (dato: Date) => {

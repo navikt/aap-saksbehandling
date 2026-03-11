@@ -1,7 +1,7 @@
 import { BarnepensjonVurdering } from 'lib/types/types';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { ValuePair } from 'components/form/FormField';
-import { formaterDatoForFrontend } from 'lib/utils/date';
+import { formaterDatoMedMånedOgÅr } from 'lib/utils/date';
 import { formaterTilNok } from 'lib/utils/string';
 import { beregnDagsats } from 'components/behandlinger/samordning/barnepensjon/BarnepensjonTabell';
 
@@ -27,7 +27,7 @@ function byggFelter(vurdering: BarnepensjonVurdering): ValuePair[] {
     ...vurdering.perioder.flatMap((periode) => [
       {
         label: 'Periode',
-        value: `${formaterDatoForFrontend(periode.fom)} - ${formaterDatoForFrontend(periode.tom || '')}`,
+        value: `${formaterDatoMedMånedOgÅr(periode.fom)} - ${formaterDatoMedMånedOgÅr(periode.tom || '')}`,
       },
       {
         label: 'Månedsytelse',
