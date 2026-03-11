@@ -30,6 +30,7 @@ interface VedtakslengdeVurderingFormFields {
   sluttdato: string;
   erNyVurdering: boolean;
   behøverVurdering: boolean;
+  manuellVurdering: boolean;
 }
 
 interface VedtakslengdeFormFields {
@@ -51,33 +52,42 @@ function getDefaultValuesFromGrunnlag(
     return mellomlagretData;
   }
 
-  const manuelleVurderinger = grunnlag.nyeVurderinger.filter((v) => v.manuellVurdering);
+  const automatiskeVurderinger: VedtakslengdeVurderingFormFields[] = grunnlag.nyeVurderinger
+    .filter((v) => !v.manuellVurdering)
+    .map((v) => ({
+      begrunnelse: v.begrunnelse,
+      sluttdato: formaterDatoForFrontend(v.sluttdato),
+      erNyVurdering: false,
+      behøverVurdering: false,
+      manuellVurdering: false,
+    }));
 
-  if (manuelleVurderinger.length > 0) {
-    return {
-      vurderinger: manuelleVurderinger.map((v) => ({
-        begrunnelse: v.begrunnelse,
-        sluttdato: formaterDatoForFrontend(v.sluttdato),
-        erNyVurdering: false,
-        behøverVurdering: false,
-      })),
-    };
-  }
+  const manuelleVurderinger: VedtakslengdeVurderingFormFields[] = grunnlag.nyeVurderinger
+    .filter((v) => v.manuellVurdering)
+    .map((v) => ({
+      begrunnelse: v.begrunnelse,
+      sluttdato: formaterDatoForFrontend(v.sluttdato),
+      erNyVurdering: false,
+      behøverVurdering: false,
+      manuellVurdering: true,
+    }));
 
-  if (grunnlag.behøverVurderinger.length > 0) {
-    return {
-      vurderinger: [
-        {
-          begrunnelse: '',
-          sluttdato: '',
-          erNyVurdering: true,
-          behøverVurdering: true,
-        },
-      ],
-    };
-  }
+  const nyeVurderinger: VedtakslengdeVurderingFormFields[] =
+    grunnlag.behøverVurderinger.length > 0 && manuelleVurderinger.length === 0
+      ? [
+          {
+            begrunnelse: '',
+            sluttdato: '',
+            erNyVurdering: true,
+            behøverVurdering: true,
+            manuellVurdering: true,
+          },
+        ]
+      : [];
 
-  return { vurderinger: [] };
+  return {
+    vurderinger: [...automatiskeVurderinger, ...manuelleVurderinger, ...nyeVurderinger],
+  };
 }
 
 export const VedtakslengdeSteg = ({ grunnlag, behandlingVersjon, readOnly, initialMellomlagretVurdering }: Props) => {
@@ -123,18 +133,21 @@ export const VedtakslengdeSteg = ({ grunnlag, behandlingVersjon, readOnly, initi
       sluttdato: '',
       erNyVurdering: true,
       behøverVurdering: false,
+      manuellVurdering: true,
     });
   }
 
   function onSubmit(data: VedtakslengdeFormFields) {
     const fom = grunnlag.kanVurderes.length > 0 ? grunnlag.kanVurderes[0].fom : grunnlag.nyeVurderinger[0]?.fom;
 
+    const manuelleVurderinger = data.vurderinger.filter((v) => v.manuellVurdering);
+
     const losning: LøsningerForPerioder = {
       behandlingVersjon: behandlingVersjon,
       referanse: behandlingsReferanse,
       behov: {
         behovstype: Behovstype.FASTSETT_VEDTAKSLENGDE as const,
-        løsningerForPerioder: data.vurderinger.map((vurdering) => {
+        løsningerForPerioder: manuelleVurderinger.map((vurdering) => {
           const sluttdato = formaterDatoForBackend(parse(vurdering.sluttdato, 'dd.MM.yyyy', new Date()));
           return {
             fom: fom,
@@ -166,6 +179,8 @@ export const VedtakslengdeSteg = ({ grunnlag, behandlingVersjon, readOnly, initi
   const sistVedtatteTom = sisteVedtatteVurdering?.tom ? parseISO(sisteVedtatteVurdering.tom) : null;
   const errorList = mapPeriodiserteVurderingerErrorList<VedtakslengdeFormFields>(form.formState.errors);
 
+  const harManuellVurdering = vurderingerFields.some((v) => v.manuellVurdering);
+
   return (
     <VilkårskortPeriodisert
       heading={'§ 6 i AAP forskriften. Vedtaksperiode'}
@@ -182,7 +197,7 @@ export const VedtakslengdeSteg = ({ grunnlag, behandlingVersjon, readOnly, initi
       mellomlagretVurdering={mellomlagretVurdering}
       visningModus={visningModus}
       visningActions={visningActions}
-      onLeggTilVurdering={vurderingerFields.length === 0 ? onAddVurdering : undefined}
+      onLeggTilVurdering={!harManuellVurdering ? onAddVurdering : undefined}
       errorList={errorList}
       formReset={() => form.reset(getDefaultValuesFromGrunnlag(grunnlag, undefined))}
     >
@@ -203,23 +218,6 @@ export const VedtakslengdeSteg = ({ grunnlag, behandlingVersjon, readOnly, initi
         </TidligereVurderingExpandableCard>
       ))}
 
-      {grunnlag.nyeVurderinger
-        .filter((v) => !v.manuellVurdering)
-        .map((vurdering, index) => (
-          <TidligereVurderingExpandableCard
-            key={`ny-automatisk-${index}`}
-            fom={parseISO(vurdering.fom)}
-            tom={vurdering.tom ? parseISO(vurdering.tom) : null}
-            foersteNyePeriodeFraDato={null}
-            vurderingStatus={VurderingStatus.VedtakslengdeAutomatisk}
-            vurdertAv={vurdering.vurdertAv}
-            kvalitetssikretAv={vurdering.kvalitetssikretAv}
-            besluttetAv={vurdering.besluttetAv}
-          >
-            <VedtakslengdeVurderingInnhold vurdering={vurdering} />
-          </TidligereVurderingExpandableCard>
-        ))}
-
       {vurderingerFields.map((vurdering, index) => (
         <NyVurderingExpandableCard
           key={vurdering.id}
@@ -231,40 +229,51 @@ export const VedtakslengdeSteg = ({ grunnlag, behandlingVersjon, readOnly, initi
           })()}
           isLast={index === vurderingerFields.length - 1}
           finnesFeil={finnesFeilForVurdering(index, errorList)}
-          vurderingStatus={vurdering.erNyVurdering ? undefined : VurderingStatus.VedtakslengdeManuell}
-          vurdering={vurdering}
-          readonly={formReadOnly}
-          onSlettVurdering={() => remove(index)}
-          harTidligereVurderinger={
-            grunnlag.sisteVedtatteVurderinger.length > 0 ||
-            grunnlag.nyeVurderinger.filter((v) => !v.manuellVurdering).length > 0
+          vurderingStatus={
+            vurdering.manuellVurdering
+              ? vurdering.erNyVurdering
+                ? undefined
+                : VurderingStatus.VedtakslengdeManuell
+              : VurderingStatus.VedtakslengdeAutomatisk
           }
+          vurdering={vurdering}
+          readonly={!vurdering.manuellVurdering || formReadOnly}
+          onSlettVurdering={() => remove(index)}
+          harTidligereVurderinger={grunnlag.sisteVedtatteVurderinger.length > 0 || index > 0}
           index={index}
           accordionsSignal={accordionsSignal}
         >
-          <VStack gap={'4'}>
-            <DateInputWrapper
-              name={`vurderinger.${index}.sluttdato`}
-              control={form.control}
-              label={'Sett ny dato for forkortet vedtaksperiode'}
-              description={'Rammen kan ikke settes tilbake i tid fra dagens dato'}
-              rules={{
-                required: 'Du må oppgi en sluttdato',
-                validate: (value) => validerDato(value as string),
-              }}
-              readOnly={formReadOnly}
-            />
+          {vurdering.manuellVurdering ? (
+            <VStack gap={'4'}>
+              <DateInputWrapper
+                name={`vurderinger.${index}.sluttdato`}
+                control={form.control}
+                label={'Sett ny dato for forkortet vedtaksperiode'}
+                description={'Rammen kan ikke settes tilbake i tid fra dagens dato'}
+                rules={{
+                  required: 'Du må oppgi en sluttdato',
+                  validate: (value) => validerDato(value as string),
+                }}
+                readOnly={formReadOnly}
+              />
 
-            <TextAreaWrapper
-              name={`vurderinger.${index}.begrunnelse`}
-              control={form.control}
-              label={'Begrunnelse for endring av vedtakslengde'}
-              rules={{
-                required: 'Du må gi en begrunnelse',
-              }}
-              readOnly={formReadOnly}
-            />
-          </VStack>
+              <TextAreaWrapper
+                name={`vurderinger.${index}.begrunnelse`}
+                control={form.control}
+                label={'Begrunnelse for endring av vedtakslengde'}
+                rules={{
+                  required: 'Du må gi en begrunnelse',
+                }}
+                readOnly={formReadOnly}
+              />
+            </VStack>
+          ) : (
+            <VStack gap={'2'}>
+              <SpørsmålOgSvar spørsmål={'Type'} svar={'Automatisk vurdering'} />
+              <SpørsmålOgSvar spørsmål={'Sluttdato'} svar={form.watch(`vurderinger.${index}.sluttdato`)} />
+              <SpørsmålOgSvar spørsmål={'Begrunnelse'} svar={form.watch(`vurderinger.${index}.begrunnelse`)} />
+            </VStack>
+          )}
         </NyVurderingExpandableCard>
       ))}
     </VilkårskortPeriodisert>
