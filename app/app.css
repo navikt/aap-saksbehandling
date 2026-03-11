@@ -16,3 +16,11 @@ div.endringslogg-content {
   background: var(--a-bg-default);
   color: var(--a-text-default);
 }
+
+button div.circle {
+  background: var(--a-surface-danger);
+}
+
+button div.ringring {
+  border: 3px solid var(--a-surface-danger);
+}
