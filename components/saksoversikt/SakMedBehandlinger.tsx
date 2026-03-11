@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Chips, Heading, HStack, Table, VStack } from '@navikt/ds-react';
+import { Alert, Button, Chips, Heading, HStack, Table, VStack } from '@navikt/ds-react';
 import { SaksInfo } from 'lib/types/types';
 import { capitalize } from 'lodash';
 import { SakDevTools } from 'components/saksoversikt/SakDevTools';
@@ -20,13 +20,15 @@ import { mapTypeBehandlingTilTekst } from 'lib/utils/oversettelser';
 import { useState } from 'react';
 import { BehandlingsflytEllerPostmottakBehandling } from './types';
 import { usePostmottakBehandlinger } from 'hooks/postmottak/PostmottakBehandlingerHook';
+import { useHentOppgaverForBehandlinger } from 'hooks/oppgave/OppgaverPåSakHook';
 
 const lokalDevToolsForBehandlingOgSak = isLocal();
-export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
+export const SakMedBehandlinger = ({ sak, innloggetBrukerIdent }: { sak: SaksInfo, innloggetBrukerIdent: string | undefined }) => {
   const router = useRouter();
 
   const [visMeldekortbehandlinger, setVisMeldekortbehandlinger] = useState(false);
   const [visPostmottakBehandlinger, setVisPostmottakBehandlinger] = useState(false);
+  const [feilmelding, setFeilmelding] = useState<string | undefined>(undefined);
 
   const behandlinger = visMeldekortbehandlinger
     ? sak.behandlinger || []
@@ -48,7 +50,15 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
   const kanRegistrerebrudd = sak.behandlinger.some((behandling) => erAvsluttetFørstegangsbehandling(behandling));
 
   const åpne = alleBehandlinger.filter((b) => !erAvsluttet(b.behandling));
+
+  const oppgaverPerBehandling = useHentOppgaverForBehandlinger(åpne.map((b) => b.behandling.referanse));
   const avsluttede = alleBehandlinger?.filter((b) => erAvsluttet(b.behandling));
+
+  function hentTildeling(referanse: string) {
+    const oppgaveInfo = oppgaverPerBehandling.get(referanse);
+    if (!oppgaveInfo) return null;
+    return oppgaveInfo.feilmelding ?? oppgaveInfo.reservertAvNavn ?? oppgaveInfo.reservertAvIdent ?? 'Ledig';
+  }
 
   return (
     <VStack gap="8">
@@ -95,6 +105,7 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
       </HStack>
       <VStack gap="4">
         <Heading size="xsmall">Behandlinger</Heading>
+        {feilmelding && <Alert variant={'error'}>{feilmelding}</Alert>}
         <Chips>
           <Chips.Toggle
             selected={visMeldekortbehandlinger}
@@ -118,6 +129,7 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
             <Table.HeaderCell>Årsak</Table.HeaderCell>
             <Table.HeaderCell>Status</Table.HeaderCell>
             <Table.HeaderCell>Vurderingsbehov</Table.HeaderCell>
+            <Table.HeaderCell>Tildelt</Table.HeaderCell>
             <Table.HeaderCell align="right">Handlinger</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
@@ -138,12 +150,17 @@ export const SakMedBehandlinger = ({ sak }: { sak: SaksInfo }) => {
                   ? behandling.behandling.vurderingsbehov.map((behov) => formaterVurderingsbehov(behov)).join(', ')
                   : null}
               </Table.DataCell>
-
+              <Table.DataCell>
+                {!erAvsluttet(behandling.behandling) && hentTildeling(behandling.behandling.referanse)}
+              </Table.DataCell>
               <Table.DataCell>
                 <BehandlingButtons
                   key={behandling.behandling.referanse}
                   sak={sak}
                   behandling={behandling}
+                  oppgaveInfo={oppgaverPerBehandling.get(behandling.behandling.referanse)}
+                  setFeilmelding={setFeilmelding}
+                  innloggetBrukerIdent={innloggetBrukerIdent}
                 ></BehandlingButtons>
               </Table.DataCell>
             </Table.Row>

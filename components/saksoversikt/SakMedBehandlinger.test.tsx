@@ -1,9 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { SakMedBehandlinger } from './SakMedBehandlinger';
 import { render, screen, within } from 'lib/test/CustomRender';
-import { SaksInfo, BehandlingInfo } from 'lib/types/types';
+import { BehandlingInfo, SaksInfo } from 'lib/types/types';
 
-const lagBehandling = (overrides: Partial<BehandlingInfo> & Pick<BehandlingInfo, 'status' | 'referanse'>): BehandlingInfo =>
+export const lagBehandling = (
+  overrides: Partial<BehandlingInfo> & Pick<BehandlingInfo, 'status' | 'referanse'>
+): BehandlingInfo =>
   ({
     opprettet: '2026-01-01T12:00:00',
     typeBehandling: 'Førstegangsbehandling',
@@ -12,7 +14,7 @@ const lagBehandling = (overrides: Partial<BehandlingInfo> & Pick<BehandlingInfo,
     ...overrides,
   }) as BehandlingInfo;
 
-const lagSak = (behandlinger: BehandlingInfo[]): SaksInfo =>
+export const lagSak = (behandlinger: BehandlingInfo[]): SaksInfo =>
   ({
     saksnummer: '12345',
     ident: '12345678910',
@@ -31,7 +33,7 @@ describe('SakMedBehandlinger', () => {
       lagBehandling({ status: 'UTREDES', referanse: 'åpen-2', opprettet: '2026-01-04T10:00:00' }),
     ]);
 
-    render(<SakMedBehandlinger sak={sak} />);
+    render(<SakMedBehandlinger sak={sak} innloggetBrukerIdent={'z123'}/>);
 
     const rows = screen.getAllByRole('row');
     // Første rad er header, resten er behandlinger

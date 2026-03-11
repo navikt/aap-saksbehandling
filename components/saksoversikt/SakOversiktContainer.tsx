@@ -17,7 +17,7 @@ enum Tab {
   TREKK = 'TREKK',
 }
 
-export const SakOversiktContainer = ({ sak }: { sak: SaksInfo }) => {
+export const SakOversiktContainer = ({ sak, innloggetBrukerIdent }: { sak: SaksInfo, innloggetBrukerIdent: string | undefined }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const isVisRettigheterForVedtakEnabled = useFeatureFlag('VisRettigheterForVedtak');
@@ -42,7 +42,7 @@ export const SakOversiktContainer = ({ sak }: { sak: SaksInfo }) => {
           <Box marginBlock="8">
             <Tabs.Panel value={Tab.OVERSIKT}>
               {isVisRettigheterForVedtakEnabled && <Rettighetsoversikt sak={sak} />}
-              <SakMedBehandlinger sak={sak} />
+              <SakMedBehandlinger sak={sak} innloggetBrukerIdent={innloggetBrukerIdent} />
             </Tabs.Panel>
 
             <Tabs.Panel value={Tab.DOKUMENTER}>
