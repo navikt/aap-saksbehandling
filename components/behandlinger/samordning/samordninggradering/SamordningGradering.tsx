@@ -9,7 +9,7 @@ import {
   SamordningYtelseVurdering,
 } from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { Alert, BodyLong, Box, Button, Detail, Heading, HStack, Modal, VStack } from '@navikt/ds-react';
+import { Alert, BodyLong, BodyShort, Box, Button, Heading, HStack, Modal, VStack } from '@navikt/ds-react';
 import { FormEvent, useRef, useState } from 'react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
@@ -288,8 +288,8 @@ export const SamordningGradering = ({
           </VStack>
         )}
         {!visForm && (
-          <VStack gap={'2'}>
-            <Detail>Vi finner ingen ytelser fra folketrygden</Detail>
+          <VStack gap={'4'}>
+            <BodyShort size={'small'}>Vi finner ingen ytelser fra folketrygden</BodyShort>
             {!formReadOnly && (
               <HStack>
                 <Button size={'small'} type={'button'} variant={'secondary'} onClick={() => setVisForm(true)}>
