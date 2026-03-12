@@ -5,7 +5,7 @@ import { UseFormReturn, useWatch } from 'react-hook-form';
 import { SykdomsvurderingerForm } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { Radio } from '@navikt/ds-react';
-import { DiagnoserDefaultOptions } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedDataFetching';
+import { DiagnoserDefaultOptions } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
 
 interface Props {
   index: number;

@@ -7,7 +7,10 @@ import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { parseISO } from 'date-fns';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { MellomlagretVurdering, SykdomsGrunnlag, TypeBehandling, VurderingMeta } from 'lib/types/types';
-import { hentSisteLagredeVurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
+import {
+  DiagnoserDefaultOptions,
+  hentSisteLagredeVurdering,
+} from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
 import { ValuePair } from 'components/form/FormField';
 import { useSak } from 'hooks/SakHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
@@ -37,7 +40,6 @@ import {
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
-import { DiagnoserDefaultOptions } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedDataFetching';
 
 export interface SykdomsvurderingerForm {
   vurderinger: Array<Sykdomsvurdering>;

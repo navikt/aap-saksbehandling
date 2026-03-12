@@ -18,7 +18,7 @@ import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrap
 import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
 import React from 'react';
 import { skalVurdereVissVarighetSjekk } from 'components/behandlinger/sykdom/sykdomsvurdering/sykdomsvurdering-utils';
-import { DiagnoserDefaultOptions } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedDataFetching';
+import { DiagnoserDefaultOptions } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
 
 interface Props {
   index: number;

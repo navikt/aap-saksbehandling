@@ -9,8 +9,9 @@ import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import { Dato } from 'lib/types/Dato';
 import { formaterDatoForBackend } from 'lib/utils/date';
-import { DiagnoserDefaultOptions } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedDataFetching';
+
 import { ingenDiagnoseCode } from 'lib/diagnosesøker/DiagnoseSøker';
+import { DiagnoserDefaultOptions } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
