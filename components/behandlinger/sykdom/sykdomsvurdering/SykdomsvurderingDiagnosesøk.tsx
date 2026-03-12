@@ -6,6 +6,7 @@ import { SykdomsvurderingerForm } from 'components/behandlinger/sykdom/sykdomsvu
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { Radio } from '@navikt/ds-react';
 import { DiagnoserDefaultOptions } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
+import styles from './SykdomsvurderingDiagnosesøk.module.css';
 
 interface Props {
   index: number;
@@ -50,6 +51,7 @@ export const SykdomsvurderingDiagnosesøk = ({ index, form, readOnly, diagnoseDe
       {kodeverkValue != null && harSkadeEllerLyte && (
         <>
           <AsyncComboSearch
+            className={styles.diagnosesokContainer}
             label={'Hoveddiagnose'}
             form={form}
             name={`vurderinger.${index}.hoveddiagnose`}
@@ -60,6 +62,7 @@ export const SykdomsvurderingDiagnosesøk = ({ index, form, readOnly, diagnoseDe
           />
           {form.watch(`vurderinger.${index}.hoveddiagnose`)?.value !== ingenDiagnoseCode && (
             <AsyncComboSearch
+              className={styles.diagnosesokContainer}
               label={'Bidiagnoser'}
               form={form}
               isMulti={true}
