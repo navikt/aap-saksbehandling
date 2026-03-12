@@ -64,7 +64,8 @@ export const LedigeOppgaverFiltreringNy = ({
                         const values = form.watch(filter.key);
                         if (Array.isArray(values)) {
                           const arrayUtenValgtFilter = values.filter((value) => value !== filter.value);
-                          form.setValue(filter.key, arrayUtenValgtFilter);
+                          // saksbehandlere er ikke i mineoppgaverfilteret og vi har derfor alltid string[]
+                          form.setValue(filter.key, arrayUtenValgtFilter as string[]);
                         } else {
                           form.setValue(filter.key, undefined);
                         }

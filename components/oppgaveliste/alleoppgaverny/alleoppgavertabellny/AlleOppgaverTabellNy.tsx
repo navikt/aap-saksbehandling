@@ -94,7 +94,7 @@ export const AlleOppgaverTabellNy = ({
             >
               Oppg. opprettet
             </Table.ColumnHeader>
-            <Table.ColumnHeader>Veileder/Saksbehandler</Table.ColumnHeader>
+            <Table.ColumnHeader>Tildelt</Table.ColumnHeader>
             <Table.HeaderCell></Table.HeaderCell>
             <Table.HeaderCell></Table.HeaderCell>
           </Table.Row>

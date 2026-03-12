@@ -35,7 +35,7 @@ function byggFelter(vurdering: BarnepensjonVurdering): ValuePair[] {
       },
       {
         label: 'Dagsats',
-        value: formaterTilNok(beregnDagsats(periode.månedsbeløp.verdi.toString())),
+        value: beregnDagsats(periode.månedsbeløp.verdi.toString()),
       },
     ]),
   ];

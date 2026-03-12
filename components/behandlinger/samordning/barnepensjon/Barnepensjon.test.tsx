@@ -87,7 +87,7 @@ describe('Barnepensjon', () => {
 
     await user.type(felt, '30000');
 
-    const dagSats = screen.getByText('1 384,62 kr');
+    const dagSats = screen.getByText('1 385 kr');
     expect(dagSats).toBeVisible();
   });
 

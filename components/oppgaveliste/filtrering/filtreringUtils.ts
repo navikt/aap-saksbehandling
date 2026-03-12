@@ -42,6 +42,14 @@ export function aktiveFiltreringer(form: FormFieldsFilter) {
       );
     }
 
+    if (key === 'saksbehandlere' && Array.isArray(value)) {
+      aktiveFilter.push(
+        ...value.map((value) => {
+          return { key: key as keyof FormFieldsFilter, value: value.value, label: `Reservert av: ${value.label}` };
+        })
+      );
+    }
+
     if (key === 'statuser' && Array.isArray(value)) {
       aktiveFilter.push(
         ...value.map((value) => {

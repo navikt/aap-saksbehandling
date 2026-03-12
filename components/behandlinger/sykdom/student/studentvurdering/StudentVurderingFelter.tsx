@@ -10,17 +10,21 @@ import { isAfter } from 'date-fns';
 import { StudentFormFields } from 'components/behandlinger/sykdom/student/studentvurdering/StudentVurdering';
 import { diagnoseSøker, ingenDiagnoseCode } from 'lib/diagnosesøker/DiagnoseSøker';
 import { AsyncComboSearch } from 'components/form/asynccombosearch/AsyncComboSearch';
+import styles from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingDiagnosesøk.module.css';
+import { DiagnoserDefaultOptions } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
 
 interface Props {
   index: number;
   readOnly: boolean;
+  diagnoseDefaultOptions: DiagnoserDefaultOptions;
 }
 
-export const StudentVurderingFelter = ({ index, readOnly }: Props) => {
+export const StudentVurderingFelter = ({ index, readOnly, diagnoseDefaultOptions }: Props) => {
   const form = useFormContext<StudentFormFields>();
-  const kodeverkValue = form.watch(`vurderinger.${index}.kodeverk`);
-  const defaultOptionsHoveddiagnose = kodeverkValue ? diagnoseSøker(kodeverkValue, '') : [];
-  const defaultOptionsBidiagnose = kodeverkValue ? diagnoseSøker(kodeverkValue, '') : [];
+
+  const kodeverkValue = form.watch(`vurderinger.${index}.kodeverk`) as keyof DiagnoserDefaultOptions;
+  const defaultOptionsHoveddiagnose = kodeverkValue && diagnoseDefaultOptions[kodeverkValue].hoveddiagnoserOptions;
+  const defaultOptionsBidiagnose = kodeverkValue && diagnoseDefaultOptions[kodeverkValue].bidiagnoserOptions;
 
   return (
     <VStack gap={'4'}>
@@ -154,6 +158,10 @@ export const StudentVurderingFelter = ({ index, readOnly }: Props) => {
             readOnly={readOnly}
             size={'small'}
             horisontal={true}
+            onChangeCustom={() => {
+              form.setValue(`vurderinger.${index}.hoveddiagnose`, null);
+              form.setValue(`vurderinger.${index}.bidiagnose`, null);
+            }}
           >
             <Radio value={'ICPC2'}>{'Primærhelsetjenesten (ICPC2)'}</Radio>
             <Radio value={'ICD10'}>{'Spesialisthelsetjenesten (ICD10)'}</Radio>
@@ -162,6 +170,7 @@ export const StudentVurderingFelter = ({ index, readOnly }: Props) => {
             <>
               <AsyncComboSearch
                 label={'Hoveddiagnose'}
+                className={styles.diagnosesokContainer}
                 form={form}
                 name={`vurderinger.${index}.hoveddiagnose`}
                 fetcher={async (value) => (kodeverkValue ? diagnoseSøker(kodeverkValue, value) : [])}
@@ -172,6 +181,7 @@ export const StudentVurderingFelter = ({ index, readOnly }: Props) => {
               {form.watch(`vurderinger.${index}.hoveddiagnose`)?.value !== ingenDiagnoseCode && (
                 <AsyncComboSearch
                   label={'Bidiagnoser'}
+                  className={styles.diagnosesokContainer}
                   form={form}
                   isMulti={true}
                   name={`vurderinger.${index}.bidiagnose`}

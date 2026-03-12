@@ -2937,6 +2937,44 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/behandling/{referanse}/grunnlag/bekreft-vurderinger-oppfolging': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description referanse */
+          referanse: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.bekreftvurderingeroppf\u00F8lging.BekreftVurderingerOppf\u00F8lgingDto'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/klage/{referanse}/grunnlag/p\u00E5klaget-behandling': {
     parameters: {
       query?: never;
@@ -4867,6 +4905,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.OpprettTestcaseDTO': {
       andreUtbetalinger?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AndreUtbetalingerDto'];
       barn: components['schemas']['no.nav.aap.behandlingsflyt.TestBarn'][];
+      dagpenger: components['schemas']['no.nav.aap.behandlingsflyt.test.modell.TestPerson.Dagpenger'][];
       erArbeidsevnenNedsatt: boolean;
       erNedsettelseIArbeidsevneMerEnnHalvparten: boolean;
       /**
@@ -10926,6 +10965,9 @@ export interface components {
       erSlettbar: boolean;
       vurdertBarn: components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnetillegg.ExtendedVurdertBarnDto'];
     };
+    'no.nav.aap.behandlingsflyt.behandling.bekreftvurderingeroppf\u00F8lging.BekreftVurderingerOppf\u00F8lgingDto': {
+      mellomlagredeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.mellomlagring.MellomlagretVurdering'][];
+    };
     'no.nav.aap.behandlingsflyt.behandling.beregning.BeregningDTO': {
       /** @enum {string} */
       beregningstypeDTO: 'STANDARD' | 'UFØRE' | 'YRKESSKADE' | 'YRKESSKADE_UFØRE';
@@ -12419,6 +12461,93 @@ export interface components {
       tom?: string | null;
       vurdertAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
     };
+    'no.nav.aap.behandlingsflyt.behandling.mellomlagring.MellomlagretVurdering': {
+      /** @enum {string} */
+      avklaringsbehovKode:
+        | '4101'
+        | '4102'
+        | '4201'
+        | '5001'
+        | '5002'
+        | '5003'
+        | '5004'
+        | '5005'
+        | '5006'
+        | '5007'
+        | '5008'
+        | '5009'
+        | '5010'
+        | '5011'
+        | '5012'
+        | '5013'
+        | '5014'
+        | '5015'
+        | '5016'
+        | '5017'
+        | '5018'
+        | '5019'
+        | '5020'
+        | '5021'
+        | '5022'
+        | '5023'
+        | '5024'
+        | '5025'
+        | '5026'
+        | '5027'
+        | '5028'
+        | '5029'
+        | '5030'
+        | '5031'
+        | '5032'
+        | '5033'
+        | '5034'
+        | '5035'
+        | '5036'
+        | '5040'
+        | '5050'
+        | '5051'
+        | '5052'
+        | '5053'
+        | '5054'
+        | '5056'
+        | '5057'
+        | '5058'
+        | '5059'
+        | '5096'
+        | '5097'
+        | '5098'
+        | '5099'
+        | '5999'
+        | '6000'
+        | '6001'
+        | '6002'
+        | '6003'
+        | '6004'
+        | '6005'
+        | '6006'
+        | '6007'
+        | '6008'
+        | '6009'
+        | '6010'
+        | '7001'
+        | '8001'
+        | '8002'
+        | '8003'
+        | '9001'
+        | '9002'
+        | '9003'
+        | '9004'
+        | '9082'
+        | '9083';
+      behandlingId: components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.behandling.BehandlingId'];
+      data: string;
+      vurdertAv: string;
+      /**
+       * Format: date-time
+       * @example 2025-04-01T12:30:00
+       */
+      vurdertDato: string;
+    };
     'no.nav.aap.behandlingsflyt.behandling.mellomlagring.MellomlagretVurderingDto': {
       /** @enum {string} */
       avklaringsbehovkode:
@@ -12929,6 +13058,8 @@ export interface components {
       arbeidsgiverGradering?: number | null;
       /** Format: double */
       barneTilleggsats: number;
+      /** Format: double */
+      barnepensjonDagsats: number;
       /** Format: double */
       barnetillegg: number;
       /** Format: double */
@@ -16250,7 +16381,7 @@ export interface components {
       /** Format: uuid */
       behandlingId: string;
       /** @enum {string} */
-      behandlingsstatus: 'AVSLUTTET' | 'OPPRETTET' | 'RETUR_FRA_BESLUTTER' | 'TIL_BEHANDLING' | 'TIL_BESLUTTER';
+      behandlingsstatus: 'AVSLUTTET' | 'OPPRETTET' | 'RETUR_FRA_BESLUTTER' | 'TIL_BEHANDLING' | 'TIL_GODKJENNING';
       fullstendigPeriode: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.TilbakekrevingPeriode'];
       /**
        * Format: date-time
@@ -16739,6 +16870,16 @@ export interface components {
       harMedlemskap: boolean;
       harYrkesskade: boolean;
       ident: string;
+    };
+    'no.nav.aap.behandlingsflyt.test.modell.TestPerson.Dagpenger': {
+      /** @enum {string} */
+      dagpengerYtelseType:
+        | 'DAGPENGER_ARBEIDSSOKER_ORDINAER'
+        | 'DAGPENGER_PERMITTERING_FISKEINDUSTRI'
+        | 'DAGPENGER_PERMITTERING_ORDINAER';
+      /** @enum {string} */
+      kilde: 'ARENA' | 'DP_SAK';
+      periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
     };
     'no.nav.aap.behandlingsflyt.test.modell.TestPerson.Sykepenger': {
       /** Format: int32 */
