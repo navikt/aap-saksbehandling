@@ -249,8 +249,7 @@ export const Sykdomsvurdering = ({
     // Vi har allerede data lagret, vis enten de som er lagret i grunnlaget her eller tom liste
     return {
       vurderinger: grunnlag.nyeVurderinger.map((vurdering) => {
-        const kodeverk: keyof DiagnoserDefaultOptions | undefined | null =
-          vurdering?.kodeverk as keyof DiagnoserDefaultOptions;
+        const kodeverk = vurdering?.kodeverk as keyof DiagnoserDefaultOptions;
 
         const hoveddiagnose = kodeverk
           ? diagnoseDefaultOptions?.[kodeverk]?.hoveddiagnoserOptions.find(
@@ -298,11 +297,10 @@ export const Sykdomsvurdering = ({
 
   function utledDiagnoserForNyVurdering() {
     const sisteLagredeVurdering = hentSisteLagredeVurdering(typeBehandling, grunnlag);
-    const kodeverk: keyof DiagnoserDefaultOptions | undefined | null =
-      sisteLagredeVurdering?.kodeverk as keyof DiagnoserDefaultOptions;
+    const kodeverk = sisteLagredeVurdering?.kodeverk as keyof DiagnoserDefaultOptions;
 
     if (kodeverk) {
-      const hoveddiagnose = diagnoseDefaultOptions?.[kodeverk]?.hoveddiagnoserOptions.find(
+      const hoveddiagnose = diagnoseDefaultOptions[kodeverk]?.hoveddiagnoserOptions.find(
         (option) => option.value === sisteLagredeVurdering?.hoveddiagnose
       );
 

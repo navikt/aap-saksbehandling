@@ -231,8 +231,7 @@ export const StudentVurdering = ({
 
     return {
       vurderinger: grunnlag.nyeVurderinger?.map((vurdering) => {
-        const kodeverk: keyof DiagnoserDefaultOptions | undefined | null =
-          vurdering?.kodeverk as keyof DiagnoserDefaultOptions;
+        const kodeverk = vurdering?.kodeverk as keyof DiagnoserDefaultOptions;
 
         const hoveddiagnose = kodeverk
           ? diagnoseDefaultOptions?.[kodeverk]?.hoveddiagnoserOptions.find(

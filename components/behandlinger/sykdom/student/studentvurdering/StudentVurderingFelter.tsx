@@ -21,8 +21,8 @@ interface Props {
 
 export const StudentVurderingFelter = ({ index, readOnly, diagnoseDefaultOptions }: Props) => {
   const form = useFormContext<StudentFormFields>();
-  const kodeverkValue = form.watch(`vurderinger.${index}.kodeverk`) as keyof DiagnoserDefaultOptions | undefined;
 
+  const kodeverkValue = form.watch(`vurderinger.${index}.kodeverk`) as keyof DiagnoserDefaultOptions;
   const defaultOptionsHoveddiagnose = kodeverkValue && diagnoseDefaultOptions[kodeverkValue].hoveddiagnoserOptions;
   const defaultOptionsBidiagnose = kodeverkValue && diagnoseDefaultOptions[kodeverkValue].bidiagnoserOptions;
 
