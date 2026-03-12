@@ -29,7 +29,7 @@ export const SaksbehandlerFilterSøk = ({ form, enheter }: Props) => {
 
   return (
     <AsyncComboSearch
-      label={'Reservert av'}
+      label={'Tildelt'}
       isMulti={true}
       form={form}
       name={`saksbehandlere`}
