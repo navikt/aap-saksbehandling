@@ -12,7 +12,7 @@ import { useConfigForm } from 'components/form/FormHook';
 import { Sykepenger } from 'components/opprettsak/samordning/Sykepenger';
 import { Dagpenger } from 'components/opprettsak/samordning/Dagpenger';
 import { parse } from 'date-fns';
-import { OpprettTestcase, TestcaseSteg } from 'lib/types/types';
+import { DagpengerKilde, DagpengerYtelseType, OpprettTestcase, TestcaseSteg } from 'lib/types/types';
 
 interface Barn {
   fodselsdato: string;
@@ -55,17 +55,6 @@ enum AndreUtbetalingerYtelser {
   STIPEND = 'STIPEND',
   LÅN = 'LÅN',
   NEI = 'NEI',
-}
-
-enum DagpengerYtelseType {
-  DAGPENGER_ARBEIDSSOKER_ORDINAER = 'DAGPENGER_ARBEIDSSOKER_ORDINAER',
-  DAGPENGER_PERMITTERING_ORDINAER = 'DAGPENGER_PERMITTERING_ORDINAER',
-  DAGPENGER_PERMITTERING_FISKEINDUSTRI = 'DAGPENGER_PERMITTERING_FISKEINDUSTRI',
-}
-
-enum DagpengerKilde {
-  ARENA = 'ARENA',
-  DP_SAK = 'DP_SAK',
 }
 
 export const AndreUtbetalingerYtelserAlternativer = Object.entries(AndreUtbetalingerYtelser).map(([k, v]) => ({
@@ -180,13 +169,13 @@ export const OpprettSakLocal = () => {
         type: 'fieldArray',
         defaultValue: [
           {
-            dagpengerYtelseType: DagpengerYtelseType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
-            kilde: DagpengerKilde.DP_SAK,
+            dagpengerYtelseType: "DAGPENGER_ARBEIDSSOKER_ORDINAER",
+            kilde: "DP_SAK",
             periode: { fom: '01.05.2025', tom: '14.05.2025' },
           },
           {
-            dagpengerYtelseType: DagpengerYtelseType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
-            kilde: DagpengerKilde.ARENA,
+            dagpengerYtelseType: "DAGPENGER_ARBEIDSSOKER_ORDINAER",
+            kilde: "ARENA",
             periode: { fom: '15.05.2025', tom: '28.05.2025' },
           },
         ],
@@ -244,7 +233,6 @@ export const OpprettSakLocal = () => {
 
   function mapInnhold(data: OpprettSakFormFields, steg?: TestcaseSteg): OpprettTestcase {
     return {
-      dagpenger: [],
       ...data,
       andreUtbetalinger: {
         afp: data.afp

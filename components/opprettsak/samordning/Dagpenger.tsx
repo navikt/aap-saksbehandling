@@ -28,7 +28,7 @@ const ytelsesOptions: ValuePair<DagpengerYtelseType>[] = [
     label: 'Dagpenger Arbeidssøker Ordinær',
   },
   {
-    value: "DAGPENGER_PERMITTERING_ORDINAER",
+    value: 'DAGPENGER_PERMITTERING_ORDINAER',
     label: 'Dagpenger Permittering Ordinær',
   },
   {
