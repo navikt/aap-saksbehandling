@@ -139,6 +139,8 @@ function formaterOppgave(oppgave: Oppgave) {
 export function byggKelvinURL(oppgave: Oppgave): string {
   if (oppgave.journalpostId) {
     return buildPostmottakURL(oppgave);
+  } else if (oppgave.behandlingstype === 'TILBAKEKREVING') {
+    return oppgave.tilbakekrevingsVarsDto!!.tilbakekrevings_URL;
   } else {
     return buildSaksbehandlingsURL(oppgave);
   }
