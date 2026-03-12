@@ -8,12 +8,13 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgG
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { Behovstype } from 'lib/utils/form';
-import { ErrorSummary, VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react';
 import { BarnepensjonTabell } from 'components/behandlinger/samordning/barnepensjon/BarnepensjonTabell';
 import { BarnepensjonTidligereVurdering } from 'components/behandlinger/samordning/barnepensjon/BarnepensjonTidligereVurdering';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { replaceCommasWithDots } from 'lib/utils/string';
 import { hentFeilmeldingerForForm } from 'lib/utils/formerrors';
+import { FormErrorSummary } from 'components/formerrorsummary/FormErrorSummary';
 
 interface Props {
   grunnlag: BarnepensjonGrunnlag;
@@ -124,15 +125,7 @@ export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering, behandlin
         <FormField form={form} formField={formFields.begrunnelse} />
         <BarnepensjonTabell form={form} readOnly={formReadOnly} />
 
-        {feilmeldinger && feilmeldinger.length > 0 && (
-          <ErrorSummary size={'small'}>
-            {feilmeldinger.map((error) => (
-              <ErrorSummary.Item key={error.name} href={`#${error.name}`}>
-                {error.message}
-              </ErrorSummary.Item>
-            ))}
-          </ErrorSummary>
-        )}
+        {feilmeldinger && feilmeldinger.length > 0 && <FormErrorSummary errorList={feilmeldinger} />}
       </VStack>
     </VilkårskortMedFormOgMellomlagringNyVisning>
   );
