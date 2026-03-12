@@ -65,7 +65,7 @@ interface SykdomProps {
   grunnlag: SykdomsGrunnlag;
   readOnly: boolean;
   typeBehandling: TypeBehandling;
-  diagnoseDefaultOptions?: DiagnoserDefaultOptions;
+  diagnoseDefaultOptions: DiagnoserDefaultOptions;
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 

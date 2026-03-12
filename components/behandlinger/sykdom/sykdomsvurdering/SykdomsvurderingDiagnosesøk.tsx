@@ -11,7 +11,7 @@ interface Props {
   index: number;
   form: UseFormReturn<SykdomsvurderingerForm>;
   readOnly: boolean;
-  diagnoseDefaultOptions?: DiagnoserDefaultOptions;
+  diagnoseDefaultOptions: DiagnoserDefaultOptions;
 }
 
 export const SykdomsvurderingDiagnosesøk = ({ index, form, readOnly, diagnoseDefaultOptions }: Props) => {
@@ -22,11 +22,9 @@ export const SykdomsvurderingDiagnosesøk = ({ index, form, readOnly, diagnoseDe
 
   const kodeverk = kodeverkValue as keyof DiagnoserDefaultOptions | undefined;
 
-  const defaultOptionsHoveddiagnose =
-    (kodeverk && diagnoseDefaultOptions?.[kodeverk].hoveddiagnoserOptions) ?? diagnoseSøker(kodeverkValue, '');
+  const defaultOptionsHoveddiagnose = kodeverk && diagnoseDefaultOptions[kodeverk].hoveddiagnoserOptions;
 
-  const defaultOptionsBidiagnose =
-    (kodeverk && diagnoseDefaultOptions?.[kodeverk].bidiagnoserOptions) ?? diagnoseSøker(kodeverkValue, '');
+  const defaultOptionsBidiagnose = kodeverk && diagnoseDefaultOptions[kodeverk].bidiagnoserOptions;
 
   const harSkadeEllerLyte = form.watch(`vurderinger.${index}.harSkadeSykdomEllerLyte`) === JaEllerNei.Ja;
 

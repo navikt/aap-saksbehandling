@@ -9,6 +9,7 @@ import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import { Dato } from 'lib/types/Dato';
 import { formaterDatoForBackend } from 'lib/utils/date';
+import { DiagnoserDefaultOptions } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedDataFetching';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
@@ -61,6 +62,17 @@ const grunnlagMedTidligereVurdering: SykdomsGrunnlag = {
   opplysninger: { innhentedeYrkesskader: [], oppgittYrkesskadeISøknad: false },
 };
 
+const diagnoserDefaultOptions: DiagnoserDefaultOptions = {
+  ICD10: {
+    hoveddiagnoserOptions: [],
+    bidiagnoserOptions: [],
+  },
+  ICPC2: {
+    hoveddiagnoserOptions: [],
+    bidiagnoserOptions: [],
+  },
+};
+
 beforeEach(() => {
   setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'AVKLAR_SYKDOM' });
 });
@@ -69,6 +81,7 @@ describe('generelt', () => {
   it('Skal ha korrekt heading', () => {
     render(
       <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -82,6 +95,7 @@ describe('generelt', () => {
   it('skal vise en lenke som viser hvordan vilkåret skal vurderes', () => {
     render(
       <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -98,6 +112,7 @@ describe('generelt', () => {
   it('skal vise en informasjonsvarsling dersom det blir besvart av brukeren ikke har nedsatt arbeidsevne', async () => {
     render(
       <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -124,6 +139,7 @@ describe('generelt', () => {
 
     render(
       <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
         grunnlag={grunnlagMedTidligereVurdering}
         readOnly={false}
         behandlingVersjon={0}
@@ -163,6 +179,7 @@ describe('felt for begrunnelse', () => {
   it('Skal ha et begrunnelsefelt', () => {
     render(
       <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -176,6 +193,7 @@ describe('felt for begrunnelse', () => {
   it('Skal vise feilmelding dersom begrunnelse felt ikke har blitt besvart', async () => {
     render(
       <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -196,6 +214,7 @@ describe('felt for om brukeren har sykdom, skade eller lyte', () => {
   it('har et felt for om brukeren har sykdom, skade eller lyte', () => {
     render(
       <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -208,6 +227,7 @@ describe('felt for om brukeren har sykdom, skade eller lyte', () => {
   it('Skal vise feilmelding dersom felt om at spørsmål om brukeren har sykdom, skade eller lyte ikke har blitt besvart', async () => {
     render(
       <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -225,6 +245,7 @@ describe('felt for om arbeidsevnen er nedsatt', () => {
   it('Skal ha et felt for om arbeidsevnen er nedsatt dersom brukeren har sykdom, skade eller lyte', async () => {
     render(
       <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -239,6 +260,7 @@ describe('felt for om arbeidsevnen er nedsatt', () => {
   it('viser feilmelding dersom felt om arbeidsevnen er nedsatt ikke er besvart', async () => {
     render(
       <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -258,6 +280,7 @@ describe('felt for å sette diagnoser', () => {
   it('felt for å sette diagnoser vises ikke initielt', async () => {
     render(
       <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -271,6 +294,7 @@ describe('felt for å sette diagnoser', () => {
   it('skal ha et felt for å velge et system for diagnoser når man har svart ja på at brukeren har sykdom, skade eller lyte', async () => {
     render(
       <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -286,6 +310,7 @@ describe('felt for å sette diagnoser', () => {
   it('skal vise en feilmelding dersom felt for å velge system ikke er valgt', async () => {
     render(
       <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -304,6 +329,7 @@ describe('felt for å sette diagnoser', () => {
   it('skal ha et felt for å sette en hoveddiagnose dersom brukeren har sykdom, skade eller lyte', async () => {
     render(
       <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -321,6 +347,7 @@ describe('felt for å sette diagnoser', () => {
   it('skal ha vise en feilmelding dersom det ikke har blitt satt en hoveddiagnose', async () => {
     render(
       <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -341,6 +368,7 @@ describe('felt for å sette diagnoser', () => {
   it('skal ha et felt for å sette bidiagnoser dersom brukeren har sykdom, skade eller lyte', async () => {
     render(
       <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -358,6 +386,7 @@ describe('felt for å sette diagnoser', () => {
   it('skal ikke vise felt for bidiagnose dersom det har blitt valgt ingen diagnose på hoveddiagnose', async () => {
     render(
       <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -381,6 +410,7 @@ describe('felt for å sette diagnoser', () => {
   it('skal vise felt for bidiagnose dersom det har blitt valgt noe annet enn ingen diagnose på hoveddiagnose', async () => {
     render(
       <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -408,6 +438,7 @@ describe('felt for nedsettelsen er av en viss varighet', () => {
   it('feltet skal vises', async () => {
     render(
       <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -437,6 +468,7 @@ describe('felt for nedsettelsen er av en viss varighet', () => {
   it('skal vise en feilmelding hvis feltet ikke er besvart', async () => {
     render(
       <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -470,6 +502,7 @@ describe('felt for om arbeidsevnen er nedsatt med minst halvparten', () => {
   it('Skal ha et felt for om arbeidsevnen er nedsatt med minst halvparten', async () => {
     render(
       <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -485,6 +518,7 @@ describe('felt for om arbeidsevnen er nedsatt med minst halvparten', () => {
   it('Skal vise feilmelding dersom felt for om arbeidsevnen er nedsatt med minst halvparten ikke er besvart', async () => {
     render(
       <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -505,6 +539,7 @@ describe('felt for om sykdom, skade eller lyte er vestenlig medvirkende til at a
   it('feltet skal vises dersom arbeidsevnen er nedsatt med minst halvparten', async () => {
     render(
       <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -525,6 +560,7 @@ describe('felt for om sykdom, skade eller lyte er vestenlig medvirkende til at a
   it('feltet skal vises dersom arbeidsevnen ikke er nedsatt med minst halvparten, men nedsatt med 30 prosent', async () => {
     render(
       <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
         grunnlag={grunnlagMedYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -546,6 +582,7 @@ describe('felt for om sykdom, skade eller lyte er vestenlig medvirkende til at a
   it('viser en feilmelding dersom feltet ikke er besvart', async () => {
     render(
       <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -570,6 +607,7 @@ describe('yrkesskade', () => {
     it('skal ha et felt for begrunnelse dersom det finnes yrkesskade og arbeidsevnen ikke er nedsatt med halvparten', async () => {
       render(
         <Sykdomsvurdering
+          diagnoseDefaultOptions={diagnoserDefaultOptions}
           grunnlag={grunnlagMedYrkesskade}
           readOnly={false}
           behandlingVersjon={0}
@@ -586,6 +624,7 @@ describe('yrkesskade', () => {
     it('skal vise description', async () => {
       render(
         <Sykdomsvurdering
+          diagnoseDefaultOptions={diagnoserDefaultOptions}
           grunnlag={grunnlagMedYrkesskade}
           readOnly={false}
           behandlingVersjon={0}
@@ -606,6 +645,7 @@ describe('yrkesskade', () => {
     it('skal vise feilmelding hvis det ikke er besvart', async () => {
       render(
         <Sykdomsvurdering
+          diagnoseDefaultOptions={diagnoserDefaultOptions}
           grunnlag={grunnlagMedYrkesskade}
           readOnly={false}
           behandlingVersjon={0}
@@ -629,6 +669,7 @@ describe('yrkesskade', () => {
     it('skal vise feltet dersom det finnes yrkesskade og arbeidsevnen er ikke nedsatt med minst halvparten', async () => {
       render(
         <Sykdomsvurdering
+          diagnoseDefaultOptions={diagnoserDefaultOptions}
           grunnlag={grunnlagMedYrkesskade}
           readOnly={false}
           behandlingVersjon={0}
@@ -645,6 +686,7 @@ describe('yrkesskade', () => {
     it('skal vise feilmelding dersom det ikke er besvart', async () => {
       render(
         <Sykdomsvurdering
+          diagnoseDefaultOptions={diagnoserDefaultOptions}
           grunnlag={grunnlagMedYrkesskade}
           readOnly={false}
           behandlingVersjon={0}
@@ -669,6 +711,7 @@ describe('vurderinger uten viss varighet', () => {
   it('viser datofelt får når vurderingen gjelder fra', () => {
     render(
       <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -683,6 +726,7 @@ describe('vurderinger uten viss varighet', () => {
     const today = format(new Date(), 'yyyy-MM-dd');
     customRenderWithSøknadstidspunkt(
       <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
         grunnlag={grunnlagMedYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -717,6 +761,7 @@ describe('vurderinger uten viss varighet', () => {
   it('viser ikke feilmelding når dato for vurderingen er etter søknadstidspunkt', async () => {
     customRenderWithSøknadstidspunkt(
       <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -736,6 +781,7 @@ describe('vurderinger uten viss varighet', () => {
     const søknadstidspunkt = subDays(new Date(), 4);
     customRenderWithSøknadstidspunkt(
       <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -755,6 +801,7 @@ describe('vurderinger uten viss varighet', () => {
     const søknadstidspunkt = subDays(new Date(), 14);
     customRenderWithSøknadstidspunkt(
       <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -787,6 +834,7 @@ describe('vurderinger uten viss varighet', () => {
 
     customRenderWithSøknadstidspunkt(
       <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
         grunnlag={grunnlagMedYrkesskadeOgÅrsakssammenheng}
         readOnly={false}
         behandlingVersjon={0}
@@ -807,6 +855,7 @@ describe('vurderinger uten viss varighet', () => {
     const søknadstidspunkt = subDays(new Date(), 14);
     customRenderWithSøknadstidspunkt(
       <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
         grunnlag={grunnlagUtenYrkesskade}
         readOnly={false}
         behandlingVersjon={0}
@@ -871,6 +920,7 @@ describe('mellomlagring i sykdom', () => {
   it('Skal vise en tekst om hvem som har gjort vurderingen dersom det finnes en mellomlagring', () => {
     render(
       <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
         grunnlag={sykdomsGrunnlagUtenVurdering}
         readOnly={false}
         behandlingVersjon={0}
@@ -885,6 +935,7 @@ describe('mellomlagring i sykdom', () => {
   it('Skal vise en tekst om hvem som har lagret vurdering dersom bruker trykker på lagre mellomlagring', async () => {
     render(
       <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
         readOnly={false}
         behandlingVersjon={0}
         typeBehandling={'Førstegangsbehandling'}
@@ -914,6 +965,7 @@ describe('mellomlagring i sykdom', () => {
   it('Skal ikke vise en tekst om hvem som har gjort mellomlagring dersom bruker trykker på slett mellomlagring', async () => {
     render(
       <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
         readOnly={false}
         behandlingVersjon={0}
         grunnlag={sykdomsGrunnlagUtenVurdering}
@@ -936,6 +988,7 @@ describe('mellomlagring i sykdom', () => {
   it('Skal bruke mellomlagring som defaultValue i skjema dersom det finnes', () => {
     render(
       <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
         grunnlag={sykdomsGrunnlagMedVurdering}
         readOnly={false}
         behandlingVersjon={0}
@@ -953,6 +1006,7 @@ describe('mellomlagring i sykdom', () => {
   it('Skal bruke bekreftet vurdering fra grunnlag som defaultValue i skjema dersom mellomlagring ikke finnes', () => {
     render(
       <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
         grunnlag={sykdomsGrunnlagMedVurdering}
         readOnly={false}
         behandlingVersjon={0}
@@ -969,6 +1023,7 @@ describe('mellomlagring i sykdom', () => {
   it('Skal resette skjema til tomt skjema dersom det ikke finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
     render(
       <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
         readOnly={false}
         grunnlag={sykdomsGrunnlagUtenVurdering}
         behandlingVersjon={0}
@@ -995,6 +1050,7 @@ describe('mellomlagring i sykdom', () => {
   it('Skal resette skjema til bekreftet vurdering dersom det finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
     render(
       <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
         grunnlag={sykdomsGrunnlagMedVurdering}
         readOnly={false}
         behandlingVersjon={0}
@@ -1022,6 +1078,7 @@ describe('mellomlagring i sykdom', () => {
   it('Skal ikke være mulig å lagre eller slette mellomlagring hvis det er readOnly', () => {
     render(
       <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
         grunnlag={sykdomsGrunnlagMedVurdering}
         readOnly={true}
         behandlingVersjon={0}
@@ -1053,6 +1110,7 @@ describe('mellomlagring i sykdom', () => {
 
     render(
       <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
         typeBehandling={'Førstegangsbehandling'}
         behandlingVersjon={0}
         readOnly={false}

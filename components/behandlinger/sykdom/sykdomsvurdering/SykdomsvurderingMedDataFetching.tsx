@@ -57,18 +57,14 @@ export interface DiagnoserDefaultOptions {
   };
 }
 
-export async function getDefaultOptionsForDiagnosesystem(
-  defaultValue?: Diagnoser[]
-): Promise<DiagnoserDefaultOptions | undefined> {
-  if (!defaultValue) return undefined;
-
+export async function getDefaultOptionsForDiagnosesystem(defaultValue?: Diagnoser[]): Promise<DiagnoserDefaultOptions> {
   const icpc2HoveddiagnoserOptions: ValuePair[] = [];
   const icpc2BidiagnoserOptions: ValuePair[] = [];
 
   const icd10HoveddiagnoserOptions: ValuePair[] = [];
   const icd10BidiagnoserOptions: ValuePair[] = [];
 
-  defaultValue.forEach((value) => {
+  defaultValue?.forEach((value) => {
     if (value.type === 'HOVEDDIAGNOSE') {
       const options = diagnoseSøker(value.kodeverk as DiagnoseSystem, value.diagnose);
       if (value.kodeverk === 'ICPC2') {

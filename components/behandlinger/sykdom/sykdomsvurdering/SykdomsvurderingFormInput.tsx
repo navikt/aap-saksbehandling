@@ -29,7 +29,7 @@ interface Props {
   skalVurdereYrkesskade: boolean;
   erÅrsakssammenhengYrkesskade: boolean;
   rettighetsperiodeStartdato: Date;
-  diagnoseDefaultOptions?: DiagnoserDefaultOptions;
+  diagnoseDefaultOptions: DiagnoserDefaultOptions;
 }
 
 export const vilkårsvurderingLabel = 'Vilkårsvurdering';
