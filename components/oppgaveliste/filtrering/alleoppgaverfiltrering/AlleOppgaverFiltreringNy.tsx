@@ -161,13 +161,15 @@ export const AlleOppgaverFiltreringNy = ({
               </BoxWrapper>
               <BoxWrapper>
                 <FormField form={form} formField={formFields.årsaker} />
-                <SaksbehandlerFilterSøk form={form} enheter={aktiveEnheter} />
               </BoxWrapper>
               <BoxWrapper>
                 <FormField form={form} formField={formFields.avklaringsbehov} />
               </BoxWrapper>
               <BoxWrapper>
                 <FormField form={form} formField={formFields.statuser} />
+              </BoxWrapper>
+              <BoxWrapper>
+                <SaksbehandlerFilterSøk form={form} enheter={aktiveEnheter} />
               </BoxWrapper>
             </HGrid>
             <HStack gap={'2'}>
