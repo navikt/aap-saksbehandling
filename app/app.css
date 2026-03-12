@@ -24,3 +24,7 @@ button div.circle {
 button div.ringring {
   border: 3px solid var(--a-surface-danger);
 }
+
+dialog.tour-modal {
+  background: var(--a-bg-default);
+}

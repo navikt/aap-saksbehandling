@@ -113,6 +113,7 @@ export async function søkPåSaksbehandler(data: SaksbehandlerSøkRequest) {
   return await apiFetch<SaksbehandlerSøkRespons>(url, oppgaveApiScope, 'POST', {
     oppgaver: data.oppgaver,
     søketekst: data.søketekst,
+    enheter: data.enheter,
   });
 }
 
