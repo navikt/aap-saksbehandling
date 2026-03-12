@@ -103,6 +103,7 @@ export const AlleOppgaverNy = ({ enheter }: Props) => {
     },
     saksbehandlere: {
       type: 'fieldArray',
+      defaultValue: lagretUtvidetFilter?.saksbehandlere ?? [],
     },
   });
 
