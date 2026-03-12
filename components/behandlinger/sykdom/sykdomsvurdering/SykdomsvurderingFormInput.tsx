@@ -29,8 +29,7 @@ interface Props {
   skalVurdereYrkesskade: boolean;
   erÅrsakssammenhengYrkesskade: boolean;
   rettighetsperiodeStartdato: Date;
-  bidiagnoserDeafultOptions?: DiagnoserDefaultOptions;
-  hoveddiagnoseDefaultOptions?: DiagnoserDefaultOptions;
+  diagnoseDefaultOptions?: DiagnoserDefaultOptions;
 }
 
 export const vilkårsvurderingLabel = 'Vilkårsvurdering';
@@ -49,8 +48,7 @@ export const SykdomsvurderingFormInput = ({
   readonly,
   ikkeRelevantePerioder,
   rettighetsperiodeStartdato,
-  hoveddiagnoseDefaultOptions,
-  bidiagnoserDeafultOptions,
+  diagnoseDefaultOptions,
 }: Props) => {
   const valgtDato = parseDatoFraDatePicker(form.watch(`vurderinger.${index}.fraDato`));
   const skalVurdereVissVarighet = skalVurdereVissVarighetSjekk(valgtDato, rettighetsperiodeStartdato);
@@ -108,8 +106,7 @@ export const SykdomsvurderingFormInput = ({
             index={index}
             form={form}
             readOnly={readonly}
-            hoveddiagnoseDefaultOptions={hoveddiagnoseDefaultOptions}
-            bidiagnoserDeafultOptions={bidiagnoserDeafultOptions}
+            diagnoseDefaultOptions={diagnoseDefaultOptions}
           />
           <RadioGroupJaNei
             name={`vurderinger.${index}.erArbeidsevnenNedsatt`}

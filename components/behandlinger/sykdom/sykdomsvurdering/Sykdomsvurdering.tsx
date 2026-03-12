@@ -65,8 +65,7 @@ interface SykdomProps {
   grunnlag: SykdomsGrunnlag;
   readOnly: boolean;
   typeBehandling: TypeBehandling;
-  bidiagnoserDeafultOptions?: DiagnoserDefaultOptions;
-  hoveddiagnoseDefaultOptions?: DiagnoserDefaultOptions;
+  diagnoseDefaultOptions?: DiagnoserDefaultOptions;
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
@@ -74,14 +73,12 @@ export const Sykdomsvurdering = ({
   grunnlag,
   behandlingVersjon,
   readOnly,
-  bidiagnoserDeafultOptions,
-  hoveddiagnoseDefaultOptions,
+  diagnoseDefaultOptions,
   typeBehandling,
   initialMellomlagretVurdering,
 }: SykdomProps) => {
-  console.log('hoveddiagnoseDefaultOptions', hoveddiagnoseDefaultOptions);
-  console.log('bidiagnoserDeafultOptions', bidiagnoserDeafultOptions);
-  console.log('grunnlag', grunnlag);
+  // console.log('diagnoseDefaultOptions', diagnoseDefaultOptions);
+  // console.log('grunnlag', grunnlag);
   const behandlingsReferanse = useBehandlingsReferanse();
   const { sak } = useSak();
 
@@ -155,6 +152,8 @@ export const Sykdomsvurdering = ({
       );
     })(event);
   };
+
+  console.log('form watch', form.watch());
 
   const errorList = mapPeriodiserteVurderingerErrorList<SykdomsvurderingerForm>(form.formState.errors);
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
@@ -234,6 +233,7 @@ export const Sykdomsvurdering = ({
               erÅrsakssammenhengYrkesskade={grunnlag.erÅrsakssammenhengYrkesskade}
               skalVurdereYrkesskade={grunnlag.skalVurdereYrkesskade}
               rettighetsperiodeStartdato={førsteDatoSomKanVurderes}
+              diagnoseDefaultOptions={diagnoseDefaultOptions}
             />
           </NyVurderingExpandableCard>
         ))}
@@ -246,11 +246,11 @@ export const Sykdomsvurdering = ({
       diagnosegrunnlag?.kodeverk as keyof DiagnoserDefaultOptions;
 
     if (kodeverk) {
-      const hoveddiagnose = hoveddiagnoseDefaultOptions?.[kodeverk]?.hoveddiagnoserOptions.find(
+      const hoveddiagnose = diagnoseDefaultOptions?.[kodeverk]?.hoveddiagnoserOptions.find(
         (option) => option.value === diagnosegrunnlag?.hoveddiagnose
       );
 
-      const bidiagnose = bidiagnoserDeafultOptions?.[kodeverk].bidiagnoserOptions.filter((option) =>
+      const bidiagnose = diagnoseDefaultOptions?.[kodeverk].bidiagnoserOptions.filter((option) =>
         diagnosegrunnlag?.bidiagnoser?.includes(option.value)
       );
 
@@ -273,16 +273,16 @@ export const Sykdomsvurdering = ({
     return {
       vurderinger: grunnlag.nyeVurderinger.map((vurdering) => {
         const kodeverk: keyof DiagnoserDefaultOptions | undefined | null =
-          diagnosegrunnlag?.kodeverk as keyof DiagnoserDefaultOptions;
+          vurdering?.kodeverk as keyof DiagnoserDefaultOptions;
 
         const hoveddiagnose = kodeverk
-          ? hoveddiagnoseDefaultOptions?.[kodeverk]?.hoveddiagnoserOptions.find(
+          ? diagnoseDefaultOptions?.[kodeverk]?.hoveddiagnoserOptions.find(
               (value) => value.value === vurdering?.hoveddiagnose
             )
           : undefined;
 
         const bidiagnose = kodeverk
-          ? bidiagnoserDeafultOptions?.[kodeverk].bidiagnoserOptions?.filter((option) =>
+          ? diagnoseDefaultOptions?.[kodeverk].bidiagnoserOptions?.filter((option) =>
               vurdering?.bidiagnoser?.includes(option.value)
             )
           : undefined;

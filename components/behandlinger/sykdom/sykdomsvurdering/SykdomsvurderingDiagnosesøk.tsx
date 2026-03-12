@@ -11,26 +11,19 @@ interface Props {
   index: number;
   form: UseFormReturn<SykdomsvurderingerForm>;
   readOnly: boolean;
-  bidiagnoserDeafultOptions?: DiagnoserDefaultOptions;
-  hoveddiagnoseDefaultOptions?: DiagnoserDefaultOptions;
+  diagnoseDefaultOptions?: DiagnoserDefaultOptions;
 }
 
-export const SykdomsvurderingDiagnosesøk = ({
-  index,
-  form,
-  readOnly,
-  hoveddiagnoseDefaultOptions,
-  bidiagnoserDeafultOptions,
-}: Props) => {
+export const SykdomsvurderingDiagnosesøk = ({ index, form, readOnly, diagnoseDefaultOptions }: Props) => {
   const kodeverkValue = form.watch(`vurderinger.${index}.kodeverk`) as DiagnoseSystem;
 
   const kodeverk = kodeverkValue as keyof DiagnoserDefaultOptions | undefined;
 
   const defaultOptionsHoveddiagnose =
-    (kodeverk && hoveddiagnoseDefaultOptions?.[kodeverk].hoveddiagnoserOptions) ?? diagnoseSøker(kodeverkValue, '');
+    (kodeverk && diagnoseDefaultOptions?.[kodeverk].hoveddiagnoserOptions) ?? diagnoseSøker(kodeverkValue, '');
 
   const defaultOptionsBidiagnose =
-    (kodeverk && bidiagnoserDeafultOptions?.[kodeverk].bidiagnoserOptions) ?? diagnoseSøker(kodeverkValue, '');
+    (kodeverk && diagnoseDefaultOptions?.[kodeverk].bidiagnoserOptions) ?? diagnoseSøker(kodeverkValue, '');
 
   const harSkadeEllerLyte = form.watch(`vurderinger.${index}.harSkadeSykdomEllerLyte`) === JaEllerNei.Ja;
 

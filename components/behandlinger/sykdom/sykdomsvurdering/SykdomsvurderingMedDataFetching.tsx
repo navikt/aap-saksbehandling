@@ -29,8 +29,14 @@ export const SykdomsvurderingMedDataFetching = async ({ behandlingsReferanse, st
     return <ApiException apiResponses={[grunnlag]} />;
   }
 
-  const hovedDiagnoseDefaultOptions = await getDefaultOptions2(finnDiagnoseGrunnlagForHovedDiagnose(grunnlag.data));
-  const bidiagnoserDefaultOptions = await getDefaultOptions2(finnDiagnoseGrunnlagForBiDiagnose(grunnlag.data));
+  const diagnoseDefaultOptions = await getDefaultOptions2([
+    ...finnDiagnoseGrunnlagForHovedDiagnose(grunnlag.data),
+    ...finnDiagnoseGrunnlagForBiDiagnose(grunnlag.data),
+  ]);
+  // const bidiagnoserDefaultOptions = await getDefaultOptions2();
+
+  console.log('grunnlag for hoveddiagnose', finnDiagnoseGrunnlagForHovedDiagnose(grunnlag.data));
+  console.log('grunnlag for bidiagnose', finnDiagnoseGrunnlagForBiDiagnose(grunnlag.data));
 
   const harTidligereVurderinger =
     grunnlag.data.sisteVedtatteVurderinger != null && grunnlag.data.sisteVedtatteVurderinger.length > 0;
@@ -44,8 +50,7 @@ export const SykdomsvurderingMedDataFetching = async ({ behandlingsReferanse, st
       grunnlag={grunnlag.data}
       readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       behandlingVersjon={stegData.behandlingVersjon}
-      bidiagnoserDeafultOptions={bidiagnoserDefaultOptions}
-      hoveddiagnoseDefaultOptions={hovedDiagnoseDefaultOptions}
+      diagnoseDefaultOptions={diagnoseDefaultOptions}
       typeBehandling={typeBehandling}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
     />
