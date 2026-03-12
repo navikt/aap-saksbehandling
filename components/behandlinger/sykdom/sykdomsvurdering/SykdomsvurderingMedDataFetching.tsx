@@ -1,6 +1,6 @@
 import { hentMellomlagring, hentSykdomsGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import {
-  finnDiagnoseGrunnlag,
+  finnDiagnoseGrunnlagForSykdom,
   getDefaultOptionsForDiagnosesystem,
 } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
@@ -25,7 +25,7 @@ export const SykdomsvurderingMedDataFetching = async ({ behandlingsReferanse, st
     return <ApiException apiResponses={[grunnlag]} />;
   }
 
-  const diagnoseDefaultOptions = await getDefaultOptionsForDiagnosesystem(finnDiagnoseGrunnlag(grunnlag.data));
+  const diagnoseDefaultOptions = await getDefaultOptionsForDiagnosesystem(finnDiagnoseGrunnlagForSykdom(grunnlag.data));
 
   const harTidligereVurderinger =
     grunnlag.data.sisteVedtatteVurderinger != null && grunnlag.data.sisteVedtatteVurderinger.length > 0;

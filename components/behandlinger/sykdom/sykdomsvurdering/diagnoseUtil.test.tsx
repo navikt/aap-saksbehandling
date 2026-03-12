@@ -2,7 +2,7 @@ import { SykdomsGrunnlag, SykdomsvurderingResponse } from 'lib/types/types';
 import { describe, expect, it } from 'vitest';
 import {
   Diagnoser,
-  finnDiagnoseGrunnlag,
+  finnDiagnoseGrunnlagForSykdom,
   getDefaultOptionsForDiagnosesystem,
 } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
 
@@ -101,7 +101,7 @@ const grunnlag: SykdomsGrunnlag = {
 
 describe('finnDiagnoseGrunnlag', () => {
   it('skal hente alle hoved- og bidiagnoser fra siste vedtatte vurderinger og nye vurderinger', () => {
-    const result = finnDiagnoseGrunnlag(grunnlag);
+    const result = finnDiagnoseGrunnlagForSykdom(grunnlag);
 
     expect(result).toEqual([
       { type: 'HOVEDDIAGNOSE', diagnose: 'A01', kodeverk: 'ICPC2' },
@@ -119,13 +119,13 @@ describe('finnDiagnoseGrunnlag', () => {
   });
 
   it('skal returnere riktig antall diagnoser', () => {
-    const result = finnDiagnoseGrunnlag(grunnlag);
+    const result = finnDiagnoseGrunnlagForSykdom(grunnlag);
 
     expect(result).toHaveLength(8);
   });
 
   it('skal inneholde både hoveddiagnoser og bidiagnoser', () => {
-    const result = finnDiagnoseGrunnlag(grunnlag);
+    const result = finnDiagnoseGrunnlagForSykdom(grunnlag);
 
     const hoveddiagnoser = result.filter((diagnose) => diagnose.type === 'HOVEDDIAGNOSE');
     const bidiagnoser = result.filter((diagnose) => diagnose.type === 'BIDIAGNOSE');
@@ -137,7 +137,7 @@ describe('finnDiagnoseGrunnlag', () => {
 
 describe('getDefaultOptionsForDiagnosesystem', () => {
   it('Skal hente diagnoser fra grunnlaget', async () => {
-    const diagnoseGrunnlag = finnDiagnoseGrunnlag(grunnlag);
+    const diagnoseGrunnlag = finnDiagnoseGrunnlagForSykdom(grunnlag);
     const result = await getDefaultOptionsForDiagnosesystem(diagnoseGrunnlag);
 
     expect(result.ICD10.hoveddiagnoserOptions).toEqual(
