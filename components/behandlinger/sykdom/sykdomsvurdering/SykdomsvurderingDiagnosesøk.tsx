@@ -1,7 +1,7 @@
 import { AsyncComboSearch } from 'components/form/asynccombosearch/AsyncComboSearch';
 import { DiagnoseSystem, diagnoseSøker, ingenDiagnoseCode } from 'lib/diagnosesøker/DiagnoseSøker';
 import { JaEllerNei } from 'lib/utils/form';
-import { UseFormReturn } from 'react-hook-form';
+import { UseFormReturn, useWatch } from 'react-hook-form';
 import { SykdomsvurderingerForm } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { Radio } from '@navikt/ds-react';
@@ -15,7 +15,10 @@ interface Props {
 }
 
 export const SykdomsvurderingDiagnosesøk = ({ index, form, readOnly, diagnoseDefaultOptions }: Props) => {
-  const kodeverkValue = form.watch(`vurderinger.${index}.kodeverk`) as DiagnoseSystem;
+  const kodeverkValue = useWatch({
+    control: form.control,
+    name: `vurderinger.${index}.kodeverk`,
+  }) as DiagnoseSystem;
 
   const kodeverk = kodeverkValue as keyof DiagnoserDefaultOptions | undefined;
 
@@ -37,6 +40,10 @@ export const SykdomsvurderingDiagnosesøk = ({ index, form, readOnly, diagnoseDe
         readOnly={readOnly}
         size={'small'}
         horisontal={true}
+        onChangeCustom={() => {
+          form.setValue(`vurderinger.${index}.hoveddiagnose`, null);
+          form.setValue(`vurderinger.${index}.bidiagnose`, null);
+        }}
       >
         <Radio value={'ICPC2'}>{'Primærhelsetjenesten (ICPC2)'}</Radio>
         <Radio value={'ICD10'}>{'Spesialisthelsetjenesten (ICD10)'}</Radio>
