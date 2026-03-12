@@ -18,6 +18,7 @@ import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrap
 import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
 import React from 'react';
 import { skalVurdereVissVarighetSjekk } from 'components/behandlinger/sykdom/sykdomsvurdering/sykdomsvurdering-utils';
+import { DiagnoserDefaultOptions } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
 
 interface Props {
   index: number;
@@ -28,6 +29,7 @@ interface Props {
   skalVurdereYrkesskade: boolean;
   erÅrsakssammenhengYrkesskade: boolean;
   rettighetsperiodeStartdato: Date;
+  diagnoseDefaultOptions: DiagnoserDefaultOptions;
 }
 
 export const vilkårsvurderingLabel = 'Vilkårsvurdering';
@@ -46,6 +48,7 @@ export const SykdomsvurderingFormInput = ({
   readonly,
   ikkeRelevantePerioder,
   rettighetsperiodeStartdato,
+  diagnoseDefaultOptions,
 }: Props) => {
   const valgtDato = parseDatoFraDatePicker(form.watch(`vurderinger.${index}.fraDato`));
   const skalVurdereVissVarighet = skalVurdereVissVarighetSjekk(valgtDato, rettighetsperiodeStartdato);
@@ -99,7 +102,12 @@ export const SykdomsvurderingFormInput = ({
       />
       {form.watch(`vurderinger.${index}.harSkadeSykdomEllerLyte`) === JaEllerNei.Ja && (
         <>
-          <SykdomsvurderingDiagnosesøk index={index} form={form} readOnly={readonly} />
+          <SykdomsvurderingDiagnosesøk
+            index={index}
+            form={form}
+            readOnly={readonly}
+            diagnoseDefaultOptions={diagnoseDefaultOptions}
+          />
           <RadioGroupJaNei
             name={`vurderinger.${index}.erArbeidsevnenNedsatt`}
             control={form.control}

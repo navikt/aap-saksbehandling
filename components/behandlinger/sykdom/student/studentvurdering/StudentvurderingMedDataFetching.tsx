@@ -4,6 +4,10 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { Behovstype } from 'lib/utils/form';
 import { skalViseSteg, StegData } from 'lib/utils/steg';
 import { StudentVurdering } from 'components/behandlinger/sykdom/student/studentvurdering/StudentVurdering';
+import {
+  finnDiagnoseGrunnlagForStudent,
+  getDefaultOptionsForDiagnosesystem,
+} from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
 
 interface Props {
   behandlingsreferanse: string;
@@ -20,6 +24,9 @@ export const StudentvurderingMedDataFetching = async ({ behandlingsreferanse, st
     return <ApiException apiResponses={[grunnlag]} />;
   }
 
+  const diagnoseGrunnlag = finnDiagnoseGrunnlagForStudent(grunnlag.data);
+  const diagnoserDefaultOptions = await getDefaultOptionsForDiagnosesystem(diagnoseGrunnlag);
+
   if (
     !skalViseSteg(stegData, grunnlag.data.studentvurdering != null || grunnlag.data.sisteVedtatteVurderinger != null)
   ) {
@@ -32,6 +39,7 @@ export const StudentvurderingMedDataFetching = async ({ behandlingsreferanse, st
       readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       behandlingVersjon={stegData.behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
+      diagnoseDefaultOptions={diagnoserDefaultOptions}
     />
   );
 };

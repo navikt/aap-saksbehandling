@@ -13,7 +13,7 @@ import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { DiagnoseSystem, diagnoseSøker } from 'lib/diagnosesøker/DiagnoseSøker';
+import { DiagnoseSystem } from 'lib/diagnosesøker/DiagnoseSøker';
 import { ValuePair } from 'components/form/FormField';
 
 import { erUendeligSlutt, formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
@@ -36,11 +36,13 @@ import { VurderingStatus } from 'components/periodisering/VurderingStatusTag';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { VedtattStudentVurderinger } from 'components/behandlinger/sykdom/student/studentvurdering/VedtattStudentVurderinger';
 import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
+import { DiagnoserDefaultOptions } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
 
 interface Props {
   behandlingVersjon: number;
   grunnlag: StudentGrunnlag;
   readOnly: boolean;
+  diagnoseDefaultOptions: DiagnoserDefaultOptions;
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
@@ -58,13 +60,19 @@ export interface StudentVurdering extends VurderingMeta {
   avbruttDato?: string;
   avbruddMerEnn6Måneder?: string;
   kodeverk?: DiagnoseSystem;
-  hoveddiagnose?: ValuePair;
-  bidiagnose?: ValuePair[];
+  hoveddiagnose?: ValuePair | null;
+  bidiagnose?: ValuePair[] | null;
 }
 
 type DraftFormFields = Partial<StudentFormFields>;
 
-export const StudentVurdering = ({ readOnly, initialMellomlagretVurdering, grunnlag, behandlingVersjon }: Props) => {
+export const StudentVurdering = ({
+  readOnly,
+  initialMellomlagretVurdering,
+  grunnlag,
+  behandlingVersjon,
+  diagnoseDefaultOptions,
+}: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
 
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
@@ -203,7 +211,11 @@ export const StudentVurdering = ({ readOnly, initialMellomlagretVurdering, grunn
                 initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
                 vurderingStatus={hentVurderingStatus(vurderingValues)}
               >
-                <StudentVurderingFelter index={index} readOnly={formReadOnly} />
+                <StudentVurderingFelter
+                  index={index}
+                  readOnly={formReadOnly}
+                  diagnoseDefaultOptions={diagnoseDefaultOptions}
+                />
               </NyVurderingExpandableCard>
             );
           })}
@@ -211,49 +223,52 @@ export const StudentVurdering = ({ readOnly, initialMellomlagretVurdering, grunn
       </VStack>
     </VilkårskortPeriodisert>
   );
-};
 
-function mapVurderingToDraftFormFields(grunnlag: StudentGrunnlag): DraftFormFields {
-  if (trengerVurderingsForslag(grunnlag)) {
-    return hentPerioderSomTrengerVurdering(grunnlag, () => emptyStudentVurdering());
+  function mapVurderingToDraftFormFields(grunnlag: StudentGrunnlag): DraftFormFields {
+    if (trengerVurderingsForslag(grunnlag)) {
+      return hentPerioderSomTrengerVurdering(grunnlag, () => emptyStudentVurdering());
+    }
+
+    return {
+      vurderinger: grunnlag.nyeVurderinger?.map((vurdering) => {
+        const kodeverk = vurdering?.kodeverk as keyof DiagnoserDefaultOptions;
+
+        const hoveddiagnose = kodeverk
+          ? diagnoseDefaultOptions?.[kodeverk]?.hoveddiagnoserOptions.find(
+              (value) => value.value === vurdering?.hoveddiagnose
+            )
+          : undefined;
+
+        const bidiagnose = kodeverk
+          ? diagnoseDefaultOptions?.[kodeverk].bidiagnoserOptions?.filter((option) =>
+              vurdering?.bidiagnoser?.includes(option.value)
+            )
+          : undefined;
+
+        return {
+          fraDato: vurdering?.fom ? new Dato(vurdering.fom).formaterForFrontend() : '',
+          begrunnelse: vurdering?.begrunnelse || '',
+          harAvbruttStudie: getJaNeiEllerUndefined(vurdering?.harAvbruttStudie),
+          godkjentStudieAvLånekassen: getJaNeiEllerUndefined(vurdering?.godkjentStudieAvLånekassen),
+          avbruttPgaSykdomEllerSkade: getJaNeiEllerUndefined(vurdering?.avbruttPgaSykdomEllerSkade),
+          harBehovForBehandling: getJaNeiEllerUndefined(vurdering?.harBehovForBehandling),
+          avbruddMerEnn6Måneder: getJaNeiEllerUndefined(vurdering?.avbruddMerEnn6Måneder),
+          avbruttDato: vurdering?.avbruttStudieDato
+            ? new Dato(vurdering.avbruttStudieDato).formaterForFrontend()
+            : undefined,
+          vurdertAv: vurdering?.vurdertAv,
+          kvalitetssikretAv: vurdering?.kvalitetssikretAv,
+          besluttetAv: vurdering?.besluttetAv,
+          kodeverk: kodeverk,
+          hoveddiagnose: hoveddiagnose,
+          bidiagnose: bidiagnose,
+          erNyVurdering: false,
+          behøverVurdering: false,
+        };
+      }),
+    };
   }
-  return {
-    vurderinger: grunnlag.nyeVurderinger?.map((vurdering) => {
-      return {
-        fraDato: vurdering?.fom ? new Dato(vurdering.fom).formaterForFrontend() : '',
-        begrunnelse: vurdering?.begrunnelse || '',
-        harAvbruttStudie: getJaNeiEllerUndefined(vurdering?.harAvbruttStudie),
-        godkjentStudieAvLånekassen: getJaNeiEllerUndefined(vurdering?.godkjentStudieAvLånekassen),
-        avbruttPgaSykdomEllerSkade: getJaNeiEllerUndefined(vurdering?.avbruttPgaSykdomEllerSkade),
-        harBehovForBehandling: getJaNeiEllerUndefined(vurdering?.harBehovForBehandling),
-        avbruddMerEnn6Måneder: getJaNeiEllerUndefined(vurdering?.avbruddMerEnn6Måneder),
-        avbruttDato: vurdering?.avbruttStudieDato
-          ? new Dato(vurdering.avbruttStudieDato).formaterForFrontend()
-          : undefined,
-        vurdertAv: vurdering?.vurdertAv,
-        kvalitetssikretAv: vurdering?.kvalitetssikretAv,
-        besluttetAv: vurdering?.besluttetAv,
-        kodeverk: (vurdering?.kodeverk as DiagnoseSystem) ?? undefined,
-        hoveddiagnose: vurdering?.hoveddiagnose
-          ? {
-              value: vurdering.hoveddiagnose,
-              label:
-                diagnoseSøker((vurdering.kodeverk as DiagnoseSystem) ?? 'ICPC2', vurdering.hoveddiagnose)[0]?.label ||
-                vurdering.hoveddiagnose,
-            }
-          : undefined,
-        bidiagnose: vurdering?.bidiagnoser
-          ? vurdering.bidiagnoser.map((d) => ({
-              value: d,
-              label: diagnoseSøker((vurdering.kodeverk as DiagnoseSystem) ?? 'ICPC2', d)[0]?.label || d,
-            }))
-          : undefined,
-        erNyVurdering: false,
-        behøverVurdering: false,
-      };
-    }),
-  };
-}
+};
 
 function emptyStudentVurdering(): StudentVurdering {
   return {
