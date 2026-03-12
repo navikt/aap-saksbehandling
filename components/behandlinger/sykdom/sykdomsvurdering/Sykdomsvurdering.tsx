@@ -7,7 +7,7 @@ import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { parseISO } from 'date-fns';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { MellomlagretVurdering, SykdomsGrunnlag, TypeBehandling, VurderingMeta } from 'lib/types/types';
-import { finnDiagnosegrunnlag } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
+import { hentSisteLagredeVurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
 import { ValuePair } from 'components/form/FormField';
 import { useSak } from 'hooks/SakHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
@@ -77,8 +77,6 @@ export const Sykdomsvurdering = ({
   typeBehandling,
   initialMellomlagretVurdering,
 }: SykdomProps) => {
-  // console.log('diagnoseDefaultOptions', diagnoseDefaultOptions);
-  // console.log('grunnlag', grunnlag);
   const behandlingsReferanse = useBehandlingsReferanse();
   const { sak } = useSak();
 
@@ -89,8 +87,6 @@ export const Sykdomsvurdering = ({
 
   const { slettMellomlagring, lagreMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
     useMellomlagring(Behovstype.AVKLAR_SYKDOM_KODE, initialMellomlagretVurdering);
-
-  const diagnosegrunnlag = finnDiagnosegrunnlag(typeBehandling, grunnlag);
 
   const { visningModus, visningActions, formReadOnly, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
@@ -152,8 +148,6 @@ export const Sykdomsvurdering = ({
       );
     })(event);
   };
-
-  console.log('form watch', form.watch());
 
   const errorList = mapPeriodiserteVurderingerErrorList<SykdomsvurderingerForm>(form.formState.errors);
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
@@ -241,25 +235,6 @@ export const Sykdomsvurdering = ({
     </VilkårskortPeriodisert>
   );
 
-  function utledDiagnoserForNyVurdering() {
-    const kodeverk: keyof DiagnoserDefaultOptions | undefined | null =
-      diagnosegrunnlag?.kodeverk as keyof DiagnoserDefaultOptions;
-
-    if (kodeverk) {
-      const hoveddiagnose = diagnoseDefaultOptions?.[kodeverk]?.hoveddiagnoserOptions.find(
-        (option) => option.value === diagnosegrunnlag?.hoveddiagnose
-      );
-
-      const bidiagnose = diagnoseDefaultOptions?.[kodeverk].bidiagnoserOptions.filter((option) =>
-        diagnosegrunnlag?.bidiagnoser?.includes(option.value)
-      );
-
-      return { kodeverk, hoveddiagnose, bidiagnose };
-    }
-
-    return undefined;
-  }
-
   function mapGrunnlagTilDefaultvalues(grunnlag: SykdomsGrunnlag): SykdomsvurderingerForm {
     const diagnoserForNyVurdering = utledDiagnoserForNyVurdering();
 
@@ -317,5 +292,25 @@ export const Sykdomsvurdering = ({
         };
       }),
     };
+  }
+
+  function utledDiagnoserForNyVurdering() {
+    const sisteLagredeVurdering = hentSisteLagredeVurdering(typeBehandling, grunnlag);
+    const kodeverk: keyof DiagnoserDefaultOptions | undefined | null =
+      sisteLagredeVurdering?.kodeverk as keyof DiagnoserDefaultOptions;
+
+    if (kodeverk) {
+      const hoveddiagnose = diagnoseDefaultOptions?.[kodeverk]?.hoveddiagnoserOptions.find(
+        (option) => option.value === sisteLagredeVurdering?.hoveddiagnose
+      );
+
+      const bidiagnose = diagnoseDefaultOptions?.[kodeverk].bidiagnoserOptions.filter((option) =>
+        sisteLagredeVurdering?.bidiagnoser?.includes(option.value)
+      );
+
+      return { kodeverk, hoveddiagnose, bidiagnose };
+    }
+
+    return undefined;
   }
 };

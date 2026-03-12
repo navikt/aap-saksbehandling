@@ -1,11 +1,7 @@
 import { hentMellomlagring, hentSykdomsGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { DiagnoseSystem, diagnoseSøker } from 'lib/diagnosesøker/DiagnoseSøker';
 import { uniqBy } from 'lodash';
-import {
-  Diagnoser,
-  finnDiagnoseGrunnlagForBiDiagnose,
-  finnDiagnoseGrunnlagForHovedDiagnose,
-} from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
+import { Diagnoser, finnDiagnoseGrunnlag } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
 import { ValuePair } from 'components/form/FormField';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
@@ -29,14 +25,7 @@ export const SykdomsvurderingMedDataFetching = async ({ behandlingsReferanse, st
     return <ApiException apiResponses={[grunnlag]} />;
   }
 
-  const diagnoseDefaultOptions = await getDefaultOptions2([
-    ...finnDiagnoseGrunnlagForHovedDiagnose(grunnlag.data),
-    ...finnDiagnoseGrunnlagForBiDiagnose(grunnlag.data),
-  ]);
-  // const bidiagnoserDefaultOptions = await getDefaultOptions2();
-
-  console.log('grunnlag for hoveddiagnose', finnDiagnoseGrunnlagForHovedDiagnose(grunnlag.data));
-  console.log('grunnlag for bidiagnose', finnDiagnoseGrunnlagForBiDiagnose(grunnlag.data));
+  const diagnoseDefaultOptions = await getDefaultOptionsForDiagnosesystem(finnDiagnoseGrunnlag(grunnlag.data));
 
   const harTidligereVurderinger =
     grunnlag.data.sisteVedtatteVurderinger != null && grunnlag.data.sisteVedtatteVurderinger.length > 0;
@@ -68,7 +57,9 @@ export interface DiagnoserDefaultOptions {
   };
 }
 
-export async function getDefaultOptions2(defaultValue?: Diagnoser[]): Promise<DiagnoserDefaultOptions | undefined> {
+export async function getDefaultOptionsForDiagnosesystem(
+  defaultValue?: Diagnoser[]
+): Promise<DiagnoserDefaultOptions | undefined> {
   if (!defaultValue) return undefined;
 
   const icpc2HoveddiagnoserOptions: ValuePair[] = [];
