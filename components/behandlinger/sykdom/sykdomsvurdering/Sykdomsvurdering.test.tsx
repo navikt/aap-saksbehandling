@@ -10,6 +10,7 @@ import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurderin
 import { Dato } from 'lib/types/Dato';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { DiagnoserDefaultOptions } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedDataFetching';
+import { ingenDiagnoseCode } from 'lib/diagnosesøker/DiagnoseSøker';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
@@ -62,14 +63,16 @@ const grunnlagMedTidligereVurdering: SykdomsGrunnlag = {
   opplysninger: { innhentedeYrkesskader: [], oppgittYrkesskadeISøknad: false },
 };
 
+const ingenDiagnoseOption = { label: 'Ingen diagnose', value: ingenDiagnoseCode };
+
 const diagnoserDefaultOptions: DiagnoserDefaultOptions = {
   ICD10: {
-    hoveddiagnoserOptions: [],
-    bidiagnoserOptions: [],
+    hoveddiagnoserOptions: [ingenDiagnoseOption],
+    bidiagnoserOptions: [ingenDiagnoseOption],
   },
   ICPC2: {
-    hoveddiagnoserOptions: [],
-    bidiagnoserOptions: [],
+    hoveddiagnoserOptions: [ingenDiagnoseOption],
+    bidiagnoserOptions: [ingenDiagnoseOption],
   },
 };
 
