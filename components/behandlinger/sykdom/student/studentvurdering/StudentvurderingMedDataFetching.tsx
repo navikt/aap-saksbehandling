@@ -6,7 +6,6 @@ import { skalViseSteg, StegData } from 'lib/utils/steg';
 import { StudentVurdering } from 'components/behandlinger/sykdom/student/studentvurdering/StudentVurdering';
 import {
   finnDiagnoseGrunnlagForStudent,
-  finnDiagnoseGrunnlagForSykdom,
   getDefaultOptionsForDiagnosesystem,
 } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
 
