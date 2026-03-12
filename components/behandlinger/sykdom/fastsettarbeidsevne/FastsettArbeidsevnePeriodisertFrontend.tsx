@@ -28,7 +28,7 @@ import {
   NyVurderingExpandableCard,
   skalVæreInitiellEkspandert,
 } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
-import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
+import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
@@ -153,7 +153,7 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
   }
 
   const foersteNyePeriode = fields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
-  const errorList = mapPeriodiserteVurderingerErrorList<FastsettArbeidsevneForm>(form.formState.errors);
+  const errorList = hentFeilmeldingerForForm(form.formState.errors);
 
   return (
     <VilkårskortPeriodisert

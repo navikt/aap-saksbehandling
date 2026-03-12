@@ -17,7 +17,13 @@ enum Tab {
   TREKK = 'TREKK',
 }
 
-export const SakOversiktContainer = ({ sak, innloggetBrukerIdent }: { sak: SaksInfo, innloggetBrukerIdent: string | undefined }) => {
+export const SakOversiktContainer = ({
+  sak,
+  innloggetBrukerIdent,
+}: {
+  sak: SaksInfo;
+  innloggetBrukerIdent: string | undefined;
+}) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const isVisRettigheterForVedtakEnabled = useFeatureFlag('VisRettigheterForVedtak');

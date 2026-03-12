@@ -23,7 +23,13 @@ import { usePostmottakBehandlinger } from 'hooks/postmottak/PostmottakBehandling
 import { useHentOppgaverForBehandlinger } from 'hooks/oppgave/OppgaverPåSakHook';
 
 const lokalDevToolsForBehandlingOgSak = isLocal();
-export const SakMedBehandlinger = ({ sak, innloggetBrukerIdent }: { sak: SaksInfo, innloggetBrukerIdent: string | undefined }) => {
+export const SakMedBehandlinger = ({
+  sak,
+  innloggetBrukerIdent,
+}: {
+  sak: SaksInfo;
+  innloggetBrukerIdent: string | undefined;
+}) => {
   const router = useRouter();
 
   const [visMeldekortbehandlinger, setVisMeldekortbehandlinger] = useState(false);

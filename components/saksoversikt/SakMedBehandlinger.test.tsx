@@ -33,7 +33,7 @@ describe('SakMedBehandlinger', () => {
       lagBehandling({ status: 'UTREDES', referanse: 'åpen-2', opprettet: '2026-01-04T10:00:00' }),
     ]);
 
-    render(<SakMedBehandlinger sak={sak} innloggetBrukerIdent={'z123'}/>);
+    render(<SakMedBehandlinger sak={sak} innloggetBrukerIdent={'z123'} />);
 
     const rows = screen.getAllByRole('row');
     // Første rad er header, resten er behandlinger

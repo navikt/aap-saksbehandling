@@ -22,7 +22,7 @@ import {
   skalVæreInitiellEkspandert,
 } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { Dato } from 'lib/types/Dato';
-import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
+import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import { SykdomsvurderingFormInput } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingFormInput';
 import { TidligereSykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/TidligereSykdomsvurdering';
 import mapTilPeriodisertVurdering from 'components/behandlinger/sykdom/sykdomsvurdering/vurderingMapper';
@@ -151,7 +151,7 @@ export const Sykdomsvurdering = ({
     })(event);
   };
 
-  const errorList = mapPeriodiserteVurderingerErrorList<SykdomsvurderingerForm>(form.formState.errors);
+  const errorList = hentFeilmeldingerForForm(form.formState.errors);
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
 
   const foersteNyePeriode = nyeVurderingerFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
