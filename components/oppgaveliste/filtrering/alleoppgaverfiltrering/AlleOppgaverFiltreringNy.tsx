@@ -14,6 +14,7 @@ import { avreserverOppgaveClient } from 'lib/oppgaveClientApi';
 import { isSuccess } from 'lib/utils/api';
 import { useTildelOppgaver } from 'context/oppgave/TildelOppgaverContext';
 import { SaksbehandlerFilterSøk } from 'components/oppgaveliste/filtrering/alleoppgaverfiltrering/SaksbehandlerFilterSøk';
+import { hasProperty } from '@vitest/expect';
 
 interface Props {
   form: UseFormReturn<FormFieldsFilter>;
@@ -109,8 +110,7 @@ export const AlleOppgaverFiltreringNy = ({
                 <BodyShort>Filtre: </BodyShort>
                 <Chips size={'small'}>
                   {aktiveFilter.map((filter) =>
-                    filter.key === 'saksbehandlere' ||
-                    (aktivKøId !== ALLE_OPPGAVER_ID && filter.key === 'behandlingstyper') ? (
+                    aktivKøId !== ALLE_OPPGAVER_ID && filter.key === 'behandlingstyper' ? (
                       <Chips.Toggle checkmark={false} selected={true} key={filter.value}>
                         {filter.label}
                       </Chips.Toggle>
@@ -120,7 +120,12 @@ export const AlleOppgaverFiltreringNy = ({
                         onClick={() => {
                           const values = form.watch(filter.key);
                           if (Array.isArray(values)) {
-                            const arrayUtenValgtFilter = values.filter((value) => value !== filter.value);
+                            const arrayUtenValgtFilter = values.filter((value) => {
+                              // sjekk om filterelementet er ValuePair eller string
+                              return typeof value === 'object' && hasProperty(value, 'value')
+                                ? value.value !== filter.value
+                                : value !== filter.value;
+                            });
                             form.setValue(filter.key, arrayUtenValgtFilter as string[]);
                           } else {
                             form.setValue(filter.key, undefined);
@@ -161,13 +166,15 @@ export const AlleOppgaverFiltreringNy = ({
               </BoxWrapper>
               <BoxWrapper>
                 <FormField form={form} formField={formFields.årsaker} />
-                <SaksbehandlerFilterSøk form={form} enheter={aktiveEnheter} />
               </BoxWrapper>
               <BoxWrapper>
                 <FormField form={form} formField={formFields.avklaringsbehov} />
               </BoxWrapper>
               <BoxWrapper>
                 <FormField form={form} formField={formFields.statuser} />
+              </BoxWrapper>
+              <BoxWrapper>
+                <SaksbehandlerFilterSøk form={form} enheter={aktiveEnheter} />
               </BoxWrapper>
             </HGrid>
             <HStack gap={'2'}>

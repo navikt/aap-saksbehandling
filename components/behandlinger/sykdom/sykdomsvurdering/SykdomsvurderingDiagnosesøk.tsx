@@ -6,6 +6,7 @@ import { ValuePair } from 'components/form/FormField';
 import { SykdomsvurderingerForm } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { Radio } from '@navikt/ds-react';
+import styles from './SykdomsvurderingDiagnosesøk.module.css';
 
 interface Props {
   index: number;
@@ -43,6 +44,7 @@ export const SykdomsvurderingDiagnosesøk = ({ index, form, readOnly, hoveddiagn
       {kodeverkValue != null && harSkadeEllerLyte && (
         <>
           <AsyncComboSearch
+            className={styles.diagnosesokContainer}
             label={'Hoveddiagnose'}
             form={form}
             name={`vurderinger.${index}.hoveddiagnose`}
@@ -53,6 +55,7 @@ export const SykdomsvurderingDiagnosesøk = ({ index, form, readOnly, hoveddiagn
           />
           {form.watch(`vurderinger.${index}.hoveddiagnose`)?.value !== ingenDiagnoseCode && (
             <AsyncComboSearch
+              className={styles.diagnosesokContainer}
               label={'Bidiagnoser'}
               form={form}
               isMulti={true}

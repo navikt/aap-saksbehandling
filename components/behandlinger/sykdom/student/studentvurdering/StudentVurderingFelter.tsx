@@ -10,6 +10,7 @@ import { isAfter } from 'date-fns';
 import { StudentFormFields } from 'components/behandlinger/sykdom/student/studentvurdering/StudentVurdering';
 import { diagnoseSøker, ingenDiagnoseCode } from 'lib/diagnosesøker/DiagnoseSøker';
 import { AsyncComboSearch } from 'components/form/asynccombosearch/AsyncComboSearch';
+import styles from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingDiagnosesøk.module.css';
 
 interface Props {
   index: number;
@@ -162,6 +163,7 @@ export const StudentVurderingFelter = ({ index, readOnly }: Props) => {
             <>
               <AsyncComboSearch
                 label={'Hoveddiagnose'}
+                className={styles.diagnosesokContainer}
                 form={form}
                 name={`vurderinger.${index}.hoveddiagnose`}
                 fetcher={async (value) => (kodeverkValue ? diagnoseSøker(kodeverkValue, value) : [])}
@@ -172,6 +174,7 @@ export const StudentVurderingFelter = ({ index, readOnly }: Props) => {
               {form.watch(`vurderinger.${index}.hoveddiagnose`)?.value !== ingenDiagnoseCode && (
                 <AsyncComboSearch
                   label={'Bidiagnoser'}
+                  className={styles.diagnosesokContainer}
                   form={form}
                   isMulti={true}
                   name={`vurderinger.${index}.bidiagnose`}

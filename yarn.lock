@@ -1546,24 +1546,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aap-oppgave-typescript-types@npm:0.0.651":
-  version: 0.0.651
-  resolution: "@navikt/aap-oppgave-typescript-types@npm:0.0.651::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-oppgave-typescript-types%2F0.0.651%2F5373e2f3cc0abba386eb003804d8680e0d2239bd"
-  checksum: 10c0/d662cc30ac40c0945f7e656336ddf59ae03b4440cca06d1ac7f4df803335d920859b60208959e8bdcdf14e5c1b607f5f88dd4f2cbfc98d0385d066664994f72c
+"@navikt/aap-oppgave-typescript-types@npm:0.0.652":
+  version: 0.0.652
+  resolution: "@navikt/aap-oppgave-typescript-types@npm:0.0.652::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-oppgave-typescript-types%2F0.0.652%2Fd80409d6488c08fc63bb5b034266574850477c9f"
+  checksum: 10c0/93c900b7cc890d2c948253fc28dfeb928901781534b84ad772422f1bde5ed815b1aa15109740fe81dabec46f94008619d1573003880d0c9ede932c00c94c14cf
   languageName: node
   linkType: hard
 
-"@navikt/aap-postmottak-backend-typescript-types@npm:0.0.644":
-  version: 0.0.644
-  resolution: "@navikt/aap-postmottak-backend-typescript-types@npm:0.0.644::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-postmottak-backend-typescript-types%2F0.0.644%2Fc9199ccc4905712c12ceecf4ed1d8526a911a192"
-  checksum: 10c0/6f0fd871afb3421d701a178596c49a0a6b7f756dda0859be03750224c9a55fedc77b7bc1520f040aec3d6b1bccb25d55f81be5973281699516481567ef237ff4
+"@navikt/aap-postmottak-backend-typescript-types@npm:0.0.645":
+  version: 0.0.645
+  resolution: "@navikt/aap-postmottak-backend-typescript-types@npm:0.0.645::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-postmottak-backend-typescript-types%2F0.0.645%2Fa8a34e99efd10f4524be1aff03a6bf7e896f39d9"
+  checksum: 10c0/2f2bfb623b50f7fb6e24b99f5b75508e7b1e1df0e122d124fb1515b34f56e44eb2ee1eb9356c61c4cf52c260218ddc168c95c23bd28e45fedb97f9675913062d
   languageName: node
   linkType: hard
 
-"@navikt/aap-statistikk-typescript-types@npm:0.1.686":
-  version: 0.1.686
-  resolution: "@navikt/aap-statistikk-typescript-types@npm:0.1.686::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-statistikk-typescript-types%2F0.1.686%2F3ed040f8f0d98c28edd38e65c7c73d7bf65f0bef"
-  checksum: 10c0/96e0ee39cc377edb8a924c6a656b4c2350a55d192ab2e9a17fc005b226d5f83f0aaa65e5b9008299bcf9fcfad1d84038438fec40428a2acd3a6c8e87c844503a
+"@navikt/aap-statistikk-typescript-types@npm:0.1.688":
+  version: 0.1.688
+  resolution: "@navikt/aap-statistikk-typescript-types@npm:0.1.688::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-statistikk-typescript-types%2F0.1.688%2Fe5d553de43384ed0816faa3e9c62b9b72f977749"
+  checksum: 10c0/07ed0c03f3b7e7b5e93718f49cdba26b9af0240ab314ff68a3abfd33fe153bdd3b77ef382c41aa172d0c412749278bb50a1631c43346aee5641f15ffe81adf64
   languageName: node
   linkType: hard
 
@@ -3326,9 +3326,9 @@ __metadata:
     "@navikt/aap-breveditor": "npm:0.10.1"
     "@navikt/aap-breveditor-css": "npm:0.4.1"
     "@navikt/aap-felles-prettier": "npm:5.6.0"
-    "@navikt/aap-oppgave-typescript-types": "npm:0.0.651"
-    "@navikt/aap-postmottak-backend-typescript-types": "npm:0.0.644"
-    "@navikt/aap-statistikk-typescript-types": "npm:0.1.686"
+    "@navikt/aap-oppgave-typescript-types": "npm:0.0.652"
+    "@navikt/aap-postmottak-backend-typescript-types": "npm:0.0.645"
+    "@navikt/aap-statistikk-typescript-types": "npm:0.1.688"
     "@navikt/aksel-icons": "npm:7.40.0"
     "@navikt/diagnosekoder": "npm:1.2026.0"
     "@navikt/ds-css": "npm:7.40.0"
@@ -3368,9 +3368,9 @@ __metadata:
     husky: "npm:9.1.7"
     i18n-iso-countries: "npm:7.14.0"
     is-european: "npm:1.0.9"
-    jose: "npm:6.2.0"
+    jose: "npm:6.2.1"
     jsdom: "npm:27.4.0"
-    lint-staged: "npm:16.3.2"
+    lint-staged: "npm:16.3.3"
     lodash: "npm:4.17.23"
     next: "npm:16.1.6"
     node-loader: "npm:2.1.0"
@@ -7048,10 +7048,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jose@npm:6.2.0":
-  version: 6.2.0
-  resolution: "jose@npm:6.2.0"
-  checksum: 10c0/cbbdfc335caf6255e55fc08f5a92e336dd865b5838255943f73b281908cba4e6183f96cdfd7dff2a27a86add2ec507b5d4a571f90cd2cde30e741f6cdff8e796
+"jose@npm:6.2.1":
+  version: 6.2.1
+  resolution: "jose@npm:6.2.1"
+  checksum: 10c0/456822e00a2ee6b1470fabadd694b237af64b9977aa8a47844aae2841298daefd79bb04ff328cbc3aa3c886761aa72b33bc5c1ad797b31b8368e77a89d09b779
   languageName: node
   linkType: hard
 
@@ -7319,9 +7319,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lint-staged@npm:16.3.2":
-  version: 16.3.2
-  resolution: "lint-staged@npm:16.3.2"
+"lint-staged@npm:16.3.3":
+  version: 16.3.3
+  resolution: "lint-staged@npm:16.3.3"
   dependencies:
     commander: "npm:^14.0.3"
     listr2: "npm:^9.0.5"
@@ -7331,7 +7331,7 @@ __metadata:
     yaml: "npm:^2.8.2"
   bin:
     lint-staged: bin/lint-staged.js
-  checksum: 10c0/4cbaa85904a912215660ac3c69400b71beabe3fe7e82969cd32c726dbfb04b0f651d0660906215f955c1446ac6b520319e1c7a03c707353a5f038c3d0441a8c3
+  checksum: 10c0/e404007ca608f2adc8acb1f358a55bc2e613dce7c71dea5ee7a4d1c2da2eaa145f6cffb05eca0db2769586e7cddd58b22ec44934cc62147772d74154aa66f5bd
   languageName: node
   linkType: hard
 
