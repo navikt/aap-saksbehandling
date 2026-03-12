@@ -5,7 +5,7 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgG
 import { Behovstype } from 'lib/utils/form';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
-import { Alert, Button } from '@navikt/ds-react';
+import { Alert, Button, HStack, Tag, VStack } from '@navikt/ds-react';
 import { BekreftVurderingerOppfølgingGrunnlag } from 'lib/types/types';
 import { mapBehovskodeTilBehovstype } from 'lib/utils/oversettelser';
 
@@ -24,17 +24,24 @@ export const BekreftVurderingerOppfølging = ({ behandlingVersjon, readOnly, gru
   return (
     <VilkårsKort heading={'Bekreft vurderinger'} steg={'BEKREFT_VURDERINGER_OPPFØLGING'}>
       {!readOnly && (
-        <>
+        <VStack gap={'4'}>
           {grunnlag.mellomlagredeVurderinger.length != 0 && (
             <Alert variant="warning" size="small">
-              <p>
-                {`Det finnes mellomlagrede vurderinger for følgende vilkår: ${grunnlag.mellomlagredeVurderinger.map((vurdering) => mapBehovskodeTilBehovstype(vurdering.avklaringsbehovKode))}`}
-              </p>
+              <p>Det finnes mellomlagrede vurderinger for følgende vilkår:</p>
+              <HStack gap={'2'}>
+                {grunnlag.mellomlagredeVurderinger.map((vurdering) => (
+                  <Tag size={'small'} variant="info" key={vurdering.avklaringsbehovKode}>
+                    {mapBehovskodeTilBehovstype(vurdering.avklaringsbehovKode)}
+                  </Tag>
+                ))}
+              </HStack>
               <p>Du må sende inn eller avbryte vurderingene for komme deg videre.</p>
             </Alert>
           )}
           <Button
             variant={'primary'}
+            className="fit-content"
+            disabled={grunnlag.mellomlagredeVurderinger.length != 0}
             onClick={() =>
               løsBehovOgGåTilNesteSteg({
                 behandlingVersjon: behandlingVersjon,
@@ -48,7 +55,7 @@ export const BekreftVurderingerOppfølging = ({ behandlingVersjon, readOnly, gru
           >
             Bekreft vurderinger og send videre
           </Button>
-        </>
+        </VStack>
       )}
 
       <LøsBehovOgGåTilNesteStegStatusAlert

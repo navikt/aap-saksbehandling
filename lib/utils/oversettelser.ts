@@ -50,7 +50,6 @@ const behovskodeMap = {
   '5054': 'Bekreft vurderinger',
   '5056': 'Samordning refusjonskrav',
   '5057': 'Arbeidsopptrapping',
-  '5059': 'Arbeidsopptrapping', // TODO
   '5058': '§ 11-15 Etablering av egen virksomhet',
   '5059': 'Avklar vedtakslengde',
   '5096': 'Forslå uttak',
