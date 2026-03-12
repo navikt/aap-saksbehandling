@@ -19,6 +19,7 @@ import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
+import { OppslagAndreYtelser } from 'components/oppslagandreytelser/OppslagAndreYtelser';
 
 interface Props {
   grunnlag: SamordningAndreStatligeYtelserGrunnlag;
@@ -144,6 +145,13 @@ export const SamordningAndreStatligeYtelser = ({
           grupperPåOpprettetDato={true}
         />
       )}
+
+      {grunnlag.perioder !== null && grunnlag.perioder !== undefined && grunnlag.perioder.length > 0 && (
+        <OppslagAndreYtelser
+          perioder={grunnlag.perioder}
+        />
+      )}
+
       <ReadMore size={'small'} header="Hva skal vurderes?">
         Det må undersøkes om bruker har hatt andre ytelser i perioden med AAP som kan gi fradrag i AAP utbetalingen.
       </ReadMore>
