@@ -12,7 +12,12 @@ import { useConfigForm } from 'components/form/FormHook';
 import { Sykepenger } from 'components/opprettsak/samordning/Sykepenger';
 import { Dagpenger } from 'components/opprettsak/samordning/Dagpenger';
 import { parse } from 'date-fns';
-import { DagpengerKilde, DagpengerYtelseType, OpprettTestcase, TestcaseSteg } from 'lib/types/types';
+import {
+  AndreStatligeYtelserKilde,
+  AndreStatligeYtelserType,
+  OpprettTestcase,
+  TestcaseSteg,
+} from 'lib/types/types';
 
 interface Barn {
   fodselsdato: string;
@@ -34,8 +39,8 @@ interface SamordningSykepenger {
 }
 
 interface SamordningDagpenger {
-  dagpengerYtelseType: DagpengerYtelseType;
-  kilde: DagpengerKilde;
+  dagpengerYtelseType: AndreStatligeYtelserType;
+  kilde: AndreStatligeYtelserKilde;
   periode: {
     fom: string;
     tom: string;

@@ -1,10 +1,9 @@
 'use client';
 
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import { BodyShort, Detail, HStack, Label, Table, VStack } from '@navikt/ds-react';
-import { AndreStatligeYtelserPeriodeDto, AvslagÅrsak } from 'lib/types/types';
+import { BodyShort, Label, Table, VStack } from '@navikt/ds-react';
+import { AndreStatligeYtelserPeriodeDto, AndreStatligeYtelserType } from 'lib/types/types';
 
-import { differenceInYears } from 'date-fns';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 
 interface Props {
@@ -47,7 +46,7 @@ export const OppslagAndreYtelser = ({ perioder }: Props) => {
   );
 };
 
-function mapYtelseTypeTilNavn(ytelseType: string): string {
+function mapYtelseTypeTilNavn(ytelseType: AndreStatligeYtelserType): string {
   switch (ytelseType) {
     case 'DAGPENGER_ARBEIDSSOKER_ORDINAER':
       return 'Dagpenger';

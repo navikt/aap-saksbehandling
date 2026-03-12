@@ -3,15 +3,15 @@ import { Button, HStack, Label, VStack } from '@navikt/ds-react';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { OpprettSakFormFields } from 'components/opprettsak/OpprettSakLocal';
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
-import { SelectWrapper } from '../../form/selectwrapper/SelectWrapper';
-import { ValuePair } from '../../form/FormField';
-import { DagpengerKilde, DagpengerYtelseType } from '../../../lib/types/types';
+import { ValuePair } from 'components/form/FormField';
+import { AndreStatligeYtelserKilde, AndreStatligeYtelserType } from 'lib/types/types';
+import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
 
 interface Props {
   form: UseFormReturn<OpprettSakFormFields>;
 }
 
-const kildeOptions: ValuePair<DagpengerKilde>[] = [
+const kildeOptions: ValuePair<AndreStatligeYtelserKilde>[] = [
   {
     value: 'ARENA',
     label: 'ARENA',
@@ -22,7 +22,7 @@ const kildeOptions: ValuePair<DagpengerKilde>[] = [
   },
 ];
 
-const ytelsesOptions: ValuePair<DagpengerYtelseType>[] = [
+const ytelsesOptions: ValuePair<AndreStatligeYtelserType>[] = [
   {
     value: 'DAGPENGER_ARBEIDSSOKER_ORDINAER',
     label: 'Dagpenger Arbeidssøker Ordinær',

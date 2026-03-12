@@ -130,11 +130,6 @@ export type AndreStatligeYtelserKilde =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.AndreStatligeYtelserPeriodeDto']['kilde'];
 export type AndreStatligeYtelserType =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.AndreStatligeYtelserPeriodeDto']['ytelseType'];
-export type DagpengerYtelseType =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.andrestatligeytelser.DagpengerPeriodeDto']['dagpengerYtelseType'];
-export type DagpengerKilde =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.andrestatligeytelser.DagpengerPeriodeDto']['kilde'];
-
 export type SamordningAndreStatligeYtelserVurderinger =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningAndreStatligeYtelserVurderingDTO'];
 
