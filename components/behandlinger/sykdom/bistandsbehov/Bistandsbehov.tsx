@@ -59,23 +59,26 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, initialMe
   const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_BISTANDSBEHOV');
 
-  const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
-    useMellomlagring(Behovstype.AVKLAR_BISTANDSBEHOV_KODE, initialMellomlagretVurdering);
-
-  const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
-
-  const { visningActions, formReadOnly, visningModus, erAktivUtenAvbryt } = useVilkårskortVisning(
-    readOnly,
-    'VURDER_BISTANDSBEHOV',
-    mellomlagretVurdering
-  );
-
   const defaultValues: BistandForm = initialMellomlagretVurdering
     ? parseOgMigrerMellomlagretData(initialMellomlagretVurdering.data, grunnlag?.behøverVurderinger?.[0]?.fom)
     : mapVurderingerToBistandForm(grunnlag);
 
   const form = useForm<BistandForm>({ defaultValues, shouldUnregister: true });
   const { fields, append, remove } = useFieldArray({ name: 'vurderinger', control: form.control });
+
+  const { slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } = useMellomlagring(
+    Behovstype.AVKLAR_BISTANDSBEHOV_KODE,
+    initialMellomlagretVurdering,
+    form.subscribe
+  );
+
+  const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
+
+  const { visningActions, formReadOnly, visningModus, erAktivUtenAvbryt } = useVilkårskortVisning(
+    readOnly,
+    'VURDER_BISTANDSBEHOV',
+    initialMellomlagretVurdering
+  );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
@@ -115,7 +118,6 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, initialMe
       status={status}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={true}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() => {
           form.reset(

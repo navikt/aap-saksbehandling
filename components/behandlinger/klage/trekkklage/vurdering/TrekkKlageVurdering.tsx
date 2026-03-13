@@ -35,13 +35,10 @@ export const TrekkKlageVurdering = ({ behandlingVersjon, readOnly, grunnlag, ini
   const { løsBehovOgGåTilNesteSteg, status, løsBehovOgGåTilNesteStegError, isLoading } =
     useLøsBehovOgGåTilNesteSteg('TREKK_KLAGE');
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.TREKK_KLAGE_KODE, initialMellomlagretVurdering);
-
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
     'TREKK_KLAGE',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
@@ -75,6 +72,12 @@ export const TrekkKlageVurdering = ({ behandlingVersjon, readOnly, grunnlag, ini
       },
     },
     { readOnly: formReadOnly }
+  );
+
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.TREKK_KLAGE_KODE,
+    initialMellomlagretVurdering,
+    form.subscribe
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -112,7 +115,6 @@ export const TrekkKlageVurdering = ({ behandlingVersjon, readOnly, grunnlag, ini
       isLoading={isLoading}
       status={status}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() =>
           form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields())

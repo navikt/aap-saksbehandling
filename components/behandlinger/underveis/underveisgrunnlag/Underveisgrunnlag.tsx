@@ -92,7 +92,6 @@ export const Underveisgrunnlag = ({ grunnlag, readOnly, behandlingVersjon, retti
       }}
       knappTekst={'Neste'}
       onDeleteMellomlagringClick={undefined}
-      onLagreMellomLagringClick={undefined}
       mellomlagretVurdering={undefined}
       visningModus={visningModus}
       visningActions={visningActions}

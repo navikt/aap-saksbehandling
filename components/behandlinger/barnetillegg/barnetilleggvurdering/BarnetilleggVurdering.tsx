@@ -67,9 +67,6 @@ export const BarnetilleggVurdering = ({
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('BARNETILLEGG');
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.AVKLAR_BARNETILLEGG_KODE, initialMellomlagretVurdering);
-
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(
@@ -85,7 +82,7 @@ export const BarnetilleggVurdering = ({
   const { visningActions, visningModus, formReadOnly } = useVilkårskortVisning(
     readOnly,
     'BARNETILLEGG',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const { form } = useConfigForm<BarnetilleggFormFields>(
@@ -104,6 +101,12 @@ export const BarnetilleggVurdering = ({
       },
     },
     {}
+  );
+
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.AVKLAR_BARNETILLEGG_KODE,
+    initialMellomlagretVurdering,
+    form.subscribe
   );
 
   const { fields: barnetilleggVurderinger } = useFieldArray({
@@ -201,7 +204,6 @@ export const BarnetilleggVurdering = ({
       vurdertAvAnsatt={grunnlag.vurdertAv}
       vurdertAutomatisk={erFolkeregistrerteBarn}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() =>
           form.reset(

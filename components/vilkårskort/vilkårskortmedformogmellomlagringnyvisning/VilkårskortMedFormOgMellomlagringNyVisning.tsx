@@ -29,7 +29,6 @@ export interface VilkårsKortMedFormOgMellomlagringProps {
   visningModus: VisningModus;
   visningActions: VisningActions;
   onDeleteMellomlagringClick: (() => void) | undefined;
-  onLagreMellomLagringClick: (() => void) | undefined;
   mellomlagretVurdering: MellomlagretVurdering | undefined;
   extraActions?: ReactNode;
   formReset: () => void;
@@ -50,7 +49,6 @@ export const VilkårskortMedFormOgMellomlagringNyVisning = ({
   vurdertAutomatisk = false,
   kvalitetssikretAv,
   onDeleteMellomlagringClick,
-  onLagreMellomLagringClick,
   mellomlagretVurdering,
   visningModus,
   visningActions,
@@ -100,11 +98,6 @@ export const VilkårskortMedFormOgMellomlagringNyVisning = ({
                     <>
                       <Button loading={isLoading}>{knappTekst}</Button>
                       {extraActions != null && extraActions}
-                      {onLagreMellomLagringClick && (
-                        <Button type="button" variant="tertiary" onClick={onLagreMellomLagringClick}>
-                          Lagre utkast
-                        </Button>
-                      )}
                     </>
                   )}
 
@@ -124,11 +117,6 @@ export const VilkårskortMedFormOgMellomlagringNyVisning = ({
                         </Button>
                       )}
                       {extraActions != null && extraActions}
-                      {onLagreMellomLagringClick && (
-                        <Button type="button" variant="tertiary" onClick={onLagreMellomLagringClick}>
-                          Lagre utkast
-                        </Button>
-                      )}
                     </>
                   )}
 

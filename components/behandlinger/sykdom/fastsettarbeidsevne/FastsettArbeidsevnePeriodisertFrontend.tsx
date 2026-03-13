@@ -76,30 +76,32 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
   initialMellomlagretVurdering,
 }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
+  const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
+
   const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('FASTSETT_ARBEIDSEVNE');
 
-  const { mellomlagretVurdering, lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering } =
-    useMellomlagring(Behovstype.FASTSETT_ARBEIDSEVNE_KODE, initialMellomlagretVurdering);
-
-  const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
-
-  const { visningActions, formReadOnly, visningModus, erAktivUtenAvbryt } = useVilkårskortVisning(
-    readOnly,
-    'FASTSETT_ARBEIDSEVNE',
-    mellomlagretVurdering
-  );
-
-  const nyeVurderinger = grunnlag?.nyeVurderinger ?? [];
-
-  const defaultValues =
-    initialMellomlagretVurdering != null
-      ? (JSON.parse(initialMellomlagretVurdering.data) as FastsettArbeidsevneForm)
-      : getDefaultValuesFromGrunnlag(grunnlag);
+  const defaultValues = initialMellomlagretVurdering
+    ? JSON.parse(initialMellomlagretVurdering.data)
+    : getDefaultValuesFromGrunnlag(grunnlag);
 
   const form = useForm<FastsettArbeidsevneForm>({
     defaultValues,
   });
+
+  const { mellomlagretVurdering, slettMellomlagring, nullstillMellomlagretVurdering } = useMellomlagring(
+    Behovstype.FASTSETT_ARBEIDSEVNE_KODE,
+    initialMellomlagretVurdering,
+    form.subscribe
+  );
+
+  const { visningActions, formReadOnly, visningModus, erAktivUtenAvbryt } = useVilkårskortVisning(
+    readOnly,
+    'FASTSETT_ARBEIDSEVNE',
+    initialMellomlagretVurdering
+  );
+
+  const nyeVurderinger = grunnlag?.nyeVurderinger ?? [];
 
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
 
@@ -165,7 +167,6 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}
       visningModus={visningModus}
       visningActions={visningActions}

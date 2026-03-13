@@ -52,13 +52,10 @@ export const YrkesskadeGrunnlagBeregning = ({
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('FASTSETT_GRUNNLAG');
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.FASTSETT_YRKESSKADEINNTEKT, initialMellomlagretVurdering);
-
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
     'FASTSETT_GRUNNLAG',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
@@ -73,6 +70,12 @@ export const YrkesskadeGrunnlagBeregning = ({
       },
     },
     { readOnly: formReadOnly }
+  );
+
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.FASTSETT_YRKESSKADEINNTEKT,
+    initialMellomlagretVurdering,
+    form.subscribe
   );
 
   const { fields } = useFieldArray({ control: form.control, name: 'vurderinger' });
@@ -115,7 +118,6 @@ export const YrkesskadeGrunnlagBeregning = ({
       vilkårTilhørerNavKontor={false}
       vurdertAvAnsatt={vurdertAvAnsatt}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() => {
           form.reset(mapVurderingerToDraftFormFields(yrkeskadeBeregningGrunnlag));

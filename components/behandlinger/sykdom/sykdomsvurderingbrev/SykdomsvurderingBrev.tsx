@@ -4,10 +4,10 @@ import { BodyLong, BodyShort, Box, Heading, Label, List, VStack } from '@navikt/
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import {
+  ForeløpigBehandlingsutfall,
   MellomlagretVurdering,
   SykdomBrevVurdering,
   SykdomsvurderingBrevGrunnlag,
-  ForeløpigBehandlingsutfall,
   TypeBehandling,
 } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
@@ -49,14 +49,10 @@ export const SykdomsvurderingBrev = ({
 
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('SYKDOMSVURDERING_BREV');
-
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.SYKDOMSVURDERING_BREV_KODE, initialMellomlagretVurdering);
-
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
     'SYKDOMSVURDERING_BREV',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const defaultValues: DraftFormFields = initialMellomlagretVurdering
@@ -73,6 +69,12 @@ export const SykdomsvurderingBrev = ({
       },
     },
     { shouldUnregister: true, readOnly: formReadOnly }
+  );
+
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.SYKDOMSVURDERING_BREV_KODE,
+    initialMellomlagretVurdering,
+    form.subscribe
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -115,7 +117,6 @@ export const SykdomsvurderingBrev = ({
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
       kvalitetssikretAv={grunnlag?.vurdering?.kvalitetssikretAv}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() => {
           form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields());

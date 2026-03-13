@@ -31,13 +31,10 @@ export const BehandlendeEnhet = ({ behandlingVersjon, grunnlag, readOnly, initia
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('BEHANDLENDE_ENHET');
 
-  const { lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
-    useMellomlagring(Behovstype.FASTSETT_BEHANDLENDE_ENHET, initialMellomlagretVurdering);
-
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
     'BEHANDLENDE_ENHET',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
@@ -59,6 +56,12 @@ export const BehandlendeEnhet = ({ behandlingVersjon, grunnlag, readOnly, initia
       },
     },
     { readOnly: formReadOnly }
+  );
+
+  const { slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } = useMellomlagring(
+    Behovstype.FASTSETT_BEHANDLENDE_ENHET,
+    initialMellomlagretVurdering,
+    form.subscribe
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -91,7 +94,6 @@ export const BehandlendeEnhet = ({ behandlingVersjon, grunnlag, readOnly, initia
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() =>
           form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag) : emptyDraftFormFields())

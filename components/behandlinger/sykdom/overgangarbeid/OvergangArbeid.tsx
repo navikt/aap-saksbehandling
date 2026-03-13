@@ -40,29 +40,31 @@ interface Props {
 
 export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialMellomlagretVurdering }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
+  const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
+
   const { løsPeriodisertBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('OVERGANG_ARBEID');
-
-  const { lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
-    useMellomlagring(Behovstype.OVERGANG_ARBEID, initialMellomlagretVurdering);
-
-  const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
   const { visningActions, visningModus, formReadOnly, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'OVERGANG_ARBEID',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
-  const defaultValues =
-    mellomlagretVurdering != null
-      ? parseOgMigrerMellomlagretData(mellomlagretVurdering.data)
-      : getDefaultValuesFromGrunnlag(grunnlag);
+  const defaultValues = initialMellomlagretVurdering
+    ? parseOgMigrerMellomlagretData(initialMellomlagretVurdering.data)
+    : getDefaultValuesFromGrunnlag(grunnlag);
 
   const form = useForm<OvergangArbeidForm>({
     defaultValues,
     reValidateMode: 'onChange',
   });
+
+  const { slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } = useMellomlagring(
+    Behovstype.OVERGANG_ARBEID,
+    initialMellomlagretVurdering,
+    form.subscribe
+  );
 
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
 
@@ -132,7 +134,6 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialM
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={true}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() => {
           form.reset(getDefaultValuesFromGrunnlag(grunnlag));

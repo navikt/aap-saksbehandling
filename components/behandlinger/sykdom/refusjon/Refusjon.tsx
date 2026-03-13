@@ -46,14 +46,10 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
 
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('REFUSJON_KRAV');
-
-  const { lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
-    useMellomlagring(Behovstype.REFUSJON_KRAV_KODE, initialMellomlagretVurdering);
-
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
     'REFUSJON_KRAV',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
@@ -73,6 +69,12 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
       defaultValue: defaultValue.refusjoner,
     },
   });
+
+  const { slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } = useMellomlagring(
+    Behovstype.REFUSJON_KRAV_KODE,
+    initialMellomlagretVurdering,
+    form.subscribe
+  );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
@@ -114,7 +116,6 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vurdertAvAnsatt={grunnlag.gjeldendeVurderinger?.[0]?.vurdertAv}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() => form.reset(mapVurderingToDraftFormFields(grunnlag, sak)))
       }

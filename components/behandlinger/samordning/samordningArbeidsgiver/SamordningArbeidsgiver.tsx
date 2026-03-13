@@ -53,13 +53,10 @@ export const SamordningArbeidsgiver = ({
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('SAMORDNING_ARBEIDSGIVER');
 
-  const { nullstillMellomlagretVurdering, mellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.AVKLAR_SAMORDNING_ARBEIDSGIVER, initialMellomlagretVurdering);
-
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
     'SAMORDNING_ARBEIDSGIVER',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
@@ -81,6 +78,12 @@ export const SamordningArbeidsgiver = ({
       },
     },
     { readOnly: formReadOnly }
+  );
+
+  const { nullstillMellomlagretVurdering, mellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.AVKLAR_SAMORDNING_ARBEIDSGIVER,
+    initialMellomlagretVurdering,
+    form.subscribe
   );
 
   const harFåttEkstrautbetalingFraArbeidsgiver = grunnlag.harFåttEkstrautbetalingFraArbeidsgiver ? 'Ja' : 'Nei';
@@ -123,7 +126,6 @@ export const SamordningArbeidsgiver = ({
       vilkårTilhørerNavKontor={false}
       vurdertAvAnsatt={grunnlag.vurdering?.vurdertAv}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() =>
           form.reset(grunnlag.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields())
