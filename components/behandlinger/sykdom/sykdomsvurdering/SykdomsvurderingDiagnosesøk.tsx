@@ -2,27 +2,25 @@ import { AsyncComboSearch } from 'components/form/asynccombosearch/AsyncComboSea
 import { DiagnoseSystem, diagnoseSøker, ingenDiagnoseCode } from 'lib/diagnosesøker/DiagnoseSøker';
 import { JaEllerNei } from 'lib/utils/form';
 import { UseFormReturn } from 'react-hook-form';
-import { ValuePair } from 'components/form/FormField';
 import { SykdomsvurderingerForm } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { Radio } from '@navikt/ds-react';
+import { DiagnoserDefaultOptions } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
 import styles from './SykdomsvurderingDiagnosesøk.module.css';
 
 interface Props {
   index: number;
   form: UseFormReturn<SykdomsvurderingerForm>;
   readOnly: boolean;
-  hoveddiagnoseDefaultOptions?: ValuePair[];
+  diagnoseDefaultOptions: DiagnoserDefaultOptions;
 }
 
-export const SykdomsvurderingDiagnosesøk = ({ index, form, readOnly, hoveddiagnoseDefaultOptions }: Props) => {
+export const SykdomsvurderingDiagnosesøk = ({ index, form, readOnly, diagnoseDefaultOptions }: Props) => {
   const kodeverkValue = form.watch(`vurderinger.${index}.kodeverk`) as DiagnoseSystem;
-  const defaultOptionsHoveddiagnose = hoveddiagnoseDefaultOptions
-    ? hoveddiagnoseDefaultOptions
-    : diagnoseSøker(kodeverkValue, '');
-  const defaultOptionsBidiagnose = hoveddiagnoseDefaultOptions
-    ? hoveddiagnoseDefaultOptions
-    : diagnoseSøker(kodeverkValue, '');
+
+  const kodeverk = kodeverkValue as keyof DiagnoserDefaultOptions;
+  const defaultOptionsHoveddiagnose = kodeverk && diagnoseDefaultOptions[kodeverk].hoveddiagnoserOptions;
+  const defaultOptionsBidiagnose = kodeverk && diagnoseDefaultOptions[kodeverk].bidiagnoserOptions;
 
   const harSkadeEllerLyte = form.watch(`vurderinger.${index}.harSkadeSykdomEllerLyte`) === JaEllerNei.Ja;
 
@@ -36,6 +34,10 @@ export const SykdomsvurderingDiagnosesøk = ({ index, form, readOnly, hoveddiagn
         readOnly={readOnly}
         size={'small'}
         horisontal={true}
+        onChangeCustom={() => {
+          form.setValue(`vurderinger.${index}.hoveddiagnose`, null);
+          form.setValue(`vurderinger.${index}.bidiagnose`, null);
+        }}
       >
         <Radio value={'ICPC2'}>{'Primærhelsetjenesten (ICPC2)'}</Radio>
         <Radio value={'ICD10'}>{'Spesialisthelsetjenesten (ICD10)'}</Radio>

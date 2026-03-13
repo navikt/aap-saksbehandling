@@ -27,6 +27,7 @@ import { SakContextProvider } from 'context/saksbehandling/SakContext';
 import { KlageBehandlingInfo } from 'components/behandlingsinfo/KlageBehandlingInfo';
 import { ÅrsakTilBehandling } from 'components/revurderingsinfo/ÅrsakTilBehandling';
 import { visÅrsakTilVurdering } from './visÅrsakTilVurdering';
+import { unleashService } from 'lib/services/unleash/unleashService';
 
 interface Props {
   saksId: string;
@@ -75,6 +76,7 @@ export const BehandlingLayout = async ({ saksId, behandlingsReferanse, children 
 
   const stegGrupperSomSkalVises: StegGruppe[] = flytResponse.data.flyt
     .filter((steg) => steg.skalVises)
+    .filter((steg) => steg.stegGruppe !== 'VEDTAKSLENGDE' || unleashService.isEnabled('VedtakslengdeAvklaringsbehov'))
     .map((stegSomSkalVises) => stegSomSkalVises.stegGruppe);
 
   const visTotrinnsvurdering =
@@ -105,7 +107,6 @@ export const BehandlingLayout = async ({ saksId, behandlingsReferanse, children 
 
           <SaksinfoBanner
             personInformasjon={personInfo}
-            referanse={behandlingsReferanse}
             behandling={behandling.data}
             sak={sak}
             oppgave={oppgave.data}

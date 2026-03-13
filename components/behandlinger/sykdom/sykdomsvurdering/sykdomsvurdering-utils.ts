@@ -68,7 +68,7 @@ export function erTidligereVurderingOppfylt(vurdering: Sykdomvurdering): boolean
   }
 }
 
-export function emptySykdomsvurdering(diagnoser: {
+export function emptySykdomsvurdering(diagnoser?: {
   kodeverk?: string;
   hoveddiagnose?: ValuePair | null;
   bidiagnose?: ValuePair[] | null;
@@ -81,9 +81,9 @@ export function emptySykdomsvurdering(diagnoser: {
     erArbeidsevnenNedsatt: undefined,
     erNedsettelseIArbeidsevneMerEnnHalvparten: undefined,
     erSkadeSykdomEllerLyteVesentligdel: undefined,
-    kodeverk: diagnoser.kodeverk,
-    hoveddiagnose: diagnoser.hoveddiagnose,
-    bidiagnose: diagnoser.bidiagnose,
+    kodeverk: diagnoser?.kodeverk,
+    hoveddiagnose: diagnoser?.hoveddiagnose,
+    bidiagnose: diagnoser?.bidiagnose,
     erNedsettelseIArbeidsevneAvEnVissVarighet: undefined,
     erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense: undefined,
     erNedsettelseIArbeidsevneMerEnnFørtiProsent: undefined,
