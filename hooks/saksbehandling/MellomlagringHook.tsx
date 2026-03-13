@@ -5,11 +5,14 @@ import { clientLagreMellomlagring, clientSlettMellomlagring } from 'lib/clientAp
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { isSuccess } from 'lib/utils/api';
 import { MellomlagretVurdering } from 'lib/types/types';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { debounce } from 'lodash';
+import { UseFormWatch } from 'react-hook-form';
 
-export function useMellomlagring(
+export function useMellomlagring<T extends object>(
   behovstype: Behovstype,
-  initialMellomlagring: MellomlagretVurdering | undefined
+  initialMellomlagring: MellomlagretVurdering | undefined,
+  watch?: UseFormWatch<T>
 ): {
   lagreMellomlagring: (vurdering: object) => void;
   slettMellomlagring: (callback?: () => void) => void;
@@ -32,6 +35,22 @@ export function useMellomlagring(
       setMellomlagretVurdering(res.data.mellomlagretVurdering);
     }
   }
+
+  const debouncedSave = useRef(
+    debounce((data: object) => {
+      lagreMellomlagring(data);
+    }, 5000)
+  ).current;
+
+  useEffect(() => {
+    if (!watch) return;
+
+    const subscription = watch((value) => {
+      debouncedSave(value);
+    });
+
+    return () => subscription.unsubscribe();
+  }, [watch, debouncedSave]);
 
   async function slettMellomlagring(callback?: () => void) {
     const res = await clientSlettMellomlagring({
