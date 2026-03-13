@@ -31,6 +31,8 @@ import { OppholdskravStegGruppe } from 'components/behandlinger/oppholdskrav/Opp
 import { Aktivitetsplikt11_9 } from 'components/behandlinger/aktivitetsplikt/11-9/Aktivitetsplikt11_9';
 import { LovvalgPeriodisert } from 'components/behandlinger/lovvalg/LovvalgPeriodisert';
 import { PeriodisertForutgåendeMedlemskap } from 'components/behandlinger/forutgåendemedlemskap/PeriodisertForutgåendeMedlemskap';
+import { Vedtakslengde } from 'components/behandlinger/vedtakslengde/Vedtakslengde';
+import { unleashService } from 'lib/services/unleash/unleashService';
 
 interface Props {
   behandlingsReferanse: string;
@@ -64,6 +66,9 @@ export const OppgaveKolonne = async ({ behandlingsReferanse, saksnummer, aktivGr
     )}
     {aktivGruppe === 'OPPHOLDSKRAV' && <OppholdskravStegGruppe behandlingsreferanse={behandlingsReferanse} />}
     {aktivGruppe === 'GRUNNLAG' && <Grunnlag behandlingsReferanse={behandlingsReferanse} />}
+    {unleashService.isEnabled('VedtakslengdeAvklaringsbehov') && aktivGruppe === 'VEDTAKSLENGDE' && (
+      <Vedtakslengde behandlingsreferanse={behandlingsReferanse} />
+    )}
     {aktivGruppe === 'UNDERVEIS' && <Underveis behandlingsreferanse={behandlingsReferanse} saksnummer={saksnummer} />}
     {aktivGruppe === 'SAMORDNING' && <Samordning behandlingsreferanse={behandlingsReferanse} />}
     {aktivGruppe === 'ET_ANNET_STED' && <Institusjonsopphold behandlingsreferanse={behandlingsReferanse} />}
