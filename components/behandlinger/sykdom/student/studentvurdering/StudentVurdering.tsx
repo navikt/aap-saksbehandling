@@ -75,28 +75,28 @@ export const StudentVurdering = ({
   diagnoseDefaultOptions,
 }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
-
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.AVKLAR_STUDENT_KODE, initialMellomlagretVurdering);
+  const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
+  const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, løsBehovOgGåTilNesteStegError, status } =
+    useLøsBehovOgGåTilNesteSteg('AVKLAR_STUDENT');
 
   const { visningModus, visningActions, formReadOnly, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'AVKLAR_STUDENT',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
-
-  const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
-
-  const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, løsBehovOgGåTilNesteStegError, status } =
-    useLøsBehovOgGåTilNesteSteg('AVKLAR_STUDENT');
 
   const defaultValues: DraftFormFields = initialMellomlagretVurdering
     ? parseOgMigrerMellomlagring(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag);
 
   const form = useForm<StudentFormFields>({ defaultValues, shouldUnregister: true });
-
   const { fields: nyeVurderinger, remove, append } = useFieldArray({ control: form.control, name: 'vurderinger' });
+
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.AVKLAR_STUDENT_KODE,
+    initialMellomlagretVurdering,
+    form.subscribe
+  );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
@@ -156,7 +156,6 @@ export const StudentVurdering = ({
   return (
     <VilkårskortPeriodisert
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(mapVurderingToDraftFormFields(grunnlag)))}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       mellomlagretVurdering={mellomlagretVurdering}
       visningModus={visningModus}
       visningActions={visningActions}

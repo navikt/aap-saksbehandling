@@ -88,7 +88,6 @@ export const KlagebehandlingOppsummering = ({ behandlingVersjon, readOnly, grunn
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       knappTekst={'Bekreft og send til beslutter'}
       onDeleteMellomlagringClick={undefined}
-      onLagreMellomLagringClick={undefined}
       mellomlagretVurdering={undefined}
       visningModus={visningModus}
       visningActions={visningActions}

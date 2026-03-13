@@ -3,14 +3,20 @@
 import { Behovstype } from 'lib/utils/form';
 import { Label, Table } from '@navikt/ds-react';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
+import {
+  LøsBehovOgGåTilNesteStegStatusAlert
+} from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 
 import styles from './ForeslåVedtak.module.css';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { FormEvent } from 'react';
 import { ForeslåVedtakGrunnlag } from 'lib/types/types';
-import { ForeslåVedtakTabell } from 'components/behandlinger/vedtak/foreslåvedtak/foreslåvedtaktabell/ForeslåVedtakTabell';
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import {
+  ForeslåVedtakTabell
+} from 'components/behandlinger/vedtak/foreslåvedtak/foreslåvedtaktabell/ForeslåVedtakTabell';
+import {
+  VilkårskortMedFormOgMellomlagringNyVisning
+} from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { useFeatureFlag } from 'context/UnleashContext';
@@ -54,7 +60,6 @@ export const ForeslåVedtak = ({ behandlingVersjon, readOnly, grunnlag }: Props)
       visningActions={visningActions}
       formReset={() => {}}
       onDeleteMellomlagringClick={undefined}
-      onLagreMellomLagringClick={undefined}
     >
       <div className={styles.foreslåvedtak}>
         <Label as="p" size={'medium'}>

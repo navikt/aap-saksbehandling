@@ -56,26 +56,29 @@ export const OvergangUforePeriodisert = ({
   initialMellomlagretVurdering,
 }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
+  const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
+
   const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('OVERGANG_UFORE');
-
-  const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
-    useMellomlagring(Behovstype.OVERGANG_UFORE, initialMellomlagretVurdering);
-
-  const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
   const { visningActions, formReadOnly, visningModus, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'OVERGANG_UFORE',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
-  const defaultValues: OvergangUforeForm = mellomlagretVurdering
-    ? JSON.parse(mellomlagretVurdering.data)
+  const defaultValues: OvergangUforeForm = initialMellomlagretVurdering
+    ? JSON.parse(initialMellomlagretVurdering.data)
     : getDefaultValuesFromGrunnlag(grunnlag);
 
   const form = useForm<OvergangUforeForm>({ defaultValues });
   const { fields: nyeVurderingFields, remove, append } = useFieldArray({ name: 'vurderinger', control: form.control });
+
+  const { slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } = useMellomlagring(
+    Behovstype.OVERGANG_UFORE,
+    initialMellomlagretVurdering,
+    form.subscribe
+  );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
@@ -122,7 +125,6 @@ export const OvergangUforePeriodisert = ({
       status={status}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={true}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}
       mellomlagretVurdering={mellomlagretVurdering}
       visningModus={visningModus}

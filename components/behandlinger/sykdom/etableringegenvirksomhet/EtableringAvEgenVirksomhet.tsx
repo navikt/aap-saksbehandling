@@ -78,17 +78,20 @@ export const EtableringAvEgenVirksomhet = ({
     ? JSON.parse(initialMellomlagretVurdering.data)
     : getDefaultValuesFromGrunnlag(grunnlag);
 
-  const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
-    useMellomlagring(Behovstype.ETABLERING_EGEN_VIRKSOMHET_KODE, initialMellomlagretVurdering);
+  const form = useForm<EtableringAvEgenVirksomhetForm>({ defaultValues, shouldUnregister: true });
+  const { fields: nyeVurderinger, append, remove } = useFieldArray({ control: form.control, name: 'vurderinger' });
+
+  const { slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } = useMellomlagring(
+    Behovstype.ETABLERING_EGEN_VIRKSOMHET_KODE,
+    initialMellomlagretVurdering,
+    form.subscribe
+  );
 
   const { visningActions, formReadOnly, visningModus, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'ETABLERING_EGEN_VIRKSOMHET',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
-
-  const form = useForm<EtableringAvEgenVirksomhetForm>({ defaultValues, shouldUnregister: true });
-  const { fields: nyeVurderinger, append, remove } = useFieldArray({ control: form.control, name: 'vurderinger' });
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
@@ -177,7 +180,6 @@ export const EtableringAvEgenVirksomhet = ({
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}
       visningModus={visningModus}
       visningActions={visningActions}

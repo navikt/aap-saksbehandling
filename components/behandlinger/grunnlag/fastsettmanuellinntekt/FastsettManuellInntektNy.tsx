@@ -45,13 +45,10 @@ export const FastsettManuellInntektNy = ({
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('MANGLENDE_LIGNING');
 
-  const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
-    useMellomlagring(Behovstype.FASTSETT_MANUELL_INNTEKT, initialMellomlagretVurdering);
-
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
     'MANGLENDE_LIGNING',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
@@ -73,6 +70,12 @@ export const FastsettManuellInntektNy = ({
       },
     },
     { readOnly: formReadOnly }
+  );
+
+  const { slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } = useMellomlagring(
+    Behovstype.FASTSETT_MANUELL_INNTEKT,
+    initialMellomlagretVurdering,
+    form.subscribe
   );
 
   const { fields: tabellår } = useFieldArray({
@@ -143,7 +146,6 @@ export const FastsettManuellInntektNy = ({
       status={status}
       vilkårTilhørerNavKontor={false}
       vurdertAvAnsatt={grunnlag.manuelleVurderinger?.vurdertAv}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() => {
           form.reset(grunnlag ? mapGrunnlagToDraftFormFields(grunnlag) : emptyDraftFormFields());

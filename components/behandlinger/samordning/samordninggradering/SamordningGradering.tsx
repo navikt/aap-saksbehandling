@@ -70,27 +70,23 @@ export const SamordningGradering = ({
   const [errorMessage, setErrorMessage] = useState<String | undefined>(undefined);
   const [success, setSuccess] = useState(false);
 
-  const handleSuccess = () => {
-    setSuccess(true);
-  };
-
   const finnesYtelserEllerVurderinger = !!(
     grunnlag.ytelser.length > 0 ||
     (grunnlag.vurdering && grunnlag.vurdering?.vurderinger?.length > 0)
   );
-
   const [visForm, setVisForm] = useState<boolean>(finnesYtelserEllerVurderinger);
+
+  const handleSuccess = () => {
+    setSuccess(true);
+  };
 
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('SAMORDNING_GRADERING');
 
-  const { mellomlagretVurdering, lagreMellomlagring, nullstillMellomlagretVurdering, slettMellomlagring } =
-    useMellomlagring(Behovstype.AVKLAR_SAMORDNING_GRADERING, initialMellomlagretVurdering);
-
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
     'SAMORDNING_GRADERING',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
@@ -111,6 +107,11 @@ export const SamordningGradering = ({
       },
     },
     { readOnly: formReadOnly, shouldUnregister: true }
+  );
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.AVKLAR_SAMORDNING_GRADERING,
+    initialMellomlagretVurdering,
+    form.subscribe
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -208,7 +209,6 @@ export const SamordningGradering = ({
         løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
         vilkårTilhørerNavKontor={false}
         vurdertAvAnsatt={grunnlag.vurdering?.vurdertAv}
-        onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
         onDeleteMellomlagringClick={() => {
           slettMellomlagring(() =>
             form.reset(grunnlag.vurdering ? mapVurderingToDraftFormFields(grunnlag) : emptyDraftFormFields())

@@ -56,13 +56,10 @@ export const Inntektsbortfall = ({
   const { status, løsBehovOgGåTilNesteSteg, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_INNTEKTSBORTFALL');
 
-  const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
-    useMellomlagring(Behovstype.YRKESSKADE_KODE, initialMellomlagretVurdering);
-
   const { visningActions, visningModus, formReadOnly } = useVilkårskortVisning(
     readOnly,
     'VURDER_INNTEKTSBORTFALL',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const defaultValues: DraftFormFields = initialMellomlagretVurdering
@@ -86,6 +83,12 @@ export const Inntektsbortfall = ({
       },
     },
     { readOnly: formReadOnly, shouldUnregister: true }
+  );
+
+  const { slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } = useMellomlagring(
+    Behovstype.YRKESSKADE_KODE,
+    initialMellomlagretVurdering,
+    form.subscribe
   );
 
   const under62År = grunnlag.under62ÅrVedSøknadstidspunkt;
@@ -134,7 +137,6 @@ export const Inntektsbortfall = ({
           form.reset(vurdering ? mapVurderingToDraftFormFields(vurdering) : {});
         });
       }}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
     >
       <>
         <TableStyled>

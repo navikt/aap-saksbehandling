@@ -34,22 +34,15 @@ export const SvarFraAndreinstans = ({ grunnlag, readOnly, behandlingVersjon, ini
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('SVAR_FRA_ANDREINSTANS');
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.HÅNDTER_SVAR_FRA_ANDREINSTANS, initialMellomlagretVurdering);
-
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
     'SVAR_FRA_ANDREINSTANS',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag?.gjeldendeVurdering);
-
-  const svarType = grunnlag?.svarFraAndreinstans.type;
-  const utfall = grunnlag?.svarFraAndreinstans.utfall;
-  const feilregistrertBegrunnelse = grunnlag?.svarFraAndreinstans.feilregistrertBegrunnelse;
 
   const { formFields, form } = useConfigForm<FormFields>(
     {
@@ -91,6 +84,16 @@ export const SvarFraAndreinstans = ({ grunnlag, readOnly, behandlingVersjon, ini
     { readOnly: formReadOnly }
   );
 
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.HÅNDTER_SVAR_FRA_ANDREINSTANS,
+    initialMellomlagretVurdering,
+    form.subscribe
+  );
+
+  const svarType = grunnlag?.svarFraAndreinstans.type;
+  const utfall = grunnlag?.svarFraAndreinstans.utfall;
+  const feilregistrertBegrunnelse = grunnlag?.svarFraAndreinstans.feilregistrertBegrunnelse;
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
       løsBehovOgGåTilNesteSteg(
@@ -126,7 +129,6 @@ export const SvarFraAndreinstans = ({ grunnlag, readOnly, behandlingVersjon, ini
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() =>
           form.reset(

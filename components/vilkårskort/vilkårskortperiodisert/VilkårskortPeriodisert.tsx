@@ -24,7 +24,6 @@ interface VilkårsKortPeriodisertProps {
   visningModus: VisningModus;
   visningActions: VisningActions;
   onDeleteMellomlagringClick: (() => void) | undefined;
-  onLagreMellomLagringClick: (() => void) | undefined;
   mellomlagretVurdering: MellomlagretVurdering | undefined;
   formReset: () => void;
   vurdertAutomatisk?: boolean;
@@ -44,7 +43,6 @@ export const VilkårskortPeriodisert = ({
   knappTekst = 'Bekreft',
   vurdertAutomatisk = false,
   onDeleteMellomlagringClick,
-  onLagreMellomLagringClick,
   mellomlagretVurdering,
   visningModus,
   visningActions,
@@ -99,11 +97,6 @@ export const VilkårskortPeriodisert = ({
                           Legg til ny vurdering
                         </Button>
                       )}
-                      {onLagreMellomLagringClick && (
-                        <Button type="button" variant="tertiary" onClick={onLagreMellomLagringClick}>
-                          Lagre utkast
-                        </Button>
-                      )}
                     </>
                   )}
 
@@ -125,11 +118,6 @@ export const VilkårskortPeriodisert = ({
                       {onLeggTilVurdering && (
                         <Button variant={'secondary'} icon={<PlusIcon />} onClick={onLeggTilVurdering} type="button">
                           Legg til ny vurdering
-                        </Button>
-                      )}
-                      {onLagreMellomLagringClick && (
-                        <Button type="button" variant="tertiary" onClick={onLagreMellomLagringClick}>
-                          Lagre utkast
                         </Button>
                       )}
                     </>

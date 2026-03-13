@@ -32,6 +32,26 @@ interface FormFields {
 
 type DraftFormfields = Partial<FormFields>;
 
+const legacyHarRettOption = {
+  label: 'Ja',
+  value: 'Ja',
+};
+
+const commonHarRettOptions = [
+  {
+    label: 'Ja, bruker ha åpenbart ikke vært i stand til å sette fram krav tidligere',
+    value: 'HarRettIkkeIStandTilÅSøkeTidligere',
+  },
+  {
+    label: 'Ja, bruker har ikke satt fram krav tidligere fordi trygdens organer har gitt misvisende opplysninger',
+    value: 'HarRettMisvisendeOpplysninger',
+  },
+  {
+    label: 'Nei',
+    value: 'Nei',
+  },
+];
+
 export const VurderRettighetsperiode = ({
   grunnlag,
   readOnly,
@@ -42,38 +62,15 @@ export const VurderRettighetsperiode = ({
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_RETTIGHETSPERIODE');
 
-  const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
-    useMellomlagring(Behovstype.VURDER_RETTIGHETSPERIODE, initialMellomlagretVurdering);
-
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
     'VURDER_RETTIGHETSPERIODE',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const defaultValues: DraftFormfields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag?.vurdering);
-
-  const legacyHarRettOption = {
-    label: 'Ja',
-    value: 'Ja',
-  };
-
-  const commonHarRettOptions = [
-    {
-      label: 'Ja, bruker ha åpenbart ikke vært i stand til å sette fram krav tidligere',
-      value: 'HarRettIkkeIStandTilÅSøkeTidligere',
-    },
-    {
-      label: 'Ja, bruker har ikke satt fram krav tidligere fordi trygdens organer har gitt misvisende opplysninger',
-      value: 'HarRettMisvisendeOpplysninger',
-    },
-    {
-      label: 'Nei',
-      value: 'Nei',
-    },
-  ];
 
   const useLegacyOptions = formReadOnly && grunnlag?.vurdering?.harRett === 'Ja';
   const harRettOptions = useLegacyOptions ? [legacyHarRettOption, ...commonHarRettOptions] : commonHarRettOptions;
@@ -119,6 +116,12 @@ export const VurderRettighetsperiode = ({
     { readOnly: formReadOnly }
   );
 
+  const { slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } = useMellomlagring(
+    Behovstype.VURDER_RETTIGHETSPERIODE,
+    initialMellomlagretVurdering,
+    form.subscribe
+  );
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
       const harRett = data.harRett !== 'Nei';
@@ -158,7 +161,6 @@ export const VurderRettighetsperiode = ({
       vilkårTilhørerNavKontor={false}
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() =>
           form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields())

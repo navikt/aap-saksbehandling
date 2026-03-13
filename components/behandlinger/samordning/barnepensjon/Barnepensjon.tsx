@@ -38,9 +38,6 @@ type DraftFormFields = Partial<BarnepensjonFormFields>;
 
 export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering, behandlingVersjon, grunnlag }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
-  const { mellomlagretVurdering, lagreMellomlagring, nullstillMellomlagretVurdering, slettMellomlagring } =
-    useMellomlagring(Behovstype.AVKLAR_SAMORDNING_BARNEPENSJON_KODE, initialMellomlagretVurdering);
-
   const { løsBehovOgGåTilNesteSteg, status, løsBehovOgGåTilNesteStegError, isLoading } =
     useLøsBehovOgGåTilNesteSteg('SAMORDNING_BARNEPENSJON');
 
@@ -68,6 +65,12 @@ export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering, behandlin
       },
     },
     { readOnly: formReadOnly }
+  );
+
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.AVKLAR_SAMORDNING_BARNEPENSJON_KODE,
+    initialMellomlagretVurdering,
+    form.subscribe
   );
 
   const feilmeldinger = hentFeilmeldingerForForm(form.formState.errors);
@@ -106,7 +109,6 @@ export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering, behandlin
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() =>
           form.reset(grunnlag.vurdering ? mapVurderingToDraftFormFields(grunnlag) : emptyDraftFormFields())

@@ -42,8 +42,21 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
   const { løsPeriodisertBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_SYKEPENGEERSTATNING');
 
-  const { lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
-    useMellomlagring(Behovstype.VURDER_SYKEPENGEERSTATNING_KODE, initialMellomlagretVurdering);
+  const defaultValues = initialMellomlagretVurdering
+    ? JSON.parse(initialMellomlagretVurdering.data)
+    : getDefaultValuesFromGrunnlag(grunnlag);
+
+  const form = useForm<SykepengeerstatningForm>({
+    defaultValues,
+    reValidateMode: 'onChange',
+    shouldUnregister: true,
+  });
+
+  const { slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } = useMellomlagring(
+    Behovstype.VURDER_SYKEPENGEERSTATNING_KODE,
+    initialMellomlagretVurdering,
+    form.subscribe
+  );
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
@@ -52,17 +65,6 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
     'VURDER_SYKEPENGEERSTATNING',
     mellomlagretVurdering
   );
-
-  const defaultValues =
-    mellomlagretVurdering != null
-      ? (JSON.parse(mellomlagretVurdering.data) as SykepengeerstatningForm)
-      : getDefaultValuesFromGrunnlag(grunnlag);
-
-  const form = useForm<SykepengeerstatningForm>({
-    defaultValues,
-    reValidateMode: 'onChange',
-    shouldUnregister: true,
-  });
 
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
 
@@ -133,7 +135,6 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() => {
           form.reset(getDefaultValuesFromGrunnlag(grunnlag));

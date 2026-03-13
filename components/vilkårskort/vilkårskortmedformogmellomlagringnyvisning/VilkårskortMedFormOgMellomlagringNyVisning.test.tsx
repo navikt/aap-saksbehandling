@@ -68,12 +68,6 @@ describe('Vilkårskort med form', () => {
     expect(errorMessage).toBeVisible();
   });
 
-  it('Skal ha en knapp for å mellomlagre en vurdering dersom det har blitt sendt inn en lagre funksjon', () => {
-    renderComponentNyVisning(VisningModus.AKTIV_UTEN_AVBRYT);
-    const lagreUtkastKnapp = screen.getByRole('button', { name: 'Lagre utkast' });
-    expect(lagreUtkastKnapp).toBeVisible();
-  });
-
   it('Skal ha en knapp for å slette en mellomlagret vurdering dersom det finnes en mellomlagret vurdering og det finnes en delete funksjon', () => {
     render(
       <VilkårskortMedFormOgMellomlagringNyVisning
@@ -183,27 +177,23 @@ describe('Vilkårskort med form', () => {
     expect(knapp).not.toBeInTheDocument();
   });
 
-  it('Skal ha knapper for bekreft, avbryt og lagre utkast når visningsModus er AKTIV_MED_AVBRYT', () => {
+  it('Skal ha knapper for bekreft og avbryt når visningsModus er AKTIV_MED_AVBRYT', () => {
     renderComponentNyVisning(VisningModus.AKTIV_MED_AVBRYT);
     const bekreftKnapp = screen.getByRole('button', { name: 'Bekreft' });
     const avbrytKnapp = screen.getByRole('button', { name: 'Avbryt' });
-    const lagreUtkastKnapp = screen.getByRole('button', { name: 'Lagre utkast' });
 
     expect(bekreftKnapp).toBeVisible();
     expect(avbrytKnapp).toBeVisible();
-    expect(lagreUtkastKnapp).toBeVisible();
   });
 
-  it('Skal ha knapper for bekreft og lagre utkast når visningsModus er AKTIV_UTEN_AVBRYT', () => {
+  it('Skal ha knapper for bekreft når visningsModus er AKTIV_UTEN_AVBRYT', () => {
     renderComponentNyVisning(VisningModus.AKTIV_UTEN_AVBRYT);
 
     const bekreftKnapp = screen.getByRole('button', { name: 'Bekreft' });
     const avbrytKnapp = screen.queryByRole('button', { name: 'Avbryt' });
-    const lagreUtkastKnapp = screen.getByRole('button', { name: 'Lagre utkast' });
 
     expect(bekreftKnapp).toBeVisible();
     expect(avbrytKnapp).not.toBeInTheDocument();
-    expect(lagreUtkastKnapp).toBeVisible();
   });
 
   it('Skal ha knapp for å endre vurdering når visningsModus er LÅST_MED_ENDRE', () => {
@@ -245,7 +235,6 @@ describe('Vilkårskort med form', () => {
           avbrytEndringClick: vitest.fn,
         }}
         formReset={() => vitest.fn}
-        onLagreMellomLagringClick={undefined}
       >
         <span>Dette er innhold</span>
       </VilkårskortMedFormOgMellomlagringNyVisning>
@@ -270,7 +259,6 @@ const defaultProps: VilkårsKortMedFormOgMellomlagringProps = {
   children: undefined,
   onDeleteMellomlagringClick: vitest.fn,
   mellomlagretVurdering: undefined,
-  onLagreMellomLagringClick: vitest.fn,
   løsBehovOgGåTilNesteStegError: undefined,
   visningActions: {
     onBekreftClick: vitest.fn,

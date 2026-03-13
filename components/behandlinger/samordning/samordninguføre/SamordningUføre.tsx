@@ -39,13 +39,10 @@ export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly, initia
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('SAMORDNING_UFØRE');
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.AVKLAR_SAMORDNING_UFORE, initialMellomlagretVurdering);
-
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
     'SAMORDNING_UFØRE',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
@@ -66,6 +63,12 @@ export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly, initia
       },
     },
     { readOnly: formReadOnly }
+  );
+
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.AVKLAR_SAMORDNING_UFORE,
+    initialMellomlagretVurdering,
+    form.subscribe
   );
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -106,7 +109,6 @@ export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly, initia
       vilkårTilhørerNavKontor={false}
       vurdertAvAnsatt={grunnlag.vurdering?.vurdertAv}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() => form.reset(mapVurderingToDraftFormFields(grunnlag)));
       }}

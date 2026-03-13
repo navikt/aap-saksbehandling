@@ -60,12 +60,24 @@ export const MeldepliktPeriodisertFrontend = ({
   initialMellomlagretVurdering,
 }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
+  const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
   const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('FRITAK_MELDEPLIKT');
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.FRITAK_MELDEPLIKT_KODE, initialMellomlagretVurdering);
+  const defaultValues = initialMellomlagretVurdering
+    ? JSON.parse(initialMellomlagretVurdering.data)
+    : getDefaultValuesFromGrunnlag(grunnlag);
+
+  const form = useForm<FritakMeldepliktForm>({
+    defaultValues,
+  });
+
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.FRITAK_MELDEPLIKT_KODE,
+    initialMellomlagretVurdering,
+    form.subscribe
+  );
 
   const { visningActions, formReadOnly, visningModus, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
@@ -73,18 +85,7 @@ export const MeldepliktPeriodisertFrontend = ({
     mellomlagretVurdering
   );
 
-  const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
-
   const nyeVurderinger = grunnlag?.nyeVurderinger ?? [];
-
-  const defaultValues =
-    initialMellomlagretVurdering != null
-      ? (JSON.parse(initialMellomlagretVurdering.data) as FritakMeldepliktForm)
-      : getDefaultValuesFromGrunnlag(grunnlag);
-
-  const form = useForm<FritakMeldepliktForm>({
-    defaultValues,
-  });
 
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
 
@@ -151,7 +152,6 @@ export const MeldepliktPeriodisertFrontend = ({
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}
       visningModus={visningModus}
       visningActions={visningActions}

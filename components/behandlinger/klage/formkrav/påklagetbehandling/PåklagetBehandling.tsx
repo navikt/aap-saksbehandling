@@ -31,24 +31,27 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, ini
   const { løsBehovOgGåTilNesteSteg, status, løsBehovOgGåTilNesteStegError, isLoading } =
     useLøsBehovOgGåTilNesteSteg('PÅKLAGET_BEHANDLING');
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.FASTSETT_PÅKLAGET_BEHANDLING, initialMellomlagretVurdering);
-
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
     'PÅKLAGET_BEHANDLING',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag?.gjeldendeVurdering);
 
-  const { control, handleSubmit, watch, reset } = useForm<FormFields>({
+  const { control, handleSubmit, watch, reset, subscribe } = useForm<FormFields>({
     defaultValues: {
       vedtak: defaultValue.vedtak,
     },
   });
+
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.FASTSETT_PÅKLAGET_BEHANDLING,
+    initialMellomlagretVurdering,
+    subscribe
+  );
 
   const onSubmit = (data: FormFields) => {
     løsBehovOgGåTilNesteSteg(
@@ -81,7 +84,6 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, ini
       status={status}
       vurdertAvAnsatt={grunnlag?.vurdertAv}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(watch())}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() =>
           reset(

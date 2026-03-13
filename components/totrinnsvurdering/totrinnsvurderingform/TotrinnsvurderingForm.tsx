@@ -53,18 +53,18 @@ export const TotrinnsvurderingForm = ({
     ? mapMellomlagringToDraftFormFields(JSON.parse(initialMellomlagretVurdering.data))
     : mapVurderingToDraftFormFields(grunnlag.vurderinger);
 
-  const { nullstillMellomlagretVurdering, mellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(
-      erKvalitetssikring ? Behovstype.KVALITETSSIKRING_KODE : Behovstype.FATTE_VEDTAK_KODE,
-      initialMellomlagretVurdering
-    );
-
   const { form } = useConfigForm<FormFieldsToTrinnsVurdering>({
     totrinnsvurderinger: {
       type: 'fieldArray',
       defaultValue: defaultValue.totrinnsvurderinger,
     },
   });
+
+  const { nullstillMellomlagretVurdering, mellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    erKvalitetssikring ? Behovstype.KVALITETSSIKRING_KODE : Behovstype.FATTE_VEDTAK_KODE,
+    initialMellomlagretVurdering,
+    form.subscribe
+  );
 
   const { fields } = useFieldArray({
     control: form.control,
@@ -175,15 +175,6 @@ export const TotrinnsvurderingForm = ({
           <HStack gap={'2'}>
             <Button size={'medium'} className={'fit-content'} loading={isLoading}>
               Bekreft og send videre
-            </Button>
-
-            <Button
-              size={'small'}
-              variant={'tertiary'}
-              type={'button'}
-              onClick={() => lagreMellomlagring(form.watch())}
-            >
-              Lagre utkast
             </Button>
           </HStack>
           {mellomlagretVurdering && (
