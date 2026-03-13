@@ -11729,12 +11729,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.medlemskap.MedlemskapGrunnlagDto': {
       medlemskap: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.register.medlemskap.MedlemskapUnntakGrunnlag'];
     };
-    'no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.DagpengerPeriodeDto': {
-      /** @enum {string} */
-      dagpengerYtelseType:
-        | 'DAGPENGER_ARBEIDSSOKER_ORDINAER'
-        | 'DAGPENGER_PERMITTERING_FISKEINDUSTRI'
-        | 'DAGPENGER_PERMITTERING_ORDINAER';
+    'no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.AndreStatligeYtelserPeriodeDto': {
       /**
        * Format: date
        * @example 2025-04-01
@@ -11747,14 +11742,19 @@ export interface components {
        * @example 2025-04-01
        */
       tom: string;
+      /** @enum {string} */
+      ytelseType:
+        | 'DAGPENGER_ARBEIDSSOKER_ORDINAER'
+        | 'DAGPENGER_PERMITTERING_FISKEINDUSTRI'
+        | 'DAGPENGER_PERMITTERING_ORDINAER';
     };
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningAndreStatligeYtelserGrunnlagDTO': {
-      dagpengerPerioder?:
-        | components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.DagpengerPeriodeDto'][]
-        | null;
       'harTilgangTil\u00C5Saksbehandle': boolean;
       historiskeVurderinger?:
         | components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningAndreStatligeYtelserVurderingDTO'][]
+        | null;
+      perioder?:
+        | components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.AndreStatligeYtelserPeriodeDto'][]
         | null;
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningAndreStatligeYtelserVurderingDTO'];
     };
@@ -14803,7 +14803,8 @@ export interface components {
         | 'TREKK_KLAGE'
         | 'UDEFINERT'
         | 'UNDERVEIS'
-        | 'VEDTAK';
+        | 'VEDTAK'
+        | 'VEDTAKSLENGDE';
       /** @enum {string} */
       aktivtSteg:
         | 'ARBEIDSOPPTRAPPING'
@@ -14921,6 +14922,7 @@ export interface components {
         | 'UDEFINERT'
         | 'UNDERVEIS'
         | 'VEDTAK'
+        | 'VEDTAKSLENGDE'
         | null;
       /** @enum {string|null} */
       vurdertSteg?:
@@ -15183,7 +15185,8 @@ export interface components {
         | 'TREKK_KLAGE'
         | 'UDEFINERT'
         | 'UNDERVEIS'
-        | 'VEDTAK';
+        | 'VEDTAK'
+        | 'VEDTAKSLENGDE';
     };
     'no.nav.aap.behandlingsflyt.flyt.FlytSteg': {
       avklaringsbehov: components['schemas']['no.nav.aap.behandlingsflyt.flyt.AvklaringsbehovDTO'][];
@@ -16381,7 +16384,13 @@ export interface components {
       /** Format: uuid */
       behandlingId: string;
       /** @enum {string} */
-      behandlingsstatus: 'AVSLUTTET' | 'OPPRETTET' | 'RETUR_FRA_BESLUTTER' | 'TIL_BEHANDLING' | 'TIL_GODKJENNING';
+      behandlingsstatus:
+        | 'AVSLUTTET'
+        | 'OPPRETTET'
+        | 'RETUR_FRA_BESLUTTER'
+        | 'TIL_BEHANDLING'
+        | 'TIL_BESLUTTER'
+        | 'TIL_GODKJENNING';
       fullstendigPeriode: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.TilbakekrevingPeriode'];
       /**
        * Format: date-time
