@@ -29,7 +29,6 @@ import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { addDays, parse, parseISO } from 'date-fns';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
-import { OvergangUforeForm } from 'components/behandlinger/sykdom/overgangufore/OvergangUforePeriodisert';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import React from 'react';
 
@@ -89,7 +88,7 @@ export const VedtakslengdeSteg = ({ grunnlag, behandlingVersjon, readOnly, initi
     mellomlagretVurdering
   );
 
-  const defaultValues: OvergangUforeForm = mellomlagretVurdering
+  const defaultValues: VedtakslengdeForm = mellomlagretVurdering
     ? JSON.parse(mellomlagretVurdering.data)
     : getDefaultValuesFromGrunnlag(grunnlag);
 
