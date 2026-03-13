@@ -28,7 +28,7 @@ import { VurderingStatus } from 'components/periodisering/VurderingStatusTag';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { addDays, parse, parseISO } from 'date-fns';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
-import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
+import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import { OvergangUforeForm } from 'components/behandlinger/sykdom/overgangufore/OvergangUforePeriodisert';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import React from 'react';
@@ -108,7 +108,7 @@ export const VedtakslengdeSteg = ({ grunnlag, behandlingVersjon, readOnly, initi
   });
 
   const foersteNyePeriode = vurderingerFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
-  const errorList = mapPeriodiserteVurderingerErrorList<VedtakslengdeForm>(form.formState.errors);
+  const errorList = hentFeilmeldingerForForm(form.formState.errors);
   const harManuellVurdering = vurderingerFields.some((v) => v.manuellVurdering);
 
   const sisteVedtatteVurdering = grunnlag.sisteVedtatteVurderinger.at(-1);
