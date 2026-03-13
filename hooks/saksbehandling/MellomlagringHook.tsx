@@ -5,7 +5,7 @@ import { clientLagreMellomlagring, clientSlettMellomlagring } from 'lib/clientAp
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { isSuccess } from 'lib/utils/api';
 import { MellomlagretVurdering } from 'lib/types/types';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { debounce } from 'lodash';
 import { UseFormSubscribe } from 'react-hook-form';
 
@@ -36,11 +36,7 @@ export function useMellomlagring<T extends object>(
     }
   }
 
-  const debouncedSave = useRef(
-    debounce((data: object) => {
-      lagreMellomlagring(data);
-    }, 1000)
-  ).current;
+  const debouncedSave = useMemo(() => debounce(lagreMellomlagring, 1000), [lagreMellomlagring]);
 
   useEffect(() => {
     if (!subscribe) return;

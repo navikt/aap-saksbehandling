@@ -14803,7 +14803,8 @@ export interface components {
         | 'TREKK_KLAGE'
         | 'UDEFINERT'
         | 'UNDERVEIS'
-        | 'VEDTAK';
+        | 'VEDTAK'
+        | 'VEDTAKSLENGDE';
       /** @enum {string} */
       aktivtSteg:
         | 'ARBEIDSOPPTRAPPING'
@@ -14921,6 +14922,7 @@ export interface components {
         | 'UDEFINERT'
         | 'UNDERVEIS'
         | 'VEDTAK'
+        | 'VEDTAKSLENGDE'
         | null;
       /** @enum {string|null} */
       vurdertSteg?:
@@ -15183,7 +15185,8 @@ export interface components {
         | 'TREKK_KLAGE'
         | 'UDEFINERT'
         | 'UNDERVEIS'
-        | 'VEDTAK';
+        | 'VEDTAK'
+        | 'VEDTAKSLENGDE';
     };
     'no.nav.aap.behandlingsflyt.flyt.FlytSteg': {
       avklaringsbehov: components['schemas']['no.nav.aap.behandlingsflyt.flyt.AvklaringsbehovDTO'][];
@@ -16381,7 +16384,13 @@ export interface components {
       /** Format: uuid */
       behandlingId: string;
       /** @enum {string} */
-      behandlingsstatus: 'AVSLUTTET' | 'OPPRETTET' | 'RETUR_FRA_BESLUTTER' | 'TIL_BEHANDLING' | 'TIL_GODKJENNING';
+      behandlingsstatus:
+        | 'AVSLUTTET'
+        | 'OPPRETTET'
+        | 'RETUR_FRA_BESLUTTER'
+        | 'TIL_BEHANDLING'
+        | 'TIL_BESLUTTER'
+        | 'TIL_GODKJENNING';
       fullstendigPeriode: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.TilbakekrevingPeriode'];
       /**
        * Format: date-time
