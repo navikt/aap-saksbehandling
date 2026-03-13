@@ -3,12 +3,14 @@ import { SykdomsvurderingLøsningDto } from 'lib/types/types';
 import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import { Dato } from 'lib/types/Dato';
 import { parseDatoFraDatePicker } from 'lib/utils/date';
-import { isAfter } from 'date-fns';
+import { vurderingFraDatoErSammeSomRettighetsperiodeStart } from 'components/behandlinger/sykdom/sykdomsvurdering/sykdomsvurdering-utils';
 
-function mapMedVissVarighet(
+function mapArbeidsevneOgYrkesskade(
   data: Sykdomsvurdering,
-  erArbeidsevnenNedsatt: undefined | boolean,
-  skalVurdereYrkesskade: boolean
+  skalVurdereYrkesskade: boolean,
+  erÅrsakssammenhengYrkesskade: boolean,
+  vurderingFraDato: string,
+  førsteDatoSomKanVurderes: Date
 ): Pick<
   SykdomsvurderingLøsningDto,
   | 'erNedsettelseIArbeidsevneMerEnnHalvparten'
@@ -17,68 +19,48 @@ function mapMedVissVarighet(
   | 'erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense'
   | 'yrkesskadeBegrunnelse'
 > {
-  const erNedsettelseIArbeidsevneMerEnnHalvparten = erArbeidsevnenNedsatt
-    ? getTrueFalseEllerUndefined(data.erNedsettelseIArbeidsevneMerEnnHalvparten)
-    : undefined;
+  const fraDato = parseDatoFraDatePicker(vurderingFraDato);
+  const vurderingDatoSammeSomRettighetsperiodeStart = vurderingFraDatoErSammeSomRettighetsperiodeStart(
+    fraDato,
+    førsteDatoSomKanVurderes
+  );
 
-  const yrkesskadeBegrunnelse =
-    erNedsettelseIArbeidsevneMerEnnHalvparten === false ? data?.yrkesskadeBegrunnelse : undefined;
+  // Ikke aktuell hvis årsakssammenheng på yrkesskade
+  const erNedsettelseIArbeidsevneMerEnnHalvparten = erÅrsakssammenhengYrkesskade
+    ? undefined
+    : getTrueFalseEllerUndefined(
+        vurderingDatoSammeSomRettighetsperiodeStart
+          ? data.erNedsettelseIArbeidsevneMerEnnHalvparten
+          : data.erNedsettelseIArbeidsevneMerEnnFørtiProsent
+      );
+
+  const skalBegrunneYrkesskaden =
+    vurderingDatoSammeSomRettighetsperiodeStart && skalVurdereYrkesskade && !erNedsettelseIArbeidsevneMerEnnHalvparten;
+
+  const yrkesskadeBegrunnelse = skalBegrunneYrkesskaden ? data?.yrkesskadeBegrunnelse : undefined;
 
   const erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense =
-    skalVurdereYrkesskade && erNedsettelseIArbeidsevneMerEnnHalvparten === false
+    skalBegrunneYrkesskaden || (!vurderingDatoSammeSomRettighetsperiodeStart && erÅrsakssammenhengYrkesskade)
       ? getTrueFalseEllerUndefined(data.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense)
       : undefined;
 
+  // Kun mappe derson bruker har tilstrekkelig nedsatt arbeidsevne
   const erSkadeSykdomEllerLyteVesentligdel =
-    erNedsettelseIArbeidsevneMerEnnHalvparten ||
-    (erNedsettelseIArbeidsevneMerEnnHalvparten === false &&
-      erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense &&
-      skalVurdereYrkesskade)
+    erNedsettelseIArbeidsevneMerEnnHalvparten || erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense
       ? getTrueFalseEllerUndefined(data.erSkadeSykdomEllerLyteVesentligdel)
       : undefined;
 
-  const erNedsettelseIArbeidsevneAvEnVissVarighet =
-    erSkadeSykdomEllerLyteVesentligdel || erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense
-      ? getTrueFalseEllerUndefined(data.erNedsettelseIArbeidsevneAvEnVissVarighet)
-      : undefined;
-
-  return {
-    erNedsettelseIArbeidsevneMerEnnHalvparten,
-    erSkadeSykdomEllerLyteVesentligdel,
-    erNedsettelseIArbeidsevneAvEnVissVarighet,
-    erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense,
-    yrkesskadeBegrunnelse,
-  };
-}
-
-function mapUtenVissVarighet(
-  data: Sykdomsvurdering,
-  erArbeidsevnenNedsatt: undefined | boolean,
-  erÅrsakssammenhengYrkesskade: boolean
-): Pick<
-  SykdomsvurderingLøsningDto,
-  | 'erNedsettelseIArbeidsevneMerEnnHalvparten'
-  | 'erSkadeSykdomEllerLyteVesentligdel'
-  | 'erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense'
-> {
-  const erNedsettelseIArbeidsevneMerEnnHalvparten =
-    !erÅrsakssammenhengYrkesskade && erArbeidsevnenNedsatt
-      ? getTrueFalseEllerUndefined(data.erNedsettelseIArbeidsevneMerEnnFørtiProsent)
-      : undefined;
-
-  const erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense =
-    erÅrsakssammenhengYrkesskade && erArbeidsevnenNedsatt
-      ? getTrueFalseEllerUndefined(data.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense)
-      : undefined;
-
-  const erSkadeSykdomEllerLyteVesentligdel = erNedsettelseIArbeidsevneMerEnnHalvparten
-    ? getTrueFalseEllerUndefined(data.erSkadeSykdomEllerLyteVesentligdel)
+  // Kun aktuell dersom skade eller sykdom er vesentling medvirkende til den nedsatte arbeidsevnen
+  const erNedsettelseIArbeidsevneAvEnVissVarighet = erSkadeSykdomEllerLyteVesentligdel
+    ? getTrueFalseEllerUndefined(data.erNedsettelseIArbeidsevneAvEnVissVarighet)
     : undefined;
 
   return {
     erNedsettelseIArbeidsevneMerEnnHalvparten,
+    yrkesskadeBegrunnelse,
     erSkadeSykdomEllerLyteVesentligdel,
     erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense,
+    erNedsettelseIArbeidsevneAvEnVissVarighet,
   };
 }
 
@@ -96,22 +78,20 @@ function mapTilPeriodisertVurdering(
   const hoveddiagnose = harSkadeSykdomEllerLyte ? data?.hoveddiagnose?.value : undefined;
   const bidiagnoser = harSkadeSykdomEllerLyte ? data.bidiagnose?.map((diagnose) => diagnose.value) : undefined;
 
-  const fraDato = parseDatoFraDatePicker(data.fraDato);
-  const skalVurdereVissVarighet = fraDato != null ? !isAfter(fraDato, førsteDatoSomKanVurderes) : false;
-
   // Denne overstyrer de under. Hvis false skal alt nulles ut.
   const erArbeidsevnenNedsatt = harSkadeSykdomEllerLyte
     ? getTrueFalseEllerUndefined(data.erArbeidsevnenNedsatt)
     : undefined;
 
-  let nedsattArbeidsevneOgYrkesskade = {};
-  if (harSkadeSykdomEllerLyte) {
-    if (skalVurdereVissVarighet) {
-      nedsattArbeidsevneOgYrkesskade = mapMedVissVarighet(data, erArbeidsevnenNedsatt, skalVurdereYrkesskade);
-    } else {
-      nedsattArbeidsevneOgYrkesskade = mapUtenVissVarighet(data, erArbeidsevnenNedsatt, erÅrsakssammenhengYrkesskade);
-    }
-  }
+  const nedsattArbeidsevneOgYrkesskade = erArbeidsevnenNedsatt
+    ? mapArbeidsevneOgYrkesskade(
+        data,
+        skalVurdereYrkesskade,
+        erÅrsakssammenhengYrkesskade,
+        data.fraDato,
+        førsteDatoSomKanVurderes
+      )
+    : undefined;
 
   return {
     ...nedsattArbeidsevneOgYrkesskade,
