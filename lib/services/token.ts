@@ -35,7 +35,7 @@ export const getToken = async (audience: string, url: string): Promise<string> =
 
   const validation = await validateToken(token);
   if (!validation.ok) {
-    logError(`Token for ${url} validerte ikke`);
+    logError(`Token for ${url} validerte ikke (errortype='${validation.errorType}')`, validation.error);
     throw new Error('Token validerte ikke');
   }
 
