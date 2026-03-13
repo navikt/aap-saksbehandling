@@ -1,12 +1,12 @@
 'use client';
 
 import {
+  MellomlagretVurdering,
   VedtakslengdeGrunnlag,
   VedtakslengdeVurderingResponse,
-  MellomlagretVurdering,
   VurderingMeta,
 } from 'lib/types/types';
-import { VStack } from '@navikt/ds-react';
+import { Radio, VStack } from '@navikt/ds-react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { Behovstype } from 'lib/utils/form';
@@ -30,6 +30,8 @@ import { addDays, parse, parseISO } from 'date-fns';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
 import { OvergangUforeForm } from 'components/behandlinger/sykdom/overgangufore/OvergangUforePeriodisert';
+import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
+import React from 'react';
 
 interface VedtakslengdeVurderingForm extends VurderingMeta {
   manuellVurdering: boolean;
@@ -38,6 +40,7 @@ interface VedtakslengdeVurderingForm extends VurderingMeta {
   fraDato: string;
   sluttdato: string;
   begrunnelse: string;
+  endring: 'FORLENGELSE';
 }
 
 interface VedtakslengdeForm {
@@ -61,6 +64,7 @@ function getDefaultValuesFromGrunnlag(grunnlag: VedtakslengdeGrunnlag): Vedtaksl
       erNyVurdering: false,
       behøverVurdering: false,
       manuellVurdering: true,
+      endring: 'FORLENGELSE',
     }));
 
   return {
@@ -120,6 +124,7 @@ export const VedtakslengdeSteg = ({ grunnlag, behandlingVersjon, readOnly, initi
       erNyVurdering: true,
       behøverVurdering: false,
       manuellVurdering: true,
+      endring: 'FORLENGELSE',
     });
   }
 
@@ -228,6 +233,19 @@ export const VedtakslengdeSteg = ({ grunnlag, behandlingVersjon, readOnly, initi
           accordionsSignal={accordionsSignal}
         >
           <VStack gap={'4'}>
+            <RadioGroupWrapper
+              label={'Ønsket endring'}
+              control={form.control}
+              name={`vurderinger.${index}.endring`}
+              readOnly={readOnly}
+              rules={{
+                required: 'Feltet er påkrevet',
+              }}
+              horisontal
+            >
+              <Radio value={'FORLENGELSE'}>Forleng vedtak</Radio>
+            </RadioGroupWrapper>
+
             <DateInputWrapper
               name={`vurderinger.${index}.sluttdato`}
               control={form.control}

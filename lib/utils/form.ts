@@ -189,7 +189,7 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
     case '5058':
       return '§ 11-15 Etablering av egen virksomhet (valgfritt)';
     case '5059':
-      return 'Utvid vedtakslengde';
+      return 'Fastsett vedtakslengde';
   }
 }
 

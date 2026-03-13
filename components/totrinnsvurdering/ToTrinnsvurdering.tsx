@@ -123,6 +123,8 @@ export function behovstypeTilVilkårskortLink(behovstype: Behovstype): string {
       return 'STUDENT/#AVKLAR_STUDENT';
     case Behovstype.AVKLAR_SAMORDNING_SYKESTIPEND_KODE:
       return 'STUDENT/#SAMORDNING_SYKESTIPEND';
+    case Behovstype.FASTSETT_VEDTAKSLENGDE:
+      return 'VEDTAKSLENGDE/#VEDTAKSLENGDE';
     default:
       return 'SYKDOM';
   }
