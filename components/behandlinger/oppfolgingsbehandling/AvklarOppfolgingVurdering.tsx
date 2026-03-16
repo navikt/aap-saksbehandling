@@ -17,6 +17,7 @@ import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   behandlingVersjon: number;
@@ -65,6 +66,7 @@ export const AvklaroppfolgingVurdering = ({
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag.grunnlag);
+  const inkluderBarnepensjon = useFeatureFlag('SamordningBarnepensjon');
 
   const { form, formFields } = useConfigForm<FormFields>(
     {
@@ -87,7 +89,9 @@ export const AvklaroppfolgingVurdering = ({
       hvaSkalRevurderes: {
         type: 'combobox_multiple',
         label: 'Hvilke opplysninger skal revurderes?',
-        options: vurderingsbehovOptions(),
+        options: vurderingsbehovOptions().filter(
+          (option) => inkluderBarnepensjon || option.value !== 'REVURDER_SAMORDNING_BARNEPENSJON'
+        ),
         defaultValue: defaultValue.hvaSkalRevurderes,
       },
     },

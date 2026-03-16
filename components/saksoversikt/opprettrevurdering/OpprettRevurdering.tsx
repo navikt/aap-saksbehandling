@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation';
 import styles from './OpprettRevurdering.module.css';
 import { isSuccess } from 'lib/utils/api';
 import { vurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 export interface ManuellRevurderingFormFields {
   årsaker: string[];
@@ -36,6 +37,8 @@ export const OpprettRevurdering = ({
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>();
+
+  const inkluderBarnepensjon = useFeatureFlag('SamordningBarnepensjon');
 
   async function sendHendelse(data: ManuellRevurderingFormFields) {
     const innsending = {
@@ -81,7 +84,9 @@ export const OpprettRevurdering = ({
     årsaker: {
       type: 'combobox_multiple',
       label: `Hvilke opplysninger skal ${erFørstegangsbehandling ? 'vurderes' : 'revurderes'}?`,
-      options: vurderingsbehovOptions(),
+      options: vurderingsbehovOptions().filter(
+        (option) => inkluderBarnepensjon || option.value !== 'REVURDER_SAMORDNING_BARNEPENSJON'
+      ),
       defaultValue: defaultÅrsaker,
       rules: {
         required: `Velg opplysning som er grunnlaget for ${variant}en`,
