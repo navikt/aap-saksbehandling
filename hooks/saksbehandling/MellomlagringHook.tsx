@@ -5,7 +5,7 @@ import { clientLagreMellomlagring, clientSlettMellomlagring } from 'lib/clientAp
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { isSuccess } from 'lib/utils/api';
 import { MellomlagretVurdering } from 'lib/types/types';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { debounce } from 'lodash';
 import { UseFormSubscribe } from 'react-hook-form';
 
@@ -24,19 +24,22 @@ export function useMellomlagring<T extends object>(
     initialMellomlagring
   );
 
-  async function lagreMellomlagring(vurdering: object) {
-    const res = await clientLagreMellomlagring({
-      avklaringsbehovkode: behovstype,
-      behandlingsReferanse: behandlingsReferanse,
-      data: JSON.stringify(vurdering),
-    });
+  const lagreMellomlagring = useCallback(
+    async (vurdering: object) => {
+      const res = await clientLagreMellomlagring({
+        avklaringsbehovkode: behovstype,
+        behandlingsReferanse: behandlingsReferanse,
+        data: JSON.stringify(vurdering),
+      });
 
-    if (isSuccess(res)) {
-      setMellomlagretVurdering(res.data.mellomlagretVurdering);
-    }
-  }
+      if (isSuccess(res)) {
+        setMellomlagretVurdering(res.data.mellomlagretVurdering);
+      }
+    },
+    [behovstype, behandlingsReferanse]
+  );
 
-  const debouncedSave = useMemo(() => debounce(lagreMellomlagring, 1000), [lagreMellomlagring]);
+  const debouncedLagreMellomlagring = useMemo(() => debounce(lagreMellomlagring, 1000), [lagreMellomlagring]);
 
   useEffect(() => {
     if (!subscribe) return;
@@ -47,12 +50,12 @@ export function useMellomlagring<T extends object>(
       },
       callback: ({ values, isDirty }) => {
         if (!isDirty) return;
-        debouncedSave(values);
+        debouncedLagreMellomlagring(values);
       },
     });
 
     return () => callback();
-  }, [subscribe, debouncedSave]);
+  }, [subscribe, debouncedLagreMellomlagring]);
 
   async function slettMellomlagring(callback?: () => void) {
     const res = await clientSlettMellomlagring({

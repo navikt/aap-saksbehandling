@@ -159,7 +159,6 @@ export const Sykdomsvurdering = ({
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
 
   const foersteNyePeriode = nyeVurderingerFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
-  const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
 
   return (
     <VilkårskortPeriodisert
@@ -220,7 +219,7 @@ export const Sykdomsvurdering = ({
             readonly={formReadOnly}
             finnesFeil={finnesFeilForVurdering(index, errorList)}
             onSlettVurdering={() => remove(index)}
-            harTidligereVurderinger={tidligereVurderinger.length > 0}
+            harTidligereVurderinger={vedtatteVurderinger.length > 0}
             index={index}
             initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
           >
