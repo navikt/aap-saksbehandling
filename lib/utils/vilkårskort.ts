@@ -1,0 +1,66 @@
+import { Behovstype } from 'lib/utils/form';
+
+export function byggVilkårskortLenke(sakId: String, behandlingsreferanse: String, behovstype: Behovstype): string {
+  return `/saksbehandling/sak/${sakId}/${behandlingsreferanse}/${behovstypeTilVilkårskortLink(behovstype)}`;
+}
+
+export function behovstypeTilVilkårskortLink(behovstype: Behovstype): string {
+  switch (behovstype) {
+    case Behovstype.AVKLAR_SYKDOM_KODE:
+      return 'SYKDOM/#AVKLAR_SYKDOM';
+    case Behovstype.AVKLAR_BISTANDSBEHOV_KODE:
+      return 'SYKDOM/#VURDER_BISTANDSBEHOV';
+    case Behovstype.FASTSETT_BEREGNINGSTIDSPUNKT_KODE:
+      return 'GRUNNLAG/#FASTSETT_BEREGNINGSTIDSPUNKT';
+    case Behovstype.FRITAK_MELDEPLIKT_KODE:
+      return 'SYKDOM/#FRITAK_MELDEPLIKT';
+    case Behovstype.FASTSETT_ARBEIDSEVNE_KODE:
+      return 'SYKDOM/#FASTSETT_ARBEIDSEVNE';
+    case Behovstype.VURDER_SYKEPENGEERSTATNING_KODE:
+      return 'SYKDOM/#VURDER_SYKEPENGEERSTATNING';
+    case Behovstype.AVKLAR_BARNETILLEGG_KODE:
+      return 'BARNETILLEGG/#BARNETILLEGG';
+    case Behovstype.FASTSETT_YRKESSKADEINNTEKT:
+      return 'GRUNNLAG/#FASTSETT_YRKESSKADEINNTEKT';
+    case Behovstype.AVKLAR_SONINGSFORRHOLD:
+      return 'ET_ANNET_STED';
+    case Behovstype.AVKLAR_HELSEINSTITUSJON:
+      return 'ET_ANNET_STED';
+    case Behovstype.VURDER_KLAGE_KONTOR:
+      return 'KLAGEBEHANDLING_KONTOR';
+    case Behovstype.VURDER_KLAGE_NAY:
+      return 'KLAGEBEHANDLING_NAY';
+    case Behovstype.AVKLAR_FORUTGÅENDE_MEDLEMSKAP:
+      return 'MEDLEMSKAP';
+    case Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP:
+      return 'LOVVALG';
+    case Behovstype.AVKLAR_SAMORDNING_ANDRE_STATLIGE_YTELSER:
+      return 'SAMORDNING/#SAMORDNING_ANDRE_STATLIGE_YTELSER';
+    case Behovstype.AVKLAR_SAMORDNING_GRADERING:
+      return 'SAMORDNING/#SAMORDNING_GRADERING';
+    case Behovstype.SAMORDNING_REFUSJONS_KRAV:
+      return 'SAMORDNING/#SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV';
+    case Behovstype.AVKLAR_SAMORDNING_UFORE:
+      return 'SAMORDNING/#SAMORDNING_UFØRE';
+    case Behovstype.AVKLAR_SAMORDNING_ARBEIDSGIVER:
+      return 'SAMORDNING/#SAMORDNING_ARBEIDSGIVER';
+    case Behovstype.FASTSETT_MANUELL_INNTEKT:
+      return 'GRUNNLAG/#FASTSETT_MANUELL_INNTEKT';
+    case Behovstype.VURDER_RETTIGHETSPERIODE:
+      return 'RETTIGHETSPERIODE';
+    case Behovstype.EFFEKTUER_11_7_KODE:
+      return 'UNDERVEIS';
+    case Behovstype.OVERSTYR_IKKE_OPPFYLT_MELDEPLIKT_KODE:
+      return 'UNDERVEIS';
+    case Behovstype.VURDER_BRUDD_11_7_KODE:
+      return 'AKTIVITETSPLIKT_11_7';
+    case Behovstype.OPPHOLDSKRAV_KODE:
+      return 'OPPHOLDSKRAV';
+    case Behovstype.AVKLAR_STUDENT_KODE:
+      return 'STUDENT/#AVKLAR_STUDENT';
+    case Behovstype.AVKLAR_SAMORDNING_SYKESTIPEND_KODE:
+      return 'STUDENT/#SAMORDNING_SYKESTIPEND';
+    default:
+      return 'SYKDOM';
+  }
+}
