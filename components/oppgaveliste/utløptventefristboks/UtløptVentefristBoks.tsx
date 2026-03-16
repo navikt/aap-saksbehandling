@@ -3,8 +3,8 @@ import { BodyShort, Button, Detail, Popover, Tag, VStack } from '@navikt/ds-reac
 import { HourglassBottomFilledIcon } from '@navikt/aksel-icons';
 import styles from './UtløptVentefristBoks.module.css';
 import { Dato } from 'lib/types/Dato';
-import { mapTilVenteÅrsakTekst } from '../../../lib/utils/oversettelser';
-import { SettPåVentÅrsaker } from '../../../lib/types/types';
+import { mapTilVenteÅrsakTekst } from 'lib/utils/oversettelser';
+import { SettPåVentÅrsaker } from 'lib/types/types';
 
 interface Props {
   frist: string;
