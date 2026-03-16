@@ -24,6 +24,7 @@ const grunnlagUtenVurdering: HelseinstitusjonGrunnlag = {
       status: 'AKTIV',
       oppholdFra: '2025-01-01',
       avsluttetDato: '2025-08-01',
+      tidligsteReduksjonsdato: '2025-05-01',
       kildeinstitusjon: 'St. Mungos Hospital',
     },
   ],
@@ -204,7 +205,10 @@ describe('Helseinstitusjonsvurdering med flere opphold', () => {
   it('Skal vise en description av tidligste reduksjonsdato på neste opphold hvis det ikke er innenfor 3 måneder', async () => {
     render(
       <Helseinstitusjon
-        grunnlag={{ ...grunnlagMedToOpphold, opphold: [opphold1, { ...opphold2, oppholdFra: '2026-10-15' }] }}
+        grunnlag={{
+          ...grunnlagMedToOpphold,
+          opphold: [opphold1, { ...opphold2, oppholdFra: '2026-10-15', tidligsteReduksjonsdato: '2027-02-01' }],
+        }}
         behandlingVersjon={123}
         readOnly={false}
       />
@@ -235,7 +239,10 @@ describe('Helseinstitusjonsvurdering med flere opphold', () => {
   it('Skal vise en feilmleding hvis bruker skriver inn en dato som er tidligere enn tidligste reduksjonsdato på neste opphold hvis det er etter 3 måneder', async () => {
     render(
       <Helseinstitusjon
-        grunnlag={{ ...grunnlagMedToOpphold, opphold: [opphold1, { ...opphold2, oppholdFra: '2026-10-15' }] }}
+        grunnlag={{
+          ...grunnlagMedToOpphold,
+          opphold: [opphold1, { ...opphold2, oppholdFra: '2026-10-15', tidligsteReduksjonsdato: '2027-02-01' }],
+        }}
         behandlingVersjon={123}
         readOnly={false}
       />

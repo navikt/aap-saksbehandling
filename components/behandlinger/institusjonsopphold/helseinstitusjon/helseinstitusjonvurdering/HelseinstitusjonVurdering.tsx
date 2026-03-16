@@ -59,9 +59,9 @@ export const Helseinstitusjonsvurdering = ({
     if (forrigeOppholdTom && erNyttOppholdInnenfor3MaanederEtterSistOpphold(forrigeOppholdTom, opphold.oppholdFra)) {
       return lagReduksjonBeskrivelseNyttOpphold(opphold.oppholdFra);
     } else {
-      return lagReduksjonsBeskrivelse(opphold.oppholdFra);
+      return lagReduksjonsBeskrivelse(opphold.oppholdFra, opphold.tidligsteReduksjonsdato);
     }
-  }, [opphold.oppholdFra, forrigeOppholdTom]);
+  }, [opphold.oppholdFra, forrigeOppholdTom, opphold.tidligsteReduksjonsdato]);
 
   return (
     <VStack gap={'4'}>
@@ -137,7 +137,7 @@ export const Helseinstitusjonsvurdering = ({
                     !forrigeOppholdTom ||
                     !erNyttOppholdInnenfor3MaanederEtterSistOpphold(forrigeOppholdTom, opphold.oppholdFra)
                   ) {
-                    return validerDatoForStoppAvReduksjon(value as string, opphold.oppholdFra);
+                    return validerDatoForStoppAvReduksjon(value as string, opphold.tidligsteReduksjonsdato);
                   }
                 },
               },
