@@ -5,11 +5,14 @@ import { clientLagreMellomlagring, clientSlettMellomlagring } from 'lib/clientAp
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { isSuccess } from 'lib/utils/api';
 import { MellomlagretVurdering } from 'lib/types/types';
-import { useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { debounce } from 'lodash';
+import { UseFormSubscribe } from 'react-hook-form';
 
-export function useMellomlagring(
+export function useMellomlagring<T extends object>(
   behovstype: Behovstype,
-  initialMellomlagring: MellomlagretVurdering | undefined
+  initialMellomlagring: MellomlagretVurdering | undefined,
+  subscribe?: UseFormSubscribe<T>
 ): {
   lagreMellomlagring: (vurdering: object) => void;
   slettMellomlagring: (callback?: () => void) => void;
@@ -21,17 +24,38 @@ export function useMellomlagring(
     initialMellomlagring
   );
 
-  async function lagreMellomlagring(vurdering: object) {
-    const res = await clientLagreMellomlagring({
-      avklaringsbehovkode: behovstype,
-      behandlingsReferanse: behandlingsReferanse,
-      data: JSON.stringify(vurdering),
+  const lagreMellomlagring = useCallback(
+    async (vurdering: object) => {
+      const res = await clientLagreMellomlagring({
+        avklaringsbehovkode: behovstype,
+        behandlingsReferanse: behandlingsReferanse,
+        data: JSON.stringify(vurdering),
+      });
+
+      if (isSuccess(res)) {
+        setMellomlagretVurdering(res.data.mellomlagretVurdering);
+      }
+    },
+    [behovstype, behandlingsReferanse]
+  );
+
+  const debouncedLagreMellomlagring = useMemo(() => debounce(lagreMellomlagring, 1000), [lagreMellomlagring]);
+
+  useEffect(() => {
+    if (!subscribe) return;
+    const callback = subscribe({
+      formState: {
+        values: true,
+        isDirty: true,
+      },
+      callback: ({ values, isDirty }) => {
+        if (!isDirty) return;
+        debouncedLagreMellomlagring(values);
+      },
     });
 
-    if (isSuccess(res)) {
-      setMellomlagretVurdering(res.data.mellomlagretVurdering);
-    }
-  }
+    return () => callback();
+  }, [subscribe, debouncedLagreMellomlagring]);
 
   async function slettMellomlagring(callback?: () => void) {
     const res = await clientSlettMellomlagring({
