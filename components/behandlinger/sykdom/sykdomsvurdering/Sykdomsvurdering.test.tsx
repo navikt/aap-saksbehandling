@@ -662,7 +662,7 @@ describe('yrkesskade', () => {
       await velgBekreft();
 
       const feilmeldinger = await screen.findAllByText(
-        'Du må skrive en begrunnelse for om arbeidsevnen er nedsatt med mist 30 prosent'
+        'Du må skrive en begrunnelse for om arbeidsevnen er nedsatt med minst 30 prosent'
       );
       expect(feilmeldinger.length).toBe(2);
       expect(feilmeldinger[0]).toBeVisible();
