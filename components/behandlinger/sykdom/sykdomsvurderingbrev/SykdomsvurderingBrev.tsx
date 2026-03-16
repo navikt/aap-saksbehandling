@@ -20,6 +20,7 @@ import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 import { ForeløpigBehandlingsutfallOppsummering } from 'components/behandlingsutfall/ForeløpigBehandlingsutfallOppsummering';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   foreløpigBehandlingsutfall: ForeløpigBehandlingsutfall;
@@ -57,6 +58,8 @@ export const SykdomsvurderingBrev = ({
     'SYKDOMSVURDERING_BREV',
     mellomlagretVurdering
   );
+
+  const erBekreftVurderingerStegPå = useFeatureFlag('BekreftVurderingerOppfolging');
 
   const defaultValues: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -118,7 +121,7 @@ export const SykdomsvurderingBrev = ({
       }}
       visningModus={visningModus}
       visningActions={visningActions}
-      knappTekst={'Bekreft og send videre'}
+      knappTekst={erBekreftVurderingerStegPå ? 'Bekreft' : 'Bekreft og send videre'}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
       <VStack gap={'4'}>
