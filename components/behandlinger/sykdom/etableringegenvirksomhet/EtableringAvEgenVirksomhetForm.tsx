@@ -77,7 +77,7 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly, gru
         control={form.control}
         label={'Foreligger det en næringsfaglig vurdering?'}
         horisontal={true}
-        rules={{ required: 'Du må svare på om det foreligger en nøringsfaglig vurdering' }}
+        rules={{ required: 'Du må svare på om det foreligger en næringsfaglig vurdering' }}
         readOnly={readOnly}
       />
       {form.watch(`vurderinger.${index}.foreliggerEnNæringsfagligVurdering`) === JaEllerNei.Ja && (
@@ -287,9 +287,11 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly, gru
           </VStack>
           <Alert variant={'info'}>
             <VStack>
-              <BodyShort>{'Har du husket å '}</BodyShort>
-              <BodyShort>{'- registrere etableringen i aktivitetsplanen?'}</BodyShort>
-              <BodyShort>{'- opprette en oppfølgingsoppgave før utgangen av neste periode?'}</BodyShort>
+              <BodyShort>{'Har du husket'}</BodyShort>
+              <BodyShort>
+                {'- at når AAP under etablering er vedtatt skal det registreres i aktivitetsplanen?'}
+              </BodyShort>
+              <BodyShort>{'- å opprette en oppfølgingsoppgave før utgangen av neste periode?'}</BodyShort>
             </VStack>
           </Alert>
         </VStack>

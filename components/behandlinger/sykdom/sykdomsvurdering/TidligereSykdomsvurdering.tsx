@@ -8,9 +8,11 @@ import {
   erArbeidsevnenNedsattLabel,
   erNedsettelseIArbeidsevneAvEnVissVarighetLabel,
   erNedsettelseIArbeidsevneMerEnnHalvpartenLabel,
+  erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense,
   erSkadeSykdomEllerLyteVesentligdelLabel,
   harSkadeSykdomEllerLyteLabel,
   vilkårsvurderingLabel,
+  yrkesskadeBegrunnelse,
 } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingFormInput';
 import { Dato } from 'lib/types/Dato';
 import { Sykdomvurdering } from 'lib/types/types';
@@ -43,22 +45,39 @@ export const TidligereSykdomsvurdering = ({ vurdering }: Props) => {
           .filter(Boolean)
           .join(', ')}
       />
-      <SpørsmålOgSvar
-        spørsmål={erArbeidsevnenNedsattLabel}
-        svar={getJaNeiEllerIkkeBesvart(vurdering.erArbeidsevnenNedsatt)}
-      />
-      <SpørsmålOgSvar
-        spørsmål={erNedsettelseIArbeidsevneMerEnnHalvpartenLabel}
-        svar={getJaNeiEllerIkkeBesvart(vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten)}
-      />
-      <SpørsmålOgSvar
-        spørsmål={erSkadeSykdomEllerLyteVesentligdelLabel}
-        svar={getJaNeiEllerIkkeBesvart(vurdering.erSkadeSykdomEllerLyteVesentligdel)}
-      />
-      <SpørsmålOgSvar
-        spørsmål={erNedsettelseIArbeidsevneAvEnVissVarighetLabel}
-        svar={getJaNeiEllerIkkeBesvart(vurdering.erNedsettelseIArbeidsevneAvEnVissVarighet)}
-      />
+      {vurdering.erArbeidsevnenNedsatt !== undefined && (
+        <SpørsmålOgSvar
+          spørsmål={erArbeidsevnenNedsattLabel}
+          svar={getJaNeiEllerIkkeBesvart(vurdering.erArbeidsevnenNedsatt)}
+        />
+      )}
+      {vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten !== undefined && (
+        <SpørsmålOgSvar
+          spørsmål={erNedsettelseIArbeidsevneMerEnnHalvpartenLabel}
+          svar={getJaNeiEllerIkkeBesvart(vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten)}
+        />
+      )}
+      {!!vurdering.yrkesskadeBegrunnelse && (
+        <SpørsmålOgSvar spørsmål={yrkesskadeBegrunnelse} svar={vurdering.yrkesskadeBegrunnelse} />
+      )}
+      {vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense !== undefined && (
+        <SpørsmålOgSvar
+          spørsmål={erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense}
+          svar={getJaNeiEllerIkkeBesvart(vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense)}
+        />
+      )}
+      {vurdering.erSkadeSykdomEllerLyteVesentligdel !== undefined && (
+        <SpørsmålOgSvar
+          spørsmål={erSkadeSykdomEllerLyteVesentligdelLabel}
+          svar={getJaNeiEllerIkkeBesvart(vurdering.erSkadeSykdomEllerLyteVesentligdel)}
+        />
+      )}
+      {vurdering.erNedsettelseIArbeidsevneAvEnVissVarighet !== undefined && (
+        <SpørsmålOgSvar
+          spørsmål={erNedsettelseIArbeidsevneAvEnVissVarighetLabel}
+          svar={getJaNeiEllerIkkeBesvart(vurdering.erNedsettelseIArbeidsevneAvEnVissVarighet)}
+        />
+      )}{' '}
     </VStack>
   );
 };

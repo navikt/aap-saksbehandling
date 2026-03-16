@@ -105,7 +105,8 @@ export const OvergangUforeVurderingFormInput = ({ index, form, readonly }: Props
 
       {harUforeVedtakEtterSoknad && (
         <Alert variant={'info'} size={'small'}>
-          Pass på at datoen vurderingen gjelder fra er virkningstidspunktet på uføretrygd.
+          Hovedregelen er at datoen vurderingen gjelder fra er virkningstidspunktet for uføretrygd. Sjekk
+          posteringsgrunnlaget og Kelvin-rutinen for mer informasjon.
         </Alert>
       )}
 

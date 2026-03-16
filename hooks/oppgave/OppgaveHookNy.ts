@@ -63,6 +63,10 @@ function lagUrlSuffix(filter: OppgavelisteRequest['utvidetFilter']): string {
     params.append('ventefristUtløpt', filter.ventefristUtløpt.toString());
   }
 
+  if (filter?.saksbehandlere?.length) {
+    filter.saksbehandlere.forEach((ident) => params.append('saksbehandlere', ident));
+  }
+
   const queryString = params.toString();
   return queryString ? `?${queryString}` : '';
 }
@@ -143,7 +147,7 @@ export function useOppgaverNy({
         antallGjenståendeOppgaver: res.data.antallGjenstaaende,
       })) ?? [];
 
-  const antallOppgaver = oppgaverValgtKø?.filter((res) => isSuccess(res))[0].data.antallTotalt ?? 0;
+  const antallOppgaver = oppgaverValgtKø?.filter((res) => isSuccess(res))[0]?.data?.antallTotalt ?? 0;
   const behandlingstyperFilterFraBackend =
     oppgaverValgtKø?.filter((res) => isSuccess(res))[0].data.sattFilterBehandlingstyper ?? [];
 

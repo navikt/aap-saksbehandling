@@ -68,7 +68,6 @@ export const SamordningArbeidsGiverTabell = ({ form, readOnly }: Props) => {
       <BodyLong textColor="subtle" size="small">
         Ytelsen fra arbeidsgiver skal regnes om til antall dager med 100% reduksjon.
       </BodyLong>
-
       <TableStyled>
         <Table.Header>
           <Table.Row>
@@ -85,19 +84,13 @@ export const SamordningArbeidsGiverTabell = ({ form, readOnly }: Props) => {
           ))}
         </Table.Body>
       </TableStyled>
-
-      <HStack>
-        <Button
-          size="small"
-          type="button"
-          variant="tertiary"
-          icon={<PlusCircleIcon />}
-          onClick={leggTilRad}
-          disabled={readOnly}
-        >
-          Legg til
-        </Button>
-      </HStack>
+      {!readOnly && (
+        <HStack>
+          <Button size="small" type="button" variant="tertiary" icon={<PlusCircleIcon />} onClick={leggTilRad}>
+            Legg til
+          </Button>
+        </HStack>
+      )}
       {form.formState.errors.perioder?.root && (
         <Alert variant={'error'}>{form.formState.errors.perioder.root.message}</Alert>
       )}
@@ -185,14 +178,15 @@ const AutoFillTomRow = ({ index, form, readOnly, remove }: AutoFillTomRowProps) 
       </Table.DataCell>
 
       <Table.DataCell>
-        <Button
-          size="small"
-          icon={<TrashIcon title="Slett" />}
-          variant="tertiary"
-          type="button"
-          onClick={() => remove(index)}
-          disabled={readOnly}
-        />
+        {!readOnly && (
+          <Button
+            size="small"
+            icon={<TrashIcon title="Slett" />}
+            variant="tertiary"
+            type="button"
+            onClick={() => remove(index)}
+          />
+        )}
       </Table.DataCell>
     </Table.Row>
   );

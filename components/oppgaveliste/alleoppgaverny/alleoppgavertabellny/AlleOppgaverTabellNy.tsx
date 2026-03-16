@@ -94,7 +94,9 @@ export const AlleOppgaverTabellNy = ({
             >
               Oppg. opprettet
             </Table.ColumnHeader>
-            <Table.ColumnHeader>Veileder/Saksbehandler</Table.ColumnHeader>
+            <Table.ColumnHeader sortKey={NoNavAapOppgaveListeOppgaveSorteringSortBy.RESERVERT_AV} sortable={true}>
+              Tildelt
+            </Table.ColumnHeader>
             <Table.HeaderCell></Table.HeaderCell>
             <Table.HeaderCell></Table.HeaderCell>
           </Table.Row>

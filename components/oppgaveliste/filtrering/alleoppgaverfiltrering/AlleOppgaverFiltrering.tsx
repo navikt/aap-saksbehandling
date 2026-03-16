@@ -115,6 +115,7 @@ export const AlleOppgaverFiltrering = ({
                         const values = form.watch(filter.key);
                         if (Array.isArray(values)) {
                           const arrayUtenValgtFilter = values.filter((value) => value !== filter.value);
+                          // @ts-expect-error fikses i AlleOppgaverFiltreringNy
                           form.setValue(filter.key, arrayUtenValgtFilter);
                         } else {
                           form.setValue(filter.key, undefined);

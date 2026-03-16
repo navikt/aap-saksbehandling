@@ -18,7 +18,7 @@ import {
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
 import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
-import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
+import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import { OvergangArbeidForm } from 'components/behandlinger/sykdom/overgangarbeid/OvergangArbeid-types';
 import {
   getDefaultValuesFromGrunnlag,
@@ -119,7 +119,7 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialM
     });
   };
 
-  const errorList = mapPeriodiserteVurderingerErrorList<OvergangArbeidForm>(form.formState.errors);
+  const errorList = hentFeilmeldingerForForm(form.formState.errors);
   const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
 
   return (

@@ -116,4 +116,3 @@ export const LeggTilUtenlandsOpphold = ({ i, form, readOnly, remove }: Props) =>
     </VStack>
   );
 };
-
