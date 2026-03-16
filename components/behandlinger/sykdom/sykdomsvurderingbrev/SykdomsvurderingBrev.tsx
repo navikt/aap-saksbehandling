@@ -19,7 +19,6 @@ import { Veiledning } from 'components/veiledning/Veiledning';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
-import { useFeatureFlag } from 'context/UnleashContext';
 import { ForeløpigBehandlingsutfallOppsummering } from 'components/behandlingsutfall/ForeløpigBehandlingsutfallOppsummering';
 
 interface Props {
@@ -98,13 +97,9 @@ export const SykdomsvurderingBrev = ({
   const skalViseTidligereVurderinger =
     typeBehandling === 'Revurdering' && historiskeVurderinger && historiskeVurderinger.length > 0;
 
-  const visOppsummering = useFeatureFlag('NyTidligereVurderinger');
-
   return (
     <VilkårskortMedFormOgMellomlagringNyVisning
-      heading={
-        visOppsummering ? 'Foreløpig resultat og individuell begrunnelse' : 'Individuell begrunnelse til vedtaksbrev'
-      }
+      heading={'Foreløpig resultat og individuell begrunnelse'}
       steg="SYKDOMSVURDERING_BREV"
       vilkårTilhørerNavKontor={true}
       defaultOpen={true}
@@ -127,16 +122,14 @@ export const SykdomsvurderingBrev = ({
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
       <VStack gap={'4'}>
-        {visOppsummering && (
-          <>
-            <BodyShort size={'small'}>
-              Tabellen viser hvilke perioder brukeren har blitt vurdert til å oppfylle vilkår for ulike rettighetstyper.
-              Resultatet kan endre seg videre i behandlingen.
-            </BodyShort>
-            <ForeløpigBehandlingsutfallOppsummering foreløpigBehandlingsutfall={foreløpigBehandlingsutfall} />
-            <Label size={'small'}>Skriv en individuell begrunnelse</Label>
-          </>
-        )}
+        <>
+          <BodyShort size={'small'}>
+            Tabellen viser hvilke perioder brukeren har blitt vurdert til å oppfylle vilkår for ulike rettighetstyper.
+            Resultatet kan endre seg videre i behandlingen.
+          </BodyShort>
+          <ForeløpigBehandlingsutfallOppsummering foreløpigBehandlingsutfall={foreløpigBehandlingsutfall} />
+          <Label size={'small'}>Skriv en individuell begrunnelse</Label>
+        </>
         {skalViseTidligereVurderinger && (
           <TidligereVurderinger
             data={historiskeVurderinger}
