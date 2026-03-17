@@ -47,7 +47,7 @@ describe('sykdomsvurdering for brev', () => {
         behandlingVersjon={0}
       />
     );
-    const button = screen.getByRole('button', { name: 'Bekreft og send videre' });
+    const button = screen.getByRole('button', { name: 'Bekreft' });
     await user.click(button);
 
     expect(await screen.findByText('Du må skrive en individuell begrunnelse')).toBeVisible();

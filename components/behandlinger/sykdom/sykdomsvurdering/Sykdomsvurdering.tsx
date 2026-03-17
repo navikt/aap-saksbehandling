@@ -26,6 +26,7 @@ import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/form
 import { SykdomsvurderingFormInput } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingFormInput';
 import { TidligereSykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/TidligereSykdomsvurdering';
 import mapTilPeriodisertVurdering from 'components/behandlinger/sykdom/sykdomsvurdering/vurderingMapper';
+import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMellomlagringParser';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
@@ -39,7 +40,6 @@ import {
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
-import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMellomlagringParser';
 
 export interface SykdomsvurderingerForm {
   vurderinger: Array<Sykdomsvurdering>;
@@ -69,6 +69,7 @@ interface SykdomProps {
   typeBehandling: TypeBehandling;
   diagnoseDefaultOptions: DiagnoserDefaultOptions;
   initialMellomlagretVurdering?: MellomlagretVurdering;
+  automatiskMellomlagringToggle?: boolean;
 }
 
 export const Sykdomsvurdering = ({
@@ -78,23 +79,12 @@ export const Sykdomsvurdering = ({
   diagnoseDefaultOptions,
   typeBehandling,
   initialMellomlagretVurdering,
+  automatiskMellomlagringToggle,
 }: SykdomProps) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { sak } = useSak();
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
-
-  const defaultValues: SykdomsvurderingerForm = initialMellomlagretVurdering
-    ? parseOgMigrerMellomlagretData(initialMellomlagretVurdering.data)
-    : mapGrunnlagTilDefaultvalues(grunnlag);
-
-  const form = useForm<SykdomsvurderingerForm>({ defaultValues });
-
-  const { slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } = useMellomlagring(
-    Behovstype.AVKLAR_SYKDOM_KODE,
-    initialMellomlagretVurdering,
-    form.subscribe
-  );
 
   const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('AVKLAR_SYKDOM');
@@ -102,14 +92,26 @@ export const Sykdomsvurdering = ({
   const { visningModus, visningActions, formReadOnly, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'AVKLAR_SYKDOM',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
+  const defaultValues: SykdomsvurderingerForm = initialMellomlagretVurdering
+    ? parseOgMigrerMellomlagretData(initialMellomlagretVurdering.data)
+    : mapGrunnlagTilDefaultvalues(grunnlag);
+
+  const form = useForm<SykdomsvurderingerForm>({ defaultValues });
   const {
     fields: nyeVurderingerFields,
     remove,
     append,
   } = useFieldArray({ name: 'vurderinger', control: form.control });
+
+  const { slettMellomlagring, lagreMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
+    useMellomlagring(
+      Behovstype.AVKLAR_SYKDOM_KODE,
+      initialMellomlagretVurdering,
+      automatiskMellomlagringToggle ? form : undefined
+    );
 
   const førsteDatoSomKanVurderes =
     grunnlag.kanVurderes[0]?.fom != null ? parseISO(grunnlag.kanVurderes[0].fom) : new Date();
@@ -171,6 +173,7 @@ export const Sykdomsvurdering = ({
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       knappTekst={'Bekreft'}
       mellomlagretVurdering={mellomlagretVurdering}
+      onLagreMellomLagringClick={!automatiskMellomlagringToggle ? () => lagreMellomlagring(form.watch()) : undefined}
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(mapGrunnlagTilDefaultvalues(grunnlag)))}
       visningActions={visningActions}
       visningModus={visningModus}

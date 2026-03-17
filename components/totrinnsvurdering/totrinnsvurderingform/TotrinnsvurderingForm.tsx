@@ -7,23 +7,20 @@ import {
   MellomlagretVurdering,
   ToTrinnsVurdering,
 } from 'lib/types/types';
-import {
-  behovstypeTilVilkårskortLink,
-  ToTrinnsVurderingFormFields,
-} from 'components/totrinnsvurdering/ToTrinnsvurdering';
+import { ToTrinnsVurderingFormFields } from 'components/totrinnsvurdering/ToTrinnsvurdering';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useFieldArray } from 'react-hook-form';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { useConfigForm } from 'components/form/FormHook';
 import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { useBehandlingsReferanse, useSaksnummer } from 'hooks/saksbehandling/BehandlingHook';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { TotrinnsvurderingVedtaksbrevFelter } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingVedtaksbrevFelter';
+import { byggVilkårskortLenke } from 'lib/utils/vilkårskort';
 
 interface Props {
   grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;
-  link: string;
   erKvalitetssikring: boolean;
   readOnly: boolean;
   initialMellomlagretVurdering?: MellomlagretVurdering;
@@ -37,11 +34,11 @@ type DraftFormFields = Partial<FormFieldsToTrinnsVurdering>;
 
 export const TotrinnsvurderingForm = ({
   grunnlag,
-  link,
   readOnly,
   erKvalitetssikring,
   initialMellomlagretVurdering,
 }: Props) => {
+  const saksnummer = useSaksnummer();
   const { flyt } = useRequiredFlyt();
   const behandlingsReferanse = useBehandlingsReferanse();
 
@@ -138,6 +135,7 @@ export const TotrinnsvurderingForm = ({
       autoComplete={'off'}
     >
       {fields.map((field, index) => {
+        const link = byggVilkårskortLenke(saksnummer, behandlingsReferanse, field.definisjon as Behovstype);
         if (field.definisjon === Behovstype.SYKDOMSVURDERING_BREV_KODE) {
           return (
             <TotrinnsvurderingVedtaksbrevFelter
@@ -146,7 +144,7 @@ export const TotrinnsvurderingForm = ({
               index={index}
               field={field}
               erKvalitetssikring={erKvalitetssikring}
-              link={`${link}/${behovstypeTilVilkårskortLink(field.definisjon as Behovstype)}`}
+              link={link}
               readOnly={readOnly}
             />
           );
@@ -158,7 +156,7 @@ export const TotrinnsvurderingForm = ({
             index={index}
             field={field}
             erKvalitetssikring={erKvalitetssikring}
-            link={`${link}/${behovstypeTilVilkårskortLink(field.definisjon as Behovstype)}`}
+            link={link}
             readOnly={readOnly}
           />
         );

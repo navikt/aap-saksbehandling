@@ -1,41 +1,72 @@
 'use client';
 
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { useBehandlingsReferanse, useSaksnummer } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { Behovstype } from 'lib/utils/form';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
-import { Button } from '@navikt/ds-react';
+import { BodyShort, Button, HStack, VStack } from '@navikt/ds-react';
+import { BekreftVurderingerOppfølgingGrunnlag } from 'lib/types/types';
+import { mapBehovskodeTilBehovstype } from 'lib/utils/oversettelser';
+import Link from 'next/link';
+import { byggVilkårskortLenke } from 'lib/utils/vilkårskort';
 
 interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
+  grunnlag: BekreftVurderingerOppfølgingGrunnlag;
 }
 
-export const BekreftVurderingerOppfølging = ({ behandlingVersjon, readOnly }: Props) => {
+export const BekreftVurderingerOppfølging = ({ behandlingVersjon, readOnly, grunnlag }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { status, løsBehovOgGåTilNesteSteg, isLoading, løsBehovOgGåTilNesteStegError } = useLøsBehovOgGåTilNesteSteg(
     'BEKREFT_VURDERINGER_OPPFØLGING'
   );
 
+  const [saksnummer, behandlingsreferanse] = [useSaksnummer(), useBehandlingsReferanse()];
+
   return (
     <VilkårsKort heading={'Bekreft vurderinger'} steg={'BEKREFT_VURDERINGER_OPPFØLGING'}>
       {!readOnly && (
-        <Button
-          variant={'primary'}
-          onClick={() =>
-            løsBehovOgGåTilNesteSteg({
-              behandlingVersjon: behandlingVersjon,
-              behov: {
-                behovstype: Behovstype.BEKREFT_VURDERINGER_OPPFØLGING,
-              },
-              referanse: behandlingsReferanse,
-            })
-          }
-          loading={isLoading}
-        >
-          Bekreft vurderinger og send videre
-        </Button>
+        <VStack gap={'4'}>
+          {grunnlag.mellomlagredeVurderinger.length != 0 && (
+            <VStack gap={'0'}>
+              <HStack gap={'2'}>
+                <BodyShort size={'small'}>Det finnes mellomlagrede vurderinger for følgende vilkår:</BodyShort>
+                {grunnlag.mellomlagredeVurderinger.map((vurdering) => (
+                  <Link
+                    href={byggVilkårskortLenke(
+                      saksnummer,
+                      behandlingsreferanse,
+                      vurdering.avklaringsbehovKode as Behovstype
+                    )}
+                    key={vurdering.avklaringsbehovKode}
+                  >
+                    <BodyShort size={'small'}> {mapBehovskodeTilBehovstype(vurdering.avklaringsbehovKode)}</BodyShort>
+                  </Link>
+                ))}
+              </HStack>
+              <BodyShort size={'small'}>Du må sende inn eller avbryte vurderingene for komme deg videre.</BodyShort>
+            </VStack>
+          )}
+          <Button
+            variant={'primary'}
+            className="fit-content"
+            disabled={grunnlag.mellomlagredeVurderinger.length != 0}
+            onClick={() =>
+              løsBehovOgGåTilNesteSteg({
+                behandlingVersjon: behandlingVersjon,
+                behov: {
+                  behovstype: Behovstype.BEKREFT_VURDERINGER_OPPFØLGING,
+                },
+                referanse: behandlingsReferanse,
+              })
+            }
+            loading={isLoading}
+          >
+            Bekreft vurderinger og send videre
+          </Button>
+        </VStack>
       )}
 
       <LøsBehovOgGåTilNesteStegStatusAlert
