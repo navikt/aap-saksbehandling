@@ -187,8 +187,8 @@ export const SaksinfoBanner = ({
             <div className={styles.oppgavestatus}>
               <UtløptVentefristBoks
                 frist={oppgave.utløptVentefrist}
-                årsak={oppgave.påVentÅrsak}
-                begrunnelse={oppgave.venteBegrunnelse}
+                årsak={oppgave.forrigePåVentÅrsak}
+                begrunnelse={oppgave.forrigeVenteBegrunnelse}
               />
             </div>
           )}

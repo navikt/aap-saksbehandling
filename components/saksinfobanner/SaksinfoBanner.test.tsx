@@ -465,14 +465,13 @@ describe('Sak status', () => {
     expect(returTag).not.toBeInTheDocument();
   });
 
-  it('skal vise frist utløpt-tag når oppgave har utløpt ventefrist', () => {
+  it('skal vise frist utløpt-tag når oppgave har utløpt ventefrist', async () => {
     customRender(
       <SaksinfoBanner
         personInformasjon={personInformasjon}
         sak={sak}
         behandling={behandling}
         brukerInformasjon={{ navn: 'Saksbehandler', NAVident: 'navIdent' }}
-        referanse={'123456'}
         oppgave={{
           ...oppgave,
           utløptVentefrist: '2026-01-04',

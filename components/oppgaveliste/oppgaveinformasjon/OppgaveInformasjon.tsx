@@ -22,8 +22,8 @@ export const OppgaveInformasjon = ({ oppgave }: Props) => {
       {oppgave.utløptVentefrist && (
         <UtløptVentefristBoks
           frist={oppgave.utløptVentefrist}
-          årsak={oppgave.påVentÅrsak}
-          begrunnelse={oppgave.venteBegrunnelse}
+          årsak={oppgave.forrigePåVentÅrsak}
+          begrunnelse={oppgave.forrigeVenteBegrunnelse}
         />
       )}
       {oppgave.harUlesteDokumenter && <SvarFraBehandler />}
