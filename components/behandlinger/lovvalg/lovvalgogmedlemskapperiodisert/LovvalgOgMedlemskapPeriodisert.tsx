@@ -51,26 +51,27 @@ export const LovvalgOgMedlemskapPeriodisert = ({
   const { løsPeriodisertBehovOgGåTilNesteSteg, status, løsBehovOgGåTilNesteStegError, isLoading } =
     useLøsBehovOgGåTilNesteSteg('VURDER_LOVVALG');
 
-  const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
-    useMellomlagring(Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP, initialMellomlagretVurdering);
+  const defaultValues = initialMellomlagretVurdering
+    ? hentPeriodiserteVerdierFraMellomlagretVurdering(initialMellomlagretVurdering, grunnlag)
+    : getDefaultValuesFromGrunnlag(grunnlag);
+
+  const form = useForm<LovOgMedlemskapVurderingForm>({
+    defaultValues,
+  });
+
+  const { slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } = useMellomlagring(
+    Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP,
+    initialMellomlagretVurdering,
+    form
+  );
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
   const { visningActions, formReadOnly, visningModus, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'VURDER_LOVVALG',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
-
-  const defaultValues =
-    mellomlagretVurdering != null
-      ? hentPeriodiserteVerdierFraMellomlagretVurdering(mellomlagretVurdering, grunnlag)
-      : getDefaultValuesFromGrunnlag(grunnlag);
-
-  const form = useForm<LovOgMedlemskapVurderingForm>({
-    defaultValues,
-    reValidateMode: 'onChange',
-  });
 
   const { fields: vurderingerFields, append, remove } = useFieldArray({ control: form.control, name: 'vurderinger' });
 
@@ -134,7 +135,6 @@ export const LovvalgOgMedlemskapPeriodisert = ({
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring({ ...form.watch(), overstyring })}
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}
       visningModus={visningModus}
       visningActions={visningActions}

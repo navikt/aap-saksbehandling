@@ -58,27 +58,29 @@ export const ForutgåendeMedlemskapPeriodisert = ({
   const { løsPeriodisertBehovOgGåTilNesteSteg, status, løsBehovOgGåTilNesteStegError, isLoading } =
     useLøsBehovOgGåTilNesteSteg('VURDER_MEDLEMSKAP');
 
-  const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
-    useMellomlagring(Behovstype.AVKLAR_FORUTGÅENDE_MEDLEMSKAP, initialMellomlagretVurdering);
-
-  const { visningActions, formReadOnly, visningModus, erAktivUtenAvbryt } = useVilkårskortVisning(
-    readOnly,
-    'VURDER_MEDLEMSKAP',
-    mellomlagretVurdering
-  );
-
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
-  const defaultValues =
-    mellomlagretVurdering != null
-      ? hentPeriodiserteVerdierFraMellomlagretVurdering(mellomlagretVurdering, grunnlag)
-      : getDefaultValuesFromGrunnlag(grunnlag);
+  const defaultValues = initialMellomlagretVurdering
+    ? hentPeriodiserteVerdierFraMellomlagretVurdering(initialMellomlagretVurdering, grunnlag)
+    : getDefaultValuesFromGrunnlag(grunnlag);
 
   const form = useForm<ForutgåendeMedlemskapVurderingForm>({
     defaultValues,
     reValidateMode: 'onChange',
     shouldUnregister: true,
   });
+
+  const { slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } = useMellomlagring(
+    Behovstype.AVKLAR_FORUTGÅENDE_MEDLEMSKAP,
+    initialMellomlagretVurdering,
+    form
+  );
+
+  const { visningActions, formReadOnly, visningModus, erAktivUtenAvbryt } = useVilkårskortVisning(
+    readOnly,
+    'VURDER_MEDLEMSKAP',
+    initialMellomlagretVurdering
+  );
 
   const { fields: vurderingerFields, append, remove } = useFieldArray({ control: form.control, name: 'vurderinger' });
 
@@ -139,7 +141,6 @@ export const ForutgåendeMedlemskapPeriodisert = ({
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring({ ...form.watch(), overstyring })}
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}
       visningModus={visningModus}
       visningActions={visningActions}

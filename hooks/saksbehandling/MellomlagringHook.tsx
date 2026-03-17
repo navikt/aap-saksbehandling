@@ -23,21 +23,6 @@ export function useMellomlagring<T extends object>(
     initialMellomlagring
   );
 
-  async function slettMellomlagring(callback?: () => void) {
-    debouncedLagreMellomlagring.cancel();
-    const res = await clientSlettMellomlagring({
-      behandlingsreferanse: behandlingsReferanse,
-      behovstype: behovstype,
-    });
-
-    if (isSuccess(res)) {
-      setMellomlagretVurdering(undefined);
-      if (callback) {
-        callback();
-      }
-    }
-  }
-
   const lagreMellomlagring = useCallback(
     async (vurdering: object) => {
       const res = await clientLagreMellomlagring({
@@ -94,6 +79,21 @@ export function useMellomlagring<T extends object>(
       unsubscribe();
     };
   }, [form, debouncedLagreMellomlagring]);
+
+  async function slettMellomlagring(callback?: () => void) {
+    debouncedLagreMellomlagring.cancel();
+    const res = await clientSlettMellomlagring({
+      behandlingsreferanse: behandlingsReferanse,
+      behovstype: behovstype,
+    });
+
+    if (isSuccess(res)) {
+      setMellomlagretVurdering(undefined);
+      if (callback) {
+        callback();
+      }
+    }
+  }
 
   function nullstillMellomlagretVurdering() {
     setMellomlagretVurdering(undefined);
