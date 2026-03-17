@@ -1,13 +1,15 @@
 'use client';
 
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { useBehandlingsReferanse, useSaksnummer } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { Behovstype } from 'lib/utils/form';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
-import { Alert, Button, HStack, Tag, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, HStack, VStack } from '@navikt/ds-react';
 import { BekreftVurderingerOppfølgingGrunnlag } from 'lib/types/types';
 import { mapBehovskodeTilBehovstype } from 'lib/utils/oversettelser';
+import Link from 'next/link';
+import { byggVilkårskortLenke } from 'lib/utils/vilkårskort';
 
 interface Props {
   behandlingVersjon: number;
@@ -21,22 +23,31 @@ export const BekreftVurderingerOppfølging = ({ behandlingVersjon, readOnly, gru
     'BEKREFT_VURDERINGER_OPPFØLGING'
   );
 
+  const [saksnummer, behandlingsreferanse] = [useSaksnummer(), useBehandlingsReferanse()];
+
   return (
     <VilkårsKort heading={'Bekreft vurderinger'} steg={'BEKREFT_VURDERINGER_OPPFØLGING'}>
       {!readOnly && (
         <VStack gap={'4'}>
           {grunnlag.mellomlagredeVurderinger.length != 0 && (
-            <Alert variant="warning" size="small">
-              <p>Det finnes mellomlagrede vurderinger for følgende vilkår:</p>
+            <VStack gap={'0'}>
               <HStack gap={'2'}>
+                <BodyShort size={'small'}>Det finnes mellomlagrede vurderinger for følgende vilkår:</BodyShort>
                 {grunnlag.mellomlagredeVurderinger.map((vurdering) => (
-                  <Tag size={'small'} variant="info" key={vurdering.avklaringsbehovKode}>
-                    {mapBehovskodeTilBehovstype(vurdering.avklaringsbehovKode)}
-                  </Tag>
+                  <Link
+                    href={byggVilkårskortLenke(
+                      saksnummer,
+                      behandlingsreferanse,
+                      vurdering.avklaringsbehovKode as Behovstype
+                    )}
+                    key={vurdering.avklaringsbehovKode}
+                  >
+                    <BodyShort size={'small'}> {mapBehovskodeTilBehovstype(vurdering.avklaringsbehovKode)}</BodyShort>
+                  </Link>
                 ))}
               </HStack>
-              <p>Du må sende inn eller avbryte vurderingene for komme deg videre.</p>
-            </Alert>
+              <BodyShort size={'small'}>Du må sende inn eller avbryte vurderingene for komme deg videre.</BodyShort>
+            </VStack>
           )}
           <Button
             variant={'primary'}
