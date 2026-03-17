@@ -61,13 +61,19 @@ describe('Generelt', () => {
     expect(heading).toBeVisible();
   });
 
-  it.skip('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
+  it('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
     setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'SYKDOMSVURDERING_BREV' });
 
     render(<Bistandsbehov grunnlag={grunnlagMedVurdering} readOnly={false} behandlingVersjon={0} />);
 
     const endreKnapp = screen.getByRole('button', { name: 'Endre' });
     await user.click(endreKnapp);
+
+    await user.click(
+      screen.getByRole('button', {
+        name: /ny vurdering: 24\. mars 2025 – oppfylt/i,
+      })
+    );
 
     const begrunnelseFelt = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
     await user.clear(begrunnelseFelt);
@@ -77,6 +83,11 @@ describe('Generelt', () => {
     const avbrytKnapp = screen.getByRole('button', { name: 'Avbryt' });
     await user.click(avbrytKnapp);
 
+    await user.click(
+      screen.getByRole('button', {
+        name: /ny vurdering: 24\. mars 2025 – oppfylt/i,
+      })
+    );
     const begrunnelseFeltEtterAvbryt = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
     expect(begrunnelseFeltEtterAvbryt).toHaveValue('Dette er min vurdering som er bekreftet');
   });

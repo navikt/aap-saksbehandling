@@ -164,7 +164,7 @@ export function hentMineOppgaverQueryParams(req: NextRequest): MineOppgaverQuery
     ...(sortorder ? { sortorder } : {}),
   };
 }
-function validerSortByQueryParamEnum(str: string): PathsMineOppgaverGetParametersQuerySortby {
+function validerSortByQueryParamEnum(str: string): PathsMineOppgaverGetParametersQuerySortby | null {
   switch (str) {
     case 'PERSONIDENT':
       return PathsMineOppgaverGetParametersQuerySortby.PERSONIDENT;
@@ -179,17 +179,17 @@ function validerSortByQueryParamEnum(str: string): PathsMineOppgaverGetParameter
     case 'OPPRETTET_TIDSPUNKT':
       return PathsMineOppgaverGetParametersQuerySortby.OPPRETTET_TIDSPUNKT;
   }
-  throw new Error(`Fant ikke mapping til backend enum for sortby query param: ${str}`);
+  return null;
 }
 
-function validerSortOrderQueryParamEnum(str: string) {
+function validerSortOrderQueryParamEnum(str: string): PathsMineOppgaverGetParametersQuerySortorder | null {
   switch (str) {
     case 'DESC':
       return PathsMineOppgaverGetParametersQuerySortorder.DESC;
     case 'ASC':
       return PathsMineOppgaverGetParametersQuerySortorder.ASC;
   }
-  throw new Error(`Fant ikke mapping til backend enum for sortorder query param: ${str}`);
+  return null;
 }
 
 function buildSaksbehandlingsURL(oppgave: Oppgave): string {
