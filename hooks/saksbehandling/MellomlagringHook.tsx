@@ -39,7 +39,16 @@ export function useMellomlagring<T extends object>(
     [behovstype, behandlingsReferanse]
   );
 
-  const debouncedLagreMellomlagring = useMemo(() => debounce(lagreMellomlagring, 600), [lagreMellomlagring]);
+  const debouncedLagreMellomlagring = useMemo(() => debounce(lagreMellomlagring, 2000), [lagreMellomlagring]);
+
+  const isSubmitting = form?.formState.isSubmitting ?? false;
+
+  // Vi må avbryte lagring når bruker løser behov
+  useEffect(() => {
+    if (isSubmitting) {
+      debouncedLagreMellomlagring.cancel();
+    }
+  }, [isSubmitting, debouncedLagreMellomlagring]);
 
   useEffect(() => {
     if (!form) return;
@@ -51,11 +60,6 @@ export function useMellomlagring<T extends object>(
         values: true,
       },
       callback: ({ values }) => {
-        if (form.formState.isSubmitting) {
-          debouncedLagreMellomlagring.cancel();
-          return;
-        }
-
         /**
          * Hindrer unødvendig autosave:
          * - Sammenligner med defaultValues for å sjekke om brukeren faktisk har gjort endringer (RHF sin isDirty er ikke alltid pålitelig).
