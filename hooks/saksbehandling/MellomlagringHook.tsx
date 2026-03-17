@@ -14,7 +14,6 @@ export function useMellomlagring<T extends object>(
   initialMellomlagring: MellomlagretVurdering | undefined,
   form?: UseFormReturn<T>
 ): {
-  lagreMellomlagring: (vurdering: object) => void;
   slettMellomlagring: (callback?: () => void) => void;
   mellomlagretVurdering?: MellomlagretVurdering;
   nullstillMellomlagretVurdering: () => void;
@@ -101,7 +100,6 @@ export function useMellomlagring<T extends object>(
   }
 
   return {
-    lagreMellomlagring,
     slettMellomlagring,
     nullstillMellomlagretVurdering,
     mellomlagretVurdering,

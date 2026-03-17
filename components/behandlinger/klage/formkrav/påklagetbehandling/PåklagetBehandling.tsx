@@ -41,7 +41,7 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, ini
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag?.gjeldendeVurdering);
 
-  const { control, handleSubmit, watch, reset, subscribe } = useForm<FormFields>({
+  const form = useForm<FormFields>({
     defaultValues: {
       vedtak: defaultValue.vedtak,
     },
@@ -50,7 +50,7 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, ini
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
     Behovstype.FASTSETT_PÅKLAGET_BEHANDLING,
     initialMellomlagretVurdering,
-    subscribe
+    form
   );
 
   const onSubmit = (data: FormFields) => {
@@ -77,7 +77,7 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, ini
     <VilkårskortMedFormOgMellomlagringNyVisning
       heading={'Klage på vedtak'}
       steg={'PÅKLAGET_BEHANDLING'}
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={form.handleSubmit(onSubmit)}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
       isLoading={isLoading}
@@ -86,7 +86,7 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, ini
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() =>
-          reset(
+          form.reset(
             grunnlag?.gjeldendeVurdering
               ? mapVurderingToDraftFormFields(grunnlag.gjeldendeVurdering)
               : emptyDraftFormFields()
@@ -95,11 +95,11 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, ini
       }
       visningModus={visningModus}
       visningActions={visningActions}
-      formReset={() => reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
+      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
       <Controller
         name="vedtak"
-        control={control}
+        control={form.control}
         rules={{ required: 'Du må velge hvilket vedtak klagen gjelder' }}
         render={({ field, fieldState }) => (
           <VelgPåklagetVedtakRadioTable

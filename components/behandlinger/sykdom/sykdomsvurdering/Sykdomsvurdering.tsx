@@ -69,7 +69,6 @@ interface SykdomProps {
   typeBehandling: TypeBehandling;
   diagnoseDefaultOptions: DiagnoserDefaultOptions;
   initialMellomlagretVurdering?: MellomlagretVurdering;
-  automatiskMellomlagringToggle?: boolean;
 }
 
 export const Sykdomsvurdering = ({
@@ -79,7 +78,6 @@ export const Sykdomsvurdering = ({
   diagnoseDefaultOptions,
   typeBehandling,
   initialMellomlagretVurdering,
-  automatiskMellomlagringToggle,
 }: SykdomProps) => {
   const behandlingsReferanse = useBehandlingsReferanse();
   const { sak } = useSak();
@@ -106,12 +104,11 @@ export const Sykdomsvurdering = ({
     append,
   } = useFieldArray({ name: 'vurderinger', control: form.control });
 
-  const { slettMellomlagring, lagreMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
-    useMellomlagring(
-      Behovstype.AVKLAR_SYKDOM_KODE,
-      initialMellomlagretVurdering,
-      automatiskMellomlagringToggle ? form : undefined
-    );
+  const { slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } = useMellomlagring(
+    Behovstype.AVKLAR_SYKDOM_KODE,
+    initialMellomlagretVurdering,
+    form
+  );
 
   const førsteDatoSomKanVurderes =
     grunnlag.kanVurderes[0]?.fom != null ? parseISO(grunnlag.kanVurderes[0].fom) : new Date();
@@ -173,7 +170,6 @@ export const Sykdomsvurdering = ({
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       knappTekst={'Bekreft'}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={!automatiskMellomlagringToggle ? () => lagreMellomlagring(form.watch()) : undefined}
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(mapGrunnlagTilDefaultvalues(grunnlag)))}
       visningActions={visningActions}
       visningModus={visningModus}

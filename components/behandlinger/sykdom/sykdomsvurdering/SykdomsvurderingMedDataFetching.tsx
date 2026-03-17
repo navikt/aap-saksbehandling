@@ -8,7 +8,6 @@ import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 import { skalViseSteg, StegData } from 'lib/utils/steg';
 import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
-import { unleashService } from 'lib/services/unleash/unleashService';
 
 interface Props {
   behandlingsReferanse: string;
@@ -31,8 +30,6 @@ export const SykdomsvurderingMedDataFetching = async ({ behandlingsReferanse, st
   const harTidligereVurderinger =
     grunnlag.data.sisteVedtatteVurderinger != null && grunnlag.data.sisteVedtatteVurderinger.length > 0;
 
-  const automatiskMellomlagringToggle = unleashService.isEnabled('automatiskMellomlagring');
-
   if (!skalViseSteg(stegData, harTidligereVurderinger)) {
     return null;
   }
@@ -45,7 +42,6 @@ export const SykdomsvurderingMedDataFetching = async ({ behandlingsReferanse, st
       diagnoseDefaultOptions={diagnoseDefaultOptions}
       typeBehandling={typeBehandling}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
-      automatiskMellomlagringToggle={automatiskMellomlagringToggle}
     />
   );
 };
