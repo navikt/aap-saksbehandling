@@ -12,7 +12,7 @@ import { UseFormReturn } from 'react-hook-form';
 export function useMellomlagring<T extends object>(
   behovstype: Behovstype,
   initialMellomlagring: MellomlagretVurdering | undefined,
-  form?: UseFormReturn<T>
+  form: UseFormReturn<T>
 ): {
   slettMellomlagring: (callback?: () => void) => void;
   mellomlagretVurdering?: MellomlagretVurdering;
@@ -40,7 +40,7 @@ export function useMellomlagring<T extends object>(
 
   const debouncedLagreMellomlagring = useMemo(() => debounce(lagreMellomlagring, 2000), [lagreMellomlagring]);
 
-  const isSubmitting = form?.formState.isSubmitting ?? false;
+  const isSubmitting = form.formState.isSubmitting;
 
   // Vi må avbryte lagring når bruker løser behov
   useEffect(() => {
@@ -50,8 +50,6 @@ export function useMellomlagring<T extends object>(
   }, [isSubmitting, debouncedLagreMellomlagring]);
 
   useEffect(() => {
-    if (!form) return;
-
     let previousValues: T | undefined;
 
     const unsubscribe = form.subscribe({
