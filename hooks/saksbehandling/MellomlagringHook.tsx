@@ -6,13 +6,13 @@ import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { isSuccess } from 'lib/utils/api';
 import { MellomlagretVurdering } from 'lib/types/types';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { debounce } from 'lodash';
-import { UseFormSubscribe } from 'react-hook-form';
+import { debounce, isEqual } from 'lodash';
+import { UseFormReturn } from 'react-hook-form';
 
 export function useMellomlagring<T extends object>(
   behovstype: Behovstype,
   initialMellomlagring: MellomlagretVurdering | undefined,
-  subscribe?: UseFormSubscribe<T>
+  form?: UseFormReturn<T>
 ): {
   lagreMellomlagring: (vurdering: object) => void;
   slettMellomlagring: (callback?: () => void) => void;
@@ -39,25 +39,46 @@ export function useMellomlagring<T extends object>(
     [behovstype, behandlingsReferanse]
   );
 
-  const debouncedLagreMellomlagring = useMemo(() => debounce(lagreMellomlagring, 1000), [lagreMellomlagring]);
+  const debouncedLagreMellomlagring = useMemo(() => debounce(lagreMellomlagring, 600), [lagreMellomlagring]);
 
   useEffect(() => {
-    if (!subscribe) return;
-    const callback = subscribe({
+    if (!form) return;
+
+    let previousValues: T | undefined;
+
+    const unsubscribe = form.subscribe({
       formState: {
         values: true,
-        isDirty: true,
       },
-      callback: ({ values, isDirty }) => {
-        if (!isDirty) return;
-        debouncedLagreMellomlagring(values);
+      callback: ({ values }) => {
+        if (form.formState.isSubmitting) {
+          debouncedLagreMellomlagring.cancel();
+          return;
+        }
+
+        /**
+         * Hindrer unødvendig autosave:
+         * - Sammenligner med defaultValues for å sjekke om brukeren faktisk har gjort endringer (RHF sin isDirty er ikke alltid pålitelig).
+         * - Sammenligner med previousValues for å unngå å lagre samme data flere ganger når RHF trigges uten reelle endringer.
+         */
+        const erForskjellig =
+          !isEqual(form.getValues(), form.formState.defaultValues) && !isEqual(form.getValues(), previousValues);
+
+        if (erForskjellig && form.formState.isDirty) {
+          previousValues = values;
+          debouncedLagreMellomlagring(values);
+        }
       },
     });
 
-    return () => callback();
-  }, [subscribe, debouncedLagreMellomlagring]);
+    return () => {
+      debouncedLagreMellomlagring.cancel();
+      unsubscribe();
+    };
+  }, [form, debouncedLagreMellomlagring]);
 
   async function slettMellomlagring(callback?: () => void) {
+    debouncedLagreMellomlagring.cancel();
     const res = await clientSlettMellomlagring({
       behandlingsreferanse: behandlingsReferanse,
       behovstype: behovstype,
