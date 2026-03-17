@@ -69,7 +69,7 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, initialMe
   const { slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } = useMellomlagring(
     Behovstype.AVKLAR_BISTANDSBEHOV_KODE,
     initialMellomlagretVurdering,
-    form.subscribe
+    form
   );
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();

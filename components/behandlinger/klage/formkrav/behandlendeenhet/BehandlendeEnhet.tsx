@@ -61,7 +61,7 @@ export const BehandlendeEnhet = ({ behandlingVersjon, grunnlag, readOnly, initia
   const { slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } = useMellomlagring(
     Behovstype.FASTSETT_BEHANDLENDE_ENHET,
     initialMellomlagretVurdering,
-    form.subscribe
+    form
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {

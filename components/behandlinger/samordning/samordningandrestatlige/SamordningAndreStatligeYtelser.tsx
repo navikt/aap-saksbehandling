@@ -81,7 +81,7 @@ export const SamordningAndreStatligeYtelser = ({
   const { slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } = useMellomlagring(
     Behovstype.AVKLAR_SAMORDNING_ANDRE_STATLIGE_YTELSER,
     initialMellomlagretVurdering,
-    form.subscribe
+    form
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {

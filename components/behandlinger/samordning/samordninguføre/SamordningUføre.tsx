@@ -68,7 +68,7 @@ export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly, initia
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
     Behovstype.AVKLAR_SAMORDNING_UFORE,
     initialMellomlagretVurdering,
-    form.subscribe
+    form
   );
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {

@@ -66,7 +66,7 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon, initi
   const { nullstillMellomlagretVurdering, mellomlagretVurdering, slettMellomlagring } = useMellomlagring(
     Behovstype.AVKLAR_SONINGSFORRHOLD,
     initialMellomlagretVurdering,
-    form.subscribe
+    form
   );
 
   const { fields, remove, append } = useFieldArray({ control: form.control, name: 'soningsvurderinger' });

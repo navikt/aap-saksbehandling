@@ -73,7 +73,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
   const { slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } = useMellomlagring(
     Behovstype.REFUSJON_KRAV_KODE,
     initialMellomlagretVurdering,
-    form.subscribe
+    form
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {

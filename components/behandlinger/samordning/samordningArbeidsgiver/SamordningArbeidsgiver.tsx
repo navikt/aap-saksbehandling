@@ -83,7 +83,7 @@ export const SamordningArbeidsgiver = ({
   const { nullstillMellomlagretVurdering, mellomlagretVurdering, slettMellomlagring } = useMellomlagring(
     Behovstype.AVKLAR_SAMORDNING_ARBEIDSGIVER,
     initialMellomlagretVurdering,
-    form.subscribe
+    form
   );
 
   const harFåttEkstrautbetalingFraArbeidsgiver = grunnlag.harFåttEkstrautbetalingFraArbeidsgiver ? 'Ja' : 'Nei';

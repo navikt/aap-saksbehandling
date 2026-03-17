@@ -111,7 +111,7 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly, initi
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
     Behovstype.FASTSETT_BEREGNINGSTIDSPUNKT_KODE,
     initialMellomlagretVurdering,
-    form.subscribe
+    form
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {

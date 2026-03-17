@@ -118,7 +118,7 @@ export const KlagebehandlingVurderingNay = ({
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
     Behovstype.VURDER_KLAGE_NAY,
     initialMellomlagretVurdering,
-    form.subscribe
+    form
   );
 
   const innstilling = form.watch('innstilling');

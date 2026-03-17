@@ -64,7 +64,7 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon, initialMel
   const { slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } = useMellomlagring(
     Behovstype.VURDER_TREKK_AV_SØKNAD_KODE,
     initialMellomlagretVurdering,
-    form.subscribe
+    form
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {

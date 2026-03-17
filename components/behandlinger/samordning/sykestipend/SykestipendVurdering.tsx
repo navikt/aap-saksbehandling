@@ -61,7 +61,7 @@ export const SykestipendVurdering = ({
   const { slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } = useMellomlagring(
     Behovstype.AVKLAR_SAMORDNING_SYKESTIPEND_KODE,
     initialMellomlagretVurdering,
-    form.subscribe
+    form
   );
 
   const harSvartJaISøknad = grunnlag.sykeStipendSvarFraSøknad

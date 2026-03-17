@@ -76,7 +76,7 @@ export const SykdomsvurderingBrev = ({
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
     Behovstype.SYKDOMSVURDERING_BREV_KODE,
     initialMellomlagretVurdering,
-    form.subscribe
+    form
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {

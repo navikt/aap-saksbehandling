@@ -104,7 +104,7 @@ export const FormkravVurdering = ({ behandlingVersjon, grunnlag, readOnly, initi
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
     Behovstype.VURDER_FORMKRAV,
     initialMellomlagretVurdering,
-    form.subscribe
+    form
   );
 
   const { erKonkret, erSignert, erBrukerPart, erFristOverholdt, likevelBehandles } = form.watch();

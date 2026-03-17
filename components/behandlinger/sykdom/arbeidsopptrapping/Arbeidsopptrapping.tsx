@@ -74,7 +74,7 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
     Behovstype.ARBEIDSOPPTRAPPING_KODE,
     initialMellomlagretVurdering,
-    form.subscribe
+    form
   );
 
   const nyeVurderinger = grunnlag?.nyeVurderinger ?? [];

@@ -55,7 +55,7 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
   const { slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } = useMellomlagring(
     Behovstype.VURDER_SYKEPENGEERSTATNING_KODE,
     initialMellomlagretVurdering,
-    form.subscribe
+    form
   );
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();

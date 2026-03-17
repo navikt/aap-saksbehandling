@@ -96,7 +96,7 @@ export const AvklaroppfolgingVurdering = ({
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
     behovsType,
     initialMellomlagretVurdering,
-    form.subscribe
+    form
   );
 
   const skalVurderesAvNavKontor = grunnlag.hvemSkalFølgeOpp == 'Lokalkontor';

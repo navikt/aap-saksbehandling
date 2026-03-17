@@ -113,7 +113,7 @@ export const Yrkesskade = ({
   const { slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } = useMellomlagring(
     Behovstype.YRKESSKADE_KODE,
     initialMellomlagretVurdering,
-    form.subscribe
+    form
   );
 
   const { fields: relevanteYrkesskadeSaker, update } = useFieldArray({

@@ -70,7 +70,7 @@ export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering, behandlin
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
     Behovstype.AVKLAR_SAMORDNING_BARNEPENSJON_KODE,
     initialMellomlagretVurdering,
-    form.subscribe
+    form
   );
 
   const feilmeldinger = hentFeilmeldingerForForm(form.formState.errors);

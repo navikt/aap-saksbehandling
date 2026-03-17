@@ -84,7 +84,7 @@ export const EtableringAvEgenVirksomhet = ({
   const { slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } = useMellomlagring(
     Behovstype.ETABLERING_EGEN_VIRKSOMHET_KODE,
     initialMellomlagretVurdering,
-    form.subscribe
+    form
   );
 
   const { visningActions, formReadOnly, visningModus, erAktivUtenAvbryt } = useVilkårskortVisning(

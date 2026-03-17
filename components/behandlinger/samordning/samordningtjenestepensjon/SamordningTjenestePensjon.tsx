@@ -72,7 +72,7 @@ export const SamordningTjenestePensjon = ({
   const { slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } = useMellomlagring(
     Behovstype.SAMORDNING_REFUSJONS_KRAV,
     initialMellomlagretVurdering,
-    form.subscribe
+    form
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {

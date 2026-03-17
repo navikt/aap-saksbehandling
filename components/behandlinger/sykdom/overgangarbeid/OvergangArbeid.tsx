@@ -63,7 +63,7 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialM
   const { slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } = useMellomlagring(
     Behovstype.OVERGANG_ARBEID,
     initialMellomlagretVurdering,
-    form.subscribe
+    form
   );
 
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];

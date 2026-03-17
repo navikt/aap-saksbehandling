@@ -106,7 +106,7 @@ export const BarnetilleggVurdering = ({
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
     Behovstype.AVKLAR_BARNETILLEGG_KODE,
     initialMellomlagretVurdering,
-    form.subscribe
+    form
   );
 
   const { fields: barnetilleggVurderinger } = useFieldArray({

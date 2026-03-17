@@ -88,7 +88,7 @@ export const Inntektsbortfall = ({
   const { slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } = useMellomlagring(
     Behovstype.YRKESSKADE_KODE,
     initialMellomlagretVurdering,
-    form.subscribe
+    form
   );
 
   const under62År = grunnlag.under62ÅrVedSøknadstidspunkt;

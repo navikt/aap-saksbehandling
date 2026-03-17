@@ -149,7 +149,7 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
     Behovstype.VURDER_BRUDD_11_7_KODE,
     initialMellomlagretVurdering,
-    form.subscribe
+    form
   );
 
   const knapptekst = () => {

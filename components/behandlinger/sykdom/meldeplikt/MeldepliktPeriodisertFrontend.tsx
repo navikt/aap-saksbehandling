@@ -76,7 +76,7 @@ export const MeldepliktPeriodisertFrontend = ({
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
     Behovstype.FRITAK_MELDEPLIKT_KODE,
     initialMellomlagretVurdering,
-    form.subscribe
+    form
   );
 
   const { visningActions, formReadOnly, visningModus, erAktivUtenAvbryt } = useVilkårskortVisning(

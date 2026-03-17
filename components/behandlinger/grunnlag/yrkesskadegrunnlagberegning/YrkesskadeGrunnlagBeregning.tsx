@@ -75,7 +75,7 @@ export const YrkesskadeGrunnlagBeregning = ({
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
     Behovstype.FASTSETT_YRKESSKADEINNTEKT,
     initialMellomlagretVurdering,
-    form.subscribe
+    form
   );
 
   const { fields } = useFieldArray({ control: form.control, name: 'vurderinger' });

@@ -163,7 +163,7 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly, ini
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
     Behovstype.FASTSETT_FULLMEKTIG,
     initialMellomlagretVurdering,
-    form.subscribe
+    form
   );
 
   const [harFullmektig, idType, land] = form.watch(['harFullmektig', 'idType', 'land']);

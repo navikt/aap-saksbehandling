@@ -87,7 +87,7 @@ export const SvarFraAndreinstans = ({ grunnlag, readOnly, behandlingVersjon, ini
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
     Behovstype.HÅNDTER_SVAR_FRA_ANDREINSTANS,
     initialMellomlagretVurdering,
-    form.subscribe
+    form
   );
 
   const svarType = grunnlag?.svarFraAndreinstans.type;

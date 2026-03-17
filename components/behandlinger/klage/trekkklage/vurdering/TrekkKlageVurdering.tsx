@@ -77,7 +77,7 @@ export const TrekkKlageVurdering = ({ behandlingVersjon, readOnly, grunnlag, ini
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
     Behovstype.TREKK_KLAGE_KODE,
     initialMellomlagretVurdering,
-    form.subscribe
+    form
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {

@@ -60,7 +60,7 @@ export const TotrinnsvurderingForm = ({
   const { nullstillMellomlagretVurdering, mellomlagretVurdering, slettMellomlagring } = useMellomlagring(
     erKvalitetssikring ? Behovstype.KVALITETSSIKRING_KODE : Behovstype.FATTE_VEDTAK_KODE,
     initialMellomlagretVurdering,
-    form.subscribe
+    form
   );
 
   const { fields } = useFieldArray({

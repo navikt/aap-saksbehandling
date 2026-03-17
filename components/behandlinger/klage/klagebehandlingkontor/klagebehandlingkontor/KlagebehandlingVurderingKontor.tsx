@@ -119,7 +119,7 @@ export const KlagebehandlingVurderingKontor = ({
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
     Behovstype.VURDER_KLAGE_KONTOR,
     initialMellomlagretVurdering,
-    form.subscribe
+    form
   );
 
   const innstilling = form.watch('innstilling');

@@ -87,7 +87,7 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
   const { slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } = useMellomlagring(
     Behovstype.AVKLAR_HELSEINSTITUSJON,
     initialMellomlagretVurdering,
-    form.subscribe
+    form
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {

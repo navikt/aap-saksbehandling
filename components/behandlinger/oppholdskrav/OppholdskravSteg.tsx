@@ -64,7 +64,7 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
     Behovstype.OPPHOLDSKRAV_KODE,
     initialMellomlagring,
-    form.subscribe
+    form
   );
 
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];

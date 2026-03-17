@@ -75,7 +75,7 @@ export const FastsettManuellInntektNy = ({
   const { slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } = useMellomlagring(
     Behovstype.FASTSETT_MANUELL_INNTEKT,
     initialMellomlagretVurdering,
-    form.subscribe
+    form
   );
 
   const { fields: tabellår } = useFieldArray({

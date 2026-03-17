@@ -92,7 +92,7 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
   const { mellomlagretVurdering, slettMellomlagring, nullstillMellomlagretVurdering } = useMellomlagring(
     Behovstype.FASTSETT_ARBEIDSEVNE_KODE,
     initialMellomlagretVurdering,
-    form.subscribe
+    form
   );
 
   const { visningActions, formReadOnly, visningModus, erAktivUtenAvbryt } = useVilkårskortVisning(
