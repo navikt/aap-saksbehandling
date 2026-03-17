@@ -1,7 +1,7 @@
 import { Behovstype } from 'lib/utils/form';
 
-export function byggVilkårskortLenke(sakId: String, behandlingsreferanse: String, behovstype: Behovstype): string {
-  return `/saksbehandling/sak/${sakId}/${behandlingsreferanse}/${behovstypeTilVilkårskortLink(behovstype)}`;
+export function byggVilkårskortLenke(saknummer: String, behandlingsreferanse: String, behovstype: Behovstype): string {
+  return `/saksbehandling/sak/${saknummer}/${behandlingsreferanse}/${behovstypeTilVilkårskortLink(behovstype)}`;
 }
 
 export function behovstypeTilVilkårskortLink(behovstype: Behovstype): string {
