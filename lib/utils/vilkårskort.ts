@@ -12,12 +12,24 @@ export function behovstypeTilVilkårskortLink(behovstype: Behovstype): string {
       return 'SYKDOM/#VURDER_BISTANDSBEHOV';
     case Behovstype.FASTSETT_BEREGNINGSTIDSPUNKT_KODE:
       return 'GRUNNLAG/#FASTSETT_BEREGNINGSTIDSPUNKT';
+    case Behovstype.ARBEIDSOPPTRAPPING_KODE:
+      return 'SYKDOM/#ARBEIDSOPPTRAPPING';
+    case Behovstype.ETABLERING_EGEN_VIRKSOMHET_KODE:
+      return 'SYKDOM/#ETABLERING_EGEN_VIRKSOMHET';
     case Behovstype.FRITAK_MELDEPLIKT_KODE:
       return 'SYKDOM/#FRITAK_MELDEPLIKT';
+    case Behovstype.OVERGANG_UFORE:
+      return 'SYKDOM/#OVERGANG_UFORE';
+    case Behovstype.OVERGANG_ARBEID:
+      return 'SYKDOM/#OVERGANG_ARBEID';
+    case Behovstype.SYKDOMSVURDERING_BREV_KODE:
+      return 'SYKDOM/#SYKDOMSVURDERING_BREV';
     case Behovstype.FASTSETT_ARBEIDSEVNE_KODE:
       return 'SYKDOM/#FASTSETT_ARBEIDSEVNE';
     case Behovstype.VURDER_SYKEPENGEERSTATNING_KODE:
       return 'SYKDOM/#VURDER_SYKEPENGEERSTATNING';
+    case Behovstype.YRKESSKADE_KODE:
+      return 'SYKDOM/#YRKESSKADE';
     case Behovstype.AVKLAR_BARNETILLEGG_KODE:
       return 'BARNETILLEGG/#BARNETILLEGG';
     case Behovstype.FASTSETT_YRKESSKADEINNTEKT:
@@ -44,6 +56,8 @@ export function behovstypeTilVilkårskortLink(behovstype: Behovstype): string {
       return 'SAMORDNING/#SAMORDNING_UFØRE';
     case Behovstype.AVKLAR_SAMORDNING_ARBEIDSGIVER:
       return 'SAMORDNING/#SAMORDNING_ARBEIDSGIVER';
+    case Behovstype.AVKLAR_SAMORDNING_BARNEPENSJON_KODE:
+      return 'SAMORDNING/#SAMORDNING_BARNEPENSJON';
     case Behovstype.FASTSETT_MANUELL_INNTEKT:
       return 'GRUNNLAG/#FASTSETT_MANUELL_INNTEKT';
     case Behovstype.VURDER_RETTIGHETSPERIODE:
@@ -59,7 +73,9 @@ export function behovstypeTilVilkårskortLink(behovstype: Behovstype): string {
     case Behovstype.AVKLAR_STUDENT_KODE:
       return 'STUDENT/#AVKLAR_STUDENT';
     case Behovstype.AVKLAR_SAMORDNING_SYKESTIPEND_KODE:
-      return 'STUDENT/#SAMORDNING_SYKESTIPEND';
+      return 'SAMORDNING/#SAMORDNING_SYKESTIPEND';
+    case Behovstype.VURDER_INNTEKTSBORTFALL:
+      return 'GRUNNLAG/#INNTEKTSBORTFALL';
     default:
       return 'SYKDOM';
   }
