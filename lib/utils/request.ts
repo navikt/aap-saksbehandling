@@ -6,7 +6,6 @@ import { SortState } from '@navikt/ds-react';
 import {
   NoNavAapOppgaveListeOppgaveSorteringSortBy,
   NoNavAapOppgaveListeOppgaveSorteringSortOrder,
-  PathsMineOppgaverGetParametersQuerySortby,
   PathsMineOppgaverGetParametersQuerySortorder,
 } from '@navikt/aap-oppgave-typescript-types';
 
@@ -112,8 +111,6 @@ export function mapSortStateSortByTilBackendEnum(orderBy: string): NoNavAapOppga
       return NoNavAapOppgaveListeOppgaveSorteringSortBy.AVKLARINGSBEHOV_KODE;
     case 'OPPRETTET_TIDSPUNKT':
       return NoNavAapOppgaveListeOppgaveSorteringSortBy.OPPRETTET_TIDSPUNKT;
-    case 'PERSONIDENT':
-      return NoNavAapOppgaveListeOppgaveSorteringSortBy.PERSONIDENT;
     case 'RESERVERT_AV':
       return NoNavAapOppgaveListeOppgaveSorteringSortBy.RESERVERT_AV;
   }
@@ -149,47 +146,6 @@ export function mineOppgaverQueryParams(params: MineOppgaverQueryParams) {
   const sortOrder = params?.sortorder ? `sortorder=${params.sortorder}` : '';
   const string = [sortBy, sortOrder].filter((value) => value).join('&');
   return encodeURI(string);
-}
-
-export function hentMineOppgaverQueryParams(req: NextRequest): MineOppgaverQueryParams {
-  const params = req.nextUrl.searchParams;
-  const kunPåVent = params.get('kunPaaVent');
-  const sortByStr = params.get('sortby');
-  const sortby = sortByStr ? validerSortByQueryParamEnum(sortByStr) : null;
-  const sortOrderStr = params.get('sortorder');
-  const sortorder = sortOrderStr ? validerSortOrderQueryParamEnum(sortOrderStr) : null;
-  return {
-    ...(kunPåVent ? { kunPaaVent: kunPåVent === 'true' } : {}),
-    ...(sortby ? { sortby } : {}),
-    ...(sortorder ? { sortorder } : {}),
-  };
-}
-function validerSortByQueryParamEnum(str: string): PathsMineOppgaverGetParametersQuerySortby | null {
-  switch (str) {
-    case 'PERSONIDENT':
-      return PathsMineOppgaverGetParametersQuerySortby.PERSONIDENT;
-    case 'BEHANDLINGSTYPE':
-      return PathsMineOppgaverGetParametersQuerySortby.BEHANDLINGSTYPE;
-    case 'BEHANDLING_OPPRETTET':
-      return PathsMineOppgaverGetParametersQuerySortby.BEHANDLING_OPPRETTET;
-    case 'ÅRSAK_TIL_OPPRETTELSE':
-      return PathsMineOppgaverGetParametersQuerySortby._RSAK_TIL_OPPRETTELSE;
-    case 'AVKLARINGSBEHOV_KODE':
-      return PathsMineOppgaverGetParametersQuerySortby.AVKLARINGSBEHOV_KODE;
-    case 'OPPRETTET_TIDSPUNKT':
-      return PathsMineOppgaverGetParametersQuerySortby.OPPRETTET_TIDSPUNKT;
-  }
-  return null;
-}
-
-function validerSortOrderQueryParamEnum(str: string): PathsMineOppgaverGetParametersQuerySortorder | null {
-  switch (str) {
-    case 'DESC':
-      return PathsMineOppgaverGetParametersQuerySortorder.DESC;
-    case 'ASC':
-      return PathsMineOppgaverGetParametersQuerySortorder.ASC;
-  }
-  return null;
 }
 
 function buildSaksbehandlingsURL(oppgave: Oppgave): string {
