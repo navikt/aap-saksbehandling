@@ -2,7 +2,7 @@ import { hentMineOppgaver } from 'lib/services/oppgaveservice/oppgaveservice';
 import { logError } from 'lib/serverutlis/logger';
 import { isError } from 'lib/utils/api';
 import { NextRequest, NextResponse } from 'next/server';
-import { hentMineOppgaverQueryParams } from 'lib/utils/request';
+import { hentMineOppgaverQueryParams } from 'lib/serverutlis/mine-oppgaver';
 
 export async function GET(req: NextRequest) {
   const params = hentMineOppgaverQueryParams(req);
