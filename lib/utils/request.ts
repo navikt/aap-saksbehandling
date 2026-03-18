@@ -92,12 +92,15 @@ export function hentStatistikkQueryParams(req: NextRequest): StatistikkQueryPara
   };
 }
 export function mapSortStateTilOppgaveSortering(sortState: SortState): OppgavelisteRequest['sortering'] {
-  return {
-    sortBy: mapSortStateSortByTilBackendEnum(sortState.orderBy),
-    sortOrder: mapSortStateDirectionTilBackendEnum(sortState.direction),
-  };
+  const sortBy = mapSortStateSortByTilBackendEnum(sortState.orderBy);
+  return sortBy
+    ? {
+        sortBy,
+        sortOrder: mapSortStateDirectionTilBackendEnum(sortState.direction),
+      }
+    : undefined;
 }
-export function mapSortStateSortByTilBackendEnum(orderBy: string): NoNavAapOppgaveListeOppgaveSorteringSortBy {
+export function mapSortStateSortByTilBackendEnum(orderBy: string): NoNavAapOppgaveListeOppgaveSorteringSortBy | null {
   switch (orderBy) {
     case 'BEHANDLING_OPPRETTET':
       return NoNavAapOppgaveListeOppgaveSorteringSortBy.BEHANDLING_OPPRETTET;
@@ -117,7 +120,7 @@ export function mapSortStateSortByTilBackendEnum(orderBy: string): NoNavAapOppga
       return NoNavAapOppgaveListeOppgaveSorteringSortBy.PERSONIDENT;
   }
   console.error(`Finner ikke mapping til backend enum for sortering: ${orderBy}`);
-  throw new Error(`Finner ikke mapping til backend enum for sortering: ${orderBy}`);
+  return null;
 }
 
 export function mapSortStateDirectionTilBackendEnum(
@@ -129,7 +132,8 @@ export function mapSortStateDirectionTilBackendEnum(
     case 'descending':
       return NoNavAapOppgaveListeOppgaveSorteringSortOrder.DESC;
   }
-  throw new Error(`Finner ikke mapping til query param sort order enum for: ${direction}`);
+  console.error(`Finner ikke mapping til backend enum for sortstatedirection: ${direction}, bruker descending`);
+  return NoNavAapOppgaveListeOppgaveSorteringSortOrder.DESC;
 }
 
 export function mapSortStateDirectionTilQueryParamEnum(direction: SortState['direction']) {
