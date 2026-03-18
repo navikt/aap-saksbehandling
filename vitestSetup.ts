@@ -94,8 +94,8 @@ beforeAll(() => {
       // Må slås sammen på et eller annet tidspunkt
       .mockReturnValue({
         saksId: '123',
-        behandlingsReferanse: '123',
-        behandlingsreferanse: '123',
+        behandlingsReferanse: '456',
+        behandlingsreferanse: '456',
         behandlingsType: 'AVKLAR_SYKDOM',
       }),
     useRouter: vi.fn(),

@@ -43,9 +43,11 @@ export const Samordning = async ({ behandlingsreferanse }: Props) => {
       visning={flyt.data.visning}
       aktivtSteg={flyt.data.aktivtSteg}
     >
-      <StegSuspense>
-        <SamordningBarnepensjonMedDatafetching behandlingsreferanse={behandlingsreferanse} />
-      </StegSuspense>
+      {!unleashService.isEnabled('SamordningBarnepensjon') && (
+        <StegSuspense>
+          <SamordningBarnepensjonMedDatafetching behandlingsreferanse={behandlingsreferanse} />
+        </StegSuspense>
+      )}
 
       {samordningSosialStønadSteg.skalViseSteg && (
         <StegSuspense>

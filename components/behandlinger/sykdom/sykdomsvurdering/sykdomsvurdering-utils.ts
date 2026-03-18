@@ -5,12 +5,23 @@ import { parseDatoFraDatePicker } from 'lib/utils/date';
 import { isAfter } from 'date-fns';
 import { ValuePair } from 'components/form/FormField';
 
-export function skalVurdereVissVarighetSjekk(
+/**
+ * Dette er en litt uheldig "hack" som har blitt brukt for å utlede om viss varighet skal vurderes.
+ * Må beholdes en liten stund til inntil vi klarer å utlede informasjonen vi faktisk trenger.
+ *
+ * Det vi egentlig skal sjekke er om forrige vurdering/behandling var oppfylt. Hvis ja, skal denne gjelde.
+ **/
+export function vurderingFraDatoErSammeSomRettighetsperiodeStart(
   valgtFraDato: string | Date | undefined,
   rettighetsperiopdeStartdato: Date
 ) {
   const valgtDato = parseDatoFraDatePicker(valgtFraDato);
-  return valgtDato != null ? !isAfter(valgtDato, rettighetsperiopdeStartdato) : true;
+
+  if (valgtDato) {
+    return !isAfter(valgtDato, rettighetsperiopdeStartdato);
+  } else {
+    return false;
+  }
 }
 export function erNyVurderingOppfylt(
   vurdering: Sykdomsvurdering,
@@ -34,7 +45,7 @@ export function erNyVurderingOppfylt(
   }
 
   if (
-    !skalVurdereVissVarighetSjekk(vurdering.fraDato, rettighetsperiodeStartDato) &&
+    !vurderingFraDatoErSammeSomRettighetsperiodeStart(vurdering.fraDato, rettighetsperiodeStartDato) &&
     vurdering.erSkadeSykdomEllerLyteVesentligdel === JaEllerNei.Ja
   ) {
     return true;

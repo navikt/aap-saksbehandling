@@ -47,7 +47,7 @@ describe('sykdomsvurdering for brev', () => {
         behandlingVersjon={0}
       />
     );
-    const button = screen.getByRole('button', { name: 'Bekreft og send videre' });
+    const button = screen.getByRole('button', { name: 'Bekreft' });
     await user.click(button);
 
     expect(await screen.findByText('Du må skrive en individuell begrunnelse')).toBeVisible();
@@ -120,36 +120,6 @@ describe('mellomlagring', () => {
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
       />
     );
-    const tekst = screen.getByText('Utkast lagret 21.08.2025 12:00 (Jan T. Loven)');
-    expect(tekst).toBeVisible();
-  });
-
-  it('Skal vise en tekst om hvem som har lagret vurdering dersom bruker trykker på lagre mellomlagring', async () => {
-    render(
-      <SykdomsvurderingBrev
-        foreløpigBehandlingsutfall={{ tidligereVurderinger: [] }}
-        typeBehandling={'Førstegangsbehandling'}
-        readOnly={false}
-        behandlingVersjon={0}
-        grunnlag={grunnlagUtenVurdering}
-      />
-    );
-
-    await user.type(
-      screen.getByRole('textbox', { name: 'Derfor får du AAP / Derfor får du ikke AAP' }),
-      'Her har jeg begynt å skrive en vurdering..'
-    );
-    expect(screen.queryByText('Utkast lagret 21.08.2025 00:00 (Jan T. Loven)')).not.toBeInTheDocument();
-
-    const mockFetchResponseLagreMellomlagring: FetchResponse<MellomlagretVurderingResponse> = {
-      type: 'SUCCESS',
-      data: mellomlagring,
-      status: 200,
-    };
-    fetchMock.mockResponse(JSON.stringify(mockFetchResponseLagreMellomlagring));
-
-    const lagreKnapp = screen.getByRole('button', { name: 'Lagre utkast' });
-    await user.click(lagreKnapp);
     const tekst = screen.getByText('Utkast lagret 21.08.2025 12:00 (Jan T. Loven)');
     expect(tekst).toBeVisible();
   });
