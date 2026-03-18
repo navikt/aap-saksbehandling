@@ -113,6 +113,8 @@ export function mapSortStateSortByTilBackendEnum(orderBy: string): NoNavAapOppga
       return NoNavAapOppgaveListeOppgaveSorteringSortBy.OPPRETTET_TIDSPUNKT;
     case 'RESERVERT_AV':
       return NoNavAapOppgaveListeOppgaveSorteringSortBy.RESERVERT_AV;
+    case 'PERSONIDENT':
+      return NoNavAapOppgaveListeOppgaveSorteringSortBy.PERSONIDENT;
   }
   console.error(`Finner ikke mapping til backend enum for sortering: ${orderBy}`);
   throw new Error(`Finner ikke mapping til backend enum for sortering: ${orderBy}`);
