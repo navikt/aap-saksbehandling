@@ -34,13 +34,10 @@ export const SvarFraAndreinstans = ({ grunnlag, readOnly, behandlingVersjon, ini
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('SVAR_FRA_ANDREINSTANS');
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.HÅNDTER_SVAR_FRA_ANDREINSTANS, initialMellomlagretVurdering);
-
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
     'SVAR_FRA_ANDREINSTANS',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
@@ -90,6 +87,9 @@ export const SvarFraAndreinstans = ({ grunnlag, readOnly, behandlingVersjon, ini
     },
     { readOnly: formReadOnly }
   );
+
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
+    useMellomlagring(Behovstype.HÅNDTER_SVAR_FRA_ANDREINSTANS, initialMellomlagretVurdering, form);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {

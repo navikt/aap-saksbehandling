@@ -40,19 +40,21 @@ interface FormFields {
 
 type DraftFormFields = Partial<FormFields>;
 
+type IndentAndType = {
+  ident: string;
+  type: IdentType;
+};
+
 export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly, initialMellomlagretVurdering }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
 
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('FULLMEKTIG');
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.FASTSETT_FULLMEKTIG, initialMellomlagretVurdering);
-
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
     'FULLMEKTIG',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
@@ -162,6 +164,9 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly, ini
     },
     { readOnly: formReadOnly }
   );
+
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
+    useMellomlagring(Behovstype.FASTSETT_FULLMEKTIG, initialMellomlagretVurdering, form);
 
   const [harFullmektig, idType, land] = form.watch(['harFullmektig', 'idType', 'land']);
 
@@ -283,11 +288,6 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly, ini
       harFullmektig: '',
     };
   }
-
-  type IndentAndType = {
-    ident: string;
-    type: IdentType;
-  };
 
   function idTypeOptions(): ValuePair[] {
     return [

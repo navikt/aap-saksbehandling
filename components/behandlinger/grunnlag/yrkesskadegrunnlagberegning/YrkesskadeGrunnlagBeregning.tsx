@@ -52,13 +52,10 @@ export const YrkesskadeGrunnlagBeregning = ({
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('FASTSETT_GRUNNLAG');
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.FASTSETT_YRKESSKADEINNTEKT, initialMellomlagretVurdering);
-
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
     'FASTSETT_GRUNNLAG',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
@@ -76,6 +73,10 @@ export const YrkesskadeGrunnlagBeregning = ({
   );
 
   const { fields } = useFieldArray({ control: form.control, name: 'vurderinger' });
+
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
+    useMellomlagring(Behovstype.FASTSETT_YRKESSKADEINNTEKT, initialMellomlagretVurdering, form);
+
   const vurdertAvAnsatt =
     yrkeskadeBeregningGrunnlag.vurderinger.length > 0 ? yrkeskadeBeregningGrunnlag.vurderinger[0].vurdertAv : undefined;
 

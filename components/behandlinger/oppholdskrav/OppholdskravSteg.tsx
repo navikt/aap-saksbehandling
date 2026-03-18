@@ -44,27 +44,26 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
   const { løsPeriodisertBehovOgGåTilNesteSteg, status, løsBehovOgGåTilNesteStegError, isLoading } =
     useLøsBehovOgGåTilNesteSteg('VURDER_OPPHOLDSKRAV');
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.OPPHOLDSKRAV_KODE, initialMellomlagring);
-
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
   const { visningActions, visningModus, formReadOnly, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'VURDER_OPPHOLDSKRAV',
-    mellomlagretVurdering
+    initialMellomlagring
   );
 
-  const defaultValues =
-    mellomlagretVurdering != null
-      ? (JSON.parse(mellomlagretVurdering.data) as OppholdskravForm)
-      : getDefaultValuesFromGrunnlag(grunnlag);
+  const defaultValues = initialMellomlagring
+    ? JSON.parse(initialMellomlagring.data)
+    : getDefaultValuesFromGrunnlag(grunnlag);
 
   const form = useForm<OppholdskravForm>({
     defaultValues,
     reValidateMode: 'onChange',
     shouldUnregister: true,
   });
+
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
+    useMellomlagring(Behovstype.OPPHOLDSKRAV_KODE, initialMellomlagring, form);
 
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
 

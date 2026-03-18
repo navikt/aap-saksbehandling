@@ -10,6 +10,7 @@ import { FormEvent, ReactNode } from 'react';
 import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { ApiException } from 'lib/utils/api';
 import { VisningActions, VisningModus } from 'lib/types/visningTypes';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 interface VilkårsKortPeriodisertProps {
   heading: string;
@@ -52,6 +53,7 @@ export const VilkårskortPeriodisert = ({
   formReset,
   errorList,
 }: Omit<VilkårsKortPeriodisertProps, 'vurdertAvAnsatt' | 'kvalitetssikretAv'>) => {
+  const automatiskMellomlagring = useFeatureFlag('automatiskMellomlagring');
   const classNameBasertPåEnhet = vilkårTilhørerNavKontor ? styles.vilkårsKortNAV : styles.vilkårsKortNAY;
   const erAktivtSteg = visningModus === 'AKTIV_UTEN_AVBRYT' || visningModus === 'AKTIV_MED_AVBRYT';
 
@@ -99,7 +101,8 @@ export const VilkårskortPeriodisert = ({
                           Legg til ny vurdering
                         </Button>
                       )}
-                      {onLagreMellomLagringClick && (
+
+                      {!automatiskMellomlagring && onLagreMellomLagringClick && (
                         <Button type="button" variant="tertiary" onClick={onLagreMellomLagringClick}>
                           Lagre utkast
                         </Button>
@@ -128,7 +131,7 @@ export const VilkårskortPeriodisert = ({
                           Legg til ny vurdering
                         </Button>
                       )}
-                      {onLagreMellomLagringClick && (
+                      {!automatiskMellomlagring && onLagreMellomLagringClick && (
                         <Button type="button" variant="tertiary" onClick={onLagreMellomLagringClick}>
                           Lagre utkast
                         </Button>

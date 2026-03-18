@@ -79,27 +79,26 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
   const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('FASTSETT_ARBEIDSEVNE');
 
-  const { mellomlagretVurdering, lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering } =
-    useMellomlagring(Behovstype.FASTSETT_ARBEIDSEVNE_KODE, initialMellomlagretVurdering);
-
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
   const { visningActions, formReadOnly, visningModus, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'FASTSETT_ARBEIDSEVNE',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const nyeVurderinger = grunnlag?.nyeVurderinger ?? [];
 
-  const defaultValues =
-    initialMellomlagretVurdering != null
-      ? (JSON.parse(initialMellomlagretVurdering.data) as FastsettArbeidsevneForm)
-      : getDefaultValuesFromGrunnlag(grunnlag);
+  const defaultValues = initialMellomlagretVurdering
+    ? JSON.parse(initialMellomlagretVurdering.data)
+    : getDefaultValuesFromGrunnlag(grunnlag);
 
   const form = useForm<FastsettArbeidsevneForm>({
     defaultValues,
   });
+
+  const { mellomlagretVurdering, lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering } =
+    useMellomlagring(Behovstype.FASTSETT_ARBEIDSEVNE_KODE, initialMellomlagretVurdering, form);
 
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
 

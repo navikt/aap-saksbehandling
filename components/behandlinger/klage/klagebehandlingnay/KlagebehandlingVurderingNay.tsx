@@ -46,13 +46,10 @@ export const KlagebehandlingVurderingNay = ({
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('KLAGEBEHANDLING_NAY');
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.VURDER_KLAGE_NAY, initialMellomlagretVurdering);
-
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
     'KLAGEBEHANDLING_NAY',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
@@ -117,6 +114,9 @@ export const KlagebehandlingVurderingNay = ({
     },
     { readOnly: formReadOnly }
   );
+
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
+    useMellomlagring(Behovstype.VURDER_KLAGE_NAY, initialMellomlagretVurdering, form);
 
   const innstilling = form.watch('innstilling');
 

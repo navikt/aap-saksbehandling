@@ -52,13 +52,10 @@ export const AvklaroppfolgingVurdering = ({
       ? Behovstype.AVKLAR_OPPFØLGINGSBEHOV_NAY
       : Behovstype.AVKLAR_OPPFØLGINGSBEHOV_LOKALKONTOR;
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(behovsType, initialMellomlagretVurdering);
-
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
     'AVKLAR_OPPFØLGING',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const skalVurderesAvNavKontor = grunnlag.hvemSkalFølgeOpp == 'Lokalkontor';
@@ -97,6 +94,9 @@ export const AvklaroppfolgingVurdering = ({
     },
     { readOnly: formReadOnly }
   );
+
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
+    useMellomlagring(behovsType, initialMellomlagretVurdering, form);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
