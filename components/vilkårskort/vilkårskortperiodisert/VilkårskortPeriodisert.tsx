@@ -117,6 +117,7 @@ export const VilkårskortPeriodisert = ({
                           onClick={() => {
                             visningActions.avbrytEndringClick();
                             formReset && formReset();
+                            onDeleteMellomlagringClick && mellomlagretVurdering && onDeleteMellomlagringClick();
                           }}
                         >
                           Avbryt

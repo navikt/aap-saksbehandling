@@ -117,6 +117,7 @@ export const VilkårskortMedFormOgMellomlagringNyVisning = ({
                           variant="secondary"
                           onClick={() => {
                             visningActions.avbrytEndringClick();
+                            onDeleteMellomlagringClick && mellomlagretVurdering && onDeleteMellomlagringClick();
                             formReset && formReset();
                           }}
                         >
