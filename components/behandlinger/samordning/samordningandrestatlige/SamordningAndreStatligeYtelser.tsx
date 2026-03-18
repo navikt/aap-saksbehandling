@@ -52,13 +52,10 @@ export const SamordningAndreStatligeYtelser = ({
     'SAMORDNING_ANDRE_STATLIGE_YTELSER'
   );
 
-  const { lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
-    useMellomlagring(Behovstype.AVKLAR_SAMORDNING_ANDRE_STATLIGE_YTELSER, initialMellomlagretVurdering);
-
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
     'SAMORDNING_ANDRE_STATLIGE_YTELSER',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
@@ -80,6 +77,9 @@ export const SamordningAndreStatligeYtelser = ({
     },
     { readOnly: formReadOnly }
   );
+
+  const { lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
+    useMellomlagring(Behovstype.AVKLAR_SAMORDNING_ANDRE_STATLIGE_YTELSER, initialMellomlagretVurdering, form);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit(async (data) =>
@@ -147,9 +147,7 @@ export const SamordningAndreStatligeYtelser = ({
       )}
 
       {grunnlag.perioder !== null && grunnlag.perioder !== undefined && grunnlag.perioder.length > 0 && (
-        <OppslagAndreYtelser
-          perioder={grunnlag.perioder}
-        />
+        <OppslagAndreYtelser perioder={grunnlag.perioder} />
       )}
 
       <ReadMore size={'small'} header="Hva skal vurderes?">

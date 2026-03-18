@@ -47,13 +47,10 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('REFUSJON_KRAV');
 
-  const { lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
-    useMellomlagring(Behovstype.REFUSJON_KRAV_KODE, initialMellomlagretVurdering);
-
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
     'REFUSJON_KRAV',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
@@ -73,6 +70,9 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
       defaultValue: defaultValue.refusjoner,
     },
   });
+
+  const { lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
+    useMellomlagring(Behovstype.REFUSJON_KRAV_KODE, initialMellomlagretVurdering, form);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {

@@ -56,21 +56,17 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
   const { løsPeriodisertBehovOgGåTilNesteSteg, status, løsBehovOgGåTilNesteStegError, isLoading } =
     useLøsBehovOgGåTilNesteSteg('ARBEIDSOPPTRAPPING');
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.ARBEIDSOPPTRAPPING_KODE, initialMellomlagretVurdering);
-
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
   const { visningActions, visningModus, formReadOnly, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'ARBEIDSOPPTRAPPING',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
-  const defaultValues =
-    mellomlagretVurdering != null
-      ? (JSON.parse(mellomlagretVurdering.data) as ArbeidsopptrappingForm)
-      : getDefaultValuesFromGrunnlag(grunnlag);
+  const defaultValues = initialMellomlagretVurdering
+    ? JSON.parse(initialMellomlagretVurdering.data)
+    : getDefaultValuesFromGrunnlag(grunnlag);
 
   const form = useForm<ArbeidsopptrappingForm>({
     defaultValues,
@@ -82,6 +78,9 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
   const ikkeVurderbarePerioder = grunnlag?.ikkeVurderbarePerioder ?? [];
 
   const { fields, append, remove } = useFieldArray({ name: 'vurderinger', control: form.control });
+
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
+    useMellomlagring(Behovstype.ARBEIDSOPPTRAPPING_KODE, initialMellomlagretVurdering, form);
 
   function onAddPeriode() {
     append({

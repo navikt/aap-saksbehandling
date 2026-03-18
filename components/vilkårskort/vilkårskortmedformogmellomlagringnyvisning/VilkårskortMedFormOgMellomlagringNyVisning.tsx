@@ -7,6 +7,7 @@ import { formaterDatoForFrontend, formaterDatoMedTidspunktForFrontend } from 'li
 
 import styles from 'components/vilkårskort/Vilkårskort.module.css';
 import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
+import { useFeatureFlag } from 'context/UnleashContext';
 import { FormEvent, ReactNode } from 'react';
 import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { ApiException } from 'lib/utils/api';
@@ -59,6 +60,7 @@ export const VilkårskortMedFormOgMellomlagringNyVisning = ({
 }: VilkårsKortMedFormOgMellomlagringProps) => {
   const classNameBasertPåEnhet = vilkårTilhørerNavKontor ? styles.vilkårsKortNAV : styles.vilkårsKortNAY;
   const { flyt } = useRequiredFlyt();
+  const automatiskMellomlagring = useFeatureFlag('automatiskMellomlagring');
   const erAktivtSteg = flyt.aktivtSteg === steg || visningModus === 'AKTIV_MED_AVBRYT';
 
   const readOnly = visningModus === 'LÅST_MED_ENDRE' || visningModus === 'LÅST_UTEN_ENDRE';
@@ -100,7 +102,7 @@ export const VilkårskortMedFormOgMellomlagringNyVisning = ({
                     <>
                       <Button loading={isLoading}>{knappTekst}</Button>
                       {extraActions != null && extraActions}
-                      {onLagreMellomLagringClick && (
+                      {!automatiskMellomlagring && onLagreMellomLagringClick && (
                         <Button type="button" variant="tertiary" onClick={onLagreMellomLagringClick}>
                           Lagre utkast
                         </Button>
@@ -125,7 +127,7 @@ export const VilkårskortMedFormOgMellomlagringNyVisning = ({
                         </Button>
                       )}
                       {extraActions != null && extraActions}
-                      {onLagreMellomLagringClick && (
+                      {!automatiskMellomlagring && onLagreMellomLagringClick && (
                         <Button type="button" variant="tertiary" onClick={onLagreMellomLagringClick}>
                           Lagre utkast
                         </Button>

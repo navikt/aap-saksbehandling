@@ -50,18 +50,19 @@ export const TotrinnsvurderingForm = ({
     ? mapMellomlagringToDraftFormFields(JSON.parse(initialMellomlagretVurdering.data))
     : mapVurderingToDraftFormFields(grunnlag.vurderinger);
 
-  const { nullstillMellomlagretVurdering, mellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(
-      erKvalitetssikring ? Behovstype.KVALITETSSIKRING_KODE : Behovstype.FATTE_VEDTAK_KODE,
-      initialMellomlagretVurdering
-    );
-
   const { form } = useConfigForm<FormFieldsToTrinnsVurdering>({
     totrinnsvurderinger: {
       type: 'fieldArray',
       defaultValue: defaultValue.totrinnsvurderinger,
     },
   });
+
+  const { nullstillMellomlagretVurdering, mellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
+    useMellomlagring(
+      erKvalitetssikring ? Behovstype.KVALITETSSIKRING_KODE : Behovstype.FATTE_VEDTAK_KODE,
+      initialMellomlagretVurdering,
+      form
+    );
 
   const { fields } = useFieldArray({
     control: form.control,

@@ -10,11 +10,12 @@ import { debounce, isEqual } from 'lodash';
 import { UseFormReturn } from 'react-hook-form';
 import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
 import { useBekreftVurderingerGrunnlag } from 'hooks/saksbehandling/BekrefteVurderingerHook';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 export function useMellomlagring<T extends object>(
   behovstype: Behovstype,
   initialMellomlagring: MellomlagretVurdering | undefined,
-  form?: UseFormReturn<T>
+  form: UseFormReturn<T>
 ): {
   lagreMellomlagring: (vurdering: object) => void;
   slettMellomlagring: (callback?: () => void) => void;
@@ -24,6 +25,7 @@ export function useMellomlagring<T extends object>(
   const behandlingsReferanse = useBehandlingsReferanse();
   const { flyt } = useRequiredFlyt();
   const { refetchBekreftVurderingerGrunnlagClient } = useBekreftVurderingerGrunnlag();
+  const automatiskMellomlagring = useFeatureFlag('automatiskMellomlagring');
 
   const [mellomlagretVurdering, setMellomlagretVurdering] = useState<MellomlagretVurdering | undefined>(
     initialMellomlagring
@@ -60,7 +62,7 @@ export function useMellomlagring<T extends object>(
   }, [isSubmitting, debouncedLagreMellomlagring]);
 
   useEffect(() => {
-    if (!form) return;
+    if (!form || !automatiskMellomlagring) return;
 
     let previousValues: T | undefined;
 

@@ -77,25 +77,25 @@ export const VedtakslengdeSteg = ({ grunnlag, behandlingVersjon, readOnly, initi
   const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('FASTSETT_VEDTAKSLENGDE');
 
-  const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
-    useMellomlagring(Behovstype.FASTSETT_VEDTAKSLENGDE, initialMellomlagretVurdering);
-
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
   const { visningModus, visningActions, formReadOnly, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'FASTSETT_VEDTAKSLENGDE',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
-  const defaultValues: VedtakslengdeForm = mellomlagretVurdering
-    ? JSON.parse(mellomlagretVurdering.data)
+  const defaultValues: VedtakslengdeForm = initialMellomlagretVurdering
+    ? JSON.parse(initialMellomlagretVurdering.data)
     : getDefaultValuesFromGrunnlag(grunnlag);
 
   const form = useForm<VedtakslengdeForm>({
     defaultValues,
     reValidateMode: 'onChange',
   });
+
+  const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
+    useMellomlagring(Behovstype.FASTSETT_VEDTAKSLENGDE, initialMellomlagretVurdering, form);
 
   const {
     fields: vurderingerFields,

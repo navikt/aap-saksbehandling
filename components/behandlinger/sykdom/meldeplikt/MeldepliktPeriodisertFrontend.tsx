@@ -64,27 +64,26 @@ export const MeldepliktPeriodisertFrontend = ({
   const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('FRITAK_MELDEPLIKT');
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.FRITAK_MELDEPLIKT_KODE, initialMellomlagretVurdering);
-
   const { visningActions, formReadOnly, visningModus, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'FRITAK_MELDEPLIKT',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
   const nyeVurderinger = grunnlag?.nyeVurderinger ?? [];
 
-  const defaultValues =
-    initialMellomlagretVurdering != null
-      ? (JSON.parse(initialMellomlagretVurdering.data) as FritakMeldepliktForm)
-      : getDefaultValuesFromGrunnlag(grunnlag);
+  const defaultValues = initialMellomlagretVurdering
+    ? JSON.parse(initialMellomlagretVurdering.data)
+    : getDefaultValuesFromGrunnlag(grunnlag);
 
   const form = useForm<FritakMeldepliktForm>({
     defaultValues,
   });
+
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
+    useMellomlagring(Behovstype.FRITAK_MELDEPLIKT_KODE, initialMellomlagretVurdering, form);
 
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
 

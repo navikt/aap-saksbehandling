@@ -41,28 +41,26 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsPeriodisertBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_SYKEPENGEERSTATNING');
-
-  const { lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
-    useMellomlagring(Behovstype.VURDER_SYKEPENGEERSTATNING_KODE, initialMellomlagretVurdering);
-
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
   const { visningActions, visningModus, formReadOnly, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'VURDER_SYKEPENGEERSTATNING',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
-  const defaultValues =
-    mellomlagretVurdering != null
-      ? (JSON.parse(mellomlagretVurdering.data) as SykepengeerstatningForm)
-      : getDefaultValuesFromGrunnlag(grunnlag);
+  const defaultValues = initialMellomlagretVurdering
+    ? JSON.parse(initialMellomlagretVurdering.data)
+    : getDefaultValuesFromGrunnlag(grunnlag);
 
   const form = useForm<SykepengeerstatningForm>({
     defaultValues,
     reValidateMode: 'onChange',
     shouldUnregister: true,
   });
+
+  const { lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
+    useMellomlagring(Behovstype.VURDER_SYKEPENGEERSTATNING_KODE, initialMellomlagretVurdering, form);
 
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
 

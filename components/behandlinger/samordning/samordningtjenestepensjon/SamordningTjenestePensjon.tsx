@@ -39,13 +39,10 @@ export const SamordningTjenestePensjon = ({
     'SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV'
   );
 
-  const { lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
-    useMellomlagring(Behovstype.SAMORDNING_REFUSJONS_KRAV, initialMellomlagretVurdering);
-
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
     'SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const defaultValues: DraftFormFields = initialMellomlagretVurdering
@@ -71,6 +68,9 @@ export const SamordningTjenestePensjon = ({
     },
     { readOnly: formReadOnly }
   );
+
+  const { lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
+    useMellomlagring(Behovstype.SAMORDNING_REFUSJONS_KRAV, initialMellomlagretVurdering, form);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) =>

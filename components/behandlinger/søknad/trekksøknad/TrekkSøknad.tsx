@@ -30,13 +30,10 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon, initialMel
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('SØKNAD');
 
-  const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
-    useMellomlagring(Behovstype.VURDER_TREKK_AV_SØKNAD_KODE, initialMellomlagretVurdering);
-
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
     'SØKNAD',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const vurderingerString = grunnlag?.vurderinger.at(-1);
@@ -63,6 +60,9 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon, initialMel
     },
     { readOnly: formReadOnly }
   );
+
+  const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
+    useMellomlagring(Behovstype.VURDER_TREKK_AV_SØKNAD_KODE, initialMellomlagretVurdering, form);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit(

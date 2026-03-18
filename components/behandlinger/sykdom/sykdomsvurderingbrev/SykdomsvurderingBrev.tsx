@@ -4,10 +4,10 @@ import { BodyLong, BodyShort, Box, Heading, Label, List, VStack } from '@navikt/
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import {
+  ForeløpigBehandlingsutfall,
   MellomlagretVurdering,
   SykdomBrevVurdering,
   SykdomsvurderingBrevGrunnlag,
-  ForeløpigBehandlingsutfall,
   TypeBehandling,
 } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
@@ -50,13 +50,10 @@ export const SykdomsvurderingBrev = ({
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('SYKDOMSVURDERING_BREV');
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.SYKDOMSVURDERING_BREV_KODE, initialMellomlagretVurdering);
-
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
     'SYKDOMSVURDERING_BREV',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const erBekreftVurderingerStegPå = useFeatureFlag('BekreftVurderingerOppfolging');
@@ -77,6 +74,8 @@ export const SykdomsvurderingBrev = ({
     { shouldUnregister: true, readOnly: formReadOnly }
   );
 
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
+    useMellomlagring(Behovstype.SYKDOMSVURDERING_BREV_KODE, initialMellomlagretVurdering, form);
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
       løsBehovOgGåTilNesteSteg(
