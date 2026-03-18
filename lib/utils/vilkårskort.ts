@@ -76,6 +76,8 @@ export function behovstypeTilVilkårskortLink(behovstype: Behovstype): string {
       return 'SAMORDNING/#SAMORDNING_SYKESTIPEND';
     case Behovstype.VURDER_INNTEKTSBORTFALL:
       return 'GRUNNLAG/#INNTEKTSBORTFALL';
+    case Behovstype.FASTSETT_VEDTAKSLENGDE:
+      return 'VEDTAKSLENGDE/#VEDTAKSLENGDE';
     default:
       return 'SYKDOM';
   }
