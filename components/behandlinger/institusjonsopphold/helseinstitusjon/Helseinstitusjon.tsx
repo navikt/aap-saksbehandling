@@ -41,6 +41,7 @@ export interface HelseinstitusjonsFormFields {
 export interface OppholdMedVurderinger {
   oppholdId: string;
   periode: Periode;
+  tidligsteReduksjonsdato?: string | null;
   vurderinger: OppholdVurdering[];
 }
 
@@ -236,6 +237,7 @@ function mapVurderingToDraftFormFields(
           fom: formaterDatoForFrontend(opphold.oppholdFra),
           tom: formaterDatoForFrontendMedStøtteForUendeligSlutt(opphold.avsluttetDato),
         },
+        tidligsteReduksjonsdato: opphold.tidligsteReduksjonsdato,
         vurderinger: harTidligereVurderingerOgIngenNåværendeVurderinger ? [] : vurderinger,
       };
     }),

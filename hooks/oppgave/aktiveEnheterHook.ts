@@ -1,30 +1,30 @@
 import { dagerTilMillisekunder } from 'lib/utils/time';
 import { useInnloggetBruker } from 'hooks/BrukerHook';
-import { ComboOption } from 'components/produksjonsstyring/minenhet/MineEnheter';
+import { ValuePair } from 'components/form/FormField';
 
 const KEY = 'AKTIVE_ENHETER_KEY';
 const MAKS_LEVETID = dagerTilMillisekunder(1);
 
 interface LagredeValgteEnheter {
-  value: ComboOption[];
+  value: ValuePair[];
   timestamp: number;
   user: string;
 }
 
 export function useLagreAktiveEnheter(): {
-  lagreAktiveEnheter: (value: ComboOption[]) => void;
-  hentLagredeAktiveEnheter: () => ComboOption[] | undefined;
+  lagreAktiveEnheter: (value: ValuePair[]) => void;
+  hentLagredeAktiveEnheter: () => ValuePair[] | undefined;
 } {
   const bruker = useInnloggetBruker();
 
-  const lagreAktiveEnheter = (value: ComboOption[]) => {
+  const lagreAktiveEnheter = (value: ValuePair[]) => {
     localStorage.setItem(
       KEY,
       JSON.stringify({ value, timestamp: new Date().getTime(), user: bruker.NAVident } as LagredeValgteEnheter)
     );
   };
 
-  const hentLagredeAktiveEnheter = (): ComboOption[] | undefined => {
+  const hentLagredeAktiveEnheter = (): ValuePair[] | undefined => {
     try {
       const obj = JSON.parse(localStorage[KEY]) as LagredeValgteEnheter;
 
