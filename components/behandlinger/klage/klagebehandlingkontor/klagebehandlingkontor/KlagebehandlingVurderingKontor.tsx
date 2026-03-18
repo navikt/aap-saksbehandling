@@ -47,13 +47,10 @@ export const KlagebehandlingVurderingKontor = ({
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('KLAGEBEHANDLING_KONTOR');
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.VURDER_KLAGE_KONTOR, initialMellomlagretVurdering);
-
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
     'KLAGEBEHANDLING_KONTOR',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const defaultValue: DraftFormfields = initialMellomlagretVurdering
@@ -118,6 +115,9 @@ export const KlagebehandlingVurderingKontor = ({
     },
     { readOnly: formReadOnly }
   );
+
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
+    useMellomlagring(Behovstype.VURDER_KLAGE_KONTOR, initialMellomlagretVurdering, form);
 
   const innstilling = form.watch('innstilling');
 

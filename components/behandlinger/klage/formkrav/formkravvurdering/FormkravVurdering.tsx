@@ -37,13 +37,10 @@ export const FormkravVurdering = ({ behandlingVersjon, grunnlag, readOnly, initi
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('FORMKRAV');
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.VURDER_FORMKRAV, initialMellomlagretVurdering);
-
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
     'FORMKRAV',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
@@ -103,6 +100,9 @@ export const FormkravVurdering = ({ behandlingVersjon, grunnlag, readOnly, initi
     },
     { readOnly: formReadOnly, shouldUnregister: true }
   );
+
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
+    useMellomlagring(Behovstype.VURDER_FORMKRAV, initialMellomlagretVurdering, form);
 
   const { erKonkret, erSignert, erBrukerPart, erFristOverholdt, likevelBehandles } = form.watch();
   const avvistGrunnetFrist = erFristOverholdt === JaEllerNei.Nei && likevelBehandles === JaEllerNei.Nei;

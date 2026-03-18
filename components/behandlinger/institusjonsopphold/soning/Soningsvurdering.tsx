@@ -46,13 +46,10 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon, initi
     useLøsBehovOgGåTilNesteSteg('DU_ER_ET_ANNET_STED');
   const behandlingsreferanse = useBehandlingsReferanse();
 
-  const { nullstillMellomlagretVurdering, mellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.AVKLAR_SONINGSFORRHOLD, initialMellomlagretVurdering);
-
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
     'DU_ER_ET_ANNET_STED',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
@@ -65,6 +62,9 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon, initi
       defaultValue: defaultValue.soningsvurderinger,
     },
   });
+
+  const { nullstillMellomlagretVurdering, mellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
+    useMellomlagring(Behovstype.AVKLAR_SONINGSFORRHOLD, initialMellomlagretVurdering, form);
 
   const { fields, remove, append } = useFieldArray({ control: form.control, name: 'soningsvurderinger' });
 

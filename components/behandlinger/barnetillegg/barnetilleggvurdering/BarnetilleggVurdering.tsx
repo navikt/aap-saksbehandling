@@ -67,9 +67,6 @@ export const BarnetilleggVurdering = ({
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('BARNETILLEGG');
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.AVKLAR_BARNETILLEGG_KODE, initialMellomlagretVurdering);
-
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(
@@ -85,7 +82,7 @@ export const BarnetilleggVurdering = ({
   const { visningActions, visningModus, formReadOnly } = useVilkårskortVisning(
     readOnly,
     'BARNETILLEGG',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const { form } = useConfigForm<BarnetilleggFormFields>(
@@ -115,6 +112,9 @@ export const BarnetilleggVurdering = ({
     control: form.control,
     name: 'folkeregistrerteBarnVurderinger',
   });
+
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
+    useMellomlagring(Behovstype.AVKLAR_BARNETILLEGG_KODE, initialMellomlagretVurdering, form);
 
   const {
     fields: saksbehandlerOppgitteBarnVurderinger,

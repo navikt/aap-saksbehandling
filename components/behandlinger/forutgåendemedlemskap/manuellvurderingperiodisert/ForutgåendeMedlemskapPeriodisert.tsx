@@ -58,21 +58,17 @@ export const ForutgåendeMedlemskapPeriodisert = ({
   const { løsPeriodisertBehovOgGåTilNesteSteg, status, løsBehovOgGåTilNesteStegError, isLoading } =
     useLøsBehovOgGåTilNesteSteg('VURDER_MEDLEMSKAP');
 
-  const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
-    useMellomlagring(Behovstype.AVKLAR_FORUTGÅENDE_MEDLEMSKAP, initialMellomlagretVurdering);
-
   const { visningActions, formReadOnly, visningModus, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'VURDER_MEDLEMSKAP',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
-  const defaultValues =
-    mellomlagretVurdering != null
-      ? hentPeriodiserteVerdierFraMellomlagretVurdering(mellomlagretVurdering, grunnlag)
-      : getDefaultValuesFromGrunnlag(grunnlag);
+  const defaultValues = initialMellomlagretVurdering
+    ? hentPeriodiserteVerdierFraMellomlagretVurdering(initialMellomlagretVurdering, grunnlag)
+    : getDefaultValuesFromGrunnlag(grunnlag);
 
   const form = useForm<ForutgåendeMedlemskapVurderingForm>({
     defaultValues,
@@ -90,6 +86,9 @@ export const ForutgåendeMedlemskapPeriodisert = ({
       erNyVurdering: true,
     });
   }
+
+  const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
+    useMellomlagring(Behovstype.AVKLAR_FORUTGÅENDE_MEDLEMSKAP, initialMellomlagretVurdering, form);
 
   function onSubmit(data: ForutgåendeMedlemskapVurderingForm) {
     const erPerioderGyldige = validerPeriodiserteVurderingerRekkefølge({
