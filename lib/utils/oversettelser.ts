@@ -202,6 +202,8 @@ export function mapTilSteggruppeTekst(steggruppe: string) {
       return 'Udefinert';
     case 'OPPHOLDSKRAV':
       return 'Oppholdskrav';
+    case 'VEDTAKSLENGDE':
+      return 'Vedtakslengde';
     default:
       return `${steggruppe}`;
   }

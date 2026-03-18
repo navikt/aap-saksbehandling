@@ -13,6 +13,7 @@ import {
   PeriodisertFritaksvurderingDto,
   SykdomsvurderingLøsningDto,
   SykepengererstatningPeriodeLøsning,
+  VedtakslengdeVurderingDto,
 } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
 
@@ -87,6 +88,11 @@ interface ForutgåendeMedlemskapMedOverstyring {
   løsningerForPerioder: AvklarPeriodisertForutgåendeMedlemskapLøsning[];
 }
 
+interface VedtakslengdeBehov {
+  behovstype: Behovstype.FASTSETT_VEDTAKSLENGDE;
+  løsningerForPerioder: VedtakslengdeVurderingDto[];
+}
+
 type Behov =
   | LovvalgOgMedlemskapBehov
   | StudentBehov
@@ -100,4 +106,5 @@ type Behov =
   | Arbeidsopptrapping
   | OvergangUføre
   | OppholdskravvurderingBehov
-  | ForutgåendeMedlemskapMedOverstyring;
+  | ForutgåendeMedlemskapMedOverstyring
+  | VedtakslengdeBehov;

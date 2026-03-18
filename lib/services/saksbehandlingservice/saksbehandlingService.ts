@@ -16,6 +16,7 @@ import {
   BehandlingFlytOgTilstand,
   BehandlingPersoninfo,
   BehandlingsHistorikk,
+  BekreftVurderingerOppfølgingGrunnlag,
   BeregningsGrunnlag,
   BeregningTidspunktGrunnlag,
   BestillLegeerklæring,
@@ -87,6 +88,7 @@ import {
   TrukketSøknadGrunnlag,
   UnderveisGrunnlag,
   UtbetalingOgSimuleringGrunnlag,
+  VedtakslengdeGrunnlag,
   VenteInformasjon,
   YrkeskadeBeregningGrunnlag,
   YrkesskadeVurderingGrunnlag,
@@ -225,6 +227,11 @@ export const hentSykepengerErstatningGrunnlag = async (behandlingsReferanse: str
 export const hentAlderGrunnlag = async (behandlingsReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/alder`;
   return await apiFetch<AlderGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentBekreftVurderingerOppfølgingGrunnlag = async (behandlingsReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsReferanse}/grunnlag/bekreft-vurderinger-oppfolging`;
+  return await apiFetch<BekreftVurderingerOppfølgingGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentUnntakMeldepliktGrunnlag = async (behandlingsReferanse: string) => {
@@ -571,6 +578,11 @@ export const hentUnderveisGrunnlag = async (behandlingsreferanse: string) => {
 export const hentBarnepensjonGrunnlag = async (behandlingsreferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/barnepensjon`;
   return await apiFetch<BarnepensjonGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentVedtakslengdeGrunnlag = async (behandlingsreferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/vedtakslengde`;
+  return await apiFetch<VedtakslengdeGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentForeslåVedtakGrunnlag = async (behandlingsreferanse: string) => {

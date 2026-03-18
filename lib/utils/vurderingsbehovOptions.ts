@@ -28,6 +28,7 @@ export const vurderingsbehovOptions = (): ValuePair<Vurderingsbehov>[] => [
   },
   { label: '§ 11-29 Refusjonskrav tjenestepensjonsordning', value: 'REVURDER_SAMORDNING_TJENESTEPENSJON' },
   { label: 'Dødsfall bruker', value: 'DØDSFALL_BRUKER' },
+  { label: '§ 11-27 Samordning barnepensjon', value: 'REVURDER_SAMORDNING_BARNEPENSJON' },
 ];
 
 export const alleVurderingsbehovOptions: ValuePair<Vurderingsbehov | VurderingsbehovIntern>[] = [

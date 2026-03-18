@@ -28,7 +28,7 @@ interface VilkårsKortPeriodisertProps {
   mellomlagretVurdering: MellomlagretVurdering | undefined;
   formReset: () => void;
   vurdertAutomatisk?: boolean;
-  onLeggTilVurdering: () => void;
+  onLeggTilVurdering?: () => void;
   errorList: ErrorList;
 }
 
@@ -117,6 +117,7 @@ export const VilkårskortPeriodisert = ({
                           onClick={() => {
                             visningActions.avbrytEndringClick();
                             formReset && formReset();
+                            onDeleteMellomlagringClick && mellomlagretVurdering && onDeleteMellomlagringClick();
                           }}
                         >
                           Avbryt

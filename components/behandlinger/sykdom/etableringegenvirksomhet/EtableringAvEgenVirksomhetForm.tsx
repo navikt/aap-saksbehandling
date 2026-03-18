@@ -77,7 +77,7 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly, gru
         control={form.control}
         label={'Foreligger det en næringsfaglig vurdering?'}
         horisontal={true}
-        rules={{ required: 'Du må svare på om det foreligger en nøringsfaglig vurdering' }}
+        rules={{ required: 'Du må svare på om det foreligger en næringsfaglig vurdering' }}
         readOnly={readOnly}
       />
       {form.watch(`vurderinger.${index}.foreliggerEnNæringsfagligVurdering`) === JaEllerNei.Ja && (

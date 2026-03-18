@@ -4,6 +4,7 @@ import {
   BehandlingFlytOgTilstand,
   BehandlingsFlytAvklaringsbehovKode,
   BehandlingsHistorikk,
+  BekreftVurderingerOppfølgingGrunnlag,
   BestillLegeerklæring,
   Brev,
   BrevdataDto,
@@ -120,6 +121,13 @@ export function clientSøkPåBehandler(fritekst: string, saksnummer: string) {
 
 export function clientHentFlyt(behandlingsreferanse: string) {
   return clientFetch<BehandlingFlytOgTilstand>(`${BASE_URL}/api/behandling/${behandlingsreferanse}/flyt`, 'GET');
+}
+
+export function clientHentBekreftVurderingerOppfølgingGrunnlag(behandlingsreferanse: string) {
+  return clientFetch<BekreftVurderingerOppfølgingGrunnlag>(
+    `${BASE_URL}/api/grunnlag/${behandlingsreferanse}/bekreftvurderinger`,
+    'GET'
+  );
 }
 
 export function clientHentAlleDialogmeldingerPåSak(saksnummer: string) {
