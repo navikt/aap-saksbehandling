@@ -1,4 +1,4 @@
-import { Alert, BodyShort, CopyButton, SortState, Table, Tooltip } from '@navikt/ds-react';
+import { Alert, BodyShort, CopyButton, Table, Tooltip } from '@navikt/ds-react';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import Link from 'next/link';
 import { storForbokstavIHvertOrd } from 'lib/utils/string';
@@ -19,12 +19,13 @@ import { SynkroniserEnhetModal } from 'components/oppgaveliste/synkroniserenhetm
 import { TildelOppgaveModal } from 'components/tildeloppgavemodal/TildelOppgaveModal';
 import { OppgaveIkkeLedigModal } from 'components/oppgaveliste/oppgaveikkeledigmodal/OppgaveIkkeLedigModal';
 import { NoNavAapOppgaveListeOppgaveSorteringSortBy } from '@navikt/aap-oppgave-typescript-types';
+import { ScopedBackendSortState } from 'hooks/oppgave/BackendSorteringHook';
 
 interface Props {
   oppgaver: Oppgave[];
   revalidateFunction: () => void;
   setSortBy: (orderBy: NoNavAapOppgaveListeOppgaveSorteringSortBy) => void;
-  sort: SortState | undefined;
+  sort: ScopedBackendSortState<NoNavAapOppgaveListeOppgaveSorteringSortBy> | undefined;
 }
 
 export const LedigeOppgaverTabellNy = ({ oppgaver, revalidateFunction, setSortBy, sort }: Props) => {

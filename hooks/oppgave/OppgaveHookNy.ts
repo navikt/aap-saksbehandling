@@ -3,13 +3,15 @@ import useSWRInfinite from 'swr/infinite';
 import { hentMineOppgaverClient, hentOppgaverClient } from 'lib/oppgaveClientApi';
 import useSWR from 'swr';
 import { isError, isSuccess } from 'lib/utils/api';
-import { SortState } from '@navikt/ds-react';
 import {
   mapSortStateDirectionTilQueryParamEnum,
   mapSortStateTilOppgaveSortering,
   mineOppgaverQueryParams,
 } from 'lib/utils/request';
-import { PathsMineOppgaverGetParametersQuerySortby } from '@navikt/aap-oppgave-typescript-types';
+import {
+  NoNavAapOppgaveListeOppgaveSorteringSortBy,
+  PathsMineOppgaverGetParametersQuerySortby,
+} from '@navikt/aap-oppgave-typescript-types';
 import { ScopedBackendSortState } from 'hooks/oppgave/BackendSorteringHook';
 
 const PAGE_SIZE = 50;
@@ -21,7 +23,7 @@ type UseOppgaverOptions = {
   aktivKøId: number;
   kunLedigeOppgaver?: boolean;
   utvidetFilter?: OppgavelisteRequest['utvidetFilter'];
-  sortering?: SortState;
+  sortering?: ScopedBackendSortState<NoNavAapOppgaveListeOppgaveSorteringSortBy>;
 };
 
 function lagUrlSuffix(filter: OppgavelisteRequest['utvidetFilter']): string {
@@ -173,7 +175,7 @@ export function useLedigeOppgaverNy(
   visKunOppgaverSomBrukerErVeilederPå: boolean,
   aktivKøId: number,
   utvidetFilter?: OppgavelisteRequest['utvidetFilter'],
-  sortering?: SortState
+  sortering?: ScopedBackendSortState<NoNavAapOppgaveListeOppgaveSorteringSortBy>
 ) {
   return useOppgaverNy({
     aktiveEnheter,
@@ -189,7 +191,7 @@ export function useAlleOppgaverForEnhetNy(
   aktiveEnheter: string[],
   aktivKøId: number,
   utvidetFilter?: OppgavelisteRequest['utvidetFilter'],
-  sortering?: SortState
+  sortering?: ScopedBackendSortState<NoNavAapOppgaveListeOppgaveSorteringSortBy>
 ) {
   return useOppgaverNy({
     aktiveEnheter,
