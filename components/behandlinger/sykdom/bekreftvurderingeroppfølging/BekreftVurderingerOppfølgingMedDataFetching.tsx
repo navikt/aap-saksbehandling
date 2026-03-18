@@ -20,6 +20,6 @@ export const BekreftVurderingerOppfølgingMedDataFetching = async ({
   }
 
   return (
-    <BekreftVurderingerOppfølging grunnlag={grunnlag.data} readOnly={readOnly} behandlingVersjon={behandlingVersjon} />
+    <BekreftVurderingerOppfølging initialGrunnlag={grunnlag.data} readOnly={readOnly} behandlingVersjon={behandlingVersjon} />
   );
 };
