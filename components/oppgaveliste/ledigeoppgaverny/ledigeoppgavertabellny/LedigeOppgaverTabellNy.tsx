@@ -20,6 +20,7 @@ import { TildelOppgaveModal } from 'components/tildeloppgavemodal/TildelOppgaveM
 import { OppgaveIkkeLedigModal } from 'components/oppgaveliste/oppgaveikkeledigmodal/OppgaveIkkeLedigModal';
 import { NoNavAapOppgaveListeOppgaveSorteringSortBy } from '@navikt/aap-oppgave-typescript-types';
 import { ScopedBackendSortState } from 'hooks/oppgave/BackendSorteringHook';
+import { isOppgavelisteOppgaveSorteringSortBy } from 'lib/utils/request';
 
 interface Props {
   oppgaver: Oppgave[];
@@ -58,7 +59,11 @@ export const LedigeOppgaverTabellNy = ({ oppgaver, revalidateFunction, setSortBy
         size={'small'}
         zebraStripes
         sort={sort}
-        onSortChange={(sortKey) => setSortBy(sortKey as NoNavAapOppgaveListeOppgaveSorteringSortBy)}
+        onSortChange={(sortKey) => {
+          if (isOppgavelisteOppgaveSorteringSortBy(sortKey)) {
+            setSortBy(sortKey);
+          }
+        }}
       >
         <Table.Header>
           <Table.Row>

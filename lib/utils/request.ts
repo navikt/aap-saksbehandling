@@ -92,6 +92,20 @@ export function hentStatistikkQueryParams(req: NextRequest): StatistikkQueryPara
     oppgaveTyper,
   };
 }
+const validSortKeys = new Set<string>(Object.values(NoNavAapOppgaveListeOppgaveSorteringSortBy));
+
+/**
+ * Type guard for enum NoNavAapOppgaveListeOppgaveSorteringSortBy
+ *
+ * @param value Verdi som skal sjekkes mot enum.
+ * @returns boolean
+ */
+export function isOppgavelisteOppgaveSorteringSortBy(
+  value: string | undefined
+): value is NoNavAapOppgaveListeOppgaveSorteringSortBy {
+  return !!value && validSortKeys.has(value);
+}
+
 export function mapSortStateTilOppgaveSortering(
   sortState: ScopedBackendSortState<NoNavAapOppgaveListeOppgaveSorteringSortBy>
 ): OppgavelisteRequest['sortering'] {
