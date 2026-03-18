@@ -131,7 +131,7 @@ export const VilkårskortPeriodisert = ({
                           Legg til ny vurdering
                         </Button>
                       )}
-                      {onLagreMellomLagringClick && (
+                      {!automatiskMellomlagring && onLagreMellomLagringClick && (
                         <Button type="button" variant="tertiary" onClick={onLagreMellomLagringClick}>
                           Lagre utkast
                         </Button>

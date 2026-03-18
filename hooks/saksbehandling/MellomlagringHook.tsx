@@ -25,7 +25,7 @@ export function useMellomlagring<T extends object>(
   const behandlingsReferanse = useBehandlingsReferanse();
   const { flyt } = useRequiredFlyt();
   const { refetchBekreftVurderingerGrunnlagClient } = useBekreftVurderingerGrunnlag();
-  const automatiskMellomlagring = useFeatureFlag('automatiskMellomlagring');
+  const automatiskMellomlagringFeatureFlag = useFeatureFlag('automatiskMellomlagring');
 
   const [mellomlagretVurdering, setMellomlagretVurdering] = useState<MellomlagretVurdering | undefined>(
     initialMellomlagring
@@ -52,17 +52,18 @@ export function useMellomlagring<T extends object>(
 
   const debouncedLagreMellomlagring = useMemo(() => debounce(lagreMellomlagring, 2000), [lagreMellomlagring]);
 
-  const isSubmitting = form?.formState.isSubmitting ?? false;
+  const isSubmitting = form.formState.isSubmitting;
 
   // Vi må avbryte lagring når bruker løser behov
   useEffect(() => {
+    if (!automatiskMellomlagringFeatureFlag) return;
     if (isSubmitting) {
       debouncedLagreMellomlagring.cancel();
     }
-  }, [isSubmitting, debouncedLagreMellomlagring]);
+  }, [isSubmitting, debouncedLagreMellomlagring, automatiskMellomlagringFeatureFlag]);
 
   useEffect(() => {
-    if (!form || !automatiskMellomlagring) return;
+    if (!automatiskMellomlagringFeatureFlag) return;
 
     let previousValues: T | undefined;
 
@@ -90,7 +91,7 @@ export function useMellomlagring<T extends object>(
       debouncedLagreMellomlagring.cancel();
       unsubscribe();
     };
-  }, [form, debouncedLagreMellomlagring]);
+  }, [form, debouncedLagreMellomlagring, automatiskMellomlagringFeatureFlag]);
 
   async function slettMellomlagring(callback?: () => void) {
     debouncedLagreMellomlagring.cancel();
