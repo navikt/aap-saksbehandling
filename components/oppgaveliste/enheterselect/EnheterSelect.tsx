@@ -3,12 +3,12 @@
 import { UNSAFE_Combobox } from '@navikt/ds-react';
 import { Enhet } from 'lib/types/oppgaveTypes';
 import { useMemo, useState } from 'react';
-import { ComboOption } from 'components/produksjonsstyring/minenhet/MineEnheter';
+import { ValuePair } from 'components/form/FormField';
 
 interface Props {
   enheter: Enhet[];
-  aktiveEnheter: ComboOption[];
-  setAktiveEnheter: (enheter: ComboOption[]) => void;
+  aktiveEnheter: ValuePair[];
+  setAktiveEnheter: (enheter: ValuePair[]) => void;
   className?: string;
 }
 
@@ -24,9 +24,9 @@ export const EnheterSelect = ({ enheter, aktiveEnheter, setAktiveEnheter, classN
     [value, enheterOptions]
   );
   const onToggleSelected = (option: string, isSelected: boolean) => {
-    const labelAndValue: ComboOption = {
+    const labelAndValue: ValuePair = {
       value: option,
-      label: enheterOptions.find((e) => e.value === option)?.label,
+      label: enheterOptions.find((e) => e.value === option)?.label || '',
     };
     let newSelected = [];
     if (isSelected) {

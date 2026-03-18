@@ -26,11 +26,11 @@ import styles from 'components/oppgaveliste/ledigeoppgaverny/LedigeOppgaver.modu
 import { TabellSkeleton } from 'components/oppgaveliste/tabellskeleton/TabellSkeleton';
 import { ALLE_OPPGAVER_ID } from 'components/oppgaveliste/filtrering/filtreringUtils';
 import { useLagreAktivUtvidetFilter } from 'hooks/oppgave/aktivUtvidetFilterHook';
-import { ComboOption } from 'components/produksjonsstyring/minenhet/MineEnheter';
 import { useLagreAktiveEnheter } from 'hooks/oppgave/aktiveEnheterHook';
 import { EnheterSelect } from 'components/oppgaveliste/enheterselect/EnheterSelect';
 import { useBackendSortering } from 'hooks/oppgave/BackendSorteringHook';
 import { AlleOppgaverFiltreringNy } from 'components/oppgaveliste/filtrering/alleoppgaverfiltrering/AlleOppgaverFiltreringNy';
+import { ValuePair } from 'components/form/FormField';
 
 interface Props {
   enheter: Enhet[];
@@ -48,7 +48,7 @@ export const AlleOppgaverNy = ({ enheter }: Props) => {
   const { sort, setSort } =
     useBackendSortering<NoNavAapOppgaveListeOppgaveSorteringSortBy>('alle-oppgaver-backendsort');
 
-  function førsteEnhetTilComboOption(enheter: Enhet[]): ComboOption[] | null {
+  function førsteEnhetTilComboOption(enheter: Enhet[]): ValuePair[] | null {
     const førsteEnhet = enheter.find((e) => e);
     if (førsteEnhet) {
       return [{ value: førsteEnhet.enhetNr, label: førsteEnhet.navn }];
@@ -56,11 +56,11 @@ export const AlleOppgaverNy = ({ enheter }: Props) => {
     return null;
   }
 
-  const [aktiveEnheter, setAktiveEnheter] = useState<ComboOption[]>(
+  const [aktiveEnheter, setAktiveEnheter] = useState<ValuePair[]>(
     hentLagredeAktiveEnheter() ?? førsteEnhetTilComboOption(enheter) ?? []
   );
   const aktiveEnhetsnumre = aktiveEnheter.map((enhet) => enhet.value);
-  const oppdaterEnheter = (enheter: ComboOption[]) => {
+  const oppdaterEnheter = (enheter: ValuePair[]) => {
     setAktiveEnheter(enheter);
     lagreAktiveEnheter(enheter);
   };
