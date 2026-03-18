@@ -67,17 +67,17 @@ export function useMellomlagring<T extends object>(
     const unsubscribe = form.subscribe({
       formState: {
         values: true,
+        isDirty: true,
       },
-      callback: ({ values }) => {
+      callback: ({ values, isDirty }) => {
         /**
          * Hindrer unødvendig autosave:
          * - Sammenligner med defaultValues for å sjekke om brukeren faktisk har gjort endringer (RHF sin isDirty er ikke alltid pålitelig).
          * - Sammenligner med previousValues for å unngå å lagre samme data flere ganger når RHF trigges uten reelle endringer.
          */
-        const erForskjellig =
-          !isEqual(form.getValues(), form.formState.defaultValues) && !isEqual(form.getValues(), previousValues);
+        const erForskjellig = !isEqual(values, form.formState.defaultValues) && !isEqual(values, previousValues);
 
-        if (erForskjellig && form.formState.isDirty) {
+        if (erForskjellig && isDirty) {
           previousValues = values;
           debouncedLagreMellomlagring(values);
         }

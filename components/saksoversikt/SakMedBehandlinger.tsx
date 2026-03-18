@@ -1,7 +1,7 @@
 'use client';
 
 import { Alert, Button, Chips, Heading, HStack, Table, VStack } from '@navikt/ds-react';
-import { SaksInfo } from 'lib/types/types';
+import { SaksInfo, Vurderingsbehov } from 'lib/types/types';
 import { capitalize } from 'lodash';
 import { SakDevTools } from 'components/saksoversikt/SakDevTools';
 import { useRouter } from 'next/navigation';
@@ -23,6 +23,26 @@ import { usePostmottakBehandlinger } from 'hooks/postmottak/PostmottakBehandling
 import { useHentOppgaverForBehandlinger } from 'hooks/oppgave/OppgaverPåSakHook';
 
 const lokalDevToolsForBehandlingOgSak = isLocal();
+
+/**
+ * Slår sammen duplikater i vurderingsbehov og legger til en teller for hvor mange ganger hvert behov forekommer.
+ * Eksempel: ["MELDEKORT", "MELDEKORT", "MELDEKORT", "SØKNAD"] vises som 'Meldekort (3), Søknad'
+ **/
+function formaterVurderingsbehovMedTeller(behov: Vurderingsbehov[]): string {
+  const teller = behov.reduce<Record<string, number>>((acc, b) => {
+    acc[b] = (acc[b] ?? 0) + 1;
+    return acc;
+  }, {});
+
+  return Object.entries(teller)
+    .map(([b, antall]) =>
+      antall > 1
+        ? `${formaterVurderingsbehov(b as Vurderingsbehov)} (${antall})`
+        : formaterVurderingsbehov(b as Vurderingsbehov)
+    )
+    .join(', ');
+}
+
 export const SakMedBehandlinger = ({
   sak,
   innloggetBrukerIdent,
@@ -153,7 +173,7 @@ export const SakMedBehandlinger = ({
               <Table.DataCell>{capitalize(behandling.behandling.status)}</Table.DataCell>
               <Table.DataCell>
                 {behandling.kilde === 'BEHANDLINGSFLYT'
-                  ? behandling.behandling.vurderingsbehov.map((behov) => formaterVurderingsbehov(behov)).join(', ')
+                  ? formaterVurderingsbehovMedTeller(behandling.behandling.vurderingsbehov as Vurderingsbehov[])
                   : null}
               </Table.DataCell>
               <Table.DataCell>
