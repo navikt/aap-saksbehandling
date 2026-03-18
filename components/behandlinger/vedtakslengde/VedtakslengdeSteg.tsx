@@ -77,24 +77,20 @@ export const VedtakslengdeSteg = ({ grunnlag, behandlingVersjon, readOnly, initi
   const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('FASTSETT_VEDTAKSLENGDE');
 
-  const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
-    useMellomlagring(Behovstype.FASTSETT_VEDTAKSLENGDE, initialMellomlagretVurdering);
-
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
   const { visningModus, visningActions, formReadOnly, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'FASTSETT_VEDTAKSLENGDE',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
-  const defaultValues: VedtakslengdeForm = mellomlagretVurdering
-    ? JSON.parse(mellomlagretVurdering.data)
+  const defaultValues: VedtakslengdeForm = initialMellomlagretVurdering
+    ? JSON.parse(initialMellomlagretVurdering.data)
     : getDefaultValuesFromGrunnlag(grunnlag);
 
   const form = useForm<VedtakslengdeForm>({
     defaultValues,
-    reValidateMode: 'onChange',
   });
 
   const {
@@ -105,6 +101,11 @@ export const VedtakslengdeSteg = ({ grunnlag, behandlingVersjon, readOnly, initi
     control: form.control,
     name: 'vurderinger',
   });
+  const { slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } = useMellomlagring(
+    Behovstype.FASTSETT_VEDTAKSLENGDE,
+    initialMellomlagretVurdering,
+    form
+  );
 
   const foersteNyePeriode = vurderingerFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
   const errorList = hentFeilmeldingerForForm(form.formState.errors);
@@ -164,7 +165,6 @@ export const VedtakslengdeSteg = ({ grunnlag, behandlingVersjon, readOnly, initi
       status={status}
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}
       mellomlagretVurdering={mellomlagretVurdering}
       visningModus={visningModus}
