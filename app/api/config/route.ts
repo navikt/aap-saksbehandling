@@ -1,4 +1,4 @@
-import { ClientConfig } from 'lib/types/clientConfig';
+import { ClientConfig } from 'lib/types/clientTypes';
 import { FetchResponse } from 'lib/utils/api';
 import { NextResponse } from 'next/server';
 
