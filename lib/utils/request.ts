@@ -8,6 +8,7 @@ import {
   NoNavAapOppgaveListeOppgaveSorteringSortOrder,
   PathsMineOppgaverGetParametersQuerySortorder,
 } from '@navikt/aap-oppgave-typescript-types';
+import { ScopedBackendSortState } from 'hooks/oppgave/BackendSorteringHook';
 
 export function queryParamsArray(key: string, values: (string | number)[]) {
   const filtered = values.filter((value) => value !== undefined && value !== null && value !== '');
@@ -91,36 +92,30 @@ export function hentStatistikkQueryParams(req: NextRequest): StatistikkQueryPara
     oppgaveTyper,
   };
 }
-export function mapSortStateTilOppgaveSortering(sortState: SortState): OppgavelisteRequest['sortering'] {
-  const sortBy = mapSortStateSortByTilBackendEnum(sortState.orderBy);
+const validSortKeys = new Set<string>(Object.values(NoNavAapOppgaveListeOppgaveSorteringSortBy));
+
+/**
+ * Type guard for enum NoNavAapOppgaveListeOppgaveSorteringSortBy
+ *
+ * @param value Verdi som skal sjekkes mot enum.
+ * @returns boolean
+ */
+export function isOppgavelisteOppgaveSorteringSortBy(
+  value: string | undefined
+): value is NoNavAapOppgaveListeOppgaveSorteringSortBy {
+  return !!value && validSortKeys.has(value);
+}
+
+export function mapSortStateTilOppgaveSortering(
+  sortState: ScopedBackendSortState<NoNavAapOppgaveListeOppgaveSorteringSortBy>
+): OppgavelisteRequest['sortering'] {
+  const sortBy = sortState.orderBy;
   return sortBy
     ? {
         sortBy,
         sortOrder: mapSortStateDirectionTilBackendEnum(sortState.direction),
       }
     : undefined;
-}
-export function mapSortStateSortByTilBackendEnum(orderBy: string): NoNavAapOppgaveListeOppgaveSorteringSortBy | null {
-  switch (orderBy) {
-    case 'BEHANDLING_OPPRETTET':
-      return NoNavAapOppgaveListeOppgaveSorteringSortBy.BEHANDLING_OPPRETTET;
-    case 'SAKSNUMMER':
-      return NoNavAapOppgaveListeOppgaveSorteringSortBy.SAKSNUMMER;
-    case 'BEHANDLINGSTYPE':
-      return NoNavAapOppgaveListeOppgaveSorteringSortBy.BEHANDLINGSTYPE;
-    case 'ÅRSAK_TIL_OPPRETTELSE':
-      return NoNavAapOppgaveListeOppgaveSorteringSortBy._RSAK_TIL_OPPRETTELSE;
-    case 'AVKLARINGSBEHOV_KODE':
-      return NoNavAapOppgaveListeOppgaveSorteringSortBy.AVKLARINGSBEHOV_KODE;
-    case 'OPPRETTET_TIDSPUNKT':
-      return NoNavAapOppgaveListeOppgaveSorteringSortBy.OPPRETTET_TIDSPUNKT;
-    case 'RESERVERT_AV':
-      return NoNavAapOppgaveListeOppgaveSorteringSortBy.RESERVERT_AV;
-    case 'PERSONIDENT':
-      return NoNavAapOppgaveListeOppgaveSorteringSortBy.PERSONIDENT;
-  }
-  console.error(`Finner ikke mapping til backend enum for sortering: ${orderBy}`);
-  return null;
 }
 
 export function mapSortStateDirectionTilBackendEnum(
