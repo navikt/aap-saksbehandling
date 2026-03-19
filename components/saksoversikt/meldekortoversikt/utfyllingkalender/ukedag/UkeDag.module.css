@@ -1,0 +1,115 @@
+.ikkeeksisterendefelt {
+  background-color: var(--ax-bg-neutral-soft);
+  opacity: 0.4;
+}
+
+.dagcontainer,
+.dagcontainerharerror {
+  flex: 1;
+}
+
+.dagcontainer:first-child,
+.dagcontainerharerror:first-child {
+  border-top-left-radius: 6px;
+}
+
+.dagcontainer:last-child,
+.dagcontainerharerror:last-child {
+  border-top-right-radius: 6px;
+}
+
+.dagcontainer:first-child {
+  border-bottom-left-radius: 6px;
+}
+
+.dagcontainer:last-child {
+  border-bottom-right-radius: 6px;
+}
+
+.inputwrapper {
+  border-right: 1px solid var(--ax-border-neutral-subtle);
+  padding: 0 var(--ax-space-20);
+}
+
+.inputwrapperutenborder {
+  padding: 0 var(--ax-space-20);
+}
+
+.dag {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: var(--ax-space-16) 0 var(--ax-space-20) 0;
+}
+
+.timerinput {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ax-space-8);
+}
+
+.erutfylt {
+  background-color: var(--ax-bg-accent-moderate);
+}
+
+.harFeilmelding {
+  background-color: var(--ax-bg-danger-soft);
+}
+
+.error {
+  display: flex;
+  flex-direction: row;
+  gap: var(--ax-space-8);
+  align-items: center;
+  padding: var(--ax-space-8) 0;
+}
+
+.errorIcon {
+  color: var(--ax-text-danger-decoration);
+}
+
+@media (max-width: 768px) {
+  .dagcontainer {
+    border-bottom: 1px solid var(--ax-border-neutral-subtle);
+  }
+
+  .inputwrapper {
+    padding: var(--ax-space-12) var(--ax-space-20);
+    border-bottom: none;
+    border-top: none;
+    border-right: none;
+  }
+
+  .inputwrapperutenborder {
+    padding: var(--ax-space-12) var(--ax-space-20);
+  }
+
+  .inputwrapper:last-child {
+    border-bottom: none;
+  }
+
+  .timerinput {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .tekstfelt {
+    max-width: 8ch;
+  }
+
+  .dagcontainer:last-child {
+    border-bottom: none;
+    border-bottom-right-radius: 13px;
+    border-bottom-left-radius: 13px;
+  }
+
+  .dagcontainer:first-child {
+    border-radius: 13px 13px 0 0;
+  }
+
+  .dag {
+    flex-direction: column;
+    align-items: stretch;
+    margin: 0;
+  }
+}
