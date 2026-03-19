@@ -4,7 +4,7 @@ import { ExternalLinkIcon, MenuGridIcon } from '@navikt/aksel-icons';
 import { Dropdown, InternalHeader } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
 import { clientConfig } from 'lib/clientApi';
-import { ClientConfig } from 'lib/types/clientConfig';
+import { ClientConfig } from 'lib/types/clientTypes';
 import { isSuccess } from 'lib/utils/api';
 
 export const AppSwitcher = () => {

@@ -3,6 +3,8 @@
 import { BodyShort, Box, Heading, HGrid, Label, Link, Page, VStack } from '@navikt/ds-react';
 import { useParams } from 'next/navigation';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
+import { useEffect } from 'react';
+import { clientLogg } from 'lib/clientApi';
 
 interface Props {
   error: Error & { digest?: string };
@@ -11,6 +13,20 @@ interface Props {
 //500 Page
 const Error = ({ error }: Props) => {
   const { saksId } = useParams<{ saksId?: string }>();
+
+  useEffect(() => {
+    try {
+      // noinspection JSIgnoredPromiseFromCall
+      clientLogg({
+        name: error.name,
+        message: error.message,
+        stack: error.stack,
+        digest: error.digest,
+      });
+    } catch {
+      // do nothing
+    }
+  }, [error]);
 
   return (
     <Page>
