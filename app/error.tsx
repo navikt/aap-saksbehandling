@@ -4,7 +4,7 @@ import { BodyShort, Box, Heading, HGrid, Label, Link, Page, VStack } from '@navi
 import { useParams } from 'next/navigation';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { useEffect } from 'react';
-import { clientLogg } from 'lib/clientApi';
+import { logClientError } from 'lib/actions/actions';
 
 interface Props {
   error: Error & { digest?: string };
@@ -17,7 +17,7 @@ const Error = ({ error }: Props) => {
   useEffect(() => {
     try {
       // noinspection JSIgnoredPromiseFromCall
-      clientLogg({
+      logClientError({
         name: error.name,
         message: error.message,
         stack: error.stack,
