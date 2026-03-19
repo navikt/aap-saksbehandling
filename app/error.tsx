@@ -1,7 +1,7 @@
 'use client';
 
 import { BodyShort, Box, Heading, HGrid, Label, Link, Page, VStack } from '@navikt/ds-react';
-import { useParams } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { useEffect } from 'react';
 import { logClientError } from 'lib/actions/actions';
@@ -13,6 +13,7 @@ interface Props {
 //500 Page
 const Error = ({ error }: Props) => {
   const { saksId } = useParams<{ saksId?: string }>();
+  const pathname = usePathname();
 
   useEffect(() => {
     try {
@@ -22,11 +23,13 @@ const Error = ({ error }: Props) => {
         message: error.message,
         stack: error.stack,
         digest: error.digest,
+        saksnummer: saksId,
+        pathname,
       });
     } catch {
       // do nothing
     }
-  }, [error]);
+  }, [error, saksId, pathname]);
 
   return (
     <Page>

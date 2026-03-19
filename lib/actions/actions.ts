@@ -13,5 +13,5 @@ export async function revalidatePostMottakFlyt(behandlingReferanse: string) {
 }
 
 export async function logClientError(error: ClientError) {
-  logError('Klient-side feil', error);
+  logError(error.message || 'Client error', error);
 }

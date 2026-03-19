@@ -8,4 +8,6 @@ export interface ClientError {
   message: string;
   stack?: string;
   digest?: string;
+  saksnummer?: string;
+  pathname?: string;
 }
