@@ -1,4 +1,4 @@
-import { Heading, HStack, VStack } from '@navikt/ds-react';
+import { BodyShort, Heading, HStack, VStack } from '@navikt/ds-react';
 import { RettighetDto, SaksInfo } from 'lib/types/types';
 import { formaterPeriode } from 'lib/utils/date';
 import { Rettighet } from 'components/saksoversikt/rettighetsoversikt/Rettighet';
@@ -30,10 +30,10 @@ export const Rettighetsoversikt = (props: Props) => {
   if (rettighetListe != null && rettighetListe.length > 0) {
     return (
       <VStack gap="6">
-        <div className={styles.gjeldendeVedtak}>
+        <HStack paddingBlock={'0 2'} className={styles.vedtaksoverskrift} gap={'4'} align={'end'}>
           <Heading size="medium">Gjeldende vedtak</Heading>
-          <p className={styles.vedtaksperiode}>{formaterPeriode(vedtakStartdato, vedtakSluttdato)}</p>
-        </div>
+          <BodyShort>{formaterPeriode(vedtakStartdato, vedtakSluttdato)}</BodyShort>
+        </HStack>
         <HStack>
           {rettighetListe.map((rettighetdata: RettighetDto, index: number) => (
             <Rettighet key={index} rettighetsdata={rettighetdata} />
