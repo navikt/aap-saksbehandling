@@ -1,4 +1,5 @@
-import { Button, Dialog, ErrorSummary, VStack } from '@navikt/ds-react';
+import { Button, Dialog, VStack } from '@navikt/ds-react';
+import { useEffect } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { Dag, Meldekort } from 'components/saksoversikt/meldekortoversikt/meldekortTypes';
 import { useConfigForm } from 'components/form/FormHook';
@@ -21,36 +22,39 @@ export interface RedigerMeldekortFormFields {
 }
 
 export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) => {
+  const defaultValues = getDefaultValuesForForm(meldekort);
+
   const { form, formFields } = useConfigForm<RedigerMeldekortFormFields>({
     begrunnelse: {
       type: 'textarea',
       label: 'Begrunnelse',
       description: 'Hvorfor gjør du endring, og hva er kilden til informasjonen.',
-      defaultValue: '',
+      defaultValue: defaultValues?.begrunnelse,
       rules: { required: 'Du må skrive en begrunnelse for hvorfor du gjør endring.' },
     },
     årsak: {
       type: 'select',
       options: ['hei', 'hoy'],
       label: 'Årsak',
-      defaultValue: '',
+      defaultValue: defaultValues?.årsak,
     },
     meldedato: {
       type: 'date_input',
       label: 'Meldedato',
       description: 'Meldekortet regnes som levert på denne datoen.',
-      defaultValue: '',
+      defaultValue: defaultValues?.meldedato,
     },
     dager: {
       type: 'fieldArray',
-      defaultValue: meldekort?.dager.map((dag) => {
-        return {
-          dato: dag.dato,
-          timerArbeidet: dag.timerArbeidet == null || dag.timerArbeidet === 0 ? '' : dag.timerArbeidet.toString(),
-        };
-      }),
+      defaultValue: defaultValues?.dager,
     },
   });
+
+  useEffect(() => {
+    if (isOpen && meldekort) {
+      form.reset(getDefaultValuesForForm(meldekort));
+    }
+  }, [isOpen, meldekort]);
 
   const errorList = hentFeilmeldingerForForm(form.formState.errors);
 
@@ -65,6 +69,7 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
             <form
               id={'endre-meldekort'}
               onSubmit={form.handleSubmit(() => {
+                // TODO POST endring her, hvis OK setIsOpen(false)
                 setIsOpen(false);
               })}
             >
@@ -88,3 +93,19 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
     </Dialog>
   );
 };
+
+function getDefaultValuesForForm(meldekort?: Meldekort): RedigerMeldekortFormFields | undefined {
+  if (!meldekort) {
+    return undefined;
+  }
+
+  return {
+    begrunnelse: '',
+    årsak: '',
+    meldedato: '',
+    dager: meldekort?.dager.map((dag) => ({
+      dato: dag.dato,
+      timerArbeidet: dag.timerArbeidet == null || dag.timerArbeidet === 0 ? '' : dag.timerArbeidet.toString(),
+    })),
+  };
+}

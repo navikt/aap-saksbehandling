@@ -15,6 +15,7 @@ interface Props {
 
 export const MeldekortTabell = ({ meldekort }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedMeldekort, setSelectedMeldekort] = useState<Meldekort>();
 
   return (
     <>
@@ -87,6 +88,7 @@ export const MeldekortTabell = ({ meldekort }: Props) => {
                     variant={'tertiary-neutral'}
                     icon={<PencilIcon />}
                     onClick={() => {
+                      setSelectedMeldekort(m);
                       setIsOpen(true);
                     }}
                   />
@@ -96,7 +98,7 @@ export const MeldekortTabell = ({ meldekort }: Props) => {
           })}
         </Table.Body>
       </TableStyled>
-      <RedigerMeldekortModal setIsOpen={setIsOpen} isOpen={isOpen} meldekort={meldekort[0]} />
+      <RedigerMeldekortModal setIsOpen={setIsOpen} isOpen={isOpen} meldekort={selectedMeldekort} />
     </>
   );
 };
