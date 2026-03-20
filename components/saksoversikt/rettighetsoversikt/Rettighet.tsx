@@ -1,7 +1,6 @@
-import { Heading, HStack } from '@navikt/ds-react';
+import { BodyShort, Heading, HStack, VStack } from '@navikt/ds-react';
 import { RettighetDto } from 'lib/types/types';
 import { formaterDatoForFrontend, formaterPeriode } from 'lib/utils/date';
-import styles from './Rettighetsoversikt.module.css';
 
 interface Props {
   rettighetsdata: RettighetDto;
@@ -21,37 +20,37 @@ export const Rettighet = ({ rettighetsdata }: Props) => {
   );
 
   return (
-    <div className={styles.rettighet}>
+    <VStack marginBlock={'0 6'}>
       <Heading size="small">{hentRettighetstypeVisning(rettighetsdata)}</Heading>
       {erRettighetKvotebasert && (
-        <HStack>
-          <HStack className={styles.data}>
-            <p>Kvote</p>
-            <p>{rettighetsdata.kvote}</p>
+        <VStack minWidth={'17rem'} marginBlock={'4 0'}>
+          <HStack justify={'space-between'}>
+            <BodyShort>Kvote</BodyShort>
+            <BodyShort>{rettighetsdata.kvote}</BodyShort>
           </HStack>
-          <HStack className={styles.data}>
-            <p>Brukt til nå</p>
-            <p>{rettighetsdata.bruktKvote}</p>
+          <HStack justify={'space-between'}>
+            <BodyShort>Brukt til nå</BodyShort>
+            <BodyShort>{rettighetsdata.bruktKvote}</BodyShort>
           </HStack>
-          <HStack className={styles.data}>
-            <p>Gjenstående</p>
-            <p>{rettighetsdata.gjenværendeKvote}</p>
+          <HStack justify={'space-between'}>
+            <BodyShort>Gjenstående</BodyShort>
+            <BodyShort>{rettighetsdata.gjenværendeKvote}</BodyShort>
           </HStack>
-          <HStack className={`${styles.data} ${styles.marginTop}`}>
-            <p>Maksdato:</p>
-            <p className={styles.fetSkrift}>
+          <HStack justify={'space-between'} marginBlock={'3 0'}>
+            <BodyShort>Maksdato:</BodyShort>
+            <BodyShort weight="semibold">
               {rettighetsdata.maksDato != null ? formaterDatoForFrontend(rettighetsdata.maksDato) : ''}
-            </p>
+            </BodyShort>
           </HStack>
-        </HStack>
+        </VStack>
       )}
       {!erRettighetKvotebasert && (
-        <HStack className={styles.data}>
-          <p>Rettighet</p>
-          <p>{formaterPeriode(rettighetsdata.startDato, rettighetsdata.maksDato)}</p>
+        <HStack justify={'space-between'}>
+          <BodyShort>Rettighet</BodyShort>
+          <BodyShort>{formaterPeriode(rettighetsdata.startDato, rettighetsdata.maksDato)}</BodyShort>
         </HStack>
       )}
-    </div>
+    </VStack>
   );
 };
 
