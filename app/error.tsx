@@ -12,7 +12,7 @@ interface Props {
 
 //500 Page
 const Error = ({ error }: Props) => {
-  const { saksId } = useParams<{ saksId?: string }>();
+  const { saksId, behandlingsReferanse } = useParams<{ saksId?: string; behandlingsReferanse: string }>();
   const pathname = usePathname();
 
   useEffect(() => {
@@ -24,12 +24,13 @@ const Error = ({ error }: Props) => {
         stack: error.stack,
         digest: error.digest,
         saksnummer: saksId,
+        behandlingsReferanse,
         pathname,
       });
     } catch {
       // do nothing
     }
-  }, [error, saksId, pathname]);
+  }, [error, saksId, behandlingsReferanse, pathname]);
 
   return (
     <Page>
@@ -49,6 +50,13 @@ const Error = ({ error }: Props) => {
                 <>
                   <Label>Saksnummer:</Label>
                   <BodyShort>{saksId}</BodyShort>
+                </>
+              )}
+
+              {behandlingsReferanse && (
+                <>
+                  <Label>Behandlingsreferanse:</Label>
+                  <BodyShort>{behandlingsReferanse}</BodyShort>
                 </>
               )}
 

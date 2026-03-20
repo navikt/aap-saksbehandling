@@ -9,5 +9,6 @@ export interface ClientError {
   stack?: string;
   digest?: string;
   saksnummer?: string;
+  behandlingsReferanse?: string;
   pathname?: string;
 }
