@@ -4640,6 +4640,44 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/drift/behandling/{referanse}/tilkjent-ytelse': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description referanse */
+          referanse: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelse2Dto'];
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/drift/sak/{saksnummer}/info': {
     parameters: {
       query?: never;
@@ -4960,7 +4998,7 @@ export interface components {
       fengsel?: boolean | null;
       sykehus?: boolean | null;
     };
-    'no.nav.aap.behandlingsflyt.LeggTilInstitusjonsoppholdDTO': {
+    'no.nav.aap.behandlingsflyt.InstitusjonsoppholdItemDTO': {
       /** @enum {string} */
       institusjonstype: 'AS' | 'FO' | 'HS';
       /**
@@ -4975,6 +5013,9 @@ export interface components {
       oppholdTom: string;
       /** @enum {string} */
       oppholdstype: 'A' | 'D' | 'F' | 'H' | 'P' | 'R' | 'S' | 'UKJENT' | 'V';
+    };
+    'no.nav.aap.behandlingsflyt.LeggTilInstitusjonsoppholdDTO': {
+      opphold: components['schemas']['no.nav.aap.behandlingsflyt.InstitusjonsoppholdItemDTO'][];
     };
     'no.nav.aap.behandlingsflyt.OpprettTestcaseDTO': {
       andreUtbetalinger?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AndreUtbetalingerDto'];
@@ -5071,9 +5112,15 @@ export interface components {
        * @example 2025-04-01
        */
       's\u00F8knadsdato'?: string | null;
+      tiltakspenger: components['schemas']['no.nav.aap.behandlingsflyt.test.modell.TestPerson.Tiltakspenger'][];
       tjenestePensjon?: boolean | null;
       /** Format: int32 */
       'uf\u00F8re'?: number | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      'uf\u00F8reS\u00F8knadDato'?: string | null;
       /**
        * Format: date
        * @example 2025-04-01
@@ -11621,6 +11668,12 @@ export interface components {
         | 'VEDTAK_11_7'
         | 'VEDTAK_11_9'
         | 'VEDTAK_ENDRING'
+        | 'VEDTAK_FORLENGELSE_UNDER_ETT_ÅR_11_12'
+        | 'VEDTAK_FORLENGELSE_UNDER_ETT_ÅR_11_26'
+        | 'VEDTAK_FORLENGELSE_UNDER_ETT_ÅR_11_27'
+        | 'VEDTAK_FORLENGELSE_UNDER_ETT_ÅR_11_3'
+        | 'VEDTAK_FORLENGELSE_UNDER_ETT_ÅR_11_4'
+        | 'VEDTAK_FORLENGELSE_UNDER_ETT_ÅR_MEDLEMSKAP'
         | 'VEDTAK_UTVID_VEDTAKSLENGDE';
       'harTilgangTil\u00C5SendeBrev': boolean;
       mottaker: components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag.Brev.Mottaker'];
@@ -11810,17 +11863,20 @@ export interface components {
        */
       fom: string;
       /** @enum {string} */
-      kilde: 'ARENA' | 'DP_SAK';
+      kilde: 'ARENA' | 'DP_SAK' | 'TPSAK';
       /**
        * Format: date
        * @example 2025-04-01
        */
-      tom: string;
+      tom?: string | null;
       /** @enum {string} */
       ytelseType:
         | 'DAGPENGER_ARBEIDSSOKER_ORDINAER'
         | 'DAGPENGER_PERMITTERING_FISKEINDUSTRI'
-        | 'DAGPENGER_PERMITTERING_ORDINAER';
+        | 'DAGPENGER_PERMITTERING_ORDINAER'
+        | 'TILTAKSPENGER'
+        | 'TILTAKSPENGER_INAKTIV'
+        | 'TILTAKSPENGER_OG_BARNETILLEGG';
     };
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningAndreStatligeYtelserGrunnlagDTO': {
       'harTilgangTil\u00C5Saksbehandle': boolean;
@@ -12029,6 +12085,7 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.HelseinstitusjonVurderingDto': {
       begrunnelse: string;
+      besluttetAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
       faarFriKostOgLosji: boolean;
       forsoergerEktefelle?: boolean | null;
       harFasteUtgifter?: boolean | null;
@@ -16186,7 +16243,7 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Meldekort': components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.MeldekortV0'];
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.MeldekortV0': {
-      harDuArbeidet: boolean;
+      harDuArbeidet?: boolean | null;
       timerArbeidPerPeriode: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ArbeidIPeriodeV0'][];
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Melding':
@@ -17015,6 +17072,13 @@ export interface components {
       /** Format: int32 */
       grad: number;
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
+    };
+    'no.nav.aap.behandlingsflyt.test.modell.TestPerson.Tiltakspenger': {
+      /** @enum {string} */
+      kilde: 'ARENA' | 'TPSAK';
+      periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
+      /** @enum {string} */
+      ytelseType: 'INGENTING' | 'TILTAKSPENGER' | 'TILTAKSPENGER_OG_BARNETILLEGG';
     };
     'no.nav.aap.brev.kontrakt.Adresse': {
       adresselinje1: string;
