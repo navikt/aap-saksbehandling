@@ -151,7 +151,7 @@ export function useOppgaverNy({
 
   const antallOppgaver = oppgaverValgtKø?.filter((res) => isSuccess(res))[0]?.data?.antallTotalt ?? 0;
   const behandlingstyperFilterFraBackend =
-    oppgaverValgtKø?.filter((res) => isSuccess(res))[0].data.sattFilterBehandlingstyper ?? [];
+    oppgaverValgtKø?.filter((res) => isSuccess(res))[0]?.data?.sattFilterBehandlingstyper ?? [];
 
   const oppgaver = oppgaverFlatMap.flatMap(({ oppgaver }) => oppgaver);
   const sisteKallMotOppgave = oppgaverFlatMap.at(-1);
