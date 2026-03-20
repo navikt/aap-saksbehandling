@@ -29,7 +29,7 @@ import { useLagreAktivUtvidetFilter } from 'hooks/oppgave/aktivUtvidetFilterHook
 import { useLagreAktiveEnheter } from 'hooks/oppgave/aktiveEnheterHook';
 import { EnheterSelect } from 'components/oppgaveliste/enheterselect/EnheterSelect';
 import { useBackendSortering } from 'hooks/oppgave/BackendSorteringHook';
-import { AlleOppgaverFiltreringNy } from 'components/oppgaveliste/filtrering/alleoppgaverfiltrering/AlleOppgaverFiltreringNy';
+import { AlleOppgaverFiltrering } from 'components/oppgaveliste/filtrering/alleoppgaverfiltrering/AlleOppgaverFiltrering';
 import { ValuePair } from 'components/form/FormField';
 
 interface Props {
@@ -204,7 +204,7 @@ export const AlleOppgaver = ({ enheter }: Props) => {
       </Box>
 
       <div className={styles.tabell}>
-        <AlleOppgaverFiltreringNy
+        <AlleOppgaverFiltrering
           form={form}
           formFields={formFields}
           antallOppgaver={antallOppgaver}

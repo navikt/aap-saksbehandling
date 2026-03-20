@@ -9,46 +9,47 @@ import { FormFields } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { FieldPath, UseFormReturn } from 'react-hook-form';
 import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
-import { aktiveFiltreringer } from 'components/oppgaveliste/filtrering/filtreringUtils';
+import { aktiveFiltreringer, ALLE_OPPGAVER_ID } from 'components/oppgaveliste/filtrering/filtreringUtils';
 import { avreserverOppgaveClient } from 'lib/oppgaveClientApi';
 import { isSuccess } from 'lib/utils/api';
 import { useTildelOppgaver } from 'context/oppgave/TildelOppgaverContext';
+import { SaksbehandlerFilterSøk } from 'components/oppgaveliste/filtrering/alleoppgaverfiltrering/SaksbehandlerFilterSøk';
+import { hasProperty } from '@vitest/expect';
 
 interface Props {
   form: UseFormReturn<FormFieldsFilter>;
   formFields: FormFields<FieldPath<FormFieldsFilter>, FormFieldsFilter>;
   antallOppgaver?: number;
-  onFiltrerClick: () => void;
-  kanFiltrere: boolean;
   valgteRader: number[];
   setValgteRader: Dispatch<SetStateAction<number[]>>;
   revalidateFunction: () => void;
+  aktivKøId: number;
+  sattBehandlingstyperFilter: string[];
+  aktiveEnheter: string[];
 }
 
 export const AlleOppgaverFiltrering = ({
   form,
   formFields,
   antallOppgaver,
-  onFiltrerClick,
-  kanFiltrere,
   valgteRader,
   revalidateFunction,
   setValgteRader,
+  aktivKøId,
+  sattBehandlingstyperFilter,
+  aktiveEnheter,
 }: Props) => {
   const [åpneFilter, setÅpneFilter] = useState(false);
-  const [kanBrukerFiltrere, setKanBrukerFiltrere] = useState<boolean>();
   const [isPendingFrigi, startTransitionFrigi] = useTransition();
   const { visModal, setOppgaveIder } = useTildelOppgaver();
 
-  useEffect(() => {
-    setKanBrukerFiltrere(kanFiltrere);
-    if (!kanFiltrere) {
-      setÅpneFilter(false);
-      form.reset();
-    }
-  }, [kanFiltrere, form]);
-
   const aktiveFilter = aktiveFiltreringer(form.watch());
+
+  useEffect(() => {
+    if (sattBehandlingstyperFilter?.length) {
+      form.setValue('behandlingstyper', sattBehandlingstyperFilter);
+    }
+  }, [sattBehandlingstyperFilter, form]);
 
   const frigiValgteOppgaver = async (oppgaver: number[]) => {
     startTransitionFrigi(async () => {
@@ -108,23 +109,33 @@ export const AlleOppgaverFiltrering = ({
               <HStack gap={'2'}>
                 <BodyShort>Filtre: </BodyShort>
                 <Chips size={'small'}>
-                  {aktiveFilter.map((filter) => (
-                    <Chips.Removable
-                      key={filter.value}
-                      onClick={() => {
-                        const values = form.watch(filter.key);
-                        if (Array.isArray(values)) {
-                          const arrayUtenValgtFilter = values.filter((value) => value !== filter.value);
-                          // @ts-expect-error fikses i AlleOppgaverFiltreringNy
-                          form.setValue(filter.key, arrayUtenValgtFilter);
-                        } else {
-                          form.setValue(filter.key, undefined);
-                        }
-                      }}
-                    >
-                      {filter.label}
-                    </Chips.Removable>
-                  ))}
+                  {aktiveFilter.map((filter) =>
+                    aktivKøId !== ALLE_OPPGAVER_ID && filter.key === 'behandlingstyper' ? (
+                      <Chips.Toggle checkmark={false} selected={true} key={filter.value}>
+                        {filter.label}
+                      </Chips.Toggle>
+                    ) : (
+                      <Chips.Removable
+                        key={filter.value}
+                        onClick={() => {
+                          const values = form.watch(filter.key);
+                          if (Array.isArray(values)) {
+                            const arrayUtenValgtFilter = values.filter((value) => {
+                              // sjekk om filterelementet er ValuePair eller string
+                              return typeof value === 'object' && hasProperty(value, 'value')
+                                ? value.value !== filter.value
+                                : value !== filter.value;
+                            });
+                            form.setValue(filter.key, arrayUtenValgtFilter as string[]);
+                          } else {
+                            form.setValue(filter.key, undefined);
+                          }
+                        }}
+                      >
+                        {filter.label}
+                      </Chips.Removable>
+                    )
+                  )}
                 </Chips>
               </HStack>
             )}
@@ -136,54 +147,47 @@ export const AlleOppgaverFiltrering = ({
       {åpneFilter && (
         <div className={styles.filtreringwrapper}>
           <div className={styles.filtrering}>
-            {kanBrukerFiltrere ? (
-              <>
-                <HGrid columns={{ sm: 1, md: 2, lg: 4, xl: 5 }} gap={'2'}>
-                  <BoxWrapper>
-                    <FormField form={form} formField={formFields.behandlingstyper} />
-                  </BoxWrapper>
-                  <BoxWrapper>
-                    <VStack gap={'4'}>
-                      <BodyShort size={'small'} weight={'semibold'}>
-                        Behandling opprettet
-                      </BodyShort>
-                      <FormField form={form} formField={formFields.behandlingOpprettetFom} />
-                      <FormField form={form} formField={formFields.behandlingOpprettetTom} />
-                    </VStack>
-                  </BoxWrapper>
-                  <BoxWrapper>
-                    <FormField form={form} formField={formFields.årsaker} />
-                  </BoxWrapper>
-                  <BoxWrapper>
-                    <FormField form={form} formField={formFields.avklaringsbehov} />
-                  </BoxWrapper>
-                  <BoxWrapper>
-                    <FormField form={form} formField={formFields.statuser} />
-                  </BoxWrapper>
-                </HGrid>
-                <HStack gap={'2'}>
-                  <Button
-                    size={'small'}
-                    variant={'tertiary'}
-                    onClick={() => {
-                      form.reset();
-                    }}
-                  >
-                    Nullstill
-                  </Button>
-                </HStack>
-              </>
-            ) : (
-              <VStack gap={'2'}>
-                <BodyShort size={'small'}>
-                  Oppgavekøen har faste filtre. Hvis du vil filtrere selv går du ut av køen og kan tilpasse filtrene
-                  videre.
-                </BodyShort>
-                <Button size={'small'} onClick={onFiltrerClick} className={'fit-content'}>
-                  Tilpass filtrene selv
-                </Button>
-              </VStack>
-            )}
+            <HGrid columns={{ sm: 1, md: 2, lg: 4, xl: 5 }} gap={'2'}>
+              <BoxWrapper>
+                <FormField
+                  form={form}
+                  formField={formFields.behandlingstyper}
+                  readOnly={ALLE_OPPGAVER_ID !== aktivKøId}
+                />
+              </BoxWrapper>
+              <BoxWrapper>
+                <VStack gap={'4'}>
+                  <BodyShort size={'small'} weight={'semibold'}>
+                    Behandling opprettet
+                  </BodyShort>
+                  <FormField form={form} formField={formFields.behandlingOpprettetFom} />
+                  <FormField form={form} formField={formFields.behandlingOpprettetTom} />
+                </VStack>
+              </BoxWrapper>
+              <BoxWrapper>
+                <FormField form={form} formField={formFields.årsaker} />
+              </BoxWrapper>
+              <BoxWrapper>
+                <FormField form={form} formField={formFields.avklaringsbehov} />
+              </BoxWrapper>
+              <BoxWrapper>
+                <FormField form={form} formField={formFields.statuser} />
+              </BoxWrapper>
+              <BoxWrapper>
+                <SaksbehandlerFilterSøk form={form} enheter={aktiveEnheter} />
+              </BoxWrapper>
+            </HGrid>
+            <HStack gap={'2'}>
+              <Button
+                size={'small'}
+                variant={'tertiary'}
+                onClick={() => {
+                  form.reset();
+                }}
+              >
+                Nullstill
+              </Button>
+            </HStack>
           </div>
         </div>
       )}

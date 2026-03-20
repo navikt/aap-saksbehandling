@@ -30,7 +30,7 @@ import { useLagreAktivUtvidetFilter } from 'hooks/oppgave/aktivUtvidetFilterHook
 import { EnheterSelect } from 'components/oppgaveliste/enheterselect/EnheterSelect';
 import { useLagreAktiveEnheter } from 'hooks/oppgave/aktiveEnheterHook';
 import { useBackendSortering } from 'hooks/oppgave/BackendSorteringHook';
-import { LedigeOppgaverFiltreringNy } from 'components/oppgaveliste/filtrering/ledigeoppgaverfiltrering/LedigeOppgaverFiltreringNy';
+import { LedigeOppgaverFiltrering } from 'components/oppgaveliste/filtrering/ledigeoppgaverfiltrering/LedigeOppgaverFiltrering';
 import { ValuePair } from 'components/form/FormField';
 
 interface Props {
@@ -220,7 +220,7 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
       </Box>
 
       <div className={styles.tabell}>
-        <LedigeOppgaverFiltreringNy
+        <LedigeOppgaverFiltrering
           form={form}
           formFields={formFields}
           antallOppgaver={antallOppgaver}
