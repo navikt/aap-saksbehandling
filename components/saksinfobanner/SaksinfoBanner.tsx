@@ -26,11 +26,11 @@ import { ArenaStatus } from 'components/arenastatus/ArenaStatus';
 import { formaterDatoForFrontend, sorterEtterNyesteDato, stringToDate } from 'lib/utils/date';
 import { ReturStatus } from 'components/returstatus/ReturStatus';
 import { useFeatureFlag } from 'context/UnleashContext';
-import { Dato } from 'lib/types/Dato';
 import { isSuccess } from 'lib/utils/api';
 import { clientHentRettighetsdata } from 'lib/clientApi';
 import useSWR from 'swr';
 import { SaksmenyDropdown } from 'components/saksinfobanner/SaksmenyDropdown';
+import { UtløptVentefristBoks } from 'components/oppgaveliste/utløptventefristboks/UtløptVentefristBoks';
 
 interface Props {
   personInformasjon: SakPersoninfo;
@@ -71,11 +71,6 @@ export const SaksinfoBanner = ({
       return { status: 'TRUKKET', label: 'Trukket' };
     } else if (visning?.resultatKode) {
       return { status: 'AVBRUTT', label: 'Avbrutt' };
-    } else if (oppgave?.utløptVentefrist) {
-      return {
-        status: 'VENTEFRIST_UTLØPT',
-        label: `Frist utløpt ${new Dato(oppgave.utløptVentefrist).formaterForFrontend()}`,
-      };
     }
   };
 
@@ -186,6 +181,15 @@ export const SaksinfoBanner = ({
           {oppgaveTildelingStatus && (
             <div className={styles.oppgavestatus}>
               <OppgaveStatus oppgaveStatus={oppgaveTildelingStatus} />
+            </div>
+          )}
+          {oppgave?.utløptVentefrist && (
+            <div className={styles.oppgavestatus}>
+              <UtløptVentefristBoks
+                frist={oppgave.utløptVentefrist}
+                årsak={oppgave.forrigePåVentÅrsak}
+                begrunnelse={oppgave.forrigeVenteBegrunnelse}
+              />
             </div>
           )}
           {oppgaveStatus && (
