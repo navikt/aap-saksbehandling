@@ -7,6 +7,8 @@ import { FormField } from 'components/form/FormField';
 import { UtfyllingKalender } from 'components/saksoversikt/meldekortoversikt/utfyllingkalender/UtfyllingKalender';
 import { FormErrorSummary } from 'components/formerrorsummary/FormErrorSummary';
 import { hentFeilmeldingerForForm } from 'lib/utils/formerrors';
+import { hentUkeNummerForPeriode } from 'components/saksoversikt/meldekortoversikt/meldekorttabell/MeldekortTabell';
+import { Dato } from 'lib/types/Dato';
 
 interface Props {
   setIsOpen: (isOpen: boolean) => void;
@@ -56,13 +58,21 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
     }
   }, [isOpen, meldekort]);
 
+  if (!meldekort) {
+    return null;
+  }
+
+  const fom = new Dato(meldekort.meldeperiode.fom);
+  const tom = new Dato(meldekort.meldeperiode.tom);
+
   const errorList = hentFeilmeldingerForForm(form.formState.errors);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen} size={'medium'}>
-      <Dialog.Popup>
+      <Dialog.Popup width={'large'} closeOnOutsideClick={false}>
         <Dialog.Header>
-          <Dialog.Title>Endre meldekort for uke x - y. fra dato - til dato</Dialog.Title>
+          <Dialog.Title>{`Endre meldekort for uke ${hentUkeNummerForPeriode(fom.dato, tom.dato)}`}</Dialog.Title>
+          <Dialog.Description>{`${fom.formaterForFrontend()} - ${tom.formaterForFrontend()}`}</Dialog.Description>
         </Dialog.Header>
         <Dialog.Body>
           <FormProvider {...form}>
