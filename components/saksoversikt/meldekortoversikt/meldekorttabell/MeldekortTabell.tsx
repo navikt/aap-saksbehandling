@@ -4,7 +4,7 @@ import { TableStyled } from 'components/tablestyled/TableStyled';
 import { MeldekortDag } from 'components/saksoversikt/meldekortoversikt/meldekorttabell/meldekortdag/MeldekortDag';
 import { eachWeekOfInterval, getISOWeek } from 'date-fns';
 import { Dato } from 'lib/types/Dato';
-import { Dag, Meldekort } from '../meldekortTypes';
+import { DagFraBackend, Meldekort } from '../meldekortTypes';
 import { PencilIcon } from '@navikt/aksel-icons';
 import { RedigerMeldekortModal } from 'components/saksoversikt/meldekortoversikt/redigermeldekortmodal/RedigerMeldekortModal';
 import { useState } from 'react';
@@ -83,32 +83,38 @@ export const MeldekortTabell = ({ meldekort }: Props) => {
                 <Table.DataCell textSize={'small'}>16.01.2026</Table.DataCell>
                 <Table.DataCell textSize={'small'}>Test Testesen</Table.DataCell>
                 <Table.DataCell textSize={'small'}>
-                  <Button variant={'tertiary-neutral'} icon={<PencilIcon />} onClick={() => setIsOpen(true)} />
+                  <Button
+                    variant={'tertiary-neutral'}
+                    icon={<PencilIcon />}
+                    onClick={() => {
+                      setIsOpen(true);
+                    }}
+                  />
                 </Table.DataCell>
               </Table.Row>
             );
           })}
         </Table.Body>
       </TableStyled>
-      <RedigerMeldekortModal setIsOpen={setIsOpen} isOpen={isOpen} />
+      <RedigerMeldekortModal setIsOpen={setIsOpen} isOpen={isOpen} meldekort={meldekort[0]} />
     </>
   );
 };
 
 type UkeGrupper = {
-  mandag: Dag[];
-  tirsdag: Dag[];
-  onsdag: Dag[];
-  torsdag: Dag[];
-  fredag: Dag[];
-  lørdag: Dag[];
-  søndag: Dag[];
+  mandag: DagFraBackend[];
+  tirsdag: DagFraBackend[];
+  onsdag: DagFraBackend[];
+  torsdag: DagFraBackend[];
+  fredag: DagFraBackend[];
+  lørdag: DagFraBackend[];
+  søndag: DagFraBackend[];
 };
 
-function grupperEtterUkedag(dager: Dag[]): UkeGrupper {
+function grupperEtterUkedag(dager: DagFraBackend[]): UkeGrupper {
   return dager.reduce<UkeGrupper>(
     (acc, dag) => {
-      const day = dag.dato.getDay();
+      const day = new Dato(dag.dato).dato.getDay();
 
       switch (day) {
         case 1:

@@ -1,15 +1,22 @@
 import { BodyShort, Detail, VStack } from '@navikt/ds-react';
 
-import { MeldepliktFormFields, replaceCommasWithDots } from 'components/flyt/steg/utfylling/Utfylling';
-import { XMarkOctagonFillIcon } from '@navikt/aksel-icons';
 import { format } from 'date-fns';
-import { useFormContext } from 'react-hook-form';
 
 import styles from './UkeDag.module.css';
-import { formaterDatoMedMånedIBokstaver, formaterDatoUtenÅrForFrontend, fullDag } from 'lib/utils/date';
+
 import { nb } from 'date-fns/locale';
-import { storForbokstav } from 'lib/utils/string';
 import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
+import { FieldArrayWithIndex } from 'components/saksoversikt/meldekortoversikt/utfyllingkalender/UtfyllingKalender';
+import {
+  formaterDatoMedMånedIBokstaver,
+  formaterDatoUtenÅrForFrontend,
+  fullDag,
+} from 'components/saksoversikt/meldekortoversikt/utfyllingDate';
+import { useFormContext } from 'react-hook-form';
+import { RedigerMeldekortFormFields } from 'components/saksoversikt/meldekortoversikt/redigermeldekortmodal/RedigerMeldekortModal';
+import { replaceCommasWithDots } from 'lib/utils/string';
+import { hentFeilmeldingerForForm } from 'lib/utils/formerrors';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 
 interface Props {
   dag: Date;
@@ -19,17 +26,23 @@ interface Props {
 }
 
 export const UkeDag = ({ dag, felterMap, erSisteFeltiRaden, radHarError }: Props) => {
+  const form = useFormContext<RedigerMeldekortFormFields>();
   const dagStr = format(dag, 'yyyy-MM-dd');
-  const dagINummer = formaterDatoUtenÅrForFrontend(dag);
   const eksisterendeFelt = felterMap.get(dagStr);
-  const harFeilmelding =
-    eksisterendeFelt?.index !== undefined ? form.formState.errors?.dager?.[eksisterendeFelt.index]?.timer : undefined;
 
-  if (erLitenSkjerm && !eksisterendeFelt) {
+  const errorList = hentFeilmeldingerForForm(form.formState.errors);
+  console.log('Såå hva er denne?', errorList);
+
+  const harFeilmelding =
+    eksisterendeFelt?.index !== undefined
+      ? form.formState.errors?.dager?.[eksisterendeFelt.index]?.timerArbeidet
+      : undefined;
+
+  if (!eksisterendeFelt) {
     return null;
   }
 
-  const harVerdi = form.watch(`dager.${eksisterendeFelt?.index!}.timer`);
+  const harVerdi = form.watch(`dager.${eksisterendeFelt.index}.timerArbeidet`);
 
   const containerClassNames = [
     !eksisterendeFelt && styles.ikkeeksisterendefelt,
@@ -44,23 +57,23 @@ export const UkeDag = ({ dag, felterMap, erSisteFeltiRaden, radHarError }: Props
     <div className={containerClassNames}>
       <div className={erSisteFeltiRaden ? styles.inputwrapperutenborder : styles.inputwrapper}>
         <div className={styles.dag}>
-          <div className={styles.timerinput}>
+          <VStack gap={'2'}>
             <VStack>
-              <Detail>
-                {erLitenSkjerm ? formaterDatoMedMånedIBokstaver(dag) : formaterDatoUtenÅrForFrontend(dag)}
-              </Detail>
-              <BodyShort size={'medium'} weight={'semibold'}>
-                {erLitenSkjerm ? storForbokstav(formaterUkedag(dag)) : formaterUkedag(dag)}
+              <Detail>{formaterDatoUtenÅrForFrontend(dag)}</Detail>
+              <BodyShort size={'small'} weight={'semibold'}>
+                {formaterUkedag(dag)}
               </BodyShort>
             </VStack>
             {eksisterendeFelt && (
               <TextFieldWrapper
-                type={'number'}
+                type={'text'}
                 control={form.control}
-                id={`dager${eksisterendeFelt.index}timer`}
-                name={`dager.${eksisterendeFelt.index}.timer`}
-                label={`Arbeid for ${fullDag(eksisterendeFelt.dag)} ${formaterDatoMedMånedIBokstaver(eksisterendeFelt.dag)}`}
+                id={`dager${eksisterendeFelt.index}timerArbeidet`}
+                name={`dager.${eksisterendeFelt.index}.timerArbeidet`}
+                label={`Arbeid for ${fullDag(eksisterendeFelt.dato)} ${formaterDatoMedMånedIBokstaver(eksisterendeFelt.dato)}`}
                 className={`${styles.tekstfelt} ${harFeilmelding ? 'navds-text-field--error' : ''}`}
+                hideLabel
+                hideErrorMessage
                 rules={{
                   validate: (value) => {
                     if (!value || value === '') {
@@ -69,22 +82,18 @@ export const UkeDag = ({ dag, felterMap, erSisteFeltiRaden, radHarError }: Props
 
                     const valueAsNumber = Number(replaceCommasWithDots(value as string));
 
-                    if (isNaN(valueAsNumber) || valueAsNumber < 0 || valueAsNumber > 24) {
-                      return 'Noe tekst';
+                    if (isNaN(valueAsNumber)) {
+                      return `Vennligst skriv inn et gyldig tall ${formaterDatoForFrontend(dag)}`;
+                    } else if (valueAsNumber < 0 || valueAsNumber > 24) {
+                      return `Tallet må være mellom 0 og 24 ${formaterDatoForFrontend(dag)}`;
                     } else if ((valueAsNumber * 10) % 5 !== 0) {
-                      return 'Noe tekst';
+                      return `Du kan bare skrive inn hele eller halve timer ${formaterDatoForFrontend(dag)}`;
                     }
                   },
                 }}
               />
             )}
-          </div>
-          {harFeilmelding && erLitenSkjerm && (
-            <div className={styles.error}>
-              <XMarkOctagonFillIcon className={styles.errorIcon} fontSize={'2rem'} />
-              <BodyShort size={'small'}>{harFeilmelding.message}</BodyShort>
-            </div>
-          )}
+          </VStack>
         </div>
       </div>
     </div>
@@ -94,6 +103,6 @@ export const UkeDag = ({ dag, felterMap, erSisteFeltiRaden, radHarError }: Props
     const dato = new Date(date);
     const ukedag = format(dato, 'EEEE', { locale: nb });
 
-    return erLitenSkjerm ? ukedag : ukedag.substring(0, 2) + '.';
+    return ukedag.substring(0, 2) + '.';
   }
 };

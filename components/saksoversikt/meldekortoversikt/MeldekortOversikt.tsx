@@ -1,6 +1,7 @@
 import { Heading, VStack } from '@navikt/ds-react';
-import { Meldekort, MeldekortTabell } from 'components/saksoversikt/meldekortoversikt/meldekorttabell/MeldekortTabell';
-import { Dag } from 'components/saksoversikt/meldekortoversikt/meldekortTypes';
+import { MeldekortTabell } from 'components/saksoversikt/meldekortoversikt/meldekorttabell/MeldekortTabell';
+import { DagFraBackend, Meldekort } from 'components/saksoversikt/meldekortoversikt/meldekortTypes';
+import { formaterDatoForBackend } from 'lib/utils/date';
 
 const meldekort1: Meldekort = {
   dager: generateTwoWeekPeriod(new Date('2026-03-16')),
@@ -32,15 +33,15 @@ export const MeldekortOversikt = () => {
 };
 
 // Kun for test
-function generateTwoWeekPeriod(startMonday: Date): Dag[] {
+function generateTwoWeekPeriod(startMonday: Date): DagFraBackend[] {
   return Array.from({ length: 14 }).map((_, i) => {
     const currentDate = new Date(startMonday);
-    currentDate.setDate(startMonday.getDate() + i);
+    currentDate.setDate(currentDate.getDate() + i);
 
     const isZero = Math.random() < 0.75;
 
     return {
-      dato: currentDate,
+      dato: formaterDatoForBackend(currentDate),
       timerArbeidet: isZero ? 0 : Math.floor(Math.random() * 9),
     };
   });

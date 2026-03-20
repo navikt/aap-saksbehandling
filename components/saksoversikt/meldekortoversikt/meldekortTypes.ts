@@ -3,7 +3,12 @@
 import { Periode } from 'lib/types/types';
 
 export interface Dag {
-  dato: Date;
+  dato: string;
+  timerArbeidet: string;
+}
+
+export interface DagFraBackend {
+  dato: string;
   timerArbeidet: number;
 }
 
@@ -20,7 +25,7 @@ export interface EndreMeldekortRequest {
 export interface Meldekort {
   meldekortId: string;
   meldeperiode: Periode;
-  dager: Dag[];
+  dager: DagFraBackend[];
   fraværTotaltIMeldeperiode: number;
   levertDato?: Date;
   sistEndret?: Date;

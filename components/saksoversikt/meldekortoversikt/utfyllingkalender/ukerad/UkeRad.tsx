@@ -1,31 +1,30 @@
 'use client';
 
-import { MeldeperiodeUke } from 'components/utfyllingkalender/UtfyllingKalender';
 import { eachDayOfInterval } from 'date-fns';
 
-import { Alert, BodyShort, Heading, VStack } from '@navikt/ds-react';
+import { BodyShort, Heading, VStack } from '@navikt/ds-react';
 
-import styles from 'components/utfyllingkalender/ukerad/UkeRad.module.css';
+import styles from './UkeRad.module.css';
 
-import { MeldepliktFormFields } from 'components/flyt/steg/utfylling/Utfylling';
 import { useFormContext } from 'react-hook-form';
-import { useSkjermBredde } from 'hooks/skjermbreddeHook';
+
 import { UkeDag } from '../ukedag/UkeDag';
+import { MeldeperiodeUke } from 'components/saksoversikt/meldekortoversikt/utfyllingkalender/UtfyllingKalender';
+import { RedigerMeldekortFormFields } from 'components/saksoversikt/meldekortoversikt/redigermeldekortmodal/RedigerMeldekortModal';
 
 interface Props {
   felterIUken: MeldeperiodeUke;
 }
 
 export const UkeRad = ({ felterIUken }: Props) => {
-  const form = useFormContext<MeldepliktFormFields>();
-  const { erLitenSkjerm } = useSkjermBredde();
+  const form = useFormContext<RedigerMeldekortFormFields>();
 
   const alleDagerIUken = eachDayOfInterval({
     start: new Date(felterIUken.ukeStart),
     end: new Date(felterIUken.ukeSlutt),
   });
 
-  const felterMap = new Map(felterIUken.felter.map((field) => [field.dag, field]));
+  const felterMap = new Map(felterIUken.felter.map((field) => [field.dato, field]));
 
   const ukeUtfyllingErrors =
     form.formState.errors?.dager && Array.isArray(form.formState.errors.dager)
@@ -45,34 +44,22 @@ export const UkeRad = ({ felterIUken }: Props) => {
   const ukeUtfyllingErrorMeldinger = ukeUtfyllingErrors.map((error) => error.message);
 
   return (
-    <div className={styles.rad}>
-      <div className={styles.heading}>
-        <Heading size={'medium'} level={'3'}>
-          Uke {felterIUken.ukeNummer}
-        </Heading>
+    <VStack gap={'4'}>
+      <BodyShort size={'medium'} weight={"semibold"}>Uke {felterIUken.ukeNummer}</BodyShort>
+
+      <div className={ukeUtfyllingErrorMeldinger.length > 0 ? styles.ukeradmederror : styles.ukerad}>
+        {alleDagerIUken.map((dag, index) => {
+          return (
+            <UkeDag
+              key={dag.toString()}
+              dag={dag}
+              felterMap={felterMap}
+              erSisteFeltiRaden={alleDagerIUken.length === index + 1}
+              radHarError={ukeUtfyllingErrorMeldinger.length > 0}
+            />
+          );
+        })}
       </div>
-      <VStack>
-        <div className={ukeUtfyllingErrorMeldinger.length > 0 ? styles.ukeradmederror : styles.ukerad}>
-          {alleDagerIUken.map((dag, index) => {
-            return (
-              <UkeDag
-                key={dag.toString()}
-                dag={dag}
-                felterMap={felterMap}
-                erSisteFeltiRaden={alleDagerIUken.length === index + 1}
-                radHarError={ukeUtfyllingErrorMeldinger.length > 0}
-              />
-            );
-          })}
-        </div>
-        {!erLitenSkjerm && ukeUtfyllingErrors.length > 0 && (
-          <Alert variant={'error'}>
-            {ukeUtfyllingErrorMeldinger.map((error, index) => {
-              return <BodyShort key={index}>{error}</BodyShort>;
-            })}
-          </Alert>
-        )}
-      </VStack>
-    </div>
+    </VStack>
   );
 };

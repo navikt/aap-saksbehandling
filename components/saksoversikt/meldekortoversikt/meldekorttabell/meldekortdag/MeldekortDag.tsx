@@ -1,8 +1,8 @@
 import { VStack } from '@navikt/ds-react';
-import { Dag } from 'components/saksoversikt/meldekortoversikt/meldekortTypes';
+import { DagFraBackend } from 'components/saksoversikt/meldekortoversikt/meldekortTypes';
 
 interface Props {
-  dager: Dag[];
+  dager: DagFraBackend[];
 }
 
 export const MeldekortDag = ({ dager }: Props) => {

@@ -3,12 +3,13 @@
 import { endOfWeek, format, getISOWeek, startOfWeek } from 'date-fns';
 import { FieldArrayWithId, useFieldArray, useFormContext } from 'react-hook-form';
 
-import { MeldepliktFormFields, replaceCommasWithDots } from 'components/flyt/steg/utfylling/Utfylling';
-import { OppsummeringTimer } from 'components/oppsummeringtimer/OppsummeringTimer';
-import { UkeRad } from 'components/utfyllingkalender/ukerad/UkeRad';
 import { VStack } from '@navikt/ds-react';
+import { RedigerMeldekortFormFields } from 'components/saksoversikt/meldekortoversikt/redigermeldekortmodal/RedigerMeldekortModal';
+import { UkeRad } from 'components/saksoversikt/meldekortoversikt/utfyllingkalender/ukerad/UkeRad';
+import { replaceCommasWithDots } from 'lib/utils/string';
+import { OppsummeringTimer } from 'components/saksoversikt/meldekortoversikt/oppsummeringtimer/OppsummeringTimer';
 
-export type FieldArrayWithIndex = FieldArrayWithId<MeldepliktFormFields> & {
+export type FieldArrayWithIndex = FieldArrayWithId<RedigerMeldekortFormFields> & {
   index: number;
 };
 
@@ -22,8 +23,7 @@ export interface MeldeperiodeUke {
 export const utfyllingKalenderId = 'rapporteringskalender';
 
 export const UtfyllingKalender = () => {
-  const form = useFormContext<MeldepliktFormFields>();
-
+  const form = useFormContext<RedigerMeldekortFormFields>();
   const { fields } = useFieldArray({
     control: form.control,
     name: 'dager',
@@ -31,7 +31,7 @@ export const UtfyllingKalender = () => {
 
   const meldeperiodeUker: Record<string, MeldeperiodeUke> = fields.reduce(
     (acc, field, index) => {
-      const ukeStart = format(startOfWeek(new Date(field.dag), { weekStartsOn: 1 }), 'yyyy-MM-dd');
+      const ukeStart = format(startOfWeek(new Date(field.dato), { weekStartsOn: 1 }), 'yyyy-MM-dd');
 
       if (!acc[ukeStart]) {
         const parsedUkeStart = new Date(ukeStart);
@@ -51,7 +51,7 @@ export const UtfyllingKalender = () => {
   );
 
   return (
-    <VStack gap={'space-32'} id={utfyllingKalenderId}>
+    <VStack gap={'4'} id={utfyllingKalenderId}>
       {Object.entries(meldeperiodeUker).map(([ukeStart, felterIUken]) => (
         <UkeRad key={ukeStart} felterIUken={felterIUken} />
       ))}
@@ -59,8 +59,8 @@ export const UtfyllingKalender = () => {
       <OppsummeringTimer
         timer={form
           .watch('dager')
-          .filter((value) => value.timer && Number(replaceCommasWithDots(value.timer)))
-          .reduce((acc, curr) => acc + (curr.timer ? Number(replaceCommasWithDots(curr.timer)) : 0), 0)}
+          .filter((value) => value.timerArbeidet && Number(replaceCommasWithDots(value.timerArbeidet)))
+          .reduce((acc, curr) => acc + (curr.timerArbeidet ? Number(replaceCommasWithDots(curr.timerArbeidet)) : 0), 0)}
       />
     </VStack>
   );
