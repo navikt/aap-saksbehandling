@@ -5188,6 +5188,7 @@ export interface components {
        * @example 2025-04-01
        */
       's\u00F8knadsdato'?: string | null;
+      tiltakspenger: components['schemas']['no.nav.aap.behandlingsflyt.test.modell.TestPerson.Tiltakspenger'][];
       tjenestePensjon?: boolean | null;
       /** Format: int32 */
       'uf\u00F8re'?: number | null;
@@ -11946,17 +11947,20 @@ export interface components {
        */
       fom: string;
       /** @enum {string} */
-      kilde: 'ARENA' | 'DP_SAK';
+      kilde: 'ARENA' | 'DP_SAK' | 'TPSAK';
       /**
        * Format: date
        * @example 2025-04-01
        */
-      tom: string;
+      tom?: string | null;
       /** @enum {string} */
       ytelseType:
         | 'DAGPENGER_ARBEIDSSOKER_ORDINAER'
         | 'DAGPENGER_PERMITTERING_FISKEINDUSTRI'
-        | 'DAGPENGER_PERMITTERING_ORDINAER';
+        | 'DAGPENGER_PERMITTERING_ORDINAER'
+        | 'TILTAKSPENGER'
+        | 'TILTAKSPENGER_INAKTIV'
+        | 'TILTAKSPENGER_OG_BARNETILLEGG';
     };
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningAndreStatligeYtelserGrunnlagDTO': {
       'harTilgangTil\u00C5Saksbehandle': boolean;
@@ -17174,6 +17178,13 @@ export interface components {
       /** Format: int32 */
       grad: number;
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
+    };
+    'no.nav.aap.behandlingsflyt.test.modell.TestPerson.Tiltakspenger': {
+      /** @enum {string} */
+      kilde: 'ARENA' | 'TPSAK';
+      periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
+      /** @enum {string} */
+      ytelseType: 'INGENTING' | 'TILTAKSPENGER' | 'TILTAKSPENGER_OG_BARNETILLEGG';
     };
     'no.nav.aap.brev.kontrakt.Adresse': {
       adresselinje1: string;
