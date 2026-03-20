@@ -5,9 +5,21 @@ import { useParams, usePathname } from 'next/navigation';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { useEffect } from 'react';
 import { logClientError } from 'lib/actions/actions';
+import StackTrace from 'stacktrace-js';
 
 interface Props {
   error: Error & { digest?: string };
+}
+
+async function mapStacktrace(error?: Error): Promise<string | undefined> {
+  try {
+    if (!error?.stack) return undefined;
+    const frames = await StackTrace.fromError(error);
+    return frames.map((frame) => frame.toString()).join('\n');
+  } catch {
+    // behold original stack ved error
+    return error?.stack;
+  }
 }
 
 //500 Page
@@ -16,20 +28,24 @@ const Error = ({ error }: Props) => {
   const pathname = usePathname();
 
   useEffect(() => {
-    try {
-      // noinspection JSIgnoredPromiseFromCall
-      logClientError({
-        name: error.name,
-        message: error.message,
-        stack: error.stack,
-        digest: error.digest,
-        saksnummer: saksId,
-        behandlingsReferanse,
-        pathname,
-      });
-    } catch {
-      // do nothing
-    }
+    (async () => {
+      const stack = await mapStacktrace(error);
+
+      try {
+        // noinspection JSIgnoredPromiseFromCall
+        logClientError({
+          name: error.name,
+          message: error.message,
+          stack,
+          digest: error.digest,
+          saksnummer: saksId,
+          behandlingsReferanse,
+          pathname,
+        });
+      } catch {
+        // do nothing
+      }
+    })();
   }, [error, saksId, behandlingsReferanse, pathname]);
 
   return (
