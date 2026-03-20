@@ -9,7 +9,7 @@ export enum VurderingStatus {
   Reduksjon = 'Reduksjon',
   IkkeReduksjon = 'Ikke reduksjon',
   VedtakslengdeAutomatisk = 'Automatisk satt vedtakslengde',
-  VedtakslengdeManuell = 'Manuell forlengelse',
+  VedtakslengdeManuell = 'Manuelt satt vedtakslengde',
 }
 
 interface Props {
