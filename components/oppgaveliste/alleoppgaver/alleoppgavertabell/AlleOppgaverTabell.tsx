@@ -1,60 +1,60 @@
-import { Alert, BodyShort, CopyButton, Table, Tooltip } from '@navikt/ds-react';
-import { TableStyled } from 'components/tablestyled/TableStyled';
-import Link from 'next/link';
-import { storForbokstavIHvertOrd } from 'lib/utils/string';
+import { Oppgave, Vurderingsbehov, ÅrsakTilOpprettelse } from 'lib/types/types';
+import { BodyShort, Checkbox, CopyButton, Table, Tooltip } from '@navikt/ds-react';
 import {
   mapBehovskodeTilBehovstype,
   mapTilOppgaveBehandlingstypeTekst,
   mapTilÅrsakTilOpprettelseTilTekst,
 } from 'lib/utils/oversettelser';
 import { formaterDatoForFrontend } from 'lib/utils/date';
+import Link from 'next/link';
+import { TableStyled } from 'components/tablestyled/TableStyled';
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
-import { AvklaringsbehovKode, VurderingsbehovIntern, ÅrsakTilOpprettelse } from 'lib/types/types';
-import { Oppgave } from 'lib/types/oppgaveTypes';
-import { useState } from 'react';
-import { LedigeOppgaverMenyNy } from 'components/oppgaveliste/ledigeoppgaverny/ledigeoppgavermeny/LedigeOppgaverMenyNy';
+import { AlleOppgaverActionMenu } from 'components/oppgaveliste/alleoppgaver/alleoppgaveractionmenu/AlleOppgaverActionMenu';
 import { OppgaveInformasjon } from 'components/oppgaveliste/oppgaveinformasjon/OppgaveInformasjon';
-import { ManglerTilgangModal } from 'components/oppgaveliste/manglertilgangmodal/ManglerTilgangModal';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { SynkroniserEnhetModal } from 'components/oppgaveliste/synkroniserenhetmodal/SynkroniserEnhetModal';
 import { TildelOppgaveModal } from 'components/tildeloppgavemodal/TildelOppgaveModal';
-import { OppgaveIkkeLedigModal } from 'components/oppgaveliste/oppgaveikkeledigmodal/OppgaveIkkeLedigModal';
 import { NoNavAapOppgaveListeOppgaveSorteringSortBy } from '@navikt/aap-oppgave-typescript-types';
 import { ScopedBackendSortState } from 'hooks/oppgave/BackendSorteringHook';
 import { isOppgavelisteOppgaveSorteringSortBy } from 'lib/utils/request';
 
 interface Props {
   oppgaver: Oppgave[];
-  revalidateFunction: () => void;
+  revalidateFunction: () => Promise<unknown>;
+  setValgteRader: Dispatch<SetStateAction<number[]>>;
+  valgteRader: number[];
   setSortBy: (orderBy: NoNavAapOppgaveListeOppgaveSorteringSortBy) => void;
   sort: ScopedBackendSortState<NoNavAapOppgaveListeOppgaveSorteringSortBy> | undefined;
 }
 
-export const LedigeOppgaverTabellNy = ({ oppgaver, revalidateFunction, setSortBy, sort }: Props) => {
-  const [feilmelding, setFeilmelding] = useState<string>();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+export const AlleOppgaverTabell = ({
+  oppgaver,
+  revalidateFunction,
+  setValgteRader,
+  valgteRader,
+  setSortBy,
+  sort,
+}: Props) => {
   const [visSynkroniserEnhetModal, setVisSynkroniserEnhetModal] = useState<boolean>(false);
-  const [saksbehandlerNavn, setSaksbehandlerNavn] = useState<string>();
-  const [visOppgaveIkkeLedigModal, setVisOppgaveIkkeLedigModal] = useState<boolean>(false);
+
+  const toggleValgtRad = (oppgaveId: number) => {
+    if (oppgaveId) {
+      setValgteRader((prevValgteRader) => {
+        if (prevValgteRader.includes(oppgaveId)) {
+          return prevValgteRader.filter((id) => id !== oppgaveId);
+        }
+        return [...prevValgteRader, oppgaveId];
+      });
+    }
+  };
 
   return (
     <>
-      <ManglerTilgangModal
-        isModalOpen={isModalOpen}
-        setIsModalOpen={setIsModalOpen}
-        revalidateFunction={revalidateFunction}
-      />
-      <TildelOppgaveModal revalidateFunction={revalidateFunction} />
       <SynkroniserEnhetModal
         visSynkroniserEnhetModal={visSynkroniserEnhetModal}
         setVisSynkroniserEnhetModal={setVisSynkroniserEnhetModal}
       />
-      <OppgaveIkkeLedigModal
-        visOppgaveIkkeLedigModal={visOppgaveIkkeLedigModal}
-        setVisOppgaveIkkeLedigModal={setVisOppgaveIkkeLedigModal}
-        saksbehandlerNavn={saksbehandlerNavn}
-        revaliderOppgaver={revalidateFunction}
-      />
-      {feilmelding && <Alert variant={'error'}>{feilmelding}</Alert>}
+      <TildelOppgaveModal revalidateFunction={revalidateFunction} />
       <TableStyled
         size={'small'}
         zebraStripes
@@ -67,16 +67,10 @@ export const LedigeOppgaverTabellNy = ({ oppgaver, revalidateFunction, setSortBy
       >
         <Table.Header>
           <Table.Row>
-            <Table.ColumnHeader textSize={'small'}>Navn</Table.ColumnHeader>
-            <Table.ColumnHeader
-              sortKey={NoNavAapOppgaveListeOppgaveSorteringSortBy.PERSONIDENT}
-              sortable={true}
-              textSize={'small'}
-            >
+            <Table.HeaderCell />
+            <Table.HeaderCell>Sak</Table.HeaderCell>
+            <Table.ColumnHeader sortKey={NoNavAapOppgaveListeOppgaveSorteringSortBy.PERSONIDENT} sortable={true}>
               Fnr
-            </Table.ColumnHeader>
-            <Table.ColumnHeader sortKey={NoNavAapOppgaveListeOppgaveSorteringSortBy.SAKSNUMMER} sortable={true}>
-              Sak
             </Table.ColumnHeader>
             <Table.ColumnHeader sortKey={NoNavAapOppgaveListeOppgaveSorteringSortBy.BEHANDLINGSTYPE} sortable={true}>
               Behandlingstype
@@ -106,20 +100,30 @@ export const LedigeOppgaverTabellNy = ({ oppgaver, revalidateFunction, setSortBy
             >
               Oppg. opprettet
             </Table.ColumnHeader>
+            <Table.ColumnHeader sortKey={NoNavAapOppgaveListeOppgaveSorteringSortBy.RESERVERT_AV} sortable={true}>
+              Tildelt
+            </Table.ColumnHeader>
             <Table.HeaderCell></Table.HeaderCell>
             <Table.HeaderCell></Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
           {oppgaver.map((oppgave, i) => (
-            <Table.Row key={`oppgave-${i}`}>
+            <Table.Row key={`oppgave-${i}`} selected={oppgave.id ? valgteRader.includes(oppgave.id) : false}>
+              <Table.DataCell>
+                <Checkbox
+                  hideLabel
+                  checked={oppgave.id ? valgteRader.includes(oppgave.id) : false}
+                  onChange={() => oppgave.id && toggleValgtRad(oppgave.id)}
+                >
+                  {' '}
+                </Checkbox>
+              </Table.DataCell>
               <Table.DataCell textSize={'small'}>
                 {oppgave.saksnummer ? (
-                  <Link href={`/saksbehandling/sak/${oppgave.saksnummer}`}>
-                    {storForbokstavIHvertOrd(oppgave.personNavn)}
-                  </Link>
+                  <Link href={`/saksbehandling/sak/${oppgave.saksnummer}`}>{oppgave.saksnummer}</Link>
                 ) : (
-                  <span>{storForbokstavIHvertOrd(oppgave.personNavn)}</span>
+                  <span>{oppgave.journalpostId}</span>
                 )}
               </Table.DataCell>
               <Table.DataCell textSize={'small'}>
@@ -134,51 +138,47 @@ export const LedigeOppgaverTabellNy = ({ oppgaver, revalidateFunction, setSortBy
                   'Ukjent'
                 )}
               </Table.DataCell>
-              <Table.DataCell textSize={'small'}>{oppgave.saksnummer || oppgave.journalpostId}</Table.DataCell>
               <Table.DataCell textSize={'small'}>
                 {mapTilOppgaveBehandlingstypeTekst(oppgave.behandlingstype)}
               </Table.DataCell>
               <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(oppgave.behandlingOpprettet)}</Table.DataCell>
               <Table.DataCell textSize={'small'}>
-                {oppgave.årsakTilOpprettelse != null
+                {oppgave.årsakTilOpprettelse
                   ? mapTilÅrsakTilOpprettelseTilTekst(oppgave.årsakTilOpprettelse as ÅrsakTilOpprettelse)
-                  : ''}
+                  : '-'}
               </Table.DataCell>
               <Table.DataCell style={{ maxWidth: '150px' }} textSize={'small'}>
-                <Tooltip
-                  content={oppgave.vurderingsbehov
-                    .map((årsak) => formaterVurderingsbehov(årsak as VurderingsbehovIntern))
-                    .join(', ')}
-                >
+                <Tooltip content={oppgave.årsakerTilBehandling.join(', ')}>
                   <BodyShort truncate size={'small'}>
-                    {oppgave.vurderingsbehov
-                      .map((årsak) => formaterVurderingsbehov(årsak as VurderingsbehovIntern))
+                    {oppgave.årsakerTilBehandling
+                      .map((årsak) => formaterVurderingsbehov(årsak as Vurderingsbehov))
                       .join(', ')}
                   </BodyShort>
                 </Tooltip>
               </Table.DataCell>
               <Table.DataCell style={{ maxWidth: '150px' }} textSize={'small'}>
-                <Tooltip content={mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode as AvklaringsbehovKode)}>
+                <Tooltip content={mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode)}>
                   <BodyShort truncate size={'small'}>
-                    {mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode as AvklaringsbehovKode)}
+                    {mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode)}
                   </BodyShort>
                 </Tooltip>
               </Table.DataCell>
               <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(oppgave.opprettetTidspunkt)}</Table.DataCell>
-
+              <Table.DataCell style={{ maxWidth: '150px' }} textSize={'small'}>
+                <Tooltip content={(oppgave.reservertAvNavn ?? oppgave.reservertAv) || 'Ledig'}>
+                  <BodyShort truncate size={'small'}>
+                    {(oppgave.reservertAvNavn ?? oppgave.reservertAv) || 'Ledig'}
+                  </BodyShort>
+                </Tooltip>
+              </Table.DataCell>
               <Table.DataCell textSize={'small'}>
                 <OppgaveInformasjon oppgave={oppgave} />
               </Table.DataCell>
-
               <Table.DataCell textSize={'small'} align={'right'}>
-                <LedigeOppgaverMenyNy
+                <AlleOppgaverActionMenu
                   oppgave={oppgave}
-                  setFeilmelding={setFeilmelding}
-                  setÅpenModal={setIsModalOpen}
+                  revalidateFunction={revalidateFunction}
                   setVisSynkroniserEnhetModal={setVisSynkroniserEnhetModal}
-                  revaliderOppgaver={revalidateFunction}
-                  setVisOppgaveIkkeLedigModal={setVisOppgaveIkkeLedigModal}
-                  setSaksbehandlerNavn={setSaksbehandlerNavn}
                 />
               </Table.DataCell>
             </Table.Row>

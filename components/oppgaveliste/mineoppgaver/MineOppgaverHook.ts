@@ -6,7 +6,7 @@ import {
   NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType,
   NoNavAapOppgaveOppgaveDtoReturStatus,
 } from '@navikt/aap-oppgave-typescript-types';
-import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaverny/MineOppgaverNy';
+import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
 import { useDebouncedValue } from 'hooks/useDebouncedValueHook';
 
 const oppgaveStatus = {
@@ -25,7 +25,7 @@ interface Props {
   filter: FormFieldsFilter;
 }
 
-export const useFiltrerteOppgaverNy = ({ oppgaver, filter }: Props) => {
+export const useFiltrerteOppgaver = ({ oppgaver, filter }: Props) => {
   const debouncedFilters = useDebouncedValue(filter, 300);
   return useMemo(() => {
     const filtrerOppgave = (oppgave: Oppgave) => {

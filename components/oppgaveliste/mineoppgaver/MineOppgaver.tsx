@@ -1,15 +1,15 @@
 'use client';
 
 import { Alert, BodyShort } from '@navikt/ds-react';
-import { MineOppgaverTabellNy } from 'components/oppgaveliste/mineoppgaverny/mineoppgavertabellny/MineOppgaverTabellNy';
+import { MineOppgaverTabell } from 'components/oppgaveliste/mineoppgaver/mineoppgavertabell/MineOppgaverTabell';
 import { useConfigForm } from 'components/form/FormHook';
 import { oppgaveBehandlingstyper, OppgaveStatuser } from 'lib/utils/behandlingstyper';
 import { MineOppgaverFiltrering } from 'components/oppgaveliste/filtrering/mineoppgaverfiltrering/MineOppgaverFiltrering';
 
-import styles from 'components/oppgaveliste/mineoppgaverny/MineOppgaver.module.css';
+import styles from 'components/oppgaveliste/mineoppgaver/MineOppgaver.module.css';
 import { oppgaveAvklaringsbehov } from 'lib/utils/avklaringsbehov';
-import { useFiltrerteOppgaverNy } from './MineOppgaverHook';
-import { useMineOppgaverNy } from 'hooks/oppgave/OppgaveHookNy';
+import { useFiltrerteOppgaver } from './MineOppgaverHook';
+import { useMineOppgaver } from 'hooks/oppgave/OppgaveHook';
 import { alleVurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
 import { TabellSkeleton } from 'components/oppgaveliste/tabellskeleton/TabellSkeleton';
 import { useLagreAktivUtvidetFilter } from 'hooks/oppgave/aktivUtvidetFilterHook';
@@ -28,9 +28,9 @@ export interface FormFieldsFilter {
   saksbehandlere?: ValuePair[];
 }
 
-export const MineOppgaverNy = () => {
+export const MineOppgaver = () => {
   const { sort, setSort } = useBackendSortering<PathsMineOppgaverGetParametersQuerySortby>('mine-oppgaver-backendsort');
-  const { oppgaver, mutate, isLoading, error } = useMineOppgaverNy(sort);
+  const { oppgaver, mutate, isLoading, error } = useMineOppgaver(sort);
   const { hentAktivUtvidetFilter, lagreAktivUtvidetFilter } = useLagreAktivUtvidetFilter();
   const lagretUtvidetFilter = hentAktivUtvidetFilter();
 
@@ -84,7 +84,7 @@ export const MineOppgaverNy = () => {
     return () => fieldValues.unsubscribe();
   }, [form, lagreAktivUtvidetFilter]);
 
-  const filtrerteOppgaver = useFiltrerteOppgaverNy({
+  const filtrerteOppgaver = useFiltrerteOppgaver({
     oppgaver,
     filter: watchedValues,
   });
@@ -106,7 +106,7 @@ export const MineOppgaverNy = () => {
 
       {!isLoading &&
         (filtrerteOppgaver?.length > 0 ? (
-          <MineOppgaverTabellNy
+          <MineOppgaverTabell
             oppgaver={filtrerteOppgaver}
             revalidateFunction={mutate}
             sort={sort}

@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { customRenderWithTildelOppgaveContext } from 'lib/test/CustomRender';
-import { MineOppgaverMenyNy } from 'components/oppgaveliste/mineoppgaverny/mineoppgavermeny/MineOppgaverMenyNy';
+import { MineOppgaverMeny } from 'components/oppgaveliste/mineoppgaver/mineoppgavermeny/MineOppgaverMeny';
 import { Oppgave } from 'lib/types/oppgaveTypes';
 import {
   NoNavAapOppgaveOppgaveDtoBehandlingstype,
@@ -32,7 +32,7 @@ describe('MineOppgaverMeny', () => {
 
   it('skal ha en knapp for å behandle oppgaven', () => {
     customRenderWithTildelOppgaveContext(
-      <MineOppgaverMenyNy
+      <MineOppgaverMeny
         oppgave={oppgaver}
         setFeilmelding={vi.fn()}
         revalidateFunction={vi.fn()}
@@ -46,7 +46,7 @@ describe('MineOppgaverMeny', () => {
 
   it('skal ha en knapp for å frigi oppgaven', async () => {
     customRenderWithTildelOppgaveContext(
-      <MineOppgaverMenyNy
+      <MineOppgaverMeny
         oppgave={oppgaver}
         setFeilmelding={vi.fn()}
         revalidateFunction={vi.fn()}

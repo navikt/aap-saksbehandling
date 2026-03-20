@@ -10,7 +10,7 @@ import {
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
 import { OppgaveInformasjon } from 'components/oppgaveliste/oppgaveinformasjon/OppgaveInformasjon';
-import { MineOppgaverMenyNy } from 'components/oppgaveliste/mineoppgaverny/mineoppgavermeny/MineOppgaverMenyNy';
+import { MineOppgaverMeny } from 'components/oppgaveliste/mineoppgaver/mineoppgavermeny/MineOppgaverMeny';
 import { VurderingsbehovIntern, ÅrsakTilOpprettelse } from 'lib/types/types';
 import { memo } from 'react';
 
@@ -72,7 +72,7 @@ const OppgaveRad = ({
         <OppgaveInformasjon oppgave={oppgave} />
       </Table.DataCell>
       <Table.DataCell textSize={'small'} align={'right'}>
-        <MineOppgaverMenyNy
+        <MineOppgaverMeny
           oppgave={oppgave}
           setFeilmelding={setFeilmelding}
           revalidateFunction={revalidateFunction}
@@ -83,5 +83,5 @@ const OppgaveRad = ({
   );
 };
 
-export const MineOppgaverTabellRadNy = memo(OppgaveRad);
-MineOppgaverTabellRadNy.displayName = 'MineOppgaverTabellRad';
+export const MineOppgaverTabellRad = memo(OppgaveRad);
+MineOppgaverTabellRad.displayName = 'MineOppgaverTabellRad';

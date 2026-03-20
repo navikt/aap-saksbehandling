@@ -18,7 +18,7 @@ interface Props {
   setSaksbehandlerNavn: Dispatch<SetStateAction<string | undefined>>;
 }
 
-export const LedigeOppgaverMenyNy = ({
+export const LedigeOppgaverMeny = ({
   revaliderOppgaver,
   oppgave,
   setFeilmelding,

@@ -7,7 +7,7 @@ import { describe, expect, it, vi } from 'vitest';
 import userEvent from '@testing-library/user-event';
 import { customRenderWithTildelOppgaveContext } from 'lib/test/CustomRender';
 import { screen } from '@testing-library/react';
-import { AlleOppgaverActionMenuNy } from 'components/oppgaveliste/alleoppgaverny/alleoppgaveractionmenuny/AlleOppgaverActionMenuNy';
+import { AlleOppgaverActionMenu } from 'components/oppgaveliste/alleoppgaver/alleoppgaveractionmenu/AlleOppgaverActionMenu';
 
 const oppgave: Oppgave = {
   behandlingRef: 'sdgasd',
@@ -34,7 +34,7 @@ describe('AlleOppgaverActionMenu', () => {
 
   it('skal ha en knapp for å åpne oppgaven', async () => {
     customRenderWithTildelOppgaveContext(
-      <AlleOppgaverActionMenuNy oppgave={oppgave} setVisSynkroniserEnhetModal={setSync} revalidateFunction={vi.fn()} />,
+      <AlleOppgaverActionMenu oppgave={oppgave} setVisSynkroniserEnhetModal={setSync} revalidateFunction={vi.fn()} />,
       false
     );
     const menu = screen.getByRole('button', { name: 'Oppgavemeny' });
@@ -46,7 +46,7 @@ describe('AlleOppgaverActionMenu', () => {
   it('skal ha en knapp for å frigi oppgaven hvis oppgaven er reservert', async () => {
     const reservertOppgave = { ...oppgave, reservertAv: 'saksbehandler' };
     customRenderWithTildelOppgaveContext(
-      <AlleOppgaverActionMenuNy
+      <AlleOppgaverActionMenu
         oppgave={reservertOppgave}
         setVisSynkroniserEnhetModal={setSync}
         revalidateFunction={vi.fn()}
@@ -61,7 +61,7 @@ describe('AlleOppgaverActionMenu', () => {
 
   it('skal ikke ha knapp for å frigi hvis oppgave ikke er reservert', async () => {
     customRenderWithTildelOppgaveContext(
-      <AlleOppgaverActionMenuNy oppgave={oppgave} setVisSynkroniserEnhetModal={setSync} revalidateFunction={vi.fn()} />,
+      <AlleOppgaverActionMenu oppgave={oppgave} setVisSynkroniserEnhetModal={setSync} revalidateFunction={vi.fn()} />,
       false
     );
     const menu = screen.getByRole('button', { name: 'Oppgavemeny' });

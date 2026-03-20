@@ -7,7 +7,7 @@ import {
   NoNavAapOppgaveOppgaveDtoStatus,
 } from '@navikt/aap-oppgave-typescript-types';
 import { customRenderWithTildelOppgaveContext } from 'lib/test/CustomRender';
-import { MineOppgaverTabellNy } from 'components/oppgaveliste/mineoppgaverny/mineoppgavertabellny/MineOppgaverTabellNy';
+import { MineOppgaverTabell } from 'components/oppgaveliste/mineoppgaver/mineoppgavertabell/MineOppgaverTabell';
 
 const oppgaver: Oppgave[] = [
   {
@@ -45,7 +45,7 @@ const oppgaver: Oppgave[] = [
 describe('Mine oppgaver tabell', () => {
   beforeEach(() =>
     customRenderWithTildelOppgaveContext(
-      <MineOppgaverTabellNy oppgaver={oppgaver} setSortBy={() => {}} sort={undefined} revalidateFunction={vi.fn()} />,
+      <MineOppgaverTabell oppgaver={oppgaver} setSortBy={() => {}} sort={undefined} revalidateFunction={vi.fn()} />,
       false
     )
   );

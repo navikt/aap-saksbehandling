@@ -14,7 +14,7 @@ interface Props {
   setVisSynkroniserEnhetModal: Dispatch<SetStateAction<boolean>>;
 }
 
-export const AlleOppgaverActionMenuNy = ({ setVisSynkroniserEnhetModal, oppgave, revalidateFunction }: Props) => {
+export const AlleOppgaverActionMenu = ({ setVisSynkroniserEnhetModal, oppgave, revalidateFunction }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const [isPendingFrigi, startTransitionFrigi] = useTransition();

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Alert, SortState, Table, VStack } from '@navikt/ds-react';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { ManglerTilgangModal } from 'components/oppgaveliste/manglertilgangmodal/ManglerTilgangModal';
-import { MineOppgaverTabellRadNy } from 'components/oppgaveliste/mineoppgaverny/mineoppgavertabellny/MineOppgaverTabellRadNy';
+import { MineOppgaverTabellRad } from 'components/oppgaveliste/mineoppgaver/mineoppgavertabell/MineOppgaverTabellRad';
 import { TildelOppgaveModal } from 'components/tildeloppgavemodal/TildelOppgaveModal';
 import { PathsMineOppgaverGetParametersQuerySortby } from '@navikt/aap-oppgave-typescript-types';
 
@@ -14,7 +14,7 @@ interface Props {
   sort: SortState | undefined;
 }
 
-export const MineOppgaverTabellNy = ({ oppgaver, revalidateFunction, setSortBy, sort }: Props) => {
+export const MineOppgaverTabell = ({ oppgaver, revalidateFunction, setSortBy, sort }: Props) => {
   const [feilmelding, setFeilmelding] = useState<string | undefined>();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -77,7 +77,7 @@ export const MineOppgaverTabellNy = ({ oppgaver, revalidateFunction, setSortBy, 
         </Table.Header>
         <Table.Body>
           {oppgaver.map((oppgave) => (
-            <MineOppgaverTabellRadNy
+            <MineOppgaverTabellRad
               key={oppgave.id}
               oppgave={oppgave}
               setFeilmelding={setFeilmelding}

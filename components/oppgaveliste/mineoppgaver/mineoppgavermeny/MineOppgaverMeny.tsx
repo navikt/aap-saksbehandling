@@ -16,7 +16,7 @@ interface Props {
   revalidateFunction: () => void;
 }
 
-export const MineOppgaverMenyNy = ({ oppgave, setFeilmelding, setÅpenModal, revalidateFunction }: Props) => {
+export const MineOppgaverMeny = ({ oppgave, setFeilmelding, setÅpenModal, revalidateFunction }: Props) => {
   const [isPendingFrigi, startTransitionFrigi] = useTransition();
   const [isPendingBehandle, startTransitionBehandle] = useTransition();
 
