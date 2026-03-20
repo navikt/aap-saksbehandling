@@ -14,8 +14,12 @@ export const apiFetch = async <ResponseType>(
   requestBody?: object,
   tags?: string[]
 ): Promise<FetchResponse<ResponseType>> => {
-  const oboToken = await getToken(scope, url);
-  const options = mapFetchOptions(method, oboToken, requestBody, tags);
+  const tokenResult = await getToken(scope, url);
+  if (!tokenResult.ok) {
+    logWarning(`Uthenting av token feilet for ${url}`, tokenResult.error);
+    return { type: 'ERROR', apiException: { message: 'Kunne ikke autentisere. Prøv igjen.' }, status: 401 };
+  }
+  const options = mapFetchOptions(method, tokenResult.token, requestBody, tags);
 
   return await fetchWithRetry<ResponseType>(url, options, NUMBER_OF_RETRIES);
 };
@@ -27,8 +31,12 @@ export const apiFetchNoMemoization = async <ResponseType>(
   requestBody?: object,
   tags?: string[]
 ): Promise<FetchResponse<ResponseType>> => {
-  const oboToken = await getToken(scope, url);
-  const options = mapFetchOptions(method, oboToken, requestBody, tags, new AbortController().signal);
+  const tokenResult = await getToken(scope, url);
+  if (!tokenResult.ok) {
+    logWarning(`Uthenting av token feilet for ${url}`, tokenResult.error);
+    return { type: 'ERROR', apiException: { message: 'Kunne ikke autentisere. Prøv igjen.' }, status: 401 };
+  }
+  const options = mapFetchOptions(method, tokenResult.token, requestBody, tags, new AbortController().signal);
 
   return await fetchWithRetry<ResponseType>(url, options, NUMBER_OF_RETRIES);
 };
@@ -97,12 +105,16 @@ const fetchWithRetry = async <ResponseType>(
 };
 
 export const apiFetchPdf = async (url: string, scope: string): Promise<Response> => {
-  const oboToken = await getToken(scope, url);
+  const tokenResult = await getToken(scope, url);
+  if (!tokenResult.ok) {
+    logWarning(`Uthenting av token feilet for ${url}`, tokenResult.error);
+    return new Response('Kunne ikke autentisere. Prøv igjen.', { status: 401 });
+  }
 
   const response = await fetch(url, {
     method: 'GET',
     headers: {
-      Authorization: `Bearer ${oboToken}`,
+      Authorization: `Bearer ${tokenResult.token}`,
       Accept: 'application/pdf, application/json',
     },
     next: { revalidate: 0 },
