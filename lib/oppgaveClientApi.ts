@@ -7,58 +7,10 @@ import {
   OppgavelisteResponse,
   PlukkOppgaveDto,
 } from './types/oppgaveTypes';
-import {
-  AntallÅpneOgGjennomsnitt,
-  BehandlingAvklaringsbehovReturDTO,
-  BehandlingPerSteggruppe,
-  BehandlingÅrsakAntallGjennomsnitt,
-  FordelingLukkedeBehandlinger,
-  FordelingÅpneBehandlinger,
-  OppgaverPerSteggruppe,
-  VenteÅrsakOgGjennomsnitt,
-} from './types/statistikkTypes';
-import { BehandlingEndringerPerDag } from 'lib/types/statistikkTypes';
 import { mapSortStateDirectionTilQueryParamEnum, mineOppgaverQueryParams, queryParamsArray } from './utils/request';
 import { clientFetch } from 'lib/clientApi';
 import { PathsMineOppgaverGetParametersQuerySortby } from '@navikt/aap-oppgave-typescript-types';
 import { ScopedBackendSortState } from 'hooks/oppgave/BackendSorteringHook';
-
-// statistikk
-export async function antallÅpneBehandlingerPerBehandlingstypeClient(url: string) {
-  return clientFetch<Array<AntallÅpneOgGjennomsnitt>>(url, 'GET');
-}
-
-export async function behandlingerUtviklingClient(url: string) {
-  return clientFetch<Array<BehandlingEndringerPerDag>>(url, 'GET');
-}
-
-export async function fordelingÅpneBehandlingerClient(url: string) {
-  return clientFetch<Array<FordelingÅpneBehandlinger>>(url, 'GET');
-}
-
-export async function fordelingLukkedeBehandlingerClient(url: string) {
-  return clientFetch<Array<FordelingLukkedeBehandlinger>>(url, 'GET');
-}
-
-export async function venteÅrsakerClient(url: string) {
-  return clientFetch<Array<VenteÅrsakOgGjennomsnitt>>(url, 'GET');
-}
-
-export async function behandlingerPerSteggruppeClient(url: string) {
-  return clientFetch<Array<BehandlingPerSteggruppe>>(url, 'GET');
-}
-
-export async function oppgaverPerSteggruppeClient(url: string) {
-  return clientFetch<OppgaverPerSteggruppe>(url, 'GET');
-}
-
-export async function årsakTilBehandlingClient(url: string) {
-  return clientFetch<Array<BehandlingÅrsakAntallGjennomsnitt>>(url, 'GET');
-}
-
-export async function antallÅpneBehandlingerMedReturPerAvklaringsbehovClient(url: string) {
-  return clientFetch<Array<BehandlingAvklaringsbehovReturDTO>>(url, 'GET');
-}
 
 // oppgave
 export async function hentOppgaverClient(oppgavelisteRequest: OppgavelisteRequest) {
