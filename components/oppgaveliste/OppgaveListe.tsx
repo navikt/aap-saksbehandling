@@ -5,13 +5,10 @@ import { Heading, HStack, Tabs, VStack } from '@navikt/ds-react';
 import { Enhet } from 'lib/types/oppgaveTypes';
 import { MineOppgaverNy } from 'components/oppgaveliste/mineoppgaverny/MineOppgaverNy';
 import { LedigeOppgaverNy } from 'components/oppgaveliste/ledigeoppgaverny/LedigeOppgaverNy';
-import { AlleOppgaver } from 'components/oppgaveliste/alleoppgaver/AlleOppgaver';
 import { useLagreAktivTab } from 'hooks/oppgave/aktivTabHook';
 import { TildelOppgaverProvider } from 'context/oppgave/TildelOppgaverContext';
 import { useFeatureFlag } from 'context/UnleashContext';
 import { AlleOppgaverNy } from 'components/oppgaveliste/alleoppgaverny/AlleOppgaverNy';
-import { MineOppgaver } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
-import { LedigeOppgaver } from 'components/oppgaveliste/ledigeoppgaver/LedigeOppgaver';
 
 interface Props {
   enheter: Enhet[];
@@ -55,11 +52,8 @@ export const OppgaveListe = ({ enheter }: Props) => {
         </HStack>
 
         {selected === 'Mine oppgaver' && backendSorteringEnabled && <MineOppgaverNy />}
-        {selected === 'Mine oppgaver' && !backendSorteringEnabled && <MineOppgaver />}
         {selected === 'Ledige oppgaver' && backendSorteringEnabled && <LedigeOppgaverNy enheter={enheter} />}
-        {selected === 'Ledige oppgaver' && !backendSorteringEnabled && <LedigeOppgaver enheter={enheter} />}
         {selected === 'Alle oppgaver' && backendSorteringEnabled && <AlleOppgaverNy enheter={enheter} />}
-        {selected === 'Alle oppgaver' && !backendSorteringEnabled && <AlleOppgaver enheter={enheter} />}
       </TildelOppgaverProvider>
     </VStack>
   );
