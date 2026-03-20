@@ -1,8 +1,18 @@
-import { Oppgave, OppgavelisteRequest, Paging } from 'lib/types/oppgaveTypes';
+import { MineOppgaverQueryParams, Oppgave, OppgavelisteRequest, Paging } from 'lib/types/oppgaveTypes';
 import useSWRInfinite from 'swr/infinite';
 import { hentMineOppgaverClient, hentOppgaverClient } from 'lib/oppgaveClientApi';
 import useSWR from 'swr';
 import { isError, isSuccess } from 'lib/utils/api';
+import {
+  mapSortStateDirectionTilQueryParamEnum,
+  mapSortStateTilOppgaveSortering,
+  mineOppgaverQueryParams,
+} from 'lib/utils/request';
+import {
+  NoNavAapOppgaveListeOppgaveSorteringSortBy,
+  PathsMineOppgaverGetParametersQuerySortby,
+} from '@navikt/aap-oppgave-typescript-types';
+import { ScopedBackendSortState } from 'hooks/oppgave/BackendSorteringHook';
 
 const PAGE_SIZE = 50;
 
@@ -13,6 +23,7 @@ type UseOppgaverOptions = {
   aktivKøId: number;
   kunLedigeOppgaver?: boolean;
   utvidetFilter?: OppgavelisteRequest['utvidetFilter'];
+  sortering?: ScopedBackendSortState<NoNavAapOppgaveListeOppgaveSorteringSortBy>;
 };
 
 function lagUrlSuffix(filter: OppgavelisteRequest['utvidetFilter']): string {
@@ -54,6 +65,10 @@ function lagUrlSuffix(filter: OppgavelisteRequest['utvidetFilter']): string {
     params.append('ventefristUtløpt', filter.ventefristUtløpt.toString());
   }
 
+  if (filter?.saksbehandlere?.length) {
+    filter.saksbehandlere.forEach((ident) => params.append('saksbehandlere', ident));
+  }
+
   const queryString = params.toString();
   return queryString ? `?${queryString}` : '';
 }
@@ -65,6 +80,7 @@ export function useOppgaver({
   kunLedigeOppgaver = true,
   type,
   utvidetFilter,
+  sortering,
 }: UseOppgaverOptions): {
   kanLasteInnFlereOppgaver: boolean;
   antallOppgaver: number;
@@ -74,6 +90,7 @@ export function useOppgaver({
   isLoading: boolean;
   isValidating: boolean;
   mutate: () => Promise<unknown>;
+  behandlingstyperFilterFraBackend: string[];
 } {
   const getKey = (pageIndex: number, previousPageData: any) => {
     if (previousPageData && previousPageData.length === 0) return null;
@@ -84,7 +101,10 @@ export function useOppgaver({
     const typeSuffix = `/${type}`;
     const utvidetFilterSuffix = lagUrlSuffix(utvidetFilter);
     const paging = utvidetFilterSuffix.length > 0 ? `&side=${pageIndex}` : `?side=${pageIndex}`;
-    return `${base}${suffix}${typeSuffix}${utvidetFilterSuffix}${paging}`;
+    const sortSuffix = sortering?.orderBy ? `&sortby=${sortering.orderBy}&direction${sortering.direction}` : '';
+    const url = `${base}${suffix}${typeSuffix}${utvidetFilterSuffix}${paging}${sortSuffix}`;
+
+    return url;
   };
 
   const {
@@ -104,6 +124,7 @@ export function useOppgaver({
         antallPerSide: PAGE_SIZE,
         side: side + 1,
       };
+      const endeligsortering = sortering ? mapSortStateTilOppgaveSortering(sortering) : undefined;
 
       const payload: OppgavelisteRequest = {
         filterId: aktivKøId!,
@@ -112,11 +133,12 @@ export function useOppgaver({
         veileder: visKunOppgaverSomBrukerErVeilederPå,
         paging: paging,
         utvidetFilter: utvidetFilter,
+        sortering: endeligsortering,
       };
 
       return hentOppgaverClient(payload);
     },
-    { revalidateOnFocus: true, refreshInterval: 10000 }
+    { revalidateOnFocus: true, refreshInterval: 10000, revalidateAll: true, persistSize: true }
   );
 
   const oppgaverFlatMap =
@@ -128,6 +150,8 @@ export function useOppgaver({
       })) ?? [];
 
   const antallOppgaver = oppgaverValgtKø?.filter((res) => isSuccess(res))[0]?.data?.antallTotalt ?? 0;
+  const behandlingstyperFilterFraBackend =
+    oppgaverValgtKø?.filter((res) => isSuccess(res))[0]?.data?.sattFilterBehandlingstyper ?? [];
 
   const oppgaver = oppgaverFlatMap.flatMap(({ oppgaver }) => oppgaver);
   const sisteKallMotOppgave = oppgaverFlatMap.at(-1);
@@ -142,6 +166,7 @@ export function useOppgaver({
     isValidating,
     kanLasteInnFlereOppgaver,
     mutate,
+    behandlingstyperFilterFraBackend,
   };
 }
 
@@ -149,7 +174,8 @@ export function useLedigeOppgaver(
   aktiveEnheter: string[],
   visKunOppgaverSomBrukerErVeilederPå: boolean,
   aktivKøId: number,
-  utvidetFilter?: OppgavelisteRequest['utvidetFilter']
+  utvidetFilter?: OppgavelisteRequest['utvidetFilter'],
+  sortering?: ScopedBackendSortState<NoNavAapOppgaveListeOppgaveSorteringSortBy>
 ) {
   return useOppgaver({
     aktiveEnheter,
@@ -157,13 +183,15 @@ export function useLedigeOppgaver(
     type: 'LEDIGE_OPPGAVER',
     aktivKøId,
     utvidetFilter,
+    sortering,
   });
 }
 
 export function useAlleOppgaverForEnhet(
   aktiveEnheter: string[],
   aktivKøId: number,
-  utvidetFilter?: OppgavelisteRequest['utvidetFilter']
+  utvidetFilter?: OppgavelisteRequest['utvidetFilter'],
+  sortering?: ScopedBackendSortState<NoNavAapOppgaveListeOppgaveSorteringSortBy>
 ) {
   return useOppgaver({
     aktiveEnheter,
@@ -172,11 +200,17 @@ export function useAlleOppgaverForEnhet(
     kunLedigeOppgaver: false,
     type: 'ALLE_OPPGAVER',
     utvidetFilter: utvidetFilter,
+    sortering,
   });
 }
 
-export const useMineOppgaver = () => {
-  const { data, mutate, isLoading } = useSWR('api/mine-oppgaver', hentMineOppgaverClient);
+export const useMineOppgaver = (sortering?: ScopedBackendSortState<PathsMineOppgaverGetParametersQuerySortby>) => {
+  const sortParams: MineOppgaverQueryParams = {
+    sortby: sortering?.orderBy,
+    sortorder: sortering?.direction ? mapSortStateDirectionTilQueryParamEnum(sortering.direction) : undefined,
+  };
+  const query = sortParams ? mineOppgaverQueryParams(sortParams) : '';
+  const { data, mutate, isLoading } = useSWR(`api/mine-oppgaver?${query}`, () => hentMineOppgaverClient(sortering));
   const oppgaver = isSuccess(data) ? data?.data?.oppgaver?.flat() : [];
 
   return { oppgaver, mutate, isLoading, error: isError(data) ? data.apiException.message : undefined };

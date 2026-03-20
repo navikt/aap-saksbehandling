@@ -1,6 +1,6 @@
 'use client';
 
-import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaverny/MineOppgaverNy';
+import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
 import { clientSøkPåSaksbehandler } from 'lib/clientApi';
 import { AsyncComboSearch } from 'components/form/asynccombosearch/AsyncComboSearch';
 import { UseFormReturn } from 'react-hook-form';
