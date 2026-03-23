@@ -4,14 +4,19 @@ import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrap
 import { OpprettSakFormFields } from 'components/opprettsak/OpprettSakLocal';
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { ValuePair } from 'components/form/FormField';
-import { AndreStatligeYtelserKilde, AndreStatligeYtelserType } from 'lib/types/types';
+import {
+  AndreStatligeYtelserKilde,
+  AndreStatligeYtelserType,
+  DagpengerKilde,
+  DagpengerYtelserType,
+} from 'lib/types/types';
 import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
 
 interface Props {
   form: UseFormReturn<OpprettSakFormFields>;
 }
 
-const kildeOptions: ValuePair<AndreStatligeYtelserKilde>[] = [
+const kildeOptions: ValuePair<DagpengerKilde>[] = [
   {
     value: 'ARENA',
     label: 'ARENA',
@@ -22,7 +27,7 @@ const kildeOptions: ValuePair<AndreStatligeYtelserKilde>[] = [
   },
 ];
 
-const ytelsesOptions: ValuePair<AndreStatligeYtelserType>[] = [
+const ytelsesOptions: ValuePair<DagpengerYtelserType>[] = [
   {
     value: 'DAGPENGER_ARBEIDSSOKER_ORDINAER',
     label: 'Dagpenger Arbeidssøker Ordinær',

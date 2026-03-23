@@ -199,23 +199,7 @@ export const OpprettSakLocal = () => {
       },
       tiltakspenger: {
         type: 'fieldArray',
-        defaultValue: [
-          {
-            ytelseType: 'TILTAKSPENGER_OG_BARNETILLEGG',
-            kilde: 'TPSAK',
-            periode: { fom: '01.03.2024', tom: '14.06.2024' },
-          },
-          {
-            ytelseType: 'TILTAKSPENGER',
-            kilde: 'ARENA',
-            periode: { fom: '01.09.2025', tom: '31.11.2025' },
-          },
-          {
-            ytelseType: 'INGENTING',
-            kilde: 'ARENA',
-            periode: { fom: '01.08.2024', tom: '31.10.2024' },
-          },
-        ],
+        defaultValue: [],
       },
       tjenestePensjon: {
         type: 'radio',
