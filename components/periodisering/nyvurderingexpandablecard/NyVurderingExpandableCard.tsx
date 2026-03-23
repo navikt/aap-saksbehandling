@@ -80,6 +80,7 @@ export const NyVurderingExpandableCard = ({
             {vurdering.behøverVurdering && (
               <Alert
                 variant={'info'}
+                size={'small'}
               >{`Perioden fra ${fraDato ? formatDatoMedMånedsnavn(fraDato) : ''} mangler vurdering og må vurderes`}</Alert>
             )}
             {children}
