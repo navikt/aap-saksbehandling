@@ -2002,44 +2002,6 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  '/api/behandling/grunnlag/andrestatligeytelser/{referanse}': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          /** @description referanse */
-          referanse: string;
-        };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description OK */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.andrestatligeytelser.AndreStatligeYtelserGrunnlagDto'];
-          };
-        };
-      };
-    };
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
   '/api/barnetillegg/grunnlag/{referanse}': {
     parameters: {
       query?: never;
@@ -4792,44 +4754,6 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  '/api/drift/sak/{saksnummer}/oppdater-person-identer': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          /** @description saksnummer */
-          saksnummer: string;
-        };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description OK */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.drift.SakDriftsinfoDTO'];
-          };
-        };
-      };
-    };
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
   '/api/behandling/{referanse}/utbetaling/simulering': {
     parameters: {
       query?: never;
@@ -5298,28 +5222,6 @@ export interface components {
       grunn: 'IKKE_RIMELIG_GRUNN' | 'RIMELIG_GRUNN';
       registrertTrekk?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_9.AktivitetspliktTrekkDto'];
       vurdertAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
-    };
-    'no.nav.aap.behandlingsflyt.behandling.andrestatligeytelser.AndreStatligeYtelserGrunnlagDto': {
-      dagpengerPerioder: components['schemas']['no.nav.aap.behandlingsflyt.behandling.andrestatligeytelser.DagpengerPeriodeDto'][];
-    };
-    'no.nav.aap.behandlingsflyt.behandling.andrestatligeytelser.DagpengerPeriodeDto': {
-      /** @enum {string} */
-      dagpengerYtelseType:
-        | 'DAGPENGER_ARBEIDSSOKER_ORDINAER'
-        | 'DAGPENGER_PERMITTERING_FISKEINDUSTRI'
-        | 'DAGPENGER_PERMITTERING_ORDINAER';
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      fom: string;
-      /** @enum {string} */
-      kilde: 'ARENA' | 'DP_SAK';
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      tom: string;
     };
     'no.nav.aap.behandlingsflyt.behandling.arbeidsevne.ArbeidsevneGrunnlagDto': {
       'beh\u00F8verVurderinger': components['schemas']['no.nav.aap.komponenter.type.Periode'][];
@@ -11409,7 +11311,6 @@ export interface components {
       nyeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.OvergangUf\u00F8reVurderingResponse'][];
       perioderSomIkkeErTilstrekkeligVurdert: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
       sisteVedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.OvergangUf\u00F8reVurderingResponse'][];
-      'uf\u00F8reS\u00F8knadOpplysninger'?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.Uf\u00F8reS\u00F8knadOpplysninger'];
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.OvergangUf\u00F8reVurderingResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.OvergangUf\u00F8reVurderingResponse': {
@@ -11441,13 +11342,6 @@ export interface components {
        */
       virkningsdato: string;
       vurdertAv: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
-    };
-    'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.Uf\u00F8reS\u00F8knadOpplysninger': {
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      soknadsdato: string;
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomGrunnlagResponse': {
       'beh\u00F8verVurderinger': components['schemas']['no.nav.aap.komponenter.type.Periode'][];
