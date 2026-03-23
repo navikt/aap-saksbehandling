@@ -9,6 +9,9 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { AktivitetspliktTrekk } from 'components/saksoversikt/aktivitetsplikttrekk/AktivitetspliktTrekk';
 import { Rettighetsoversikt } from 'components/saksoversikt/rettighetsoversikt/Rettighetsoversikt';
 import { NySakMedBehandlinger } from 'components/saksoversikt/NySakMedBehandlinger';
+import { clientHentRettighetsdata } from 'lib/clientApi';
+import { isError } from 'lib/utils/api';
+import useSWR from 'swr';
 
 import styles from 'components/saksoversikt/Saksoversikt.module.css';
 
@@ -31,6 +34,12 @@ export const NySakOversiktContainer = ({
 
   const [tab, setTab] = useState(searchParams.get('t') || Tab.OVERSIKT);
 
+  const { data: rettighetData } = useSWR(`/api/sak/${sak.saksnummer}/rettighet`, () =>
+    clientHentRettighetsdata(sak.saksnummer)
+  );
+  const rettighetListe = !isError(rettighetData) ? (rettighetData?.data ?? []) : [];
+  const harRettigheter = rettighetListe.length > 0;
+
   const changeActiveTab = (newTab: Tab) => {
     setTab(newTab);
     router.replace(`?t=${newTab}`);
@@ -38,7 +47,7 @@ export const NySakOversiktContainer = ({
 
   return (
     <Page>
-      <Page.Block style={{ padding: '0 var(--a-spacing-8)' }}>
+      <Page.Block className={styles.saksoversiktSide}>
         <HGrid columns="6fr 2fr" gap={'4'}>
           <Tabs defaultValue={tab} onChange={(value) => changeActiveTab(value as Tab)}>
             <Tabs.List>
@@ -70,13 +79,13 @@ export const NySakOversiktContainer = ({
             </Box>
           </Tabs>
 
-          <aside>
-            <VStack gap={'4'}>
-              <Box className={styles.sideBoxCard}>
-                <Rettighetsoversikt sak={sak} />
+          {harRettigheter && (
+            <aside>
+              <Box className={styles.gjeldenePersonInfoBoks}>
+                <Rettighetsoversikt rettighetListe={rettighetListe} />
               </Box>
-            </VStack>
-          </aside>
+            </aside>
+          )}
         </HGrid>
       </Page.Block>
     </Page>
