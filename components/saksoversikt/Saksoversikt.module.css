@@ -1,0 +1,7 @@
+.sideBoxCard {
+    padding: var(--a-spacing-5) 16px;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: var(--a-border-radius-large);
+    border-color: var(--a-border-divider);
+}

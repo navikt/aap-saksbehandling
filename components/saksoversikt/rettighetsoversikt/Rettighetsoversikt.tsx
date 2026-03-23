@@ -35,8 +35,8 @@ export const Rettighetsoversikt = (props: Props) => {
           <BodyShort>{formaterPeriode(vedtakStartdato, vedtakSluttdato)}</BodyShort>
         </HStack>
         <HStack>
-          {rettighetListe.map((rettighetdata: RettighetDto, index: number) => (
-            <Rettighet key={index} rettighetsdata={rettighetdata} />
+          {rettighetListe.map((rettighetdata: RettighetDto) => (
+            <Rettighet key={`${rettighetdata.type}-${rettighetdata.startDato}`} rettighetsdata={rettighetdata} />
           ))}
         </HStack>
       </VStack>
