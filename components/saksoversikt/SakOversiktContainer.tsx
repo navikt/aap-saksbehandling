@@ -10,6 +10,9 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { AktivitetspliktTrekk } from 'components/saksoversikt/aktivitetsplikttrekk/AktivitetspliktTrekk';
 import { Rettighetsoversikt } from 'components/saksoversikt/rettighetsoversikt/Rettighetsoversikt';
 import { useFeatureFlag } from 'context/UnleashContext';
+import { clientHentRettighetsdata } from 'lib/clientApi';
+import { isError } from 'lib/utils/api';
+import useSWR from 'swr';
 
 enum Tab {
   OVERSIKT = 'OVERSIKT',
@@ -30,6 +33,12 @@ export const SakOversiktContainer = ({
 
   const [tab, setTab] = useState(searchParams.get('t') || Tab.OVERSIKT);
 
+  const { data: rettighetData } = useSWR(
+    isVisRettigheterForVedtakEnabled ? `/api/sak/${sak.saksnummer}/rettighet` : null,
+    () => clientHentRettighetsdata(sak.saksnummer)
+  );
+  const rettighetListe = !isError(rettighetData) ? (rettighetData?.data ?? []) : [];
+
   const changeActiveTab = (newTab: Tab) => {
     setTab(newTab);
     router.replace(`?t=${newTab}`);
@@ -47,7 +56,7 @@ export const SakOversiktContainer = ({
 
           <Box marginBlock="8">
             <Tabs.Panel value={Tab.OVERSIKT}>
-              {isVisRettigheterForVedtakEnabled && <Rettighetsoversikt sak={sak} />}
+              {isVisRettigheterForVedtakEnabled && <Rettighetsoversikt rettighetListe={rettighetListe} />}
               <SakMedBehandlinger sak={sak} innloggetBrukerIdent={innloggetBrukerIdent} />
             </Tabs.Panel>
 
