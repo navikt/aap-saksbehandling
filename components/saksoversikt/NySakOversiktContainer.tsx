@@ -59,7 +59,7 @@ export const NySakOversiktContainer = ({
             <Box marginBlock="8">
               <Tabs.Panel value={Tab.OVERSIKT}>
                 <VStack gap={'4'}>
-                  <ExpansionCard open={true} aria-label="Kelvin" style={{ paddingBottom: '8px' }}>
+                  <ExpansionCard open={true} aria-label="Kelvin" className={styles.saksoversiktSide__ExpansionCard}>
                     <ExpansionCard.Header>
                       <ExpansionCard.Title>Sak {sak.saksnummer}</ExpansionCard.Title>
                     </ExpansionCard.Header>
@@ -81,7 +81,7 @@ export const NySakOversiktContainer = ({
 
           {harRettigheter && (
             <aside>
-              <Box className={styles.gjeldenePersonInfoBoks}>
+              <Box padding="space-20" borderWidth="1" borderRadius="large" borderColor="border-divider">
                 <Rettighetsoversikt rettighetListe={rettighetListe} />
               </Box>
             </aside>
