@@ -1,4 +1,4 @@
-import { useState, useTransition } from 'react';
+import { Dispatch, SetStateAction, useRef, useState, useTransition } from 'react';
 import {
   ServerSentEventData,
   ServerSentEventStatus,
@@ -23,6 +23,8 @@ import { ApiException, isError, isSuccess } from 'lib/utils/api';
 import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
 import { Behovstype } from 'lib/utils/form';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
+import { hentTildeltStatusClient } from 'lib/oppgaveClientApi';
+import { isLocal } from 'lib/utils/environment';
 
 export type LøsBehovOgGåTilNesteStegStatus = ServerSentEventStatus | undefined;
 
@@ -30,8 +32,12 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
   løsBehovOgGåTilNesteStegError?: ApiException;
   status: LøsBehovOgGåTilNesteStegStatus;
   isLoading: boolean;
-  løsBehovOgGåTilNesteSteg: (behov: LøsAvklaringsbehovPåBehandling, callback?: () => void) => void;
-  løsPeriodisertBehovOgGåTilNesteSteg: (behov: LøsningerForPerioder, callback?: () => void) => void;
+  løsBehovOgGåTilNesteSteg: (behov: LøsAvklaringsbehovPåBehandling, callback?: () => void, sjekkTildeltStatus?: boolean) => void;
+  løsPeriodisertBehovOgGåTilNesteSteg: (behov: LøsningerForPerioder, callback?: () => void, sjekkTildeltStatus?: boolean) => void;
+  visOverstyrTildelingModal: boolean;
+  setVisOverstyrTildelingModal: Dispatch<SetStateAction<boolean>>;
+  bekreftOgFortsett: () => void;
+  reservertAvNavn?: string;
 } {
   const params = useParams<{ aktivGruppe: string; behandlingsReferanse: string; saksId: string }>();
   const router = useRouter();
@@ -42,15 +48,53 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<ApiException | undefined>();
   const [isPending, startTransition] = useTransition();
+  const [visOverstyrTildelingModal, setVisOverstyrTildelingModal] = useState(false);
+  const [reservertAvNavn, setReservertAvNavn] = useState<string>();
+
+  const erLokal = isLocal();
+  const sisteBehovRef = useRef<{
+    behov: LøsAvklaringsbehovPåBehandling | LøsPeriodisertBehovPåBehandling;
+    erPeriodisert: boolean;
+    callback?: () => void;
+  }>(null);
 
   const løsBehovOgGåTilNesteSteg = async (
     behov: LøsAvklaringsbehovPåBehandling | LøsPeriodisertBehovPåBehandling,
     erPeriodisert: boolean,
-    callback?: () => void
+    callback?: () => void,
+    sjekkTildeltStatus: boolean = false
   ) => {
     setIsLoading(true);
     setStatus(undefined);
     setError(undefined);
+
+    if (sjekkTildeltStatus && !erLokal) {
+      const nyesteOppgavePåBehandling = await hentTildeltStatusClient(params.behandlingsReferanse);
+      if (isSuccess(nyesteOppgavePåBehandling)) {
+        if (
+          nyesteOppgavePåBehandling.data.tildeltSaksbehandlerIdent != null &&
+          !nyesteOppgavePåBehandling.data.erTildeltInnloggetBruker
+        ) {
+          setVisOverstyrTildelingModal(true);
+          setReservertAvNavn(
+            nyesteOppgavePåBehandling.data.tildeltSaksbehandlerNavn ??
+              nyesteOppgavePåBehandling.data.tildeltSaksbehandlerIdent
+          );
+          setIsLoading(false);
+          sisteBehovRef.current = {
+            behov,
+            erPeriodisert,
+            callback,
+          };
+          return;
+        }
+      } else {
+        // TODO: skal vi blokkere videre flyt hvis henting av tildeltstatus feiler? Kan også bare la saksbehandler gå videre
+        setError(nyesteOppgavePåBehandling.apiException);
+        setIsLoading(false);
+        return;
+      }
+    }
 
     const løsbehovRes = erPeriodisert
       ? await clientLøsPeriodisertBehov(behov as LøsPeriodisertBehovPåBehandling)
@@ -102,6 +146,20 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
         callback();
       }
     });
+  };
+
+  const bekreftOgFortsett = () => {
+    if (!sisteBehovRef.current) {
+      setError({ message: 'Noe gikk galt ved overstyring av tildeling. Prøv igjen.' });
+      return;
+    }
+    sisteBehovRef.current &&
+      løsBehovOgGåTilNesteSteg(
+        sisteBehovRef.current.behov,
+        sisteBehovRef.current.erPeriodisert,
+        sisteBehovRef.current.callback,
+        false
+      );
   };
 
   const listenSSE = async (underkjennelseIKvalitetssikringEllerBeslutning: boolean) => {
@@ -189,8 +247,12 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
   return {
     isLoading: isLoading || isPending,
     status,
-    løsBehovOgGåTilNesteSteg: (behov, callback) => løsBehovOgGåTilNesteSteg(behov, false, callback),
-    løsPeriodisertBehovOgGåTilNesteSteg: (behov, callback) => løsBehovOgGåTilNesteSteg(behov, true, callback),
+    løsBehovOgGåTilNesteSteg: (behov, callback, skipReservasjonsjekk) => løsBehovOgGåTilNesteSteg(behov, false, callback, skipReservasjonsjekk),
+    løsPeriodisertBehovOgGåTilNesteSteg: (behov, callback, skipReservasjonsjekk) => løsBehovOgGåTilNesteSteg(behov, true, callback, skipReservasjonsjekk),
     løsBehovOgGåTilNesteStegError: error,
+    visOverstyrTildelingModal: visOverstyrTildelingModal,
+    setVisOverstyrTildelingModal: setVisOverstyrTildelingModal,
+    bekreftOgFortsett,
+    reservertAvNavn,
   };
 }

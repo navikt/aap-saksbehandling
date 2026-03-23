@@ -56,8 +56,16 @@ export interface BistandVurderingForm extends VurderingMeta {
 
 export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, initialMellomlagretVurdering }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
-  const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('VURDER_BISTANDSBEHOV');
+  const {
+    løsPeriodisertBehovOgGåTilNesteSteg,
+    isLoading,
+    status,
+    løsBehovOgGåTilNesteStegError,
+    visOverstyrTildelingModal,
+    setVisOverstyrTildelingModal,
+    bekreftOgFortsett,
+    reservertAvNavn,
+  } = useLøsBehovOgGåTilNesteSteg('VURDER_BISTANDSBEHOV');
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
@@ -96,7 +104,8 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, initialMe
           nullstillMellomlagretVurdering();
           visningActions.onBekreftClick();
           closeAllAccordions();
-        }
+        },
+        true
       );
     })(event);
   };
@@ -131,6 +140,10 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, initialMe
       formReset={() => form.reset(mapVurderingerToBistandForm(grunnlag))}
       onLeggTilVurdering={() => append(emptyBistandVurderingForm())}
       errorList={errorList}
+      visOverstyrTildelingModal={visOverstyrTildelingModal}
+      setVisOverstyrTildelingModal={setVisOverstyrTildelingModal}
+      bekreftOgFortsett={bekreftOgFortsett}
+      reservertAvNavn={reservertAvNavn}
     >
       <VStack gap={'4'}>
         <Veiledning

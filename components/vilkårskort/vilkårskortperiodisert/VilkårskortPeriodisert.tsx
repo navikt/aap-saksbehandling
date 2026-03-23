@@ -6,11 +6,12 @@ import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { PlusIcon } from '@navikt/aksel-icons';
 import { ErrorList } from 'lib/utils/formerrors';
 import { FormErrorSummary } from 'components/formerrorsummary/FormErrorSummary';
-import { FormEvent, ReactNode } from 'react';
+import { Dispatch, FormEvent, ReactNode, SetStateAction } from 'react';
 import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { ApiException } from 'lib/utils/api';
 import { VisningActions, VisningModus } from 'lib/types/visningTypes';
 import { useFeatureFlag } from 'context/UnleashContext';
+import { OverstyrTildelingModal } from 'components/overstyrtildelingmodal/OverstyrTildelingModal';
 
 interface VilkårsKortPeriodisertProps {
   heading: string;
@@ -31,6 +32,10 @@ interface VilkårsKortPeriodisertProps {
   vurdertAutomatisk?: boolean;
   onLeggTilVurdering?: () => void;
   errorList: ErrorList;
+  bekreftOgFortsett?: () => void;
+  visOverstyrTildelingModal?: boolean;
+  setVisOverstyrTildelingModal?: Dispatch<SetStateAction<boolean>>;
+  reservertAvNavn?: string;
 }
 
 export const VilkårskortPeriodisert = ({
@@ -52,6 +57,10 @@ export const VilkårskortPeriodisert = ({
   onLeggTilVurdering,
   formReset,
   errorList,
+  bekreftOgFortsett,
+  visOverstyrTildelingModal,
+  setVisOverstyrTildelingModal,
+  reservertAvNavn,
 }: Omit<VilkårsKortPeriodisertProps, 'vurdertAvAnsatt' | 'kvalitetssikretAv'>) => {
   const automatiskMellomlagring = useFeatureFlag('automatiskMellomlagring');
   const classNameBasertPåEnhet = vilkårTilhørerNavKontor ? styles.vilkårsKortNAV : styles.vilkårsKortNAY;
@@ -60,121 +69,132 @@ export const VilkårskortPeriodisert = ({
   const readOnly = visningModus === 'LÅST_MED_ENDRE' || visningModus === 'LÅST_UTEN_ENDRE';
 
   return (
-    <VStack
-      padding={'3'}
-      gap={'1'}
-      aria-label={heading}
-      className={`${erAktivtSteg ? classNameBasertPåEnhet : styles.vilkårsKort}`}
-    >
-      <HGrid columns={'1fr'} paddingBlock={'3'}>
-        <Heading level={'3'} size={'small'} data-testid="vilkår-heading">
-          {heading}
-        </Heading>
-      </HGrid>
+    <>
+      <VStack
+        padding={'3'}
+        gap={'1'}
+        aria-label={heading}
+        className={`${erAktivtSteg ? classNameBasertPåEnhet : styles.vilkårsKort}`}
+      >
+        <HGrid columns={'1fr'} paddingBlock={'3'}>
+          <Heading level={'3'} size={'small'} data-testid="vilkår-heading">
+            {heading}
+          </Heading>
+        </HGrid>
 
-      <VStack>
-        <form onSubmit={onSubmit} id={steg} autoComplete="off">
-          <VStack gap="4">
-            {/* innhold i vilkårskortet */}
-            <VStack style={{ borderTop: '1px solid lightgray' }} paddingBlock={'4 0'}>
-              {children}
-            </VStack>
+        <VStack>
+          <form onSubmit={onSubmit} id={steg} autoComplete="off">
+            <VStack gap="4">
+              {/* innhold i vilkårskortet */}
+              <VStack style={{ borderTop: '1px solid lightgray' }} paddingBlock={'4 0'}>
+                {children}
+              </VStack>
 
-            {/* Status / feil */}
-            <LøsBehovOgGåTilNesteStegStatusAlert
-              løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-              status={status}
-            />
+              {/* Status / feil */}
+              <LøsBehovOgGåTilNesteStegStatusAlert
+                løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+                status={status}
+              />
 
-            <FormErrorSummary errorList={errorList} />
+              <FormErrorSummary errorList={errorList} />
 
-            <HStack justify="space-between" align="end">
-              {/* Venstre kolonne: knapper + utkast */}
-              <VStack gap="4">
-                <HStack gap="4">
-                  {/* Modus-styrte knapper */}
-                  {visningModus === 'AKTIV_UTEN_AVBRYT' && (
-                    <>
-                      <Button loading={isLoading}>{knappTekst}</Button>
-                      {onLeggTilVurdering && (
-                        <Button variant={'secondary'} icon={<PlusIcon />} onClick={onLeggTilVurdering} type="button">
-                          Legg til ny vurdering
-                        </Button>
-                      )}
+              <HStack justify="space-between" align="end">
+                {/* Venstre kolonne: knapper + utkast */}
+                <VStack gap="4">
+                  <HStack gap="4">
+                    {/* Modus-styrte knapper */}
+                    {visningModus === 'AKTIV_UTEN_AVBRYT' && (
+                      <>
+                        <Button loading={isLoading}>{knappTekst}</Button>
+                        {onLeggTilVurdering && (
+                          <Button variant={'secondary'} icon={<PlusIcon />} onClick={onLeggTilVurdering} type="button">
+                            Legg til ny vurdering
+                          </Button>
+                        )}
 
-                      {!automatiskMellomlagring && onLagreMellomLagringClick && (
-                        <Button type="button" variant="tertiary" onClick={onLagreMellomLagringClick}>
-                          Lagre utkast
-                        </Button>
-                      )}
-                    </>
-                  )}
+                        {!automatiskMellomlagring && onLagreMellomLagringClick && (
+                          <Button type="button" variant="tertiary" onClick={onLagreMellomLagringClick}>
+                            Lagre utkast
+                          </Button>
+                        )}
+                      </>
+                    )}
 
-                  {visningModus === 'AKTIV_MED_AVBRYT' && (
-                    <>
-                      <Button loading={isLoading}>{knappTekst}</Button>
-                      {visningActions && (
-                        <Button
-                          type="button"
-                          variant="secondary"
-                          onClick={() => {
-                            visningActions.avbrytEndringClick();
-                            formReset && formReset();
-                            onDeleteMellomlagringClick && mellomlagretVurdering && onDeleteMellomlagringClick();
-                          }}
-                        >
-                          Avbryt
-                        </Button>
-                      )}
-                      {onLeggTilVurdering && (
-                        <Button variant={'secondary'} icon={<PlusIcon />} onClick={onLeggTilVurdering} type="button">
-                          Legg til ny vurdering
-                        </Button>
-                      )}
-                      {!automatiskMellomlagring && onLagreMellomLagringClick && (
-                        <Button type="button" variant="tertiary" onClick={onLagreMellomLagringClick}>
-                          Lagre utkast
-                        </Button>
-                      )}
-                    </>
-                  )}
+                    {visningModus === 'AKTIV_MED_AVBRYT' && (
+                      <>
+                        <Button loading={isLoading}>{knappTekst}</Button>
+                        {visningActions && (
+                          <Button
+                            type="button"
+                            variant="secondary"
+                            onClick={() => {
+                              visningActions.avbrytEndringClick();
+                              formReset && formReset();
+                              onDeleteMellomlagringClick && mellomlagretVurdering && onDeleteMellomlagringClick();
+                            }}
+                          >
+                            Avbryt
+                          </Button>
+                        )}
+                        {onLeggTilVurdering && (
+                          <Button variant={'secondary'} icon={<PlusIcon />} onClick={onLeggTilVurdering} type="button">
+                            Legg til ny vurdering
+                          </Button>
+                        )}
+                        {!automatiskMellomlagring && onLagreMellomLagringClick && (
+                          <Button type="button" variant="tertiary" onClick={onLagreMellomLagringClick}>
+                            Lagre utkast
+                          </Button>
+                        )}
+                      </>
+                    )}
 
-                  {visningModus === 'LÅST_MED_ENDRE' && (
-                    <Button
-                      type="button"
-                      variant={'secondary'}
-                      onClick={visningActions.onEndreClick}
-                      loading={isLoading}
-                    >
-                      Endre
-                    </Button>
-                  )}
+                    {visningModus === 'LÅST_MED_ENDRE' && (
+                      <Button
+                        type="button"
+                        variant={'secondary'}
+                        onClick={visningActions.onEndreClick}
+                        loading={isLoading}
+                      >
+                        Endre
+                      </Button>
+                    )}
 
-                  {visningModus === 'LÅST_UTEN_ENDRE' && null}
-                </HStack>
-
-                {/* Utkast-info */}
-                {!readOnly && mellomlagretVurdering && onDeleteMellomlagringClick && (
-                  <HStack align="baseline">
-                    <Detail>
-                      {`Utkast lagret ${formaterDatoMedTidspunktForFrontend(
-                        mellomlagretVurdering.vurdertDato
-                      )} (${mellomlagretVurdering.vurdertAv})`}
-                    </Detail>
-                    <Button type="button" size="small" variant="tertiary" onClick={onDeleteMellomlagringClick}>
-                      Slett utkast
-                    </Button>
+                    {visningModus === 'LÅST_UTEN_ENDRE' && null}
                   </HStack>
-                )}
-              </VStack>
 
-              <VStack align="baseline" paddingBlock={'2 0'}>
-                {vurdertAutomatisk && <Detail>Vurdert automatisk</Detail>}
-              </VStack>
-            </HStack>
-          </VStack>
-        </form>
+                  {/* Utkast-info */}
+                  {!readOnly && mellomlagretVurdering && onDeleteMellomlagringClick && (
+                    <HStack align="baseline">
+                      <Detail>
+                        {`Utkast lagret ${formaterDatoMedTidspunktForFrontend(
+                          mellomlagretVurdering.vurdertDato
+                        )} (${mellomlagretVurdering.vurdertAv})`}
+                      </Detail>
+                      <Button type="button" size="small" variant="tertiary" onClick={onDeleteMellomlagringClick}>
+                        Slett utkast
+                      </Button>
+                    </HStack>
+                  )}
+                </VStack>
+
+                <VStack align="baseline" paddingBlock={'2 0'}>
+                  {vurdertAutomatisk && <Detail>Vurdert automatisk</Detail>}
+                </VStack>
+              </HStack>
+            </VStack>
+          </form>
+        </VStack>
       </VStack>
-    </VStack>
+      {bekreftOgFortsett && visOverstyrTildelingModal != undefined && setVisOverstyrTildelingModal && (
+        <OverstyrTildelingModal
+          isOpen={visOverstyrTildelingModal}
+          onClose={() => setVisOverstyrTildelingModal(false)}
+          onConfirm={bekreftOgFortsett}
+          isLoading={isLoading}
+          reservertAvNavn={reservertAvNavn}
+        />
+      )}
+    </>
   );
 };

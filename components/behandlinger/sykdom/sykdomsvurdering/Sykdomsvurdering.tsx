@@ -84,8 +84,16 @@ export const Sykdomsvurdering = ({
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
-  const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('AVKLAR_SYKDOM');
+  const {
+    løsPeriodisertBehovOgGåTilNesteSteg,
+    isLoading,
+    status,
+    løsBehovOgGåTilNesteStegError,
+    visOverstyrTildelingModal,
+    setVisOverstyrTildelingModal,
+    bekreftOgFortsett,
+    reservertAvNavn,
+  } = useLøsBehovOgGåTilNesteSteg('AVKLAR_SYKDOM');
 
   const { visningModus, visningActions, formReadOnly, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
@@ -146,7 +154,8 @@ export const Sykdomsvurdering = ({
           closeAllAccordions();
           visningActions.onBekreftClick();
           nullstillMellomlagretVurdering();
-        }
+        },
+        true
       );
     })(event);
   };
@@ -174,6 +183,10 @@ export const Sykdomsvurdering = ({
       formReset={() => form.reset(mapGrunnlagTilDefaultvalues(grunnlag))}
       onLeggTilVurdering={() => append(emptySykdomsvurdering(utledDiagnoserForNyVurdering()))}
       errorList={errorList}
+      visOverstyrTildelingModal={visOverstyrTildelingModal}
+      setVisOverstyrTildelingModal={setVisOverstyrTildelingModal}
+      bekreftOgFortsett={bekreftOgFortsett}
+      reservertAvNavn={reservertAvNavn}
     >
       <VStack gap={'4'}>
         <BodyLong size={'small'}>
