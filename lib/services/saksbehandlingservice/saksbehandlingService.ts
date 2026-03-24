@@ -669,7 +669,7 @@ export const hentOppfølgningsOppgaverOpprinselsePåBehandlingsReferanse = async
 
 export const lagreMellomlagring = async (request: MellomlagretVurderingRequest) => {
   return apiFetch<MellomlagretVurderingResponse>(
-    `${saksbehandlingApiBaseUrl}/api/behandling/mellomlagret-vurdering`,
+    `${saksbehandlingApiBaseUrl}/api/behandling/mellomlagret-vurdering/${request.behandlingsReferanse}`,
     saksbehandlingApiScope,
     'POST',
     request
