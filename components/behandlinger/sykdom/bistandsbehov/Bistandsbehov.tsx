@@ -100,8 +100,7 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, initialMe
           nullstillMellomlagretVurdering();
           visningActions.onBekreftClick();
           closeAllAccordions();
-        },
-        true
+        }
       );
     })(event);
   };

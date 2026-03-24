@@ -150,8 +150,7 @@ export const Sykdomsvurdering = ({
           closeAllAccordions();
           visningActions.onBekreftClick();
           nullstillMellomlagretVurdering();
-        },
-        true
+        }
       );
     })(event);
   };

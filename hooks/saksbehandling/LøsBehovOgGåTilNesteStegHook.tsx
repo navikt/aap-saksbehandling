@@ -68,7 +68,7 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
     behov: LøsAvklaringsbehovPåBehandling | LøsPeriodisertBehovPåBehandling,
     erPeriodisert: boolean,
     callback?: () => void,
-    sjekkTildeltStatus: boolean = false
+    sjekkTildeltStatus: boolean = true
   ) => {
     setIsLoading(true);
     setStatus(undefined);
