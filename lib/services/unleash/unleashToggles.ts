@@ -8,6 +8,7 @@ export const FLAGS = [
   'SjekkTildelingVedBekreft',
   'VisSisteDagMedRett',
   'Redigitalisering',
+  'EnhetForrigeOppgaveFrontend',
 ] as const;
 
 export type FlagNames = (typeof FLAGS)[number];
@@ -23,4 +24,5 @@ export const mockedFlags: Flags = {
   SjekkTildelingVedBekreft: true,
   VisSisteDagMedRett: true,
   Redigitalisering: true,
+  EnhetForrigeOppgaveFrontend: true,
 };
