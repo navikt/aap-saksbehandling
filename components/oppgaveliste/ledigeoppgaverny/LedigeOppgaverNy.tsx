@@ -231,7 +231,13 @@ export const LedigeOppgaverNy = ({ enheter }: Props) => {
 
         {!isLoading &&
           (oppgaver.length > 0 ? (
-            <LedigeOppgaverTabellNy oppgaver={oppgaver} setSortBy={setSort} sort={sort} revalidateFunction={mutate} />
+            <LedigeOppgaverTabellNy
+              oppgaver={oppgaver}
+              setSortBy={setSort}
+              sort={sort}
+              revalidateFunction={mutate}
+              aktivKøId={aktivKøId}
+            />
           ) : (
             <BodyShort size={'small'} className={styles.ingenoppgaver}>
               Ingen oppgaver i valgt kø for valgt enhet

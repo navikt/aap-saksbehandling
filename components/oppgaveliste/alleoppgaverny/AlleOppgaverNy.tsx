@@ -225,6 +225,7 @@ export const AlleOppgaverNy = ({ enheter }: Props) => {
             setValgteRader={setValgteRader}
             setSortBy={setSort}
             sort={sort}
+            aktivKøId={aktivKøId}
           />
         ) : (
           <BodyShort size={'small'} className={styles.ingenoppgaver}>
