@@ -13,8 +13,8 @@ interface Props {
 
 export const StegGruppeIndikatorAksel = ({ flytRespons, stegGrupperSomSkalVises }: Props) => {
   const router = useRouter();
-  const params = useParams<{ saksId: string; behandlingsReferanse: string; aktivGruppe: string }>();
-  const { saksId, behandlingsReferanse, aktivGruppe } = params;
+  const params = useParams<{ saksnummer: string; behandlingsReferanse: string; aktivGruppe: string }>();
+  const { saksnummer, behandlingsReferanse, aktivGruppe } = params;
   const stegGrupper = flytRespons.flyt.filter((gruppe) => stegGrupperSomSkalVises.includes(gruppe.stegGruppe));
   const activeStepIndex = stegGrupper.findIndex((gruppe) => gruppe.stegGruppe === decodeURI(aktivGruppe)) + 1;
 
@@ -31,7 +31,7 @@ export const StegGruppeIndikatorAksel = ({ flytRespons, stegGrupperSomSkalVises 
                 completed={gruppe.erFullført}
                 interactive={gruppe.erFullført || flytRespons.aktivGruppe === gruppe.stegGruppe}
                 onClick={() =>
-                  router.push(`/saksbehandling/sak/${saksId}/${behandlingsReferanse}/${gruppe.stegGruppe}`)
+                  router.push(`/saksbehandling/sak/${saksnummer}/${behandlingsReferanse}/${gruppe.stegGruppe}`)
                 }
               >
                 {mapTilSteggruppeTekst(gruppe.stegGruppe)}

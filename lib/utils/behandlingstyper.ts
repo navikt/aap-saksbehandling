@@ -1,7 +1,5 @@
 import { exhaustiveCheck } from 'lib/utils/typescript';
 import { NoNavAapOppgaveOppgaveDtoBehandlingstype } from '@navikt/aap-oppgave-typescript-types';
-import { PathsBehandlingstidGetParametersQueryBehandlingstyper } from '@navikt/aap-statistikk-typescript-types';
-import { BehandlingstyperRequestQuery } from 'lib/types/statistikkTypes';
 import { ValuePair } from 'components/form/FormField';
 
 export const oppgaveBehandlingstyper = Object.keys(
@@ -34,38 +32,6 @@ export const oppgaveBehandlingstyper = Object.keys(
     exhaustiveCheck(key);
   });
 
-const behandlingsTypeAlternativerFraEnum = Object.keys(
-  PathsBehandlingstidGetParametersQueryBehandlingstyper as unknown as keyof (typeof PathsBehandlingstidGetParametersQueryBehandlingstyper)[]
-)
-  .map((key) => key as keyof typeof PathsBehandlingstidGetParametersQueryBehandlingstyper)
-  .map((key) => {
-    switch (key) {
-      case 'F_rstegangsbehandling':
-        return 'Førstegangsbehandling';
-      case 'Tilbakekreving':
-        return 'Tilbakekreving';
-      case 'Revurdering':
-        return 'Revurdering';
-      case 'Klage':
-        return 'Klage';
-      case 'Dokumenth_ndtering':
-        return 'Dokumenthåndtering';
-      case 'Journalf_ring':
-        return 'Journalføring';
-      case 'SvarFraAndreinstans':
-        return 'SvarFraAndreinstans';
-      case 'Oppf_lgingsbehandling':
-        return 'Oppfølgingsbehandling';
-      case 'Aktivitetsplikt':
-        return 'Aktivitetsplikt';
-      case 'Aktivitetsplikt11_9':
-        return 'Aktivitetsplikt';
-    }
-    exhaustiveCheck(key);
-  });
-export type BehandlingsTyperOption = BehandlingstyperRequestQuery;
-export const behandlingsTyperOptions: BehandlingsTyperOption[] = behandlingsTypeAlternativerFraEnum;
-
 export const OppgaveStatuser: ValuePair[] = [
   { label: 'På vent', value: 'VENT' },
   { label: 'Retur fra kvalitetssikrer', value: 'RETUR_FRA_KVALITETSSIKRER' },
@@ -73,5 +39,5 @@ export const OppgaveStatuser: ValuePair[] = [
   { label: 'Retur fra veileder', value: 'RETUR_FRA_VEILEDER' },
   { label: 'Retur fra saksbehandler', value: 'RETUR_FRA_SAKSBEHANDLER' },
   { label: 'Hastesak', value: 'ER_HASTESAK' },
-  { label: 'Ventefrist utløpt', value: 'VENTEFRIST_UTLØPT'}
+  { label: 'Ventefrist utløpt', value: 'VENTEFRIST_UTLØPT' },
 ];

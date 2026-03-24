@@ -28,7 +28,7 @@ import {
   SettPåVent,
 } from './types/types';
 import { getErrorMessage } from 'lib/utils/errorUtil';
-import { ClientConfig } from 'lib/types/clientConfig';
+import { ClientConfig } from 'lib/types/clientTypes';
 import { FetchResponse } from 'lib/utils/api';
 import { TilgangResponse } from 'lib/services/tilgangservice/tilgangsService';
 import { Markering, SaksbehandlerSøkRespons, TildelOppgaveRequest } from 'lib/types/oppgaveTypes';

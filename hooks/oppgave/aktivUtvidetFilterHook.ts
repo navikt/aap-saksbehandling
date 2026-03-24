@@ -2,7 +2,7 @@
 
 import { dagerTilMillisekunder } from 'lib/utils/time';
 import { useInnloggetBruker } from 'hooks/BrukerHook';
-import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaverny/MineOppgaverNy';
+import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
 
 interface LagretAktivUtvidetFilterData {
   feltData: FormFieldsFilter;

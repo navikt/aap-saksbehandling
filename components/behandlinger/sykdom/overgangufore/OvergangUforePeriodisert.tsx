@@ -176,7 +176,12 @@ export const OvergangUforePeriodisert = ({
               index={index}
               initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
             >
-              <OvergangUforeVurderingFormInput index={index} form={form} readonly={formReadOnly} />
+              <OvergangUforeVurderingFormInput
+                index={index}
+                form={form}
+                readonly={formReadOnly}
+                søknadsdatoUføretrygd={grunnlag.uføreSøknadOpplysninger?.soknadsdato}
+              />
             </NyVurderingExpandableCard>
           );
         })}

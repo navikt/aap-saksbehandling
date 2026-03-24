@@ -10,7 +10,7 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 const oppgaver: Oppgave = {
-  behandlingRef: 'sdf',
+  behandlingRef: 'asdf',
   vurderingsbehov: [],
   avklaringsbehovKode: '',
   behandlingOpprettet: '',

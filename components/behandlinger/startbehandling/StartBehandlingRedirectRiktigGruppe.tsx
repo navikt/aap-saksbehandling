@@ -13,13 +13,13 @@ type Props = {
  */
 export const StartBehandlingRedirectRiktigGruppe = ({ flyt }: Props) => {
   const router = useRouter();
-  const { saksId, behandlingsReferanse } = useParams<{ saksId: string; behandlingsReferanse: string }>();
+  const { saksnummer, behandlingsReferanse } = useParams<{ saksnummer: string; behandlingsReferanse: string }>();
 
   useEffect(() => {
     if (flyt.aktivGruppe !== 'START_BEHANDLING') {
-      router.push(`/saksbehandling/sak/${saksId}/${behandlingsReferanse}/${flyt.aktivGruppe}`);
+      router.push(`/saksbehandling/sak/${saksnummer}/${behandlingsReferanse}/${flyt.aktivGruppe}`);
     }
-  }, [flyt.aktivGruppe, router, saksId, behandlingsReferanse]);
+  }, [flyt.aktivGruppe, router, saksnummer, behandlingsReferanse]);
 
   return null;
 };
