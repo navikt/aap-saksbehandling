@@ -51,6 +51,7 @@ export const AlleOppgaverTabell = ({
     }
   };
 
+  const kvalitetssikrerKøId = 25;
   const enhetForrigeOppgaveFrontendEnabled = useFeatureFlag('EnhetForrigeOppgaveFrontend');
 
   return (
@@ -96,10 +97,9 @@ export const AlleOppgaverTabell = ({
             {enhetForrigeOppgaveFrontendEnabled ? (
               <Table.ColumnHeader
                 sortKey={NoNavAapOppgaveListeOppgaveSorteringSortBy.AVKLARINGSBEHOV_KODE}
-                // 25 = Kvalitetssikrerkø
-                sortable={aktivKøId !== 25}
+                sortable={aktivKøId !== kvalitetssikrerKøId}
               >
-                {aktivKøId !== 25 ? 'Oppgave' : 'Kontor'}
+                {aktivKøId !== kvalitetssikrerKøId ? 'Oppgave' : 'Kontor'}
               </Table.ColumnHeader>
             ) : (
               <Table.ColumnHeader
@@ -172,18 +172,15 @@ export const AlleOppgaverTabell = ({
                 </Tooltip>
               </Table.DataCell>
               <Table.DataCell style={{ maxWidth: '150px' }} textSize={'small'}>
-                {
-                  // 25 = Kvalitetssikrerkø
-                  enhetForrigeOppgaveFrontendEnabled && aktivKøId === 25 ? (
-                    (oppgave.enhetForrigeOppgave?.navn ?? '-')
-                  ) : (
-                    <Tooltip content={mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode)}>
-                      <BodyShort truncate size={'small'}>
-                        {mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode)}
-                      </BodyShort>
-                    </Tooltip>
-                  )
-                }
+                {enhetForrigeOppgaveFrontendEnabled && aktivKøId === kvalitetssikrerKøId ? (
+                  (oppgave.enhetForrigeOppgave?.navn ?? '-')
+                ) : (
+                  <Tooltip content={mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode)}>
+                    <BodyShort truncate size={'small'}>
+                      {mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode)}
+                    </BodyShort>
+                  </Tooltip>
+                )}
               </Table.DataCell>
               <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(oppgave.opprettetTidspunkt)}</Table.DataCell>
               <Table.DataCell style={{ maxWidth: '150px' }} textSize={'small'}>
