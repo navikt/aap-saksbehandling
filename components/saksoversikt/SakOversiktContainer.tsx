@@ -2,7 +2,7 @@
 
 import { Box, Page, Tabs } from '@navikt/ds-react';
 import { SakMedBehandlinger } from 'components/saksoversikt/SakMedBehandlinger';
-import { SaksInfo } from 'lib/types/types';
+import { RettighetsinfoDto, SaksInfo } from 'lib/types/types';
 import { FileTextIcon, PersonIcon } from '@navikt/aksel-icons';
 import { DokumentOversikt } from 'components/saksoversikt/dokumentoversikt/DokumentOversikt';
 import { useState } from 'react';
@@ -18,9 +18,11 @@ enum Tab {
 export const SakOversiktContainer = ({
   sak,
   innloggetBrukerIdent,
+  rettighetsinfo,
 }: {
   sak: SaksInfo;
   innloggetBrukerIdent: string | undefined;
+  rettighetsinfo: RettighetsinfoDto | null;
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -44,7 +46,11 @@ export const SakOversiktContainer = ({
 
           <Box marginBlock="8">
             <Tabs.Panel value={Tab.OVERSIKT}>
-              <SakMedBehandlinger sak={sak} innloggetBrukerIdent={innloggetBrukerIdent} />
+              <SakMedBehandlinger
+                sak={sak}
+                innloggetBrukerIdent={innloggetBrukerIdent}
+                rettighetsinfo={rettighetsinfo}
+              />
             </Tabs.Panel>
 
             <Tabs.Panel value={Tab.DOKUMENTER}>

@@ -1,7 +1,7 @@
 'use client';
 
-import { Alert, Button, Chips, Heading, HStack, Table, VStack } from '@navikt/ds-react';
-import { SaksInfo, Vurderingsbehov } from 'lib/types/types';
+import { Alert, BodyShort, Button, Chips, Heading, HStack, Table, VStack } from '@navikt/ds-react';
+import { RettighetsinfoDto, SaksInfo, Vurderingsbehov } from 'lib/types/types';
 import { capitalize } from 'lodash';
 import { SakDevTools } from 'components/saksoversikt/SakDevTools';
 import { useRouter } from 'next/navigation';
@@ -21,6 +21,7 @@ import { useState } from 'react';
 import { BehandlingsflytEllerPostmottakBehandling } from './types';
 import { usePostmottakBehandlinger } from 'hooks/postmottak/PostmottakBehandlingerHook';
 import { useHentOppgaverForBehandlinger } from 'hooks/oppgave/OppgaverPåSakHook';
+import { Dato } from 'lib/types/Dato';
 
 const lokalDevToolsForBehandlingOgSak = isLocal();
 
@@ -46,9 +47,11 @@ function formaterVurderingsbehovMedTeller(behov: Vurderingsbehov[]): string {
 export const SakMedBehandlinger = ({
   sak,
   innloggetBrukerIdent,
+  rettighetsinfo,
 }: {
   sak: SaksInfo;
   innloggetBrukerIdent: string | undefined;
+  rettighetsinfo: RettighetsinfoDto | null;
 }) => {
   const router = useRouter();
 
@@ -88,47 +91,52 @@ export const SakMedBehandlinger = ({
 
   return (
     <VStack gap="8">
-      <HStack justify="space-between">
-        <Heading size="large">Sak {sak.saksnummer}</Heading>
-        <HStack gap="4">
-          <Button
-            variant="secondary"
-            size="small"
-            onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/klage`)}
-          >
-            Opprett klage
-          </Button>
-          {kanRegistrerebrudd && (
+      <VStack>
+        <HStack justify="space-between">
+          <Heading size="large">Sak {sak.saksnummer}</Heading>
+          <HStack gap="4">
             <Button
               variant="secondary"
               size="small"
-              onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/aktivitet`)}
+              onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/klage`)}
             >
-              Vurder aktivitetsplikt
+              Opprett klage
             </Button>
-          )}
+            {kanRegistrerebrudd && (
+              <Button
+                variant="secondary"
+                size="small"
+                onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/aktivitet`)}
+              >
+                Vurder aktivitetsplikt
+              </Button>
+            )}
 
-          {kanRevurdere && (
-            <Button
-              variant="secondary"
-              size="small"
-              onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/revurdering`)}
-            >
-              Opprett {erAktivFørstegangsbehandling(sak.behandlinger) ? 'vurdering' : 'revurdering'}
-            </Button>
-          )}
+            {kanRevurdere && (
+              <Button
+                variant="secondary"
+                size="small"
+                onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/revurdering`)}
+              >
+                Opprett {erAktivFørstegangsbehandling(sak.behandlinger) ? 'vurdering' : 'revurdering'}
+              </Button>
+            )}
 
-          {kanRevurdere && (
-            <Button
-              variant="secondary"
-              size="small"
-              onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/oppfolging`)}
-            >
-              Opprett oppfølgingsoppgave
-            </Button>
-          )}
+            {kanRevurdere && (
+              <Button
+                variant="secondary"
+                size="small"
+                onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/oppfolging`)}
+              >
+                Opprett oppfølgingsoppgave
+              </Button>
+            )}
+          </HStack>
         </HStack>
-      </HStack>
+        {rettighetsinfo?.sisteDagMedRett && (
+          <BodyShort>{`Siste dag med rett: ${new Dato(rettighetsinfo.sisteDagMedRett).formaterForFrontend()}`}</BodyShort>
+        )}
+      </VStack>
       <VStack gap="4">
         <Heading size="xsmall">Behandlinger</Heading>
         {feilmelding && <Alert variant={'error'}>{feilmelding}</Alert>}
