@@ -93,12 +93,7 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
           };
           return;
         }
-      } else {
-        // TODO: skal vi blokkere videre flyt hvis henting av tildeltstatus feiler? Kan også bare la saksbehandler gå videre
-        setError(nyesteOppgavePåBehandling.apiException);
-        setIsLoading(false);
-        return;
-      }
+      } // Hvis henting av tildelt-status feiler, la saksbehandler fortsette
     }
 
     const løsbehovRes = erPeriodisert
