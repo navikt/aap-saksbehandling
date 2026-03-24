@@ -1,13 +1,12 @@
-import { Button, Table, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, Detail, Table, VStack } from '@navikt/ds-react';
 import { TableStyled } from 'components/tablestyled/TableStyled';
-
-import { MeldekortDag } from 'components/saksoversikt/meldekortoversikt/meldekorttabell/meldekortdag/MeldekortDag';
 import { eachWeekOfInterval, getISOWeek } from 'date-fns';
 import { Dato } from 'lib/types/Dato';
-import { DagFraBackend, Meldekort } from '../meldekortTypes';
+import { Dag, DagFraBackend, Meldekort } from '../meldekortTypes';
 import { PencilIcon } from '@navikt/aksel-icons';
 import { RedigerMeldekortModal } from 'components/saksoversikt/meldekortoversikt/redigermeldekortmodal/RedigerMeldekortModal';
 import { useState } from 'react';
+import { replaceCommasWithDots } from 'lib/utils/string';
 
 interface Props {
   meldekort: Meldekort[];
@@ -19,23 +18,17 @@ export const MeldekortTabell = ({ meldekort }: Props) => {
 
   return (
     <>
-      <TableStyled tablelayout={'FIXED'}>
+      <TableStyled>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell textSize={'small'} colSpan={3}>
+            <Table.HeaderCell />
+            <Table.HeaderCell textSize={'small'} colSpan={2}>
               Meldeperiode
             </Table.HeaderCell>
-            <Table.HeaderCell textSize={'small'}>Man</Table.HeaderCell>
-            <Table.HeaderCell textSize={'small'}>Tir</Table.HeaderCell>
-            <Table.HeaderCell textSize={'small'}>Ons</Table.HeaderCell>
-            <Table.HeaderCell textSize={'small'}>Tor</Table.HeaderCell>
-            <Table.HeaderCell textSize={'small'}>Fre</Table.HeaderCell>
-            <Table.HeaderCell textSize={'small'}>Lør</Table.HeaderCell>
-            <Table.HeaderCell textSize={'small'} colSpan={2}>
-              Søn
+            <Table.HeaderCell textSize={'small'}>Timer arbeidet</Table.HeaderCell>
+            <Table.HeaderCell textSize={'small'} colSpan={3}>
+              Prosent
             </Table.HeaderCell>
-            <Table.HeaderCell textSize={'small'}>Arbeid</Table.HeaderCell>
-            <Table.HeaderCell textSize={'small'}>Fravær</Table.HeaderCell>
             <Table.HeaderCell textSize={'small'}>Levert dato</Table.HeaderCell>
             <Table.HeaderCell textSize={'small'}>Sist endret</Table.HeaderCell>
             <Table.HeaderCell textSize={'small'}>Endret av</Table.HeaderCell>
@@ -44,45 +37,26 @@ export const MeldekortTabell = ({ meldekort }: Props) => {
         </Table.Header>
         <Table.Body>
           {meldekort.map((m, index) => {
-            const grupperteUkedager = grupperEtterUkedag(m.dager);
-
             const fom = new Dato(m.meldeperiode.fom);
             const tom = new Dato(m.meldeperiode.tom);
 
+            const antallTimerArbeidet = hentTotaltAntallTimerArbeidet(m.dager);
+
             return (
-              <Table.Row key={index}>
-                <Table.DataCell textSize={'small'} colSpan={3}>
+              <Table.ExpandableRow key={index} content={'hello pello'}>
+                <Table.HeaderCell textSize={'small'} colSpan={2} scope={'row'}>
                   <VStack gap={'2'}>
-                    <span>{`Uke ${hentUkeNummerForPeriode(fom.dato, tom.dato)}`}</span>
-                    <span>{`${fom.formaterForFrontend()} - ${tom.formaterForFrontend()}`}</span>
+                    <BodyShort size={'small'}>{`Uke ${hentUkeNummerForPeriode(fom.dato, tom.dato)}`}</BodyShort>
+                    <Detail>{`${fom.formaterForFrontend()} - ${tom.formaterForFrontend()}`}</Detail>
                   </VStack>
+                </Table.HeaderCell>
+                <Table.DataCell textSize={'small'}>{antallTimerArbeidet}</Table.DataCell>
+                <Table.DataCell textSize={'small'} colSpan={3}>
+                  40%
                 </Table.DataCell>
-                <Table.DataCell textSize={'small'}>
-                  <MeldekortDag dager={grupperteUkedager.mandag} />
-                </Table.DataCell>
-                <Table.DataCell textSize={'small'}>
-                  <MeldekortDag dager={grupperteUkedager.tirsdag} />
-                </Table.DataCell>
-                <Table.DataCell textSize={'small'}>
-                  <MeldekortDag dager={grupperteUkedager.onsdag} />
-                </Table.DataCell>
-                <Table.DataCell textSize={'small'}>
-                  <MeldekortDag dager={grupperteUkedager.torsdag} />
-                </Table.DataCell>
-                <Table.DataCell textSize={'small'}>
-                  <MeldekortDag dager={grupperteUkedager.fredag} />
-                </Table.DataCell>
-                <Table.DataCell textSize={'small'}>
-                  <MeldekortDag dager={grupperteUkedager.lørdag} />
-                </Table.DataCell>
-                <Table.DataCell textSize={'small'} colSpan={2}>
-                  <MeldekortDag dager={grupperteUkedager.søndag} />
-                </Table.DataCell>
-                <Table.DataCell textSize={'small'}>40%</Table.DataCell>
-                <Table.DataCell textSize={'small'}>0</Table.DataCell>
-                <Table.DataCell textSize={'small'}>16.01.2026</Table.DataCell>
-                <Table.DataCell textSize={'small'}>16.01.2026</Table.DataCell>
-                <Table.DataCell textSize={'small'}>Test Testesen</Table.DataCell>
+                <Table.DataCell textSize={'small'}>{m?.levertDato}</Table.DataCell>
+                <Table.DataCell textSize={'small'}>{m?.sistEndret}</Table.DataCell>
+                <Table.DataCell textSize={'small'}>{m.endretAv}</Table.DataCell>
                 <Table.DataCell textSize={'small'}>
                   <Button
                     variant={'tertiary-neutral'}
@@ -93,7 +67,7 @@ export const MeldekortTabell = ({ meldekort }: Props) => {
                     }}
                   />
                 </Table.DataCell>
-              </Table.Row>
+              </Table.ExpandableRow>
             );
           })}
         </Table.Body>
@@ -112,6 +86,10 @@ type UkeGrupper = {
   lørdag: DagFraBackend[];
   søndag: DagFraBackend[];
 };
+
+function hentTotaltAntallTimerArbeidet(dager: DagFraBackend[]) {
+  return dager.reduce((acc, curr) => acc + (curr.timerArbeidet ? curr.timerArbeidet : 0), 0);
+}
 
 function grupperEtterUkedag(dager: DagFraBackend[]): UkeGrupper {
   return dager.reduce<UkeGrupper>(

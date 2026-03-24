@@ -27,8 +27,8 @@ export interface Meldekort {
   meldeperiode: Periode;
   dager: DagFraBackend[];
   fraværTotaltIMeldeperiode: number;
-  levertDato?: Date;
-  sistEndret?: Date;
+  levertDato?: string;
+  sistEndret?: string;
   endretAv?: string;
 }
 

@@ -21,6 +21,9 @@ const meldekort2: Meldekort = {
     fom: '2026-03-30',
     tom: '2026-04-12',
   },
+  endretAv: 'Saksbehandler',
+  sistEndret: '2026-03-24',
+  levertDato: '2026-04-13',
 };
 
 export const MeldekortOversikt = () => {
