@@ -9,7 +9,7 @@ import {
 } from 'lib/utils/oversettelser';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
-import { AvklaringsbehovKode, VurderingsbehovIntern, ÅrsakTilOpprettelse } from 'lib/types/types';
+import { VurderingsbehovIntern, ÅrsakTilOpprettelse } from 'lib/types/types';
 import { Oppgave } from 'lib/types/oppgaveTypes';
 import { useState } from 'react';
 import { LedigeOppgaverMeny } from 'components/oppgaveliste/ledigeoppgaver/ledigeoppgavermeny/LedigeOppgaverMeny';
@@ -21,20 +21,25 @@ import { OppgaveIkkeLedigModal } from 'components/oppgaveliste/oppgaveikkeledigm
 import { NoNavAapOppgaveListeOppgaveSorteringSortBy } from '@navikt/aap-oppgave-typescript-types';
 import { ScopedBackendSortState } from 'hooks/oppgave/BackendSorteringHook';
 import { isOppgavelisteOppgaveSorteringSortBy } from 'lib/utils/request';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   oppgaver: Oppgave[];
   revalidateFunction: () => void;
   setSortBy: (orderBy: NoNavAapOppgaveListeOppgaveSorteringSortBy) => void;
   sort: ScopedBackendSortState<NoNavAapOppgaveListeOppgaveSorteringSortBy> | undefined;
+  aktivKøId: number | undefined;
 }
 
-export const LedigeOppgaverTabell = ({ oppgaver, revalidateFunction, setSortBy, sort }: Props) => {
+export const LedigeOppgaverTabell = ({ oppgaver, revalidateFunction, setSortBy, sort, aktivKøId }: Props) => {
   const [feilmelding, setFeilmelding] = useState<string>();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [visSynkroniserEnhetModal, setVisSynkroniserEnhetModal] = useState<boolean>(false);
   const [saksbehandlerNavn, setSaksbehandlerNavn] = useState<string>();
   const [visOppgaveIkkeLedigModal, setVisOppgaveIkkeLedigModal] = useState<boolean>(false);
+
+  const kvalitetssikrerKøId = 25;
+  const enhetForrigeOppgaveFrontendEnabled = useFeatureFlag('EnhetForrigeOppgaveFrontend');
 
   return (
     <>
@@ -94,12 +99,21 @@ export const LedigeOppgaverTabell = ({ oppgaver, revalidateFunction, setSortBy, 
               Årsak
             </Table.ColumnHeader>
             <Table.ColumnHeader>Vurderingsbehov</Table.ColumnHeader>
-            <Table.ColumnHeader
-              sortKey={NoNavAapOppgaveListeOppgaveSorteringSortBy.AVKLARINGSBEHOV_KODE}
-              sortable={true}
-            >
-              Oppgave
-            </Table.ColumnHeader>
+            {enhetForrigeOppgaveFrontendEnabled ? (
+              <Table.ColumnHeader
+                sortKey={NoNavAapOppgaveListeOppgaveSorteringSortBy.AVKLARINGSBEHOV_KODE}
+                sortable={aktivKøId !== kvalitetssikrerKøId}
+              >
+                {aktivKøId !== kvalitetssikrerKøId ? 'Oppgave' : 'Kontor'}
+              </Table.ColumnHeader>
+            ) : (
+              <Table.ColumnHeader
+                sortKey={NoNavAapOppgaveListeOppgaveSorteringSortBy.AVKLARINGSBEHOV_KODE}
+                sortable={true}
+              >
+                Oppgave
+              </Table.ColumnHeader>
+            )}
             <Table.ColumnHeader
               sortKey={NoNavAapOppgaveListeOppgaveSorteringSortBy.OPPRETTET_TIDSPUNKT}
               sortable={true}
@@ -158,11 +172,15 @@ export const LedigeOppgaverTabell = ({ oppgaver, revalidateFunction, setSortBy, 
                 </Tooltip>
               </Table.DataCell>
               <Table.DataCell style={{ maxWidth: '150px' }} textSize={'small'}>
-                <Tooltip content={mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode as AvklaringsbehovKode)}>
-                  <BodyShort truncate size={'small'}>
-                    {mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode as AvklaringsbehovKode)}
-                  </BodyShort>
-                </Tooltip>
+                {enhetForrigeOppgaveFrontendEnabled && aktivKøId === kvalitetssikrerKøId ? (
+                  (oppgave.enhetForrigeOppgave?.navn ?? '-')
+                ) : (
+                  <Tooltip content={mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode)}>
+                    <BodyShort truncate size={'small'}>
+                      {mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode)}
+                    </BodyShort>
+                  </Tooltip>
+                )}
               </Table.DataCell>
               <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(oppgave.opprettetTidspunkt)}</Table.DataCell>
 
