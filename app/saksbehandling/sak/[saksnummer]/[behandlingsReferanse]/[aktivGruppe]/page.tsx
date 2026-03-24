@@ -7,10 +7,10 @@ import { ForberedBehandling } from 'components/behandling/ForberedBehandling';
 import { BehandlingPage } from 'components/behandling/BehandlingPage';
 
 const Page = async (props: {
-  params: Promise<{ behandlingsReferanse: string; saksnummer: string; aktivGruppe: StegGruppe; saksId: string }>;
+  params: Promise<{ behandlingsReferanse: string; saksnummer: string; aktivGruppe: StegGruppe }>;
 }) => {
   const params = await props.params;
-  const { behandlingsReferanse, saksnummer, aktivGruppe, saksId } = params;
+  const { behandlingsReferanse, saksnummer, aktivGruppe } = params;
   const behandling = await hentBehandling(behandlingsReferanse);
 
   if (isError(behandling)) {
@@ -30,7 +30,7 @@ const Page = async (props: {
   ) : (
     <BehandlingPage
       behandlingsReferanse={behandlingsReferanse}
-      saksnummer={saksId}
+      saksnummer={saksnummer}
       aktivGruppe={aktivGruppe as StegGruppe}
     />
   );

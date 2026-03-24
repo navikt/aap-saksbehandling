@@ -4,9 +4,9 @@ import { redirect } from 'next/navigation';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
-const Page = async (props: { params: Promise<{ saksId: string; behandlingsReferanse: string }> }) => {
-  const params = await props.params;
-  const flyt = await hentFlyt(params.behandlingsReferanse);
+const Page = async (props: { params: Promise<{ saksnummer: string; behandlingsReferanse: string }> }) => {
+  const { saksnummer, behandlingsReferanse } = await props.params;
+  const flyt = await hentFlyt(behandlingsReferanse);
 
   if (isError(flyt)) {
     return <ApiException apiResponses={[flyt]} />;
@@ -18,10 +18,10 @@ const Page = async (props: { params: Promise<{ saksId: string; behandlingsRefera
    */
   if (flyt.data.vurdertGruppe && flyt.data.vurdertSteg) {
     redirect(
-      `/saksbehandling/sak/${params.saksId}/${params.behandlingsReferanse}/${flyt.data.vurdertGruppe}/#${flyt.data.vurdertSteg}`
+      `/saksbehandling/sak/${saksnummer}/${behandlingsReferanse}/${flyt.data.vurdertGruppe}/#${flyt.data.vurdertSteg}`
     );
   } else {
-    redirect(`/saksbehandling/sak/${params.saksId}/${params.behandlingsReferanse}/${flyt.data.aktivGruppe}`);
+    redirect(`/saksbehandling/sak/${saksnummer}/${behandlingsReferanse}/${flyt.data.aktivGruppe}`);
   }
 };
 

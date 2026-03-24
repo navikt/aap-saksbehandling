@@ -33,7 +33,7 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
   løsBehovOgGåTilNesteSteg: (behov: LøsAvklaringsbehovPåBehandling, callback?: () => void) => void;
   løsPeriodisertBehovOgGåTilNesteSteg: (behov: LøsningerForPerioder, callback?: () => void) => void;
 } {
-  const params = useParams<{ aktivGruppe: string; behandlingsReferanse: string; saksId: string }>();
+  const params = useParams<{ aktivGruppe: string; behandlingsReferanse: string; saksnummer: string }>();
   const router = useRouter();
   const { refetchFlytClient } = useRequiredFlyt();
   const { setIsModalOpen } = useIngenFlereOppgaverModal();
@@ -158,7 +158,7 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
         } else {
           if (skalBytteGruppe || skalBytteSteg) {
             router.push(
-              `/saksbehandling/sak/${params.saksId}/${params.behandlingsReferanse}/${aktivVisningGruppe}/#${aktivtVisningSteg}`
+              `/saksbehandling/sak/${params.saksnummer}/${params.behandlingsReferanse}/${aktivVisningGruppe}/#${aktivtVisningSteg}`
             );
           }
         }
