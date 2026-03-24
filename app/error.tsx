@@ -5,17 +5,21 @@ import { useParams, usePathname } from 'next/navigation';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { useEffect } from 'react';
 import { logClientError } from 'lib/actions/actions';
+import { erIngenTilgangError } from 'lib/utils/ingenTilgang';
 
 interface Props {
   error: Error & { digest?: string };
 }
 
-//500 Page
 const Error = ({ error }: Props) => {
   const { saksnummer, behandlingsReferanse } = useParams<{ saksnummer?: string; behandlingsReferanse: string }>();
   const pathname = usePathname();
 
+  const ingenTilgang = erIngenTilgangError(error);
+
   useEffect(() => {
+    if (ingenTilgang) return; // unngå å logge tilgangsfeil som "vanlige" feil
+
     try {
       // noinspection JSIgnoredPromiseFromCall
       logClientError({
@@ -30,7 +34,11 @@ const Error = ({ error }: Props) => {
     } catch {
       // do nothing
     }
-  }, [error, saksnummer, behandlingsReferanse, pathname]);
+  }, [error, saksnummer, behandlingsReferanse, pathname, ingenTilgang]);
+
+  if (ingenTilgang) {
+    return <IngenTilgangFeil saksnummer={saksnummer} />;
+  }
 
   return (
     <Page>
@@ -74,5 +82,28 @@ const Error = ({ error }: Props) => {
     </Page>
   );
 };
+
+/*
+ * Midlertidig løsning mens vi venter på at NextJS sin forbidden() funksjon kommer ut av "experimental" state
+ */
+const IngenTilgangFeil = ({ saksnummer }: { saksnummer?: string }) => (
+  <VStack align="center">
+    <Box marginBlock="8" padding="4">
+      <VStack gap="4" marginBlock="8">
+        <Heading level="2" size="large">
+          Mangler tilgang
+        </Heading>
+
+        {saksnummer ? (
+          <BodyShort>Du har ikke tilgang til sak {saksnummer}.</BodyShort>
+        ) : (
+          <BodyShort>Du har ikke tilgang til denne ressursen.</BodyShort>
+        )}
+
+        <Link href={`/`}>Gå tilbake til oppgavelisten</Link>
+      </VStack>
+    </Box>
+  </VStack>
+);
 
 export default Error;
