@@ -3,8 +3,8 @@
 import { BodyShort, Box, Heading, Link, Page, VStack } from '@navikt/ds-react';
 import { useParams } from 'next/navigation';
 
-const SakIkkeFunnet = () => {
-  const { saksId } = useParams<{ saksId: string }>();
+const IngenTilgangSak = () => {
+  const { saksnummer } = useParams<{ saksnummer: string }>();
 
   return (
     <Page>
@@ -12,12 +12,10 @@ const SakIkkeFunnet = () => {
         <Box marginBlock="8" padding="4">
           <VStack gap="4" marginBlock="8">
             <Heading level="2" size="large">
-              {saksId ? `Fant ikke sak med saksnummer '${saksId}'` : 'Fant ikke saken'}
+              Mangler tilgang
             </Heading>
 
-            <BodyShort textColor="subtle">
-              Dersom du mener dette er en feil kan du melde det i Porten med skjermbilde av denne siden.
-            </BodyShort>
+            <BodyShort>Du har ikke tilgang til sak {saksnummer}.</BodyShort>
 
             <Link href={`/`}>Gå tilbake til oppgavelisten</Link>
           </VStack>
@@ -27,4 +25,4 @@ const SakIkkeFunnet = () => {
   );
 };
 
-export default SakIkkeFunnet;
+export default IngenTilgangSak;

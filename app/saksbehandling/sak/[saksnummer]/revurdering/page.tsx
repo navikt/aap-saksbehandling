@@ -5,11 +5,11 @@ import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
 import { hentBrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { erAktivFørstegangsbehandling } from 'lib/utils/behandling';
 
-export default async function Page(props: { params: Promise<{ saksId: string }> }) {
+export default async function Page(props: { params: Promise<{ saksnummer: string }> }) {
   const params = await props.params;
   const [sak, personInfo, brukerInformasjon] = await Promise.all([
-    hentSak(params.saksId),
-    hentSakPersoninfo(params.saksId),
+    hentSak(params.saksnummer),
+    hentSakPersoninfo(params.saksnummer),
     hentBrukerInformasjon(),
   ]);
 

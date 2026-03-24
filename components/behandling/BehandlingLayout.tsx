@@ -1,6 +1,6 @@
 import { SWRConfig } from 'swr';
 import { IngenFlereOppgaverModalContextProvider } from 'context/saksbehandling/IngenFlereOppgaverModalContext';
-import styles from 'app/saksbehandling/sak/[saksId]/[behandlingsReferanse]/layout.module.css';
+import styles from 'app/saksbehandling/sak/[saksnummer]/[behandlingsReferanse]/layout.module.css';
 import { IngenFlereOppgaverModal } from 'components/ingenflereoppgavermodal/IngenFlereOppgaverModal';
 import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
 import { StegGruppeIndikatorAksel } from 'components/steggruppeindikator/StegGruppeIndikatorAksel';
@@ -30,12 +30,12 @@ import { visÅrsakTilVurdering } from './visÅrsakTilVurdering';
 import { unleashService } from 'lib/services/unleash/unleashService';
 
 interface Props {
-  saksId: string;
+  saksnummer: string;
   behandlingsReferanse: string;
   children: ReactNode;
 }
 
-export const BehandlingLayout = async ({ saksId, behandlingsReferanse, children }: Props) => {
+export const BehandlingLayout = async ({ saksnummer, behandlingsReferanse, children }: Props) => {
   const behandling = await hentBehandling(behandlingsReferanse);
 
   if (isError(behandling)) {
@@ -52,10 +52,10 @@ export const BehandlingLayout = async ({ saksId, behandlingsReferanse, children 
   const [oppgave, personInfo, brukerInformasjon, flytResponse, sak, roller, kabalKlageResultat, klageresultat] =
     await Promise.all([
       hentOppgave(behandlingsReferanse),
-      hentSakPersoninfo(saksId),
+      hentSakPersoninfo(saksnummer),
       hentBrukerInformasjon(),
       hentFlyt(behandlingsReferanse),
-      hentSak(saksId),
+      hentSak(saksnummer),
       hentRollerForBruker(),
       hentKabalKlageresultat(behandlingsReferanse),
       hentKlageresultat(behandlingsReferanse),

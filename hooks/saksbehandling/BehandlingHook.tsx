@@ -6,6 +6,6 @@ export const useBehandlingsReferanse = (): string => {
 };
 
 export const useSaksnummer = (): string => {
-  const { saksId } = useParams<{ saksId: string }>();
-  return saksId;
+  const { saksnummer } = useParams<{ saksnummer: string }>();
+  return saksnummer;
 };

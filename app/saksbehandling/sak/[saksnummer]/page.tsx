@@ -4,11 +4,11 @@ import { SakOversiktContainer } from 'components/saksoversikt/SakOversiktContain
 import { Suspense } from 'react';
 import { hentBrukerInformasjon } from 'lib/services/azure/azureUserService';
 
-const Page = async (props: { params: Promise<{ saksId: string }> }) => {
+const Page = async (props: { params: Promise<{ saksnummer: string }> }) => {
   const params = await props.params;
   const [sak, personInfo, innloggetBrukerInfo] = await Promise.all([
-    hentSak(params.saksId),
-    hentSakPersoninfo(params.saksId),
+    hentSak(params.saksnummer),
+    hentSakPersoninfo(params.saksnummer),
     hentBrukerInformasjon(),
   ]);
 

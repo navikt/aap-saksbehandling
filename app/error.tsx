@@ -12,7 +12,7 @@ interface Props {
 
 //500 Page
 const Error = ({ error }: Props) => {
-  const { saksId, behandlingsReferanse } = useParams<{ saksId?: string; behandlingsReferanse: string }>();
+  const { saksnummer, behandlingsReferanse } = useParams<{ saksnummer?: string; behandlingsReferanse: string }>();
   const pathname = usePathname();
 
   useEffect(() => {
@@ -23,14 +23,14 @@ const Error = ({ error }: Props) => {
         message: error.message,
         stack: error.stack,
         digest: error.digest,
-        saksnummer: saksId,
+        saksnummer: saksnummer,
         behandlingsReferanse,
         pathname,
       });
     } catch {
       // do nothing
     }
-  }, [error, saksId, behandlingsReferanse, pathname]);
+  }, [error, saksnummer, behandlingsReferanse, pathname]);
 
   return (
     <Page>
@@ -46,10 +46,10 @@ const Error = ({ error }: Props) => {
             </BodyShort>
 
             <HGrid columns={2} gap="2">
-              {saksId && (
+              {saksnummer && (
                 <>
                   <Label>Saksnummer:</Label>
-                  <BodyShort>{saksId}</BodyShort>
+                  <BodyShort>{saksnummer}</BodyShort>
                 </>
               )}
 
