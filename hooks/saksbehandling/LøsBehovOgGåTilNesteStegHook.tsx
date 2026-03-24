@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useRef, useState, useTransition } from 'react';
+import { useRef, useState, useTransition } from 'react';
 import {
   ServerSentEventData,
   ServerSentEventStatus,
@@ -25,6 +25,7 @@ import { Behovstype } from 'lib/utils/form';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import { hentTildeltStatusClient } from 'lib/oppgaveClientApi';
 import { isLocal } from 'lib/utils/environment';
+import { useOverstyrTildelingHook } from 'hooks/saksbehandling/OverstyrTildelingHook';
 
 export type LøsBehovOgGåTilNesteStegStatus = ServerSentEventStatus | undefined;
 
@@ -32,24 +33,27 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
   løsBehovOgGåTilNesteStegError?: ApiException;
   status: LøsBehovOgGåTilNesteStegStatus;
   isLoading: boolean;
-  løsBehovOgGåTilNesteSteg: (behov: LøsAvklaringsbehovPåBehandling, callback?: () => void, sjekkTildeltStatus?: boolean) => void;
-  løsPeriodisertBehovOgGåTilNesteSteg: (behov: LøsningerForPerioder, callback?: () => void, sjekkTildeltStatus?: boolean) => void;
-  visOverstyrTildelingModal: boolean;
-  setVisOverstyrTildelingModal: Dispatch<SetStateAction<boolean>>;
-  bekreftOgFortsett: () => void;
-  reservertAvNavn?: string;
+  løsBehovOgGåTilNesteSteg: (
+    behov: LøsAvklaringsbehovPåBehandling,
+    callback?: () => void,
+    sjekkTildeltStatus?: boolean
+  ) => void;
+  løsPeriodisertBehovOgGåTilNesteSteg: (
+    behov: LøsningerForPerioder,
+    callback?: () => void,
+    sjekkTildeltStatus?: boolean
+  ) => void;
 } {
   const params = useParams<{ aktivGruppe: string; behandlingsReferanse: string; saksId: string }>();
   const router = useRouter();
   const { refetchFlytClient } = useRequiredFlyt();
   const { setIsModalOpen } = useIngenFlereOppgaverModal();
+  const { setVisOverstyrModal, setCallback, setReservertAvNavn } = useOverstyrTildelingHook();
 
   const [status, setStatus] = useState<LøsBehovOgGåTilNesteStegStatus>();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<ApiException | undefined>();
   const [isPending, startTransition] = useTransition();
-  const [visOverstyrTildelingModal, setVisOverstyrTildelingModal] = useState(false);
-  const [reservertAvNavn, setReservertAvNavn] = useState<string>();
 
   const erLokal = isLocal();
   const sisteBehovRef = useRef<{
@@ -75,12 +79,13 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
           nyesteOppgavePåBehandling.data.tildeltSaksbehandlerIdent != null &&
           !nyesteOppgavePåBehandling.data.erTildeltInnloggetBruker
         ) {
-          setVisOverstyrTildelingModal(true);
+          setVisOverstyrModal(true);
           setReservertAvNavn(
             nyesteOppgavePåBehandling.data.tildeltSaksbehandlerNavn ??
               nyesteOppgavePåBehandling.data.tildeltSaksbehandlerIdent
           );
           setIsLoading(false);
+          setCallback(() => bekreftOgFortsett);
           sisteBehovRef.current = {
             behov,
             erPeriodisert,
@@ -247,12 +252,10 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
   return {
     isLoading: isLoading || isPending,
     status,
-    løsBehovOgGåTilNesteSteg: (behov, callback, skipReservasjonsjekk) => løsBehovOgGåTilNesteSteg(behov, false, callback, skipReservasjonsjekk),
-    løsPeriodisertBehovOgGåTilNesteSteg: (behov, callback, skipReservasjonsjekk) => løsBehovOgGåTilNesteSteg(behov, true, callback, skipReservasjonsjekk),
+    løsBehovOgGåTilNesteSteg: (behov, callback, skipReservasjonsjekk) =>
+      løsBehovOgGåTilNesteSteg(behov, false, callback, skipReservasjonsjekk),
+    løsPeriodisertBehovOgGåTilNesteSteg: (behov, callback, skipReservasjonsjekk) =>
+      løsBehovOgGåTilNesteSteg(behov, true, callback, skipReservasjonsjekk),
     løsBehovOgGåTilNesteStegError: error,
-    visOverstyrTildelingModal: visOverstyrTildelingModal,
-    setVisOverstyrTildelingModal: setVisOverstyrTildelingModal,
-    bekreftOgFortsett,
-    reservertAvNavn,
   };
 }

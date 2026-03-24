@@ -8,11 +8,10 @@ import { formaterDatoForFrontend, formaterDatoMedTidspunktForFrontend } from 'li
 import styles from 'components/vilkårskort/Vilkårskort.module.css';
 import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
 import { useFeatureFlag } from 'context/UnleashContext';
-import { Dispatch, FormEvent, ReactNode, SetStateAction } from 'react';
+import { FormEvent, ReactNode } from 'react';
 import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { ApiException } from 'lib/utils/api';
 import { VisningActions, VisningModus } from 'lib/types/visningTypes';
-import { OverstyrTildelingModal } from 'components/overstyrtildelingmodal/OverstyrTildelingModal';
 
 export interface VilkårsKortMedFormOgMellomlagringProps {
   heading: string;
@@ -35,10 +34,6 @@ export interface VilkårsKortMedFormOgMellomlagringProps {
   mellomlagretVurdering: MellomlagretVurdering | undefined;
   extraActions?: ReactNode;
   formReset: () => void;
-  bekreftOgFortsett?: () => void;
-  visOverstyrTildelingModal?: boolean;
-  setVisOverstyrTildelingModal?: Dispatch<SetStateAction<boolean>>;
-  reservertAvNavn?: string;
 }
 
 export const VilkårskortMedFormOgMellomlagringNyVisning = ({
@@ -62,10 +57,6 @@ export const VilkårskortMedFormOgMellomlagringNyVisning = ({
   visningActions,
   extraActions,
   formReset,
-  bekreftOgFortsett,
-  visOverstyrTildelingModal,
-  setVisOverstyrTildelingModal,
-  reservertAvNavn,
 }: VilkårsKortMedFormOgMellomlagringProps) => {
   const classNameBasertPåEnhet = vilkårTilhørerNavKontor ? styles.vilkårsKortNAV : styles.vilkårsKortNAY;
   const { flyt } = useRequiredFlyt();
@@ -75,7 +66,6 @@ export const VilkårskortMedFormOgMellomlagringNyVisning = ({
   const readOnly = visningModus === 'LÅST_MED_ENDRE' || visningModus === 'LÅST_UTEN_ENDRE';
 
   return (
-    <>
       <ExpansionCard
         aria-label={heading}
         className={erAktivtSteg ? classNameBasertPåEnhet : styles.vilkårsKort}
@@ -195,16 +185,6 @@ export const VilkårskortMedFormOgMellomlagringNyVisning = ({
           </form>
         </ExpansionCard.Content>
       </ExpansionCard>
-      {bekreftOgFortsett && visOverstyrTildelingModal != undefined && setVisOverstyrTildelingModal && (
-        <OverstyrTildelingModal
-          isOpen={visOverstyrTildelingModal}
-          onClose={() => setVisOverstyrTildelingModal(false)}
-          onConfirm={bekreftOgFortsett}
-          isLoading={isLoading}
-          reservertAvNavn={reservertAvNavn}
-        />
-      )}
-    </>
   );
 };
 

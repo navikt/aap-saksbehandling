@@ -61,10 +61,6 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, initialMe
     isLoading,
     status,
     løsBehovOgGåTilNesteStegError,
-    visOverstyrTildelingModal,
-    setVisOverstyrTildelingModal,
-    bekreftOgFortsett,
-    reservertAvNavn,
   } = useLøsBehovOgGåTilNesteSteg('VURDER_BISTANDSBEHOV');
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
@@ -140,10 +136,6 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, initialMe
       formReset={() => form.reset(mapVurderingerToBistandForm(grunnlag))}
       onLeggTilVurdering={() => append(emptyBistandVurderingForm())}
       errorList={errorList}
-      visOverstyrTildelingModal={visOverstyrTildelingModal}
-      setVisOverstyrTildelingModal={setVisOverstyrTildelingModal}
-      bekreftOgFortsett={bekreftOgFortsett}
-      reservertAvNavn={reservertAvNavn}
     >
       <VStack gap={'4'}>
         <Veiledning

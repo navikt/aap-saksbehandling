@@ -1,22 +1,19 @@
+'use client';
+
 import { BodyLong, Button, Modal } from '@navikt/ds-react';
 import styles from 'components/saksinfobanner/avbrytrevurderingmodal/AvbrytRevurderingModal.module.css';
+import { useOverstyrTildelingHook } from 'hooks/saksbehandling/OverstyrTildelingHook';
 
-interface Props {
-  isOpen: boolean;
-  onClose: () => void;
-  isLoading: boolean;
-  onConfirm?: () => void;
-  reservertAvNavn?: string;
-}
+export const OverstyrTildelingModal = () => {
+  const {visOverstyrModal, setVisOverstyrModal, reservertAvNavn, callback} = useOverstyrTildelingHook();
 
-export const OverstyrTildelingModal = ({ isOpen, onClose, isLoading, onConfirm, reservertAvNavn }: Props) => {
   return (
     <Modal
       header={{
         heading: 'Er du sikker på at du vil jobbe med denne oppgaven?',
       }}
-      open={isOpen}
-      onClose={onClose}
+      open={visOverstyrModal}
+      onClose={() => setVisOverstyrModal(false)}
       className={styles.modal}
     >
       <Modal.Body>
@@ -31,10 +28,9 @@ export const OverstyrTildelingModal = ({ isOpen, onClose, isLoading, onConfirm, 
           type={'button'}
           className={'fit-content'}
           onClick={async () => {
-            onConfirm && onConfirm();
-            onClose();
+            callback();
+            setVisOverstyrModal(false);
           }}
-          loading={isLoading}
         >
           Bekreft og fortsett
         </Button>
@@ -42,7 +38,7 @@ export const OverstyrTildelingModal = ({ isOpen, onClose, isLoading, onConfirm, 
           type="button"
           variant="secondary"
           onClick={() => {
-            onClose();
+            setVisOverstyrModal(false);
           }}
         >
           Avbryt

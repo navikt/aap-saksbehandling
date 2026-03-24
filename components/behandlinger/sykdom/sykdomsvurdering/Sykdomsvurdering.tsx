@@ -89,10 +89,6 @@ export const Sykdomsvurdering = ({
     isLoading,
     status,
     løsBehovOgGåTilNesteStegError,
-    visOverstyrTildelingModal,
-    setVisOverstyrTildelingModal,
-    bekreftOgFortsett,
-    reservertAvNavn,
   } = useLøsBehovOgGåTilNesteSteg('AVKLAR_SYKDOM');
 
   const { visningModus, visningActions, formReadOnly, erAktivUtenAvbryt } = useVilkårskortVisning(
@@ -183,10 +179,6 @@ export const Sykdomsvurdering = ({
       formReset={() => form.reset(mapGrunnlagTilDefaultvalues(grunnlag))}
       onLeggTilVurdering={() => append(emptySykdomsvurdering(utledDiagnoserForNyVurdering()))}
       errorList={errorList}
-      visOverstyrTildelingModal={visOverstyrTildelingModal}
-      setVisOverstyrTildelingModal={setVisOverstyrTildelingModal}
-      bekreftOgFortsett={bekreftOgFortsett}
-      reservertAvNavn={reservertAvNavn}
     >
       <VStack gap={'4'}>
         <BodyLong size={'small'}>
