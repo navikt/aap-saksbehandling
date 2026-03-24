@@ -2,12 +2,11 @@
 
 import { useBehandlingsReferanse, useSaksnummer } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { Behovstype } from 'lib/utils/form';
+import { Behovstype, mapBehovskodeTilBehovstype } from 'lib/utils/form';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
 import { Button, ErrorSummary, VStack } from '@navikt/ds-react';
 import { BekreftVurderingerOppfølgingGrunnlag } from 'lib/types/types';
-import { mapBehovskodeTilBehovstype } from 'lib/utils/oversettelser';
 import { byggVilkårskortLenke } from 'lib/utils/vilkårskort';
 import { useBekreftVurderingerGrunnlag } from 'hooks/saksbehandling/BekrefteVurderingerHook';
 
@@ -45,7 +44,7 @@ export const BekreftVurderingerOppfølging = ({ behandlingVersjon, readOnly, ini
                       vurdering.avklaringsbehovKode as Behovstype
                     )}
                   >
-                    {mapBehovskodeTilBehovstype(vurdering.avklaringsbehovKode)}
+                    {mapBehovskodeTilBehovstype(vurdering.avklaringsbehovKode as Behovstype)}
                   </ErrorSummary.Item>
                 ))}
               </ErrorSummary>
