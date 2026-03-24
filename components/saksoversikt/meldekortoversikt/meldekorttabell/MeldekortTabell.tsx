@@ -2,11 +2,11 @@ import { BodyShort, Button, Detail, Table, VStack } from '@navikt/ds-react';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { eachWeekOfInterval, getISOWeek } from 'date-fns';
 import { Dato } from 'lib/types/Dato';
-import { Dag, DagFraBackend, Meldekort } from '../meldekortTypes';
+import { DagFraBackend, Meldekort } from '../meldekortTypes';
 import { PencilIcon } from '@navikt/aksel-icons';
 import { RedigerMeldekortModal } from 'components/saksoversikt/meldekortoversikt/redigermeldekortmodal/RedigerMeldekortModal';
 import { useState } from 'react';
-import { replaceCommasWithDots } from 'lib/utils/string';
+import { FørteTimer } from 'components/saksoversikt/meldekortoversikt/meldekorttabell/førtetimer/FørteTimer';
 
 interface Props {
   meldekort: Meldekort[];
@@ -21,7 +21,6 @@ export const MeldekortTabell = ({ meldekort }: Props) => {
       <TableStyled>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell />
             <Table.HeaderCell textSize={'small'} colSpan={2}>
               Meldeperiode
             </Table.HeaderCell>
@@ -32,7 +31,7 @@ export const MeldekortTabell = ({ meldekort }: Props) => {
             <Table.HeaderCell textSize={'small'}>Levert dato</Table.HeaderCell>
             <Table.HeaderCell textSize={'small'}>Sist endret</Table.HeaderCell>
             <Table.HeaderCell textSize={'small'}>Endret av</Table.HeaderCell>
-            <Table.HeaderCell textSize={'small'}></Table.HeaderCell>
+            <Table.HeaderCell colSpan={2} />
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -41,9 +40,15 @@ export const MeldekortTabell = ({ meldekort }: Props) => {
             const tom = new Dato(m.meldeperiode.tom);
 
             const antallTimerArbeidet = hentTotaltAntallTimerArbeidet(m.dager);
+            const antallTimerArbeidetIProsent = regnUtProsentForTimerArbeidet(antallTimerArbeidet);
 
             return (
-              <Table.ExpandableRow key={index} content={'hello pello'}>
+              <Table.ExpandableRow
+                expandOnRowClick
+                key={index}
+                content={<FørteTimer meldekort={m} />}
+                togglePlacement={'right'}
+              >
                 <Table.HeaderCell textSize={'small'} colSpan={2} scope={'row'}>
                   <VStack gap={'2'}>
                     <BodyShort size={'small'}>{`Uke ${hentUkeNummerForPeriode(fom.dato, tom.dato)}`}</BodyShort>
@@ -52,7 +57,7 @@ export const MeldekortTabell = ({ meldekort }: Props) => {
                 </Table.HeaderCell>
                 <Table.DataCell textSize={'small'}>{antallTimerArbeidet}</Table.DataCell>
                 <Table.DataCell textSize={'small'} colSpan={3}>
-                  40%
+                  {antallTimerArbeidetIProsent} %
                 </Table.DataCell>
                 <Table.DataCell textSize={'small'}>{m?.levertDato}</Table.DataCell>
                 <Table.DataCell textSize={'small'}>{m?.sistEndret}</Table.DataCell>
@@ -77,61 +82,13 @@ export const MeldekortTabell = ({ meldekort }: Props) => {
   );
 };
 
-type UkeGrupper = {
-  mandag: DagFraBackend[];
-  tirsdag: DagFraBackend[];
-  onsdag: DagFraBackend[];
-  torsdag: DagFraBackend[];
-  fredag: DagFraBackend[];
-  lørdag: DagFraBackend[];
-  søndag: DagFraBackend[];
-};
+function regnUtProsentForTimerArbeidet(antallTimerArbeidet: number): number {
+  const antallTimerFor2Uker = 37.5 * 2;
+  return Math.round((antallTimerArbeidet / antallTimerFor2Uker) * 100);
+}
 
 function hentTotaltAntallTimerArbeidet(dager: DagFraBackend[]) {
   return dager.reduce((acc, curr) => acc + (curr.timerArbeidet ? curr.timerArbeidet : 0), 0);
-}
-
-function grupperEtterUkedag(dager: DagFraBackend[]): UkeGrupper {
-  return dager.reduce<UkeGrupper>(
-    (acc, dag) => {
-      const day = new Dato(dag.dato).dato.getDay();
-
-      switch (day) {
-        case 1:
-          acc.mandag.push(dag);
-          break;
-        case 2:
-          acc.tirsdag.push(dag);
-          break;
-        case 3:
-          acc.onsdag.push(dag);
-          break;
-        case 4:
-          acc.torsdag.push(dag);
-          break;
-        case 5:
-          acc.fredag.push(dag);
-          break;
-        case 6:
-          acc.lørdag.push(dag);
-          break;
-        case 0:
-          acc.søndag.push(dag);
-          break;
-      }
-
-      return acc;
-    },
-    {
-      mandag: [],
-      tirsdag: [],
-      onsdag: [],
-      torsdag: [],
-      fredag: [],
-      lørdag: [],
-      søndag: [],
-    }
-  );
 }
 
 export function hentUkeNummerForPeriode(fraDato: Date, tilDato: Date): string {

@@ -1,0 +1,16 @@
+.erutfylt {
+  background-color: var(--a-surface-selected);
+}
+
+.ikkeeksisterendefelt {
+  background-color: var(--a-surface-subtle);
+  opacity: 0.4;
+}
+
+.border {
+  border-right: 1px solid var(--a-border-subtle);
+}
+
+.dag {
+  padding: var(--a-spacing-4);
+}
