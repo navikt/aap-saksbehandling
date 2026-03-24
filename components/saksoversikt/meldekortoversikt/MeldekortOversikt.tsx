@@ -29,7 +29,7 @@ const meldekort2: Meldekort = {
 export const MeldekortOversikt = () => {
   return (
     <VStack gap={'4'}>
-      <Heading size="large">Meldekort</Heading>
+      <Heading size="medium">Meldekort</Heading>
       <MeldekortTabell meldekort={[meldekort1, meldekort2]} />
     </VStack>
   );
