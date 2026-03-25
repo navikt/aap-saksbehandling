@@ -19,7 +19,7 @@ import { useConfigForm } from 'components/form/FormHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
-import { format, parse, subDays } from 'date-fns';
+import { addDays, format, parse, subDays } from 'date-fns';
 import { useFieldArray } from 'react-hook-form';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { Dato } from 'lib/types/Dato';
@@ -99,8 +99,8 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
             : formaterDatoForBackend(parse(opphold.periode.fom, 'dd.MM.yyyy', new Date()));
 
           const tom = !nesteVurdering
-            ? // tom dato for siste vurdering skal alltid være siste dag i oppholdet
-              formaterDatoForBackend(parse(opphold.periode.tom, 'dd.MM.yyyy', new Date()))
+            ? // tom dato for siste vurdering skal alltid være siste dag i oppholdet + 1 dag
+              formaterDatoForBackend(addDays(parse(opphold.periode.tom, 'dd.MM.yyyy', new Date()), 1))
             : // tom skal være dagen før fom i neste vurdering
               formaterDatoForBackend(subDays(new Dato(nesteVurdering.periode.fom).dato, 1));
 
