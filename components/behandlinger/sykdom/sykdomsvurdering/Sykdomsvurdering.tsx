@@ -84,8 +84,12 @@ export const Sykdomsvurdering = ({
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
-  const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('AVKLAR_SYKDOM');
+  const {
+    løsPeriodisertBehovOgGåTilNesteSteg,
+    isLoading,
+    status,
+    løsBehovOgGåTilNesteStegError,
+  } = useLøsBehovOgGåTilNesteSteg('AVKLAR_SYKDOM');
 
   const { visningModus, visningActions, formReadOnly, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
