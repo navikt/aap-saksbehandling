@@ -25,6 +25,6 @@ export const mockedFlags: Flags = {
   VedtakslengdeAvklaringsbehov: true,
   automatiskMellomlagring: true,
   BekreftVurderingerOppfolging: true,
-  SjekkTildelingVedBekreft: true
+  SjekkTildelingVedBekreft: true,
   hentUforesoknadsdata: true,
 };
