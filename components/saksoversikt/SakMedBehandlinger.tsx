@@ -14,7 +14,6 @@ import {
   erAvsluttet,
   erAvsluttetFørstegangsbehandling,
   formatterÅrsakTilOpprettelseTilTekst,
-  kanRevurdereSak,
 } from 'lib/utils/behandling';
 import { mapTypeBehandlingTilTekst } from 'lib/utils/oversettelser';
 import { useState } from 'react';
@@ -71,7 +70,7 @@ export const SakMedBehandlinger = ({
     postmottakBehandlinger.filter((b) => !erAvsluttet(b.behandling) || visPostmottakBehandlinger)
   );
 
-  const kanRevurdere = kanRevurdereSak(behandlinger);
+  const kanRevurdere = !sak.søknadErTrukket;
 
   const kanRegistrerebrudd = sak.behandlinger.some((behandling) => erAvsluttetFørstegangsbehandling(behandling));
 
