@@ -2,19 +2,17 @@ import { BodyShort, Button, Detail, Table, VStack } from '@navikt/ds-react';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { eachWeekOfInterval, getISOWeek } from 'date-fns';
 import { Dato } from 'lib/types/Dato';
-import { DagFraBackend, Meldekort } from '../meldekortTypes';
 import { PencilIcon } from '@navikt/aksel-icons';
 import { RedigerMeldekortModal } from 'components/saksoversikt/meldekortoversikt/redigermeldekortmodal/RedigerMeldekortModal';
 import { useState } from 'react';
 import { FørteTimer } from 'components/saksoversikt/meldekortoversikt/meldekorttabell/førtetimer/FørteTimer';
+import { useMeldekort } from 'hooks/saksbehandling/MeldekortHook';
+import { DagDto, MeldeperiodeMedMeldekortDto } from 'lib/types/types';
 
-interface Props {
-  meldekort: Meldekort[];
-}
-
-export const MeldekortTabell = ({ meldekort }: Props) => {
+export const MeldekortTabell = () => {
+  const { alleMeldekort } = useMeldekort();
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedMeldekort, setSelectedMeldekort] = useState<Meldekort>();
+  const [selectedMeldekort, setSelectedMeldekort] = useState<MeldeperiodeMedMeldekortDto>();
 
   return (
     <>
@@ -35,18 +33,20 @@ export const MeldekortTabell = ({ meldekort }: Props) => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {meldekort.map((m, index) => {
-            const fom = new Dato(m.meldeperiode.fom);
-            const tom = new Dato(m.meldeperiode.tom);
+          {alleMeldekort?.map((meldekort, index) => {
+            const fom = new Dato(meldekort.meldeperiode.fom);
+            const tom = new Dato(meldekort.meldeperiode.tom);
 
-            const antallTimerArbeidet = hentTotaltAntallTimerArbeidet(m.dager);
-            const antallTimerArbeidetIProsent = regnUtProsentForTimerArbeidet(antallTimerArbeidet);
+            const antallTimerArbeidet = hentTotaltAntallTimerArbeidet(meldekort.meldekort?.dager);
+            const antallTimerArbeidetIProsent = antallTimerArbeidet
+              ? regnUtProsentForTimerArbeidet(antallTimerArbeidet)
+              : undefined;
 
             return (
               <Table.ExpandableRow
                 expandOnRowClick
                 key={index}
-                content={<FørteTimer meldekort={m} />}
+                content={<FørteTimer meldekort={meldekort} />}
                 togglePlacement={'right'}
               >
                 <Table.HeaderCell textSize={'small'} colSpan={2} scope={'row'}>
@@ -59,15 +59,15 @@ export const MeldekortTabell = ({ meldekort }: Props) => {
                 <Table.DataCell textSize={'small'} colSpan={3}>
                   {antallTimerArbeidetIProsent} %
                 </Table.DataCell>
-                <Table.DataCell textSize={'small'}>{m?.levertDato}</Table.DataCell>
-                <Table.DataCell textSize={'small'}>{m?.sistEndret}</Table.DataCell>
-                <Table.DataCell textSize={'small'}>{m.endretAv}</Table.DataCell>
+                <Table.DataCell textSize={'small'}>levert dato</Table.DataCell>
+                <Table.DataCell textSize={'small'}>sist endret dato</Table.DataCell>
+                <Table.DataCell textSize={'small'}>endret av</Table.DataCell>
                 <Table.DataCell textSize={'small'}>
                   <Button
                     variant={'tertiary-neutral'}
                     icon={<PencilIcon />}
                     onClick={() => {
-                      setSelectedMeldekort(m);
+                      setSelectedMeldekort(meldekort);
                       setIsOpen(true);
                     }}
                   />
@@ -87,8 +87,8 @@ function regnUtProsentForTimerArbeidet(antallTimerArbeidet: number): number {
   return Math.round((antallTimerArbeidet / antallTimerFor2Uker) * 100);
 }
 
-function hentTotaltAntallTimerArbeidet(dager: DagFraBackend[]) {
-  return dager.reduce((acc, curr) => acc + (curr.timerArbeidet ? curr.timerArbeidet : 0), 0);
+function hentTotaltAntallTimerArbeidet(dager?: DagDto[]) {
+  return dager?.reduce((acc, curr) => acc + (curr.timerArbeidet ? curr.timerArbeidet : 0), 0);
 }
 
 export function hentUkeNummerForPeriode(fraDato: Date, tilDato: Date): string {

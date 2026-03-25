@@ -1,4 +1,3 @@
-import { Meldekort } from 'components/saksoversikt/meldekortoversikt/meldekortTypes';
 import { Dato } from 'lib/types/Dato';
 import { eachDayOfInterval, format } from 'date-fns';
 import { nb } from 'date-fns/locale';
@@ -6,9 +5,10 @@ import { formaterDatoUtenÅrForFrontend } from 'components/saksoversikt/meldekor
 import { BodyShort, Detail, HStack, VStack } from '@navikt/ds-react';
 
 import styles from './FørteTimer.module.css';
+import { MeldeperiodeMedMeldekortDto } from 'lib/types/types';
 
 interface Props {
-  meldekort: Meldekort;
+  meldekort: MeldeperiodeMedMeldekortDto;
 }
 
 export const FørteTimer = ({ meldekort }: Props) => {
@@ -18,7 +18,7 @@ export const FørteTimer = ({ meldekort }: Props) => {
   });
 
   const dagerMedTimer = alleDagerIMeldeperioden.map((dato) => {
-    const dagFraBackend = meldekort.dager.find((dag) => dag.dato === format(dato, 'yyyy-MM-dd'));
+    const dagFraBackend = meldekort.meldekort?.dager.find((dag) => dag.dato === format(dato, 'yyyy-MM-dd'));
     return {
       dato,
       timerArbeidet: dagFraBackend?.timerArbeidet,

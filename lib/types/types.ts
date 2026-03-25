@@ -560,6 +560,14 @@ export type ArbeidsopptrappingLøsningDto =
 export type ForeløpigBehandlingsutfall =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.tidligerevurderinger.TidligereVurderingerDto'];
 
+export type MeldePerioderMedMEldekortResponse =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.MeldeperioderMedMeldekortResponse'];
+
+export type MeldeperiodeMedMeldekortDto =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.MeldeperiodeMedMeldekortDto'];
+
+export type DagDto = components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.DagDto'];
+
 export type BrevdataDto = components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto'];
 export type DelmalDto = components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto.Delmal'];
 export type ValgDto = components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto.Valg'];

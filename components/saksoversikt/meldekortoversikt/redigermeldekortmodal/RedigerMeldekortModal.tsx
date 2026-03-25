@@ -1,7 +1,7 @@
 import { Button, Dialog, VStack } from '@navikt/ds-react';
 import { useEffect } from 'react';
 import { FormProvider } from 'react-hook-form';
-import { Dag, Meldekort } from 'components/saksoversikt/meldekortoversikt/meldekortTypes';
+import { Dag } from 'components/saksoversikt/meldekortoversikt/meldekortTypes';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { UtfyllingKalender } from 'components/saksoversikt/meldekortoversikt/utfyllingkalender/UtfyllingKalender';
@@ -9,11 +9,12 @@ import { FormErrorSummary } from 'components/formerrorsummary/FormErrorSummary';
 import { hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import { hentUkeNummerForPeriode } from 'components/saksoversikt/meldekortoversikt/meldekorttabell/MeldekortTabell';
 import { Dato } from 'lib/types/Dato';
+import { MeldeperiodeMedMeldekortDto } from 'lib/types/types';
 
 interface Props {
   setIsOpen: (isOpen: boolean) => void;
   isOpen: boolean;
-  meldekort?: Meldekort;
+  meldekort?: MeldeperiodeMedMeldekortDto;
 }
 
 export interface RedigerMeldekortFormFields {
@@ -104,7 +105,7 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
   );
 };
 
-function getDefaultValuesForForm(meldekort?: Meldekort): RedigerMeldekortFormFields | undefined {
+function getDefaultValuesForForm(meldekort?: MeldeperiodeMedMeldekortDto): RedigerMeldekortFormFields | undefined {
   if (!meldekort) {
     return undefined;
   }
@@ -113,9 +114,10 @@ function getDefaultValuesForForm(meldekort?: Meldekort): RedigerMeldekortFormFie
     begrunnelse: '',
     årsak: '',
     meldedato: '',
-    dager: meldekort?.dager.map((dag) => ({
-      dato: dag.dato,
-      timerArbeidet: dag.timerArbeidet == null || dag.timerArbeidet === 0 ? '' : dag.timerArbeidet.toString(),
-    })),
+    dager:
+      meldekort?.meldekort?.dager.map((dag) => ({
+        dato: dag.dato,
+        timerArbeidet: dag.timerArbeidet == null || dag.timerArbeidet === 0 ? '' : dag.timerArbeidet.toString(),
+      })) || [],
   };
 }

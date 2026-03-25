@@ -2,6 +2,12 @@ import { Heading, VStack } from '@navikt/ds-react';
 import { MeldekortTabell } from 'components/saksoversikt/meldekortoversikt/meldekorttabell/MeldekortTabell';
 import { DagFraBackend, Meldekort } from 'components/saksoversikt/meldekortoversikt/meldekortTypes';
 import { formaterDatoForBackend } from 'lib/utils/date';
+import useSWR from 'swr';
+import { useParams } from 'next/navigation';
+import { useSaksnummer } from 'hooks/saksbehandling/BehandlingHook';
+import { clientHentAlleMeldekort } from 'lib/clientApi';
+import { isError } from 'lib/utils/api';
+import { useMeldekort } from 'hooks/saksbehandling/MeldekortHook';
 
 const meldekort1: Meldekort = {
   dager: generateTwoWeekPeriod(new Date('2026-03-16')),
