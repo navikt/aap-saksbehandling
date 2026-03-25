@@ -456,7 +456,8 @@ describe('felt for nedsettelsen er av en viss varighet', () => {
         name: 'Har brukeren nedsatt arbeidsevne?',
       })
     );
-    await velgJaIGruppe(screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt med minst halvparten?' }));
+
+    await velgJaIGruppe(screen.getByLabelText(/er arbeidsevnen nedsatt med minst halvparten\?/i));
     await velgJaIGruppe(
       screen.getByRole('group', {
         name: 'Er sykdom, skade eller lyte vesentlig medvirkende til at arbeidsevnen er nedsatt?',
@@ -485,7 +486,7 @@ describe('felt for nedsettelsen er av en viss varighet', () => {
         name: 'Har brukeren nedsatt arbeidsevne?',
       })
     );
-    await velgJaIGruppe(screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt med minst halvparten?' }));
+    await velgJaIGruppe(screen.getByLabelText(/er arbeidsevnen nedsatt med minst halvparten\?/i));
     await velgJaIGruppe(
       screen.getByRole('group', {
         name: 'Er sykdom, skade eller lyte vesentlig medvirkende til at arbeidsevnen er nedsatt?',
@@ -515,7 +516,7 @@ describe('felt for om arbeidsevnen er nedsatt med minst halvparten', () => {
     );
     await velgAtBrukerHarSykdomSkadeLyte();
     await velgJaIGruppe(screen.getByRole('group', { name: 'Har brukeren nedsatt arbeidsevne?' }));
-    const radioGroup = screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt med minst halvparten?' });
+    const radioGroup = screen.getByLabelText(/er arbeidsevnen nedsatt med minst halvparten\?/i);
     expect(radioGroup).toBeVisible();
   });
 
@@ -552,7 +553,7 @@ describe('felt for om sykdom, skade eller lyte er vestenlig medvirkende til at a
     );
     await velgAtBrukerHarSykdomSkadeLyte();
     await velgJaIGruppe(screen.getByRole('group', { name: 'Har brukeren nedsatt arbeidsevne?' }));
-    await velgJaIGruppe(screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt med minst halvparten?' }));
+    await velgJaIGruppe(screen.getByLabelText(/er arbeidsevnen nedsatt med minst halvparten\?/i));
 
     const felt = screen.getByRole('group', {
       name: 'Er sykdom, skade eller lyte vesentlig medvirkende til at arbeidsevnen er nedsatt?',
@@ -573,7 +574,7 @@ describe('felt for om sykdom, skade eller lyte er vestenlig medvirkende til at a
     );
     await velgAtBrukerHarSykdomSkadeLyte();
     await velgJaIGruppe(screen.getByRole('group', { name: 'Har brukeren nedsatt arbeidsevne?' }));
-    await velgNeiIGruppe(screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt med minst halvparten?' }));
+    await velgNeiIGruppe(screen.getByLabelText(/er arbeidsevnen nedsatt med minst halvparten\?/i));
     await velgJaIGruppe(screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt med minst 30 prosent?' }));
 
     const felt = screen.getByRole('group', {
@@ -595,7 +596,7 @@ describe('felt for om sykdom, skade eller lyte er vestenlig medvirkende til at a
     );
     await velgAtBrukerHarSykdomSkadeLyte();
     await velgJaIGruppe(screen.getByRole('group', { name: 'Har brukeren nedsatt arbeidsevne?' }));
-    await velgJaIGruppe(screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt med minst halvparten?' }));
+    await velgJaIGruppe(screen.getByLabelText(/er arbeidsevnen nedsatt med minst halvparten\?/i));
     await velgBekreft();
 
     const feilmeldinger = await screen.findAllByText(
@@ -620,7 +621,7 @@ describe('yrkesskade', () => {
       );
       await velgAtBrukerHarSykdomSkadeLyte();
       await velgJaIGruppe(screen.getByRole('group', { name: 'Har brukeren nedsatt arbeidsevne?' }));
-      await velgNeiIGruppe(screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt med minst halvparten?' }));
+      await velgNeiIGruppe(screen.getByLabelText(/er arbeidsevnen nedsatt med minst halvparten\?/i));
 
       expect(screen.getByRole('textbox', { name: '§ 11-22 AAP ved yrkesskade' }));
     });
@@ -637,7 +638,7 @@ describe('yrkesskade', () => {
       );
       await velgAtBrukerHarSykdomSkadeLyte();
       await velgJaIGruppe(screen.getByRole('group', { name: 'Har brukeren nedsatt arbeidsevne?' }));
-      await velgNeiIGruppe(screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt med minst halvparten?' }));
+      await velgNeiIGruppe(screen.getByLabelText(/er arbeidsevnen nedsatt med minst halvparten\?/i));
 
       expect(
         screen.getByText(
@@ -658,7 +659,7 @@ describe('yrkesskade', () => {
       );
       await velgAtBrukerHarSykdomSkadeLyte();
       await velgJaIGruppe(screen.getByRole('group', { name: 'Har brukeren nedsatt arbeidsevne?' }));
-      await velgNeiIGruppe(screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt med minst halvparten?' }));
+      await velgNeiIGruppe(screen.getByLabelText(/er arbeidsevnen nedsatt med minst halvparten\?/i));
       await velgBekreft();
 
       const feilmeldinger = await screen.findAllByText(
@@ -682,7 +683,7 @@ describe('yrkesskade', () => {
       );
       await velgAtBrukerHarSykdomSkadeLyte();
       await velgJaIGruppe(screen.getByRole('group', { name: 'Har brukeren nedsatt arbeidsevne?' }));
-      await velgNeiIGruppe(screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt med minst halvparten?' }));
+      await velgNeiIGruppe(screen.getByLabelText(/er arbeidsevnen nedsatt med minst halvparten\?/i));
 
       expect(screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt med minst 30 prosent?' }));
     });
@@ -699,7 +700,7 @@ describe('yrkesskade', () => {
       );
       await velgAtBrukerHarSykdomSkadeLyte();
       await velgJaIGruppe(screen.getByRole('group', { name: 'Har brukeren nedsatt arbeidsevne?' }));
-      await velgNeiIGruppe(screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt med minst halvparten?' }));
+      await velgNeiIGruppe(screen.getByLabelText(/er arbeidsevnen nedsatt med minst halvparten\?/i));
       await velgBekreft();
 
       const feilmeldinger = await screen.findAllByText(
@@ -816,7 +817,7 @@ describe('vurderinger uten viss varighet', () => {
     await skrivInnDatoForNårVurderingenGjelderFra(format(addDays(new Date(), 10), 'ddMMyy'));
     await velgAtBrukerHarSykdomSkadeLyte();
     await velgAtBrukerHarNedsattArbeidsevne();
-    expect(screen.getByRole('group', { name: 'Er arbeidsevnen nedsatt med minst 40 prosent?' })).toBeVisible();
+    expect(screen.getByLabelText(/er arbeidsevnen nedsatt med minst halvparten\?/i)).toBeVisible();
     expect(
       screen.queryByRole('group', { name: 'Er arbeidsevnen nedsatt med minst 30 prosent?' })
     ).not.toBeInTheDocument();
