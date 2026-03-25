@@ -56,8 +56,12 @@ export interface BistandVurderingForm extends VurderingMeta {
 
 export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, initialMellomlagretVurdering }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
-  const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('VURDER_BISTANDSBEHOV');
+  const {
+    løsPeriodisertBehovOgGåTilNesteSteg,
+    isLoading,
+    status,
+    løsBehovOgGåTilNesteStegError,
+  } = useLøsBehovOgGåTilNesteSteg('VURDER_BISTANDSBEHOV');
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 

@@ -8,6 +8,7 @@ import { TildelOppgaverContext } from 'context/oppgave/TildelOppgaverContext';
 import { FeatureFlagProvider } from 'context/UnleashContext';
 import { mockedFlags } from 'lib/services/unleash/unleashToggles';
 import { InnloggetBrukerContextProvider } from 'context/InnloggetBrukerContext';
+import { OverstyrTildelingContextProvider } from 'context/saksbehandling/OverstyrTildelingContext';
 
 afterEach(() => {
   cleanup();
@@ -20,17 +21,19 @@ export function customRender(ui: ReactElement) {
   return render(
     <FeatureFlagProvider flags={mockedFlags}>
       <IngenFlereOppgaverModalContextProvider>
-        <SakContextProvider
-          sak={{
-            saksnummer: '12345',
-            ident: '12345678910',
-            opprettetTidspunkt: today,
-            periode: { fom: today, tom: tomorrow },
-            virkningsTidspunkt: today,
-          }}
-        >
-          {ui}
-        </SakContextProvider>
+        <OverstyrTildelingContextProvider>
+          <SakContextProvider
+            sak={{
+              saksnummer: '12345',
+              ident: '12345678910',
+              opprettetTidspunkt: today,
+              periode: { fom: today, tom: tomorrow },
+              virkningsTidspunkt: today,
+            }}
+          >
+            {ui}
+          </SakContextProvider>
+        </OverstyrTildelingContextProvider>
       </IngenFlereOppgaverModalContextProvider>
     </FeatureFlagProvider>
   );
@@ -40,17 +43,19 @@ export function customRenderWithSøknadstidspunkt(ui: ReactElement, søknadstids
   render(
     <FeatureFlagProvider flags={mockedFlags}>
       <IngenFlereOppgaverModalContextProvider>
-        <SakContextProvider
-          sak={{
-            saksnummer: '12345',
-            ident: '12345678910',
-            opprettetTidspunkt: today,
-            periode: { fom: søknadstidspunkt, tom: tomorrow },
-            virkningsTidspunkt: today,
-          }}
-        >
-          {ui}
-        </SakContextProvider>
+        <OverstyrTildelingContextProvider>
+          <SakContextProvider
+            sak={{
+              saksnummer: '12345',
+              ident: '12345678910',
+              opprettetTidspunkt: today,
+              periode: { fom: søknadstidspunkt, tom: tomorrow },
+              virkningsTidspunkt: today,
+            }}
+          >
+            {ui}
+          </SakContextProvider>
+        </OverstyrTildelingContextProvider>
       </IngenFlereOppgaverModalContextProvider>
     </FeatureFlagProvider>
   );
