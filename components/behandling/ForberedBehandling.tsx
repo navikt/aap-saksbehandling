@@ -6,11 +6,10 @@ import { logInfo } from 'lib/serverutlis/logger';
 
 interface Props {
   behandlingsReferanse: string;
-  saksnummer: string;
   aktivGruppe: string;
 }
 
-export const ForberedBehandling = async ({ behandlingsReferanse, saksnummer, aktivGruppe }: Props) => {
+export const ForberedBehandling = async ({ behandlingsReferanse, aktivGruppe }: Props) => {
   const result = await forberedBehandlingOgVentPåProsessering(behandlingsReferanse);
 
   if (result?.status === 'FEILET') {
@@ -25,11 +24,5 @@ export const ForberedBehandling = async ({ behandlingsReferanse, saksnummer, akt
     // TODO bør vi vise en "Forsøk på nytt"-knapp i stedet når disse tilfellene oppstår? Nå vil behandlingssiden vises i readonly modus
   }
 
-  return (
-    <BehandlingPage
-      behandlingsReferanse={behandlingsReferanse}
-      saksnummer={saksnummer}
-      aktivGruppe={aktivGruppe as StegGruppe}
-    />
-  );
+  return <BehandlingPage behandlingsReferanse={behandlingsReferanse} aktivGruppe={aktivGruppe as StegGruppe} />;
 };
