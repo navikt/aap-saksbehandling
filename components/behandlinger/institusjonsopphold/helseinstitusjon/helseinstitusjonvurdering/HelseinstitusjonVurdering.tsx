@@ -9,7 +9,8 @@ import {
   erReduksjonUtIFraFormFields,
   lagReduksjonBeskrivelseNyttOpphold,
   lagReduksjonsBeskrivelse,
-  validerDatoErInnenforOpphold,
+  validerDatoErInnenforOppholdIkkeReduksjon,
+  validerDatoErInnenforOppholdReduksjon,
   validerDatoForStoppAvReduksjon,
   validerErIKronologiskRekkeFølge,
 } from 'lib/utils/institusjonopphold';
@@ -129,7 +130,7 @@ export const Helseinstitusjonsvurdering = ({
               validate: {
                 gyldigDato: (value) => validerDato(value as string),
                 validerInnenforOpphold: (value) =>
-                  validerDatoErInnenforOpphold(value as string, opphold.oppholdFra, opphold.avsluttetDato),
+                  validerDatoErInnenforOppholdReduksjon(value as string, opphold.oppholdFra, opphold.avsluttetDato),
                 validerKronologiskRekkefølge: (value) =>
                   validerErIKronologiskRekkeFølge(value as string, forrigeVurdering?.periode.fom),
                 validerReduksjonsdato: (value) => {
@@ -163,7 +164,7 @@ export const Helseinstitusjonsvurdering = ({
             validate: {
               gyldigDato: (value) => validerDato(value as string),
               validerInnenforOpphold: (value) =>
-                validerDatoErInnenforOpphold(value as string, opphold.oppholdFra, opphold.avsluttetDato),
+                validerDatoErInnenforOppholdIkkeReduksjon(value as string, opphold.oppholdFra, opphold.avsluttetDato),
               validerKronologiskRekkefølge: (value) =>
                 validerErIKronologiskRekkeFølge(value as string, forrigeVurdering?.periode.fom),
             },
