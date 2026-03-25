@@ -1,7 +1,7 @@
 import { BodyShort, Box, Button, HStack, Label, VStack } from '@navikt/ds-react';
 import { Buildings3Icon } from '@navikt/aksel-icons';
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
-import { HelseinstitusjonGrunnlag, HelseInstiusjonVurdering } from 'lib/types/types';
+import { HelseInstiusjonVurdering, Institusjonsopphold } from 'lib/types/types';
 import React from 'react';
 import styles from './HelseinstitusjonOppholdGruppe.module.css';
 import {
@@ -30,7 +30,7 @@ interface Props {
   form: UseFormReturn<HelseinstitusjonsFormFields>;
   oppholdIndex: number;
   readonly: boolean;
-  opphold: HelseinstitusjonGrunnlag['opphold'][0];
+  opphold: Institusjonsopphold;
   tidligereVurderinger?: HelseInstiusjonVurdering[] | null;
   accordionsSignal: AccordionsSignal;
   erAktivUtenAvbryt: boolean;
@@ -68,7 +68,6 @@ export const HelseinstitusjonOppholdGruppe = ({
       borderColor="border-subtle"
       className={styles.oppholdGruppe}
     >
-      {/* OPPHOLDET */}
       <Box background="surface-subtle" padding="3" className={styles.oppholdHeader}>
         <HStack gap="4" align="center">
           <Buildings3Icon title={`Helseinstitusjon${opphold.kildeinstitusjon}`} fontSize="1.5rem" aria-hidden />
@@ -86,7 +85,6 @@ export const HelseinstitusjonOppholdGruppe = ({
         </HStack>
       </Box>
 
-      {/* VURDERINGER */}
       <Box padding="4">
         <VStack gap="0">
           {tidligereVurderinger?.map((vurdering) => {
