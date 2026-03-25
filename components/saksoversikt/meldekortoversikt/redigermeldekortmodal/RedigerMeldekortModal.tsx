@@ -9,7 +9,8 @@ import { FormErrorSummary } from 'components/formerrorsummary/FormErrorSummary';
 import { hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import { hentUkeNummerForPeriode } from 'components/saksoversikt/meldekortoversikt/meldekorttabell/MeldekortTabell';
 import { Dato } from 'lib/types/Dato';
-import { MeldeperiodeMedMeldekortDto } from 'lib/types/types';
+import { MeldeperiodeMedMeldekortDto, Periode } from 'lib/types/types';
+import { formaterDatoForBackend } from 'lib/utils/date';
 
 interface Props {
   setIsOpen: (isOpen: boolean) => void;
@@ -80,7 +81,7 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
             <form
               id={'endre-meldekort'}
               onSubmit={form.handleSubmit(() => {
-                // TODO POST endring her, hvis OK setIsOpen(false)
+                // TODO POST endring her
                 setIsOpen(false);
               })}
             >
@@ -118,6 +119,18 @@ function getDefaultValuesForForm(meldekort?: MeldeperiodeMedMeldekortDto): Redig
       meldekort?.meldekort?.dager.map((dag) => ({
         dato: dag.dato,
         timerArbeidet: dag.timerArbeidet == null || dag.timerArbeidet === 0 ? '' : dag.timerArbeidet.toString(),
-      })) || [],
+      })) || genererUkedagerFraMeldeperiode(meldekort.meldeperiode),
   };
+}
+
+function genererUkedagerFraMeldeperiode(meldeperiode: Periode): Dag[] {
+  return Array.from({ length: 14 }).map((_, i) => {
+    const currentDate = new Dato(meldeperiode.fom).dato;
+    currentDate.setDate(currentDate.getDate() + i);
+
+    return {
+      dato: formaterDatoForBackend(currentDate),
+      timerArbeidet: '',
+    };
+  });
 }

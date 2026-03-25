@@ -1,57 +1,11 @@
 import { Heading, VStack } from '@navikt/ds-react';
 import { MeldekortTabell } from 'components/saksoversikt/meldekortoversikt/meldekorttabell/MeldekortTabell';
-import { DagFraBackend, Meldekort } from 'components/saksoversikt/meldekortoversikt/meldekortTypes';
-import { formaterDatoForBackend } from 'lib/utils/date';
-import useSWR from 'swr';
-import { useParams } from 'next/navigation';
-import { useSaksnummer } from 'hooks/saksbehandling/BehandlingHook';
-import { clientHentAlleMeldekort } from 'lib/clientApi';
-import { isError } from 'lib/utils/api';
-import { useMeldekort } from 'hooks/saksbehandling/MeldekortHook';
-
-const meldekort1: Meldekort = {
-  dager: generateTwoWeekPeriod(new Date('2026-03-16')),
-  fraværTotaltIMeldeperiode: 0,
-  meldekortId: 'hello-pello',
-  meldeperiode: {
-    fom: '2026-03-16',
-    tom: '2026-03-29',
-  },
-};
-
-const meldekort2: Meldekort = {
-  dager: generateTwoWeekPeriod(new Date('2026-03-30')),
-  fraværTotaltIMeldeperiode: 0,
-  meldekortId: 'hello-fello',
-  meldeperiode: {
-    fom: '2026-03-30',
-    tom: '2026-04-12',
-  },
-  endretAv: 'Saksbehandler',
-  sistEndret: '2026-03-24',
-  levertDato: '2026-04-13',
-};
 
 export const MeldekortOversikt = () => {
   return (
     <VStack gap={'4'}>
       <Heading size="medium">Meldekort</Heading>
-      <MeldekortTabell meldekort={[meldekort1, meldekort2]} />
+      <MeldekortTabell />
     </VStack>
   );
 };
-
-// Kun for test
-function generateTwoWeekPeriod(startMonday: Date): DagFraBackend[] {
-  return Array.from({ length: 14 }).map((_, i) => {
-    const currentDate = new Date(startMonday);
-    currentDate.setDate(currentDate.getDate() + i);
-
-    const isZero = Math.random() < 0.75;
-
-    return {
-      dato: formaterDatoForBackend(currentDate),
-      timerArbeidet: isZero ? 0 : Math.floor(Math.random() * 9),
-    };
-  });
-}
