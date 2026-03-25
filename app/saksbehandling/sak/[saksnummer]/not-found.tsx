@@ -4,7 +4,7 @@ import { BodyShort, Box, Heading, Link, Page, VStack } from '@navikt/ds-react';
 import { useParams } from 'next/navigation';
 
 const SakIkkeFunnet = () => {
-  const { saksId } = useParams<{ saksId: string }>();
+  const { saksnummer } = useParams<{ saksnummer: string }>();
 
   return (
     <Page>
@@ -12,7 +12,7 @@ const SakIkkeFunnet = () => {
         <Box marginBlock="8" padding="4">
           <VStack gap="4" marginBlock="8">
             <Heading level="2" size="large">
-              {saksId ? `Fant ikke sak med saksnummer '${saksId}'` : 'Fant ikke saken'}
+              {saksnummer ? `Fant ikke sak med saksnummer '${saksnummer}'` : 'Fant ikke saken'}
             </Heading>
 
             <BodyShort textColor="subtle">

@@ -45,7 +45,7 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
     sjekkTildeltStatus?: boolean
   ) => void;
 } {
-  const params = useParams<{ aktivGruppe: string; behandlingsReferanse: string; saksId: string }>();
+  const params = useParams<{ aktivGruppe: string; behandlingsReferanse: string; saksnummer: string }>();
   const router = useRouter();
   const { refetchFlytClient } = useRequiredFlyt();
   const { setIsModalOpen } = useIngenFlereOppgaverModal();
@@ -218,7 +218,7 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
         } else {
           if (skalBytteGruppe || skalBytteSteg) {
             router.push(
-              `/saksbehandling/sak/${params.saksId}/${params.behandlingsReferanse}/${aktivVisningGruppe}/#${aktivtVisningSteg}`
+              `/saksbehandling/sak/${params.saksnummer}/${params.behandlingsReferanse}/${aktivVisningGruppe}/#${aktivtVisningSteg}`
             );
           }
         }
