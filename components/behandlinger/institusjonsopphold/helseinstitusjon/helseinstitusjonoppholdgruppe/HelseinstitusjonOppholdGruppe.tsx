@@ -94,7 +94,7 @@ export const HelseinstitusjonOppholdGruppe = ({
               <TidligereVurderingExpandableCard
                 key={vurdering.periode.fom}
                 fom={new Dato(vurdering.periode.fom).dato}
-                tom={new Dato(vurdering.periode.tom).dato}
+                tom={!datoErUendeligSlutt(vurdering.periode.tom) ? new Dato(vurdering.periode.tom).dato : undefined}
                 foersteNyePeriodeFraDato={foersteNyePeriode == null ? null : parseDatoFraDatePicker(foersteNyePeriode)}
                 vurderingStatus={getErReduksjonEllerIkke(erReduksjonUtIFraVurdering(vurdering))}
                 vurdertAv={vurdering.vurdertAv}
