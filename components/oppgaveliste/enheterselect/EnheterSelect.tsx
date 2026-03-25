@@ -20,7 +20,7 @@ export const EnheterSelect = ({ enheter, aktiveEnheter, setAktiveEnheter, classN
   );
 
   const filteredOptions = useMemo(
-    () => enheterOptions.filter((option) => option.label.includes(value)),
+    () => enheterOptions.filter((option) => option.label.toLowerCase().includes(value.toLowerCase())),
     [value, enheterOptions]
   );
   const onToggleSelected = (option: string, isSelected: boolean) => {
