@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { AvklarSak } from 'components/postmottak/avklarsak/AvklarSak';
 import { FinnSakGrunnlag } from 'lib/types/postmottakTypes';
 import { PostmottakFlytResponse, setPostmottakMockFlytResponse } from 'vitestSetup';
+import { render } from 'lib/test/CustomRender';
 
 describe('Avklar sak', () => {
   const grunnlag: FinnSakGrunnlag = {

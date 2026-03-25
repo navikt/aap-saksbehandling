@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { OverleveringGrunnlag } from 'lib/types/postmottakTypes';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { Overlevering } from './Overlevering';
+import { render } from 'lib/test/CustomRender';
 
 describe('Overlevering', () => {
   const grunnlag: OverleveringGrunnlag = {
