@@ -3,7 +3,7 @@
 import { Box, Page, Tabs } from '@navikt/ds-react';
 import { SakMedBehandlinger } from 'components/saksoversikt/SakMedBehandlinger';
 import { RettighetsinfoDto, SaksInfo } from 'lib/types/types';
-import { FileTextIcon, PersonIcon } from '@navikt/aksel-icons';
+import { FileTextIcon, PersonIcon, TasklistIcon } from '@navikt/aksel-icons';
 import { DokumentOversikt } from 'components/saksoversikt/dokumentoversikt/DokumentOversikt';
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -12,6 +12,7 @@ import { AktivitetspliktTrekk } from 'components/saksoversikt/aktivitetsplikttre
 enum Tab {
   OVERSIKT = 'OVERSIKT',
   DOKUMENTER = 'DOKUMENTER',
+  MELDEKORT = 'MELDEKORT',
   TREKK = 'TREKK',
 }
 
@@ -41,6 +42,7 @@ export const SakOversiktContainer = ({
           <Tabs.List>
             <Tabs.Tab label="Oversikt" value={Tab.OVERSIKT} icon={<PersonIcon />} />
             <Tabs.Tab label="Dokumenter" value={Tab.DOKUMENTER} icon={<FileTextIcon />} />
+            <Tabs.Tab label="Meldekort" value={Tab.MELDEKORT} icon={<TasklistIcon />} />
             <Tabs.Tab label="Aktivitetsplikt 11-9 trekk" value={Tab.TREKK} icon={<FileTextIcon />} />
           </Tabs.List>
 
@@ -56,6 +58,11 @@ export const SakOversiktContainer = ({
             <Tabs.Panel value={Tab.DOKUMENTER}>
               <DokumentOversikt sak={sak} />
             </Tabs.Panel>
+
+            <Tabs.Panel value={Tab.MELDEKORT}>
+              <MeldekortOversikt />
+            </Tabs.Panel>
+
             <Tabs.Panel value={Tab.TREKK}>
               <AktivitetspliktTrekk sak={sak} />
             </Tabs.Panel>
