@@ -1,7 +1,7 @@
 import { Button, Dialog, VStack } from '@navikt/ds-react';
 import { useEffect } from 'react';
 import { FormProvider } from 'react-hook-form';
-import { Dag } from 'components/saksoversikt/meldekortoversikt/meldekortTypes';
+
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { UtfyllingKalender } from 'components/saksoversikt/meldekortoversikt/utfyllingkalender/UtfyllingKalender';
@@ -23,6 +23,11 @@ export interface RedigerMeldekortFormFields {
   årsak: string;
   meldedato: string;
   dager: Dag[];
+}
+
+interface Dag {
+  dato: string;
+  timerArbeidet: string;
 }
 
 export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) => {
