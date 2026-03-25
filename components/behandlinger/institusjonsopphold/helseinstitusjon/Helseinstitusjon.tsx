@@ -11,7 +11,7 @@ import {
 } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 
-import { DATO_FORMATER, formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
+import { DATO_FORMATER, erUendeligSlutt, formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 
 import React, { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
@@ -99,8 +99,10 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
             : formaterDatoForBackend(parse(opphold.periode.fom, 'dd.MM.yyyy', new Date()));
 
           const tom = !nesteVurdering
-            ? // tom dato for siste vurdering skal alltid være siste dag i oppholdet + 1 dag
-              formaterDatoForBackend(addDays(parse(opphold.periode.tom, 'dd.MM.yyyy', new Date()), 1))
+            ? // tom dato for siste vurdering skal alltid være siste dag i oppholdet, hvis ikke uendelig slutt +1 dag
+              erUendeligSlutt(opphold.periode.tom)
+              ? formaterDatoForBackend(parse(opphold.periode.tom, 'dd.MM.yyyy', new Date()))
+              : formaterDatoForBackend(addDays(parse(opphold.periode.tom, 'dd.MM.yyyy', new Date()), 1))
             : // tom skal være dagen før fom i neste vurdering
               formaterDatoForBackend(subDays(new Dato(nesteVurdering.periode.fom).dato, 1));
 
