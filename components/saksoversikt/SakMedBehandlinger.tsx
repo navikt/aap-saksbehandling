@@ -1,7 +1,7 @@
 'use client';
 
-import { Alert, Button, Chips, Heading, HStack, Table, VStack } from '@navikt/ds-react';
-import { SaksInfo } from 'lib/types/types';
+import { Alert, BodyShort, Button, Chips, Heading, HStack, Table, VStack } from '@navikt/ds-react';
+import { RettighetsinfoDto, SaksInfo, Vurderingsbehov } from 'lib/types/types';
 import { capitalize } from 'lodash';
 import { SakDevTools } from 'components/saksoversikt/SakDevTools';
 import { useRouter } from 'next/navigation';
@@ -14,21 +14,44 @@ import {
   erAvsluttet,
   erAvsluttetFørstegangsbehandling,
   formatterÅrsakTilOpprettelseTilTekst,
-  kanRevurdereSak,
 } from 'lib/utils/behandling';
 import { mapTypeBehandlingTilTekst } from 'lib/utils/oversettelser';
 import { useState } from 'react';
 import { BehandlingsflytEllerPostmottakBehandling } from './types';
 import { usePostmottakBehandlinger } from 'hooks/postmottak/PostmottakBehandlingerHook';
 import { useHentOppgaverForBehandlinger } from 'hooks/oppgave/OppgaverPåSakHook';
+import { Dato } from 'lib/types/Dato';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 const lokalDevToolsForBehandlingOgSak = isLocal();
+
+/**
+ * Slår sammen duplikater i vurderingsbehov og legger til en teller for hvor mange ganger hvert behov forekommer.
+ * Eksempel: ["MELDEKORT", "MELDEKORT", "MELDEKORT", "SØKNAD"] vises som 'Meldekort (3), Søknad'
+ **/
+function formaterVurderingsbehovMedTeller(behov: Vurderingsbehov[]): string {
+  const teller = behov.reduce<Record<string, number>>((acc, b) => {
+    acc[b] = (acc[b] ?? 0) + 1;
+    return acc;
+  }, {});
+
+  return Object.entries(teller)
+    .map(([b, antall]) =>
+      antall > 1
+        ? `${formaterVurderingsbehov(b as Vurderingsbehov)} (${antall})`
+        : formaterVurderingsbehov(b as Vurderingsbehov)
+    )
+    .join(', ');
+}
+
 export const SakMedBehandlinger = ({
   sak,
   innloggetBrukerIdent,
+  rettighetsinfo,
 }: {
   sak: SaksInfo;
   innloggetBrukerIdent: string | undefined;
+  rettighetsinfo: RettighetsinfoDto | null;
 }) => {
   const router = useRouter();
 
@@ -51,7 +74,7 @@ export const SakMedBehandlinger = ({
     postmottakBehandlinger.filter((b) => !erAvsluttet(b.behandling) || visPostmottakBehandlinger)
   );
 
-  const kanRevurdere = kanRevurdereSak(behandlinger);
+  const kanRevurdere = !sak.søknadErTrukket;
 
   const kanRegistrerebrudd = sak.behandlinger.some((behandling) => erAvsluttetFørstegangsbehandling(behandling));
 
@@ -59,6 +82,7 @@ export const SakMedBehandlinger = ({
 
   const oppgaverPerBehandling = useHentOppgaverForBehandlinger(åpne.map((b) => b.behandling.referanse));
   const avsluttede = alleBehandlinger?.filter((b) => erAvsluttet(b.behandling));
+  const visSisteDagMedRett = useFeatureFlag('VisSisteDagMedRett');
 
   function hentTildeling(referanse: string) {
     const oppgaveInfo = oppgaverPerBehandling.get(referanse);
@@ -68,47 +92,52 @@ export const SakMedBehandlinger = ({
 
   return (
     <VStack gap="8">
-      <HStack justify="space-between">
-        <Heading size="large">Sak {sak.saksnummer}</Heading>
-        <HStack gap="4">
-          <Button
-            variant="secondary"
-            size="small"
-            onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/klage`)}
-          >
-            Opprett klage
-          </Button>
-          {kanRegistrerebrudd && (
+      <VStack>
+        <HStack justify="space-between">
+          <Heading size="large">Sak {sak.saksnummer}</Heading>
+          <HStack gap="4">
             <Button
               variant="secondary"
               size="small"
-              onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/aktivitet`)}
+              onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/klage`)}
             >
-              Vurder aktivitetsplikt
+              Opprett klage
             </Button>
-          )}
+            {kanRegistrerebrudd && (
+              <Button
+                variant="secondary"
+                size="small"
+                onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/aktivitet`)}
+              >
+                Vurder aktivitetsplikt
+              </Button>
+            )}
 
-          {kanRevurdere && (
-            <Button
-              variant="secondary"
-              size="small"
-              onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/revurdering`)}
-            >
-              Opprett {erAktivFørstegangsbehandling(sak.behandlinger) ? 'vurdering' : 'revurdering'}
-            </Button>
-          )}
+            {kanRevurdere && (
+              <Button
+                variant="secondary"
+                size="small"
+                onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/revurdering`)}
+              >
+                Opprett {erAktivFørstegangsbehandling(sak.behandlinger) ? 'vurdering' : 'revurdering'}
+              </Button>
+            )}
 
-          {kanRevurdere && (
-            <Button
-              variant="secondary"
-              size="small"
-              onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/oppfolging`)}
-            >
-              Opprett oppfølgingsoppgave
-            </Button>
-          )}
+            {kanRevurdere && (
+              <Button
+                variant="secondary"
+                size="small"
+                onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/oppfolging`)}
+              >
+                Opprett oppfølgingsoppgave
+              </Button>
+            )}
+          </HStack>
         </HStack>
-      </HStack>
+        {visSisteDagMedRett && rettighetsinfo?.sisteDagMedRett && (
+          <BodyShort>{`Siste dag med rett: ${new Dato(rettighetsinfo.sisteDagMedRett).formaterForFrontend()}`}</BodyShort>
+        )}
+      </VStack>
       <VStack gap="4">
         <Heading size="xsmall">Behandlinger</Heading>
         {feilmelding && <Alert variant={'error'}>{feilmelding}</Alert>}
@@ -153,7 +182,7 @@ export const SakMedBehandlinger = ({
               <Table.DataCell>{capitalize(behandling.behandling.status)}</Table.DataCell>
               <Table.DataCell>
                 {behandling.kilde === 'BEHANDLINGSFLYT'
-                  ? behandling.behandling.vurderingsbehov.map((behov) => formaterVurderingsbehov(behov)).join(', ')
+                  ? formaterVurderingsbehovMedTeller(behandling.behandling.vurderingsbehov as Vurderingsbehov[])
                   : null}
               </Table.DataCell>
               <Table.DataCell>

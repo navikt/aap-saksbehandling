@@ -31,15 +31,16 @@ import { OppholdskravStegGruppe } from 'components/behandlinger/oppholdskrav/Opp
 import { Aktivitetsplikt11_9 } from 'components/behandlinger/aktivitetsplikt/11-9/Aktivitetsplikt11_9';
 import { LovvalgPeriodisert } from 'components/behandlinger/lovvalg/LovvalgPeriodisert';
 import { PeriodisertForutgåendeMedlemskap } from 'components/behandlinger/forutgåendemedlemskap/PeriodisertForutgåendeMedlemskap';
+import { Vedtakslengde } from 'components/behandlinger/vedtakslengde/Vedtakslengde';
+import { unleashService } from 'lib/services/unleash/unleashService';
 
 interface Props {
   behandlingsReferanse: string;
-  saksnummer: string;
   aktivGruppe: StegGruppe;
   className: string;
 }
 
-export const OppgaveKolonne = async ({ behandlingsReferanse, saksnummer, aktivGruppe, className }: Props) => (
+export const OppgaveKolonne = async ({ behandlingsReferanse, aktivGruppe, className }: Props) => (
   <section className={className}>
     {aktivGruppe === 'START_BEHANDLING' && <StartBehandling behandlingsReferanse={behandlingsReferanse} />}
     {aktivGruppe === 'SØKNAD' && <Søknad behandlingsReferanse={behandlingsReferanse} />}
@@ -64,7 +65,10 @@ export const OppgaveKolonne = async ({ behandlingsReferanse, saksnummer, aktivGr
     )}
     {aktivGruppe === 'OPPHOLDSKRAV' && <OppholdskravStegGruppe behandlingsreferanse={behandlingsReferanse} />}
     {aktivGruppe === 'GRUNNLAG' && <Grunnlag behandlingsReferanse={behandlingsReferanse} />}
-    {aktivGruppe === 'UNDERVEIS' && <Underveis behandlingsreferanse={behandlingsReferanse} saksnummer={saksnummer} />}
+    {unleashService.isEnabled('VedtakslengdeAvklaringsbehov') && aktivGruppe === 'VEDTAKSLENGDE' && (
+      <Vedtakslengde behandlingsreferanse={behandlingsReferanse} />
+    )}
+    {aktivGruppe === 'UNDERVEIS' && <Underveis behandlingsreferanse={behandlingsReferanse} />}
     {aktivGruppe === 'SAMORDNING' && <Samordning behandlingsreferanse={behandlingsReferanse} />}
     {aktivGruppe === 'ET_ANNET_STED' && <Institusjonsopphold behandlingsreferanse={behandlingsReferanse} />}
     {aktivGruppe === 'BARNETILLEGG' && <Barnetillegg behandlingsreferanse={behandlingsReferanse} />}

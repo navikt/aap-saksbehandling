@@ -1,33 +1,21 @@
 import { describe, expect, test } from 'vitest';
-import { statistikkQueryparams } from './request';
+import { mineOppgaverQueryParams } from './request';
+import {
+  PathsMineOppgaverGetParametersQuerySortby,
+  PathsMineOppgaverGetParametersQuerySortorder,
+} from '@navikt/aap-oppgave-typescript-types';
 
-describe('statistikkQueryParams', () => {
+describe('mineOppgaverQueryParams', () => {
   test('tomt', () => {
-    const url = statistikkQueryparams({ behandlingstyper: [] });
+    const url = mineOppgaverQueryParams({});
     expect(url).to.equal('');
   });
-  test('behandlingstyper', () => {
-    const url = statistikkQueryparams({
-      behandlingstyper: ['Førstegangsbehandling', 'Revurdering', 'Tilbakekreving', 'Klage'],
+  test('kunpåvent, sortby og sortorder', () => {
+    const url = mineOppgaverQueryParams({
+      kunPaaVent: true,
+      sortby: PathsMineOppgaverGetParametersQuerySortby.PERSONIDENT,
+      sortorder: PathsMineOppgaverGetParametersQuerySortorder.ASC,
     });
-    expect(url).to.equal(
-      'behandlingstyper=F%C3%B8rstegangsbehandling&behandlingstyper=Revurdering&behandlingstyper=Tilbakekreving&behandlingstyper=Klage'
-    );
-  });
-  test('behandlingstyper og antallDager', () => {
-    const url = statistikkQueryparams({
-      behandlingstyper: ['Revurdering', 'Klage'],
-      antallDager: 10,
-    });
-    expect(url).to.equal('behandlingstyper=Revurdering&behandlingstyper=Klage&antallDager=10');
-  });
-  test('antallBøtter, bøttestørrelse, enhet og behandlingstype', () => {
-    const url = statistikkQueryparams({
-      behandlingstyper: ['Klage'],
-      antallBøtter: 20,
-      bøtteStørrelse: 1,
-      enhet: 'UKE',
-    });
-    expect(url).to.equal('behandlingstyper=Klage&antallB%C3%B8tter=20&b%C3%B8tteSt%C3%B8rrelse=1&enhet=UKE');
+    expect(url).to.equal('kunPaaVent=true&sortby=PERSONIDENT&sortorder=ASC');
   });
 });

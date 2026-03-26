@@ -2,33 +2,37 @@ import { ValuePair } from 'components/form/FormField';
 import type { Vurderingsbehov, VurderingsbehovIntern } from '../types/types';
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
 
-export const vurderingsbehovOptions = (): ValuePair<Vurderingsbehov>[] => [
-  // TODO fjerner denne inntil det er avklart om denne skal brukes { label: 'Helhetlig vurdering', value: 'HELHETLIG_VURDERING' },
-  { label: '§ 22-13 syvende ledd', value: 'VURDER_RETTIGHETSPERIODE' },
-  { label: 'Lovvalg og medlemskap', value: 'LOVVALG_OG_MEDLEMSKAP' },
-  { label: '§ 11-14 Student', value: 'REVURDER_STUDENT' },
-  { label: '§§ 11-5 og 11-6 Sykdom, arbeidsevne og behov for bistand', value: 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND' },
-  { label: '§ 11-22 Yrkesskade', value: 'REVURDER_YRKESSKADE' },
-  { label: '§ 11-13 Sykepengeerstatning', value: 'REVURDER_SYKEPENGEERSTATNING' },
-  { label: '§ 11-19 Beregningstidspunkt', value: 'REVURDER_BEREGNING' },
-  { label: 'Manuell inntekt', value: 'REVURDER_MANUELL_INNTEKT' },
-  { label: '§ 11-2 Forutgående medlemskap', value: 'FORUTGAENDE_MEDLEMSKAP' },
-  { label: '§ 11-3 Oppholdskrav', value: 'OPPHOLDSKRAV' },
-  { label: '§ 11-20 Barnetillegg', value: 'BARNETILLEGG' },
-  { label: 'Dødsfall barn', value: 'DØDSFALL_BARN' },
-  { label: '§ 11-25 Institusjonsopphold', value: 'INSTITUSJONSOPPHOLD' },
-  { label: '§§ 11-27 og 11-28 Folketrygdytelser', value: 'REVURDER_SAMORDNING_ANDRE_FOLKETRYGDYTELSER' },
-  { label: '§ 11-28 Samordning med delvis uføre', value: 'REVURDER_SAMORDNING_UFØRE' },
-  { label: '§ 11-10 Overstyr perioder uten overholdt meldeplikt', value: 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN' },
-  { label: '§ 11-15 Etablering av egen virksomhet', value: 'ETABLERING_EGEN_VIRKSOMHET' },
-  { label: 'Fradrag ved andre statlige ytelser', value: 'REVURDER_SAMORDNING_ANDRE_STATLIGE_YTELSER' },
-  {
-    label: '§ 11-24 Reduksjon av AAP på grunn av ytelse fra arbeidsgiver',
-    value: 'REVURDER_SAMORDNING_ARBEIDSGIVER',
-  },
-  { label: '§ 11-29 Refusjonskrav tjenestepensjonsordning', value: 'REVURDER_SAMORDNING_TJENESTEPENSJON' },
-  { label: 'Dødsfall bruker', value: 'DØDSFALL_BRUKER' },
-];
+export const vurderingsbehovOptions = (): ValuePair<Vurderingsbehov>[] => {
+  const behov: Vurderingsbehov[] = [
+    // TODO fjerner denne inntil det er avklart om denne skal brukes { label: 'Helhetlig vurdering', value: 'HELHETLIG_VURDERING' },
+    'VURDER_RETTIGHETSPERIODE',
+    'LOVVALG_OG_MEDLEMSKAP',
+    'REVURDER_STUDENT',
+    'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND',
+    'REVURDER_YRKESSKADE',
+    'REVURDER_SYKEPENGEERSTATNING',
+    'REVURDER_BEREGNING',
+    'REVURDER_MANUELL_INNTEKT',
+    'FORUTGAENDE_MEDLEMSKAP',
+    'BARNETILLEGG',
+    'DØDSFALL_BARN',
+    'INSTITUSJONSOPPHOLD',
+    'REVURDER_SAMORDNING_ANDRE_FOLKETRYGDYTELSER',
+    'REVURDER_SAMORDNING_UFØRE',
+    'REVURDER_MELDEPLIKT_RIMELIG_GRUNN',
+    'ETABLERING_EGEN_VIRKSOMHET',
+    'REVURDER_SAMORDNING_ANDRE_STATLIGE_YTELSER',
+    'REVURDER_SAMORDNING_ARBEIDSGIVER',
+    'REVURDER_SAMORDNING_TJENESTEPENSJON',
+    'DØDSFALL_BRUKER',
+    'REVURDER_SAMORDNING_BARNEPENSJON',
+  ];
+
+  return behov.map((behov) => ({
+    value: behov,
+    label: formaterVurderingsbehov(behov),
+  }));
+};
 
 export const alleVurderingsbehovOptions: ValuePair<Vurderingsbehov | VurderingsbehovIntern>[] = [
   { value: 'SØKNAD', label: formaterVurderingsbehov('MOTTATT_SØKNAD') },

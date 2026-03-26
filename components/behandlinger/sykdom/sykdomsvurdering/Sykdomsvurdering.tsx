@@ -84,20 +84,21 @@ export const Sykdomsvurdering = ({
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
-  const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('AVKLAR_SYKDOM');
-
-  const { slettMellomlagring, lagreMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
-    useMellomlagring(Behovstype.AVKLAR_SYKDOM_KODE, initialMellomlagretVurdering);
+  const {
+    løsPeriodisertBehovOgGåTilNesteSteg,
+    isLoading,
+    status,
+    løsBehovOgGåTilNesteStegError,
+  } = useLøsBehovOgGåTilNesteSteg('AVKLAR_SYKDOM');
 
   const { visningModus, visningActions, formReadOnly, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'AVKLAR_SYKDOM',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
-  const defaultValues: SykdomsvurderingerForm = mellomlagretVurdering
-    ? parseOgMigrerMellomlagretData(mellomlagretVurdering.data)
+  const defaultValues: SykdomsvurderingerForm = initialMellomlagretVurdering
+    ? parseOgMigrerMellomlagretData(initialMellomlagretVurdering.data)
     : mapGrunnlagTilDefaultvalues(grunnlag);
 
   const form = useForm<SykdomsvurderingerForm>({ defaultValues });
@@ -106,6 +107,9 @@ export const Sykdomsvurdering = ({
     remove,
     append,
   } = useFieldArray({ name: 'vurderinger', control: form.control });
+
+  const { slettMellomlagring, lagreMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
+    useMellomlagring(Behovstype.AVKLAR_SYKDOM_KODE, initialMellomlagretVurdering, form);
 
   const førsteDatoSomKanVurderes =
     grunnlag.kanVurderes[0]?.fom != null ? parseISO(grunnlag.kanVurderes[0].fom) : new Date();

@@ -6,13 +6,16 @@ import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { isSuccess } from 'lib/utils/api';
 import { MellomlagretVurdering } from 'lib/types/types';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { debounce } from 'lodash';
-import { UseFormSubscribe } from 'react-hook-form';
+import { debounce, isEqual } from 'lodash';
+import { UseFormReturn } from 'react-hook-form';
+import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
+import { useBekreftVurderingerGrunnlag } from 'hooks/saksbehandling/BekrefteVurderingerHook';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 export function useMellomlagring<T extends object>(
   behovstype: Behovstype,
   initialMellomlagring: MellomlagretVurdering | undefined,
-  subscribe?: UseFormSubscribe<T>
+  form: UseFormReturn<T>
 ): {
   lagreMellomlagring: (vurdering: object) => void;
   slettMellomlagring: (callback?: () => void) => void;
@@ -20,6 +23,10 @@ export function useMellomlagring<T extends object>(
   nullstillMellomlagretVurdering: () => void;
 } {
   const behandlingsReferanse = useBehandlingsReferanse();
+  const { flyt } = useRequiredFlyt();
+  const { refetchBekreftVurderingerGrunnlagClient } = useBekreftVurderingerGrunnlag();
+  const automatiskMellomlagringFeatureFlag = useFeatureFlag('automatiskMellomlagring');
+
   const [mellomlagretVurdering, setMellomlagretVurdering] = useState<MellomlagretVurdering | undefined>(
     initialMellomlagring
   );
@@ -34,30 +41,60 @@ export function useMellomlagring<T extends object>(
 
       if (isSuccess(res)) {
         setMellomlagretVurdering(res.data.mellomlagretVurdering);
+
+        if (flyt.aktivtSteg === 'BEKREFT_VURDERINGER_OPPFØLGING') {
+          refetchBekreftVurderingerGrunnlagClient();
+        }
       }
     },
-    [behovstype, behandlingsReferanse]
+    [behovstype, behandlingsReferanse, flyt.aktivtSteg, refetchBekreftVurderingerGrunnlagClient]
   );
 
-  const debouncedLagreMellomlagring = useMemo(() => debounce(lagreMellomlagring, 1000), [lagreMellomlagring]);
+  const debouncedLagreMellomlagring = useMemo(() => debounce(lagreMellomlagring, 2000), [lagreMellomlagring]);
+
+  const isSubmitting = form.formState.isSubmitting;
+
+  // Vi må avbryte lagring når bruker løser behov
+  useEffect(() => {
+    if (!automatiskMellomlagringFeatureFlag) return;
+    if (isSubmitting) {
+      debouncedLagreMellomlagring.cancel();
+    }
+  }, [isSubmitting, debouncedLagreMellomlagring, automatiskMellomlagringFeatureFlag]);
 
   useEffect(() => {
-    if (!subscribe) return;
-    const callback = subscribe({
+    if (!automatiskMellomlagringFeatureFlag) return;
+
+    let previousValues: T | undefined;
+
+    const unsubscribe = form.subscribe({
       formState: {
         values: true,
         isDirty: true,
       },
       callback: ({ values, isDirty }) => {
-        if (!isDirty) return;
-        debouncedLagreMellomlagring(values);
+        /**
+         * Hindrer unødvendig autosave:
+         * - Sammenligner med defaultValues for å sjekke om brukeren faktisk har gjort endringer (RHF sin isDirty er ikke alltid pålitelig).
+         * - Sammenligner med previousValues for å unngå å lagre samme data flere ganger når RHF trigges uten reelle endringer.
+         */
+        const erForskjellig = !isEqual(values, form.formState.defaultValues) && !isEqual(values, previousValues);
+
+        if (erForskjellig && isDirty) {
+          previousValues = values;
+          debouncedLagreMellomlagring(values);
+        }
       },
     });
 
-    return () => callback();
-  }, [subscribe, debouncedLagreMellomlagring]);
+    return () => {
+      debouncedLagreMellomlagring.cancel();
+      unsubscribe();
+    };
+  }, [form, debouncedLagreMellomlagring, automatiskMellomlagringFeatureFlag]);
 
   async function slettMellomlagring(callback?: () => void) {
+    debouncedLagreMellomlagring.cancel();
     const res = await clientSlettMellomlagring({
       behandlingsreferanse: behandlingsReferanse,
       behovstype: behovstype,
@@ -65,6 +102,11 @@ export function useMellomlagring<T extends object>(
 
     if (isSuccess(res)) {
       setMellomlagretVurdering(undefined);
+
+      if (flyt.aktivtSteg === 'BEKREFT_VURDERINGER_OPPFØLGING') {
+        refetchBekreftVurderingerGrunnlagClient();
+      }
+
       if (callback) {
         callback();
       }

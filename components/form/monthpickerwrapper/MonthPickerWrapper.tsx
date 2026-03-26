@@ -45,7 +45,6 @@ export function MonthPickerWrapper<FormFieldValues extends FieldValues>({
     onMonthChange: (date) => date && field.onChange(formatDateToLocaleDateOrEmptyString(date)),
     defaultSelected: field.value ? new Date(field.value) : undefined,
     onValidate: (val) => {
-      console.log('val', val);
       if (!val.isValidMonth) {
         form.setError(name, { message: 'Ugyldig datoformat' });
       } else {

@@ -32,8 +32,6 @@ export const SykestipendVurdering = ({
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('SAMORDNING_SYKESTIPEND');
 
-  const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
-    useMellomlagring(Behovstype.AVKLAR_SAMORDNING_SYKESTIPEND_KODE, initialMellomlagretVurdering);
   const harSvartJaISøknad = grunnlag.sykeStipendSvarFraSøknad
     ? 'Ja'
     : grunnlag.sykeStipendSvarFraSøknad === false
@@ -43,7 +41,7 @@ export const SykestipendVurdering = ({
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
     'SAMORDNING_SYKESTIPEND',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const defaultValue: SykestipendFormFields = initialMellomlagretVurdering
@@ -65,6 +63,9 @@ export const SykestipendVurdering = ({
     },
     { readOnly: formReadOnly }
   );
+
+  const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
+    useMellomlagring(Behovstype.AVKLAR_SAMORDNING_SYKESTIPEND_KODE, initialMellomlagretVurdering, form);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit(async (data) =>

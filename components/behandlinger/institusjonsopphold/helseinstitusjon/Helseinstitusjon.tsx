@@ -41,6 +41,7 @@ export interface HelseinstitusjonsFormFields {
 export interface OppholdMedVurderinger {
   oppholdId: string;
   periode: Periode;
+  tidligsteReduksjonsdato?: string | null;
   vurderinger: OppholdVurdering[];
 }
 
@@ -60,15 +61,12 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('DU_ER_ET_ANNET_STED');
 
-  const { lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
-    useMellomlagring(Behovstype.AVKLAR_HELSEINSTITUSJON, initialMellomlagretVurdering);
-
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
   const { visningActions, formReadOnly, visningModus, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'DU_ER_ET_ANNET_STED',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
@@ -86,6 +84,9 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
     control: form.control,
     name: 'helseinstitusjonsvurderinger',
   });
+
+  const { lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
+    useMellomlagring(Behovstype.AVKLAR_HELSEINSTITUSJON, initialMellomlagretVurdering, form);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
@@ -234,6 +235,7 @@ function mapVurderingToDraftFormFields(
           fom: formaterDatoForFrontend(opphold.oppholdFra),
           tom: formaterDatoForFrontendMedStøtteForUendeligSlutt(opphold.avsluttetDato),
         },
+        tidligsteReduksjonsdato: opphold.tidligsteReduksjonsdato,
         vurderinger: harTidligereVurderingerOgIngenNåværendeVurderinger ? [] : vurderinger,
       };
     }),

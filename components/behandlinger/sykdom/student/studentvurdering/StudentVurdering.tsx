@@ -76,15 +76,6 @@ export const StudentVurdering = ({
 }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.AVKLAR_STUDENT_KODE, initialMellomlagretVurdering);
-
-  const { visningModus, visningActions, formReadOnly, erAktivUtenAvbryt } = useVilkårskortVisning(
-    readOnly,
-    'AVKLAR_STUDENT',
-    mellomlagretVurdering
-  );
-
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
   const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, løsBehovOgGåTilNesteStegError, status } =
@@ -97,6 +88,15 @@ export const StudentVurdering = ({
   const form = useForm<StudentFormFields>({ defaultValues, shouldUnregister: true });
 
   const { fields: nyeVurderinger, remove, append } = useFieldArray({ control: form.control, name: 'vurderinger' });
+
+  const { visningModus, visningActions, formReadOnly, erAktivUtenAvbryt } = useVilkårskortVisning(
+    readOnly,
+    'AVKLAR_STUDENT',
+    initialMellomlagretVurdering
+  );
+
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
+    useMellomlagring(Behovstype.AVKLAR_STUDENT_KODE, initialMellomlagretVurdering, form);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {

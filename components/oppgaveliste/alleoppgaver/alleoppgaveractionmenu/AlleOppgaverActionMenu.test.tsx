@@ -10,7 +10,7 @@ import { screen } from '@testing-library/react';
 import { AlleOppgaverActionMenu } from 'components/oppgaveliste/alleoppgaver/alleoppgaveractionmenu/AlleOppgaverActionMenu';
 
 const oppgave: Oppgave = {
-  behandlingRef: 'sdgad',
+  behandlingRef: 'sdgasd',
   vurderingsbehov: [],
   avklaringsbehovKode: '',
   behandlingOpprettet: '',

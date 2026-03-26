@@ -6,10 +6,11 @@ import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { PlusIcon } from '@navikt/aksel-icons';
 import { ErrorList } from 'lib/utils/formerrors';
 import { FormErrorSummary } from 'components/formerrorsummary/FormErrorSummary';
-import { FormEvent, ReactNode } from 'react';
+import { Dispatch, FormEvent, ReactNode, SetStateAction } from 'react';
 import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { ApiException } from 'lib/utils/api';
 import { VisningActions, VisningModus } from 'lib/types/visningTypes';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 interface VilkårsKortPeriodisertProps {
   heading: string;
@@ -28,8 +29,12 @@ interface VilkårsKortPeriodisertProps {
   mellomlagretVurdering: MellomlagretVurdering | undefined;
   formReset: () => void;
   vurdertAutomatisk?: boolean;
-  onLeggTilVurdering: () => void;
+  onLeggTilVurdering?: () => void;
   errorList: ErrorList;
+  bekreftOgFortsett?: () => void;
+  visOverstyrTildelingModal?: boolean;
+  setVisOverstyrTildelingModal?: Dispatch<SetStateAction<boolean>>;
+  reservertAvNavn?: string;
 }
 
 export const VilkårskortPeriodisert = ({
@@ -52,6 +57,7 @@ export const VilkårskortPeriodisert = ({
   formReset,
   errorList,
 }: Omit<VilkårsKortPeriodisertProps, 'vurdertAvAnsatt' | 'kvalitetssikretAv'>) => {
+  const automatiskMellomlagring = useFeatureFlag('automatiskMellomlagring');
   const classNameBasertPåEnhet = vilkårTilhørerNavKontor ? styles.vilkårsKortNAV : styles.vilkårsKortNAY;
   const erAktivtSteg = visningModus === 'AKTIV_UTEN_AVBRYT' || visningModus === 'AKTIV_MED_AVBRYT';
 
@@ -99,7 +105,8 @@ export const VilkårskortPeriodisert = ({
                           Legg til ny vurdering
                         </Button>
                       )}
-                      {onLagreMellomLagringClick && (
+
+                      {!automatiskMellomlagring && onLagreMellomLagringClick && (
                         <Button type="button" variant="tertiary" onClick={onLagreMellomLagringClick}>
                           Lagre utkast
                         </Button>
@@ -117,6 +124,7 @@ export const VilkårskortPeriodisert = ({
                           onClick={() => {
                             visningActions.avbrytEndringClick();
                             formReset && formReset();
+                            onDeleteMellomlagringClick && mellomlagretVurdering && onDeleteMellomlagringClick();
                           }}
                         >
                           Avbryt
@@ -127,7 +135,7 @@ export const VilkårskortPeriodisert = ({
                           Legg til ny vurdering
                         </Button>
                       )}
-                      {onLagreMellomLagringClick && (
+                      {!automatiskMellomlagring && onLagreMellomLagringClick && (
                         <Button type="button" variant="tertiary" onClick={onLagreMellomLagringClick}>
                           Lagre utkast
                         </Button>

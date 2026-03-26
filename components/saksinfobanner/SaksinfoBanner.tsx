@@ -1,14 +1,7 @@
 'use client';
 
 import { BodyShort, CopyButton, HStack, Label, Link, Tag } from '@navikt/ds-react';
-import {
-  DetaljertBehandling,
-  FlytGruppe,
-  FlytVisning,
-  SakPersoninfo,
-  SaksInfo as SaksInfoType,
-  TypeBehandling,
-} from 'lib/types/types';
+import { DetaljertBehandling, FlytGruppe, FlytVisning, SakPersoninfo, SaksInfo as SaksInfoType } from 'lib/types/types';
 import { useState } from 'react';
 import { ChevronRightIcon } from '@navikt/aksel-icons';
 
@@ -23,14 +16,10 @@ import { SvarFraBehandler } from 'components/saksinfobanner/svarfrabehandler/Sva
 import { Oppgave } from 'lib/types/oppgaveTypes';
 import { MarkeringInfoboks } from 'components/markeringinfoboks/MarkeringInfoboks';
 import { ArenaStatus } from 'components/arenastatus/ArenaStatus';
-import { formaterDatoForFrontend, sorterEtterNyesteDato, stringToDate } from 'lib/utils/date';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 import { ReturStatus } from 'components/returstatus/ReturStatus';
-import { useFeatureFlag } from 'context/UnleashContext';
-import { isSuccess } from 'lib/utils/api';
-import { clientHentRettighetsdata } from 'lib/clientApi';
-import useSWR from 'swr';
 import { SaksmenyDropdown } from 'components/saksinfobanner/SaksmenyDropdown';
-import { UtløptVentefristBoks } from 'components/oppgaveliste/utløptventefristboks/UtløptVentefristBoks';
+import { UtløptVentefristBoks } from '../oppgaveliste/utløptventefristboks/UtløptVentefristBoks';
 
 interface Props {
   personInformasjon: SakPersoninfo;
@@ -59,10 +48,6 @@ export const SaksinfoBanner = ({
   const erReservertAvInnloggetBruker = brukerInformasjon?.NAVident === oppgave?.reservertAv;
 
   const adressebeskyttelser = oppgave ? utledAdressebeskyttelse(oppgave) : [];
-  const isVisRettigheterForVedtakEnabled = useFeatureFlag('VisRettigheterForVedtak'); // TODO AAP-1709 Fjerne feature toggle etter verifisering i dev
-  const rettighetsdata = useSWR(isVisRettigheterForVedtakEnabled ? `/api/sak/${sak.saksnummer}/rettighet` : null, () =>
-    clientHentRettighetsdata(sak.saksnummer)
-  ).data;
 
   const hentOppgaveStatus = (): OppgaveStatusType | undefined => {
     if (visning?.visVentekort) {
@@ -87,32 +72,8 @@ export const SaksinfoBanner = ({
     }
   };
 
-  const hentMaksdato = (): string | null | undefined => {
-    if (isVisRettigheterForVedtakEnabled && isSuccess(rettighetsdata)) {
-      const ytelsesbehandlingTyper: TypeBehandling[] = ['Førstegangsbehandling', 'Revurdering'];
-
-      const gjeldendeVedtak = sak.behandlinger
-        .filter((behandling) => {
-          const behandlingstype = behandling?.typeBehandling;
-          return (
-            behandlingstype && ytelsesbehandlingTyper.includes(behandlingstype) && behandling.status === 'AVSLUTTET'
-          );
-        })
-        .sort((b1, b2) => sorterEtterNyesteDato(b1.opprettet, b2.opprettet))[0];
-
-      const gjeldendeRettighet = rettighetsdata.data.find(
-        (rettighet) =>
-          stringToDate(rettighet.startDato)?.toDateString() === new Date(gjeldendeVedtak?.opprettet).toDateString()
-      );
-
-      return gjeldendeRettighet?.maksDato;
-    }
-    return undefined;
-  };
-
   const oppgaveStatus = hentOppgaveStatus();
   const oppgaveTildelingStatus = hentOppgaveTildeling();
-  const maksdato = isVisRettigheterForVedtakEnabled ? hentMaksdato() : undefined;
 
   return (
     <div className={styles.saksinfobanner}>
@@ -153,13 +114,6 @@ export const SaksinfoBanner = ({
 
       {behandling && (
         <HStack>
-          {maksdato && (
-            <div className={styles.oppgavestatus}>
-              <Tag className={styles.maksdatoTag} variant={'info'} size={'small'}>
-                {`Maksdato: ${formaterDatoForFrontend(maksdato)}`}
-              </Tag>
-            </div>
-          )}
           {adressebeskyttelser?.map((adressebeskyttelse) => (
             <div key={adressebeskyttelse} className={styles.oppgavestatus}>
               <AdressebeskyttelseStatus adressebeskyttelsesGrad={adressebeskyttelse} />

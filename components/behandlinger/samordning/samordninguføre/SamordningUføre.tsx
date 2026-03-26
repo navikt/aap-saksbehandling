@@ -39,13 +39,10 @@ export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly, initia
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('SAMORDNING_UFØRE');
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.AVKLAR_SAMORDNING_UFORE, initialMellomlagretVurdering);
-
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
     'SAMORDNING_UFØRE',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
@@ -67,6 +64,9 @@ export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly, initia
     },
     { readOnly: formReadOnly }
   );
+
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
+    useMellomlagring(Behovstype.AVKLAR_SAMORDNING_UFORE, initialMellomlagretVurdering, form);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     form.handleSubmit(async (data) =>

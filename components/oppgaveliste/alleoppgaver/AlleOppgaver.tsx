@@ -12,23 +12,25 @@ import { queryParamsArray } from 'lib/utils/request';
 import { hentKøerForEnheterClient } from 'lib/oppgaveClientApi';
 import { useLagreAktivKø } from 'hooks/oppgave/aktivkøHook';
 import { useConfigForm } from 'components/form/FormHook';
-import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaverny/MineOppgaverNy';
+import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
 import { oppgaveBehandlingstyper, OppgaveStatuser } from 'lib/utils/behandlingstyper';
 import { alleVurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
 import { oppgaveAvklaringsbehov } from 'lib/utils/avklaringsbehov';
 import {
+  NoNavAapOppgaveListeOppgaveSorteringSortBy,
   NoNavAapOppgaveListeUtvidetOppgavelisteFilterBehandlingstyper,
   NoNavAapOppgaveListeUtvidetOppgavelisteFilterReturStatuser,
 } from '@navikt/aap-oppgave-typescript-types';
 import { formaterDatoForBackend } from 'lib/utils/date';
-import styles from 'components/oppgaveliste/ledigeoppgaverny/LedigeOppgaver.module.css';
+import styles from 'components/oppgaveliste/ledigeoppgaver/LedigeOppgaver.module.css';
 import { TabellSkeleton } from 'components/oppgaveliste/tabellskeleton/TabellSkeleton';
-import { AlleOppgaverFiltrering } from 'components/oppgaveliste/filtrering/alleoppgaverfiltrering/AlleOppgaverFiltrering';
 import { ALLE_OPPGAVER_ID } from 'components/oppgaveliste/filtrering/filtreringUtils';
 import { useLagreAktivUtvidetFilter } from 'hooks/oppgave/aktivUtvidetFilterHook';
-import { ComboOption } from 'components/produksjonsstyring/minenhet/MineEnheter';
 import { useLagreAktiveEnheter } from 'hooks/oppgave/aktiveEnheterHook';
 import { EnheterSelect } from 'components/oppgaveliste/enheterselect/EnheterSelect';
+import { useBackendSortering } from 'hooks/oppgave/BackendSorteringHook';
+import { AlleOppgaverFiltrering } from 'components/oppgaveliste/filtrering/alleoppgaverfiltrering/AlleOppgaverFiltrering';
+import { ValuePair } from 'components/form/FormField';
 
 interface Props {
   enheter: Enhet[];
@@ -43,18 +45,22 @@ export const AlleOppgaver = ({ enheter }: Props) => {
   const [valgteRader, setValgteRader] = useState<number[]>([]);
   const lagretUtvidetFilter = hentAktivUtvidetFilter();
 
-  function førsteEnhetTilComboOption(enheter: Enhet[]): ComboOption[] | null {
+  const { sort, setSort } =
+    useBackendSortering<NoNavAapOppgaveListeOppgaveSorteringSortBy>('alle-oppgaver-backendsort');
+
+  function førsteEnhetTilComboOption(enheter: Enhet[]): ValuePair[] | null {
     const førsteEnhet = enheter.find((e) => e);
     if (førsteEnhet) {
       return [{ value: førsteEnhet.enhetNr, label: førsteEnhet.navn }];
     }
     return null;
   }
-  const [aktiveEnheter, setAktiveEnheter] = useState<ComboOption[]>(
+
+  const [aktiveEnheter, setAktiveEnheter] = useState<ValuePair[]>(
     hentLagredeAktiveEnheter() ?? førsteEnhetTilComboOption(enheter) ?? []
   );
   const aktiveEnhetsnumre = aktiveEnheter.map((enhet) => enhet.value);
-  const oppdaterEnheter = (enheter: ComboOption[]) => {
+  const oppdaterEnheter = (enheter: ValuePair[]) => {
     setAktiveEnheter(enheter);
     lagreAktiveEnheter(enheter);
   };
@@ -97,6 +103,7 @@ export const AlleOppgaver = ({ enheter }: Props) => {
     },
     saksbehandlere: {
       type: 'fieldArray',
+      defaultValue: lagretUtvidetFilter?.saksbehandlere ?? [],
     },
   });
 
@@ -104,27 +111,33 @@ export const AlleOppgaver = ({ enheter }: Props) => {
   const behandlingOpprettetFom = form.watch('behandlingOpprettetFom');
   const andreStatusTyper = ['VENT', 'ER_HASTESAK', 'VENTEFRIST_UTLØPT'];
 
-  const utvidetFilter =
-    aktivKøId === ALLE_OPPGAVER_ID
-      ? {
-          behandlingstyper: (form.watch('behandlingstyper') ||
-            []) as NoNavAapOppgaveListeUtvidetOppgavelisteFilterBehandlingstyper[],
-          tom: behandlingOpprettetTom ? formaterDatoForBackend(behandlingOpprettetTom) : undefined,
-          fom: behandlingOpprettetFom ? formaterDatoForBackend(behandlingOpprettetFom) : undefined,
-          returStatuser: (
-            (form.watch('statuser') || []) as NoNavAapOppgaveListeUtvidetOppgavelisteFilterReturStatuser[]
-          ).filter((status) => !andreStatusTyper.includes(status.valueOf())),
-          påVent: form.watch('statuser')?.includes('VENT'),
-          årsaker: form.watch('årsaker') || [],
-          avklaringsbehovKoder: form.watch('avklaringsbehov') || [],
-          markertHaster: form.watch('statuser')?.includes('ER_HASTESAK'),
-          ventefristUtløpt: form.watch('statuser')?.includes('VENTEFRIST_UTLØPT'),
-          saksbehandlere: [],
-        }
-      : undefined;
+  const utvidetFilter = {
+    behandlingstyper: (form.watch('behandlingstyper') ||
+      []) as NoNavAapOppgaveListeUtvidetOppgavelisteFilterBehandlingstyper[],
+    tom: behandlingOpprettetTom ? formaterDatoForBackend(behandlingOpprettetTom) : undefined,
+    fom: behandlingOpprettetFom ? formaterDatoForBackend(behandlingOpprettetFom) : undefined,
+    returStatuser: (
+      (form.watch('statuser') || []) as NoNavAapOppgaveListeUtvidetOppgavelisteFilterReturStatuser[]
+    ).filter((status) => !andreStatusTyper.includes(status.valueOf())),
+    påVent: form.watch('statuser')?.includes('VENT'),
+    årsaker: form.watch('årsaker') || [],
+    avklaringsbehovKoder: form.watch('avklaringsbehov') || [],
+    markertHaster: form.watch('statuser')?.includes('ER_HASTESAK'),
+    ventefristUtløpt: form.watch('statuser')?.includes('VENTEFRIST_UTLØPT'),
+    saksbehandlere: (form.watch('saksbehandlere') || []).map((option) => option.value),
+  };
 
-  const { antallOppgaver, oppgaver, size, setSize, isLoading, isValidating, kanLasteInnFlereOppgaver, mutate } =
-    useAlleOppgaverForEnhet(aktiveEnhetsnumre, aktivKøId, utvidetFilter);
+  const {
+    antallOppgaver,
+    oppgaver,
+    size,
+    setSize,
+    isLoading,
+    isValidating,
+    kanLasteInnFlereOppgaver,
+    mutate,
+    behandlingstyperFilterFraBackend,
+  } = useAlleOppgaverForEnhet(aktiveEnhetsnumre, aktivKøId, utvidetFilter, sort);
 
   const { data: køer } = useSWR(`api/filter?${queryParamsArray('enheter', aktiveEnhetsnumre)}`, () =>
     hentKøerForEnheterClient(aktiveEnhetsnumre)
@@ -143,7 +156,7 @@ export const AlleOppgaver = ({ enheter }: Props) => {
   };
 
   useEffect(() => {
-    if (!køer || (køer && isError(køer))) {
+    if (isError(køer) || !køer?.data?.length) {
       return;
     }
     const køId = hentLagretAktivKø();
@@ -195,27 +208,29 @@ export const AlleOppgaver = ({ enheter }: Props) => {
           form={form}
           formFields={formFields}
           antallOppgaver={antallOppgaver}
-          kanFiltrere={aktivKøId === ALLE_OPPGAVER_ID}
-          onFiltrerClick={() => oppdaterKøId(ALLE_OPPGAVER_ID)}
           valgteRader={valgteRader}
           setValgteRader={setValgteRader}
           revalidateFunction={mutate}
+          aktivKøId={aktivKøId}
+          aktiveEnheter={aktiveEnhetsnumre}
+          sattBehandlingstyperFilter={behandlingstyperFilterFraBackend}
         />
         {isLoading && <TabellSkeleton />}
 
-        {!isLoading &&
-          (oppgaver.length > 0 ? (
-            <AlleOppgaverTabell
-              oppgaver={oppgaver}
-              revalidateFunction={mutate}
-              valgteRader={valgteRader}
-              setValgteRader={setValgteRader}
-            />
-          ) : (
-            <BodyShort size={'small'} className={styles.ingenoppgaver}>
-              Ingen oppgaver i valgt kø for valgt enhet
-            </BodyShort>
-          ))}
+        {!isLoading && oppgaver.length > 0 ? (
+          <AlleOppgaverTabell
+            oppgaver={oppgaver}
+            revalidateFunction={mutate}
+            valgteRader={valgteRader}
+            setValgteRader={setValgteRader}
+            setSortBy={setSort}
+            sort={sort}
+          />
+        ) : (
+          <BodyShort size={'small'} className={styles.ingenoppgaver}>
+            Ingen oppgaver i valgt kø for valgt enhet
+          </BodyShort>
+        )}
       </div>
 
       {kanLasteInnFlereOppgaver && (

@@ -9,12 +9,6 @@ export function erAvsluttet(behandling: BehandlingInfo | PostmottakBehandlingInf
   return ['IVERKSETTES', 'AVSLUTTET'].includes(behandling.status);
 }
 
-export function kanRevurdereSak(behandlinger: BehandlingInfo[]): boolean {
-  return behandlinger.some(
-    (behandling) => erFørstegangsbehandling(behandling) && behandling.status !== 'OPPRETTET' && !erTrukket(behandling)
-  );
-}
-
 export function erTrukket(behandling: BehandlingInfo) {
   return behandling.vurderingsbehov.includes('SØKNAD_TRUKKET');
 }
@@ -66,7 +60,7 @@ export function formatterÅrsakTilOpprettelseTilTekst(årsakTilOpprettelse: Års
     case 'TILBAKEKREVING_HENDELSE':
       return 'Mulig feilutbetaling';
     case 'UTVID_VEDTAKSLENGDE':
-      return 'Utvid vedtakslengde';
+      return 'Utvid vedtaksperiode';
     default:
       return 'Ukjent årsak';
   }

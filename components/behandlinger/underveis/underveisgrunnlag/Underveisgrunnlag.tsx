@@ -1,7 +1,7 @@
 'use client';
 
-import { BodyShort, InlineMessage, Table } from '@navikt/ds-react';
-import { RettighetDto, UnderveisAvslagsÅrsak, UnderveisGrunnlag } from 'lib/types/types';
+import { BodyShort, Table } from '@navikt/ds-react';
+import { UnderveisAvslagsÅrsak, UnderveisGrunnlag } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { mapUtfallTilTekst } from 'lib/utils/oversettelser';
 import { exhaustiveCheck } from 'lib/utils/typescript';
@@ -12,34 +12,15 @@ import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { useFeatureFlag } from 'context/UnleashContext';
 import styles from 'components/behandlinger/vedtak/foreslåvedtak/ForeslåVedtak.module.css';
 
 type Props = {
   grunnlag: UnderveisGrunnlag[];
   readOnly: boolean;
   behandlingVersjon: number;
-  rettighetsdata: RettighetDto[];
 };
 
-const Perioderad = ({
-  periode,
-  rettighetsdata,
-  isVisRettigheterForVedtakEnabled,
-}: {
-  periode: UnderveisGrunnlag;
-  rettighetsdata: RettighetDto[];
-  isVisRettigheterForVedtakEnabled: boolean;
-}) => {
-  const gjenværendeKvote =
-    periode.utfall === 'OPPFYLT'
-      ? (rettighetsdata
-          ?.find((rettighet) => rettighet.type === periode.rettighetsType?.rettighetsType)
-          ?.periodeKvoter.find(
-            (kvote) => kvote.periode.fom === periode.periode.fom && kvote.periode.tom === periode.periode.tom
-          )?.gjenværendeKvote ?? <InlineMessage status="error">Kunne ikke hente data</InlineMessage>)
-      : undefined;
-
+const Perioderad = ({ periode }: { periode: UnderveisGrunnlag }) => {
   return (
     <Table.Row>
       <Table.HeaderCell>
@@ -55,7 +36,6 @@ const Perioderad = ({
       </Table.DataCell>
       <Table.DataCell>{periode.trekk.antall}</Table.DataCell>
       <Table.DataCell>{periode.rettighetsType?.hjemmel}</Table.DataCell>
-      {isVisRettigheterForVedtakEnabled && <Table.DataCell>{gjenværendeKvote}</Table.DataCell>}
       <Table.DataCell>
         {formaterDatoForFrontend(periode.meldePeriode.fom)} - {formaterDatoForFrontend(periode.meldePeriode.tom)}
       </Table.DataCell>
@@ -63,9 +43,7 @@ const Perioderad = ({
   );
 };
 
-export const Underveisgrunnlag = ({ grunnlag, readOnly, behandlingVersjon, rettighetsdata }: Props) => {
-  // TODO AAP-1709 Fjern feature toggle etter verifisering i dev
-  const isVisRettigheterForVedtakEnabled = useFeatureFlag('VisRettigheterForVedtak');
+export const Underveisgrunnlag = ({ grunnlag, readOnly, behandlingVersjon }: Props) => {
   const behandlingsReferanse = useBehandlingsReferanse();
 
   const { status, løsBehovOgGåTilNesteSteg, isLoading, løsBehovOgGåTilNesteStegError } =
@@ -107,18 +85,12 @@ export const Underveisgrunnlag = ({ grunnlag, readOnly, behandlingVersjon, retti
             <Table.HeaderCell>Gradering</Table.HeaderCell>
             <Table.HeaderCell>Trekk (dagsatser)</Table.HeaderCell>
             <Table.HeaderCell>Rettighetstype</Table.HeaderCell>
-            {isVisRettigheterForVedtakEnabled && <Table.HeaderCell>Dager igjen</Table.HeaderCell>}
             <Table.HeaderCell>Meldeperiode</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
           {grunnlag.map((periode, index) => (
-            <Perioderad
-              key={index}
-              periode={periode}
-              rettighetsdata={rettighetsdata}
-              isVisRettigheterForVedtakEnabled={isVisRettigheterForVedtakEnabled}
-            />
+            <Perioderad key={index} periode={periode} />
           ))}
         </Table.Body>
       </Table>

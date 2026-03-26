@@ -10,7 +10,7 @@ import {
 
 const oppgaver: Oppgave[] = [
   {
-    behandlingRef: 'fdsfds',
+    behandlingRef: 'dgklasdf',
     vurderingsbehov: [],
     avklaringsbehovKode: '',
     behandlingOpprettet: '2025-02-09',
@@ -29,7 +29,7 @@ const oppgaver: Oppgave[] = [
     erÅpen: true,
   },
   {
-    behandlingRef: 'fdsfds',
+    behandlingRef: 'sdfgaf',
     vurderingsbehov: [],
     avklaringsbehovKode: '',
     behandlingOpprettet: '2025-02-09',
@@ -56,6 +56,8 @@ describe('AlleOppgaverTabell', () => {
         revalidateFunction={vi.fn()}
         setValgteRader={vi.fn()}
         valgteRader={[]}
+        setSortBy={() => {}}
+        sort={undefined}
       />,
       false
     );
@@ -73,6 +75,8 @@ describe('AlleOppgaverTabell', () => {
         revalidateFunction={vi.fn()}
         setValgteRader={vi.fn()}
         valgteRader={[]}
+        setSortBy={() => {}}
+        sort={undefined}
       />,
       false
     );

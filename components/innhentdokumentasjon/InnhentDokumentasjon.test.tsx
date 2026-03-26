@@ -37,11 +37,4 @@ describe('Innhent dokumentasjon', () => {
     render(<InnhentDokumentasjon />);
     expect(screen.getByRole('button', { name: 'Be om opplysninger fra behandler' })).toBeVisible();
   });
-
-  // TODO må refaktorere denne komponenten litt
-  test.skip('viser en tabell over bestilte erklæringer', async () => {
-    fetchMock.mockResponseOnce(JSON.stringify(testdata), { status: 200 });
-    render(<InnhentDokumentasjon />);
-    expect(await screen.findAllByRole('row')).toHaveLength(testdata.length + 1);
-  });
 });

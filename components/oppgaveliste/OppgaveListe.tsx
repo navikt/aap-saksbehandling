@@ -3,15 +3,11 @@
 import { useEffect, useState } from 'react';
 import { Heading, HStack, Tabs, VStack } from '@navikt/ds-react';
 import { Enhet } from 'lib/types/oppgaveTypes';
-import { MineOppgaverNy } from 'components/oppgaveliste/mineoppgaverny/MineOppgaverNy';
-import { LedigeOppgaverNy } from 'components/oppgaveliste/ledigeoppgaverny/LedigeOppgaverNy';
-import { AlleOppgaver } from 'components/oppgaveliste/alleoppgaver/AlleOppgaver';
-import { useLagreAktivTab } from 'hooks/oppgave/aktivTabHook';
-import { TildelOppgaverProvider } from 'context/oppgave/TildelOppgaverContext';
-import { useFeatureFlag } from 'context/UnleashContext';
-import { AlleOppgaverNy } from 'components/oppgaveliste/alleoppgaverny/AlleOppgaverNy';
 import { MineOppgaver } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
 import { LedigeOppgaver } from 'components/oppgaveliste/ledigeoppgaver/LedigeOppgaver';
+import { useLagreAktivTab } from 'hooks/oppgave/aktivTabHook';
+import { TildelOppgaverProvider } from 'context/oppgave/TildelOppgaverContext';
+import { AlleOppgaver } from 'components/oppgaveliste/alleoppgaver/AlleOppgaver';
 
 interface Props {
   enheter: Enhet[];
@@ -31,7 +27,6 @@ export const OppgaveListe = ({ enheter }: Props) => {
       setSelected(lagretTab as MenyValg);
     }
   }, [hentAktivTab]);
-  const backendSorteringEnabled = useFeatureFlag('OppgavelisteBackendsorteringFrontend');
   return (
     <VStack gap={'8'} padding={'8'} maxWidth={'1680px'} marginInline={'auto'} marginBlock={'0'}>
       <TildelOppgaverProvider>
@@ -54,12 +49,9 @@ export const OppgaveListe = ({ enheter }: Props) => {
           </Tabs>
         </HStack>
 
-        {selected === 'Mine oppgaver' && backendSorteringEnabled && <MineOppgaverNy />}
-        {selected === 'Mine oppgaver' && !backendSorteringEnabled && <MineOppgaver />}
-        {selected === 'Ledige oppgaver' && backendSorteringEnabled && <LedigeOppgaverNy enheter={enheter} />}
-        {selected === 'Ledige oppgaver' && !backendSorteringEnabled && <LedigeOppgaver enheter={enheter} />}
-        {selected === 'Alle oppgaver' && backendSorteringEnabled && <AlleOppgaverNy enheter={enheter} />}
-        {selected === 'Alle oppgaver' && !backendSorteringEnabled && <AlleOppgaver enheter={enheter} />}
+        {selected === 'Mine oppgaver' && <MineOppgaver />}
+        {selected === 'Ledige oppgaver' && <LedigeOppgaver enheter={enheter} />}
+        {selected === 'Alle oppgaver' && <AlleOppgaver enheter={enheter} />}
       </TildelOppgaverProvider>
     </VStack>
   );

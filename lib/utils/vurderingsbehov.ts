@@ -33,7 +33,7 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov | Vurde
     case 'REVURDER_MEDLEMSKAP':
       return 'Revurder medlemskap';
     case 'REVURDER_YRKESSKADE':
-      return 'Revurder yrkesskade';
+      return '§ 11-22 Yrkesskade';
     case 'REVURDER_BEREGNING':
       return 'Revurder beregning';
     case 'REVURDER_LOVVALG':
@@ -41,17 +41,19 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov | Vurde
     case 'REVURDER_SAMORDNING':
       return 'Revurder samordning';
     case 'REVURDER_SAMORDNING_ANDRE_FOLKETRYGDYTELSER':
-      return 'Forhold andre ytelser - Folketrygdytelser';
+      return '§§ 11-27 og 11-28 Folketrygdytelser';
     case 'REVURDER_SAMORDNING_UFØRE':
-      return 'Forhold andre ytelser - Samordning ufør';
+      return '§ 11-28 Samordning med delvis uføre';
     case 'REVURDER_SAMORDNING_ANDRE_STATLIGE_YTELSER':
-      return 'Forhold andre ytelser - Andre ytelser avregning';
+      return 'Fradrag ved andre statlige ytelser';
     case 'REVURDER_SAMORDNING_ARBEIDSGIVER':
-      return 'Forhold andre ytelser - Arbeidsgiverytelse';
+      return '§ 11-24 Reduksjon av AAP på grunn av ytelse fra arbeidsgiver';
     case 'REVURDER_SAMORDNING_TJENESTEPENSJON':
-      return 'Forhold andre ytelser - Tjenestepensjon';
+      return '§ 11-29 Refusjonskrav tjenestepensjonsordning';
+    case 'REVURDER_SAMORDNING_BARNEPENSJON':
+      return '§ 11-27 Samordning barnepensjon';
     case 'REVURDER_STUDENT':
-      return 'Revurder student';
+      return '§ 11-14 Student';
     case 'MOTATT_KLAGE':
       return 'Klage';
     case 'KLAGE':
@@ -59,13 +61,13 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov | Vurde
     case 'LOVVALG_OG_MEDLEMSKAP':
       return 'Lovvalg og medlemskap';
     case 'FORUTGAENDE_MEDLEMSKAP':
-      return 'Forutgående medlemskap';
+      return '§ 11-2 Forutgående medlemskap';
     case 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND':
-      return 'Sykdom arbeidsevne behov for bistand';
+      return '§§ 11-5 og 11-6 Sykdom, arbeidsevne og behov for bistand';
     case 'REVURDER_SYKEPENGEERSTATNING':
-      return 'Revurdering sykepengererstatning';
+      return '§ 11-13 Sykepengeerstatning';
     case 'BARNETILLEGG':
-      return 'Barnetillegg';
+      return '§ 11-20 Barnetillegg';
     case 'INSTITUSJONSOPPHOLD':
       return 'Institusjonsopphold';
     case 'SAMORDNING_OG_AVREGNING':
@@ -77,7 +79,7 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov | Vurde
     case 'SØKNAD_TRUKKET':
       return 'Trukket søknad';
     case 'VURDER_RETTIGHETSPERIODE':
-      return 'Vurder § 22-13 syvende ledd';
+      return '§ 22-13 syvende ledd';
     case 'KLAGE_TRUKKET':
       return 'Klage trukket';
     case 'REVURDERING_AVBRUTT':
@@ -87,13 +89,13 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov | Vurde
     case 'FRITAK_MELDEPLIKT':
       return 'Fritak meldeplikt';
     case 'REVURDER_MANUELL_INNTEKT':
-      return 'Revurder manuell inntekt';
+      return 'Manuell inntekt';
     case 'OPPFØLGINGSOPPGAVE':
       return 'Oppfølgingsoppgave';
     case 'HELHETLIG_VURDERING':
       return 'Helhetlig vurdering';
     case 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN':
-      return 'Revurder meldeplikt rimelig grunn';
+      return '§ 11-10 Overstyr perioder uten overholdt meldeplikt';
     case 'AKTIVITETSPLIKT_11_7':
       return 'Aktivitetsplikt § 11-7';
     case 'AKTIVITETSPLIKT_11_9':
@@ -105,7 +107,7 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov | Vurde
     case 'OVERGANG_ARBEID':
       return 'Overgang arbeidssøker';
     case 'OPPHOLDSKRAV':
-      return 'Oppholdskrav § 11-3';
+      return '§ 11-3 Oppholdskrav';
     case 'DØDSFALL_BARN':
       return 'Dødsfall barn';
     case 'DØDSFALL_BRUKER':
@@ -115,7 +117,7 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov | Vurde
     case 'BARNETILLEGG_SATS_REGULERING':
       return 'Satsregulering barnetillegg';
     case 'UTVID_VEDTAKSLENGDE':
-      return 'Utvid vedtakslengde';
+      return 'Utvid vedtaksperiode';
     case 'MIGRER_RETTIGHETSPERIODE':
       return 'Korrigering av teknisk periode (automatisk behandling)';
     case 'ETABLERING_EGEN_VIRKSOMHET':
@@ -160,7 +162,7 @@ export const formaterFrittVurderingsbehov = (vurderingsbehov: String) => {
     case 'REVURDER_YRKESSKADE':
       return 'Revurder yrkesskade';
     case 'REVURDER_BEREGNING':
-      return 'Revurder beregning';
+      return '§ 11-19 Beregningstidspunkt';
     case 'REVURDER_LOVVALG':
       return 'Revurder lovvalg';
     case 'REVURDER_SAMORDNING':
@@ -177,7 +179,7 @@ export const formaterFrittVurderingsbehov = (vurderingsbehov: String) => {
     case 'BARNETILLEGG':
       return 'Barnetillegg';
     case 'INSTITUSJONSOPPHOLD':
-      return 'Institusjonsopphold';
+      return '§ 11-25 Institusjonsopphold';
     case 'SAMORDNING_OG_AVREGNING':
       return 'Samordning og avregning';
     case 'REFUSJONSKRAV':
