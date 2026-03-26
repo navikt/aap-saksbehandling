@@ -51,7 +51,7 @@ const behovskodeMap = {
   '5056': 'Samordning refusjonskrav',
   '5057': 'Arbeidsopptrapping',
   '5058': '§ 11-15 Etablering av egen virksomhet',
-  '5059': 'Avklar vedtakslengde',
+  '5059': 'Avklar vedtaksperiode',
   '5096': 'Forslå uttak',
   '5097': 'Kvalitetssikre sak',
   '5098': 'Foreslå vedtak',
@@ -203,7 +203,7 @@ export function mapTilSteggruppeTekst(steggruppe: string) {
     case 'OPPHOLDSKRAV':
       return 'Oppholdskrav';
     case 'VEDTAKSLENGDE':
-      return 'Vedtakslengde';
+      return 'Vedtaksperiode';
     default:
       return `${steggruppe}`;
   }
@@ -268,7 +268,7 @@ export function mapTilÅrsakTilOpprettelseTilTekst(årsakTilOpprettelse: ÅrsakT
     case 'AKTIVITETSPLIKT':
       return 'Aktivitetsplikt';
     case 'UTVID_VEDTAKSLENGDE':
-      return 'Utvid vedtakslengde';
+      return 'Utvid vedtaksperiode';
   }
 }
 

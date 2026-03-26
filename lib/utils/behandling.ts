@@ -60,7 +60,7 @@ export function formatterÅrsakTilOpprettelseTilTekst(årsakTilOpprettelse: Års
     case 'TILBAKEKREVING_HENDELSE':
       return 'Mulig feilutbetaling';
     case 'UTVID_VEDTAKSLENGDE':
-      return 'Utvid vedtakslengde';
+      return 'Utvid vedtaksperiode';
     default:
       return 'Ukjent årsak';
   }
