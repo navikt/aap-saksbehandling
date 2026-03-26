@@ -2559,7 +2559,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  '/api/behandling/mellomlagret-vurdering': {
+  '/api/behandling/mellomlagret-vurdering/{referanse}': {
     parameters: {
       query?: never;
       header?: never;
@@ -4678,6 +4678,44 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/drift/behandling/{referanse}/rettighetsinfo': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description referanse */
+          referanse: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.rettighet.RettighetsinfoDto'];
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/drift/sak/{saksnummer}/info': {
     parameters: {
       query?: never;
@@ -4744,6 +4782,44 @@ export interface paths {
           };
           content: {
             'application/json': components['schemas']['no.nav.aap.behandlingsflyt.drift.MottattDokumentDriftsinfoDTO'][];
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/drift/sak/{saksnummer}/oppdater-person-identer': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description saksnummer */
+          saksnummer: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.drift.SakDriftsinfoDTO'];
           };
         };
       };
@@ -11311,6 +11387,7 @@ export interface components {
       nyeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.OvergangUf\u00F8reVurderingResponse'][];
       perioderSomIkkeErTilstrekkeligVurdert: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
       sisteVedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.OvergangUf\u00F8reVurderingResponse'][];
+      'uf\u00F8reS\u00F8knadOpplysninger'?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.Uf\u00F8reS\u00F8knadOpplysninger'];
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.OvergangUf\u00F8reVurderingResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.OvergangUf\u00F8reVurderingResponse': {
@@ -11342,6 +11419,13 @@ export interface components {
        */
       virkningsdato: string;
       vurdertAv: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.Uf\u00F8reS\u00F8knadOpplysninger': {
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      soknadsdato: string;
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomGrunnlagResponse': {
       'beh\u00F8verVurderinger': components['schemas']['no.nav.aap.komponenter.type.Periode'][];
