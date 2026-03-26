@@ -252,7 +252,7 @@ describe('Tidligere vurderinger', () => {
   it('Skal vise sisteVedtatteVurderinger med riktig status-tag for automatisk vurdering', () => {
     render(<VedtakslengdeSteg readOnly={false} behandlingVersjon={0} grunnlag={grunnlagMedVedtatteOgNyeVurderinger} />);
 
-    const automatiskTags = screen.getAllByText('Automatisk satt vedtakslengde');
+    const automatiskTags = screen.getAllByText('Automatisk satt vedtaksperiode');
     expect(automatiskTags.length).toBeGreaterThanOrEqual(1);
     expect(automatiskTags[0]).toBeVisible();
   });
@@ -266,7 +266,7 @@ describe('Tidligere vurderinger', () => {
   it('Skal vise automatiske nye vurderinger som tidligere vurderinger med automatisk status', () => {
     render(<VedtakslengdeSteg readOnly={false} behandlingVersjon={0} grunnlag={grunnlagMedAutomatiskVurdering} />);
 
-    expect(screen.getByText('Automatisk satt vedtakslengde')).toBeVisible();
+    expect(screen.getByText('Automatisk satt vedtaksperiode')).toBeVisible();
   });
 
   it('Skal vise VedtakslengdeVurderingInnhold med sluttdato og begrunnelse', () => {

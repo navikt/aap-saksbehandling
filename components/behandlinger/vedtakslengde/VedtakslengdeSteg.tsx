@@ -180,7 +180,9 @@ export const VedtakslengdeSteg = ({ grunnlag, behandlingVersjon, readOnly, initi
           tom={vurdering.tom ? parseISO(vurdering.tom) : null}
           foersteNyePeriodeFraDato={foersteNyePeriode == null ? null : parseDatoFraDatePicker(foersteNyePeriode)}
           vurderingStatus={
-            vurdering.manuellVurdering ? VurderingStatus.VedtakslengdeManuell : VurderingStatus.VedtakslengdeAutomatisk
+            vurdering.manuellVurdering
+              ? VurderingStatus.VedtaksperiodeManuell
+              : VurderingStatus.VedtaksperiodeAutomatisk
           }
           vurdertAv={vurdering.vurdertAv}
           kvalitetssikretAv={vurdering.kvalitetssikretAv}
@@ -198,7 +200,7 @@ export const VedtakslengdeSteg = ({ grunnlag, behandlingVersjon, readOnly, initi
             fom={parseISO(vurdering.fom)}
             tom={vurdering.tom ? parseISO(vurdering.tom) : null}
             foersteNyePeriodeFraDato={foersteNyePeriode == null ? null : parseDatoFraDatePicker(foersteNyePeriode)}
-            vurderingStatus={VurderingStatus.VedtakslengdeAutomatisk}
+            vurderingStatus={VurderingStatus.VedtaksperiodeAutomatisk}
             vurdertAv={vurdering.vurdertAv}
             kvalitetssikretAv={vurdering.kvalitetssikretAv}
             besluttetAv={vurdering.besluttetAv}
@@ -219,7 +221,7 @@ export const VedtakslengdeSteg = ({ grunnlag, behandlingVersjon, readOnly, initi
           })()}
           isLast={true}
           finnesFeil={finnesFeilForVurdering(index, errorList)}
-          vurderingStatus={vurdering.erNyVurdering ? undefined : VurderingStatus.VedtakslengdeManuell}
+          vurderingStatus={vurdering.erNyVurdering ? undefined : VurderingStatus.VedtaksperiodeManuell}
           vurdering={vurdering}
           readonly={formReadOnly}
           onSlettVurdering={() => remove(index)}
