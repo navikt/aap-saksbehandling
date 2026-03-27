@@ -1,4 +1,4 @@
-import { useState, useTransition } from 'react';
+import { useRef, useState, useTransition } from 'react';
 import {
   ServerSentEventData,
   ServerSentEventStatus,
@@ -23,6 +23,10 @@ import { ApiException, isError, isSuccess } from 'lib/utils/api';
 import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
 import { Behovstype } from 'lib/utils/form';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
+import { hentTildeltStatusClient } from 'lib/oppgaveClientApi';
+import { isLocal } from 'lib/utils/environment';
+import { useOverstyrTildelingHook } from 'hooks/saksbehandling/OverstyrTildelingHook';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 export type LøsBehovOgGåTilNesteStegStatus = ServerSentEventStatus | undefined;
 
@@ -30,27 +34,69 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
   løsBehovOgGåTilNesteStegError?: ApiException;
   status: LøsBehovOgGåTilNesteStegStatus;
   isLoading: boolean;
-  løsBehovOgGåTilNesteSteg: (behov: LøsAvklaringsbehovPåBehandling, callback?: () => void) => void;
-  løsPeriodisertBehovOgGåTilNesteSteg: (behov: LøsningerForPerioder, callback?: () => void) => void;
+  løsBehovOgGåTilNesteSteg: (
+    behov: LøsAvklaringsbehovPåBehandling,
+    callback?: () => void,
+    sjekkTildeltStatus?: boolean
+  ) => void;
+  løsPeriodisertBehovOgGåTilNesteSteg: (
+    behov: LøsningerForPerioder,
+    callback?: () => void,
+    sjekkTildeltStatus?: boolean
+  ) => void;
 } {
   const params = useParams<{ aktivGruppe: string; behandlingsReferanse: string; saksnummer: string }>();
   const router = useRouter();
   const { refetchFlytClient } = useRequiredFlyt();
   const { setIsModalOpen } = useIngenFlereOppgaverModal();
+  const { setVisOverstyrModal, setCallback, setReservertAvNavn } = useOverstyrTildelingHook();
 
   const [status, setStatus] = useState<LøsBehovOgGåTilNesteStegStatus>();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<ApiException | undefined>();
   const [isPending, startTransition] = useTransition();
+  const sjekkTildelingFeatureToggle = useFeatureFlag('SjekkTildelingVedBekreft')
+
+  const erLokal = isLocal();
+  const sisteBehovRef = useRef<{
+    behov: LøsAvklaringsbehovPåBehandling | LøsPeriodisertBehovPåBehandling;
+    erPeriodisert: boolean;
+    callback?: () => void;
+  }>(null);
 
   const løsBehovOgGåTilNesteSteg = async (
     behov: LøsAvklaringsbehovPåBehandling | LøsPeriodisertBehovPåBehandling,
     erPeriodisert: boolean,
-    callback?: () => void
+    callback?: () => void,
+    sjekkTildeltStatus: boolean = true
   ) => {
     setIsLoading(true);
     setStatus(undefined);
     setError(undefined);
+
+    if (sjekkTildeltStatus && !erLokal && sjekkTildelingFeatureToggle) {
+      const nyesteOppgavePåBehandling = await hentTildeltStatusClient(params.behandlingsReferanse);
+      if (isSuccess(nyesteOppgavePåBehandling)) {
+        if (
+          nyesteOppgavePåBehandling.data.tildeltSaksbehandlerIdent != null &&
+          !nyesteOppgavePåBehandling.data.erTildeltInnloggetBruker
+        ) {
+          setVisOverstyrModal(true);
+          setReservertAvNavn(
+            nyesteOppgavePåBehandling.data.tildeltSaksbehandlerNavn ??
+              nyesteOppgavePåBehandling.data.tildeltSaksbehandlerIdent
+          );
+          setIsLoading(false);
+          setCallback(() => bekreftOgFortsett);
+          sisteBehovRef.current = {
+            behov,
+            erPeriodisert,
+            callback,
+          };
+          return;
+        }
+      } // Hvis henting av tildelt-status feiler, la saksbehandler fortsette
+    }
 
     const løsbehovRes = erPeriodisert
       ? await clientLøsPeriodisertBehov(behov as LøsPeriodisertBehovPåBehandling)
@@ -102,6 +148,20 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
         callback();
       }
     });
+  };
+
+  const bekreftOgFortsett = () => {
+    if (!sisteBehovRef.current) {
+      setError({ message: 'Noe gikk galt ved overstyring av tildeling. Prøv igjen.' });
+      return;
+    }
+    sisteBehovRef.current &&
+      løsBehovOgGåTilNesteSteg(
+        sisteBehovRef.current.behov,
+        sisteBehovRef.current.erPeriodisert,
+        sisteBehovRef.current.callback,
+        false
+      );
   };
 
   const listenSSE = async (underkjennelseIKvalitetssikringEllerBeslutning: boolean) => {
@@ -189,8 +249,10 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
   return {
     isLoading: isLoading || isPending,
     status,
-    løsBehovOgGåTilNesteSteg: (behov, callback) => løsBehovOgGåTilNesteSteg(behov, false, callback),
-    løsPeriodisertBehovOgGåTilNesteSteg: (behov, callback) => løsBehovOgGåTilNesteSteg(behov, true, callback),
+    løsBehovOgGåTilNesteSteg: (behov, callback, skipReservasjonsjekk) =>
+      løsBehovOgGåTilNesteSteg(behov, false, callback, skipReservasjonsjekk),
+    løsPeriodisertBehovOgGåTilNesteSteg: (behov, callback, skipReservasjonsjekk) =>
+      løsBehovOgGåTilNesteSteg(behov, true, callback, skipReservasjonsjekk),
     løsBehovOgGåTilNesteStegError: error,
   };
 }

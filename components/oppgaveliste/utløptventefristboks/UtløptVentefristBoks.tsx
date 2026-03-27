@@ -1,14 +1,18 @@
 import { useRef, useState } from 'react';
-import { BodyShort, Button, Popover, Tag, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, Detail, Popover, Tag, VStack } from '@navikt/ds-react';
 import { HourglassBottomFilledIcon } from '@navikt/aksel-icons';
 import styles from './UtløptVentefristBoks.module.css';
 import { Dato } from 'lib/types/Dato';
+import { mapTilVenteÅrsakTekst } from 'lib/utils/oversettelser';
+import { SettPåVentÅrsaker } from 'lib/types/types';
 
 interface Props {
   frist: string;
+  årsak?: string | null;
+  begrunnelse?: string | null;
 }
 
-export const UtløptVentefristBoks = ({ frist }: Props) => {
+export const UtløptVentefristBoks = ({ frist, årsak, begrunnelse }: Props) => {
   const buttonRef = useRef(null);
   const [vis, setVis] = useState(false);
 
@@ -39,6 +43,18 @@ export const UtløptVentefristBoks = ({ frist }: Props) => {
               {`Frist utløpt ${fristDate}`}
             </BodyShort>
           </Tag>
+          {årsak ? (
+            <VStack gap={'0'}>
+              <Detail textColor="subtle">Årsak</Detail>
+              <div>{mapTilVenteÅrsakTekst(årsak as SettPåVentÅrsaker)}</div>
+            </VStack>
+          ) : undefined}
+          {begrunnelse ? (
+            <VStack gap={'0'}>
+              <Detail textColor="subtle">Begrunnelse</Detail>
+              <div>{begrunnelse}</div>
+            </VStack>
+          ) : undefined}
         </VStack>
       </Popover>
     </>

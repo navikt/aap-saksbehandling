@@ -10,7 +10,7 @@ const Page = async (props: {
   params: Promise<{ behandlingsReferanse: string; saksnummer: string; aktivGruppe: StegGruppe }>;
 }) => {
   const params = await props.params;
-  const { behandlingsReferanse, saksnummer, aktivGruppe } = params;
+  const { behandlingsReferanse, aktivGruppe } = params;
   const behandling = await hentBehandling(behandlingsReferanse);
 
   if (isError(behandling)) {
@@ -21,18 +21,10 @@ const Page = async (props: {
 
   return behandling.data.skalForberede ? (
     <Suspense fallback={<Spinner size={'xlarge'} label={'Forbereder behandling..'} />}>
-      <ForberedBehandling
-        behandlingsReferanse={behandlingsReferanse}
-        saksnummer={saksnummer}
-        aktivGruppe={aktivGruppe}
-      />
+      <ForberedBehandling behandlingsReferanse={behandlingsReferanse} aktivGruppe={aktivGruppe} />
     </Suspense>
   ) : (
-    <BehandlingPage
-      behandlingsReferanse={behandlingsReferanse}
-      saksnummer={saksnummer}
-      aktivGruppe={aktivGruppe as StegGruppe}
-    />
+    <BehandlingPage behandlingsReferanse={behandlingsReferanse} aktivGruppe={aktivGruppe as StegGruppe} />
   );
 };
 

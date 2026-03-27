@@ -6,7 +6,7 @@ import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { PlusIcon } from '@navikt/aksel-icons';
 import { ErrorList } from 'lib/utils/formerrors';
 import { FormErrorSummary } from 'components/formerrorsummary/FormErrorSummary';
-import { FormEvent, ReactNode } from 'react';
+import { Dispatch, FormEvent, ReactNode, SetStateAction } from 'react';
 import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { ApiException } from 'lib/utils/api';
 import { VisningActions, VisningModus } from 'lib/types/visningTypes';
@@ -31,6 +31,10 @@ interface VilkårsKortPeriodisertProps {
   vurdertAutomatisk?: boolean;
   onLeggTilVurdering?: () => void;
   errorList: ErrorList;
+  bekreftOgFortsett?: () => void;
+  visOverstyrTildelingModal?: boolean;
+  setVisOverstyrTildelingModal?: Dispatch<SetStateAction<boolean>>;
+  reservertAvNavn?: string;
 }
 
 export const VilkårskortPeriodisert = ({

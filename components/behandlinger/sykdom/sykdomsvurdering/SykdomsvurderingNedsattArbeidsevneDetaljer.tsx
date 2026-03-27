@@ -46,6 +46,7 @@ export const SykdomsvurderingNedsattArbeidsevneDetaljer = ({
         (vurderingDatoSammeSomRettighetsperiodeStart ? (
           <RadioGroupJaNei
             name={`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnHalvparten`}
+            description={'Ved løpende vurdering trenger arbeidsevnen kun å være nedsatt med minst 40 prosent (§ 11-23)'}
             control={form.control}
             label={'Er arbeidsevnen nedsatt med minst halvparten?'}
             horisontal={true}
@@ -61,7 +62,8 @@ export const SykdomsvurderingNedsattArbeidsevneDetaljer = ({
           <RadioGroupJaNei
             name={`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnFørtiProsent`}
             control={form.control}
-            label={'Er arbeidsevnen nedsatt med minst 40 prosent?'}
+            label={'Er arbeidsevnen nedsatt med minst halvparten?'}
+            description={'Ved løpende vurdering trenger arbeidsevnen kun å være nedsatt med minst 40 prosent (§ 11-23)'}
             horisontal={true}
             rules={{
               required: 'Du må svare på om den nedsatte arbeidsevnen er nedsatt med minst 40 prosent.',

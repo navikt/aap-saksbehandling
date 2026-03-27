@@ -31,11 +31,13 @@ export const OppslagAndreYtelser = ({ perioder }: Props) => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {perioder.map((periode, index) => {
+          {perioder
+            .filter((periode) => burdeYtelseTypeVises(periode.ytelseType))
+            .map((periode, index) => {
             return (
               <Table.Row key={index}>
                 <Table.DataCell textSize={'small'}>{mapYtelseTypeTilNavn(periode.ytelseType)}</Table.DataCell>
-                <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(periode.fom) + " - " + formaterDatoForFrontend(periode.tom)}</Table.DataCell>
+                <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(periode.fom) + " - " + formaterDatoForFrontend(periode.tom ?? "")}</Table.DataCell>
                 <Table.DataCell textSize={'small'}>{periode.kilde}</Table.DataCell>
               </Table.Row>
             );
@@ -46,6 +48,15 @@ export const OppslagAndreYtelser = ({ perioder }: Props) => {
   );
 };
 
+function burdeYtelseTypeVises(ytelseType: AndreStatligeYtelserType) {
+  switch (ytelseType) {
+    case 'TILTAKSPENGER_INAKTIV':
+      return false;
+    default:
+      return true;
+  }
+}
+
 function mapYtelseTypeTilNavn(ytelseType: AndreStatligeYtelserType): string {
   switch (ytelseType) {
     case 'DAGPENGER_ARBEIDSSOKER_ORDINAER':
@@ -54,6 +65,12 @@ function mapYtelseTypeTilNavn(ytelseType: AndreStatligeYtelserType): string {
       return 'Dagpenger';
     case 'DAGPENGER_PERMITTERING_FISKEINDUSTRI':
       return 'Dagpenger';
+    case 'TILTAKSPENGER':
+      return 'Tiltakspenger';
+    case 'TILTAKSPENGER_OG_BARNETILLEGG':
+      return 'Tiltakspenger';
+    case 'TILTAKSPENGER_INAKTIV':
+      return 'Tiltakspenger';
     default:
       throw new Error('Kunne ikke finne påkrevd årsak.');
   }
