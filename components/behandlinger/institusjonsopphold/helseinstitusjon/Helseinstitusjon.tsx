@@ -121,7 +121,7 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
             if (nesteVurdering) {
               tom = formaterDatoForBackend(subDays(new Dato(nesteVurdering.periode.fom).dato, 1));
             } else {
-              tom = oppholdErLøpende ? uendeligSluttString : formaterDatoForBackend(addDays(oppholdSluttDato!, 1));
+              tom = oppholdErLøpende ? uendeligSluttString : formaterDatoForBackend(oppholdSluttDato!);
             }
 
           return {
