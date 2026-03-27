@@ -25,7 +25,7 @@ import { useConfigForm } from 'components/form/FormHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
-import { addDays, format, isAfter, parse, subDays } from 'date-fns';
+import { format, isAfter, parse, subDays } from 'date-fns';
 import { useFieldArray } from 'react-hook-form';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { Dato } from 'lib/types/Dato';
@@ -107,38 +107,40 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
         const oppholdSluttDatoISO = oppholdErLøpende ? null : faktiskOpphold.avsluttetDato;
         const oppholdSluttDato = oppholdSluttDatoISO ? new Date(oppholdSluttDatoISO) : null;
 
-        return opphold.vurderinger
-          // Filtrerer bort vurderinger der periodens startdato (fom) er etter oppholdets sluttdato.
-          .filter((vurdering) => {
-            if (!vurdering.periode?.fom || !oppholdSluttDato) return true;
-            return !isAfter(parseDato(vurdering.periode.fom), oppholdSluttDato);
-          })
-          .map((vurdering, index, filtrerteVurderinger) => {
-            const nesteVurdering = filtrerteVurderinger.at(index + 1);
+        return (
+          opphold.vurderinger
+            // Filtrerer bort vurderinger der periodens startdato (fom) er etter oppholdets sluttdato.
+            .filter((vurdering) => {
+              if (!vurdering.periode?.fom || !oppholdSluttDato) return true;
+              return !isAfter(parseDato(vurdering.periode.fom), oppholdSluttDato);
+            })
+            .map((vurdering, index, filtrerteVurderinger) => {
+              const nesteVurdering = filtrerteVurderinger.at(index + 1);
 
-            const fom = vurdering.periode?.fom
-              ? formaterDatoForBackend(parseDato(vurdering.periode.fom))
-              : formaterDatoForBackend(parseDato(opphold.periode.fom));
+              const fom = vurdering.periode?.fom
+                ? formaterDatoForBackend(parseDato(vurdering.periode.fom))
+                : formaterDatoForBackend(parseDato(opphold.periode.fom));
 
-            let tom: string;
-            if (nesteVurdering) {
-              tom = formaterDatoForBackend(subDays(new Dato(nesteVurdering.periode.fom).dato, 1));
-            } else {
-              tom = oppholdErLøpende ? uendeligSluttString : formaterDatoForBackend(oppholdSluttDato!);
-            }
+              let tom: string;
+              if (nesteVurdering) {
+                tom = formaterDatoForBackend(subDays(new Dato(nesteVurdering.periode.fom).dato, 1));
+              } else {
+                tom = oppholdErLøpende ? uendeligSluttString : formaterDatoForBackend(oppholdSluttDato!);
+              }
 
-          return {
-            oppholdId: vurdering.oppholdId,
-            begrunnelse: vurdering.begrunnelse,
-            faarFriKostOgLosji: vurdering.faarFriKostOgLosji === JaEllerNei.Ja,
-            forsoergerEktefelle: vurdering.forsoergerEktefelle === JaEllerNei.Ja,
-            harFasteUtgifter: vurdering.harFasteUtgifter === JaEllerNei.Ja,
-            periode: {
-              fom: fom,
-              tom: tom,
-            },
-          };
-        });
+              return {
+                oppholdId: vurdering.oppholdId,
+                begrunnelse: vurdering.begrunnelse,
+                faarFriKostOgLosji: vurdering.faarFriKostOgLosji === JaEllerNei.Ja,
+                forsoergerEktefelle: vurdering.forsoergerEktefelle === JaEllerNei.Ja,
+                harFasteUtgifter: vurdering.harFasteUtgifter === JaEllerNei.Ja,
+                periode: {
+                  fom: fom,
+                  tom: tom,
+                },
+              };
+            })
+        );
       });
 
       løsBehovOgGåTilNesteSteg(
