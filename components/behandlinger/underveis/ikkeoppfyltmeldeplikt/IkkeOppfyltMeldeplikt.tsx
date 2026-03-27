@@ -14,7 +14,7 @@ import {
   MeldepliktOverstyringVurdering,
 } from 'components/behandlinger/underveis/ikkeoppfyltmeldeplikt/types';
 import { Behovstype } from 'lib/utils/form';
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 
 type Props = {
@@ -150,7 +150,7 @@ export const IkkeOppfyltMeldeplikt = ({ grunnlag, behandlingVersjon, readOnly }:
       grunnlag.gjeldendeVedtatteOversyringsvurderinger.length > 0);
 
   return harIkkeMeldteEllerOverstyrtePerioder ? (
-    <VilkårskortMedFormOgMellomlagringNyVisning
+    <VilkårskortMedFormOgMellomlagring
       heading={'§ 11-10 andre ledd. Perioder uten overholdt meldeplikt'}
       steg={'IKKE_OPPFYLT_MELDEPLIKT'}
       vilkårTilhørerNavKontor={false}
@@ -159,7 +159,6 @@ export const IkkeOppfyltMeldeplikt = ({ grunnlag, behandlingVersjon, readOnly }:
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       onDeleteMellomlagringClick={undefined}
-      onLagreMellomLagringClick={undefined}
       mellomlagretVurdering={undefined}
       visningModus={visningModus}
       visningActions={visningActions}
@@ -191,7 +190,7 @@ export const IkkeOppfyltMeldeplikt = ({ grunnlag, behandlingVersjon, readOnly }:
           ))}
         </VStack>
       </VStack>
-    </VilkårskortMedFormOgMellomlagringNyVisning>
+    </VilkårskortMedFormOgMellomlagring>
   ) : (
     <></>
   );

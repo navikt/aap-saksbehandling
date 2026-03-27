@@ -1,17 +1,18 @@
-import { MellomlagretVurdering, StegType } from 'lib/types/types';
-import styles from './VilkårskortPeriodisert.module.css';
-import { Button, Detail, Heading, HGrid, HStack, VStack } from '@navikt/ds-react';
+'use client';
+
+import { Button, Detail, ExpansionCard, HStack, VStack } from '@navikt/ds-react';
+import { MellomlagretVurdering, StegType, VurdertAvAnsatt } from 'lib/types/types';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
-import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
-import { PlusIcon } from '@navikt/aksel-icons';
-import { ErrorList } from 'lib/utils/formerrors';
-import { FormErrorSummary } from 'components/formerrorsummary/FormErrorSummary';
-import { Dispatch, FormEvent, ReactNode, SetStateAction } from 'react';
+import { formaterDatoForFrontend, formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
+
+import styles from 'components/vilkårskort/Vilkårskort.module.css';
+import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
+import { FormEvent, ReactNode } from 'react';
 import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { ApiException } from 'lib/utils/api';
 import { VisningActions, VisningModus } from 'lib/types/visningTypes';
 
-interface VilkårsKortPeriodisertProps {
+export interface VilkårsKortMedFormOgMellomlagringProps {
   heading: string;
   steg: StegType;
   children: ReactNode;
@@ -20,22 +21,19 @@ interface VilkårsKortPeriodisertProps {
   status: LøsBehovOgGåTilNesteStegStatus;
   løsBehovOgGåTilNesteStegError: ApiException | undefined;
   knappTekst?: string;
+  defaultOpen?: boolean;
   vilkårTilhørerNavKontor: boolean;
+  vurdertAvAnsatt?: VurdertAvAnsatt;
+  vurdertAutomatisk?: boolean;
+  kvalitetssikretAv?: VurdertAvAnsatt;
   visningModus: VisningModus;
   visningActions: VisningActions;
   onDeleteMellomlagringClick: (() => void) | undefined;
   mellomlagretVurdering: MellomlagretVurdering | undefined;
   formReset: () => void;
-  vurdertAutomatisk?: boolean;
-  onLeggTilVurdering?: () => void;
-  errorList: ErrorList;
-  bekreftOgFortsett?: () => void;
-  visOverstyrTildelingModal?: boolean;
-  setVisOverstyrTildelingModal?: Dispatch<SetStateAction<boolean>>;
-  reservertAvNavn?: string;
 }
 
-export const VilkårskortPeriodisert = ({
+export const VilkårskortMedFormOgMellomlagring = ({
   heading,
   steg,
   children,
@@ -45,48 +43,49 @@ export const VilkårskortPeriodisert = ({
   løsBehovOgGåTilNesteStegError,
   vilkårTilhørerNavKontor,
   knappTekst = 'Bekreft',
+  defaultOpen = true,
+  vurdertAvAnsatt,
   vurdertAutomatisk = false,
+  kvalitetssikretAv,
   onDeleteMellomlagringClick,
   mellomlagretVurdering,
   visningModus,
   visningActions,
-  onLeggTilVurdering,
   formReset,
-  errorList,
-}: VilkårsKortPeriodisertProps) => {
+}: VilkårsKortMedFormOgMellomlagringProps) => {
   const classNameBasertPåEnhet = vilkårTilhørerNavKontor ? styles.vilkårsKortNAV : styles.vilkårsKortNAY;
-  const erAktivtSteg = visningModus === 'AKTIV_UTEN_AVBRYT' || visningModus === 'AKTIV_MED_AVBRYT';
+  const { flyt } = useRequiredFlyt();
+  const erAktivtSteg = flyt.aktivtSteg === steg || visningModus === 'AKTIV_MED_AVBRYT';
 
   const readOnly = visningModus === 'LÅST_MED_ENDRE' || visningModus === 'LÅST_UTEN_ENDRE';
 
   return (
-    <VStack
-      padding={'3'}
-      gap={'1'}
+    <ExpansionCard
       aria-label={heading}
-      className={`${erAktivtSteg ? classNameBasertPåEnhet : styles.vilkårsKort}`}
+      className={erAktivtSteg ? classNameBasertPåEnhet : styles.vilkårsKort}
+      size="small"
+      defaultOpen={defaultOpen}
+      id={steg}
     >
-      <HGrid columns={'1fr'} paddingBlock={'3'}>
-        <Heading level={'3'} size={'small'} data-testid="vilkår-heading">
-          {heading}
-        </Heading>
-      </HGrid>
+      <ExpansionCard.Header className={styles.header}>
+        <div className={styles.title}>
+          <ExpansionCard.Title size="small" data-testid="vilkår-heading">
+            {heading}
+          </ExpansionCard.Title>
+        </div>
+      </ExpansionCard.Header>
 
-      <VStack>
+      <ExpansionCard.Content className={styles.content}>
         <form onSubmit={onSubmit} id={steg} autoComplete="off">
           <VStack gap="4">
             {/* innhold i vilkårskortet */}
-            <VStack style={{ borderTop: '1px solid lightgray' }} paddingBlock={'4 0'}>
-              {children}
-            </VStack>
+            {children}
 
             {/* Status / feil */}
             <LøsBehovOgGåTilNesteStegStatusAlert
               løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
               status={status}
             />
-
-            <FormErrorSummary errorList={errorList} />
 
             <HStack justify="space-between" align="end">
               {/* Venstre kolonne: knapper + utkast */}
@@ -96,11 +95,6 @@ export const VilkårskortPeriodisert = ({
                   {visningModus === 'AKTIV_UTEN_AVBRYT' && (
                     <>
                       <Button loading={isLoading}>{knappTekst}</Button>
-                      {onLeggTilVurdering && (
-                        <Button variant={'secondary'} icon={<PlusIcon />} onClick={onLeggTilVurdering} type="button">
-                          Legg til ny vurdering
-                        </Button>
-                      )}
                     </>
                   )}
 
@@ -113,16 +107,11 @@ export const VilkårskortPeriodisert = ({
                           variant="secondary"
                           onClick={() => {
                             visningActions.avbrytEndringClick();
-                            formReset && formReset();
                             onDeleteMellomlagringClick && mellomlagretVurdering && onDeleteMellomlagringClick();
+                            formReset && formReset();
                           }}
                         >
                           Avbryt
-                        </Button>
-                      )}
-                      {onLeggTilVurdering && (
-                        <Button variant={'secondary'} icon={<PlusIcon />} onClick={onLeggTilVurdering} type="button">
-                          Legg til ny vurdering
                         </Button>
                       )}
                     </>
@@ -157,13 +146,30 @@ export const VilkårskortPeriodisert = ({
                 )}
               </VStack>
 
-              <VStack align="baseline" paddingBlock={'2 0'}>
+              {/* Høyre kolonne: vurdert av / kvalitetssikret av */}
+              <VStack align="baseline">
                 {vurdertAutomatisk && <Detail>Vurdert automatisk</Detail>}
+                {vurdertAvAnsatt && (
+                  <Detail>
+                    {`Vurdert av ${utledVurdertAv(vurdertAvAnsatt)}, ${formaterDatoForFrontend(vurdertAvAnsatt.dato)}`}
+                  </Detail>
+                )}
+                {kvalitetssikretAv && (
+                  <Detail>
+                    {`Kvalitetssikret av ${utledVurdertAv(kvalitetssikretAv)}, ${formaterDatoForFrontend(
+                      kvalitetssikretAv.dato
+                    )}`}
+                  </Detail>
+                )}
               </VStack>
             </HStack>
           </VStack>
         </form>
-      </VStack>
-    </VStack>
+      </ExpansionCard.Content>
+    </ExpansionCard>
   );
 };
+
+function utledVurdertAv(vurdertAvAnsatt: VurdertAvAnsatt): string {
+  return vurdertAvAnsatt.ansattnavn ? vurdertAvAnsatt.ansattnavn : vurdertAvAnsatt.ident;
+}

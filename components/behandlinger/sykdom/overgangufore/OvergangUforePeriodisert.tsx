@@ -74,8 +74,11 @@ export const OvergangUforePeriodisert = ({
   const form = useForm<OvergangUforeForm>({ defaultValues });
   const { fields: nyeVurderingFields, remove, append } = useFieldArray({ name: 'vurderinger', control: form.control });
 
-  const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
-    useMellomlagring(Behovstype.OVERGANG_UFORE, initialMellomlagretVurdering, form);
+  const { slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } = useMellomlagring(
+    Behovstype.OVERGANG_UFORE,
+    initialMellomlagretVurdering,
+    form
+  );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
@@ -122,7 +125,6 @@ export const OvergangUforePeriodisert = ({
       status={status}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={true}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}
       mellomlagretVurdering={mellomlagretVurdering}
       visningModus={visningModus}

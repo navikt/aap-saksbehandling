@@ -347,7 +347,7 @@ describe('FastsettArbeidsevne', () => {
         );
       });
 
-      it('Skal ikke være mulig å lagre eller slette mellomlagring hvis det er readOnly', () => {
+      it('Skal ikke være mulig å slette mellomlagring hvis det er readOnly', () => {
         render(
           <FastsettArbeidsevnePeriodisertFrontend
             readOnly={true}
@@ -357,8 +357,6 @@ describe('FastsettArbeidsevne', () => {
           />
         );
 
-        const lagreKnapp = screen.queryByRole('button', { name: 'Lagre utkast' });
-        expect(lagreKnapp).not.toBeInTheDocument();
         const slettKnapp = screen.queryByRole('button', { name: 'Slett utkast' });
         expect(slettKnapp).not.toBeInTheDocument();
       });

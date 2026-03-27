@@ -87,8 +87,11 @@ export const ForutgåendeMedlemskapPeriodisert = ({
     });
   }
 
-  const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
-    useMellomlagring(Behovstype.AVKLAR_FORUTGÅENDE_MEDLEMSKAP, initialMellomlagretVurdering, form);
+  const { slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } = useMellomlagring(
+    Behovstype.AVKLAR_FORUTGÅENDE_MEDLEMSKAP,
+    initialMellomlagretVurdering,
+    form
+  );
 
   function onSubmit(data: ForutgåendeMedlemskapVurderingForm) {
     const erPerioderGyldige = validerPeriodiserteVurderingerRekkefølge({
@@ -138,7 +141,6 @@ export const ForutgåendeMedlemskapPeriodisert = ({
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring({ ...form.watch(), overstyring })}
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}
       visningModus={visningModus}
       visningActions={visningActions}
