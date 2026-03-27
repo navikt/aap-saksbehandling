@@ -111,8 +111,11 @@ export const Yrkesskade = ({
     { readOnly: formReadOnly, shouldUnregister: true }
   );
 
-  const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
-    useMellomlagring(Behovstype.YRKESSKADE_KODE, initialMellomlagretVurdering, form);
+  const { slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } = useMellomlagring(
+    Behovstype.YRKESSKADE_KODE,
+    initialMellomlagretVurdering,
+    form
+  );
 
   const { fields: relevanteYrkesskadeSaker, update } = useFieldArray({
     name: 'relevanteYrkesskadeSaker',
@@ -190,7 +193,6 @@ export const Yrkesskade = ({
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vurdertAvAnsatt={grunnlag.yrkesskadeVurdering?.vurdertAv}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() => form.reset(mapVurderingToDraftFormFields(grunnlag)));
       }}

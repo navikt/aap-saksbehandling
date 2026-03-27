@@ -63,8 +63,11 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon, initi
     },
   });
 
-  const { nullstillMellomlagretVurdering, mellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.AVKLAR_SONINGSFORRHOLD, initialMellomlagretVurdering, form);
+  const { nullstillMellomlagretVurdering, mellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.AVKLAR_SONINGSFORRHOLD,
+    initialMellomlagretVurdering,
+    form
+  );
 
   const { fields, remove, append } = useFieldArray({ control: form.control, name: 'soningsvurderinger' });
 
@@ -106,7 +109,6 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon, initi
       vilkårTilhørerNavKontor={false}
       vurdertAvAnsatt={grunnlag.vurdertAv}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() => form.reset(mapVurderingToDraftFormFields(grunnlag.vurderinger)))
       }

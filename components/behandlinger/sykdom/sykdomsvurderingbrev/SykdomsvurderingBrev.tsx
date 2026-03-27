@@ -74,8 +74,11 @@ export const SykdomsvurderingBrev = ({
     { shouldUnregister: true, readOnly: formReadOnly }
   );
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.SYKDOMSVURDERING_BREV_KODE, initialMellomlagretVurdering, form);
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.SYKDOMSVURDERING_BREV_KODE,
+    initialMellomlagretVurdering,
+    form
+  );
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
       løsBehovOgGåTilNesteSteg(
@@ -112,7 +115,6 @@ export const SykdomsvurderingBrev = ({
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
       kvalitetssikretAv={grunnlag?.vurdering?.kvalitetssikretAv}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() => {
           form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields());

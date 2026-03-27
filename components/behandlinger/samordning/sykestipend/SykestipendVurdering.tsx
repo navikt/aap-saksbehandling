@@ -64,8 +64,11 @@ export const SykestipendVurdering = ({
     { readOnly: formReadOnly }
   );
 
-  const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
-    useMellomlagring(Behovstype.AVKLAR_SAMORDNING_SYKESTIPEND_KODE, initialMellomlagretVurdering, form);
+  const { slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } = useMellomlagring(
+    Behovstype.AVKLAR_SAMORDNING_SYKESTIPEND_KODE,
+    initialMellomlagretVurdering,
+    form
+  );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit(async (data) =>
@@ -103,7 +106,6 @@ export const SykestipendVurdering = ({
       vilkårTilhørerNavKontor={false}
       vurdertAvAnsatt={grunnlag?.gjeldendeVurdering?.vurdertAv}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() =>
           form.reset(grunnlag?.gjeldendeVurdering ? mapVurderingTilForm(grunnlag.gjeldendeVurdering) : tomtForm())

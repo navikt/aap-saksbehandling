@@ -80,8 +80,11 @@ export const SamordningArbeidsgiver = ({
     { readOnly: formReadOnly }
   );
 
-  const { nullstillMellomlagretVurdering, mellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.AVKLAR_SAMORDNING_ARBEIDSGIVER, initialMellomlagretVurdering, form);
+  const { nullstillMellomlagretVurdering, mellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.AVKLAR_SAMORDNING_ARBEIDSGIVER,
+    initialMellomlagretVurdering,
+    form
+  );
 
   const harFåttEkstrautbetalingFraArbeidsgiver = grunnlag.harFåttEkstrautbetalingFraArbeidsgiver ? 'Ja' : 'Nei';
 
@@ -123,7 +126,6 @@ export const SamordningArbeidsgiver = ({
       vilkårTilhørerNavKontor={false}
       vurdertAvAnsatt={grunnlag.vurdering?.vurdertAv}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() =>
           form.reset(grunnlag.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields())

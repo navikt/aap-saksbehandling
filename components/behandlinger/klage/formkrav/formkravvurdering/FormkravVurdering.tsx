@@ -101,8 +101,11 @@ export const FormkravVurdering = ({ behandlingVersjon, grunnlag, readOnly, initi
     { readOnly: formReadOnly, shouldUnregister: true }
   );
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.VURDER_FORMKRAV, initialMellomlagretVurdering, form);
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.VURDER_FORMKRAV,
+    initialMellomlagretVurdering,
+    form
+  );
 
   const { erKonkret, erSignert, erBrukerPart, erFristOverholdt, likevelBehandles } = form.watch();
   const avvistGrunnetFrist = erFristOverholdt === JaEllerNei.Nei && likevelBehandles === JaEllerNei.Nei;
@@ -147,7 +150,6 @@ export const FormkravVurdering = ({ behandlingVersjon, grunnlag, readOnly, initi
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() =>
           form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields())

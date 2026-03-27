@@ -165,8 +165,11 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly, ini
     { readOnly: formReadOnly }
   );
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.FASTSETT_FULLMEKTIG, initialMellomlagretVurdering, form);
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.FASTSETT_FULLMEKTIG,
+    initialMellomlagretVurdering,
+    form
+  );
 
   const [harFullmektig, idType, land] = form.watch(['harFullmektig', 'idType', 'land']);
 
@@ -224,7 +227,6 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly, ini
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() =>
           form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag) : emptyDraftFormFields())

@@ -480,7 +480,7 @@ describe('Mellomlagring i vedtakslengde', () => {
     expect(begrunnelseFelt).toHaveValue('Manuell forlengelse begrunnelse');
   });
 
-  it('Skal ikke være mulig å lagre eller slette mellomlagring hvis det er readOnly', () => {
+  it('Skal ikke være mulig å slette mellomlagring hvis det er readOnly', () => {
     render(
       <VedtakslengdeSteg
         readOnly={true}
@@ -490,8 +490,6 @@ describe('Mellomlagring i vedtakslengde', () => {
       />
     );
 
-    const lagreKnapp = screen.queryByRole('button', { name: 'Lagre utkast' });
-    expect(lagreKnapp).not.toBeInTheDocument();
     const slettKnapp = screen.queryByRole('button', { name: 'Slett utkast' });
     expect(slettKnapp).not.toBeInTheDocument();
   });

@@ -68,8 +68,11 @@ export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering, behandlin
     { readOnly: formReadOnly }
   );
 
-  const { mellomlagretVurdering, lagreMellomlagring, nullstillMellomlagretVurdering, slettMellomlagring } =
-    useMellomlagring(Behovstype.AVKLAR_SAMORDNING_BARNEPENSJON_KODE, initialMellomlagretVurdering, form);
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.AVKLAR_SAMORDNING_BARNEPENSJON_KODE,
+    initialMellomlagretVurdering,
+    form
+  );
 
   const feilmeldinger = hentFeilmeldingerForForm(form.formState.errors);
 
@@ -107,7 +110,6 @@ export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering, behandlin
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() =>
           form.reset(grunnlag.vurdering ? mapVurderingToDraftFormFields(grunnlag) : emptyDraftFormFields())

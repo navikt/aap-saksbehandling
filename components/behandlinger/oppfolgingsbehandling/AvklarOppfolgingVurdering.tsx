@@ -95,8 +95,11 @@ export const AvklaroppfolgingVurdering = ({
     { readOnly: formReadOnly }
   );
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(behovsType, initialMellomlagretVurdering, form);
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    behovsType,
+    initialMellomlagretVurdering,
+    form
+  );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
@@ -133,7 +136,6 @@ export const AvklaroppfolgingVurdering = ({
       vurdertAvAnsatt={undefined}
       knappTekst={'Fullfør'}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() =>
           form.reset(grunnlag.grunnlag ? mapVurderingToDraftFormFields(grunnlag.grunnlag) : emptyDraftFormFields())

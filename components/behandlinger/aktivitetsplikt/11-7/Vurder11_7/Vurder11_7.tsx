@@ -146,8 +146,11 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
     { readOnly: formReadOnly }
   );
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.VURDER_BRUDD_11_7_KODE, initialMellomlagretVurdering, form);
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.VURDER_BRUDD_11_7_KODE,
+    initialMellomlagretVurdering,
+    form
+  );
 
   const knapptekst = () => {
     if (
@@ -179,7 +182,6 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
       vilkårTilhørerNavKontor={true}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() =>
           form.reset(grunnlag.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields())

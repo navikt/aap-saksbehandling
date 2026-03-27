@@ -47,8 +47,11 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, ini
     },
   });
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.FASTSETT_PÅKLAGET_BEHANDLING, initialMellomlagretVurdering, form);
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.FASTSETT_PÅKLAGET_BEHANDLING,
+    initialMellomlagretVurdering,
+    form
+  );
 
   const onSubmit = (data: FormFields) => {
     løsBehovOgGåTilNesteSteg(
@@ -81,7 +84,6 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, ini
       status={status}
       vurdertAvAnsatt={grunnlag?.vurdertAv}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() =>
           form.reset(

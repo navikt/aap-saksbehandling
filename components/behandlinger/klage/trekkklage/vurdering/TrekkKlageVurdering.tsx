@@ -74,8 +74,11 @@ export const TrekkKlageVurdering = ({ behandlingVersjon, readOnly, grunnlag, ini
     { readOnly: formReadOnly }
   );
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.TREKK_KLAGE_KODE, initialMellomlagretVurdering, form);
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.TREKK_KLAGE_KODE,
+    initialMellomlagretVurdering,
+    form
+  );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
@@ -112,7 +115,6 @@ export const TrekkKlageVurdering = ({ behandlingVersjon, readOnly, grunnlag, ini
       isLoading={isLoading}
       status={status}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() =>
           form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields())

@@ -54,7 +54,6 @@ export const ForeslåVedtak = ({ behandlingVersjon, readOnly, grunnlag }: Props)
       visningActions={visningActions}
       formReset={() => {}}
       onDeleteMellomlagringClick={undefined}
-      onLagreMellomLagringClick={undefined}
     >
       <div className={styles.foreslåvedtak}>
         <Label as="p" size={'medium'}>

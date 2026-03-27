@@ -69,8 +69,11 @@ export const SamordningTjenestePensjon = ({
     { readOnly: formReadOnly }
   );
 
-  const { lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
-    useMellomlagring(Behovstype.SAMORDNING_REFUSJONS_KRAV, initialMellomlagretVurdering, form);
+  const { slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } = useMellomlagring(
+    Behovstype.SAMORDNING_REFUSJONS_KRAV,
+    initialMellomlagretVurdering,
+    form
+  );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) =>
@@ -104,7 +107,6 @@ export const SamordningTjenestePensjon = ({
       steg={'SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV'}
       onSubmit={handleSubmit}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() =>
           form.reset(
