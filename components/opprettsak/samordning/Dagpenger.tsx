@@ -4,12 +4,7 @@ import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrap
 import { OpprettSakFormFields } from 'components/opprettsak/OpprettSakLocal';
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { ValuePair } from 'components/form/FormField';
-import {
-  AndreStatligeYtelserKilde,
-  AndreStatligeYtelserType,
-  DagpengerKilde,
-  DagpengerYtelserType,
-} from 'lib/types/types';
+import { DagpengerKilde, DagpengerYtelserType } from 'lib/types/types';
 import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
 
 interface Props {
@@ -23,7 +18,7 @@ const kildeOptions: ValuePair<DagpengerKilde>[] = [
   },
   {
     value: 'DP_SAK',
-    label: 'DP_SAK'
+    label: 'DP_SAK',
   },
 ];
 
@@ -47,7 +42,7 @@ export const Dagpenger = ({ form }: Props) => {
     control: form.control,
     name: 'dagpenger',
   });
-  
+
   return (
     <VStack gap={'2'}>
       <Label>Samordning, dagpenger</Label>
