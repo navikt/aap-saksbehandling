@@ -6,34 +6,70 @@ import {
   erNyttOppholdInnenfor3MaanederEtterSistOpphold,
   erReduksjonUtIFraVurdering,
   lagReduksjonBeskrivelseNyttOpphold,
-  validerDatoErInnenforOpphold,
+  validerDatoErInnenforOppholdIkkeReduksjon,
+  validerDatoErInnenforOppholdReduksjon,
   validerErIKronologiskRekkeFølge,
 } from 'lib/utils/institusjonopphold';
 
-describe('validerReduksjonsdatoInnenforOpphold', () => {
+describe('validerDatoErInnenforOppholdReduksjon', () => {
   const oppholdFra = new Dato('2025-01-01').formaterForFrontend();
   const avsluttetDato = new Dato('2025-08-01').formaterForFrontend();
 
   it('skal vise en feilmelding dersom reduksjonsdato er før oppholdFra dato', () => {
     const inputValue = new Dato('2024-12-31').formaterForFrontend();
-    const value = validerDatoErInnenforOpphold(inputValue, oppholdFra, avsluttetDato);
+    const value = validerDatoErInnenforOppholdReduksjon(inputValue, oppholdFra, avsluttetDato);
     expect(value).toBe('Dato kan ikke være før innleggelsesdato: 01.01.2025');
   });
 
   it('skal vise en feilmelding dersom reduksjonsdato er etter oppholdTil dato', () => {
     const inputValue = new Dato('2025-10-01').formaterForFrontend();
-    const value = validerDatoErInnenforOpphold(inputValue, oppholdFra, avsluttetDato);
+    const value = validerDatoErInnenforOppholdReduksjon(inputValue, oppholdFra, avsluttetDato);
     expect(value).toBe('Dato kan ikke være etter oppholdets sluttdato: 01.08.2025');
   });
 
   it('skal returnere true dersom reduksjonsdato er innenfor perioden', () => {
     const inputValue = new Dato('2025-06-01').formaterForFrontend();
-    const value = validerDatoErInnenforOpphold(inputValue, oppholdFra, avsluttetDato);
+    const value = validerDatoErInnenforOppholdReduksjon(inputValue, oppholdFra, avsluttetDato);
     expect(value).toBeTruthy();
   });
 });
 
-describe('validerReduksjonsdatoInnenforOpphold', () => {
+describe('validerDatoErInnenforOppholdIkkeReduksjon', () => {
+  const oppholdFra = new Dato('2025-01-01').formaterForFrontend();
+  const avsluttetDato = new Dato('2025-08-01').formaterForFrontend();
+
+  it('skal vise en feilmelding dersom reduksjonsdato er før oppholdFra dato', () => {
+    const inputValue = new Dato('2024-12-31').formaterForFrontend();
+    const value = validerDatoErInnenforOppholdIkkeReduksjon(inputValue, oppholdFra, avsluttetDato);
+    expect(value).toBe('Dato kan ikke være før innleggelsesdato: 01.01.2025');
+  });
+
+  it('skal vise en feilmelding dersom dato er to dager etter oppholdets slutt ', () => {
+    const inputValue = new Dato('2025-08-03').formaterForFrontend();
+    const value = validerDatoErInnenforOppholdIkkeReduksjon(inputValue, oppholdFra, avsluttetDato);
+    expect(value).toBe('Dato kan ikke være senere enn dagen etter oppholdets sluttdato: 02.08.2025');
+  });
+
+  it('skal ikke vise feilmelding dersom dato er dagen etter oppholdets slutt ', () => {
+    const inputValue = new Dato('2025-08-02').formaterForFrontend();
+    const value = validerDatoErInnenforOppholdIkkeReduksjon(inputValue, oppholdFra, avsluttetDato);
+    expect(value).toBeTruthy();
+  });
+
+  it('skal vise en feilmelding dersom reduksjonsdato er etter oppholdTil dato', () => {
+    const inputValue = new Dato('2025-10-01').formaterForFrontend();
+    const value = validerDatoErInnenforOppholdIkkeReduksjon(inputValue, oppholdFra, avsluttetDato);
+    expect(value).toBe('Dato kan ikke være senere enn dagen etter oppholdets sluttdato: 02.08.2025');
+  });
+
+  it('skal returnere true dersom reduksjonsdato er innenfor perioden', () => {
+    const inputValue = new Dato('2025-06-01').formaterForFrontend();
+    const value = validerDatoErInnenforOppholdIkkeReduksjon(inputValue, oppholdFra, avsluttetDato);
+    expect(value).toBeTruthy();
+  });
+});
+
+describe('validerErIKronologiskRekkefølge', () => {
   const forrigevurderingFom = new Dato('2025-02-01').formaterForFrontend();
 
   it('skal vise en feilmelding dersom input value er tidligere enn forrige vurdering fom', () => {

@@ -11,7 +11,13 @@ import {
 } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 
-import { DATO_FORMATER, formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
+import {
+  DATO_FORMATER,
+  erUendeligSlutt,
+  formaterDatoForBackend,
+  formaterDatoForFrontend,
+  uendeligSluttString,
+} from 'lib/utils/date';
 
 import React, { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
@@ -19,7 +25,7 @@ import { useConfigForm } from 'components/form/FormHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
-import { format, parse, subDays } from 'date-fns';
+import { format, isAfter, parse, subDays } from 'date-fns';
 import { useFieldArray } from 'react-hook-form';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { Dato } from 'lib/types/Dato';
@@ -93,32 +99,48 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
+      const parseDato = (dato: string) => parse(dato, 'dd.MM.yyyy', new Date());
+
       const vurderinger: HelseInstiusjonVurdering[] = data.helseinstitusjonsvurderinger.flatMap((opphold) => {
-        return opphold.vurderinger.map((vurdering, index) => {
-          const nesteVurdering = opphold.vurderinger.at(index + 1);
+        const faktiskOpphold = grunnlag.opphold.find((o) => o.oppholdId === opphold.oppholdId);
+        const oppholdErLøpende = !faktiskOpphold?.avsluttetDato || erUendeligSlutt(faktiskOpphold.avsluttetDato);
+        const oppholdSluttDatoISO = oppholdErLøpende ? null : faktiskOpphold.avsluttetDato;
+        const oppholdSluttDato = oppholdSluttDatoISO ? new Date(oppholdSluttDatoISO) : null;
 
-          const fom = vurdering.periode?.fom
-            ? formaterDatoForBackend(parse(vurdering.periode.fom, 'dd.MM.yyyy', new Date()))
-            : formaterDatoForBackend(parse(opphold.periode.fom, 'dd.MM.yyyy', new Date()));
+        return (
+          opphold.vurderinger
+            // Filtrerer bort vurderinger der periodens startdato (fom) er etter oppholdets sluttdato.
+            .filter((vurdering) => {
+              if (!vurdering.periode?.fom || !oppholdSluttDato) return true;
+              return !isAfter(parseDato(vurdering.periode.fom), oppholdSluttDato);
+            })
+            .map((vurdering, index, filtrerteVurderinger) => {
+              const nesteVurdering = filtrerteVurderinger.at(index + 1);
 
-          const tom = !nesteVurdering
-            ? // tom dato for siste vurdering skal alltid være siste dag i oppholdet
-              formaterDatoForBackend(parse(opphold.periode.tom, 'dd.MM.yyyy', new Date()))
-            : // tom skal være dagen før fom i neste vurdering
-              formaterDatoForBackend(subDays(new Dato(nesteVurdering.periode.fom).dato, 1));
+              const fom = vurdering.periode?.fom
+                ? formaterDatoForBackend(parseDato(vurdering.periode.fom))
+                : formaterDatoForBackend(parseDato(opphold.periode.fom));
 
-          return {
-            oppholdId: vurdering.oppholdId,
-            begrunnelse: vurdering.begrunnelse,
-            faarFriKostOgLosji: vurdering.faarFriKostOgLosji === JaEllerNei.Ja,
-            forsoergerEktefelle: vurdering.forsoergerEktefelle === JaEllerNei.Ja,
-            harFasteUtgifter: vurdering.harFasteUtgifter === JaEllerNei.Ja,
-            periode: {
-              fom: fom,
-              tom: tom,
-            },
-          };
-        });
+              let tom: string;
+              if (nesteVurdering) {
+                tom = formaterDatoForBackend(subDays(new Dato(nesteVurdering.periode.fom).dato, 1));
+              } else {
+                tom = oppholdErLøpende ? uendeligSluttString : formaterDatoForBackend(oppholdSluttDato!);
+              }
+
+              return {
+                oppholdId: vurdering.oppholdId,
+                begrunnelse: vurdering.begrunnelse,
+                faarFriKostOgLosji: vurdering.faarFriKostOgLosji === JaEllerNei.Ja,
+                forsoergerEktefelle: vurdering.forsoergerEktefelle === JaEllerNei.Ja,
+                harFasteUtgifter: vurdering.harFasteUtgifter === JaEllerNei.Ja,
+                periode: {
+                  fom: fom,
+                  tom: tom,
+                },
+              };
+            })
+        );
       });
 
       løsBehovOgGåTilNesteSteg(
