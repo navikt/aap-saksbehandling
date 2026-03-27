@@ -132,6 +132,12 @@ export type AndreStatligeYtelserKilde =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.AndreStatligeYtelserPeriodeDto']['kilde'];
 export type AndreStatligeYtelserType =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.AndreStatligeYtelserPeriodeDto']['ytelseType'];
+export type DagpengerYtelserType =
+  components['schemas']['no.nav.aap.behandlingsflyt.test.modell.TestPerson.Dagpenger']['dagpengerYtelseType'];
+export type DagpengerKilde = components['schemas']['no.nav.aap.behandlingsflyt.test.modell.TestPerson.Dagpenger']['kilde'];
+export type TiltakspengerYtelserType =
+  components['schemas']['no.nav.aap.behandlingsflyt.test.modell.TestPerson.Tiltakspenger']['ytelseType'];
+export type TiltakspengerKilde = components['schemas']['no.nav.aap.behandlingsflyt.test.modell.TestPerson.Tiltakspenger']['kilde'];
 export type SamordningAndreStatligeYtelserVurderinger =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningAndreStatligeYtelserVurderingDTO'];
 
