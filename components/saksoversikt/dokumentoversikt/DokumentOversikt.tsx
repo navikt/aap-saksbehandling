@@ -1,5 +1,5 @@
 import styles from './DokumentOversikt.module.css';
-import { Alert, Box, Heading, HStack, Table, VStack } from '@navikt/ds-react';
+import { Alert, Box, Button, Heading, HStack, Table, VStack } from '@navikt/ds-react';
 import { Spinner } from 'components/felles/Spinner';
 import { isSuccess } from 'lib/utils/api';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
@@ -14,6 +14,7 @@ import { Journalpost, Journalposttype, Journalstatus, Tema } from 'lib/types/jou
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { useEffect, useState } from 'react';
 import { useLagretDokumentFilter } from 'hooks/dokumenter/dokumentFilterHook';
+import { ArrowCirclepathReverseIcon } from '@navikt/aksel-icons';
 
 export interface DokumentFilterFormFields {
   tema: string[];
@@ -89,6 +90,10 @@ export const DokumentOversikt = ({ sak }: { sak: SaksInfo }) => {
     return () => unsubscribe();
   }, [form, hentFilter, lagreFilter, sak.ident]);
 
+  const nullstill = () => {
+    form.reset({ tema: ['AAP'], typer: [], statuser: [] });
+  };
+
   if (error) {
     return <Alert variant="error">{error || 'Ukjent feil oppsto'}</Alert>;
   }
@@ -98,10 +103,15 @@ export const DokumentOversikt = ({ sak }: { sak: SaksInfo }) => {
       <Heading size="large">Dokumentoversikt</Heading>
 
       <Box background="surface-subtle" padding="4" borderRadius="xlarge">
-        <HStack gap="4">
+        <HStack gap="4" marginBlock="0 4" wrap={false}>
           <FormField form={form} formField={formFields.tema} />
           <FormField form={form} formField={formFields.typer} />
           <FormField form={form} formField={formFields.statuser} />
+        </HStack>
+        <HStack gap="4">
+          <Button variant="secondary" size="small" icon={<ArrowCirclepathReverseIcon />} onClick={nullstill}>
+            Nullstill
+          </Button>
         </HStack>
       </Box>
 
