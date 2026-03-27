@@ -65,8 +65,11 @@ export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly, initia
     { readOnly: formReadOnly }
   );
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.AVKLAR_SAMORDNING_UFORE, initialMellomlagretVurdering, form);
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.AVKLAR_SAMORDNING_UFORE,
+    initialMellomlagretVurdering,
+    form
+  );
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     form.handleSubmit(async (data) =>
@@ -106,7 +109,6 @@ export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly, initia
       vilkårTilhørerNavKontor={false}
       vurdertAvAnsatt={grunnlag.vurdering?.vurdertAv}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() => form.reset(mapVurderingToDraftFormFields(grunnlag)));
       }}

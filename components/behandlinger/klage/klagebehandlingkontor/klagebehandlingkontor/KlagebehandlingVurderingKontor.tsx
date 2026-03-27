@@ -116,8 +116,11 @@ export const KlagebehandlingVurderingKontor = ({
     { readOnly: formReadOnly }
   );
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.VURDER_KLAGE_KONTOR, initialMellomlagretVurdering, form);
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.VURDER_KLAGE_KONTOR,
+    initialMellomlagretVurdering,
+    form
+  );
 
   const innstilling = form.watch('innstilling');
 
@@ -166,7 +169,6 @@ export const KlagebehandlingVurderingKontor = ({
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
       kvalitetssikretAv={grunnlag?.vurdering?.kvalitetssikretAv}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() =>
           form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields())

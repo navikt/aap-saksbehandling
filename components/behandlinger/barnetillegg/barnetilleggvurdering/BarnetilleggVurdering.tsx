@@ -113,8 +113,11 @@ export const BarnetilleggVurdering = ({
     name: 'folkeregistrerteBarnVurderinger',
   });
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.AVKLAR_BARNETILLEGG_KODE, initialMellomlagretVurdering, form);
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.AVKLAR_BARNETILLEGG_KODE,
+    initialMellomlagretVurdering,
+    form
+  );
 
   const {
     fields: saksbehandlerOppgitteBarnVurderinger,
@@ -201,7 +204,6 @@ export const BarnetilleggVurdering = ({
       vurdertAvAnsatt={grunnlag.vurdertAv}
       vurdertAutomatisk={erFolkeregistrerteBarn}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() =>
           form.reset(

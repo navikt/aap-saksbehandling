@@ -5,8 +5,6 @@ import {
   VilkårsKortMedFormOgMellomlagringProps,
 } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
 import { VisningModus } from 'lib/types/visningTypes';
-import { FeatureFlagProvider } from 'context/UnleashContext';
-import { mockedFlags } from 'lib/services/unleash/unleashToggles';
 
 describe('Vilkårskort med form', () => {
   it('skal ha en overskrift', () => {
@@ -51,57 +49,47 @@ describe('Vilkårskort med form', () => {
 
   it('skal vise feilmelding dersom det finnes', () => {
     render(
-      <FeatureFlagProvider flags={{ ...mockedFlags, automatiskMellomlagring: false }}>
-        <VilkårskortMedFormOgMellomlagringNyVisning
-          {...defaultProps}
-          visningModus={VisningModus.AKTIV_UTEN_AVBRYT}
-          løsBehovOgGåTilNesteStegError={{ message: 'Dette er en feil fra backend gjennom løs behov', code: 'UKJENT' }}
-          visningActions={{
-            onBekreftClick: vitest.fn,
-            onEndreClick: vitest.fn,
-            avbrytEndringClick: vitest.fn,
-          }}
-          formReset={() => vitest.fn}
-        >
-          <span>Dette er innhold</span>
-        </VilkårskortMedFormOgMellomlagringNyVisning>
-      </FeatureFlagProvider>
+      <VilkårskortMedFormOgMellomlagringNyVisning
+        {...defaultProps}
+        visningModus={VisningModus.AKTIV_UTEN_AVBRYT}
+        løsBehovOgGåTilNesteStegError={{ message: 'Dette er en feil fra backend gjennom løs behov', code: 'UKJENT' }}
+        visningActions={{
+          onBekreftClick: vitest.fn,
+          onEndreClick: vitest.fn,
+          avbrytEndringClick: vitest.fn,
+        }}
+        formReset={() => vitest.fn}
+      >
+        <span>Dette er innhold</span>
+      </VilkårskortMedFormOgMellomlagringNyVisning>
     );
 
     const errorMessage = screen.getByText('Dette er en feil fra backend gjennom løs behov');
     expect(errorMessage).toBeVisible();
   });
 
-  it('Skal ha en knapp for å mellomlagre en vurdering dersom det har blitt sendt inn en lagre funksjon', () => {
-    renderComponentNyVisning(VisningModus.AKTIV_UTEN_AVBRYT);
-    const lagreUtkastKnapp = screen.getByRole('button', { name: 'Lagre utkast' });
-    expect(lagreUtkastKnapp).toBeVisible();
-  });
-
   it('Skal ha en knapp for å slette en mellomlagret vurdering dersom det finnes en mellomlagret vurdering og det finnes en delete funksjon', () => {
     render(
-      <FeatureFlagProvider flags={{ ...mockedFlags, automatiskMellomlagring: false }}>
-        <VilkårskortMedFormOgMellomlagringNyVisning
-          {...defaultProps}
-          visningModus={VisningModus.AKTIV_UTEN_AVBRYT}
-          visningActions={{
-            onBekreftClick: vitest.fn,
-            onEndreClick: vitest.fn,
-            avbrytEndringClick: vitest.fn,
-          }}
-          mellomlagretVurdering={{
-            vurdertDato: '2025-08-21T12:00:00.000',
-            vurdertAv: 'Jan T. Loven',
-            data: '{begrunnelse: 12}',
-            avklaringsbehovkode: '5003',
-            behandlingId: { id: 1 },
-          }}
-          onDeleteMellomlagringClick={() => vitest.fn}
-          formReset={() => vitest.fn}
-        >
-          <span>Dette er innhold</span>
-        </VilkårskortMedFormOgMellomlagringNyVisning>
-      </FeatureFlagProvider>
+      <VilkårskortMedFormOgMellomlagringNyVisning
+        {...defaultProps}
+        visningModus={VisningModus.AKTIV_UTEN_AVBRYT}
+        visningActions={{
+          onBekreftClick: vitest.fn,
+          onEndreClick: vitest.fn,
+          avbrytEndringClick: vitest.fn,
+        }}
+        mellomlagretVurdering={{
+          vurdertDato: '2025-08-21T12:00:00.000',
+          vurdertAv: 'Jan T. Loven',
+          data: '{begrunnelse: 12}',
+          avklaringsbehovkode: '5003',
+          behandlingId: { id: 1 },
+        }}
+        onDeleteMellomlagringClick={() => vitest.fn}
+        formReset={() => vitest.fn}
+      >
+        <span>Dette er innhold</span>
+      </VilkårskortMedFormOgMellomlagringNyVisning>
     );
 
     const slettUtkastKnapp = screen.getByRole('button', { name: 'Slett utkast' });
@@ -110,27 +98,25 @@ describe('Vilkårskort med form', () => {
 
   it('Skal vise hvem som har gjort mellomlagring hvis det finnes', () => {
     render(
-      <FeatureFlagProvider flags={{ ...mockedFlags, automatiskMellomlagring: false }}>
-        <VilkårskortMedFormOgMellomlagringNyVisning
-          {...defaultProps}
-          visningModus={VisningModus.AKTIV_UTEN_AVBRYT}
-          visningActions={{
-            onBekreftClick: vitest.fn,
-            onEndreClick: vitest.fn,
-            avbrytEndringClick: vitest.fn,
-          }}
-          mellomlagretVurdering={{
-            vurdertDato: '2025-08-21T12:00:00.000',
-            vurdertAv: 'Jan T. Loven',
-            data: '{begrunnelse: 12}',
-            avklaringsbehovkode: '5003',
-            behandlingId: { id: 1 },
-          }}
-          formReset={() => vitest.fn}
-        >
-          <span>Dette er innhold</span>
-        </VilkårskortMedFormOgMellomlagringNyVisning>
-      </FeatureFlagProvider>
+      <VilkårskortMedFormOgMellomlagringNyVisning
+        {...defaultProps}
+        visningModus={VisningModus.AKTIV_UTEN_AVBRYT}
+        visningActions={{
+          onBekreftClick: vitest.fn,
+          onEndreClick: vitest.fn,
+          avbrytEndringClick: vitest.fn,
+        }}
+        mellomlagretVurdering={{
+          vurdertDato: '2025-08-21T12:00:00.000',
+          vurdertAv: 'Jan T. Loven',
+          data: '{begrunnelse: 12}',
+          avklaringsbehovkode: '5003',
+          behandlingId: { id: 1 },
+        }}
+        formReset={() => vitest.fn}
+      >
+        <span>Dette er innhold</span>
+      </VilkårskortMedFormOgMellomlagringNyVisning>
     );
 
     const tekst = screen.getByText('Utkast lagret 21.08.2025 12:00 (Jan T. Loven)');
@@ -139,83 +125,48 @@ describe('Vilkårskort med form', () => {
 
   it('Skal ikke vise hvem som har gjort mellomlagring hvis det er readOnly', () => {
     render(
-      <FeatureFlagProvider flags={{ ...mockedFlags, automatiskMellomlagring: false }}>
-        <VilkårskortMedFormOgMellomlagringNyVisning
-          {...defaultProps}
-          visningModus={VisningModus.LÅST_UTEN_ENDRE}
-          visningActions={{
-            onBekreftClick: vitest.fn,
-            onEndreClick: vitest.fn,
-            avbrytEndringClick: vitest.fn,
-          }}
-          mellomlagretVurdering={{
-            vurdertDato: '2025-08-21T12:00:00.000',
-            vurdertAv: 'Jan T. Loven',
-            data: '{begrunnelse: 12}',
-            avklaringsbehovkode: '5003',
-            behandlingId: { id: 1 },
-          }}
-          formReset={() => vitest.fn}
-        >
-          <span>Dette er innhold</span>
-        </VilkårskortMedFormOgMellomlagringNyVisning>
-      </FeatureFlagProvider>
+      <VilkårskortMedFormOgMellomlagringNyVisning
+        {...defaultProps}
+        visningModus={VisningModus.LÅST_UTEN_ENDRE}
+        visningActions={{
+          onBekreftClick: vitest.fn,
+          onEndreClick: vitest.fn,
+          avbrytEndringClick: vitest.fn,
+        }}
+        mellomlagretVurdering={{
+          vurdertDato: '2025-08-21T12:00:00.000',
+          vurdertAv: 'Jan T. Loven',
+          data: '{begrunnelse: 12}',
+          avklaringsbehovkode: '5003',
+          behandlingId: { id: 1 },
+        }}
+        formReset={() => vitest.fn}
+      >
+        <span>Dette er innhold</span>
+      </VilkårskortMedFormOgMellomlagringNyVisning>
     );
 
     const tekst = screen.queryByText('Utkast lagret 21.08.2025 12:00 (Jan T. Loven)');
     expect(tekst).not.toBeInTheDocument();
   });
 
-  it('Skal ikke vise knapp for å lagre mellomlagring hvis det er readOnly', () => {
-    render(
-      <FeatureFlagProvider flags={{ ...mockedFlags, automatiskMellomlagring: false }}>
-        <VilkårskortMedFormOgMellomlagringNyVisning
-          {...defaultProps}
-          visningModus={VisningModus.LÅST_UTEN_ENDRE}
-          visningActions={{
-            onBekreftClick: vitest.fn,
-            onEndreClick: vitest.fn,
-            avbrytEndringClick: vitest.fn,
-          }}
-          mellomlagretVurdering={{
-            vurdertDato: '2025-08-21T12:00:00.000',
-            vurdertAv: 'Jan T. Loven',
-            data: '{begrunnelse: 12}',
-            avklaringsbehovkode: '5003',
-            behandlingId: { id: 1 },
-          }}
-          formReset={() => vitest.fn}
-        >
-          <span>Dette er innhold</span>
-        </VilkårskortMedFormOgMellomlagringNyVisning>
-      </FeatureFlagProvider>
-    );
-
-    const knapp = screen.queryByRole('button', { name: 'Lagre utkast' });
-    expect(knapp).not.toBeInTheDocument();
-  });
-
-  it('Skal ha knapper for bekreft, avbryt og lagre utkast når visningsModus er AKTIV_MED_AVBRYT', () => {
+  it('Skal ha knapper for bekreft og avbryt utkast når visningsModus er AKTIV_MED_AVBRYT', () => {
     renderComponentNyVisning(VisningModus.AKTIV_MED_AVBRYT);
     const bekreftKnapp = screen.getByRole('button', { name: 'Bekreft' });
     const avbrytKnapp = screen.getByRole('button', { name: 'Avbryt' });
-    const lagreUtkastKnapp = screen.getByRole('button', { name: 'Lagre utkast' });
 
     expect(bekreftKnapp).toBeVisible();
     expect(avbrytKnapp).toBeVisible();
-    expect(lagreUtkastKnapp).toBeVisible();
   });
 
-  it('Skal ha knapper for bekreft og lagre utkast når visningsModus er AKTIV_UTEN_AVBRYT', () => {
+  it('Skal ha knapper for bekreft når visningsModus er AKTIV_UTEN_AVBRYT', () => {
     renderComponentNyVisning(VisningModus.AKTIV_UTEN_AVBRYT);
 
     const bekreftKnapp = screen.getByRole('button', { name: 'Bekreft' });
     const avbrytKnapp = screen.queryByRole('button', { name: 'Avbryt' });
-    const lagreUtkastKnapp = screen.getByRole('button', { name: 'Lagre utkast' });
 
     expect(bekreftKnapp).toBeVisible();
     expect(avbrytKnapp).not.toBeInTheDocument();
-    expect(lagreUtkastKnapp).toBeVisible();
   });
 
   it('Skal ha knapp for å endre vurdering når visningsModus er LÅST_MED_ENDRE', () => {
@@ -226,48 +177,21 @@ describe('Vilkårskort med form', () => {
 
     const bekreftKnapp = screen.queryByRole('button', { name: 'Bekreft' });
     const avbrytKnapp = screen.queryByRole('button', { name: 'Avbryt' });
-    const lagreUtkastKnapp = screen.queryByRole('button', { name: 'Lagre utkast' });
 
     expect(bekreftKnapp).not.toBeInTheDocument();
     expect(avbrytKnapp).not.toBeInTheDocument();
-    expect(lagreUtkastKnapp).not.toBeInTheDocument();
   });
 
-  it('Skal ikke ha noen knapper når visningsModus er LÅST_UTEN_ENDRE', () => {
+  it('Skal ikke ha knapper for endre, bekreft eller avbryt når visningsModus er LÅST_UTEN_ENDRE', () => {
     renderComponentNyVisning(VisningModus.LÅST_UTEN_ENDRE);
 
     const endreKnapp = screen.queryByRole('button', { name: 'Endre' });
     const bekreftKnapp = screen.queryByRole('button', { name: 'Bekreft' });
     const avbrytKnapp = screen.queryByRole('button', { name: 'Avbryt' });
-    const lagreUtkastKnapp = screen.queryByRole('button', { name: 'Lagre utkast' });
 
     expect(endreKnapp).not.toBeInTheDocument();
     expect(bekreftKnapp).not.toBeInTheDocument();
     expect(avbrytKnapp).not.toBeInTheDocument();
-    expect(lagreUtkastKnapp).not.toBeInTheDocument();
-  });
-  it('Skal ikke ha lagre utkast-knapp lagreMellomlagring listener er undefined', () => {
-    render(
-      <FeatureFlagProvider flags={{ ...mockedFlags, automatiskMellomlagring: false }}>
-      <VilkårskortMedFormOgMellomlagringNyVisning
-        {...defaultProps}
-        visningModus={VisningModus.AKTIV_UTEN_AVBRYT}
-        visningActions={{
-          onBekreftClick: vitest.fn,
-          onEndreClick: vitest.fn,
-          avbrytEndringClick: vitest.fn,
-        }}
-        formReset={() => vitest.fn}
-        onLagreMellomLagringClick={undefined}
-      >
-        <span>Dette er innhold</span>
-      </VilkårskortMedFormOgMellomlagringNyVisning>
-      </FeatureFlagProvider>
-    );
-
-    const lagreUtkastKnapp = screen.queryByRole('button', { name: 'Lagre utkast' });
-
-    expect(lagreUtkastKnapp).not.toBeInTheDocument();
   });
 });
 
@@ -284,7 +208,6 @@ const defaultProps: VilkårsKortMedFormOgMellomlagringProps = {
   children: undefined,
   onDeleteMellomlagringClick: vitest.fn,
   mellomlagretVurdering: undefined,
-  onLagreMellomLagringClick: vitest.fn,
   løsBehovOgGåTilNesteStegError: undefined,
   visningActions: {
     onBekreftClick: vitest.fn,
@@ -296,19 +219,17 @@ const defaultProps: VilkårsKortMedFormOgMellomlagringProps = {
 
 function renderComponentNyVisning(visningModus: VisningModus) {
   render(
-    <FeatureFlagProvider flags={{ ...mockedFlags, automatiskMellomlagring: false }}>
-      <VilkårskortMedFormOgMellomlagringNyVisning
-        {...defaultProps}
-        visningModus={visningModus}
-        visningActions={{
-          onBekreftClick: vitest.fn,
-          onEndreClick: vitest.fn,
-          avbrytEndringClick: vitest.fn,
-        }}
-        formReset={() => vitest.fn}
-      >
-        <span>Dette er innhold</span>
-      </VilkårskortMedFormOgMellomlagringNyVisning>
-    </FeatureFlagProvider>
+    <VilkårskortMedFormOgMellomlagringNyVisning
+      {...defaultProps}
+      visningModus={visningModus}
+      visningActions={{
+        onBekreftClick: vitest.fn,
+        onEndreClick: vitest.fn,
+        avbrytEndringClick: vitest.fn,
+      }}
+      formReset={() => vitest.fn}
+    >
+      <span>Dette er innhold</span>
+    </VilkårskortMedFormOgMellomlagringNyVisning>
   );
 }

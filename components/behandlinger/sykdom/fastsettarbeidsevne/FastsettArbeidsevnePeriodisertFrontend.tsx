@@ -97,8 +97,11 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
     defaultValues,
   });
 
-  const { mellomlagretVurdering, lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering } =
-    useMellomlagring(Behovstype.FASTSETT_ARBEIDSEVNE_KODE, initialMellomlagretVurdering, form);
+  const { mellomlagretVurdering, slettMellomlagring, nullstillMellomlagretVurdering } = useMellomlagring(
+    Behovstype.FASTSETT_ARBEIDSEVNE_KODE,
+    initialMellomlagretVurdering,
+    form
+  );
 
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
 
@@ -164,7 +167,6 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}
       visningModus={visningModus}
       visningActions={visningActions}

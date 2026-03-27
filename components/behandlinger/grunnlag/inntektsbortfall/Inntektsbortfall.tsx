@@ -85,8 +85,11 @@ export const Inntektsbortfall = ({
     { readOnly: formReadOnly, shouldUnregister: true }
   );
 
-  const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
-    useMellomlagring(Behovstype.YRKESSKADE_KODE, initialMellomlagretVurdering, form);
+  const { slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } = useMellomlagring(
+    Behovstype.YRKESSKADE_KODE,
+    initialMellomlagretVurdering,
+    form
+  );
 
   const under62År = grunnlag.under62ÅrVedSøknadstidspunkt;
   const inntektSisteÅr = grunnlag.inntektSisteÅrOver1G;
@@ -134,7 +137,6 @@ export const Inntektsbortfall = ({
           form.reset(vurdering ? mapVurderingToDraftFormFields(vurdering) : {});
         });
       }}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
     >
       <>
         <TableStyled>

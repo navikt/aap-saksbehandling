@@ -86,7 +86,6 @@ export const AvbrytRevurderingVurdering = ({ grunnlag, readOnly, behandlingVersj
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
       onDeleteMellomlagringClick={undefined}
-      onLagreMellomLagringClick={undefined}
       mellomlagretVurdering={undefined}
       visningModus={visningModus}
       visningActions={visningActions}

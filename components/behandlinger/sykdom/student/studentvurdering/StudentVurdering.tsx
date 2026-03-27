@@ -95,8 +95,11 @@ export const StudentVurdering = ({
     initialMellomlagretVurdering
   );
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.AVKLAR_STUDENT_KODE, initialMellomlagretVurdering, form);
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.AVKLAR_STUDENT_KODE,
+    initialMellomlagretVurdering,
+    form
+  );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
@@ -156,7 +159,6 @@ export const StudentVurdering = ({
   return (
     <VilkårskortPeriodisert
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(mapVurderingToDraftFormFields(grunnlag)))}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       mellomlagretVurdering={mellomlagretVurdering}
       visningModus={visningModus}
       visningActions={visningActions}

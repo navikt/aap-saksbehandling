@@ -74,8 +74,11 @@ export const YrkesskadeGrunnlagBeregning = ({
 
   const { fields } = useFieldArray({ control: form.control, name: 'vurderinger' });
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.FASTSETT_YRKESSKADEINNTEKT, initialMellomlagretVurdering, form);
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.FASTSETT_YRKESSKADEINNTEKT,
+    initialMellomlagretVurdering,
+    form
+  );
 
   const vurdertAvAnsatt =
     yrkeskadeBeregningGrunnlag.vurderinger.length > 0 ? yrkeskadeBeregningGrunnlag.vurderinger[0].vurdertAv : undefined;
@@ -116,7 +119,6 @@ export const YrkesskadeGrunnlagBeregning = ({
       vilkårTilhørerNavKontor={false}
       vurdertAvAnsatt={vurdertAvAnsatt}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() => {
           form.reset(mapVurderingerToDraftFormFields(yrkeskadeBeregningGrunnlag));
