@@ -18,8 +18,8 @@ import { MarkeringInfoboks } from 'components/markeringinfoboks/MarkeringInfobok
 import { ArenaStatus } from 'components/arenastatus/ArenaStatus';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { ReturStatus } from 'components/returstatus/ReturStatus';
-import { Dato } from 'lib/types/Dato';
 import { SaksmenyDropdown } from 'components/saksinfobanner/SaksmenyDropdown';
+import { UtløptVentefristBoks } from '../oppgaveliste/utløptventefristboks/UtløptVentefristBoks';
 
 interface Props {
   personInformasjon: SakPersoninfo;
@@ -56,11 +56,6 @@ export const SaksinfoBanner = ({
       return { status: 'TRUKKET', label: 'Trukket' };
     } else if (visning?.resultatKode) {
       return { status: 'AVBRUTT', label: 'Avbrutt' };
-    } else if (oppgave?.utløptVentefrist) {
-      return {
-        status: 'VENTEFRIST_UTLØPT',
-        label: `Frist utløpt ${new Dato(oppgave.utløptVentefrist).formaterForFrontend()}`,
-      };
     }
   };
 
@@ -140,6 +135,15 @@ export const SaksinfoBanner = ({
           {oppgaveTildelingStatus && (
             <div className={styles.oppgavestatus}>
               <OppgaveStatus oppgaveStatus={oppgaveTildelingStatus} />
+            </div>
+          )}
+          {oppgave?.utløptVentefrist && (
+            <div className={styles.oppgavestatus}>
+              <UtløptVentefristBoks
+                frist={oppgave.utløptVentefrist}
+                årsak={oppgave.forrigePåVentÅrsak}
+                begrunnelse={oppgave.forrigeVenteBegrunnelse}
+              />
             </div>
           )}
           {oppgaveStatus && (
