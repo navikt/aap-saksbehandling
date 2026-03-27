@@ -477,6 +477,8 @@ describe('Sak status', () => {
           utløptVentefrist: '2026-01-04',
           påVentÅrsak: 'VENTER_PÅ_OPPLYSNINGER',
           venteBegrunnelse: 'Venter på dokumentasjon',
+          forrigeVenteBegrunnelse: 'Venter på dokumentasjon',
+          forrigePåVentÅrsak: 'VENTER_PÅ_OPPLYSNINGER',
         }}
       />
     );
