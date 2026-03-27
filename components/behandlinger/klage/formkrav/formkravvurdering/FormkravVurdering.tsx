@@ -10,7 +10,7 @@ import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { FormkravAvvisningVarsel } from 'components/behandlinger/klage/formkrav/formkravvurdering/FormkravAvvisningVarsel';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 
 interface Props {
   grunnlag?: FormkravGrunnlag;
@@ -140,7 +140,7 @@ export const FormkravVurdering = ({ behandlingVersjon, grunnlag, readOnly, initi
   };
 
   return (
-    <VilkårskortMedFormOgMellomlagringNyVisning
+    <VilkårskortMedFormOgMellomlagring
       heading={'Formkrav'}
       steg={'FORMKRAV'}
       onSubmit={handleSubmit}
@@ -169,7 +169,7 @@ export const FormkravVurdering = ({ behandlingVersjon, grunnlag, readOnly, initi
       {grunnlag?.varselSvarfrist != null && !readOnly && formkravErIkkeOppfylltVarsel && (
         <FormkravAvvisningVarsel frist={new Date(grunnlag.varselSvarfrist)} />
       )}
-    </VilkårskortMedFormOgMellomlagringNyVisning>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 

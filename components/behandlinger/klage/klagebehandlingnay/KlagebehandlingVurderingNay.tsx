@@ -16,7 +16,7 @@ import { getValgteHjemlerSomIkkeErImplementert, hjemmelalternativer, hjemmelMap 
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 
 interface Props {
   behandlingVersjon: number;
@@ -157,7 +157,7 @@ export const KlagebehandlingVurderingNay = ({
   };
 
   return (
-    <VilkårskortMedFormOgMellomlagringNyVisning
+    <VilkårskortMedFormOgMellomlagring
       heading={'Behandle klage'}
       steg={'KLAGEBEHANDLING_NAY'}
       onSubmit={handleSubmit}
@@ -186,7 +186,7 @@ export const KlagebehandlingVurderingNay = ({
       {['OPPRETTHOLD', 'DELVIS_OMGJØR'].includes(innstilling) && (
         <FormField form={form} formField={formFields.vilkårSomSkalOpprettholdes} />
       )}
-    </VilkårskortMedFormOgMellomlagringNyVisning>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 

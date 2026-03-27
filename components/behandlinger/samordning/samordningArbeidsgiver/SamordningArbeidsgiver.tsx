@@ -17,7 +17,7 @@ import { differenceInBusinessDays, parse } from 'date-fns';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import Link from 'next/link';
 
@@ -116,7 +116,7 @@ export const SamordningArbeidsgiver = ({
   const historiskeVurderinger = grunnlag.historiskeVurderinger;
 
   return (
-    <VilkårskortMedFormOgMellomlagringNyVisning
+    <VilkårskortMedFormOgMellomlagring
       heading="§ 11-24 Reduksjon av AAP på grunn av ytelser fra arbeidsgiver"
       steg="SAMORDNING_ARBEIDSGIVER"
       onSubmit={handleSubmit}
@@ -174,7 +174,7 @@ export const SamordningArbeidsgiver = ({
           </VStack>
         </VStack>
       }
-    </VilkårskortMedFormOgMellomlagringNyVisning>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 

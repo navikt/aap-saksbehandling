@@ -1,6 +1,6 @@
 'use client';
 
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { BarnepensjonGrunnlag, MellomlagretVurdering } from 'lib/types/types';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
@@ -77,7 +77,7 @@ export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering, behandlin
   const feilmeldinger = hentFeilmeldingerForForm(form.formState.errors);
 
   return (
-    <VilkårskortMedFormOgMellomlagringNyVisning
+    <VilkårskortMedFormOgMellomlagring
       heading={'§ 11-27 Samordning barnepensjon (valgfritt)'}
       steg={'SAMORDNING_BARNEPENSJON'}
       onSubmit={form.handleSubmit((data) => {
@@ -130,7 +130,7 @@ export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering, behandlin
 
         {feilmeldinger && feilmeldinger.length > 0 && <FormErrorSummary errorList={feilmeldinger} />}
       </VStack>
-    </VilkårskortMedFormOgMellomlagringNyVisning>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 

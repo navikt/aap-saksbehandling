@@ -10,7 +10,7 @@ import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { FormEvent } from 'react';
 import { ForeslåVedtakGrunnlag } from 'lib/types/types';
 import { ForeslåVedtakTabell } from 'components/behandlinger/vedtak/foreslåvedtak/foreslåvedtaktabell/ForeslåVedtakTabell';
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { useFeatureFlag } from 'context/UnleashContext';
@@ -31,7 +31,7 @@ export const ForeslåVedtak = ({ behandlingVersjon, readOnly, grunnlag }: Props)
   const { visningActions, visningModus } = useVilkårskortVisning(readOnly, 'FORESLÅ_VEDTAK', undefined);
 
   return (
-    <VilkårskortMedFormOgMellomlagringNyVisning
+    <VilkårskortMedFormOgMellomlagring
       heading="Foreslå vedtak"
       steg={'FORESLÅ_VEDTAK'}
       vilkårTilhørerNavKontor={false}
@@ -87,6 +87,6 @@ export const ForeslåVedtak = ({ behandlingVersjon, readOnly, grunnlag }: Props)
           løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
         />
       </div>
-    </VilkårskortMedFormOgMellomlagringNyVisning>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };

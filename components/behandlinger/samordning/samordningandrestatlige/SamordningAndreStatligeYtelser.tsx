@@ -17,7 +17,7 @@ import {
 } from 'lib/types/types';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { OppslagAndreYtelser } from 'components/oppslagandreytelser/OppslagAndreYtelser';
 
@@ -115,7 +115,7 @@ export const SamordningAndreStatligeYtelser = ({
   const historiskeVurderinger = grunnlag.historiskeVurderinger ?? null;
 
   return (
-    <VilkårskortMedFormOgMellomlagringNyVisning
+    <VilkårskortMedFormOgMellomlagring
       heading="Fradrag ved andre statlige ytelser"
       steg="SAMORDNING_ANDRE_STATLIGE_YTELSER"
       onSubmit={handleSubmit}
@@ -160,7 +160,7 @@ export const SamordningAndreStatligeYtelser = ({
         <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
         <AndreStatligeYtelserTabell form={form} readOnly={formReadOnly} />
       </VStack>
-    </VilkårskortMedFormOgMellomlagringNyVisning>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 

@@ -15,7 +15,7 @@ import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereV
 import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 
 interface Props {
   behandlingVersjon: number;
@@ -172,7 +172,7 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
   };
 
   return (
-    <VilkårskortMedFormOgMellomlagringNyVisning
+    <VilkårskortMedFormOgMellomlagring
       heading="§ 11-7 Medlemmets aktivitetsplikt"
       steg={'VURDER_AKTIVITETSPLIKT_11_7'}
       onSubmit={handleSubmit}
@@ -210,7 +210,7 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
       {form.watch('erOppfylt') === JaEllerNei.Nei &&
         grunnlag.harSendtForhåndsvarsel &&
         harPassertVarselFrist === false && <FormField form={form} formField={formFields.skalIgnorereVarselFrist} />}
-    </VilkårskortMedFormOgMellomlagringNyVisning>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 

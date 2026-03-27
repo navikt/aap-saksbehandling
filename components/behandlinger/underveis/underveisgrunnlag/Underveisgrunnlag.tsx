@@ -10,7 +10,7 @@ import { Behovstype } from 'lib/utils/form';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import styles from 'components/behandlinger/vedtak/foreslåvedtak/ForeslåVedtak.module.css';
 
@@ -51,7 +51,7 @@ export const Underveisgrunnlag = ({ grunnlag, readOnly, behandlingVersjon }: Pro
   const { visningModus, visningActions } = useVilkårskortVisning(readOnly, 'FASTSETT_UTTAK', undefined);
 
   return (
-    <VilkårskortMedFormOgMellomlagringNyVisning
+    <VilkårskortMedFormOgMellomlagring
       heading="Underveis"
       steg={'FASTSETT_UTTAK'}
       vilkårTilhørerNavKontor={false}
@@ -100,7 +100,7 @@ export const Underveisgrunnlag = ({ grunnlag, readOnly, behandlingVersjon }: Pro
           løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
         />
       </div>
-    </VilkårskortMedFormOgMellomlagringNyVisning>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 

@@ -15,7 +15,7 @@ import { useConfigForm } from 'components/form/FormHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { OppgitteBarnVurdering } from 'components/barn/oppgittebarnvurdering/OppgitteBarnVurdering';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { OppgitteFolkeregisterBarnVurdering } from 'components/barn/oppgittebarnvurdering/OppgitteFolkeregisterBarnVurdering';
 import { PlusIcon } from '@navikt/aksel-icons';
 import { SaksbehandlerOppgittBarnVurdering } from 'components/barn/oppgittebarnvurdering/SaksbehandlerOppgittBarnVurdering';
@@ -193,7 +193,7 @@ export const BarnetilleggVurdering = ({
   const [visLeggTilBarnModal, setVisLeggTilBarnModal] = useState(false);
 
   return (
-    <VilkårskortMedFormOgMellomlagringNyVisning
+    <VilkårskortMedFormOgMellomlagring
       heading={'§ 11-20 tredje og fjerde ledd barnetillegg '}
       steg={'BARNETILLEGG'}
       onSubmit={handleSubmit}
@@ -355,7 +355,7 @@ export const BarnetilleggVurdering = ({
           />
         )}
       </div>
-    </VilkårskortMedFormOgMellomlagringNyVisning>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 

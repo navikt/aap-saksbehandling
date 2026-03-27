@@ -5,7 +5,7 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgG
 import styles from './Inntektsbortfall.module.css';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { FormEvent } from 'react';
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { Alert, Table } from '@navikt/ds-react';
 import { InntektsbortfallResponse, MellomlagretVurdering } from 'lib/types/types';
@@ -96,7 +96,7 @@ export const Inntektsbortfall = ({
   const inntektSisteTreÅr = grunnlag.inntektSiste3ÅrOver3G;
 
   return (
-    <VilkårskortMedFormOgMellomlagringNyVisning
+    <VilkårskortMedFormOgMellomlagring
       heading="§ 11-4 andre ledd. Krav om inntektsbortfall etter fylte 62 år"
       steg={'VURDER_INNTEKTSBORTFALL'}
       vilkårTilhørerNavKontor={false}
@@ -191,6 +191,6 @@ export const Inntektsbortfall = ({
         <FormField form={form} formField={formFields.begrunnelse} />
         <FormField form={form} formField={formFields.rettTilUttak} />
       </>
-    </VilkårskortMedFormOgMellomlagringNyVisning>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };

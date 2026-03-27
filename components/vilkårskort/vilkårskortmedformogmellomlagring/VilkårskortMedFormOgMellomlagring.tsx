@@ -34,7 +34,7 @@ export interface VilkårsKortMedFormOgMellomlagringProps {
   formReset: () => void;
 }
 
-export const VilkårskortMedFormOgMellomlagringNyVisning = ({
+export const VilkårskortMedFormOgMellomlagring = ({
   heading,
   steg,
   children,

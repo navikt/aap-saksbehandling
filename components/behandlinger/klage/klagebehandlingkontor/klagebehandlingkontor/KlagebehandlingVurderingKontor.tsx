@@ -16,7 +16,7 @@ import { Behovstype } from 'lib/utils/form';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 
 interface Props {
   behandlingVersjon: number;
@@ -158,7 +158,7 @@ export const KlagebehandlingVurderingKontor = ({
   };
 
   return (
-    <VilkårskortMedFormOgMellomlagringNyVisning
+    <VilkårskortMedFormOgMellomlagring
       heading={'Vurder klage'}
       steg={'KLAGEBEHANDLING_KONTOR'}
       onSubmit={handleSubmit}
@@ -188,7 +188,7 @@ export const KlagebehandlingVurderingKontor = ({
       {['OPPRETTHOLD', 'DELVIS_OMGJØR'].includes(innstilling) && (
         <FormField form={form} formField={formFields.vilkårSomSkalOpprettholdes} />
       )}
-    </VilkårskortMedFormOgMellomlagringNyVisning>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 

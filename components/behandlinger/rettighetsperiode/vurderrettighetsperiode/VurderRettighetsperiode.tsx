@@ -13,7 +13,7 @@ import { Alert, BodyShort, HStack, VStack } from '@navikt/ds-react';
 import { formaterDatoForBackend, formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 
 interface Props {
   readOnly: boolean;
@@ -151,7 +151,7 @@ export const VurderRettighetsperiode = ({
   const harRett = harRettFormValue != null && harRettFormValue !== 'Nei';
 
   return (
-    <VilkårskortMedFormOgMellomlagringNyVisning
+    <VilkårskortMedFormOgMellomlagring
       heading={'§ 22-13 syvende ledd. Første mulige dato med rett på ytelse'}
       steg={'VURDER_RETTIGHETSPERIODE'}
       onSubmit={handleSubmit}
@@ -193,7 +193,7 @@ export const VurderRettighetsperiode = ({
           </HStack>
         </>
       )}
-    </VilkårskortMedFormOgMellomlagringNyVisning>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 

@@ -28,7 +28,7 @@ import { useSak } from 'hooks/SakHook';
 import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { storForbokstavOgMellomromForUnderstrek } from 'lib/utils/string';
 
@@ -202,7 +202,7 @@ export const SamordningGradering = ({
           </Modal.Body>
         </Modal>
       )}
-      <VilkårskortMedFormOgMellomlagringNyVisning
+      <VilkårskortMedFormOgMellomlagring
         heading="§§ 11-27 / 11-28 Forholdet til andre fulle eller reduserte folketrygdytelser"
         steg="SAMORDNING_GRADERING"
         onSubmit={handleSubmit}
@@ -301,7 +301,7 @@ export const SamordningGradering = ({
             )}
           </VStack>
         )}
-      </VilkårskortMedFormOgMellomlagringNyVisning>
+      </VilkårskortMedFormOgMellomlagring>
     </>
   );
 };

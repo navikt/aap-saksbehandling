@@ -12,7 +12,7 @@ import { getValgteHjemlerSomIkkeErImplementert, hjemmelalternativer, hjemmelMap 
 import { FormField } from 'components/form/FormField';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 
 interface Props {
   grunnlag?: SvarFraAndreinstansGrunnlag;
@@ -120,7 +120,7 @@ export const SvarFraAndreinstans = ({ grunnlag, readOnly, behandlingVersjon, ini
   const konsekvens = form.watch('konsekvens');
 
   return (
-    <VilkårskortMedFormOgMellomlagringNyVisning
+    <VilkårskortMedFormOgMellomlagring
       heading={'Vurder konsekvens av svar fra Nav Klageinstans'}
       steg={'SVAR_FRA_ANDREINSTANS'}
       onSubmit={handleSubmit}
@@ -176,7 +176,7 @@ export const SvarFraAndreinstans = ({ grunnlag, readOnly, behandlingVersjon, ini
           </Alert>
         )}
       </VStack>
-    </VilkårskortMedFormOgMellomlagringNyVisning>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 

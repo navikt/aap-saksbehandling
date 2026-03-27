@@ -14,7 +14,7 @@ import { BodyShort, Label, Table, VStack } from '@navikt/ds-react';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 
 interface Props {
   grunnlag: SamordningUføreGrunnlag;
@@ -99,7 +99,7 @@ export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly, initia
   }
 
   return (
-    <VilkårskortMedFormOgMellomlagringNyVisning
+    <VilkårskortMedFormOgMellomlagring
       heading="§ 11-28 Samordning med delvis uføre"
       steg="SAMORDNING_UFØRE"
       onSubmit={handleSubmit}
@@ -144,7 +144,7 @@ export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly, initia
         </VStack>
       )}
       <SamordningUføreTabell form={form} readOnly={formReadOnly} />
-    </VilkårskortMedFormOgMellomlagringNyVisning>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 

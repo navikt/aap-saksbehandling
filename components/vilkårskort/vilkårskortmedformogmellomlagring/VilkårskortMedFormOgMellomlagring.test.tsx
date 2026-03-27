@@ -1,9 +1,9 @@
 import { describe, expect, it, vitest } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import {
-  VilkårskortMedFormOgMellomlagringNyVisning,
+  VilkårskortMedFormOgMellomlagring,
   VilkårsKortMedFormOgMellomlagringProps,
-} from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+} from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { VisningModus } from 'lib/types/visningTypes';
 
 describe('Vilkårskort med form', () => {
@@ -49,7 +49,7 @@ describe('Vilkårskort med form', () => {
 
   it('skal vise feilmelding dersom det finnes', () => {
     render(
-      <VilkårskortMedFormOgMellomlagringNyVisning
+      <VilkårskortMedFormOgMellomlagring
         {...defaultProps}
         visningModus={VisningModus.AKTIV_UTEN_AVBRYT}
         løsBehovOgGåTilNesteStegError={{ message: 'Dette er en feil fra backend gjennom løs behov', code: 'UKJENT' }}
@@ -61,7 +61,7 @@ describe('Vilkårskort med form', () => {
         formReset={() => vitest.fn}
       >
         <span>Dette er innhold</span>
-      </VilkårskortMedFormOgMellomlagringNyVisning>
+      </VilkårskortMedFormOgMellomlagring>
     );
 
     const errorMessage = screen.getByText('Dette er en feil fra backend gjennom løs behov');
@@ -70,7 +70,7 @@ describe('Vilkårskort med form', () => {
 
   it('Skal ha en knapp for å slette en mellomlagret vurdering dersom det finnes en mellomlagret vurdering og det finnes en delete funksjon', () => {
     render(
-      <VilkårskortMedFormOgMellomlagringNyVisning
+      <VilkårskortMedFormOgMellomlagring
         {...defaultProps}
         visningModus={VisningModus.AKTIV_UTEN_AVBRYT}
         visningActions={{
@@ -89,7 +89,7 @@ describe('Vilkårskort med form', () => {
         formReset={() => vitest.fn}
       >
         <span>Dette er innhold</span>
-      </VilkårskortMedFormOgMellomlagringNyVisning>
+      </VilkårskortMedFormOgMellomlagring>
     );
 
     const slettUtkastKnapp = screen.getByRole('button', { name: 'Slett utkast' });
@@ -98,7 +98,7 @@ describe('Vilkårskort med form', () => {
 
   it('Skal vise hvem som har gjort mellomlagring hvis det finnes', () => {
     render(
-      <VilkårskortMedFormOgMellomlagringNyVisning
+      <VilkårskortMedFormOgMellomlagring
         {...defaultProps}
         visningModus={VisningModus.AKTIV_UTEN_AVBRYT}
         visningActions={{
@@ -116,7 +116,7 @@ describe('Vilkårskort med form', () => {
         formReset={() => vitest.fn}
       >
         <span>Dette er innhold</span>
-      </VilkårskortMedFormOgMellomlagringNyVisning>
+      </VilkårskortMedFormOgMellomlagring>
     );
 
     const tekst = screen.getByText('Utkast lagret 21.08.2025 12:00 (Jan T. Loven)');
@@ -125,7 +125,7 @@ describe('Vilkårskort med form', () => {
 
   it('Skal ikke vise hvem som har gjort mellomlagring hvis det er readOnly', () => {
     render(
-      <VilkårskortMedFormOgMellomlagringNyVisning
+      <VilkårskortMedFormOgMellomlagring
         {...defaultProps}
         visningModus={VisningModus.LÅST_UTEN_ENDRE}
         visningActions={{
@@ -143,7 +143,7 @@ describe('Vilkårskort med form', () => {
         formReset={() => vitest.fn}
       >
         <span>Dette er innhold</span>
-      </VilkårskortMedFormOgMellomlagringNyVisning>
+      </VilkårskortMedFormOgMellomlagring>
     );
 
     const tekst = screen.queryByText('Utkast lagret 21.08.2025 12:00 (Jan T. Loven)');
@@ -219,7 +219,7 @@ const defaultProps: VilkårsKortMedFormOgMellomlagringProps = {
 
 function renderComponentNyVisning(visningModus: VisningModus) {
   render(
-    <VilkårskortMedFormOgMellomlagringNyVisning
+    <VilkårskortMedFormOgMellomlagring
       {...defaultProps}
       visningModus={visningModus}
       visningActions={{
@@ -230,6 +230,6 @@ function renderComponentNyVisning(visningModus: VisningModus) {
       formReset={() => vitest.fn}
     >
       <span>Dette er innhold</span>
-    </VilkårskortMedFormOgMellomlagringNyVisning>
+    </VilkårskortMedFormOgMellomlagring>
   );
 }
