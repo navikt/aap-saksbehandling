@@ -30,7 +30,6 @@ export interface VilkårsKortMedFormOgMellomlagringProps {
   visningActions: VisningActions;
   onDeleteMellomlagringClick: (() => void) | undefined;
   mellomlagretVurdering: MellomlagretVurdering | undefined;
-  extraActions?: ReactNode;
   formReset: () => void;
 }
 
@@ -52,7 +51,6 @@ export const VilkårskortMedFormOgMellomlagring = ({
   mellomlagretVurdering,
   visningModus,
   visningActions,
-  extraActions,
   formReset,
 }: VilkårsKortMedFormOgMellomlagringProps) => {
   const classNameBasertPåEnhet = vilkårTilhørerNavKontor ? styles.vilkårsKortNAV : styles.vilkårsKortNAY;
@@ -97,7 +95,6 @@ export const VilkårskortMedFormOgMellomlagring = ({
                   {visningModus === 'AKTIV_UTEN_AVBRYT' && (
                     <>
                       <Button loading={isLoading}>{knappTekst}</Button>
-                      {extraActions != null && extraActions}
                     </>
                   )}
 
@@ -117,7 +114,6 @@ export const VilkårskortMedFormOgMellomlagring = ({
                           Avbryt
                         </Button>
                       )}
-                      {extraActions != null && extraActions}
                     </>
                   )}
 
