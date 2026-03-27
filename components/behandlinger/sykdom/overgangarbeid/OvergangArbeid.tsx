@@ -60,8 +60,11 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialM
     reValidateMode: 'onChange',
   });
 
-  const { lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
-    useMellomlagring(Behovstype.OVERGANG_ARBEID, initialMellomlagretVurdering, form);
+  const { slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } = useMellomlagring(
+    Behovstype.OVERGANG_ARBEID,
+    initialMellomlagretVurdering,
+    form
+  );
 
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
 
@@ -131,7 +134,6 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialM
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={true}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() => {
           form.reset(getDefaultValuesFromGrunnlag(grunnlag));

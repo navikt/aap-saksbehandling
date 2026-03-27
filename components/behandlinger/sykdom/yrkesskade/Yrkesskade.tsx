@@ -14,7 +14,7 @@ import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date'
 import { parse } from 'date-fns';
 import { useFieldArray } from 'react-hook-form';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 
 interface Props {
   grunnlag: YrkesskadeVurderingGrunnlag;
@@ -111,8 +111,11 @@ export const Yrkesskade = ({
     { readOnly: formReadOnly, shouldUnregister: true }
   );
 
-  const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
-    useMellomlagring(Behovstype.YRKESSKADE_KODE, initialMellomlagretVurdering, form);
+  const { slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } = useMellomlagring(
+    Behovstype.YRKESSKADE_KODE,
+    initialMellomlagretVurdering,
+    form
+  );
 
   const { fields: relevanteYrkesskadeSaker, update } = useFieldArray({
     name: 'relevanteYrkesskadeSaker',
@@ -180,7 +183,7 @@ export const Yrkesskade = ({
   };
 
   return (
-    <VilkårskortMedFormOgMellomlagringNyVisning
+    <VilkårskortMedFormOgMellomlagring
       heading={'§ 11-22 AAP ved yrkesskade'}
       steg={'VURDER_YRKESSKADE'}
       vilkårTilhørerNavKontor={false}
@@ -190,7 +193,6 @@ export const Yrkesskade = ({
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vurdertAvAnsatt={grunnlag.yrkesskadeVurdering?.vurdertAv}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() => form.reset(mapVurderingToDraftFormFields(grunnlag)));
       }}
@@ -216,7 +218,7 @@ export const Yrkesskade = ({
           <FormField form={form} formField={formFields.andelAvNedsettelsen} className={'prosent_input'} />
         </>
       )}
-    </VilkårskortMedFormOgMellomlagringNyVisning>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 

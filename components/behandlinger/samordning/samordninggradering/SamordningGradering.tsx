@@ -28,7 +28,7 @@ import { useSak } from 'hooks/SakHook';
 import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { storForbokstavOgMellomromForUnderstrek } from 'lib/utils/string';
 
@@ -110,8 +110,11 @@ export const SamordningGradering = ({
     { readOnly: formReadOnly, shouldUnregister: true }
   );
 
-  const { mellomlagretVurdering, lagreMellomlagring, nullstillMellomlagretVurdering, slettMellomlagring } =
-    useMellomlagring(Behovstype.AVKLAR_SAMORDNING_GRADERING, initialMellomlagretVurdering, form);
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.AVKLAR_SAMORDNING_GRADERING,
+    initialMellomlagretVurdering,
+    form
+  );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit(async (data) => {
@@ -199,7 +202,7 @@ export const SamordningGradering = ({
           </Modal.Body>
         </Modal>
       )}
-      <VilkårskortMedFormOgMellomlagringNyVisning
+      <VilkårskortMedFormOgMellomlagring
         heading="§§ 11-27 / 11-28 Forholdet til andre fulle eller reduserte folketrygdytelser"
         steg="SAMORDNING_GRADERING"
         onSubmit={handleSubmit}
@@ -208,7 +211,6 @@ export const SamordningGradering = ({
         løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
         vilkårTilhørerNavKontor={false}
         vurdertAvAnsatt={grunnlag.vurdering?.vurdertAv}
-        onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
         onDeleteMellomlagringClick={() => {
           slettMellomlagring(() =>
             form.reset(grunnlag.vurdering ? mapVurderingToDraftFormFields(grunnlag) : emptyDraftFormFields())
@@ -299,7 +301,7 @@ export const SamordningGradering = ({
             )}
           </VStack>
         )}
-      </VilkårskortMedFormOgMellomlagringNyVisning>
+      </VilkårskortMedFormOgMellomlagring>
     </>
   );
 };

@@ -10,7 +10,7 @@ import { mapInnstillingTilTekst } from 'lib/utils/oversettelser';
 import styles from './KlagebehandlingOppsummering.module.css';
 import { FormEvent } from 'react';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 
 interface Props {
   behandlingVersjon: number;
@@ -78,7 +78,7 @@ export const KlagebehandlingOppsummering = ({ behandlingVersjon, readOnly, grunn
     });
   };
   return (
-    <VilkårskortMedFormOgMellomlagringNyVisning
+    <VilkårskortMedFormOgMellomlagring
       heading={'Oppsummering av klagebehandlingen'}
       steg={'KLAGEBEHANDLING_OPPSUMMERING'}
       onSubmit={handleSubmit}
@@ -88,7 +88,6 @@ export const KlagebehandlingOppsummering = ({ behandlingVersjon, readOnly, grunn
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       knappTekst={'Bekreft og send til beslutter'}
       onDeleteMellomlagringClick={undefined}
-      onLagreMellomLagringClick={undefined}
       mellomlagretVurdering={undefined}
       visningModus={visningModus}
       visningActions={visningActions}
@@ -132,6 +131,6 @@ export const KlagebehandlingOppsummering = ({ behandlingVersjon, readOnly, grunn
           })}
         </VStack>
       )}
-    </VilkårskortMedFormOgMellomlagringNyVisning>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
