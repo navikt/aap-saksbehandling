@@ -14,14 +14,17 @@ interface Props {
 
 export const OppgaveInformasjon = ({ oppgave }: Props) => {
   const adressebeskyttelser = utledAdressebeskyttelse(oppgave);
-
   return (
     <HStack gap={'1'}>
       {oppgave.påVentTil && (
         <PåVentInfoboks frist={oppgave.påVentTil} årsak={oppgave.påVentÅrsak} begrunnelse={oppgave.venteBegrunnelse} />
       )}
       {oppgave.utløptVentefrist && (
-        <UtløptVentefristBoks frist={oppgave.utløptVentefrist} />
+        <UtløptVentefristBoks
+          frist={oppgave.utløptVentefrist}
+          årsak={oppgave.forrigePåVentÅrsak}
+          begrunnelse={oppgave.forrigeVenteBegrunnelse}
+        />
       )}
       {oppgave.harUlesteDokumenter && <SvarFraBehandler />}
       {oppgave.returInformasjon && <Returboks oppgave={oppgave} />}

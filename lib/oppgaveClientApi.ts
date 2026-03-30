@@ -6,6 +6,7 @@ import {
   OppgavelisteRequest,
   OppgavelisteResponse,
   PlukkOppgaveDto,
+  TildeltStatus,
 } from './types/oppgaveTypes';
 import { mapSortStateDirectionTilQueryParamEnum, mineOppgaverQueryParams, queryParamsArray } from './utils/request';
 import { clientFetch } from 'lib/clientApi';
@@ -18,6 +19,10 @@ export async function hentOppgaverClient(oppgavelisteRequest: OppgavelisteReques
 }
 export async function hentOppgaveClient(behandlingsreferanse: string) {
   return clientFetch<Oppgave>(`/oppgave/api/oppgave/${behandlingsreferanse}/hent`, 'GET');
+}
+
+export async function hentTildeltStatusClient(behandlingsreferanse: string) {
+  return clientFetch<TildeltStatus>(`/oppgave/api/oppgave/${behandlingsreferanse}/tildelt-status`, 'GET');
 }
 
 export async function hentMineOppgaverClient(

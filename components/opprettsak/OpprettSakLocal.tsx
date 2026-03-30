@@ -13,10 +13,12 @@ import { Sykepenger } from 'components/opprettsak/samordning/Sykepenger';
 import { Dagpenger } from 'components/opprettsak/samordning/Dagpenger';
 import { parse } from 'date-fns';
 import {
-  AndreStatligeYtelserKilde,
-  AndreStatligeYtelserType,
+  DagpengerKilde,
+  DagpengerYtelserType,
   OpprettTestcase,
   TestcaseSteg,
+  TiltakspengerKilde,
+  TiltakspengerYtelserType,
 } from 'lib/types/types';
 
 interface Barn {
@@ -39,8 +41,17 @@ interface SamordningSykepenger {
 }
 
 interface SamordningDagpenger {
-  dagpengerYtelseType: AndreStatligeYtelserType;
-  kilde: AndreStatligeYtelserKilde;
+  dagpengerYtelseType: DagpengerYtelserType;
+  kilde: DagpengerKilde;
+  periode: {
+    fom: string;
+    tom: string;
+  };
+}
+
+interface SamordningTiltakspenger {
+  ytelseType: TiltakspengerYtelserType;
+  kilde: TiltakspengerKilde;
   periode: {
     fom: string;
     tom: string;
@@ -80,6 +91,7 @@ export interface OpprettSakFormFields {
   søknadsdato: Date;
   sykepenger?: SamordningSykepenger[];
   dagpenger?: SamordningDagpenger[];
+  tiltakspenger?: SamordningTiltakspenger[];
   tjenestePensjon?: JaEllerNei;
   erArbeidsevnenNedsatt: JaEllerNei;
   erNedsettelseIArbeidsevneMerEnnHalvparten: JaEllerNei;
@@ -174,16 +186,20 @@ export const OpprettSakLocal = () => {
         type: 'fieldArray',
         defaultValue: [
           {
-            dagpengerYtelseType: "DAGPENGER_ARBEIDSSOKER_ORDINAER",
-            kilde: "DP_SAK",
+            dagpengerYtelseType: 'DAGPENGER_ARBEIDSSOKER_ORDINAER',
+            kilde: 'DP_SAK',
             periode: { fom: '01.05.2025', tom: '14.05.2025' },
           },
           {
-            dagpengerYtelseType: "DAGPENGER_ARBEIDSSOKER_ORDINAER",
-            kilde: "ARENA",
+            dagpengerYtelseType: 'DAGPENGER_ARBEIDSSOKER_ORDINAER',
+            kilde: 'ARENA',
             periode: { fom: '15.05.2025', tom: '28.05.2025' },
           },
         ],
+      },
+      tiltakspenger: {
+        type: 'fieldArray',
+        defaultValue: [],
       },
       tjenestePensjon: {
         type: 'radio',
@@ -280,6 +296,15 @@ export const OpprettSakLocal = () => {
       dagpenger:
         data.dagpenger?.map((samordning) => ({
           dagpengerYtelseType: samordning.dagpengerYtelseType,
+          kilde: samordning.kilde,
+          periode: {
+            fom: formaterDatoForBackend(parse(samordning.periode.fom, 'dd.MM.yyyy', new Date())),
+            tom: formaterDatoForBackend(parse(samordning.periode.tom, 'dd.MM.yyyy', new Date())),
+          },
+        })) || [],
+      tiltakspenger:
+        data.tiltakspenger?.map((samordning) => ({
+          ytelseType: samordning.ytelseType,
           kilde: samordning.kilde,
           periode: {
             fom: formaterDatoForBackend(parse(samordning.periode.fom, 'dd.MM.yyyy', new Date())),

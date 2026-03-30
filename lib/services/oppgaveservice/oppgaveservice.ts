@@ -17,6 +17,7 @@ import {
   SøkResponse,
   TildelOppgaveRequest,
   TildelOppgaveResponse,
+  TildeltStatus,
 } from 'lib/types/oppgaveTypes';
 import { mineOppgaverQueryParams, queryParamsArray } from 'lib/utils/request';
 import { apiFetch } from 'lib/services/apiFetch';
@@ -120,6 +121,11 @@ export async function søkPåSaksbehandler(data: SaksbehandlerSøkRequest) {
 export async function tildelTilSaksbehandler(data: TildelOppgaveRequest) {
   const url = `${oppgaveApiBaseURL}/tildel-oppgaver`;
   return await apiFetch<TildelOppgaveResponse>(url, oppgaveApiScope, 'POST', data);
+}
+
+export async function hentTildeltStatus(behandlingReferanse: string) {
+  const url = `${oppgaveApiBaseURL}/${behandlingReferanse}/tildelt-status`;
+  return await apiFetch<TildeltStatus>(url, oppgaveApiScope, 'GET');
 }
 
 export async function avreserverOppgave({ oppgaver }: AvreserverOppgaveDto) {

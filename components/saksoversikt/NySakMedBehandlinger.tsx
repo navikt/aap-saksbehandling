@@ -1,7 +1,7 @@
 'use client';
 
-import { Alert, Button, Chips, Heading, HStack, Table, VStack } from '@navikt/ds-react';
-import { SaksInfo, Vurderingsbehov } from 'lib/types/types';
+import { Alert, BodyShort, Button, Chips, Heading, HStack, Table, VStack } from '@navikt/ds-react';
+import { RettighetsinfoDto, SaksInfo, Vurderingsbehov } from 'lib/types/types';
 import { capitalize } from 'lodash';
 import { SakDevTools } from 'components/saksoversikt/SakDevTools';
 import { useRouter } from 'next/navigation';
@@ -14,13 +14,14 @@ import {
   erAvsluttet,
   erAvsluttetFørstegangsbehandling,
   formatterÅrsakTilOpprettelseTilTekst,
-  kanRevurdereSak,
 } from 'lib/utils/behandling';
 import { mapTypeBehandlingTilTekst } from 'lib/utils/oversettelser';
 import { useState } from 'react';
 import { BehandlingsflytEllerPostmottakBehandling } from './types';
 import { usePostmottakBehandlinger } from 'hooks/postmottak/PostmottakBehandlingerHook';
 import { useHentOppgaverForBehandlinger } from 'hooks/oppgave/OppgaverPåSakHook';
+import { useFeatureFlag } from 'context/UnleashContext';
+import { Dato } from 'lib/types/Dato';
 
 const lokalDevToolsForBehandlingOgSak = isLocal();
 
@@ -42,15 +43,18 @@ function formaterVurderingsbehovMedTeller(behov: Vurderingsbehov[]): string {
 export const NySakMedBehandlinger = ({
   sak,
   innloggetBrukerIdent,
+  rettighetsinfo,
 }: {
   sak: SaksInfo;
   innloggetBrukerIdent: string | undefined;
+  rettighetsinfo: RettighetsinfoDto | null;
 }) => {
   const router = useRouter();
 
   const [visMeldekortbehandlinger, setVisMeldekortbehandlinger] = useState(false);
   const [visPostmottakBehandlinger, setVisPostmottakBehandlinger] = useState(false);
   const [feilmelding, setFeilmelding] = useState<string | undefined>(undefined);
+  const visSisteDagMedRett = useFeatureFlag('VisSisteDagMedRett');
 
   const behandlinger = visMeldekortbehandlinger
     ? sak.behandlinger || []
@@ -67,7 +71,7 @@ export const NySakMedBehandlinger = ({
     postmottakBehandlinger.filter((b) => !erAvsluttet(b.behandling) || visPostmottakBehandlinger)
   );
 
-  const kanRevurdere = kanRevurdereSak(behandlinger);
+  const kanRevurdere = !sak.søknadErTrukket;
 
   const kanRegistrerebrudd = sak.behandlinger.some((behandling) => erAvsluttetFørstegangsbehandling(behandling));
 
@@ -123,6 +127,9 @@ export const NySakMedBehandlinger = ({
             </Button>
           )}
         </HStack>
+        {visSisteDagMedRett && rettighetsinfo?.sisteDagMedRett && (
+          <BodyShort>{`Siste dag med rett: ${new Dato(rettighetsinfo.sisteDagMedRett).formaterForFrontend()}`}</BodyShort>
+        )}
       </HStack>
       <HStack gap="4">
         <Heading size="small">Behandlinger</Heading>

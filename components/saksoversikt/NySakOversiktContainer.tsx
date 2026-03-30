@@ -1,17 +1,13 @@
 'use client';
 
 import { Box, ExpansionCard, HGrid, Page, Tabs, VStack } from '@navikt/ds-react';
-import { SakPersoninfo, SaksInfo } from 'lib/types/types';
+import { RettighetsinfoDto, SakPersoninfo, SaksInfo } from 'lib/types/types';
 import { FileTextIcon, PersonIcon } from '@navikt/aksel-icons';
 import { DokumentOversikt } from 'components/saksoversikt/dokumentoversikt/DokumentOversikt';
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { AktivitetspliktTrekk } from 'components/saksoversikt/aktivitetsplikttrekk/AktivitetspliktTrekk';
-import { Rettighetsoversikt } from 'components/saksoversikt/rettighetsoversikt/Rettighetsoversikt';
 import { NySakMedBehandlinger } from 'components/saksoversikt/NySakMedBehandlinger';
-import { clientHentRettighetsdata } from 'lib/clientApi';
-import { isError } from 'lib/utils/api';
-import useSWR from 'swr';
 
 import styles from 'components/saksoversikt/Saksoversikt.module.css';
 
@@ -24,21 +20,17 @@ enum Tab {
 export const NySakOversiktContainer = ({
   sak,
   innloggetBrukerIdent,
+  rettighetsinfo,
 }: {
   sak: SaksInfo;
   innloggetBrukerIdent: string | undefined;
   personInfo: SakPersoninfo;
+  rettighetsinfo: RettighetsinfoDto | null;
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
   const [tab, setTab] = useState(searchParams.get('t') || Tab.OVERSIKT);
-
-  const { data: rettighetData } = useSWR(`/api/sak/${sak.saksnummer}/rettighet`, () =>
-    clientHentRettighetsdata(sak.saksnummer)
-  );
-  const rettighetListe = !isError(rettighetData) ? (rettighetData?.data ?? []) : [];
-  const harRettigheter = rettighetListe.length > 0;
 
   const changeActiveTab = (newTab: Tab) => {
     setTab(newTab);
@@ -64,7 +56,11 @@ export const NySakOversiktContainer = ({
                       <ExpansionCard.Title>Sak {sak.saksnummer}</ExpansionCard.Title>
                     </ExpansionCard.Header>
                     <ExpansionCard.Content>
-                      <NySakMedBehandlinger sak={sak} innloggetBrukerIdent={innloggetBrukerIdent} />
+                      <NySakMedBehandlinger
+                        sak={sak}
+                        innloggetBrukerIdent={innloggetBrukerIdent}
+                        rettighetsinfo={rettighetsinfo}
+                      />
                     </ExpansionCard.Content>
                   </ExpansionCard>
                 </VStack>
@@ -78,14 +74,6 @@ export const NySakOversiktContainer = ({
               </Tabs.Panel>
             </Box>
           </Tabs>
-
-          {harRettigheter && (
-            <aside>
-              <Box padding="space-20" borderWidth="1" borderRadius="large" borderColor="border-divider">
-                <Rettighetsoversikt rettighetListe={rettighetListe} />
-              </Box>
-            </aside>
-          )}
         </HGrid>
       </Page.Block>
     </Page>

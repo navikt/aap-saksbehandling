@@ -10,7 +10,7 @@ import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { FormkravAvvisningVarsel } from 'components/behandlinger/klage/formkrav/formkravvurdering/FormkravAvvisningVarsel';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 
 interface Props {
   grunnlag?: FormkravGrunnlag;
@@ -101,8 +101,11 @@ export const FormkravVurdering = ({ behandlingVersjon, grunnlag, readOnly, initi
     { readOnly: formReadOnly, shouldUnregister: true }
   );
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.VURDER_FORMKRAV, initialMellomlagretVurdering, form);
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.VURDER_FORMKRAV,
+    initialMellomlagretVurdering,
+    form
+  );
 
   const { erKonkret, erSignert, erBrukerPart, erFristOverholdt, likevelBehandles } = form.watch();
   const avvistGrunnetFrist = erFristOverholdt === JaEllerNei.Nei && likevelBehandles === JaEllerNei.Nei;
@@ -137,7 +140,7 @@ export const FormkravVurdering = ({ behandlingVersjon, grunnlag, readOnly, initi
   };
 
   return (
-    <VilkårskortMedFormOgMellomlagringNyVisning
+    <VilkårskortMedFormOgMellomlagring
       heading={'Formkrav'}
       steg={'FORMKRAV'}
       onSubmit={handleSubmit}
@@ -147,7 +150,6 @@ export const FormkravVurdering = ({ behandlingVersjon, grunnlag, readOnly, initi
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() =>
           form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields())
@@ -167,7 +169,7 @@ export const FormkravVurdering = ({ behandlingVersjon, grunnlag, readOnly, initi
       {grunnlag?.varselSvarfrist != null && !readOnly && formkravErIkkeOppfylltVarsel && (
         <FormkravAvvisningVarsel frist={new Date(grunnlag.varselSvarfrist)} />
       )}
-    </VilkårskortMedFormOgMellomlagringNyVisning>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 

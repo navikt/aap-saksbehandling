@@ -4,12 +4,12 @@ import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
 import { OpprettOppfølgingsBehandling } from 'components/saksoversikt/opprettoppfølgingsbehandling/OpprettOppfølgingsbehandling';
 import { hentBrukerInformasjon, hentRollerForBruker, Roller } from 'lib/services/azure/azureUserService';
 
-export default async function Page(props: { params: Promise<{ saksId: string }> }) {
+export default async function Page(props: { params: Promise<{ saksnummer: string }> }) {
   const params = await props.params;
 
   const [sak, personInfo, brukerInformasjon, roller] = await Promise.all([
-    hentSak(params.saksId),
-    hentSakPersoninfo(params.saksId),
+    hentSak(params.saksnummer),
+    hentSakPersoninfo(params.saksnummer),
     hentBrukerInformasjon(),
     hentRollerForBruker(),
   ]);

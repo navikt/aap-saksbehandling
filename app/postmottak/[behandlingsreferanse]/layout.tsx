@@ -18,6 +18,8 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { hentOppgave } from 'lib/services/oppgaveservice/oppgaveservice';
 import { hentBrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { SWRConfig } from 'swr';
+import { OverstyrTildelingContextProvider } from 'context/saksbehandling/OverstyrTildelingContext';
+import { OverstyrTildelingModal } from 'components/overstyrtildelingmodal/OverstyrTildelingModal';
 
 interface LayoutProps {
   children: ReactNode;
@@ -66,33 +68,36 @@ const Layout = async (props: LayoutProps) => {
         },
       }}
     >
-      <div className={styles.idLayoutWrapper}>
-        <DokumentInfoBanner
-          behandlingsreferanse={params.behandlingsreferanse}
-          behandlingsVersjon={flytResponse.data.behandlingVersjon}
-          journalpostInfo={journalpostInfo.data}
-          påVent={flytResponse.data.visning.visVentekort}
-          oppgave={oppgave.data}
-          innloggetBrukerIdent={brukerInformasjon.NAVident}
-        />
-        <StegGruppeIndikatorAksel
-          behandlingsreferanse={params.behandlingsreferanse}
-          stegGrupper={stegGrupper}
-          flytRespons={flytResponse.data}
-        />
-        {flytResponse.data.prosessering.status === 'FEILET' && (
-          <FlytProsesseringAlert flytProsessering={flytResponse.data.prosessering} />
-        )}
+      <OverstyrTildelingContextProvider>
+        <OverstyrTildelingModal />
+        <div className={styles.idLayoutWrapper}>
+          <DokumentInfoBanner
+            behandlingsreferanse={params.behandlingsreferanse}
+            behandlingsVersjon={flytResponse.data.behandlingVersjon}
+            journalpostInfo={journalpostInfo.data}
+            påVent={flytResponse.data.visning.visVentekort}
+            oppgave={oppgave.data}
+            innloggetBrukerIdent={brukerInformasjon.NAVident}
+          />
+          <StegGruppeIndikatorAksel
+            behandlingsreferanse={params.behandlingsreferanse}
+            stegGrupper={stegGrupper}
+            flytRespons={flytResponse.data}
+          />
+          {flytResponse.data.prosessering.status === 'FEILET' && (
+            <FlytProsesseringAlert flytProsessering={flytResponse.data.prosessering} />
+          )}
 
-        <SplitVindu journalpostId={journalpostInfo.data.journalpostId} dokumenter={dokumenter}>
-          <VStack gap={'4'}>
-            {flytResponse.data.visning.visVentekort && (
-              <BehandlingPVentMedDataFetching behandlingsreferanse={params.behandlingsreferanse} />
-            )}
-            {children}
-          </VStack>
-        </SplitVindu>
-      </div>
+          <SplitVindu journalpostId={journalpostInfo.data.journalpostId} dokumenter={dokumenter}>
+            <VStack gap={'4'}>
+              {flytResponse.data.visning.visVentekort && (
+                <BehandlingPVentMedDataFetching behandlingsreferanse={params.behandlingsreferanse} />
+              )}
+              {children}
+            </VStack>
+          </SplitVindu>
+        </div>
+      </OverstyrTildelingContextProvider>
     </SWRConfig>
   );
 };

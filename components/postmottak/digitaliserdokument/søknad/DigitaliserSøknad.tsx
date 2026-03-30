@@ -12,6 +12,7 @@ import {
   stringToJaNeiAvbruttIkkeOppgitt,
   stringToJaNeiIkkeOppgitt,
   stringToJaNeiVetikke,
+  JaNeiEllerVetIkkeOptions,
 } from 'lib/postmottakForm';
 import { Barnetillegg } from './Barnetillegg';
 import { Medlemskap } from './Medlemskap';
@@ -160,7 +161,7 @@ export const DigitaliserSøknad = ({ grunnlag, registrertDato, readOnly, submit,
       studentKommeTilbake: {
         type: 'radio',
         label: 'Skal søkeren tilbake til studiet?',
-        options: JaNeiEllerIkkeOppgittOptions,
+        options: JaNeiEllerVetIkkeOptions,
         defaultValue: søknadGrunnlag.student?.kommeTilbake
           ? stringToJaNeiVetikke(søknadGrunnlag.student.kommeTilbake)
           : undefined,

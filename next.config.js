@@ -6,6 +6,7 @@ const nextConfig = {
   assetPrefix: process.env.ASSET_PREFIX ?? undefined,
 
   experimental: {
+    authInterrupts: true,
     optimizePackageImports: ['@navikt/ds-react', '@navikt/aksel-icons'],
   },
   turbopack: {},

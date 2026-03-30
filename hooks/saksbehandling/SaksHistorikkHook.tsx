@@ -5,15 +5,15 @@ import useSWR from 'swr';
 import { clientHentSakshistorikk } from 'lib/clientApi';
 
 export function useSaksHistorikk() {
-  const params = useParams<{ saksId: string }>();
+  const params = useParams<{ saksnummer: string }>();
 
-  if (!params.saksId) {
-    throw new Error('fant ikke saksId');
+  if (!params.saksnummer) {
+    throw new Error('fant ikke saksnummer');
   }
 
   const { data: historikk, mutate } = useSWR(
-    `sak/${params.saksId}/historikk`,
-    () => clientHentSakshistorikk(params.saksId),
+    `sak/${params.saksnummer}/historikk`,
+    () => clientHentSakshistorikk(params.saksnummer),
     { revalidateOnFocus: true, shouldRetryOnError: true }
   );
 

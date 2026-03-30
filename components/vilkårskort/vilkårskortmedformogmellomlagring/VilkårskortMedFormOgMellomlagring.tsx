@@ -7,7 +7,6 @@ import { formaterDatoForFrontend, formaterDatoMedTidspunktForFrontend } from 'li
 
 import styles from 'components/vilkårskort/Vilkårskort.module.css';
 import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
-import { useFeatureFlag } from 'context/UnleashContext';
 import { FormEvent, ReactNode } from 'react';
 import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { ApiException } from 'lib/utils/api';
@@ -30,13 +29,11 @@ export interface VilkårsKortMedFormOgMellomlagringProps {
   visningModus: VisningModus;
   visningActions: VisningActions;
   onDeleteMellomlagringClick: (() => void) | undefined;
-  onLagreMellomLagringClick: (() => void) | undefined;
   mellomlagretVurdering: MellomlagretVurdering | undefined;
-  extraActions?: ReactNode;
   formReset: () => void;
 }
 
-export const VilkårskortMedFormOgMellomlagringNyVisning = ({
+export const VilkårskortMedFormOgMellomlagring = ({
   heading,
   steg,
   children,
@@ -51,16 +48,13 @@ export const VilkårskortMedFormOgMellomlagringNyVisning = ({
   vurdertAutomatisk = false,
   kvalitetssikretAv,
   onDeleteMellomlagringClick,
-  onLagreMellomLagringClick,
   mellomlagretVurdering,
   visningModus,
   visningActions,
-  extraActions,
   formReset,
 }: VilkårsKortMedFormOgMellomlagringProps) => {
   const classNameBasertPåEnhet = vilkårTilhørerNavKontor ? styles.vilkårsKortNAV : styles.vilkårsKortNAY;
   const { flyt } = useRequiredFlyt();
-  const automatiskMellomlagring = useFeatureFlag('automatiskMellomlagring');
   const erAktivtSteg = flyt.aktivtSteg === steg || visningModus === 'AKTIV_MED_AVBRYT';
 
   const readOnly = visningModus === 'LÅST_MED_ENDRE' || visningModus === 'LÅST_UTEN_ENDRE';
@@ -101,12 +95,6 @@ export const VilkårskortMedFormOgMellomlagringNyVisning = ({
                   {visningModus === 'AKTIV_UTEN_AVBRYT' && (
                     <>
                       <Button loading={isLoading}>{knappTekst}</Button>
-                      {extraActions != null && extraActions}
-                      {!automatiskMellomlagring && onLagreMellomLagringClick && (
-                        <Button type="button" variant="tertiary" onClick={onLagreMellomLagringClick}>
-                          Lagre utkast
-                        </Button>
-                      )}
                     </>
                   )}
 
@@ -124,12 +112,6 @@ export const VilkårskortMedFormOgMellomlagringNyVisning = ({
                           }}
                         >
                           Avbryt
-                        </Button>
-                      )}
-                      {extraActions != null && extraActions}
-                      {!automatiskMellomlagring && onLagreMellomLagringClick && (
-                        <Button type="button" variant="tertiary" onClick={onLagreMellomLagringClick}>
-                          Lagre utkast
                         </Button>
                       )}
                     </>

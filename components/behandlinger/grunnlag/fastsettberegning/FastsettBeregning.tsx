@@ -21,7 +21,7 @@ import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereV
 import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 
 interface Props {
   grunnlag?: BeregningTidspunktGrunnlag;
@@ -108,8 +108,11 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly, initi
     { readOnly: formReadOnly }
   );
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.FASTSETT_BEREGNINGSTIDSPUNKT_KODE, initialMellomlagretVurdering, form);
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.FASTSETT_BEREGNINGSTIDSPUNKT_KODE,
+    initialMellomlagretVurdering,
+    form
+  );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
@@ -154,7 +157,7 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly, initi
   });
 
   return (
-    <VilkårskortMedFormOgMellomlagringNyVisning
+    <VilkårskortMedFormOgMellomlagring
       heading={heading}
       steg={'FASTSETT_BEREGNINGSTIDSPUNKT'}
       onSubmit={handleSubmit}
@@ -164,7 +167,6 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly, initi
       status={status}
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() =>
           form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields())
@@ -203,7 +205,7 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly, initi
           Sjekk om beregningstidspunkt skal være datert etter tidspunkt for foreløpig virkningstidspunkt
         </Alert>
       )}
-    </VilkårskortMedFormOgMellomlagringNyVisning>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 

@@ -3,7 +3,7 @@ import { BehandlingLayout } from 'components/behandling/BehandlingLayout';
 
 interface Props {
   children: ReactNode;
-  params: Promise<{ saksId: string; behandlingsReferanse: string }>;
+  params: Promise<{ saksnummer: string; behandlingsReferanse: string }>;
 }
 
 const Layout = async (props: Props) => {
@@ -12,7 +12,7 @@ const Layout = async (props: Props) => {
   const { children } = props;
 
   return (
-    <BehandlingLayout saksId={params.saksId} behandlingsReferanse={params.behandlingsReferanse}>
+    <BehandlingLayout saksnummer={params.saksnummer} behandlingsReferanse={params.behandlingsReferanse}>
       {children}
     </BehandlingLayout>
   );

@@ -9,7 +9,7 @@ export async function GET(req: NextRequest) {
 
   try {
     const res = await hentKøer(enheter);
-    if (isError(res)) {
+    if (isError(res) && res.status >= 500) {
       logError('oppgave/api/filter', res.apiException);
     }
     return NextResponse.json(res, { status: res.status });

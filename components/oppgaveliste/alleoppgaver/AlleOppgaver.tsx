@@ -156,7 +156,7 @@ export const AlleOppgaver = ({ enheter }: Props) => {
   };
 
   useEffect(() => {
-    if (!køer || (køer && isError(køer))) {
+    if (isError(køer) || !køer?.data?.length) {
       return;
     }
     const køId = hentLagretAktivKø();

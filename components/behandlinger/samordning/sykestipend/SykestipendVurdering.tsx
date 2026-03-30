@@ -8,7 +8,7 @@ import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook
 import { MellomlagretVurdering, SykestipendGrunnlag } from 'lib/types/types';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormEvent } from 'react';
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { BodyLong, VStack } from '@navikt/ds-react';
 import { FormField } from 'components/form/FormField';
 import { SykestipendPeriodeTabell } from 'components/behandlinger/samordning/sykestipend/SykestipendPeriodeTabell';
@@ -64,8 +64,11 @@ export const SykestipendVurdering = ({
     { readOnly: formReadOnly }
   );
 
-  const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
-    useMellomlagring(Behovstype.AVKLAR_SAMORDNING_SYKESTIPEND_KODE, initialMellomlagretVurdering, form);
+  const { slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } = useMellomlagring(
+    Behovstype.AVKLAR_SAMORDNING_SYKESTIPEND_KODE,
+    initialMellomlagretVurdering,
+    form
+  );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit(async (data) =>
@@ -93,7 +96,7 @@ export const SykestipendVurdering = ({
   };
 
   return (
-    <VilkårskortMedFormOgMellomlagringNyVisning
+    <VilkårskortMedFormOgMellomlagring
       heading={'§ 11-29 Sykestipend fra lånekassen'}
       steg={'SAMORDNING_SYKESTIPEND'}
       onSubmit={handleSubmit}
@@ -103,7 +106,6 @@ export const SykestipendVurdering = ({
       vilkårTilhørerNavKontor={false}
       vurdertAvAnsatt={grunnlag?.gjeldendeVurdering?.vurdertAv}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() =>
           form.reset(grunnlag?.gjeldendeVurdering ? mapVurderingTilForm(grunnlag.gjeldendeVurdering) : tomtForm())
@@ -127,7 +129,7 @@ export const SykestipendVurdering = ({
         <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
         <SykestipendPeriodeTabell form={form} readOnly={formReadOnly} />
       </VStack>
-    </VilkårskortMedFormOgMellomlagringNyVisning>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 

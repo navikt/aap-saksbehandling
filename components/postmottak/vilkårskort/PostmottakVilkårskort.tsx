@@ -22,7 +22,6 @@ interface PostmottakVilkårskortProps {
   knappTekst: string;
   visningModus: VisningModus;
   visningActions: VisningActions;
-  extraActions?: ReactNode;
   formReset: () => void;
 }
 
@@ -37,7 +36,6 @@ export const PostmottakVilkårskort = ({
   knappTekst,
   visningModus,
   visningActions,
-  extraActions,
   formReset,
 }: PostmottakVilkårskortProps) => {
   const { flyt } = usePostmottakRequiredFlyt();
@@ -79,7 +77,6 @@ export const PostmottakVilkårskort = ({
                   {visningModus === 'AKTIV_UTEN_AVBRYT' && (
                     <>
                       <Button loading={isLoading}>{knappTekst}</Button>
-                      {extraActions != null && extraActions}
                     </>
                   )}
 
@@ -98,7 +95,6 @@ export const PostmottakVilkårskort = ({
                           Avbryt
                         </Button>
                       )}
-                      {extraActions != null && extraActions}
                     </>
                   )}
 

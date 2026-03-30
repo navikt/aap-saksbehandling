@@ -18,7 +18,6 @@ import { useBehandlingsReferanse, useSaksnummer } from 'hooks/saksbehandling/Beh
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { TotrinnsvurderingVedtaksbrevFelter } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingVedtaksbrevFelter';
 import { byggVilkårskortLenke } from 'lib/utils/vilkårskort';
-import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;
@@ -39,7 +38,6 @@ export const TotrinnsvurderingForm = ({
   erKvalitetssikring,
   initialMellomlagretVurdering,
 }: Props) => {
-  const automatiskMellomlagringFlag = useFeatureFlag('automatiskMellomlagring');
   const saksnummer = useSaksnummer();
   const { flyt } = useRequiredFlyt();
   const behandlingsReferanse = useBehandlingsReferanse();
@@ -59,12 +57,11 @@ export const TotrinnsvurderingForm = ({
     },
   });
 
-  const { nullstillMellomlagretVurdering, mellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(
-      erKvalitetssikring ? Behovstype.KVALITETSSIKRING_KODE : Behovstype.FATTE_VEDTAK_KODE,
-      initialMellomlagretVurdering,
-      form
-    );
+  const { nullstillMellomlagretVurdering, mellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    erKvalitetssikring ? Behovstype.KVALITETSSIKRING_KODE : Behovstype.FATTE_VEDTAK_KODE,
+    initialMellomlagretVurdering,
+    form
+  );
 
   const { fields } = useFieldArray({
     control: form.control,
@@ -177,16 +174,6 @@ export const TotrinnsvurderingForm = ({
             <Button size={'medium'} className={'fit-content'} loading={isLoading}>
               Bekreft og send videre
             </Button>
-            {!automatiskMellomlagringFlag && (
-              <Button
-                size={'small'}
-                variant={'tertiary'}
-                type={'button'}
-                onClick={() => lagreMellomlagring(form.watch())}
-              >
-                Lagre utkast
-              </Button>
-            )}
           </HStack>
           {mellomlagretVurdering && (
             <HStack align={'baseline'}>

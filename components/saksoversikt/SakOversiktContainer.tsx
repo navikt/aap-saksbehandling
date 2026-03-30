@@ -2,17 +2,12 @@
 
 import { Box, Page, Tabs } from '@navikt/ds-react';
 import { SakMedBehandlinger } from 'components/saksoversikt/SakMedBehandlinger';
-import { SaksInfo } from 'lib/types/types';
+import { RettighetsinfoDto, SaksInfo } from 'lib/types/types';
 import { FileTextIcon, PersonIcon } from '@navikt/aksel-icons';
 import { DokumentOversikt } from 'components/saksoversikt/dokumentoversikt/DokumentOversikt';
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { AktivitetspliktTrekk } from 'components/saksoversikt/aktivitetsplikttrekk/AktivitetspliktTrekk';
-import { Rettighetsoversikt } from 'components/saksoversikt/rettighetsoversikt/Rettighetsoversikt';
-import { useFeatureFlag } from 'context/UnleashContext';
-import { clientHentRettighetsdata } from 'lib/clientApi';
-import { isError } from 'lib/utils/api';
-import useSWR from 'swr';
 
 enum Tab {
   OVERSIKT = 'OVERSIKT',
@@ -23,21 +18,16 @@ enum Tab {
 export const SakOversiktContainer = ({
   sak,
   innloggetBrukerIdent,
+  rettighetsinfo,
 }: {
   sak: SaksInfo;
   innloggetBrukerIdent: string | undefined;
+  rettighetsinfo: RettighetsinfoDto | null;
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const isVisRettigheterForVedtakEnabled = useFeatureFlag('VisRettigheterForVedtak');
 
   const [tab, setTab] = useState(searchParams.get('t') || Tab.OVERSIKT);
-
-  const { data: rettighetData } = useSWR(
-    isVisRettigheterForVedtakEnabled ? `/api/sak/${sak.saksnummer}/rettighet` : null,
-    () => clientHentRettighetsdata(sak.saksnummer)
-  );
-  const rettighetListe = !isError(rettighetData) ? (rettighetData?.data ?? []) : [];
 
   const changeActiveTab = (newTab: Tab) => {
     setTab(newTab);
@@ -56,8 +46,11 @@ export const SakOversiktContainer = ({
 
           <Box marginBlock="8">
             <Tabs.Panel value={Tab.OVERSIKT}>
-              {isVisRettigheterForVedtakEnabled && <Rettighetsoversikt rettighetListe={rettighetListe} />}
-              <SakMedBehandlinger sak={sak} innloggetBrukerIdent={innloggetBrukerIdent} />
+              <SakMedBehandlinger
+                sak={sak}
+                innloggetBrukerIdent={innloggetBrukerIdent}
+                rettighetsinfo={rettighetsinfo}
+              />
             </Tabs.Panel>
 
             <Tabs.Panel value={Tab.DOKUMENTER}>

@@ -8,8 +8,8 @@ export enum VurderingStatus {
   Overskrevet = 'Overskrevet',
   Reduksjon = 'Reduksjon',
   IkkeReduksjon = 'Ikke reduksjon',
-  VedtakslengdeAutomatisk = 'Automatisk satt vedtakslengde',
-  VedtakslengdeManuell = 'Manuell forlengelse',
+  VedtaksperiodeAutomatisk = 'Automatisk satt vedtaksperiode',
+  VedtaksperiodeManuell = 'Manuell forlengelse',
 }
 
 interface Props {
@@ -40,9 +40,9 @@ function getTagVariant(status: VurderingStatus): TagProps['variant'] {
       return 'warning-moderate';
     case VurderingStatus.IkkeReduksjon:
       return 'success-moderate';
-    case VurderingStatus.VedtakslengdeAutomatisk:
+    case VurderingStatus.VedtaksperiodeAutomatisk:
       return 'success-moderate';
-    case VurderingStatus.VedtakslengdeManuell:
+    case VurderingStatus.VedtaksperiodeManuell:
       return 'success-moderate';
   }
 }
@@ -59,9 +59,9 @@ function mapVurderingStatusToVurderingTekst(status: VurderingStatus): string {
       return 'Ikke oppfylt';
     case VurderingStatus.Overskrevet:
       return 'Overskrevet';
-    case VurderingStatus.VedtakslengdeAutomatisk:
-      return 'Automatisk satt vedtakslengde';
-    case VurderingStatus.VedtakslengdeManuell:
+    case VurderingStatus.VedtaksperiodeAutomatisk:
+      return 'Automatisk satt vedtaksperiode';
+    case VurderingStatus.VedtaksperiodeManuell:
       return 'Manuell forlengelse';
   }
 }

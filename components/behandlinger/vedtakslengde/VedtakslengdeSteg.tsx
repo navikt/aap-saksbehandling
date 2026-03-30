@@ -94,8 +94,11 @@ export const VedtakslengdeSteg = ({ grunnlag, behandlingVersjon, readOnly, initi
     reValidateMode: 'onChange',
   });
 
-  const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
-    useMellomlagring(Behovstype.FASTSETT_VEDTAKSLENGDE, initialMellomlagretVurdering, form);
+  const { slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } = useMellomlagring(
+    Behovstype.FASTSETT_VEDTAKSLENGDE,
+    initialMellomlagretVurdering,
+    form
+  );
 
   const {
     fields: vurderingerFields,
@@ -164,7 +167,6 @@ export const VedtakslengdeSteg = ({ grunnlag, behandlingVersjon, readOnly, initi
       status={status}
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}
       mellomlagretVurdering={mellomlagretVurdering}
       visningModus={visningModus}
@@ -180,7 +182,9 @@ export const VedtakslengdeSteg = ({ grunnlag, behandlingVersjon, readOnly, initi
           tom={vurdering.tom ? parseISO(vurdering.tom) : null}
           foersteNyePeriodeFraDato={foersteNyePeriode == null ? null : parseDatoFraDatePicker(foersteNyePeriode)}
           vurderingStatus={
-            vurdering.manuellVurdering ? VurderingStatus.VedtakslengdeManuell : VurderingStatus.VedtakslengdeAutomatisk
+            vurdering.manuellVurdering
+              ? VurderingStatus.VedtaksperiodeManuell
+              : VurderingStatus.VedtaksperiodeAutomatisk
           }
           vurdertAv={vurdering.vurdertAv}
           kvalitetssikretAv={vurdering.kvalitetssikretAv}
@@ -198,7 +202,7 @@ export const VedtakslengdeSteg = ({ grunnlag, behandlingVersjon, readOnly, initi
             fom={parseISO(vurdering.fom)}
             tom={vurdering.tom ? parseISO(vurdering.tom) : null}
             foersteNyePeriodeFraDato={foersteNyePeriode == null ? null : parseDatoFraDatePicker(foersteNyePeriode)}
-            vurderingStatus={VurderingStatus.VedtakslengdeAutomatisk}
+            vurderingStatus={VurderingStatus.VedtaksperiodeAutomatisk}
             vurdertAv={vurdering.vurdertAv}
             kvalitetssikretAv={vurdering.kvalitetssikretAv}
             besluttetAv={vurdering.besluttetAv}
@@ -219,7 +223,7 @@ export const VedtakslengdeSteg = ({ grunnlag, behandlingVersjon, readOnly, initi
           })()}
           isLast={true}
           finnesFeil={finnesFeilForVurdering(index, errorList)}
-          vurderingStatus={vurdering.erNyVurdering ? undefined : VurderingStatus.VedtakslengdeManuell}
+          vurderingStatus={vurdering.erNyVurdering ? undefined : VurderingStatus.VedtaksperiodeManuell}
           vurdering={vurdering}
           readonly={formReadOnly}
           onSlettVurdering={() => remove(index)}

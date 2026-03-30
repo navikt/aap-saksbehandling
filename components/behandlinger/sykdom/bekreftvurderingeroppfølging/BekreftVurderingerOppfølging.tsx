@@ -2,13 +2,11 @@
 
 import { useBehandlingsReferanse, useSaksnummer } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { Behovstype } from 'lib/utils/form';
+import { Behovstype, mapBehovskodeTilBehovstype } from 'lib/utils/form';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
-import { BodyShort, Button, List, VStack } from '@navikt/ds-react';
+import { Button, ErrorSummary, VStack } from '@navikt/ds-react';
 import { BekreftVurderingerOppfølgingGrunnlag } from 'lib/types/types';
-import { mapBehovskodeTilBehovstype } from 'lib/utils/oversettelser';
-import Link from 'next/link';
 import { byggVilkårskortLenke } from 'lib/utils/vilkårskort';
 import { useBekreftVurderingerGrunnlag } from 'hooks/saksbehandling/BekrefteVurderingerHook';
 
@@ -32,26 +30,24 @@ export const BekreftVurderingerOppfølging = ({ behandlingVersjon, readOnly, ini
       {!readOnly && (
         <VStack gap={'4'}>
           {grunnlag?.mellomlagredeVurderinger.length != 0 && (
-            <VStack gap={'1'}>
-              <BodyShort size={'small'}>Det finnes mellomlagrede vurderinger for følgende vilkår:</BodyShort>
-              <List size={'small'}>
+            <VStack gap={'4'}>
+              <ErrorSummary
+                size={'small'}
+                heading={'Det finnes endringer som ikke er lagret. Bekreft eller avbryt disse før du kan fortsette.'}
+              >
                 {grunnlag?.mellomlagredeVurderinger.map((vurdering) => (
-                  <List.Item key={vurdering.avklaringsbehovKode}>
-                    <Link
-                      href={byggVilkårskortLenke(
-                        saksnummer,
-                        behandlingsReferanse,
-                        vurdering.avklaringsbehovKode as Behovstype
-                      )}
-                    >
-                      <BodyShort size={'small'}>{mapBehovskodeTilBehovstype(vurdering.avklaringsbehovKode)}</BodyShort>
-                    </Link>
-                  </List.Item>
+                  <ErrorSummary.Item
+                    key={vurdering.avklaringsbehovKode}
+                    href={byggVilkårskortLenke(
+                      saksnummer,
+                      behandlingsReferanse,
+                      vurdering.avklaringsbehovKode as Behovstype
+                    )}
+                  >
+                    {mapBehovskodeTilBehovstype(vurdering.avklaringsbehovKode as Behovstype)}
+                  </ErrorSummary.Item>
                 ))}
-              </List>
-              <BodyShort size={'small'} weight={'semibold'}>
-                Du må sende inn eller avbryte vurderingene for komme deg videre.
-              </BodyShort>
+              </ErrorSummary>
             </VStack>
           )}
 

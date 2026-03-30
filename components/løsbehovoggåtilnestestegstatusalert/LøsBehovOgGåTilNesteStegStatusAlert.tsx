@@ -11,7 +11,7 @@ interface Props {
 }
 
 export const LøsBehovOgGåTilNesteStegStatusAlert = ({ status, løsBehovOgGåTilNesteStegError }: Props) => {
-  const { behandlingsReferanse, saksId } = useParams<{ behandlingsReferanse: string; saksId: string }>();
+  const { behandlingsReferanse, saksnummer } = useParams<{ behandlingsReferanse: string; saksnummer: string }>();
   return (
     <>
       {løsBehovOgGåTilNesteStegError && (
@@ -21,7 +21,7 @@ export const LøsBehovOgGåTilNesteStegStatusAlert = ({ status, løsBehovOgGåTi
           </BodyShort>
           <BodyShort size={'small'}>
             <b>SakId:</b>
-            {` ${saksId}`}
+            {` ${saksnummer}`}
           </BodyShort>
           <BodyShort size={'small'}>
             <b>Behandlingsreferanse:</b>
@@ -34,7 +34,7 @@ export const LøsBehovOgGåTilNesteStegStatusAlert = ({ status, løsBehovOgGåTi
           <BodyShort spacing>Det tok for lang tid å hente neste steg fra baksystemet. Kom tilbake senere.</BodyShort>
           <BodyShort size={'small'}>
             <b>SakId:</b>
-            {` ${saksId}`}
+            {` ${saksnummer}`}
           </BodyShort>
           <BodyShort size={'small'}>
             <b>Behandlingsreferanse:</b>
@@ -47,7 +47,7 @@ export const LøsBehovOgGåTilNesteStegStatusAlert = ({ status, løsBehovOgGåTi
           <BodyShort spacing>Maskinen bruker litt lengre tid på å jobbe enn vanlig.</BodyShort>
           <BodyShort size={'small'}>
             <b>SakId:</b>
-            {` ${saksId}`}
+            {` ${saksnummer}`}
           </BodyShort>
           <BodyShort size={'small'}>
             <b>Behandlingsreferanse:</b>

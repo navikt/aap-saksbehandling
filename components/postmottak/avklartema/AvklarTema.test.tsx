@@ -1,7 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { AvklarTema } from './AvklarTema';
 import { AvklarTemaGrunnlag } from 'lib/types/postmottakTypes';
+import { render } from 'lib/test/CustomRender';
 
 describe('AvklarTema', () => {
   const grunnlag: AvklarTemaGrunnlag = {
