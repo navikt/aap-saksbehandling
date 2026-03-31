@@ -13,10 +13,12 @@ export const DATO_FORMATER = {
 };
 
 export const uendeligSluttString = '2999-01-01';
-const uendeligSlutt = new Date(uendeligSluttString);
 
 export function erUendeligSlutt(dato: string | Date): boolean {
-  return dato === uendeligSluttString || dato === uendeligSlutt;
+  if (typeof dato === 'string') {
+    return dato.startsWith(uendeligSluttString);
+  }
+  return format(dato, 'yyyy-MM-dd') === uendeligSluttString;
 }
 
 export function formaterDatoForFrontend(dato: Date | string): string {
@@ -35,7 +37,7 @@ export function formaterDatoMedKunDagOgMånedForFrontend(dato: string): string {
 }
 
 export function formatDatoMedMånedsnavn(dato: string | Date): string {
-  if (dato === uendeligSluttString || dato === uendeligSlutt) {
+  if (erUendeligSlutt(dato)) {
     return '';
   }
 
@@ -43,7 +45,7 @@ export function formatDatoMedMånedsnavn(dato: string | Date): string {
 }
 
 export function formaterDatoMedMånedOgÅr(dato: string | Date): string {
-  if (dato === uendeligSluttString || dato === uendeligSlutt) {
+  if (erUendeligSlutt(dato)) {
     return '';
   }
 
