@@ -39,6 +39,28 @@ export function validerPeriodiserteVurderingerRekkefølge({
     return false;
   }
 
+  const duplikateFraDatoer = new Set(
+    sorterteVurderinger
+      .filter((vurdering, index, array) => {
+        const forrige = array[index - 1];
+        return forrige && vurdering.fraDato === forrige.fraDato;
+      })
+      .map((vurdering) => vurdering.fraDato)
+  );
+  const harFlereNyeVurderingerFraSammeDag = duplikateFraDatoer.size > 0;
+
+  if (harFlereNyeVurderingerFraSammeDag) {
+    nyeVurderinger.forEach((_vurdering, index) => {
+      if (duplikateFraDatoer.has(nyeVurderinger[index].fraDato)) {
+        form.setError(`vurderinger.${index}.fraDato`, {
+          message: `Du har flere nye vurderinger som gjelder fra ${nyeVurderinger[index].fraDato}. Det kan kun være én vurdering per fra-dato.`,
+          type: 'custom',
+        });
+      }
+    });
+    return false;
+  }
+
   if (vurderingerKanIkkeVæreFørKanVurderes) {
     const tidligsteDato = sorterteVurderinger[0]?.fraDato ? new Dato(sorterteVurderinger[0]?.fraDato).dato : null;
 
