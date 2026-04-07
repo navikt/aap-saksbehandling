@@ -47,7 +47,7 @@ export const SykdomsvurderingNedsattArbeidsevneDetaljer = ({
           <RadioGroupJaNei
             name={`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnHalvparten`}
             description={
-              'Det er tilstrekkelig at arbeidsevnen er redusert med 40 prosent (§ 11-23) hvis brukeren mottar AAP eller skal tre inn i en tidligere stanset sak (§ 11-31)'
+              'Det er tilstrekkelig at arbeidsevnen er redusert med 40 prosent (§ 11-23) hvis brukeren mottar AAP eller skal tre inn i en tidligere stanset sak (§ 11-31).'
             }
             control={form.control}
             label={'Er arbeidsevnen nedsatt med minst halvparten?'}
@@ -66,7 +66,7 @@ export const SykdomsvurderingNedsattArbeidsevneDetaljer = ({
             control={form.control}
             label={'Er arbeidsevnen nedsatt med minst halvparten?'}
             description={
-              'Det er tilstrekkelig at arbeidsevnen er redusert med 40 prosent (§ 11-23) hvis brukeren mottar AAP eller skal tre inn i en tidligere stanset sak (§ 11-31)'
+              'Det er tilstrekkelig at arbeidsevnen er redusert med 40 prosent (§ 11-23) hvis brukeren mottar AAP eller skal tre inn i en tidligere stanset sak (§ 11-31).'
             }
             horisontal={true}
             rules={{

@@ -88,9 +88,9 @@ export const VurderRettighetsperiodeModal = ({
           <VStack gap="4">
             <BodyLong size="medium">
               Dersom søker kan ha rett på AAP før søknadstidspunktet kan første mulige dato med rett på ytelse
-              overstyres. NAY får en oppgave for å vurdere riktig dato etter § 22-13 syvende ledd
+              overstyres. NAY får en oppgave for å vurdere riktig dato etter § 22-13 syvende ledd.
             </BodyLong>
-            <BodyLong>Tilbakedatering av søknadsdato etter § 22-13 5. ledd må gjøres i postmottak</BodyLong>
+            <BodyLong>Tilbakedatering av søknadsdato etter § 22-13 5. ledd må gjøres i postmottak.</BodyLong>
             <FormField form={form} formField={formFields.begrunnelse} size="medium" />
             {sendHendelseError && (
               <Alert variant={'error'} size={'small'}>
