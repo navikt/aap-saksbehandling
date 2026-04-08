@@ -6,6 +6,7 @@ describe('settBehandlingPåVentModal', () => {
   beforeEach(() => {
     render(<SettBehandlingPåVentModal behandlingsReferanse={'123'} reservert={true} isOpen={true} onClose={vi.fn} />);
   });
+
   it('skal ha en heading', () => {
     const heading = screen.getByText('Sett behandling på vent');
     expect(heading).toBeVisible();
