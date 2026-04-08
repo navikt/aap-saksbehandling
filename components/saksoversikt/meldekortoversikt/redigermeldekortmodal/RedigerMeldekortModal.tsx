@@ -1,4 +1,4 @@
-import { Button, Dialog, VStack } from '@navikt/ds-react';
+import { Alert, Button, Dialog, VStack } from '@navikt/ds-react';
 import { useEffect } from 'react';
 import { FormProvider } from 'react-hook-form';
 
@@ -30,6 +30,8 @@ interface Dag {
   timerArbeidet: string;
 }
 
+const årsakOptions = ['', 'Registrere meldedato', 'Lever/endre meldekort for bruker', 'Overstyre bruker'];
+
 export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) => {
   const defaultValues = getDefaultValuesForForm(meldekort);
 
@@ -43,7 +45,7 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
     },
     årsak: {
       type: 'select',
-      options: ['hei', 'hoy'],
+      options: årsakOptions,
       label: 'Årsak',
       defaultValue: defaultValues?.årsak,
     },
@@ -74,6 +76,12 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
 
   const errorList = hentFeilmeldingerForForm(form.formState.errors);
 
+  const årsak = form.watch('årsak');
+
+  const skalViseMeldedato = årsak === 'Lever/endre meldekort for bruker' || årsak === 'Registrere meldedato';
+  const skalViseTimer = årsak === 'Lever/endre meldekort for bruker';
+  const skalViseAlertForOverstyringAvBruker = årsak === 'Overstyre bruker';
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen} size={'medium'}>
       <Dialog.Popup width={'large'} closeOnOutsideClick={false}>
@@ -93,9 +101,15 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
               <VStack gap={'4'}>
                 <FormField form={form} formField={formFields.begrunnelse} />
                 <FormField form={form} formField={formFields.årsak} />
-                <FormField form={form} formField={formFields.meldedato} />
-                <UtfyllingKalender />
+                {skalViseMeldedato && <FormField form={form} formField={formFields.meldedato} />}
+                {skalViseTimer && <UtfyllingKalender />}
                 <FormErrorSummary errorList={errorList} />
+                {skalViseAlertForOverstyringAvBruker && (
+                  <Alert variant={'warning'} size={'small'}>
+                    Overstyring av bruker er ikke støttet enda. Hvis behovet vedvarer etter dialog med bruker, send sak
+                    i porten til team AAP.
+                  </Alert>
+                )}
               </VStack>
             </form>
           </FormProvider>
