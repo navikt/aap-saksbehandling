@@ -15,7 +15,6 @@ import {
 import { useFormContext } from 'react-hook-form';
 import { RedigerMeldekortFormFields } from 'components/saksoversikt/meldekortoversikt/redigermeldekortmodal/RedigerMeldekortModal';
 import { replaceCommasWithDots } from 'lib/utils/string';
-import { hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 
 interface Props {
@@ -29,9 +28,6 @@ export const UkeDag = ({ dag, felterMap, erSisteFeltiRaden, radHarError }: Props
   const form = useFormContext<RedigerMeldekortFormFields>();
   const dagStr = format(dag, 'yyyy-MM-dd');
   const eksisterendeFelt = felterMap.get(dagStr);
-
-  const errorList = hentFeilmeldingerForForm(form.formState.errors);
-  console.log('Såå hva er denne?', errorList);
 
   const harFeilmelding =
     eksisterendeFelt?.index !== undefined
