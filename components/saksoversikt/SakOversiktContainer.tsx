@@ -8,6 +8,7 @@ import { DokumentOversikt } from 'components/saksoversikt/dokumentoversikt/Dokum
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { AktivitetspliktTrekk } from 'components/saksoversikt/aktivitetsplikttrekk/AktivitetspliktTrekk';
+import { MeldekortOversikt } from 'components/saksoversikt/meldekortoversikt/MeldekortOversikt';
 
 enum Tab {
   OVERSIKT = 'OVERSIKT',

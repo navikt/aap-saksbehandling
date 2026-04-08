@@ -2749,6 +2749,44 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/sak/{saksnummer}/rettighetsinfo': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description saksnummer */
+          saksnummer: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.rettighet.RettighetsinfoDto'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/behandling/{referanse}/tidligere-vurderinger': {
     parameters: {
       query?: never;
@@ -4827,6 +4865,44 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/drift/sak/{saksnummer}/oppdater-person-identer': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description saksnummer */
+          saksnummer: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.drift.SakDriftsinfoDTO'];
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/behandling/{referanse}/utbetaling/simulering': {
     parameters: {
       query?: never;
@@ -5189,6 +5265,11 @@ export interface components {
       tjenestePensjon?: boolean | null;
       /** Format: int32 */
       'uf\u00F8re'?: number | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      'uf\u00F8reS\u00F8knadDato'?: string | null;
       /**
        * Format: date
        * @example 2025-04-01
@@ -11380,6 +11461,7 @@ export interface components {
       nyeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.OvergangUf\u00F8reVurderingResponse'][];
       perioderSomIkkeErTilstrekkeligVurdert: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
       sisteVedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.OvergangUf\u00F8reVurderingResponse'][];
+      'uf\u00F8reS\u00F8knadOpplysninger'?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.Uf\u00F8reS\u00F8knadOpplysninger'];
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.OvergangUf\u00F8reVurderingResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.OvergangUf\u00F8reVurderingResponse': {
@@ -11411,6 +11493,13 @@ export interface components {
        */
       virkningsdato: string;
       vurdertAv: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.Uf\u00F8reS\u00F8knadOpplysninger': {
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      soknadsdato: string;
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomGrunnlagResponse': {
       'beh\u00F8verVurderinger': components['schemas']['no.nav.aap.komponenter.type.Periode'][];
@@ -13070,6 +13159,28 @@ export interface components {
       /** @enum {string} */
       type: 'ARBEIDSSØKER' | 'BISTANDSBEHOV' | 'STUDENT' | 'SYKEPENGEERSTATNING' | 'VURDERES_FOR_UFØRETRYGD';
     };
+    'no.nav.aap.behandlingsflyt.behandling.rettighet.RettighetsinfoDto': {
+      perioderMedRett: components['schemas']['no.nav.aap.behandlingsflyt.behandling.rettighet.RettighetsperiodeDto'][];
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      sisteDagMedRett?: string | null;
+    };
+    'no.nav.aap.behandlingsflyt.behandling.rettighet.RettighetsperiodeDto': {
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fom: string;
+      /** @enum {string} */
+      rettighetstype: 'ARBEIDSSØKER' | 'BISTANDSBEHOV' | 'STUDENT' | 'SYKEPENGEERSTATNING' | 'VURDERES_FOR_UFØRETRYGD';
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      tom: string;
+    };
     'no.nav.aap.behandlingsflyt.behandling.rettighetsperiode.RettighetsperiodeGrunnlagResponse': {
       'harTilgangTil\u00C5Saksbehandle': boolean;
       /**
@@ -13767,6 +13878,7 @@ export interface components {
         | 'ANNET_RELEVANT_DOKUMENT'
         | 'DIALOGMELDING'
         | 'FAGSYSTEMINFO_BEHOV_HENDELSE'
+        | 'FORELDREPENGE_VEDTAK_HENDELSE'
         | 'INSTITUSJONSOPPHOLD'
         | 'KABAL_HENDELSE'
         | 'KLAGE'
@@ -15867,6 +15979,7 @@ export interface components {
         | 'BEHANDLING_REFERANSE'
         | 'BRUDD_AKTIVITETSPLIKT_INNSENDING_ID'
         | 'FAGSYSTEMINFO_BEHOV_HENDELSE_ID'
+        | 'FORELDREPENGEVEDTAK_HENDELSE_ID'
         | 'INSTITUSJONSOPPHOLD_HENDELSE_ID'
         | 'JOURNALPOST'
         | 'KABAL_HENDELSE_ID'
@@ -16146,6 +16259,18 @@ export interface components {
       /** Format: int32 */
       versjon: number;
     };
+    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ForeldrepengeVedtak': components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ForeldrepengeVedtakV0'];
+    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ForeldrepengeVedtakV0': {
+      /** @enum {string} */
+      kilde: 'FP_SAK';
+      personidentifikator: string;
+      tema: string;
+      /**
+       * Format: date-time
+       * @example 2025-04-01T14:30:00+02:00
+       */
+      tidspunkt: string;
+    };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Ident': {
       identifikator: string;
     };
@@ -16167,6 +16292,7 @@ export interface components {
         | 'ANNET_RELEVANT_DOKUMENT'
         | 'DIALOGMELDING'
         | 'FAGSYSTEMINFO_BEHOV_HENDELSE'
+        | 'FORELDREPENGE_VEDTAK_HENDELSE'
         | 'INSTITUSJONSOPPHOLD'
         | 'KABAL_HENDELSE'
         | 'KLAGE'
@@ -16334,6 +16460,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Melding':
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Aktivitetskort']
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AnnetRelevantDokument']
+      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ForeldrepengeVedtak']
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.InstitusjonsOppholdHendelse']
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.KabalHendelse']
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Klage']
@@ -16576,6 +16703,7 @@ export interface components {
         | 'ANNET_RELEVANT_DOKUMENT'
         | 'DIALOGMELDING'
         | 'FAGSYSTEMINFO_BEHOV_HENDELSE'
+        | 'FORELDREPENGE_VEDTAK_HENDELSE'
         | 'INSTITUSJONSOPPHOLD'
         | 'KABAL_HENDELSE'
         | 'KLAGE'
