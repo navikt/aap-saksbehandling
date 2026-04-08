@@ -2,7 +2,7 @@
 
 import { eachDayOfInterval } from 'date-fns';
 
-import { BodyShort, Heading, VStack } from '@navikt/ds-react';
+import { BodyShort, VStack } from '@navikt/ds-react';
 
 import styles from './UkeRad.module.css';
 
@@ -45,7 +45,9 @@ export const UkeRad = ({ felterIUken }: Props) => {
 
   return (
     <VStack gap={'4'}>
-      <BodyShort size={'medium'} weight={"semibold"}>Uke {felterIUken.ukeNummer}</BodyShort>
+      <BodyShort size={'medium'} weight={'semibold'}>
+        Uke {felterIUken.ukeNummer}
+      </BodyShort>
 
       <div className={ukeUtfyllingErrorMeldinger.length > 0 ? styles.ukeradmederror : styles.ukerad}>
         {alleDagerIUken.map((dag, index) => {
