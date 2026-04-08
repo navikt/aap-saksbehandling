@@ -13,7 +13,7 @@ import { erGyldigFødselsnummer } from 'lib/utils/fnr';
 import { erGyldigOrganisasjonsnummer } from 'lib/utils/orgnr';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 
 interface Props {
   grunnlag?: FullmektigGrunnlag;
@@ -165,8 +165,11 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly, ini
     { readOnly: formReadOnly }
   );
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.FASTSETT_FULLMEKTIG, initialMellomlagretVurdering, form);
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.FASTSETT_FULLMEKTIG,
+    initialMellomlagretVurdering,
+    form
+  );
 
   const [harFullmektig, idType, land] = form.watch(['harFullmektig', 'idType', 'land']);
 
@@ -214,7 +217,7 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly, ini
   };
 
   return (
-    <VilkårskortMedFormOgMellomlagringNyVisning
+    <VilkårskortMedFormOgMellomlagring
       heading={'Fullmektig/verge'}
       steg={'FULLMEKTIG'}
       onSubmit={handleSubmit}
@@ -224,7 +227,6 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly, ini
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() =>
           form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag) : emptyDraftFormFields())
@@ -260,7 +262,7 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly, ini
           )}
         </>
       )}
-    </VilkårskortMedFormOgMellomlagringNyVisning>
+    </VilkårskortMedFormOgMellomlagring>
   );
 
   function mapVurderingToDraftFormFields(grunnlag?: FullmektigGrunnlag): DraftFormFields {

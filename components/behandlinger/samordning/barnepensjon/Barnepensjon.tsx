@@ -1,6 +1,6 @@
 'use client';
 
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { BarnepensjonGrunnlag, MellomlagretVurdering } from 'lib/types/types';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
@@ -68,13 +68,16 @@ export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering, behandlin
     { readOnly: formReadOnly }
   );
 
-  const { mellomlagretVurdering, lagreMellomlagring, nullstillMellomlagretVurdering, slettMellomlagring } =
-    useMellomlagring(Behovstype.AVKLAR_SAMORDNING_BARNEPENSJON_KODE, initialMellomlagretVurdering, form);
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.AVKLAR_SAMORDNING_BARNEPENSJON_KODE,
+    initialMellomlagretVurdering,
+    form
+  );
 
   const feilmeldinger = hentFeilmeldingerForForm(form.formState.errors);
 
   return (
-    <VilkårskortMedFormOgMellomlagringNyVisning
+    <VilkårskortMedFormOgMellomlagring
       heading={'§ 11-27 Samordning barnepensjon (valgfritt)'}
       steg={'SAMORDNING_BARNEPENSJON'}
       onSubmit={form.handleSubmit((data) => {
@@ -107,7 +110,6 @@ export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering, behandlin
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() =>
           form.reset(grunnlag.vurdering ? mapVurderingToDraftFormFields(grunnlag) : emptyDraftFormFields())
@@ -128,7 +130,7 @@ export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering, behandlin
 
         {feilmeldinger && feilmeldinger.length > 0 && <FormErrorSummary errorList={feilmeldinger} />}
       </VStack>
-    </VilkårskortMedFormOgMellomlagringNyVisning>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 

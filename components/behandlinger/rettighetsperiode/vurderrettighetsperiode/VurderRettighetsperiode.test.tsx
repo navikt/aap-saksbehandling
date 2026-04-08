@@ -166,8 +166,7 @@ describe('Vurder rettighetsperiode', () => {
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
         />
       );
-      const lagreKnapp = screen.queryByRole('button', { name: 'Lagre utkast' });
-      expect(lagreKnapp).not.toBeInTheDocument();
+
       const slettKnapp = screen.queryByRole('button', { name: 'Slett utkast' });
       expect(slettKnapp).not.toBeInTheDocument();
     });

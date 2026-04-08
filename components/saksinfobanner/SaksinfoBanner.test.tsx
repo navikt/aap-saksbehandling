@@ -465,18 +465,34 @@ describe('Sak status', () => {
     expect(returTag).not.toBeInTheDocument();
   });
 
-  it('skal vise frist utløpt-tag når oppgave har utløpt ventefrist', () => {
+  it('skal vise frist utløpt-tag når oppgave har utløpt ventefrist', async () => {
     customRender(
       <SaksinfoBanner
         personInformasjon={personInformasjon}
         sak={sak}
         behandling={behandling}
         brukerInformasjon={{ navn: 'Saksbehandler', NAVident: 'navIdent' }}
-        oppgave={{ ...oppgave, utløptVentefrist: '2026-01-04' }}
+        oppgave={{
+          ...oppgave,
+          utløptVentefrist: '2026-01-04',
+          påVentÅrsak: 'VENTER_PÅ_OPPLYSNINGER',
+          venteBegrunnelse: 'Venter på dokumentasjon',
+          forrigeVenteBegrunnelse: 'Venter på dokumentasjon',
+          forrigePåVentÅrsak: 'VENTER_PÅ_OPPLYSNINGER',
+        }}
       />
     );
-    const fristTag = screen.getByText('Frist utløpt 04.01.2026');
-    expect(fristTag).toBeVisible();
+
+    const fristKnapp = screen.getByRole('button', { name: /Ventefrist utløpt.*04\.01\.2026/ });
+    expect(fristKnapp).toBeVisible();
+
+    await user.click(fristKnapp);
+
+    expect(screen.getByText('Frist utløpt 04.01.2026')).toBeVisible();
+    expect(screen.getByText('Årsak')).toBeVisible();
+    expect(screen.getByText('Venter på opplysninger')).toBeVisible();
+    expect(screen.getByText('Begrunnelse')).toBeVisible();
+    expect(screen.getByText('Venter på dokumentasjon')).toBeVisible();
   });
 
   it('skal ikke vise frist utløpt-tag når oppgave ikke har utløpt ventefrist', () => {

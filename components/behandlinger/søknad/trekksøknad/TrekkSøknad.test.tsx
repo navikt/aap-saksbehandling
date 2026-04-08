@@ -171,7 +171,7 @@ describe('Trekk søknad', () => {
       );
     });
 
-    it('Skal ikke være mulig å lagre eller slette mellomlagring hvis det er readOnly', () => {
+    it('Skal ikke være mulig å slette mellomlagring hvis det er readOnly', () => {
       render(
         <TrekkSøknad
           readOnly={true}
@@ -181,8 +181,6 @@ describe('Trekk søknad', () => {
         />
       );
 
-      const lagreKnapp = screen.queryByRole('button', { name: 'Lagre utkast' });
-      expect(lagreKnapp).not.toBeInTheDocument();
       const slettKnapp = screen.queryByRole('button', { name: 'Slett utkast' });
       expect(slettKnapp).not.toBeInTheDocument();
     });

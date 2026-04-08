@@ -62,8 +62,11 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
     shouldUnregister: true,
   });
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.OPPHOLDSKRAV_KODE, initialMellomlagring, form);
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.OPPHOLDSKRAV_KODE,
+    initialMellomlagring,
+    form
+  );
 
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
 
@@ -135,7 +138,6 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
       isLoading={isLoading}
       status={status}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}
       visningModus={visningModus}
       visningActions={visningActions}

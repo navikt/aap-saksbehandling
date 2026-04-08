@@ -9,7 +9,7 @@ import { Behovstype } from 'lib/utils/form';
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 
 interface Props {
   behandlingVersjon: number;
@@ -47,8 +47,11 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, ini
     },
   });
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.FASTSETT_PÅKLAGET_BEHANDLING, initialMellomlagretVurdering, form);
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.FASTSETT_PÅKLAGET_BEHANDLING,
+    initialMellomlagretVurdering,
+    form
+  );
 
   const onSubmit = (data: FormFields) => {
     løsBehovOgGåTilNesteSteg(
@@ -71,7 +74,7 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, ini
   };
 
   return (
-    <VilkårskortMedFormOgMellomlagringNyVisning
+    <VilkårskortMedFormOgMellomlagring
       heading={'Klage på vedtak'}
       steg={'PÅKLAGET_BEHANDLING'}
       onSubmit={form.handleSubmit(onSubmit)}
@@ -81,7 +84,6 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, ini
       status={status}
       vurdertAvAnsatt={grunnlag?.vurdertAv}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() =>
           form.reset(
@@ -108,7 +110,7 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, ini
           />
         )}
       />
-    </VilkårskortMedFormOgMellomlagringNyVisning>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 

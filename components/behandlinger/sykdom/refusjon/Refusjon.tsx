@@ -18,7 +18,7 @@ import { Sak } from 'context/saksbehandling/SakContext';
 import { Refusjonskrav } from 'components/behandlinger/sykdom/refusjon/RefusjonsKrav';
 import { ValuePair } from 'components/form/FormField';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 
 interface Props {
   behandlingVersjon: number;
@@ -71,8 +71,11 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
     },
   });
 
-  const { lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
-    useMellomlagring(Behovstype.REFUSJON_KRAV_KODE, initialMellomlagretVurdering, form);
+  const { slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } = useMellomlagring(
+    Behovstype.REFUSJON_KRAV_KODE,
+    initialMellomlagretVurdering,
+    form
+  );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
@@ -104,7 +107,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
       : 'ingen data';
 
   return (
-    <VilkårskortMedFormOgMellomlagringNyVisning
+    <VilkårskortMedFormOgMellomlagring
       heading={'Refusjonskrav sosialstønad'}
       steg="REFUSJON_KRAV"
       vilkårTilhørerNavKontor={true}
@@ -114,7 +117,6 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vurdertAvAnsatt={grunnlag.gjeldendeVurderinger?.[0]?.vurdertAv}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() => form.reset(mapVurderingToDraftFormFields(grunnlag, sak)))
       }
@@ -146,7 +148,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
         <Radio value={JaEllerNei.Nei}>Nei</Radio>
       </RadioGroupWrapper>
       {form.watch('harKrav') === JaEllerNei.Ja && <Refusjonskrav sak={sak} form={form} readOnly={readOnly} />}
-    </VilkårskortMedFormOgMellomlagringNyVisning>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 
