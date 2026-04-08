@@ -9,7 +9,6 @@ import { OvergangUforeForm } from 'components/behandlinger/sykdom/overgangufore/
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { JaEllerNei } from 'lib/utils/form';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
-import { useFeatureFlag } from 'context/UnleashContext';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 interface Props {
   index: number;
@@ -19,7 +18,6 @@ interface Props {
 }
 
 export const OvergangUforeVurderingFormInput = ({ index, form, readonly, søknadsdatoUføretrygd }: Props) => {
-  const skalViseUføreSøknadInfo = useFeatureFlag('hentUforesoknadsdata');
   const vilkårsvurderingLabel = 'Vilkårsvurdering';
   const brukerSøktUføretrygdLabel = 'Har brukeren søkt om uføretrygd?';
   const brukerHarFaattVedtakOmUføretrygdLabel = 'Har brukeren fått vedtak på søknaden om uføretrygd?';
@@ -72,13 +70,13 @@ export const OvergangUforeVurderingFormInput = ({ index, form, readonly, søknad
         readOnly={readonly}
         shouldUnregister
       />
-      {skalViseUføreSøknadInfo && (
-        <Alert variant={'info'} size={'small'}>
-          {søknadsdatoUføretrygd
-            ? `Brukeren har søkt om uføretrygd ${formaterDatoForFrontend(søknadsdatoUføretrygd)}`
-            : 'Ingen uføresøknad funnet på brukeren'}
-        </Alert>
-      )}
+
+      <Alert variant={'info'} size={'small'}>
+        {søknadsdatoUføretrygd
+          ? `Brukeren har søkt om uføretrygd ${formaterDatoForFrontend(søknadsdatoUføretrygd)}`
+          : 'Ingen uføresøknad funnet på brukeren'}
+      </Alert>
+
       {brukerHarSoktOmUforetrygd && (
         <RadioGroupWrapper
           name={`vurderinger.${index}.brukerHarFåttVedtakOmUføretrygd`}
