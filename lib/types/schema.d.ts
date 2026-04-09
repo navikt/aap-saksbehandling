@@ -2259,6 +2259,41 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/drift/api/jobb/avbrytAlleFeilede': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': string;
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/drift/api/jobb/rekjorAlleFeilede': {
     parameters: {
       query?: never;
@@ -3573,6 +3608,44 @@ export interface paths {
           };
           content: {
             'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_9.AktivitetspliktMedTrekkDto'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/meldekort/{saksnummer}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description saksnummer */
+          saksnummer: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.MeldeperioderMedMeldekortResponse'];
           };
         };
       };
@@ -7332,7 +7405,7 @@ export interface components {
       'l\u00F8sningerForPerioder'?:
         | components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.PeriodisertStudentDto'][]
         | null;
-      studentvurdering: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.StudentVurderingDTO'];
+      studentvurdering?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.StudentVurderingDTO'];
     };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarStudentL\u00F8sning': {
       /** @enum {string} */
@@ -8755,6 +8828,7 @@ export interface components {
       /** @enum {string} */
       konsekvens: 'BEHANDLE_PÅ_NYTT' | 'INGENTING' | 'OMGJØRING';
       'vilk\u00E5rSomOmgj\u00F8res': (
+        | 'EOES_883_2004'
         | 'FOLKETRYGDLOVEN_11_10_FRITAK'
         | 'FOLKETRYGDLOVEN_11_10_MELDEPLIKT'
         | 'FOLKETRYGDLOVEN_11_12'
@@ -12269,6 +12343,7 @@ export interface components {
       kvalitetssikretAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
       notat?: string | null;
       'vilk\u00E5rSomOmgj\u00F8res': (
+        | 'EOES_883_2004'
         | 'FOLKETRYGDLOVEN_11_10_FRITAK'
         | 'FOLKETRYGDLOVEN_11_10_MELDEPLIKT'
         | 'FOLKETRYGDLOVEN_11_12'
@@ -12305,6 +12380,7 @@ export interface components {
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
       )[];
       'vilk\u00E5rSomOpprettholdes': (
+        | 'EOES_883_2004'
         | 'FOLKETRYGDLOVEN_11_10_FRITAK'
         | 'FOLKETRYGDLOVEN_11_10_MELDEPLIKT'
         | 'FOLKETRYGDLOVEN_11_12'
@@ -12348,6 +12424,7 @@ export interface components {
       innstilling: 'DELVIS_OMGJØR' | 'OMGJØR' | 'OPPRETTHOLD';
       notat?: string | null;
       'vilk\u00E5rSomOmgj\u00F8res': (
+        | 'EOES_883_2004'
         | 'FOLKETRYGDLOVEN_11_10_FRITAK'
         | 'FOLKETRYGDLOVEN_11_10_MELDEPLIKT'
         | 'FOLKETRYGDLOVEN_11_12'
@@ -12384,6 +12461,7 @@ export interface components {
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
       )[];
       'vilk\u00E5rSomOpprettholdes': (
+        | 'EOES_883_2004'
         | 'FOLKETRYGDLOVEN_11_10_FRITAK'
         | 'FOLKETRYGDLOVEN_11_10_MELDEPLIKT'
         | 'FOLKETRYGDLOVEN_11_12'
@@ -12658,6 +12736,31 @@ export interface components {
        */
       tom?: string | null;
       vurdertAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.meldekort.DagDto': {
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      dato: string;
+      /** Format: double */
+      timerArbeidet: number;
+    };
+    'no.nav.aap.behandlingsflyt.behandling.meldekort.MeldekortDto': {
+      dager: components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.DagDto'][];
+      id: string;
+      /**
+       * Format: date-time
+       * @example 2025-04-01T12:30:00
+       */
+      mottattTidspunkt: string;
+    };
+    'no.nav.aap.behandlingsflyt.behandling.meldekort.MeldeperiodeMedMeldekortDto': {
+      meldekort?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.MeldekortDto'];
+      meldeperiode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.meldekort.MeldeperioderMedMeldekortResponse': {
+      meldeperioderMedMeldekort: components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.MeldeperiodeMedMeldekortDto'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.mellomlagring.MellomlagretVurdering': {
       /** @enum {string} */
@@ -13200,6 +13303,7 @@ export interface components {
       /** @enum {string} */
       konsekvens: 'BEHANDLE_PÅ_NYTT' | 'INGENTING' | 'OMGJØRING';
       'vilk\u00E5rSomOmgj\u00F8res': (
+        | 'EOES_883_2004'
         | 'FOLKETRYGDLOVEN_11_10_FRITAK'
         | 'FOLKETRYGDLOVEN_11_10_MELDEPLIKT'
         | 'FOLKETRYGDLOVEN_11_12'
@@ -14117,6 +14221,7 @@ export interface components {
       innstilling: 'DELVIS_OMGJØR' | 'OMGJØR' | 'OPPRETTHOLD';
       notat?: string | null;
       'vilk\u00E5rSomOmgj\u00F8res': (
+        | 'EOES_883_2004'
         | 'FOLKETRYGDLOVEN_11_10_FRITAK'
         | 'FOLKETRYGDLOVEN_11_10_MELDEPLIKT'
         | 'FOLKETRYGDLOVEN_11_12'
@@ -14153,6 +14258,7 @@ export interface components {
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
       )[];
       'vilk\u00E5rSomOpprettholdes': (
+        | 'EOES_883_2004'
         | 'FOLKETRYGDLOVEN_11_10_FRITAK'
         | 'FOLKETRYGDLOVEN_11_10_MELDEPLIKT'
         | 'FOLKETRYGDLOVEN_11_12'
@@ -14195,6 +14301,7 @@ export interface components {
       innstilling: 'DELVIS_OMGJØR' | 'OMGJØR' | 'OPPRETTHOLD';
       notat?: string | null;
       'vilk\u00E5rSomOmgj\u00F8res': (
+        | 'EOES_883_2004'
         | 'FOLKETRYGDLOVEN_11_10_FRITAK'
         | 'FOLKETRYGDLOVEN_11_10_MELDEPLIKT'
         | 'FOLKETRYGDLOVEN_11_12'
@@ -14231,6 +14338,7 @@ export interface components {
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
       )[];
       'vilk\u00E5rSomOpprettholdes': (
+        | 'EOES_883_2004'
         | 'FOLKETRYGDLOVEN_11_10_FRITAK'
         | 'FOLKETRYGDLOVEN_11_10_MELDEPLIKT'
         | 'FOLKETRYGDLOVEN_11_12'
@@ -14283,6 +14391,7 @@ export interface components {
       /** @enum {string} */
       type: 'AVSLÅTT' | 'DELVIS_OMGJØRES' | 'OMGJØRES' | 'OPPRETTHOLDES' | 'TRUKKET' | 'UFULLSTENDIG';
       'vilk\u00E5rSomSkalOmgj\u00F8res': (
+        | 'EOES_883_2004'
         | 'FOLKETRYGDLOVEN_11_10_FRITAK'
         | 'FOLKETRYGDLOVEN_11_10_MELDEPLIKT'
         | 'FOLKETRYGDLOVEN_11_12'
@@ -14319,6 +14428,7 @@ export interface components {
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
       )[];
       'vilk\u00E5rSomSkalOpprettholdes': (
+        | 'EOES_883_2004'
         | 'FOLKETRYGDLOVEN_11_10_FRITAK'
         | 'FOLKETRYGDLOVEN_11_10_MELDEPLIKT'
         | 'FOLKETRYGDLOVEN_11_12'
@@ -14366,6 +14476,7 @@ export interface components {
       /** @enum {string} */
       type: 'AVSLÅTT' | 'DELVIS_OMGJØRES' | 'OMGJØRES' | 'OPPRETTHOLDES' | 'TRUKKET' | 'UFULLSTENDIG';
       'vilk\u00E5rSomSkalOmgj\u00F8res': (
+        | 'EOES_883_2004'
         | 'FOLKETRYGDLOVEN_11_10_FRITAK'
         | 'FOLKETRYGDLOVEN_11_10_MELDEPLIKT'
         | 'FOLKETRYGDLOVEN_11_12'
@@ -14406,6 +14517,7 @@ export interface components {
       /** @enum {string} */
       type: 'AVSLÅTT' | 'DELVIS_OMGJØRES' | 'OMGJØRES' | 'OPPRETTHOLDES' | 'TRUKKET' | 'UFULLSTENDIG';
       'vilk\u00E5rSomSkalOpprettholdes': (
+        | 'EOES_883_2004'
         | 'FOLKETRYGDLOVEN_11_10_FRITAK'
         | 'FOLKETRYGDLOVEN_11_10_MELDEPLIKT'
         | 'FOLKETRYGDLOVEN_11_12'

@@ -6,7 +6,6 @@ export const FLAGS = [
   'VedtakslengdeAvklaringsbehov',
   'BekreftVurderingerOppfolging',
   'SjekkTildelingVedBekreft',
-  'hentUforesoknadsdata',
   'VisSisteDagMedRett',
 ] as const;
 
@@ -21,6 +20,5 @@ export const mockedFlags: Flags = {
   VedtakslengdeAvklaringsbehov: true,
   BekreftVurderingerOppfolging: true,
   SjekkTildelingVedBekreft: true,
-  hentUforesoknadsdata: true,
   VisSisteDagMedRett: true,
 };

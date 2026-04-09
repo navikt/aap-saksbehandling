@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useConfigForm } from 'components/form/FormHook';
-import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
-import { BookIcon } from '@navikt/aksel-icons';
+import { BookIcon, ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import styles from 'components/settbehandlingpåventmodal/SettBehandlingPåVentModal.module.css';
 import { Alert, Button, Modal, VStack } from '@navikt/ds-react';
 
@@ -48,15 +47,16 @@ export const SettMarkeringForBehandlingModal = ({ referanse, type, isOpen, onClo
     },
   });
 
-  useEffect(() => {
+  function onCloseClick() {
     form.reset();
     setError(undefined);
-  }, [isOpen, form]);
+    onClose();
+  }
 
   return (
     <Modal
       open={isOpen}
-      onClose={onClose}
+      onClose={onCloseClick}
       header={markeringTypeTilOverskrift(type)}
       className={styles.settBehandlingPåVentModal}
     >
@@ -106,7 +106,7 @@ export const SettMarkeringForBehandlingModal = ({ referanse, type, isOpen, onClo
         <Button form={'settMarkeringPåBehandling'} className={'fit-content'} loading={isLoading}>
           Sett markering
         </Button>
-        <Button variant={'secondary'} onClick={onClose}>
+        <Button variant={'secondary'} onClick={onCloseClick}>
           Avbryt
         </Button>
       </Modal.Footer>

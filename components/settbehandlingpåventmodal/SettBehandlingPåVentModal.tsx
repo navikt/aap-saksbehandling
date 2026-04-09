@@ -1,6 +1,6 @@
 'use client';
 
-import React, { FormEvent, useEffect, useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import { Alert, Box, Button, Modal, VStack } from '@navikt/ds-react';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { clientSettBehandlingPåVent } from 'lib/clientApi';
@@ -80,11 +80,6 @@ export const SettBehandlingPåVentModal = ({ behandlingsReferanse, reservert, is
     },
   });
 
-  useEffect(() => {
-    form.reset();
-    setError(undefined);
-  }, [isOpen, form]);
-
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit(async (data) => {
       setIsLoading(true);
@@ -139,10 +134,15 @@ export const SettBehandlingPåVentModal = ({ behandlingsReferanse, reservert, is
     };
   };
 
+  function onCloseClick() {
+    form.reset();
+    onClose();
+  }
+
   return (
     <Modal
       open={isOpen}
-      onClose={onClose}
+      onClose={onCloseClick}
       header={{ heading: 'Sett behandling på vent', icon: <HourglassBottomFilledIcon /> }}
       className={styles.settBehandlingPåVentModal}
     >
@@ -173,7 +173,7 @@ export const SettBehandlingPåVentModal = ({ behandlingsReferanse, reservert, is
         <Button form={'settBehandlingPåVent'} className={'fit-content'} loading={isLoading}>
           Sett på vent
         </Button>
-        <Button variant={'secondary'} onClick={onClose}>
+        <Button variant={'secondary'} onClick={onCloseClick}>
           Avbryt
         </Button>
       </Modal.Footer>

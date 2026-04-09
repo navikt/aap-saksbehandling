@@ -7,6 +7,7 @@ export const getValgteHjemlerSomIkkeErImplementert = (value: string | Hjemmel[] 
 };
 
 export const hjemmelMap: Partial<Record<Hjemmel, string>> = {
+  EOES_883_2004: 'EØS-forordningen (lovvalg / medlemskap)',
   FOLKETRYGDLOVEN_KAPITTEL_2: 'Kapittel 2',
   FOLKETRYGDLOVEN_11_2: '§ 11-2',
   FOLKETRYGDLOVEN_11_3: '§ 11-3',
