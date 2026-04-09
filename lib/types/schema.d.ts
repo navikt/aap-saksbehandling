@@ -13878,6 +13878,7 @@ export interface components {
         | 'ANNET_RELEVANT_DOKUMENT'
         | 'DIALOGMELDING'
         | 'FAGSYSTEMINFO_BEHOV_HENDELSE'
+        | 'FORELDREPENGE_VEDTAK_HENDELSE'
         | 'INSTITUSJONSOPPHOLD'
         | 'KABAL_HENDELSE'
         | 'KLAGE'
@@ -15978,6 +15979,7 @@ export interface components {
         | 'BEHANDLING_REFERANSE'
         | 'BRUDD_AKTIVITETSPLIKT_INNSENDING_ID'
         | 'FAGSYSTEMINFO_BEHOV_HENDELSE_ID'
+        | 'FORELDREPENGEVEDTAK_HENDELSE_ID'
         | 'INSTITUSJONSOPPHOLD_HENDELSE_ID'
         | 'JOURNALPOST'
         | 'KABAL_HENDELSE_ID'
@@ -16257,6 +16259,18 @@ export interface components {
       /** Format: int32 */
       versjon: number;
     };
+    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ForeldrepengeVedtak': components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ForeldrepengeVedtakV0'];
+    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ForeldrepengeVedtakV0': {
+      /** @enum {string} */
+      kilde: 'FP_SAK';
+      personidentifikator: string;
+      tema: string;
+      /**
+       * Format: date-time
+       * @example 2025-04-01T14:30:00+02:00
+       */
+      tidspunkt: string;
+    };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Ident': {
       identifikator: string;
     };
@@ -16278,6 +16292,7 @@ export interface components {
         | 'ANNET_RELEVANT_DOKUMENT'
         | 'DIALOGMELDING'
         | 'FAGSYSTEMINFO_BEHOV_HENDELSE'
+        | 'FORELDREPENGE_VEDTAK_HENDELSE'
         | 'INSTITUSJONSOPPHOLD'
         | 'KABAL_HENDELSE'
         | 'KLAGE'
@@ -16445,6 +16460,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Melding':
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Aktivitetskort']
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AnnetRelevantDokument']
+      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ForeldrepengeVedtak']
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.InstitusjonsOppholdHendelse']
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.KabalHendelse']
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Klage']
@@ -16687,6 +16703,7 @@ export interface components {
         | 'ANNET_RELEVANT_DOKUMENT'
         | 'DIALOGMELDING'
         | 'FAGSYSTEMINFO_BEHOV_HENDELSE'
+        | 'FORELDREPENGE_VEDTAK_HENDELSE'
         | 'INSTITUSJONSOPPHOLD'
         | 'KABAL_HENDELSE'
         | 'KLAGE'

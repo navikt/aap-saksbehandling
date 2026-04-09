@@ -5,6 +5,7 @@ import { Control, Controller, FieldValues, RegisterOptions, FieldPath } from 're
 
 export interface TextFieldProps<FormFieldValues extends FieldValues> {
   name: FieldPath<FormFieldValues>;
+  id?: string;
   label?: string;
   hideLabel?: boolean;
   hideErrorMessage?: boolean;
