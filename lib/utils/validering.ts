@@ -39,21 +39,19 @@ export function validerPeriodiserteVurderingerRekkefølge({
     return false;
   }
 
-  const duplikateFraDatoer = new Set(
+  const vurderingerMedDuplisertFraDato = new Set(
     sorterteVurderinger
       .filter((vurdering, index, array) => {
         const forrige = array[index - 1];
         return forrige && vurdering.fraDato === forrige.fraDato;
       })
-      .map((vurdering) => vurdering.fraDato)
   );
-  const harFlereNyeVurderingerFraSammeDag = duplikateFraDatoer.size > 0;
-
-  if (harFlereNyeVurderingerFraSammeDag) {
-    nyeVurderinger.forEach((_vurdering, index) => {
-      if (duplikateFraDatoer.has(nyeVurderinger[index].fraDato)) {
+  // Vis feilmelding hvis flere nye vurderinger har samme fra-dato
+  if (vurderingerMedDuplisertFraDato.size > 0) {
+    nyeVurderinger.forEach((vurdering, index) => {
+      if (vurderingerMedDuplisertFraDato.has(vurdering)) {
         form.setError(`vurderinger.${index}.fraDato`, {
-          message: `Du har flere nye vurderinger som gjelder fra ${nyeVurderinger[index].fraDato}. Det kan kun være én vurdering per fra-dato.`,
+          message: `Du har allerede en vurdering på denne datoen. Velg en annen dato eller slett vurderingen.`,
           type: 'custom',
         });
       }
