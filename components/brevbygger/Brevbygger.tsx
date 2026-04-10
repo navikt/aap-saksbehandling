@@ -165,7 +165,6 @@ export const Brevbygger = ({
       betingetTekst: brevdata?.betingetTekst || [],
       faktagrunnlag: brevdata?.faktagrunnlag || [],
       fritekster: fritekst,
-      periodetekster: brevdata?.periodetekster || [],
     });
   };
 

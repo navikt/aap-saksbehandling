@@ -40,10 +40,60 @@ describe('Vilkårskort med form', () => {
     expect(tekst).toBeVisible();
   });
 
-  it('skal vise informasjon om hvem som har gjort kvalitetssikring', () => {
+  it('skal vise informasjon om hvem som har gjort kvalitetssikring og beslutning', () => {
     renderComponentNyVisning(VisningModus.AKTIV_UTEN_AVBRYT);
 
-    const tekst = screen.getByText('Kvalitetssikret av Kvalitetssikrer, 26.04.2025');
+    expect(screen.getByText('Kvalitetssikret av Kvalitetssikrer, 26.04.2025')).toBeVisible();
+    expect(screen.getByText('Besluttet av Beslutter, 27.04.2025')).toBeVisible();
+  });
+
+  it('skal vise informasjon om hvem som har gjort kvalitetssikring og at den er returnert', () => {
+    const defaultPropsMedReturFraKvalitetssikrer: VilkårsKortMedFormOgMellomlagringProps = {
+      ...defaultProps,
+      kvalitetssikretAv: { ident: 'Kvalitetssikrer', dato: '2025-04-26', erRetur: true },
+    };
+
+    render(
+      <VilkårskortMedFormOgMellomlagring
+        {...defaultPropsMedReturFraKvalitetssikrer}
+        visningModus={VisningModus.LÅST_MED_ENDRE}
+        visningActions={{
+          onBekreftClick: vitest.fn,
+          onEndreClick: vitest.fn,
+          avbrytEndringClick: vitest.fn,
+        }}
+        formReset={() => vitest.fn}
+      >
+        <span>Dette er innhold</span>
+      </VilkårskortMedFormOgMellomlagring>
+    );
+
+    const tekst = screen.getByText('Returnert av Kvalitetssikrer, 26.04.2025');
+    expect(tekst).toBeVisible();
+  });
+
+  it('skal vise informasjon om hvem som har gjort beslutning og at den er returnert', () => {
+    const defaultPropsMedReturFraBeslutter: VilkårsKortMedFormOgMellomlagringProps = {
+      ...defaultProps,
+      besluttetAv: { ident: 'Beslutter', dato: '2025-04-26', erRetur: true },
+    };
+
+    render(
+      <VilkårskortMedFormOgMellomlagring
+        {...defaultPropsMedReturFraBeslutter}
+        visningModus={VisningModus.LÅST_MED_ENDRE}
+        visningActions={{
+          onBekreftClick: vitest.fn,
+          onEndreClick: vitest.fn,
+          avbrytEndringClick: vitest.fn,
+        }}
+        formReset={() => vitest.fn}
+      >
+        <span>Dette er innhold</span>
+      </VilkårskortMedFormOgMellomlagring>
+    );
+
+    const tekst = screen.getByText('Returnert av Beslutter, 26.04.2025');
     expect(tekst).toBeVisible();
   });
 
@@ -205,6 +255,7 @@ const defaultProps: VilkårsKortMedFormOgMellomlagringProps = {
   vilkårTilhørerNavKontor: true,
   vurdertAvAnsatt: { ident: 'Lokalsaksbehandler', dato: '2025-04-25' },
   kvalitetssikretAv: { ident: 'Kvalitetssikrer', dato: '2025-04-26' },
+  besluttetAv: { ident: 'Beslutter', dato: '2025-04-27' },
   children: undefined,
   onDeleteMellomlagringClick: vitest.fn,
   mellomlagretVurdering: undefined,
