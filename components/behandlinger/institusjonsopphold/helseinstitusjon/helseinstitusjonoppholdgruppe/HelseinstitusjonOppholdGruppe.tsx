@@ -96,7 +96,12 @@ export const HelseinstitusjonOppholdGruppe = ({
       <Box padding="4">
         <VStack gap="0">
           {tidligereVurderinger
-            ?.sort((a, b) => sorterEtterEldsteDato(a.periode.fom, b.periode.fom))
+            ?.filter((v) => {
+              const starterFørOppholdSlutt = v.periode.fom <= opphold.avsluttetDato;
+              const slutterEtterOppholdStart = v.periode.tom >= opphold.oppholdFra;
+              return starterFørOppholdSlutt && slutterEtterOppholdStart;
+            })
+            .sort((a, b) => sorterEtterEldsteDato(a.periode.fom, b.periode.fom))
             .map((vurdering, index, alle) => {
               const erSiste = index === alle.length - 1;
 
