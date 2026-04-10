@@ -161,13 +161,15 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
           const faktiskOpphold = grunnlag.opphold.find((o) => o.oppholdId === oppholdField.oppholdId)!;
           const skalJustere = skalJustereVedtatteVurderinger(grunnlag, oppholdField.oppholdId);
 
+          const tidligereVurderinger = grunnlag.vedtatteVurderinger
+            .filter((v) => v.oppholdId === oppholdField.oppholdId)
+            .flatMap((v) => v.vurderinger || []);
+
           return (
             <HelseinstitusjonOppholdGruppe
               key={oppholdField.id}
               opphold={faktiskOpphold}
-              tidligereVurderinger={
-                grunnlag.vedtatteVurderinger.find((v) => v.oppholdId === oppholdField.oppholdId)?.vurderinger
-              }
+              tidligereVurderinger={tidligereVurderinger}
               accordionsSignal={accordionsSignal}
               oppholdIndex={oppholdIndex}
               form={form}
@@ -206,9 +208,7 @@ function mapVurderingToDraftFormFields(
 
   return {
     helseinstitusjonsvurderinger: opphold.map((opphold) => {
-      const vurderingerForOpphold = grunnlag.vurderinger.find(
-        (v) => v.oppholdId === opphold.oppholdId
-      )?.vurderinger;
+      const vurderingerForOpphold = grunnlag.vurderinger.find((v) => v.oppholdId === opphold.oppholdId)?.vurderinger;
 
       const vedtatteVurderingerForOpphold = grunnlag.vedtatteVurderinger.find(
         (v) => v.oppholdId === opphold.oppholdId
@@ -235,11 +235,11 @@ function mapVurderingToDraftFormFields(
           behøverVurdering: false,
         }));
       } else if (skalJustere && vedtatteVurderingerForOpphold) {
-        vurderinger = []
+        vurderinger = [];
       } else {
         vurderinger = [
           {
-            oppholdId: opphold.oppholdId || '',  // TODO Gjør om oppholdId til required i backend når ny helseinstitusjon er ute i prod
+            oppholdId: opphold.oppholdId || '', // TODO Gjør om oppholdId til required i backend når ny helseinstitusjon er ute i prod
             begrunnelse: '',
             faarFriKostOgLosji: undefined,
             harFasteUtgifter: undefined,

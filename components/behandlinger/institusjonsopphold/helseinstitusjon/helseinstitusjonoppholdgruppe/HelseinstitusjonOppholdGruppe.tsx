@@ -8,6 +8,7 @@ import {
   formatDatoMedMånedsnavn,
   formaterDatoForFrontend,
   parseDatoFraDatePicker,
+  sorterEtterEldsteDato,
   uendeligSluttString,
 } from 'lib/utils/date';
 import {
@@ -63,7 +64,6 @@ export const HelseinstitusjonOppholdGruppe = ({
 
   const oppholdAvsluttetDato = new Dato(opphold.avsluttetDato).dato;
   const [cardExpanded, setCardExpanded] = useState<boolean>(true);
-  console.log('tidligereVurderinger',tidligereVurderinger);
 
   return (
     <Box
@@ -95,26 +95,31 @@ export const HelseinstitusjonOppholdGruppe = ({
       {/* VURDERINGER */}
       <Box padding="4">
         <VStack gap="0">
-          {tidligereVurderinger?.map((vurdering, index, alle) => {
-            const erSiste = index === alle.length - 1;
-            const justertTomDato =
-              erSiste && skalJustereVedtatteVurderinger ? oppholdAvsluttetDato : new Dato(vurdering.periode.tom).dato;
+          {tidligereVurderinger
+            ?.sort((a, b) => sorterEtterEldsteDato(a.periode.fom, b.periode.fom))
+            .map((vurdering, index, alle) => {
+              const erSiste = index === alle.length - 1;
 
-            return (
-              <TidligereVurderingExpandableCard
-                key={vurdering.periode.fom}
-                fom={new Dato(vurdering.periode.fom).dato}
-                tom={justertTomDato}
-                foersteNyePeriodeFraDato={foersteNyePeriode == null ? null : parseDatoFraDatePicker(foersteNyePeriode)}
-                vurderingStatus={getErReduksjonEllerIkke(erReduksjonUtIFraVurdering(vurdering))}
-                vurdertAv={vurdering.vurdertAv}
-                kvalitetssikretAv={undefined}
-                besluttetAv={undefined}
-              >
-                <HelseinstitusjonTidligereVurdering vurdering={vurdering} />
-              </TidligereVurderingExpandableCard>
-            );
-          })}
+              const justertTomDato =
+                erSiste && skalJustereVedtatteVurderinger ? oppholdAvsluttetDato : new Dato(vurdering.periode.tom).dato;
+
+              return (
+                <TidligereVurderingExpandableCard
+                  key={vurdering.periode.fom}
+                  fom={new Dato(vurdering.periode.fom).dato}
+                  tom={justertTomDato}
+                  foersteNyePeriodeFraDato={
+                    foersteNyePeriode == null ? null : parseDatoFraDatePicker(foersteNyePeriode)
+                  }
+                  vurderingStatus={getErReduksjonEllerIkke(erReduksjonUtIFraVurdering(vurdering))}
+                  vurdertAv={vurdering.vurdertAv}
+                  kvalitetssikretAv={undefined}
+                  besluttetAv={undefined}
+                >
+                  <HelseinstitusjonTidligereVurdering vurdering={vurdering} />
+                </TidligereVurderingExpandableCard>
+              );
+            })}
 
           {vurderinger.map((vurdering, vurderingIndex) => {
             const reduksjon = erReduksjonUtIFraFormFields(
@@ -171,9 +176,7 @@ export const HelseinstitusjonOppholdGruppe = ({
               setExpanded={setCardExpanded}
               heading={
                 <HStack justify={'space-between'} padding={'2'}>
-                  <BodyShort size={'small'}>
-                    {formatDatoMedMånedsnavn(addDays(oppholdAvsluttetDato, 1))} –{' '}
-                  </BodyShort>
+                  <BodyShort size={'small'}>{formatDatoMedMånedsnavn(addDays(oppholdAvsluttetDato, 1))} – </BodyShort>
                   <Tag size="xsmall" variant={'neutral-moderate'}>
                     Ikke relevant
                   </Tag>
