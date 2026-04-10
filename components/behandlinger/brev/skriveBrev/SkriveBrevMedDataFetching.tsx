@@ -15,7 +15,7 @@ import { skrivBrevBehovstype } from 'components/brev/BrevKortMedDataFetching';
 import { BrevOppsummering } from 'components/behandlinger/brev/skriveBrev/BrevOppsummering';
 import { mapGrunnlagTilMottakere } from 'lib/utils/brevmottakere';
 import { isProd } from 'lib/utils/environment';
-import { Brevbygger } from 'components/brevbygger/Brevbygger';
+import { BrevbyggerNy } from 'components/brevbygger/brevbyggerNy/BrevbyggerNy';
 
 interface Props {
   behandlingsReferanse: string;
@@ -83,7 +83,6 @@ export const SkriveBrevMedDataFetching = async ({
   const behovstype = skrivBrevBehovstype(brev.avklaringsbehovKode);
 
   const { bruker, fullmektig } = mapGrunnlagTilMottakere(brev.mottaker, fullmektigGrunnlag.data.vurdering);
-
   return (
     <div className={styles.flex}>
       {!brukNyBrevbygger && (
@@ -96,7 +95,7 @@ export const SkriveBrevMedDataFetching = async ({
         />
       )}
       {brukNyBrevbygger && (
-        <Brevbygger
+        <BrevbyggerNy
           brevmal={brev.brevmal}
           brevdata={brev.brevdata}
           referanse={brev.brevbestillingReferanse}
