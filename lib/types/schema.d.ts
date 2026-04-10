@@ -11203,6 +11203,11 @@ export interface components {
        * Format: date
        * @example 2025-04-01
        */
+      dodsDato?: string | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
       fodselsDato?: string | null;
       forsorgerPeriode?: components['schemas']['no.nav.aap.komponenter.type.Periode'];
       ident?: components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.Ident'];
@@ -13878,6 +13883,7 @@ export interface components {
         | 'ANNET_RELEVANT_DOKUMENT'
         | 'DIALOGMELDING'
         | 'FAGSYSTEMINFO_BEHOV_HENDELSE'
+        | 'FORELDREPENGE_VEDTAK_HENDELSE'
         | 'INSTITUSJONSOPPHOLD'
         | 'KABAL_HENDELSE'
         | 'KLAGE'
@@ -15083,6 +15089,10 @@ export interface components {
       erNedsettelseIArbeidsevneAvEnVissVarighet?: boolean | null;
       erNedsettelseIArbeidsevneMerEnnHalvparten?: boolean | null;
       erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense?: boolean | null;
+      /** @enum {string|null} */
+      erNedsettelseMerEnnYrkesskadegrense?: 'JA' | 'JA_FORBIGÅENDE_PROBLEMER' | 'NEI' | null;
+      /** @enum {string|null} */
+      erNedsettelseMinstHalvparten?: 'JA' | 'JA_FORBIGÅENDE_PROBLEMER' | 'NEI' | null;
       erSkadeSykdomEllerLyteVesentligdel?: boolean | null;
       /**
        * Format: date
@@ -15978,6 +15988,7 @@ export interface components {
         | 'BEHANDLING_REFERANSE'
         | 'BRUDD_AKTIVITETSPLIKT_INNSENDING_ID'
         | 'FAGSYSTEMINFO_BEHOV_HENDELSE_ID'
+        | 'FORELDREPENGEVEDTAK_HENDELSE_ID'
         | 'INSTITUSJONSOPPHOLD_HENDELSE_ID'
         | 'JOURNALPOST'
         | 'KABAL_HENDELSE_ID'
@@ -16257,6 +16268,18 @@ export interface components {
       /** Format: int32 */
       versjon: number;
     };
+    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ForeldrepengeVedtak': components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ForeldrepengeVedtakV0'];
+    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ForeldrepengeVedtakV0': {
+      /** @enum {string} */
+      kilde: 'FP_SAK';
+      personidentifikator: string;
+      tema: string;
+      /**
+       * Format: date-time
+       * @example 2025-04-01T14:30:00+02:00
+       */
+      tidspunkt: string;
+    };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Ident': {
       identifikator: string;
     };
@@ -16278,6 +16301,7 @@ export interface components {
         | 'ANNET_RELEVANT_DOKUMENT'
         | 'DIALOGMELDING'
         | 'FAGSYSTEMINFO_BEHOV_HENDELSE'
+        | 'FORELDREPENGE_VEDTAK_HENDELSE'
         | 'INSTITUSJONSOPPHOLD'
         | 'KABAL_HENDELSE'
         | 'KLAGE'
@@ -16445,6 +16469,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Melding':
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Aktivitetskort']
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AnnetRelevantDokument']
+      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ForeldrepengeVedtak']
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.InstitusjonsOppholdHendelse']
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.KabalHendelse']
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Klage']
@@ -16687,6 +16712,7 @@ export interface components {
         | 'ANNET_RELEVANT_DOKUMENT'
         | 'DIALOGMELDING'
         | 'FAGSYSTEMINFO_BEHOV_HENDELSE'
+        | 'FORELDREPENGE_VEDTAK_HENDELSE'
         | 'INSTITUSJONSOPPHOLD'
         | 'KABAL_HENDELSE'
         | 'KLAGE'
@@ -17322,7 +17348,6 @@ export interface components {
       delmaler: components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto.Delmal'][];
       faktagrunnlag: components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto.Faktagrunnlag'][];
       fritekster: components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto.Fritekst'][];
-      periodetekster: components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto.Periodetekst'][];
       valg: components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto.Valg'][];
     };
     'no.nav.aap.brev.kontrakt.BrevdataDto.BetingetTekst': {
@@ -17339,10 +17364,6 @@ export interface components {
       fritekst: string;
       key: string;
       parentId: string;
-    };
-    'no.nav.aap.brev.kontrakt.BrevdataDto.Periodetekst': {
-      faktagrunnlag: components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto.Faktagrunnlag'][];
-      id: string;
     };
     'no.nav.aap.brev.kontrakt.BrevdataDto.Valg': {
       id: string;
