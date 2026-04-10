@@ -1,8 +1,8 @@
-import { BodyShort, Box, Button, HStack, Label, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Box, Button, HStack, Label, Tag, VStack } from '@navikt/ds-react';
 import { Buildings3Icon } from '@navikt/aksel-icons';
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
-import { HelseInstiusjonVurdering, Institusjonsopphold } from 'lib/types/types';
-import React from 'react';
+import { HelseinstitusjonGrunnlag, HelseInstiusjonVurdering } from 'lib/types/types';
+import React, { useState } from 'react';
 import styles from './HelseinstitusjonOppholdGruppe.module.css';
 import {
   formatDatoMedMånedsnavn,
@@ -18,22 +18,23 @@ import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { AccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErReduksjonEllerIkke } from 'components/periodisering/VurderingStatusTag';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
-
 import { Dato } from 'lib/types/Dato';
-
 import { HelseinstitusjonsFormFields } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/Helseinstitusjon';
 import { Helseinstitusjonsvurdering } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/helseinstitusjonvurdering/HelseinstitusjonVurdering';
 import { erReduksjonUtIFraFormFields, erReduksjonUtIFraVurdering } from 'lib/utils/institusjonopphold';
 import { HelseinstitusjonTidligereVurdering } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/helseinstitusjontidligerevurdering/HelseinstitusjonTidligereVurdering';
+import { CustomExpandableCard } from 'components/customexpandablecard/CustomExpandableCard';
+import { addDays } from 'date-fns';
 
 interface Props {
   form: UseFormReturn<HelseinstitusjonsFormFields>;
   oppholdIndex: number;
   readonly: boolean;
-  opphold: Institusjonsopphold;
+  opphold: HelseinstitusjonGrunnlag['opphold'][0];
   tidligereVurderinger?: HelseInstiusjonVurdering[] | null;
   accordionsSignal: AccordionsSignal;
   erAktivUtenAvbryt: boolean;
+  skalJustereVedtatteVurderinger: boolean;
 }
 
 export const HelseinstitusjonOppholdGruppe = ({
@@ -44,6 +45,7 @@ export const HelseinstitusjonOppholdGruppe = ({
   readonly: formReadOnly,
   opphold,
   erAktivUtenAvbryt,
+  skalJustereVedtatteVurderinger,
 }: Props) => {
   const {
     fields: vurderinger,
@@ -59,6 +61,10 @@ export const HelseinstitusjonOppholdGruppe = ({
       ? form.watch(`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.0.periode.fom`)
       : null;
 
+  const oppholdAvsluttetDato = new Dato(opphold.avsluttetDato).dato;
+  const [cardExpanded, setCardExpanded] = useState<boolean>(true);
+  console.log('tidligereVurderinger',tidligereVurderinger);
+
   return (
     <Box
       background="surface-default"
@@ -68,6 +74,7 @@ export const HelseinstitusjonOppholdGruppe = ({
       borderColor="border-subtle"
       className={styles.oppholdGruppe}
     >
+      {/* OPPHOLDET */}
       <Box background="surface-subtle" padding="3" className={styles.oppholdHeader}>
         <HStack gap="4" align="center">
           <Buildings3Icon title={`Helseinstitusjon${opphold.kildeinstitusjon}`} fontSize="1.5rem" aria-hidden />
@@ -85,14 +92,19 @@ export const HelseinstitusjonOppholdGruppe = ({
         </HStack>
       </Box>
 
+      {/* VURDERINGER */}
       <Box padding="4">
         <VStack gap="0">
-          {tidligereVurderinger?.map((vurdering) => {
+          {tidligereVurderinger?.map((vurdering, index, alle) => {
+            const erSiste = index === alle.length - 1;
+            const justertTomDato =
+              erSiste && skalJustereVedtatteVurderinger ? oppholdAvsluttetDato : new Dato(vurdering.periode.tom).dato;
+
             return (
               <TidligereVurderingExpandableCard
                 key={vurdering.periode.fom}
                 fom={new Dato(vurdering.periode.fom).dato}
-                tom={!datoErUendeligSlutt(vurdering.periode.tom) ? new Dato(vurdering.periode.tom).dato : undefined}
+                tom={justertTomDato}
                 foersteNyePeriodeFraDato={foersteNyePeriode == null ? null : parseDatoFraDatePicker(foersteNyePeriode)}
                 vurderingStatus={getErReduksjonEllerIkke(erReduksjonUtIFraVurdering(vurdering))}
                 vurdertAv={vurdering.vurdertAv}
@@ -150,6 +162,31 @@ export const HelseinstitusjonOppholdGruppe = ({
               </div>
             );
           })}
+
+          {skalJustereVedtatteVurderinger && (
+            <CustomExpandableCard
+              editable={false}
+              disabled={true}
+              expanded={cardExpanded}
+              setExpanded={setCardExpanded}
+              heading={
+                <HStack justify={'space-between'} padding={'2'}>
+                  <BodyShort size={'small'}>
+                    {formatDatoMedMånedsnavn(addDays(oppholdAvsluttetDato, 1))} –{' '}
+                  </BodyShort>
+                  <Tag size="xsmall" variant={'neutral-moderate'}>
+                    Ikke relevant
+                  </Tag>
+                </HStack>
+              }
+            >
+              <VStack>
+                <Alert size="small" variant={'info'} className={'fit-content'}>
+                  Vilkåret kan bare vurderes innenfor oppholdsperioden.
+                </Alert>
+              </VStack>
+            </CustomExpandableCard>
+          )}
         </VStack>
       </Box>
 

@@ -40,7 +40,7 @@ export function lagReduksjonBeskrivelseNyttOpphold(oppholdFra: string): string {
  * @param avsluttetDato Sluttdato for oppholdet (yyyy-MM-dd), valgfri
  * @returns Feilmelding som string hvis ugyldig, ellers true
  */
-export const validerDatoErInnenforOppholdReduksjon = (
+export const validerDatoErInnenforOpphold = (
   value: string,
   oppholdFra: string,
   avsluttetDato?: string | null

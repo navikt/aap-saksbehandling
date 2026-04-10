@@ -10,22 +10,14 @@ import {
   VurderingMeta,
 } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
-
-import {
-  DATO_FORMATER,
-  erUendeligSlutt,
-  formaterDatoForBackend,
-  formaterDatoForFrontend,
-  uendeligSluttString,
-} from 'lib/utils/date';
-
+import { DATO_FORMATER, erUendeligSlutt, formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import React, { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useConfigForm } from 'components/form/FormHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
-import { format, isAfter, parse, subDays } from 'date-fns';
+import { format, parse, subDays } from 'date-fns';
 import { useFieldArray } from 'react-hook-form';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { Dato } from 'lib/types/Dato';
@@ -102,45 +94,26 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
       const parseDato = (dato: string) => parse(dato, 'dd.MM.yyyy', new Date());
 
       const vurderinger: HelseInstiusjonVurdering[] = data.helseinstitusjonsvurderinger.flatMap((opphold) => {
-        const faktiskOpphold = grunnlag.opphold.find((o) => o.oppholdId === opphold.oppholdId);
-        const oppholdErLøpende = !faktiskOpphold?.avsluttetDato || erUendeligSlutt(faktiskOpphold.avsluttetDato);
-        const oppholdSluttDatoISO = oppholdErLøpende ? null : faktiskOpphold.avsluttetDato;
-        const oppholdSluttDato = oppholdSluttDatoISO ? new Date(oppholdSluttDatoISO) : null;
+        return opphold.vurderinger.map((vurdering, index, filtrerteVurderinger) => {
+          const nesteVurdering = filtrerteVurderinger.at(index + 1);
 
-        return (
-          opphold.vurderinger
-            // Filtrerer bort vurderinger der periodens startdato (fom) er etter oppholdets sluttdato.
-            .filter((vurdering) => {
-              if (!vurdering.periode?.fom || !oppholdSluttDato) return true;
-              return !isAfter(parseDato(vurdering.periode.fom), oppholdSluttDato);
-            })
-            .map((vurdering, index, filtrerteVurderinger) => {
-              const nesteVurdering = filtrerteVurderinger.at(index + 1);
+          const fom = vurdering.periode?.fom
+            ? formaterDatoForBackend(parseDato(vurdering.periode.fom))
+            : formaterDatoForBackend(parseDato(opphold.periode.fom));
 
-              const fom = vurdering.periode?.fom
-                ? formaterDatoForBackend(parseDato(vurdering.periode.fom))
-                : formaterDatoForBackend(parseDato(opphold.periode.fom));
+          const tom = nesteVurdering
+            ? formaterDatoForBackend(subDays(new Dato(nesteVurdering.periode.fom).dato, 1))
+            : formaterDatoForBackend(parseDato(opphold.periode.tom));
 
-              let tom: string;
-              if (nesteVurdering) {
-                tom = formaterDatoForBackend(subDays(new Dato(nesteVurdering.periode.fom).dato, 1));
-              } else {
-                tom = oppholdErLøpende ? uendeligSluttString : formaterDatoForBackend(oppholdSluttDato!);
-              }
-
-              return {
-                oppholdId: vurdering.oppholdId,
-                begrunnelse: vurdering.begrunnelse,
-                faarFriKostOgLosji: vurdering.faarFriKostOgLosji === JaEllerNei.Ja,
-                forsoergerEktefelle: vurdering.forsoergerEktefelle === JaEllerNei.Ja,
-                harFasteUtgifter: vurdering.harFasteUtgifter === JaEllerNei.Ja,
-                periode: {
-                  fom: fom,
-                  tom: tom,
-                },
-              };
-            })
-        );
+          return {
+            oppholdId: vurdering.oppholdId,
+            begrunnelse: vurdering.begrunnelse,
+            faarFriKostOgLosji: vurdering.faarFriKostOgLosji === JaEllerNei.Ja,
+            forsoergerEktefelle: vurdering.forsoergerEktefelle === JaEllerNei.Ja,
+            harFasteUtgifter: vurdering.harFasteUtgifter === JaEllerNei.Ja,
+            periode: { fom, tom },
+          };
+        });
       });
 
       løsBehovOgGåTilNesteSteg(
@@ -148,9 +121,7 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
           behandlingVersjon: behandlingVersjon,
           behov: {
             behovstype: Behovstype.AVKLAR_HELSEINSTITUSJON,
-            helseinstitusjonVurdering: {
-              vurderinger: vurderinger,
-            },
+            helseinstitusjonVurdering: { vurderinger },
           },
           referanse: behandlingsreferanse,
         },
@@ -186,78 +157,108 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
           instutisjonsopphold={grunnlag.opphold}
         />
 
-        {oppholdFields.map((oppholdField, oppholdIndex) => (
-          <HelseinstitusjonOppholdGruppe
-            key={oppholdField.id}
-            opphold={grunnlag.opphold.find((o) => o.oppholdId === oppholdField.oppholdId)!}
-            tidligereVurderinger={
-              grunnlag.vedtatteVurderinger.find((vurdering) => vurdering.oppholdId === oppholdField.oppholdId)
-                ?.vurderinger
-            }
-            accordionsSignal={accordionsSignal}
-            oppholdIndex={oppholdIndex}
-            form={form}
-            readonly={formReadOnly}
-            erAktivUtenAvbryt={erAktivUtenAvbryt}
-          />
-        ))}
+        {oppholdFields.map((oppholdField, oppholdIndex) => {
+          const faktiskOpphold = grunnlag.opphold.find((o) => o.oppholdId === oppholdField.oppholdId)!;
+          const skalJustere = skalJustereVedtatteVurderinger(grunnlag, oppholdField.oppholdId);
+
+          return (
+            <HelseinstitusjonOppholdGruppe
+              key={oppholdField.id}
+              opphold={faktiskOpphold}
+              tidligereVurderinger={
+                grunnlag.vedtatteVurderinger.find((v) => v.oppholdId === oppholdField.oppholdId)?.vurderinger
+              }
+              accordionsSignal={accordionsSignal}
+              oppholdIndex={oppholdIndex}
+              form={form}
+              readonly={formReadOnly}
+              erAktivUtenAvbryt={erAktivUtenAvbryt}
+              skalJustereVedtatteVurderinger={skalJustere}
+            />
+          );
+        })}
       </VStack>
     </VilkårskortMedFormOgMellomlagring>
   );
 };
 
+function skalJustereVedtatteVurderinger(grunnlag: HelseinstitusjonGrunnlag, oppholdId: string): boolean {
+  if (grunnlag.vedtatteVurderinger.length === 0) return false;
+
+  const opphold = grunnlag.opphold.find((o) => o.oppholdId === oppholdId);
+  if (!opphold || erUendeligSlutt(opphold.avsluttetDato)) return false;
+
+  const harNyeVurderinger = grunnlag.vurderinger.some((v) => v.oppholdId === oppholdId);
+  if (harNyeVurderinger) return false;
+
+  const vedtatteForOpphold = grunnlag.vedtatteVurderinger.find((v) => v.oppholdId === oppholdId)?.vurderinger;
+  if (!vedtatteForOpphold || vedtatteForOpphold.length === 0) return false;
+
+  const sisteVedtatteTom = vedtatteForOpphold[vedtatteForOpphold.length - 1].periode.tom;
+  return erUendeligSlutt(sisteVedtatteTom) || sisteVedtatteTom > opphold.avsluttetDato;
+}
+
 function mapVurderingToDraftFormFields(
   grunnlag: HelseinstitusjonGrunnlag,
   opphold: HelseinstitusjonGrunnlag['opphold']
 ): DraftFormFields {
-  const harTidligerevurderinger = grunnlag.vedtatteVurderinger && grunnlag.vedtatteVurderinger.length > 0;
+  const harTidligerevurderinger = grunnlag.vedtatteVurderinger.length > 0;
 
   return {
     helseinstitusjonsvurderinger: opphold.map((opphold) => {
       const vurderingerForOpphold = grunnlag.vurderinger.find(
-        (vurdering) => vurdering.oppholdId === opphold.oppholdId
+        (v) => v.oppholdId === opphold.oppholdId
       )?.vurderinger;
 
-      const vurderinger =
-        vurderingerForOpphold && vurderingerForOpphold.length > 0
-          ? vurderingerForOpphold?.map((vurdering) => ({
-              oppholdId: vurdering.oppholdId || '', // TODO Gjør om oppholdId til required i backend når ny helseinstitusjon er ute i prod
-              begrunnelse: vurdering.begrunnelse,
-              harFasteUtgifter: getJaNeiEllerUndefined(vurdering.harFasteUtgifter),
-              forsoergerEktefelle: getJaNeiEllerUndefined(vurdering.forsoergerEktefelle),
-              faarFriKostOgLosji: getJaNeiEllerUndefined(vurdering.faarFriKostOgLosji),
-              periode: {
-                fom: formaterDatoForFrontend(vurdering.periode.fom),
-                tom: formaterDatoForFrontend(vurdering.periode.tom),
-              },
-              vurdertAv: vurdering.vurdertAv,
-              erNyVurdering: false,
-              behøverVurdering: false,
-            }))
-          : [
-              {
-                oppholdId: opphold.oppholdId || '', // TODO Gjør om oppholdId til required i backend når ny helseinstitusjon er ute i prod
-                begrunnelse: '',
-                faarFriKostOgLosji: undefined,
-                harFasteUtgifter: undefined,
-                forsoergerEktefelle: undefined,
-                periode: {
-                  fom: '',
-                  tom: formaterDatoForFrontendMedStøtteForUendeligSlutt(opphold.avsluttetDato),
-                },
-                erNyVurdering: true,
-                behøverVurdering: false,
-              },
-            ];
+      const vedtatteVurderingerForOpphold = grunnlag.vedtatteVurderinger.find(
+        (v) => v.oppholdId === opphold.oppholdId
+      )?.vurderinger;
 
-      // Tom vurdering skal ikke legges til dersom det finnes tidligere vurderinger
-      const harTidligereVurderingerOgIngenNåværendeVurderinger = harTidligerevurderinger && !vurderingerForOpphold;
+      const oppholdAvsluttetDato = formaterDatoForFrontendMedStøtteForUendeligSlutt(opphold.avsluttetDato);
+      const skalJustere = skalJustereVedtatteVurderinger(grunnlag, opphold.oppholdId || '');
+
+      let vurderinger: OppholdVurdering[];
+
+      if (vurderingerForOpphold && vurderingerForOpphold.length > 0) {
+        vurderinger = vurderingerForOpphold.map((vurdering) => ({
+          oppholdId: vurdering.oppholdId || '', // TODO Gjør om oppholdId til required i backend når ny helseinstitusjon er ute i prod
+          begrunnelse: vurdering.begrunnelse,
+          harFasteUtgifter: getJaNeiEllerUndefined(vurdering.harFasteUtgifter),
+          forsoergerEktefelle: getJaNeiEllerUndefined(vurdering.forsoergerEktefelle),
+          faarFriKostOgLosji: getJaNeiEllerUndefined(vurdering.faarFriKostOgLosji),
+          periode: {
+            fom: formaterDatoForFrontend(vurdering.periode.fom),
+            tom: formaterDatoForFrontend(vurdering.periode.tom),
+          },
+          vurdertAv: vurdering.vurdertAv,
+          erNyVurdering: false,
+          behøverVurdering: false,
+        }));
+      } else if (skalJustere && vedtatteVurderingerForOpphold) {
+        vurderinger = []
+      } else {
+        vurderinger = [
+          {
+            oppholdId: opphold.oppholdId || '',  // TODO Gjør om oppholdId til required i backend når ny helseinstitusjon er ute i prod
+            begrunnelse: '',
+            faarFriKostOgLosji: undefined,
+            harFasteUtgifter: undefined,
+            forsoergerEktefelle: undefined,
+            periode: { fom: '', tom: oppholdAvsluttetDato },
+            erNyVurdering: true,
+            behøverVurdering: false,
+          },
+        ];
+      }
+
+      const harTidligereVurderingerOgIngenNåværendeVurderinger =
+        harTidligerevurderinger && !vurderingerForOpphold && !skalJustere;
 
       return {
-        oppholdId: opphold.oppholdId || '', // TODO Gjør om oppholdId til required i backend når ny helseinstitusjon er ute i prod
+        oppholdId: opphold.oppholdId || '',
         periode: {
           fom: formaterDatoForFrontend(opphold.oppholdFra),
-          tom: formaterDatoForFrontendMedStøtteForUendeligSlutt(opphold.avsluttetDato),
+          tom: oppholdAvsluttetDato,
         },
         tidligsteReduksjonsdato: opphold.tidligsteReduksjonsdato,
         vurderinger: harTidligereVurderingerOgIngenNåværendeVurderinger ? [] : vurderinger,
