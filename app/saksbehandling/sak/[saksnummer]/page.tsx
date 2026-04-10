@@ -8,6 +8,8 @@ import { SakOversiktContainer } from 'components/saksoversikt/SakOversiktContain
 import { Suspense } from 'react';
 import { hentBrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { isSuccess } from 'lib/utils/api';
+import { unleashService } from 'lib/services/unleash/unleashService';
+import { NySakOversiktContainer } from 'components/saksoversikt/NySakOversiktContainer';
 
 const Page = async (props: { params: Promise<{ saksnummer: string }> }) => {
   const params = await props.params;
@@ -18,6 +20,7 @@ const Page = async (props: { params: Promise<{ saksnummer: string }> }) => {
     hentRettighetsinfo(params.saksnummer),
   ]);
   const rettighetsinfo = isSuccess(rettihetsinfoRes) ? rettihetsinfoRes.data : null;
+  const nySaksoversikt = unleashService.isEnabled('NySaksBehandlingOversikt');
 
   return (
     <>
@@ -26,11 +29,20 @@ const Page = async (props: { params: Promise<{ saksnummer: string }> }) => {
       <br />
 
       <Suspense>
-        <SakOversiktContainer
-          sak={sak}
-          innloggetBrukerIdent={innloggetBrukerInfo.NAVident}
-          rettighetsinfo={rettighetsinfo}
-        />
+        {nySaksoversikt ? (
+          <NySakOversiktContainer
+            sak={sak}
+            innloggetBrukerIdent={innloggetBrukerInfo.NAVident}
+            personInfo={personInfo}
+            rettighetsinfo={rettighetsinfo}
+          />
+        ) : (
+          <SakOversiktContainer
+            sak={sak}
+            innloggetBrukerIdent={innloggetBrukerInfo.NAVident}
+            rettighetsinfo={rettighetsinfo}
+          />
+        )}
       </Suspense>
     </>
   );
