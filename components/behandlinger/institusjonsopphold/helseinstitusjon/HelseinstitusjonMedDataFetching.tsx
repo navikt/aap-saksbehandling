@@ -27,6 +27,8 @@ export const HelseinstitusjonMedDataFetching = async ({ behandlingsreferanse, st
   const vurderinger = grunnlag.data.vurderinger;
   const vedtatteVurderinger = grunnlag.data.vedtatteVurderinger;
 
+  if (grunnlag.data.opphold.length === 0 && vurderinger.length == 0 && vedtatteVurderinger.length == 0) return;
+
   if (!skalViseSteg(stegData, vurderinger.length > 0 || vedtatteVurderinger.length > 0)) {
     return <ManglendeOpphold />;
   }

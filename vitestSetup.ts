@@ -101,6 +101,7 @@ vi.mock('next/navigation', () => ({
 }));
 
 beforeAll(() => {
+  // Mocker eventsource ettersom vi bruker det i Form komponenten
   Object.defineProperty(window, 'EventSource', {
     writable: true,
     value: vi.fn().mockImplementation(() => ({

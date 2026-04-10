@@ -94,6 +94,7 @@ export const Inntektsbortfall = ({
   const under62År = grunnlag.under62ÅrVedSøknadstidspunkt;
   const inntektSisteÅr = grunnlag.inntektSisteÅrOver1G;
   const inntektSisteTreÅr = grunnlag.inntektSiste3ÅrOver3G;
+  const showRettTilUttakAlert = !inntektSisteÅr.resultat && !inntektSisteTreÅr.resultat;
 
   return (
     <VilkårskortMedFormOgMellomlagring
@@ -184,10 +185,12 @@ export const Inntektsbortfall = ({
             </Table.Row>
           </Table.Body>
         </TableStyled>
-        <Alert variant="info">
-          Brukeren har ikke hatt inntekt over 1 G siste år / 3 G siste 3 år. Det må vurderes om brukeren har rett til å
-          ta ut full alderspensjon.
-        </Alert>
+        {showRettTilUttakAlert && (
+          <Alert variant="info">
+            Brukeren har ikke hatt inntekt over 1 G siste år / 3 G siste 3 år. Det må vurderes om brukeren har rett til
+            å ta ut full alderspensjon.
+          </Alert>
+        )}
         <FormField form={form} formField={formFields.begrunnelse} />
         <FormField form={form} formField={formFields.rettTilUttak} />
       </>
