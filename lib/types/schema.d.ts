@@ -13198,10 +13198,11 @@ export interface components {
        * @example 2025-04-01
        */
       's\u00F8knadsdato'?: string | null;
-      vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.rettighetsperiode.RettighetsperiodeVurderingResponse'];
+      vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.rettighetsperiode.RettighetsperiodeVurderingDto'];
     };
-    'no.nav.aap.behandlingsflyt.behandling.rettighetsperiode.RettighetsperiodeVurderingResponse': {
+    'no.nav.aap.behandlingsflyt.behandling.rettighetsperiode.RettighetsperiodeVurderingDto': {
       begrunnelse: string;
+      besluttetAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
       /** @enum {string} */
       harRett: 'HarRettIkkeIStandTilÅSøkeTidligere' | 'HarRettMisvisendeOpplysninger' | 'Ja' | 'Nei';
       /**
@@ -13696,6 +13697,7 @@ export interface components {
        */
       dato: string;
       enhetsnavn?: string | null;
+      erRetur?: boolean | null;
       ident: string;
     };
     'no.nav.aap.behandlingsflyt.drift.BehandlingDriftsinfo': {
