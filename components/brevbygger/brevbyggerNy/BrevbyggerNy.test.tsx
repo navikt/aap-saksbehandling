@@ -19,7 +19,6 @@ const brevdata: BrevdataDto = {
   delmaler: [],
   faktagrunnlag: [],
   fritekster: [],
-  periodetekster: [],
   valg: [],
 };
 

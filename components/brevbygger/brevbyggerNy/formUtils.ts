@@ -79,6 +79,5 @@ export function byggBrevdataPayload(
     fritekster,
     betingetTekst: brevdata?.betingetTekst ?? [],
     faktagrunnlag: brevdata?.faktagrunnlag ?? [],
-    periodetekster: brevdata?.periodetekster ?? [],
   };
 }
