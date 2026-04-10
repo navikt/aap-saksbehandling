@@ -24,6 +24,7 @@ export const RegistrertBarn = ({ registrertBarn, navn }: Props) => {
           {registrertBarn.fodselsDato ? kalkulerAlder(new Date(registrertBarn.fodselsDato)) : 'Ukjent alder'})
         </BodyShort>
         <BodyShort size={'small'}>
+          {registrertBarn.dodsDato ? 'Dødsdato:' + formaterDatoForFrontend(registrertBarn.dodsDato) : ''}{' '}
           Forsørgerperiode:{' '}
           {registrertBarn.forsorgerPeriode?.fom
             ? formaterDatoForFrontend(registrertBarn.forsorgerPeriode.fom)
