@@ -160,6 +160,7 @@ export const VurderRettighetsperiode = ({
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
+      besluttetAv={grunnlag?.vurdering?.besluttetAv}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() =>
