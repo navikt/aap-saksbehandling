@@ -10,7 +10,7 @@ import {
   validerErIKronologiskRekkeFølge,
 } from 'lib/utils/institusjonopphold';
 
-describe('validerReduksjonsdatoInnenforOpphold', () => {
+describe('validerDatoErInnenforOppholdReduksjon', () => {
   const oppholdFra = new Dato('2025-01-01').formaterForFrontend();
   const avsluttetDato = new Dato('2025-08-01').formaterForFrontend();
 
@@ -33,7 +33,7 @@ describe('validerReduksjonsdatoInnenforOpphold', () => {
   });
 });
 
-describe('validerReduksjonsdatoInnenforOpphold', () => {
+describe('validerErIKronologiskRekkefølge', () => {
   const forrigevurderingFom = new Dato('2025-02-01').formaterForFrontend();
 
   it('skal vise en feilmelding dersom input value er tidligere enn forrige vurdering fom', () => {

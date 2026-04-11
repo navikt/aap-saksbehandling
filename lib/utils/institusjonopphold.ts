@@ -1,4 +1,4 @@
-import { addMonths, format, isAfter, isBefore, isEqual, startOfMonth } from 'date-fns';
+import { addDays, addMonths, format, isAfter, isBefore, isEqual, startOfMonth } from 'date-fns';
 import { nb } from 'date-fns/locale';
 import { formatDatoMedMånedsnavn, formaterDatoForFrontend } from 'lib/utils/date';
 import { Dato } from 'lib/types/Dato';
@@ -33,7 +33,7 @@ export function lagReduksjonBeskrivelseNyttOpphold(oppholdFra: string): string {
 }
 
 /**
- * Validerer at en dato er innenfor oppholdsperioden.
+ * Validerer at en dato er innenfor oppholdsperioden når det er reduksjon.
  *
  * @param value Dato som skal valideres (dd.MM.yyyy)
  * @param oppholdFra Startdato for oppholdet (yyyy-MM-dd)
@@ -53,6 +53,32 @@ export const validerDatoErInnenforOpphold = (
     return `Dato kan ikke være før innleggelsesdato: ${formaterDatoForFrontend(oppholdFraDato)}`;
   } else if (oppholdSluttDato && isAfter(valgtDato, oppholdSluttDato)) {
     return `Dato kan ikke være etter oppholdets sluttdato: ${formaterDatoForFrontend(oppholdSluttDato)}`;
+  }
+
+  return true;
+};
+
+/**
+ * Validerer at en dato er innenfor oppholdsperioden + 1 dag etter avsluttetDato når det ikke er reduksjon.
+ *
+ * @param value Dato som skal valideres (dd.MM.yyyy)
+ * @param oppholdFra Startdato for oppholdet (yyyy-MM-dd)
+ * @param avsluttetDato Sluttdato for oppholdet (yyyy-MM-dd), valgfri
+ * @returns Feilmelding som string hvis ugyldig, ellers true
+ */
+export const validerDatoErInnenforOppholdIkkeReduksjon = (
+  value: string,
+  oppholdFra: string,
+  avsluttetDato?: string | null
+): string | true => {
+  const valgtDato = new Dato(value).dato;
+  const oppholdFraDato = new Dato(oppholdFra).dato;
+  const oppholdSluttDatoPlussEnDag = avsluttetDato ? addDays(new Dato(avsluttetDato).dato, 1) : undefined;
+
+  if (isBefore(valgtDato, oppholdFraDato)) {
+    return `Dato kan ikke være før innleggelsesdato: ${formaterDatoForFrontend(oppholdFraDato)}`;
+  } else if (oppholdSluttDatoPlussEnDag && isAfter(valgtDato, oppholdSluttDatoPlussEnDag)) {
+    return `Dato kan ikke være senere enn dagen etter oppholdets sluttdato: ${formaterDatoForFrontend(oppholdSluttDatoPlussEnDag)}`;
   }
 
   return true;

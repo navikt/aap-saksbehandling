@@ -1,13 +1,14 @@
-import { BodyShort, Box, Button, HStack, Label, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Box, Button, HStack, Label, Tag, VStack } from '@navikt/ds-react';
 import { Buildings3Icon } from '@navikt/aksel-icons';
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { HelseinstitusjonGrunnlag, HelseInstiusjonVurdering } from 'lib/types/types';
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './HelseinstitusjonOppholdGruppe.module.css';
 import {
   formatDatoMedMånedsnavn,
   formaterDatoForFrontend,
   parseDatoFraDatePicker,
+  sorterEtterEldsteDato,
   uendeligSluttString,
 } from 'lib/utils/date';
 import {
@@ -18,13 +19,13 @@ import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { AccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErReduksjonEllerIkke } from 'components/periodisering/VurderingStatusTag';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
-
 import { Dato } from 'lib/types/Dato';
-
 import { HelseinstitusjonsFormFields } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/Helseinstitusjon';
 import { Helseinstitusjonsvurdering } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/helseinstitusjonvurdering/HelseinstitusjonVurdering';
 import { erReduksjonUtIFraFormFields, erReduksjonUtIFraVurdering } from 'lib/utils/institusjonopphold';
 import { HelseinstitusjonTidligereVurdering } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/helseinstitusjontidligerevurdering/HelseinstitusjonTidligereVurdering';
+import { CustomExpandableCard } from 'components/customexpandablecard/CustomExpandableCard';
+import { addDays } from 'date-fns';
 
 interface Props {
   form: UseFormReturn<HelseinstitusjonsFormFields>;
@@ -34,6 +35,7 @@ interface Props {
   tidligereVurderinger?: HelseInstiusjonVurdering[] | null;
   accordionsSignal: AccordionsSignal;
   erAktivUtenAvbryt: boolean;
+  skalJustereVedtatteVurderinger: boolean;
 }
 
 export const HelseinstitusjonOppholdGruppe = ({
@@ -44,6 +46,7 @@ export const HelseinstitusjonOppholdGruppe = ({
   readonly: formReadOnly,
   opphold,
   erAktivUtenAvbryt,
+  skalJustereVedtatteVurderinger,
 }: Props) => {
   const {
     fields: vurderinger,
@@ -58,6 +61,9 @@ export const HelseinstitusjonOppholdGruppe = ({
     vurderinger.length > 0
       ? form.watch(`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.0.periode.fom`)
       : null;
+
+  const oppholdAvsluttetDato = new Dato(opphold.avsluttetDato).dato;
+  const [cardExpanded, setCardExpanded] = useState<boolean>(true);
 
   return (
     <Box
@@ -89,22 +95,36 @@ export const HelseinstitusjonOppholdGruppe = ({
       {/* VURDERINGER */}
       <Box padding="4">
         <VStack gap="0">
-          {tidligereVurderinger?.map((vurdering) => {
-            return (
-              <TidligereVurderingExpandableCard
-                key={vurdering.periode.fom}
-                fom={new Dato(vurdering.periode.fom).dato}
-                tom={new Dato(vurdering.periode.tom).dato}
-                foersteNyePeriodeFraDato={foersteNyePeriode == null ? null : parseDatoFraDatePicker(foersteNyePeriode)}
-                vurderingStatus={getErReduksjonEllerIkke(erReduksjonUtIFraVurdering(vurdering))}
-                vurdertAv={vurdering.vurdertAv}
-                kvalitetssikretAv={undefined}
-                besluttetAv={undefined}
-              >
-                <HelseinstitusjonTidligereVurdering vurdering={vurdering} />
-              </TidligereVurderingExpandableCard>
-            );
-          })}
+          {tidligereVurderinger
+            ?.filter((v) => {
+              const starterFørOppholdSlutt = v.periode.fom <= opphold.avsluttetDato;
+              const slutterEtterOppholdStart = v.periode.tom >= opphold.oppholdFra;
+              return starterFørOppholdSlutt && slutterEtterOppholdStart;
+            })
+            .sort((a, b) => sorterEtterEldsteDato(a.periode.fom, b.periode.fom))
+            .map((vurdering, index, alle) => {
+              const erSiste = index === alle.length - 1;
+
+              const justertTomDato =
+                erSiste && skalJustereVedtatteVurderinger ? oppholdAvsluttetDato : new Dato(vurdering.periode.tom).dato;
+
+              return (
+                <TidligereVurderingExpandableCard
+                  key={vurdering.periode.fom}
+                  fom={new Dato(vurdering.periode.fom).dato}
+                  tom={justertTomDato}
+                  foersteNyePeriodeFraDato={
+                    foersteNyePeriode == null ? null : parseDatoFraDatePicker(foersteNyePeriode)
+                  }
+                  vurderingStatus={getErReduksjonEllerIkke(erReduksjonUtIFraVurdering(vurdering))}
+                  vurdertAv={vurdering.vurdertAv}
+                  kvalitetssikretAv={undefined}
+                  besluttetAv={undefined}
+                >
+                  <HelseinstitusjonTidligereVurdering vurdering={vurdering} />
+                </TidligereVurderingExpandableCard>
+              );
+            })}
 
           {vurderinger.map((vurdering, vurderingIndex) => {
             const reduksjon = erReduksjonUtIFraFormFields(
@@ -152,6 +172,29 @@ export const HelseinstitusjonOppholdGruppe = ({
               </div>
             );
           })}
+
+          {skalJustereVedtatteVurderinger && (
+            <CustomExpandableCard
+              editable={false}
+              disabled={true}
+              expanded={cardExpanded}
+              setExpanded={setCardExpanded}
+              heading={
+                <HStack justify={'space-between'} padding={'2'}>
+                  <BodyShort size={'small'}>{formatDatoMedMånedsnavn(addDays(oppholdAvsluttetDato, 1))} – </BodyShort>
+                  <Tag size="xsmall" variant={'neutral-moderate'}>
+                    Ikke relevant
+                  </Tag>
+                </HStack>
+              }
+            >
+              <VStack>
+                <Alert size="small" variant={'info'} className={'fit-content'}>
+                  Vilkåret kan bare vurderes innenfor oppholdsperioden.
+                </Alert>
+              </VStack>
+            </CustomExpandableCard>
+          )}
         </VStack>
       </Box>
 
