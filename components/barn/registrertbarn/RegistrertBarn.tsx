@@ -1,4 +1,4 @@
-import { BodyShort, Detail } from '@navikt/ds-react';
+import { BodyShort, Detail, Tag } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { IdentifisertBarn } from 'lib/types/types';
 
@@ -20,16 +20,17 @@ export const RegistrertBarn = ({ registrertBarn, navn }: Props) => {
       <div className={styles.tekst}>
         <Detail className={styles.detailgray}>Folkeregistrert barn</Detail>
         <BodyShort size={'small'}>
-          {navn}, {registrertBarn?.ident?.identifikator} (
-          {registrertBarn.fodselsDato ? kalkulerAlder(new Date(registrertBarn.fodselsDato)) : 'Ukjent alder'})
-        </BodyShort>
-        <BodyShort size={'small'}>
-          {registrertBarn.dodsDato ? 'Dødsdato:' + formaterDatoForFrontend(registrertBarn.dodsDato) : ''}{' '}
-          Forsørgerperiode:{' '}
-          {registrertBarn.forsorgerPeriode?.fom
-            ? formaterDatoForFrontend(registrertBarn.forsorgerPeriode.fom)
-            : 'Ukjent'}
-          {` - ${registrertBarn?.forsorgerPeriode?.tom ? `${formaterDatoForFrontend(registrertBarn.forsorgerPeriode.tom)}` : ''}`}
+          {navn}, {registrertBarn?.ident?.identifikator}{' '}
+          {registrertBarn.dodsDato ? (
+            <Tag variant="alt1" data-color="neutral">
+              Død
+            </Tag>
+          ) : null}
+          ({registrertBarn.fodselsDato ? kalkulerAlder(new Date(registrertBarn.fodselsDato)) : 'Ukjent alder'})
+          {registrertBarn.dodsDato
+            ? 'Død:' + formaterDatoForFrontend(registrertBarn.dodsDato)
+            : 'Fyller 18 år: ' +
+              `${registrertBarn?.forsorgerPeriode?.tom ? `${formaterDatoForFrontend(registrertBarn.forsorgerPeriode.tom)}` : 'Ukjent dato'}`}
         </BodyShort>
       </div>
     </section>
