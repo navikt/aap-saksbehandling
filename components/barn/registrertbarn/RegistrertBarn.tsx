@@ -20,13 +20,20 @@ export const RegistrertBarn = ({ registrertBarn, navn }: Props) => {
       <div className={styles.tekst}>
         <Detail className={styles.detailgray}>Folkeregistrert barn</Detail>
         <BodyShort size={'small'}>
-          {navn}, {registrertBarn?.ident?.identifikator}{' '}
+          {navn}, {registrertBarn?.ident?.identifikator} (
+          {registrertBarn.fodselsDato ? kalkulerAlder(new Date(registrertBarn.fodselsDato)) : 'Ukjent alder'})
           {registrertBarn.dodsDato ? (
             <Tag variant="alt1" data-color="neutral">
               Død
             </Tag>
           ) : null}
-          ({registrertBarn.fodselsDato ? kalkulerAlder(new Date(registrertBarn.fodselsDato)) : 'Ukjent alder'})
+        </BodyShort>
+        <BodyShort size={'small'}>
+          {registrertBarn.fodselsDato
+            ? 'Født:' + formaterDatoForFrontend(registrertBarn.fodselsDato)
+            : 'Født: ' + 'Ukjent dato'}
+        </BodyShort>
+        <BodyShort size={'small'}>
           {registrertBarn.dodsDato
             ? 'Død:' + formaterDatoForFrontend(registrertBarn.dodsDato)
             : 'Fyller 18 år: ' +
