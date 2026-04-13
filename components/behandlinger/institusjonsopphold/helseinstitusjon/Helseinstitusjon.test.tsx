@@ -503,3 +503,217 @@ describe('mellomlagring', () => {
     expect(slettKnapp).not.toBeInTheDocument();
   });
 });
+
+describe('handleSubmit - periode beregning', () => {
+  let capturedRequest: unknown = null;
+
+  beforeEach(() => {
+    capturedRequest = null;
+
+    window.EventSource = vi.fn(function (this: any) {
+      this.close = vi.fn();
+      this.addEventListener = vi.fn();
+      this.onmessage = null;
+      this.onerror = null;
+    }) as any;
+
+    fetchMock.mockResponse(async (req) => {
+      if (req.method === 'POST') {
+        try {
+          const text = await req.text();
+          const body = JSON.parse(text);
+          if (body?.behov?.behovstype) {
+            capturedRequest = body;
+          }
+        } catch {
+          // ignore
+        }
+      }
+      return JSON.stringify({ type: 'SUCCESS', status: 200, data: {} });
+    });
+  });
+
+  it('sender tom lik avsluttetDato for enkelt opphold uten reduksjon', async () => {
+    render(<Helseinstitusjon grunnlag={grunnlagUtenVurdering} behandlingVersjon={0} readOnly={false} />);
+
+    await fyllUtOgBekreftIkkeReduksjon(0, 'Ingen reduksjon grunnet forsørger');
+
+    const vurderinger = hentVurderingerFraRequest(capturedRequest);
+    expect(vurderinger).toHaveLength(1);
+    expect(vurderinger[0].periode.fom).toBe('2025-01-01');
+    expect(vurderinger[0].periode.tom).toBe('2025-08-01');
+    expect(vurderinger[0].faarFriKostOgLosji).toBe(false);
+  });
+
+  it('sender tom lik avsluttetDato for enkelt opphold med reduksjon', async () => {
+    render(<Helseinstitusjon grunnlag={grunnlagUtenVurdering} behandlingVersjon={0} readOnly={false} />);
+
+    await fyllUtOgBekreftReduksjon(0, 'Reduksjon fra mai', '01.05.2025');
+
+    const vurderinger = hentVurderingerFraRequest(capturedRequest);
+    expect(vurderinger).toHaveLength(1);
+    expect(vurderinger[0].periode.fom).toBe('2025-05-01');
+    expect(vurderinger[0].periode.tom).toBe('2025-08-01');
+    expect(vurderinger[0].faarFriKostOgLosji).toBe(true);
+    expect(vurderinger[0].forsoergerEktefelle).toBe(false);
+  });
+
+  it('sender riktige perioder for to vurderinger - reduksjon etterfulgt av ikke-reduksjon', async () => {
+    render(<Helseinstitusjon grunnlag={grunnlagUtenVurdering} behandlingVersjon={0} readOnly={false} />);
+
+    await fyllUtOgBekreftReduksjonMedStoppDato(0, 'Reduksjon', '01.05.2025', '01.07.2025');
+
+    const vurderinger = hentVurderingerFraRequest(capturedRequest);
+    expect(vurderinger).toHaveLength(2);
+    expect(vurderinger[0].periode.fom).toBe('2025-05-01');
+    expect(vurderinger[0].periode.tom).toBe('2025-06-30');
+    expect(vurderinger[0].faarFriKostOgLosji).toBe(true);
+    expect(vurderinger[1].periode.fom).toBe('2025-07-01');
+    expect(vurderinger[1].periode.tom).toBe('2025-08-01');
+    expect(vurderinger[1].faarFriKostOgLosji).toBe(false);
+  });
+
+  it('sender fom lik oppholdFra når vurderingen ikke har eksplisitt fom-dato (ikke-reduksjon)', async () => {
+    render(<Helseinstitusjon grunnlag={grunnlagUtenVurdering} behandlingVersjon={0} readOnly={false} />);
+
+    await fyllUtOgBekreftIkkeReduksjon(0, 'Ingen reduksjon');
+
+    const vurderinger = hentVurderingerFraRequest(capturedRequest);
+    expect(vurderinger[0].periode.fom).toBe('2025-01-01');
+  });
+
+  it('sender riktige perioder for to opphold med én vurdering hver', async () => {
+    const grunnlagToOpphold: HelseinstitusjonGrunnlag = {
+      harTilgangTilÅSaksbehandle: true,
+      vedtatteVurderinger: [],
+      opphold: [
+        {
+          oppholdId: 'opphold-1',
+          institusjonstype: 'Helseinstitusjon',
+          oppholdstype: 'Heldøgnpasient',
+          status: 'AKTIV',
+          oppholdFra: '2025-01-01',
+          avsluttetDato: '2025-06-01',
+          tidligsteReduksjonsdato: '2025-05-01',
+          kildeinstitusjon: 'Sykehus A',
+        },
+        {
+          oppholdId: 'opphold-2',
+          institusjonstype: 'Helseinstitusjon',
+          oppholdstype: 'Heldøgnpasient',
+          status: 'AKTIV',
+          oppholdFra: '2025-07-01',
+          avsluttetDato: '2025-12-01',
+          tidligsteReduksjonsdato: '2025-11-01',
+          kildeinstitusjon: 'Sykehus B',
+        },
+      ],
+      vurderinger: [],
+    };
+
+    render(<Helseinstitusjon grunnlag={grunnlagToOpphold} behandlingVersjon={0} readOnly={false} />);
+
+    await fyllUtOgBekreftIkkeReduksjon(0, 'Ingen reduksjon opphold 1');
+    await fyllUtOgBekreftIkkeReduksjon(1, 'Ingen reduksjon opphold 2');
+
+    const vurderinger = hentVurderingerFraRequest(capturedRequest);
+    expect(vurderinger).toHaveLength(2);
+    expect(vurderinger[0].periode.fom).toBe('2025-01-01');
+    expect(vurderinger[0].periode.tom).toBe('2025-06-01');
+    expect(vurderinger[1].periode.fom).toBe('2025-07-01');
+    expect(vurderinger[1].periode.tom).toBe('2025-12-01');
+  });
+
+  it('sender riktig behovstype i requesten', async () => {
+    render(<Helseinstitusjon grunnlag={grunnlagUtenVurdering} behandlingVersjon={0} readOnly={false} />);
+
+    await fyllUtOgBekreftIkkeReduksjon(0, 'Ingen reduksjon');
+
+    expect(capturedRequest).toMatchObject({
+      behov: { behovstype: '5011' }, //'AVKLAR_HELSEINSTITUSJON'
+    });
+  });
+
+  it('sender forsoergerEktefelle=true og faarFriKostOgLosji=false ved ikke-reduksjon pga forsørger', async () => {
+    render(<Helseinstitusjon grunnlag={grunnlagUtenVurdering} behandlingVersjon={0} readOnly={false} />);
+
+    await fyllUtOgBekreftIkkeReduksjon(0, 'Forsørger ektefelle');
+
+    const vurderinger = hentVurderingerFraRequest(capturedRequest);
+    expect(vurderinger[0].faarFriKostOgLosji).toBe(false);
+  });
+
+  it('sender harFasteUtgifter=true og ingen reduksjon når bruker har faste utgifter', async () => {
+    render(<Helseinstitusjon grunnlag={grunnlagUtenVurdering} behandlingVersjon={0} readOnly={false} />);
+
+    await svarPåSpørsmålOmFriKostOgLosji(true, 0);
+    await svarPåSpørsmålOmBrukerHarFasteUtgifter(true, 0);
+
+    const begrunnelse = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
+    await user.type(begrunnelse, 'Har faste utgifter');
+
+    await user.click(screen.getByRole('button', { name: 'Bekreft' }));
+
+    const vurderinger = hentVurderingerFraRequest(capturedRequest);
+    expect(vurderinger[0].harFasteUtgifter).toBe(true);
+    expect(vurderinger[0].faarFriKostOgLosji).toBe(true);
+  });
+});
+
+// Hjelpefunksjoner for handleSubmit-tester
+
+function hentVurderingerFraRequest(request: unknown): Array<{
+  periode: { fom: string; tom: string };
+  faarFriKostOgLosji: boolean;
+  forsoergerEktefelle: boolean;
+  harFasteUtgifter: boolean;
+  begrunnelse: string;
+  oppholdId: string;
+}> {
+  return (request as { behov: { helseinstitusjonVurdering: { vurderinger: [] } } }).behov
+    .helseinstitusjonVurdering.vurderinger;
+}
+
+async function fyllUtOgBekreftIkkeReduksjon(oppholdIndex: number, begrunnelseTekst: string) {
+  await svarIkkeReduksjon(oppholdIndex);
+  const begrunnelsefelter = screen.getAllByRole('textbox', { name: 'Vilkårsvurdering' });
+  await user.type(begrunnelsefelter[oppholdIndex], begrunnelseTekst);
+  await user.click(screen.getByRole('button', { name: 'Bekreft' }));
+}
+
+async function fyllUtOgBekreftReduksjon(oppholdIndex: number, begrunnelseTekst: string, reduksjonFom: string) {
+  await svarReduksjon(oppholdIndex);
+  const datoFelter = screen.getAllByRole('textbox', { name: 'Oppgi dato for reduksjon av AAP' });
+  await user.clear(datoFelter[oppholdIndex]);
+  await user.type(datoFelter[oppholdIndex], reduksjonFom);
+  const begrunnelsefelter = screen.getAllByRole('textbox', { name: 'Vilkårsvurdering' });
+  await user.type(begrunnelsefelter[oppholdIndex], begrunnelseTekst);
+  await user.click(screen.getByRole('button', { name: 'Bekreft' }));
+}
+
+async function fyllUtOgBekreftReduksjonMedStoppDato(
+  oppholdIndex: number,
+  begrunnelseTekst: string,
+  reduksjonFom: string,
+  stoppDato: string
+) {
+  await svarReduksjon(oppholdIndex);
+
+  const datoFelter = screen.getAllByRole('textbox', { name: 'Oppgi dato for reduksjon av AAP' });
+  await user.clear(datoFelter[oppholdIndex]);
+  await user.type(datoFelter[oppholdIndex], reduksjonFom);
+
+  await user.click(screen.getByRole('button', { name: 'Legg til ny vurdering' }));
+
+  const stoppFelter = screen.getAllByRole('textbox', { name: 'Når skal reduksjonen stoppes?' });
+  await user.clear(stoppFelter[0]);
+  await user.type(stoppFelter[0], stoppDato);
+
+  await svarIkkeReduksjon(1);
+
+  const begrunnelsefelter = screen.getAllByRole('textbox', { name: 'Vilkårsvurdering' });
+  await user.type(begrunnelsefelter[0], begrunnelseTekst);
+  await user.type(begrunnelsefelter[1], 'Ikke reduksjon');
+
+  await user.click(screen.getByRole('button', { name: 'Bekreft' }));
+}
