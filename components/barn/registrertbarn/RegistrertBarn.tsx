@@ -5,7 +5,7 @@ import { IdentifisertBarn } from 'lib/types/types';
 import styles from './RegistrertBarn.module.css';
 import { kalkulerAlder } from 'components/behandlinger/alder/Alder';
 import { ChildEyesIcon } from '@navikt/aksel-icons';
-import { useFeatureFlag } from '../../../context/UnleashContext';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   registrertBarn: IdentifisertBarn;
