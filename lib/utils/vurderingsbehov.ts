@@ -118,6 +118,8 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov | Vurde
       return 'Satsregulering barnetillegg';
     case 'UTVID_VEDTAKSLENGDE':
       return 'Utvid vedtaksperiode';
+    case 'VEDTAKSLENGDE_MANUELT':
+      return 'Vedtaksperiode';
     case 'MIGRER_RETTIGHETSPERIODE':
       return 'Korrigering av teknisk periode (automatisk behandling)';
     case 'ETABLERING_EGEN_VIRKSOMHET':

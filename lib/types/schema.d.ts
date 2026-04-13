@@ -11203,6 +11203,11 @@ export interface components {
        * Format: date
        * @example 2025-04-01
        */
+      dodsDato?: string | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
       fodselsDato?: string | null;
       forsorgerPeriode?: components['schemas']['no.nav.aap.komponenter.type.Periode'];
       ident?: components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.Ident'];
@@ -15084,6 +15089,10 @@ export interface components {
       erNedsettelseIArbeidsevneAvEnVissVarighet?: boolean | null;
       erNedsettelseIArbeidsevneMerEnnHalvparten?: boolean | null;
       erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense?: boolean | null;
+      /** @enum {string|null} */
+      erNedsettelseMerEnnYrkesskadegrense?: 'JA' | 'JA_FORBIGÅENDE_PROBLEMER' | 'NEI' | null;
+      /** @enum {string|null} */
+      erNedsettelseMinstHalvparten?: 'JA' | 'JA_FORBIGÅENDE_PROBLEMER' | 'NEI' | null;
       erSkadeSykdomEllerLyteVesentligdel?: boolean | null;
       /**
        * Format: date
@@ -17339,7 +17348,6 @@ export interface components {
       delmaler: components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto.Delmal'][];
       faktagrunnlag: components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto.Faktagrunnlag'][];
       fritekster: components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto.Fritekst'][];
-      periodetekster: components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto.Periodetekst'][];
       valg: components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto.Valg'][];
     };
     'no.nav.aap.brev.kontrakt.BrevdataDto.BetingetTekst': {
@@ -17356,10 +17364,6 @@ export interface components {
       fritekst: string;
       key: string;
       parentId: string;
-    };
-    'no.nav.aap.brev.kontrakt.BrevdataDto.Periodetekst': {
-      faktagrunnlag: components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto.Faktagrunnlag'][];
-      id: string;
     };
     'no.nav.aap.brev.kontrakt.BrevdataDto.Valg': {
       id: string;

@@ -1,4 +1,4 @@
-import { Brevbygger } from 'components/brevbygger/Brevbygger';
+import { BrevbyggerNy } from 'components/brevbygger/brevbyggerNy/BrevbyggerNy';
 import { BrevmalType } from 'components/brevbygger/brevmodellTypes';
 import {
   obligatoriskDelmal,
@@ -37,7 +37,7 @@ describe('Delmalvelger', () => {
 
   test('Overskrift hentes fra beskrivelse', () => {
     render(
-      <Brevbygger
+      <BrevbyggerNy
         referanse={'1234'}
         brevmal={JSON.stringify(brevmal)}
         brevdata={brevdata}
@@ -52,7 +52,7 @@ describe('Delmalvelger', () => {
 
   test('Valgfrie delmaler har en checkbox (Switch fra Aksel)', () => {
     render(
-      <Brevbygger
+      <BrevbyggerNy
         referanse={'1234'}
         brevmal={JSON.stringify(brevmal)}
         brevdata={brevdata}
@@ -73,7 +73,7 @@ describe('Delmalvelger', () => {
 
   test('Obligatoriske delmaler uten valg vises ikke', () => {
     render(
-      <Brevbygger
+      <BrevbyggerNy
         referanse={'1234'}
         brevmal={JSON.stringify(brevmal)}
         brevdata={brevdata}
@@ -88,7 +88,7 @@ describe('Delmalvelger', () => {
 
   test('Valgfrie delmaler er ikke valgt initielt', () => {
     render(
-      <Brevbygger
+      <BrevbyggerNy
         referanse={'1234'}
         brevmal={JSON.stringify(brevmal)}
         brevdata={brevdata}
@@ -109,7 +109,7 @@ describe('Delmalvelger', () => {
 
   test('Valgfrie delmaler kan være valgt initielt', () => {
     render(
-      <Brevbygger
+      <BrevbyggerNy
         referanse={'1234'}
         brevmal={JSON.stringify(brevmal)}
         brevdata={{ ...brevdata, delmaler: [{ id: valgfriDelmal.delmal._id }] }}
@@ -142,7 +142,7 @@ describe('Delmaler med valg', () => {
 
   test('valg skjules når delmal ikke er valgt', () => {
     render(
-      <Brevbygger
+      <BrevbyggerNy
         referanse={'1234'}
         brevmal={JSON.stringify(brevmal)}
         brevdata={brevdata}
@@ -157,7 +157,7 @@ describe('Delmaler med valg', () => {
 
   test('valg vises når delmal er valgt', () => {
     render(
-      <Brevbygger
+      <BrevbyggerNy
         referanse={'1234'}
         brevmal={JSON.stringify(brevmal)}
         brevdata={{ ...brevdata, delmaler: [{ id: valgfriDelmalMedAlternativer.delmal._id }] }}
@@ -181,7 +181,7 @@ describe('Delmaler med valg', () => {
       delmaler: [obligatoriskDelmalMedAlternativer],
     };
     render(
-      <Brevbygger
+      <BrevbyggerNy
         referanse={'1234'}
         brevmal={JSON.stringify(brevmalMedObligatoriskDelmalMedAlternativer)}
         brevdata={brevdata}
@@ -206,7 +206,7 @@ describe('Delmaler med valg', () => {
       delmaler: [obligatoriskDelmalMedAlternativer],
     };
     render(
-      <Brevbygger
+      <BrevbyggerNy
         referanse={'1234'}
         brevmal={JSON.stringify(brevmalMedObligatoriskDelmalMedAlternativer)}
         brevdata={brevdata}
@@ -227,7 +227,7 @@ describe('Delmaler med valg', () => {
 
   test('alternativer hentes fra brevmalen', () => {
     render(
-      <Brevbygger
+      <BrevbyggerNy
         referanse={'1234'}
         brevmal={JSON.stringify(brevmal)}
         brevdata={{ ...brevdata, delmaler: [{ id: valgfriDelmalMedAlternativer.delmal._id }] }}
@@ -254,7 +254,7 @@ describe('Delmaler med valg', () => {
     };
 
     render(
-      <Brevbygger
+      <BrevbyggerNy
         referanse={'1234'}
         brevmal={JSON.stringify(brevmal)}
         brevdata={brevdata}
@@ -273,7 +273,7 @@ describe('Delmaler med valg', () => {
 
   test('valg er valgt når det kommer som input til brevbyggeren', () => {
     render(
-      <Brevbygger
+      <BrevbyggerNy
         referanse={'1234'}
         brevmal={JSON.stringify(brevmal)}
         brevdata={{
@@ -299,7 +299,7 @@ describe('Delmaler med valg', () => {
 
   test('fritekst er valgt når det kommer som input til brevbyggeren', () => {
     render(
-      <Brevbygger
+      <BrevbyggerNy
         referanse={'1234'}
         brevmal={JSON.stringify(brevmal)}
         brevdata={{
@@ -343,7 +343,7 @@ describe('Delmaler med valg', () => {
       delmaler: [valgfriDelmalMedAlternativer],
     };
     render(
-      <Brevbygger
+      <BrevbyggerNy
         referanse={'1234'}
         brevmal={JSON.stringify(brevmal)}
         behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
@@ -369,7 +369,7 @@ describe('Delmaler med valg', () => {
       delmaler: [valgfriDelmalMedValgfrieAlternativer],
     };
     render(
-      <Brevbygger
+      <BrevbyggerNy
         referanse={'1234'}
         brevmal={JSON.stringify(brevmal)}
         behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
