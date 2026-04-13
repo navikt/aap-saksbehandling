@@ -2,7 +2,7 @@
 
 import { BistandsGrunnlag, MellomlagretVurdering, VurderingMeta, VurdertAvAnsatt } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
-import { FormEvent } from 'react';
+import React, { FormEvent } from 'react';
 import { parseDatoFraDatePicker } from 'lib/utils/date';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
@@ -27,7 +27,7 @@ import {
 import { Dato } from 'lib/types/Dato';
 import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovMellomlagringParser';
 import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
-import { Link, VStack } from '@navikt/ds-react';
+import { Alert, Link, VStack } from '@navikt/ds-react';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
@@ -37,6 +37,7 @@ interface Props {
   readOnly: boolean;
   grunnlag: BistandsGrunnlag;
   initialMellomlagretVurdering?: MellomlagretVurdering;
+  erOvergangUføre: boolean;
 }
 export interface BistandForm {
   vurderinger: Array<BistandVurderingForm>;
@@ -54,7 +55,13 @@ export interface BistandVurderingForm extends VurderingMeta {
   besluttetAv?: VurdertAvAnsatt;
 }
 
-export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, initialMellomlagretVurdering }: Props) => {
+export const Bistandsbehov = ({
+  behandlingVersjon,
+  grunnlag,
+  readOnly,
+  initialMellomlagretVurdering,
+  erOvergangUføre,
+}: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
   const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_BISTANDSBEHOV');
@@ -150,6 +157,13 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, initialMe
             </div>
           }
         />
+
+        {erOvergangUføre && (
+          <Alert variant={'info'} size={'small'}>
+            Hvis brukeren skal vurderes for uføretrygd og ha AAP etter § 11-18, må du først vurdere at brukeren ikke
+            lenger har behov for bistand etter § 11-6.
+          </Alert>
+        )}
 
         {vedtatteVurderinger.map((vurdering) => (
           <TidligereVurderingExpandableCard

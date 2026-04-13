@@ -90,6 +90,7 @@ describe('generelt', () => {
         readOnly={false}
         behandlingVersjon={0}
         typeBehandling={'Førstegangsbehandling'}
+        erOvergangArbeid={false}
       />
     );
     const heading = screen.getByRole('heading', { name: '§ 11-5 Nedsatt arbeidsevne og krav til årsakssammenheng' });
@@ -104,6 +105,7 @@ describe('generelt', () => {
         readOnly={false}
         behandlingVersjon={0}
         typeBehandling={'Førstegangsbehandling'}
+        erOvergangArbeid={false}
       />
     );
 
@@ -121,6 +123,7 @@ describe('generelt', () => {
         readOnly={false}
         behandlingVersjon={0}
         typeBehandling={'Førstegangsbehandling'}
+        erOvergangArbeid={false}
       />
     );
     await velgAtBrukerHarSykdomSkadeLyte();
@@ -148,6 +151,7 @@ describe('generelt', () => {
         readOnly={false}
         behandlingVersjon={0}
         typeBehandling={'Førstegangsbehandling'}
+        erOvergangArbeid={false}
       />
     );
 
@@ -188,6 +192,7 @@ describe('felt for begrunnelse', () => {
         readOnly={false}
         behandlingVersjon={0}
         typeBehandling={'Førstegangsbehandling'}
+        erOvergangArbeid={false}
       />
     );
     const textbox = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
@@ -202,6 +207,7 @@ describe('felt for begrunnelse', () => {
         readOnly={false}
         behandlingVersjon={0}
         typeBehandling={'Førstegangsbehandling'}
+        erOvergangArbeid={false}
       />
     );
     await skrivInnDatoForNårVurderingenGjelderFra(format(new Date(), 'ddMMyy'));
@@ -223,6 +229,7 @@ describe('felt for om brukeren har sykdom, skade eller lyte', () => {
         readOnly={false}
         behandlingVersjon={0}
         typeBehandling={'Førstegangsbehandling'}
+        erOvergangArbeid={false}
       />
     );
     expect(screen.getByRole('group', { name: 'Har brukeren sykdom, skade eller lyte?' })).toBeVisible();
@@ -236,6 +243,7 @@ describe('felt for om brukeren har sykdom, skade eller lyte', () => {
         readOnly={false}
         behandlingVersjon={0}
         typeBehandling={'Førstegangsbehandling'}
+        erOvergangArbeid={false}
       />
     );
     await velgBekreft();
@@ -254,6 +262,7 @@ describe('felt for om arbeidsevnen er nedsatt', () => {
         readOnly={false}
         behandlingVersjon={0}
         typeBehandling={'Førstegangsbehandling'}
+        erOvergangArbeid={false}
       />
     );
     await velgAtBrukerHarSykdomSkadeLyte();
@@ -269,6 +278,7 @@ describe('felt for om arbeidsevnen er nedsatt', () => {
         readOnly={false}
         behandlingVersjon={0}
         typeBehandling={'Førstegangsbehandling'}
+        erOvergangArbeid={false}
       />
     );
     await velgAtBrukerHarSykdomSkadeLyte();
@@ -289,6 +299,7 @@ describe('felt for å sette diagnoser', () => {
         readOnly={false}
         behandlingVersjon={0}
         typeBehandling={'Førstegangsbehandling'}
+        erOvergangArbeid={false}
       />
     );
 
@@ -303,6 +314,7 @@ describe('felt for å sette diagnoser', () => {
         readOnly={false}
         behandlingVersjon={0}
         typeBehandling={'Førstegangsbehandling'}
+        erOvergangArbeid={false}
       />
     );
 
@@ -319,6 +331,7 @@ describe('felt for å sette diagnoser', () => {
         readOnly={false}
         behandlingVersjon={0}
         typeBehandling={'Førstegangsbehandling'}
+        erOvergangArbeid={false}
       />
     );
 
@@ -338,6 +351,7 @@ describe('felt for å sette diagnoser', () => {
         readOnly={false}
         behandlingVersjon={0}
         typeBehandling={'Førstegangsbehandling'}
+        erOvergangArbeid={false}
       />
     );
 
@@ -356,6 +370,7 @@ describe('felt for å sette diagnoser', () => {
         readOnly={false}
         behandlingVersjon={0}
         typeBehandling={'Førstegangsbehandling'}
+        erOvergangArbeid={false}
       />
     );
 
@@ -377,6 +392,7 @@ describe('felt for å sette diagnoser', () => {
         readOnly={false}
         behandlingVersjon={0}
         typeBehandling={'Førstegangsbehandling'}
+        erOvergangArbeid={false}
       />
     );
 
@@ -395,6 +411,7 @@ describe('felt for å sette diagnoser', () => {
         readOnly={false}
         behandlingVersjon={0}
         typeBehandling={'Førstegangsbehandling'}
+        erOvergangArbeid={false}
       />
     );
 
@@ -419,6 +436,7 @@ describe('felt for å sette diagnoser', () => {
         readOnly={false}
         behandlingVersjon={0}
         typeBehandling={'Førstegangsbehandling'}
+        erOvergangArbeid={false}
       />
     );
 
@@ -447,6 +465,7 @@ describe('felt for nedsettelsen er av en viss varighet', () => {
         readOnly={false}
         behandlingVersjon={0}
         typeBehandling={'Førstegangsbehandling'}
+        erOvergangArbeid={false}
       />
     );
 
@@ -478,6 +497,7 @@ describe('felt for nedsettelsen er av en viss varighet', () => {
         readOnly={false}
         behandlingVersjon={0}
         typeBehandling={'Førstegangsbehandling'}
+        erOvergangArbeid={false}
       />
     );
     await velgAtBrukerHarSykdomSkadeLyte();
@@ -512,6 +532,7 @@ describe('felt for om arbeidsevnen er nedsatt med minst halvparten', () => {
         readOnly={false}
         behandlingVersjon={0}
         typeBehandling={'Førstegangsbehandling'}
+        erOvergangArbeid={false}
       />
     );
     await velgAtBrukerHarSykdomSkadeLyte();
@@ -528,6 +549,7 @@ describe('felt for om arbeidsevnen er nedsatt med minst halvparten', () => {
         readOnly={false}
         behandlingVersjon={0}
         typeBehandling={'Førstegangsbehandling'}
+        erOvergangArbeid={false}
       />
     );
     await velgAtBrukerHarSykdomSkadeLyte();
@@ -549,6 +571,7 @@ describe('felt for om sykdom, skade eller lyte er vestenlig medvirkende til at a
         readOnly={false}
         behandlingVersjon={0}
         typeBehandling={'Førstegangsbehandling'}
+        erOvergangArbeid={false}
       />
     );
     await velgAtBrukerHarSykdomSkadeLyte();
@@ -570,6 +593,7 @@ describe('felt for om sykdom, skade eller lyte er vestenlig medvirkende til at a
         readOnly={false}
         behandlingVersjon={0}
         typeBehandling={'Førstegangsbehandling'}
+        erOvergangArbeid={false}
       />
     );
     await velgAtBrukerHarSykdomSkadeLyte();
@@ -592,6 +616,7 @@ describe('felt for om sykdom, skade eller lyte er vestenlig medvirkende til at a
         readOnly={false}
         behandlingVersjon={0}
         typeBehandling={'Førstegangsbehandling'}
+        erOvergangArbeid={false}
       />
     );
     await velgAtBrukerHarSykdomSkadeLyte();
@@ -617,6 +642,7 @@ describe('yrkesskade', () => {
           readOnly={false}
           behandlingVersjon={0}
           typeBehandling={'Førstegangsbehandling'}
+          erOvergangArbeid={false}
         />
       );
       await velgAtBrukerHarSykdomSkadeLyte();
@@ -634,6 +660,7 @@ describe('yrkesskade', () => {
           readOnly={false}
           behandlingVersjon={0}
           typeBehandling={'Førstegangsbehandling'}
+          erOvergangArbeid={false}
         />
       );
       await velgAtBrukerHarSykdomSkadeLyte();
@@ -655,6 +682,7 @@ describe('yrkesskade', () => {
           readOnly={false}
           behandlingVersjon={0}
           typeBehandling={'Førstegangsbehandling'}
+          erOvergangArbeid={false}
         />
       );
       await velgAtBrukerHarSykdomSkadeLyte();
@@ -679,6 +707,7 @@ describe('yrkesskade', () => {
           readOnly={false}
           behandlingVersjon={0}
           typeBehandling={'Førstegangsbehandling'}
+          erOvergangArbeid={false}
         />
       );
       await velgAtBrukerHarSykdomSkadeLyte();
@@ -696,6 +725,7 @@ describe('yrkesskade', () => {
           readOnly={false}
           behandlingVersjon={0}
           typeBehandling={'Førstegangsbehandling'}
+          erOvergangArbeid={false}
         />
       );
       await velgAtBrukerHarSykdomSkadeLyte();
@@ -721,6 +751,7 @@ describe('vurderinger uten viss varighet', () => {
         readOnly={false}
         behandlingVersjon={0}
         typeBehandling={'Revurdering'}
+        erOvergangArbeid={false}
       />
     );
 
@@ -737,6 +768,7 @@ describe('vurderinger uten viss varighet', () => {
         behandlingVersjon={0}
         typeBehandling={'Førstegangsbehandling'}
         initialMellomlagretVurdering={undefined}
+        erOvergangArbeid={false}
       />,
       today
     );
@@ -771,6 +803,7 @@ describe('vurderinger uten viss varighet', () => {
         readOnly={false}
         behandlingVersjon={0}
         typeBehandling={'Revurdering'}
+        erOvergangArbeid={false}
       />,
       format(subDays(new Date(), 4), 'yyyy-MM-dd')
     );
@@ -791,6 +824,7 @@ describe('vurderinger uten viss varighet', () => {
         readOnly={false}
         behandlingVersjon={0}
         typeBehandling={'Revurdering'}
+        erOvergangArbeid={false}
       />,
       format(søknadstidspunkt, 'yyyy-MM-dd')
     );
@@ -811,6 +845,7 @@ describe('vurderinger uten viss varighet', () => {
         readOnly={false}
         behandlingVersjon={0}
         typeBehandling={'Revurdering'}
+        erOvergangArbeid={false}
       />,
       format(søknadstidspunkt, 'yyyy-MM-dd')
     );
@@ -844,6 +879,7 @@ describe('vurderinger uten viss varighet', () => {
         readOnly={false}
         behandlingVersjon={0}
         typeBehandling={'Revurdering'}
+        erOvergangArbeid={false}
       />,
       format(søknadstidspunkt, 'yyyy-MM-dd')
     );
@@ -865,6 +901,7 @@ describe('vurderinger uten viss varighet', () => {
         readOnly={false}
         behandlingVersjon={0}
         typeBehandling={'Revurdering'}
+        erOvergangArbeid={false}
       />,
       format(søknadstidspunkt, 'yyyy-MM-dd')
     );
@@ -931,6 +968,7 @@ describe('mellomlagring i sykdom', () => {
         behandlingVersjon={0}
         typeBehandling={'Førstegangsbehandling'}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+        erOvergangArbeid={false}
       />
     );
     const tekst = screen.getByText('Utkast lagret 21.08.2025 12:00 (Jan T. Loven)');
@@ -946,6 +984,7 @@ describe('mellomlagring i sykdom', () => {
         grunnlag={sykdomsGrunnlagUtenVurdering}
         typeBehandling={'Førstegangsbehandling'}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+        erOvergangArbeid={false}
       />
     );
 
@@ -969,6 +1008,7 @@ describe('mellomlagring i sykdom', () => {
         behandlingVersjon={0}
         typeBehandling={'Førstegangsbehandling'}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+        erOvergangArbeid={false}
       />
     );
     const begrunnelseFelt = screen.getByRole('textbox', {
@@ -986,6 +1026,7 @@ describe('mellomlagring i sykdom', () => {
         readOnly={false}
         behandlingVersjon={0}
         typeBehandling={'Førstegangsbehandling'}
+        erOvergangArbeid={false}
       />
     );
     const begrunnelseFelt = screen.getByRole('textbox', {
@@ -1004,6 +1045,7 @@ describe('mellomlagring i sykdom', () => {
         behandlingVersjon={0}
         typeBehandling={'Førstegangsbehandling'}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+        erOvergangArbeid={false}
       />
     );
     await user.type(screen.getByRole('textbox', { name: 'Vilkårsvurdering' }), ' her er ekstra tekst');
@@ -1031,6 +1073,7 @@ describe('mellomlagring i sykdom', () => {
         behandlingVersjon={0}
         typeBehandling={'Førstegangsbehandling'}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+        erOvergangArbeid={false}
       />
     );
     await user.type(screen.getByRole('textbox', { name: 'Vilkårsvurdering' }), ' her er ekstra tekst');
@@ -1059,6 +1102,7 @@ describe('mellomlagring i sykdom', () => {
         behandlingVersjon={0}
         typeBehandling={'Førstegangsbehandling'}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+        erOvergangArbeid={false}
       />
     );
 
@@ -1089,6 +1133,7 @@ describe('mellomlagring i sykdom', () => {
         readOnly={false}
         grunnlag={sykdomsGrunnlagUtenVurdering}
         initialMellomlagretVurdering={mellomlagringGammel.mellomlagretVurdering}
+        erOvergangArbeid={false}
       />
     );
 

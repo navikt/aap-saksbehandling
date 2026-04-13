@@ -2,6 +2,8 @@
 
 import { Behovstype, getJaNeiEllerUndefined, getStringEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
+import React, { FormEvent } from 'react';
+import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { FormEvent } from 'react';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { parseISO } from 'date-fns';
@@ -30,7 +32,7 @@ import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/sy
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
-import { BodyLong, Link, VStack } from '@navikt/ds-react';
+import { Alert, BodyLong, Link, VStack } from '@navikt/ds-react';
 import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
 import {
   emptySykdomsvurdering,
@@ -69,6 +71,7 @@ interface SykdomProps {
   typeBehandling: TypeBehandling;
   diagnoseDefaultOptions: DiagnoserDefaultOptions;
   initialMellomlagretVurdering?: MellomlagretVurdering;
+  erOvergangArbeid: boolean;
 }
 
 export const Sykdomsvurdering = ({
@@ -78,6 +81,7 @@ export const Sykdomsvurdering = ({
   diagnoseDefaultOptions,
   typeBehandling,
   initialMellomlagretVurdering,
+  erOvergangArbeid,
 }: SykdomProps) => {
   const { behandlingsreferanse } = useParamsMedType();
   const { sak } = useSak();
@@ -183,6 +187,14 @@ export const Sykdomsvurdering = ({
             Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-5 (lovdata.no)
           </Link>
         </BodyLong>
+
+        {erOvergangArbeid && (
+          <Alert variant={'info'} size={'small'}>
+            Hvis brukeren skal ha AAP i perioden som arbeidssøker etter § 11-17, må du først vurdere at arbeidsevnen
+            ikke lenger er nedsatt etter § 11-5 og at brukeren er satt i stand til å skaffe seg arbeid som han eller hun
+            kan utføre.
+          </Alert>
+        )}
 
         {vedtatteVurderinger.map((vurdering) => (
           <TidligereVurderingExpandableCard
