@@ -1,7 +1,7 @@
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { BarnetilleggFormFields } from 'components/behandlinger/barnetillegg/barnetilleggvurdering/BarnetilleggVurdering';
 import { ChildEyesIcon, TrashIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, Detail } from '@navikt/ds-react';
+import { BodyShort, Button, Detail, Tag } from '@navikt/ds-react';
 import { kalkulerAlder } from 'components/behandlinger/alder/Alder';
 import { JaEllerNei } from 'lib/utils/form';
 
@@ -17,6 +17,7 @@ interface Props {
   ident: string | null | undefined;
   navn: string;
   fødselsdato: string | null | undefined;
+  dødsdato: string | null | undefined;
   harOppgittFosterforelderRelasjon: boolean;
   forsørgerPeriode?: Periode;
   readOnly: boolean;
@@ -30,6 +31,7 @@ export const OppgitteFolkeregisterBarnVurdering = ({
   forsørgerPeriode,
   readOnly,
   fødselsdato,
+  dødsdato,
   harOppgittFosterforelderRelasjon,
 }: Props) => {
   const {
@@ -48,10 +50,6 @@ export const OppgitteFolkeregisterBarnVurdering = ({
 
   const erUnderMyndighetsalder = fødselsdato ? Number.parseInt(kalkulerAlder(new Date(fødselsdato))) < 18 : false;
 
-  const periodeTekst = forsørgerPeriode?.fom
-    ? `${formaterDatoForFrontend(forsørgerPeriode.fom)} - ${forsørgerPeriode?.tom ? formaterDatoForFrontend(forsørgerPeriode.tom) : ''}`
-    : 'Ukjent';
-
   return (
     <section className={`flex-column`}>
       <div className={styles.folkeregisterbarnheading}>
@@ -61,10 +59,20 @@ export const OppgitteFolkeregisterBarnVurdering = ({
         <div className={styles.tekst}>
           <Detail className={styles.detailgray}>Barn</Detail>
           <BodyShort size={'small'}>
-            {navn}, {ident} ({fødselsdato ? kalkulerAlder(new Date(fødselsdato)) : 'Ukjent alder'})
+            {navn}, {ident} ({fødselsdato ? kalkulerAlder(new Date(fødselsdato)) : 'Ukjent alder'}){' '}
+            {dødsdato && (
+              <Tag variant="alt1" data-color="neutral">
+                Død
+              </Tag>
+            )}
           </BodyShort>
           {fødselsdato && <BodyShort size={'small'}>Fødselsdato: {formaterDatoForFrontend(fødselsdato)}</BodyShort>}
-          <BodyShort size={'small'}>Forsørgerperiode:{periodeTekst}</BodyShort>
+          <BodyShort size={'small'}>
+            {dødsdato
+              ? 'Død: ' + formaterDatoForFrontend(dødsdato)
+              : 'Siste potensielle dag med barnetillegg før fylte 18 år: ' +
+                `${forsørgerPeriode?.tom ? `${formaterDatoForFrontend(forsørgerPeriode.tom)}` : 'Ukjent dato'}`}
+          </BodyShort>
         </div>
       </div>
       <div className={styles.vurderingwrapper}>

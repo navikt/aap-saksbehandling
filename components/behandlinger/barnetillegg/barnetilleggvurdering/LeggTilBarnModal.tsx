@@ -36,6 +36,7 @@ export const LeggTilBarnModal = ({ readOnly, åpne, avbryt, onLagreNyttBarn, all
       etternavn: '',
       navn: '',
       fødselsdato: '',
+      dødsdato: '',
       ident: '',
       manglerIdent: false,
       oppgittForelderRelasjon: undefined,
@@ -65,6 +66,7 @@ export const LeggTilBarnModal = ({ readOnly, åpne, avbryt, onLagreNyttBarn, all
       fødselsdato: data.fødselsdato
         ? formaterDatoForBackend(parse(data.fødselsdato, DATO_FORMATER.ddMMyyyy, new Date()))
         : '',
+      dødsdato: data.dødsdato ? formaterDatoForBackend(parse(data.dødsdato, DATO_FORMATER.ddMMyyyy, new Date())) : '',
       ident: data.ident,
       oppgittForelderRelasjon: data.oppgittForelderRelasjon,
       vurderinger: [{ begrunnelse: '', harForeldreAnsvar: '', fraDato: '' }],
