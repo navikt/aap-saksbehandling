@@ -87,16 +87,11 @@ vi.mock('swr', () => ({
 }));
 
 vi.mock('next/navigation', () => ({
-  useParams: vi
-    .fn()
-    // TODO: Vi bruker dessverre både behandlingsReferanse og behandlingsreferanse i appen
-    // Må slås sammen på et eller annet tidspunkt
-    .mockReturnValue({
-      saksnummer: '123',
-      behandlingsReferanse: '456',
-      behandlingsreferanse: '456',
-      behandlingsType: 'AVKLAR_SYKDOM',
-    }),
+  useParams: vi.fn().mockReturnValue({
+    saksnummer: '123',
+    behandlingsreferanse: '456',
+    behandlingsType: 'AVKLAR_SYKDOM',
+  }),
   useRouter: vi.fn(),
 }));
 
