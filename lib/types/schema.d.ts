@@ -11191,6 +11191,11 @@ export interface components {
        * Format: date
        * @example 2025-04-01
        */
+      'd\u00F8dsdato'?: string | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
       'f\u00F8dselsdato'?: string | null;
       ident?: string | null;
       navn?: string | null;
@@ -14717,6 +14722,11 @@ export interface components {
       vurderteBarn: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.barn.VurdertBarnDto'][];
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.barn.VurdertBarnDto': {
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      'd\u00F8dsdato'?: string | null;
       /**
        * Format: date
        * @example 2025-04-01
