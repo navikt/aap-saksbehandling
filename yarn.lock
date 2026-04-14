@@ -1288,17 +1288,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aap-oppgave-typescript-types@npm:0.0.675":
-  version: 0.0.675
-  resolution: "@navikt/aap-oppgave-typescript-types@npm:0.0.675::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-oppgave-typescript-types%2F0.0.675%2F9335f0ad9a12b15352496b365975a42fde3e3125"
-  checksum: 10c0/eea4916be422e03ca7a395bb4f542b04847858b52c3ed3c3b656d30514ef5e8173e752f196b2cde934abb1d5a7f523996140961cfc8fc9eef3de795e05de853c
+"@navikt/aap-oppgave-typescript-types@npm:0.0.676":
+  version: 0.0.676
+  resolution: "@navikt/aap-oppgave-typescript-types@npm:0.0.676::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-oppgave-typescript-types%2F0.0.676%2F3eb883be4826847afb93cdbf448d024c0e8d30b5"
+  checksum: 10c0/fb34d109a517911db90a486e8422893853b916821b29a33ba25e5933385dfee04207099cb1bdb27a71f7e66ff575e7296ceb61317dc5ef1aafafd0a6949b22b4
   languageName: node
   linkType: hard
 
-"@navikt/aap-postmottak-backend-typescript-types@npm:0.0.650":
-  version: 0.0.650
-  resolution: "@navikt/aap-postmottak-backend-typescript-types@npm:0.0.650::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-postmottak-backend-typescript-types%2F0.0.650%2F7aa242ab9c5a8ccd94f5aea29b2450505e758c5c"
-  checksum: 10c0/188b948059110f94c8c5b0640cd852feec3a62e9d371b164f7ddb7f5f514625e0659137547b7fc2556706962c6df97b361ce19a7f8c93b8c16f002ffe5bd95cd
+"@navikt/aap-postmottak-backend-typescript-types@npm:0.0.654":
+  version: 0.0.654
+  resolution: "@navikt/aap-postmottak-backend-typescript-types@npm:0.0.654::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-postmottak-backend-typescript-types%2F0.0.654%2F32c6463bea8168c3a0c0be5bd6d3e2283adf742d"
+  checksum: 10c0/f3ee7c31be53ab75a280718bed185766d8bb99ca47e723350dcfa7eca2e1c53b012e508f76c03e4c4c9166b8cae781cba20c3ad730d845c81f938cb930d2f817
   languageName: node
   linkType: hard
 
@@ -2664,9 +2664,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vercel/otel@npm:2.1.1":
-  version: 2.1.1
-  resolution: "@vercel/otel@npm:2.1.1"
+"@vercel/otel@npm:2.1.2":
+  version: 2.1.2
+  resolution: "@vercel/otel@npm:2.1.2"
   peerDependencies:
     "@opentelemetry/api": ">=1.9.0 <2.0.0"
     "@opentelemetry/api-logs": ">=0.200.0 <0.300.0"
@@ -2675,7 +2675,7 @@ __metadata:
     "@opentelemetry/sdk-logs": ">=0.200.0 <0.300.0"
     "@opentelemetry/sdk-metrics": ">=2.0.0 <3.0.0"
     "@opentelemetry/sdk-trace-base": ">=2.0.0 <3.0.0"
-  checksum: 10c0/c0885a6a7673a92a62775c2442e434aaceebae379ecdba8407ea7055fc0bd91133f319f7029e005bb6fba515911d23497074bd073e043e388b0eb8e7da9fb324
+  checksum: 10c0/a32f2d148e2d06a475f966d810516308c4bf63b83b69c81d4ca89f194eb428d4bb4b72da0cef43b784c7439d02c44fff05919ccda085cb55bd04e754a527f921
   languageName: node
   linkType: hard
 
@@ -2810,8 +2810,8 @@ __metadata:
     "@navikt/aap-breveditor": "npm:0.10.1"
     "@navikt/aap-breveditor-css": "npm:0.4.1"
     "@navikt/aap-felles-prettier": "npm:5.6.2"
-    "@navikt/aap-oppgave-typescript-types": "npm:0.0.675"
-    "@navikt/aap-postmottak-backend-typescript-types": "npm:0.0.650"
+    "@navikt/aap-oppgave-typescript-types": "npm:0.0.676"
+    "@navikt/aap-postmottak-backend-typescript-types": "npm:0.0.654"
     "@navikt/aksel-icons": "npm:7.40.0"
     "@navikt/diagnosekoder": "npm:1.2026.0"
     "@navikt/ds-css": "npm:7.40.0"
@@ -2832,7 +2832,7 @@ __metadata:
     "@types/react-dom": "npm:19.2.3"
     "@typescript-eslint/eslint-plugin": "npm:8.52.0"
     "@typescript-eslint/parser": "npm:8.52.0"
-    "@vercel/otel": "npm:2.1.1"
+    "@vercel/otel": "npm:2.1.2"
     "@vitejs/plugin-react": "npm:5.2.0"
     "@vitest/coverage-v8": "npm:4.1.4"
     date-fns: "npm:4.1.0"

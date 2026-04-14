@@ -43,6 +43,7 @@ type DraftFormFields = Partial<BarnetilleggFormFields>;
 export interface BarneTilleggVurdering {
   ident: string | null | undefined;
   fødselsdato: string | null | undefined;
+  dødsdato: string | null | undefined;
   navn: string | null | undefined;
   oppgittForelderRelasjon?: 'FORELDER' | 'FOSTERFORELDER' | null;
   forsørgerPeriode?: Periode;
@@ -191,7 +192,6 @@ export const BarnetilleggVurdering = ({
   );
   const kapitaliserNavn = (navn: string) => navn.toLowerCase().replaceAll(/(^|\s)\w/g, (match) => match.toUpperCase());
   const [visLeggTilBarnModal, setVisLeggTilBarnModal] = useState(false);
-
   return (
     <VilkårskortMedFormOgMellomlagring
       heading={'§ 11-20 tredje og fjerde ledd barnetillegg '}
@@ -250,6 +250,7 @@ export const BarnetilleggVurdering = ({
             })}
           </div>
         )}
+
         {erFolkeregistrerteBarn && (
           <div className={'flex-column'}>
             <Heading size={'xsmall'} level="3">
@@ -269,6 +270,7 @@ export const BarnetilleggVurdering = ({
                     barnetilleggIndex={barnetilleggIndex}
                     ident={vurdering.ident}
                     fødselsdato={vurdering.fødselsdato}
+                    dødsdato={vurdering.dødsdato}
                     navn={kapitaliserNavn(
                       vurdering.navn || behandlingPersonInfo?.info[vurdering.ident || 'null'] || 'Ukjent'
                     )}
@@ -375,6 +377,7 @@ function mapVurderingToDraftFormFields(
       navn: navn || (barn.ident ? behandlingPersonInfo?.info[barn.ident] : 'Ukjent'),
       oppgittForelderRelasjon: barn.oppgittForeldreRelasjon,
       fødselsdato: barn.fødselsdato,
+      dødsdato: barn.dødsdato,
       vurderinger: barn.vurderinger.map((value) => {
         return {
           begrunnelse: value.begrunnelse,
@@ -394,6 +397,7 @@ function mapVurderingToDraftFormFields(
       oppgittForelderRelasjon: barn.oppgittForeldreRelasjon,
       vurderinger: [{ begrunnelse: '', harForeldreAnsvar: '', fraDato: '' }],
       fødselsdato: barn.fodselsDato,
+      dødsdato: barn.dodsDato,
     };
   });
 
@@ -404,6 +408,7 @@ function mapVurderingToDraftFormFields(
     return {
       navn: barn.navn || behandlingPersonInfo?.info[barn.ident!.identifikator],
       fødselsdato: barn.fodselsDato,
+      dødsdato: barn.dodsDato,
       ident: barn.ident?.identifikator,
       forsørgerPeriode: barn.forsorgerPeriode,
       vurderinger:
@@ -428,7 +433,9 @@ function mapVurderingToDraftFormFields(
         }
         return (
           eksisterendeVurdering.vurdertBarn.navn === barn.navn &&
-          eksisterendeVurdering.vurdertBarn.fødselsdato === barn.fodselsDato
+            eksisterendeVurdering.vurdertBarn.fødselsdato === barn.fodselsDato,
+          eksisterendeVurdering.vurdertBarn.dødsdato === barn.dodsDato,
+          eksisterendeVurdering.vurdertBarn
         );
       });
 
@@ -443,6 +450,7 @@ function mapVurderingToDraftFormFields(
       return {
         navn: barn.navn,
         fødselsdato: barn.fodselsDato,
+        dødsdato: barn.dodsDato,
         ident: barn.ident?.identifikator,
         oppgittForelderRelasjon: barn.oppgittForeldreRelasjon,
         erSlettbar: vurderingForBarn?.erSlettbar ?? true,
