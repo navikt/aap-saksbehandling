@@ -48,13 +48,11 @@ export function validerPeriodiserteVurderingerRekkefølge({
   );
   // Vis feilmelding hvis flere nye vurderinger har samme fra-dato
   if (vurderingerMedDuplisertFraDato.size > 0) {
-    nyeVurderinger.forEach((vurdering, index) => {
-      if (vurderingerMedDuplisertFraDato.has(vurdering)) {
-        form.setError(`vurderinger.${index}.fraDato`, {
-          message: `Du har allerede en vurdering på denne datoen. Velg en annen dato eller slett vurderingen.`,
-          type: 'custom',
-        });
-      }
+    vurderingerMedDuplisertFraDato.forEach((vurdering) => {
+      form.setError(`vurderinger.${nyeVurderinger.indexOf(vurdering)}.fraDato`, {
+        message: `Du har allerede en vurdering på denne datoen. Velg en annen dato eller slett vurderingen.`,
+        type: 'custom',
+      });
     });
     return false;
   }
