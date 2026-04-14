@@ -6,13 +6,14 @@ import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { useEffect } from 'react';
 import { logClientError } from 'lib/actions/actions';
 import { erIngenTilgangError } from 'lib/utils/ingenTilgang';
+import { useBehandlingsreferanseOgSaksnummer } from 'hooks/saksbehandling/BehandlingHook';
 
 interface Props {
   error: Error & { digest?: string };
 }
 
 const Error = ({ error }: Props) => {
-  const { saksnummer, behandlingsReferanse } = useParams<{ saksnummer?: string; behandlingsReferanse: string }>();
+  const { saksnummer, behandlingsreferanse } = useParams<{ saksnummer?: string; behandlingsreferanse: string }>();
   const pathname = usePathname();
 
   const ingenTilgang = erIngenTilgangError(error);
@@ -28,13 +29,13 @@ const Error = ({ error }: Props) => {
         stack: error.stack,
         digest: error.digest,
         saksnummer: saksnummer,
-        behandlingsReferanse,
+        behandlingsReferanse: behandlingsreferanse,
         pathname,
       });
     } catch {
       // do nothing
     }
-  }, [error, saksnummer, behandlingsReferanse, pathname, ingenTilgang]);
+  }, [error, saksnummer, behandlingsreferanse, pathname, ingenTilgang]);
 
   if (ingenTilgang) {
     return <IngenTilgangFeil saksnummer={saksnummer} />;
@@ -61,10 +62,10 @@ const Error = ({ error }: Props) => {
                 </>
               )}
 
-              {behandlingsReferanse && (
+              {behandlingsreferanse && (
                 <>
                   <Label>Behandlingsreferanse:</Label>
-                  <BodyShort>{behandlingsReferanse}</BodyShort>
+                  <BodyShort>{behandlingsreferanse}</BodyShort>
                 </>
               )}
 

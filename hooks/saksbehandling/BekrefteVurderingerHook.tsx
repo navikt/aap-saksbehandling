@@ -8,15 +8,15 @@ export function useBekreftVurderingerGrunnlag(initialGrunnlag?: BekreftVurdering
   grunnlag?: BekreftVurderingerOppfølgingGrunnlag;
   refetchBekreftVurderingerGrunnlagClient: () => void;
 } {
-  const params = useParams<{ behandlingsReferanse: string }>();
+  const params = useParams<{ behandlingsreferanse: string }>();
 
-  if (!params.behandlingsReferanse) {
+  if (!params.behandlingsreferanse) {
     throw Error('useBekreftVurderinger kan bare brukes på behandlingssiden.');
   }
 
   const { data, mutate } = useSWR(
-    `api/grunnlag/${params.behandlingsReferanse}/bekreftvurderinger`,
-    () => clientHentBekreftVurderingerOppfølgingGrunnlag(params.behandlingsReferanse),
+    `api/grunnlag/${params.behandlingsreferanse}/bekreftvurderinger`,
+    () => clientHentBekreftVurderingerOppfølgingGrunnlag(params.behandlingsreferanse),
     {
       fallbackData: initialGrunnlag && {
         type: 'SUCCESS',

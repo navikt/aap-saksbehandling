@@ -10,15 +10,15 @@ export function useFlyt(): {
   flyt?: BehandlingFlytOgTilstand;
   refetchFlytClient: () => void;
 } {
-  const params = useParams<{ behandlingsReferanse: string }>();
+  const params = useParams<{ behandlingsreferanse: string }>();
 
-  if (!params.behandlingsReferanse) {
+  if (!params.behandlingsreferanse) {
     throw Error('useFlyt kan bare brukes på behandlingssiden.');
   }
 
   const { data, mutate } = useSWR(
-    `api/flyt/${params.behandlingsReferanse}`,
-    () => clientHentFlyt(params.behandlingsReferanse),
+    `api/flyt/${params.behandlingsreferanse}`,
+    () => clientHentFlyt(params.behandlingsreferanse),
     { revalidateOnFocus: true, shouldRetryOnError: true }
   );
 
@@ -29,15 +29,15 @@ export function useFlyt(): {
 }
 
 export function useRequiredFlyt(): { flyt: BehandlingFlytOgTilstand; refetchFlytClient: () => void } {
-  const params = useParams<{ behandlingsReferanse: string }>();
+  const params = useParams<{ behandlingsreferanse: string }>();
 
-  if (!params.behandlingsReferanse) {
+  if (!params.behandlingsreferanse) {
     throw Error('useFlyt kan bare brukes på behandlingssiden.');
   }
 
   const { data: flyt, mutate } = useSWR(
-    `api/flyt/${params.behandlingsReferanse}`,
-    () => clientHentFlyt(params.behandlingsReferanse),
+    `api/flyt/${params.behandlingsreferanse}`,
+    () => clientHentFlyt(params.behandlingsreferanse),
     {
       revalidateOnFocus: true,
       shouldRetryOnError: true,

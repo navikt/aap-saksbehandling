@@ -45,7 +45,7 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
     sjekkTildeltStatus?: boolean
   ) => void;
 } {
-  const params = useParams<{ aktivGruppe: string; behandlingsReferanse: string; saksnummer: string }>();
+  const params = useParams<{ aktivGruppe: string; behandlingsreferanse: string; saksnummer: string }>();
   const router = useRouter();
   const { refetchFlytClient } = useRequiredFlyt();
   const { setIsModalOpen } = useIngenFlereOppgaverModal();
@@ -75,7 +75,7 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
     setError(undefined);
 
     if (sjekkTildeltStatus && !erLokal && sjekkTildelingFeatureToggle) {
-      const nyesteOppgavePåBehandling = await hentTildeltStatusClient(params.behandlingsReferanse);
+      const nyesteOppgavePåBehandling = await hentTildeltStatusClient(params.behandlingsreferanse);
       if (isSuccess(nyesteOppgavePåBehandling)) {
         if (
           nyesteOppgavePåBehandling.data.tildeltSaksbehandlerIdent != null &&
@@ -104,7 +104,7 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
     if (isError(løsbehovRes)) {
       if (løsbehovRes.status === 409) {
         // Henter siste versjon av flyt for å bruke siste behandlingversjon
-        const flytResponse = await clientHentFlyt(params.behandlingsReferanse);
+        const flytResponse = await clientHentFlyt(params.behandlingsreferanse);
 
         if (isSuccess(flytResponse)) {
           const clientLøsBehovEtterConflict = erPeriodisert
@@ -166,7 +166,7 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
 
   const listenSSE = async (underkjennelseIKvalitetssikringEllerBeslutning: boolean) => {
     const eventSource = new EventSource(
-      `/saksbehandling/api/behandling/hent/${params.behandlingsReferanse}/${params.aktivGruppe}/${steg}/nesteSteg/`,
+      `/saksbehandling/api/behandling/hent/${params.behandlingsreferanse}/${params.aktivGruppe}/${steg}/nesteSteg/`,
       {
         withCredentials: true,
       }
@@ -190,7 +190,7 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
 
         if (skalKvalitetssikre) {
           const kanFortsetteSaksbehandlingRespons = await clientHentTilgangForKvalitetssikring(
-            params.behandlingsReferanse
+            params.behandlingsreferanse
           );
           if (isSuccess(kanFortsetteSaksbehandlingRespons)) {
             kanFortsetteSaksbehandling = kanFortsetteSaksbehandlingRespons.data.harTilgangTilÅKvalitetssikre;
@@ -199,7 +199,7 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
           if (aktivtStegBehovsKode) {
             kanFortsetteSaksbehandling = (
               await Promise.all(
-                aktivtStegBehovsKode.map((kode) => clientSjekkTilgang(params.behandlingsReferanse, kode))
+                aktivtStegBehovsKode.map((kode) => clientSjekkTilgang(params.behandlingsreferanse, kode))
               )
             ).some((tilgangResponse) => isSuccess(tilgangResponse) && tilgangResponse.data.tilgang);
           }
@@ -218,7 +218,7 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
         } else {
           if (skalBytteGruppe || skalBytteSteg) {
             router.push(
-              `/saksbehandling/sak/${params.saksnummer}/${params.behandlingsReferanse}/${aktivVisningGruppe}/#${aktivtVisningSteg}`
+              `/saksbehandling/sak/${params.saksnummer}/${params.behandlingsreferanse}/${aktivVisningGruppe}/#${aktivtVisningSteg}`
             );
           }
         }
