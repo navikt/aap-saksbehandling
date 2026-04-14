@@ -64,7 +64,7 @@ export const OppgitteFolkeregisterBarnVurdering = ({
           <Detail className={styles.detailgray}>Barn</Detail>
           <BodyShort size={'small'}>
             {navn}, {ident} ({fødselsdato ? kalkulerAlder(new Date(fødselsdato)) : 'Ukjent alder'}){' '}
-            {!dødsdato && (
+            {dødsdato && (
               <Tag variant="alt3-filled" size="small" data-color="neutral">
                 Død
               </Tag>
