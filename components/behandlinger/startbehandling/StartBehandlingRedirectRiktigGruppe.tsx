@@ -2,7 +2,8 @@
 
 import { useEffect } from 'react';
 import { BehandlingFlytOgTilstand } from 'lib/types/types';
-import { useParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 
 type Props = {
   flyt: BehandlingFlytOgTilstand;
@@ -13,7 +14,7 @@ type Props = {
  */
 export const StartBehandlingRedirectRiktigGruppe = ({ flyt }: Props) => {
   const router = useRouter();
-  const { saksnummer, behandlingsreferanse } = useParams<{ saksnummer: string; behandlingsreferanse: string }>();
+  const { saksnummer, behandlingsreferanse } = useParamsMedType();
 
   useEffect(() => {
     if (flyt.aktivGruppe !== 'START_BEHANDLING') {

@@ -1,13 +1,13 @@
 'use client';
 
 import { BehandlingFlytOgTilstand } from 'lib/types/postmottakTypes';
-import { useParams } from 'next/navigation';
 import { postmottakHentFlyt } from 'lib/postmottakClientApi';
 import useSWR from 'swr';
 import { isError } from 'lib/utils/api';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 
 export function usePostmottakRequiredFlyt(): { flyt: BehandlingFlytOgTilstand } {
-  const params = useParams<{ behandlingsreferanse: string }>();
+  const params = useParamsMedType();
 
   if (!params.behandlingsreferanse) {
     throw Error('usePostmottakRequiredFlyt kan bare brukes i postmottak.');
