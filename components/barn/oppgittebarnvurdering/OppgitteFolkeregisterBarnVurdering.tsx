@@ -10,6 +10,7 @@ import { OppgitteFolkeregisterBarnVurderingFelter } from 'components/barn/oppgit
 import { Periode } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import React from 'react';
+import { addDays } from 'date-fns';
 
 interface Props {
   form: UseFormReturn<BarnetilleggFormFields>;
@@ -49,6 +50,9 @@ export const OppgitteFolkeregisterBarnVurdering = ({
       ?.vurderinger?.every((vurdering) => vurdering.harForeldreAnsvar !== JaEllerNei.Nei) && !readOnly;
 
   const erUnderMyndighetsalder = fødselsdato ? Number.parseInt(kalkulerAlder(new Date(fødselsdato))) < 18 : false;
+  const fyller18år = forsørgerPeriode?.tom
+    ? formaterDatoForFrontend(addDays(new Date(forsørgerPeriode.tom), 1))
+    : 'Ukjent dato';
 
   return (
     <section className={`flex-column`}>
@@ -68,10 +72,7 @@ export const OppgitteFolkeregisterBarnVurdering = ({
           </BodyShort>
           {fødselsdato && <BodyShort size={'small'}>Fødselsdato: {formaterDatoForFrontend(fødselsdato)}</BodyShort>}
           <BodyShort size={'small'}>
-            {dødsdato
-              ? 'Død: ' + formaterDatoForFrontend(dødsdato)
-              : 'Siste potensielle dag med barnetillegg før fylte 18 år: ' +
-                `${forsørgerPeriode?.tom ? `${formaterDatoForFrontend(forsørgerPeriode.tom)}` : 'Ukjent dato'}`}
+            {dødsdato ? 'Død: ' + formaterDatoForFrontend(dødsdato) : 'Fyller 18 år: ' + `${fyller18år}`}
           </BodyShort>
         </div>
       </div>
