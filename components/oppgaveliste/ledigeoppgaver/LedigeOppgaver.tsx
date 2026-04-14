@@ -20,22 +20,26 @@ import { formaterDatoForBackend } from 'lib/utils/date';
 
 import styles from 'components/oppgaveliste/ledigeoppgaver/LedigeOppgaver.module.css';
 import {
+  NoNavAapOppgaveListeOppgaveSorteringSortBy,
   NoNavAapOppgaveListeUtvidetOppgavelisteFilterBehandlingstyper,
   NoNavAapOppgaveListeUtvidetOppgavelisteFilterReturStatuser,
 } from '@navikt/aap-oppgave-typescript-types';
-import { LedigeOppgaverFiltrering } from 'components/oppgaveliste/filtrering/ledigeoppgaverfiltrering/LedigeOppgaverFiltrering';
 import { TabellSkeleton } from 'components/oppgaveliste/tabellskeleton/TabellSkeleton';
 import { ALLE_OPPGAVER_ID } from 'components/oppgaveliste/filtrering/filtreringUtils';
 import { useLagreAktivUtvidetFilter } from 'hooks/oppgave/aktivUtvidetFilterHook';
 import { EnheterSelect } from 'components/oppgaveliste/enheterselect/EnheterSelect';
-import { ComboOption } from 'components/produksjonsstyring/minenhet/MineEnheter';
 import { useLagreAktiveEnheter } from 'hooks/oppgave/aktiveEnheterHook';
+import { useBackendSortering } from 'hooks/oppgave/BackendSorteringHook';
+import { LedigeOppgaverFiltrering } from 'components/oppgaveliste/filtrering/ledigeoppgaverfiltrering/LedigeOppgaverFiltrering';
+import { ValuePair } from 'components/form/FormField';
 
 interface Props {
   enheter: Enhet[];
 }
 
 export const LedigeOppgaver = ({ enheter }: Props) => {
+  const { sort, setSort } =
+    useBackendSortering<NoNavAapOppgaveListeOppgaveSorteringSortBy>('ledige-oppgaver-backendsort');
   const { hentLagretAktivKø, lagreAktivKøId } = useLagreAktivKø();
   const { hentAktivUtvidetFilter, lagreAktivUtvidetFilter } = useLagreAktivUtvidetFilter();
   const { hentLagredeAktiveEnheter, lagreAktiveEnheter } = useLagreAktiveEnheter();
@@ -44,19 +48,20 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
   const [aktivKøId, setAktivKøId] = useState<number>(ALLE_OPPGAVER_ID);
   const lagretUtvidetFilter = hentAktivUtvidetFilter();
 
-  function førsteEnhetTilComboOption(enheter: Enhet[]): ComboOption[] | null {
+  function førsteEnhetTilComboOption(enheter: Enhet[]): ValuePair[] | null {
     const førsteEnhet = enheter.find((e) => e);
     if (førsteEnhet) {
       return [{ value: førsteEnhet.enhetNr, label: førsteEnhet.navn }];
     }
     return null;
   }
-  const [aktiveEnheter, setAktiveEnheter] = useState<ComboOption[]>(
+
+  const [aktiveEnheter, setAktiveEnheter] = useState<ValuePair[]>(
     hentLagredeAktiveEnheter() ?? førsteEnhetTilComboOption(enheter) ?? []
   );
 
   const aktiveEnhetsnumre = aktiveEnheter.map((enhet) => enhet.value);
-  const oppdaterEnheter = (enheter: ComboOption[]) => {
+  const oppdaterEnheter = (enheter: ValuePair[]) => {
     setAktiveEnheter(enheter);
     lagreAktiveEnheter(enheter);
   };
@@ -97,32 +102,42 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
       options: OppgaveStatuser,
       defaultValue: lagretUtvidetFilter?.statuser ?? [],
     },
+    saksbehandlere: {
+      type: 'fieldArray',
+    },
   });
 
   const behandlingOpprettetTom = form.watch('behandlingOpprettetTom');
   const behandlingOpprettetFom = form.watch('behandlingOpprettetFom');
   const andreStatusTyper = ['VENT', 'ER_HASTESAK', 'VENTEFRIST_UTLØPT'];
 
-  const utvidetFilter =
-    aktivKøId === ALLE_OPPGAVER_ID
-      ? {
-          behandlingstyper: (form.watch('behandlingstyper') ||
-            []) as NoNavAapOppgaveListeUtvidetOppgavelisteFilterBehandlingstyper[],
-          tom: behandlingOpprettetTom ? formaterDatoForBackend(behandlingOpprettetTom) : undefined,
-          fom: behandlingOpprettetFom ? formaterDatoForBackend(behandlingOpprettetFom) : undefined,
-          returStatuser: (
-            (form.watch('statuser') || []) as NoNavAapOppgaveListeUtvidetOppgavelisteFilterReturStatuser[]
-          ).filter((status) => !andreStatusTyper.includes(status.valueOf())),
-          påVent: form.watch('statuser')?.includes('VENT'),
-          årsaker: form.watch('årsaker') || [],
-          avklaringsbehovKoder: form.watch('avklaringsbehov') || [],
-          markertHaster: form.watch('statuser')?.includes('ER_HASTESAK'),
-          ventefristUtløpt: form.watch('statuser')?.includes('VENTEFRIST_UTLØPT'),
-        }
-      : undefined;
+  const utvidetFilter = {
+    behandlingstyper: (form.watch('behandlingstyper') ||
+      []) as NoNavAapOppgaveListeUtvidetOppgavelisteFilterBehandlingstyper[],
+    tom: behandlingOpprettetTom ? formaterDatoForBackend(behandlingOpprettetTom) : undefined,
+    fom: behandlingOpprettetFom ? formaterDatoForBackend(behandlingOpprettetFom) : undefined,
+    returStatuser: (
+      (form.watch('statuser') || []) as NoNavAapOppgaveListeUtvidetOppgavelisteFilterReturStatuser[]
+    ).filter((status) => !andreStatusTyper.includes(status.valueOf())),
+    påVent: form.watch('statuser')?.includes('VENT'),
+    årsaker: form.watch('årsaker') || [],
+    avklaringsbehovKoder: form.watch('avklaringsbehov') || [],
+    markertHaster: form.watch('statuser')?.includes('ER_HASTESAK'),
+    ventefristUtløpt: form.watch('statuser')?.includes('VENTEFRIST_UTLØPT'),
+    saksbehandlere: [],
+  };
 
-  const { antallOppgaver, oppgaver, size, setSize, isLoading, isValidating, kanLasteInnFlereOppgaver, mutate } =
-    useLedigeOppgaver(aktiveEnhetsnumre, veilederFilter === 'veileder', aktivKøId, utvidetFilter);
+  const {
+    antallOppgaver,
+    oppgaver,
+    size,
+    setSize,
+    isLoading,
+    isValidating,
+    kanLasteInnFlereOppgaver,
+    mutate,
+    behandlingstyperFilterFraBackend,
+  } = useLedigeOppgaver(aktiveEnhetsnumre, veilederFilter === 'veileder', aktivKøId, utvidetFilter, sort);
 
   const { data: køer } = useSWR(`api/filter?${queryParamsArray('enheter', aktiveEnhetsnumre)}`, () =>
     hentKøerForEnheterClient(aktiveEnhetsnumre)
@@ -141,7 +156,7 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
   };
 
   useEffect(() => {
-    if (!køer || (køer && isError(køer))) {
+    if (isError(køer) || !køer?.data?.length) {
       return;
     }
     const køId = hentLagretAktivKø();
@@ -209,14 +224,14 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
           form={form}
           formFields={formFields}
           antallOppgaver={antallOppgaver}
-          kanFiltrere={aktivKøId === ALLE_OPPGAVER_ID}
-          onFiltrerClick={() => oppdaterKøId(ALLE_OPPGAVER_ID)}
+          aktivKøId={aktivKøId}
+          sattBehandlingstyperFilter={behandlingstyperFilterFraBackend}
         />
         {isLoading && <TabellSkeleton />}
 
         {!isLoading &&
           (oppgaver.length > 0 ? (
-            <LedigeOppgaverTabell oppgaver={oppgaver} revalidateFunction={mutate} />
+            <LedigeOppgaverTabell oppgaver={oppgaver} setSortBy={setSort} sort={sort} revalidateFunction={mutate} />
           ) : (
             <BodyShort size={'small'} className={styles.ingenoppgaver}>
               Ingen oppgaver i valgt kø for valgt enhet

@@ -15,7 +15,7 @@ import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereV
 import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 
 interface Props {
   behandlingVersjon: number;
@@ -44,13 +44,10 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_AKTIVITETSPLIKT_11_7');
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.VURDER_BRUDD_11_7_KODE, initialMellomlagretVurdering);
-
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
     'VURDER_AKTIVITETSPLIKT_11_7',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
@@ -149,6 +146,12 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
     { readOnly: formReadOnly }
   );
 
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.VURDER_BRUDD_11_7_KODE,
+    initialMellomlagretVurdering,
+    form
+  );
+
   const knapptekst = () => {
     if (
       grunnlag.harSendtForhåndsvarsel &&
@@ -169,7 +172,7 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
   };
 
   return (
-    <VilkårskortMedFormOgMellomlagringNyVisning
+    <VilkårskortMedFormOgMellomlagring
       heading="§ 11-7 Medlemmets aktivitetsplikt"
       steg={'VURDER_AKTIVITETSPLIKT_11_7'}
       onSubmit={handleSubmit}
@@ -179,7 +182,6 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
       vilkårTilhørerNavKontor={true}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() =>
           form.reset(grunnlag.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields())
@@ -208,7 +210,7 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
       {form.watch('erOppfylt') === JaEllerNei.Nei &&
         grunnlag.harSendtForhåndsvarsel &&
         harPassertVarselFrist === false && <FormField form={form} formField={formFields.skalIgnorereVarselFrist} />}
-    </VilkårskortMedFormOgMellomlagringNyVisning>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 

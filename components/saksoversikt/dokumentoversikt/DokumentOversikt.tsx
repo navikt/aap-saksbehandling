@@ -1,5 +1,5 @@
 import styles from './DokumentOversikt.module.css';
-import { Alert, Box, Heading, HStack, Table, VStack } from '@navikt/ds-react';
+import { Alert, Box, Button, Heading, HStack, Table, VStack } from '@navikt/ds-react';
 import { Spinner } from 'components/felles/Spinner';
 import { isSuccess } from 'lib/utils/api';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
@@ -10,11 +10,13 @@ import { clientHentAlleDokumenterPåBruker } from 'lib/dokumentClientApi';
 import { erFerdigstilt, formaterJournalpostType, formaterJournalstatus } from 'lib/utils/journalpost';
 import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
-import { Journalpost, Journalposttype, Journalstatus } from 'lib/types/journalpost';
+import { Journalpost, Journalposttype, Journalstatus, Tema } from 'lib/types/journalpost';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { useEffect, useState } from 'react';
+import { useLagretDokumentFilter } from 'hooks/dokumenter/dokumentFilterHook';
+import { ArrowCirclepathReverseIcon } from '@navikt/aksel-icons';
 
-interface FilterFormFields {
+export interface DokumentFilterFormFields {
   tema: string[];
   typer: Journalposttype[];
   statuser: Journalstatus[];
@@ -32,6 +34,8 @@ export const DokumentOversikt = ({ sak }: { sak: SaksInfo }) => {
   const [error, setError] = useState<string>();
   const [journalposter, setJournalposter] = useState<Journalpost[]>([]);
 
+  const { lagreFilter, hentFilter } = useLagretDokumentFilter();
+
   const hent = async (request: HentDokumentoversiktBrukerRequest) => {
     setIsLoading(true);
 
@@ -43,41 +47,12 @@ export const DokumentOversikt = ({ sak }: { sak: SaksInfo }) => {
       .finally(() => setIsLoading(false));
   };
 
-  const { form, formFields } = useConfigForm<FilterFormFields>({
+  const { form, formFields } = useConfigForm<DokumentFilterFormFields>({
     tema: {
       type: 'combobox_multiple',
       label: 'Tema',
       defaultValue: ['AAP'],
-      options: [
-        { value: 'AAP', label: 'Arbeidsavklaringspenger' },
-        { value: 'AGR', label: 'Ajourhold - grunnopplysninger' },
-        { value: 'AKT', label: 'Aktivitetsplan med dialoger' },
-        { value: 'BAR', label: 'Barnetrygd' },
-        { value: 'ENF', label: 'Enslig mor eller far' },
-        { value: 'EYB', label: 'Etterlatteytelser barnepensjon' },
-        { value: 'EYO', label: 'Etterlatteytelser omstilingsstønad' },
-        { value: 'FEI', label: 'Feilutbetaling' },
-        { value: 'FOR', label: 'Foreldre- og svangerskapspenger' },
-        { value: 'FUL', label: 'Fullmakt' },
-        { value: 'GEN', label: 'Generell' },
-        { value: 'IND', label: 'Tiltakspenger' },
-        { value: 'MED', label: 'Medlemskap' },
-        { value: 'OMS', label: 'Omsorgspenger, pleiepenger og opplæringspenger' },
-        { value: 'OPP', label: 'Oppfølging' },
-        { value: 'PER', label: 'Permittering og masseoppsigelser' },
-        { value: 'SAP', label: 'Sanksjon - person' },
-        { value: 'STO', label: 'Regnskap' },
-        { value: 'SYK', label: 'Sykepenger' },
-        { value: 'SYM', label: 'Sykmelding' },
-        { value: 'TIL', label: 'Tiltak' },
-        { value: 'TRK', label: 'Trekkhåndtering' },
-        { value: 'TRY', label: 'Trygdeavgift' },
-        { value: 'TSO', label: 'Tilleggsstønad' },
-        { value: 'TSR', label: 'Tilleggsstønad - arbeidssøkere' },
-        { value: 'UFM', label: 'Unntak fra medlemskap' },
-        { value: 'UFO', label: 'Uføretrygd' },
-        { value: 'YRK', label: 'Yrkesskade og menerstatning' },
-      ],
+      options: Object.entries(Tema).map(([value, label]) => ({ value, label })),
     },
     typer: {
       type: 'combobox_multiple',
@@ -97,18 +72,27 @@ export const DokumentOversikt = ({ sak }: { sak: SaksInfo }) => {
     },
   });
 
-  const tema = form.watch('tema');
-  const statuser = form.watch('statuser');
-  const typer = form.watch('typer');
-
   useEffect(() => {
-    hent({
-      personIdent: sak.ident,
-      tema: tema || [],
-      statuser: statuser || [],
-      typer: typer || [],
+    // localStorage er kun tilgjengelig på klienten – leses etter mount for å unngå hydreringsfeil
+    const lagretFilter = hentFilter();
+    if (lagretFilter) {
+      form.reset(lagretFilter);
+    }
+
+    hent({ personIdent: sak.ident, ...(form.getValues() as DokumentFilterFormFields) });
+
+    const { unsubscribe } = form.watch((values) => {
+      const filter = values as DokumentFilterFormFields;
+      lagreFilter(filter);
+      hent({ personIdent: sak.ident, ...filter });
     });
-  }, [tema, statuser, typer, sak.ident]);
+
+    return () => unsubscribe();
+  }, [form, hentFilter, lagreFilter, sak.ident]);
+
+  const nullstill = () => {
+    form.reset({ tema: ['AAP'], typer: [], statuser: [] });
+  };
 
   if (error) {
     return <Alert variant="error">{error || 'Ukjent feil oppsto'}</Alert>;
@@ -119,10 +103,15 @@ export const DokumentOversikt = ({ sak }: { sak: SaksInfo }) => {
       <Heading size="large">Dokumentoversikt</Heading>
 
       <Box background="surface-subtle" padding="4" borderRadius="xlarge">
-        <HStack gap="4">
+        <HStack gap="4" marginBlock="0 4" wrap={false}>
           <FormField form={form} formField={formFields.tema} />
           <FormField form={form} formField={formFields.typer} />
           <FormField form={form} formField={formFields.statuser} />
+        </HStack>
+        <HStack gap="4">
+          <Button variant="secondary" size="small" icon={<ArrowCirclepathReverseIcon />} onClick={nullstill}>
+            Nullstill
+          </Button>
         </HStack>
       </Box>
 

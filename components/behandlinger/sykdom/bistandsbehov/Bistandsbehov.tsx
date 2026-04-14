@@ -1,6 +1,6 @@
 'use client';
 
-import { BistandsGrunnlag, MellomlagretVurdering, VurdertAvAnsatt } from 'lib/types/types';
+import { BistandsGrunnlag, MellomlagretVurdering, VurderingMeta, VurdertAvAnsatt } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { FormEvent } from 'react';
 import { parseDatoFraDatePicker } from 'lib/utils/date';
@@ -18,8 +18,7 @@ import {
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { parseISO } from 'date-fns';
-import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
-import { LovOgMedlemskapVurderingForm } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/types';
+import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import { BistandsbehovTidligereVurdering } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovTidligereVurdering';
 import {
   erNyVurderingOppfylt,
@@ -42,7 +41,7 @@ interface Props {
 export interface BistandForm {
   vurderinger: Array<BistandVurderingForm>;
 }
-export interface BistandVurderingForm {
+export interface BistandVurderingForm extends VurderingMeta {
   fraDato: string;
   begrunnelse: string;
   erBehovForAktivBehandling: JaEllerNei | undefined;
@@ -53,7 +52,6 @@ export interface BistandVurderingForm {
   vurdertAv?: VurdertAvAnsatt;
   kvalitetssikretAv?: VurdertAvAnsatt;
   besluttetAv?: VurdertAvAnsatt;
-  erNyVurdering?: boolean;
 }
 
 export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, initialMellomlagretVurdering }: Props) => {
@@ -61,15 +59,12 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, initialMe
   const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_BISTANDSBEHOV');
 
-  const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
-    useMellomlagring(Behovstype.AVKLAR_BISTANDSBEHOV_KODE, initialMellomlagretVurdering);
-
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
   const { visningActions, formReadOnly, visningModus, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'VURDER_BISTANDSBEHOV',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const defaultValues: BistandForm = initialMellomlagretVurdering
@@ -78,6 +73,12 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, initialMe
 
   const form = useForm<BistandForm>({ defaultValues, shouldUnregister: true });
   const { fields, append, remove } = useFieldArray({ name: 'vurderinger', control: form.control });
+
+  const { slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } = useMellomlagring(
+    Behovstype.AVKLAR_BISTANDSBEHOV_KODE,
+    initialMellomlagretVurdering,
+    form
+  );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
@@ -106,7 +107,7 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, initialMe
   const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const foersteNyePeriode = fields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
-  const errorList = mapPeriodiserteVurderingerErrorList<LovOgMedlemskapVurderingForm>(form.formState.errors);
+  const errorList = hentFeilmeldingerForForm(form.formState.errors);
 
   return (
     <VilkårskortPeriodisert
@@ -117,7 +118,6 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, initialMe
       status={status}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={true}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() => {
           form.reset(
@@ -153,7 +153,7 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, initialMe
 
         {vedtatteVurderinger.map((vurdering) => (
           <TidligereVurderingExpandableCard
-            key={vurdering.fom}
+            key={crypto.randomUUID()}
             fom={parseISO(vurdering.fom)}
             tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
             foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
@@ -164,6 +164,9 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, initialMe
                 vurdering.erBehovForAnnenOppfølging
               )
             )}
+            vurdertAv={vurdering.vurdertAv}
+            kvalitetssikretAv={vurdering.kvalitetssikretAv}
+            besluttetAv={vurdering.besluttetAv}
           >
             <BistandsbehovTidligereVurdering vurdering={vurdering} />
           </TidligereVurderingExpandableCard>
@@ -177,9 +180,7 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, initialMe
             nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
             isLast={index === fields.length - 1}
             vurderingStatus={getErOppfyltEllerIkkeStatus(erNyVurderingOppfylt(form.watch(`vurderinger.${index}`)))}
-            vurdertAv={vurdering.vurdertAv}
-            kvalitetssikretAv={vurdering.kvalitetssikretAv}
-            besluttetAv={vurdering.besluttetAv}
+            vurdering={vurdering}
             readonly={formReadOnly}
             onSlettVurdering={() => remove(index)}
             harTidligereVurderinger={tidligereVurderinger.length > 0}
@@ -212,6 +213,8 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, initialMe
         vurdertAv: vurdering.vurdertAv,
         kvalitetssikretAv: vurdering.kvalitetssikretAv,
         besluttetAv: vurdering.besluttetAv,
+        erNyVurdering: false,
+        behøverVurdering: false,
       })),
     };
   }
@@ -226,6 +229,7 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, initialMe
       skalVurdereAapIOvergangTilArbeid: undefined,
       erBehovForArbeidsrettetTiltak: undefined,
       erNyVurdering: true,
+      behøverVurdering: false,
     };
   }
 };

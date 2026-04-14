@@ -18,7 +18,7 @@ import {
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
 import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
-import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
+import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import { OvergangArbeidForm } from 'components/behandlinger/sykdom/overgangarbeid/OvergangArbeid-types';
 import {
   getDefaultValuesFromGrunnlag,
@@ -43,26 +43,28 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialM
   const { løsPeriodisertBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('OVERGANG_ARBEID');
 
-  const { lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
-    useMellomlagring(Behovstype.OVERGANG_ARBEID, initialMellomlagretVurdering);
-
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
   const { visningActions, visningModus, formReadOnly, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'OVERGANG_ARBEID',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
-  const defaultValues =
-    mellomlagretVurdering != null
-      ? parseOgMigrerMellomlagretData(mellomlagretVurdering.data)
-      : getDefaultValuesFromGrunnlag(grunnlag);
+  const defaultValues = initialMellomlagretVurdering
+    ? parseOgMigrerMellomlagretData(initialMellomlagretVurdering.data)
+    : getDefaultValuesFromGrunnlag(grunnlag);
 
   const form = useForm<OvergangArbeidForm>({
     defaultValues,
     reValidateMode: 'onChange',
   });
+
+  const { slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } = useMellomlagring(
+    Behovstype.OVERGANG_ARBEID,
+    initialMellomlagretVurdering,
+    form
+  );
 
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
 
@@ -81,6 +83,8 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialM
       begrunnelse: '',
       fraDato: '',
       brukerRettPåAAP: '',
+      erNyVurdering: true,
+      behøverVurdering: false,
     });
   }
 
@@ -117,7 +121,7 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialM
     });
   };
 
-  const errorList = mapPeriodiserteVurderingerErrorList<OvergangArbeidForm>(form.formState.errors);
+  const errorList = hentFeilmeldingerForForm(form.formState.errors);
   const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
 
   return (
@@ -130,7 +134,6 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialM
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={true}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() => {
           form.reset(getDefaultValuesFromGrunnlag(grunnlag));
@@ -144,11 +147,14 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialM
     >
       {vedtatteVurderinger?.map((vurdering) => (
         <TidligereVurderingExpandableCard
-          key={vurdering.fom}
+          key={crypto.randomUUID()}
           fom={parseISO(vurdering.fom)}
           tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
           foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
           vurderingStatus={getErOppfyltEllerIkkeStatus(vurdering.brukerRettPåAAP)}
+          vurdertAv={vurdering.vurdertAv}
+          kvalitetssikretAv={vurdering.kvalitetssikretAv}
+          besluttetAv={vurdering.besluttetAv}
         >
           <OvergangArbeidTidligereVurdering
             fraDato={vurdering.fom}
@@ -171,9 +177,7 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialM
           )}
           nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
           isLast={index === vurderingerFields.length - 1}
-          vurdertAv={vurdering.vurdertAv}
-          kvalitetssikretAv={vurdering.kvalitetssikretAv}
-          besluttetAv={vurdering.besluttetAv}
+          vurdering={vurdering}
           readonly={formReadOnly}
           onSlettVurdering={() => remove(index)}
           harTidligereVurderinger={tidligereVurderinger.length > 0}

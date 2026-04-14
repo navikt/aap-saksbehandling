@@ -19,7 +19,7 @@ import { formaterTilNok } from 'lib/utils/string';
 import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 
 interface Props {
   behandlingVersjon: number;
@@ -52,13 +52,10 @@ export const YrkesskadeGrunnlagBeregning = ({
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('FASTSETT_GRUNNLAG');
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.FASTSETT_YRKESSKADEINNTEKT, initialMellomlagretVurdering);
-
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
     'FASTSETT_GRUNNLAG',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
@@ -76,13 +73,20 @@ export const YrkesskadeGrunnlagBeregning = ({
   );
 
   const { fields } = useFieldArray({ control: form.control, name: 'vurderinger' });
+
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.FASTSETT_YRKESSKADEINNTEKT,
+    initialMellomlagretVurdering,
+    form
+  );
+
   const vurdertAvAnsatt =
     yrkeskadeBeregningGrunnlag.vurderinger.length > 0 ? yrkeskadeBeregningGrunnlag.vurderinger[0].vurdertAv : undefined;
 
   const historiskeVurderinger = yrkeskadeBeregningGrunnlag?.historiskeVurderinger;
 
   return (
-    <VilkårskortMedFormOgMellomlagringNyVisning
+    <VilkårskortMedFormOgMellomlagring
       heading={'Yrkesskade grunnlagsberegning §§ 11-19 / 11-22'}
       steg={'FASTSETT_BEREGNINGSTIDSPUNKT'}
       onSubmit={form.handleSubmit((data) => {
@@ -115,7 +119,6 @@ export const YrkesskadeGrunnlagBeregning = ({
       vilkårTilhørerNavKontor={false}
       vurdertAvAnsatt={vurdertAvAnsatt}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() => {
           form.reset(mapVurderingerToDraftFormFields(yrkeskadeBeregningGrunnlag));
@@ -181,7 +184,7 @@ export const YrkesskadeGrunnlagBeregning = ({
           </div>
         );
       })}
-    </VilkårskortMedFormOgMellomlagringNyVisning>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 

@@ -33,6 +33,7 @@ const avsluttetSak: SaksInfo = {
 };
 
 const oppgave: Oppgave = {
+  behandlingRef: 'gasg',
   vurderingsbehov: [],
   avklaringsbehovKode: '',
   behandlingOpprettet: '',
@@ -47,6 +48,7 @@ const oppgave: Oppgave = {
   reservertAv: 'navIdent',
   enhetForKø: '0300',
   erPåVent: false,
+  erÅpen: true,
 };
 
 const visning: FlytVisning = {
@@ -121,78 +123,42 @@ const avsluttetBehandling: DetaljertBehandling = {
 describe('SaksinfoBanner på behandling siden', () => {
   it('skal vise navn på bruker', () => {
     customRender(
-      <SaksinfoBanner
-        personInformasjon={personInformasjon}
-        sak={sak}
-        behandling={behandling}
-        referanse={'123456'}
-        visning={visning}
-      />
+      <SaksinfoBanner personInformasjon={personInformasjon} sak={sak} behandling={behandling} visning={visning} />
     );
     expect(screen.getByText('Peder Ås')).toBeVisible();
   });
 
   it('skal vise ident på bruker', () => {
     customRender(
-      <SaksinfoBanner
-        personInformasjon={personInformasjon}
-        sak={sak}
-        behandling={behandling}
-        referanse={'123456'}
-        visning={visning}
-      />
+      <SaksinfoBanner personInformasjon={personInformasjon} sak={sak} behandling={behandling} visning={visning} />
     );
     expect(screen.getByText('12345678910')).toBeVisible();
   });
 
   it('skal vise saksnummer derosm brukeren er på behandlingsiden', () => {
     customRender(
-      <SaksinfoBanner
-        personInformasjon={personInformasjon}
-        sak={sak}
-        behandling={behandling}
-        referanse={'123456'}
-        visning={visning}
-      />
+      <SaksinfoBanner personInformasjon={personInformasjon} sak={sak} behandling={behandling} visning={visning} />
     );
     expect(screen.getByText('Sak 12345'));
   });
 
   it('skal vise hvilken type behandling', () => {
     customRender(
-      <SaksinfoBanner
-        personInformasjon={personInformasjon}
-        sak={sak}
-        behandling={behandling}
-        referanse={'123456'}
-        visning={visning}
-      />
+      <SaksinfoBanner personInformasjon={personInformasjon} sak={sak} behandling={behandling} visning={visning} />
     );
     expect(screen.getByText('Førstegangsbehandling')).toBeVisible();
   });
 
   it('skal vise status', () => {
     customRender(
-      <SaksinfoBanner
-        personInformasjon={personInformasjon}
-        sak={sak}
-        behandling={behandling}
-        referanse={'123456'}
-        visning={visning}
-      />
+      <SaksinfoBanner personInformasjon={personInformasjon} sak={sak} behandling={behandling} visning={visning} />
     );
     expect(screen.getByText('Utredes')).toBeVisible();
   });
 
   it('skal ha en knapp for å åpne saksmeny', () => {
     customRender(
-      <SaksinfoBanner
-        personInformasjon={personInformasjon}
-        sak={sak}
-        behandling={behandling}
-        referanse={'123456'}
-        visning={visning}
-      />
+      <SaksinfoBanner personInformasjon={personInformasjon} sak={sak} behandling={behandling} visning={visning} />
     );
     const knapp = screen.getByRole('button', { name: 'Saksmeny' });
     expect(knapp).toBeVisible();
@@ -204,7 +170,6 @@ describe('SaksinfoBanner på behandling siden', () => {
         personInformasjon={personInformasjon}
         sak={sak}
         behandling={behandling}
-        referanse={'123456'}
         visning={visning}
         brukerKanSaksbehandle={true}
       />
@@ -219,7 +184,6 @@ describe('SaksinfoBanner på behandling siden', () => {
         personInformasjon={personInformasjon}
         sak={sak}
         behandling={behandling}
-        referanse={'123456'}
         visning={visning}
         brukerKanSaksbehandle={false}
       />
@@ -234,7 +198,6 @@ describe('SaksinfoBanner på behandling siden', () => {
         personInformasjon={personInformasjon}
         sak={avsluttetSak}
         behandling={avsluttetBehandling}
-        referanse={'123456'}
         visning={visning}
         brukerKanSaksbehandle={true}
       />
@@ -249,7 +212,6 @@ describe('SaksinfoBanner på behandling siden', () => {
         personInformasjon={personInformasjon}
         sak={sak}
         behandling={behandling}
-        referanse={'123456'}
         visning={{ ...visning, typeBehandling: 'Revurdering' }}
       />
     );
@@ -263,7 +225,6 @@ describe('SaksinfoBanner på behandling siden', () => {
         personInformasjon={personInformasjon}
         sak={sak}
         behandling={{ ...behandling, status: 'IVERKSETTES' }}
-        referanse={'123456'}
         visning={visning}
         brukerKanSaksbehandle={true}
       />
@@ -279,7 +240,6 @@ describe('SaksinfoBanner på behandling siden', () => {
         personInformasjon={personInformasjon}
         sak={sak}
         behandling={{ ...behandling, status: 'IVERKSETTES' }}
-        referanse={'123456'}
         visning={visning}
         brukerKanSaksbehandle={true}
       />
@@ -296,7 +256,6 @@ describe('SaksinfoBanner på behandling siden', () => {
         sak={sak}
         behandling={behandling}
         brukerInformasjon={{ navn: 'Saksbehandler', NAVident: 'navIdent' }}
-        referanse={'123456'}
         oppgave={oppgave}
       />
     );
@@ -317,7 +276,6 @@ describe('SaksinfoBanner på behandling siden', () => {
           },
         }}
         brukerInformasjon={{ navn: 'Saksbehandler', NAVident: 'navIdent' }}
-        referanse={'123456'}
         oppgave={oppgave}
       />
     );
@@ -333,7 +291,6 @@ describe('Sak status', () => {
         personInformasjon={personInformasjon}
         sak={sak}
         behandling={behandling}
-        referanse={'123456'}
         visning={{ ...visning, visVentekort: true }}
       />
     );
@@ -344,13 +301,7 @@ describe('Sak status', () => {
 
   it('skal ikke vise en tag som viser om saken er satt på vent dersom den ikke er det', () => {
     customRender(
-      <SaksinfoBanner
-        personInformasjon={personInformasjon}
-        sak={sak}
-        behandling={behandling}
-        referanse={'123456'}
-        visning={visning}
-      />
+      <SaksinfoBanner personInformasjon={personInformasjon} sak={sak} behandling={behandling} visning={visning} />
     );
 
     const påVentTag = screen.queryByText('På vent');
@@ -365,7 +316,6 @@ describe('Sak status', () => {
         behandling={behandling}
         brukerInformasjon={{ navn: 'Saksbehandler', NAVident: 'nayBruker' }}
         oppgave={{ ...oppgave, reservertAvNavn: 'Test Testesen' }}
-        referanse={'123456'}
         visning={visning}
       />
     );
@@ -382,7 +332,6 @@ describe('Sak status', () => {
         behandling={behandling}
         brukerInformasjon={{ navn: 'Saksbehandler', NAVident: 'nayBruker' }}
         oppgave={oppgave}
-        referanse={'123456'}
         visning={visning}
       />
     );
@@ -399,7 +348,6 @@ describe('Sak status', () => {
         behandling={behandling}
         brukerInformasjon={{ navn: 'Saksbehandler', NAVident: 'navIdent' }}
         oppgave={oppgave}
-        referanse={'123456'}
       />
     );
 
@@ -414,7 +362,6 @@ describe('Sak status', () => {
         sak={sak}
         behandling={behandling}
         brukerInformasjon={{ navn: 'Saksbehandler', NAVident: 'navIdent' }}
-        referanse={'123456'}
       />
     );
 
@@ -429,7 +376,6 @@ describe('Sak status', () => {
         sak={sak}
         behandling={behandling}
         brukerInformasjon={{ navn: 'Saksbehandler', NAVident: 'navIdent' }}
-        referanse={'123456'}
       />
     );
     expect(screen.queryByText('Trukket')).not.toBeInTheDocument();
@@ -443,7 +389,6 @@ describe('Sak status', () => {
         sak={trukketSøknad}
         behandling={behandling}
         brukerInformasjon={{ navn: 'Saksbehandler', NAVident: 'navIdent' }}
-        referanse={'123456'}
       />
     );
     expect(screen.getByText('Trukket')).toBeVisible();
@@ -456,7 +401,6 @@ describe('Sak status', () => {
         sak={sak}
         behandling={behandling}
         brukerInformasjon={{ navn: 'Saksbehandler', NAVident: 'navIdent' }}
-        referanse={'123456'}
       />
     );
     const ledigTag = screen.getByText('Ledig');
@@ -470,7 +414,6 @@ describe('Sak status', () => {
         sak={sak}
         behandling={behandling}
         brukerInformasjon={{ navn: 'Saksbehandler', NAVident: 'navIdent' }}
-        referanse={'123456'}
         oppgave={{
           ...oppgave,
           returInformasjon: {
@@ -493,7 +436,6 @@ describe('Sak status', () => {
         sak={sak}
         behandling={behandling}
         brukerInformasjon={{ navn: 'Saksbehandler', NAVident: 'navIdent' }}
-        referanse={'123456'}
         oppgave={{
           ...oppgave,
           returInformasjon: {
@@ -516,7 +458,6 @@ describe('Sak status', () => {
         sak={sak}
         behandling={behandling}
         brukerInformasjon={{ navn: 'Saksbehandler', NAVident: 'navIdent' }}
-        referanse={'123456'}
         oppgave={oppgave}
       />
     );
@@ -524,19 +465,34 @@ describe('Sak status', () => {
     expect(returTag).not.toBeInTheDocument();
   });
 
-  it('skal vise frist utløpt-tag når oppgave har utløpt ventefrist', () => {
+  it('skal vise frist utløpt-tag når oppgave har utløpt ventefrist', async () => {
     customRender(
       <SaksinfoBanner
         personInformasjon={personInformasjon}
         sak={sak}
         behandling={behandling}
         brukerInformasjon={{ navn: 'Saksbehandler', NAVident: 'navIdent' }}
-        referanse={'123456'}
-        oppgave={{ ...oppgave, utløptVentefrist: '2026-01-04' }}
+        oppgave={{
+          ...oppgave,
+          utløptVentefrist: '2026-01-04',
+          påVentÅrsak: 'VENTER_PÅ_OPPLYSNINGER',
+          venteBegrunnelse: 'Venter på dokumentasjon',
+          forrigeVenteBegrunnelse: 'Venter på dokumentasjon',
+          forrigePåVentÅrsak: 'VENTER_PÅ_OPPLYSNINGER',
+        }}
       />
     );
-    const fristTag = screen.getByText('Frist utløpt 04.01.2026');
-    expect(fristTag).toBeVisible();
+
+    const fristKnapp = screen.getByRole('button', { name: /Ventefrist utløpt.*04\.01\.2026/ });
+    expect(fristKnapp).toBeVisible();
+
+    await user.click(fristKnapp);
+
+    expect(screen.getByText('Frist utløpt 04.01.2026')).toBeVisible();
+    expect(screen.getByText('Årsak')).toBeVisible();
+    expect(screen.getByText('Venter på opplysninger')).toBeVisible();
+    expect(screen.getByText('Begrunnelse')).toBeVisible();
+    expect(screen.getByText('Venter på dokumentasjon')).toBeVisible();
   });
 
   it('skal ikke vise frist utløpt-tag når oppgave ikke har utløpt ventefrist', () => {
@@ -546,7 +502,6 @@ describe('Sak status', () => {
         sak={sak}
         behandling={behandling}
         brukerInformasjon={{ navn: 'Saksbehandler', NAVident: 'navIdent' }}
-        referanse={'123456'}
         oppgave={oppgave}
       />
     );

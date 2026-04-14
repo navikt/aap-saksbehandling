@@ -1,0 +1,14 @@
+.utfall {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.oppfyltIcon {
+  color: var(--a-surface-success);
+}
+
+.avslåttIcon {
+  color: var(--a-surface-danger);
+}

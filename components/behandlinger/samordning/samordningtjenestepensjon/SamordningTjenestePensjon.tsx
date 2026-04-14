@@ -12,7 +12,7 @@ import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 
 interface Props {
   grunnlag: SamordningTjenestePensjonGrunnlag;
@@ -39,13 +39,10 @@ export const SamordningTjenestePensjon = ({
     'SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV'
   );
 
-  const { lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
-    useMellomlagring(Behovstype.SAMORDNING_REFUSJONS_KRAV, initialMellomlagretVurdering);
-
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
     'SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const defaultValues: DraftFormFields = initialMellomlagretVurdering
@@ -72,6 +69,12 @@ export const SamordningTjenestePensjon = ({
     { readOnly: formReadOnly }
   );
 
+  const { slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } = useMellomlagring(
+    Behovstype.SAMORDNING_REFUSJONS_KRAV,
+    initialMellomlagretVurdering,
+    form
+  );
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) =>
       løsBehovOgGåTilNesteSteg(
@@ -95,7 +98,7 @@ export const SamordningTjenestePensjon = ({
   };
 
   return (
-    <VilkårskortMedFormOgMellomlagringNyVisning
+    <VilkårskortMedFormOgMellomlagring
       heading={'Refusjonskrav tjenestepensjon'}
       status={status}
       isLoading={isLoading}
@@ -104,7 +107,6 @@ export const SamordningTjenestePensjon = ({
       steg={'SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV'}
       onSubmit={handleSubmit}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() =>
           form.reset(
@@ -150,7 +152,7 @@ export const SamordningTjenestePensjon = ({
 
       <FormField form={form} formField={formFields.begrunnelse} />
       <FormField form={form} formField={formFields.skalEtterbetalingHoldesIgjen} horizontalRadio />
-    </VilkårskortMedFormOgMellomlagringNyVisning>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 

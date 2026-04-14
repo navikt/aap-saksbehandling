@@ -8,7 +8,7 @@ import { Behovstype } from 'lib/utils/form';
 import { FormEvent } from 'react';
 import { AvbrytRevurderingGrunnlag } from 'lib/types/types';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
 
 interface Props {
   behandlingVersjon: number;
@@ -77,7 +77,7 @@ export const AvbrytRevurderingVurdering = ({ grunnlag, readOnly, behandlingVersj
   };
 
   return (
-    <VilkårskortMedFormOgMellomlagringNyVisning
+    <VilkårskortMedForm
       heading={'Avbryt revurdering'}
       steg={'AVBRYT_REVURDERING'}
       onSubmit={handleSubmit}
@@ -85,15 +85,12 @@ export const AvbrytRevurderingVurdering = ({ grunnlag, readOnly, behandlingVersj
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
-      onDeleteMellomlagringClick={undefined}
-      onLagreMellomLagringClick={undefined}
-      mellomlagretVurdering={undefined}
       visningModus={visningModus}
       visningActions={visningActions}
       formReset={() => form.reset()}
     >
       <FormField form={form} formField={formFields.aarsak} className="årsak" />
       <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
-    </VilkårskortMedFormOgMellomlagringNyVisning>
+    </VilkårskortMedForm>
   );
 };

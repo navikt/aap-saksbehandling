@@ -6,13 +6,18 @@ import { validerDato } from 'lib/validation/dateValidation';
 import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
-import React from 'react';
-import { useFieldArray, UseFormReturn } from 'react-hook-form';
+import { useFieldArray, UseFormReturn, useWatch } from 'react-hook-form';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { EtableringAvEgenVirksomhetForm } from 'components/behandlinger/sykdom/etableringegenvirksomhet/EtableringAvEgenVirksomhet';
 import { JaEllerNei } from 'lib/utils/form';
-import { EtableringEierBrukerVirksomheten, lagEnumObjektFraUnionType } from 'lib/types/types';
+import {
+  EtableringEgenVirksomhetGrunnlagResponse,
+  EtableringEierBrukerVirksomheten,
+  lagEnumObjektFraUnionType,
+} from 'lib/types/types';
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
+import { useEffect } from 'react';
+import { nyVurderingErOppfylt } from 'components/behandlinger/sykdom/etableringegenvirksomhet/etablering-av-egen-virksomhet-utils';
 
 const EierBrukerVirsomheten = lagEnumObjektFraUnionType<NonNullable<EtableringEierBrukerVirksomheten>>({
   EIER_MINST_50_PROSENT: 'EIER_MINST_50_PROSENT',
@@ -24,15 +29,28 @@ type Props = {
   form: UseFormReturn<EtableringAvEgenVirksomhetForm>;
   readOnly: boolean;
   index: number;
+  grunnlag: EtableringEgenVirksomhetGrunnlagResponse;
 };
-export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly }: Props) => {
+export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly, grunnlag }: Props) => {
   const utviklingsperioder = useFieldArray({ control: form.control, name: `vurderinger.${index}.utviklingsperioder` });
   const oppstartsperioder = useFieldArray({ control: form.control, name: `vurderinger.${index}.oppstartsperioder` });
+
+  const utviklingperiodeList = useWatch({
+    control: form.control,
+    name: `vurderinger.${index}.utviklingsperioder`,
+  });
+
+  const oppstartsperiodeList = useWatch({
+    control: form.control,
+    name: `vurderinger.${index}.oppstartsperioder`,
+  });
+
+  useEffect(() => {
+    form.clearErrors(`vurderinger`);
+  }, [utviklingperiodeList, oppstartsperiodeList, form.clearErrors]);
+
   return (
     <VStack gap={'4'}>
-      <Heading level={'2'} size={'medium'}>
-        Vilkårsvurdering
-      </Heading>
       <DateInputWrapper
         name={`vurderinger.${index}.fraDato`}
         label="Vurderingen gjelder fra"
@@ -59,7 +77,7 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly }: P
         control={form.control}
         label={'Foreligger det en næringsfaglig vurdering?'}
         horisontal={true}
-        rules={{ required: 'Du må svare på om det foreligger en nøringsfaglig vurdering' }}
+        rules={{ required: 'Du må svare på om det foreligger en næringsfaglig vurdering' }}
         readOnly={readOnly}
       />
       {form.watch(`vurderinger.${index}.foreliggerEnNæringsfagligVurdering`) === JaEllerNei.Ja && (
@@ -100,21 +118,29 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly }: P
           readOnly={readOnly}
         />
       )}
-      {form.watch(`vurderinger.${index}.antasDetAtEtableringenFørerTilSelvforsørgelse`) === JaEllerNei.Ja && (
-        <>
-          <Heading level={'2'} size={'medium'}>
+      {nyVurderingErOppfylt(form.watch(`vurderinger.${index}`)) && (
+        <VStack gap={'4'} paddingBlock={'4 0'}>
+          <Heading level={'2'} size={'small'}>
             Etableringsplan
           </Heading>
-          {form.formState.errors.vurderinger?.[index]?.utviklingsperioder && (
-            <Alert variant={'error'}>{form.formState.errors.vurderinger[index].utviklingsperioder.message}</Alert>
-          )}
           <VStack gap={'4'}>
             <VStack>
-              <Label size={'small'}>Utviklingsperiode</Label>
-              <BodyShort textColor={'subtle'} size={'small'}>
-                Kan gis for inntil 6 måneder
-              </BodyShort>
+              <Label size={'small'}>Utviklingsfase</Label>
+              <VStack gap={'1'}>
+                <BodyShort textColor={'subtle'} size={'small'}>
+                  Kan gis for inntil 6 måneder
+                </BodyShort>
+                {grunnlag.bruktUtviklingsDager && grunnlag.bruktUtviklingsDager > 0 ? (
+                  <BodyShort
+                    textColor={'subtle'}
+                    size={'small'}
+                  >{`Brukt: ${grunnlag.bruktUtviklingsDager} arbeidsdager`}</BodyShort>
+                ) : null}
+              </VStack>
             </VStack>
+            {form.formState.errors.vurderinger?.[index]?.utviklingsperioder && (
+              <Alert variant={'error'}>{form.formState.errors.vurderinger[index].utviklingsperioder.message}</Alert>
+            )}
             <VStack gap={'4'}>
               <Table size="small">
                 <Table.Header>
@@ -134,11 +160,13 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly }: P
                         <Table.DataCell>
                           <HStack gap={'2'} align={'center'}>
                             <DateInputWrapper
+                              readOnly={readOnly}
                               name={`vurderinger.${index}.utviklingsperioder.${i}.fom`}
                               control={form.control}
                             />
                             {'-'}
                             <DateInputWrapper
+                              readOnly={readOnly}
                               name={`vurderinger.${index}.utviklingsperioder.${i}.tom`}
                               control={form.control}
                             />
@@ -146,6 +174,7 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly }: P
                         </Table.DataCell>
                         <Table.DataCell>
                           <Button
+                            disabled={readOnly}
                             size={'small'}
                             variant={'secondary'}
                             type={'button'}
@@ -160,6 +189,7 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly }: P
               </Table>
               <HStack>
                 <Button
+                  disabled={readOnly}
                   size={'small'}
                   variant={'secondary'}
                   type={'button'}
@@ -176,11 +206,22 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly }: P
           </VStack>
           <VStack gap={'4'}>
             <VStack>
-              <Label size={'small'}>Oppstartsperiode</Label>
-              <BodyShort textColor={'subtle'} size={'small'}>
-                Kan gis for inntil 3 måneder
-              </BodyShort>
+              <Label size={'small'}>Oppstartsfase</Label>
+              <VStack gap={'1'}>
+                <BodyShort textColor={'subtle'} size={'small'}>
+                  Kan gis for inntil 3 måneder.
+                </BodyShort>
+                {grunnlag.bruktOppstartsdager && grunnlag.bruktOppstartsdager > 0 ? (
+                  <BodyShort
+                    textColor={'subtle'}
+                    size={'small'}
+                  >{`Brukt: ${grunnlag.bruktOppstartsdager} arbeidsdager`}</BodyShort>
+                ) : null}
+              </VStack>
             </VStack>
+            {form.formState.errors.vurderinger?.[index]?.oppstartsperioder && (
+              <Alert variant={'error'}>{form.formState.errors.vurderinger[index].oppstartsperioder.message}</Alert>
+            )}
             <VStack gap={'4'}>
               <Table size="small">
                 <Table.Header>
@@ -200,11 +241,13 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly }: P
                         <Table.DataCell>
                           <HStack gap={'2'} align={'center'}>
                             <DateInputWrapper
+                              readOnly={readOnly}
                               name={`vurderinger.${index}.oppstartsperioder.${i}.fom`}
                               control={form.control}
                             />
                             {'-'}
                             <DateInputWrapper
+                              readOnly={readOnly}
                               name={`vurderinger.${index}.oppstartsperioder.${i}.tom`}
                               control={form.control}
                             />
@@ -212,6 +255,7 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly }: P
                         </Table.DataCell>
                         <Table.DataCell>
                           <Button
+                            disabled={readOnly}
                             size={'small'}
                             variant={'secondary'}
                             type={'button'}
@@ -226,6 +270,7 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly }: P
               </Table>
               <HStack>
                 <Button
+                  disabled={readOnly}
                   size={'small'}
                   variant={'secondary'}
                   type={'button'}
@@ -240,7 +285,16 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly }: P
               </HStack>
             </VStack>
           </VStack>
-        </>
+          <Alert variant={'info'}>
+            <VStack>
+              <BodyShort>{'Har du husket'}</BodyShort>
+              <BodyShort>
+                {'- at når AAP under etablering er vedtatt skal det registreres i aktivitetsplanen?'}
+              </BodyShort>
+              <BodyShort>{'- å opprette en oppfølgingsoppgave før utgangen av neste periode?'}</BodyShort>
+            </VStack>
+          </Alert>
+        </VStack>
       )}
     </VStack>
   );

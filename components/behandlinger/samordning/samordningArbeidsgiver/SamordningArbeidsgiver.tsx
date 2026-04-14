@@ -2,7 +2,7 @@
 
 import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
-import { BodyLong, VStack } from '@navikt/ds-react';
+import { BodyLong, BodyShort, VStack } from '@navikt/ds-react';
 import { FormEvent } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
@@ -17,7 +17,7 @@ import { differenceInBusinessDays, parse } from 'date-fns';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import Link from 'next/link';
 
@@ -53,13 +53,10 @@ export const SamordningArbeidsgiver = ({
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('SAMORDNING_ARBEIDSGIVER');
 
-  const { nullstillMellomlagretVurdering, mellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.AVKLAR_SAMORDNING_ARBEIDSGIVER, initialMellomlagretVurdering);
-
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
     'SAMORDNING_ARBEIDSGIVER',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
@@ -82,6 +79,14 @@ export const SamordningArbeidsgiver = ({
     },
     { readOnly: formReadOnly }
   );
+
+  const { nullstillMellomlagretVurdering, mellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.AVKLAR_SAMORDNING_ARBEIDSGIVER,
+    initialMellomlagretVurdering,
+    form
+  );
+
+  const harFåttEkstrautbetalingFraArbeidsgiver = grunnlag.harFåttEkstrautbetalingFraArbeidsgiver ? 'Ja' : 'Nei';
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit(async (data) =>
@@ -111,7 +116,7 @@ export const SamordningArbeidsgiver = ({
   const historiskeVurderinger = grunnlag.historiskeVurderinger;
 
   return (
-    <VilkårskortMedFormOgMellomlagringNyVisning
+    <VilkårskortMedFormOgMellomlagring
       heading="§ 11-24 Reduksjon av AAP på grunn av ytelser fra arbeidsgiver"
       steg="SAMORDNING_ARBEIDSGIVER"
       onSubmit={handleSubmit}
@@ -121,7 +126,6 @@ export const SamordningArbeidsgiver = ({
       vilkårTilhørerNavKontor={false}
       vurdertAvAnsatt={grunnlag.vurdering?.vurdertAv}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() =>
           form.reset(grunnlag.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields())
@@ -145,17 +149,18 @@ export const SamordningArbeidsgiver = ({
             />
           )}
 
-          <VStack>
-            {/* TODO: Skal legges til senere
-            <BodyShort size={'small'} weight={'semibold'}>
-              Relevant informasjon fra søknad:
-            </BodyShort>
+          {grunnlag.harFåttEkstrautbetalingFraArbeidsgiver != null && (
+            <VStack>
+              <BodyShort size={'small'} weight={'semibold'}>
+                Relevant informasjon fra søknad:
+              </BodyShort>
 
-            <BodyShort textColor={'subtle'} size={'small'} weight={'semibold'}>
-              Har du fått eller skal du få ekstra utbetalinger fra arbeidsgiver? Ja
-            </BodyShort>
-            */}
-          </VStack>
+              <BodyShort textColor={'subtle'} size={'small'} weight={'semibold'}>
+                Har du fått eller skal du få ekstra utbetalinger fra arbeidsgiver?{' '}
+                {harFåttEkstrautbetalingFraArbeidsgiver}
+              </BodyShort>
+            </VStack>
+          )}
 
           <BodyLong size={'small'}>
             <Link href={'https://lovdata.no/nav/rundskriv/r11-00#ref/lov/1997-02-28-19/%C2%A711-24'}>
@@ -169,7 +174,7 @@ export const SamordningArbeidsgiver = ({
           </VStack>
         </VStack>
       }
-    </VilkårskortMedFormOgMellomlagringNyVisning>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 

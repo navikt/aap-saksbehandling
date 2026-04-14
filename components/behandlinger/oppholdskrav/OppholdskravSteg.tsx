@@ -24,8 +24,7 @@ import {
 } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
-import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
-import { LovOgMedlemskapVurderingForm } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/types';
+import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import { BodyLong, Link, VStack } from '@navikt/ds-react';
@@ -45,27 +44,29 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
   const { løsPeriodisertBehovOgGåTilNesteSteg, status, løsBehovOgGåTilNesteStegError, isLoading } =
     useLøsBehovOgGåTilNesteSteg('VURDER_OPPHOLDSKRAV');
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.OPPHOLDSKRAV_KODE, initialMellomlagring);
-
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
   const { visningActions, visningModus, formReadOnly, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'VURDER_OPPHOLDSKRAV',
-    mellomlagretVurdering
+    initialMellomlagring
   );
 
-  const defaultValues =
-    mellomlagretVurdering != null
-      ? (JSON.parse(mellomlagretVurdering.data) as OppholdskravForm)
-      : getDefaultValuesFromGrunnlag(grunnlag);
+  const defaultValues = initialMellomlagring
+    ? JSON.parse(initialMellomlagring.data)
+    : getDefaultValuesFromGrunnlag(grunnlag);
 
   const form = useForm<OppholdskravForm>({
     defaultValues,
     reValidateMode: 'onChange',
     shouldUnregister: true,
   });
+
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.OPPHOLDSKRAV_KODE,
+    initialMellomlagring,
+    form
+  );
 
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
 
@@ -85,8 +86,9 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
       oppfyller: undefined,
       land: '',
       landAnnet: undefined,
-      fraDato: undefined,
+      fraDato: '',
       erNyVurdering: true,
+      behøverVurdering: false,
     });
   }
 
@@ -124,7 +126,7 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
 
   const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const foersteNyePeriode = vurderingerFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
-  const errorList = mapPeriodiserteVurderingerErrorList<LovOgMedlemskapVurderingForm>(form.formState.errors);
+  const errorList = hentFeilmeldingerForForm(form.formState.errors);
 
   return (
     <VilkårskortPeriodisert
@@ -136,7 +138,6 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
       isLoading={isLoading}
       status={status}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}
       visningModus={visningModus}
       visningActions={visningActions}
@@ -153,11 +154,14 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
 
         {vedtatteVurderinger.map((vurdering) => (
           <TidligereVurderingExpandableCard
-            key={vurdering.fom}
+            key={crypto.randomUUID()}
             fom={parseISO(vurdering.fom)}
             tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
             foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
             vurderingStatus={getErOppfyltEllerIkkeStatus(vurdering.oppfylt)}
+            vurdertAv={vurdering.vurdertAv}
+            kvalitetssikretAv={vurdering.kvalitetssikretAv}
+            besluttetAv={vurdering.besluttetAv}
           >
             <OppholdskravTidligereVurdering
               fraDato={vurdering.fom}
@@ -180,9 +184,7 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
             }
             nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
             isLast={index === vurderingerFields.length - 1}
-            vurdertAv={vurdering.vurdertAv}
-            kvalitetssikretAv={vurdering.kvalitetssikretAv}
-            besluttetAv={vurdering.besluttetAv}
+            vurdering={vurdering}
             finnesFeil={finnesFeilForVurdering(index, errorList)}
             readonly={formReadOnly}
             onSlettVurdering={() => remove(index)}

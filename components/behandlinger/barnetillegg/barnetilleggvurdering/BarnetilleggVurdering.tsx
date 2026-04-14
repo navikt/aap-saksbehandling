@@ -15,7 +15,7 @@ import { useConfigForm } from 'components/form/FormHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { OppgitteBarnVurdering } from 'components/barn/oppgittebarnvurdering/OppgitteBarnVurdering';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { OppgitteFolkeregisterBarnVurdering } from 'components/barn/oppgittebarnvurdering/OppgitteFolkeregisterBarnVurdering';
 import { PlusIcon } from '@navikt/aksel-icons';
 import { SaksbehandlerOppgittBarnVurdering } from 'components/barn/oppgittebarnvurdering/SaksbehandlerOppgittBarnVurdering';
@@ -43,6 +43,7 @@ type DraftFormFields = Partial<BarnetilleggFormFields>;
 export interface BarneTilleggVurdering {
   ident: string | null | undefined;
   fødselsdato: string | null | undefined;
+  dødsdato: string | null | undefined;
   navn: string | null | undefined;
   oppgittForelderRelasjon?: 'FORELDER' | 'FOSTERFORELDER' | null;
   forsørgerPeriode?: Periode;
@@ -67,9 +68,6 @@ export const BarnetilleggVurdering = ({
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('BARNETILLEGG');
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.AVKLAR_BARNETILLEGG_KODE, initialMellomlagretVurdering);
-
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(
@@ -85,7 +83,7 @@ export const BarnetilleggVurdering = ({
   const { visningActions, visningModus, formReadOnly } = useVilkårskortVisning(
     readOnly,
     'BARNETILLEGG',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const { form } = useConfigForm<BarnetilleggFormFields>(
@@ -115,6 +113,12 @@ export const BarnetilleggVurdering = ({
     control: form.control,
     name: 'folkeregistrerteBarnVurderinger',
   });
+
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.AVKLAR_BARNETILLEGG_KODE,
+    initialMellomlagretVurdering,
+    form
+  );
 
   const {
     fields: saksbehandlerOppgitteBarnVurderinger,
@@ -188,9 +192,8 @@ export const BarnetilleggVurdering = ({
   );
   const kapitaliserNavn = (navn: string) => navn.toLowerCase().replaceAll(/(^|\s)\w/g, (match) => match.toUpperCase());
   const [visLeggTilBarnModal, setVisLeggTilBarnModal] = useState(false);
-
   return (
-    <VilkårskortMedFormOgMellomlagringNyVisning
+    <VilkårskortMedFormOgMellomlagring
       heading={'§ 11-20 tredje og fjerde ledd barnetillegg '}
       steg={'BARNETILLEGG'}
       onSubmit={handleSubmit}
@@ -201,7 +204,6 @@ export const BarnetilleggVurdering = ({
       vurdertAvAnsatt={grunnlag.vurdertAv}
       vurdertAutomatisk={erFolkeregistrerteBarn}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() =>
           form.reset(
@@ -248,6 +250,7 @@ export const BarnetilleggVurdering = ({
             })}
           </div>
         )}
+
         {erFolkeregistrerteBarn && (
           <div className={'flex-column'}>
             <Heading size={'xsmall'} level="3">
@@ -267,6 +270,7 @@ export const BarnetilleggVurdering = ({
                     barnetilleggIndex={barnetilleggIndex}
                     ident={vurdering.ident}
                     fødselsdato={vurdering.fødselsdato}
+                    dødsdato={vurdering.dødsdato}
                     navn={kapitaliserNavn(
                       vurdering.navn || behandlingPersonInfo?.info[vurdering.ident || 'null'] || 'Ukjent'
                     )}
@@ -353,7 +357,7 @@ export const BarnetilleggVurdering = ({
           />
         )}
       </div>
-    </VilkårskortMedFormOgMellomlagringNyVisning>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 
@@ -373,6 +377,7 @@ function mapVurderingToDraftFormFields(
       navn: navn || (barn.ident ? behandlingPersonInfo?.info[barn.ident] : 'Ukjent'),
       oppgittForelderRelasjon: barn.oppgittForeldreRelasjon,
       fødselsdato: barn.fødselsdato,
+      dødsdato: barn.dødsdato,
       vurderinger: barn.vurderinger.map((value) => {
         return {
           begrunnelse: value.begrunnelse,
@@ -392,6 +397,7 @@ function mapVurderingToDraftFormFields(
       oppgittForelderRelasjon: barn.oppgittForeldreRelasjon,
       vurderinger: [{ begrunnelse: '', harForeldreAnsvar: '', fraDato: '' }],
       fødselsdato: barn.fodselsDato,
+      dødsdato: barn.dodsDato,
     };
   });
 
@@ -402,6 +408,7 @@ function mapVurderingToDraftFormFields(
     return {
       navn: barn.navn || behandlingPersonInfo?.info[barn.ident!.identifikator],
       fødselsdato: barn.fodselsDato,
+      dødsdato: barn.dodsDato,
       ident: barn.ident?.identifikator,
       forsørgerPeriode: barn.forsorgerPeriode,
       vurderinger:
@@ -426,7 +433,9 @@ function mapVurderingToDraftFormFields(
         }
         return (
           eksisterendeVurdering.vurdertBarn.navn === barn.navn &&
-          eksisterendeVurdering.vurdertBarn.fødselsdato === barn.fodselsDato
+            eksisterendeVurdering.vurdertBarn.fødselsdato === barn.fodselsDato,
+          eksisterendeVurdering.vurdertBarn.dødsdato === barn.dodsDato,
+          eksisterendeVurdering.vurdertBarn
         );
       });
 
@@ -441,6 +450,7 @@ function mapVurderingToDraftFormFields(
       return {
         navn: barn.navn,
         fødselsdato: barn.fodselsDato,
+        dødsdato: barn.dodsDato,
         ident: barn.ident?.identifikator,
         oppgittForelderRelasjon: barn.oppgittForeldreRelasjon,
         erSlettbar: vurderingForBarn?.erSlettbar ?? true,

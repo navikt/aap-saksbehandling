@@ -11,6 +11,13 @@ const logger = pino({
         object.stack_trace = err.stack;
         object.type = err.type;
         object.error_message = err.message;
+
+        // Spesifikt for [ClientError]
+        object.x_error_digest = err.digest;
+        object.x_saksnummer = err.saksnummer;
+        object.x_behandlingsreferanse = err.behandlingsReferanse;
+        object.x_pathname = err.pathname;
+
         delete object.err;
       }
       return object;

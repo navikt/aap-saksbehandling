@@ -1,5 +1,6 @@
-import { format, isValid, parse } from 'date-fns';
+import { differenceInBusinessDays, format, isValid, parse } from 'date-fns';
 import { nb } from 'date-fns/locale';
+import { Dato } from 'lib/types/Dato';
 
 export const DATO_FORMATER = {
   ddMMyyyy: 'dd.MM.yyyy',
@@ -8,13 +9,20 @@ export const DATO_FORMATER = {
   ddMMyyyy_HHmmss: 'dd.MM.yyyy HH:mm:ss',
   ddMM: 'dd.MM.',
   dMMMMyyyy: 'd. MMMM yyyy', // 1. februar 2026
+  LLLL_yyyy: 'LLLL yyyy', // februar 2026
 };
 
 export const uendeligSluttString = '2999-01-01';
-const uendeligSlutt = new Date(uendeligSluttString);
+
+export function erUendeligSlutt(dato: string | Date): boolean {
+  if (typeof dato === 'string') {
+    return dato.startsWith(uendeligSluttString);
+  }
+  return format(dato, 'yyyy-MM-dd') === uendeligSluttString;
+}
 
 export function formaterDatoForFrontend(dato: Date | string): string {
-  if (dato === uendeligSluttString || dato === uendeligSlutt) {
+  if (erUendeligSlutt(dato)) {
     return '';
   }
   return format(dato, DATO_FORMATER.ddMMyyyy, { locale: nb });
@@ -29,7 +37,19 @@ export function formaterDatoMedKunDagOgMånedForFrontend(dato: string): string {
 }
 
 export function formatDatoMedMånedsnavn(dato: string | Date): string {
+  if (erUendeligSlutt(dato)) {
+    return '';
+  }
+
   return format(dato, DATO_FORMATER.dMMMMyyyy, { locale: nb });
+}
+
+export function formaterDatoMedMånedOgÅr(dato: string | Date): string {
+  if (erUendeligSlutt(dato)) {
+    return '';
+  }
+
+  return format(dato, DATO_FORMATER.LLLL_yyyy, { locale: nb });
 }
 
 export const formaterDatoForBackend = (dato: Date) => {
@@ -67,4 +87,13 @@ export function formaterPeriode(dato1?: string | null, dato2?: string | null): s
   } else {
     return '';
   }
+}
+
+export function summerPerioderVarighetIArbeidsdager(perioder: { fom: string; tom: string }[]): number {
+  return perioder.reduce((acc, periode) => {
+    const start = new Dato(periode.fom).dato;
+    const end = new Dato(periode.tom).dato;
+    const duration = differenceInBusinessDays(end, start);
+    return acc + duration;
+  }, 0);
 }

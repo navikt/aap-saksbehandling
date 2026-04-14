@@ -37,13 +37,17 @@ const oppgaver: Oppgave[] = [
     markeringer: [],
     vurderingsbehov: [],
     enhetForKø: '0300',
+    erÅpen: true,
     erPåVent: false,
   },
 ];
 
 describe('Mine oppgaver tabell', () => {
   beforeEach(() =>
-    customRenderWithTildelOppgaveContext(<MineOppgaverTabell oppgaver={oppgaver} revalidateFunction={vi.fn()} />, false)
+    customRenderWithTildelOppgaveContext(
+      <MineOppgaverTabell oppgaver={oppgaver} setSortBy={() => {}} sort={undefined} revalidateFunction={vi.fn()} />,
+      false
+    )
   );
 
   it('Skal inneholde korrekte kolonner ', () => {
@@ -56,7 +60,7 @@ describe('Mine oppgaver tabell', () => {
   });
 
   it('Skal inneholde kolonner som kan sorteres ', () => {
-    const kolonnerSomKanSorteres = ['Navn', 'Fnr', 'Sak', 'Beh. opprettet', 'Vurderingsbehov'];
+    const kolonnerSomKanSorteres = ['Fnr', 'Sak', 'Beh. opprettet', 'Årsak', 'Oppgave', 'Oppg. opprettet'];
     kolonnerSomKanSorteres.forEach((kolonne) => {
       const column = screen.getByRole('button', { name: kolonne });
       expect(column).toBeVisible();

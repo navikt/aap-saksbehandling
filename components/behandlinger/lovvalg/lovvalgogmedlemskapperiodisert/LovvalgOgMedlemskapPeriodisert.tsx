@@ -24,7 +24,7 @@ import {
 } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
-import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
+import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
@@ -51,26 +51,28 @@ export const LovvalgOgMedlemskapPeriodisert = ({
   const { løsPeriodisertBehovOgGåTilNesteSteg, status, løsBehovOgGåTilNesteStegError, isLoading } =
     useLøsBehovOgGåTilNesteSteg('VURDER_LOVVALG');
 
-  const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
-    useMellomlagring(Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP, initialMellomlagretVurdering);
-
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
   const { visningActions, formReadOnly, visningModus, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'VURDER_LOVVALG',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
-  const defaultValues =
-    mellomlagretVurdering != null
-      ? hentPeriodiserteVerdierFraMellomlagretVurdering(mellomlagretVurdering, grunnlag)
-      : getDefaultValuesFromGrunnlag(grunnlag);
+  const defaultValues = initialMellomlagretVurdering
+    ? hentPeriodiserteVerdierFraMellomlagretVurdering(initialMellomlagretVurdering, grunnlag)
+    : getDefaultValuesFromGrunnlag(grunnlag);
 
   const form = useForm<LovOgMedlemskapVurderingForm>({
     defaultValues,
     reValidateMode: 'onChange',
   });
+
+  const { slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } = useMellomlagring(
+    Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP,
+    initialMellomlagretVurdering,
+    form
+  );
 
   const { fields: vurderingerFields, append, remove } = useFieldArray({ control: form.control, name: 'vurderinger' });
 
@@ -81,8 +83,9 @@ export const LovvalgOgMedlemskapPeriodisert = ({
         lovvalgsEØSLand: '',
       },
       medlemskap: undefined,
-      fraDato: undefined,
+      fraDato: '',
       erNyVurdering: true,
+      behøverVurdering: false,
     });
   }
 
@@ -121,7 +124,7 @@ export const LovvalgOgMedlemskapPeriodisert = ({
   const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const foersteNyePeriode = vurderingerFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
-  const errorList = mapPeriodiserteVurderingerErrorList<LovOgMedlemskapVurderingForm>(form.formState.errors);
+  const errorList = hentFeilmeldingerForForm(form.formState.errors);
 
   return (
     <VilkårskortPeriodisert
@@ -133,7 +136,6 @@ export const LovvalgOgMedlemskapPeriodisert = ({
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring({ ...form.watch(), overstyring })}
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}
       visningModus={visningModus}
       visningActions={visningActions}
@@ -143,7 +145,7 @@ export const LovvalgOgMedlemskapPeriodisert = ({
     >
       {vedtatteVurderinger.map((vurdering) => (
         <TidligereVurderingExpandableCard
-          key={vurdering.fom}
+          key={crypto.randomUUID()}
           fom={parseISO(vurdering.fom)}
           tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
           foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
@@ -151,6 +153,9 @@ export const LovvalgOgMedlemskapPeriodisert = ({
             vurdering.lovvalg.lovvalgsEØSLandEllerLandMedAvtale === 'NOR' &&
               vurdering.medlemskap?.varMedlemIFolketrygd === true
           )}
+          vurdertAv={vurdering.vurdertAv}
+          kvalitetssikretAv={vurdering.kvalitetssikretAv}
+          besluttetAv={vurdering.besluttetAv}
         >
           <LovvalgOgMedlemskapTidligereVurdering vurdering={vurdering} />
         </TidligereVurderingExpandableCard>
@@ -168,9 +173,7 @@ export const LovvalgOgMedlemskapPeriodisert = ({
               ? form.watch(`vurderinger.${index}.medlemskap.varMedlemIFolketrygd`) === JaEllerNei.Ja
               : undefined
           )}
-          vurdertAv={vurdering.vurdertAv}
-          kvalitetssikretAv={vurdering.kvalitetssikretAv}
-          besluttetAv={vurdering.besluttetAv}
+          vurdering={vurdering}
           finnesFeil={finnesFeilForVurdering(index, errorList)}
           onSlettVurdering={() => remove(index)}
           harTidligereVurderinger={tidligereVurderinger.length > 0}

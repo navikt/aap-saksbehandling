@@ -13,7 +13,7 @@ import { erGyldigFødselsnummer } from 'lib/utils/fnr';
 import { erGyldigOrganisasjonsnummer } from 'lib/utils/orgnr';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 
 interface Props {
   grunnlag?: FullmektigGrunnlag;
@@ -40,19 +40,21 @@ interface FormFields {
 
 type DraftFormFields = Partial<FormFields>;
 
+type IndentAndType = {
+  ident: string;
+  type: IdentType;
+};
+
 export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly, initialMellomlagretVurdering }: Props) => {
   const behandlingsreferanse = useBehandlingsReferanse();
 
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('FULLMEKTIG');
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.FASTSETT_FULLMEKTIG, initialMellomlagretVurdering);
-
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
     'FULLMEKTIG',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
@@ -163,6 +165,12 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly, ini
     { readOnly: formReadOnly }
   );
 
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.FASTSETT_FULLMEKTIG,
+    initialMellomlagretVurdering,
+    form
+  );
+
   const [harFullmektig, idType, land] = form.watch(['harFullmektig', 'idType', 'land']);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -209,7 +217,7 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly, ini
   };
 
   return (
-    <VilkårskortMedFormOgMellomlagringNyVisning
+    <VilkårskortMedFormOgMellomlagring
       heading={'Fullmektig/verge'}
       steg={'FULLMEKTIG'}
       onSubmit={handleSubmit}
@@ -219,7 +227,6 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly, ini
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() =>
           form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag) : emptyDraftFormFields())
@@ -255,7 +262,7 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly, ini
           )}
         </>
       )}
-    </VilkårskortMedFormOgMellomlagringNyVisning>
+    </VilkårskortMedFormOgMellomlagring>
   );
 
   function mapVurderingToDraftFormFields(grunnlag?: FullmektigGrunnlag): DraftFormFields {
@@ -283,11 +290,6 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly, ini
       harFullmektig: '',
     };
   }
-
-  type IndentAndType = {
-    ident: string;
-    type: IdentType;
-  };
 
   function idTypeOptions(): ValuePair[] {
     return [

@@ -58,6 +58,12 @@ export type ArbeidsevneGrunnlag =
 export type PeriodisertArbeidsevneVurderingDto =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.arbeidsevne.flate.PeriodisertFastsettArbeidsevneDto'];
 
+export type BarnepensjonGrunnlag =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnepensjon.BarnepensjonGrunnlagDto'];
+
+export type BarnepensjonVurdering =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnepensjon.BarnepensjonVurderingDto'];
+
 export type RefusjonskravGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.refusjon.RefusjonkravGrunnlagResponse'];
 export type RefusjonkravVurderingResponse =
@@ -91,6 +97,8 @@ export type FatteVedtakGrunnlag =
 
 export type AlderGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.alder.AlderDTO'];
+export type BekreftVurderingerOppfølgingGrunnlag =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.bekreftvurderingeroppfølging.BekreftVurderingerOppfølgingDto'];
 
 export type BrevGrunnlag = components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag'];
 export type BrevGrunnlagBrev = components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag.Brev'];
@@ -118,7 +126,18 @@ export type SamordningUføreGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningUføreVurderingGrunnlagDTO'];
 export type SamordningAndreStatligeYtelserGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningAndreStatligeYtelserGrunnlagDTO'];
-
+export type AndreStatligeYtelserPeriodeDto =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.AndreStatligeYtelserPeriodeDto'];
+export type AndreStatligeYtelserKilde =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.AndreStatligeYtelserPeriodeDto']['kilde'];
+export type AndreStatligeYtelserType =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.AndreStatligeYtelserPeriodeDto']['ytelseType'];
+export type DagpengerYtelserType =
+  components['schemas']['no.nav.aap.behandlingsflyt.test.modell.TestPerson.Dagpenger']['dagpengerYtelseType'];
+export type DagpengerKilde = components['schemas']['no.nav.aap.behandlingsflyt.test.modell.TestPerson.Dagpenger']['kilde'];
+export type TiltakspengerYtelserType =
+  components['schemas']['no.nav.aap.behandlingsflyt.test.modell.TestPerson.Tiltakspenger']['ytelseType'];
+export type TiltakspengerKilde = components['schemas']['no.nav.aap.behandlingsflyt.test.modell.TestPerson.Tiltakspenger']['kilde'];
 export type SamordningAndreStatligeYtelserVurderinger =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningAndreStatligeYtelserVurderingDTO'];
 
@@ -143,7 +162,8 @@ export type TrukketSøknadVudering =
 export type AvbrytRevurderingGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.revurdering.AvbrytRevurderingGrunnlagDto'];
 
-export type RettighetDto = components['schemas']['no.nav.aap.behandlingsflyt.behandling.rettighet.RettighetDto'];
+export type RettighetsinfoDto =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.rettighet.RettighetsinfoDto'];
 
 export type RettighetsperiodeGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.rettighetsperiode.RettighetsperiodeGrunnlagResponse'];
@@ -339,6 +359,15 @@ export type ForhåndsvisDialogmeldingResponse =
 export type UnderveisGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.underveis.UnderveisperiodeDto'];
 
+export type VedtakslengdeGrunnlag =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.vedtakslengde.VedtakslengdeGrunnlagResponse'];
+
+export type VedtakslengdeVurderingResponse =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.vedtakslengde.VedtakslengdeVurderingResponse'];
+
+export type VedtakslengdeVurderingDto =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.vedtakslengde.VedtakslengdeVurderingDto'];
+
 export type ForeslåVedtakGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.ForeslåVedtakResponse'];
 
@@ -349,6 +378,12 @@ export type AutomatiskLovvalgOgMedlemskapVurdering =
 
 export type tilhørighetVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.Tilh\u00F8righetVurdering'];
+
+export type AvklarPeriodisertStudentLøsning =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.PeriodisertStudentDto'];
+
+export type StudentVurderingResponse =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.student.StudentVurderingResponse'];
 
 export type AvklarPeriodisertLovvalgMedlemskapLøsning =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.lovvalgmedlemskap.PeriodisertManuellVurderingForLovvalgMedlemskapDto'];
@@ -529,6 +564,9 @@ export type ArbeidsopptrappingGrunnlagResponse =
 export type ArbeidsopptrappingLøsningDto =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.arbeidsopptrapping.ArbeidsopptrappingL\u00F8sningDto'];
 
+export type ForeløpigBehandlingsutfall =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.tidligerevurderinger.TidligereVurderingerDto'];
+
 export type BrevdataDto = components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto'];
 export type DelmalDto = components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto.Delmal'];
 export type ValgDto = components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto.Valg'];
@@ -554,6 +592,15 @@ export interface PeriodisertVurderingFormFields {
   fraDato?: string;
   tilDato?: string | null;
 }
+
+export interface VurderingMeta {
+  behøverVurdering: boolean;
+  erNyVurdering: boolean;
+  vurdertAv?: VurdertAvAnsatt;
+  kvalitetssikretAv?: VurdertAvAnsatt;
+  besluttetAv?: VurdertAvAnsatt;
+}
+
 // Gjør at vi kan lage et typesikkert "enum-objekt" med union types generert fra backend. feks const minEnum = lagEnumObjektFraUnionType<StegGruppe>({ SYKDOM: 'SYKDOM' ...})
 export function lagEnumObjektFraUnionType<UnionType extends string>(o: { [P in UnionType]: P }): {
   [P in UnionType]: P;

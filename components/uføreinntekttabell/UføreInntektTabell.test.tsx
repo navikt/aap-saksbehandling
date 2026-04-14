@@ -113,20 +113,6 @@ describe('tabell for å vise uføre inntekter', () => {
     expect(justertTilMaks6GKolonne).toBeVisible();
   });
 
-  // TODO AAP-1377 Avklar om gjennomsnittSiste3år skal brukes
-  it.skip('skal ha et felt med gjennomsnittlig inntekt siste 3 år', () => {
-    render(
-      <UføreInntektTabell
-        inntekter={innteker}
-        gjennomsnittSiste3år={6}
-        ytterligereNedsattArbeidsevneÅr="2021"
-        gjeldendeGrunnbeløp={grunnbeløpFor2025}
-      />
-    );
-    const felt = screen.getByText(`Gjennomsnitt ${innteker.at(0)?.år} - ${innteker.at(-1)?.år}`);
-    expect(felt).toBeVisible();
-  });
-
   it('skal rendre en rad', () => {
     render(
       <UføreInntektTabell

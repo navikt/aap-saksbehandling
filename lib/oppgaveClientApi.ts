@@ -1,61 +1,17 @@
 import {
   AvreserverOppgaveDto,
   Kø,
+  MineOppgaverQueryParams,
   Oppgave,
   OppgavelisteRequest,
   OppgavelisteResponse,
   PlukkOppgaveDto,
+  TildeltStatus,
 } from './types/oppgaveTypes';
-import {
-  AntallÅpneOgGjennomsnitt,
-  BehandlingAvklaringsbehovReturDTO,
-  BehandlingPerSteggruppe,
-  BehandlingÅrsakAntallGjennomsnitt,
-  FordelingLukkedeBehandlinger,
-  FordelingÅpneBehandlinger,
-  OppgaverPerSteggruppe,
-  VenteÅrsakOgGjennomsnitt,
-} from './types/statistikkTypes';
-import { BehandlingEndringerPerDag } from 'lib/types/statistikkTypes';
-import { queryParamsArray } from './utils/request';
+import { mapSortStateDirectionTilQueryParamEnum, mineOppgaverQueryParams, queryParamsArray } from './utils/request';
 import { clientFetch } from 'lib/clientApi';
-
-// statistikk
-export async function antallÅpneBehandlingerPerBehandlingstypeClient(url: string) {
-  return clientFetch<Array<AntallÅpneOgGjennomsnitt>>(url, 'GET');
-}
-
-export async function behandlingerUtviklingClient(url: string) {
-  return clientFetch<Array<BehandlingEndringerPerDag>>(url, 'GET');
-}
-
-export async function fordelingÅpneBehandlingerClient(url: string) {
-  return clientFetch<Array<FordelingÅpneBehandlinger>>(url, 'GET');
-}
-
-export async function fordelingLukkedeBehandlingerClient(url: string) {
-  return clientFetch<Array<FordelingLukkedeBehandlinger>>(url, 'GET');
-}
-
-export async function venteÅrsakerClient(url: string) {
-  return clientFetch<Array<VenteÅrsakOgGjennomsnitt>>(url, 'GET');
-}
-
-export async function behandlingerPerSteggruppeClient(url: string) {
-  return clientFetch<Array<BehandlingPerSteggruppe>>(url, 'GET');
-}
-
-export async function oppgaverPerSteggruppeClient(url: string) {
-  return clientFetch<OppgaverPerSteggruppe>(url, 'GET');
-}
-
-export async function årsakTilBehandlingClient(url: string) {
-  return clientFetch<Array<BehandlingÅrsakAntallGjennomsnitt>>(url, 'GET');
-}
-
-export async function antallÅpneBehandlingerMedReturPerAvklaringsbehovClient(url: string) {
-  return clientFetch<Array<BehandlingAvklaringsbehovReturDTO>>(url, 'GET');
-}
+import { PathsMineOppgaverGetParametersQuerySortby } from '@navikt/aap-oppgave-typescript-types';
+import { ScopedBackendSortState } from 'hooks/oppgave/BackendSorteringHook';
 
 // oppgave
 export async function hentOppgaverClient(oppgavelisteRequest: OppgavelisteRequest) {
@@ -65,8 +21,19 @@ export async function hentOppgaveClient(behandlingsreferanse: string) {
   return clientFetch<Oppgave>(`/oppgave/api/oppgave/${behandlingsreferanse}/hent`, 'GET');
 }
 
-export async function hentMineOppgaverClient() {
-  return clientFetch<OppgavelisteResponse>('/oppgave/api/oppgave/mine-oppgaver', 'GET');
+export async function hentTildeltStatusClient(behandlingsreferanse: string) {
+  return clientFetch<TildeltStatus>(`/oppgave/api/oppgave/${behandlingsreferanse}/tildelt-status`, 'GET');
+}
+
+export async function hentMineOppgaverClient(
+  sortering?: ScopedBackendSortState<PathsMineOppgaverGetParametersQuerySortby>
+) {
+  const sortParams: MineOppgaverQueryParams = {
+    sortby: sortering?.orderBy,
+    sortorder: sortering?.direction ? mapSortStateDirectionTilQueryParamEnum(sortering.direction) : undefined,
+  };
+  const query = sortParams.sortby ? mineOppgaverQueryParams(sortParams) : '';
+  return clientFetch<OppgavelisteResponse>(`/oppgave/api/oppgave/mine-oppgaver?${query}`, 'GET');
 }
 
 export async function avreserverOppgaveClient(oppgaver: number[]) {

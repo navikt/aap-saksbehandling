@@ -39,6 +39,7 @@ const config = [
         ...globals.node,
         React: 'readable',
         RequestInit: 'readable',
+        NodeJS: 'readable',
       },
     },
     plugins: {

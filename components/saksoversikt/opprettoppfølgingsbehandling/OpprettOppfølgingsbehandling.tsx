@@ -19,6 +19,7 @@ import styles from './OpprettOppfølgingsbehandling.module.css';
 interface Props {
   saksnummer: string;
   brukerInformasjon: BrukerInformasjon;
+  brukerHarNayTilgang: boolean;
   modalOnClose?: () => void;
   successfullOpprettelse?: () => void;
   finnTidligsteVirkningstidspunkt?: string;
@@ -48,6 +49,7 @@ export const OpprettOppfølgingsBehandling = ({
   finnTidligsteVirkningstidspunkt,
   behandlingsreferanse,
   behovsType,
+  brukerHarNayTilgang,
 }: Props) => {
   const erOppfølgingsoppgaveForSamordningGradering = behovsType === Behovstype.AVKLAR_SAMORDNING_GRADERING;
   const defaultValues: DefaultValues = {
@@ -56,7 +58,7 @@ export const OpprettOppfølgingsBehandling = ({
       ? 'Vurder om virkningstidspunkt etter samordning må endres'
       : '',
     hvemSkalFølgeOpp: erOppfølgingsoppgaveForSamordningGradering ? 'NasjonalEnhet' : '',
-    reserverTilMeg: erOppfølgingsoppgaveForSamordningGradering ? [] : ['RESERVER_TIL_MEG'],
+    reserverTilMeg: [],
   };
 
   const router = useRouter();
@@ -66,6 +68,10 @@ export const OpprettOppfølgingsBehandling = ({
 
   const avbrytButton = (modalOnClose?: () => void) =>
     modalOnClose ? modalOnClose() : router.push(`/saksbehandling/sak/${saksnummer}`);
+
+  const harTilgangTilÅReservereSelv = (skalFølgesOppAvNay: boolean) => {
+    return (brukerHarNayTilgang && skalFølgesOppAvNay) || (!brukerHarNayTilgang && !skalFølgesOppAvNay);
+  };
 
   async function sendHendelse(data: OppfølgingsoppgaveFormFields) {
     const innsending = {
@@ -85,7 +91,10 @@ export const OpprettOppfølgingsBehandling = ({
         },
         datoForOppfølging: formaterDatoForBackend(parse(data.datoForOppfølging, 'dd.MM.yyyy', new Date())),
         hvaSkalFølgesOpp: data.hvaSkalFølgesOpp,
-        reserverTilBruker: data.reserverTilMeg.length > 0 ? brukerInformasjon.NAVident : undefined,
+        reserverTilBruker:
+          data.reserverTilMeg.length > 0 && harTilgangTilÅReservereSelv(data.hvemSkalFølgeOpp == 'NasjonalEnhet')
+            ? brukerInformasjon.NAVident
+            : undefined,
         hvemSkalFølgeOpp: data.hvemSkalFølgeOpp,
       } satisfies OppfølgingsoppgaveV0,
     };
@@ -169,6 +178,7 @@ export const OpprettOppfølgingsBehandling = ({
     return <Spinner label="Oppretter oppfølgingsoppgave ..." />;
   }
 
+  const skalFølgesOppAvNay = form.watch('hvemSkalFølgeOpp') == 'NasjonalEnhet';
   return (
     <Page.Block width="md">
       <form onSubmit={form.handleSubmit((data) => sendHendelse(data))}>
@@ -191,9 +201,10 @@ export const OpprettOppfølgingsBehandling = ({
                 <FormField form={form} formField={formFields.datoForOppfølging} size="medium" />
                 <FormField form={form} formField={formFields.hvaSkalFølgesOpp} size="medium" />
                 <FormField form={form} formField={formFields.hvemSkalFølgeOpp} size="medium" />
-                {behovsType !== Behovstype.AVKLAR_SAMORDNING_GRADERING && (
-                  <FormField form={form} formField={formFields.reserverTilMeg} size="medium" />
-                )}
+                {behovsType !== Behovstype.AVKLAR_SAMORDNING_GRADERING &&
+                  harTilgangTilÅReservereSelv(skalFølgesOppAvNay) && (
+                    <FormField form={form} formField={formFields.reserverTilMeg} size="medium" />
+                  )}
               </VStack>
             </ExpansionCard.Content>
           </ExpansionCard>

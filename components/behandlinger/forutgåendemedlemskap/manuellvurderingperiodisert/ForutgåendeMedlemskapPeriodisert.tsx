@@ -20,7 +20,7 @@ import {
 } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
-import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
+import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { ForutgåendeMedlemskapVurderingForm } from 'components/behandlinger/forutgåendemedlemskap/manuellvurderingperiodisert/types';
 import {
@@ -58,21 +58,17 @@ export const ForutgåendeMedlemskapPeriodisert = ({
   const { løsPeriodisertBehovOgGåTilNesteSteg, status, løsBehovOgGåTilNesteStegError, isLoading } =
     useLøsBehovOgGåTilNesteSteg('VURDER_MEDLEMSKAP');
 
-  const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
-    useMellomlagring(Behovstype.AVKLAR_FORUTGÅENDE_MEDLEMSKAP, initialMellomlagretVurdering);
-
   const { visningActions, formReadOnly, visningModus, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'VURDER_MEDLEMSKAP',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
-  const defaultValues =
-    mellomlagretVurdering != null
-      ? hentPeriodiserteVerdierFraMellomlagretVurdering(mellomlagretVurdering, grunnlag)
-      : getDefaultValuesFromGrunnlag(grunnlag);
+  const defaultValues = initialMellomlagretVurdering
+    ? hentPeriodiserteVerdierFraMellomlagretVurdering(initialMellomlagretVurdering, grunnlag)
+    : getDefaultValuesFromGrunnlag(grunnlag);
 
   const form = useForm<ForutgåendeMedlemskapVurderingForm>({
     defaultValues,
@@ -84,11 +80,18 @@ export const ForutgåendeMedlemskapPeriodisert = ({
 
   function onAddPeriode() {
     append({
+      behøverVurdering: false,
       begrunnelse: '',
-      fraDato: undefined,
+      fraDato: '',
       erNyVurdering: true,
     });
   }
+
+  const { slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } = useMellomlagring(
+    Behovstype.AVKLAR_FORUTGÅENDE_MEDLEMSKAP,
+    initialMellomlagretVurdering,
+    form
+  );
 
   function onSubmit(data: ForutgåendeMedlemskapVurderingForm) {
     const erPerioderGyldige = validerPeriodiserteVurderingerRekkefølge({
@@ -126,7 +129,7 @@ export const ForutgåendeMedlemskapPeriodisert = ({
   const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const foersteNyePeriode = vurderingerFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
-  const errorList = mapPeriodiserteVurderingerErrorList<ForutgåendeMedlemskapVurderingForm>(form.formState.errors);
+  const errorList = hentFeilmeldingerForForm(form.formState.errors);
 
   return (
     <VilkårskortPeriodisert
@@ -138,7 +141,6 @@ export const ForutgåendeMedlemskapPeriodisert = ({
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring({ ...form.watch(), overstyring })}
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}
       visningModus={visningModus}
       visningActions={visningActions}
@@ -148,7 +150,7 @@ export const ForutgåendeMedlemskapPeriodisert = ({
     >
       {vedtatteVurderinger.map((vurdering) => (
         <TidligereVurderingExpandableCard
-          key={vurdering.fom}
+          key={crypto.randomUUID()}
           fom={parseISO(vurdering.fom)}
           tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
           foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
@@ -157,6 +159,9 @@ export const ForutgåendeMedlemskapPeriodisert = ({
               vurdering.varMedlemMedNedsattArbeidsevne === true ||
               vurdering.medlemMedUnntakAvMaksFemAar === true
           )}
+          vurdertAv={vurdering.vurdertAv}
+          kvalitetssikretAv={vurdering.kvalitetssikretAv}
+          besluttetAv={vurdering.besluttetAv}
         >
           <ForutgåendeMedlemskapTidligereVurdering vurdering={vurdering} />
         </TidligereVurderingExpandableCard>
@@ -175,9 +180,7 @@ export const ForutgåendeMedlemskapPeriodisert = ({
               form.watch(`vurderinger.${index}.unntaksvilkår`)
             )
           )}
-          vurdertAv={vurdering.vurdertAv}
-          kvalitetssikretAv={vurdering.kvalitetssikretAv}
-          besluttetAv={vurdering.besluttetAv}
+          vurdering={vurdering}
           finnesFeil={finnesFeilForVurdering(index, errorList)}
           readonly={formReadOnly}
           onSlettVurdering={() => remove(index)}

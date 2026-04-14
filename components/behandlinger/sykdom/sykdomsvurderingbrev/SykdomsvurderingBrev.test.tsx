@@ -26,6 +26,7 @@ describe('sykdomsvurdering for brev', () => {
   it('Skal vise vurderingsfelt', async () => {
     render(
       <SykdomsvurderingBrev
+        foreløpigBehandlingsutfall={{ tidligereVurderinger: [] }}
         grunnlag={grunnlag}
         typeBehandling={'Førstegangsbehandling'}
         readOnly={false}
@@ -39,13 +40,14 @@ describe('sykdomsvurdering for brev', () => {
   it('Skal vise feilmelding dersom vurderingsfeltet ikke har blitt besvart', async () => {
     render(
       <SykdomsvurderingBrev
+        foreløpigBehandlingsutfall={{ tidligereVurderinger: [] }}
         grunnlag={grunnlag}
         typeBehandling={'Førstegangsbehandling'}
         readOnly={false}
         behandlingVersjon={0}
       />
     );
-    const button = screen.getByRole('button', { name: 'Bekreft og send videre' });
+    const button = screen.getByRole('button', { name: 'Bekreft' });
     await user.click(button);
 
     expect(await screen.findByText('Du må skrive en individuell begrunnelse')).toBeVisible();
@@ -81,6 +83,7 @@ it('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
 
   render(
     <SykdomsvurderingBrev
+      foreløpigBehandlingsutfall={{ tidligereVurderinger: [] }}
       grunnlag={grunnlagMedVurdering}
       readOnly={false}
       behandlingVersjon={0}
@@ -109,6 +112,7 @@ describe('mellomlagring', () => {
   it('Skal vise en tekst om hvem som har gjort vurderingen dersom det finnes en mellomlagring', () => {
     render(
       <SykdomsvurderingBrev
+        foreløpigBehandlingsutfall={{ tidligereVurderinger: [] }}
         typeBehandling={'Førstegangsbehandling'}
         readOnly={false}
         behandlingVersjon={0}
@@ -120,38 +124,10 @@ describe('mellomlagring', () => {
     expect(tekst).toBeVisible();
   });
 
-  it('Skal vise en tekst om hvem som har lagret vurdering dersom bruker trykker på lagre mellomlagring', async () => {
-    render(
-      <SykdomsvurderingBrev
-        typeBehandling={'Førstegangsbehandling'}
-        readOnly={false}
-        behandlingVersjon={0}
-        grunnlag={grunnlagUtenVurdering}
-      />
-    );
-
-    await user.type(
-      screen.getByRole('textbox', { name: 'Derfor får du AAP / Derfor får du ikke AAP' }),
-      'Her har jeg begynt å skrive en vurdering..'
-    );
-    expect(screen.queryByText('Utkast lagret 21.08.2025 00:00 (Jan T. Loven)')).not.toBeInTheDocument();
-
-    const mockFetchResponseLagreMellomlagring: FetchResponse<MellomlagretVurderingResponse> = {
-      type: 'SUCCESS',
-      data: mellomlagring,
-      status: 200,
-    };
-    fetchMock.mockResponse(JSON.stringify(mockFetchResponseLagreMellomlagring));
-
-    const lagreKnapp = screen.getByRole('button', { name: 'Lagre utkast' });
-    await user.click(lagreKnapp);
-    const tekst = screen.getByText('Utkast lagret 21.08.2025 12:00 (Jan T. Loven)');
-    expect(tekst).toBeVisible();
-  });
-
   it('Skal ikke vise tekst om hvem som har gjort mellomlagring dersom bruker trykker på slett mellomlagring', async () => {
     render(
       <SykdomsvurderingBrev
+        foreløpigBehandlingsutfall={{ tidligereVurderinger: [] }}
         typeBehandling={'Førstegangsbehandling'}
         readOnly={false}
         behandlingVersjon={0}
@@ -174,6 +150,7 @@ describe('mellomlagring', () => {
   it('Skal bruke mellomlagring som defaultValue i skjema dersom det finnes', () => {
     render(
       <SykdomsvurderingBrev
+        foreløpigBehandlingsutfall={{ tidligereVurderinger: [] }}
         typeBehandling={'Førstegangsbehandling'}
         readOnly={false}
         behandlingVersjon={0}
@@ -192,6 +169,7 @@ describe('mellomlagring', () => {
   it('Skal bruke bekreftet vurdering fra grunnlag som defaultValue i skjema dersom mellomlagring ikke finnes', () => {
     render(
       <SykdomsvurderingBrev
+        foreløpigBehandlingsutfall={{ tidligereVurderinger: [] }}
         typeBehandling={'Førstegangsbehandling'}
         readOnly={false}
         behandlingVersjon={0}
@@ -209,6 +187,7 @@ describe('mellomlagring', () => {
   it('Skal resette skjema til tomt skjema dersom det ikke finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
     render(
       <SykdomsvurderingBrev
+        foreløpigBehandlingsutfall={{ tidligereVurderinger: [] }}
         typeBehandling={'Førstegangsbehandling'}
         readOnly={false}
         behandlingVersjon={0}
@@ -235,6 +214,7 @@ describe('mellomlagring', () => {
   it('Skal resette skjema til bekreftet vurdering dersom det finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
     render(
       <SykdomsvurderingBrev
+        foreløpigBehandlingsutfall={{ tidligereVurderinger: [] }}
         typeBehandling={'Førstegangsbehandling'}
         readOnly={false}
         behandlingVersjon={0}
@@ -266,9 +246,10 @@ describe('mellomlagring', () => {
     );
   });
 
-  it('Skal ikke være mulig å lagre eller slette mellomlagring hvis det er readOnly', () => {
+  it('Skal ikke være mulig å slette mellomlagring hvis det er readOnly', () => {
     render(
       <SykdomsvurderingBrev
+        foreløpigBehandlingsutfall={{ tidligereVurderinger: [] }}
         typeBehandling={'Førstegangsbehandling'}
         readOnly={true}
         behandlingVersjon={0}
@@ -277,8 +258,6 @@ describe('mellomlagring', () => {
       />
     );
 
-    const lagreKnapp = screen.queryByRole('button', { name: 'Lagre utkast' });
-    expect(lagreKnapp).not.toBeInTheDocument();
     const slettKnapp = screen.queryByRole('button', { name: 'Slett utkast' });
     expect(slettKnapp).not.toBeInTheDocument();
   });

@@ -5,7 +5,7 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgG
 import styles from './Inntektsbortfall.module.css';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { FormEvent } from 'react';
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { Alert, Table } from '@navikt/ds-react';
 import { InntektsbortfallResponse, MellomlagretVurdering } from 'lib/types/types';
@@ -56,13 +56,10 @@ export const Inntektsbortfall = ({
   const { status, løsBehovOgGåTilNesteSteg, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_INNTEKTSBORTFALL');
 
-  const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
-    useMellomlagring(Behovstype.YRKESSKADE_KODE, initialMellomlagretVurdering);
-
   const { visningActions, visningModus, formReadOnly } = useVilkårskortVisning(
     readOnly,
     'VURDER_INNTEKTSBORTFALL',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const defaultValues: DraftFormFields = initialMellomlagretVurdering
@@ -88,12 +85,19 @@ export const Inntektsbortfall = ({
     { readOnly: formReadOnly, shouldUnregister: true }
   );
 
+  const { slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } = useMellomlagring(
+    Behovstype.YRKESSKADE_KODE,
+    initialMellomlagretVurdering,
+    form
+  );
+
   const under62År = grunnlag.under62ÅrVedSøknadstidspunkt;
   const inntektSisteÅr = grunnlag.inntektSisteÅrOver1G;
   const inntektSisteTreÅr = grunnlag.inntektSiste3ÅrOver3G;
+  const showRettTilUttakAlert = !inntektSisteÅr.resultat && !inntektSisteTreÅr.resultat;
 
   return (
-    <VilkårskortMedFormOgMellomlagringNyVisning
+    <VilkårskortMedFormOgMellomlagring
       heading="§ 11-4 andre ledd. Krav om inntektsbortfall etter fylte 62 år"
       steg={'VURDER_INNTEKTSBORTFALL'}
       vilkårTilhørerNavKontor={false}
@@ -134,7 +138,6 @@ export const Inntektsbortfall = ({
           form.reset(vurdering ? mapVurderingToDraftFormFields(vurdering) : {});
         });
       }}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
     >
       <>
         <TableStyled>
@@ -182,13 +185,15 @@ export const Inntektsbortfall = ({
             </Table.Row>
           </Table.Body>
         </TableStyled>
-        <Alert variant="info">
-          Brukeren har ikke hatt inntekt over 1 G siste år / 3 G siste 3 år. Det må vurderes om brukeren har rett til å
-          ta ut full alderspensjon.
-        </Alert>
+        {showRettTilUttakAlert && (
+          <Alert variant="info">
+            Brukeren har ikke hatt inntekt over 1 G siste år / 3 G siste 3 år. Det må vurderes om brukeren har rett til
+            å ta ut full alderspensjon.
+          </Alert>
+        )}
         <FormField form={form} formField={formFields.begrunnelse} />
         <FormField form={form} formField={formFields.rettTilUttak} />
       </>
-    </VilkårskortMedFormOgMellomlagringNyVisning>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };

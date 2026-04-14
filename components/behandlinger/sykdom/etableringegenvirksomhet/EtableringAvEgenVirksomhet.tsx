@@ -1,20 +1,20 @@
 'use client';
 
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
-import { BodyLong, HStack, Link, VStack } from '@navikt/ds-react';
+import { Alert, BodyLong, HStack, Link, VStack } from '@navikt/ds-react';
 import {
   NyVurderingExpandableCard,
   skalVæreInitiellEkspandert,
 } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
-import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
+import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import React, { FormEvent } from 'react';
 import {
   EtableringEgenVirksomhetGrunnlagResponse,
   EtableringEierBrukerVirksomheten,
   MellomlagretVurdering,
   Periode,
-  VurdertAvAnsatt,
+  VurderingMeta,
 } from 'lib/types/types';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
@@ -36,7 +36,7 @@ import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingS
 import { EtableringEgenVirksomhetTidligereVurdering } from 'components/behandlinger/sykdom/etableringegenvirksomhet/EtableringAvEgenVirksomhetTidligereVurdering';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { parseISO } from 'date-fns';
-import { parseDatoFraDatePicker } from 'lib/utils/date';
+import { parseDatoFraDatePicker, summerPerioderVarighetIArbeidsdager } from 'lib/utils/date';
 import { IkkeVurderbarPeriode } from 'components/periodisering/IkkeVurderbarPeriode';
 import { validerPeriodiserteVurderingerMotIkkeRelevantePerioder } from 'lib/utils/validering';
 
@@ -46,8 +46,8 @@ interface Props {
   grunnlag: EtableringEgenVirksomhetGrunnlagResponse;
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }
-export interface EtableringAvEgenVirksomhetVurderingForm {
-  fraDato: string | undefined;
+export interface EtableringAvEgenVirksomhetVurderingForm extends VurderingMeta {
+  fraDato: string;
   begrunnelse: string;
   foreliggerEnNæringsfagligVurdering: JaEllerNei | undefined;
   erVirksomhetenNy: JaEllerNei | undefined;
@@ -55,10 +55,6 @@ export interface EtableringAvEgenVirksomhetVurderingForm {
   antasDetAtEtableringenFørerTilSelvforsørgelse: JaEllerNei | undefined;
   utviklingsperioder: Periode[];
   oppstartsperioder: Periode[];
-  vurdertAv?: VurdertAvAnsatt;
-  kvalitetssikretAv?: VurdertAvAnsatt;
-  besluttetAv?: VurdertAvAnsatt;
-  erNyVurdering?: boolean;
 }
 
 export interface EtableringAvEgenVirksomhetForm {
@@ -82,17 +78,20 @@ export const EtableringAvEgenVirksomhet = ({
     ? JSON.parse(initialMellomlagretVurdering.data)
     : getDefaultValuesFromGrunnlag(grunnlag);
 
-  const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
-    useMellomlagring(Behovstype.ETABLERING_EGEN_VIRKSOMHET_KODE, initialMellomlagretVurdering);
-
   const { visningActions, formReadOnly, visningModus, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'ETABLERING_EGEN_VIRKSOMHET',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const form = useForm<EtableringAvEgenVirksomhetForm>({ defaultValues, shouldUnregister: true });
   const { fields: nyeVurderinger, append, remove } = useFieldArray({ control: form.control, name: 'vurderinger' });
+
+  const { slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } = useMellomlagring(
+    Behovstype.ETABLERING_EGEN_VIRKSOMHET_KODE,
+    initialMellomlagretVurdering,
+    form
+  );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
@@ -110,6 +109,27 @@ export const EtableringAvEgenVirksomhet = ({
           }
         }
       });
+      // valider at summan av alle utviklingsperioder ikke er lengre enn 6 mnd
+      const alleUtviklingsperioder = data.vurderinger.map((vurdering) => vurdering.utviklingsperioder).flat();
+      const utviklingsperioderDuration = summerPerioderVarighetIArbeidsdager(alleUtviklingsperioder);
+      if (utviklingsperioderDuration > 131) {
+        validerTidsplan = false;
+        form.setError(`vurderinger`, {
+          type: 'custom',
+          message: `Utviklingsfase kan ikke være lengre enn 6 mnd. Du legger til ${utviklingsperioderDuration} arbeidsdager. Maks antall dager totalt er 131.`,
+        });
+      }
+
+      // valider at summen av alle oppstartsperioder ikke er lengre enn 3 mnd
+      const alleOppstartsperioder = data.vurderinger.map((vurdering) => vurdering.oppstartsperioder).flat();
+      const oppstartsperioderDuration = summerPerioderVarighetIArbeidsdager(alleOppstartsperioder);
+      if (oppstartsperioderDuration > 66) {
+        validerTidsplan = false;
+        form.setError(`vurderinger`, {
+          type: 'custom',
+          message: `Oppstartsfase kan ikke være lengre enn 3 mnd. Du legger til ${oppstartsperioderDuration} arbeidsdager. Maks antall dager totalt er 66.`,
+        });
+      }
       if (!validerTidsplan) {
         return;
       }
@@ -148,7 +168,7 @@ export const EtableringAvEgenVirksomhet = ({
   }
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const foersteNyePeriode = nyeVurderinger.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
-  const errorList = mapPeriodiserteVurderingerErrorList<EtableringAvEgenVirksomhetForm>(form.formState.errors);
+  const errorList = hentFeilmeldingerForForm(form.formState.errors);
 
   return (
     <VilkårskortPeriodisert
@@ -160,7 +180,6 @@ export const EtableringAvEgenVirksomhet = ({
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}
       visningModus={visningModus}
       visningActions={visningActions}
@@ -168,6 +187,15 @@ export const EtableringAvEgenVirksomhet = ({
       onLeggTilVurdering={onAddPeriode}
       errorList={errorList}
     >
+      {grunnlag.ikkeRelevantePerioder.map((vurdering) => (
+        <IkkeVurderbarPeriode
+          key={crypto.randomUUID()}
+          fom={parseISO(vurdering.fom)}
+          tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
+          alertMelding={'Vilkåret kan ikke vurderes for denne perioden.'}
+          foersteNyePeriodeFraDato={undefined}
+        ></IkkeVurderbarPeriode>
+      ))}
       {!formReadOnly && (
         <VStack paddingBlock={'4'} paddingInline={'5'} gap={'4'}>
           <BodyLong size={'small'}>
@@ -177,40 +205,31 @@ export const EtableringAvEgenVirksomhet = ({
           </BodyLong>
         </VStack>
       )}
-      {grunnlag.ikkeRelevantePerioder.map((vurdering) => (
-        <IkkeVurderbarPeriode
-          key={vurdering.fom}
-          fom={parseISO(vurdering.fom)}
-          tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
-          alertMelding={
-            'Vilkåret kan ikke vurderes for denne perioden. For å vurdere vilkåret må § 11-6 b være oppfylt.'
-          }
-          foersteNyePeriodeFraDato={undefined}
-        ></IkkeVurderbarPeriode>
-      ))}
       {vedtatteVurderinger.map((vurdering) => (
         <TidligereVurderingExpandableCard
-          key={vurdering.fom}
+          key={crypto.randomUUID()}
           fom={parseISO(vurdering.fom)}
           tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
           foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
           vurderingStatus={getErOppfyltEllerIkkeStatus(tidligereVurderingErOppfylt(vurdering))}
+          vurdertAv={vurdering.vurdertAv}
+          kvalitetssikretAv={vurdering.kvalitetssikretAv}
+          besluttetAv={vurdering.besluttetAv}
         >
           <EtableringEgenVirksomhetTidligereVurdering vurdering={vurdering} />
         </TidligereVurderingExpandableCard>
       ))}
-      {!formReadOnly && (
+      {nyeVurderinger.length > 0 && (
         <VStack paddingBlock={'4'} paddingInline={'5'} gap={'4'}>
-          {nyeVurderinger.length > 0 && (
-            <HStack>
-              <TextFieldWrapper
-                name={'virksomhetNavn'}
-                control={form.control}
-                type={'text'}
-                label={'Virksomheten det søkes for'}
-              />
-            </HStack>
-          )}
+          <HStack>
+            <TextFieldWrapper
+              name={'virksomhetNavn'}
+              control={form.control}
+              type={'text'}
+              label={'Virksomheten det søkes for'}
+              readOnly={formReadOnly}
+            />
+          </HStack>
         </VStack>
       )}
       {nyeVurderinger.map((vurdering, index) => (
@@ -221,9 +240,7 @@ export const EtableringAvEgenVirksomhet = ({
           vurderingStatus={getErOppfyltEllerIkkeStatus(nyVurderingErOppfylt(form.watch(`vurderinger.${index}`)))}
           nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
           isLast={index === vedtatteVurderinger.length - 1}
-          vurdertAv={vurdering.vurdertAv}
-          kvalitetssikretAv={vurdering.kvalitetssikretAv}
-          besluttetAv={vurdering.besluttetAv}
+          vurdering={vurdering}
           finnesFeil={finnesFeilForVurdering(index, errorList)}
           readonly={formReadOnly}
           onSlettVurdering={() => remove(index)}
@@ -232,9 +249,12 @@ export const EtableringAvEgenVirksomhet = ({
           index={index}
           initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
         >
-          <EtableringAvEgenVirksomhetFormInput form={form} readOnly={formReadOnly} index={index} />
+          <EtableringAvEgenVirksomhetFormInput form={form} readOnly={formReadOnly} index={index} grunnlag={grunnlag} />
         </NyVurderingExpandableCard>
       ))}
+      {form.formState.errors.vurderinger && (
+        <Alert variant={'error'}>{form.formState.errors.vurderinger.message}</Alert>
+      )}
     </VilkårskortPeriodisert>
   );
 };

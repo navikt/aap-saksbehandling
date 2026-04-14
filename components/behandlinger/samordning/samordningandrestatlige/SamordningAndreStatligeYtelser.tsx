@@ -17,8 +17,9 @@ import {
 } from 'lib/types/types';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
+import { OppslagAndreYtelser } from 'components/oppslagandreytelser/OppslagAndreYtelser';
 
 interface Props {
   grunnlag: SamordningAndreStatligeYtelserGrunnlag;
@@ -51,13 +52,10 @@ export const SamordningAndreStatligeYtelser = ({
     'SAMORDNING_ANDRE_STATLIGE_YTELSER'
   );
 
-  const { lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
-    useMellomlagring(Behovstype.AVKLAR_SAMORDNING_ANDRE_STATLIGE_YTELSER, initialMellomlagretVurdering);
-
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
     'SAMORDNING_ANDRE_STATLIGE_YTELSER',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
@@ -78,6 +76,12 @@ export const SamordningAndreStatligeYtelser = ({
       },
     },
     { readOnly: formReadOnly }
+  );
+
+  const { slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } = useMellomlagring(
+    Behovstype.AVKLAR_SAMORDNING_ANDRE_STATLIGE_YTELSER,
+    initialMellomlagretVurdering,
+    form
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -111,7 +115,7 @@ export const SamordningAndreStatligeYtelser = ({
   const historiskeVurderinger = grunnlag.historiskeVurderinger ?? null;
 
   return (
-    <VilkårskortMedFormOgMellomlagringNyVisning
+    <VilkårskortMedFormOgMellomlagring
       heading="Fradrag ved andre statlige ytelser"
       steg="SAMORDNING_ANDRE_STATLIGE_YTELSER"
       onSubmit={handleSubmit}
@@ -121,7 +125,6 @@ export const SamordningAndreStatligeYtelser = ({
       vilkårTilhørerNavKontor={false}
       vurdertAvAnsatt={grunnlag.vurdering?.vurdertAv}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() =>
           form.reset(grunnlag.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields())
@@ -144,6 +147,11 @@ export const SamordningAndreStatligeYtelser = ({
           grupperPåOpprettetDato={true}
         />
       )}
+
+      {grunnlag.perioder !== null && grunnlag.perioder !== undefined && grunnlag.perioder.length > 0 && (
+        <OppslagAndreYtelser perioder={grunnlag.perioder} />
+      )}
+
       <ReadMore size={'small'} header="Hva skal vurderes?">
         Det må undersøkes om bruker har hatt andre ytelser i perioden med AAP som kan gi fradrag i AAP utbetalingen.
       </ReadMore>
@@ -152,7 +160,7 @@ export const SamordningAndreStatligeYtelser = ({
         <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
         <AndreStatligeYtelserTabell form={form} readOnly={formReadOnly} />
       </VStack>
-    </VilkårskortMedFormOgMellomlagringNyVisning>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 

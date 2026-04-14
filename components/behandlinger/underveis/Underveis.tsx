@@ -8,10 +8,9 @@ import { IkkeOppfyltMeldepliktMedDataFetching } from 'components/behandlinger/un
 
 interface Props {
   behandlingsreferanse: string;
-  saksnummer: string;
 }
 
-export const Underveis = async ({ behandlingsreferanse, saksnummer }: Props) => {
+export const Underveis = async ({ behandlingsreferanse }: Props) => {
   const flyt = await hentFlyt(behandlingsreferanse);
   if (isError(flyt)) {
     return <ApiException apiResponses={[flyt]} />;
@@ -37,7 +36,6 @@ export const Underveis = async ({ behandlingsreferanse, saksnummer }: Props) => 
           readOnly={flyt.data.visning.saksbehandlerReadOnly}
           behandlingVersjon={flyt.data.behandlingVersjon}
           behandlingsreferanse={behandlingsreferanse}
-          saksnummer={saksnummer}
         />
       </StegSuspense>
     </GruppeSteg>

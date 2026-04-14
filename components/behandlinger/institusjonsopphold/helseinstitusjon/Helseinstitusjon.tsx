@@ -1,21 +1,29 @@
 'use client';
 
-import { BodyShort, Label } from '@navikt/ds-react';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { InstitusjonsoppholdTabell } from 'components/behandlinger/institusjonsopphold/InstitusjonsoppholdTabell';
-import { HelseinstitusjonGrunnlag, MellomlagretVurdering, Periode } from 'lib/types/types';
+import {
+  HelseinstitusjonGrunnlag,
+  HelseInstiusjonVurdering,
+  MellomlagretVurdering,
+  Periode,
+  VurderingMeta,
+} from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
-import { useFieldArray } from 'react-hook-form';
-import { Helseinstitusjonsvurdering } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/helseinstitusjonsvurdering/Helseinstitusjonsvurdering';
-import { formaterDatoForFrontend } from 'lib/utils/date';
-
-import styles from './Helseinstitusjon.module.css';
-import { FormEvent } from 'react';
+import { DATO_FORMATER, erUendeligSlutt, formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
+import React, { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useConfigForm } from 'components/form/FormHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { format, parse, subDays } from 'date-fns';
+import { useFieldArray } from 'react-hook-form';
+import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
+import { Dato } from 'lib/types/Dato';
+import { VStack } from '@navikt/ds-react';
+import { HelseinstitusjonOppholdGruppe } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/helseinstitusjonoppholdgruppe/HelseinstitusjonOppholdGruppe';
+import { nb } from 'date-fns/locale';
 
 interface Props {
   grunnlag: HelseinstitusjonGrunnlag;
@@ -25,10 +33,18 @@ interface Props {
 }
 
 export interface HelseinstitusjonsFormFields {
-  helseinstitusjonsvurderinger: Vurdering[];
+  helseinstitusjonsvurderinger: OppholdMedVurderinger[];
 }
 
-interface Vurdering {
+export interface OppholdMedVurderinger {
+  oppholdId: string;
+  periode: Periode;
+  tidligsteReduksjonsdato?: string | null;
+  vurderinger: OppholdVurdering[];
+}
+
+export interface OppholdVurdering extends VurderingMeta {
+  oppholdId: string;
   periode: Periode;
   begrunnelse: string;
   harFasteUtgifter?: JaEllerNei;
@@ -43,18 +59,17 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('DU_ER_ET_ANNET_STED');
 
-  const { lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
-    useMellomlagring(Behovstype.AVKLAR_HELSEINSTITUSJON, initialMellomlagretVurdering);
+  const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
-  const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
+  const { visningActions, formReadOnly, visningModus, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'DU_ER_ET_ANNET_STED',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
-    : mapVurderingToDraftFormFields(grunnlag.vurderinger);
+    : mapVurderingToDraftFormFields(grunnlag, grunnlag.opphold);
 
   const { form } = useConfigForm<HelseinstitusjonsFormFields>({
     helseinstitusjonsvurderinger: {
@@ -63,42 +78,63 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
     },
   });
 
-  const { fields } = useFieldArray({
+  const { fields: oppholdFields } = useFieldArray({
     control: form.control,
     name: 'helseinstitusjonsvurderinger',
   });
 
+  const { slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } = useMellomlagring(
+    Behovstype.AVKLAR_HELSEINSTITUSJON,
+    initialMellomlagretVurdering,
+    form
+  );
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
+      const parseDato = (dato: string) => parse(dato, 'dd.MM.yyyy', new Date());
+
+      const vurderinger: HelseInstiusjonVurdering[] = data.helseinstitusjonsvurderinger.flatMap((opphold) => {
+        return opphold.vurderinger.map((vurdering, index, filtrerteVurderinger) => {
+          const nesteVurdering = filtrerteVurderinger.at(index + 1);
+
+          const fom = vurdering.periode?.fom
+            ? formaterDatoForBackend(parseDato(vurdering.periode.fom))
+            : formaterDatoForBackend(parseDato(opphold.periode.fom));
+
+          const tom = nesteVurdering
+            ? formaterDatoForBackend(subDays(new Dato(nesteVurdering.periode.fom).dato, 1))
+            : formaterDatoForBackend(parseDato(opphold.periode.tom));
+
+          return {
+            oppholdId: vurdering.oppholdId,
+            begrunnelse: vurdering.begrunnelse,
+            faarFriKostOgLosji: vurdering.faarFriKostOgLosji === JaEllerNei.Ja,
+            forsoergerEktefelle: vurdering.forsoergerEktefelle === JaEllerNei.Ja,
+            harFasteUtgifter: vurdering.harFasteUtgifter === JaEllerNei.Ja,
+            periode: { fom, tom },
+          };
+        });
+      });
+
       løsBehovOgGåTilNesteSteg(
         {
           behandlingVersjon: behandlingVersjon,
           behov: {
             behovstype: Behovstype.AVKLAR_HELSEINSTITUSJON,
-            helseinstitusjonVurdering: {
-              vurderinger: data.helseinstitusjonsvurderinger.map((vurdering) => {
-                return {
-                  begrunnelse: vurdering.begrunnelse,
-                  harFasteUtgifter: vurdering.harFasteUtgifter === JaEllerNei.Ja,
-                  faarFriKostOgLosji: vurdering.faarFriKostOgLosji === JaEllerNei.Ja,
-                  forsoergerEktefelle: vurdering.forsoergerEktefelle === JaEllerNei.Ja,
-                  periode: vurdering.periode,
-                };
-              }),
-            },
+            helseinstitusjonVurdering: { vurderinger },
           },
           referanse: behandlingsreferanse,
         },
         () => {
+          closeAllAccordions();
           nullstillMellomlagretVurdering();
-          visningActions.onBekreftClick();
         }
       );
     })(event);
   };
 
   return (
-    <VilkårskortMedFormOgMellomlagringNyVisning
+    <VilkårskortMedFormOgMellomlagring
       heading={'§ 11-25 Helseinstitusjon'}
       steg={'DU_ER_ET_ANNET_STED'}
       onSubmit={handleSubmit}
@@ -106,54 +142,131 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       isLoading={isLoading}
       vilkårTilhørerNavKontor={false}
-      vurdertAvAnsatt={grunnlag.vurdertAv}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() =>
-        slettMellomlagring(() => form.reset(mapVurderingToDraftFormFields(grunnlag.vurderinger)))
+        slettMellomlagring(() => form.reset(mapVurderingToDraftFormFields(grunnlag, grunnlag.opphold)))
       }
       visningModus={visningModus}
       visningActions={visningActions}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
-      <InstitusjonsoppholdTabell
-        label={'Brukeren har følgende institusjonsopphold på helseinstitusjon'}
-        beskrivelse={'Opphold over tre måneder på helseinstitusjon kan gi redusert AAP-ytelse.'}
-        instutisjonsopphold={grunnlag.opphold}
-      />
-      {fields.map((field, index) => {
-        return (
-          <div key={field.id} className={styles.vurdering}>
-            <div>
-              <Label size={'medium'}>Periode</Label>
-              <BodyShort>
-                {formaterDatoForFrontend(field.periode.fom)} - {formaterDatoForFrontend(field.periode.tom)}
-              </BodyShort>
-            </div>
-            <Helseinstitusjonsvurdering form={form} helseinstitusjonoppholdIndex={index} readonly={formReadOnly} />
-          </div>
-        );
-      })}
-    </VilkårskortMedFormOgMellomlagringNyVisning>
+      <VStack gap={'6'}>
+        <InstitusjonsoppholdTabell
+          label={'Brukeren har følgende institusjonsopphold på helseinstitusjon'}
+          beskrivelse={'Opphold over tre måneder på helseinstitusjon kan gi redusert AAP-ytelse. '}
+          instutisjonsopphold={grunnlag.opphold}
+        />
+
+        {oppholdFields.map((oppholdField, oppholdIndex) => {
+          const faktiskOpphold = grunnlag.opphold.find((o) => o.oppholdId === oppholdField.oppholdId)!;
+          const skalJustere = skalJustereVedtatteVurderinger(grunnlag, oppholdField.oppholdId);
+
+          const tidligereVurderinger = grunnlag.vedtatteVurderinger
+            .filter((v) => v.oppholdId === oppholdField.oppholdId)
+            .flatMap((v) => v.vurderinger || []);
+
+          return (
+            <HelseinstitusjonOppholdGruppe
+              key={oppholdField.id}
+              opphold={faktiskOpphold}
+              tidligereVurderinger={tidligereVurderinger}
+              accordionsSignal={accordionsSignal}
+              oppholdIndex={oppholdIndex}
+              form={form}
+              readonly={formReadOnly}
+              erAktivUtenAvbryt={erAktivUtenAvbryt}
+              skalJustereVedtatteVurderinger={skalJustere}
+            />
+          );
+        })}
+      </VStack>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 
-function mapVurderingToDraftFormFields(vurderinger: HelseinstitusjonGrunnlag['vurderinger']): DraftFormFields {
+function skalJustereVedtatteVurderinger(grunnlag: HelseinstitusjonGrunnlag, oppholdId: string): boolean {
+  if (grunnlag.vedtatteVurderinger.length === 0) return false;
+
+  const opphold = grunnlag.opphold.find((o) => o.oppholdId === oppholdId);
+  if (!opphold || erUendeligSlutt(opphold.avsluttetDato)) return false;
+
+  const harNyeVurderinger = grunnlag.vurderinger.some((v) => v.oppholdId === oppholdId);
+  if (harNyeVurderinger) return false;
+
+  const vedtatteForOpphold = grunnlag.vedtatteVurderinger.find((v) => v.oppholdId === oppholdId)?.vurderinger;
+  if (!vedtatteForOpphold || vedtatteForOpphold.length === 0) return false;
+
+  const sisteVedtatteTom = vedtatteForOpphold[vedtatteForOpphold.length - 1].periode.tom;
+  return erUendeligSlutt(sisteVedtatteTom) || sisteVedtatteTom > opphold.avsluttetDato;
+}
+
+function mapVurderingToDraftFormFields(
+  grunnlag: HelseinstitusjonGrunnlag,
+  opphold: HelseinstitusjonGrunnlag['opphold']
+): DraftFormFields {
+  const harTidligerevurderinger = grunnlag.vedtatteVurderinger.length > 0;
+
   return {
-    helseinstitusjonsvurderinger: vurderinger.flatMap((item) => {
-      if (item.vurderinger && item.vurderinger.length > 0) {
-        return item.vurderinger.map((vurdering) => {
-          return {
-            begrunnelse: vurdering.begrunnelse,
-            harFasteUtgifter: getJaNeiEllerUndefined(vurdering.harFasteUtgifter),
-            forsoergerEktefelle: getJaNeiEllerUndefined(vurdering.forsoergerEktefelle),
-            faarFriKostOgLosji: getJaNeiEllerUndefined(vurdering.faarFriKostOgLosji),
-            periode: vurdering.periode,
-          };
-        });
+    helseinstitusjonsvurderinger: opphold.map((opphold) => {
+      const vurderingerForOpphold = grunnlag.vurderinger.find((v) => v.oppholdId === opphold.oppholdId)?.vurderinger;
+
+      const vedtatteVurderingerForOpphold = grunnlag.vedtatteVurderinger.find(
+        (v) => v.oppholdId === opphold.oppholdId
+      )?.vurderinger;
+
+      const oppholdAvsluttetDato = formaterDatoForFrontendMedStøtteForUendeligSlutt(opphold.avsluttetDato);
+      const skalJustere = skalJustereVedtatteVurderinger(grunnlag, opphold.oppholdId || '');
+
+      let vurderinger: OppholdVurdering[];
+
+      if (vurderingerForOpphold && vurderingerForOpphold.length > 0) {
+        vurderinger = vurderingerForOpphold.map((vurdering) => ({
+          oppholdId: vurdering.oppholdId || '', // TODO Gjør om oppholdId til required i backend når ny helseinstitusjon er ute i prod
+          begrunnelse: vurdering.begrunnelse,
+          harFasteUtgifter: getJaNeiEllerUndefined(vurdering.harFasteUtgifter),
+          forsoergerEktefelle: getJaNeiEllerUndefined(vurdering.forsoergerEktefelle),
+          faarFriKostOgLosji: getJaNeiEllerUndefined(vurdering.faarFriKostOgLosji),
+          periode: {
+            fom: formaterDatoForFrontend(vurdering.periode.fom),
+            tom: formaterDatoForFrontend(vurdering.periode.tom),
+          },
+          vurdertAv: vurdering.vurdertAv,
+          erNyVurdering: false,
+          behøverVurdering: false,
+        }));
+      } else if (skalJustere && vedtatteVurderingerForOpphold) {
+        vurderinger = [];
       } else {
-        return [{ begrunnelse: '', periode: item.periode }];
+        vurderinger = [
+          {
+            oppholdId: opphold.oppholdId || '', // TODO Gjør om oppholdId til required i backend når ny helseinstitusjon er ute i prod
+            begrunnelse: '',
+            faarFriKostOgLosji: undefined,
+            harFasteUtgifter: undefined,
+            forsoergerEktefelle: undefined,
+            periode: { fom: '', tom: oppholdAvsluttetDato },
+            erNyVurdering: true,
+            behøverVurdering: false,
+          },
+        ];
       }
+
+      const harTidligereVurderingerOgIngenNåværendeVurderinger =
+        harTidligerevurderinger && !vurderingerForOpphold && !skalJustere;
+
+      return {
+        oppholdId: opphold.oppholdId || '',
+        periode: {
+          fom: formaterDatoForFrontend(opphold.oppholdFra),
+          tom: oppholdAvsluttetDato,
+        },
+        tidligsteReduksjonsdato: opphold.tidligsteReduksjonsdato,
+        vurderinger: harTidligereVurderingerOgIngenNåværendeVurderinger ? [] : vurderinger,
+      };
     }),
   };
+}
+
+export function formaterDatoForFrontendMedStøtteForUendeligSlutt(dato: Date | string): string {
+  return format(dato, DATO_FORMATER.ddMMyyyy, { locale: nb });
 }

@@ -16,7 +16,7 @@ import { getValgteHjemlerSomIkkeErImplementert, hjemmelalternativer, hjemmelMap 
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 
 interface Props {
   behandlingVersjon: number;
@@ -46,13 +46,10 @@ export const KlagebehandlingVurderingNay = ({
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('KLAGEBEHANDLING_NAY');
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.VURDER_KLAGE_NAY, initialMellomlagretVurdering);
-
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
     'KLAGEBEHANDLING_NAY',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
@@ -118,6 +115,12 @@ export const KlagebehandlingVurderingNay = ({
     { readOnly: formReadOnly }
   );
 
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.VURDER_KLAGE_NAY,
+    initialMellomlagretVurdering,
+    form
+  );
+
   const innstilling = form.watch('innstilling');
 
   useEffect(() => {
@@ -154,7 +157,7 @@ export const KlagebehandlingVurderingNay = ({
   };
 
   return (
-    <VilkårskortMedFormOgMellomlagringNyVisning
+    <VilkårskortMedFormOgMellomlagring
       heading={'Behandle klage'}
       steg={'KLAGEBEHANDLING_NAY'}
       onSubmit={handleSubmit}
@@ -164,7 +167,6 @@ export const KlagebehandlingVurderingNay = ({
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() =>
           form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields())
@@ -184,7 +186,7 @@ export const KlagebehandlingVurderingNay = ({
       {['OPPRETTHOLD', 'DELVIS_OMGJØR'].includes(innstilling) && (
         <FormField form={form} formField={formFields.vilkårSomSkalOpprettholdes} />
       )}
-    </VilkårskortMedFormOgMellomlagringNyVisning>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 

@@ -4,6 +4,7 @@ import {
   BehandlingFlytOgTilstand,
   BehandlingsFlytAvklaringsbehovKode,
   BehandlingsHistorikk,
+  BekreftVurderingerOppfølgingGrunnlag,
   BestillLegeerklæring,
   Brev,
   BrevdataDto,
@@ -22,12 +23,12 @@ import {
   OpprettAktivitetspliktBehandlingDto,
   OpprettDummySakDto,
   OpprettTestcase,
-  RettighetDto,
+  RettighetsinfoDto,
   SaksInfo,
   SettPåVent,
 } from './types/types';
 import { getErrorMessage } from 'lib/utils/errorUtil';
-import { ClientConfig } from 'lib/types/clientConfig';
+import { ClientConfig } from 'lib/types/clientTypes';
 import { FetchResponse } from 'lib/utils/api';
 import { TilgangResponse } from 'lib/services/tilgangservice/tilgangsService';
 import { Markering, SaksbehandlerSøkRespons, TildelOppgaveRequest } from 'lib/types/oppgaveTypes';
@@ -122,6 +123,13 @@ export function clientHentFlyt(behandlingsreferanse: string) {
   return clientFetch<BehandlingFlytOgTilstand>(`${BASE_URL}/api/behandling/${behandlingsreferanse}/flyt`, 'GET');
 }
 
+export function clientHentBekreftVurderingerOppfølgingGrunnlag(behandlingsreferanse: string) {
+  return clientFetch<BekreftVurderingerOppfølgingGrunnlag>(
+    `${BASE_URL}/api/grunnlag/${behandlingsreferanse}/bekreftvurderinger`,
+    'GET'
+  );
+}
+
 export function clientHentAlleDialogmeldingerPåSak(saksnummer: string) {
   return clientFetch<LegeerklæringStatus[]>(`${BASE_URL}/api/dokumentinnhenting/status/${saksnummer}`, 'GET');
 }
@@ -141,8 +149,8 @@ export function clientBestillDialogmelding(bestilling: BestillLegeerklæring) {
   return clientFetch(`${BASE_URL}/api/dokumentinnhenting/bestill`, 'POST', bestilling);
 }
 
-export function clientHentRettighetsdata(saksnummer: string) {
-  return clientFetch<Array<RettighetDto>>(`${BASE_URL}/api/sak/${saksnummer}/rettighet`, 'GET');
+export function clientHentRettighetsinfo(saksnummer: string) {
+  return clientFetch<RettighetsinfoDto>(`${BASE_URL}/api/sak/${saksnummer}/rettighetsinfo`, 'GET');
 }
 
 export function clientForhåndsvisDialogmelding(dialogmelding: ForhåndsvisDialogmelding) {
@@ -225,10 +233,11 @@ export function clientFjernMarkeringForBehandling(referanse: string, markering: 
   return clientFetch(`${BASE_URL}/api/behandling/${referanse}/markering/fjern`, 'POST', markering);
 }
 
-export function clientSøkPåSaksbehandler(oppgaver: number[], søketekst: string) {
+export function clientSøkPåSaksbehandler(oppgaver: number[], søketekst: string, enheter?: string[]) {
   return clientFetch<SaksbehandlerSøkRespons>(`${BASE_URL}/api/saksbehandler/finn-saksbehandler`, 'POST', {
     oppgaver: oppgaver,
     søketekst: søketekst,
+    enheter,
   });
 }
 

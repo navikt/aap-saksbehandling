@@ -6,8 +6,11 @@ import { FormEvent } from 'react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { parseISO } from 'date-fns';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
-import { MellomlagretVurdering, SykdomsGrunnlag, TypeBehandling, VurdertAvAnsatt } from 'lib/types/types';
-import { finnDiagnosegrunnlag } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
+import { MellomlagretVurdering, SykdomsGrunnlag, TypeBehandling, VurderingMeta } from 'lib/types/types';
+import {
+  DiagnoserDefaultOptions,
+  hentSisteLagredeVurdering,
+} from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
 import { ValuePair } from 'components/form/FormField';
 import { useSak } from 'hooks/SakHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
@@ -19,7 +22,7 @@ import {
   skalVæreInitiellEkspandert,
 } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { Dato } from 'lib/types/Dato';
-import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
+import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import { SykdomsvurderingFormInput } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingFormInput';
 import { TidligereSykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/TidligereSykdomsvurdering';
 import mapTilPeriodisertVurdering from 'components/behandlinger/sykdom/sykdomsvurdering/vurderingMapper';
@@ -42,7 +45,7 @@ export interface SykdomsvurderingerForm {
   vurderinger: Array<Sykdomsvurdering>;
 }
 
-export interface Sykdomsvurdering {
+export interface Sykdomsvurdering extends VurderingMeta {
   fraDato: string;
   begrunnelse: string;
   vurderingenGjelderFra?: string;
@@ -57,10 +60,6 @@ export interface Sykdomsvurdering {
   erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense?: JaEllerNei;
   erNedsettelseIArbeidsevneMerEnnFørtiProsent?: JaEllerNei;
   yrkesskadeBegrunnelse?: string;
-  vurdertAv?: VurdertAvAnsatt;
-  kvalitetssikretAv?: VurdertAvAnsatt;
-  besluttetAv?: VurdertAvAnsatt;
-  erNyVurdering?: boolean;
 }
 
 interface SykdomProps {
@@ -68,8 +67,7 @@ interface SykdomProps {
   grunnlag: SykdomsGrunnlag;
   readOnly: boolean;
   typeBehandling: TypeBehandling;
-  bidiagnoserDeafultOptions?: ValuePair[];
-  hoveddiagnoseDefaultOptions?: ValuePair[];
+  diagnoseDefaultOptions: DiagnoserDefaultOptions;
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
@@ -77,8 +75,7 @@ export const Sykdomsvurdering = ({
   grunnlag,
   behandlingVersjon,
   readOnly,
-  bidiagnoserDeafultOptions,
-  hoveddiagnoseDefaultOptions,
+  diagnoseDefaultOptions,
   typeBehandling,
   initialMellomlagretVurdering,
 }: SykdomProps) => {
@@ -90,19 +87,14 @@ export const Sykdomsvurdering = ({
   const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('AVKLAR_SYKDOM');
 
-  const { slettMellomlagring, lagreMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
-    useMellomlagring(Behovstype.AVKLAR_SYKDOM_KODE, initialMellomlagretVurdering);
-
-  const diagnosegrunnlag = finnDiagnosegrunnlag(typeBehandling, grunnlag);
-
   const { visningModus, visningActions, formReadOnly, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'AVKLAR_SYKDOM',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
-  const defaultValues: SykdomsvurderingerForm = mellomlagretVurdering
-    ? parseOgMigrerMellomlagretData(mellomlagretVurdering.data)
+  const defaultValues: SykdomsvurderingerForm = initialMellomlagretVurdering
+    ? parseOgMigrerMellomlagretData(initialMellomlagretVurdering.data)
     : mapGrunnlagTilDefaultvalues(grunnlag);
 
   const form = useForm<SykdomsvurderingerForm>({ defaultValues });
@@ -111,6 +103,12 @@ export const Sykdomsvurdering = ({
     remove,
     append,
   } = useFieldArray({ name: 'vurderinger', control: form.control });
+
+  const { slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } = useMellomlagring(
+    Behovstype.AVKLAR_SYKDOM_KODE,
+    initialMellomlagretVurdering,
+    form
+  );
 
   const førsteDatoSomKanVurderes =
     grunnlag.kanVurderes[0]?.fom != null ? parseISO(grunnlag.kanVurderes[0].fom) : new Date();
@@ -156,11 +154,10 @@ export const Sykdomsvurdering = ({
     })(event);
   };
 
-  const errorList = mapPeriodiserteVurderingerErrorList<SykdomsvurderingerForm>(form.formState.errors);
+  const errorList = hentFeilmeldingerForForm(form.formState.errors);
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
 
   const foersteNyePeriode = nyeVurderingerFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
-  const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
 
   return (
     <VilkårskortPeriodisert
@@ -173,12 +170,11 @@ export const Sykdomsvurdering = ({
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       knappTekst={'Bekreft'}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(mapGrunnlagTilDefaultvalues(grunnlag)))}
       visningActions={visningActions}
       visningModus={visningModus}
       formReset={() => form.reset(mapGrunnlagTilDefaultvalues(grunnlag))}
-      onLeggTilVurdering={() => append(emptySykdomsvurdering(utledDiagnoserForVurdering()))}
+      onLeggTilVurdering={() => append(emptySykdomsvurdering(utledDiagnoserForNyVurdering()))}
       errorList={errorList}
     >
       <VStack gap={'4'}>
@@ -190,13 +186,15 @@ export const Sykdomsvurdering = ({
 
         {vedtatteVurderinger.map((vurdering) => (
           <TidligereVurderingExpandableCard
-            key={vurdering.fom}
+            key={crypto.randomUUID()}
             fom={new Dato(vurdering.fom).dato}
             tom={vurdering.tom ? parseISO(vurdering.tom) : undefined}
             foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
             vurderingStatus={getErOppfyltEllerIkkeStatus(erTidligereVurderingOppfylt(vurdering))}
             defaultCollapsed={nyeVurderingerFields.length > 0}
             vurdertAv={vurdering.vurdertAv}
+            kvalitetssikretAv={vurdering.kvalitetssikretAv}
+            besluttetAv={vurdering.besluttetAv}
           >
             <TidligereSykdomsvurdering vurdering={vurdering} />
           </TidligereVurderingExpandableCard>
@@ -216,13 +214,11 @@ export const Sykdomsvurdering = ({
             )}
             nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
             isLast={index === nyeVurderingerFields.length - 1}
-            vurdertAv={vurdering.vurdertAv}
-            kvalitetssikretAv={vurdering.kvalitetssikretAv}
-            besluttetAv={vurdering.besluttetAv}
+            vurdering={vurdering}
             readonly={formReadOnly}
             finnesFeil={finnesFeilForVurdering(index, errorList)}
             onSlettVurdering={() => remove(index)}
-            harTidligereVurderinger={tidligereVurderinger.length > 0}
+            harTidligereVurderinger={vedtatteVurderinger.length > 0}
             index={index}
             initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
           >
@@ -234,6 +230,7 @@ export const Sykdomsvurdering = ({
               erÅrsakssammenhengYrkesskade={grunnlag.erÅrsakssammenhengYrkesskade}
               skalVurdereYrkesskade={grunnlag.skalVurdereYrkesskade}
               rettighetsperiodeStartdato={førsteDatoSomKanVurderes}
+              diagnoseDefaultOptions={diagnoseDefaultOptions}
             />
           </NyVurderingExpandableCard>
         ))}
@@ -241,51 +238,80 @@ export const Sykdomsvurdering = ({
     </VilkårskortPeriodisert>
   );
 
-  function utledDiagnoserForVurdering() {
-    const kodeverk = getStringEllerUndefined(diagnosegrunnlag?.kodeverk);
-    const hoveddiagnose = hoveddiagnoseDefaultOptions?.find((value) => value.value === diagnosegrunnlag?.hoveddiagnose);
-    const bidiagnose = bidiagnoserDeafultOptions?.filter((option) =>
-      diagnosegrunnlag?.bidiagnoser?.includes(option.value)
-    );
-
-    return { kodeverk, hoveddiagnose, bidiagnose };
-  }
-
   function mapGrunnlagTilDefaultvalues(grunnlag: SykdomsGrunnlag): SykdomsvurderingerForm {
-    const diagnoser = utledDiagnoserForVurdering();
+    const diagnoserForNyVurdering = utledDiagnoserForNyVurdering();
 
     if (trengerVurderingsForslag(grunnlag)) {
-      return hentPerioderSomTrengerVurdering<Sykdomsvurdering>(grunnlag, () => emptySykdomsvurdering(diagnoser));
+      return hentPerioderSomTrengerVurdering<Sykdomsvurdering>(grunnlag, () =>
+        emptySykdomsvurdering(diagnoserForNyVurdering)
+      );
     }
 
     // Vi har allerede data lagret, vis enten de som er lagret i grunnlaget her eller tom liste
     return {
-      vurderinger: grunnlag.nyeVurderinger.map((vurdering) => ({
-        fraDato: new Dato(vurdering.vurderingenGjelderFra || vurdering.fom).formaterForFrontend(),
-        begrunnelse: vurdering?.begrunnelse,
-        harSkadeSykdomEllerLyte: getJaNeiEllerUndefined(vurdering?.harSkadeSykdomEllerLyte)!,
-        erArbeidsevnenNedsatt: getJaNeiEllerUndefined(vurdering?.erArbeidsevnenNedsatt),
-        erNedsettelseIArbeidsevneMerEnnHalvparten: getJaNeiEllerUndefined(
-          vurdering?.erNedsettelseIArbeidsevneMerEnnHalvparten
-        ),
-        erSkadeSykdomEllerLyteVesentligdel: getJaNeiEllerUndefined(vurdering?.erSkadeSykdomEllerLyteVesentligdel),
-        kodeverk: diagnoser.kodeverk,
-        hoveddiagnose: diagnoser.hoveddiagnose,
-        bidiagnose: diagnoser.bidiagnose,
-        erNedsettelseIArbeidsevneAvEnVissVarighet: getJaNeiEllerUndefined(
-          vurdering?.erNedsettelseIArbeidsevneAvEnVissVarighet
-        ),
-        erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense: getJaNeiEllerUndefined(
-          vurdering?.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense
-        ),
-        erNedsettelseIArbeidsevneMerEnnFørtiProsent: getJaNeiEllerUndefined(
-          vurdering?.erNedsettelseIArbeidsevneMerEnnHalvparten
-        ),
-        yrkesskadeBegrunnelse: getStringEllerUndefined(vurdering?.yrkesskadeBegrunnelse),
-        vurdertAv: vurdering.vurdertAv,
-        kvalitetssikretAv: vurdering.kvalitetssikretAv,
-        besluttetAv: vurdering.besluttetAv,
-      })),
+      vurderinger: grunnlag.nyeVurderinger.map((vurdering) => {
+        const kodeverk = vurdering?.kodeverk as keyof DiagnoserDefaultOptions;
+
+        const hoveddiagnose = kodeverk
+          ? diagnoseDefaultOptions?.[kodeverk]?.hoveddiagnoserOptions.find(
+              (value) => value.value === vurdering?.hoveddiagnose
+            )
+          : undefined;
+
+        const bidiagnose = kodeverk
+          ? diagnoseDefaultOptions?.[kodeverk].bidiagnoserOptions?.filter((option) =>
+              vurdering?.bidiagnoser?.includes(option.value)
+            )
+          : undefined;
+
+        return {
+          fraDato: new Dato(vurdering.vurderingenGjelderFra || vurdering.fom).formaterForFrontend(),
+          begrunnelse: vurdering?.begrunnelse,
+          harSkadeSykdomEllerLyte: getJaNeiEllerUndefined(vurdering?.harSkadeSykdomEllerLyte)!,
+          erArbeidsevnenNedsatt: getJaNeiEllerUndefined(vurdering?.erArbeidsevnenNedsatt),
+          erNedsettelseIArbeidsevneMerEnnHalvparten: getJaNeiEllerUndefined(
+            vurdering?.erNedsettelseIArbeidsevneMerEnnHalvparten
+          ),
+          erSkadeSykdomEllerLyteVesentligdel: getJaNeiEllerUndefined(vurdering?.erSkadeSykdomEllerLyteVesentligdel),
+          kodeverk: getStringEllerUndefined(vurdering.kodeverk),
+          hoveddiagnose: hoveddiagnose,
+          bidiagnose: bidiagnose,
+          erNedsettelseIArbeidsevneAvEnVissVarighet: getJaNeiEllerUndefined(
+            vurdering?.erNedsettelseIArbeidsevneAvEnVissVarighet
+          ),
+          erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense: getJaNeiEllerUndefined(
+            vurdering?.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense
+          ),
+          erNedsettelseIArbeidsevneMerEnnFørtiProsent: getJaNeiEllerUndefined(
+            vurdering?.erNedsettelseIArbeidsevneMerEnnHalvparten
+          ),
+          yrkesskadeBegrunnelse: getStringEllerUndefined(vurdering?.yrkesskadeBegrunnelse),
+          vurdertAv: vurdering.vurdertAv,
+          kvalitetssikretAv: vurdering.kvalitetssikretAv,
+          besluttetAv: vurdering.besluttetAv,
+          erNyVurdering: false,
+          behøverVurdering: false,
+        };
+      }),
     };
+  }
+
+  function utledDiagnoserForNyVurdering() {
+    const sisteLagredeVurdering = hentSisteLagredeVurdering(typeBehandling, grunnlag);
+    const kodeverk = sisteLagredeVurdering?.kodeverk as keyof DiagnoserDefaultOptions;
+
+    if (kodeverk) {
+      const hoveddiagnose = diagnoseDefaultOptions[kodeverk]?.hoveddiagnoserOptions.find(
+        (option) => option.value === sisteLagredeVurdering?.hoveddiagnose
+      );
+
+      const bidiagnose = diagnoseDefaultOptions?.[kodeverk].bidiagnoserOptions.filter((option) =>
+        sisteLagredeVurdering?.bidiagnoser?.includes(option.value)
+      );
+
+      return { kodeverk, hoveddiagnose, bidiagnose };
+    }
+
+    return undefined;
   }
 };

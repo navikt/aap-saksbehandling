@@ -18,7 +18,7 @@ const mockToken = 'mock-token';
 describe('apiFetch', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(getToken).mockResolvedValue(mockToken);
+    vi.mocked(getToken).mockResolvedValue({ ok: true, token: mockToken });
   });
 
   afterEach(() => {
@@ -135,7 +135,7 @@ describe('apiFetch', () => {
 
     expect(result).toEqual({
       type: 'ERROR',
-      apiException: { message: 'Fikk ikke svar fra tjenesten. Prøv igjen.' },
+      apiException: { message: 'Fikk ikke svar fra tjenesten. Prøv igjen om litt.' },
       status: 503,
     });
     expect(fetch).toHaveBeenCalledTimes(3);
@@ -161,7 +161,7 @@ describe('apiFetch', () => {
 describe('apiFetchNoMemoization', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(getToken).mockResolvedValue(mockToken);
+    vi.mocked(getToken).mockResolvedValue({ ok: true, token: mockToken });
   });
 
   it('should include AbortController signal in request', async () => {

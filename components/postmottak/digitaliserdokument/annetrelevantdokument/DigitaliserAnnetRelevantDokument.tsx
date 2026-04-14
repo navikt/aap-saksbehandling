@@ -17,10 +17,10 @@ export interface AnnetRelevantDokumentFormFields {
 }
 
 interface Props extends Submittable {
-  isRevurderingStarttidspunktEnabled: boolean;
   grunnlag: DigitaliseringsGrunnlag;
   readOnly: boolean;
   isLoading: boolean;
+  inkluderBarnepensjon: boolean;
 }
 
 function mapTilAnnetRelevantDokumentKontrakt(data: AnnetRelevantDokumentFormFields) {
@@ -37,13 +37,15 @@ export const DigitaliserAnnetRelevantDokument = ({
   readOnly,
   submit,
   isLoading,
-  isRevurderingStarttidspunktEnabled,
+  inkluderBarnepensjon = false,
 }: Props) => {
   const annetRelevantDokumentGrunnlag: AnnetRelevantDokument = grunnlag.vurdering?.strukturertDokumentJson
     ? JSON.parse(grunnlag.vurdering?.strukturertDokumentJson)
     : {};
 
-  const vurderingsbehov = vurderingsbehovOptions(isRevurderingStarttidspunktEnabled);
+  const vurderingsbehov = vurderingsbehovOptions().filter(
+    (option) => inkluderBarnepensjon || option.value !== 'REVURDER_SAMORDNING_BARNEPENSJON'
+  );
   const defaultÅrsakOptions: string[] = (annetRelevantDokumentGrunnlag.årsakerTilBehandling || [])
     .map((årsakFraGrunnlag) => vurderingsbehov.find((årsak) => årsak.value === årsakFraGrunnlag))
     .filter((e) => e !== undefined)

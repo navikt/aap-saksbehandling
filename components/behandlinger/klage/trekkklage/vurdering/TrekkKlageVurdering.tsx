@@ -9,7 +9,7 @@ import { FormEvent } from 'react';
 import { FormField } from 'components/form/FormField';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 
 interface Props {
   behandlingVersjon: number;
@@ -35,13 +35,10 @@ export const TrekkKlageVurdering = ({ behandlingVersjon, readOnly, grunnlag, ini
   const { løsBehovOgGåTilNesteSteg, status, løsBehovOgGåTilNesteStegError, isLoading } =
     useLøsBehovOgGåTilNesteSteg('TREKK_KLAGE');
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.TREKK_KLAGE_KODE, initialMellomlagretVurdering);
-
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
     'TREKK_KLAGE',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
@@ -77,6 +74,12 @@ export const TrekkKlageVurdering = ({ behandlingVersjon, readOnly, grunnlag, ini
     { readOnly: formReadOnly }
   );
 
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.TREKK_KLAGE_KODE,
+    initialMellomlagretVurdering,
+    form
+  );
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
       løsBehovOgGåTilNesteSteg(
@@ -103,7 +106,7 @@ export const TrekkKlageVurdering = ({ behandlingVersjon, readOnly, grunnlag, ini
   const harValgtAtKlageTrekkes = form.watch('skalTrekkes') === JaEllerNei.Ja;
 
   return (
-    <VilkårskortMedFormOgMellomlagringNyVisning
+    <VilkårskortMedFormOgMellomlagring
       heading={'Trekk klage'}
       steg={'TREKK_KLAGE'}
       onSubmit={handleSubmit}
@@ -112,7 +115,6 @@ export const TrekkKlageVurdering = ({ behandlingVersjon, readOnly, grunnlag, ini
       isLoading={isLoading}
       status={status}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() =>
           form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields())
@@ -125,7 +127,7 @@ export const TrekkKlageVurdering = ({ behandlingVersjon, readOnly, grunnlag, ini
       <FormField form={form} formField={formFields.begrunnelse} />
       <FormField form={form} formField={formFields.skalTrekkes} horizontalRadio />
       {harValgtAtKlageTrekkes && <FormField form={form} formField={formFields.hvorforTrekkes} />}
-    </VilkårskortMedFormOgMellomlagringNyVisning>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 

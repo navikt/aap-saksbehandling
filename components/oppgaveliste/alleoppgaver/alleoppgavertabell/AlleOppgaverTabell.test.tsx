@@ -10,6 +10,7 @@ import {
 
 const oppgaver: Oppgave[] = [
   {
+    behandlingRef: 'dgklasdf',
     vurderingsbehov: [],
     avklaringsbehovKode: '',
     behandlingOpprettet: '2025-02-09',
@@ -25,8 +26,10 @@ const oppgaver: Oppgave[] = [
     reservertAvNavn: 'Test Testesen',
     enhetForKø: '4491',
     erPåVent: false,
+    erÅpen: true,
   },
   {
+    behandlingRef: 'sdfgaf',
     vurderingsbehov: [],
     avklaringsbehovKode: '',
     behandlingOpprettet: '2025-02-09',
@@ -41,6 +44,7 @@ const oppgaver: Oppgave[] = [
     reservertAv: 'ident2',
     enhetForKø: '4491',
     erPåVent: false,
+    erÅpen: true,
   },
 ];
 
@@ -52,6 +56,8 @@ describe('AlleOppgaverTabell', () => {
         revalidateFunction={vi.fn()}
         setValgteRader={vi.fn()}
         valgteRader={[]}
+        setSortBy={() => {}}
+        sort={undefined}
       />,
       false
     );
@@ -69,6 +75,8 @@ describe('AlleOppgaverTabell', () => {
         revalidateFunction={vi.fn()}
         setValgteRader={vi.fn()}
         valgteRader={[]}
+        setSortBy={() => {}}
+        sort={undefined}
       />,
       false
     );

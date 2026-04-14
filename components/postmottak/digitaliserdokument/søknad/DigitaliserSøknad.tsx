@@ -4,14 +4,18 @@ import {
   JaNeiAbruttEllerIkkeOpgittOptions,
   JaNeiAvbruttIkkeOppgitt,
   JaNeiEllerIkkeOppgittOptions,
-  JaNeiEllerVetIkkeOptions,
+  JaEllerNei,
+  JaEllerNeiOptions,
   JaNeiIkkeOppgitt,
   JaNeiVetIkke,
+  stringToJaEllerNei,
   stringToJaNeiAvbruttIkkeOppgitt,
   stringToJaNeiIkkeOppgitt,
   stringToJaNeiVetikke,
+  JaNeiEllerVetIkkeOptions,
 } from 'lib/postmottakForm';
 import { Barnetillegg } from './Barnetillegg';
+import { Medlemskap } from './Medlemskap';
 import { DigitaliseringsGrunnlag } from 'lib/types/postmottakTypes';
 import { Student } from './Student';
 import { Button, VStack } from '@navikt/ds-react';
@@ -24,6 +28,14 @@ import { isBefore, parse, startOfDay } from 'date-fns';
 import { validerDato } from 'lib/validation/dateValidation';
 import { FormEvent } from 'react';
 import { formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
+
+export type Utenlandsopphold = {
+  land: string;
+  fraDato: string;
+  tilDato: string;
+  iArbeid: JaEllerNei;
+  utenlandsId?: string;
+};
 
 export type Barn = {
   fnr?: string;
@@ -40,6 +52,11 @@ export interface SøknadFormFields {
   erStudent: JaNeiAvbruttIkkeOppgitt;
   studentKommeTilbake: JaNeiVetIkke;
   oppgitteBarn: Barn[];
+  arbeidetUtenforNorgeFørSykdom: JaEllerNei;
+  harArbeidetINorgeSiste5År: JaEllerNei;
+  harBoddINorgeSiste5År: JaEllerNei;
+  iTilleggArbeidUtenforNorge: JaEllerNei;
+  utenlandsOpphold: Utenlandsopphold[];
 }
 
 interface Props extends Submittable {
@@ -59,6 +76,25 @@ function mapTilSøknadKontrakt(data: SøknadFormFields) {
             kommeTilbake: data.studentKommeTilbake || null,
           },
     yrkesskade: data.yrkesSkade,
+    medlemskap: {
+      arbeidetUtenforNorgeFørSykdom: data.arbeidetUtenforNorgeFørSykdom,
+      harArbeidetINorgeSiste5År: data.harArbeidetINorgeSiste5År,
+      harBoddINorgeSiste5År: data.harBoddINorgeSiste5År,
+      iTilleggArbeidUtenforNorge: data.iTilleggArbeidUtenforNorge,
+      utenlandsOpphold: data.utenlandsOpphold.map((u) => {
+        const fraDato = formaterDatoForBackend(parse(u.fraDato, 'dd.MM.yyyy', new Date()));
+        const tilDato = formaterDatoForBackend(parse(u.tilDato, 'dd.MM.yyyy', new Date()));
+        return {
+          land: u.land,
+          fraDato,
+          fraDatoLocalDate: fraDato,
+          tilDato,
+          tilDatoLocalDate: tilDato,
+          iArbeid: u.iArbeid,
+          utenlandsId: u.utenlandsId || undefined,
+        };
+      }),
+    },
     oppgitteBarn: {
       identer: [],
       barn: data.oppgitteBarn.map((barn) => {
@@ -133,6 +169,45 @@ export const DigitaliserSøknad = ({ grunnlag, registrertDato, readOnly, submit,
       oppgitteBarn: {
         type: 'fieldArray',
       },
+      arbeidetUtenforNorgeFørSykdom: {
+        type: 'radio',
+        label: 'Arbeidet søker utenfor Norge de siste fem årene?',
+        options: JaEllerNeiOptions,
+        defaultValue: søknadGrunnlag.medlemskap?.arbeidetUtenforNorgeFørSykdom
+          ? stringToJaEllerNei(søknadGrunnlag.medlemskap.arbeidetUtenforNorgeFørSykdom)
+          : undefined,
+        rules: { required: 'Du må velge et alternativ.' },
+      },
+      harArbeidetINorgeSiste5År: {
+        type: 'radio',
+        label: 'Har søker arbeidet sammenhengende i Norge siste 5 år?',
+        options: JaEllerNeiOptions,
+        defaultValue: søknadGrunnlag.medlemskap?.harArbeidetINorgeSiste5År
+          ? stringToJaEllerNei(søknadGrunnlag.medlemskap.harArbeidetINorgeSiste5År)
+          : undefined,
+        rules: { required: 'Du må velge et alternativ.' },
+      },
+      harBoddINorgeSiste5År: {
+        type: 'radio',
+        label: 'Har søker bodd sammenhengende i Norge siste 5 år?',
+        options: JaEllerNeiOptions,
+        defaultValue: søknadGrunnlag.medlemskap?.harBoddINorgeSiste5År
+          ? stringToJaEllerNei(søknadGrunnlag.medlemskap.harBoddINorgeSiste5År)
+          : undefined,
+        rules: { required: 'Du må velge et alternativ.' },
+      },
+      iTilleggArbeidUtenforNorge: {
+        type: 'radio',
+        label: 'Har søker i tillegg jobbet utenfor Norge i de siste fem årene?',
+        options: JaEllerNeiOptions,
+        defaultValue: søknadGrunnlag.medlemskap?.iTilleggArbeidUtenforNorge
+          ? stringToJaEllerNei(søknadGrunnlag.medlemskap.iTilleggArbeidUtenforNorge)
+          : undefined,
+        rules: { required: 'Du må velge et alternativ.' },
+      },
+      utenlandsOpphold: {
+        type: 'fieldArray',
+      },
     },
     { readOnly }
   );
@@ -154,6 +229,7 @@ export const DigitaliserSøknad = ({ grunnlag, registrertDato, readOnly, submit,
             <FormField form={form} formField={formFields.yrkesSkade} />
           </div>
           <Barnetillegg form={form} readOnly={readOnly} />
+          <Medlemskap form={form} formFields={formFields} readOnly={readOnly} />
           <Student form={form} formFields={formFields} />
           {!readOnly && (
             <Button loading={isLoading} className={'fit-content'}>

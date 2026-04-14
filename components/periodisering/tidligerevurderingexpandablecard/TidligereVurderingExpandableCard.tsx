@@ -15,7 +15,9 @@ interface Props {
   tom: Date | null | undefined;
   foersteNyePeriodeFraDato: Date | null | undefined;
   vurderingStatus: VurderingStatus | undefined;
-  vurdertAv?: VurdertAvAnsatt;
+  vurdertAv: VurdertAvAnsatt | undefined;
+  besluttetAv: VurdertAvAnsatt | undefined;
+  kvalitetssikretAv: VurdertAvAnsatt | undefined;
   children: ReactNode;
   defaultCollapsed?: boolean;
 }
@@ -26,6 +28,8 @@ export const TidligereVurderingExpandableCard = ({
   foersteNyePeriodeFraDato,
   vurderingStatus,
   vurdertAv,
+  kvalitetssikretAv,
+  besluttetAv,
   children,
   defaultCollapsed = false,
 }: Props) => {
@@ -59,7 +63,9 @@ export const TidligereVurderingExpandableCard = ({
     >
       <VStack>
         {children}
-        <VurdertAvAnsattDetail variant={'VURDERING'} vurdertAv={vurdertAv} />
+        <VurdertAvAnsattDetail vurdertAv={vurdertAv} variant={'VURDERING'} />
+        <VurdertAvAnsattDetail vurdertAv={kvalitetssikretAv} variant={'KVALITETSSIKRER'} />
+        <VurdertAvAnsattDetail vurdertAv={besluttetAv} variant={'BESLUTTER'} />
       </VStack>
     </CustomExpandableCard>
   );

@@ -29,7 +29,7 @@ export const SvarFraBehandler = ({ behandlingReferanse, oppdaterVisHarUlesteDoku
         Svar fra behandler
       </Button>
       <Popover
-        onClose={() => setVis(vis)}
+        onClose={() => setVis(false)}
         open={vis}
         anchorEl={buttonRef.current}
         arrow={false}

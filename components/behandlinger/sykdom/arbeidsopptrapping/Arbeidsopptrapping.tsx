@@ -4,7 +4,7 @@ import {
   ArbeidsopptrappingGrunnlagResponse,
   ArbeidsopptrappingLøsningDto,
   MellomlagretVurdering,
-  VurdertAvAnsatt,
+  VurderingMeta,
 } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { useFieldArray, useForm } from 'react-hook-form';
@@ -15,8 +15,7 @@ import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook
 import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
 import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
-import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
-import { LovOgMedlemskapVurderingForm } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/types';
+import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import { parse, parseISO } from 'date-fns';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
@@ -44,15 +43,11 @@ export interface ArbeidsopptrappingForm {
   vurderinger: ArbeidsopptrappingVurderingForm[];
 }
 
-export interface ArbeidsopptrappingVurderingForm {
+export interface ArbeidsopptrappingVurderingForm extends VurderingMeta {
   begrunnelse: string;
   fraDato: string | undefined;
   reellMulighetTilOpptrapping: JaEllerNei | undefined;
   rettPaaAAPIOpptrapping: JaEllerNei | undefined;
-  vurdertAv?: VurdertAvAnsatt;
-  kvalitetssikretAv?: VurdertAvAnsatt;
-  besluttetAv?: VurdertAvAnsatt;
-  erNyVurdering?: boolean;
 }
 
 export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, initialMellomlagretVurdering }: Props) => {
@@ -61,21 +56,17 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
   const { løsPeriodisertBehovOgGåTilNesteSteg, status, løsBehovOgGåTilNesteStegError, isLoading } =
     useLøsBehovOgGåTilNesteSteg('ARBEIDSOPPTRAPPING');
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.ARBEIDSOPPTRAPPING_KODE, initialMellomlagretVurdering);
-
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
   const { visningActions, visningModus, formReadOnly, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'ARBEIDSOPPTRAPPING',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
-  const defaultValues =
-    mellomlagretVurdering != null
-      ? (JSON.parse(mellomlagretVurdering.data) as ArbeidsopptrappingForm)
-      : getDefaultValuesFromGrunnlag(grunnlag);
+  const defaultValues = initialMellomlagretVurdering
+    ? JSON.parse(initialMellomlagretVurdering.data)
+    : getDefaultValuesFromGrunnlag(grunnlag);
 
   const form = useForm<ArbeidsopptrappingForm>({
     defaultValues,
@@ -88,6 +79,12 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
 
   const { fields, append, remove } = useFieldArray({ name: 'vurderinger', control: form.control });
 
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.ARBEIDSOPPTRAPPING_KODE,
+    initialMellomlagretVurdering,
+    form
+  );
+
   function onAddPeriode() {
     append({
       begrunnelse: '',
@@ -95,6 +92,7 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
       reellMulighetTilOpptrapping: undefined,
       rettPaaAAPIOpptrapping: undefined,
       erNyVurdering: true,
+      behøverVurdering: false,
     });
   }
 
@@ -135,7 +133,7 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
   }
 
   const foersteNyePeriode = fields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
-  const errorList = mapPeriodiserteVurderingerErrorList<LovOgMedlemskapVurderingForm>(form.formState.errors);
+  const errorList = hentFeilmeldingerForForm(form.formState.errors);
 
   return (
     <VilkårskortPeriodisert
@@ -147,7 +145,6 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
       isLoading={isLoading}
       status={status}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}
       visningModus={visningModus}
       visningActions={visningActions}
@@ -166,7 +163,7 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
       )}
       {ikkeVurderbarePerioder.map((vurdering) => (
         <IkkeVurderbarPeriode
-          key={vurdering.fom}
+          key={crypto.randomUUID()}
           fom={parseISO(vurdering.fom)}
           tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
           alertMelding={
@@ -177,13 +174,16 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
       ))}
       {vedtatteVurderinger.map((vurdering) => (
         <TidligereVurderingExpandableCard
-          key={vurdering.fom}
+          key={crypto.randomUUID()}
           fom={parseISO(vurdering.fom)}
           tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
           foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
           vurderingStatus={getErOppfyltEllerIkkeStatus(
             vurdering.reellMulighetTilOpptrapping && vurdering.rettPaaAAPIOpptrapping
           )}
+          vurdertAv={vurdering.vurdertAv}
+          kvalitetssikretAv={vurdering.kvalitetssikretAv}
+          besluttetAv={vurdering.besluttetAv}
         >
           <VStack gap={'5'}>
             <SpørsmålOgSvar spørsmål="Vurderingen gjelder fra?" svar={formaterDatoForFrontend(vurdering.fom)} />
@@ -214,9 +214,7 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
           )}
           nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
           isLast={index === fields.length - 1}
-          vurdertAv={vurdering.vurdertAv}
-          kvalitetssikretAv={vurdering.kvalitetssikretAv}
-          besluttetAv={vurdering.besluttetAv}
+          vurdering={vurdering}
           finnesFeil={finnesFeilForVurdering(index, errorList)}
           onSlettVurdering={() => remove(index)}
           readonly={formReadOnly}
@@ -256,6 +254,8 @@ function getDefaultValuesFromGrunnlag(
       vurdertAv: vurdering.vurdertAv,
       kvalitetssikretAv: vurdering.kvalitetssikretAv,
       besluttetAv: vurdering.besluttetAv,
+      erNyVurdering: false,
+      behøverVurdering: false,
     })),
   };
 }

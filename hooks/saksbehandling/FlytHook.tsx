@@ -44,7 +44,11 @@ export function useRequiredFlyt(): { flyt: BehandlingFlytOgTilstand; refetchFlyt
     }
   );
 
-  if (isError(flyt) || !flyt) {
+  if (isError(flyt)) {
+    throw new Error(
+      `Feil oppsto ved henting av påkrevd flyt: ${flyt.apiException.message} med kode ${flyt.apiException.code} og status ${flyt.status}`
+    );
+  } else if (!flyt) {
     throw new Error('Kunne ikke finne påkrevd flyt');
   }
 

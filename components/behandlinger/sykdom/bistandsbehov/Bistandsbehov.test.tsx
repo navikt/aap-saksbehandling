@@ -61,13 +61,19 @@ describe('Generelt', () => {
     expect(heading).toBeVisible();
   });
 
-  it.skip('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
+  it('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
     setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'SYKDOMSVURDERING_BREV' });
 
     render(<Bistandsbehov grunnlag={grunnlagMedVurdering} readOnly={false} behandlingVersjon={0} />);
 
     const endreKnapp = screen.getByRole('button', { name: 'Endre' });
     await user.click(endreKnapp);
+
+    await user.click(
+      screen.getByRole('button', {
+        name: /ny vurdering: 24\. mars 2025 – oppfylt/i,
+      })
+    );
 
     const begrunnelseFelt = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
     await user.clear(begrunnelseFelt);
@@ -77,6 +83,11 @@ describe('Generelt', () => {
     const avbrytKnapp = screen.getByRole('button', { name: 'Avbryt' });
     await user.click(avbrytKnapp);
 
+    await user.click(
+      screen.getByRole('button', {
+        name: /ny vurdering: 24\. mars 2025 – oppfylt/i,
+      })
+    );
     const begrunnelseFeltEtterAvbryt = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
     expect(begrunnelseFeltEtterAvbryt).toHaveValue('Dette er min vurdering som er bekreftet');
   });
@@ -124,31 +135,6 @@ describe('mellomlagring i bistandsbehov', () => {
     const tekst = screen.getByText('Utkast lagret 21.08.2025 12:00 (Jan T. Loven)');
     expect(tekst).toBeVisible();
   });
-
-  it(
-    'Skal vise en tekst om hvem som har lagret vurdering dersom bruker trykker på lagre ' + 'mellomlagring',
-    async () => {
-      render(<Bistandsbehov behandlingVersjon={0} readOnly={false} grunnlag={grunnlagTomt} />);
-
-      await user.type(
-        screen.getByRole('textbox', { name: 'Vilkårsvurdering' }),
-        'Her har jeg begynt å skrive en vurdering..'
-      );
-      expect(screen.queryByText('Utkast lagret 21.08.2025 00:00 (Jan T. Loven)')).not.toBeInTheDocument();
-
-      const mockFetchResponseLagreMellomlagring: FetchResponse<MellomlagretVurderingResponse> = {
-        type: 'SUCCESS',
-        data: mellomlagring,
-        status: 200,
-      };
-      fetchMock.mockResponse(JSON.stringify(mockFetchResponseLagreMellomlagring));
-
-      const lagreKnapp = screen.getByRole('button', { name: 'Lagre utkast' });
-      await user.click(lagreKnapp);
-      const tekst = screen.getByText('Utkast lagret 21.08.2025 12:00 (Jan T. Loven)');
-      expect(tekst).toBeVisible();
-    }
-  );
 
   it('Skal ikke vise tekst om hvem som har gjort mellomlagring dersom bruker trykker på slett mellomlagring', async () => {
     render(
@@ -280,7 +266,7 @@ describe('mellomlagring i bistandsbehov', () => {
     );
   });
 
-  it('Skal ikke være mulig å lagre eller slette mellomlagring hvis det er readOnly', () => {
+  it('Skal ikke være mulig å slette mellomlagring hvis det er readOnly', () => {
     render(
       <Bistandsbehov
         behandlingVersjon={0}
@@ -290,8 +276,6 @@ describe('mellomlagring i bistandsbehov', () => {
       />
     );
 
-    const lagreKnapp = screen.queryByRole('button', { name: 'Lagre utkast' });
-    expect(lagreKnapp).not.toBeInTheDocument();
     const slettKnapp = screen.queryByRole('button', { name: 'Slett utkast' });
     expect(slettKnapp).not.toBeInTheDocument();
   });

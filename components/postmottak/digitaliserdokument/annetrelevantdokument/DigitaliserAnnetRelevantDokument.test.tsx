@@ -25,7 +25,7 @@ describe('DigitaliserAnnetDokument', () => {
         grunnlag={grunnlag}
         readOnly={false}
         isLoading={false}
-        isRevurderingStarttidspunktEnabled={true}
+        inkluderBarnepensjon={true}
       />
     );
 

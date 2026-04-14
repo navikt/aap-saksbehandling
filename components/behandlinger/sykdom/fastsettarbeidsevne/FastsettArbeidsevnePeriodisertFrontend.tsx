@@ -8,7 +8,7 @@ import {
   ArbeidsevneGrunnlag,
   MellomlagretVurdering,
   PeriodisertArbeidsevneVurderingDto,
-  VurdertAvAnsatt,
+  VurderingMeta,
 } from 'lib/types/types';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
@@ -28,7 +28,7 @@ import {
   NyVurderingExpandableCard,
   skalVæreInitiellEkspandert,
 } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
-import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
+import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
@@ -45,14 +45,10 @@ interface Props {
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
-interface ArbeidsevneVurderingForm {
+interface ArbeidsevneVurderingForm extends VurderingMeta {
   begrunnelse: string;
   arbeidsevne: number | undefined;
   fraDato: string | undefined;
-  vurdertAv?: VurdertAvAnsatt;
-  kvalitetssikretAv?: VurdertAvAnsatt;
-  besluttetAv?: VurdertAvAnsatt;
-  erNyVurdering?: boolean;
 }
 
 interface FastsettArbeidsevneForm {
@@ -83,27 +79,29 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
   const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('FASTSETT_ARBEIDSEVNE');
 
-  const { mellomlagretVurdering, lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering } =
-    useMellomlagring(Behovstype.FASTSETT_ARBEIDSEVNE_KODE, initialMellomlagretVurdering);
-
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
   const { visningActions, formReadOnly, visningModus, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'FASTSETT_ARBEIDSEVNE',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const nyeVurderinger = grunnlag?.nyeVurderinger ?? [];
 
-  const defaultValues =
-    initialMellomlagretVurdering != null
-      ? (JSON.parse(initialMellomlagretVurdering.data) as FastsettArbeidsevneForm)
-      : getDefaultValuesFromGrunnlag(grunnlag);
+  const defaultValues = initialMellomlagretVurdering
+    ? JSON.parse(initialMellomlagretVurdering.data)
+    : getDefaultValuesFromGrunnlag(grunnlag);
 
   const form = useForm<FastsettArbeidsevneForm>({
     defaultValues,
   });
+
+  const { mellomlagretVurdering, slettMellomlagring, nullstillMellomlagretVurdering } = useMellomlagring(
+    Behovstype.FASTSETT_ARBEIDSEVNE_KODE,
+    initialMellomlagretVurdering,
+    form
+  );
 
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
 
@@ -115,6 +113,7 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
       fraDato: fields.length === 0 ? formaterDatoForFrontend(new Date()) : undefined,
       arbeidsevne: undefined,
       erNyVurdering: true,
+      behøverVurdering: false,
     });
   }
 
@@ -156,7 +155,7 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
   }
 
   const foersteNyePeriode = fields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
-  const errorList = mapPeriodiserteVurderingerErrorList<FastsettArbeidsevneForm>(form.formState.errors);
+  const errorList = hentFeilmeldingerForForm(form.formState.errors);
 
   return (
     <VilkårskortPeriodisert
@@ -168,7 +167,6 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}
       visningModus={visningModus}
       visningActions={visningActions}
@@ -187,12 +185,14 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
       )}
       {vedtatteVurderinger.map((vurdering) => (
         <TidligereVurderingExpandableCard
-          key={vurdering.fom}
+          key={crypto.randomUUID()}
           fom={parseISO(vurdering.fom)}
           tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
           foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
           vurderingStatus={getErOppfyltEllerIkkeStatus(vurdering.arbeidsevne > 0)}
           vurdertAv={vurdering.vurdertAv}
+          kvalitetssikretAv={vurdering.kvalitetssikretAv}
+          besluttetAv={vurdering.besluttetAv}
         >
           <VStack gap={'5'}>
             <SpørsmålOgSvar spørsmål="Vurderingen gjelder fra?" svar={formaterDatoForFrontend(vurdering.fom)} />
@@ -213,9 +213,7 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
           vurderingStatus={undefined}
           nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
           isLast={index === vedtatteVurderinger.length - 1}
-          vurdertAv={vurdering.vurdertAv}
-          kvalitetssikretAv={vurdering.kvalitetssikretAv}
-          besluttetAv={vurdering.besluttetAv}
+          vurdering={vurdering}
           finnesFeil={finnesFeilForVurdering(index, errorList)}
           readonly={formReadOnly}
           onSlettVurdering={() => remove(index)}
@@ -301,6 +299,8 @@ function getDefaultValuesFromGrunnlag(grunnlag: ArbeidsevneGrunnlag | undefined)
       vurdertAv: vurdering.vurdertAv,
       kvalitetssikretAv: vurdering.kvalitetssikretAv,
       besluttetAv: vurdering.besluttetAv,
+      erNyVurdering: false,
+      behøverVurdering: false,
     })),
   };
 }

@@ -6,6 +6,7 @@ import {
   EnhetSynkroniseringOppgave,
   Kø,
   Markering,
+  MineOppgaverQueryParams,
   Oppgave,
   OppgaveAvklaringsbehovKode,
   OppgaveBehandlingstype,
@@ -16,8 +17,9 @@ import {
   SøkResponse,
   TildelOppgaveRequest,
   TildelOppgaveResponse,
+  TildeltStatus,
 } from 'lib/types/oppgaveTypes';
-import { queryParamsArray } from 'lib/utils/request';
+import { mineOppgaverQueryParams, queryParamsArray } from 'lib/utils/request';
 import { apiFetch } from 'lib/services/apiFetch';
 import { isLocal } from 'lib/utils/environment';
 import { FetchResponse } from 'lib/utils/api';
@@ -45,6 +47,7 @@ export async function hentOppgave(behandlingReferanse: string) {
     const mockResponse: FetchResponse<Oppgave> = {
       type: 'SUCCESS',
       data: {
+        behandlingRef: 'dsfad',
         avklaringsbehovKode: '5008',
         behandlingOpprettet: '2025-08-20',
         behandlingstype: NoNavAapOppgaveOppgaveDtoBehandlingstype.REVURDERING,
@@ -58,6 +61,7 @@ export async function hentOppgave(behandlingReferanse: string) {
         årsakerTilBehandling: [],
         enhetForKø: '4491',
         erPåVent: false,
+        erÅpen: true,
       },
     };
 
@@ -76,9 +80,12 @@ export async function hentAntallOppgaver(behandlingstype?: string) {
   });
 }
 
-export const hentMineOppgaver = async () => {
-  const url = `${oppgaveApiBaseURL}/mine-oppgaver`;
-  return await apiFetch<OppgavelisteResponse>(url, oppgaveApiScope, 'GET', undefined, ['oppgaveservice/mine-oppgaver']);
+export const hentMineOppgaver = async (queryParams: MineOppgaverQueryParams) => {
+  const query = queryParams?.sortby
+    ? mineOppgaverQueryParams({ sortby: queryParams?.sortby, sortorder: queryParams.sortorder })
+    : '';
+  const url = `${oppgaveApiBaseURL}/mine-oppgaver${query ? `?${query}` : ''}`;
+  return await apiFetch<OppgavelisteResponse>(url, oppgaveApiScope, 'GET');
 };
 
 export async function hentEnheter() {
@@ -107,12 +114,18 @@ export async function søkPåSaksbehandler(data: SaksbehandlerSøkRequest) {
   return await apiFetch<SaksbehandlerSøkRespons>(url, oppgaveApiScope, 'POST', {
     oppgaver: data.oppgaver,
     søketekst: data.søketekst,
+    enheter: data.enheter,
   });
 }
 
 export async function tildelTilSaksbehandler(data: TildelOppgaveRequest) {
   const url = `${oppgaveApiBaseURL}/tildel-oppgaver`;
   return await apiFetch<TildelOppgaveResponse>(url, oppgaveApiScope, 'POST', data);
+}
+
+export async function hentTildeltStatus(behandlingReferanse: string) {
+  const url = `${oppgaveApiBaseURL}/${behandlingReferanse}/tildelt-status`;
+  return await apiFetch<TildeltStatus>(url, oppgaveApiScope, 'GET');
 }
 
 export async function avreserverOppgave({ oppgaver }: AvreserverOppgaveDto) {

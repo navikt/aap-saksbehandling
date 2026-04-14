@@ -3,8 +3,6 @@ import { describe, expect, it } from 'vitest';
 import { Dato } from 'lib/types/Dato';
 import { HelseInstiusjonVurdering } from 'lib/types/types';
 import {
-  beregnReduksjonsdatoVedNyttOpphold,
-  beregnTidligsteReduksjonsdato,
   erNyttOppholdInnenfor3MaanederEtterSistOpphold,
   erReduksjonUtIFraVurdering,
   lagReduksjonBeskrivelseNyttOpphold,
@@ -12,21 +10,7 @@ import {
   validerErIKronologiskRekkeFølge,
 } from 'lib/utils/institusjonopphold';
 
-describe('beregnTidligsteReduksjonsdato', () => {
-  it('Skal returnere 1. mai dersom vi sender inn 1. januar', () => {
-    const januarDato = new Dato('2025-01-01').formaterForFrontend();
-    const value = beregnTidligsteReduksjonsdato(januarDato);
-    expect(value).toBe('01.05.2025');
-  });
-
-  it('Skal returnere 1. mai dersom vi sender inn hvilken som helst dag i januar', () => {
-    const januarDato = new Dato('2025-01-10').formaterForFrontend();
-    const value = beregnTidligsteReduksjonsdato(januarDato);
-    expect(value).toBe('01.05.2025');
-  });
-});
-
-describe('validerReduksjonsdatoInnenforOpphold', () => {
+describe('validerDatoErInnenforOppholdReduksjon', () => {
   const oppholdFra = new Dato('2025-01-01').formaterForFrontend();
   const avsluttetDato = new Dato('2025-08-01').formaterForFrontend();
 
@@ -49,7 +33,7 @@ describe('validerReduksjonsdatoInnenforOpphold', () => {
   });
 });
 
-describe('validerReduksjonsdatoInnenforOpphold', () => {
+describe('validerErIKronologiskRekkefølge', () => {
   const forrigevurderingFom = new Dato('2025-02-01').formaterForFrontend();
 
   it('skal vise en feilmelding dersom input value er tidligere enn forrige vurdering fom', () => {
@@ -124,42 +108,6 @@ describe('erReduksjon', () => {
         harFasteUtgifter: true,
       })
     ).toBe(false);
-  });
-});
-
-describe('beregnReduksjonsdatoVedNyttOpphold', () => {
-  it('returnerer reduksjonsdato måneden etter nytt opphold når nytt opphold er innen 3 måneder', () => {
-    const resultat = beregnReduksjonsdatoVedNyttOpphold('01.01.2025', '15.02.2025');
-
-    // Nytt opphold i februar → reduksjon fra 01.03.2025
-    expect(resultat).toBe('01.03.2025');
-  });
-
-  it('inkluderer nytt opphold som starter nøyaktig 3 måneder etter utskrivelse', () => {
-    const resultat = beregnReduksjonsdatoVedNyttOpphold('01.01.2025', '01.04.2025');
-
-    // April → reduksjon fra 01.05.2025
-    expect(resultat).toBe('01.05.2025');
-  });
-
-  it('returnerer nyttOppholdFra dersom nytt opphold er etter 3 måneder', () => {
-    const resultat = beregnReduksjonsdatoVedNyttOpphold('01.01.2025', '02.04.2025');
-
-    expect(resultat).toBe('02.04.2025');
-  });
-
-  it('runder alltid til første dag i måneden etter nytt opphold', () => {
-    const resultat = beregnReduksjonsdatoVedNyttOpphold('10.01.2025', '28.03.2025');
-
-    // Mars → reduksjon fra 01.04.2025
-    expect(resultat).toBe('01.04.2025');
-  });
-
-  it('håndterer nytt opphold i samme måned som utskrivelse', () => {
-    const resultat = beregnReduksjonsdatoVedNyttOpphold('05.01.2025', '20.01.2025');
-
-    // Januar → reduksjon fra 01.02.2025
-    expect(resultat).toBe('01.02.2025');
   });
 });
 

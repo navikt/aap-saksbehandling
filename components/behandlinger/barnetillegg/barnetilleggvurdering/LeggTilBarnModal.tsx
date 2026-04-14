@@ -7,8 +7,8 @@ import { erDatoIFremtiden, validerDato } from 'lib/validation/dateValidation';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { erGyldigFødselsnummer } from 'lib/utils/fnr';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
-import { DATO_FORMATER, formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
-import { parse } from 'date-fns';
+import { formaterDatoForFrontend } from 'lib/utils/date';
+import { Dato } from '../../../../lib/types/Dato';
 
 interface Props {
   readOnly: boolean;
@@ -36,6 +36,7 @@ export const LeggTilBarnModal = ({ readOnly, åpne, avbryt, onLagreNyttBarn, all
       etternavn: '',
       navn: '',
       fødselsdato: '',
+      dødsdato: '',
       ident: '',
       manglerIdent: false,
       oppgittForelderRelasjon: undefined,
@@ -62,9 +63,8 @@ export const LeggTilBarnModal = ({ readOnly, åpne, avbryt, onLagreNyttBarn, all
     }
     const nyttBarn: BarneTilleggVurdering = {
       navn: `${data.fornavn} ${data.etternavn}`,
-      fødselsdato: data.fødselsdato
-        ? formaterDatoForBackend(parse(data.fødselsdato, DATO_FORMATER.ddMMyyyy, new Date()))
-        : '',
+      fødselsdato: data.fødselsdato ? new Dato(data.fødselsdato).formaterForBackend() : '',
+      dødsdato: data.dødsdato ? new Dato(data.dødsdato).formaterForBackend() : '',
       ident: data.ident,
       oppgittForelderRelasjon: data.oppgittForelderRelasjon,
       vurderinger: [{ begrunnelse: '', harForeldreAnsvar: '', fraDato: '' }],

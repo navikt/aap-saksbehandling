@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useTransition } from 'react';
+import React, { useTransition } from 'react';
 import { Alert, Button, Modal } from '@navikt/ds-react';
 import styles from 'components/postmottak/postmottaksettbehandlingpåventmodal/PostmottakSettBehandlingPåVentModal.module.css';
 import { HourglassBottomFilledIcon } from '@navikt/aksel-icons';
@@ -64,14 +64,15 @@ export const PostmottakSettBehandllingPVentModal = ({
     },
   });
 
-  useEffect(() => {
+  function onCloseClick() {
     form.reset();
-  }, [isOpen, form]);
+    onClose();
+  }
 
   return (
     <Modal
       open={isOpen}
-      onClose={onClose}
+      onClose={onCloseClick}
       header={{ heading: 'Sett behandling på vent', icon: <HourglassBottomFilledIcon /> }}
       className={styles.settBehandlingPåVentModal}
     >
@@ -106,7 +107,7 @@ export const PostmottakSettBehandllingPVentModal = ({
         <Button form={'settBehandlingPåVent'} loading={isPending}>
           Sett på vent
         </Button>
-        <Button variant={'secondary'} onClick={onClose}>
+        <Button variant={'secondary'} onClick={onCloseClick}>
           Avbryt
         </Button>
       </Modal.Footer>

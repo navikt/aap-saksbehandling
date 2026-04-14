@@ -9,7 +9,7 @@ import {
   SamordningYtelseVurdering,
 } from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { Alert, BodyLong, Box, Button, Detail, Heading, HStack, Modal, VStack } from '@navikt/ds-react';
+import { Alert, BodyLong, BodyShort, Box, Button, Heading, HStack, Modal, VStack } from '@navikt/ds-react';
 import { FormEvent, useRef, useState } from 'react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
@@ -28,7 +28,7 @@ import { useSak } from 'hooks/SakHook';
 import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { storForbokstavOgMellomromForUnderstrek } from 'lib/utils/string';
 
@@ -84,13 +84,10 @@ export const SamordningGradering = ({
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('SAMORDNING_GRADERING');
 
-  const { mellomlagretVurdering, lagreMellomlagring, nullstillMellomlagretVurdering, slettMellomlagring } =
-    useMellomlagring(Behovstype.AVKLAR_SAMORDNING_GRADERING, initialMellomlagretVurdering);
-
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
     'SAMORDNING_GRADERING',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
@@ -111,6 +108,12 @@ export const SamordningGradering = ({
       },
     },
     { readOnly: formReadOnly, shouldUnregister: true }
+  );
+
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.AVKLAR_SAMORDNING_GRADERING,
+    initialMellomlagretVurdering,
+    form
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -194,11 +197,12 @@ export const SamordningGradering = ({
               modalOnClose={() => setModalForOppfølgingsoppgaveState(false)}
               successfullOpprettelse={handleSuccess}
               finnTidligsteVirkningstidspunkt={finnTidligsteVirkningstidspunkt()}
+              brukerHarNayTilgang={true}
             />
           </Modal.Body>
         </Modal>
       )}
-      <VilkårskortMedFormOgMellomlagringNyVisning
+      <VilkårskortMedFormOgMellomlagring
         heading="§§ 11-27 / 11-28 Forholdet til andre fulle eller reduserte folketrygdytelser"
         steg="SAMORDNING_GRADERING"
         onSubmit={handleSubmit}
@@ -207,7 +211,6 @@ export const SamordningGradering = ({
         løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
         vilkårTilhørerNavKontor={false}
         vurdertAvAnsatt={grunnlag.vurdering?.vurdertAv}
-        onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
         onDeleteMellomlagringClick={() => {
           slettMellomlagring(() =>
             form.reset(grunnlag.vurdering ? mapVurderingToDraftFormFields(grunnlag) : emptyDraftFormFields())
@@ -287,22 +290,18 @@ export const SamordningGradering = ({
           </VStack>
         )}
         {!visForm && (
-          <VStack gap={'2'}>
-            <Detail>Vi finner ingen ytelser fra folketrygden</Detail>
-            <HStack>
-              <Button
-                size={'small'}
-                type={'button'}
-                variant={'secondary'}
-                onClick={() => setVisForm(true)}
-                disabled={formReadOnly}
-              >
-                Legg til folketrygdytelse
-              </Button>
-            </HStack>
+          <VStack gap={'4'}>
+            <BodyShort size={'small'}>Vi finner ingen ytelser fra folketrygden</BodyShort>
+            {!formReadOnly && (
+              <HStack>
+                <Button size={'small'} type={'button'} variant={'secondary'} onClick={() => setVisForm(true)}>
+                  Legg til folketrygdytelse
+                </Button>
+              </HStack>
+            )}
           </VStack>
         )}
-      </VilkårskortMedFormOgMellomlagringNyVisning>
+      </VilkårskortMedFormOgMellomlagring>
     </>
   );
 };

@@ -65,30 +65,26 @@ export const SamordningUføreTabell = ({ form, readOnly }: Props) => {
                 />
               </Table.DataCell>
               <Table.DataCell>
-                <Button
-                  size={'small'}
-                  icon={<TrashIcon title={'Slett'} />}
-                  variant={'tertiary'}
-                  type={'button'}
-                  onClick={() => remove(index)}
-                  disabled={readOnly}
-                />
+                {!readOnly && (
+                  <Button
+                    size={'small'}
+                    icon={<TrashIcon title={'Slett'} />}
+                    variant={'tertiary'}
+                    type={'button'}
+                    onClick={() => remove(index)}
+                  />
+                )}
               </Table.DataCell>
             </Table.Row>
           ))}
         </Table.Body>
       </TableStyled>
       <HStack>
-        <Button
-          size={'small'}
-          type={'button'}
-          variant={'tertiary'}
-          icon={<PlusCircleIcon />}
-          onClick={leggTilRad}
-          disabled={readOnly}
-        >
-          Legg til
-        </Button>
+        {!readOnly && (
+          <Button size={'small'} type={'button'} variant={'tertiary'} icon={<PlusCircleIcon />} onClick={leggTilRad}>
+            Legg til
+          </Button>
+        )}
       </HStack>
     </VStack>
   );

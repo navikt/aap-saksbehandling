@@ -3,6 +3,7 @@ import {
   AvklarOppholdkravLøsning,
   AvklarPeriodisertForutgåendeMedlemskapLøsning,
   AvklarPeriodisertLovvalgMedlemskapLøsning,
+  AvklarPeriodisertStudentLøsning,
   BistandsbehovLøsning,
   EtableringEgenVirksomhetLøsningDto,
   LøsPeriodisertBehovPåBehandling,
@@ -12,6 +13,7 @@ import {
   PeriodisertFritaksvurderingDto,
   SykdomsvurderingLøsningDto,
   SykepengererstatningPeriodeLøsning,
+  VedtakslengdeVurderingDto,
 } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
 
@@ -26,9 +28,14 @@ interface LovvalgOgMedlemskapBehov {
   løsningerForPerioder: AvklarPeriodisertLovvalgMedlemskapLøsning[];
 }
 
+interface StudentBehov {
+  behovstype: Behovstype.AVKLAR_STUDENT_KODE;
+  løsningerForPerioder: AvklarPeriodisertStudentLøsning[];
+}
+
 interface SykdomsvurderingBehov {
   behovstype: Behovstype.AVKLAR_SYKDOM_KODE;
-  løsningerForPerioder: SykdomsvurderingLøsningDto[]; // typen fra types.ts
+  løsningerForPerioder: SykdomsvurderingLøsningDto[];
 }
 
 interface Bistandsbehov {
@@ -81,8 +88,14 @@ interface ForutgåendeMedlemskapMedOverstyring {
   løsningerForPerioder: AvklarPeriodisertForutgåendeMedlemskapLøsning[];
 }
 
+interface VedtakslengdeBehov {
+  behovstype: Behovstype.FASTSETT_VEDTAKSLENGDE;
+  løsningerForPerioder: VedtakslengdeVurderingDto[];
+}
+
 type Behov =
   | LovvalgOgMedlemskapBehov
+  | StudentBehov
   | SykdomsvurderingBehov
   | Bistandsbehov
   | FastsettArbeidsevne
@@ -93,4 +106,5 @@ type Behov =
   | Arbeidsopptrapping
   | OvergangUføre
   | OppholdskravvurderingBehov
-  | ForutgåendeMedlemskapMedOverstyring;
+  | ForutgåendeMedlemskapMedOverstyring
+  | VedtakslengdeBehov;

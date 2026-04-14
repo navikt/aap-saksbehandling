@@ -20,7 +20,7 @@ import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrap
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 
 interface Props {
   grunnlag: Soningsgrunnlag;
@@ -46,13 +46,10 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon, initi
     useLøsBehovOgGåTilNesteSteg('DU_ER_ET_ANNET_STED');
   const behandlingsreferanse = useBehandlingsReferanse();
 
-  const { nullstillMellomlagretVurdering, mellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.AVKLAR_SONINGSFORRHOLD, initialMellomlagretVurdering);
-
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
     'DU_ER_ET_ANNET_STED',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
@@ -65,6 +62,12 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon, initi
       defaultValue: defaultValue.soningsvurderinger,
     },
   });
+
+  const { nullstillMellomlagretVurdering, mellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.AVKLAR_SONINGSFORRHOLD,
+    initialMellomlagretVurdering,
+    form
+  );
 
   const { fields, remove, append } = useFieldArray({ control: form.control, name: 'soningsvurderinger' });
 
@@ -96,7 +99,7 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon, initi
   };
 
   return (
-    <VilkårskortMedFormOgMellomlagringNyVisning
+    <VilkårskortMedFormOgMellomlagring
       heading={'§ 11-26 Soning'}
       steg={'DU_ER_ET_ANNET_STED'}
       onSubmit={handleSubmit}
@@ -106,7 +109,6 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon, initi
       vilkårTilhørerNavKontor={false}
       vurdertAvAnsatt={grunnlag.vurdertAv}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() => form.reset(mapVurderingToDraftFormFields(grunnlag.vurderinger)))
       }
@@ -187,7 +189,7 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon, initi
           Legg til ny vurdering
         </Button>
       )}
-    </VilkårskortMedFormOgMellomlagringNyVisning>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 

@@ -1,9 +1,9 @@
 'use client';
 
-import { VStack } from '@navikt/ds-react';
+import { Alert, VStack } from '@navikt/ds-react';
 import { erDatoIPeriode, validerDato } from 'lib/validation/dateValidation';
 import { parse } from 'date-fns';
-import { parseDatoFraDatePicker, stringToDate } from 'lib/utils/date';
+import { stringToDate } from 'lib/utils/date';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
 import { UseFormReturn } from 'react-hook-form';
@@ -11,13 +11,12 @@ import { Periode } from 'lib/types/types';
 import type { SykdomsvurderingerForm } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import { JaEllerNei } from 'lib/utils/form';
 import { Sak } from 'context/saksbehandling/SakContext';
-import { SykdomsvurderingMedVissVarighet } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedVissVarighet';
-import { SykdomsvurderingUtenVissVarighet } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingUtenVissVarighet';
+import { SykdomsvurderingNedsattArbeidsevneDetaljer } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingNedsattArbeidsevneDetaljer';
 import { SykdomsvurderingDiagnosesøk } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingDiagnosesøk';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
 import React from 'react';
-import { skalVurdereVissVarighetSjekk } from 'components/behandlinger/sykdom/sykdomsvurdering/sykdomsvurdering-utils';
+import { DiagnoserDefaultOptions } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
 
 interface Props {
   index: number;
@@ -28,12 +27,15 @@ interface Props {
   skalVurdereYrkesskade: boolean;
   erÅrsakssammenhengYrkesskade: boolean;
   rettighetsperiodeStartdato: Date;
+  diagnoseDefaultOptions: DiagnoserDefaultOptions;
 }
 
 export const vilkårsvurderingLabel = 'Vilkårsvurdering';
 export const harSkadeSykdomEllerLyteLabel = 'Har brukeren sykdom, skade eller lyte?';
 export const erArbeidsevnenNedsattLabel = 'Har brukeren nedsatt arbeidsevne?';
 export const erNedsettelseIArbeidsevneMerEnnHalvpartenLabel = 'Er arbeidsevnen nedsatt med minst halvparten?';
+export const yrkesskadeBegrunnelse = '§ 11-22 AAP ved yrkesskade';
+export const erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense = 'Er arbeidsevnen nedsatt med minst 30 prosent?';
 export const erSkadeSykdomEllerLyteVesentligdelLabel =
   'Er sykdom, skade eller lyte vesentlig medvirkende til at arbeidsevnen er nedsatt?';
 export const erNedsettelseIArbeidsevneAvEnVissVarighetLabel = 'Er den nedsatte arbeidsevnen av en viss varighet?';
@@ -46,10 +48,8 @@ export const SykdomsvurderingFormInput = ({
   readonly,
   ikkeRelevantePerioder,
   rettighetsperiodeStartdato,
+  diagnoseDefaultOptions,
 }: Props) => {
-  const valgtDato = parseDatoFraDatePicker(form.watch(`vurderinger.${index}.fraDato`));
-  const skalVurdereVissVarighet = skalVurdereVissVarighetSjekk(valgtDato, rettighetsperiodeStartdato);
-
   return (
     <VStack gap={'5'}>
       <DateInputWrapper
@@ -99,7 +99,12 @@ export const SykdomsvurderingFormInput = ({
       />
       {form.watch(`vurderinger.${index}.harSkadeSykdomEllerLyte`) === JaEllerNei.Ja && (
         <>
-          <SykdomsvurderingDiagnosesøk index={index} form={form} readOnly={readonly} />
+          <SykdomsvurderingDiagnosesøk
+            index={index}
+            form={form}
+            readOnly={readonly}
+            diagnoseDefaultOptions={diagnoseDefaultOptions}
+          />
           <RadioGroupJaNei
             name={`vurderinger.${index}.erArbeidsevnenNedsatt`}
             control={form.control}
@@ -108,19 +113,20 @@ export const SykdomsvurderingFormInput = ({
             rules={{ required: 'Du må svare på om brukeren har nedsatt arbeidsevne' }}
             readOnly={readonly}
           />
-          {skalVurdereVissVarighet && (
-            <SykdomsvurderingMedVissVarighet
-              index={index}
-              form={form}
-              readonly={readonly}
-              skalVurdereYrkesskade={skalVurdereYrkesskade}
-            />
+
+          {form.watch(`vurderinger.${index}.erArbeidsevnenNedsatt`) === JaEllerNei.Nei && (
+            <Alert variant={'info'} size={'small'} className={'fit-content'}>
+              Brukeren vil få vedtak om at de ikke har rett på AAP. De kvalifiserer ikke for sykepengeerstatning.
+            </Alert>
           )}
-          {!skalVurdereVissVarighet && (
-            <SykdomsvurderingUtenVissVarighet
+
+          {form.watch(`vurderinger.${index}.erArbeidsevnenNedsatt`) === JaEllerNei.Ja && (
+            <SykdomsvurderingNedsattArbeidsevneDetaljer
               index={index}
               form={form}
               readonly={readonly}
+              rettighetsperiodeStartdato={rettighetsperiodeStartdato}
+              skalVurdereYrkesskade={skalVurdereYrkesskade}
               erÅrsakssammenhengYrkesskade={erÅrsakssammenhengYrkesskade}
             />
           )}

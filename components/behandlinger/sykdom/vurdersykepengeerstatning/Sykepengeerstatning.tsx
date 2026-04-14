@@ -25,7 +25,7 @@ import { SykepengeerstatningFormInput } from 'components/behandlinger/sykdom/vur
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
 import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
 import { OppholdskravSykepengererstatninbgTidligereVurdering } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/SykepengererstatningTidligereVurdering';
-import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
+import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
@@ -41,28 +41,29 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
   const behandlingsReferanse = useBehandlingsReferanse();
   const { løsPeriodisertBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_SYKEPENGEERSTATNING');
-
-  const { lagreMellomlagring, slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } =
-    useMellomlagring(Behovstype.VURDER_SYKEPENGEERSTATNING_KODE, initialMellomlagretVurdering);
-
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
   const { visningActions, visningModus, formReadOnly, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'VURDER_SYKEPENGEERSTATNING',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
-  const defaultValues =
-    mellomlagretVurdering != null
-      ? (JSON.parse(mellomlagretVurdering.data) as SykepengeerstatningForm)
-      : getDefaultValuesFromGrunnlag(grunnlag);
+  const defaultValues = initialMellomlagretVurdering
+    ? JSON.parse(initialMellomlagretVurdering.data)
+    : getDefaultValuesFromGrunnlag(grunnlag);
 
   const form = useForm<SykepengeerstatningForm>({
     defaultValues,
     reValidateMode: 'onChange',
     shouldUnregister: true,
   });
+
+  const { slettMellomlagring, nullstillMellomlagretVurdering, mellomlagretVurdering } = useMellomlagring(
+    Behovstype.VURDER_SYKEPENGEERSTATNING_KODE,
+    initialMellomlagretVurdering,
+    form
+  );
 
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
 
@@ -83,6 +84,7 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
       grunn: null,
       erOppfylt: '',
       erNyVurdering: true,
+      behøverVurdering: false,
     });
   }
 
@@ -120,7 +122,7 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
   };
   const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
 
-  const errorList = mapPeriodiserteVurderingerErrorList<SykepengeerstatningForm>(form.formState.errors);
+  const errorList = hentFeilmeldingerForForm(form.formState.errors);
 
   return (
     <VilkårskortPeriodisert
@@ -132,7 +134,6 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() => {
           form.reset(getDefaultValuesFromGrunnlag(grunnlag));
@@ -146,11 +147,14 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
     >
       {vedtatteVurderinger?.map((vurdering) => (
         <TidligereVurderingExpandableCard
-          key={vurdering.fom}
+          key={crypto.randomUUID()}
           fom={parseISO(vurdering.fom)}
           tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
           foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
           vurderingStatus={getErOppfyltEllerIkkeStatus(vurdering.harRettPå)}
+          vurdertAv={vurdering.vurdertAv}
+          kvalitetssikretAv={vurdering.kvalitetssikretAv}
+          besluttetAv={vurdering.besluttetAv}
         >
           <OppholdskravSykepengererstatninbgTidligereVurdering
             fraDato={vurdering.fom}
@@ -172,9 +176,7 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
             nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
             isLast={index === vurderingerFields.length - 1}
             accordionsSignal={accordionsSignal}
-            vurdertAv={vurdering.vurdertAv}
-            kvalitetssikretAv={vurdering.kvalitetssikretAv}
-            besluttetAv={vurdering.besluttetAv}
+            vurdering={vurdering}
             finnesFeil={finnesFeilForVurdering(index, errorList)}
             readonly={formReadOnly}
             onSlettVurdering={() => remove(index)}

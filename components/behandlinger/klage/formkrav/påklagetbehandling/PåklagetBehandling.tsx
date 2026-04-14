@@ -9,7 +9,7 @@ import { Behovstype } from 'lib/utils/form';
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 
 interface Props {
   behandlingVersjon: number;
@@ -31,24 +31,27 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, ini
   const { løsBehovOgGåTilNesteSteg, status, løsBehovOgGåTilNesteStegError, isLoading } =
     useLøsBehovOgGåTilNesteSteg('PÅKLAGET_BEHANDLING');
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.FASTSETT_PÅKLAGET_BEHANDLING, initialMellomlagretVurdering);
-
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
     'PÅKLAGET_BEHANDLING',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag?.gjeldendeVurdering);
 
-  const { control, handleSubmit, watch, reset } = useForm<FormFields>({
+  const form = useForm<FormFields>({
     defaultValues: {
       vedtak: defaultValue.vedtak,
     },
   });
+
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.FASTSETT_PÅKLAGET_BEHANDLING,
+    initialMellomlagretVurdering,
+    form
+  );
 
   const onSubmit = (data: FormFields) => {
     løsBehovOgGåTilNesteSteg(
@@ -71,20 +74,19 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, ini
   };
 
   return (
-    <VilkårskortMedFormOgMellomlagringNyVisning
+    <VilkårskortMedFormOgMellomlagring
       heading={'Klage på vedtak'}
       steg={'PÅKLAGET_BEHANDLING'}
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={form.handleSubmit(onSubmit)}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
       isLoading={isLoading}
       status={status}
       vurdertAvAnsatt={grunnlag?.vurdertAv}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(watch())}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() =>
-          reset(
+          form.reset(
             grunnlag?.gjeldendeVurdering
               ? mapVurderingToDraftFormFields(grunnlag.gjeldendeVurdering)
               : emptyDraftFormFields()
@@ -93,11 +95,11 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, ini
       }
       visningModus={visningModus}
       visningActions={visningActions}
-      formReset={() => reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
+      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
       <Controller
         name="vedtak"
-        control={control}
+        control={form.control}
         rules={{ required: 'Du må velge hvilket vedtak klagen gjelder' }}
         render={({ field, fieldState }) => (
           <VelgPåklagetVedtakRadioTable
@@ -108,7 +110,7 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, ini
           />
         )}
       />
-    </VilkårskortMedFormOgMellomlagringNyVisning>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 

@@ -38,6 +38,9 @@ export const OpprettRevurdering = ({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>();
 
+  const inkluderBarnepensjon = useFeatureFlag('SamordningBarnepensjon');
+  const inkluderVedtakslengde = useFeatureFlag('VedtakslengdeAvklaringsbehov');
+
   async function sendHendelse(data: ManuellRevurderingFormFields) {
     const innsending = {
       saksnummer: sak.saksnummer,
@@ -68,7 +71,6 @@ export const OpprettRevurdering = ({
     }
   }
 
-  const isRevurderingStarttidspunktEnabled = useFeatureFlag('RevurderStarttidspunkt');
   const variant = erFørstegangsbehandling ? 'vurdering' : 'revurdering';
 
   const { form, formFields } = useConfigForm<ManuellRevurderingFormFields>({
@@ -83,7 +85,11 @@ export const OpprettRevurdering = ({
     årsaker: {
       type: 'combobox_multiple',
       label: `Hvilke opplysninger skal ${erFørstegangsbehandling ? 'vurderes' : 'revurderes'}?`,
-      options: vurderingsbehovOptions(isRevurderingStarttidspunktEnabled),
+      options: vurderingsbehovOptions().filter(
+        (option) =>
+          (inkluderBarnepensjon || option.value !== 'REVURDER_SAMORDNING_BARNEPENSJON') &&
+          (inkluderVedtakslengde || option.value !== 'VEDTAKSLENGDE_MANUELT')
+      ),
       defaultValue: defaultÅrsaker,
       rules: {
         required: `Velg opplysning som er grunnlaget for ${variant}en`,

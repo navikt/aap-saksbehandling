@@ -5,9 +5,9 @@ import { Heading, HStack, Tabs, VStack } from '@navikt/ds-react';
 import { Enhet } from 'lib/types/oppgaveTypes';
 import { MineOppgaver } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
 import { LedigeOppgaver } from 'components/oppgaveliste/ledigeoppgaver/LedigeOppgaver';
-import { AlleOppgaver } from 'components/oppgaveliste/alleoppgaver/AlleOppgaver';
 import { useLagreAktivTab } from 'hooks/oppgave/aktivTabHook';
 import { TildelOppgaverProvider } from 'context/oppgave/TildelOppgaverContext';
+import { AlleOppgaver } from 'components/oppgaveliste/alleoppgaver/AlleOppgaver';
 
 interface Props {
   enheter: Enhet[];
@@ -27,7 +27,6 @@ export const OppgaveListe = ({ enheter }: Props) => {
       setSelected(lagretTab as MenyValg);
     }
   }, [hentAktivTab]);
-
   return (
     <VStack gap={'8'} padding={'8'} maxWidth={'1680px'} marginInline={'auto'} marginBlock={'0'}>
       <TildelOppgaverProvider>

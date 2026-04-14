@@ -12,6 +12,8 @@ import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { SamordningArbeidsgiverMedDatafetching } from 'components/behandlinger/samordning/samordningArbeidsgiver/SamordningArbeidsgiverMedDatafetching';
 import { SamordningBarnepensjonMedDatafetching } from 'components/behandlinger/samordning/samordningBarnepensjon/SamordningBarnepensjonMedDatafetching';
 import { SykestipendMedDataFetching } from 'components/behandlinger/samordning/sykestipend/SykestipendMedDataFetching';
+import { BarnepensjonMedDataFetching } from 'components/behandlinger/samordning/barnepensjon/BarnepensjonMedDataFetching';
+import { unleashService } from 'lib/services/unleash/unleashService';
 
 interface Props {
   behandlingsreferanse: string;
@@ -22,6 +24,7 @@ export const Samordning = async ({ behandlingsreferanse }: Props) => {
   if (isError(flyt)) {
     return <ApiException apiResponses={[flyt]} />;
   }
+
   const aktivGruppe = 'SAMORDNING';
   const samordningSosialStønadSteg = getStegData('SYKDOM', 'REFUSJON_KRAV', flyt.data);
   const samordningGraderingSteg = getStegData(aktivGruppe, 'SAMORDNING_GRADERING', flyt.data);
@@ -29,7 +32,8 @@ export const Samordning = async ({ behandlingsreferanse }: Props) => {
   const samordningStatligeYtelserSteg = getStegData(aktivGruppe, 'SAMORDNING_ANDRE_STATLIGE_YTELSER', flyt.data);
   const samordningArbeidsgiverSteg = getStegData(aktivGruppe, 'SAMORDNING_ARBEIDSGIVER', flyt.data);
   const samordningTjenestepensjonSteg = getStegData(aktivGruppe, 'SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV', flyt.data);
-  const sykestipendSteg = getStegData('SAMORDNING', 'SAMORDNING_SYKESTIPEND', flyt.data);
+  const sykestipendSteg = getStegData(aktivGruppe, 'SAMORDNING_SYKESTIPEND', flyt.data);
+  const samordningBarnepensjonSteg = getStegData(aktivGruppe, 'SAMORDNING_BARNEPENSJON', flyt.data);
 
   return (
     <GruppeSteg
@@ -39,9 +43,11 @@ export const Samordning = async ({ behandlingsreferanse }: Props) => {
       visning={flyt.data.visning}
       aktivtSteg={flyt.data.aktivtSteg}
     >
-      <StegSuspense>
-        <SamordningBarnepensjonMedDatafetching behandlingsreferanse={behandlingsreferanse} />
-      </StegSuspense>
+      {!unleashService.isEnabled('SamordningBarnepensjon') && (
+        <StegSuspense>
+          <SamordningBarnepensjonMedDatafetching behandlingsreferanse={behandlingsreferanse} />
+        </StegSuspense>
+      )}
 
       {samordningSosialStønadSteg.skalViseSteg && (
         <StegSuspense>
@@ -83,6 +89,19 @@ export const Samordning = async ({ behandlingsreferanse }: Props) => {
         <StegSuspense>
           <SykestipendMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={sykestipendSteg} />
         </StegSuspense>
+      )}
+
+      {unleashService.isEnabled('SamordningBarnepensjon') && (
+        <>
+          {samordningBarnepensjonSteg.skalViseSteg && (
+            <StegSuspense>
+              <BarnepensjonMedDataFetching
+                behandlingsreferanse={behandlingsreferanse}
+                stegData={samordningBarnepensjonSteg}
+              />
+            </StegSuspense>
+          )}
+        </>
       )}
 
       <StegSuspense>

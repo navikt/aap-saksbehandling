@@ -4,7 +4,7 @@ import {
   MellomlagretVurdering,
   OvergangUforeGrunnlag,
   OvergangUføreVedtakResultat,
-  VurdertAvAnsatt,
+  VurderingMeta,
 } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
@@ -22,7 +22,7 @@ import {
   skalVæreInitiellEkspandert,
 } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { OvergangUforeVurderingFormInput } from 'components/behandlinger/sykdom/overgangufore/OvergangUforeVurderingFormInput';
-import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
+import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { OvergangUforeTidligereVurdering } from 'components/behandlinger/sykdom/overgangufore/OvergangUforeTidligereVurdering';
 import { BodyLong, Link, VStack } from '@navikt/ds-react';
@@ -41,16 +41,12 @@ interface Props {
 export interface OvergangUforeForm {
   vurderinger: Array<OvergangUforeVurderingForm>;
 }
-interface OvergangUforeVurderingForm {
+interface OvergangUforeVurderingForm extends VurderingMeta {
   fraDato: string;
   begrunnelse: string;
   brukerHarSøktUføretrygd: JaEllerNei | undefined;
   brukerHarFåttVedtakOmUføretrygd: OvergangUføreVedtakResultat | null;
   brukerRettPåAAP?: JaEllerNei | undefined;
-  vurdertAv?: VurdertAvAnsatt;
-  kvalitetssikretAv?: VurdertAvAnsatt;
-  besluttetAv?: VurdertAvAnsatt;
-  erNyVurdering?: boolean;
 }
 
 export const OvergangUforePeriodisert = ({
@@ -63,23 +59,26 @@ export const OvergangUforePeriodisert = ({
   const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('OVERGANG_UFORE');
 
-  const { lagreMellomlagring, slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } =
-    useMellomlagring(Behovstype.OVERGANG_UFORE, initialMellomlagretVurdering);
-
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
   const { visningActions, formReadOnly, visningModus, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'OVERGANG_UFORE',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
-  const defaultValues: OvergangUforeForm = mellomlagretVurdering
-    ? JSON.parse(mellomlagretVurdering.data)
+  const defaultValues: OvergangUforeForm = initialMellomlagretVurdering
+    ? JSON.parse(initialMellomlagretVurdering.data)
     : getDefaultValuesFromGrunnlag(grunnlag);
 
   const form = useForm<OvergangUforeForm>({ defaultValues });
   const { fields: nyeVurderingFields, remove, append } = useFieldArray({ name: 'vurderinger', control: form.control });
+
+  const { slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } = useMellomlagring(
+    Behovstype.OVERGANG_UFORE,
+    initialMellomlagretVurdering,
+    form
+  );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
@@ -116,7 +115,7 @@ export const OvergangUforePeriodisert = ({
 
   const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const foersteNyePeriode = nyeVurderingFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
-  const errorList = mapPeriodiserteVurderingerErrorList<OvergangUforeForm>(form.formState.errors);
+  const errorList = hentFeilmeldingerForForm(form.formState.errors);
   return (
     <VilkårskortPeriodisert
       heading={'§ 11-18 AAP under behandling av krav om uføretrygd'}
@@ -126,7 +125,6 @@ export const OvergangUforePeriodisert = ({
       status={status}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={true}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}
       mellomlagretVurdering={mellomlagretVurdering}
       visningModus={visningModus}
@@ -144,11 +142,14 @@ export const OvergangUforePeriodisert = ({
 
         {grunnlag.sisteVedtatteVurderinger.map((vurdering) => (
           <TidligereVurderingExpandableCard
-            key={vurdering.fom}
+            key={crypto.randomUUID()}
             fom={parseISO(vurdering.fom)}
             tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
             foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
             vurderingStatus={getErOppfyltEllerIkkeStatus(!!vurdering.brukerRettPåAAP)}
+            vurdertAv={vurdering.vurdertAv}
+            kvalitetssikretAv={vurdering.kvalitetssikretAv}
+            besluttetAv={vurdering.besluttetAv}
           >
             <OvergangUforeTidligereVurdering
               fraDato={vurdering.fom}
@@ -169,9 +170,7 @@ export const OvergangUforePeriodisert = ({
               vurderingStatus={getErOppfyltEllerIkkeStatus(erVurderingOppfylt(form, index))}
               nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
               isLast={index === nyeVurderingFields.length - 1}
-              vurdertAv={vurdering.vurdertAv}
-              kvalitetssikretAv={vurdering.kvalitetssikretAv}
-              besluttetAv={vurdering.besluttetAv}
+              vurdering={vurdering}
               finnesFeil={finnesFeilForVurdering(index, errorList)}
               readonly={formReadOnly}
               onSlettVurdering={() => remove(index)}
@@ -179,7 +178,12 @@ export const OvergangUforePeriodisert = ({
               index={index}
               initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
             >
-              <OvergangUforeVurderingFormInput index={index} form={form} readonly={formReadOnly} />
+              <OvergangUforeVurderingFormInput
+                index={index}
+                form={form}
+                readonly={formReadOnly}
+                søknadsdatoUføretrygd={grunnlag.uføreSøknadOpplysninger?.soknadsdato}
+              />
             </NyVurderingExpandableCard>
           );
         })}
@@ -202,6 +206,8 @@ export const OvergangUforePeriodisert = ({
         vurdertAv: vurdering.vurdertAv,
         kvalitetssikretAv: vurdering.kvalitetssikretAv,
         besluttetAv: vurdering.besluttetAv,
+        erNyVurdering: false,
+        behøverVurdering: false,
       })),
     };
   }
@@ -213,6 +219,8 @@ export const OvergangUforePeriodisert = ({
       brukerHarSøktUføretrygd: undefined,
       brukerHarFåttVedtakOmUføretrygd: null,
       brukerRettPåAAP: undefined,
+      erNyVurdering: true,
+      behøverVurdering: false,
     };
   }
 };

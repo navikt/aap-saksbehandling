@@ -32,9 +32,11 @@ export function getDefaultValuesFromGrunnlag(
   grunnlag: PeriodisertForutgåendeMedlemskapGrunnlag
 ): ForutgåendeMedlemskapVurderingForm {
   if (trengerVurderingsForslag(grunnlag)) {
-    return hentPerioderSomTrengerVurdering<ForutgåendeMedlemskapManuellVurderingForm>(grunnlag, () => ({
+    return hentPerioderSomTrengerVurdering(grunnlag, () => ({
       begrunnelse: '',
       fraDato: '',
+      erNyVurdering: true,
+      behøverVurdering: false,
     }));
   }
 
@@ -53,6 +55,8 @@ export function getDefaultValuesFromGrunnlag(
         vurdertAv: vurdering.vurdertAv,
         kvalitetssikretAv: vurdering.kvalitetssikretAv,
         besluttetAv: vurdering.besluttetAv,
+        erNyVurdering: false,
+        behøverVurdering: false,
       })) || [],
   };
 }

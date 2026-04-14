@@ -226,39 +226,6 @@ describe('mellomlagring i forutgående medlemskap', () => {
     expect(tekst).toBeVisible();
   });
 
-  it(
-    'Skal vise en tekst om hvem som har lagret vurdering dersom bruker trykker på lagre ' + 'mellomlagring',
-    async () => {
-      render(
-        <ForutgåendeMedlemskapPeriodisert
-          readOnly={false}
-          behandlingVersjon={0}
-          grunnlag={grunnlag}
-          overstyring={false}
-          behovstype={Behovstype.AVKLAR_FORUTGÅENDE_MEDLEMSKAP}
-        />
-      );
-
-      await user.type(
-        screen.getByRole('textbox', { name: 'Vurder brukerens forutgående medlemskap' }),
-        'Her har jeg begynt å skrive en vurdering..'
-      );
-      expect(screen.queryByText('Utkast lagret 21.08.2025 00:00 (Jan T. Loven)')).not.toBeInTheDocument();
-
-      const mockFetchResponseLagreMellomlagring: FetchResponse<MellomlagretVurderingResponse> = {
-        type: 'SUCCESS',
-        data: mellomlagring,
-        status: 200,
-      };
-      fetchMock.mockResponse(JSON.stringify(mockFetchResponseLagreMellomlagring));
-
-      const lagreKnapp = screen.getByRole('button', { name: 'Lagre utkast' });
-      await user.click(lagreKnapp);
-      const tekst = screen.getByText('Utkast lagret 21.08.2025 12:00 (Jan T. Loven)');
-      expect(tekst).toBeVisible();
-    }
-  );
-
   it('Skal ikke vise tekst om hvem som har gjort mellomlagring dersom bruker trykker på slett mellomlagring', async () => {
     render(
       <ForutgåendeMedlemskapPeriodisert
@@ -380,7 +347,7 @@ describe('mellomlagring i forutgående medlemskap', () => {
     );
   });
 
-  it('Skal ikke være mulig å lagre eller slette mellomlagring hvis det er readOnly', () => {
+  it('Skal ikke være mulig å slette mellomlagring hvis det er readOnly', () => {
     render(
       <ForutgåendeMedlemskapPeriodisert
         readOnly={true}
@@ -392,8 +359,6 @@ describe('mellomlagring i forutgående medlemskap', () => {
       />
     );
 
-    const lagreKnapp = screen.queryByRole('button', { name: 'Lagre utkast' });
-    expect(lagreKnapp).not.toBeInTheDocument();
     const slettKnapp = screen.queryByRole('button', { name: 'Slett utkast' });
     expect(slettKnapp).not.toBeInTheDocument();
   });

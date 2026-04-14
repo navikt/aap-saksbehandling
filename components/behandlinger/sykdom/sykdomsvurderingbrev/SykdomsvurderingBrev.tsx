@@ -1,9 +1,10 @@
 'use client';
 
-import { BodyLong, Box, Heading, List, VStack } from '@navikt/ds-react';
+import { BodyLong, BodyShort, Box, Heading, Label, List, VStack } from '@navikt/ds-react';
 import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import {
+  ForeløpigBehandlingsutfall,
   MellomlagretVurdering,
   SykdomBrevVurdering,
   SykdomsvurderingBrevGrunnlag,
@@ -17,9 +18,12 @@ import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereV
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { ForeløpigBehandlingsutfallOppsummering } from 'components/behandlingsutfall/ForeløpigBehandlingsutfallOppsummering';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
+  foreløpigBehandlingsutfall: ForeløpigBehandlingsutfall;
   behandlingVersjon: number;
   grunnlag?: SykdomsvurderingBrevGrunnlag;
   typeBehandling: TypeBehandling;
@@ -34,6 +38,7 @@ interface VurderingBrevFormFields {
 type DraftFormFields = Partial<VurderingBrevFormFields>;
 
 export const SykdomsvurderingBrev = ({
+  foreløpigBehandlingsutfall,
   behandlingVersjon,
   grunnlag,
   typeBehandling,
@@ -45,14 +50,13 @@ export const SykdomsvurderingBrev = ({
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('SYKDOMSVURDERING_BREV');
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.SYKDOMSVURDERING_BREV_KODE, initialMellomlagretVurdering);
-
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
     'SYKDOMSVURDERING_BREV',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
+
+  const erBekreftVurderingerStegPå = useFeatureFlag('BekreftVurderingerOppfolging');
 
   const defaultValues: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -70,6 +74,11 @@ export const SykdomsvurderingBrev = ({
     { shouldUnregister: true, readOnly: formReadOnly }
   );
 
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.SYKDOMSVURDERING_BREV_KODE,
+    initialMellomlagretVurdering,
+    form
+  );
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
       løsBehovOgGåTilNesteSteg(
@@ -94,8 +103,8 @@ export const SykdomsvurderingBrev = ({
     typeBehandling === 'Revurdering' && historiskeVurderinger && historiskeVurderinger.length > 0;
 
   return (
-    <VilkårskortMedFormOgMellomlagringNyVisning
-      heading={'Individuell begrunnelse til vedtaksbrev'}
+    <VilkårskortMedFormOgMellomlagring
+      heading={'Foreløpig resultat og individuell begrunnelse'}
       steg="SYKDOMSVURDERING_BREV"
       vilkårTilhørerNavKontor={true}
       defaultOpen={true}
@@ -106,7 +115,6 @@ export const SykdomsvurderingBrev = ({
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
       kvalitetssikretAv={grunnlag?.vurdering?.kvalitetssikretAv}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() => {
           form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields());
@@ -114,10 +122,18 @@ export const SykdomsvurderingBrev = ({
       }}
       visningModus={visningModus}
       visningActions={visningActions}
-      knappTekst={'Bekreft og send videre'}
+      knappTekst={erBekreftVurderingerStegPå ? 'Bekreft' : 'Bekreft og send videre'}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
       <VStack gap={'4'}>
+        <>
+          <BodyShort size={'small'}>
+            Tabellen viser hvilke perioder brukeren har blitt vurdert til å oppfylle vilkår for ulike rettighetstyper.
+            Resultatet kan endre seg videre i behandlingen.
+          </BodyShort>
+          <ForeløpigBehandlingsutfallOppsummering foreløpigBehandlingsutfall={foreløpigBehandlingsutfall} />
+          <Label size={'small'}>Skriv en individuell begrunnelse</Label>
+        </>
         {skalViseTidligereVurderinger && (
           <TidligereVurderinger
             data={historiskeVurderinger}
@@ -171,7 +187,7 @@ export const SykdomsvurderingBrev = ({
         />
         <FormField form={form} formField={formFields.vurdering} className={'begrunnelse'} />
       </VStack>
-    </VilkårskortMedFormOgMellomlagringNyVisning>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 

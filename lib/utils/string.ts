@@ -8,6 +8,10 @@ export function storForbokstavIHvertOrd(value?: string | null): string {
   return ordMedStorForbokstav.join(' ');
 }
 
+export function replaceCommasWithDots(input: string): string {
+  return input.replace(/,/g, '.');
+}
+
 export function storForbokstav(value: string): string {
   return value.charAt(0).toUpperCase().concat(value.slice(1).toLowerCase());
 }

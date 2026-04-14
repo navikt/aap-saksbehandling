@@ -30,6 +30,7 @@ export const Tilkjent = ({ grunnlag }: Props) => {
             <Table.HeaderCell>Institusjon</Table.HeaderCell>
             <Table.HeaderCell>Arbeidsgiver</Table.HeaderCell>
             <Table.HeaderCell>Total reduksjon</Table.HeaderCell>
+            <Table.HeaderCell>Barnepensjon</Table.HeaderCell>
             <Table.HeaderCell>Effektiv dagsats</Table.HeaderCell>
             <Table.HeaderCell>Meldekort levert</Table.HeaderCell>
             <Table.HeaderCell></Table.HeaderCell>
@@ -71,6 +72,9 @@ export const Tilkjent = ({ grunnlag }: Props) => {
                   </Table.DataCell>
                   <Table.DataCell textSize={'small'}>
                     {formaterTilProsent(vurdertPeriode.felter.totalReduksjon)}
+                  </Table.DataCell>
+                  <Table.DataCell textSize={'small'}>
+                    {formaterTilNok(vurdertPeriode.felter.barnepensjonDagsats)}
                   </Table.DataCell>
                   <Table.DataCell textSize={'small'}>
                     {formaterTilNok(vurdertPeriode.felter.effektivDagsats)}

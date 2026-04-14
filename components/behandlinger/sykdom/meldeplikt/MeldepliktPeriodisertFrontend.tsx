@@ -7,7 +7,7 @@ import {
   FritakMeldepliktGrunnlag,
   MellomlagretVurdering,
   PeriodisertFritaksvurderingDto,
-  VurdertAvAnsatt,
+  VurderingMeta,
 } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { gyldigDatoEllerNull, validerDato } from 'lib/validation/dateValidation';
@@ -20,7 +20,7 @@ import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
-import { finnesFeilForVurdering, mapPeriodiserteVurderingerErrorList } from 'lib/utils/formerrors';
+import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import {
   NyVurderingExpandableCard,
   skalVæreInitiellEkspandert,
@@ -47,14 +47,10 @@ export interface FritakMeldepliktForm {
   vurderinger: FritakMeldepliktVurderingForm[];
 }
 
-export interface FritakMeldepliktVurderingForm {
+export interface FritakMeldepliktVurderingForm extends VurderingMeta {
   begrunnelse: string;
   harFritak: string | undefined;
   fraDato: string | undefined;
-  vurdertAv?: VurdertAvAnsatt;
-  kvalitetssikretAv?: VurdertAvAnsatt;
-  besluttetAv?: VurdertAvAnsatt;
-  erNyVurdering?: boolean;
 }
 
 export const MeldepliktPeriodisertFrontend = ({
@@ -68,27 +64,29 @@ export const MeldepliktPeriodisertFrontend = ({
   const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('FRITAK_MELDEPLIKT');
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(Behovstype.FRITAK_MELDEPLIKT_KODE, initialMellomlagretVurdering);
-
   const { visningActions, formReadOnly, visningModus, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'FRITAK_MELDEPLIKT',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
   const nyeVurderinger = grunnlag?.nyeVurderinger ?? [];
 
-  const defaultValues =
-    initialMellomlagretVurdering != null
-      ? (JSON.parse(initialMellomlagretVurdering.data) as FritakMeldepliktForm)
-      : getDefaultValuesFromGrunnlag(grunnlag);
+  const defaultValues = initialMellomlagretVurdering
+    ? JSON.parse(initialMellomlagretVurdering.data)
+    : getDefaultValuesFromGrunnlag(grunnlag);
 
   const form = useForm<FritakMeldepliktForm>({
     defaultValues,
   });
+
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.FRITAK_MELDEPLIKT_KODE,
+    initialMellomlagretVurdering,
+    form
+  );
 
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
 
@@ -100,6 +98,7 @@ export const MeldepliktPeriodisertFrontend = ({
       fraDato: fields.length === 0 ? formaterDatoForFrontend(new Date()) : undefined,
       harFritak: undefined,
       erNyVurdering: true,
+      behøverVurdering: false,
     });
   }
 
@@ -142,7 +141,7 @@ export const MeldepliktPeriodisertFrontend = ({
   }
 
   const foersteNyePeriode = fields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
-  const errorList = mapPeriodiserteVurderingerErrorList<FritakMeldepliktVurderingForm>(form.formState.errors);
+  const errorList = hentFeilmeldingerForForm(form.formState.errors);
 
   return (
     <VilkårskortPeriodisert
@@ -154,7 +153,6 @@ export const MeldepliktPeriodisertFrontend = ({
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}
       visningModus={visningModus}
       visningActions={visningActions}
@@ -174,11 +172,14 @@ export const MeldepliktPeriodisertFrontend = ({
 
       {vedtatteVurderinger.map((vurdering) => (
         <TidligereVurderingExpandableCard
-          key={vurdering.fom}
+          key={crypto.randomUUID()}
           fom={parseISO(vurdering.fom)}
           tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
           foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
           vurderingStatus={getErOppfyltEllerIkkeStatus(vurdering.harFritak)}
+          vurdertAv={vurdering.vurdertAv}
+          kvalitetssikretAv={vurdering.kvalitetssikretAv}
+          besluttetAv={vurdering.besluttetAv}
         >
           <VStack gap={'5'}>
             <SpørsmålOgSvar spørsmål="Vurderingen gjelder fra?" svar={formaterDatoForFrontend(vurdering.fom)} />
@@ -203,9 +204,7 @@ export const MeldepliktPeriodisertFrontend = ({
           )}
           nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
           isLast={index === vedtatteVurderinger.length - 1}
-          vurdertAv={vurdering.vurdertAv}
-          kvalitetssikretAv={vurdering.kvalitetssikretAv}
-          besluttetAv={vurdering.besluttetAv}
+          vurdering={vurdering}
           finnesFeil={finnesFeilForVurdering(index, errorList)}
           readonly={formReadOnly}
           onSlettVurdering={() => remove(index)}
@@ -269,6 +268,8 @@ function getDefaultValuesFromGrunnlag(grunnlag: FritakMeldepliktGrunnlag | undef
       vurdertAv: vurdering.vurdertAv,
       kvalitetssikretAv: vurdering.kvalitetssikretAv,
       besluttetAv: vurdering.besluttetAv,
+      erNyVurdering: false,
+      behøverVurdering: false,
     })),
   };
 }

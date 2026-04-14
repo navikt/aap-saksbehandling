@@ -5,7 +5,6 @@ import { MineOppgaverTabell } from 'components/oppgaveliste/mineoppgaver/mineopp
 import { useConfigForm } from 'components/form/FormHook';
 import { oppgaveBehandlingstyper, OppgaveStatuser } from 'lib/utils/behandlingstyper';
 import { MineOppgaverFiltrering } from 'components/oppgaveliste/filtrering/mineoppgaverfiltrering/MineOppgaverFiltrering';
-import { useWatch } from 'react-hook-form';
 
 import styles from 'components/oppgaveliste/mineoppgaver/MineOppgaver.module.css';
 import { oppgaveAvklaringsbehov } from 'lib/utils/avklaringsbehov';
@@ -15,6 +14,9 @@ import { alleVurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
 import { TabellSkeleton } from 'components/oppgaveliste/tabellskeleton/TabellSkeleton';
 import { useLagreAktivUtvidetFilter } from 'hooks/oppgave/aktivUtvidetFilterHook';
 import { useEffect } from 'react';
+import { useBackendSortering } from 'hooks/oppgave/BackendSorteringHook';
+import { PathsMineOppgaverGetParametersQuerySortby } from '@navikt/aap-oppgave-typescript-types';
+import { ValuePair } from 'components/form/FormField';
 
 export interface FormFieldsFilter {
   behandlingstyper?: string[];
@@ -23,10 +25,12 @@ export interface FormFieldsFilter {
   årsaker?: string[];
   avklaringsbehov?: string[];
   statuser?: string[];
+  saksbehandlere?: ValuePair[];
 }
 
 export const MineOppgaver = () => {
-  const { oppgaver, mutate, isLoading, error } = useMineOppgaver();
+  const { sort, setSort } = useBackendSortering<PathsMineOppgaverGetParametersQuerySortby>('mine-oppgaver-backendsort');
+  const { oppgaver, mutate, isLoading, error } = useMineOppgaver(sort);
   const { hentAktivUtvidetFilter, lagreAktivUtvidetFilter } = useLagreAktivUtvidetFilter();
   const lagretUtvidetFilter = hentAktivUtvidetFilter();
 
@@ -66,9 +70,12 @@ export const MineOppgaver = () => {
       options: OppgaveStatuser,
       defaultValue: lagretUtvidetFilter?.statuser ?? [],
     },
+    saksbehandlere: {
+      type: 'fieldArray',
+    },
   });
 
-  const watchedValues = useWatch({ control: form.control });
+  const watchedValues = form.watch();
 
   useEffect(() => {
     const fieldValues = form.watch((values) => {
@@ -99,7 +106,12 @@ export const MineOppgaver = () => {
 
       {!isLoading &&
         (filtrerteOppgaver?.length > 0 ? (
-          <MineOppgaverTabell oppgaver={filtrerteOppgaver} revalidateFunction={mutate} />
+          <MineOppgaverTabell
+            oppgaver={filtrerteOppgaver}
+            revalidateFunction={mutate}
+            sort={sort}
+            setSortBy={setSort}
+          />
         ) : (
           <BodyShort className={styles.ingenreserverteoppgaver}>Ingen reserverte oppgaver.</BodyShort>
         ))}

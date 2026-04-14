@@ -16,6 +16,7 @@ const journalpostInfo = {
 };
 
 const oppgave: Oppgave = {
+  behandlingRef: 'gasg',
   vurderingsbehov: [],
   avklaringsbehovKode: '',
   behandlingOpprettet: '',
@@ -29,6 +30,7 @@ const oppgave: Oppgave = {
   markeringer: [],
   enhetForKø: '0300',
   erPåVent: false,
+  erÅpen: true,
 };
 
 describe('Dokumentinfobanner', () => {

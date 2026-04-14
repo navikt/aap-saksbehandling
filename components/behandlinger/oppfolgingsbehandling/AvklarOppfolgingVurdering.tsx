@@ -16,7 +16,7 @@ import { BodyShort, Label } from '@navikt/ds-react';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagringNyVisning } from 'components/vilkårskort/vilkårskortmedformogmellomlagringnyvisning/VilkårskortMedFormOgMellomlagringNyVisning';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
@@ -52,20 +52,18 @@ export const AvklaroppfolgingVurdering = ({
       ? Behovstype.AVKLAR_OPPFØLGINGSBEHOV_NAY
       : Behovstype.AVKLAR_OPPFØLGINGSBEHOV_LOKALKONTOR;
 
-  const { mellomlagretVurdering, nullstillMellomlagretVurdering, lagreMellomlagring, slettMellomlagring } =
-    useMellomlagring(behovsType, initialMellomlagretVurdering);
-
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
     'AVKLAR_OPPFØLGING',
-    mellomlagretVurdering
+    initialMellomlagretVurdering
   );
+
+  const skalVurderesAvNavKontor = grunnlag.hvemSkalFølgeOpp == 'Lokalkontor';
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag.grunnlag);
-
-  const isRevurderingStarttidspunktEnabled = useFeatureFlag('RevurderStarttidspunkt');
+  const inkluderBarnepensjon = useFeatureFlag('SamordningBarnepensjon');
 
   const { form, formFields } = useConfigForm<FormFields>(
     {
@@ -88,11 +86,19 @@ export const AvklaroppfolgingVurdering = ({
       hvaSkalRevurderes: {
         type: 'combobox_multiple',
         label: 'Hvilke opplysninger skal revurderes?',
-        options: vurderingsbehovOptions(isRevurderingStarttidspunktEnabled),
+        options: vurderingsbehovOptions().filter(
+          (option) => inkluderBarnepensjon || option.value !== 'REVURDER_SAMORDNING_BARNEPENSJON'
+        ),
         defaultValue: defaultValue.hvaSkalRevurderes,
       },
     },
     { readOnly: formReadOnly }
+  );
+
+  const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    behovsType,
+    initialMellomlagretVurdering,
+    form
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -119,10 +125,10 @@ export const AvklaroppfolgingVurdering = ({
   };
 
   return (
-    <VilkårskortMedFormOgMellomlagringNyVisning
+    <VilkårskortMedFormOgMellomlagring
       heading={'Avklar oppfølgingsoppgave'}
       steg="AVKLAR_OPPFØLGING"
-      vilkårTilhørerNavKontor={true}
+      vilkårTilhørerNavKontor={skalVurderesAvNavKontor}
       onSubmit={handleSubmit}
       status={status}
       isLoading={isLoading}
@@ -130,7 +136,6 @@ export const AvklaroppfolgingVurdering = ({
       vurdertAvAnsatt={undefined}
       knappTekst={'Fullfør'}
       mellomlagretVurdering={mellomlagretVurdering}
-      onLagreMellomLagringClick={() => lagreMellomlagring(form.watch())}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() =>
           form.reset(grunnlag.grunnlag ? mapVurderingToDraftFormFields(grunnlag.grunnlag) : emptyDraftFormFields())
@@ -157,7 +162,7 @@ export const AvklaroppfolgingVurdering = ({
           <FormField form={form} formField={formFields.årsak} />
         </>
       )}
-    </VilkårskortMedFormOgMellomlagringNyVisning>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };
 

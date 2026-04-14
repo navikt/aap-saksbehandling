@@ -1,49 +1,22 @@
-import { addMonths, format, isAfter, isBefore, isEqual, parse, startOfMonth } from 'date-fns';
+import { addMonths, format, isAfter, isBefore, isEqual, startOfMonth } from 'date-fns';
 import { nb } from 'date-fns/locale';
 import { formatDatoMedMånedsnavn, formaterDatoForFrontend } from 'lib/utils/date';
 import { Dato } from 'lib/types/Dato';
 import { HelseInstiusjonVurdering } from 'lib/types/types';
 
 import { JaEllerNei } from 'lib/utils/form';
-import { OppholdVurdering } from 'components/behandlinger/institusjonsopphold/helseinstitusjonny/HelseinstitusjonNy';
-
-/**
- * Beregner tidligste dato for reduksjon av AAP ved institusjonsopphold.
- *
- * Regel: AAP gis uten reduksjon for innleggelsesmåneden og de tre påfølgende månedene.
- * Reduksjon starter tidligst første dag i 4. måneden etter innleggelsesmåneden.
- *
- * Eksempel:
- * - Opphold starter: 15.01.2025
- * - Innleggelsesmåned: Januar 2025
- * - Uten reduksjon: Januar, Februar, Mars, April
- * - Tidligste reduksjon: 01.05.2025
- *
- * @param oppholdFra Dato for når oppholdet startet (YYYY-MM-DD)
- * @returns Tidligste tillatte dato for reduksjon (dd.MM.yyyy)
- */
-export function beregnTidligsteReduksjonsdato(oppholdFra: string): string {
-  const opphold = new Dato(oppholdFra).dato;
-
-  // Finn første dag i innleggelsesmåneden
-  const innleggelsesmåned = startOfMonth(opphold);
-
-  // Legg til 4 måneder (innleggelsesmåned + 3 påfølgende måneder)
-  const tidligsteReduksjonsdato = addMonths(innleggelsesmåned, 4);
-
-  return formaterDatoForFrontend(tidligsteReduksjonsdato);
-}
+import { OppholdVurdering } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/Helseinstitusjon';
 
 /**
  * Formatterer beskrivelse av reduksjonsperioden
  */
-export function lagReduksjonsBeskrivelse(oppholdFra: string): string {
+export function lagReduksjonsBeskrivelse(oppholdFra: string, tidligsteReduksjonsdato?: string | null): string {
   const opphold = new Dato(oppholdFra).dato;
 
   const innleggelsesmåned = format(startOfMonth(opphold), 'MMMM yyyy', { locale: nb });
-  const tidligsteReduksjon = formatDatoMedMånedsnavn(
-    parse(beregnTidligsteReduksjonsdato(oppholdFra), 'dd.MM.yyyy', new Date())
-  );
+  const tidligsteReduksjon = tidligsteReduksjonsdato
+    ? formatDatoMedMånedsnavn(new Dato(tidligsteReduksjonsdato).dato)
+    : '';
 
   return `Innleggelsesmåned: ${innleggelsesmåned}. Reduksjon kan tidligst starte: ${tidligsteReduksjon}`;
 }
@@ -60,7 +33,7 @@ export function lagReduksjonBeskrivelseNyttOpphold(oppholdFra: string): string {
 }
 
 /**
- * Validerer at en dato er innenfor oppholdsperioden.
+ * Validerer at en dato er innenfor oppholdsperioden når det er reduksjon.
  *
  * @param value Dato som skal valideres (dd.MM.yyyy)
  * @param oppholdFra Startdato for oppholdet (yyyy-MM-dd)
@@ -85,37 +58,15 @@ export const validerDatoErInnenforOpphold = (
   return true;
 };
 
-export const validerDatoForStoppAvReduksjon = (reduksjonDato: string, oppholdfra: string) => {
+export const validerDatoForStoppAvReduksjon = (reduksjonDato: string, tidligsteReduksjonsdato?: string | null) => {
   const dato = new Dato(reduksjonDato).dato;
 
-  const tidligsteReduksjonsdato = new Dato(beregnTidligsteReduksjonsdato(oppholdfra)).dato;
+  const tidligsteReduksjonsdato2 = tidligsteReduksjonsdato ? new Dato(tidligsteReduksjonsdato).dato : '';
 
-  if (isBefore(dato, tidligsteReduksjonsdato)) {
-    return `Tidligste dato for reduksjon er: ${formaterDatoForFrontend(tidligsteReduksjonsdato)}`;
+  if (isBefore(dato, tidligsteReduksjonsdato2)) {
+    return `Tidligste dato for reduksjon er: ${formaterDatoForFrontend(tidligsteReduksjonsdato2)}`;
   }
 };
-
-/**
- * Beregner reduksjonsdato ved nytt opphold innen tre måneder etter utskrivelse.
- * @param utskrevetDato Dato for utskrivelse (YYYY-MM-DD)
- * @param nyttOppholdFra Dato for nytt opphold (YYYY-MM-DD)
- * @returns Reduksjonsdato (dd.MM.yyyy) eller undefined hvis regelen ikke gjelder
- */
-export function beregnReduksjonsdatoVedNyttOpphold(utskrevetDato: string, nyttOppholdFra: string): string {
-  const utskrevet = new Dato(utskrevetDato).dato;
-  const nyttOpphold = new Dato(nyttOppholdFra).dato;
-
-  // Sjekk om nytt opphold starter innen 3 måneder etter utskrivelse
-  const treMndEtterUtskrivelse = addMonths(utskrevet, 3);
-  if (nyttOpphold <= treMndEtterUtskrivelse) {
-    // Reduksjon fra og med måneden etter nytt opphold
-    const nesteMnd = new Dato(addMonths(startOfMonth(nyttOpphold), 1));
-
-    return nesteMnd.formaterForFrontend();
-  }
-
-  return formaterDatoForFrontend(nyttOpphold);
-}
 
 export const validerErIKronologiskRekkeFølge = (value: string, forrigeVurderingFom?: string) => {
   if (!forrigeVurderingFom) {
