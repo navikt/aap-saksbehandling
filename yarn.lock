@@ -2664,9 +2664,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vercel/otel@npm:2.1.1":
-  version: 2.1.1
-  resolution: "@vercel/otel@npm:2.1.1"
+"@vercel/otel@npm:2.1.2":
+  version: 2.1.2
+  resolution: "@vercel/otel@npm:2.1.2"
   peerDependencies:
     "@opentelemetry/api": ">=1.9.0 <2.0.0"
     "@opentelemetry/api-logs": ">=0.200.0 <0.300.0"
@@ -2675,7 +2675,7 @@ __metadata:
     "@opentelemetry/sdk-logs": ">=0.200.0 <0.300.0"
     "@opentelemetry/sdk-metrics": ">=2.0.0 <3.0.0"
     "@opentelemetry/sdk-trace-base": ">=2.0.0 <3.0.0"
-  checksum: 10c0/c0885a6a7673a92a62775c2442e434aaceebae379ecdba8407ea7055fc0bd91133f319f7029e005bb6fba515911d23497074bd073e043e388b0eb8e7da9fb324
+  checksum: 10c0/a32f2d148e2d06a475f966d810516308c4bf63b83b69c81d4ca89f194eb428d4bb4b72da0cef43b784c7439d02c44fff05919ccda085cb55bd04e754a527f921
   languageName: node
   linkType: hard
 
@@ -2832,7 +2832,7 @@ __metadata:
     "@types/react-dom": "npm:19.2.3"
     "@typescript-eslint/eslint-plugin": "npm:8.52.0"
     "@typescript-eslint/parser": "npm:8.52.0"
-    "@vercel/otel": "npm:2.1.1"
+    "@vercel/otel": "npm:2.1.2"
     "@vitejs/plugin-react": "npm:5.2.0"
     "@vitest/coverage-v8": "npm:4.1.4"
     date-fns: "npm:4.1.0"
