@@ -3,7 +3,7 @@ import { FormEvent, useState } from 'react';
 
 import styles from './InnhentDokumentasjonSkjema.module.css';
 import { BestillLegeerklæring } from 'lib/types/types';
-import { useBehandlingsReferanse, useSaksnummer } from 'hooks/saksbehandling/BehandlingHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { clientBestillDialogmelding, clientSøkPåBehandler } from 'lib/clientApi';
 import { Forhåndsvisning } from 'components/innhentdokumentasjon/innhentdokumentasjonskjema/Forhåndsvisning';
 import { AsyncComboSearch } from 'components/form/asynccombosearch/AsyncComboSearch';
@@ -51,8 +51,7 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>();
   const [defaultOptions, setDefaultOptions] = useState<ValuePair[]>([]);
-  const saksnummer = useSaksnummer();
-  const behandlingsreferanse = useBehandlingsReferanse();
+  const { saksnummer, behandlingsreferanse } = useParamsMedType();
 
   const { form, formFields } = useConfigForm<FormFields>({
     behandler: {

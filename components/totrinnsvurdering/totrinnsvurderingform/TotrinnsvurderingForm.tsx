@@ -14,7 +14,7 @@ import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggå
 import { useConfigForm } from 'components/form/FormHook';
 import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
-import { useBehandlingsReferanse, useSaksnummer } from 'hooks/saksbehandling/BehandlingHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { TotrinnsvurderingVedtaksbrevFelter } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingVedtaksbrevFelter';
 import { byggVilkårskortLenke } from 'lib/utils/vilkårskort';
@@ -38,9 +38,8 @@ export const TotrinnsvurderingForm = ({
   erKvalitetssikring,
   initialMellomlagretVurdering,
 }: Props) => {
-  const saksnummer = useSaksnummer();
   const { flyt } = useRequiredFlyt();
-  const behandlingsReferanse = useBehandlingsReferanse();
+  const { saksnummer, behandlingsreferanse } = useParamsMedType();
 
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } = useLøsBehovOgGåTilNesteSteg(
     erKvalitetssikring ? 'KVALITETSSIKRING' : 'FATTE_VEDTAK'
@@ -126,7 +125,7 @@ export const TotrinnsvurderingForm = ({
                 }
               }),
             },
-            referanse: behandlingsReferanse,
+            referanse: behandlingsreferanse,
           },
           () => nullstillMellomlagretVurdering()
         );
@@ -135,7 +134,7 @@ export const TotrinnsvurderingForm = ({
       autoComplete={'off'}
     >
       {fields.map((field, index) => {
-        const link = byggVilkårskortLenke(saksnummer, behandlingsReferanse, field.definisjon as Behovstype);
+        const link = byggVilkårskortLenke(saksnummer, behandlingsreferanse, field.definisjon as Behovstype);
         if (field.definisjon === Behovstype.SYKDOMSVURDERING_BREV_KODE) {
           return (
             <TotrinnsvurderingVedtaksbrevFelter

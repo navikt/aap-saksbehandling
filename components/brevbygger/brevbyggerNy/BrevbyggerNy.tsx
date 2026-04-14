@@ -12,7 +12,6 @@ import { Behovstype } from 'lib/utils/form';
 import { clientOppdaterBrevmal } from 'lib/clientApi';
 import { revalidateFlyt } from 'lib/actions/actions';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 
 import { ForhåndsvisBrev } from 'components/brevbygger/ForhåndsvisBrev';
 import { VelgeMottakere } from 'components/brevbygger/VelgeMottakere';
@@ -25,6 +24,7 @@ import { BrevFormVerdier } from 'components/brevbygger/brevbyggerNy/types';
 import { initialiserFormVerdier } from 'components/brevbygger/brevbyggerNy/formUtils';
 import { Delmal } from 'components/brevbygger/brevbyggerNy/Delmal';
 import { useMellomlagringAvBrev } from 'components/brevbygger/brevbyggerNy/useMellomlagringAvBrev';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 
 interface BrevbyggerNyProps {
   referanse: string;
@@ -61,7 +61,7 @@ export const BrevbyggerNy = ({
   const { pdfDataUri, lasterPdf } = useMellomlagringAvBrev({ referanse, control, brevmal: parsedBrevmal, brevdata });
 
   const router = useRouter();
-  const behandlingsReferanse = useBehandlingsReferanse();
+  const { behandlingsreferanse } = useParamsMedType();
   const {
     løsBehovOgGåTilNesteSteg,
     status: løsBehovStatus,
@@ -86,7 +86,7 @@ export const BrevbyggerNy = ({
         mottakere: valgteMottakere,
         handling: 'FERDIGSTILL',
       },
-      referanse: behandlingsReferanse,
+      referanse: behandlingsreferanse,
     });
   };
 
@@ -98,9 +98,9 @@ export const BrevbyggerNy = ({
         brevbestillingReferanse: referanse,
         handling: 'AVBRYT',
       },
-      referanse: behandlingsReferanse,
+      referanse: behandlingsreferanse,
     });
-    await revalidateFlyt(behandlingsReferanse);
+    await revalidateFlyt(behandlingsreferanse);
   };
 
   const oppdaterBrevmal = async () => {

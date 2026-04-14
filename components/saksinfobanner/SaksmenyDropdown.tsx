@@ -13,7 +13,7 @@ import { SettMarkeringForBehandlingModal } from 'components/settmarkeringforbeha
 import { MarkeringType, Oppgave } from 'lib/types/oppgaveTypes';
 import { NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType } from '@navikt/aap-oppgave-typescript-types';
 import { AvbrytRevurderingModal } from 'components/saksinfobanner/avbrytrevurderingmodal/AvbrytRevurderingModal';
-import { useSaksnummer } from 'hooks/saksbehandling/BehandlingHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 
 export const SaksmenyDropdown = ({
   flyt,
@@ -32,7 +32,7 @@ export const SaksmenyDropdown = ({
   brukerKanSaksbehandle?: boolean;
   brukerErBeslutter?: boolean;
 }) => {
-  const saksnummer = useSaksnummer();
+  const { saksnummer } = useParamsMedType();
 
   const [settBehandlingPåVentmodalIsOpen, setSettBehandlingPåVentmodalIsOpen] = useState(false);
   const [visTrekkSøknadModal, settVisTrekkSøknadModal] = useState(false);
