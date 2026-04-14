@@ -28,7 +28,7 @@
     "@testing-library/user-event": "14.6.1",
     "@vercel/otel": "2.1.2",
     "date-fns": "4.1.0",
-    "fuse.js": "7.1.0",
+    "fuse.js": "7.3.0",
     "i18n-iso-countries": "7.14.0",
     "is-european": "1.0.9",
     "jose": "6.2.2",
