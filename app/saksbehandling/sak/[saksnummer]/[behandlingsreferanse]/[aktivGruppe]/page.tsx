@@ -7,24 +7,24 @@ import { ForberedBehandling } from 'components/behandling/ForberedBehandling';
 import { BehandlingPage } from 'components/behandling/BehandlingPage';
 
 const Page = async (props: {
-  params: Promise<{ behandlingsReferanse: string; saksnummer: string; aktivGruppe: StegGruppe }>;
+  params: Promise<{ behandlingsreferanse: string; saksnummer: string; aktivGruppe: StegGruppe }>;
 }) => {
   const params = await props.params;
-  const { behandlingsReferanse, aktivGruppe } = params;
-  const behandling = await hentBehandling(behandlingsReferanse);
+  const { behandlingsreferanse, aktivGruppe } = params;
+  const behandling = await hentBehandling(behandlingsreferanse);
 
   if (isError(behandling)) {
     return <div>Feil i henting av behandling</div>;
   }
 
-  auditlog(behandlingsReferanse);
+  auditlog(behandlingsreferanse);
 
   return behandling.data.skalForberede ? (
     <Suspense fallback={<Spinner size={'xlarge'} label={'Forbereder behandling..'} />}>
-      <ForberedBehandling behandlingsReferanse={behandlingsReferanse} aktivGruppe={aktivGruppe} />
+      <ForberedBehandling behandlingsReferanse={behandlingsreferanse} aktivGruppe={aktivGruppe} />
     </Suspense>
   ) : (
-    <BehandlingPage behandlingsReferanse={behandlingsReferanse} aktivGruppe={aktivGruppe as StegGruppe} />
+    <BehandlingPage behandlingsReferanse={behandlingsreferanse} aktivGruppe={aktivGruppe as StegGruppe} />
   );
 };
 
