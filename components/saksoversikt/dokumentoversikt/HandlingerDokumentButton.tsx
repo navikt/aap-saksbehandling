@@ -47,7 +47,9 @@ export const HandlingerDokumentButton = ({ sak, journalpost }: { sak: SaksInfo; 
                     Feilregistrer sakstilknytning
                   </ActionMenu.Item>
                 )}
-                <ActionMenu.Item onSelect={() => setRedigitaliserOpen(true)}>Redigitaliser dokument</ActionMenu.Item>
+                {redigitaliserDokument && (
+                  <ActionMenu.Item onSelect={() => setRedigitaliserOpen(true)}>Redigitaliser dokument</ActionMenu.Item>
+                )}
               </>
             )}
           </ActionMenu.Group>
