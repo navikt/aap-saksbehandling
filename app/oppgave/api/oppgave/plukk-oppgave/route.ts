@@ -13,8 +13,8 @@ export async function POST(req: NextRequest) {
   try {
     const res = await plukkOppgave(data.oppgaveId, data.versjon);
     if (isError(res)) {
-      if (res.status === 401) {
-        logInfo(`/api/oppgave/plukk-oppgave - 401 - ikke tilgang`, res.apiException);
+      if (res.status === 401 || res.status === 403) {
+        logInfo(`/api/oppgave/plukk-oppgave - ikke tilgang`, res.apiException);
       } else {
         logError(`/api/oppgave/plukk-oppgave`, res.apiException);
       }
