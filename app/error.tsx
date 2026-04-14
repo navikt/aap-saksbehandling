@@ -6,7 +6,6 @@ import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { useEffect } from 'react';
 import { logClientError } from 'lib/actions/actions';
 import { erIngenTilgangError } from 'lib/utils/ingenTilgang';
-import { useBehandlingsreferanseOgSaksnummer } from 'hooks/saksbehandling/BehandlingHook';
 
 interface Props {
   error: Error & { digest?: string };

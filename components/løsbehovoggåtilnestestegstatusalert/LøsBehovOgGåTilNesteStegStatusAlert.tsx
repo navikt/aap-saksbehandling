@@ -4,7 +4,6 @@ import { Alert, BodyShort } from '@navikt/ds-react';
 import { useParams } from 'next/navigation';
 import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { ApiException } from 'lib/utils/api';
-import { useBehandlingsreferanseOgSaksnummer } from 'hooks/saksbehandling/BehandlingHook';
 
 interface Props {
   status?: LøsBehovOgGåTilNesteStegStatus;
