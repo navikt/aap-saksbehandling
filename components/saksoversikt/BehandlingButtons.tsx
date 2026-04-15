@@ -65,7 +65,10 @@ export const BehandlingButtons = ({
       }
     });
   }
-  const visBehandleKnapp = behandlingErÅpen && (!oppgaveInfo?.reservertAvIdent || oppgaveReservertAvInnloggetBruker);
+  const visBehandleKnapp =
+    behandlingErÅpen &&
+    !oppgaveInfo?.feilmelding &&
+    (!oppgaveInfo?.reservertAvIdent || oppgaveReservertAvInnloggetBruker);
 
   if (kildeErBehandlingsflyt && behandling.behandling.eksternSaksbehandlingsløsningUrl) {
     return (

@@ -66,7 +66,7 @@ export const SamordningAndreStatligeYtelser = ({
     {
       begrunnelse: {
         type: 'textarea',
-        label: 'Vurder om brukeren har andre statlige ytelser som kan gi fradrag fra AAP etterbetaling',
+        label: 'Vurder om brukeren har andre statlige ytelser som kan gi fradrag fra AAP etterbetaling.',
         rules: { required: 'Du må gjøre en vilkårsvurdering' },
         defaultValue: defaultValue.begrunnelse,
       },
@@ -153,7 +153,7 @@ export const SamordningAndreStatligeYtelser = ({
       )}
 
       <ReadMore size={'small'} header="Hva skal vurderes?">
-        Det må undersøkes om bruker har hatt andre ytelser i perioden med AAP som kan gi fradrag i AAP utbetalingen.
+        Det må undersøkes om bruker har hatt andre ytelser i perioden med AAP som kan gi fradrag i AAP-utbetalingen.
       </ReadMore>
 
       <VStack gap={'6'}>
