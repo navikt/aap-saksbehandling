@@ -1,5 +1,5 @@
 .vurdering {
-  border-left: 2px solid var(--a-border-subtle);
-  padding-left: var(--a-spacing-4);
+  border-left: 2px solid var(--ax-border-neutral-subtle);
+  padding-left: var(--ax-space-16);
 }
 

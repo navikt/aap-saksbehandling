@@ -162,12 +162,12 @@ const HoveddokumentRow = ({
     <Table.DataCell>
       {journalposttype === Journalposttype.U && (
         <Tooltip content="Utgående dokument">
-          <InboxUpIcon style={{ color: 'var(--a-orange-600)' }} />
+          <InboxUpIcon style={{ color: 'var(--ax-warning-700)' }} />
         </Tooltip>
       )}
       {journalposttype === Journalposttype.I && (
         <Tooltip content="Inngående dokument">
-          <InboxDownIcon style={{ color: 'var(--a-green-500)' }} />
+          <InboxDownIcon style={{ color: 'var(--ax-success-600)' }} />
         </Tooltip>
       )}
     </Table.DataCell>

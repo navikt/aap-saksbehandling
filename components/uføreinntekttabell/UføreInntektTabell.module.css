@@ -3,8 +3,8 @@
 }
 
 .footer {
-    border-top: 3px solid var(--a-border-divider);
-    border-bottom: 3px solid var(--a-border-divider);
+    border-top: 3px solid var(--ax-border-neutral-subtle);
+    border-bottom: 3px solid var(--ax-border-neutral-subtle);
 }
 
 .fetSkrift {

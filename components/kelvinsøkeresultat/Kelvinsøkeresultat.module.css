@@ -1,16 +1,16 @@
 .detail {
-  color: var(--a-gray-300);
+  color: var(--ax-neutral-400);
 }
 
 .link {
-  font-size: var(--a-font-size-small);
+  font-size: var(--ax-font-size-small);
 }
 
 .linkName {
-  font-size: var(--a-font-size-small);
-  color: var(--a-text-on-inverted);
+  font-size: var(--ax-font-size-small);
+  color: var(--ax-text-neutral-contrast);
 }
 
 .info {
-  color: var(--a-text-default);
+  color: var(--ax-text-neutral);
 }

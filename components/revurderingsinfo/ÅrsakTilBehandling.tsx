@@ -36,7 +36,7 @@ export const ÅrsakTilBehandling = ({ vurderingsbehovOgÅrsaker, behandlingType 
       size={'small'}
       aria-label={tittel}
       defaultOpen={true}
-      style={{ backgroundColor: 'var(--a-surface-info-subtle)' }}
+      style={{ backgroundColor: 'var(--ax-bg-info-soft)' }}
     >
       <ExpansionCard.Header>
         <HStack wrap={false} gap="4" align="center">

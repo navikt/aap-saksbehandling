@@ -36,7 +36,7 @@ export const SakOversiktContainer = ({
 
   return (
     <Page>
-      <Page.Block width="2xl" style={{ padding: '0 var(--a-spacing-8)' }}>
+      <Page.Block width="2xl" style={{ padding: '0 var(--ax-space-32)' }}>
         <Tabs defaultValue={tab} onChange={(value) => changeActiveTab(value as Tab)}>
           <Tabs.List>
             <Tabs.Tab label="Oversikt" value={Tab.OVERSIKT} icon={<PersonIcon />} />

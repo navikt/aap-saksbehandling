@@ -3,12 +3,12 @@
 }
 
 .valgtRad {
-  background: var(--a-surface-action-subtle);
+  background: var(--ax-bg-accent-soft);
 }
 
 .skjemaContainer {
   padding-left: 16px;
-  border-left: 1px solid var(--a-spacing-4);
+  border-left: 1px solid var(--ax-space-16);
 }
 
 .skjemaContainer:last-of-type {

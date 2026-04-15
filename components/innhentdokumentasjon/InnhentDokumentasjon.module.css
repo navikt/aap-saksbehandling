@@ -1,8 +1,8 @@
 .rad {
   display: flex;
   flex-direction: row;
-  gap: var(--a-spacing-4);
-  margin-top: var(--a-spacing-4);
+  gap: var(--ax-space-16);
+  margin-top: var(--ax-space-16);
 }
 
 .loader {
@@ -10,5 +10,5 @@
 }
 
 .marginTop {
-  margin-top: var(--a-spacing-8);
+  margin-top: var(--ax-space-32);
 }
