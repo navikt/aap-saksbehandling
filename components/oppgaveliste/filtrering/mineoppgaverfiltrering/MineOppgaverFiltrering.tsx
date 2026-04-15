@@ -3,7 +3,7 @@
 import { BodyShort, Box, Button, Chips, Detail, HGrid, HStack, VStack } from '@navikt/ds-react';
 
 import styles from 'components/oppgaveliste/filtrering/Filtrering.module.css';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { FilterIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { FormFields } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
@@ -20,16 +20,8 @@ interface Props {
 
 export const MineOppgaverFiltrering = ({ form, formFields, antallOppgaverIFilter, antallOppgaverTotalt }: Props) => {
   const [visFilter, setVisFilter] = useState(false);
-  const [aktiveFilter, setAktiveFilter] = useState<ReturnType<typeof aktiveFiltreringer>>([]);
 
-  useEffect(() => {
-    const oppdaterAktiveFilter = (values: FormFieldsFilter) => {
-      setAktiveFilter(aktiveFiltreringer(values));
-    };
-    oppdaterAktiveFilter(form.getValues());
-    const subscription = form.watch((values) => oppdaterAktiveFilter(values as FormFieldsFilter));
-    return () => subscription.unsubscribe();
-  }, [form]);
+  const aktiveFilter = aktiveFiltreringer(form.watch());
 
   return (
     <div className={styles.wrapper}>
