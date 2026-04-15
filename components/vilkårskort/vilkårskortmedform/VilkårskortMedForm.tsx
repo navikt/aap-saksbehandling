@@ -1,9 +1,9 @@
 'use client';
 
 import { Button, Detail, ExpansionCard, HStack, VStack } from '@navikt/ds-react';
-import { MellomlagretVurdering, StegType, VurdertAvAnsatt } from 'lib/types/types';
+import { StegType, VurdertAvAnsatt } from 'lib/types/types';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
-import { formaterDatoForFrontend, formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 
 import styles from 'components/vilkårskort/Vilkårskort.module.css';
 import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
@@ -12,28 +12,26 @@ import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehov
 import { ApiException } from 'lib/utils/api';
 import { VisningActions, VisningModus } from 'lib/types/visningTypes';
 
-export interface VilkårsKortMedFormOgMellomlagringProps {
+export interface VilkårsKortMedFormProps {
   heading: string;
   steg: StegType;
   children: ReactNode;
   onSubmit: (e: FormEvent<HTMLFormElement>) => void;
+  løsBehovOgGåTilNesteStegError: ApiException | undefined;
   isLoading: boolean;
   status: LøsBehovOgGåTilNesteStegStatus;
-  løsBehovOgGåTilNesteStegError: ApiException | undefined;
-  knappTekst?: string;
-  defaultOpen?: boolean;
   vilkårTilhørerNavKontor: boolean;
-  vurdertAvAnsatt?: VurdertAvAnsatt;
-  vurdertAutomatisk?: boolean;
-  kvalitetssikretAv?: VurdertAvAnsatt;
   visningModus: VisningModus;
   visningActions: VisningActions;
-  onDeleteMellomlagringClick: () => void;
-  mellomlagretVurdering: MellomlagretVurdering | undefined;
-  formReset: () => void;
+  formReset?: () => void;
+  knappTekst?: string;
+  defaultOpen?: boolean;
+  kvalitetssikretAv?: VurdertAvAnsatt;
+  vurdertAvAnsatt?: VurdertAvAnsatt;
+  vurdertAutomatisk?: boolean;
 }
 
-export const VilkårskortMedFormOgMellomlagring = ({
+export const VilkårskortMedForm = ({
   heading,
   steg,
   children,
@@ -47,17 +45,13 @@ export const VilkårskortMedFormOgMellomlagring = ({
   vurdertAvAnsatt,
   vurdertAutomatisk = false,
   kvalitetssikretAv,
-  onDeleteMellomlagringClick,
-  mellomlagretVurdering,
   visningModus,
   visningActions,
   formReset,
-}: VilkårsKortMedFormOgMellomlagringProps) => {
+}: VilkårsKortMedFormProps) => {
   const classNameBasertPåEnhet = vilkårTilhørerNavKontor ? styles.vilkårsKortNAV : styles.vilkårsKortNAY;
   const { flyt } = useRequiredFlyt();
   const erAktivtSteg = flyt.aktivtSteg === steg || visningModus === 'AKTIV_MED_AVBRYT';
-
-  const readOnly = visningModus === 'LÅST_MED_ENDRE' || visningModus === 'LÅST_UTEN_ENDRE';
 
   return (
     <ExpansionCard
@@ -107,7 +101,6 @@ export const VilkårskortMedFormOgMellomlagring = ({
                           variant="secondary"
                           onClick={() => {
                             visningActions.avbrytEndringClick();
-                            onDeleteMellomlagringClick && mellomlagretVurdering && onDeleteMellomlagringClick();
                             formReset && formReset();
                           }}
                         >
@@ -130,20 +123,6 @@ export const VilkårskortMedFormOgMellomlagring = ({
 
                   {visningModus === 'LÅST_UTEN_ENDRE' && null}
                 </HStack>
-
-                {/* Utkast-info */}
-                {!readOnly && mellomlagretVurdering && onDeleteMellomlagringClick && (
-                  <HStack align="baseline">
-                    <Detail>
-                      {`Utkast lagret ${formaterDatoMedTidspunktForFrontend(
-                        mellomlagretVurdering.vurdertDato
-                      )} (${mellomlagretVurdering.vurdertAv})`}
-                    </Detail>
-                    <Button type="button" size="small" variant="tertiary" onClick={onDeleteMellomlagringClick}>
-                      Slett utkast
-                    </Button>
-                  </HStack>
-                )}
               </VStack>
 
               {/* Høyre kolonne: vurdert av / kvalitetssikret av */}

@@ -12,6 +12,14 @@ interface Props {
 export const VurdertAvAnsattDetail = ({ vurdertAv, variant }: Props) => {
   if (!vurdertAv) return null;
 
+  if (vurdertAv.ident === 'Kelvin') {
+    return (
+      <VStack align="end">
+        <Detail>{`Vurdert automatisk, ${vurdertAv?.dato ? formaterDatoForFrontend(vurdertAv.dato) : ''}`}</Detail>
+      </VStack>
+    );
+  }
+
   return (
     <VStack align="end">
       {variant == 'VURDERING' && (

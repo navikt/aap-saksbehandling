@@ -33,7 +33,7 @@ export function lagReduksjonBeskrivelseNyttOpphold(oppholdFra: string): string {
 }
 
 /**
- * Validerer at en dato er innenfor oppholdsperioden.
+ * Validerer at en dato er innenfor oppholdsperioden når det er reduksjon.
  *
  * @param value Dato som skal valideres (dd.MM.yyyy)
  * @param oppholdFra Startdato for oppholdet (yyyy-MM-dd)

@@ -15,7 +15,7 @@ export function useLøsBehovOgVentPåProsessering(): {
   løsBehovOgVentPåProsessering: (behov: LøsAvklaringsbehovPåBehandling) => void;
   løsBehovError?: ApiException;
 } {
-  const params = useParams<{ behandlingsReferanse: string }>();
+  const params = useParams<{ behandlingsreferanse: string }>();
   const [status, setStatus] = useState<LøsBehovOgVentPåProsesseringStatus>();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<ApiException | undefined>();
@@ -30,7 +30,7 @@ export function useLøsBehovOgVentPåProsessering(): {
     if (isError(løsbehovRes)) {
       if (løsbehovRes.status === 409) {
         // Henter siste versjon av flyt for å bruke siste behandlingversjon
-        const flytResponse = await clientHentFlyt(params.behandlingsReferanse);
+        const flytResponse = await clientHentFlyt(params.behandlingsreferanse);
 
         if (isSuccess(flytResponse)) {
           const clientLøsBehovEtterConflict = await clientLøsBehov({
@@ -56,7 +56,7 @@ export function useLøsBehovOgVentPåProsessering(): {
   const listenSSE = () => {
     setIsLoading(true);
     const eventSource = new EventSource(
-      `/saksbehandling/api/behandling/hent/${params.behandlingsReferanse}/prosessering/`,
+      `/saksbehandling/api/behandling/hent/${params.behandlingsreferanse}/prosessering/`,
       {
         withCredentials: true,
       }
@@ -66,7 +66,7 @@ export function useLøsBehovOgVentPåProsessering(): {
       const eventData: FlytProsesseringServerSentEvent = JSON.parse(event.data);
       if (eventData.status === 'FERDIG') {
         eventSource.close();
-        await revalidateFlyt(params.behandlingsReferanse);
+        await revalidateFlyt(params.behandlingsreferanse);
         refetchFlytClient();
         setIsLoading(false);
       }
