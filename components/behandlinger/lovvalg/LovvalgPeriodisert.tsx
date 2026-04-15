@@ -14,15 +14,15 @@ import { LovvalgOgMedlemskapPeriodisert } from 'components/behandlinger/lovvalg/
 import { LovvalgOgMedlemskapPeriodisertOverstyringswrapper } from 'components/behandlinger/lovvalg/LovvalgOgMedlemskapPeriodisertOverstyringswrapper';
 
 interface Props {
-  behandlingsReferanse: string;
+  behandlingsreferanse: string;
 }
 
-export const LovvalgPeriodisert = async ({ behandlingsReferanse }: Props) => {
+export const LovvalgPeriodisert = async ({ behandlingsreferanse }: Props) => {
   const [flyt, vurderingAutomatisk, grunnlag, initialMellomlagretVurdering] = await Promise.all([
-    hentFlyt(behandlingsReferanse),
-    hentAutomatiskLovvalgOgMedlemskapVurdering(behandlingsReferanse),
-    hentLovvalgMedlemskapGrunnlag(behandlingsReferanse),
-    hentMellomlagring(behandlingsReferanse, Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP),
+    hentFlyt(behandlingsreferanse),
+    hentAutomatiskLovvalgOgMedlemskapVurdering(behandlingsreferanse),
+    hentLovvalgMedlemskapGrunnlag(behandlingsreferanse),
+    hentMellomlagring(behandlingsreferanse, Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP),
   ]);
 
   if (isError(vurderingAutomatisk) || isError(grunnlag) || isError(flyt)) {
@@ -54,14 +54,14 @@ export const LovvalgPeriodisert = async ({ behandlingsReferanse }: Props) => {
     <GruppeSteg
       prosessering={flyt.data.prosessering}
       visning={flyt.data.visning}
-      behandlingReferanse={behandlingsReferanse}
+      behandlingReferanse={behandlingsreferanse}
       behandlingVersjon={behandlingsVersjon}
       aktivtSteg={flyt.data.aktivtSteg}
     >
       <LovvalgOgMedlemskapPeriodisertOverstyringswrapper
         automatiskVurdering={vurderingAutomatisk.data}
         harAvklaringsbehov={vurderLovvalgSteg.avklaringsbehov.length > 0}
-        behandlingsReferanse={behandlingsReferanse}
+        behandlingsreferanse={behandlingsreferanse}
         behandlingVersjon={behandlingsVersjon}
         readOnly={readOnly}
         visOverstyrKnapp={visOverstyrKnapp}

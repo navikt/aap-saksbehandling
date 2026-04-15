@@ -33,12 +33,12 @@ import { OverstyrTildelingModal } from 'components/overstyrtildelingmodal/Overst
 
 interface Props {
   saksnummer: string;
-  behandlingsReferanse: string;
+  behandlingsreferanse: string;
   children: ReactNode;
 }
 
-export const BehandlingLayout = async ({ saksnummer, behandlingsReferanse, children }: Props) => {
-  const behandling = await hentBehandling(behandlingsReferanse);
+export const BehandlingLayout = async ({ saksnummer, behandlingsreferanse, children }: Props) => {
+  const behandling = await hentBehandling(behandlingsreferanse);
 
   if (isError(behandling)) {
     return (
@@ -49,18 +49,18 @@ export const BehandlingLayout = async ({ saksnummer, behandlingsReferanse, child
   }
 
   // noinspection ES6MissingAwait - trenger ikke vente på svar fra auditlog-kall
-  auditlog(behandlingsReferanse);
+  auditlog(behandlingsreferanse);
 
   const [oppgave, personInfo, brukerInformasjon, flytResponse, sak, roller, kabalKlageResultat, klageresultat] =
     await Promise.all([
-      hentOppgave(behandlingsReferanse),
+      hentOppgave(behandlingsreferanse),
       hentSakPersoninfo(saksnummer),
       hentBrukerInformasjon(),
-      hentFlyt(behandlingsReferanse),
+      hentFlyt(behandlingsreferanse),
       hentSak(saksnummer),
       hentRollerForBruker(),
-      hentKabalKlageresultat(behandlingsReferanse),
-      hentKlageresultat(behandlingsReferanse),
+      hentKabalKlageresultat(behandlingsreferanse),
+      hentKlageresultat(behandlingsreferanse),
     ]);
 
   if (isError(flytResponse) || isError(klageresultat) || isError(oppgave)) {
@@ -99,7 +99,7 @@ export const BehandlingLayout = async ({ saksnummer, behandlingsReferanse, child
     <SWRConfig
       value={{
         fallback: {
-          [`api/flyt/${behandlingsReferanse}`]: flytResponse,
+          [`api/flyt/${behandlingsreferanse}`]: flytResponse,
         },
       }}
     >
@@ -158,7 +158,7 @@ export const BehandlingLayout = async ({ saksnummer, behandlingsReferanse, child
                   <Behandlingsinfo behandling={behandling.data} sak={sak} klageresultat={klageresultat.data} />
                   <KlageBehandlingInfo kabalKlageResultat={kabalKlageResultat} klageresultat={klageresultat.data} />
                   {visTotrinnsvurdering && (
-                    <ToTrinnsvurderingMedDataFetching behandlingsReferanse={behandlingsReferanse} />
+                    <ToTrinnsvurderingMedDataFetching behandlingsreferanse={behandlingsreferanse} />
                   )}
                   <Saksbehandlingsoversikt />
                 </aside>

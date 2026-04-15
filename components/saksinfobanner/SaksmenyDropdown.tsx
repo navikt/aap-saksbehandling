@@ -132,7 +132,7 @@ export const SaksmenyDropdown = ({
       </Dropdown>
 
       <SettBehandlingPåVentModal
-        behandlingsReferanse={behandling.referanse}
+        behandlingsreferanse={behandling.referanse}
         reservert={!!oppgave?.reservertAv}
         isOpen={settBehandlingPåVentmodalIsOpen}
         onClose={() => setSettBehandlingPåVentmodalIsOpen(false)}

@@ -9,14 +9,14 @@ import { MeldepliktPeriodisertFrontend } from 'components/behandlinger/sykdom/me
 import { StegData } from 'lib/utils/steg';
 
 interface Props {
-  behandlingsReferanse: string;
+  behandlingsreferanse: string;
   stegData: StegData;
 }
 
-export const MeldepliktMedDataFetching = async ({ behandlingsReferanse, stegData }: Props) => {
+export const MeldepliktMedDataFetching = async ({ behandlingsreferanse, stegData }: Props) => {
   const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
-    hentUnntakMeldepliktGrunnlag(behandlingsReferanse),
-    hentMellomlagring(behandlingsReferanse, Behovstype.FRITAK_MELDEPLIKT_KODE),
+    hentUnntakMeldepliktGrunnlag(behandlingsreferanse),
+    hentMellomlagring(behandlingsreferanse, Behovstype.FRITAK_MELDEPLIKT_KODE),
   ]);
 
   if (isError(grunnlag)) {

@@ -6,14 +6,14 @@ import { skalViseSteg, StegData } from 'lib/utils/steg';
 import { Bistandsbehov } from 'components/behandlinger/sykdom/bistandsbehov/Bistandsbehov';
 
 interface Props {
-  behandlingsReferanse: string;
+  behandlingsreferanse: string;
   stegData: StegData;
 }
 
-export const BistandsbehovMedDataFetching = async ({ behandlingsReferanse, stegData }: Props) => {
+export const BistandsbehovMedDataFetching = async ({ behandlingsreferanse, stegData }: Props) => {
   const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
-    hentBistandsbehovGrunnlag(behandlingsReferanse),
-    hentMellomlagring(behandlingsReferanse, Behovstype.AVKLAR_BISTANDSBEHOV_KODE),
+    hentBistandsbehovGrunnlag(behandlingsreferanse),
+    hentMellomlagring(behandlingsreferanse, Behovstype.AVKLAR_BISTANDSBEHOV_KODE),
   ]);
 
   if (isError(grunnlag)) {

@@ -21,11 +21,11 @@ import { BehandlingFlytOgTilstand, StegGruppe } from 'lib/types/types';
 import { BekreftVurderingerOppfølgingMedDataFetching } from 'components/behandlinger/sykdom/bekreftvurderingeroppfølging/BekreftVurderingerOppfølgingMedDataFetching';
 
 interface Props {
-  behandlingsReferanse: string;
+  behandlingsreferanse: string;
 }
 
-export const Sykdom = async ({ behandlingsReferanse }: Props) => {
-  const flyt = await hentFlyt(behandlingsReferanse);
+export const Sykdom = async ({ behandlingsreferanse }: Props) => {
+  const flyt = await hentFlyt(behandlingsreferanse);
   if (isError(flyt)) {
     return <ApiException apiResponses={[flyt]} />;
   }
@@ -47,7 +47,7 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
 
   return (
     <GruppeSteg
-      behandlingReferanse={behandlingsReferanse}
+      behandlingReferanse={behandlingsreferanse}
       behandlingVersjon={flyt.data.behandlingVersjon}
       prosessering={flyt.data.prosessering}
       visning={flyt.data.visning}
@@ -55,26 +55,26 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
     >
       {sykdomSteg.skalViseSteg && (
         <StegSuspense>
-          <SykdomsvurderingMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={sykdomSteg} />
+          <SykdomsvurderingMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={sykdomSteg} />
         </StegSuspense>
       )}
       {vurderBistandsbehovSteg.skalViseSteg && (
         <StegSuspense>
           <BistandsbehovMedDataFetching
-            behandlingsReferanse={behandlingsReferanse}
+            behandlingsreferanse={behandlingsreferanse}
             stegData={vurderBistandsbehovSteg}
           />
         </StegSuspense>
       )}
       {fritakMeldepliktSteg.skalViseSteg && (
         <StegSuspense>
-          <MeldepliktMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={fritakMeldepliktSteg} />
+          <MeldepliktMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={fritakMeldepliktSteg} />
         </StegSuspense>
       )}
       {etableringAvEgenVirksomhetSteg.skalViseSteg && (
         <StegSuspense>
           <EtableringAvEgenVirksomhetMedDatafetching
-            behandlingsReferanse={behandlingsReferanse}
+            behandlingsreferanse={behandlingsreferanse}
             stegData={etableringAvEgenVirksomhetSteg}
           />
         </StegSuspense>
@@ -82,7 +82,7 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
       {fastsettArbeidsevneSteg.skalViseSteg && (
         <StegSuspense>
           <FastsettArbeidsevneMedDataFetching
-            behandlingsReferanse={behandlingsReferanse}
+            behandlingsreferanse={behandlingsreferanse}
             stegData={fastsettArbeidsevneSteg}
           />
         </StegSuspense>
@@ -90,31 +90,31 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
       {arbeidsopptrappingSteg.skalViseSteg && (
         <StegSuspense>
           <ArbeidsopptrappingMedDataFetching
-            behandlingsreferanse={behandlingsReferanse}
+            behandlingsreferanse={behandlingsreferanse}
             stegData={arbeidsopptrappingSteg}
           />
         </StegSuspense>
       )}
       {overganguføreSteg.skalViseSteg && (
         <StegSuspense>
-          <OvergangUforeMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={overganguføreSteg} />
+          <OvergangUforeMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={overganguføreSteg} />
         </StegSuspense>
       )}
 
       {overgangarbeidSteg.skalViseSteg && (
         <StegSuspense>
-          <OvergangArbeidMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={overgangarbeidSteg} />
+          <OvergangArbeidMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={overgangarbeidSteg} />
         </StegSuspense>
       )}
       {refusjonskravSteg.skalViseSteg && (
         <StegSuspense>
-          <RefusjonMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={refusjonskravSteg} />
+          <RefusjonMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={refusjonskravSteg} />
         </StegSuspense>
       )}
       {sykdomsvurderingBrevSteg.skalViseSteg && (
         <StegSuspense>
           <SykdomsvurderingBrevMedDataFetching
-            behandlingsReferanse={behandlingsReferanse}
+            behandlingsreferanse={behandlingsreferanse}
             stegData={sykdomsvurderingBrevSteg}
           />
         </StegSuspense>
@@ -122,7 +122,7 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
       {bekreftVurderingerOppfølgingSteg.skalViseSteg && !bekreftVurderingerOppfølgingSteg.readOnly && (
         <StegSuspense>
           <BekreftVurderingerOppfølgingMedDataFetching
-            behandlingsreferanse={behandlingsReferanse}
+            behandlingsreferanse={behandlingsreferanse}
             behandlingVersjon={bekreftVurderingerOppfølgingSteg.behandlingVersjon}
             readOnly={bekreftVurderingerOppfølgingSteg.readOnly}
           />
@@ -130,13 +130,13 @@ export const Sykdom = async ({ behandlingsReferanse }: Props) => {
       )}
       {vurderYrkesskadeSteg.skalViseSteg && (
         <StegSuspense>
-          <YrkesskadeMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={vurderYrkesskadeSteg} />
+          <YrkesskadeMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={vurderYrkesskadeSteg} />
         </StegSuspense>
       )}
       {vurderSykepengeerstatningSteg.skalViseSteg && (
         <StegSuspense>
           <SykepengeerstatningMedDataFetching
-            behandlingsReferanse={behandlingsReferanse}
+            behandlingsreferanse={behandlingsreferanse}
             stegData={vurderSykepengeerstatningSteg}
           />
         </StegSuspense>

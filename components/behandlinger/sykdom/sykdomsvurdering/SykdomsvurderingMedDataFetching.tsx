@@ -10,14 +10,14 @@ import { skalViseSteg, StegData } from 'lib/utils/steg';
 import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 
 interface Props {
-  behandlingsReferanse: string;
+  behandlingsreferanse: string;
   stegData: StegData;
 }
 
-export const SykdomsvurderingMedDataFetching = async ({ behandlingsReferanse, stegData }: Props) => {
+export const SykdomsvurderingMedDataFetching = async ({ behandlingsreferanse, stegData }: Props) => {
   const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
-    hentSykdomsGrunnlag(behandlingsReferanse),
-    hentMellomlagring(behandlingsReferanse, Behovstype.AVKLAR_SYKDOM_KODE),
+    hentSykdomsGrunnlag(behandlingsreferanse),
+    hentMellomlagring(behandlingsreferanse, Behovstype.AVKLAR_SYKDOM_KODE),
   ]);
   const typeBehandling = stegData.typeBehandling;
 

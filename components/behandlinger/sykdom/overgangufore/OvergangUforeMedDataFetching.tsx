@@ -6,14 +6,14 @@ import { skalViseSteg, StegData } from 'lib/utils/steg';
 import { OvergangUforePeriodisert } from 'components/behandlinger/sykdom/overgangufore/OvergangUforePeriodisert';
 
 interface Props {
-  behandlingsReferanse: string;
+  behandlingsreferanse: string;
   stegData: StegData;
 }
 
-export const OvergangUforeMedDataFetching = async ({ behandlingsReferanse, stegData }: Props) => {
+export const OvergangUforeMedDataFetching = async ({ behandlingsreferanse, stegData }: Props) => {
   const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
-    hentOvergangUforeGrunnlag(behandlingsReferanse),
-    hentMellomlagring(behandlingsReferanse, Behovstype.OVERGANG_UFORE),
+    hentOvergangUforeGrunnlag(behandlingsreferanse),
+    hentMellomlagring(behandlingsreferanse, Behovstype.OVERGANG_UFORE),
   ]);
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;

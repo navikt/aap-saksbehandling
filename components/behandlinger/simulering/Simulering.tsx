@@ -8,15 +8,15 @@ import { Alert } from '@navikt/ds-react';
 import { toggles } from 'lib/utils/toggles';
 
 interface Props {
-  behandlingsReferanse: string;
+  behandlingsreferanse: string;
 }
 
-export const Simulering = async ({ behandlingsReferanse }: Props) => {
+export const Simulering = async ({ behandlingsreferanse }: Props) => {
   // TODO: Ref AAP-1325 - Skal skjule simuleringssteget frem til forbedringer er på plass
   if (!toggles.featureSimulering) {
     return <div>Simulering er foreløpig under arbeid</div>;
   }
-  const [flyt, behandling] = await Promise.all([hentFlyt(behandlingsReferanse), hentBehandling(behandlingsReferanse)]);
+  const [flyt, behandling] = await Promise.all([hentFlyt(behandlingsreferanse), hentBehandling(behandlingsreferanse)]);
   if (isError(flyt) || isError(behandling)) {
     return <ApiException apiResponses={[flyt]} />;
   }
@@ -24,14 +24,14 @@ export const Simulering = async ({ behandlingsReferanse }: Props) => {
   return (
     <GruppeSteg
       behandlingVersjon={flyt.data.behandlingVersjon}
-      behandlingReferanse={behandlingsReferanse}
+      behandlingReferanse={behandlingsreferanse}
       prosessering={flyt.data.prosessering}
       visning={flyt.data.visning}
       aktivtSteg={flyt.data.aktivtSteg}
     >
       <StegSuspense>
         {behandling.data.status === 'UTREDES' || behandling.data.status === 'OPPRETTET' ? (
-          <UtbetalingOgSimuleringMedDataFetching behandlingsreferanse={behandlingsReferanse} />
+          <UtbetalingOgSimuleringMedDataFetching behandlingsreferanse={behandlingsreferanse} />
         ) : (
           <Alert variant={'info'}>
             Simulering kan kun vises etter steget Tilkjent ytelse, og før det er fattet et vedtak.

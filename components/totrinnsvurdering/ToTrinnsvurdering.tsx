@@ -16,7 +16,7 @@ import { Label, VStack } from '@navikt/ds-react';
 interface Props {
   grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;
   erKvalitetssikring: boolean;
-  behandlingsReferanse: string;
+  behandlingsreferanse: string;
   readOnly: boolean;
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }
