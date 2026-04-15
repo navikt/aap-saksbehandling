@@ -519,7 +519,7 @@ export const opprettDummySakTest = async (sak: OpprettDummySakDto) => {
   return await apiFetch<void>(url, saksbehandlingApiScope, 'POST', sak);
 };
 
-export const bestillTestBrev = async (bestilling: { behandlingreferanse: string }) => {
+export const bestillTestBrev = async (bestilling: { behandlingsreferanse: string }) => {
   const url = `${saksbehandlingApiBaseUrl}/test/brev`;
   return await apiFetch<void>(url, saksbehandlingApiScope, 'POST', bestilling);
 };
