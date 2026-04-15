@@ -18,22 +18,22 @@ import { BrevOppsummering } from 'components/behandlinger/brev/skriveBrev/BrevOp
 import { mapGrunnlagTilMottakere } from 'lib/utils/brevmottakere';
 
 export const SkriveKlageBrevMedDataFetching = async ({
-  behandlingsReferanse,
+  behandlingsreferanse,
   behandlingVersjon,
   aktivtSteg,
 }: {
-  behandlingsReferanse: string;
+  behandlingsreferanse: string;
   behandlingVersjon: number;
   aktivtSteg: StegType;
 }) => {
   const [brevGrunnlag, klageresultat, formkrav, klagebehandlingKontor, klagebehandlingNay, fullmektigGrunnlag, roller] =
     await Promise.all([
-      hentBrevGrunnlag(behandlingsReferanse),
-      hentKlageresultat(behandlingsReferanse),
-      hentFormkravGrunnlag(behandlingsReferanse),
-      hentKlagebehandlingKontorGrunnlag(behandlingsReferanse),
-      hentKlagebehandlingNayGrunnlag(behandlingsReferanse),
-      hentFullmektigGrunnlag(behandlingsReferanse),
+      hentBrevGrunnlag(behandlingsreferanse),
+      hentKlageresultat(behandlingsreferanse),
+      hentFormkravGrunnlag(behandlingsreferanse),
+      hentKlagebehandlingKontorGrunnlag(behandlingsreferanse),
+      hentKlagebehandlingNayGrunnlag(behandlingsreferanse),
+      hentFullmektigGrunnlag(behandlingsreferanse),
       hentRollerForBruker(),
     ]);
   if (

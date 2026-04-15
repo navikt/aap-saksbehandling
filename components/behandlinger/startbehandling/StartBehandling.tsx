@@ -7,7 +7,7 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { StartBehandlingRedirectRiktigGruppe } from './StartBehandlingRedirectRiktigGruppe';
 
 interface Props {
-  behandlingsReferanse: string;
+  behandlingsreferanse: string;
 }
 
 const VENTESTATUSER_SOM_SKAL_KUNNE_GJENÅPNES = ['VENTER_PÅ_KLAGE_IMPLEMENTASJON'];
@@ -20,9 +20,9 @@ const VENTESTATUSER_SOM_SKAL_KUNNE_GJENÅPNES = ['VENTER_PÅ_KLAGE_IMPLEMENTASJO
  * For å være sikker på at man ikke kan gjenåpne statuser som ikke er klare for det, er VENTESTATUSER_SOM_SKAL_KUNNE_GJENÅPNES
  * en whitelsit med grunner som man får lov til å gjenåpne her.
  */
-export const StartBehandling = async ({ behandlingsReferanse }: Props) => {
-  const flyt = await hentFlyt(behandlingsReferanse);
-  const venteInformasjon = await hentBehandlingPåVentInformasjon(behandlingsReferanse);
+export const StartBehandling = async ({ behandlingsreferanse }: Props) => {
+  const flyt = await hentFlyt(behandlingsreferanse);
+  const venteInformasjon = await hentBehandlingPåVentInformasjon(behandlingsreferanse);
 
   if (isError(flyt) || isError(venteInformasjon)) {
     return <ApiException apiResponses={[flyt, venteInformasjon]} />;
@@ -38,7 +38,7 @@ export const StartBehandling = async ({ behandlingsReferanse }: Props) => {
   return (
     <GruppeSteg
       behandlingVersjon={flyt.data.behandlingVersjon}
-      behandlingReferanse={behandlingsReferanse}
+      behandlingReferanse={behandlingsreferanse}
       prosessering={flyt.data.prosessering}
       visning={flyt.data.visning}
       aktivtSteg={flyt.data.aktivtSteg}

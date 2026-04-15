@@ -57,7 +57,7 @@ beforeEach(() => {
 describe('Yrkesskade', () => {
   describe('Generelt', () => {
     it('skal har korrekt heading', () => {
-      render(<Yrkesskade grunnlag={grunnlag} behandlingVersjon={1} readOnly={false} behandlingsReferanse={'123'} />);
+      render(<Yrkesskade grunnlag={grunnlag} behandlingVersjon={1} readOnly={false} behandlingsreferanse={'123'} />);
       const heading = screen.getByRole('heading', { name: '§ 11-22 AAP ved yrkesskade' });
       expect(heading).toBeVisible();
     });
@@ -70,7 +70,7 @@ describe('Yrkesskade', () => {
           grunnlag={grunnelagMedTidligereVurdering}
           readOnly={false}
           behandlingVersjon={0}
-          behandlingsReferanse={'123'}
+          behandlingsreferanse={'123'}
         />
       );
 
@@ -92,7 +92,7 @@ describe('Yrkesskade', () => {
 
   describe('felter', () => {
     beforeEach(() => {
-      render(<Yrkesskade grunnlag={grunnlag} behandlingVersjon={1} readOnly={false} behandlingsReferanse={'123'} />);
+      render(<Yrkesskade grunnlag={grunnlag} behandlingVersjon={1} readOnly={false} behandlingsreferanse={'123'} />);
     });
 
     it('skal være synlig', () => {
@@ -217,7 +217,7 @@ describe('Yrkesskade', () => {
           grunnlag={grunnlagUtenVurdering}
           behandlingVersjon={1}
           readOnly={false}
-          behandlingsReferanse={'123'}
+          behandlingsreferanse={'123'}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
         />
       );
@@ -232,7 +232,7 @@ describe('Yrkesskade', () => {
           readOnly={false}
           behandlingVersjon={0}
           grunnlag={grunnlagUtenVurdering}
-          behandlingsReferanse={'123'}
+          behandlingsreferanse={'123'}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
         />
       );
@@ -254,7 +254,7 @@ describe('Yrkesskade', () => {
           readOnly={false}
           behandlingVersjon={0}
           grunnlag={grunnlagUtenVurdering}
-          behandlingsReferanse={'123'}
+          behandlingsreferanse={'123'}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
         />
       );
@@ -269,7 +269,7 @@ describe('Yrkesskade', () => {
     it('Skal bruke bekreftet vurdering fra grunnlag som defaultValue i skjema dersom mellomlagring ikke finnes', () => {
       render(
         <Yrkesskade
-          behandlingsReferanse={'123'}
+          behandlingsreferanse={'123'}
           readOnly={false}
           behandlingVersjon={0}
           grunnlag={grunnlagMedVurdering}
@@ -289,7 +289,7 @@ describe('Yrkesskade', () => {
           readOnly={false}
           behandlingVersjon={0}
           grunnlag={grunnlagUtenVurdering}
-          behandlingsReferanse={'123'}
+          behandlingsreferanse={'123'}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
         />
       );
@@ -313,7 +313,7 @@ describe('Yrkesskade', () => {
           readOnly={false}
           behandlingVersjon={0}
           grunnlag={grunnlagMedVurdering}
-          behandlingsReferanse={'123'}
+          behandlingsreferanse={'123'}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
         />
       );
@@ -339,7 +339,7 @@ describe('Yrkesskade', () => {
           readOnly={true}
           behandlingVersjon={0}
           grunnlag={grunnlagMedVurdering}
-          behandlingsReferanse={'123'}
+          behandlingsreferanse={'123'}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
         />
       );

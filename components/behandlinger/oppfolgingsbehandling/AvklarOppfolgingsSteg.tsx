@@ -24,7 +24,7 @@ export const AvklarOppfolgingsSteg = async ({ behandlingsreferanse }: Props) => 
       aktivtSteg={flyt.data.aktivtSteg}
     >
       <AvklarOppfolgingVurderingMedDataFetching
-        behandlingsReferanse={behandlingsreferanse}
+        behandlingsreferanse={behandlingsreferanse}
         behandlingVersjon={flyt.data.behandlingVersjon}
         readOnly={flyt.data.visning.saksbehandlerReadOnly}
       />

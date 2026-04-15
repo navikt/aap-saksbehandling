@@ -10,14 +10,14 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { Behovstype } from 'lib/utils/form';
 
 interface Props {
-  behandlingsReferanse: string;
+  behandlingsreferanse: string;
 }
 
-export const ToTrinnsvurderingMedDataFetching = async ({ behandlingsReferanse }: Props) => {
+export const ToTrinnsvurderingMedDataFetching = async ({ behandlingsreferanse }: Props) => {
   const [fatteVedtakGrunnlag, kvalitetssikringGrunnlag, flyt] = await Promise.all([
-    hentFatteVedtakGrunnlang(behandlingsReferanse),
-    hentKvalitetssikringGrunnlag(behandlingsReferanse),
-    hentFlyt(behandlingsReferanse),
+    hentFatteVedtakGrunnlang(behandlingsreferanse),
+    hentKvalitetssikringGrunnlag(behandlingsreferanse),
+    hentFlyt(behandlingsreferanse),
   ]);
 
   if (isError(fatteVedtakGrunnlag) || isError(kvalitetssikringGrunnlag) || isError(flyt)) {
@@ -27,7 +27,7 @@ export const ToTrinnsvurderingMedDataFetching = async ({ behandlingsReferanse }:
   const erKvalitetssikring = flyt.data.visning.visKvalitetssikringKort && !flyt.data.visning.visBeslutterKort;
 
   const initialMellomlagretVurdering = await hentMellomlagring(
-    behandlingsReferanse,
+    behandlingsreferanse,
     erKvalitetssikring ? Behovstype.KVALITETSSIKRING_KODE : Behovstype.FATTE_VEDTAK_KODE
   );
   return (
@@ -36,7 +36,7 @@ export const ToTrinnsvurderingMedDataFetching = async ({ behandlingsReferanse }:
         <ToTrinnsvurdering
           grunnlag={fatteVedtakGrunnlag.data}
           erKvalitetssikring={false}
-          behandlingsReferanse={behandlingsReferanse}
+          behandlingsreferanse={behandlingsreferanse}
           readOnly={flyt.data.visning.beslutterReadOnly || !fatteVedtakGrunnlag.data.harTilgangTilÅSaksbehandle}
           initialMellomlagretVurdering={initialMellomlagretVurdering}
         />
@@ -44,7 +44,7 @@ export const ToTrinnsvurderingMedDataFetching = async ({ behandlingsReferanse }:
       {flyt.data.visning.visKvalitetssikringKort && (
         <ToTrinnsvurdering
           grunnlag={kvalitetssikringGrunnlag.data}
-          behandlingsReferanse={behandlingsReferanse}
+          behandlingsreferanse={behandlingsreferanse}
           erKvalitetssikring={true}
           readOnly={
             flyt.data.visning.kvalitetssikringReadOnly || !kvalitetssikringGrunnlag.data.harTilgangTilÅSaksbehandle

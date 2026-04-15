@@ -7,11 +7,11 @@ import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 interface Props {
-  behandlingsReferanse: string;
+  behandlingsreferanse: string;
 }
 
-export const FatteVedtak = async ({ behandlingsReferanse }: Props) => {
-  const flytResponse = await hentFlyt(behandlingsReferanse);
+export const FatteVedtak = async ({ behandlingsreferanse }: Props) => {
+  const flytResponse = await hentFlyt(behandlingsreferanse);
   if (isError(flytResponse)) {
     return <ApiException apiResponses={[flytResponse]} />;
   }
@@ -21,14 +21,14 @@ export const FatteVedtak = async ({ behandlingsReferanse }: Props) => {
   return (
     <GruppeSteg
       behandlingVersjon={flytResponse.data.behandlingVersjon}
-      behandlingReferanse={behandlingsReferanse}
+      behandlingReferanse={behandlingsreferanse}
       prosessering={flytResponse.data.prosessering}
       visning={flytResponse.data.visning}
       aktivtSteg={flytResponse.data.aktivtSteg}
     >
       {stegSomSkalVises.includes('FATTE_VEDTAK') && (
         <StegSuspense>
-          <FatteVedtakMedDataFetching behandlingsreferanse={behandlingsReferanse} />
+          <FatteVedtakMedDataFetching behandlingsreferanse={behandlingsreferanse} />
         </StegSuspense>
       )}
     </GruppeSteg>

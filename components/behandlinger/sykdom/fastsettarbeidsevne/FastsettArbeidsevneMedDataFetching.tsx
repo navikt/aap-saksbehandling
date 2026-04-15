@@ -9,14 +9,14 @@ import { StegData } from 'lib/utils/steg';
 import { FastsettArbeidsevnePeriodisertFrontend } from 'components/behandlinger/sykdom/fastsettarbeidsevne/FastsettArbeidsevnePeriodisertFrontend';
 
 interface Props {
-  behandlingsReferanse: string;
+  behandlingsreferanse: string;
   stegData: StegData;
 }
 
-export const FastsettArbeidsevneMedDataFetching = async ({ behandlingsReferanse, stegData }: Props) => {
+export const FastsettArbeidsevneMedDataFetching = async ({ behandlingsreferanse, stegData }: Props) => {
   const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
-    hentFastsettArbeidsevneGrunnlag(behandlingsReferanse),
-    hentMellomlagring(behandlingsReferanse, Behovstype.FASTSETT_ARBEIDSEVNE_KODE),
+    hentFastsettArbeidsevneGrunnlag(behandlingsreferanse),
+    hentMellomlagring(behandlingsreferanse, Behovstype.FASTSETT_ARBEIDSEVNE_KODE),
   ]);
 
   if (isError(grunnlag)) {

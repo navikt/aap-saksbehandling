@@ -16,9 +16,9 @@ import { PeriodisertForutgåendemedlemskapOverstyringswrapper } from 'components
 import { ForutgåendeMedlemskapPeriodisert } from 'components/behandlinger/forutgåendemedlemskap/manuellvurderingperiodisert/ForutgåendeMedlemskapPeriodisert';
 
 interface Props {
-  behandlingsReferanse: string;
+  behandlingsreferanse: string;
 }
-export const PeriodisertForutgåendeMedlemskap = async ({ behandlingsReferanse }: Props) => {
+export const PeriodisertForutgåendeMedlemskap = async ({ behandlingsreferanse }: Props) => {
   const [
     flyt,
     grunnlag,
@@ -27,12 +27,12 @@ export const PeriodisertForutgåendeMedlemskap = async ({ behandlingsReferanse }
     yrkesskadeVurderingGrunnlag,
     initialMellomlagretVurdering,
   ] = await Promise.all([
-    hentFlyt(behandlingsReferanse),
-    hentForutgåendeMedlemskapGrunnlag(behandlingsReferanse),
-    hentBeregningstidspunktVurdering(behandlingsReferanse),
-    hentForutgåendeMedlemskapsVurdering(behandlingsReferanse),
-    hentYrkesskadeVurderingGrunnlag(behandlingsReferanse),
-    hentMellomlagring(behandlingsReferanse, Behovstype.AVKLAR_FORUTGÅENDE_MEDLEMSKAP),
+    hentFlyt(behandlingsreferanse),
+    hentForutgåendeMedlemskapGrunnlag(behandlingsreferanse),
+    hentBeregningstidspunktVurdering(behandlingsreferanse),
+    hentForutgåendeMedlemskapsVurdering(behandlingsreferanse),
+    hentYrkesskadeVurderingGrunnlag(behandlingsreferanse),
+    hentMellomlagring(behandlingsreferanse, Behovstype.AVKLAR_FORUTGÅENDE_MEDLEMSKAP),
   ]);
 
   if (
@@ -71,12 +71,12 @@ export const PeriodisertForutgåendeMedlemskap = async ({ behandlingsReferanse }
     <GruppeSteg
       prosessering={flyt.data.prosessering}
       visning={flyt.data.visning}
-      behandlingReferanse={behandlingsReferanse}
+      behandlingReferanse={behandlingsreferanse}
       behandlingVersjon={behandlingsVersjon}
       aktivtSteg={flyt.data.aktivtSteg}
     >
       <PeriodisertForutgåendemedlemskapOverstyringswrapper
-        behandlingsReferanse={behandlingsReferanse}
+        behandlingsreferanse={behandlingsreferanse}
         behovstype={behovstype}
         behandlingVersjon={behandlingsVersjon}
         readOnly={readOnly}

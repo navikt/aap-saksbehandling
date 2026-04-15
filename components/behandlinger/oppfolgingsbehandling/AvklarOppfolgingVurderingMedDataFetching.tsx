@@ -8,17 +8,17 @@ import { ApiException } from '../../saksbehandling/apiexception/ApiException';
 import { Behovstype } from 'lib/utils/form';
 
 interface Props {
-  behandlingsReferanse: string;
+  behandlingsreferanse: string;
   behandlingVersjon: number;
   readOnly: boolean;
 }
 
 export const AvklarOppfolgingVurderingMedDataFetching = async ({
-  behandlingsReferanse,
+  behandlingsreferanse,
   behandlingVersjon,
   readOnly,
 }: Props) => {
-  const grunnlag = await hentOppfølgingsoppgaveGrunnlag(behandlingsReferanse);
+  const grunnlag = await hentOppfølgingsoppgaveGrunnlag(behandlingsreferanse);
 
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
@@ -29,7 +29,7 @@ export const AvklarOppfolgingVurderingMedDataFetching = async ({
       ? Behovstype.AVKLAR_OPPFØLGINGSBEHOV_NAY
       : Behovstype.AVKLAR_OPPFØLGINGSBEHOV_LOKALKONTOR;
 
-  const initialMellomlagretVurdering = await hentMellomlagring(behandlingsReferanse, behovsType);
+  const initialMellomlagretVurdering = await hentMellomlagring(behandlingsreferanse, behovsType);
 
   return (
     <AvklaroppfolgingVurdering

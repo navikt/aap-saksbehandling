@@ -9,14 +9,14 @@ import { StegData } from 'lib/utils/steg';
 import { Inntektsbortfall } from './Inntektsbortfall';
 
 interface Props {
-  behandlingsReferanse: string;
+  behandlingsreferanse: string;
   stegData: StegData;
 }
 
-export const InntektsbortfallMedDataFetching = async ({ behandlingsReferanse, stegData }: Props) => {
+export const InntektsbortfallMedDataFetching = async ({ behandlingsreferanse, stegData }: Props) => {
   const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
-    hentInntektsBortfallGrunnlag(behandlingsReferanse),
-    hentMellomlagring(behandlingsReferanse, Behovstype.FASTSETT_BEREGNINGSTIDSPUNKT_KODE),
+    hentInntektsBortfallGrunnlag(behandlingsreferanse),
+    hentMellomlagring(behandlingsreferanse, Behovstype.FASTSETT_BEREGNINGSTIDSPUNKT_KODE),
   ]);
 
   if (isError(grunnlag)) {

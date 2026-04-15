@@ -12,13 +12,13 @@ import { FastsettManuellInntektMedDataFetchingNy } from 'components/behandlinger
 import { InntektsbortfallMedDataFetching } from './inntektsbortfall/InntektsbortfallMedDataFetching';
 
 interface Props {
-  behandlingsReferanse: string;
+  behandlingsreferanse: string;
 }
 
-export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
+export const Grunnlag = async ({ behandlingsreferanse }: Props) => {
   const [flyt, beregningsgrunnlag] = await Promise.all([
-    hentFlyt(behandlingsReferanse),
-    hentBeregningsGrunnlag(behandlingsReferanse),
+    hentFlyt(behandlingsreferanse),
+    hentBeregningsGrunnlag(behandlingsreferanse),
   ]);
 
   if (isError(beregningsgrunnlag) || isError(flyt)) {
@@ -48,7 +48,7 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
 
   return (
     <GruppeSteg
-      behandlingReferanse={behandlingsReferanse}
+      behandlingReferanse={behandlingsreferanse}
       behandlingVersjon={flyt.data.behandlingVersjon}
       prosessering={flyt.data.prosessering}
       visning={flyt.data.visning}
@@ -57,7 +57,7 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
       {fastsettBeregningstidspunktSteg.skalViseSteg && (
         <StegSuspense>
           <FastsettBeregningMedDataFetching
-            behandlingsReferanse={behandlingsReferanse}
+            behandlingsreferanse={behandlingsreferanse}
             stegData={fastsettBeregningstidspunktSteg}
           />
         </StegSuspense>
@@ -65,14 +65,14 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
       {fastsettYrkesskadeInntekt.skalViseSteg && (
         <StegSuspense>
           <YrkesskadeGrunnlagBeregningMedDataFetching
-            behandlingsreferanse={behandlingsReferanse}
+            behandlingsreferanse={behandlingsreferanse}
             stegData={fastsettYrkesskadeInntekt}
           />
         </StegSuspense>
       )}
       <StegSuspense>
         <FastsettManuellInntektMedDataFetchingNy
-          behandlingsreferanse={behandlingsReferanse}
+          behandlingsreferanse={behandlingsreferanse}
           stegData={vurderManglendeLigningSteg}
         />
       </StegSuspense>
@@ -83,7 +83,7 @@ export const Grunnlag = async ({ behandlingsReferanse }: Props) => {
       )}
 
       <StegSuspense>
-        <InntektsbortfallMedDataFetching behandlingsReferanse={behandlingsReferanse} stegData={inntektsbortfall} />
+        <InntektsbortfallMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={inntektsbortfall} />
       </StegSuspense>
     </GruppeSteg>
   );
