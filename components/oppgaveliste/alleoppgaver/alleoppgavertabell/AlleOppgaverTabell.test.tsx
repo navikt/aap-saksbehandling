@@ -58,6 +58,7 @@ describe('AlleOppgaverTabell', () => {
         valgteRader={[]}
         setSortBy={() => {}}
         sort={undefined}
+        aktivKø={undefined}
       />,
       false
     );
@@ -77,6 +78,7 @@ describe('AlleOppgaverTabell', () => {
         valgteRader={[]}
         setSortBy={() => {}}
         sort={undefined}
+        aktivKø={undefined}
       />,
       false
     );

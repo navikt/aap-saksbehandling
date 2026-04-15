@@ -9,13 +9,15 @@ import { FormFields } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { FieldPath, UseFormReturn } from 'react-hook-form';
 import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
-import { aktiveFiltreringer, ALLE_OPPGAVER_ID } from 'components/oppgaveliste/filtrering/filtreringUtils';
+import { aktiveFiltreringer } from 'components/oppgaveliste/filtrering/filtreringUtils';
+import { NoNavAapOppgaveFilterFilterDtoType } from '@navikt/aap-oppgave-typescript-types';
+import { AktivKø } from 'hooks/oppgave/aktivkøHook';
 
 interface Props {
   form: UseFormReturn<FormFieldsFilter>;
   formFields: FormFields<FieldPath<FormFieldsFilter>, FormFieldsFilter>;
   antallOppgaver?: number;
-  aktivKøId: number;
+  aktivKø: AktivKø;
   sattBehandlingstyperFilter: string[];
 }
 
@@ -23,7 +25,7 @@ export const LedigeOppgaverFiltrering = ({
   form,
   formFields,
   antallOppgaver,
-  aktivKøId,
+  aktivKø,
   sattBehandlingstyperFilter,
 }: Props) => {
   const [åpneFilter, setÅpneFilter] = useState(false);
@@ -53,7 +55,8 @@ export const LedigeOppgaverFiltrering = ({
               <BodyShort>Filtre: </BodyShort>
               <Chips size={'small'}>
                 {aktiveFilter.map((filter) => {
-                  return aktivKøId !== ALLE_OPPGAVER_ID && filter.key === 'behandlingstyper' ? (
+                  return aktivKø.type !== NoNavAapOppgaveFilterFilterDtoType.ALLE_OPPGAVER &&
+                    filter.key === 'behandlingstyper' ? (
                     <Chips.Toggle key={filter.value} checkmark={false} selected={true}>
                       {filter.label}
                     </Chips.Toggle>
@@ -89,7 +92,7 @@ export const LedigeOppgaverFiltrering = ({
                 <FormField
                   form={form}
                   formField={formFields.behandlingstyper}
-                  readOnly={ALLE_OPPGAVER_ID !== aktivKøId}
+                  readOnly={NoNavAapOppgaveFilterFilterDtoType.ALLE_OPPGAVER !== aktivKø.type}
                 />
               </BoxWrapper>
               <BoxWrapper>

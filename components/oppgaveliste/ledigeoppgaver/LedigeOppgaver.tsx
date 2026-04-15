@@ -7,7 +7,7 @@ import { KøSelect } from 'components/oppgaveliste/køselect/KøSelect';
 import { queryParamsArray } from 'lib/utils/request';
 import { Enhet } from 'lib/types/oppgaveTypes';
 import { hentKøerForEnheterClient } from 'lib/oppgaveClientApi';
-import { useLagreAktivKø } from 'hooks/oppgave/aktivkøHook';
+import { AktivKø, useLagreAktivKø } from 'hooks/oppgave/aktivkøHook';
 import { isError, isSuccess } from 'lib/utils/api';
 import { useLedigeOppgaver } from 'hooks/oppgave/OppgaveHook';
 import { LedigeOppgaverTabell } from 'components/oppgaveliste/ledigeoppgaver/ledigeoppgavertabell/LedigeOppgaverTabell';
@@ -25,13 +25,13 @@ import {
   NoNavAapOppgaveListeUtvidetOppgavelisteFilterReturStatuser,
 } from '@navikt/aap-oppgave-typescript-types';
 import { TabellSkeleton } from 'components/oppgaveliste/tabellskeleton/TabellSkeleton';
-import { ALLE_OPPGAVER_ID } from 'components/oppgaveliste/filtrering/filtreringUtils';
 import { useLagreAktivUtvidetFilter } from 'hooks/oppgave/aktivUtvidetFilterHook';
 import { EnheterSelect } from 'components/oppgaveliste/enheterselect/EnheterSelect';
 import { useLagreAktiveEnheter } from 'hooks/oppgave/aktiveEnheterHook';
 import { useBackendSortering } from 'hooks/oppgave/BackendSorteringHook';
 import { LedigeOppgaverFiltrering } from 'components/oppgaveliste/filtrering/ledigeoppgaverfiltrering/LedigeOppgaverFiltrering';
 import { ValuePair } from 'components/form/FormField';
+import { useInnloggetBruker } from 'hooks/BrukerHook';
 
 interface Props {
   enheter: Enhet[];
@@ -40,12 +40,14 @@ interface Props {
 export const LedigeOppgaver = ({ enheter }: Props) => {
   const { sort, setSort } =
     useBackendSortering<NoNavAapOppgaveListeOppgaveSorteringSortBy>('ledige-oppgaver-backendsort');
-  const { hentLagretAktivKø, lagreAktivKøId } = useLagreAktivKø();
+  const { hentLagretAktivKø, lagreAktivKø } = useLagreAktivKø();
   const { hentAktivUtvidetFilter, lagreAktivUtvidetFilter } = useLagreAktivUtvidetFilter();
   const { hentLagredeAktiveEnheter, lagreAktiveEnheter } = useLagreAktiveEnheter();
 
+  const bruker = useInnloggetBruker();
+  const [aktivKø, setAktivKø] = useState<AktivKø | undefined>(undefined);
+
   const [veilederFilter, setVeilederFilter] = useState<string>('');
-  const [aktivKøId, setAktivKøId] = useState<number>(ALLE_OPPGAVER_ID);
   const lagretUtvidetFilter = hentAktivUtvidetFilter();
 
   function førsteEnhetTilComboOption(enheter: Enhet[]): ValuePair[] | null {
@@ -59,7 +61,6 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
   const [aktiveEnheter, setAktiveEnheter] = useState<ValuePair[]>(
     hentLagredeAktiveEnheter() ?? førsteEnhetTilComboOption(enheter) ?? []
   );
-
   const aktiveEnhetsnumre = aktiveEnheter.map((enhet) => enhet.value);
   const oppdaterEnheter = (enheter: ValuePair[]) => {
     setAktiveEnheter(enheter);
@@ -137,7 +138,7 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
     kanLasteInnFlereOppgaver,
     mutate,
     behandlingstyperFilterFraBackend,
-  } = useLedigeOppgaver(aktiveEnhetsnumre, veilederFilter === 'veileder', aktivKøId, utvidetFilter, sort);
+  } = useLedigeOppgaver(aktiveEnhetsnumre, veilederFilter === 'veileder', aktivKø?.id ?? 0, utvidetFilter, sort);
 
   const { data: køer } = useSWR(`api/filter?${queryParamsArray('enheter', aktiveEnhetsnumre)}`, () =>
     hentKøerForEnheterClient(aktiveEnhetsnumre)
@@ -150,27 +151,32 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
     return () => fieldValues.unsubscribe();
   }, [form, lagreAktivUtvidetFilter]);
 
-  const oppdaterKøId = (id: number) => {
-    setAktivKøId(id);
-    lagreAktivKøId(id);
+  const oppdaterKø = (kø: AktivKø) => {
+    setAktivKø(kø);
+    lagreAktivKø(kø.id, kø.type);
   };
 
   useEffect(() => {
     if (isError(køer) || !køer?.data?.length) {
       return;
     }
-    const køId = hentLagretAktivKø();
+    const lagretKø = hentLagretAktivKø();
     const gyldigeKøer = køer.data.map((kø) => kø.id);
 
-    if (!køId || !gyldigeKøer.includes(køId)) {
-      oppdaterKøId(gyldigeKøer[0] ?? 0);
+    if (lagretKø && gyldigeKøer.includes(lagretKø.id)) {
+      oppdaterKø(lagretKø);
     } else {
-      oppdaterKøId(køId);
+      const førsteKø = køer.data[0];
+      oppdaterKø({ id: førsteKø.id!, type: førsteKø.type, timestamp: new Date().getTime(), user: bruker.NAVident });
     }
   }, [køer]);
 
   if (isError(køer)) {
     return <Alert variant="error">{køer.apiException.message}</Alert>;
+  }
+
+  if (!aktivKø) {
+    return <TabellSkeleton />;
   }
 
   const oppgaveKøer = isSuccess(køer) ? køer.data : undefined;
@@ -196,8 +202,8 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
               <KøSelect
                 label={'Velg kø'}
                 køer={oppgaveKøer || []}
-                aktivKøId={aktivKøId}
-                setAktivKø={oppdaterKøId}
+                aktivKø={aktivKø}
+                oppdaterKø={oppdaterKø}
                 form={form}
               />
               <Switch
@@ -214,7 +220,7 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
             <Label as="p" size={'small'}>
               Beskrivelse av køen:
             </Label>
-            <BodyShort size={'small'}>{oppgaveKøer?.find((e) => e.id === aktivKøId)?.beskrivelse}</BodyShort>
+            <BodyShort size={'small'}>{oppgaveKøer?.find((e) => e.id === aktivKø.id)?.beskrivelse}</BodyShort>
           </HStack>
         </VStack>
       </Box>
@@ -224,14 +230,20 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
           form={form}
           formFields={formFields}
           antallOppgaver={antallOppgaver}
-          aktivKøId={aktivKøId}
+          aktivKø={aktivKø}
           sattBehandlingstyperFilter={behandlingstyperFilterFraBackend}
         />
         {isLoading && <TabellSkeleton />}
 
         {!isLoading &&
           (oppgaver.length > 0 ? (
-            <LedigeOppgaverTabell oppgaver={oppgaver} setSortBy={setSort} sort={sort} revalidateFunction={mutate} />
+            <LedigeOppgaverTabell
+              oppgaver={oppgaver}
+              setSortBy={setSort}
+              sort={sort}
+              revalidateFunction={mutate}
+              aktivKø={aktivKø}
+            />
           ) : (
             <BodyShort size={'small'} className={styles.ingenoppgaver}>
               Ingen oppgaver i valgt kø for valgt enhet
