@@ -13,7 +13,7 @@ import { Alert, BodyLong, BodyShort, Box, Button, Heading, HStack, Modal, VStack
 import { FormEvent, useRef, useState } from 'react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { Behovstype } from 'lib/utils/form';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { addDays, format, isValid, parse } from 'date-fns';
@@ -66,7 +66,7 @@ export const SamordningGradering = ({
   initialMellomlagretVurdering,
   oppfølgningOppgave,
 }: Props) => {
-  const behandlingsreferanse = useBehandlingsReferanse();
+  const { behandlingsreferanse } = useParamsMedType();
   const [errorMessage, setErrorMessage] = useState<String | undefined>(undefined);
   const [success, setSuccess] = useState(false);
 

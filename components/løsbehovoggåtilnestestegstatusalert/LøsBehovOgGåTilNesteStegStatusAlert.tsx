@@ -1,9 +1,9 @@
 'use client';
 
 import { Alert, BodyShort } from '@navikt/ds-react';
-import { useParams } from 'next/navigation';
 import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { ApiException } from 'lib/utils/api';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 
 interface Props {
   status?: LøsBehovOgGåTilNesteStegStatus;
@@ -11,7 +11,7 @@ interface Props {
 }
 
 export const LøsBehovOgGåTilNesteStegStatusAlert = ({ status, løsBehovOgGåTilNesteStegError }: Props) => {
-  const { behandlingsreferanse, saksnummer } = useParams<{ behandlingsreferanse: string; saksnummer: string }>();
+  const { behandlingsreferanse, saksnummer } = useParamsMedType();
   return (
     <>
       {løsBehovOgGåTilNesteStegError && (

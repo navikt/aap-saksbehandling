@@ -5,7 +5,7 @@ import { Alert, BodyShort, HStack, VStack } from '@navikt/ds-react';
 import { formaterSvartype, formaterUtfall } from 'lib/utils/svarfraandreinstans';
 import { useConfigForm } from 'components/form/FormHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { FormEvent } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import { getValgteHjemlerSomIkkeErImplementert, hjemmelalternativer, hjemmelMap } from 'lib/utils/hjemmel';
@@ -30,7 +30,7 @@ interface FormFields {
 type DraftFormFields = Partial<FormFields>;
 
 export const SvarFraAndreinstans = ({ grunnlag, readOnly, behandlingVersjon, initialMellomlagretVurdering }: Props) => {
-  const behandlingsreferanse = useBehandlingsReferanse();
+  const { behandlingsreferanse } = useParamsMedType();
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('SVAR_FRA_ANDREINSTANS');
 

@@ -1,7 +1,7 @@
 import { BodyShort, Button, HStack, Link, Pagination, Table, Tooltip, VStack } from '@navikt/ds-react';
 import { formaterDatoForFrontend, formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import useSWR from 'swr';
-import { useSaksnummer } from 'hooks/saksbehandling/BehandlingHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
@@ -19,7 +19,7 @@ interface FormFields {
 }
 
 export const Saksdokumenter = () => {
-  const saksnummer = useSaksnummer();
+  const { saksnummer } = useParamsMedType();
   const { data: journalposterPåSak } = useSWR(`api/dokumenter/sak/${saksnummer}`, () =>
     clientHentAlleDokumenterPåSak(saksnummer)
   );

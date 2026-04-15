@@ -3,7 +3,7 @@ import {
   ServerSentEventData,
   ServerSentEventStatus,
 } from 'app/postmottak/api/post/[behandlingsreferanse]/hent/[gruppe]/[steg]/nesteSteg/route';
-import { useParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { LøsAvklaringsbehovPåBehandling, StegType } from 'lib/types/postmottakTypes';
 import { postmottakLøsBehovClient } from 'lib/postmottakClientApi';
 import { ApiException, isError, isSuccess } from 'lib/utils/api';
@@ -11,6 +11,7 @@ import { isLocal } from 'lib/utils/environment';
 import { hentTildeltStatusClient } from 'lib/oppgaveClientApi';
 import { useOverstyrTildelingHook } from 'hooks/saksbehandling/OverstyrTildelingHook';
 import { useFeatureFlag } from 'context/UnleashContext';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 
 export const usePostmottakLøsBehovOgGåTilNesteSteg = (
   steg: StegType
@@ -21,21 +22,24 @@ export const usePostmottakLøsBehovOgGåTilNesteSteg = (
   løsBehovOgGåTilNesteSteg: (behov: LøsAvklaringsbehovPåBehandling, sjekkTildeltStatus?: boolean) => void;
   løsBehovOgGåTilNesteStegError?: ApiException;
 } => {
-  const params = useParams<{ aktivGruppe: string; behandlingsreferanse: string }>();
+  const params = useParamsMedType();
   const router = useRouter();
   const [status, setStatus] = useState<ServerSentEventStatus | undefined>();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<ApiException | undefined>();
   const [isPending, startTransition] = useTransition();
   const { setVisOverstyrModal, setCallback, setReservertAvNavn } = useOverstyrTildelingHook();
-  const skalSjekkeTildeltStatus = useFeatureFlag('SjekkTildelingVedBekreft')
+  const skalSjekkeTildeltStatus = useFeatureFlag('SjekkTildelingVedBekreft');
 
   const erLokal = isLocal();
   const sisteBehovRef = useRef<{
     behov: LøsAvklaringsbehovPåBehandling;
   }>(null);
 
-  const løsBehovOgGåTilNesteSteg = async (behov: LøsAvklaringsbehovPåBehandling, sjekkTildeltStatus: boolean = true) => {
+  const løsBehovOgGåTilNesteSteg = async (
+    behov: LøsAvklaringsbehovPåBehandling,
+    sjekkTildeltStatus: boolean = true
+  ) => {
     setIsLoading(true);
     setStatus(undefined);
     setError(undefined);
@@ -59,7 +63,6 @@ export const usePostmottakLøsBehovOgGåTilNesteSteg = (
         }
       } // Hvis henting av tildelt-status feiler, la saksbehandler fortsette
     }
-
 
     const løsbehovRes = await postmottakLøsBehovClient(behov);
     if (isError(løsbehovRes)) {
@@ -111,11 +114,7 @@ export const usePostmottakLøsBehovOgGåTilNesteSteg = (
       setError({ message: 'Noe gikk galt ved overstyring av tildeling. Prøv igjen.' });
       return;
     }
-    sisteBehovRef.current &&
-      løsBehovOgGåTilNesteSteg(
-        sisteBehovRef.current.behov,
-        false
-      );
+    sisteBehovRef.current && løsBehovOgGåTilNesteSteg(sisteBehovRef.current.behov, false);
   };
 
   return {

@@ -1,16 +1,16 @@
 'use client';
 
 import { BehandlingFlytOgTilstand } from 'lib/types/types';
-import { useParams } from 'next/navigation';
 import useSWR from 'swr';
 import { clientHentFlyt } from 'lib/clientApi';
 import { isError, isSuccess } from 'lib/utils/api';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 
 export function useFlyt(): {
   flyt?: BehandlingFlytOgTilstand;
   refetchFlytClient: () => void;
 } {
-  const params = useParams<{ behandlingsreferanse: string }>();
+  const params = useParamsMedType();
 
   if (!params.behandlingsreferanse) {
     throw Error('useFlyt kan bare brukes på behandlingssiden.');
@@ -29,7 +29,7 @@ export function useFlyt(): {
 }
 
 export function useRequiredFlyt(): { flyt: BehandlingFlytOgTilstand; refetchFlytClient: () => void } {
-  const params = useParams<{ behandlingsreferanse: string }>();
+  const params = useParamsMedType();
 
   if (!params.behandlingsreferanse) {
     throw Error('useFlyt kan bare brukes på behandlingssiden.');

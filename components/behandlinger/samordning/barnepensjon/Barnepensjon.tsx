@@ -11,7 +11,7 @@ import { Behovstype } from 'lib/utils/form';
 import { VStack } from '@navikt/ds-react';
 import { BarnepensjonTabell } from 'components/behandlinger/samordning/barnepensjon/BarnepensjonTabell';
 import { BarnepensjonTidligereVurdering } from 'components/behandlinger/samordning/barnepensjon/BarnepensjonTidligereVurdering';
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { replaceCommasWithDots } from 'lib/utils/string';
 import { hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import { FormErrorSummary } from 'components/formerrorsummary/FormErrorSummary';
@@ -37,7 +37,7 @@ export interface BarnepensjonFormFields {
 type DraftFormFields = Partial<BarnepensjonFormFields>;
 
 export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering, behandlingVersjon, grunnlag }: Props) => {
-  const behandlingsreferanse = useBehandlingsReferanse();
+  const { behandlingsreferanse } = useParamsMedType();
 
   const { løsBehovOgGåTilNesteSteg, status, løsBehovOgGåTilNesteStegError, isLoading } =
     useLøsBehovOgGåTilNesteSteg('SAMORDNING_BARNEPENSJON');

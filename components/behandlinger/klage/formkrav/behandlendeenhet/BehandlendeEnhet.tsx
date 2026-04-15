@@ -1,7 +1,7 @@
 'use client';
 
 import { BehandlendeEnhetGrunnlag, MellomlagretVurdering, TypeBehandling } from 'lib/types/types';
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormEvent } from 'react';
@@ -26,7 +26,7 @@ interface FormFields {
 type DraftFormFields = Partial<FormFields>;
 
 export const BehandlendeEnhet = ({ behandlingVersjon, grunnlag, readOnly, initialMellomlagretVurdering }: Props) => {
-  const behandlingsreferanse = useBehandlingsReferanse();
+  const { behandlingsreferanse } = useParamsMedType();
 
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('BEHANDLENDE_ENHET');

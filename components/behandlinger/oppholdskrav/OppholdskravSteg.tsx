@@ -1,6 +1,6 @@
 'use client';
 
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { Behovstype, JaEllerNei } from 'lib/utils/form';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
@@ -39,7 +39,7 @@ type Props = {
 };
 
 export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVersjon, readOnly }: Props) => {
-  const behandlingsreferanse = useBehandlingsReferanse();
+  const { behandlingsreferanse } = useParamsMedType();
 
   const { løsPeriodisertBehovOgGåTilNesteSteg, status, løsBehovOgGåTilNesteStegError, isLoading } =
     useLøsBehovOgGåTilNesteSteg('VURDER_OPPHOLDSKRAV');

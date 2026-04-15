@@ -9,7 +9,7 @@ import { BodyShort, Label } from '@navikt/ds-react';
 import styles from './YrkesskadeGrunnlagBeregning.module.css';
 import { MellomlagretVurdering, YrkeskadeBeregningGrunnlag, YrkesskadeBeløpVurderingResponse } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useConfigForm } from 'components/form/FormHook';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
@@ -48,7 +48,7 @@ export const YrkesskadeGrunnlagBeregning = ({
   behandlingVersjon,
   initialMellomlagretVurdering,
 }: Props) => {
-  const behandlingsReferanse = useBehandlingsReferanse();
+  const { behandlingsreferanse } = useParamsMedType();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('FASTSETT_GRUNNLAG');
 
@@ -104,7 +104,7 @@ export const YrkesskadeGrunnlagBeregning = ({
                 }),
               },
             },
-            referanse: behandlingsReferanse,
+            referanse: behandlingsreferanse,
             behandlingVersjon: behandlingVersjon,
           },
           () => {

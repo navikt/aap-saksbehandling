@@ -17,7 +17,6 @@ import { clientOppdaterBrevdata, clientOppdaterBrevmal } from 'lib/clientApi';
 import { useRouter } from 'next/navigation';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { Behovstype } from 'lib/utils/form';
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useEffect, useState } from 'react';
 import { isSuccess } from 'lib/utils/api';
 import { revalidateFlyt } from 'lib/actions/actions';
@@ -28,6 +27,7 @@ import { ExpandIcon, ShrinkIcon } from '@navikt/aksel-icons';
 import { RefusjonskravVisning } from 'components/brevbygger/RefusjonskravVisning';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { Distribusjonssjekk } from 'components/brev/Distribusjonssjekk';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 
 export interface AlternativFormField {
   verdi: string;
@@ -106,7 +106,7 @@ export const Brevbygger = ({
   const [distribusjonssjekkFeil, setDistribusjonssjekkFeil] = useState<string | undefined>();
   const [ikkeSendBrevModalOpen, settIkkeSendBrevModalOpen] = useState(false);
   const [pdfViewExpanded, togglePdfVievExpanded] = useState(false);
-  const behandlingsReferanse = useBehandlingsReferanse();
+  const { behandlingsreferanse } = useParamsMedType();
   const { fields } = useFieldArray({ control, name: 'delmaler' });
   const {
     løsBehovOgGåTilNesteSteg,
@@ -198,7 +198,7 @@ export const Brevbygger = ({
           mottakere: valgteMottakere,
           handling: 'FERDIGSTILL',
         },
-        referanse: behandlingsReferanse,
+        referanse: behandlingsreferanse,
       });
     }
   };
@@ -211,9 +211,9 @@ export const Brevbygger = ({
         brevbestillingReferanse: referanse,
         handling: 'AVBRYT',
       },
-      referanse: behandlingsReferanse,
+      referanse: behandlingsreferanse,
     });
-    await revalidateFlyt(behandlingsReferanse);
+    await revalidateFlyt(behandlingsreferanse);
   };
 
   return (

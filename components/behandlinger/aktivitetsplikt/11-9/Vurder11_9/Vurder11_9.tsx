@@ -10,7 +10,7 @@ import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggå
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { defaultRad, useMellomlagre11_9 } from './Mellomlagre11_9Hook';
 import { Behovstype } from 'lib/utils/form';
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { Vurdering11_9 } from 'components/behandlinger/aktivitetsplikt/11-9/Vurder11_9/Vurder11_9MedDataFetching';
 import { omit } from 'lodash';
 
@@ -32,7 +32,7 @@ export const Vurder11_9 = ({ readOnly, grunnlag, initialMellomlagretVurdering, b
       ...v,
       id: v.dato,
     })) ?? [];
-  const behandlingsreferanse = useBehandlingsReferanse();
+  const { behandlingsreferanse } = useParamsMedType();
 
   const { valgtRad, velgRad, mellomlagreVurdering, fjernRad, mellomlagredeVurderinger } = useMellomlagre11_9(
     vurderingerSendtTilBeslutter,

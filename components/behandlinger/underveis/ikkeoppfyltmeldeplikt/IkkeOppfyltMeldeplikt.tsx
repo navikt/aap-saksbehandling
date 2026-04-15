@@ -3,7 +3,6 @@
 import { MeldepliktOverstyringLøsningDto, OverstyringMeldepliktGrunnlag, Periode } from 'lib/types/types';
 import { FormEvent } from 'react';
 import { BodyLong, Link, VStack } from '@navikt/ds-react';
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { IkkeMeldtPerioderTable } from 'components/behandlinger/underveis/ikkeoppfyltmeldeplikt/IkkeMeldtPerioderTable';
 import { VurderingMeldepliktOverstyringSkjema } from 'components/behandlinger/underveis/ikkeoppfyltmeldeplikt/VurderingMeldepliktOverstyringSkjema';
@@ -16,6 +15,7 @@ import {
 import { Behovstype } from 'lib/utils/form';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 
 type Props = {
   grunnlag?: OverstyringMeldepliktGrunnlag;
@@ -24,7 +24,7 @@ type Props = {
 };
 
 export const IkkeOppfyltMeldeplikt = ({ grunnlag, behandlingVersjon, readOnly }: Props) => {
-  const behandlingsreferanse = useBehandlingsReferanse();
+  const { behandlingsreferanse } = useParamsMedType();
 
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('IKKE_OPPFYLT_MELDEPLIKT');

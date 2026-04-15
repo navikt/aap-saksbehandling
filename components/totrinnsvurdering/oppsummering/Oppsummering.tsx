@@ -6,7 +6,7 @@ import Link from 'next/link';
 import styles from './Oppsummering.module.css';
 import { mapGrunnTilString } from 'lib/utils/oversettelser';
 import { byggVilkårskortLenke } from 'lib/utils/vilkårskort';
-import { useBehandlingsReferanse, useSaksnummer } from 'hooks/saksbehandling/BehandlingHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 
 interface Props {
   vurderinger: ToTrinnsVurdering[];
@@ -14,7 +14,7 @@ interface Props {
 }
 
 export const Oppsummering = ({ vurderinger, erKvalitetssikrer }: Props) => {
-  const [saksnummer, behandlingsreferanse] = [useSaksnummer(), useBehandlingsReferanse()];
+  const { saksnummer, behandlingsreferanse } = useParamsMedType();
 
   return (
     <div className={styles.oppsummering}>
