@@ -32,18 +32,18 @@ export const BehandlingButtons = ({
   const kildeErBehandlingsflyt = behandling.kilde === 'BEHANDLINGSFLYT';
   const oppgaveReservertAvInnloggetBruker = oppgaveInfo?.reservertAvIdent === innloggetBrukerIdent;
 
-  async function gåTilBehandling(behandlingsReferanse: string) {
+  async function gåTilBehandling(behandlingsreferanse: string) {
     setFeilmelding('');
     startTransitionBehandling(async () => {
-      const internUrl = `/saksbehandling/sak/${sak.saksnummer}/${behandlingsReferanse}`;
+      const internUrl = `/saksbehandling/sak/${sak.saksnummer}/${behandlingsreferanse}`;
       router.push(internUrl);
     });
   }
 
-  async function gåTilPostmottakBehandling(behandlingsReferanse: string) {
+  async function gåTilPostmottakBehandling(behandlingsreferanse: string) {
     setFeilmelding('');
     startTransitionBehandling(async () => {
-      const internUrl = `/postmottak/${behandlingsReferanse}`;
+      const internUrl = `/postmottak/${behandlingsreferanse}`;
       router.push(internUrl);
     });
   }

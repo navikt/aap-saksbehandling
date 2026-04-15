@@ -22,7 +22,7 @@ interface FormFields {
 }
 
 export const AvbrytRevurderingVurdering = ({ grunnlag, readOnly, behandlingVersjon }: Props) => {
-  const { behandlingsreferanse: behandlingsReferanse } = useParamsMedType();
+  const { behandlingsreferanse } = useParamsMedType();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('AVBRYT_REVURDERING');
 
@@ -71,7 +71,7 @@ export const AvbrytRevurderingVurdering = ({ grunnlag, readOnly, behandlingVersj
             årsak: data.aarsak,
           },
         },
-        referanse: behandlingsReferanse,
+        referanse: behandlingsreferanse,
       });
     })(event);
   };

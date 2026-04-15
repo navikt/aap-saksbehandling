@@ -38,7 +38,7 @@ interface Props {
 }
 
 export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, initialMellomlagretVurdering }: Props) => {
-  const { behandlingsreferanse: behandlingsReferanse } = useParamsMedType();
+  const { behandlingsreferanse } = useParamsMedType();
   const { løsPeriodisertBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_SYKEPENGEERSTATNING');
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
@@ -101,7 +101,7 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
     }
     const losning: LøsningerForPerioder = {
       behandlingVersjon: behandlingVersjon,
-      referanse: behandlingsReferanse,
+      referanse: behandlingsreferanse,
       behov: {
         behovstype: Behovstype.VURDER_SYKEPENGEERSTATNING_KODE,
         løsningerForPerioder: data.vurderinger.map((periode, index) => {

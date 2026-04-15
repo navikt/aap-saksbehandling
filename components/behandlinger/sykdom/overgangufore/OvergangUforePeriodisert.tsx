@@ -55,7 +55,7 @@ export const OvergangUforePeriodisert = ({
   readOnly,
   initialMellomlagretVurdering,
 }: Props) => {
-  const { behandlingsreferanse: behandlingsReferanse } = useParamsMedType();
+  const { behandlingsreferanse } = useParamsMedType();
   const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('OVERGANG_UFORE');
 
@@ -85,7 +85,7 @@ export const OvergangUforePeriodisert = ({
       løsPeriodisertBehovOgGåTilNesteSteg(
         {
           behandlingVersjon: behandlingVersjon,
-          referanse: behandlingsReferanse,
+          referanse: behandlingsreferanse,
           behov: {
             behovstype: Behovstype.OVERGANG_UFORE,
             løsningerForPerioder: data.vurderinger.map((vurdering, index) => {

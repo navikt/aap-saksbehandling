@@ -16,7 +16,7 @@ export function useMellomlagre11_9(
   vurderingerSendtTilBeslutter: Vurdering11_9[],
   initialMellomlagretVurdering?: MellomlagretVurdering
 ) {
-  const { behandlingsreferanse: behandlingsReferanse } = useParamsMedType();
+  const { behandlingsreferanse } = useParamsMedType();
   const [mellomlagretVurdering, setMellomlagretVurdering] = useState<MellomlagretVurdering | undefined>(
     initialMellomlagretVurdering
   );
@@ -25,7 +25,7 @@ export function useMellomlagre11_9(
     async (vurdering: object) => {
       const res = await clientLagreMellomlagring({
         avklaringsbehovkode: Behovstype.VURDER_BRUDD_11_9_KODE,
-        behandlingsReferanse: behandlingsReferanse,
+        behandlingsReferanse: behandlingsreferanse,
         data: JSON.stringify(vurdering),
       });
 
@@ -33,7 +33,7 @@ export function useMellomlagre11_9(
         setMellomlagretVurdering(res.data.mellomlagretVurdering);
       }
     },
-    [behandlingsReferanse]
+    [behandlingsreferanse]
   );
 
   const { mellomlagredeVurderinger }: MellomlagretData = mellomlagretVurdering?.data
