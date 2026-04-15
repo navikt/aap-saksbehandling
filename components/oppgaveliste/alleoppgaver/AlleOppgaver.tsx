@@ -10,7 +10,7 @@ import { isError, isSuccess } from 'lib/utils/api';
 import useSWR from 'swr';
 import { queryParamsArray } from 'lib/utils/request';
 import { hentKøerForEnheterClient } from 'lib/oppgaveClientApi';
-import { useLagreAktivKø } from 'hooks/oppgave/aktivkøHook';
+import { AktivKø, useLagreAktivKø } from 'hooks/oppgave/aktivkøHook';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
 import { oppgaveBehandlingstyper, OppgaveStatuser } from 'lib/utils/behandlingstyper';
@@ -24,24 +24,26 @@ import {
 import { formaterDatoForBackend } from 'lib/utils/date';
 import styles from 'components/oppgaveliste/ledigeoppgaver/LedigeOppgaver.module.css';
 import { TabellSkeleton } from 'components/oppgaveliste/tabellskeleton/TabellSkeleton';
-import { ALLE_OPPGAVER_ID } from 'components/oppgaveliste/filtrering/filtreringUtils';
 import { useLagreAktivUtvidetFilter } from 'hooks/oppgave/aktivUtvidetFilterHook';
 import { useLagreAktiveEnheter } from 'hooks/oppgave/aktiveEnheterHook';
 import { EnheterSelect } from 'components/oppgaveliste/enheterselect/EnheterSelect';
 import { useBackendSortering } from 'hooks/oppgave/BackendSorteringHook';
 import { AlleOppgaverFiltrering } from 'components/oppgaveliste/filtrering/alleoppgaverfiltrering/AlleOppgaverFiltrering';
 import { ValuePair } from 'components/form/FormField';
+import { useInnloggetBruker } from 'hooks/BrukerHook';
 
 interface Props {
   enheter: Enhet[];
 }
 
 export const AlleOppgaver = ({ enheter }: Props) => {
-  const { hentLagretAktivKø, lagreAktivKøId } = useLagreAktivKø();
+  const { hentLagretAktivKø, lagreAktivKø } = useLagreAktivKø();
   const { hentAktivUtvidetFilter, lagreAktivUtvidetFilter } = useLagreAktivUtvidetFilter();
   const { hentLagredeAktiveEnheter, lagreAktiveEnheter } = useLagreAktiveEnheter();
 
-  const [aktivKøId, setAktivKøId] = useState<number>(ALLE_OPPGAVER_ID);
+  const bruker = useInnloggetBruker();
+  const [aktivKø, setAktivKø] = useState<AktivKø | undefined>(undefined);
+
   const [valgteRader, setValgteRader] = useState<number[]>([]);
   const lagretUtvidetFilter = hentAktivUtvidetFilter();
 
@@ -137,7 +139,7 @@ export const AlleOppgaver = ({ enheter }: Props) => {
     kanLasteInnFlereOppgaver,
     mutate,
     behandlingstyperFilterFraBackend,
-  } = useAlleOppgaverForEnhet(aktiveEnhetsnumre, aktivKøId, utvidetFilter, sort);
+  } = useAlleOppgaverForEnhet(aktiveEnhetsnumre, aktivKø?.id ?? 0, utvidetFilter, sort);
 
   const { data: køer } = useSWR(`api/filter?${queryParamsArray('enheter', aktiveEnhetsnumre)}`, () =>
     hentKøerForEnheterClient(aktiveEnhetsnumre)
@@ -150,27 +152,32 @@ export const AlleOppgaver = ({ enheter }: Props) => {
     return () => fieldValues.unsubscribe();
   }, [form, lagreAktivUtvidetFilter]);
 
-  const oppdaterKøId = (id: number) => {
-    setAktivKøId(id);
-    lagreAktivKøId(id);
+  const oppdaterKø = (kø: AktivKø) => {
+    setAktivKø(kø);
+    lagreAktivKø(kø.id, kø.type);
   };
 
   useEffect(() => {
     if (isError(køer) || !køer?.data?.length) {
       return;
     }
-    const køId = hentLagretAktivKø();
+    const lagretKø = hentLagretAktivKø();
     const gyldigeKøer = køer.data.map((kø) => kø.id);
 
-    if (!køId || !gyldigeKøer.includes(køId)) {
-      oppdaterKøId(gyldigeKøer[0] ?? 0);
+    if (lagretKø && gyldigeKøer.includes(lagretKø.id)) {
+      oppdaterKø(lagretKø);
     } else {
-      oppdaterKøId(køId);
+      const førsteKø = køer.data[0];
+      oppdaterKø({ id: førsteKø.id!, type: førsteKø.type, timestamp: new Date().getTime(), user: bruker.NAVident });
     }
   }, [køer]);
 
   if (isError(køer)) {
     return <Alert variant="error">{køer.apiException.message}</Alert>;
+  }
+
+  if (!aktivKø) {
+    return <TabellSkeleton />;
   }
 
   const oppgaveKøer = isSuccess(køer) ? køer.data : undefined;
@@ -189,8 +196,8 @@ export const AlleOppgaver = ({ enheter }: Props) => {
             <KøSelect
               label={'Velg kø'}
               køer={oppgaveKøer || []}
-              aktivKøId={aktivKøId}
-              setAktivKø={oppdaterKøId}
+              aktivKø={aktivKø}
+              oppdaterKø={oppdaterKø}
               form={form}
             />
           </HStack>
@@ -198,7 +205,7 @@ export const AlleOppgaver = ({ enheter }: Props) => {
             <Label as="p" size={'small'}>
               Beskrivelse av køen:
             </Label>
-            <BodyShort size={'small'}>{oppgaveKøer?.find((e) => e.id === aktivKøId)?.beskrivelse}</BodyShort>
+            <BodyShort size={'small'}>{oppgaveKøer?.find((e) => e.id === aktivKø.id)?.beskrivelse}</BodyShort>
           </HStack>
         </VStack>
       </Box>
@@ -211,7 +218,7 @@ export const AlleOppgaver = ({ enheter }: Props) => {
           valgteRader={valgteRader}
           setValgteRader={setValgteRader}
           revalidateFunction={mutate}
-          aktivKøId={aktivKøId}
+          aktivKø={aktivKø}
           aktiveEnheter={aktiveEnhetsnumre}
           sattBehandlingstyperFilter={behandlingstyperFilterFraBackend}
         />
@@ -225,7 +232,7 @@ export const AlleOppgaver = ({ enheter }: Props) => {
             setValgteRader={setValgteRader}
             setSortBy={setSort}
             sort={sort}
-            aktivKøId={aktivKøId}
+            aktivKøId={aktivKø.id}
           />
         ) : (
           <BodyShort size={'small'} className={styles.ingenoppgaver}>
