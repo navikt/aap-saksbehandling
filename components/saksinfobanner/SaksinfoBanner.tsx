@@ -94,7 +94,7 @@ export const SaksinfoBanner = ({
           />
 
           {personInformasjon.dødsdato && (
-            <Tag variant="neutral-filled" size="small" data-color="neutral">
+            <Tag variant="strong" size="small" data-color="neutral">
               Døde {formaterDatoForFrontend(personInformasjon.dødsdato)}
             </Tag>
           )}

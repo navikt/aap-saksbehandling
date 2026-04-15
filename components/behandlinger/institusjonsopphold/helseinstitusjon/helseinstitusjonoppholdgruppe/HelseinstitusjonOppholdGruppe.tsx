@@ -181,7 +181,7 @@ export const HelseinstitusjonOppholdGruppe = ({
               heading={
                 <HStack justify={'space-between'} padding={"space-8"}>
                   <BodyShort size={'small'}>{formatDatoMedMånedsnavn(addDays(oppholdAvsluttetDato, 1))} – </BodyShort>
-                  <Tag size="xsmall" variant={'neutral-moderate'}>
+                  <Tag data-color="neutral" size="xsmall" variant={"moderate"}>
                     Ikke relevant
                   </Tag>
                 </HStack>

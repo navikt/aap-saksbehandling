@@ -11,27 +11,39 @@ export const Behandlingsstatus = ({ status }: Props) => {
   switch (status) {
     case 'UTREDES':
       return (
-        <Tag className={styles.tag} size={'xsmall'} variant={'info'}>
-          Utredes
-        </Tag>
+        <Tag
+          data-color="info"
+          className={styles.tag}
+          size={'xsmall'}
+          variant={"outline"}>Utredes
+                  </Tag>
       );
     case 'OPPRETTET':
       return (
-        <Tag className={styles.tag} size={'xsmall'} variant={'info'}>
-          Opprettet
-        </Tag>
+        <Tag
+          data-color="info"
+          className={styles.tag}
+          size={'xsmall'}
+          variant={"outline"}>Opprettet
+                  </Tag>
       );
     case 'AVSLUTTET':
       return (
-        <Tag className={styles.tag} size={'xsmall'} variant={'neutral'}>
-          Avsluttet
-        </Tag>
+        <Tag
+          data-color="neutral"
+          className={styles.tag}
+          size={'xsmall'}
+          variant={"outline"}>Avsluttet
+                  </Tag>
       );
     case 'IVERKSETTES':
       return (
-        <Tag className={styles.tag} size={'xsmall'} variant={'success'}>
-          Iverksettes
-        </Tag>
+        <Tag
+          data-color="success"
+          className={styles.tag}
+          size={'xsmall'}
+          variant={"outline"}>Iverksettes
+                  </Tag>
       );
   }
 };

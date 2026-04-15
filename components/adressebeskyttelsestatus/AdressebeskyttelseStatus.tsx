@@ -11,7 +11,12 @@ interface Props {
 
 export const AdressebeskyttelseStatus = ({ adressebeskyttelsesGrad, size = 'small', showLabel = true }: Props) => {
   return (
-    <Tag className={styles.tag} icon={<ShieldLockIcon />} variant={'warning-moderate'} size={size}>
+    <Tag
+      data-color="warning"
+      className={styles.tag}
+      icon={<ShieldLockIcon />}
+      variant={"moderate"}
+      size={size}>
       {showLabel && adressebeskyttelsesGrad}
     </Tag>
   );

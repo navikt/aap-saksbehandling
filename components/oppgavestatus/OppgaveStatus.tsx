@@ -23,38 +23,65 @@ export const OppgaveStatus = ({ oppgaveStatus, size = 'small', showLabel = true 
   switch (oppgaveStatus.status) {
     case 'PÅ_VENT':
       return (
-        <Tag className={styles.tag} icon={<HourglassTopFilledIcon />} variant={'warning-moderate'} size={size}>
+        <Tag
+          data-color="warning"
+          className={styles.tag}
+          icon={<HourglassTopFilledIcon />}
+          variant={"moderate"}
+          size={size}>
           {showLabel && oppgaveStatus.label}
         </Tag>
       );
     case 'VENTEFRIST_UTLØPT':
       return (
-        <Tag className={styles.tag} icon={<HourglassBottomFilledIcon />} variant={'error-moderate'} size={size}>
+        <Tag
+          data-color="danger"
+          className={styles.tag}
+          icon={<HourglassBottomFilledIcon />}
+          variant={"moderate"}
+          size={size}>
           {showLabel && oppgaveStatus.label}
         </Tag>
       );
     case 'TILDELT':
       return (
-        <Tag className={styles.tag} icon={<PadlockLockedFillIcon />} variant={'error-moderate'} size={size}>
+        <Tag
+          data-color="danger"
+          className={styles.tag}
+          icon={<PadlockLockedFillIcon />}
+          variant={"moderate"}
+          size={size}>
           {showLabel && oppgaveStatus.label}
         </Tag>
       );
     case 'TILDELT_INNLOGGET_BRUKER':
       return (
-        <Tag className={styles.tag} variant={'neutral-moderate'} size={size}>
+        <Tag
+          data-color="neutral"
+          className={styles.tag}
+          variant={"moderate"}
+          size={size}>
           {showLabel && oppgaveStatus.label}
         </Tag>
       );
     case 'LEDIG':
       return (
-        <Tag className={styles.tag} variant={'neutral-moderate'} size={size}>
+        <Tag
+          data-color="neutral"
+          className={styles.tag}
+          variant={"moderate"}
+          size={size}>
           {showLabel && oppgaveStatus.label}
         </Tag>
       );
     case 'TRUKKET':
     case 'AVBRUTT':
       return (
-        <Tag variant={'neutral-moderate'} icon={<XMarkOctagonIcon />} size={size}>
+        <Tag
+          data-color="neutral"
+          variant={"moderate"}
+          icon={<XMarkOctagonIcon />}
+          size={size}>
           {showLabel && oppgaveStatus.label}
         </Tag>
       );

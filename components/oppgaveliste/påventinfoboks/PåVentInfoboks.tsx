@@ -41,7 +41,12 @@ export const PåVentInfoboks = ({ frist, årsak, begrunnelse }: Props) => {
         placement={'bottom-end'}
         offset={8}>
         <VStack gap={"space-8"} className={styles.boks}>
-          <Tag icon={<HourglassTopFilledIcon />} variant={'warning-moderate'} size={'medium'} className={styles.tag}>
+          <Tag
+            data-color="warning"
+            icon={<HourglassTopFilledIcon />}
+            variant={"moderate"}
+            size={'medium'}
+            className={styles.tag}>
             <BodyShort size={'small'} weight={'semibold'}>
               På vent
             </BodyShort>

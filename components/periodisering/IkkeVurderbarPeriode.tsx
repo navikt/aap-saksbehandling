@@ -35,7 +35,7 @@ export const IkkeVurderbarPeriode = ({ fom, tom, foersteNyePeriodeFraDato, alert
             )}
             {nySluttdato && <span> {formatDatoMedMånedsnavn(sub(foersteNyePeriodeFraDato, { days: 1 }))}</span>}
           </BodyShort>
-          <Tag size="xsmall" variant={'neutral-moderate'}>
+          <Tag data-color="neutral" size="xsmall" variant={"moderate"}>
             Ikke relevant
           </Tag>
         </HStack>

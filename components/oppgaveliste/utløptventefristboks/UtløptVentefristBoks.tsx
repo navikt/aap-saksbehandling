@@ -36,7 +36,12 @@ export const UtløptVentefristBoks = ({ frist, årsak, begrunnelse }: Props) => 
         placement={'bottom-end'}
         offset={8}>
         <VStack gap={"space-8"} className={styles.boks}>
-          <Tag icon={<HourglassBottomFilledIcon />} variant={'warning-moderate'} size={'medium'} className={styles.tag}>
+          <Tag
+            data-color="warning"
+            icon={<HourglassBottomFilledIcon />}
+            variant={"moderate"}
+            size={'medium'}
+            className={styles.tag}>
             <BodyShort size={'small'} weight={'semibold'}>
               {`Frist utløpt ${fristDate}`}
             </BodyShort>

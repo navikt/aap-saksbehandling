@@ -92,7 +92,11 @@ export const DokumentInfoBanner = ({
 
           <ChevronRightIcon className={styles.chevron} />
           <BodyShort size={'small'}>Dokumenthåndtering</BodyShort>
-          <Tag className={styles.tag} size={'xsmall'} variant={'alt1'}>
+          <Tag
+            data-color="meta-purple"
+            className={styles.tag}
+            size={'xsmall'}
+            variant={"outline"}>
             {formaterDatoForFrontend(journalpostInfo.registrertDato!)}
           </Tag>
         </HStack>
