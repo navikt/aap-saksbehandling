@@ -1,4 +1,8 @@
-import { hentBistandsbehovGrunnlag, hentMellomlagring } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import {
+  hentBehandling,
+  hentBistandsbehovGrunnlag,
+  hentMellomlagring,
+} from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
@@ -11,9 +15,10 @@ interface Props {
 }
 
 export const BistandsbehovMedDataFetching = async ({ behandlingsreferanse, stegData }: Props) => {
-  const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
+  const [grunnlag, initialMellomlagretVurdering, behandling] = await Promise.all([
     hentBistandsbehovGrunnlag(behandlingsreferanse),
     hentMellomlagring(behandlingsreferanse, Behovstype.AVKLAR_BISTANDSBEHOV_KODE),
+    hentBehandling(behandlingsreferanse),
   ]);
 
   if (isError(grunnlag)) {
@@ -27,12 +32,19 @@ export const BistandsbehovMedDataFetching = async ({ behandlingsreferanse, stegD
     return null;
   }
 
+  const vurderingsbehov =
+    behandling.type === 'SUCCESS'
+      ? behandling.data.vurderingsbehovOgÅrsaker.flatMap((behovOgÅrsak) => behovOgÅrsak.vurderingsbehov)
+      : [];
+  const erRevurderingAvOvergangUføre = vurderingsbehov.some((behov) => behov.type === 'OVERGANG_UFORE');
+
   return (
     <Bistandsbehov
       grunnlag={grunnlag.data}
       readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       behandlingVersjon={stegData.behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
+      erRevurderingAvOvergangUføre={erRevurderingAvOvergangUføre}
     />
   );
 };
