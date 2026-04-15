@@ -1,4 +1,3 @@
-import { VStack } from '@navikt/ds-react';
 import { Control, UseFormWatch } from 'react-hook-form';
 import { ValgRef } from 'components/brevbygger/brevmodellTypes';
 import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
@@ -40,17 +39,3 @@ export const Valg = ({ valgRef, control, watch }: ValgProps) => {
     </div>
   );
 };
-
-interface ValglisteProps {
-  valgRefs: ValgRef[];
-  control: Control<BrevFormVerdier>;
-  watch: UseFormWatch<BrevFormVerdier>;
-}
-
-export const Valgliste = ({ valgRefs, control, watch }: ValglisteProps) => (
-  <VStack gap="4" marginBlock="2">
-    {valgRefs.map((valgRef) => (
-      <Valg key={valgRef._key} valgRef={valgRef} control={control} watch={watch} />
-    ))}
-  </VStack>
-);

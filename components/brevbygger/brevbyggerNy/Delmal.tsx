@@ -1,8 +1,9 @@
-import { Box, Heading, HStack, Switch } from '@navikt/ds-react';
+import { Box, Heading, HStack, Switch, VStack } from '@navikt/ds-react';
 import { Control, Controller, UseFormWatch } from 'react-hook-form';
-import { DelmalReferanse, ValgRef } from 'components/brevbygger/brevmodellTypes';
+import { DelmalReferanse, FritekstType, ValgRef } from 'components/brevbygger/brevmodellTypes';
 import { BrevFormVerdier } from 'components/brevbygger/brevbyggerNy/types';
-import { Valgliste } from 'components/brevbygger/brevbyggerNy/Valg';
+import { Valg } from 'components/brevbygger/brevbyggerNy/Valg';
+import { DelmalFritekst } from 'components/brevbygger/brevbyggerNy/Fritekst';
 
 interface Props {
   delmalRef: DelmalReferanse;
@@ -13,10 +14,12 @@ interface Props {
 export const Delmal = ({ delmalRef, control, watch }: Props) => {
   const { delmal, obligatorisk } = delmalRef;
 
-  const valgRefs = delmal.teksteditor.filter((node): node is ValgRef => node._type === 'valgRef');
-  const harValg = valgRefs.length > 0;
+  const valgOgFritekst = delmal.teksteditor.filter(
+    (node): node is ValgRef | FritekstType => node._type === 'valgRef' || node._type === 'fritekst'
+  );
+  const harValgEllerFritekst = valgOgFritekst.length > 0;
 
-  if (obligatorisk && !harValg) {
+  if (obligatorisk && !harValgEllerFritekst) {
     return null;
   }
 
@@ -42,8 +45,16 @@ export const Delmal = ({ delmalRef, control, watch }: Props) => {
           />
         )}
       </HStack>
-
-      {erValgt && <Valgliste valgRefs={valgRefs} control={control} watch={watch} />}
+      {erValgt && (
+        <VStack gap="4" marginBlock="2">
+          {valgOgFritekst.map((node) => {
+            if (node._type === 'fritekst') {
+              return <DelmalFritekst key={node._key} node={node} control={control} />;
+            }
+            return <Valg key={node._key} valgRef={node} control={control} watch={watch} />;
+          })}
+        </VStack>
+      )}
     </Box>
   );
 };
