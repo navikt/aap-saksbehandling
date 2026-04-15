@@ -3,8 +3,6 @@
 import { Behovstype, getJaNeiEllerUndefined, getStringEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import React, { FormEvent } from 'react';
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
-import { FormEvent } from 'react';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { parseISO } from 'date-fns';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
