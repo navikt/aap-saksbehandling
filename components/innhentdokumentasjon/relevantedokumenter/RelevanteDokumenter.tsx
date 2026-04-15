@@ -148,10 +148,10 @@ const DokumentRad = ({ sak, dokument }: { sak: SakContextType; dokument: Relevan
           <ActionMenu>
             <ActionMenu.Trigger>
               <Button
-                variant={'tertiary-neutral'}
+                data-color="neutral"
+                variant={"tertiary"}
                 icon={<MenuElipsisVerticalIcon title={'Handlinger'} />}
-                size={'small'}
-              />
+                size={'small'} />
             </ActionMenu.Trigger>
             <ActionMenu.Content>
               <ActionMenu.Item onSelect={() => setIsOpen(true)}>Knytt til sak</ActionMenu.Item>

@@ -268,12 +268,12 @@ export const Brevbygger = ({
           <HStack gap={"space-8"}>
             {visAvbryt && (
               <Button
+                data-color="danger"
                 type="button"
                 onClick={() => settIkkeSendBrevModalOpen(true)}
-                variant="danger"
+                variant="primary"
                 size="small"
-                disabled={isLoading}
-              >
+                disabled={isLoading}>
                 Ikke send brev
               </Button>
             )}

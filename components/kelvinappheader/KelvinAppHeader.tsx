@@ -146,11 +146,11 @@ export const KelvinAppHeader = ({
                 Søkeresultater
               </Heading>
               <Button
-                variant={'primary-neutral'}
+                data-color="neutral"
+                variant={"primary"}
                 size={'small'}
                 icon={<XMarkIcon />}
-                onClick={() => setSøkeresultat(undefined)}
-              >
+                onClick={() => setSøkeresultat(undefined)}>
                 Lukk
               </Button>
             </HStack>

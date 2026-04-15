@@ -93,10 +93,10 @@ export const LedigeOppgaverMeny = ({
         <ActionMenu>
           <ActionMenu.Trigger>
             <Button
-              variant={'tertiary-neutral'}
+              data-color="neutral"
+              variant={"tertiary"}
               icon={<MenuElipsisVerticalIcon title={'Oppgavemeny'} />}
-              size={'small'}
-            />
+              size={'small'} />
           </ActionMenu.Trigger>
           <ActionMenu.Content>
             <ActionMenu.Item

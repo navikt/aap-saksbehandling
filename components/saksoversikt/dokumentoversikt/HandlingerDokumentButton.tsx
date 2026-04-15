@@ -22,7 +22,11 @@ export const HandlingerDokumentButton = ({ sak, journalpost }: { sak: SaksInfo; 
     <>
       <ActionMenu>
         <ActionMenu.Trigger>
-          <Button variant="tertiary-neutral" icon={<MenuElipsisVerticalIcon title="Saksmeny" />} size="small" />
+          <Button
+            data-color="neutral"
+            variant="tertiary"
+            icon={<MenuElipsisVerticalIcon title="Saksmeny" />}
+            size="small" />
         </ActionMenu.Trigger>
         <ActionMenu.Content>
           <ActionMenu.Group label="Handlinger">
@@ -55,7 +59,6 @@ export const HandlingerDokumentButton = ({ sak, journalpost }: { sak: SaksInfo; 
           </ActionMenu.Group>
         </ActionMenu.Content>
       </ActionMenu>
-
       <KnyttTilSakModal
         journalpostId={journalpost.journalpostId}
         tema={journalpost.tema!!}
@@ -65,7 +68,6 @@ export const HandlingerDokumentButton = ({ sak, journalpost }: { sak: SaksInfo; 
         onClose={() => setKnyttTilSakOpen(false)}
         onSuccess={() => window.location.reload()}
       />
-
       <FeilregistrerJournalpostModal
         journalpost={journalpost}
         isOpen={feilregistrerOpen}

@@ -130,7 +130,11 @@ export const SkriveBrev = ({
           {!readOnly && (
             <ActionMenu>
               <ActionMenu.Trigger>
-                <Button variant="secondary-neutral" icon={<ChevronDownIcon aria-hidden />} iconPosition="right">
+                <Button
+                  data-color="neutral"
+                  variant="secondary"
+                  icon={<ChevronDownIcon aria-hidden />}
+                  iconPosition="right">
                   Andre handlinger
                 </Button>
               </ActionMenu.Trigger>
