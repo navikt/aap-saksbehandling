@@ -32,10 +32,8 @@ export const SvarFraBehandler = ({ behandlingReferanse, oppdaterVisHarUlesteDoku
         onClose={() => setVis(false)}
         open={vis}
         anchorEl={buttonRef.current}
-        arrow={false}
         placement={'bottom-end'}
-        offset={8}
-      >
+        offset={8}>
         <Box maxWidth={'400px'} minWidth={'400px'}>
           <VStack gap={"space-0"}>
             <Tag icon={<FirstAidKitIcon />} variant={'warning-moderate'} size={'medium'} className={styles.tag}>

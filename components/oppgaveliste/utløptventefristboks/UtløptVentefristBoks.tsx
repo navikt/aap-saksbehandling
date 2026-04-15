@@ -33,10 +33,8 @@ export const UtløptVentefristBoks = ({ frist, årsak, begrunnelse }: Props) => 
         onClose={() => setVis(false)}
         open={vis}
         anchorEl={buttonRef.current}
-        arrow={false}
         placement={'bottom-end'}
-        offset={8}
-      >
+        offset={8}>
         <VStack gap={"space-8"} className={styles.boks}>
           <Tag icon={<HourglassBottomFilledIcon />} variant={'warning-moderate'} size={'medium'} className={styles.tag}>
             <BodyShort size={'small'} weight={'semibold'}>

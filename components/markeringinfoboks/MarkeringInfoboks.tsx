@@ -38,10 +38,8 @@ export const MarkeringInfoboks = ({ markering, referanse, showLabel = false, siz
         onClose={() => setVisInfo(false)}
         open={visInfo}
         anchorEl={tagRef.current}
-        arrow={false}
         placement={'bottom-end'}
-        offset={8}
-      >
+        offset={8}>
         <VStack gap={"space-8"} className={styles.boks}>
           <Tag
             icon={ikonForMarkeringType(markering.markeringType)}

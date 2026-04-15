@@ -74,10 +74,8 @@ export const Returboks = ({ oppgave: { returInformasjon: maybeReturInformasjon }
         onClose={() => setVis(false)}
         open={vis}
         anchorEl={buttonRef.current}
-        arrow={false}
         placement={'bottom-end'}
-        offset={8}
-      >
+        offset={8}>
         {skalViseBoks ? (
           <VStack gap={"space-8"} className={styles.boks}>
             <Tag icon={<ArrowsSquarepathIcon />} variant={'warning-moderate'} size={'medium'} className={styles.tag}>
