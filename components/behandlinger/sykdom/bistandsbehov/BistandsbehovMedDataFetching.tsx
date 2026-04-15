@@ -36,7 +36,7 @@ export const BistandsbehovMedDataFetching = async ({ behandlingsreferanse, stegD
     behandling.type === 'SUCCESS'
       ? behandling.data.vurderingsbehovOgÅrsaker.flatMap((behovOgÅrsak) => behovOgÅrsak.vurderingsbehov)
       : [];
-  const erOvergangUføre = vurderingsbehov.some((x) => x.type === 'OVERGANG_UFORE');
+  const erOvergangUføre = vurderingsbehov.some((behov) => behov.type === 'OVERGANG_UFORE');
 
   return (
     <Bistandsbehov
@@ -44,7 +44,7 @@ export const BistandsbehovMedDataFetching = async ({ behandlingsreferanse, stegD
       readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       behandlingVersjon={stegData.behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
-      erOvergangUføre={erOvergangUføre}
+      erRevurderingAvOvergangUføre={erOvergangUføre}
     />
   );
 };

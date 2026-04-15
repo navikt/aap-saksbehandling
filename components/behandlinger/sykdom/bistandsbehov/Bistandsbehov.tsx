@@ -37,7 +37,7 @@ interface Props {
   readOnly: boolean;
   grunnlag: BistandsGrunnlag;
   initialMellomlagretVurdering?: MellomlagretVurdering;
-  erOvergangUføre: boolean;
+  erRevurderingAvOvergangUføre: boolean;
 }
 export interface BistandForm {
   vurderinger: Array<BistandVurderingForm>;
@@ -60,7 +60,7 @@ export const Bistandsbehov = ({
   grunnlag,
   readOnly,
   initialMellomlagretVurdering,
-  erOvergangUføre,
+  erRevurderingAvOvergangUføre,
 }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
   const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
@@ -158,7 +158,7 @@ export const Bistandsbehov = ({
           }
         />
 
-        {erOvergangUføre && (
+        {erRevurderingAvOvergangUføre && (
           <Alert variant={'info'} size={'small'}>
             Hvis brukeren skal vurderes for uføretrygd og ha AAP etter § 11-18, må du først vurdere at brukeren ikke
             lenger har behov for bistand etter § 11-6.
