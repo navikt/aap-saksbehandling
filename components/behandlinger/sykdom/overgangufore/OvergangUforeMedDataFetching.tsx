@@ -2,7 +2,7 @@ import { hentMellomlagring, hentOvergangUforeGrunnlag } from 'lib/services/saksb
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
-import { skalViseSteg, StegData } from 'lib/utils/steg';
+import { StegData } from 'lib/utils/steg';
 import { OvergangUforePeriodisert } from 'components/behandlinger/sykdom/overgangufore/OvergangUforePeriodisert';
 
 interface Props {
@@ -17,13 +17,6 @@ export const OvergangUforeMedDataFetching = async ({ behandlingsreferanse, stegD
   ]);
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
-  }
-
-  const harTidligereVurderinger =
-    grunnlag.data.gjeldendeVedtatteVurderinger != null && grunnlag.data.gjeldendeVedtatteVurderinger.length > 0;
-
-  if (!skalViseSteg(stegData, harTidligereVurderinger)) {
-    return null;
   }
 
   return (
