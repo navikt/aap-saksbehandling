@@ -21,7 +21,7 @@ export const BehandlingsHendelse = ({ hendelse }: Props) => {
         <BodyShort size={'small'} textColor={'subtle'}>
           {`${formaterDatoMedTidspunktForFrontend(hendelse.tidspunkt)} ${mapUtførtAvTilTekst(hendelse.utførtAv) && '· '}${mapUtførtAvTilTekst(hendelse.utførtAv)}`}
         </BodyShort>
-        <VStack gap={'2'} paddingBlock={'2 2'}>
+        <VStack gap={"space-8"} paddingBlock={"space-8 space-8"}>
           {finnesÅrsak && (
             <VStack>
               <Detail weight={'semibold'}>Årsak</Detail>

@@ -39,9 +39,8 @@ export const ToTrinnsvurdering = ({ grunnlag, readOnly, erKvalitetssikring, init
       {readOnly && vurderteTotrinnsvurderinger.length > 0 && (
         <Oppsummering vurderinger={vurderteTotrinnsvurderinger} erKvalitetssikrer={erKvalitetssikring} />
       )}
-
       {!readOnly && (
-        <VStack gap={'3'}>
+        <VStack gap={"space-12"}>
           <Label>{erKvalitetssikring ? 'Kvalitetssikrer' : 'Beslutter'}</Label>
           <TotrinnsvurderingForm
             grunnlag={grunnlag}

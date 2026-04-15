@@ -28,7 +28,7 @@ const valideringsregler = (noekkel: string, brevmal: BrevmalType): Object | unde
 
 export const Valgfelt = ({ control, delmalIndex, valg, brevmal, watch }: ValgfeltProps) => {
   return (
-    <VStack gap="4" marginBlock={'2'}>
+    <VStack gap="space-16" marginBlock={"space-8"}>
       {valg.map((v, index) => {
         const alternativer = v.alternativer.map((alternativ) => ({
           value: alternativ.verdi,

@@ -28,7 +28,7 @@ export const TextFieldToggle = <FormFieldIds extends FieldValues>({
   }
 
   return (
-    <VStack gap="2">
+    <VStack gap="space-8">
       <Controller
         name={name}
         control={form.control}
@@ -47,9 +47,8 @@ export const TextFieldToggle = <FormFieldIds extends FieldValues>({
           />
         )}
       />
-
       {editing ? (
-        <HStack gap="2">
+        <HStack gap="space-8">
           <Button
             type="button"
             variant="secondary"

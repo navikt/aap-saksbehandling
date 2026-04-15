@@ -13,7 +13,7 @@ export const HelseinstitusjonTidligereVurdering = ({ vurdering }: Props) => {
   const vurderingErReduksjon = erReduksjonUtIFraVurdering(vurdering);
 
   return (
-    <VStack gap={'4'}>
+    <VStack gap={"space-16"}>
       <SpørsmålOgSvar spørsmål={'Begrunnelse'} svar={vurdering.begrunnelse} />
       <SpørsmålOgSvar spørsmål={'Får brukeren fri kost og losji?'} svar={getJaEllerNei(vurdering.faarFriKostOgLosji)} />
       {vurdering.forsoergerEktefelle !== null && vurdering.forsoergerEktefelle !== undefined && (
@@ -28,7 +28,6 @@ export const HelseinstitusjonTidligereVurdering = ({ vurdering }: Props) => {
           svar={getJaEllerNei(vurdering.harFasteUtgifter)}
         />
       )}
-
       {vurderingErReduksjon && (
         <SpørsmålOgSvar
           spørsmål={'Oppgi dato for reduksjon av AAP'}

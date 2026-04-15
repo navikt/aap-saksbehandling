@@ -68,7 +68,7 @@ export const Overlevering = ({ behandlingsVersjon, behandlingsreferanse, grunnla
       visningActions={visningActions}
       formReset={() => {}}
     >
-      <VStack gap={'6'}>
+      <VStack gap={"space-24"}>
         <ServerSentEventStatusAlert status={status} />
         <FormField form={form} formField={formFields.skalOverleveres} />
       </VStack>

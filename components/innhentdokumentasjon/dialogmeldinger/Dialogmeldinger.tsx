@@ -62,7 +62,7 @@ const Dialogmelding = ({ melding }: { melding: LegeerklæringStatus }) => {
         {melding.behandlerNavn}
       </Table.DataCell>
       <Table.DataCell textSize={'small'} align="right">
-        <HStack gap={'2'} justify="end">
+        <HStack gap={"space-8"} justify="end">
           {kanSendePurring(melding.opprettet) && !purringSent && (
             <Button
               variant="secondary"

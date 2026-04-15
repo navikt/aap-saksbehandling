@@ -162,13 +162,13 @@ export const IkkeOppfyltMeldeplikt = ({ grunnlag, behandlingVersjon, readOnly }:
       visningActions={visningActions}
       formReset={() => form.reset()}
     >
-      <VStack gap={'4'}>
+      <VStack gap={"space-16"}>
         <BodyLong size={'small'}>
           <Link href={'https://lovdata.no/pro/rundskriv/r11-00/KAPITTEL_12'} target="_blank">
             Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-10 (lovdata.no)
           </Link>
         </BodyLong>
-        <VStack gap={'10'}>
+        <VStack gap={"space-40"}>
           <IkkeMeldtPerioderTable
             ikkeMeldtPerioder={ikkeMeldtPerioderSomSkalVises}
             tidligereVurdertePerioder={tidligereVurderinger}

@@ -10,9 +10,8 @@ export const LeggTilMockYrkesskade = ({ saksnummer }: { saksnummer: string }) =>
   };
 
   return (
-    <VStack gap="2">
+    <VStack gap="space-8">
       <Heading size="small">Yrkesskade</Heading>
-
       <div>
         <Button onClick={send} loading={isLoading}>
           Legg til

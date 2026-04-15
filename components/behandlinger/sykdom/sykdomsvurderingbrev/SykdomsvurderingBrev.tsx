@@ -125,7 +125,7 @@ export const SykdomsvurderingBrev = ({
       knappTekst={erBekreftVurderingerStegPå ? 'Bekreft' : 'Bekreft og send videre'}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
-      <VStack gap={'4'}>
+      <VStack gap={"space-16"}>
         <>
           <BodyShort size={'small'}>
             Tabellen viser hvilke perioder brukeren har blitt vurdert til å oppfylle vilkår for ulike rettighetstyper.
@@ -173,7 +173,7 @@ export const SykdomsvurderingBrev = ({
           tekst={
             <Box>
               <BodyLong size={'small'}>Før avsnittet du skriver, står dette avsnittet:</BodyLong>
-              <Box marginBlock={'3 0'}>
+              <Box marginBlock={"space-12 space-0"}>
                 <Heading size={'xsmall'}>Hvem kan få AAP?</Heading>
                 <BodyLong size={'small'}>
                   For å ha rett til arbeidsavklaringspenger må arbeidsevnen din være nedsatt med minst halvparten på

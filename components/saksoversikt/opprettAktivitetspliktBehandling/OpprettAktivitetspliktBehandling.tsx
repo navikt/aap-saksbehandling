@@ -62,7 +62,7 @@ export const OpprettAktivitetspliktBehandling = ({ sak }: { sak: SaksInfo }) => 
           )(event);
         }}
       >
-        <VStack gap="4">
+        <VStack gap="space-16">
           <ExpansionCard
             aria-label="Opprett vurdering av aktivitetsplikten"
             size={'small'}
@@ -74,7 +74,7 @@ export const OpprettAktivitetspliktBehandling = ({ sak }: { sak: SaksInfo }) => 
             </ExpansionCard.Header>
 
             <ExpansionCard.Content className={styles.content}>
-              <VStack gap="4">
+              <VStack gap="space-16">
                 <FormField form={form} formField={formFields.aktivitetspliktBruddType} size="medium" />
               </VStack>
             </ExpansionCard.Content>
@@ -86,7 +86,7 @@ export const OpprettAktivitetspliktBehandling = ({ sak }: { sak: SaksInfo }) => 
             </Alert>
           )}
 
-          <HStack gap="4">
+          <HStack gap="space-16">
             <Button type="submit">Bekreft</Button>
             <Button as="a" href={`/saksbehandling/sak/${sak.saksnummer}`} rel="noreferrer noopener" variant="secondary">
               Avbryt

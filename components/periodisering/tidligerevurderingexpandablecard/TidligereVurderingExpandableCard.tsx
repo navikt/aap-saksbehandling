@@ -49,7 +49,7 @@ export const TidligereVurderingExpandableCard = ({
       expanded={cardExpanded}
       setExpanded={setCardExpanded}
       heading={
-        <HStack justify={'space-between'} padding={'2'}>
+        <HStack justify={'space-between'} padding={"space-8"}>
           <BodyShort size={'small'} className={strekUtHele ? styles.streketUtTekst : ''}>
             {formatDatoMedMånedsnavn(fom)} –{' '}
             {tom != null && (

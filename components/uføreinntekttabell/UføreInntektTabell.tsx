@@ -28,7 +28,7 @@ export const UføreInntektTabell = ({
 
   return (
     <div className={'flex-column'}>
-      <VStack gap={'1'}>
+      <VStack gap={"space-4"}>
         <BodyShort size={'small'} weight={'semibold'}>
           Grunnlagsberegning § 11-19 etter oppjustering jf. § 11-28 fjerde ledd
         </BodyShort>

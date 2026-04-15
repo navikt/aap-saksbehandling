@@ -21,7 +21,7 @@ export const Medlemskap = ({ form, formFields, readOnly }: Props) => {
   const iTilleggArbeidUtenforNorge = form.watch('iTilleggArbeidUtenforNorge');
 
   return (
-    <VStack gap={'3'}>
+    <VStack gap={"space-12"}>
       <FormField form={form} formField={formFields.harBoddINorgeSiste5År} />
       {harBoddINorgeSiste5År === JaEllerNei.Ja && (
         <>
@@ -35,7 +35,7 @@ export const Medlemskap = ({ form, formFields, readOnly }: Props) => {
       {(iTilleggArbeidUtenforNorge === JaEllerNei.Ja ||
         harArbeidetINorgeSiste5År === JaEllerNei.Ja ||
         arbeidetUtenforNorgeFørSykdom === JaEllerNei.Ja) && (
-        <VStack gap={'2'}>
+        <VStack gap={"space-8"}>
           <Label size={'small'}>Utenlandsopphold</Label>
           {fields.map((field, i) => (
             <LeggTilUtenlandsOpphold key={field.id} i={i} form={form} readOnly={readOnly} remove={remove} />

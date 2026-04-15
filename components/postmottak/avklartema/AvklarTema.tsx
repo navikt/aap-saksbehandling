@@ -132,7 +132,7 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
           </Button>
         </Modal.Footer>
       </Modal>
-      <VStack gap={'6'}>
+      <VStack gap={"space-24"}>
         <LøsBehovOgGåTilNesteStegStatusAlert status={status} />
         <FormField form={form} formField={formFields.erTemaAAP} />
         {error && (

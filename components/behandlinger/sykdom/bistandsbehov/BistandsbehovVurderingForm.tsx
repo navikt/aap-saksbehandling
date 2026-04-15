@@ -26,7 +26,7 @@ export const BistandsbehovVurderingForm = ({ form, index, readOnly }: Props) => 
     'c: Kan brukeren anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra Nav?';
 
   return (
-    <VStack gap={'4'}>
+    <VStack gap={"space-16"}>
       <DateInputWrapper
         name={`vurderinger.${index}.fraDato`}
         label="Vurderingen gjelder fra"
@@ -37,9 +37,7 @@ export const BistandsbehovVurderingForm = ({ form, index, readOnly }: Props) => 
         }}
         readOnly={readOnly}
       />
-
       <HvordanLeggeTilSluttdatoReadMore />
-
       <TextAreaWrapper
         name={`vurderinger.${index}.begrunnelse`}
         control={form.control}

@@ -16,7 +16,7 @@ export const BehandlingPage = async ({ behandlingsreferanse, aktivGruppe }: Prop
 
   if (isError(flytResponse)) {
     return (
-      <VStack padding={'4'}>
+      <VStack padding={"space-16"}>
         <ApiException apiResponses={[flytResponse]} />
       </VStack>
     );

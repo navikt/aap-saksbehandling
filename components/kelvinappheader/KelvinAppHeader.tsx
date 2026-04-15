@@ -89,7 +89,7 @@ export const KelvinAppHeader = ({
       <InternalHeader>
         <InternalHeader.Title href="/">Kelvin</InternalHeader.Title>
 
-        <HStack gap="4" marginInline="4" className={styles.kelvinAppHeaderMenuItems}>
+        <HStack gap="space-16" marginInline="space-16" className={styles.kelvinAppHeaderMenuItems}>
           <Kelvinsøk setSøkeresultat={setSøkeresultat} />
           <Link href={`/oppgave/`}>Oppgaveliste</Link>
 
@@ -131,10 +131,9 @@ export const KelvinAppHeader = ({
         <AppSwitcher />
         <Brukermeny brukerInformasjon={brukerInformasjon} roller={roller} />
       </InternalHeader>
-
       {søkeresultat && (
         <Box background="surface-inverted" className={styles.kelvinAppHeaderSearchResult}>
-          <VStack padding="4">
+          <VStack padding="space-16">
             <HStack justify={'space-between'}>
               <Heading size="small" spacing>
                 Søkeresultater

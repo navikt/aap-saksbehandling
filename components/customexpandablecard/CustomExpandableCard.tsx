@@ -16,10 +16,10 @@ interface Props {
 }
 export const CustomExpandableCard = ({ heading, children, expanded, setExpanded, editable, disabled }: Props) => {
   return (
-    <VStack gap={'4'} justify={'center'} className={styles.container} padding={'0'}>
+    <VStack gap={"space-16"} justify={'center'} className={styles.container} padding={"space-0"}>
       <button className={styles.headingButton} type="button" onClick={() => setExpanded(!expanded)}>
-        <HGrid columns={'1fr 16px'} align={'center'} gap={'1'}>
-          <HGrid columns={'16px 1fr'} align={'center'} gap={'1'}>
+        <HGrid columns={'1fr 16px'} align={'center'} gap={"space-4"}>
+          <HGrid columns={'16px 1fr'} align={'center'} gap={"space-4"}>
             {disabled ? (
               <CircleSlashIcon color={'black'} />
             ) : editable ? (

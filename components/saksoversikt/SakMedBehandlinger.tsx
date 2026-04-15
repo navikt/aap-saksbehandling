@@ -91,11 +91,11 @@ export const SakMedBehandlinger = ({
   }
 
   return (
-    <VStack gap="8">
+    <VStack gap="space-32">
       <VStack>
         <HStack justify="space-between">
           <Heading size="large">Sak {sak.saksnummer}</Heading>
-          <HStack gap="4">
+          <HStack gap="space-16">
             <Button
               variant="secondary"
               size="small"
@@ -138,7 +138,7 @@ export const SakMedBehandlinger = ({
           <BodyShort>{`Siste dag med rett: ${new Dato(rettighetsinfo.sisteDagMedRett).formaterForFrontend()}`}</BodyShort>
         )}
       </VStack>
-      <VStack gap="4">
+      <VStack gap="space-16">
         <Heading size="xsmall">Behandlinger</Heading>
         {feilmelding && <Alert variant={'error'}>{feilmelding}</Alert>}
         <Chips>
@@ -202,7 +202,6 @@ export const SakMedBehandlinger = ({
           ))}
         </Table.Body>
       </Table>
-
       {lokalDevToolsForBehandlingOgSak && (
         <SakDevTools
           saksnummer={sak.saksnummer}

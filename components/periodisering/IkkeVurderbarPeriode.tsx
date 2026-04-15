@@ -27,7 +27,7 @@ export const IkkeVurderbarPeriode = ({ fom, tom, foersteNyePeriodeFraDato, alert
       expanded={cardExpanded}
       setExpanded={setCardExpanded}
       heading={
-        <HStack justify={'space-between'} padding={'2'}>
+        <HStack justify={'space-between'} padding={"space-8"}>
           <BodyShort size={'small'} className={''}>
             {formatDatoMedMånedsnavn(fom)} –{' '}
             {tom != null && (

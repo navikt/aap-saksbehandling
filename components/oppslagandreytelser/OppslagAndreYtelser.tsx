@@ -12,7 +12,7 @@ interface Props {
 
 export const OppslagAndreYtelser = ({ perioder }: Props) => {
   return (
-    <VStack gap={'6'}>
+    <VStack gap={"space-24"}>
       <div className={'flex-column'}>
         <div>
           <Label size={'small'}>Oppslag på andre ytelser</Label>
@@ -21,7 +21,6 @@ export const OppslagAndreYtelser = ({ perioder }: Props) => {
           </BodyShort>
         </div>
       </div>
-
       <TableStyled>
         <Table.Header>
           <Table.Row>

@@ -138,7 +138,7 @@ export const AvklarSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, 
       visningActions={visningActions}
       formReset={() => {}}
     >
-      <VStack gap={'6'}>
+      <VStack gap={"space-24"}>
         <ServerSentEventStatusAlert status={status} />
 
         <RadioGroupWrapper
@@ -170,7 +170,7 @@ export const AvklarSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, 
           />
         </div>
 
-        <VStack gap="2">
+        <VStack gap="space-8">
           <Label size="small">Dokumenttittel</Label>
           <Detail textColor="subtle">Tittel på dokumenter er synlig for sluttbruker på nav.no</Detail>
 
@@ -187,7 +187,7 @@ export const AvklarSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, 
         </VStack>
 
         {grunnlag.kanEndreAvsenderMottaker && (
-          <VStack gap="2">
+          <VStack gap="space-8">
             <Label size="small">Avsender</Label>
             <RadioGroupWrapper
               label="Avsendertype"

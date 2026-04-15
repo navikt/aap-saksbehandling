@@ -23,7 +23,7 @@ export const Alder = ({ grunnlag }: Props) => {
   return (
     <VilkårsKort heading={'§ 11-4 Alder'} steg={'VURDER_ALDER'}>
       {grunnlag.fødselsdato && (
-        <VStack gap={'4'}>
+        <VStack gap={"space-16"}>
           <div className={'flex-column'}>
             <div>
               <Label size={'small'}>Fødselsdato</Label>

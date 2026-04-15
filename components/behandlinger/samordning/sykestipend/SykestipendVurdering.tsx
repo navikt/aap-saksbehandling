@@ -115,7 +115,7 @@ export const SykestipendVurdering = ({
       visningActions={visningActions}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
-      <VStack gap={'6'}>
+      <VStack gap={"space-24"}>
         {grunnlag.sykeStipendSvarFraSøknad && (
           <VStack>
             <BodyLong weight={'semibold'} size={'small'}>

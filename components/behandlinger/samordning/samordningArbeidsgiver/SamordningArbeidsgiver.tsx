@@ -136,7 +136,7 @@ export const SamordningArbeidsgiver = ({
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
       {
-        <VStack gap={'6'}>
+        <VStack gap={"space-24"}>
           {!!historiskeVurderinger?.length && (
             <TidligereVurderinger
               data={historiskeVurderinger}
@@ -169,7 +169,7 @@ export const SamordningArbeidsgiver = ({
           </BodyLong>
 
           <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
-          <VStack gap={'6'}>
+          <VStack gap={"space-24"}>
             <SamordningArbeidsGiverTabell form={form} readOnly={formReadOnly} />
           </VStack>
         </VStack>

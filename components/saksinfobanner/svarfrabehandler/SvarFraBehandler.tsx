@@ -37,7 +37,7 @@ export const SvarFraBehandler = ({ behandlingReferanse, oppdaterVisHarUlesteDoku
         offset={8}
       >
         <Box maxWidth={'400px'} minWidth={'400px'}>
-          <VStack gap={'0'}>
+          <VStack gap={"space-0"}>
             <Tag icon={<FirstAidKitIcon />} variant={'warning-moderate'} size={'medium'} className={styles.tag}>
               <BodyShort size={'small'} weight={'semibold'}>
                 Svar fra behandler

@@ -64,10 +64,10 @@ export const AlleOppgaverFiltrering = ({
   return (
     <div className={styles.wrapper}>
       <HStack justify={'space-between'} align={'center'} className={styles.filtreringTop}>
-        <HStack gap={'4'}>
+        <HStack gap={"space-16"}>
           {valgteRader.length > 0 && (
             <>
-              <HStack gap={'2'} align={'baseline'}>
+              <HStack gap={"space-8"} align={'baseline'}>
                 <Detail>{valgteRader.length} oppgaver valgt.</Detail>
                 <Button
                   onClick={() => frigiValgteOppgaver(valgteRader)}
@@ -95,7 +95,7 @@ export const AlleOppgaverFiltrering = ({
             </>
           )}
 
-          <HStack gap={'2'} align={'center'}>
+          <HStack gap={"space-8"} align={'center'}>
             <Button
               icon={åpneFilter ? <XMarkIcon /> : <FilterIcon />}
               iconPosition={'right'}
@@ -106,7 +106,7 @@ export const AlleOppgaverFiltrering = ({
               {åpneFilter ? 'Lukk filter' : 'Filtrer listen'}
             </Button>
             {aktiveFilter.length > 0 && (
-              <HStack gap={'2'}>
+              <HStack gap={"space-8"}>
                 <BodyShort>Filtre: </BodyShort>
                 <Chips size={'small'}>
                   {aktiveFilter.map((filter) =>
@@ -147,7 +147,7 @@ export const AlleOppgaverFiltrering = ({
       {åpneFilter && (
         <div className={styles.filtreringwrapper}>
           <div className={styles.filtrering}>
-            <HGrid columns={{ sm: 1, md: 2, lg: 4, xl: 5 }} gap={'2'}>
+            <HGrid columns={{ sm: 1, md: 2, lg: 4, xl: 5 }} gap={"space-8"}>
               <BoxWrapper>
                 <FormField
                   form={form}
@@ -156,7 +156,7 @@ export const AlleOppgaverFiltrering = ({
                 />
               </BoxWrapper>
               <BoxWrapper>
-                <VStack gap={'4'}>
+                <VStack gap={"space-16"}>
                   <BodyShort size={'small'} weight={'semibold'}>
                     Behandling opprettet
                   </BodyShort>
@@ -177,7 +177,7 @@ export const AlleOppgaverFiltrering = ({
                 <SaksbehandlerFilterSøk form={form} enheter={aktiveEnheter} />
               </BoxWrapper>
             </HGrid>
-            <HStack gap={'2'}>
+            <HStack gap={"space-8"}>
               <Button
                 size={'small'}
                 variant={'tertiary'}
@@ -202,8 +202,8 @@ function BoxWrapper({ children }: { children: React.ReactNode }) {
       borderColor={'border-divider'}
       borderWidth={'2'}
       borderRadius={'xlarge'}
-      paddingInline={'4'}
-      paddingBlock={'4'}
+      paddingInline={"space-16"}
+      paddingBlock={"space-16"}
     >
       {children}
     </Box>

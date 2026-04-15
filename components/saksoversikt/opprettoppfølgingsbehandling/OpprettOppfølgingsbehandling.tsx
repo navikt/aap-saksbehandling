@@ -182,7 +182,7 @@ export const OpprettOppfølgingsBehandling = ({
   return (
     <Page.Block width="md">
       <form onSubmit={form.handleSubmit((data) => sendHendelse(data))}>
-        <VStack gap="4">
+        <VStack gap="space-16">
           <ExpansionCard
             aria-label="Opprett oppfølgingsopgave"
             size={'small'}
@@ -194,7 +194,7 @@ export const OpprettOppfølgingsBehandling = ({
             </ExpansionCard.Header>
 
             <ExpansionCard.Content className={styles.content}>
-              <VStack gap="4">
+              <VStack gap="space-16">
                 <div>
                   <BodyLong>Oppfølgingsoppgaven ligger på vent til ønsket dato.</BodyLong>
                 </div>
@@ -214,7 +214,7 @@ export const OpprettOppfølgingsBehandling = ({
             </Alert>
           )}
 
-          <HStack gap="4">
+          <HStack gap="space-16">
             <Button type="submit">Bekreft</Button>
             <Button type="button" variant="secondary" onClick={() => avbrytButton(modalOnClose)}>
               Avbryt

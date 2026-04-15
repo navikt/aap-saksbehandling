@@ -120,13 +120,12 @@ export const SamordningTjenestePensjon = ({
       visningActions={visningActions}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
-      <VStack gap={'1'}>
+      <VStack gap={"space-4"}>
         <BodyShort weight={'semibold'}>
           Vi har funnet perioder der brukeren kan ha mottatt tjenestepensjonsordning
         </BodyShort>
         <BodyShort>Disse kan føre til refusjonskrav på etterbetaling.</BodyShort>
       </VStack>
-
       <TableStyled>
         <Table.Header>
           <Table.Row>
@@ -149,7 +148,6 @@ export const SamordningTjenestePensjon = ({
           })}
         </Table.Body>
       </TableStyled>
-
       <FormField form={form} formField={formFields.begrunnelse} />
       <FormField form={form} formField={formFields.skalEtterbetalingHoldesIgjen} horizontalRadio />
     </VilkårskortMedFormOgMellomlagring>

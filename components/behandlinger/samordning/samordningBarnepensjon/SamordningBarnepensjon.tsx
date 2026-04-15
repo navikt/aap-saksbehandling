@@ -24,7 +24,7 @@ export const SamordningBarnepensjon = ({ fødselsdato }: Props) => {
   return (
     <VilkårsKort heading="§ 11-27 Samordning barnepensjon (valgfritt)" steg="UDEFINERT">
       {
-        <VStack gap={'6'}>
+        <VStack gap={"space-24"}>
           <Alert variant={'info'}>
             Samordning med barnepensjon er ikke støttet. Hvis brukeren har barnepensjon må du sette behandlingen på vent
             og melde behovet i porten.

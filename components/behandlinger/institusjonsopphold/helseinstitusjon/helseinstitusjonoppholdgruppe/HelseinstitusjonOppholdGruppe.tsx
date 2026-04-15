@@ -68,15 +68,15 @@ export const HelseinstitusjonOppholdGruppe = ({
   return (
     <Box
       background="surface-default"
-      padding="0"
+      padding="space-0"
       borderRadius="xlarge"
       borderWidth="1"
       borderColor="border-subtle"
       className={styles.oppholdGruppe}
     >
       {/* OPPHOLDET */}
-      <Box background="surface-subtle" padding="3" className={styles.oppholdHeader}>
-        <HStack gap="4" align="center">
+      <Box background="surface-subtle" padding="space-12" className={styles.oppholdHeader}>
+        <HStack gap="space-16" align="center">
           <Buildings3Icon title={`Helseinstitusjon${opphold.kildeinstitusjon}`} fontSize="1.5rem" aria-hidden />
           <div>
             <BodyShort className={styles.detailgray}>
@@ -91,10 +91,9 @@ export const HelseinstitusjonOppholdGruppe = ({
           </div>
         </HStack>
       </Box>
-
       {/* VURDERINGER */}
-      <Box padding="4">
-        <VStack gap="0">
+      <Box padding="space-16">
+        <VStack gap="space-0">
           {tidligereVurderinger
             ?.filter((v) => {
               const starterFørOppholdSlutt = v.periode.fom <= opphold.avsluttetDato;
@@ -180,7 +179,7 @@ export const HelseinstitusjonOppholdGruppe = ({
               expanded={cardExpanded}
               setExpanded={setCardExpanded}
               heading={
-                <HStack justify={'space-between'} padding={'2'}>
+                <HStack justify={'space-between'} padding={"space-8"}>
                   <BodyShort size={'small'}>{formatDatoMedMånedsnavn(addDays(oppholdAvsluttetDato, 1))} – </BodyShort>
                   <Tag size="xsmall" variant={'neutral-moderate'}>
                     Ikke relevant
@@ -197,9 +196,8 @@ export const HelseinstitusjonOppholdGruppe = ({
           )}
         </VStack>
       </Box>
-
       {!formReadOnly && (
-        <Box padding="3">
+        <Box padding="space-12">
           <Button
             type="button"
             className="fit-content"

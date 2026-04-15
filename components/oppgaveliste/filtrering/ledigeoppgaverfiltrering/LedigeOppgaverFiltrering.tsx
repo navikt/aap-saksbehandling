@@ -38,7 +38,7 @@ export const LedigeOppgaverFiltrering = ({
   return (
     <div className={styles.wrapper}>
       <HStack justify={'space-between'} align={'center'} className={styles.filtreringTop}>
-        <HStack gap={'2'} align={'center'}>
+        <HStack gap={"space-8"} align={'center'}>
           <Button
             icon={åpneFilter ? <XMarkIcon /> : <FilterIcon />}
             iconPosition={'right'}
@@ -49,7 +49,7 @@ export const LedigeOppgaverFiltrering = ({
             {åpneFilter ? 'Lukk filter' : 'Filtrer listen'}
           </Button>
           {aktiveFilter.length > 0 && (
-            <HStack gap={'2'}>
+            <HStack gap={"space-8"}>
               <BodyShort>Filtre: </BodyShort>
               <Chips size={'small'}>
                 {aktiveFilter.map((filter) => {
@@ -84,7 +84,7 @@ export const LedigeOppgaverFiltrering = ({
       {åpneFilter && (
         <div className={styles.filtreringwrapper}>
           <div className={styles.filtrering}>
-            <HGrid columns={{ sm: 1, md: 2, lg: 4, xl: 5 }} gap={'2'}>
+            <HGrid columns={{ sm: 1, md: 2, lg: 4, xl: 5 }} gap={"space-8"}>
               <BoxWrapper>
                 <FormField
                   form={form}
@@ -93,7 +93,7 @@ export const LedigeOppgaverFiltrering = ({
                 />
               </BoxWrapper>
               <BoxWrapper>
-                <VStack gap={'4'}>
+                <VStack gap={"space-16"}>
                   <BodyShort size={'small'} weight={'semibold'}>
                     Behandling opprettet
                   </BodyShort>
@@ -111,7 +111,7 @@ export const LedigeOppgaverFiltrering = ({
                 <FormField form={form} formField={formFields.statuser} />
               </BoxWrapper>
             </HGrid>
-            <HStack gap={'2'}>
+            <HStack gap={"space-8"}>
               <Button
                 size={'small'}
                 variant={'tertiary'}
@@ -136,8 +136,8 @@ function BoxWrapper({ children }: { children: React.ReactNode }) {
       borderColor={'border-divider'}
       borderWidth={'2'}
       borderRadius={'xlarge'}
-      paddingInline={'4'}
-      paddingBlock={'4'}
+      paddingInline={"space-16"}
+      paddingBlock={"space-16"}
     >
       {children}
     </Box>

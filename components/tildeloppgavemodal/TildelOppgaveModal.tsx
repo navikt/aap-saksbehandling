@@ -90,7 +90,7 @@ export const TildelOppgaveModal = ({ revalidateFunction }: Props) => {
       ) : (
         <>
           <Modal.Body>
-            <VStack gap={'4'}>
+            <VStack gap={"space-16"}>
               <SaksbehandlerSøk
                 oppgaver={oppgaveIder}
                 setSaksbehandlere={setSaksbehandlere}
@@ -152,7 +152,7 @@ export const TildelOppgaveModal = ({ revalidateFunction }: Props) => {
           </Modal.Body>
 
           <Modal.Footer>
-            <HStack gap={'4'}>
+            <HStack gap={"space-16"}>
               <Button variant={'secondary'} onClick={lukkOgResetModal}>
                 Avbryt
               </Button>

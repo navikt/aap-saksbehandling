@@ -39,7 +39,7 @@ export const ÅrsakTilBehandling = ({ vurderingsbehovOgÅrsaker, behandlingType 
       style={{ backgroundColor: 'var(--ax-bg-info-soft)' }}
     >
       <ExpansionCard.Header>
-        <HStack wrap={false} gap="4" align="center">
+        <HStack wrap={false} gap="space-16" align="center">
           <TasklistStartIcon aria-hidden fontSize={'1.5rem'} />
           <ExpansionCard.Title size={'small'}>
             <Label>{tittel}</Label>
@@ -47,13 +47,13 @@ export const ÅrsakTilBehandling = ({ vurderingsbehovOgÅrsaker, behandlingType 
         </HStack>
       </ExpansionCard.Header>
       <ExpansionCard.Content>
-        <VStack gap={'3'}>
+        <VStack gap={"space-12"}>
           {filtrerteÅrsaker
             .filter(({ vurderingsbehov }) => !vurderingsbehov.some((v) => v.type === 'REVURDERING_AVBRUTT'))
             .map(({ vurderingsbehov, opprettet, årsak, beskrivelse }, index) => {
               return (
                 <Box key={index}>
-                  <HStack gap="2" align="end">
+                  <HStack gap="space-8" align="end">
                     <Label size="small">{vurderingsbehov.map((v) => formaterVurderingsbehov(v.type)).join(', ')}</Label>
                     <Detail textColor="subtle">
                       {mapTilÅrsakTilOpprettelseTilTekst(årsak)} {formaterDatoForFrontend(opprettet)}

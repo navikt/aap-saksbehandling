@@ -16,11 +16,11 @@ export const Sykepenger = ({ form }: Props) => {
   });
 
   return (
-    <VStack gap={'2'}>
+    <VStack gap={"space-8"}>
       <Label>Samordning, sykepenger</Label>
       {fields.map((field, index) => {
         return (
-          <HStack key={field.id} gap={'2'} align={'end'}>
+          <HStack key={field.id} gap={"space-8"} align={'end'}>
             <TextFieldWrapper label={`Grad`} control={form.control} name={`sykepenger.${index}.grad`} type={'text'} />
             <DateInputWrapper label={`Fra og med`} control={form.control} name={`sykepenger.${index}.periode.fom`} />
             <DateInputWrapper label={`Til og med`} control={form.control} name={`sykepenger.${index}.periode.tom`} />

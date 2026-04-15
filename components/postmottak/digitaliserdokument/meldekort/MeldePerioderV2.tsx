@@ -65,7 +65,7 @@ export const MeldeperioderV2 = ({ form, readOnly }: Props) => {
   }, [valgteUker, form, remove]);
 
   return (
-    <VStack gap={'3'}>
+    <VStack gap={"space-12"}>
       {fields.map((meldeperioder, periodeIndex) => (
         <MeldePeriodeInputV2 key={meldeperioder.id} form={form} dagIndex={periodeIndex} readOnly={readOnly} />
       ))}

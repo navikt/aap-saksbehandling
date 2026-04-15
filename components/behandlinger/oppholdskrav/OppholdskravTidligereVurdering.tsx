@@ -16,7 +16,7 @@ export const OppholdskravTidligereVurdering = ({ fraDato, begrunnelse, land, opp
   const valgtLand = landSelectOptions.find((option) => option.value === land)?.label ?? land ?? 'Annet';
 
   return (
-    <VStack gap="5">
+    <VStack gap="space-20">
       <SpørsmålOgSvar spørsmål="Vurderingen gjelder fra?" svar={formaterDatoForFrontend(fraDato)} />
       <SpørsmålOgSvar spørsmål="Vilkårsvurdering" svar={begrunnelse} />
       <SpørsmålOgSvar spørsmål="Oppfyller brukerene vilkårene i § 11-3?" svar={oppfyller ? 'Ja' : 'Nei'} />

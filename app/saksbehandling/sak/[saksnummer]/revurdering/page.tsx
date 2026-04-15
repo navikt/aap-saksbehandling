@@ -16,7 +16,7 @@ export default async function Page(props: { params: Promise<{ saksnummer: string
   if (sak.søknadErTrukket) {
     return (
       <HStack justify="center">
-        <VStack width="600" gap="4" margin="8" align="center">
+        <VStack width="600" gap="space-16" margin="space-32" align="center">
           <Alert variant="warning">Søknaden er trukket. Kan ikke opprette ny vurdering eller revurdering.</Alert>
 
           <Link href={`/saksbehandling/sak/${sak.saksnummer}`}>Gå tilbake</Link>
@@ -28,8 +28,7 @@ export default async function Page(props: { params: Promise<{ saksnummer: string
   return (
     <AkselPage>
       <SaksinfoBanner personInformasjon={personInfo} sak={sak} />
-
-      <Box marginBlock="8">
+      <Box marginBlock="space-32">
         <OpprettRevurdering
           sak={sak}
           erFørstegangsbehandling={erAktivFørstegangsbehandling(sak.behandlinger)}

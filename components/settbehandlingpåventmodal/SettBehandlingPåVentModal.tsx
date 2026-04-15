@@ -147,11 +147,11 @@ export const SettBehandlingPåVentModal = ({ behandlingsreferanse, reservert, is
       className={styles.settBehandlingPåVentModal}
     >
       <Modal.Body>
-        <VStack gap={'4'}>
+        <VStack gap={"space-16"}>
           {isOpen && (
             <form id={'settBehandlingPåVent'} onSubmit={handleSubmit} className={'flex-column'} autoComplete={'off'}>
               {!reservert && (
-                <Box marginBlock={'0 2'}>
+                <Box marginBlock={"space-0 space-8"}>
                   <Alert variant={'info'} size={'small'}>
                     Behandlingen er ikke tildelt deg. Den tildeles deg når du setter den på vent.
                   </Alert>

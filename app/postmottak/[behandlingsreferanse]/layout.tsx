@@ -89,7 +89,7 @@ const Layout = async (props: LayoutProps) => {
           )}
 
           <SplitVindu journalpostId={journalpostInfo.data.journalpostId} dokumenter={dokumenter}>
-            <VStack gap={'4'}>
+            <VStack gap={"space-16"}>
               {flytResponse.data.visning.visVentekort && (
                 <BehandlingPVentMedDataFetching behandlingsreferanse={params.behandlingsreferanse} />
               )}

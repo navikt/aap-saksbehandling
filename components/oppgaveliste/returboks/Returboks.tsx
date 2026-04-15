@@ -79,18 +79,18 @@ export const Returboks = ({ oppgave: { returInformasjon: maybeReturInformasjon }
         offset={8}
       >
         {skalViseBoks ? (
-          <VStack gap={'2'} className={styles.boks}>
+          <VStack gap={"space-8"} className={styles.boks}>
             <Tag icon={<ArrowsSquarepathIcon />} variant={'warning-moderate'} size={'medium'} className={styles.tag}>
               <BodyShort size={'small'} weight={'semibold'}>
                 {returStatusTilTekst(returInformasjon.status)}
               </BodyShort>
             </Tag>
-            <VStack gap={'0'}>
+            <VStack gap={"space-0"}>
               <Detail textColor="subtle">{årsakTekst}</Detail>
 
               <div>{årsakerTilString(returInformasjon.årsaker)} </div>
             </VStack>
-            <VStack gap={'0'}>
+            <VStack gap={"space-0"}>
               <Detail textColor="subtle">Begrunnelse</Detail>
 
               <div>{returInformasjon?.begrunnelse}</div>

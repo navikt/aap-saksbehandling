@@ -20,7 +20,7 @@ export const AutomatiskVurderingAvLovvalgOgMedlemskap = ({
 }: Props) => {
   return (
     <VilkårsKort heading={'Automatisk vurdering av lovvalg og medlemskap'} steg={'VURDER_LOVVALG'}>
-      <VStack gap={'7'} paddingBlock={'3'}>
+      <VStack gap={"space-28"} paddingBlock={"space-12"}>
         {!vurdering.kanBehandlesAutomatisk && (
           <Alert variant={'warning'} title={'Til manuell vurdering'} size={'small'} className={'fit-content'}>
             Opplysningene tilsier at det kan være utenlandsk lovvalg eller manglende medlemskap. Lovvalg og medlemskap

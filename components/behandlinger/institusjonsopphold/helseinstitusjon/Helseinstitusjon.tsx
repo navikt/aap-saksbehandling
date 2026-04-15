@@ -150,7 +150,7 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
       visningActions={visningActions}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
-      <VStack gap={'6'}>
+      <VStack gap={"space-24"}>
         <InstitusjonsoppholdTabell
           label={'Brukeren har følgende institusjonsopphold på helseinstitusjon'}
           beskrivelse={'Opphold over tre måneder på helseinstitusjon kan gi redusert AAP-ytelse. '}

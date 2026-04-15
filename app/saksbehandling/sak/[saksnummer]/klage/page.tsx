@@ -11,8 +11,7 @@ export default async function Page(props: { params: Promise<{ saksnummer: string
   return (
     <AkselPage>
       <SaksinfoBanner personInformasjon={personInfo} sak={sak} />
-
-      <Box marginBlock="8">
+      <Box marginBlock="space-32">
         <OpprettKlage sak={sak} />
       </Box>
     </AkselPage>

@@ -104,7 +104,7 @@ export const OpprettRevurdering = ({
   return (
     <Page.Block width="md">
       <form onSubmit={form.handleSubmit((data) => sendHendelse(data))}>
-        <VStack gap="4">
+        <VStack gap="space-16">
           <ExpansionCard
             aria-label={`Opprett ${variant}`}
             size={'small'}
@@ -116,7 +116,7 @@ export const OpprettRevurdering = ({
             </ExpansionCard.Header>
 
             <ExpansionCard.Content className={styles.content}>
-              <VStack gap="4">
+              <VStack gap="space-16">
                 <div>
                   <FormField form={form} formField={formFields.årsaker} size="medium" />
                 </div>
@@ -131,7 +131,7 @@ export const OpprettRevurdering = ({
             </Alert>
           )}
 
-          <HStack gap="4">
+          <HStack gap="space-16">
             <Button type="submit">Opprett {variant}</Button>
             <Button
               type="button"

@@ -22,7 +22,7 @@ export const LovvalgOgMedlemskapFormInput = ({ readOnly, index, form }: Props) =
   const { control, watch } = form;
 
   return (
-    <VStack gap="4">
+    <VStack gap="space-16">
       <HStack justify={'space-between'}>
         <DateInputWrapper
           name={`vurderinger.${index}.fraDato`}
@@ -35,9 +35,7 @@ export const LovvalgOgMedlemskapFormInput = ({ readOnly, index, form }: Props) =
           readOnly={readOnly}
         />
       </HStack>
-
       <HvordanLeggeTilSluttdatoReadMore />
-
       <TextAreaWrapper
         name={`vurderinger.${index}.lovvalg.begrunnelse`}
         control={control}

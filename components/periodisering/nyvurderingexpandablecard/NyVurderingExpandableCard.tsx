@@ -61,7 +61,7 @@ export const NyVurderingExpandableCard = ({
       expanded={isOpen || finnesFeil}
       setExpanded={setIsOpen}
       heading={
-        <HStack justify={'space-between'} padding={'2'}>
+        <HStack justify={'space-between'} padding={"space-8"}>
           <BodyShort size={'small'}>
             Ny vurdering: {fraDato ? `${formatDatoMedMånedsnavn(fraDato)} – ` : '[Ikke valgt]'}
             {nestePeriodeFraDato ? (
@@ -74,9 +74,9 @@ export const NyVurderingExpandableCard = ({
         </HStack>
       }
     >
-      <VStack gap={'5'}>
+      <VStack gap={"space-20"}>
         <HGrid columns={'1fr 30px'}>
-          <VStack gap={'5'}>
+          <VStack gap={"space-20"}>
             {vurdering.behøverVurdering && (
               <Alert
                 variant={'info'}

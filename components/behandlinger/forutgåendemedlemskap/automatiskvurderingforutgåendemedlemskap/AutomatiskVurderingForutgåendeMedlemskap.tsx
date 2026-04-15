@@ -22,7 +22,7 @@ export const AutomatiskVurderingForutgåendeMedlemskap = ({
 }: Props) => {
   return (
     <VilkårsKort heading={'Automatisk vurdering av forutgående medlemskap'} steg={'VURDER_MEDLEMSKAP'}>
-      <VStack gap={'5'}>
+      <VStack gap={"space-20"}>
         {!vurdering.kanBehandlesAutomatisk && !harYrkesskade && (
           <Alert variant={'warning'} title={'Til manuell vurdering'} size={'small'} className={'fit-content'}>
             Opplysningene tilsier at det kan være tilhørighet utenfor Norge. Forutgående medlemskap må vurderes manuelt.

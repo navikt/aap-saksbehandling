@@ -118,7 +118,7 @@ export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly, initia
     >
       <FormField form={form} formField={formFields.begrunnelse} />
       {grunnlag?.grunnlag?.length > 0 && (
-        <VStack gap={'2'}>
+        <VStack gap={"space-8"}>
           <Label size={'small'}>Vedtak om uføretrygd</Label>
           <BodyShort size={'small'}>Vi har funnet følgende perioder med overlapp mellom uføretrygd og AAP.</BodyShort>
           <TableStyled>

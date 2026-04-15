@@ -61,7 +61,7 @@ export const SykdomsvurderingNedsattArbeidsevneDetaljer = ({
            *  så denne logikken blir ikke helt riktig. På sikt burde feltene slås sammen og la det være opp til
            *  saksbehandler å vurdere hva som er riktig prosent nedsettelse.
            */
-          <RadioGroupJaNei
+          (<RadioGroupJaNei
             name={`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnFørtiProsent`}
             control={form.control}
             label={'Er arbeidsevnen nedsatt med minst halvparten?'}
@@ -73,9 +73,8 @@ export const SykdomsvurderingNedsattArbeidsevneDetaljer = ({
               required: 'Du må svare på om den nedsatte arbeidsevnen er nedsatt med minst 40 prosent.',
             }}
             readOnly={readonly}
-          />
+          />)
         ))}
-
       <SykdomsvurderingYrkesskade
         form={form}
         erÅrsakssammenhengYrkesskade={erÅrsakssammenhengYrkesskade}
@@ -84,7 +83,6 @@ export const SykdomsvurderingNedsattArbeidsevneDetaljer = ({
         skalVurdereYrkesskade={skalVurdereYrkesskade}
         vurderingDatoSammeSomRettighetsperiodeStart={vurderingDatoSammeSomRettighetsperiodeStart}
       />
-
       {erTilstrekkeligNedsatt && (
         <>
           <RadioGroupJaNei

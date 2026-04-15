@@ -195,7 +195,6 @@ export const VedtakslengdeSteg = ({ grunnlag, behandlingVersjon, readOnly, initi
           <VedtakslengdeVurderingInnhold vurdering={vurdering} />
         </TidligereVurderingExpandableCard>
       ))}
-
       {grunnlag.nyeVurderinger
         .filter((v) => !v.manuellVurdering)
         .map((vurdering, index) => (
@@ -212,7 +211,6 @@ export const VedtakslengdeSteg = ({ grunnlag, behandlingVersjon, readOnly, initi
             <VedtakslengdeVurderingInnhold vurdering={vurdering} />
           </TidligereVurderingExpandableCard>
         ))}
-
       {vurderingerFields.map((vurdering, index) => (
         <NyVurderingExpandableCard
           key={vurdering.id}
@@ -237,7 +235,7 @@ export const VedtakslengdeSteg = ({ grunnlag, behandlingVersjon, readOnly, initi
           index={index}
           accordionsSignal={accordionsSignal}
         >
-          <VStack gap={'4'}>
+          <VStack gap={"space-16"}>
             <RadioGroupWrapper
               label={'Ønsket endring'}
               control={form.control}
@@ -280,7 +278,7 @@ export const VedtakslengdeSteg = ({ grunnlag, behandlingVersjon, readOnly, initi
 };
 
 const VedtakslengdeVurderingInnhold = ({ vurdering }: { vurdering: VedtakslengdeVurderingResponse }) => (
-  <VStack gap={'2'}>
+  <VStack gap={"space-8"}>
     <SpørsmålOgSvar spørsmål={'Sluttdato'} svar={formaterDatoForFrontend(vurdering.sluttdato)} />
     <SpørsmålOgSvar spørsmål={'Begrunnelse'} svar={vurdering.begrunnelse} />
   </VStack>

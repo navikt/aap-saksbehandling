@@ -133,7 +133,7 @@ export const OvergangUforePeriodisert = ({
       onLeggTilVurdering={() => append(emptyOvergangUføreVurdering())}
       errorList={errorList}
     >
-      <VStack gap={'4'}>
+      <VStack gap={"space-16"}>
         <BodyLong size={'small'}>
           <Link href="https://lovdata.no/pro/lov/1997-02-28-19/%C2%A711-18" target="_blank">
             Du kan lese om hvordan vilkåret skal vurderes i rundskrivet til § 11-18

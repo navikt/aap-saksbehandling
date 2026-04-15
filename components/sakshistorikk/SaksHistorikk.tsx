@@ -11,7 +11,7 @@ export function SaksHistorikk() {
   if (!historikk || isError(historikk)) return null;
   return (
     <section>
-      <VStack gap={'2'}>
+      <VStack gap={"space-8"}>
         {historikk.data.map((behandling, behandlingIndex) => (
           <BehandlingsHendelserTidslinje
             key={`behandling-${behandlingIndex}`}

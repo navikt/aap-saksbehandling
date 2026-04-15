@@ -11,8 +11,8 @@ interface Props {
 
 export const InstitusjonsoppholdTabell = ({ label, beskrivelse, instutisjonsopphold }: Props) => {
   return (
-    <VStack gap={'4'}>
-      <VStack gap={'1'}>
+    <VStack gap={"space-16"}>
+      <VStack gap={"space-4"}>
         <BodyShort weight={'semibold'} size={'small'} as={'p'}>
           {label}
         </BodyShort>

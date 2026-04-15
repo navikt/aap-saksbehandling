@@ -44,7 +44,7 @@ export const SakOversiktContainer = ({
             <Tabs.Tab label="Aktivitetsplikt 11-9 trekk" value={Tab.TREKK} icon={<FileTextIcon />} />
           </Tabs.List>
 
-          <Box marginBlock="8">
+          <Box marginBlock="space-32">
             <Tabs.Panel value={Tab.OVERSIKT}>
               <SakMedBehandlinger
                 sak={sak}

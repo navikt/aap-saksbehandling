@@ -217,7 +217,7 @@ export const Brevbygger = ({
   };
 
   return (
-    <HGrid columns={pdfViewExpanded ? '1fr 3fr' : '1fr 1fr'} gap={'2'}>
+    <HGrid columns={pdfViewExpanded ? '1fr 3fr' : '1fr 1fr'} gap={"space-8"}>
       <Box>
         {fullmektigMottaker && brukerMottaker && (
           <VelgeMottakere
@@ -233,7 +233,7 @@ export const Brevbygger = ({
             onSubmit(data);
           })}
         >
-          <VStack gap={'4'}>
+          <VStack gap={"space-16"}>
             <RefusjonskravVisning refusjonskravgrunnlag={refusjonskravgrunnlag} />
             {fields.map((feltet, index) => {
               if (!delmalSkalVises(feltet.noekkel, parsedBrevmal)) {
@@ -252,7 +252,7 @@ export const Brevbygger = ({
             })}
           </VStack>
         </form>
-        <HStack gap={'2'} justify={'space-between'} marginBlock={'4'}>
+        <HStack gap={"space-8"} justify={'space-between'} marginBlock={"space-16"}>
           <LøsBehovOgGåTilNesteStegStatusAlert
             status={løsBehovStatus}
             løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
@@ -265,7 +265,7 @@ export const Brevbygger = ({
             setDistribusjonssjekkFeil={setDistribusjonssjekkFeil}
             brukerMottaker={brukerMottaker}
           />
-          <HStack gap={'2'}>
+          <HStack gap={"space-8"}>
             {visAvbryt && (
               <Button
                 type="button"
@@ -298,7 +298,7 @@ export const Brevbygger = ({
           </Button>
         </HStack>
       </Box>
-      <VStack gap={'2'}>
+      <VStack gap={"space-8"}>
         <div>
           <Button
             type="button"
@@ -310,7 +310,6 @@ export const Brevbygger = ({
         </div>
         <ForhåndsvisBrev isLoading={pdfIsLoading} dataUri={dataUri} />
       </VStack>
-
       <IkkeSendBrevModal
         isOpen={ikkeSendBrevModalOpen}
         onClose={() => {

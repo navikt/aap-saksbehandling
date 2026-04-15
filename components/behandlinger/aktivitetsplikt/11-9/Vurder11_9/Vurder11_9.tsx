@@ -65,7 +65,7 @@ export const Vurder11_9 = ({ readOnly, grunnlag, initialMellomlagretVurdering, b
       <Heading level={'3'} size={'xsmall'}>
         Brudd på aktivitetsplikten § 11-9
       </Heading>
-      <VStack gap={'4'}>
+      <VStack gap={"space-16"}>
         <Registrer11_9BruddTabell
           tidligereVurderinger={vedtatteGjeldendeVurderinger}
           mellomlagredeVurderinger={mellomlagredeVurderinger}

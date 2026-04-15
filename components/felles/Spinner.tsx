@@ -9,7 +9,7 @@ export const Spinner = ({ visible, label, ...rest }: Props) => {
   if (visible === false) return null;
 
   return (
-    <HStack gap="4" align="center" justify="center" margin="12">
+    <HStack gap="space-16" align="center" justify="center" margin="space-48">
       <Loader {...rest} title={label} />
       {label && <BodyLong>{label}</BodyLong>}
     </HStack>

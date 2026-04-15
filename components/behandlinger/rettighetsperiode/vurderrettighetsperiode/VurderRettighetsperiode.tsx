@@ -174,7 +174,7 @@ export const VurderRettighetsperiode = ({
           : mapVurderingToDraftFormFields(grunnlag?.vurdering);
       }}
     >
-      <VStack gap={'1'}>
+      <VStack gap={"space-4"}>
         <BodyShort size={'small'} weight={'semibold'}>
           Søknadsdato
         </BodyShort>

@@ -73,7 +73,7 @@ export const OpprettKlage = ({ sak }: { sak: SaksInfo }) => {
   return (
     <Page.Block width="md">
       <form onSubmit={form.handleSubmit((data) => sendHendelse(data))}>
-        <VStack gap="4">
+        <VStack gap="space-16">
           <ExpansionCard
             aria-label="Opprett klage"
             size={'small'}
@@ -85,7 +85,7 @@ export const OpprettKlage = ({ sak }: { sak: SaksInfo }) => {
             </ExpansionCard.Header>
 
             <ExpansionCard.Content className={styles.content}>
-              <VStack gap="4">
+              <VStack gap="space-16">
                 <FormField form={form} formField={formFields.kravMottatt} size="medium" />
                 <FormField form={form} formField={formFields.beskrivelse} size="medium" />
               </VStack>
@@ -98,7 +98,7 @@ export const OpprettKlage = ({ sak }: { sak: SaksInfo }) => {
             </Alert>
           )}
 
-          <HStack gap="4">
+          <HStack gap="space-16">
             <Button type="submit">Opprett klage</Button>
             <Button
               type="button"

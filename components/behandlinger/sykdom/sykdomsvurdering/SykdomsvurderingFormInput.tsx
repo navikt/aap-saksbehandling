@@ -51,7 +51,7 @@ export const SykdomsvurderingFormInput = ({
   diagnoseDefaultOptions,
 }: Props) => {
   return (
-    <VStack gap={'5'}>
+    <VStack gap={"space-20"}>
       <DateInputWrapper
         name={`vurderinger.${index}.fraDato`}
         label="Vurderingen gjelder fra"
@@ -77,9 +77,7 @@ export const SykdomsvurderingFormInput = ({
         }}
         readOnly={readonly}
       />
-
       <HvordanLeggeTilSluttdatoReadMore />
-
       <TextAreaWrapper
         name={`vurderinger.${index}.begrunnelse`}
         control={form.control}

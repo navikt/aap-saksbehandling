@@ -177,7 +177,7 @@ export const Sykdomsvurdering = ({
       onLeggTilVurdering={() => append(emptySykdomsvurdering(utledDiagnoserForNyVurdering()))}
       errorList={errorList}
     >
-      <VStack gap={'4'}>
+      <VStack gap={"space-16"}>
         <BodyLong size={'small'}>
           <Link href="https://lovdata.no/nav/rundskriv/r11-00#KAPITTEL_7-1" target="_blank">
             Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-5 (lovdata.no)

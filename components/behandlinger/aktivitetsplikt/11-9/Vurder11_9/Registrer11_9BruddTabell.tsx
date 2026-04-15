@@ -92,7 +92,7 @@ const Rad = ({
       <Table.DataCell className={klasse}>{formaterStatus(rad.status)}</Table.DataCell>
       <Table.DataCell>
         {!readOnly && (
-          <HStack gap="1">
+          <HStack gap="space-4">
             {!erOverskrevet(rad) && (
               <Button
                 size="small"

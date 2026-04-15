@@ -161,7 +161,7 @@ export const MeldepliktPeriodisertFrontend = ({
       errorList={errorList}
     >
       {!formReadOnly && (
-        <VStack paddingBlock={'4'}>
+        <VStack paddingBlock={"space-16"}>
           <BodyLong size={'small'}>
             <Link href={'https://lovdata.no/pro/rundskriv/r11-00/KAPITTEL_12'} target="_blank">
               Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-10 (lovdata.no)
@@ -169,7 +169,6 @@ export const MeldepliktPeriodisertFrontend = ({
           </BodyLong>
         </VStack>
       )}
-
       {vedtatteVurderinger.map((vurdering) => (
         <TidligereVurderingExpandableCard
           key={crypto.randomUUID()}
@@ -181,7 +180,7 @@ export const MeldepliktPeriodisertFrontend = ({
           kvalitetssikretAv={vurdering.kvalitetssikretAv}
           besluttetAv={vurdering.besluttetAv}
         >
-          <VStack gap={'5'}>
+          <VStack gap={"space-20"}>
             <SpørsmålOgSvar spørsmål="Vurderingen gjelder fra?" svar={formaterDatoForFrontend(vurdering.fom)} />
             <SpørsmålOgSvar spørsmål="Vilkårsvurdering" svar={vurdering.begrunnelse} />
             <SpørsmålOgSvar
@@ -191,7 +190,6 @@ export const MeldepliktPeriodisertFrontend = ({
           </VStack>
         </TidligereVurderingExpandableCard>
       ))}
-
       {fields.map((vurdering, index) => (
         <NyVurderingExpandableCard
           key={vurdering.id}

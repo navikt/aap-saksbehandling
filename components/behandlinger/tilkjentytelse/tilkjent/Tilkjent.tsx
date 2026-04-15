@@ -92,7 +92,7 @@ export const Tilkjent = ({ grunnlag }: Props) => {
                           <Button variant={'tertiary'} icon={<MenuElipsisVerticalIcon title={'Oppgavemeny'} />} />
                         </ActionMenu.Trigger>
                         <ActionMenu.Content>
-                          <VStack gap={'4'} width={'250px'}>
+                          <VStack gap={"space-16"} width={'250px'}>
                             <BodyShort weight={'semibold'}>Meldekort</BodyShort>
                             <BodyShort>
                               Bruker har ført {periode.sisteLeverteMeldekort.timerArbeidPerPeriode.timerArbeid} timer.

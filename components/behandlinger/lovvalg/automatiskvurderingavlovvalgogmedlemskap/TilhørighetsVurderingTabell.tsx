@@ -77,7 +77,7 @@ export const TilhørighetsVurderingTabell = ({
             </BodyShort>
           </Table.DataCell>
           <Table.DataCell>
-            <HStack gap={'1'} align={'center'}>
+            <HStack gap={"space-4"} align={'center'}>
               {oppfyllerOpplysningeneKravene ? (
                 <>
                   <CheckmarkCircleFillIcon className={styles.godkjentIcon} title={'Suksess'} />

@@ -26,7 +26,7 @@ export const SvarFraBehandler = () => {
         placement={'bottom-end'}
         offset={8}
       >
-        <VStack gap={'2'} className={styles.boks}>
+        <VStack gap={"space-8"} className={styles.boks}>
           <Tag icon={<FirstAidKitIcon />} variant={'warning-moderate'} size={'medium'} className={styles.tag}>
             <BodyShort size={'small'} weight={'semibold'}>
               Svar fra behandler

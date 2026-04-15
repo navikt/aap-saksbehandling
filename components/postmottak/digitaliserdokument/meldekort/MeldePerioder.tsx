@@ -22,7 +22,7 @@ export const MeldePerioder = ({ form, readOnly }: Props) => {
     remove(index);
   }
   return (
-    <VStack gap={'3'}>
+    <VStack gap={"space-12"}>
       {fields.map((_, periodeIndex) => (
         <MeldePeriodeInput
           key={`pliktperiodeinput-${periodeIndex}`}

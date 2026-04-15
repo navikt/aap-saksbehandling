@@ -34,7 +34,6 @@ export const MarkeringInfoboks = ({ markering, referanse, showLabel = false, siz
           {showLabel && markeringTypeTilTekst(markering.markeringType)}
         </Tag>
       )}
-
       <Popover
         onClose={() => setVisInfo(false)}
         open={visInfo}
@@ -43,7 +42,7 @@ export const MarkeringInfoboks = ({ markering, referanse, showLabel = false, siz
         placement={'bottom-end'}
         offset={8}
       >
-        <VStack gap={'2'} className={styles.boks}>
+        <VStack gap={"space-8"} className={styles.boks}>
           <Tag
             icon={ikonForMarkeringType(markering.markeringType)}
             variant={variantFraType(markering.markeringType)}
@@ -59,13 +58,13 @@ export const MarkeringInfoboks = ({ markering, referanse, showLabel = false, siz
             </BodyShort>
           </Tag>
           {markering.begrunnelse ? (
-            <VStack gap={'0'}>
+            <VStack gap={"space-0"}>
               <Detail textColor="subtle">Årsak</Detail>
               <div>{markering.begrunnelse}</div>
             </VStack>
           ) : undefined}
           {referanse && visTag && (
-            <VStack gap={'0'} align={'end'}>
+            <VStack gap={"space-0"} align={'end'}>
               <Button
                 variant={'secondary'}
                 size={'small'}

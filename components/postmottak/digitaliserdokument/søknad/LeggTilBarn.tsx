@@ -26,8 +26,8 @@ export const LeggTilBarn = ({ i, form, readOnly, remove }: Props) => {
     }
   }, [manglerIdent]);
   return (
-    <VStack key={`div-${i}`} gap={'4'} className={styles.barn}>
-      <HStack gap={'4'}>
+    <VStack key={`div-${i}`} gap={"space-16"} className={styles.barn}>
+      <HStack gap={"space-16"}>
         <VStack>
           <TextFieldWrapper
             label={'Fornavn og mellomnavn'}
@@ -55,7 +55,7 @@ export const LeggTilBarn = ({ i, form, readOnly, remove }: Props) => {
           />
         </VStack>
       </HStack>
-      <HStack gap={'4'}>
+      <HStack gap={"space-16"}>
         <VStack>
           <SelectWrapper
             label={'Hva er relasjonen til barnet'}

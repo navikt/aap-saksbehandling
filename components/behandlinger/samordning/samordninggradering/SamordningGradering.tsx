@@ -224,7 +224,7 @@ export const SamordningGradering = ({
         {!!historiskeVurderinger && !!historiskeVurderinger.length && (
           /* TODO: <TidligereVurderinger/> er ikke ideelt for visning av denne typen data (samordning, inst, m.m.).
               Burde på sikt utformes litt annerledes, men dette får fungere som en slags "MVP" */
-          <TidligereVurderinger
+          (<TidligereVurderinger
             data={historiskeVurderinger}
             buildFelter={byggFelter}
             getErGjeldende={() => {
@@ -234,11 +234,11 @@ export const SamordningGradering = ({
             getVurdertAvIdent={(v) => v.vurdertAv.ident}
             getVurdertDato={(v) => v.vurdertAv.dato}
             grupperPåOpprettetDato={true}
-          />
+          />)
         )}
 
         {visForm && (
-          <VStack gap={'6'}>
+          <VStack gap={"space-24"}>
             <Veiledning
               header={'Hva skal vurderes?'}
               tekst={
@@ -261,7 +261,7 @@ export const SamordningGradering = ({
                     Tidligste virkningstidspunkt etter samordning er{' '}
                     <strong>{finnTidligsteVirkningstidspunkt()}</strong>
                   </Heading>
-                  <VStack gap={'2'}>
+                  <VStack gap={"space-8"}>
                     <BodyLong size="small">
                       Kelvin oppretter automatisk revurdering hvis det kommer vedtak om folketrygdytelse som går utover
                       denne perioden, eller hvis graden i vedtaket endres.
@@ -290,7 +290,7 @@ export const SamordningGradering = ({
           </VStack>
         )}
         {!visForm && (
-          <VStack gap={'4'}>
+          <VStack gap={"space-16"}>
             <BodyShort size={'small'}>Vi finner ingen ytelser fra folketrygden</BodyShort>
             {!formReadOnly && (
               <HStack>
