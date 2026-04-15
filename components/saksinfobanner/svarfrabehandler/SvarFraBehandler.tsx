@@ -47,7 +47,7 @@ export const SvarFraBehandler = ({ behandlingReferanse, oppdaterVisHarUlesteDoku
               </BodyLong>
             </Box>
           </VStack>
-          <Box borderWidth={'1'} borderColor={'border-divider'} />
+          <Box borderWidth={'1'} borderColor={"neutral-subtle"} />
           {error && (
             <HStack padding={'space-8'} justify={'center'}>
               <Alert size={'small'} variant={'error'}>

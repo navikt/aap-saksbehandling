@@ -177,7 +177,7 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
 
   return (
     <VStack gap={"space-20"}>
-      <Box borderColor="border-divider" borderWidth="1" borderRadius={'xlarge'}>
+      <Box borderColor="neutral-subtle" borderWidth="1" borderRadius={"12"}>
         <VStack>
           <HStack
             justify={'space-between'}

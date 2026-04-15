@@ -15,7 +15,7 @@ export const SakDevTools = ({
   behandlinger: { referanse: string; type: TypeBehandling }[];
 }) => {
   return (
-    <Box background="bg-subtle" padding="space-16" borderWidth="1" borderRadius="large" borderColor="border-divider">
+    <Box background="neutral-soft" padding="space-16" borderWidth="1" borderRadius="8" borderColor="neutral-subtle">
       <Heading size={'medium'}>Utviklerverktøy</Heading>
       <HGrid gap="space-8" columns={2}>
         <VStack gap="space-16">

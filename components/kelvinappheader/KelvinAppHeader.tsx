@@ -1,3 +1,10 @@
+/*
+TODO: Aksel Box migration:
+Could not migrate the following:
+  - background=surface-inverted
+    - Use 'bg-default' or 'bg-raised' in theme 'dark'-mode.
+*/
+
 'use client';
 
 import { useState } from 'react';

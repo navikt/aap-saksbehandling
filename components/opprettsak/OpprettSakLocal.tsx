@@ -329,10 +329,10 @@ export const OpprettSakLocal = () => {
       <Box
         padding="space-16"
         marginBlock="space-16"
-        background="bg-default"
+        background="default"
         borderWidth="1"
-        borderColor="border-subtle"
-        borderRadius="medium"
+        borderColor="neutral-subtle"
+        borderRadius="4"
       >
         <HGrid columns={2} gap="space-16">
           <VStack gap="space-16">
@@ -369,10 +369,10 @@ export const OpprettSakLocal = () => {
           <Box
             padding="space-16"
             marginBlock="space-16"
-            background="surface-info-subtle"
+            background="info-soft"
             borderWidth="1"
-            borderColor="border-subtle"
-            borderRadius="medium"
+            borderColor="neutral-subtle"
+            borderRadius="4"
           >
             <Button type="button" size="small" loading={isLoading} onClick={() => opprett('START_BEHANDLING')}>
               Opprett
@@ -382,10 +382,10 @@ export const OpprettSakLocal = () => {
           <Box
             padding="space-16"
             marginBlock="space-16"
-            background="surface-success-subtle"
+            background="success-soft"
             borderWidth="1"
-            borderColor="border-subtle"
-            borderRadius="medium"
+            borderColor="neutral-subtle"
+            borderRadius="4"
           >
             <Button type="button" size="small" loading={isLoading} onClick={() => opprett(undefined)}>
               Opprett og iverksett
@@ -395,10 +395,10 @@ export const OpprettSakLocal = () => {
           <Box
             padding="space-16"
             marginBlock="space-16"
-            background="surface-alt-1-subtle"
+            background="meta-purple-soft"
             borderWidth="1"
-            borderColor="border-subtle"
-            borderRadius="medium"
+            borderColor="neutral-subtle"
+            borderRadius="4"
           >
             <HStack gap="space-16" align="end" wrap={false}>
               <FormField form={form} formField={formFields.steg} />

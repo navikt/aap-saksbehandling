@@ -113,9 +113,9 @@ function BoxWrapper({ children }: { children: React.ReactNode }) {
   return (
     <Box
       height={'fit-content'}
-      borderColor={'border-divider'}
+      borderColor={"neutral-subtle"}
       borderWidth={'2'}
-      borderRadius={'xlarge'}
+      borderRadius={"12"}
       paddingInline={"space-16"}
       paddingBlock={"space-16"}
     >

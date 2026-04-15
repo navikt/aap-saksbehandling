@@ -177,7 +177,7 @@ export const AlleOppgaver = ({ enheter }: Props) => {
 
   return (
     <VStack gap={"space-16"}>
-      <Box borderColor="border-divider" borderWidth="1" borderRadius={'xlarge'}>
+      <Box borderColor="neutral-subtle" borderWidth="1" borderRadius={"12"}>
         <VStack>
           <HStack paddingInline={"space-16"} paddingBlock={"space-8"} gap={"space-16"} style={{ borderBottom: '1px solid #071A3636' }}>
             <EnheterSelect

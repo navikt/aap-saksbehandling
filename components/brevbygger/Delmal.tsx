@@ -49,7 +49,7 @@ export const Delmal = ({ delmalFelt, index, control, watch, brevmal }: DelmalPro
     (delmalErObligatorisk(delmalFelt.noekkel, brevmal) && delmalHarAlternativer(delmalFelt.noekkel, brevmal));
 
   return (
-    <Box borderWidth="1" borderRadius={'12'} padding={"space-8"} borderColor="border-divider" background="bg-default">
+    <Box borderWidth="1" borderRadius={'12'} padding={"space-8"} borderColor="neutral-subtle" background="default">
       <HStack justify={'space-between'}>
         <Heading level="2" size={'small'}>
           {finnBeskrivelseForDelmal(delmalFelt.noekkel, brevmal)}

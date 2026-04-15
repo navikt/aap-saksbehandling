@@ -67,15 +67,15 @@ export const HelseinstitusjonOppholdGruppe = ({
 
   return (
     <Box
-      background="surface-default"
+      background="default"
       padding="space-0"
-      borderRadius="xlarge"
+      borderRadius="12"
       borderWidth="1"
-      borderColor="border-subtle"
+      borderColor="neutral-subtle"
       className={styles.oppholdGruppe}
     >
       {/* OPPHOLDET */}
-      <Box background="surface-subtle" padding="space-12" className={styles.oppholdHeader}>
+      <Box background="neutral-soft" padding="space-12" className={styles.oppholdHeader}>
         <HStack gap="space-16" align="center">
           <Buildings3Icon title={`Helseinstitusjon${opphold.kildeinstitusjon}`} fontSize="1.5rem" aria-hidden />
           <div>

@@ -26,8 +26,8 @@ export const KlageBehandlingInfo = ({ kabalKlageResultat, klageresultat }: Props
   return (skalVises && (<Box
     padding="space-16"
     borderWidth="1"
-    borderRadius="large"
-    borderColor="border-divider"
+    borderRadius="8"
+    borderColor="neutral-subtle"
     className={styles.behandlingsinfo}
   >
     <VStack gap={"space-16"}>

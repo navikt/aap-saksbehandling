@@ -27,7 +27,7 @@ export const Delmal = ({ delmalRef, control, watch }: Props) => {
   const erValgt = watch(`delmaler.${delmal._id}`) || obligatorisk;
 
   return (
-    <Box borderWidth="1" borderRadius="12" padding="space-8" borderColor="border-divider" background="bg-default">
+    <Box borderWidth="1" borderRadius="12" padding="space-8" borderColor="neutral-subtle" background="default">
       <HStack justify="space-between">
         <Heading level="2" size="small">
           {delmal.beskrivelse}

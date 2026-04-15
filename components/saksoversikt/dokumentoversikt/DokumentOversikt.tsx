@@ -101,7 +101,7 @@ export const DokumentOversikt = ({ sak }: { sak: SaksInfo }) => {
   return (
     <VStack gap="space-16">
       <Heading size="large">Dokumentoversikt</Heading>
-      <Box background="surface-subtle" padding="space-16" borderRadius="xlarge">
+      <Box background="neutral-soft" padding="space-16" borderRadius="12">
         <HStack gap="space-16" marginBlock="space-0 space-16" wrap={false}>
           <FormField form={form} formField={formFields.tema} />
           <FormField form={form} formField={formFields.typer} />
