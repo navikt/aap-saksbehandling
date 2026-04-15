@@ -11,7 +11,7 @@ interface Props {
 }
 
 export const LøsBehovOgGåTilNesteStegStatusAlert = ({ status, løsBehovOgGåTilNesteStegError }: Props) => {
-  const { behandlingsReferanse, saksnummer } = useParams<{ behandlingsReferanse: string; saksnummer: string }>();
+  const { behandlingsreferanse, saksnummer } = useParams<{ behandlingsreferanse: string; saksnummer: string }>();
   return (
     <>
       {løsBehovOgGåTilNesteStegError && (
@@ -25,7 +25,7 @@ export const LøsBehovOgGåTilNesteStegStatusAlert = ({ status, løsBehovOgGåTi
           </BodyShort>
           <BodyShort size={'small'}>
             <b>Behandlingsreferanse:</b>
-            {` ${behandlingsReferanse}`}
+            {` ${behandlingsreferanse}`}
           </BodyShort>
         </Alert>
       )}
@@ -38,7 +38,7 @@ export const LøsBehovOgGåTilNesteStegStatusAlert = ({ status, løsBehovOgGåTi
           </BodyShort>
           <BodyShort size={'small'}>
             <b>Behandlingsreferanse:</b>
-            {` ${behandlingsReferanse}`}
+            {` ${behandlingsreferanse}`}
           </BodyShort>
         </Alert>
       )}
@@ -51,7 +51,7 @@ export const LøsBehovOgGåTilNesteStegStatusAlert = ({ status, løsBehovOgGåTi
           </BodyShort>
           <BodyShort size={'small'}>
             <b>Behandlingsreferanse:</b>
-            {` ${behandlingsReferanse}`}
+            {` ${behandlingsreferanse}`}
           </BodyShort>
         </Alert>
       )}

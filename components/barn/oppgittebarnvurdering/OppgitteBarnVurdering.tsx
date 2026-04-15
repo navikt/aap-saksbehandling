@@ -54,7 +54,7 @@ export const OppgitteBarnVurdering = ({
           <BodyShort size={'small'}>
             {navn}, {ident} ({fødselsdato ? kalkulerAlder(new Date(fødselsdato)) : 'Ukjent fødselsdato'})
           </BodyShort>
-          {fødselsdato && <BodyShort size={'small'}>Fødselsdato: {formaterDatoForFrontend(fødselsdato)}</BodyShort>}
+          {fødselsdato && <BodyShort size={'small'}>Født: {formaterDatoForFrontend(fødselsdato)}</BodyShort>}
         </div>
       </div>
       <div className={styles.vurderingwrapper}>

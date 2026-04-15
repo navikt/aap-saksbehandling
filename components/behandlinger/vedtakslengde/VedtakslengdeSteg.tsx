@@ -64,6 +64,8 @@ function getDefaultValuesFromGrunnlag(grunnlag: VedtakslengdeGrunnlag): Vedtaksl
       behøverVurdering: false,
       manuellVurdering: true,
       endring: 'FORLENGELSE',
+      vurdertAv: v.vurdertAv,
+      besluttetAv: v.besluttetAv,
     }));
 
   return {
