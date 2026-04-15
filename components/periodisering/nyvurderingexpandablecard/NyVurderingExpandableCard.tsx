@@ -81,7 +81,7 @@ export const NyVurderingExpandableCard = ({
               <Alert
                 variant={'info'}
                 size={'small'}
-              >{`Perioden fra ${fraDato ? formatDatoMedMånedsnavn(fraDato) : ''} mangler vurdering og må vurderes`}</Alert>
+              >{`Perioden fra ${fraDato ? formatDatoMedMånedsnavn(fraDato) : ''} mangler vurdering og må vurderes.`}</Alert>
             )}
             {children}
           </VStack>
