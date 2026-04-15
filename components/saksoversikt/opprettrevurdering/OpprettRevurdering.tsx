@@ -40,6 +40,7 @@ export const OpprettRevurdering = ({
 
   const inkluderBarnepensjon = useFeatureFlag('SamordningBarnepensjon');
   const inkluderVedtakslengde = useFeatureFlag('VedtakslengdeAvklaringsbehov');
+  const inkluderOvergangUføreArbeid = useFeatureFlag('InkluderOvergangUforeArbeid');
 
   async function sendHendelse(data: ManuellRevurderingFormFields) {
     const innsending = {
@@ -88,7 +89,9 @@ export const OpprettRevurdering = ({
       options: vurderingsbehovOptions().filter(
         (option) =>
           (inkluderBarnepensjon || option.value !== 'REVURDER_SAMORDNING_BARNEPENSJON') &&
-          (inkluderVedtakslengde || option.value !== 'VEDTAKSLENGDE_MANUELT')
+          (inkluderVedtakslengde || option.value !== 'VEDTAKSLENGDE_MANUELT') &&
+          (inkluderOvergangUføreArbeid || option.value !== 'OVERGANG_UFORE') &&
+          (inkluderOvergangUføreArbeid || option.value !== 'OVERGANG_ARBEID')
       ),
       defaultValue: defaultÅrsaker,
       rules: {
