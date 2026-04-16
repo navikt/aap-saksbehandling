@@ -1,5 +1,4 @@
-import { DefaultValues, RegisterOptions, useForm, UseFormProps, UseFormReturn } from 'react-hook-form';
-import { FieldPath, FieldValues } from 'react-hook-form/dist/types';
+import { DefaultValues, FieldPath, FieldValues, RegisterOptions, useForm, UseFormProps, UseFormReturn } from 'react-hook-form';
 
 import { ValuePair } from './FormField';
 
