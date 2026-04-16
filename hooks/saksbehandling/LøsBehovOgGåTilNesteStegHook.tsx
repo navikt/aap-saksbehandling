@@ -26,7 +26,6 @@ import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import { hentTildeltStatusClient } from 'lib/oppgaveClientApi';
 import { isLocal } from 'lib/utils/environment';
 import { useOverstyrTildelingHook } from 'hooks/saksbehandling/OverstyrTildelingHook';
-import { useFeatureFlag } from 'context/UnleashContext';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 
 export type LøsBehovOgGåTilNesteStegStatus = ServerSentEventStatus | undefined;
@@ -56,7 +55,6 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<ApiException | undefined>();
   const [isPending, startTransition] = useTransition();
-  const sjekkTildelingFeatureToggle = useFeatureFlag('SjekkTildelingVedBekreft');
 
   const erLokal = isLocal();
   const sisteBehovRef = useRef<{
@@ -75,7 +73,7 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
     setStatus(undefined);
     setError(undefined);
 
-    if (sjekkTildeltStatus && !erLokal && sjekkTildelingFeatureToggle) {
+    if (sjekkTildeltStatus && !erLokal) {
       const nyesteOppgavePåBehandling = await hentTildeltStatusClient(params.behandlingsreferanse);
       if (isSuccess(nyesteOppgavePåBehandling)) {
         if (
