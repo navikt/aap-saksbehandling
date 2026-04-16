@@ -1,7 +1,7 @@
 'use client';
 
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/postmottakForm';
-import { FormEvent, FormEventHandler, useState } from 'react';
+import React, { FormEvent, FormEventHandler, useState } from 'react';
 import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/PostmottakLøsBehovOgGåTilNesteStegHook';
 import { AvklarTemaGrunnlag } from 'lib/types/postmottakTypes';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
@@ -26,12 +26,16 @@ interface FormFields {
   erTemaAAP: string;
 }
 
+const NAV_KLAGEINSTANS_ENHET = '4260';
+const KLAGE_ETTERSENDELSE_BREVKODE = 'NAVe 90-00.08 K';
+
 export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, readOnly }: Props) => {
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     usePostmottakLøsBehovOgGåTilNesteSteg('AVKLAR_TEMA');
   const { postmottakEndreTema, error, data } = usePostmottakEndreTema();
   const [visModal, setVisModal] = useState<boolean>(grunnlag?.vurdering?.skalTilAap === false || false);
 
+  console.log(grunnlag);
   const { visningActions, formReadOnly, visningModus } = usePostmottakVilkårskortVisning(readOnly, 'AVKLAR_TEMA');
 
   const { formFields, form } = useConfigForm<FormFields>(
@@ -80,6 +84,10 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
   };
 
   const settesPåVent = toggles.featurePostmottakBehandlingerPåVent;
+
+  const skalViseKlageEttersendelseInfo =
+    grunnlag.journalpostMetadata.journalfoerendeEnhet === NAV_KLAGEINSTANS_ENHET &&
+    grunnlag.journalpostMetadata.brevkode === KLAGE_ETTERSENDELSE_BREVKODE;
 
   return (
     <PostmottakVilkårskort
@@ -133,6 +141,12 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
         </Modal.Footer>
       </Modal>
       <VStack gap={'6'}>
+        {skalViseKlageEttersendelseInfo && (
+          <Alert variant={'info'} size={'small'}>
+            Det ser ut som at dette dokumentet ikke skal til Kelvin. Svar <i>Nei</i> for å opprette
+            journalføringsoppgave i Gosys for Nav Klageinstans.
+          </Alert>
+        )}
         <LøsBehovOgGåTilNesteStegStatusAlert status={status} />
         <FormField form={form} formField={formFields.erTemaAAP} />
         {error && (
