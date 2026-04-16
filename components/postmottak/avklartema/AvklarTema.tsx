@@ -143,8 +143,9 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
       <VStack gap={'6'}>
         {skalViseKlageEttersendelseInfo && (
           <Alert variant={'info'} size={'small'}>
-            Det ser ut som at dette dokumentet ikke skal til Kelvin. Svar <i>Nei</i> for å opprette
-            journalføringsoppgave i Gosys for Nav Klageinstans.
+            Denne journalposten er en ettersendelse til klage, og journalførende enhet er satt til{'  '}
+            {NAV_KLAGEINSTANS_ENHET}. Svar <i>Nei</i> dersom du ønsker å opprette journalføringsoppgave i Gosys for Nav
+            Klageinstans.
           </Alert>
         )}
         <LøsBehovOgGåTilNesteStegStatusAlert status={status} />
