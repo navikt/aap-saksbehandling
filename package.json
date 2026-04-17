@@ -30,7 +30,7 @@
     "date-fns": "4.1.0",
     "fuse.js": "7.1.0",
     "i18n-iso-countries": "7.14.0",
-    "is-european": "1.0.9",
+    "is-european": "1.0.10",
     "jose": "6.2.2",
     "lodash": "4.18.1",
     "next": "16.2.3",
