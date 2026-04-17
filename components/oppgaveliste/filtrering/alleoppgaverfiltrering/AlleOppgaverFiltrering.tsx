@@ -114,12 +114,12 @@ export const AlleOppgaverFiltrering = ({
                   {aktiveFilter.map((filter) =>
                     aktivKø.type !== NoNavAapOppgaveFilterFilterDtoType.ALLE_OPPGAVER &&
                     filter.key === 'behandlingstyper' ? (
-                      <Chips.Toggle checkmark={false} selected={true} key={filter.value}>
+                      <Chips.Toggle checkmark={false} selected={true} key={`${filter.key}-${filter.value}`}>
                         {filter.label}
                       </Chips.Toggle>
                     ) : (
                       <Chips.Removable
-                        key={filter.value}
+                        key={`${filter.key}-${filter.value}`}
                         onClick={() => {
                           const values = form.watch(filter.key);
                           if (Array.isArray(values)) {

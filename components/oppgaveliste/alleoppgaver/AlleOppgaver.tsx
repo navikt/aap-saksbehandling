@@ -85,6 +85,16 @@ export const AlleOppgaver = ({ enheter }: Props) => {
       label: 'Opprettet til',
       defaultValue: lagretUtvidetFilter?.behandlingOpprettetTom,
     },
+    tilbakekrevingBeløpFom: {
+      type: 'number',
+      label: 'Beløp fra',
+      defaultValue: lagretUtvidetFilter?.tilbakekrevingBeløpFom,
+    },
+    tilbakekrevingBeløpTom: {
+      type: 'number',
+      label: 'Beløp til',
+      defaultValue: lagretUtvidetFilter?.tilbakekrevingBeløpTom,
+    },
     årsaker: {
       type: 'combobox_multiple',
       label: 'Vurderingsbehov',
