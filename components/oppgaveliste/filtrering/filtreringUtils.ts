@@ -69,6 +69,22 @@ export function aktiveFiltreringer(form: FormFieldsFilter) {
         label: `Behandling opprettet til: ${formaterDatoForFrontend(value)}`,
       });
     }
+
+    if (key === 'tilbakekrevingBeløpFom' && value) {
+      aktiveFilter.push({
+        key: key as keyof FormFieldsFilter,
+        value: value,
+        label: `Beløp fra: ${value}`,
+      });
+    }
+
+    if (key === 'tilbakekrevingBeløpTom' && value) {
+      aktiveFilter.push({
+        key: key as keyof FormFieldsFilter,
+        value: value,
+        label: `Beløp til: ${value}`,
+      });
+    }
   });
 
   return aktiveFilter;
