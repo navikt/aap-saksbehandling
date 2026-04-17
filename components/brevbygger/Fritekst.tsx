@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button, Textarea, VStack } from '@navikt/ds-react';
-import { BrevFormVerdier } from 'components/brevbygger/brevbyggerNy/types';
+import { BrevFormVerdier } from 'components/brevbygger/types';
 import { FritekstType } from 'components/brevbygger/brevmodellTypes';
 import { Control, FieldPath, useController } from 'react-hook-form';
 import { PlusIcon } from '@navikt/aksel-icons';

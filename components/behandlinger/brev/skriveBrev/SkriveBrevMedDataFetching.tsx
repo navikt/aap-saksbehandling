@@ -15,7 +15,7 @@ import { skrivBrevBehovstype } from 'components/brev/BrevKortMedDataFetching';
 import { BrevOppsummering } from 'components/behandlinger/brev/skriveBrev/BrevOppsummering';
 import { mapGrunnlagTilMottakere } from 'lib/utils/brevmottakere';
 import { isProd } from 'lib/utils/environment';
-import { BrevbyggerNy } from 'components/brevbygger/brevbyggerNy/BrevbyggerNy';
+import { Brevbygger } from 'components/brevbygger/Brevbygger';
 
 interface Props {
   behandlingsreferanse: string;
@@ -95,7 +95,7 @@ export const SkriveBrevMedDataFetching = async ({
         />
       )}
       {brukNyBrevbygger && (
-        <BrevbyggerNy
+        <Brevbygger
           brevmal={brev.brevmal}
           brevdata={brev.brevdata}
           referanse={brev.brevbestillingReferanse}
