@@ -1,6 +1,6 @@
 'use client';
 
-import { Detail } from '@navikt/ds-react';
+import { Detail, VStack } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { VurdertAvAnsatt } from 'lib/types/types';
 
