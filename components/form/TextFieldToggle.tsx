@@ -1,8 +1,7 @@
 import { BodyShort, Button, HStack, TextField, VStack } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import { PencilIcon } from '@navikt/aksel-icons';
-import { Controller, RegisterOptions, UseFormReturn } from 'react-hook-form';
-import { FieldPath, FieldValues } from 'react-hook-form/dist/types';
+import { Controller, FieldPath, FieldValues, RegisterOptions, UseFormReturn } from 'react-hook-form';
 
 interface Props<FormFieldIds extends FieldValues> {
   form: UseFormReturn<FormFieldIds, any, any>;
