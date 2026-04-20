@@ -1,10 +1,3 @@
-/*
-TODO: Aksel Box migration:
-Could not migrate the following:
-  - background=surface-inverted
-    - Use 'bg-default' or 'bg-raised' in theme 'dark'-mode.
-*/
-
 'use client';
 
 import { useState } from 'react';
@@ -18,6 +11,7 @@ import {
   InternalHeader,
   Link,
   Spacer,
+  Theme,
   VStack,
 } from '@navikt/ds-react';
 import { Kelvinsøk } from 'components/kelvinsøkeresultat/Kelvinsøk';
@@ -146,26 +140,28 @@ export const KelvinAppHeader = ({
         <Brukermeny brukerInformasjon={brukerInformasjon} roller={roller} />
       </InternalHeader>
       {søkeresultat && (
-        <Box background="surface-inverted" className={styles.kelvinAppHeaderSearchResult}>
-          <VStack padding="space-16">
-            <HStack justify={'space-between'}>
-              <Heading size="small" spacing>
-                Søkeresultater
-              </Heading>
-              <Button
-                data-color="neutral"
-                variant={'primary'}
-                size={'small'}
-                icon={<XMarkIcon />}
-                onClick={() => setSøkeresultat(undefined)}
-              >
-                Lukk
-              </Button>
-            </HStack>
+        <Theme theme={'dark'}>
+          <Box background={'default'} className={styles.kelvinAppHeaderSearchResult}>
+            <VStack padding="space-16">
+              <HStack justify={'space-between'}>
+                <Heading size="small" spacing>
+                  Søkeresultater
+                </Heading>
+                <Button
+                  data-color="neutral"
+                  variant={'primary'}
+                  size={'small'}
+                  icon={<XMarkIcon />}
+                  onClick={() => setSøkeresultat(undefined)}
+                >
+                  Lukk
+                </Button>
+              </HStack>
 
-            <Kelvinsøkeresultat søkeresultat={søkeresultat} />
-          </VStack>
-        </Box>
+              <Kelvinsøkeresultat søkeresultat={søkeresultat} />
+            </VStack>
+          </Box>
+        </Theme>
       )}
     </>
   );
