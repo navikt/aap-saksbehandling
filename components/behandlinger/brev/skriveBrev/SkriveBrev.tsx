@@ -134,7 +134,8 @@ export const SkriveBrev = ({
                   data-color="neutral"
                   variant="secondary"
                   icon={<ChevronDownIcon aria-hidden />}
-                  iconPosition="right">
+                  iconPosition="right"
+                >
                   Andre handlinger
                 </Button>
               </ActionMenu.Trigger>
@@ -163,7 +164,7 @@ export const SkriveBrev = ({
           )}
         </HStack>
 
-        <VStack gap={"space-16"}>
+        <VStack gap={'space-16'}>
           <BrevbyggerBeta
             brevmal={brev}
             mottaker={mottaker}
