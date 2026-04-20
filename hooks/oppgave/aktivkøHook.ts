@@ -2,40 +2,41 @@
 
 import { dagerTilMillisekunder } from 'lib/utils/time';
 import { useInnloggetBruker } from 'hooks/BrukerHook';
+import { NoNavAapOppgaveFilterFilterDtoType } from '@navikt/aap-oppgave-typescript-types';
 
-const KEY = 'AKTIV_KØ_ID_KEY';
+const AKTIV_OPPGAVE_KØ_KEY = 'AKTIV_OPPGAVE_KØ_KEY';
 const MAKS_LEVETID = dagerTilMillisekunder(1);
 
-interface LagretAktivKøId {
+export interface AktivKø {
   id: number;
+  type?: NoNavAapOppgaveFilterFilterDtoType;
   timestamp: number;
-  user: string;
+  user: string | undefined;
 }
 
 export function useLagreAktivKø(): {
-  lagreAktivKøId: (id: number) => void;
-  hentLagretAktivKø: () => number | undefined;
+  lagreAktivKø: (id: number, type: NoNavAapOppgaveFilterFilterDtoType | undefined) => void;
+  hentLagretAktivKø: () => AktivKø | undefined;
 } {
   const bruker = useInnloggetBruker();
 
-  const lagreAktivKøId = (id: number) => {
-    localStorage.setItem(
-      KEY,
-      JSON.stringify({
-        id,
-        timestamp: new Date().getTime(),
-        user: bruker.NAVident,
-      } as LagretAktivKøId)
-    );
+  const lagreAktivKø = (id: number, type: NoNavAapOppgaveFilterFilterDtoType | undefined) => {
+    const kø: AktivKø = {
+      id,
+      type,
+      timestamp: new Date().getTime(),
+      user: bruker.NAVident,
+    };
+    localStorage.setItem(AKTIV_OPPGAVE_KØ_KEY, JSON.stringify(kø));
   };
 
-  const hentLagretAktivKø = (): number | undefined => {
+  const hentLagretAktivKø = (): AktivKø | undefined => {
     try {
-      const obj = JSON.parse(localStorage[KEY]) as LagretAktivKøId;
-      if (obj.user === bruker.NAVident && new Date().getTime() < obj.timestamp + MAKS_LEVETID) {
-        return isNaN(obj.id) ? undefined : obj.id;
+      const aktivKø: AktivKø = JSON.parse(localStorage[AKTIV_OPPGAVE_KØ_KEY]);
+      if (aktivKø.user === bruker.NAVident && new Date().getTime() < aktivKø.timestamp + MAKS_LEVETID) {
+        return aktivKø;
       } else {
-        localStorage.removeItem(KEY);
+        localStorage.removeItem(AKTIV_OPPGAVE_KØ_KEY);
         return undefined;
       }
     } catch {
@@ -43,5 +44,5 @@ export function useLagreAktivKø(): {
     }
   };
 
-  return { lagreAktivKøId, hentLagretAktivKø: hentLagretAktivKø };
+  return { lagreAktivKø, hentLagretAktivKø: hentLagretAktivKø };
 }

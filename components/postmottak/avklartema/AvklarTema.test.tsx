@@ -8,6 +8,10 @@ describe('AvklarTema', () => {
   const grunnlag: AvklarTemaGrunnlag = {
     vurdering: { skalTilAap: true },
     dokumenter: [],
+    journalpostMetadata: {
+      brevkode: 'NAV 11-13.05',
+      journalfoerendeEnhet: null,
+    },
   };
   it('Skal ha en tittel', () => {
     render(<AvklarTema behandlingsVersjon={1} behandlingsreferanse={'123'} grunnlag={grunnlag} readOnly={false} />);

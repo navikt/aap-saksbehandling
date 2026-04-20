@@ -22,6 +22,8 @@ export interface FormFieldsFilter {
   behandlingstyper?: string[];
   behandlingOpprettetFom?: Date;
   behandlingOpprettetTom?: Date;
+  tilbakekrevingBeløpFom?: string;
+  tilbakekrevingBeløpTom?: string;
   årsaker?: string[];
   avklaringsbehov?: string[];
   statuser?: string[];
@@ -51,6 +53,16 @@ export const MineOppgaver = () => {
       type: 'date',
       label: 'Opprettet til',
       defaultValue: lagretUtvidetFilter?.behandlingOpprettetTom,
+    },
+    tilbakekrevingBeløpFom: {
+      type: 'number',
+      label: 'Beløp fra',
+      defaultValue: lagretUtvidetFilter?.tilbakekrevingBeløpFom ?? undefined,
+    },
+    tilbakekrevingBeløpTom: {
+      type: 'number',
+      label: 'Beløp til',
+      defaultValue: lagretUtvidetFilter?.tilbakekrevingBeløpTom ?? undefined,
     },
     årsaker: {
       type: 'combobox_multiple',

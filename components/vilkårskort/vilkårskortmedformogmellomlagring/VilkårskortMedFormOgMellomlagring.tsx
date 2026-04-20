@@ -3,7 +3,7 @@
 import { Button, Detail, ExpansionCard, HStack, VStack } from '@navikt/ds-react';
 import { MellomlagretVurdering, StegType, VurdertAvAnsatt } from 'lib/types/types';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
-import { formaterDatoForFrontend, formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
+import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 
 import styles from 'components/vilkårskort/Vilkårskort.module.css';
 import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
@@ -11,6 +11,7 @@ import { FormEvent, ReactNode } from 'react';
 import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { ApiException } from 'lib/utils/api';
 import { VisningActions, VisningModus } from 'lib/types/visningTypes';
+import { VurdertAvAnsattDetail } from 'components/vurdertav/VurdertAvAnsattDetail';
 
 export interface VilkårsKortMedFormOgMellomlagringProps {
   heading: string;
@@ -26,6 +27,7 @@ export interface VilkårsKortMedFormOgMellomlagringProps {
   vurdertAvAnsatt?: VurdertAvAnsatt;
   vurdertAutomatisk?: boolean;
   kvalitetssikretAv?: VurdertAvAnsatt;
+  besluttetAv?: VurdertAvAnsatt;
   visningModus: VisningModus;
   visningActions: VisningActions;
   onDeleteMellomlagringClick: () => void;
@@ -47,6 +49,7 @@ export const VilkårskortMedFormOgMellomlagring = ({
   vurdertAvAnsatt,
   vurdertAutomatisk = false,
   kvalitetssikretAv,
+  besluttetAv,
   onDeleteMellomlagringClick,
   mellomlagretVurdering,
   visningModus,
@@ -148,18 +151,9 @@ export const VilkårskortMedFormOgMellomlagring = ({
               {/* Høyre kolonne: vurdert av / kvalitetssikret av */}
               <VStack align="baseline">
                 {vurdertAutomatisk && <Detail>Vurdert automatisk</Detail>}
-                {vurdertAvAnsatt && (
-                  <Detail>
-                    {`Vurdert av ${utledVurdertAv(vurdertAvAnsatt)}, ${formaterDatoForFrontend(vurdertAvAnsatt.dato)}`}
-                  </Detail>
-                )}
-                {kvalitetssikretAv && (
-                  <Detail>
-                    {`Kvalitetssikret av ${utledVurdertAv(kvalitetssikretAv)}, ${formaterDatoForFrontend(
-                      kvalitetssikretAv.dato
-                    )}`}
-                  </Detail>
-                )}
+                <VurdertAvAnsattDetail vurdertAv={vurdertAvAnsatt} variant={'VURDERING'} />
+                <VurdertAvAnsattDetail vurdertAv={kvalitetssikretAv} variant={'KVALITETSSIKRER'} />
+                <VurdertAvAnsattDetail vurdertAv={besluttetAv} variant={'BESLUTTER'} />
               </VStack>
             </HStack>
           </VStack>
@@ -168,7 +162,3 @@ export const VilkårskortMedFormOgMellomlagring = ({
     </ExpansionCard>
   );
 };
-
-function utledVurdertAv(vurdertAvAnsatt: VurdertAvAnsatt): string {
-  return vurdertAvAnsatt.ansattnavn ? vurdertAvAnsatt.ansattnavn : vurdertAvAnsatt.ident;
-}

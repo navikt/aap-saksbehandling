@@ -10,6 +10,7 @@ import { FormField } from 'components/form/FormField';
 import { FieldPath, UseFormReturn } from 'react-hook-form';
 import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
 import { aktiveFiltreringer } from 'components/oppgaveliste/filtrering/filtreringUtils';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   form: UseFormReturn<FormFieldsFilter>;
@@ -22,6 +23,7 @@ export const MineOppgaverFiltrering = ({ form, formFields, antallOppgaverIFilter
   const [visFilter, setVisFilter] = useState(false);
 
   const aktiveFilter = aktiveFiltreringer(form.watch());
+  const tilbakekrevingBelopFilter = useFeatureFlag('TilbakekrevingBelopFilter');
 
   return (
     <div className={styles.wrapper}>
@@ -42,7 +44,7 @@ export const MineOppgaverFiltrering = ({ form, formFields, antallOppgaverIFilter
               <Chips size={'small'}>
                 {aktiveFilter.map((filter) => (
                   <Chips.Removable
-                    key={filter.value}
+                    key={`${filter.key}-${filter.value}`}
                     onClick={() => {
                       const values = form.watch(filter.key);
                       if (Array.isArray(values)) {
@@ -90,6 +92,17 @@ export const MineOppgaverFiltrering = ({ form, formFields, antallOppgaverIFilter
               <BoxWrapper>
                 <FormField form={form} formField={formFields.statuser} />
               </BoxWrapper>
+              {tilbakekrevingBelopFilter && (
+                <BoxWrapper>
+                  <VStack gap={'4'}>
+                    <BodyShort size={'small'} weight={'semibold'}>
+                      Tilbakekrevingsbeløp
+                    </BodyShort>
+                    <FormField form={form} formField={formFields.tilbakekrevingBeløpFom} />
+                    <FormField form={form} formField={formFields.tilbakekrevingBeløpTom} />
+                  </VStack>
+                </BoxWrapper>
+              )}
             </HGrid>
             <HStack gap={"space-8"}>
               <Button

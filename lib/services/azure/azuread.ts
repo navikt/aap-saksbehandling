@@ -1,12 +1,11 @@
 import 'server-only';
 
-import { JWSHeaderParameters, jwtVerify, createRemoteJWKSet, FlattenedJWSInput } from 'jose';
-import { GetKeyFunction } from 'jose/dist/types/types';
+import { jwtVerify, createRemoteJWKSet } from 'jose';
 import { isLocal } from 'lib/utils/environment';
 import { getToken } from '@navikt/oasis';
 import { redirect } from 'next/navigation';
 
-let _remoteJWKSet: GetKeyFunction<JWSHeaderParameters, FlattenedJWSInput>;
+let _remoteJWKSet: ReturnType<typeof createRemoteJWKSet>;
 
 export async function validerToken(token: string | Uint8Array) {
   const issuer = process.env.AZURE_OPENID_CONFIG_ISSUER;

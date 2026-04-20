@@ -4,11 +4,11 @@ export const FLAGS = [
   'VisStansOpphorFrontend',
   'SamordningBarnepensjon',
   'VedtakslengdeAvklaringsbehov',
-  'BekreftVurderingerOppfolging',
-  'SjekkTildelingVedBekreft',
   'VisSisteDagMedRett',
   'Redigitalisering',
   'InkluderOvergangUforeArbeid',
+  'EnhetForrigeOppgaveFrontend',
+  'TilbakekrevingBelopFilter',
 ] as const;
 
 export type FlagNames = (typeof FLAGS)[number];
@@ -20,9 +20,9 @@ export const mockedFlags: Flags = {
   VisStansOpphorFrontend: true,
   SamordningBarnepensjon: true,
   VedtakslengdeAvklaringsbehov: true,
-  BekreftVurderingerOppfolging: true,
-  SjekkTildelingVedBekreft: true,
   VisSisteDagMedRett: true,
   Redigitalisering: true,
   InkluderOvergangUforeArbeid: true,
+  EnhetForrigeOppgaveFrontend: true,
+  TilbakekrevingBelopFilter: true,
 };

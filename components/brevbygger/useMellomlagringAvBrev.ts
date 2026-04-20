@@ -5,8 +5,8 @@ import { clientOppdaterBrevdata } from 'lib/clientApi';
 import { isSuccess } from 'lib/utils/api';
 import { BrevmalType } from 'components/brevbygger/brevmodellTypes';
 import { BrevdataDto } from 'lib/types/types';
-import { BrevFormVerdier } from 'components/brevbygger/brevbyggerNy/types';
-import { byggBrevdataPayload } from 'components/brevbygger/brevbyggerNy/formUtils';
+import { BrevFormVerdier } from 'components/brevbygger/types';
+import { byggBrevdataPayload } from 'components/brevbygger/formUtils';
 
 interface Props {
   referanse: string;

@@ -1,6 +1,6 @@
 import { BrevmalType } from 'components/brevbygger/brevmodellTypes';
 import { BrevdataDto, FritekstDto } from 'lib/types/types';
-import { BrevFormVerdier } from 'components/brevbygger/brevbyggerNy/types';
+import { BrevFormVerdier } from 'components/brevbygger/types';
 
 export function initialiserFormVerdier(brevmal: BrevmalType, brevdata: BrevdataDto | undefined): BrevFormVerdier {
   const delmaler: Record<string, boolean> = {};

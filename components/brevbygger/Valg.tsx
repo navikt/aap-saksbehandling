@@ -2,7 +2,7 @@ import { Control, UseFormWatch } from 'react-hook-form';
 import { ValgRef } from 'components/brevbygger/brevmodellTypes';
 import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
-import { BrevFormVerdier } from 'components/brevbygger/brevbyggerNy/types';
+import { BrevFormVerdier } from 'components/brevbygger/types';
 
 interface ValgProps {
   valgRef: ValgRef;

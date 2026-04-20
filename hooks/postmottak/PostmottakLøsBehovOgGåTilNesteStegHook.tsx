@@ -10,7 +10,6 @@ import { ApiException, isError, isSuccess } from 'lib/utils/api';
 import { isLocal } from 'lib/utils/environment';
 import { hentTildeltStatusClient } from 'lib/oppgaveClientApi';
 import { useOverstyrTildelingHook } from 'hooks/saksbehandling/OverstyrTildelingHook';
-import { useFeatureFlag } from 'context/UnleashContext';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 
 export const usePostmottakLøsBehovOgGåTilNesteSteg = (
@@ -29,7 +28,6 @@ export const usePostmottakLøsBehovOgGåTilNesteSteg = (
   const [error, setError] = useState<ApiException | undefined>();
   const [isPending, startTransition] = useTransition();
   const { setVisOverstyrModal, setCallback, setReservertAvNavn } = useOverstyrTildelingHook();
-  const skalSjekkeTildeltStatus = useFeatureFlag('SjekkTildelingVedBekreft');
 
   const erLokal = isLocal();
   const sisteBehovRef = useRef<{
@@ -44,7 +42,7 @@ export const usePostmottakLøsBehovOgGåTilNesteSteg = (
     setStatus(undefined);
     setError(undefined);
 
-    if (sjekkTildeltStatus && !erLokal && skalSjekkeTildeltStatus) {
+    if (sjekkTildeltStatus && !erLokal) {
       const nyesteOppgavePåBehandling = await hentTildeltStatusClient(params.behandlingsreferanse);
       if (isSuccess(nyesteOppgavePåBehandling)) {
         if (

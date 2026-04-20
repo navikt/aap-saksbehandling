@@ -1,67 +1,59 @@
-import { Box, Heading, HStack, Switch } from '@navikt/ds-react';
-import { BrevdataFormFields } from 'components/brevbygger/Brevbygger';
-import {
-  delmalErObligatorisk,
-  delmalHarAlternativer,
-  finnBeskrivelseForDelmal,
-} from 'components/brevbygger/brevmalMapping';
-import { BrevmalType } from 'components/brevbygger/brevmodellTypes';
-import { Valgfelt } from 'components/brevbygger/Valgfelt';
-import { Control, Controller, FieldArrayWithId, UseFormWatch } from 'react-hook-form';
+import { Box, Heading, HStack, Switch, VStack } from '@navikt/ds-react';
+import { Control, Controller, UseFormWatch } from 'react-hook-form';
+import { DelmalReferanse, FritekstType, ValgRef } from 'components/brevbygger/brevmodellTypes';
+import { BrevFormVerdier } from 'components/brevbygger/types';
+import { Valg } from 'components/brevbygger/Valg';
+import { DelmalFritekst } from 'components/brevbygger/Fritekst';
 
-interface DelmalvelgerProps {
-  index: number;
-  control: Control<BrevdataFormFields>;
-  obligatorisk: boolean;
+interface Props {
+  delmalRef: DelmalReferanse;
+  control: Control<BrevFormVerdier>;
+  watch: UseFormWatch<BrevFormVerdier>;
 }
 
-const Delmalvelger = ({ index, control, obligatorisk }: DelmalvelgerProps) => {
-  if (obligatorisk) {
+export const Delmal = ({ delmalRef, control, watch }: Props) => {
+  const { delmal, obligatorisk } = delmalRef;
+
+  const valgOgFritekst = delmal.teksteditor.filter(
+    (node): node is ValgRef | FritekstType => node._type === 'valgRef' || node._type === 'fritekst'
+  );
+  const harValgEllerFritekst = valgOgFritekst.length > 0;
+
+  if (obligatorisk && !harValgEllerFritekst) {
     return null;
   }
-  return (
-    <Controller
-      name={`delmaler.${index}.valgt`}
-      control={control}
-      render={({ field }) => {
-        return (
-          <Switch onChange={field.onChange} checked={field.value} hideLabel size={'small'} position="right">
-            Inkluder i brev
-          </Switch>
-        );
-      }}
-    />
-  );
-};
 
-interface DelmalProps {
-  delmalFelt: FieldArrayWithId<BrevdataFormFields, 'delmaler'>;
-  index: number;
-  control: Control<BrevdataFormFields>;
-  watch: UseFormWatch<BrevdataFormFields>;
-  brevmal: BrevmalType;
-}
-
-export const Delmal = ({ delmalFelt, index, control, watch, brevmal }: DelmalProps) => {
-  const harValgtDelmal = watch(`delmaler.${index}.valgt`) === true;
-  const visAlternativer =
-    harValgtDelmal ||
-    (delmalErObligatorisk(delmalFelt.noekkel, brevmal) && delmalHarAlternativer(delmalFelt.noekkel, brevmal));
+  // sjekker om denne delmalen er valgt eller er obligatorisk
+  const erValgt = watch(`delmaler.${delmal._id}`) || obligatorisk;
 
   return (
-    <Box borderWidth="1" borderRadius={'12'} padding={"space-8"} borderColor="neutral-subtle" background="default">
-      <HStack justify={'space-between'}>
-        <Heading level="2" size={'small'}>
-          {finnBeskrivelseForDelmal(delmalFelt.noekkel, brevmal)}
+    <Box borderWidth="1" borderRadius="12" padding="space-8" borderColor="neutral-subtle" background="default">
+      <HStack justify="space-between">
+        <Heading level="2" size="small">
+          {delmal.beskrivelse}
         </Heading>
-        <Delmalvelger
-          control={control}
-          index={index}
-          obligatorisk={delmalErObligatorisk(delmalFelt.noekkel, brevmal)}
-        />
+
+        {!obligatorisk && (
+          <Controller
+            name={`delmaler.${delmal._id}`}
+            control={control}
+            render={({ field }) => (
+              <Switch onChange={field.onChange} checked={field.value} hideLabel size="small" position="right">
+                Inkluder i brev
+              </Switch>
+            )}
+          />
+        )}
       </HStack>
-      {visAlternativer && !!delmalFelt.valg?.length && (
-        <Valgfelt valg={delmalFelt.valg} control={control} delmalIndex={index} brevmal={brevmal} watch={watch} />
+      {erValgt && (
+        <VStack gap="space-16" marginBlock="space-8">
+          {valgOgFritekst.map((node) => {
+            if (node._type === 'fritekst') {
+              return <DelmalFritekst key={node._key} node={node} control={control} />;
+            }
+            return <Valg key={node._key} valgRef={node} control={control} watch={watch} />;
+          })}
+        </VStack>
       )}
     </Box>
   );
