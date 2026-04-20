@@ -134,10 +134,12 @@ export type AndreStatligeYtelserType =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.AndreStatligeYtelserPeriodeDto']['ytelseType'];
 export type DagpengerYtelserType =
   components['schemas']['no.nav.aap.behandlingsflyt.test.modell.TestPerson.Dagpenger']['dagpengerYtelseType'];
-export type DagpengerKilde = components['schemas']['no.nav.aap.behandlingsflyt.test.modell.TestPerson.Dagpenger']['kilde'];
+export type DagpengerKilde =
+  components['schemas']['no.nav.aap.behandlingsflyt.test.modell.TestPerson.Dagpenger']['kilde'];
 export type TiltakspengerYtelserType =
   components['schemas']['no.nav.aap.behandlingsflyt.test.modell.TestPerson.Tiltakspenger']['ytelseType'];
-export type TiltakspengerKilde = components['schemas']['no.nav.aap.behandlingsflyt.test.modell.TestPerson.Tiltakspenger']['kilde'];
+export type TiltakspengerKilde =
+  components['schemas']['no.nav.aap.behandlingsflyt.test.modell.TestPerson.Tiltakspenger']['kilde'];
 export type SamordningAndreStatligeYtelserVurderinger =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningAndreStatligeYtelserVurderingDTO'];
 
@@ -379,6 +381,9 @@ export type AutomatiskLovvalgOgMedlemskapVurdering =
 export type tilhørighetVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.Tilh\u00F8righetVurdering'];
 
+export type VisuellTidslinjeArbeidInntekt =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.VisuellTidslinjeArbeidInntektINorge'];
+
 export type AvklarPeriodisertStudentLøsning =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.PeriodisertStudentDto'];
 
@@ -571,6 +576,7 @@ export type BrevdataDto = components['schemas']['no.nav.aap.brev.kontrakt.Brevda
 export type DelmalDto = components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto.Delmal'];
 export type ValgDto = components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto.Valg'];
 export type FritekstDto = components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto.Fritekst'];
+
 // ---- HENTET FRA BEHANDLINGSFLYT PeriodiserteVurderingerDto.kt ---
 export interface VurderingDto {
   fom: string;
@@ -579,6 +585,7 @@ export interface VurderingDto {
   kvalitetssikretAv?: VurdertAvAnsatt | null;
   besluttetAv?: VurdertAvAnsatt | null;
 }
+
 export type PeriodiserteVurderingerDto<T extends VurderingDto> = {
   harTilgangTilÅSaksbehandle: boolean;
   sisteVedtatteVurderinger: Array<T>;

@@ -1,15 +1,16 @@
 'use client';
 
-import { BodyShort, HStack, Table } from '@navikt/ds-react';
-import { AutomatiskLovvalgOgMedlemskapVurdering, tilhørighetVurdering } from 'lib/types/types';
+import { BodyShort, HStack, Table, Timeline } from '@navikt/ds-react';
+import { tilhørighetVurdering, VisuellTidslinjeArbeidInntekt } from 'lib/types/types';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { CheckmarkCircleFillIcon, ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
 
 import styles from './TilhørighetsVurderingTabell.module.css';
 import { OpplysningerContent } from 'components/behandlinger/lovvalg/opplysningercontent/OpplysningerContent';
+import { formaterPeriode } from 'lib/utils/date';
 
 interface Props {
-  vurdering: AutomatiskLovvalgOgMedlemskapVurdering['tilhørighetVurdering'];
+  vurdering: tilhørighetVurdering[];
   oppfyllerOpplysningeneKravene: boolean;
   oppfyllerOpplysningeneKraveneTekst: string;
 }
@@ -32,7 +33,9 @@ export const TilhørighetsVurderingTabell = ({
       </Table.Header>
       <Table.Body>
         {vurdering.map((opplysning, index) => {
-          const erUtvidbar = harMinstEttGrunnlag(opplysning);
+          const harVisuellTidslinje = opplysning.visuellTidslinje.length > 0;
+          const erUtvidbar = harVisuellTidslinje || harMinstEttGrunnlag(opplysning);
+
           const radInnhold = (
             <>
               <Table.DataCell textSize="small" width={200}>
@@ -49,16 +52,13 @@ export const TilhørighetsVurderingTabell = ({
               </Table.DataCell>
             </>
           );
-
+          const expandableContent = harVisuellTidslinje ? (
+            <VisuellTidslinjeInnhold visuellTidslinje={opplysning.visuellTidslinje}></VisuellTidslinjeInnhold>
+          ) : (
+            <OpplysningerContent opplysning={opplysning} />
+          );
           return erUtvidbar ? (
-            <Table.ExpandableRow
-              key={index}
-              content={
-                <div className={styles.opplysning}>
-                  <OpplysningerContent opplysning={opplysning} />
-                </div>
-              }
-            >
+            <Table.ExpandableRow key={index} content={expandableContent}>
               {radInnhold}
             </Table.ExpandableRow>
           ) : (
@@ -102,6 +102,7 @@ export const TilhørighetsVurderingTabell = ({
 };
 
 type Kilde = 'SØKNAD' | 'PDL' | 'MEDL' | 'AA_REGISTERET' | 'A_INNTEKT' | 'EREG';
+
 function mapKildeTilTekst(kilde: Kilde): string {
   switch (kilde) {
     case 'SØKNAD':
@@ -130,4 +131,49 @@ function harMinstEttGrunnlag(vurdering: tilhørighetVurdering) {
     vurdering.utenlandsAddresserGrunnlag?.personStatus,
     vurdering.vedtakImedlGrunnlag,
   ].some((grunnlag) => grunnlag !== null && grunnlag && grunnlag?.length > 0);
+}
+
+function VisuellTidslinjeInnhold({ visuellTidslinje }: { visuellTidslinje: VisuellTidslinjeArbeidInntekt[] }) {
+  const datoer = visuellTidslinje.flatMap((it) => [new Date(it.periode.fom), new Date(it.periode.tom)]);
+
+  const startDate = new Date(Math.min(...datoer.map((d) => d.getTime())));
+  const endDate = new Date(Math.max(...datoer.map((d) => d.getTime())));
+
+  return (
+    <Timeline startDate={startDate} endDate={endDate}>
+      <Timeline.Row label={''}>
+        {visuellTidslinje.map((item, i) => {
+          return (
+            <Timeline.Period
+              key={i}
+              start={new Date(item.periode.fom)}
+              end={new Date(item.periode.tom)}
+              status={item.periodeMangler ? 'danger' : 'success'}
+              statusLabel={'Inntektstidslinje'}
+            >
+              {item.periodeMangler ? (
+                <div>
+                  <div>
+                    <b>{formaterPeriode(item.periode.fom, item.periode.tom)}</b>
+                  </div>
+                  <div>Inntekt mangler</div>
+                </div>
+              ) : (
+                <div>
+                  <div>
+                    <b>{formaterPeriode(item.periode.fom, item.periode.tom)}</b>
+                  </div>
+                  <div>
+                    {item.virksomhetNavn} (org.nr: {item.virksomhetId})
+                  </div>
+                  <div>Inntekt: {item.beloep}</div>
+                </div>
+              )}
+            </Timeline.Period>
+          );
+        })}
+      </Timeline.Row>
+      );
+    </Timeline>
+  );
 }
