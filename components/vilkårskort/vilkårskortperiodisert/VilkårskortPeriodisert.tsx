@@ -61,12 +61,12 @@ export const VilkårskortPeriodisert = ({
 
   return (
     <VStack
-      padding={"space-12"}
-      gap={"space-4"}
+      padding={'space-12'} // TODO Fiks denne slik at padding over og under er 0 når kortet ikke er aktivt
+      gap={'space-4'}
       aria-label={heading}
       className={`${erAktivtSteg ? classNameBasertPåEnhet : styles.vilkårsKort}`}
     >
-      <HGrid columns={'1fr'} paddingBlock={"space-12"}>
+      <HGrid columns={'1fr'} paddingBlock={'space-4'}>
         <Heading level={'3'} size={'small'} data-testid="vilkår-heading">
           {heading}
         </Heading>
@@ -75,7 +75,7 @@ export const VilkårskortPeriodisert = ({
         <form onSubmit={onSubmit} id={steg} autoComplete="off">
           <VStack gap="space-16">
             {/* innhold i vilkårskortet */}
-            <VStack style={{ borderTop: '1px solid lightgray' }} paddingBlock={"space-16 space-0"}>
+            <VStack style={{ borderTop: '1px solid lightgray' }} paddingBlock={'space-16 space-0'}>
               {children}
             </VStack>
 
@@ -156,7 +156,7 @@ export const VilkårskortPeriodisert = ({
                 )}
               </VStack>
 
-              <VStack align="baseline" paddingBlock={"space-8 space-0"}>
+              <VStack align="baseline" paddingBlock={'space-8 space-0'}>
                 {vurdertAutomatisk && <Detail>Vurdert automatisk</Detail>}
               </VStack>
             </HStack>

@@ -11,7 +11,7 @@
   --ac-expansioncard-border-hover-color: none;
 
   border: 1px solid var(--ax-border-neutral-subtle);
-  border-left: 0.5rem solid var(--ax-bg-meta-purple-moderate);
+  border-left: 0.5rem solid var(--ax-bg-meta-purple-strong);
 }
 
 .vilkårsKort {

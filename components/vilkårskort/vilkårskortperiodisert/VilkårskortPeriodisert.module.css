@@ -15,7 +15,7 @@
   background-color: var(--ax-bg-default);
   border: 1px solid var(--ax-border-neutral-subtle);
   border-radius: var(--ax-radius-8);
-  border-left: 0.5rem solid var(--ax-bg-meta-purple-moderate);
+  border-left: 0.5rem solid var(--ax-bg-meta-purple-strong);
 }
 
 .vilkårsKort {

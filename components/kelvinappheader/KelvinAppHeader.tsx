@@ -93,21 +93,28 @@ export const KelvinAppHeader = ({
 
   return (
     <>
-      <InternalHeader>
+      <InternalHeader data-color={'neutral'}>
         <InternalHeader.Title href="/">Kelvin</InternalHeader.Title>
 
         <HStack gap="space-16" marginInline="space-16" className={styles.kelvinAppHeaderMenuItems}>
           <Kelvinsøk setSøkeresultat={setSøkeresultat} />
-          <Link href={`/oppgave/`}>Oppgaveliste</Link>
+          <Link data-color={'neutral'} href={`/oppgave/`}>
+            Oppgaveliste
+          </Link>
 
           <Link
             href={'https://metabase.ansatt.nav.no/public/dashboard/da1ad654-13a9-492c-bfa0-8cc828aab274?'}
             target="_blank"
+            data-color={'neutral'}
           >
             Produksjonsstyring <ExternalLinkIcon />
           </Link>
 
-          {lokalLenkeTilSaksoversikt && <Link href={`/saksbehandling/saksoversikt`}>Saksoversikt</Link>}
+          {lokalLenkeTilSaksoversikt && (
+            <Link data-color={'neutral'} href={`/saksbehandling/saksoversikt`}>
+              Saksoversikt
+            </Link>
+          )}
         </HStack>
 
         <Spacer />
@@ -147,10 +154,11 @@ export const KelvinAppHeader = ({
               </Heading>
               <Button
                 data-color="neutral"
-                variant={"primary"}
+                variant={'primary'}
                 size={'small'}
                 icon={<XMarkIcon />}
-                onClick={() => setSøkeresultat(undefined)}>
+                onClick={() => setSøkeresultat(undefined)}
+              >
                 Lukk
               </Button>
             </HStack>
