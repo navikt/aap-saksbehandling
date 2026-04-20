@@ -50,6 +50,7 @@
     "@navikt/aap-felles-prettier": "5.6.2",
     "@navikt/aap-oppgave-typescript-types": "0.0.688",
     "@navikt/aap-postmottak-backend-typescript-types": "0.0.662",
+    "@navikt/aksel": "8.9.1",
     "@navikt/eslint-config-aap": "5.5.1",
     "@testing-library/dom": "10.4.1",
     "@testing-library/jest-dom": "6.9.1",
