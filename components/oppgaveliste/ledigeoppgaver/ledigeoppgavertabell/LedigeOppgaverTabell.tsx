@@ -10,7 +10,7 @@ import {
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
 import { VurderingsbehovIntern, ÅrsakTilOpprettelse } from 'lib/types/types';
-import { Oppgave } from 'lib/types/oppgaveTypes';
+import { Køtype, Oppgave } from 'lib/types/oppgaveTypes';
 import { useState } from 'react';
 import { LedigeOppgaverMeny } from 'components/oppgaveliste/ledigeoppgaver/ledigeoppgavermeny/LedigeOppgaverMeny';
 import { OppgaveInformasjon } from 'components/oppgaveliste/oppgaveinformasjon/OppgaveInformasjon';
@@ -18,10 +18,7 @@ import { ManglerTilgangModal } from 'components/oppgaveliste/manglertilgangmodal
 import { SynkroniserEnhetModal } from 'components/oppgaveliste/synkroniserenhetmodal/SynkroniserEnhetModal';
 import { TildelOppgaveModal } from 'components/tildeloppgavemodal/TildelOppgaveModal';
 import { OppgaveIkkeLedigModal } from 'components/oppgaveliste/oppgaveikkeledigmodal/OppgaveIkkeLedigModal';
-import {
-  NoNavAapOppgaveFilterFilterDtoType,
-  NoNavAapOppgaveListeOppgaveSorteringSortBy,
-} from '@navikt/aap-oppgave-typescript-types';
+import { NoNavAapOppgaveListeOppgaveSorteringSortBy } from '@navikt/aap-oppgave-typescript-types';
 import { ScopedBackendSortState } from 'hooks/oppgave/BackendSorteringHook';
 import { isOppgavelisteOppgaveSorteringSortBy } from 'lib/utils/request';
 import { useFeatureFlag } from 'context/UnleashContext';
@@ -105,9 +102,9 @@ export const LedigeOppgaverTabell = ({ oppgaver, revalidateFunction, setSortBy, 
             {enhetForrigeOppgaveFrontendEnabled ? (
               <Table.ColumnHeader
                 sortKey={NoNavAapOppgaveListeOppgaveSorteringSortBy.AVKLARINGSBEHOV_KODE}
-                sortable={aktivKø?.type !== NoNavAapOppgaveFilterFilterDtoType.KVALITETSSIKRING}
+                sortable={aktivKø?.type !== Køtype.KVALITETSSIKRING}
               >
-                {aktivKø?.type !== NoNavAapOppgaveFilterFilterDtoType.KVALITETSSIKRING ? 'Oppgave' : 'Kontor'}
+                {aktivKø?.type !== Køtype.KVALITETSSIKRING ? 'Oppgave' : 'Kontor'}
               </Table.ColumnHeader>
             ) : (
               <Table.ColumnHeader
@@ -175,8 +172,7 @@ export const LedigeOppgaverTabell = ({ oppgaver, revalidateFunction, setSortBy, 
                 </Tooltip>
               </Table.DataCell>
               <Table.DataCell style={{ maxWidth: '150px' }} textSize={'small'}>
-                {enhetForrigeOppgaveFrontendEnabled &&
-                aktivKø?.type === NoNavAapOppgaveFilterFilterDtoType.KVALITETSSIKRING ? (
+                {enhetForrigeOppgaveFrontendEnabled && aktivKø?.type === Køtype.KVALITETSSIKRING ? (
                   (oppgave.enhetForrigeOppgave?.navn ?? '-')
                 ) : (
                   <Tooltip content={mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode)}>
