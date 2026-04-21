@@ -1,9 +1,7 @@
-import { RadioGroup } from '@navikt/ds-react';
+import { HStack, RadioGroup } from '@navikt/ds-react';
 import React, { ReactNode } from 'react';
-import { Control, Controller, RegisterOptions, FieldValues, FieldPath } from 'react-hook-form';
+import { Control, Controller, FieldPath, FieldValues, RegisterOptions } from 'react-hook-form';
 import { createSyntheticEvent } from 'lib/types/SyntheticEvent';
-
-import styles from './RadioGroupWrapper.module.css';
 
 interface RadioProps<FormFieldValues extends FieldValues> {
   name: FieldPath<FormFieldValues>;
@@ -36,42 +34,41 @@ const RadioGroupWrapper = <FormFieldValues extends FieldValues>({
   className,
   onChangeCustom,
 }: RadioProps<FormFieldValues>) => {
-  const classNames = `${className} ${horisontal ? styles.radiowrapper_horizontal : ''}`;
   return (
-    <div className={styles.radiowrapper_radiogroup}>
-      <Controller
-        name={name}
-        control={control}
-        rules={rules}
-        shouldUnregister={shouldUnregister}
-        render={({ field: { onChange, value }, fieldState: { error } }) => {
-          const handleChange = (val: string) => {
-            onChange(val);
-            if (onChangeCustom) {
-              onChangeCustom(createSyntheticEvent(val));
-            }
-          };
+    // <div className={styles.radiowrapper_radiogroup}>
+    <Controller
+      name={name}
+      control={control}
+      rules={rules}
+      shouldUnregister={shouldUnregister}
+      render={({ field: { onChange, value }, fieldState: { error } }) => {
+        const handleChange = (val: string) => {
+          onChange(val);
+          if (onChangeCustom) {
+            onChangeCustom(createSyntheticEvent(val));
+          }
+        };
 
-          return (
-            <RadioGroup
-              id={name}
-              size={size}
-              value={value || ''}
-              hideLegend={hideLabel}
-              name={name}
-              legend={label}
-              error={error?.message}
-              onChange={handleChange}
-              description={description}
-              className={classNames}
-              readOnly={readOnly}
-            >
-              {children}
-            </RadioGroup>
-          );
-        }}
-      />
-    </div>
+        return (
+          <RadioGroup
+            id={name}
+            size={size}
+            value={value || ''}
+            hideLegend={hideLabel}
+            name={name}
+            legend={label}
+            error={error?.message}
+            onChange={handleChange}
+            description={description}
+            className={className}
+            readOnly={readOnly}
+          >
+            <>{horisontal ? <HStack gap={'space-16'}>{children}</HStack> : { children }}</>
+          </RadioGroup>
+        );
+      }}
+    />
+    // </div>
   );
 };
 
