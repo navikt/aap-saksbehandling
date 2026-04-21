@@ -10,7 +10,7 @@ import { FormField } from 'components/form/FormField';
 import { FieldPath, UseFormReturn } from 'react-hook-form';
 import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
 import { aktiveFiltreringer } from 'components/oppgaveliste/filtrering/filtreringUtils';
-import { NoNavAapOppgaveFilterFilterDtoType } from '@navikt/aap-oppgave-typescript-types';
+import { Køtype } from 'lib/types/oppgaveTypes';
 import { AktivKø } from 'hooks/oppgave/aktivkøHook';
 
 interface Props {
@@ -55,8 +55,7 @@ export const LedigeOppgaverFiltrering = ({
               <BodyShort>Filtre: </BodyShort>
               <Chips size={'small'}>
                 {aktiveFilter.map((filter) => {
-                  return aktivKø.type !== NoNavAapOppgaveFilterFilterDtoType.ALLE_OPPGAVER &&
-                    filter.key === 'behandlingstyper' ? (
+                  return aktivKø.type !== Køtype.ALLE_OPPGAVER && filter.key === 'behandlingstyper' ? (
                     <Chips.Toggle key={`${filter.key}-${filter.value}`} checkmark={false} selected={true}>
                       {filter.label}
                     </Chips.Toggle>
@@ -92,7 +91,7 @@ export const LedigeOppgaverFiltrering = ({
                 <FormField
                   form={form}
                   formField={formFields.behandlingstyper}
-                  readOnly={NoNavAapOppgaveFilterFilterDtoType.ALLE_OPPGAVER !== aktivKø.type}
+                  readOnly={Køtype.ALLE_OPPGAVER !== aktivKø.type}
                 />
               </BoxWrapper>
               <BoxWrapper>

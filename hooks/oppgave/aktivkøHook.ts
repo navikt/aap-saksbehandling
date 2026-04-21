@@ -2,25 +2,25 @@
 
 import { dagerTilMillisekunder } from 'lib/utils/time';
 import { useInnloggetBruker } from 'hooks/BrukerHook';
-import { NoNavAapOppgaveFilterFilterDtoType } from '@navikt/aap-oppgave-typescript-types';
+import { Køtype } from 'lib/types/oppgaveTypes';
 
 const AKTIV_OPPGAVE_KØ_KEY = 'AKTIV_OPPGAVE_KØ_KEY';
 const MAKS_LEVETID = dagerTilMillisekunder(1);
 
 export interface AktivKø {
   id: number;
-  type?: NoNavAapOppgaveFilterFilterDtoType;
+  type?: Køtype;
   timestamp: number;
   user: string | undefined;
 }
 
 export function useLagreAktivKø(): {
-  lagreAktivKø: (id: number, type: NoNavAapOppgaveFilterFilterDtoType | undefined) => void;
+  lagreAktivKø: (id: number, type: Køtype | undefined) => void;
   hentLagretAktivKø: () => AktivKø | undefined;
 } {
   const bruker = useInnloggetBruker();
 
-  const lagreAktivKø = (id: number, type: NoNavAapOppgaveFilterFilterDtoType | undefined) => {
+  const lagreAktivKø = (id: number, type: Køtype | undefined) => {
     const kø: AktivKø = {
       id,
       type,

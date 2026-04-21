@@ -16,7 +16,7 @@ import { useTildelOppgaver } from 'context/oppgave/TildelOppgaverContext';
 import { SaksbehandlerFilterSøk } from 'components/oppgaveliste/filtrering/alleoppgaverfiltrering/SaksbehandlerFilterSøk';
 import { hasProperty } from '@vitest/expect';
 import { AktivKø } from 'hooks/oppgave/aktivkøHook';
-import { NoNavAapOppgaveFilterFilterDtoType } from '@navikt/aap-oppgave-typescript-types';
+import { Køtype } from 'lib/types/oppgaveTypes';
 
 interface Props {
   form: UseFormReturn<FormFieldsFilter>;
@@ -112,8 +112,7 @@ export const AlleOppgaverFiltrering = ({
                 <BodyShort>Filtre: </BodyShort>
                 <Chips size={'small'}>
                   {aktiveFilter.map((filter) =>
-                    aktivKø.type !== NoNavAapOppgaveFilterFilterDtoType.ALLE_OPPGAVER &&
-                    filter.key === 'behandlingstyper' ? (
+                    aktivKø.type !== Køtype.ALLE_OPPGAVER && filter.key === 'behandlingstyper' ? (
                       <Chips.Toggle checkmark={false} selected={true} key={`${filter.key}-${filter.value}`}>
                         {filter.label}
                       </Chips.Toggle>
@@ -155,7 +154,7 @@ export const AlleOppgaverFiltrering = ({
                 <FormField
                   form={form}
                   formField={formFields.behandlingstyper}
-                  readOnly={NoNavAapOppgaveFilterFilterDtoType.ALLE_OPPGAVER !== aktivKø.type}
+                  readOnly={Køtype.ALLE_OPPGAVER !== aktivKø.type}
                 />
               </BoxWrapper>
               <BoxWrapper>
