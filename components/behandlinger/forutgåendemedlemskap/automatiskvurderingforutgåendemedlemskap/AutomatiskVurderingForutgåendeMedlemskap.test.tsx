@@ -12,6 +12,7 @@ const vurdering: AutomatiskLovvalgOgMedlemskapVurdering = {
       opplysning: 'opplysning',
       resultat: true,
       vurdertPeriode: 'INNEVÆRENDE_OG_FORRIGE_MND',
+      visuellTidslinje: [],
     },
   ],
 };
