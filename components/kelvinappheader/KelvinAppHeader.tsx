@@ -141,7 +141,7 @@ export const KelvinAppHeader = ({
       </InternalHeader>
       {søkeresultat && (
         <Theme theme={'dark'}>
-          <Box background={'default'} className={styles.kelvinAppHeaderSearchResult}>
+          <Box background={'neutral-moderateA'} className={styles.kelvinAppHeaderSearchResult}>
             <VStack padding="space-16">
               <HStack justify={'space-between'}>
                 <Heading size="small" spacing>

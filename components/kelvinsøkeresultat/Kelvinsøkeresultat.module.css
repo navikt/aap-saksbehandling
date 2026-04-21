@@ -1,14 +1,15 @@
 .detail {
-  color: var(--ax-neutral-400);
+  color: var(--ax-text-neutral-subtle);
 }
 
 .link {
   font-size: var(--ax-font-size-small);
+  color: var(--ax-text-neutral);
 }
 
 .linkName {
   font-size: var(--ax-font-size-small);
-  color: var(--ax-text-neutral-contrast);
+  color: var(--ax-text-neutral);
 }
 
 .info {

@@ -18,7 +18,7 @@ interface Props {
 export const Kelvinsøkeresultat = ({
   søkeresultat: { oppgaver, saker, kontor, person, behandlingsStatus, harTilgang, harAdressebeskyttelse },
 }: Props) => {
-  if ((saker?.length == 0) && (oppgaver?.length == 0)) {
+  if (saker?.length == 0 && oppgaver?.length == 0) {
     return (
       <HStack>
         <Alert variant={'info'} size={'small'} className={styles.info}>
@@ -29,7 +29,7 @@ export const Kelvinsøkeresultat = ({
   }
 
   return (
-    <VStack gap={"space-8"}>
+    <VStack gap={'space-8'}>
       {!harTilgang && (
         <HStack>
           <Alert variant={'info'} size={'small'} className={styles.info}>
@@ -39,8 +39,8 @@ export const Kelvinsøkeresultat = ({
           </Alert>
         </HStack>
       )}
-      <HStack gap={"space-32"}>
-        <VStack gap={"space-4"}>
+      <HStack gap={'space-32'}>
+        <VStack gap={'space-4'}>
           <Detail className={styles.detail}>Bruker</Detail>
           <VStack gap="space-8">
             {!person?.length ? (
@@ -60,7 +60,7 @@ export const Kelvinsøkeresultat = ({
           </VStack>
         </VStack>
 
-        <VStack gap={"space-4"}>
+        <VStack gap={'space-4'}>
           <Detail className={styles.detail}>Saker</Detail>
           <VStack gap="space-8">
             {!saker?.length ? (
@@ -90,7 +90,7 @@ export const Kelvinsøkeresultat = ({
                 const oppgaveStatus = mapStatus(søk.status);
 
                 return (
-                  <HStack gap={"space-8"} key={index}>
+                  <HStack gap={'space-8'} key={index}>
                     <LenkeHvisHarTilgang
                       className={styles.link}
                       key={`oppgave-resultat-${index}`}
@@ -117,7 +117,7 @@ export const Kelvinsøkeresultat = ({
           </VStack>
         </VStack>
 
-        <VStack gap={"space-4"}>
+        <VStack gap={'space-4'}>
           <Detail className={styles.detail}>Kontor</Detail>
           <VStack gap="space-8">
             {!kontor?.length ? (
@@ -132,7 +132,7 @@ export const Kelvinsøkeresultat = ({
           </VStack>
         </VStack>
 
-        <VStack gap={"space-4"}>
+        <VStack gap={'space-4'}>
           <Detail className={styles.detail}>Status</Detail>
           <VStack gap="space-8">
             {!behandlingsStatus?.length ? (
