@@ -35,7 +35,6 @@ const RadioGroupWrapper = <FormFieldValues extends FieldValues>({
   onChangeCustom,
 }: RadioProps<FormFieldValues>) => {
   return (
-    // <div className={styles.radiowrapper_radiogroup}>
     <Controller
       name={name}
       control={control}
@@ -63,12 +62,11 @@ const RadioGroupWrapper = <FormFieldValues extends FieldValues>({
             className={className}
             readOnly={readOnly}
           >
-            <>{horisontal ? <HStack gap={'space-16'}>{children}</HStack> : { children }}</>
+            <>{horisontal ? <HStack gap={'space-16'}>{children}</HStack> : children}</>
           </RadioGroup>
         );
       }}
     />
-    // </div>
   );
 };
 
