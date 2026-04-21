@@ -147,19 +147,23 @@ export const SykdomsvurderingBrev = ({
           tekst={
             <Box>
               <BodyLong size={'small'}>Melding om innvilgelse skal innholde en beskrivelse av</BodyLong>
-              <List size={'small'}>
-                <List.Item>hvilke opplysninger som er lagt til grunn, eksempelvis fra lege</List.Item>
-                <List.Item>hvilke hovedhensyn som har vært avgjørende for utfallet</List.Item>
-              </List>
+              <Box marginBlock="space-16" asChild>
+                <List size={'small'}>
+                  <List.Item>hvilke opplysninger som er lagt til grunn, eksempelvis fra lege</List.Item>
+                  <List.Item>hvilke hovedhensyn som har vært avgjørende for utfallet</List.Item>
+                </List>
+              </Box>
               <BodyLong size={'small'}>Melding om avslag skal i tillegg inneholde</BodyLong>
-              <List size={'small'}>
-                <List.Item>opplysninger om vilkåret eller vilkårene som er avslått</List.Item>
-                <List.Item>begrunnelse for vilkåret eller vilkårene som er avslått</List.Item>
-                <List.Item>
-                  informasjon om hvilke av sakens opplysninger som har vært avgjørende for at vilkår/ vilkårene er
-                  ansett for ikke å være oppfylt
-                </List.Item>
-              </List>
+              <Box marginBlock="space-16" asChild>
+                <List size={'small'}>
+                  <List.Item>opplysninger om vilkåret eller vilkårene som er avslått</List.Item>
+                  <List.Item>begrunnelse for vilkåret eller vilkårene som er avslått</List.Item>
+                  <List.Item>
+                    informasjon om hvilke av sakens opplysninger som har vært avgjørende for at vilkår/ vilkårene er
+                    ansett for ikke å være oppfylt
+                  </List.Item>
+                </List>
+              </Box>
             </Box>
           }
           defaultOpen={false}
