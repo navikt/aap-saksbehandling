@@ -14,10 +14,45 @@ export function VisuellTidslinjeInnhold({ visuellTidslinje }: Props) {
   const startDate = new Date(Math.min(...datoer.map((d) => d.getTime())));
   const endDate = new Date(Math.max(...datoer.map((d) => d.getTime())));
 
+  const inntektTimeline = visuellTidslinje.filter((periode) => !periode.periodeMangler);
+  const hullTimeline = visuellTidslinje.filter((periode) => periode.periodeMangler);
+
   return (
     <Timeline startDate={startDate} endDate={endDate}>
-      <Timeline.Row label={''}>
-        {visuellTidslinje.map((item, i) => {
+      <Timeline.Row label={'Inntekter'}>
+        {inntektTimeline.map((item, i) => {
+          return (
+            <Timeline.Period
+              key={i}
+              start={new Date(item.periode.fom)}
+              end={new Date(item.periode.tom)}
+              status={item.periodeMangler ? 'danger' : 'success'}
+              statusLabel={'Inntektstidslinje'}
+            >
+              {item.periodeMangler ? (
+                <div>
+                  <div>
+                    <b>{formaterPeriode(item.periode.fom, item.periode.tom)}</b>
+                  </div>
+                  <div>Inntekt mangler</div>
+                </div>
+              ) : (
+                <div>
+                  <div>
+                    <b>{formaterPeriode(item.periode.fom, item.periode.tom)}</b>
+                  </div>
+                  <div>
+                    {item.virksomhetNavn} (org.nr: {item.virksomhetId})
+                  </div>
+                  <div>Inntekt: {item.beloep}</div>
+                </div>
+              )}
+            </Timeline.Period>
+          );
+        })}
+      </Timeline.Row>
+      <Timeline.Row label={'Manglende inntekter'}>
+        {hullTimeline.map((item, i) => {
           return (
             <Timeline.Period
               key={i}
