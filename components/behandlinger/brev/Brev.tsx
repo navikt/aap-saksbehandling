@@ -7,11 +7,11 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { SkriveKlageBrevMedDataFetching } from 'components/behandlinger/brev/skriveBrev/SkriveKlageBrevMedDataFetching';
 
 interface Props {
-  behandlingsReferanse: string;
+  behandlingsreferanse: string;
 }
 
-export const Brev = async ({ behandlingsReferanse }: Props) => {
-  const flyt = await hentFlyt(behandlingsReferanse);
+export const Brev = async ({ behandlingsreferanse }: Props) => {
+  const flyt = await hentFlyt(behandlingsreferanse);
   if (isError(flyt)) {
     return <ApiException apiResponses={[flyt]} />;
   }
@@ -21,7 +21,7 @@ export const Brev = async ({ behandlingsReferanse }: Props) => {
   return (
     <GruppeSteg
       behandlingVersjon={flyt.data.behandlingVersjon}
-      behandlingReferanse={behandlingsReferanse}
+      behandlingReferanse={behandlingsreferanse}
       prosessering={flyt.data.prosessering}
       visning={flyt.data.visning}
       aktivtSteg={flyt.data.aktivtSteg}
@@ -29,13 +29,13 @@ export const Brev = async ({ behandlingsReferanse }: Props) => {
       <StegSuspense>
         {typeBehandling === 'Klage' ? (
           <SkriveKlageBrevMedDataFetching
-            behandlingsReferanse={behandlingsReferanse}
+            behandlingsreferanse={behandlingsreferanse}
             behandlingVersjon={flyt.data.behandlingVersjon}
             aktivtSteg={flyt.data.aktivtSteg}
           />
         ) : (
           <SkriveBrevMedDataFetching
-            behandlingsReferanse={behandlingsReferanse}
+            behandlingsreferanse={behandlingsreferanse}
             behandlingVersjon={flyt.data.behandlingVersjon}
             behandlingstype={typeBehandling}
             aktivtSteg={flyt.data.aktivtSteg}

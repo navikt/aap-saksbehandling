@@ -1,10 +1,10 @@
 'use client';
 
 import { BodyShort, Box, Heading, Link, Page, VStack } from '@navikt/ds-react';
-import { useParams } from 'next/navigation';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 
 const SakIkkeFunnet = () => {
-  const { saksnummer } = useParams<{ saksnummer: string }>();
+  const { saksnummer } = useParamsMedType();
 
   return (
     <Page>

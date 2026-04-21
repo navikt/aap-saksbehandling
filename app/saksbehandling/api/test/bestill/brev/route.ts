@@ -5,7 +5,7 @@ import { logError } from 'lib/serverutlis/logger';
 import { isError, isSuccess } from 'lib/utils/api';
 
 export async function POST(req: NextRequest) {
-  const body: { behandlingReferanse: string } = await req.json();
+  const body: { behandlingsreferanse: string } = await req.json();
 
   const res = await bestillTestBrev(body);
   if (isError(res)) {

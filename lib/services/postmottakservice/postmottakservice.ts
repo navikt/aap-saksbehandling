@@ -20,8 +20,8 @@ import { isError } from 'lib/utils/api';
 const postmottakApiBaseUrl = process.env.POSTMOTTAK_API_BASE_URL;
 const postmottakApiScope = process.env.POSTMOTTAK_API_SCOPE ?? '';
 
-export const hentBehandling = async (behandlingsReferanse: string) => {
-  const url = `${postmottakApiBaseUrl}/api/behandling/${behandlingsReferanse}`;
+export const hentBehandling = async (behandlingsreferanse: string) => {
+  const url = `${postmottakApiBaseUrl}/api/behandling/${behandlingsreferanse}`;
   return await apiFetch<DetaljertBehandlingDto>(url, postmottakApiScope, 'GET');
 };
 export const hentFlyt = async (behandlingsreferanse: string) => {

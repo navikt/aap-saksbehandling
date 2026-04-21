@@ -1,10 +1,11 @@
 'use client';
 
 import { BehandlingFlytOgTilstand, StegGruppe } from 'lib/types/types';
-import { useParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { Stepper } from '@navikt/ds-react';
 import styles from './StegGruppeIndikator.module.css';
 import { mapTilSteggruppeTekst } from 'lib/utils/oversettelser';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 
 interface Props {
   flytRespons: BehandlingFlytOgTilstand;
@@ -13,7 +14,7 @@ interface Props {
 
 export const StegGruppeIndikatorAksel = ({ flytRespons, stegGrupperSomSkalVises }: Props) => {
   const router = useRouter();
-  const params = useParams<{ saksnummer: string; behandlingsreferanse: string; aktivGruppe: string }>();
+  const params = useParamsMedType();
   const { saksnummer, behandlingsreferanse, aktivGruppe } = params;
   const stegGrupper = flytRespons.flyt.filter((gruppe) => stegGrupperSomSkalVises.includes(gruppe.stegGruppe));
   const activeStepIndex = stegGrupper.findIndex((gruppe) => gruppe.stegGruppe === decodeURI(aktivGruppe)) + 1;

@@ -1,4 +1,8 @@
-import { hentMellomlagring, hentSykdomsGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import {
+  hentBehandling,
+  hentMellomlagring,
+  hentSykdomsGrunnlag,
+} from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import {
   finnDiagnoseGrunnlagForSykdom,
   getDefaultOptionsForDiagnosesystem,
@@ -10,14 +14,15 @@ import { skalViseSteg, StegData } from 'lib/utils/steg';
 import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 
 interface Props {
-  behandlingsReferanse: string;
+  behandlingsreferanse: string;
   stegData: StegData;
 }
 
-export const SykdomsvurderingMedDataFetching = async ({ behandlingsReferanse, stegData }: Props) => {
-  const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
-    hentSykdomsGrunnlag(behandlingsReferanse),
-    hentMellomlagring(behandlingsReferanse, Behovstype.AVKLAR_SYKDOM_KODE),
+export const SykdomsvurderingMedDataFetching = async ({ behandlingsreferanse, stegData }: Props) => {
+  const [grunnlag, initialMellomlagretVurdering, behandling] = await Promise.all([
+    hentSykdomsGrunnlag(behandlingsreferanse),
+    hentMellomlagring(behandlingsreferanse, Behovstype.AVKLAR_SYKDOM_KODE),
+    hentBehandling(behandlingsreferanse),
   ]);
   const typeBehandling = stegData.typeBehandling;
 
@@ -34,6 +39,12 @@ export const SykdomsvurderingMedDataFetching = async ({ behandlingsReferanse, st
     return null;
   }
 
+  const vurderingsbehov =
+    behandling.type === 'SUCCESS'
+      ? behandling.data.vurderingsbehovOgÅrsaker.flatMap((behovOgÅrsak) => behovOgÅrsak.vurderingsbehov)
+      : [];
+  const erOvergangArbeid = vurderingsbehov.some((x) => x.type === 'OVERGANG_ARBEID');
+
   return (
     <Sykdomsvurdering
       grunnlag={grunnlag.data}
@@ -42,6 +53,7 @@ export const SykdomsvurderingMedDataFetching = async ({ behandlingsReferanse, st
       diagnoseDefaultOptions={diagnoseDefaultOptions}
       typeBehandling={typeBehandling}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
+      erOvergangArbeid={erOvergangArbeid}
     />
   );
 };

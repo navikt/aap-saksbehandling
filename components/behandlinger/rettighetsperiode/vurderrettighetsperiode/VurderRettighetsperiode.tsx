@@ -1,6 +1,6 @@
 'use client';
 
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
@@ -38,7 +38,7 @@ export const VurderRettighetsperiode = ({
   behandlingVersjon,
   initialMellomlagretVurdering,
 }: Props) => {
-  const behandlingsReferanse = useBehandlingsReferanse();
+  const { behandlingsreferanse } = useParamsMedType();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_RETTIGHETSPERIODE');
 
@@ -137,7 +137,7 @@ export const VurderRettighetsperiode = ({
               harRett: data.harRett,
             },
           },
-          referanse: behandlingsReferanse,
+          referanse: behandlingsreferanse,
         },
         () => {
           visningActions.onBekreftClick();
@@ -160,6 +160,7 @@ export const VurderRettighetsperiode = ({
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
       vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
+      besluttetAv={grunnlag?.vurdering?.besluttetAv}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() =>

@@ -2,7 +2,7 @@
 
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { Behovstype, JaEllerNei } from 'lib/utils/form';
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { MellomlagretVurdering, PeriodisertLovvalgMedlemskapGrunnlag } from 'lib/types/types';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
@@ -47,7 +47,7 @@ export const LovvalgOgMedlemskapPeriodisert = ({
   initialMellomlagretVurdering,
   behovstype,
 }: Props) => {
-  const behandlingsReferanse = useBehandlingsReferanse();
+  const { behandlingsreferanse } = useParamsMedType();
   const { løsPeriodisertBehovOgGåTilNesteSteg, status, løsBehovOgGåTilNesteStegError, isLoading } =
     useLøsBehovOgGåTilNesteSteg('VURDER_LOVVALG');
 
@@ -100,7 +100,7 @@ export const LovvalgOgMedlemskapPeriodisert = ({
     }
     const losning: LøsningerForPerioder = {
       behandlingVersjon: behandlingVersjon,
-      referanse: behandlingsReferanse,
+      referanse: behandlingsreferanse,
 
       behov: {
         behovstype: behovstype,

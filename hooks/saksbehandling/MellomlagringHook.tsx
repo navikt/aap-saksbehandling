@@ -2,7 +2,7 @@
 
 import { Behovstype } from 'lib/utils/form';
 import { clientLagreMellomlagring, clientSlettMellomlagring } from 'lib/clientApi';
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { isSuccess } from 'lib/utils/api';
 import { MellomlagretVurdering } from 'lib/types/types';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -20,7 +20,7 @@ export function useMellomlagring<T extends object>(
   mellomlagretVurdering?: MellomlagretVurdering;
   nullstillMellomlagretVurdering: () => void;
 } {
-  const behandlingsReferanse = useBehandlingsReferanse();
+  const { behandlingsreferanse } = useParamsMedType();
   const { flyt } = useRequiredFlyt();
   const { refetchBekreftVurderingerGrunnlagClient } = useBekreftVurderingerGrunnlag();
 
@@ -32,7 +32,7 @@ export function useMellomlagring<T extends object>(
     async (vurdering: object) => {
       const res = await clientLagreMellomlagring({
         avklaringsbehovkode: behovstype,
-        behandlingsReferanse: behandlingsReferanse,
+        behandlingsReferanse: behandlingsreferanse,
         data: JSON.stringify(vurdering),
       });
 
@@ -44,7 +44,7 @@ export function useMellomlagring<T extends object>(
         }
       }
     },
-    [behovstype, behandlingsReferanse, flyt.aktivtSteg, refetchBekreftVurderingerGrunnlagClient]
+    [behovstype, behandlingsreferanse, flyt.aktivtSteg, refetchBekreftVurderingerGrunnlagClient]
   );
 
   const debouncedLagreMellomlagring = useMemo(() => debounce(lagreMellomlagring, 2000), [lagreMellomlagring]);
@@ -90,7 +90,7 @@ export function useMellomlagring<T extends object>(
   async function slettMellomlagring(callback?: () => void) {
     debouncedLagreMellomlagring.cancel();
     const res = await clientSlettMellomlagring({
-      behandlingsreferanse: behandlingsReferanse,
+      behandlingsreferanse: behandlingsreferanse,
       behovstype: behovstype,
     });
 

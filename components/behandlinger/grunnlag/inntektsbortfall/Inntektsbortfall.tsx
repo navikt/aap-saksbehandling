@@ -3,7 +3,7 @@
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import styles from './Inntektsbortfall.module.css';
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { FormEvent } from 'react';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
@@ -52,7 +52,7 @@ export const Inntektsbortfall = ({
   grunnlag: { grunnlag, vurdering },
   initialMellomlagretVurdering,
 }: Props) => {
-  const behandlingsReferanse = useBehandlingsReferanse();
+  const { behandlingsreferanse } = useParamsMedType();
   const { status, løsBehovOgGåTilNesteSteg, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_INNTEKTSBORTFALL');
 
@@ -118,7 +118,7 @@ export const Inntektsbortfall = ({
                   rettTilUttak: data.rettTilUttak === JaEllerNei.Ja,
                 },
               },
-              referanse: behandlingsReferanse,
+              referanse: behandlingsreferanse,
             },
             () => {
               visningActions.onBekreftClick();

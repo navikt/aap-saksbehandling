@@ -6,11 +6,11 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 
 interface Props {
-  behandlingsReferanse: string;
+  behandlingsreferanse: string;
 }
 
-export const Søknad = async ({ behandlingsReferanse }: Props) => {
-  const flyt = await hentFlyt(behandlingsReferanse);
+export const Søknad = async ({ behandlingsreferanse }: Props) => {
+  const flyt = await hentFlyt(behandlingsreferanse);
   if (isError(flyt)) {
     return <ApiException apiResponses={[flyt]} />;
   }
@@ -18,14 +18,14 @@ export const Søknad = async ({ behandlingsReferanse }: Props) => {
   return (
     <GruppeSteg
       behandlingVersjon={flyt.data.behandlingVersjon}
-      behandlingReferanse={behandlingsReferanse}
+      behandlingReferanse={behandlingsreferanse}
       prosessering={flyt.data.prosessering}
       visning={flyt.data.visning}
       aktivtSteg={flyt.data.aktivtSteg}
     >
       <StegSuspense>
         <TrekkSøknadMedDatafetching
-          behandlingsreferanse={behandlingsReferanse}
+          behandlingsreferanse={behandlingsreferanse}
           readOnly={flyt.data.visning.saksbehandlerReadOnly}
           behandlingVersjon={flyt.data.behandlingVersjon}
         />

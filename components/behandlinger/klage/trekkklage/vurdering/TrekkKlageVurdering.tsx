@@ -2,7 +2,7 @@
 
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { MellomlagretVurdering, TrekkKlageGrunnlag, TypeBehandling } from 'lib/types/types';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormEvent } from 'react';
@@ -30,7 +30,7 @@ interface FormFields {
 type DraftFormFields = Partial<FormFields>;
 
 export const TrekkKlageVurdering = ({ behandlingVersjon, readOnly, grunnlag, initialMellomlagretVurdering }: Props) => {
-  const behandlingsreferanse = useBehandlingsReferanse();
+  const { behandlingsreferanse } = useParamsMedType();
 
   const { løsBehovOgGåTilNesteSteg, status, løsBehovOgGåTilNesteStegError, isLoading } =
     useLøsBehovOgGåTilNesteSteg('TREKK_KLAGE');

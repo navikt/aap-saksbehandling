@@ -15,17 +15,17 @@ import { skrivBrevBehovstype } from 'components/brev/BrevKortMedDataFetching';
 import { BrevOppsummering } from 'components/behandlinger/brev/skriveBrev/BrevOppsummering';
 import { mapGrunnlagTilMottakere } from 'lib/utils/brevmottakere';
 import { isProd } from 'lib/utils/environment';
-import { BrevbyggerNy } from 'components/brevbygger/brevbyggerNy/BrevbyggerNy';
+import { Brevbygger } from 'components/brevbygger/Brevbygger';
 
 interface Props {
-  behandlingsReferanse: string;
+  behandlingsreferanse: string;
   behandlingVersjon: number;
   aktivtSteg: StegType;
   behandlingstype: TypeBehandling;
 }
 
 export const SkriveBrevMedDataFetching = async ({
-  behandlingsReferanse,
+  behandlingsreferanse,
   behandlingVersjon,
   aktivtSteg,
   behandlingstype,
@@ -37,11 +37,11 @@ export const SkriveBrevMedDataFetching = async ({
     fullmektigGrunnlag,
     aktivitetsplikt11_7Grunnlag,
   ] = await Promise.all([
-    hentBrevGrunnlag(behandlingsReferanse),
-    hentRefusjonGrunnlag(behandlingsReferanse),
-    hentSykdomsvurderingBrevGrunnlag(behandlingsReferanse),
-    hentFullmektigGrunnlag(behandlingsReferanse),
-    hentAktivitetsplikt11_7Grunnlag(behandlingsReferanse),
+    hentBrevGrunnlag(behandlingsreferanse),
+    hentRefusjonGrunnlag(behandlingsreferanse),
+    hentSykdomsvurderingBrevGrunnlag(behandlingsreferanse),
+    hentFullmektigGrunnlag(behandlingsreferanse),
+    hentAktivitetsplikt11_7Grunnlag(behandlingsreferanse),
   ]);
   if (
     isError(refusjonGrunnlag) ||
@@ -95,7 +95,7 @@ export const SkriveBrevMedDataFetching = async ({
         />
       )}
       {brukNyBrevbygger && (
-        <BrevbyggerNy
+        <Brevbygger
           brevmal={brev.brevmal}
           brevdata={brev.brevdata}
           referanse={brev.brevbestillingReferanse}

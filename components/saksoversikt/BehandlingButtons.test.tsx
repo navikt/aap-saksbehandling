@@ -116,7 +116,6 @@ describe('BehandlingButtons', () => {
         oppgaveInfo={undefined}
       />
     );
-
     const behandleknapp = screen.queryByText('Behandle');
     expect(behandleknapp).not.toBeInTheDocument();
 
@@ -125,5 +124,35 @@ describe('BehandlingButtons', () => {
 
     const visknapp = screen.getByText('Vis');
     expect(visknapp).toBeInTheDocument();
+  });
+
+  it('ikke vis behandle-knapp når henting av oppgave feilet', () => {
+    const sak = lagSak([lagBehandling({ status: 'UTREDES', referanse: 'åpen-1', opprettet: '2026-01-02T10:00:00' })]);
+
+    const behandling: BehandlingsflytEllerPostmottakBehandling = {
+      behandling: sak.behandlinger[0],
+      kilde: 'BEHANDLINGSFLYT',
+    };
+
+    render(
+      <BehandlingButtons
+        sak={sak}
+        behandling={behandling}
+        setFeilmelding={vi.fn()}
+        innloggetBrukerIdent={'z123'}
+        oppgaveInfo={{
+          feilmelding: 'noe gikk galt',
+          id: null,
+          reservertAvIdent: null,
+          reservertAvNavn: null,
+          versjon: null,
+        }}
+      />
+    );
+    const behandleknapp = screen.queryByText('Behandle');
+    expect(behandleknapp).not.toBeInTheDocument();
+
+    const åpneknapp = screen.getByText('Åpne');
+    expect(åpneknapp).toBeInTheDocument();
   });
 });

@@ -7,7 +7,7 @@ import { addDays, isBefore, parse, startOfDay } from 'date-fns';
 import { formaterDatoForBackend, formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
 import { useSak } from 'hooks/SakHook';
 import { FormField, ValuePair } from 'components/form/FormField';
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
 import { Aktivitetsplikt11_7Grunnlag, Aktivitetsplikt11_7Vurdering, MellomlagretVurdering } from 'lib/types/types';
@@ -38,7 +38,7 @@ type DraftFormFields = Partial<FormFields>;
 
 export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMellomlagretVurdering }: Props) => {
   const { sak } = useSak();
-  const behandlingsreferanse = useBehandlingsReferanse();
+  const { behandlingsreferanse } = useParamsMedType();
   const vedtatteVurderinger = grunnlag?.vedtatteVurderinger;
 
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =

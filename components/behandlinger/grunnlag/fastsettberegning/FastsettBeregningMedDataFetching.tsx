@@ -9,14 +9,14 @@ import { Behovstype } from 'lib/utils/form';
 import { skalViseSteg, StegData } from 'lib/utils/steg';
 
 interface Props {
-  behandlingsReferanse: string;
+  behandlingsreferanse: string;
   stegData: StegData;
 }
 
-export const FastsettBeregningMedDataFetching = async ({ behandlingsReferanse, stegData }: Props) => {
+export const FastsettBeregningMedDataFetching = async ({ behandlingsreferanse, stegData }: Props) => {
   const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
-    hentBeregningstidspunktVurdering(behandlingsReferanse),
-    hentMellomlagring(behandlingsReferanse, Behovstype.FASTSETT_BEREGNINGSTIDSPUNKT_KODE),
+    hentBeregningstidspunktVurdering(behandlingsreferanse),
+    hentMellomlagring(behandlingsreferanse, Behovstype.FASTSETT_BEREGNINGSTIDSPUNKT_KODE),
   ]);
 
   if (isError(grunnlag)) {

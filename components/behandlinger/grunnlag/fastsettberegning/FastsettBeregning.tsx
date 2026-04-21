@@ -9,7 +9,7 @@ import {
 } from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { isBefore, parse } from 'date-fns';
 import { erDatoFoerDato, erDatoIFremtiden, validerDato } from 'lib/validation/dateValidation';
 import styles from './FastsettBeregning.module.css';
@@ -40,7 +40,7 @@ interface FormFields {
 type DraftFormFields = Partial<FormFields>;
 
 export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly, initialMellomlagretVurdering }: Props) => {
-  const behandlingsReferanse = useBehandlingsReferanse();
+  const { behandlingsreferanse } = useParamsMedType();
   const { sak } = useSak();
 
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
@@ -132,7 +132,7 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly, initi
               ytterligereNedsattBegrunnelse: data?.ytterligereNedsattArbeidsevneDatobegrunnelse,
             },
           },
-          referanse: behandlingsReferanse,
+          referanse: behandlingsreferanse,
         },
         () => {
           visningActions.onBekreftClick();

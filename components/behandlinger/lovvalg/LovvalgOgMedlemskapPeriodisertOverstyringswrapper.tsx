@@ -11,7 +11,7 @@ import { Behovstype } from 'lib/utils/form';
 import { LovvalgOgMedlemskapPeriodisert } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/LovvalgOgMedlemskapPeriodisert';
 
 interface Props {
-  behandlingsReferanse: string;
+  behandlingsreferanse: string;
   grunnlag: PeriodisertLovvalgMedlemskapGrunnlag;
   behandlingVersjon: number;
   readOnly: boolean;

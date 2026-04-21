@@ -384,3 +384,98 @@ describe('Delmaler med valg', () => {
     expect(screen.queryByText('Du må velge et alternativ')).not.toBeInTheDocument();
   });
 });
+
+describe('Delmaler med fritekst', () => {
+  const brevmal: BrevmalType = {
+    ...sanityAttrs,
+    _id: 'brevmal-id',
+    beskrivelse: 'En beskrivelse',
+    overskrift: 'En overskrift',
+    journalposttittel: 'jp-tittel',
+    kanSendesAutomatisk: false,
+    delmaler: [valgfriDelmal],
+  };
+
+  const brevdataMedValgtDelmal = { ...brevdata, delmaler: [{ id: valgfriDelmal.delmal._id }] };
+
+  test('viser "Legg til fritekst"-knapp når delmal er valgt og ingen fritekst finnes fra før', () => {
+    render(
+      <Brevbygger
+        referanse={'1234'}
+        brevmal={JSON.stringify(brevmal)}
+        brevdata={brevdataMedValgtDelmal}
+        behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
+        mottaker={{ ident: '1234', navn: 'Navn' }}
+        behandlingVersjon={1}
+        readOnly={false}
+      />
+    );
+    expect(screen.getByRole('button', { name: 'Legg til fritekst' })).toBeVisible();
+    expect(screen.queryByRole('textbox', { name: 'Fritekst' })).not.toBeInTheDocument();
+  });
+
+  test('viser fritekstfelt og "Slett fritekst"-knapp etter klikk på "Legg til fritekst"', async () => {
+    render(
+      <Brevbygger
+        referanse={'1234'}
+        brevmal={JSON.stringify(brevmal)}
+        brevdata={brevdataMedValgtDelmal}
+        behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
+        mottaker={{ ident: '1234', navn: 'Navn' }}
+        behandlingVersjon={1}
+        readOnly={false}
+      />
+    );
+    await user.click(screen.getByRole('button', { name: 'Legg til fritekst' }));
+    expect(screen.getByRole('textbox', { name: 'Fritekst' })).toBeVisible();
+    expect(screen.getByRole('button', { name: 'Slett fritekst' })).toBeVisible();
+  });
+
+  test('"Slett fritekst" fjerner fritekstfeltet, tømmer innholdet og viser "Legg til fritekst" igjen', async () => {
+    render(
+      <Brevbygger
+        referanse={'1234'}
+        brevmal={JSON.stringify(brevmal)}
+        brevdata={brevdataMedValgtDelmal}
+        behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
+        mottaker={{ ident: '1234', navn: 'Navn' }}
+        behandlingVersjon={1}
+        readOnly={false}
+      />
+    );
+    await user.click(screen.getByRole('button', { name: 'Legg til fritekst' }));
+    await user.type(screen.getByRole('textbox', { name: 'Fritekst' }), 'Noe tekst');
+    await user.click(screen.getByRole('button', { name: 'Slett fritekst' }));
+
+    expect(screen.queryByRole('textbox', { name: 'Fritekst' })).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Legg til fritekst' })).toBeVisible();
+
+    await user.click(screen.getByRole('button', { name: 'Legg til fritekst' }));
+    expect(screen.getByRole('textbox', { name: 'Fritekst' })).toHaveValue('');
+  });
+
+  test('viser fritekstfelt direkte når brevdata inneholder eksisterende fritekst', () => {
+    render(
+      <Brevbygger
+        referanse={'1234'}
+        brevmal={JSON.stringify(brevmal)}
+        brevdata={{
+          ...brevdataMedValgtDelmal,
+          fritekster: [
+            {
+              fritekst: JSON.stringify({ tekst: 'Eksisterende fritekst' }),
+              parentId: valgfriDelmal.delmal._id,
+              key: 'teksteditor-key',
+            },
+          ],
+        }}
+        behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
+        mottaker={{ ident: '1234', navn: 'Navn' }}
+        behandlingVersjon={1}
+        readOnly={false}
+      />
+    );
+    expect(screen.getByRole('textbox', { name: 'Fritekst' })).toBeVisible();
+    expect(screen.getByText('Eksisterende fritekst')).toBeVisible();
+  });
+});

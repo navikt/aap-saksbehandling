@@ -2,7 +2,7 @@
 
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { Behovstype } from 'lib/utils/form';
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import {
   BeregningTidspunktGrunnlag,
   MellomlagretVurdering,
@@ -54,7 +54,7 @@ export const ForutgåendeMedlemskapPeriodisert = ({
   behovstype,
   beregningstidspunktGrunnlag,
 }: Props) => {
-  const behandlingsReferanse = useBehandlingsReferanse();
+  const { behandlingsreferanse } = useParamsMedType();
   const { løsPeriodisertBehovOgGåTilNesteSteg, status, løsBehovOgGåTilNesteStegError, isLoading } =
     useLøsBehovOgGåTilNesteSteg('VURDER_MEDLEMSKAP');
 
@@ -105,7 +105,7 @@ export const ForutgåendeMedlemskapPeriodisert = ({
     }
     const losning: LøsningerForPerioder = {
       behandlingVersjon: behandlingVersjon,
-      referanse: behandlingsReferanse,
+      referanse: behandlingsreferanse,
 
       behov: {
         behovstype: behovstype,

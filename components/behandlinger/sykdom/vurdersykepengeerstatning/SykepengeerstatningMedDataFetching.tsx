@@ -9,14 +9,14 @@ import { Sykepengeerstatning } from 'components/behandlinger/sykdom/vurdersykepe
 import { skalViseSteg, StegData } from 'lib/utils/steg';
 
 interface Props {
-  behandlingsReferanse: string;
+  behandlingsreferanse: string;
   stegData: StegData;
 }
 
-export const SykepengeerstatningMedDataFetching = async ({ behandlingsReferanse, stegData }: Props) => {
+export const SykepengeerstatningMedDataFetching = async ({ behandlingsreferanse, stegData }: Props) => {
   const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
-    hentSykepengerErstatningGrunnlag(behandlingsReferanse),
-    hentMellomlagring(behandlingsReferanse, Behovstype.VURDER_SYKEPENGEERSTATNING_KODE),
+    hentSykepengerErstatningGrunnlag(behandlingsreferanse),
+    hentMellomlagring(behandlingsreferanse, Behovstype.VURDER_SYKEPENGEERSTATNING_KODE),
   ]);
 
   if (isError(grunnlag)) {

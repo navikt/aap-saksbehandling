@@ -6,7 +6,7 @@ import { FormField } from 'components/form/FormField';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { FormEvent } from 'react';
 import { Behovstype } from 'lib/utils/form';
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { SamordningUføreTabell } from 'components/behandlinger/samordning/samordninguføre/SamordningUføreTabell';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { format, parse } from 'date-fns';
@@ -35,7 +35,7 @@ interface SamordnetUførePeriode {
 type DraftFormFields = Partial<SamordningUføreFormFields>;
 
 export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly, initialMellomlagretVurdering }: Props) => {
-  const behandlingsreferanse = useBehandlingsReferanse();
+  const { behandlingsreferanse } = useParamsMedType();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('SAMORDNING_UFØRE');
 

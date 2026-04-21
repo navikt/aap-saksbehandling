@@ -9,7 +9,7 @@ import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } fro
 import { FormField } from 'components/form/FormField';
 import { formaterPeriode } from 'lib/utils/date';
 import { FormEvent } from 'react';
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
@@ -34,7 +34,7 @@ export const SamordningTjenestePensjon = ({
   readOnly,
   initialMellomlagretVurdering,
 }: Props) => {
-  const behandlingsReferanse = useBehandlingsReferanse();
+  const { behandlingsreferanse } = useParamsMedType();
   const { løsBehovOgGåTilNesteSteg, status, løsBehovOgGåTilNesteStegError, isLoading } = useLøsBehovOgGåTilNesteSteg(
     'SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV'
   );
@@ -87,7 +87,7 @@ export const SamordningTjenestePensjon = ({
               harKrav: data.skalEtterbetalingHoldesIgjen === JaEllerNei.Ja,
             },
           },
-          referanse: behandlingsReferanse,
+          referanse: behandlingsreferanse,
         },
         () => {
           visningActions.onBekreftClick();

@@ -31,7 +31,7 @@ import {
   tidligereVurderingErOppfylt,
   tomEtableringAvEgenVirksomhetVurdering,
 } from 'components/behandlinger/sykdom/etableringegenvirksomhet/etablering-av-egen-virksomhet-utils';
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 import { EtableringEgenVirksomhetTidligereVurdering } from 'components/behandlinger/sykdom/etableringegenvirksomhet/EtableringAvEgenVirksomhetTidligereVurdering';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
@@ -67,7 +67,7 @@ export const EtableringAvEgenVirksomhet = ({
   grunnlag,
   behandlingVersjon,
 }: Props) => {
-  const behandlingsReferanse = useBehandlingsReferanse();
+  const { behandlingsreferanse } = useParamsMedType();
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
@@ -152,7 +152,7 @@ export const EtableringAvEgenVirksomhet = ({
               return mapEtableringEgenVirksomhetVurderingTilDto(vurdering, data.virksomhetNavn!, tilDato);
             }),
           },
-          referanse: behandlingsReferanse,
+          referanse: behandlingsreferanse,
         },
         () => {
           nullstillMellomlagretVurdering();

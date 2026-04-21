@@ -13,7 +13,7 @@ import { ForutgåendeMedlemskapPeriodisert } from 'components/behandlinger/forut
 import { Behovstype } from 'lib/utils/form';
 
 interface Props {
-  behandlingsReferanse: string;
+  behandlingsreferanse: string;
   behandlingVersjon: number;
   readOnly: boolean;
   automatiskVurdering: AutomatiskLovvalgOgMedlemskapVurdering;

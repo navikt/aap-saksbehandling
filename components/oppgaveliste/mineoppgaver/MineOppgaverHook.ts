@@ -8,6 +8,7 @@ import {
 } from '@navikt/aap-oppgave-typescript-types';
 import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
 import { useDebouncedValue } from 'hooks/useDebouncedValueHook';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 const oppgaveStatus = {
   VENT: (oppgave: Oppgave) => !!oppgave.påVentTil,
@@ -26,12 +27,13 @@ interface Props {
 }
 
 export const useFiltrerteOppgaver = ({ oppgaver, filter }: Props) => {
+  const tilbakekrevingBelopFilter = useFeatureFlag('TilbakekrevingBelopFilter');
   const debouncedFilters = useDebouncedValue(filter, 300);
   return useMemo(() => {
     const filtrerOppgave = (oppgave: Oppgave) => {
       const dato = formaterDatoForFrontend(oppgave.behandlingOpprettet);
 
-      const { behandlingOpprettetFom, behandlingOpprettetTom, avklaringsbehov, årsaker, behandlingstyper, statuser } =
+      const { behandlingOpprettetFom, behandlingOpprettetTom, avklaringsbehov, årsaker, behandlingstyper, statuser, tilbakekrevingBeløpFom, tilbakekrevingBeløpTom } =
         debouncedFilters;
 
       if (behandlingOpprettetFom && !erDatoFoerDato(formaterDatoForFrontend(behandlingOpprettetFom), dato)) {
@@ -54,11 +56,27 @@ export const useFiltrerteOppgaver = ({ oppgaver, filter }: Props) => {
         return false;
       }
 
+      if (tilbakekrevingBelopFilter) {
+        if (tilbakekrevingBeløpFom) {
+          const beløp = oppgave.tilbakekrevingsVarsDto?.tilbakekrevings_beløp;
+          if (beløp == null || beløp < Number(tilbakekrevingBeløpFom)) {
+            return false;
+          }
+        }
+
+        if (tilbakekrevingBeløpTom) {
+          const beløp = oppgave.tilbakekrevingsVarsDto?.tilbakekrevings_beløp;
+          if (beløp == null || beløp > Number(tilbakekrevingBeløpTom)) {
+            return false;
+          }
+        }
+      }
+
       return !(
         statuser?.length && !statuser.some((status) => oppgaveStatus[status as keyof typeof oppgaveStatus]?.(oppgave))
       );
     };
 
     return oppgaver.filter(filtrerOppgave);
-  }, [oppgaver, debouncedFilters]);
+  }, [oppgaver, debouncedFilters, tilbakekrevingBelopFilter]);
 };

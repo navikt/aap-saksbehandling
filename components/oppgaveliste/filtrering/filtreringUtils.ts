@@ -6,10 +6,6 @@ import {
 } from 'lib/utils/oversettelser';
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import { isLocal, isProd } from 'lib/utils/environment';
-
-// TODO: Dette her er ikke en god løsning og må fikses. Se https://jira.adeo.no/browse/AAP-1443
-export const ALLE_OPPGAVER_ID = isProd() || isLocal() ? 8 : 27; // Denne er definert i aap-oppgave
 
 export function aktiveFiltreringer(form: FormFieldsFilter) {
   const aktiveFilter: { key: keyof FormFieldsFilter; value: string; label: string }[] = [];
@@ -71,6 +67,22 @@ export function aktiveFiltreringer(form: FormFieldsFilter) {
         key: key as keyof FormFieldsFilter,
         value: value,
         label: `Behandling opprettet til: ${formaterDatoForFrontend(value)}`,
+      });
+    }
+
+    if (key === 'tilbakekrevingBeløpFom' && value) {
+      aktiveFilter.push({
+        key: key as keyof FormFieldsFilter,
+        value: value,
+        label: `Beløp fra: ${value}`,
+      });
+    }
+
+    if (key === 'tilbakekrevingBeløpTom' && value) {
+      aktiveFilter.push({
+        key: key as keyof FormFieldsFilter,
+        value: value,
+        label: `Beløp til: ${value}`,
       });
     }
   });

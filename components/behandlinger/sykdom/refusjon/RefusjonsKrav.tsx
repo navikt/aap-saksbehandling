@@ -9,7 +9,7 @@ import { clientHentAlleNavenheter } from 'lib/clientApi';
 import { isError } from 'lib/utils/api';
 
 import { FormFields } from 'components/behandlinger/sykdom/refusjon/Refusjon';
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 
 import { Sak } from 'context/saksbehandling/SakContext';
 
@@ -21,7 +21,7 @@ interface Props {
 
 export const Refusjonskrav = ({ form, readOnly }: Props) => {
   const { fields, append, remove } = useFieldArray({ name: 'refusjoner', control: form.control });
-  const behandlingsreferanse = useBehandlingsReferanse();
+  const { behandlingsreferanse } = useParamsMedType();
 
   const kontorSøk = async (input: string) => {
     if (input.length <= 2) {

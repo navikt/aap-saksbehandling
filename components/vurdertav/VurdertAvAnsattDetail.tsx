@@ -21,17 +21,23 @@ export const VurdertAvAnsattDetail = ({ vurdertAv, variant }: Props) => {
   }
 
   return (
-    <VStack align="end">
+    <>
       {variant == 'VURDERING' && (
-        <Detail>{`Vurdert av ${utledVurdertAv(vurdertAv)}, ${vurdertAv?.dato ? formaterDatoForFrontend(vurdertAv.dato) : ''}`}</Detail>
+        <Detail>
+          {`Vurdert av ${utledVurdertAv(vurdertAv)}, ${vurdertAv?.dato ? formaterDatoForFrontend(vurdertAv.dato) : ''}`}
+        </Detail>
       )}
       {variant == 'KVALITETSSIKRER' && (
-        <Detail>{`Kvalitetssikret av ${utledVurdertAv(vurdertAv)}, ${vurdertAv?.dato ? formaterDatoForFrontend(vurdertAv.dato) : ''}`}</Detail>
+        <Detail>
+          {`${vurdertAv.erRetur ? 'Returnert' : 'Kvalitetssikret'} av ${utledVurdertAv(vurdertAv)}, ${vurdertAv?.dato ? formaterDatoForFrontend(vurdertAv.dato) : ''}`}
+        </Detail>
       )}
       {variant == 'BESLUTTER' && (
-        <Detail>{`Besluttet av ${utledVurdertAv(vurdertAv)}, ${vurdertAv?.dato ? formaterDatoForFrontend(vurdertAv.dato) : ''}`}</Detail>
+        <Detail>
+          {`${vurdertAv.erRetur ? 'Returnert' : 'Besluttet'} av ${utledVurdertAv(vurdertAv)}, ${vurdertAv?.dato ? formaterDatoForFrontend(vurdertAv.dato) : ''}`}
+        </Detail>
       )}
-    </VStack>
+    </>
   );
 };
 

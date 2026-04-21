@@ -6,10 +6,10 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { TilkjentMedDataFetching } from 'components/behandlinger/tilkjentytelse/tilkjent/TilkjentMedDataFetching';
 
 interface Props {
-  behandlingsReferanse: string;
+  behandlingsreferanse: string;
 }
-export const TilkjentYtelse = async ({ behandlingsReferanse }: Props) => {
-  const flyt = await hentFlyt(behandlingsReferanse);
+export const TilkjentYtelse = async ({ behandlingsreferanse }: Props) => {
+  const flyt = await hentFlyt(behandlingsreferanse);
   if (isError(flyt)) {
     return <ApiException apiResponses={[flyt]} />;
   }
@@ -17,13 +17,13 @@ export const TilkjentYtelse = async ({ behandlingsReferanse }: Props) => {
   return (
     <GruppeSteg
       behandlingVersjon={flyt.data.behandlingVersjon}
-      behandlingReferanse={behandlingsReferanse}
+      behandlingReferanse={behandlingsreferanse}
       prosessering={flyt.data.prosessering}
       visning={flyt.data.visning}
       aktivtSteg={flyt.data.aktivtSteg}
     >
       <StegSuspense>
-        <TilkjentMedDataFetching behandlingsReferanse={behandlingsReferanse} />
+        <TilkjentMedDataFetching behandlingsreferanse={behandlingsreferanse} />
       </StegSuspense>
     </GruppeSteg>
   );

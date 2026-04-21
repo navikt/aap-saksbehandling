@@ -1,7 +1,7 @@
 'use client';
 
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { MellomlagretVurdering, PåklagetBehandlingGrunnlag, TypeBehandling } from 'lib/types/types';
 import { VelgPåklagetVedtakRadioTable } from 'components/behandlinger/klage/formkrav/påklagetbehandling/VelgPåklagetVedtakRadioTable';
 import { Controller, useForm } from 'react-hook-form';
@@ -26,7 +26,7 @@ interface FormFields {
 type DraftFormFields = Partial<FormFields>;
 
 export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, initialMellomlagretVurdering }: Props) => {
-  const behandlingsreferanse = useBehandlingsReferanse();
+  const { behandlingsreferanse } = useParamsMedType();
 
   const { løsBehovOgGåTilNesteSteg, status, løsBehovOgGåTilNesteStegError, isLoading } =
     useLøsBehovOgGåTilNesteSteg('PÅKLAGET_BEHANDLING');

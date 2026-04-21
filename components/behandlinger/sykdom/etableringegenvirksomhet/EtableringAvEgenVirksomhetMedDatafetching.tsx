@@ -9,14 +9,14 @@ import { StegData } from 'lib/utils/steg';
 import { Behovstype } from 'lib/utils/form';
 
 interface Props {
-  behandlingsReferanse: string;
+  behandlingsreferanse: string;
   stegData: StegData;
 }
 
-export const EtableringAvEgenVirksomhetMedDatafetching = async ({ behandlingsReferanse, stegData }: Props) => {
+export const EtableringAvEgenVirksomhetMedDatafetching = async ({ behandlingsreferanse, stegData }: Props) => {
   const [grunnlag, mellomlagring] = await Promise.all([
-    hentEtableringEgenVirksomhetGrunnlag(behandlingsReferanse),
-    hentMellomlagring(behandlingsReferanse, Behovstype.ETABLERING_EGEN_VIRKSOMHET_KODE),
+    hentEtableringEgenVirksomhetGrunnlag(behandlingsreferanse),
+    hentMellomlagring(behandlingsreferanse, Behovstype.ETABLERING_EGEN_VIRKSOMHET_KODE),
   ]);
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;

@@ -2,7 +2,7 @@
 
 import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { Behovstype } from 'lib/utils/form';
 import { FormEvent } from 'react';
@@ -22,7 +22,7 @@ interface FormFields {
 }
 
 export const AvbrytRevurderingVurdering = ({ grunnlag, readOnly, behandlingVersjon }: Props) => {
-  const behandlingsReferanse = useBehandlingsReferanse();
+  const { behandlingsreferanse } = useParamsMedType();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('AVBRYT_REVURDERING');
 
@@ -71,7 +71,7 @@ export const AvbrytRevurderingVurdering = ({ grunnlag, readOnly, behandlingVersj
             årsak: data.aarsak,
           },
         },
-        referanse: behandlingsReferanse,
+        referanse: behandlingsreferanse,
       });
     })(event);
   };

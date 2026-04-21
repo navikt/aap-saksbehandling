@@ -6,7 +6,7 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgG
 import { FormEvent } from 'react';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { FullmektigGrunnlag, MellomlagretVurdering, TypeBehandling } from 'lib/types/types';
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import styles from './fullmektig.module.css';
 import { landMedTrygdesamarbeidInklNorgeAlpha2 } from 'lib/utils/countries';
 import { erGyldigFødselsnummer } from 'lib/utils/fnr';
@@ -46,7 +46,7 @@ type IndentAndType = {
 };
 
 export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly, initialMellomlagretVurdering }: Props) => {
-  const behandlingsreferanse = useBehandlingsReferanse();
+  const { behandlingsreferanse } = useParamsMedType();
 
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('FULLMEKTIG');

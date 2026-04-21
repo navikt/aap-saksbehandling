@@ -6,7 +6,7 @@ import { BruddStatus } from 'components/behandlinger/aktivitetsplikt/11-9/Vurder
 import { Vurdering11_9 } from 'components/behandlinger/aktivitetsplikt/11-9/Vurder11_9/Vurder11_9MedDataFetching';
 import { clientLagreMellomlagring } from 'lib/clientApi';
 import { isSuccess } from 'lib/utils/api';
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 
 interface MellomlagretData {
   mellomlagredeVurderinger: Vurdering11_9[];
@@ -16,7 +16,7 @@ export function useMellomlagre11_9(
   vurderingerSendtTilBeslutter: Vurdering11_9[],
   initialMellomlagretVurdering?: MellomlagretVurdering
 ) {
-  const behandlingsReferanse = useBehandlingsReferanse();
+  const { behandlingsreferanse } = useParamsMedType();
   const [mellomlagretVurdering, setMellomlagretVurdering] = useState<MellomlagretVurdering | undefined>(
     initialMellomlagretVurdering
   );
@@ -25,7 +25,7 @@ export function useMellomlagre11_9(
     async (vurdering: object) => {
       const res = await clientLagreMellomlagring({
         avklaringsbehovkode: Behovstype.VURDER_BRUDD_11_9_KODE,
-        behandlingsReferanse: behandlingsReferanse,
+        behandlingsReferanse: behandlingsreferanse,
         data: JSON.stringify(vurdering),
       });
 
@@ -33,7 +33,7 @@ export function useMellomlagre11_9(
         setMellomlagretVurdering(res.data.mellomlagretVurdering);
       }
     },
-    [behandlingsReferanse]
+    [behandlingsreferanse]
   );
 
   const { mellomlagredeVurderinger }: MellomlagretData = mellomlagretVurdering?.data

@@ -20,7 +20,7 @@ interface Props {
   grunnlag: YrkesskadeVurderingGrunnlag;
   behandlingVersjon: number;
   readOnly: boolean;
-  behandlingsReferanse: string;
+  behandlingsreferanse: string;
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
@@ -45,7 +45,7 @@ type DraftFormFields = Partial<YrkesskadeMedSkadeDatoFormFields>;
 export const Yrkesskade = ({
   grunnlag,
   behandlingVersjon,
-  behandlingsReferanse,
+  behandlingsreferanse,
   readOnly,
   initialMellomlagretVurdering,
 }: Props) => {
@@ -172,7 +172,7 @@ export const Yrkesskade = ({
             },
           },
           behandlingVersjon: behandlingVersjon,
-          referanse: behandlingsReferanse,
+          referanse: behandlingsreferanse,
         },
         () => {
           visningActions.onBekreftClick();

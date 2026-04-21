@@ -7,7 +7,6 @@ import {
   VurderingMeta,
 } from 'lib/types/types';
 import { Radio, VStack } from '@navikt/ds-react';
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { Behovstype } from 'lib/utils/form';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
@@ -31,6 +30,7 @@ import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import React from 'react';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 
 interface VedtakslengdeVurderingForm extends VurderingMeta {
   manuellVurdering: boolean;
@@ -74,7 +74,7 @@ function getDefaultValuesFromGrunnlag(grunnlag: VedtakslengdeGrunnlag): Vedtaksl
 }
 
 export const VedtakslengdeSteg = ({ grunnlag, behandlingVersjon, readOnly, initialMellomlagretVurdering }: Props) => {
-  const behandlingsReferanse = useBehandlingsReferanse();
+  const { behandlingsreferanse } = useParamsMedType();
 
   const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('FASTSETT_VEDTAKSLENGDE');
@@ -137,7 +137,7 @@ export const VedtakslengdeSteg = ({ grunnlag, behandlingVersjon, readOnly, initi
 
     const losning: LøsningerForPerioder = {
       behandlingVersjon: behandlingVersjon,
-      referanse: behandlingsReferanse,
+      referanse: behandlingsreferanse,
       behov: {
         behovstype: Behovstype.FASTSETT_VEDTAKSLENGDE as const,
         løsningerForPerioder: manuelleVurderinger.map((vurdering) => {

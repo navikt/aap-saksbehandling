@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { useParams } from 'next/navigation';
 import { FlytProsesseringStatus, LøsAvklaringsbehovPåBehandling } from 'lib/types/types';
 import { clientHentFlyt, clientLøsBehov } from 'lib/clientApi';
 import { FlytProsesseringServerSentEvent } from 'app/saksbehandling/api/behandling/hent/[referanse]/prosessering/route';
 import { revalidateFlyt } from 'lib/actions/actions';
 import { ApiException, isError, isSuccess } from 'lib/utils/api';
 import { useFlyt } from 'hooks/saksbehandling/FlytHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 
 export type LøsBehovOgVentPåProsesseringStatus = FlytProsesseringStatus | undefined;
 
@@ -15,7 +15,7 @@ export function useLøsBehovOgVentPåProsessering(): {
   løsBehovOgVentPåProsessering: (behov: LøsAvklaringsbehovPåBehandling) => void;
   løsBehovError?: ApiException;
 } {
-  const params = useParams<{ behandlingsreferanse: string }>();
+  const params = useParamsMedType();
   const [status, setStatus] = useState<LøsBehovOgVentPåProsesseringStatus>();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<ApiException | undefined>();

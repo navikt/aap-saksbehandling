@@ -12,7 +12,7 @@ const Layout = async (props: Props) => {
   const { children } = props;
 
   return (
-    <BehandlingLayout saksnummer={params.saksnummer} behandlingsReferanse={params.behandlingsreferanse}>
+    <BehandlingLayout saksnummer={params.saksnummer} behandlingsreferanse={params.behandlingsreferanse}>
       {children}
     </BehandlingLayout>
   );

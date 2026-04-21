@@ -7,11 +7,11 @@ import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { getStegData } from 'lib/utils/steg';
 
 interface Props {
-  behandlingsReferanse: string;
+  behandlingsreferanse: string;
 }
 
-export const Rettighetsperiode = async ({ behandlingsReferanse }: Props) => {
-  const flyt = await hentFlyt(behandlingsReferanse);
+export const Rettighetsperiode = async ({ behandlingsreferanse }: Props) => {
+  const flyt = await hentFlyt(behandlingsreferanse);
   if (isError(flyt)) {
     return <ApiException apiResponses={[flyt]} />;
   }
@@ -21,7 +21,7 @@ export const Rettighetsperiode = async ({ behandlingsReferanse }: Props) => {
   return (
     <GruppeSteg
       behandlingVersjon={flyt.data.behandlingVersjon}
-      behandlingReferanse={behandlingsReferanse}
+      behandlingReferanse={behandlingsreferanse}
       prosessering={flyt.data.prosessering}
       visning={flyt.data.visning}
       aktivtSteg={flyt.data.aktivtSteg}
@@ -29,7 +29,7 @@ export const Rettighetsperiode = async ({ behandlingsReferanse }: Props) => {
       {rettighetsperiodeSteg.skalViseSteg && (
         <StegSuspense>
           <VurderRettighetsperiodeMedDataFetching
-            behandlingsreferanse={behandlingsReferanse}
+            behandlingsreferanse={behandlingsreferanse}
             stegData={rettighetsperiodeSteg}
           />
         </StegSuspense>

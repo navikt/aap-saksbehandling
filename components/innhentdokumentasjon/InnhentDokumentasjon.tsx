@@ -5,7 +5,7 @@ import { InnhentDokumentasjonSkjema } from 'components/innhentdokumentasjon/innh
 import { clientHentAlleDialogmeldingerPåSak } from 'lib/clientApi';
 import useSWR from 'swr';
 import { Dialogmeldinger } from 'components/innhentdokumentasjon/dialogmeldinger/Dialogmeldinger';
-import { useBehandlingsReferanse, useSaksnummer } from 'hooks/saksbehandling/BehandlingHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 
 import styles from './InnhentDokumentasjon.module.css';
 import { RelevanteDokumenter } from 'components/innhentdokumentasjon/relevantedokumenter/RelevanteDokumenter';
@@ -14,8 +14,7 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { revalidateFlyt } from 'lib/actions/actions';
 
 export const InnhentDokumentasjon = () => {
-  const saksnummer = useSaksnummer();
-  const behandlingsReferanse = useBehandlingsReferanse();
+  const { saksnummer, behandlingsreferanse } = useParamsMedType();
   const {
     data: dialogmeldinger,
     isLoading,
@@ -30,7 +29,7 @@ export const InnhentDokumentasjon = () => {
   const skjulOgRefresh = () => {
     skjulSkjema();
     mutate();
-    revalidateFlyt(behandlingsReferanse);
+    revalidateFlyt(behandlingsreferanse);
   };
   return (
     <section>
