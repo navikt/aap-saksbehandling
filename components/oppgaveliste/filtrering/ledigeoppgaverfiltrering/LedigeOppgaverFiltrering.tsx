@@ -12,6 +12,7 @@ import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppga
 import { aktiveFiltreringer } from 'components/oppgaveliste/filtrering/filtreringUtils';
 import { Køtype } from 'lib/types/oppgaveTypes';
 import { AktivKø } from 'hooks/oppgave/aktivkøHook';
+import { useFeatureFlag } from '../../../../context/UnleashContext';
 
 interface Props {
   form: UseFormReturn<FormFieldsFilter>;
@@ -31,6 +32,8 @@ export const LedigeOppgaverFiltrering = ({
   const [åpneFilter, setÅpneFilter] = useState(false);
 
   const aktiveFilter = aktiveFiltreringer(form.watch());
+  const tilbakekrevingBelopFilter = useFeatureFlag('TilbakekrevingBelopFilter');
+
   useEffect(() => {
     if (sattBehandlingstyperFilter?.length) {
       form.setValue('behandlingstyper', sattBehandlingstyperFilter);
@@ -112,6 +115,17 @@ export const LedigeOppgaverFiltrering = ({
               <BoxWrapper>
                 <FormField form={form} formField={formFields.statuser} />
               </BoxWrapper>
+              {tilbakekrevingBelopFilter && (
+                <BoxWrapper>
+                  <VStack gap={'4'}>
+                    <BodyShort size={'small'} weight={'semibold'}>
+                      Tilbakekrevingsbeløp
+                    </BodyShort>
+                    <FormField form={form} formField={formFields.tilbakekrevingBeløpFom} />
+                    <FormField form={form} formField={formFields.tilbakekrevingBeløpTom} />
+                  </VStack>
+                </BoxWrapper>
+              )}
             </HGrid>
             <HStack gap={"space-8"}>
               <Button
