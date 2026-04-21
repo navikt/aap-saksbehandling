@@ -1,7 +1,7 @@
 import { Behovstype, JaEllerNei, JaEllerNeiOptions, mapBehovskodeTilBehovstype } from 'lib/utils/form';
 
 import styles from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingFelter.module.css';
-import { Checkbox, Radio } from '@navikt/ds-react';
+import { Checkbox, Link as AkselLink, Radio } from '@navikt/ds-react';
 import Link from 'next/link';
 import { ToTrinnsVurderingGrunn } from 'lib/types/types';
 import { FieldArrayWithId, UseFormReturn } from 'react-hook-form';
@@ -38,7 +38,9 @@ export const TotrinnnsvurderingFelter = ({ readOnly, link, erKvalitetssikring, f
       <div
         className={`${styles.heading} ${erKvalitetssikring ? styles.headingKvalitetssikrer : styles.headingBeslutter}`}
       >
-        <Link href={link}>{mapBehovskodeTilBehovstype(field.definisjon as Behovstype)}</Link>
+        <AkselLink as={Link} href={link}>
+          {mapBehovskodeTilBehovstype(field.definisjon as Behovstype)}
+        </AkselLink>
       </div>
       <div className={styles.felter}>
         <RadioGroupWrapper
