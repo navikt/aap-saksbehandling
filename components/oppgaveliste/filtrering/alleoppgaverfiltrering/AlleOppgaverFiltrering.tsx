@@ -17,7 +17,7 @@ import { SaksbehandlerFilterSøk } from 'components/oppgaveliste/filtrering/alle
 import { hasProperty } from '@vitest/expect';
 import { AktivKø } from 'hooks/oppgave/aktivkøHook';
 import { Køtype } from 'lib/types/oppgaveTypes';
-import { useFeatureFlag } from '../../../../context/UnleashContext';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   form: UseFormReturn<FormFieldsFilter>;
