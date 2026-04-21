@@ -2,13 +2,13 @@
 
 import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { Behovstype } from 'lib/utils/form';
 import { FormEvent } from 'react';
 import { AvbrytRevurderingGrunnlag } from 'lib/types/types';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
 
 interface Props {
   behandlingVersjon: number;
@@ -22,7 +22,7 @@ interface FormFields {
 }
 
 export const AvbrytRevurderingVurdering = ({ grunnlag, readOnly, behandlingVersjon }: Props) => {
-  const behandlingsReferanse = useBehandlingsReferanse();
+  const { behandlingsreferanse } = useParamsMedType();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('AVBRYT_REVURDERING');
 
@@ -71,13 +71,13 @@ export const AvbrytRevurderingVurdering = ({ grunnlag, readOnly, behandlingVersj
             årsak: data.aarsak,
           },
         },
-        referanse: behandlingsReferanse,
+        referanse: behandlingsreferanse,
       });
     })(event);
   };
 
   return (
-    <VilkårskortMedFormOgMellomlagring
+    <VilkårskortMedForm
       heading={'Avbryt revurdering'}
       steg={'AVBRYT_REVURDERING'}
       onSubmit={handleSubmit}
@@ -85,14 +85,12 @@ export const AvbrytRevurderingVurdering = ({ grunnlag, readOnly, behandlingVersj
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
-      onDeleteMellomlagringClick={undefined}
-      mellomlagretVurdering={undefined}
       visningModus={visningModus}
       visningActions={visningActions}
       formReset={() => form.reset()}
     >
       <FormField form={form} formField={formFields.aarsak} className="årsak" />
       <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
-    </VilkårskortMedFormOgMellomlagring>
+    </VilkårskortMedForm>
   );
 };

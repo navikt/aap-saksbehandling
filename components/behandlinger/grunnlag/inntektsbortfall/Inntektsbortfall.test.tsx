@@ -29,7 +29,7 @@ describe('InntektsbortfallMedDataFetching', () => {
     vi.spyOn(saksbehandlingService, 'hentMellomlagring').mockResolvedValue(undefined);
 
     const result = await InntektsbortfallMedDataFetching({
-      behandlingsReferanse: 'test-ref',
+      behandlingsreferanse: 'test-ref',
       stegData: {
         stegType: 'MANGLENDE_LIGNING',
         readOnly: false,
@@ -60,7 +60,7 @@ describe('InntektsbortfallMedDataFetching', () => {
     vi.spyOn(saksbehandlingService, 'hentMellomlagring').mockResolvedValue(undefined);
 
     const result = await InntektsbortfallMedDataFetching({
-      behandlingsReferanse: 'test-ref',
+      behandlingsreferanse: 'test-ref',
       stegData: {
         stegType: 'MANGLENDE_LIGNING',
         readOnly: false,

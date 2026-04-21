@@ -4,8 +4,9 @@ import { SettBehandlingPåVentModal } from 'components/settbehandlingpåventmoda
 
 describe('settBehandlingPåVentModal', () => {
   beforeEach(() => {
-    render(<SettBehandlingPåVentModal behandlingsReferanse={'123'} reservert={true} isOpen={true} onClose={vi.fn} />);
+    render(<SettBehandlingPåVentModal behandlingsreferanse={'123'} reservert={true} isOpen={true} onClose={vi.fn} />);
   });
+
   it('skal ha en heading', () => {
     const heading = screen.getByText('Sett behandling på vent');
     expect(heading).toBeVisible();
@@ -31,13 +32,13 @@ describe('settBehandlingPåVentModal viser infoboks om reservert oppgave', () =>
   const expectedText = 'Behandlingen er ikke tildelt deg. Den tildeles deg når du setter den på vent.';
 
   it('skal vise infoboks med informasjon om at oppgaven reserveres saksbehandler', () => {
-    render(<SettBehandlingPåVentModal behandlingsReferanse={'123'} reservert={false} isOpen={true} onClose={vi.fn} />);
+    render(<SettBehandlingPåVentModal behandlingsreferanse={'123'} reservert={false} isOpen={true} onClose={vi.fn} />);
     const infoboks = screen.getByText(expectedText);
     expect(infoboks).toBeVisible();
   });
 
   it('skal ikke vise infoboks med informasjon om at oppgaven reserveres saksbehandler', () => {
-    render(<SettBehandlingPåVentModal behandlingsReferanse={'123'} reservert={true} isOpen={true} onClose={vi.fn} />);
+    render(<SettBehandlingPåVentModal behandlingsreferanse={'123'} reservert={true} isOpen={true} onClose={vi.fn} />);
     const infoboks = screen.queryByText(expectedText);
     expect(infoboks).toBeNull();
   });

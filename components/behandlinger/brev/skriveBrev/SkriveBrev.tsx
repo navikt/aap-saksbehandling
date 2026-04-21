@@ -2,7 +2,7 @@
 
 import { BrevbyggerBeta } from '@navikt/aap-breveditor/';
 import { ActionMenu, Alert, Button, HStack, Label, Loader, VStack } from '@navikt/ds-react';
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useDebounce } from 'hooks/DebounceHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { clientHentFlyt, clientMellomlagreBrev } from 'lib/clientApi';
@@ -49,7 +49,7 @@ export const SkriveBrev = ({
   status: BrevStatus;
   readOnly: boolean;
 }) => {
-  const behandlingsReferanse = useBehandlingsReferanse();
+  const { behandlingsreferanse } = useParamsMedType();
   const [brev, setBrev] = useState<Brev>(grunnlag);
   const [sistLagret, setSistLagret] = useState<Date | undefined>();
   const [isSaving, setIsSaving] = useState(false);
@@ -99,9 +99,9 @@ export const SkriveBrev = ({
         brevbestillingReferanse: referanse,
         handling: 'AVBRYT',
       },
-      referanse: behandlingsReferanse,
+      referanse: behandlingsreferanse,
     });
-    await revalidateFlyt(behandlingsReferanse);
+    await revalidateFlyt(behandlingsreferanse);
     settIkkeSendBrevModalOpen(false);
   };
 
@@ -186,7 +186,7 @@ export const SkriveBrev = ({
               disabled={status !== 'FORHÅNDSVISNING_KLAR' || !!distribusjonssjekkFeil}
               onClick={async () => {
                 await clientMellomlagreBrev(referanse, brev);
-                const flyt = await clientHentFlyt(behandlingsReferanse);
+                const flyt = await clientHentFlyt(behandlingsreferanse);
                 if (isSuccess(flyt) && flyt.data.behandlingVersjon) {
                   setKanMellomlagreBrev(false);
                   løsBehovOgGåTilNesteSteg({
@@ -197,7 +197,7 @@ export const SkriveBrev = ({
                       mottakere: valgteMottakere,
                       handling: 'FERDIGSTILL',
                     },
-                    referanse: behandlingsReferanse,
+                    referanse: behandlingsreferanse,
                   });
                 }
               }}

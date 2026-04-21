@@ -3,7 +3,6 @@
 import { Behovstype, JaEllerNei } from 'lib/utils/form';
 import { MellomlagretVurdering, SykepengeerstatningGrunnlag } from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
@@ -11,6 +10,7 @@ import { parseISO } from 'date-fns';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { useFieldArray, useForm } from 'react-hook-form';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { SykepengeerstatningForm } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/sykepengererstating-types';
 import {
   getDefaultValuesFromGrunnlag,
@@ -38,7 +38,7 @@ interface Props {
 }
 
 export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, initialMellomlagretVurdering }: Props) => {
-  const behandlingsReferanse = useBehandlingsReferanse();
+  const { behandlingsreferanse } = useParamsMedType();
   const { løsPeriodisertBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_SYKEPENGEERSTATNING');
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
@@ -101,7 +101,7 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
     }
     const losning: LøsningerForPerioder = {
       behandlingVersjon: behandlingVersjon,
-      referanse: behandlingsReferanse,
+      referanse: behandlingsreferanse,
       behov: {
         behovstype: Behovstype.VURDER_SYKEPENGEERSTATNING_KODE,
         løsningerForPerioder: data.vurderinger.map((periode, index) => {

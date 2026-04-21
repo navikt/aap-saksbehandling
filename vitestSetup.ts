@@ -64,43 +64,38 @@ const resetPostmottakMockFlytResponse = () => {
   postmottakMockFlytResponse = PostmottakFlytResponse;
 };
 
+vi.mock('swr', () => ({
+  default: vi.fn((key) => {
+    if (key?.startsWith('api/flyt')) {
+      return {
+        data: { type: 'SUCCESS', status: 200, data: mockFlytResponse },
+        error: undefined,
+        mutate: vi.fn(),
+      };
+    }
+
+    if (key?.startsWith('postmottak/api/post/')) {
+      return {
+        data: { type: 'SUCCESS', status: 200, data: postmottakMockFlytResponse },
+        error: undefined,
+        mutate: vi.fn(),
+      };
+    }
+
+    return { data: undefined, error: undefined, mutate: vi.fn() };
+  }),
+}));
+
+vi.mock('next/navigation', () => ({
+  useParams: vi.fn().mockReturnValue({
+    saksnummer: '123',
+    behandlingsreferanse: '456',
+    behandlingsType: 'AVKLAR_SYKDOM',
+  }),
+  useRouter: vi.fn(),
+}));
+
 beforeAll(() => {
-  vi.mock('swr', () => ({
-    default: vi.fn((key) => {
-      if (key?.startsWith('api/flyt')) {
-        return {
-          data: { type: 'SUCCESS', status: 200, data: mockFlytResponse },
-          error: undefined,
-          mutate: vi.fn(),
-        };
-      }
-
-      if (key?.startsWith('postmottak/api/post/')) {
-        return {
-          data: { type: 'SUCCESS', status: 200, data: postmottakMockFlytResponse },
-          error: undefined,
-          mutate: vi.fn(),
-        };
-      }
-
-      return { data: undefined, error: undefined, mutate: vi.fn() };
-    }),
-  }));
-
-  vi.mock('next/navigation', () => ({
-    useParams: vi
-      .fn()
-      // TODO: Vi bruker dessverre både behandlingsReferanse og behandlingsreferanse i appen
-      // Må slås sammen på et eller annet tidspunkt
-      .mockReturnValue({
-        saksnummer: '123',
-        behandlingsReferanse: '456',
-        behandlingsreferanse: '456',
-        behandlingsType: 'AVKLAR_SYKDOM',
-      }),
-    useRouter: vi.fn(),
-  }));
-
   // Mocker eventsource ettersom vi bruker det i Form komponenten
   Object.defineProperty(window, 'EventSource', {
     writable: true,

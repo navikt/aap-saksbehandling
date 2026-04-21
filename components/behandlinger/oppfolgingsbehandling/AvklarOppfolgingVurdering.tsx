@@ -2,7 +2,7 @@
 
 import { Behovstype } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import {
   AvklarOppfolgingsoppgaveGrunnlagResponse,
   MellomlagretVurdering,
@@ -43,7 +43,7 @@ export const AvklaroppfolgingVurdering = ({
   grunnlag,
   initialMellomlagretVurdering,
 }: Props) => {
-  const behandlingsReferanse = useBehandlingsReferanse();
+  const { behandlingsreferanse } = useParamsMedType();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('AVKLAR_OPPFØLGING');
 
@@ -114,7 +114,7 @@ export const AvklaroppfolgingVurdering = ({
               årsak: data.årsak,
             },
           },
-          referanse: behandlingsReferanse,
+          referanse: behandlingsreferanse,
         },
         () => {
           visningActions.onBekreftClick();

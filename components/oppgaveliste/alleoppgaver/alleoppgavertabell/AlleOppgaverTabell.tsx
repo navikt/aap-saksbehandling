@@ -17,6 +17,9 @@ import { TildelOppgaveModal } from 'components/tildeloppgavemodal/TildelOppgaveM
 import { NoNavAapOppgaveListeOppgaveSorteringSortBy } from '@navikt/aap-oppgave-typescript-types';
 import { ScopedBackendSortState } from 'hooks/oppgave/BackendSorteringHook';
 import { isOppgavelisteOppgaveSorteringSortBy } from 'lib/utils/request';
+import { useFeatureFlag } from 'context/UnleashContext';
+import { AktivKø } from 'hooks/oppgave/aktivkøHook';
+import { Køtype } from 'lib/types/oppgaveTypes';
 
 interface Props {
   oppgaver: Oppgave[];
@@ -25,6 +28,7 @@ interface Props {
   valgteRader: number[];
   setSortBy: (orderBy: NoNavAapOppgaveListeOppgaveSorteringSortBy) => void;
   sort: ScopedBackendSortState<NoNavAapOppgaveListeOppgaveSorteringSortBy> | undefined;
+  aktivKø: AktivKø | undefined;
 }
 
 export const AlleOppgaverTabell = ({
@@ -34,6 +38,7 @@ export const AlleOppgaverTabell = ({
   valgteRader,
   setSortBy,
   sort,
+  aktivKø,
 }: Props) => {
   const [visSynkroniserEnhetModal, setVisSynkroniserEnhetModal] = useState<boolean>(false);
 
@@ -47,6 +52,8 @@ export const AlleOppgaverTabell = ({
       });
     }
   };
+
+  const enhetForrigeOppgaveFrontendEnabled = useFeatureFlag('EnhetForrigeOppgaveFrontend');
 
   return (
     <>
@@ -88,12 +95,21 @@ export const AlleOppgaverTabell = ({
               Årsak
             </Table.ColumnHeader>
             <Table.ColumnHeader>Vurderingsbehov</Table.ColumnHeader>
-            <Table.ColumnHeader
-              sortKey={NoNavAapOppgaveListeOppgaveSorteringSortBy.AVKLARINGSBEHOV_KODE}
-              sortable={true}
-            >
-              Oppgave
-            </Table.ColumnHeader>
+            {enhetForrigeOppgaveFrontendEnabled ? (
+              <Table.ColumnHeader
+                sortKey={NoNavAapOppgaveListeOppgaveSorteringSortBy.AVKLARINGSBEHOV_KODE}
+                sortable={aktivKø?.type !== Køtype.KVALITETSSIKRING}
+              >
+                {aktivKø?.type !== Køtype.KVALITETSSIKRING ? 'Oppgave' : 'Kontor'}
+              </Table.ColumnHeader>
+            ) : (
+              <Table.ColumnHeader
+                sortKey={NoNavAapOppgaveListeOppgaveSorteringSortBy.AVKLARINGSBEHOV_KODE}
+                sortable={true}
+              >
+                Oppgave
+              </Table.ColumnHeader>
+            )}
             <Table.ColumnHeader
               sortKey={NoNavAapOppgaveListeOppgaveSorteringSortBy.OPPRETTET_TIDSPUNKT}
               sortable={true}
@@ -157,11 +173,15 @@ export const AlleOppgaverTabell = ({
                 </Tooltip>
               </Table.DataCell>
               <Table.DataCell style={{ maxWidth: '150px' }} textSize={'small'}>
-                <Tooltip content={mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode)}>
-                  <BodyShort truncate size={'small'}>
-                    {mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode)}
-                  </BodyShort>
-                </Tooltip>
+                {enhetForrigeOppgaveFrontendEnabled && aktivKø?.type === Køtype.KVALITETSSIKRING ? (
+                  (oppgave.enhetForrigeOppgave?.navn ?? '-')
+                ) : (
+                  <Tooltip content={mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode)}>
+                    <BodyShort truncate size={'small'}>
+                      {mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode)}
+                    </BodyShort>
+                  </Tooltip>
+                )}
               </Table.DataCell>
               <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(oppgave.opprettetTidspunkt)}</Table.DataCell>
               <Table.DataCell style={{ maxWidth: '150px' }} textSize={'small'}>

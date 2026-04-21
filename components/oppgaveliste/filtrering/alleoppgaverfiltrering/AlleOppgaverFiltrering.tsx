@@ -9,12 +9,14 @@ import { FormFields } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { FieldPath, UseFormReturn } from 'react-hook-form';
 import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
-import { aktiveFiltreringer, ALLE_OPPGAVER_ID } from 'components/oppgaveliste/filtrering/filtreringUtils';
+import { aktiveFiltreringer } from 'components/oppgaveliste/filtrering/filtreringUtils';
 import { avreserverOppgaveClient } from 'lib/oppgaveClientApi';
 import { isSuccess } from 'lib/utils/api';
 import { useTildelOppgaver } from 'context/oppgave/TildelOppgaverContext';
 import { SaksbehandlerFilterSøk } from 'components/oppgaveliste/filtrering/alleoppgaverfiltrering/SaksbehandlerFilterSøk';
 import { hasProperty } from '@vitest/expect';
+import { AktivKø } from 'hooks/oppgave/aktivkøHook';
+import { Køtype } from 'lib/types/oppgaveTypes';
 
 interface Props {
   form: UseFormReturn<FormFieldsFilter>;
@@ -23,7 +25,7 @@ interface Props {
   valgteRader: number[];
   setValgteRader: Dispatch<SetStateAction<number[]>>;
   revalidateFunction: () => void;
-  aktivKøId: number;
+  aktivKø: AktivKø;
   sattBehandlingstyperFilter: string[];
   aktiveEnheter: string[];
 }
@@ -35,7 +37,7 @@ export const AlleOppgaverFiltrering = ({
   valgteRader,
   revalidateFunction,
   setValgteRader,
-  aktivKøId,
+  aktivKø,
   sattBehandlingstyperFilter,
   aktiveEnheter,
 }: Props) => {
@@ -110,13 +112,13 @@ export const AlleOppgaverFiltrering = ({
                 <BodyShort>Filtre: </BodyShort>
                 <Chips size={'small'}>
                   {aktiveFilter.map((filter) =>
-                    aktivKøId !== ALLE_OPPGAVER_ID && filter.key === 'behandlingstyper' ? (
-                      <Chips.Toggle checkmark={false} selected={true} key={filter.value}>
+                    aktivKø.type !== Køtype.ALLE_OPPGAVER && filter.key === 'behandlingstyper' ? (
+                      <Chips.Toggle checkmark={false} selected={true} key={`${filter.key}-${filter.value}`}>
                         {filter.label}
                       </Chips.Toggle>
                     ) : (
                       <Chips.Removable
-                        key={filter.value}
+                        key={`${filter.key}-${filter.value}`}
                         onClick={() => {
                           const values = form.watch(filter.key);
                           if (Array.isArray(values)) {
@@ -152,7 +154,7 @@ export const AlleOppgaverFiltrering = ({
                 <FormField
                   form={form}
                   formField={formFields.behandlingstyper}
-                  readOnly={ALLE_OPPGAVER_ID !== aktivKøId}
+                  readOnly={Køtype.ALLE_OPPGAVER !== aktivKø.type}
                 />
               </BoxWrapper>
               <BoxWrapper>

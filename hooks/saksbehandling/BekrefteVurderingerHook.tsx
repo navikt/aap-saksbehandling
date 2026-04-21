@@ -1,22 +1,22 @@
 import { BekreftVurderingerOppfølgingGrunnlag } from 'lib/types/types';
-import { useParams } from 'next/navigation';
 import useSWR from 'swr';
 import { clientHentBekreftVurderingerOppfølgingGrunnlag } from 'lib/clientApi';
 import { isSuccess } from 'lib/utils/api';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 
 export function useBekreftVurderingerGrunnlag(initialGrunnlag?: BekreftVurderingerOppfølgingGrunnlag): {
   grunnlag?: BekreftVurderingerOppfølgingGrunnlag;
   refetchBekreftVurderingerGrunnlagClient: () => void;
 } {
-  const params = useParams<{ behandlingsReferanse: string }>();
+  const params = useParamsMedType();
 
-  if (!params.behandlingsReferanse) {
+  if (!params.behandlingsreferanse) {
     throw Error('useBekreftVurderinger kan bare brukes på behandlingssiden.');
   }
 
   const { data, mutate } = useSWR(
-    `api/grunnlag/${params.behandlingsReferanse}/bekreftvurderinger`,
-    () => clientHentBekreftVurderingerOppfølgingGrunnlag(params.behandlingsReferanse),
+    `api/grunnlag/${params.behandlingsreferanse}/bekreftvurderinger`,
+    () => clientHentBekreftVurderingerOppfølgingGrunnlag(params.behandlingsreferanse),
     {
       fallbackData: initialGrunnlag && {
         type: 'SUCCESS',

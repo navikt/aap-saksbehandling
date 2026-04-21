@@ -1,24 +1,24 @@
 'use client';
 
 import { BehandlingFlytOgTilstand } from 'lib/types/types';
-import { useParams } from 'next/navigation';
 import useSWR from 'swr';
 import { clientHentFlyt } from 'lib/clientApi';
 import { isError, isSuccess } from 'lib/utils/api';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 
 export function useFlyt(): {
   flyt?: BehandlingFlytOgTilstand;
   refetchFlytClient: () => void;
 } {
-  const params = useParams<{ behandlingsReferanse: string }>();
+  const params = useParamsMedType();
 
-  if (!params.behandlingsReferanse) {
+  if (!params.behandlingsreferanse) {
     throw Error('useFlyt kan bare brukes på behandlingssiden.');
   }
 
   const { data, mutate } = useSWR(
-    `api/flyt/${params.behandlingsReferanse}`,
-    () => clientHentFlyt(params.behandlingsReferanse),
+    `api/flyt/${params.behandlingsreferanse}`,
+    () => clientHentFlyt(params.behandlingsreferanse),
     { revalidateOnFocus: true, shouldRetryOnError: true }
   );
 
@@ -29,15 +29,15 @@ export function useFlyt(): {
 }
 
 export function useRequiredFlyt(): { flyt: BehandlingFlytOgTilstand; refetchFlytClient: () => void } {
-  const params = useParams<{ behandlingsReferanse: string }>();
+  const params = useParamsMedType();
 
-  if (!params.behandlingsReferanse) {
+  if (!params.behandlingsreferanse) {
     throw Error('useFlyt kan bare brukes på behandlingssiden.');
   }
 
   const { data: flyt, mutate } = useSWR(
-    `api/flyt/${params.behandlingsReferanse}`,
-    () => clientHentFlyt(params.behandlingsReferanse),
+    `api/flyt/${params.behandlingsreferanse}`,
+    () => clientHentFlyt(params.behandlingsreferanse),
     {
       revalidateOnFocus: true,
       shouldRetryOnError: true,
@@ -45,7 +45,9 @@ export function useRequiredFlyt(): { flyt: BehandlingFlytOgTilstand; refetchFlyt
   );
 
   if (isError(flyt)) {
-    throw new Error(`Feil oppsto ved henting av påkrevd flyt: ${flyt.apiException.message}`);
+    throw new Error(
+      `Feil oppsto ved henting av påkrevd flyt: ${flyt.apiException.message} med kode ${flyt.apiException.code} og status ${flyt.status}`
+    );
   } else if (!flyt) {
     throw new Error('Kunne ikke finne påkrevd flyt');
   }

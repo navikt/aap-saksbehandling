@@ -10,15 +10,15 @@ import { StegData } from 'lib/utils/steg';
 import { SykdomsvurderingBrev } from 'components/behandlinger/sykdom/sykdomsvurderingbrev/SykdomsvurderingBrev';
 
 interface Props {
-  behandlingsReferanse: string;
+  behandlingsreferanse: string;
   stegData: StegData;
 }
 
-export const SykdomsvurderingBrevMedDataFetching = async ({ behandlingsReferanse, stegData }: Props) => {
+export const SykdomsvurderingBrevMedDataFetching = async ({ behandlingsreferanse, stegData }: Props) => {
   const [grunnlag, initialMellomlagretVurdering, foreløpigBehandlingsutfall] = await Promise.all([
-    hentSykdomsvurderingBrevGrunnlag(behandlingsReferanse),
-    hentMellomlagring(behandlingsReferanse, Behovstype.SYKDOMSVURDERING_BREV_KODE),
-    hentForeløpigBehandlingsutfall(behandlingsReferanse, stegData.stegType, 'VURDER_ALDER'),
+    hentSykdomsvurderingBrevGrunnlag(behandlingsreferanse),
+    hentMellomlagring(behandlingsreferanse, Behovstype.SYKDOMSVURDERING_BREV_KODE),
+    hentForeløpigBehandlingsutfall(behandlingsreferanse, stegData.stegType, 'VURDER_ALDER'),
   ]);
 
   if (isError(grunnlag) || isError(foreløpigBehandlingsutfall)) {

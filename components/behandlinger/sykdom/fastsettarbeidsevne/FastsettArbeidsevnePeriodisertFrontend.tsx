@@ -10,7 +10,7 @@ import {
   PeriodisertArbeidsevneVurderingDto,
   VurderingMeta,
 } from 'lib/types/types';
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { Behovstype } from 'lib/utils/form';
 import { parse, parseISO } from 'date-fns';
@@ -75,7 +75,7 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
   readOnly,
   initialMellomlagretVurdering,
 }: Props) => {
-  const behandlingsreferanse = useBehandlingsReferanse();
+  const { behandlingsreferanse } = useParamsMedType();
   const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('FASTSETT_ARBEIDSEVNE');
 

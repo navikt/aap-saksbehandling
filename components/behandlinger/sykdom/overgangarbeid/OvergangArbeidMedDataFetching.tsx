@@ -9,14 +9,14 @@ import { skalViseSteg, StegData } from 'lib/utils/steg';
 import { OvergangArbeid } from 'components/behandlinger/sykdom/overgangarbeid/OvergangArbeid';
 
 interface Props {
-  behandlingsReferanse: string;
+  behandlingsreferanse: string;
   stegData: StegData;
 }
 
-export const OvergangArbeidMedDataFetching = async ({ behandlingsReferanse, stegData }: Props) => {
+export const OvergangArbeidMedDataFetching = async ({ behandlingsreferanse, stegData }: Props) => {
   const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
-    hentOvergangArbeidGrunnlag(behandlingsReferanse),
-    hentMellomlagring(behandlingsReferanse, Behovstype.OVERGANG_ARBEID),
+    hentOvergangArbeidGrunnlag(behandlingsreferanse),
+    hentMellomlagring(behandlingsreferanse, Behovstype.OVERGANG_ARBEID),
   ]);
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;

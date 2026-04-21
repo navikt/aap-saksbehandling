@@ -103,9 +103,9 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov | Vurde
     case 'EFFEKTUER_AKTIVITETSPLIKT':
       return 'Effektuer aktivitetsplikt § 11-7';
     case 'OVERGANG_UFORE':
-      return 'Overgang til uføre';
+      return '§ 11-18 Overgang til uføre';
     case 'OVERGANG_ARBEID':
-      return 'Overgang arbeidssøker';
+      return '§ 11-17 Overgang arbeidssøker';
     case 'OPPHOLDSKRAV':
       return '§ 11-3 Oppholdskrav';
     case 'DØDSFALL_BARN':
@@ -118,6 +118,8 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov | Vurde
       return 'Satsregulering barnetillegg';
     case 'UTVID_VEDTAKSLENGDE':
       return 'Utvid vedtaksperiode';
+    case 'VEDTAKSLENGDE_MANUELT':
+      return 'Vedtaksperiode';
     case 'MIGRER_RETTIGHETSPERIODE':
       return 'Korrigering av teknisk periode (automatisk behandling)';
     case 'ETABLERING_EGEN_VIRKSOMHET':

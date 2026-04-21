@@ -9,7 +9,7 @@ import {
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import React, { FormEvent } from 'react';
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { parse, parseISO } from 'date-fns';
@@ -55,7 +55,7 @@ export const OvergangUforePeriodisert = ({
   readOnly,
   initialMellomlagretVurdering,
 }: Props) => {
-  const behandlingsReferanse = useBehandlingsReferanse();
+  const { behandlingsreferanse } = useParamsMedType();
   const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('OVERGANG_UFORE');
 
@@ -85,7 +85,7 @@ export const OvergangUforePeriodisert = ({
       løsPeriodisertBehovOgGåTilNesteSteg(
         {
           behandlingVersjon: behandlingVersjon,
-          referanse: behandlingsReferanse,
+          referanse: behandlingsreferanse,
           behov: {
             behovstype: Behovstype.OVERGANG_UFORE,
             løsningerForPerioder: data.vurderinger.map((vurdering, index) => {

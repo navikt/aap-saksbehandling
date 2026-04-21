@@ -1,18 +1,18 @@
 import { StegGruppe } from 'lib/types/types';
 import { BodyShort, VStack } from '@navikt/ds-react';
 import { OppgaveKolonne } from 'components/oppgavekolonne/OppgaveKolonne';
-import styles from 'app/saksbehandling/sak/[saksnummer]/[behandlingsReferanse]/[aktivGruppe]/page.module.css';
+import styles from 'app/saksbehandling/sak/[saksnummer]/[behandlingsreferanse]/[aktivGruppe]/page.module.css';
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 interface Props {
-  behandlingsReferanse: string;
+  behandlingsreferanse: string;
   aktivGruppe: StegGruppe;
 }
 
-export const BehandlingPage = async ({ behandlingsReferanse, aktivGruppe }: Props) => {
-  const flytResponse = await hentFlyt(behandlingsReferanse);
+export const BehandlingPage = async ({ behandlingsreferanse, aktivGruppe }: Props) => {
+  const flytResponse = await hentFlyt(behandlingsreferanse);
 
   if (isError(flytResponse)) {
     return (
@@ -33,7 +33,7 @@ export const BehandlingPage = async ({ behandlingsReferanse, aktivGruppe }: Prop
   ) : (
     <OppgaveKolonne
       className={styles.oppgavekolonne}
-      behandlingsReferanse={behandlingsReferanse}
+      behandlingsreferanse={behandlingsreferanse}
       aktivGruppe={decodeURIComponent(aktivGruppe) as StegGruppe}
     />
   );

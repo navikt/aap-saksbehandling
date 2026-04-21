@@ -9,14 +9,14 @@ import { skalViseSteg, StegData } from 'lib/utils/steg';
 import { Yrkesskade } from 'components/behandlinger/sykdom/yrkesskade/Yrkesskade';
 
 interface Props {
-  behandlingsReferanse: string;
+  behandlingsreferanse: string;
   stegData: StegData;
 }
 
-export const YrkesskadeMedDataFetching = async ({ behandlingsReferanse, stegData }: Props) => {
+export const YrkesskadeMedDataFetching = async ({ behandlingsreferanse, stegData }: Props) => {
   const [yrkesskadeVurderingGrunnlag, initialMellomlagretVurdering] = await Promise.all([
-    hentYrkesskadeVurderingGrunnlag(behandlingsReferanse),
-    hentMellomlagring(behandlingsReferanse, Behovstype.YRKESSKADE_KODE),
+    hentYrkesskadeVurderingGrunnlag(behandlingsreferanse),
+    hentMellomlagring(behandlingsreferanse, Behovstype.YRKESSKADE_KODE),
   ]);
 
   if (isError(yrkesskadeVurderingGrunnlag)) {
@@ -32,7 +32,7 @@ export const YrkesskadeMedDataFetching = async ({ behandlingsReferanse, stegData
       grunnlag={yrkesskadeVurderingGrunnlag.data}
       readOnly={stegData.readOnly || !yrkesskadeVurderingGrunnlag.data.harTilgangTilÅSaksbehandle}
       behandlingVersjon={stegData.behandlingVersjon}
-      behandlingsReferanse={behandlingsReferanse}
+      behandlingsreferanse={behandlingsreferanse}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
     />
   );

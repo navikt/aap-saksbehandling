@@ -40,7 +40,7 @@ it('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
   await user.click(endreKnapp);
 
   const begrunnelseFelt = screen.getByRole('textbox', {
-    name: 'Vurder om brukeren har andre statlige ytelser som kan gi fradrag fra AAP etterbetaling',
+    name: 'Vurder om brukeren har andre statlige ytelser som kan gi fradrag fra AAP etterbetaling.',
   });
   await user.clear(begrunnelseFelt);
   await user.type(begrunnelseFelt, 'Dette er en ny begrunnelse');
@@ -50,7 +50,7 @@ it('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
   await user.click(avbrytKnapp);
 
   const begrunnelseFeltEtterAvbryt = screen.getByRole('textbox', {
-    name: 'Vurder om brukeren har andre statlige ytelser som kan gi fradrag fra AAP etterbetaling',
+    name: 'Vurder om brukeren har andre statlige ytelser som kan gi fradrag fra AAP etterbetaling.',
   });
   expect(begrunnelseFeltEtterAvbryt).toHaveValue('Dette er min vurdering som er bekreftet');
 });
@@ -111,7 +111,7 @@ describe('mellomlagring', () => {
     );
 
     const begrunnelseFelt = screen.getByRole('textbox', {
-      name: 'Vurder om brukeren har andre statlige ytelser som kan gi fradrag fra AAP etterbetaling',
+      name: 'Vurder om brukeren har andre statlige ytelser som kan gi fradrag fra AAP etterbetaling.',
     });
 
     expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er mellomlagret');
@@ -121,7 +121,7 @@ describe('mellomlagring', () => {
     render(<SamordningAndreStatligeYtelser behandlingVersjon={0} readOnly={false} grunnlag={grunnlagMedVurdering} />);
 
     const begrunnelseFelt = screen.getByRole('textbox', {
-      name: 'Vurder om brukeren har andre statlige ytelser som kan gi fradrag fra AAP etterbetaling',
+      name: 'Vurder om brukeren har andre statlige ytelser som kan gi fradrag fra AAP etterbetaling.',
     });
 
     expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er bekreftet');
@@ -139,14 +139,14 @@ describe('mellomlagring', () => {
 
     await user.type(
       screen.getByRole('textbox', {
-        name: 'Vurder om brukeren har andre statlige ytelser som kan gi fradrag fra AAP etterbetaling',
+        name: 'Vurder om brukeren har andre statlige ytelser som kan gi fradrag fra AAP etterbetaling.',
       }),
       ' her er ekstra tekst'
     );
 
     expect(
       screen.getByRole('textbox', {
-        name: 'Vurder om brukeren har andre statlige ytelser som kan gi fradrag fra AAP etterbetaling',
+        name: 'Vurder om brukeren har andre statlige ytelser som kan gi fradrag fra AAP etterbetaling.',
       })
     ).toHaveValue('Dette er min vurdering som er mellomlagret her er ekstra tekst');
 
@@ -156,7 +156,7 @@ describe('mellomlagring', () => {
 
     expect(
       screen.getByRole('textbox', {
-        name: 'Vurder om brukeren har andre statlige ytelser som kan gi fradrag fra AAP etterbetaling',
+        name: 'Vurder om brukeren har andre statlige ytelser som kan gi fradrag fra AAP etterbetaling.',
       })
     ).toHaveValue('');
   });
@@ -173,14 +173,14 @@ describe('mellomlagring', () => {
 
     await user.type(
       screen.getByRole('textbox', {
-        name: 'Vurder om brukeren har andre statlige ytelser som kan gi fradrag fra AAP etterbetaling',
+        name: 'Vurder om brukeren har andre statlige ytelser som kan gi fradrag fra AAP etterbetaling.',
       }),
       ' her er ekstra tekst'
     );
 
     expect(
       screen.getByRole('textbox', {
-        name: 'Vurder om brukeren har andre statlige ytelser som kan gi fradrag fra AAP etterbetaling',
+        name: 'Vurder om brukeren har andre statlige ytelser som kan gi fradrag fra AAP etterbetaling.',
       })
     ).toHaveValue('Dette er min vurdering som er mellomlagret her er ekstra tekst');
 
@@ -190,7 +190,7 @@ describe('mellomlagring', () => {
 
     expect(
       screen.getByRole('textbox', {
-        name: 'Vurder om brukeren har andre statlige ytelser som kan gi fradrag fra AAP etterbetaling',
+        name: 'Vurder om brukeren har andre statlige ytelser som kan gi fradrag fra AAP etterbetaling.',
       })
     ).toHaveValue('Dette er min vurdering som er bekreftet');
   });

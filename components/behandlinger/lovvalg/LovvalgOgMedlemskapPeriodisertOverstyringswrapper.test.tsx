@@ -24,7 +24,7 @@ describe('Lovvalg og medlemskap wrapper', () => {
     customRender(
       <LovvalgOgMedlemskapPeriodisertOverstyringswrapper
         grunnlag={tomtGrunnlag}
-        behandlingsReferanse={'123'}
+        behandlingsreferanse={'123'}
         behandlingVersjon={1}
         readOnly={false}
         automatiskVurdering={automatiskLovvalgOgMedlemskapVurdering}
@@ -53,7 +53,7 @@ describe('Lovvalg og medlemskap wrapper', () => {
     customRender(
       <LovvalgOgMedlemskapPeriodisertOverstyringswrapper
         grunnlag={tomtGrunnlag}
-        behandlingsReferanse={'123'}
+        behandlingsreferanse={'123'}
         behandlingVersjon={1}
         readOnly={false}
         automatiskVurdering={automatiskLovvalgOgMedlemskapVurdering}

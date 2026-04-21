@@ -25,7 +25,7 @@ describe('Forutgående medlemskap wrapper', () => {
     customRender(
       <PeriodisertForutgåendemedlemskapOverstyringswrapper
         grunnlag={tomtGrunnlag}
-        behandlingsReferanse={'123'}
+        behandlingsreferanse={'123'}
         behandlingVersjon={1}
         readOnly={false}
         automatiskVurdering={automatiskLovvalgOgMedlemskapVurdering}
@@ -56,7 +56,7 @@ describe('Forutgående medlemskap wrapper', () => {
     customRender(
       <PeriodisertForutgåendemedlemskapOverstyringswrapper
         grunnlag={tomtGrunnlag}
-        behandlingsReferanse={'123'}
+        behandlingsreferanse={'123'}
         behandlingVersjon={1}
         readOnly={false}
         automatiskVurdering={automatiskLovvalgOgMedlemskapVurdering}

@@ -1,7 +1,7 @@
 'use client';
 
 import { BodyLong, BodyShort, Box, Heading, Label, List, VStack } from '@navikt/ds-react';
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import {
   ForeløpigBehandlingsutfall,
@@ -20,7 +20,6 @@ import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { ForeløpigBehandlingsutfallOppsummering } from 'components/behandlingsutfall/ForeløpigBehandlingsutfallOppsummering';
-import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   foreløpigBehandlingsutfall: ForeløpigBehandlingsutfall;
@@ -45,7 +44,7 @@ export const SykdomsvurderingBrev = ({
   readOnly,
   initialMellomlagretVurdering,
 }: Props) => {
-  const behandlingsreferanse = useBehandlingsReferanse();
+  const { behandlingsreferanse } = useParamsMedType();
 
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('SYKDOMSVURDERING_BREV');
@@ -55,8 +54,6 @@ export const SykdomsvurderingBrev = ({
     'SYKDOMSVURDERING_BREV',
     initialMellomlagretVurdering
   );
-
-  const erBekreftVurderingerStegPå = useFeatureFlag('BekreftVurderingerOppfolging');
 
   const defaultValues: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -122,7 +119,7 @@ export const SykdomsvurderingBrev = ({
       }}
       visningModus={visningModus}
       visningActions={visningActions}
-      knappTekst={erBekreftVurderingerStegPå ? 'Bekreft' : 'Bekreft og send videre'}
+      knappTekst={'Bekreft'}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
       <VStack gap={'4'}>

@@ -1,9 +1,8 @@
 'use client';
 
-import { Periode, MeldepliktOverstyringLøsningDto, OverstyringMeldepliktGrunnlag } from 'lib/types/types';
+import { MeldepliktOverstyringLøsningDto, OverstyringMeldepliktGrunnlag, Periode } from 'lib/types/types';
 import { FormEvent } from 'react';
 import { BodyLong, Link, VStack } from '@navikt/ds-react';
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { IkkeMeldtPerioderTable } from 'components/behandlinger/underveis/ikkeoppfyltmeldeplikt/IkkeMeldtPerioderTable';
 import { VurderingMeldepliktOverstyringSkjema } from 'components/behandlinger/underveis/ikkeoppfyltmeldeplikt/VurderingMeldepliktOverstyringSkjema';
@@ -14,8 +13,9 @@ import {
   MeldepliktOverstyringVurdering,
 } from 'components/behandlinger/underveis/ikkeoppfyltmeldeplikt/types';
 import { Behovstype } from 'lib/utils/form';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 
 type Props = {
   grunnlag?: OverstyringMeldepliktGrunnlag;
@@ -24,7 +24,7 @@ type Props = {
 };
 
 export const IkkeOppfyltMeldeplikt = ({ grunnlag, behandlingVersjon, readOnly }: Props) => {
-  const behandlingsreferanse = useBehandlingsReferanse();
+  const { behandlingsreferanse } = useParamsMedType();
 
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('IKKE_OPPFYLT_MELDEPLIKT');
@@ -150,7 +150,7 @@ export const IkkeOppfyltMeldeplikt = ({ grunnlag, behandlingVersjon, readOnly }:
       grunnlag.gjeldendeVedtatteOversyringsvurderinger.length > 0);
 
   return harIkkeMeldteEllerOverstyrtePerioder ? (
-    <VilkårskortMedFormOgMellomlagring
+    <VilkårskortMedForm
       heading={'§ 11-10 andre ledd. Perioder uten overholdt meldeplikt'}
       steg={'IKKE_OPPFYLT_MELDEPLIKT'}
       vilkårTilhørerNavKontor={false}
@@ -158,8 +158,6 @@ export const IkkeOppfyltMeldeplikt = ({ grunnlag, behandlingVersjon, readOnly }:
       status={status}
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      onDeleteMellomlagringClick={undefined}
-      mellomlagretVurdering={undefined}
       visningModus={visningModus}
       visningActions={visningActions}
       formReset={() => form.reset()}
@@ -190,7 +188,7 @@ export const IkkeOppfyltMeldeplikt = ({ grunnlag, behandlingVersjon, readOnly }:
           ))}
         </VStack>
       </VStack>
-    </VilkårskortMedFormOgMellomlagring>
+    </VilkårskortMedForm>
   ) : (
     <></>
   );

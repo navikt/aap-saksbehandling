@@ -79,6 +79,43 @@ const grunnlag: BarnetilleggGrunnlag = {
   vurderteSaksbehandlerOppgitteBarn: [],
 };
 
+const grunnlagDodtBarn: BarnetilleggGrunnlag = {
+  harTilgangTilÅSaksbehandle: true,
+  søknadstidspunkt: '12.12.2023',
+  folkeregisterbarn: [
+    {
+      ident: {
+        identifikator: '01987654321',
+        aktivIdent: true,
+      },
+      fodselsDato: '2020-06-05',
+      dodsDato: '2025-06-05',
+      forsorgerPeriode: {
+        fom: '2020-02-02',
+        tom: '2038-02-02',
+      },
+    },
+  ],
+  barnSomTrengerVurdering: [
+    {
+      ident: {
+        identifikator: '12345678910',
+        aktivIdent: true,
+      },
+      fodselsDato: '2020-06-05',
+      dodsDato: '2025-06-05',
+      forsorgerPeriode: {
+        fom: '2020-01-30',
+        tom: '2038-01-30',
+      },
+    },
+  ],
+  vurderteFolkeregisterBarn: [],
+  vurderteBarn: [],
+  saksbehandlerOppgitteBarn: [],
+  vurderteSaksbehandlerOppgitteBarn: [],
+};
+
 const behandlingPersonInfo: BehandlingPersoninfo = {
   info: {
     '01987654321': 'TOR NADO',
@@ -124,6 +161,34 @@ describe('barnetillegg', () => {
     );
     const heading = screen.getByText('Følgende barn er funnet i folkeregisteret');
     expect(heading).toBeVisible();
+  });
+
+  it('skal vise siste potensielle dag med barnetillegg som dagen etter forsorgerPeriode.tom', () => {
+    render(
+      <BarnetilleggVurdering
+        grunnlag={grunnlag}
+        behandlingsversjon={0}
+        readOnly={false}
+        behandlingPersonInfo={behandlingPersonInfo}
+      />
+    );
+
+    const tekst = screen.getByText('Fyller 18 år: 03.02.2038');
+    expect(tekst).toBeVisible();
+  });
+
+  it('skal vise dødsdato dersom denne er satt', () => {
+    render(
+      <BarnetilleggVurdering
+        grunnlag={grunnlagDodtBarn}
+        behandlingsversjon={0}
+        readOnly={false}
+        behandlingPersonInfo={behandlingPersonInfo}
+      />
+    );
+
+    const tekst = screen.getByText('Død: 05.06.2025');
+    expect(tekst).toBeVisible();
   });
 
   it('skal vise knapp for å fullføre steget dersom readonly er satt til false', () => {

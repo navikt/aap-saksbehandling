@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { FlytProsesseringStatus } from 'lib/types/types';
 import { clientSendHendelse } from 'lib/clientApi';
 import { FlytProsesseringServerSentEvent } from 'app/saksbehandling/api/behandling/hent/[referanse]/prosessering/route';
 import { ApiException, isError } from 'lib/utils/api';
 import { useFlyt } from 'hooks/saksbehandling/FlytHook';
-import { useRouter } from 'next/navigation';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 
 export type SendHendelseOgVentPåProsesseringStatus =
   | FlytProsesseringStatus
@@ -19,7 +19,7 @@ export const useSendHendelseOgVentPåProsessering = (): {
   sendHendelseOgVentPåProsessering: (saksnummer: string, hendelse: Object, onSuccess?: () => void) => void;
   sendHendelseError?: ApiException;
 } => {
-  const params = useParams<{ behandlingsReferanse: string }>();
+  const params = useParamsMedType();
   const [status, setStatus] = useState<SendHendelseOgVentPåProsesseringStatus>();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<ApiException | undefined>();
@@ -48,7 +48,7 @@ export const useSendHendelseOgVentPåProsessering = (): {
   const listenSSE = (saksnummer: string, onSuccess?: () => void) => {
     setIsLoading(true);
     const eventSource = new EventSource(
-      `/saksbehandling/api/behandling/hent/${params.behandlingsReferanse}/prosessering/`,
+      `/saksbehandling/api/behandling/hent/${params.behandlingsreferanse}/prosessering/`,
       {
         withCredentials: true,
       }
@@ -61,7 +61,7 @@ export const useSendHendelseOgVentPåProsessering = (): {
         refetchFlytClient();
         setIsLoading(false);
         onSuccess && onSuccess();
-        router.push(`/saksbehandling/sak/${saksnummer}/${params.behandlingsReferanse}`);
+        router.push(`/saksbehandling/sak/${saksnummer}/${params.behandlingsreferanse}`);
         router.refresh();
       }
       if (eventData.status === 'FEILET') {

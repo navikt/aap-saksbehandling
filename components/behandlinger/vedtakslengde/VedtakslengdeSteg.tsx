@@ -6,8 +6,7 @@ import {
   VedtakslengdeVurderingResponse,
   VurderingMeta,
 } from 'lib/types/types';
-import { Radio, VStack } from '@navikt/ds-react';
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { Radio, VStack, Alert } from '@navikt/ds-react';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { Behovstype } from 'lib/utils/form';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
@@ -31,6 +30,7 @@ import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import React from 'react';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 
 interface VedtakslengdeVurderingForm extends VurderingMeta {
   manuellVurdering: boolean;
@@ -51,6 +51,7 @@ interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
   initialMellomlagretVurdering?: MellomlagretVurdering;
+  erVedtakslengdeManuelt: boolean;
 }
 
 function getDefaultValuesFromGrunnlag(grunnlag: VedtakslengdeGrunnlag): VedtakslengdeForm {
@@ -64,6 +65,8 @@ function getDefaultValuesFromGrunnlag(grunnlag: VedtakslengdeGrunnlag): Vedtaksl
       behøverVurdering: false,
       manuellVurdering: true,
       endring: 'FORLENGELSE',
+      vurdertAv: v.vurdertAv,
+      besluttetAv: v.besluttetAv,
     }));
 
   return {
@@ -71,8 +74,14 @@ function getDefaultValuesFromGrunnlag(grunnlag: VedtakslengdeGrunnlag): Vedtaksl
   };
 }
 
-export const VedtakslengdeSteg = ({ grunnlag, behandlingVersjon, readOnly, initialMellomlagretVurdering }: Props) => {
-  const behandlingsReferanse = useBehandlingsReferanse();
+export const VedtakslengdeSteg = ({
+  grunnlag,
+  behandlingVersjon,
+  readOnly,
+  initialMellomlagretVurdering,
+  erVedtakslengdeManuelt,
+}: Props) => {
+  const { behandlingsreferanse } = useParamsMedType();
 
   const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('FASTSETT_VEDTAKSLENGDE');
@@ -135,7 +144,7 @@ export const VedtakslengdeSteg = ({ grunnlag, behandlingVersjon, readOnly, initi
 
     const losning: LøsningerForPerioder = {
       behandlingVersjon: behandlingVersjon,
-      referanse: behandlingsReferanse,
+      referanse: behandlingsreferanse,
       behov: {
         behovstype: Behovstype.FASTSETT_VEDTAKSLENGDE as const,
         løsningerForPerioder: manuelleVurderinger.map((vurdering) => {
@@ -175,6 +184,13 @@ export const VedtakslengdeSteg = ({ grunnlag, behandlingVersjon, readOnly, initi
       errorList={errorList}
       formReset={() => form.reset(getDefaultValuesFromGrunnlag(grunnlag))}
     >
+      {erVedtakslengdeManuelt && (
+        <Alert variant={'info'} size={'small'} style={{ marginBottom: '1rem' }}>
+          Brukeren har stans eller opphør etterfulgt av løpende rettighet fram i tid. Vedtaksperioden må vurderes
+          manuelt.
+        </Alert>
+      )}
+
       {grunnlag.sisteVedtatteVurderinger.map((vurdering, index) => (
         <TidligereVurderingExpandableCard
           key={`vedtatt-${index}`}

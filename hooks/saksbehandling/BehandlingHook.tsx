@@ -1,11 +1,11 @@
 import { useParams } from 'next/navigation';
 
-export const useBehandlingsReferanse = (): string => {
-  const { behandlingsReferanse } = useParams<{ behandlingsReferanse: string }>();
-  return behandlingsReferanse;
+type BehandlingParams = {
+  aktivGruppe: string;
+  behandlingsreferanse: string;
+  saksnummer: string;
 };
 
-export const useSaksnummer = (): string => {
-  const { saksnummer } = useParams<{ saksnummer: string }>();
-  return saksnummer;
+export const useParamsMedType = () => {
+  return useParams<BehandlingParams>();
 };

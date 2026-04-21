@@ -1,6 +1,6 @@
 'use client';
 
-import { useBehandlingsReferanse, useSaksnummer } from 'hooks/saksbehandling/BehandlingHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { Behovstype, mapBehovskodeTilBehovstype } from 'lib/utils/form';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
@@ -17,9 +17,8 @@ interface Props {
 }
 
 export const BekreftVurderingerOppfølging = ({ behandlingVersjon, readOnly, initialGrunnlag }: Props) => {
-  const behandlingsReferanse = useBehandlingsReferanse();
-  const saksnummer = useSaksnummer();
-  const { status, løsBehovOgGåTilNesteSteg, isLoading, løsBehovOgGåTilNesteStegError } = useLøsBehovOgGåTilNesteSteg(
+  const { behandlingsreferanse, saksnummer } = useParamsMedType();
+    const { status, løsBehovOgGåTilNesteSteg, isLoading, løsBehovOgGåTilNesteStegError } = useLøsBehovOgGåTilNesteSteg(
     'BEKREFT_VURDERINGER_OPPFØLGING'
   );
 
@@ -40,7 +39,7 @@ export const BekreftVurderingerOppfølging = ({ behandlingVersjon, readOnly, ini
                     key={vurdering.avklaringsbehovKode}
                     href={byggVilkårskortLenke(
                       saksnummer,
-                      behandlingsReferanse,
+                      behandlingsreferanse,
                       vurdering.avklaringsbehovKode as Behovstype
                     )}
                   >
@@ -61,7 +60,7 @@ export const BekreftVurderingerOppfølging = ({ behandlingVersjon, readOnly, ini
                 behov: {
                   behovstype: Behovstype.BEKREFT_VURDERINGER_OPPFØLGING,
                 },
-                referanse: behandlingsReferanse,
+                referanse: behandlingsreferanse,
               })
             }
             loading={isLoading}

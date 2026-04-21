@@ -1,18 +1,19 @@
 'use client';
 
 import { BodyShort, Box, Heading, HGrid, Label, Link, Page, VStack } from '@navikt/ds-react';
-import { useParams, usePathname } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { useEffect } from 'react';
 import { logClientError } from 'lib/actions/actions';
 import { erIngenTilgangError } from 'lib/utils/ingenTilgang';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 
 interface Props {
   error: Error & { digest?: string };
 }
 
 const Error = ({ error }: Props) => {
-  const { saksnummer, behandlingsReferanse } = useParams<{ saksnummer?: string; behandlingsReferanse: string }>();
+  const { saksnummer, behandlingsreferanse } = useParamsMedType();
   const pathname = usePathname();
 
   const ingenTilgang = erIngenTilgangError(error);
@@ -28,13 +29,13 @@ const Error = ({ error }: Props) => {
         stack: error.stack,
         digest: error.digest,
         saksnummer: saksnummer,
-        behandlingsReferanse,
+        behandlingsReferanse: behandlingsreferanse,
         pathname,
       });
     } catch {
       // do nothing
     }
-  }, [error, saksnummer, behandlingsReferanse, pathname, ingenTilgang]);
+  }, [error, saksnummer, behandlingsreferanse, pathname, ingenTilgang]);
 
   if (ingenTilgang) {
     return <IngenTilgangFeil saksnummer={saksnummer} />;
@@ -61,10 +62,10 @@ const Error = ({ error }: Props) => {
                 </>
               )}
 
-              {behandlingsReferanse && (
+              {behandlingsreferanse && (
                 <>
                   <Label>Behandlingsreferanse:</Label>
-                  <BodyShort>{behandlingsReferanse}</BodyShort>
+                  <BodyShort>{behandlingsreferanse}</BodyShort>
                 </>
               )}
 

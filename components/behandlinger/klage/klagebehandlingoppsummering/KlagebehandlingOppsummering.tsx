@@ -4,13 +4,13 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgG
 import { KlagebehandlingKontorGrunnlag, KlagebehandlingNayGrunnlag, TypeBehandling } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
 import { hjemmelMap } from 'lib/utils/hjemmel';
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { BodyShort, Detail, VStack } from '@navikt/ds-react';
 import { mapInnstillingTilTekst } from 'lib/utils/oversettelser';
 import styles from './KlagebehandlingOppsummering.module.css';
 import { FormEvent } from 'react';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
 
 interface Props {
   behandlingVersjon: number;
@@ -57,7 +57,7 @@ const utledVilkårSomOmgjøres = (
 };
 
 export const KlagebehandlingOppsummering = ({ behandlingVersjon, readOnly, grunnlagNay, grunnlagKontor }: Props) => {
-  const behandlingsreferanse = useBehandlingsReferanse();
+  const { behandlingsreferanse } = useParamsMedType();
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('KLAGEBEHANDLING_OPPSUMMERING');
 
@@ -78,7 +78,7 @@ export const KlagebehandlingOppsummering = ({ behandlingVersjon, readOnly, grunn
     });
   };
   return (
-    <VilkårskortMedFormOgMellomlagring
+    <VilkårskortMedForm
       heading={'Oppsummering av klagebehandlingen'}
       steg={'KLAGEBEHANDLING_OPPSUMMERING'}
       onSubmit={handleSubmit}
@@ -87,11 +87,8 @@ export const KlagebehandlingOppsummering = ({ behandlingVersjon, readOnly, grunn
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       knappTekst={'Bekreft og send til beslutter'}
-      onDeleteMellomlagringClick={undefined}
-      mellomlagretVurdering={undefined}
       visningModus={visningModus}
       visningActions={visningActions}
-      formReset={() => {}}
     >
       <VStack gap={'1'}>
         <BodyShort size={'small'} weight={'semibold'}>
@@ -131,6 +128,6 @@ export const KlagebehandlingOppsummering = ({ behandlingVersjon, readOnly, grunn
           })}
         </VStack>
       )}
-    </VilkårskortMedFormOgMellomlagring>
+    </VilkårskortMedForm>
   );
 };

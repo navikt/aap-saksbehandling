@@ -8,11 +8,11 @@ import { exhaustiveCheck } from 'lib/utils/typescript';
 import { FormEvent } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import styles from 'components/behandlinger/vedtak/foreslåvedtak/ForeslåVedtak.module.css';
+import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 
 type Props = {
   grunnlag: UnderveisGrunnlag[];
@@ -44,14 +44,14 @@ const Perioderad = ({ periode }: { periode: UnderveisGrunnlag }) => {
 };
 
 export const Underveisgrunnlag = ({ grunnlag, readOnly, behandlingVersjon }: Props) => {
-  const behandlingsReferanse = useBehandlingsReferanse();
+  const { behandlingsreferanse } = useParamsMedType();
 
   const { status, løsBehovOgGåTilNesteSteg, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('FASTSETT_UTTAK');
   const { visningModus, visningActions } = useVilkårskortVisning(readOnly, 'FASTSETT_UTTAK', undefined);
 
   return (
-    <VilkårskortMedFormOgMellomlagring
+    <VilkårskortMedForm
       heading="Underveis"
       steg={'FASTSETT_UTTAK'}
       vilkårTilhørerNavKontor={false}
@@ -65,15 +65,12 @@ export const Underveisgrunnlag = ({ grunnlag, readOnly, behandlingVersjon }: Pro
           behov: {
             behovstype: Behovstype.FORESLÅ_UTTAK_KODE,
           },
-          referanse: behandlingsReferanse,
+          referanse: behandlingsreferanse,
         });
       }}
       knappTekst={'Neste'}
-      onDeleteMellomlagringClick={undefined}
-      mellomlagretVurdering={undefined}
       visningModus={visningModus}
       visningActions={visningActions}
-      formReset={() => {}}
     >
       <Table>
         <Table.Header>
@@ -100,7 +97,7 @@ export const Underveisgrunnlag = ({ grunnlag, readOnly, behandlingVersjon }: Pro
           løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
         />
       </div>
-    </VilkårskortMedFormOgMellomlagring>
+    </VilkårskortMedForm>
   );
 };
 

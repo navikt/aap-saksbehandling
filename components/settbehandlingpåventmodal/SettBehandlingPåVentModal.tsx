@@ -1,6 +1,6 @@
 'use client';
 
-import React, { FormEvent, useEffect, useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import { Alert, Box, Button, Modal, VStack } from '@navikt/ds-react';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { clientSettBehandlingPåVent } from 'lib/clientApi';
@@ -18,7 +18,7 @@ import { FlytProsesseringServerSentEvent } from 'app/saksbehandling/api/behandli
 import { isSuccess } from 'lib/utils/api';
 
 interface Props {
-  behandlingsReferanse: string;
+  behandlingsreferanse: string;
   reservert: boolean;
   isOpen: boolean;
   onClose: () => void;
@@ -30,7 +30,7 @@ interface FormFields {
   grunn: SettPåVentÅrsaker;
 }
 
-export const SettBehandlingPåVentModal = ({ behandlingsReferanse, reservert, isOpen, onClose }: Props) => {
+export const SettBehandlingPåVentModal = ({ behandlingsreferanse, reservert, isOpen, onClose }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>();
   const { flyt } = useFlyt();
@@ -80,11 +80,6 @@ export const SettBehandlingPåVentModal = ({ behandlingsReferanse, reservert, is
     },
   });
 
-  useEffect(() => {
-    form.reset();
-    setError(undefined);
-  }, [isOpen, form]);
-
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit(async (data) => {
       setIsLoading(true);
@@ -94,7 +89,7 @@ export const SettBehandlingPåVentModal = ({ behandlingsReferanse, reservert, is
         return;
       }
 
-      const res = await clientSettBehandlingPåVent(behandlingsReferanse, {
+      const res = await clientSettBehandlingPåVent(behandlingsreferanse, {
         begrunnelse: data.begrunnelse,
         behandlingVersjon: flyt.behandlingVersjon,
         frist: formaterDatoForBackend(parse(data.frist, 'dd.MM.yyyy', new Date())),
@@ -111,7 +106,7 @@ export const SettBehandlingPåVentModal = ({ behandlingsReferanse, reservert, is
   };
 
   const listenSSE = () => {
-    const eventSource = new EventSource(`/saksbehandling/api/behandling/hent/${behandlingsReferanse}/prosessering/`, {
+    const eventSource = new EventSource(`/saksbehandling/api/behandling/hent/${behandlingsreferanse}/prosessering/`, {
       withCredentials: true,
     });
 
@@ -119,7 +114,7 @@ export const SettBehandlingPåVentModal = ({ behandlingsReferanse, reservert, is
       const eventData: FlytProsesseringServerSentEvent = JSON.parse(event.data);
       if (eventData.status === 'FERDIG') {
         eventSource.close();
-        await revalidateFlyt(behandlingsReferanse);
+        await revalidateFlyt(behandlingsreferanse);
 
         // Simuler en delay for å vise loading state før modalen lukkes
         setTimeout(() => {
@@ -129,7 +124,7 @@ export const SettBehandlingPåVentModal = ({ behandlingsReferanse, reservert, is
       }
       if (eventData.status === 'FEILET') {
         eventSource.close();
-        await revalidateFlyt(behandlingsReferanse);
+        await revalidateFlyt(behandlingsreferanse);
         setIsLoading(false);
         setError('Kan ikke sette behandlingen på vent.');
       }
@@ -139,10 +134,15 @@ export const SettBehandlingPåVentModal = ({ behandlingsReferanse, reservert, is
     };
   };
 
+  function onCloseClick() {
+    form.reset();
+    onClose();
+  }
+
   return (
     <Modal
       open={isOpen}
-      onClose={onClose}
+      onClose={onCloseClick}
       header={{ heading: 'Sett behandling på vent', icon: <HourglassBottomFilledIcon /> }}
       className={styles.settBehandlingPåVentModal}
     >
@@ -173,7 +173,7 @@ export const SettBehandlingPåVentModal = ({ behandlingsReferanse, reservert, is
         <Button form={'settBehandlingPåVent'} className={'fit-content'} loading={isLoading}>
           Sett på vent
         </Button>
-        <Button variant={'secondary'} onClick={onClose}>
+        <Button variant={'secondary'} onClick={onCloseClick}>
           Avbryt
         </Button>
       </Modal.Footer>

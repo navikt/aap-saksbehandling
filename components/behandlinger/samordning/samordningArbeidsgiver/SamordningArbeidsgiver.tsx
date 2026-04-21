@@ -6,7 +6,7 @@ import { BodyLong, BodyShort, VStack } from '@navikt/ds-react';
 import { FormEvent } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import {
   MellomlagretVurdering,
   SamordningArbeidsgiverGrunnlag,
@@ -49,7 +49,7 @@ export const SamordningArbeidsgiver = ({
   grunnlag,
   initialMellomlagretVurdering,
 }: Props) => {
-  const behandlingsreferanse = useBehandlingsReferanse();
+  const { behandlingsreferanse } = useParamsMedType();
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('SAMORDNING_ARBEIDSGIVER');
 

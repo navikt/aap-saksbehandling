@@ -6,9 +6,9 @@ import { SideProsessKort } from 'components/sideprosesskort/SideProsessKort';
 import { HourglassBottomFilledIcon } from '@navikt/aksel-icons';
 import { SettPåVentÅrsaker, VenteInformasjon } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgVentPåProsessering } from 'hooks/saksbehandling/LøsBehovOgVentPåProsessering';
 import { useFlyt } from 'hooks/saksbehandling/FlytHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 
 interface Props {
   behandlingVersjon: number;
@@ -16,7 +16,7 @@ interface Props {
 }
 
 export const BehandlingPåVentKort = ({ informasjon }: Props) => {
-  const behandlingsReferanse = useBehandlingsReferanse();
+  const { behandlingsreferanse } = useParamsMedType();
   const { flyt } = useFlyt();
   const { løsBehovOgVentPåProsessering, isLoading, løsBehovError } = useLøsBehovOgVentPåProsessering();
   const [errorMessage, setErrorMessage] = useState<string>();
@@ -67,7 +67,7 @@ export const BehandlingPåVentKort = ({ informasjon }: Props) => {
                   behov: {
                     behovstype: informasjon?.definisjon.kode,
                   },
-                  referanse: behandlingsReferanse,
+                  referanse: behandlingsreferanse,
                 });
               }}
               className={'fit-content'}

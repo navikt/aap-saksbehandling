@@ -1,6 +1,5 @@
 import React, { HTMLInputAutoCompleteAttribute, ReactNode } from 'react';
-import { UseFormReturn } from 'react-hook-form';
-import { FieldValues } from 'react-hook-form/dist/types';
+import { FieldValues, UseFormReturn } from 'react-hook-form';
 
 import { FormFieldType } from './FormHook';
 import { TextFieldWrapper } from './textfieldwrapper/TextFieldWrapper';

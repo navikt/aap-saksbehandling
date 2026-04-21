@@ -3,7 +3,7 @@
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import styles from './Inntektsbortfall.module.css';
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { FormEvent } from 'react';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
@@ -52,7 +52,7 @@ export const Inntektsbortfall = ({
   grunnlag: { grunnlag, vurdering },
   initialMellomlagretVurdering,
 }: Props) => {
-  const behandlingsReferanse = useBehandlingsReferanse();
+  const { behandlingsreferanse } = useParamsMedType();
   const { status, løsBehovOgGåTilNesteSteg, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_INNTEKTSBORTFALL');
 
@@ -94,6 +94,7 @@ export const Inntektsbortfall = ({
   const under62År = grunnlag.under62ÅrVedSøknadstidspunkt;
   const inntektSisteÅr = grunnlag.inntektSisteÅrOver1G;
   const inntektSisteTreÅr = grunnlag.inntektSiste3ÅrOver3G;
+  const showRettTilUttakAlert = !inntektSisteÅr.resultat && !inntektSisteTreÅr.resultat;
 
   return (
     <VilkårskortMedFormOgMellomlagring
@@ -117,7 +118,7 @@ export const Inntektsbortfall = ({
                   rettTilUttak: data.rettTilUttak === JaEllerNei.Ja,
                 },
               },
-              referanse: behandlingsReferanse,
+              referanse: behandlingsreferanse,
             },
             () => {
               visningActions.onBekreftClick();
@@ -184,10 +185,12 @@ export const Inntektsbortfall = ({
             </Table.Row>
           </Table.Body>
         </TableStyled>
-        <Alert variant="info">
-          Brukeren har ikke hatt inntekt over 1 G siste år / 3 G siste 3 år. Det må vurderes om brukeren har rett til å
-          ta ut full alderspensjon.
-        </Alert>
+        {showRettTilUttakAlert && (
+          <Alert variant="info">
+            Brukeren har ikke hatt inntekt over 1 G siste år / 3 G siste 3 år. Det må vurderes om brukeren har rett til
+            å ta ut full alderspensjon.
+          </Alert>
+        )}
         <FormField form={form} formField={formFields.begrunnelse} />
         <FormField form={form} formField={formFields.rettTilUttak} />
       </>

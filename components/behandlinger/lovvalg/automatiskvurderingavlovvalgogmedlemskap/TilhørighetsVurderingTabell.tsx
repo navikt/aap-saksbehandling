@@ -1,7 +1,8 @@
 'use client';
 
 import { BodyShort, HStack, Table } from '@navikt/ds-react';
-import { AutomatiskLovvalgOgMedlemskapVurdering, tilhørighetVurdering } from 'lib/types/types';
+import { tilhørighetVurdering } from 'lib/types/types';
+import { VisuellTidslinjeInnhold } from './VisuellTidslinjeInnhold';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { CheckmarkCircleFillIcon, ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
 
@@ -9,7 +10,7 @@ import styles from './TilhørighetsVurderingTabell.module.css';
 import { OpplysningerContent } from 'components/behandlinger/lovvalg/opplysningercontent/OpplysningerContent';
 
 interface Props {
-  vurdering: AutomatiskLovvalgOgMedlemskapVurdering['tilhørighetVurdering'];
+  vurdering: tilhørighetVurdering[];
   oppfyllerOpplysningeneKravene: boolean;
   oppfyllerOpplysningeneKraveneTekst: string;
 }
@@ -32,7 +33,9 @@ export const TilhørighetsVurderingTabell = ({
       </Table.Header>
       <Table.Body>
         {vurdering.map((opplysning, index) => {
-          const erUtvidbar = harMinstEttGrunnlag(opplysning);
+          const harVisuellTidslinje = opplysning.visuellTidslinje.length > 0;
+          const erUtvidbar = harVisuellTidslinje || harMinstEttGrunnlag(opplysning);
+
           const radInnhold = (
             <>
               <Table.DataCell textSize="small" width={200}>
@@ -49,16 +52,13 @@ export const TilhørighetsVurderingTabell = ({
               </Table.DataCell>
             </>
           );
-
+          const expandableContent = harVisuellTidslinje ? (
+            <VisuellTidslinjeInnhold visuellTidslinje={opplysning.visuellTidslinje}></VisuellTidslinjeInnhold>
+          ) : (
+            <OpplysningerContent opplysning={opplysning} />
+          );
           return erUtvidbar ? (
-            <Table.ExpandableRow
-              key={index}
-              content={
-                <div className={styles.opplysning}>
-                  <OpplysningerContent opplysning={opplysning} />
-                </div>
-              }
-            >
+            <Table.ExpandableRow key={index} content={expandableContent}>
               {radInnhold}
             </Table.ExpandableRow>
           ) : (
@@ -102,6 +102,7 @@ export const TilhørighetsVurderingTabell = ({
 };
 
 type Kilde = 'SØKNAD' | 'PDL' | 'MEDL' | 'AA_REGISTERET' | 'A_INNTEKT' | 'EREG';
+
 function mapKildeTilTekst(kilde: Kilde): string {
   switch (kilde) {
     case 'SØKNAD':

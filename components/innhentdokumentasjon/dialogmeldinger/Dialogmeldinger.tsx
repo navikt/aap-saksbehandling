@@ -5,7 +5,7 @@ import { ReactNode, useState } from 'react';
 import styles from './Dialogmeldinger.module.css';
 import { PaperplaneIcon } from '@navikt/aksel-icons';
 import { formaterDatoForFrontend, sorterEtterNyesteDato } from 'lib/utils/date';
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { isBefore, subDays } from 'date-fns';
 import { usePurrPåDialogmelding } from 'hooks/FetchHook';
 
@@ -47,7 +47,7 @@ const Dialogmelding = ({ melding }: { melding: LegeerklæringStatus }) => {
     }
   };
 
-  const behandlingsreferanse = useBehandlingsReferanse();
+  const { behandlingsreferanse } = useParamsMedType();
   const { purrPåDialogmelding, isLoading, error } = usePurrPåDialogmelding();
 
   return (

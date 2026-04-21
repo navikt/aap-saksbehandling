@@ -2,11 +2,11 @@
 
 import { BistandsGrunnlag, MellomlagretVurdering, VurderingMeta, VurdertAvAnsatt } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
-import { FormEvent } from 'react';
+import React, { FormEvent } from 'react';
 import { parseDatoFraDatePicker } from 'lib/utils/date';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { useBehandlingsReferanse } from 'hooks/saksbehandling/BehandlingHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
@@ -27,7 +27,7 @@ import {
 import { Dato } from 'lib/types/Dato';
 import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovMellomlagringParser';
 import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
-import { Link, VStack } from '@navikt/ds-react';
+import { Alert, Link, VStack } from '@navikt/ds-react';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
@@ -37,6 +37,7 @@ interface Props {
   readOnly: boolean;
   grunnlag: BistandsGrunnlag;
   initialMellomlagretVurdering?: MellomlagretVurdering;
+  erRevurderingAvOvergangUføre: boolean;
 }
 export interface BistandForm {
   vurderinger: Array<BistandVurderingForm>;
@@ -54,8 +55,14 @@ export interface BistandVurderingForm extends VurderingMeta {
   besluttetAv?: VurdertAvAnsatt;
 }
 
-export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, initialMellomlagretVurdering }: Props) => {
-  const behandlingsReferanse = useBehandlingsReferanse();
+export const Bistandsbehov = ({
+  behandlingVersjon,
+  grunnlag,
+  readOnly,
+  initialMellomlagretVurdering,
+  erRevurderingAvOvergangUføre,
+}: Props) => {
+  const { behandlingsreferanse } = useParamsMedType();
   const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('VURDER_BISTANDSBEHOV');
 
@@ -93,7 +100,7 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, initialMe
               return mapBistandVurderingFormTilDto(vurdering, tilDato);
             }),
           },
-          referanse: behandlingsReferanse,
+          referanse: behandlingsreferanse,
         },
         () => {
           nullstillMellomlagretVurdering();
@@ -150,6 +157,13 @@ export const Bistandsbehov = ({ behandlingVersjon, grunnlag, readOnly, initialMe
             </div>
           }
         />
+
+        {erRevurderingAvOvergangUføre && (
+          <Alert variant={'info'} size={'small'}>
+            Hvis brukeren skal vurderes for uføretrygd og ha AAP etter § 11-18, må du først vurdere at brukeren ikke
+            lenger har behov for bistand etter § 11-6.
+          </Alert>
+        )}
 
         {vedtatteVurderinger.map((vurdering) => (
           <TidligereVurderingExpandableCard
