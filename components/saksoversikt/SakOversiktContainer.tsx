@@ -9,6 +9,7 @@ import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { AktivitetspliktTrekk } from 'components/saksoversikt/aktivitetsplikttrekk/AktivitetspliktTrekk';
 import { MeldekortOversikt } from 'components/saksoversikt/meldekortoversikt/MeldekortOversikt';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 enum Tab {
   OVERSIKT = 'OVERSIKT',
@@ -36,6 +37,8 @@ export const SakOversiktContainer = ({
     router.replace(`?t=${newTab}`);
   };
 
+  const registrereEllerEndreMeldekortFlagg = useFeatureFlag('registrereEllerEndreMeldekort');
+
   return (
     <Page>
       <Page.Block width="2xl" style={{ padding: '0 var(--a-spacing-8)' }}>
@@ -43,7 +46,9 @@ export const SakOversiktContainer = ({
           <Tabs.List>
             <Tabs.Tab label="Oversikt" value={Tab.OVERSIKT} icon={<PersonIcon />} />
             <Tabs.Tab label="Dokumenter" value={Tab.DOKUMENTER} icon={<FileTextIcon />} />
-            <Tabs.Tab label="Meldekort" value={Tab.MELDEKORT} icon={<TasklistIcon />} />
+            {registrereEllerEndreMeldekortFlagg && (
+              <Tabs.Tab label="Meldekort" value={Tab.MELDEKORT} icon={<TasklistIcon />} />
+            )}
             <Tabs.Tab label="Aktivitetsplikt 11-9 trekk" value={Tab.TREKK} icon={<FileTextIcon />} />
           </Tabs.List>
 
@@ -60,9 +65,11 @@ export const SakOversiktContainer = ({
               <DokumentOversikt sak={sak} />
             </Tabs.Panel>
 
-            <Tabs.Panel value={Tab.MELDEKORT}>
-              <MeldekortOversikt />
-            </Tabs.Panel>
+            {registrereEllerEndreMeldekortFlagg && (
+              <Tabs.Panel value={Tab.MELDEKORT}>
+                <MeldekortOversikt />
+              </Tabs.Panel>
+            )}
 
             <Tabs.Panel value={Tab.TREKK}>
               <AktivitetspliktTrekk sak={sak} />
