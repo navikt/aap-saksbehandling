@@ -1,0 +1,22 @@
+.ukerad {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  border: 2px solid var(--a-border-subtle);
+  border-radius: 10px;
+}
+
+.ukeradmederror {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  border-top: 2px solid var(--a-border-subtle);
+  border-left: 2px solid var(--a-border-subtle);
+  border-right: 2px solid var(--a-border-subtle);
+  border-radius: 8px 8px 0 0;
+}
+
+.tekst {
+  display: flex;
+  gap: var(--a-spacing-2);
+}

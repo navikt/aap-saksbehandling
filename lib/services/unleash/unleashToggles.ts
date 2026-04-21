@@ -9,6 +9,7 @@ export const FLAGS = [
   'InkluderOvergangUforeArbeid',
   'EnhetForrigeOppgaveFrontend',
   'TilbakekrevingBelopFilter',
+  'registrereEllerEndreMeldekort',
 ] as const;
 
 export type FlagNames = (typeof FLAGS)[number];
@@ -25,4 +26,5 @@ export const mockedFlags: Flags = {
   InkluderOvergangUforeArbeid: true,
   EnhetForrigeOppgaveFrontend: true,
   TilbakekrevingBelopFilter: true,
+  registrereEllerEndreMeldekort: true,
 };

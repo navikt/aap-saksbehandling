@@ -16,6 +16,7 @@ import {
   LegeerklæringStatus,
   LøsAvklaringsbehovPåBehandling,
   LøsPeriodisertBehovPåBehandling,
+  MeldePerioderMedMEldekortResponse,
   MellomlagretVurderingRequest,
   MellomlagretVurderingResponse,
   NavEnheterResponse,
@@ -250,4 +251,8 @@ export function clientTildelTilSaksbehandler(oppgaver: number[], saksbehandlerId
 
 export function clientHentAktivitetspliktMedTrekk(saksnummer: string) {
   return clientFetch<AktivitetspliktMedTrekkRespons>(`${BASE_URL}/api/aktivitetsplikt/trekk/${saksnummer}`, 'GET');
+}
+
+export function clientHentAlleMeldekort(saksnummer: string) {
+  return clientFetch<MeldePerioderMedMEldekortResponse>(`${BASE_URL}/api/meldekort/${saksnummer}`, 'GET');
 }
