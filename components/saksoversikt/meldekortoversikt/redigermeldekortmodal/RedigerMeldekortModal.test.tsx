@@ -109,7 +109,7 @@ describe('RedigerMeldekortModal', () => {
     render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
     await user.click(screen.getByRole('button', { name: 'Bekreft' }));
 
-    const feilmelding = await screen.getByText('Du må skrive en begrunnelse for hvorfor du gjør endring.');
+    const feilmelding = screen.getAllByText('Du må skrive en begrunnelse for hvorfor du gjør endring.')[0];
     expect(feilmelding).toBeVisible();
   });
 
