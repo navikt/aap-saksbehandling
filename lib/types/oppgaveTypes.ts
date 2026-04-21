@@ -5,6 +5,7 @@ import {
   NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType,
   NoNavAapOppgaveOppgaveDtoBehandlingstype,
   NoNavAapOppgaveOppgaveDtoStatus,
+  NoNavAapOppgaveFilterFilterDtoType,
 } from '@navikt/aap-oppgave-typescript-types';
 import { BehandlingsFlytAvklaringsbehovKode } from 'lib/types/types';
 
@@ -41,3 +42,6 @@ export type OppgaveAvklaringsbehovKode = BehandlingsFlytAvklaringsbehovKode | Po
 export type FilterTidsEnhet = 'DAG' | 'UKE' | 'MÅNED' | 'ÅR';
 
 export type MineOppgaverQueryParams = paths['/mine-oppgaver']['get']['parameters']['query'];
+
+export const Køtype = NoNavAapOppgaveFilterFilterDtoType;
+export type Køtype = NoNavAapOppgaveFilterFilterDtoType;
