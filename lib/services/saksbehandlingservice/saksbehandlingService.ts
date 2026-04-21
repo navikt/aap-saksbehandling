@@ -691,6 +691,13 @@ export const hentAktivitetspliktTrekk = async (saksnummer: string) => {
   );
 };
 
+export const hentMeldekort = async (saksnummer: string) => {
+  return apiFetch<AktivitetspliktMedTrekkRespons>(
+    `${saksbehandlingApiBaseUrl}/api/meldekort/${saksnummer}`,
+    saksbehandlingApiScope
+  );
+};
+
 export const sendLokalHendelse = async (saksnummer: string, body: Object) => {
   const url = `${saksbehandlingApiBaseUrl}/api/hendelse/sak/${saksnummer}/send`;
   return await apiFetch(url, saksbehandlingApiScope, 'POST', body);
