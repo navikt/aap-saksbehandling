@@ -136,6 +136,8 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
     markertHaster: form.watch('statuser')?.includes('ER_HASTESAK'),
     ventefristUtløpt: form.watch('statuser')?.includes('VENTEFRIST_UTLØPT'),
     saksbehandlere: [],
+    beløpMerEnn: form.watch('tilbakekrevingBeløpFom') ? Number(form.watch('tilbakekrevingBeløpFom')) : undefined,
+    beløpMindreEnn: form.watch('tilbakekrevingBeløpTom') ? Number(form.watch('tilbakekrevingBeløpTom')) : undefined,
   };
 
   const {
