@@ -50,7 +50,7 @@ export const MeldekortTabell = () => {
                 togglePlacement={'right'}
               >
                 <Table.HeaderCell textSize={'small'} colSpan={2} scope={'row'}>
-                  <VStack gap={'2'}>
+                  <VStack gap={"space-8"}>
                     <BodyShort size={'small'}>{`Uke ${hentUkeNummerForPeriode(fom.dato, tom.dato)}`}</BodyShort>
                     <Detail>{`${fom.formaterForFrontend()} - ${tom.formaterForFrontend()}`}</Detail>
                   </VStack>
