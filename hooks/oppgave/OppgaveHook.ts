@@ -69,6 +69,14 @@ function lagUrlSuffix(filter: OppgavelisteRequest['utvidetFilter']): string {
     filter.saksbehandlere.forEach((ident) => params.append('saksbehandlere', ident));
   }
 
+  if (filter?.beløpMerEnn != null) {
+    params.append('beløpMerEnn', filter.beløpMerEnn.toString())
+  }
+
+  if (filter?.beløpMindreEnn != null) {
+    params.append('beløpMindreEnn', filter.beløpMindreEnn.toString());
+  }
+
   const queryString = params.toString();
   return queryString ? `?${queryString}` : '';
 }

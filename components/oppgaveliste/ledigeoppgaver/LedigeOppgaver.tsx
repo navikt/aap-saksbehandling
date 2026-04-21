@@ -88,12 +88,12 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
     tilbakekrevingBeløpFom: {
       type: 'number',
       label: 'Beløp fra',
-      defaultValue: lagretUtvidetFilter?.tilbakekrevingBeløpFom,
+      defaultValue: lagretUtvidetFilter?.tilbakekrevingBeløpFom ?? undefined,
     },
     tilbakekrevingBeløpTom: {
       type: 'number',
       label: 'Beløp til',
-      defaultValue: lagretUtvidetFilter?.tilbakekrevingBeløpTom,
+      defaultValue: lagretUtvidetFilter?.tilbakekrevingBeløpTom ?? undefined,
     },
     årsaker: {
       type: 'combobox_multiple',
