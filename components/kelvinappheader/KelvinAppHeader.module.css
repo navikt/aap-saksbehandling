@@ -1,12 +1,3 @@
-/*.kelvinAppHeaderMenuItems,*/
-/*.kelvinAppHeaderSearchResult,*/
-/*.kelvinAppHeaderSearchResult label,*/
-/*.kelvinAppHeaderSearchResult .navds-heading {*/
-/*  color: var(--a-white);*/
-/*  --ac-link-text: var(--a-white);*/
-/*  --ac-link-action-text: var(--a-white);*/
-/*}*/
-
 .kelvinAppHeaderSearchResult {
   border-top: 1px solid var(--ax-neutral-100);
   padding-bottom: var(--ax-space-12);

@@ -1,5 +1,5 @@
 .tablerowwithoutborder {
-  --ac-table-row-border: none;
+  border: 0;
 }
 
 .tablerowwithzebra {

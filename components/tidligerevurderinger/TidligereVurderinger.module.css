@@ -9,18 +9,11 @@
   box-shadow: none;
   border-radius: 4px;
   cursor: pointer;
-  --ac-chip-toggle-text: var(--ax-bg-accent-strong);
-  --ac-chip-toggle-bg: var(--a-transparent);
 }
 
 .sidebarItemSingle {
   box-shadow: none;
   border-radius: 4px;
-  --ac-chip-toggle-text: var(--ac-chip-toggle-text);
-  --ac-chip-toggle-bg: var(--a-transparent);
-  --ac-chip-toggle-hover-text: var(--ac-chip-toggle-text);
-  --ac-chip-toggle-hover-bg: var(--a-transparent);
-  --ac-chip-toggle-hover-border: var(--a-transparent);
   cursor: default;
 }
 
@@ -43,15 +36,6 @@
 }
 
 .tidligereVurderinger {
-  --ac-expansioncard-bg: var(--ax-bg-default);
-  --ac-expansioncard-header-bg: var(--a-surface-transparent);
-  --ac-expansioncard-header-bg-hover: var(--ax-bg-neutral-moderate-hoverA);
-  --ac-expansioncard-header-open-bg: var(--a-surface-transparent);
-  --ac-expansioncard-border-color: var(--ax-border-neutral);
-  --ac-expansioncard-border-open-color: var(--ax-border-neutral);
-  --ac-expansioncard-border-radius: var(--ax-radius-8);
-  --ac-expansioncard-button-border-radius: var(--ax-radius-4);
-  --ac-expansioncard-border-hover-color: var(--ax-border-neutral-strong);
   margin-bottom: var(--ax-space-16);
   background: #e6f0ff80;
 }

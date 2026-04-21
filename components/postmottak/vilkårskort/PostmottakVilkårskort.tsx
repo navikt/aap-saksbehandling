@@ -44,7 +44,7 @@ export const PostmottakVilkårskort = ({
   return (
     <ExpansionCard
       aria-label={heading}
-      className={erAktivtSteg ? `${styles.vilkårsKort} ${styles.blå}` : styles.vilkårsKort}
+      className={erAktivtSteg ? styles.blå : styles.vilkårsKort}
       size="small"
       defaultOpen={true}
       id={steg}

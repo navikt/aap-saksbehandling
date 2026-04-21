@@ -1,21 +1,14 @@
 .vilkårsKortNAY {
-  --ac-expansioncard-border-radius: var(--ax-radius-8);
-  --ac-expansioncard-border-hover-color: none;
-
   border: 1px solid var(--ax-border-neutral-subtle);
   border-left: 0.5rem solid var(--ax-bg-brand-blue-strong);
 }
 
 .vilkårsKortNAV {
-  --ac-expansioncard-border-radius: var(--ax-radius-8);
-  --ac-expansioncard-border-hover-color: none;
-
   border: 1px solid var(--ax-border-neutral-subtle);
   border-left: 0.5rem solid var(--ax-bg-meta-purple-strong);
 }
 
 .vilkårsKort {
-  --ac-expansioncard-border-hover-color: none;
   border: 1px solid var(--ax-border-neutral-subtle);
 }
 

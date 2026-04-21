@@ -90,7 +90,7 @@ export const KelvinAppHeader = ({
       <InternalHeader data-color={'neutral'}>
         <InternalHeader.Title href="/">Kelvin</InternalHeader.Title>
 
-        <HStack gap="space-16" marginInline="space-16" className={styles.kelvinAppHeaderMenuItems}>
+        <HStack gap="space-16" marginInline="space-16">
           <Kelvinsøk setSøkeresultat={setSøkeresultat} />
           <Link data-color={'neutral'} href={`/oppgave/`}>
             Oppgaveliste

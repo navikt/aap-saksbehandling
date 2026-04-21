@@ -1,20 +1,9 @@
-.vilkårsKort {
-  --ac-expansioncard-border-radius: var(--ax-radius-8);
-  --ac-expansioncard-border-hover-color: none;
-}
-
 .blå {
-  --ac-expansioncard-border-radius: var(--ax-radius-8);
-  --ac-expansioncard-border-hover-color: none;
-
   border: 1px solid var(--ax-border-neutral-subtle);
   border-left: 0.5rem solid var(--ax-bg-brand-blue-strong);
 }
 
 .gul {
-  --ac-expansioncard-border-radius: var(--ax-radius-8);
-  --ac-expansioncard-border-hover-color: none;
-
   border: 1px solid var(--ax-border-neutral-subtle);
   border-left: 0.5rem solid var(--ax-bg-warning-soft);
 }

@@ -1,8 +1,5 @@
 .opprettKlageKort {
-  --ac-expansioncard-border-radius: var(--ax-radius-8);
-  --ac-expansioncard-border-hover-color: none;
-
-  border: 1px solid var(--ax-border-neutral-subtle);
+  /*border: 1px solid var(--ax-border-neutral-subtle);*/
 }
 
 .header,
