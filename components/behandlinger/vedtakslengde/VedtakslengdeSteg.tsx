@@ -6,7 +6,7 @@ import {
   VedtakslengdeVurderingResponse,
   VurderingMeta,
 } from 'lib/types/types';
-import { Radio, VStack } from '@navikt/ds-react';
+import { Radio, VStack, Alert } from '@navikt/ds-react';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { Behovstype } from 'lib/utils/form';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
@@ -51,6 +51,7 @@ interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
   initialMellomlagretVurdering?: MellomlagretVurdering;
+  erVedtakslengdeManuelt: boolean;
 }
 
 function getDefaultValuesFromGrunnlag(grunnlag: VedtakslengdeGrunnlag): VedtakslengdeForm {
@@ -73,7 +74,13 @@ function getDefaultValuesFromGrunnlag(grunnlag: VedtakslengdeGrunnlag): Vedtaksl
   };
 }
 
-export const VedtakslengdeSteg = ({ grunnlag, behandlingVersjon, readOnly, initialMellomlagretVurdering }: Props) => {
+export const VedtakslengdeSteg = ({
+  grunnlag,
+  behandlingVersjon,
+  readOnly,
+  initialMellomlagretVurdering,
+  erVedtakslengdeManuelt,
+}: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
 
   const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
@@ -177,6 +184,13 @@ export const VedtakslengdeSteg = ({ grunnlag, behandlingVersjon, readOnly, initi
       errorList={errorList}
       formReset={() => form.reset(getDefaultValuesFromGrunnlag(grunnlag))}
     >
+      {erVedtakslengdeManuelt && (
+        <Alert variant={'info'} size={'small'} style={{ marginBottom: '1rem' }}>
+          Brukeren har stans eller opphør etterfulgt av løpende rettighet fram i tid. Vedtaksperioden må vurderes
+          manuelt.
+        </Alert>
+      )}
+
       {grunnlag.sisteVedtatteVurderinger.map((vurdering, index) => (
         <TidligereVurderingExpandableCard
           key={`vedtatt-${index}`}
