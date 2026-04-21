@@ -12,7 +12,7 @@ import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppga
 import { aktiveFiltreringer } from 'components/oppgaveliste/filtrering/filtreringUtils';
 import { Køtype } from 'lib/types/oppgaveTypes';
 import { AktivKø } from 'hooks/oppgave/aktivkøHook';
-import { useFeatureFlag } from '../../../../context/UnleashContext';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   form: UseFormReturn<FormFieldsFilter>;
@@ -117,7 +117,7 @@ export const LedigeOppgaverFiltrering = ({
               </BoxWrapper>
               {tilbakekrevingBelopFilter && (
                 <BoxWrapper>
-                  <VStack gap={'4'}>
+                  <VStack gap={"space-16"}>
                     <BodyShort size={'small'} weight={'semibold'}>
                       Tilbakekrevingsbeløp
                     </BodyShort>
