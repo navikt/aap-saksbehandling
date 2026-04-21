@@ -170,28 +170,85 @@ const grunnlagMedVedtattManuellVurdering: VedtakslengdeGrunnlag = {
 
 describe('Generelt', () => {
   it('Skal ha en overskrift', () => {
-    render(<VedtakslengdeSteg readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
+    render(
+      <VedtakslengdeSteg
+        readOnly={false}
+        behandlingVersjon={0}
+        grunnlag={grunnlagTomt}
+        erVedtakslengdeManuelt={false}
+      />
+    );
 
     const heading = screen.getByText('§ 6 i AAP forskriften. Vedtaksperiode');
     expect(heading).toBeVisible();
   });
 
+  it('Skal vise info-melding når vurderingsbehov er VEDTAKSLENGDE_MANUELT', () => {
+    render(
+      <VedtakslengdeSteg readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} erVedtakslengdeManuelt={true} />
+    );
+
+    expect(
+      screen.getByText(
+        /Brukeren har stans eller opphør etterfulgt av løpende rettighet fram i tid. Vedtaksperioden må vurderes manuelt./
+      )
+    ).toBeVisible();
+  });
+
+  it('Skal ikke vise info-melding når vurderingsbehov ikke er VEDTAKSLENGDE_MANUELT', () => {
+    render(
+      <VedtakslengdeSteg
+        readOnly={false}
+        behandlingVersjon={0}
+        grunnlag={grunnlagTomt}
+        erVedtakslengdeManuelt={false}
+      />
+    );
+
+    expect(
+      screen.queryByText(
+        /Brukeren har stans eller opphør etterfulgt av løpende rettighet fram i tid. Vedtaksperioden må vurderes manuelt./
+      )
+    ).not.toBeInTheDocument();
+  });
+
   it('Skal vise "Legg til ny vurdering" knapp når ingen manuell vurdering finnes', () => {
-    render(<VedtakslengdeSteg readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
+    render(
+      <VedtakslengdeSteg
+        readOnly={false}
+        behandlingVersjon={0}
+        grunnlag={grunnlagTomt}
+        erVedtakslengdeManuelt={false}
+      />
+    );
 
     const leggTilKnapp = screen.getByRole('button', { name: 'Legg til ny vurdering' });
     expect(leggTilKnapp).toBeVisible();
   });
 
   it('Skal ikke vise "Legg til ny vurdering" knapp når manuell vurdering allerede finnes', () => {
-    render(<VedtakslengdeSteg readOnly={false} behandlingVersjon={0} grunnlag={grunnlagMedManuellVurdering} />);
+    render(
+      <VedtakslengdeSteg
+        readOnly={false}
+        behandlingVersjon={0}
+        grunnlag={grunnlagMedManuellVurdering}
+        erVedtakslengdeManuelt={false}
+      />
+    );
 
     const leggTilKnapp = screen.queryByRole('button', { name: 'Legg til ny vurdering' });
     expect(leggTilKnapp).not.toBeInTheDocument();
   });
 
   it('Skal vise skjemafelt etter å ha trykket "Legg til ny vurdering"', async () => {
-    render(<VedtakslengdeSteg readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
+    render(
+      <VedtakslengdeSteg
+        readOnly={false}
+        behandlingVersjon={0}
+        grunnlag={grunnlagTomt}
+        erVedtakslengdeManuelt={false}
+      />
+    );
 
     const leggTilKnapp = screen.getByRole('button', { name: 'Legg til ny vurdering' });
     await user.click(leggTilKnapp);
@@ -211,7 +268,14 @@ describe('Generelt', () => {
   });
 
   it('Skal ikke vise "Legg til ny vurdering" etter at en manuell vurdering er lagt til', async () => {
-    render(<VedtakslengdeSteg readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
+    render(
+      <VedtakslengdeSteg
+        readOnly={false}
+        behandlingVersjon={0}
+        grunnlag={grunnlagTomt}
+        erVedtakslengdeManuelt={false}
+      />
+    );
 
     const leggTilKnapp = screen.getByRole('button', { name: 'Legg til ny vurdering' });
     await user.click(leggTilKnapp);
@@ -222,7 +286,14 @@ describe('Generelt', () => {
 
 describe('Validering', () => {
   it('Skal vise feilmeldinger når skjemaet sendes inn uten utfylte felt', async () => {
-    render(<VedtakslengdeSteg readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
+    render(
+      <VedtakslengdeSteg
+        readOnly={false}
+        behandlingVersjon={0}
+        grunnlag={grunnlagTomt}
+        erVedtakslengdeManuelt={false}
+      />
+    );
 
     // Legg til ny vurdering
     await user.click(screen.getByRole('button', { name: 'Legg til ny vurdering' }));
@@ -235,7 +306,14 @@ describe('Validering', () => {
   });
 
   it('Skal vise feilmelding ved ugyldig datoformat', async () => {
-    render(<VedtakslengdeSteg readOnly={false} behandlingVersjon={0} grunnlag={grunnlagTomt} />);
+    render(
+      <VedtakslengdeSteg
+        readOnly={false}
+        behandlingVersjon={0}
+        grunnlag={grunnlagTomt}
+        erVedtakslengdeManuelt={false}
+      />
+    );
 
     await user.click(screen.getByRole('button', { name: 'Legg til ny vurdering' }));
 
@@ -250,7 +328,14 @@ describe('Validering', () => {
 
 describe('Tidligere vurderinger', () => {
   it('Skal vise sisteVedtatteVurderinger med riktig status-tag for automatisk vurdering', () => {
-    render(<VedtakslengdeSteg readOnly={false} behandlingVersjon={0} grunnlag={grunnlagMedVedtatteOgNyeVurderinger} />);
+    render(
+      <VedtakslengdeSteg
+        readOnly={false}
+        behandlingVersjon={0}
+        grunnlag={grunnlagMedVedtatteOgNyeVurderinger}
+        erVedtakslengdeManuelt={false}
+      />
+    );
 
     const automatiskTags = screen.getAllByText('Automatisk satt vedtaksperiode');
     expect(automatiskTags.length).toBeGreaterThanOrEqual(1);
@@ -258,19 +343,40 @@ describe('Tidligere vurderinger', () => {
   });
 
   it('Skal vise sisteVedtatteVurderinger med riktig status-tag for manuell vurdering', () => {
-    render(<VedtakslengdeSteg readOnly={false} behandlingVersjon={0} grunnlag={grunnlagMedVedtattManuellVurdering} />);
+    render(
+      <VedtakslengdeSteg
+        readOnly={false}
+        behandlingVersjon={0}
+        grunnlag={grunnlagMedVedtattManuellVurdering}
+        erVedtakslengdeManuelt={false}
+      />
+    );
 
     expect(screen.getByText('Manuell forlengelse')).toBeVisible();
   });
 
   it('Skal vise automatiske nye vurderinger som tidligere vurderinger med automatisk status', () => {
-    render(<VedtakslengdeSteg readOnly={false} behandlingVersjon={0} grunnlag={grunnlagMedAutomatiskVurdering} />);
+    render(
+      <VedtakslengdeSteg
+        readOnly={false}
+        behandlingVersjon={0}
+        grunnlag={grunnlagMedAutomatiskVurdering}
+        erVedtakslengdeManuelt={false}
+      />
+    );
 
     expect(screen.getByText('Automatisk satt vedtaksperiode')).toBeVisible();
   });
 
   it('Skal vise VedtakslengdeVurderingInnhold med sluttdato og begrunnelse', () => {
-    render(<VedtakslengdeSteg readOnly={false} behandlingVersjon={0} grunnlag={grunnlagMedVedtatteOgNyeVurderinger} />);
+    render(
+      <VedtakslengdeSteg
+        readOnly={false}
+        behandlingVersjon={0}
+        grunnlag={grunnlagMedVedtatteOgNyeVurderinger}
+        erVedtakslengdeManuelt={false}
+      />
+    );
 
     // Sluttdato og begrunnelse vises i SpørsmålOgSvar (cards may be collapsed)
     const sluttdatoLabels = screen.getAllByText('Sluttdato');
@@ -285,7 +391,14 @@ describe('Tidligere vurderinger', () => {
 
 describe('Slett manuell vurdering', () => {
   it('Skal fjerne manuell vurdering når slett-knappen trykkes', async () => {
-    render(<VedtakslengdeSteg readOnly={false} behandlingVersjon={0} grunnlag={grunnlagMedAutomatiskVurdering} />);
+    render(
+      <VedtakslengdeSteg
+        readOnly={false}
+        behandlingVersjon={0}
+        grunnlag={grunnlagMedAutomatiskVurdering}
+        erVedtakslengdeManuelt={false}
+      />
+    );
 
     // Legg til vurdering
     await user.click(screen.getByRole('button', { name: 'Legg til ny vurdering' }));
@@ -314,7 +427,14 @@ describe('Endre / Avbryt', () => {
   it('Skal vise "Endre"-knapp når steg ikke er aktivt og det finnes en manuell vurdering', () => {
     setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'FASTSETT_GRUNNLAG' });
 
-    render(<VedtakslengdeSteg readOnly={false} behandlingVersjon={0} grunnlag={grunnlagMedManuellVurdering} />);
+    render(
+      <VedtakslengdeSteg
+        readOnly={false}
+        behandlingVersjon={0}
+        grunnlag={grunnlagMedManuellVurdering}
+        erVedtakslengdeManuelt={false}
+      />
+    );
 
     const endreKnapp = screen.getByRole('button', { name: 'Endre' });
     expect(endreKnapp).toBeVisible();
@@ -323,7 +443,14 @@ describe('Endre / Avbryt', () => {
   it('Skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
     setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'FASTSETT_GRUNNLAG' });
 
-    render(<VedtakslengdeSteg readOnly={false} behandlingVersjon={0} grunnlag={grunnlagMedManuellVurdering} />);
+    render(
+      <VedtakslengdeSteg
+        readOnly={false}
+        behandlingVersjon={0}
+        grunnlag={grunnlagMedManuellVurdering}
+        erVedtakslengdeManuelt={false}
+      />
+    );
 
     const endreKnapp = screen.getByRole('button', { name: 'Endre' });
     await user.click(endreKnapp);
@@ -375,6 +502,7 @@ describe('Mellomlagring i vedtakslengde', () => {
         behandlingVersjon={0}
         grunnlag={grunnlagTomt}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+        erVedtakslengdeManuelt={false}
       />
     );
 
@@ -389,6 +517,7 @@ describe('Mellomlagring i vedtakslengde', () => {
         behandlingVersjon={0}
         grunnlag={grunnlagTomt}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+        erVedtakslengdeManuelt={false}
       />
     );
 
@@ -410,6 +539,7 @@ describe('Mellomlagring i vedtakslengde', () => {
         behandlingVersjon={0}
         grunnlag={grunnlagTomt}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+        erVedtakslengdeManuelt={false}
       />
     );
 
@@ -425,7 +555,14 @@ describe('Mellomlagring i vedtakslengde', () => {
   });
 
   it('Skal bruke bekreftet vurdering fra grunnlag som defaultValue i skjema dersom mellomlagring ikke finnes', () => {
-    render(<VedtakslengdeSteg readOnly={false} behandlingVersjon={0} grunnlag={grunnlagMedManuellVurdering} />);
+    render(
+      <VedtakslengdeSteg
+        readOnly={false}
+        behandlingVersjon={0}
+        grunnlag={grunnlagMedManuellVurdering}
+        erVedtakslengdeManuelt={false}
+      />
+    );
 
     const begrunnelseFelt = screen.getByRole('textbox', {
       name: 'Begrunnelse for endring av vedtakslengde',
@@ -445,6 +582,7 @@ describe('Mellomlagring i vedtakslengde', () => {
         behandlingVersjon={0}
         grunnlag={grunnlagTomt}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+        erVedtakslengdeManuelt={false}
       />
     );
 
@@ -465,6 +603,7 @@ describe('Mellomlagring i vedtakslengde', () => {
         behandlingVersjon={0}
         grunnlag={grunnlagMedManuellVurdering}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+        erVedtakslengdeManuelt={false}
       />
     );
 
@@ -487,6 +626,7 @@ describe('Mellomlagring i vedtakslengde', () => {
         behandlingVersjon={0}
         grunnlag={grunnlagTomt}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+        erVedtakslengdeManuelt={false}
       />
     );
 
