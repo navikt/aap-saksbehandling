@@ -27,7 +27,7 @@ export const StudentVurderingFelter = ({ index, readOnly, diagnoseDefaultOptions
   const defaultOptionsBidiagnose = kodeverkValue && diagnoseDefaultOptions[kodeverkValue].bidiagnoserOptions;
 
   return (
-    <VStack gap={"space-16"}>
+    <VStack gap={'space-16'}>
       <DateInputWrapper
         name={`vurderinger.${index}.fraDato`}
         control={form.control}
@@ -40,7 +40,6 @@ export const StudentVurderingFelter = ({ index, readOnly, diagnoseDefaultOptions
         control={form.control}
         label={'Vurder §11-14 og vilkårene i §7 i forskriften'}
         rules={{ required: 'Du må gjøre en vilkårsvurdering' }}
-        className={'begrunnelse'}
         readOnly={readOnly}
       />
       <RadioGroupWrapper

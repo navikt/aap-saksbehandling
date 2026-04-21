@@ -161,7 +161,7 @@ export const MeldepliktPeriodisertFrontend = ({
       errorList={errorList}
     >
       {!formReadOnly && (
-        <VStack paddingBlock={"space-16"}>
+        <VStack paddingBlock={'space-16'}>
           <BodyLong size={'small'}>
             <Link href={'https://lovdata.no/pro/rundskriv/r11-00/KAPITTEL_12'} target="_blank">
               Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-10 (lovdata.no)
@@ -180,7 +180,7 @@ export const MeldepliktPeriodisertFrontend = ({
           kvalitetssikretAv={vurdering.kvalitetssikretAv}
           besluttetAv={vurdering.besluttetAv}
         >
-          <VStack gap={"space-20"}>
+          <VStack gap={'space-20'}>
             <SpørsmålOgSvar spørsmål="Vurderingen gjelder fra?" svar={formaterDatoForFrontend(vurdering.fom)} />
             <SpørsmålOgSvar spørsmål="Vilkårsvurdering" svar={vurdering.begrunnelse} />
             <SpørsmålOgSvar
@@ -229,7 +229,6 @@ export const MeldepliktPeriodisertFrontend = ({
             control={form.control}
             name={`vurderinger.${index}.begrunnelse`}
             rules={{ required: 'Du må begrunne vurderingen din' }}
-            className={'begrunnelse'}
             readOnly={formReadOnly}
           />
           <RadioGroupWrapper

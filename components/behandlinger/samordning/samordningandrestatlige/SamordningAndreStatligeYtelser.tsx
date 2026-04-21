@@ -153,8 +153,8 @@ export const SamordningAndreStatligeYtelser = ({
       <ReadMore size={'small'} header="Hva skal vurderes?">
         Det må undersøkes om bruker har hatt andre ytelser i perioden med AAP som kan gi fradrag i AAP-utbetalingen.
       </ReadMore>
-      <VStack gap={"space-24"}>
-        <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
+      <VStack gap={'space-24'}>
+        <FormField form={form} formField={formFields.begrunnelse} />
         <AndreStatligeYtelserTabell form={form} readOnly={formReadOnly} />
       </VStack>
     </VilkårskortMedFormOgMellomlagring>

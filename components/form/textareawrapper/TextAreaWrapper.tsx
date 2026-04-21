@@ -59,7 +59,7 @@ export const TextAreaWrapper = <FormFieldValues extends FieldValues>({
           name={name}
           maxLength={maxLength}
           readOnly={readOnly}
-          className={className}
+          className={`textarea ${className}`}
           autoComplete={autocomplete}
         />
       );

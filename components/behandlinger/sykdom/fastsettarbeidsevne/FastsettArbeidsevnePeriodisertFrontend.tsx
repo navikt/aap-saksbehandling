@@ -175,7 +175,7 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
       errorList={errorList}
     >
       {!formReadOnly && (
-        <VStack paddingBlock={"space-16"}>
+        <VStack paddingBlock={'space-16'}>
           <BodyLong size={'small'}>
             <Link href={'https://lovdata.no/pro/rundskriv/r11-00/KAPITTEL_26-3'} target="_blank">
               Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-23 (lovdata.no)
@@ -194,7 +194,7 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
           kvalitetssikretAv={vurdering.kvalitetssikretAv}
           besluttetAv={vurdering.besluttetAv}
         >
-          <VStack gap={"space-20"}>
+          <VStack gap={'space-20'}>
             <SpørsmålOgSvar spørsmål="Vurderingen gjelder fra?" svar={formaterDatoForFrontend(vurdering.fom)} />
             <SpørsmålOgSvar spørsmål="Vilkårsvurdering" svar={vurdering.begrunnelse} />
             <SpørsmålOgSvar
@@ -242,13 +242,12 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
             control={form.control}
             name={`vurderinger.${index}.begrunnelse`}
             rules={{ required: 'Du må begrunne vurderingen din' }}
-            className={'begrunnelse'}
             readOnly={formReadOnly}
           />
-          <HStack gap={"space-12"}>
-            <VStack gap={"space-8"}>
+          <HStack gap={'space-12'}>
+            <VStack gap={'space-8'}>
               <Label size={'small'}>Oppgi arbeidsevnen som ikke er utnyttet i prosent</Label>
-              <HStack gap={"space-8"}>
+              <HStack gap={'space-8'}>
                 <TextFieldWrapper
                   control={form.control}
                   name={`vurderinger.${index}.arbeidsevne`}
@@ -269,7 +268,7 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
                   readOnly={formReadOnly}
                   className="prosent_input"
                 />
-                <VStack paddingBlock={"space-4"} justify={'end'}>
+                <VStack paddingBlock={'space-4'} justify={'end'}>
                   {regnOmTilTimer(form.watch(`vurderinger.${index}.arbeidsevne`)?.toString() ?? '')}
                 </VStack>
               </HStack>

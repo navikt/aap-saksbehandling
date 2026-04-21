@@ -77,7 +77,6 @@ export const TotrinnsvurderingVedtaksbrevFelter = ({
                       : true,
                 },
               }}
-              className={'begrunnelse'}
             />
             <CheckboxWrapper
               label={'Returårsak'}

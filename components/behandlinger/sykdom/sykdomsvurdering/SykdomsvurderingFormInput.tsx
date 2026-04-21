@@ -51,7 +51,7 @@ export const SykdomsvurderingFormInput = ({
   diagnoseDefaultOptions,
 }: Props) => {
   return (
-    <VStack gap={"space-20"}>
+    <VStack gap={'space-20'}>
       <DateInputWrapper
         name={`vurderinger.${index}.fraDato`}
         label="Vurderingen gjelder fra"

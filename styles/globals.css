@@ -15,10 +15,6 @@
   gap: var(--ax-space-16);
 }
 
-.begrunnelse {
-  max-width: 90ch;
-}
-
 .prosent_input > input {
   max-width: 6ch;
 }
@@ -31,12 +27,6 @@
   max-width: 90ch;
 }
 
-.navds-form-field {
-  max-width: 90ch;
-}
-.navds-read-more__content {
-  max-width: 90ch;
-}
-.navds-error-summary--small {
+.textarea {
   max-width: 90ch;
 }

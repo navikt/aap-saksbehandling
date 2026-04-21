@@ -70,7 +70,6 @@ export const TotrinnnsvurderingFelter = ({ readOnly, link, erKvalitetssikring, f
                       : true,
                 },
               }}
-              className={'begrunnelse'}
             />
             <CheckboxWrapper
               label={'Returårsak'}

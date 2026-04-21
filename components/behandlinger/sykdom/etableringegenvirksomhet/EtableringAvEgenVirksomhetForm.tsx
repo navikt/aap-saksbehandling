@@ -50,7 +50,7 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly, gru
   }, [utviklingperiodeList, oppstartsperiodeList, form.clearErrors]);
 
   return (
-    <VStack gap={"space-16"}>
+    <VStack gap={'space-16'}>
       <DateInputWrapper
         name={`vurderinger.${index}.fraDato`}
         label="Vurderingen gjelder fra"
@@ -70,7 +70,6 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly, gru
           required: 'Du må gi en begrunnelse for vurderingen',
         }}
         readOnly={readOnly}
-        className={'begrunnelse'}
       />
       <RadioGroupJaNei
         name={`vurderinger.${index}.foreliggerEnNæringsfagligVurdering`}
@@ -118,14 +117,14 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly, gru
         />
       )}
       {nyVurderingErOppfylt(form.watch(`vurderinger.${index}`)) && (
-        <VStack gap={"space-16"} paddingBlock={"space-16 space-0"}>
+        <VStack gap={'space-16'} paddingBlock={'space-16 space-0'}>
           <Heading level={'2'} size={'small'}>
             Etableringsplan
           </Heading>
-          <VStack gap={"space-16"}>
+          <VStack gap={'space-16'}>
             <VStack>
               <Label size={'small'}>Utviklingsfase</Label>
-              <VStack gap={"space-4"}>
+              <VStack gap={'space-4'}>
                 <BodyShort textColor={'subtle'} size={'small'}>
                   Kan gis for inntil 6 måneder
                 </BodyShort>
@@ -140,7 +139,7 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly, gru
             {form.formState.errors.vurderinger?.[index]?.utviklingsperioder && (
               <Alert variant={'error'}>{form.formState.errors.vurderinger[index].utviklingsperioder.message}</Alert>
             )}
-            <VStack gap={"space-16"}>
+            <VStack gap={'space-16'}>
               <Table size="small">
                 <Table.Header>
                   <Table.Row>
@@ -157,7 +156,7 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly, gru
                     return (
                       <Table.Row key={id}>
                         <Table.DataCell>
-                          <HStack gap={"space-8"} align={'center'}>
+                          <HStack gap={'space-8'} align={'center'}>
                             <DateInputWrapper
                               readOnly={readOnly}
                               name={`vurderinger.${index}.utviklingsperioder.${i}.fom`}
@@ -203,10 +202,10 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly, gru
               </HStack>
             </VStack>
           </VStack>
-          <VStack gap={"space-16"}>
+          <VStack gap={'space-16'}>
             <VStack>
               <Label size={'small'}>Oppstartsfase</Label>
-              <VStack gap={"space-4"}>
+              <VStack gap={'space-4'}>
                 <BodyShort textColor={'subtle'} size={'small'}>
                   Kan gis for inntil 3 måneder.
                 </BodyShort>
@@ -221,7 +220,7 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly, gru
             {form.formState.errors.vurderinger?.[index]?.oppstartsperioder && (
               <Alert variant={'error'}>{form.formState.errors.vurderinger[index].oppstartsperioder.message}</Alert>
             )}
-            <VStack gap={"space-16"}>
+            <VStack gap={'space-16'}>
               <Table size="small">
                 <Table.Header>
                   <Table.Row>
@@ -238,7 +237,7 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly, gru
                     return (
                       <Table.Row key={id}>
                         <Table.DataCell>
-                          <HStack gap={"space-8"} align={'center'}>
+                          <HStack gap={'space-8'} align={'center'}>
                             <DateInputWrapper
                               readOnly={readOnly}
                               name={`vurderinger.${index}.oppstartsperioder.${i}.fom`}
