@@ -50,7 +50,7 @@ export const MeldekortTabell = () => {
                 togglePlacement={'right'}
               >
                 <Table.HeaderCell textSize={'small'} colSpan={2} scope={'row'}>
-                  <VStack gap={"space-8"}>
+                  <VStack gap={'space-8'}>
                     <BodyShort size={'small'}>{`Uke ${hentUkeNummerForPeriode(fom.dato, tom.dato)}`}</BodyShort>
                     <Detail>{`${fom.formaterForFrontend()} - ${tom.formaterForFrontend()}`}</Detail>
                   </VStack>
@@ -64,7 +64,8 @@ export const MeldekortTabell = () => {
                 <Table.DataCell textSize={'small'}>endret av</Table.DataCell>
                 <Table.DataCell textSize={'small'}>
                   <Button
-                    variant={'tertiary-neutral'}
+                    data-color="neutral"
+                    variant={'tertiary'}
                     icon={<PencilIcon />}
                     onClick={() => {
                       setSelectedMeldekort(meldekort);
