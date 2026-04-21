@@ -26,27 +26,18 @@ export function VisuellTidslinjeInnhold({ visuellTidslinje }: Props) {
               key={i}
               start={new Date(item.periode.fom)}
               end={new Date(item.periode.tom)}
-              status={item.periodeMangler ? 'danger' : 'success'}
+              status={'success'}
               statusLabel={'Inntektstidslinje'}
             >
-              {item.periodeMangler ? (
+              <div>
                 <div>
-                  <div>
-                    <b>{formaterPeriode(item.periode.fom, item.periode.tom)}</b>
-                  </div>
-                  <div>Inntekt mangler</div>
+                  <b>{formaterPeriode(item.periode.fom, item.periode.tom)}</b>
                 </div>
-              ) : (
                 <div>
-                  <div>
-                    <b>{formaterPeriode(item.periode.fom, item.periode.tom)}</b>
-                  </div>
-                  <div>
-                    {item.virksomhetNavn} (org.nr: {item.virksomhetId})
-                  </div>
-                  <div>Inntekt: {item.beloep}</div>
+                  {item.virksomhetNavn} (org.nr: {item.virksomhetId})
                 </div>
-              )}
+                <div>Inntekt: {item.beloep}</div>
+              </div>
             </Timeline.Period>
           );
         })}
@@ -58,27 +49,15 @@ export function VisuellTidslinjeInnhold({ visuellTidslinje }: Props) {
               key={i}
               start={new Date(item.periode.fom)}
               end={new Date(item.periode.tom)}
-              status={item.periodeMangler ? 'danger' : 'success'}
-              statusLabel={'Inntektstidslinje'}
+              status={'danger'}
+              statusLabel={'Manglende inntekter'}
             >
-              {item.periodeMangler ? (
+              <div>
                 <div>
-                  <div>
-                    <b>{formaterPeriode(item.periode.fom, item.periode.tom)}</b>
-                  </div>
-                  <div>Inntekt mangler</div>
+                  <b>{formaterPeriode(item.periode.fom, item.periode.tom)}</b>
                 </div>
-              ) : (
-                <div>
-                  <div>
-                    <b>{formaterPeriode(item.periode.fom, item.periode.tom)}</b>
-                  </div>
-                  <div>
-                    {item.virksomhetNavn} (org.nr: {item.virksomhetId})
-                  </div>
-                  <div>Inntekt: {item.beloep}</div>
-                </div>
-              )}
+                <div>Inntekt mangler</div>
+              </div>
             </Timeline.Period>
           );
         })}
