@@ -18,7 +18,6 @@
 
 .knapp:focus-visible {
   background-color: var(--ax-bg-meta-purple-soft);
-  --a-shadow-focus: 0 0 0 3px var(--ax-bg-meta-purple-soft);
 }
 
 .boks > * {
@@ -30,9 +29,9 @@
 }
 
 .litenBoks > * {
-    padding-left: var(--ax-space-12);
-    padding-right: var(--ax-space-12);
-    padding-bottom: 0.5rem;
-    min-width: 200px;
-    max-width: 300px;
+  padding-left: var(--ax-space-12);
+  padding-right: var(--ax-space-12);
+  padding-bottom: 0.5rem;
+  min-width: 200px;
+  max-width: 300px;
 }

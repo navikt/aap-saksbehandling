@@ -1,19 +1,8 @@
-.form {
-  display: grid;
-  border: 1px solid gray;
-  box-shadow: var(--a-shadow-large);
-  grid-template-columns: 1fr 1fr;
-  gap: var(--ax-space-16);
-  padding: var(--ax-space-16);
-  margin-top: var(--ax-space-16);
-  width: 100%;
-}
-
 .formTest {
   display: flex;
   flex-direction: column;
   border: 1px solid gray;
-  box-shadow: var(--a-shadow-large);
+  box-shadow: var(--ax-shadow-dialog);
   gap: var(--ax-space-16);
   padding: var(--ax-space-16);
   margin-top: var(--ax-space-16);

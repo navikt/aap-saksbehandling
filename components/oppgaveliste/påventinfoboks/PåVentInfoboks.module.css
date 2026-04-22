@@ -18,7 +18,6 @@
 
 .knapp:focus-visible {
   background-color: var(--ax-bg-warning-moderate);
-  --a-shadow-focus: 0 0 0 3px var(--ax-warning-500);
 }
 
 .boks > * {
