@@ -86,13 +86,15 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
       defaultValue: lagretUtvidetFilter?.behandlingOpprettetTom,
     },
     tilbakekrevingBeløpFom: {
-      type: 'number',
+      type: 'text',
       label: 'Beløp fra',
+      rules: { pattern: { value: /^\d*$/, message: 'Kun tall' } },
       defaultValue: lagretUtvidetFilter?.tilbakekrevingBeløpFom ?? undefined,
     },
     tilbakekrevingBeløpTom: {
-      type: 'number',
+      type: 'text',
       label: 'Beløp til',
+      rules: { pattern: { value: /^\d*$/, message: 'Kun tall' } },
       defaultValue: lagretUtvidetFilter?.tilbakekrevingBeløpTom ?? undefined,
     },
     årsaker: {
@@ -116,7 +118,7 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
     saksbehandlere: {
       type: 'fieldArray',
     },
-  });
+  }, { mode: 'onChange' });
 
   const behandlingOpprettetTom = form.watch('behandlingOpprettetTom');
   const behandlingOpprettetFom = form.watch('behandlingOpprettetFom');
