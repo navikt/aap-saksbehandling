@@ -7,7 +7,6 @@ export const FLAGS = [
   'VisSisteDagMedRett',
   'Redigitalisering',
   'InkluderOvergangUforeArbeid',
-  'EnhetForrigeOppgaveFrontend',
   'TilbakekrevingBelopFilter',
   'registrereEllerEndreMeldekort',
 ] as const;
@@ -24,7 +23,6 @@ export const mockedFlags: Flags = {
   VisSisteDagMedRett: true,
   Redigitalisering: true,
   InkluderOvergangUforeArbeid: true,
-  EnhetForrigeOppgaveFrontend: true,
   TilbakekrevingBelopFilter: true,
   registrereEllerEndreMeldekort: true,
 };
