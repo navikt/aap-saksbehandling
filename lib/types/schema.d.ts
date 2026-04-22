@@ -5924,7 +5924,7 @@ export interface components {
         | '9004'
         | '9082'
         | '9083';
-      helseinstitusjonVurdering: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.flate.HelseinstitusjonVurderingerDto'];
+      'l\u00F8sningerForPerioder': components['schemas']['no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.PeriodisertInstitusjonsoppholdDto'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarManuellInntektVurderingL\u00F8sning': {
       /** @enum {string} */
@@ -7850,7 +7850,6 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.EnkeltAvklaringsbehovL\u00F8sning':
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvbrytRevurderingL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarBarnetilleggL\u00F8sning']
-      | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarHelseinstitusjonL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarManuellInntektVurderingL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarOppf\u00F8lgingLokalkontorL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarOppf\u00F8lgingNAYL\u00F8sning']
@@ -9149,6 +9148,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.PeriodisertAvklaringsbehovL\u00F8sning<*>':
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.ArbeidsopptrappingL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarBistandsbehovL\u00F8sning']
+      | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarHelseinstitusjonL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarOppholdskravL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarOvergangArbeidL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarOvergangUf\u00F8reL\u00F8sning']
@@ -12232,6 +12232,22 @@ export interface components {
        */
       tidligsteReduksjonsdato?: string | null;
     };
+    'no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.PeriodisertInstitusjonsoppholdDto': {
+      begrunnelse: string;
+      faarFriKostOgLosji: boolean;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fom: string;
+      forsoergerEktefelle?: boolean | null;
+      harFasteUtgifter?: boolean | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      tom: string;
+    };
     'no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.SoningsGrunnlagDto': {
       'harTilgangTil\u00C5Saksbehandle': boolean;
       soningsforhold: components['schemas']['no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.InstitusjonsoppholdDto'][];
@@ -13625,13 +13641,9 @@ export interface components {
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
     };
     'no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.VisuellTidslinjeArbeidInntektINorge': {
-      /** Format: double */
-      beloep: number;
       inntekter: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.VisuellTidslinjeInntektDetalj'][];
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
       periodeMangler: boolean;
-      virksomhetId?: string | null;
-      virksomhetNavn?: string | null;
     };
     'no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.VisuellTidslinjeInntektDetalj': {
       /** Format: double */
@@ -14773,16 +14785,6 @@ export interface components {
       utviklingsPerioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
       virksomhetErNy?: boolean | null;
       virksomhetNavn: string;
-    };
-    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.flate.HelseinstitusjonVurderingDto': {
-      begrunnelse: string;
-      faarFriKostOgLosji: boolean;
-      forsoergerEktefelle?: boolean | null;
-      harFasteUtgifter?: boolean | null;
-      periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
-    };
-    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.flate.HelseinstitusjonVurderingerDto': {
-      vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.flate.HelseinstitusjonVurderingDto'][];
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.flate.SoningsvurderingDto': {
       begrunnelse: string;

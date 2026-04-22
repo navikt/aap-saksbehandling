@@ -11,6 +11,7 @@ import {
   OvergangUforeLøsning,
   PeriodisertArbeidsevneVurderingDto,
   PeriodisertFritaksvurderingDto,
+  PeriodisertInstitusjonsoppholdDto,
   SykdomsvurderingLøsningDto,
   SykepengererstatningPeriodeLøsning,
   VedtakslengdeVurderingDto,
@@ -93,6 +94,11 @@ interface VedtakslengdeBehov {
   løsningerForPerioder: VedtakslengdeVurderingDto[];
 }
 
+interface HelseinstitusjonBehov {
+  behovstype: Behovstype.AVKLAR_HELSEINSTITUSJON;
+  løsningerForPerioder: PeriodisertInstitusjonsoppholdDto[];
+}
+
 type Behov =
   | LovvalgOgMedlemskapBehov
   | StudentBehov
@@ -107,4 +113,5 @@ type Behov =
   | OvergangUføre
   | OppholdskravvurderingBehov
   | ForutgåendeMedlemskapMedOverstyring
-  | VedtakslengdeBehov;
+  | VedtakslengdeBehov
+  | HelseinstitusjonBehov;

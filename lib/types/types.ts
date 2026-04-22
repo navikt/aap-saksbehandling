@@ -92,6 +92,9 @@ export type Institusjonsopphold =
 export type HelseInstiusjonVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.HelseinstitusjonVurderingDto'];
 
+export type PeriodisertInstitusjonsoppholdDto =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.PeriodisertInstitusjonsoppholdDto'];
+
 export type FatteVedtakGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.FatteVedtakGrunnlagDto'];
 

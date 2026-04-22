@@ -4,9 +4,9 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgG
 import { InstitusjonsoppholdTabell } from 'components/behandlinger/institusjonsopphold/InstitusjonsoppholdTabell';
 import {
   HelseinstitusjonGrunnlag,
-  HelseInstiusjonVurdering,
   MellomlagretVurdering,
   Periode,
+  PeriodisertInstitusjonsoppholdDto,
   VurderingMeta,
 } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
@@ -56,7 +56,7 @@ type DraftFormFields = Partial<HelseinstitusjonsFormFields>;
 
 export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initialMellomlagretVurdering }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
+  const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('DU_ER_ET_ANNET_STED');
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
@@ -93,7 +93,7 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
     form.handleSubmit((data) => {
       const parseDato = (dato: string) => parse(dato, 'dd.MM.yyyy', new Date());
 
-      const vurderinger: HelseInstiusjonVurdering[] = data.helseinstitusjonsvurderinger.flatMap((opphold) => {
+      const vurderinger: PeriodisertInstitusjonsoppholdDto[] = data.helseinstitusjonsvurderinger.flatMap((opphold) => {
         return opphold.vurderinger.map((vurdering, index, filtrerteVurderinger) => {
           const nesteVurdering = filtrerteVurderinger.at(index + 1);
 
@@ -111,17 +111,18 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
             faarFriKostOgLosji: vurdering.faarFriKostOgLosji === JaEllerNei.Ja,
             forsoergerEktefelle: vurdering.forsoergerEktefelle === JaEllerNei.Ja,
             harFasteUtgifter: vurdering.harFasteUtgifter === JaEllerNei.Ja,
-            periode: { fom, tom },
+            fom,
+            tom,
           };
         });
       });
 
-      løsBehovOgGåTilNesteSteg(
+      løsPeriodisertBehovOgGåTilNesteSteg(
         {
           behandlingVersjon: behandlingVersjon,
           behov: {
             behovstype: Behovstype.AVKLAR_HELSEINSTITUSJON,
-            helseinstitusjonVurdering: { vurderinger },
+            løsningerForPerioder: vurderinger,
           },
           referanse: behandlingsreferanse,
         },
