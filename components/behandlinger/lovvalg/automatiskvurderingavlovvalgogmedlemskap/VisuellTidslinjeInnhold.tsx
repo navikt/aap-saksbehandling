@@ -33,10 +33,14 @@ export function VisuellTidslinjeInnhold({ visuellTidslinje }: Props) {
                 <div>
                   <b>{formaterPeriode(item.periode.fom, item.periode.tom)}</b>
                 </div>
-                <div>
-                  {item.virksomhetNavn} (org.nr: {item.virksomhetId})
-                </div>
-                <div>Inntekt: {item.beloep}</div>
+                {item.inntekter.map((inntekt, j) => (
+                  <div key={j}>
+                    <div>
+                      {inntekt.virksomhetNavn} (org.nr: {inntekt.virksomhetId})
+                    </div>
+                    <div>Inntekt: {inntekt.beloep}</div>
+                  </div>
+                ))}
               </div>
             </Timeline.Period>
           );
