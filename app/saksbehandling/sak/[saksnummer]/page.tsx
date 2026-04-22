@@ -10,6 +10,7 @@ import { hentBrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { isSuccess } from 'lib/utils/api';
 import { unleashService } from 'lib/services/unleash/unleashService';
 import { NySakOversiktContainer } from 'components/saksoversikt/NySakOversiktContainer';
+import { hentArenaSakerForPerson } from 'lib/services/apiinternservice/apiInternService';
 
 const Page = async (props: { params: Promise<{ saksnummer: string }> }) => {
   const params = await props.params;
@@ -21,6 +22,9 @@ const Page = async (props: { params: Promise<{ saksnummer: string }> }) => {
   ]);
   const rettighetsinfo = isSuccess(rettihetsinfoRes) ? rettihetsinfoRes.data : null;
   const nySaksoversikt = unleashService.isEnabled('NySaksBehandlingOversikt');
+
+  const arenaSakerRes = nySaksoversikt ? await hentArenaSakerForPerson(personInfo.fnr) : null;
+  const arenaSaker = arenaSakerRes && isSuccess(arenaSakerRes) ? arenaSakerRes.data : null;
 
   return (
     <>
@@ -35,6 +39,7 @@ const Page = async (props: { params: Promise<{ saksnummer: string }> }) => {
             innloggetBrukerIdent={innloggetBrukerInfo.NAVident}
             personInfo={personInfo}
             rettighetsinfo={rettighetsinfo}
+            arenaSaker={arenaSaker}
           />
         ) : (
           <SakOversiktContainer

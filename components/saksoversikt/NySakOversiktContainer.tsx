@@ -2,6 +2,7 @@
 
 import { Box, ExpansionCard, HGrid, Page, Tabs, VStack } from '@navikt/ds-react';
 import { RettighetsinfoDto, SakPersoninfo, SaksInfo } from 'lib/types/types';
+import { SakerResponse } from 'lib/services/apiinternservice/apiInternService';
 import { FileTextIcon, PersonIcon } from '@navikt/aksel-icons';
 import { DokumentOversikt } from 'components/saksoversikt/dokumentoversikt/DokumentOversikt';
 import { useState } from 'react';
@@ -21,11 +22,13 @@ export const NySakOversiktContainer = ({
   sak,
   innloggetBrukerIdent,
   rettighetsinfo,
+  arenaSaker,
 }: {
   sak: SaksInfo;
   innloggetBrukerIdent: string | undefined;
   personInfo: SakPersoninfo;
   rettighetsinfo: RettighetsinfoDto | null;
+  arenaSaker: SakerResponse | null;
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -60,6 +63,7 @@ export const NySakOversiktContainer = ({
                         sak={sak}
                         innloggetBrukerIdent={innloggetBrukerIdent}
                         rettighetsinfo={rettighetsinfo}
+                        arenaSaker={arenaSaker}
                       />
                     </ExpansionCard.Content>
                   </ExpansionCard>
