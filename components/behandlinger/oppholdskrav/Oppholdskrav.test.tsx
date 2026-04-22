@@ -66,7 +66,7 @@ describe('Generelt', () => {
     expect(begrunnelse).toBeVisible();
 
     // oppfylt
-    const felt = screen.getByRole('group', {
+    const felt = screen.getByRole('radiogroup', {
       name: 'Oppfyller brukeren vilkårene i § 11-3?',
     });
     expect(felt).toBeVisible();
@@ -92,7 +92,7 @@ describe('Generelt', () => {
     expect(screen.getAllByText('Du må ta stilling til om brukeren oppfyller vilkårene')[0]).toBeVisible();
 
     // velg oppfylt ja
-    const oppfyller = screen.getByRole('group', {
+    const oppfyller = screen.getByRole('radiogroup', {
       name: 'Oppfyller brukeren vilkårene i § 11-3?',
     });
     const neiOppfyller = within(oppfyller).getByRole('radio', {

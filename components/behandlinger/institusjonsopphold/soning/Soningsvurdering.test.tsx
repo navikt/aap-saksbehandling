@@ -96,7 +96,7 @@ describe('Soningsvurdering', () => {
 
   it('har et for å avgjøre om ytelsen skal stanses', () => {
     render(<Soningsvurdering grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingsversjon={0} />);
-    expect(screen.getByRole('group', { name: 'Skal ytelsen stoppes på grunn av soning?' })).toBeVisible();
+    expect(screen.getByRole('radiogroup', { name: 'Skal ytelsen stoppes på grunn av soning?' })).toBeVisible();
   });
 
   it('datofelt for når vurderingen skal gjelde fra vises ikke på den første vurderingen', () => {

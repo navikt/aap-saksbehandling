@@ -28,7 +28,7 @@ describe('Klage', () => {
 
   it('Skal ha felt for å velge hvorvidt det finnes verge/fullmektig', () => {
     render(<FullmektigVurdering readOnly={false} behandlingVersjon={0} typeBehandling={'Klage'} />);
-    const fullmektig = screen.getByRole('group', { name: 'Finnes det fullmektig eller verge i klagesaken?' });
+    const fullmektig = screen.getByRole('radiogroup', { name: 'Finnes det fullmektig eller verge i klagesaken?' });
     expect(fullmektig).toBeVisible();
   });
 });
@@ -97,7 +97,7 @@ describe('mellomlagring', () => {
     );
 
     const finnesDetFullmektigEllerVergeIKlagesakenFelt = within(
-      screen.getByRole('group', {
+      screen.getByRole('radiogroup', {
         name: /finnes det fullmektig eller verge i klagesaken\?/i,
       })
     ).getByRole('radio', { name: 'Nei' });
@@ -116,7 +116,7 @@ describe('mellomlagring', () => {
     );
 
     const finnesDetFullmektigEllerVergeIKlagesakenFelt = within(
-      screen.getByRole('group', {
+      screen.getByRole('radiogroup', {
         name: /finnes det fullmektig eller verge i klagesaken\?/i,
       })
     ).getByRole('radio', { name: 'Ja' });
@@ -135,7 +135,7 @@ describe('mellomlagring', () => {
     );
 
     const finnesDetFullmektigEllerVergeIKlagesakenFelt = within(
-      screen.getByRole('group', {
+      screen.getByRole('radiogroup', {
         name: /finnes det fullmektig eller verge i klagesaken\?/i,
       })
     ).getByRole('radio', { name: 'Ja' });
@@ -144,7 +144,7 @@ describe('mellomlagring', () => {
 
     expect(
       within(
-        screen.getByRole('group', {
+        screen.getByRole('radiogroup', {
           name: /finnes det fullmektig eller verge i klagesaken\?/i,
         })
       ).getByRole('radio', { name: 'Ja' })
@@ -158,7 +158,7 @@ describe('mellomlagring', () => {
 
     expect(
       within(
-        screen.getByRole('group', {
+        screen.getByRole('radiogroup', {
           name: /finnes det fullmektig eller verge i klagesaken\?/i,
         })
       ).getByRole('radio', { name: 'Ja' })
@@ -178,7 +178,7 @@ describe('mellomlagring', () => {
 
     await user.click(
       within(
-        screen.getByRole('group', {
+        screen.getByRole('radiogroup', {
           name: /finnes det fullmektig eller verge i klagesaken\?/i,
         })
       ).getByRole('radio', { name: 'Nei' })
@@ -186,7 +186,7 @@ describe('mellomlagring', () => {
 
     expect(
       within(
-        screen.getByRole('group', {
+        screen.getByRole('radiogroup', {
           name: /finnes det fullmektig eller verge i klagesaken\?/i,
         })
       ).getByRole('radio', { name: 'Nei' })
@@ -200,7 +200,7 @@ describe('mellomlagring', () => {
 
     expect(
       within(
-        screen.getByRole('group', {
+        screen.getByRole('radiogroup', {
           name: /finnes det fullmektig eller verge i klagesaken\?/i,
         })
       ).getByRole('radio', { name: 'Ja' })

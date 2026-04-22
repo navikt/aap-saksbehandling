@@ -144,7 +144,7 @@ describe('Student', () => {
           behandlingVersjon={0}
         />
       );
-      expect(screen.getByRole('group', { name: 'Har brukeren avbrutt et studie?' })).toBeVisible();
+      expect(screen.getByRole('radiogroup', { name: 'Har brukeren avbrutt et studie?' })).toBeVisible();
     });
 
     it('har et valg for om studiet er godkjent av Lånekassen', async () => {
@@ -157,7 +157,7 @@ describe('Student', () => {
         />
       );
       await velgAtSøkerHarAvbruttEtStudie();
-      expect(screen.getByRole('group', { name: 'Er studiet godkjent av Lånekassen?' })).toBeVisible();
+      expect(screen.getByRole('radiogroup', { name: 'Er studiet godkjent av Lånekassen?' })).toBeVisible();
     });
 
     it('har et valg for om studie er avbrutt pga sykdom eller skade', async () => {
@@ -171,7 +171,7 @@ describe('Student', () => {
       );
       await velgAtSøkerHarAvbruttEtStudie();
       await velgAtStudieErGodkjentAvLånekassen();
-      expect(screen.getByRole('group', { name: 'Er studie avbrutt pga sykdom eller skade?' })).toBeVisible();
+      expect(screen.getByRole('radiogroup', { name: 'Er studie avbrutt pga sykdom eller skade?' })).toBeVisible();
     });
 
     it('har et valg for om brukeren har behov for behandling', async () => {
@@ -187,7 +187,7 @@ describe('Student', () => {
       await velgAtStudieErGodkjentAvLånekassen();
       await velgAtStudieErAvbruttPgaSykdomEllerSkade();
       expect(
-        screen.getByRole('group', { name: 'Har brukeren behov for behandling for å gjenoppta studiet?' })
+        screen.getByRole('radiogroup', { name: 'Har brukeren behov for behandling for å gjenoppta studiet?' })
       ).toBeVisible();
     });
 
@@ -224,7 +224,7 @@ describe('Student', () => {
       await velgAtStudieErAvbruttPgaSykdomEllerSkade();
       await velgAtBrukerHarBehovForBehandling();
       expect(
-        screen.getByRole('group', { name: 'Er det forventet at brukeren kan gjenoppta studiet innen 6 måneder?' })
+        screen.getByRole('radiogroup', { name: 'Er det forventet at brukeren kan gjenoppta studiet innen 6 måneder?' })
       ).toBeVisible();
     });
 
@@ -695,26 +695,26 @@ describe('Student', () => {
 
 const velgAtSøkerHarAvbruttEtStudie = async () =>
   await user.click(
-    within(screen.getByRole('group', { name: 'Har brukeren avbrutt et studie?' })).getByRole('radio', { name: 'Ja' })
+    within(screen.getByRole('radiogroup', { name: 'Har brukeren avbrutt et studie?' })).getByRole('radio', { name: 'Ja' })
   );
 
 const velgAtStudieErGodkjentAvLånekassen = async () =>
   await user.click(
-    within(screen.getByRole('group', { name: 'Er studiet godkjent av Lånekassen?' })).getByRole('radio', {
+    within(screen.getByRole('radiogroup', { name: 'Er studiet godkjent av Lånekassen?' })).getByRole('radio', {
       name: 'Ja',
     })
   );
 
 const velgAtStudieErAvbruttPgaSykdomEllerSkade = async () =>
   await user.click(
-    within(screen.getByRole('group', { name: 'Er studie avbrutt pga sykdom eller skade?' })).getByRole('radio', {
+    within(screen.getByRole('radiogroup', { name: 'Er studie avbrutt pga sykdom eller skade?' })).getByRole('radio', {
       name: 'Ja',
     })
   );
 
 const velgAtBrukerHarBehovForBehandling = async () =>
   await user.click(
-    within(screen.getByRole('group', { name: 'Har brukeren behov for behandling for å gjenoppta studiet?' })).getByRole(
+    within(screen.getByRole('radiogroup', { name: 'Har brukeren behov for behandling for å gjenoppta studiet?' })).getByRole(
       'radio',
       {
         name: 'Ja',
@@ -724,7 +724,7 @@ const velgAtBrukerHarBehovForBehandling = async () =>
 const velgAtDetErForventetAtStudieKanGjenopptasInnen6Mnd = async () =>
   await user.click(
     within(
-      screen.getByRole('group', { name: 'Er det forventet at brukeren kan gjenoppta studiet innen 6 måneder?' })
+      screen.getByRole('radiogroup', { name: 'Er det forventet at brukeren kan gjenoppta studiet innen 6 måneder?' })
     ).getByRole('radio', {
       name: 'Ja',
     })
