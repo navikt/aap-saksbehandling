@@ -1,11 +1,12 @@
 import React, { useRef, useState } from 'react';
-import { BodyShort, Button, Detail, Popover, Tag, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, Detail, HStack, Popover, Tag, VStack } from '@navikt/ds-react';
 import styles from './MarkeringInfoBoks.module.css';
 import { clientFjernMarkeringForBehandling } from 'lib/clientApi';
 import { Markering, MarkeringType } from 'lib/types/oppgaveTypes';
 import { BookIcon, ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import { NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType } from '@navikt/aap-oppgave-typescript-types';
 import { isSuccess } from 'lib/utils/api';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 
 interface Props {
   markering: Markering;
@@ -65,24 +66,33 @@ export const MarkeringInfoboks = ({ markering, referanse, showLabel = false, siz
             </VStack>
           ) : undefined}
           {referanse && visTag && (
-            <VStack gap={'0'} align={'end'}>
-              <Button
-                variant={'secondary'}
-                size={'small'}
-                loading={isLoading}
-                onClick={async () => {
-                  setIsLoading(true);
-                  const res = await clientFjernMarkeringForBehandling(referanse, markering);
-                  if (isSuccess(res)) {
-                    setVisInfo(false);
-                    setVisTag(false);
-                  }
-                  setIsLoading(false);
-                }}
-              >
-                Fjern markering
-              </Button>
-            </VStack>
+            <>
+              <HStack align={'end'} justify={'end'} gap={'4'}>
+                {markering.opprettetAvNavn && markering.opprettetTidspunkt && (
+                  <Detail
+                    textColor={'subtle'}
+                  >{`Opprettet av ${markering.opprettetAvNavn} (${formaterDatoForFrontend(markering.opprettetTidspunkt)})`}</Detail>
+                )}
+                <VStack gap={'2'} align={'end'}>
+                  <Button
+                    variant={'secondary'}
+                    size={'small'}
+                    loading={isLoading}
+                    onClick={async () => {
+                      setIsLoading(true);
+                      const res = await clientFjernMarkeringForBehandling(referanse, markering);
+                      if (isSuccess(res)) {
+                        setVisInfo(false);
+                        setVisTag(false);
+                      }
+                      setIsLoading(false);
+                    }}
+                  >
+                    Fjern markering
+                  </Button>
+                </VStack>
+              </HStack>
+            </>
           )}
         </VStack>
       </Popover>

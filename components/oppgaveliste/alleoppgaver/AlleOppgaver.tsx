@@ -86,14 +86,16 @@ export const AlleOppgaver = ({ enheter }: Props) => {
       defaultValue: lagretUtvidetFilter?.behandlingOpprettetTom,
     },
     tilbakekrevingBeløpFom: {
-      type: 'number',
+      type: 'text',
       label: 'Beløp fra',
-      defaultValue: lagretUtvidetFilter?.tilbakekrevingBeløpFom,
+      rules: { pattern: { value: /^\d*$/, message: 'Kun tall' } },
+      defaultValue: lagretUtvidetFilter?.tilbakekrevingBeløpFom ?? undefined,
     },
     tilbakekrevingBeløpTom: {
-      type: 'number',
+      type: 'text',
       label: 'Beløp til',
-      defaultValue: lagretUtvidetFilter?.tilbakekrevingBeløpTom,
+      rules: { pattern: { value: /^\d*$/, message: 'Kun tall' } },
+      defaultValue: lagretUtvidetFilter?.tilbakekrevingBeløpTom ?? undefined,
     },
     årsaker: {
       type: 'combobox_multiple',
@@ -117,7 +119,7 @@ export const AlleOppgaver = ({ enheter }: Props) => {
       type: 'fieldArray',
       defaultValue: lagretUtvidetFilter?.saksbehandlere ?? [],
     },
-  });
+  }, { mode: 'onChange' });
 
   const behandlingOpprettetTom = form.watch('behandlingOpprettetTom');
   const behandlingOpprettetFom = form.watch('behandlingOpprettetFom');
@@ -137,6 +139,8 @@ export const AlleOppgaver = ({ enheter }: Props) => {
     markertHaster: form.watch('statuser')?.includes('ER_HASTESAK'),
     ventefristUtløpt: form.watch('statuser')?.includes('VENTEFRIST_UTLØPT'),
     saksbehandlere: (form.watch('saksbehandlere') || []).map((option) => option.value),
+    beløpMerEnn: form.watch('tilbakekrevingBeløpFom') ? Number(form.watch('tilbakekrevingBeløpFom')) : undefined,
+    beløpMindreEnn: form.watch('tilbakekrevingBeløpTom') ? Number(form.watch('tilbakekrevingBeløpTom')) : undefined,
   };
 
   const {
