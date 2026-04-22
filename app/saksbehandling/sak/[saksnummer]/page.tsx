@@ -26,6 +26,8 @@ const Page = async (props: { params: Promise<{ saksnummer: string }> }) => {
   const arenaSakerRes = nySaksoversikt ? await hentArenaSakerForPerson(personInfo.fnr) : null;
   const arenaSaker = arenaSakerRes && isSuccess(arenaSakerRes) ? arenaSakerRes.data : null;
 
+  console.log(personInfo.fnr);
+  console.log(arenaSaker);
   return (
     <>
       <SaksinfoBanner personInformasjon={personInfo} sak={sak} />

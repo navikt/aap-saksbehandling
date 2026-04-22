@@ -2,7 +2,6 @@
 
 import { Alert, BodyShort, Button, Chips, Heading, HStack, Table, VStack } from '@navikt/ds-react';
 import { RettighetsinfoDto, SaksInfo, Vurderingsbehov } from 'lib/types/types';
-import { SakerResponse } from 'lib/services/apiinternservice/apiInternService';
 import { capitalize } from 'lodash';
 import { SakDevTools } from 'components/saksoversikt/SakDevTools';
 import { useRouter } from 'next/navigation';
@@ -45,12 +44,10 @@ export const NySakMedBehandlinger = ({
   sak,
   innloggetBrukerIdent,
   rettighetsinfo,
-  arenaSaker: _arenaSaker,
 }: {
   sak: SaksInfo;
   innloggetBrukerIdent: string | undefined;
   rettighetsinfo: RettighetsinfoDto | null;
-  arenaSaker: SakerResponse | null;
 }) => {
   const router = useRouter();
 
