@@ -27,7 +27,6 @@ import { SakContextProvider } from 'context/saksbehandling/SakContext';
 import { KlageBehandlingInfo } from 'components/behandlingsinfo/KlageBehandlingInfo';
 import { ÅrsakTilBehandling } from 'components/revurderingsinfo/ÅrsakTilBehandling';
 import { visÅrsakTilVurdering } from './visÅrsakTilVurdering';
-import { unleashService } from 'lib/services/unleash/unleashService';
 import { OverstyrTildelingContextProvider } from 'context/saksbehandling/OverstyrTildelingContext';
 import { OverstyrTildelingModal } from 'components/overstyrtildelingmodal/OverstyrTildelingModal';
 
@@ -78,7 +77,6 @@ export const BehandlingLayout = async ({ saksnummer, behandlingsreferanse, child
 
   const stegGrupperSomSkalVises: StegGruppe[] = flytResponse.data.flyt
     .filter((steg) => steg.skalVises)
-    .filter((steg) => steg.stegGruppe !== 'VEDTAKSLENGDE' || unleashService.isEnabled('VedtakslengdeAvklaringsbehov'))
     .map((stegSomSkalVises) => stegSomSkalVises.stegGruppe);
 
   const visTotrinnsvurdering =
@@ -165,7 +163,7 @@ export const BehandlingLayout = async ({ saksnummer, behandlingsreferanse, child
               </SakContextProvider>
             </HGrid>
           </div>
-          </OverstyrTildelingContextProvider>
+        </OverstyrTildelingContextProvider>
       </IngenFlereOppgaverModalContextProvider>
     </SWRConfig>
   );
