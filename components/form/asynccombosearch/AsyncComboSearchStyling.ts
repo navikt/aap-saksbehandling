@@ -1,6 +1,5 @@
 import { StylesConfig } from 'react-select';
 
-
 export const customStyles: StylesConfig = {
   container: (provided) => ({
     ...provided,
@@ -9,16 +8,16 @@ export const customStyles: StylesConfig = {
   control: (provided, state) => ({
     ...provided,
     border: '1px solid #9197A2',
-    boxShadow: state.isFocused ? '0 0 0 4px #00347D' : 'none',
+    boxShadow: state.isFocused ? '0 0 0 4px #1f2733' : 'none',
     ':hover': {
-      borderColor: '#0357B5',
+      borderColor: '#1f2733',
     },
   }),
 
   // Denne er for chipsene når det er mulig å velge flere
   multiValue: (provided) => ({
     ...provided,
-    backgroundColor: '#003D79',
+    backgroundColor: '#005bb6',
     borderRadius: '5px',
     color: 'white',
   }),
@@ -35,7 +34,7 @@ export const customStyles: StylesConfig = {
     color: 'white',
     cursor: 'pointer',
     ':hover': {
-      backgroundColor: '#001F4B', // Darker blue on hover
+      backgroundColor: '#0063c1', // Lighter blue on hover
       color: 'white',
     },
   }),
