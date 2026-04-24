@@ -20,7 +20,6 @@ interface Props extends Submittable {
   grunnlag: DigitaliseringsGrunnlag;
   readOnly: boolean;
   isLoading: boolean;
-  inkluderBarnepensjon: boolean;
 }
 
 function mapTilAnnetRelevantDokumentKontrakt(data: AnnetRelevantDokumentFormFields) {
@@ -32,20 +31,12 @@ function mapTilAnnetRelevantDokumentKontrakt(data: AnnetRelevantDokumentFormFiel
   return JSON.stringify(dokument);
 }
 
-export const DigitaliserAnnetRelevantDokument = ({
-  grunnlag,
-  readOnly,
-  submit,
-  isLoading,
-  inkluderBarnepensjon = false,
-}: Props) => {
+export const DigitaliserAnnetRelevantDokument = ({ grunnlag, readOnly, submit, isLoading }: Props) => {
   const annetRelevantDokumentGrunnlag: AnnetRelevantDokument = grunnlag.vurdering?.strukturertDokumentJson
     ? JSON.parse(grunnlag.vurdering?.strukturertDokumentJson)
     : {};
 
-  const vurderingsbehov = vurderingsbehovOptions().filter(
-    (option) => inkluderBarnepensjon || option.value !== 'REVURDER_SAMORDNING_BARNEPENSJON'
-  );
+  const vurderingsbehov = vurderingsbehovOptions();
   const defaultÅrsakOptions: string[] = (annetRelevantDokumentGrunnlag.årsakerTilBehandling || [])
     .map((årsakFraGrunnlag) => vurderingsbehov.find((årsak) => årsak.value === årsakFraGrunnlag))
     .filter((e) => e !== undefined)
