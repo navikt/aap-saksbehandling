@@ -7,6 +7,7 @@ export const FLAGS = [
   'InkluderOvergangUforeArbeid',
   'TilbakekrevingBelopFilter',
   'registrereEllerEndreMeldekort',
+  'ForeslaaVedtakVedtakslengde',
 ] as const;
 
 export type FlagNames = (typeof FLAGS)[number];
@@ -21,4 +22,5 @@ export const mockedFlags: Flags = {
   InkluderOvergangUforeArbeid: true,
   TilbakekrevingBelopFilter: true,
   registrereEllerEndreMeldekort: true,
+  ForeslaaVedtakVedtakslengde: true,
 };
