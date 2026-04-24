@@ -81,11 +81,11 @@ export const Distribusjonssjekk = ({
               under for å prøve på nytt. Ta kontakt med brukerstøtte hvis feilen vedvarer.
             </BodyShort>
             <Button
+              data-color="neutral"
               onClick={() => rekjørDistribuerBrevSjekk()}
               size="small"
-              variant="secondary-neutral"
-              loading={proeverIgjen}
-            >
+              variant="secondary"
+              loading={proeverIgjen}>
               Prøv igjen
             </Button>
           </VStack>

@@ -12,7 +12,7 @@ interface Props {
 
 export const BistandsbehovTidligereVurdering = ({ vurdering }: Props) => {
   return (
-    <VStack gap="5">
+    <VStack gap="space-20">
       <SpørsmålOgSvar spørsmål="Vurderingen gjelder fra" svar={formaterDatoForFrontend(vurdering.fom)} />
       <SpørsmålOgSvar spørsmål="Vilkårsvurdering" svar={vurdering.begrunnelse} />
       <SpørsmålOgSvar

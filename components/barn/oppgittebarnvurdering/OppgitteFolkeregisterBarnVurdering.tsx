@@ -65,7 +65,7 @@ export const OppgitteFolkeregisterBarnVurdering = ({
           <BodyShort size={'small'}>
             {navn}, {ident} ({fødselsdato ? kalkulerAlder(new Date(fødselsdato)) : 'Ukjent alder'}){' '}
             {dødsdato && (
-              <Tag variant="neutral-filled" size="xsmall" data-color="neutral">
+              <Tag variant="strong" size="xsmall" data-color="neutral">
                 Død
               </Tag>
             )}

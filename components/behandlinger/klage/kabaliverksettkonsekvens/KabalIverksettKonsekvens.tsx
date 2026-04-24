@@ -23,12 +23,12 @@ const mapResultatTilTeskst = (vurdering: SvarFraAndreinstansVurdering): string =
 
 export const KabalIverksettKonsekvens = ({ grunnlag }: Props) => (
   <VilkårsKort heading={'Oppsummering'} steg={'IVERKSETT_KONSEKVENS'}>
-    <VStack gap={'4'}>
-      <HStack gap="2">
+    <VStack gap={"space-16"}>
+      <HStack gap="space-8">
         <BodyShort weight="semibold">Svartype fra Kabal:</BodyShort>
         <BodyShort>{formaterSvartype(grunnlag.svarFraAndreinstans.type)}</BodyShort>
       </HStack>
-      <HStack gap="2">
+      <HStack gap="space-8">
         <BodyShort weight="semibold">Utfall:</BodyShort>
         <BodyShort>
           {grunnlag.svarFraAndreinstans.utfall && formaterUtfall(grunnlag.svarFraAndreinstans.utfall)}
@@ -36,23 +36,23 @@ export const KabalIverksettKonsekvens = ({ grunnlag }: Props) => (
       </HStack>
       {grunnlag.svarFraAndreinstans.feilregistrertBegrunnelse != null &&
         grunnlag.svarFraAndreinstans.feilregistrertBegrunnelse != '' && (
-          <HStack gap="2">
+          <HStack gap="space-8">
             <BodyShort weight="semibold">Begrunnelse for feilregistrering:</BodyShort>
             <BodyShort>{grunnlag.svarFraAndreinstans.feilregistrertBegrunnelse}</BodyShort>
           </HStack>
         )}
-      <HStack gap="2">
+      <HStack gap="space-8">
         <BodyShort weight="semibold">Kommentar:</BodyShort>
         <BodyShort>{grunnlag.gjeldendeVurdering?.begrunnelse}</BodyShort>
       </HStack>
       {grunnlag.gjeldendeVurdering != null && (
-        <HStack gap="2">
+        <HStack gap="space-8">
           <BodyShort weight="semibold">Resultat av klagebehandling:</BodyShort>
           <BodyShort>{mapResultatTilTeskst(grunnlag.gjeldendeVurdering)}</BodyShort>
         </HStack>
       )}
       {grunnlag.gjeldendeVurdering?.konsekvens === 'OMGJØRING' && (
-        <HStack gap="2">
+        <HStack gap="space-8">
           <BodyShort weight="semibold">Vilkår som omgjøres:</BodyShort>
           <BodyShort>
             {grunnlag.gjeldendeVurdering.vilkårSomOmgjøres.map((vilkår) => hjemmelMap[vilkår]).join(', ')}

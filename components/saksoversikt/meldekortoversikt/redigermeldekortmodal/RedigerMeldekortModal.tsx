@@ -98,7 +98,7 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
                 setIsOpen(false);
               })}
             >
-              <VStack gap={'4'}>
+              <VStack gap={"space-16"}>
                 <FormField form={form} formField={formFields.begrunnelse} />
                 <FormField form={form} formField={formFields.årsak} />
                 {skalViseMeldedato && <FormField form={form} formField={formFields.meldedato} />}

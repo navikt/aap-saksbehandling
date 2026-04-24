@@ -77,10 +77,9 @@ export const VilkårskortMedFormOgMellomlagring = ({
           </ExpansionCard.Title>
         </div>
       </ExpansionCard.Header>
-
       <ExpansionCard.Content className={styles.content}>
         <form onSubmit={onSubmit} id={steg} autoComplete="off">
-          <VStack gap="4">
+          <VStack gap="space-16">
             {/* innhold i vilkårskortet */}
             {children}
 
@@ -92,8 +91,8 @@ export const VilkårskortMedFormOgMellomlagring = ({
 
             <HStack justify="space-between" align="end">
               {/* Venstre kolonne: knapper + utkast */}
-              <VStack gap="4">
-                <HStack gap="4">
+              <VStack gap="space-16">
+                <HStack gap="space-16">
                   {/* Modus-styrte knapper */}
                   {visningModus === 'AKTIV_UTEN_AVBRYT' && (
                     <>
@@ -124,6 +123,7 @@ export const VilkårskortMedFormOgMellomlagring = ({
                     <Button
                       type="button"
                       variant={'secondary'}
+                      data-color={'accent'}
                       onClick={visningActions.onEndreClick}
                       loading={isLoading}
                     >

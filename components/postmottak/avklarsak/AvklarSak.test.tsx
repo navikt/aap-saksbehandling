@@ -23,6 +23,6 @@ describe('Avklar sak', () => {
     setPostmottakMockFlytResponse(PostmottakFlytResponse);
 
     render(<AvklarSak behandlingsVersjon={1} behandlingsreferanse={'123'} grunnlag={grunnlag} readOnly={false} />);
-    expect(screen.getByRole('group', { name: 'Hvor skal dokumentet journalføres?' })).toBeVisible();
+    expect(screen.getByRole('radiogroup', { name: 'Hvor skal dokumentet journalføres?' })).toBeVisible();
   });
 });

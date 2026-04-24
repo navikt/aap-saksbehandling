@@ -39,26 +39,26 @@ describe('Sykepengeerstatning', () => {
   });
 
   it('har felt for krav på sykepengeerstatning', () => {
-    expect(screen.getByRole('group', { name: 'Har brukeren krav på sykepengeerstatning?' })).toBeVisible();
+    expect(screen.getByRole('radiogroup', { name: 'Har brukeren krav på sykepengeerstatning?' })).toBeVisible();
   });
 
   it('skal vise valg for grunn når krav på sykeerstatning er oppfylt', async () => {
     const jaValg = screen.getByRole('radio', { name: 'Ja' });
     await user.click(jaValg);
 
-    const grunnFelt = await screen.findByRole('group', { name: 'Velg én grunn' });
+    const grunnFelt = await screen.findByRole('radiogroup', { name: 'Velg én grunn' });
     expect(grunnFelt).toBeVisible();
   });
 
   it('skal ikke vise valg for grunn når krav på sykeerstatning ikke er oppfylt', async () => {
-    expect(screen.queryByRole('group', { name: 'Velg én grunn' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('radiogroup', { name: 'Velg én grunn' })).not.toBeInTheDocument();
     const neiValg = screen.getByRole('radio', { name: 'Nei' });
     await user.click(neiValg);
-    expect(screen.queryByRole('group', { name: 'Velg én grunn' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('radiogroup', { name: 'Velg én grunn' })).not.toBeInTheDocument();
   });
 
   it('skal ikke vise valg for grunn når krav på sykeerstatning ikke er besvart', async () => {
-    const grunnFelt = screen.queryByRole('group', { name: 'Velg én grunn' });
+    const grunnFelt = screen.queryByRole('radiogroup', { name: 'Velg én grunn' });
     expect(grunnFelt).not.toBeInTheDocument();
   });
 

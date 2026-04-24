@@ -109,7 +109,7 @@ export const Brevbygger = ({
   };
 
   return (
-    <HGrid columns={pdfViewExpanded ? '1fr 3fr' : '1fr 1fr'} gap="2">
+    <HGrid columns={pdfViewExpanded ? '1fr 3fr' : '1fr 1fr'} gap={"space-8"}>
       <Box>
         {fullmektigMottaker && brukerMottaker && (
           <VelgeMottakere
@@ -121,14 +121,14 @@ export const Brevbygger = ({
           />
         )}
 
-        <VStack gap="4">
+        <VStack gap="space-16">
           <RefusjonskravVisning refusjonskravgrunnlag={refusjonskravgrunnlag} />
           {parsedBrevmal.delmaler.map((delmalRef) => (
             <Delmal key={delmalRef._key} delmalRef={delmalRef} control={control} watch={watch} />
           ))}
         </VStack>
 
-        <HStack gap="2" justify="space-between" marginBlock="4">
+        <HStack gap="space-8" justify="space-between" marginBlock="space-8">
           <LøsBehovOgGåTilNesteStegStatusAlert
             status={løsBehovStatus}
             løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
@@ -141,15 +141,15 @@ export const Brevbygger = ({
             setDistribusjonssjekkFeil={setDistribusjonssjekkFeil}
             brukerMottaker={brukerMottaker}
           />
-          <HStack gap="2">
+          <HStack gap={"space-8"}>
             {visAvbryt && (
               <Button
+                data-color="danger"
                 type="button"
                 onClick={() => settIkkeSendBrevModalOpen(true)}
-                variant="danger"
+                variant="primary"
                 size="small"
-                disabled={isLoading}
-              >
+                disabled={isLoading}>
                 Ikke send brev
               </Button>
             )}
@@ -163,7 +163,7 @@ export const Brevbygger = ({
         </HStack>
       </Box>
 
-      <VStack gap="2">
+      <VStack gap="space-8">
         <div>
           <Button
             type="button"
@@ -175,7 +175,6 @@ export const Brevbygger = ({
         </div>
         <ForhåndsvisBrev isLoading={lasterPdf} dataUri={pdfDataUri} />
       </VStack>
-
       <IkkeSendBrevModal
         isOpen={ikkeSendBrevModalOpen}
         onClose={() => settIkkeSendBrevModalOpen(false)}

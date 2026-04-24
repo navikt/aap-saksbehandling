@@ -41,7 +41,7 @@ export const SakOversiktContainer = ({
 
   return (
     <Page>
-      <Page.Block width="2xl" style={{ padding: '0 var(--a-spacing-8)' }}>
+      <Page.Block width="2xl" style={{ padding: '0 var(--ax-space-32)' }}>
         <Tabs defaultValue={tab} onChange={(value) => changeActiveTab(value as Tab)}>
           <Tabs.List>
             <Tabs.Tab label="Oversikt" value={Tab.OVERSIKT} icon={<PersonIcon />} />
@@ -52,7 +52,7 @@ export const SakOversiktContainer = ({
             <Tabs.Tab label="Aktivitetsplikt 11-9 trekk" value={Tab.TREKK} icon={<FileTextIcon />} />
           </Tabs.List>
 
-          <Box marginBlock="8">
+          <Box marginBlock="space-32">
             <Tabs.Panel value={Tab.OVERSIKT}>
               <SakMedBehandlinger
                 sak={sak}

@@ -7,7 +7,7 @@ interface Props {
 
 export const RelevantInformasjonStudent = ({ opplysninger }: Props) => {
   return (
-    <VStack gap={'1'}>
+    <VStack gap={"space-4"}>
       <Label size={'small'}>Relevant informasjon fra søknaden</Label>
       {opplysninger?.erStudentStatus && (
         <BodyShort size={'small'}>

@@ -23,21 +23,21 @@ export const Behandlingsinfo = ({ behandling, sak, klageresultat }: Props) => {
 
   return (
     <Box
-      padding="4"
+      padding="space-16"
       borderWidth="1"
-      borderRadius="large"
-      borderColor="border-divider"
+      borderRadius="8"
+      borderColor="neutral-subtle"
       className={styles.behandlingsinfo}
     >
-      <VStack gap={'4'}>
-        <HStack gap={'2'} align={'center'}>
+      <VStack gap={"space-16"}>
+        <HStack gap={"space-8"} align={'center'}>
           <Label as="p" size="medium">
             {mapTypeBehandlingTilTekst(behandling.type)}
           </Label>
           <Behandlingsstatus status={behandling.status} />
         </HStack>
 
-        <HGrid columns={'1fr 1fr'} gap="1">
+        <HGrid columns={'1fr 1fr'} gap="space-4">
           <Label as="p" size={'small'}>
             Opprettet:
           </Label>

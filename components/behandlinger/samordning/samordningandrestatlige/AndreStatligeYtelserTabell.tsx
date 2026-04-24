@@ -64,7 +64,7 @@ export const AndreStatligeYtelserTabell = ({ form, readOnly }: Props) => {
     });
   }
   return (
-    <VStack gap={'2'}>
+    <VStack gap={"space-8"}>
       <Label size={'small'}>Legg til ytelse og periode for utbetaling</Label>
       <BodyLong size={'small'}>
         Legg til perioder der brukeren har hatt andre statlige ytelser. Disse ytelsene skal gi fradrag i etterbetalingen
@@ -100,7 +100,7 @@ export const AndreStatligeYtelserTabell = ({ form, readOnly }: Props) => {
                 </SelectWrapper>
               </Table.DataCell>
               <Table.DataCell>
-                <HStack align={'center'} gap={'1'}>
+                <HStack align={'center'} gap={"space-4"}>
                   <DateInputWrapper
                     control={form.control}
                     name={`vurderteSamordninger.${index}.fom`}

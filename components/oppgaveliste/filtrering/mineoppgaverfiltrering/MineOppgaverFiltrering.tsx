@@ -28,7 +28,7 @@ export const MineOppgaverFiltrering = ({ form, formFields, antallOppgaverIFilter
   return (
     <div className={styles.wrapper}>
       <HStack justify={'space-between'} align={'center'} className={styles.filtreringTop}>
-        <HStack gap={'2'} align={'center'}>
+        <HStack gap={"space-8"} align={'center'}>
           <Button
             icon={visFilter ? <XMarkIcon /> : <FilterIcon />}
             iconPosition={'right'}
@@ -39,7 +39,7 @@ export const MineOppgaverFiltrering = ({ form, formFields, antallOppgaverIFilter
             {visFilter ? 'Lukk filter' : 'Filtrer listen'}
           </Button>
           {aktiveFilter.length > 0 && (
-            <HStack gap={'2'}>
+            <HStack gap={"space-8"}>
               <BodyShort>Filtre: </BodyShort>
               <Chips size={'small'}>
                 {aktiveFilter.map((filter) => (
@@ -67,16 +67,15 @@ export const MineOppgaverFiltrering = ({ form, formFields, antallOppgaverIFilter
           Viser {antallOppgaverIFilter} av totalt {antallOppgaverTotalt} oppgaver
         </Detail>
       </HStack>
-
       {visFilter && (
         <div className={styles.filtreringwrapper}>
           <div className={styles.filtrering}>
-            <HGrid columns={{ sm: 1, md: 2, lg: 4, xl: 5 }} gap={'2'}>
+            <HGrid columns={{ sm: 1, md: 2, lg: 4, xl: 5 }} gap={"space-8"}>
               <BoxWrapper>
                 <FormField form={form} formField={formFields.behandlingstyper} />
               </BoxWrapper>
               <BoxWrapper>
-                <VStack gap={'4'}>
+                <VStack gap={"space-16"}>
                   <BodyShort size={'small'} weight={'semibold'}>
                     Behandling opprettet
                   </BodyShort>
@@ -95,7 +94,7 @@ export const MineOppgaverFiltrering = ({ form, formFields, antallOppgaverIFilter
               </BoxWrapper>
               {tilbakekrevingBelopFilter && (
                 <BoxWrapper>
-                  <VStack gap={'4'}>
+                  <VStack gap={"space-16"}>
                     <BodyShort size={'small'} weight={'semibold'}>
                       Tilbakekrevingsbeløp
                     </BodyShort>
@@ -105,7 +104,7 @@ export const MineOppgaverFiltrering = ({ form, formFields, antallOppgaverIFilter
                 </BoxWrapper>
               )}
             </HGrid>
-            <HStack gap={'2'}>
+            <HStack gap={"space-8"}>
               <Button
                 size={'small'}
                 variant={'tertiary'}
@@ -127,11 +126,11 @@ function BoxWrapper({ children }: { children: React.ReactNode }) {
   return (
     <Box
       height={'fit-content'}
-      borderColor={'border-divider'}
+      borderColor={"neutral-subtle"}
       borderWidth={'2'}
-      borderRadius={'xlarge'}
-      paddingInline={'4'}
-      paddingBlock={'4'}
+      borderRadius={"12"}
+      paddingInline={"space-16"}
+      paddingBlock={"space-16"}
     >
       {children}
     </Box>

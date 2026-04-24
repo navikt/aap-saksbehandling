@@ -3,7 +3,7 @@ import { MeldekortTabell } from 'components/saksoversikt/meldekortoversikt/melde
 
 export const MeldekortOversikt = () => {
   return (
-    <VStack gap={'4'}>
+    <VStack gap={"space-16"}>
       <Heading size="medium">Meldekort</Heading>
       <MeldekortTabell />
     </VStack>

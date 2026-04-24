@@ -147,17 +147,14 @@ export const SamordningAndreStatligeYtelser = ({
           grupperPåOpprettetDato={true}
         />
       )}
-
       {grunnlag.perioder !== null && grunnlag.perioder !== undefined && grunnlag.perioder.length > 0 && (
         <OppslagAndreYtelser perioder={grunnlag.perioder} />
       )}
-
       <ReadMore size={'small'} header="Hva skal vurderes?">
         Det må undersøkes om bruker har hatt andre ytelser i perioden med AAP som kan gi fradrag i AAP-utbetalingen.
       </ReadMore>
-
-      <VStack gap={'6'}>
-        <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
+      <VStack gap={'space-24'}>
+        <FormField form={form} formField={formFields.begrunnelse} />
         <AndreStatligeYtelserTabell form={form} readOnly={formReadOnly} />
       </VStack>
     </VilkårskortMedFormOgMellomlagring>

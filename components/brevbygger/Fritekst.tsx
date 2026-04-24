@@ -16,7 +16,7 @@ export const DelmalFritekst = ({ node, control }: DelmalFritekstProps) => {
   const [isActive, setIsActive] = useState(() => !!field.value);
 
   return (
-    <VStack gap="2">
+    <VStack gap="space-8">
       {!isActive && (
         <div>
           <Button type="button" variant="tertiary" size="small" onClick={() => setIsActive(true)} icon={<PlusIcon />}>

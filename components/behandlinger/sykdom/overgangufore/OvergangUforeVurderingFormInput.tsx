@@ -40,7 +40,7 @@ export const OvergangUforeVurderingFormInput = ({ index, form, readonly, søknad
     form.watch(`vurderinger.${index}.brukerRettPåAAP`) === JaEllerNei.Ja;
 
   return (
-    <VStack gap={'5'}>
+    <VStack gap={"space-20"}>
       <DateInputWrapper
         name={`vurderinger.${index}.fraDato`}
         label={virkningsdatoLabel}
@@ -50,7 +50,6 @@ export const OvergangUforeVurderingFormInput = ({ index, form, readonly, søknad
         }}
         readOnly={readonly}
       />
-
       <TextAreaWrapper
         name={`vurderinger.${index}.begrunnelse`}
         control={form.control}
@@ -70,13 +69,11 @@ export const OvergangUforeVurderingFormInput = ({ index, form, readonly, søknad
         readOnly={readonly}
         shouldUnregister
       />
-
       <Alert variant={'info'} size={'small'}>
         {søknadsdatoUføretrygd
           ? `Brukeren har søkt om uføretrygd ${formaterDatoForFrontend(søknadsdatoUføretrygd)}`
           : 'Ingen uføresøknad funnet på brukeren'}
       </Alert>
-
       {brukerHarSoktOmUforetrygd && (
         <RadioGroupWrapper
           name={`vurderinger.${index}.brukerHarFåttVedtakOmUføretrygd`}
@@ -110,14 +107,12 @@ export const OvergangUforeVurderingFormInput = ({ index, form, readonly, søknad
           shouldUnregister
         />
       )}
-
       {harUforeVedtakEtterSoknad && (
         <Alert variant={'info'} size={'small'}>
           Hovedregelen er at datoen vurderingen gjelder fra er virkningstidspunktet for uføretrygd. Sjekk
           posteringsgrunnlaget og Kelvin-rutinen for mer informasjon.
         </Alert>
       )}
-
       {venterPaUforeVedtakMenHarAAP && (
         <Alert variant={'info'} size={'small'}>
           Pass på at datoen vurderingen gjelder fra er samme som søknadsdato om uføretrygd.

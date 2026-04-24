@@ -20,7 +20,7 @@ export const MeldePeriodeInputV2 = ({ form, dagIndex, readOnly }: Props) => {
   });
 
   return (
-    <VStack padding={'4'} className={styles.pliktPeriodeInput}>
+    <VStack padding={"space-16"} className={styles.pliktPeriodeInput}>
       <Table size={'small'} className={styles.tabell}>
         <Table.Header>
           <Table.Row>

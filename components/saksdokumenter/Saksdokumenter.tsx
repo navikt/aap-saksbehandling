@@ -69,7 +69,7 @@ export const Saksdokumenter = () => {
     : dokumenterFiltrertPåSøk;
 
   return (
-    <VStack gap={'4'}>
+    <VStack gap={"space-16"}>
       <div>
         <Button
           as={Link}
@@ -82,12 +82,10 @@ export const Saksdokumenter = () => {
           Se andre relevante dokumenter
         </Button>
       </div>
-
-      <HStack gap="4" align="end" wrap={false}>
+      <HStack gap="space-16" align="end" wrap={false}>
         <FormField form={form} formField={formFields.dokumentnavn} />
         <FormField form={form} formField={formFields.visMeldekort} />
       </HStack>
-
       <TableStyled size={'small'}>
         <Table.Header>
           <Table.Row>
@@ -162,17 +160,17 @@ const HoveddokumentRow = ({
     <Table.DataCell>
       {journalposttype === Journalposttype.U && (
         <Tooltip content="Utgående dokument">
-          <InboxUpIcon style={{ color: 'var(--a-orange-600)' }} />
+          <InboxUpIcon style={{ color: 'var(--ax-warning-700)' }} />
         </Tooltip>
       )}
       {journalposttype === Journalposttype.I && (
         <Tooltip content="Inngående dokument">
-          <InboxDownIcon style={{ color: 'var(--a-green-500)' }} />
+          <InboxDownIcon style={{ color: 'var(--ax-success-600)' }} />
         </Tooltip>
       )}
     </Table.DataCell>
     <Table.DataCell>
-      <HStack gap="1" wrap={false}>
+      <HStack gap="space-4" wrap={false}>
         <Link href={`/saksbehandling/api/dokumenter/${journalpostId}/${dokumentInfoId}`} target="_blank">
           <BodyShort size={'small'}>{tittel}</BodyShort>
         </Link>
@@ -204,7 +202,7 @@ const VedleggRow = ({
     <Table.DataCell />
 
     <Table.DataCell colSpan={100}>
-      <HStack gap="1" wrap={false}>
+      <HStack gap="space-4" wrap={false}>
         <BodyShort textColor="subtle">
           <ArrowDownRightIcon />
         </BodyShort>

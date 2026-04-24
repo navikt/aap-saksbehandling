@@ -17,7 +17,7 @@ export const OpplysningerContent = ({ opplysning }: Props) => {
 
     return (
       <ul className={styles.inntektListe}>
-        <VStack gap={'1'}>
+        <VStack gap={"space-4"}>
           {arbeidInntektINorgeGrunnlag
             .sort((a, b) => sorterEtterNyesteDato(a.periode.fom, b.periode.fom))
             .map((inntekt, index) => {
@@ -42,12 +42,12 @@ export const OpplysningerContent = ({ opplysning }: Props) => {
     const mottarSykepengerGrunnlag = opplysning.mottarSykepengerGrunnlag;
 
     return (
-      <VStack gap={'2'}>
+      <VStack gap={"space-8"}>
         {mottarSykepengerGrunnlag
           .sort((a, b) => sorterEtterNyesteDato(a.periode.fom, b.periode.fom))
           .map((sykepenger, index) => {
             return (
-              <VStack gap={'2'} key={index} className={styles.sideDivider}>
+              <VStack gap={"space-8"} key={index} className={styles.sideDivider}>
                 <LabelValue
                   label={'Periode: '}
                   value={formaterPeriode(sykepenger.periode.fom, sykepenger.periode.tom)}
@@ -64,10 +64,10 @@ export const OpplysningerContent = ({ opplysning }: Props) => {
     const oppgittJobbetIUtlandGrunnlag = opplysning.oppgittJobbetIUtlandGrunnlag;
 
     return (
-      <VStack gap={'2'}>
+      <VStack gap={"space-8"}>
         {oppgittJobbetIUtlandGrunnlag.map((jobb, index) => {
           return (
-            <VStack gap={'1'} key={index} className={styles.sideDivider}>
+            <VStack gap={"space-4"} key={index} className={styles.sideDivider}>
               {jobb.land && <LabelValue label={'Land:'} value={jobb.land} />}
               <LabelValue label={'Periode:'} value={formaterPeriode(jobb.fraDato, jobb.tilDato)} />
             </VStack>
@@ -81,10 +81,10 @@ export const OpplysningerContent = ({ opplysning }: Props) => {
     const oppgittUtenlandsOppholdGrunnlag = opplysning.oppgittUtenlandsOppholdGrunnlag;
 
     return (
-      <VStack gap={'2'}>
+      <VStack gap={"space-8"}>
         {oppgittUtenlandsOppholdGrunnlag.map((opphold, index) => {
           return (
-            <VStack gap={'1'} key={index} className={styles.sideDivider}>
+            <VStack gap={"space-4"} key={index} className={styles.sideDivider}>
               {opphold.land && <LabelValue label={'Land'} value={opphold.land} />}
               <LabelValue label={'Periode:'} value={formaterPeriode(opphold.fraDato, opphold.tilDato)} />
             </VStack>
@@ -98,11 +98,11 @@ export const OpplysningerContent = ({ opplysning }: Props) => {
     const manglerStatsborgerskapGrunnlag = opplysning.manglerStatsborgerskapGrunnlag;
 
     return (
-      <VStack gap={'2'}>
+      <VStack gap={"space-8"}>
         {manglerStatsborgerskapGrunnlag.map((manglerStatsborgerskap, index) => {
           const landNavn = getLandNavn(manglerStatsborgerskap.land);
           return (
-            <VStack gap={'1'} key={index} className={styles.sideDivider}>
+            <VStack gap={"space-4"} key={index} className={styles.sideDivider}>
               <LabelValue
                 label={landNavn ? 'Land/landkode:' : 'Landkode:'}
                 value={landNavn ? `${landNavn.label}, ${manglerStatsborgerskap.land}` : manglerStatsborgerskap.land}
@@ -123,10 +123,10 @@ export const OpplysningerContent = ({ opplysning }: Props) => {
     const utenlandsAddresserGrunnlag = opplysning.utenlandsAddresserGrunnlag;
 
     return (
-      <VStack gap={'2'}>
+      <VStack gap={"space-8"}>
         {utenlandsAddresserGrunnlag.adresser?.map((utenlandsAdresse, index) => {
           return (
-            <VStack gap={'1'} key={index} className={styles.sideDivider}>
+            <VStack gap={"space-4"} key={index} className={styles.sideDivider}>
               <LabelValue
                 label={'Adresse:'}
                 value={`${utenlandsAdresse.adresseNavn} ${
@@ -149,7 +149,7 @@ export const OpplysningerContent = ({ opplysning }: Props) => {
               ? `(${formaterPeriode(it.gyldighetstidspunkt, it.opphoerstidspunkt)})`
               : '';
           return (
-            <VStack gap={'1'} key={index} className={styles.sideDivider}>
+            <VStack gap={"space-4"} key={index} className={styles.sideDivider}>
               <LabelValue label={'Folkeregisterstatus:'} value={`${it.status} ${periode}`} />
             </VStack>
           );
@@ -161,12 +161,12 @@ export const OpplysningerContent = ({ opplysning }: Props) => {
   if (opplysning.vedtakImedlGrunnlag) {
     const vedtakImedlGrunnlag = opplysning.vedtakImedlGrunnlag;
     return (
-      <VStack gap={'2'}>
+      <VStack gap={"space-8"}>
         {vedtakImedlGrunnlag
           .sort((a, b) => sorterEtterNyesteDato(a.periode.fom, b.periode.fom))
           .map((vedtak, index) => {
             return (
-              <VStack gap={'1'} key={index} className={styles.sideDivider}>
+              <VStack gap={"space-4"} key={index} className={styles.sideDivider}>
                 <LabelValue label={'Periode:'} value={formaterPeriode(vedtak.periode.fom, vedtak.periode.tom)} />
                 <LabelValue label={'Grunnlagskode:'} value={vedtak.grunnlag} />
                 {vedtak.lovvalgsland && <LabelValue label={'Lovvalgsland:'} value={vedtak.lovvalgsland} />}
@@ -181,7 +181,7 @@ export const OpplysningerContent = ({ opplysning }: Props) => {
 
 function LabelValue({ label, value }: { label?: string; value: string }) {
   return (
-    <HStack gap={'1'}>
+    <HStack gap={"space-4"}>
       {label && (
         <BodyShort size={'small'} weight={'semibold'}>
           {label}

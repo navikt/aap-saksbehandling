@@ -1,5 +1,5 @@
 import { Tag, TagProps } from '@navikt/ds-react';
-import styles from 'components/oppgavestatus/OppgaveStatus.module.css';
+
 import { ShieldLockIcon } from '@navikt/aksel-icons';
 import { Adressebeskyttelsesgrad } from 'lib/utils/adressebeskyttelse';
 
@@ -11,7 +11,7 @@ interface Props {
 
 export const AdressebeskyttelseStatus = ({ adressebeskyttelsesGrad, size = 'small', showLabel = true }: Props) => {
   return (
-    <Tag className={styles.tag} icon={<ShieldLockIcon />} variant={'warning-moderate'} size={size}>
+    <Tag data-color="warning" icon={<ShieldLockIcon />} variant={'moderate'} size={size}>
       {showLabel && adressebeskyttelsesGrad}
     </Tag>
   );

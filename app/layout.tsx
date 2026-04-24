@@ -5,8 +5,9 @@ import { hentBrukerInformasjon, hentRollerForBruker } from 'lib/services/azure/a
 import { InnloggetBrukerContextProvider } from 'context/InnloggetBrukerContext';
 import { FeatureFlagProvider } from 'context/UnleashContext';
 import { getAllFlags } from 'lib/services/unleash/unleashService';
+import { Metadata } from 'next';
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'Kelvin',
   description: 'Saksbehandlingssystem for AAP',
 };

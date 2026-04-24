@@ -19,7 +19,7 @@ export const OppholdskravSykepengererstatninbgTidligereVurdering = ({
   const valgtGtunn = grunnOptions.find((option) => option.value === grunn)?.label ?? grunn ?? 'Annet';
 
   return (
-    <VStack gap="5">
+    <VStack gap="space-20">
       <SpørsmålOgSvar spørsmål="Vurderingen gjelder fra?" svar={formaterDatoForFrontend(fraDato)} />
       <SpørsmålOgSvar spørsmål="Vilkårsvurdering" svar={begrunnelse} />
       <SpørsmålOgSvar spørsmål="Har brukeren krav på sykepengeerstatning?" svar={oppfyller ? 'Ja' : 'Nei'} />

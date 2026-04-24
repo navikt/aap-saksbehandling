@@ -53,7 +53,7 @@ export const UkeDag = ({ dag, felterMap, erSisteFeltiRaden, radHarError }: Props
     <div className={containerClassNames}>
       <div className={erSisteFeltiRaden ? styles.inputwrapperutenborder : styles.inputwrapper}>
         <div className={styles.dag}>
-          <VStack gap={'2'}>
+          <VStack gap={"space-8"}>
             <VStack>
               <Detail>{formaterDatoUtenÅrForFrontend(dag)}</Detail>
               <BodyShort size={'small'} weight={'semibold'}>

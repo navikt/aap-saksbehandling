@@ -220,8 +220,8 @@ export const DigitaliserSøknad = ({ grunnlag, registrertDato, readOnly, submit,
   return (
     <VilkårsKort heading={'Søknad'}>
       <form onSubmit={handleSubmit}>
-        <VStack gap={'6'}>
-          <VStack gap={'3'}>
+        <VStack gap={"space-24"}>
+          <VStack gap={"space-12"}>
             {grunnlag.erPapir && <p>Papirsøknader skal justeres for postgang</p>}
             <FormField form={form} formField={formFields.søknadsDato} />
           </VStack>

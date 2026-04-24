@@ -95,13 +95,13 @@ describe('Helseinstitusjonsvurdering', () => {
   test('spør om brukeren forsørger ektefelle dersom det er besvart ja på om bruker får fri kost og losji og nei på faste utgifter', async () => {
     await svarPåSpørsmålOmFriKostOgLosji(true, 0);
     await svarPåSpørsmålOmBrukerHarFasteUtgifter(false, 0);
-    expect(screen.getByRole('group', { name: 'Forsørger brukeren ektefelle eller tilsvarende?' })).toBeVisible();
+    expect(screen.getByRole('radiogroup', { name: 'Forsørger brukeren ektefelle eller tilsvarende?' })).toBeVisible();
   });
 
   test('spør om brukeren har faste utgifter for å beholde bolig eller andre eiendeler', async () => {
     await svarPåSpørsmålOmFriKostOgLosji(true, 0);
     expect(
-      screen.getByRole('group', {
+      screen.getByRole('radiogroup', {
         name: /har bruker faste utgifter som er nødvendig for å beholde bolig eller eiendeler\? vurder om utgiftene gjør at aap ikke skal reduseres\./i,
       })
     ).toBeVisible();
@@ -316,7 +316,7 @@ describe('form med reduksjon', () => {
 });
 
 async function svarPåSpørsmålOmFriKostOgLosji(value: boolean, index: number) {
-  const gruppe = screen.getAllByRole('group', {
+  const gruppe = screen.getAllByRole('radiogroup', {
     name: 'Får brukeren fri kost og losji?',
   })[index];
 
@@ -324,7 +324,7 @@ async function svarPåSpørsmålOmFriKostOgLosji(value: boolean, index: number) 
 }
 
 async function svarPåSpørsmålOmBrukerForsørgerEktefelleEllerTilsvarende(value: boolean, index: number) {
-  const gruppe = screen.getAllByRole('group', {
+  const gruppe = screen.getAllByRole('radiogroup', {
     name: 'Forsørger brukeren ektefelle eller tilsvarende?',
   });
 
@@ -332,7 +332,7 @@ async function svarPåSpørsmålOmBrukerForsørgerEktefelleEllerTilsvarende(valu
 }
 
 async function svarPåSpørsmålOmBrukerHarFasteUtgifter(value: boolean, index: number) {
-  const gruppe = screen.getAllByRole('group', {
+  const gruppe = screen.getAllByRole('radiogroup', {
     name: /har bruker faste utgifter som er nødvendig for å beholde bolig eller eiendeler\? vurder om utgiftene gjør at aap ikke skal reduseres\./i,
   })[index];
 
@@ -670,8 +670,8 @@ function hentVurderingerFraRequest(request: unknown): Array<{
   begrunnelse: string;
   oppholdId: string;
 }> {
-  return (request as { behov: { helseinstitusjonVurdering: { vurderinger: [] } } }).behov
-    .helseinstitusjonVurdering.vurderinger;
+  return (request as { behov: { helseinstitusjonVurdering: { vurderinger: [] } } }).behov.helseinstitusjonVurdering
+    .vurderinger;
 }
 
 async function fyllUtOgBekreftIkkeReduksjon(oppholdIndex: number, begrunnelseTekst: string) {

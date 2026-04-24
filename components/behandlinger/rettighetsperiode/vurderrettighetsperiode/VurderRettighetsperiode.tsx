@@ -175,13 +175,13 @@ export const VurderRettighetsperiode = ({
           : mapVurderingToDraftFormFields(grunnlag?.vurdering);
       }}
     >
-      <VStack gap={'1'}>
+      <VStack gap={'space-4'}>
         <BodyShort size={'small'} weight={'semibold'}>
           Søknadsdato
         </BodyShort>
         <BodyShort size={'small'}>{grunnlag?.søknadsdato && formaterDatoForFrontend(grunnlag.søknadsdato)}</BodyShort>
       </VStack>
-      <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
+      <FormField form={form} formField={formFields.begrunnelse} />
       <FormField form={form} formField={formFields.harRett} />
       {harRett && (
         <>

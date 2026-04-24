@@ -72,7 +72,7 @@ export const DigitaliserAnnetRelevantDokument = ({ grunnlag, readOnly, submit, i
   return (
     <VilkårsKort heading={'Annet relevant dokument'}>
       <form onSubmit={handleSubmit}>
-        <VStack gap={'6'}>
+        <VStack gap={"space-24"}>
           <FormField form={form} formField={formFields.årsaker} />
           <FormField form={form} formField={formFields.begrunnelse} />
           {!readOnly && (

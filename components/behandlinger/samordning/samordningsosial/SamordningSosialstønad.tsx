@@ -14,50 +14,46 @@ export const SamordningSosialstønad = ({ grunnlag }: Props) => {
   if (!grunnlag.gjeldendeVurderinger?.[0]?.harKrav) return null;
   const vurderinger = grunnlag.gjeldendeVurderinger;
 
-  return (
-    vurderinger && (
-      <VilkårsKort heading="Refusjonskrav sosialstønad" steg="REFUSJON_KRAV" defaultOpen={true}>
-        <BodyShort size={'small'} spacing>
-          Nav-kontor har meldt om perioder der brukeren kan ha mottatt sosialstønad. Disse kan føre til refusjonskrav på
-          etterbetaling. Etterbetaling settes på vent i opp til 21 dager i påvente av refusjonskrav fra Nav-kontor.
-          Følgende Nav-kontor vil varsles automatisk via Gosys når vedtak fattes i saken.
-        </BodyShort>
-        <TableStyled>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>Periode</Table.HeaderCell>
-              <Table.HeaderCell>Nav-kontor</Table.HeaderCell>
+  return (vurderinger && (<VilkårsKort heading="Refusjonskrav sosialstønad" steg="REFUSJON_KRAV" defaultOpen={true}>
+    <BodyShort size={'small'} spacing>
+      Nav-kontor har meldt om perioder der brukeren kan ha mottatt sosialstønad. Disse kan føre til refusjonskrav på
+      etterbetaling. Etterbetaling settes på vent i opp til 21 dager i påvente av refusjonskrav fra Nav-kontor.
+      Følgende Nav-kontor vil varsles automatisk via Gosys når vedtak fattes i saken.
+    </BodyShort>
+    <TableStyled>
+      <Table.Header>
+        <Table.Row>
+          <Table.HeaderCell>Periode</Table.HeaderCell>
+          <Table.HeaderCell>Nav-kontor</Table.HeaderCell>
+        </Table.Row>
+      </Table.Header>
+      <Table.Body>
+        {!vurderinger.length && (
+          <Table.Row>
+            <Table.DataCell colSpan={4}>Ingen refusjon fra Nav-kontor funnet</Table.DataCell>
+          </Table.Row>
+        )}
+        {vurderinger.map((vurdering, index) => {
+          return (
+            <Table.Row key={vurdering.navKontor ?? index}>
+              <Table.DataCell textSize="small">
+                <HStack gap={"space-8"} marginInline={"space-8"}>
+                  {vurdering.fom
+                    ? formaterDatoForFrontend(vurdering.fom)
+                    : grunnlag.nåværendeVirkningsTidspunkt
+                      ? formaterDatoForFrontend(grunnlag.nåværendeVirkningsTidspunkt)
+                      : ''}{' '}
+                  -{' '}
+                  {vurdering.tom
+                    ? formaterDatoForFrontend(vurdering.tom)
+                    : 'Dagen før vedtak (Settes når saken iverksettes)'}
+                </HStack>
+              </Table.DataCell>
+              <Table.DataCell textSize="small">{vurdering.navKontor}</Table.DataCell>
             </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {!vurderinger.length && (
-              <Table.Row>
-                <Table.DataCell colSpan={4}>Ingen refusjon fra Nav-kontor funnet</Table.DataCell>
-              </Table.Row>
-            )}
-            {vurderinger.map((vurdering, index) => {
-              return (
-                <Table.Row key={vurdering.navKontor ?? index}>
-                  <Table.DataCell textSize="small">
-                    <HStack gap={'2'} marginInline={'2'}>
-                      {vurdering.fom
-                        ? formaterDatoForFrontend(vurdering.fom)
-                        : grunnlag.nåværendeVirkningsTidspunkt
-                          ? formaterDatoForFrontend(grunnlag.nåværendeVirkningsTidspunkt)
-                          : ''}{' '}
-                      -{' '}
-                      {vurdering.tom
-                        ? formaterDatoForFrontend(vurdering.tom)
-                        : 'Dagen før vedtak (Settes når saken iverksettes)'}
-                    </HStack>
-                  </Table.DataCell>
-                  <Table.DataCell textSize="small">{vurdering.navKontor}</Table.DataCell>
-                </Table.Row>
-              );
-            })}
-          </Table.Body>
-        </TableStyled>
-      </VilkårsKort>
-    )
-  );
+          );
+        })}
+      </Table.Body>
+    </TableStyled>
+  </VilkårsKort>));
 };

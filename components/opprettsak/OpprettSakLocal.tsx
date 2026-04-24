@@ -327,15 +327,15 @@ export const OpprettSakLocal = () => {
   return (
     <form autoComplete={'off'}>
       <Box
-        padding="4"
-        marginBlock="4"
-        background="bg-default"
+        padding="space-16"
+        marginBlock="space-16"
+        background="default"
         borderWidth="1"
-        borderColor="border-subtle"
-        borderRadius="medium"
+        borderColor="neutral-subtle"
+        borderRadius="4"
       >
-        <HGrid columns={2} gap="4">
-          <VStack gap="4">
+        <HGrid columns={2} gap="space-16">
+          <VStack gap="space-16">
             <FormField form={form} formField={formFields.søknadsdato} />
             <FormField form={form} formField={formFields.fødselsdato} />
             <FormField form={form} formField={formFields.yrkesskade} horizontalRadio={true} />
@@ -357,7 +357,7 @@ export const OpprettSakLocal = () => {
             <FormField form={form} formField={formFields.lønn} />
             <FormField form={form} formField={formFields.stønad} />
           </VStack>
-          <VStack gap="4">
+          <VStack gap="space-16">
             <OpprettSakBarn form={form} />
             <OpprettInntekter form={form} />
             <Sykepenger form={form} />
@@ -365,14 +365,14 @@ export const OpprettSakLocal = () => {
           </VStack>
         </HGrid>
 
-        <HGrid columns={3} gap="4">
+        <HGrid columns={3} gap="space-16">
           <Box
-            padding="4"
-            marginBlock="4"
-            background="surface-info-subtle"
+            padding="space-16"
+            marginBlock="space-16"
+            background="info-soft"
             borderWidth="1"
-            borderColor="border-subtle"
-            borderRadius="medium"
+            borderColor="neutral-subtle"
+            borderRadius="4"
           >
             <Button type="button" size="small" loading={isLoading} onClick={() => opprett('START_BEHANDLING')}>
               Opprett
@@ -380,12 +380,12 @@ export const OpprettSakLocal = () => {
           </Box>
 
           <Box
-            padding="4"
-            marginBlock="4"
-            background="surface-success-subtle"
+            padding="space-16"
+            marginBlock="space-16"
+            background="success-soft"
             borderWidth="1"
-            borderColor="border-subtle"
-            borderRadius="medium"
+            borderColor="neutral-subtle"
+            borderRadius="4"
           >
             <Button type="button" size="small" loading={isLoading} onClick={() => opprett(undefined)}>
               Opprett og iverksett
@@ -393,14 +393,14 @@ export const OpprettSakLocal = () => {
           </Box>
 
           <Box
-            padding="4"
-            marginBlock="4"
-            background="surface-alt-1-subtle"
+            padding="space-16"
+            marginBlock="space-16"
+            background="meta-purple-soft"
             borderWidth="1"
-            borderColor="border-subtle"
-            borderRadius="medium"
+            borderColor="neutral-subtle"
+            borderRadius="4"
           >
-            <HStack gap="4" align="end" wrap={false}>
+            <HStack gap="space-16" align="end" wrap={false}>
               <FormField form={form} formField={formFields.steg} />
 
               <Button type="button" size="small" loading={isLoading} onClick={() => opprett(form.getValues().steg)}>

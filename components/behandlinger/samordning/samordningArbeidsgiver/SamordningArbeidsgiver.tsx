@@ -2,7 +2,7 @@
 
 import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
-import { BodyLong, BodyShort, VStack } from '@navikt/ds-react';
+import { BodyLong, BodyShort, Link, VStack } from '@navikt/ds-react';
 import { FormEvent } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
@@ -19,7 +19,7 @@ import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
-import Link from 'next/link';
+
 
 import { SamordningArbeidsGiverTabell } from 'components/behandlinger/samordning/samordningArbeidsgiver/SamordningArbeidsgiverTabell';
 
@@ -136,7 +136,7 @@ export const SamordningArbeidsgiver = ({
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
       {
-        <VStack gap={'6'}>
+        <VStack gap={'space-24'}>
           {!!historiskeVurderinger?.length && (
             <TidligereVurderinger
               data={historiskeVurderinger}
@@ -168,8 +168,8 @@ export const SamordningArbeidsgiver = ({
             </Link>
           </BodyLong>
 
-          <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
-          <VStack gap={'6'}>
+          <FormField form={form} formField={formFields.begrunnelse} />
+          <VStack gap={'space-24'}>
             <SamordningArbeidsGiverTabell form={form} readOnly={formReadOnly} />
           </VStack>
         </VStack>

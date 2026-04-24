@@ -1,23 +1,23 @@
 .knapp {
-  background-color: var(--a-surface-warning-moderate);
+  background-color: var(--ax-bg-warning-moderate);
   color: black;
 }
 
 .tag {
-  border-radius: var(--a-border-radius-large);
+  border-radius: var(--ax-radius-8);
   justify-content: left;
-  height: var(--a-spacing-10);
-  background-color: var(--a-surface-warning-subtle);
+  height: var(--ax-space-40);
+  background-color: var(--ax-bg-warning-soft);
   padding-top: 0.5rem;
 }
 
 .knapp:hover {
-  background-color: var(--a-surface-warning-moderate);
+  background-color: var(--ax-bg-warning-moderate);
 }
 
 .boks > * {
-  padding-left: var(--a-spacing-3);
-  padding-right: var(--a-spacing-3);
+  padding-left: var(--ax-space-12);
+  padding-right: var(--ax-space-12);
   padding-bottom: 0.5rem;
   min-width: 200px;
   max-width: 200px;

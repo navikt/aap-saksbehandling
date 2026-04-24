@@ -64,7 +64,7 @@ export const Helseinstitusjonsvurdering = ({
   }, [opphold.oppholdFra, forrigeOppholdTom, opphold.tidligsteReduksjonsdato]);
 
   return (
-    <VStack gap={'4'}>
+    <VStack gap={"space-16"}>
       <TextAreaWrapper
         name={`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.begrunnelse`}
         control={form.control}
@@ -73,7 +73,6 @@ export const Helseinstitusjonsvurdering = ({
         rules={{ required: 'Du må begrunne vurderingen din' }}
         readOnly={readonly}
       />
-
       <RadioGroupWrapper
         name={`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.faarFriKostOgLosji`}
         control={form.control}
@@ -85,7 +84,6 @@ export const Helseinstitusjonsvurdering = ({
         <Radio value={JaEllerNei.Ja}>Ja</Radio>
         <Radio value={JaEllerNei.Nei}>Nei</Radio>
       </RadioGroupWrapper>
-
       {visHarFasteUtgifterSpørsmål && (
         <RadioGroupWrapper
           name={`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.harFasteUtgifter`}
@@ -102,7 +100,6 @@ export const Helseinstitusjonsvurdering = ({
           <Radio value={JaEllerNei.Nei}>Nei</Radio>
         </RadioGroupWrapper>
       )}
-
       {visForsørgerEktefelleSpørsmål && (
         <RadioGroupWrapper
           name={`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.forsoergerEktefelle`}
@@ -116,7 +113,6 @@ export const Helseinstitusjonsvurdering = ({
           <Radio value={JaEllerNei.Nei}>Nei</Radio>
         </RadioGroupWrapper>
       )}
-
       {erReduksjon && (
         <>
           <DateInputWrapper
@@ -152,7 +148,6 @@ export const Helseinstitusjonsvurdering = ({
           </ReadMore>
         </>
       )}
-
       {skalViseDatoFeltForStoppAvReduksjon && (
         <DateInputWrapper
           name={`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.periode.fom`}

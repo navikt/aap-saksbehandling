@@ -66,7 +66,7 @@ export const DokumentInfoBanner = ({
   return (
     <div className={styles.dokumentinfobanner}>
       <div className={styles.dokumentinfo}>
-        <HStack gap={'2'} align="center">
+        <HStack gap={"space-8"} align="center">
           <BodyShort size="small">{storForbokstavIHvertOrd(journalpostInfo.søker?.navn)}</BodyShort>
 
           <CopyButton
@@ -80,7 +80,7 @@ export const DokumentInfoBanner = ({
           <ChevronRightIcon className={styles.chevron} />
           <div>
             <Tooltip content={'Avsender'}>
-              <HStack gap={'2'}>
+              <HStack gap={"space-8"}>
                 <PaperplaneIcon title={'avsender'} />
                 <BodyShort size={'small'}>{storForbokstavIHvertOrd(journalpostInfo.avsender?.navn)}</BodyShort>
               </HStack>
@@ -92,12 +92,15 @@ export const DokumentInfoBanner = ({
 
           <ChevronRightIcon className={styles.chevron} />
           <BodyShort size={'small'}>Dokumenthåndtering</BodyShort>
-          <Tag className={styles.tag} size={'xsmall'} variant={'alt1'}>
+          <Tag
+            data-color="meta-purple"
+            className={styles.tag}
+            size={'xsmall'}
+            variant={"outline"}>
             {formaterDatoForFrontend(journalpostInfo.registrertDato!)}
           </Tag>
         </HStack>
       </div>
-
       <HStack>
         {oppgaveStatus && (
           <div className={styles.oppgavestatus}>

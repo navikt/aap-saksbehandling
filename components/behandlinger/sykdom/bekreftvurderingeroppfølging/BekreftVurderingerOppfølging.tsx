@@ -27,9 +27,9 @@ export const BekreftVurderingerOppfølging = ({ behandlingVersjon, readOnly, ini
   return (
     <VilkårsKort heading={'Bekreft vurderinger'} steg={'BEKREFT_VURDERINGER_OPPFØLGING'} aktivMarkering={true}>
       {!readOnly && (
-        <VStack gap={'4'}>
+        <VStack gap={"space-16"}>
           {grunnlag?.mellomlagredeVurderinger.length != 0 && (
-            <VStack gap={'4'}>
+            <VStack gap={"space-16"}>
               <ErrorSummary
                 size={'small'}
                 heading={'Det finnes endringer som ikke er lagret. Bekreft eller avbryt disse før du kan fortsette.'}
@@ -69,7 +69,6 @@ export const BekreftVurderingerOppfølging = ({ behandlingVersjon, readOnly, ini
           </Button>
         </VStack>
       )}
-
       <LøsBehovOgGåTilNesteStegStatusAlert
         status={status}
         løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}

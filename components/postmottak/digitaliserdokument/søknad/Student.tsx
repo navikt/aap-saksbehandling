@@ -13,7 +13,7 @@ interface Props {
 export const Student = ({ form, formFields }: Props) => {
   const erStudent = form.watch('erStudent');
   return (
-    <VStack gap={'3'}>
+    <VStack gap={"space-12"}>
       <FormField form={form} formField={formFields.erStudent} />
       {erStudent === JaNeiAvbruttIkkeOppgitt.AVBRUTT && (
         <FormField form={form} formField={formFields.studentKommeTilbake} />

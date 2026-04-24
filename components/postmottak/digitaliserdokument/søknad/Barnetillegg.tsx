@@ -12,7 +12,7 @@ export const Barnetillegg = ({ form, readOnly }: Props) => {
   const { fields, append, remove } = useFieldArray({ control: form.control, name: 'oppgitteBarn' });
 
   return (
-    <VStack gap={'2'}>
+    <VStack gap={"space-8"}>
       <Label size={'small'}>Har søker barn?</Label>
       {fields.length > 0 && (
         <>

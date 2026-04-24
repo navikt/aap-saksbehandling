@@ -13,7 +13,7 @@ interface Props {
 export const YrkesskadeBeregningTabell = ({ grunnlag, visning }: Props) => {
   return (
     <div className={'flex-column'}>
-      <VStack gap={'1'}>
+      <VStack gap={"space-4"}>
         <BodyShort size={'small'} weight={'semibold'}>
           Grunnlagsberegning § 11-19, jf. grunnlag ved yrkesskadefordel etter § 11-22
         </BodyShort>

@@ -28,7 +28,7 @@ export const ForeslåVedtakTabell = ({ grunnlag }: Props) => {
         {grunnlag.perioder.length === 0 ? (
           <Table.Row>
             <Table.DataCell>
-              <HStack gap={'2'} align={'center'}>
+              <HStack gap={"space-8"} align={'center'}>
                 <XMarkOctagonIcon className={styles.avslåttIcon} />
                 {mapUtfallTilTekst('IKKE_OPPFYLT')}
               </HStack>
@@ -40,7 +40,7 @@ export const ForeslåVedtakTabell = ({ grunnlag }: Props) => {
           grunnlag.perioder.map((vedtaksPeriode) => (
             <Table.Row key={`${vedtaksPeriode.utfall}-${vedtaksPeriode.rettighetsType}-${vedtaksPeriode.periode?.fom}`}>
               <Table.DataCell>
-                <HStack gap={'2'} align={'center'}>
+                <HStack gap={"space-8"} align={'center'}>
                   {vedtaksPeriode.utfall == 'OPPFYLT' ? (
                     <CheckmarkCircleIcon className={styles.godkjentIcon} />
                   ) : (

@@ -24,25 +24,25 @@ export const LokalBrukerBytte = () => {
     <Dropdown.Menu.GroupedList>
       <Dropdown.Menu.GroupedList.Heading>Bytte av roller for lokal backend</Dropdown.Menu.GroupedList.Heading>
       <Dropdown.Menu.GroupedList.Item onClick={() => switchUser('VEILEDER')}>
-        <HStack gap={'1'} align={'center'}>
+        <HStack gap={"space-4"} align={'center'}>
           <BodyShort>Veileder</BodyShort>
           {bruker === 'VEILEDER' && <CheckmarkCircleFillIcon color={'green'} />}
         </HStack>
       </Dropdown.Menu.GroupedList.Item>
       <Dropdown.Menu.GroupedList.Item onClick={() => switchUser('KVALITETSSIKRER')}>
-        <HStack gap={'1'} align={'center'}>
+        <HStack gap={"space-4"} align={'center'}>
           <BodyShort>Kvalitetssikrer</BodyShort>
           {bruker === 'KVALITETSSIKRER' && <CheckmarkCircleFillIcon color={'green'} />}
         </HStack>
       </Dropdown.Menu.GroupedList.Item>
       <Dropdown.Menu.GroupedList.Item onClick={() => switchUser('SAKSBEHANDLER')}>
-        <HStack gap={'1'} align={'center'}>
+        <HStack gap={"space-4"} align={'center'}>
           <BodyShort>Saksbehandler</BodyShort>
           {bruker === 'SAKSBEHANDLER' && <CheckmarkCircleFillIcon color={'green'} />}
         </HStack>
       </Dropdown.Menu.GroupedList.Item>
       <Dropdown.Menu.GroupedList.Item onClick={() => switchUser('BESLUTTER')}>
-        <HStack gap={'1'} align={'center'}>
+        <HStack gap={"space-4"} align={'center'}>
           <BodyShort>Beslutter</BodyShort>
           {bruker === 'BESLUTTER' && <CheckmarkCircleFillIcon color={'green'} />}
         </HStack>

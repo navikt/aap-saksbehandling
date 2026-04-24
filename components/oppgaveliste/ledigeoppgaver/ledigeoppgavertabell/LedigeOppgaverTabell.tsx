@@ -1,4 +1,4 @@
-import { Alert, BodyShort, CopyButton, Table, Tooltip } from '@navikt/ds-react';
+import { Alert, BodyShort, CopyButton, Table, Tooltip, Link as AkselLink } from '@navikt/ds-react';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import Link from 'next/link';
 import { storForbokstavIHvertOrd } from 'lib/utils/string';
@@ -117,9 +117,9 @@ export const LedigeOppgaverTabell = ({ oppgaver, revalidateFunction, setSortBy, 
             <Table.Row key={`oppgave-${i}`}>
               <Table.DataCell textSize={'small'}>
                 {oppgave.saksnummer ? (
-                  <Link href={`/saksbehandling/sak/${oppgave.saksnummer}`}>
+                  <AkselLink as={Link} href={`/saksbehandling/sak/${oppgave.saksnummer}`}>
                     {storForbokstavIHvertOrd(oppgave.personNavn)}
-                  </Link>
+                  </AkselLink>
                 ) : (
                   <span>{storForbokstavIHvertOrd(oppgave.personNavn)}</span>
                 )}

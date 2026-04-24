@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, ExpansionCard, HStack, Page, VStack } from '@navikt/ds-react';
+import { Alert, Button, HStack, Page, VStack } from '@navikt/ds-react';
 import { KlageV0, SaksInfo } from 'lib/types/types';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
@@ -8,10 +8,10 @@ import { clientSendHendelse } from 'lib/clientApi';
 import { useState } from 'react';
 import { Spinner } from 'components/felles/Spinner';
 import { useRouter } from 'next/navigation';
-import styles from './OpprettKlage.module.css';
 import { isSuccess } from 'lib/utils/api';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { parse } from 'date-fns';
+import { Kort } from 'components/kort/Kort';
 
 export interface KlageFormFields {
   kravMottatt: string;
@@ -73,32 +73,19 @@ export const OpprettKlage = ({ sak }: { sak: SaksInfo }) => {
   return (
     <Page.Block width="md">
       <form onSubmit={form.handleSubmit((data) => sendHendelse(data))}>
-        <VStack gap="4">
-          <ExpansionCard
-            aria-label="Opprett klage"
-            size={'small'}
-            defaultOpen={true}
-            className={styles.opprettKlageKort}
-          >
-            <ExpansionCard.Header className={styles.header}>
-              <ExpansionCard.Title size="small">Opprett klage</ExpansionCard.Title>
-            </ExpansionCard.Header>
-
-            <ExpansionCard.Content className={styles.content}>
-              <VStack gap="4">
-                <FormField form={form} formField={formFields.kravMottatt} size="medium" />
-                <FormField form={form} formField={formFields.beskrivelse} size="medium" />
-              </VStack>
-            </ExpansionCard.Content>
-          </ExpansionCard>
-
+        <VStack gap="space-16">
+          <Kort heading={'Opprettt klage'}>
+            <VStack gap={'space-16'}>
+              <FormField form={form} formField={formFields.kravMottatt} size="medium" />
+              <FormField form={form} formField={formFields.beskrivelse} size="medium" />
+            </VStack>
+          </Kort>
           {error && (
             <Alert variant={'error'} size={'small'}>
               {error}
             </Alert>
           )}
-
-          <HStack gap="4">
+          <HStack gap="space-16">
             <Button type="submit">Opprett klage</Button>
             <Button
               type="button"

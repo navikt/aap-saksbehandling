@@ -44,11 +44,11 @@ export const Dagpenger = ({ form }: Props) => {
   });
 
   return (
-    <VStack gap={'2'}>
+    <VStack gap={"space-8"}>
       <Label>Samordning, dagpenger</Label>
       {fields.map((field, index) => {
         return (
-          <HStack key={field.id} gap={'2'} align={'end'}>
+          <HStack key={field.id} gap={"space-8"} align={'end'}>
             <SelectWrapper
               label="Kilde"
               size={'small'}

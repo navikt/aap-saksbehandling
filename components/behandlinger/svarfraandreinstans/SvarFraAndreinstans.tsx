@@ -148,21 +148,21 @@ export const SvarFraAndreinstans = ({ grunnlag, readOnly, behandlingVersjon, ini
         );
       }}
     >
-      <VStack gap={'4'}>
+      <VStack gap={"space-16"}>
         {svarType && (
-          <HStack gap="2">
+          <HStack gap="space-8">
             <BodyShort weight="semibold">Type svar:</BodyShort>
             <BodyShort>{formaterSvartype(svarType)}</BodyShort>
           </HStack>
         )}
         {utfall && (
-          <HStack gap="2">
+          <HStack gap="space-8">
             <BodyShort weight="semibold">Utfall:</BodyShort>
             <BodyShort>{grunnlag?.svarFraAndreinstans.utfall && formaterUtfall(utfall)}</BodyShort>
           </HStack>
         )}
         {feilregistrertBegrunnelse && (
-          <HStack gap="2">
+          <HStack gap="space-8">
             <BodyShort weight="semibold">Begrunnelse for feilregistrering:</BodyShort>
             <BodyShort>{feilregistrertBegrunnelse}</BodyShort>
           </HStack>

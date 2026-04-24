@@ -78,7 +78,7 @@ export const SaksinfoBanner = ({
   return (
     <div className={styles.saksinfobanner}>
       <div className={styles.saksinfo}>
-        <HStack gap={'2'} align="center">
+        <HStack gap={"space-8"} align="center">
           <Label size="small">
             <Link href={`/saksbehandling/sak/${sak.saksnummer}`} title="Tilbake til saksoversikt">
               {storForbokstavIHvertOrd(personInformasjon.navn)}
@@ -94,7 +94,7 @@ export const SaksinfoBanner = ({
           />
 
           {personInformasjon.dødsdato && (
-            <Tag variant="neutral-filled" size="small" data-color="neutral">
+            <Tag variant="strong" size="small" data-color="neutral">
               Døde {formaterDatoForFrontend(personInformasjon.dødsdato)}
             </Tag>
           )}
@@ -111,7 +111,6 @@ export const SaksinfoBanner = ({
           )}
         </HStack>
       </div>
-
       {behandling && (
         <HStack>
           {adressebeskyttelser?.map((adressebeskyttelse) => (

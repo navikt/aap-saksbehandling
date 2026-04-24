@@ -24,7 +24,7 @@ export const ArbeidsopptrappingVurderingFormInput = ({ index, readonly, form, ik
   const rettPåAAPIOpptrapping = form.watch(`vurderinger.${index}.rettPaaAAPIOpptrapping`);
 
   return (
-    <VStack gap={'5'}>
+    <VStack gap={"space-20"}>
       <DateInputWrapper
         name={`vurderinger.${index}.fraDato`}
         label="Vurderingen gjelder fra"
@@ -50,9 +50,7 @@ export const ArbeidsopptrappingVurderingFormInput = ({ index, readonly, form, ik
         }}
         readOnly={readonly}
       />
-
       <HvordanLeggeTilSluttdatoReadMore />
-
       <TextAreaWrapper
         name={`vurderinger.${index}.begrunnelse`}
         control={form.control}
@@ -70,7 +68,6 @@ export const ArbeidsopptrappingVurderingFormInput = ({ index, readonly, form, ik
         rules={{ required: 'Du må ta stilling til om brukeren har en reell mulighet til å trappe opp arbeid' }}
         readOnly={readonly}
       />
-
       <RadioGroupJaNei
         name={`vurderinger.${index}.rettPaaAAPIOpptrapping`}
         control={form.control}

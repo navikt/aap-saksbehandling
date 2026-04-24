@@ -9,8 +9,8 @@ const NotFound = () => {
   return (
     <Page>
       <Page.Block width="md" gutters>
-        <Box marginBlock="8" padding="4">
-          <VStack gap="4" marginBlock="8">
+        <Box marginBlock="space-32" padding="space-16">
+          <VStack gap="space-16" marginBlock="space-32">
             <Heading level="2" size="large">
               Denne siden finnes ikke
             </Heading>

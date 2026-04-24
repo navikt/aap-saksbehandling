@@ -20,7 +20,7 @@ export const FastsettManuellInntektTabell = ({ tabellår, form, readOnly, låstV
   };
 
   return (
-    <VStack gap={'2'}>
+    <VStack gap={"space-8"}>
       <Label size={'small'}>Hvilke år skal inntekt overstyres?</Label>
       <TableStyled tablelayout={'FIXED'}>
         <Table.Header>

@@ -121,7 +121,7 @@ export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering, behandlin
         form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : emptyDraftFormFields())
       }
     >
-      <VStack gap={'8'}>
+      <VStack gap={"space-32"}>
         {grunnlag.historiskeVurderinger && grunnlag.historiskeVurderinger.length > 0 && (
           <BarnepensjonTidligereVurdering vurderinger={grunnlag.historiskeVurderinger} />
         )}

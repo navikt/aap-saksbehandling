@@ -89,20 +89,20 @@ describe('Meldeplikt', () => {
     it('har valg for å avgjøre om brukeren skal få fritak fra meldeplikt eller ikke', async () => {
       render(<MeldepliktPeriodisertFrontend behandlingVersjon={0} readOnly={false} />);
       await klikkPåNyPeriode();
-      expect(screen.getByRole('group', { name: 'Skal brukeren få fritak fra meldeplikt?' })).toBeVisible();
+      expect(screen.getByRole('radiogroup', { name: 'Skal brukeren få fritak fra meldeplikt?' })).toBeVisible();
     });
 
     it('har et valg for å si at brukeren skal få fritak fra meldeplikt', async () => {
       render(<MeldepliktPeriodisertFrontend behandlingVersjon={0} readOnly={false} />);
       await klikkPåNyPeriode();
-      const fritakGruppe = screen.getByRole('group', { name: 'Skal brukeren få fritak fra meldeplikt?' });
+      const fritakGruppe = screen.getByRole('radiogroup', { name: 'Skal brukeren få fritak fra meldeplikt?' });
       expect(within(fritakGruppe).getByRole('radio', { name: 'Ja' })).toBeVisible();
     });
 
     it('har et valg for å si at brukeren ikke skal ha fritak fra meldeplikt', async () => {
       render(<MeldepliktPeriodisertFrontend behandlingVersjon={0} readOnly={false} />);
       await klikkPåNyPeriode();
-      const fritakGruppe = screen.getByRole('group', { name: 'Skal brukeren få fritak fra meldeplikt?' });
+      const fritakGruppe = screen.getByRole('radiogroup', { name: 'Skal brukeren få fritak fra meldeplikt?' });
       expect(within(fritakGruppe).getByRole('radio', { name: 'Nei' })).toBeVisible();
     });
 

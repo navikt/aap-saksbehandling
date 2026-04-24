@@ -52,7 +52,7 @@ export const DigitaliserDokument = ({
   }
 
   return (
-    <VStack gap={'4'}>
+    <VStack gap={"space-16"}>
       <Kategoriser
         submit={handleSubmit}
         kategori={kategori}

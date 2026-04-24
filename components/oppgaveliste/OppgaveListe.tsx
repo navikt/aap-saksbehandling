@@ -28,9 +28,9 @@ export const OppgaveListe = ({ enheter }: Props) => {
     }
   }, [hentAktivTab]);
   return (
-    <VStack gap={'8'} padding={'8'} maxWidth={'1680px'} marginInline={'auto'} marginBlock={'0'}>
+    <VStack gap={"space-32"} padding={"space-32"} maxWidth={'1680px'} marginInline={'auto'} marginBlock={"space-0"}>
       <TildelOppgaverProvider>
-        <HStack gap={'4'} align={'center'}>
+        <HStack gap={"space-16"} align={'center'}>
           <Heading level={'1'} size={'large'}>
             Oppgaver
           </Heading>

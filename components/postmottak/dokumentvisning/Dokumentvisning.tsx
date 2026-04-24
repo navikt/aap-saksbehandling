@@ -44,7 +44,7 @@ export const Dokumentvisning = ({ journalpostId, dokumenter, setIsExpandedAction
 
   return (
     <div className={styles.dokumentvisning}>
-      <HStack gap={'2'} align={'center'}>
+      <HStack gap={"space-8"} align={'center'}>
         <div className={styles.ekspanderknapp}>
           <Button
             variant={'tertiary'}

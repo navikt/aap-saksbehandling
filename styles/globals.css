@@ -6,17 +6,13 @@
 .flex-row {
   display: flex;
   flex-direction: row;
-  gap: var(--a-spacing-4);
+  gap: var(--ax-space-16);
 }
 
 .flex-column {
   display: flex;
   flex-direction: column;
-  gap: var(--a-spacing-4);
-}
-
-.begrunnelse {
-  max-width: 90ch;
+  gap: var(--ax-space-16);
 }
 
 .prosent_input > input {
@@ -31,12 +27,6 @@
   max-width: 90ch;
 }
 
-.navds-form-field {
-  max-width: 90ch;
-}
-.navds-read-more__content {
-  max-width: 90ch;
-}
-.navds-error-summary--small {
+.textarea {
   max-width: 90ch;
 }

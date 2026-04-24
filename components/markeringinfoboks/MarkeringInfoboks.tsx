@@ -35,16 +35,13 @@ export const MarkeringInfoboks = ({ markering, referanse, showLabel = false, siz
           {showLabel && markeringTypeTilTekst(markering.markeringType)}
         </Tag>
       )}
-
       <Popover
         onClose={() => setVisInfo(false)}
         open={visInfo}
         anchorEl={tagRef.current}
-        arrow={false}
         placement={'bottom-end'}
-        offset={8}
-      >
-        <VStack gap={'2'} className={styles.boks}>
+        offset={8}>
+        <VStack gap={"space-8"} className={styles.boks}>
           <Tag
             icon={ikonForMarkeringType(markering.markeringType)}
             variant={variantFraType(markering.markeringType)}
@@ -60,20 +57,20 @@ export const MarkeringInfoboks = ({ markering, referanse, showLabel = false, siz
             </BodyShort>
           </Tag>
           {markering.begrunnelse ? (
-            <VStack gap={'0'}>
+            <VStack gap={"space-0"}>
               <Detail textColor="subtle">Årsak</Detail>
               <div>{markering.begrunnelse}</div>
             </VStack>
           ) : undefined}
           {referanse && visTag && (
             <>
-              <HStack align={'end'} justify={'end'} gap={'4'}>
+              <HStack align={'end'} justify={'end'} gap={'space-16'}>
                 {markering.opprettetAvNavn && markering.opprettetTidspunkt && (
                   <Detail
                     textColor={'subtle'}
                   >{`Opprettet av ${markering.opprettetAvNavn} (${formaterDatoForFrontend(markering.opprettetTidspunkt)})`}</Detail>
                 )}
-                <VStack gap={'2'} align={'end'}>
+                <VStack gap={'space-8'} align={'end'}>
                   <Button
                     variant={'secondary'}
                     size={'small'}

@@ -19,7 +19,7 @@ export const MineOppgaverTabell = ({ oppgaver, revalidateFunction, setSortBy, so
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <VStack gap={'5'}>
+    <VStack gap={"space-20"}>
       <ManglerTilgangModal
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}

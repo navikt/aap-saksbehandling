@@ -1,17 +1,17 @@
 .godkjent {
-  background-color: var(--a-green-50);
+  background-color: var(--ax-success-100);
 }
 
 .avslått {
-  background-color: var(--a-orange-50);
+  background-color: var(--ax-warning-100);
 }
 
 .godkjentIcon {
-  color: var(--a-icon-success);
+  color: var(--ax-text-success-decoration);
 }
 
 .avslåttIcon {
-  color: var(--a-icon-warning);
+  color: var(--ax-text-warning-decoration);
 }
 
 .rad {
@@ -19,5 +19,5 @@
 }
 
 .opplysning {
-  margin-bottom: var(--a-spacing-4);
+  margin-bottom: var(--ax-space-16);
 }

@@ -1,10 +1,10 @@
 .tabell {
   display: flex;
   flex-direction: column;
-  border: 1px solid var(--a-border-divider);
-  border-radius: var(--a-border-radius-large);
+  border: 1px solid var(--ax-border-neutral-subtle);
+  border-radius: var(--ax-radius-8);
 }
 
 .ingenreserverteoppgaver {
-  padding: var(--a-spacing-2);
+  padding: var(--ax-space-8);
 }

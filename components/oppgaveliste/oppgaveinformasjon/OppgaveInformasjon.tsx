@@ -15,7 +15,7 @@ interface Props {
 export const OppgaveInformasjon = ({ oppgave }: Props) => {
   const adressebeskyttelser = utledAdressebeskyttelse(oppgave);
   return (
-    <HStack gap={'1'}>
+    <HStack gap={"space-4"}>
       {oppgave.påVentTil && (
         <PåVentInfoboks frist={oppgave.påVentTil} årsak={oppgave.påVentÅrsak} begrunnelse={oppgave.venteBegrunnelse} />
       )}

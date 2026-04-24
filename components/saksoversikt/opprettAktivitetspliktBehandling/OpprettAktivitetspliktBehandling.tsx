@@ -1,15 +1,15 @@
 'use client';
 
-import { Alert, Button, ExpansionCard, HStack, Page, VStack } from '@navikt/ds-react';
+import { Alert, Button, HStack, Page, VStack } from '@navikt/ds-react';
 import { OpprettAktivitetspliktBehandlingDto, SaksInfo } from 'lib/types/types';
 import { useConfigForm } from 'components/form/FormHook';
 import { clientOpprettAktivitetsplikt } from 'lib/clientApi';
 import { useState } from 'react';
 import { Spinner } from 'components/felles/Spinner';
-import styles from './OpprettAktivitetsplikt.module.css';
 import { FormField } from 'components/form/FormField';
 import { isSuccess } from 'lib/utils/api';
 import { useRouter } from 'next/navigation';
+import { Kort } from 'components/kort/Kort';
 
 export interface AktivitetspliktbruddFormFields {
   aktivitetspliktBruddType: 'AKTIVITETSPLIKT_11_7';
@@ -62,23 +62,10 @@ export const OpprettAktivitetspliktBehandling = ({ sak }: { sak: SaksInfo }) => 
           )(event);
         }}
       >
-        <VStack gap="4">
-          <ExpansionCard
-            aria-label="Opprett vurdering av aktivitetsplikten"
-            size={'small'}
-            defaultOpen={true}
-            className={styles.opprettKlageKort}
-          >
-            <ExpansionCard.Header className={styles.header}>
-              <ExpansionCard.Title size="small">Opprett vurdering av aktivitetsplikten</ExpansionCard.Title>
-            </ExpansionCard.Header>
-
-            <ExpansionCard.Content className={styles.content}>
-              <VStack gap="4">
-                <FormField form={form} formField={formFields.aktivitetspliktBruddType} size="medium" />
-              </VStack>
-            </ExpansionCard.Content>
-          </ExpansionCard>
+        <VStack gap="space-16">
+          <Kort heading={'Opprett vurdering av aktivitetsplikten'}>
+            <FormField form={form} formField={formFields.aktivitetspliktBruddType} size="medium" />
+          </Kort>
 
           {error && (
             <Alert variant={'error'} size={'small'}>
@@ -86,7 +73,7 @@ export const OpprettAktivitetspliktBehandling = ({ sak }: { sak: SaksInfo }) => 
             </Alert>
           )}
 
-          <HStack gap="4">
+          <HStack gap="space-16">
             <Button type="submit">Bekreft</Button>
             <Button as="a" href={`/saksbehandling/sak/${sak.saksnummer}`} rel="noreferrer noopener" variant="secondary">
               Avbryt

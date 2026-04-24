@@ -14,8 +14,8 @@ interface Props {
 export const YtelseTabell = ({ ytelser }: Props) => {
   return (
     <Box>
-      <VStack gap={'2'}>
-        <VStack gap={'2'}>
+      <VStack gap={"space-8"}>
+        <VStack gap={"space-8"}>
           <Label size="small">Vedtak om folketrygdytelser</Label>
           <BodyShort size="small">Vi har funnet følgende perioder som kan være relevante for AAP</BodyShort>
         </VStack>
@@ -43,7 +43,7 @@ export const YtelseTabell = ({ ytelser }: Props) => {
                 <Table.Row key={ytelse.saksRef ?? index} className={classNames}>
                   <Table.DataCell textSize="small">{ytelse.ytelseType}</Table.DataCell>
                   <Table.DataCell textSize="small">
-                    <HStack gap={'2'} marginInline={'2'}>
+                    <HStack gap={"space-8"} marginInline={"space-8"}>
                       {ytelse.endringStatus === 'NY' && (
                         <BodyShort size="small" weight="semibold" className={styles.nyTag}>
                           Ny

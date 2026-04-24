@@ -35,7 +35,6 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
   const { postmottakEndreTema, error, data } = usePostmottakEndreTema();
   const [visModal, setVisModal] = useState<boolean>(grunnlag?.vurdering?.skalTilAap === false || false);
 
-  console.log(grunnlag);
   const { visningActions, formReadOnly, visningModus } = usePostmottakVilkårskortVisning(readOnly, 'AVKLAR_TEMA');
 
   const { formFields, form } = useConfigForm<FormFields>(
@@ -140,7 +139,7 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
           </Button>
         </Modal.Footer>
       </Modal>
-      <VStack gap={'6'}>
+      <VStack gap={"space-24"}>
         {skalViseKlageEttersendelseInfo && (
           <Alert variant={'info'} size={'small'}>
             Denne journalposten er en ettersendelse til klage, og journalførende enhet er satt til{'  '}

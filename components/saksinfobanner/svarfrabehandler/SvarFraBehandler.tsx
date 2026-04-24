@@ -32,13 +32,16 @@ export const SvarFraBehandler = ({ behandlingReferanse, oppdaterVisHarUlesteDoku
         onClose={() => setVis(false)}
         open={vis}
         anchorEl={buttonRef.current}
-        arrow={false}
         placement={'bottom-end'}
-        offset={8}
-      >
+        offset={8}>
         <Box maxWidth={'400px'} minWidth={'400px'}>
-          <VStack gap={'0'}>
-            <Tag icon={<FirstAidKitIcon />} variant={'warning-moderate'} size={'medium'} className={styles.tag}>
+          <VStack gap={"space-0"}>
+            <Tag
+              data-color="warning"
+              icon={<FirstAidKitIcon />}
+              variant={"moderate"}
+              size={'medium'}
+              className={styles.tag}>
               <BodyShort size={'small'} weight={'semibold'}>
                 Svar fra behandler
               </BodyShort>
@@ -49,7 +52,7 @@ export const SvarFraBehandler = ({ behandlingReferanse, oppdaterVisHarUlesteDoku
               </BodyLong>
             </Box>
           </VStack>
-          <Box borderWidth={'1'} borderColor={'border-divider'} />
+          <Box borderWidth={'1'} borderColor={"neutral-subtle"} />
           {error && (
             <HStack padding={'space-8'} justify={'center'}>
               <Alert size={'small'} variant={'error'}>

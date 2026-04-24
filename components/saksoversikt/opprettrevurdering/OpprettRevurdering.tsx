@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, ExpansionCard, HStack, Page, VStack } from '@navikt/ds-react';
+import { Alert, Button, HStack, Page, VStack } from '@navikt/ds-react';
 import { ManuellRevurderingV0, SaksInfo } from 'lib/types/types';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
@@ -8,10 +8,10 @@ import { clientSendHendelse } from 'lib/clientApi';
 import { useState } from 'react';
 import { Spinner } from 'components/felles/Spinner';
 import { useRouter } from 'next/navigation';
-import styles from './OpprettRevurdering.module.css';
 import { isSuccess } from 'lib/utils/api';
 import { vurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
 import { useFeatureFlag } from 'context/UnleashContext';
+import { Kort } from 'components/kort/Kort';
 
 export interface ManuellRevurderingFormFields {
   årsaker: string[];
@@ -103,26 +103,15 @@ export const OpprettRevurdering = ({
   return (
     <Page.Block width="md">
       <form onSubmit={form.handleSubmit((data) => sendHendelse(data))}>
-        <VStack gap="4">
-          <ExpansionCard
-            aria-label={`Opprett ${variant}`}
-            size={'small'}
-            defaultOpen={true}
-            className={styles.opprettRevurderingKort}
-          >
-            <ExpansionCard.Header className={styles.header}>
-              <ExpansionCard.Title size="small">Opprett {variant}</ExpansionCard.Title>
-            </ExpansionCard.Header>
-
-            <ExpansionCard.Content className={styles.content}>
-              <VStack gap="4">
-                <div>
-                  <FormField form={form} formField={formFields.årsaker} size="medium" />
-                </div>
-                <FormField form={form} formField={formFields.beskrivelse} size="medium" />
-              </VStack>
-            </ExpansionCard.Content>
-          </ExpansionCard>
+        <VStack gap="space-16">
+          <Kort heading={`Opprett ${variant}`}>
+            <VStack gap="space-16">
+              <div>
+                <FormField form={form} formField={formFields.årsaker} size="medium" />
+              </div>
+              <FormField form={form} formField={formFields.beskrivelse} size="medium" />
+            </VStack>
+          </Kort>
 
           {error && (
             <Alert variant={'error'} size={'small'}>
@@ -130,7 +119,7 @@ export const OpprettRevurdering = ({
             </Alert>
           )}
 
-          <HStack gap="4">
+          <HStack gap="space-16">
             <Button type="submit">Opprett {variant}</Button>
             <Button
               type="button"

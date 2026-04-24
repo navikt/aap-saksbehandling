@@ -23,7 +23,7 @@ interface Props {
 
 export const TidligereSykdomsvurdering = ({ vurdering }: Props) => {
   return (
-    <VStack gap="5">
+    <VStack gap="space-20">
       <SpørsmålOgSvar spørsmål={'Fra dato'} svar={new Dato(vurdering.fom).formaterForFrontend()} />
       <SpørsmålOgSvar spørsmål={vilkårsvurderingLabel} svar={vurdering.begrunnelse} />
       <SpørsmålOgSvar

@@ -70,8 +70,8 @@ export const Ytelsesvurderinger = ({ form, readOnly }: Props) => {
 
   return (
     <Box>
-      <VStack gap={'2'}>
-        <VStack gap={'2'}>
+      <VStack gap={"space-8"}>
+        <VStack gap={"space-8"}>
           <Label size="small">Legg til perioder med samordning</Label>
           <BodyShort size="small">
             Legg til perioder med folketrygdytelser som skal samordnes med AAP etter § 11-27 / 11-28.
@@ -81,7 +81,7 @@ export const Ytelsesvurderinger = ({ form, readOnly }: Props) => {
             100 % samordningsgrad vil gi stans av AAP i perioden etter § 11-27. Lavere prosent gir redusert ytelse.
           </BodyShort>
         </VStack>
-        <VStack gap={'2'}>
+        <VStack gap={"space-8"}>
           <TableStyled>
             <Table.Header>
               <Table.Row>
@@ -95,7 +95,7 @@ export const Ytelsesvurderinger = ({ form, readOnly }: Props) => {
               {fields.map((field, index) => (
                 <Table.Row key={field.id}>
                   <Table.DataCell>
-                    <HStack align={'center'} gap={'1'}>
+                    <HStack align={'center'} gap={"space-4"}>
                       <DateInputWrapper
                         label="Fra og med"
                         control={form.control}

@@ -44,8 +44,8 @@ const Error = ({ error }: Props) => {
   return (
     <Page>
       <Page.Block width="md" gutters>
-        <Box marginBlock="8" padding="4">
-          <VStack gap="4" marginBlock="8">
+        <Box marginBlock="space-32" padding="space-16">
+          <VStack gap="space-16" marginBlock="space-32">
             <Heading level="2" size="large">
               En feil har oppstått!
             </Heading>
@@ -54,7 +54,7 @@ const Error = ({ error }: Props) => {
               Du kan prøve igjen. Dersom feilen vedvarer kan du melde problemet i Porten med skjermbilde av denne siden.
             </BodyShort>
 
-            <HGrid columns={2} gap="2">
+            <HGrid columns={2} gap="space-8">
               {saksnummer && (
                 <>
                   <Label>Saksnummer:</Label>
@@ -89,8 +89,8 @@ const Error = ({ error }: Props) => {
  */
 const IngenTilgangFeil = ({ saksnummer }: { saksnummer?: string }) => (
   <VStack align="center">
-    <Box marginBlock="8" padding="4">
-      <VStack gap="4" marginBlock="8">
+    <Box marginBlock="space-32" padding="space-16">
+      <VStack gap="space-16" marginBlock="space-32">
         <Heading level="2" size="large">
           Mangler tilgang
         </Heading>

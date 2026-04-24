@@ -1,29 +1,29 @@
 .hasterTag {
-    background-color: var(--a-surface-danger-subtle);
-    border-top-left-radius: var(--a-border-radius-large);
-    border-top-right-radius: var(--a-border-radius-large);
+    background-color: var(--ax-bg-danger-soft);
+    border-top-left-radius: var(--ax-radius-8);
+    border-top-right-radius: var(--ax-radius-8);
     justify-content: left;
-    height: var(--a-spacing-10);
+    height: var(--ax-space-40);
 }
 
 .spesialkompetanseTag {
-    background-color: var(--a-surface-alt-1-subtle);
-    border-top-left-radius: var(--a-border-radius-large);
-    border-top-right-radius: var(--a-border-radius-large);
+    background-color: var(--ax-bg-meta-purple-soft);
+    border-top-left-radius: var(--ax-radius-8);
+    border-top-right-radius: var(--ax-radius-8);
     justify-content: left;
-    height: var(--a-spacing-10);
+    height: var(--ax-space-40);
 }
 
 .boks > * {
-    padding-left: var(--a-spacing-3);
-    padding-right: var(--a-spacing-3);
+    padding-left: var(--ax-space-12);
+    padding-right: var(--ax-space-12);
     padding-bottom: 0.5rem;
     min-width: 400px;
     max-width: 600px;
 }
 
 .tag {
-    border-radius: var(--a-border-radius-medium);
+    border-radius: var(--ax-radius-4);
 }
 
 .tag:hover {

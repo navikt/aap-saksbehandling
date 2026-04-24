@@ -32,7 +32,7 @@ export const MeldePeriodeInput = ({ form, dagIndex, readOnly, slettPeriode }: Pr
   const erDatoValgt = fields.every((e) => e.dato);
 
   return (
-    <VStack padding={'4'} className={styles.pliktPeriodeInput}>
+    <VStack padding={"space-16"} className={styles.pliktPeriodeInput}>
       <HStack justify={'space-between'}>
         <Button
           icon={<PencilFillIcon />}

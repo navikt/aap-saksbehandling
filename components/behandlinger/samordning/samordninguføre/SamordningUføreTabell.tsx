@@ -22,7 +22,7 @@ export const SamordningUføreTabell = ({ form, readOnly }: Props) => {
     });
   }
   return (
-    <VStack gap={'1'}>
+    <VStack gap={"space-4"}>
       <Label size={'small'}>Vurder brukerens faktiske uføregrad</Label>
       <TableStyled>
         <Table.Header>

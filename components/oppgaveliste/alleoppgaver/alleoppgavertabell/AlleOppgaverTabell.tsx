@@ -1,5 +1,5 @@
 import { Oppgave, Vurderingsbehov, ÅrsakTilOpprettelse } from 'lib/types/types';
-import { BodyShort, Checkbox, CopyButton, Table, Tooltip } from '@navikt/ds-react';
+import { BodyShort, Checkbox, CopyButton, Table, Tooltip, Link as AkselLink } from '@navikt/ds-react';
 import {
   mapBehovskodeTilBehovstype,
   mapTilOppgaveBehandlingstypeTekst,
@@ -125,7 +125,9 @@ export const AlleOppgaverTabell = ({
               </Table.DataCell>
               <Table.DataCell textSize={'small'}>
                 {oppgave.saksnummer ? (
-                  <Link href={`/saksbehandling/sak/${oppgave.saksnummer}`}>{oppgave.saksnummer}</Link>
+                  <AkselLink as={Link} href={`/saksbehandling/sak/${oppgave.saksnummer}`}>
+                    {oppgave.saksnummer}
+                  </AkselLink>
                 ) : (
                   <span>{oppgave.journalpostId}</span>
                 )}

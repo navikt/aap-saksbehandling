@@ -36,7 +36,7 @@ export const YrkesskadeVurderingTabell = ({ form, yrkesskader, readOnly, update 
     ?.every((yrkesskade) => !yrkesskade.erTilknyttet);
 
   return (
-    <VStack gap={'2'}>
+    <VStack gap={"space-8"}>
       <TableStyled>
         <Table.Header>
           <Table.Row>

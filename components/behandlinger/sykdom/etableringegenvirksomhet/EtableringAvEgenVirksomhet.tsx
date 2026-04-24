@@ -197,7 +197,7 @@ export const EtableringAvEgenVirksomhet = ({
         ></IkkeVurderbarPeriode>
       ))}
       {!formReadOnly && (
-        <VStack paddingBlock={'4'} paddingInline={'5'} gap={'4'}>
+        <VStack paddingBlock={"space-16"} paddingInline={"space-20"} gap={"space-16"}>
           <BodyLong size={'small'}>
             <Link href={'https://lovdata.no/pro/rundskriv/r11-00/KAPITTEL_18'} target="_blank">
               Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-15 (lovdata.no)
@@ -220,7 +220,7 @@ export const EtableringAvEgenVirksomhet = ({
         </TidligereVurderingExpandableCard>
       ))}
       {nyeVurderinger.length > 0 && (
-        <VStack paddingBlock={'4'} paddingInline={'5'} gap={'4'}>
+        <VStack paddingBlock={"space-16"} paddingInline={"space-20"} gap={"space-16"}>
           <HStack>
             <TextFieldWrapper
               name={'virksomhetNavn'}

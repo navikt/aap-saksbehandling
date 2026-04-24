@@ -200,10 +200,10 @@ export const AlleOppgaver = ({ enheter }: Props) => {
   const oppgaveKøer = isSuccess(køer) ? køer.data : undefined;
 
   return (
-    <VStack gap={'4'}>
-      <Box borderColor="border-divider" borderWidth="1" borderRadius={'xlarge'}>
+    <VStack gap={"space-16"}>
+      <Box borderColor="neutral-subtle" borderWidth="1" borderRadius={"12"}>
         <VStack>
-          <HStack paddingInline={'4'} paddingBlock={'2'} gap={'4'} style={{ borderBottom: '1px solid #071A3636' }}>
+          <HStack paddingInline={"space-16"} paddingBlock={"space-8"} gap={"space-16"} style={{ borderBottom: '1px solid #071A3636' }}>
             <EnheterSelect
               enheter={enheter}
               aktiveEnheter={aktiveEnheter}
@@ -218,7 +218,7 @@ export const AlleOppgaver = ({ enheter }: Props) => {
               form={form}
             />
           </HStack>
-          <HStack gap={'2'} paddingInline={'4'} paddingBlock={'2'}>
+          <HStack gap={"space-8"} paddingInline={"space-16"} paddingBlock={"space-8"}>
             <Label as="p" size={'small'}>
               Beskrivelse av køen:
             </Label>
@@ -226,7 +226,6 @@ export const AlleOppgaver = ({ enheter }: Props) => {
           </HStack>
         </VStack>
       </Box>
-
       <div className={styles.tabell}>
         <AlleOppgaverFiltrering
           form={form}
@@ -257,7 +256,6 @@ export const AlleOppgaver = ({ enheter }: Props) => {
           </BodyShort>
         )}
       </div>
-
       {kanLasteInnFlereOppgaver && (
         <HStack justify={'center'}>
           <Button

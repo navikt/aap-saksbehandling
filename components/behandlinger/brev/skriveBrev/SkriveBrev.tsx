@@ -117,8 +117,8 @@ export const SkriveBrev = ({
         />
       )}
       <div>
-        <HStack gap="4" justify="space-between" wrap={false} align="center" marginBlock="0 4">
-          <HStack gap="2">
+        <HStack gap="space-16" justify="space-between" wrap={false} align="center" marginBlock="space-0 space-16">
+          <HStack gap="space-8">
             {sistLagret && <Label as="p">Sist lagret: {formaterDatoMedTidspunktForFrontend(sistLagret)}</Label>}
             {isSaving && <Loader />}
             {error && (
@@ -130,7 +130,12 @@ export const SkriveBrev = ({
           {!readOnly && (
             <ActionMenu>
               <ActionMenu.Trigger>
-                <Button variant="secondary-neutral" icon={<ChevronDownIcon aria-hidden />} iconPosition="right">
+                <Button
+                  data-color="neutral"
+                  variant="secondary"
+                  icon={<ChevronDownIcon aria-hidden />}
+                  iconPosition="right"
+                >
                   Andre handlinger
                 </Button>
               </ActionMenu.Trigger>
@@ -159,7 +164,7 @@ export const SkriveBrev = ({
           )}
         </HStack>
 
-        <VStack gap={'4'}>
+        <VStack gap={'space-16'}>
           <BrevbyggerBeta
             brevmal={brev}
             mottaker={mottaker}

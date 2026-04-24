@@ -18,7 +18,7 @@ describe('DigitaliserSøknad', () => {
   it('yrkesskade vises', () => {
     render(<DigitaliserSøknad submit={() => {}} grunnlag={grunnlag} readOnly={false} isLoading={false} />);
 
-    const yrkeskadeRadio = screen.getByRole('group', {
+    const yrkeskadeRadio = screen.getByRole('radiogroup', {
       name: /yrkesskade/i,
     });
     expect(yrkeskadeRadio).toBeVisible();
@@ -26,7 +26,7 @@ describe('DigitaliserSøknad', () => {
   it('erStudent vises', () => {
     render(<DigitaliserSøknad submit={() => {}} grunnlag={grunnlag} readOnly={false} isLoading={false} />);
 
-    const studentRadio = screen.getByRole('group', {
+    const studentRadio = screen.getByRole('radiogroup', {
       name: /Er søkeren student?/i,
     });
     expect(studentRadio).toBeVisible();
@@ -34,11 +34,11 @@ describe('DigitaliserSøknad', () => {
   it('studentKommeTilbake hvis studie er avbrutt', async () => {
     render(<DigitaliserSøknad submit={() => {}} grunnlag={grunnlag} readOnly={false} isLoading={false} />);
 
-    const studentRadio = screen.getByRole('group', {
+    const studentRadio = screen.getByRole('radiogroup', {
       name: /Er søkeren student?/i,
     });
     await user.click(within(studentRadio).getByText('Avbrutt'));
-    const studentAvbruttRadio = screen.getByRole('group', {
+    const studentAvbruttRadio = screen.getByRole('radiogroup', {
       name: /Skal søkeren tilbake til studiet?/i,
     });
     expect(studentAvbruttRadio).toBeVisible();
@@ -89,26 +89,26 @@ describe('DigitaliserSøknad', () => {
     await user.type(screen.getByRole('textbox', { name: /søknadsdato/i }), '01.01.2024');
 
     // Yrkesskade
-    const yrkesSkadeGruppe = screen.getByRole('group', { name: /Har søker yrkesskade?/i });
+    const yrkesSkadeGruppe = screen.getByRole('radiogroup', { name: /Har søker yrkesskade?/i });
     await user.click(within(yrkesSkadeGruppe).getByText('Nei'));
 
     // harBoddINorgeSiste5År = Ja → viser harArbeidetINorgeSiste5År og arbeidetUtenforNorgeFørSykdom
-    const harBoddGruppe = screen.getByRole('group', { name: /Har søker bodd sammenhengende i Norge siste 5 år?/i });
+    const harBoddGruppe = screen.getByRole('radiogroup', { name: /Har søker bodd sammenhengende i Norge siste 5 år?/i });
     await user.click(within(harBoddGruppe).getByText('Ja'));
 
-    const harArbeidetGruppe = screen.getByRole('group', {
+    const harArbeidetGruppe = screen.getByRole('radiogroup', {
       name: /Har søker arbeidet sammenhengende i Norge siste 5 år?/i,
     });
     await user.click(within(harArbeidetGruppe).getByText('Nei'));
 
     // arbeidetUtenforNorgeFørSykdom = Ja → viser "Legg til utenlandsopphold"
-    const arbeidetUtenforGruppe = screen.getByRole('group', {
+    const arbeidetUtenforGruppe = screen.getByRole('radiogroup', {
       name: /Arbeidet søker utenfor Norge de siste fem årene?/i,
     });
     await user.click(within(arbeidetUtenforGruppe).getByText('Ja'));
 
     // erStudent = Nei
-    const erStudentGruppe = screen.getByRole('group', { name: /Er søkeren student?/i });
+    const erStudentGruppe = screen.getByRole('radiogroup', { name: /Er søkeren student?/i });
     await user.click(within(erStudentGruppe).getByText('Nei'));
 
     // Legg til utenlandsopphold
@@ -127,7 +127,7 @@ describe('DigitaliserSøknad', () => {
     await user.type(screen.getByRole('textbox', { name: /Til dato/i }), '31.12.2020');
 
     // iArbeid
-    const iArbeidGruppe = screen.getByRole('group', { name: /Var søker i arbeid i utlandet?/i });
+    const iArbeidGruppe = screen.getByRole('radiogroup', { name: /Var søker i arbeid i utlandet?/i });
     await user.click(within(iArbeidGruppe).getByText('Ja'));
 
     // Submit

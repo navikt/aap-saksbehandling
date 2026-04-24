@@ -36,7 +36,7 @@ export const LeggTilUtenlandsOpphold = ({ i, form, readOnly, remove }: Props) =>
   const visUtenlandsId = skalViseUtenlandsId(land);
 
   return (
-    <VStack gap={'4'} className={styles.barn}>
+    <VStack gap={"space-16"} className={styles.barn}>
       <ComboboxWrapper
         label={'Land'}
         name={`utenlandsOpphold.${i}.land`}
@@ -45,7 +45,7 @@ export const LeggTilUtenlandsOpphold = ({ i, form, readOnly, remove }: Props) =>
         readOnly={readOnly}
         rules={{ required: 'Du må velge land', validate: (v) => v !== '' || 'Du må velge land' }}
       />
-      <HStack gap={'4'}>
+      <HStack gap={"space-16"}>
         <VStack>
           <DateInputWrapper
             label={'Fra dato'}

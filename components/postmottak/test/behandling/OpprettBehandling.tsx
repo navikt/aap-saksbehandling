@@ -30,7 +30,7 @@ export const OpprettBehandling = () => {
   return (
     <Page.Block width="xl" className={styles.stickyFooterWrapper}>
       <div className={styles.stickyFooter}>
-        <HStack gap="4" align="end" marginBlock="4">
+        <HStack gap="space-16" align="end" marginBlock="space-16">
           <TextField
             inputMode="numeric"
             label={'Journalpost-id'}

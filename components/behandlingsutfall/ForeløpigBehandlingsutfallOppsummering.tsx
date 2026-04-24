@@ -23,7 +23,7 @@ export const ForeløpigBehandlingsutfallOppsummering = ({
         {foreløpigBehandlingsutfall.tidligereVurderinger.length === 0 ? (
           <Table.Row>
             <Table.DataCell>
-              <HStack gap={'2'} align={'center'}>
+              <HStack gap={"space-8"} align={'center'}>
                 <XMarkOctagonIcon className={styles.avslåttIcon} />
                 Ingen tidligere vurderinger
               </HStack>
@@ -35,7 +35,7 @@ export const ForeløpigBehandlingsutfallOppsummering = ({
           foreløpigBehandlingsutfall.tidligereVurderinger.map((segment) => (
             <Table.Row key={`${segment.periode.fom}`}>
               <Table.DataCell>
-                <HStack gap={'2'} align={'center'}>
+                <HStack gap={"space-8"} align={'center'}>
                   {segment.utfall == 'POTENSIELT_OPPFYLT' ? (
                     segment.rettighetstype ? (
                       <CheckmarkCircleIcon className={styles.godkjentIcon} />

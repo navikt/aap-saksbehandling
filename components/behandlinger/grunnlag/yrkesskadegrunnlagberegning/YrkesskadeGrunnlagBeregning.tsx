@@ -159,7 +159,6 @@ export const YrkesskadeGrunnlagBeregning = ({
               control={form.control}
               label={`Begrunnelse for anslått årlig arbeidsinntekt for skadetidspunkt ${formaterDatoForFrontend(field.skadetidspunkt)}`}
               readOnly={formReadOnly}
-              className={'begrunnelse'}
               rules={{ required: 'Du må oppgi en begrunnelse for anslått arbeidsinntekt.' }}
             />
             <div className={styles.inntektfelt}>
