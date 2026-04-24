@@ -1,5 +1,5 @@
 import { ToTrinnsVurdering } from 'lib/types/types';
-import { BodyShort, Label } from '@navikt/ds-react';
+import { BodyShort, Label, Link as AkselLink, VStack } from '@navikt/ds-react';
 import { Behovstype, mapBehovskodeTilBehovstype } from 'lib/utils/form';
 import Link from 'next/link';
 
@@ -21,12 +21,15 @@ export const Oppsummering = ({ vurderinger, erKvalitetssikrer }: Props) => {
       <Label size={'small'}>{`Siste vurderinger fra ${erKvalitetssikrer ? 'kvalitetssikrer' : 'beslutter'}`}</Label>
       {vurderinger.map((vurdering) => (
         <div key={vurdering.definisjon} className={styles.beslutteroppsummering}>
-          <div>
+          <VStack>
             <Label size={'small'}>Vilkår</Label>
-            <Link href={byggVilkårskortLenke(saksnummer, behandlingsreferanse, vurdering.definisjon as Behovstype)}>
+            <AkselLink
+              as={Link}
+              href={byggVilkårskortLenke(saksnummer, behandlingsreferanse, vurdering.definisjon as Behovstype)}
+            >
               <BodyShort size={'small'}>{mapBehovskodeTilBehovstype(vurdering.definisjon as Behovstype)}</BodyShort>
-            </Link>
-          </div>
+            </AkselLink>
+          </VStack>
 
           <div>
             <Label size={'small'}>Godkjent?</Label>
