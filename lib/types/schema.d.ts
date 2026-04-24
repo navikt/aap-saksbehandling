@@ -1736,6 +1736,44 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/behandling/{referanse}/grunnlag/foreslaa-vedtak-vedtakslengde': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description referanse */
+          referanse: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.foresl\u00E5vedtak.VedtakslengdeVedtakResponse'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/behandling/{referanse}/grunnlag/trukket-s\u00F8knad': {
     parameters: {
       query?: never;
@@ -2784,6 +2822,7 @@ export interface paths {
             | 'FASTSETT_VEDTAKSLENGDE'
             | 'FATTE_VEDTAK'
             | 'FORESLÅ_VEDTAK'
+            | 'FORESLÅ_VEDTAK_VEDTAKSLENGDE'
             | 'FORMKRAV'
             | 'FRITAK_MELDEPLIKT'
             | 'FULLMEKTIG'
@@ -2857,6 +2896,7 @@ export interface paths {
             | 'FASTSETT_VEDTAKSLENGDE'
             | 'FATTE_VEDTAK'
             | 'FORESLÅ_VEDTAK'
+            | 'FORESLÅ_VEDTAK_VEDTAKSLENGDE'
             | 'FORMKRAV'
             | 'FRITAK_MELDEPLIKT'
             | 'FULLMEKTIG'
@@ -5167,6 +5207,7 @@ export interface components {
         | 'FASTSETT_VEDTAKSLENGDE'
         | 'FATTE_VEDTAK'
         | 'FORESLÅ_VEDTAK'
+        | 'FORESLÅ_VEDTAK_VEDTAKSLENGDE'
         | 'FORMKRAV'
         | 'FRITAK_MELDEPLIKT'
         | 'FULLMEKTIG'
@@ -5495,6 +5536,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -5578,6 +5620,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -5658,6 +5701,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -5738,6 +5782,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -5818,6 +5863,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -5898,6 +5944,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -5978,6 +6025,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -6059,6 +6107,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -6139,6 +6188,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -6218,6 +6268,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -6298,6 +6349,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -6378,6 +6430,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -6458,6 +6511,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -6538,6 +6592,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -6618,6 +6673,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -6698,6 +6754,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -6778,6 +6835,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -6858,6 +6916,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -6939,6 +6998,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -7018,6 +7078,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -7098,6 +7159,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -7178,6 +7240,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -7258,6 +7321,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -7338,6 +7402,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -7421,6 +7486,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -7501,6 +7567,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -7581,6 +7648,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -7661,6 +7729,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -7741,6 +7810,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -7820,6 +7890,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -7873,6 +7944,7 @@ export interface components {
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.FatteVedtakL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.Foresl\u00E5UttakL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.Foresl\u00E5VedtakL\u00F8sning']
+      | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.Foresl\u00E5VedtakVedtakslengdeL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.FritakMeldepliktL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.H\u00E5ndterSvarFraAndreinstansL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.KvalitetssikringL\u00F8sning']
@@ -7952,6 +8024,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -8033,6 +8106,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -8112,6 +8186,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -8192,6 +8267,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -8272,6 +8348,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -8352,6 +8429,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -8432,6 +8510,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -8512,6 +8591,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -8591,6 +8671,87 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
+        | '5096'
+        | '5097'
+        | '5098'
+        | '5099'
+        | '5999'
+        | '6000'
+        | '6001'
+        | '6002'
+        | '6003'
+        | '6004'
+        | '6005'
+        | '6006'
+        | '6007'
+        | '6008'
+        | '6009'
+        | '6010'
+        | '7001'
+        | '8001'
+        | '8002'
+        | '8003'
+        | '9001'
+        | '9002'
+        | '9003'
+        | '9004'
+        | '9082'
+        | '9083';
+    };
+    'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.Foresl\u00E5VedtakVedtakslengdeL\u00F8sning': {
+      /** @enum {string} */
+      behovstype:
+        | '4101'
+        | '4102'
+        | '4201'
+        | '5001'
+        | '5002'
+        | '5003'
+        | '5004'
+        | '5005'
+        | '5006'
+        | '5007'
+        | '5008'
+        | '5009'
+        | '5010'
+        | '5011'
+        | '5012'
+        | '5013'
+        | '5014'
+        | '5015'
+        | '5016'
+        | '5017'
+        | '5018'
+        | '5019'
+        | '5020'
+        | '5021'
+        | '5022'
+        | '5023'
+        | '5024'
+        | '5025'
+        | '5026'
+        | '5027'
+        | '5028'
+        | '5029'
+        | '5030'
+        | '5031'
+        | '5032'
+        | '5033'
+        | '5034'
+        | '5035'
+        | '5036'
+        | '5040'
+        | '5050'
+        | '5051'
+        | '5052'
+        | '5053'
+        | '5054'
+        | '5056'
+        | '5057'
+        | '5058'
+        | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -8670,6 +8831,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -8757,6 +8919,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -8879,6 +9042,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -8959,6 +9123,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -9038,6 +9203,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -9118,6 +9284,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -9215,6 +9382,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -9295,6 +9463,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -9375,6 +9544,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -9455,6 +9625,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -9534,6 +9705,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -9613,6 +9785,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -9697,6 +9870,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -9782,6 +9956,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -9866,6 +10041,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -9946,6 +10122,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -10026,6 +10203,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -10107,6 +10285,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -10187,6 +10366,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -10266,6 +10446,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -10345,6 +10526,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -10424,6 +10606,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -10503,6 +10686,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -10583,6 +10767,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -10663,6 +10848,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -10742,6 +10928,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -10822,6 +11009,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -10902,6 +11090,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -10982,6 +11171,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -11062,6 +11252,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -11724,6 +11915,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -11960,6 +12152,21 @@ export interface components {
         | 'VARIGHET_OVERSKREDET_OVERGANG_UFORE'
         | 'VARIGHET_OVERSKREDET_STUDENT'
       )[];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.foresl\u00E5vedtak.VedtakslengdeVedtakDto': {
+      periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
+      /** @enum {string|null} */
+      rettighetsType?:
+        | 'ARBEIDSSØKER'
+        | 'BISTANDSBEHOV'
+        | 'STUDENT'
+        | 'SYKEPENGEERSTATNING'
+        | 'VURDERES_FOR_UFØRETRYGD'
+        | null;
+    };
+    'no.nav.aap.behandlingsflyt.behandling.foresl\u00E5vedtak.VedtakslengdeVedtakResponse': {
+      perioder: components['schemas']['no.nav.aap.behandlingsflyt.behandling.foresl\u00E5vedtak.VedtakslengdeVedtakDto'][];
+      'stansOpph\u00F8r': components['schemas']['no.nav.aap.behandlingsflyt.behandling.foresl\u00E5vedtak.StansOpph\u00F8rDto'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.medlemskap.MedlemskapGrunnlagDto': {
       medlemskap: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.register.medlemskap.MedlemskapUnntakGrunnlag'];
@@ -12786,6 +12993,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -12873,6 +13081,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -13625,13 +13834,9 @@ export interface components {
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
     };
     'no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.VisuellTidslinjeArbeidInntektINorge': {
-      /** Format: double */
-      beloep: number;
       inntekter: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.VisuellTidslinjeInntektDetalj'][];
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
       periodeMangler: boolean;
-      virksomhetId?: string | null;
-      virksomhetNavn?: string | null;
     };
     'no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.VisuellTidslinjeInntektDetalj': {
       /** Format: double */
@@ -13927,6 +14132,7 @@ export interface components {
         | 'FASTSETT_VEDTAKSLENGDE'
         | 'FATTE_VEDTAK'
         | 'FORESLÅ_VEDTAK'
+        | 'FORESLÅ_VEDTAK_VEDTAKSLENGDE'
         | 'FORMKRAV'
         | 'FRITAK_MELDEPLIKT'
         | 'FULLMEKTIG'
@@ -15169,6 +15375,7 @@ export interface components {
         | 'FASTSETT_VEDTAKSLENGDE'
         | 'FATTE_VEDTAK'
         | 'FORESLÅ_VEDTAK'
+        | 'FORESLÅ_VEDTAK_VEDTAKSLENGDE'
         | 'FORMKRAV'
         | 'FRITAK_MELDEPLIKT'
         | 'FULLMEKTIG'
@@ -15288,6 +15495,7 @@ export interface components {
         | 'FASTSETT_VEDTAKSLENGDE'
         | 'FATTE_VEDTAK'
         | 'FORESLÅ_VEDTAK'
+        | 'FORESLÅ_VEDTAK_VEDTAKSLENGDE'
         | 'FORMKRAV'
         | 'FRITAK_MELDEPLIKT'
         | 'FULLMEKTIG'
@@ -15373,6 +15581,7 @@ export interface components {
         | 'FASTSETT_VEDTAKSLENGDE'
         | 'FATTE_VEDTAK'
         | 'FORESLÅ_VEDTAK'
+        | 'FORESLÅ_VEDTAK_VEDTAKSLENGDE'
         | 'FORMKRAV'
         | 'FRITAK_MELDEPLIKT'
         | 'FULLMEKTIG'
@@ -15554,6 +15763,7 @@ export interface components {
         | 'FASTSETT_VEDTAKSLENGDE'
         | 'FATTE_VEDTAK'
         | 'FORESLÅ_VEDTAK'
+        | 'FORESLÅ_VEDTAK_VEDTAKSLENGDE'
         | 'FORMKRAV'
         | 'FRITAK_MELDEPLIKT'
         | 'FULLMEKTIG'
@@ -15812,6 +16022,7 @@ export interface components {
         | '5057'
         | '5058'
         | '5059'
+        | '5060'
         | '5096'
         | '5097'
         | '5098'
@@ -15874,6 +16085,7 @@ export interface components {
         | 'FASTSETT_VEDTAKSLENGDE'
         | 'FATTE_VEDTAK'
         | 'FORESLÅ_VEDTAK'
+        | 'FORESLÅ_VEDTAK_VEDTAKSLENGDE'
         | 'FORMKRAV'
         | 'FRITAK_MELDEPLIKT'
         | 'FULLMEKTIG'
@@ -16940,6 +17152,7 @@ export interface components {
         | 'BREV_SENDT'
         | 'FØRSTEGANGSBEHANDLING_OPPRETTET'
         | 'KLAGE_OPPRETTET'
+        | 'KVALITETSSIKRET'
         | 'MOTTATT_DIALOGMELDING'
         | 'RETUR_FRA_BESLUTTER'
         | 'RETUR_FRA_KVALITETSSIKRER'

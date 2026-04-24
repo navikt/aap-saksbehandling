@@ -4,6 +4,7 @@ import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { VedtakslengdeMedDataFetching } from 'components/behandlinger/vedtakslengde/VedtakslengdeMedDataFetching';
+import { ForeslåVedtakVedtakslengdeMedDataFetching } from 'components/behandlinger/vedtakslengde/foreslåvedtakvedtakslengde/ForeslåVedtakVedtakslengdeMedDataFetching';
 
 interface Props {
   behandlingsreferanse: string;
@@ -28,6 +29,13 @@ export const Vedtakslengde = async ({ behandlingsreferanse }: Props) => {
           behandlingsreferanse={behandlingsreferanse}
           behandlingVersjon={flyt.data.behandlingVersjon}
           readOnly={flyt.data.visning.saksbehandlerReadOnly}
+        />
+      </StegSuspense>
+      <StegSuspense>
+        <ForeslåVedtakVedtakslengdeMedDataFetching
+          behandlingsreferanse={behandlingsreferanse}
+          behandlingVersjon={flyt.data.behandlingVersjon}
+          readonly={flyt.data.visning.saksbehandlerReadOnly}
         />
       </StegSuspense>
     </GruppeSteg>

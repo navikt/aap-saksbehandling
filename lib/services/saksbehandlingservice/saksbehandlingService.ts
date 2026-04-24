@@ -30,6 +30,7 @@ import {
   FlytProsessering,
   ForeløpigBehandlingsutfall,
   ForeslåVedtakGrunnlag,
+  ForeslåVedtakVedtakslengdeGrunnlag,
   ForhåndsvisDialogmelding,
   ForhåndsvisDialogmeldingResponse,
   FormkravGrunnlag,
@@ -544,7 +545,9 @@ export const forberedBehandlingOgVentPåProsessering = async (
 ): Promise<undefined | FlytProsessering> => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/forbered`;
   logInfo('Forbereder behandling ' + behandlingsreferanse);
-  return await apiFetch(url, saksbehandlingApiScope, 'GET').then(() => ventTilProsesseringErFerdig(behandlingsreferanse));
+  return await apiFetch(url, saksbehandlingApiScope, 'GET').then(() =>
+    ventTilProsesseringErFerdig(behandlingsreferanse)
+  );
 };
 
 export const hentAlleDialogmeldingerPåSak = async (saksnummer: string) => {
@@ -590,6 +593,11 @@ export const hentVedtakslengdeGrunnlag = async (behandlingsreferanse: string) =>
 export const hentForeslåVedtakGrunnlag = async (behandlingsreferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/foreslaa-vedtak`;
   return await apiFetch<ForeslåVedtakGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentForeslåVedtakVedtakslengdeGrunnlag = async (behandlingsreferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/foreslaa-vedtak-vedtakslengde`;
+  return await apiFetch<ForeslåVedtakVedtakslengdeGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentForutgåendeMedlemskapsVurdering = async (behandlingsreferanse: string) => {
