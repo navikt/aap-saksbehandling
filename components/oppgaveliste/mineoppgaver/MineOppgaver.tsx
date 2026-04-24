@@ -36,56 +36,61 @@ export const MineOppgaver = () => {
   const { hentAktivUtvidetFilter, lagreAktivUtvidetFilter } = useLagreAktivUtvidetFilter();
   const lagretUtvidetFilter = hentAktivUtvidetFilter();
 
-  const { form, formFields } = useConfigForm<FormFieldsFilter>({
-    behandlingstyper: {
-      type: 'checkbox',
-      label: 'Behandlingstype',
-      options: oppgaveBehandlingstyper,
-      defaultValue: lagretUtvidetFilter?.behandlingstyper ?? [],
+  const { form, formFields } = useConfigForm<FormFieldsFilter>(
+    {
+      behandlingstyper: {
+        type: 'checkbox',
+        label: 'Behandlingstype',
+        options: oppgaveBehandlingstyper,
+        defaultValue: lagretUtvidetFilter?.behandlingstyper ?? [],
+      },
+      behandlingOpprettetFom: {
+        type: 'date',
+        label: 'Opprettet fra',
+        toDate: new Date(),
+        defaultValue: lagretUtvidetFilter?.behandlingOpprettetFom,
+      },
+      behandlingOpprettetTom: {
+        type: 'date',
+        label: 'Opprettet til',
+        defaultValue: lagretUtvidetFilter?.behandlingOpprettetTom,
+      },
+      tilbakekrevingBeløpFom: {
+        type: 'text',
+        label: 'Beløp fra',
+        rules: { pattern: { value: /^\d*$/, message: 'Kun tall' } },
+        defaultValue: lagretUtvidetFilter?.tilbakekrevingBeløpFom ?? undefined,
+      },
+      tilbakekrevingBeløpTom: {
+        type: 'text',
+        label: 'Beløp til',
+        rules: { pattern: { value: /^\d*$/, message: 'Kun tall' } },
+        defaultValue: lagretUtvidetFilter?.tilbakekrevingBeløpTom ?? undefined,
+      },
+      årsaker: {
+        type: 'combobox_multiple',
+        label: 'Vurderingsbehov',
+        options: alleVurderingsbehovOptions,
+        defaultValue: lagretUtvidetFilter?.årsaker ?? [],
+      },
+      avklaringsbehov: {
+        type: 'combobox_multiple',
+        label: 'Oppgave',
+        options: oppgaveAvklaringsbehov,
+        defaultValue: lagretUtvidetFilter?.avklaringsbehov ?? [],
+      },
+      statuser: {
+        type: 'checkbox',
+        label: 'Markering',
+        options: OppgaveStatuser,
+        defaultValue: lagretUtvidetFilter?.statuser ?? [],
+      },
+      saksbehandlere: {
+        type: 'fieldArray',
+      },
     },
-    behandlingOpprettetFom: {
-      type: 'date',
-      label: 'Opprettet fra',
-      toDate: new Date(),
-      defaultValue: lagretUtvidetFilter?.behandlingOpprettetFom,
-    },
-    behandlingOpprettetTom: {
-      type: 'date',
-      label: 'Opprettet til',
-      defaultValue: lagretUtvidetFilter?.behandlingOpprettetTom,
-    },
-    tilbakekrevingBeløpFom: {
-      type: 'number',
-      label: 'Beløp fra',
-      defaultValue: lagretUtvidetFilter?.tilbakekrevingBeløpFom ?? undefined,
-    },
-    tilbakekrevingBeløpTom: {
-      type: 'number',
-      label: 'Beløp til',
-      defaultValue: lagretUtvidetFilter?.tilbakekrevingBeløpTom ?? undefined,
-    },
-    årsaker: {
-      type: 'combobox_multiple',
-      label: 'Vurderingsbehov',
-      options: alleVurderingsbehovOptions,
-      defaultValue: lagretUtvidetFilter?.årsaker ?? [],
-    },
-    avklaringsbehov: {
-      type: 'combobox_multiple',
-      label: 'Oppgave',
-      options: oppgaveAvklaringsbehov,
-      defaultValue: lagretUtvidetFilter?.avklaringsbehov ?? [],
-    },
-    statuser: {
-      type: 'checkbox',
-      label: 'Markering',
-      options: OppgaveStatuser,
-      defaultValue: lagretUtvidetFilter?.statuser ?? [],
-    },
-    saksbehandlere: {
-      type: 'fieldArray',
-    },
-  });
+    { mode: 'onChange' }
+  );
 
   const watchedValues = form.watch();
 

@@ -8,8 +8,6 @@ import {
   Markering,
   MineOppgaverQueryParams,
   Oppgave,
-  OppgaveAvklaringsbehovKode,
-  OppgaveBehandlingstype,
   OppgavelisteRequest,
   OppgavelisteResponse,
   SaksbehandlerSøkRequest,
@@ -95,18 +93,6 @@ export async function hentEnheter() {
 export async function synkroniserEnhetPåOppgave(data: EnhetSynkroniseringOppgave) {
   const url = `${oppgaveApiBaseURL}/synkroniser-enhet-paa-oppgave`;
   return await apiFetch<void>(url, oppgaveApiScope, 'POST', { oppgaveId: data.oppgaveId });
-}
-export async function oppgaveSøk(
-  avklaringsbehovKoder: OppgaveAvklaringsbehovKode[],
-  behandlingstyper: OppgaveBehandlingstype[],
-  enheter: string[]
-) {
-  const url = `${oppgaveApiBaseURL}/oppgavesok`;
-  return await apiFetch<Array<Oppgave>>(url, oppgaveApiScope, 'POST', {
-    avklaringsbehovKoder,
-    behandlingstyper,
-    enheter,
-  });
 }
 
 export async function søkPåSaksbehandler(data: SaksbehandlerSøkRequest) {

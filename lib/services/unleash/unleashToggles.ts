@@ -2,11 +2,9 @@ export const FLAGS = [
   'VisAvslagsaarsaker',
   'DigitaliseringAvMeldekortV2Frontend',
   'VisStansOpphorFrontend',
-  'SamordningBarnepensjon',
   'VisSisteDagMedRett',
   'Redigitalisering',
   'InkluderOvergangUforeArbeid',
-  'EnhetForrigeOppgaveFrontend',
   'TilbakekrevingBelopFilter',
   'registrereEllerEndreMeldekort',
 ] as const;
@@ -18,11 +16,9 @@ export const mockedFlags: Flags = {
   VisAvslagsaarsaker: true,
   DigitaliseringAvMeldekortV2Frontend: true,
   VisStansOpphorFrontend: true,
-  SamordningBarnepensjon: true,
   VisSisteDagMedRett: true,
   Redigitalisering: true,
   InkluderOvergangUforeArbeid: true,
-  EnhetForrigeOppgaveFrontend: true,
   TilbakekrevingBelopFilter: true,
   registrereEllerEndreMeldekort: true,
 };

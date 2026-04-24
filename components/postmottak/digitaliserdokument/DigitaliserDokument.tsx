@@ -51,8 +51,6 @@ export const DigitaliserDokument = ({
     });
   }
 
-  const inkluderBarnepensjon = useFeatureFlag('SamordningBarnepensjon');
-
   return (
     <VStack gap={'4'}>
       <Kategoriser
@@ -92,7 +90,6 @@ export const DigitaliserDokument = ({
           grunnlag={grunnlag}
           readOnly={readOnly}
           isLoading={isLoading}
-          inkluderBarnepensjon={inkluderBarnepensjon}
         />
       )}
     </VStack>
