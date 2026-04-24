@@ -150,7 +150,7 @@ export const VilkårskortMedFormOgMellomlagring = ({
               </VStack>
 
               {/* Høyre kolonne: vurdert av / kvalitetssikret av */}
-              <VStack align="baseline">
+              <VStack align="end">
                 {vurdertAutomatisk && <Detail>Vurdert automatisk</Detail>}
                 <VurdertAvAnsattDetail vurdertAv={vurdertAvAnsatt} variant={'VURDERING'} />
                 <VurdertAvAnsattDetail vurdertAv={kvalitetssikretAv} variant={'KVALITETSSIKRER'} />

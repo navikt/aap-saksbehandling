@@ -61,7 +61,7 @@ export const TidligereVurderingExpandableCard = ({
         </HStack>
       }
     >
-      <VStack>
+      <VStack align="end">
         {children}
         <VurdertAvAnsattDetail vurdertAv={vurdertAv} variant={'VURDERING'} />
         <VurdertAvAnsattDetail vurdertAv={kvalitetssikretAv} variant={'KVALITETSSIKRER'} />

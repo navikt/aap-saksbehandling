@@ -100,7 +100,7 @@ export const NyVurderingExpandableCard = ({
           )}
         </HGrid>
 
-        <VStack>
+        <VStack align="end">
           <VurdertAvAnsattDetail vurdertAv={vurdering.vurdertAv} variant={'VURDERING'} />
           <VurdertAvAnsattDetail vurdertAv={vurdering.kvalitetssikretAv} variant={'KVALITETSSIKRER'} />
           <VurdertAvAnsattDetail vurdertAv={vurdering.besluttetAv} variant={'BESLUTTER'} />
