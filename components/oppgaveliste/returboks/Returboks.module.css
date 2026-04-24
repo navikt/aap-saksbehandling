@@ -1,23 +1,17 @@
 .knapp {
-  background-color: var(--ax-bg-meta-purple-soft);
+  background-color: var(--ax-bg-meta-purple-moderate);
   color: black;
 }
 
 .tag {
-  border-top-left-radius: var(--ax-radius-8);
-  border-top-right-radius: var(--ax-radius-8);
   justify-content: left;
   height: var(--ax-space-40);
-  background-color: var(--ax-bg-meta-purple-soft);
+  background-color: var(--ax-bg-meta-purple-moderate);
   padding-top: 0.5rem;
 }
 
 .knapp:hover {
-  background-color: var(--ax-bg-meta-purple-soft);
-}
-
-.knapp:focus-visible {
-  background-color: var(--ax-bg-meta-purple-soft);
+  background-color: var(--ax-bg-meta-purple-moderate-hover);
 }
 
 .boks > * {

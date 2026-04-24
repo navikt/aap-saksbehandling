@@ -75,25 +75,27 @@ export const Returboks = ({ oppgave: { returInformasjon: maybeReturInformasjon }
         open={vis}
         anchorEl={buttonRef.current}
         placement={'bottom-end'}
-        offset={8}>
+        offset={8}
+      >
         {skalViseBoks ? (
-          <VStack gap={"space-8"} className={styles.boks}>
+          <VStack gap={'space-8'} className={styles.boks}>
             <Tag
               data-color="warning"
               icon={<ArrowsSquarepathIcon />}
-              variant={"moderate"}
+              variant={'moderate'}
               size={'medium'}
-              className={styles.tag}>
+              className={styles.tag}
+            >
               <BodyShort size={'small'} weight={'semibold'}>
                 {returStatusTilTekst(returInformasjon.status)}
               </BodyShort>
             </Tag>
-            <VStack gap={"space-0"}>
+            <VStack gap={'space-0'}>
               <Detail textColor="subtle">{årsakTekst}</Detail>
 
               <div>{årsakerTilString(returInformasjon.årsaker)} </div>
             </VStack>
-            <VStack gap={"space-0"}>
+            <VStack gap={'space-0'}>
               <Detail textColor="subtle">Begrunnelse</Detail>
 
               <div>{returInformasjon?.begrunnelse}</div>
@@ -104,9 +106,10 @@ export const Returboks = ({ oppgave: { returInformasjon: maybeReturInformasjon }
             <Tag
               data-color="warning"
               icon={<ArrowsSquarepathIcon />}
-              variant={"moderate"}
+              variant={'moderate'}
               size={'medium'}
-              className={styles.tag}>
+              className={styles.tag}
+            >
               <BodyShort size={'small'} weight={'semibold'}>
                 {returStatusTilTekst(returInformasjon.status)}
               </BodyShort>

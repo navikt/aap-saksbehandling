@@ -39,33 +39,35 @@ export const PåVentInfoboks = ({ frist, årsak, begrunnelse }: Props) => {
         open={vis}
         anchorEl={buttonRef.current}
         placement={'bottom-end'}
-        offset={8}>
-        <VStack gap={"space-8"} className={styles.boks}>
+        offset={8}
+      >
+        <VStack gap={'space-8'} className={styles.boks}>
           <Tag
             data-color="warning"
             icon={<HourglassTopFilledIcon />}
-            variant={"moderate"}
+            variant={'moderate'}
             size={'medium'}
-            className={styles.tag}>
+            className={styles.tag}
+          >
             <BodyShort size={'small'} weight={'semibold'}>
               På vent
             </BodyShort>
           </Tag>
-          <VStack gap={"space-0"}>
+          <VStack>
             <Detail textColor="subtle">Frist</Detail>
             <div>
               {formaterDatoForFrontend(frist)} ({forskjellIDager} {dagTekst} igjen)
             </div>
           </VStack>
           {årsak ? (
-            <VStack gap={"space-0"}>
+            <VStack>
               <Detail textColor="subtle">Årsak</Detail>
 
               <div>{mapTilVenteÅrsakTekst(årsak as SettPåVentÅrsaker)}</div>
             </VStack>
           ) : undefined}
           {begrunnelse ? (
-            <VStack gap={"space-0"}>
+            <VStack>
               <Detail textColor="subtle">Begrunnelse</Detail>
               <div>{begrunnelse}</div>
             </VStack>

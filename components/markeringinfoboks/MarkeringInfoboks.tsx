@@ -25,7 +25,6 @@ export const MarkeringInfoboks = ({ markering, referanse, showLabel = false, siz
     <>
       {visTag && (
         <Tag
-          className={styles.tag}
           icon={ikonForMarkeringType(markering.markeringType)}
           variant={variantFraType(markering.markeringType)}
           size={size}
@@ -40,8 +39,9 @@ export const MarkeringInfoboks = ({ markering, referanse, showLabel = false, siz
         open={visInfo}
         anchorEl={tagRef.current}
         placement={'bottom-end'}
-        offset={8}>
-        <VStack gap={"space-8"} className={styles.boks}>
+        offset={8}
+      >
+        <VStack gap={'space-8'} className={styles.boks}>
           <Tag
             icon={ikonForMarkeringType(markering.markeringType)}
             variant={variantFraType(markering.markeringType)}
@@ -57,7 +57,7 @@ export const MarkeringInfoboks = ({ markering, referanse, showLabel = false, siz
             </BodyShort>
           </Tag>
           {markering.begrunnelse ? (
-            <VStack gap={"space-0"}>
+            <VStack gap={'space-0'}>
               <Detail textColor="subtle">Årsak</Detail>
               <div>{markering.begrunnelse}</div>
             </VStack>

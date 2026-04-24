@@ -4,15 +4,14 @@
 }
 
 .tag {
-  border-radius: var(--ax-radius-8);
   justify-content: left;
   height: var(--ax-space-40);
-  background-color: var(--ax-bg-warning-soft);
+  background-color: var(--ax-bg-warning-moderate);
   padding-top: 0.5rem;
 }
 
 .knapp:hover {
-  background-color: var(--ax-bg-warning-moderate);
+  background-color: var(--ax-bg-warning-moderate-hover);
 }
 
 .boks > * {

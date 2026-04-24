@@ -4,7 +4,6 @@
 }
 
 .tag {
-  border-radius: var(--ax-radius-8);
   justify-content: left;
   height: var(--ax-space-40);
   background-color: var(--ax-bg-danger-soft);
@@ -12,7 +11,7 @@
 }
 
 .knapp:hover {
-  background-color: var(--ax-bg-danger-moderate);
+  background-color: var(--ax-bg-danger-moderate-hover);
 }
 
 .boks > * {
