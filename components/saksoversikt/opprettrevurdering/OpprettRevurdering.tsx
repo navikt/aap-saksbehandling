@@ -38,7 +38,6 @@ export const OpprettRevurdering = ({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>();
 
-  const inkluderBarnepensjon = useFeatureFlag('SamordningBarnepensjon');
   const inkluderVedtakslengde = useFeatureFlag('VedtakslengdeAvklaringsbehov');
   const inkluderOvergangUføreArbeid = useFeatureFlag('InkluderOvergangUforeArbeid');
 
@@ -88,7 +87,6 @@ export const OpprettRevurdering = ({
       label: `Hvilke opplysninger skal ${erFørstegangsbehandling ? 'vurderes' : 'revurderes'}?`,
       options: vurderingsbehovOptions().filter(
         (option) =>
-          (inkluderBarnepensjon || option.value !== 'REVURDER_SAMORDNING_BARNEPENSJON') &&
           (inkluderVedtakslengde || option.value !== 'VEDTAKSLENGDE_MANUELT') &&
           (inkluderOvergangUføreArbeid || option.value !== 'OVERGANG_UFORE') &&
           (inkluderOvergangUføreArbeid || option.value !== 'OVERGANG_ARBEID')
