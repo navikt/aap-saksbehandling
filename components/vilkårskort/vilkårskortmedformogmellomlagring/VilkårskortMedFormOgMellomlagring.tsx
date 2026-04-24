@@ -123,6 +123,7 @@ export const VilkårskortMedFormOgMellomlagring = ({
                     <Button
                       type="button"
                       variant={'secondary'}
+                      data-color={'accent'}
                       onClick={visningActions.onEndreClick}
                       loading={isLoading}
                     >
