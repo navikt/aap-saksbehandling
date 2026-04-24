@@ -21,10 +21,10 @@ export const ForeslåVedtakVedtakslengdeTabell = ({ grunnlag }: Props) => {
         </Table.Row>
       </Table.Header>
       <Table.Body>
-        {grunnlag.perioder.length === 0 ? (
+        {grunnlag.perioder!.length === 0 ? (
           <Table.Row>
             <Table.DataCell>
-              <HStack gap={'2'} align={'center'}>
+              <HStack gap={'space-8'} align={'center'}>
                 <XMarkOctagonIcon className={styles.avslåttIcon} />
                 {mapUtfallTilTekst('IKKE_OPPFYLT')}
               </HStack>
@@ -33,30 +33,27 @@ export const ForeslåVedtakVedtakslengdeTabell = ({ grunnlag }: Props) => {
             <Table.DataCell>-</Table.DataCell>
           </Table.Row>
         ) : (
-          grunnlag.perioder.map((vedtaksPeriode) => {
-            const utfall = vedtaksPeriode.rettighetsType != null ? 'OPPFYLT' : 'IKKE_OPPFYLT';
-            return (
-              <Table.Row key={`${utfall}-${vedtaksPeriode.rettighetsType}-${vedtaksPeriode.periode?.fom}`}>
-                <Table.DataCell>
-                  <HStack gap={'2'} align={'center'}>
-                    {utfall === 'OPPFYLT' ? (
-                      <CheckmarkCircleIcon className={styles.godkjentIcon} />
-                    ) : (
-                      <XMarkOctagonIcon className={styles.avslåttIcon} />
-                    )}
-                    {mapUtfallTilTekst(utfall)}
-                  </HStack>
-                </Table.DataCell>
-                <Table.DataCell>
-                  {formaterDatoForFrontend(vedtaksPeriode.periode.fom)} -{' '}
-                  {formaterDatoForFrontend(vedtaksPeriode.periode.tom)}
-                </Table.DataCell>
-                <Table.DataCell>
-                  {utfall === 'OPPFYLT' ? mapRettighetsTypeTilTekst(vedtaksPeriode.rettighetsType) : '–'}
-                </Table.DataCell>
-              </Table.Row>
-            );
-          })
+          grunnlag.perioder!.map((vedtaksPeriode) => (
+            <Table.Row key={`${vedtaksPeriode.utfall}-${vedtaksPeriode.rettighetsType}-${vedtaksPeriode.periode?.fom}`}>
+              <Table.DataCell>
+                <HStack gap={'space-8'} align={'center'}>
+                  {vedtaksPeriode.utfall === 'OPPFYLT' ? (
+                    <CheckmarkCircleIcon className={styles.godkjentIcon} />
+                  ) : (
+                    <XMarkOctagonIcon className={styles.avslåttIcon} />
+                  )}
+                  {mapUtfallTilTekst(vedtaksPeriode.utfall)}
+                </HStack>
+              </Table.DataCell>
+              <Table.DataCell>
+                {formaterDatoForFrontend(vedtaksPeriode.periode.fom)} -{' '}
+                {formaterDatoForFrontend(vedtaksPeriode.periode.tom)}
+              </Table.DataCell>
+              <Table.DataCell>
+                {vedtaksPeriode.utfall === 'OPPFYLT' ? mapRettighetsTypeTilTekst(vedtaksPeriode.rettighetsType) : '–'}
+              </Table.DataCell>
+            </Table.Row>
+          ))
         )}
       </Table.Body>
     </TableStyled>

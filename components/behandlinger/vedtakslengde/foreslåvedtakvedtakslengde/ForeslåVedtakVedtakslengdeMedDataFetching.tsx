@@ -22,6 +22,10 @@ export const ForeslåVedtakVedtakslengdeMedDataFetching = async ({
     return <ApiException apiResponses={[grunnlag]} />;
   }
 
+  if (grunnlag.data.perioder == null) {
+    return null;
+  }
+
   return (
     <ForeslåVedtakVedtakslengde
       behandlingVersjon={behandlingVersjon}
