@@ -52,6 +52,7 @@ const behovskodeMap = {
   '5057': 'Arbeidsopptrapping',
   '5058': '§ 11-15 Etablering av egen virksomhet',
   '5059': 'Avklar vedtaksperiode',
+  '5060': 'Oppsummert rettighet i vedtaket',
   '5096': 'Forslå uttak',
   '5097': 'Kvalitetssikre sak',
   '5098': 'Foreslå vedtak',

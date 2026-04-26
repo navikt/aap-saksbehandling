@@ -373,6 +373,9 @@ export type VedtakslengdeVurderingDto =
 export type ForeslåVedtakGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.ForeslåVedtakResponse'];
 
+export type ForeslåVedtakVedtakslengdeGrunnlag =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.VedtakslengdeVedtakResponse'];
+
 export type UnderveisAvslagsÅrsak = NonNullable<UnderveisGrunnlag['avslagsårsak']>;
 
 export type AutomatiskLovvalgOgMedlemskapVurdering =
