@@ -1,6 +1,6 @@
 'use client';
 
-import { BodyShort, Table } from '@navikt/ds-react';
+import { BodyShort, Table, VStack } from '@navikt/ds-react';
 import { UnderveisAvslagsÅrsak, UnderveisGrunnlag } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { mapUtfallTilTekst } from 'lib/utils/oversettelser';
@@ -10,7 +10,6 @@ import { Behovstype } from 'lib/utils/form';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import styles from 'components/behandlinger/vedtak/foreslåvedtak/ForeslåVedtak.module.css';
 import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 
@@ -90,13 +89,13 @@ export const Underveisgrunnlag = ({ grunnlag, readOnly, behandlingVersjon }: Pro
           ))}
         </Table.Body>
       </Table>
-      <div className={styles.foreslåvedtak}>
+      <VStack gap={'space-16'}>
         {!readOnly && <BodyShort>Trykk på neste steg for å komme videre.</BodyShort>}
         <LøsBehovOgGåTilNesteStegStatusAlert
           status={status}
           løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
         />
-      </div>
+      </VStack>
     </VilkårskortMedForm>
   );
 };

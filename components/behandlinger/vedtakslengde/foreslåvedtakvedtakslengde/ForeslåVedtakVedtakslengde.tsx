@@ -1,11 +1,10 @@
 'use client';
 
 import { Behovstype } from 'lib/utils/form';
-import { Label, Table } from '@navikt/ds-react';
+import { Label, Table, VStack } from '@navikt/ds-react';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 
-import styles from 'components/behandlinger/vedtak/foreslåvedtak/ForeslåVedtak.module.css';
 import { FormEvent } from 'react';
 import { ForeslåVedtakVedtakslengdeGrunnlag } from 'lib/types/types';
 import { ForeslåVedtakVedtakslengdeTabell } from 'components/behandlinger/vedtakslengde/foreslåvedtakvedtakslengde/ForeslåVedtakVedtakslengdeTabell';
@@ -53,7 +52,7 @@ export const ForeslåVedtakVedtakslengde = ({ behandlingVersjon, readOnly, grunn
       visningActions={visningActions}
       formReset={() => {}}
     >
-      <div className={styles.foreslåvedtak}>
+      <VStack gap={'space-16'}>
         <Label as="p" size={'medium'}>
           Vedtaket medfører følgende konsekvens for brukeren:
         </Label>
@@ -84,7 +83,7 @@ export const ForeslåVedtakVedtakslengde = ({ behandlingVersjon, readOnly, grunn
           status={status}
           løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
         />
-      </div>
+      </VStack>
     </VilkårskortMedForm>
   );
 };

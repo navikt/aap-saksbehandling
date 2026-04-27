@@ -1,10 +1,9 @@
 'use client';
 
 import { Behovstype } from 'lib/utils/form';
-import { BodyShort, Box, Label, List, Table } from '@navikt/ds-react';
+import { BodyShort, Box, Label, List, Table, VStack } from '@navikt/ds-react';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 
-import styles from './ForeslåVedtak.module.css';
 import { FormEvent } from 'react';
 import { ForeslåVedtakGrunnlag, StansOpphørÅrsak } from 'lib/types/types';
 import { ForeslåVedtakTabell } from 'components/behandlinger/vedtak/foreslåvedtak/foreslåvedtaktabell/ForeslåVedtakTabell';
@@ -53,7 +52,7 @@ export const ForeslåVedtak = ({ behandlingVersjon, readOnly, grunnlag }: Props)
       visningActions={visningActions}
       formReset={() => {}}
     >
-      <div className={styles.foreslåvedtak}>
+      <VStack gap={'space-16'}>
         <Label as="p" size={'medium'}>
           Vedtaket medfører følgende konsekvens for brukeren:
         </Label>
@@ -94,7 +93,7 @@ export const ForeslåVedtak = ({ behandlingVersjon, readOnly, grunnlag }: Props)
             </Table.Body>
           </TableStyled>
         )}
-      </div>
+      </VStack>
     </VilkårskortMedForm>
   );
 };
