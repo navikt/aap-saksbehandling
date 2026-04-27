@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  BistandVurderingResponse,
   MellomlagretVurdering,
   OvergangUforeGrunnlag,
   OvergangUføreVedtakResultat,
@@ -25,12 +26,14 @@ import { OvergangUforeVurderingFormInput } from 'components/behandlinger/sykdom/
 import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { OvergangUforeTidligereVurdering } from 'components/behandlinger/sykdom/overgangufore/OvergangUforeTidligereVurdering';
-import { VStack } from '@navikt/ds-react';
+import { BodyLong, Link, VStack } from '@navikt/ds-react';
 import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
 import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
+import { IkkeVurderbarPeriode } from 'components/periodisering/IkkeVurderbarPeriode';
+import { erTidligereVurderingOppfylt } from 'components/behandlinger/sykdom/sykdomsvurdering/sykdomsvurdering-utils';
 
 interface Props {
   behandlingVersjon: number;
@@ -117,6 +120,19 @@ export const OvergangUforePeriodisert = ({
   const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const førsteNyePeriode = nyeVurderingFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
   const errorList = hentFeilmeldingerForForm(form.formState.errors);
+
+  const nyeVurderingerSykdom = grunnlag.gjeldendeSykdsomsvurderinger ?? [];
+  const vurderingerBistandsbehov = grunnlag.gjeldendeBistandsbehovVurderinger ?? [];
+
+  // TODO: Kan det være flere vurderinger her med forskjellige resultater? Hva skjer da?
+  const sisteVurderingSykdom = nyeVurderingerSykdom?.at(nyeVurderingerSykdom.length - 1);
+  const skalStegVurderes =
+    sisteVurderingSykdom == undefined
+      ? false
+      : erTidligereVurderingOppfylt(sisteVurderingSykdom) &&
+        erBistandsbehoveneAvklart(vurderingerBistandsbehov) &&
+        !erBistandsbehoveneOppfylt(vurderingerBistandsbehov);
+
   return (
     <VilkårskortPeriodisert
       heading={'§ 11-18 AAP under behandling av krav om uføretrygd'}
@@ -133,9 +149,28 @@ export const OvergangUforePeriodisert = ({
       formReset={() => form.reset(getDefaultValuesFromGrunnlag(grunnlag))}
       onLeggTilVurdering={() => append(emptyOvergangUføreVurdering())}
       errorList={errorList}
+      skalViseEndreKnapp={skalStegVurderes}
     >
       <VStack gap={'space-16'}>
         <EksterneLenkerIVilkårskort steg={'OVERGANG_UFORE'} />
+        <BodyLong size={'small'}>
+          <Link href="https://lovdata.no/pro/lov/1997-02-28-19/%C2%A711-18" target="_blank">
+            Du kan lese om hvordan vilkåret skal vurderes i rundskrivet til § 11-18
+          </Link>
+        </BodyLong>
+
+        {grunnlag.ikkeRelevantePerioder.map((periode) => (
+          <IkkeVurderbarPeriode
+            key={crypto.randomUUID()}
+            fom={parseISO(periode.fom)}
+            tom={periode.tom != null ? parseISO(periode.tom) : null}
+            alertMelding={
+              'Vilkåret kan ikke vurderes for denne perioden. For å vurdere vilkåret må § 11-5 være oppfylt, og § 11-6 ikke være oppfylt i samme periode'
+            }
+            foersteNyePeriodeFraDato={undefined}
+          ></IkkeVurderbarPeriode>
+        ))}
+
         {grunnlag.sisteVedtatteVurderinger.map((vurdering) => (
           <TidligereVurderingExpandableCard
             key={crypto.randomUUID()}
@@ -155,32 +190,33 @@ export const OvergangUforePeriodisert = ({
           </TidligereVurderingExpandableCard>
         ))}
 
-        {nyeVurderingFields.map((vurdering, index) => {
-          return (
-            <NyVurderingExpandableCard
-              key={vurdering.id}
-              accordionsSignal={accordionsSignal}
-              fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-              vurderingStatus={getErOppfyltEllerIkkeStatus(erVurderingOppfylt(form, index))}
-              nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
-              isLast={index === nyeVurderingFields.length - 1}
-              vurdering={vurdering}
-              finnesFeil={finnesFeilForVurdering(index, errorList)}
-              readonly={formReadOnly}
-              onSlettVurdering={() => remove(index)}
-              harTidligereVurderinger={tidligereVurderinger.length > 0}
-              index={index}
-              initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
-            >
-              <OvergangUforeVurderingFormInput
-                index={index}
-                form={form}
+        {skalStegVurderes &&
+          nyeVurderingFields.map((vurdering, index) => {
+            return (
+              <NyVurderingExpandableCard
+                key={vurdering.id}
+                accordionsSignal={accordionsSignal}
+                fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
+                vurderingStatus={getErOppfyltEllerIkkeStatus(erVurderingOppfylt(form, index))}
+                nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
+                isLast={index === nyeVurderingFields.length - 1}
+                vurdering={vurdering}
+                finnesFeil={finnesFeilForVurdering(index, errorList)}
                 readonly={formReadOnly}
-                søknadsdatoUføretrygd={grunnlag.uføreSøknadOpplysninger?.soknadsdato}
-              />
-            </NyVurderingExpandableCard>
-          );
-        })}
+                onSlettVurdering={() => remove(index)}
+                harTidligereVurderinger={tidligereVurderinger.length > 0}
+                index={index}
+                initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
+              >
+                <OvergangUforeVurderingFormInput
+                  index={index}
+                  form={form}
+                  readonly={formReadOnly}
+                  søknadsdatoUføretrygd={grunnlag.uføreSøknadOpplysninger?.soknadsdato}
+                />
+              </NyVurderingExpandableCard>
+            );
+          })}
       </VStack>
     </VilkårskortPeriodisert>
   );
@@ -231,4 +267,20 @@ function erVurderingOppfylt(form: UseFormReturn<OvergangUforeForm>, index: numbe
   }
 
   return undefined;
+}
+
+function erBistandsbehoveneAvklart(bistandsvurderinger: BistandVurderingResponse[]) {
+  return bistandsvurderinger !== undefined && bistandsvurderinger.length > 0;
+}
+
+function erBistandsbehoveneOppfylt(bistandsvurderinger: BistandVurderingResponse[]) {
+  return bistandsvurderinger.every(erBistandsbehovetOppfylt);
+}
+
+function erBistandsbehovetOppfylt(bistandsvurdering: BistandVurderingResponse) {
+  return (
+    bistandsvurdering.erBehovForAktivBehandling ||
+    bistandsvurdering.erBehovForArbeidsrettetTiltak ||
+    (bistandsvurdering.erBehovForAnnenOppfølging !== undefined && bistandsvurdering.erBehovForAnnenOppfølging)
+  );
 }
