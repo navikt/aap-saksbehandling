@@ -531,6 +531,9 @@ export type BehandlingInfo =
 export type Vurderingsbehov =
   components['schemas'][`no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Ny\u00C5rsakTilBehandling`]['årsakerTilBehandling'][number];
 
+export type StansOpphørÅrsak =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.StansOpphørVurderingDto']['årsaker'][number];
+
 /**
  * @deprecated Unngå denne i frontend. Får ikke fjernet den helt ennå fordi noen av løserne forventer denne. Men alt av dokumenter
  * til behandlingsflyt forventer `Vurderingsbehov`.
