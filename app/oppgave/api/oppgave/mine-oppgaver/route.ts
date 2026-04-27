@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
       sortorder: params?.sortorder,
       kunPaaVent: params?.kunPaaVent,
     });
-    if (isError(res)) {
+    if (isError(res) && res.status >= 500) {
       logError(`/api/oppgave/mine-oppgaver`, res.apiException);
     }
     return NextResponse.json(res, { status: res.status });
