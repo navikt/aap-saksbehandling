@@ -41,6 +41,7 @@ export const hjemmelMap: Partial<Record<Hjemmel, string>> = {
   FOLKETRYGDLOVEN_21_7: '§ 21-7',
   FOLKETRYGDLOVEN_22_13: '§ 22-13',
   FOLKETRYGDLOVEN_22_17: '§ 22-17',
+  ANDRE_TRYGDEAVTALER: 'Andre bilaterale avtaler (lovvalg / medlemskap)',
 };
 
 // En liste over hjemmler som ikke har implementert revurderinger i backend
