@@ -33,6 +33,7 @@ interface VilkårsKortPeriodisertProps {
   visOverstyrTildelingModal?: boolean;
   setVisOverstyrTildelingModal?: Dispatch<SetStateAction<boolean>>;
   reservertAvNavn?: string;
+  skalViseEndreKnapp?: boolean;
 }
 
 export const VilkårskortPeriodisert = ({
@@ -53,6 +54,7 @@ export const VilkårskortPeriodisert = ({
   onLeggTilVurdering,
   formReset,
   errorList,
+  skalViseEndreKnapp = true,
 }: VilkårsKortPeriodisertProps) => {
   const classNameBasertPåEnhet = vilkårTilhørerNavKontor ? styles.vilkårsKortNAV : styles.vilkårsKortNAY;
   const erAktivtSteg = visningModus === 'AKTIV_UTEN_AVBRYT' || visningModus === 'AKTIV_MED_AVBRYT';
@@ -127,7 +129,7 @@ export const VilkårskortPeriodisert = ({
                     </>
                   )}
 
-                  {visningModus === 'LÅST_MED_ENDRE' && (
+                  {visningModus === 'LÅST_MED_ENDRE' && skalViseEndreKnapp && (
                     <Button
                       type="button"
                       variant={'secondary'}
