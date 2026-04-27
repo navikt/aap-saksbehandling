@@ -9,16 +9,15 @@ export async function hentLocalToken(scope: string) {
     cookieStore.set({ name: 'bruker', value: 'VEILEDER' });
   }
 
-  let url = `http://localhost:8081/token/${ident?.value}`;
-  if (scope === process.env.POSTMOTTAK_API_SCOPE) {
-    url = 'http://localhost:8071/token';
-  } else if (scope === process.env.STATISTIKK_API_SCOPE) {
-    url = 'http://localhost:8091/token';
-  }
   try {
-    return fetch(url, { method: 'POST', next: { revalidate: 0 } })
-      .then((res) => res.json())
-      .then((data) => data?.access_token);
+    const params = new URLSearchParams({
+      aud: scope,
+      NAVident: ident?.value || '',
+      groups: ['saksbehandler-rolle', 'veileder-rolle', 'kvalitetssikrer-rolle', 'beslutter-rolle'].join(','),
+    });
+
+    const url = new URL('https://fakedings.intern.dev.nav.no/fake/aad?' + params.toString());
+    return fetch(url, { method: 'POST', next: { revalidate: 0 } }).then((token) => token.text());
   } catch (err) {
     logError('hentLocalToken feilet', err);
     return Promise.resolve('dummy-token');
