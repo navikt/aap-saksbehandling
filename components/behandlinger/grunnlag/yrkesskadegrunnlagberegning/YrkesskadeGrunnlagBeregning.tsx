@@ -123,7 +123,7 @@ export const YrkesskadeGrunnlagBeregning = ({
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       isLoading={isLoading}
       vilkårTilhørerNavKontor={false}
-      vurdertAvAnsatt={vurdertAvAnsatt}
+      vurdertAv={{ vurdertAvAnsatt: vurdertAvAnsatt }}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() => {

@@ -10,6 +10,8 @@ import { Dispatch, FormEvent, ReactNode, SetStateAction } from 'react';
 import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { ApiException } from 'lib/utils/api';
 import { VisningActions, VisningModus } from 'lib/types/visningTypes';
+import { VurdertAv } from 'components/vilkårskort/VurdertAv';
+import { VurdertAvAnsattDetail } from 'components/vurdertav/VurdertAvAnsattDetail';
 
 interface VilkårsKortPeriodisertProps {
   heading: string;
@@ -26,7 +28,7 @@ interface VilkårsKortPeriodisertProps {
   onDeleteMellomlagringClick: (() => void) | undefined;
   mellomlagretVurdering: MellomlagretVurdering | undefined;
   formReset: () => void;
-  vurdertAutomatisk?: boolean;
+  vurdertAv?: VurdertAv;
   onLeggTilVurdering?: () => void;
   errorList: ErrorList;
   bekreftOgFortsett?: () => void;
@@ -45,7 +47,7 @@ export const VilkårskortPeriodisert = ({
   løsBehovOgGåTilNesteStegError,
   vilkårTilhørerNavKontor,
   knappTekst = 'Bekreft',
-  vurdertAutomatisk = false,
+  vurdertAv = {},
   onDeleteMellomlagringClick,
   mellomlagretVurdering,
   visningModus,
@@ -157,7 +159,11 @@ export const VilkårskortPeriodisert = ({
               </VStack>
 
               <VStack align="baseline" paddingBlock={'space-8 space-0'}>
-                {vurdertAutomatisk && <Detail>Vurdert automatisk</Detail>}
+                {vurdertAv.vurdertAutomatisk && <Detail>Vurdert automatisk</Detail>}
+                <VurdertAvAnsattDetail vurdertAv={vurdertAv.vurdertAvAnsatt} variant={'VURDERING'} />
+                <VurdertAvAnsattDetail vurdertAv={vurdertAv.kvalitetssikretAv} variant={'KVALITETSSIKRER'} />
+                <VurdertAvAnsattDetail vurdertAv={vurdertAv.besluttetAv} variant={'BESLUTTER'} />
+                <VurdertAvAnsattDetail vurdertAv={vurdertAv.trukketAv} variant={'TRUKKET'} />
               </VStack>
             </HStack>
           </VStack>

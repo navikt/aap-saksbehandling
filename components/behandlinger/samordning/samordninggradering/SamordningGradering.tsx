@@ -205,7 +205,7 @@ export const SamordningGradering = ({
         status={status}
         løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
         vilkårTilhørerNavKontor={false}
-        vurdertAvAnsatt={grunnlag.vurdering?.vurdertAv}
+        vurdertAv={{ vurdertAvAnsatt: grunnlag.vurdering?.vurdertAv }}
         onDeleteMellomlagringClick={() => {
           slettMellomlagring(() =>
             form.reset(grunnlag.vurdering ? mapVurderingToDraftFormFields(grunnlag) : emptyDraftFormFields())

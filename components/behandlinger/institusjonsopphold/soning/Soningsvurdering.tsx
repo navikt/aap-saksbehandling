@@ -107,7 +107,7 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon, initi
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
-      vurdertAvAnsatt={grunnlag.vurdertAv}
+      vurdertAv={{ vurdertAvAnsatt: grunnlag.vurdertAv }}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() => form.reset(mapVurderingToDraftFormFields(grunnlag.vurderinger)))

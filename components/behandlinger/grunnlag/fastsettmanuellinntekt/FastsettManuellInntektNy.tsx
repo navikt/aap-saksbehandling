@@ -145,7 +145,7 @@ export const FastsettManuellInntektNy = ({
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       status={status}
       vilkårTilhørerNavKontor={false}
-      vurdertAvAnsatt={grunnlag.manuelleVurderinger?.vurdertAv}
+      vurdertAv={{ vurdertAvAnsatt: grunnlag.manuelleVurderinger?.vurdertAv }}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() => {
           form.reset(grunnlag ? mapGrunnlagToDraftFormFields(grunnlag) : emptyDraftFormFields());

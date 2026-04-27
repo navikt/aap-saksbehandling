@@ -165,7 +165,7 @@ export const KlagebehandlingVurderingNay = ({
       status={status}
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
+      vurdertAv={{ vurdertAvAnsatt: grunnlag?.vurdering?.vurdertAv }}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() =>

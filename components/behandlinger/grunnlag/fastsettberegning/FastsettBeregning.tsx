@@ -165,7 +165,7 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly, initi
       vilkårTilhørerNavKontor={false}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       status={status}
-      vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
+      vurdertAv={{ vurdertAvAnsatt: grunnlag?.vurdering?.vurdertAv }}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() =>

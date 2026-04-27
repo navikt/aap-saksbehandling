@@ -123,7 +123,7 @@ export const SamordningAndreStatligeYtelser = ({
       status={status}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
-      vurdertAvAnsatt={grunnlag.vurdering?.vurdertAv}
+      vurdertAv={{ vurdertAvAnsatt: grunnlag.vurdering?.vurdertAv }}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() =>

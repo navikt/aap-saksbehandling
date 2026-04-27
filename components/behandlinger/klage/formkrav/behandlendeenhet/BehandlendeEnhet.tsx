@@ -92,7 +92,7 @@ export const BehandlendeEnhet = ({ behandlingVersjon, grunnlag, readOnly, initia
       status={status}
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
+      vurdertAv={{ vurdertAvAnsatt: grunnlag?.vurdering?.vurdertAv }}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() =>

@@ -1,7 +1,7 @@
 'use client';
 
 import { Button, Detail, ExpansionCard, HStack, VStack } from '@navikt/ds-react';
-import { MellomlagretVurdering, StegType, VurdertAvAnsatt } from 'lib/types/types';
+import { MellomlagretVurdering, StegType } from 'lib/types/types';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 
@@ -12,6 +12,9 @@ import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehov
 import { ApiException } from 'lib/utils/api';
 import { VisningActions, VisningModus } from 'lib/types/visningTypes';
 import { VurdertAvAnsattDetail } from 'components/vurdertav/VurdertAvAnsattDetail';
+import { VurdertAv } from 'components/vilkårskort/VurdertAv';
+
+export type { VurdertAv } from 'components/vilkårskort/VurdertAv';
 
 export interface VilkårsKortMedFormOgMellomlagringProps {
   heading: string;
@@ -24,10 +27,7 @@ export interface VilkårsKortMedFormOgMellomlagringProps {
   knappTekst?: string;
   defaultOpen?: boolean;
   vilkårTilhørerNavKontor: boolean;
-  vurdertAvAnsatt?: VurdertAvAnsatt;
-  vurdertAutomatisk?: boolean;
-  kvalitetssikretAv?: VurdertAvAnsatt;
-  besluttetAv?: VurdertAvAnsatt;
+  vurdertAv?: VurdertAv;
   visningModus: VisningModus;
   visningActions: VisningActions;
   onDeleteMellomlagringClick: () => void;
@@ -46,10 +46,7 @@ export const VilkårskortMedFormOgMellomlagring = ({
   vilkårTilhørerNavKontor,
   knappTekst = 'Bekreft',
   defaultOpen = true,
-  vurdertAvAnsatt,
-  vurdertAutomatisk = false,
-  kvalitetssikretAv,
-  besluttetAv,
+  vurdertAv = {},
   onDeleteMellomlagringClick,
   mellomlagretVurdering,
   visningModus,
@@ -149,12 +146,12 @@ export const VilkårskortMedFormOgMellomlagring = ({
                 )}
               </VStack>
 
-              {/* Høyre kolonne: vurdert av / kvalitetssikret av */}
               <VStack align="end">
-                {vurdertAutomatisk && <Detail>Vurdert automatisk</Detail>}
-                <VurdertAvAnsattDetail vurdertAv={vurdertAvAnsatt} variant={'VURDERING'} />
-                <VurdertAvAnsattDetail vurdertAv={kvalitetssikretAv} variant={'KVALITETSSIKRER'} />
-                <VurdertAvAnsattDetail vurdertAv={besluttetAv} variant={'BESLUTTER'} />
+                {vurdertAv.vurdertAutomatisk && <Detail>Vurdert automatisk</Detail>}
+                <VurdertAvAnsattDetail vurdertAv={vurdertAv.vurdertAvAnsatt} variant={'VURDERING'} />
+                <VurdertAvAnsattDetail vurdertAv={vurdertAv.kvalitetssikretAv} variant={'KVALITETSSIKRER'} />
+                <VurdertAvAnsattDetail vurdertAv={vurdertAv.besluttetAv} variant={'BESLUTTER'} />
+                <VurdertAvAnsattDetail vurdertAv={vurdertAv.trukketAv} variant={'TRUKKET'} />
               </VStack>
             </HStack>
           </VStack>

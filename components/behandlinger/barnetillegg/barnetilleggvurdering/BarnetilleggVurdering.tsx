@@ -201,8 +201,7 @@ export const BarnetilleggVurdering = ({
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
-      vurdertAvAnsatt={grunnlag.vurdertAv}
-      vurdertAutomatisk={erFolkeregistrerteBarn}
+      vurdertAv={{ vurdertAvAnsatt: grunnlag.vurdertAv, vurdertAutomatisk: erFolkeregistrerteBarn }}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() =>

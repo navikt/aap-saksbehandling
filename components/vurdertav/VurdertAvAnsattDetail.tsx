@@ -5,7 +5,7 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 import { VurdertAvAnsatt } from 'lib/types/types';
 
 interface Props {
-  variant: 'KVALITETSSIKRER' | 'VURDERING' | 'BESLUTTER';
+  variant: 'KVALITETSSIKRER' | 'VURDERING' | 'BESLUTTER' | 'TRUKKET';
   vurdertAv?: VurdertAvAnsatt;
 }
 
@@ -35,6 +35,11 @@ export const VurdertAvAnsattDetail = ({ vurdertAv, variant }: Props) => {
       {variant == 'BESLUTTER' && (
         <Detail>
           {`${vurdertAv.erRetur ? 'Returnert' : 'Besluttet'} av ${utledVurdertAv(vurdertAv)}, ${vurdertAv?.dato ? formaterDatoForFrontend(vurdertAv.dato) : ''}`}
+        </Detail>
+      )}
+      {variant == 'TRUKKET' && (
+        <Detail>
+          {`Trukket av ${utledVurdertAv(vurdertAv)}, ${vurdertAv?.dato ? formaterDatoForFrontend(vurdertAv.dato) : ''}`}
         </Detail>
       )}
     </>

@@ -36,7 +36,7 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon, initialMel
     initialMellomlagretVurdering
   );
 
-  const vurderingerString = grunnlag?.vurderinger.at(-1);
+  const sisteVurdering = grunnlag?.vurderinger.at(-1);
 
   const vurdertAvAnsatt = vurderingerString
     ? { ident: vurderingerString.vurdertAv, dato: vurderingerString.vurdertDato }
@@ -44,7 +44,7 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon, initialMel
 
   const defaultValues: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
-    : mapVurderingToDraftFormFields(vurderingerString);
+    : mapVurderingToDraftFormFields(sisteVurdering);
 
   const { form, formFields } = useConfigForm<FormFields>(
     {
@@ -101,9 +101,20 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon, initialMel
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() =>
-          form.reset(vurderingerString ? mapVurderingToDraftFormFields(vurderingerString) : emptyDraftFormFields())
+          form.reset(sisteVurdering ? mapVurderingToDraftFormFields(sisteVurdering) : emptyDraftFormFields())
         );
       }}
+      vurdertAv={
+        sisteVurdering?.skalTrekkes
+          ? {
+              trukketAv: {
+                ansattnavn: sisteVurdering?.vurdertAv,
+                dato: sisteVurdering?.vurdertDato ?? '',
+                ident: sisteVurdering?.vurdertAv ?? '',
+              },
+            }
+          : undefined
+      }
       visningModus={visningModus}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
       visningActions={visningActions}

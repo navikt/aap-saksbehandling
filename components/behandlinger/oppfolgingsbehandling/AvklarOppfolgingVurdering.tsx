@@ -129,7 +129,7 @@ export const AvklaroppfolgingVurdering = ({
       status={status}
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      vurdertAvAnsatt={undefined}
+      vurdertAv={{ vurdertAvAnsatt: undefined }}
       knappTekst={'Fullfør'}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() =>

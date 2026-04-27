@@ -104,8 +104,7 @@ export const Inntektsbortfall = ({
       status={status}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       isLoading={isLoading}
-      vurdertAutomatisk={grunnlag.kanBehandlesAutomatisk}
-      vurdertAvAnsatt={vurdering?.vurdertAv}
+      vurdertAv={{ vurdertAutomatisk: grunnlag.kanBehandlesAutomatisk, vurdertAvAnsatt: vurdering?.vurdertAv }}
       onSubmit={(event: FormEvent<HTMLFormElement>) => {
         form.handleSubmit((data) => {
           løsBehovOgGåTilNesteSteg(

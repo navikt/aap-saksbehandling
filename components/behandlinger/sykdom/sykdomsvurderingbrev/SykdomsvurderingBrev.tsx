@@ -109,8 +109,10 @@ export const SykdomsvurderingBrev = ({
       status={status}
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
-      kvalitetssikretAv={grunnlag?.vurdering?.kvalitetssikretAv}
+      vurdertAv={{
+        vurdertAvAnsatt: grunnlag?.vurdering?.vurdertAv,
+        kvalitetssikretAv: grunnlag?.vurdering?.kvalitetssikretAv,
+      }}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() => {
