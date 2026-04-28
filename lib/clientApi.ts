@@ -35,6 +35,7 @@ import { TilgangResponse } from 'lib/services/tilgangservice/tilgangsService';
 import { Markering, SaksbehandlerSøkRespons, TildelOppgaveRequest } from 'lib/types/oppgaveTypes';
 import { MellomLagringIdentifikator } from 'app/saksbehandling/api/mellomlagring/route';
 import { isLocal } from 'lib/utils/environment';
+import { buildOAuthLoginUrl } from 'lib/services/azure/redirectUtils';
 
 const BASE_URL = '/saksbehandling';
 
@@ -48,6 +49,11 @@ export async function clientFetch<ResponseBody>(
       method,
       body: body && JSON.stringify(body),
     });
+
+    if (res.status === 401) {
+      window.location.href = buildOAuthLoginUrl(window.location.pathname);
+      return new Promise(() => {});
+    }
 
     return await res.json();
   } catch (e) {
