@@ -5449,6 +5449,7 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.FatteVedtakGrunnlagDto': {
       besluttetAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.BeslutterDto'];
+      'harGjortVilk\u00E5rsvurderingerP\u00E5Behandling': boolean;
       'harTilgangTil\u00C5Saksbehandle': boolean;
       historikk: components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.flate.Historikk'][];
       vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8ser.vedtak.TotrinnsVurdering'][];
@@ -11584,13 +11585,6 @@ export interface components {
        * @example 2025-04-01
        */
       tom?: string | null;
-      /**
-       * Format: date
-       * @deprecated
-       * @description Bruk fom
-       * @example 2025-04-01
-       */
-      vurderingenGjelderFra?: string | null;
       vurdertAv: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangarbeid.OvergangArbeidGrunnlagResponse': {
@@ -11622,11 +11616,6 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.OvergangUf\u00F8reGrunnlagResponse': {
       'beh\u00F8verVurderinger': components['schemas']['no.nav.aap.komponenter.type.Periode'][];
       gjeldendeSykdsomsvurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomsvurderingResponse'][];
-      /**
-       * @deprecated
-       * @description Erstattes av sisteVedtatteVurderinger
-       */
-      gjeldendeVedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.OvergangUf\u00F8reVurderingResponse'][];
       'harTilgangTil\u00C5Saksbehandle': boolean;
       historiskeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.OvergangUf\u00F8reVurderingResponse'][];
       ikkeRelevantePerioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
@@ -11636,7 +11625,6 @@ export interface components {
       perioderSomIkkeErTilstrekkeligVurdert: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
       sisteVedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.OvergangUf\u00F8reVurderingResponse'][];
       'uf\u00F8reS\u00F8knadOpplysninger'?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.Uf\u00F8reS\u00F8knadOpplysninger'];
-      vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.OvergangUf\u00F8reVurderingResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.OvergangUf\u00F8reVurderingResponse': {
       begrunnelse: string;
@@ -11661,13 +11649,6 @@ export interface components {
        * @example 2025-04-01
        */
       tom?: string | null;
-      /**
-       * Format: date
-       * @deprecated
-       * @description Bruk fom
-       * @example 2025-04-01
-       */
-      virkningsdato: string;
       vurdertAv: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.Uf\u00F8reS\u00F8knadOpplysninger': {
@@ -11839,6 +11820,10 @@ export interface components {
       registrerteInntekterSisteRelevanteAr: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.\u00C5rData'][];
       /** Format: int32 */
       'sisteRelevante\u00C5r': number;
+      /**
+       * @deprecated
+       * @description Erstattes av vurderinger
+       */
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.ManuellInntektVurderingGrunnlagResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.ManuellInntektGrunnlagVurdering': {
@@ -12191,6 +12176,7 @@ export interface components {
         | 'IKKE_RETT_PA_SYKEPENGEERSTATNING'
         | 'IKKE_RETT_UNDER_STRAFFEGJENNOMFØRING'
         | 'IKKE_SYKDOM_AV_VISS_VARIGHET'
+        | 'IKKE_SYKDOM_SKADE_LYTE'
         | 'IKKE_SYKDOM_SKADE_LYTE_VESENTLIGDEL'
         | 'INNTEKTSTAP_DEKKES_ETTER_ANNEN_LOVGIVNING'
         | 'MANGLENDE_DOKUMENTASJON'
@@ -12872,6 +12858,7 @@ export interface components {
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.trekkklage.flate.TrekkKlageVurderingDto'];
     };
     'no.nav.aap.behandlingsflyt.behandling.kvalitetssikring.KvalitetssikringGrunnlagDto': {
+      'harGjortVilk\u00E5rsvurderingerP\u00E5Behandling': boolean;
       'harTilgangTil\u00C5Saksbehandle': boolean;
       historikk: components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.flate.Historikk'][];
       vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8ser.vedtak.TotrinnsVurdering'][];
@@ -13427,6 +13414,10 @@ export interface components {
       nyeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.student.StudentVurderingResponse'][];
       oppgittStudent?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.OppgittStudent'];
       sisteVedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.student.StudentVurderingResponse'][];
+      /**
+       * @deprecated
+       * @description Bruk nyeVurderinger
+       */
       studentvurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.student.StudentVurderingResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.student.StudentVurderingResponse': {
@@ -14068,6 +14059,7 @@ export interface components {
         | 'IKKE_RETT_PA_SYKEPENGEERSTATNING'
         | 'IKKE_RETT_UNDER_STRAFFEGJENNOMFØRING'
         | 'IKKE_SYKDOM_AV_VISS_VARIGHET'
+        | 'IKKE_SYKDOM_SKADE_LYTE'
         | 'IKKE_SYKDOM_SKADE_LYTE_VESENTLIGDEL'
         | 'INNTEKTSTAP_DEKKES_ETTER_ANNEN_LOVGIVNING'
         | 'MANGLENDE_DOKUMENTASJON'
@@ -14366,6 +14358,7 @@ export interface components {
         | 'IKKE_RETT_PA_SYKEPENGEERSTATNING'
         | 'IKKE_RETT_UNDER_STRAFFEGJENNOMFØRING'
         | 'IKKE_SYKDOM_AV_VISS_VARIGHET'
+        | 'IKKE_SYKDOM_SKADE_LYTE'
         | 'IKKE_SYKDOM_SKADE_LYTE_VESENTLIGDEL'
         | 'INNTEKTSTAP_DEKKES_ETTER_ANNEN_LOVGIVNING'
         | 'MANGLENDE_DOKUMENTASJON'
@@ -15994,6 +15987,7 @@ export interface components {
         | 'IKKE_RETT_PA_SYKEPENGEERSTATNING'
         | 'IKKE_RETT_UNDER_STRAFFEGJENNOMFØRING'
         | 'IKKE_SYKDOM_AV_VISS_VARIGHET'
+        | 'IKKE_SYKDOM_SKADE_LYTE'
         | 'IKKE_SYKDOM_SKADE_LYTE_VESENTLIGDEL'
         | 'INNTEKTSTAP_DEKKES_ETTER_ANNEN_LOVGIVNING'
         | 'MANGLENDE_DOKUMENTASJON'
