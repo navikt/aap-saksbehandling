@@ -4,7 +4,7 @@ import { BodyShort, Box, Heading, HGrid, Label, Link, Page, VStack } from '@navi
 import { usePathname } from 'next/navigation';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { useEffect } from 'react';
-import { logClientError } from 'lib/actions/actions';
+import { logClientWarning } from 'lib/actions/actions';
 import { erIngenTilgangError } from 'lib/utils/ingenTilgang';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 
@@ -23,7 +23,7 @@ const Error = ({ error }: Props) => {
 
     try {
       // noinspection JSIgnoredPromiseFromCall
-      logClientError({
+      logClientWarning({
         name: error.name,
         message: error.message,
         stack: error.stack,
