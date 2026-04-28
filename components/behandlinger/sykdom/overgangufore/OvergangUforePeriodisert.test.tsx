@@ -18,7 +18,6 @@ beforeEach(() => {
 const overganguforeGrunnlag: OvergangUforeGrunnlag = {
   ikkeRelevantePerioder: [],
   gjeldendeSykdsomsvurderinger: [],
-  gjeldendeVedtatteVurderinger: [],
   historiskeVurderinger: [],
   perioderSomIkkeErTilstrekkeligVurdert: [],
   nyeVurderinger: [],
@@ -40,7 +39,6 @@ const overganguforeGrunnlag: OvergangUforeGrunnlag = {
 const overganguforeGrunnlagMedBekreftetVurdering: OvergangUforeGrunnlag = {
   ikkeRelevantePerioder: [],
   gjeldendeSykdsomsvurderinger: [],
-  gjeldendeVedtatteVurderinger: [],
   historiskeVurderinger: [],
   perioderSomIkkeErTilstrekkeligVurdert: [],
   nyeVurderinger: [
@@ -49,7 +47,6 @@ const overganguforeGrunnlagMedBekreftetVurdering: OvergangUforeGrunnlag = {
       brukerHarSøktUføretrygd: true,
       brukerHarFåttVedtakOmUføretrygd: 'JA_INNVILGET_FULL',
       brukerRettPåAAP: true,
-      virkningsdato: '',
       fom: '2025-10-10',
       vurdertAv: { dato: '2025-10-10', ident: 'FASF343' },
     },

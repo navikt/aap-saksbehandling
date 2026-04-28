@@ -156,5 +156,7 @@ export function mapÅrsakTilTekst(årsak: StansOpphørÅrsak): string {
       return 'Ordinær kvote er oppbrukt';
     case 'SYKEPENGEERSTATNINGKVOTE_BRUKT_OPP':
       return 'Kvote på AAP som sykepengeerstatning er oppbrukt';
+    case 'IKKE_SYKDOM_SKADE_LYTE':
+      return 'Ikke sykdom, skade eller lyte';
   }
 }
