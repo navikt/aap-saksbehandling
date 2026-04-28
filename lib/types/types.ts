@@ -158,7 +158,7 @@ export type SamordningAndreStatligeYtelserYtelse =
 export type TrukketSøknadGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.søknad.TrukketSøknadGrunnlagDto'];
 
-export type TrukketSøknadVudering =
+export type TrukketSøknadVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.søknad.TrukketSøknadVurderingDto'];
 
 export type AvbrytRevurderingGrunnlag =

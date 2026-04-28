@@ -3,11 +3,14 @@
 import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { MellomlagretVurdering, TrukketSøknadGrunnlag, TrukketSøknadVudering } from 'lib/types/types';
+import { MellomlagretVurdering, TrukketSøknadGrunnlag, TrukketSøknadVurdering, VurdertAvAnsatt } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { FormEvent } from 'react';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import {
+  VilkårskortMedFormOgMellomlagring,
+  VurdertAv,
+} from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 
@@ -104,17 +107,7 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon, initialMel
           form.reset(sisteVurdering ? mapVurderingToDraftFormFields(sisteVurdering) : emptyDraftFormFields())
         );
       }}
-      vurdertAv={
-        sisteVurdering?.skalTrekkes
-          ? {
-              trukketAv: {
-                ansattnavn: sisteVurdering?.vurdertAv,
-                dato: sisteVurdering?.vurdertDato ?? '',
-                ident: sisteVurdering?.vurdertAv ?? '',
-              },
-            }
-          : undefined
-      }
+      vurdertAv={sisteVurderingMap(sisteVurdering)}
       visningModus={visningModus}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
       visningActions={visningActions}
@@ -125,7 +118,23 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon, initialMel
   );
 };
 
-function mapVurderingToDraftFormFields(vurdering?: TrukketSøknadVudering): DraftFormFields {
+function sisteVurderingMap(sisteVurdering: TrukketSøknadVurdering | undefined): VurdertAv | undefined {
+  if (!sisteVurdering) return undefined;
+
+  const sisteVurderingMap: VurdertAvAnsatt = {
+    ansattnavn: sisteVurdering?.vurdertAv,
+    dato: sisteVurdering?.vurdertDato ?? '',
+    ident: sisteVurdering?.vurdertAv ?? '',
+  };
+
+  if (sisteVurdering.skalTrekkes) {
+    return { trukketAv: sisteVurderingMap };
+  } else {
+    return { vurdertAvAnsatt: sisteVurderingMap };
+  }
+}
+
+function mapVurderingToDraftFormFields(vurdering?: TrukketSøknadVurdering): DraftFormFields {
   return {
     begrunnelse: vurdering?.begrunnelse,
     skalTrekkes: getJaNeiEllerUndefined(vurdering?.skalTrekkes),
