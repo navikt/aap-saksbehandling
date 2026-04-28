@@ -19,6 +19,7 @@ interface Props {
   behandlingsreferanse: string;
   readOnly: boolean;
   initialMellomlagretVurdering?: MellomlagretVurdering;
+  behandlingsversjon: number;
 }
 
 export interface ToTrinnsVurderingFormFields {
@@ -29,7 +30,13 @@ export interface ToTrinnsVurderingFormFields {
   definisjon: AvklaringsbehovKode;
 }
 
-export const ToTrinnsvurdering = ({ grunnlag, readOnly, erKvalitetssikring, initialMellomlagretVurdering }: Props) => {
+export const ToTrinnsvurdering = ({
+  grunnlag,
+  readOnly,
+  erKvalitetssikring,
+  initialMellomlagretVurdering,
+  behandlingsversjon,
+}: Props) => {
   const vurderteTotrinnsvurderinger = grunnlag.vurderinger.filter(
     (vurdering) => typeof vurdering.godkjent === 'boolean'
   );
@@ -40,13 +47,14 @@ export const ToTrinnsvurdering = ({ grunnlag, readOnly, erKvalitetssikring, init
         <Oppsummering vurderinger={vurderteTotrinnsvurderinger} erKvalitetssikrer={erKvalitetssikring} />
       )}
       {!readOnly && (
-        <VStack gap={"space-12"}>
+        <VStack gap={'space-12'}>
           <Label>{erKvalitetssikring ? 'Kvalitetssikrer' : 'Beslutter'}</Label>
           <TotrinnsvurderingForm
             grunnlag={grunnlag}
             erKvalitetssikring={erKvalitetssikring}
             readOnly={readOnly}
             initialMellomlagretVurdering={initialMellomlagretVurdering}
+            behandlingsversjon={behandlingsversjon}
           />
         </VStack>
       )}

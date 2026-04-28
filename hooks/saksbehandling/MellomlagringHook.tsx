@@ -8,7 +8,7 @@ import { MellomlagretVurdering } from 'lib/types/types';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { debounce, isEqual } from 'lodash';
 import { UseFormReturn } from 'react-hook-form';
-import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
+import { useFlyt } from 'hooks/saksbehandling/FlytHook';
 import { useBekreftVurderingerGrunnlag } from 'hooks/saksbehandling/BekrefteVurderingerHook';
 
 export function useMellomlagring<T extends object>(
@@ -21,7 +21,7 @@ export function useMellomlagring<T extends object>(
   nullstillMellomlagretVurdering: () => void;
 } {
   const { behandlingsreferanse } = useParamsMedType();
-  const { flyt } = useRequiredFlyt();
+  const { flyt } = useFlyt();
   const { refetchBekreftVurderingerGrunnlagClient } = useBekreftVurderingerGrunnlag();
 
   const [mellomlagretVurdering, setMellomlagretVurdering] = useState<MellomlagretVurdering | undefined>(
@@ -39,12 +39,12 @@ export function useMellomlagring<T extends object>(
       if (isSuccess(res)) {
         setMellomlagretVurdering(res.data.mellomlagretVurdering);
 
-        if (flyt.aktivtSteg === 'BEKREFT_VURDERINGER_OPPFØLGING') {
+        if (flyt?.aktivtSteg === 'BEKREFT_VURDERINGER_OPPFØLGING') {
           refetchBekreftVurderingerGrunnlagClient();
         }
       }
     },
-    [behovstype, behandlingsreferanse, flyt.aktivtSteg, refetchBekreftVurderingerGrunnlagClient]
+    [behovstype, behandlingsreferanse, flyt?.aktivtSteg, refetchBekreftVurderingerGrunnlagClient]
   );
 
   const debouncedLagreMellomlagring = useMemo(() => debounce(lagreMellomlagring, 2000), [lagreMellomlagring]);
@@ -97,7 +97,7 @@ export function useMellomlagring<T extends object>(
     if (isSuccess(res)) {
       setMellomlagretVurdering(undefined);
 
-      if (flyt.aktivtSteg === 'BEKREFT_VURDERINGER_OPPFØLGING') {
+      if (flyt?.aktivtSteg === 'BEKREFT_VURDERINGER_OPPFØLGING') {
         refetchBekreftVurderingerGrunnlagClient();
       }
 
