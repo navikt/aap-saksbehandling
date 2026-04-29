@@ -6,8 +6,9 @@ import { PencilIcon } from '@navikt/aksel-icons';
 import { RedigerMeldekortModal } from 'components/saksoversikt/meldekortoversikt/redigermeldekortmodal/RedigerMeldekortModal';
 import { useState } from 'react';
 import { FørteTimer } from 'components/saksoversikt/meldekortoversikt/meldekorttabell/førtetimer/FørteTimer';
-import { useMeldekort } from 'hooks/saksbehandling/MeldekortHook';
 import { DagDto, MeldeperiodeMedMeldekortDto } from 'lib/types/types';
+import { Kort } from 'components/kort/Kort';
+import { useMeldekort } from 'hooks/saksbehandling/MeldekortHook';
 
 export const MeldekortTabell = () => {
   const { alleMeldekort } = useMeldekort();
@@ -15,7 +16,7 @@ export const MeldekortTabell = () => {
   const [selectedMeldekort, setSelectedMeldekort] = useState<MeldeperiodeMedMeldekortDto>();
 
   return (
-    <>
+    <Kort background="default" padding="space-0">
       <TableStyled>
         <Table.Header>
           <Table.Row>
@@ -79,7 +80,7 @@ export const MeldekortTabell = () => {
         </Table.Body>
       </TableStyled>
       <RedigerMeldekortModal setIsOpen={setIsOpen} isOpen={isOpen} meldekort={selectedMeldekort} />
-    </>
+    </Kort>
   );
 };
 

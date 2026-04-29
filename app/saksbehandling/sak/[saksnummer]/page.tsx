@@ -8,6 +8,9 @@ import { SakOversiktContainer } from 'components/saksoversikt/SakOversiktContain
 import { Suspense } from 'react';
 import { hentBrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { isSuccess } from 'lib/utils/api';
+import { hentArenaSakerForPerson } from 'lib/services/apiinternservice/apiInternService';
+import { unleashService } from 'lib/services/unleash/unleashService';
+import { Box } from '@navikt/ds-react';
 
 const Page = async (props: { params: Promise<{ saksnummer: string }> }) => {
   const params = await props.params;
@@ -19,8 +22,12 @@ const Page = async (props: { params: Promise<{ saksnummer: string }> }) => {
   ]);
   const rettighetsinfo = isSuccess(rettihetsinfoRes) ? rettihetsinfoRes.data : null;
 
+  const visArenasakerOversikt = unleashService.isEnabled('VisArenasakerOversikt');
+  const arenaSakerRes = visArenasakerOversikt ? await hentArenaSakerForPerson(personInfo.fnr) : undefined;
+  const arenaSaker = isSuccess(arenaSakerRes) ? arenaSakerRes.data : null;
+
   return (
-    <>
+    <Box background="neutral-soft">
       <SaksinfoBanner personInformasjon={personInfo} sak={sak} />
 
       <br />
@@ -30,9 +37,10 @@ const Page = async (props: { params: Promise<{ saksnummer: string }> }) => {
           sak={sak}
           innloggetBrukerIdent={innloggetBrukerInfo.NAVident}
           rettighetsinfo={rettighetsinfo}
+          arenaSaker={arenaSaker}
         />
       </Suspense>
-    </>
+    </Box>
   );
 };
 

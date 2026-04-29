@@ -8,6 +8,7 @@ import { isError } from 'lib/utils/api';
 import { formaterBrudd, formaterGrunn } from 'components/behandlinger/aktivitetsplikt/11-9/Vurder11_9/utils';
 import { formaterTilNok } from 'lib/utils/string';
 import { formaterDatoForFrontend, sorterEtterNyesteDato } from 'lib/utils/date';
+import { Kort } from 'components/kort/Kort';
 
 export const AktivitetspliktTrekk = ({ sak }: { sak: SaksInfo }) => {
   const {
@@ -31,52 +32,55 @@ export const AktivitetspliktTrekk = ({ sak }: { sak: SaksInfo }) => {
   ) : (
     <VStack gap="space-16">
       <Heading size="large">Aktivitetsplikt 11-9 med trekk</Heading>
+      <Kort background="default" padding="space-0">
+        <HStack>
+          <TableStyled size="small">
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell textSize={'small'}>Dato for brudd</Table.HeaderCell>
+                <Table.HeaderCell textSize={'small'}>Brudd</Table.HeaderCell>
+                <Table.HeaderCell textSize={'small'}>Grunn</Table.HeaderCell>
+                <Table.HeaderCell textSize={'small'}>Dagsats</Table.HeaderCell>
+                <Table.HeaderCell textSize={'small'}>Trekk i utbetaling</Table.HeaderCell>
+                <Table.HeaderCell textSize={'small'}>Vurdering</Table.HeaderCell>
+                <Table.HeaderCell />
+              </Table.Row>
+            </Table.Header>
 
-      <HStack>
-        <TableStyled size="small">
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell textSize={'small'}>Dato for brudd</Table.HeaderCell>
-              <Table.HeaderCell textSize={'small'}>Brudd</Table.HeaderCell>
-              <Table.HeaderCell textSize={'small'}>Grunn</Table.HeaderCell>
-              <Table.HeaderCell textSize={'small'}>Dagsats</Table.HeaderCell>
-              <Table.HeaderCell textSize={'small'}>Trekk i utbetaling</Table.HeaderCell>
-              <Table.HeaderCell textSize={'small'}>Vurdering</Table.HeaderCell>
-              <Table.HeaderCell />
-            </Table.Row>
-          </Table.Header>
-
-          <Table.Body>
-            {vurderingerMedTrekk
-              ?.sort((a, b) => sorterEtterNyesteDato(a.dato, b.dato))
-              .map((vurdering, index) => (
-                <Table.Row key={index}>
-                  <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(vurdering.dato)}</Table.DataCell>
-                  <Table.DataCell textSize={'small'}>{formaterBrudd(vurdering.brudd)}</Table.DataCell>
-                  <Table.DataCell textSize={'small'}>{formaterGrunn(vurdering.grunn)}</Table.DataCell>
-                  <Table.DataCell textSize={'small'}>{formaterTilNok(vurdering.registrertTrekk?.beløp)}</Table.DataCell>
-                  <Table.DataCell textSize={'small'}>
-                    {vurdering.registrertTrekk?.posteringer?.map((postering, index) => {
-                      return (
-                        <div key={index}>
-                          {formaterDatoForFrontend(postering.dato)} - {formaterTilNok(postering.beløp)}
-                        </div>
-                      );
-                    }) || 'Ikke utført trekk'}
-                  </Table.DataCell>
-                  <Table.DataCell>
-                    {vurdering.vurdertAv && (
-                      <span>
-                        <Detail>{`Vurdert av ${vurdering.vurdertAv.ansattnavn ? vurdering.vurdertAv.ansattnavn : vurdering.vurdertAv.ident}`}</Detail>
-                        <Detail>{`${formaterDatoForFrontend(vurdering.vurdertAv.dato)}`}</Detail>
-                      </span>
-                    )}
-                  </Table.DataCell>
-                </Table.Row>
-              ))}
-          </Table.Body>
-        </TableStyled>
-      </HStack>
+            <Table.Body>
+              {vurderingerMedTrekk
+                ?.sort((a, b) => sorterEtterNyesteDato(a.dato, b.dato))
+                .map((vurdering, index) => (
+                  <Table.Row key={index}>
+                    <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(vurdering.dato)}</Table.DataCell>
+                    <Table.DataCell textSize={'small'}>{formaterBrudd(vurdering.brudd)}</Table.DataCell>
+                    <Table.DataCell textSize={'small'}>{formaterGrunn(vurdering.grunn)}</Table.DataCell>
+                    <Table.DataCell textSize={'small'}>
+                      {formaterTilNok(vurdering.registrertTrekk?.beløp)}
+                    </Table.DataCell>
+                    <Table.DataCell textSize={'small'}>
+                      {vurdering.registrertTrekk?.posteringer?.map((postering, index) => {
+                        return (
+                          <div key={index}>
+                            {formaterDatoForFrontend(postering.dato)} - {formaterTilNok(postering.beløp)}
+                          </div>
+                        );
+                      }) || 'Ikke utført trekk'}
+                    </Table.DataCell>
+                    <Table.DataCell>
+                      {vurdering.vurdertAv && (
+                        <span>
+                          <Detail>{`Vurdert av ${vurdering.vurdertAv.ansattnavn ? vurdering.vurdertAv.ansattnavn : vurdering.vurdertAv.ident}`}</Detail>
+                          <Detail>{`${formaterDatoForFrontend(vurdering.vurdertAv.dato)}`}</Detail>
+                        </span>
+                      )}
+                    </Table.DataCell>
+                  </Table.Row>
+                ))}
+            </Table.Body>
+          </TableStyled>
+        </HStack>
+      </Kort>
     </VStack>
   );
 };
