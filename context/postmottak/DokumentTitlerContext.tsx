@@ -1,7 +1,6 @@
 'use client';
 
 import React, { createContext, useContext, useState } from 'react';
-import { Dokument } from 'lib/types/postmottakTypes';
 
 interface DokumentTitlerContextValue {
   titler: Record<string, string>;
@@ -14,7 +13,7 @@ const DokumentTitlerContext = createContext<DokumentTitlerContextValue | null>(n
 
 interface Props {
   children: React.ReactNode;
-  dokumenter: Dokument[];
+  dokumenter: { dokumentInfoId: string; tittel?: string | null }[];
 }
 
 export function DokumentTitlerContextProvider({ children, dokumenter }: Props) {

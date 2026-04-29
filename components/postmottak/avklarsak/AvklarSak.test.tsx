@@ -4,6 +4,7 @@ import { AvklarSak } from 'components/postmottak/avklarsak/AvklarSak';
 import { FinnSakGrunnlag } from 'lib/types/postmottakTypes';
 import { PostmottakFlytResponse, setPostmottakMockFlytResponse } from 'vitestSetup';
 import { render } from 'lib/test/CustomRender';
+import { DokumentTitlerContextProvider } from 'context/postmottak/DokumentTitlerContext';
 
 describe('Avklar sak', () => {
   const grunnlag: FinnSakGrunnlag = {
@@ -14,7 +15,11 @@ describe('Avklar sak', () => {
   };
 
   it('Skal ha en oversikt', () => {
-    render(<AvklarSak behandlingsVersjon={1} behandlingsreferanse={'123'} grunnlag={grunnlag} readOnly={false} />);
+    render(
+      <DokumentTitlerContextProvider dokumenter={[]}>
+        <AvklarSak behandlingsVersjon={1} behandlingsreferanse={'123'} grunnlag={grunnlag} readOnly={false} />
+      </DokumentTitlerContextProvider>
+    );
     const heading = screen.getByText('Avklar sak og journalpostdetaljer');
     expect(heading).toBeVisible();
   });
@@ -22,7 +27,11 @@ describe('Avklar sak', () => {
   it('Har et valg for å knytte dokumentet til sak', () => {
     setPostmottakMockFlytResponse(PostmottakFlytResponse);
 
-    render(<AvklarSak behandlingsVersjon={1} behandlingsreferanse={'123'} grunnlag={grunnlag} readOnly={false} />);
+    render(
+      <DokumentTitlerContextProvider dokumenter={[]}>
+        <AvklarSak behandlingsVersjon={1} behandlingsreferanse={'123'} grunnlag={grunnlag} readOnly={false} />
+      </DokumentTitlerContextProvider>
+    );
     expect(screen.getByRole('radiogroup', { name: 'Hvor skal dokumentet journalføres?' })).toBeVisible();
   });
 });

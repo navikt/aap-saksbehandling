@@ -30,6 +30,12 @@ export const RedigerbarTabLabel = ({ tittel, isEditing, editError, readOnly, onS
     }
   }, [isEditing]);
 
+  useEffect(() => {
+    if (!isEditing && spanRef.current) {
+      spanRef.current.textContent = tittel;
+    }
+  }, [isEditing, tittel]);
+
   return (
     <HStack align="center" gap="space-4" className={styles.tabLabel}>
       <span

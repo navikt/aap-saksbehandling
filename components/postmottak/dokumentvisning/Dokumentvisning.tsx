@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, ErrorMessage, HStack, Tabs, Tooltip } from '@navikt/ds-react';
 import { Dokument } from 'lib/types/postmottakTypes';
 import { ExpandIcon, ShrinkIcon } from '@navikt/aksel-icons';
@@ -25,7 +25,6 @@ export const Dokumentvisning = ({ journalpostId, dokumenter, setIsExpandedAction
   const [editingDokumentInfoId, setEditingDokumentInfoId] = useState<string | null>(null);
   const [editValue, setEditValue] = useState('');
   const [editError, setEditError] = useState<string | null>(null);
-  const containerRef = useRef<HTMLDivElement | null>(null);
 
   const { titler, setTittel, readOnly } = useDokumentTitler();
 
@@ -58,25 +57,27 @@ export const Dokumentvisning = ({ journalpostId, dokumenter, setIsExpandedAction
     setEditingDokumentInfoId(null);
   };
 
+  const lagreVedKlikkUtenfor = (dokumentInfoId: string, verdi: string) => {
+    if (verdi.trim()) setTittel(dokumentInfoId, verdi);
+    setEditError(null);
+    setEditingDokumentInfoId(null);
+  };
+
   const avbrytEditing = () => {
     setEditError(null);
     setEditingDokumentInfoId(null);
   };
 
-  useEffect(() => {
-    if (!editingDokumentInfoId) return;
-    const handleMouseDown = (e: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-        avbrytEditing();
-      }
-    };
-    document.addEventListener('mousedown', handleMouseDown);
-    return () => document.removeEventListener('mousedown', handleMouseDown);
-  }, [editingDokumentInfoId]);
-
   return (
     <div className={styles.dokumentvisning}>
-      <div ref={containerRef}>
+      <div
+        tabIndex={-1}
+        onBlur={(e) => {
+          if (editingDokumentInfoId && !e.currentTarget.contains(e.relatedTarget)) {
+            lagreVedKlikkUtenfor(editingDokumentInfoId, editValue);
+          }
+        }}
+      >
         <HStack gap={'space-8'} align={'center'}>
           <div className={styles.ekspanderknapp}>
             <Button
