@@ -1,5 +1,4 @@
-arbeidOgInntektApp: arbeid-og-inntekt-q2
-fss-cluster: dev-fss
+fssCluster: dev-fss
 
 ingresses:
   - "https://kelvin.ansatt.dev.nav.no"
