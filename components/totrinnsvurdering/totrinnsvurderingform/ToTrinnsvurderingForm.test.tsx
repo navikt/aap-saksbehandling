@@ -12,6 +12,7 @@ fetchMock.enableMocks();
 const user = userEvent.setup();
 
 const grunnlagUtenVurdering: FatteVedtakGrunnlag = {
+  harGjortVilkårsvurderingerPåBehandling: false,
   harTilgangTilÅSaksbehandle: true,
   vurderinger: [
     {
@@ -19,7 +20,6 @@ const grunnlagUtenVurdering: FatteVedtakGrunnlag = {
     },
   ],
   historikk: [],
-  harGjortVilkårsvurderingerPåBehandling: false
 };
 
 describe('totrinnsvurderingform', () => {
@@ -234,6 +234,7 @@ describe('totrinnsvurderingform', () => {
 
 describe('Totrinnsvurdering av vedtaksbrev', () => {
   const grunnlaget: FatteVedtakGrunnlag = {
+    harGjortVilkårsvurderingerPåBehandling: false,
     harTilgangTilÅSaksbehandle: true,
     vurderinger: [
       {
@@ -241,7 +242,6 @@ describe('Totrinnsvurdering av vedtaksbrev', () => {
       },
     ],
     historikk: [],
-    harGjortVilkårsvurderingerPåBehandling: false
   };
   it('har en egen beskrivelse for kvalitetssikring av vedtaksbrev', () => {
     render(<TotrinnsvurderingForm grunnlag={grunnlaget} erKvalitetssikring={true} readOnly={false} />);
@@ -286,6 +286,7 @@ describe('mellomlagring', () => {
   };
 
   const grunnlagMedVurdering: FatteVedtakGrunnlag = {
+    harGjortVilkårsvurderingerPåBehandling: false,
     harTilgangTilÅSaksbehandle: true,
     historikk: [],
     vurderinger: [
@@ -295,7 +296,6 @@ describe('mellomlagring', () => {
         godkjent: false,
       },
     ],
-    harGjortVilkårsvurderingerPåBehandling: false
   };
 
   it('Skal vise en tekst om hvem som har gjort vurderingen dersom det finnes en mellomlagring', () => {
