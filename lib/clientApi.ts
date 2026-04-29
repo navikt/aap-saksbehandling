@@ -256,3 +256,7 @@ export function clientHentAktivitetspliktMedTrekk(saksnummer: string) {
 export function clientHentAlleMeldekort(saksnummer: string) {
   return clientFetch<MeldePerioderMedMEldekortResponse>(`${BASE_URL}/api/meldekort/${saksnummer}`, 'GET');
 }
+
+export function clientHentAInntektRedirectUrl(saksnummer: string) {
+  return clientFetch<{ redirectUrl: string }>(`${BASE_URL}/api/ainntekt`, 'POST', { saksnummer });
+}
