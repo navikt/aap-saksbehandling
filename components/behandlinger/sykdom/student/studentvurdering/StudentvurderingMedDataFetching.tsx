@@ -27,9 +27,7 @@ export const StudentvurderingMedDataFetching = async ({ behandlingsreferanse, st
   const diagnoseGrunnlag = finnDiagnoseGrunnlagForStudent(grunnlag.data);
   const diagnoserDefaultOptions = await getDefaultOptionsForDiagnosesystem(diagnoseGrunnlag);
 
-  if (
-    !skalViseSteg(stegData, grunnlag.data.studentvurdering != null || grunnlag.data.sisteVedtatteVurderinger != null)
-  ) {
+  if (!skalViseSteg(stegData, grunnlag.data.sisteVedtatteVurderinger != null)) {
     return null;
   }
 
