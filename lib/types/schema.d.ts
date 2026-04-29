@@ -11493,6 +11493,10 @@ export interface components {
       erNedsettelseIArbeidsevneAvEnVissVarighet?: boolean | null;
       erNedsettelseIArbeidsevneMerEnnHalvparten?: boolean | null;
       erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense?: boolean | null;
+      /** @enum {string|null} */
+      erNedsettelseMerEnnYrkesskadegrense?: 'JA' | 'JA_FORBIGÅENDE_PROBLEMER' | 'NEI' | null;
+      /** @enum {string|null} */
+      erNedsettelseMinstHalvparten?: 'JA' | 'JA_FORBIGÅENDE_PROBLEMER' | 'NEI' | null;
       erSkadeSykdomEllerLyteVesentligdel?: boolean | null;
       /**
        * Format: date
@@ -13625,13 +13629,9 @@ export interface components {
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
     };
     'no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.VisuellTidslinjeArbeidInntektINorge': {
-      /** Format: double */
-      beloep: number;
       inntekter: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.VisuellTidslinjeInntektDetalj'][];
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
       periodeMangler: boolean;
-      virksomhetId?: string | null;
-      virksomhetNavn?: string | null;
     };
     'no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.VisuellTidslinjeInntektDetalj': {
       /** Format: double */
@@ -16940,6 +16940,7 @@ export interface components {
         | 'BREV_SENDT'
         | 'FØRSTEGANGSBEHANDLING_OPPRETTET'
         | 'KLAGE_OPPRETTET'
+        | 'KVALITETSSIKRET'
         | 'MOTTATT_DIALOGMELDING'
         | 'RETUR_FRA_BESLUTTER'
         | 'RETUR_FRA_KVALITETSSIKRER'

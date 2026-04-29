@@ -1,4 +1,4 @@
-import { JaEllerNei } from 'lib/utils/form';
+import { JaEllerNei, JaNeiEllerForbigåendeTekst } from 'lib/utils/form';
 import { UseFormReturn } from 'react-hook-form';
 import type { SykdomsvurderingerForm } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import { Periode } from 'lib/types/types';
@@ -10,6 +10,10 @@ import {
   erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense,
   yrkesskadeBegrunnelse,
 } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingFormInput';
+import { Radio } from '@navikt/ds-react';
+import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
+import React from 'react';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   index: number;
@@ -29,52 +33,56 @@ export const SykdomsvurderingNedsattArbeidsevneDetaljer = ({
   index,
   readonly,
 }: Props) => {
+  const sykdomUtenVissVarighetToggle = useFeatureFlag('SykdomUtenVissVarighetFrontend');
   const valgtDato = parseDatoFraDatePicker(form.watch(`vurderinger.${index}.fraDato`));
   const vurderingDatoSammeSomRettighetsperiodeStart = vurderingFraDatoErSammeSomRettighetsperiodeStart(
     valgtDato,
     rettighetsperiodeStartdato
   );
 
-  const erTilstrekkeligNedsatt =
-    form.watch(`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnHalvparten`) === JaEllerNei.Ja ||
-    form.watch(`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnFørtiProsent`) === JaEllerNei.Ja ||
-    form.watch(`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense`) === JaEllerNei.Ja;
+  const erTilstrekkeligNedsatt = sykdomUtenVissVarighetToggle
+    ? form.watch(`vurderinger.${index}.erNedsettelseMinstHalvparten`) === 'JA' ||
+      form.watch(`vurderinger.${index}.erNedsettelseMinstHalvparten`) === 'JA_FORBIGÅENDE_PROBLEMER' ||
+      form.watch(`vurderinger.${index}.erNedsettelseMerEnnYrkesskadegrense`) === 'JA' ||
+      form.watch(`vurderinger.${index}.erNedsettelseMerEnnYrkesskadegrense`) === 'JA_FORBIGÅENDE_PROBLEMER'
+    : form.watch(`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnHalvparten`) === JaEllerNei.Ja ||
+      form.watch(`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense`) === JaEllerNei.Ja;
 
   return (
     <>
-      {!erÅrsakssammenhengYrkesskade &&
-        (vurderingDatoSammeSomRettighetsperiodeStart ? (
-          <RadioGroupJaNei
-            name={`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnHalvparten`}
-            description={
-              'Det er tilstrekkelig at arbeidsevnen er redusert med 40 prosent (§ 11-23) hvis brukeren mottar AAP eller skal tre inn i en tidligere stanset sak (§ 11-31).'
-            }
-            control={form.control}
-            label={'Er arbeidsevnen nedsatt med minst halvparten?'}
-            horisontal={true}
-            rules={{ required: 'Du må svare på om arbeidsevnen er nedsatt med minst halvparten' }}
-            readOnly={readonly}
-          />
-        ) : (
-          /*
-           *  Nedsatt med 40% skal vises dersom forrige vurdering var oppfylt eller forrige behandling ble innvilget,
-           *  så denne logikken blir ikke helt riktig. På sikt burde feltene slås sammen og la det være opp til
-           *  saksbehandler å vurdere hva som er riktig prosent nedsettelse.
-           */
-          <RadioGroupJaNei
-            name={`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnFørtiProsent`}
-            control={form.control}
-            label={'Er arbeidsevnen nedsatt med minst halvparten?'}
-            description={
-              'Det er tilstrekkelig at arbeidsevnen er redusert med 40 prosent (§ 11-23) hvis brukeren mottar AAP eller skal tre inn i en tidligere stanset sak (§ 11-31).'
-            }
-            horisontal={true}
-            rules={{
-              required: 'Du må svare på om den nedsatte arbeidsevnen er nedsatt med minst 40 prosent.',
-            }}
-            readOnly={readonly}
-          />
-        ))}
+      {!erÅrsakssammenhengYrkesskade && (
+        <>
+          {sykdomUtenVissVarighetToggle ? (
+            <RadioGroupWrapper
+              name={`vurderinger.${index}.erNedsettelseMinstHalvparten`}
+              description={
+                'Det er tilstrekkelig at arbeidsevnen er redusert med 40 prosent (§ 11-23) hvis brukeren mottar AAP eller skal tre inn i en tidligere stanset sak (§ 11-31).'
+              }
+              control={form.control}
+              label={'Er arbeidsevnen nedsatt med minst halvparten?'}
+              rules={{ required: 'Du må svare på om arbeidsevnen er nedsatt med minst halvparten' }}
+              readOnly={readonly}
+              size={'small'}
+            >
+              <Radio value={'JA'}>{JaNeiEllerForbigåendeTekst.Ja}</Radio>
+              <Radio value={'JA_FORBIGÅENDE_PROBLEMER'}>{JaNeiEllerForbigåendeTekst.Forbigående}</Radio>
+              <Radio value={'NEI'}>{JaNeiEllerForbigåendeTekst.Nei}</Radio>
+            </RadioGroupWrapper>
+          ) : (
+            <RadioGroupJaNei
+              name={`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnHalvparten`}
+              description={
+                'Det er tilstrekkelig at arbeidsevnen er redusert med 40 prosent (§ 11-23) hvis brukeren mottar AAP eller skal tre inn i en tidligere stanset sak (§ 11-31).'
+              }
+              control={form.control}
+              label={'Er arbeidsevnen nedsatt med minst halvparten?'}
+              horisontal={true}
+              rules={{ required: 'Du må svare på om arbeidsevnen er nedsatt med minst halvparten' }}
+              readOnly={readonly}
+            />
+          )}
+        </>
+      )}
 
       <SykdomsvurderingYrkesskade
         form={form}
@@ -98,19 +106,20 @@ export const SykdomsvurderingNedsattArbeidsevneDetaljer = ({
             readOnly={readonly}
           />
 
-          {form.watch(`vurderinger.${index}.erSkadeSykdomEllerLyteVesentligdel`) === JaEllerNei.Ja && (
-            <RadioGroupJaNei
-              name={`vurderinger.${index}.erNedsettelseIArbeidsevneAvEnVissVarighet`}
-              control={form.control}
-              label={'Er den nedsatte arbeidsevnen av en viss varighet?'}
-              description={'Om du svarer nei, vil brukeren vurderes for AAP som sykepengeerstatning etter § 11-13.'}
-              horisontal={true}
-              rules={{
-                required: 'Du må svare på om den nedsatte arbeidsevnen er av en viss varighet',
-              }}
-              readOnly={readonly}
-            />
-          )}
+          {form.watch(`vurderinger.${index}.erSkadeSykdomEllerLyteVesentligdel`) === JaEllerNei.Ja &&
+            !sykdomUtenVissVarighetToggle && (
+              <RadioGroupJaNei
+                name={`vurderinger.${index}.erNedsettelseIArbeidsevneAvEnVissVarighet`}
+                control={form.control}
+                label={'Er den nedsatte arbeidsevnen av en viss varighet?'}
+                description={'Om du svarer nei, vil brukeren vurderes for AAP som sykepengeerstatning etter § 11-13.'}
+                horisontal={true}
+                rules={{
+                  required: 'Du må svare på om den nedsatte arbeidsevnen er av en viss varighet',
+                }}
+                readOnly={readonly}
+              />
+            )}
         </>
       )}
     </>
@@ -132,6 +141,7 @@ const SykdomsvurderingYrkesskade = ({
   skalVurdereYrkesskade: boolean;
   erÅrsakssammenhengYrkesskade: boolean;
 }) => {
+  const sykdomUtenVissVarighetToggle = useFeatureFlag('SykdomUtenVissVarighetFrontend');
   /*
    * Logikken for yrkesskade er litt kronglete.
    * Parameter [vurderingDatoSammeSomRettighetsperiodeStart] brukes midlertidig siden vi ikke har en enkel/god måte å
@@ -144,7 +154,7 @@ const SykdomsvurderingYrkesskade = ({
   if (vurderingDatoSammeSomRettighetsperiodeStart) {
     const kanBegrunneYrkesskade =
       form.watch(`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnHalvparten`) === JaEllerNei.Nei ||
-      form.watch(`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnFørtiProsent`) === JaEllerNei.Nei;
+      form.watch(`vurderinger.${index}.erNedsettelseMinstHalvparten`) === 'NEI';
 
     return (
       skalVurdereYrkesskade &&
@@ -165,32 +175,69 @@ const SykdomsvurderingYrkesskade = ({
             shouldUnregister={false}
           />
 
-          <RadioGroupJaNei
-            name={`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense`}
-            control={form.control}
-            label={'Er arbeidsevnen nedsatt med minst 30 prosent?'}
-            horisontal={true}
-            rules={{
-              required: 'Du må svare på om den nedsatte arbeidsevnen er nedsatt med minst 30 prosent.',
-            }}
-            readOnly={readonly}
-          />
+          {sykdomUtenVissVarighetToggle ? (
+            <RadioGroupWrapper
+              name={`vurderinger.${index}.erNedsettelseMerEnnYrkesskadegrense`}
+              control={form.control}
+              label={erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense}
+              rules={{
+                required: 'Du må svare på om den nedsatte arbeidsevnen er nedsatt med minst 30 prosent.',
+              }}
+              readOnly={readonly}
+              size={'small'}
+              horisontal={true}
+            >
+              <Radio value={'JA'}>{JaNeiEllerForbigåendeTekst.Ja}</Radio>
+              <Radio value={'JA_FORBIGÅENDE_PROBLEMER'}>{JaNeiEllerForbigåendeTekst.Forbigående}</Radio>
+              <Radio value={'NEI'}>{JaNeiEllerForbigåendeTekst.Nei}</Radio>
+            </RadioGroupWrapper>
+          ) : (
+            <RadioGroupJaNei
+              name={`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense`}
+              control={form.control}
+              label={erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense}
+              horisontal={true}
+              rules={{
+                required: 'Du må svare på om den nedsatte arbeidsevnen er nedsatt med minst 30 prosent.',
+              }}
+              readOnly={readonly}
+            />
+          )}
         </>
       )
     );
   } else {
     return (
       erÅrsakssammenhengYrkesskade && (
-        <RadioGroupJaNei
-          name={`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense`}
-          control={form.control}
-          label={erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense}
-          horisontal={true}
-          rules={{
-            required: 'Du må svare på om den nedsatte arbeidsevnen er nedsatt med minst 30 prosent.',
-          }}
-          readOnly={readonly}
-        />
+        <>
+          {sykdomUtenVissVarighetToggle ? (
+            <RadioGroupWrapper
+              name={`vurderinger.${index}.erNedsettelseMerEnnYrkesskadegrense`}
+              control={form.control}
+              label={erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense}
+              rules={{
+                required: 'Du må svare på om den nedsatte arbeidsevnen er nedsatt med minst 30 prosent.',
+              }}
+              readOnly={readonly}
+              size={'small'}
+            >
+              <Radio value={'JA'}>{JaNeiEllerForbigåendeTekst.Ja}</Radio>
+              <Radio value={'JA_FORBIGÅENDE_PROBLEMER'}>{JaNeiEllerForbigåendeTekst.Forbigående}</Radio>
+              <Radio value={'NEI'}>{JaNeiEllerForbigåendeTekst.Nei}</Radio>
+            </RadioGroupWrapper>
+          ) : (
+            <RadioGroupJaNei
+              name={`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense`}
+              control={form.control}
+              label={erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense}
+              horisontal={true}
+              rules={{
+                required: 'Du må svare på om den nedsatte arbeidsevnen er nedsatt med minst 30 prosent.',
+              }}
+              readOnly={readonly}
+            />
+          )}
+        </>
       )
     );
   }

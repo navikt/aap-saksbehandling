@@ -1,4 +1,5 @@
 import { ValuePair } from 'components/form/FormField';
+import { SykdomNedsattMerEnnHalvpartenValg, SykdomNedsattMerEnnYrkesskadeValg } from 'lib/types/types';
 
 export enum Behovstype {
   MANUELT_SATT_PÅ_VENT_KODE = '9001',
@@ -233,4 +234,26 @@ export function getJaNeiEllerIkkeBesvart(value?: boolean | null) {
     return 'Ikke besvart';
   }
   return value ? JaEllerNei.Ja : JaEllerNei.Nei;
+}
+
+export enum JaNeiEllerForbigåendeTekst {
+  Ja = 'Ja',
+  Nei = 'Nei',
+  Forbigående = 'Ja, men brukeren har kun forbigående problemer med å komme i arbeid og skal vurderes for AAP som sykepengeerstatning etter § 11-13',
+}
+
+export function getJaNeiJaForeløpigEllerIkkeBesvart(
+  value?: SykdomNedsattMerEnnHalvpartenValg | null | SykdomNedsattMerEnnYrkesskadeValg
+) {
+  if (value === undefined || value === null) {
+    return 'Ikke besvart';
+  }
+  switch (value) {
+    case 'JA_FORBIGÅENDE_PROBLEMER':
+      return JaNeiEllerForbigåendeTekst.Forbigående;
+    case 'JA':
+      return JaNeiEllerForbigåendeTekst.Ja;
+    case 'NEI':
+      return JaNeiEllerForbigåendeTekst.Nei;
+  }
 }

@@ -431,6 +431,12 @@ export type SykdomsvurderingResponse =
 export type VurdertAvAnsatt =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
 
+export type SykdomNedsattMerEnnHalvpartenValg =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomsvurderingResponse']['erNedsettelseMinstHalvparten'];
+
+export type SykdomNedsattMerEnnYrkesskadeValg =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomsvurderingResponse']['erNedsettelseMerEnnYrkesskadegrense'];
+
 export type BistandsbehovVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.bistand.BistandVurderingResponse'];
 
