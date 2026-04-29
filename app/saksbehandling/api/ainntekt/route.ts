@@ -22,6 +22,7 @@ export async function POST(req: NextRequest) {
   try {
     const response = await fetch(url, {
       method: 'GET',
+      cache: 'no-store',
       headers: {
         Accept: '*/*',
         'Nav-Personident': personident,
