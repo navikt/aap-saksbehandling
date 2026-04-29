@@ -76,5 +76,6 @@ spec:
         - application: {{arbeidOgInntektApp}}
           namespace: team-inntekt
           cluster: {{fssCluster}}
+      external:
         - host: cdn.nav.no
         - host: aap-unleash-api.nav.cloud.nais.io
