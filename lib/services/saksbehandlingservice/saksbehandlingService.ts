@@ -53,6 +53,8 @@ import {
   MellomlagretVurderingRequest,
   MellomlagretVurderingResponse,
   NavEnhetRequest,
+  OppdaterMeldekortRequest,
+  OppdaterMeldekortResponse,
   OppfølgningOppgaveOpprinnelseResponse,
   OppholdskravGrunnlagResponse,
   OpprettAktivitetspliktBehandlingDto,
@@ -703,6 +705,15 @@ export const hentMeldekort = async (saksnummer: string) => {
   return apiFetch<AktivitetspliktMedTrekkRespons>(
     `${saksbehandlingApiBaseUrl}/api/meldekort/${saksnummer}`,
     saksbehandlingApiScope
+  );
+};
+
+export const oppdaterMeldekort = async (saksnummer: string, oppdaterMeldekortRequest: OppdaterMeldekortRequest) => {
+  return apiFetch<OppdaterMeldekortResponse>(
+    `${saksbehandlingApiBaseUrl}/api/meldekort/${saksnummer}`,
+    saksbehandlingApiScope,
+    'POST',
+    oppdaterMeldekortRequest
   );
 };
 
