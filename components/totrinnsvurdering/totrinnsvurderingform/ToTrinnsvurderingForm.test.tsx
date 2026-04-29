@@ -19,7 +19,7 @@ const grunnlagUtenVurdering: FatteVedtakGrunnlag = {
       definisjon: Behovstype.AVKLAR_SYKDOM_KODE,
     },
   ],
-  historikk: []
+  historikk: [],
 };
 
 describe('totrinnsvurderingform', () => {
