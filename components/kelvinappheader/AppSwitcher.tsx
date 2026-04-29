@@ -21,13 +21,9 @@ export const AppSwitcher = () => {
       e.preventDefault();
       const response = await clientHentAInntektRedirectUrl(saksnummer);
 
-      if (isError(response)) {
-        window.open(config?.aInntektUrl, '_blank');
-      } else {
+      if (!isError(response)) {
         window.open(response.data.redirectUrl, '_blank');
       }
-    } else {
-      window.open(config?.aInntektUrl, '_blank');
     }
   };
 
