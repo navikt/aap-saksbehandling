@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, FormEventHandler } from 'react';
+import { FormEvent, FormEventHandler, useEffect } from 'react';
 import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/PostmottakLøsBehovOgGåTilNesteStegHook';
 import { AvsenderMottakerIdType, FinnSakGrunnlag, Saksinfo } from 'lib/types/postmottakTypes';
 import { Alert, Detail, Label, Radio, VStack } from '@navikt/ds-react';
@@ -13,6 +13,7 @@ import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupW
 import { Behovstype } from 'lib/postmottakForm';
 import { PostmottakVilkårskort } from 'components/postmottak/vilkårskort/PostmottakVilkårskort';
 import { usePostmottakVilkårskortVisning } from 'hooks/postmottak/PostmottakVisningHook';
+import { useDokumentTitler } from 'context/postmottak/DokumentTitlerContext';
 
 interface Props {
   behandlingsVersjon: number;
@@ -91,6 +92,29 @@ export const AvklarSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, 
 
   const { fields: dokumenterFields } = useFieldArray({ name: 'dokumenter', control: form.control });
 
+  const { titler, setTittel, setReadOnly: setContextReadOnly } = useDokumentTitler();
+
+  useEffect(() => {
+    const subscription = form.watch((data) => {
+      data.dokumenter?.forEach((dok) => {
+        if (dok?.dokumentInfoId && dok.tittel !== undefined) {
+          setTittel(dok.dokumentInfoId, dok.tittel);
+        }
+      });
+    });
+    return () => subscription.unsubscribe();
+  }, [form, setTittel]);
+
+  useEffect(() => {
+    dokumenterFields.forEach((field, i) => {
+      const contextTittel = titler[field.dokumentInfoId];
+      const formTittel = form.getValues(`dokumenter.${i}.tittel`);
+      if (contextTittel !== undefined && contextTittel !== formTittel) {
+        form.setValue(`dokumenter.${i}.tittel`, contextTittel, { shouldValidate: false });
+      }
+    });
+  }, [titler, dokumenterFields, form]);
+
   const {
     løsBehovOgGåTilNesteSteg,
     status,
@@ -123,6 +147,10 @@ export const AvklarSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, 
 
   const { visningActions, formReadOnly, visningModus } = usePostmottakVilkårskortVisning(readOnly, 'AVKLAR_SAK');
 
+  useEffect(() => {
+    setContextReadOnly(formReadOnly);
+  }, [formReadOnly, setContextReadOnly]);
+
   const valgtIdType = form.watch('avsenderMottaker.idType');
 
   return (
@@ -138,7 +166,7 @@ export const AvklarSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, 
       visningActions={visningActions}
       formReset={() => {}}
     >
-      <VStack gap={"space-24"}>
+      <VStack gap={'space-24'}>
         <ServerSentEventStatusAlert status={status} />
 
         <RadioGroupWrapper

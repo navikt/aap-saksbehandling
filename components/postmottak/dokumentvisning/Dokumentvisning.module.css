@@ -12,3 +12,15 @@
   padding: var(--ax-space-8);
   height: 100%;
 }
+
+.editIcon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity 0.1s;
+}
+
+.tabLabel:hover .editIcon {
+  opacity: 1;
+}
