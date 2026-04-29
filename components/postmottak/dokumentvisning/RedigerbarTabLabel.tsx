@@ -51,7 +51,7 @@ export const RedigerbarTabLabel = ({ tittel, isEditing, editError, readOnly, onS
           textOverflow: isEditing ? undefined : 'ellipsis',
           whiteSpace: 'nowrap',
           outline: 'none',
-          borderBottom: isEditing ? `2px solid ${editError ? 'var(--a-border-danger)' : 'currentColor'}` : undefined,
+          borderBottom: isEditing ? `2px solid ${editError ? 'var(--ax-border-danger)' : 'currentColor'}` : undefined,
           minWidth: isEditing ? '80px' : undefined,
         }}
         onInput={(e) => onInput(e.currentTarget.textContent ?? '')}
