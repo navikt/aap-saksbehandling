@@ -1,5 +1,5 @@
 .saksinfobanner {
-  background-color: #f8f9fa;
+  background-color: var(--ax-bg-neutral-soft);
   border-bottom: 1px solid var(--ax-border-neutral-subtle);
   display: flex;
   flex-direction: row;

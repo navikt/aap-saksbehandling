@@ -100,6 +100,8 @@ export const ForeslåVedtak = ({ behandlingVersjon, readOnly, grunnlag }: Props)
 
 export function mapÅrsakTilTekst(årsak: StansOpphørÅrsak): string {
   switch (årsak) {
+    case 'IKKE_SYKDOM_SKADE_LYTE':
+      return 'Ikke sykdom, skade eller lyte';
     case 'BRUKER_UNDER_18':
       return 'Brukeren er under 18 år';
     case 'BRUKER_OVER_67':

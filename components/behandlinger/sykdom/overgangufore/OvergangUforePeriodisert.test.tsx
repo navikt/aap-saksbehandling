@@ -301,7 +301,8 @@ describe('Førstegangsbehandling', () => {
     expect(infoTekst).toBeVisible();
   });
 
-  const finnGruppeForSoktOmUforetrygd = () => screen.getByRole('radiogroup', { name: 'Har brukeren søkt om uføretrygd?' });
+  const finnGruppeForSoktOmUforetrygd = () =>
+    screen.getByRole('radiogroup', { name: 'Har brukeren søkt om uføretrygd?' });
 
   const finnGruppeForVedtakOmUforetrygd = () =>
     screen.getByRole('radiogroup', { name: 'Har brukeren fått vedtak på søknaden om uføretrygd?' });

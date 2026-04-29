@@ -3,6 +3,7 @@
   flex-direction: column;
   border: 1px solid var(--ax-border-neutral-subtle);
   border-radius: var(--ax-radius-8);
+  background-color: var(--ax-bg-default);
 }
 
 .ingenreserverteoppgaver {

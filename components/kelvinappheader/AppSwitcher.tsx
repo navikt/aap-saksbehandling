@@ -3,16 +3,29 @@
 import { ExternalLinkIcon, MenuGridIcon } from '@navikt/aksel-icons';
 import { Dropdown, InternalHeader } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
-import { clientConfig } from 'lib/clientApi';
+import { clientConfig, clientHentAInntektRedirectUrl } from 'lib/clientApi';
 import { ClientConfig } from 'lib/types/clientTypes';
-import { isSuccess } from 'lib/utils/api';
+import { isError, isSuccess } from 'lib/utils/api';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 
 export const AppSwitcher = () => {
   const [config, setConfig] = useState<ClientConfig>();
+  const { saksnummer } = useParamsMedType();
 
   useEffect(() => {
     clientConfig().then((config) => isSuccess(config) && setConfig(config.data));
   }, []);
+
+  const handleAInntektClick = async (e: React.MouseEvent) => {
+    if (saksnummer) {
+      e.preventDefault();
+      const response = await clientHentAInntektRedirectUrl(saksnummer);
+
+      if (!isError(response)) {
+        window.open(response.data.redirectUrl, '_blank');
+      }
+    }
+  };
 
   return (
     <Dropdown>
@@ -35,6 +48,16 @@ export const AppSwitcher = () => {
             disabled={!config?.modiaPersonoversiktUrl}
           >
             Modia personoversikt <ExternalLinkIcon aria-hidden />
+          </Dropdown.Menu.GroupedList.Item>
+
+          <Dropdown.Menu.GroupedList.Item
+            as="a"
+            target="_blank"
+            href={config?.aInntektUrl}
+            disabled={!config?.aInntektUrl}
+            onClick={handleAInntektClick}
+          >
+            A-inntekt <ExternalLinkIcon aria-hidden />
           </Dropdown.Menu.GroupedList.Item>
           <Dropdown.Menu.GroupedList.Item
             as="a"

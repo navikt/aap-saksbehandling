@@ -9,7 +9,7 @@ import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper
 
 type Props = {
   periode: Periode;
-  control: Control<MeldepliktOverstyringFormFields, any, any>;
+  control: Control<MeldepliktOverstyringFormFields, any, MeldepliktOverstyringFormFields>;
   index: number;
   field: FieldArrayWithId<MeldepliktOverstyringFormFields>;
   readOnly: boolean;

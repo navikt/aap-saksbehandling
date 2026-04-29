@@ -73,6 +73,9 @@ spec:
         - application: tilgang
         - application: endringslogg
           namespace: k9saksbehandling 
+        - application: {{arbeidOgInntektApp}}
+          namespace: team-inntekt
+          cluster: {{fssCluster}}
       external:
         - host: cdn.nav.no
         - host: aap-unleash-api.nav.cloud.nais.io
