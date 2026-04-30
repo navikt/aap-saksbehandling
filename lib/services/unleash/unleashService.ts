@@ -2,9 +2,10 @@ import 'server-only';
 import { Unleash } from 'unleash-client';
 import { isLocal } from 'lib/utils/environment';
 import { FlagNames, FLAGS, Flags, mockedFlags } from 'lib/services/unleash/unleashToggles';
+import type { Context } from 'unleash-client/lib/context';
 
 export interface IUnleash {
-  isEnabled(flagName: FlagNames): boolean;
+  isEnabled(flagName: FlagNames, context?: Context): boolean;
 }
 
 function createRealUnleash(): IUnleash {
@@ -28,6 +29,6 @@ function createMockUnleash(): IUnleash {
 export const unleashService =
   process.env.UNLEASH_SERVER_API_URL == null && isLocal() ? createMockUnleash() : createRealUnleash();
 
-export function getAllFlags(): Flags {
-  return Object.fromEntries(FLAGS.map((name) => [name, unleashService.isEnabled(name)])) as Flags;
+export function getAllFlags(userId: string | undefined): Flags {
+  return Object.fromEntries(FLAGS.map((name) => [name, unleashService.isEnabled(name, { userId })])) as Flags;
 }

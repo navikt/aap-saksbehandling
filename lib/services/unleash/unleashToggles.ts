@@ -9,6 +9,8 @@ export const FLAGS = [
   'registrereEllerEndreMeldekort',
   'ForeslaaVedtakVedtakslengde',
   'SykdomUtenVissVarighetFrontend',
+  'VisArenasakerOversikt',
+  'ArenasakerLenkeTilVisninsklient',
 ] as const;
 
 export type FlagNames = (typeof FLAGS)[number];
@@ -25,4 +27,6 @@ export const mockedFlags: Flags = {
   registrereEllerEndreMeldekort: true,
   SykdomUtenVissVarighetFrontend: true,
   ForeslaaVedtakVedtakslengde: true,
+  VisArenasakerOversikt: true,
+  ArenasakerLenkeTilVisninsklient: true,
 };

@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Page, Tabs } from '@navikt/ds-react';
+import { Box, Page, Tabs, VStack } from '@navikt/ds-react';
 import { SakMedBehandlinger } from 'components/saksoversikt/SakMedBehandlinger';
 import { RettighetsinfoDto, SaksInfo } from 'lib/types/types';
 import { FileTextIcon, PersonIcon, TasklistIcon } from '@navikt/aksel-icons';
@@ -10,6 +10,8 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { AktivitetspliktTrekk } from 'components/saksoversikt/aktivitetsplikttrekk/AktivitetspliktTrekk';
 import { MeldekortOversikt } from 'components/saksoversikt/meldekortoversikt/MeldekortOversikt';
 import { useFeatureFlag } from 'context/UnleashContext';
+import { SakerResponse } from 'lib/services/apiinternservice/apiInternService';
+import { ArenaSakerListe } from 'components/saksoversikt/ArenaSakerListe';
 
 enum Tab {
   OVERSIKT = 'OVERSIKT',
@@ -22,10 +24,12 @@ export const SakOversiktContainer = ({
   sak,
   innloggetBrukerIdent,
   rettighetsinfo,
+  arenaSaker,
 }: {
   sak: SaksInfo;
   innloggetBrukerIdent: string | undefined;
   rettighetsinfo: RettighetsinfoDto | null;
+  arenaSaker: SakerResponse | null;
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -38,6 +42,7 @@ export const SakOversiktContainer = ({
   };
 
   const registrereEllerEndreMeldekortFlagg = useFeatureFlag('registrereEllerEndreMeldekort');
+  const visArenasakerOversikt = useFeatureFlag('VisArenasakerOversikt');
 
   return (
     <Page>
@@ -54,11 +59,14 @@ export const SakOversiktContainer = ({
 
           <Box marginBlock="space-32">
             <Tabs.Panel value={Tab.OVERSIKT}>
-              <SakMedBehandlinger
-                sak={sak}
-                innloggetBrukerIdent={innloggetBrukerIdent}
-                rettighetsinfo={rettighetsinfo}
-              />
+              <VStack gap="space-32">
+                <SakMedBehandlinger
+                  sak={sak}
+                  innloggetBrukerIdent={innloggetBrukerIdent}
+                  rettighetsinfo={rettighetsinfo}
+                />
+                {visArenasakerOversikt && arenaSaker && <ArenaSakerListe arenaSaker={arenaSaker} />}
+              </VStack>
             </Tabs.Panel>
 
             <Tabs.Panel value={Tab.DOKUMENTER}>

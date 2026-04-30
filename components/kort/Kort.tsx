@@ -1,20 +1,36 @@
 import { Box, Heading, VStack } from '@navikt/ds-react';
 import { ReactNode } from 'react';
+import type {
+  AkselColoredStatelessBackgroundToken,
+  AkselDynamicStatelessBackgroundToken,
+  AkselRootBackgroundToken,
+  AkselSpaceToken,
+} from '@navikt/ds-tokens/types';
 
-interface Props {
-  heading: string;
+type Props = {
+  heading?: string;
   children: ReactNode;
-}
+  padding?: AkselSpaceToken;
+  background?: AkselRootBackgroundToken | AkselColoredStatelessBackgroundToken | AkselDynamicStatelessBackgroundToken;
+};
 
-export const Kort = ({ heading, children }: Props) => {
+export const Kort = ({ heading, children, background, padding = 'space-16' }: Props) => {
   return (
-    <Box aria-label={heading} borderWidth={'1'} borderColor={'neutral-subtle'} borderRadius={'12'} padding={'space-16'}>
-      <Heading spacing size={'small'}>
-        {heading}
-      </Heading>
-      <VStack style={{ borderTop: '1px solid lightgray' }} paddingBlock={'space-16 space-0'}>
-        {children}
-      </VStack>
+    <Box
+      aria-label={heading}
+      borderWidth={'1'}
+      borderColor={'neutral-subtle'}
+      borderRadius={'12'}
+      padding={padding}
+      background={background}
+    >
+      {heading && (
+        <Heading spacing size={'small'} style={{ borderBottom: '1px solid lightgray', paddingBottom: 12 }}>
+          {heading}
+        </Heading>
+      )}
+
+      <VStack paddingBlock={'space-4 space-0'}>{children}</VStack>
     </Box>
   );
 };
