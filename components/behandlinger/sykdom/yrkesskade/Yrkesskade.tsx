@@ -38,6 +38,11 @@ export interface YrkesskadeMedSkadeDatoSak {
   saksnummer?: number | null;
   erTilknyttet?: boolean;
   kilde: string;
+  vedtaksdato?: string | null;
+  skadeart?: string | null;
+  diagnose?: string | null;
+  skadekombinasjoner?: { kroppsdel: string; skadetype: string }[] | null;
+  skadekombinasjonerTekst?: string | null;
 }
 
 type DraftFormFields = Partial<YrkesskadeMedSkadeDatoFormFields>;
@@ -99,7 +104,7 @@ export const Yrkesskade = ({
           required: 'Du må svare på hvor stor andel av den nedsatte arbeidsevnen skyldes yrkesskadene',
           validate: (value) => {
             const valueAsNumber = Number(value);
-            if (isNaN(valueAsNumber)) {
+            if (Number.isNaN(valueAsNumber)) {
               return 'Prosent må være et tall';
             } else if (!erProsent(valueAsNumber)) {
               return 'Prosent kan bare være mellom 0 og 100';
@@ -244,6 +249,11 @@ function hentDefaultYrkesskadesakerFraVurderingerEllerGrunnlag(
         ...skade,
         erTilknyttet: !!alleredeTilknyttetYrkesskade,
         manuellYrkesskadeDato: alleredeTilknyttetYrkesskade?.manuellYrkesskadeDato,
+        vedtaksdato: skade.vedtaksdato,
+        skadeart: skade.skadeart,
+        diagnose: skade.diagnose,
+        skadekombinasjoner: skade.skadekombinasjoner,
+        skadekombinasjonerTekst: skade.skadekombinasjonerTekst,
       };
     }) || []
   );

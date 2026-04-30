@@ -20,6 +20,7 @@ import {
   TiltakspengerKilde,
   TiltakspengerYtelserType,
 } from 'lib/types/types';
+import { OpprettYrkesskade } from 'components/opprettsak/yrkesskade/OpprettYrkesskade';
 
 interface Barn {
   fodselsdato: string;
@@ -58,6 +59,16 @@ interface SamordningTiltakspenger {
   };
 }
 
+interface YrkesskadeOppføring {
+  kilde: 'SØKNAD' | 'REGISTER';
+  harYrkesskade?: JaEllerNei; // kun for kilde=SØKNAD
+  // alle felter under er kun for kilde=REGISTER
+  yrkesskadeRegisterKilde: 'KOMPYS' | 'INFOTRYGD';
+  diagnose?: string;
+  skadeart?: string;
+  skadebeskrivelse?: string;
+}
+
 type Institusjon = 'fengsel' | 'sykehus';
 
 enum AndreUtbetalingerYtelser {
@@ -80,7 +91,7 @@ export const AndreUtbetalingerYtelserAlternativer = Object.entries(AndreUtbetali
 
 export interface OpprettSakFormFields {
   fødselsdato: Date;
-  yrkesskade: JaEllerNei;
+  yrkesskader?: YrkesskadeOppføring[];
   student: JaEllerNei;
   uføre: string;
   uføretidspunkt: Date;
@@ -136,11 +147,9 @@ export const OpprettSakLocal = () => {
         toDate: new Date(),
         label: 'Fødselsdato',
       },
-      yrkesskade: {
-        type: 'radio',
-        label: 'Yrkesskade?',
-        defaultValue: JaEllerNei.Nei,
-        options: JaEllerNeiOptions,
+      yrkesskader: {
+        type: 'fieldArray',
+        defaultValue: [],
       },
       student: {
         type: 'radio',
@@ -253,8 +262,11 @@ export const OpprettSakLocal = () => {
   );
 
   function mapInnhold(data: OpprettSakFormFields, steg?: TestcaseSteg): OpprettTestcase {
+    const søknadYrkesskade = data.yrkesskader?.find((y) => y.kilde === 'SØKNAD');
     return {
       ...data,
+      harYrkesskade: søknadYrkesskade?.harYrkesskade === JaEllerNei.Ja,
+      harYrkesskadeFraSøknad: søknadYrkesskade?.harYrkesskade === JaEllerNei.Ja,
       andreUtbetalinger: {
         afp: data.afp
           ? {
@@ -266,7 +278,23 @@ export const OpprettSakLocal = () => {
       },
       søknadsdato: formaterDatoForBackend(data.søknadsdato),
       fødselsdato: formaterDatoForBackend(data.fødselsdato),
-      yrkesskade: data.yrkesskade === JaEllerNei.Ja,
+      yrkesskader: (data.yrkesskader ?? []).map((y) => {
+        if (y.kilde === 'SØKNAD') {
+          return {
+            kilde: y.kilde,
+            harYrkesskade: y.harYrkesskade === JaEllerNei.Ja,
+            harYrkesskadeFraSøknad: y.harYrkesskade === JaEllerNei.Ja,
+          };
+        } else {
+          return {
+            kilde: y.kilde,
+            saksreferanse: y.yrkesskadeRegisterKilde ?? '',
+            skadeart: y.skadeart ?? '',
+            diagnose: y.diagnose ?? '',
+            skadebeskrivelse: y.skadebeskrivelse ?? '',
+          };
+        }
+      }),
       student: data.student === JaEllerNei.Ja,
       uføre: Number(data.uføre),
       barn:
@@ -338,7 +366,7 @@ export const OpprettSakLocal = () => {
           <VStack gap="space-16">
             <FormField form={form} formField={formFields.søknadsdato} />
             <FormField form={form} formField={formFields.fødselsdato} />
-            <FormField form={form} formField={formFields.yrkesskade} horizontalRadio={true} />
+            <OpprettYrkesskade form={form} />
             <FormField form={form} formField={formFields.erArbeidsevnenNedsatt} horizontalRadio={true} />
             {form.watch('erArbeidsevnenNedsatt') === JaEllerNei.Ja && (
               <FormField

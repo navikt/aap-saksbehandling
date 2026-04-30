@@ -2,7 +2,7 @@
 
 import { FieldArray, UseFormReturn } from 'react-hook-form';
 import { TableStyled } from 'components/tablestyled/TableStyled';
-import { Checkbox, Table, VStack } from '@navikt/ds-react';
+import { Checkbox, Table, VStack, ErrorMessage } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { validerDato } from 'lib/validation/dateValidation';
@@ -10,7 +10,6 @@ import {
   YrkesskadeMedSkadeDatoFormFields,
   YrkesskadeMedSkadeDatoSak,
 } from 'components/behandlinger/sykdom/yrkesskade/Yrkesskade';
-import { ErrorMessage } from '@navikt/ds-react';
 
 interface Props {
   form: UseFormReturn<YrkesskadeMedSkadeDatoFormFields>;
@@ -28,6 +27,11 @@ export const YrkesskadeVurderingTabell = ({ form, yrkesskader, readOnly, update 
       manuellYrkesskadeDato: yrkesskade.manuellYrkesskadeDato,
       saksnummer: yrkesskade.saksnummer,
       erTilknyttet,
+      vedtaksdato: yrkesskade.vedtaksdato,
+      skadeart: yrkesskade.skadeart,
+      diagnose: yrkesskade.diagnose,
+      skadekombinasjoner: yrkesskade.skadekombinasjoner,
+      skadekombinasjonerTekst: yrkesskade.skadekombinasjonerTekst,
     });
   }
 
@@ -36,15 +40,18 @@ export const YrkesskadeVurderingTabell = ({ form, yrkesskader, readOnly, update 
     ?.every((yrkesskade) => !yrkesskade.erTilknyttet);
 
   return (
-    <VStack gap={"space-8"}>
+    <VStack gap={'space-8'}>
       <TableStyled>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell textSize={'small'}>Tilknytt yrkesskade</Table.HeaderCell>
             <Table.HeaderCell textSize={'small'}>Saksnummer</Table.HeaderCell>
             <Table.HeaderCell textSize={'small'}>Kilde</Table.HeaderCell>
-            <Table.HeaderCell textSize={'small'}>Referanse</Table.HeaderCell>
             <Table.HeaderCell textSize={'small'}>Skadedato</Table.HeaderCell>
+            <Table.HeaderCell textSize={'small'}>Vedtaksdato</Table.HeaderCell>
+            <Table.HeaderCell textSize={'small'}>Skadeart</Table.HeaderCell>
+            <Table.HeaderCell textSize={'small'}>Diagnose</Table.HeaderCell>
+            <Table.HeaderCell textSize={'small'}>Skadebeskrivelse</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         {yrkesskader.length > 0 && (
@@ -64,8 +71,11 @@ export const YrkesskadeVurderingTabell = ({ form, yrkesskader, readOnly, update 
                   </Checkbox>
                 </Table.DataCell>
                 <Table.DataCell textSize={'small'}>{yrkesskade.saksnummer}</Table.DataCell>
-                <Table.DataCell textSize={'small'}>{yrkesskade.kilde}</Table.DataCell>
-                <Table.DataCell textSize={'small'}>{yrkesskade.ref}</Table.DataCell>
+                <Table.DataCell textSize={'small'}>
+                  {yrkesskade.kilde
+                    ? `${yrkesskade.kilde.charAt(0).toUpperCase()}${yrkesskade.kilde.slice(1).toLowerCase()}`
+                    : '–'}
+                </Table.DataCell>
                 <Table.DataCell textSize={'small'}>
                   {yrkesskade.skadedato ? (
                     formaterDatoForFrontend(yrkesskade.skadedato)
@@ -87,6 +97,29 @@ export const YrkesskadeVurderingTabell = ({ form, yrkesskader, readOnly, update 
                       hideLabel={true}
                     />
                   )}
+                </Table.DataCell>
+                <Table.DataCell textSize={'small'}>
+                  {yrkesskade.vedtaksdato ? formaterDatoForFrontend(yrkesskade.vedtaksdato) : '–'}
+                </Table.DataCell>
+                <Table.DataCell textSize={'small'}>
+                  {yrkesskade.skadeart
+                    ? `${yrkesskade.skadeart.charAt(0).toUpperCase()}${yrkesskade.skadeart.slice(1).toLowerCase()}`
+                    : '–'}
+                </Table.DataCell>
+                <Table.DataCell textSize={'small'}>
+                  {yrkesskade.diagnose
+                    ? `${yrkesskade.diagnose.charAt(0).toUpperCase()}${yrkesskade.diagnose.slice(1).toLowerCase()}`
+                    : '–'}
+                </Table.DataCell>
+                <Table.DataCell textSize={'small'}>
+                  {yrkesskade.skadekombinasjonerTekst
+                    ? yrkesskade.skadekombinasjonerTekst
+                    : yrkesskade.skadekombinasjoner
+                        ?.map(
+                          (k) =>
+                            `${k.skadetype.charAt(0).toUpperCase()}${k.skadetype.slice(1).toLowerCase()} i ${k.kroppsdel.toLowerCase()}`
+                        )
+                        .join(', ') || '–'}
                 </Table.DataCell>
               </Table.Row>
             ))}
