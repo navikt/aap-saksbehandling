@@ -35,6 +35,17 @@ export const AppSwitcher = () => {
     }
   };
 
+  const handleModiaClick = async (e: React.MouseEvent) => {
+    if (saksnummer && config?.modiaPersonoversiktUrl) {
+      e.preventDefault();
+      const response = await clientHentSakPersoninfo(saksnummer);
+      const url = !isError(response)
+        ? `${config.modiaPersonoversiktUrl}/person/${response.data.fnr}`
+        : config.modiaPersonoversiktUrl;
+      window.open(url, '_blank');
+    }
+  };
+
   return (
     <Dropdown>
       <InternalHeader.Button as={Dropdown.Toggle}>
@@ -60,6 +71,7 @@ export const AppSwitcher = () => {
             target="_blank"
             href={config?.modiaPersonoversiktUrl}
             disabled={!config?.modiaPersonoversiktUrl}
+            onClick={handleModiaClick}
           >
             Modia personoversikt <ExternalLinkIcon aria-hidden />
           </Dropdown.Menu.GroupedList.Item>
