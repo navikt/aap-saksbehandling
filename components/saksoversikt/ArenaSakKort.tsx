@@ -16,7 +16,7 @@ export function ArenaSakKort({ sak }: { sak: ArenaSakOppsummeringKontrakt }) {
       <HStack gap="space-16" justify="space-between" align="center" wrap={false}>
         <HStack gap="space-16" align="center">
           <Heading as="h3" size="small">
-            Arena AAP
+            Arena {sak.sakstype}
           </Heading>
           {visLenke ? (
             <Link href={`${arenaVisningsklientBaseUrl}sak/${sak.sakId}`} target="_blank">
