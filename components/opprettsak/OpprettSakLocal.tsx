@@ -67,6 +67,8 @@ interface YrkesskadeOppføring {
   diagnose?: string;
   skadeart?: string;
   skadebeskrivelse?: string;
+  harVedtaksdato?: boolean;
+  vedtaksdato?: string;
 }
 
 type Institusjon = 'fengsel' | 'sykehus';
@@ -257,7 +259,7 @@ export const OpprettSakLocal = () => {
       },
     },
     {
-      shouldUnregister: true,
+      shouldUnregister: false,
     }
   );
 

@@ -2,7 +2,7 @@
 
 import { FieldArray, UseFormReturn } from 'react-hook-form';
 import { TableStyled } from 'components/tablestyled/TableStyled';
-import { Checkbox, Table, VStack, ErrorMessage } from '@navikt/ds-react';
+import { Checkbox, ErrorMessage, Table, VStack } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { validerDato } from 'lib/validation/dateValidation';
@@ -10,15 +10,17 @@ import {
   YrkesskadeMedSkadeDatoFormFields,
   YrkesskadeMedSkadeDatoSak,
 } from 'components/behandlinger/sykdom/yrkesskade/Yrkesskade';
+import { JaEllerNei } from 'lib/utils/form';
 
 interface Props {
   form: UseFormReturn<YrkesskadeMedSkadeDatoFormFields>;
   readOnly: boolean;
   yrkesskader: YrkesskadeMedSkadeDatoSak[];
   update: (index: number, value: FieldArray<YrkesskadeMedSkadeDatoFormFields, 'relevanteYrkesskadeSaker'>) => void;
+  erÅrsakssammenheng: string;
 }
 
-export const YrkesskadeVurderingTabell = ({ form, yrkesskader, readOnly, update }: Props) => {
+export const YrkesskadeVurderingTabell = ({ form, yrkesskader, readOnly, update, erÅrsakssammenheng }: Props) => {
   function oppdaterTilknytning(index: number, erTilknyttet: boolean, yrkesskade: YrkesskadeMedSkadeDatoSak) {
     update(index, {
       ref: yrkesskade.ref,
@@ -65,7 +67,7 @@ export const YrkesskadeVurderingTabell = ({ form, yrkesskader, readOnly, update 
                     value={yrkesskade.ref}
                     checked={yrkesskade.erTilknyttet}
                     onChange={(e) => oppdaterTilknytning(index, e.target.checked, yrkesskade)}
-                    readOnly={readOnly}
+                    readOnly={readOnly || erÅrsakssammenheng === JaEllerNei.Nei}
                   >
                     Tilknytt yrkesskade til vurdering
                   </Checkbox>

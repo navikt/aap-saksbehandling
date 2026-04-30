@@ -207,22 +207,20 @@ export const Yrkesskade = ({
     >
       <FormField form={form} formField={formFields.begrunnelse} />
       <FormField form={form} formField={formFields.erÅrsakssammenheng} horizontalRadio />
-      {erÅrsakssammenheng === JaEllerNei.Ja && (
-        <>
-          <VStack>
-            <Label size={'small'}>
-              Tilknytt eventuelle yrkesskader som er helt eller delvis årsak til den nedsatte arbeidsevnen.
-            </Label>
-            <YrkesskadeVurderingTabell
-              form={form}
-              readOnly={formReadOnly}
-              yrkesskader={relevanteYrkesskadeSaker}
-              update={update}
-            />
-          </VStack>
-          <FormField form={form} formField={formFields.andelAvNedsettelsen} className={'prosent_input'} />
-        </>
-      )}
+
+      <VStack>
+        <Label size={'small'}>
+          Tilknytt eventuelle yrkesskader som er helt eller delvis årsak til den nedsatte arbeidsevnen.
+        </Label>
+        <YrkesskadeVurderingTabell
+          form={form}
+          readOnly={formReadOnly}
+          yrkesskader={relevanteYrkesskadeSaker}
+          update={update}
+          erÅrsakssammenheng={erÅrsakssammenheng}
+        />
+      </VStack>
+      <FormField form={form} formField={formFields.andelAvNedsettelsen} className={'prosent_input'} />
     </VilkårskortMedFormOgMellomlagring>
   );
 };

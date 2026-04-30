@@ -1,19 +1,21 @@
 'use client';
 
 import { PlusIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Button, HStack, Label, VStack } from '@navikt/ds-react';
+import { Button, Checkbox, HStack, Label, VStack } from '@navikt/ds-react';
 import { useFieldArray, UseFormReturn, useWatch } from 'react-hook-form';
 import { OpprettSakFormFields } from 'components/opprettsak/OpprettSakLocal';
 import { JaEllerNei } from 'lib/utils/form';
 import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
 import { useEffect } from 'react';
+import { formaterDatoForBackend } from 'lib/utils/date';
+import { subDays } from 'date-fns';
 
 interface Props {
   form: UseFormReturn<OpprettSakFormFields>;
 }
 
 const skadeartOptions = ['Arbeidsulykke', 'Yrkessykdom', 'Annet'];
-const diagnoseOptions = ['Lumbago', 'Karpaltunnelsyndrom', 'Fraktur håndledd', 'Hørselstap', 'Hjernerystelse'];
+const diagnoseOptions = ['Lumbago', 'Karpaltunnelsyndrom', 'Håndleddsfraktur', 'Hørselstap', 'Hjernerystelse'];
 
 const diagnoseTilSkadebeskrivelse: Record<string, string> = {
   Lumbago: 'Belastningsskade i korsrygg',
@@ -25,6 +27,7 @@ const diagnoseTilSkadebeskrivelse: Record<string, string> = {
 
 const RegisterYrkesskadeFields = ({ form, index }: { form: UseFormReturn<OpprettSakFormFields>; index: number }) => {
   const diagnose = useWatch({ control: form.control, name: `yrkesskader.${index}.diagnose` });
+  const harVedtaksdato = useWatch({ control: form.control, name: `yrkesskader.${index}.harVedtaksdato` });
 
   useEffect(() => {
     if (diagnose) {
@@ -48,6 +51,18 @@ const RegisterYrkesskadeFields = ({ form, index }: { form: UseFormReturn<Opprett
           </option>
         ))}
       </SelectWrapper>
+      <Checkbox
+        size="small"
+        checked={!!harVedtaksdato}
+        defaultChecked
+        onChange={(e) => {
+          const vedtaksdato = e.target.checked ? formaterDatoForBackend(subDays(new Date(), 8)) : undefined;
+          form.setValue(`yrkesskader.${index}.harVedtaksdato`, e.target.checked);
+          form.setValue(`yrkesskader.${index}.vedtaksdato`, vedtaksdato);
+        }}
+      >
+        Har vedtaksdato
+      </Checkbox>
     </>
   );
 };
@@ -113,7 +128,9 @@ export const OpprettYrkesskade = ({ form }: Props) => {
             skadeart: skadeartOptions[0],
             diagnose: diagnoseOptions[0],
             skadebeskrivelse: diagnoseTilSkadebeskrivelse[diagnoseOptions[0]],
-            yrkesskadeRegisterKilde: Math.random() < 0.5 ? 'KOMPYS' : 'INFOTRYGD',
+            yrkesskadeRegisterKilde: 'KOMPYS',
+            harVedtaksdato: true,
+            vedtaksdato: formaterDatoForBackend(subDays(new Date(), 8)),
           })
         }
       >
