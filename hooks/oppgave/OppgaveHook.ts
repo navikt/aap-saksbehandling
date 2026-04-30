@@ -70,7 +70,7 @@ function lagUrlSuffix(filter: OppgavelisteRequest['utvidetFilter']): string {
   }
 
   if (filter?.beløpMerEnn != null) {
-    params.append('beløpMerEnn', filter.beløpMerEnn.toString())
+    params.append('beløpMerEnn', filter.beløpMerEnn.toString());
   }
 
   if (filter?.beløpMindreEnn != null) {

@@ -1,11 +1,11 @@
 .stickyFooterWrapper {
-    height: var(--ax-space-48);
+  height: var(--ax-space-48);
 }
 
 .stickyFooter {
-    position: fixed;
-    bottom: 0;
-    background: var(--ax-bg-default);
-    width: var(--ax-breakpoint-xl);
-    border-top: 1px solid var(--ax-border-neutral-subtle)
+  position: fixed;
+  bottom: 0;
+  background: var(--ax-bg-default);
+  width: var(--ax-breakpoint-xl);
+  border-top: 1px solid var(--ax-border-neutral-subtle);
 }

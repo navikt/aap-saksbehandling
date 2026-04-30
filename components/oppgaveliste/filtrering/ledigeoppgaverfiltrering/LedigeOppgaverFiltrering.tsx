@@ -43,7 +43,7 @@ export const LedigeOppgaverFiltrering = ({
   return (
     <div className={styles.wrapper}>
       <HStack justify={'space-between'} align={'center'} className={styles.filtreringTop}>
-        <HStack gap={"space-8"} align={'center'}>
+        <HStack gap={'space-8'} align={'center'}>
           <Button
             icon={åpneFilter ? <XMarkIcon /> : <FilterIcon />}
             iconPosition={'right'}
@@ -54,7 +54,7 @@ export const LedigeOppgaverFiltrering = ({
             {åpneFilter ? 'Lukk filter' : 'Filtrer listen'}
           </Button>
           {aktiveFilter.length > 0 && (
-            <HStack gap={"space-8"}>
+            <HStack gap={'space-8'}>
               <BodyShort>Filtre: </BodyShort>
               <Chips size={'small'}>
                 {aktiveFilter.map((filter) => {
@@ -89,7 +89,7 @@ export const LedigeOppgaverFiltrering = ({
       {åpneFilter && (
         <div className={styles.filtreringwrapper}>
           <div className={styles.filtrering}>
-            <HGrid columns={{ sm: 1, md: 2, lg: 4, xl: 5 }} gap={"space-8"}>
+            <HGrid columns={{ sm: 1, md: 2, lg: 4, xl: 5 }} gap={'space-8'}>
               <BoxWrapper>
                 <FormField
                   form={form}
@@ -98,7 +98,7 @@ export const LedigeOppgaverFiltrering = ({
                 />
               </BoxWrapper>
               <BoxWrapper>
-                <VStack gap={"space-16"}>
+                <VStack gap={'space-16'}>
                   <BodyShort size={'small'} weight={'semibold'}>
                     Behandling opprettet
                   </BodyShort>
@@ -117,7 +117,7 @@ export const LedigeOppgaverFiltrering = ({
               </BoxWrapper>
               {tilbakekrevingBelopFilter && (
                 <BoxWrapper>
-                  <VStack gap={"space-16"}>
+                  <VStack gap={'space-16'}>
                     <BodyShort size={'small'} weight={'semibold'}>
                       Tilbakekrevingsbeløp
                     </BodyShort>
@@ -127,7 +127,7 @@ export const LedigeOppgaverFiltrering = ({
                 </BoxWrapper>
               )}
             </HGrid>
-            <HStack gap={"space-8"}>
+            <HStack gap={'space-8'}>
               <Button
                 size={'small'}
                 variant={'tertiary'}
@@ -149,11 +149,11 @@ function BoxWrapper({ children }: { children: React.ReactNode }) {
   return (
     <Box
       height={'fit-content'}
-      borderColor={"neutral-subtle"}
+      borderColor={'neutral-subtle'}
       borderWidth={'2'}
-      borderRadius={"12"}
-      paddingInline={"space-16"}
-      paddingBlock={"space-16"}
+      borderRadius={'12'}
+      paddingInline={'space-16'}
+      paddingBlock={'space-16'}
     >
       {children}
     </Box>

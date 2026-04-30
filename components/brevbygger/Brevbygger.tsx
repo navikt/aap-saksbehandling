@@ -109,7 +109,7 @@ export const Brevbygger = ({
   };
 
   return (
-    <HGrid columns={pdfViewExpanded ? '1fr 3fr' : '1fr 1fr'} gap={"space-8"}>
+    <HGrid columns={pdfViewExpanded ? '1fr 3fr' : '1fr 1fr'} gap={'space-8'}>
       <Box>
         {fullmektigMottaker && brukerMottaker && (
           <VelgeMottakere
@@ -141,7 +141,7 @@ export const Brevbygger = ({
             setDistribusjonssjekkFeil={setDistribusjonssjekkFeil}
             brukerMottaker={brukerMottaker}
           />
-          <HStack gap={"space-8"}>
+          <HStack gap={'space-8'}>
             {visAvbryt && (
               <Button
                 data-color="danger"
@@ -149,7 +149,8 @@ export const Brevbygger = ({
                 onClick={() => settIkkeSendBrevModalOpen(true)}
                 variant="primary"
                 size="small"
-                disabled={isLoading}>
+                disabled={isLoading}
+              >
                 Ikke send brev
               </Button>
             )}

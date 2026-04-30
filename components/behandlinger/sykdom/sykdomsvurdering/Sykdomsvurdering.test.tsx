@@ -778,12 +778,11 @@ describe('vurderinger uten viss varighet', () => {
       screen.getByRole('textbox', { name: 'Vilkårsvurdering' }),
       'Her har jeg begynt å skrive en vurdering..'
     );
-    const neiValg = within(screen.getByRole('radiogroup', { name: 'Har brukeren sykdom, skade eller lyte?' })).getByRole(
-      'radio',
-      {
-        name: 'Nei',
-      }
-    );
+    const neiValg = within(
+      screen.getByRole('radiogroup', { name: 'Har brukeren sykdom, skade eller lyte?' })
+    ).getByRole('radio', {
+      name: 'Nei',
+    });
     await user.click(neiValg);
 
     await velgBekreft();

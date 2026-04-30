@@ -200,10 +200,15 @@ export const AlleOppgaver = ({ enheter }: Props) => {
   const oppgaveKøer = isSuccess(køer) ? køer.data : undefined;
 
   return (
-    <VStack gap={"space-16"}>
-      <Box borderColor="neutral-subtle" background={'default'} borderWidth="1" borderRadius={"12"}>
+    <VStack gap={'space-16'}>
+      <Box borderColor="neutral-subtle" background={'default'} borderWidth="1" borderRadius={'12'}>
         <VStack>
-          <HStack paddingInline={"space-16"} paddingBlock={"space-8"} gap={"space-16"} style={{ borderBottom: '1px solid #071A3636' }}>
+          <HStack
+            paddingInline={'space-16'}
+            paddingBlock={'space-8'}
+            gap={'space-16'}
+            style={{ borderBottom: '1px solid #071A3636' }}
+          >
             <EnheterSelect
               enheter={enheter}
               aktiveEnheter={aktiveEnheter}
@@ -218,7 +223,7 @@ export const AlleOppgaver = ({ enheter }: Props) => {
               form={form}
             />
           </HStack>
-          <HStack gap={"space-8"} paddingInline={"space-16"} paddingBlock={"space-8"}>
+          <HStack gap={'space-8'} paddingInline={'space-16'} paddingBlock={'space-8'}>
             <Label as="p" size={'small'}>
               Beskrivelse av køen:
             </Label>

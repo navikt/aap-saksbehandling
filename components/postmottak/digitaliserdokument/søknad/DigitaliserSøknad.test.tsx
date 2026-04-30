@@ -93,7 +93,9 @@ describe('DigitaliserSøknad', () => {
     await user.click(within(yrkesSkadeGruppe).getByText('Nei'));
 
     // harBoddINorgeSiste5År = Ja → viser harArbeidetINorgeSiste5År og arbeidetUtenforNorgeFørSykdom
-    const harBoddGruppe = screen.getByRole('radiogroup', { name: /Har søker bodd sammenhengende i Norge siste 5 år?/i });
+    const harBoddGruppe = screen.getByRole('radiogroup', {
+      name: /Har søker bodd sammenhengende i Norge siste 5 år?/i,
+    });
     await user.click(within(harBoddGruppe).getByText('Ja'));
 
     const harArbeidetGruppe = screen.getByRole('radiogroup', {

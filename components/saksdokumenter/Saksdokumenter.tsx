@@ -69,7 +69,7 @@ export const Saksdokumenter = () => {
     : dokumenterFiltrertPåSøk;
 
   return (
-    <VStack gap={"space-16"}>
+    <VStack gap={'space-16'}>
       <div>
         <Button
           as={Link}

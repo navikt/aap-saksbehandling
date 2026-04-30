@@ -33,8 +33,16 @@ export const useFiltrerteOppgaver = ({ oppgaver, filter }: Props) => {
     const filtrerOppgave = (oppgave: Oppgave) => {
       const dato = formaterDatoForFrontend(oppgave.behandlingOpprettet);
 
-      const { behandlingOpprettetFom, behandlingOpprettetTom, avklaringsbehov, årsaker, behandlingstyper, statuser, tilbakekrevingBeløpFom, tilbakekrevingBeløpTom } =
-        debouncedFilters;
+      const {
+        behandlingOpprettetFom,
+        behandlingOpprettetTom,
+        avklaringsbehov,
+        årsaker,
+        behandlingstyper,
+        statuser,
+        tilbakekrevingBeløpFom,
+        tilbakekrevingBeløpTom,
+      } = debouncedFilters;
 
       if (behandlingOpprettetFom && !erDatoFoerDato(formaterDatoForFrontend(behandlingOpprettetFom), dato)) {
         return false;

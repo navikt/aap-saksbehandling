@@ -79,7 +79,7 @@ export const LedigeOppgaverMeny = ({
   }
 
   return (
-    <HStack style={{ display: 'flex', justifyContent: 'flex-end' }} gap={"space-4"}>
+    <HStack style={{ display: 'flex', justifyContent: 'flex-end' }} gap={'space-4'}>
       <Button
         type={'button'}
         size={'small'}
@@ -94,9 +94,10 @@ export const LedigeOppgaverMeny = ({
           <ActionMenu.Trigger>
             <Button
               data-color="neutral"
-              variant={"tertiary"}
+              variant={'tertiary'}
               icon={<MenuElipsisVerticalIcon title={'Oppgavemeny'} />}
-              size={'small'} />
+              size={'small'}
+            />
           </ActionMenu.Trigger>
           <ActionMenu.Content>
             <ActionMenu.Item

@@ -117,7 +117,9 @@ export const RelevanteDokumenter = () => {
                 dokument.tittel.toUpperCase().includes(form.watch('dokumentnavn').toUpperCase())
             )
             .filter((dokument) => !form.watch('tema') || dokument.tema === form.watch('tema'))
-            .map((dokument) => <DokumentRad key={dokument.dokumentInfoId} sak={sak} dokument={dokument} />)}
+            .map((dokument) => (
+              <DokumentRad key={dokument.dokumentInfoId} sak={sak} dokument={dokument} />
+            ))}
         </Table.Body>
       </TableStyled>
     </section>
@@ -149,9 +151,10 @@ const DokumentRad = ({ sak, dokument }: { sak: SakContextType; dokument: Relevan
             <ActionMenu.Trigger>
               <Button
                 data-color="neutral"
-                variant={"tertiary"}
+                variant={'tertiary'}
                 icon={<MenuElipsisVerticalIcon title={'Handlinger'} />}
-                size={'small'} />
+                size={'small'}
+              />
             </ActionMenu.Trigger>
             <ActionMenu.Content>
               <ActionMenu.Item onSelect={() => setIsOpen(true)}>Knytt til sak</ActionMenu.Item>

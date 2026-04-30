@@ -29,7 +29,7 @@ export function OverstyrTildelingContextProvider(props: Props) {
     callback,
     setCallback,
     reservertAvNavn,
-    setReservertAvNavn
+    setReservertAvNavn,
   };
 
   return <OverstyrTildelingContext.Provider value={context}>{children}</OverstyrTildelingContext.Provider>;

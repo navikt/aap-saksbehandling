@@ -40,7 +40,7 @@ export const OvergangUforeVurderingFormInput = ({ index, form, readonly, søknad
     form.watch(`vurderinger.${index}.brukerRettPåAAP`) === JaEllerNei.Ja;
 
   return (
-    <VStack gap={"space-20"}>
+    <VStack gap={'space-20'}>
       <DateInputWrapper
         name={`vurderinger.${index}.fraDato`}
         label={virkningsdatoLabel}

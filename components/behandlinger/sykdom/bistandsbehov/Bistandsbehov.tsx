@@ -141,7 +141,7 @@ export const Bistandsbehov = ({
       onLeggTilVurdering={() => append(emptyBistandVurderingForm())}
       errorList={errorList}
     >
-      <VStack gap={"space-16"}>
+      <VStack gap={'space-16'}>
         <Veiledning
           defaultOpen={false}
           tekst={

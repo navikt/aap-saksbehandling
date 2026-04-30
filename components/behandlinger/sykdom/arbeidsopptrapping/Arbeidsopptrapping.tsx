@@ -153,7 +153,7 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
       errorList={errorList}
     >
       {!formReadOnly && (
-        <VStack paddingBlock={"space-16"}>
+        <VStack paddingBlock={'space-16'}>
           <BodyLong size={'small'}>
             <Link href="https://lovdata.no/nav/rundskriv/r11-00#KAPITTEL_26-7" target="_blank">
               Du kan lese om hvordan vilkåret skal vurderes i rundskrivet til § 11-23 (lovdata.no)
@@ -185,7 +185,7 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
           kvalitetssikretAv={vurdering.kvalitetssikretAv}
           besluttetAv={vurdering.besluttetAv}
         >
-          <VStack gap={"space-20"}>
+          <VStack gap={'space-20'}>
             <SpørsmålOgSvar spørsmål="Vurderingen gjelder fra?" svar={formaterDatoForFrontend(vurdering.fom)} />
             <SpørsmålOgSvar spørsmål="Vilkårsvurdering" svar={vurdering.begrunnelse} />
             <SpørsmålOgSvar

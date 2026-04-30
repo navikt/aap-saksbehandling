@@ -97,11 +97,7 @@ export const FeilregistrerJournalpostModal = ({
       </Modal.Body>
       {error && <Alert variant="error">{error}</Alert>}
       <Modal.Footer>
-        <Button
-          data-color="danger"
-          variant="primary"
-          onClick={feilregistrer}
-          loading={isLoading}>
+        <Button data-color="danger" variant="primary" onClick={feilregistrer} loading={isLoading}>
           Ja, feilregistrer
         </Button>
         <Button variant="secondary" disabled={isLoading}>
