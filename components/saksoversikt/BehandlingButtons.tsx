@@ -72,7 +72,7 @@ export const BehandlingButtons = ({
 
   if (kildeErBehandlingsflyt && behandling.behandling.eksternSaksbehandlingsløsningUrl) {
     return (
-      <HStack gap="2" justify="end">
+      <HStack gap="space-8" justify="end">
         <Button
           as="a"
           type={'button'}
@@ -91,7 +91,7 @@ export const BehandlingButtons = ({
     );
   } else {
     return (
-      <HStack gap="2" justify="end">
+      <HStack gap="space-8" justify="end">
         {lokalBrevBestillingKnapp && <BestillBrevTestKnapp behandlingReferanse={behandling.behandling.referanse} />}
         {!oppgaveReservertAvInnloggetBruker &&
           (kildeErBehandlingsflyt ? (

@@ -27,7 +27,7 @@ export const StudentVurderingFelter = ({ index, readOnly, diagnoseDefaultOptions
   const defaultOptionsBidiagnose = kodeverkValue && diagnoseDefaultOptions[kodeverkValue].bidiagnoserOptions;
 
   return (
-    <VStack gap={'4'}>
+    <VStack gap={'space-16'}>
       <DateInputWrapper
         name={`vurderinger.${index}.fraDato`}
         control={form.control}
@@ -35,16 +35,13 @@ export const StudentVurderingFelter = ({ index, readOnly, diagnoseDefaultOptions
         rules={{ required: 'Du må sette en dato for når vurderinger gjelder fra' }}
         readOnly={readOnly}
       />
-
       <TextAreaWrapper
         name={`vurderinger.${index}.begrunnelse`}
         control={form.control}
         label={'Vurder §11-14 og vilkårene i §7 i forskriften'}
         rules={{ required: 'Du må gjøre en vilkårsvurdering' }}
-        className={'begrunnelse'}
         readOnly={readOnly}
       />
-
       <RadioGroupWrapper
         name={`vurderinger.${index}.harAvbruttStudie`}
         control={form.control}
@@ -58,7 +55,6 @@ export const StudentVurderingFelter = ({ index, readOnly, diagnoseDefaultOptions
           </Radio>
         ))}
       </RadioGroupWrapper>
-
       {form.watch(`vurderinger.${index}.harAvbruttStudie`) === JaEllerNei.Ja && (
         <RadioGroupWrapper
           name={`vurderinger.${index}.godkjentStudieAvLånekassen`}
@@ -74,7 +70,6 @@ export const StudentVurderingFelter = ({ index, readOnly, diagnoseDefaultOptions
           ))}
         </RadioGroupWrapper>
       )}
-
       {form.watch(`vurderinger.${index}.godkjentStudieAvLånekassen`) === JaEllerNei.Ja && (
         <RadioGroupWrapper
           name={`vurderinger.${index}.avbruttPgaSykdomEllerSkade`}
@@ -90,7 +85,6 @@ export const StudentVurderingFelter = ({ index, readOnly, diagnoseDefaultOptions
           ))}
         </RadioGroupWrapper>
       )}
-
       {form.watch(`vurderinger.${index}.avbruttPgaSykdomEllerSkade`) === JaEllerNei.Ja && (
         <RadioGroupWrapper
           name={`vurderinger.${index}.harBehovForBehandling`}
@@ -106,7 +100,6 @@ export const StudentVurderingFelter = ({ index, readOnly, diagnoseDefaultOptions
           ))}
         </RadioGroupWrapper>
       )}
-
       {form.watch(`vurderinger.${index}.harBehovForBehandling`) === JaEllerNei.Ja && (
         <RadioGroupWrapper
           name={`vurderinger.${index}.avbruddMerEnn6Måneder`}
@@ -122,7 +115,6 @@ export const StudentVurderingFelter = ({ index, readOnly, diagnoseDefaultOptions
           ))}
         </RadioGroupWrapper>
       )}
-
       {form.watch(`vurderinger.${index}.avbruddMerEnn6Måneder`) === JaEllerNei.Ja && (
         <DateInputWrapper
           name={`vurderinger.${index}.avbruttDato`}
@@ -147,7 +139,6 @@ export const StudentVurderingFelter = ({ index, readOnly, diagnoseDefaultOptions
           readOnly={readOnly}
         />
       )}
-
       {form.watch(`vurderinger.${index}.avbruddMerEnn6Måneder`) === JaEllerNei.Ja && (
         <>
           <RadioGroupWrapper

@@ -9,7 +9,7 @@ import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper
 
 type Props = {
   periode: Periode;
-  control: Control<MeldepliktOverstyringFormFields, any, any>;
+  control: Control<MeldepliktOverstyringFormFields, any, MeldepliktOverstyringFormFields>;
   index: number;
   field: FieldArrayWithId<MeldepliktOverstyringFormFields>;
   readOnly: boolean;
@@ -21,7 +21,7 @@ export const VurderingMeldepliktOverstyringSkjema = ({ periode, index, control, 
       <Heading size={'small'} level="3">
         Vurdering av periode {formaterPeriode(periode.fom, periode.tom)}
       </Heading>
-      <VStack gap={'6'} style={{ marginTop: '1rem' }}>
+      <VStack gap={'space-24'} style={{ marginTop: '1rem' }}>
         <SelectWrapper
           name={`vurderinger.${index}.meldepliktOverstyringStatus`}
           control={control}

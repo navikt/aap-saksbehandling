@@ -85,7 +85,7 @@ export const VurderRettighetsperiodeModal = ({
     >
       <form onSubmit={onBekreft}>
         <Modal.Body>
-          <VStack gap="4">
+          <VStack gap="space-16">
             <BodyLong size="medium">
               Dersom søker kan ha rett på AAP før søknadstidspunktet kan første mulige dato med rett på ytelse
               overstyres. NAY får en oppgave for å vurdere riktig dato etter § 22-13 syvende ledd.

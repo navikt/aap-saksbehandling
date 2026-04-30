@@ -18,7 +18,6 @@ beforeEach(() => {
 const overganguforeGrunnlag: OvergangUforeGrunnlag = {
   ikkeRelevantePerioder: [],
   gjeldendeSykdsomsvurderinger: [],
-  gjeldendeVedtatteVurderinger: [],
   historiskeVurderinger: [],
   perioderSomIkkeErTilstrekkeligVurdert: [],
   nyeVurderinger: [],
@@ -40,7 +39,6 @@ const overganguforeGrunnlag: OvergangUforeGrunnlag = {
 const overganguforeGrunnlagMedBekreftetVurdering: OvergangUforeGrunnlag = {
   ikkeRelevantePerioder: [],
   gjeldendeSykdsomsvurderinger: [],
-  gjeldendeVedtatteVurderinger: [],
   historiskeVurderinger: [],
   perioderSomIkkeErTilstrekkeligVurdert: [],
   nyeVurderinger: [
@@ -49,7 +47,6 @@ const overganguforeGrunnlagMedBekreftetVurdering: OvergangUforeGrunnlag = {
       brukerHarSøktUføretrygd: true,
       brukerHarFåttVedtakOmUføretrygd: 'JA_INNVILGET_FULL',
       brukerRettPåAAP: true,
-      virkningsdato: '',
       fom: '2025-10-10',
       vurdertAv: { dato: '2025-10-10', ident: 'FASF343' },
     },
@@ -202,7 +199,7 @@ describe('Førstegangsbehandling', () => {
 
   it('Skal ha felt for om brukeren har søkt om uføretrygd', () => {
     render(<OvergangUforePeriodisert grunnlag={overganguforeGrunnlag} readOnly={false} behandlingVersjon={0} />);
-    const felt = screen.getByRole('group', {
+    const felt = screen.getByRole('radiogroup', {
       name: 'Har brukeren søkt om uføretrygd?',
     });
     expect(felt).toBeVisible();
@@ -304,13 +301,14 @@ describe('Førstegangsbehandling', () => {
     expect(infoTekst).toBeVisible();
   });
 
-  const finnGruppeForSoktOmUforetrygd = () => screen.getByRole('group', { name: 'Har brukeren søkt om uføretrygd?' });
+  const finnGruppeForSoktOmUforetrygd = () =>
+    screen.getByRole('radiogroup', { name: 'Har brukeren søkt om uføretrygd?' });
 
   const finnGruppeForVedtakOmUforetrygd = () =>
-    screen.getByRole('group', { name: 'Har brukeren fått vedtak på søknaden om uføretrygd?' });
+    screen.getByRole('radiogroup', { name: 'Har brukeren fått vedtak på søknaden om uføretrygd?' });
 
   const finnGruppeForRettPåAAP = () =>
-    screen.getByRole('group', {
+    screen.getByRole('radiogroup', {
       name: 'Har brukeren rett på AAP under behandling av krav om uføretrygd etter § 11-18?',
     });
 

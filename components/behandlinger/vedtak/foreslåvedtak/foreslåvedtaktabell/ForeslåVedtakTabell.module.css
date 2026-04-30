@@ -1,11 +1,11 @@
 .godkjentIcon {
-  color: var(--a-icon-success);
+  color: var(--ax-text-success-decoration);
 }
 
 .avslåttIcon {
-  color: var(--a-icon-danger);
+  color: var(--ax-text-danger-decoration);
 }
 
 .iconSubtle {
-  color: var(--a-icon-subtle);
+  color: var(--ax-text-neutral-subtle);
 }

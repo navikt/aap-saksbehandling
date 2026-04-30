@@ -47,52 +47,54 @@ export const Tilkjent = ({ grunnlag }: Props) => {
               const bakgrunnClassName = periodeIndex % 2 ? styles.tablerowwithzebra : '';
 
               return (
-                <Table.Row key={vurdertPeriodeIndex} className={`${skilleLinjeClassName} ${bakgrunnClassName}`}>
-                  <Table.DataCell textSize={'small'}>
+                <Table.Row key={vurdertPeriodeIndex} className={bakgrunnClassName}>
+                  <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
                     {vurdertPeriodeIndex === 0 && formaterPeriode(periode.meldeperiode.fom, periode.meldeperiode.tom)}
                   </Table.DataCell>
-                  <Table.DataCell textSize={'small'}>
+                  <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
                     {formaterPeriode(vurdertPeriode.periode.fom, vurdertPeriode.periode.tom)}
                   </Table.DataCell>
-                  <Table.DataCell textSize={'small'}>{formaterTilNok(vurdertPeriode.felter.dagsats)}</Table.DataCell>
-                  <Table.DataCell textSize={'small'}>
+                  <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
+                    {formaterTilNok(vurdertPeriode.felter.dagsats)}
+                  </Table.DataCell>
+                  <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
                     {formaterTilNok(vurdertPeriode.felter.barnetillegg)}
                   </Table.DataCell>
-                  <Table.DataCell textSize={'small'}>
+                  <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
                     {formaterTilProsent(vurdertPeriode.felter.arbeidGradering)}
                   </Table.DataCell>
-                  <Table.DataCell textSize={'small'}>
+                  <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
                     {formaterTilProsent(vurdertPeriode.felter.samordningGradering)}
                   </Table.DataCell>
-                  <Table.DataCell textSize={'small'}>
+                  <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
                     {formaterTilProsent(vurdertPeriode.felter.institusjonGradering)}
                   </Table.DataCell>
-                  <Table.DataCell textSize={'small'}>
+                  <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
                     {formaterTilProsent(vurdertPeriode.felter.arbeidsgiverGradering)}
                   </Table.DataCell>
-                  <Table.DataCell textSize={'small'}>
+                  <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
                     {formaterTilProsent(vurdertPeriode.felter.totalReduksjon)}
                   </Table.DataCell>
-                  <Table.DataCell textSize={'small'}>
+                  <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
                     {formaterTilNok(vurdertPeriode.felter.barnepensjonDagsats)}
                   </Table.DataCell>
-                  <Table.DataCell textSize={'small'}>
+                  <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
                     {formaterTilNok(vurdertPeriode.felter.effektivDagsats)}
                   </Table.DataCell>
-                  <Table.DataCell textSize={'small'}>
+                  <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
                     {vurdertPeriodeIndex === 0 &&
                       (periode.levertMeldekortDato
                         ? formaterDatoForFrontend(periode.levertMeldekortDato)
                         : 'Ikke levert')}
                   </Table.DataCell>
-                  <Table.DataCell>
+                  <Table.DataCell className={skilleLinjeClassName}>
                     {periode.sisteLeverteMeldekort && (
                       <ActionMenu>
                         <ActionMenu.Trigger>
                           <Button variant={'tertiary'} icon={<MenuElipsisVerticalIcon title={'Oppgavemeny'} />} />
                         </ActionMenu.Trigger>
                         <ActionMenu.Content>
-                          <VStack gap={'4'} width={'250px'}>
+                          <VStack gap={'space-16'} width={'250px'}>
                             <BodyShort weight={'semibold'}>Meldekort</BodyShort>
                             <BodyShort>
                               Bruker har ført {periode.sisteLeverteMeldekort.timerArbeidPerPeriode.timerArbeid} timer.

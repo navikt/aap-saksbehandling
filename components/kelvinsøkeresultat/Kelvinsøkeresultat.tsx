@@ -18,7 +18,7 @@ interface Props {
 export const Kelvinsøkeresultat = ({
   søkeresultat: { oppgaver, saker, kontor, person, behandlingsStatus, harTilgang, harAdressebeskyttelse },
 }: Props) => {
-  if ((saker?.length == 0) && (oppgaver?.length == 0)) {
+  if (saker?.length == 0 && oppgaver?.length == 0) {
     return (
       <HStack>
         <Alert variant={'info'} size={'small'} className={styles.info}>
@@ -29,7 +29,7 @@ export const Kelvinsøkeresultat = ({
   }
 
   return (
-    <VStack gap={'2'}>
+    <VStack gap={'space-8'}>
       {!harTilgang && (
         <HStack>
           <Alert variant={'info'} size={'small'} className={styles.info}>
@@ -39,10 +39,10 @@ export const Kelvinsøkeresultat = ({
           </Alert>
         </HStack>
       )}
-      <HStack gap={'8'}>
-        <VStack gap={'1'}>
+      <HStack gap={'space-32'}>
+        <VStack gap={'space-4'}>
           <Detail className={styles.detail}>Bruker</Detail>
-          <VStack gap="2">
+          <VStack gap="space-8">
             {!person?.length ? (
               <BodyShort size={'small'}>Fant ikke navn på person</BodyShort>
             ) : (
@@ -60,9 +60,9 @@ export const Kelvinsøkeresultat = ({
           </VStack>
         </VStack>
 
-        <VStack gap={'1'}>
+        <VStack gap={'space-4'}>
           <Detail className={styles.detail}>Saker</Detail>
-          <VStack gap="2">
+          <VStack gap="space-8">
             {!saker?.length ? (
               <BodyShort size={'small'}>Fant ingen saker</BodyShort>
             ) : (
@@ -80,9 +80,9 @@ export const Kelvinsøkeresultat = ({
           </VStack>
         </VStack>
 
-        <VStack gap="1">
+        <VStack gap="space-4">
           <Detail className={styles.detail}>Oppgaver</Detail>
-          <VStack gap="2">
+          <VStack gap="space-8">
             {!oppgaver?.length ? (
               <BodyShort size={'small'}>Fant ingen oppgaver</BodyShort>
             ) : (
@@ -90,7 +90,7 @@ export const Kelvinsøkeresultat = ({
                 const oppgaveStatus = mapStatus(søk.status);
 
                 return (
-                  <HStack gap={'2'} key={index}>
+                  <HStack gap={'space-8'} key={index}>
                     <LenkeHvisHarTilgang
                       className={styles.link}
                       key={`oppgave-resultat-${index}`}
@@ -117,9 +117,9 @@ export const Kelvinsøkeresultat = ({
           </VStack>
         </VStack>
 
-        <VStack gap={'1'}>
+        <VStack gap={'space-4'}>
           <Detail className={styles.detail}>Kontor</Detail>
-          <VStack gap="2">
+          <VStack gap="space-8">
             {!kontor?.length ? (
               <BodyShort size={'small'}>Fant ikke kontor</BodyShort>
             ) : (
@@ -132,9 +132,9 @@ export const Kelvinsøkeresultat = ({
           </VStack>
         </VStack>
 
-        <VStack gap={'1'}>
+        <VStack gap={'space-4'}>
           <Detail className={styles.detail}>Status</Detail>
-          <VStack gap="2">
+          <VStack gap="space-8">
             {!behandlingsStatus?.length ? (
               <BodyShort size={'small'}>Fant ikke status</BodyShort>
             ) : (

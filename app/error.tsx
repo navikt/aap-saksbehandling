@@ -4,7 +4,7 @@ import { BodyShort, Box, Heading, HGrid, Label, Link, Page, VStack } from '@navi
 import { usePathname } from 'next/navigation';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { useEffect } from 'react';
-import { logClientError } from 'lib/actions/actions';
+import { logClientWarning } from 'lib/actions/actions';
 import { erIngenTilgangError } from 'lib/utils/ingenTilgang';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 
@@ -23,7 +23,7 @@ const Error = ({ error }: Props) => {
 
     try {
       // noinspection JSIgnoredPromiseFromCall
-      logClientError({
+      logClientWarning({
         name: error.name,
         message: error.message,
         stack: error.stack,
@@ -44,8 +44,8 @@ const Error = ({ error }: Props) => {
   return (
     <Page>
       <Page.Block width="md" gutters>
-        <Box marginBlock="8" padding="4">
-          <VStack gap="4" marginBlock="8">
+        <Box marginBlock="space-32" padding="space-16">
+          <VStack gap="space-16" marginBlock="space-32">
             <Heading level="2" size="large">
               En feil har oppstått!
             </Heading>
@@ -54,7 +54,7 @@ const Error = ({ error }: Props) => {
               Du kan prøve igjen. Dersom feilen vedvarer kan du melde problemet i Porten med skjermbilde av denne siden.
             </BodyShort>
 
-            <HGrid columns={2} gap="2">
+            <HGrid columns={2} gap="space-8">
               {saksnummer && (
                 <>
                   <Label>Saksnummer:</Label>
@@ -89,8 +89,8 @@ const Error = ({ error }: Props) => {
  */
 const IngenTilgangFeil = ({ saksnummer }: { saksnummer?: string }) => (
   <VStack align="center">
-    <Box marginBlock="8" padding="4">
-      <VStack gap="4" marginBlock="8">
+    <Box marginBlock="space-32" padding="space-16">
+      <VStack gap="space-16" marginBlock="space-32">
         <Heading level="2" size="large">
           Mangler tilgang
         </Heading>

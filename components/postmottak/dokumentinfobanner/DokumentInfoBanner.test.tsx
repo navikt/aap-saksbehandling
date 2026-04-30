@@ -67,7 +67,7 @@ describe('Dokumentinfobanner', () => {
   });
 
   it('skal vise registreringsdato', () => {
-    const journalPostId = screen.getByText('03.04.2025');
+    const journalPostId = screen.getByText('Registrert: 03.04.2025');
     expect(journalPostId).toBeVisible();
   });
   it('skal ikke vise en tag dersom behandlingen ikke er på vent', () => {

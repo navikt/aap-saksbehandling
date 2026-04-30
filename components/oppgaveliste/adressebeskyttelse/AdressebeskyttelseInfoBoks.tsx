@@ -24,12 +24,17 @@ export const AdressebeskyttelseInfoBoks = ({ adressebeskyttelseGrad }: Props) =>
         onClose={() => setVis(false)}
         open={vis}
         anchorEl={buttonRef.current}
-        arrow={false}
         placement={'bottom-end'}
         offset={8}
       >
-        <VStack gap={'2'} className={styles.boks}>
-          <Tag icon={<ShieldLockIcon />} variant={'warning-moderate'} size={'medium'} className={styles.tag}>
+        <VStack gap={'space-8'} className={styles.boks}>
+          <Tag
+            data-color="warning"
+            icon={<ShieldLockIcon />}
+            variant={'moderate'}
+            size={'medium'}
+            className={styles.tag}
+          >
             <BodyShort size={'small'} weight={'semibold'}>
               {adressebeskyttelseGrad}
             </BodyShort>

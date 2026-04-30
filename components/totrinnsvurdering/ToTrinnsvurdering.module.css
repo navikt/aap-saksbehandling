@@ -1,11 +1,11 @@
 .toTrinnsKontroll {
   display: flex;
   flex-direction: column;
-  gap: var(--a-spacing-4);
-  border: 1px solid var(--a-border-divider);
-  border-radius: var(--a-border-radius-large);
+  gap: var(--ax-space-16);
+  border: 1px solid var(--ax-border-neutral-subtle);
+  border-radius: var(--ax-radius-8);
   padding: 1rem;
-  background-color: var(--a-surface-default);
+  background-color: var(--ax-bg-default);
 }
 .stretch {
   display: flex;

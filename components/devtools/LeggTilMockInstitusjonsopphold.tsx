@@ -49,11 +49,10 @@ export const LeggTilMockInstitusjonsopphold = ({ saksnummer }: { saksnummer: str
   };
 
   return (
-    <VStack gap="2">
+    <VStack gap="space-8">
       <Heading size="small">Institusjonsopphold</Heading>
-
       {fields.map((field, index) => (
-        <HStack key={field.id} gap="2" align="end">
+        <HStack key={field.id} gap="space-8" align="end">
           <SelectWrapper label="Institusjonstype" name={`opphold.${index}.institusjonstype`} control={form.control}>
             <option value="HS">Helseinstitusjon</option>
             <option value="FO">Fengsel</option>
@@ -75,8 +74,7 @@ export const LeggTilMockInstitusjonsopphold = ({ saksnummer }: { saksnummer: str
           </Button>
         </HStack>
       ))}
-
-      <HStack gap="2">
+      <HStack gap="space-8">
         <Button
           type="button"
           variant="tertiary"
@@ -91,7 +89,6 @@ export const LeggTilMockInstitusjonsopphold = ({ saksnummer }: { saksnummer: str
           Lagre
         </Button>
       </HStack>
-
       {error && <Alert variant="error">{error}</Alert>}
     </VStack>
   );

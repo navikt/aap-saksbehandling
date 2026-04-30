@@ -9,7 +9,7 @@ type Props = {
 
 export const LovvalgOgMedlemskapTidligereVurdering = ({ vurdering }: Props) => {
   return (
-    <VStack gap="5">
+    <VStack gap="space-20">
       <SpørsmålOgSvar spørsmål="Vurderingen gjelder fra" svar={formaterDatoForFrontend(vurdering.fom)} />
       <SpørsmålOgSvar spørsmål="Vurder riktig lovvalg" svar={vurdering.lovvalg.begrunnelse} />
       <SpørsmålOgSvar

@@ -1,4 +1,4 @@
 .behandling {
-  background-color: #f8f9fa;
+  background-color: var(--ax-bg-neutral-soft);
   min-height: 100vh;
 }

@@ -9,7 +9,7 @@ type Props = {
 
 export const ForutgåendeMedlemskapTidligereVurdering = ({ vurdering }: Props) => {
   return (
-    <VStack gap="5">
+    <VStack gap="space-20">
       <SpørsmålOgSvar spørsmål="Vurderingen gjelder fra" svar={formaterDatoForFrontend(vurdering.fom)} />
       <SpørsmålOgSvar spørsmål="Vurder brukerens forutgående medlemskap" svar={vurdering.begrunnelse} />
       <SpørsmålOgSvar

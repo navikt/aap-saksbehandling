@@ -109,7 +109,7 @@ describe('Yrkesskade', () => {
     });
 
     it('skal være synlig', () => {
-      const felt = screen.getByRole('group', {
+      const felt = screen.getByRole('radiogroup', {
         name: 'Finnes det en årsakssammenheng mellom yrkesskade og nedsatt arbeidsevne?',
       });
       expect(felt).toBeVisible();
@@ -356,7 +356,7 @@ async function velgBekreft() {
 
 async function velgJaPåÅrsakssammenheng() {
   const JaValg = within(
-    screen.getByRole('group', {
+    screen.getByRole('radiogroup', {
       name: 'Finnes det en årsakssammenheng mellom yrkesskade og nedsatt arbeidsevne?',
     })
   ).getByRole('radio', { name: 'Ja' });

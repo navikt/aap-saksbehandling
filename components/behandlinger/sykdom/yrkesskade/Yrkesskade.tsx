@@ -200,7 +200,7 @@ export const Yrkesskade = ({
       visningActions={visningActions}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
-      <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
+      <FormField form={form} formField={formFields.begrunnelse} />
       <FormField form={form} formField={formFields.erÅrsakssammenheng} horizontalRadio />
       {erÅrsakssammenheng === JaEllerNei.Ja && (
         <>

@@ -57,7 +57,6 @@ const søkeresultatUtenSak: SøkeResultat = {
   ],
 };
 
-
 describe('Kelvinsøkeresultat', () => {
   it('skal ikke lenke til saksside eller behandling når saksbehandler ikke har lesetilgang', () => {
     render(<Kelvinsøkeresultat søkeresultat={{ ...søkeresultat, harTilgang: false }} />);

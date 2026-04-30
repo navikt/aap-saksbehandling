@@ -8,11 +8,11 @@ export async function POST(req: Request, props: { params: Promise<{ behandlingsr
   const body: NavEnhetRequest = await req.json();
   const params = await props.params;
 
-  const navEnheterResponse = await hentAlleNavEnheter(params.behandlingsreferanse, body);
-  if (isError(navEnheterResponse)) {
+  const res = await hentAlleNavEnheter(params.behandlingsreferanse, body);
+  if (isError(res) && res.status >= 500) {
     logError(
-      `/api/navenhet/${params.behandlingsreferanse}/finn/ ${navEnheterResponse.status}, ${navEnheterResponse.apiException.code}: ${navEnheterResponse.apiException.message}`
+      `/api/navenhet/${params.behandlingsreferanse}/finn/ ${res.status}, ${res.apiException.code}: ${res.apiException.message}`
     );
   }
-  return NextResponse.json(navEnheterResponse, { status: navEnheterResponse.status });
+  return NextResponse.json(res, { status: res.status });
 }

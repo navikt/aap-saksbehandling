@@ -15,12 +15,7 @@ interface Props {
 export const VilkårsKort = ({ heading, children, icon, defaultOpen = true, variant = 'primary' }: Props) => {
   const fargeClassname = variant === 'primary' ? styles.blå : styles.gul;
   return (
-    <ExpansionCard
-      className={`${styles.vilkårsKort} ${fargeClassname}`}
-      aria-label={heading}
-      size={'small'}
-      defaultOpen={defaultOpen}
-    >
+    <ExpansionCard className={fargeClassname} aria-label={heading} size={'small'} defaultOpen={defaultOpen}>
       <ExpansionCard.Header className={styles.header}>
         <div className={styles.title}>
           {icon && <div>{icon}</div>}

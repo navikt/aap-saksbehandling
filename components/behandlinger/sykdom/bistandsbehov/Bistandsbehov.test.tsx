@@ -332,7 +332,7 @@ describe('Førstegangsbehandling', () => {
         erRevurderingAvOvergangUføre={false}
       />
     );
-    const felt = screen.getByRole('group', {
+    const felt = screen.getByRole('radiogroup', {
       name: 'a: Har brukeren behov for aktiv behandling?',
     });
     expect(felt).toBeVisible();
@@ -347,7 +347,7 @@ describe('Førstegangsbehandling', () => {
         erRevurderingAvOvergangUføre={false}
       />
     );
-    const felt = screen.getByRole('group', { name: 'b: Har brukeren behov for arbeidsrettet tiltak?' });
+    const felt = screen.getByRole('radiogroup', { name: 'b: Har brukeren behov for arbeidsrettet tiltak?' });
     expect(felt).toBeVisible();
   });
 
@@ -361,7 +361,7 @@ describe('Førstegangsbehandling', () => {
       />
     );
     expect(
-      screen.queryByRole('group', {
+      screen.queryByRole('radiogroup', {
         name: 'c: Kan brukeren anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra Nav?',
       })
     ).toBeVisible();
@@ -457,12 +457,14 @@ describe('Førstegangsbehandling', () => {
     );
     await velgNei(finnGruppeForBokstavA());
     await velgNei(finnGruppeForBokstavB());
-    const gruppeC = screen.getByRole('group', {
+    const gruppeC = screen.getByRole('radiogroup', {
       name: 'c: Kan brukeren anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra Nav?',
     });
     await velgNei(gruppeC);
     expect(screen.getByRole('heading', { name: '§ 11-17 AAP i perioden som arbeidssøker', level: 3 })).toBeVisible();
-    expect(screen.getByRole('group', { name: 'Har brukeren rett til AAP i perioden som arbeidssøker?' })).toBeVisible();
+    expect(
+      screen.getByRole('radiogroup', { name: 'Har brukeren rett til AAP i perioden som arbeidssøker?' })
+    ).toBeVisible();
   });
 
   it('Skal vise feilmelding dersom feltet for begrunnelse ikke er besvart', async () => {
@@ -526,7 +528,7 @@ describe('Førstegangsbehandling', () => {
       />
     );
 
-    const harInnbyggetBehovForAktivBehandling = screen.getByRole('group', {
+    const harInnbyggetBehovForAktivBehandling = screen.getByRole('radiogroup', {
       name: 'a: Har brukeren behov for aktiv behandling?',
     });
 
@@ -536,7 +538,7 @@ describe('Førstegangsbehandling', () => {
 
     await user.click(neiFeltHarBrukerBehovForAktivBehandling);
 
-    const harBrukerBehovForArbeidsrettetTiltakFelt = screen.getByRole('group', {
+    const harBrukerBehovForArbeidsrettetTiltakFelt = screen.getByRole('radiogroup', {
       name: 'b: Har brukeren behov for arbeidsrettet tiltak?',
     });
     const neiHarBrukerBehovForArbeidsrettetTiltakFelt = within(harBrukerBehovForArbeidsrettetTiltakFelt).getByRole(
@@ -556,11 +558,12 @@ describe('Førstegangsbehandling', () => {
 });
 
 const trykkPåBekreft = async () => await user.click(screen.getByRole('button', { name: 'Bekreft' }));
-const finnGruppeForBokstavA = () => screen.getByRole('group', { name: 'a: Har brukeren behov for aktiv behandling?' });
+const finnGruppeForBokstavA = () =>
+  screen.getByRole('radiogroup', { name: 'a: Har brukeren behov for aktiv behandling?' });
 const finnGruppeForBokstavB = () =>
-  screen.getByRole('group', { name: 'b: Har brukeren behov for arbeidsrettet tiltak?' });
+  screen.getByRole('radiogroup', { name: 'b: Har brukeren behov for arbeidsrettet tiltak?' });
 const finnGruppeForBokstavC = () =>
-  screen.queryByRole('group', {
+  screen.queryByRole('radiogroup', {
     name: 'c: Kan brukeren anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra Nav?',
   });
 

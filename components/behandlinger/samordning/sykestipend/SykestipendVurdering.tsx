@@ -115,7 +115,7 @@ export const SykestipendVurdering = ({
       visningActions={visningActions}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
-      <VStack gap={'6'}>
+      <VStack gap={'space-24'}>
         {grunnlag.sykeStipendSvarFraSøknad && (
           <VStack>
             <BodyLong weight={'semibold'} size={'small'}>
@@ -126,7 +126,7 @@ export const SykestipendVurdering = ({
             </BodyLong>
           </VStack>
         )}
-        <FormField form={form} formField={formFields.begrunnelse} className={'begrunnelse'} />
+        <FormField form={form} formField={formFields.begrunnelse} />
         <SykestipendPeriodeTabell form={form} readOnly={formReadOnly} />
       </VStack>
     </VilkårskortMedFormOgMellomlagring>

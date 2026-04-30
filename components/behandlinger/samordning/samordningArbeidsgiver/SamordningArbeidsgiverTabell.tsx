@@ -63,7 +63,7 @@ export const SamordningArbeidsGiverTabell = ({ form, readOnly }: Props) => {
   };
 
   return (
-    <VStack gap="2">
+    <VStack gap="space-8">
       <Label size="small">Legg til periode med reduksjon som følge av ytelse fra arbeidsgiver</Label>
       <BodyLong textColor="subtle" size="small">
         Ytelsen fra arbeidsgiver skal regnes om til antall dager med 100% reduksjon.

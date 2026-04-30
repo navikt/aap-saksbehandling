@@ -44,7 +44,7 @@ export const PostmottakVilkårskort = ({
   return (
     <ExpansionCard
       aria-label={heading}
-      className={erAktivtSteg ? `${styles.vilkårsKort} ${styles.blå}` : styles.vilkårsKort}
+      className={erAktivtSteg ? styles.blå : styles.vilkårsKort}
       size="small"
       defaultOpen={true}
       id={steg}
@@ -56,10 +56,9 @@ export const PostmottakVilkårskort = ({
           </ExpansionCard.Title>
         </div>
       </ExpansionCard.Header>
-
       <ExpansionCard.Content className={styles.content}>
         <form onSubmit={onSubmit} id={steg} autoComplete="off">
-          <VStack gap="4">
+          <VStack gap="space-16">
             {/* innhold i vilkårskortet */}
             {children}
 
@@ -71,8 +70,8 @@ export const PostmottakVilkårskort = ({
 
             <HStack justify="space-between" align="end">
               {/* Venstre kolonne: knapper + utkast */}
-              <VStack gap="4">
-                <HStack gap="4">
+              <VStack gap="space-16">
+                <HStack gap="space-16">
                   {/* Modus-styrte knapper */}
                   {visningModus === 'AKTIV_UTEN_AVBRYT' && (
                     <>

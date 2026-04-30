@@ -88,7 +88,7 @@ describe('Generelt', () => {
     expect(begrunnelse).toBeVisible();
 
     // oppfylt
-    const felt = screen.getByRole('group', {
+    const felt = screen.getByRole('radiogroup', {
       name: 'Har brukeren fem års forutgående medlemskap i folketrygden jf. § 11-2?',
     });
     expect(felt).toBeVisible();
@@ -123,7 +123,7 @@ describe('Generelt', () => {
 
     // unntaksvilkår vises ikke før de skal
     expect(
-      screen.queryByRole('group', {
+      screen.queryByRole('radiogroup', {
         name: 'Oppfyller brukeren noen av unntaksvilkårene?',
       })
     ).not.toBeInTheDocument();
@@ -134,7 +134,7 @@ describe('Generelt', () => {
     expect(screen.getAllByText('Du må velge om brukeren har fem års forutgående medlemskap')[0]).toBeVisible();
 
     // velger at medlemskap ikke er oppfylt
-    const oppfyller = screen.getByRole('group', {
+    const oppfyller = screen.getByRole('radiogroup', {
       name: 'Har brukeren fem års forutgående medlemskap i folketrygden jf. § 11-2?',
     });
     const neiOppfyller = within(oppfyller).getByRole('radio', {
@@ -144,7 +144,7 @@ describe('Generelt', () => {
 
     // unntaksvilkår vises
     expect(
-      screen.queryByRole('group', {
+      screen.queryByRole('radiogroup', {
         name: 'Oppfyller brukeren noen av unntaksvilkårene?',
       })
     ).toBeInTheDocument();

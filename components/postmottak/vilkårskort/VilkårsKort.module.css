@@ -1,22 +1,11 @@
-.vilkårsKort {
-  --ac-expansioncard-border-radius: var(--a-border-radius-large);
-  --ac-expansioncard-border-hover-color: none;
-}
-
 .blå {
-  --ac-expansioncard-border-radius: var(--a-border-radius-large);
-  --ac-expansioncard-border-hover-color: none;
-
-  border: 1px solid var(--a-border-divider);
-  border-left: 0.5rem solid var(--a-surface-alt-3);
+  border: 1px solid var(--ax-border-neutral-subtle);
+  border-left: 0.5rem solid var(--ax-bg-brand-blue-strong);
 }
 
 .gul {
-  --ac-expansioncard-border-radius: var(--a-border-radius-large);
-  --ac-expansioncard-border-hover-color: none;
-
-  border: 1px solid var(--a-border-divider);
-  border-left: 0.5rem solid var(--a-surface-warning-subtle);
+  border: 1px solid var(--ax-border-neutral-subtle);
+  border-left: 0.5rem solid var(--ax-bg-warning-soft);
 }
 
 .header,
@@ -30,10 +19,10 @@
 .title {
   display: flex;
   align-items: flex-end;
-  gap: var(--a-spacing-2);
+  gap: var(--ax-space-8);
 }
 .content form {
   display: flex;
   flex-direction: column;
-  gap: var(--a-spacing-4);
+  gap: var(--ax-space-16);
 }

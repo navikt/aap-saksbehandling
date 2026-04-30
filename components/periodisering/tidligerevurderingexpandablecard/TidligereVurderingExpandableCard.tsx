@@ -49,7 +49,7 @@ export const TidligereVurderingExpandableCard = ({
       expanded={cardExpanded}
       setExpanded={setCardExpanded}
       heading={
-        <HStack justify={'space-between'} padding={'2'}>
+        <HStack justify={'space-between'} padding={'space-8'}>
           <BodyShort size={'small'} className={strekUtHele ? styles.streketUtTekst : ''}>
             {formatDatoMedMånedsnavn(fom)} –{' '}
             {tom != null && (
@@ -61,8 +61,8 @@ export const TidligereVurderingExpandableCard = ({
         </HStack>
       }
     >
-      <VStack>
-        {children}
+      {children}
+      <VStack align="end">
         <VurdertAvAnsattDetail vurdertAv={vurdertAv} variant={'VURDERING'} />
         <VurdertAvAnsattDetail vurdertAv={kvalitetssikretAv} variant={'KVALITETSSIKRER'} />
         <VurdertAvAnsattDetail vurdertAv={besluttetAv} variant={'BESLUTTER'} />

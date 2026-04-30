@@ -22,7 +22,7 @@ export const VurderingStatusTag = ({ status }: Props) => {
   }
 
   return (
-    <Tag size="xsmall" variant={getTagVariant(status)}>
+    <Tag size="xsmall" data-color={getDataColor(status)} variant={getTagVariant(status)}>
       {mapVurderingStatusToVurderingTekst(status)}
     </Tag>
   );
@@ -31,19 +31,38 @@ export const VurderingStatusTag = ({ status }: Props) => {
 function getTagVariant(status: VurderingStatus): TagProps['variant'] {
   switch (status) {
     case VurderingStatus.Oppfylt:
-      return 'success-moderate';
+      return 'strong';
     case VurderingStatus.IkkeOppfylt:
-      return 'error-moderate';
+      return 'strong';
     case VurderingStatus.Overskrevet:
-      return 'neutral-moderate';
+      return 'strong';
     case VurderingStatus.Reduksjon:
-      return 'warning-moderate';
+      return 'strong';
     case VurderingStatus.IkkeReduksjon:
-      return 'success-moderate';
+      return 'strong';
     case VurderingStatus.VedtaksperiodeAutomatisk:
-      return 'success-moderate';
+      return 'strong';
     case VurderingStatus.VedtaksperiodeManuell:
-      return 'success-moderate';
+      return 'strong';
+  }
+}
+
+function getDataColor(status: VurderingStatus): TagProps['data-color'] {
+  switch (status) {
+    case VurderingStatus.Oppfylt:
+      return 'success';
+    case VurderingStatus.IkkeOppfylt:
+      return 'danger';
+    case VurderingStatus.Overskrevet:
+      return 'neutral';
+    case VurderingStatus.Reduksjon:
+      return 'warning';
+    case VurderingStatus.IkkeReduksjon:
+      return 'success';
+    case VurderingStatus.VedtaksperiodeAutomatisk:
+      return 'success';
+    case VurderingStatus.VedtaksperiodeManuell:
+      return 'success';
   }
 }
 

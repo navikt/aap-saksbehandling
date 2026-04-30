@@ -6,7 +6,7 @@ type SpørsmålOgSvarProps = {
 };
 
 export const SpørsmålOgSvar = ({ spørsmål, svar }: SpørsmålOgSvarProps) => (
-  <VStack gap="1">
+  <VStack gap="space-4">
     <Label size="small">{spørsmål}</Label>
     <BodyShort size="small">{svar}</BodyShort>
   </VStack>

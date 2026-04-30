@@ -39,7 +39,7 @@ export const SamordningSosialstønad = ({ grunnlag }: Props) => {
               return (
                 <Table.Row key={vurdering.navKontor ?? index}>
                   <Table.DataCell textSize="small">
-                    <HStack gap={'2'} marginInline={'2'}>
+                    <HStack gap={'space-8'} marginInline={'space-8'}>
                       {vurdering.fom
                         ? formaterDatoForFrontend(vurdering.fom)
                         : grunnlag.nåværendeVirkningsTidspunkt

@@ -21,7 +21,7 @@ export const SykepengeerstatningFormInput = ({ readOnly, index, form }: Props) =
   const { control, watch } = form;
 
   return (
-    <VStack gap="5">
+    <VStack gap="space-20">
       <HStack justify={'space-between'}>
         <DateInputWrapper
           name={`vurderinger.${index}.fraDato`}
@@ -34,9 +34,7 @@ export const SykepengeerstatningFormInput = ({ readOnly, index, form }: Props) =
           readOnly={readOnly}
         />
       </HStack>
-
       <HvordanLeggeTilSluttdatoReadMore />
-
       <TextAreaWrapper
         name={`vurderinger.${index}.begrunnelse`}
         control={control}

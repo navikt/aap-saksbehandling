@@ -1,5 +1,5 @@
 import { Oppgave } from 'lib/types/oppgaveTypes';
-import { BodyShort, CopyButton, Table, Tooltip } from '@navikt/ds-react';
+import { BodyShort, CopyButton, Table, Tooltip, Link as AkselLink } from '@navikt/ds-react';
 import Link from 'next/link';
 import { storForbokstavIHvertOrd } from 'lib/utils/string';
 import {
@@ -29,7 +29,9 @@ const OppgaveRad = ({
     <Table.Row key={oppgave.saksnummer || oppgave.journalpostId}>
       <Table.DataCell textSize={'small'}>
         {oppgave.saksnummer ? (
-          <Link href={`/saksbehandling/sak/${oppgave.saksnummer}`}>{storForbokstavIHvertOrd(oppgave.personNavn)}</Link>
+          <AkselLink as={Link} href={`/saksbehandling/sak/${oppgave.saksnummer}`}>
+            {storForbokstavIHvertOrd(oppgave.personNavn)}
+          </AkselLink>
         ) : (
           <span>{storForbokstavIHvertOrd(oppgave.personNavn)}</span>
         )}

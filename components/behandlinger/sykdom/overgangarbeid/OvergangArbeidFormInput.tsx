@@ -18,7 +18,7 @@ export const OvergangArbeidFormInput = ({ readOnly, index, form }: Props) => {
   const { control } = form;
 
   return (
-    <VStack gap="5">
+    <VStack gap="space-20">
       <DateInputWrapper
         name={`vurderinger.${index}.fraDato`}
         label="Vurderingen gjelder fra"
@@ -29,9 +29,7 @@ export const OvergangArbeidFormInput = ({ readOnly, index, form }: Props) => {
         }}
         readOnly={readOnly}
       />
-
       <HvordanLeggeTilSluttdatoReadMore />
-
       <TextAreaWrapper
         name={`vurderinger.${index}.begrunnelse`}
         control={control}

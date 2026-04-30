@@ -1,26 +1,19 @@
 .vilkårsKortNAY {
-  --ac-expansioncard-border-radius: var(--a-border-radius-large);
-  --ac-expansioncard-border-hover-color: none;
-
-  background-color: var(--a-surface-default);
-  border: 1px solid var(--a-border-divider);
-  border-radius: var(--a-border-radius-large);
-  border-left: 0.5rem solid var(--a-surface-alt-3);
+  background-color: var(--ax-bg-default);
+  border: 1px solid var(--ax-border-neutral-subtle);
+  border-radius: var(--ax-radius-8);
+  border-left: 0.5rem solid var(--ax-bg-brand-blue-strong);
 }
 
 .vilkårsKortNAV {
-  --ac-expansioncard-border-radius: var(--a-border-radius-large);
-  --ac-expansioncard-border-hover-color: none;
-
-  background-color: var(--a-surface-default);
-  border: 1px solid var(--a-border-divider);
-  border-radius: var(--a-border-radius-large);
-  border-left: 0.5rem solid var(--a-surface-alt-1-moderate);
+  background-color: var(--ax-bg-default);
+  border: 1px solid var(--ax-border-neutral-subtle);
+  border-radius: var(--ax-radius-8);
+  border-left: 0.5rem solid var(--ax-bg-meta-purple-strong);
 }
 
 .vilkårsKort {
-  --ac-expansioncard-border-hover-color: none;
-  background-color: var(--a-surface-default);
-  border-radius: var(--a-border-radius-large);
-  border: 1px solid var(--a-border-divider);
+  background-color: var(--ax-bg-default);
+  border-radius: var(--ax-radius-8);
+  border: 1px solid var(--ax-border-neutral-subtle);
 }

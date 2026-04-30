@@ -92,7 +92,6 @@ export const SykdomsvurderingNedsattArbeidsevneDetaljer = ({
         skalVurdereYrkesskade={skalVurdereYrkesskade}
         vurderingDatoSammeSomRettighetsperiodeStart={vurderingDatoSammeSomRettighetsperiodeStart}
       />
-
       {erTilstrekkeligNedsatt && (
         <>
           <RadioGroupJaNei
@@ -170,7 +169,6 @@ const SykdomsvurderingYrkesskade = ({
             rules={{
               required: 'Du må skrive en begrunnelse for om arbeidsevnen er nedsatt med minst 30 prosent',
             }}
-            className={'begrunnelse'}
             readOnly={readonly}
             shouldUnregister={false}
           />

@@ -11,6 +11,7 @@ import {
   InternalHeader,
   Link,
   Spacer,
+  Theme,
   VStack,
 } from '@navikt/ds-react';
 import { Kelvinsøk } from 'components/kelvinsøkeresultat/Kelvinsøk';
@@ -86,21 +87,28 @@ export const KelvinAppHeader = ({
 
   return (
     <>
-      <InternalHeader>
+      <InternalHeader data-color={'neutral'}>
         <InternalHeader.Title href="/">Kelvin</InternalHeader.Title>
 
-        <HStack gap="4" marginInline="4" className={styles.kelvinAppHeaderMenuItems}>
+        <HStack gap="space-16" marginInline="space-16">
           <Kelvinsøk setSøkeresultat={setSøkeresultat} />
-          <Link href={`/oppgave/`}>Oppgaveliste</Link>
+          <Link data-color={'neutral'} href={`/oppgave/`}>
+            Oppgaveliste
+          </Link>
 
           <Link
             href={'https://metabase.ansatt.nav.no/public/dashboard/da1ad654-13a9-492c-bfa0-8cc828aab274?'}
             target="_blank"
+            data-color={'neutral'}
           >
             Produksjonsstyring <ExternalLinkIcon />
           </Link>
 
-          {lokalLenkeTilSaksoversikt && <Link href={`/saksbehandling/saksoversikt`}>Saksoversikt</Link>}
+          {lokalLenkeTilSaksoversikt && (
+            <Link data-color={'neutral'} href={`/saksbehandling/saksoversikt`}>
+              Saksoversikt
+            </Link>
+          )}
         </HStack>
 
         <Spacer />
@@ -131,27 +139,29 @@ export const KelvinAppHeader = ({
         <AppSwitcher />
         <Brukermeny brukerInformasjon={brukerInformasjon} roller={roller} />
       </InternalHeader>
-
       {søkeresultat && (
-        <Box background="surface-inverted" className={styles.kelvinAppHeaderSearchResult}>
-          <VStack padding="4">
-            <HStack justify={'space-between'}>
-              <Heading size="small" spacing>
-                Søkeresultater
-              </Heading>
-              <Button
-                variant={'primary-neutral'}
-                size={'small'}
-                icon={<XMarkIcon />}
-                onClick={() => setSøkeresultat(undefined)}
-              >
-                Lukk
-              </Button>
-            </HStack>
+        <Theme theme={'dark'}>
+          <Box background={'neutral-moderateA'} className={styles.kelvinAppHeaderSearchResult}>
+            <VStack padding="space-16">
+              <HStack justify={'space-between'}>
+                <Heading size="small" spacing>
+                  Søkeresultater
+                </Heading>
+                <Button
+                  data-color="neutral"
+                  variant={'primary'}
+                  size={'small'}
+                  icon={<XMarkIcon />}
+                  onClick={() => setSøkeresultat(undefined)}
+                >
+                  Lukk
+                </Button>
+              </HStack>
 
-            <Kelvinsøkeresultat søkeresultat={søkeresultat} />
-          </VStack>
-        </Box>
+              <Kelvinsøkeresultat søkeresultat={søkeresultat} />
+            </VStack>
+          </Box>
+        </Theme>
       )}
     </>
   );

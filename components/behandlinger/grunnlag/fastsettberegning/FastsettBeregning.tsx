@@ -192,11 +192,7 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly, initi
       {grunnlag?.skalVurdereYtterligere && (
         <div className={styles.ytterligerenedsattfelter}>
           <Heading size={'small'}>Tidspunktet da arbeidsevnen ble ytterligere nedsatt § 11-28</Heading>
-          <FormField
-            form={form}
-            formField={formFields.ytterligereNedsattArbeidsevneDatobegrunnelse}
-            className={'begrunnelse'}
-          />
+          <FormField form={form} formField={formFields.ytterligereNedsattArbeidsevneDatobegrunnelse} />
           <FormField form={form} formField={formFields.ytterligereNedsattArbeidsevneDato} />
         </div>
       )}

@@ -1,16 +1,16 @@
 .blaaBoks {
-  background-color: var(--a-surface-info-subtle);
-  border: 1px solid var(--a-border-info);
-  border-radius: var(--a-border-radius-medium);
-  padding: var(--a-spacing-4);
+  background-color: var(--ax-bg-info-soft);
+  border: 1px solid var(--ax-border-info);
+  border-radius: var(--ax-radius-4);
+  padding: var(--ax-space-16);
   display: flex;
   flex-direction: column;
-  gap: var(--a-spacing-4);
+  gap: var(--ax-space-16);
 }
 
 .icon {
-  font-size: var(--a-font-size-heading-medium);
-  color: var(--a-icon-info);
+  font-size: var(--ax-font-size-heading-medium);
+  color: var(--ax-text-info-decoration);
   flex-grow: 0;
   flex-shrink: 0;
 }
@@ -18,8 +18,8 @@
 .heading {
   display: flex;
   flex-direction: row;
-  gap: var(--a-spacing-2);
-  margin-bottom: var(--a-spacing-2);
+  gap: var(--ax-space-8);
+  margin-bottom: var(--ax-space-8);
 }
 
 .filterrad {
@@ -29,5 +29,5 @@
 }
 
 .beskrivelse {
-  margin-bottom: var(--a-spacing-2);
+  margin-bottom: var(--ax-space-8);
 }

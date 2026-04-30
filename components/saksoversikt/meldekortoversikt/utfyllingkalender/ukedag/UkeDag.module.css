@@ -1,5 +1,5 @@
 .ikkeeksisterendefelt {
-  background-color: var(--a-surface-subtle);
+  background-color: var(--ax-bg-neutral-soft);
   opacity: 0.4;
 }
 
@@ -27,37 +27,37 @@
 }
 
 .inputwrapper {
-  border-right: 1px solid var(--a-border-divider);
-  padding: 0 var(--a-spacing-5);
+  border-right: 1px solid var(--ax-border-neutral-subtle);
+  padding: 0 var(--ax-space-20);
 }
 
 .inputwrapperutenborder {
-  padding: 0 var(--a-spacing-5);
+  padding: 0 var(--ax-space-20);
 }
 
 .dag {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin: var(--a-spacing-4) 0 var(--a-spacing-5) 0;
+  margin: var(--ax-space-16) 0 var(--ax-space-20) 0;
 }
 
 .erutfylt {
-  background-color: var(--a-surface-selected);
+  background-color: var(--ax-bg-accent-soft);
 }
 
 .harFeilmelding {
-  background-color: var(--a-surface-danger-subtle);
+  background-color: var(--ax-bg-danger-soft);
 }
 
 .error {
   display: flex;
   flex-direction: row;
-  gap: var(--a-spacing-2);
+  gap: var(--ax-space-8);
   align-items: center;
-  padding: var(--a-spacing-2) 0;
+  padding: var(--ax-space-8) 0;
 }
 
 .errorIcon {
-  color: var(--a-icon-danger);
+  color: var(--ax-text-danger-decoration);
 }

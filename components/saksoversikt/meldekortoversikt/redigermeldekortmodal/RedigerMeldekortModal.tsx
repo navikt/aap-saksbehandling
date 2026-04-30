@@ -1,5 +1,5 @@
 import { Alert, Button, Dialog, VStack } from '@navikt/ds-react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 
 import { useConfigForm } from 'components/form/FormHook';
@@ -11,6 +11,9 @@ import { hentUkeNummerForPeriode } from 'components/saksoversikt/meldekortoversi
 import { Dato } from 'lib/types/Dato';
 import { MeldeperiodeMedMeldekortDto, Periode } from 'lib/types/types';
 import { formaterDatoForBackend } from 'lib/utils/date';
+import { clientKorrigerMeldekort } from 'lib/clientApi';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { isError } from 'lib/utils/api';
 
 interface Props {
   setIsOpen: (isOpen: boolean) => void;
@@ -33,6 +36,11 @@ interface Dag {
 const årsakOptions = ['', 'Registrere meldedato', 'Lever/endre meldekort for bruker', 'Overstyre bruker'];
 
 export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) => {
+  const { saksnummer } = useParamsMedType();
+
+  const [error, setError] = useState<string>();
+  const [isLoading, setIsLoading] = useState(false);
+
   const defaultValues = getDefaultValuesForForm(meldekort);
 
   const { form, formFields } = useConfigForm<RedigerMeldekortFormFields>({
@@ -93,17 +101,35 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
           <FormProvider {...form}>
             <form
               id={'endre-meldekort'}
-              onSubmit={form.handleSubmit(() => {
-                // TODO POST endring her
-                setIsOpen(false);
+              onSubmit={form.handleSubmit(async (data) => {
+                setIsLoading(true);
+                const oppdaterMeldekortResponse = await clientKorrigerMeldekort(saksnummer, {
+                  dager: data.dager.map((dag) => {
+                    return {
+                      dato: dag.dato,
+                      timerArbeidet: Number(dag.timerArbeidet),
+                    };
+                  }),
+                  begrunnelse: data.begrunnelse,
+                  meldeperiode: meldekort.meldeperiode,
+                });
+
+                if (isError(oppdaterMeldekortResponse)) {
+                  setError('Noe gikk galt ved oppdatering av meldekort.');
+                } else {
+                  setIsOpen(false);
+                }
+
+                setIsLoading(false);
               })}
             >
-              <VStack gap={'4'}>
+              <VStack gap={'space-16'}>
                 <FormField form={form} formField={formFields.begrunnelse} />
                 <FormField form={form} formField={formFields.årsak} />
                 {skalViseMeldedato && <FormField form={form} formField={formFields.meldedato} />}
                 {skalViseTimer && <UtfyllingKalender />}
                 <FormErrorSummary errorList={errorList} />
+                {error && <Alert variant={'error'}>{error}</Alert>}
                 {skalViseAlertForOverstyringAvBruker && (
                   <Alert variant={'warning'} size={'small'}>
                     Overstyring av bruker er ikke støttet enda. Hvis behovet vedvarer etter dialog med bruker, send sak
@@ -118,7 +144,9 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
           <Dialog.CloseTrigger>
             <Button variant="secondary">Avbryt</Button>
           </Dialog.CloseTrigger>
-          <Button form={'endre-meldekort'}>Bekreft</Button>
+          <Button form={'endre-meldekort'} loading={isLoading}>
+            Bekreft
+          </Button>
         </Dialog.Footer>
       </Dialog.Popup>
     </Dialog>

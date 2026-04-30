@@ -12,6 +12,7 @@ fetchMock.enableMocks();
 const user = userEvent.setup();
 
 const grunnlagUtenVurdering: FatteVedtakGrunnlag = {
+  harGjortVilkårsvurderingerPåBehandling: false,
   harTilgangTilÅSaksbehandle: true,
   vurderinger: [
     {
@@ -233,6 +234,7 @@ describe('totrinnsvurderingform', () => {
 
 describe('Totrinnsvurdering av vedtaksbrev', () => {
   const grunnlaget: FatteVedtakGrunnlag = {
+    harGjortVilkårsvurderingerPåBehandling: false,
     harTilgangTilÅSaksbehandle: true,
     vurderinger: [
       {
@@ -284,6 +286,7 @@ describe('mellomlagring', () => {
   };
 
   const grunnlagMedVurdering: FatteVedtakGrunnlag = {
+    harGjortVilkårsvurderingerPåBehandling: false,
     harTilgangTilÅSaksbehandle: true,
     historikk: [],
     vurderinger: [

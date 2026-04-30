@@ -24,7 +24,7 @@ export const ForutgåendeMedlemskapFormInput = ({ readOnly, index, form, beregni
   const { control, watch } = form;
 
   return (
-    <VStack gap="4">
+    <VStack gap="space-16">
       <HStack>
         <DateInputWrapper
           name={`vurderinger.${index}.fraDato`}
@@ -37,9 +37,7 @@ export const ForutgåendeMedlemskapFormInput = ({ readOnly, index, form, beregni
           readOnly={readOnly}
         />
       </HStack>
-
       <HvordanLeggeTilSluttdatoReadMore />
-
       <TextAreaWrapper
         name={`vurderinger.${index}.begrunnelse`}
         control={control}

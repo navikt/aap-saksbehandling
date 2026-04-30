@@ -373,6 +373,9 @@ export type VedtakslengdeVurderingDto =
 export type ForeslåVedtakGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.ForeslåVedtakResponse'];
 
+export type ForeslåVedtakVedtakslengdeGrunnlag =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.VedtakslengdeVedtakResponse'];
+
 export type UnderveisAvslagsÅrsak = NonNullable<UnderveisGrunnlag['avslagsårsak']>;
 
 export type AutomatiskLovvalgOgMedlemskapVurdering =
@@ -534,6 +537,9 @@ export type BehandlingInfo =
 export type Vurderingsbehov =
   components['schemas'][`no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Ny\u00C5rsakTilBehandling`]['årsakerTilBehandling'][number];
 
+export type StansOpphørÅrsak =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.StansOpphørVurderingDto']['årsaker'][number];
+
 /**
  * @deprecated Unngå denne i frontend. Får ikke fjernet den helt ennå fordi noen av løserne forventer denne. Men alt av dokumenter
  * til behandlingsflyt forventer `Vurderingsbehov`.
@@ -583,6 +589,12 @@ export type MeldePerioderMedMEldekortResponse =
 
 export type MeldeperiodeMedMeldekortDto =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.MeldeperiodeMedMeldekortDto'];
+
+export type OppdaterMeldekortRequest =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.OppdaterMeldekortRequest'];
+
+export type OppdaterMeldekortResponse =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.OppdaterMeldekortResponse'];
 
 export type DagDto = components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.DagDto'];
 

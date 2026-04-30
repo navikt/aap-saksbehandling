@@ -254,7 +254,7 @@ describe('Generelt', () => {
     await user.click(leggTilKnapp);
 
     // radiogroup
-    const endringGruppe = screen.getByRole('group', { name: 'Ønsket endring' });
+    const endringGruppe = screen.getByRole('radiogroup', { name: 'Ønsket endring' });
     expect(endringGruppe).toBeVisible();
     expect(within(endringGruppe).getByRole('radio', { name: 'Forleng vedtak' })).toBeChecked();
 

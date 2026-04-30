@@ -27,7 +27,6 @@ import { SakContextProvider } from 'context/saksbehandling/SakContext';
 import { KlageBehandlingInfo } from 'components/behandlingsinfo/KlageBehandlingInfo';
 import { ÅrsakTilBehandling } from 'components/revurderingsinfo/ÅrsakTilBehandling';
 import { visÅrsakTilVurdering } from './visÅrsakTilVurdering';
-import { unleashService } from 'lib/services/unleash/unleashService';
 import { OverstyrTildelingContextProvider } from 'context/saksbehandling/OverstyrTildelingContext';
 import { OverstyrTildelingModal } from 'components/overstyrtildelingmodal/OverstyrTildelingModal';
 
@@ -42,7 +41,7 @@ export const BehandlingLayout = async ({ saksnummer, behandlingsreferanse, child
 
   if (isError(behandling)) {
     return (
-      <VStack padding={'4'}>
+      <VStack padding={'space-16'}>
         <ApiException apiResponses={[behandling]} />
       </VStack>
     );
@@ -65,7 +64,7 @@ export const BehandlingLayout = async ({ saksnummer, behandlingsreferanse, child
 
   if (isError(flytResponse) || isError(klageresultat) || isError(oppgave)) {
     return (
-      <VStack padding={'4'}>
+      <VStack padding={'space-16'}>
         <ApiException apiResponses={[flytResponse, klageresultat, oppgave]} />
       </VStack>
     );
@@ -78,7 +77,6 @@ export const BehandlingLayout = async ({ saksnummer, behandlingsreferanse, child
 
   const stegGrupperSomSkalVises: StegGruppe[] = flytResponse.data.flyt
     .filter((steg) => steg.skalVises)
-    .filter((steg) => steg.stegGruppe !== 'VEDTAKSLENGDE' || unleashService.isEnabled('VedtakslengdeAvklaringsbehov'))
     .map((stegSomSkalVises) => stegSomSkalVises.stegGruppe);
 
   const visTotrinnsvurdering =
@@ -129,11 +127,11 @@ export const BehandlingLayout = async ({ saksnummer, behandlingsreferanse, child
 
             <HGrid
               columns="4fr 2fr"
-              padding={'4'}
-              gap={'4'}
+              padding={'space-16'}
+              gap={'space-16'}
               maxWidth={'1680px'}
               marginInline={'auto'}
-              marginBlock={'0'}
+              marginBlock={'space-0'}
             >
               <SakContextProvider
                 sak={{
@@ -144,7 +142,7 @@ export const BehandlingLayout = async ({ saksnummer, behandlingsreferanse, child
                   virkningsTidspunkt: behandling.data.virkningstidspunkt,
                 }}
               >
-                <VStack gap={'5'}>
+                <VStack gap={'space-20'}>
                   {visÅrsakTilBehandling && (
                     <ÅrsakTilBehandling
                       behandlingType={behandling.data.type}
@@ -165,7 +163,7 @@ export const BehandlingLayout = async ({ saksnummer, behandlingsreferanse, child
               </SakContextProvider>
             </HGrid>
           </div>
-          </OverstyrTildelingContextProvider>
+        </OverstyrTildelingContextProvider>
       </IngenFlereOppgaverModalContextProvider>
     </SWRConfig>
   );

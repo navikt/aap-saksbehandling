@@ -74,7 +74,7 @@ export const Mellomlagre11_9Skjema = ({
 
   return (
     <form onSubmit={onSubmit} autoComplete={'off'} id={'11-9-brudd'}>
-      <VStack gap="4">
+      <VStack gap="space-16">
         <DateInputWrapper
           name={formFields.dato.name}
           control={form.control}

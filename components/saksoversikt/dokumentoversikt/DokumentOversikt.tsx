@@ -99,22 +99,20 @@ export const DokumentOversikt = ({ sak }: { sak: SaksInfo }) => {
   }
 
   return (
-    <VStack gap="4">
+    <VStack gap="space-16">
       <Heading size="large">Dokumentoversikt</Heading>
-
-      <Box background="surface-subtle" padding="4" borderRadius="xlarge">
-        <HStack gap="4" marginBlock="0 4" wrap={false}>
+      <Box background="neutral-soft" padding="space-16" borderRadius="12">
+        <HStack gap="space-16" marginBlock="space-0 space-16" wrap={false}>
           <FormField form={form} formField={formFields.tema} />
           <FormField form={form} formField={formFields.typer} />
           <FormField form={form} formField={formFields.statuser} />
         </HStack>
-        <HStack gap="4">
+        <HStack gap="space-16">
           <Button variant="secondary" size="small" icon={<ArrowCirclepathReverseIcon />} onClick={nullstill}>
             Nullstill
           </Button>
         </HStack>
       </Box>
-
       <HStack>
         <TableStyled size="small">
           <Table.Header>
@@ -173,7 +171,7 @@ const JournalpostRad = ({ journalpost, sak }: { journalpost: Journalpost; sak: S
     </Table.DataCell>
     <Table.DataCell textSize={'small'}>{journalpost.sak?.fagsakId}</Table.DataCell>
     <Table.DataCell textSize={'small'}>
-      <HStack gap="2" wrap={false}>
+      <HStack gap="space-8" wrap={false}>
         <ÅpneDokumentButton journalpost={journalpost} />
         {/* TODO: Fjerne sjekk når vi har støtte for redigering av journalpost */}
         {erFerdigstilt(journalpost.journalstatus) && <HandlingerDokumentButton sak={sak} journalpost={journalpost} />}

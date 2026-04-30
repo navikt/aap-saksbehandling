@@ -90,7 +90,7 @@ describe('Refusjon tjenestepensjon', () => {
 
   it('skal ha et felt for om etterbetaling skal holdes igjen for perioden', () => {
     render(<SamordningTjenestePensjon grunnlag={grunnlagUtenVurdering} behandlingVersjon={1} readOnly={false} />);
-    const felt = screen.getByRole('group', { name: 'Skal etterbetaling holdes igjen for perioden?' });
+    const felt = screen.getByRole('radiogroup', { name: 'Skal etterbetaling holdes igjen for perioden?' });
     expect(felt).toBeVisible();
   });
 

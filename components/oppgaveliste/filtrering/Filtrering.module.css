@@ -1,26 +1,29 @@
 .wrapper {
   display: flex;
   flex-direction: column;
+  border-top-left-radius: var(--ax-radius-8);
+  border-top-right-radius: var(--ax-radius-8);
+  background-color: var(--ax-bg-default);
 }
 
 .filtreringTop {
-  padding: var(--a-spacing-3);
-  border-bottom: 1px solid var(--a-border-divider);
+  padding: var(--ax-space-12);
+  border-bottom: 1px solid var(--ax-border-neutral-subtle);
 }
 
 .filtreringwrapper {
-  background-color: var(--a-bg-subtle);
-  border-bottom: 1px solid var(--a-border-divider);
+  background-color: var(--ax-bg-neutral-soft);
+  border-bottom: 1px solid var(--ax-border-neutral-subtle);
 }
 
 .filtrering {
-  padding: var(--a-spacing-3);
+  padding: var(--ax-space-12);
   display: flex;
   flex-direction: column;
-  gap: var(--a-spacing-4);
+  gap: var(--ax-space-16);
 }
 
 .divider {
-  border-left: 1px solid var(--a-border-divider);
+  border-left: 1px solid var(--ax-border-neutral-subtle);
   margin: -12px 0;
 }

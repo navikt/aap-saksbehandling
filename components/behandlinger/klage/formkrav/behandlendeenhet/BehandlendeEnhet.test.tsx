@@ -98,7 +98,7 @@ describe('mellomlagring', () => {
     );
 
     const hvemSkalVurdereFelt = within(
-      screen.getByRole('group', {
+      screen.getByRole('radiogroup', {
         name: 'Hvem skal vurdere vilkårene det er klaget på?',
       })
     ).getByRole('radio', { name: 'Nav-kontor' });
@@ -117,7 +117,7 @@ describe('mellomlagring', () => {
     );
 
     const hvemSkalVurdereFelt = within(
-      screen.getByRole('group', {
+      screen.getByRole('radiogroup', {
         name: 'Hvem skal vurdere vilkårene det er klaget på?',
       })
     ).getByRole('radio', { name: 'NAY' });
@@ -136,7 +136,7 @@ describe('mellomlagring', () => {
     );
 
     const hvemSkalVurdereFelt = within(
-      screen.getByRole('group', {
+      screen.getByRole('radiogroup', {
         name: 'Hvem skal vurdere vilkårene det er klaget på?',
       })
     ).getByRole('radio', { name: 'Nav-kontor' });
@@ -145,7 +145,7 @@ describe('mellomlagring', () => {
 
     expect(
       within(
-        screen.getByRole('group', {
+        screen.getByRole('radiogroup', {
           name: 'Hvem skal vurdere vilkårene det er klaget på?',
         })
       ).getByRole('radio', { name: 'Nav-kontor' })
@@ -159,7 +159,7 @@ describe('mellomlagring', () => {
 
     expect(
       within(
-        screen.getByRole('group', {
+        screen.getByRole('radiogroup', {
           name: 'Hvem skal vurdere vilkårene det er klaget på?',
         })
       ).getByRole('radio', { name: 'Nav-kontor' })
@@ -179,7 +179,7 @@ describe('mellomlagring', () => {
 
     await user.click(
       within(
-        screen.getByRole('group', {
+        screen.getByRole('radiogroup', {
           name: 'Hvem skal vurdere vilkårene det er klaget på?',
         })
       ).getByRole('radio', { name: 'Nav-kontor' })
@@ -187,7 +187,7 @@ describe('mellomlagring', () => {
 
     expect(
       within(
-        screen.getByRole('group', {
+        screen.getByRole('radiogroup', {
           name: 'Hvem skal vurdere vilkårene det er klaget på?',
         })
       ).getByRole('radio', { name: 'Nav-kontor' })
@@ -201,7 +201,7 @@ describe('mellomlagring', () => {
 
     expect(
       within(
-        screen.getByRole('group', {
+        screen.getByRole('radiogroup', {
           name: 'Hvem skal vurdere vilkårene det er klaget på?',
         })
       ).getByRole('radio', { name: 'NAY' })

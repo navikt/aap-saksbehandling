@@ -1,26 +1,19 @@
 .vilkårsKortNAY {
-  --ac-expansioncard-border-radius: var(--a-border-radius-large);
-  --ac-expansioncard-border-hover-color: none;
-
-  border: 1px solid var(--a-border-divider);
-  border-left: 0.5rem solid var(--a-surface-alt-3);
+  border: 1px solid var(--ax-border-neutral-subtle);
+  border-left: 0.5rem solid var(--ax-bg-brand-blue-strong);
 }
 
 .vilkårsKortNAV {
-  --ac-expansioncard-border-radius: var(--a-border-radius-large);
-  --ac-expansioncard-border-hover-color: none;
-
-  border: 1px solid var(--a-border-divider);
-  border-left: 0.5rem solid var(--a-surface-alt-1-moderate);
+  border: 1px solid var(--ax-border-neutral-subtle);
+  border-left: 0.5rem solid var(--ax-bg-meta-purple-strong);
 }
 
 .vilkårsKort {
-  --ac-expansioncard-border-hover-color: none;
-  border: 1px solid var(--a-border-divider);
+  border: 1px solid var(--ax-border-neutral-subtle);
 }
 
 :is(.vilkårsKortNAV, .vilkårsKortNAY):last-of-type {
-  margin-bottom: var(--a-spacing-18);
+  margin-bottom: var(--ax-space-72);
 }
 
 .header,
@@ -32,5 +25,5 @@
 .title {
   display: flex;
   align-items: flex-end;
-  gap: var(--a-spacing-2);
+  gap: var(--ax-space-8);
 }

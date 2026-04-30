@@ -3,19 +3,19 @@
 }
 
 .ny {
-  background-color: var(--a-lightblue-50);
+  background-color: var(--ax-bg-accent-moderate);
 }
 
 .ny > td:first-of-type {
-  box-shadow: inset 5px 0 var(--a-border-info);
+  box-shadow: inset 5px 0 var(--ax-border-info);
 }
 
 .nyTag {
-  color: var(--a-text-action-selected);
+  color: var(--ax-text-accent-subtle);
 }
 
 .slettet {
-  background-color: var(--a-grayalpha-50);
+  background-color: var(--ax-neutral-100A);
   text-decoration: line-through;
-  color: var(--a-text-subtle);
+  color: var(--ax-text-neutral-subtle);
 }

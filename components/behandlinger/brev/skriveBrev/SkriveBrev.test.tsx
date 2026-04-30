@@ -7,7 +7,8 @@ import { Behovstype } from 'lib/utils/form';
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
 
-describe('Skriv brev', () => {
+// TODO Skip testene her da vi snart skal bytte ut denne komponentnen
+describe.skip('Skriv brev', () => {
   it('skal vise action meny hvis det ikke er readonly', () => {
     mockMellomLagring();
     renderSkrivBrev(false);

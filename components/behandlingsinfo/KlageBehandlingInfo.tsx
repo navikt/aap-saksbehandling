@@ -26,17 +26,17 @@ export const KlageBehandlingInfo = ({ kabalKlageResultat, klageresultat }: Props
   return (
     skalVises && (
       <Box
-        padding="4"
+        padding="space-16"
         borderWidth="1"
-        borderRadius="large"
-        borderColor="border-divider"
+        borderRadius="8"
+        borderColor="neutral-subtle"
         className={styles.behandlingsinfo}
       >
-        <VStack gap={'4'}>
+        <VStack gap={'space-16'}>
           <Label>Svar fra Nav klageinstans</Label>
           {!svarFraAndreinstans?.length ? (
             <Box>
-              <HGrid columns={'1fr 1fr'} gap="1">
+              <HGrid columns={'1fr 1fr'} gap="space-4">
                 <BodyShort size={'small'}>Venter på svar</BodyShort>
               </HGrid>
             </Box>
@@ -44,7 +44,7 @@ export const KlageBehandlingInfo = ({ kabalKlageResultat, klageresultat }: Props
             svarFraAndreinstans?.map((resultat, index) => {
               return (
                 <Box key={index} className={index !== 0 ? styles.klageBehandlingResultatMedSkillelinje : ''}>
-                  <HGrid columns={'1fr 1fr'} gap="1">
+                  <HGrid columns={'1fr 1fr'} gap="space-4">
                     <Label as="p" size={'small'}>
                       Resultat:
                     </Label>

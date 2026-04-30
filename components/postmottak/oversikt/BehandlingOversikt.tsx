@@ -16,7 +16,6 @@ export const BehandlingOversikt = ({ behandlinger }: Props) => {
   return (
     <Page.Block width="xl">
       <Heading size="large">Postmottak</Heading>
-
       <Table>
         <Table.Header>
           <Table.Row>

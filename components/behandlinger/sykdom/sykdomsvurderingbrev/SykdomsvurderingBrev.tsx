@@ -122,7 +122,7 @@ export const SykdomsvurderingBrev = ({
       knappTekst={'Bekreft'}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
-      <VStack gap={'4'}>
+      <VStack gap={'space-16'}>
         <>
           <BodyShort size={'small'}>
             Tabellen viser hvilke perioder brukeren har blitt vurdert til å oppfylle vilkår for ulike rettighetstyper.
@@ -147,19 +147,23 @@ export const SykdomsvurderingBrev = ({
           tekst={
             <Box>
               <BodyLong size={'small'}>Melding om innvilgelse skal innholde en beskrivelse av</BodyLong>
-              <List size={'small'}>
-                <List.Item>hvilke opplysninger som er lagt til grunn, eksempelvis fra lege</List.Item>
-                <List.Item>hvilke hovedhensyn som har vært avgjørende for utfallet</List.Item>
-              </List>
+              <Box marginBlock="space-16" asChild>
+                <List size={'small'}>
+                  <List.Item>hvilke opplysninger som er lagt til grunn, eksempelvis fra lege</List.Item>
+                  <List.Item>hvilke hovedhensyn som har vært avgjørende for utfallet</List.Item>
+                </List>
+              </Box>
               <BodyLong size={'small'}>Melding om avslag skal i tillegg inneholde</BodyLong>
-              <List size={'small'}>
-                <List.Item>opplysninger om vilkåret eller vilkårene som er avslått</List.Item>
-                <List.Item>begrunnelse for vilkåret eller vilkårene som er avslått</List.Item>
-                <List.Item>
-                  informasjon om hvilke av sakens opplysninger som har vært avgjørende for at vilkår/ vilkårene er
-                  ansett for ikke å være oppfylt
-                </List.Item>
-              </List>
+              <Box marginBlock="space-16" asChild>
+                <List size={'small'}>
+                  <List.Item>opplysninger om vilkåret eller vilkårene som er avslått</List.Item>
+                  <List.Item>begrunnelse for vilkåret eller vilkårene som er avslått</List.Item>
+                  <List.Item>
+                    informasjon om hvilke av sakens opplysninger som har vært avgjørende for at vilkår/ vilkårene er
+                    ansett for ikke å være oppfylt
+                  </List.Item>
+                </List>
+              </Box>
             </Box>
           }
           defaultOpen={false}
@@ -170,7 +174,7 @@ export const SykdomsvurderingBrev = ({
           tekst={
             <Box>
               <BodyLong size={'small'}>Før avsnittet du skriver, står dette avsnittet:</BodyLong>
-              <Box marginBlock={'3 0'}>
+              <Box marginBlock={'space-12 space-0'}>
                 <Heading size={'xsmall'}>Hvem kan få AAP?</Heading>
                 <BodyLong size={'small'}>
                   For å ha rett til arbeidsavklaringspenger må arbeidsevnen din være nedsatt med minst halvparten på
@@ -182,7 +186,7 @@ export const SykdomsvurderingBrev = ({
           }
           defaultOpen={false}
         />
-        <FormField form={form} formField={formFields.vurdering} className={'begrunnelse'} />
+        <FormField form={form} formField={formFields.vurdering} />
       </VStack>
     </VilkårskortMedFormOgMellomlagring>
   );

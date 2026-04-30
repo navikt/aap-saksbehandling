@@ -335,7 +335,7 @@ describe('Oppgitte barn', () => {
         behandlingPersonInfo={behandlingPersonInfo}
       />
     );
-    const felt = screen.getByRole('group', {
+    const felt = screen.getByRole('radiogroup', {
       name: 'Skal brukeren få barnetillegg for barnet?',
     });
     expect(felt).toBeVisible();
@@ -666,7 +666,7 @@ describe('Oppgitte barn', () => {
   });
 
   async function svarJaPåOmDetSkalBeregnesBarnetillegg() {
-    const skalBeregnesBarnetilleggFelt = screen.getByRole('group', {
+    const skalBeregnesBarnetilleggFelt = screen.getByRole('radiogroup', {
       name: 'Skal brukeren få barnetillegg for barnet?',
     });
     const jaVerdi = within(skalBeregnesBarnetilleggFelt).getByRole('radio', { name: 'Ja' });
@@ -928,7 +928,7 @@ describe('mellomlagring', () => {
 
 describe('reset felter ved endringer som påvirker visningslogikk', () => {
   async function svarPåOmFosteroppholdErVarig(svar: 'Ja' | 'Nei') {
-    const fosterFelt = screen.getByRole('group', {
+    const fosterFelt = screen.getByRole('radiogroup', {
       name: 'Har fosterhjemsordningen vart i to år eller er den av varig karakter?',
     });
     const jaVerdi = within(fosterFelt).getByRole('radio', { name: svar });
@@ -936,7 +936,7 @@ describe('reset felter ved endringer som påvirker visningslogikk', () => {
     await user.click(jaVerdi);
   }
   async function svarPåOmDetSkalBeregnesBarnetillegg(svar: 'Ja' | 'Nei') {
-    const skalBeregnesBarnetilleggFelt = screen.getByRole('group', {
+    const skalBeregnesBarnetilleggFelt = screen.getByRole('radiogroup', {
       name: 'Skal brukeren få barnetillegg for barnet?',
     });
     const jaVerdi = within(skalBeregnesBarnetilleggFelt).getByRole('radio', { name: svar });
@@ -990,7 +990,7 @@ describe('reset felter ved endringer som påvirker visningslogikk', () => {
     await svarPåOmFosteroppholdErVarig('Ja');
 
     expect(await screen.queryByDisplayValue(mindato)).not.toBeInTheDocument();
-    const foreldreAnsvarRadio = screen.getByRole('group', {
+    const foreldreAnsvarRadio = screen.getByRole('radiogroup', {
       name: 'Skal brukeren få barnetillegg for barnet?',
     });
     const radios = within(foreldreAnsvarRadio).getAllByRole('radio');

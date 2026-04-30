@@ -19,7 +19,7 @@ export const OvergangUforeTidligereVurdering = ({
   brukerRettPåAAP,
 }: Props) => {
   return (
-    <VStack gap="5">
+    <VStack gap="space-20">
       <SpørsmålOgSvar spørsmål="Vurderingen gjelder fra?" svar={formaterDatoForFrontend(fraDato)} />
       <SpørsmålOgSvar spørsmål="Vilkårsvurdering" svar={begrunnelse} />
       <SpørsmålOgSvar spørsmål="Har brukeren søkt om uføretrygd?" svar={brukerHarSøktOmUføretrygd ? 'Ja' : 'Nei'} />

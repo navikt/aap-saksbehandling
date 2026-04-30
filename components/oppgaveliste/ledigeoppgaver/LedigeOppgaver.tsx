@@ -67,58 +67,61 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
     lagreAktiveEnheter(enheter);
   };
 
-  const { form, formFields } = useConfigForm<FormFieldsFilter>({
-    behandlingstyper: {
-      type: 'checkbox',
-      label: 'Behandlingstype',
-      options: oppgaveBehandlingstyper,
-      defaultValue: lagretUtvidetFilter?.behandlingstyper ?? [],
+  const { form, formFields } = useConfigForm<FormFieldsFilter>(
+    {
+      behandlingstyper: {
+        type: 'checkbox',
+        label: 'Behandlingstype',
+        options: oppgaveBehandlingstyper,
+        defaultValue: lagretUtvidetFilter?.behandlingstyper ?? [],
+      },
+      behandlingOpprettetFom: {
+        type: 'date',
+        label: 'Opprettet fra',
+        toDate: new Date(),
+        defaultValue: lagretUtvidetFilter?.behandlingOpprettetFom,
+      },
+      behandlingOpprettetTom: {
+        type: 'date',
+        label: 'Opprettet til',
+        defaultValue: lagretUtvidetFilter?.behandlingOpprettetTom,
+      },
+      tilbakekrevingBeløpFom: {
+        type: 'text',
+        label: 'Beløp fra',
+        rules: { pattern: { value: /^\d*$/, message: 'Kun tall' } },
+        defaultValue: lagretUtvidetFilter?.tilbakekrevingBeløpFom ?? undefined,
+      },
+      tilbakekrevingBeløpTom: {
+        type: 'text',
+        label: 'Beløp til',
+        rules: { pattern: { value: /^\d*$/, message: 'Kun tall' } },
+        defaultValue: lagretUtvidetFilter?.tilbakekrevingBeløpTom ?? undefined,
+      },
+      årsaker: {
+        type: 'combobox_multiple',
+        label: 'Vurderingsbehov',
+        options: alleVurderingsbehovOptions,
+        defaultValue: lagretUtvidetFilter?.årsaker ?? [],
+      },
+      avklaringsbehov: {
+        type: 'combobox_multiple',
+        label: 'Oppgave',
+        options: oppgaveAvklaringsbehov,
+        defaultValue: lagretUtvidetFilter?.avklaringsbehov ?? [],
+      },
+      statuser: {
+        type: 'checkbox',
+        label: 'Markering',
+        options: OppgaveStatuser,
+        defaultValue: lagretUtvidetFilter?.statuser ?? [],
+      },
+      saksbehandlere: {
+        type: 'fieldArray',
+      },
     },
-    behandlingOpprettetFom: {
-      type: 'date',
-      label: 'Opprettet fra',
-      toDate: new Date(),
-      defaultValue: lagretUtvidetFilter?.behandlingOpprettetFom,
-    },
-    behandlingOpprettetTom: {
-      type: 'date',
-      label: 'Opprettet til',
-      defaultValue: lagretUtvidetFilter?.behandlingOpprettetTom,
-    },
-    tilbakekrevingBeløpFom: {
-      type: 'text',
-      label: 'Beløp fra',
-      rules: { pattern: { value: /^\d*$/, message: 'Kun tall' } },
-      defaultValue: lagretUtvidetFilter?.tilbakekrevingBeløpFom ?? undefined,
-    },
-    tilbakekrevingBeløpTom: {
-      type: 'text',
-      label: 'Beløp til',
-      rules: { pattern: { value: /^\d*$/, message: 'Kun tall' } },
-      defaultValue: lagretUtvidetFilter?.tilbakekrevingBeløpTom ?? undefined,
-    },
-    årsaker: {
-      type: 'combobox_multiple',
-      label: 'Vurderingsbehov',
-      options: alleVurderingsbehovOptions,
-      defaultValue: lagretUtvidetFilter?.årsaker ?? [],
-    },
-    avklaringsbehov: {
-      type: 'combobox_multiple',
-      label: 'Oppgave',
-      options: oppgaveAvklaringsbehov,
-      defaultValue: lagretUtvidetFilter?.avklaringsbehov ?? [],
-    },
-    statuser: {
-      type: 'checkbox',
-      label: 'Markering',
-      options: OppgaveStatuser,
-      defaultValue: lagretUtvidetFilter?.statuser ?? [],
-    },
-    saksbehandlere: {
-      type: 'fieldArray',
-    },
-  }, { mode: 'onChange' });
+    { mode: 'onChange' }
+  );
 
   const behandlingOpprettetTom = form.watch('behandlingOpprettetTom');
   const behandlingOpprettetFom = form.watch('behandlingOpprettetFom');
@@ -196,17 +199,17 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
   const oppgaveKøer = isSuccess(køer) ? køer.data : undefined;
 
   return (
-    <VStack gap={'5'}>
-      <Box borderColor="border-divider" borderWidth="1" borderRadius={'xlarge'}>
+    <VStack gap={'space-20'}>
+      <Box borderColor="neutral-subtle" background={'default'} borderWidth="1" borderRadius={'12'}>
         <VStack>
           <HStack
             justify={'space-between'}
             align={'end'}
-            paddingInline={'4'}
-            paddingBlock={'2'}
+            paddingInline={'space-16'}
+            paddingBlock={'space-8'}
             style={{ borderBottom: '1px solid #071A3636' }}
           >
-            <HStack gap={'4'} align={'end'}>
+            <HStack gap={'space-16'} align={'end'}>
               <EnheterSelect
                 enheter={enheter}
                 aktiveEnheter={aktiveEnheter}
@@ -230,7 +233,7 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
               </Switch>
             </HStack>
           </HStack>
-          <HStack gap={'2'} paddingInline={'4'} paddingBlock={'2'}>
+          <HStack gap={'space-8'} paddingInline={'space-16'} paddingBlock={'space-8'}>
             <Label as="p" size={'small'}>
               Beskrivelse av køen:
             </Label>
@@ -238,7 +241,6 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
           </HStack>
         </VStack>
       </Box>
-
       <div className={styles.tabell}>
         <LedigeOppgaverFiltrering
           form={form}
@@ -264,7 +266,6 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
             </BodyShort>
           ))}
       </div>
-
       {kanLasteInnFlereOppgaver && (
         <HStack justify={'center'}>
           <Button
