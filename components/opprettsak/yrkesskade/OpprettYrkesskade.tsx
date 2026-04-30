@@ -6,22 +6,51 @@ import { useFieldArray, UseFormReturn, useWatch } from 'react-hook-form';
 import { OpprettSakFormFields } from 'components/opprettsak/OpprettSakLocal';
 import { JaEllerNei } from 'lib/utils/form';
 import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
+import { useEffect } from 'react';
 
 interface Props {
   form: UseFormReturn<OpprettSakFormFields>;
 }
 
 const skadeartOptions = ['Arbeidsulykke', 'Yrkessykdom', 'Annet'];
-
 const diagnoseOptions = ['Lumbago', 'Karpaltunnelsyndrom', 'Fraktur håndledd', 'Hørselstap', 'Hjernerystelse'];
 
-const skadebeskrivelseOptions = [
-  'Belastningsskade i korsrygg',
-  'Bruddskade i håndledd',
-  'Kuttskade i hånd',
-  'Hørseltap i venstre øre',
-  'Irritasjonsskade i lunger',
-];
+const diagnoseTilSkadebeskrivelse: Record<string, string> = {
+  Lumbago: 'Belastningsskade i korsrygg',
+  Karpaltunnelsyndrom: 'Nerveskade i håndledd',
+  Håndleddsfraktur: 'Bruddskade i håndledd',
+  Hørselstap: 'Hørseltap i venstre øre',
+  Hjernerystelse: 'Kjemikalieeksponering i hjerne',
+};
+
+const RegisterYrkesskadeFields = ({ form, index }: { form: UseFormReturn<OpprettSakFormFields>; index: number }) => {
+  const diagnose = useWatch({ control: form.control, name: `yrkesskader.${index}.diagnose` });
+
+  useEffect(() => {
+    if (diagnose) {
+      form.setValue(`yrkesskader.${index}.skadebeskrivelse`, diagnoseTilSkadebeskrivelse[diagnose] ?? '');
+    }
+  }, [diagnose]);
+
+  return (
+    <>
+      <SelectWrapper label="Skadeart" control={form.control} name={`yrkesskader.${index}.skadeart`}>
+        {skadeartOptions.map((o) => (
+          <option key={o} value={o}>
+            {o}
+          </option>
+        ))}
+      </SelectWrapper>
+      <SelectWrapper label="Diagnose" control={form.control} name={`yrkesskader.${index}.diagnose`}>
+        {diagnoseOptions.map((o) => (
+          <option key={o} value={o}>
+            {o}
+          </option>
+        ))}
+      </SelectWrapper>
+    </>
+  );
+};
 
 export const OpprettYrkesskade = ({ form }: Props) => {
   const { fields, append, remove } = useFieldArray({
@@ -46,47 +75,18 @@ export const OpprettYrkesskade = ({ form }: Props) => {
                 <option value="REGISTER">Fra registeret</option>
               </SelectWrapper>
 
-              {kilde === 'SØKNAD' &&
-                fields.findIndex((f) => (yrkesskader?.[fields.indexOf(f)]?.kilde ?? f.kilde) === 'SØKNAD') ===
-                  index && (
-                  <SelectWrapper
-                    label="Har yrkesskade?"
-                    control={form.control}
-                    name={`yrkesskader.${index}.harYrkesskade`}
-                  >
-                    <option value={JaEllerNei.Ja}>Ja</option>
-                    <option value={JaEllerNei.Nei}>Nei</option>
-                  </SelectWrapper>
-                )}
-
-              {(kilde ?? 'REGISTER') === 'REGISTER' && (
-                <>
-                  <SelectWrapper label="Skadeart" control={form.control} name={`yrkesskader.${index}.skadeart`}>
-                    {skadeartOptions.map((o) => (
-                      <option key={o} value={o}>
-                        {o}
-                      </option>
-                    ))}
-                  </SelectWrapper>
-                  <SelectWrapper label="Diagnose" control={form.control} name={`yrkesskader.${index}.diagnose`}>
-                    {diagnoseOptions.map((o) => (
-                      <option key={o} value={o}>
-                        {o}
-                      </option>
-                    ))}
-                  </SelectWrapper>
-                  <div style={{ display: 'none' }}>
-                    <SelectWrapper
-                      label="Skadebeskrivelse"
-                      control={form.control}
-                      name={`yrkesskader.${index}.skadebeskrivelse`}
-                      readOnly={true}
-                    >
-                      <option value="">{skadebeskrivelseOptions[index] || 'Ingen beskrivelse'}</option>
-                    </SelectWrapper>
-                  </div>
-                </>
+              {kilde === 'SØKNAD' && (
+                <SelectWrapper
+                  label="Har yrkesskade?"
+                  control={form.control}
+                  name={`yrkesskader.${index}.harYrkesskade`}
+                >
+                  <option value={JaEllerNei.Ja}>Ja</option>
+                  <option value={JaEllerNei.Nei}>Nei</option>
+                </SelectWrapper>
               )}
+
+              {(kilde ?? 'REGISTER') === 'REGISTER' && <RegisterYrkesskadeFields form={form} index={index} />}
 
               <Button
                 type="button"
@@ -110,10 +110,9 @@ export const OpprettYrkesskade = ({ form }: Props) => {
         onClick={() =>
           append({
             kilde: 'REGISTER',
-            harYrkesskade: JaEllerNei.Nei,
             skadeart: skadeartOptions[0],
             diagnose: diagnoseOptions[0],
-            skadebeskrivelse: skadebeskrivelseOptions[0],
+            skadebeskrivelse: diagnoseTilSkadebeskrivelse[diagnoseOptions[0]],
             yrkesskadeRegisterKilde: Math.random() < 0.5 ? 'KOMPYS' : 'INFOTRYGD',
           })
         }

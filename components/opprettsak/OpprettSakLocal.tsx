@@ -279,15 +279,16 @@ export const OpprettSakLocal = () => {
       søknadsdato: formaterDatoForBackend(data.søknadsdato),
       fødselsdato: formaterDatoForBackend(data.fødselsdato),
       yrkesskader: (data.yrkesskader ?? []).map((y) => {
-        if (y.kilde === 'SØKNAD') {
+        const kilde = y.kilde ?? 'REGISTER';
+        if (kilde === 'SØKNAD') {
           return {
-            kilde: y.kilde,
+            kilde: kilde,
             harYrkesskade: y.harYrkesskade === JaEllerNei.Ja,
             harYrkesskadeFraSøknad: y.harYrkesskade === JaEllerNei.Ja,
           };
         } else {
           return {
-            kilde: y.kilde,
+            kilde: kilde,
             saksreferanse: y.yrkesskadeRegisterKilde ?? '',
             skadeart: y.skadeart ?? '',
             diagnose: y.diagnose ?? '',
