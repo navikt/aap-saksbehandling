@@ -59,7 +59,7 @@ export const YrkesskadeVurderingTabell = ({ form, yrkesskader, readOnly, update,
         {yrkesskader.length > 0 && (
           <Table.Body>
             {yrkesskader.map((yrkesskade, index) => (
-              <Table.Row key={yrkesskade.ref}>
+              <Table.Row key={`${yrkesskade.ref}-${yrkesskade.saksnummer ?? index}`}>
                 <Table.DataCell textSize={'small'}>
                   <Checkbox
                     size={'small'}

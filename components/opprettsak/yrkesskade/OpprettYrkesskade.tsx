@@ -54,7 +54,6 @@ const RegisterYrkesskadeFields = ({ form, index }: { form: UseFormReturn<Opprett
       <Checkbox
         size="small"
         checked={!!harVedtaksdato}
-        defaultChecked
         onChange={(e) => {
           const vedtaksdato = e.target.checked ? formaterDatoForBackend(subDays(new Date(), 8)) : undefined;
           form.setValue(`yrkesskader.${index}.harVedtaksdato`, e.target.checked);

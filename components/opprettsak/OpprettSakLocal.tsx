@@ -295,6 +295,7 @@ export const OpprettSakLocal = () => {
             skadeart: y.skadeart ?? '',
             diagnose: y.diagnose ?? '',
             skadebeskrivelse: y.skadebeskrivelse ?? '',
+            vedtaksdato: y.vedtaksdato ?? null,
           };
         }
       }),
