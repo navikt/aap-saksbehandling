@@ -3,7 +3,7 @@
 import { ExternalLinkIcon, MenuGridIcon } from '@navikt/aksel-icons';
 import { Dropdown, InternalHeader } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
-import { clientConfig, clientHentAInntektRedirectUrl } from 'lib/clientApi';
+import { clientConfig, clientHentAInntektRedirectUrl, clientHentSakPersoninfo } from 'lib/clientApi';
 import { ClientConfig } from 'lib/types/clientTypes';
 import { isError, isSuccess } from 'lib/utils/api';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
@@ -21,9 +21,17 @@ export const AppSwitcher = () => {
       e.preventDefault();
       const response = await clientHentAInntektRedirectUrl(saksnummer);
 
-      if (!isError(response)) {
-        window.open(response.data.redirectUrl, '_blank');
-      }
+      const url = !isError(response) ? response.data.redirectUrl : config?.aInntektUrl;
+      window.open(url, '_blank');
+    }
+  };
+
+  const handleGosysClick = async (e: React.MouseEvent) => {
+    if (saksnummer && config?.gosysUrl) {
+      e.preventDefault();
+      const response = await clientHentSakPersoninfo(saksnummer);
+      const url = !isError(response) ? `${config.gosysUrl}/personoversikt/fnr=${response.data.fnr}` : config.gosysUrl;
+      window.open(url, '_blank');
     }
   };
 
@@ -37,7 +45,13 @@ export const AppSwitcher = () => {
         <Dropdown.Menu.GroupedList>
           <Dropdown.Menu.GroupedList.Heading>Systemer og oppslagsverk</Dropdown.Menu.GroupedList.Heading>
 
-          <Dropdown.Menu.GroupedList.Item as="a" target="_blank" href={config?.gosysUrl} disabled={!config?.gosysUrl}>
+          <Dropdown.Menu.GroupedList.Item
+            as="a"
+            target="_blank"
+            href={config?.gosysUrl}
+            disabled={!config?.gosysUrl}
+            onClick={handleGosysClick}
+          >
             Gosys <ExternalLinkIcon aria-hidden />
           </Dropdown.Menu.GroupedList.Item>
 

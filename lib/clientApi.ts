@@ -27,6 +27,7 @@ import {
   OpprettDummySakDto,
   OpprettTestcase,
   RettighetsinfoDto,
+  SakPersoninfo,
   SaksInfo,
   SettPåVent,
 } from './types/types';
@@ -267,7 +268,10 @@ export function clientKorrigerMeldekort(saksnummer: string, oppdaterMeldekortReq
   );
 }
 
-
 export function clientHentAInntektRedirectUrl(saksnummer: string) {
   return clientFetch<{ redirectUrl: string }>(`${BASE_URL}/api/ainntekt`, 'POST', { saksnummer });
+}
+
+export function clientHentSakPersoninfo(saksnummer: string) {
+  return clientFetch<SakPersoninfo>(`${BASE_URL}/api/sak/${saksnummer}/personinformasjon`, 'GET');
 }
