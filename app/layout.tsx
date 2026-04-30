@@ -33,7 +33,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         )}
       </head>
       <body>
-        <FeatureFlagProvider flags={getAllFlags()}>
+        <FeatureFlagProvider flags={getAllFlags(brukerInformasjon.NAVident)}>
           <InnloggetBrukerContextProvider bruker={brukerInformasjon}>
             <KelvinAppHeader brukerInformasjon={brukerInformasjon} roller={roller} />
             {children}
