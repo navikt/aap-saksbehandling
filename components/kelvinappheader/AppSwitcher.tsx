@@ -94,6 +94,9 @@ export const AppSwitcher = () => {
           >
             Kunnskapsbanken <ExternalLinkIcon aria-hidden />
           </Dropdown.Menu.GroupedList.Item>
+          <Dropdown.Menu.GroupedList.Item as="a" target="_blank" href={config?.inst2Url} disabled={!config?.inst2Url}>
+            INST2 <ExternalLinkIcon aria-hidden />
+          </Dropdown.Menu.GroupedList.Item>
         </Dropdown.Menu.GroupedList>
       </Dropdown.Menu>
     </Dropdown>
