@@ -5048,6 +5048,84 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/test/opprettOgFullforBehandling': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['no.nav.aap.behandlingsflyt.test.OpprettOgFullforBehandlingRequest'];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.test.OpprettOgFullforBehandlingRespons'];
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/test/behandlingStatus': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['no.nav.aap.behandlingsflyt.test.BehandlingStatusRequest'];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.test.BehandlingStatusRespons'];
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/test/opprett': {
     parameters: {
       query?: never;
@@ -5322,22 +5400,23 @@ export interface components {
       harRelasjon: boolean;
       skalFinnesIPDL: boolean;
     };
-    'no.nav.aap.behandlingsflyt.TestYrkesskadeDto':
-      | components['schemas']['no.nav.aap.behandlingsflyt.TestYrkesskadeDto.Register']
-      | components['schemas']['no.nav.aap.behandlingsflyt.TestYrkesskadeDto.S\u00F8knad'];
-    'no.nav.aap.behandlingsflyt.TestYrkesskadeDto.Register': {
-      diagnose: string;
+    'no.nav.aap.behandlingsflyt.TestYrkesskadeDto': {
+      diagnose?: string | null;
+      harYrkesskade: boolean;
+      kilde: string;
       saksreferanse: string;
-      skadeart: string;
-      skadebeskrivelse: string;
+      skadeart?: string | null;
+      skadebeskrivelse?: string | null;
       /**
        * Format: date
        * @example 2025-04-01
        */
       skadedato?: string | null;
-    };
-    'no.nav.aap.behandlingsflyt.TestYrkesskadeDto.S\u00F8knad': {
-      harYrkesskade: boolean;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      vedtaksdato?: string | null;
     };
     'no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_7.Aktivitetsplikt11_7GrunnlagDto': {
       'harSendtForh\u00E5ndsvarsel': boolean;
@@ -17613,12 +17692,37 @@ export interface components {
       status: 'AVSLUTTET' | 'LØPENDE' | 'OPPRETTET' | 'UTREDES';
       's\u00F8knadErTrukket'?: boolean | null;
     };
+    'no.nav.aap.behandlingsflyt.test.BehandlingStatusRequest': {
+      saksnummer: string;
+    };
+    'no.nav.aap.behandlingsflyt.test.BehandlingStatusRespons': {
+      behandlingStatus?: string | null;
+      ferdig: boolean;
+      saksnummer: string;
+      's\u00F8knad'?: components['schemas']['no.nav.aap.behandlingsflyt.test.S\u00F8knadDetaljer'];
+    };
     'no.nav.aap.behandlingsflyt.test.OpprettDummySakDto': {
       andreUtbetalinger?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AndreUtbetalingerDto'];
       erStudent: boolean;
       harMedlemskap: boolean;
       harYrkesskade: boolean;
       ident: string;
+    };
+    'no.nav.aap.behandlingsflyt.test.OpprettOgFullforBehandlingRequest': {
+      andreUtbetalinger?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AndreUtbetalingerDto'];
+      erStudent: boolean;
+      harMedlemskap: boolean;
+      harYrkesskade: boolean;
+      ident: string;
+    };
+    'no.nav.aap.behandlingsflyt.test.OpprettOgFullforBehandlingRespons': {
+      saksnummer: string;
+    };
+    'no.nav.aap.behandlingsflyt.test.S\u00F8knadDetaljer': {
+      andreUtbetalinger?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AndreUtbetalingerDto'];
+      erStudent: boolean;
+      harMedlemskap: boolean;
+      harYrkesskade: boolean;
     };
     'no.nav.aap.behandlingsflyt.test.modell.TestPerson.Dagpenger': {
       /** @enum {string} */

@@ -205,6 +205,14 @@ export const Yrkesskade = ({
       visningActions={visningActions}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
+      <div>
+        <Label size="small">Relevante informasjon fra søknad</Label>
+        <p>
+          Har du yrkesskade eller yrkessykdom som påvirker hvor mye du kan arbeide?{' '}
+          {grunnlag.opplysninger.oppgittYrkesskadeISøknad ? 'Ja' : 'Nei'}
+        </p>
+      </div>
+      <FormField form={form} formField={formFields.begrunnelse} />
       <FormField form={form} formField={formFields.begrunnelse} />
       <FormField form={form} formField={formFields.erÅrsakssammenheng} horizontalRadio />
 
