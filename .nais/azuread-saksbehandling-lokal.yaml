@@ -35,7 +35,7 @@ spec:
   secretName: azuread-saksbehandling-lokal
   claims:
     groups:
-      # 0000-GA-AAP_BESLUTTER
+        # 0000-GA-AAP_BESLUTTER
       - id: f0f6cad5-e3c0-4308-99a2-3630ac60174a
         # 0000-GA-AAP_LES
       - id: 96e18023-db50-45f7-b023-3251279df28d
