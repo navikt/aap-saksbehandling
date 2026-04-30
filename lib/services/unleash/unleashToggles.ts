@@ -8,6 +8,7 @@ export const FLAGS = [
   'TilbakekrevingBelopFilter',
   'registrereEllerEndreMeldekort',
   'ForeslaaVedtakVedtakslengde',
+  'SykdomUtenVissVarighetFrontend',
   'VisArenasakerOversikt',
   'ArenasakerLenkeTilVisninsklient',
 ] as const;
@@ -24,6 +25,7 @@ export const mockedFlags: Flags = {
   InkluderOvergangUforeArbeid: true,
   TilbakekrevingBelopFilter: true,
   registrereEllerEndreMeldekort: true,
+  SykdomUtenVissVarighetFrontend: true,
   ForeslaaVedtakVedtakslengde: true,
   VisArenasakerOversikt: true,
   ArenasakerLenkeTilVisninsklient: true,
