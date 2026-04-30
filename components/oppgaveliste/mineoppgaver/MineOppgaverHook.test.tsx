@@ -56,15 +56,11 @@ const lagOppgaveUtenBeløp = (id: number): Oppgave => ({
 });
 
 const wrapper = ({ children }: { children: ReactNode }) => (
-  <FeatureFlagProvider flags={{ ...mockedFlags, TilbakekrevingBelopFilter: true }}>
-    {children}
-  </FeatureFlagProvider>
+  <FeatureFlagProvider flags={{ ...mockedFlags, TilbakekrevingBelopFilter: true }}>{children}</FeatureFlagProvider>
 );
 
 const wrapperUtenFeatureFlag = ({ children }: { children: ReactNode }) => (
-  <FeatureFlagProvider flags={{ ...mockedFlags, TilbakekrevingBelopFilter: false }}>
-    {children}
-  </FeatureFlagProvider>
+  <FeatureFlagProvider flags={{ ...mockedFlags, TilbakekrevingBelopFilter: false }}>{children}</FeatureFlagProvider>
 );
 
 describe('useFiltrerteOppgaver — tilbakekrevingBeløp-filter', () => {
@@ -84,12 +80,11 @@ describe('useFiltrerteOppgaver — tilbakekrevingBeløp-filter', () => {
   ];
 
   it('returnerer alle oppgaver når ingen beløpsfiltre er satt', () => {
-    const { result } = renderHook(
-      () => useFiltrerteOppgaver({ oppgaver, filter: {} }),
-      { wrapper }
-    );
+    const { result } = renderHook(() => useFiltrerteOppgaver({ oppgaver, filter: {} }), { wrapper });
 
-    act(() => { vi.advanceTimersByTime(300); });
+    act(() => {
+      vi.advanceTimersByTime(300);
+    });
 
     expect(result.current).toHaveLength(4);
   });
@@ -100,7 +95,9 @@ describe('useFiltrerteOppgaver — tilbakekrevingBeløp-filter', () => {
       { wrapper }
     );
 
-    act(() => { vi.advanceTimersByTime(300); });
+    act(() => {
+      vi.advanceTimersByTime(300);
+    });
 
     const ids = result.current.map((o) => o.id);
     expect(ids).toContain(2);
@@ -114,7 +111,9 @@ describe('useFiltrerteOppgaver — tilbakekrevingBeløp-filter', () => {
       { wrapper }
     );
 
-    act(() => { vi.advanceTimersByTime(300); });
+    act(() => {
+      vi.advanceTimersByTime(300);
+    });
 
     const ids = result.current.map((o) => o.id);
     expect(ids).toContain(1);
@@ -124,23 +123,27 @@ describe('useFiltrerteOppgaver — tilbakekrevingBeløp-filter', () => {
 
   it('filtrerer med både fom og tom satt', () => {
     const { result } = renderHook(
-      () => useFiltrerteOppgaver({ oppgaver, filter: { tilbakekrevingBeløpFom: '1000', tilbakekrevingBeløpTom: '5000' } }),
+      () =>
+        useFiltrerteOppgaver({ oppgaver, filter: { tilbakekrevingBeløpFom: '1000', tilbakekrevingBeløpTom: '5000' } }),
       { wrapper }
     );
 
-    act(() => { vi.advanceTimersByTime(300); });
+    act(() => {
+      vi.advanceTimersByTime(300);
+    });
 
     const ids = result.current.map((o) => o.id);
     expect(ids).toEqual([2]);
   });
 
   it('ekskluderer oppgaver uten tilbakekrevingsbeløp når beløpsfilter er satt', () => {
-    const { result } = renderHook(
-      () => useFiltrerteOppgaver({ oppgaver, filter: { tilbakekrevingBeløpFom: '100' } }),
-      { wrapper }
-    );
+    const { result } = renderHook(() => useFiltrerteOppgaver({ oppgaver, filter: { tilbakekrevingBeløpFom: '100' } }), {
+      wrapper,
+    });
 
-    act(() => { vi.advanceTimersByTime(300); });
+    act(() => {
+      vi.advanceTimersByTime(300);
+    });
 
     const ids = result.current.map((o) => o.id);
     expect(ids).not.toContain(4);
@@ -152,7 +155,9 @@ describe('useFiltrerteOppgaver — tilbakekrevingBeløp-filter', () => {
       { wrapper: wrapperUtenFeatureFlag }
     );
 
-    act(() => { vi.advanceTimersByTime(300); });
+    act(() => {
+      vi.advanceTimersByTime(300);
+    });
 
     expect(result.current).toHaveLength(4);
   });

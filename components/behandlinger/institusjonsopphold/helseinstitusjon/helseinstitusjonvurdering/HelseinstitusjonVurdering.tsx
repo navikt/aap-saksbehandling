@@ -64,7 +64,7 @@ export const Helseinstitusjonsvurdering = ({
   }, [opphold.oppholdFra, forrigeOppholdTom, opphold.tidligsteReduksjonsdato]);
 
   return (
-    <VStack gap={"space-16"}>
+    <VStack gap={'space-16'}>
       <TextAreaWrapper
         name={`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.begrunnelse`}
         control={form.control}

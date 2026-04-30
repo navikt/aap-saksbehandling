@@ -47,7 +47,7 @@ export const ÅrsakTilBehandling = ({ vurderingsbehovOgÅrsaker, behandlingType 
         </HStack>
       </ExpansionCard.Header>
       <ExpansionCard.Content>
-        <VStack gap={"space-12"}>
+        <VStack gap={'space-12'}>
           {filtrerteÅrsaker
             .filter(({ vurderingsbehov }) => !vurderingsbehov.some((v) => v.type === 'REVURDERING_AVBRUTT'))
             .map(({ vurderingsbehov, opprettet, årsak, beskrivelse }, index) => {

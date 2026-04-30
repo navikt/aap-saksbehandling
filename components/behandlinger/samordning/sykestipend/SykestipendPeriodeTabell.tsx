@@ -22,9 +22,9 @@ export const SykestipendPeriodeTabell = ({ form, readOnly }: Props) => {
     });
   }
   return (
-    <VStack gap={"space-8"}>
+    <VStack gap={'space-8'}>
       <Label size={'small'}>Legg til periode med sykestipend</Label>
-      <VStack gap={"space-0"}>
+      <VStack gap={'space-0'}>
         <BodyLong size={'small'}>Legg til perioder der brukeren har rett på sykestipend.</BodyLong>
         <BodyLong size={'small'}>Perioder med sykestipend gir ikke rett på AAP.</BodyLong>
       </VStack>
@@ -41,7 +41,7 @@ export const SykestipendPeriodeTabell = ({ form, readOnly }: Props) => {
             <Table.Row key={`${field.id}-${index}`}>
               <Table.DataCell>Sykestipend inkludert karanteneperiode</Table.DataCell>
               <Table.DataCell>
-                <HStack align={'center'} gap={"space-4"}>
+                <HStack align={'center'} gap={'space-4'}>
                   <DateInputWrapper
                     control={form.control}
                     name={`perioder.${index}.fom`}

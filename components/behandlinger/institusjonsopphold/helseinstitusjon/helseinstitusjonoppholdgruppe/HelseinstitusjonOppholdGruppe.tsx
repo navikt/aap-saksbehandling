@@ -179,9 +179,9 @@ export const HelseinstitusjonOppholdGruppe = ({
               expanded={cardExpanded}
               setExpanded={setCardExpanded}
               heading={
-                <HStack justify={'space-between'} padding={"space-8"}>
+                <HStack justify={'space-between'} padding={'space-8'}>
                   <BodyShort size={'small'}>{formatDatoMedMånedsnavn(addDays(oppholdAvsluttetDato, 1))} – </BodyShort>
-                  <Tag data-color="neutral" size="xsmall" variant={"moderate"}>
+                  <Tag data-color="neutral" size="xsmall" variant={'moderate'}>
                     Ikke relevant
                   </Tag>
                 </HStack>

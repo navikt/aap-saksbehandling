@@ -24,7 +24,7 @@ export const ArbeidsopptrappingVurderingFormInput = ({ index, readonly, form, ik
   const rettPåAAPIOpptrapping = form.watch(`vurderinger.${index}.rettPaaAAPIOpptrapping`);
 
   return (
-    <VStack gap={"space-20"}>
+    <VStack gap={'space-20'}>
       <DateInputWrapper
         name={`vurderinger.${index}.fraDato`}
         label="Vurderingen gjelder fra"

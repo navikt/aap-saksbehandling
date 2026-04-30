@@ -92,7 +92,7 @@ export const LeggTilBarnModal = ({ readOnly, åpne, avbryt, onLagreNyttBarn, all
       width={'small'}
     >
       <Modal.Body>
-        <VStack gap={"space-24"}>
+        <VStack gap={'space-24'}>
           <TextFieldWrapper
             label={'Fornavn og mellomnavn'}
             name={'fornavn'}

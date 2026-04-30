@@ -5,7 +5,7 @@ import styles from 'components/saksinfobanner/avbrytrevurderingmodal/AvbrytRevur
 import { useOverstyrTildelingHook } from 'hooks/saksbehandling/OverstyrTildelingHook';
 
 export const OverstyrTildelingModal = () => {
-  const {visOverstyrModal, setVisOverstyrModal, reservertAvNavn, callback} = useOverstyrTildelingHook();
+  const { visOverstyrModal, setVisOverstyrModal, reservertAvNavn, callback } = useOverstyrTildelingHook();
 
   return (
     <Modal

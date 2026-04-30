@@ -61,7 +61,7 @@ export const SettMarkeringForBehandlingModal = ({ referanse, type, isOpen, onClo
       className={styles.settBehandlingPåVentModal}
     >
       <Modal.Body>
-        <VStack gap={"space-16"}>
+        <VStack gap={'space-16'}>
           {isOpen && (
             <form
               id={'settMarkeringPåBehandling'}

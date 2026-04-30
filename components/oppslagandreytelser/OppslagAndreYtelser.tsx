@@ -12,7 +12,7 @@ interface Props {
 
 export const OppslagAndreYtelser = ({ perioder }: Props) => {
   return (
-    <VStack gap={"space-24"}>
+    <VStack gap={'space-24'}>
       <div className={'flex-column'}>
         <div>
           <Label size={'small'}>Oppslag på andre ytelser</Label>
@@ -33,14 +33,16 @@ export const OppslagAndreYtelser = ({ perioder }: Props) => {
           {perioder
             .filter((periode) => burdeYtelseTypeVises(periode.ytelseType))
             .map((periode, index) => {
-            return (
-              <Table.Row key={index}>
-                <Table.DataCell textSize={'small'}>{mapYtelseTypeTilNavn(periode.ytelseType)}</Table.DataCell>
-                <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(periode.fom) + " - " + formaterDatoForFrontend(periode.tom ?? "")}</Table.DataCell>
-                <Table.DataCell textSize={'small'}>{periode.kilde}</Table.DataCell>
-              </Table.Row>
-            );
-          })}
+              return (
+                <Table.Row key={index}>
+                  <Table.DataCell textSize={'small'}>{mapYtelseTypeTilNavn(periode.ytelseType)}</Table.DataCell>
+                  <Table.DataCell textSize={'small'}>
+                    {formaterDatoForFrontend(periode.fom) + ' - ' + formaterDatoForFrontend(periode.tom ?? '')}
+                  </Table.DataCell>
+                  <Table.DataCell textSize={'small'}>{periode.kilde}</Table.DataCell>
+                </Table.Row>
+              );
+            })}
         </Table.Body>
       </TableStyled>
     </VStack>

@@ -23,7 +23,7 @@ const mapResultatTilTeskst = (vurdering: SvarFraAndreinstansVurdering): string =
 
 export const KabalIverksettKonsekvens = ({ grunnlag }: Props) => (
   <VilkårsKort heading={'Oppsummering'} steg={'IVERKSETT_KONSEKVENS'}>
-    <VStack gap={"space-16"}>
+    <VStack gap={'space-16'}>
       <HStack gap="space-8">
         <BodyShort weight="semibold">Svartype fra Kabal:</BodyShort>
         <BodyShort>{formaterSvartype(grunnlag.svarFraAndreinstans.type)}</BodyShort>

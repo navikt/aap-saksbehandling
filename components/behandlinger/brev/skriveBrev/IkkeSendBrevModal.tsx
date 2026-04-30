@@ -17,11 +17,7 @@ export const IkkeSendBrevModal = ({ isOpen, onClose, onDelete }: Props) => {
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={onClose}>Lukk</Button>
-        <Button
-          data-color="danger"
-          variant="primary"
-          icon={<TrashIcon />}
-          onClick={onDelete}>
+        <Button data-color="danger" variant="primary" icon={<TrashIcon />} onClick={onDelete}>
           Ikke send brev
         </Button>
       </Modal.Footer>

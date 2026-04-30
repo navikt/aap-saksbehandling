@@ -138,7 +138,7 @@ export const AvklarSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, 
       visningActions={visningActions}
       formReset={() => {}}
     >
-      <VStack gap={"space-24"}>
+      <VStack gap={'space-24'}>
         <ServerSentEventStatusAlert status={status} />
 
         <RadioGroupWrapper
