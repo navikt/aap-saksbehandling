@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { logError } from 'lib/serverutlis/logger';
 import { hentSakPersoninfo } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 
-const aInntektBaseUrl = process.env.A_INNTEKT_URL;
+const aInntektBaseUrl = process.env.A_INNTEKT_URL_PUB;
 
 export async function POST(req: NextRequest) {
   const body = await req.json();

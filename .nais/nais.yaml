@@ -72,7 +72,7 @@ spec:
         - application: dokumentinnhenting
         - application: tilgang
         - application: endringslogg
-          namespace: k9saksbehandling 
+          namespace: k9saksbehandling
       external:
         - host: cdn.nav.no
         - host: aap-unleash-api.nav.cloud.nais.io
