@@ -15,7 +15,7 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgG
 
 import { ForhåndsvisBrev } from 'components/brevbygger/ForhåndsvisBrev';
 import { VelgeMottakere } from 'components/brevbygger/VelgeMottakere';
-import { IkkeSendBrevModal } from 'components/behandlinger/brev/skriveBrev/IkkeSendBrevModal';
+import { IkkeSendBrevModal, IkkeSendFields } from 'components/behandlinger/brev/skriveBrev/IkkeSendBrevModal';
 import { RefusjonskravVisning } from 'components/brevbygger/RefusjonskravVisning';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { Distribusjonssjekk } from 'components/brev/Distribusjonssjekk';
@@ -90,12 +90,13 @@ export const Brevbygger = ({
     });
   };
 
-  const slettBrev = async () => {
+  const slettBrev = async (ikkeSendBrevForm: IkkeSendFields) => {
     løsBehovOgGåTilNesteSteg({
       behandlingVersjon,
       behov: {
         behovstype,
         brevbestillingReferanse: referanse,
+        begrunnelse: ikkeSendBrevForm.begrunnelse,
         handling: 'AVBRYT',
       },
       referanse: behandlingsreferanse,
