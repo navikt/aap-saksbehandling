@@ -631,10 +631,11 @@ export interface VurderingMeta {
   besluttetAv?: VurdertAvAnsatt;
 }
 
-export type VurderingMetaResponse = Pick<VurderingMeta, 'vurdertAv' | 'kvalitetssikretAv' | 'besluttetAv'> & {
-  vurdertAutomatisk?: boolean;
-  trukketAv?: VurdertAvAnsatt;
-};
+export type VurderingMetaResponse =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'] & {
+    vurdertAutomatisk?: boolean;
+    trukketAv?: VurdertAvAnsatt;
+  };
 
 // Gjør at vi kan lage et typesikkert "enum-objekt" med union types generert fra backend. feks const minEnum = lagEnumObjektFraUnionType<StegGruppe>({ SYKDOM: 'SYKDOM' ...})
 export function lagEnumObjektFraUnionType<UnionType extends string>(o: { [P in UnionType]: P }): {
