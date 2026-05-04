@@ -4,7 +4,6 @@ import { Kategoriser } from './kategoriser/Kategoriser';
 import { DigitaliseringsGrunnlag, KategoriserDokumentKategori } from 'lib/types/postmottakTypes';
 import { useState } from 'react';
 import { DigitaliserSøknad } from './søknad/DigitaliserSøknad';
-import { DigitaliserMeldekort } from './meldekort/DigitaliserMeldekort';
 import { Behovstype } from 'lib/postmottakForm';
 import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/PostmottakLøsBehovOgGåTilNesteStegHook';
 import { formaterDatoForBackend } from 'lib/utils/date';
@@ -12,7 +11,6 @@ import { DigitaliserAnnetRelevantDokument } from './annetrelevantdokument/Digita
 import { VStack } from '@navikt/ds-react';
 import { DigitaliserKlage } from 'components/postmottak/digitaliserdokument/klage/DigitaliserKlage';
 import { DigitaliserMeldekortV2 } from 'components/postmottak/digitaliserdokument/meldekort/DigitaliserMeldekortV2';
-import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   behandlingsVersjon: number;
@@ -35,8 +33,6 @@ export const DigitaliserDokument = ({
 }: Props) => {
   const [kategori, setKategori] = useState<KategoriserDokumentKategori | undefined>(grunnlag.vurdering?.kategori);
   const { løsBehovOgGåTilNesteSteg, status, isLoading } = usePostmottakLøsBehovOgGåTilNesteSteg('DIGITALISER_DOKUMENT');
-
-  const nyDigitaliseringAvMeldekortEnabled = useFeatureFlag('DigitaliseringAvMeldekortV2Frontend');
 
   function handleSubmit(kategori: KategoriserDokumentKategori, jsonString: string | null, søknadsdato: Date | null) {
     løsBehovOgGåTilNesteSteg({
@@ -69,10 +65,7 @@ export const DigitaliserDokument = ({
           isLoading={isLoading}
         />
       )}
-      {kategori === 'MELDEKORT' && !nyDigitaliseringAvMeldekortEnabled && (
-        <DigitaliserMeldekort submit={handleSubmit} readOnly={readOnly} isLoading={isLoading} />
-      )}
-      {kategori === 'MELDEKORT' && nyDigitaliseringAvMeldekortEnabled && (
+      {kategori === 'MELDEKORT' && (
         <DigitaliserMeldekortV2 submit={handleSubmit} readOnly={readOnly} isLoading={isLoading} />
       )}
       {kategori === 'KLAGE' && (
