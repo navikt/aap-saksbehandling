@@ -21,7 +21,6 @@ import { BehandlingsflytEllerPostmottakBehandling } from './types';
 import { usePostmottakBehandlinger } from 'hooks/postmottak/PostmottakBehandlingerHook';
 import { useHentOppgaverForBehandlinger } from 'hooks/oppgave/OppgaverPåSakHook';
 import { Dato } from 'lib/types/Dato';
-import { useFeatureFlag } from 'context/UnleashContext';
 import { Kort } from 'components/kort/Kort';
 
 const lokalDevToolsForBehandlingOgSak = isLocal();
@@ -83,7 +82,6 @@ export const SakMedBehandlinger = ({
 
   const oppgaverPerBehandling = useHentOppgaverForBehandlinger(åpne.map((b) => b.behandling.referanse));
   const avsluttede = alleBehandlinger?.filter((b) => erAvsluttet(b.behandling));
-  const visSisteDagMedRett = useFeatureFlag('VisSisteDagMedRett');
 
   function hentTildeling(referanse: string) {
     const oppgaveInfo = oppgaverPerBehandling.get(referanse);
@@ -136,7 +134,7 @@ export const SakMedBehandlinger = ({
               )}
             </HStack>
           </HStack>
-          {visSisteDagMedRett && rettighetsinfo?.sisteDagMedRett && (
+          {rettighetsinfo?.sisteDagMedRett && (
             <BodyShort>{`Siste dag med rett: ${new Dato(rettighetsinfo.sisteDagMedRett).formaterForFrontend()}`}</BodyShort>
           )}
         </VStack>
