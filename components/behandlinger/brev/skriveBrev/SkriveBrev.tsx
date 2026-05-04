@@ -15,7 +15,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { revalidateFlyt } from 'lib/actions/actions';
 import { ChevronDownIcon, GlassIcon, TrashIcon } from '@navikt/aksel-icons';
 import { ForhåndsvisBrevModal } from 'components/behandlinger/brev/skriveBrev/ForhåndsvisBrevModal';
-import { IkkeSendBrevModal } from 'components/behandlinger/brev/skriveBrev/IkkeSendBrevModal';
+import { IkkeSendBrevModal, IkkeSendFields } from 'components/behandlinger/brev/skriveBrev/IkkeSendBrevModal';
 import { isError, isSuccess } from 'lib/utils/api';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
@@ -91,12 +91,13 @@ export const SkriveBrev = ({
     setBrev(brev);
   };
 
-  const slettBrev = async () => {
+  const slettBrev = async (ikkeSendBrevForm: IkkeSendFields) => {
     løsBehovOgGåTilNesteSteg({
       behandlingVersjon: behandlingVersjon,
       behov: {
         behovstype: behovstype,
         brevbestillingReferanse: referanse,
+        begrunnelse: ikkeSendBrevForm.begrunnelse,
         handling: 'AVBRYT',
       },
       referanse: behandlingsreferanse,
@@ -226,9 +227,7 @@ export const SkriveBrev = ({
           onClose={() => {
             settIkkeSendBrevModalOpen(false);
           }}
-          onDelete={() => {
-            slettBrev();
-          }}
+          onDelete={slettBrev}
         />
       </div>
     </>
