@@ -2,6 +2,7 @@ import { BodyShort, Button, Modal } from '@navikt/ds-react';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { useForm } from 'react-hook-form';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   isOpen: boolean;
@@ -13,6 +14,7 @@ export interface IkkeSendFields {
 }
 
 export const IkkeSendBrevModal = ({ isOpen, onClose, onDelete }: Props) => {
+  const krevBegrunnelse = useFeatureFlag('BegrunnelseForIkkeSendBrev');
   const localForm = useForm<IkkeSendFields>();
   const { control, handleSubmit, trigger } = localForm;
   return (
@@ -21,15 +23,17 @@ export const IkkeSendBrevModal = ({ isOpen, onClose, onDelete }: Props) => {
         <BodyShort spacing>
           Denne handlingen skal kun brukes i tilfeller hvor det ikke er behov for å sende brev til bruker.
         </BodyShort>
-        <TextAreaWrapper
-          label={'Begrunnelse'}
-          name={'begrunnelse'}
-          control={control}
-          rules={{ required: 'Du må gi en begrunnelse for hvorfor brevet ikke skal sendes.' }}
-          onChangeCustom={async () => {
-            await trigger('begrunnelse');
-          }}
-        />
+        {krevBegrunnelse && (
+          <TextAreaWrapper
+            label={'Begrunnelse'}
+            name={'begrunnelse'}
+            control={control}
+            rules={{ required: 'Du må gi en begrunnelse for hvorfor brevet ikke skal sendes.' }}
+            onChangeCustom={async () => {
+              await trigger('begrunnelse');
+            }}
+          />
+        )}
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={onClose}>Lukk</Button>

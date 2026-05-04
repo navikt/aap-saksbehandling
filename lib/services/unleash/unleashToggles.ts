@@ -10,6 +10,7 @@ export const FLAGS = [
   'SykdomUtenVissVarighetFrontend',
   'VisArenasakerOversikt',
   'ArenasakerLenkeTilVisninsklient',
+  'BegrunnelseForIkkeSendBrev',
 ] as const;
 
 export type FlagNames = (typeof FLAGS)[number];
@@ -27,4 +28,5 @@ export const mockedFlags: Flags = {
   ForeslaaVedtakVedtakslengde: true,
   VisArenasakerOversikt: true,
   ArenasakerLenkeTilVisninsklient: true,
+  BegrunnelseForIkkeSendBrev: true,
 };
