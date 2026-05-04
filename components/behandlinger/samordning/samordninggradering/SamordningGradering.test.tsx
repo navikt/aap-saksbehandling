@@ -28,6 +28,7 @@ const grunnlagMedVurdering: SamordningGraderingGrunnlag = {
         },
       },
     ],
+    vurderingerMeta: {},
   },
   historiskeVurderinger: [],
   ytelser: [],

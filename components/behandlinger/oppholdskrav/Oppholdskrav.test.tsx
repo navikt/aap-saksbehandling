@@ -28,7 +28,9 @@ const oppholdskravGrunnlag: OppholdskravGrunnlagResponse = {
 };
 const oppholdskravGrunnlagMedBekreftetVurdering: OppholdskravGrunnlagResponse = {
   ikkeRelevantePerioder: [],
-  nyeVurderinger: [{ begrunnelse: 'Dette er min vurdering som er bekreftet', oppfylt: true, fom: '2025-10-10' }],
+  nyeVurderinger: [
+    { begrunnelse: 'Dette er min vurdering som er bekreftet', oppfylt: true, fom: '2025-10-10', vurderingerMeta: {} },
+  ],
   kanVurderes: [
     {
       fom: '2025-10-10',

@@ -28,6 +28,7 @@ const grunnlag: PåklagetBehandlingGrunnlag = {
       virkningstidspunkt: null,
     },
   ],
+  vurderingerMeta: {},
 };
 
 beforeEach(() => {

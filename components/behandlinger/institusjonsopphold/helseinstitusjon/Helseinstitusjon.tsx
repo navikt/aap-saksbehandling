@@ -2,13 +2,7 @@
 
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { InstitusjonsoppholdTabell } from 'components/behandlinger/institusjonsopphold/InstitusjonsoppholdTabell';
-import {
-  HelseinstitusjonGrunnlag,
-  HelseInstiusjonVurdering,
-  MellomlagretVurdering,
-  Periode,
-  VurderingMeta,
-} from 'lib/types/types';
+import { HelseinstitusjonGrunnlag, MellomlagretVurdering, Periode, VurderingMeta } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { DATO_FORMATER, erUendeligSlutt, formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import React, { FormEvent } from 'react';
@@ -93,7 +87,7 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
     form.handleSubmit((data) => {
       const parseDato = (dato: string) => parse(dato, 'dd.MM.yyyy', new Date());
 
-      const vurderinger: HelseInstiusjonVurdering[] = data.helseinstitusjonsvurderinger.flatMap((opphold) => {
+      const vurderinger = data.helseinstitusjonsvurderinger.flatMap((opphold) => {
         return opphold.vurderinger.map((vurdering, index, filtrerteVurderinger) => {
           const nesteVurdering = filtrerteVurderinger.at(index + 1);
 
@@ -230,7 +224,7 @@ function mapVurderingToDraftFormFields(
             fom: formaterDatoForFrontend(vurdering.periode.fom),
             tom: formaterDatoForFrontend(vurdering.periode.tom),
           },
-          vurdertAv: vurdering.vurdertAv,
+          vurdertAv: vurdering.vurderingerMeta?.vurdertAv,
           erNyVurdering: false,
           behøverVurdering: false,
         }));

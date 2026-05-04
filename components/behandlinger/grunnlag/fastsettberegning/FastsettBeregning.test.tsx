@@ -26,9 +26,11 @@ const grunnlagMedTidligereVurdering: BeregningTidspunktGrunnlag = {
   vurdering: {
     begrunnelse: 'Dette er en tidligere begrunnelse',
     nedsattArbeidsevneDato: '2022-01-01',
-    vurdertAv: {
-      ident: 'Saksbehandler',
-      dato: '2022-07-01',
+    vurderingerMeta: {
+      vurdertAv: {
+        ident: 'Saksbehandler',
+        dato: '2022-07-01',
+      },
     },
   },
 };
@@ -215,9 +217,11 @@ describe('mellomlagring', () => {
     vurdering: {
       begrunnelse: 'Dette er min vurdering som er bekreftet',
       nedsattArbeidsevneDato: '2025-08-21',
-      vurdertAv: {
-        ident: 'Saksbehandler',
-        dato: '2025-08-21',
+      vurderingerMeta: {
+        vurdertAv: {
+          ident: 'Saksbehandler',
+          dato: '2025-08-21',
+        },
       },
     },
   };

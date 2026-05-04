@@ -3,14 +3,16 @@
 import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { MellomlagretVurdering, TrukketSøknadGrunnlag, TrukketSøknadVurdering, VurdertAvAnsatt } from 'lib/types/types';
+import {
+  MellomlagretVurdering,
+  TrukketSøknadGrunnlag,
+  TrukketSøknadVurdering,
+  VurderingMetaResponse,
+} from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { FormEvent } from 'react';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
-import {
-  VilkårskortMedFormOgMellomlagring,
-  VurdertAv,
-} from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 
@@ -107,7 +109,7 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon, initialMel
           form.reset(sisteVurdering ? mapVurderingToDraftFormFields(sisteVurdering) : emptyDraftFormFields())
         );
       }}
-      vurdertAv={sisteVurderingMap(sisteVurdering)}
+      vurderingerMeta={sisteVurderingMeta(sisteVurdering)}
       visningModus={visningModus}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
       visningActions={visningActions}
@@ -118,19 +120,13 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon, initialMel
   );
 };
 
-function sisteVurderingMap(sisteVurdering: TrukketSøknadVurdering | undefined): VurdertAv | undefined {
+function sisteVurderingMeta(sisteVurdering: TrukketSøknadVurdering | undefined): VurderingMetaResponse | undefined {
   if (!sisteVurdering) return undefined;
 
-  const sisteVurderingMap: VurdertAvAnsatt = {
-    ansattnavn: sisteVurdering?.vurdertAv,
-    dato: sisteVurdering?.vurdertDato ?? '',
-    ident: sisteVurdering?.vurdertAv ?? '',
-  };
-
   if (sisteVurdering.skalTrekkes) {
-    return { trukketAv: sisteVurderingMap };
+    return { trukketAv: sisteVurdering.vurderingerMeta.vurdertAv };
   } else {
-    return { vurdertAvAnsatt: sisteVurderingMap };
+    return { vurdertAv: sisteVurdering.vurderingerMeta.vurdertAv };
   }
 }
 

@@ -184,9 +184,7 @@ export const StudentVurdering = ({
               tom={vurdering.tom && !erUendeligSlutt(vurdering.tom) ? new Dato(vurdering.tom).dato : undefined}
               foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
               vurderingStatus={hentVurderingStatusForVedtattVurdering(vurdering)}
-              vurdertAv={vurdering.vurdertAv}
-              kvalitetssikretAv={vurdering.kvalitetssikretAv}
-              besluttetAv={vurdering.besluttetAv}
+              vurderingerMeta={vurdering.vurderingerMeta}
             >
               <VedtattStudentVurderinger vurdering={vurdering} />
             </TidligereVurderingExpandableCard>
@@ -259,9 +257,9 @@ export const StudentVurdering = ({
           avbruttDato: vurdering?.avbruttStudieDato
             ? new Dato(vurdering.avbruttStudieDato).formaterForFrontend()
             : undefined,
-          vurdertAv: vurdering?.vurdertAv,
-          kvalitetssikretAv: vurdering?.kvalitetssikretAv,
-          besluttetAv: vurdering?.besluttetAv,
+          vurdertAv: vurdering?.vurderingerMeta?.vurdertAv,
+          kvalitetssikretAv: vurdering?.vurderingerMeta?.kvalitetssikretAv,
+          besluttetAv: vurdering?.vurderingerMeta?.besluttetAv,
           kodeverk: kodeverk,
           hoveddiagnose: hoveddiagnose,
           bidiagnose: bidiagnose,

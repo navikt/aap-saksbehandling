@@ -211,9 +211,7 @@ export const Sykdomsvurdering = ({
             foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
             vurderingStatus={getErOppfyltEllerIkkeStatus(erTidligereVurderingOppfylt(vurdering))}
             defaultCollapsed={nyeVurderingerFields.length > 0}
-            vurdertAv={vurdering.vurdertAv}
-            kvalitetssikretAv={vurdering.kvalitetssikretAv}
-            besluttetAv={vurdering.besluttetAv}
+            vurderingerMeta={vurdering.vurderingerMeta}
           >
             <TidligereSykdomsvurdering
               vurdering={vurdering}
@@ -309,9 +307,9 @@ export const Sykdomsvurdering = ({
           erNedsettelseMinstHalvparten: vurdering?.erNedsettelseMinstHalvparten,
           erNedsettelseMerEnnYrkesskadegrense: vurdering?.erNedsettelseMerEnnYrkesskadegrense,
           yrkesskadeBegrunnelse: getStringEllerUndefined(vurdering?.yrkesskadeBegrunnelse),
-          vurdertAv: vurdering.vurdertAv,
-          kvalitetssikretAv: vurdering.kvalitetssikretAv,
-          besluttetAv: vurdering.besluttetAv,
+          vurdertAv: vurdering.vurderingerMeta?.vurdertAv,
+          kvalitetssikretAv: vurdering.vurderingerMeta?.kvalitetssikretAv,
+          besluttetAv: vurdering.vurderingerMeta?.besluttetAv,
           erNyVurdering: false,
           behøverVurdering: false,
         };

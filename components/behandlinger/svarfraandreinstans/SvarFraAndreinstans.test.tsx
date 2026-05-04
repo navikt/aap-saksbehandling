@@ -83,7 +83,7 @@ describe('mellomlagring', () => {
       begrunnelse: 'Dette er min vurdering som er bekreftet',
       konsekvens: 'OMGJØRING',
       vilkårSomOmgjøres: [],
-      vurdertAv: '',
+      vurderingerMeta: {},
     },
     svarFraAndreinstans: {
       avsluttetTidspunkt: undefined,

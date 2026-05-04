@@ -123,7 +123,7 @@ export const SamordningArbeidsgiver = ({
       status={status}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
-      vurdertAv={{ vurdertAvAnsatt: grunnlag.vurdering?.vurdertAv }}
+      vurderingerMeta={grunnlag.vurdering?.vurderingerMeta}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() =>
@@ -142,9 +142,9 @@ export const SamordningArbeidsgiver = ({
               buildFelter={byggFelter}
               grupperPåOpprettetDato={true}
               getErGjeldende={() => true}
-              getFomDato={(v) => v.vurderingenGjelderFra ?? v.vurdertAv.dato}
-              getVurdertAvIdent={(v) => v.vurdertAv.ident}
-              getVurdertDato={(v) => v.vurdertAv.dato}
+              getFomDato={(v) => v.vurderingenGjelderFra ?? v.vurderingerMeta.vurdertAv?.dato ?? ''}
+              getVurdertAvIdent={(v) => v.vurderingerMeta.vurdertAv?.ident ?? ''}
+              getVurdertDato={(v) => v.vurderingerMeta.vurdertAv?.dato ?? ''}
             />
           )}
 

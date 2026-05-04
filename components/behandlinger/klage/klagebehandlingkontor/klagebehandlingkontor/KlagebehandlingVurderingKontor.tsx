@@ -166,10 +166,7 @@ export const KlagebehandlingVurderingKontor = ({
       status={status}
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      vurdertAv={{
-        vurdertAvAnsatt: grunnlag?.vurdering?.vurdertAv,
-        kvalitetssikretAv: grunnlag?.vurdering?.kvalitetssikretAv,
-      }}
+      vurderingerMeta={grunnlag?.vurdering?.vurderingerMeta}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() =>

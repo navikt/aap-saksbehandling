@@ -34,7 +34,7 @@ describe('Vurder rettighetsperiode', () => {
       vurdering: {
         harRett: 'Nei',
         begrunnelse: 'Dette er min vurdering som er bekreftet',
-        vurdertAv: { ident: 'Kjell T. Ringen', dato: '2025-08-21' },
+        vurderingerMeta: { vurdertAv: { ident: 'Kjell T. Ringen', dato: '2025-08-21' } },
       },
     };
 

@@ -65,8 +65,8 @@ function getDefaultValuesFromGrunnlag(grunnlag: VedtakslengdeGrunnlag): Vedtaksl
       behøverVurdering: false,
       manuellVurdering: true,
       endring: 'FORLENGELSE',
-      vurdertAv: v.vurdertAv,
-      besluttetAv: v.besluttetAv,
+      vurdertAv: v.vurderingerMeta?.vurdertAv,
+      besluttetAv: v.vurderingerMeta?.besluttetAv,
     }));
 
   return {
@@ -202,9 +202,7 @@ export const VedtakslengdeSteg = ({
               ? VurderingStatus.VedtaksperiodeManuell
               : VurderingStatus.VedtaksperiodeAutomatisk
           }
-          vurdertAv={vurdering.vurdertAv}
-          kvalitetssikretAv={vurdering.kvalitetssikretAv}
-          besluttetAv={vurdering.besluttetAv}
+          vurderingerMeta={vurdering.vurderingerMeta}
         >
           <VedtakslengdeVurderingInnhold vurdering={vurdering} />
         </TidligereVurderingExpandableCard>
@@ -218,9 +216,7 @@ export const VedtakslengdeSteg = ({
             tom={vurdering.tom ? parseISO(vurdering.tom) : null}
             foersteNyePeriodeFraDato={foersteNyePeriode == null ? null : parseDatoFraDatePicker(foersteNyePeriode)}
             vurderingStatus={VurderingStatus.VedtaksperiodeAutomatisk}
-            vurdertAv={vurdering.vurdertAv}
-            kvalitetssikretAv={vurdering.kvalitetssikretAv}
-            besluttetAv={vurdering.besluttetAv}
+            vurderingerMeta={vurdering.vurderingerMeta}
           >
             <VedtakslengdeVurderingInnhold vurdering={vurdering} />
           </TidligereVurderingExpandableCard>

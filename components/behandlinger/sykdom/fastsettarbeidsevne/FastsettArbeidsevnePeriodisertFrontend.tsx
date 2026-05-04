@@ -190,9 +190,7 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
           tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
           foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
           vurderingStatus={getErOppfyltEllerIkkeStatus(vurdering.arbeidsevne > 0)}
-          vurdertAv={vurdering.vurdertAv}
-          kvalitetssikretAv={vurdering.kvalitetssikretAv}
-          besluttetAv={vurdering.besluttetAv}
+          vurderingerMeta={vurdering.vurderingerMeta}
         >
           <VStack gap={'space-20'}>
             <SpørsmålOgSvar spørsmål="Vurderingen gjelder fra?" svar={formaterDatoForFrontend(vurdering.fom)} />
@@ -294,9 +292,9 @@ function getDefaultValuesFromGrunnlag(grunnlag: ArbeidsevneGrunnlag | undefined)
       begrunnelse: vurdering.begrunnelse,
       fraDato: formaterDatoForFrontend(vurdering.fom),
       arbeidsevne: vurdering.arbeidsevne,
-      vurdertAv: vurdering.vurdertAv,
-      kvalitetssikretAv: vurdering.kvalitetssikretAv,
-      besluttetAv: vurdering.besluttetAv,
+      vurdertAv: vurdering.vurderingerMeta?.vurdertAv,
+      kvalitetssikretAv: vurdering.vurderingerMeta?.kvalitetssikretAv,
+      besluttetAv: vurdering.vurderingerMeta?.besluttetAv,
       erNyVurdering: false,
       behøverVurdering: false,
     })),

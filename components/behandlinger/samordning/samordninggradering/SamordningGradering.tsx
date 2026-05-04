@@ -205,7 +205,7 @@ export const SamordningGradering = ({
         status={status}
         løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
         vilkårTilhørerNavKontor={false}
-        vurdertAv={{ vurdertAvAnsatt: grunnlag.vurdering?.vurdertAv }}
+        vurderingerMeta={grunnlag.vurdering?.vurderingerMeta}
         onDeleteMellomlagringClick={() => {
           slettMellomlagring(() =>
             form.reset(grunnlag.vurdering ? mapVurderingToDraftFormFields(grunnlag) : emptyDraftFormFields())
@@ -225,9 +225,9 @@ export const SamordningGradering = ({
             getErGjeldende={() => {
               return true;
             }}
-            getFomDato={(v) => v.vurderingenGjelderFra ?? v.vurdertAv.dato}
-            getVurdertAvIdent={(v) => v.vurdertAv.ident}
-            getVurdertDato={(v) => v.vurdertAv.dato}
+            getFomDato={(v) => v.vurderingenGjelderFra ?? v.vurderingerMeta.vurdertAv?.dato ?? ''}
+            getVurdertAvIdent={(v) => v.vurderingerMeta.vurdertAv?.ident ?? ''}
+            getVurdertDato={(v) => v.vurderingerMeta.vurdertAv?.dato ?? ''}
             grupperPåOpprettetDato={true}
           />
         )}

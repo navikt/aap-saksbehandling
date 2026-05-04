@@ -181,9 +181,7 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
           vurderingStatus={getErOppfyltEllerIkkeStatus(
             vurdering.reellMulighetTilOpptrapping && vurdering.rettPaaAAPIOpptrapping
           )}
-          vurdertAv={vurdering.vurdertAv}
-          kvalitetssikretAv={vurdering.kvalitetssikretAv}
-          besluttetAv={vurdering.besluttetAv}
+          vurderingerMeta={vurdering.vurderingerMeta}
         >
           <VStack gap={'space-20'}>
             <SpørsmålOgSvar spørsmål="Vurderingen gjelder fra?" svar={formaterDatoForFrontend(vurdering.fom)} />
@@ -250,9 +248,9 @@ function getDefaultValuesFromGrunnlag(
       fraDato: formaterDatoForFrontend(vurdering.fom),
       reellMulighetTilOpptrapping: getJaNeiEllerUndefined(vurdering.reellMulighetTilOpptrapping),
       rettPaaAAPIOpptrapping: getJaNeiEllerUndefined(vurdering.rettPaaAAPIOpptrapping),
-      vurdertAv: vurdering.vurdertAv,
-      kvalitetssikretAv: vurdering.kvalitetssikretAv,
-      besluttetAv: vurdering.besluttetAv,
+      vurdertAv: vurdering.vurderingerMeta?.vurdertAv,
+      kvalitetssikretAv: vurdering.vurderingerMeta?.kvalitetssikretAv,
+      besluttetAv: vurdering.vurderingerMeta?.besluttetAv,
       erNyVurdering: false,
       behøverVurdering: false,
     })),

@@ -115,7 +115,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
       status={status}
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      vurdertAv={{ vurdertAvAnsatt: grunnlag.gjeldendeVurderinger?.[0]?.vurdertAv }}
+      vurderingerMeta={grunnlag.gjeldendeVurderinger?.[0]?.vurderingerMeta}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() => form.reset(mapVurderingToDraftFormFields(grunnlag, sak)))

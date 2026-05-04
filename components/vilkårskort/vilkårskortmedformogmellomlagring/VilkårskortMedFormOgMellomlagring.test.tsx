@@ -50,8 +50,8 @@ describe('Vilkårskort med form', () => {
   it('skal vise informasjon om hvem som har gjort kvalitetssikring og at den er returnert', () => {
     const defaultPropsMedReturFraKvalitetssikrer: VilkårsKortMedFormOgMellomlagringProps = {
       ...defaultProps,
-      vurdertAv: {
-        ...defaultProps.vurdertAv,
+      vurderingerMeta: {
+        ...defaultProps.vurderingerMeta,
         kvalitetssikretAv: { ident: 'Kvalitetssikrer', dato: '2025-04-26', erRetur: true },
       },
     };
@@ -78,8 +78,8 @@ describe('Vilkårskort med form', () => {
   it('skal vise informasjon om hvem som har gjort beslutning og at den er returnert', () => {
     const defaultPropsMedReturFraBeslutter: VilkårsKortMedFormOgMellomlagringProps = {
       ...defaultProps,
-      vurdertAv: {
-        ...defaultProps.vurdertAv,
+      vurderingerMeta: {
+        ...defaultProps.vurderingerMeta,
         besluttetAv: { ident: 'Beslutter', dato: '2025-04-26', erRetur: true },
       },
     };
@@ -259,8 +259,8 @@ const defaultProps: VilkårsKortMedFormOgMellomlagringProps = {
   isLoading: false,
   status: 'DONE',
   vilkårTilhørerNavKontor: true,
-  vurdertAv: {
-    vurdertAvAnsatt: { ident: 'Lokalsaksbehandler', dato: '2025-04-25' },
+  vurderingerMeta: {
+    vurdertAv: { ident: 'Lokalsaksbehandler', dato: '2025-04-25' },
     kvalitetssikretAv: { ident: 'Kvalitetssikrer', dato: '2025-04-26' },
     besluttetAv: { ident: 'Beslutter', dato: '2025-04-27' },
   },

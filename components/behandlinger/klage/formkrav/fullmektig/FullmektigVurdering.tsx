@@ -225,7 +225,7 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly, ini
       status={status}
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      vurdertAv={{ vurdertAvAnsatt: grunnlag?.vurdering?.vurdertAv }}
+      vurderingerMeta={grunnlag?.vurdering?.vurderingerMeta}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() =>

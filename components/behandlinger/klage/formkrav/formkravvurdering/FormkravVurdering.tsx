@@ -148,7 +148,7 @@ export const FormkravVurdering = ({ behandlingVersjon, grunnlag, readOnly, initi
       status={status}
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      vurdertAv={{ vurdertAvAnsatt: grunnlag?.vurdering?.vurdertAv }}
+      vurderingerMeta={grunnlag?.vurdering?.vurderingerMeta}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() =>

@@ -15,7 +15,7 @@ export const BarnepensjonTidligereVurdering = ({ vurderinger }: Props) => {
       data={vurderinger}
       buildFelter={byggFelter}
       getErGjeldende={() => true}
-      getVurdertAvIdent={(v) => v.vurdertAv.ident}
+      getVurdertAvIdent={(v) => v.vurderingerMeta.vurdertAv?.ident ?? ''}
       grupperPåOpprettetDato={true}
     />
   );

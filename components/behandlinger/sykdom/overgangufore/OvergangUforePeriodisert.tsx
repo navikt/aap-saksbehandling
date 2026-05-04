@@ -147,9 +147,7 @@ export const OvergangUforePeriodisert = ({
             tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
             foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
             vurderingStatus={getErOppfyltEllerIkkeStatus(!!vurdering.brukerRettPåAAP)}
-            vurdertAv={vurdering.vurdertAv}
-            kvalitetssikretAv={vurdering.kvalitetssikretAv}
-            besluttetAv={vurdering.besluttetAv}
+            vurderingerMeta={vurdering.vurderingerMeta}
           >
             <OvergangUforeTidligereVurdering
               fraDato={vurdering.fom}
@@ -203,9 +201,9 @@ export const OvergangUforePeriodisert = ({
         brukerRettPåAAP: getJaNeiEllerUndefined(vurdering?.brukerRettPåAAP),
         brukerHarSøktUføretrygd: getJaNeiEllerUndefined(vurdering?.brukerHarSøktUføretrygd),
         brukerHarFåttVedtakOmUføretrygd: vurdering?.brukerHarFåttVedtakOmUføretrygd || null,
-        vurdertAv: vurdering.vurdertAv,
-        kvalitetssikretAv: vurdering.kvalitetssikretAv,
-        besluttetAv: vurdering.besluttetAv,
+        vurdertAv: vurdering.vurderingerMeta?.vurdertAv,
+        kvalitetssikretAv: vurdering.vurderingerMeta?.kvalitetssikretAv,
+        besluttetAv: vurdering.vurderingerMeta?.besluttetAv,
         erNyVurdering: false,
         behøverVurdering: false,
       })),

@@ -178,9 +178,7 @@ export const Bistandsbehov = ({
                 vurdering.erBehovForAnnenOppfølging
               )
             )}
-            vurdertAv={vurdering.vurdertAv}
-            kvalitetssikretAv={vurdering.kvalitetssikretAv}
-            besluttetAv={vurdering.besluttetAv}
+            vurderingerMeta={vurdering.vurderingerMeta}
           >
             <BistandsbehovTidligereVurdering vurdering={vurdering} />
           </TidligereVurderingExpandableCard>
@@ -224,9 +222,9 @@ export const Bistandsbehov = ({
         overgangBegrunnelse: vurdering?.overgangBegrunnelse || '',
         skalVurdereAapIOvergangTilArbeid: getJaNeiEllerUndefined(vurdering?.skalVurdereAapIOvergangTilArbeid),
         erBehovForArbeidsrettetTiltak: getJaNeiEllerUndefined(vurdering?.erBehovForArbeidsrettetTiltak),
-        vurdertAv: vurdering.vurdertAv,
-        kvalitetssikretAv: vurdering.kvalitetssikretAv,
-        besluttetAv: vurdering.besluttetAv,
+        vurdertAv: vurdering.vurderingerMeta?.vurdertAv,
+        kvalitetssikretAv: vurdering.vurderingerMeta?.kvalitetssikretAv,
+        besluttetAv: vurdering.vurderingerMeta?.besluttetAv,
         erNyVurdering: false,
         behøverVurdering: false,
       })),
