@@ -33,6 +33,7 @@ interface VilkårsKortPeriodisertProps {
   visOverstyrTildelingModal?: boolean;
   setVisOverstyrTildelingModal?: Dispatch<SetStateAction<boolean>>;
   reservertAvNavn?: string;
+  formOnBlur?: () => void;
 }
 
 export const VilkårskortPeriodisert = ({
@@ -53,6 +54,7 @@ export const VilkårskortPeriodisert = ({
   onLeggTilVurdering,
   formReset,
   errorList,
+  formOnBlur,
 }: VilkårsKortPeriodisertProps) => {
   const classNameBasertPåEnhet = vilkårTilhørerNavKontor ? styles.vilkårsKortNAV : styles.vilkårsKortNAY;
   const erAktivtSteg = visningModus === 'AKTIV_UTEN_AVBRYT' || visningModus === 'AKTIV_MED_AVBRYT';
@@ -72,7 +74,7 @@ export const VilkårskortPeriodisert = ({
         </Heading>
       </HGrid>
       <VStack>
-        <form onSubmit={onSubmit} id={steg} autoComplete="off">
+        <form onSubmit={onSubmit} id={steg} autoComplete="off" onBlur={formOnBlur}>
           <VStack gap="space-16">
             {/* innhold i vilkårskortet */}
             <VStack style={{ borderTop: '1px solid lightgray' }} paddingBlock={'space-16 space-0'}>
