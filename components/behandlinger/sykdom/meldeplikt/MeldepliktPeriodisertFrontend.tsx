@@ -7,7 +7,7 @@ import {
   FritakMeldepliktGrunnlag,
   MellomlagretVurdering,
   PeriodisertFritaksvurderingDto,
-  VurderingMeta,
+  VurderingFormMeta,
 } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { gyldigDatoEllerNull, validerDato } from 'lib/validation/dateValidation';
@@ -47,7 +47,7 @@ export interface FritakMeldepliktForm {
   vurderinger: FritakMeldepliktVurderingForm[];
 }
 
-export interface FritakMeldepliktVurderingForm extends VurderingMeta {
+export interface FritakMeldepliktVurderingForm extends VurderingFormMeta {
   begrunnelse: string;
   harFritak: string | undefined;
   fraDato: string | undefined;
@@ -260,9 +260,7 @@ function getDefaultValuesFromGrunnlag(grunnlag: FritakMeldepliktGrunnlag | undef
       begrunnelse: vurdering.begrunnelse,
       fraDato: formaterDatoForFrontend(vurdering.fom),
       harFritak: vurdering.harFritak ? JaEllerNei.Ja : JaEllerNei.Nei,
-      vurdertAv: vurdering.vurderingerMeta?.vurdertAv,
-      kvalitetssikretAv: vurdering.vurderingerMeta?.kvalitetssikretAv,
-      besluttetAv: vurdering.vurderingerMeta?.besluttetAv,
+      vurderingerMeta: vurdering.vurderingerMeta,
       erNyVurdering: false,
       behøverVurdering: false,
     })),

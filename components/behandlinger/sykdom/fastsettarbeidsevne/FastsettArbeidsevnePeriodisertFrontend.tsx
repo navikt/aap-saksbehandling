@@ -8,7 +8,7 @@ import {
   ArbeidsevneGrunnlag,
   MellomlagretVurdering,
   PeriodisertArbeidsevneVurderingDto,
-  VurderingMeta,
+  VurderingFormMeta,
 } from 'lib/types/types';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
@@ -45,7 +45,7 @@ interface Props {
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
-interface ArbeidsevneVurderingForm extends VurderingMeta {
+interface ArbeidsevneVurderingForm extends VurderingFormMeta {
   begrunnelse: string;
   arbeidsevne: number | undefined;
   fraDato: string | undefined;
@@ -292,9 +292,7 @@ function getDefaultValuesFromGrunnlag(grunnlag: ArbeidsevneGrunnlag | undefined)
       begrunnelse: vurdering.begrunnelse,
       fraDato: formaterDatoForFrontend(vurdering.fom),
       arbeidsevne: vurdering.arbeidsevne,
-      vurdertAv: vurdering.vurderingerMeta?.vurdertAv,
-      kvalitetssikretAv: vurdering.vurderingerMeta?.kvalitetssikretAv,
-      besluttetAv: vurdering.vurderingerMeta?.besluttetAv,
+      vurderingerMeta: vurdering.vurderingerMeta,
       erNyVurdering: false,
       behøverVurdering: false,
     })),

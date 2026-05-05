@@ -7,7 +7,7 @@ import { ReactNode, useState } from 'react';
 import { BodyShort, HStack, VStack } from '@navikt/ds-react';
 import styles from 'components/behandlinger/oppholdskrav/oppholdskrav.module.css';
 import { VurdertAvAnsattDetail } from 'components/vurdertav/VurdertAvAnsattDetail';
-import { VurderingMetaResponse } from 'lib/types/types';
+import { VurderingerMeta } from 'lib/types/types';
 import { VurderingStatus, VurderingStatusTag } from 'components/periodisering/VurderingStatusTag';
 
 interface Props {
@@ -15,7 +15,7 @@ interface Props {
   tom: Date | null | undefined;
   foersteNyePeriodeFraDato: Date | null | undefined;
   vurderingStatus: VurderingStatus | undefined;
-  vurderingerMeta: VurderingMetaResponse;
+  vurderingerMeta: VurderingerMeta;
   children: ReactNode;
   defaultCollapsed?: boolean;
 }

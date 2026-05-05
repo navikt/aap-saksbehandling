@@ -1,7 +1,7 @@
 'use client';
 
 import { Button, Detail, ExpansionCard, HStack, VStack } from '@navikt/ds-react';
-import { MellomlagretVurdering, StegType, VurderingMetaResponse } from 'lib/types/types';
+import { MellomlagretVurdering, StegType, VurderingerMeta } from 'lib/types/types';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 
@@ -24,7 +24,7 @@ export interface VilkårsKortMedFormOgMellomlagringProps {
   knappTekst?: string;
   defaultOpen?: boolean;
   vilkårTilhørerNavKontor: boolean;
-  vurderingerMeta?: VurderingMetaResponse;
+  vurderingerMeta?: VurderingerMeta;
   visningModus: VisningModus;
   visningActions: VisningActions;
   onDeleteMellomlagringClick: () => void;

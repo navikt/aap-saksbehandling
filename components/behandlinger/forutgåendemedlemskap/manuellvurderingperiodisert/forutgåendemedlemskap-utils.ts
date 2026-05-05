@@ -52,9 +52,7 @@ export function getDefaultValuesFromGrunnlag(
           vurdering.varMedlemMedNedsattArbeidsevne,
           vurdering.medlemMedUnntakAvMaksFemAar
         ),
-        vurdertAv: vurdering.vurderingerMeta.vurdertAv,
-        kvalitetssikretAv: vurdering.vurderingerMeta.kvalitetssikretAv,
-        besluttetAv: vurdering.vurderingerMeta.besluttetAv,
+        vurderingerMeta: vurdering.vurderingerMeta,
         erNyVurdering: false,
         behøverVurdering: false,
       })) || [],

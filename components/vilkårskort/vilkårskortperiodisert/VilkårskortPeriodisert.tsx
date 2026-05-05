@@ -10,7 +10,7 @@ import { Dispatch, FormEvent, ReactNode, SetStateAction } from 'react';
 import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { ApiException } from 'lib/utils/api';
 import { VisningActions, VisningModus } from 'lib/types/visningTypes';
-import { VurderingMetaResponse } from 'lib/types/types';
+import { VurderingerMeta } from 'lib/types/types';
 import { VurdertAvAnsattDetail } from 'components/vurdertav/VurdertAvAnsattDetail';
 
 interface VilkårsKortPeriodisertProps {
@@ -28,7 +28,7 @@ interface VilkårsKortPeriodisertProps {
   onDeleteMellomlagringClick: (() => void) | undefined;
   mellomlagretVurdering: MellomlagretVurdering | undefined;
   formReset: () => void;
-  vurderingerMeta?: VurderingMetaResponse;
+  vurderingerMeta?: VurderingerMeta;
   onLeggTilVurdering?: () => void;
   errorList: ErrorList;
   bekreftOgFortsett?: () => void;

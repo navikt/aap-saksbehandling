@@ -4,7 +4,7 @@ import {
   MellomlagretVurdering,
   VedtakslengdeGrunnlag,
   VedtakslengdeVurderingResponse,
-  VurderingMeta,
+  VurderingFormMeta,
 } from 'lib/types/types';
 import { Radio, VStack, Alert } from '@navikt/ds-react';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
@@ -32,7 +32,7 @@ import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupW
 import React from 'react';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 
-interface VedtakslengdeVurderingForm extends VurderingMeta {
+interface VedtakslengdeVurderingForm extends VurderingFormMeta {
   manuellVurdering: boolean;
   erNyVurdering: boolean;
   behøverVurdering: boolean;
@@ -65,8 +65,7 @@ function getDefaultValuesFromGrunnlag(grunnlag: VedtakslengdeGrunnlag): Vedtaksl
       behøverVurdering: false,
       manuellVurdering: true,
       endring: 'FORLENGELSE',
-      vurdertAv: v.vurderingerMeta?.vurdertAv,
-      besluttetAv: v.vurderingerMeta?.besluttetAv,
+      vurderingerMeta: v.vurderingerMeta,
     }));
 
   return {

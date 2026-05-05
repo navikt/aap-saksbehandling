@@ -3,12 +3,7 @@
 import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import {
-  MellomlagretVurdering,
-  TrukketSøknadGrunnlag,
-  TrukketSøknadVurdering,
-  VurderingMetaResponse,
-} from 'lib/types/types';
+import { MellomlagretVurdering, TrukketSøknadGrunnlag, TrukketSøknadVurdering, VurderingerMeta } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { FormEvent } from 'react';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
@@ -109,7 +104,7 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon, initialMel
           form.reset(sisteVurdering ? mapVurderingToDraftFormFields(sisteVurdering) : emptyDraftFormFields())
         );
       }}
-      vurderingerMeta={sisteVurderingMeta(sisteVurdering)}
+      vurderingerMeta={sisteVurderingFormMeta(sisteVurdering)}
       visningModus={visningModus}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
       visningActions={visningActions}
@@ -120,7 +115,7 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon, initialMel
   );
 };
 
-function sisteVurderingMeta(sisteVurdering: TrukketSøknadVurdering | undefined): VurderingMetaResponse | undefined {
+function sisteVurderingFormMeta(sisteVurdering: TrukketSøknadVurdering | undefined): VurderingerMeta | undefined {
   if (!sisteVurdering) return undefined;
 
   if (sisteVurdering.skalTrekkes) {

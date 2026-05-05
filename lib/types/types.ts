@@ -623,15 +623,13 @@ export interface PeriodisertVurderingFormFields {
   tilDato?: string | null;
 }
 
-export interface VurderingMeta {
+export interface VurderingFormMeta {
   behøverVurdering: boolean;
   erNyVurdering: boolean;
-  vurdertAv?: VurdertAvAnsatt;
-  kvalitetssikretAv?: VurdertAvAnsatt;
-  besluttetAv?: VurdertAvAnsatt;
+  vurderingerMeta?: VurderingerMeta;
 }
 
-export type VurderingMetaResponse =
+export type VurderingerMeta =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'] & {
     vurdertAutomatisk?: boolean;
     trukketAv?: VurdertAvAnsatt;

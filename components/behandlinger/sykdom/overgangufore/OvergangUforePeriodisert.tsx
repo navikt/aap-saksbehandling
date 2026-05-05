@@ -4,7 +4,7 @@ import {
   MellomlagretVurdering,
   OvergangUforeGrunnlag,
   OvergangUføreVedtakResultat,
-  VurderingMeta,
+  VurderingFormMeta,
 } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
@@ -41,7 +41,7 @@ interface Props {
 export interface OvergangUforeForm {
   vurderinger: Array<OvergangUforeVurderingForm>;
 }
-interface OvergangUforeVurderingForm extends VurderingMeta {
+interface OvergangUforeVurderingForm extends VurderingFormMeta {
   fraDato: string;
   begrunnelse: string;
   brukerHarSøktUføretrygd: JaEllerNei | undefined;
@@ -201,9 +201,7 @@ export const OvergangUforePeriodisert = ({
         brukerRettPåAAP: getJaNeiEllerUndefined(vurdering?.brukerRettPåAAP),
         brukerHarSøktUføretrygd: getJaNeiEllerUndefined(vurdering?.brukerHarSøktUføretrygd),
         brukerHarFåttVedtakOmUføretrygd: vurdering?.brukerHarFåttVedtakOmUføretrygd || null,
-        vurdertAv: vurdering.vurderingerMeta?.vurdertAv,
-        kvalitetssikretAv: vurdering.vurderingerMeta?.kvalitetssikretAv,
-        besluttetAv: vurdering.vurderingerMeta?.besluttetAv,
+        vurderingerMeta: vurdering.vurderingerMeta,
         erNyVurdering: false,
         behøverVurdering: false,
       })),

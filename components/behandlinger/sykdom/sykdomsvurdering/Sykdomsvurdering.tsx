@@ -11,7 +11,7 @@ import {
   MellomlagretVurdering,
   SykdomsGrunnlag,
   TypeBehandling,
-  VurderingMeta,
+  VurderingFormMeta,
 } from 'lib/types/types';
 import {
   DiagnoserDefaultOptions,
@@ -52,7 +52,7 @@ export interface SykdomsvurderingerForm {
   vurderinger: Array<Sykdomsvurdering>;
 }
 
-export interface Sykdomsvurdering extends VurderingMeta {
+export interface Sykdomsvurdering extends VurderingFormMeta {
   fraDato: string;
   begrunnelse: string;
   vurderingenGjelderFra?: string;
@@ -307,9 +307,7 @@ export const Sykdomsvurdering = ({
           erNedsettelseMinstHalvparten: vurdering?.erNedsettelseMinstHalvparten,
           erNedsettelseMerEnnYrkesskadegrense: vurdering?.erNedsettelseMerEnnYrkesskadegrense,
           yrkesskadeBegrunnelse: getStringEllerUndefined(vurdering?.yrkesskadeBegrunnelse),
-          vurdertAv: vurdering.vurderingerMeta?.vurdertAv,
-          kvalitetssikretAv: vurdering.vurderingerMeta?.kvalitetssikretAv,
-          besluttetAv: vurdering.vurderingerMeta?.besluttetAv,
+          vurderingerMeta: vurdering.vurderingerMeta,
           erNyVurdering: false,
           behøverVurdering: false,
         };

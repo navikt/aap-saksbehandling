@@ -2,7 +2,7 @@
 
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { InstitusjonsoppholdTabell } from 'components/behandlinger/institusjonsopphold/InstitusjonsoppholdTabell';
-import { HelseinstitusjonGrunnlag, MellomlagretVurdering, Periode, VurderingMeta } from 'lib/types/types';
+import { HelseinstitusjonGrunnlag, MellomlagretVurdering, Periode, VurderingFormMeta } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { DATO_FORMATER, erUendeligSlutt, formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import React, { FormEvent } from 'react';
@@ -37,7 +37,7 @@ export interface OppholdMedVurderinger {
   vurderinger: OppholdVurdering[];
 }
 
-export interface OppholdVurdering extends VurderingMeta {
+export interface OppholdVurdering extends VurderingFormMeta {
   oppholdId: string;
   periode: Periode;
   begrunnelse: string;
@@ -224,7 +224,7 @@ function mapVurderingToDraftFormFields(
             fom: formaterDatoForFrontend(vurdering.periode.fom),
             tom: formaterDatoForFrontend(vurdering.periode.tom),
           },
-          vurdertAv: vurdering.vurderingerMeta?.vurdertAv,
+          vurderingerMeta: vurdering.vurderingerMeta,
           erNyVurdering: false,
           behøverVurdering: false,
         }));

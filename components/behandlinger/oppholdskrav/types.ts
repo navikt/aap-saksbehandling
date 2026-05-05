@@ -1,11 +1,11 @@
 import { JaEllerNei } from 'lib/utils/form';
-import { VurderingMeta } from 'lib/types/types';
+import { VurderingFormMeta } from 'lib/types/types';
 
 export type OppholdskravForm = {
   vurderinger: OppholdskravVurderingForm[];
 };
 
-export interface OppholdskravVurderingForm extends VurderingMeta {
+export interface OppholdskravVurderingForm extends VurderingFormMeta {
   begrunnelse: string;
   oppfyller?: JaEllerNei | null;
   land: string;

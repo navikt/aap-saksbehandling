@@ -14,7 +14,7 @@ import {
   EtableringEierBrukerVirksomheten,
   MellomlagretVurdering,
   Periode,
-  VurderingMeta,
+  VurderingFormMeta,
 } from 'lib/types/types';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
@@ -46,7 +46,7 @@ interface Props {
   grunnlag: EtableringEgenVirksomhetGrunnlagResponse;
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }
-export interface EtableringAvEgenVirksomhetVurderingForm extends VurderingMeta {
+export interface EtableringAvEgenVirksomhetVurderingForm extends VurderingFormMeta {
   fraDato: string;
   begrunnelse: string;
   foreliggerEnNæringsfagligVurdering: JaEllerNei | undefined;

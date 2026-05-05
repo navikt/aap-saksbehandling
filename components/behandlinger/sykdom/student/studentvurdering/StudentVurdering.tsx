@@ -6,7 +6,7 @@ import {
   MellomlagretVurdering,
   StudentGrunnlag,
   StudentVurderingResponse,
-  VurderingMeta,
+  VurderingFormMeta,
 } from 'lib/types/types';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
@@ -51,7 +51,7 @@ export interface StudentFormFields {
   vurderinger: StudentVurdering[];
 }
 
-export interface StudentVurdering extends VurderingMeta {
+export interface StudentVurdering extends VurderingFormMeta {
   fraDato: string;
   begrunnelse: string;
   harAvbruttStudie?: string;
@@ -257,9 +257,7 @@ export const StudentVurdering = ({
           avbruttDato: vurdering?.avbruttStudieDato
             ? new Dato(vurdering.avbruttStudieDato).formaterForFrontend()
             : undefined,
-          vurdertAv: vurdering?.vurderingerMeta?.vurdertAv,
-          kvalitetssikretAv: vurdering?.vurderingerMeta?.kvalitetssikretAv,
-          besluttetAv: vurdering?.vurderingerMeta?.besluttetAv,
+          vurderingerMeta: vurdering.vurderingerMeta,
           kodeverk: kodeverk,
           hoveddiagnose: hoveddiagnose,
           bidiagnose: bidiagnose,

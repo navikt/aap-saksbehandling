@@ -4,7 +4,7 @@ import {
   ArbeidsopptrappingGrunnlagResponse,
   ArbeidsopptrappingLøsningDto,
   MellomlagretVurdering,
-  VurderingMeta,
+  VurderingFormMeta,
 } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { useFieldArray, useForm } from 'react-hook-form';
@@ -43,7 +43,7 @@ export interface ArbeidsopptrappingForm {
   vurderinger: ArbeidsopptrappingVurderingForm[];
 }
 
-export interface ArbeidsopptrappingVurderingForm extends VurderingMeta {
+export interface ArbeidsopptrappingVurderingForm extends VurderingFormMeta {
   begrunnelse: string;
   fraDato: string | undefined;
   reellMulighetTilOpptrapping: JaEllerNei | undefined;
@@ -248,9 +248,7 @@ function getDefaultValuesFromGrunnlag(
       fraDato: formaterDatoForFrontend(vurdering.fom),
       reellMulighetTilOpptrapping: getJaNeiEllerUndefined(vurdering.reellMulighetTilOpptrapping),
       rettPaaAAPIOpptrapping: getJaNeiEllerUndefined(vurdering.rettPaaAAPIOpptrapping),
-      vurdertAv: vurdering.vurderingerMeta?.vurdertAv,
-      kvalitetssikretAv: vurdering.vurderingerMeta?.kvalitetssikretAv,
-      besluttetAv: vurdering.vurderingerMeta?.besluttetAv,
+      vurderingerMeta: vurdering.vurderingerMeta,
       erNyVurdering: false,
       behøverVurdering: false,
     })),
