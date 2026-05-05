@@ -146,7 +146,7 @@ export function useOppgaver({
 
       return hentOppgaverClient(payload);
     },
-    { revalidateOnFocus: true, refreshInterval: 10000, revalidateAll: true, persistSize: true }
+    { revalidateOnFocus: true, revalidateAll: true, persistSize: true }
   );
 
   const oppgaverFlatMap =
