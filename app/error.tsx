@@ -1,6 +1,7 @@
 'use client';
 
 import { BodyShort, Box, Heading, HGrid, Label, Link, Page, VStack } from '@navikt/ds-react';
+import { faro } from '@grafana/faro-web-sdk';
 import { usePathname } from 'next/navigation';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { useEffect } from 'react';
@@ -22,6 +23,7 @@ const Error = ({ error }: Props) => {
     if (ingenTilgang) return; // unngå å logge tilgangsfeil som "vanlige" feil
 
     try {
+      faro.api.pushError(error);
       // noinspection JSIgnoredPromiseFromCall
       logClientWarning({
         name: error.name,

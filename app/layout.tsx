@@ -8,6 +8,7 @@ import { getAllFlags } from 'lib/services/unleash/unleashService';
 import { Metadata } from 'next';
 import { isDev } from 'lib/utils/environment';
 import Script from 'next/script';
+import Faro from 'components/frontendobservability/faro';
 
 export const metadata: Metadata = {
   title: 'Kelvin',
@@ -33,6 +34,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         )}
       </head>
       <body>
+        <Faro collectorUrl={process.env.NAIS_FRONTEND_TELEMETRY_COLLECTOR_URL} />
         <FeatureFlagProvider flags={getAllFlags(brukerInformasjon.NAVident)}>
           <InnloggetBrukerContextProvider bruker={brukerInformasjon}>
             <KelvinAppHeader brukerInformasjon={brukerInformasjon} roller={roller} />
