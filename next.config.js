@@ -6,6 +6,12 @@ const nextConfig = {
   assetPrefix: process.env.ASSET_PREFIX ?? undefined,
   productionBrowserSourceMaps: true,
 
+  logging: {
+    fetches: {
+      fullUrl: true,
+    },
+  },
+
   experimental: {
     authInterrupts: true,
     optimizePackageImports: ['@navikt/ds-react', '@navikt/aksel-icons'],

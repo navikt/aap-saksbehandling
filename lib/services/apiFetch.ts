@@ -12,14 +12,15 @@ export const apiFetch = async <ResponseType>(
   scope: string,
   method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' = 'GET',
   requestBody?: object,
-  tags?: string[]
+  tags?: string[],
+  revalidate?: number | false
 ): Promise<FetchResponse<ResponseType>> => {
   const tokenResult = await getToken(scope, url);
   if (!tokenResult.ok) {
     logWarning(`Uthenting av token feilet for ${url}`, tokenResult.error);
     return { type: 'ERROR', apiException: { message: 'Kunne ikke autentisere. Prøv igjen.' }, status: 401 };
   }
-  const options = mapFetchOptions(method, tokenResult.token, requestBody, tags);
+  const options = mapFetchOptions(method, tokenResult.token, requestBody, tags, revalidate);
 
   return await fetchWithRetry<ResponseType>(url, options, NUMBER_OF_RETRIES);
 };
@@ -36,7 +37,14 @@ export const apiFetchNoMemoization = async <ResponseType>(
     logWarning(`Uthenting av token feilet for ${url}`, tokenResult.error);
     return { type: 'ERROR', apiException: { message: 'Kunne ikke autentisere. Prøv igjen.' }, status: 401 };
   }
-  const options = mapFetchOptions(method, tokenResult.token, requestBody, tags, new AbortController().signal);
+  const options = mapFetchOptions(
+    method,
+    tokenResult.token,
+    requestBody,
+    tags,
+    undefined,
+    new AbortController().signal
+  );
 
   return await fetchWithRetry<ResponseType>(url, options, NUMBER_OF_RETRIES);
 };
@@ -134,6 +142,7 @@ const mapFetchOptions = (
   oboToken: string,
   requestBody?: object,
   tags?: string[],
+  revalidate?: number | false,
   /**
    * Brukes for å gi signal om og unngå bruk av request memoization.
    * Se https://nextjs.org/docs/app/deep-dive/caching#request-memoization
@@ -147,6 +156,6 @@ const mapFetchOptions = (
     Accept: 'application/json',
     'Content-Type': 'application/json',
   },
-  next: { revalidate: 0, tags },
+  next: { revalidate: revalidate ?? 0, tags },
   signal: signal,
 });

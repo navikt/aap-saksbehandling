@@ -98,6 +98,7 @@ import {
 } from 'lib/types/types';
 import { apiFetch, apiFetchNoMemoization, apiFetchPdf } from 'lib/services/apiFetch';
 import { logError, logInfo, logWarning } from 'lib/serverutlis/logger';
+import { revalidateTag, unstable_cache } from 'next/cache';
 import { FetchResponse, isError, isSuccess } from 'lib/utils/api';
 import { Enhet } from 'lib/types/oppgaveTypes';
 import { Behovstype } from 'lib/utils/form';
@@ -638,10 +639,17 @@ export const hentArbeidsOpptrappingGrunnlag = async (behandlingsreferanse: strin
   );
 };
 
+const mellomlagringTag = (behandlingsreferanse: string, kode: string) =>
+  `mellomlagret-vurdering/${behandlingsreferanse}/${kode}`;
+
 export const hentMellomlagringMedStatus = (behandlingsreferanse: string, kode: string) => {
   return apiFetch<MellomlagretVurderingResponse>(
     `${saksbehandlingApiBaseUrl}/api/behandling/mellomlagret-vurdering/${behandlingsreferanse}/${kode}`,
-    saksbehandlingApiScope
+    saksbehandlingApiScope,
+    'GET',
+    undefined,
+    [mellomlagringTag(behandlingsreferanse, kode)],
+    false
   );
 };
 export const hentMellomlagring = async (behandlingsreferanse: string, kode: string, readOnly: boolean) => {
@@ -682,20 +690,24 @@ export const hentOppfølgningsOppgaverOpprinselsePåBehandlingsReferanse = async
 };
 
 export const lagreMellomlagring = async (request: MellomlagretVurderingRequest) => {
-  return apiFetch<MellomlagretVurderingResponse>(
+  const result = await apiFetch<MellomlagretVurderingResponse>(
     `${saksbehandlingApiBaseUrl}/api/behandling/mellomlagret-vurdering/${request.behandlingsReferanse}`,
     saksbehandlingApiScope,
     'POST',
     request
   );
+  revalidateTag(mellomlagringTag(request.behandlingsReferanse, request.avklaringsbehovkode), 'max');
+  return result;
 };
 
 export const slettMellomlagring = async (behandlingsreferanse: string, kode: Behovstype) => {
-  return apiFetch(
+  const result = await apiFetch(
     `${saksbehandlingApiBaseUrl}/api/behandling/mellomlagret-vurdering/${behandlingsreferanse}/${kode}/slett`,
     saksbehandlingApiScope,
     'POST'
   );
+  revalidateTag(mellomlagringTag(behandlingsreferanse, kode), 'max');
+  return result;
 };
 
 export const hentAktivitetspliktTrekk = async (saksnummer: string) => {
