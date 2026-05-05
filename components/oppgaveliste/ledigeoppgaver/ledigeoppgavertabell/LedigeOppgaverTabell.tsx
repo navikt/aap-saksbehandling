@@ -117,7 +117,7 @@ export const LedigeOppgaverTabell = ({ oppgaver, revalidateFunction, setSortBy, 
             <Table.Row key={`oppgave-${i}`}>
               <Table.DataCell textSize={'small'}>
                 {oppgave.saksnummer ? (
-                  <AkselLink as={Link} href={`/saksbehandling/sak/${oppgave.saksnummer}`}>
+                  <AkselLink as={Link} prefetch={false} href={`/saksbehandling/sak/${oppgave.saksnummer}`}>
                     {storForbokstavIHvertOrd(oppgave.personNavn)}
                   </AkselLink>
                 ) : (
