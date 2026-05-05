@@ -16,19 +16,25 @@ interface Props {
 }
 
 export const SamordningGraderingMedDatafetching = async ({ behandlingsreferanse, stegData }: Props) => {
-  const [grunnlag, brukerInformasjon, oppfølgningOppgaver, initialMellomlagretVurdering] = await Promise.all([
+  const [grunnlag, brukerInformasjon, oppfølgningOppgaver] = await Promise.all([
     hentSamordningGraderingGrunnlag(behandlingsreferanse),
     hentBrukerInformasjon(),
     hentOppfølgningsOppgaverOpprinselsePåBehandlingsReferanse(
       behandlingsreferanse,
       Behovstype.AVKLAR_SAMORDNING_GRADERING
     ),
-    hentMellomlagring(behandlingsreferanse, Behovstype.AVKLAR_SAMORDNING_GRADERING),
   ]);
 
   if (isError(grunnlag) || isError(oppfølgningOppgaver)) {
     return <ApiException apiResponses={[grunnlag, oppfølgningOppgaver]} />;
   }
+
+  const totalReadOnly = stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
+  const initialMellomlagretVurdering = await hentMellomlagring(
+    behandlingsreferanse,
+    Behovstype.AVKLAR_SAMORDNING_GRADERING,
+    totalReadOnly
+  );
 
   return (
     <SamordningGradering
@@ -36,7 +42,7 @@ export const SamordningGraderingMedDatafetching = async ({ behandlingsreferanse,
       bruker={brukerInformasjon}
       grunnlag={grunnlag.data}
       behandlingVersjon={stegData.behandlingVersjon}
-      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+      readOnly={totalReadOnly}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
     />
   );

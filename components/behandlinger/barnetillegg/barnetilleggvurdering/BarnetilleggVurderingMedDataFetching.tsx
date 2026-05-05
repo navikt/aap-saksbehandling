@@ -15,21 +15,26 @@ type Props = {
 };
 
 export const BarnetilleggVurderingMedDataFetching = async ({ behandlingsreferanse, stegData }: Props) => {
-  const [grunnlag, behandlingPersoninfo, initialMellomlagretVurdering] = await Promise.all([
+  const [grunnlag, behandlingPersoninfo] = await Promise.all([
     hentBarnetilleggGrunnlag(behandlingsreferanse),
     hentBehandlingPersoninfo(behandlingsreferanse),
-    hentMellomlagring(behandlingsreferanse, Behovstype.AVKLAR_BARNETILLEGG_KODE),
   ]);
 
   if (isError(grunnlag) || isError(behandlingPersoninfo)) {
     return <ApiException apiResponses={[grunnlag, behandlingPersoninfo]} />;
   }
+  const totalReadOnly = stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
+  const initialMellomlagretVurdering = await hentMellomlagring(
+    behandlingsreferanse,
+    Behovstype.AVKLAR_BARNETILLEGG_KODE,
+    totalReadOnly
+  );
 
   return (
     <BarnetilleggVurdering
       grunnlag={grunnlag.data}
       behandlingsversjon={stegData.behandlingVersjon}
-      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+      readOnly={totalReadOnly}
       behandlingPersonInfo={behandlingPersoninfo.data}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
     />

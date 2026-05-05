@@ -2,8 +2,8 @@ import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import {
   hentAutomatiskLovvalgOgMedlemskapVurdering,
   hentFlyt,
-  hentMellomlagring,
   hentLovvalgMedlemskapGrunnlag,
+  hentMellomlagring,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { getStegData, skalViseSteg } from 'lib/utils/steg';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
@@ -18,11 +18,10 @@ interface Props {
 }
 
 export const LovvalgPeriodisert = async ({ behandlingsreferanse }: Props) => {
-  const [flyt, vurderingAutomatisk, grunnlag, initialMellomlagretVurdering] = await Promise.all([
+  const [flyt, vurderingAutomatisk, grunnlag] = await Promise.all([
     hentFlyt(behandlingsreferanse),
     hentAutomatiskLovvalgOgMedlemskapVurdering(behandlingsreferanse),
     hentLovvalgMedlemskapGrunnlag(behandlingsreferanse),
-    hentMellomlagring(behandlingsreferanse, Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP),
   ]);
 
   if (isError(vurderingAutomatisk) || isError(grunnlag) || isError(flyt)) {
@@ -30,8 +29,14 @@ export const LovvalgPeriodisert = async ({ behandlingsreferanse }: Props) => {
   }
 
   const vurderLovvalgSteg = getStegData('LOVVALG', 'VURDER_LOVVALG', flyt.data);
-  const behandlingsVersjon = flyt.data.behandlingVersjon;
   const readOnly = vurderLovvalgSteg.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
+  const initialMellomlagretVurdering = await hentMellomlagring(
+    behandlingsreferanse,
+    Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP,
+    readOnly
+  );
+
+  const behandlingsVersjon = flyt.data.behandlingVersjon;
   const erOverstyrtTilbakeførtVurdering =
     vurderingAutomatisk.data.kanBehandlesAutomatisk &&
     (grunnlag.data.nyeVurderinger.length === 0 || grunnlag.data.overstyrt);

@@ -15,15 +15,21 @@ interface Props {
 }
 
 export const VedtakslengdeMedDataFetching = async ({ behandlingsreferanse, behandlingVersjon, readOnly }: Props) => {
-  const [grunnlag, initialMellomlagretVurdering, behandling] = await Promise.all([
+  const [grunnlag, behandling] = await Promise.all([
     hentVedtakslengdeGrunnlag(behandlingsreferanse),
-    hentMellomlagring(behandlingsreferanse, Behovstype.FASTSETT_VEDTAKSLENGDE),
     hentBehandling(behandlingsreferanse),
   ]);
 
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
   }
+
+  const totalReadOnly = readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
+  const initialMellomlagretVurdering = await hentMellomlagring(
+    behandlingsreferanse,
+    Behovstype.FASTSETT_VEDTAKSLENGDE,
+    totalReadOnly
+  );
 
   const erVedtakslengdeManuelt =
     behandling.type === 'SUCCESS' &&
@@ -37,7 +43,7 @@ export const VedtakslengdeMedDataFetching = async ({ behandlingsreferanse, behan
     <VedtakslengdeSteg
       grunnlag={grunnlag.data}
       behandlingVersjon={behandlingVersjon}
-      readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+      readOnly={totalReadOnly}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
       erVedtakslengdeManuelt={erVedtakslengdeManuelt}
     />
