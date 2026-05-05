@@ -47,7 +47,7 @@ export function useMellomlagring<T extends object>(
     [behovstype, behandlingsreferanse, flyt.aktivtSteg, refetchBekreftVurderingerGrunnlagClient]
   );
 
-  const debouncedLagreMellomlagring = useMemo(() => debounce(lagreMellomlagring, 2000), [lagreMellomlagring]);
+  const debouncedLagreMellomlagring = useMemo(() => debounce(lagreMellomlagring, 3000), [lagreMellomlagring]);
 
   const isSubmitting = form.formState.isSubmitting;
 
