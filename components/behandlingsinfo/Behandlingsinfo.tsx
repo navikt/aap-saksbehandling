@@ -29,8 +29,8 @@ export const Behandlingsinfo = ({ behandling, sak, klageresultat }: Props) => {
       borderColor="neutral-subtle"
       className={styles.behandlingsinfo}
     >
-      <VStack gap={"space-16"}>
-        <HStack gap={"space-8"} align={'center'}>
+      <VStack gap={'space-16'}>
+        <HStack gap={'space-8'} align={'center'}>
           <Label as="p" size="medium">
             {mapTypeBehandlingTilTekst(behandling.type)}
           </Label>

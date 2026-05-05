@@ -18,20 +18,24 @@ export const FormkravVurderingMedDataFetching = async ({
   readOnly,
   typeBehandling,
 }: Props) => {
-  const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
-    hentFormkravGrunnlag(behandlingsreferanse),
-    hentMellomlagring(behandlingsreferanse, Behovstype.VURDER_FORMKRAV),
-  ]);
+  const grunnlag = await hentFormkravGrunnlag(behandlingsreferanse);
 
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
   }
 
+  const totalReadOnly = readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
+  const initialMellomlagretVurdering = await hentMellomlagring(
+    behandlingsreferanse,
+    Behovstype.VURDER_FORMKRAV,
+    totalReadOnly
+  );
+
   return (
     <FormkravVurdering
       grunnlag={grunnlag.data}
       behandlingVersjon={behandlingVersjon}
-      readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+      readOnly={totalReadOnly}
       typeBehandling={typeBehandling}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
     />

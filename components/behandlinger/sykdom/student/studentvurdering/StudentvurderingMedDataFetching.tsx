@@ -15,10 +15,7 @@ interface Props {
 }
 
 export const StudentvurderingMedDataFetching = async ({ behandlingsreferanse, stegData }: Props) => {
-  const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
-    hentStudentGrunnlag(behandlingsreferanse),
-    hentMellomlagring(behandlingsreferanse, Behovstype.AVKLAR_STUDENT_KODE),
-  ]);
+  const grunnlag = await hentStudentGrunnlag(behandlingsreferanse);
 
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
@@ -27,11 +24,16 @@ export const StudentvurderingMedDataFetching = async ({ behandlingsreferanse, st
   const diagnoseGrunnlag = finnDiagnoseGrunnlagForStudent(grunnlag.data);
   const diagnoserDefaultOptions = await getDefaultOptionsForDiagnosesystem(diagnoseGrunnlag);
 
-  if (
-    !skalViseSteg(stegData, grunnlag.data.studentvurdering != null || grunnlag.data.sisteVedtatteVurderinger != null)
-  ) {
+  if (!skalViseSteg(stegData, grunnlag.data.sisteVedtatteVurderinger != null)) {
     return null;
   }
+
+  const totalReadOnly = stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
+  const initialMellomlagretVurdering = await hentMellomlagring(
+    behandlingsreferanse,
+    Behovstype.AVKLAR_STUDENT_KODE,
+    totalReadOnly
+  );
 
   return (
     <StudentVurdering

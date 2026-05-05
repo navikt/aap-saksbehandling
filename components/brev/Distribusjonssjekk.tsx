@@ -85,7 +85,8 @@ export const Distribusjonssjekk = ({
               onClick={() => rekjørDistribuerBrevSjekk()}
               size="small"
               variant="secondary"
-              loading={proeverIgjen}>
+              loading={proeverIgjen}
+            >
               Prøv igjen
             </Button>
           </VStack>

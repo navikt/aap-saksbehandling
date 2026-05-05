@@ -1569,24 +1569,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aap-oppgave-typescript-types@npm:0.0.711":
-  version: 0.0.711
-  resolution: "@navikt/aap-oppgave-typescript-types@npm:0.0.711::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-oppgave-typescript-types%2F0.0.711%2F6f72b34d6c0095ce4d0db82494ff3c73aca5f880"
-  checksum: 10c0/27f42fac152d8c7c1f09497e695ea6fb7ded0d2bd5df9230faf53b22fc8ae3de7a967094244918bcbe2a09dfb96ed8905e05a5be27f97179d4227c99bf75521b
+"@navikt/aap-oppgave-typescript-types@npm:0.0.724":
+  version: 0.0.724
+  resolution: "@navikt/aap-oppgave-typescript-types@npm:0.0.724::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-oppgave-typescript-types%2F0.0.724%2Fb8c8ad0ab4e8dca5e2797db4a4c9c967b22b1a70"
+  checksum: 10c0/a44f6039d19b9be969c607ba4d614e8f267d0be05ff2d2274ac274b74dbce00661cea054689e09e306e48997e5331f3c394c54c73c2d6a4e874ffbf2f2e8a367
   languageName: node
   linkType: hard
 
-"@navikt/aap-postmottak-backend-typescript-types@npm:0.0.672":
-  version: 0.0.672
-  resolution: "@navikt/aap-postmottak-backend-typescript-types@npm:0.0.672::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-postmottak-backend-typescript-types%2F0.0.672%2F23d1c461b00123f79847cfdef6f9c347602ee660"
-  checksum: 10c0/e14256f9b106dbea9ff1afca1babb3838532c2d73485adc91e78d146144b11e93f92db2b57d78a60c2fcec62b0f06277b5dcdfdb7a61319fe6af9e6c60b099bb
+"@navikt/aap-postmottak-backend-typescript-types@npm:0.0.681":
+  version: 0.0.681
+  resolution: "@navikt/aap-postmottak-backend-typescript-types@npm:0.0.681::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-postmottak-backend-typescript-types%2F0.0.681%2F3580cf66a06081d2afba711bdd83e9a43b1bff94"
+  checksum: 10c0/114ca193714c35b590060e3952d0d8dfcd7e5514342c94c61807a65f27ef43fdf31b014197fa47a84db0ba4ac19cbf8e5f1e5edf1aeb9a44d870ee58c344d18e
   languageName: node
   linkType: hard
 
-"@navikt/aksel-icons@npm:8.10.2, @navikt/aksel-icons@npm:^8.10.2":
-  version: 8.10.2
-  resolution: "@navikt/aksel-icons@npm:8.10.2::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F8.10.2%2F001cf489c9e029902c38f7a52e34eee5c2d82a82"
-  checksum: 10c0/f70bec975d50b2ac7f611c7d4c03ffa3bd4d7e10e19c2cd3bdcdb1c2954600c358bb0592bc348e7aa29eba93c82e70f8e76a5f73acf8629a8702622ef83b3246
+"@navikt/aksel-icons@npm:8.10.3, @navikt/aksel-icons@npm:^8.10.3":
+  version: 8.10.3
+  resolution: "@navikt/aksel-icons@npm:8.10.3::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F8.10.3%2Fa30f1c596de7423acbdd2347a32355aea772a366"
+  checksum: 10c0/88a09b7c19617eb49c6712b0404414e65486d6912e71b83dd973013fbc9c3a9fd4f7be12373836136a5a84992e28d3a6c1aa85b68411b69591f9ae2c27f397d7
   languageName: node
   linkType: hard
 
@@ -1597,12 +1597,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aksel@npm:8.10.2":
-  version: 8.10.2
-  resolution: "@navikt/aksel@npm:8.10.2::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel%2F8.10.2%2F03e5805e6e1289ab953a0f2d0340abd19fbcb961"
+"@navikt/aksel@npm:8.10.3":
+  version: 8.10.3
+  resolution: "@navikt/aksel@npm:8.10.3::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel%2F8.10.3%2Fc3180b9992f6247411de6ac651afbe496e2d2dac"
   dependencies:
-    "@navikt/ds-css": "npm:^8.10.2"
-    "@navikt/ds-tokens": "npm:^8.10.2"
+    "@navikt/ds-css": "npm:^8.10.3"
+    "@navikt/ds-tokens": "npm:^8.10.3"
     chalk: "npm:5.6.2"
     cli-progress: "npm:3.12.0"
     clipboardy: "npm:5.0.1"
@@ -1616,7 +1616,7 @@ __metadata:
     lodash: "npm:4.18.1"
   bin:
     aksel: dist/index.js
-  checksum: 10c0/205080600d22ae0dfd6cddf02e7f41d51ab221e820c132849731148498d3fe38998b0fafb257ce712c4b3980c00c77c5c2d426584b389dd6997e1815f0431f08
+  checksum: 10c0/9c7c8d81f180789d3b21e346583b667f828fa0bdabf2681063e5aa7745a1e6d5a3fdc7c29ff93601a769a086fbeb4d4493ff079c2939c7be8d691d6105a62ac8
   languageName: node
   linkType: hard
 
@@ -1627,10 +1627,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/ds-css@npm:8.10.2, @navikt/ds-css@npm:^8.10.2":
-  version: 8.10.2
-  resolution: "@navikt/ds-css@npm:8.10.2::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-css%2F8.10.2%2F238deffb1f06db4dcb70c9cc048d0edd187958e3"
-  checksum: 10c0/f6139c597bdfe8773a57976cf4858b2ba6cf699e5b36cc39ef9e797452ef04c3bd2fe6d5bfeb8d11b49eff8b4dcdbbc62253cf44baa9d379832e6191e08404e0
+"@navikt/ds-css@npm:8.10.3, @navikt/ds-css@npm:^8.10.3":
+  version: 8.10.3
+  resolution: "@navikt/ds-css@npm:8.10.3::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-css%2F8.10.3%2F2c6d65719d3a85ff0f59aa178c3f8c77c78f9bca"
+  checksum: 10c0/0ff6481fc04691475d24bc4553f97c4ba67fb4d4a916f91ddebb5e534f1859a8363ac767062c4d4d774c92f54053657d948bebf69fef7180c79d4b51f464e742
   languageName: node
   linkType: hard
 
@@ -1641,21 +1641,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/ds-react@npm:8.10.2":
-  version: 8.10.2
-  resolution: "@navikt/ds-react@npm:8.10.2::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-react%2F8.10.2%2Fc55b2d11aa9b12d071e9c9e8fb9ef53756e29825"
+"@navikt/ds-react@npm:8.10.3":
+  version: 8.10.3
+  resolution: "@navikt/ds-react@npm:8.10.3::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-react%2F8.10.3%2Fd1b215fcd6beef57205dfc7350b5cc7e7104ebff"
   dependencies:
     "@floating-ui/react": "npm:0.27.8"
     "@floating-ui/react-dom": "npm:^2.1.8"
-    "@navikt/aksel-icons": "npm:^8.10.2"
-    "@navikt/ds-tokens": "npm:^8.10.2"
+    "@navikt/aksel-icons": "npm:^8.10.3"
+    "@navikt/ds-tokens": "npm:^8.10.3"
     date-fns: "npm:^4.0.0"
     react-day-picker: "npm:9.14.0"
   peerDependencies:
     "@types/react": ^17.0.30 || ^18 || ^19
     react: ^17 || ^18 || ^19
     react-dom: ^17 || ^18 || ^19
-  checksum: 10c0/23d0ee284760d043392a9e1f324c70524d1354402f3fd7327f8624399a265afeb5bdbb718effb9c200ae784f3bc5261065070478750c261f6d5ac7c500c07d52
+  checksum: 10c0/281596d79dad6ff8fcd06a6b472dce9e1577a9dc858c5bf006c0fe2d28373654381a795d3409252177d82e9c5eca63a2ee12c6142a792c502dec1b586d32445e
   languageName: node
   linkType: hard
 
@@ -1684,10 +1684,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/ds-tokens@npm:^8.10.2":
-  version: 8.10.2
-  resolution: "@navikt/ds-tokens@npm:8.10.2::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-tokens%2F8.10.2%2F8e24eb9d5b3b087d8d95cf5f4c06b96076da04c2"
-  checksum: 10c0/e9a94ce07791a0b1951c97a43ebc9bfe053cb62a89687f0aee9e0f1b2b1fa9730356b3f7f954968deaeb45b26ece744c97459325529d16e1f4c5caedaddf1b7c
+"@navikt/ds-tokens@npm:^8.10.3":
+  version: 8.10.3
+  resolution: "@navikt/ds-tokens@npm:8.10.3::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-tokens%2F8.10.3%2F1c8cb263d04f4002c5a1f40b8c5d68366b4613b9"
+  checksum: 10c0/5ac8d6270a6f8aab8b74d186cfa59c9016989ab723747c9d26e3158c6bf1161ee73ce59026f7e4ebf287263291e1b0329f0f06aa28714e357fa159f67f8b96ea
   languageName: node
   linkType: hard
 
@@ -1722,14 +1722,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/oasis@npm:3.8.0":
-  version: 3.8.0
-  resolution: "@navikt/oasis@npm:3.8.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Foasis%2F3.8.0%2Ffc6862d934adfbefa382220614af18160688cd1e"
+"@navikt/oasis@npm:4.1.4":
+  version: 4.1.4
+  resolution: "@navikt/oasis@npm:4.1.4::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Foasis%2F4.1.4%2F0d9c93820b9b6d93b1bd9da134feb95461ad8a47"
   dependencies:
-    jose: "npm:^5.2.3"
-    openid-client: "npm:^5.6.5"
-    prom-client: "npm:^15.1.0"
-  checksum: 10c0/225e8e26f3651a795c75c2de39cec0b4d9231b2adfc60ec9dd6ed28a94c1746dfffc0ca6aed0eaeeee2f4d782702345a1d94f32be7bad8f54488a59d550509ae
+    "@navikt/texas": "npm:^4.1.4"
+    "@opentelemetry/api": "npm:^1.9.0"
+    jose: "npm:^6.1.3"
+    prom-client: "npm:^15.1.3"
+  checksum: 10c0/9ac5568d4c9944bdd4962332fe1b20ddb50ad2acb9004f12829d4bb1d16879eb4c6281fe737136986f292453db109ae3b7c52c64b72f31bf0a6b1612c51fea8a
+  languageName: node
+  linkType: hard
+
+"@navikt/texas@npm:^4.1.4":
+  version: 4.1.4
+  resolution: "@navikt/texas@npm:4.1.4::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Ftexas%2F4.1.4%2F1725aca0fa0b803e0048212c3e202d24c10f3c3b"
+  checksum: 10c0/7dcf64b1db109be3524b603a75c219606ea188606cb1563161892e14ee28dcf4e46d1051dc6af921664bc4d6bececf008cee092e5b98cec6df230699f822a56e
   languageName: node
   linkType: hard
 
@@ -1870,7 +1878,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@opentelemetry/api@npm:1.9.1":
+"@opentelemetry/api@npm:1.9.1, @opentelemetry/api@npm:^1.9.0":
   version: 1.9.1
   resolution: "@opentelemetry/api@npm:1.9.1"
   checksum: 10c0/c608485fc8b5a91e1f7e05e843b45b509307456b31cd2ad365933d90813e40ebfedf179f1451c762037e82d7c76aa8500e95d2da3609f640a1206cde5322cd14
@@ -2788,16 +2796,16 @@ __metadata:
     "@navikt/aap-breveditor": "npm:0.13.0"
     "@navikt/aap-breveditor-css": "npm:0.6.0"
     "@navikt/aap-felles-prettier": "npm:5.6.3"
-    "@navikt/aap-oppgave-typescript-types": "npm:0.0.711"
-    "@navikt/aap-postmottak-backend-typescript-types": "npm:0.0.672"
-    "@navikt/aksel": "npm:8.10.2"
-    "@navikt/aksel-icons": "npm:8.10.2"
+    "@navikt/aap-oppgave-typescript-types": "npm:0.0.724"
+    "@navikt/aap-postmottak-backend-typescript-types": "npm:0.0.681"
+    "@navikt/aksel": "npm:8.10.3"
+    "@navikt/aksel-icons": "npm:8.10.3"
     "@navikt/diagnosekoder": "npm:1.2026.0"
-    "@navikt/ds-css": "npm:8.10.2"
-    "@navikt/ds-react": "npm:8.10.2"
+    "@navikt/ds-css": "npm:8.10.3"
+    "@navikt/ds-react": "npm:8.10.3"
     "@navikt/endringslogg": "npm:2.0.0"
     "@navikt/eslint-config-aap": "npm:5.5.1"
-    "@navikt/oasis": "npm:3.8.0"
+    "@navikt/oasis": "npm:4.1.4"
     "@opentelemetry/api": "npm:1.9.1"
     "@opentelemetry/api-logs": "npm:0.215.0"
     "@portabletext/react": "npm:6.0.3"
@@ -2828,7 +2836,7 @@ __metadata:
     husky: "npm:9.1.7"
     i18n-iso-countries: "npm:7.14.0"
     is-european: "npm:1.0.10"
-    jose: "npm:6.2.2"
+    jose: "npm:6.2.3"
     jsdom: "npm:27.4.0"
     lint-staged: "npm:16.3.3"
     lodash: "npm:4.18.1"
@@ -5650,24 +5658,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jose@npm:6.2.2":
+"jose@npm:6.2.3":
+  version: 6.2.3
+  resolution: "jose@npm:6.2.3"
+  checksum: 10c0/aa91bccba22cc84d86308f833749bcb0b00441e35c24e0ac79abeac5f76dc62d47bdef9c1da6a0c609f5da6478595f52b252085888b89dbdb163861e40ea4188
+  languageName: node
+  linkType: hard
+
+"jose@npm:^6.1.3":
   version: 6.2.2
   resolution: "jose@npm:6.2.2"
   checksum: 10c0/201f4776d77eccd339de99fb3ba940fdf03db15e64be7a99b511e53c232e3f3818e3f21b95223d62f99315a2ab76b4251cedd94e067de56893e45273a8d2151b
-  languageName: node
-  linkType: hard
-
-"jose@npm:^4.15.9":
-  version: 4.15.9
-  resolution: "jose@npm:4.15.9"
-  checksum: 10c0/4ed4ddf4a029db04bd167f2215f65d7245e4dc5f36d7ac3c0126aab38d66309a9e692f52df88975d99429e357e5fd8bab340ff20baab544d17684dd1d940a0f4
-  languageName: node
-  linkType: hard
-
-"jose@npm:^5.2.3":
-  version: 5.10.0
-  resolution: "jose@npm:5.10.0"
-  checksum: 10c0/e20d9fc58d7e402f2e5f04e824b8897d5579aae60e64cb88ebdea1395311c24537bf4892f7de413fab1acf11e922797fb1b42269bc8fc65089a3749265ccb7b0
   languageName: node
   linkType: hard
 
@@ -6203,15 +6204,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lru-cache@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "lru-cache@npm:6.0.0"
-  dependencies:
-    yallist: "npm:^4.0.0"
-  checksum: 10c0/cb53e582785c48187d7a188d3379c181b5ca2a9c78d2bce3e7dee36f32761d1c42983da3fe12b55cb74e1779fa94cdc2e5367c028a9b35317184ede0c07a30a9
-  languageName: node
-  linkType: hard
-
 "lz-string@npm:^1.5.0":
   version: 1.5.0
   resolution: "lz-string@npm:1.5.0"
@@ -6650,13 +6642,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"object-hash@npm:^2.2.0":
-  version: 2.2.0
-  resolution: "object-hash@npm:2.2.0"
-  checksum: 10c0/1527de843926c5442ed61f8bdddfc7dc181b6497f725b0e89fcf50a55d9c803088763ed447cac85a5aa65345f1e99c2469ba679a54349ef3c4c0aeaa396a3eb9
-  languageName: node
-  linkType: hard
-
 "object-inspect@npm:^1.13.3, object-inspect@npm:^1.13.4":
   version: 1.13.4
   resolution: "object-inspect@npm:1.13.4"
@@ -6739,13 +6724,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"oidc-token-hash@npm:^5.0.3":
-  version: 5.2.0
-  resolution: "oidc-token-hash@npm:5.2.0"
-  checksum: 10c0/4fa9a6f0a27c0b304aa2e4a37e433e871fb2e71418b62ada7305022ed7c70a4b325a81a4ee9661bf0c456cda0acdbeb564e68659bd6fe6a192b20bdec11688ea
-  languageName: node
-  linkType: hard
-
 "on-exit-leak-free@npm:^2.1.0":
   version: 2.1.2
   resolution: "on-exit-leak-free@npm:2.1.2"
@@ -6786,18 +6764,6 @@ __metadata:
   bin:
     openapi-typescript: bin/cli.js
   checksum: 10c0/56d25e160fee33a231646d0648407ca4e65415ff7696b6545bca948828a941a3aeb55585fe34159b71ba8ad93bac55d025db46815132ea092d07ef7386efa462
-  languageName: node
-  linkType: hard
-
-"openid-client@npm:^5.6.5":
-  version: 5.7.1
-  resolution: "openid-client@npm:5.7.1"
-  dependencies:
-    jose: "npm:^4.15.9"
-    lru-cache: "npm:^6.0.0"
-    object-hash: "npm:^2.2.0"
-    oidc-token-hash: "npm:^5.0.3"
-  checksum: 10c0/6aae649758562002eace7574b6eda02be7eddbb0df61eef497ae98b7a4a0ae4c6b09f3f0c1b9b6cb7fcc0c70bbde2576691bf31b870db1f19ab634c1def10bc7
   languageName: node
   linkType: hard
 
@@ -7187,7 +7153,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prom-client@npm:^15.1.0":
+"prom-client@npm:^15.1.3":
   version: 15.1.3
   resolution: "prom-client@npm:15.1.3"
   dependencies:

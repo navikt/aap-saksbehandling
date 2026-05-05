@@ -51,4 +51,3 @@ describe('ÅrsakTilBehandling filtering logic', () => {
     expect(filtrert).toEqual(årsaker);
   });
 });
-

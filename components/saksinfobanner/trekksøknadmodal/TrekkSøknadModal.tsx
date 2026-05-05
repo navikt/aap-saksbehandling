@@ -44,7 +44,7 @@ export const TrekkSøknadModal = ({ saksnummer, isOpen, onClose, behandlingRefer
           data-color="danger"
           type={'button'}
           className={'fit-content'}
-          variant={"primary"}
+          variant={'primary'}
           onClick={async () => {
             sendHendelseOgVentPåProsessering(
               saksnummer,
@@ -67,7 +67,8 @@ export const TrekkSøknadModal = ({ saksnummer, isOpen, onClose, behandlingRefer
               onClose
             );
           }}
-          loading={isLoading}>
+          loading={isLoading}
+        >
           Trekk søknad
         </Button>
         <Button variant={'secondary'} onClick={onClose} type="button">

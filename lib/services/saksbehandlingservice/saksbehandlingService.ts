@@ -53,6 +53,8 @@ import {
   MellomlagretVurderingRequest,
   MellomlagretVurderingResponse,
   NavEnhetRequest,
+  OppdaterMeldekortRequest,
+  OppdaterMeldekortResponse,
   OppfølgningOppgaveOpprinnelseResponse,
   OppholdskravGrunnlagResponse,
   OpprettAktivitetspliktBehandlingDto,
@@ -642,7 +644,11 @@ export const hentMellomlagringMedStatus = (behandlingsreferanse: string, kode: s
     saksbehandlingApiScope
   );
 };
-export const hentMellomlagring = async (behandlingsreferanse: string, kode: string) => {
+export const hentMellomlagring = async (behandlingsreferanse: string, kode: string, readOnly: boolean) => {
+  if (readOnly) {
+    return undefined;
+  }
+
   const res = await hentMellomlagringMedStatus(behandlingsreferanse, kode);
 
   if (isSuccess(res)) {
@@ -703,6 +709,15 @@ export const hentMeldekort = async (saksnummer: string) => {
   return apiFetch<AktivitetspliktMedTrekkRespons>(
     `${saksbehandlingApiBaseUrl}/api/meldekort/${saksnummer}`,
     saksbehandlingApiScope
+  );
+};
+
+export const oppdaterMeldekort = async (saksnummer: string, oppdaterMeldekortRequest: OppdaterMeldekortRequest) => {
+  return apiFetch<OppdaterMeldekortResponse>(
+    `${saksbehandlingApiBaseUrl}/api/meldekort/${saksnummer}`,
+    saksbehandlingApiScope,
+    'POST',
+    oppdaterMeldekortRequest
   );
 };
 

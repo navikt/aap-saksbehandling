@@ -1,5 +1,5 @@
 import styles from './DokumentOversikt.module.css';
-import { Alert, Box, Button, Heading, HStack, Table, VStack } from '@navikt/ds-react';
+import { Alert, Button, Heading, HStack, Table, VStack } from '@navikt/ds-react';
 import { Spinner } from 'components/felles/Spinner';
 import { isSuccess } from 'lib/utils/api';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
@@ -15,6 +15,7 @@ import { TableStyled } from 'components/tablestyled/TableStyled';
 import { useEffect, useState } from 'react';
 import { useLagretDokumentFilter } from 'hooks/dokumenter/dokumentFilterHook';
 import { ArrowCirclepathReverseIcon } from '@navikt/aksel-icons';
+import { Kort } from 'components/kort/Kort';
 
 export interface DokumentFilterFormFields {
   tema: string[];
@@ -99,9 +100,9 @@ export const DokumentOversikt = ({ sak }: { sak: SaksInfo }) => {
   }
 
   return (
-    <VStack gap="space-16">
+    <VStack gap="space-32">
       <Heading size="large">Dokumentoversikt</Heading>
-      <Box background="neutral-soft" padding="space-16" borderRadius="12">
+      <Kort background="default">
         <HStack gap="space-16" marginBlock="space-0 space-16" wrap={false}>
           <FormField form={form} formField={formFields.tema} />
           <FormField form={form} formField={formFields.typer} />
@@ -112,38 +113,40 @@ export const DokumentOversikt = ({ sak }: { sak: SaksInfo }) => {
             Nullstill
           </Button>
         </HStack>
-      </Box>
-      <HStack>
-        <TableStyled size="small">
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell textSize={'small'}>ID</Table.HeaderCell>
-              <Table.HeaderCell textSize={'small'}>Tittel</Table.HeaderCell>
-              <Table.HeaderCell textSize={'small'}>Opprettet</Table.HeaderCell>
-              <Table.HeaderCell textSize={'small'}>Avsender / mottaker</Table.HeaderCell>
-              <Table.HeaderCell textSize={'small'}>Tema</Table.HeaderCell>
-              <Table.HeaderCell textSize={'small'}>Type</Table.HeaderCell>
-              <Table.HeaderCell textSize={'small'}>Status</Table.HeaderCell>
-              <Table.HeaderCell textSize={'small'}>Sak</Table.HeaderCell>
-              <Table.HeaderCell />
-            </Table.Row>
-          </Table.Header>
-
-          <Table.Body>
-            {isLoading ? (
+      </Kort>
+      <Kort background="default" padding="space-0">
+        <HStack>
+          <TableStyled size="small">
+            <Table.Header>
               <Table.Row>
-                <Table.DataCell colSpan={100}>
-                  <Spinner label="Henter dokumenter" />
-                </Table.DataCell>
+                <Table.HeaderCell textSize={'small'}>ID</Table.HeaderCell>
+                <Table.HeaderCell textSize={'small'}>Tittel</Table.HeaderCell>
+                <Table.HeaderCell textSize={'small'}>Opprettet</Table.HeaderCell>
+                <Table.HeaderCell textSize={'small'}>Avsender / mottaker</Table.HeaderCell>
+                <Table.HeaderCell textSize={'small'}>Tema</Table.HeaderCell>
+                <Table.HeaderCell textSize={'small'}>Type</Table.HeaderCell>
+                <Table.HeaderCell textSize={'small'}>Status</Table.HeaderCell>
+                <Table.HeaderCell textSize={'small'}>Sak</Table.HeaderCell>
+                <Table.HeaderCell />
               </Table.Row>
-            ) : (
-              journalposter?.map((journalpost) => (
-                <JournalpostRad key={journalpost.journalpostId} journalpost={journalpost} sak={sak} />
-              ))
-            )}
-          </Table.Body>
-        </TableStyled>
-      </HStack>
+            </Table.Header>
+
+            <Table.Body>
+              {isLoading ? (
+                <Table.Row>
+                  <Table.DataCell colSpan={100}>
+                    <Spinner label="Henter dokumenter" />
+                  </Table.DataCell>
+                </Table.Row>
+              ) : (
+                journalposter?.map((journalpost) => (
+                  <JournalpostRad key={journalpost.journalpostId} journalpost={journalpost} sak={sak} />
+                ))
+              )}
+            </Table.Body>
+          </TableStyled>
+        </HStack>
+      </Kort>
     </VStack>
   );
 };

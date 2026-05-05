@@ -49,7 +49,7 @@ export const Refusjonskrav = ({ form, readOnly }: Props) => {
 
   return (
     <Box>
-      <VStack gap={"space-16"}>
+      <VStack gap={'space-16'}>
         <BodyLong size={'small'} weight={'semibold'}>
           Legg til refusjonskrav
         </BodyLong>
@@ -65,8 +65,8 @@ export const Refusjonskrav = ({ form, readOnly }: Props) => {
           </BodyLong>
         </VStack>
       </VStack>
-      <VStack gap={"space-8"}>
-        <VStack gap={"space-8"}>
+      <VStack gap={'space-8'}>
+        <VStack gap={'space-8'}>
           <TableStyled>
             <Table.Header>
               <Table.Row>

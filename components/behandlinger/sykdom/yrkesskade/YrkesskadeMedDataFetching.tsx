@@ -14,10 +14,7 @@ interface Props {
 }
 
 export const YrkesskadeMedDataFetching = async ({ behandlingsreferanse, stegData }: Props) => {
-  const [yrkesskadeVurderingGrunnlag, initialMellomlagretVurdering] = await Promise.all([
-    hentYrkesskadeVurderingGrunnlag(behandlingsreferanse),
-    hentMellomlagring(behandlingsreferanse, Behovstype.YRKESSKADE_KODE),
-  ]);
+  const yrkesskadeVurderingGrunnlag = await hentYrkesskadeVurderingGrunnlag(behandlingsreferanse);
 
   if (isError(yrkesskadeVurderingGrunnlag)) {
     return <ApiException apiResponses={[yrkesskadeVurderingGrunnlag]} />;
@@ -27,10 +24,17 @@ export const YrkesskadeMedDataFetching = async ({ behandlingsreferanse, stegData
     return null;
   }
 
+  const totalReadOnly = stegData.readOnly || !yrkesskadeVurderingGrunnlag.data.harTilgangTilÅSaksbehandle;
+  const initialMellomlagretVurdering = await hentMellomlagring(
+    behandlingsreferanse,
+    Behovstype.YRKESSKADE_KODE,
+    totalReadOnly
+  );
+
   return (
     <Yrkesskade
       grunnlag={yrkesskadeVurderingGrunnlag.data}
-      readOnly={stegData.readOnly || !yrkesskadeVurderingGrunnlag.data.harTilgangTilÅSaksbehandle}
+      readOnly={totalReadOnly}
       behandlingVersjon={stegData.behandlingVersjon}
       behandlingsreferanse={behandlingsreferanse}
       initialMellomlagretVurdering={initialMellomlagretVurdering}

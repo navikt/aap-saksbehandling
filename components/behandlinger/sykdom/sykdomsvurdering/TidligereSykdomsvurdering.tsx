@@ -2,7 +2,7 @@
 
 import { VStack } from '@navikt/ds-react';
 import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
-import { getJaNeiEllerIkkeBesvart } from 'lib/utils/form';
+import { getJaNeiEllerIkkeBesvart, getJaNeiJaForeløpigEllerIkkeBesvart } from 'lib/utils/form';
 import { DiagnoseSystem, diagnoseSøker } from 'lib/diagnosesøker/DiagnoseSøker';
 import {
   erArbeidsevnenNedsattLabel,
@@ -19,9 +19,10 @@ import { Sykdomvurdering } from 'lib/types/types';
 
 interface Props {
   vurdering: Sykdomvurdering;
+  sykdomUtenVissVarighetToggle: boolean;
 }
 
-export const TidligereSykdomsvurdering = ({ vurdering }: Props) => {
+export const TidligereSykdomsvurdering = ({ vurdering, sykdomUtenVissVarighetToggle }: Props) => {
   return (
     <VStack gap="space-20">
       <SpørsmålOgSvar spørsmål={'Fra dato'} svar={new Dato(vurdering.fom).formaterForFrontend()} />
@@ -51,19 +52,31 @@ export const TidligereSykdomsvurdering = ({ vurdering }: Props) => {
           svar={getJaNeiEllerIkkeBesvart(vurdering.erArbeidsevnenNedsatt)}
         />
       )}
-      {vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten !== undefined && (
+      {!sykdomUtenVissVarighetToggle && vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten !== undefined && (
         <SpørsmålOgSvar
           spørsmål={erNedsettelseIArbeidsevneMerEnnHalvpartenLabel}
           svar={getJaNeiEllerIkkeBesvart(vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten)}
         />
       )}
+      {sykdomUtenVissVarighetToggle && vurdering.erNedsettelseMinstHalvparten !== undefined && (
+        <SpørsmålOgSvar
+          spørsmål={erNedsettelseIArbeidsevneMerEnnHalvpartenLabel}
+          svar={getJaNeiJaForeløpigEllerIkkeBesvart(vurdering.erNedsettelseMinstHalvparten)}
+        />
+      )}
       {!!vurdering.yrkesskadeBegrunnelse && (
         <SpørsmålOgSvar spørsmål={yrkesskadeBegrunnelse} svar={vurdering.yrkesskadeBegrunnelse} />
       )}
-      {vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense !== undefined && (
+      {!sykdomUtenVissVarighetToggle && vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense !== undefined && (
         <SpørsmålOgSvar
           spørsmål={erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense}
           svar={getJaNeiEllerIkkeBesvart(vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense)}
+        />
+      )}
+      {sykdomUtenVissVarighetToggle && vurdering.erNedsettelseMerEnnYrkesskadegrense !== undefined && (
+        <SpørsmålOgSvar
+          spørsmål={erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense}
+          svar={getJaNeiJaForeløpigEllerIkkeBesvart(vurdering.erNedsettelseMerEnnYrkesskadegrense)}
         />
       )}
       {vurdering.erSkadeSykdomEllerLyteVesentligdel !== undefined && (
@@ -72,7 +85,7 @@ export const TidligereSykdomsvurdering = ({ vurdering }: Props) => {
           svar={getJaNeiEllerIkkeBesvart(vurdering.erSkadeSykdomEllerLyteVesentligdel)}
         />
       )}
-      {vurdering.erNedsettelseIArbeidsevneAvEnVissVarighet !== undefined && (
+      {!sykdomUtenVissVarighetToggle && vurdering.erNedsettelseIArbeidsevneAvEnVissVarighet !== undefined && (
         <SpørsmålOgSvar
           spørsmål={erNedsettelseIArbeidsevneAvEnVissVarighetLabel}
           svar={getJaNeiEllerIkkeBesvart(vurdering.erNedsettelseIArbeidsevneAvEnVissVarighet)}

@@ -173,7 +173,7 @@ export const StudentVurdering = ({
       vilkårTilhørerNavKontor={false}
       formReset={() => form.reset()}
     >
-      <VStack gap={"space-16"}>
+      <VStack gap={'space-16'}>
         <RelevantInformasjonStudent opplysninger={grunnlag.oppgittStudent} />
 
         {sistevedtatteVurderinger?.map((vurdering, index) => {

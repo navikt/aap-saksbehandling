@@ -26,7 +26,8 @@ export const HandlingerDokumentButton = ({ sak, journalpost }: { sak: SaksInfo; 
             data-color="neutral"
             variant="tertiary"
             icon={<MenuElipsisVerticalIcon title="Saksmeny" />}
-            size="small" />
+            size="small"
+          />
         </ActionMenu.Trigger>
         <ActionMenu.Content>
           <ActionMenu.Group label="Handlinger">

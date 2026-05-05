@@ -104,7 +104,7 @@ export function TidligereVurderinger({
       <ExpansionCard.Content>
         <VStack className={styles.panel}>
           <Chips size={'medium'}>
-            <VStack gap={"space-4"}>
+            <VStack gap={'space-4'}>
               {mappedVurderinger.map((v, index) => {
                 const periode = grupperPåOpprettetDato
                   ? `${formatDatoMedMånedsnavn(v.vurdertDato)}`

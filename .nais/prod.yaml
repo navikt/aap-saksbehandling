@@ -1,3 +1,6 @@
+arbeidOgInntektApp: arbeid-og-inntekt
+fssCluster: prod-fss
+
 ingresses:
   - "https://kelvin.intern.nav.no"
 

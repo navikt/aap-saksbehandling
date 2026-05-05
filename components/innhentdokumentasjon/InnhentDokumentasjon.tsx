@@ -34,7 +34,7 @@ export const InnhentDokumentasjon = () => {
   return (
     <section>
       {!visSkjema && (
-        <VStack gap={"space-16"}>
+        <VStack gap={'space-16'}>
           <div>
             <Button type="button" variant={'secondary'} size={'small'} onClick={() => oppdaterVisSkjema(true)}>
               Be om opplysninger fra behandler

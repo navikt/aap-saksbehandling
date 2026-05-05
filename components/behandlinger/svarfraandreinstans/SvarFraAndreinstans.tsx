@@ -148,7 +148,7 @@ export const SvarFraAndreinstans = ({ grunnlag, readOnly, behandlingVersjon, ini
         );
       }}
     >
-      <VStack gap={"space-16"}>
+      <VStack gap={'space-16'}>
         {svarType && (
           <HStack gap="space-8">
             <BodyShort weight="semibold">Type svar:</BodyShort>

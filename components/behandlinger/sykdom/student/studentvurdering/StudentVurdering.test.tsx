@@ -695,7 +695,9 @@ describe('Student', () => {
 
 const velgAtSøkerHarAvbruttEtStudie = async () =>
   await user.click(
-    within(screen.getByRole('radiogroup', { name: 'Har brukeren avbrutt et studie?' })).getByRole('radio', { name: 'Ja' })
+    within(screen.getByRole('radiogroup', { name: 'Har brukeren avbrutt et studie?' })).getByRole('radio', {
+      name: 'Ja',
+    })
   );
 
 const velgAtStudieErGodkjentAvLånekassen = async () =>
@@ -714,12 +716,11 @@ const velgAtStudieErAvbruttPgaSykdomEllerSkade = async () =>
 
 const velgAtBrukerHarBehovForBehandling = async () =>
   await user.click(
-    within(screen.getByRole('radiogroup', { name: 'Har brukeren behov for behandling for å gjenoppta studiet?' })).getByRole(
-      'radio',
-      {
-        name: 'Ja',
-      }
-    )
+    within(
+      screen.getByRole('radiogroup', { name: 'Har brukeren behov for behandling for å gjenoppta studiet?' })
+    ).getByRole('radio', {
+      name: 'Ja',
+    })
   );
 const velgAtDetErForventetAtStudieKanGjenopptasInnen6Mnd = async () =>
   await user.click(

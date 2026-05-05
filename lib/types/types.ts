@@ -434,6 +434,12 @@ export type SykdomsvurderingResponse =
 export type VurdertAvAnsatt =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
 
+export type SykdomNedsattMerEnnHalvpartenValg =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomsvurderingResponse']['erNedsettelseMinstHalvparten'];
+
+export type SykdomNedsattMerEnnYrkesskadeValg =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomsvurderingResponse']['erNedsettelseMerEnnYrkesskadegrense'];
+
 export type BistandsbehovVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.bistand.BistandVurderingResponse'];
 
@@ -583,6 +589,12 @@ export type MeldePerioderMedMEldekortResponse =
 
 export type MeldeperiodeMedMeldekortDto =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.MeldeperiodeMedMeldekortDto'];
+
+export type OppdaterMeldekortRequest =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.OppdaterMeldekortRequest'];
+
+export type OppdaterMeldekortResponse =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.OppdaterMeldekortResponse'];
 
 export type DagDto = components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.DagDto'];
 

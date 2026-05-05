@@ -249,7 +249,7 @@ export const VedtakslengdeSteg = ({
           index={index}
           accordionsSignal={accordionsSignal}
         >
-          <VStack gap={"space-16"}>
+          <VStack gap={'space-16'}>
             <RadioGroupWrapper
               label={'Ønsket endring'}
               control={form.control}
@@ -292,7 +292,7 @@ export const VedtakslengdeSteg = ({
 };
 
 const VedtakslengdeVurderingInnhold = ({ vurdering }: { vurdering: VedtakslengdeVurderingResponse }) => (
-  <VStack gap={"space-8"}>
+  <VStack gap={'space-8'}>
     <SpørsmålOgSvar spørsmål={'Sluttdato'} svar={formaterDatoForFrontend(vurdering.sluttdato)} />
     <SpørsmålOgSvar spørsmål={'Begrunnelse'} svar={vurdering.begrunnelse} />
   </VStack>

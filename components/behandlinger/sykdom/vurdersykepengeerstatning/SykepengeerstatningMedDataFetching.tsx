@@ -14,10 +14,7 @@ interface Props {
 }
 
 export const SykepengeerstatningMedDataFetching = async ({ behandlingsreferanse, stegData }: Props) => {
-  const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
-    hentSykepengerErstatningGrunnlag(behandlingsreferanse),
-    hentMellomlagring(behandlingsreferanse, Behovstype.VURDER_SYKEPENGEERSTATNING_KODE),
-  ]);
+  const grunnlag = await hentSykepengerErstatningGrunnlag(behandlingsreferanse);
 
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
@@ -31,6 +28,14 @@ export const SykepengeerstatningMedDataFetching = async ({ behandlingsreferanse,
   ) {
     return null;
   }
+
+  const totalReadOnly = stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
+
+  const initialMellomlagretVurdering = await hentMellomlagring(
+    behandlingsreferanse,
+    Behovstype.VURDER_SYKEPENGEERSTATNING_KODE,
+    totalReadOnly
+  );
 
   return (
     <Sykepengeerstatning

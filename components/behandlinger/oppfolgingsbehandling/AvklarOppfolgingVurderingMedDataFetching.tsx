@@ -2,7 +2,7 @@ import { AvklaroppfolgingVurdering } from './AvklarOppfolgingVurdering';
 import {
   hentMellomlagring,
   hentOppfølgingsoppgaveGrunnlag,
-} from '../../../lib/services/saksbehandlingservice/saksbehandlingService';
+} from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isError } from 'lib/utils/api';
 import { ApiException } from '../../saksbehandling/apiexception/ApiException';
 import { Behovstype } from 'lib/utils/form';
@@ -29,7 +29,7 @@ export const AvklarOppfolgingVurderingMedDataFetching = async ({
       ? Behovstype.AVKLAR_OPPFØLGINGSBEHOV_NAY
       : Behovstype.AVKLAR_OPPFØLGINGSBEHOV_LOKALKONTOR;
 
-  const initialMellomlagretVurdering = await hentMellomlagring(behandlingsreferanse, behovsType);
+  const initialMellomlagretVurdering = await hentMellomlagring(behandlingsreferanse, behovsType, readOnly);
 
   return (
     <AvklaroppfolgingVurdering

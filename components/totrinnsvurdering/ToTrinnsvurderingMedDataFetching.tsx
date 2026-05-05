@@ -26,18 +26,25 @@ export const ToTrinnsvurderingMedDataFetching = async ({ behandlingsreferanse }:
 
   const erKvalitetssikring = flyt.data.visning.visKvalitetssikringKort && !flyt.data.visning.visBeslutterKort;
 
+  const totalReadOnly = erKvalitetssikring
+    ? !kvalitetssikringGrunnlag.data.harTilgangTilÅSaksbehandle || flyt.data.visning.kvalitetssikringReadOnly
+    : !fatteVedtakGrunnlag.data.harTilgangTilÅSaksbehandle || flyt.data.visning.beslutterReadOnly;
+
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
-    erKvalitetssikring ? Behovstype.KVALITETSSIKRING_KODE : Behovstype.FATTE_VEDTAK_KODE
+    erKvalitetssikring ? Behovstype.KVALITETSSIKRING_KODE : Behovstype.FATTE_VEDTAK_KODE,
+    totalReadOnly
   );
+
   return (
     <>
       {flyt.data.visning.visBeslutterKort && (
         <ToTrinnsvurdering
           grunnlag={fatteVedtakGrunnlag.data}
           erKvalitetssikring={false}
+          harTilgangTilÅSaksbehandle={fatteVedtakGrunnlag.data.harTilgangTilÅSaksbehandle}
           behandlingsreferanse={behandlingsreferanse}
-          readOnly={flyt.data.visning.beslutterReadOnly || !fatteVedtakGrunnlag.data.harTilgangTilÅSaksbehandle}
+          readOnly={flyt.data.visning.beslutterReadOnly}
           initialMellomlagretVurdering={initialMellomlagretVurdering}
           behandlingsversjon={flyt.data.behandlingVersjon}
         />
@@ -47,9 +54,8 @@ export const ToTrinnsvurderingMedDataFetching = async ({ behandlingsreferanse }:
           grunnlag={kvalitetssikringGrunnlag.data}
           behandlingsreferanse={behandlingsreferanse}
           erKvalitetssikring={true}
-          readOnly={
-            flyt.data.visning.kvalitetssikringReadOnly || !kvalitetssikringGrunnlag.data.harTilgangTilÅSaksbehandle
-          }
+          harTilgangTilÅSaksbehandle={kvalitetssikringGrunnlag.data.harTilgangTilÅSaksbehandle}
+          readOnly={flyt.data.visning.kvalitetssikringReadOnly}
           initialMellomlagretVurdering={initialMellomlagretVurdering}
           behandlingsversjon={flyt.data.behandlingVersjon}
         />

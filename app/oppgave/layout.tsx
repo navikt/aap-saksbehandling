@@ -1,5 +1,6 @@
 import '@navikt/ds-css';
 import { Metadata } from 'next';
+import { Box } from '@navikt/ds-react';
 
 export const metadata: Metadata = {
   title: 'Kelvin - Oppgave',
@@ -7,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  return <div>{children}</div>;
+  return <Box background={'neutral-soft'}>{children}</Box>;
 }

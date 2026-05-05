@@ -6,6 +6,8 @@ export async function GET() {
   const config: ClientConfig = {
     gosysUrl: process.env.GOSYS_URL!!,
     modiaPersonoversiktUrl: process.env.MODIA_PERSONOVERSIKT_URL!!,
+    aInntektUrl: process.env.A_INNTEKT_URL!!,
+    inst2Url: process.env.INST2_URL!!,
   };
 
   const res: FetchResponse<ClientConfig> = {

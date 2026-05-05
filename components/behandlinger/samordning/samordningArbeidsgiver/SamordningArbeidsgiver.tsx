@@ -20,7 +20,6 @@ import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 
-
 import { SamordningArbeidsGiverTabell } from 'components/behandlinger/samordning/samordningArbeidsgiver/SamordningArbeidsgiverTabell';
 
 interface Props {

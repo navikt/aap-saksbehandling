@@ -15,7 +15,7 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgG
 
 import { ForhåndsvisBrev } from 'components/brevbygger/ForhåndsvisBrev';
 import { VelgeMottakere } from 'components/brevbygger/VelgeMottakere';
-import { IkkeSendBrevModal } from 'components/behandlinger/brev/skriveBrev/IkkeSendBrevModal';
+import { IkkeSendBrevModal, IkkeSendFields } from 'components/behandlinger/brev/skriveBrev/IkkeSendBrevModal';
 import { RefusjonskravVisning } from 'components/brevbygger/RefusjonskravVisning';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { Distribusjonssjekk } from 'components/brev/Distribusjonssjekk';
@@ -90,12 +90,13 @@ export const Brevbygger = ({
     });
   };
 
-  const slettBrev = async () => {
+  const slettBrev = async (ikkeSendBrevForm: IkkeSendFields) => {
     løsBehovOgGåTilNesteSteg({
       behandlingVersjon,
       behov: {
         behovstype,
         brevbestillingReferanse: referanse,
+        begrunnelse: ikkeSendBrevForm.begrunnelse,
         handling: 'AVBRYT',
       },
       referanse: behandlingsreferanse,
@@ -109,7 +110,7 @@ export const Brevbygger = ({
   };
 
   return (
-    <HGrid columns={pdfViewExpanded ? '1fr 3fr' : '1fr 1fr'} gap={"space-8"}>
+    <HGrid columns={pdfViewExpanded ? '1fr 3fr' : '1fr 1fr'} gap={'space-8'}>
       <Box>
         {fullmektigMottaker && brukerMottaker && (
           <VelgeMottakere
@@ -141,7 +142,7 @@ export const Brevbygger = ({
             setDistribusjonssjekkFeil={setDistribusjonssjekkFeil}
             brukerMottaker={brukerMottaker}
           />
-          <HStack gap={"space-8"}>
+          <HStack gap={'space-8'}>
             {visAvbryt && (
               <Button
                 data-color="danger"
@@ -149,7 +150,8 @@ export const Brevbygger = ({
                 onClick={() => settIkkeSendBrevModalOpen(true)}
                 variant="primary"
                 size="small"
-                disabled={isLoading}>
+                disabled={isLoading}
+              >
                 Ikke send brev
               </Button>
             )}

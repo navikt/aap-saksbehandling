@@ -43,7 +43,7 @@ export const BarnepensjonTabell = ({ form, readOnly }: Props) => {
               <Table.Row key={field.id}>
                 <Table.DataCell textSize={'small'}>Barnepensjon</Table.DataCell>
                 <Table.DataCell colSpan={3}>
-                  <HStack gap={"space-8"}>
+                  <HStack gap={'space-8'}>
                     <MonthPickerWrapper
                       name={`barnepensjonPerioder.${index}.fom`}
                       control={form.control}

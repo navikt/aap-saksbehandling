@@ -12,6 +12,7 @@ import { formaterDatoForBackend } from 'lib/utils/date';
 
 import { ingenDiagnoseCode } from 'lib/diagnosesøker/DiagnoseSøker';
 import { DiagnoserDefaultOptions } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
+import { JaNeiEllerForbigåendeTekst } from 'lib/utils/form';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
@@ -457,7 +458,7 @@ describe('felt for å sette diagnoser', () => {
 });
 
 describe('felt for nedsettelsen er av en viss varighet', () => {
-  it('feltet skal vises', async () => {
+  it('feltet skal ikke lenger vises', async () => {
     render(
       <Sykdomsvurdering
         diagnoseDefaultOptions={diagnoserDefaultOptions}
@@ -476,17 +477,19 @@ describe('felt for nedsettelsen er av en viss varighet', () => {
       })
     );
 
-    await velgJaIGruppe(screen.getByLabelText(/er arbeidsevnen nedsatt med minst halvparten\?/i));
+    await velgJaForbigåendeProblemerNedsettelseMinstHalvparten(
+      screen.getByLabelText(/er arbeidsevnen nedsatt med minst halvparten\?/i)
+    );
     await velgJaIGruppe(
       screen.getByRole('radiogroup', {
         name: 'Er sykdom, skade eller lyte vesentlig medvirkende til at arbeidsevnen er nedsatt?',
       })
     );
 
-    const felt = screen.getByRole('radiogroup', {
+    const felter = await screen.queryByRole('radiogroup', {
       name: 'Er den nedsatte arbeidsevnen av en viss varighet? Om du svarer nei, vil brukeren vurderes for AAP som sykepengeerstatning etter § 11-13.',
     });
-    expect(felt).toBeVisible();
+    expect(felter).toBeNull();
   });
 
   it('skal vise en feilmelding hvis feltet ikke er besvart', async () => {
@@ -507,16 +510,11 @@ describe('felt for nedsettelsen er av en viss varighet', () => {
       })
     );
     await velgJaIGruppe(screen.getByLabelText(/er arbeidsevnen nedsatt med minst halvparten\?/i));
-    await velgJaIGruppe(
-      screen.getByRole('radiogroup', {
-        name: 'Er sykdom, skade eller lyte vesentlig medvirkende til at arbeidsevnen er nedsatt?',
-      })
-    );
 
     await velgBekreft();
 
     const feilmeldinger = await screen.findAllByText(
-      'Du må svare på om den nedsatte arbeidsevnen er av en viss varighet'
+      'Du må svare på om sykdom, skade eller lyte er vesentlig medvirkende til nedsatt arbeidsevne'
     );
     expect(feilmeldinger.length).toBe(2);
     expect(feilmeldinger[0]).toBeVisible();
@@ -731,6 +729,7 @@ describe('yrkesskade', () => {
       await velgAtBrukerHarSykdomSkadeLyte();
       await velgJaIGruppe(screen.getByRole('radiogroup', { name: 'Har brukeren nedsatt arbeidsevne?' }));
       await velgNeiIGruppe(screen.getByLabelText(/er arbeidsevnen nedsatt med minst halvparten\?/i));
+      expect(screen.getByRole('textbox', { name: '§ 11-22 AAP ved yrkesskade' }));
       await velgBekreft();
 
       const feilmeldinger = await screen.findAllByText(
@@ -778,12 +777,11 @@ describe('vurderinger uten viss varighet', () => {
       screen.getByRole('textbox', { name: 'Vilkårsvurdering' }),
       'Her har jeg begynt å skrive en vurdering..'
     );
-    const neiValg = within(screen.getByRole('radiogroup', { name: 'Har brukeren sykdom, skade eller lyte?' })).getByRole(
-      'radio',
-      {
-        name: 'Nei',
-      }
-    );
+    const neiValg = within(
+      screen.getByRole('radiogroup', { name: 'Har brukeren sykdom, skade eller lyte?' })
+    ).getByRole('radio', {
+      name: 'Nei',
+    });
     await user.click(neiValg);
 
     await velgBekreft();
@@ -1174,3 +1172,6 @@ const velgNeiIGruppe = async (gruppe: HTMLElement): Promise<void> =>
 
 const velgJaIGruppe = async (gruppe: HTMLElement): Promise<void> =>
   await user.click(within(gruppe).getByRole('radio', { name: 'Ja' }));
+
+const velgJaForbigåendeProblemerNedsettelseMinstHalvparten = async (gruppe: HTMLElement): Promise<void> =>
+  await user.click(within(gruppe).getByRole('radio', { name: JaNeiEllerForbigåendeTekst.Forbigående }));

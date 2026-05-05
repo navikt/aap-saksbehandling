@@ -21,10 +21,13 @@ import {
   MellomlagretVurderingResponse,
   NavEnheterResponse,
   NavEnhetRequest,
+  OppdaterMeldekortRequest,
+  OppdaterMeldekortResponse,
   OpprettAktivitetspliktBehandlingDto,
   OpprettDummySakDto,
   OpprettTestcase,
   RettighetsinfoDto,
+  SakPersoninfo,
   SaksInfo,
   SettPåVent,
 } from './types/types';
@@ -261,4 +264,20 @@ export function clientHentAktivitetspliktMedTrekk(saksnummer: string) {
 
 export function clientHentAlleMeldekort(saksnummer: string) {
   return clientFetch<MeldePerioderMedMEldekortResponse>(`${BASE_URL}/api/meldekort/${saksnummer}`, 'GET');
+}
+
+export function clientKorrigerMeldekort(saksnummer: string, oppdaterMeldekortRequest: OppdaterMeldekortRequest) {
+  return clientFetch<OppdaterMeldekortResponse>(
+    `${BASE_URL}/api/meldekort/${saksnummer}`,
+    'POST',
+    oppdaterMeldekortRequest
+  );
+}
+
+export function clientHentAInntektRedirectUrl(saksnummer: string) {
+  return clientFetch<{ redirectUrl: string }>(`${BASE_URL}/api/ainntekt`, 'POST', { saksnummer });
+}
+
+export function clientHentSakPersoninfo(saksnummer: string) {
+  return clientFetch<SakPersoninfo>(`${BASE_URL}/api/sak/${saksnummer}/personinformasjon`, 'GET');
 }

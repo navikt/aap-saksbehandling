@@ -18,19 +18,23 @@ export const SvarFraAndreinstansMedDatafetching = async ({
   behandlingVersjon,
   readOnly,
 }: Props) => {
-  const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
-    hentSvarFraAndreinstansGrunnlag(behandlingsreferanse),
-    hentMellomlagring(behandlingsreferanse, Behovstype.HÅNDTER_SVAR_FRA_ANDREINSTANS),
-  ]);
+  const grunnlag = await hentSvarFraAndreinstansGrunnlag(behandlingsreferanse);
 
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
   }
 
+  const totalReadOnly = readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
+  const initialMellomlagretVurdering = await hentMellomlagring(
+    behandlingsreferanse,
+    Behovstype.HÅNDTER_SVAR_FRA_ANDREINSTANS,
+    totalReadOnly
+  );
+
   return (
     <SvarFraAndreinstans
       grunnlag={grunnlag.data}
-      readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+      readOnly={totalReadOnly}
       behandlingVersjon={behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
     />

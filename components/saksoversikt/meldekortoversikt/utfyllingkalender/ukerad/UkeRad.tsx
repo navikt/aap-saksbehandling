@@ -44,7 +44,7 @@ export const UkeRad = ({ felterIUken }: Props) => {
   const ukeUtfyllingErrorMeldinger = ukeUtfyllingErrors.map((error) => error.message);
 
   return (
-    <VStack gap={"space-16"}>
+    <VStack gap={'space-16'}>
       <BodyShort size={'medium'} weight={'semibold'}>
         Uke {felterIUken.ukeNummer}
       </BodyShort>

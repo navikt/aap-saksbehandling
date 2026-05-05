@@ -90,14 +90,14 @@ export const KlagebehandlingOppsummering = ({ behandlingVersjon, readOnly, grunn
       visningModus={visningModus}
       visningActions={visningActions}
     >
-      <VStack gap={"space-4"}>
+      <VStack gap={'space-4'}>
         <BodyShort size={'small'} weight={'semibold'}>
           Hva er innstillingen til klagen fra NAY og Nav-kontor?
         </BodyShort>
         <BodyShort size={'small'}>{utledetInnstilling && mapInnstillingTilTekst(utledetInnstilling)}</BodyShort>
       </VStack>
       {vilkårSomOmgjøres.length > 0 && (
-        <VStack gap={"space-4"}>
+        <VStack gap={'space-4'}>
           <BodyShort size={'small'} weight={'semibold'}>
             Hvilke vilkår skal omgjøres?
           </BodyShort>
@@ -112,7 +112,7 @@ export const KlagebehandlingOppsummering = ({ behandlingVersjon, readOnly, grunn
         </VStack>
       )}
       {vilkårSomOpprettholdes.length > 0 && (
-        <VStack gap={"space-4"}>
+        <VStack gap={'space-4'}>
           <BodyShort size={'small'} weight={'semibold'}>
             Hvilke vilkår er blitt vurdert til å opprettholdes?{' '}
           </BodyShort>
