@@ -19,21 +19,25 @@ export const BehandlendeEnhetMedDataFetching = async ({
   typeBehandling: TypeBehandling;
   readOnly: boolean;
 }) => {
-  const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
-    hentBehandlendeEnhetGrunnlag(behandlingsreferanse),
-    hentMellomlagring(behandlingsreferanse, Behovstype.FASTSETT_BEHANDLENDE_ENHET),
-  ]);
+  const grunnlag = await hentBehandlendeEnhetGrunnlag(behandlingsreferanse);
 
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
   }
+
+  const totalReadOnly = readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
+  const initialMellomlagretVurdering = await hentMellomlagring(
+    behandlingsreferanse,
+    Behovstype.FASTSETT_BEHANDLENDE_ENHET,
+    totalReadOnly
+  );
 
   return (
     <BehandlendeEnhet
       grunnlag={grunnlag.data}
       typeBehandling={typeBehandling}
       behandlingVersjon={behandlingVersjon}
-      readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+      readOnly={totalReadOnly}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
     />
   );

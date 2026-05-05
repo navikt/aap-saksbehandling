@@ -18,14 +18,17 @@ export const TrekkKlageVurderingMedDataFetching = async ({
   typeBehandling,
   behandlingsreferanse,
 }: Props) => {
-  const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
-    hentTrekkKlageGrunnlag(behandlingsreferanse),
-    hentMellomlagring(behandlingsreferanse, Behovstype.TREKK_KLAGE_KODE),
-  ]);
+  const grunnlag = await hentTrekkKlageGrunnlag(behandlingsreferanse);
 
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
   }
+
+  const initialMellomlagretVurdering = await hentMellomlagring(
+    behandlingsreferanse,
+    Behovstype.TREKK_KLAGE_KODE,
+    readOnly
+  );
 
   return (
     <TrekkKlageVurdering

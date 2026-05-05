@@ -26,10 +26,16 @@ export const ToTrinnsvurderingMedDataFetching = async ({ behandlingsreferanse }:
 
   const erKvalitetssikring = flyt.data.visning.visKvalitetssikringKort && !flyt.data.visning.visBeslutterKort;
 
+  const totalReadOnly = erKvalitetssikring
+    ? !kvalitetssikringGrunnlag.data.harTilgangTilÅSaksbehandle || flyt.data.visning.kvalitetssikringReadOnly
+    : !fatteVedtakGrunnlag.data.harTilgangTilÅSaksbehandle || flyt.data.visning.beslutterReadOnly;
+
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
-    erKvalitetssikring ? Behovstype.KVALITETSSIKRING_KODE : Behovstype.FATTE_VEDTAK_KODE
+    erKvalitetssikring ? Behovstype.KVALITETSSIKRING_KODE : Behovstype.FATTE_VEDTAK_KODE,
+    totalReadOnly
   );
+
   return (
     <>
       {flyt.data.visning.visBeslutterKort && (

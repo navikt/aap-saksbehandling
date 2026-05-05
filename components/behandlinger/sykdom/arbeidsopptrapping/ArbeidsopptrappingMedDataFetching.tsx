@@ -13,14 +13,18 @@ interface Props {
   stegData: StegData;
 }
 export const ArbeidsopptrappingMedDataFetching = async ({ behandlingsreferanse, stegData }: Props) => {
-  const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
-    hentArbeidsOpptrappingGrunnlag(behandlingsreferanse),
-    hentMellomlagring(behandlingsreferanse, Behovstype.ARBEIDSOPPTRAPPING_KODE),
-  ]);
+  const grunnlag = await hentArbeidsOpptrappingGrunnlag(behandlingsreferanse);
 
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
   }
+
+  const totalReadOnly = stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
+  const initialMellomlagretVurdering = await hentMellomlagring(
+    behandlingsreferanse,
+    Behovstype.ARBEIDSOPPTRAPPING_KODE,
+    totalReadOnly
+  );
 
   return (
     <Arbeidsopptrapping

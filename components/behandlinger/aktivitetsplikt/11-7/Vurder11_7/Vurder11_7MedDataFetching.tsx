@@ -14,20 +14,25 @@ interface Props {
 }
 
 export const Vurder11_7MedDataFetching = async ({ behandlingsreferanse, behandlingVersjon, readOnly }: Props) => {
-  const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
-    hentAktivitetsplikt11_7Grunnlag(behandlingsreferanse),
-    hentMellomlagring(behandlingsreferanse, Behovstype.VURDER_BRUDD_11_7_KODE),
-  ]);
+  const grunnlag = await hentAktivitetsplikt11_7Grunnlag(behandlingsreferanse);
 
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
   }
 
+  const totalReadOnly = readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
+
+  const initialMellomlagretVurdering = await hentMellomlagring(
+    behandlingsreferanse,
+    Behovstype.VURDER_BRUDD_11_7_KODE,
+    totalReadOnly
+  );
+
   return (
     <Vurder11_7
       grunnlag={grunnlag.data}
       behandlingVersjon={behandlingVersjon}
-      readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+      readOnly={totalReadOnly}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
     />
   );

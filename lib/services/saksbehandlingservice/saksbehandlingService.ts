@@ -644,7 +644,11 @@ export const hentMellomlagringMedStatus = (behandlingsreferanse: string, kode: s
     saksbehandlingApiScope
   );
 };
-export const hentMellomlagring = async (behandlingsreferanse: string, kode: string) => {
+export const hentMellomlagring = async (behandlingsreferanse: string, kode: string, readOnly: boolean) => {
+  if (readOnly) {
+    return undefined;
+  }
+
   const res = await hentMellomlagringMedStatus(behandlingsreferanse, kode);
 
   if (isSuccess(res)) {

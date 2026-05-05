@@ -19,16 +19,23 @@ interface Props {
 }
 
 export const SykdomsvurderingMedDataFetching = async ({ behandlingsreferanse, stegData }: Props) => {
-  const [grunnlag, initialMellomlagretVurdering, behandling] = await Promise.all([
+  const [grunnlag, behandling] = await Promise.all([
     hentSykdomsGrunnlag(behandlingsreferanse),
-    hentMellomlagring(behandlingsreferanse, Behovstype.AVKLAR_SYKDOM_KODE),
     hentBehandling(behandlingsreferanse),
   ]);
+
   const typeBehandling = stegData.typeBehandling;
 
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
   }
+
+  const totalReadOnly = stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
+  const initialMellomlagretVurdering = await hentMellomlagring(
+    behandlingsreferanse,
+    Behovstype.AVKLAR_SYKDOM_KODE,
+    totalReadOnly
+  );
 
   const diagnoseDefaultOptions = await getDefaultOptionsForDiagnosesystem(finnDiagnoseGrunnlagForSykdom(grunnlag.data));
 

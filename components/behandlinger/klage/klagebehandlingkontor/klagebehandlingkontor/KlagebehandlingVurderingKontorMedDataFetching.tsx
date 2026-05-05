@@ -21,19 +21,24 @@ export const KlagebehandlingVurderingKontorMedDataFetching = async ({
   readOnly,
   typeBehandling,
 }: Props) => {
-  const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
-    hentKlagebehandlingKontorGrunnlag(behandlingsreferanse),
-    hentMellomlagring(behandlingsreferanse, Behovstype.VURDER_KLAGE_KONTOR),
-  ]);
+  const grunnlag = await hentKlagebehandlingKontorGrunnlag(behandlingsreferanse);
 
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
   }
+
+  const totalReadOnly = readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
+  const initialMellomlagretVurdering = await hentMellomlagring(
+    behandlingsreferanse,
+    Behovstype.VURDER_KLAGE_KONTOR,
+    totalReadOnly
+  );
+
   return (
     <KlagebehandlingVurderingKontor
       grunnlag={grunnlag.data}
       behandlingVersjon={behandlingVersjon}
-      readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+      readOnly={totalReadOnly}
       typeBehandling={typeBehandling}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
     />
