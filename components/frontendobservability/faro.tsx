@@ -23,6 +23,13 @@ export default function Faro({ collectorUrl }: { collectorUrl?: string }) {
             },
           }),
         ],
+        pageTracking: {
+          generatePageId: (location: Location) =>
+            location.pathname.replace(
+              /\/saksbehandling\/sak\/[^/]+\/[^/]+/,
+              '/saksbehandling/sak/{saksid}/{behandlingsreferanse}'
+            ),
+        },
         consoleInstrumentation: {
           disabledLevels: [LogLevel.DEBUG, LogLevel.TRACE], // capture log, info, warn, error
         },
