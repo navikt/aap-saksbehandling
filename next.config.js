@@ -4,6 +4,7 @@ const nextConfig = {
   reactStrictMode: true,
   output: 'standalone',
   assetPrefix: process.env.ASSET_PREFIX ?? undefined,
+  productionBrowserSourceMaps: true,
 
   experimental: {
     authInterrupts: true,

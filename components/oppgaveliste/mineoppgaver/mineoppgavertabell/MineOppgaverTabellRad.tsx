@@ -29,7 +29,7 @@ const OppgaveRad = ({
     <Table.Row key={oppgave.saksnummer || oppgave.journalpostId}>
       <Table.DataCell textSize={'small'}>
         {oppgave.saksnummer ? (
-          <AkselLink as={Link} href={`/saksbehandling/sak/${oppgave.saksnummer}`}>
+          <AkselLink as={Link} prefetch={false} href={`/saksbehandling/sak/${oppgave.saksnummer}`}>
             {storForbokstavIHvertOrd(oppgave.personNavn)}
           </AkselLink>
         ) : (
