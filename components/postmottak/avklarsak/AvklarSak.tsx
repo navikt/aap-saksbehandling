@@ -2,7 +2,7 @@
 
 import { FormEvent, FormEventHandler } from 'react';
 import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/PostmottakLøsBehovOgGåTilNesteStegHook';
-import { AvsenderMottakerIdType, FinnSakGrunnlag, Saksinfo } from 'lib/types/postmottakTypes';
+import { AvsenderMottakerIdType, FinnSakGrunnlag, JournalpostInfo, Saksinfo } from 'lib/types/postmottakTypes';
 import { Alert, Detail, Label, Radio, VStack } from '@navikt/ds-react';
 import { ServerSentEventStatusAlert } from 'components/postmottak/serversenteventstatusalert/ServerSentEventStatusAlert';
 import { FormFieldRadioOptions } from 'components/form/FormHook';
@@ -19,6 +19,7 @@ interface Props {
   behandlingsreferanse: string;
   grunnlag: FinnSakGrunnlag;
   readOnly: boolean;
+  søker?: JournalpostInfo['søker'];
 }
 
 /**
@@ -68,7 +69,7 @@ const mapIdType = (type?: string | null) => {
   }
 };
 
-export const AvklarSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, readOnly }: Props) => {
+export const AvklarSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, readOnly, søker }: Props) => {
   const nySakOption = grunnlag.saksinfo.length === 0 ? [{ label: 'Opprett ny sak', value: NY }] : [];
 
   const form = useForm<FormFields>({
@@ -77,9 +78,9 @@ export const AvklarSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, 
       journalpostTittel: grunnlag.journalposttittel || '',
       avsenderMottaker: grunnlag.kanEndreAvsenderMottaker
         ? {
-            id: grunnlag.avsenderMottaker?.id || '',
-            idType: mapIdType(grunnlag.avsenderMottaker?.idType),
-            navn: grunnlag.avsenderMottaker?.navn || '',
+            id: grunnlag.avsenderMottaker?.id || søker?.ident || '',
+            idType: mapIdType(grunnlag.avsenderMottaker?.idType) ?? IdType.FNR,
+            navn: grunnlag.avsenderMottaker?.navn || søker?.navn || '',
           }
         : undefined,
       dokumenter: grunnlag.dokumenter.map((dok) => ({
