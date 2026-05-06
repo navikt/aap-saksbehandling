@@ -146,6 +146,11 @@ export const YrkesskadeGrunnlagBeregning = ({
             saksnummer: vurdering.saksnummer,
             kilde: vurdering.kilde,
             skadedato: vurdering.skadeDato,
+            vedtaksdato: vurdering.vedtaksdato,
+            skadeart: vurdering.skadeart,
+            diagnose: vurdering.diagnose,
+            skadekombinasjoner: vurdering.skadekombinasjoner,
+            skadekombinasjonerTekst: vurdering.skadekombinasjonerTekst,
           };
         })}
       />

@@ -33,7 +33,7 @@ const RegisterYrkesskadeFields = ({ form, index }: { form: UseFormReturn<Opprett
     if (diagnose) {
       form.setValue(`yrkesskader.${index}.skadebeskrivelse`, diagnoseTilSkadebeskrivelse[diagnose] ?? '');
     }
-  }, [diagnose]);
+  }, [diagnose, form, index]);
 
   return (
     <>
@@ -82,8 +82,32 @@ export const OpprettYrkesskade = ({ form }: Props) => {
         return (
           <VStack key={field.id} gap="space-4">
             <HStack gap="space-8" align="end">
-              <SelectWrapper label="Kilde" control={form.control} name={`yrkesskader.${index}.kilde`}>
-                {fields.some((f, i) => (yrkesskader?.[i]?.kilde ?? f.kilde) === 'SØKNAD' && i !== index) ? null : (
+              <SelectWrapper
+                label="Kilde"
+                control={form.control}
+                name={`yrkesskader.${index}.kilde`}
+                rules={{
+                  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => {
+                    const nyKilde = e.target.value;
+                    if (nyKilde === 'REGISTER') {
+                      form.setValue(`yrkesskader.${index}.harYrkesskade`, JaEllerNei.Nei);
+                      form.setValue(`yrkesskader.${index}.skadeart`, skadeartOptions[0]);
+                      form.setValue(`yrkesskader.${index}.diagnose`, diagnoseOptions[0]);
+                      form.setValue(`yrkesskader.${index}.skadebeskrivelse`, diagnoseTilSkadebeskrivelse[diagnoseOptions[0]]);
+                      form.setValue(`yrkesskader.${index}.harVedtaksdato`, false);
+                      form.setValue(`yrkesskader.${index}.vedtaksdato`, undefined);
+                    } else {
+                      form.setValue(`yrkesskader.${index}.harYrkesskade`, JaEllerNei.Ja);
+                      form.setValue(`yrkesskader.${index}.skadeart`, undefined);
+                      form.setValue(`yrkesskader.${index}.diagnose`, undefined);
+                      form.setValue(`yrkesskader.${index}.skadebeskrivelse`, undefined);
+                      form.setValue(`yrkesskader.${index}.harVedtaksdato`, false);
+                      form.setValue(`yrkesskader.${index}.vedtaksdato`, undefined);
+                    }
+                  },
+                }}
+              >
+                {!yrkesskader?.some((y, i) => y.kilde === 'SØKNAD' && i !== index) && (
                   <option value="SØKNAD">Fra søknad</option>
                 )}
                 <option value="REGISTER">Fra registeret</option>
@@ -121,7 +145,7 @@ export const OpprettYrkesskade = ({ form }: Props) => {
         size="xsmall"
         icon={<PlusIcon aria-hidden />}
         className="fit-content"
-        onClick={() =>
+        /*onClick={() =>
           append({
             kilde: 'REGISTER',
             skadeart: skadeartOptions[0],
@@ -131,7 +155,33 @@ export const OpprettYrkesskade = ({ form }: Props) => {
             harVedtaksdato: true,
             vedtaksdato: formaterDatoForBackend(subDays(new Date(), 8)),
           })
-        }
+        }*/
+        onClick={() => {
+          const harSøknad = yrkesskader?.some((y) => y.kilde === 'SØKNAD');
+          if (harSøknad) {
+            append({
+              kilde: 'REGISTER',
+              harYrkesskade: JaEllerNei.Nei,
+              skadeart: skadeartOptions[0],
+              diagnose: diagnoseOptions[0],
+              skadebeskrivelse: diagnoseTilSkadebeskrivelse[diagnoseOptions[0]],
+              yrkesskadeRegisterKilde: 'KOMPYS',
+              harVedtaksdato: false,
+              vedtaksdato: undefined,
+            });
+          } else {
+            append({
+              kilde: 'SØKNAD',
+              harYrkesskade: JaEllerNei.Ja,
+              skadeart: undefined,
+              diagnose: undefined,
+              skadebeskrivelse: undefined,
+              yrkesskadeRegisterKilde: undefined,
+              harVedtaksdato: false,
+              vedtaksdato: undefined,
+            });
+          }
+        }}
       >
         Legg til yrkesskade
       </Button>

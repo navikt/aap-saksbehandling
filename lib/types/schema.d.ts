@@ -12023,6 +12023,7 @@ export interface components {
       vurdertAv: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.tidspunkt.YrkesskadeTilVurderingResponse': {
+      diagnose?: string | null;
       'grunnbel\u00F8p': components['schemas']['no.nav.aap.komponenter.verdityper.Bel\u00F8p'];
       kilde: string;
       referanse: string;
@@ -12033,6 +12034,16 @@ export interface components {
        * @example 2025-04-01
        */
       skadeDato: string;
+      skadeart?: string | null;
+      skadekombinasjoner?:
+        | components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.register.yrkesskade.SkadekombinasjonRegister'][]
+        | null;
+      skadekombinasjonerTekst?: string | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      vedtaksdato?: string | null;
     };
     'no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag': {
       brevGrunnlag: components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag.Brev'][];
@@ -13116,7 +13127,12 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.meldekort.MeldekortDto': {
       begrunnelse?: string | null;
       dager: components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.DagDto'][];
+      /**
+       * @deprecated
+       * @description Bruk journalpostId i stedet for id, da det er mer beskrivende
+       */
       id: string;
+      journalpostId: string;
       /**
        * Format: date-time
        * @example 2025-04-01T12:30:00
@@ -13127,6 +13143,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.meldekort.MeldeperiodeMedMeldekortDto': {
       meldekort?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.MeldekortDto'];
       meldeperiode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
+      tidligereMeldekort: components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.MeldekortDto'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.meldekort.MeldeperioderMedMeldekortResponse': {
       /** @enum {string} */
@@ -17790,7 +17807,6 @@ export interface components {
     'no.nav.aap.brev.kontrakt.BrevdataDto': {
       betingetTekst: components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto.BetingetTekst'][];
       delmaler: components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto.Delmal'][];
-      faktagrunnlag: components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto.Faktagrunnlag'][];
       fritekster: components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto.Fritekst'][];
       valg: components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto.Valg'][];
     };
@@ -17799,10 +17815,6 @@ export interface components {
     };
     'no.nav.aap.brev.kontrakt.BrevdataDto.Delmal': {
       id: string;
-    };
-    'no.nav.aap.brev.kontrakt.BrevdataDto.Faktagrunnlag': {
-      tekniskNavn: string;
-      verdi: string;
     };
     'no.nav.aap.brev.kontrakt.BrevdataDto.Fritekst': {
       fritekst: string;

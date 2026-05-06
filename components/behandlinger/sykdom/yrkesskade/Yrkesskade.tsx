@@ -3,7 +3,7 @@
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { MellomlagretVurdering, YrkesskadeVurderingGrunnlag } from 'lib/types/types';
-import { Label, VStack } from '@navikt/ds-react';
+import { Alert, Label, VStack } from '@navikt/ds-react';
 import { erProsent } from 'lib/utils/validering';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
@@ -205,30 +205,44 @@ export const Yrkesskade = ({
       visningActions={visningActions}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
-      <div>
-        <Label size="small">Relevante informasjon fra søknad</Label>
-        <p>
-          Har du yrkesskade eller yrkessykdom som påvirker hvor mye du kan arbeide?{' '}
-          {grunnlag.opplysninger.oppgittYrkesskadeISøknad ? 'Ja' : 'Nei'}
-        </p>
-      </div>
-      <FormField form={form} formField={formFields.begrunnelse} />
-      <FormField form={form} formField={formFields.begrunnelse} />
-      <FormField form={form} formField={formFields.erÅrsakssammenheng} horizontalRadio />
+      <VStack gap='space-4'>
+        <div>
+          <Label size="medium">Relevante informasjon fra søknad</Label>
+          <p style={{ marginTop: 2, marginBottom: 0 }}>
+            Har du yrkesskade eller yrkessykdom som påvirker hvor mye du kan arbeide?{' '}
+            {grunnlag.opplysninger.oppgittYrkesskadeISøknad ? 'Ja' : 'Nei'}
+          </p>
+        </div>
 
-      <VStack>
-        <Label size={'small'}>
-          Tilknytt eventuelle yrkesskader som er helt eller delvis årsak til den nedsatte arbeidsevnen.
-        </Label>
-        <YrkesskadeVurderingTabell
-          form={form}
-          readOnly={formReadOnly}
-          yrkesskader={relevanteYrkesskadeSaker}
-          update={update}
-          erÅrsakssammenheng={erÅrsakssammenheng}
-        />
+        {grunnlag.opplysninger.oppgittYrkesskadeISøknad && relevanteYrkesskadeSaker.length === 0 && (
+          <div>
+            <Alert variant="info" size="small" style={{ maxWidth: 500 }}>
+              Brukeren har oppgitt at de har en yrkesskade, men vi finner ingen treff i registeret
+            </Alert>
+          </div>
+        )}
       </VStack>
-      <FormField form={form} formField={formFields.andelAvNedsettelsen} className={'prosent_input'} />
+
+      <FormField form={form} formField={formFields.begrunnelse} />
+
+      {relevanteYrkesskadeSaker.length > 0 && (
+        <>
+          <FormField form={form} formField={formFields.erÅrsakssammenheng} horizontalRadio />
+          <VStack>
+            <Label size={'small'}>
+              Tilknytt eventuelle yrkesskader som er helt eller delvis årsak til den nedsatte arbeidsevnen.
+            </Label>
+            <YrkesskadeVurderingTabell
+              form={form}
+              readOnly={formReadOnly}
+              yrkesskader={relevanteYrkesskadeSaker}
+              update={update}
+              erÅrsakssammenheng={erÅrsakssammenheng}
+            />
+          </VStack>
+          <FormField form={form} formField={formFields.andelAvNedsettelsen} className={'prosent_input'} />
+        </>
+      )}
     </VilkårskortMedFormOgMellomlagring>
   );
 };

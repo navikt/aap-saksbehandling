@@ -63,7 +63,7 @@ interface YrkesskadeOppføring {
   kilde: 'SØKNAD' | 'REGISTER';
   harYrkesskade?: JaEllerNei; // kun for kilde=SØKNAD
   // alle felter under er kun for kilde=REGISTER
-  yrkesskadeRegisterKilde: 'KOMPYS' | 'INFOTRYGD';
+  yrkesskadeRegisterKilde: 'KOMPYS' | 'INFOTRYGD' | undefined;
   diagnose?: string;
   skadeart?: string;
   skadebeskrivelse?: string;
@@ -285,6 +285,7 @@ export const OpprettSakLocal = () => {
         if (kilde === 'SØKNAD') {
           return {
             kilde: kilde,
+            saksreferanse: '',
             harYrkesskade: y.harYrkesskade === JaEllerNei.Ja,
             harYrkesskadeFraSøknad: y.harYrkesskade === JaEllerNei.Ja,
           };
@@ -296,6 +297,7 @@ export const OpprettSakLocal = () => {
             diagnose: y.diagnose ?? '',
             skadebeskrivelse: y.skadebeskrivelse ?? '',
             vedtaksdato: y.vedtaksdato ?? null,
+            harYrkesskade: false,
           };
         }
       }),
@@ -419,7 +421,7 @@ export const OpprettSakLocal = () => {
             borderColor="neutral-subtle"
             borderRadius="4"
           >
-            <Button type="button" size="small" loading={isLoading} onClick={() => opprett(undefined)}>
+            <Button type="button" size="small" loading={isLoading} onClick={() => opprett()}>
               Opprett og iverksett
             </Button>
           </Box>
