@@ -11,6 +11,10 @@ describe('Avklar sak', () => {
     saksinfo: [{ saksnummer: '23424', periode: { fom: '2025-01-01', tom: '2025-02-01' } }],
     kanEndreAvsenderMottaker: true,
     brevkode: '',
+    person: {
+      id: 1,
+      identifikator: 'string',
+    },
   };
 
   it('Skal ha en oversikt', () => {
