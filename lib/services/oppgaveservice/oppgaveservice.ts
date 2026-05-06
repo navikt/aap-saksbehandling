@@ -29,9 +29,14 @@ import {
 const oppgaveApiBaseURL = process.env.OPPGAVE_API_BASE_URL;
 const oppgaveApiScope = process.env.OPPGAVE_API_SCOPE ?? '';
 
+const CACHE_1_TIME = 3600;
+
 export const hentKøer = async (enheter: string[]) => {
   const url = `${oppgaveApiBaseURL}/filter?${queryParamsArray('enheter', enheter)}`;
-  return await apiFetch<Kø[]>(url, oppgaveApiScope, 'GET');
+  return await apiFetch<Kø[]>(url, oppgaveApiScope, 'GET', undefined, {
+    revalidate: CACHE_1_TIME,
+    tags: ['køer'],
+  });
 };
 
 export const hentOppgaverForFilter = async (data: OppgavelisteRequest) => {
@@ -88,7 +93,10 @@ export const hentMineOppgaver = async (queryParams: MineOppgaverQueryParams) => 
 
 export async function hentEnheter() {
   const url = `${oppgaveApiBaseURL}/enheter`;
-  return await apiFetch<Array<Enhet>>(url, oppgaveApiScope, 'GET');
+  return await apiFetch<Array<Enhet>>(url, oppgaveApiScope, 'GET', undefined, {
+    revalidate: CACHE_1_TIME,
+    tags: ['enheter'],
+  });
 }
 export async function synkroniserEnhetPåOppgave(data: EnhetSynkroniseringOppgave) {
   const url = `${oppgaveApiBaseURL}/synkroniser-enhet-paa-oppgave`;

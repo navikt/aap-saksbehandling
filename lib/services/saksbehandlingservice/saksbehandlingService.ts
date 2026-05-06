@@ -140,10 +140,7 @@ export const søkPåSak = async (søketekst: string) => {
 
 export const hentSakPersoninfo = async (saksnummer: string): Promise<SakPersoninfo> => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/${saksnummer}/personinformasjon`;
-  const res = await apiFetch<SakPersoninfo>(url, saksbehandlingApiScope, 'GET', undefined, {
-    revalidate: CACHE_1_TIME,
-    tags: [`personinfo/sak/${saksnummer}`],
-  });
+  const res = await apiFetch<SakPersoninfo>(url, saksbehandlingApiScope, 'GET');
 
   if (isSuccess(res)) {
     return res.data;
@@ -182,7 +179,10 @@ export const hentSiste = async (antall: number) => {
 
 export const hentAlleNavEnheter = async (behandlingsreferanse: string, input: NavEnhetRequest) => {
   const url = `${saksbehandlingApiBaseUrl}/api/navenhet/${behandlingsreferanse}/finn`;
-  return await apiFetch<Enhet[]>(url, saksbehandlingApiScope, 'POST', input);
+  return await apiFetch<Enhet[]>(url, saksbehandlingApiScope, 'POST', input, {
+    revalidate: CACHE_1_TIME,
+    tags: ['nav-enheter'],
+  });
 };
 
 export const hentYrkesskadeVurderingGrunnlag = async (behandlingsreferanse: string) => {
