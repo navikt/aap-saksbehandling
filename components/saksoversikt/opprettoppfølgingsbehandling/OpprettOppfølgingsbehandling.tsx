@@ -11,7 +11,6 @@ import { useRouter } from 'next/navigation';
 import { isSuccess } from 'lib/utils/api';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { parse } from 'date-fns';
-import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { erDatoIFremtiden, validerDato } from 'lib/validation/dateValidation';
 import { Behovstype } from 'lib/utils/form';
 import { Kort } from 'components/kort/Kort';

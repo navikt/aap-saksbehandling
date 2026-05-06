@@ -7,7 +7,6 @@ import userEvent from '@testing-library/user-event';
 import { Behovstype } from 'lib/utils/form';
 import { FetchResponse } from 'lib/utils/api';
 import createFetchMock from 'vitest-fetch-mock';
-import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 
 const fetchMock = createFetchMock(vi);
@@ -49,11 +48,6 @@ const grunnlagUtenVurdering: SamordningGraderingGrunnlag = {
     },
   ],
   historiskeVurderinger: [],
-};
-
-const bruker: BrukerInformasjon = {
-  navn: 'Iren Panikk',
-  NAVident: 'z123456',
 };
 
 beforeEach(() => {

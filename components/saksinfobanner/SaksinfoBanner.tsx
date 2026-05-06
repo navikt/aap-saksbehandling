@@ -8,7 +8,6 @@ import { ChevronRightIcon } from '@navikt/aksel-icons';
 import styles from './SaksinfoBanner.module.css';
 import { Behandlingsstatus } from 'components/behandlingsstatus/Behandlingsstatus';
 import { OppgaveStatus, OppgaveStatusType } from 'components/oppgavestatus/OppgaveStatus';
-import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { AdressebeskyttelseStatus } from 'components/adressebeskyttelsestatus/AdressebeskyttelseStatus';
 import { utledAdressebeskyttelse } from 'lib/utils/adressebeskyttelse';
 import { storForbokstavIHvertOrd } from 'lib/utils/string';
