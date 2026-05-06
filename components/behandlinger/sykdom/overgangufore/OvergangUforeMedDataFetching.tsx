@@ -33,7 +33,7 @@ export const OvergangUforeMedDataFetching = async ({ behandlingsreferanse, stegD
     return <ApiException apiResponses={[overgangArbeidGrunnlag]} />;
   }
 
-  const totalReadOnly = stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
+  const totalReadOnly = stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle || !stegData.skalViseSteg;
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.OVERGANG_UFORE,
@@ -46,6 +46,7 @@ export const OvergangUforeMedDataFetching = async ({ behandlingsreferanse, stegD
       readOnly={totalReadOnly}
       behandlingVersjon={stegData.behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
+      skalStegVurderes={stegData.skalViseSteg}
     />
   );
 };

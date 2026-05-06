@@ -1,7 +1,6 @@
 'use client';
 
 import {
-  BistandVurderingResponse,
   MellomlagretVurdering,
   OvergangUforeGrunnlag,
   OvergangUføreVedtakResultat,
@@ -32,13 +31,14 @@ import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/u
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 import { IkkeVurderbarPeriode } from 'components/periodisering/IkkeVurderbarPeriode';
-import { erTidligereVurderingOppfylt } from 'components/behandlinger/sykdom/sykdomsvurdering/sykdomsvurdering-utils';
+import { Dato } from 'lib/types/Dato';
 
 interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
   grunnlag: OvergangUforeGrunnlag;
   initialMellomlagretVurdering?: MellomlagretVurdering;
+  skalStegVurderes: boolean;
 }
 
 export interface OvergangUforeForm {
@@ -57,6 +57,7 @@ export const OvergangUforePeriodisert = ({
   grunnlag,
   readOnly,
   initialMellomlagretVurdering,
+  skalStegVurderes,
 }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
   const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
@@ -120,25 +121,6 @@ export const OvergangUforePeriodisert = ({
   const foersteNyePeriode = nyeVurderingFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
   const errorList = hentFeilmeldingerForForm(form.formState.errors);
 
-  const nyeVurderingerSykdom = grunnlag.gjeldendeSykdsomsvurderinger ?? [];
-  const vurderingerBistandsbehov = grunnlag.gjeldendeBistandsbehovVurderinger ?? [];
-
-  // TODO: Kan det være flere vurderinger her med forskjellige resultater? Hva skjer da?
-  const sisteVurderingSykdom = nyeVurderingerSykdom?.at(nyeVurderingerSykdom.length - 1);
-  //const sisteVurderingOvergangArbeid = vurderingerBistandsbehov?.at(vurderingerBistandsbehov.length - 1);
-  const skalStegVurderes =
-    sisteVurderingSykdom == undefined
-      ? false
-      : erTidligereVurderingOppfylt(sisteVurderingSykdom) &&
-        erBistandsbehoveneAvklart(vurderingerBistandsbehov) &&
-        !erBistandsbehoveneOppfylt(vurderingerBistandsbehov);
-
-  console.log('nyeVurderingerSykdom: ', nyeVurderingerSykdom);
-  console.log('vurderingerBistandsbehov: ', vurderingerBistandsbehov);
-  console.log('grunnlag.gjeldendeBistandsbehovVurderinger: ', grunnlag.gjeldendeBistandsbehovVurderinger);
-  console.log('erBistandsbehoveneOppfylt: ', erBistandsbehoveneOppfylt(grunnlag.gjeldendeBistandsbehovVurderinger));
-  console.log('Skal vise endreknapp: ', skalStegVurderes);
-
   return (
     <VilkårskortPeriodisert
       heading={'§ 11-18 AAP under behandling av krav om uføretrygd'}
@@ -155,7 +137,6 @@ export const OvergangUforePeriodisert = ({
       formReset={() => form.reset(getDefaultValuesFromGrunnlag(grunnlag))}
       onLeggTilVurdering={() => append(emptyOvergangUføreVurdering())}
       errorList={errorList}
-      skalViseEndreKnapp={skalStegVurderes}
     >
       <VStack gap={'space-16'}>
         <BodyLong size={'small'}>
@@ -175,6 +156,19 @@ export const OvergangUforePeriodisert = ({
             foersteNyePeriodeFraDato={undefined}
           ></IkkeVurderbarPeriode>
         ))}
+
+        {!skalStegVurderes &&
+          nyeVurderingFields.map((vurdering) => (
+            <IkkeVurderbarPeriode
+              key={crypto.randomUUID()}
+              fom={new Dato(vurdering.fraDato).dato}
+              tom={null}
+              alertMelding={
+                'Vilkåret kan ikke vurderes for denne perioden. For å vurdere vilkåret må § 11-5 være oppfylt, og § 11-6 ikke være oppfylt i samme periode'
+              }
+              foersteNyePeriodeFraDato={undefined}
+            ></IkkeVurderbarPeriode>
+          ))}
 
         {grunnlag.sisteVedtatteVurderinger.map((vurdering) => (
           <TidligereVurderingExpandableCard
@@ -276,20 +270,4 @@ function erVurderingOppfylt(form: UseFormReturn<OvergangUforeForm>, index: numbe
   }
 
   return undefined;
-}
-
-function erBistandsbehoveneAvklart(bistandsvurderinger: BistandVurderingResponse[]) {
-  return bistandsvurderinger !== undefined && bistandsvurderinger.length > 0;
-}
-
-function erBistandsbehoveneOppfylt(bistandsvurderinger: BistandVurderingResponse[]) {
-  return bistandsvurderinger.every(erBistandsbehovetOppfylt);
-}
-
-function erBistandsbehovetOppfylt(bistandsvurdering: BistandVurderingResponse) {
-  return (
-    bistandsvurdering.erBehovForAktivBehandling ||
-    bistandsvurdering.erBehovForArbeidsrettetTiltak ||
-    (bistandsvurdering.erBehovForAnnenOppfølging !== undefined && bistandsvurdering.erBehovForAnnenOppfølging)
-  );
 }

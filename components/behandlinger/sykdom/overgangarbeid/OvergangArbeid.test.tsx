@@ -60,6 +60,7 @@ describe('mellomlagring i overgang arbeid', () => {
         readOnly={false}
         behandlingVersjon={0}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+        skalStegVurderes={true}
       />
     );
     const tekst = screen.getByText('Utkast lagret 21.08.2025 12:00 (Jan T. Loven)');
@@ -73,6 +74,7 @@ describe('mellomlagring i overgang arbeid', () => {
         behandlingVersjon={0}
         readOnly={false}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+        skalStegVurderes={true}
       />
     );
 
@@ -94,6 +96,7 @@ describe('mellomlagring i overgang arbeid', () => {
         readOnly={false}
         grunnlag={overgangArbeidgrunnlag}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+        skalStegVurderes={true}
       />
     );
 
@@ -127,6 +130,7 @@ describe('mellomlagring i overgang arbeid', () => {
         readOnly={false}
         grunnlag={overgangArbeidgrunnlag}
         initialMellomlagretVurdering={mellomlagringGammel.mellomlagretVurdering}
+        skalStegVurderes={true}
       />
     );
 
@@ -138,7 +142,14 @@ describe('mellomlagring i overgang arbeid', () => {
   });
 
   it('Skal bruke bekreftet vurdering fra grunnlag som defaultValue i skjema dersom mellomlagring ikke finnes', () => {
-    render(<OvergangArbeid behandlingVersjon={0} readOnly={false} grunnlag={overgangArbeidgrunnlag} />);
+    render(
+      <OvergangArbeid
+        behandlingVersjon={0}
+        readOnly={false}
+        grunnlag={overgangArbeidgrunnlag}
+        skalStegVurderes={true}
+      />
+    );
 
     const begrunnelseFelt = screen.getByRole('textbox', {
       name: /vilkårsvurdering/i,
@@ -154,6 +165,7 @@ describe('mellomlagring i overgang arbeid', () => {
         behandlingVersjon={0}
         readOnly={false}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+        skalStegVurderes={true}
       />
     );
 
@@ -177,6 +189,7 @@ describe('mellomlagring i overgang arbeid', () => {
         readOnly={false}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
         grunnlag={overgangArbeidgrunnlag}
+        skalStegVurderes={true}
       />
     );
 
@@ -202,6 +215,7 @@ describe('mellomlagring i overgang arbeid', () => {
         readOnly={true}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
         grunnlag={overgangArbeidgrunnlag}
+        skalStegVurderes={true}
       />
     );
 
@@ -212,20 +226,20 @@ describe('mellomlagring i overgang arbeid', () => {
 
 describe('Førstegangsbehandling', () => {
   it('Skal ha en overskrift', () => {
-    render(<OvergangArbeid grunnlag={grunnlagTomt} readOnly={false} behandlingVersjon={0} />);
+    render(<OvergangArbeid grunnlag={grunnlagTomt} readOnly={false} behandlingVersjon={0} skalStegVurderes={true} />);
 
     const heading = screen.getByText('§ 11-17 AAP i perioden som arbeidssøker');
     expect(heading).toBeVisible();
   });
 
   it('Skal ha felt for begrunnelse', () => {
-    render(<OvergangArbeid grunnlag={grunnlagTomt} readOnly={false} behandlingVersjon={0} />);
+    render(<OvergangArbeid grunnlag={grunnlagTomt} readOnly={false} behandlingVersjon={0} skalStegVurderes={true} />);
     const begrunnelse = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
     expect(begrunnelse).toBeVisible();
   });
 
   it('Skal ha felt for om brukeren har rett på AAP', () => {
-    render(<OvergangArbeid grunnlag={grunnlagTomt} readOnly={false} behandlingVersjon={0} />);
+    render(<OvergangArbeid grunnlag={grunnlagTomt} readOnly={false} behandlingVersjon={0} skalStegVurderes={true} />);
     const felt = screen.getByRole('radiogroup', {
       name: 'Har brukeren rett på AAP i perioden som arbeidssøker etter § 11-17?',
     });
@@ -233,7 +247,7 @@ describe('Førstegangsbehandling', () => {
   });
 
   it('Skal ha felt for virkningsdato', () => {
-    render(<OvergangArbeid grunnlag={grunnlagTomt} readOnly={false} behandlingVersjon={0} />);
+    render(<OvergangArbeid grunnlag={grunnlagTomt} readOnly={false} behandlingVersjon={0} skalStegVurderes={true} />);
     const felt = screen.queryByRole('textbox', {
       name: 'Vurderingen gjelder fra',
     });
@@ -243,7 +257,14 @@ describe('Førstegangsbehandling', () => {
   it('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
     setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'AVKLAR_SYKDOM' });
 
-    render(<OvergangArbeid grunnlag={overgangArbeidgrunnlag} readOnly={false} behandlingVersjon={0} />);
+    render(
+      <OvergangArbeid
+        grunnlag={overgangArbeidgrunnlag}
+        readOnly={false}
+        behandlingVersjon={0}
+        skalStegVurderes={true}
+      />
+    );
 
     const endreKnapp = screen.getByRole('button', { name: 'Endre' });
     await user.click(endreKnapp);
