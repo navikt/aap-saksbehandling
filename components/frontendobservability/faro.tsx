@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { faro, getWebInstrumentations, initializeFaro, LogLevel } from '@grafana/faro-web-sdk';
 import { TracingInstrumentation } from '@grafana/faro-web-tracing';
+import { generateKelvinFaroPageId } from 'lib/utils/faro';
 
 export default function Faro({ collectorUrl }: { collectorUrl?: string }) {
   useEffect(() => {
@@ -23,6 +24,9 @@ export default function Faro({ collectorUrl }: { collectorUrl?: string }) {
             },
           }),
         ],
+        pageTracking: {
+          generatePageId: generateKelvinFaroPageId,
+        },
         consoleInstrumentation: {
           disabledLevels: [LogLevel.DEBUG, LogLevel.TRACE], // capture log, info, warn, error
         },

@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
     "target": "es6",
     "lib": [
       "dom",
@@ -30,7 +29,8 @@
     "paths": {
       "test-utils": [
         "./test-utils"
-      ]
+      ],
+      "*": ["./*"]
     }
   },
   "include": [
