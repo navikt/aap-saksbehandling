@@ -1,9 +1,10 @@
 import 'server-only';
 
-import { jwtVerify, createRemoteJWKSet } from 'jose';
+import { createRemoteJWKSet, jwtVerify } from 'jose';
 import { isLocal } from 'lib/utils/environment';
 import { getToken } from '@navikt/oasis';
 import { redirect } from 'next/navigation';
+import { buildOAuthLoginUrl } from 'lib/services/azure/redirectUtils';
 
 let _remoteJWKSet: ReturnType<typeof createRemoteJWKSet>;
 
@@ -31,7 +32,7 @@ export function getAccessTokenOrRedirectToLogin(headers: Headers): string {
   const redirectPath = headers.get('x-path');
   const token = getToken(headers);
   if (!token) {
-    redirect(`/oauth2/login?redirect=${redirectPath}`);
+    redirect(buildOAuthLoginUrl(redirectPath));
   }
 
   return token;

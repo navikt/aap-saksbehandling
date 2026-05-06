@@ -20,6 +20,8 @@ interface Props {
   readOnly: boolean;
   initialMellomlagretVurdering?: MellomlagretVurdering;
   harTilgangTilÅSaksbehandle: boolean;
+  behandlingsversjon: number;
+
 }
 
 export interface ToTrinnsVurderingFormFields {
@@ -35,7 +37,8 @@ export const ToTrinnsvurdering = ({
   readOnly,
   erKvalitetssikring,
   initialMellomlagretVurdering,
-  harTilgangTilÅSaksbehandle,
+                                    harTilgangTilÅSaksbehandle,
+  behandlingsversjon,
 }: Props) => {
   const vurderteTotrinnsvurderinger = grunnlag.vurderinger.filter(
     (vurdering) => typeof vurdering.godkjent === 'boolean'
@@ -61,6 +64,7 @@ export const ToTrinnsvurdering = ({
               erKvalitetssikring={erKvalitetssikring}
               readOnly={readOnly}
               initialMellomlagretVurdering={initialMellomlagretVurdering}
+              behandlingsversjon={behandlingsversjon}
             />
           </VStack>
         )}

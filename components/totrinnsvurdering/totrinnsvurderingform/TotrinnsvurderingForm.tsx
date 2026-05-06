@@ -12,7 +12,6 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgG
 import { useFieldArray } from 'react-hook-form';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { useConfigForm } from 'components/form/FormHook';
-import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
@@ -24,6 +23,7 @@ interface Props {
   erKvalitetssikring: boolean;
   readOnly: boolean;
   initialMellomlagretVurdering?: MellomlagretVurdering;
+  behandlingsversjon: number;
 }
 
 export interface FormFieldsToTrinnsVurdering {
@@ -37,8 +37,8 @@ export const TotrinnsvurderingForm = ({
   readOnly,
   erKvalitetssikring,
   initialMellomlagretVurdering,
+  behandlingsversjon,
 }: Props) => {
-  const { flyt } = useRequiredFlyt();
   const { saksnummer, behandlingsreferanse } = useParamsMedType();
 
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } = useLøsBehovOgGåTilNesteSteg(
@@ -68,9 +68,6 @@ export const TotrinnsvurderingForm = ({
     rules: {
       validate: (vurderinger) => {
         const assessedFields = vurderinger.filter((vurdering) => vurdering.godkjent !== undefined);
-        if (!flyt.behandlingVersjon) {
-          return 'Kunne ikke finne behandlingversjon';
-        }
         if (!assessedFields.length) {
           return 'Du må gjøre minst én vurdering.';
         }
@@ -101,7 +98,7 @@ export const TotrinnsvurderingForm = ({
         }
         løsBehovOgGåTilNesteSteg(
           {
-            behandlingVersjon: flyt.behandlingVersjon,
+            behandlingVersjon: behandlingsversjon,
             behov: {
               behovstype: erKvalitetssikring ? Behovstype.KVALITETSSIKRING_KODE : Behovstype.FATTE_VEDTAK_KODE,
               vurderinger: assessedFields.map((vurdering) => {

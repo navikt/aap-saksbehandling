@@ -26,7 +26,14 @@ describe('totrinnsvurderingform', () => {
   const user = userEvent.setup();
 
   it('skal ha en overskrift som er en lenke til vilkårsvurderingen', () => {
-    render(<TotrinnsvurderingForm grunnlag={grunnlagUtenVurdering} erKvalitetssikring={false} readOnly={false} />);
+    render(
+      <TotrinnsvurderingForm
+        behandlingsversjon={1}
+        grunnlag={grunnlagUtenVurdering}
+        erKvalitetssikring={false}
+        readOnly={false}
+      />
+    );
 
     const overskriftLenke = screen.getByRole('link', {
       name: '§ 11-5 Nedsatt arbeidsevne og krav til årsakssammenheng',
@@ -36,7 +43,14 @@ describe('totrinnsvurderingform', () => {
   });
 
   it('skal ha en radio group hvor beslutter kan godkjenne eller avslå vurderingen til saksbehandler/veileder', () => {
-    render(<TotrinnsvurderingForm grunnlag={grunnlagUtenVurdering} erKvalitetssikring={false} readOnly={false} />);
+    render(
+      <TotrinnsvurderingForm
+        behandlingsversjon={1}
+        grunnlag={grunnlagUtenVurdering}
+        erKvalitetssikring={false}
+        readOnly={false}
+      />
+    );
 
     const godkjennValg = screen.getByRole('radio', { name: /ja/i });
     expect(godkjennValg).toBeVisible();
@@ -46,14 +60,28 @@ describe('totrinnsvurderingform', () => {
   });
 
   it('skal ha en knapp for å sende inn totrinnsvurderingene', () => {
-    render(<TotrinnsvurderingForm grunnlag={grunnlagUtenVurdering} erKvalitetssikring={false} readOnly={false} />);
+    render(
+      <TotrinnsvurderingForm
+        behandlingsversjon={1}
+        grunnlag={grunnlagUtenVurdering}
+        erKvalitetssikring={false}
+        readOnly={false}
+      />
+    );
 
     const knapp = screen.getByRole('button', { name: 'Bekreft og send videre' });
     expect(knapp).toBeVisible();
   });
 
   it('skal dukke opp felt for begrunnelse dersom vurderingen har blitt avslått', async () => {
-    render(<TotrinnsvurderingForm grunnlag={grunnlagUtenVurdering} erKvalitetssikring={false} readOnly={false} />);
+    render(
+      <TotrinnsvurderingForm
+        behandlingsversjon={1}
+        grunnlag={grunnlagUtenVurdering}
+        erKvalitetssikring={false}
+        readOnly={false}
+      />
+    );
 
     const vurderPåNyttValg = screen.getByRole('radio', { name: /nei/i });
     await user.click(vurderPåNyttValg);
@@ -63,7 +91,14 @@ describe('totrinnsvurderingform', () => {
   });
 
   it('skal dukke opp felt for å velge grunner for avslag dersom vurderingen har blitt avslått', async () => {
-    render(<TotrinnsvurderingForm grunnlag={grunnlagUtenVurdering} erKvalitetssikring={false} readOnly={false} />);
+    render(
+      <TotrinnsvurderingForm
+        behandlingsversjon={1}
+        grunnlag={grunnlagUtenVurdering}
+        erKvalitetssikring={false}
+        readOnly={false}
+      />
+    );
 
     const vurderPåNyttValg = screen.getByRole('radio', { name: /nei/i });
     await user.click(vurderPåNyttValg);
@@ -82,7 +117,14 @@ describe('totrinnsvurderingform', () => {
   });
 
   it('skal ha riktige vlag i feltet for å velge grunner', async () => {
-    render(<TotrinnsvurderingForm grunnlag={grunnlagUtenVurdering} erKvalitetssikring={false} readOnly={false} />);
+    render(
+      <TotrinnsvurderingForm
+        behandlingsversjon={1}
+        grunnlag={grunnlagUtenVurdering}
+        erKvalitetssikring={false}
+        readOnly={false}
+      />
+    );
 
     const vurderPåNyttValg = screen.getByRole('radio', { name: /nei/i });
     await user.click(vurderPåNyttValg);
@@ -92,7 +134,14 @@ describe('totrinnsvurderingform', () => {
   });
 
   it('skal dukke opp feilmelding hvis begrunnelse ikke har blitt besvart ved innsending', async () => {
-    render(<TotrinnsvurderingForm grunnlag={grunnlagUtenVurdering} erKvalitetssikring={false} readOnly={false} />);
+    render(
+      <TotrinnsvurderingForm
+        behandlingsversjon={1}
+        grunnlag={grunnlagUtenVurdering}
+        erKvalitetssikring={false}
+        readOnly={false}
+      />
+    );
 
     const vurderPåNyttValg = screen.getByRole('radio', { name: /nei/i });
     await user.click(vurderPåNyttValg);
@@ -105,7 +154,14 @@ describe('totrinnsvurderingform', () => {
   });
 
   it('skal dukke opp feilmelding hvis ingen grunn har blitt valgt ved innsending', async () => {
-    render(<TotrinnsvurderingForm grunnlag={grunnlagUtenVurdering} erKvalitetssikring={false} readOnly={false} />);
+    render(
+      <TotrinnsvurderingForm
+        behandlingsversjon={1}
+        grunnlag={grunnlagUtenVurdering}
+        erKvalitetssikring={false}
+        readOnly={false}
+      />
+    );
 
     const vurderPåNyttValg = screen.getByRole('radio', { name: /nei/i });
     await user.click(vurderPåNyttValg);
@@ -118,7 +174,14 @@ describe('totrinnsvurderingform', () => {
   });
 
   it('skal dukke opp et fritekst felt for å skrive inn en grunn dersom ANNET er valgt', async () => {
-    render(<TotrinnsvurderingForm grunnlag={grunnlagUtenVurdering} erKvalitetssikring={false} readOnly={false} />);
+    render(
+      <TotrinnsvurderingForm
+        behandlingsversjon={1}
+        grunnlag={grunnlagUtenVurdering}
+        erKvalitetssikring={false}
+        readOnly={false}
+      />
+    );
 
     const vurderPåNyttValg = screen.getByRole('radio', { name: /nei/i });
     await user.click(vurderPåNyttValg);
@@ -134,7 +197,14 @@ describe('totrinnsvurderingform', () => {
   });
 
   it('skal dukke opp error på fritekst felt for å skrive inn en grunn dersom ANNET er valgt og det ikke er besvart', async () => {
-    render(<TotrinnsvurderingForm grunnlag={grunnlagUtenVurdering} erKvalitetssikring={false} readOnly={false} />);
+    render(
+      <TotrinnsvurderingForm
+        behandlingsversjon={1}
+        grunnlag={grunnlagUtenVurdering}
+        erKvalitetssikring={false}
+        readOnly={false}
+      />
+    );
 
     const vurderPåNyttValg = screen.getByRole('radio', { name: /nei/i });
     await user.click(vurderPåNyttValg);
@@ -156,7 +226,14 @@ describe('totrinnsvurderingform', () => {
   });
 
   it('gir feilmelding hvis man velger en grunn for så å fjerne den igjen', async () => {
-    render(<TotrinnsvurderingForm grunnlag={grunnlagUtenVurdering} erKvalitetssikring={false} readOnly={false} />);
+    render(
+      <TotrinnsvurderingForm
+        behandlingsversjon={1}
+        grunnlag={grunnlagUtenVurdering}
+        erKvalitetssikring={false}
+        readOnly={false}
+      />
+    );
 
     const vurderPåNyttValg = screen.getByRole('radio', { name: /nei/i });
     await user.click(vurderPåNyttValg);
@@ -176,7 +253,14 @@ describe('totrinnsvurderingform', () => {
   });
 
   it('skal vise en feilmelding dersom det ikke har blitt gjort noen totrinnsvurdering og man prøver å send inn vurderingene', async () => {
-    render(<TotrinnsvurderingForm grunnlag={grunnlagUtenVurdering} erKvalitetssikring={false} readOnly={false} />);
+    render(
+      <TotrinnsvurderingForm
+        behandlingsversjon={1}
+        grunnlag={grunnlagUtenVurdering}
+        erKvalitetssikring={false}
+        readOnly={false}
+      />
+    );
 
     const sendInnButton = screen.getByRole('button', { name: 'Bekreft og send videre' });
     expect(screen.queryByText('Du må gjøre minst én vurdering.')).not.toBeInTheDocument();
@@ -189,6 +273,7 @@ describe('totrinnsvurderingform', () => {
   it('skal vise en feilmelding dersom det er vurdering(er) som ikke er tatt stilling til og forrige vurdering er godkjent', async () => {
     render(
       <TotrinnsvurderingForm
+        behandlingsversjon={1}
         grunnlag={{
           ...grunnlagUtenVurdering,
           vurderinger: [...grunnlagUtenVurdering.vurderinger, { definisjon: Behovstype.AVKLAR_OPPFØLGINGSBEHOV_NAY }],
@@ -211,6 +296,7 @@ describe('totrinnsvurderingform', () => {
   it('skal ikke vise vise en feilmelding dersom det er flere vurderinger og man underkjenner kun den første', async () => {
     render(
       <TotrinnsvurderingForm
+        behandlingsversjon={1}
         grunnlag={{
           ...grunnlagUtenVurdering,
           vurderinger: [...grunnlagUtenVurdering.vurderinger, { definisjon: Behovstype.AVKLAR_OPPFØLGINGSBEHOV_NAY }],
@@ -244,12 +330,16 @@ describe('Totrinnsvurdering av vedtaksbrev', () => {
     historikk: [],
   };
   it('har en egen beskrivelse for kvalitetssikring av vedtaksbrev', () => {
-    render(<TotrinnsvurderingForm grunnlag={grunnlaget} erKvalitetssikring={true} readOnly={false} />);
+    render(
+      <TotrinnsvurderingForm behandlingsversjon={1} grunnlag={grunnlaget} erKvalitetssikring={true} readOnly={false} />
+    );
     expect(screen.getByText('Godkjenner du begrunnelsen?')).toBeVisible();
   });
 
   it('har egne grunner for retur', async () => {
-    render(<TotrinnsvurderingForm grunnlag={grunnlaget} erKvalitetssikring={true} readOnly={false} />);
+    render(
+      <TotrinnsvurderingForm behandlingsversjon={1} grunnlag={grunnlaget} erKvalitetssikring={true} readOnly={false} />
+    );
 
     await user.click(screen.getByRole('radio', { name: /Nei/ }));
 
@@ -260,7 +350,14 @@ describe('Totrinnsvurdering av vedtaksbrev', () => {
   });
 
   it('skal dukke opp et fritekst felt for å skrive inn en grunn dersom ANNET er valgt', async () => {
-    render(<TotrinnsvurderingForm grunnlag={grunnlagUtenVurdering} erKvalitetssikring={false} readOnly={false} />);
+    render(
+      <TotrinnsvurderingForm
+        behandlingsversjon={1}
+        grunnlag={grunnlagUtenVurdering}
+        erKvalitetssikring={false}
+        readOnly={false}
+      />
+    );
 
     const vurderPåNyttValg = screen.getByRole('radio', { name: 'Nei' });
     await user.click(vurderPåNyttValg);
@@ -301,6 +398,7 @@ describe('mellomlagring', () => {
   it('Skal vise en tekst om hvem som har gjort vurderingen dersom det finnes en mellomlagring', () => {
     render(
       <TotrinnsvurderingForm
+        behandlingsversjon={1}
         readOnly={false}
         erKvalitetssikring={false}
         grunnlag={grunnlagUtenVurdering}
@@ -314,6 +412,7 @@ describe('mellomlagring', () => {
   it('Skal ikke vise tekst om hvem som har gjort mellomlagring dersom bruker trykker på slett mellomlagring', async () => {
     render(
       <TotrinnsvurderingForm
+        behandlingsversjon={1}
         readOnly={false}
         erKvalitetssikring={false}
         grunnlag={grunnlagUtenVurdering}
@@ -335,6 +434,7 @@ describe('mellomlagring', () => {
   it('Skal bruke mellomlagring som defaultValue i skjema dersom det finnes', () => {
     render(
       <TotrinnsvurderingForm
+        behandlingsversjon={1}
         readOnly={false}
         erKvalitetssikring={false}
         grunnlag={grunnlagMedVurdering}
@@ -350,7 +450,14 @@ describe('mellomlagring', () => {
   });
 
   it('Skal bruke bekreftet vurdering fra grunnlag som defaultValue i skjema dersom mellomlagring ikke finnes', () => {
-    render(<TotrinnsvurderingForm readOnly={false} erKvalitetssikring={false} grunnlag={grunnlagMedVurdering} />);
+    render(
+      <TotrinnsvurderingForm
+        behandlingsversjon={1}
+        readOnly={false}
+        erKvalitetssikring={false}
+        grunnlag={grunnlagMedVurdering}
+      />
+    );
 
     const begrunnelseFelt = screen.getByRole('textbox', {
       name: 'Begrunnelse for retur',
@@ -362,6 +469,7 @@ describe('mellomlagring', () => {
   it('Skal resette skjema til tomt skjema dersom det ikke finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
     render(
       <TotrinnsvurderingForm
+        behandlingsversjon={1}
         readOnly={false}
         erKvalitetssikring={false}
         grunnlag={grunnlagUtenVurdering}
@@ -385,6 +493,7 @@ describe('mellomlagring', () => {
   it('Skal resette skjema til bekreftet vurdering dersom det finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
     render(
       <TotrinnsvurderingForm
+        behandlingsversjon={1}
         readOnly={false}
         erKvalitetssikring={false}
         grunnlag={grunnlagMedVurdering}
@@ -410,6 +519,7 @@ describe('mellomlagring', () => {
   it('Skal ikke være mulig å slette mellomlagring hvis det er readOnly', () => {
     render(
       <TotrinnsvurderingForm
+        behandlingsversjon={1}
         readOnly={true}
         erKvalitetssikring={false}
         grunnlag={grunnlagMedVurdering}
