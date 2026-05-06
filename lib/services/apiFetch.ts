@@ -7,19 +7,26 @@ import { getToken } from 'lib/services/token';
 const NUMBER_OF_RETRIES = 3;
 const REQUEST_TIMEOUT_MS = 60_000; // 60 sekunder, samme som RestClient default i Kelvin komponenter
 
+
+export type CacheOptions = {
+  revalidate?: number;
+  tags?: string[];
+};
+
+
 export const apiFetch = async <ResponseType>(
   url: string,
   scope: string,
   method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' = 'GET',
   requestBody?: object,
-  tags?: string[]
+  cache?: CacheOptions
 ): Promise<FetchResponse<ResponseType>> => {
   const tokenResult = await getToken(scope, url);
   if (!tokenResult.ok) {
     logWarning(`Uthenting av token feilet for ${url}`, tokenResult.error);
     return { type: 'ERROR', apiException: { message: 'Kunne ikke autentisere. Prøv igjen.' }, status: 401 };
   }
-  const options = mapFetchOptions(method, tokenResult.token, requestBody, tags);
+  const options = mapFetchOptions(method, tokenResult.token, requestBody, cache);
 
   return await fetchWithRetry<ResponseType>(url, options, NUMBER_OF_RETRIES);
 };
@@ -29,14 +36,14 @@ export const apiFetchNoMemoization = async <ResponseType>(
   scope: string,
   method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' = 'GET',
   requestBody?: object,
-  tags?: string[]
+  cache?: CacheOptions
 ): Promise<FetchResponse<ResponseType>> => {
   const tokenResult = await getToken(scope, url);
   if (!tokenResult.ok) {
     logWarning(`Uthenting av token feilet for ${url}`, tokenResult.error);
     return { type: 'ERROR', apiException: { message: 'Kunne ikke autentisere. Prøv igjen.' }, status: 401 };
   }
-  const options = mapFetchOptions(method, tokenResult.token, requestBody, tags, new AbortController().signal);
+  const options = mapFetchOptions(method, tokenResult.token, requestBody, cache, new AbortController().signal);
 
   return await fetchWithRetry<ResponseType>(url, options, NUMBER_OF_RETRIES);
 };
@@ -133,7 +140,7 @@ const mapFetchOptions = (
   method: string,
   oboToken: string,
   requestBody?: object,
-  tags?: string[],
+  cache?: CacheOptions,
   /**
    * Brukes for å gi signal om og unngå bruk av request memoization.
    * Se https://nextjs.org/docs/app/deep-dive/caching#request-memoization
@@ -147,6 +154,6 @@ const mapFetchOptions = (
     Accept: 'application/json',
     'Content-Type': 'application/json',
   },
-  next: { revalidate: 0, tags },
+  next: { revalidate: cache?.revalidate ?? 0, tags: cache?.tags },
   signal: signal,
 });
