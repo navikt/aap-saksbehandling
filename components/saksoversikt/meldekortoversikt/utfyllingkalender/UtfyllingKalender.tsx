@@ -51,7 +51,7 @@ export const UtfyllingKalender = () => {
   );
 
   return (
-    <VStack gap={"space-16"} id={utfyllingKalenderId}>
+    <VStack gap={'space-16'} id={utfyllingKalenderId}>
       {Object.entries(meldeperiodeUker).map(([ukeStart, felterIUken]) => (
         <UkeRad key={ukeStart} felterIUken={felterIUken} />
       ))}

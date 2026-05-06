@@ -1,5 +1,5 @@
 .oppsummering {
-    padding: var(--ax-space-16) var(--ax-space-16);
-    border-radius: 10px;
-    background-color: var(--ax-bg-accent-soft);
+  padding: var(--ax-space-16) var(--ax-space-16);
+  border-radius: 10px;
+  background-color: var(--ax-bg-accent-soft);
 }

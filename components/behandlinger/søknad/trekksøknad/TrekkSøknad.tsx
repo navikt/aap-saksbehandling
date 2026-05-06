@@ -38,6 +38,10 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon, initialMel
 
   const vurderingerString = grunnlag?.vurderinger.at(-1);
 
+  const vurdertAvAnsatt = vurderingerString
+    ? { ident: vurderingerString.vurdertAv, dato: vurderingerString.vurdertDato }
+    : undefined;
+
   const defaultValues: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(vurderingerString);
@@ -93,6 +97,7 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon, initialMel
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
+      vurdertAvAnsatt={vurdertAvAnsatt}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() =>

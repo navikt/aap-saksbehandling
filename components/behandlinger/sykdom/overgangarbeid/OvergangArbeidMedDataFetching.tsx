@@ -14,10 +14,8 @@ interface Props {
 }
 
 export const OvergangArbeidMedDataFetching = async ({ behandlingsreferanse, stegData }: Props) => {
-  const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
-    hentOvergangArbeidGrunnlag(behandlingsreferanse),
-    hentMellomlagring(behandlingsreferanse, Behovstype.OVERGANG_ARBEID),
-  ]);
+  const grunnlag = await hentOvergangArbeidGrunnlag(behandlingsreferanse);
+
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
   }
@@ -29,10 +27,17 @@ export const OvergangArbeidMedDataFetching = async ({ behandlingsreferanse, steg
     return null;
   }
 
+  const totalReadOnly = stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
+  const initialMellomlagretVurdering = await hentMellomlagring(
+    behandlingsreferanse,
+    Behovstype.OVERGANG_ARBEID,
+    totalReadOnly
+  );
+
   return (
     <OvergangArbeid
       grunnlag={grunnlag.data}
-      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+      readOnly={totalReadOnly}
       behandlingVersjon={stegData.behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
     />

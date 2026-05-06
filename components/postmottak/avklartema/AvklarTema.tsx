@@ -139,7 +139,7 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
           </Button>
         </Modal.Footer>
       </Modal>
-      <VStack gap={"space-24"}>
+      <VStack gap={'space-24'}>
         {skalViseKlageEttersendelseInfo && (
           <Alert variant={'info'} size={'small'}>
             Denne journalposten er en ettersendelse til klage, og journalførende enhet er satt til{'  '}

@@ -11,10 +11,7 @@ interface Props {
 }
 
 export const RefusjonMedDataFetching = async ({ behandlingsreferanse, stegData }: Props) => {
-  const [refusjonGrunnlag, initialMellomlagretVurdering] = await Promise.all([
-    hentRefusjonGrunnlag(behandlingsreferanse),
-    hentMellomlagring(behandlingsreferanse, Behovstype.REFUSJON_KRAV_KODE),
-  ]);
+  const refusjonGrunnlag = await hentRefusjonGrunnlag(behandlingsreferanse);
 
   if (isError(refusjonGrunnlag)) {
     return <ApiException apiResponses={[refusjonGrunnlag]} />;
@@ -24,10 +21,17 @@ export const RefusjonMedDataFetching = async ({ behandlingsreferanse, stegData }
     return null;
   }
 
+  const totalReadOnly = stegData.readOnly || !refusjonGrunnlag.data.harTilgangTilÅSaksbehandle;
+  const initialMellomlagretVurdering = await hentMellomlagring(
+    behandlingsreferanse,
+    Behovstype.REFUSJON_KRAV_KODE,
+    totalReadOnly
+  );
+
   return (
     <Refusjon
       grunnlag={refusjonGrunnlag.data}
-      readOnly={stegData.readOnly || !refusjonGrunnlag.data.harTilgangTilÅSaksbehandle}
+      readOnly={totalReadOnly}
       behandlingVersjon={stegData.behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
     />

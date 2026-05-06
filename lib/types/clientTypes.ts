@@ -2,6 +2,7 @@ export interface ClientConfig {
   gosysUrl: string;
   modiaPersonoversiktUrl: string;
   aInntektUrl: string;
+  inst2Url: string;
 }
 
 export interface ClientError {

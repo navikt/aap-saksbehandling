@@ -11,14 +11,17 @@ interface Props {
 }
 
 export const TrekkSøknadMedDatafetching = async ({ behandlingsreferanse, readOnly, behandlingVersjon }: Props) => {
-  const [trukketSøknadGrunnlag, initialMellomlagretVurdering] = await Promise.all([
-    hentTrukketSøknad(behandlingsreferanse),
-    hentMellomlagring(behandlingsreferanse, Behovstype.VURDER_TREKK_AV_SØKNAD_KODE),
-  ]);
+  const [trukketSøknadGrunnlag] = await Promise.all([hentTrukketSøknad(behandlingsreferanse)]);
 
   if (isError(trukketSøknadGrunnlag)) {
     return <ApiException apiResponses={[trukketSøknadGrunnlag]} />;
   }
+
+  const initialMellomlagretVurdering = await hentMellomlagring(
+    behandlingsreferanse,
+    Behovstype.VURDER_TREKK_AV_SØKNAD_KODE,
+    readOnly
+  );
 
   return (
     <TrekkSøknad

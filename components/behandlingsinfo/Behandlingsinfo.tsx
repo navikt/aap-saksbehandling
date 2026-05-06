@@ -29,8 +29,8 @@ export const Behandlingsinfo = ({ behandling, sak, klageresultat }: Props) => {
       borderColor="neutral-subtle"
       className={styles.behandlingsinfo}
     >
-      <VStack gap={"space-16"}>
-        <HStack gap={"space-8"} align={'center'}>
+      <VStack gap={'space-16'}>
+        <HStack gap={'space-8'} align={'center'}>
           <Label as="p" size="medium">
             {mapTypeBehandlingTilTekst(behandling.type)}
           </Label>
@@ -61,7 +61,10 @@ export const Behandlingsinfo = ({ behandling, sak, klageresultat }: Props) => {
           {erSvarFraKabal && behandling.tilhørendeKlagebehandling && (
             <>
               <BodyShort size={'small'}>
-                <Link href={`/saksbehandling/sak/${sak.saksnummer}/${behandling.tilhørendeKlagebehandling}`}>
+                <Link
+                  prefetch={false}
+                  href={`/saksbehandling/sak/${sak.saksnummer}/${behandling.tilhørendeKlagebehandling}`}
+                >
                   Tilhørende klagebehandling
                 </Link>
               </BodyShort>

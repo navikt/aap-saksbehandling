@@ -21,7 +21,7 @@ import { BehandlingsflytEllerPostmottakBehandling } from './types';
 import { usePostmottakBehandlinger } from 'hooks/postmottak/PostmottakBehandlingerHook';
 import { useHentOppgaverForBehandlinger } from 'hooks/oppgave/OppgaverPåSakHook';
 import { Dato } from 'lib/types/Dato';
-import { useFeatureFlag } from 'context/UnleashContext';
+import { Kort } from 'components/kort/Kort';
 
 const lokalDevToolsForBehandlingOgSak = isLocal();
 
@@ -82,7 +82,6 @@ export const SakMedBehandlinger = ({
 
   const oppgaverPerBehandling = useHentOppgaverForBehandlinger(åpne.map((b) => b.behandling.referanse));
   const avsluttede = alleBehandlinger?.filter((b) => erAvsluttet(b.behandling));
-  const visSisteDagMedRett = useFeatureFlag('VisSisteDagMedRett');
 
   function hentTildeling(referanse: string) {
     const oppgaveInfo = oppgaverPerBehandling.get(referanse);
@@ -91,123 +90,125 @@ export const SakMedBehandlinger = ({
   }
 
   return (
-    <VStack gap="space-32">
-      <VStack>
-        <HStack justify="space-between">
-          <Heading size="large">Sak {sak.saksnummer}</Heading>
-          <HStack gap="space-16">
-            <Button
-              variant="secondary"
-              size="small"
-              onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/klage`)}
-            >
-              Opprett klage
-            </Button>
-            {kanRegistrerebrudd && (
+    <Kort background="default">
+      <VStack gap="space-32">
+        <VStack>
+          <HStack justify="space-between">
+            <Heading size="large">Sak {sak.saksnummer}</Heading>
+            <HStack gap="space-16">
               <Button
                 variant="secondary"
                 size="small"
-                onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/aktivitet`)}
+                onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/klage`)}
               >
-                Vurder aktivitetsplikt
+                Opprett klage
               </Button>
-            )}
+              {kanRegistrerebrudd && (
+                <Button
+                  variant="secondary"
+                  size="small"
+                  onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/aktivitet`)}
+                >
+                  Vurder aktivitetsplikt
+                </Button>
+              )}
 
-            {kanRevurdere && (
-              <Button
-                variant="secondary"
-                size="small"
-                onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/revurdering`)}
-              >
-                Opprett {erAktivFørstegangsbehandling(sak.behandlinger) ? 'vurdering' : 'revurdering'}
-              </Button>
-            )}
+              {kanRevurdere && (
+                <Button
+                  variant="secondary"
+                  size="small"
+                  onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/revurdering`)}
+                >
+                  Opprett {erAktivFørstegangsbehandling(sak.behandlinger) ? 'vurdering' : 'revurdering'}
+                </Button>
+              )}
 
-            {kanRevurdere && (
-              <Button
-                variant="secondary"
-                size="small"
-                onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/oppfolging`)}
-              >
-                Opprett oppfølgingsoppgave
-              </Button>
-            )}
+              {kanRevurdere && (
+                <Button
+                  variant="secondary"
+                  size="small"
+                  onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/oppfolging`)}
+                >
+                  Opprett oppfølgingsoppgave
+                </Button>
+              )}
+            </HStack>
           </HStack>
-        </HStack>
-        {visSisteDagMedRett && rettighetsinfo?.sisteDagMedRett && (
-          <BodyShort>{`Siste dag med rett: ${new Dato(rettighetsinfo.sisteDagMedRett).formaterForFrontend()}`}</BodyShort>
+          {rettighetsinfo?.sisteDagMedRett && (
+            <BodyShort>{`Siste dag med rett: ${new Dato(rettighetsinfo.sisteDagMedRett).formaterForFrontend()}`}</BodyShort>
+          )}
+        </VStack>
+        <VStack gap="space-16">
+          <Heading size="xsmall">Behandlinger</Heading>
+          {feilmelding && <Alert variant={'error'}>{feilmelding}</Alert>}
+          <Chips>
+            <Chips.Toggle
+              selected={visMeldekortbehandlinger}
+              onClick={() => setVisMeldekortbehandlinger(!visMeldekortbehandlinger)}
+            >
+              Meldekortbehandlinger
+            </Chips.Toggle>
+            <Chips.Toggle
+              selected={visPostmottakBehandlinger}
+              onClick={() => setVisPostmottakBehandlinger(!visPostmottakBehandlinger)}
+            >
+              Journalføring og dokumenthåndtering
+            </Chips.Toggle>
+          </Chips>
+        </VStack>
+        <Table>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell>Opprettet</Table.HeaderCell>
+              <Table.HeaderCell>Type</Table.HeaderCell>
+              <Table.HeaderCell>Årsak</Table.HeaderCell>
+              <Table.HeaderCell>Status</Table.HeaderCell>
+              <Table.HeaderCell>Vurderingsbehov</Table.HeaderCell>
+              <Table.HeaderCell>Tildelt</Table.HeaderCell>
+              <Table.HeaderCell align="right">Handlinger</Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+
+          <Table.Body>
+            {åpne.concat(avsluttede).map((behandling) => (
+              <Table.Row key={behandling.behandling.referanse}>
+                <Table.DataCell>{formaterDatoMedTidspunktForFrontend(behandling.behandling.opprettet)}</Table.DataCell>
+                <Table.DataCell>{mapTypeBehandlingTilTekst(behandling.behandling.typeBehandling)}</Table.DataCell>
+                <Table.DataCell>
+                  {behandling.kilde === 'BEHANDLINGSFLYT'
+                    ? formatterÅrsakTilOpprettelseTilTekst(behandling.behandling.årsakTilOpprettelse)
+                    : null}
+                </Table.DataCell>
+                <Table.DataCell>{capitalize(behandling.behandling.status)}</Table.DataCell>
+                <Table.DataCell>
+                  {behandling.kilde === 'BEHANDLINGSFLYT'
+                    ? formaterVurderingsbehovMedTeller(behandling.behandling.vurderingsbehov as Vurderingsbehov[])
+                    : null}
+                </Table.DataCell>
+                <Table.DataCell>
+                  {!erAvsluttet(behandling.behandling) && hentTildeling(behandling.behandling.referanse)}
+                </Table.DataCell>
+                <Table.DataCell>
+                  <BehandlingButtons
+                    key={behandling.behandling.referanse}
+                    sak={sak}
+                    behandling={behandling}
+                    oppgaveInfo={oppgaverPerBehandling.get(behandling.behandling.referanse)}
+                    setFeilmelding={setFeilmelding}
+                    innloggetBrukerIdent={innloggetBrukerIdent}
+                  ></BehandlingButtons>
+                </Table.DataCell>
+              </Table.Row>
+            ))}
+          </Table.Body>
+        </Table>
+        {lokalDevToolsForBehandlingOgSak && (
+          <SakDevTools
+            saksnummer={sak.saksnummer}
+            behandlinger={sak.behandlinger.map((e) => ({ referanse: e.referanse, type: e.typeBehandling }))}
+          />
         )}
       </VStack>
-      <VStack gap="space-16">
-        <Heading size="xsmall">Behandlinger</Heading>
-        {feilmelding && <Alert variant={'error'}>{feilmelding}</Alert>}
-        <Chips>
-          <Chips.Toggle
-            selected={visMeldekortbehandlinger}
-            onClick={() => setVisMeldekortbehandlinger(!visMeldekortbehandlinger)}
-          >
-            Meldekortbehandlinger
-          </Chips.Toggle>
-          <Chips.Toggle
-            selected={visPostmottakBehandlinger}
-            onClick={() => setVisPostmottakBehandlinger(!visPostmottakBehandlinger)}
-          >
-            Journalføring og dokumenthåndtering
-          </Chips.Toggle>
-        </Chips>
-      </VStack>
-      <Table>
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell>Opprettet</Table.HeaderCell>
-            <Table.HeaderCell>Type</Table.HeaderCell>
-            <Table.HeaderCell>Årsak</Table.HeaderCell>
-            <Table.HeaderCell>Status</Table.HeaderCell>
-            <Table.HeaderCell>Vurderingsbehov</Table.HeaderCell>
-            <Table.HeaderCell>Tildelt</Table.HeaderCell>
-            <Table.HeaderCell align="right">Handlinger</Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-
-        <Table.Body>
-          {åpne.concat(avsluttede).map((behandling) => (
-            <Table.Row key={behandling.behandling.referanse}>
-              <Table.DataCell>{formaterDatoMedTidspunktForFrontend(behandling.behandling.opprettet)}</Table.DataCell>
-              <Table.DataCell>{mapTypeBehandlingTilTekst(behandling.behandling.typeBehandling)}</Table.DataCell>
-              <Table.DataCell>
-                {behandling.kilde === 'BEHANDLINGSFLYT'
-                  ? formatterÅrsakTilOpprettelseTilTekst(behandling.behandling.årsakTilOpprettelse)
-                  : null}
-              </Table.DataCell>
-              <Table.DataCell>{capitalize(behandling.behandling.status)}</Table.DataCell>
-              <Table.DataCell>
-                {behandling.kilde === 'BEHANDLINGSFLYT'
-                  ? formaterVurderingsbehovMedTeller(behandling.behandling.vurderingsbehov as Vurderingsbehov[])
-                  : null}
-              </Table.DataCell>
-              <Table.DataCell>
-                {!erAvsluttet(behandling.behandling) && hentTildeling(behandling.behandling.referanse)}
-              </Table.DataCell>
-              <Table.DataCell>
-                <BehandlingButtons
-                  key={behandling.behandling.referanse}
-                  sak={sak}
-                  behandling={behandling}
-                  oppgaveInfo={oppgaverPerBehandling.get(behandling.behandling.referanse)}
-                  setFeilmelding={setFeilmelding}
-                  innloggetBrukerIdent={innloggetBrukerIdent}
-                ></BehandlingButtons>
-              </Table.DataCell>
-            </Table.Row>
-          ))}
-        </Table.Body>
-      </Table>
-      {lokalDevToolsForBehandlingOgSak && (
-        <SakDevTools
-          saksnummer={sak.saksnummer}
-          behandlinger={sak.behandlinger.map((e) => ({ referanse: e.referanse, type: e.typeBehandling }))}
-        />
-      )}
-    </VStack>
+    </Kort>
   );
 };

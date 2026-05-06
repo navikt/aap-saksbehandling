@@ -23,14 +23,16 @@ export const SvarFraBehandler = () => {
         open={vis}
         anchorEl={buttonRef.current}
         placement={'bottom-end'}
-        offset={8}>
-        <VStack gap={"space-8"} className={styles.boks}>
+        offset={8}
+      >
+        <VStack gap={'space-8'} className={styles.boks}>
           <Tag
             data-color="warning"
             icon={<FirstAidKitIcon />}
-            variant={"moderate"}
+            variant={'moderate'}
             size={'medium'}
-            className={styles.tag}>
+            className={styles.tag}
+          >
             <BodyShort size={'small'} weight={'semibold'}>
               Svar fra behandler
             </BodyShort>

@@ -70,7 +70,7 @@ function lagUrlSuffix(filter: OppgavelisteRequest['utvidetFilter']): string {
   }
 
   if (filter?.beløpMerEnn != null) {
-    params.append('beløpMerEnn', filter.beløpMerEnn.toString())
+    params.append('beløpMerEnn', filter.beløpMerEnn.toString());
   }
 
   if (filter?.beløpMindreEnn != null) {
@@ -146,7 +146,7 @@ export function useOppgaver({
 
       return hentOppgaverClient(payload);
     },
-    { revalidateOnFocus: true, refreshInterval: 10000, revalidateAll: true, persistSize: true }
+    { revalidateOnFocus: true, revalidateAll: true, persistSize: true }
   );
 
   const oppgaverFlatMap =

@@ -25,6 +25,7 @@ export const Oppsummering = ({ vurderinger, erKvalitetssikrer }: Props) => {
             <Label size={'small'}>Vilkår</Label>
             <AkselLink
               as={Link}
+              prefetch={false}
               href={byggVilkårskortLenke(saksnummer, behandlingsreferanse, vurdering.definisjon as Behovstype)}
             >
               <BodyShort size={'small'}>{mapBehovskodeTilBehovstype(vurdering.definisjon as Behovstype)}</BodyShort>

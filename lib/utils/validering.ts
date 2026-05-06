@@ -40,11 +40,10 @@ export function validerPeriodiserteVurderingerRekkefølge({
   }
 
   const vurderingerMedDuplisertFraDato = new Set(
-    sorterteVurderinger
-      .filter((vurdering, index, array) => {
-        const forrige = array[index - 1];
-        return forrige && vurdering.fraDato === forrige.fraDato;
-      })
+    sorterteVurderinger.filter((vurdering, index, array) => {
+      const forrige = array[index - 1];
+      return forrige && vurdering.fraDato === forrige.fraDato;
+    })
   );
   // Vis feilmelding hvis flere nye vurderinger har samme fra-dato
   if (vurderingerMedDuplisertFraDato.size > 0) {

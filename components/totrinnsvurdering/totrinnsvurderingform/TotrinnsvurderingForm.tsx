@@ -169,7 +169,7 @@ export const TotrinnsvurderingForm = ({
       />
       {!readOnly && (
         <>
-          <HStack gap={"space-8"}>
+          <HStack gap={'space-8'}>
             <Button size={'medium'} className={'fit-content'} loading={isLoading}>
               Bekreft og send videre
             </Button>

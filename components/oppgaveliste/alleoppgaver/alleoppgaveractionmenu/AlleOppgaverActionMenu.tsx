@@ -51,10 +51,11 @@ export const AlleOppgaverActionMenu = ({ setVisSynkroniserEnhetModal, oppgave, r
         <ActionMenu.Trigger>
           <Button
             data-color="neutral"
-            variant={"tertiary"}
+            variant={'tertiary'}
             icon={<MenuElipsisVerticalIcon title={'Oppgavemeny'} />}
             size={'small'}
-            loading={isLoading || isPendingFrigi} />
+            loading={isLoading || isPendingFrigi}
+          />
         </ActionMenu.Trigger>
         <ActionMenu.Content>
           <ActionMenu.Item

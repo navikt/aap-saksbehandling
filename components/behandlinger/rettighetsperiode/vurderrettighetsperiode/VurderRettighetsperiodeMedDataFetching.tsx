@@ -14,10 +14,7 @@ interface Props {
 }
 
 export const VurderRettighetsperiodeMedDataFetching = async ({ behandlingsreferanse, stegData }: Props) => {
-  const [rettighetsperiodeGrunnlag, initialMellomlagretVurdering] = await Promise.all([
-    hentRettighetsperiodeGrunnlag(behandlingsreferanse),
-    hentMellomlagring(behandlingsreferanse, Behovstype.VURDER_RETTIGHETSPERIODE),
-  ]);
+  const rettighetsperiodeGrunnlag = await hentRettighetsperiodeGrunnlag(behandlingsreferanse);
 
   if (isError(rettighetsperiodeGrunnlag)) {
     return <ApiException apiResponses={[rettighetsperiodeGrunnlag]} />;
@@ -27,10 +24,17 @@ export const VurderRettighetsperiodeMedDataFetching = async ({ behandlingsrefera
     return null;
   }
 
+  const totalReadOnly = stegData.readOnly || !rettighetsperiodeGrunnlag.data.harTilgangTilÅSaksbehandle;
+  const initialMellomlagretVurdering = await hentMellomlagring(
+    behandlingsreferanse,
+    Behovstype.VURDER_RETTIGHETSPERIODE,
+    totalReadOnly
+  );
+
   return (
     <VurderRettighetsperiode
       grunnlag={rettighetsperiodeGrunnlag.data}
-      readOnly={stegData.readOnly || !rettighetsperiodeGrunnlag.data.harTilgangTilÅSaksbehandle}
+      readOnly={totalReadOnly}
       behandlingVersjon={stegData.behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
     />

@@ -6,8 +6,10 @@ import { PencilIcon } from '@navikt/aksel-icons';
 import { RedigerMeldekortModal } from 'components/saksoversikt/meldekortoversikt/redigermeldekortmodal/RedigerMeldekortModal';
 import { useState } from 'react';
 import { FørteTimer } from 'components/saksoversikt/meldekortoversikt/meldekorttabell/førtetimer/FørteTimer';
-import { useMeldekort } from 'hooks/saksbehandling/MeldekortHook';
 import { DagDto, MeldeperiodeMedMeldekortDto } from 'lib/types/types';
+import { formaterDatoForFrontend } from 'lib/utils/date';
+import { Kort } from 'components/kort/Kort';
+import { useMeldekort } from 'hooks/saksbehandling/MeldekortHook';
 
 export const MeldekortTabell = () => {
   const { alleMeldekort } = useMeldekort();
@@ -15,7 +17,7 @@ export const MeldekortTabell = () => {
   const [selectedMeldekort, setSelectedMeldekort] = useState<MeldeperiodeMedMeldekortDto>();
 
   return (
-    <>
+    <Kort background="default" padding="space-0">
       <TableStyled>
         <Table.Header>
           <Table.Row>
@@ -57,11 +59,19 @@ export const MeldekortTabell = () => {
                 </Table.HeaderCell>
                 <Table.DataCell textSize={'small'}>{antallTimerArbeidet}</Table.DataCell>
                 <Table.DataCell textSize={'small'} colSpan={3}>
-                  {antallTimerArbeidetIProsent} %
+                  {antallTimerArbeidetIProsent ? `${antallTimerArbeidetIProsent} %` : '-'}
                 </Table.DataCell>
-                <Table.DataCell textSize={'small'}>levert dato</Table.DataCell>
-                <Table.DataCell textSize={'small'}>sist endret dato</Table.DataCell>
-                <Table.DataCell textSize={'small'}>endret av</Table.DataCell>
+                <Table.DataCell textSize={'small'}>
+                  {meldekort.meldekort?.mottattTidspunkt
+                    ? formaterDatoForFrontend(meldekort.meldekort?.mottattTidspunkt)
+                    : '-'}
+                </Table.DataCell>
+                <Table.DataCell textSize={'small'}>
+                  {meldekort.meldekort?.mottattTidspunkt
+                    ? formaterDatoForFrontend(meldekort.meldekort?.mottattTidspunkt)
+                    : '-'}
+                </Table.DataCell>
+                <Table.DataCell textSize={'small'}>{meldekort.meldekort?.oppdatertAv}</Table.DataCell>
                 <Table.DataCell textSize={'small'}>
                   <Button
                     data-color="neutral"
@@ -79,7 +89,7 @@ export const MeldekortTabell = () => {
         </Table.Body>
       </TableStyled>
       <RedigerMeldekortModal setIsOpen={setIsOpen} isOpen={isOpen} meldekort={selectedMeldekort} />
-    </>
+    </Kort>
   );
 };
 

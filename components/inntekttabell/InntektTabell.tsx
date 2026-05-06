@@ -17,7 +17,7 @@ export const InntektTabell = ({ inntekter, gjennomsnittSiste3år, yrkesevneNedsa
 
   return (
     <div className={'flex-column'}>
-      <VStack gap={"space-4"}>
+      <VStack gap={'space-4'}>
         <BodyShort size={'small'} weight={'semibold'}>
           Grunnlagsberegning § 11-19
         </BodyShort>

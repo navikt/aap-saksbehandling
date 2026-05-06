@@ -15,9 +15,8 @@ interface Props {
 }
 
 export const BistandsbehovMedDataFetching = async ({ behandlingsreferanse, stegData }: Props) => {
-  const [grunnlag, initialMellomlagretVurdering, behandling] = await Promise.all([
+  const [grunnlag, behandling] = await Promise.all([
     hentBistandsbehovGrunnlag(behandlingsreferanse),
-    hentMellomlagring(behandlingsreferanse, Behovstype.AVKLAR_BISTANDSBEHOV_KODE),
     hentBehandling(behandlingsreferanse),
   ]);
 
@@ -32,6 +31,13 @@ export const BistandsbehovMedDataFetching = async ({ behandlingsreferanse, stegD
     return null;
   }
 
+  const totalReadOnly = stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
+  const initialMellomlagretVurdering = await hentMellomlagring(
+    behandlingsreferanse,
+    Behovstype.AVKLAR_BISTANDSBEHOV_KODE,
+    totalReadOnly
+  );
+
   const vurderingsbehov =
     behandling.type === 'SUCCESS'
       ? behandling.data.vurderingsbehovOgÅrsaker.flatMap((behovOgÅrsak) => behovOgÅrsak.vurderingsbehov)
@@ -41,7 +47,7 @@ export const BistandsbehovMedDataFetching = async ({ behandlingsreferanse, stegD
   return (
     <Bistandsbehov
       grunnlag={grunnlag.data}
-      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+      readOnly={totalReadOnly}
       behandlingVersjon={stegData.behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
       erRevurderingAvOvergangUføre={erRevurderingAvOvergangUføre}

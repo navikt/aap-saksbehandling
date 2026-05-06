@@ -28,7 +28,7 @@ export const FørteTimer = ({ meldekort }: Props) => {
   const uker = [dagerMedTimer.slice(0, 7), dagerMedTimer.slice(7, 14)];
 
   return (
-    <VStack gap={"space-16"}>
+    <VStack>
       {uker.map((uke, ukeIndex) => (
         <HStack key={ukeIndex}>
           {uke.map((dag, index) => {
@@ -41,9 +41,9 @@ export const FørteTimer = ({ meldekort }: Props) => {
               .join(' ');
 
             return (
-              <VStack key={index} className={containerClassNames} gap={"space-8"} align={'start'}>
+              <VStack key={index} className={containerClassNames} gap={'space-8'} align={'start'}>
                 <Detail>{dato}</Detail>
-                <BodyShort size={'small'}>{dag.timerArbeidet}</BodyShort>
+                <BodyShort size={'small'}>{dag.timerArbeidet ? dag.timerArbeidet : '-'}</BodyShort>
               </VStack>
             );
           })}
