@@ -19,7 +19,6 @@ const overganguforeGrunnlag: OvergangUforeGrunnlag = {
   ikkeRelevantePerioder: [],
   gjeldendeSykdsomsvurderinger: [],
   gjeldendeBistandsbehovVurderinger: [],
-  gjeldendeVedtatteVurderinger: [],
   historiskeVurderinger: [],
   perioderSomIkkeErTilstrekkeligVurdert: [],
   nyeVurderinger: [],
@@ -43,7 +42,6 @@ const overganguforeGrunnlagMedBekreftetVurdering: OvergangUforeGrunnlag = {
   ikkeRelevantePerioder: [],
   gjeldendeSykdsomsvurderinger: [],
   gjeldendeBistandsbehovVurderinger: [],
-  gjeldendeVedtatteVurderinger: [],
   historiskeVurderinger: [],
   perioderSomIkkeErTilstrekkeligVurdert: [],
   nyeVurderinger: [
@@ -91,6 +89,7 @@ describe('mellomlagring i overgang uføre', () => {
         readOnly={false}
         behandlingVersjon={0}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+        skalStegVurderes={true}
       />
     );
     const tekst = screen.getByText('Utkast lagret 21.08.2025 12:00 (Jan T. Loven)');
@@ -104,6 +103,7 @@ describe('mellomlagring i overgang uføre', () => {
         behandlingVersjon={0}
         readOnly={false}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+        skalStegVurderes={true}
       />
     );
 
@@ -125,6 +125,7 @@ describe('mellomlagring i overgang uføre', () => {
         readOnly={false}
         grunnlag={overganguforeGrunnlag}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+        skalStegVurderes={true}
       />
     );
 
@@ -141,6 +142,7 @@ describe('mellomlagring i overgang uføre', () => {
         behandlingVersjon={0}
         readOnly={false}
         grunnlag={overganguforeGrunnlagMedBekreftetVurdering}
+        skalStegVurderes={true}
       />
     );
 
@@ -158,6 +160,7 @@ describe('mellomlagring i overgang uføre', () => {
         readOnly={false}
         grunnlag={overganguforeGrunnlag}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+        skalStegVurderes={true}
       />
     );
 
@@ -181,6 +184,7 @@ describe('mellomlagring i overgang uføre', () => {
         readOnly={true}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
         grunnlag={overganguforeGrunnlag}
+        skalStegVurderes={true}
       />
     );
 
@@ -191,20 +195,41 @@ describe('mellomlagring i overgang uføre', () => {
 
 describe('Førstegangsbehandling', () => {
   it('Skal ha en overskrift', () => {
-    render(<OvergangUforePeriodisert grunnlag={overganguforeGrunnlag} readOnly={false} behandlingVersjon={0} />);
+    render(
+      <OvergangUforePeriodisert
+        grunnlag={overganguforeGrunnlag}
+        readOnly={false}
+        behandlingVersjon={0}
+        skalStegVurderes={true}
+      />
+    );
 
     const heading = screen.getByText('§ 11-18 AAP under behandling av krav om uføretrygd');
     expect(heading).toBeVisible();
   });
 
   it('Skal ha felt for begrunnelse', () => {
-    render(<OvergangUforePeriodisert grunnlag={overganguforeGrunnlag} readOnly={false} behandlingVersjon={0} />);
+    render(
+      <OvergangUforePeriodisert
+        grunnlag={overganguforeGrunnlag}
+        readOnly={false}
+        behandlingVersjon={0}
+        skalStegVurderes={true}
+      />
+    );
     const begrunnelse = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
     expect(begrunnelse).toBeVisible();
   });
 
   it('Skal ha felt for om brukeren har søkt om uføretrygd', () => {
-    render(<OvergangUforePeriodisert grunnlag={overganguforeGrunnlag} readOnly={false} behandlingVersjon={0} />);
+    render(
+      <OvergangUforePeriodisert
+        grunnlag={overganguforeGrunnlag}
+        readOnly={false}
+        behandlingVersjon={0}
+        skalStegVurderes={true}
+      />
+    );
     const felt = screen.getByRole('radiogroup', {
       name: 'Har brukeren søkt om uføretrygd?',
     });
@@ -212,7 +237,14 @@ describe('Førstegangsbehandling', () => {
   });
 
   it('Viser felt om brukeren har fått vedtak om uføretrygd, dersom brukeren ikke har søkt', async () => {
-    render(<OvergangUforePeriodisert grunnlag={overganguforeGrunnlag} readOnly={false} behandlingVersjon={0} />);
+    render(
+      <OvergangUforePeriodisert
+        grunnlag={overganguforeGrunnlag}
+        readOnly={false}
+        behandlingVersjon={0}
+        skalStegVurderes={true}
+      />
+    );
 
     expect(finnGruppeForSoktOmUforetrygd()).toBeVisible();
 
@@ -221,7 +253,14 @@ describe('Førstegangsbehandling', () => {
   });
 
   it('Har brukeren rett på AAP under behandling av krav om uføretrygd etter § 11-18?', async () => {
-    render(<OvergangUforePeriodisert grunnlag={overganguforeGrunnlag} readOnly={false} behandlingVersjon={0} />);
+    render(
+      <OvergangUforePeriodisert
+        grunnlag={overganguforeGrunnlag}
+        readOnly={false}
+        behandlingVersjon={0}
+        skalStegVurderes={true}
+      />
+    );
     await velgJa(finnGruppeForSoktOmUforetrygd());
     const fåttVedtak = finnGruppeForVedtakOmUforetrygd();
     await user.click(within(fåttVedtak).getByRole('radio', { name: 'Nei' }));
@@ -236,6 +275,7 @@ describe('Førstegangsbehandling', () => {
         grunnlag={overganguforeGrunnlagMedBekreftetVurdering}
         readOnly={false}
         behandlingVersjon={0}
+        skalStegVurderes={true}
       />
     );
 
@@ -269,7 +309,14 @@ describe('Førstegangsbehandling', () => {
   });
 
   it('Skal vise en info alert hvis bruker har uføre vedtak etter søknad', async () => {
-    render(<OvergangUforePeriodisert grunnlag={overganguforeGrunnlag} readOnly={false} behandlingVersjon={0} />);
+    render(
+      <OvergangUforePeriodisert
+        grunnlag={overganguforeGrunnlag}
+        readOnly={false}
+        behandlingVersjon={0}
+        skalStegVurderes={true}
+      />
+    );
     const harBrukerSøktOmUføretrygd = finnGruppeForSoktOmUforetrygd();
     await velgJa(harBrukerSøktOmUføretrygd);
 
@@ -287,7 +334,14 @@ describe('Førstegangsbehandling', () => {
   });
 
   it('Skal vise en info alert hvis bruker venter på uføre vedtak, men har AAP', async () => {
-    render(<OvergangUforePeriodisert grunnlag={overganguforeGrunnlag} readOnly={false} behandlingVersjon={0} />);
+    render(
+      <OvergangUforePeriodisert
+        grunnlag={overganguforeGrunnlag}
+        readOnly={false}
+        behandlingVersjon={0}
+        skalStegVurderes={true}
+      />
+    );
     const harBrukerSøktOmUføretrygd = finnGruppeForSoktOmUforetrygd();
     await velgJa(harBrukerSøktOmUføretrygd);
 
