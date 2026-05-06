@@ -374,7 +374,7 @@ export type ForeslåVedtakGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.ForeslåVedtakResponse'];
 
 export type ForeslåVedtakVedtakslengdeGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.VedtakslengdeVedtakResponse'];
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.ForeslåvedtakVedtakslengdeRespons'];
 
 export type UnderveisAvslagsÅrsak = NonNullable<UnderveisGrunnlag['avslagsårsak']>;
 
