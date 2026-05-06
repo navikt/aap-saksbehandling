@@ -152,7 +152,7 @@ export function useOppgaver({
 
       return hentOppgaverClient(payload);
     },
-    { revalidateOnFocus: true, revalidateFirstPage: false }
+    { revalidateOnFocus: true, revalidateFirstPage: false, persistSize: true }
   );
 
   const oppgaveListe = oppgaverValgtKø?.filter(isSuccess) ?? [];
