@@ -1,8 +1,9 @@
 import 'server-only';
 
+import { validateAzureToken } from '@navikt/oasis';
 import { headers } from 'next/headers';
 
-import { getAccessTokenOrRedirectToLogin, validerToken } from './azuread';
+import { getAccessTokenOrRedirectToLogin } from './azuread';
 import { isDev, isLocal } from 'lib/utils/environment';
 
 export interface BrukerInformasjon {
@@ -18,8 +19,11 @@ export async function hentBrukerInformasjon(): Promise<BrukerInformasjon> {
   const requestHeaders = await headers();
   const token = getAccessTokenOrRedirectToLogin(requestHeaders);
 
-  const JWTVerifyResult = await validerToken(token);
-  return { navn: JWTVerifyResult.payload.name as string, NAVident: JWTVerifyResult.payload.NAVident as string };
+  const validationResult = await validateAzureToken(token);
+  if (validationResult.ok) {
+    return { navn: validationResult.payload.name ?? '', NAVident: validationResult.payload.NAVident };
+  }
+  return { navn: 'Fant ikke bruker' };
 }
 
 export enum Roller {
@@ -48,23 +52,23 @@ export async function hentRollerForBruker(): Promise<Roller[]> {
   const requestHeaders = await headers();
   const token = getAccessTokenOrRedirectToLogin(requestHeaders);
 
-  const JWTVerifyResult = await validerToken(token);
-
-  const grupper = JWTVerifyResult.payload.groups as string[];
+  const JWTVerifyResult = await validateAzureToken(token);
 
   const isDevelopment = isDev();
 
-  const roller: Roller[] = [];
+  let roller: Roller[] = [];
+  if (JWTVerifyResult.ok) {
+    const grupper = JWTVerifyResult.payload.groups as string[];
+    grupper.forEach((gruppe) => {
+      const rolle = isDevelopment
+        ? mapRollerFraTokenTilKelvinRollerDev(gruppe)
+        : mapRollerFraTokenTilKelvinRollerProd(gruppe);
 
-  grupper.forEach((gruppe) => {
-    const rolle = isDevelopment
-      ? mapRollerFraTokenTilKelvinRollerDev(gruppe)
-      : mapRollerFraTokenTilKelvinRollerProd(gruppe);
-
-    if (rolle) {
-      roller.push(rolle);
-    }
-  });
+      if (rolle) {
+        roller.push(rolle);
+      }
+    });
+  }
 
   return roller;
 }
