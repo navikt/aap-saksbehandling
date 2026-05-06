@@ -1,7 +1,7 @@
 import './app.css';
 
 import { KelvinAppHeader } from 'components/kelvinappheader/KelvinAppHeader';
-import { hentBrukerInformasjon, hentRollerForBruker } from 'lib/services/azure/azureUserService';
+import { hentInnloggetBrukerInformasjon, hentRollerForBruker } from 'lib/services/azure/azureUserService';
 import { InnloggetBrukerContextProvider } from 'context/InnloggetBrukerContext';
 import { FeatureFlagProvider } from 'context/UnleashContext';
 import { getAllFlags } from 'lib/services/unleash/unleashService';
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 const umamiSporingskode = 'ebb233f3-6c6d-4b9f-b84d-9a11a3c2f16f';
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const [brukerInformasjon, roller] = await Promise.all([hentBrukerInformasjon(), hentRollerForBruker()]);
+  const [brukerInformasjon, roller] = await Promise.all([hentInnloggetBrukerInformasjon(), hentRollerForBruker()]);
 
   return (
     <html lang="nb">

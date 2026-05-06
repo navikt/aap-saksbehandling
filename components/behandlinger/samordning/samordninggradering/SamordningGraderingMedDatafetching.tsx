@@ -6,7 +6,6 @@ import {
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
-import { hentBrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { StegData } from 'lib/utils/steg';
 import { SamordningGradering } from 'components/behandlinger/samordning/samordninggradering/SamordningGradering';
 
@@ -16,9 +15,8 @@ interface Props {
 }
 
 export const SamordningGraderingMedDatafetching = async ({ behandlingsreferanse, stegData }: Props) => {
-  const [grunnlag, brukerInformasjon, oppfølgningOppgaver] = await Promise.all([
+  const [grunnlag, oppfølgningOppgaver] = await Promise.all([
     hentSamordningGraderingGrunnlag(behandlingsreferanse),
-    hentBrukerInformasjon(),
     hentOppfølgningsOppgaverOpprinselsePåBehandlingsReferanse(
       behandlingsreferanse,
       Behovstype.AVKLAR_SAMORDNING_GRADERING
@@ -39,7 +37,6 @@ export const SamordningGraderingMedDatafetching = async ({ behandlingsreferanse,
   return (
     <SamordningGradering
       oppfølgningOppgave={oppfølgningOppgaver.data}
-      bruker={brukerInformasjon}
       grunnlag={grunnlag.data}
       behandlingVersjon={stegData.behandlingVersjon}
       readOnly={totalReadOnly}

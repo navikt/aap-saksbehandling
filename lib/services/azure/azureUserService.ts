@@ -12,7 +12,7 @@ export interface BrukerInformasjon {
 }
 
 const lokaltOverstyrtBruker = isLocal();
-export async function hentBrukerInformasjon(): Promise<BrukerInformasjon> {
+export async function hentInnloggetBrukerInformasjon(): Promise<BrukerInformasjon> {
   if (lokaltOverstyrtBruker) {
     return { navn: 'Iren Panikk', NAVident: 'z123456' };
   }

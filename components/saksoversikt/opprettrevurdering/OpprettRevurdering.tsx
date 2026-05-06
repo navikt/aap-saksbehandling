@@ -12,6 +12,7 @@ import { isSuccess } from 'lib/utils/api';
 import { vurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
 import { useFeatureFlag } from 'context/UnleashContext';
 import { Kort } from 'components/kort/Kort';
+import { useInnloggetBruker } from 'hooks/BrukerHook';
 
 export interface ManuellRevurderingFormFields {
   årsaker: string[];
@@ -24,16 +25,15 @@ export const OpprettRevurdering = ({
   defaultÅrsaker,
   defaultBegrunnelse,
   redirect = false,
-  navIdent,
 }: {
   sak: SaksInfo;
   erFørstegangsbehandling?: boolean;
   defaultÅrsaker?: string[];
   defaultBegrunnelse?: string;
   redirect?: boolean;
-  navIdent?: string;
 }) => {
   const router = useRouter();
+  const innloggetBruker = useInnloggetBruker();
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>();
@@ -54,7 +54,7 @@ export const OpprettRevurdering = ({
         meldingType: 'ManuellRevurderingV0',
         årsakerTilBehandling: data.årsaker as ManuellRevurderingV0['årsakerTilBehandling'],
         beskrivelse: data.beskrivelse,
-        opprettetAv: navIdent,
+        opprettetAv: innloggetBruker.NAVident,
       } satisfies ManuellRevurderingV0,
     };
 

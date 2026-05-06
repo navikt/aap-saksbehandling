@@ -2,15 +2,14 @@ import { Box, Page as AkselPage } from '@navikt/ds-react';
 import { hentSak, hentSakPersoninfo } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
 import { OpprettOppfølgingsBehandling } from 'components/saksoversikt/opprettoppfølgingsbehandling/OpprettOppfølgingsbehandling';
-import { hentBrukerInformasjon, hentRollerForBruker, Roller } from 'lib/services/azure/azureUserService';
+import { hentRollerForBruker, Roller } from 'lib/services/azure/azureUserService';
 
 export default async function Page(props: { params: Promise<{ saksnummer: string }> }) {
   const params = await props.params;
 
-  const [sak, personInfo, brukerInformasjon, roller] = await Promise.all([
+  const [sak, personInfo, roller] = await Promise.all([
     hentSak(params.saksnummer),
     hentSakPersoninfo(params.saksnummer),
-    hentBrukerInformasjon(),
     hentRollerForBruker(),
   ]);
 
@@ -19,11 +18,7 @@ export default async function Page(props: { params: Promise<{ saksnummer: string
     <AkselPage>
       <SaksinfoBanner personInformasjon={personInfo} sak={sak} />
       <Box marginBlock="space-32">
-        <OpprettOppfølgingsBehandling
-          saksnummer={sak.saksnummer}
-          brukerInformasjon={brukerInformasjon}
-          brukerHarNayTilgang={brukerharNayTilgang}
-        />
+        <OpprettOppfølgingsBehandling saksnummer={sak.saksnummer} brukerHarNayTilgang={brukerharNayTilgang} />
       </Box>
     </AkselPage>
   );

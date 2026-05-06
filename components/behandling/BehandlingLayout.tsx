@@ -20,7 +20,7 @@ import {
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-import { hentBrukerInformasjon, hentRollerForBruker, Roller } from 'lib/services/azure/azureUserService';
+import { hentRollerForBruker, Roller } from 'lib/services/azure/azureUserService';
 import { hentOppgave } from 'lib/services/oppgaveservice/oppgaveservice';
 import { StegGruppe } from 'lib/types/types';
 import { SakContextProvider } from 'context/saksbehandling/SakContext';
@@ -50,17 +50,15 @@ export const BehandlingLayout = async ({ saksnummer, behandlingsreferanse, child
   // noinspection ES6MissingAwait - trenger ikke vente på svar fra auditlog-kall
   auditlog(behandlingsreferanse);
 
-  const [oppgave, personInfo, brukerInformasjon, flytResponse, sak, roller, kabalKlageResultat, klageresultat] =
-    await Promise.all([
-      hentOppgave(behandlingsreferanse),
-      hentSakPersoninfo(saksnummer),
-      hentBrukerInformasjon(),
-      hentFlyt(behandlingsreferanse),
-      hentSak(saksnummer),
-      hentRollerForBruker(),
-      hentKabalKlageresultat(behandlingsreferanse),
-      hentKlageresultat(behandlingsreferanse),
-    ]);
+  const [oppgave, personInfo, flytResponse, sak, roller, kabalKlageResultat, klageresultat] = await Promise.all([
+    hentOppgave(behandlingsreferanse),
+    hentSakPersoninfo(saksnummer),
+    hentFlyt(behandlingsreferanse),
+    hentSak(saksnummer),
+    hentRollerForBruker(),
+    hentKabalKlageresultat(behandlingsreferanse),
+    hentKlageresultat(behandlingsreferanse),
+  ]);
 
   if (isError(flytResponse) || isError(klageresultat) || isError(oppgave)) {
     return (
@@ -113,7 +111,6 @@ export const BehandlingLayout = async ({ saksnummer, behandlingsreferanse, child
               behandling={behandling.data}
               sak={sak}
               oppgave={oppgave.data}
-              brukerInformasjon={brukerInformasjon}
               brukerKanSaksbehandle={brukerKanSaksbehandle}
               flyt={flytResponse.data.flyt}
               visning={flytResponse.data.visning}

@@ -33,7 +33,6 @@ import { Veiledning } from 'components/veiledning/Veiledning';
 import { storForbokstavOgMellomromForUnderstrek } from 'lib/utils/string';
 
 interface Props {
-  bruker: BrukerInformasjon;
   grunnlag: SamordningGraderingGrunnlag;
   behandlingVersjon: number;
   readOnly: boolean;
@@ -59,7 +58,6 @@ export interface SamordningGraderingFormfields {
 type DraftFormFields = Partial<SamordningGraderingFormfields>;
 
 export const SamordningGradering = ({
-  bruker,
   grunnlag,
   behandlingVersjon,
   readOnly,
@@ -181,7 +179,7 @@ export const SamordningGradering = ({
 
   return (
     <>
-      {bruker && visModalForOppfølgingsoppgaveState && (
+      {visModalForOppfølgingsoppgaveState && (
         <Modal
           ref={ref}
           header={{ heading: 'Vurder konsekvens' }}
@@ -193,7 +191,6 @@ export const SamordningGradering = ({
               behovsType={Behovstype.AVKLAR_SAMORDNING_GRADERING}
               behandlingsreferanse={behandlingsreferanse}
               saksnummer={sak.sak.saksnummer}
-              brukerInformasjon={bruker}
               modalOnClose={() => setModalForOppfølgingsoppgaveState(false)}
               successfullOpprettelse={handleSuccess}
               finnTidligsteVirkningstidspunkt={finnTidligsteVirkningstidspunkt()}

@@ -15,10 +15,10 @@ import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { erDatoIFremtiden, validerDato } from 'lib/validation/dateValidation';
 import { Behovstype } from 'lib/utils/form';
 import { Kort } from 'components/kort/Kort';
+import { useInnloggetBruker } from 'hooks/BrukerHook';
 
 interface Props {
   saksnummer: string;
-  brukerInformasjon: BrukerInformasjon;
   brukerHarNayTilgang: boolean;
   modalOnClose?: () => void;
   successfullOpprettelse?: () => void;
@@ -43,7 +43,6 @@ export interface OppfølgingsoppgaveFormFields {
 
 export const OpprettOppfølgingsBehandling = ({
   saksnummer,
-  brukerInformasjon,
   modalOnClose,
   successfullOpprettelse,
   finnTidligsteVirkningstidspunkt,
@@ -62,6 +61,7 @@ export const OpprettOppfølgingsBehandling = ({
   };
 
   const router = useRouter();
+  const brukerInformasjon = useInnloggetBruker();
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>();

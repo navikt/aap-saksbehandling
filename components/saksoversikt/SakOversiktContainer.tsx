@@ -22,12 +22,10 @@ enum Tab {
 
 export const SakOversiktContainer = ({
   sak,
-  innloggetBrukerIdent,
   rettighetsinfo,
   arenaSaker,
 }: {
   sak: SaksInfo;
-  innloggetBrukerIdent: string | undefined;
   rettighetsinfo: RettighetsinfoDto | null;
   arenaSaker: SakerResponse | null;
 }) => {
@@ -60,11 +58,7 @@ export const SakOversiktContainer = ({
           <Box marginBlock="space-32">
             <Tabs.Panel value={Tab.OVERSIKT}>
               <VStack gap="space-32">
-                <SakMedBehandlinger
-                  sak={sak}
-                  innloggetBrukerIdent={innloggetBrukerIdent}
-                  rettighetsinfo={rettighetsinfo}
-                />
+                <SakMedBehandlinger sak={sak} rettighetsinfo={rettighetsinfo} />
                 {visArenasakerOversikt && arenaSaker && <ArenaSakerListe arenaSaker={arenaSaker} />}
               </VStack>
             </Tabs.Panel>

@@ -20,13 +20,13 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 import { ReturStatus } from 'components/returstatus/ReturStatus';
 import { SaksmenyDropdown } from 'components/saksinfobanner/SaksmenyDropdown';
 import { UtløptVentefristBoks } from '../oppgaveliste/utløptventefristboks/UtløptVentefristBoks';
+import { useInnloggetBruker } from 'hooks/BrukerHook';
 
 interface Props {
   personInformasjon: SakPersoninfo;
   sak: SaksInfoType;
   behandling?: DetaljertBehandling;
   oppgave?: Oppgave;
-  brukerInformasjon?: BrukerInformasjon;
   flyt?: FlytGruppe[];
   visning?: FlytVisning;
   brukerKanSaksbehandle?: boolean;
@@ -38,12 +38,12 @@ export const SaksinfoBanner = ({
   sak,
   behandling,
   oppgave,
-  brukerInformasjon,
   flyt,
   visning,
   brukerKanSaksbehandle,
   brukerErBeslutter,
 }: Props) => {
+  const brukerInformasjon = useInnloggetBruker();
   const [visHarUlesteDokumenter, settVisHarUlesteDokumenter] = useState(!!oppgave?.harUlesteDokumenter);
   const erReservertAvInnloggetBruker = brukerInformasjon?.NAVident === oppgave?.reservertAv;
 

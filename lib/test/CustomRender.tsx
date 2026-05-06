@@ -19,23 +19,25 @@ const tomorrow = format(addDays(new Date(), 1), 'yyyy-MM-dd');
 
 export function customRender(ui: ReactElement) {
   return render(
-    <FeatureFlagProvider flags={mockedFlags}>
-      <IngenFlereOppgaverModalContextProvider>
-        <OverstyrTildelingContextProvider>
-          <SakContextProvider
-            sak={{
-              saksnummer: '12345',
-              ident: '12345678910',
-              opprettetTidspunkt: today,
-              periode: { fom: today, tom: tomorrow },
-              virkningsTidspunkt: today,
-            }}
-          >
-            {ui}
-          </SakContextProvider>
-        </OverstyrTildelingContextProvider>
-      </IngenFlereOppgaverModalContextProvider>
-    </FeatureFlagProvider>
+    <InnloggetBrukerContextProvider bruker={{ NAVident: 'Z000000', navn: 'Test Testesen' }}>
+      <FeatureFlagProvider flags={mockedFlags}>
+        <IngenFlereOppgaverModalContextProvider>
+          <OverstyrTildelingContextProvider>
+            <SakContextProvider
+              sak={{
+                saksnummer: '12345',
+                ident: '12345678910',
+                opprettetTidspunkt: today,
+                periode: { fom: today, tom: tomorrow },
+                virkningsTidspunkt: today,
+              }}
+            >
+              {ui}
+            </SakContextProvider>
+          </OverstyrTildelingContextProvider>
+        </IngenFlereOppgaverModalContextProvider>
+      </FeatureFlagProvider>
+    </InnloggetBrukerContextProvider>
   );
 }
 
