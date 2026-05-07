@@ -17,7 +17,6 @@ import { Behovstype } from 'lib/utils/form';
 const brevdata: BrevdataDto = {
   betingetTekst: [],
   delmaler: [],
-  faktagrunnlag: [],
   fritekster: [],
   valg: [],
 };
