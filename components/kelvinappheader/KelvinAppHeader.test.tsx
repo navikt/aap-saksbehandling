@@ -4,8 +4,6 @@ import { KelvinAppHeader } from './KelvinAppHeader';
 
 import { userEvent } from '@testing-library/user-event';
 import createFetchMock from 'vitest-fetch-mock';
-import { FeatureFlagProvider } from 'context/UnleashContext';
-import { mockedFlags } from 'lib/services/unleash/unleashToggles';
 import { render, screen } from 'lib/test/CustomRender';
 
 const fetchMock = createFetchMock(vi);
@@ -19,22 +17,14 @@ describe('Header', () => {
   it('skal vise navnet på brukeren i header', async () => {
     mockFetchConfig();
 
-    render(
-      <FeatureFlagProvider flags={mockedFlags}>
-        <KelvinAppHeader />
-      </FeatureFlagProvider>
-    );
+    render(<KelvinAppHeader />);
     expect(screen.getByText('Test Testesen')).toBeVisible();
   });
 
   it('skal vise knapp for å logge ut', async () => {
     mockFetchConfig();
 
-    render(
-      <FeatureFlagProvider flags={mockedFlags}>
-        <KelvinAppHeader />
-      </FeatureFlagProvider>
-    );
+    render(<KelvinAppHeader />);
 
     await user.click(screen.getByText('Test Testesen'));
 
