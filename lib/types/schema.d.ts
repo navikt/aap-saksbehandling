@@ -41,6 +41,45 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/person/ident': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['no.nav.aap.behandlingsflyt.PersonIdentRequest'];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.PersonIdentResponse'];
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/sak/ekstern/finn': {
     parameters: {
       query?: never;
@@ -1761,7 +1800,7 @@ export interface paths {
             [name: string]: unknown;
           };
           content: {
-            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.foresl\u00E5vedtak.VedtakslengdeVedtakResponse'];
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.foresl\u00E5vedtak.Foresl\u00E5vedtakVedtakslengdeRespons'];
           };
         };
       };
@@ -3923,6 +3962,44 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/brev/{brevbestillingReferanse}/forhandsvis-html': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description brevbestillingReferanse */
+          brevbestillingReferanse: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BrevResponsDTO'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/{brevbestillingReferanse}/kan-distribuere-brev': {
     parameters: {
       query?: never;
@@ -5048,7 +5125,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  '/api/test/opprettOgFullforBehandling': {
+  '/api/test/opprettOgFullfoerBehandling': {
     parameters: {
       query?: never;
       header?: never;
@@ -5390,6 +5467,13 @@ export interface components {
        */
       'uf\u00F8regradTom'?: string | null;
       yrkesskader: components['schemas']['no.nav.aap.behandlingsflyt.TestYrkesskadeDto'][];
+    };
+    'no.nav.aap.behandlingsflyt.PersonIdentRequest': {
+      /** Format: uuid */
+      personReferanse: string;
+    };
+    'no.nav.aap.behandlingsflyt.PersonIdentResponse': {
+      ident: string;
     };
     'no.nav.aap.behandlingsflyt.TestBarn': {
       /**
@@ -12291,7 +12375,15 @@ export interface components {
       utfall: 'IKKE_OPPFYLT' | 'IKKE_RELEVANT' | 'IKKE_VURDERT' | 'OPPFYLT';
     };
     'no.nav.aap.behandlingsflyt.behandling.foresl\u00E5vedtak.Foresl\u00E5VedtakResponse': {
+      'harTilgangTil\u00C5Saksbehandle': boolean;
       perioder: components['schemas']['no.nav.aap.behandlingsflyt.behandling.foresl\u00E5vedtak.Foresl\u00E5VedtakDto'][];
+      'stansOpph\u00F8r': components['schemas']['no.nav.aap.behandlingsflyt.behandling.foresl\u00E5vedtak.StansOpph\u00F8rDto'][];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.foresl\u00E5vedtak.Foresl\u00E5vedtakVedtakslengdeRespons': {
+      'harTilgangTil\u00C5Saksbehandle': boolean;
+      perioder?:
+        | components['schemas']['no.nav.aap.behandlingsflyt.behandling.foresl\u00E5vedtak.VedtakslengdeVedtakDto'][]
+        | null;
       'stansOpph\u00F8r': components['schemas']['no.nav.aap.behandlingsflyt.behandling.foresl\u00E5vedtak.StansOpph\u00F8rDto'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.foresl\u00E5vedtak.StansOpph\u00F8rDto': {
@@ -12351,12 +12443,6 @@ export interface components {
         | null;
       /** @enum {string} */
       utfall: 'IKKE_OPPFYLT' | 'IKKE_RELEVANT' | 'IKKE_VURDERT' | 'OPPFYLT';
-    };
-    'no.nav.aap.behandlingsflyt.behandling.foresl\u00E5vedtak.VedtakslengdeVedtakResponse': {
-      perioder?:
-        | components['schemas']['no.nav.aap.behandlingsflyt.behandling.foresl\u00E5vedtak.VedtakslengdeVedtakDto'][]
-        | null;
-      'stansOpph\u00F8r': components['schemas']['no.nav.aap.behandlingsflyt.behandling.foresl\u00E5vedtak.StansOpph\u00F8rDto'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.medlemskap.MedlemskapGrunnlagDto': {
       medlemskap: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.register.medlemskap.MedlemskapUnntakGrunnlag'];
@@ -12975,6 +13061,7 @@ export interface components {
         | 'FAGSYSTEMINFO_BEHOV_HENDELSE'
         | 'FASTSATT_PERIODE_PASSERT'
         | 'FRITAK_MELDEPLIKT'
+        | 'G_REGULERING'
         | 'HELSEOPPLYSNINGER'
         | 'KLAGE'
         | 'MANUELL_OPPRETTELSE'
@@ -14157,6 +14244,7 @@ export interface components {
         | 'FAGSYSTEMINFO_BEHOV_HENDELSE'
         | 'FASTSATT_PERIODE_PASSERT'
         | 'FRITAK_MELDEPLIKT'
+        | 'G_REGULERING'
         | 'HELSEOPPLYSNINGER'
         | 'KLAGE'
         | 'MANUELL_OPPRETTELSE'
@@ -17387,6 +17475,7 @@ export interface components {
         | 'FAGSYSTEMINFO_BEHOV_HENDELSE'
         | 'FASTSATT_PERIODE_PASSERT'
         | 'FRITAK_MELDEPLIKT'
+        | 'G_REGULERING'
         | 'HELSEOPPLYSNINGER'
         | 'KLAGE'
         | 'MANUELL_OPPRETTELSE'
@@ -17601,6 +17690,7 @@ export interface components {
         | 'FAGSYSTEMINFO_BEHOV_HENDELSE'
         | 'FASTSATT_PERIODE_PASSERT'
         | 'FRITAK_MELDEPLIKT'
+        | 'G_REGULERING'
         | 'HELSEOPPLYSNINGER'
         | 'KLAGE'
         | 'MANUELL_OPPRETTELSE'
@@ -17615,6 +17705,9 @@ export interface components {
         | 'TILBAKEKREVING_HENDELSE'
         | 'UTVID_VEDTAKSLENGDE'
         | null;
+    };
+    'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BrevResponsDTO': {
+      html: string;
     };
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.FinnBehandlingForIdentDTO': {
       ident: string;
@@ -17658,6 +17751,8 @@ export interface components {
        */
       'f\u00F8dselsdato'?: string | null;
       navn: string;
+      /** Format: uuid */
+      personReferanse: string;
     };
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.SaksinfoDTO': {
       ident: string;
@@ -17709,14 +17804,39 @@ export interface components {
       status: 'AVSLUTTET' | 'LØPENDE' | 'OPPRETTET' | 'UTREDES';
       's\u00F8knadErTrukket'?: boolean | null;
     };
+    'no.nav.aap.behandlingsflyt.test.AndreUtbetalingerApiDto': {
+      afp?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AfpDto'];
+      /** @enum {string|null} */
+      loenn?: 'JA' | 'NEI' | null;
+      stoenad?:
+        | (
+            | 'AFP'
+            | 'INTRODUKSJONSSTOENAD'
+            | 'KVALIFISERINGSSTOENAD'
+            | 'LAAN'
+            | 'NEI'
+            | 'OEKONOMISK_SOSIALHJELP'
+            | 'OMSORGSSTOENAD'
+            | 'STIPEND'
+            | 'UTLAND'
+            | 'VERV'
+          )[]
+        | null;
+    };
     'no.nav.aap.behandlingsflyt.test.BehandlingStatusRequest': {
-      saksnummer: string;
+      ident: string;
     };
     'no.nav.aap.behandlingsflyt.test.BehandlingStatusRespons': {
-      behandlingStatus?: string | null;
+      /**
+       * @description Sier om behandlingen er ferdigbehandlet. Om denne ikke er AVSLUTTET innen 1 min, er det antakelig en feil.
+       * @enum {string|null}
+       */
+      behandlingStatus?: 'AVSLUTTET' | 'IVERKSETTES' | 'OPPRETTET' | 'UTREDES' | null;
+      /** @description Om behandlingen er ferdigbehandlet. */
       ferdig: boolean;
+      /** @description Det opprettede saksnummeret. */
       saksnummer: string;
-      's\u00F8knad'?: components['schemas']['no.nav.aap.behandlingsflyt.test.S\u00F8knadDetaljer'];
+      soeknad?: components['schemas']['no.nav.aap.behandlingsflyt.test.SoeknadDetaljer'];
     };
     'no.nav.aap.behandlingsflyt.test.OpprettDummySakDto': {
       andreUtbetalinger?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AndreUtbetalingerDto'];
@@ -17726,17 +17846,22 @@ export interface components {
       ident: string;
     };
     'no.nav.aap.behandlingsflyt.test.OpprettOgFullforBehandlingRequest': {
-      andreUtbetalinger?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AndreUtbetalingerDto'];
+      /** @description Om søker svarte at hen mottar andre utbetalinger i søknaden. */
+      andreUtbetalinger?: components['schemas']['no.nav.aap.behandlingsflyt.test.AndreUtbetalingerApiDto'];
+      /** @description Om personen svarer at han/hun er student i søknaden. */
       erStudent: boolean;
+      /** @description Om personen svarer at han/hun har bodd/jobbet i Norge i siste 5 år. */
       harMedlemskap: boolean;
+      /** @description Om personen svarer at han/hun har yrkesskade i søknaden. Urelatert til om det finnes yrkesskade i yrkesskaderegisteret. */
       harYrkesskade: boolean;
+      /** @description Dolly-ident for test-personen. */
       ident: string;
     };
     'no.nav.aap.behandlingsflyt.test.OpprettOgFullforBehandlingRespons': {
       saksnummer: string;
     };
-    'no.nav.aap.behandlingsflyt.test.S\u00F8knadDetaljer': {
-      andreUtbetalinger?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AndreUtbetalingerDto'];
+    'no.nav.aap.behandlingsflyt.test.SoeknadDetaljer': {
+      andreUtbetalinger?: components['schemas']['no.nav.aap.behandlingsflyt.test.AndreUtbetalingerApiDto'];
       erStudent: boolean;
       harMedlemskap: boolean;
       harYrkesskade: boolean;

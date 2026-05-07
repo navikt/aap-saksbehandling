@@ -21,8 +21,10 @@ const VENTESTATUSER_SOM_SKAL_KUNNE_GJENÅPNES = ['VENTER_PÅ_KLAGE_IMPLEMENTASJO
  * en whitelsit med grunner som man får lov til å gjenåpne her.
  */
 export const StartBehandling = async ({ behandlingsreferanse }: Props) => {
-  const flyt = await hentFlyt(behandlingsreferanse);
-  const venteInformasjon = await hentBehandlingPåVentInformasjon(behandlingsreferanse);
+  const [flyt, venteInformasjon] = await Promise.all([
+    hentFlyt(behandlingsreferanse),
+    hentBehandlingPåVentInformasjon(behandlingsreferanse),
+  ]);
 
   if (isError(flyt) || isError(venteInformasjon)) {
     return <ApiException apiResponses={[flyt, venteInformasjon]} />;
