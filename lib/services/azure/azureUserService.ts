@@ -2,10 +2,12 @@ import 'server-only';
 
 import { validateAzureToken, ValidationResult } from '@navikt/oasis';
 import { headers } from 'next/headers';
+import { redirect } from 'next/navigation';
 
 import { getAccessTokenOrRedirectToLogin } from './azuread';
 import { isDev, isLocal } from 'lib/utils/environment';
 import { Roller } from 'lib/types/types';
+import { logError } from 'lib/serverutlis/logger';
 
 export interface BrukerInformasjon {
   navn: string;
@@ -38,7 +40,8 @@ export async function hentInnloggetBrukerInformasjon(): Promise<BrukerInformasjo
       roller: hentRollerForBruker(validationResult),
     };
   }
-  return { navn: 'Fant ikke bruker', roller: [] };
+  logError('Feil ved uthenting av brukerinformasjon fra token', validationResult.error);
+  redirect(`/oauth2/login?redirect=${requestHeaders.get('x-path')}`);
 }
 
 function hentRollerForBruker(validationResult: ValidationResult): Roller[] {
