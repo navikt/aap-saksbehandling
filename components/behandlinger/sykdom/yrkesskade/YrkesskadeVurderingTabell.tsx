@@ -11,6 +11,7 @@ import {
   YrkesskadeMedSkadeDatoSak,
 } from 'components/behandlinger/sykdom/yrkesskade/Yrkesskade';
 import { JaEllerNei } from 'lib/utils/form';
+import { storForbokstav } from 'lib/utils/string';
 
 interface Props {
   form: UseFormReturn<YrkesskadeMedSkadeDatoFormFields>;
@@ -74,9 +75,7 @@ export const YrkesskadeVurderingTabell = ({ form, yrkesskader, readOnly, update,
                 </Table.DataCell>
                 <Table.DataCell textSize={'small'}>{yrkesskade.saksnummer}</Table.DataCell>
                 <Table.DataCell textSize={'small'}>
-                  {yrkesskade.kilde
-                    ? `${yrkesskade.kilde.charAt(0).toUpperCase()}${yrkesskade.kilde.slice(1).toLowerCase()}`
-                    : '–'}
+                  {yrkesskade.kilde ? storForbokstav(yrkesskade.kilde) : '–'}
                 </Table.DataCell>
                 <Table.DataCell textSize={'small'}>
                   {yrkesskade.skadedato ? (
@@ -104,24 +103,17 @@ export const YrkesskadeVurderingTabell = ({ form, yrkesskader, readOnly, update,
                   {yrkesskade.vedtaksdato ? formaterDatoForFrontend(yrkesskade.vedtaksdato) : '–'}
                 </Table.DataCell>
                 <Table.DataCell textSize={'small'}>
-                  {yrkesskade.skadeart
-                    ? `${yrkesskade.skadeart.charAt(0).toUpperCase()}${yrkesskade.skadeart.slice(1).toLowerCase()}`
-                    : '–'}
+                  {yrkesskade.skadeart ? storForbokstav(yrkesskade.skadeart) : '–'}
                 </Table.DataCell>
                 <Table.DataCell textSize={'small'}>
-                  {yrkesskade.diagnose
-                    ? `${yrkesskade.diagnose.charAt(0).toUpperCase()}${yrkesskade.diagnose.slice(1).toLowerCase()}`
-                    : '–'}
+                  {yrkesskade.diagnose ? storForbokstav(yrkesskade.diagnose) : '–'}
                 </Table.DataCell>
                 <Table.DataCell textSize={'small'}>
-                  {yrkesskade.skadekombinasjonerTekst
-                    ? yrkesskade.skadekombinasjonerTekst
-                    : yrkesskade.skadekombinasjoner
-                        ?.map(
-                          (k) =>
-                            `${k.skadetype.charAt(0).toUpperCase()}${k.skadetype.slice(1).toLowerCase()} i ${k.kroppsdel.toLowerCase()}`
-                        )
-                        .join(', ') || '–'}
+                  {yrkesskade.skadekombinasjoner
+                    ? yrkesskade.skadekombinasjoner
+                        ?.map((k) => `${storForbokstav(k.skadetype)} i ${k.kroppsdel.toLowerCase()}`)
+                        .join(', ')
+                    : yrkesskade.skadekombinasjonerTekst || '–'}
                 </Table.DataCell>
               </Table.Row>
             ))}

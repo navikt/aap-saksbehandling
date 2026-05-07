@@ -27,7 +27,7 @@ const diagnoseTilSkadebeskrivelse: Record<string, string> = {
 
 const RegisterYrkesskadeFields = ({ form, index }: { form: UseFormReturn<OpprettSakFormFields>; index: number }) => {
   const diagnose = useWatch({ control: form.control, name: `yrkesskader.${index}.diagnose` });
-  const harVedtaksdato = useWatch({ control: form.control, name: `yrkesskader.${index}.harVedtaksdato` });
+  const harSkadedato = useWatch({ control: form.control, name: `yrkesskader.${index}.harSkadedato` });
 
   useEffect(() => {
     if (diagnose) {
@@ -53,14 +53,14 @@ const RegisterYrkesskadeFields = ({ form, index }: { form: UseFormReturn<Opprett
       </SelectWrapper>
       <Checkbox
         size="small"
-        checked={!!harVedtaksdato}
+        checked={!!harSkadedato}
         onChange={(e) => {
-          const vedtaksdato = e.target.checked ? formaterDatoForBackend(subDays(new Date(), 8)) : undefined;
-          form.setValue(`yrkesskader.${index}.harVedtaksdato`, e.target.checked);
-          form.setValue(`yrkesskader.${index}.vedtaksdato`, vedtaksdato);
+          const skadedato = e.target.checked ? formaterDatoForBackend(subDays(new Date(), 8)) : undefined;
+          form.setValue(`yrkesskader.${index}.harSkadedato`, e.target.checked);
+          form.setValue(`yrkesskader.${index}.skadedato`, skadedato);
         }}
       >
-        Har vedtaksdato
+        Har skadedato
       </Checkbox>
     </>
   );
@@ -94,15 +94,15 @@ export const OpprettYrkesskade = ({ form }: Props) => {
                       form.setValue(`yrkesskader.${index}.skadeart`, skadeartOptions[0]);
                       form.setValue(`yrkesskader.${index}.diagnose`, diagnoseOptions[0]);
                       form.setValue(`yrkesskader.${index}.skadebeskrivelse`, diagnoseTilSkadebeskrivelse[diagnoseOptions[0]]);
-                      form.setValue(`yrkesskader.${index}.harVedtaksdato`, false);
-                      form.setValue(`yrkesskader.${index}.vedtaksdato`, undefined);
+                      form.setValue(`yrkesskader.${index}.harSkadedato`, false);
+                      form.setValue(`yrkesskader.${index}.skadedato`, undefined);
                     } else {
                       form.setValue(`yrkesskader.${index}.harYrkesskade`, JaEllerNei.Ja);
                       form.setValue(`yrkesskader.${index}.skadeart`, undefined);
                       form.setValue(`yrkesskader.${index}.diagnose`, undefined);
                       form.setValue(`yrkesskader.${index}.skadebeskrivelse`, undefined);
-                      form.setValue(`yrkesskader.${index}.harVedtaksdato`, false);
-                      form.setValue(`yrkesskader.${index}.vedtaksdato`, undefined);
+                      form.setValue(`yrkesskader.${index}.harSkadedato`, false);
+                      form.setValue(`yrkesskader.${index}.skadedato`, undefined);
                     }
                   },
                 }}
@@ -145,17 +145,6 @@ export const OpprettYrkesskade = ({ form }: Props) => {
         size="xsmall"
         icon={<PlusIcon aria-hidden />}
         className="fit-content"
-        /*onClick={() =>
-          append({
-            kilde: 'REGISTER',
-            skadeart: skadeartOptions[0],
-            diagnose: diagnoseOptions[0],
-            skadebeskrivelse: diagnoseTilSkadebeskrivelse[diagnoseOptions[0]],
-            yrkesskadeRegisterKilde: 'KOMPYS',
-            harVedtaksdato: true,
-            vedtaksdato: formaterDatoForBackend(subDays(new Date(), 8)),
-          })
-        }*/
         onClick={() => {
           const harSøknad = yrkesskader?.some((y) => y.kilde === 'SØKNAD');
           if (harSøknad) {
@@ -166,8 +155,8 @@ export const OpprettYrkesskade = ({ form }: Props) => {
               diagnose: diagnoseOptions[0],
               skadebeskrivelse: diagnoseTilSkadebeskrivelse[diagnoseOptions[0]],
               yrkesskadeRegisterKilde: 'KOMPYS',
-              harVedtaksdato: false,
-              vedtaksdato: undefined,
+              harSkadedato: false,
+              skadedato: undefined,
             });
           } else {
             append({
@@ -177,8 +166,8 @@ export const OpprettYrkesskade = ({ form }: Props) => {
               diagnose: undefined,
               skadebeskrivelse: undefined,
               yrkesskadeRegisterKilde: undefined,
-              harVedtaksdato: false,
-              vedtaksdato: undefined,
+              harSkadedato: false,
+              skadedato: undefined,
             });
           }
         }}

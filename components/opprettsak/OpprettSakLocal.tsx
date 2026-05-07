@@ -67,8 +67,8 @@ interface YrkesskadeOppføring {
   diagnose?: string;
   skadeart?: string;
   skadebeskrivelse?: string;
-  harVedtaksdato?: boolean;
-  vedtaksdato?: string;
+  harSkadedato?: boolean;
+  skadedato?: string;
 }
 
 type Institusjon = 'fengsel' | 'sykehus';
@@ -296,7 +296,7 @@ export const OpprettSakLocal = () => {
             skadeart: y.skadeart ?? '',
             diagnose: y.diagnose ?? '',
             skadebeskrivelse: y.skadebeskrivelse ?? '',
-            vedtaksdato: y.vedtaksdato ?? null,
+            skadedato: y.skadedato ?? null,
             harYrkesskade: false,
           };
         }
