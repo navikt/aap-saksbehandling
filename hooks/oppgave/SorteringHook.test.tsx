@@ -6,7 +6,7 @@ import { InnloggetBrukerContextProvider } from 'context/InnloggetBrukerContext';
 import { ReactNode } from 'react';
 
 describe('SorteringHook', () => {
-  const mockBruker = { navn: 'Test Bruker', NAVident: 'Z123456' };
+  const mockBruker = { navn: 'Test Bruker', NAVident: 'Z123456', roller: [] };
   const scope = 'test';
 
   beforeEach(() => {
@@ -135,8 +135,8 @@ describe('SorteringHook', () => {
   });
 
   test('skal isolere sorteringstilstand per bruker', () => {
-    const bruker1 = { navn: 'Bruker 1', NAVident: 'Z111111' };
-    const bruker2 = { navn: 'Bruker 2', NAVident: 'Z222222' };
+    const bruker1 = { navn: 'Bruker 1', NAVident: 'Z111111', roller: [] };
+    const bruker2 = { navn: 'Bruker 2', NAVident: 'Z222222', roller: [] };
 
     const wrapper1 = ({ children }: { children: ReactNode }) => (
       <InnloggetBrukerContextProvider bruker={bruker1}>{children}</InnloggetBrukerContextProvider>

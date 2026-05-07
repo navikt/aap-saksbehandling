@@ -640,3 +640,13 @@ export function lagEnumObjektFraUnionType<UnionType extends string>(o: { [P in U
 } {
   return o;
 }
+
+export enum Roller {
+  BESLUTTER = 'Beslutter',
+  LES = 'Les',
+  SAKSBEHANDLER_OPPFØLGING = 'Veileder',
+  KVALITETSSIKRER = 'Kvalitetssikrer',
+  SAKSBEHANDLER_NASJONAL = 'Saksbehandler',
+  DRIFT = 'Drift',
+  PRODUKSJONSSTYRING = 'Produksjonsstyring',
+}

@@ -193,7 +193,6 @@ export const SamordningGradering = ({
               modalOnClose={() => setModalForOppfølgingsoppgaveState(false)}
               successfullOpprettelse={handleSuccess}
               finnTidligsteVirkningstidspunkt={finnTidligsteVirkningstidspunkt()}
-              brukerHarNayTilgang={true}
             />
           </Modal.Body>
         </Modal>

@@ -1,64 +1,52 @@
 import 'server-only';
 
-import { validateAzureToken } from '@navikt/oasis';
+import { validateAzureToken, ValidationResult } from '@navikt/oasis';
 import { headers } from 'next/headers';
 
 import { getAccessTokenOrRedirectToLogin } from './azuread';
 import { isDev, isLocal } from 'lib/utils/environment';
+import { Roller } from 'lib/types/types';
 
 export interface BrukerInformasjon {
   navn: string;
   NAVident?: string;
+  roller: Roller[];
 }
 
 const lokaltOverstyrtBruker = isLocal();
+const lokaltOverstyrteRoller = [
+  Roller.BESLUTTER,
+  Roller.KVALITETSSIKRER,
+  Roller.LES,
+  Roller.SAKSBEHANDLER_NASJONAL,
+  Roller.SAKSBEHANDLER_OPPFØLGING,
+  Roller.DRIFT,
+  Roller.PRODUKSJONSSTYRING,
+];
 export async function hentInnloggetBrukerInformasjon(): Promise<BrukerInformasjon> {
   if (lokaltOverstyrtBruker) {
-    return { navn: 'Iren Panikk', NAVident: 'z123456' };
+    return { navn: 'Iren Panikk', NAVident: 'z123456', roller: lokaltOverstyrteRoller };
   }
   const requestHeaders = await headers();
   const token = getAccessTokenOrRedirectToLogin(requestHeaders);
 
   const validationResult = await validateAzureToken(token);
   if (validationResult.ok) {
-    return { navn: validationResult.payload.name ?? '', NAVident: validationResult.payload.NAVident };
+    return {
+      navn: validationResult.payload.name ?? '',
+      NAVident: validationResult.payload.NAVident,
+      roller: hentRollerForBruker(validationResult),
+    };
   }
-  return { navn: 'Fant ikke bruker' };
+  return { navn: 'Fant ikke bruker', roller: [] };
 }
 
-export enum Roller {
-  BESLUTTER = 'Beslutter',
-  LES = 'Les',
-  SAKSBEHANDLER_OPPFØLGING = 'Veileder',
-  KVALITETSSIKRER = 'Kvalitetssikrer',
-  SAKSBEHANDLER_NASJONAL = 'Saksbehandler',
-  DRIFT = 'Drift',
-  PRODUKSJONSSTYRING = 'Produksjonsstyring',
-}
-
-const lokaltOverstyrteRoller = isLocal();
-export async function hentRollerForBruker(): Promise<Roller[]> {
-  if (lokaltOverstyrteRoller) {
-    return [
-      Roller.BESLUTTER,
-      Roller.KVALITETSSIKRER,
-      Roller.LES,
-      Roller.SAKSBEHANDLER_NASJONAL,
-      Roller.SAKSBEHANDLER_OPPFØLGING,
-      Roller.DRIFT,
-      Roller.PRODUKSJONSSTYRING,
-    ];
-  }
-  const requestHeaders = await headers();
-  const token = getAccessTokenOrRedirectToLogin(requestHeaders);
-
-  const JWTVerifyResult = await validateAzureToken(token);
-
+function hentRollerForBruker(validationResult: ValidationResult): Roller[] {
   const isDevelopment = isDev();
 
   let roller: Roller[] = [];
-  if (JWTVerifyResult.ok) {
-    const grupper = JWTVerifyResult.payload.groups as string[];
+  if (validationResult.ok) {
+    const grupper = validationResult.payload.groups as string[];
     grupper.forEach((gruppe) => {
       const rolle = isDevelopment
         ? mapRollerFraTokenTilKelvinRollerDev(gruppe)

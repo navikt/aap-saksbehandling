@@ -11,7 +11,7 @@ import { InnloggetBrukerContextProvider } from 'context/InnloggetBrukerContext';
 
 function renderMedInnloggetBruker(ui: ReactElement) {
   return render(
-    <InnloggetBrukerContextProvider bruker={{ NAVident: 'Z000000', navn: 'Test Testesen' }}>
+    <InnloggetBrukerContextProvider bruker={{ NAVident: 'Z000000', navn: 'Test Testesen', roller: [] }}>
       {ui}
     </InnloggetBrukerContextProvider>
   );

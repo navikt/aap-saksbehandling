@@ -9,6 +9,7 @@ import { FeatureFlagProvider } from 'context/UnleashContext';
 import { mockedFlags } from 'lib/services/unleash/unleashToggles';
 import { InnloggetBrukerContextProvider } from 'context/InnloggetBrukerContext';
 import { OverstyrTildelingContextProvider } from 'context/saksbehandling/OverstyrTildelingContext';
+import { Roller } from 'lib/types/types';
 
 afterEach(() => {
   cleanup();
@@ -19,7 +20,7 @@ const tomorrow = format(addDays(new Date(), 1), 'yyyy-MM-dd');
 
 export function customRender(ui: ReactElement) {
   return render(
-    <InnloggetBrukerContextProvider bruker={{ NAVident: 'Z000000', navn: 'Test Testesen' }}>
+    <InnloggetBrukerContextProvider bruker={{ NAVident: 'Z000000', navn: 'Test Testesen', roller: [] }}>
       <FeatureFlagProvider flags={mockedFlags}>
         <IngenFlereOppgaverModalContextProvider>
           <OverstyrTildelingContextProvider>
@@ -65,13 +66,37 @@ export function customRenderWithSøknadstidspunkt(ui: ReactElement, søknadstids
 
 export function customRenderWithTildelOppgaveContext(ui: ReactElement, visModal: boolean, bruker?: string) {
   render(
-    <InnloggetBrukerContextProvider bruker={{ NAVident: bruker || 'Z000000', navn: 'Test Testesen' }}>
+    <InnloggetBrukerContextProvider bruker={{ NAVident: bruker || 'Z000000', navn: 'Test Testesen', roller: [] }}>
       <FeatureFlagProvider flags={mockedFlags}>
         <TildelOppgaverContext.Provider
           value={{ oppgaveIder: [], setOppgaveIder: () => {}, visModal, setVisModal: () => {} }}
         >
           {ui}
         </TildelOppgaverContext.Provider>
+      </FeatureFlagProvider>
+    </InnloggetBrukerContextProvider>
+  );
+}
+
+export function customRenderMedRoller(ui: ReactElement, roller: Roller[]) {
+  return render(
+    <InnloggetBrukerContextProvider bruker={{ NAVident: 'Z000000', navn: 'Test Testesen', roller }}>
+      <FeatureFlagProvider flags={mockedFlags}>
+        <IngenFlereOppgaverModalContextProvider>
+          <OverstyrTildelingContextProvider>
+            <SakContextProvider
+              sak={{
+                saksnummer: '12345',
+                ident: '12345678910',
+                opprettetTidspunkt: today,
+                periode: { fom: today, tom: tomorrow },
+                virkningsTidspunkt: today,
+              }}
+            >
+              {ui}
+            </SakContextProvider>
+          </OverstyrTildelingContextProvider>
+        </IngenFlereOppgaverModalContextProvider>
       </FeatureFlagProvider>
     </InnloggetBrukerContextProvider>
   );

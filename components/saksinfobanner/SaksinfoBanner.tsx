@@ -28,20 +28,9 @@ interface Props {
   oppgave?: Oppgave;
   flyt?: FlytGruppe[];
   visning?: FlytVisning;
-  brukerKanSaksbehandle?: boolean;
-  brukerErBeslutter?: boolean;
 }
 
-export const SaksinfoBanner = ({
-  personInformasjon,
-  sak,
-  behandling,
-  oppgave,
-  flyt,
-  visning,
-  brukerKanSaksbehandle,
-  brukerErBeslutter,
-}: Props) => {
+export const SaksinfoBanner = ({ personInformasjon, sak, behandling, oppgave, flyt, visning }: Props) => {
   const brukerInformasjon = useInnloggetBruker();
   const [visHarUlesteDokumenter, settVisHarUlesteDokumenter] = useState(!!oppgave?.harUlesteDokumenter);
   const erReservertAvInnloggetBruker = brukerInformasjon?.NAVident === oppgave?.reservertAv;
@@ -166,8 +155,6 @@ export const SaksinfoBanner = ({
             behandling={behandling}
             oppgave={oppgave}
             brukerInformasjon={brukerInformasjon}
-            brukerKanSaksbehandle={brukerKanSaksbehandle}
-            brukerErBeslutter={brukerErBeslutter}
           />
         </HStack>
       )}

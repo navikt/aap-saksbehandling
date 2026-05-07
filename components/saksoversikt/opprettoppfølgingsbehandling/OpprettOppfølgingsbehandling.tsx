@@ -15,10 +15,10 @@ import { erDatoIFremtiden, validerDato } from 'lib/validation/dateValidation';
 import { Behovstype } from 'lib/utils/form';
 import { Kort } from 'components/kort/Kort';
 import { useInnloggetBruker } from 'hooks/BrukerHook';
+import { brukerharNayTilgang } from 'lib/utils/innloggetBruker';
 
 interface Props {
   saksnummer: string;
-  brukerHarNayTilgang: boolean;
   modalOnClose?: () => void;
   successfullOpprettelse?: () => void;
   finnTidligsteVirkningstidspunkt?: string;
@@ -47,7 +47,6 @@ export const OpprettOppfølgingsBehandling = ({
   finnTidligsteVirkningstidspunkt,
   behandlingsreferanse,
   behovsType,
-  brukerHarNayTilgang,
 }: Props) => {
   const erOppfølgingsoppgaveForSamordningGradering = behovsType === Behovstype.AVKLAR_SAMORDNING_GRADERING;
   const defaultValues: DefaultValues = {
@@ -61,6 +60,7 @@ export const OpprettOppfølgingsBehandling = ({
 
   const router = useRouter();
   const brukerInformasjon = useInnloggetBruker();
+  const brukerHarNayTilgang = brukerharNayTilgang(brukerInformasjon);
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>();

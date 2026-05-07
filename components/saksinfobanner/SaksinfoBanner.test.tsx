@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
-import { DetaljertBehandling, FlytVisning, SakPersoninfo, SaksInfo } from 'lib/types/types';
+import { DetaljertBehandling, FlytVisning, Roller, SakPersoninfo, SaksInfo } from 'lib/types/types';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Oppgave } from 'lib/types/oppgaveTypes';
@@ -9,7 +9,7 @@ import {
   NoNavAapOppgaveOppgaveDtoStatus,
   NoNavAapOppgaveReturInformasjonStatus,
 } from '@navikt/aap-oppgave-typescript-types';
-import { customRender } from 'lib/test/CustomRender';
+import { customRender, customRenderMedRoller } from 'lib/test/CustomRender';
 
 const personInformasjon: SakPersoninfo = { navn: 'Peder Ås', fnr: '12345678910' };
 const user = userEvent.setup();
@@ -165,14 +165,9 @@ describe('SaksinfoBanner på behandling siden', () => {
   });
 
   it('menyvalg for å trekke søknad vises for førstegangsbehandling', async () => {
-    customRender(
-      <SaksinfoBanner
-        personInformasjon={personInformasjon}
-        sak={sak}
-        behandling={behandling}
-        visning={visning}
-        brukerKanSaksbehandle={true}
-      />
+    customRenderMedRoller(
+      <SaksinfoBanner personInformasjon={personInformasjon} sak={sak} behandling={behandling} visning={visning} />,
+      [Roller.SAKSBEHANDLER_NASJONAL]
     );
     await user.click(screen.getByRole('button', { name: 'Saksmeny' }));
     expect(screen.getByRole('button', { name: 'Trekk søknad' })).toBeVisible();
@@ -180,27 +175,21 @@ describe('SaksinfoBanner på behandling siden', () => {
 
   it('menyvalg for å trekke søknad vises ikke hvis bruker ikke har saksbehandlertilgang', async () => {
     customRender(
-      <SaksinfoBanner
-        personInformasjon={personInformasjon}
-        sak={sak}
-        behandling={behandling}
-        visning={visning}
-        brukerKanSaksbehandle={false}
-      />
+      <SaksinfoBanner personInformasjon={personInformasjon} sak={sak} behandling={behandling} visning={visning} />
     );
     await user.click(screen.getByRole('button', { name: 'Saksmeny' }));
     expect(screen.queryByRole('button', { name: 'Trekk søknad' })).not.toBeInTheDocument();
   });
 
   it('menyvalg for å trekke søknad vises ikke for en avsluttet førstegangsbehandling', async () => {
-    customRender(
+    customRenderMedRoller(
       <SaksinfoBanner
         personInformasjon={personInformasjon}
         sak={avsluttetSak}
         behandling={avsluttetBehandling}
         visning={visning}
-        brukerKanSaksbehandle={true}
-      />
+      />,
+      [Roller.SAKSBEHANDLER_OPPFØLGING]
     );
     await user.click(screen.getByRole('button', { name: 'Saksmeny' }));
     expect(screen.queryByRole('button', { name: 'Trekk søknad' })).not.toBeInTheDocument();
@@ -220,14 +209,14 @@ describe('SaksinfoBanner på behandling siden', () => {
   });
 
   it('menyvalg for å overstyre startstidspunkt vises ikke hvis behandling er iverksatt', async () => {
-    customRender(
+    customRenderMedRoller(
       <SaksinfoBanner
         personInformasjon={personInformasjon}
         sak={sak}
         behandling={{ ...behandling, status: 'IVERKSETTES' }}
         visning={visning}
-        brukerKanSaksbehandle={true}
-      />
+      />,
+      [Roller.SAKSBEHANDLER_OPPFØLGING]
     );
 
     await user.click(screen.getByRole('button', { name: 'Saksmeny' }));
@@ -235,14 +224,14 @@ describe('SaksinfoBanner på behandling siden', () => {
   });
 
   it('menyvalg for å sette markeringer på behandling vises', async () => {
-    customRender(
+    customRenderMedRoller(
       <SaksinfoBanner
         personInformasjon={personInformasjon}
         sak={sak}
         behandling={{ ...behandling, status: 'IVERKSETTES' }}
         visning={visning}
-        brukerKanSaksbehandle={true}
-      />
+      />,
+      [Roller.SAKSBEHANDLER_OPPFØLGING]
     );
 
     await user.click(screen.getByRole('button', { name: 'Saksmeny' }));
