@@ -68,9 +68,6 @@ export const SkriveKlageBrevMedDataFetching = async ({
     return <BrevOppsummering sendteBrev={sendteBrev} avbrutteBrev={avbrytteBrev} />;
   }
 
-  if (!brev?.brev) {
-    return null;
-  }
   const readOnlyBrev = aktivtSteg === 'BREV' && !brev.harTilgangTilÅSendeBrev;
 
   const behovstype = skrivBrevBehovstype(brev.avklaringsbehovKode);
