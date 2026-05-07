@@ -6,13 +6,15 @@ import { RedigerMeldekortModal } from 'components/saksoversikt/meldekortoversikt
 import { MeldeperiodeMedMeldekortDto } from 'lib/types/types';
 
 const meldekort: MeldeperiodeMedMeldekortDto = {
+  tidligereMeldekort: [],
   meldeperiode: {
     fom: '2025-01-06',
     tom: '2025-01-19',
-  },
+  }
 };
 
 const meldekortMedDager: MeldeperiodeMedMeldekortDto = {
+  tidligereMeldekort: [],
   meldeperiode: {
     fom: '2025-01-06',
     tom: '2025-01-19',
@@ -36,7 +38,8 @@ const meldekortMedDager: MeldeperiodeMedMeldekortDto = {
       { dato: '2025-01-18', timerArbeidet: 0 },
       { dato: '2025-01-19', timerArbeidet: 0 },
     ],
-  },
+    journalpostId: '',
+  }
 };
 
 describe('RedigerMeldekortModal', () => {

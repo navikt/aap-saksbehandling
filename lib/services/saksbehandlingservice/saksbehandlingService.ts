@@ -142,7 +142,7 @@ export const hentSakPersoninfo = async (saksnummer: string): Promise<SakPersonin
   if (isSuccess(res)) {
     return res.data;
   } else {
-    return { fnr: 'Ukjent', navn: 'Ukjent' };
+    return { personReferanse: '123', fnr: 'Ukjent', navn: 'Ukjent' };
   }
 };
 
