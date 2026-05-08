@@ -76,6 +76,7 @@ export const OpprettRevurdering = ({
     beskrivelse: {
       type: 'textarea',
       label: 'Hva er årsaken?',
+      description: 'Utdyp så det er tydelig for andre i Kelvin hva som er årsak til vurderingsbehovet',
       rules: {
         required: `Skriv litt om hvorfor du skal ${erFørstegangsbehandling ? 'opprette vurdering' : 'revurdere saken'}`,
       },
