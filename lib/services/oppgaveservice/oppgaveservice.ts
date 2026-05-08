@@ -25,13 +25,17 @@ import {
   NoNavAapOppgaveOppgaveDtoBehandlingstype,
   NoNavAapOppgaveOppgaveDtoStatus,
 } from '@navikt/aap-oppgave-typescript-types';
+import { CACHE_1_TIME, genererTagMedNavIdent } from 'lib/services/cache';
 
 const oppgaveApiBaseURL = process.env.OPPGAVE_API_BASE_URL;
 const oppgaveApiScope = process.env.OPPGAVE_API_SCOPE ?? '';
 
 export const hentKøer = async (enheter: string[]) => {
   const url = `${oppgaveApiBaseURL}/filter?${queryParamsArray('enheter', enheter)}`;
-  return await apiFetch<Kø[]>(url, oppgaveApiScope, 'GET');
+  return await apiFetch<Kø[]>(url, oppgaveApiScope, 'GET', undefined, {
+    revalidate: CACHE_1_TIME,
+    tags: [await genererTagMedNavIdent('køer')],
+  });
 };
 
 export const hentOppgaverForFilter = async (data: OppgavelisteRequest) => {
@@ -88,7 +92,11 @@ export const hentMineOppgaver = async (queryParams: MineOppgaverQueryParams) => 
 
 export async function hentEnheter() {
   const url = `${oppgaveApiBaseURL}/enheter`;
-  return await apiFetch<Array<Enhet>>(url, oppgaveApiScope, 'GET');
+
+  return await apiFetch<Array<Enhet>>(url, oppgaveApiScope, 'GET', undefined, {
+    revalidate: CACHE_1_TIME,
+    tags: [await genererTagMedNavIdent('enheter')],
+  });
 }
 export async function synkroniserEnhetPåOppgave(data: EnhetSynkroniseringOppgave) {
   const url = `${oppgaveApiBaseURL}/synkroniser-enhet-paa-oppgave`;

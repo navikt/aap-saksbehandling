@@ -2,12 +2,14 @@ import 'server-only';
 
 import { headers } from 'next/headers';
 
-import { getAccessTokenOrRedirectToLogin, validerToken } from './azuread';
+import { decodeJwt } from 'jose';
+
+import { getAccessTokenOrRedirectToLogin } from './azuread';
 import { isDev, isLocal } from 'lib/utils/environment';
 
 export interface BrukerInformasjon {
   navn: string;
-  NAVident?: string;
+  NAVident: string;
 }
 
 const lokaltOverstyrtBruker = isLocal();
@@ -18,8 +20,8 @@ export async function hentBrukerInformasjon(): Promise<BrukerInformasjon> {
   const requestHeaders = await headers();
   const token = getAccessTokenOrRedirectToLogin(requestHeaders);
 
-  const JWTVerifyResult = await validerToken(token);
-  return { navn: JWTVerifyResult.payload.name as string, NAVident: JWTVerifyResult.payload.NAVident as string };
+  const payload = decodeJwt(token);
+  return { navn: payload.name as string, NAVident: payload.NAVident as string };
 }
 
 export enum Roller {
@@ -48,9 +50,8 @@ export async function hentRollerForBruker(): Promise<Roller[]> {
   const requestHeaders = await headers();
   const token = getAccessTokenOrRedirectToLogin(requestHeaders);
 
-  const JWTVerifyResult = await validerToken(token);
-
-  const grupper = JWTVerifyResult.payload.groups as string[];
+  const payload = decodeJwt(token);
+  const grupper = payload.groups as string[];
 
   const isDevelopment = isDev();
 
