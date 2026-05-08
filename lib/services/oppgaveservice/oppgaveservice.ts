@@ -25,18 +25,16 @@ import {
   NoNavAapOppgaveOppgaveDtoBehandlingstype,
   NoNavAapOppgaveOppgaveDtoStatus,
 } from '@navikt/aap-oppgave-typescript-types';
-import { hentBrukerInformasjon } from 'lib/services/azure/azureUserService';
-import { CACHE_1_TIME } from 'lib/services/cache';
+import { CACHE_1_TIME, genererTagMedNavIdent } from 'lib/services/cache';
 
 const oppgaveApiBaseURL = process.env.OPPGAVE_API_BASE_URL;
 const oppgaveApiScope = process.env.OPPGAVE_API_SCOPE ?? '';
 
 export const hentKøer = async (enheter: string[]) => {
   const url = `${oppgaveApiBaseURL}/filter?${queryParamsArray('enheter', enheter)}`;
-  const brukerInformasjon = await hentBrukerInformasjon();
   return await apiFetch<Kø[]>(url, oppgaveApiScope, 'GET', undefined, {
     revalidate: CACHE_1_TIME,
-    tags: [`${brukerInformasjon.NAVident}-køer`],
+    tags: [await genererTagMedNavIdent('køer')],
   });
 };
 
@@ -94,10 +92,10 @@ export const hentMineOppgaver = async (queryParams: MineOppgaverQueryParams) => 
 
 export async function hentEnheter() {
   const url = `${oppgaveApiBaseURL}/enheter`;
-  const brukerInformasjon = await hentBrukerInformasjon();
+
   return await apiFetch<Array<Enhet>>(url, oppgaveApiScope, 'GET', undefined, {
     revalidate: CACHE_1_TIME,
-    tags: [`${brukerInformasjon.NAVident}-enheter`],
+    tags: [await genererTagMedNavIdent('enheter')],
   });
 }
 export async function synkroniserEnhetPåOppgave(data: EnhetSynkroniseringOppgave) {
