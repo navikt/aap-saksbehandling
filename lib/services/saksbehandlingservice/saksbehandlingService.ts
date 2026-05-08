@@ -104,9 +104,7 @@ import { Behovstype } from 'lib/utils/form';
 import { isLocal } from 'lib/utils/environment';
 import { notFound } from 'next/navigation';
 import { ingenTilgang } from 'lib/utils/ingenTilgang';
-
-// Denne kan vi utvide med flere cache const etter hvert som vi legger på mer caching
-const CACHE_1_TIME = 3600;
+import { CACHE_1_TIME } from 'lib/services/cache';
 
 const saksbehandlingApiBaseUrl = process.env.BEHANDLING_API_BASE_URL;
 const saksbehandlingApiScope = process.env.BEHANDLING_API_SCOPE ?? '';

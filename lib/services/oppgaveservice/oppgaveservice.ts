@@ -26,11 +26,10 @@ import {
   NoNavAapOppgaveOppgaveDtoStatus,
 } from '@navikt/aap-oppgave-typescript-types';
 import { hentBrukerInformasjon } from 'lib/services/azure/azureUserService';
+import { CACHE_1_TIME } from 'lib/services/cache';
 
 const oppgaveApiBaseURL = process.env.OPPGAVE_API_BASE_URL;
 const oppgaveApiScope = process.env.OPPGAVE_API_SCOPE ?? '';
-
-const CACHE_1_TIME = 3600;
 
 export const hentKøer = async (enheter: string[]) => {
   const url = `${oppgaveApiBaseURL}/filter?${queryParamsArray('enheter', enheter)}`;
