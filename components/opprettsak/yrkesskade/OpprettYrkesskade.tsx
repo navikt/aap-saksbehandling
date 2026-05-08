@@ -8,7 +8,7 @@ import { JaEllerNei } from 'lib/utils/form';
 import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
 import { useEffect } from 'react';
 import { formaterDatoForBackend } from 'lib/utils/date';
-import { subDays } from 'date-fns';
+import { subDays, subMonths } from 'date-fns';
 
 interface Props {
   form: UseFormReturn<OpprettSakFormFields>;
@@ -93,8 +93,11 @@ export const OpprettYrkesskade = ({ form }: Props) => {
                       form.setValue(`yrkesskader.${index}.harYrkesskade`, JaEllerNei.Nei);
                       form.setValue(`yrkesskader.${index}.skadeart`, skadeartOptions[0]);
                       form.setValue(`yrkesskader.${index}.diagnose`, diagnoseOptions[0]);
-                      form.setValue(`yrkesskader.${index}.skadebeskrivelse`, diagnoseTilSkadebeskrivelse[diagnoseOptions[0]]);
-                      form.setValue(`yrkesskader.${index}.harSkadedato`, false);
+                      form.setValue(
+                        `yrkesskader.${index}.skadebeskrivelse`,
+                        diagnoseTilSkadebeskrivelse[diagnoseOptions[0]]
+                      );
+                      form.setValue(`yrkesskader.${index}.harSkadedato`, true);
                       form.setValue(`yrkesskader.${index}.skadedato`, undefined);
                     } else {
                       form.setValue(`yrkesskader.${index}.harYrkesskade`, JaEllerNei.Ja);
@@ -155,8 +158,8 @@ export const OpprettYrkesskade = ({ form }: Props) => {
               diagnose: diagnoseOptions[0],
               skadebeskrivelse: diagnoseTilSkadebeskrivelse[diagnoseOptions[0]],
               yrkesskadeRegisterKilde: 'KOMPYS',
-              harSkadedato: false,
-              skadedato: undefined,
+              harSkadedato: true,
+              skadedato: formaterDatoForBackend(subMonths(new Date(), 3)),
             });
           } else {
             append({
