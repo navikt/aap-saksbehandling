@@ -14,7 +14,7 @@ interface Props {
 }
 
 export const EtableringAvEgenVirksomhetMedDatafetching = async ({ behandlingsreferanse, stegData }: Props) => {
-  const [grunnlag] = await Promise.all([hentEtableringEgenVirksomhetGrunnlag(behandlingsreferanse)]);
+  const grunnlag = await hentEtableringEgenVirksomhetGrunnlag(behandlingsreferanse);
 
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;

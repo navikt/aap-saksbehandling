@@ -49,6 +49,42 @@ describe('apiFetch', () => {
     );
   });
 
+  it('should pass revalidate and tags in next config when cache options provided', async () => {
+    vi.mocked(fetch).mockResolvedValueOnce({
+      ok: true,
+      status: 200,
+      headers: new Headers({ 'content-type': 'application/json' }),
+      json: async () => ({}),
+    } as Response);
+
+    await apiFetch(mockUrl, mockScope, 'GET', undefined, { revalidate: 60, tags: ['my-tag'] });
+
+    expect(fetch).toHaveBeenCalledWith(
+      mockUrl,
+      expect.objectContaining({
+        next: { revalidate: 60, tags: ['my-tag'] },
+      })
+    );
+  });
+
+  it('should default to revalidate: 0 when no cache options provided', async () => {
+    vi.mocked(fetch).mockResolvedValueOnce({
+      ok: true,
+      status: 200,
+      headers: new Headers({ 'content-type': 'application/json' }),
+      json: async () => ({}),
+    } as Response);
+
+    await apiFetch(mockUrl, mockScope);
+
+    expect(fetch).toHaveBeenCalledWith(
+      mockUrl,
+      expect.objectContaining({
+        next: expect.objectContaining({ revalidate: 0 }),
+      })
+    );
+  });
+
   it('should handle 204 No Content response', async () => {
     vi.mocked(fetch).mockResolvedValueOnce({
       ok: true,

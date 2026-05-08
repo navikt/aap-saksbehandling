@@ -4,6 +4,8 @@ import { validateAzureToken, ValidationResult } from '@navikt/oasis';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 
+import { decodeJwt } from 'jose';
+
 import { getAccessTokenOrRedirectToLogin } from './azuread';
 import { isDev, isLocal } from 'lib/utils/environment';
 import { Roller } from 'lib/types/types';
@@ -11,7 +13,7 @@ import { logError } from 'lib/serverutlis/logger';
 
 export interface BrukerInformasjon {
   navn: string;
-  NAVident?: string;
+  NAVident: string;
   roller: Roller[];
 }
 
@@ -25,6 +27,7 @@ const lokaltOverstyrteRoller = [
   Roller.DRIFT,
   Roller.PRODUKSJONSSTYRING,
 ];
+
 export async function hentInnloggetBrukerInformasjon(): Promise<BrukerInformasjon> {
   if (lokaltOverstyrtBruker) {
     return { navn: 'Iren Panikk', NAVident: 'z123456', roller: lokaltOverstyrteRoller };

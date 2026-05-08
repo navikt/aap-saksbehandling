@@ -11,7 +11,7 @@ import {
 } from '@navikt/aap-oppgave-typescript-types';
 import { customRender, customRenderMedRoller } from 'lib/test/CustomRender';
 
-const personInformasjon: SakPersoninfo = { navn: 'Peder Ås', fnr: '12345678910' };
+const personInformasjon: SakPersoninfo = { personReferanse: '1234', navn: 'Peder Ås', fnr: '12345678910' };
 const user = userEvent.setup();
 
 const sak: SaksInfo = {

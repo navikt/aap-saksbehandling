@@ -69,7 +69,7 @@ export const løsAvklaringsbehov = async (avklaringsBehov: LøsAvklaringsbehovP�
 };
 export const settPåVent = async (behandlingsreferanse: string, body: SettPåVentRequest) => {
   const url = `${postmottakApiBaseUrl}/api/behandling/${behandlingsreferanse}/sett-på-vent`;
-  return await apiFetch<unknown>(url, postmottakApiScope, 'POST', body, [`postmottak/flyt/${behandlingsreferanse}`]);
+  return await apiFetch<unknown>(url, postmottakApiScope, 'POST', body, { tags: [`postmottak/flyt/${behandlingsreferanse}`] });
 };
 export const hentVenteInformasjon = async (behandlingsreferanse: string) => {
   const url = `${postmottakApiBaseUrl}/api/behandling/${behandlingsreferanse}/vente-informasjon`;
