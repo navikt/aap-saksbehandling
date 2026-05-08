@@ -1,15 +1,11 @@
 import 'server-only';
-
-import { validateAzureToken, ValidationResult } from '@navikt/oasis';
 import { headers } from 'next/headers';
-import { redirect } from 'next/navigation';
 
-import { decodeJwt } from 'jose';
+import { decodeJwt, JWTPayload } from 'jose';
 
 import { getAccessTokenOrRedirectToLogin } from './azuread';
 import { isDev, isLocal } from 'lib/utils/environment';
 import { Roller } from 'lib/types/types';
-import { logError } from 'lib/serverutlis/logger';
 
 export interface BrukerInformasjon {
   navn: string;
@@ -35,34 +31,25 @@ export async function hentInnloggetBrukerInformasjon(): Promise<BrukerInformasjo
   const requestHeaders = await headers();
   const token = getAccessTokenOrRedirectToLogin(requestHeaders);
 
-  const validationResult = await validateAzureToken(token);
-  if (validationResult.ok) {
-    return {
-      navn: validationResult.payload.name ?? '',
-      NAVident: validationResult.payload.NAVident,
-      roller: hentRollerForBruker(validationResult),
-    };
-  }
-  logError('Feil ved uthenting av brukerinformasjon fra token', validationResult.error);
-  redirect(`/oauth2/login?redirect=${requestHeaders.get('x-path')}`);
+  const payload = decodeJwt(token);
+  return { navn: payload.name as string, NAVident: payload.NAVident as string, roller: hentRollerForBruker(payload) };
 }
 
-function hentRollerForBruker(validationResult: ValidationResult): Roller[] {
+function hentRollerForBruker(payload: JWTPayload): Roller[] {
   const isDevelopment = isDev();
 
   let roller: Roller[] = [];
-  if (validationResult.ok) {
-    const grupper = validationResult.payload.groups as string[];
-    grupper.forEach((gruppe) => {
-      const rolle = isDevelopment
-        ? mapRollerFraTokenTilKelvinRollerDev(gruppe)
-        : mapRollerFraTokenTilKelvinRollerProd(gruppe);
 
-      if (rolle) {
-        roller.push(rolle);
-      }
-    });
-  }
+  const grupper = payload.groups as string[];
+  grupper.forEach((gruppe) => {
+    const rolle = isDevelopment
+      ? mapRollerFraTokenTilKelvinRollerDev(gruppe)
+      : mapRollerFraTokenTilKelvinRollerProd(gruppe);
+
+    if (rolle) {
+      roller.push(rolle);
+    }
+  });
 
   return roller;
 }
