@@ -5360,6 +5360,8 @@ export interface components {
        * @example 2025-04-01
        */
       'f\u00F8dselsdato': string;
+      harYrkesskade: boolean;
+      'harYrkesskadeFraS\u00F8knad': boolean;
       inntekterPerAr?: components['schemas']['no.nav.aap.behandlingsflyt.InntektPer\u00C5rDto'][] | null;
       institusjoner: components['schemas']['no.nav.aap.behandlingsflyt.Institusjoner'];
       medlemskap: boolean;
@@ -5464,7 +5466,7 @@ export interface components {
        * @example 2025-04-01
        */
       'uf\u00F8regradTom'?: string | null;
-      yrkesskade: boolean;
+      yrkesskader: components['schemas']['no.nav.aap.behandlingsflyt.TestYrkesskadeDto'][];
     };
     'no.nav.aap.behandlingsflyt.PersonIdentRequest': {
       /** Format: uuid */
@@ -5481,6 +5483,24 @@ export interface components {
       fodselsdato: string;
       harRelasjon: boolean;
       skalFinnesIPDL: boolean;
+    };
+    'no.nav.aap.behandlingsflyt.TestYrkesskadeDto': {
+      diagnose?: string | null;
+      harYrkesskade: boolean;
+      kilde: string;
+      saksreferanse: string;
+      skadeart?: string | null;
+      skadebeskrivelse?: string | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      skadedato?: string | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      vedtaksdato?: string | null;
     };
     'no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_7.Aktivitetsplikt11_7GrunnlagDto': {
       'harSendtForh\u00E5ndsvarsel': boolean;
@@ -12087,6 +12107,7 @@ export interface components {
       vurdertAv: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.tidspunkt.YrkesskadeTilVurderingResponse': {
+      diagnose?: string | null;
       'grunnbel\u00F8p': components['schemas']['no.nav.aap.komponenter.verdityper.Bel\u00F8p'];
       kilde: string;
       referanse: string;
@@ -12097,6 +12118,16 @@ export interface components {
        * @example 2025-04-01
        */
       skadeDato: string;
+      skadeart?: string | null;
+      skadekombinasjoner?:
+        | components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.register.yrkesskade.SkadekombinasjonRegister'][]
+        | null;
+      skadekombinasjonerTekst?: string | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      vedtaksdato?: string | null;
     };
     'no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag': {
       brevGrunnlag: components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag.Brev'][];
@@ -15117,6 +15148,10 @@ export interface components {
       status: string;
       statusaarsak?: string | null;
     };
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.register.yrkesskade.SkadekombinasjonRegister': {
+      kroppsdel: string;
+      skadetype: string;
+    };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.arbeidsevne.flate.PeriodisertFastsettArbeidsevneDto': {
       /** Format: int32 */
       arbeidsevne: number;
@@ -15531,15 +15566,26 @@ export interface components {
       tom?: string | null;
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.RegistrertYrkesskade': {
+      diagnose?: string | null;
       kilde: string;
       ref: string;
       /** Format: int32 */
       saksnummer?: number | null;
+      skadeart?: string | null;
       /**
        * Format: date
        * @example 2025-04-01
        */
       skadedato?: string | null;
+      skadekombinasjoner?:
+        | components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.register.yrkesskade.SkadekombinasjonRegister'][]
+        | null;
+      skadekombinasjonerTekst?: string | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      vedtaksdato?: string | null;
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.SykdomsvurderingL\u00F8sningDto': {
       begrunnelse: string;

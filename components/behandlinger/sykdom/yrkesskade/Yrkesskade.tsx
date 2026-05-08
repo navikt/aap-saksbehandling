@@ -10,11 +10,13 @@ import { FormField } from 'components/form/FormField';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { FormEvent, useEffect } from 'react';
 import { YrkesskadeVurderingTabell } from 'components/behandlinger/sykdom/yrkesskade/YrkesskadeVurderingTabell';
+import { YrkesskadeVurderingTabellGammel } from 'components/behandlinger/sykdom/yrkesskade/YrkesskadeVurderingTabellGammel';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { parse } from 'date-fns';
 import { useFieldArray } from 'react-hook-form';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   grunnlag: YrkesskadeVurderingGrunnlag;
@@ -38,6 +40,11 @@ export interface YrkesskadeMedSkadeDatoSak {
   saksnummer?: number | null;
   erTilknyttet?: boolean;
   kilde: string;
+  vedtaksdato?: string | null;
+  skadeart?: string | null;
+  diagnose?: string | null;
+  skadekombinasjoner?: { kroppsdel: string; skadetype: string }[] | null;
+  skadekombinasjonerTekst?: string | null;
 }
 
 type DraftFormFields = Partial<YrkesskadeMedSkadeDatoFormFields>;
@@ -99,7 +106,7 @@ export const Yrkesskade = ({
           required: 'Du må svare på hvor stor andel av den nedsatte arbeidsevnen skyldes yrkesskadene',
           validate: (value) => {
             const valueAsNumber = Number(value);
-            if (isNaN(valueAsNumber)) {
+            if (Number.isNaN(valueAsNumber)) {
               return 'Prosent må være et tall';
             } else if (!erProsent(valueAsNumber)) {
               return 'Prosent kan bare være mellom 0 og 100';
@@ -182,6 +189,8 @@ export const Yrkesskade = ({
     })(event);
   };
 
+  const yrkesskadeNyeFelter = useFeatureFlag('YrkesskadeNyeFelter');
+
   return (
     <VilkårskortMedFormOgMellomlagring
       heading={'§ 11-22 AAP ved yrkesskade'}
@@ -200,22 +209,45 @@ export const Yrkesskade = ({
       visningActions={visningActions}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
+      {yrkesskadeNyeFelter && (
+        <div>
+          <Label size="medium">Relevante informasjon fra søknad</Label>
+          <p style={{ marginTop: 2, marginBottom: 0 }}>
+            Har du yrkesskade eller yrkessykdom som påvirker hvor mye du kan arbeide?{' '}
+            {grunnlag.opplysninger.oppgittYrkesskadeISøknad ? 'Ja' : 'Nei'}
+          </p>
+        </div>
+      )}
+
       <FormField form={form} formField={formFields.begrunnelse} />
       <FormField form={form} formField={formFields.erÅrsakssammenheng} horizontalRadio />
-      {erÅrsakssammenheng === JaEllerNei.Ja && (
+      {relevanteYrkesskadeSaker.length > 0 && (
         <>
           <VStack>
             <Label size={'small'}>
               Tilknytt eventuelle yrkesskader som er helt eller delvis årsak til den nedsatte arbeidsevnen.
             </Label>
-            <YrkesskadeVurderingTabell
-              form={form}
-              readOnly={formReadOnly}
-              yrkesskader={relevanteYrkesskadeSaker}
-              update={update}
-            />
+            {yrkesskadeNyeFelter ? (
+              <YrkesskadeVurderingTabell
+                form={form}
+                readOnly={formReadOnly}
+                yrkesskader={relevanteYrkesskadeSaker}
+                update={update}
+                erÅrsakssammenheng={erÅrsakssammenheng}
+              />
+            ) : (
+              <YrkesskadeVurderingTabellGammel
+                form={form}
+                readOnly={formReadOnly}
+                yrkesskader={relevanteYrkesskadeSaker}
+                update={update}
+              />
+            )}
           </VStack>
-          <FormField form={form} formField={formFields.andelAvNedsettelsen} className={'prosent_input'} />
+
+          {erÅrsakssammenheng !== JaEllerNei.Nei && (
+            <FormField form={form} formField={formFields.andelAvNedsettelsen} className={'prosent_input'} />
+          )}
         </>
       )}
     </VilkårskortMedFormOgMellomlagring>
@@ -244,6 +276,11 @@ function hentDefaultYrkesskadesakerFraVurderingerEllerGrunnlag(
         ...skade,
         erTilknyttet: !!alleredeTilknyttetYrkesskade,
         manuellYrkesskadeDato: alleredeTilknyttetYrkesskade?.manuellYrkesskadeDato,
+        vedtaksdato: skade.vedtaksdato,
+        skadeart: skade.skadeart,
+        diagnose: skade.diagnose,
+        skadekombinasjoner: skade.skadekombinasjoner,
+        skadekombinasjonerTekst: skade.skadekombinasjonerTekst,
       };
     }) || []
   );

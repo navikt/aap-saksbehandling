@@ -20,7 +20,11 @@ export const YrkesskadeMedDataFetching = async ({ behandlingsreferanse, stegData
     return <ApiException apiResponses={[yrkesskadeVurderingGrunnlag]} />;
   }
 
-  if (!skalViseSteg(stegData, yrkesskadeVurderingGrunnlag.data.yrkesskadeVurdering != null)) {
+  const grunnlag = yrkesskadeVurderingGrunnlag.data;
+  const harTidligereVurdering = grunnlag.yrkesskadeVurdering != null;
+  const harInnhentedeYrkesskader = (grunnlag.opplysninger?.innhentedeYrkesskader?.length ?? 0) > 0;
+
+  if (!skalViseSteg(stegData, harTidligereVurdering) && !harInnhentedeYrkesskader) {
     return null;
   }
 
