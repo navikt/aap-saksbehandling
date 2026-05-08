@@ -31,7 +31,6 @@ import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/u
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 import { IkkeVurderbarPeriode } from 'components/periodisering/IkkeVurderbarPeriode';
-import { Dato } from 'lib/types/Dato';
 
 interface Props {
   behandlingVersjon: number;
@@ -145,31 +144,6 @@ export const OvergangUforePeriodisert = ({
           </Link>
         </BodyLong>
 
-        {grunnlag.ikkeRelevantePerioder.map((periode) => (
-          <IkkeVurderbarPeriode
-            key={crypto.randomUUID()}
-            fom={parseISO(periode.fom)}
-            tom={periode.tom != null ? parseISO(periode.tom) : null}
-            alertMelding={
-              'Vilkåret kan ikke vurderes for denne perioden. For å vurdere vilkåret må § 11-5 være oppfylt, og § 11-6 ikke være oppfylt i samme periode'
-            }
-            foersteNyePeriodeFraDato={undefined}
-          ></IkkeVurderbarPeriode>
-        ))}
-
-        {!skalStegVurderes &&
-          nyeVurderingFields.map((vurdering) => (
-            <IkkeVurderbarPeriode
-              key={crypto.randomUUID()}
-              fom={new Dato(vurdering.fraDato).dato}
-              tom={null}
-              alertMelding={
-                'Vilkåret kan ikke vurderes for denne perioden. For å vurdere vilkåret må § 11-5 være oppfylt, og § 11-6 ikke være oppfylt i samme periode'
-              }
-              foersteNyePeriodeFraDato={undefined}
-            ></IkkeVurderbarPeriode>
-          ))}
-
         {grunnlag.sisteVedtatteVurderinger.map((vurdering) => (
           <TidligereVurderingExpandableCard
             key={crypto.randomUUID()}
@@ -218,12 +192,25 @@ export const OvergangUforePeriodisert = ({
               </NyVurderingExpandableCard>
             );
           })}
+
+        {!skalStegVurderes &&
+          nyeVurderingFields.map((vurdering, index) => (
+            <IkkeVurderbarPeriode
+              key={crypto.randomUUID()}
+              fom={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`)) ?? new Date()}
+              tom={null}
+              alertMelding={
+                'Vilkåret kan ikke vurderes for denne perioden. For å kunne vurdere vilkåret må § 11-5 ikke være oppfylt i samme periode, og brukeren må ha hatt en periode med ordinær AAP før § 11-17 perioden'
+              }
+              foersteNyePeriodeFraDato={undefined}
+            ></IkkeVurderbarPeriode>
+          ))}
       </VStack>
     </VilkårskortPeriodisert>
   );
 
   function getDefaultValuesFromGrunnlag(grunnlag: OvergangUforeGrunnlag): OvergangUforeForm {
-    if (trengerVurderingsForslag(grunnlag) /*&& grunnlag.ikkeRelevantePerioder.length === 0*/) {
+    if (trengerVurderingsForslag(grunnlag)) {
       return hentPerioderSomTrengerVurdering<OvergangUforeVurderingForm>(grunnlag, emptyOvergangUføreVurdering);
     }
 

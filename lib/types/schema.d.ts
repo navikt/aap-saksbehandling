@@ -11803,7 +11803,6 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.OvergangUf\u00F8reGrunnlagResponse': {
       'beh\u00F8verVurderinger': components['schemas']['no.nav.aap.komponenter.type.Periode'][];
-      gjeldendeBistandsbehovVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.bistand.BistandVurderingResponse'][];
       gjeldendeSykdsomsvurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomsvurderingResponse'][];
       'harTilgangTil\u00C5Saksbehandle': boolean;
       historiskeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.OvergangUf\u00F8reVurderingResponse'][];
@@ -16685,6 +16684,16 @@ export interface components {
       /** Format: double */
       timerArbeid: number;
     };
+    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.BehandlerDto': {
+      firstname?: string | null;
+      gateadresse?: string | null;
+      id?: string | null;
+      lastname?: string | null;
+      legekontor?: string | null;
+      postnummer?: string | null;
+      poststed?: string | null;
+      telefon?: string | null;
+    };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.BehandlingDetaljer': {
       ankeITrygderettenbehandlingOpprettet?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AnkeITrygderettenbehandlingOpprettetDetaljer'];
       ankebehandlingAvsluttet?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AnkebehandlingAvsluttetDetaljer'];
@@ -16735,6 +16744,18 @@ export interface components {
       kravgrunnlagReferanse: string;
       /** Format: int32 */
       versjon: number;
+    };
+    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.FastlegeDto': {
+      behandlerRef: string;
+      /** @enum {string|null} */
+      erRegistrertFastlegeRiktig?: 'Ja' | 'Nei' | null;
+      kontaktinformasjon: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.FastlegeKontaktInformasjonDto'];
+      navn: string;
+    };
+    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.FastlegeKontaktInformasjonDto': {
+      adresse?: string | null;
+      kontor?: string | null;
+      telefon?: string | null;
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ForeldrepengeVedtak': components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ForeldrepengeVedtakV0'];
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ForeldrepengeVedtakV0': {
@@ -17236,7 +17257,11 @@ export interface components {
       kommeTilbake?: 'Ja' | 'Nei' | 'VetIkke' | null;
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.S\u00F8knadV0': {
+      andreBehandlere?:
+        | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.BehandlerDto'][]
+        | null;
       andreUtbetalinger?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AndreUtbetalingerDto'];
+      fastlege?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.FastlegeDto'][] | null;
       medlemskap?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.S\u00F8knadMedlemskapDto'];
       oppgitteBarn?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.OppgitteBarn'];
       student?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.S\u00F8knadStudentDto'];

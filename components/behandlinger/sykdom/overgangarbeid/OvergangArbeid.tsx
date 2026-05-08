@@ -203,7 +203,7 @@ export const OvergangArbeid = ({
         vurderingerFields.map((vurdering, index) => (
           <IkkeVurderbarPeriode
             key={crypto.randomUUID()}
-            fom={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`)) ?? new Date('01.01.2020')}
+            fom={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`)) ?? new Date()}
             tom={null}
             alertMelding={
               'Vilkåret kan ikke vurderes for denne perioden. For å kunne vurdere vilkåret må § 11-5 ikke være oppfylt i samme periode, og brukeren må ha hatt en periode med ordinær AAP før § 11-17 perioden'
@@ -214,11 +214,3 @@ export const OvergangArbeid = ({
     </VilkårskortPeriodisert>
   );
 };
-
-/*
-              fom={
-                vurdering.fraDato !== null
-                  ? parseISO(vurdering.fraDato)
-                  : parseISO("2026-05-05")
-              } // TODO: FIX!
- */
