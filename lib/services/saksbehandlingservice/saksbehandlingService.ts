@@ -177,11 +177,11 @@ export const hentSiste = async (antall: number) => {
   return await apiFetch<SaksInfo[]>(url, saksbehandlingApiScope, 'GET');
 };
 
-export const hentAlleNavEnheter = async (behandlingsreferanse: string, input: NavEnhetRequest) => {
+export const hentAlleNavEnheter = async (behandlingsreferanse: string, input: NavEnhetRequest, navIdent: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/navenhet/${behandlingsreferanse}/finn`;
   return await apiFetch<Enhet[]>(url, saksbehandlingApiScope, 'POST', input, {
     revalidate: CACHE_1_TIME,
-    tags: ['nav-enheter'],
+    tags: [`${navIdent}-nav-enheter`],
   });
 };
 

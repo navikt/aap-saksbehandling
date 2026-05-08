@@ -25,6 +25,7 @@ import {
   NoNavAapOppgaveOppgaveDtoBehandlingstype,
   NoNavAapOppgaveOppgaveDtoStatus,
 } from '@navikt/aap-oppgave-typescript-types';
+import { hentBrukerInformasjon } from 'lib/services/azure/azureUserService';
 
 const oppgaveApiBaseURL = process.env.OPPGAVE_API_BASE_URL;
 const oppgaveApiScope = process.env.OPPGAVE_API_SCOPE ?? '';
@@ -33,9 +34,10 @@ const CACHE_1_TIME = 3600;
 
 export const hentKøer = async (enheter: string[]) => {
   const url = `${oppgaveApiBaseURL}/filter?${queryParamsArray('enheter', enheter)}`;
+  const brukerInformasjon = await hentBrukerInformasjon();
   return await apiFetch<Kø[]>(url, oppgaveApiScope, 'GET', undefined, {
     revalidate: CACHE_1_TIME,
-    tags: ['køer'],
+    tags: [`${brukerInformasjon.NAVident}-køer`],
   });
 };
 
@@ -93,9 +95,10 @@ export const hentMineOppgaver = async (queryParams: MineOppgaverQueryParams) => 
 
 export async function hentEnheter() {
   const url = `${oppgaveApiBaseURL}/enheter`;
+  const brukerInformasjon = await hentBrukerInformasjon();
   return await apiFetch<Array<Enhet>>(url, oppgaveApiScope, 'GET', undefined, {
     revalidate: CACHE_1_TIME,
-    tags: ['enheter'],
+    tags: [`${brukerInformasjon.NAVident}-enheter`],
   });
 }
 export async function synkroniserEnhetPåOppgave(data: EnhetSynkroniseringOppgave) {

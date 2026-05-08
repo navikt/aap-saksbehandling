@@ -7,7 +7,7 @@ import { isDev, isLocal } from 'lib/utils/environment';
 
 export interface BrukerInformasjon {
   navn: string;
-  NAVident?: string;
+  NAVident: string;
 }
 
 const lokaltOverstyrtBruker = isLocal();
