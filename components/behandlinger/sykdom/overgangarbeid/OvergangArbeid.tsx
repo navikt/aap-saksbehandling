@@ -217,3 +217,11 @@ export const OvergangArbeid = ({
     </VilkårskortPeriodisert>
   );
 };
+
+/*
+              fom={
+                vurdering.fraDato !== null
+                  ? parseISO(vurdering.fraDato)
+                  : parseISO("2026-05-05")
+              } // TODO: FIX!
+ */
