@@ -1,11 +1,10 @@
 import 'server-only';
+
 import { headers } from 'next/headers';
-
-import { decodeJwt, JWTPayload } from 'jose';
-
 import { getAccessTokenOrRedirectToLogin } from './azuread';
 import { isDev, isLocal } from 'lib/utils/environment';
 import { Roller } from 'lib/types/types';
+import { decodeJwt, JWTPayload } from 'jose';
 
 export interface BrukerInformasjon {
   navn: string;
