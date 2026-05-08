@@ -1,8 +1,9 @@
 import { describe, expect, it, vi } from 'vitest';
 import { OpprettOppfølgingsBehandling } from './OpprettOppfølgingsbehandling';
-import { render, screen } from 'lib/test/CustomRender';
+import { customRenderMedRoller, render, screen } from 'lib/test/CustomRender';
 import { userEvent } from '@testing-library/user-event';
 import createFetchMock from 'vitest-fetch-mock';
+import { Roller } from 'lib/types/types';
 
 const user = userEvent.setup();
 
@@ -11,13 +12,7 @@ fetchMock.enableMocks();
 
 describe('opprett oppfølgingsbehandling', () => {
   it('viser feilmelding om dato ikke settes, og verifiserer riktig kall til backend', async () => {
-    render(
-      <OpprettOppfølgingsBehandling
-        saksnummer="ABCDEFG"
-        brukerInformasjon={{ navn: 'Navn på bruker', NAVident: 'minident' }}
-        brukerHarNayTilgang={true}
-      />
-    );
+    customRenderMedRoller(<OpprettOppfølgingsBehandling saksnummer="ABCDEFG" />, [Roller.SAKSBEHANDLER_NASJONAL]);
 
     await user.click(screen.getByRole('button', { name: 'Bekreft' }));
 
@@ -53,19 +48,13 @@ describe('opprett oppfølgingsbehandling', () => {
     expect(jsonBody.melding.meldingType).toBe('OppfølgingsoppgaveV0');
     expect(jsonBody.melding.datoForOppfølging).toBe('2100-02-13');
     expect(jsonBody.melding.hvemSkalFølgeOpp).toBe('NasjonalEnhet');
-    expect(jsonBody.melding.reserverTilBruker).toBe('minident');
+    expect(jsonBody.melding.reserverTilBruker).toBe('Z000000');
 
     fetchMock.resetMocks();
   });
 
   it('om boksen for oppfølging ikke er avkrysset, så sendes null med i hvemskalfølgeopp', async () => {
-    render(
-      <OpprettOppfølgingsBehandling
-        saksnummer="ABCDEFG"
-        brukerInformasjon={{ navn: 'Navn på bruker', NAVident: 'minident' }}
-        brukerHarNayTilgang={false}
-      />
-    );
+    render(<OpprettOppfølgingsBehandling saksnummer="ABCDEFG" />);
 
     let datotekstboks = screen.getByRole('textbox', { name: 'Dato for oppfølging' });
 
@@ -97,13 +86,7 @@ describe('opprett oppfølgingsbehandling', () => {
   });
 
   it('hvis NAY skal følge opp og bruker ikke er NAY-saksbehandler, ikke vis reserver til meg-boksen', async () => {
-    render(
-      <OpprettOppfølgingsBehandling
-        saksnummer="ABCDEFG"
-        brukerInformasjon={{ navn: 'Navn på bruker', NAVident: 'minident' }}
-        brukerHarNayTilgang={false}
-      />
-    );
+    render(<OpprettOppfølgingsBehandling saksnummer="ABCDEFG" />);
 
     let datotekstboks = screen.getByRole('textbox', { name: 'Dato for oppfølging' });
 
@@ -127,13 +110,7 @@ describe('opprett oppfølgingsbehandling', () => {
   });
 
   it('hvis lokal skal følge opp og bruker er NAY-saksbehandler, ikke vis reserver til meg-boksen', async () => {
-    render(
-      <OpprettOppfølgingsBehandling
-        saksnummer="ABCDEFG"
-        brukerInformasjon={{ navn: 'Navn på bruker', NAVident: 'minident' }}
-        brukerHarNayTilgang={true}
-      />
-    );
+    customRenderMedRoller(<OpprettOppfølgingsBehandling saksnummer="ABCDEFG" />, [Roller.SAKSBEHANDLER_NASJONAL]);
 
     let datotekstboks = screen.getByRole('textbox', { name: 'Dato for oppfølging' });
 

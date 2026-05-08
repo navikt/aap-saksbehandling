@@ -21,14 +21,11 @@ import styles from './KelvinAppHeader.module.css';
 import { AppSwitcher } from 'components/kelvinappheader/AppSwitcher';
 import { isLocal, isProd } from 'lib/utils/environment';
 import { LokalBrukerBytte } from 'components/lokalbrukerbytte/LokalBrukerBytte';
-import { Roller } from 'lib/services/azure/azureUserService';
 import { SøkeResultat } from 'app/api/kelvinsok/route';
 import Endringslogg from '@navikt/endringslogg';
-
-interface BrukerInformasjon {
-  navn: string;
-  NAVident?: string;
-}
+import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
+import { Roller } from 'lib/types/types';
+import { useInnloggetBruker } from 'hooks/BrukerHook';
 
 const bytteBrukerForDevOgLokalt = !isProd();
 const lokalBrukerbytte = isLocal();
@@ -75,15 +72,10 @@ function finnEndringslogg(): HTMLElement {
 }
 
 const lokalLenkeTilSaksoversikt = isLocal();
-export const KelvinAppHeader = ({
-  brukerInformasjon,
-  roller,
-}: {
-  brukerInformasjon: BrukerInformasjon;
-  roller?: Roller[];
-}) => {
+export const KelvinAppHeader = () => {
   const [søkeresultat, setSøkeresultat] = useState<SøkeResultat | undefined>(undefined);
   const [endringsloggÅpen, setEndringsloggÅpen] = useState<boolean>(false);
+  const brukerInformasjon = useInnloggetBruker();
 
   return (
     <>
@@ -137,7 +129,7 @@ export const KelvinAppHeader = ({
           </InternalHeader.Button>
         )}
         <AppSwitcher />
-        <Brukermeny brukerInformasjon={brukerInformasjon} roller={roller} />
+        <Brukermeny brukerInformasjon={brukerInformasjon} roller={brukerInformasjon.roller} />
       </InternalHeader>
       {søkeresultat && (
         <Theme theme={'dark'}>

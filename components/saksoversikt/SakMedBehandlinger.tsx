@@ -46,11 +46,9 @@ function formaterVurderingsbehovMedTeller(behov: Vurderingsbehov[]): string {
 
 export const SakMedBehandlinger = ({
   sak,
-  innloggetBrukerIdent,
   rettighetsinfo,
 }: {
   sak: SaksInfo;
-  innloggetBrukerIdent: string | undefined;
   rettighetsinfo: RettighetsinfoDto | null;
 }) => {
   const router = useRouter();
@@ -195,7 +193,6 @@ export const SakMedBehandlinger = ({
                     behandling={behandling}
                     oppgaveInfo={oppgaverPerBehandling.get(behandling.behandling.referanse)}
                     setFeilmelding={setFeilmelding}
-                    innloggetBrukerIdent={innloggetBrukerIdent}
                   ></BehandlingButtons>
                 </Table.DataCell>
               </Table.Row>

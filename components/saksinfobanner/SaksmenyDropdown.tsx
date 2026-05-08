@@ -1,3 +1,5 @@
+'use client';
+
 import { Button, Dropdown } from '@navikt/ds-react';
 import { DetaljertBehandling, FlytGruppe, FlytVisning } from 'lib/types/types';
 import { useState } from 'react';
@@ -14,6 +16,8 @@ import { MarkeringType, Oppgave } from 'lib/types/oppgaveTypes';
 import { NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType } from '@navikt/aap-oppgave-typescript-types';
 import { AvbrytRevurderingModal } from 'components/saksinfobanner/avbrytrevurderingmodal/AvbrytRevurderingModal';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { useInnloggetBruker } from 'hooks/BrukerHook';
+import { brukerErBeslutter, brukerKanSaksbehandle } from 'lib/utils/innloggetBruker';
 
 export const SaksmenyDropdown = ({
   flyt,
@@ -21,19 +25,18 @@ export const SaksmenyDropdown = ({
   brukerInformasjon,
   behandling,
   oppgave,
-  brukerKanSaksbehandle,
-  brukerErBeslutter,
 }: {
   flyt?: FlytGruppe[];
   visning?: FlytVisning;
   brukerInformasjon?: BrukerInformasjon;
   behandling: DetaljertBehandling;
   oppgave?: Oppgave;
-  brukerKanSaksbehandle?: boolean;
-  brukerErBeslutter?: boolean;
 }) => {
   const { saksnummer } = useParamsMedType();
+  const innloggetBruker = useInnloggetBruker();
 
+  const innloggetBrukerKanSaksbehandle = brukerKanSaksbehandle(innloggetBruker);
+  const innloggetBrukerErBeslutter = brukerErBeslutter(innloggetBruker);
   const [settBehandlingPåVentmodalIsOpen, setSettBehandlingPåVentmodalIsOpen] = useState(false);
   const [visTrekkSøknadModal, settVisTrekkSøknadModal] = useState(false);
   const [visTrekkKlageModal, settVisTrekkKlageModal] = useState(false);
@@ -57,28 +60,31 @@ export const SaksmenyDropdown = ({
 
   const visValgForÅTrekkeSøknad =
     !behandlerEnSøknadSomSkalTrekkes &&
-    brukerKanSaksbehandle &&
+    innloggetBrukerKanSaksbehandle &&
     behandlingErFørstegangsbehandling &&
     behandlingErIkkeAvsluttet;
 
   const visValgForÅAvbryteRevurdering =
     behandlingErIkkeIverksatt &&
-    brukerErBeslutter &&
+    innloggetBrukerErBeslutter &&
     !behandlerRevurderingSomSkalAvbrytes &&
-    brukerKanSaksbehandle &&
+    innloggetBrukerKanSaksbehandle &&
     behandlingErRevurdering &&
     behandlingErIkkeAvsluttet;
 
   const visValgForÅTrekkeKlage =
-    brukerKanSaksbehandle && !harAlleredeValgtTrekkKlage && behandlingErIkkeAvsluttet && behandling?.type === 'Klage';
+    innloggetBrukerKanSaksbehandle &&
+    !harAlleredeValgtTrekkKlage &&
+    behandlingErIkkeAvsluttet &&
+    behandling?.type === 'Klage';
 
   const visValgForÅOverstyreStarttidspunkt =
-    brukerKanSaksbehandle &&
+    innloggetBrukerKanSaksbehandle &&
     (behandlingErRevurdering || behandlingErFørstegangsbehandling) &&
     behandlingErIkkeAvsluttet &&
     behandlingErIkkeIverksatt;
 
-  const visValgForÅSetteMarkering = brukerKanSaksbehandle && behandlingErIkkeAvsluttet;
+  const visValgForÅSetteMarkering = innloggetBrukerKanSaksbehandle && behandlingErIkkeAvsluttet;
 
   return (
     <div className={styles.saksmeny}>
