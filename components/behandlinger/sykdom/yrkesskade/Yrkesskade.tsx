@@ -221,7 +221,7 @@ export const Yrkesskade = ({
                 case false:
                   return 'Nei';
                 default:
-                  return 'Ikke oppgitt';
+                  return 'Mangler informasjon';
               }
             })()}
           </p>
