@@ -214,11 +214,19 @@ export const Yrkesskade = ({
           <Label size="medium">Relevante informasjon fra søknad</Label>
           <p style={{ marginTop: 2, marginBottom: 0 }}>
             Har du yrkesskade eller yrkessykdom som påvirker hvor mye du kan arbeide?{' '}
-            {grunnlag.opplysninger.oppgittYrkesskadeISøknad ? 'Ja' : 'Nei'}
+            {(() => {
+              switch (grunnlag.opplysninger.oppgittYrkesskadeISøknad) {
+                case true:
+                  return 'Ja';
+                case false:
+                  return 'Nei';
+                default:
+                  return 'Ikke oppgitt';
+              }
+            })()}
           </p>
         </div>
       )}
-
       <FormField form={form} formField={formFields.begrunnelse} />
       <FormField form={form} formField={formFields.erÅrsakssammenheng} horizontalRadio />
       {relevanteYrkesskadeSaker.length > 0 && (
