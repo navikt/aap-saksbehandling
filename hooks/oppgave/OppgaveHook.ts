@@ -24,6 +24,7 @@ type UseOppgaverOptions = {
   kunLedigeOppgaver?: boolean;
   utvidetFilter?: OppgavelisteRequest['utvidetFilter'];
   sortering?: ScopedBackendSortState<NoNavAapOppgaveListeOppgaveSorteringSortBy>;
+  hastemarkeringerFørst: boolean;
 };
 
 function lagUrlSuffix(filter: OppgavelisteRequest['utvidetFilter']): string {
@@ -89,6 +90,7 @@ export function useOppgaver({
   type,
   utvidetFilter,
   sortering,
+  hastemarkeringerFørst,
 }: UseOppgaverOptions): {
   kanLasteInnFlereOppgaver: boolean;
   antallOppgaver: number;
@@ -109,8 +111,9 @@ export function useOppgaver({
     const typeSuffix = `/${type}`;
     const utvidetFilterSuffix = lagUrlSuffix(utvidetFilter);
     const paging = utvidetFilterSuffix.length > 0 ? `&side=${pageIndex}` : `?side=${pageIndex}`;
-    const sortSuffix = sortering?.orderBy ? `&sortby=${sortering.orderBy}&direction${sortering.direction}` : '';
-    const url = `${base}${suffix}${typeSuffix}${utvidetFilterSuffix}${paging}${sortSuffix}`;
+    const sortSuffix = sortering?.orderBy ? `&sortby=${sortering.orderBy}&direction=${sortering.direction}` : '';
+    const hasteoppgaveSuffix = `&hasteoppgaver=${hastemarkeringerFørst}`
+    const url = `${base}${suffix}${typeSuffix}${utvidetFilterSuffix}${paging}${sortSuffix}${hasteoppgaveSuffix}`;
 
     return url;
   };
@@ -142,6 +145,7 @@ export function useOppgaver({
         paging: paging,
         utvidetFilter: utvidetFilter,
         sortering: endeligsortering,
+        hastemarkeringerFørst: hastemarkeringerFørst,
       };
 
       return hentOppgaverClient(payload);
@@ -182,6 +186,7 @@ export function useLedigeOppgaver(
   aktiveEnheter: string[],
   visKunOppgaverSomBrukerErVeilederPå: boolean,
   aktivKøId: number,
+  hastemarkeringerFørst: boolean,
   utvidetFilter?: OppgavelisteRequest['utvidetFilter'],
   sortering?: ScopedBackendSortState<NoNavAapOppgaveListeOppgaveSorteringSortBy>
 ) {
@@ -192,12 +197,14 @@ export function useLedigeOppgaver(
     aktivKøId,
     utvidetFilter,
     sortering,
+    hastemarkeringerFørst,
   });
 }
 
 export function useAlleOppgaverForEnhet(
   aktiveEnheter: string[],
   aktivKøId: number,
+  hastemarkeringerFørst: boolean,
   utvidetFilter?: OppgavelisteRequest['utvidetFilter'],
   sortering?: ScopedBackendSortState<NoNavAapOppgaveListeOppgaveSorteringSortBy>
 ) {
@@ -209,16 +216,18 @@ export function useAlleOppgaverForEnhet(
     type: 'ALLE_OPPGAVER',
     utvidetFilter: utvidetFilter,
     sortering,
+    hastemarkeringerFørst,
   });
 }
 
-export const useMineOppgaver = (sortering?: ScopedBackendSortState<PathsMineOppgaverGetParametersQuerySortby>) => {
+export const useMineOppgaver = (hastemarkeringerFørst: boolean, sortering?: ScopedBackendSortState<PathsMineOppgaverGetParametersQuerySortby>) => {
   const sortParams: MineOppgaverQueryParams = {
     sortby: sortering?.orderBy,
     sortorder: sortering?.direction ? mapSortStateDirectionTilQueryParamEnum(sortering.direction) : undefined,
+    hastemarkeringFørst: hastemarkeringerFørst
   };
   const query = sortParams ? mineOppgaverQueryParams(sortParams) : '';
-  const { data, mutate, isLoading } = useSWR(`api/mine-oppgaver?${query}`, () => hentMineOppgaverClient(sortering));
+  const { data, mutate, isLoading } = useSWR(`api/mine-oppgaver?${query}`, () => hentMineOppgaverClient(hastemarkeringerFørst, sortering));
   const oppgaver = isSuccess(data) ? data?.data?.oppgaver?.flat() : [];
 
   return { oppgaver, mutate, isLoading, error: isError(data) ? data.apiException.message : undefined };
