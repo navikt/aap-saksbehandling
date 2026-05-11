@@ -1,0 +1,37 @@
+.wrapper {
+  position: relative;
+  max-height: 90vh;
+  overflow: auto;
+
+  box-shadow: var(--ax-shadow-dialog);
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.7);
+  z-index: 1;
+
+  min-height: 90vh;
+}
+
+.container {
+  background: #fff;
+  padding: 1rem;
+}
+
+.changed {
+  animation: highlight 2s ease-out;
+}
+
+@keyframes highlight {
+  0% {
+    background-color: #fffb8f;
+  }
+  100% {
+    background-color: transparent;
+  }
+}

@@ -10,6 +10,20 @@ interface ValgProps {
   watch: UseFormWatch<BrevFormVerdier>;
 }
 
+const selecta = (id: string) => {
+  const elem = document.getElementById(`valg_${id}`);
+  if (elem) {
+    elem.classList.add('aktivtValg');
+  }
+};
+
+const remova = (id: string) => {
+  const elem = document.getElementById(`valg_${id}`);
+  if (elem) {
+    elem.classList.remove('aktivtValg');
+  }
+};
+
 export const Valg = ({ valgRef, control, watch }: ValgProps) => {
   const valgId = valgRef.valg._id;
   const valgtAlternativKey = watch(`valg.${valgId}`);
@@ -17,7 +31,7 @@ export const Valg = ({ valgRef, control, watch }: ValgProps) => {
   const erFritekstValgt = valgtAlternativ?._type === 'fritekst';
 
   return (
-    <div>
+    <div onMouseEnter={() => selecta(valgId)} onMouseLeave={() => remova(valgId)}>
       <SelectWrapper
         control={control}
         name={`valg.${valgId}`}

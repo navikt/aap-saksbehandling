@@ -51,3 +51,34 @@ export function useMellomlagringAvBrev({ referanse, control, brevmal, brevdata }
 
   return { pdfDataUri, lasterPdf };
 }
+
+export function useMellomlagringAvBrevV2({ referanse, control, brevmal, brevdata }: Props): {
+  lasterHtml: boolean;
+  htmlString: string | undefined;
+} {
+  const [lasterHtml, setLasterHtml] = useState(false);
+  const [htmlString, setHtmlString] = useState<string | undefined>();
+
+  const formVerdier = useWatch({ control });
+  const debouncedFormVerdier = useDebounce(formVerdier);
+
+  useEffect(() => {
+    const lagreOgOppdaterHtml = async () => {
+      setLasterHtml(true);
+      try {
+        const payload = byggBrevdataPayload(debouncedFormVerdier as BrevFormVerdier, brevmal, brevdata);
+        const res = await clientOppdaterBrevdata(referanse, payload);
+
+        if (isSuccess(res)) {
+          const { html } = await fetch(`/saksbehandling/api/brev/${referanse}/forhandsvis-html/`).then((r) => r.json());
+          setHtmlString(html);
+        }
+      } finally {
+        setLasterHtml(false);
+      }
+    };
+    lagreOgOppdaterHtml();
+  }, [debouncedFormVerdier]);
+
+  return { lasterHtml, htmlString };
+}

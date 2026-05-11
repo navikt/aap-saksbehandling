@@ -1,9 +1,13 @@
-import { Box, Heading, HStack, Switch, VStack } from '@navikt/ds-react';
+import { useState } from 'react';
+import { Box, Button, Heading, HStack, Switch, VStack } from '@navikt/ds-react';
 import { Control, Controller, UseFormWatch } from 'react-hook-form';
 import { DelmalReferanse, FritekstType, ValgRef } from 'components/brevbygger/brevmodellTypes';
 import { BrevFormVerdier } from 'components/brevbygger/types';
 import { Valg } from 'components/brevbygger/Valg';
 import { DelmalFritekst } from 'components/brevbygger/Fritekst';
+import { EyeIcon, EyeObfuscatedIcon } from '@navikt/aksel-icons';
+
+import styles from './Delmal.module.css';
 
 interface Props {
   delmalRef: DelmalReferanse;
@@ -13,6 +17,13 @@ interface Props {
 
 export const Delmal = ({ delmalRef, control, watch }: Props) => {
   const { delmal, obligatorisk } = delmalRef;
+  const [erMarkert, settErMarkert] = useState<boolean>(false);
+
+  const toggleMarkering = () => {
+    const element = document.getElementById(`brev_${delmalRef._key}`);
+    element?.classList.toggle('valgtBrevmal');
+    settErMarkert(!erMarkert);
+  };
 
   const valgOgFritekst = delmal.teksteditor.filter(
     (node): node is ValgRef | FritekstType => node._type === 'valgRef' || node._type === 'fritekst'
@@ -27,7 +38,16 @@ export const Delmal = ({ delmalRef, control, watch }: Props) => {
   const erValgt = watch(`delmaler.${delmal._id}`) || obligatorisk;
 
   return (
-    <Box borderWidth="1" borderRadius="12" padding="space-8" borderColor="neutral-subtle" background="default">
+    <Box
+      borderWidth="1"
+      borderRadius="12"
+      paddingInline="space-16"
+      paddingBlock="space-8"
+      borderColor="neutral-subtle"
+      background="default"
+      id={delmalRef._key}
+      className={erMarkert ? `${styles.markertDelmal} ${styles.delmal}` : `${styles.delmal}`}
+    >
       <HStack justify="space-between">
         <Heading level="2" size="small">
           {delmal.beskrivelse}
@@ -55,6 +75,15 @@ export const Delmal = ({ delmalRef, control, watch }: Props) => {
           })}
         </VStack>
       )}
+      <Button
+        variant={'tertiary'}
+        type={'button'}
+        size={'small'}
+        onClick={() => toggleMarkering()}
+        icon={erMarkert ? <EyeObfuscatedIcon /> : <EyeIcon />}
+      >
+        {erMarkert ? 'Fjern markering' : 'Marker i brev'}
+      </Button>
     </Box>
   );
 };

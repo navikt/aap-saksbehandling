@@ -15,4 +15,5 @@
   display: flex;
   justify-content: center;
   background-color: hsl(136 0 62 / 0.2);
+  overflow: hidden;
 }
