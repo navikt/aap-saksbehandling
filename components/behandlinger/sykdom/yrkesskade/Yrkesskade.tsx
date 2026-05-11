@@ -8,7 +8,7 @@ import { erProsent } from 'lib/utils/validering';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
-import { FormEvent, useEffect } from 'react';
+import { FormEvent } from 'react';
 import { YrkesskadeVurderingTabell } from 'components/behandlinger/sykdom/yrkesskade/YrkesskadeVurderingTabell';
 import { YrkesskadeVurderingTabellGammel } from 'components/behandlinger/sykdom/yrkesskade/YrkesskadeVurderingTabellGammel';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
@@ -82,6 +82,13 @@ export const Yrkesskade = ({
         options: JaEllerNeiOptions,
         defaultValue: defaultValues.erÅrsakssammenheng,
         rules: { required: 'Du må svare på om det finnes en årsakssammenheng' },
+        onChange: () => {
+          form.setValue(
+            'relevanteYrkesskadeSaker',
+            relevanteYrkesskadeSaker.map((sak) => ({ ...sak, erTilknyttet: false }))
+          );
+          form.setValue('andelAvNedsettelsen', undefined);
+        },
       },
       relevanteYrkesskadeSaker: {
         type: 'fieldArray',
@@ -107,7 +114,7 @@ export const Yrkesskade = ({
         },
       },
     },
-    { readOnly: formReadOnly, shouldUnregister: true }
+    { readOnly: formReadOnly }
   );
 
   const { slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } = useMellomlagring(
@@ -116,13 +123,14 @@ export const Yrkesskade = ({
     form
   );
 
+  const erÅrsakssammenheng = form.watch('erÅrsakssammenheng');
+
   const { fields: relevanteYrkesskadeSaker, update } = useFieldArray({
     name: 'relevanteYrkesskadeSaker',
     control: form.control,
     rules: {
       validate: (fields) => {
         // skip validering hvis erÅrsaksammenheng er Nei. Da skulle egentlig denne vært unmounted
-        const erÅrsakssammenheng = form.getValues('erÅrsakssammenheng');
         if (erÅrsakssammenheng === JaEllerNei.Nei) {
           return;
         }
@@ -137,16 +145,6 @@ export const Yrkesskade = ({
       },
     },
   });
-
-  const erÅrsakssammenheng = form.watch('erÅrsakssammenheng');
-  useEffect(() => {
-    if (erÅrsakssammenheng === JaEllerNei.Nei) {
-      form.setValue(
-        'relevanteYrkesskadeSaker',
-        relevanteYrkesskadeSaker.map((sak) => ({ ...sak, erTilknyttet: false }))
-      );
-    }
-  }, [erÅrsakssammenheng]);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
