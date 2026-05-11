@@ -23,9 +23,11 @@ import { Distribusjonssjekk } from 'components/brev/Distribusjonssjekk';
 import { BrevFormVerdier } from 'components/brevbygger/types';
 import { initialiserFormVerdier } from 'components/brevbygger/formUtils';
 import { Delmal } from 'components/brevbygger/Delmal';
-import { useMellomlagringAvBrev } from 'components/brevbygger/useMellomlagringAvBrev';
+import { useMellomlagringAvBrev, useMellomlagringAvBrevV2 } from 'components/brevbygger/useMellomlagringAvBrev';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { loggUmamiEvent, useUmamiStartTidspunkt } from 'lib/utils/umami';
+import { ForhåndsvisHtml } from 'components/brevbygger/ForhåndsvisHtml';
+import { FerdigstillBrevDialog } from 'components/brevbygger/FerdigstillBrevDialog';
 
 interface BrevbyggerProps {
   referanse: string;
@@ -62,7 +64,8 @@ export const Brevbygger = ({
   });
   const umamiStartTidspunkt = useUmamiStartTidspunkt('AKTIV');
 
-  const { pdfDataUri, lasterPdf } = useMellomlagringAvBrev({ referanse, control, brevmal: parsedBrevmal, brevdata });
+  // const { pdfDataUri, lasterPdf } = useMellomlagringAvBrev({ referanse, control, brevmal: parsedBrevmal, brevdata });
+  const { htmlString, lasterHtml } = useMellomlagringAvBrevV2({ referanse, control, brevmal: parsedBrevmal, brevdata });
 
   const router = useRouter();
   const { behandlingsreferanse, saksnummer } = useParamsMedType();
@@ -76,6 +79,7 @@ export const Brevbygger = ({
   const [valgteMottakere, setMottakere] = useState<Mottaker[]>([]);
   const [distribusjonssjekkFeil, setDistribusjonssjekkFeil] = useState<string | undefined>();
   const [ikkeSendBrevModalOpen, settIkkeSendBrevModalOpen] = useState(false);
+  const [visFerdigstillBrevDialog, settVisFerdigstillBrevDialog] = useState(false);
   const [pdfViewExpanded, setPdfViewExpanded] = useState(false);
 
   const sendBrev = async () => {
@@ -170,9 +174,12 @@ export const Brevbygger = ({
               Oppdater brevmal
             </Button>
           </HStack>
-          <Button type="button" onClick={sendBrev} loading={isLoading} size="small" disabled={!!distribusjonssjekkFeil}>
-            Send brev
+          <Button type="button" onClick={() => settVisFerdigstillBrevDialog(true)} size={'small'}>
+            Ferdigstill brev
           </Button>
+          {/*<Button type="button" onClick={sendBrev} loading={isLoading} size="small" disabled={!!distribusjonssjekkFeil}>
+            Send brev
+          </Button>*/}
         </HStack>
       </Box>
 
@@ -186,12 +193,19 @@ export const Brevbygger = ({
             icon={pdfViewExpanded ? <ShrinkIcon /> : <ExpandIcon />}
           />
         </div>
-        <ForhåndsvisBrev isLoading={lasterPdf} dataUri={pdfDataUri} />
+        {/*<ForhåndsvisBrev isLoading={lasterPdf} dataUri={pdfDataUri} />*/}
+        <ForhåndsvisHtml isLoading={lasterHtml} html={htmlString} />
       </VStack>
       <IkkeSendBrevModal
         isOpen={ikkeSendBrevModalOpen}
         onClose={() => settIkkeSendBrevModalOpen(false)}
         onDelete={slettBrev}
+      />
+      <FerdigstillBrevDialog
+        referanse={referanse}
+        isOpen={visFerdigstillBrevDialog}
+        onClose={() => settVisFerdigstillBrevDialog(false)}
+        sendBrev={sendBrev}
       />
     </HGrid>
   );

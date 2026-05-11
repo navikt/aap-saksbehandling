@@ -9,17 +9,13 @@ interface Props {
 
 export const ForhåndsvisBrev = ({ dataUri, isLoading = false }: Props) => {
   return (
-    <Box padding={'space-8'} background={'neutral-soft'} shadow="dialog" minHeight={'100%'} className={styles.pdfBox}>
+    <Box padding={'space-8'} background={'neutral-soft'} shadow="dialog" height={'70vh'} className={styles.pdfBox}>
       {isLoading && (
         <div className={styles.overlay}>
           <Loader size="2xlarge" title="Laster forhåndsvisning av brev..." transparent />
         </div>
       )}
-      {dataUri && (
-        <object data={`${dataUri}`} type="application/pdf" className={styles.pdf}>
-          <p>Forhåndsvisning av brev</p>
-        </object>
-      )}
+      {dataUri && <object data={`${dataUri}`} type="application/pdf" className={styles.pdf} />}
     </Box>
   );
 };

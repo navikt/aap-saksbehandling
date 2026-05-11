@@ -1,0 +1,7 @@
+.delmal {
+  box-sizing: border-box;
+}
+
+.markertDelmal {
+  box-shadow: 0.5rem 0 0 inset var(--ax-bg-brand-blue-strong);
+}
