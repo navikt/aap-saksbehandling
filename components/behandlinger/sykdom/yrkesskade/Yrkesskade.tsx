@@ -210,29 +210,19 @@ export const Yrkesskade = ({
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
       {yrkesskadeNyeFelter && (
-        <div>
+        <VStack gap={'space-4'}>
           <Label size="medium">Relevante informasjon fra søknad</Label>
-          <p style={{ marginTop: 2, marginBottom: 0 }}>
-            Har du yrkesskade eller yrkessykdom som påvirker hvor mye du kan arbeide?{' '}
-            {(() => {
-              switch (grunnlag.opplysninger.oppgittYrkesskadeISøknad) {
-                case true:
-                  return 'Ja';
-                case false:
-                  return 'Nei';
-                default:
-                  return 'Mangler informasjon';
-              }
-            })()}
-          </p>
-        </div>
+          <BodyShort size={'small'}>
+            {`Har du yrkesskade eller yrkessykdom som påvirker hvor mye du kan arbeide? ${mapOppgittYrkesskadeISøknadTilTekst(grunnlag.opplysninger.oppgittYrkesskadeISøknad)}`}
+          </BodyShort>
+        </VStack>
       )}
       <FormField form={form} formField={formFields.begrunnelse} />
       <FormField form={form} formField={formFields.erÅrsakssammenheng} horizontalRadio />
       {relevanteYrkesskadeSaker.length > 0 && (
         <>
           <VStack>
-            <Label size={'small'}>
+            <Label size={'small'} spacing>
               Tilknytt eventuelle yrkesskader som er helt eller delvis årsak til den nedsatte arbeidsevnen.
             </Label>
             {yrkesskadeNyeFelter ? (
@@ -292,4 +282,15 @@ function hentDefaultYrkesskadesakerFraVurderingerEllerGrunnlag(
       };
     }) || []
   );
+}
+
+function mapOppgittYrkesskadeISøknadTilTekst(oppgittYrkesskadeISøknad?: boolean | null) {
+  switch (oppgittYrkesskadeISøknad) {
+    case true:
+      return 'Ja';
+    case false:
+      return 'Nei';
+    default:
+      return 'Mangler informasjon';
+  }
 }
