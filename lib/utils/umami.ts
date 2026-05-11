@@ -6,7 +6,11 @@ type UmamiData = Record<string, UmamiValue>;
 export const loggUmamiEvent = (eventName: string, data: UmamiData) => {
   if (typeof window === 'undefined') return;
 
-  window.umami?.track(eventName, data);
+  try {
+    window.umami?.track(eventName, data);
+  } catch (error) {
+    console.error(`Umami Failed to track event ${eventName}:`, error);
+  }
 };
 
 export function useUmamiStartTidspunkt(): number {
