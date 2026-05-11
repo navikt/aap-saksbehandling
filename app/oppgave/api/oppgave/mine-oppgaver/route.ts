@@ -11,7 +11,6 @@ export async function GET(req: NextRequest) {
       sortby: params?.sortby,
       sortorder: params?.sortorder,
       kunPaaVent: params?.kunPaaVent,
-      hastemarkeringFørst: params?.hastemarkeringFørst
     });
     if (isError(res) && res.status >= 500) {
       logError(`/api/oppgave/mine-oppgaver`, res.apiException);
