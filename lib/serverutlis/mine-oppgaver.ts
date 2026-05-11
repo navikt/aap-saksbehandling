@@ -15,12 +15,10 @@ export function hentMineOppgaverQueryParams(req: NextRequest): MineOppgaverQuery
   const sortby = sortByStr ? validerSortByQueryParamEnum(sortByStr) : null;
   const sortOrderStr = params.get('sortorder');
   const sortorder = sortOrderStr ? validerSortOrderQueryParamEnum(sortOrderStr) : null;
-  const hastemarkeringFørst = params.get('hastemarkeringFørst');
   return {
     ...(kunPåVent ? { kunPaaVent: kunPåVent === 'true' } : {}),
     ...(sortby ? { sortby } : {}),
     ...(sortorder ? { sortorder } : {}),
-    ...(hastemarkeringFørst ? { hastemarkeringFørst: hastemarkeringFørst === 'true' } : {}),
   };
 }
 
