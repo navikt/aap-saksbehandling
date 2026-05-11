@@ -1,9 +1,9 @@
 'use client';
 
-import { BodyShort, Box, Button, Chips, Detail, HGrid, HStack, Switch, VStack } from '@navikt/ds-react';
+import { BodyShort, Box, Button, Chips, Detail, HGrid, HStack, VStack } from '@navikt/ds-react';
 
 import styles from 'components/oppgaveliste/filtrering/Filtrering.module.css';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { useState } from 'react';
 import { FilterIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { FormFields } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
@@ -17,23 +17,13 @@ interface Props {
   formFields: FormFields<FieldPath<FormFieldsFilter>, FormFieldsFilter>;
   antallOppgaverTotalt?: number;
   antallOppgaverIFilter?: number;
-  hasteoppgaverØverst: boolean;
-  setHasteOppgaverØverst: Dispatch<SetStateAction<boolean>>;
 }
 
-export const MineOppgaverFiltrering = ({
-  form,
-  formFields,
-  antallOppgaverIFilter,
-  antallOppgaverTotalt,
-  hasteoppgaverØverst,
-  setHasteOppgaverØverst,
-}: Props) => {
+export const MineOppgaverFiltrering = ({ form, formFields, antallOppgaverIFilter, antallOppgaverTotalt }: Props) => {
   const [visFilter, setVisFilter] = useState(false);
 
   const aktiveFilter = aktiveFiltreringer(form.watch());
   const tilbakekrevingBelopFilter = useFeatureFlag('TilbakekrevingBelopFilter');
-  const skalViseHasteoppgaveToggle = useFeatureFlag('HastemarkeringerFoerst');
 
   return (
     <div className={styles.wrapper}>
@@ -110,23 +100,6 @@ export const MineOppgaverFiltrering = ({
                     </BodyShort>
                     <FormField form={form} formField={formFields.tilbakekrevingBeløpFom} />
                     <FormField form={form} formField={formFields.tilbakekrevingBeløpTom} />
-                  </VStack>
-                </BoxWrapper>
-              )}
-              {skalViseHasteoppgaveToggle && (
-                <BoxWrapper>
-                  <VStack gap={'space-16'}>
-                    <BodyShort size={'small'} weight={'semibold'}>
-                      Hastemarkering
-                    </BodyShort>
-                    <Switch
-                      value="hasteoppgaver"
-                      checked={hasteoppgaverØverst}
-                      onChange={() => setHasteOppgaverØverst((prev) => !prev)}
-                      size={'small'}
-                    >
-                      Vis oppgaver med hastemarkering øverst
-                    </Switch>
                   </VStack>
                 </BoxWrapper>
               )}

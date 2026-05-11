@@ -112,7 +112,7 @@ export function useOppgaver({
     const utvidetFilterSuffix = lagUrlSuffix(utvidetFilter);
     const paging = utvidetFilterSuffix.length > 0 ? `&side=${pageIndex}` : `?side=${pageIndex}`;
     const sortSuffix = sortering?.orderBy ? `&sortby=${sortering.orderBy}&direction=${sortering.direction}` : '';
-    const hasteoppgaveSuffix = `&hasteoppgaver=${hastemarkeringerFørst}`
+    const hasteoppgaveSuffix = `&hasteoppgaver=${hastemarkeringerFørst}`;
     const url = `${base}${suffix}${typeSuffix}${utvidetFilterSuffix}${paging}${sortSuffix}${hasteoppgaveSuffix}`;
 
     return url;
@@ -220,14 +220,13 @@ export function useAlleOppgaverForEnhet(
   });
 }
 
-export const useMineOppgaver = (hastemarkeringerFørst: boolean, sortering?: ScopedBackendSortState<PathsMineOppgaverGetParametersQuerySortby>) => {
+export const useMineOppgaver = (sortering?: ScopedBackendSortState<PathsMineOppgaverGetParametersQuerySortby>) => {
   const sortParams: MineOppgaverQueryParams = {
     sortby: sortering?.orderBy,
     sortorder: sortering?.direction ? mapSortStateDirectionTilQueryParamEnum(sortering.direction) : undefined,
-    hastemarkeringFørst: hastemarkeringerFørst
   };
   const query = sortParams ? mineOppgaverQueryParams(sortParams) : '';
-  const { data, mutate, isLoading } = useSWR(`api/mine-oppgaver?${query}`, () => hentMineOppgaverClient(hastemarkeringerFørst, sortering));
+  const { data, mutate, isLoading } = useSWR(`api/mine-oppgaver?${query}`, () => hentMineOppgaverClient(sortering));
   const oppgaver = isSuccess(data) ? data?.data?.oppgaver?.flat() : [];
 
   return { oppgaver, mutate, isLoading, error: isError(data) ? data.apiException.message : undefined };

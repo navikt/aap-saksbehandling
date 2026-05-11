@@ -67,10 +67,9 @@ export function mapSortStateDirectionTilQueryParamEnum(direction: SortState['dir
 
 export function mineOppgaverQueryParams(params: MineOppgaverQueryParams) {
   const kunpaavent = params?.kunPaaVent ? `kunPaaVent=${params.kunPaaVent}` : '';
-  const hastemarkeringerFørst = `hastemarkeringerFørst=${params?.hastemarkeringFørst}`;
   const sortBy = params?.sortby ? `sortby=${params.sortby}` : '';
   const sortOrder = params?.sortorder ? `sortorder=${params.sortorder}` : '';
-  const string = [kunpaavent, sortBy, sortOrder, hastemarkeringerFørst].filter((value) => value).join('&');
+  const string = [kunpaavent, sortBy, sortOrder].filter((value) => value).join('&');
   return encodeURI(string);
 }
 

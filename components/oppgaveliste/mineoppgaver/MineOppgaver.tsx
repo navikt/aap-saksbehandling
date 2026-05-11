@@ -13,7 +13,7 @@ import { useMineOppgaver } from 'hooks/oppgave/OppgaveHook';
 import { alleVurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
 import { TabellSkeleton } from 'components/oppgaveliste/tabellskeleton/TabellSkeleton';
 import { useLagreAktivUtvidetFilter } from 'hooks/oppgave/aktivUtvidetFilterHook';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useBackendSortering } from 'hooks/oppgave/BackendSorteringHook';
 import { PathsMineOppgaverGetParametersQuerySortby } from '@navikt/aap-oppgave-typescript-types';
 import { ValuePair } from 'components/form/FormField';
@@ -32,9 +32,8 @@ export interface FormFieldsFilter {
 
 export const MineOppgaver = () => {
   const { sort, setSort } = useBackendSortering<PathsMineOppgaverGetParametersQuerySortby>('mine-oppgaver-backendsort');
-  const [hasteoppgaverØverst, setHasteOppgaverØverst] = useState<boolean>(true);
 
-  const { oppgaver, mutate, isLoading, error } = useMineOppgaver(hasteoppgaverØverst, sort);
+  const { oppgaver, mutate, isLoading, error } = useMineOppgaver(sort);
   const { hentAktivUtvidetFilter, lagreAktivUtvidetFilter } = useLagreAktivUtvidetFilter();
   const lagretUtvidetFilter = hentAktivUtvidetFilter();
 
@@ -119,8 +118,6 @@ export const MineOppgaver = () => {
         formFields={formFields}
         antallOppgaverTotalt={oppgaver?.length}
         antallOppgaverIFilter={filtrerteOppgaver?.length}
-        hasteoppgaverØverst={hasteoppgaverØverst}
-        setHasteOppgaverØverst={setHasteOppgaverØverst}
       />
 
       {isLoading && <TabellSkeleton />}

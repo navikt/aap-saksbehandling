@@ -26,13 +26,11 @@ export async function hentTildeltStatusClient(behandlingsreferanse: string) {
 }
 
 export async function hentMineOppgaverClient(
-  hastemarkeringerFørst: boolean,
   sortering?: ScopedBackendSortState<PathsMineOppgaverGetParametersQuerySortby>
 ) {
   const sortParams: MineOppgaverQueryParams = {
     sortby: sortering?.orderBy,
     sortorder: sortering?.direction ? mapSortStateDirectionTilQueryParamEnum(sortering.direction) : undefined,
-    hastemarkeringFørst: hastemarkeringerFørst
   };
   const query = sortParams.sortby ? mineOppgaverQueryParams(sortParams) : '';
   return clientFetch<OppgavelisteResponse>(`/oppgave/api/oppgave/mine-oppgaver?${query}`, 'GET');
