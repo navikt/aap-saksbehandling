@@ -3,7 +3,7 @@
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { MellomlagretVurdering, YrkesskadeVurderingGrunnlag } from 'lib/types/types';
-import { Label, VStack } from '@navikt/ds-react';
+import { BodyShort, Label, VStack } from '@navikt/ds-react';
 import { erProsent } from 'lib/utils/validering';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
@@ -29,7 +29,6 @@ interface Props {
 export interface YrkesskadeMedSkadeDatoFormFields {
   begrunnelse: string;
   erÅrsakssammenheng: string;
-  relevanteSaker?: string[];
   relevanteYrkesskadeSaker?: YrkesskadeMedSkadeDatoSak[];
   andelAvNedsettelsen?: number;
 }
@@ -83,13 +82,6 @@ export const Yrkesskade = ({
         options: JaEllerNeiOptions,
         defaultValue: defaultValues.erÅrsakssammenheng,
         rules: { required: 'Du må svare på om det finnes en årsakssammenheng' },
-      },
-      relevanteSaker: {
-        //TODO: deprecated
-        type: 'checkbox_nested',
-        label: 'Tilknytt eventuelle yrkesskader som er helt eller delvis årsak til den nedsatte arbeidsevnen.',
-        defaultValue: grunnlag.yrkesskadeVurdering?.relevanteSaker,
-        rules: { required: 'Du må velge minst én yrkesskade' },
       },
       relevanteYrkesskadeSaker: {
         type: 'fieldArray',
@@ -166,7 +158,7 @@ export const Yrkesskade = ({
               begrunnelse: data.begrunnelse,
               erÅrsakssammenheng: data.erÅrsakssammenheng === JaEllerNei.Ja,
               andelAvNedsettelsen: data?.andelAvNedsettelsen,
-              relevanteSaker: data.relevanteSaker || [],
+              relevanteSaker: [], // TODO Fjern fra backend
               relevanteYrkesskadeSaker:
                 data.relevanteYrkesskadeSaker
                   ?.filter((sak) => sak.erTilknyttet)
@@ -256,7 +248,6 @@ function mapVurderingToDraftFormFields(grunnlag?: YrkesskadeVurderingGrunnlag): 
   return {
     begrunnelse: grunnlag?.yrkesskadeVurdering?.begrunnelse ?? '',
     erÅrsakssammenheng: getJaNeiEllerUndefined(grunnlag?.yrkesskadeVurdering?.erÅrsakssammenheng) ?? '',
-    relevanteSaker: grunnlag?.yrkesskadeVurdering?.relevanteSaker ?? [],
     relevanteYrkesskadeSaker: hentDefaultYrkesskadesakerFraVurderingerEllerGrunnlag(grunnlag),
     andelAvNedsettelsen: grunnlag?.yrkesskadeVurdering?.andelAvNedsettelsen ?? undefined,
   };
