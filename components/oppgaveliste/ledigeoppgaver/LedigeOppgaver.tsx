@@ -249,7 +249,7 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
                   onChange={() => setHasteOppgaverØverst((prev) => !prev)}
                   size={'small'}
                 >
-                  Vis oppgaver med hastemarkering øverst
+                  Vis hastemarkeringer øverst
                 </Switch>
               )}
             </HStack>
