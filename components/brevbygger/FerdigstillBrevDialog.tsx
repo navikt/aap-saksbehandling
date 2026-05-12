@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { Button, Dialog } from '@navikt/ds-react';
 import { ForhåndsvisBrev } from 'components/brevbygger/ForhåndsvisBrev';
 
+import styles from './FerdigstillBrevDialog.module.css';
+
 interface Props {
   referanse: string;
   isOpen: boolean;
@@ -29,12 +31,12 @@ export const FerdigstillBrevDialog = ({ referanse, isOpen, onClose, sendBrev }: 
   }, [isOpen]);
 
   return (
-    <Dialog open={isOpen}>
-      <Dialog.Popup width="large" height="large">
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <Dialog.Popup position="fullscreen">
         <Dialog.Header>
           <Dialog.Title>Ferdigstill brev</Dialog.Title>
         </Dialog.Header>
-        <Dialog.Body>
+        <Dialog.Body className={styles.dialogBody}>
           <ForhåndsvisBrev isLoading={lasterPdf} dataUri={pdfDataUri} />
         </Dialog.Body>
         <Dialog.Footer>
