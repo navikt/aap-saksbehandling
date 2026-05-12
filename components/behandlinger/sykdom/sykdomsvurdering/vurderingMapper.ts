@@ -32,8 +32,7 @@ function mapArbeidsevneOgYrkesskade(
     // Ikke aktuell hvis årsakssammenheng på yrkesskade
     const erNedsettelseIArbeidsevneMerEnnHalvparten = erÅrsakssammenhengYrkesskade
       ? undefined
-      : data.erNedsettelseMinstHalvparten === 'JA' || data.erNedsettelseMinstHalvparten === 'JA_FORBIGÅENDE_PROBLEMER';
-
+      : getTrueFalseEllerUndefined(data.erNedsettelseIArbeidsevneMerEnnHalvparten);
     const skalBegrunneYrkesskaden =
       vurderingDatoSammeSomRettighetsperiodeStart &&
       skalVurdereYrkesskade &&
@@ -43,36 +42,24 @@ function mapArbeidsevneOgYrkesskade(
 
     const erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense =
       skalBegrunneYrkesskaden || (!vurderingDatoSammeSomRettighetsperiodeStart && erÅrsakssammenhengYrkesskade)
-        ? data.erNedsettelseMerEnnYrkesskadegrense === 'JA' ||
-          data.erNedsettelseMerEnnYrkesskadegrense === 'JA_FORBIGÅENDE_PROBLEMER'
+        ? getTrueFalseEllerUndefined(data.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense)
         : undefined;
 
+    // Kun mappe derson bruker har tilstrekkelig nedsatt arbeidsevne
     const erSkadeSykdomEllerLyteVesentligdel =
       erNedsettelseIArbeidsevneMerEnnHalvparten || erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense
         ? getTrueFalseEllerUndefined(data.erSkadeSykdomEllerLyteVesentligdel)
         : undefined;
 
-    const erNedsettelseMerEnnYrkesskadegrense =
-      skalBegrunneYrkesskaden || (!vurderingDatoSammeSomRettighetsperiodeStart && erÅrsakssammenhengYrkesskade)
-        ? data.erNedsettelseMerEnnYrkesskadegrense
-        : undefined;
-    const erNedsettelseMinstHalvparten = data.erNedsettelseMinstHalvparten;
-
-    const erNedsettelseIArbeidsevneAvEnVissVarighetBakoverkompatibel = erNedsettelseIArbeidsevneMerEnnHalvparten
-      ? data.erNedsettelseMinstHalvparten === 'JA'
-      : erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense
-        ? data.erNedsettelseMerEnnYrkesskadegrense === 'JA'
-        : undefined;
+    const erNedsettelseIArbeidsevneAvEnVissVarighetBakoverkompatibel = data.harNedsattArbeidsevne === 'JA';
 
     return {
       yrkesskadeBegrunnelse,
       erSkadeSykdomEllerLyteVesentligdel,
-      erNedsettelseMerEnnYrkesskadegrense,
-      erNedsettelseMinstHalvparten,
-
-      // Disse må settes for bakoverkompabilitet men kan fjernes på sikt
       erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense,
       erNedsettelseIArbeidsevneMerEnnHalvparten,
+
+      // Disse må settes for bakoverkompabilitet men kan fjernes på sikt
       erNedsettelseIArbeidsevneAvEnVissVarighet: erNedsettelseIArbeidsevneAvEnVissVarighetBakoverkompatibel,
     };
   } else {

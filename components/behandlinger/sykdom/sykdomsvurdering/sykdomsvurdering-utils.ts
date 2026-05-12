@@ -31,15 +31,16 @@ export function erNyVurderingOppfylt(
   if (sykdomUtenVissVarighetToggle) {
     if (
       vurdering.harSkadeSykdomEllerLyte === JaEllerNei.Nei ||
-      vurdering.erArbeidsevnenNedsatt === JaEllerNei.Nei ||
-      (!skalVurdereYrkesskade && vurdering.erNedsettelseMinstHalvparten === 'NEI') ||
+      vurdering.harNedsattArbeidsevne === 'NEI' ||
+      (!skalVurdereYrkesskade && vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten === JaEllerNei.Nei) ||
       vurdering.erSkadeSykdomEllerLyteVesentligdel === JaEllerNei.Nei ||
-      vurdering.erNedsettelseMerEnnYrkesskadegrense === 'NEI'
+      vurdering.erNedsettelseIArbeidsevneAvEnVissVarighet === JaEllerNei.Nei ||
+      vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense === JaEllerNei.Nei
     ) {
       return false;
     }
 
-    if (vurdering.erNedsettelseMinstHalvparten === 'JA_FORBIGÅENDE_PROBLEMER') {
+    if (vurdering.erNedsettelseIArbeidsevneAvEnVissVarighet === JaEllerNei.Ja) {
       return true;
     }
 
@@ -70,24 +71,21 @@ export function erNyVurderingOppfylt(
 
 export function erTidligereVurderingOppfylt(vurdering: Sykdomvurdering): boolean | undefined {
   if (
-    vurdering.harSkadeSykdomEllerLyte === false ||
+    !vurdering.harSkadeSykdomEllerLyte ||
+    vurdering.harNedsattArbeidsevne === 'NEI' ||
     vurdering.erArbeidsevnenNedsatt === false ||
+    vurdering.erNedsettelseIArbeidsevneAvEnVissVarighet === false ||
     vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten === false ||
     vurdering.erSkadeSykdomEllerLyteVesentligdel === false ||
-    vurdering.erNedsettelseIArbeidsevneAvEnVissVarighet === false ||
-    vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense === false ||
-    vurdering.erNedsettelseMerEnnYrkesskadegrense === 'NEI' ||
-    vurdering.erNedsettelseMinstHalvparten === 'NEI'
+    vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense === false
   ) {
     return false;
   }
 
   if (
     vurdering.erNedsettelseIArbeidsevneAvEnVissVarighet === true ||
-    vurdering.erNedsettelseMinstHalvparten === 'JA_FORBIGÅENDE_PROBLEMER' ||
-    vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense === true ||
-    vurdering.erNedsettelseMerEnnYrkesskadegrense === 'JA_FORBIGÅENDE_PROBLEMER' ||
-    vurdering.erNedsettelseMerEnnYrkesskadegrense === 'JA'
+    vurdering.harNedsattArbeidsevne === 'JA_FORBIGÅENDE_PROBLEMER' ||
+    vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense === true
   ) {
     return true;
   }

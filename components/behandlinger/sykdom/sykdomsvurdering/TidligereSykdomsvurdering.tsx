@@ -2,10 +2,10 @@
 
 import { VStack } from '@navikt/ds-react';
 import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
-import { getJaNeiEllerIkkeBesvart, getJaNeiJaForeløpigEllerIkkeBesvart } from 'lib/utils/form';
+import { getJaNeiEllerIkkeBesvart, getJaNeiJaForbigåendeEllerIkkeBesvart } from 'lib/utils/form';
 import { DiagnoseSystem, diagnoseSøker } from 'lib/diagnosesøker/DiagnoseSøker';
 import {
-  erArbeidsevnenNedsattLabel,
+  harNedsattArbeidsevneLabel,
   erNedsettelseIArbeidsevneAvEnVissVarighetLabel,
   erNedsettelseIArbeidsevneMerEnnHalvpartenLabel,
   erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense,
@@ -46,37 +46,31 @@ export const TidligereSykdomsvurdering = ({ vurdering, sykdomUtenVissVarighetTog
           .filter(Boolean)
           .join(', ')}
       />
-      {vurdering.erArbeidsevnenNedsatt !== undefined && (
+      {!sykdomUtenVissVarighetToggle && vurdering.erArbeidsevnenNedsatt !== undefined && (
         <SpørsmålOgSvar
-          spørsmål={erArbeidsevnenNedsattLabel}
+          spørsmål={harNedsattArbeidsevneLabel}
           svar={getJaNeiEllerIkkeBesvart(vurdering.erArbeidsevnenNedsatt)}
         />
       )}
-      {!sykdomUtenVissVarighetToggle && vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten !== undefined && (
+      {sykdomUtenVissVarighetToggle && vurdering.harNedsattArbeidsevne !== undefined && (
+        <SpørsmålOgSvar
+          spørsmål={erNedsettelseIArbeidsevneMerEnnHalvpartenLabel}
+          svar={getJaNeiJaForbigåendeEllerIkkeBesvart(vurdering.harNedsattArbeidsevne)}
+        />
+      )}
+      {vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten !== undefined && (
         <SpørsmålOgSvar
           spørsmål={erNedsettelseIArbeidsevneMerEnnHalvpartenLabel}
           svar={getJaNeiEllerIkkeBesvart(vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten)}
         />
       )}
-      {sykdomUtenVissVarighetToggle && vurdering.erNedsettelseMinstHalvparten !== undefined && (
-        <SpørsmålOgSvar
-          spørsmål={erNedsettelseIArbeidsevneMerEnnHalvpartenLabel}
-          svar={getJaNeiJaForeløpigEllerIkkeBesvart(vurdering.erNedsettelseMinstHalvparten)}
-        />
-      )}
       {!!vurdering.yrkesskadeBegrunnelse && (
         <SpørsmålOgSvar spørsmål={yrkesskadeBegrunnelse} svar={vurdering.yrkesskadeBegrunnelse} />
       )}
-      {!sykdomUtenVissVarighetToggle && vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense !== undefined && (
+      {vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense !== undefined && (
         <SpørsmålOgSvar
           spørsmål={erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense}
           svar={getJaNeiEllerIkkeBesvart(vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense)}
-        />
-      )}
-      {sykdomUtenVissVarighetToggle && vurdering.erNedsettelseMerEnnYrkesskadegrense !== undefined && (
-        <SpørsmålOgSvar
-          spørsmål={erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense}
-          svar={getJaNeiJaForeløpigEllerIkkeBesvart(vurdering.erNedsettelseMerEnnYrkesskadegrense)}
         />
       )}
       {vurdering.erSkadeSykdomEllerLyteVesentligdel !== undefined && (
