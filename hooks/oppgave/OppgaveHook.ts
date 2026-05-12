@@ -30,6 +30,7 @@ type UseOppgaverOptions = {
   kunLedigeOppgaver?: boolean;
   utvidetFilter?: OppgavelisteRequest['utvidetFilter'];
   sortering?: ScopedBackendSortState<NoNavAapOppgaveListeOppgaveSorteringSortBy>;
+  hastemarkeringerFørst: boolean;
 };
 
 function lagUrlSuffix(filter: OppgavelisteRequest['utvidetFilter']): string {
@@ -95,6 +96,7 @@ export function useOppgaver({
   type,
   utvidetFilter,
   sortering,
+  hastemarkeringerFørst,
 }: UseOppgaverOptions): {
   kanLasteInnFlereOppgaver: boolean;
   antallOppgaver: number;
@@ -115,9 +117,10 @@ export function useOppgaver({
     const typeSuffix = `/${type}`;
     const utvidetFilterSuffix = lagUrlSuffix(utvidetFilter);
     const paging = utvidetFilterSuffix.length > 0 ? `&side=${pageIndex}` : `?side=${pageIndex}`;
+    const hasteoppgaveSuffix = `&hasteoppgaver=${hastemarkeringerFørst}`;
     const sortSuffix = sortering?.orderBy ? `&sortby=${sortering.orderBy}&direction=${sortering.direction}` : '';
 
-    return `${base}${suffix}${typeSuffix}${utvidetFilterSuffix}${paging}${sortSuffix}`;
+    return `${base}${suffix}${typeSuffix}${utvidetFilterSuffix}${paging}${sortSuffix}${hasteoppgaveSuffix}`;
   };
 
   const {
@@ -147,6 +150,7 @@ export function useOppgaver({
         paging: paging,
         utvidetFilter: utvidetFilter,
         sortering: endeligsortering,
+        hastemarkeringerFørst: hastemarkeringerFørst,
       };
 
       return hentOppgaverClient(payload);
@@ -186,6 +190,7 @@ export function useLedigeOppgaver(
   aktiveEnheter: string[],
   visKunOppgaverSomBrukerErVeilederPå: boolean,
   aktivKøId: number,
+  hastemarkeringerFørst: boolean,
   utvidetFilter?: OppgavelisteRequest['utvidetFilter'],
   sortering?: ScopedBackendSortState<NoNavAapOppgaveListeOppgaveSorteringSortBy>
 ) {
@@ -196,12 +201,14 @@ export function useLedigeOppgaver(
     aktivKøId,
     utvidetFilter,
     sortering,
+    hastemarkeringerFørst,
   });
 }
 
 export function useAlleOppgaverForEnhet(
   aktiveEnheter: string[],
   aktivKøId: number,
+  hastemarkeringerFørst: boolean,
   utvidetFilter?: OppgavelisteRequest['utvidetFilter'],
   sortering?: ScopedBackendSortState<NoNavAapOppgaveListeOppgaveSorteringSortBy>
 ) {
@@ -213,6 +220,7 @@ export function useAlleOppgaverForEnhet(
     type: 'ALLE_OPPGAVER',
     utvidetFilter: utvidetFilter,
     sortering,
+    hastemarkeringerFørst,
   });
 }
 
