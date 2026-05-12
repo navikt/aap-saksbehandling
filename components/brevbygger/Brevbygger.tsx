@@ -75,6 +75,15 @@ export const Brevbygger = ({
   const [ikkeSendBrevModalOpen, settIkkeSendBrevModalOpen] = useState(false);
   const [visFerdigstillBrevDialog, settVisFerdigstillBrevDialog] = useState(false);
   const [pdfViewExpanded, setPdfViewExpanded] = useState(false);
+  const [markerteDelmalKeys, settMarkerteDelmalKeys] = useState<Set<string>>(new Set());
+
+  const toggleMarkering = (key: string) => {
+    settMarkerteDelmalKeys((eksisterendeMarkeringer) => {
+      const nyeMarkeringer = new Set(eksisterendeMarkeringer);
+      nyeMarkeringer.has(key) ? nyeMarkeringer.delete(key) : nyeMarkeringer.add(key);
+      return nyeMarkeringer;
+    });
+  };
 
   const ferdigstillBrev = async () => {
     const isValid = await trigger();
@@ -130,7 +139,14 @@ export const Brevbygger = ({
         <VStack gap="space-16">
           <RefusjonskravVisning refusjonskravgrunnlag={refusjonskravgrunnlag} />
           {parsedBrevmal.delmaler.map((delmalRef) => (
-            <Delmal key={delmalRef._key} delmalRef={delmalRef} control={control} watch={watch} />
+            <Delmal
+              key={delmalRef._key}
+              delmalRef={delmalRef}
+              control={control}
+              watch={watch}
+              erMarkert={markerteDelmalKeys.has(delmalRef._key)}
+              onToggleMarkering={() => toggleMarkering(delmalRef._key)}
+            />
           ))}
         </VStack>
 
@@ -180,7 +196,7 @@ export const Brevbygger = ({
             icon={pdfViewExpanded ? <ShrinkIcon /> : <ExpandIcon />}
           />
         </div>
-        <ForhåndsvisHtml isLoading={lasterHtml} html={htmlString} />
+        <ForhåndsvisHtml isLoading={lasterHtml} html={htmlString} markerteDelmalKeys={markerteDelmalKeys} />
       </VStack>
       <IkkeSendBrevModal
         isOpen={ikkeSendBrevModalOpen}

@@ -29,20 +29,6 @@ dialog.tour-modal {
   background: var(--ax-bg-default);
 }
 
-.valgtBrevmal {
-  position: relative;
-}
-
-.valgtBrevmal::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  left: -0.5rem;
-  pointer-events: none;
-  z-index: 2;
-  box-shadow: -0.5rem 0 0 var(--ax-bg-brand-blue-strong);
-}
-
 .aktivtValg {
   position: relative;
   z-index: 1;
