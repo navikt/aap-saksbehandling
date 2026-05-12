@@ -56,6 +56,13 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
       options: årsakOptions,
       label: 'Årsak',
       defaultValue: defaultValues?.årsak,
+      rules: {
+        validate: (value) => {
+          if (value === 'Overstyre bruker') {
+            return 'Overstyring av bruker støttes ikke ennå.';
+          }
+        },
+      },
     },
     meldedato: {
       type: 'date_input',
