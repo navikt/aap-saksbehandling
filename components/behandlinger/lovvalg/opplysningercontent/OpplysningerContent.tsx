@@ -177,6 +177,25 @@ export const OpplysningerContent = ({ opplysning }: Props) => {
       </VStack>
     );
   }
+
+  if (opplysning.bestemtArbeidsgruppeINorge) {
+    const bestemtArbeidsgruppe = opplysning.bestemtArbeidsgruppeINorge;
+    return (
+      <VStack gap={'space-8'}>
+        {bestemtArbeidsgruppe
+          .sort((a, b) => sorterEtterNyesteDato(a.fom, b.fom))
+          .map((data, index) => {
+            return (
+              <VStack gap={'space-4'} key={index} className={styles.sideDivider}>
+                <LabelValue label={'Organisasjonsnummer:'} value={data.virksomhetId} />
+                <LabelValue label={'Virksomhetsnavn:'} value={data.virksomhetNavn ?? ''} />
+                <LabelValue label={'Periode:'} value={formaterPeriode(data.fom, data.tom)} />
+              </VStack>
+            );
+          })}
+      </VStack>
+    );
+  }
 };
 
 function LabelValue({ label, value }: { label?: string; value: string }) {

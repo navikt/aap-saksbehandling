@@ -3,12 +3,12 @@
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { MellomlagretVurdering, YrkesskadeVurderingGrunnlag } from 'lib/types/types';
-import { Label, VStack } from '@navikt/ds-react';
+import { BodyShort, Label, VStack } from '@navikt/ds-react';
 import { erProsent } from 'lib/utils/validering';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
-import { FormEvent, useEffect } from 'react';
+import { FormEvent } from 'react';
 import { YrkesskadeVurderingTabell } from 'components/behandlinger/sykdom/yrkesskade/YrkesskadeVurderingTabell';
 import { YrkesskadeVurderingTabellGammel } from 'components/behandlinger/sykdom/yrkesskade/YrkesskadeVurderingTabellGammel';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
@@ -29,7 +29,6 @@ interface Props {
 export interface YrkesskadeMedSkadeDatoFormFields {
   begrunnelse: string;
   erÅrsakssammenheng: string;
-  relevanteSaker?: string[];
   relevanteYrkesskadeSaker?: YrkesskadeMedSkadeDatoSak[];
   andelAvNedsettelsen?: number;
 }
@@ -83,13 +82,13 @@ export const Yrkesskade = ({
         options: JaEllerNeiOptions,
         defaultValue: defaultValues.erÅrsakssammenheng,
         rules: { required: 'Du må svare på om det finnes en årsakssammenheng' },
-      },
-      relevanteSaker: {
-        //TODO: deprecated
-        type: 'checkbox_nested',
-        label: 'Tilknytt eventuelle yrkesskader som er helt eller delvis årsak til den nedsatte arbeidsevnen.',
-        defaultValue: grunnlag.yrkesskadeVurdering?.relevanteSaker,
-        rules: { required: 'Du må velge minst én yrkesskade' },
+        onChange: () => {
+          form.setValue(
+            'relevanteYrkesskadeSaker',
+            relevanteYrkesskadeSaker.map((sak) => ({ ...sak, erTilknyttet: false }))
+          );
+          form.setValue('andelAvNedsettelsen', undefined);
+        },
       },
       relevanteYrkesskadeSaker: {
         type: 'fieldArray',
@@ -115,7 +114,7 @@ export const Yrkesskade = ({
         },
       },
     },
-    { readOnly: formReadOnly, shouldUnregister: true }
+    { readOnly: formReadOnly }
   );
 
   const { slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } = useMellomlagring(
@@ -124,13 +123,14 @@ export const Yrkesskade = ({
     form
   );
 
+  const erÅrsakssammenheng = form.watch('erÅrsakssammenheng');
+
   const { fields: relevanteYrkesskadeSaker, update } = useFieldArray({
     name: 'relevanteYrkesskadeSaker',
     control: form.control,
     rules: {
       validate: (fields) => {
         // skip validering hvis erÅrsaksammenheng er Nei. Da skulle egentlig denne vært unmounted
-        const erÅrsakssammenheng = form.getValues('erÅrsakssammenheng');
         if (erÅrsakssammenheng === JaEllerNei.Nei) {
           return;
         }
@@ -146,16 +146,6 @@ export const Yrkesskade = ({
     },
   });
 
-  const erÅrsakssammenheng = form.watch('erÅrsakssammenheng');
-  useEffect(() => {
-    if (erÅrsakssammenheng === JaEllerNei.Nei) {
-      form.setValue(
-        'relevanteYrkesskadeSaker',
-        relevanteYrkesskadeSaker.map((sak) => ({ ...sak, erTilknyttet: false }))
-      );
-    }
-  }, [erÅrsakssammenheng]);
-
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
       løsBehovOgGåTilNesteSteg(
@@ -166,7 +156,7 @@ export const Yrkesskade = ({
               begrunnelse: data.begrunnelse,
               erÅrsakssammenheng: data.erÅrsakssammenheng === JaEllerNei.Ja,
               andelAvNedsettelsen: data?.andelAvNedsettelsen,
-              relevanteSaker: data.relevanteSaker || [],
+              relevanteSaker: [], // TODO Fjern fra backend
               relevanteYrkesskadeSaker:
                 data.relevanteYrkesskadeSaker
                   ?.filter((sak) => sak.erTilknyttet)
@@ -210,29 +200,19 @@ export const Yrkesskade = ({
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
       {yrkesskadeNyeFelter && (
-        <div>
+        <VStack gap={'space-4'}>
           <Label size="medium">Relevante informasjon fra søknad</Label>
-          <p style={{ marginTop: 2, marginBottom: 0 }}>
-            Har du yrkesskade eller yrkessykdom som påvirker hvor mye du kan arbeide?{' '}
-            {(() => {
-              switch (grunnlag.opplysninger.oppgittYrkesskadeISøknad) {
-                case true:
-                  return 'Ja';
-                case false:
-                  return 'Nei';
-                default:
-                  return 'Mangler informasjon';
-              }
-            })()}
-          </p>
-        </div>
+          <BodyShort size={'small'}>
+            {`Har du yrkesskade eller yrkessykdom som påvirker hvor mye du kan arbeide? ${mapOppgittYrkesskadeISøknadTilTekst(grunnlag.opplysninger.oppgittYrkesskadeISøknad)}`}
+          </BodyShort>
+        </VStack>
       )}
       <FormField form={form} formField={formFields.begrunnelse} />
       <FormField form={form} formField={formFields.erÅrsakssammenheng} horizontalRadio />
       {relevanteYrkesskadeSaker.length > 0 && (
         <>
           <VStack>
-            <Label size={'small'}>
+            <Label size={'small'} spacing>
               Tilknytt eventuelle yrkesskader som er helt eller delvis årsak til den nedsatte arbeidsevnen.
             </Label>
             {yrkesskadeNyeFelter ? (
@@ -266,7 +246,6 @@ function mapVurderingToDraftFormFields(grunnlag?: YrkesskadeVurderingGrunnlag): 
   return {
     begrunnelse: grunnlag?.yrkesskadeVurdering?.begrunnelse ?? '',
     erÅrsakssammenheng: getJaNeiEllerUndefined(grunnlag?.yrkesskadeVurdering?.erÅrsakssammenheng) ?? '',
-    relevanteSaker: grunnlag?.yrkesskadeVurdering?.relevanteSaker ?? [],
     relevanteYrkesskadeSaker: hentDefaultYrkesskadesakerFraVurderingerEllerGrunnlag(grunnlag),
     andelAvNedsettelsen: grunnlag?.yrkesskadeVurdering?.andelAvNedsettelsen ?? undefined,
   };
@@ -292,4 +271,15 @@ function hentDefaultYrkesskadesakerFraVurderingerEllerGrunnlag(
       };
     }) || []
   );
+}
+
+function mapOppgittYrkesskadeISøknadTilTekst(oppgittYrkesskadeISøknad?: boolean | null) {
+  switch (oppgittYrkesskadeISøknad) {
+    case true:
+      return 'Ja';
+    case false:
+      return 'Nei';
+    default:
+      return 'Mangler informasjon';
+  }
 }
