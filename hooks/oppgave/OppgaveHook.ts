@@ -118,10 +118,9 @@ export function useOppgaver({
     const utvidetFilterSuffix = lagUrlSuffix(utvidetFilter);
     const paging = utvidetFilterSuffix.length > 0 ? `&side=${pageIndex}` : `?side=${pageIndex}`;
     const hasteoppgaveSuffix = `&hasteoppgaver=${hastemarkeringerFørst}`;
-    const url = `${base}${suffix}${typeSuffix}${utvidetFilterSuffix}${paging}${sortSuffix}${hasteoppgaveSuffix}`;
     const sortSuffix = sortering?.orderBy ? `&sortby=${sortering.orderBy}&direction=${sortering.direction}` : '';
 
-    return `${base}${suffix}${typeSuffix}${utvidetFilterSuffix}${paging}${sortSuffix}`;
+    return `${base}${suffix}${typeSuffix}${utvidetFilterSuffix}${paging}${sortSuffix}${hasteoppgaveSuffix}`;
   };
 
   const {
