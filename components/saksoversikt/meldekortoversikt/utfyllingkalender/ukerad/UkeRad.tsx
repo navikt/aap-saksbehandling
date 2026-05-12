@@ -14,9 +14,10 @@ import { RedigerMeldekortFormFields } from 'components/saksoversikt/meldekortove
 
 interface Props {
   felterIUken: MeldeperiodeUke;
+  readOnly: boolean
 }
 
-export const UkeRad = ({ felterIUken }: Props) => {
+export const UkeRad = ({ felterIUken, readOnly }: Props) => {
   const form = useFormContext<RedigerMeldekortFormFields>();
 
   const alleDagerIUken = eachDayOfInterval({
@@ -57,6 +58,7 @@ export const UkeRad = ({ felterIUken }: Props) => {
               felterMap={felterMap}
               erSisteFeltiRaden={alleDagerIUken.length === index + 1}
               radHarError={ukeUtfyllingErrorMeldinger.length > 0}
+              readOnly={readOnly}
             />
           );
         })}

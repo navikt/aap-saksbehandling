@@ -9,6 +9,10 @@ import { UkeRad } from 'components/saksoversikt/meldekortoversikt/utfyllingkalen
 import { replaceCommasWithDots } from 'lib/utils/string';
 import { OppsummeringTimer } from 'components/saksoversikt/meldekortoversikt/oppsummeringtimer/OppsummeringTimer';
 
+interface Props {
+  readOnly: boolean;
+}
+
 export type FieldArrayWithIndex = FieldArrayWithId<RedigerMeldekortFormFields> & {
   index: number;
 };
@@ -22,7 +26,7 @@ export interface MeldeperiodeUke {
 
 export const utfyllingKalenderId = 'rapporteringskalender';
 
-export const UtfyllingKalender = () => {
+export const UtfyllingKalender = ({ readOnly }: Props) => {
   const form = useFormContext<RedigerMeldekortFormFields>();
   const { fields } = useFieldArray({
     control: form.control,
@@ -53,7 +57,7 @@ export const UtfyllingKalender = () => {
   return (
     <VStack gap={'space-16'} id={utfyllingKalenderId}>
       {Object.entries(meldeperiodeUker).map(([ukeStart, felterIUken]) => (
-        <UkeRad key={ukeStart} felterIUken={felterIUken} />
+        <UkeRad key={ukeStart} felterIUken={felterIUken} readOnly={readOnly}/>
       ))}
       <OppsummeringTimer
         timer={form

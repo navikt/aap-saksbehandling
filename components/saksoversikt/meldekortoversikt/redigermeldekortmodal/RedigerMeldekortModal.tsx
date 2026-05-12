@@ -33,7 +33,13 @@ interface Dag {
   timerArbeidet: string;
 }
 
-const årsakOptions = ['', 'Registrere meldedato', 'Lever/endre meldekort for bruker', 'Overstyre bruker'];
+enum Årsaker {
+  REGISTRERE_MELDEDATO = 'Registrere meldedato',
+  LEVERE_MELDEKORT_FOR_BRUKER = 'Lever/endre meldekort for bruker',
+  OVERSTYRE_BRUKER = 'Overstyre bruker',
+}
+
+const årsakOptions = ['', ...Object.values(Årsaker)];
 
 export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) => {
   const { saksnummer } = useParamsMedType();
@@ -93,9 +99,15 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
 
   const årsak = form.watch('årsak');
 
-  const skalViseMeldedato = årsak === 'Lever/endre meldekort for bruker' || årsak === 'Registrere meldedato';
-  const skalViseTimer = årsak === 'Lever/endre meldekort for bruker';
-  const skalViseAlertForOverstyringAvBruker = årsak === 'Overstyre bruker';
+  const erÅrsakLevereMeldekort = årsak === Årsaker.LEVERE_MELDEKORT_FOR_BRUKER;
+  const erÅrsakRegistrereMeldedato = årsak === Årsaker.REGISTRERE_MELDEDATO;
+  const erÅrsakOverstyring = årsak === Årsaker.OVERSTYRE_BRUKER;
+
+  const brukerHarLevertTimer = meldekort.meldekort?.dager.some((dag) => dag.timerArbeidet > 0) ?? false;
+
+  const skalViseMeldedato = erÅrsakLevereMeldekort || erÅrsakRegistrereMeldedato;
+  const skalViseTimer = erÅrsakLevereMeldekort || (erÅrsakRegistrereMeldedato && brukerHarLevertTimer);
+  const skalViseAlertForIngenTimer = erÅrsakRegistrereMeldedato && !brukerHarLevertTimer;
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen} size={'medium'}>
@@ -134,10 +146,15 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
                 <FormField form={form} formField={formFields.begrunnelse} />
                 <FormField form={form} formField={formFields.årsak} />
                 {skalViseMeldedato && <FormField form={form} formField={formFields.meldedato} />}
-                {skalViseTimer && <UtfyllingKalender />}
+                {skalViseTimer && <UtfyllingKalender readOnly={erÅrsakRegistrereMeldedato} />}
+                {skalViseAlertForIngenTimer && (
+                  <Alert variant={'info'} size={'small'}>
+                    Bruker har ikke levert noen timer.
+                  </Alert>
+                )}
                 <FormErrorSummary errorList={errorList} />
                 {error && <Alert variant={'error'}>{error}</Alert>}
-                {skalViseAlertForOverstyringAvBruker && (
+                {erÅrsakOverstyring && (
                   <Alert variant={'warning'} size={'small'}>
                     Overstyring av bruker er ikke støttet enda. Hvis behovet vedvarer etter dialog med bruker, send sak
                     i porten til team AAP.
