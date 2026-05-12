@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Box, Button, Heading, HStack, Switch, VStack } from '@navikt/ds-react';
 import { Control, Controller, UseFormWatch } from 'react-hook-form';
 import { DelmalReferanse, FritekstType, ValgRef } from 'components/brevbygger/brevmodellTypes';
@@ -13,17 +12,12 @@ interface Props {
   delmalRef: DelmalReferanse;
   control: Control<BrevFormVerdier>;
   watch: UseFormWatch<BrevFormVerdier>;
+  erMarkert: boolean;
+  onToggleMarkering: () => void;
 }
 
-export const Delmal = ({ delmalRef, control, watch }: Props) => {
+export const Delmal = ({ delmalRef, control, watch, erMarkert, onToggleMarkering }: Props) => {
   const { delmal, obligatorisk } = delmalRef;
-  const [erMarkert, settErMarkert] = useState<boolean>(false);
-
-  const toggleMarkering = () => {
-    const element = document.getElementById(`brev_${delmalRef._key}`);
-    element?.classList.toggle('valgtBrevmal');
-    settErMarkert(!erMarkert);
-  };
 
   const valgOgFritekst = delmal.teksteditor.filter(
     (node): node is ValgRef | FritekstType => node._type === 'valgRef' || node._type === 'fritekst'
@@ -79,10 +73,10 @@ export const Delmal = ({ delmalRef, control, watch }: Props) => {
         variant={'tertiary'}
         type={'button'}
         size={'small'}
-        onClick={() => toggleMarkering()}
+        onClick={onToggleMarkering}
         icon={erMarkert ? <EyeObfuscatedIcon /> : <EyeIcon />}
       >
-        {erMarkert ? 'Fjern markering' : 'Marker i brev'}
+        {erMarkert ? 'Skjul markering' : 'Vis i brev'}
       </Button>
     </Box>
   );

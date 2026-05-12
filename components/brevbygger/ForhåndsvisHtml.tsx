@@ -8,6 +8,7 @@ import styles from './ForhåndsvisHtml.module.css';
 interface Props {
   html: string | undefined;
   isLoading: boolean;
+  markerteDelmalKeys: Set<string>;
 }
 
 function parseToDiv(html: string): HTMLDivElement {
@@ -17,17 +18,30 @@ function parseToDiv(html: string): HTMLDivElement {
   return div;
 }
 
-export const ForhåndsvisHtml = ({ html, isLoading }: Props) => {
+function leggTilMarkeringer(container: HTMLDivElement, keys: Set<string>, className: string) {
+  container.querySelectorAll(`.${className}`).forEach((el) => el.classList.remove(className));
+  keys.forEach((key) => container.querySelector(`#brev_${key}`)?.classList.add(className));
+}
+
+export const ForhåndsvisHtml = ({ html, isLoading, markerteDelmalKeys }: Props) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // når html-en oppdateres pga en endring fra bruker
   useEffect(() => {
     const container = containerRef.current;
     if (!container || !html) return;
 
-    const newDiv = parseToDiv(html);
-
-    container.innerHTML = newDiv.innerHTML;
+    container.innerHTML = parseToDiv(html).innerHTML;
+    leggTilMarkeringer(container, markerteDelmalKeys, styles.valgtBrevmal);
   }, [html]);
+
+  // når vi endrer hvilke delmaler som er markert
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    leggTilMarkeringer(container, markerteDelmalKeys, styles.valgtBrevmal);
+  }, [markerteDelmalKeys]);
 
   return (
     <div className={styles.wrapper}>
