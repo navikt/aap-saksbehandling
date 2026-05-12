@@ -87,11 +87,7 @@ export const Brevbygger = ({
   };
 
   const sendBrev = async () => {
-    const isValid = await trigger();
-    if (!isValid) return;
-
-    løsBehovOgGåTilNesteSteg(
-      {
+    løsBehovOgGåTilNesteSteg({
         behandlingVersjon,
         behov: {
           behovstype,
@@ -178,7 +174,7 @@ export const Brevbygger = ({
               Oppdater brevmal
             </Button>
           </HStack>
-          <Button type="button" onClick={() => ferdigstillBrev()} size={'small'}>
+          <Button type="button" onClick={ferdigstillBrev} size={'small'}>
             Ferdigstill brev
           </Button>
         </HStack>
