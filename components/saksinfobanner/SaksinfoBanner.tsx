@@ -68,8 +68,7 @@ export const SaksinfoBanner = ({ personInformasjon, sak, behandling, oppgave, fl
       <div className={styles.saksinfo}>
         <HStack gap={'space-8'} align="center">
           <Label size="small">
-            {/*@ts-ignore*/}
-            <Link href={`/person/${personInformasjon.kryptertIdent}`} title="Personside">
+            <Link href={`/person/${personInformasjon.personReferanse}`} title="Personside">
               Personside
             </Link>
           </Label>
