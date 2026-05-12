@@ -117,7 +117,7 @@ function mapTilPeriodisertVurdering(
   const erArbeidsevnenNedsatt = getTrueFalseEllerUndefined(data.erArbeidsevnenNedsatt);
   // Denne overstyrer de under. Hvis false skal alt nulles ut.
   const erArbeidsevnenNedsattBakoverkompatibel = harSkadeSykdomEllerLyte
-    ? erArbeidsevnenNedsatt ||
+    ? (!sykdomsvurderingVissVarighetToggle && erArbeidsevnenNedsatt) ||
       (sykdomsvurderingVissVarighetToggle && data.harNedsattArbeidsevne && data.harNedsattArbeidsevne !== 'NEI')
     : undefined;
 

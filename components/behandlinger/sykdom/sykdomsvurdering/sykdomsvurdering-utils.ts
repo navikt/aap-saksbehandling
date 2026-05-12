@@ -31,7 +31,8 @@ export function erNyVurderingOppfylt(
   if (sykdomUtenVissVarighetToggle) {
     if (
       vurdering.harSkadeSykdomEllerLyte === JaEllerNei.Nei ||
-      vurdering.harNedsattArbeidsevne === 'NEI' ||
+      vurdering.harNedsattArbeidsevne == 'NEI' ||
+      vurdering.harNedsattArbeidsevne == 'JA_FORBIGÅENDE_PROBLEMER' ||
       (!skalVurdereYrkesskade && vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten === JaEllerNei.Nei) ||
       vurdering.erSkadeSykdomEllerLyteVesentligdel === JaEllerNei.Nei ||
       vurdering.erNedsettelseIArbeidsevneAvEnVissVarighet === JaEllerNei.Nei ||
