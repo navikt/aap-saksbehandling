@@ -40,10 +40,6 @@ export function erNyVurderingOppfylt(
       return false;
     }
 
-    if (vurdering.erNedsettelseIArbeidsevneAvEnVissVarighet === JaEllerNei.Ja) {
-      return true;
-    }
-
     if (vurdering.erSkadeSykdomEllerLyteVesentligdel === JaEllerNei.Ja) {
       return true;
     }
