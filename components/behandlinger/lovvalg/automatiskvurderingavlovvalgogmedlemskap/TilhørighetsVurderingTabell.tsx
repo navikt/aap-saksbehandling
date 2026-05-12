@@ -131,5 +131,6 @@ function harMinstEttGrunnlag(vurdering: tilhørighetVurdering) {
     vurdering.utenlandsAddresserGrunnlag?.adresser,
     vurdering.utenlandsAddresserGrunnlag?.personStatus,
     vurdering.vedtakImedlGrunnlag,
+    vurdering.bestemtArbeidsgruppeINorge,
   ].some((grunnlag) => grunnlag !== null && grunnlag && grunnlag?.length > 0);
 }
