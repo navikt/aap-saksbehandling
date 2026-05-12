@@ -7,6 +7,7 @@ import { ExpandIcon, ShrinkIcon } from '@navikt/aksel-icons';
 
 import styles from './Dokumentvisning.module.css';
 import { postmottakHentDokumentClient } from 'lib/postmottakClientApi';
+import { useFeatureFlag } from '../../../context/UnleashContext';
 
 interface Props {
   journalpostId: number;
@@ -19,6 +20,7 @@ export const Dokumentvisning = ({ journalpostId, dokumenter, setIsExpandedAction
   const [valgtDokumentInfoId, setValgtDokumentInfoId] = useState<string | undefined>(
     dokumenter && dokumenter.length > 0 ? dokumenter[0].dokumentInfoId : undefined
   );
+  const pdfBrowserView = useFeatureFlag('BrowserPDFDokumentVisning');
 
   const [dataUri, setDataUri] = useState<string>();
 
@@ -72,13 +74,16 @@ export const Dokumentvisning = ({ journalpostId, dokumenter, setIsExpandedAction
           </Tabs.List>
         </Tabs>
       </HStack>
-      {dataUri && (
-        <div className={styles.pdf}>
+      {dataUri &&
+        (pdfBrowserView ? (
+          <div className={styles.pdf}>
+            <iframe src={dataUri} title="Dokumentvisning" width="100%" height="100%" style={{ border: 'none' }} />
+          </div>
+        ) : (
           <object data={`${dataUri}#toolbar=0`} type="application/pdf" width="100%" height="100%">
             <p>Visning av dokument</p>
           </object>
-        </div>
-      )}
+        ))}
     </div>
   );
 };
