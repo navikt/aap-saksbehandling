@@ -16,46 +16,11 @@ interface Props {
 }
 
 interface MellomlagringAvBrevResultat {
-  pdfDataUri: string | undefined;
-  lasterPdf: boolean;
+  lasterHtml: boolean;
+  htmlString: string | undefined;
 }
 
 export function useMellomlagringAvBrev({ referanse, control, brevmal, brevdata }: Props): MellomlagringAvBrevResultat {
-  const [pdfDataUri, setPdfDataUri] = useState<string | undefined>();
-  const [lasterPdf, setLasterPdf] = useState(false);
-
-  useEffect(() => {
-    return () => {
-      if (pdfDataUri) URL.revokeObjectURL(pdfDataUri);
-    };
-  });
-
-  const formVerdier = useWatch({ control });
-  const debouncedFormVerdier = useDebounce(formVerdier);
-
-  useEffect(() => {
-    const lagreOgOppdaterPdf = async () => {
-      const payload = byggBrevdataPayload(debouncedFormVerdier as BrevFormVerdier, brevmal, brevdata);
-      const res = await clientOppdaterBrevdata(referanse, payload);
-
-      if (isSuccess(res)) {
-        setLasterPdf(true);
-        const blob = await fetch(`/saksbehandling/api/brev/${referanse}/forhandsvis/`).then((r) => r.blob());
-        setPdfDataUri(URL.createObjectURL(new Blob([blob], { type: 'application/pdf' })));
-        setLasterPdf(false);
-      }
-    };
-
-    lagreOgOppdaterPdf();
-  }, [debouncedFormVerdier]);
-
-  return { pdfDataUri, lasterPdf };
-}
-
-export function useMellomlagringAvBrevV2({ referanse, control, brevmal, brevdata }: Props): {
-  lasterHtml: boolean;
-  htmlString: string | undefined;
-} {
   const [lasterHtml, setLasterHtml] = useState(false);
   const [htmlString, setHtmlString] = useState<string | undefined>();
 

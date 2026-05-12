@@ -13,7 +13,6 @@ import { clientOppdaterBrevmal } from 'lib/clientApi';
 import { revalidateBehandlingPath } from 'lib/actions/actions';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 
-import { ForhåndsvisBrev } from 'components/brevbygger/ForhåndsvisBrev';
 import { VelgeMottakere } from 'components/brevbygger/VelgeMottakere';
 import { IkkeSendBrevModal, IkkeSendFields } from 'components/behandlinger/brev/skriveBrev/IkkeSendBrevModal';
 import { RefusjonskravVisning } from 'components/brevbygger/RefusjonskravVisning';
@@ -23,7 +22,7 @@ import { Distribusjonssjekk } from 'components/brev/Distribusjonssjekk';
 import { BrevFormVerdier } from 'components/brevbygger/types';
 import { initialiserFormVerdier } from 'components/brevbygger/formUtils';
 import { Delmal } from 'components/brevbygger/Delmal';
-import { useMellomlagringAvBrev, useMellomlagringAvBrevV2 } from 'components/brevbygger/useMellomlagringAvBrev';
+import { useMellomlagringAvBrev } from 'components/brevbygger/useMellomlagringAvBrev';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { loggUmamiEvent, useUmamiStartTidspunkt } from 'lib/utils/umami';
 import { ForhåndsvisHtml } from 'components/brevbygger/ForhåndsvisHtml';
@@ -64,8 +63,7 @@ export const Brevbygger = ({
   });
   const umamiStartTidspunkt = useUmamiStartTidspunkt('AKTIV');
 
-  // const { pdfDataUri, lasterPdf } = useMellomlagringAvBrev({ referanse, control, brevmal: parsedBrevmal, brevdata });
-  const { htmlString, lasterHtml } = useMellomlagringAvBrevV2({ referanse, control, brevmal: parsedBrevmal, brevdata });
+  const { htmlString, lasterHtml } = useMellomlagringAvBrev({ referanse, control, brevmal: parsedBrevmal, brevdata });
 
   const router = useRouter();
   const { behandlingsreferanse, saksnummer } = useParamsMedType();
@@ -81,6 +79,12 @@ export const Brevbygger = ({
   const [ikkeSendBrevModalOpen, settIkkeSendBrevModalOpen] = useState(false);
   const [visFerdigstillBrevDialog, settVisFerdigstillBrevDialog] = useState(false);
   const [pdfViewExpanded, setPdfViewExpanded] = useState(false);
+
+  const ferdigstillBrev = async () => {
+    const isValid = await trigger();
+    if (!isValid) return;
+    settVisFerdigstillBrevDialog(true);
+  };
 
   const sendBrev = async () => {
     const isValid = await trigger();
@@ -174,12 +178,9 @@ export const Brevbygger = ({
               Oppdater brevmal
             </Button>
           </HStack>
-          <Button type="button" onClick={() => settVisFerdigstillBrevDialog(true)} size={'small'}>
+          <Button type="button" onClick={() => ferdigstillBrev()} size={'small'}>
             Ferdigstill brev
           </Button>
-          {/*<Button type="button" onClick={sendBrev} loading={isLoading} size="small" disabled={!!distribusjonssjekkFeil}>
-            Send brev
-          </Button>*/}
         </HStack>
       </Box>
 
@@ -193,7 +194,6 @@ export const Brevbygger = ({
             icon={pdfViewExpanded ? <ShrinkIcon /> : <ExpandIcon />}
           />
         </div>
-        {/*<ForhåndsvisBrev isLoading={lasterPdf} dataUri={pdfDataUri} />*/}
         <ForhåndsvisHtml isLoading={lasterHtml} html={htmlString} />
       </VStack>
       <IkkeSendBrevModal
