@@ -15,7 +15,9 @@ export const ForhåndsvisBrev = ({ dataUri, isLoading = false }: Props) => {
           <Loader size="2xlarge" title="Oppretter pdf" transparent />
         </div>
       )}
-      {dataUri && <object data={dataUri} type="application/pdf" className={styles.pdf} />}
+      {dataUri && (
+        <object data={dataUri} type="application/pdf" className={styles.pdf} aria-label="Pdf av vedtaksbrev" />
+      )}
     </div>
   );
 };
