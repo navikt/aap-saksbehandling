@@ -37,6 +37,7 @@ describe('Delmalvelger', () => {
   test('Overskrift hentes fra beskrivelse', () => {
     render(
       <Brevbygger
+        behandlingstype={'Førstegangsbehandling'}
         referanse={'1234'}
         brevmal={JSON.stringify(brevmal)}
         brevdata={brevdata}
@@ -59,6 +60,7 @@ describe('Delmalvelger', () => {
         mottaker={{ ident: '1234', navn: 'Navn' }}
         behandlingVersjon={1}
         readOnly={false}
+        behandlingstype={'Førstegangsbehandling'}
       />
     );
     const kort = screen.getByRole('heading', { name: valgfriDelmal.delmal.beskrivelse }).closest('div');
@@ -80,6 +82,7 @@ describe('Delmalvelger', () => {
         mottaker={{ ident: '1234', navn: 'Navn' }}
         behandlingVersjon={1}
         readOnly={false}
+        behandlingstype={'Førstegangsbehandling'}
       />
     );
     expect(screen.queryByText(obligatoriskDelmal.delmal.beskrivelse)).not.toBeInTheDocument();
@@ -95,6 +98,7 @@ describe('Delmalvelger', () => {
         mottaker={{ ident: '1234', navn: 'Navn' }}
         behandlingVersjon={1}
         readOnly={false}
+        behandlingstype={'Førstegangsbehandling'}
       />
     );
     const kort = screen.getByRole('heading', { name: valgfriDelmal.delmal.beskrivelse }).closest('div');
@@ -116,6 +120,7 @@ describe('Delmalvelger', () => {
         mottaker={{ ident: '1234', navn: 'Navn' }}
         behandlingVersjon={1}
         readOnly={false}
+        behandlingstype={'Førstegangsbehandling'}
       />
     );
     const kort = screen.getByRole('heading', { name: valgfriDelmal.delmal.beskrivelse }).closest('div');
@@ -149,6 +154,7 @@ describe('Delmaler med valg', () => {
         mottaker={{ ident: '1234', navn: 'Navn' }}
         behandlingVersjon={1}
         readOnly={false}
+        behandlingstype={'Førstegangsbehandling'}
       />
     );
     expect(screen.queryByText('Beskrivelse av alternativ')).not.toBeInTheDocument();
@@ -164,6 +170,7 @@ describe('Delmaler med valg', () => {
         mottaker={{ ident: '1234', navn: 'Navn' }}
         behandlingVersjon={1}
         readOnly={false}
+        behandlingstype={'Førstegangsbehandling'}
       />
     );
     expect(screen.getByRole('combobox', { name: 'Beskrivelse av alternativ' })).toBeInTheDocument();
@@ -188,6 +195,7 @@ describe('Delmaler med valg', () => {
         mottaker={{ ident: '1234', navn: 'Navn' }}
         behandlingVersjon={1}
         readOnly={false}
+        behandlingstype={'Førstegangsbehandling'}
       />
     );
     expect(screen.getByRole('heading', { name: obligatoriskDelmalMedAlternativer.delmal.beskrivelse })).toBeVisible();
@@ -213,6 +221,7 @@ describe('Delmaler med valg', () => {
         mottaker={{ ident: '1234', navn: 'Navn' }}
         behandlingVersjon={1}
         readOnly={false}
+        behandlingstype={'Førstegangsbehandling'}
       />
     );
     const kort = screen.getByRole('heading', { name: obligatoriskDelmal.delmal.beskrivelse }).closest('div');
@@ -234,6 +243,7 @@ describe('Delmaler med valg', () => {
         mottaker={{ ident: '1234', navn: 'Navn' }}
         behandlingVersjon={1}
         readOnly={false}
+        behandlingstype={'Førstegangsbehandling'}
       />
     );
     expect(screen.getByRole('option', { name: 'Alternativ 1' })).toBeInTheDocument();
@@ -261,6 +271,7 @@ describe('Delmaler med valg', () => {
         mottaker={{ ident: '1234', navn: 'Navn' }}
         behandlingVersjon={1}
         readOnly={false}
+        behandlingstype={'Førstegangsbehandling'}
       />
     );
 
@@ -289,6 +300,7 @@ describe('Delmaler med valg', () => {
         mottaker={{ ident: '1234', navn: 'Navn' }}
         behandlingVersjon={1}
         readOnly={false}
+        behandlingstype={'Førstegangsbehandling'}
       />
     );
 
@@ -322,6 +334,7 @@ describe('Delmaler med valg', () => {
         mottaker={{ ident: '1234', navn: 'Navn' }}
         behandlingVersjon={1}
         readOnly={false}
+        behandlingstype={'Førstegangsbehandling'}
       />
     );
 
@@ -349,6 +362,7 @@ describe('Delmaler med valg', () => {
         mottaker={{ ident: '1234', navn: 'Navn' }}
         behandlingVersjon={1}
         readOnly={false}
+        behandlingstype={'Førstegangsbehandling'}
       />
     );
     await user.click(screen.getByRole('checkbox', { name: 'Inkluder i brev' }));
@@ -375,6 +389,7 @@ describe('Delmaler med valg', () => {
         mottaker={{ ident: '1234', navn: 'Navn' }}
         behandlingVersjon={1}
         readOnly={false}
+        behandlingstype={'Førstegangsbehandling'}
       />
     );
     await user.click(screen.getByRole('checkbox', { name: 'Inkluder i brev' }));
@@ -407,6 +422,7 @@ describe('Delmaler med fritekst', () => {
         mottaker={{ ident: '1234', navn: 'Navn' }}
         behandlingVersjon={1}
         readOnly={false}
+        behandlingstype={'Førstegangsbehandling'}
       />
     );
     expect(screen.getByRole('button', { name: 'Legg til fritekst' })).toBeVisible();
@@ -423,6 +439,7 @@ describe('Delmaler med fritekst', () => {
         mottaker={{ ident: '1234', navn: 'Navn' }}
         behandlingVersjon={1}
         readOnly={false}
+        behandlingstype={'Førstegangsbehandling'}
       />
     );
     await user.click(screen.getByRole('button', { name: 'Legg til fritekst' }));
@@ -440,6 +457,7 @@ describe('Delmaler med fritekst', () => {
         mottaker={{ ident: '1234', navn: 'Navn' }}
         behandlingVersjon={1}
         readOnly={false}
+        behandlingstype={'Førstegangsbehandling'}
       />
     );
     await user.click(screen.getByRole('button', { name: 'Legg til fritekst' }));
@@ -472,6 +490,7 @@ describe('Delmaler med fritekst', () => {
         mottaker={{ ident: '1234', navn: 'Navn' }}
         behandlingVersjon={1}
         readOnly={false}
+        behandlingstype={'Førstegangsbehandling'}
       />
     );
     expect(screen.getByRole('textbox', { name: 'Fritekst' })).toBeVisible();
