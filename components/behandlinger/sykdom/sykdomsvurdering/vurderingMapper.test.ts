@@ -173,6 +173,30 @@ describe('mapTilPeriodisertVurdering', () => {
       });
     });
 
+    describe('harNedsattArbeidsevne = NEI', () => {
+      const data: Sykdomsvurdering = {
+        ...baseSykdomsvurdering,
+        erArbeidsevnenNedsatt: undefined,
+        harNedsattArbeidsevne: 'NEI',
+      };
+
+      it('skal sette harNedsattArbeidsevne til NEI', () => {
+        const result = mapTilPeriodisertVurdering(data, false, false, rettighetsperiodeStart, true);
+        expect(result.harNedsattArbeidsevne).toBe('NEI');
+      });
+
+      it('skal nullstille alle arbeidsevne- og yrkesskade-felt', () => {
+        const result = mapTilPeriodisertVurdering(data, false, false, rettighetsperiodeStart, true);
+        expect(result.erNedsettelseIArbeidsevneMerEnnHalvparten).toBeUndefined();
+        expect(result.erNedsettelseMinstHalvparten).toBeUndefined();
+        expect(result.erSkadeSykdomEllerLyteVesentligdel).toBeUndefined();
+        expect(result.erNedsettelseIArbeidsevneAvEnVissVarighet).toBeUndefined();
+        expect(result.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense).toBeUndefined();
+        expect(result.erNedsettelseIArbeidsevneMerEnnHalvparten).toBeUndefined();
+        expect(result.yrkesskadeBegrunnelse).toBeUndefined();
+      });
+    });
+
     describe('erArbeidsevnenNedsatt = Ja, ingen yrkesskade', () => {
       describe('fraDato lik eller før rettighetsperiodeStart', () => {
         it('skal bruke erNedsettelseIArbeidsevneMerEnnHalvparten (Ja) og kaskadere videre', () => {

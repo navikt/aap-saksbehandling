@@ -33,6 +33,7 @@ function mapArbeidsevneOgYrkesskade(
     const erNedsettelseIArbeidsevneMerEnnHalvparten = erÅrsakssammenhengYrkesskade
       ? undefined
       : getTrueFalseEllerUndefined(data.erNedsettelseIArbeidsevneMerEnnHalvparten);
+
     const skalBegrunneYrkesskaden =
       vurderingDatoSammeSomRettighetsperiodeStart &&
       skalVurdereYrkesskade &&
@@ -52,7 +53,6 @@ function mapArbeidsevneOgYrkesskade(
         : undefined;
 
     const erNedsettelseIArbeidsevneAvEnVissVarighetBakoverkompatibel = data.harNedsattArbeidsevne === 'JA';
-
     return {
       yrkesskadeBegrunnelse,
       erSkadeSykdomEllerLyteVesentligdel,
@@ -114,12 +114,14 @@ function mapTilPeriodisertVurdering(
   const hoveddiagnose = harSkadeSykdomEllerLyte ? data?.hoveddiagnose?.value : undefined;
   const bidiagnoser = harSkadeSykdomEllerLyte ? data.bidiagnose?.map((diagnose) => diagnose.value) : undefined;
 
+  const erArbeidsevnenNedsatt = getTrueFalseEllerUndefined(data.erArbeidsevnenNedsatt);
   // Denne overstyrer de under. Hvis false skal alt nulles ut.
-  const erArbeidsevnenNedsatt = harSkadeSykdomEllerLyte
-    ? getTrueFalseEllerUndefined(data.erArbeidsevnenNedsatt)
+  const erArbeidsevnenNedsattBakoverkompatibel = harSkadeSykdomEllerLyte
+    ? erArbeidsevnenNedsatt ||
+      (sykdomsvurderingVissVarighetToggle && data.harNedsattArbeidsevne && data.harNedsattArbeidsevne !== 'NEI')
     : undefined;
 
-  const nedsattArbeidsevneOgYrkesskade = erArbeidsevnenNedsatt
+  const nedsattArbeidsevneOgYrkesskade = erArbeidsevnenNedsattBakoverkompatibel
     ? mapArbeidsevneOgYrkesskade(
         data,
         skalVurdereYrkesskade,
@@ -139,8 +141,9 @@ function mapTilPeriodisertVurdering(
     kodeverk,
     hoveddiagnose,
     bidiagnoser,
-    erArbeidsevnenNedsatt,
     dokumenterBruktIVurdering: [],
+    harNedsattArbeidsevne: data.harNedsattArbeidsevne,
+    erArbeidsevnenNedsatt: erArbeidsevnenNedsattBakoverkompatibel,
   };
 }
 
