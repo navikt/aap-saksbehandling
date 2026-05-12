@@ -1,11 +1,11 @@
 .pdf {
-  padding: var(--ax-space-8);
   min-height: 100%;
   min-width: 100%;
 }
 
 .pdfBox {
   position: relative;
+  height: 100%;
 }
 
 .overlay {
