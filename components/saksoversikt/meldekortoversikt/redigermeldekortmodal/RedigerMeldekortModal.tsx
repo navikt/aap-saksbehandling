@@ -1,4 +1,4 @@
-import { Alert, Button, Dialog, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, Detail, Dialog, HStack, Link, VStack } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 
@@ -9,11 +9,14 @@ import { FormErrorSummary } from 'components/formerrorsummary/FormErrorSummary';
 import { hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import { hentUkeNummerForPeriode } from 'components/saksoversikt/meldekortoversikt/meldekorttabell/MeldekortTabell';
 import { Dato } from 'lib/types/Dato';
-import { MeldeperiodeMedMeldekortDto, Periode } from 'lib/types/types';
-import { formaterDatoForBackend } from 'lib/utils/date';
+import { MeldeperiodeMedMeldekortDto } from 'lib/types/types';
+import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { clientKorrigerMeldekort } from 'lib/clientApi';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { isError } from 'lib/utils/api';
+import { useAlleDokumenterPåSak } from 'hooks/saksbehandling/DokumenterHook';
+import { ExternalLinkIcon } from '@navikt/aksel-icons';
+import { addDays } from 'date-fns';
 
 interface Props {
   setIsOpen: (isOpen: boolean) => void;
@@ -33,10 +36,17 @@ interface Dag {
   timerArbeidet: string;
 }
 
-const årsakOptions = ['', 'Registrere meldedato', 'Lever/endre meldekort for bruker', 'Overstyre bruker'];
+enum Årsaker {
+  REGISTRERE_MELDEDATO = 'Registrere meldedato',
+  LEVERE_MELDEKORT_FOR_BRUKER = 'Lever/endre meldekort for bruker',
+  OVERSTYRE_BRUKER = 'Overstyre bruker',
+}
+
+const årsakOptions = ['', ...Object.values(Årsaker)];
 
 export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) => {
   const { saksnummer } = useParamsMedType();
+  const { dokumenter } = useAlleDokumenterPåSak();
 
   const [error, setError] = useState<string>();
   const [isLoading, setIsLoading] = useState(false);
@@ -56,6 +66,13 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
       options: årsakOptions,
       label: 'Årsak',
       defaultValue: defaultValues?.årsak,
+      rules: {
+        validate: (value) => {
+          if (value === 'Overstyre bruker') {
+            return 'Overstyring av bruker støttes ikke ennå.';
+          }
+        },
+      },
     },
     meldedato: {
       type: 'date_input',
@@ -86,9 +103,30 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
 
   const årsak = form.watch('årsak');
 
-  const skalViseMeldedato = årsak === 'Lever/endre meldekort for bruker' || årsak === 'Registrere meldedato';
-  const skalViseTimer = årsak === 'Lever/endre meldekort for bruker';
-  const skalViseAlertForOverstyringAvBruker = årsak === 'Overstyre bruker';
+  const erÅrsakLevereMeldekort = årsak === Årsaker.LEVERE_MELDEKORT_FOR_BRUKER;
+  const erÅrsakRegistrereMeldedato = årsak === Årsaker.REGISTRERE_MELDEDATO;
+  const erÅrsakOverstyring = årsak === Årsaker.OVERSTYRE_BRUKER;
+
+  const brukerHarLevertTimer = meldekort.meldekort?.dager.some((dag) => dag.timerArbeidet > 0) ?? false;
+
+  const skalViseMeldedato = erÅrsakLevereMeldekort || erÅrsakRegistrereMeldedato;
+  const skalViseTimer = erÅrsakLevereMeldekort || (erÅrsakRegistrereMeldedato && brukerHarLevertTimer);
+  const skalViseAlertForIngenTimer = erÅrsakRegistrereMeldedato && !brukerHarLevertTimer;
+
+  const tidligereInnsendteMeldekort = meldekort.tidligereMeldekort.map((tidligereMeldekort) => {
+    const dokument = dokumenter?.find((doku) => doku.journalpostId === tidligereMeldekort.journalpostId);
+    const journalpostId = tidligereMeldekort.journalpostId;
+    const dokumentId = dokument?.dokumenter[0]?.dokumentInfoId;
+    const mottattTidspunkt = tidligereMeldekort.mottattTidspunkt;
+    const oppdatertAv = tidligereMeldekort.oppdatertAv;
+
+    return {
+      journalpostId,
+      dokumentId,
+      mottattTidspunkt,
+      oppdatertAv,
+    };
+  });
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen} size={'medium'}>
@@ -98,47 +136,81 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
           <Dialog.Description>{`${fom.formaterForFrontend()} - ${tom.formaterForFrontend()}`}</Dialog.Description>
         </Dialog.Header>
         <Dialog.Body>
-          <FormProvider {...form}>
-            <form
-              id={'endre-meldekort'}
-              onSubmit={form.handleSubmit(async (data) => {
-                setIsLoading(true);
-                const oppdaterMeldekortResponse = await clientKorrigerMeldekort(saksnummer, {
-                  dager: data.dager.map((dag) => {
-                    return {
-                      dato: dag.dato,
-                      timerArbeidet: Number(dag.timerArbeidet),
-                    };
-                  }),
-                  begrunnelse: data.begrunnelse,
-                  meldeperiode: meldekort.meldeperiode,
-                });
+          <VStack gap={'space-16'}>
+            <FormProvider {...form}>
+              <form
+                id={'endre-meldekort'}
+                onSubmit={form.handleSubmit(async (data) => {
+                  setIsLoading(true);
+                  const oppdaterMeldekortResponse = await clientKorrigerMeldekort(saksnummer, {
+                    dager: data.dager.map((dag) => {
+                      return {
+                        dato: dag.dato,
+                        timerArbeidet: Number(dag.timerArbeidet),
+                      };
+                    }),
+                    begrunnelse: data.begrunnelse,
+                    meldeperiode: meldekort.meldeperiode,
+                  });
 
-                if (isError(oppdaterMeldekortResponse)) {
-                  setError('Noe gikk galt ved oppdatering av meldekort.');
-                } else {
-                  setIsOpen(false);
-                }
+                  if (isError(oppdaterMeldekortResponse)) {
+                    setError('Noe gikk galt ved oppdatering av meldekort.');
+                  } else {
+                    setIsOpen(false);
+                  }
 
-                setIsLoading(false);
-              })}
-            >
-              <VStack gap={'space-16'}>
-                <FormField form={form} formField={formFields.begrunnelse} />
-                <FormField form={form} formField={formFields.årsak} />
-                {skalViseMeldedato && <FormField form={form} formField={formFields.meldedato} />}
-                {skalViseTimer && <UtfyllingKalender />}
-                <FormErrorSummary errorList={errorList} />
-                {error && <Alert variant={'error'}>{error}</Alert>}
-                {skalViseAlertForOverstyringAvBruker && (
-                  <Alert variant={'warning'} size={'small'}>
-                    Overstyring av bruker er ikke støttet enda. Hvis behovet vedvarer etter dialog med bruker, send sak
-                    i porten til team AAP.
-                  </Alert>
-                )}
+                  setIsLoading(false);
+                })}
+              >
+                <VStack gap={'space-16'}>
+                  <FormField form={form} formField={formFields.begrunnelse} />
+                  <FormField form={form} formField={formFields.årsak} />
+                  {skalViseMeldedato && <FormField form={form} formField={formFields.meldedato} />}
+                  {skalViseTimer && <UtfyllingKalender readOnly={erÅrsakRegistrereMeldedato} />}
+                  {skalViseAlertForIngenTimer && (
+                    <Alert variant={'info'} size={'small'}>
+                      Bruker har ikke levert noen timer.
+                    </Alert>
+                  )}
+                  <FormErrorSummary errorList={errorList} />
+                  {error && <Alert variant={'error'}>{error}</Alert>}
+                  {erÅrsakOverstyring && (
+                    <Alert variant={'warning'} size={'small'}>
+                      Overstyring av bruker er ikke støttet enda. Hvis behovet vedvarer etter dialog med bruker, send
+                      sak i porten til team AAP.
+                    </Alert>
+                  )}
+                </VStack>
+              </form>
+            </FormProvider>
+
+            {tidligereInnsendteMeldekort && tidligereInnsendteMeldekort.length > 0 && (
+              <VStack gap={'space-8'}>
+                <BodyShort weight={'semibold'}>Tidligere versjoner av meldekortet:</BodyShort>
+                <VStack gap={'space-2'}>
+                  {tidligereInnsendteMeldekort.map((tidligereMeldekort, index) => {
+                    return (
+                      <HStack key={index} gap={'space-4'} align={'baseline'}>
+                        {tidligereMeldekort.dokumentId && (
+                          <Link
+                            href={`/saksbehandling/api/dokumenter/${tidligereMeldekort.journalpostId}/${tidligereMeldekort.dokumentId}`}
+                            target="_blank"
+                          >
+                            Meldekort for uke {hentUkeNummerForPeriode(fom.dato, tom.dato)}
+                            <ExternalLinkIcon />
+                          </Link>
+                        )}
+                        <Detail>
+                          {formaterDatoForFrontend(tidligereMeldekort.mottattTidspunkt)}{' '}
+                          {tidligereMeldekort.oppdatertAv}
+                        </Detail>
+                      </HStack>
+                    );
+                  })}
+                </VStack>
               </VStack>
-            </form>
-          </FormProvider>
+            )}
+          </VStack>
         </Dialog.Body>
         <Dialog.Footer>
           <Dialog.CloseTrigger>
@@ -158,26 +230,28 @@ function getDefaultValuesForForm(meldekort?: MeldeperiodeMedMeldekortDto): Redig
     return undefined;
   }
 
+  const eksisterendeDager = meldekort.meldekort?.dager ?? [];
+  const startDato = new Dato(meldekort.meldeperiode.fom);
+
+  const alleDager: Dag[] = Array.from({ length: 14 }).map((_, index) => {
+    const dato = formaterDatoForBackend(addDays(startDato.dato, index));
+    const eksisterendeDag = eksisterendeDager.find((dag) => dag.dato === dato);
+
+    return {
+      dato,
+      timerArbeidet:
+        eksisterendeDag?.timerArbeidet == null || eksisterendeDag.timerArbeidet === 0
+          ? ''
+          : eksisterendeDag.timerArbeidet.toString(),
+    };
+  });
+
   return {
     begrunnelse: '',
     årsak: '',
-    meldedato: '',
-    dager:
-      meldekort?.meldekort?.dager.map((dag) => ({
-        dato: dag.dato,
-        timerArbeidet: dag.timerArbeidet == null || dag.timerArbeidet === 0 ? '' : dag.timerArbeidet.toString(),
-      })) || genererUkedagerFraMeldeperiode(meldekort.meldeperiode),
+    meldedato: meldekort.meldekort?.mottattTidspunkt
+      ? formaterDatoForFrontend(meldekort.meldekort.mottattTidspunkt)
+      : '',
+    dager: alleDager,
   };
-}
-
-function genererUkedagerFraMeldeperiode(meldeperiode: Periode): Dag[] {
-  return Array.from({ length: 14 }).map((_, i) => {
-    const currentDate = new Dato(meldeperiode.fom).dato;
-    currentDate.setDate(currentDate.getDate() + i);
-
-    return {
-      dato: formaterDatoForBackend(currentDate),
-      timerArbeidet: '',
-    };
-  });
 }

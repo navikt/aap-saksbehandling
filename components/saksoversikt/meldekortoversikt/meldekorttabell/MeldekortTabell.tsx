@@ -1,4 +1,4 @@
-import { BodyShort, Button, Detail, Table, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, Detail, Table, Tooltip, VStack } from '@navikt/ds-react';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { eachWeekOfInterval, getISOWeek } from 'date-fns';
 import { Dato } from 'lib/types/Dato';
@@ -40,9 +40,8 @@ export const MeldekortTabell = () => {
             const tom = new Dato(meldekort.meldeperiode.tom);
 
             const antallTimerArbeidet = hentTotaltAntallTimerArbeidet(meldekort.meldekort?.dager);
-            const antallTimerArbeidetIProsent = antallTimerArbeidet
-              ? regnUtProsentForTimerArbeidet(antallTimerArbeidet)
-              : undefined;
+            const antallTimerArbeidetIProsent =
+              antallTimerArbeidet != null ? regnUtProsentForTimerArbeidet(antallTimerArbeidet) : undefined;
 
             return (
               <Table.ExpandableRow
@@ -57,9 +56,17 @@ export const MeldekortTabell = () => {
                     <Detail>{`${fom.formaterForFrontend()} - ${tom.formaterForFrontend()}`}</Detail>
                   </VStack>
                 </Table.HeaderCell>
-                <Table.DataCell textSize={'small'}>{antallTimerArbeidet}</Table.DataCell>
+                <Table.DataCell textSize={'small'}>
+                  {antallTimerArbeidet != null ? (
+                    antallTimerArbeidet
+                  ) : (
+                    <Tooltip content={'Timer er ikke rapportert / Bruker har ikke meldt seg'}>
+                      <BodyShort>-</BodyShort>
+                    </Tooltip>
+                  )}
+                </Table.DataCell>
                 <Table.DataCell textSize={'small'} colSpan={3}>
-                  {antallTimerArbeidetIProsent ? `${antallTimerArbeidetIProsent} %` : '-'}
+                  {antallTimerArbeidetIProsent != null ? `${antallTimerArbeidetIProsent} %` : '-'}
                 </Table.DataCell>
                 <Table.DataCell textSize={'small'}>
                   {meldekort.meldekort?.mottattTidspunkt
