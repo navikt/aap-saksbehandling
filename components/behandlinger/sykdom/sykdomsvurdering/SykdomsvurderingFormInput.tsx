@@ -56,8 +56,8 @@ export const SykdomsvurderingFormInput = ({
   const harNedsattArbeidsevne = form.watch(`vurderinger.${index}.harNedsattArbeidsevne`);
   const skalViseNedsettelse =
     form.watch(`vurderinger.${index}.erArbeidsevnenNedsatt`) === JaEllerNei.Ja ||
-    harNedsattArbeidsevne == 'JA' ||
-    harNedsattArbeidsevne == 'JA_FORBIGÅENDE_PROBLEMER';
+    harNedsattArbeidsevne === 'JA' ||
+    harNedsattArbeidsevne === 'JA_FORBIGÅENDE_PROBLEMER';
 
   return (
     <VStack gap={'space-20'}>
