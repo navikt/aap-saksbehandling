@@ -1,4 +1,4 @@
-import { Control, UseFormWatch } from 'react-hook-form';
+import { Control, useWatch } from 'react-hook-form';
 import { ValgRef } from 'components/brevbygger/brevmodellTypes';
 import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
@@ -7,7 +7,6 @@ import { BrevFormVerdier } from 'components/brevbygger/types';
 interface ValgProps {
   valgRef: ValgRef;
   control: Control<BrevFormVerdier>;
-  watch: UseFormWatch<BrevFormVerdier>;
 }
 
 const handleMouseEnter = (id: string) => {
@@ -24,9 +23,11 @@ const handleMouseLeave = (id: string) => {
   }
 };
 
-export const Valg = ({ valgRef, control, watch }: ValgProps) => {
+export const Valg = ({ valgRef, control }: ValgProps) => {
   const valgId = valgRef.valg._id;
-  const valgtAlternativKey = watch(`valg.${valgId}`);
+
+  const valgtAlternativKey = useWatch({ control, name: `valg.${valgId}` });
+
   const valgtAlternativ = valgRef.valg.alternativer.find((a) => a._key === valgtAlternativKey);
   const erFritekstValgt = valgtAlternativ?._type === 'fritekst';
 

@@ -25,6 +25,8 @@ function leggTilMarkeringer(container: HTMLDivElement, keys: Set<string>, classN
 
 export const ForhåndsvisHtml = ({ html, isLoading, markerteDelmalKeys }: Props) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const markerteDelmalKeysRef = useRef(markerteDelmalKeys);
+  markerteDelmalKeysRef.current = markerteDelmalKeys;
 
   // når html-en oppdateres pga en endring fra bruker
   useEffect(() => {
@@ -32,7 +34,7 @@ export const ForhåndsvisHtml = ({ html, isLoading, markerteDelmalKeys }: Props)
     if (!container || !html) return;
 
     container.innerHTML = parseToDiv(html).innerHTML;
-    leggTilMarkeringer(container, markerteDelmalKeys, styles.valgtBrevmal);
+    leggTilMarkeringer(container, markerteDelmalKeysRef.current, styles.valgtBrevmal);
   }, [html]);
 
   // når vi endrer hvilke delmaler som er markert

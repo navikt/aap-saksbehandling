@@ -2,7 +2,7 @@
 
 import { Box, Button, HGrid, HStack, VStack } from '@navikt/ds-react';
 import { useForm } from 'react-hook-form';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ExpandIcon, ShrinkIcon } from '@navikt/aksel-icons';
 
@@ -57,8 +57,8 @@ export const Brevbygger = ({
   refusjonskravgrunnlag,
   behandlingstype,
 }: BrevbyggerProps) => {
-  const parsedBrevmal: BrevmalType = JSON.parse(brevmal ?? '');
-  const { control, trigger, watch } = useForm<BrevFormVerdier>({
+  const parsedBrevmal: BrevmalType = useMemo(() => JSON.parse(brevmal ?? ''), [brevmal]);
+  const { control, trigger } = useForm<BrevFormVerdier>({
     values: initialiserFormVerdier(parsedBrevmal, brevdata),
   });
   const umamiStartTidspunkt = useUmamiStartTidspunkt('AKTIV');
@@ -153,7 +153,6 @@ export const Brevbygger = ({
               key={delmalRef._key}
               delmalRef={delmalRef}
               control={control}
-              watch={watch}
               erMarkert={markerteDelmalKeys.has(delmalRef._key)}
               onToggleMarkering={() => toggleMarkering(delmalRef._key)}
             />

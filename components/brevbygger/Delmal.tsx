@@ -1,5 +1,5 @@
 import { Box, Button, Heading, HStack, Switch, VStack } from '@navikt/ds-react';
-import { Control, Controller, UseFormWatch } from 'react-hook-form';
+import { Control, Controller, useWatch } from 'react-hook-form';
 import { DelmalReferanse, FritekstType, ValgRef } from 'components/brevbygger/brevmodellTypes';
 import { BrevFormVerdier } from 'components/brevbygger/types';
 import { Valg } from 'components/brevbygger/Valg';
@@ -11,12 +11,11 @@ import styles from './Delmal.module.css';
 interface Props {
   delmalRef: DelmalReferanse;
   control: Control<BrevFormVerdier>;
-  watch: UseFormWatch<BrevFormVerdier>;
   erMarkert: boolean;
   onToggleMarkering: () => void;
 }
 
-export const Delmal = ({ delmalRef, control, watch, erMarkert, onToggleMarkering }: Props) => {
+export const Delmal = ({ delmalRef, control, erMarkert, onToggleMarkering }: Props) => {
   const { delmal, obligatorisk } = delmalRef;
 
   const valgOgFritekst = delmal.teksteditor.filter(
@@ -28,8 +27,13 @@ export const Delmal = ({ delmalRef, control, watch, erMarkert, onToggleMarkering
     return null;
   }
 
+  const delmalErValgt = useWatch({
+    control,
+    name: `delmaler.${delmal._id}`,
+  });
+
   // sjekker om denne delmalen er valgt eller er obligatorisk
-  const erValgt = watch(`delmaler.${delmal._id}`) || obligatorisk;
+  const erValgt = delmalErValgt || obligatorisk;
 
   return (
     <Box
@@ -65,7 +69,7 @@ export const Delmal = ({ delmalRef, control, watch, erMarkert, onToggleMarkering
             if (node._type === 'fritekst') {
               return <DelmalFritekst key={node._key} node={node} control={control} />;
             }
-            return <Valg key={node._key} valgRef={node} control={control} watch={watch} />;
+            return <Valg key={node._key} valgRef={node} control={control} />;
           })}
         </VStack>
       )}
