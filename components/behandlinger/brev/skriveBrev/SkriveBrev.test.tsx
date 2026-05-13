@@ -58,6 +58,7 @@ function renderSkrivBrev(readOnly: boolean) {
       signaturer={[]}
       status={'FORHÅNDSVISNING_KLAR'}
       readOnly={readOnly}
+      behandlingstype={'Førstegangsbehandling'}
     />
   );
 }
