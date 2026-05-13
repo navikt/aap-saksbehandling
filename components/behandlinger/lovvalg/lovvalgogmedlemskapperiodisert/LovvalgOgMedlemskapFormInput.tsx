@@ -11,6 +11,7 @@ import { LovOgMedlemskapVurderingForm } from 'components/behandlinger/lovvalg/lo
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
+import { UmamiTags } from 'components/umami/Umami';
 
 type Props = {
   form: UseFormReturn<LovOgMedlemskapVurderingForm>;
@@ -25,6 +26,7 @@ export const LovvalgOgMedlemskapFormInput = ({ readOnly, index, form }: Props) =
     <VStack gap="space-16">
       <HStack justify={'space-between'}>
         <DateInputWrapper
+          dataUmamiEvent={UmamiTags.LOVVALG_MEDLEMSKAP_INPUT_FRA_DATO}
           name={`vurderinger.${index}.fraDato`}
           label="Vurderingen gjelder fra"
           control={control}
@@ -37,6 +39,7 @@ export const LovvalgOgMedlemskapFormInput = ({ readOnly, index, form }: Props) =
       </HStack>
       <HvordanLeggeTilSluttdatoReadMore />
       <TextAreaWrapper
+        dataUmamiEvent={UmamiTags.LOVVALG_MEDLEMSKAP_INPUT_LOVVALG_BEGRUNNELSE}
         name={`vurderinger.${index}.lovvalg.begrunnelse`}
         control={control}
         label="Vurder riktig lovvalg"
@@ -47,6 +50,7 @@ export const LovvalgOgMedlemskapFormInput = ({ readOnly, index, form }: Props) =
       />
       <RadioGroupWrapper
         name={`vurderinger.${index}.lovvalg.lovvalgsEØSLand`}
+        dataUmamiEvent={UmamiTags.LOVVALG_MEDLEMSKAP_INPUT_LOVVALGSLAND_EØS}
         control={control}
         label={'Hva er riktig lovvalgsland?'}
         rules={{
@@ -67,6 +71,7 @@ export const LovvalgOgMedlemskapFormInput = ({ readOnly, index, form }: Props) =
       {watch(`vurderinger.${index}.lovvalg.lovvalgsEØSLand`) === 'Annet land med avtale' && (
         <ComboboxWrapper
           name={`vurderinger.${index}.lovvalg.annetLovvalgslandMedAvtale`}
+          dataUmamiEvent={UmamiTags.LOVVALG_MEDLEMSKAP_INPUT_LOVVALGSLAND_ANNET}
           control={control}
           label="Velg land som vi vurderer som lovvalgsland"
           options={landMedTrygdesamarbeid}
@@ -78,6 +83,7 @@ export const LovvalgOgMedlemskapFormInput = ({ readOnly, index, form }: Props) =
         <>
           <TextAreaWrapper
             name={`vurderinger.${index}.medlemskap.begrunnelse`}
+            dataUmamiEvent={UmamiTags.LOVVALG_MEDLEMSKAP_INPUT_MEDLEMSKAP_BEGRUNNELSE}
             control={control}
             label="Vurder brukerens medlemskap"
             rules={{
@@ -87,6 +93,7 @@ export const LovvalgOgMedlemskapFormInput = ({ readOnly, index, form }: Props) =
           />
           <RadioGroupJaNei
             name={`vurderinger.${index}.medlemskap.varMedlemIFolketrygd`}
+            dataUmamiEvent={UmamiTags.LOVVALG_MEDLEMSKAP_INPUT_MEDLEMSKAP_I_FOLKETRYGDEN}
             control={control}
             label="Var brukeren medlem av folketrygden?"
             horisontal={true}

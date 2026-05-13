@@ -18,6 +18,7 @@ interface Props<FormFieldValues extends FieldValues> {
   horisontal?: boolean;
   readOnly?: boolean;
   className?: string;
+  dataUmamiEvent?: string;
 }
 
 export const RadioGroupJaNei = <FormFieldValues extends FieldValues>({
@@ -32,10 +33,12 @@ export const RadioGroupJaNei = <FormFieldValues extends FieldValues>({
   shouldUnregister = false,
   readOnly,
   className,
+  dataUmamiEvent,
 }: Props<FormFieldValues>) => {
   return (
     <RadioGroupWrapper
       name={name}
+      dataUmamiEvent={dataUmamiEvent}
       control={control}
       label={label}
       hideLabel={hideLabel}
