@@ -1,4 +1,4 @@
-import { Alert, Button, Dialog, VStack } from '@navikt/ds-react';
+import { Alert, BodyLong, BodyShort, Button, Dialog, HStack, Link, VStack } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 
@@ -14,6 +14,8 @@ import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date'
 import { clientKorrigerMeldekort } from 'lib/clientApi';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { isError } from 'lib/utils/api';
+import { useAlleDokumenterPåSak } from 'hooks/saksbehandling/DokumenterHook';
+import { ExternalLinkIcon } from '@navikt/aksel-icons';
 
 interface Props {
   setIsOpen: (isOpen: boolean) => void;
@@ -43,6 +45,7 @@ const årsakOptions = ['', ...Object.values(Årsaker)];
 
 export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) => {
   const { saksnummer } = useParamsMedType();
+  const { dokumenter } = useAlleDokumenterPåSak();
 
   const [error, setError] = useState<string>();
   const [isLoading, setIsLoading] = useState(false);
@@ -109,6 +112,21 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
   const skalViseTimer = erÅrsakLevereMeldekort || (erÅrsakRegistrereMeldedato && brukerHarLevertTimer);
   const skalViseAlertForIngenTimer = erÅrsakRegistrereMeldedato && !brukerHarLevertTimer;
 
+  const tidligereInnsendteMeldekort = meldekort.tidligereMeldekort.map((tidligereMeldekort) => {
+    const dokument = dokumenter?.find((doku) => doku.journalpostId === tidligereMeldekort.journalpostId);
+    const jorunalPostId = tidligereMeldekort.journalpostId;
+    const dokumentId = dokument?.dokumenter[0].dokumentInfoId;
+    const mottattTidspunkt = tidligereMeldekort.mottattTidspunkt;
+    const oppdatertAv = tidligereMeldekort.oppdatertAv;
+
+    return {
+      jorunalPostId,
+      dokumentId,
+      mottattTidspunkt,
+      oppdatertAv,
+    };
+  });
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen} size={'medium'}>
       <Dialog.Popup width={'large'} closeOnOutsideClick={false}>
@@ -117,52 +135,78 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
           <Dialog.Description>{`${fom.formaterForFrontend()} - ${tom.formaterForFrontend()}`}</Dialog.Description>
         </Dialog.Header>
         <Dialog.Body>
-          <FormProvider {...form}>
-            <form
-              id={'endre-meldekort'}
-              onSubmit={form.handleSubmit(async (data) => {
-                setIsLoading(true);
-                const oppdaterMeldekortResponse = await clientKorrigerMeldekort(saksnummer, {
-                  dager: data.dager.map((dag) => {
-                    return {
-                      dato: dag.dato,
-                      timerArbeidet: Number(dag.timerArbeidet),
-                    };
-                  }),
-                  begrunnelse: data.begrunnelse,
-                  meldeperiode: meldekort.meldeperiode,
-                });
+          <VStack gap={'space-16'}>
+            <FormProvider {...form}>
+              <form
+                id={'endre-meldekort'}
+                onSubmit={form.handleSubmit(async (data) => {
+                  setIsLoading(true);
+                  const oppdaterMeldekortResponse = await clientKorrigerMeldekort(saksnummer, {
+                    dager: data.dager.map((dag) => {
+                      return {
+                        dato: dag.dato,
+                        timerArbeidet: Number(dag.timerArbeidet),
+                      };
+                    }),
+                    begrunnelse: data.begrunnelse,
+                    meldeperiode: meldekort.meldeperiode,
+                  });
 
-                if (isError(oppdaterMeldekortResponse)) {
-                  setError('Noe gikk galt ved oppdatering av meldekort.');
-                } else {
-                  setIsOpen(false);
-                }
+                  if (isError(oppdaterMeldekortResponse)) {
+                    setError('Noe gikk galt ved oppdatering av meldekort.');
+                  } else {
+                    setIsOpen(false);
+                  }
 
-                setIsLoading(false);
-              })}
-            >
-              <VStack gap={'space-16'}>
-                <FormField form={form} formField={formFields.begrunnelse} />
-                <FormField form={form} formField={formFields.årsak} />
-                {skalViseMeldedato && <FormField form={form} formField={formFields.meldedato} />}
-                {skalViseTimer && <UtfyllingKalender readOnly={erÅrsakRegistrereMeldedato} />}
-                {skalViseAlertForIngenTimer && (
-                  <Alert variant={'info'} size={'small'}>
-                    Bruker har ikke levert noen timer.
-                  </Alert>
-                )}
-                <FormErrorSummary errorList={errorList} />
-                {error && <Alert variant={'error'}>{error}</Alert>}
-                {erÅrsakOverstyring && (
-                  <Alert variant={'warning'} size={'small'}>
-                    Overstyring av bruker er ikke støttet enda. Hvis behovet vedvarer etter dialog med bruker, send sak
-                    i porten til team AAP.
-                  </Alert>
-                )}
-              </VStack>
-            </form>
-          </FormProvider>
+                  setIsLoading(false);
+                })}
+              >
+                <VStack gap={'space-16'}>
+                  <FormField form={form} formField={formFields.begrunnelse} />
+                  <FormField form={form} formField={formFields.årsak} />
+                  {skalViseMeldedato && <FormField form={form} formField={formFields.meldedato} />}
+                  {skalViseTimer && <UtfyllingKalender readOnly={erÅrsakRegistrereMeldedato} />}
+                  {skalViseAlertForIngenTimer && (
+                    <Alert variant={'info'} size={'small'}>
+                      Bruker har ikke levert noen timer.
+                    </Alert>
+                  )}
+                  <FormErrorSummary errorList={errorList} />
+                  {error && <Alert variant={'error'}>{error}</Alert>}
+                  {erÅrsakOverstyring && (
+                    <Alert variant={'warning'} size={'small'}>
+                      Overstyring av bruker er ikke støttet enda. Hvis behovet vedvarer etter dialog med bruker, send
+                      sak i porten til team AAP.
+                    </Alert>
+                  )}
+                </VStack>
+              </form>
+            </FormProvider>
+            {tidligereInnsendteMeldekort && tidligereInnsendteMeldekort.length > 0 && (
+              <>
+                <BodyShort weight={'semibold'}>Tidligere versjoner av meldekortet:</BodyShort>
+                <VStack gap={'space-2'}>
+                  {tidligereInnsendteMeldekort.map((tidligereMeldekort, index) => {
+                    return (
+                      <HStack key={index}>
+                        <BodyLong>
+                          <Link
+                            href={`/saksbehandling/api/dokumenter/${tidligereMeldekort.jorunalPostId}/${tidligereMeldekort.dokumentId}`}
+                            target="_blank"
+                          >
+                            Meldekort for uke {hentUkeNummerForPeriode(fom.dato, tom.dato)}
+                            <ExternalLinkIcon />
+                          </Link>
+                          {formaterDatoForFrontend(tidligereMeldekort.mottattTidspunkt)}{' '}
+                          {tidligereMeldekort.oppdatertAv}
+                        </BodyLong>
+                      </HStack>
+                    );
+                  })}
+                </VStack>
+              </>
+            )}
+          </VStack>
         </Dialog.Body>
         <Dialog.Footer>
           <Dialog.CloseTrigger>
