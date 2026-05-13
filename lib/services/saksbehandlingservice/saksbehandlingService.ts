@@ -136,6 +136,10 @@ export const søkPåSak = async (søketekst: string) => {
   return await apiFetch<SøkPåSakInfo[]>(url, saksbehandlingApiScope, 'POST', { søketekst });
 };
 
+export const hentPersonIdent = async (kryptertIdent: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/person/ident`;
+  return await apiFetch<{ ident: string }>(url, saksbehandlingApiScope, 'POST', { kryptertIdent });
+};
 export const hentSakPersoninfo = async (saksnummer: string): Promise<SakPersoninfo> => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/${saksnummer}/personinformasjon`;
   const res = await apiFetch<SakPersoninfo>(url, saksbehandlingApiScope, 'GET');
