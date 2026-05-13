@@ -11,6 +11,7 @@ export const FLAGS = [
   'ArenasakerLenkeTilVisninsklient',
   'BegrunnelseForIkkeSendBrev',
   'YrkesskadeNyeFelter',
+  'HastemarkeringerFoerst',
 ] as const;
 
 export type FlagNames = (typeof FLAGS)[number];
@@ -29,4 +30,5 @@ export const mockedFlags: Flags = {
   ArenasakerLenkeTilVisninsklient: true,
   BegrunnelseForIkkeSendBrev: true,
   YrkesskadeNyeFelter: true,
+  HastemarkeringerFoerst: true,
 };
