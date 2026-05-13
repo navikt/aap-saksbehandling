@@ -126,7 +126,7 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
               const starttidspunkt = startOfDay(new Date(sak.periode.fom));
               const vurderingGjelderFra = stringToDate(v as string, 'dd.MM.yyyy');
               if (vurderingGjelderFra && isBefore(startOfDay(vurderingGjelderFra), starttidspunkt)) {
-                return 'Vurderingen kan ikke gjelde fra før starttidspunktet';
+                return 'Vurderingen kan ikke gjelde fra før starttidspunktet.';
               }
             },
           },
