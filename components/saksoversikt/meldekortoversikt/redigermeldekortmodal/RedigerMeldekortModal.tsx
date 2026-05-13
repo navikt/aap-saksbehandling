@@ -115,13 +115,13 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
 
   const tidligereInnsendteMeldekort = meldekort.tidligereMeldekort.map((tidligereMeldekort) => {
     const dokument = dokumenter?.find((doku) => doku.journalpostId === tidligereMeldekort.journalpostId);
-    const jorunalPostId = tidligereMeldekort.journalpostId;
-    const dokumentId = dokument?.dokumenter[0].dokumentInfoId;
+    const journalpostId = tidligereMeldekort.journalpostId;
+    const dokumentId = dokument?.dokumenter[0]?.dokumentInfoId;
     const mottattTidspunkt = tidligereMeldekort.mottattTidspunkt;
     const oppdatertAv = tidligereMeldekort.oppdatertAv;
 
     return {
-      jorunalPostId,
+      journalpostId,
       dokumentId,
       mottattTidspunkt,
       oppdatertAv,
@@ -191,13 +191,15 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
                   {tidligereInnsendteMeldekort.map((tidligereMeldekort, index) => {
                     return (
                       <HStack key={index} gap={'space-4'} align={'baseline'}>
-                        <Link
-                          href={`/saksbehandling/api/dokumenter/${tidligereMeldekort.jorunalPostId}/${tidligereMeldekort.dokumentId}`}
-                          target="_blank"
-                        >
-                          Meldekort for uke {hentUkeNummerForPeriode(fom.dato, tom.dato)}
-                          <ExternalLinkIcon />
-                        </Link>
+                        {tidligereMeldekort.dokumentId && (
+                          <Link
+                            href={`/saksbehandling/api/dokumenter/${tidligereMeldekort.journalpostId}/${tidligereMeldekort.dokumentId}`}
+                            target="_blank"
+                          >
+                            Meldekort for uke {hentUkeNummerForPeriode(fom.dato, tom.dato)}
+                            <ExternalLinkIcon />
+                          </Link>
+                        )}
                         <Detail>
                           {formaterDatoForFrontend(tidligereMeldekort.mottattTidspunkt)}{' '}
                           {tidligereMeldekort.oppdatertAv}

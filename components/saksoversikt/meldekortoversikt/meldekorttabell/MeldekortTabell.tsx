@@ -40,9 +40,8 @@ export const MeldekortTabell = () => {
             const tom = new Dato(meldekort.meldeperiode.tom);
 
             const antallTimerArbeidet = hentTotaltAntallTimerArbeidet(meldekort.meldekort?.dager);
-            const antallTimerArbeidetIProsent = antallTimerArbeidet
-              ? regnUtProsentForTimerArbeidet(antallTimerArbeidet)
-              : undefined;
+            const antallTimerArbeidetIProsent =
+              antallTimerArbeidet != null ? regnUtProsentForTimerArbeidet(antallTimerArbeidet) : undefined;
 
             return (
               <Table.ExpandableRow
@@ -58,7 +57,7 @@ export const MeldekortTabell = () => {
                   </VStack>
                 </Table.HeaderCell>
                 <Table.DataCell textSize={'small'}>
-                  {antallTimerArbeidet ? (
+                  {antallTimerArbeidet != null ? (
                     antallTimerArbeidet
                   ) : (
                     <Tooltip content={'Timer er ikke rapportert / Bruker har ikke meldt seg'}>
@@ -67,7 +66,7 @@ export const MeldekortTabell = () => {
                   )}
                 </Table.DataCell>
                 <Table.DataCell textSize={'small'} colSpan={3}>
-                  {antallTimerArbeidetIProsent ? `${antallTimerArbeidetIProsent} %` : '-'}
+                  {antallTimerArbeidetIProsent != null ? `${antallTimerArbeidetIProsent} %` : '-'}
                 </Table.DataCell>
                 <Table.DataCell textSize={'small'}>
                   {meldekort.meldekort?.mottattTidspunkt

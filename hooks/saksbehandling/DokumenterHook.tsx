@@ -11,7 +11,7 @@ export function useAlleDokumenterPåSak(): {
   const params = useParamsMedType();
 
   if (!params.saksnummer) {
-    throw Error('useFlyt kan bare brukes på behandlingssiden.');
+    throw Error('useAlleDokumenterPåSak må brukes innenfor en sak.');
   }
 
   const { data, mutate } = useSWR(`api/dokumenter/sak/${params.saksnummer}`, () =>
