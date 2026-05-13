@@ -36,9 +36,8 @@ const baseSykdomsvurderingUtenVissVarighet: Sykdomsvurdering = {
   hoveddiagnose: { label: 'Kne', value: 'M001' },
   bidiagnose: [{ label: 'Rygg', value: 'M002' }],
   erArbeidsevnenNedsatt: JaEllerNei.Ja,
+  harNedsattArbeidsevne: 'JA',
   erSkadeSykdomEllerLyteVesentligdel: JaEllerNei.Ja,
-  erNedsettelseMinstHalvparten: 'JA',
-  erNedsettelseMerEnnYrkesskadegrense: 'JA',
   yrkesskadeBegrunnelse: 'Yrkesskade begrunnelse',
   behøverVurdering: true,
   erNyVurdering: true,
@@ -164,6 +163,30 @@ describe('mapTilPeriodisertVurdering', () => {
 
       it('skal nullstille alle arbeidsevne- og yrkesskade-felt', () => {
         const result = mapTilPeriodisertVurdering(data, false, false, rettighetsperiodeStart, false);
+        expect(result.erNedsettelseIArbeidsevneMerEnnHalvparten).toBeUndefined();
+        expect(result.erNedsettelseMinstHalvparten).toBeUndefined();
+        expect(result.erSkadeSykdomEllerLyteVesentligdel).toBeUndefined();
+        expect(result.erNedsettelseIArbeidsevneAvEnVissVarighet).toBeUndefined();
+        expect(result.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense).toBeUndefined();
+        expect(result.erNedsettelseIArbeidsevneMerEnnHalvparten).toBeUndefined();
+        expect(result.yrkesskadeBegrunnelse).toBeUndefined();
+      });
+    });
+
+    describe('harNedsattArbeidsevne = NEI', () => {
+      const data: Sykdomsvurdering = {
+        ...baseSykdomsvurdering,
+        erArbeidsevnenNedsatt: undefined,
+        harNedsattArbeidsevne: 'NEI',
+      };
+
+      it('skal sette harNedsattArbeidsevne til NEI', () => {
+        const result = mapTilPeriodisertVurdering(data, false, false, rettighetsperiodeStart, true);
+        expect(result.harNedsattArbeidsevne).toBe('NEI');
+      });
+
+      it('skal nullstille alle arbeidsevne- og yrkesskade-felt', () => {
+        const result = mapTilPeriodisertVurdering(data, false, false, rettighetsperiodeStart, true);
         expect(result.erNedsettelseIArbeidsevneMerEnnHalvparten).toBeUndefined();
         expect(result.erNedsettelseMinstHalvparten).toBeUndefined();
         expect(result.erSkadeSykdomEllerLyteVesentligdel).toBeUndefined();

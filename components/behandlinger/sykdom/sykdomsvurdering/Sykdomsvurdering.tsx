@@ -7,9 +7,8 @@ import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { parseISO } from 'date-fns';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import {
+  ArbeidsevneNedsattValg,
   MellomlagretVurdering,
-  SykdomNedsattMerEnnHalvpartenValg,
-  SykdomNedsattMerEnnYrkesskadeValg,
   SykdomsGrunnlag,
   TypeBehandling,
   VurderingMeta,
@@ -65,8 +64,7 @@ export interface Sykdomsvurdering extends VurderingMeta {
   erSkadeSykdomEllerLyteVesentligdel?: JaEllerNei;
   erNedsettelseIArbeidsevneAvEnVissVarighet?: JaEllerNei;
   erNedsettelseIArbeidsevneMerEnnHalvparten?: JaEllerNei;
-  erNedsettelseMinstHalvparten?: SykdomNedsattMerEnnHalvpartenValg;
-  erNedsettelseMerEnnYrkesskadegrense?: SykdomNedsattMerEnnYrkesskadeValg;
+  harNedsattArbeidsevne?: ArbeidsevneNedsattValg;
   erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense?: JaEllerNei;
   yrkesskadeBegrunnelse?: string;
 }
@@ -255,6 +253,7 @@ export const Sykdomsvurdering = ({
               skalVurdereYrkesskade={grunnlag.skalVurdereYrkesskade}
               rettighetsperiodeStartdato={førsteDatoSomKanVurderes}
               diagnoseDefaultOptions={diagnoseDefaultOptions}
+              sykdomUtenVissVarighetToggle={sykdomUtenVissVarighetToggle}
             />
           </NyVurderingExpandableCard>
         ))}

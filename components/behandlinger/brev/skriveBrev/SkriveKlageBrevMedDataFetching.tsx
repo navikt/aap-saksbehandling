@@ -1,4 +1,4 @@
-import { StegType } from 'lib/types/types';
+import { StegType, TypeBehandling } from 'lib/types/types';
 import {
   hentBrevGrunnlag,
   hentFormkravGrunnlag,
@@ -20,10 +20,12 @@ export const SkriveKlageBrevMedDataFetching = async ({
   behandlingsreferanse,
   behandlingVersjon,
   aktivtSteg,
+  behandlingstype,
 }: {
   behandlingsreferanse: string;
   behandlingVersjon: number;
   aktivtSteg: StegType;
+  behandlingstype: TypeBehandling;
 }) => {
   const [brevGrunnlag, klageresultat, formkrav, klagebehandlingKontor, klagebehandlingNay, fullmektigGrunnlag] =
     await Promise.all([
@@ -91,6 +93,7 @@ export const SkriveKlageBrevMedDataFetching = async ({
         fullmektigMottaker={fullmektig}
         brukerMottaker={bruker}
         behandlingVersjon={behandlingVersjon}
+        behandlingstype={behandlingstype}
       />
     </div>
   );

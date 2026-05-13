@@ -25,6 +25,7 @@ export async function POST(req: NextRequest) {
       sortering: data.sortering,
       kunLedigeOppgaver: data.kunLedigeOppgaver,
       utvidetFilter: data.utvidetFilter,
+      hastemarkeringerFørst: data.hastemarkeringerFørst
     };
     const res = await hentOppgaverForFilter(payload);
     if (isError(res)) {

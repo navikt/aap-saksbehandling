@@ -4883,7 +4883,7 @@ export interface paths {
             [name: string]: unknown;
           };
           content: {
-            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.rettighet.RettighetsinfoDto'];
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.drift.`DriftApiKt$driftApi$1$DriftRettighetsinfoDto`'];
           };
         };
       };
@@ -11886,25 +11886,29 @@ export interface components {
        * @description Bruk fom
        */
       dokumenterBruktIVurdering: components['schemas']['no.nav.aap.verdityper.dokument.JournalpostId'][];
+      /**
+       * @deprecated
+       * @description Bruk harArbeidsevneNedsatt
+       */
       erArbeidsevnenNedsatt?: boolean | null;
       /**
        * @deprecated
-       * @description Bruk erNedsettelseMinstHalvparten/erNedsettelseMerEnnYrkesskadegrense
+       * @description Bruk harNedsattArbeidsevne
        */
       erNedsettelseIArbeidsevneAvEnVissVarighet?: boolean | null;
-      /**
-       * @deprecated
-       * @description Bruk erNedsettelseMinstHalvparten
-       */
       erNedsettelseIArbeidsevneMerEnnHalvparten?: boolean | null;
+      erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense?: boolean | null;
       /**
        * @deprecated
-       * @description Bruk erNedsettelseMerEnnYrkesskadegrense
+       * @description Bruk erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense
+       * @enum {string|null}
        */
-      erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense?: boolean | null;
-      /** @enum {string|null} */
       erNedsettelseMerEnnYrkesskadegrense?: 'JA' | 'JA_FORBIGÅENDE_PROBLEMER' | 'NEI' | null;
-      /** @enum {string|null} */
+      /**
+       * @deprecated
+       * @description Bruk erNedsettelseIArbeidsevneMerEnnHalvparten
+       * @enum {string|null}
+       */
       erNedsettelseMinstHalvparten?: 'JA' | 'JA_FORBIGÅENDE_PROBLEMER' | 'NEI' | null;
       erSkadeSykdomEllerLyteVesentligdel?: boolean | null;
       /**
@@ -11912,6 +11916,8 @@ export interface components {
        * @example 2025-04-01
        */
       fom: string;
+      /** @enum {string|null} */
+      harNedsattArbeidsevne?: 'JA' | 'JA_FORBIGÅENDE_PROBLEMER' | 'NEI' | null;
       harSkadeSykdomEllerLyte: boolean;
       hoveddiagnose?: string | null;
       kodeverk?: string | null;
@@ -14010,6 +14016,20 @@ export interface components {
       virksomhetId: string;
       virksomhetNavn?: string | null;
     };
+    'no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.BestemtArbeidsgruppeINorgeGrunnlag': {
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fom: string;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      tom?: string | null;
+      virksomhetId: string;
+      virksomhetNavn?: string | null;
+    };
     'no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.FolkeregisterStatusDto': {
       /**
        * Format: date
@@ -14085,6 +14105,9 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.Tilh\u00F8righetVurdering': {
       arbeidInntektINorgeGrunnlag?:
         | components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.ArbeidInntektINorgeGrunnlag'][]
+        | null;
+      bestemtArbeidsgruppeINorge?:
+        | components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.BestemtArbeidsgruppeINorgeGrunnlag'][]
         | null;
       /** @enum {string} */
       indikasjon: 'I_NORGE' | 'UTENFOR_NORGE';
@@ -14417,6 +14440,14 @@ export interface components {
     'no.nav.aap.behandlingsflyt.drift.`DriftApiKt$driftApi$1$AvbrytBrevBody`': {
       begrunnelse: string;
     };
+    'no.nav.aap.behandlingsflyt.drift.`DriftApiKt$driftApi$1$DriftRettighetsinfoDto`': {
+      rettighetsperioder: components['schemas']['no.nav.aap.behandlingsflyt.drift.`DriftApiKt$driftApi$1$RettighetstypePeriodeDto`'][];
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      sisteDagMedRett?: string | null;
+    };
     'no.nav.aap.behandlingsflyt.drift.`DriftApiKt$driftApi$1$KjorFraSteg`': {
       /** @enum {string} */
       steg:
@@ -14492,6 +14523,35 @@ export interface components {
         | 'VURDER_RETTIGHETSPERIODE'
         | 'VURDER_SYKEPENGEERSTATNING'
         | 'VURDER_YRKESSKADE';
+    };
+    'no.nav.aap.behandlingsflyt.drift.`DriftApiKt$driftApi$1$RettighetstypePeriodeDto`': {
+      periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
+      /** @enum {string|null} */
+      rettighetstypeGrunnlag?:
+        | 'ARBEIDSSØKER'
+        | 'BISTANDSBEHOV'
+        | 'STUDENT'
+        | 'SYKEPENGEERSTATNING'
+        | 'VURDERES_FOR_UFØRETRYGD'
+        | null;
+      /** @enum {string|null} */
+      rettighetstypeUnderveis?:
+        | 'ARBEIDSSØKER'
+        | 'BISTANDSBEHOV'
+        | 'STUDENT'
+        | 'SYKEPENGEERSTATNING'
+        | 'VURDERES_FOR_UFØRETRYGD'
+        | null;
+      'stansOpph\u00F8r': components['schemas']['no.nav.aap.behandlingsflyt.drift.`DriftApiKt$driftApi$1$StansOpph\u00F8rDTO`'][];
+    };
+    'no.nav.aap.behandlingsflyt.drift.`DriftApiKt$driftApi$1$StansOpph\u00F8rDTO`': {
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fom: string;
+      'stansOpph\u00F8r': string;
+      '\u00E5rsaker': string[];
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.aktivitetsplikt.Aktivitetsplikt11_7L\u00F8sningDto': {
       begrunnelse: string;
@@ -15591,13 +15651,29 @@ export interface components {
       begrunnelse: string;
       bidiagnoser?: string[] | null;
       dokumenterBruktIVurdering: components['schemas']['no.nav.aap.verdityper.dokument.JournalpostId'][];
+      /**
+       * @deprecated
+       * @description Erstattes av harNedsattArbeidsevne
+       */
       erArbeidsevnenNedsatt?: boolean | null;
+      /**
+       * @deprecated
+       * @description Bakes inn i harNedsattArbeidsevne
+       */
       erNedsettelseIArbeidsevneAvEnVissVarighet?: boolean | null;
       erNedsettelseIArbeidsevneMerEnnHalvparten?: boolean | null;
       erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense?: boolean | null;
-      /** @enum {string|null} */
+      /**
+       * @deprecated
+       * @description Bruk erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense
+       * @enum {string|null}
+       */
       erNedsettelseMerEnnYrkesskadegrense?: 'JA' | 'JA_FORBIGÅENDE_PROBLEMER' | 'NEI' | null;
-      /** @enum {string|null} */
+      /**
+       * @deprecated
+       * @description Bruk erNedsettelseIArbeidsevneMerEnnHalvparten
+       * @enum {string|null}
+       */
       erNedsettelseMinstHalvparten?: 'JA' | 'JA_FORBIGÅENDE_PROBLEMER' | 'NEI' | null;
       erSkadeSykdomEllerLyteVesentligdel?: boolean | null;
       /**
@@ -15605,6 +15681,8 @@ export interface components {
        * @example 2025-04-01
        */
       fom: string;
+      /** @enum {string|null} */
+      harNedsattArbeidsevne?: 'JA' | 'JA_FORBIGÅENDE_PROBLEMER' | 'NEI' | null;
       harSkadeSykdomEllerLyte: boolean;
       hoveddiagnose?: string | null;
       kodeverk?: string | null;
