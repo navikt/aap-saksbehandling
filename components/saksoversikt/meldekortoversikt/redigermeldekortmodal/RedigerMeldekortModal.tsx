@@ -10,7 +10,7 @@ import { hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import { hentUkeNummerForPeriode } from 'components/saksoversikt/meldekortoversikt/meldekorttabell/MeldekortTabell';
 import { Dato } from 'lib/types/Dato';
 import { MeldeperiodeMedMeldekortDto, Periode } from 'lib/types/types';
-import { formaterDatoForBackend } from 'lib/utils/date';
+import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { clientKorrigerMeldekort } from 'lib/clientApi';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { isError } from 'lib/utils/api';
@@ -185,7 +185,9 @@ function getDefaultValuesForForm(meldekort?: MeldeperiodeMedMeldekortDto): Redig
   return {
     begrunnelse: '',
     årsak: '',
-    meldedato: '',
+    meldedato: meldekort.meldekort?.mottattTidspunkt
+      ? formaterDatoForFrontend(meldekort.meldekort.mottattTidspunkt)
+      : '',
     dager:
       meldekort?.meldekort?.dager.map((dag) => ({
         dato: dag.dato,
