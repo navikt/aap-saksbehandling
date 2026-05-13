@@ -25,19 +25,24 @@ export const FastsettManuellInntektMedDataFetchingNy = async ({ behandlingsrefer
     return null;
   }
 
-  const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
-    hentManuellInntektGrunnlag(behandlingsreferanse),
-    hentMellomlagring(behandlingsreferanse, Behovstype.FASTSETT_MANUELL_INNTEKT),
-  ]);
+  const grunnlag = await hentManuellInntektGrunnlag(behandlingsreferanse);
+
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
   }
+
+  const totalReadOnly = stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
+  const initialMellomlagretVurdering = await hentMellomlagring(
+    behandlingsreferanse,
+    Behovstype.FASTSETT_MANUELL_INNTEKT,
+    totalReadOnly
+  );
 
   return (
     <FastsettManuellInntektNy
       behandlingsversjon={stegData.behandlingVersjon}
       grunnlag={grunnlag.data}
-      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+      readOnly={totalReadOnly}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
       behandlingErRevurdering={stegData.typeBehandling === 'Revurdering'}
     />

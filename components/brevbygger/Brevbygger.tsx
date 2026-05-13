@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ExpandIcon, ShrinkIcon } from '@navikt/aksel-icons';
 
-import { BrevdataDto, BrevMottaker, Mottaker, RefusjonskravGrunnlag } from 'lib/types/types';
+import { BrevdataDto, BrevMottaker, Mottaker, RefusjonskravGrunnlag, TypeBehandling } from 'lib/types/types';
 import { BrevmalType } from 'components/brevbygger/brevmodellTypes';
 import { Behovstype } from 'lib/utils/form';
 import { clientOppdaterBrevmal } from 'lib/clientApi';
@@ -15,7 +15,7 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgG
 
 import { ForhåndsvisBrev } from 'components/brevbygger/ForhåndsvisBrev';
 import { VelgeMottakere } from 'components/brevbygger/VelgeMottakere';
-import { IkkeSendBrevModal } from 'components/behandlinger/brev/skriveBrev/IkkeSendBrevModal';
+import { IkkeSendBrevModal, IkkeSendFields } from 'components/behandlinger/brev/skriveBrev/IkkeSendBrevModal';
 import { RefusjonskravVisning } from 'components/brevbygger/RefusjonskravVisning';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { Distribusjonssjekk } from 'components/brev/Distribusjonssjekk';
@@ -25,6 +25,7 @@ import { initialiserFormVerdier } from 'components/brevbygger/formUtils';
 import { Delmal } from 'components/brevbygger/Delmal';
 import { useMellomlagringAvBrev } from 'components/brevbygger/useMellomlagringAvBrev';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { loggUmamiEvent, useUmamiStartTidspunkt } from 'lib/utils/umami';
 
 interface BrevbyggerProps {
   referanse: string;
@@ -38,6 +39,7 @@ interface BrevbyggerProps {
   brevmal?: string | null;
   brevdata?: BrevdataDto;
   refusjonskravgrunnlag?: RefusjonskravGrunnlag;
+  behandlingstype: TypeBehandling;
 }
 
 export const Brevbygger = ({
@@ -52,11 +54,13 @@ export const Brevbygger = ({
   readOnly,
   visAvbryt = true,
   refusjonskravgrunnlag,
+  behandlingstype,
 }: BrevbyggerProps) => {
   const parsedBrevmal: BrevmalType = JSON.parse(brevmal ?? '');
   const { control, trigger, watch } = useForm<BrevFormVerdier>({
     values: initialiserFormVerdier(parsedBrevmal, brevdata),
   });
+  const umamiStartTidspunkt = useUmamiStartTidspunkt();
 
   const { pdfDataUri, lasterPdf } = useMellomlagringAvBrev({ referanse, control, brevmal: parsedBrevmal, brevdata });
 
@@ -78,24 +82,32 @@ export const Brevbygger = ({
     const isValid = await trigger();
     if (!isValid) return;
 
-    løsBehovOgGåTilNesteSteg({
-      behandlingVersjon,
-      behov: {
-        behovstype,
-        brevbestillingReferanse: referanse,
-        mottakere: valgteMottakere,
-        handling: 'FERDIGSTILL',
+    løsBehovOgGåTilNesteSteg(
+      {
+        behandlingVersjon,
+        behov: {
+          behovstype,
+          brevbestillingReferanse: referanse,
+          mottakere: valgteMottakere,
+          handling: 'FERDIGSTILL',
+        },
+        referanse: behandlingsreferanse,
       },
-      referanse: behandlingsreferanse,
-    });
+      () =>
+        loggUmamiEvent('brevbygger-varighet', {
+          varighet_sekunder: Math.floor((Date.now() - umamiStartTidspunkt) / 1000),
+          typeBehandling: behandlingstype,
+        })
+    );
   };
 
-  const slettBrev = async () => {
+  const slettBrev = async (ikkeSendBrevForm: IkkeSendFields) => {
     løsBehovOgGåTilNesteSteg({
       behandlingVersjon,
       behov: {
         behovstype,
         brevbestillingReferanse: referanse,
+        begrunnelse: ikkeSendBrevForm.begrunnelse,
         handling: 'AVBRYT',
       },
       referanse: behandlingsreferanse,

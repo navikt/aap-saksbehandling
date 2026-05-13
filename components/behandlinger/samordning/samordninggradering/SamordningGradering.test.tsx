@@ -7,7 +7,6 @@ import userEvent from '@testing-library/user-event';
 import { Behovstype } from 'lib/utils/form';
 import { FetchResponse } from 'lib/utils/api';
 import createFetchMock from 'vitest-fetch-mock';
-import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 
 const fetchMock = createFetchMock(vi);
@@ -51,20 +50,13 @@ const grunnlagUtenVurdering: SamordningGraderingGrunnlag = {
   historiskeVurderinger: [],
 };
 
-const bruker: BrukerInformasjon = {
-  navn: 'Iren Panikk',
-  NAVident: 'z123456',
-};
-
 beforeEach(() => {
   setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'SAMORDNING_GRADERING' });
 });
 
 describe('Samordning gradering', () => {
   test('skal kunne redigere ytelse, periode og gradering for en manuell rad', () => {
-    render(
-      <SamordningGradering bruker={bruker} grunnlag={grunnlagMedVurdering} behandlingVersjon={1} readOnly={false} />
-    );
+    render(<SamordningGradering grunnlag={grunnlagMedVurdering} behandlingVersjon={1} readOnly={false} />);
     expect(screen.getByRole('combobox', { name: 'Ytelsestype' })).toBeVisible();
     expect(screen.getByRole('combobox', { name: 'Ytelsestype' })).toBeEnabled();
 
@@ -79,16 +71,12 @@ describe('Samordning gradering', () => {
   });
 
   test('kan slette en rad', () => {
-    render(
-      <SamordningGradering bruker={bruker} grunnlag={grunnlagMedVurdering} behandlingVersjon={1} readOnly={false} />
-    );
+    render(<SamordningGradering grunnlag={grunnlagMedVurdering} behandlingVersjon={1} readOnly={false} />);
     expect(screen.getByRole('button', { name: 'Slett' })).toBeVisible();
   });
 
   test('gir feilmelding dersom det er funnet ytelser fra kilder, men ikke gjort noen vurderinger', async () => {
-    render(
-      <SamordningGradering bruker={bruker} grunnlag={grunnlagUtenVurdering} behandlingVersjon={1} readOnly={false} />
-    );
+    render(<SamordningGradering grunnlag={grunnlagUtenVurdering} behandlingVersjon={1} readOnly={false} />);
     await user.type(screen.getByRole('textbox', { name: 'Vurder vilkåret' }), 'Min begrunnelse');
     await user.click(screen.getByRole('button', { name: 'Bekreft' }));
     expect(await screen.findByText('Du må gjøre en vurdering av periodene')).toBeVisible();
@@ -97,9 +85,7 @@ describe('Samordning gradering', () => {
   test('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
     setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'VURDER_BISTANDSBEHOV' });
 
-    render(
-      <SamordningGradering bruker={bruker} grunnlag={grunnlagMedVurdering} readOnly={false} behandlingVersjon={0} />
-    );
+    render(<SamordningGradering grunnlag={grunnlagMedVurdering} readOnly={false} behandlingVersjon={0} />);
 
     const endreKnapp = screen.getByRole('button', { name: 'Endre' });
     await user.click(endreKnapp);
@@ -125,7 +111,7 @@ describe('Samordning gradering', () => {
       ytelser: [],
     };
 
-    render(<SamordningGradering bruker={bruker} grunnlag={etGrunnlag} readOnly={false} behandlingVersjon={0} />);
+    render(<SamordningGradering grunnlag={etGrunnlag} readOnly={false} behandlingVersjon={0} />);
 
     const endreKnapp = screen.getByRole('button', { name: 'Endre' });
     await user.click(endreKnapp);
@@ -162,7 +148,6 @@ describe('mellomlagring', () => {
   it('Skal vise en tekst om hvem som har gjort vurderingen dersom det finnes en mellomlagring', () => {
     render(
       <SamordningGradering
-        bruker={bruker}
         grunnlag={grunnlagUtenVurdering}
         readOnly={false}
         behandlingVersjon={0}
@@ -176,7 +161,6 @@ describe('mellomlagring', () => {
   it('Skal ikke vise tekst om hvem som har gjort mellomlagring dersom bruker trykker på slett mellomlagring', async () => {
     render(
       <SamordningGradering
-        bruker={bruker}
         behandlingVersjon={0}
         readOnly={false}
         grunnlag={grunnlagUtenVurdering}
@@ -198,7 +182,6 @@ describe('mellomlagring', () => {
   it('Skal bruke mellomlagring som defaultValue i skjema dersom det finnes', () => {
     render(
       <SamordningGradering
-        bruker={bruker}
         behandlingVersjon={0}
         readOnly={false}
         grunnlag={grunnlagMedVurdering}
@@ -214,9 +197,7 @@ describe('mellomlagring', () => {
   });
 
   it('Skal bruke bekreftet vurdering fra grunnlag som defaultValue i skjema dersom mellomlagring ikke finnes', () => {
-    render(
-      <SamordningGradering bruker={bruker} behandlingVersjon={0} readOnly={false} grunnlag={grunnlagMedVurdering} />
-    );
+    render(<SamordningGradering behandlingVersjon={0} readOnly={false} grunnlag={grunnlagMedVurdering} />);
 
     const begrunnelseFelt = screen.getByRole('textbox', {
       name: 'Vurder vilkåret',
@@ -228,7 +209,6 @@ describe('mellomlagring', () => {
   it('Skal resette skjema til tomt skjema dersom det ikke finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
     render(
       <SamordningGradering
-        bruker={bruker}
         behandlingVersjon={0}
         readOnly={false}
         grunnlag={grunnlagUtenVurdering}
@@ -252,7 +232,6 @@ describe('mellomlagring', () => {
   it('Skal resette skjema til bekreftet vurdering dersom det finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
     render(
       <SamordningGradering
-        bruker={bruker}
         behandlingVersjon={0}
         readOnly={false}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
@@ -278,7 +257,6 @@ describe('mellomlagring', () => {
   it('Skal ikke være mulig å slette mellomlagring hvis det er readOnly', () => {
     render(
       <SamordningGradering
-        bruker={bruker}
         behandlingVersjon={0}
         readOnly={true}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}

@@ -16,7 +16,6 @@ import { VStack } from '@navikt/ds-react';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { hentOppgave } from 'lib/services/oppgaveservice/oppgaveservice';
-import { hentBrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { SWRConfig } from 'swr';
 import { OverstyrTildelingContextProvider } from 'context/saksbehandling/OverstyrTildelingContext';
 import { OverstyrTildelingModal } from 'components/overstyrtildelingmodal/OverstyrTildelingModal';
@@ -30,10 +29,9 @@ const Layout = async (props: LayoutProps) => {
   const params = await props.params;
   const { children } = props;
 
-  const [behandling, oppgave, brukerInformasjon] = await Promise.all([
+  const [behandling, oppgave] = await Promise.all([
     hentBehandling(params.behandlingsreferanse),
     hentOppgave(params.behandlingsreferanse),
-    hentBrukerInformasjon(),
   ]);
 
   if (isError(behandling) || isError(oppgave)) {
@@ -77,7 +75,6 @@ const Layout = async (props: LayoutProps) => {
             journalpostInfo={journalpostInfo.data}
             påVent={flytResponse.data.visning.visVentekort}
             oppgave={oppgave.data}
-            innloggetBrukerIdent={brukerInformasjon.NAVident}
           />
           <StegGruppeIndikatorAksel
             behandlingsreferanse={params.behandlingsreferanse}

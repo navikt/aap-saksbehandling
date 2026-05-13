@@ -19,6 +19,7 @@ export type DateInputWrapperProps<FormFieldValues extends FieldValues> = {
   className?: string;
   autocomplete?: HTMLInputAutoCompleteAttribute;
   onChangeCustom?: (event: React.FormEvent<HTMLInputElement>) => void;
+  dataUmamiEvent?: string;
 };
 
 export const DateInputWrapper = <FormFieldValues extends FieldValues>({
@@ -34,6 +35,7 @@ export const DateInputWrapper = <FormFieldValues extends FieldValues>({
   hideLabel,
   autocomplete,
   onChangeCustom,
+  dataUmamiEvent,
 }: DateInputWrapperProps<FormFieldValues>) => {
   const classNames = `${styles.aap_date_input} ${className}`;
   const transform = (input: React.FormEvent<HTMLInputElement>) => mapShortDateToDateString(input.currentTarget.value);
@@ -55,6 +57,7 @@ export const DateInputWrapper = <FormFieldValues extends FieldValues>({
         return (
           <TextField
             id={name}
+            data-umami-event={dataUmamiEvent}
             name={name}
             size={size}
             label={label}

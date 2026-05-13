@@ -34,6 +34,7 @@ export const TilhørighetsVurderingTabell = ({
       <Table.Body>
         {vurdering.map((opplysning, index) => {
           const harVisuellTidslinje = opplysning.visuellTidslinje.length > 0;
+          const harManglendePeriode = opplysning.visuellTidslinje.some((it) => it.periodeMangler);
           const erUtvidbar = harVisuellTidslinje || harMinstEttGrunnlag(opplysning);
 
           const radInnhold = (
@@ -58,7 +59,7 @@ export const TilhørighetsVurderingTabell = ({
             <OpplysningerContent opplysning={opplysning} />
           );
           return erUtvidbar ? (
-            <Table.ExpandableRow key={index} content={expandableContent}>
+            <Table.ExpandableRow key={index} content={expandableContent} defaultOpen={harManglendePeriode}>
               {radInnhold}
             </Table.ExpandableRow>
           ) : (
@@ -130,5 +131,6 @@ function harMinstEttGrunnlag(vurdering: tilhørighetVurdering) {
     vurdering.utenlandsAddresserGrunnlag?.adresser,
     vurdering.utenlandsAddresserGrunnlag?.personStatus,
     vurdering.vedtakImedlGrunnlag,
+    vurdering.bestemtArbeidsgruppeINorge,
   ].some((grunnlag) => grunnlag !== null && grunnlag && grunnlag?.length > 0);
 }

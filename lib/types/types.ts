@@ -374,7 +374,7 @@ export type ForeslåVedtakGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.ForeslåVedtakResponse'];
 
 export type ForeslåVedtakVedtakslengdeGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.VedtakslengdeVedtakResponse'];
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.ForeslåvedtakVedtakslengdeRespons'];
 
 export type UnderveisAvslagsÅrsak = NonNullable<UnderveisGrunnlag['avslagsårsak']>;
 
@@ -434,11 +434,8 @@ export type SykdomsvurderingResponse =
 export type VurdertAvAnsatt =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
 
-export type SykdomNedsattMerEnnHalvpartenValg =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomsvurderingResponse']['erNedsettelseMinstHalvparten'];
-
-export type SykdomNedsattMerEnnYrkesskadeValg =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomsvurderingResponse']['erNedsettelseMerEnnYrkesskadegrense'];
+export type ArbeidsevneNedsattValg =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomsvurderingResponse']['harNedsattArbeidsevne'];
 
 export type BistandsbehovVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.bistand.BistandVurderingResponse'];
@@ -639,4 +636,14 @@ export function lagEnumObjektFraUnionType<UnionType extends string>(o: { [P in U
   [P in UnionType]: P;
 } {
   return o;
+}
+
+export enum Roller {
+  BESLUTTER = 'Beslutter',
+  LES = 'Les',
+  SAKSBEHANDLER_OPPFØLGING = 'Veileder',
+  KVALITETSSIKRER = 'Kvalitetssikrer',
+  SAKSBEHANDLER_NASJONAL = 'Saksbehandler',
+  DRIFT = 'Drift',
+  PRODUKSJONSSTYRING = 'Produksjonsstyring',
 }

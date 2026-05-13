@@ -14,20 +14,25 @@ interface Props {
 }
 
 export const EtableringAvEgenVirksomhetMedDatafetching = async ({ behandlingsreferanse, stegData }: Props) => {
-  const [grunnlag, mellomlagring] = await Promise.all([
-    hentEtableringEgenVirksomhetGrunnlag(behandlingsreferanse),
-    hentMellomlagring(behandlingsreferanse, Behovstype.ETABLERING_EGEN_VIRKSOMHET_KODE),
-  ]);
+  const grunnlag = await hentEtableringEgenVirksomhetGrunnlag(behandlingsreferanse);
+
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
   }
 
+  const totalReadOnly = stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
+  const initalMellomlagretVurdering = await hentMellomlagring(
+    behandlingsreferanse,
+    Behovstype.ETABLERING_EGEN_VIRKSOMHET_KODE,
+    totalReadOnly
+  );
+
   return (
     <EtableringAvEgenVirksomhet
       grunnlag={grunnlag.data}
-      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+      readOnly={totalReadOnly}
       behandlingVersjon={stegData.behandlingVersjon}
-      initialMellomlagretVurdering={mellomlagring}
+      initialMellomlagretVurdering={initalMellomlagretVurdering}
     />
   );
 };

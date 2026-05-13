@@ -32,6 +32,7 @@ const foreslåVedtakGrunnlag: ForeslåVedtakGrunnlag = {
     },
   ],
   stansOpphør: [],
+  harTilgangTilÅSaksbehandle: true,
 };
 
 describe('Foreslå vedtak', () => {
@@ -50,6 +51,7 @@ describe('Foreslå vedtak', () => {
         grunnlag={{
           perioder: [],
           stansOpphør: [],
+          harTilgangTilÅSaksbehandle: true,
         }}
       />
     );

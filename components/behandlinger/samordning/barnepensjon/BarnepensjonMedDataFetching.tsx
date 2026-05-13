@@ -11,20 +11,24 @@ interface Props {
 }
 
 export const BarnepensjonMedDataFetching = async ({ behandlingsreferanse, stegData }: Props) => {
-  const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
-    hentBarnepensjonGrunnlag(behandlingsreferanse),
-    hentMellomlagring(behandlingsreferanse, Behovstype.AVKLAR_SAMORDNING_BARNEPENSJON_KODE),
-  ]);
+  const grunnlag = await hentBarnepensjonGrunnlag(behandlingsreferanse);
 
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
   }
 
+  const totalReadOnly = stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
+  const initialMellomlagretVurdering = await hentMellomlagring(
+    behandlingsreferanse,
+    Behovstype.AVKLAR_SAMORDNING_BARNEPENSJON_KODE,
+    totalReadOnly
+  );
+
   return (
     <Barnepensjon
       grunnlag={grunnlag.data}
       behandlingVersjon={stegData.behandlingVersjon}
-      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+      readOnly={totalReadOnly}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
     />
   );

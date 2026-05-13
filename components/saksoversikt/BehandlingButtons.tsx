@@ -10,6 +10,7 @@ import { plukkOppgaveClient } from 'lib/oppgaveClientApi';
 import { isSuccess } from 'lib/utils/api';
 import { byggKelvinURL } from 'lib/utils/request';
 import { OppgaveInfo } from 'hooks/oppgave/OppgaverPåSakHook';
+import { useInnloggetBruker } from 'hooks/BrukerHook';
 
 const lokalBrevBestillingKnapp = isLocal();
 export const BehandlingButtons = ({
@@ -17,20 +18,19 @@ export const BehandlingButtons = ({
   behandling,
   oppgaveInfo,
   setFeilmelding,
-  innloggetBrukerIdent,
 }: {
   sak: SaksInfo;
   behandling: BehandlingsflytEllerPostmottakBehandling;
   oppgaveInfo?: OppgaveInfo;
   setFeilmelding: Dispatch<SetStateAction<string | undefined>>;
-  innloggetBrukerIdent: string | undefined;
 }) => {
   const router = useRouter();
+  const innloggetBruker = useInnloggetBruker();
   const [isPendingBehandling, startTransitionBehandling] = useTransition();
   const [isPendingPlukk, startTransitionPlukk] = useTransition();
   const behandlingErÅpen = behandling.behandling.status === 'OPPRETTET' || behandling.behandling.status === 'UTREDES';
   const kildeErBehandlingsflyt = behandling.kilde === 'BEHANDLINGSFLYT';
-  const oppgaveReservertAvInnloggetBruker = oppgaveInfo?.reservertAvIdent === innloggetBrukerIdent;
+  const oppgaveReservertAvInnloggetBruker = oppgaveInfo?.reservertAvIdent === innloggetBruker.NAVident;
 
   async function gåTilBehandling(behandlingsreferanse: string) {
     setFeilmelding('');

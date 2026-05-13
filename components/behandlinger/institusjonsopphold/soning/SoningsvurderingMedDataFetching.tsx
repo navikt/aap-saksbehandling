@@ -11,10 +11,7 @@ interface Props {
 }
 
 export const SoningsvurderingMedDataFetching = async ({ behandlingsreferanse, stegData }: Props) => {
-  const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
-    hentSoningsvurdering(behandlingsreferanse),
-    hentMellomlagring(behandlingsreferanse, Behovstype.AVKLAR_SONINGSFORRHOLD),
-  ]);
+  const grunnlag = await hentSoningsvurdering(behandlingsreferanse);
 
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
@@ -23,13 +20,19 @@ export const SoningsvurderingMedDataFetching = async ({ behandlingsreferanse, st
   if (!skalViseSteg(stegData, grunnlag.data.vurderinger.length > 0)) {
     return null;
   }
+  const totalReadOnly = stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
+  const initialMellomlagretVurdering = await hentMellomlagring(
+    behandlingsreferanse,
+    Behovstype.AVKLAR_SONINGSFORRHOLD,
+    totalReadOnly
+  );
 
   return (
     grunnlag.data.soningsforhold.length > 0 && (
       <Soningsvurdering
         behandlingsversjon={stegData.behandlingVersjon}
         grunnlag={grunnlag.data}
-        readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+        readOnly={totalReadOnly}
         initialMellomlagretVurdering={initialMellomlagretVurdering}
       />
     )

@@ -125,7 +125,7 @@ export const AlleOppgaverTabell = ({
               </Table.DataCell>
               <Table.DataCell textSize={'small'}>
                 {oppgave.saksnummer ? (
-                  <AkselLink as={Link} href={`/saksbehandling/sak/${oppgave.saksnummer}`}>
+                  <AkselLink as={Link} prefetch={false} href={`/saksbehandling/sak/${oppgave.saksnummer}`}>
                     {oppgave.saksnummer}
                   </AkselLink>
                 ) : (

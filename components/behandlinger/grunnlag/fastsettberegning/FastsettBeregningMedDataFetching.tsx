@@ -14,10 +14,7 @@ interface Props {
 }
 
 export const FastsettBeregningMedDataFetching = async ({ behandlingsreferanse, stegData }: Props) => {
-  const [grunnlag, initialMellomlagretVurdering] = await Promise.all([
-    hentBeregningstidspunktVurdering(behandlingsreferanse),
-    hentMellomlagring(behandlingsreferanse, Behovstype.FASTSETT_BEREGNINGSTIDSPUNKT_KODE),
-  ]);
+  const grunnlag = await hentBeregningstidspunktVurdering(behandlingsreferanse);
 
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
@@ -27,9 +24,16 @@ export const FastsettBeregningMedDataFetching = async ({ behandlingsreferanse, s
     return null;
   }
 
+  const totalReadOnly = stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
+  const initialMellomlagretVurdering = await hentMellomlagring(
+    behandlingsreferanse,
+    Behovstype.FASTSETT_BEREGNINGSTIDSPUNKT_KODE,
+    totalReadOnly
+  );
+
   return (
     <FastsettBeregning
-      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+      readOnly={totalReadOnly}
       grunnlag={grunnlag.data}
       behandlingVersjon={stegData.behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}

@@ -15,15 +15,21 @@ interface Props {
 }
 
 export const SykdomsvurderingBrevMedDataFetching = async ({ behandlingsreferanse, stegData }: Props) => {
-  const [grunnlag, initialMellomlagretVurdering, foreløpigBehandlingsutfall] = await Promise.all([
+  const [grunnlag, foreløpigBehandlingsutfall] = await Promise.all([
     hentSykdomsvurderingBrevGrunnlag(behandlingsreferanse),
-    hentMellomlagring(behandlingsreferanse, Behovstype.SYKDOMSVURDERING_BREV_KODE),
     hentForeløpigBehandlingsutfall(behandlingsreferanse, stegData.stegType, 'VURDER_ALDER'),
   ]);
 
   if (isError(grunnlag) || isError(foreløpigBehandlingsutfall)) {
     return <ApiException apiResponses={[grunnlag, foreløpigBehandlingsutfall]} />;
   }
+
+  const totalReadOnly = stegData.readOnly || !grunnlag.data.kanSaksbehandle;
+  const initialMellomlagretVurdering = await hentMellomlagring(
+    behandlingsreferanse,
+    Behovstype.SYKDOMSVURDERING_BREV_KODE,
+    totalReadOnly
+  );
 
   return (
     <SykdomsvurderingBrev

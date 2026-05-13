@@ -6,7 +6,7 @@ import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useDebounce } from 'hooks/DebounceHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { clientHentFlyt, clientMellomlagreBrev } from 'lib/clientApi';
-import { Brev, BrevMottaker, BrevStatus, Mottaker, Signatur } from 'lib/types/types';
+import { Brev, BrevMottaker, BrevStatus, Mottaker, Signatur, TypeBehandling } from 'lib/types/types';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { Behovstype } from 'lib/utils/form';
 
@@ -15,12 +15,13 @@ import { useCallback, useEffect, useState } from 'react';
 import { revalidateFlyt } from 'lib/actions/actions';
 import { ChevronDownIcon, GlassIcon, TrashIcon } from '@navikt/aksel-icons';
 import { ForhåndsvisBrevModal } from 'components/behandlinger/brev/skriveBrev/ForhåndsvisBrevModal';
-import { IkkeSendBrevModal } from 'components/behandlinger/brev/skriveBrev/IkkeSendBrevModal';
+import { IkkeSendBrevModal, IkkeSendFields } from 'components/behandlinger/brev/skriveBrev/IkkeSendBrevModal';
 import { isError, isSuccess } from 'lib/utils/api';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { Distribusjonssjekk } from 'components/brev/Distribusjonssjekk';
+import { loggUmamiEvent, useUmamiStartTidspunkt } from 'lib/utils/umami';
 
 export const SkriveBrev = ({
   referanse,
@@ -35,6 +36,7 @@ export const SkriveBrev = ({
   visAvbryt = true,
   status,
   readOnly,
+  behandlingstype,
 }: {
   referanse: string;
   behovstype: Behovstype;
@@ -48,6 +50,7 @@ export const SkriveBrev = ({
   visAvbryt?: boolean;
   status: BrevStatus;
   readOnly: boolean;
+  behandlingstype: TypeBehandling;
 }) => {
   const { behandlingsreferanse } = useParamsMedType();
   const [brev, setBrev] = useState<Brev>(grunnlag);
@@ -58,6 +61,7 @@ export const SkriveBrev = ({
   const debouncedBrev = useDebounce<Brev>(brev, 2000);
   const [kanMellomlagreBrev, setKanMellomlagreBrev] = useState(true);
   const [valgteMottakere, setMottakere] = useState<Mottaker[]>([]);
+  const umamiStartTidspunkt = useUmamiStartTidspunkt();
 
   const [forhåndsvisModalOpen, setForhåndsvisModalOpen] = useState(false);
   const [ikkeSendBrevModalOpen, settIkkeSendBrevModalOpen] = useState(false);
@@ -91,12 +95,13 @@ export const SkriveBrev = ({
     setBrev(brev);
   };
 
-  const slettBrev = async () => {
+  const slettBrev = async (ikkeSendBrevForm: IkkeSendFields) => {
     løsBehovOgGåTilNesteSteg({
       behandlingVersjon: behandlingVersjon,
       behov: {
         behovstype: behovstype,
         brevbestillingReferanse: referanse,
+        begrunnelse: ikkeSendBrevForm.begrunnelse,
         handling: 'AVBRYT',
       },
       referanse: behandlingsreferanse,
@@ -194,16 +199,23 @@ export const SkriveBrev = ({
                 const flyt = await clientHentFlyt(behandlingsreferanse);
                 if (isSuccess(flyt) && flyt.data.behandlingVersjon) {
                   setKanMellomlagreBrev(false);
-                  løsBehovOgGåTilNesteSteg({
-                    behandlingVersjon: flyt.data.behandlingVersjon,
-                    behov: {
-                      behovstype: behovstype,
-                      brevbestillingReferanse: referanse,
-                      mottakere: valgteMottakere,
-                      handling: 'FERDIGSTILL',
+                  løsBehovOgGåTilNesteSteg(
+                    {
+                      behandlingVersjon: flyt.data.behandlingVersjon,
+                      behov: {
+                        behovstype: behovstype,
+                        brevbestillingReferanse: referanse,
+                        mottakere: valgteMottakere,
+                        handling: 'FERDIGSTILL',
+                      },
+                      referanse: behandlingsreferanse,
                     },
-                    referanse: behandlingsreferanse,
-                  });
+                    () =>
+                      loggUmamiEvent('skrivebrev-varighet', {
+                        varighet_sekunder: Math.floor((Date.now() - umamiStartTidspunkt) / 1000),
+                        typeBehandling: behandlingstype,
+                      })
+                  );
                 }
               }}
               className={'fit-content'}
@@ -226,9 +238,7 @@ export const SkriveBrev = ({
           onClose={() => {
             settIkkeSendBrevModalOpen(false);
           }}
-          onDelete={() => {
-            slettBrev();
-          }}
+          onDelete={slettBrev}
         />
       </div>
     </>

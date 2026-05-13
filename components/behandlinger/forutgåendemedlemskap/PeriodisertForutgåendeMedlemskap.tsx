@@ -2,9 +2,9 @@ import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import {
   hentBeregningstidspunktVurdering,
   hentFlyt,
+  hentForutgåendeMedlemskapGrunnlag,
   hentForutgåendeMedlemskapsVurdering,
   hentMellomlagring,
-  hentForutgåendeMedlemskapGrunnlag,
   hentYrkesskadeVurderingGrunnlag,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { getStegData, skalViseSteg } from 'lib/utils/steg';
@@ -19,21 +19,14 @@ interface Props {
   behandlingsreferanse: string;
 }
 export const PeriodisertForutgåendeMedlemskap = async ({ behandlingsreferanse }: Props) => {
-  const [
-    flyt,
-    grunnlag,
-    beregningsperiodeGrunnlag,
-    automatiskVurdering,
-    yrkesskadeVurderingGrunnlag,
-    initialMellomlagretVurdering,
-  ] = await Promise.all([
-    hentFlyt(behandlingsreferanse),
-    hentForutgåendeMedlemskapGrunnlag(behandlingsreferanse),
-    hentBeregningstidspunktVurdering(behandlingsreferanse),
-    hentForutgåendeMedlemskapsVurdering(behandlingsreferanse),
-    hentYrkesskadeVurderingGrunnlag(behandlingsreferanse),
-    hentMellomlagring(behandlingsreferanse, Behovstype.AVKLAR_FORUTGÅENDE_MEDLEMSKAP),
-  ]);
+  const [flyt, grunnlag, beregningsperiodeGrunnlag, automatiskVurdering, yrkesskadeVurderingGrunnlag] =
+    await Promise.all([
+      hentFlyt(behandlingsreferanse),
+      hentForutgåendeMedlemskapGrunnlag(behandlingsreferanse),
+      hentBeregningstidspunktVurdering(behandlingsreferanse),
+      hentForutgåendeMedlemskapsVurdering(behandlingsreferanse),
+      hentYrkesskadeVurderingGrunnlag(behandlingsreferanse),
+    ]);
 
   if (
     isError(grunnlag) ||
@@ -49,6 +42,12 @@ export const PeriodisertForutgåendeMedlemskap = async ({ behandlingsreferanse }
   const harYrkesskade = yrkesskadeVurderingGrunnlag.data.yrkesskadeVurdering?.erÅrsakssammenheng === true;
   const vurderMedlemskapSteg = getStegData('MEDLEMSKAP', 'VURDER_MEDLEMSKAP', flyt.data);
   const readOnly = vurderMedlemskapSteg.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
+
+  const initialMellomlagretVurdering = await hentMellomlagring(
+    behandlingsreferanse,
+    Behovstype.AVKLAR_FORUTGÅENDE_MEDLEMSKAP,
+    readOnly
+  );
 
   const erOverstyrtTilbakeførtVurdering =
     automatiskVurdering.data.kanBehandlesAutomatisk &&

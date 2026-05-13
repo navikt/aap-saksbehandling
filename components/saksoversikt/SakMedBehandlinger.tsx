@@ -21,7 +21,6 @@ import { BehandlingsflytEllerPostmottakBehandling } from './types';
 import { usePostmottakBehandlinger } from 'hooks/postmottak/PostmottakBehandlingerHook';
 import { useHentOppgaverForBehandlinger } from 'hooks/oppgave/OppgaverPåSakHook';
 import { Dato } from 'lib/types/Dato';
-import { useFeatureFlag } from 'context/UnleashContext';
 import { Kort } from 'components/kort/Kort';
 
 const lokalDevToolsForBehandlingOgSak = isLocal();
@@ -47,11 +46,9 @@ function formaterVurderingsbehovMedTeller(behov: Vurderingsbehov[]): string {
 
 export const SakMedBehandlinger = ({
   sak,
-  innloggetBrukerIdent,
   rettighetsinfo,
 }: {
   sak: SaksInfo;
-  innloggetBrukerIdent: string | undefined;
   rettighetsinfo: RettighetsinfoDto | null;
 }) => {
   const router = useRouter();
@@ -83,7 +80,6 @@ export const SakMedBehandlinger = ({
 
   const oppgaverPerBehandling = useHentOppgaverForBehandlinger(åpne.map((b) => b.behandling.referanse));
   const avsluttede = alleBehandlinger?.filter((b) => erAvsluttet(b.behandling));
-  const visSisteDagMedRett = useFeatureFlag('VisSisteDagMedRett');
 
   function hentTildeling(referanse: string) {
     const oppgaveInfo = oppgaverPerBehandling.get(referanse);
@@ -136,7 +132,7 @@ export const SakMedBehandlinger = ({
               )}
             </HStack>
           </HStack>
-          {visSisteDagMedRett && rettighetsinfo?.sisteDagMedRett && (
+          {rettighetsinfo?.sisteDagMedRett && (
             <BodyShort>{`Siste dag med rett: ${new Dato(rettighetsinfo.sisteDagMedRett).formaterForFrontend()}`}</BodyShort>
           )}
         </VStack>
@@ -197,7 +193,6 @@ export const SakMedBehandlinger = ({
                     behandling={behandling}
                     oppgaveInfo={oppgaverPerBehandling.get(behandling.behandling.referanse)}
                     setFeilmelding={setFeilmelding}
-                    innloggetBrukerIdent={innloggetBrukerIdent}
                   ></BehandlingButtons>
                 </Table.DataCell>
               </Table.Row>

@@ -45,7 +45,7 @@ export const TotrinnsvurderingVedtaksbrevFelter = ({
       <div
         className={`${styles.heading} ${erKvalitetssikring ? styles.headingKvalitetssikrer : styles.headingBeslutter}`}
       >
-        <AkselLink as={Link} href={link}>
+        <AkselLink as={Link} prefetch={false} href={link}>
           {mapBehovskodeTilBehovstype(field.definisjon as Behovstype)}
         </AkselLink>
       </div>

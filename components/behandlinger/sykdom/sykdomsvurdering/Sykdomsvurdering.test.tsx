@@ -471,15 +471,13 @@ describe('felt for nedsettelsen er av en viss varighet', () => {
     );
 
     await velgAtBrukerHarSykdomSkadeLyte();
-    await velgJaIGruppe(
+    await velgJaForbigåendeProblemer(
       screen.getByRole('radiogroup', {
         name: 'Har brukeren nedsatt arbeidsevne?',
       })
     );
 
-    await velgJaForbigåendeProblemerNedsettelseMinstHalvparten(
-      screen.getByLabelText(/er arbeidsevnen nedsatt med minst halvparten\?/i)
-    );
+    await velgJaIGruppe(screen.getByLabelText(/er arbeidsevnen nedsatt med minst halvparten\?/i));
     await velgJaIGruppe(
       screen.getByRole('radiogroup', {
         name: 'Er sykdom, skade eller lyte vesentlig medvirkende til at arbeidsevnen er nedsatt?',
@@ -1173,5 +1171,5 @@ const velgNeiIGruppe = async (gruppe: HTMLElement): Promise<void> =>
 const velgJaIGruppe = async (gruppe: HTMLElement): Promise<void> =>
   await user.click(within(gruppe).getByRole('radio', { name: 'Ja' }));
 
-const velgJaForbigåendeProblemerNedsettelseMinstHalvparten = async (gruppe: HTMLElement): Promise<void> =>
+const velgJaForbigåendeProblemer = async (gruppe: HTMLElement): Promise<void> =>
   await user.click(within(gruppe).getByRole('radio', { name: JaNeiEllerForbigåendeTekst.Forbigående }));

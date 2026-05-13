@@ -61,7 +61,10 @@ export const Behandlingsinfo = ({ behandling, sak, klageresultat }: Props) => {
           {erSvarFraKabal && behandling.tilhørendeKlagebehandling && (
             <>
               <BodyShort size={'small'}>
-                <Link href={`/saksbehandling/sak/${sak.saksnummer}/${behandling.tilhørendeKlagebehandling}`}>
+                <Link
+                  prefetch={false}
+                  href={`/saksbehandling/sak/${sak.saksnummer}/${behandling.tilhørendeKlagebehandling}`}
+                >
                   Tilhørende klagebehandling
                 </Link>
               </BodyShort>

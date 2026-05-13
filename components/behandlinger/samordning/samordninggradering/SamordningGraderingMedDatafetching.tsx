@@ -6,7 +6,6 @@ import {
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
-import { hentBrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { StegData } from 'lib/utils/steg';
 import { SamordningGradering } from 'components/behandlinger/samordning/samordninggradering/SamordningGradering';
 
@@ -16,27 +15,31 @@ interface Props {
 }
 
 export const SamordningGraderingMedDatafetching = async ({ behandlingsreferanse, stegData }: Props) => {
-  const [grunnlag, brukerInformasjon, oppfølgningOppgaver, initialMellomlagretVurdering] = await Promise.all([
+  const [grunnlag, oppfølgningOppgaver] = await Promise.all([
     hentSamordningGraderingGrunnlag(behandlingsreferanse),
-    hentBrukerInformasjon(),
     hentOppfølgningsOppgaverOpprinselsePåBehandlingsReferanse(
       behandlingsreferanse,
       Behovstype.AVKLAR_SAMORDNING_GRADERING
     ),
-    hentMellomlagring(behandlingsreferanse, Behovstype.AVKLAR_SAMORDNING_GRADERING),
   ]);
 
   if (isError(grunnlag) || isError(oppfølgningOppgaver)) {
     return <ApiException apiResponses={[grunnlag, oppfølgningOppgaver]} />;
   }
 
+  const totalReadOnly = stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
+  const initialMellomlagretVurdering = await hentMellomlagring(
+    behandlingsreferanse,
+    Behovstype.AVKLAR_SAMORDNING_GRADERING,
+    totalReadOnly
+  );
+
   return (
     <SamordningGradering
       oppfølgningOppgave={oppfølgningOppgaver.data}
-      bruker={brukerInformasjon}
       grunnlag={grunnlag.data}
       behandlingVersjon={stegData.behandlingVersjon}
-      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+      readOnly={totalReadOnly}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
     />
   );

@@ -13,14 +13,13 @@ interface Props {
 }
 
 export const OppholdskravStegMedDataFatching = async ({ behandlingVersjon, behandlingsreferanse, readOnly }: Props) => {
-  const [grunnlag, mellomlagring] = await Promise.all([
-    hentOppholdskravGrunnlag(behandlingsreferanse),
-    hentMellomlagring(behandlingsreferanse, Behovstype.OPPHOLDSKRAV_KODE),
-  ]);
+  const grunnlag = await hentOppholdskravGrunnlag(behandlingsreferanse);
 
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
   }
+
+  const mellomlagring = await hentMellomlagring(behandlingsreferanse, Behovstype.OPPHOLDSKRAV_KODE, readOnly);
 
   return (
     <OppholdskravSteg

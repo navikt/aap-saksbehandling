@@ -32,6 +32,7 @@ import { useBackendSortering } from 'hooks/oppgave/BackendSorteringHook';
 import { LedigeOppgaverFiltrering } from 'components/oppgaveliste/filtrering/ledigeoppgaverfiltrering/LedigeOppgaverFiltrering';
 import { ValuePair } from 'components/form/FormField';
 import { useInnloggetBruker } from 'hooks/BrukerHook';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   enheter: Enhet[];
@@ -49,6 +50,9 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
 
   const [veilederFilter, setVeilederFilter] = useState<string>('');
   const lagretUtvidetFilter = hentAktivUtvidetFilter();
+
+  const [hasteoppgaverØverst, setHasteOppgaverØverst] = useState<boolean>(true);
+  const skalViseHasteoppgaveToggle = useFeatureFlag('HastemarkeringerFoerst');
 
   function førsteEnhetTilComboOption(enheter: Enhet[]): ValuePair[] | null {
     const førsteEnhet = enheter.find((e) => e);
@@ -155,7 +159,14 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
     kanLasteInnFlereOppgaver,
     mutate,
     behandlingstyperFilterFraBackend,
-  } = useLedigeOppgaver(aktiveEnhetsnumre, veilederFilter === 'veileder', aktivKø?.id ?? 0, utvidetFilter, sort);
+  } = useLedigeOppgaver(
+    aktiveEnhetsnumre,
+    veilederFilter === 'veileder',
+    aktivKø?.id ?? 0,
+    hasteoppgaverØverst,
+    utvidetFilter,
+    sort
+  );
 
   const { data: køer } = useSWR(`api/filter?${queryParamsArray('enheter', aktiveEnhetsnumre)}`, () =>
     hentKøerForEnheterClient(aktiveEnhetsnumre)
@@ -231,6 +242,16 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
               >
                 Vis kun oppgaver jeg er veileder på
               </Switch>
+              {skalViseHasteoppgaveToggle && (
+                <Switch
+                  value="hasteoppgaver"
+                  checked={hasteoppgaverØverst}
+                  onChange={() => setHasteOppgaverØverst((prev) => !prev)}
+                  size={'small'}
+                >
+                  Vis hastemarkeringer øverst
+                </Switch>
+              )}
             </HStack>
           </HStack>
           <HStack gap={'space-8'} paddingInline={'space-16'} paddingBlock={'space-8'}>

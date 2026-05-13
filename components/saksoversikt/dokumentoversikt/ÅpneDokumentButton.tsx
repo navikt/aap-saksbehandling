@@ -21,6 +21,7 @@ export const ÅpneDokumentButton = ({ journalpost }: { journalpost: Journalpost 
                   disabled={!dok.dokumentvarianter[0]?.saksbehandlerHarTilgang}
                 >
                   <Link
+                    prefetch={false}
                     href={`/saksbehandling/api/dokumenter/${journalpost.journalpostId}/${dok.dokumentInfoId}`}
                     target="_blank"
                     rel="noreferrer noopener"
