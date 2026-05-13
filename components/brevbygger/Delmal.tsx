@@ -23,14 +23,14 @@ export const Delmal = ({ delmalRef, control, erMarkert, onToggleMarkering }: Pro
   );
   const harValgEllerFritekst = valgOgFritekst.length > 0;
 
-  if (obligatorisk && !harValgEllerFritekst) {
-    return null;
-  }
-
   const delmalErValgt = useWatch({
     control,
     name: `delmaler.${delmal._id}`,
   });
+
+  if (obligatorisk && !harValgEllerFritekst) {
+    return null;
+  }
 
   // sjekker om denne delmalen er valgt eller er obligatorisk
   const erValgt = delmalErValgt || obligatorisk;
