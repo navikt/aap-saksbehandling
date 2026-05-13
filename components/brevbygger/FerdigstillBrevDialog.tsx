@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button, Dialog } from '@navikt/ds-react';
 import { ForhåndsvisBrev } from 'components/brevbygger/ForhåndsvisBrev';
 
@@ -14,19 +14,28 @@ interface Props {
 export const FerdigstillBrevDialog = ({ referanse, isOpen, onClose, sendBrev }: Props) => {
   const [lasterPdf, setLasterPdf] = useState<boolean>(false);
   const [pdfDataUri, setPdfDataUri] = useState<string | undefined>();
+  const pdfDataUriRef = useRef<string | undefined>(undefined);
 
   useEffect(() => {
     const getPdf = async () => {
       setLasterPdf(true);
-      const blob = await fetch(`/saksbehandling/api/brev/${referanse}/forhandsvis/`).then((r) => r.blob());
-      setPdfDataUri(URL.createObjectURL(new Blob([blob], { type: 'application/pdf' })));
-      setLasterPdf(false);
+      try {
+        const blob = await fetch(`/saksbehandling/api/brev/${referanse}/forhandsvis/`).then((r) => r.blob());
+        const url = URL.createObjectURL(new Blob([blob], { type: 'application/pdf' }));
+        pdfDataUriRef.current = url;
+        setPdfDataUri(url);
+      } finally {
+        setLasterPdf(false);
+      }
     };
     if (isOpen) {
       getPdf();
     }
     return () => {
-      if (pdfDataUri) URL.revokeObjectURL(pdfDataUri);
+      if (pdfDataUriRef.current) {
+        URL.revokeObjectURL(pdfDataUriRef.current);
+        pdfDataUriRef.current = undefined;
+      }
     };
   }, [isOpen]);
 
