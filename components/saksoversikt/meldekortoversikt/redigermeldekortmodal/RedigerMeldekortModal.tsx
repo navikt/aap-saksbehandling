@@ -229,13 +229,12 @@ function getDefaultValuesForForm(meldekort?: MeldeperiodeMedMeldekortDto): Redig
   }
 
   const eksisterendeDager = meldekort.meldekort?.dager ?? [];
-
-  const startDato = new Date(meldekort.meldeperiode.fom);
+  const startDato = new Dato(meldekort.meldeperiode.fom);
 
   const alleDager: Dag[] = Array.from({ length: 14 }).map((_, index) => {
-    const dato = formaterDatoForBackend(addDays(startDato, index));
-
+    const dato = formaterDatoForBackend(addDays(startDato.dato, index));
     const eksisterendeDag = eksisterendeDager.find((dag) => dag.dato === dato);
+
     return {
       dato,
       timerArbeidet:
