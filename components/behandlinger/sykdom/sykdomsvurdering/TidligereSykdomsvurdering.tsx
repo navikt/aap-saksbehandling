@@ -54,7 +54,7 @@ export const TidligereSykdomsvurdering = ({ vurdering, sykdomUtenVissVarighetTog
       )}
       {sykdomUtenVissVarighetToggle && vurdering.harNedsattArbeidsevne !== undefined && (
         <SpørsmålOgSvar
-          spørsmål={erNedsettelseIArbeidsevneMerEnnHalvpartenLabel}
+          spørsmål={harNedsattArbeidsevneLabel}
           svar={getJaNeiJaForbigåendeEllerIkkeBesvart(vurdering.harNedsattArbeidsevne)}
         />
       )}
