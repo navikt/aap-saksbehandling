@@ -13,11 +13,28 @@ export const UmamiScript = () => {
 };
 
 function loadTracker() {
+  (window as unknown as Window & { umamiBeforeSend: typeof umamiBeforeSend }).umamiBeforeSend = umamiBeforeSend;
+
   const script = document.createElement('script');
   script.defer = true;
   script.src = 'https://cdn.nav.no/team-researchops/sporing/sporing-dev.js';
   script.setAttribute('data-website-id', umamiSporingskode);
+  script.setAttribute('data-before-send', 'umamiBeforeSend');
   document.head.appendChild(script);
+}
+
+function umamiBeforeSend(type: string, payload: { url?: string }) {
+  if (payload.url) {
+    const normalisertUrl = payload.url
+      .replace(/\/saksbehandling\/sak\/[^/]+\/[^/]+/, '/saksbehandling/sak/{saksid}/{behandlingsreferanse}')
+      .replace(/\/saksbehandling\/sak\/[^/]+/, '/saksbehandling/sak/{saksid}')
+      .replace(
+        /\/postmottak\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i,
+        '/postmottak/{referanse}'
+      );
+    payload.url = normalisertUrl;
+  }
+  return payload;
 }
 
 export const UmamiTags = {
