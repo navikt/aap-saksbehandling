@@ -292,6 +292,7 @@ export const Sykdomsvurdering = ({
           begrunnelse: vurdering?.begrunnelse,
           harSkadeSykdomEllerLyte: getJaNeiEllerUndefined(vurdering?.harSkadeSykdomEllerLyte)!,
           erArbeidsevnenNedsatt: getJaNeiEllerUndefined(vurdering?.erArbeidsevnenNedsatt),
+          harNedsattArbeidsevne: vurdering?.harNedsattArbeidsevne,
           erNedsettelseIArbeidsevneMerEnnHalvparten: getJaNeiEllerUndefined(
             vurdering?.erNedsettelseIArbeidsevneMerEnnHalvparten
           ),
