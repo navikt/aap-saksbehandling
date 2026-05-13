@@ -11886,25 +11886,29 @@ export interface components {
        * @description Bruk fom
        */
       dokumenterBruktIVurdering: components['schemas']['no.nav.aap.verdityper.dokument.JournalpostId'][];
+      /**
+       * @deprecated
+       * @description Bruk harArbeidsevneNedsatt
+       */
       erArbeidsevnenNedsatt?: boolean | null;
       /**
        * @deprecated
-       * @description Bruk erNedsettelseMinstHalvparten/erNedsettelseMerEnnYrkesskadegrense
+       * @description Bruk harNedsattArbeidsevne
        */
       erNedsettelseIArbeidsevneAvEnVissVarighet?: boolean | null;
-      /**
-       * @deprecated
-       * @description Bruk erNedsettelseMinstHalvparten
-       */
       erNedsettelseIArbeidsevneMerEnnHalvparten?: boolean | null;
+      erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense?: boolean | null;
       /**
        * @deprecated
-       * @description Bruk erNedsettelseMerEnnYrkesskadegrense
+       * @description Bruk erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense
+       * @enum {string|null}
        */
-      erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense?: boolean | null;
-      /** @enum {string|null} */
       erNedsettelseMerEnnYrkesskadegrense?: 'JA' | 'JA_FORBIGÅENDE_PROBLEMER' | 'NEI' | null;
-      /** @enum {string|null} */
+      /**
+       * @deprecated
+       * @description Bruk erNedsettelseIArbeidsevneMerEnnHalvparten
+       * @enum {string|null}
+       */
       erNedsettelseMinstHalvparten?: 'JA' | 'JA_FORBIGÅENDE_PROBLEMER' | 'NEI' | null;
       erSkadeSykdomEllerLyteVesentligdel?: boolean | null;
       /**
@@ -11912,6 +11916,8 @@ export interface components {
        * @example 2025-04-01
        */
       fom: string;
+      /** @enum {string|null} */
+      harNedsattArbeidsevne?: 'JA' | 'JA_FORBIGÅENDE_PROBLEMER' | 'NEI' | null;
       harSkadeSykdomEllerLyte: boolean;
       hoveddiagnose?: string | null;
       kodeverk?: string | null;
@@ -15645,13 +15651,29 @@ export interface components {
       begrunnelse: string;
       bidiagnoser?: string[] | null;
       dokumenterBruktIVurdering: components['schemas']['no.nav.aap.verdityper.dokument.JournalpostId'][];
+      /**
+       * @deprecated
+       * @description Erstattes av harNedsattArbeidsevne
+       */
       erArbeidsevnenNedsatt?: boolean | null;
+      /**
+       * @deprecated
+       * @description Bakes inn i harNedsattArbeidsevne
+       */
       erNedsettelseIArbeidsevneAvEnVissVarighet?: boolean | null;
       erNedsettelseIArbeidsevneMerEnnHalvparten?: boolean | null;
       erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense?: boolean | null;
-      /** @enum {string|null} */
+      /**
+       * @deprecated
+       * @description Bruk erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense
+       * @enum {string|null}
+       */
       erNedsettelseMerEnnYrkesskadegrense?: 'JA' | 'JA_FORBIGÅENDE_PROBLEMER' | 'NEI' | null;
-      /** @enum {string|null} */
+      /**
+       * @deprecated
+       * @description Bruk erNedsettelseIArbeidsevneMerEnnHalvparten
+       * @enum {string|null}
+       */
       erNedsettelseMinstHalvparten?: 'JA' | 'JA_FORBIGÅENDE_PROBLEMER' | 'NEI' | null;
       erSkadeSykdomEllerLyteVesentligdel?: boolean | null;
       /**
@@ -15659,6 +15681,8 @@ export interface components {
        * @example 2025-04-01
        */
       fom: string;
+      /** @enum {string|null} */
+      harNedsattArbeidsevne?: 'JA' | 'JA_FORBIGÅENDE_PROBLEMER' | 'NEI' | null;
       harSkadeSykdomEllerLyte: boolean;
       hoveddiagnose?: string | null;
       kodeverk?: string | null;
