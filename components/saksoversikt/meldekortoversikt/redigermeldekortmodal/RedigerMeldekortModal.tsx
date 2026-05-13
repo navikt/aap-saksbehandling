@@ -1,4 +1,4 @@
-import { Alert, BodyLong, BodyShort, Button, Dialog, HStack, Link, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, Detail, Dialog, HStack, Link, VStack } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 
@@ -182,29 +182,30 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
                 </VStack>
               </form>
             </FormProvider>
+
             {tidligereInnsendteMeldekort && tidligereInnsendteMeldekort.length > 0 && (
-              <>
+              <VStack gap={'space-8'}>
                 <BodyShort weight={'semibold'}>Tidligere versjoner av meldekortet:</BodyShort>
                 <VStack gap={'space-2'}>
                   {tidligereInnsendteMeldekort.map((tidligereMeldekort, index) => {
                     return (
-                      <HStack key={index}>
-                        <BodyLong>
-                          <Link
-                            href={`/saksbehandling/api/dokumenter/${tidligereMeldekort.jorunalPostId}/${tidligereMeldekort.dokumentId}`}
-                            target="_blank"
-                          >
-                            Meldekort for uke {hentUkeNummerForPeriode(fom.dato, tom.dato)}
-                            <ExternalLinkIcon />
-                          </Link>
+                      <HStack key={index} gap={'space-4'} align={'baseline'}>
+                        <Link
+                          href={`/saksbehandling/api/dokumenter/${tidligereMeldekort.jorunalPostId}/${tidligereMeldekort.dokumentId}`}
+                          target="_blank"
+                        >
+                          Meldekort for uke {hentUkeNummerForPeriode(fom.dato, tom.dato)}
+                          <ExternalLinkIcon />
+                        </Link>
+                        <Detail>
                           {formaterDatoForFrontend(tidligereMeldekort.mottattTidspunkt)}{' '}
                           {tidligereMeldekort.oppdatertAv}
-                        </BodyLong>
+                        </Detail>
                       </HStack>
                     );
                   })}
                 </VStack>
-              </>
+              </VStack>
             )}
           </VStack>
         </Dialog.Body>
