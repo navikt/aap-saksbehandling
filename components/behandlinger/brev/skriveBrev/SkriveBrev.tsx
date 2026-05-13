@@ -96,23 +96,16 @@ export const SkriveBrev = ({
   };
 
   const slettBrev = async (ikkeSendBrevForm: IkkeSendFields) => {
-    løsBehovOgGåTilNesteSteg(
-      {
-        behandlingVersjon: behandlingVersjon,
-        behov: {
-          behovstype: behovstype,
-          brevbestillingReferanse: referanse,
-          begrunnelse: ikkeSendBrevForm.begrunnelse,
-          handling: 'AVBRYT',
-        },
-        referanse: behandlingsreferanse,
+    løsBehovOgGåTilNesteSteg({
+      behandlingVersjon: behandlingVersjon,
+      behov: {
+        behovstype: behovstype,
+        brevbestillingReferanse: referanse,
+        begrunnelse: ikkeSendBrevForm.begrunnelse,
+        handling: 'AVBRYT',
       },
-      () =>
-        loggUmamiEvent('skrivebrev-varighet', {
-          varighet_sekunder: Math.floor((Date.now() - umamiStartTidspunkt) / 1000),
-          typeBehandling: behandlingstype,
-        })
-    );
+      referanse: behandlingsreferanse,
+    });
     await revalidateFlyt(behandlingsreferanse);
     settIkkeSendBrevModalOpen(false);
   };
@@ -206,16 +199,23 @@ export const SkriveBrev = ({
                 const flyt = await clientHentFlyt(behandlingsreferanse);
                 if (isSuccess(flyt) && flyt.data.behandlingVersjon) {
                   setKanMellomlagreBrev(false);
-                  løsBehovOgGåTilNesteSteg({
-                    behandlingVersjon: flyt.data.behandlingVersjon,
-                    behov: {
-                      behovstype: behovstype,
-                      brevbestillingReferanse: referanse,
-                      mottakere: valgteMottakere,
-                      handling: 'FERDIGSTILL',
+                  løsBehovOgGåTilNesteSteg(
+                    {
+                      behandlingVersjon: flyt.data.behandlingVersjon,
+                      behov: {
+                        behovstype: behovstype,
+                        brevbestillingReferanse: referanse,
+                        mottakere: valgteMottakere,
+                        handling: 'FERDIGSTILL',
+                      },
+                      referanse: behandlingsreferanse,
                     },
-                    referanse: behandlingsreferanse,
-                  });
+                    () =>
+                      loggUmamiEvent('skrivebrev-varighet', {
+                        varighet_sekunder: Math.floor((Date.now() - umamiStartTidspunkt) / 1000),
+                        typeBehandling: behandlingstype,
+                      })
+                  );
                 }
               }}
               className={'fit-content'}
