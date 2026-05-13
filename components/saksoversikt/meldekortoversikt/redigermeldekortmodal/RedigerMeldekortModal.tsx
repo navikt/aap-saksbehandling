@@ -9,7 +9,7 @@ import { FormErrorSummary } from 'components/formerrorsummary/FormErrorSummary';
 import { hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import { hentUkeNummerForPeriode } from 'components/saksoversikt/meldekortoversikt/meldekorttabell/MeldekortTabell';
 import { Dato } from 'lib/types/Dato';
-import { MeldeperiodeMedMeldekortDto, Periode } from 'lib/types/types';
+import { MeldeperiodeMedMeldekortDto } from 'lib/types/types';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { clientKorrigerMeldekort } from 'lib/clientApi';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
@@ -182,28 +182,29 @@ function getDefaultValuesForForm(meldekort?: MeldeperiodeMedMeldekortDto): Redig
     return undefined;
   }
 
+  const eksisterendeDager = meldekort.meldekort?.dager ?? [];
+
+  const alleDager: Dag[] = Array.from({ length: 14 }).map((_, i) => {
+    const currentDate = new Dato(meldekort.meldeperiode.fom).dato;
+    currentDate.setDate(currentDate.getDate() + i);
+    const dato = formaterDatoForBackend(currentDate);
+
+    const eksisterendeDag = eksisterendeDager.find((dag) => dag.dato === dato);
+    return {
+      dato,
+      timerArbeidet:
+        eksisterendeDag?.timerArbeidet == null || eksisterendeDag.timerArbeidet === 0
+          ? ''
+          : eksisterendeDag.timerArbeidet.toString(),
+    };
+  });
+
   return {
     begrunnelse: '',
     årsak: '',
     meldedato: meldekort.meldekort?.mottattTidspunkt
       ? formaterDatoForFrontend(meldekort.meldekort.mottattTidspunkt)
       : '',
-    dager:
-      meldekort?.meldekort?.dager.map((dag) => ({
-        dato: dag.dato,
-        timerArbeidet: dag.timerArbeidet == null || dag.timerArbeidet === 0 ? '' : dag.timerArbeidet.toString(),
-      })) || genererUkedagerFraMeldeperiode(meldekort.meldeperiode),
+    dager: alleDager,
   };
-}
-
-function genererUkedagerFraMeldeperiode(meldeperiode: Periode): Dag[] {
-  return Array.from({ length: 14 }).map((_, i) => {
-    const currentDate = new Dato(meldeperiode.fom).dato;
-    currentDate.setDate(currentDate.getDate() + i);
-
-    return {
-      dato: formaterDatoForBackend(currentDate),
-      timerArbeidet: '',
-    };
-  });
 }
