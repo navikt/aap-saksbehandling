@@ -16,6 +16,7 @@ import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { isError } from 'lib/utils/api';
 import { useAlleDokumenterPåSak } from 'hooks/saksbehandling/DokumenterHook';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
+import { addDays } from 'date-fns';
 
 interface Props {
   setIsOpen: (isOpen: boolean) => void;
@@ -229,10 +230,10 @@ function getDefaultValuesForForm(meldekort?: MeldeperiodeMedMeldekortDto): Redig
 
   const eksisterendeDager = meldekort.meldekort?.dager ?? [];
 
-  const alleDager: Dag[] = Array.from({ length: 14 }).map((_, i) => {
-    const currentDate = new Dato(meldekort.meldeperiode.fom).dato;
-    currentDate.setDate(currentDate.getDate() + i);
-    const dato = formaterDatoForBackend(currentDate);
+  const startDato = new Date(meldekort.meldeperiode.fom);
+
+  const alleDager: Dag[] = Array.from({ length: 14 }).map((_, index) => {
+    const dato = formaterDatoForBackend(addDays(startDato, index));
 
     const eksisterendeDag = eksisterendeDager.find((dag) => dag.dato === dato);
     return {
