@@ -159,9 +159,7 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
             tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
             foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
             vurderingStatus={getErOppfyltEllerIkkeStatus(vurdering.oppfylt)}
-            vurdertAv={vurdering.vurdertAv}
-            kvalitetssikretAv={vurdering.kvalitetssikretAv}
-            besluttetAv={vurdering.besluttetAv}
+            vurderingerMeta={vurdering.vurderingerMeta}
           >
             <OppholdskravTidligereVurdering
               fraDato={vurdering.fom}

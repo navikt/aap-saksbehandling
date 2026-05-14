@@ -85,7 +85,9 @@ export const YrkesskadeGrunnlagBeregning = ({
   );
 
   const vurdertAvAnsatt =
-    yrkeskadeBeregningGrunnlag.vurderinger.length > 0 ? yrkeskadeBeregningGrunnlag.vurderinger[0].vurdertAv : undefined;
+    yrkeskadeBeregningGrunnlag.vurderinger.length > 0
+      ? yrkeskadeBeregningGrunnlag.vurderinger[0].vurderingerMeta.vurdertAv
+      : undefined;
 
   const historiskeVurderinger = yrkeskadeBeregningGrunnlag?.historiskeVurderinger;
 
@@ -123,7 +125,7 @@ export const YrkesskadeGrunnlagBeregning = ({
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       isLoading={isLoading}
       vilkårTilhørerNavKontor={false}
-      vurdertAvAnsatt={vurdertAvAnsatt}
+      vurderingerMeta={{ vurdertAv: vurdertAvAnsatt }}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() => {
@@ -139,9 +141,9 @@ export const YrkesskadeGrunnlagBeregning = ({
           data={historiskeVurderinger}
           buildFelter={byggFelter}
           getErGjeldende={(v) => deepEqual(v, historiskeVurderinger[historiskeVurderinger.length - 1])}
-          getFomDato={(v) => v.vurderingenGjelderFra ?? v.vurdertAv.dato}
-          getVurdertAvIdent={(v) => v.vurdertAv.ident}
-          getVurdertDato={(v) => v.vurdertAv.dato}
+          getFomDato={(v) => v.vurderingenGjelderFra ?? v.vurderingerMeta.vurdertAv?.dato ?? ''}
+          getVurdertAvIdent={(v) => v.vurderingerMeta.vurdertAv?.ident ?? ''}
+          getVurdertDato={(v) => v.vurderingerMeta.vurdertAv?.dato ?? ''}
         />
       )}
 

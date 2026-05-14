@@ -34,11 +34,13 @@ describe('Klage - vurdering nay', () => {
             innstilling: 'OMGJØR',
             vilkårSomOmgjøres: ['FOLKETRYGDLOVEN_11_5'],
             vilkårSomOpprettholdes: [],
-            vurdertAv: {
-              ident: 'ident',
-              dato: '2025-01-01',
-              ansattnavn: 'Ine',
-              enhetsnavn: 'Kontor',
+            vurderingerMeta: {
+              vurdertAv: {
+                ident: 'ident',
+                dato: '2025-01-01',
+                ansattnavn: 'Ine',
+                enhetsnavn: 'Kontor',
+              },
             },
           },
           harTilgangTilÅSaksbehandle: true,
@@ -119,6 +121,7 @@ describe('mellomlagring', () => {
       notat: '',
       vilkårSomOmgjøres: [],
       vilkårSomOpprettholdes: [],
+      vurderingerMeta: {},
     },
   };
 

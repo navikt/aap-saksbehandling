@@ -4,7 +4,7 @@ import {
   MellomlagretVurdering,
   VedtakslengdeGrunnlag,
   VedtakslengdeVurderingResponse,
-  VurderingMeta,
+  VurderingFormMeta,
 } from 'lib/types/types';
 import { Radio, VStack, Alert } from '@navikt/ds-react';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
@@ -32,7 +32,7 @@ import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupW
 import React from 'react';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 
-interface VedtakslengdeVurderingForm extends VurderingMeta {
+interface VedtakslengdeVurderingForm extends VurderingFormMeta {
   manuellVurdering: boolean;
   erNyVurdering: boolean;
   behøverVurdering: boolean;
@@ -65,8 +65,7 @@ function getDefaultValuesFromGrunnlag(grunnlag: VedtakslengdeGrunnlag): Vedtaksl
       behøverVurdering: false,
       manuellVurdering: true,
       endring: 'FORLENGELSE',
-      vurdertAv: v.vurdertAv,
-      besluttetAv: v.besluttetAv,
+      vurderingerMeta: v.vurderingerMeta,
     }));
 
   return {
@@ -202,9 +201,7 @@ export const VedtakslengdeSteg = ({
               ? VurderingStatus.VedtaksperiodeManuell
               : VurderingStatus.VedtaksperiodeAutomatisk
           }
-          vurdertAv={vurdering.vurdertAv}
-          kvalitetssikretAv={vurdering.kvalitetssikretAv}
-          besluttetAv={vurdering.besluttetAv}
+          vurderingerMeta={vurdering.vurderingerMeta}
         >
           <VedtakslengdeVurderingInnhold vurdering={vurdering} />
         </TidligereVurderingExpandableCard>
@@ -218,9 +215,7 @@ export const VedtakslengdeSteg = ({
             tom={vurdering.tom ? parseISO(vurdering.tom) : null}
             foersteNyePeriodeFraDato={foersteNyePeriode == null ? null : parseDatoFraDatePicker(foersteNyePeriode)}
             vurderingStatus={VurderingStatus.VedtaksperiodeAutomatisk}
-            vurdertAv={vurdering.vurdertAv}
-            kvalitetssikretAv={vurdering.kvalitetssikretAv}
-            besluttetAv={vurdering.besluttetAv}
+            vurderingerMeta={vurdering.vurderingerMeta}
           >
             <VedtakslengdeVurderingInnhold vurdering={vurdering} />
           </TidligereVurderingExpandableCard>

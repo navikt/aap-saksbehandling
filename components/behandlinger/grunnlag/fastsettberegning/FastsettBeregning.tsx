@@ -153,7 +153,7 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly, initi
     erDatoFoerDato(formaterDatoForFrontend(sak.virkningsTidspunkt), form.watch('nedsattArbeidsevneDato'));
 
   const historiskeVurderinger = grunnlag?.historiskeVurderinger.sort((a, b) => {
-    return sorterEtterNyesteDato(a.vurdertAv.dato, b.vurdertAv.dato);
+    return sorterEtterNyesteDato(a.vurderingerMeta.vurdertAv?.dato ?? '', b.vurderingerMeta.vurdertAv?.dato ?? '');
   });
 
   return (
@@ -165,7 +165,7 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly, initi
       vilkårTilhørerNavKontor={false}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       status={status}
-      vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
+      vurderingerMeta={grunnlag?.vurdering?.vurderingerMeta}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() =>
@@ -181,8 +181,8 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly, initi
           data={historiskeVurderinger}
           buildFelter={byggFelter}
           getErGjeldende={(v) => deepEqual(v, historiskeVurderinger.at(0))}
-          getVurdertAvIdent={(v) => v.vurdertAv.ident}
-          getVurdertDato={(v) => v.vurdertAv.dato}
+          getVurdertAvIdent={(v) => v.vurderingerMeta.vurdertAv?.ident ?? ''}
+          getVurdertDato={(v) => v.vurderingerMeta.vurdertAv?.dato ?? ''}
           grupperPåOpprettetDato={true}
         />
       )}

@@ -45,6 +45,7 @@ const grunnlagMedAutomatiskVurdering: VedtakslengdeGrunnlag = {
       begrunnelse: 'Automatisk fastsatt vedtakslengde',
       manuellVurdering: false,
       utvidetMed: 'FØRSTE_ÅR',
+      vurderingerMeta: {},
     },
   ],
   kanVurderes: [
@@ -68,6 +69,7 @@ const grunnlagMedManuellVurdering: VedtakslengdeGrunnlag = {
       begrunnelse: 'Automatisk fastsatt vedtakslengde',
       manuellVurdering: false,
       utvidetMed: 'FØRSTE_ÅR',
+      vurderingerMeta: {},
     },
     {
       fom: '2026-10-11',
@@ -76,9 +78,11 @@ const grunnlagMedManuellVurdering: VedtakslengdeGrunnlag = {
       begrunnelse: 'Manuell forlengelse begrunnelse',
       manuellVurdering: true,
       utvidetMed: 'ANNET',
-      vurdertAv: {
-        ident: 'Saksbehandler',
-        dato: '2026-03-10',
+      vurderingerMeta: {
+        vurdertAv: {
+          ident: 'Saksbehandler',
+          dato: '2026-03-10',
+        },
       },
     },
   ],
@@ -103,6 +107,7 @@ const grunnlagMedVedtatteOgNyeVurderinger: VedtakslengdeGrunnlag = {
       begrunnelse: 'Automatisk vedtakslengde ny periode',
       manuellVurdering: false,
       utvidetMed: 'ANDRE_ÅR',
+      vurderingerMeta: {},
     },
   ],
   kanVurderes: [
@@ -119,9 +124,11 @@ const grunnlagMedVedtatteOgNyeVurderinger: VedtakslengdeGrunnlag = {
       begrunnelse: 'Vedtatt automatisk vedtakslengde',
       manuellVurdering: false,
       utvidetMed: 'FØRSTE_ÅR',
-      vurdertAv: {
-        ident: 'Maskinansen',
-        dato: '2025-10-10',
+      vurderingerMeta: {
+        vurdertAv: {
+          ident: 'Maskinansen',
+          dato: '2025-10-10',
+        },
       },
     },
   ],
@@ -146,9 +153,11 @@ const grunnlagMedVedtattManuellVurdering: VedtakslengdeGrunnlag = {
       begrunnelse: 'Vedtatt automatisk',
       manuellVurdering: false,
       utvidetMed: 'FØRSTE_ÅR',
-      vurdertAv: {
-        ident: 'Maskinansen',
-        dato: '2025-10-10',
+      vurderingerMeta: {
+        vurdertAv: {
+          ident: 'Maskinansen',
+          dato: '2025-10-10',
+        },
       },
     },
     {
@@ -158,9 +167,11 @@ const grunnlagMedVedtattManuellVurdering: VedtakslengdeGrunnlag = {
       begrunnelse: 'Vedtatt manuell forlengelse',
       manuellVurdering: true,
       utvidetMed: 'ANNET',
-      vurdertAv: {
-        ident: 'Saksansen',
-        dato: '2026-03-10',
+      vurderingerMeta: {
+        vurdertAv: {
+          ident: 'Saksansen',
+          dato: '2026-03-10',
+        },
       },
     },
   ],

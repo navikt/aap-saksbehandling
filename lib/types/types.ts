@@ -158,7 +158,7 @@ export type SamordningAndreStatligeYtelserYtelse =
 export type TrukketSøknadGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.søknad.TrukketSøknadGrunnlagDto'];
 
-export type TrukketSøknadVudering =
+export type TrukketSøknadVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.søknad.TrukketSøknadVurderingDto'];
 
 export type AvbrytRevurderingGrunnlag =
@@ -623,13 +623,17 @@ export interface PeriodisertVurderingFormFields {
   tilDato?: string | null;
 }
 
-export interface VurderingMeta {
+export interface VurderingFormMeta {
   behøverVurdering: boolean;
   erNyVurdering: boolean;
-  vurdertAv?: VurdertAvAnsatt;
-  kvalitetssikretAv?: VurdertAvAnsatt;
-  besluttetAv?: VurdertAvAnsatt;
+  vurderingerMeta?: VurderingerMeta;
 }
+
+export type VurderingerMeta =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'] & {
+    vurdertAutomatisk?: boolean;
+    trukketAv?: VurdertAvAnsatt;
+  };
 
 // Gjør at vi kan lage et typesikkert "enum-objekt" med union types generert fra backend. feks const minEnum = lagEnumObjektFraUnionType<StegGruppe>({ SYKDOM: 'SYKDOM' ...})
 export function lagEnumObjektFraUnionType<UnionType extends string>(o: { [P in UnionType]: P }): {

@@ -1,7 +1,7 @@
 'use client';
 
 import { Button, Detail, ExpansionCard, HStack, VStack } from '@navikt/ds-react';
-import { MellomlagretVurdering, StegType, VurdertAvAnsatt } from 'lib/types/types';
+import { MellomlagretVurdering, StegType, VurderingerMeta } from 'lib/types/types';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 
@@ -24,10 +24,7 @@ export interface VilkårsKortMedFormOgMellomlagringProps {
   knappTekst?: string;
   defaultOpen?: boolean;
   vilkårTilhørerNavKontor: boolean;
-  vurdertAvAnsatt?: VurdertAvAnsatt;
-  vurdertAutomatisk?: boolean;
-  kvalitetssikretAv?: VurdertAvAnsatt;
-  besluttetAv?: VurdertAvAnsatt;
+  vurderingerMeta?: VurderingerMeta;
   visningModus: VisningModus;
   visningActions: VisningActions;
   onDeleteMellomlagringClick: () => void;
@@ -46,10 +43,7 @@ export const VilkårskortMedFormOgMellomlagring = ({
   vilkårTilhørerNavKontor,
   knappTekst = 'Bekreft',
   defaultOpen = true,
-  vurdertAvAnsatt,
-  vurdertAutomatisk = false,
-  kvalitetssikretAv,
-  besluttetAv,
+  vurderingerMeta = {},
   onDeleteMellomlagringClick,
   mellomlagretVurdering,
   visningModus,
@@ -149,12 +143,12 @@ export const VilkårskortMedFormOgMellomlagring = ({
                 )}
               </VStack>
 
-              {/* Høyre kolonne: vurdert av / kvalitetssikret av */}
               <VStack align="end">
-                {vurdertAutomatisk && <Detail>Vurdert automatisk</Detail>}
-                <VurdertAvAnsattDetail vurdertAv={vurdertAvAnsatt} variant={'VURDERING'} />
-                <VurdertAvAnsattDetail vurdertAv={kvalitetssikretAv} variant={'KVALITETSSIKRER'} />
-                <VurdertAvAnsattDetail vurdertAv={besluttetAv} variant={'BESLUTTER'} />
+                {vurderingerMeta.vurdertAutomatisk && <Detail>Vurdert automatisk</Detail>}
+                <VurdertAvAnsattDetail vurdertAv={vurderingerMeta.vurdertAv} variant={'VURDERING'} />
+                <VurdertAvAnsattDetail vurdertAv={vurderingerMeta.kvalitetssikretAv} variant={'KVALITETSSIKRER'} />
+                <VurdertAvAnsattDetail vurdertAv={vurderingerMeta.besluttetAv} variant={'BESLUTTER'} />
+                <VurdertAvAnsattDetail vurdertAv={vurderingerMeta.trukketAv} variant={'TRUKKET'} />
               </VStack>
             </HStack>
           </VStack>

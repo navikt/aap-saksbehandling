@@ -117,12 +117,12 @@ describe('mellomlagring', () => {
         vurdertIBehandling: { id: 1 },
         opprettet: '2025-08-21',
         grunn: 'ANNEN_SYKDOM_INNEN_SEKS_MND',
-        vurdertAv: {
-          dato: '2025-08-21',
-          ident: 'Saksbehandler',
+        vurderingerMeta: {
+          vurdertAv: {
+            dato: '2025-08-21',
+            ident: 'Saksbehandler',
+          },
         },
-        besluttetAv: undefined,
-        kvalitetssikretAv: undefined,
       },
     ],
     sisteVedtatteVurderinger: [
@@ -135,12 +135,12 @@ describe('mellomlagring', () => {
         vurdertIBehandling: { id: 1 },
         opprettet: '2025-08-21',
         grunn: 'ANNEN_SYKDOM_INNEN_SEKS_MND',
-        vurdertAv: {
-          dato: '2025-08-21',
-          ident: 'Saksbehandler',
+        vurderingerMeta: {
+          vurdertAv: {
+            dato: '2025-08-21',
+            ident: 'Saksbehandler',
+          },
         },
-        besluttetAv: undefined,
-        kvalitetssikretAv: undefined,
       },
     ],
   };

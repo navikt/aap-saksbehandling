@@ -190,7 +190,7 @@ export const Yrkesskade = ({
       isLoading={isLoading}
       status={status}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      vurdertAvAnsatt={grunnlag.yrkesskadeVurdering?.vurdertAv}
+      vurderingerMeta={grunnlag.yrkesskadeVurdering?.vurderingerMeta}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() => form.reset(mapVurderingToDraftFormFields(grunnlag)));

@@ -1,11 +1,11 @@
 import { JaEllerNei } from 'lib/utils/form';
-import { VurderingMeta } from 'lib/types/types';
+import { VurderingFormMeta } from 'lib/types/types';
 
 export type LovOgMedlemskapVurderingForm = {
   vurderinger: LovvalgOgMedlemskapManuellVurderingForm[];
 };
 
-export interface LovvalgOgMedlemskapManuellVurderingForm extends VurderingMeta {
+export interface LovvalgOgMedlemskapManuellVurderingForm extends VurderingFormMeta {
   lovvalg: {
     begrunnelse: string;
     lovvalgsEØSLand: string;

@@ -33,9 +33,9 @@ export function TidligereVurderinger({
   data,
   buildFelter,
   getErGjeldende = () => false,
-  getVurdertAvIdent = (v: any) => v.vurdertAv.ident,
-  getVurdertDato = (v: any) => v.vurdertAv.dato,
-  getFomDato = (v: any) => v.vurderingenGjelderFra ?? v.vurdertAv?.dato,
+  getVurdertAvIdent = (v: any) => v.vurderingerMeta?.vurdertAv?.ident ?? '',
+  getVurdertDato = (v: any) => v.vurderingerMeta?.vurdertAv?.dato ?? '',
+  getFomDato = (v: any) => v.vurderingenGjelderFra ?? v.vurderingerMeta?.vurdertAv?.dato,
   grupperPåOpprettetDato = false,
   customElement,
 }: Props) {

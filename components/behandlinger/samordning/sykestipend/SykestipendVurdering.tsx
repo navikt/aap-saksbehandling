@@ -104,7 +104,7 @@ export const SykestipendVurdering = ({
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
-      vurdertAvAnsatt={grunnlag?.gjeldendeVurdering?.vurdertAv}
+      vurderingerMeta={grunnlag?.gjeldendeVurdering?.vurderingerMeta}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() =>

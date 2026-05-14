@@ -50,7 +50,10 @@ describe('Vilkårskort med form', () => {
   it('skal vise informasjon om hvem som har gjort kvalitetssikring og at den er returnert', () => {
     const defaultPropsMedReturFraKvalitetssikrer: VilkårsKortMedFormOgMellomlagringProps = {
       ...defaultProps,
-      kvalitetssikretAv: { ident: 'Kvalitetssikrer', dato: '2025-04-26', erRetur: true },
+      vurderingerMeta: {
+        ...defaultProps.vurderingerMeta,
+        kvalitetssikretAv: { ident: 'Kvalitetssikrer', dato: '2025-04-26', erRetur: true },
+      },
     };
 
     render(
@@ -75,7 +78,10 @@ describe('Vilkårskort med form', () => {
   it('skal vise informasjon om hvem som har gjort beslutning og at den er returnert', () => {
     const defaultPropsMedReturFraBeslutter: VilkårsKortMedFormOgMellomlagringProps = {
       ...defaultProps,
-      besluttetAv: { ident: 'Beslutter', dato: '2025-04-26', erRetur: true },
+      vurderingerMeta: {
+        ...defaultProps.vurderingerMeta,
+        besluttetAv: { ident: 'Beslutter', dato: '2025-04-26', erRetur: true },
+      },
     };
 
     render(
@@ -253,9 +259,11 @@ const defaultProps: VilkårsKortMedFormOgMellomlagringProps = {
   isLoading: false,
   status: 'DONE',
   vilkårTilhørerNavKontor: true,
-  vurdertAvAnsatt: { ident: 'Lokalsaksbehandler', dato: '2025-04-25' },
-  kvalitetssikretAv: { ident: 'Kvalitetssikrer', dato: '2025-04-26' },
-  besluttetAv: { ident: 'Beslutter', dato: '2025-04-27' },
+  vurderingerMeta: {
+    vurdertAv: { ident: 'Lokalsaksbehandler', dato: '2025-04-25' },
+    kvalitetssikretAv: { ident: 'Kvalitetssikrer', dato: '2025-04-26' },
+    besluttetAv: { ident: 'Beslutter', dato: '2025-04-27' },
+  },
   children: undefined,
   onDeleteMellomlagringClick: vitest.fn,
   mellomlagretVurdering: undefined,

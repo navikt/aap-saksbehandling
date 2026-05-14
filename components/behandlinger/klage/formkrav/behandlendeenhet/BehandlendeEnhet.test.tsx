@@ -48,6 +48,7 @@ describe('mellomlagring', () => {
     vurdering: {
       skalBehandlesAvKontor: false,
       skalBehandlesAvNay: true,
+      vurderingerMeta: {},
     },
     harTilgangTilÅSaksbehandle: true,
   };

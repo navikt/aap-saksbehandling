@@ -32,7 +32,7 @@ const overgangArbeidgrunnlag: OvergangArbeidGrunnlag = {
       begrunnelse: 'Dette er min vurdering som er bekreftet',
       brukerRettPåAAP: true,
       fom: '2025-08-19',
-      vurdertAv: { ident: 'TESTER', dato: '2025-08-19' },
+      vurderingerMeta: { vurdertAv: { ident: 'TESTER', dato: '2025-08-19' } },
     },
   ],
   gjeldendeSykdsomsvurderinger: [],

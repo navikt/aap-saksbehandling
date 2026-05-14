@@ -63,6 +63,7 @@ describe('mellomlagring', () => {
       erOppfylt: false,
       gjelderFra: '2025-09-01',
       skalIgnorereVarselFrist: false,
+      vurderingerMeta: {},
     },
     vedtatteVurderinger: [],
   };

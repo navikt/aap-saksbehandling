@@ -40,7 +40,7 @@ describe('Meldeplikt', () => {
             begrunnelse: 'en god begrunnelse',
             fom: '2024-08-10',
             harFritak: true,
-            vurdertAv: { ident: 'saksbehandler', dato: '2024-08-10' },
+            vurderingerMeta: { vurdertAv: { ident: 'saksbehandler', dato: '2024-08-10' } },
           },
         ],
         sisteVedtatteVurderinger: [],
@@ -132,9 +132,11 @@ describe('Meldeplikt', () => {
           begrunnelse: 'Dette er min vurdering som er bekreftet',
           fom: '2025-08-21',
           harFritak: true,
-          vurdertAv: {
-            dato: '2025-08-21',
-            ident: 'Saksbehandler',
+          vurderingerMeta: {
+            vurdertAv: {
+              dato: '2025-08-21',
+              ident: 'Saksbehandler',
+            },
           },
         },
       ],

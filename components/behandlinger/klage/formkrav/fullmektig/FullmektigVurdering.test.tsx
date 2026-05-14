@@ -47,6 +47,7 @@ describe('mellomlagring', () => {
   const grunnlagMedVurdering: FullmektigGrunnlag = {
     vurdering: {
       harFullmektig: true,
+      vurderingerMeta: {},
     },
     harTilgangTilÅSaksbehandle: true,
   };

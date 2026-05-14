@@ -10,9 +10,11 @@ const grunnlagMedVurdering: SykestipendGrunnlag = {
   gjeldendeVurdering: {
     begrunnelse: 'Test-begrunnelse',
     perioder: [{ fom: '2024-01-01', tom: '2024-01-31' }],
-    vurdertAv: {
-      dato: '2024-02-01',
-      ident: 'Saksbehandler',
+    vurderingerMeta: {
+      vurdertAv: {
+        dato: '2024-02-01',
+        ident: 'Saksbehandler',
+      },
     },
   },
 };

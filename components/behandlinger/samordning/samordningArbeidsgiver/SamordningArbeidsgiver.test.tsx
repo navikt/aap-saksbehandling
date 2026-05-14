@@ -18,6 +18,7 @@ const grunnlagMedVurdering: SamordningArbeidsgiverGrunnlag = {
   vurdering: {
     begrunnelse: 'Dette er min vurdering som er bekreftet',
     perioder: [{ tom: '2025-10-10', fom: '2025-11-11' }],
+    vurderingerMeta: {},
   },
 };
 const grunnlagUtenVurdering: SamordningArbeidsgiverGrunnlag = { harTilgangTilÅSaksbehandle: true };

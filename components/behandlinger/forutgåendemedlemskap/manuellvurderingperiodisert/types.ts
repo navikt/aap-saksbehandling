@@ -1,11 +1,11 @@
 import { JaEllerNei } from 'lib/utils/form';
-import { VurderingMeta } from 'lib/types/types';
+import { VurderingFormMeta } from 'lib/types/types';
 
 export type ForutgåendeMedlemskapVurderingForm = {
   vurderinger: ForutgåendeMedlemskapManuellVurderingForm[];
 };
 
-export interface ForutgåendeMedlemskapManuellVurderingForm extends VurderingMeta {
+export interface ForutgåendeMedlemskapManuellVurderingForm extends VurderingFormMeta {
   begrunnelse: string;
   harForutgåendeMedlemskap?: JaEllerNei;
   unntaksvilkår?: 'A' | 'B' | 'Nei';

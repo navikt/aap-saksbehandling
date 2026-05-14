@@ -18,7 +18,7 @@ const grunnlagMedVurdering: SamordningAndreStatligeYtelserGrunnlag = {
   vurdering: {
     begrunnelse: 'Dette er min vurdering som er bekreftet',
     vurderingPerioder: [],
-    vurdertAv: { ident: 'Saksbehandler', dato: '2025-08-01' },
+    vurderingerMeta: { vurdertAv: { ident: 'Saksbehandler', dato: '2025-08-01' } },
   },
 };
 

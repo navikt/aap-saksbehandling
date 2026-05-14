@@ -4,7 +4,7 @@ import {
   MellomlagretVurdering,
   OvergangUforeGrunnlag,
   OvergangUføreVedtakResultat,
-  VurderingMeta,
+  VurderingFormMeta,
 } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
@@ -41,7 +41,7 @@ interface Props {
 export interface OvergangUforeForm {
   vurderinger: Array<OvergangUforeVurderingForm>;
 }
-interface OvergangUforeVurderingForm extends VurderingMeta {
+interface OvergangUforeVurderingForm extends VurderingFormMeta {
   fraDato: string;
   begrunnelse: string;
   brukerHarSøktUføretrygd: JaEllerNei | undefined;
@@ -147,9 +147,7 @@ export const OvergangUforePeriodisert = ({
             tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
             foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
             vurderingStatus={getErOppfyltEllerIkkeStatus(!!vurdering.brukerRettPåAAP)}
-            vurdertAv={vurdering.vurdertAv}
-            kvalitetssikretAv={vurdering.kvalitetssikretAv}
-            besluttetAv={vurdering.besluttetAv}
+            vurderingerMeta={vurdering.vurderingerMeta}
           >
             <OvergangUforeTidligereVurdering
               fraDato={vurdering.fom}
@@ -203,9 +201,7 @@ export const OvergangUforePeriodisert = ({
         brukerRettPåAAP: getJaNeiEllerUndefined(vurdering?.brukerRettPåAAP),
         brukerHarSøktUføretrygd: getJaNeiEllerUndefined(vurdering?.brukerHarSøktUføretrygd),
         brukerHarFåttVedtakOmUføretrygd: vurdering?.brukerHarFåttVedtakOmUføretrygd || null,
-        vurdertAv: vurdering.vurdertAv,
-        kvalitetssikretAv: vurdering.kvalitetssikretAv,
-        besluttetAv: vurdering.besluttetAv,
+        vurderingerMeta: vurdering.vurderingerMeta,
         erNyVurdering: false,
         behøverVurdering: false,
       })),

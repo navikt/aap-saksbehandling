@@ -35,6 +35,7 @@ const overganguforeGrunnlag: OvergangUforeGrunnlag = {
     },
   ],
   harTilgangTilÅSaksbehandle: true,
+  vurderingerMeta: {},
 };
 const overganguforeGrunnlagMedBekreftetVurdering: OvergangUforeGrunnlag = {
   ikkeRelevantePerioder: [],
@@ -48,7 +49,7 @@ const overganguforeGrunnlagMedBekreftetVurdering: OvergangUforeGrunnlag = {
       brukerHarFåttVedtakOmUføretrygd: 'JA_INNVILGET_FULL',
       brukerRettPåAAP: true,
       fom: '2025-10-10',
-      vurdertAv: { dato: '2025-10-10', ident: 'FASF343' },
+      vurderingerMeta: { vurdertAv: { dato: '2025-10-10', ident: 'FASF343' } },
     },
   ],
   kanVurderes: [
@@ -65,6 +66,7 @@ const overganguforeGrunnlagMedBekreftetVurdering: OvergangUforeGrunnlag = {
     },
   ],
   harTilgangTilÅSaksbehandle: true,
+  vurderingerMeta: {},
 };
 
 describe('mellomlagring i overgang uføre', () => {

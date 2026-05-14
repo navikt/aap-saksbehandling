@@ -142,9 +142,9 @@ const TidligereVurdertPeriodeRow = ({ periode, checked, onChange, readonly }: Ti
     </Table.DataCell>
     <Table.DataCell textSize="small">{formaterDatoForFrontend(periode.vurderingsTidspunkt)}</Table.DataCell>
     <Table.DataCell textSize="small">
-      {periode.vurdertAv?.ansattnavn ?? periode.vurdertAv?.ident ?? ''}
+      {periode.vurderingerMeta?.vurdertAv?.ansattnavn ?? periode.vurderingerMeta?.vurdertAv?.ident ?? ''}
       <br />
-      {periode.vurdertAv?.enhetsnavn ?? ''}
+      {periode.vurderingerMeta?.vurdertAv?.enhetsnavn ?? ''}
     </Table.DataCell>
   </>
 );
