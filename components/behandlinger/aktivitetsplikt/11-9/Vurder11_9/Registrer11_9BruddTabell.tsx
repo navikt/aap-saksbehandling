@@ -33,7 +33,7 @@ export const Registrer11_9BruddTabell = ({
   const rader = konstruerRader(tidligereVurderinger, mellomlagredeVurderinger);
 
   return rader.length === 0 ? (
-    <BodyShort>Det finnes ingen tidligere vurderinger</BodyShort>
+    <BodyShort>Det finnes ingen tidligere vurderinger.</BodyShort>
   ) : (
     <div>
       <TableStyled size="medium">

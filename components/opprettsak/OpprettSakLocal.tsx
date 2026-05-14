@@ -144,9 +144,8 @@ export const OpprettSakLocal = () => {
         options: AndreUtbetalingerYtelserAlternativer,
       },
       fødselsdato: {
-        type: 'date',
-        defaultValue: new Date('2000-01-01'),
-        toDate: new Date(),
+        type: 'date_input',
+        defaultValue: '01.01.2000',
         label: 'Fødselsdato',
       },
       yrkesskader: {
