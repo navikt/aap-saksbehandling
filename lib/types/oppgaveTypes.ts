@@ -16,7 +16,10 @@ export type PostmottakAvklaringsbehovKode =
 // oppgave
 export type Kø = oppgave['schemas']['no.nav.aap.oppgave.filter.FilterDto'];
 export type Oppgave = oppgave['schemas']['no.nav.aap.oppgave.OppgaveDto'];
-export type OppgavelisteRequest = oppgave['schemas']['no.nav.aap.oppgave.liste.OppgavelisteRequest'];
+export type OppgavelisteRequest = oppgave['schemas']['no.nav.aap.oppgave.liste.OppgavelisteRequest'] & {
+  /** Sorter hastemarkerte oppgaver først. Ikke del av OpenAPI-skjema ennå. */
+  hastemarkeringerFørst?: boolean;
+};
 export type OppgavelisteResponse = oppgave['schemas']['no.nav.aap.oppgave.liste.OppgavelisteRespons'];
 export type OppgavelisteSortering = oppgave['schemas']['no.nav.aap.oppgave.liste.OppgaveSortering'];
 export type Paging = OppgavelisteRequest['paging'];
