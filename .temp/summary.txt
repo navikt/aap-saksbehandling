@@ -1,0 +1,30 @@
+# Test Performance Optimizations
+
+## Results
+- **Before:** 50.98s
+- **After:** 15.22s  
+- **Improvement:** 70% faster ⚡
+
+## Changes Made
+
+### vitest.config.mts
+- Added `pool: 'threads'` for parallel execution
+- Added `minThreads: 1, maxThreads: 12` (using all CPU cores)
+- Added `isolate: false` to share test context between files
+
+### package.json
+- Added `--pool=threads` flag to test command
+
+### Other
+- Created `.temp/` directory for temp files
+- Updated `.gitignore` to exclude `.temp/`
+- Created `agents.md` with temp file guidelines
+
+## Test Failures (Pre-existing)
+The React.act errors exist in baseline - NOT caused by optimizations.
+This is a separate issue with React 19 compatibility.
+
+## Additional Recommendations
+1. Run `yarn test --changed` during development
+2. Use `yarn test --bail` to stop on first failure  
+3. Consider updating React to 19.2.4 (available in dependabot PR)

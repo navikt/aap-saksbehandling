@@ -1,7 +1,11 @@
-export function deepEqual(objekt1: any, objekt2: any, ignorerFelt: string[] = []): boolean {
+function isRecord(val: unknown): val is Record<string, unknown> {
+  return typeof val === 'object' && val !== null;
+}
+
+export function deepEqual(objekt1: unknown, objekt2: unknown, ignorerFelt: string[] = []): boolean {
   if (objekt1 === objekt2) return true;
 
-  if (typeof objekt1 !== 'object' || typeof objekt2 !== 'object' || objekt1 === null || objekt2 === null) {
+  if (!isRecord(objekt1) || !isRecord(objekt2)) {
     return false;
   }
 

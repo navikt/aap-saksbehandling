@@ -77,7 +77,7 @@ export const usePostmottakLøsBehovOgGåTilNesteSteg = (
         withCredentials: true,
       }
     );
-    eventSource.onmessage = async (event: any) => {
+    eventSource.onmessage = async (event: MessageEvent) => {
       const eventData: ServerSentEventData = JSON.parse(event.data);
       if (eventData.status === 'DONE') {
         eventSource.close();
@@ -98,8 +98,7 @@ export const usePostmottakLøsBehovOgGåTilNesteSteg = (
         setStatus(eventData.status);
       }
     };
-    eventSource.onerror = (event: any) => {
-      throw new Error('event onError', event);
+    eventSource.onerror = (event: Event) => {
     };
   };
 

@@ -7,13 +7,23 @@ import { ValuePair } from '../form/FormField';
 import { format, parse, subDays } from 'date-fns';
 import { erDatoFoerDato } from 'lib/validation/dateValidation';
 
-interface Props<T> {
+interface VurderingBase {
+  vurderingerMeta?: {
+    vurdertAv?: {
+      ident?: string;
+      dato?: string;
+    };
+  };
+  vurderingenGjelderFra?: string;
+}
+
+interface Props<T extends VurderingBase = VurderingBase> {
   data: T[];
   buildFelter?: (vurdering: T) => ValuePair[];
   getErGjeldende?: (vurdering: T) => boolean;
-  getVurdertAvIdent: (vurdering: T) => string;
-  getVurdertDato: (vurdering: T) => string;
-  getFomDato: (vurdering: T) => string | undefined;
+  getVurdertAvIdent?: (vurdering: T) => string;
+  getVurdertDato?: (vurdering: T) => string;
+  getFomDato?: (vurdering: T) => string;
   grupperPåOpprettetDato?: boolean;
   customElement?: (selectedIndex: number) => React.JSX.Element;
 }
@@ -29,13 +39,13 @@ interface TidligereVurdering {
   erGjeldendeVurdering: boolean;
 }
 
-export function TidligereVurderinger<T>({
+export function TidligereVurderinger<T extends VurderingBase = VurderingBase>({
   data,
   buildFelter,
   getErGjeldende = () => false,
-  getVurdertAvIdent,
-  getVurdertDato,
-  getFomDato,
+  getVurdertAvIdent = (v: T) => v.vurderingerMeta?.vurdertAv?.ident ?? '',
+  getVurdertDato = (v: T) => v.vurderingerMeta?.vurdertAv?.dato ?? '',
+  getFomDato = (v: T) => v.vurderingenGjelderFra ?? v.vurderingerMeta?.vurdertAv?.dato ?? '',
   grupperPåOpprettetDato = false,
   customElement,
 }: Props<T>) {

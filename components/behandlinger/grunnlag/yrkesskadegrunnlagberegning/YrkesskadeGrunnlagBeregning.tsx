@@ -141,9 +141,6 @@ export const YrkesskadeGrunnlagBeregning = ({
           data={historiskeVurderinger}
           buildFelter={byggFelter}
           getErGjeldende={(v) => deepEqual(v, historiskeVurderinger[historiskeVurderinger.length - 1])}
-          getFomDato={(v) => v.vurderingerMeta.vurdertAv?.dato ?? ''}
-          getVurdertAvIdent={(v) => v.vurderingerMeta.vurdertAv?.ident ?? ''}
-          getVurdertDato={(v) => v.vurderingerMeta.vurdertAv?.dato ?? ''}
         />
       )}
 
