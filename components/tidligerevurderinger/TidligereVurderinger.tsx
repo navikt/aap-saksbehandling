@@ -6,14 +6,10 @@ import { ClockDashedIcon } from '@navikt/aksel-icons';
 import { ValuePair } from '../form/FormField';
 import { format, parse, subDays } from 'date-fns';
 import { erDatoFoerDato } from 'lib/validation/dateValidation';
+import { VurderingerMeta } from 'lib/types/types';
 
 interface VurderingBase {
-  vurderingerMeta?: {
-    vurdertAv?: {
-      ident?: string;
-      dato?: string;
-    };
-  };
+  vurderingerMeta?: VurderingerMeta;
   vurderingenGjelderFra?: string;
 }
 
