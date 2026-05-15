@@ -142,7 +142,7 @@ export const SamordningArbeidsgiver = ({
               buildFelter={byggFelter}
               grupperPåOpprettetDato={true}
               getErGjeldende={() => true}
-              getFomDato={(v) => v.vurderingenGjelderFra ?? v.vurderingerMeta.vurdertAv?.dato ?? ''}
+              getFomDato={(v) => v.vurderingerMeta.vurdertAv?.dato ?? ''}
               getVurdertAvIdent={(v) => v.vurderingerMeta.vurdertAv?.ident ?? ''}
               getVurdertDato={(v) => v.vurderingerMeta.vurdertAv?.dato ?? ''}
             />
