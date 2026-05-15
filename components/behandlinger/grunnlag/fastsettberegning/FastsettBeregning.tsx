@@ -183,6 +183,7 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly, initi
           getErGjeldende={(v) => deepEqual(v, historiskeVurderinger.at(0))}
           getVurdertAvIdent={(v) => v.vurderingerMeta.vurdertAv?.ident ?? ''}
           getVurdertDato={(v) => v.vurderingerMeta.vurdertAv?.dato ?? ''}
+          getFomDato={(v) => v.vurderingerMeta.vurdertAv?.dato}
           grupperPåOpprettetDato={true}
         />
       )}
