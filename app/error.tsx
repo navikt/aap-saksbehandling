@@ -1,7 +1,7 @@
 'use client';
 
 import { BodyShort, Box, Heading, HGrid, Label, Link, Page, VStack } from '@navikt/ds-react';
-import { faro } from '@grafana/faro-web-sdk';
+import { faro, LogLevel } from '@grafana/faro-web-sdk';
 import { usePathname } from 'next/navigation';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { useEffect } from 'react';
@@ -24,6 +24,10 @@ const Error = ({ error }: Props) => {
 
     try {
       faro.api.pushError(error);
+      faro.api.pushLog(
+        [`${error.name}: ${error.message}`, error.stack, error.digest ? `digest: ${error.digest}` : ''].filter(Boolean),
+        { level: LogLevel.ERROR, context: { saksnummer, behandlingsreferanse, pathname } }
+      );
       // noinspection JSIgnoredPromiseFromCall
       logClientWarning({
         name: error.name,
