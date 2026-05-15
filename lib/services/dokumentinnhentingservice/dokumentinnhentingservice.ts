@@ -17,12 +17,12 @@ export const hentAlleDokumenterPåSak = async (saksnummer: string) => {
   return await apiFetch<RelevantDokumentType[]>(url, dokumentinnhentingApiScope, 'GET');
 };
 
-export const hentAlleDokumenterPåBruker = async (brukerId: any) => {
+export const hentAlleDokumenterPåBruker = async (brukerId: object) => {
   const url = `${dokumentinnhentingApiBaseUrl}/api/dokumenter/bruker`;
   return await apiFetch<Journalpost[]>(url, dokumentinnhentingApiScope, 'POST', brukerId);
 };
 
-export async function hentHelsedokumenterPåBruker(request: any) {
+export async function hentHelsedokumenterPåBruker(request: object) {
   const url = `${dokumentinnhentingApiBaseUrl}/api/dokumenter/bruker/helsedokumenter`;
   return await apiFetch<RelevantDokumentType[]>(url, dokumentinnhentingApiScope, 'POST', request);
 }

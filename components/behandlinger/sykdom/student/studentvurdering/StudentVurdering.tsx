@@ -358,6 +358,6 @@ function parseOgMigrerMellomlagring(mellomlagring: string): DraftFormFields {
   }
 }
 
-function erPeriodisertVersjon(object: any): object is StudentFormFields {
-  return object instanceof Object && object['vurderinger'] != null;
+function erPeriodisertVersjon(object: unknown): object is StudentFormFields {
+  return typeof object === 'object' && object !== null && 'vurderinger' in object && object.vurderinger != null;
 }

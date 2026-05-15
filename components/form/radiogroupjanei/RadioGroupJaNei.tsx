@@ -8,7 +8,7 @@ import React, { ReactNode } from 'react';
 
 interface Props<FormFieldValues extends FieldValues> {
   name: FieldPath<FormFieldValues>;
-  control: Control<FormFieldValues, any, any>;
+  control: Control<FormFieldValues>;
   hideLabel?: boolean;
   shouldUnregister?: boolean;
   label?: string;
