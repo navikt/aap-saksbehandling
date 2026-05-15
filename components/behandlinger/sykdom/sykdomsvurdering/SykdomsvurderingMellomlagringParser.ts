@@ -13,7 +13,8 @@ function mapFromOldFormToNewForm(oldData: Omit<Sykdomsvurdering, 'fraDato'>): Sy
     vurderinger: [
       {
         ...oldData,
-        fraDato: oldData.vurderingenGjelderFra ?? '',
+        // vurderingenGjelderFra er alltid satt i gammelt format
+        fraDato: oldData.vurderingenGjelderFra!,
       },
     ],
   };
