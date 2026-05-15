@@ -98,7 +98,7 @@ export const usePostmottakLøsBehovOgGåTilNesteSteg = (
         setStatus(eventData.status);
       }
     };
-    eventSource.onerror = (event: Event) => {
+    eventSource.onerror = () => {
     };
   };
 

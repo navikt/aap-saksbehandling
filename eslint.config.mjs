@@ -66,7 +66,7 @@ const config = [
       'react/react-in-jsx-scope': 'off',
       'no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': ['error'],
-      '@typescript-eslint/no-explicit-any': ['warn'],
+      '@typescript-eslint/no-explicit-any': ['error'],
       'jest/no-disabled-tests': 'warn',
       'jest/no-focused-tests': 'error',
       'jest/no-identical-title': 'error',

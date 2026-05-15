@@ -240,7 +240,7 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
         setStatus(status);
       }
     };
-    eventSource.onerror = (event: Event) => {
+    eventSource.onerror = () => {
     };
   };
 
