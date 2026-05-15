@@ -45,9 +45,4 @@ export type PostmottakBehandlingInfo = FinnBehandlingerRespons['behandlinger'][n
 
 export type PostmottakTypeBehandling = PostmottakBehandlingInfo['typeBehandling'];
 
-export interface UbehandletJournalpost {
-  journalpostId: string;
-  mottaksKanal: string | null;
-  datoOpprettet: string | null;
-  behandlingReferanse: string | null;
-}
+export type UbehandletJournalpost = postmottak['schemas']['no.nav.aap.postmottak.joarkavstemmer.UavstemtJournalpost'];
