@@ -43,7 +43,7 @@ export const LedigeOppgaverMeny = ({
             return;
           }
         } else {
-          setFeilmelding(`Feil ved henting av oppgave: ${nyesteOppgave.apiException.message}`);
+          setFeilmelding(`Feil ved henting av oppgave: ${nyesteOppgave.apiException?.message}`);
         }
 
         const plukketOppgave = await plukkOppgaveClient(oppgave.id, oppgave.versjon);
