@@ -16,6 +16,7 @@ export default function Faro({ collectorUrl }: { collectorUrl?: string }) {
         app: {
           name: 'saksbehandling',
         },
+        ignoreErrors: ['ResizeObserver loop'],
         instrumentations: [
           ...getWebInstrumentations(),
           new TracingInstrumentation({
