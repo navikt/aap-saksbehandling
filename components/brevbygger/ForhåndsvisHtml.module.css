@@ -14,15 +14,14 @@
 
 .wrapper {
   position: relative;
-  max-height: 90vh;
+  min-height: 90vh;
+  max-height: 29.7cm; /* a4 */
   overflow: auto;
 
   box-shadow: var(--ax-shadow-dialog);
 }
 
 .overlay {
-  position: absolute;
-  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
