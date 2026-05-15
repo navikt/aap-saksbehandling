@@ -241,6 +241,8 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
       }
     };
     eventSource.onerror = () => {
+      eventSource.close();
+      setError({ message: 'Tilkoblingen til serveren ble brutt. Prøv igjen.' });
     };
   };
 
