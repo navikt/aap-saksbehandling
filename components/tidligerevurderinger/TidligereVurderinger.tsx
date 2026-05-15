@@ -109,7 +109,7 @@ export function TidligereVurderinger<T>({
               {mappedVurderinger.map((v, index) => {
                 const periode = grupperPåOpprettetDato
                   ? `${formatDatoMedMånedsnavn(v.vurdertDato)}`
-                  : `${formatDatoMedMånedsnavn(v.periode.fom)} - ${v.periode.tom ? formatDatoMedMånedsnavn(v.periode.tom) : ''}`;
+                  : `${v.periode.fom ? formatDatoMedMånedsnavn(v.periode.fom) : ''} - ${v.periode.tom ? formatDatoMedMånedsnavn(v.periode.tom) : ''}`;
                 const flereVurderinger = mappedVurderinger.length > 1;
                 return (
                   <Chips.Toggle
