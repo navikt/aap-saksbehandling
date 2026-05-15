@@ -36,6 +36,6 @@ function mapFromOldFormToNewForm(oldData: BistandFormOld, foersteFraDato: string
   };
 }
 
-function isNewSchema(object: any): object is BistandForm {
-  return object instanceof Object && object['vurderinger'] != null;
+function isNewSchema(object: unknown): object is BistandForm {
+  return typeof object === 'object' && object !== null && 'vurderinger' in object && object.vurderinger != null;
 }

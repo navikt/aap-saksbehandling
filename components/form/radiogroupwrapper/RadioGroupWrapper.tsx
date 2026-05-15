@@ -5,7 +5,7 @@ import { createSyntheticEvent } from 'lib/types/SyntheticEvent';
 
 interface RadioProps<FormFieldValues extends FieldValues> {
   name: FieldPath<FormFieldValues>;
-  control: Control<FormFieldValues, any, any>;
+  control: Control<FormFieldValues>;
   children: ReactNode;
   hideLabel?: boolean;
   shouldUnregister?: boolean;

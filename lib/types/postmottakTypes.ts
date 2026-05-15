@@ -44,3 +44,10 @@ export type FinnBehandlingerRespons =
 export type PostmottakBehandlingInfo = FinnBehandlingerRespons['behandlinger'][number];
 
 export type PostmottakTypeBehandling = PostmottakBehandlingInfo['typeBehandling'];
+
+export interface UbehandletJournalpost {
+  journalpostId: string;
+  mottaksKanal: string | null;
+  datoOpprettet: string | null;
+  behandlingReferanse: string | null;
+}

@@ -24,16 +24,18 @@ type Innholdstype = 'mal' | 'delmal' | 'valg' | 'tekst';
 export interface TekstinnholdType {
   _key: string;
   _type: 'span';
-  marks: any[];
+  marks: string[];
   text: string;
 }
 
+// Eksempel her:
+// https://www.sanity.io/docs/studio/span-type#k224b8d83-945c-45ad-9d75-52ce055daed7
 export interface TextEditorType {
   _id?: string | null;
   _key: string;
   _type: 'block';
   children: TekstinnholdType[];
-  markDefs: any[];
+  markDefs: Record<string, unknown>[];
   style: string;
   listItem?: string;
   level?: number;

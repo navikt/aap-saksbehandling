@@ -54,7 +54,7 @@ export const useSendHendelseOgVentPåProsessering = (): {
       }
     );
 
-    eventSource.onmessage = async (event: any) => {
+    eventSource.onmessage = async (event: MessageEvent) => {
       const eventData: FlytProsesseringServerSentEvent = JSON.parse(event.data);
       if (eventData.status === 'FERDIG') {
         eventSource.close();

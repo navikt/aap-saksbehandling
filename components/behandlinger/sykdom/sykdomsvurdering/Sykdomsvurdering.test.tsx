@@ -1109,7 +1109,7 @@ describe('mellomlagring i sykdom', () => {
   });
 
   it('Skal støtte å bruke gammelt format på mellomlagret data', () => {
-    const dataGammel: Partial<any> = {
+    const dataGammel: Partial<Sykdomsvurdering> = {
       begrunnelse: 'Dette er en gammel mellomlagret begrunnelse',
     };
 

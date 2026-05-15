@@ -25,6 +25,6 @@ function mapFromOldFormToNewForm(oldData: OvergangArbeidFormOld): OvergangArbeid
   };
 }
 
-function isNewSchema(object: any): object is OvergangArbeidForm {
-  return object instanceof Object && object['vurderinger'] != null;
+function isNewSchema(object: unknown): object is OvergangArbeidForm {
+  return typeof object === 'object' && object !== null && 'vurderinger' in object && object.vurderinger != null;
 }
