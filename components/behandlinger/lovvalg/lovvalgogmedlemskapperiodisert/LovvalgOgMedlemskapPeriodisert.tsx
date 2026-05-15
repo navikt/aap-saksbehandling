@@ -68,7 +68,7 @@ export const LovvalgOgMedlemskapPeriodisert = ({
     reValidateMode: 'onChange',
   });
 
-  const { slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } = useMellomlagring(
+  const { slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering, debounceFlush } = useMellomlagring(
     Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP,
     initialMellomlagretVurdering,
     form
@@ -142,6 +142,7 @@ export const LovvalgOgMedlemskapPeriodisert = ({
       onLeggTilVurdering={onAddPeriode}
       errorList={errorList}
       formReset={() => form.reset(getDefaultValuesFromGrunnlag(grunnlag))}
+      formOnBlur={debounceFlush}
     >
       {vedtatteVurderinger.map((vurdering) => (
         <TidligereVurderingExpandableCard

@@ -19,6 +19,7 @@ export function useMellomlagring<T extends object>(
   slettMellomlagring: (callback?: () => void) => void;
   mellomlagretVurdering?: MellomlagretVurdering;
   nullstillMellomlagretVurdering: () => void;
+  debounceFlush: () => void;
 } {
   const { behandlingsreferanse } = useParamsMedType();
   const { flyt } = useRequiredFlyt();
@@ -47,7 +48,7 @@ export function useMellomlagring<T extends object>(
     [behovstype, behandlingsreferanse, flyt.aktivtSteg, refetchBekreftVurderingerGrunnlagClient]
   );
 
-  const debouncedLagreMellomlagring = useMemo(() => debounce(lagreMellomlagring, 3000), [lagreMellomlagring]);
+  const debouncedLagreMellomlagring = useMemo(() => debounce(lagreMellomlagring, 7000), [lagreMellomlagring]);
 
   const isSubmitting = form.formState.isSubmitting;
 
@@ -111,9 +112,17 @@ export function useMellomlagring<T extends object>(
     setMellomlagretVurdering(undefined);
   }
 
+  function debounceFlush() {
+    /**
+     * Kaller debouncLagreMellomlagringMedSiste argumenter, uten å vente på til tiden går ut
+     */
+    debouncedLagreMellomlagring.flush();
+  }
+
   return {
     slettMellomlagring,
     nullstillMellomlagretVurdering,
     mellomlagretVurdering,
+    debounceFlush,
   };
 }
