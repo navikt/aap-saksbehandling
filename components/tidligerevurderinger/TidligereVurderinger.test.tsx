@@ -8,7 +8,6 @@ const user = userEvent.setup();
 
 const vurderinger = [
   {
-    vurderingenGjelderFra: '2025-01-01',
     periode: {
       fom: '2025-01-01',
       tom: '2025-02-01',
@@ -28,7 +27,6 @@ const vurderinger = [
     ],
   },
   {
-    vurderingenGjelderFra: '2025-02-02',
     periode: {
       fom: '2025-02-02',
       tom: null,

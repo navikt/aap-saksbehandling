@@ -7,23 +7,13 @@ import { ValuePair } from '../form/FormField';
 import { format, parse, subDays } from 'date-fns';
 import { erDatoFoerDato } from 'lib/validation/dateValidation';
 
-interface VurderingBase {
-  vurderingerMeta?: {
-    vurdertAv?: {
-      ident?: string;
-      dato?: string;
-    };
-  };
-  vurderingenGjelderFra?: string;
-}
-
-interface Props<T extends VurderingBase = VurderingBase> {
-  data: T[];
-  buildFelter?: (vurdering: T) => ValuePair[];
-  getErGjeldende?: (vurdering: T) => boolean;
-  getVurdertAvIdent?: (vurdering: T) => string;
-  getVurdertDato?: (vurdering: T) => string;
-  getFomDato?: (vurdering: T) => string;
+interface Props {
+  data: any[];
+  buildFelter?: (vurdering: any) => ValuePair[];
+  getErGjeldende?: (vurdering: any) => boolean;
+  getVurdertAvIdent?: (vurdering: any) => string;
+  getVurdertDato?: (vurdering: any) => string;
+  getFomDato?: (vurdering: any) => string;
   grupperPåOpprettetDato?: boolean;
   customElement?: (selectedIndex: number) => React.JSX.Element;
 }
@@ -39,17 +29,17 @@ interface TidligereVurdering {
   erGjeldendeVurdering: boolean;
 }
 
-export function TidligereVurderinger<T extends VurderingBase = VurderingBase>({
+export function TidligereVurderinger({
   data,
   buildFelter,
   getErGjeldende = () => false,
-  getVurdertAvIdent = (v: T) => v.vurderingerMeta?.vurdertAv?.ident ?? '',
-  getVurdertDato = (v: T) => v.vurderingerMeta?.vurdertAv?.dato ?? '',
-  getFomDato = (v: T) => v.vurderingenGjelderFra ?? v.vurderingerMeta?.vurdertAv?.dato ?? '',
+  getVurdertAvIdent = (v: any) => v.vurderingerMeta?.vurdertAv?.ident ?? '',
+  getVurdertDato = (v: any) => v.vurderingerMeta?.vurdertAv?.dato ?? '',
+  getFomDato = (v: any) => v.vurderingenGjelderFra ?? v.vurderingerMeta?.vurdertAv?.dato,
   grupperPåOpprettetDato = false,
   customElement,
-}: Props<T>) {
-  const finnSluttdato = (index: number, arr: T[]) => {
+}: Props) {
+  const finnSluttdato = (index: number, arr: any[]) => {
     if (arr.length <= 1 || index === 0) return null;
 
     const forrigeGjelderFra = getFomDato(arr[index - 1]);
