@@ -20,10 +20,6 @@ import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerU
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
-import { useFeatureFlag } from 'context/UnleashContext';
-import {
-  YrkesskadeTabellGammel
-} from 'components/behandlinger/grunnlag/yrkesskadegrunnlagberegning/yrkesskadetabell/YrkesskadeTabellGammel';
 
 interface Props {
   behandlingVersjon: number;
@@ -91,8 +87,6 @@ export const YrkesskadeGrunnlagBeregning = ({
 
   const historiskeVurderinger = yrkeskadeBeregningGrunnlag?.historiskeVurderinger;
 
-  const yrkesskadeNyeFelter = useFeatureFlag('YrkesskadeNyeFelter');
-
   return (
     <VilkårskortMedFormOgMellomlagring
       heading={'Yrkesskade grunnlagsberegning §§ 11-19 / 11-22'}
@@ -147,34 +141,21 @@ export const YrkesskadeGrunnlagBeregning = ({
         />
       )}
 
-      {yrkesskadeNyeFelter ? (
-        <YrkesskadeTabell
-          yrkesskader={yrkeskadeBeregningGrunnlag.skalVurderes.map((vurdering) => {
-            return {
-              ref: vurdering.referanse,
-              saksnummer: vurdering.saksnummer,
-              kilde: vurdering.kilde,
-              skadedato: vurdering.skadeDato,
-              vedtaksdato: vurdering.vedtaksdato,
-              skadeart: vurdering.skadeart,
-              diagnose: vurdering.diagnose,
-              skadekombinasjoner: vurdering.skadekombinasjoner,
-              skadekombinasjonerTekst: vurdering.skadekombinasjonerTekst,
-            };
-          })}
-        />
-      ) : (
-        <YrkesskadeTabellGammel
-          yrkesskader={yrkeskadeBeregningGrunnlag.skalVurderes.map((vurdering) => {
-            return {
-              ref: vurdering.referanse,
-              saksnummer: vurdering.saksnummer,
-              kilde: vurdering.kilde,
-              skadedato: vurdering.skadeDato,
-            };
-          })}
-        />
-      )}
+      <YrkesskadeTabell
+        yrkesskader={yrkeskadeBeregningGrunnlag.skalVurderes.map((vurdering) => {
+          return {
+            ref: vurdering.referanse,
+            saksnummer: vurdering.saksnummer,
+            kilde: vurdering.kilde,
+            skadedato: vurdering.skadeDato,
+            vedtaksdato: vurdering.vedtaksdato,
+            skadeart: vurdering.skadeart,
+            diagnose: vurdering.diagnose,
+            skadekombinasjoner: vurdering.skadekombinasjoner,
+            skadekombinasjonerTekst: vurdering.skadekombinasjonerTekst,
+          };
+        })}
+      />
       {fields.map((field, index) => {
         const grunnlag = Number(form.watch(`vurderinger.${index}.inntekt`)) / field.gverdi;
 
