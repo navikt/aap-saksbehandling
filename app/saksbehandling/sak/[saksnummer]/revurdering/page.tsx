@@ -2,16 +2,11 @@ import { Alert, Box, HStack, Link, Page as AkselPage, VStack } from '@navikt/ds-
 import { hentSak, hentSakPersoninfo } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { OpprettRevurdering } from 'components/saksoversikt/opprettrevurdering/OpprettRevurdering';
 import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
-import { hentBrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { erAktivFørstegangsbehandling } from 'lib/utils/behandling';
 
 export default async function Page(props: { params: Promise<{ saksnummer: string }> }) {
   const params = await props.params;
-  const [sak, personInfo, brukerInformasjon] = await Promise.all([
-    hentSak(params.saksnummer),
-    hentSakPersoninfo(params.saksnummer),
-    hentBrukerInformasjon(),
-  ]);
+  const [sak, personInfo] = await Promise.all([hentSak(params.saksnummer), hentSakPersoninfo(params.saksnummer)]);
 
   if (sak.søknadErTrukket) {
     return (
@@ -33,7 +28,6 @@ export default async function Page(props: { params: Promise<{ saksnummer: string
           sak={sak}
           erFørstegangsbehandling={erAktivFørstegangsbehandling(sak.behandlinger)}
           redirect={true}
-          navIdent={brukerInformasjon.NAVident}
         />
       </Box>
     </AkselPage>

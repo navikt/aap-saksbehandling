@@ -8,7 +8,6 @@ import { ChevronRightIcon } from '@navikt/aksel-icons';
 import styles from './SaksinfoBanner.module.css';
 import { Behandlingsstatus } from 'components/behandlingsstatus/Behandlingsstatus';
 import { OppgaveStatus, OppgaveStatusType } from 'components/oppgavestatus/OppgaveStatus';
-import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { AdressebeskyttelseStatus } from 'components/adressebeskyttelsestatus/AdressebeskyttelseStatus';
 import { utledAdressebeskyttelse } from 'lib/utils/adressebeskyttelse';
 import { storForbokstavIHvertOrd } from 'lib/utils/string';
@@ -20,30 +19,19 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 import { ReturStatus } from 'components/returstatus/ReturStatus';
 import { SaksmenyDropdown } from 'components/saksinfobanner/SaksmenyDropdown';
 import { UtløptVentefristBoks } from '../oppgaveliste/utløptventefristboks/UtløptVentefristBoks';
+import { useInnloggetBruker } from 'hooks/BrukerHook';
 
 interface Props {
   personInformasjon: SakPersoninfo;
   sak: SaksInfoType;
   behandling?: DetaljertBehandling;
   oppgave?: Oppgave;
-  brukerInformasjon?: BrukerInformasjon;
   flyt?: FlytGruppe[];
   visning?: FlytVisning;
-  brukerKanSaksbehandle?: boolean;
-  brukerErBeslutter?: boolean;
 }
 
-export const SaksinfoBanner = ({
-  personInformasjon,
-  sak,
-  behandling,
-  oppgave,
-  brukerInformasjon,
-  flyt,
-  visning,
-  brukerKanSaksbehandle,
-  brukerErBeslutter,
-}: Props) => {
+export const SaksinfoBanner = ({ personInformasjon, sak, behandling, oppgave, flyt, visning }: Props) => {
+  const brukerInformasjon = useInnloggetBruker();
   const [visHarUlesteDokumenter, settVisHarUlesteDokumenter] = useState(!!oppgave?.harUlesteDokumenter);
   const erReservertAvInnloggetBruker = brukerInformasjon?.NAVident === oppgave?.reservertAv;
 
@@ -167,8 +155,6 @@ export const SaksinfoBanner = ({
             behandling={behandling}
             oppgave={oppgave}
             brukerInformasjon={brukerInformasjon}
-            brukerKanSaksbehandle={brukerKanSaksbehandle}
-            brukerErBeslutter={brukerErBeslutter}
           />
         </HStack>
       )}

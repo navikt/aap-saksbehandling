@@ -104,6 +104,7 @@ import { Behovstype } from 'lib/utils/form';
 import { isLocal } from 'lib/utils/environment';
 import { notFound } from 'next/navigation';
 import { ingenTilgang } from 'lib/utils/ingenTilgang';
+import { CACHE_1_TIME } from 'lib/services/cache';
 
 const saksbehandlingApiBaseUrl = process.env.BEHANDLING_API_BASE_URL;
 const saksbehandlingApiScope = process.env.BEHANDLING_API_SCOPE ?? '';
@@ -142,7 +143,7 @@ export const hentSakPersoninfo = async (saksnummer: string): Promise<SakPersonin
   if (isSuccess(res)) {
     return res.data;
   } else {
-    return { fnr: 'Ukjent', navn: 'Ukjent' };
+    return { personReferanse: '123', fnr: 'Ukjent', navn: 'Ukjent' };
   }
 };
 
@@ -176,7 +177,10 @@ export const hentSiste = async (antall: number) => {
 
 export const hentAlleNavEnheter = async (behandlingsreferanse: string, input: NavEnhetRequest) => {
   const url = `${saksbehandlingApiBaseUrl}/api/navenhet/${behandlingsreferanse}/finn`;
-  return await apiFetch<Enhet[]>(url, saksbehandlingApiScope, 'POST', input);
+  return await apiFetch<Enhet[]>(url, saksbehandlingApiScope, 'POST', input, {
+    revalidate: CACHE_1_TIME,
+    tags: [`alle-nav-enheter`],
+  });
 };
 
 export const hentYrkesskadeVurderingGrunnlag = async (behandlingsreferanse: string) => {
@@ -454,9 +458,9 @@ export const hentEtableringEgenVirksomhetGrunnlag = async (behandlingsreferanse:
 
 export const hentFlyt = async (behandlingsreferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/flyt`;
-  return await apiFetch<BehandlingFlytOgTilstand>(url, saksbehandlingApiScope, 'GET', undefined, [
-    `flyt/${behandlingsreferanse}`,
-  ]);
+  return await apiFetch<BehandlingFlytOgTilstand>(url, saksbehandlingApiScope, 'GET', undefined, {
+    tags: [`flyt/${behandlingsreferanse}`],
+  });
 };
 
 // Requestene skal ikke caches ved polling
@@ -467,9 +471,9 @@ export const hentFlytUtenRequestMemoization = async (behandlingsreferanse: strin
 
 export const hentUtbetalingOgSimuleringGrunnlag = async (behandlingsreferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/utbetaling/simulering`;
-  return await apiFetch<UtbetalingOgSimuleringGrunnlag[]>(url, saksbehandlingApiScope, 'GET', undefined, [
-    `utbetalingogsimulering/${behandlingsreferanse}`,
-  ]);
+  return await apiFetch<UtbetalingOgSimuleringGrunnlag[]>(url, saksbehandlingApiScope, 'GET', undefined, {
+    tags: [`utbetalingogsimulering/${behandlingsreferanse}`],
+  });
 };
 
 export const løsPeriodisertAvklaringsbehov = async (avklaringsBehov: LøsPeriodisertBehovPåBehandling) => {

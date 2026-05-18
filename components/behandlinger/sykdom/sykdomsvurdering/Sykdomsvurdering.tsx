@@ -7,12 +7,11 @@ import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { parseISO } from 'date-fns';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import {
+  ArbeidsevneNedsattValg,
   MellomlagretVurdering,
-  SykdomNedsattMerEnnHalvpartenValg,
-  SykdomNedsattMerEnnYrkesskadeValg,
   SykdomsGrunnlag,
   TypeBehandling,
-  VurderingMeta,
+  VurderingFormMeta,
 } from 'lib/types/types';
 import {
   DiagnoserDefaultOptions,
@@ -53,7 +52,7 @@ export interface SykdomsvurderingerForm {
   vurderinger: Array<Sykdomsvurdering>;
 }
 
-export interface Sykdomsvurdering extends VurderingMeta {
+export interface Sykdomsvurdering extends VurderingFormMeta {
   fraDato: string;
   begrunnelse: string;
   vurderingenGjelderFra?: string;
@@ -65,8 +64,7 @@ export interface Sykdomsvurdering extends VurderingMeta {
   erSkadeSykdomEllerLyteVesentligdel?: JaEllerNei;
   erNedsettelseIArbeidsevneAvEnVissVarighet?: JaEllerNei;
   erNedsettelseIArbeidsevneMerEnnHalvparten?: JaEllerNei;
-  erNedsettelseMinstHalvparten?: SykdomNedsattMerEnnHalvpartenValg;
-  erNedsettelseMerEnnYrkesskadegrense?: SykdomNedsattMerEnnYrkesskadeValg;
+  harNedsattArbeidsevne?: ArbeidsevneNedsattValg;
   erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense?: JaEllerNei;
   yrkesskadeBegrunnelse?: string;
 }
@@ -213,9 +211,7 @@ export const Sykdomsvurdering = ({
             foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
             vurderingStatus={getErOppfyltEllerIkkeStatus(erTidligereVurderingOppfylt(vurdering))}
             defaultCollapsed={nyeVurderingerFields.length > 0}
-            vurdertAv={vurdering.vurdertAv}
-            kvalitetssikretAv={vurdering.kvalitetssikretAv}
-            besluttetAv={vurdering.besluttetAv}
+            vurderingerMeta={vurdering.vurderingerMeta}
           >
             <TidligereSykdomsvurdering
               vurdering={vurdering}
@@ -255,6 +251,7 @@ export const Sykdomsvurdering = ({
               skalVurdereYrkesskade={grunnlag.skalVurdereYrkesskade}
               rettighetsperiodeStartdato={førsteDatoSomKanVurderes}
               diagnoseDefaultOptions={diagnoseDefaultOptions}
+              sykdomUtenVissVarighetToggle={sykdomUtenVissVarighetToggle}
             />
           </NyVurderingExpandableCard>
         ))}
@@ -293,6 +290,7 @@ export const Sykdomsvurdering = ({
           begrunnelse: vurdering?.begrunnelse,
           harSkadeSykdomEllerLyte: getJaNeiEllerUndefined(vurdering?.harSkadeSykdomEllerLyte)!,
           erArbeidsevnenNedsatt: getJaNeiEllerUndefined(vurdering?.erArbeidsevnenNedsatt),
+          harNedsattArbeidsevne: vurdering?.harNedsattArbeidsevne,
           erNedsettelseIArbeidsevneMerEnnHalvparten: getJaNeiEllerUndefined(
             vurdering?.erNedsettelseIArbeidsevneMerEnnHalvparten
           ),
@@ -309,9 +307,7 @@ export const Sykdomsvurdering = ({
           erNedsettelseMinstHalvparten: vurdering?.erNedsettelseMinstHalvparten,
           erNedsettelseMerEnnYrkesskadegrense: vurdering?.erNedsettelseMerEnnYrkesskadegrense,
           yrkesskadeBegrunnelse: getStringEllerUndefined(vurdering?.yrkesskadeBegrunnelse),
-          vurdertAv: vurdering.vurdertAv,
-          kvalitetssikretAv: vurdering.kvalitetssikretAv,
-          besluttetAv: vurdering.besluttetAv,
+          vurderingerMeta: vurdering.vurderingerMeta,
           erNyVurdering: false,
           behøverVurdering: false,
         };

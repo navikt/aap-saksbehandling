@@ -6,6 +6,16 @@ import {
   NoNavAapOppgaveOppgaveDtoBehandlingstype,
   NoNavAapOppgaveOppgaveDtoStatus,
 } from '@navikt/aap-oppgave-typescript-types';
+import { ReactElement } from 'react';
+import { InnloggetBrukerContextProvider } from 'context/InnloggetBrukerContext';
+
+function renderMedInnloggetBruker(ui: ReactElement) {
+  return render(
+    <InnloggetBrukerContextProvider bruker={{ NAVident: 'Z000000', navn: 'Test Testesen', roller: [] }}>
+      {ui}
+    </InnloggetBrukerContextProvider>
+  );
+}
 
 const journalpostInfo = {
   journalpostId: 345,
@@ -35,7 +45,7 @@ const oppgave: Oppgave = {
 
 describe('Dokumentinfobanner', () => {
   beforeEach(() => {
-    render(
+    renderMedInnloggetBruker(
       <DokumentInfoBanner
         behandlingsreferanse={'uuid'}
         behandlingsVersjon={1}
@@ -84,7 +94,7 @@ describe('Dokumentinfobanner', () => {
 });
 
 test('skal vise en tag dersom behandlingen er på vent', () => {
-  render(
+  renderMedInnloggetBruker(
     <DokumentInfoBanner
       behandlingsreferanse={'uuid'}
       behandlingsVersjon={1}
@@ -99,7 +109,7 @@ test('skal vise en tag dersom behandlingen er på vent', () => {
 });
 
 test('skal vise en tag dersom behandlingen har utløpt ventefrist', () => {
-  render(
+  renderMedInnloggetBruker(
     <DokumentInfoBanner
       behandlingsreferanse={'uuid'}
       behandlingsVersjon={1}
@@ -114,7 +124,7 @@ test('skal vise en tag dersom behandlingen har utløpt ventefrist', () => {
 });
 
 test('skal vise en tag dersom oppgaven er reservert', () => {
-  render(
+  renderMedInnloggetBruker(
     <DokumentInfoBanner
       behandlingsreferanse={'uuid'}
       behandlingsVersjon={1}
@@ -132,7 +142,7 @@ test('skal vise en tag dersom oppgaven er reservert', () => {
 });
 
 test('skal vise tag dersom oppgaven er ledig', () => {
-  render(
+  renderMedInnloggetBruker(
     <DokumentInfoBanner
       behandlingsreferanse={'uuid'}
       behandlingsVersjon={1}

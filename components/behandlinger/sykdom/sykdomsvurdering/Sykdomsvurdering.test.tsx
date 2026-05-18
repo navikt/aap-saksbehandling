@@ -52,9 +52,11 @@ const grunnlagMedTidligereVurdering: SykdomsGrunnlag = {
       begrunnelse: 'Dette er en tidligere begrunnelse',
       dokumenterBruktIVurdering: [{ identifikator: '12345' }],
       harSkadeSykdomEllerLyte: true,
-      vurdertAv: {
-        dato: '2025-10-31T09:44:54.793',
-        ident: 'Z123456',
+      vurderingerMeta: {
+        vurdertAv: {
+          dato: '2025-10-31T09:44:54.793',
+          ident: 'Z123456',
+        },
       },
     },
   ],
@@ -471,15 +473,13 @@ describe('felt for nedsettelsen er av en viss varighet', () => {
     );
 
     await velgAtBrukerHarSykdomSkadeLyte();
-    await velgJaIGruppe(
+    await velgJaForbigåendeProblemer(
       screen.getByRole('radiogroup', {
         name: 'Har brukeren nedsatt arbeidsevne?',
       })
     );
 
-    await velgJaForbigåendeProblemerNedsettelseMinstHalvparten(
-      screen.getByLabelText(/er arbeidsevnen nedsatt med minst halvparten\?/i)
-    );
+    await velgJaIGruppe(screen.getByLabelText(/er arbeidsevnen nedsatt med minst halvparten\?/i));
     await velgJaIGruppe(
       screen.getByRole('radiogroup', {
         name: 'Er sykdom, skade eller lyte vesentlig medvirkende til at arbeidsevnen er nedsatt?',
@@ -930,7 +930,7 @@ describe('mellomlagring i sykdom', () => {
     begrunnelse: 'Dette er min vurdering som er bekreftet',
     dokumenterBruktIVurdering: [],
     harSkadeSykdomEllerLyte: false,
-    vurdertAv: { ident: '1234', dato: '2025-01-01' },
+    vurderingerMeta: { vurdertAv: { ident: '1234', dato: '2025-01-01' } },
   };
 
   const sykdomsGrunnlagMedVurdering: SykdomsGrunnlag = {
@@ -1109,7 +1109,7 @@ describe('mellomlagring i sykdom', () => {
   });
 
   it('Skal støtte å bruke gammelt format på mellomlagret data', () => {
-    const dataGammel: Partial<any> = {
+    const dataGammel: Partial<Sykdomsvurdering> = {
       begrunnelse: 'Dette er en gammel mellomlagret begrunnelse',
     };
 
@@ -1173,5 +1173,5 @@ const velgNeiIGruppe = async (gruppe: HTMLElement): Promise<void> =>
 const velgJaIGruppe = async (gruppe: HTMLElement): Promise<void> =>
   await user.click(within(gruppe).getByRole('radio', { name: 'Ja' }));
 
-const velgJaForbigåendeProblemerNedsettelseMinstHalvparten = async (gruppe: HTMLElement): Promise<void> =>
+const velgJaForbigåendeProblemer = async (gruppe: HTMLElement): Promise<void> =>
   await user.click(within(gruppe).getByRole('radio', { name: JaNeiEllerForbigåendeTekst.Forbigående }));

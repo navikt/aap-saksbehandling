@@ -9,11 +9,13 @@ const grunnlagKontor: KlagebehandlingKontorGrunnlag = {
     innstilling: 'DELVIS_OMGJØR',
     vilkårSomOmgjøres: ['FOLKETRYGDLOVEN_11_2'],
     vilkårSomOpprettholdes: ['FOLKETRYGDLOVEN_11_5'],
-    vurdertAv: {
-      ident: 'ident',
-      dato: '2025-01-01',
-      ansattnavn: 'Ine',
-      enhetsnavn: 'Kontor',
+    vurderingerMeta: {
+      vurdertAv: {
+        ident: 'ident',
+        dato: '2025-01-01',
+        ansattnavn: 'Ine',
+        enhetsnavn: 'Kontor',
+      },
     },
   },
   harTilgangTilÅSaksbehandle: true,
@@ -24,11 +26,13 @@ const grunnlagNay: KlagebehandlingNayGrunnlag = {
     innstilling: 'OMGJØR',
     vilkårSomOmgjøres: ['FOLKETRYGDLOVEN_11_20', 'FOLKETRYGDLOVEN_11_19'],
     vilkårSomOpprettholdes: [],
-    vurdertAv: {
-      ident: 'ident',
-      dato: '2025-01-01',
-      ansattnavn: 'Ine',
-      enhetsnavn: 'Kontor',
+    vurderingerMeta: {
+      vurdertAv: {
+        ident: 'ident',
+        dato: '2025-01-01',
+        ansattnavn: 'Ine',
+        enhetsnavn: 'Kontor',
+      },
     },
   },
   harTilgangTilÅSaksbehandle: true,

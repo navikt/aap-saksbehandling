@@ -14,6 +14,7 @@ interface ComboboxProps<FormFieldValues extends FieldValues> {
   description?: ReactNode;
   readOnly?: boolean;
   className?: string;
+  dataUmamiEvent?: string;
 }
 
 const ComboboxWrapper = <FormFieldValues extends FieldValues>({
@@ -27,6 +28,7 @@ const ComboboxWrapper = <FormFieldValues extends FieldValues>({
   readOnly,
   options,
   className,
+  dataUmamiEvent,
 }: ComboboxProps<FormFieldValues>) => {
   return (
     <Controller
@@ -38,6 +40,7 @@ const ComboboxWrapper = <FormFieldValues extends FieldValues>({
           shouldAutocomplete={false}
           size={size}
           id={name}
+          data-umami-event={dataUmamiEvent}
           name={name}
           label={label}
           hideLabel={hideLabel}

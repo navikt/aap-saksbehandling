@@ -74,9 +74,7 @@ export const Dokumentvisning = ({ journalpostId, dokumenter, setIsExpandedAction
       </HStack>
       {dataUri && (
         <div className={styles.pdf}>
-          <object data={`${dataUri}#toolbar=0`} type="application/pdf" width="100%" height="100%">
-            <p>Visning av dokument</p>
-          </object>
+          <iframe src={dataUri} title="Dokumentvisning" width="100%" height="100%" style={{ border: 'none' }} />
         </div>
       )}
     </div>

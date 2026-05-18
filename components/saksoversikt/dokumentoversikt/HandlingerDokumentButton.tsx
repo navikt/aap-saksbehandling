@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { erFerdigstilt } from 'lib/utils/journalpost';
 import { FeilregistrerJournalpostModal } from 'components/saksoversikt/dokumentoversikt/FeilregistrerJournalpost';
 import { KnyttTilSakModal } from 'components/saksoversikt/dokumentoversikt/KnyttTilSakModal';
-import { Journalpost } from 'lib/types/journalpost';
+import { Journalpost, Journalposttype } from 'lib/types/journalpost';
 import { RedigitaliserJournalpost } from 'components/saksoversikt/dokumentoversikt/RedigitaliserJournalpost';
 import { useFeatureFlag } from '../../../context/UnleashContext';
 
@@ -16,7 +16,7 @@ export const HandlingerDokumentButton = ({ sak, journalpost }: { sak: SaksInfo; 
   const [feilregistrerOpen, setFeilregistrerOpen] = useState(false);
   const [redigitaliserOpen, setRedigitaliserOpen] = useState(false);
 
-  const redigitaliserDokument = useFeatureFlag('Redigitalisering');
+  const redigitaliserDokument = useFeatureFlag('Redigitalisering') && journalpost.journalposttype != Journalposttype.U;
 
   return (
     <>
@@ -53,7 +53,9 @@ export const HandlingerDokumentButton = ({ sak, journalpost }: { sak: SaksInfo; 
                   </ActionMenu.Item>
                 )}
                 {redigitaliserDokument && (
-                  <ActionMenu.Item onSelect={() => setRedigitaliserOpen(true)}>Redigitaliser dokument</ActionMenu.Item>
+                  <ActionMenu.Item onSelect={() => setRedigitaliserOpen(true)}>
+                    Digitaliser dokument på nytt
+                  </ActionMenu.Item>
                 )}
               </>
             )}

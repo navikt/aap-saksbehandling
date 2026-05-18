@@ -22,9 +22,10 @@ interface Props {
   felterMap: Map<string, FieldArrayWithIndex>;
   erSisteFeltiRaden: boolean;
   radHarError: boolean;
+  readOnly: boolean;
 }
 
-export const UkeDag = ({ dag, felterMap, erSisteFeltiRaden, radHarError }: Props) => {
+export const UkeDag = ({ dag, felterMap, erSisteFeltiRaden, radHarError, readOnly }: Props) => {
   const form = useFormContext<RedigerMeldekortFormFields>();
   const dagStr = format(dag, 'yyyy-MM-dd');
   const eksisterendeFelt = felterMap.get(dagStr);
@@ -70,6 +71,7 @@ export const UkeDag = ({ dag, felterMap, erSisteFeltiRaden, radHarError }: Props
                 className={`${styles.tekstfelt} ${harFeilmelding ? 'navds-text-field--error' : ''}`}
                 hideLabel
                 hideErrorMessage
+                readOnly={readOnly}
                 rules={{
                   validate: (value) => {
                     if (!value || value === '') {

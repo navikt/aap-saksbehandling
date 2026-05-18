@@ -8,11 +8,13 @@ import {
 
 const sisteVedtatteVurderinger: SykdomsvurderingResponse[] = [
   {
-    vurdertAv: {
-      ident: 'SAKSBEHANDLER',
-      dato: '2026-03-12',
-      ansattnavn: 'Test Testesen',
-      enhetsnavn: 'Lokalenhetsnavn',
+    vurderingerMeta: {
+      vurdertAv: {
+        ident: 'SAKSBEHANDLER',
+        dato: '2026-03-12',
+        ansattnavn: 'Test Testesen',
+        enhetsnavn: 'Lokalenhetsnavn',
+      },
     },
     fom: '2026-03-12',
     begrunnelse: 'hei',
@@ -28,11 +30,13 @@ const sisteVedtatteVurderinger: SykdomsvurderingResponse[] = [
     bidiagnoser: ['A04'],
   },
   {
-    vurdertAv: {
-      ident: 'SAKSBEHANDLER',
-      dato: '2026-03-12',
-      ansattnavn: 'Test Testesen',
-      enhetsnavn: 'Lokalenhetsnavn',
+    vurderingerMeta: {
+      vurdertAv: {
+        ident: 'SAKSBEHANDLER',
+        dato: '2026-03-12',
+        ansattnavn: 'Test Testesen',
+        enhetsnavn: 'Lokalenhetsnavn',
+      },
     },
     fom: '2026-04-01',
     tom: '2026-04-30',
@@ -47,11 +51,13 @@ const sisteVedtatteVurderinger: SykdomsvurderingResponse[] = [
   },
   {
     fom: '2026-05-01',
-    vurdertAv: {
-      ident: 'SAKSBEHANDLER',
-      dato: '2026-03-12',
-      ansattnavn: 'Test Testesen',
-      enhetsnavn: 'Lokalenhetsnavn',
+    vurderingerMeta: {
+      vurdertAv: {
+        ident: 'SAKSBEHANDLER',
+        dato: '2026-03-12',
+        ansattnavn: 'Test Testesen',
+        enhetsnavn: 'Lokalenhetsnavn',
+      },
     },
     begrunnelse: 'nei',
     vurderingenGjelderFra: '2026-05-01',
@@ -66,11 +72,13 @@ const sisteVedtatteVurderinger: SykdomsvurderingResponse[] = [
 
 const nyeVurderinger: SykdomsvurderingResponse[] = [
   {
-    vurdertAv: {
-      ident: 'SAKSBEHANDLER',
-      dato: '2026-03-12',
-      ansattnavn: 'Test Testesen',
-      enhetsnavn: 'Lokalenhetsnavn',
+    vurderingerMeta: {
+      vurdertAv: {
+        ident: 'SAKSBEHANDLER',
+        dato: '2026-03-12',
+        ansattnavn: 'Test Testesen',
+        enhetsnavn: 'Lokalenhetsnavn',
+      },
     },
     fom: '2026-06-01',
     begrunnelse: 'hei',

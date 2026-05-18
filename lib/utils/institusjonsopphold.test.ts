@@ -64,6 +64,7 @@ describe('erReduksjon', () => {
       fom: '2025-01-01',
       tom: '2025-08-01',
     },
+    vurderingerMeta: {},
   };
 
   it('returnerer true når faarFriKostOgLosji er true og de andre er false', () => {

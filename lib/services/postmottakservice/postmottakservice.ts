@@ -11,6 +11,7 @@ import {
   LøsAvklaringsbehovPåBehandling,
   OverleveringGrunnlag,
   SettPåVentRequest,
+  UbehandletJournalpost,
   Venteinformasjon,
 } from 'lib/types/postmottakTypes';
 import { logError, logInfo, logWarning } from 'lib/serverutlis/logger';
@@ -52,7 +53,7 @@ export const hentJournalpostInfo = async (behandlingsreferanse: string) => {
 
 export const hentUbehandledeJournalposter = async () => {
   const url = `${postmottakApiBaseUrl}/api/dokumenter/finn-ubehandlede`;
-  return await apiFetch<any[]>(url, postmottakApiScope, 'GET');
+  return await apiFetch<UbehandletJournalpost[]>(url, postmottakApiScope, 'GET');
 };
 export const redigitaliser = async (journalpostId: number, saksnummer: string) => {
   const url = `${postmottakApiBaseUrl}/api/redigitalisering`;
@@ -69,7 +70,7 @@ export const løsAvklaringsbehov = async (avklaringsBehov: LøsAvklaringsbehovP�
 };
 export const settPåVent = async (behandlingsreferanse: string, body: SettPåVentRequest) => {
   const url = `${postmottakApiBaseUrl}/api/behandling/${behandlingsreferanse}/sett-på-vent`;
-  return await apiFetch<unknown>(url, postmottakApiScope, 'POST', body, [`postmottak/flyt/${behandlingsreferanse}`]);
+  return await apiFetch<unknown>(url, postmottakApiScope, 'POST', body, { tags: [`postmottak/flyt/${behandlingsreferanse}`] });
 };
 export const hentVenteInformasjon = async (behandlingsreferanse: string) => {
   const url = `${postmottakApiBaseUrl}/api/behandling/${behandlingsreferanse}/vente-informasjon`;

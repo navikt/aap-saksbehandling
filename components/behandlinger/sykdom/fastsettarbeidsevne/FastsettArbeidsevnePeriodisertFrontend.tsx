@@ -8,7 +8,7 @@ import {
   ArbeidsevneGrunnlag,
   MellomlagretVurdering,
   PeriodisertArbeidsevneVurderingDto,
-  VurderingMeta,
+  VurderingFormMeta,
 } from 'lib/types/types';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
@@ -45,7 +45,7 @@ interface Props {
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
-interface ArbeidsevneVurderingForm extends VurderingMeta {
+interface ArbeidsevneVurderingForm extends VurderingFormMeta {
   begrunnelse: string;
   arbeidsevne: number | undefined;
   fraDato: string | undefined;
@@ -190,9 +190,7 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
           tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
           foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
           vurderingStatus={getErOppfyltEllerIkkeStatus(vurdering.arbeidsevne > 0)}
-          vurdertAv={vurdering.vurdertAv}
-          kvalitetssikretAv={vurdering.kvalitetssikretAv}
-          besluttetAv={vurdering.besluttetAv}
+          vurderingerMeta={vurdering.vurderingerMeta}
         >
           <VStack gap={'space-20'}>
             <SpørsmålOgSvar spørsmål="Vurderingen gjelder fra?" svar={formaterDatoForFrontend(vurdering.fom)} />
@@ -294,9 +292,7 @@ function getDefaultValuesFromGrunnlag(grunnlag: ArbeidsevneGrunnlag | undefined)
       begrunnelse: vurdering.begrunnelse,
       fraDato: formaterDatoForFrontend(vurdering.fom),
       arbeidsevne: vurdering.arbeidsevne,
-      vurdertAv: vurdering.vurdertAv,
-      kvalitetssikretAv: vurdering.kvalitetssikretAv,
-      besluttetAv: vurdering.besluttetAv,
+      vurderingerMeta: vurdering.vurderingerMeta,
       erNyVurdering: false,
       behøverVurdering: false,
     })),

@@ -1,4 +1,4 @@
-import { StegType } from 'lib/types/types';
+import { StegType, TypeBehandling } from 'lib/types/types';
 import {
   hentBrevGrunnlag,
   hentFormkravGrunnlag,
@@ -7,7 +7,6 @@ import {
   hentKlagebehandlingNayGrunnlag,
   hentKlageresultat,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { hentRollerForBruker, Roller } from 'lib/services/azure/azureUserService';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { skrivBrevBehovstype } from 'components/brev/BrevKortMedDataFetching';
@@ -21,12 +20,14 @@ export const SkriveKlageBrevMedDataFetching = async ({
   behandlingsreferanse,
   behandlingVersjon,
   aktivtSteg,
+  behandlingstype,
 }: {
   behandlingsreferanse: string;
   behandlingVersjon: number;
   aktivtSteg: StegType;
+  behandlingstype: TypeBehandling;
 }) => {
-  const [brevGrunnlag, klageresultat, formkrav, klagebehandlingKontor, klagebehandlingNay, fullmektigGrunnlag, roller] =
+  const [brevGrunnlag, klageresultat, formkrav, klagebehandlingKontor, klagebehandlingNay, fullmektigGrunnlag] =
     await Promise.all([
       hentBrevGrunnlag(behandlingsreferanse),
       hentKlageresultat(behandlingsreferanse),
@@ -34,7 +35,6 @@ export const SkriveKlageBrevMedDataFetching = async ({
       hentKlagebehandlingKontorGrunnlag(behandlingsreferanse),
       hentKlagebehandlingNayGrunnlag(behandlingsreferanse),
       hentFullmektigGrunnlag(behandlingsreferanse),
-      hentRollerForBruker(),
     ]);
   if (
     isError(brevGrunnlag) ||
@@ -65,15 +65,12 @@ export const SkriveKlageBrevMedDataFetching = async ({
   const avbrytteBrev = brevGrunnlag.data.brevGrunnlag.filter(
     (x) => x.status === 'AVBRUTT' && x.brev != null && x.avklaringsbehovKode === '5050'
   );
-  const readOnlyBrev = aktivtSteg === 'BREV' && !roller.includes(Roller.BESLUTTER);
 
   if (!brev?.brev) {
     return <BrevOppsummering sendteBrev={sendteBrev} avbrutteBrev={avbrytteBrev} />;
   }
 
-  if (!brev?.brev) {
-    return null;
-  }
+  const readOnlyBrev = aktivtSteg === 'BREV' && !brev.harTilgangTilÅSendeBrev;
 
   const behovstype = skrivBrevBehovstype(brev.avklaringsbehovKode);
   const { bruker, fullmektig } = mapGrunnlagTilMottakere(brev.mottaker, fullmektigGrunnlag.data.vurdering);
@@ -96,6 +93,7 @@ export const SkriveKlageBrevMedDataFetching = async ({
         fullmektigMottaker={fullmektig}
         brukerMottaker={bruker}
         behandlingVersjon={behandlingVersjon}
+        behandlingstype={behandlingstype}
       />
     </div>
   );

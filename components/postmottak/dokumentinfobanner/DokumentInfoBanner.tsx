@@ -14,6 +14,7 @@ import { storForbokstavIHvertOrd } from 'lib/utils/string';
 import { Oppgave } from 'lib/types/oppgaveTypes';
 import { OppgaveStatus, OppgaveStatusType } from 'components/oppgavestatus/OppgaveStatus';
 import { Dato } from 'lib/types/Dato';
+import { useInnloggetBruker } from 'hooks/BrukerHook';
 
 interface Props {
   behandlingsreferanse: string;
@@ -21,7 +22,6 @@ interface Props {
   journalpostInfo: JournalpostInfo;
   påVent: boolean;
   oppgave: Oppgave;
-  innloggetBrukerIdent?: string;
 }
 
 export const DokumentInfoBanner = ({
@@ -30,11 +30,11 @@ export const DokumentInfoBanner = ({
   journalpostInfo,
   påVent,
   oppgave,
-  innloggetBrukerIdent,
 }: Props) => {
   const [settBehandlingPåVentmodalIsOpen, setSettBehandlingPåVentmodalIsOpen] = useState(false);
+  const bruker = useInnloggetBruker();
 
-  const erReservertAvInnloggetBruker = innloggetBrukerIdent === oppgave?.reservertAv;
+  const erReservertAvInnloggetBruker = bruker.NAVident === oppgave?.reservertAv;
 
   const hentOppgaveTildeling = (): OppgaveStatusType | undefined => {
     if (!oppgave?.reservertAv) {

@@ -11,15 +11,14 @@ import { useRouter } from 'next/navigation';
 import { isSuccess } from 'lib/utils/api';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { parse } from 'date-fns';
-import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { erDatoIFremtiden, validerDato } from 'lib/validation/dateValidation';
 import { Behovstype } from 'lib/utils/form';
 import { Kort } from 'components/kort/Kort';
+import { useInnloggetBruker } from 'hooks/BrukerHook';
+import { brukerharNayTilgang } from 'lib/utils/innloggetBruker';
 
 interface Props {
   saksnummer: string;
-  brukerInformasjon: BrukerInformasjon;
-  brukerHarNayTilgang: boolean;
   modalOnClose?: () => void;
   successfullOpprettelse?: () => void;
   finnTidligsteVirkningstidspunkt?: string;
@@ -43,13 +42,11 @@ export interface OppfølgingsoppgaveFormFields {
 
 export const OpprettOppfølgingsBehandling = ({
   saksnummer,
-  brukerInformasjon,
   modalOnClose,
   successfullOpprettelse,
   finnTidligsteVirkningstidspunkt,
   behandlingsreferanse,
   behovsType,
-  brukerHarNayTilgang,
 }: Props) => {
   const erOppfølgingsoppgaveForSamordningGradering = behovsType === Behovstype.AVKLAR_SAMORDNING_GRADERING;
   const defaultValues: DefaultValues = {
@@ -62,6 +59,8 @@ export const OpprettOppfølgingsBehandling = ({
   };
 
   const router = useRouter();
+  const brukerInformasjon = useInnloggetBruker();
+  const brukerHarNayTilgang = brukerharNayTilgang(brukerInformasjon);
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>();

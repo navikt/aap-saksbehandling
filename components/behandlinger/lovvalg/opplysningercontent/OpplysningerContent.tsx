@@ -177,6 +177,42 @@ export const OpplysningerContent = ({ opplysning }: Props) => {
       </VStack>
     );
   }
+
+  if (opplysning.bestemtArbeidsgruppeINorge) {
+    const bestemtArbeidsgruppe = opplysning.bestemtArbeidsgruppeINorge;
+    return (
+      <VStack gap={'space-8'}>
+        {bestemtArbeidsgruppe
+          .sort((a, b) => sorterEtterNyesteDato(a.fom, b.fom))
+          .map((data, index) => {
+            return (
+              <VStack gap={'space-4'} key={index} className={styles.sideDivider}>
+                <LabelValue label={'Organisasjonsnummer:'} value={data.virksomhetId} />
+                <LabelValue label={'Virksomhetsnavn:'} value={data.virksomhetNavn ?? ''} />
+                <LabelValue label={'Periode:'} value={formaterPeriode(data.fom, data.tom)} />
+                {data.ansettelsesDetaljer?.map((detalj, detaljIndex) => (
+                  <VStack gap={'space-4'} key={detaljIndex}>
+                    {detalj.skipsregister && <LabelValue label={'Skipsregister:'} value={detalj.skipsregister} />}
+                    {detalj.skipstype && <LabelValue label={'Skipstype:'} value={detalj.skipstype} />}
+                    {detalj.fartsomraade && <LabelValue label={'Fartsområde:'} value={detalj.fartsomraade} />}
+                    {detalj.yrke && (
+                      <LabelValue
+                        label={'Yrke:'}
+                        value={
+                          detalj.yrke.beskrivelse
+                            ? `${detalj.yrke.beskrivelse} (${detalj.yrke.kode})`
+                            : detalj.yrke.kode
+                        }
+                      />
+                    )}
+                  </VStack>
+                ))}
+              </VStack>
+            );
+          })}
+      </VStack>
+    );
+  }
 };
 
 function LabelValue({ label, value }: { label?: string; value: string }) {

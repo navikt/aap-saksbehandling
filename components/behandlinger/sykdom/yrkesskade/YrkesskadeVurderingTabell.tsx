@@ -2,7 +2,7 @@
 
 import { FieldArray, UseFormReturn } from 'react-hook-form';
 import { TableStyled } from 'components/tablestyled/TableStyled';
-import { Checkbox, Table, VStack } from '@navikt/ds-react';
+import { Checkbox, ErrorMessage, Table, VStack } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { validerDato } from 'lib/validation/dateValidation';
@@ -10,16 +10,18 @@ import {
   YrkesskadeMedSkadeDatoFormFields,
   YrkesskadeMedSkadeDatoSak,
 } from 'components/behandlinger/sykdom/yrkesskade/Yrkesskade';
-import { ErrorMessage } from '@navikt/ds-react';
+import { JaEllerNei } from 'lib/utils/form';
+import { storForbokstav } from 'lib/utils/string';
 
 interface Props {
   form: UseFormReturn<YrkesskadeMedSkadeDatoFormFields>;
   readOnly: boolean;
   yrkesskader: YrkesskadeMedSkadeDatoSak[];
   update: (index: number, value: FieldArray<YrkesskadeMedSkadeDatoFormFields, 'relevanteYrkesskadeSaker'>) => void;
+  erÅrsakssammenheng: string;
 }
 
-export const YrkesskadeVurderingTabell = ({ form, yrkesskader, readOnly, update }: Props) => {
+export const YrkesskadeVurderingTabell = ({ form, yrkesskader, readOnly, update, erÅrsakssammenheng }: Props) => {
   function oppdaterTilknytning(index: number, erTilknyttet: boolean, yrkesskade: YrkesskadeMedSkadeDatoSak) {
     update(index, {
       ref: yrkesskade.ref,
@@ -28,6 +30,11 @@ export const YrkesskadeVurderingTabell = ({ form, yrkesskader, readOnly, update 
       manuellYrkesskadeDato: yrkesskade.manuellYrkesskadeDato,
       saksnummer: yrkesskade.saksnummer,
       erTilknyttet,
+      vedtaksdato: yrkesskade.vedtaksdato,
+      skadeart: yrkesskade.skadeart,
+      diagnose: yrkesskade.diagnose,
+      skadekombinasjoner: yrkesskade.skadekombinasjoner,
+      skadekombinasjonerTekst: yrkesskade.skadekombinasjonerTekst,
     });
   }
 
@@ -43,14 +50,17 @@ export const YrkesskadeVurderingTabell = ({ form, yrkesskader, readOnly, update 
             <Table.HeaderCell textSize={'small'}>Tilknytt yrkesskade</Table.HeaderCell>
             <Table.HeaderCell textSize={'small'}>Saksnummer</Table.HeaderCell>
             <Table.HeaderCell textSize={'small'}>Kilde</Table.HeaderCell>
-            <Table.HeaderCell textSize={'small'}>Referanse</Table.HeaderCell>
             <Table.HeaderCell textSize={'small'}>Skadedato</Table.HeaderCell>
+            <Table.HeaderCell textSize={'small'}>Vedtaksdato</Table.HeaderCell>
+            <Table.HeaderCell textSize={'small'}>Skadeart</Table.HeaderCell>
+            <Table.HeaderCell textSize={'small'}>Diagnose</Table.HeaderCell>
+            <Table.HeaderCell textSize={'small'}>Skadebeskrivelse</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         {yrkesskader.length > 0 && (
           <Table.Body>
             {yrkesskader.map((yrkesskade, index) => (
-              <Table.Row key={yrkesskade.ref}>
+              <Table.Row key={`${yrkesskade.ref}-${yrkesskade.saksnummer ?? index}`}>
                 <Table.DataCell textSize={'small'}>
                   <Checkbox
                     size={'small'}
@@ -58,14 +68,15 @@ export const YrkesskadeVurderingTabell = ({ form, yrkesskader, readOnly, update 
                     value={yrkesskade.ref}
                     checked={yrkesskade.erTilknyttet}
                     onChange={(e) => oppdaterTilknytning(index, e.target.checked, yrkesskade)}
-                    readOnly={readOnly}
+                    readOnly={readOnly || erÅrsakssammenheng === JaEllerNei.Nei}
                   >
                     Tilknytt yrkesskade til vurdering
                   </Checkbox>
                 </Table.DataCell>
                 <Table.DataCell textSize={'small'}>{yrkesskade.saksnummer}</Table.DataCell>
-                <Table.DataCell textSize={'small'}>{yrkesskade.kilde}</Table.DataCell>
-                <Table.DataCell textSize={'small'}>{yrkesskade.ref}</Table.DataCell>
+                <Table.DataCell textSize={'small'}>
+                  {yrkesskade.kilde ? storForbokstav(yrkesskade.kilde) : '–'}
+                </Table.DataCell>
                 <Table.DataCell textSize={'small'}>
                   {yrkesskade.skadedato ? (
                     formaterDatoForFrontend(yrkesskade.skadedato)
@@ -87,6 +98,22 @@ export const YrkesskadeVurderingTabell = ({ form, yrkesskader, readOnly, update 
                       hideLabel={true}
                     />
                   )}
+                </Table.DataCell>
+                <Table.DataCell textSize={'small'}>
+                  {yrkesskade.vedtaksdato ? formaterDatoForFrontend(yrkesskade.vedtaksdato) : '–'}
+                </Table.DataCell>
+                <Table.DataCell textSize={'small'}>
+                  {yrkesskade.skadeart ? storForbokstav(yrkesskade.skadeart) : '–'}
+                </Table.DataCell>
+                <Table.DataCell textSize={'small'}>
+                  {yrkesskade.diagnose ? storForbokstav(yrkesskade.diagnose) : '–'}
+                </Table.DataCell>
+                <Table.DataCell textSize={'small'}>
+                  {yrkesskade.skadekombinasjoner
+                    ? yrkesskade.skadekombinasjoner
+                        ?.map((k) => `${storForbokstav(k.skadetype)} i ${k.kroppsdel.toLowerCase()}`)
+                        .join(', ')
+                    : yrkesskade.skadekombinasjonerTekst || '–'}
                 </Table.DataCell>
               </Table.Row>
             ))}

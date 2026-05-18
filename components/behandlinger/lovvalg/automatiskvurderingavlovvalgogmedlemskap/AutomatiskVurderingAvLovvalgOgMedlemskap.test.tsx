@@ -2,6 +2,8 @@ import { describe, expect, it, vitest } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { AutomatiskLovvalgOgMedlemskapVurdering } from 'lib/types/types';
 import { AutomatiskVurderingAvLovvalgOgMedlemskap } from 'components/behandlinger/lovvalg/automatiskvurderingavlovvalgogmedlemskap/AutomatiskVurderingAvLovvalgOgMedlemskap';
+import { FeatureFlagProvider } from 'context/UnleashContext';
+import { mockedFlags } from 'lib/services/unleash/unleashToggles';
 
 const vurdering: AutomatiskLovvalgOgMedlemskapVurdering = {
   kanBehandlesAutomatisk: true,
@@ -19,12 +21,14 @@ const vurdering: AutomatiskLovvalgOgMedlemskapVurdering = {
 describe('Automatisk vurdering av lovvalg og medlemskap', () => {
   it('Skal vise overstyringsknapp', () => {
     render(
-      <AutomatiskVurderingAvLovvalgOgMedlemskap
-        vurdering={vurdering}
-        setOverstyring={vitest.fn()}
-        visOverstyrKnapp={true}
-        visOverstyringsBehov={false}
-      />
+      <FeatureFlagProvider flags={mockedFlags}>
+        <AutomatiskVurderingAvLovvalgOgMedlemskap
+          vurdering={vurdering}
+          setOverstyring={vitest.fn()}
+          visOverstyrKnapp={true}
+          visOverstyringsBehov={false}
+        />
+      </FeatureFlagProvider>
     );
     const button = screen.getByText('Overstyr');
     expect(button).toBeVisible();
@@ -32,12 +36,14 @@ describe('Automatisk vurdering av lovvalg og medlemskap', () => {
 
   it('Skal ikke vise overstyringsknapp dersom visOverstyrKnapp er satt til false', () => {
     render(
-      <AutomatiskVurderingAvLovvalgOgMedlemskap
-        vurdering={vurdering}
-        setOverstyring={vitest.fn()}
-        visOverstyrKnapp={false}
-        visOverstyringsBehov={false}
-      />
+      <FeatureFlagProvider flags={mockedFlags}>
+        <AutomatiskVurderingAvLovvalgOgMedlemskap
+          vurdering={vurdering}
+          setOverstyring={vitest.fn()}
+          visOverstyrKnapp={false}
+          visOverstyringsBehov={false}
+        />
+      </FeatureFlagProvider>
     );
 
     const button = screen.queryByRole('button', { name: 'Overstyr' });
@@ -46,12 +52,14 @@ describe('Automatisk vurdering av lovvalg og medlemskap', () => {
 
   it('Skal vise angre overstyringsknapp hvis det allerede er trykket overstyr', () => {
     render(
-      <AutomatiskVurderingAvLovvalgOgMedlemskap
-        vurdering={vurdering}
-        setOverstyring={() => {}}
-        visOverstyrKnapp={true}
-        visOverstyringsBehov={true}
-      />
+      <FeatureFlagProvider flags={mockedFlags}>
+        <AutomatiskVurderingAvLovvalgOgMedlemskap
+          vurdering={vurdering}
+          setOverstyring={() => {}}
+          visOverstyrKnapp={true}
+          visOverstyringsBehov={true}
+        />
+      </FeatureFlagProvider>
     );
     const button = screen.getByText('Angre overstyring');
     expect(button).toBeVisible();

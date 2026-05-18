@@ -4,7 +4,7 @@ import { PencilIcon } from '@navikt/aksel-icons';
 import { Controller, FieldPath, FieldValues, RegisterOptions, UseFormReturn } from 'react-hook-form';
 
 interface Props<FormFieldIds extends FieldValues> {
-  form: UseFormReturn<FormFieldIds, any, any>;
+  form: UseFormReturn<FormFieldIds>;
   name: FieldPath<FormFieldIds>;
   label?: string;
   buttonLabel?: string;

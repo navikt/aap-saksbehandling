@@ -25,9 +25,11 @@ const grunnlagMedVurdering: SamordningUføreGrunnlag = {
   vurdering: {
     begrunnelse: 'Dette er min vurdering som er bekreftet',
     vurderingPerioder: [{ uføregradTilSamordning: 40, virkningstidspunkt: '2025-08-01' }],
-    vurdertAv: {
-      dato: '2025-08-01',
-      ident: 'Saksbehandler',
+    vurderingerMeta: {
+      vurdertAv: {
+        dato: '2025-08-01',
+        ident: 'Saksbehandler',
+      },
     },
   },
 };

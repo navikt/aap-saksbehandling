@@ -3,7 +3,7 @@
 import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { MellomlagretVurdering, TrukketSøknadGrunnlag, TrukketSøknadVudering } from 'lib/types/types';
+import { MellomlagretVurdering, TrukketSøknadGrunnlag, TrukketSøknadVurdering, VurderingerMeta } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { FormEvent } from 'react';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
@@ -36,15 +36,11 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon, initialMel
     initialMellomlagretVurdering
   );
 
-  const vurderingerString = grunnlag?.vurderinger.at(-1);
-
-  const vurdertAvAnsatt = vurderingerString
-    ? { ident: vurderingerString.vurdertAv, dato: vurderingerString.vurdertDato }
-    : undefined;
+  const sisteVurdering = grunnlag?.vurderinger.at(-1);
 
   const defaultValues: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
-    : mapVurderingToDraftFormFields(vurderingerString);
+    : mapVurderingToDraftFormFields(sisteVurdering);
 
   const { form, formFields } = useConfigForm<FormFields>(
     {
@@ -97,13 +93,13 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon, initialMel
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
-      vurdertAvAnsatt={vurdertAvAnsatt}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() =>
-          form.reset(vurderingerString ? mapVurderingToDraftFormFields(vurderingerString) : emptyDraftFormFields())
+          form.reset(sisteVurdering ? mapVurderingToDraftFormFields(sisteVurdering) : emptyDraftFormFields())
         );
       }}
+      vurderingerMeta={sisteVurderingFormMeta(sisteVurdering)}
       visningModus={visningModus}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
       visningActions={visningActions}
@@ -114,7 +110,17 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon, initialMel
   );
 };
 
-function mapVurderingToDraftFormFields(vurdering?: TrukketSøknadVudering): DraftFormFields {
+function sisteVurderingFormMeta(sisteVurdering: TrukketSøknadVurdering | undefined): VurderingerMeta | undefined {
+  if (!sisteVurdering) return undefined;
+
+  if (sisteVurdering.skalTrekkes) {
+    return { trukketAv: sisteVurdering.vurderingerMeta.vurdertAv };
+  } else {
+    return { vurdertAv: sisteVurdering.vurderingerMeta.vurdertAv };
+  }
+}
+
+function mapVurderingToDraftFormFields(vurdering?: TrukketSøknadVurdering): DraftFormFields {
   return {
     begrunnelse: vurdering?.begrunnelse,
     skalTrekkes: getJaNeiEllerUndefined(vurdering?.skalTrekkes),

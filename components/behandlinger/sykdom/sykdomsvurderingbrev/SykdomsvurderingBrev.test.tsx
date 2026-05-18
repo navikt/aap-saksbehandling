@@ -69,7 +69,7 @@ const grunnlagMedVurdering: SykdomsvurderingBrevGrunnlag = {
   kanSaksbehandle: true,
   vurdering: {
     vurdering: 'Dette er min vurdering som er bekreftet',
-    vurdertAv: { ident: 'Saksbehandler', dato: '2025-08-21' },
+    vurderingerMeta: { vurdertAv: { ident: 'Saksbehandler', dato: '2025-08-21' } },
   },
 };
 

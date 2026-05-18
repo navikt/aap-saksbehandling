@@ -158,7 +158,7 @@ export type SamordningAndreStatligeYtelserYtelse =
 export type TrukketSøknadGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.søknad.TrukketSøknadGrunnlagDto'];
 
-export type TrukketSøknadVudering =
+export type TrukketSøknadVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.søknad.TrukketSøknadVurderingDto'];
 
 export type AvbrytRevurderingGrunnlag =
@@ -374,7 +374,7 @@ export type ForeslåVedtakGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.ForeslåVedtakResponse'];
 
 export type ForeslåVedtakVedtakslengdeGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.VedtakslengdeVedtakResponse'];
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.ForeslåvedtakVedtakslengdeRespons'];
 
 export type UnderveisAvslagsÅrsak = NonNullable<UnderveisGrunnlag['avslagsårsak']>;
 
@@ -434,11 +434,8 @@ export type SykdomsvurderingResponse =
 export type VurdertAvAnsatt =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
 
-export type SykdomNedsattMerEnnHalvpartenValg =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomsvurderingResponse']['erNedsettelseMinstHalvparten'];
-
-export type SykdomNedsattMerEnnYrkesskadeValg =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomsvurderingResponse']['erNedsettelseMerEnnYrkesskadegrense'];
+export type ArbeidsevneNedsattValg =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomsvurderingResponse']['harNedsattArbeidsevne'];
 
 export type BistandsbehovVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.bistand.BistandVurderingResponse'];
@@ -626,17 +623,31 @@ export interface PeriodisertVurderingFormFields {
   tilDato?: string | null;
 }
 
-export interface VurderingMeta {
+export interface VurderingFormMeta {
   behøverVurdering: boolean;
   erNyVurdering: boolean;
-  vurdertAv?: VurdertAvAnsatt;
-  kvalitetssikretAv?: VurdertAvAnsatt;
-  besluttetAv?: VurdertAvAnsatt;
+  vurderingerMeta?: VurderingerMeta;
 }
+
+export type VurderingerMeta =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'] & {
+    vurdertAutomatisk?: boolean;
+    trukketAv?: VurdertAvAnsatt;
+  };
 
 // Gjør at vi kan lage et typesikkert "enum-objekt" med union types generert fra backend. feks const minEnum = lagEnumObjektFraUnionType<StegGruppe>({ SYKDOM: 'SYKDOM' ...})
 export function lagEnumObjektFraUnionType<UnionType extends string>(o: { [P in UnionType]: P }): {
   [P in UnionType]: P;
 } {
   return o;
+}
+
+export enum Roller {
+  BESLUTTER = 'Beslutter',
+  LES = 'Les',
+  SAKSBEHANDLER_OPPFØLGING = 'Veileder',
+  KVALITETSSIKRER = 'Kvalitetssikrer',
+  SAKSBEHANDLER_NASJONAL = 'Saksbehandler',
+  DRIFT = 'Drift',
+  PRODUKSJONSSTYRING = 'Produksjonsstyring',
 }

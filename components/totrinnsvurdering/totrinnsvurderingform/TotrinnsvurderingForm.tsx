@@ -1,3 +1,5 @@
+'use client';
+
 import { TotrinnnsvurderingFelter } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnnsvurderingFelter';
 import { Behovstype, getJaNeiEllerUndefined, getTrueFalseEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { Alert, Button, Detail, HStack } from '@navikt/ds-react';
@@ -17,6 +19,7 @@ import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { TotrinnsvurderingVedtaksbrevFelter } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingVedtaksbrevFelter';
 import { byggVilkårskortLenke } from 'lib/utils/vilkårskort';
+import { loggUmamiEvent, useUmamiStartTidspunkt } from 'lib/utils/umami';
 
 interface Props {
   grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;
@@ -44,6 +47,8 @@ export const TotrinnsvurderingForm = ({
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } = useLøsBehovOgGåTilNesteSteg(
     erKvalitetssikring ? 'KVALITETSSIKRING' : 'FATTE_VEDTAK'
   );
+
+  const umamiStartTidspunkt = useUmamiStartTidspunkt();
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? mapMellomlagringToDraftFormFields(JSON.parse(initialMellomlagretVurdering.data))
@@ -124,7 +129,15 @@ export const TotrinnsvurderingForm = ({
             },
             referanse: behandlingsreferanse,
           },
-          () => nullstillMellomlagretVurdering()
+          () => {
+            if (!erKvalitetssikring) {
+              loggUmamiEvent('beslutter-varighet', {
+                varighet_sekunder: Math.floor((Date.now() - umamiStartTidspunkt) / 1000),
+                typeBehandling: flyt.visning.typeBehandling,
+              });
+            }
+            nullstillMellomlagretVurdering();
+          }
         );
       })}
       className={'flex-column'}

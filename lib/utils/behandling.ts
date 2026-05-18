@@ -61,6 +61,8 @@ export function formatterÅrsakTilOpprettelseTilTekst(årsakTilOpprettelse: Års
       return 'Mulig feilutbetaling';
     case 'UTVID_VEDTAKSLENGDE':
       return 'Utvid vedtaksperiode';
+    case 'G_REGULERING':
+      return 'G-regulering';
     default:
       return 'Ukjent årsak';
   }

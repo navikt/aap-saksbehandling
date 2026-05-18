@@ -2,7 +2,7 @@
 
 import { Enhet } from 'lib/types/oppgaveTypes';
 import { useEffect, useState } from 'react';
-import { Alert, BodyShort, Box, Button, HStack, Label, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Box, Button, HStack, Label, Switch, VStack } from '@navikt/ds-react';
 import { AlleOppgaverTabell } from 'components/oppgaveliste/alleoppgaver/alleoppgavertabell/AlleOppgaverTabell';
 import { useAlleOppgaverForEnhet } from 'hooks/oppgave/OppgaveHook';
 import { KøSelect } from 'components/oppgaveliste/køselect/KøSelect';
@@ -31,6 +31,7 @@ import { useBackendSortering } from 'hooks/oppgave/BackendSorteringHook';
 import { AlleOppgaverFiltrering } from 'components/oppgaveliste/filtrering/alleoppgaverfiltrering/AlleOppgaverFiltrering';
 import { ValuePair } from 'components/form/FormField';
 import { useInnloggetBruker } from 'hooks/BrukerHook';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   enheter: Enhet[];
@@ -43,6 +44,8 @@ export const AlleOppgaver = ({ enheter }: Props) => {
 
   const bruker = useInnloggetBruker();
   const [aktivKø, setAktivKø] = useState<AktivKø | undefined>(undefined);
+  const [hasteoppgaverØverst, setHasteOppgaverØverst] = useState<boolean>(true);
+  const skalViseHasteoppgaveToggle = useFeatureFlag('HastemarkeringerFoerst');
 
   const [valgteRader, setValgteRader] = useState<number[]>([]);
   const lagretUtvidetFilter = hentAktivUtvidetFilter();
@@ -156,7 +159,7 @@ export const AlleOppgaver = ({ enheter }: Props) => {
     kanLasteInnFlereOppgaver,
     mutate,
     behandlingstyperFilterFraBackend,
-  } = useAlleOppgaverForEnhet(aktiveEnhetsnumre, aktivKø?.id ?? 0, utvidetFilter, sort);
+  } = useAlleOppgaverForEnhet(aktiveEnhetsnumre, aktivKø?.id ?? 0, hasteoppgaverØverst, utvidetFilter, sort);
 
   const { data: køer } = useSWR(`api/filter?${queryParamsArray('enheter', aktiveEnhetsnumre)}`, () =>
     hentKøerForEnheterClient(aktiveEnhetsnumre)
@@ -204,6 +207,7 @@ export const AlleOppgaver = ({ enheter }: Props) => {
       <Box borderColor="neutral-subtle" background={'default'} borderWidth="1" borderRadius={'12'}>
         <VStack>
           <HStack
+            align={'end'}
             paddingInline={'space-16'}
             paddingBlock={'space-8'}
             gap={'space-16'}
@@ -222,6 +226,16 @@ export const AlleOppgaver = ({ enheter }: Props) => {
               oppdaterKø={oppdaterKø}
               form={form}
             />
+            {skalViseHasteoppgaveToggle && (
+              <Switch
+                value="hasteoppgaver"
+                checked={hasteoppgaverØverst}
+                onChange={() => setHasteOppgaverØverst((prev) => !prev)}
+                size={'small'}
+              >
+                Vis hastemarkeringer øverst
+              </Switch>
+            )}
           </HStack>
           <HStack gap={'space-8'} paddingInline={'space-16'} paddingBlock={'space-8'}>
             <Label as="p" size={'small'}>

@@ -7,7 +7,7 @@ import { ReactNode, useState } from 'react';
 import { BodyShort, HStack, VStack } from '@navikt/ds-react';
 import styles from 'components/behandlinger/oppholdskrav/oppholdskrav.module.css';
 import { VurdertAvAnsattDetail } from 'components/vurdertav/VurdertAvAnsattDetail';
-import { VurdertAvAnsatt } from 'lib/types/types';
+import { VurderingerMeta } from 'lib/types/types';
 import { VurderingStatus, VurderingStatusTag } from 'components/periodisering/VurderingStatusTag';
 
 interface Props {
@@ -15,9 +15,7 @@ interface Props {
   tom: Date | null | undefined;
   foersteNyePeriodeFraDato: Date | null | undefined;
   vurderingStatus: VurderingStatus | undefined;
-  vurdertAv: VurdertAvAnsatt | undefined;
-  besluttetAv: VurdertAvAnsatt | undefined;
-  kvalitetssikretAv: VurdertAvAnsatt | undefined;
+  vurderingerMeta: VurderingerMeta;
   children: ReactNode;
   defaultCollapsed?: boolean;
 }
@@ -27,9 +25,7 @@ export const TidligereVurderingExpandableCard = ({
   tom,
   foersteNyePeriodeFraDato,
   vurderingStatus,
-  vurdertAv,
-  kvalitetssikretAv,
-  besluttetAv,
+  vurderingerMeta,
   children,
   defaultCollapsed = false,
 }: Props) => {
@@ -63,9 +59,9 @@ export const TidligereVurderingExpandableCard = ({
     >
       {children}
       <VStack align="end">
-        <VurdertAvAnsattDetail vurdertAv={vurdertAv} variant={'VURDERING'} />
-        <VurdertAvAnsattDetail vurdertAv={kvalitetssikretAv} variant={'KVALITETSSIKRER'} />
-        <VurdertAvAnsattDetail vurdertAv={besluttetAv} variant={'BESLUTTER'} />
+        <VurdertAvAnsattDetail vurdertAv={vurderingerMeta.vurdertAv} variant={'VURDERING'} />
+        <VurdertAvAnsattDetail vurdertAv={vurderingerMeta.kvalitetssikretAv} variant={'KVALITETSSIKRER'} />
+        <VurdertAvAnsattDetail vurdertAv={vurderingerMeta.besluttetAv} variant={'BESLUTTER'} />
       </VStack>
     </CustomExpandableCard>
   );

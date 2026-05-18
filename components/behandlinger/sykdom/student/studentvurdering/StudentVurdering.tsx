@@ -6,7 +6,7 @@ import {
   MellomlagretVurdering,
   StudentGrunnlag,
   StudentVurderingResponse,
-  VurderingMeta,
+  VurderingFormMeta,
 } from 'lib/types/types';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
@@ -51,7 +51,7 @@ export interface StudentFormFields {
   vurderinger: StudentVurdering[];
 }
 
-export interface StudentVurdering extends VurderingMeta {
+export interface StudentVurdering extends VurderingFormMeta {
   fraDato: string;
   begrunnelse: string;
   harAvbruttStudie?: string;
@@ -184,9 +184,7 @@ export const StudentVurdering = ({
               tom={vurdering.tom && !erUendeligSlutt(vurdering.tom) ? new Dato(vurdering.tom).dato : undefined}
               foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
               vurderingStatus={hentVurderingStatusForVedtattVurdering(vurdering)}
-              vurdertAv={vurdering.vurdertAv}
-              kvalitetssikretAv={vurdering.kvalitetssikretAv}
-              besluttetAv={vurdering.besluttetAv}
+              vurderingerMeta={vurdering.vurderingerMeta}
             >
               <VedtattStudentVurderinger vurdering={vurdering} />
             </TidligereVurderingExpandableCard>
@@ -259,9 +257,7 @@ export const StudentVurdering = ({
           avbruttDato: vurdering?.avbruttStudieDato
             ? new Dato(vurdering.avbruttStudieDato).formaterForFrontend()
             : undefined,
-          vurdertAv: vurdering?.vurdertAv,
-          kvalitetssikretAv: vurdering?.kvalitetssikretAv,
-          besluttetAv: vurdering?.besluttetAv,
+          vurderingerMeta: vurdering.vurderingerMeta,
           kodeverk: kodeverk,
           hoveddiagnose: hoveddiagnose,
           bidiagnose: bidiagnose,
@@ -362,6 +358,6 @@ function parseOgMigrerMellomlagring(mellomlagring: string): DraftFormFields {
   }
 }
 
-function erPeriodisertVersjon(object: any): object is StudentFormFields {
-  return object instanceof Object && object['vurderinger'] != null;
+function erPeriodisertVersjon(object: unknown): object is StudentFormFields {
+  return typeof object === 'object' && object !== null && 'vurderinger' in object && object.vurderinger != null;
 }

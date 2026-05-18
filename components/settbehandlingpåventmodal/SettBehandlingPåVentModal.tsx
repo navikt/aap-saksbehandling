@@ -110,7 +110,7 @@ export const SettBehandlingPåVentModal = ({ behandlingsreferanse, reservert, is
       withCredentials: true,
     });
 
-    eventSource.onmessage = async (event: any) => {
+    eventSource.onmessage = async (event: MessageEvent) => {
       const eventData: FlytProsesseringServerSentEvent = JSON.parse(event.data);
       if (eventData.status === 'FERDIG') {
         eventSource.close();

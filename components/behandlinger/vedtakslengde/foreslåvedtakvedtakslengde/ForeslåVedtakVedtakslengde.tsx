@@ -1,7 +1,7 @@
 'use client';
 
 import { Behovstype } from 'lib/utils/form';
-import { Label, Table, VStack } from '@navikt/ds-react';
+import { BodyShort, Box, Label, List, Table, VStack } from '@navikt/ds-react';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 
@@ -14,6 +14,8 @@ import { useFeatureFlag } from 'context/UnleashContext';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { storForbokstav } from 'lib/utils/string';
+import { mapÅrsakTilTekst } from 'components/behandlinger/vedtak/foreslåvedtak/ForeslåVedtak';
 
 interface Props {
   behandlingVersjon: number;
@@ -68,11 +70,25 @@ export const ForeslåVedtakVedtakslengde = ({ behandlingVersjon, readOnly, grunn
             </Table.Header>
             <Table.Body>
               {grunnlag.stansOpphør.map(({ stansOpphørFraOgMed, historikk }) => {
+                const finnesFlereÅrsaker = historikk[0].årsaker.length > 1;
+
                 return (
                   <Table.Row key={stansOpphørFraOgMed}>
                     <Table.DataCell>{formaterDatoForFrontend(stansOpphørFraOgMed)}</Table.DataCell>
-                    <Table.DataCell>{historikk[0].type}</Table.DataCell>
-                    <Table.DataCell>{historikk[0].årsaker}</Table.DataCell>
+                    <Table.DataCell>{storForbokstav(historikk[0].type)}</Table.DataCell>
+                    <Table.DataCell>
+                      {finnesFlereÅrsaker ? (
+                        <Box asChild>
+                          <List>
+                            {historikk[0].årsaker.map((årsak, index) => (
+                              <List.Item key={index}>{mapÅrsakTilTekst(årsak)}</List.Item>
+                            ))}
+                          </List>
+                        </Box>
+                      ) : (
+                        <BodyShort>{mapÅrsakTilTekst(historikk[0].årsaker[0])}</BodyShort>
+                      )}
+                    </Table.DataCell>
                   </Table.Row>
                 );
               })}

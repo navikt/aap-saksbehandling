@@ -53,3 +53,4 @@ yarn-error.log*
 
 #bytte mellom lokalt og dev-miljø
 switch.sh
+.temp/

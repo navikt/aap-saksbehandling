@@ -44,3 +44,5 @@ export type FinnBehandlingerRespons =
 export type PostmottakBehandlingInfo = FinnBehandlingerRespons['behandlinger'][number];
 
 export type PostmottakTypeBehandling = PostmottakBehandlingInfo['typeBehandling'];
+
+export type UbehandletJournalpost = postmottak['schemas']['no.nav.aap.postmottak.joarkavstemmer.UavstemtJournalpost'];

@@ -1,61 +1,45 @@
 import 'server-only';
 
 import { headers } from 'next/headers';
-
-import { getAccessTokenOrRedirectToLogin, validerToken } from './azuread';
+import { getAccessTokenOrRedirectToLogin } from './azuread';
 import { isDev, isLocal } from 'lib/utils/environment';
+import { Roller } from 'lib/types/types';
+import { decodeJwt, JWTPayload } from 'jose';
 
 export interface BrukerInformasjon {
   navn: string;
-  NAVident?: string;
+  NAVident: string;
+  roller: Roller[];
 }
 
 const lokaltOverstyrtBruker = isLocal();
-export async function hentBrukerInformasjon(): Promise<BrukerInformasjon> {
+const lokaltOverstyrteRoller = [
+  Roller.BESLUTTER,
+  Roller.KVALITETSSIKRER,
+  Roller.LES,
+  Roller.SAKSBEHANDLER_NASJONAL,
+  Roller.SAKSBEHANDLER_OPPFØLGING,
+  Roller.DRIFT,
+  Roller.PRODUKSJONSSTYRING,
+];
+
+export async function hentInnloggetBrukerInformasjon(): Promise<BrukerInformasjon> {
   if (lokaltOverstyrtBruker) {
-    return { navn: 'Iren Panikk', NAVident: 'z123456' };
+    return { navn: 'Iren Panikk', NAVident: 'z123456', roller: lokaltOverstyrteRoller };
   }
   const requestHeaders = await headers();
   const token = getAccessTokenOrRedirectToLogin(requestHeaders);
 
-  const JWTVerifyResult = await validerToken(token);
-  return { navn: JWTVerifyResult.payload.name as string, NAVident: JWTVerifyResult.payload.NAVident as string };
+  const payload = decodeJwt(token);
+  return { navn: payload.name as string, NAVident: payload.NAVident as string, roller: hentRollerForBruker(payload) };
 }
 
-export enum Roller {
-  BESLUTTER = 'Beslutter',
-  LES = 'Les',
-  SAKSBEHANDLER_OPPFØLGING = 'Veileder',
-  KVALITETSSIKRER = 'Kvalitetssikrer',
-  SAKSBEHANDLER_NASJONAL = 'Saksbehandler',
-  DRIFT = 'Drift',
-  PRODUKSJONSSTYRING = 'Produksjonsstyring',
-}
-
-const lokaltOverstyrteRoller = isLocal();
-export async function hentRollerForBruker(): Promise<Roller[]> {
-  if (lokaltOverstyrteRoller) {
-    return [
-      Roller.BESLUTTER,
-      Roller.KVALITETSSIKRER,
-      Roller.LES,
-      Roller.SAKSBEHANDLER_NASJONAL,
-      Roller.SAKSBEHANDLER_OPPFØLGING,
-      Roller.DRIFT,
-      Roller.PRODUKSJONSSTYRING,
-    ];
-  }
-  const requestHeaders = await headers();
-  const token = getAccessTokenOrRedirectToLogin(requestHeaders);
-
-  const JWTVerifyResult = await validerToken(token);
-
-  const grupper = JWTVerifyResult.payload.groups as string[];
-
+function hentRollerForBruker(payload: JWTPayload): Roller[] {
   const isDevelopment = isDev();
 
-  const roller: Roller[] = [];
+  let roller: Roller[] = [];
 
+  const grupper = payload.groups as string[];
   grupper.forEach((gruppe) => {
     const rolle = isDevelopment
       ? mapRollerFraTokenTilKelvinRollerDev(gruppe)

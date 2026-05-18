@@ -68,10 +68,10 @@ export const AktivitetspliktTrekk = ({ sak }: { sak: SaksInfo }) => {
                       }) || 'Ikke utført trekk'}
                     </Table.DataCell>
                     <Table.DataCell>
-                      {vurdering.vurdertAv && (
+                      {vurdering.vurderingerMeta?.vurdertAv && (
                         <span>
-                          <Detail>{`Vurdert av ${vurdering.vurdertAv.ansattnavn ? vurdering.vurdertAv.ansattnavn : vurdering.vurdertAv.ident}`}</Detail>
-                          <Detail>{`${formaterDatoForFrontend(vurdering.vurdertAv.dato)}`}</Detail>
+                          <Detail>{`Vurdert av ${vurdering.vurderingerMeta.vurdertAv.ansattnavn ? vurdering.vurderingerMeta.vurdertAv.ansattnavn : vurdering.vurderingerMeta.vurdertAv.ident}`}</Detail>
+                          <Detail>{`${formaterDatoForFrontend(vurdering.vurderingerMeta.vurdertAv.dato)}`}</Detail>
                         </span>
                       )}
                     </Table.DataCell>

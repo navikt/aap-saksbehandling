@@ -1,10 +1,7 @@
 import { ForeslåVedtakVedtakslengde } from 'components/behandlinger/vedtakslengde/foreslåvedtakvedtakslengde/ForeslåVedtakVedtakslengde';
-import { sjekkTilgang } from 'lib/services/tilgangservice/tilgangsService';
-import { Behovstype } from 'lib/utils/form';
-import { isError, isSuccess } from 'lib/utils/api';
+import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { hentForeslåVedtakVedtakslengdeGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { unleashService } from 'lib/services/unleash/unleashService';
 
 interface Props {
   behandlingsreferanse: string;
@@ -17,11 +14,6 @@ export const ForeslåVedtakVedtakslengdeMedDataFetching = async ({
   behandlingsreferanse,
   readonly,
 }: Props) => {
-  if (!unleashService.isEnabled('ForeslaaVedtakVedtakslengde')) {
-    return null;
-  }
-
-  const brukerHarTilgang = await sjekkTilgang(behandlingsreferanse, Behovstype.FORESLÅ_VEDTAK_VEDTAKSLENGDE);
   const grunnlag = await hentForeslåVedtakVedtakslengdeGrunnlag(behandlingsreferanse);
 
   if (isError(grunnlag)) {
@@ -35,7 +27,7 @@ export const ForeslåVedtakVedtakslengdeMedDataFetching = async ({
   return (
     <ForeslåVedtakVedtakslengde
       behandlingVersjon={behandlingVersjon}
-      readOnly={readonly || (isSuccess(brukerHarTilgang) && !brukerHarTilgang.data.tilgang)}
+      readOnly={readonly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       grunnlag={grunnlag.data}
     />
   );

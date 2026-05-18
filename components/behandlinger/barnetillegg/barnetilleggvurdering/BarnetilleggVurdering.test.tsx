@@ -716,11 +716,13 @@ describe('mellomlagring', () => {
         fødselsdato: '2020-01-01',
       },
     ],
-    vurdertAv: {
-      ident: 'KVALITETSSIKRER',
-      dato: '2025-09-02',
-      ansattnavn: 'KVALITETSSIKRER',
-      enhetsnavn: 'Lokalenhetsnavn',
+    vurderingerMeta: {
+      vurdertAv: {
+        ident: 'KVALITETSSIKRER',
+        dato: '2025-09-02',
+        ansattnavn: 'KVALITETSSIKRER',
+        enhetsnavn: 'Lokalenhetsnavn',
+      },
     },
     barnSomTrengerVurdering: [],
     saksbehandlerOppgitteBarn: [],

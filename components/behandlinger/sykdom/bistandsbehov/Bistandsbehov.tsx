@@ -1,6 +1,6 @@
 'use client';
 
-import { BistandsGrunnlag, MellomlagretVurdering, VurderingMeta, VurdertAvAnsatt } from 'lib/types/types';
+import { BistandsGrunnlag, MellomlagretVurdering, VurderingFormMeta } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import React, { FormEvent } from 'react';
 import { parseDatoFraDatePicker } from 'lib/utils/date';
@@ -42,7 +42,7 @@ interface Props {
 export interface BistandForm {
   vurderinger: Array<BistandVurderingForm>;
 }
-export interface BistandVurderingForm extends VurderingMeta {
+export interface BistandVurderingForm extends VurderingFormMeta {
   fraDato: string;
   begrunnelse: string;
   erBehovForAktivBehandling: JaEllerNei | undefined;
@@ -50,9 +50,6 @@ export interface BistandVurderingForm extends VurderingMeta {
   erBehovForAnnenOppfølging?: JaEllerNei | undefined;
   overgangBegrunnelse?: string;
   skalVurdereAapIOvergangTilArbeid?: JaEllerNei | undefined;
-  vurdertAv?: VurdertAvAnsatt;
-  kvalitetssikretAv?: VurdertAvAnsatt;
-  besluttetAv?: VurdertAvAnsatt;
 }
 
 export const Bistandsbehov = ({
@@ -178,9 +175,7 @@ export const Bistandsbehov = ({
                 vurdering.erBehovForAnnenOppfølging
               )
             )}
-            vurdertAv={vurdering.vurdertAv}
-            kvalitetssikretAv={vurdering.kvalitetssikretAv}
-            besluttetAv={vurdering.besluttetAv}
+            vurderingerMeta={vurdering.vurderingerMeta}
           >
             <BistandsbehovTidligereVurdering vurdering={vurdering} />
           </TidligereVurderingExpandableCard>
@@ -224,9 +219,7 @@ export const Bistandsbehov = ({
         overgangBegrunnelse: vurdering?.overgangBegrunnelse || '',
         skalVurdereAapIOvergangTilArbeid: getJaNeiEllerUndefined(vurdering?.skalVurdereAapIOvergangTilArbeid),
         erBehovForArbeidsrettetTiltak: getJaNeiEllerUndefined(vurdering?.erBehovForArbeidsrettetTiltak),
-        vurdertAv: vurdering.vurdertAv,
-        kvalitetssikretAv: vurdering.kvalitetssikretAv,
-        besluttetAv: vurdering.besluttetAv,
+        vurderingerMeta: vurdering.vurderingerMeta,
         erNyVurdering: false,
         behøverVurdering: false,
       })),

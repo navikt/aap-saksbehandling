@@ -126,7 +126,7 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
               const starttidspunkt = startOfDay(new Date(sak.periode.fom));
               const vurderingGjelderFra = stringToDate(v as string, 'dd.MM.yyyy');
               if (vurderingGjelderFra && isBefore(startOfDay(vurderingGjelderFra), starttidspunkt)) {
-                return 'Vurderingen kan ikke gjelde fra før starttidspunktet';
+                return 'Vurderingen kan ikke gjelde fra før starttidspunktet.';
               }
             },
           },
@@ -198,9 +198,9 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
           getErGjeldende={(v) =>
             grunnlag?.vedtatteVurderinger.some((gjeldendeVurdering) => deepEqual(v, gjeldendeVurdering, ['dato']))
           }
-          getFomDato={(v) => v.gjelderFra ?? v.vurdertAv.dato}
-          getVurdertAvIdent={(v) => v.vurdertAv.ident}
-          getVurdertDato={(v) => v.vurdertAv.dato}
+          getFomDato={(v) => v.gjelderFra ?? v.vurderingerMeta?.vurdertAv?.dato}
+          getVurdertAvIdent={(v) => v.vurderingerMeta?.vurdertAv?.ident ?? ''}
+          getVurdertDato={(v) => v.vurderingerMeta?.vurdertAv?.dato ?? ''}
         />
       )}
       <FormField form={form} formField={formFields.begrunnelse} />

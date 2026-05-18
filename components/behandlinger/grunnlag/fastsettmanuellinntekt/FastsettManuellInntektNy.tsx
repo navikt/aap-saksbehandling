@@ -133,7 +133,7 @@ export const FastsettManuellInntektNy = ({
 
   const visHovedinnhold = !formReadOnly || grunnlag.manuelleVurderinger !== null;
   const vurderinger = grunnlag.historiskeManuelleVurderinger?.sort((a, b) => {
-    return sorterEtterNyesteDato(a.vurdertAv.dato, b.vurdertAv.dato);
+    return sorterEtterNyesteDato(a.vurderingerMeta.vurdertAv?.dato ?? '', b.vurderingerMeta.vurdertAv?.dato ?? '');
   });
 
   return (
@@ -145,7 +145,7 @@ export const FastsettManuellInntektNy = ({
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       status={status}
       vilkårTilhørerNavKontor={false}
-      vurdertAvAnsatt={grunnlag.manuelleVurderinger?.vurdertAv}
+      vurderingerMeta={grunnlag.manuelleVurderinger?.vurderingerMeta}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() => {
           form.reset(grunnlag ? mapGrunnlagToDraftFormFields(grunnlag) : emptyDraftFormFields());
@@ -160,8 +160,9 @@ export const FastsettManuellInntektNy = ({
         <TidligereVurderinger
           data={vurderinger}
           getErGjeldende={(v) => deepEqual(v, vurderinger.at(0))}
-          getVurdertAvIdent={(v) => v.vurdertAv.ident}
-          getVurdertDato={(v) => v.vurdertAv.dato}
+          getVurdertAvIdent={(v) => v.vurderingerMeta.vurdertAv?.ident ?? ''}
+          getVurdertDato={(v) => v.vurderingerMeta.vurdertAv?.dato ?? ''}
+          getFomDato={(v) => v.vurderingerMeta.vurdertAv?.dato}
           grupperPåOpprettetDato={true}
           customElement={(valgtVurderingIndex) => {
             const tabelldata: Tabellår[] | undefined = vurderinger

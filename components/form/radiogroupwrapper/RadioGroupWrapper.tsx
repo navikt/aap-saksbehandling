@@ -5,7 +5,7 @@ import { createSyntheticEvent } from 'lib/types/SyntheticEvent';
 
 interface RadioProps<FormFieldValues extends FieldValues> {
   name: FieldPath<FormFieldValues>;
-  control: Control<FormFieldValues, any, any>;
+  control: Control<FormFieldValues>;
   children: ReactNode;
   hideLabel?: boolean;
   shouldUnregister?: boolean;
@@ -17,6 +17,7 @@ interface RadioProps<FormFieldValues extends FieldValues> {
   readOnly?: boolean;
   className?: string;
   onChangeCustom?: (event: React.SyntheticEvent) => void;
+  dataUmamiEvent?: string;
 }
 
 const RadioGroupWrapper = <FormFieldValues extends FieldValues>({
@@ -33,6 +34,7 @@ const RadioGroupWrapper = <FormFieldValues extends FieldValues>({
   readOnly,
   className,
   onChangeCustom,
+  dataUmamiEvent,
 }: RadioProps<FormFieldValues>) => {
   return (
     <Controller
@@ -51,6 +53,7 @@ const RadioGroupWrapper = <FormFieldValues extends FieldValues>({
         return (
           <RadioGroup
             id={name}
+            data-umami-event={dataUmamiEvent}
             size={size}
             value={value || ''}
             hideLegend={hideLabel}

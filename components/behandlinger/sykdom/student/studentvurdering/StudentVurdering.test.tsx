@@ -38,9 +38,11 @@ const grunnlagMedVurdering: StudentGrunnlag = {
     {
       begrunnelse: 'en god begrunnelse',
       harAvbruttStudie: true,
-      vurdertAv: {
-        dato: '2026-01-01',
-        ident: 'Saksbehandler',
+      vurderingerMeta: {
+        vurdertAv: {
+          dato: '2026-01-01',
+          ident: 'Saksbehandler',
+        },
       },
       fom: '2026-01-01',
     },
@@ -530,11 +532,13 @@ describe('Student', () => {
         {
           begrunnelse: 'Dette er min vurdering som er bekreftet',
           harAvbruttStudie: false,
-          vurdertAv: {
-            ansattnavn: 'Kjell T. Ringen',
-            dato: '2025-08-21',
-            enhetsnavn: undefined,
-            ident: '',
+          vurderingerMeta: {
+            vurdertAv: {
+              ansattnavn: 'Kjell T. Ringen',
+              dato: '2025-08-21',
+              enhetsnavn: undefined,
+              ident: '',
+            },
           },
           fom: '',
         },

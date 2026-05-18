@@ -20,6 +20,10 @@ import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerU
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { useFeatureFlag } from 'context/UnleashContext';
+import {
+  YrkesskadeTabellGammel
+} from 'components/behandlinger/grunnlag/yrkesskadegrunnlagberegning/yrkesskadetabell/YrkesskadeTabellGammel';
 
 interface Props {
   behandlingVersjon: number;
@@ -81,9 +85,13 @@ export const YrkesskadeGrunnlagBeregning = ({
   );
 
   const vurdertAvAnsatt =
-    yrkeskadeBeregningGrunnlag.vurderinger.length > 0 ? yrkeskadeBeregningGrunnlag.vurderinger[0].vurdertAv : undefined;
+    yrkeskadeBeregningGrunnlag.vurderinger.length > 0
+      ? yrkeskadeBeregningGrunnlag.vurderinger[0].vurderingerMeta.vurdertAv
+      : undefined;
 
   const historiskeVurderinger = yrkeskadeBeregningGrunnlag?.historiskeVurderinger;
+
+  const yrkesskadeNyeFelter = useFeatureFlag('YrkesskadeNyeFelter');
 
   return (
     <VilkårskortMedFormOgMellomlagring
@@ -117,7 +125,7 @@ export const YrkesskadeGrunnlagBeregning = ({
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       isLoading={isLoading}
       vilkårTilhørerNavKontor={false}
-      vurdertAvAnsatt={vurdertAvAnsatt}
+      vurderingerMeta={{ vurdertAv: vurdertAvAnsatt }}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() => {
@@ -133,22 +141,40 @@ export const YrkesskadeGrunnlagBeregning = ({
           data={historiskeVurderinger}
           buildFelter={byggFelter}
           getErGjeldende={(v) => deepEqual(v, historiskeVurderinger[historiskeVurderinger.length - 1])}
-          getFomDato={(v) => v.vurderingenGjelderFra ?? v.vurdertAv.dato}
-          getVurdertAvIdent={(v) => v.vurdertAv.ident}
-          getVurdertDato={(v) => v.vurdertAv.dato}
+          getFomDato={(v) => v.vurderingerMeta.vurdertAv?.dato ?? ''}
+          getVurdertAvIdent={(v) => v.vurderingerMeta.vurdertAv?.ident ?? ''}
+          getVurdertDato={(v) => v.vurderingerMeta.vurdertAv?.dato ?? ''}
         />
       )}
 
-      <YrkesskadeTabell
-        yrkesskader={yrkeskadeBeregningGrunnlag.skalVurderes.map((vurdering) => {
-          return {
-            ref: vurdering.referanse,
-            saksnummer: vurdering.saksnummer,
-            kilde: vurdering.kilde,
-            skadedato: vurdering.skadeDato,
-          };
-        })}
-      />
+      {yrkesskadeNyeFelter ? (
+        <YrkesskadeTabell
+          yrkesskader={yrkeskadeBeregningGrunnlag.skalVurderes.map((vurdering) => {
+            return {
+              ref: vurdering.referanse,
+              saksnummer: vurdering.saksnummer,
+              kilde: vurdering.kilde,
+              skadedato: vurdering.skadeDato,
+              vedtaksdato: vurdering.vedtaksdato,
+              skadeart: vurdering.skadeart,
+              diagnose: vurdering.diagnose,
+              skadekombinasjoner: vurdering.skadekombinasjoner,
+              skadekombinasjonerTekst: vurdering.skadekombinasjonerTekst,
+            };
+          })}
+        />
+      ) : (
+        <YrkesskadeTabellGammel
+          yrkesskader={yrkeskadeBeregningGrunnlag.skalVurderes.map((vurdering) => {
+            return {
+              ref: vurdering.referanse,
+              saksnummer: vurdering.saksnummer,
+              kilde: vurdering.kilde,
+              skadedato: vurdering.skadeDato,
+            };
+          })}
+        />
+      )}
       {fields.map((field, index) => {
         const grunnlag = Number(form.watch(`vurderinger.${index}.inntekt`)) / field.gverdi;
 
