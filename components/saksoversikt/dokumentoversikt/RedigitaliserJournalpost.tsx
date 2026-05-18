@@ -69,10 +69,10 @@ export const RedigitaliserJournalpost = ({
 
       <Modal.Footer>
         <Button variant="primary" onClick={redigitaliser} loading={isLoading}>
-          Ja, redigitaliser
+          Bekreft
         </Button>
         <Button variant="secondary" disabled={isLoading}>
-          Nei, avbryt
+          Avbryt
         </Button>
       </Modal.Footer>
     </Modal>
