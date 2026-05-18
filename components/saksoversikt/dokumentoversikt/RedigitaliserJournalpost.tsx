@@ -37,7 +37,7 @@ export const RedigitaliserJournalpost = ({
     <Modal
       open={isOpen}
       header={{
-        heading: 'Redigitaliser dokument',
+        heading: 'Digitaliser dokument på nytt',
       }}
       onClose={onClose}
     >

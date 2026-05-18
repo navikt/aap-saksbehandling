@@ -53,7 +53,9 @@ export const HandlingerDokumentButton = ({ sak, journalpost }: { sak: SaksInfo; 
                   </ActionMenu.Item>
                 )}
                 {redigitaliserDokument && (
-                  <ActionMenu.Item onSelect={() => setRedigitaliserOpen(true)}>Redigitaliser dokument</ActionMenu.Item>
+                  <ActionMenu.Item onSelect={() => setRedigitaliserOpen(true)}>
+                    Digitaliser dokument på nytt
+                  </ActionMenu.Item>
                 )}
               </>
             )}
