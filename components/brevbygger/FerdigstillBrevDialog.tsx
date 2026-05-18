@@ -9,9 +9,10 @@ interface Props {
   isOpen: boolean;
   onClose: () => void;
   sendBrev: () => void;
+  senderBrev: boolean;
 }
 
-export const FerdigstillBrevDialog = ({ referanse, isOpen, onClose, sendBrev }: Props) => {
+export const FerdigstillBrevDialog = ({ referanse, isOpen, onClose, sendBrev, senderBrev }: Props) => {
   const [lasterPdf, setLasterPdf] = useState<boolean>(false);
   const [pdfDataUri, setPdfDataUri] = useState<string | undefined>();
   const pdfDataUriRef = useRef<string | undefined>(undefined);
@@ -49,10 +50,10 @@ export const FerdigstillBrevDialog = ({ referanse, isOpen, onClose, sendBrev }: 
           <ForhåndsvisBrev isLoading={lasterPdf} dataUri={pdfDataUri} />
         </Dialog.Body>
         <Dialog.Footer>
-          <Button type={'button'} variant={'secondary'} size={'small'} onClick={onClose}>
+          <Button type={'button'} variant={'secondary'} size={'small'} onClick={onClose} disabled={senderBrev}>
             Lukk
           </Button>
-          <Button type={'button'} variant={'primary'} size={'small'} onClick={sendBrev}>
+          <Button type={'button'} variant={'primary'} size={'small'} onClick={sendBrev} loading={senderBrev}>
             Send brev
           </Button>
         </Dialog.Footer>
