@@ -30,12 +30,14 @@ import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/op
 import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
+import { IkkeVurderbarPeriode } from 'components/periodisering/IkkeVurderbarPeriode';
 
 interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
   grunnlag: OvergangUforeGrunnlag;
   initialMellomlagretVurdering?: MellomlagretVurdering;
+  skalStegVurderes: boolean;
 }
 
 export interface OvergangUforeForm {
@@ -54,6 +56,7 @@ export const OvergangUforePeriodisert = ({
   grunnlag,
   readOnly,
   initialMellomlagretVurdering,
+  skalStegVurderes,
 }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
   const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
@@ -116,6 +119,7 @@ export const OvergangUforePeriodisert = ({
   const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const foersteNyePeriode = nyeVurderingFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
   const errorList = hentFeilmeldingerForForm(form.formState.errors);
+
   return (
     <VilkårskortPeriodisert
       heading={'§ 11-18 AAP under behandling av krav om uføretrygd'}
@@ -159,32 +163,46 @@ export const OvergangUforePeriodisert = ({
           </TidligereVurderingExpandableCard>
         ))}
 
-        {nyeVurderingFields.map((vurdering, index) => {
-          return (
-            <NyVurderingExpandableCard
-              key={vurdering.id}
-              accordionsSignal={accordionsSignal}
-              fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-              vurderingStatus={getErOppfyltEllerIkkeStatus(erVurderingOppfylt(form, index))}
-              nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
-              isLast={index === nyeVurderingFields.length - 1}
-              vurdering={vurdering}
-              finnesFeil={finnesFeilForVurdering(index, errorList)}
-              readonly={formReadOnly}
-              onSlettVurdering={() => remove(index)}
-              harTidligereVurderinger={tidligereVurderinger.length > 0}
-              index={index}
-              initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
-            >
-              <OvergangUforeVurderingFormInput
-                index={index}
-                form={form}
+        {skalStegVurderes &&
+          nyeVurderingFields.map((vurdering, index) => {
+            return (
+              <NyVurderingExpandableCard
+                key={vurdering.id}
+                accordionsSignal={accordionsSignal}
+                fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
+                vurderingStatus={getErOppfyltEllerIkkeStatus(erVurderingOppfylt(form, index))}
+                nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
+                isLast={index === nyeVurderingFields.length - 1}
+                vurdering={vurdering}
+                finnesFeil={finnesFeilForVurdering(index, errorList)}
                 readonly={formReadOnly}
-                søknadsdatoUføretrygd={grunnlag.uføreSøknadOpplysninger?.soknadsdato}
-              />
-            </NyVurderingExpandableCard>
-          );
-        })}
+                onSlettVurdering={() => remove(index)}
+                harTidligereVurderinger={tidligereVurderinger.length > 0}
+                index={index}
+                initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
+              >
+                <OvergangUforeVurderingFormInput
+                  index={index}
+                  form={form}
+                  readonly={formReadOnly}
+                  søknadsdatoUføretrygd={grunnlag.uføreSøknadOpplysninger?.soknadsdato}
+                />
+              </NyVurderingExpandableCard>
+            );
+          })}
+
+        {!skalStegVurderes &&
+          nyeVurderingFields.map((vurdering, index) => (
+            <IkkeVurderbarPeriode
+              key={crypto.randomUUID()}
+              fom={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`)) ?? new Date()}
+              tom={null}
+              alertMelding={
+                'Vilkåret kan ikke vurderes for denne perioden. For å kunne vurdere vilkåret må § 11-5 ikke være oppfylt i samme periode, og brukeren må ha hatt en periode med ordinær AAP før § 11-17 perioden'
+              }
+              foersteNyePeriodeFraDato={undefined}
+            ></IkkeVurderbarPeriode>
+          ))}
       </VStack>
     </VilkårskortPeriodisert>
   );

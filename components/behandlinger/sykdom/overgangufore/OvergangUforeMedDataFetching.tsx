@@ -2,7 +2,7 @@ import { hentMellomlagring, hentOvergangUforeGrunnlag } from 'lib/services/saksb
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
-import { skalViseSteg, StegData } from 'lib/utils/steg';
+import { StegData } from 'lib/utils/steg';
 import { OvergangUforePeriodisert } from 'components/behandlinger/sykdom/overgangufore/OvergangUforePeriodisert';
 
 interface Props {
@@ -17,14 +17,7 @@ export const OvergangUforeMedDataFetching = async ({ behandlingsreferanse, stegD
     return <ApiException apiResponses={[grunnlag]} />;
   }
 
-  const harTidligereVurderinger =
-    grunnlag.data.sisteVedtatteVurderinger != null && grunnlag.data.sisteVedtatteVurderinger.length > 0;
-
-  if (!skalViseSteg(stegData, harTidligereVurderinger)) {
-    return null;
-  }
-
-  const totalReadOnly = stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
+  const totalReadOnly = stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle || !stegData.skalViseSteg;
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.OVERGANG_UFORE,
@@ -37,6 +30,7 @@ export const OvergangUforeMedDataFetching = async ({ behandlingsreferanse, stegD
       readOnly={totalReadOnly}
       behandlingVersjon={stegData.behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
+      skalStegVurderes={stegData.skalViseSteg}
     />
   );
 };
