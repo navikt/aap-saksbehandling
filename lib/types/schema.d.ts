@@ -13087,6 +13087,10 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.kvalitetssikring.KvalitetssikringTilgangDto': {
       'harTilgangTil\u00C5Kvalitetssikre': boolean;
     };
+    'no.nav.aap.behandlingsflyt.behandling.lovvalg.Yrke': {
+      beskrivelse?: string | null;
+      kode: string;
+    };
     'no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.LovvalgResponse': {
       begrunnelse: string;
       /** @enum {string} */
@@ -13594,26 +13598,11 @@ export interface components {
       vurderingerMeta: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.rettighet.RettighetsinfoDto': {
-      perioderMedRett: components['schemas']['no.nav.aap.behandlingsflyt.behandling.rettighet.RettighetsperiodeDto'][];
       /**
        * Format: date
        * @example 2025-04-01
        */
       sisteDagMedRett?: string | null;
-    };
-    'no.nav.aap.behandlingsflyt.behandling.rettighet.RettighetsperiodeDto': {
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      fom: string;
-      /** @enum {string} */
-      rettighetstype: 'ARBEIDSSØKER' | 'BISTANDSBEHOV' | 'STUDENT' | 'SYKEPENGEERSTATNING' | 'VURDERES_FOR_UFØRETRYGD';
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      tom: string;
     };
     'no.nav.aap.behandlingsflyt.behandling.rettighetsperiode.RettighetsperiodeGrunnlagResponse': {
       'harTilgangTil\u00C5Saksbehandle': boolean;
@@ -13977,7 +13966,19 @@ export interface components {
       virksomhetId: string;
       virksomhetNavn?: string | null;
     };
+    'no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.AsettelsesDetalj': {
+      /** @enum {string|null} */
+      fartsomraade?: 'INNENRIKS' | 'UTENRIKS' | null;
+      /** @enum {string|null} */
+      skipsregister?: 'NIS' | 'NOR' | 'UTL' | null;
+      /** @enum {string|null} */
+      skipstype?: 'ANNET' | 'BOREPLATTFORM' | 'TURIST' | null;
+      yrke?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.lovvalg.Yrke'];
+    };
     'no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.BestemtArbeidsgruppeINorgeGrunnlag': {
+      ansettelsesDetaljer?:
+        | components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.AsettelsesDetalj'][]
+        | null;
       /**
        * Format: date
        * @example 2025-04-01
@@ -14413,6 +14414,7 @@ export interface components {
        * @example 2025-04-01
        */
       sisteDagMedRett?: string | null;
+      'stansOpph\u00F8r': components['schemas']['no.nav.aap.behandlingsflyt.drift.`DriftApiKt$driftApi$1$StansOpph\u00F8rDTO`'][];
     };
     'no.nav.aap.behandlingsflyt.drift.`DriftApiKt$driftApi$1$KjorFraSteg`': {
       /** @enum {string} */
@@ -14508,7 +14510,6 @@ export interface components {
         | 'SYKEPENGEERSTATNING'
         | 'VURDERES_FOR_UFØRETRYGD'
         | null;
-      'stansOpph\u00F8r': components['schemas']['no.nav.aap.behandlingsflyt.drift.`DriftApiKt$driftApi$1$StansOpph\u00F8rDTO`'][];
     };
     'no.nav.aap.behandlingsflyt.drift.`DriftApiKt$driftApi$1$StansOpph\u00F8rDTO`': {
       /**
