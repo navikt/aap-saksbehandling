@@ -1,9 +1,4 @@
-import {
-  hentMellomlagring,
-  hentOvergangArbeidGrunnlag,
-  hentOvergangUforeGrunnlag,
-  hentSykdomsGrunnlag,
-} from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { hentMellomlagring, hentOvergangUforeGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
@@ -16,21 +11,10 @@ interface Props {
 }
 
 export const OvergangUforeMedDataFetching = async ({ behandlingsreferanse, stegData }: Props) => {
-  const [grunnlag, sykdomGrunnlag, overgangArbeidGrunnlag] = await Promise.all([
-    hentOvergangUforeGrunnlag(behandlingsreferanse),
-    hentSykdomsGrunnlag(behandlingsreferanse),
-    hentOvergangArbeidGrunnlag(behandlingsreferanse),
-  ]);
+  const grunnlag = await hentOvergangUforeGrunnlag(behandlingsreferanse);
+
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
-  }
-
-  if (isError(sykdomGrunnlag)) {
-    return <ApiException apiResponses={[sykdomGrunnlag]} />;
-  }
-
-  if (isError(overgangArbeidGrunnlag)) {
-    return <ApiException apiResponses={[overgangArbeidGrunnlag]} />;
   }
 
   const totalReadOnly = stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle || !stegData.skalViseSteg;
