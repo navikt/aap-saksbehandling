@@ -217,6 +217,7 @@ export const Brevbygger = ({
         isOpen={visFerdigstillBrevDialog}
         onClose={() => settVisFerdigstillBrevDialog(false)}
         sendBrev={sendBrev}
+        senderBrev={isLoading}
       />
     </HGrid>
   );
