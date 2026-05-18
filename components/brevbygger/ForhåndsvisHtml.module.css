@@ -36,6 +36,11 @@
   padding: 1rem;
 }
 
+.container :global(.navLogo) {
+  height: 75px;
+  margin-bottom: 40px;
+}
+
 .changed {
   animation: highlight 2s ease-out;
 }
