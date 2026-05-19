@@ -21,7 +21,6 @@ interface Props {
   initialMellomlagretVurdering?: MellomlagretVurdering;
   harTilgangTilÅSaksbehandle: boolean;
   behandlingsversjon: number;
-
 }
 
 export interface ToTrinnsVurderingFormFields {
@@ -37,7 +36,7 @@ export const ToTrinnsvurdering = ({
   readOnly,
   erKvalitetssikring,
   initialMellomlagretVurdering,
-                                    harTilgangTilÅSaksbehandle,
+  harTilgangTilÅSaksbehandle,
   behandlingsversjon,
 }: Props) => {
   const vurderteTotrinnsvurderinger = grunnlag.vurderinger.filter(
