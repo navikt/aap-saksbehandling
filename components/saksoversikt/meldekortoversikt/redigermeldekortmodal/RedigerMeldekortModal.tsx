@@ -16,7 +16,9 @@ import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { isError } from 'lib/utils/api';
 import { useAlleDokumenterPåSak } from 'hooks/saksbehandling/DokumenterHook';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
+import { MeldekortProsesseringServerSentEvent } from 'app/saksbehandling/api/meldekort/[saksnummer]/prosessering/route';
 import { addDays } from 'date-fns';
+import { useMeldekort } from 'hooks/saksbehandling/MeldekortHook';
 
 interface Props {
   setIsOpen: (isOpen: boolean) => void;
@@ -47,9 +49,39 @@ const årsakOptions = ['', ...Object.values(Årsaker)];
 export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) => {
   const { saksnummer } = useParamsMedType();
   const { dokumenter } = useAlleDokumenterPåSak();
+  const { refetchMeldekort } = useMeldekort();
 
   const [error, setError] = useState<string>();
   const [isLoading, setIsLoading] = useState(false);
+
+  const ventPåMeldekortProsessering = () => {
+    const eventSource = new EventSource(`/saksbehandling/api/meldekort/${saksnummer}/prosessering/`, {
+      withCredentials: true,
+    });
+
+    eventSource.onmessage = async (event: MessageEvent) => {
+      const eventData: MeldekortProsesseringServerSentEvent = JSON.parse(event.data);
+
+      console.log(eventData);
+
+      if (eventData.status === 'KLAR') {
+        eventSource.close();
+        refetchMeldekort();
+        setIsOpen(false);
+        setIsLoading(false);
+      } else {
+        eventSource.close();
+        setError('Meldekort ble sendt inn, men prosesseringen tok for lang tid. Prøv å laste siden på nytt.');
+        setIsLoading(false);
+      }
+    };
+
+    eventSource.onerror = () => {
+      eventSource.close();
+      setError('Noe gikk galt under prosessering av meldekort.');
+      setIsLoading(false);
+    };
+  };
 
   const defaultValues = getDefaultValuesForForm(meldekort);
 
@@ -155,11 +187,10 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
 
                   if (isError(oppdaterMeldekortResponse)) {
                     setError('Noe gikk galt ved oppdatering av meldekort.');
+                    setIsLoading(false);
                   } else {
-                    setIsOpen(false);
+                    ventPåMeldekortProsessering();
                   }
-
-                  setIsLoading(false);
                 })}
               >
                 <VStack gap={'space-16'}>
