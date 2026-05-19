@@ -3,6 +3,7 @@ import { BehandlingsFlytAvklaringsbehovKode, StegGruppe, StegType } from 'lib/ty
 import { NextRequest } from 'next/server';
 import { logError, logInfo } from 'lib/serverutlis/logger';
 import { isError } from 'lib/utils/api';
+import Prometheus from 'lib/prometheus';
 
 const DEFAULT_TIMEOUT_IN_MS = 500;
 const RETRIES = 0;
@@ -20,12 +21,15 @@ export interface ServerSentEventData {
 
 export type ServerSentEventStatus = 'POLLING' | 'ERROR' | 'DONE';
 
+const endepunkt = 'behandlingsflyt-nesteSteg' as const;
+
 export async function GET(
   _: NextRequest,
   context: { params: Promise<{ referanse: string; gruppe: string; steg: string }> }
 ) {
   let responseStream = new TransformStream();
   const writer = responseStream.writable.getWriter();
+  const startTime = Date.now();
 
   const pollFlytMedTimeoutOgRetry = async (timeout: number, retries: number) => {
     setTimeout(async () => {
@@ -37,6 +41,7 @@ export async function GET(
         };
         await writer.write(`event: message\ndata: ${JSON.stringify(json)}\n\n`);
         await writer.close();
+        Prometheus.observePolling(startTime, { endepunkt, status: json.status, retries, reason: 'MAX_RETRIES' });
         return;
       }
       if (retries === 10) {
@@ -57,6 +62,7 @@ export async function GET(
         };
         await writer.write(`event: message\ndata: ${JSON.stringify(json)}\n\n`);
         await writer.close();
+        Prometheus.observePolling(startTime, { endepunkt, status: json.status, retries, reason: 'FETCH_ERROR' });
         return;
       }
 
@@ -70,6 +76,7 @@ export async function GET(
 
         await writer.write(`event: message\ndata: ${JSON.stringify(json)}\n\n`);
         await writer.close();
+        Prometheus.observePolling(startTime, { endepunkt, status: json.status, retries, reason: 'JOBB_ERROR' });
         return;
       }
 
@@ -92,6 +99,7 @@ export async function GET(
 
         await writer.write(`event: message\ndata: ${JSON.stringify(json)}\n\n`);
         await writer.close();
+        Prometheus.observePolling(startTime, { endepunkt, status: json.status, retries });
         return;
       } else {
         logInfo('Prosessering jobber');

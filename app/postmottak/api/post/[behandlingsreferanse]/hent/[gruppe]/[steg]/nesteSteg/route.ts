@@ -3,6 +3,7 @@ import { StegGruppe, StegType } from 'lib/types/postmottakTypes';
 import { NextRequest } from 'next/server';
 import { logInfo, logWarning } from 'lib/serverutlis/logger';
 import { isError } from 'lib/utils/api';
+import Prometheus from 'lib/prometheus';
 
 const DEFAULT_TIMEOUT_IN_MS = 1000;
 const RETRIES = 0;
@@ -18,12 +19,15 @@ export interface ServerSentEventData {
 
 export type ServerSentEventStatus = 'POLLING' | 'ERROR' | 'DONE';
 
+const endepunkt = 'postmottak-nesteSteg' as const;
+
 export async function GET(
   _: NextRequest,
   context: { params: Promise<{ behandlingsreferanse: string; gruppe: string; steg: string }> }
 ) {
   let responseStream = new TransformStream();
   const writer = responseStream.writable.getWriter();
+  const startTime = Date.now();
 
   const pollFlytMedTimeoutOgRetry = async (timeout: number, retries: number) => {
     setTimeout(async () => {
@@ -35,6 +39,7 @@ export async function GET(
         };
         await writer.write(`event: message\ndata: ${JSON.stringify(json)}\n\n`);
         await writer.close();
+        Prometheus.observePolling(startTime, {endepunkt, status: json.status, reason: 'MAX_RETRIES', retries});
         return;
       }
       if (retries === 3) {
@@ -54,6 +59,7 @@ export async function GET(
 
         await writer.write(`event: message\ndata: ${JSON.stringify(json)}\n\n`);
         await writer.close();
+        Prometheus.observePolling(startTime, { endepunkt, status: json.status, reason: 'FETCH_ERROR', retries });
         return;
       }
       const aktivGruppe = flyt.data.aktivGruppe;
@@ -67,6 +73,7 @@ export async function GET(
 
         await writer.write(`event: message\ndata: ${JSON.stringify(json)}\n\n`);
         await writer.close();
+        Prometheus.observePolling(startTime, { endepunkt, status: json.status, reason: 'JOBB_ERROR', retries });
         return;
       }
 
@@ -84,6 +91,7 @@ export async function GET(
 
         await writer.write(`event: message\ndata: ${JSON.stringify(json)}\n\n`);
         await writer.close();
+        Prometheus.observePolling(startTime, { endepunkt, status: json.status, retries });
         return;
       } else {
         await pollFlytMedTimeoutOgRetry(timeout * 1.3, retries + 1);
