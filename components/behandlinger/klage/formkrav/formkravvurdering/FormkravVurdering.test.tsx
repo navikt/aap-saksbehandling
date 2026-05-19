@@ -50,6 +50,7 @@ describe('mellomlagring', () => {
       erKonkret: true,
       erSignert: true,
       erBrukerPart: true,
+      vurderingerMeta: {},
     },
   };
 

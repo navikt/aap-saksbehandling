@@ -5,13 +5,12 @@ export const FLAGS = [
   'InkluderOvergangUforeArbeid',
   'TilbakekrevingBelopFilter',
   'registrereEllerEndreMeldekort',
-  'ForeslaaVedtakVedtakslengde',
   'SykdomUtenVissVarighetFrontend',
   'VisArenasakerOversikt',
   'ArenasakerLenkeTilVisninsklient',
   'BegrunnelseForIkkeSendBrev',
-  'YrkesskadeNyeFelter',
   'HastemarkeringerFoerst',
+  'ForutgaaendeGap',
 ] as const;
 
 export type FlagNames = (typeof FLAGS)[number];
@@ -25,10 +24,9 @@ export const mockedFlags: Flags = {
   TilbakekrevingBelopFilter: true,
   registrereEllerEndreMeldekort: true,
   SykdomUtenVissVarighetFrontend: true,
-  ForeslaaVedtakVedtakslengde: true,
   VisArenasakerOversikt: true,
   ArenasakerLenkeTilVisninsklient: true,
   BegrunnelseForIkkeSendBrev: true,
-  YrkesskadeNyeFelter: true,
   HastemarkeringerFoerst: true,
+  ForutgaaendeGap: true,
 };

@@ -2,7 +2,6 @@ import { ForeslåVedtakVedtakslengde } from 'components/behandlinger/vedtaksleng
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { hentForeslåVedtakVedtakslengdeGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { unleashService } from 'lib/services/unleash/unleashService';
 
 interface Props {
   behandlingsreferanse: string;
@@ -15,10 +14,6 @@ export const ForeslåVedtakVedtakslengdeMedDataFetching = async ({
   behandlingsreferanse,
   readonly,
 }: Props) => {
-  if (!unleashService.isEnabled('ForeslaaVedtakVedtakslengde')) {
-    return null;
-  }
-
   const grunnlag = await hentForeslåVedtakVedtakslengdeGrunnlag(behandlingsreferanse);
 
   if (isError(grunnlag)) {

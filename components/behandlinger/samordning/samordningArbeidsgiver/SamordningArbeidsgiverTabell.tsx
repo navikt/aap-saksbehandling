@@ -20,7 +20,7 @@ export const SamordningArbeidsGiverTabell = ({ form, readOnly }: Props) => {
     name: 'perioder',
     control: form.control,
     rules: {
-      validate: (perioder: any) => {
+      validate: (perioder: SamordningArbeidsgiverFormFields['perioder']) => {
         if (!perioder || perioder.length < 2) {
           return true;
         }

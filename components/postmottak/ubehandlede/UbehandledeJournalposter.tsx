@@ -3,8 +3,9 @@
 import { Alert, Button, Heading, Page, Table } from '@navikt/ds-react';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
+import { UbehandletJournalpost } from 'lib/types/postmottakTypes';
 
-export const UbehandledeJournalposter = ({ journalposter }: { journalposter: any[] }) => {
+export const UbehandledeJournalposter = ({ journalposter }: { journalposter: UbehandletJournalpost[] }) => {
   return (
     <Page>
       <Page.Block width="md">

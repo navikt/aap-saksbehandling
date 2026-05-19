@@ -35,9 +35,11 @@ const grunnlagMedBekreftetVurdering: PeriodisertForutgåendeMedlemskapGrunnlag =
       begrunnelse: 'Dette er min vurdering som er bekreftet',
       harForutgåendeMedlemskap: true,
       overstyrt: false,
-      vurdertAv: {
-        dato: '2025-11-01',
-        ident: 'Saksbehandler',
+      vurderingerMeta: {
+        vurdertAv: {
+          dato: '2025-11-01',
+          ident: 'Saksbehandler',
+        },
       },
     },
   ],

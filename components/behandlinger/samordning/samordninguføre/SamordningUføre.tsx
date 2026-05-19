@@ -107,7 +107,7 @@ export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly, initia
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       vilkårTilhørerNavKontor={false}
-      vurdertAvAnsatt={grunnlag.vurdering?.vurdertAv}
+      vurderingerMeta={grunnlag.vurdering?.vurderingerMeta}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() => form.reset(mapVurderingToDraftFormFields(grunnlag)));

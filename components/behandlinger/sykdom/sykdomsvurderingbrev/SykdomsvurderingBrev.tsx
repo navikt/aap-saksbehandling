@@ -109,8 +109,7 @@ export const SykdomsvurderingBrev = ({
       status={status}
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      vurdertAvAnsatt={grunnlag?.vurdering?.vurdertAv}
-      kvalitetssikretAv={grunnlag?.vurdering?.kvalitetssikretAv}
+      vurderingerMeta={grunnlag?.vurdering?.vurderingerMeta}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() => {
@@ -136,9 +135,9 @@ export const SykdomsvurderingBrev = ({
             data={historiskeVurderinger}
             buildFelter={byggFelter}
             getErGjeldende={() => true}
-            getFomDato={(v) => v.vurdertAv.dato}
-            getVurdertAvIdent={(v) => v.vurdertAv.ident}
-            getVurdertDato={(v) => v.vurdertAv.dato}
+            getVurdertAvIdent={(v) => v.vurderingerMeta?.vurdertAv?.ident ?? ''}
+            getVurdertDato={(v) => v.vurderingerMeta?.vurdertAv?.dato ?? ''}
+            getFomDato={(v) => v.vurderingerMeta?.vurdertAv?.dato}
           />
         )}
 

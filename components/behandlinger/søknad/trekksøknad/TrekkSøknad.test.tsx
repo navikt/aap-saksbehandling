@@ -33,6 +33,30 @@ describe('Trekk søknad', () => {
       await user.click(screen.getByRole('button', { name: 'Bekreft' }));
       expect(await screen.findByText('Du må begrunne hvorfor søknaden skal trekkes')).toBeVisible();
     });
+
+    it('viser hvem som har trukket søknaden', async () => {
+      const trukketSøknadGrunnlagMedVurdering: TrukketSøknadGrunnlag = {
+        vurderinger: [
+          {
+            begrunnelse: 'Dette er min vurdering som er bekreftet',
+            skalTrekkes: true,
+            journalpostId: '123',
+            vurderingerMeta: {
+              vurdertAv: {
+                ident: 'Kjell T. Ringen',
+                dato: '2025-08-21',
+                ansattnavn: 'Kjell T. Ringen',
+              },
+            },
+          },
+        ],
+      };
+
+      render(<TrekkSøknad readOnly={false} behandlingVersjon={0} grunnlag={trukketSøknadGrunnlagMedVurdering} />);
+
+      const tekst = screen.getByText('Trukket av Kjell T. Ringen, 21.08.2025');
+      expect(tekst).toBeVisible();
+    });
   });
 
   describe('mellomlagring', () => {
@@ -50,10 +74,15 @@ describe('Trekk søknad', () => {
       vurderinger: [
         {
           begrunnelse: 'Dette er min vurdering som er bekreftet',
-          vurdertAv: 'Kjell T. Ringen',
-          vurdertDato: '2025-08-21',
           skalTrekkes: true,
           journalpostId: '123',
+          vurderingerMeta: {
+            vurdertAv: {
+              ident: 'Kjell T. Ringen',
+              dato: '2025-08-21',
+              ansattnavn: 'Kjell T. Ringen',
+            },
+          },
         },
       ],
     };

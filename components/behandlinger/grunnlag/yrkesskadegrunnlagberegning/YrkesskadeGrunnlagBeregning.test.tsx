@@ -101,9 +101,11 @@ describe('YrkesskadeGrunnlagBeregning', () => {
           },
           referanse: 'YRK',
           begrunnelse: 'Dette er en begrunnelse',
-          vurdertAv: {
-            ident: 'KVALITETSSIKRER',
-            dato: '2025-08-26',
+          vurderingerMeta: {
+            vurdertAv: {
+              ident: 'KVALITETSSIKRER',
+              dato: '2025-08-26',
+            },
           },
         },
       ],
@@ -185,11 +187,13 @@ describe('mellomlagring', () => {
         },
         referanse: 'YRK',
         begrunnelse: 'Dette er min vurdering som er bekreftet',
-        vurdertAv: {
-          ident: 'KVALITETSSIKRER',
-          dato: '2025-08-26',
-          ansattnavn: 'KVALITETSSIKRER',
-          enhetsnavn: 'Lokalenhetsnavn',
+        vurderingerMeta: {
+          vurdertAv: {
+            ident: 'KVALITETSSIKRER',
+            dato: '2025-08-26',
+            ansattnavn: 'KVALITETSSIKRER',
+            enhetsnavn: 'Lokalenhetsnavn',
+          },
         },
       },
     ],

@@ -31,7 +31,7 @@ describe('KabalIverksettKonsekvens', () => {
           gjeldendeVurdering: {
             begrunnelse: 'kommentar',
             konsekvens: 'INGENTING',
-            vurdertAv: 'indens',
+            vurderingerMeta: {},
             vilkårSomOmgjøres: [],
           },
           svarFraAndreinstans: {
@@ -57,7 +57,7 @@ describe('KabalIverksettKonsekvens', () => {
           gjeldendeVurdering: {
             begrunnelse: 'kommentar',
             konsekvens: 'BEHANDLE_PÅ_NYTT',
-            vurdertAv: 'indens',
+            vurderingerMeta: {},
             vilkårSomOmgjøres: [],
           },
           svarFraAndreinstans: {
@@ -83,7 +83,7 @@ describe('KabalIverksettKonsekvens', () => {
           gjeldendeVurdering: {
             begrunnelse: 'kommentar',
             konsekvens: 'OMGJØRING',
-            vurdertAv: 'indens',
+            vurderingerMeta: {},
             vilkårSomOmgjøres: ['FOLKETRYGDLOVEN_11_2', 'FOLKETRYGDLOVEN_11_3'],
           },
           svarFraAndreinstans: {

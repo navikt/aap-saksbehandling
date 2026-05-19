@@ -29,6 +29,8 @@ import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
+import { loggUmamiVarighetHendelser, useUmamiVarighetHendelser } from 'lib/utils/umami';
+import { UmamiTags } from 'components/umami/Umami';
 
 interface Props {
   behandlingVersjon: number;
@@ -62,6 +64,10 @@ export const LovvalgOgMedlemskapPeriodisert = ({
   const defaultValues = initialMellomlagretVurdering
     ? hentPeriodiserteVerdierFraMellomlagretVurdering(initialMellomlagretVurdering, grunnlag)
     : getDefaultValuesFromGrunnlag(grunnlag);
+
+  const { hendelseSerieRef, varighetHendelseRef, addHendelse } = useUmamiVarighetHendelser(
+    UmamiTags.LOVVALG_MEDLEMSKAP_VARIGHET_HENDELSER
+  );
 
   const form = useForm<LovOgMedlemskapVurderingForm>({
     defaultValues,
@@ -116,6 +122,8 @@ export const LovvalgOgMedlemskapPeriodisert = ({
       closeAllAccordions();
       visningActions.onBekreftClick();
       nullstillMellomlagretVurdering();
+      addHendelse(UmamiTags.LOVVALG_MEDLEMSKAP_STEG_FULLFØRT, Date.now());
+      loggUmamiVarighetHendelser(varighetHendelseRef.current, hendelseSerieRef.current);
     });
   }
 
@@ -153,9 +161,7 @@ export const LovvalgOgMedlemskapPeriodisert = ({
             vurdering.lovvalg.lovvalgsEØSLandEllerLandMedAvtale === 'NOR' &&
               vurdering.medlemskap?.varMedlemIFolketrygd === true
           )}
-          vurdertAv={vurdering.vurdertAv}
-          kvalitetssikretAv={vurdering.kvalitetssikretAv}
-          besluttetAv={vurdering.besluttetAv}
+          vurderingerMeta={vurdering.vurderingerMeta}
         >
           <LovvalgOgMedlemskapTidligereVurdering vurdering={vurdering} />
         </TidligereVurderingExpandableCard>
@@ -181,7 +187,12 @@ export const LovvalgOgMedlemskapPeriodisert = ({
           readonly={formReadOnly}
           initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
         >
-          <LovvalgOgMedlemskapFormInput form={form} readOnly={formReadOnly} index={index} />
+          <LovvalgOgMedlemskapFormInput
+            form={form}
+            readOnly={formReadOnly}
+            index={index}
+            umamiAddHendelse={addHendelse}
+          />
         </NyVurderingExpandableCard>
       ))}
     </VilkårskortPeriodisert>

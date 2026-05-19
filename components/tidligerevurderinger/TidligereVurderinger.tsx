@@ -7,13 +7,13 @@ import { ValuePair } from '../form/FormField';
 import { format, parse, subDays } from 'date-fns';
 import { erDatoFoerDato } from 'lib/validation/dateValidation';
 
-interface Props {
-  data: any[];
-  buildFelter?: (vurdering: any) => ValuePair[];
-  getErGjeldende?: (vurdering: any) => boolean;
-  getVurdertAvIdent?: (vurdering: any) => string;
-  getVurdertDato?: (vurdering: any) => string;
-  getFomDato?: (vurdering: any) => string;
+interface Props<T> {
+  data: T[];
+  buildFelter?: (vurdering: T) => ValuePair[];
+  getErGjeldende?: (vurdering: T) => boolean;
+  getVurdertAvIdent: (vurdering: T) => string;
+  getVurdertDato: (vurdering: T) => string;
+  getFomDato: (vurdering: T) => string | undefined;
   grupperPåOpprettetDato?: boolean;
   customElement?: (selectedIndex: number) => React.JSX.Element;
 }
@@ -29,23 +29,24 @@ interface TidligereVurdering {
   erGjeldendeVurdering: boolean;
 }
 
-export function TidligereVurderinger({
+export function TidligereVurderinger<T>({
   data,
   buildFelter,
   getErGjeldende = () => false,
-  getVurdertAvIdent = (v: any) => v.vurdertAv.ident,
-  getVurdertDato = (v: any) => v.vurdertAv.dato,
-  getFomDato = (v: any) => v.vurderingenGjelderFra ?? v.vurdertAv?.dato,
+  getVurdertAvIdent,
+  getVurdertDato,
+  getFomDato,
   grupperPåOpprettetDato = false,
   customElement,
-}: Props) {
-  const finnSluttdato = (index: number, arr: any[]) => {
+}: Props<T>) {
+  const finnSluttdato = (index: number, arr: T[]) => {
     if (arr.length <= 1 || index === 0) return null;
 
     const forrigeGjelderFra = getFomDato(arr[index - 1]);
     if (!forrigeGjelderFra) return null;
 
     const vurderingGjelderFra = getFomDato(arr[index]);
+    if (!vurderingGjelderFra) return null;
     if (forrigeGjelderFra === vurderingGjelderFra) {
       return format(subDays(parse(vurderingGjelderFra, 'yyyy-MM-dd', new Date()), 0), 'yyyy-MM-dd');
     }
@@ -69,12 +70,12 @@ export function TidligereVurderinger({
       if (!aGjeldende && bGjeldende) return 1;
     }
 
-    return sorterEtterNyesteDato(afom, bfom);
+    return sorterEtterNyesteDato(afom ?? '', bfom ?? '');
   });
 
   const mappedVurderinger: TidligereVurdering[] = sortedData.map((v, index, arr) => ({
     periode: {
-      fom: getFomDato(v),
+      fom: getFomDato(v) ?? '',
       tom: finnSluttdato(index, arr),
     },
     vurdertAvIdent: getVurdertAvIdent(v),
@@ -108,7 +109,7 @@ export function TidligereVurderinger({
               {mappedVurderinger.map((v, index) => {
                 const periode = grupperPåOpprettetDato
                   ? `${formatDatoMedMånedsnavn(v.vurdertDato)}`
-                  : `${formatDatoMedMånedsnavn(v.periode.fom)} - ${v.periode.tom ? formatDatoMedMånedsnavn(v.periode.tom) : ''}`;
+                  : `${v.periode.fom ? formatDatoMedMånedsnavn(v.periode.fom) : ''} - ${v.periode.tom ? formatDatoMedMånedsnavn(v.periode.tom) : ''}`;
                 const flereVurderinger = mappedVurderinger.length > 1;
                 return (
                   <Chips.Toggle

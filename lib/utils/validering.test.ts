@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { erProsent, validerPeriodiserteVurderingerMotIkkeRelevantePerioder } from 'lib/utils/validering';
 import { PeriodiserteVurderingerDto, PeriodisertVurderingFormFields, VurderingDto } from 'lib/types/types';
-import { UseFormReturn } from 'react-hook-form';
+import { FieldValues, UseFormReturn } from 'react-hook-form';
 
 describe('erProsent', () => {
   it('skal returnere true hvis value er 50', () => {
@@ -39,7 +39,7 @@ const grunnlag: PeriodiserteVurderingerDto<VurderingDto> = {
 };
 
 // @ts-expect-error
-const form: UseFormReturn<any> = {
+const form: UseFormReturn<FieldValues> = {
   setError: () => {},
 };
 describe('validerPeriodiserteVurderingerMotIkkeRelevantePerioder', () => {

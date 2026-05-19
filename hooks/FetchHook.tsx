@@ -7,7 +7,7 @@ import { postmottakEndreTemaClient, postmottakSettPåVentClient } from 'lib/post
 import { SettPåVentRequest } from 'lib/types/postmottakTypes';
 import { clientMottattDokumenterLest } from 'lib/oppgaveClientApi';
 
-export function useFetch<FunctionParameters extends any[], ResponseBody>(
+export function useFetch<FunctionParameters extends unknown[], ResponseBody>(
   fetchFunction: (...functionParameters: FunctionParameters) => Promise<FetchResponse<ResponseBody>>
 ): {
   method: (...functionParameters: FunctionParameters) => Promise<{ ok: boolean }>;
@@ -60,7 +60,7 @@ export function useOpprettSak(): {
 
 export function useOpprettDummySak(): {
   opprettSak: (sak: OpprettDummySakDto) => Promise<{ ok: boolean }>;
-  data?: any;
+  data?: unknown;
   error?: string;
   isLoading: boolean;
 } {

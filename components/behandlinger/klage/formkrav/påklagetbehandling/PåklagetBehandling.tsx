@@ -82,7 +82,7 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, ini
       vilkårTilhørerNavKontor={false}
       isLoading={isLoading}
       status={status}
-      vurdertAvAnsatt={grunnlag?.vurdertAv}
+      vurderingerMeta={grunnlag?.vurderingerMeta}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() =>

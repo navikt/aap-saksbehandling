@@ -12,15 +12,7 @@ interface FormFields {
 }
 
 const utledDetaljerFraType = (type: KabalSvarType): KabalBehandlingDetaljer => {
-  const tomtResultat: any = {
-    ankebehandlingOpprettet: null,
-    ankebehandlingAvsluttet: null,
-    ankeITrygderettenbehandlingOpprettet: null,
-    behandlingFeilregistrert: null,
-    behandlingEtterTrygderettenOpphevetAvsluttet: null,
-    omgjoeringskravbehandlingAvsluttet: null,
-    klagebehandlingAvsluttet: null,
-  };
+  const tomtResultat: KabalBehandlingDetaljer = {};
   switch (type) {
     case 'OMGJOERINGSKRAV':
       return {

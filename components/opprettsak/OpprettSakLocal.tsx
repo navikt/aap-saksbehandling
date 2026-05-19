@@ -21,6 +21,7 @@ import {
   TiltakspengerYtelserType,
 } from 'lib/types/types';
 import { OpprettYrkesskade } from 'components/opprettsak/yrkesskade/OpprettYrkesskade';
+import { Dato } from '../../lib/types/Dato';
 
 interface Barn {
   fodselsdato: string;
@@ -144,9 +145,8 @@ export const OpprettSakLocal = () => {
         options: AndreUtbetalingerYtelserAlternativer,
       },
       fødselsdato: {
-        type: 'date',
-        defaultValue: new Date('2000-01-01'),
-        toDate: new Date(),
+        type: 'date_input',
+        defaultValue: '01.01.2000',
         label: 'Fødselsdato',
       },
       yrkesskader: {
@@ -278,8 +278,8 @@ export const OpprettSakLocal = () => {
         lønn: data.lønn,
         stønad: data.stønad,
       },
-      søknadsdato: formaterDatoForBackend(data.søknadsdato),
-      fødselsdato: formaterDatoForBackend(data.fødselsdato),
+      søknadsdato: new Dato(data.søknadsdato).formaterForBackend(),
+      fødselsdato: new Dato(data.fødselsdato).formaterForBackend(),
       yrkesskader: (data.yrkesskader ?? []).map((y) => {
         const kilde = y.kilde ?? 'REGISTER';
         if (kilde === 'SØKNAD') {

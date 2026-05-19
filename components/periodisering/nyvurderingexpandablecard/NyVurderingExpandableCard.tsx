@@ -7,7 +7,7 @@ import { Alert, BodyShort, Button, HGrid, HStack, VStack } from '@navikt/ds-reac
 import { VurdertAvAnsattDetail } from 'components/vurdertav/VurdertAvAnsattDetail';
 import { subDays } from 'date-fns';
 import { TrashFillIcon } from '@navikt/aksel-icons';
-import { VurderingMeta } from 'lib/types/types';
+import { VurderingFormMeta } from 'lib/types/types';
 import { SlettVurderingModal } from 'components/periodisering/slettvurderingmodal/SlettVurderingModal';
 import { VurderingStatus, VurderingStatusTag } from 'components/periodisering/VurderingStatusTag';
 import { AccordionsSignal } from 'hooks/AccordionSignalHook';
@@ -19,7 +19,7 @@ interface Props {
   isLast: boolean;
   finnesFeil: boolean;
   vurderingStatus: VurderingStatus | undefined;
-  vurdering: VurderingMeta;
+  vurdering: VurderingFormMeta;
   children: ReactNode;
   readonly: boolean;
   onSlettVurdering: () => void;
@@ -101,9 +101,9 @@ export const NyVurderingExpandableCard = ({
         </HGrid>
 
         <VStack align="end">
-          <VurdertAvAnsattDetail vurdertAv={vurdering.vurdertAv} variant={'VURDERING'} />
-          <VurdertAvAnsattDetail vurdertAv={vurdering.kvalitetssikretAv} variant={'KVALITETSSIKRER'} />
-          <VurdertAvAnsattDetail vurdertAv={vurdering.besluttetAv} variant={'BESLUTTER'} />
+          <VurdertAvAnsattDetail vurdertAv={vurdering.vurderingerMeta?.vurdertAv} variant={'VURDERING'} />
+          <VurdertAvAnsattDetail vurdertAv={vurdering.vurderingerMeta?.kvalitetssikretAv} variant={'KVALITETSSIKRER'} />
+          <VurdertAvAnsattDetail vurdertAv={vurdering.vurderingerMeta?.besluttetAv} variant={'BESLUTTER'} />
         </VStack>
       </VStack>
     </CustomExpandableCard>

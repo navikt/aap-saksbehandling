@@ -116,9 +116,7 @@ export const HelseinstitusjonOppholdGruppe = ({
                     foersteNyePeriode == null ? null : parseDatoFraDatePicker(foersteNyePeriode)
                   }
                   vurderingStatus={getErReduksjonEllerIkke(erReduksjonUtIFraVurdering(vurdering))}
-                  vurdertAv={vurdering.vurdertAv}
-                  kvalitetssikretAv={undefined}
-                  besluttetAv={undefined}
+                  vurderingerMeta={vurdering.vurderingerMeta}
                 >
                   <HelseinstitusjonTidligereVurdering vurdering={vurdering} />
                 </TidligereVurderingExpandableCard>

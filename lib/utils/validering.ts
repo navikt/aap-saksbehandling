@@ -1,7 +1,7 @@
 import { formaterDatoForFrontend, parseDatoFraDatePicker, stringToDate } from 'lib/utils/date';
 import { isAfter, isBefore, isSameDay, min, parseISO, startOfDay } from 'date-fns';
 import { PeriodiserteVurderingerDto, PeriodisertVurderingFormFields, VurderingDto } from 'lib/types/types';
-import { UseFormReturn } from 'react-hook-form';
+import { FieldValues, UseFormReturn } from 'react-hook-form';
 import { Dato } from 'lib/types/Dato';
 
 export function erProsent(value: number): boolean {
@@ -10,6 +10,13 @@ export function erProsent(value: number): boolean {
 
 export const isNullOrUndefined = (value: number | null | undefined) => value === null || value === undefined;
 
+export function validerPeriodiserteVurderingerRekkefølge<T extends FieldValues>(params: {
+  form: UseFormReturn<T>;
+  grunnlag?: PeriodiserteVurderingerDto<VurderingDto>;
+  nyeVurderinger: Array<PeriodisertVurderingFormFields>;
+  tidligsteDatoMåMatcheMedRettighetsperiode?: boolean;
+  vurderingerKanIkkeVæreFørKanVurderes?: boolean;
+}): boolean;
 export function validerPeriodiserteVurderingerRekkefølge({
   form,
   grunnlag,
@@ -17,12 +24,12 @@ export function validerPeriodiserteVurderingerRekkefølge({
   tidligsteDatoMåMatcheMedRettighetsperiode = true,
   vurderingerKanIkkeVæreFørKanVurderes = false,
 }: {
-  form: UseFormReturn<any>;
+  form: UseFormReturn<FieldValues>;
   grunnlag?: PeriodiserteVurderingerDto<VurderingDto>;
   nyeVurderinger: Array<PeriodisertVurderingFormFields>;
   tidligsteDatoMåMatcheMedRettighetsperiode?: boolean;
   vurderingerKanIkkeVæreFørKanVurderes?: boolean;
-}) {
+}): boolean {
   const sorterteVurderinger = nyeVurderinger.toSorted((a, b) => {
     const aParsed = stringToDate(a.fraDato, 'dd.MM.yyyy')!;
     const bParsed = stringToDate(b.fraDato, 'dd.MM.yyyy')!;
@@ -94,15 +101,20 @@ export function validerPeriodiserteVurderingerRekkefølge({
   return true;
 }
 
+export function validerPeriodiserteVurderingerMotIkkeRelevantePerioder<T extends FieldValues>(params: {
+  form: UseFormReturn<T>;
+  grunnlag: PeriodiserteVurderingerDto<VurderingDto>;
+  nyeVurderinger: Array<PeriodisertVurderingFormFields>;
+}): boolean;
 export function validerPeriodiserteVurderingerMotIkkeRelevantePerioder({
   nyeVurderinger,
   form,
   grunnlag,
 }: {
-  form: UseFormReturn<any>;
+  form: UseFormReturn<FieldValues>;
   grunnlag: PeriodiserteVurderingerDto<VurderingDto>;
   nyeVurderinger: Array<PeriodisertVurderingFormFields>;
-}) {
+}): boolean {
   let validering = true;
   grunnlag.ikkeRelevantePerioder.forEach((periode) => {
     const ikkeRelevantFra = startOfDay(new Dato(periode.fom).dato);

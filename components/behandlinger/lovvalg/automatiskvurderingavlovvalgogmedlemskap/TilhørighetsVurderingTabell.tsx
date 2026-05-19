@@ -1,6 +1,6 @@
 'use client';
 
-import { BodyShort, HStack, Table } from '@navikt/ds-react';
+import { BodyShort, HelpText, HStack, Table } from '@navikt/ds-react';
 import { tilhørighetVurdering } from 'lib/types/types';
 import { VisuellTidslinjeInnhold } from './VisuellTidslinjeInnhold';
 import { TableStyled } from 'components/tablestyled/TableStyled';
@@ -8,6 +8,7 @@ import { CheckmarkCircleFillIcon, ExclamationmarkTriangleFillIcon } from '@navik
 
 import styles from './TilhørighetsVurderingTabell.module.css';
 import { OpplysningerContent } from 'components/behandlinger/lovvalg/opplysningercontent/OpplysningerContent';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   vurdering: tilhørighetVurdering[];
@@ -20,6 +21,8 @@ export const TilhørighetsVurderingTabell = ({
   oppfyllerOpplysningeneKravene,
   oppfyllerOpplysningeneKraveneTekst,
 }: Props) => {
+  const flagToggle = useFeatureFlag('ForutgaaendeGap');
+
   return (
     <TableStyled size={'small'}>
       <Table.Header>
@@ -46,7 +49,14 @@ export const TilhørighetsVurderingTabell = ({
                 {opplysning.vurdertPeriode}
               </Table.DataCell>
               <Table.DataCell textSize="small" width={750}>
-                {opplysning.opplysning}
+                <HStack gap={'space-4'} align={'center'} className={styles.opplysning}>
+                  <BodyShort size="small">{opplysning.opplysning}</BodyShort>
+                  {flagToggle && !oppfyllerOpplysningeneKravene && harManglendePeriode && (
+                    <HelpText>
+                      {'Bruker har perioder uten inntekt over 1 måned eller 10 manglende perioder over 5 år.'}
+                    </HelpText>
+                  )}
+                </HStack>
               </Table.DataCell>
               <Table.DataCell textSize="small" width={'auto'}>
                 <BodyShort size="small">{opplysning.resultat ? 'Ja' : 'Nei'}</BodyShort>

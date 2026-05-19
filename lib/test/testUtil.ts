@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 import { vi, type Mock } from 'vitest';
 
-export function mockSWRImplementation(customMocks: Record<string, any>) {
+export function mockSWRImplementation(customMocks: Record<string, unknown>) {
   (useSWR as unknown as Mock).mockImplementation((key: string) => {
     const mockData = customMocks[key];
     if (mockData) {

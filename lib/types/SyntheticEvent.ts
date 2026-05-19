@@ -4,7 +4,7 @@ import React from 'react';
  * Creates a synthetic event that is compatible with React.SyntheticEvent.
  * This function is used to create synthetic events for components that don't provide them.
  */
-export function createSyntheticEvent<T = any>(value: T): React.SyntheticEvent {
+export function createSyntheticEvent<T = unknown>(value: T): React.SyntheticEvent {
   const element = document.createElement('div');
 
   const event = {

@@ -69,9 +69,11 @@ describe('FastsettArbeidsevne', () => {
             arbeidsevne: 20,
             begrunnelse: 'Dette er min vurdering som er bekreftet',
             fom: '2025-08-21',
-            vurdertAv: {
-              ident: 'Saksbehandler',
-              dato: '2025-08-21',
+            vurderingerMeta: {
+              vurdertAv: {
+                ident: 'Saksbehandler',
+                dato: '2025-08-21',
+              },
             },
           },
         ],
@@ -222,9 +224,11 @@ describe('FastsettArbeidsevne', () => {
             arbeidsevne: 20,
             begrunnelse: 'Dette er min vurdering som er bekreftet',
             fom: '2025-08-21',
-            vurdertAv: {
-              ident: 'Saksbehandler',
-              dato: '2025-08-21',
+            vurderingerMeta: {
+              vurdertAv: {
+                ident: 'Saksbehandler',
+                dato: '2025-08-21',
+              },
             },
           },
         ],
