@@ -17,18 +17,32 @@ export const RedigitaliserJournalpost = ({
   onClose: () => void;
 }) => {
   const [error, setError] = useState<string>();
+  const [info, setInfo] = useState<string>();
   const [isLoading, setIsLoading] = useState(false);
 
+  const handleClose = () => {
+    setError(undefined);
+    setInfo(undefined);
+    setIsLoading(false);
+    onClose();
+  };
+
   const redigitaliser = async () => {
+    setError(undefined);
+    setInfo(undefined);
     setIsLoading(true);
 
-    let result;
-    result = await redigitaliserDokument(Number(journalpost.journalpostId), sak.saksnummer);
+    const result = await redigitaliserDokument(Number(journalpost.journalpostId), sak.saksnummer);
 
     if (isSuccess(result)) {
+      if (result.data?.message) {
+        setInfo(result.data.message);
+        setIsLoading(false);
+        return;
+      }
       window.location.reload();
     } else if (isError(result)) {
-      setError('En ukjent feil oppsto');
+      setError(result.apiException.message || 'En ukjent feil oppsto');
       setIsLoading(false);
     }
   };
@@ -39,7 +53,7 @@ export const RedigitaliserJournalpost = ({
       header={{
         heading: 'Digitaliser dokument på nytt',
       }}
-      onClose={onClose}
+      onClose={handleClose}
     >
       <Modal.Body>
         <BodyShort spacing>
@@ -66,12 +80,13 @@ export const RedigitaliserJournalpost = ({
       </Modal.Body>
 
       {error && <Alert variant="error">{error}</Alert>}
+      {info && <Alert variant="info">{info}</Alert>}
 
       <Modal.Footer>
         <Button variant="primary" onClick={redigitaliser} loading={isLoading}>
           Bekreft
         </Button>
-        <Button variant="secondary" disabled={isLoading}>
+        <Button variant="secondary" disabled={isLoading} onClick={handleClose}>
           Avbryt
         </Button>
       </Modal.Footer>

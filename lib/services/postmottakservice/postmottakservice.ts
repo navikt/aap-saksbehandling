@@ -58,7 +58,7 @@ export const hentUbehandledeJournalposter = async () => {
 export const redigitaliser = async (journalpostId: number, saksnummer: string) => {
   const url = `${postmottakApiBaseUrl}/api/redigitalisering`;
 
-  return await apiFetch<void>(url, postmottakApiScope, 'POST', {
+  return await apiFetch<{ message?: string }>(url, postmottakApiScope, 'POST', {
     journalpostId: journalpostId,
     saksnummer: saksnummer,
   });
@@ -70,7 +70,9 @@ export const løsAvklaringsbehov = async (avklaringsBehov: LøsAvklaringsbehovP�
 };
 export const settPåVent = async (behandlingsreferanse: string, body: SettPåVentRequest) => {
   const url = `${postmottakApiBaseUrl}/api/behandling/${behandlingsreferanse}/sett-på-vent`;
-  return await apiFetch<unknown>(url, postmottakApiScope, 'POST', body, { tags: [`postmottak/flyt/${behandlingsreferanse}`] });
+  return await apiFetch<unknown>(url, postmottakApiScope, 'POST', body, {
+    tags: [`postmottak/flyt/${behandlingsreferanse}`],
+  });
 };
 export const hentVenteInformasjon = async (behandlingsreferanse: string) => {
   const url = `${postmottakApiBaseUrl}/api/behandling/${behandlingsreferanse}/vente-informasjon`;
