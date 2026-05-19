@@ -19,6 +19,7 @@ import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { MeldekortProsesseringServerSentEvent } from 'app/saksbehandling/api/meldekort/[saksnummer]/prosessering/route';
 import { addDays } from 'date-fns';
 import { useMeldekort } from 'hooks/saksbehandling/MeldekortHook';
+import { Journalpost } from 'lib/types/journalpost';
 
 interface Props {
   setIsOpen: (isOpen: boolean) => void;
@@ -61,8 +62,6 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
 
     eventSource.onmessage = async (event: MessageEvent) => {
       const eventData: MeldekortProsesseringServerSentEvent = JSON.parse(event.data);
-
-      console.log(eventData);
 
       if (eventData.status === 'KLAR') {
         eventSource.close();
@@ -131,8 +130,6 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
   const fom = new Dato(meldekort.meldeperiode.fom);
   const tom = new Dato(meldekort.meldeperiode.tom);
 
-  const errorList = hentFeilmeldingerForForm(form.formState.errors);
-
   const årsak = form.watch('årsak');
 
   const erÅrsakLevereMeldekort = årsak === Årsaker.LEVERE_MELDEKORT_FOR_BRUKER;
@@ -145,20 +142,8 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
   const skalViseTimer = erÅrsakLevereMeldekort || (erÅrsakRegistrereMeldedato && brukerHarLevertTimer);
   const skalViseAlertForIngenTimer = erÅrsakRegistrereMeldedato && !brukerHarLevertTimer;
 
-  const tidligereInnsendteMeldekort = meldekort.tidligereMeldekort.map((tidligereMeldekort) => {
-    const dokument = dokumenter?.find((doku) => doku.journalpostId === tidligereMeldekort.journalpostId);
-    const journalpostId = tidligereMeldekort.journalpostId;
-    const dokumentId = dokument?.dokumenter[0]?.dokumentInfoId;
-    const mottattTidspunkt = tidligereMeldekort.mottattTidspunkt;
-    const oppdatertAv = tidligereMeldekort.oppdatertAv;
-
-    return {
-      journalpostId,
-      dokumentId,
-      mottattTidspunkt,
-      oppdatertAv,
-    };
-  });
+  const tidligereInnsendteMeldekort = kobleDokumentInfoTilTidligereMeldekort(meldekort, dokumenter);
+  const errorList = hentFeilmeldingerForForm(form.formState.errors);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen} size={'medium'}>
@@ -285,4 +270,24 @@ function getDefaultValuesForForm(meldekort?: MeldeperiodeMedMeldekortDto): Redig
       : '',
     dager: alleDager,
   };
+}
+
+function kobleDokumentInfoTilTidligereMeldekort(
+  meldeperiodeMedMeldekort: MeldeperiodeMedMeldekortDto,
+  dokumenter?: Journalpost[]
+) {
+  return meldeperiodeMedMeldekort.tidligereMeldekort.map((tidligereMeldekort) => {
+    const dokument = dokumenter?.find((doku) => doku.journalpostId === tidligereMeldekort.journalpostId);
+    const journalpostId = tidligereMeldekort.journalpostId;
+    const dokumentId = dokument?.dokumenter[0]?.dokumentInfoId;
+    const mottattTidspunkt = tidligereMeldekort.mottattTidspunkt;
+    const oppdatertAv = tidligereMeldekort.oppdatertAv;
+
+    return {
+      journalpostId,
+      dokumentId,
+      mottattTidspunkt,
+      oppdatertAv,
+    };
+  });
 }

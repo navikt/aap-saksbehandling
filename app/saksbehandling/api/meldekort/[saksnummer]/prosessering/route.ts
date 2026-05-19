@@ -1,4 +1,3 @@
-import { logError, logInfo } from 'lib/serverutlis/logger';
 import { hentMeldekortProsseseringStatus } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { MeldekortProsesseringStatus } from 'lib/types/types';
 import { NextRequest } from 'next/server';
@@ -17,8 +16,6 @@ export async function GET(_: NextRequest, context: { params: Promise<{ saksnumme
 
   const pollMeldekortMedTimeoutOgRetry = async (timeout: number, retries: number) => {
     setTimeout(async () => {
-      logInfo(`Meldekort prosessering - Timeout: ${timeout}, Retries: ${retries}`);
-
       if (retries > MAX_RETRIES) {
         const json: MeldekortProsesseringServerSentEvent = {
           status: 'PROSESSERER_MELDEKORT',
@@ -30,11 +27,7 @@ export async function GET(_: NextRequest, context: { params: Promise<{ saksnumme
 
       const meldekortResponse = await hentMeldekortProsseseringStatus((await context.params).saksnummer);
 
-      console.log('meldekortResponse', meldekortResponse);
-
       if (isError(meldekortResponse)) {
-        const errorString = `meldekort prosessering hentMeldekort ${meldekortResponse.status} - ${meldekortResponse.apiException.code}: ${meldekortResponse.apiException.message}`;
-        logError(errorString);
         const json: MeldekortProsesseringServerSentEvent = {
           status: 'PROSESSERER_MELDEKORT',
         };
@@ -44,7 +37,6 @@ export async function GET(_: NextRequest, context: { params: Promise<{ saksnumme
       }
 
       if (meldekortResponse.data.meldekortProsesseringStatus === 'KLAR') {
-        logInfo('Meldekort prosessering er ferdig!');
         const json: MeldekortProsesseringServerSentEvent = {
           status: 'KLAR',
         };
