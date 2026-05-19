@@ -13207,8 +13207,13 @@ export interface components {
        * Format: date-time
        * @example 2025-04-01T12:30:00
        */
-      mottattTidspunkt: string;
+      meldeDato: string;
       oppdatertAv?: string | null;
+      /**
+       * Format: date-time
+       * @example 2025-04-01T12:30:00
+       */
+      oppdatertTidspunkt?: string | null;
     };
     'no.nav.aap.behandlingsflyt.behandling.meldekort.MeldeperiodeMedMeldekortDto': {
       meldekort?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.MeldekortDto'];
@@ -13223,10 +13228,20 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.meldekort.OppdaterMeldekortRequest': {
       begrunnelse: string;
       dager: components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.DagDto'][];
+      /**
+       * Format: date-time
+       * @example 2025-04-01T12:30:00
+       */
+      meldeDato: string;
       meldeperiode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
     };
     'no.nav.aap.behandlingsflyt.behandling.meldekort.OppdaterMeldekortResponse': {
       journalpostId: string;
+      /**
+       * Format: date-time
+       * @example 2025-04-01T12:30:00
+       */
+      oppdatertTidspunkt: string;
     };
     'no.nav.aap.behandlingsflyt.behandling.mellomlagring.MellomlagretVurdering': {
       /** @enum {string} */
@@ -14359,6 +14374,7 @@ export interface components {
         | 'OPPFØLGINGSOPPGAVE'
         | 'PDL_HENDELSE_DODSFALL_BARN'
         | 'PDL_HENDELSE_DODSFALL_BRUKER'
+        | 'PDL_HENDELSE_FOLKEREGISTERIDENT'
         | 'SYKEPENGE_VEDTAK_HENDELSE'
         | 'SØKNAD'
         | 'TILBAKEKREVING_HENDELSE'
@@ -16894,6 +16910,7 @@ export interface components {
         | 'OPPFØLGINGSOPPGAVE'
         | 'PDL_HENDELSE_DODSFALL_BARN'
         | 'PDL_HENDELSE_DODSFALL_BRUKER'
+        | 'PDL_HENDELSE_FOLKEREGISTERIDENT'
         | 'SYKEPENGE_VEDTAK_HENDELSE'
         | 'SØKNAD'
         | 'TILBAKEKREVING_HENDELSE'
@@ -17315,6 +17332,7 @@ export interface components {
         | 'OPPFØLGINGSOPPGAVE'
         | 'PDL_HENDELSE_DODSFALL_BARN'
         | 'PDL_HENDELSE_DODSFALL_BRUKER'
+        | 'PDL_HENDELSE_FOLKEREGISTERIDENT'
         | 'SYKEPENGE_VEDTAK_HENDELSE'
         | 'SØKNAD'
         | 'TILBAKEKREVING_HENDELSE'
