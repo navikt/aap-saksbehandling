@@ -4,6 +4,7 @@ import { FlytProsesseringStatus } from 'lib/types/types';
 import { NextRequest } from 'next/server';
 import { ServerSentEventData } from 'app/saksbehandling/api/behandling/hent/[referanse]/[gruppe]/[steg]/nesteSteg/route';
 import { isError } from 'lib/utils/api';
+import Prometheus from 'lib/prometheus';
 
 const DEFAULT_TIMEOUT_IN_MS = 1000;
 const RETRIES = 0;
@@ -12,9 +13,12 @@ export interface FlytProsesseringServerSentEvent {
   status: FlytProsesseringStatus;
 }
 
+const endepunkt = 'behandlingsflyt-prosessering' as const;
+
 export async function GET(_: NextRequest, context: { params: Promise<{ referanse: string }> }) {
   let responseStream = new TransformStream();
   const writer = responseStream.writable.getWriter();
+  const startTime = Date.now();
 
   const pollFlytMedTimeoutOgRetry = async (timeout: number, retries: number) => {
     setTimeout(async () => {
@@ -25,6 +29,7 @@ export async function GET(_: NextRequest, context: { params: Promise<{ referanse
         };
         await writer.write(`event: message\ndata: ${JSON.stringify(json)}\n\n`);
         await writer.close();
+        Prometheus.observePolling(startTime, { endepunkt, status: json.status, retries, reason: 'MAX_RETRIES' });
         return;
       }
 
@@ -39,6 +44,7 @@ export async function GET(_: NextRequest, context: { params: Promise<{ referanse
         };
         await writer.write(`event: message\ndata: ${JSON.stringify(json)}\n\n`);
         await writer.close();
+        Prometheus.observePolling(startTime, { endepunkt, status: json.status, retries, reason: 'FETCH_ERROR' });
         return;
       }
 
@@ -50,6 +56,12 @@ export async function GET(_: NextRequest, context: { params: Promise<{ referanse
 
         await writer.write(`event: message\ndata: ${JSON.stringify(json)}\n\n`);
         await writer.close();
+        Prometheus.observePolling(startTime, {
+          endepunkt,
+          status: json.status,
+          retries,
+          reason: flyt.data.prosessering.status === 'FERDIG' ? undefined : 'JOBB_ERROR',
+        });
         return;
       } else {
         await pollFlytMedTimeoutOgRetry(timeout * 1.3, retries + 1);
