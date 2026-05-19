@@ -10,13 +10,11 @@ import { FormField } from 'components/form/FormField';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { FormEvent } from 'react';
 import { YrkesskadeVurderingTabell } from 'components/behandlinger/sykdom/yrkesskade/YrkesskadeVurderingTabell';
-import { YrkesskadeVurderingTabellGammel } from 'components/behandlinger/sykdom/yrkesskade/YrkesskadeVurderingTabellGammel';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { parse } from 'date-fns';
 import { useFieldArray } from 'react-hook-form';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
-import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   grunnlag: YrkesskadeVurderingGrunnlag;
@@ -179,8 +177,6 @@ export const Yrkesskade = ({
     })(event);
   };
 
-  const yrkesskadeNyeFelter = useFeatureFlag('YrkesskadeNyeFelter');
-
   return (
     <VilkårskortMedFormOgMellomlagring
       heading={'§ 11-22 AAP ved yrkesskade'}
@@ -199,14 +195,12 @@ export const Yrkesskade = ({
       visningActions={visningActions}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
-      {yrkesskadeNyeFelter && (
-        <VStack gap={'space-4'}>
-          <Label size="medium">Relevante informasjon fra søknad</Label>
-          <BodyShort size={'small'}>
-            {`Har du yrkesskade eller yrkessykdom som påvirker hvor mye du kan arbeide? ${mapOppgittYrkesskadeISøknadTilTekst(grunnlag.opplysninger.oppgittYrkesskadeISøknad)}`}
-          </BodyShort>
-        </VStack>
-      )}
+      <VStack gap={'space-4'}>
+        <Label size="medium">Relevante informasjon fra søknad</Label>
+        <BodyShort size={'small'}>
+          {`Har du yrkesskade eller yrkessykdom som påvirker hvor mye du kan arbeide? ${mapOppgittYrkesskadeISøknadTilTekst(grunnlag.opplysninger.oppgittYrkesskadeISøknad)}`}
+        </BodyShort>
+      </VStack>
       <FormField form={form} formField={formFields.begrunnelse} />
       <FormField form={form} formField={formFields.erÅrsakssammenheng} horizontalRadio />
       {relevanteYrkesskadeSaker.length > 0 && (
@@ -215,22 +209,13 @@ export const Yrkesskade = ({
             <Label size={'small'} spacing>
               Tilknytt eventuelle yrkesskader som er helt eller delvis årsak til den nedsatte arbeidsevnen.
             </Label>
-            {yrkesskadeNyeFelter ? (
-              <YrkesskadeVurderingTabell
-                form={form}
-                readOnly={formReadOnly}
-                yrkesskader={relevanteYrkesskadeSaker}
-                update={update}
-                erÅrsakssammenheng={erÅrsakssammenheng}
-              />
-            ) : (
-              <YrkesskadeVurderingTabellGammel
-                form={form}
-                readOnly={formReadOnly}
-                yrkesskader={relevanteYrkesskadeSaker}
-                update={update}
-              />
-            )}
+            <YrkesskadeVurderingTabell
+              form={form}
+              readOnly={formReadOnly}
+              yrkesskader={relevanteYrkesskadeSaker}
+              update={update}
+              erÅrsakssammenheng={erÅrsakssammenheng}
+            />
           </VStack>
 
           {erÅrsakssammenheng !== JaEllerNei.Nei && (
