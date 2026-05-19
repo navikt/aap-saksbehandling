@@ -41,7 +41,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  '/api/person/ident': {
+  '/api/person/personinformasjon': {
     parameters: {
       query?: never;
       header?: never;
@@ -59,7 +59,7 @@ export interface paths {
       };
       requestBody?: {
         content: {
-          'application/json': components['schemas']['no.nav.aap.behandlingsflyt.PersonIdentRequest'];
+          'application/json': components['schemas']['no.nav.aap.behandlingsflyt.PersoninfoRequest'];
         };
       };
       responses: {
@@ -69,7 +69,7 @@ export interface paths {
             [name: string]: unknown;
           };
           content: {
-            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.PersonIdentResponse'];
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.PersoninfoDTO'];
           };
         };
       };
@@ -2839,6 +2839,7 @@ export interface paths {
           /** @description Tidligere vurderinger frem til */
           'f\u00F8rSteg':
             | 'ARBEIDSOPPTRAPPING'
+            | 'AVBRYT_AKTIVITETSPLIKTBEHANDLING'
             | 'AVBRYT_REVURDERING'
             | 'AVKLAR_OPPFØLGING'
             | 'AVKLAR_STUDENT'
@@ -2913,6 +2914,7 @@ export interface paths {
           /** @description Tidligere vurderinger etter */
           etterSteg:
             | 'ARBEIDSOPPTRAPPING'
+            | 'AVBRYT_AKTIVITETSPLIKTBEHANDLING'
             | 'AVBRYT_REVURDERING'
             | 'AVKLAR_OPPFØLGING'
             | 'AVKLAR_STUDENT'
@@ -5368,6 +5370,7 @@ export interface components {
       /** @enum {string|null} */
       steg?:
         | 'ARBEIDSOPPTRAPPING'
+        | 'AVBRYT_AKTIVITETSPLIKTBEHANDLING'
         | 'AVBRYT_REVURDERING'
         | 'AVKLAR_OPPFØLGING'
         | 'AVKLAR_STUDENT'
@@ -5468,12 +5471,23 @@ export interface components {
       'uf\u00F8regradTom'?: string | null;
       yrkesskader: components['schemas']['no.nav.aap.behandlingsflyt.TestYrkesskadeDto'][];
     };
-    'no.nav.aap.behandlingsflyt.PersonIdentRequest': {
+    'no.nav.aap.behandlingsflyt.PersoninfoDTO': {
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      'd\u00F8dsdato'?: string | null;
+      fnr: string;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      'f\u00F8dselsdato'?: string | null;
+      navn: string;
+    };
+    'no.nav.aap.behandlingsflyt.PersoninfoRequest': {
       /** Format: uuid */
       personReferanse: string;
-    };
-    'no.nav.aap.behandlingsflyt.PersonIdentResponse': {
-      ident: string;
     };
     'no.nav.aap.behandlingsflyt.TestBarn': {
       /**
@@ -5695,6 +5709,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -5779,6 +5794,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -5860,6 +5876,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -5941,6 +5958,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -6022,6 +6040,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -6103,6 +6122,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -6184,6 +6204,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -6266,6 +6287,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -6347,6 +6369,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -6427,6 +6450,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -6508,6 +6532,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -6589,6 +6614,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -6670,6 +6696,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -6751,6 +6778,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -6832,6 +6860,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -6913,6 +6942,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -6994,6 +7024,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -7075,6 +7106,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -7157,6 +7189,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -7237,6 +7270,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -7318,6 +7352,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -7399,6 +7434,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -7480,6 +7516,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -7561,6 +7598,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -7645,6 +7683,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -7726,6 +7765,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -7807,6 +7847,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -7888,6 +7929,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -7969,6 +8011,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -8049,6 +8092,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -8183,6 +8227,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -8265,6 +8310,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -8345,6 +8391,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -8426,6 +8473,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -8507,6 +8555,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -8588,6 +8637,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -8669,6 +8719,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -8750,6 +8801,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -8830,6 +8882,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -8910,6 +8963,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -8990,6 +9044,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -9078,6 +9133,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -9202,6 +9258,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -9283,6 +9340,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -9363,6 +9421,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -9444,6 +9503,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -9542,6 +9602,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -9623,6 +9684,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -9704,6 +9766,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -9785,6 +9848,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -9865,6 +9929,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -9945,6 +10010,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -10030,6 +10096,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -10116,6 +10183,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -10201,6 +10269,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -10282,6 +10351,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -10363,6 +10433,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -10445,6 +10516,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -10526,6 +10598,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -10606,6 +10679,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -10686,6 +10760,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -10766,6 +10841,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -10846,6 +10922,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -10927,6 +11004,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -11008,6 +11086,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -11088,6 +11167,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -11169,6 +11249,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -11250,6 +11331,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -11331,6 +11413,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -11412,6 +11495,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -12128,6 +12212,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -12977,6 +13062,7 @@ export interface components {
        */
       virkningstidspunkt?: string | null;
       vurderingsbehov: (
+        | 'AKTIVITETSPLIKTBEHANDLING_AVBRUTT'
         | 'AKTIVITETSPLIKT_11_7'
         | 'AKTIVITETSPLIKT_11_9'
         | 'BARNETILLEGG'
@@ -13234,6 +13320,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -13322,6 +13409,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -13428,6 +13516,7 @@ export interface components {
       /** @enum {string} */
       'konsekvensAvOppf\u00F8lging': 'INGEN' | 'OPPRETT_VURDERINGSBEHOV';
       opplysningerTilRevurdering: (
+        | 'AKTIVITETSPLIKTBEHANDLING_AVBRUTT'
         | 'AKTIVITETSPLIKT_11_7'
         | 'AKTIVITETSPLIKT_11_9'
         | 'BARNETILLEGG'
@@ -13499,6 +13588,7 @@ export interface components {
       'konsekvensAvOppf\u00F8lging': 'INGEN' | 'OPPRETT_VURDERINGSBEHOV';
       opplysningerTilRevurdering?:
         | (
+            | 'AKTIVITETSPLIKTBEHANDLING_AVBRUTT'
             | 'AKTIVITETSPLIKT_11_7'
             | 'AKTIVITETSPLIKT_11_9'
             | 'BARNETILLEGG'
@@ -14167,6 +14257,7 @@ export interface components {
       status: 'AVSLUTTET' | 'IVERKSETTES' | 'OPPRETTET' | 'UTREDES';
       type: string;
       vurderingsbehov: (
+        | 'AKTIVITETSPLIKTBEHANDLING_AVBRUTT'
         | 'AKTIVITETSPLIKT_11_7'
         | 'AKTIVITETSPLIKT_11_9'
         | 'BARNETILLEGG'
@@ -14359,6 +14450,7 @@ export interface components {
         | 'OPPFØLGINGSOPPGAVE'
         | 'PDL_HENDELSE_DODSFALL_BARN'
         | 'PDL_HENDELSE_DODSFALL_BRUKER'
+        | 'PDL_HENDELSE_FOLKEREGISTERIDENT'
         | 'SYKEPENGE_VEDTAK_HENDELSE'
         | 'SØKNAD'
         | 'TILBAKEKREVING_HENDELSE'
@@ -14420,6 +14512,7 @@ export interface components {
       /** @enum {string} */
       steg:
         | 'ARBEIDSOPPTRAPPING'
+        | 'AVBRYT_AKTIVITETSPLIKTBEHANDLING'
         | 'AVBRYT_REVURDERING'
         | 'AVKLAR_OPPFØLGING'
         | 'AVKLAR_STUDENT'
@@ -15706,6 +15799,7 @@ export interface components {
         | 'AKTIVITETSPLIKT_11_7'
         | 'AKTIVITETSPLIKT_11_9'
         | 'ALDER'
+        | 'AVBRYT_AKTIVITETSPLIKTBEHANDLING'
         | 'AVBRYT_REVURDERING'
         | 'AVKLAR_OPPPFØLGING'
         | 'BARNETILLEGG'
@@ -15743,6 +15837,7 @@ export interface components {
       /** @enum {string} */
       aktivtSteg:
         | 'ARBEIDSOPPTRAPPING'
+        | 'AVBRYT_AKTIVITETSPLIKTBEHANDLING'
         | 'AVBRYT_REVURDERING'
         | 'AVKLAR_OPPFØLGING'
         | 'AVKLAR_STUDENT'
@@ -15825,6 +15920,7 @@ export interface components {
         | 'AKTIVITETSPLIKT_11_7'
         | 'AKTIVITETSPLIKT_11_9'
         | 'ALDER'
+        | 'AVBRYT_AKTIVITETSPLIKTBEHANDLING'
         | 'AVBRYT_REVURDERING'
         | 'AVKLAR_OPPPFØLGING'
         | 'BARNETILLEGG'
@@ -15863,6 +15959,7 @@ export interface components {
       /** @enum {string|null} */
       vurdertSteg?:
         | 'ARBEIDSOPPTRAPPING'
+        | 'AVBRYT_AKTIVITETSPLIKTBEHANDLING'
         | 'AVBRYT_REVURDERING'
         | 'AVKLAR_OPPFØLGING'
         | 'AVKLAR_STUDENT'
@@ -15949,6 +16046,7 @@ export interface components {
       /** @enum {string} */
       aktivtSteg:
         | 'ARBEIDSOPPTRAPPING'
+        | 'AVBRYT_AKTIVITETSPLIKTBEHANDLING'
         | 'AVBRYT_REVURDERING'
         | 'AVKLAR_OPPFØLGING'
         | 'AVKLAR_STUDENT'
@@ -16091,6 +16189,7 @@ export interface components {
         | 'AKTIVITETSPLIKT_11_7'
         | 'AKTIVITETSPLIKT_11_9'
         | 'ALDER'
+        | 'AVBRYT_AKTIVITETSPLIKTBEHANDLING'
         | 'AVBRYT_REVURDERING'
         | 'AVKLAR_OPPPFØLGING'
         | 'BARNETILLEGG'
@@ -16131,6 +16230,7 @@ export interface components {
       /** @enum {string} */
       stegType:
         | 'ARBEIDSOPPTRAPPING'
+        | 'AVBRYT_AKTIVITETSPLIKTBEHANDLING'
         | 'AVBRYT_REVURDERING'
         | 'AVKLAR_OPPFØLGING'
         | 'AVKLAR_STUDENT'
@@ -16367,6 +16467,7 @@ export interface components {
         | '4101'
         | '4102'
         | '4201'
+        | '4301'
         | '5001'
         | '5002'
         | '5003'
@@ -16454,6 +16555,7 @@ export interface components {
       /** @enum {string} */
       'l\u00F8sesISteg':
         | 'ARBEIDSOPPTRAPPING'
+        | 'AVBRYT_AKTIVITETSPLIKTBEHANDLING'
         | 'AVBRYT_REVURDERING'
         | 'AVKLAR_OPPFØLGING'
         | 'AVKLAR_STUDENT'
@@ -16647,6 +16749,7 @@ export interface components {
       begrunnelse?: string | null;
       '\u00E5rsakerTilBehandling': (
         | 'AKTIVITETSMELDING'
+        | 'AKTIVITETSPLIKTBEHANDLING_AVBRUTT'
         | 'AKTIVITETSPLIKT_11_7'
         | 'AKTIVITETSPLIKT_11_9'
         | 'AVVIST_LEGEERKLÆRING'
@@ -16706,6 +16809,7 @@ export interface components {
       begrunnelse: string;
       '\u00E5rsakerTilBehandling': (
         | 'AKTIVITETSMELDING'
+        | 'AKTIVITETSPLIKTBEHANDLING_AVBRUTT'
         | 'AKTIVITETSPLIKT_11_7'
         | 'AKTIVITETSPLIKT_11_9'
         | 'AVVIST_LEGEERKLÆRING'
@@ -16894,6 +16998,7 @@ export interface components {
         | 'OPPFØLGINGSOPPGAVE'
         | 'PDL_HENDELSE_DODSFALL_BARN'
         | 'PDL_HENDELSE_DODSFALL_BRUKER'
+        | 'PDL_HENDELSE_FOLKEREGISTERIDENT'
         | 'SYKEPENGE_VEDTAK_HENDELSE'
         | 'SØKNAD'
         | 'TILBAKEKREVING_HENDELSE'
@@ -16979,6 +17084,7 @@ export interface components {
       opprettetAv?: string | null;
       '\u00E5rsakerTilBehandling': (
         | 'AKTIVITETSMELDING'
+        | 'AKTIVITETSPLIKTBEHANDLING_AVBRUTT'
         | 'AKTIVITETSPLIKT_11_7'
         | 'AKTIVITETSPLIKT_11_9'
         | 'AVVIST_LEGEERKLÆRING'
@@ -17076,6 +17182,7 @@ export interface components {
       reserverTilBruker?: string | null;
       '\u00E5rsakerTilBehandling': (
         | 'AKTIVITETSMELDING'
+        | 'AKTIVITETSPLIKTBEHANDLING_AVBRUTT'
         | 'AKTIVITETSPLIKT_11_7'
         | 'AKTIVITETSPLIKT_11_9'
         | 'AVVIST_LEGEERKLÆRING'
@@ -17150,6 +17257,7 @@ export interface components {
       kilde: 'KELVIN' | 'KLAGEINSTANS';
       vurderingsbehov: (
         | 'AKTIVITETSMELDING'
+        | 'AKTIVITETSPLIKTBEHANDLING_AVBRUTT'
         | 'AKTIVITETSPLIKT_11_7'
         | 'AKTIVITETSPLIKT_11_9'
         | 'AVVIST_LEGEERKLÆRING'
@@ -17213,6 +17321,7 @@ export interface components {
       kildeReferanse: string;
       vurderingsbehov: (
         | 'AKTIVITETSMELDING'
+        | 'AKTIVITETSPLIKTBEHANDLING_AVBRUTT'
         | 'AKTIVITETSPLIKT_11_7'
         | 'AKTIVITETSPLIKT_11_9'
         | 'AVVIST_LEGEERKLÆRING'
@@ -17315,6 +17424,7 @@ export interface components {
         | 'OPPFØLGINGSOPPGAVE'
         | 'PDL_HENDELSE_DODSFALL_BARN'
         | 'PDL_HENDELSE_DODSFALL_BRUKER'
+        | 'PDL_HENDELSE_FOLKEREGISTERIDENT'
         | 'SYKEPENGE_VEDTAK_HENDELSE'
         | 'SØKNAD'
         | 'TILBAKEKREVING_HENDELSE'
@@ -17471,6 +17581,7 @@ export interface components {
       oppdatertTid: string;
       /** @enum {string} */
       type:
+        | 'AKTIVITETSPLIKTBEHANDLING_AVBRUTT'
         | 'AKTIVITETSPLIKT_11_7'
         | 'AKTIVITETSPLIKT_11_9'
         | 'BARNETILLEGG'
@@ -17610,6 +17721,7 @@ export interface components {
         | 'VENTER_PÅ_VURDERING_AV_ROL'
         | null;
       '\u00E5rsakerTilOpprettelse': (
+        | 'AKTIVITETSPLIKTBEHANDLING_AVBRUTT'
         | 'AKTIVITETSPLIKT_11_7'
         | 'AKTIVITETSPLIKT_11_9'
         | 'BARNETILLEGG'
@@ -17694,6 +17806,7 @@ export interface components {
         | 'SvarFraAndreinstans'
         | 'Tilbakekreving';
       vurderingsbehov: (
+        | 'AKTIVITETSPLIKTBEHANDLING_AVBRUTT'
         | 'AKTIVITETSPLIKT_11_7'
         | 'AKTIVITETSPLIKT_11_9'
         | 'BARNETILLEGG'
