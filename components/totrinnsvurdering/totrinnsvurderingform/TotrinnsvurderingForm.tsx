@@ -20,6 +20,7 @@ import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { TotrinnsvurderingVedtaksbrevFelter } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingVedtaksbrevFelter';
 import { byggVilkårskortLenke } from 'lib/utils/vilkårskort';
 import { loggUmamiEvent, useUmamiStartTidspunkt } from 'lib/utils/umami';
+import { useFlyt } from 'hooks/saksbehandling/FlytHook';
 
 interface Props {
   grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;
@@ -43,6 +44,7 @@ export const TotrinnsvurderingForm = ({
   behandlingsversjon,
 }: Props) => {
   const { saksnummer, behandlingsreferanse } = useParamsMedType();
+  const { flyt } = useFlyt();
 
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } = useLøsBehovOgGåTilNesteSteg(
     erKvalitetssikring ? 'KVALITETSSIKRING' : 'FATTE_VEDTAK'
@@ -133,7 +135,7 @@ export const TotrinnsvurderingForm = ({
             if (!erKvalitetssikring) {
               loggUmamiEvent('beslutter-varighet', {
                 varighet_sekunder: Math.floor((Date.now() - umamiStartTidspunkt) / 1000),
-                typeBehandling: flyt.visning.typeBehandling,
+                typeBehandling: flyt?.visning.typeBehandling,
               });
             }
             nullstillMellomlagretVurdering();

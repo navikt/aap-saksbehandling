@@ -1,6 +1,6 @@
 import { RefObject, useEffect, useRef } from 'react';
 
-type UmamiValue = string | number | boolean | null;
+type UmamiValue = string | number | boolean | null | undefined;
 type UmamiData = Record<string, UmamiValue>;
 
 export const loggUmamiEvent = (eventName: string, data: UmamiData) => {
