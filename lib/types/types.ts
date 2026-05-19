@@ -77,6 +77,12 @@ export type BeregningstidspunktVurderingResponse =
 export type TilkjentYtelseGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelse2Dto'];
 
+export type TilkjentYtelsePeriode =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto'];
+
+export type TilkjentYtelseGrunnlagMedDiff =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelse2MedDiffDto'];
+
 export type KvalitetssikringGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.kvalitetssikring.KvalitetssikringGrunnlagDto'];
 export type KvalitetssikringTilgang =

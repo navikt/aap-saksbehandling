@@ -1,6 +1,6 @@
 'use client';
 
-import { TilkjentYtelseGrunnlag } from 'lib/types/types';
+import { TilkjentYtelseGrunnlag, TilkjentYtelseGrunnlagMedDiff, TilkjentYtelsePeriode } from 'lib/types/types';
 import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
 import { ActionMenu, BodyShort, Button, Table, VStack } from '@navikt/ds-react';
 
@@ -13,6 +13,9 @@ import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
 
 interface Props {
   grunnlag: TilkjentYtelseGrunnlag;
+}
+interface PropsMedDiff {
+  grunnlagMedDiff: TilkjentYtelseGrunnlagMedDiff;
 }
 
 export const Tilkjent = ({ grunnlag }: Props) => {
@@ -38,78 +41,121 @@ export const Tilkjent = ({ grunnlag }: Props) => {
         </Table.Header>
         <Table.Body>
           {grunnlag.perioder.map((periode, periodeIndex) => {
-            return periode.vurdertePerioder.map((vurdertPeriode, vurdertPeriodeIndex) => {
-              const skilleLinjeClassName =
-                periode.vurdertePerioder.length === vurdertPeriodeIndex + 1 || periode.vurdertePerioder.length === 1
-                  ? ''
-                  : styles.tablerowwithoutborder;
-
-              const bakgrunnClassName = periodeIndex % 2 ? styles.tablerowwithzebra : '';
-
-              return (
-                <Table.Row key={vurdertPeriodeIndex} className={bakgrunnClassName}>
-                  <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
-                    {vurdertPeriodeIndex === 0 && formaterPeriode(periode.meldeperiode.fom, periode.meldeperiode.tom)}
-                  </Table.DataCell>
-                  <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
-                    {formaterPeriode(vurdertPeriode.periode.fom, vurdertPeriode.periode.tom)}
-                  </Table.DataCell>
-                  <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
-                    {formaterTilNok(vurdertPeriode.felter.dagsats)}
-                  </Table.DataCell>
-                  <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
-                    {formaterTilNok(vurdertPeriode.felter.barnetillegg)}
-                  </Table.DataCell>
-                  <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
-                    {formaterTilProsent(vurdertPeriode.felter.arbeidGradering)}
-                  </Table.DataCell>
-                  <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
-                    {formaterTilProsent(vurdertPeriode.felter.samordningGradering)}
-                  </Table.DataCell>
-                  <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
-                    {formaterTilProsent(vurdertPeriode.felter.institusjonGradering)}
-                  </Table.DataCell>
-                  <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
-                    {formaterTilProsent(vurdertPeriode.felter.arbeidsgiverGradering)}
-                  </Table.DataCell>
-                  <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
-                    {formaterTilProsent(vurdertPeriode.felter.totalReduksjon)}
-                  </Table.DataCell>
-                  <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
-                    {formaterTilNok(vurdertPeriode.felter.barnepensjonDagsats)}
-                  </Table.DataCell>
-                  <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
-                    {formaterTilNok(vurdertPeriode.felter.effektivDagsats)}
-                  </Table.DataCell>
-                  <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
-                    {vurdertPeriodeIndex === 0 &&
-                      (periode.levertMeldekortDato
-                        ? formaterDatoForFrontend(periode.levertMeldekortDato)
-                        : 'Ikke levert')}
-                  </Table.DataCell>
-                  <Table.DataCell className={skilleLinjeClassName}>
-                    {periode.sisteLeverteMeldekort && (
-                      <ActionMenu>
-                        <ActionMenu.Trigger>
-                          <Button variant={'tertiary'} icon={<MenuElipsisVerticalIcon title={'Oppgavemeny'} />} />
-                        </ActionMenu.Trigger>
-                        <ActionMenu.Content>
-                          <VStack gap={'space-16'} width={'250px'}>
-                            <BodyShort weight={'semibold'}>Meldekort</BodyShort>
-                            <BodyShort>
-                              Bruker har ført {periode.sisteLeverteMeldekort.timerArbeidPerPeriode.timerArbeid} timer.
-                            </BodyShort>
-                          </VStack>
-                        </ActionMenu.Content>
-                      </ActionMenu>
-                    )}
-                  </Table.DataCell>
-                </Table.Row>
-              );
-            });
+            return <TilkjentPeriodeRad key={periodeIndex} periode={periode} periodeIndex={periodeIndex} />;
           })}
         </Table.Body>
       </TableStyled>
     </VilkårsKort>
   );
+};
+export const TilkjentMedDiff = ({ grunnlagMedDiff }: PropsMedDiff) => {
+  const endredePerioder = grunnlagMedDiff.perioder
+    // @ts-expect-error Skal fikses senere
+    .filter((periode) => periode['diff'] === 'Endret')
+    // @ts-expect-error Skal fikses senere
+    .map((periode) => periode['til']);
+
+  console.log(grunnlagMedDiff);
+  return (
+    <VilkårsKort heading="Tilkjent ytelse" steg="BEREGN_TILKJENT_YTELSE">
+      <TableStyled size="medium">
+        <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell>Meldeperiode</Table.HeaderCell>
+            <Table.HeaderCell>Vurdert periode</Table.HeaderCell>
+            <Table.HeaderCell>Dagsats</Table.HeaderCell>
+            <Table.HeaderCell>Barnetillegg</Table.HeaderCell>
+            <Table.HeaderCell>Arbeid</Table.HeaderCell>
+            <Table.HeaderCell>Samordning</Table.HeaderCell>
+            <Table.HeaderCell>Institusjon</Table.HeaderCell>
+            <Table.HeaderCell>Arbeidsgiver</Table.HeaderCell>
+            <Table.HeaderCell>Total reduksjon</Table.HeaderCell>
+            <Table.HeaderCell>Barnepensjon</Table.HeaderCell>
+            <Table.HeaderCell>Effektiv dagsats</Table.HeaderCell>
+            <Table.HeaderCell>Meldekort levert</Table.HeaderCell>
+            <Table.HeaderCell></Table.HeaderCell>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          {endredePerioder.map((periode, periodeIndex) => {
+            return <TilkjentPeriodeRad key={periodeIndex} periode={periode} periodeIndex={periodeIndex} />;
+          })}
+        </Table.Body>
+      </TableStyled>
+    </VilkårsKort>
+  );
+};
+
+interface TilkjentYtelsePeriodeProps {
+  periode: TilkjentYtelsePeriode;
+  periodeIndex: number;
+}
+const TilkjentPeriodeRad = ({ periode, periodeIndex }: TilkjentYtelsePeriodeProps) => {
+  return periode.vurdertePerioder.map((vurdertPeriode, vurdertPeriodeIndex) => {
+    const skilleLinjeClassName =
+      periode.vurdertePerioder.length === vurdertPeriodeIndex + 1 || periode.vurdertePerioder.length === 1
+        ? ''
+        : styles.tablerowwithoutborder;
+
+    const bakgrunnClassName = periodeIndex % 2 ? styles.tablerowwithzebra : '';
+
+    return (
+      <Table.Row key={vurdertPeriodeIndex} className={bakgrunnClassName}>
+        <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
+          {vurdertPeriodeIndex === 0 && formaterPeriode(periode.meldeperiode.fom, periode.meldeperiode.tom)}
+        </Table.DataCell>
+        <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
+          {formaterPeriode(vurdertPeriode.periode.fom, vurdertPeriode.periode.tom)}
+        </Table.DataCell>
+        <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
+          {formaterTilNok(vurdertPeriode.felter.dagsats)}
+        </Table.DataCell>
+        <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
+          {formaterTilNok(vurdertPeriode.felter.barnetillegg)}
+        </Table.DataCell>
+        <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
+          {formaterTilProsent(vurdertPeriode.felter.arbeidGradering)}
+        </Table.DataCell>
+        <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
+          {formaterTilProsent(vurdertPeriode.felter.samordningGradering)}
+        </Table.DataCell>
+        <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
+          {formaterTilProsent(vurdertPeriode.felter.institusjonGradering)}
+        </Table.DataCell>
+        <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
+          {formaterTilProsent(vurdertPeriode.felter.arbeidsgiverGradering)}
+        </Table.DataCell>
+        <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
+          {formaterTilProsent(vurdertPeriode.felter.totalReduksjon)}
+        </Table.DataCell>
+        <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
+          {formaterTilNok(vurdertPeriode.felter.barnepensjonDagsats)}
+        </Table.DataCell>
+        <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
+          {formaterTilNok(vurdertPeriode.felter.effektivDagsats)}
+        </Table.DataCell>
+        <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
+          {vurdertPeriodeIndex === 0 &&
+            (periode.levertMeldekortDato ? formaterDatoForFrontend(periode.levertMeldekortDato) : 'Ikke levert')}
+        </Table.DataCell>
+        <Table.DataCell className={skilleLinjeClassName}>
+          {periode.sisteLeverteMeldekort && (
+            <ActionMenu>
+              <ActionMenu.Trigger>
+                <Button variant={'tertiary'} icon={<MenuElipsisVerticalIcon title={'Oppgavemeny'} />} />
+              </ActionMenu.Trigger>
+              <ActionMenu.Content>
+                <VStack gap={'space-16'} width={'250px'}>
+                  <BodyShort weight={'semibold'}>Meldekort</BodyShort>
+                  <BodyShort>
+                    Bruker har ført {periode.sisteLeverteMeldekort.timerArbeidPerPeriode.timerArbeid} timer.
+                  </BodyShort>
+                </VStack>
+              </ActionMenu.Content>
+            </ActionMenu>
+          )}
+        </Table.DataCell>
+      </Table.Row>
+    );
+  });
 };
