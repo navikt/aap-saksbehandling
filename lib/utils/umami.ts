@@ -27,6 +27,7 @@ export const loggUmamiVarighetHendelser = (
         hendelser_serie: hendelseSerie.hendelse_serie,
         hendelse: hendelse.hendelse,
         varighet_sekunder: hendelse.varighet_sekunder,
+        varighet_sekunder_siden_forrige: hendelse.varighet_sekunder_siden_forrige,
         tidsstempel: hendelse.tidsstempel,
       })
     );
