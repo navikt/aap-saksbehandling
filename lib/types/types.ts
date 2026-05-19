@@ -593,6 +593,12 @@ export type OppdaterMeldekortRequest =
 export type OppdaterMeldekortResponse =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.OppdaterMeldekortResponse'];
 
+export type MeldekortProsesseringResponse =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.MeldekortProsesseringResponse'];
+
+export type MeldekortProsesseringStatus =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.MeldekortProsesseringResponse']['meldekortProsesseringStatus'];
+
 export type DagDto = components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.DagDto'];
 
 export type BrevdataDto = components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto'];

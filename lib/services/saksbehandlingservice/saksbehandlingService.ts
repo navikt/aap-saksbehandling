@@ -50,6 +50,8 @@ import {
   LøsAvklaringsbehovPåBehandling,
   LøsPeriodisertBehovPåBehandling,
   ManuellInntektGrunnlag,
+  MeldekortProsesseringResponse,
+  MeldeperiodeMedMeldekortDto,
   MellomlagretVurderingRequest,
   MellomlagretVurderingResponse,
   NavEnhetRequest,
@@ -710,8 +712,15 @@ export const hentAktivitetspliktTrekk = async (saksnummer: string) => {
 };
 
 export const hentMeldekort = async (saksnummer: string) => {
-  return apiFetch<AktivitetspliktMedTrekkRespons>(
+  return apiFetch<MeldeperiodeMedMeldekortDto>(
     `${saksbehandlingApiBaseUrl}/api/meldekort/${saksnummer}`,
+    saksbehandlingApiScope
+  );
+};
+
+export const hentMeldekortProsseseringStatus = async (saksnummer: string) => {
+  return apiFetch<MeldekortProsesseringResponse>(
+    `${saksbehandlingApiBaseUrl}/api/meldekort/${saksnummer}/prosessering`,
     saksbehandlingApiScope
   );
 };
