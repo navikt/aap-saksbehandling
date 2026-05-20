@@ -84,7 +84,7 @@ export const AvbrytAktivitetspliktbehandlingVurdering = ({ grunnlag, readOnly, b
       status={status}
       isLoading={isLoading}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      vilkårTilhørerNavKontor={false}
+      vilkårTilhørerNavKontor={true}
       visningModus={visningModus}
       visningActions={visningActions}
       formReset={() => form.reset()}
