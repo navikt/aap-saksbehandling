@@ -12666,8 +12666,7 @@ export interface components {
         | 'OPPLÆRINGSPENGER'
         | 'PLEIEPENGER'
         | 'SVANGERSKAPSPENGER'
-        | 'SYKEPENGER'
-        | 'UKJENT_SLUTTDATO_PÅ_YTELSE';
+        | 'SYKEPENGER';
     };
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningYtelseDTO': {
       /** @enum {string} */
@@ -12687,8 +12686,7 @@ export interface components {
         | 'OPPLÆRINGSPENGER'
         | 'PLEIEPENGER'
         | 'SVANGERSKAPSPENGER'
-        | 'SYKEPENGER'
-        | 'UKJENT_SLUTTDATO_PÅ_YTELSE';
+        | 'SYKEPENGER';
     };
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningYtelseVurderingDTO': {
       begrunnelse?: string | null;
@@ -13328,14 +13326,14 @@ export interface components {
       id: string;
       journalpostId: string;
       /**
-       * Format: date-time
-       * @example 2025-04-01T12:30:00
+       * Format: date
+       * @example 2025-04-01
        */
       meldeDato: string;
       oppdatertAv?: string | null;
       /**
-       * Format: date-time
-       * @example 2025-04-01T12:30:00
+       * Format: date
+       * @example 2025-04-01
        */
       oppdatertTidspunkt?: string | null;
     };
@@ -13355,8 +13353,8 @@ export interface components {
       begrunnelse: string;
       dager: components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.DagDto'][];
       /**
-       * Format: date-time
-       * @example 2025-04-01T12:30:00
+       * Format: date
+       * @example 2025-04-01
        */
       meldeDato: string;
       meldeperiode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
@@ -13364,8 +13362,8 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.meldekort.OppdaterMeldekortResponse': {
       journalpostId: string;
       /**
-       * Format: date-time
-       * @example 2025-04-01T12:30:00
+       * Format: date
+       * @example 2025-04-01
        */
       oppdatertTidspunkt: string;
     };
@@ -14311,6 +14309,11 @@ export interface components {
       /** @enum {string} */
       status: 'AVSLUTTET' | 'IVERKSETTES' | 'OPPRETTET' | 'UTREDES';
       type: string;
+      /**
+       * Format: date-time
+       * @example 2025-04-01T12:30:00
+       */
+      vedtatt?: string | null;
       vurderingsbehov: (
         | 'AKTIVITETSPLIKTBEHANDLING_AVBRUTT'
         | 'AKTIVITETSPLIKT_11_7'
@@ -15611,8 +15614,7 @@ export interface components {
         | 'OPPLÆRINGSPENGER'
         | 'PLEIEPENGER'
         | 'SVANGERSKAPSPENGER'
-        | 'SYKEPENGER'
-        | 'UKJENT_SLUTTDATO_PÅ_YTELSE';
+        | 'SYKEPENGER';
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.samordning.VurderingerForSamordning': {
       begrunnelse?: string | null;
