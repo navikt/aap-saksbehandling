@@ -166,6 +166,7 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
                         timerArbeidet: Number(dag.timerArbeidet),
                       };
                     }),
+                    meldeDato: new Dato(data.meldedato).formaterForBackend(),
                     begrunnelse: data.begrunnelse,
                     meldeperiode: meldekort.meldeperiode,
                   });
@@ -217,8 +218,7 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
                           </Link>
                         )}
                         <Detail>
-                          {formaterDatoForFrontend(tidligereMeldekort.mottattTidspunkt)}{' '}
-                          {tidligereMeldekort.oppdatertAv}
+                          {formaterDatoForFrontend(tidligereMeldekort.meldeDato)} {tidligereMeldekort.oppdatertAv}
                         </Detail>
                       </HStack>
                     );
@@ -265,9 +265,7 @@ function getDefaultValuesForForm(meldekort?: MeldeperiodeMedMeldekortDto): Redig
   return {
     begrunnelse: '',
     årsak: '',
-    meldedato: meldekort.meldekort?.mottattTidspunkt
-      ? formaterDatoForFrontend(meldekort.meldekort.mottattTidspunkt)
-      : '',
+    meldedato: meldekort.meldekort?.meldeDato ? formaterDatoForFrontend(meldekort.meldekort.meldeDato) : '',
     dager: alleDager,
   };
 }
@@ -280,13 +278,13 @@ function kobleDokumentInfoTilTidligereMeldekort(
     const dokument = dokumenter?.find((doku) => doku.journalpostId === tidligereMeldekort.journalpostId);
     const journalpostId = tidligereMeldekort.journalpostId;
     const dokumentId = dokument?.dokumenter[0]?.dokumentInfoId;
-    const mottattTidspunkt = tidligereMeldekort.mottattTidspunkt;
+    const meldeDato = tidligereMeldekort.meldeDato;
     const oppdatertAv = tidligereMeldekort.oppdatertAv;
 
     return {
       journalpostId,
       dokumentId,
-      mottattTidspunkt,
+      meldeDato,
       oppdatertAv,
     };
   });
