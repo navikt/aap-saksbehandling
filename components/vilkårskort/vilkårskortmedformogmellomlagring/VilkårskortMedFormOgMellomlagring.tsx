@@ -43,7 +43,7 @@ export const VilkårskortMedFormOgMellomlagring = ({
   vilkårTilhørerNavKontor,
   knappTekst = 'Bekreft',
   defaultOpen = true,
-  vurderingerMeta = {},
+  vurderingerMeta,
   onDeleteMellomlagringClick,
   mellomlagretVurdering,
   visningModus,
@@ -144,11 +144,11 @@ export const VilkårskortMedFormOgMellomlagring = ({
               </VStack>
 
               <VStack align="end">
-                {vurderingerMeta.vurdertAutomatisk && <Detail>Vurdert automatisk</Detail>}
-                <VurdertAvAnsattDetail vurdertAv={vurderingerMeta.vurdertAv} variant={'VURDERING'} />
-                <VurdertAvAnsattDetail vurdertAv={vurderingerMeta.kvalitetssikretAv} variant={'KVALITETSSIKRER'} />
-                <VurdertAvAnsattDetail vurdertAv={vurderingerMeta.besluttetAv} variant={'BESLUTTER'} />
-                <VurdertAvAnsattDetail vurdertAv={vurderingerMeta.trukketAv} variant={'TRUKKET'} />
+                {vurderingerMeta?.vurdertAutomatisk && <Detail>Vurdert automatisk</Detail>}
+                <VurdertAvAnsattDetail vurdertAv={vurderingerMeta?.vurdertAv} variant={'VURDERING'} />
+                <VurdertAvAnsattDetail vurdertAv={vurderingerMeta?.kvalitetssikretAv} variant={'KVALITETSSIKRER'} />
+                <VurdertAvAnsattDetail vurdertAv={vurderingerMeta?.besluttetAv} variant={'BESLUTTER'} />
+                <VurdertAvAnsattDetail vurdertAv={vurderingerMeta?.trukketAv} variant={'TRUKKET'} />
               </VStack>
             </HStack>
           </VStack>
