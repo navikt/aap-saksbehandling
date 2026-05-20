@@ -206,6 +206,8 @@ export function mapTilSteggruppeTekst(steggruppe: string) {
       return 'Oppholdskrav';
     case 'VEDTAKSLENGDE':
       return 'Vedtaksperiode';
+    case 'AVBRYT_AKTIVITETSPLIKTBEHANDLING':
+      return 'Avbryt behandling';
     default:
       return `${steggruppe}`;
   }
