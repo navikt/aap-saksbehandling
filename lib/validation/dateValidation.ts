@@ -37,8 +37,8 @@ export function erDatoIPeriode(inputDato: Date, periodeFra: Date, periodeTil: Da
   );
 }
 
-export function erDatoIFremtiden(value: string): boolean {
-  return isFuture(parse(value as string, 'dd.MM.yyyy', new Date()));
+export function erDatoIFremtiden(value?: string): boolean {
+  return value ? isFuture(parse(value as string, 'dd.MM.yyyy', new Date())) : false;
 }
 
 export function validerÅrstall(val: string | string[]) {
