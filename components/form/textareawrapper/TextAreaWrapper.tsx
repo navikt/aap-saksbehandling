@@ -1,6 +1,6 @@
 import { Textarea } from '@navikt/ds-react';
-import React, { HTMLInputAutoCompleteAttribute } from 'react';
-import { Control, Controller, FieldValues, RegisterOptions, FieldPath } from 'react-hook-form';
+import React, { FocusEventHandler, HTMLInputAutoCompleteAttribute } from 'react';
+import { Control, Controller, FieldPath, FieldValues, RegisterOptions } from 'react-hook-form';
 
 export interface TextAreaProps<FormFieldValues extends FieldValues> {
   name: FieldPath<FormFieldValues>;
@@ -17,6 +17,7 @@ export interface TextAreaProps<FormFieldValues extends FieldValues> {
   onChangeCustom?: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
   shouldUnregister?: boolean;
   dataUmamiEvent?: string;
+  onBlur?: FocusEventHandler<HTMLTextAreaElement> | undefined;
 }
 
 export const TextAreaWrapper = <FormFieldValues extends FieldValues>({
@@ -34,6 +35,7 @@ export const TextAreaWrapper = <FormFieldValues extends FieldValues>({
   onChangeCustom,
   shouldUnregister = false,
   dataUmamiEvent,
+  onBlur,
 }: TextAreaProps<FormFieldValues>) => (
   <Controller
     name={name}
@@ -64,6 +66,7 @@ export const TextAreaWrapper = <FormFieldValues extends FieldValues>({
           readOnly={readOnly}
           className={`textarea ${className}`}
           autoComplete={autocomplete}
+          onBlur={onBlur}
         />
       );
     }}

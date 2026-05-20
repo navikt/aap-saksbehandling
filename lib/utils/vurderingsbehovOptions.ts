@@ -9,11 +9,14 @@ export const vurderingsbehovOptions = (): ValuePair<Vurderingsbehov>[] => {
     'LOVVALG_OG_MEDLEMSKAP',
     'REVURDER_STUDENT',
     'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND',
+    'OVERGANG_ARBEID',
+    'OVERGANG_UFORE',
     'REVURDER_YRKESSKADE',
     'REVURDER_SYKEPENGEERSTATNING',
     'REVURDER_BEREGNING',
     'REVURDER_MANUELL_INNTEKT',
     'FORUTGAENDE_MEDLEMSKAP',
+    'OPPHOLDSKRAV',
     'BARNETILLEGG',
     'DØDSFALL_BARN',
     'INSTITUSJONSOPPHOLD',
@@ -26,10 +29,7 @@ export const vurderingsbehovOptions = (): ValuePair<Vurderingsbehov>[] => {
     'REVURDER_SAMORDNING_TJENESTEPENSJON',
     'DØDSFALL_BRUKER',
     'REVURDER_SAMORDNING_BARNEPENSJON',
-    'OPPHOLDSKRAV',
     'VEDTAKSLENGDE_MANUELT',
-    'OVERGANG_UFORE',
-    'OVERGANG_ARBEID',
   ];
 
   return behov.map((behov) => ({

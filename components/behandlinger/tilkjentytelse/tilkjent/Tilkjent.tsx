@@ -88,7 +88,7 @@ export const Tilkjent = ({ grunnlag }: Props) => {
                         : 'Ikke levert')}
                   </Table.DataCell>
                   <Table.DataCell className={skilleLinjeClassName}>
-                    {periode.sisteLeverteMeldekort && (
+                    {vurdertPeriodeIndex === 0 && periode.sisteLeverteMeldekort && (
                       <ActionMenu>
                         <ActionMenu.Trigger>
                           <Button variant={'tertiary'} icon={<MenuElipsisVerticalIcon title={'Oppgavemeny'} />} />

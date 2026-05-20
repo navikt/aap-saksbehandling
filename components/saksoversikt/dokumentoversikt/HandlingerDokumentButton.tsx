@@ -9,14 +9,15 @@ import { FeilregistrerJournalpostModal } from 'components/saksoversikt/dokumento
 import { KnyttTilSakModal } from 'components/saksoversikt/dokumentoversikt/KnyttTilSakModal';
 import { Journalpost, Journalposttype } from 'lib/types/journalpost';
 import { RedigitaliserJournalpost } from 'components/saksoversikt/dokumentoversikt/RedigitaliserJournalpost';
-import { useFeatureFlag } from '../../../context/UnleashContext';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 export const HandlingerDokumentButton = ({ sak, journalpost }: { sak: SaksInfo; journalpost: Journalpost }) => {
   const [knyttTilSakOpen, setKnyttTilSakOpen] = useState(false);
   const [feilregistrerOpen, setFeilregistrerOpen] = useState(false);
   const [redigitaliserOpen, setRedigitaliserOpen] = useState(false);
 
-  const redigitaliserDokument = useFeatureFlag('Redigitalisering') && journalpost.journalposttype != Journalposttype.U;
+  const redigitaliserDokument =
+    useFeatureFlag('Redigitalisering') && journalpost.journalposttype != Journalposttype.U && journalpost.sak?.fagsakId;
 
   return (
     <>

@@ -102,10 +102,10 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov | Vurde
       return 'Aktivitetsplikt § 11-9';
     case 'EFFEKTUER_AKTIVITETSPLIKT':
       return 'Effektuer aktivitetsplikt § 11-7';
-    case 'OVERGANG_UFORE':
-      return '§ 11-18 Overgang til uføre';
     case 'OVERGANG_ARBEID':
-      return '§ 11-17 Overgang arbeidssøker';
+      return '§ 11-17 AAP i perioden som arbeidssøker';
+    case 'OVERGANG_UFORE':
+      return '§ 11-18 AAP under behandling av krav om uføretrygd';
     case 'OPPHOLDSKRAV':
       return '§ 11-3 Oppholdskrav';
     case 'DØDSFALL_BARN':
