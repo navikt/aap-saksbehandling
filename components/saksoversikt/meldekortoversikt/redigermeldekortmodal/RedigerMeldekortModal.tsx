@@ -278,13 +278,13 @@ function kobleDokumentInfoTilTidligereMeldekort(
     const dokument = dokumenter?.find((doku) => doku.journalpostId === tidligereMeldekort.journalpostId);
     const journalpostId = tidligereMeldekort.journalpostId;
     const dokumentId = dokument?.dokumenter[0]?.dokumentInfoId;
-    const mottattTidspunkt = tidligereMeldekort.mottattTidspunkt;
+    const meldeDato = tidligereMeldekort.meldeDato;
     const oppdatertAv = tidligereMeldekort.oppdatertAv;
 
     return {
       journalpostId,
       dokumentId,
-      mottattTidspunkt,
+      meldeDato,
       oppdatertAv,
     };
   });
