@@ -20,6 +20,7 @@ import { MeldekortProsesseringServerSentEvent } from 'app/saksbehandling/api/mel
 import { addDays } from 'date-fns';
 import { useMeldekort } from 'hooks/saksbehandling/MeldekortHook';
 import { Journalpost } from 'lib/types/journalpost';
+import { erDatoFoerDato, erDatoIFremtiden } from 'lib/validation/dateValidation';
 
 interface Props {
   setIsOpen: (isOpen: boolean) => void;
@@ -110,6 +111,22 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
       label: 'Meldedato',
       description: 'Meldekortet regnes som levert på denne datoen.',
       defaultValue: defaultValues?.meldedato,
+      rules: {
+        required: 'Du må legge til en meldedato for meldekortet.',
+        validate: {
+          validerIkkeFørDato: (value) => {
+            if (erDatoIFremtiden(value as string)) {
+              return 'Meldedato kan ikke være i fremtiden.';
+            }
+          },
+          validerIkkeFørMeldeperiodeTom: (value) => {
+            const tom = meldekort?.meldeperiode.tom;
+            if (tom && erDatoFoerDato(value as string, formaterDatoForFrontend(tom))) {
+              return 'Meldedato kan ikke være før meldeperiodens slutt.';
+            }
+          },
+        },
+      },
     },
     dager: {
       type: 'fieldArray',
