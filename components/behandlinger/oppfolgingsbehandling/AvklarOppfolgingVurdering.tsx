@@ -10,7 +10,7 @@ import {
 } from 'lib/types/types';
 import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
-import { FormEvent } from 'react';
+import { SubmitEvent } from 'react';
 import { vurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
 import { BodyShort, Label } from '@navikt/ds-react';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
@@ -97,7 +97,7 @@ export const AvklaroppfolgingVurdering = ({
     form
   );
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: SubmitEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
       løsBehovOgGåTilNesteSteg(
         {

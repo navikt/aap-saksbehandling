@@ -10,7 +10,7 @@ import {
 } from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { Alert, BodyLong, BodyShort, Box, Button, Heading, HStack, Modal, VStack } from '@navikt/ds-react';
-import { FormEvent, useRef, useState } from 'react';
+import { SubmitEvent, useRef, useState } from 'react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
@@ -113,7 +113,7 @@ export const SamordningGradering = ({
     form
   );
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: SubmitEvent<HTMLFormElement>) => {
     form.handleSubmit(async (data) => {
       setErrorMessage(undefined);
       if (grunnlag.ytelser.length > 0 && data.vurderteSamordninger.length === 0) {

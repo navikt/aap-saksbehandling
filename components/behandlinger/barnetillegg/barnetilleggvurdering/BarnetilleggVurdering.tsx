@@ -9,7 +9,7 @@ import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useFieldArray } from 'react-hook-form';
 import { DATO_FORMATER, formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { parse } from 'date-fns';
-import React, { FormEvent, useState } from 'react';
+import React, { SubmitEvent, useState } from 'react';
 import styles from './BarnetilleggVurdering.module.css';
 import { useConfigForm } from 'components/form/FormHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
@@ -129,7 +129,7 @@ export const BarnetilleggVurdering = ({
     name: 'saksbehandlerOppgitteBarnVurderinger',
   });
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     form.handleSubmit((data) => {
       const mapVurdering = (vurdering: Vurdering) => ({
         begrunnelse: vurdering.begrunnelse,

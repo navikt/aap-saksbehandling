@@ -1,7 +1,7 @@
 'use client';
 
 import { Alert, Search, VStack } from '@navikt/ds-react';
-import { Dispatch, FormEvent, SetStateAction, useState } from 'react';
+import { Dispatch, SubmitEvent, SetStateAction, useState } from 'react';
 import { clientSøkPåSaksbehandler } from 'lib/clientApi';
 import { isSuccess } from 'lib/utils/api';
 
@@ -36,7 +36,7 @@ export const SaksbehandlerSøk = ({
   const [error, setError] = useState<string>();
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSaksbehandlerSøk = async (event: FormEvent<HTMLFormElement>) => {
+  const handleSaksbehandlerSøk = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsLoading(true);
     setInfomelding(undefined);

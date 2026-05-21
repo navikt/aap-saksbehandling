@@ -7,7 +7,7 @@ import { Behovstype } from 'lib/utils/form';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { MellomlagretVurdering, SykestipendGrunnlag } from 'lib/types/types';
 import { useConfigForm } from 'components/form/FormHook';
-import { FormEvent } from 'react';
+import { SubmitEvent } from 'react';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { BodyLong, VStack } from '@navikt/ds-react';
 import { FormField } from 'components/form/FormField';
@@ -70,7 +70,7 @@ export const SykestipendVurdering = ({
     form
   );
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: SubmitEvent<HTMLFormElement>) => {
     form.handleSubmit(async (data) =>
       løsBehovOgGåTilNesteSteg(
         {

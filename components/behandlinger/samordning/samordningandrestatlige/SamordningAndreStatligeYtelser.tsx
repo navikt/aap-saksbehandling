@@ -3,7 +3,7 @@
 import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { ReadMore, VStack } from '@navikt/ds-react';
-import { FormEvent } from 'react';
+import { SubmitEvent } from 'react';
 import { AndreStatligeYtelserTabell } from 'components/behandlinger/samordning/samordningandrestatlige/AndreStatligeYtelserTabell';
 import { Behovstype } from 'lib/utils/form';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
@@ -84,7 +84,7 @@ export const SamordningAndreStatligeYtelser = ({
     form
   );
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: SubmitEvent<HTMLFormElement>) => {
     form.handleSubmit(async (data) =>
       løsBehovOgGåTilNesteSteg(
         {

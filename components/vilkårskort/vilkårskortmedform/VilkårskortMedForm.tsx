@@ -7,7 +7,7 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 
 import styles from 'components/vilkårskort/Vilkårskort.module.css';
 import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
-import { FormEvent, ReactNode } from 'react';
+import { SubmitEvent, ReactNode } from 'react';
 import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { ApiException } from 'lib/utils/api';
 import { VisningActions, VisningModus } from 'lib/types/visningTypes';
@@ -16,7 +16,7 @@ export interface VilkårsKortMedFormProps {
   heading: string;
   steg: StegType;
   children: ReactNode;
-  onSubmit: (e: FormEvent<HTMLFormElement>) => void;
+  onSubmit: (e: SubmitEvent<HTMLFormElement>) => void;
   løsBehovOgGåTilNesteStegError: ApiException | undefined;
   isLoading: boolean;
   status: LøsBehovOgGåTilNesteStegStatus;

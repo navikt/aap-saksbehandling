@@ -1,6 +1,6 @@
 'use client';
 
-import React, { FormEvent, useState } from 'react';
+import React, { SubmitEvent, useState } from 'react';
 import { Alert, Box, Button, Modal, VStack } from '@navikt/ds-react';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { clientSettBehandlingPåVent } from 'lib/clientApi';
@@ -80,7 +80,7 @@ export const SettBehandlingPåVentModal = ({ behandlingsreferanse, reservert, is
     },
   });
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: SubmitEvent<HTMLFormElement>) => {
     form.handleSubmit(async (data) => {
       setIsLoading(true);
       if (!flyt?.behandlingVersjon) {

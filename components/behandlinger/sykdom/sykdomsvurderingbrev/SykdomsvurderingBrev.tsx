@@ -11,7 +11,7 @@ import {
   TypeBehandling,
 } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
-import { FormEvent } from 'react';
+import { SubmitEvent } from 'react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
@@ -76,7 +76,7 @@ export const SykdomsvurderingBrev = ({
     initialMellomlagretVurdering,
     form
   );
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: SubmitEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
       løsBehovOgGåTilNesteSteg(
         {

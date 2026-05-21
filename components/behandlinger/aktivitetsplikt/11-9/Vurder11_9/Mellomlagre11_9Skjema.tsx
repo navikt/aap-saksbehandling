@@ -8,7 +8,7 @@ import { formaterBrudd, formaterGrunn } from 'components/behandlinger/aktivitets
 import { BruddRad } from 'components/behandlinger/aktivitetsplikt/11-9/Vurder11_9/Registrer11_9BruddTabell';
 import { FormField } from 'components/form/FormField';
 import { VStack } from '@navikt/ds-react';
-import { FormEvent } from 'react';
+import { SubmitEvent } from 'react';
 import { parse } from 'date-fns';
 import { Brudd } from 'lib/types/types';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
@@ -60,7 +60,7 @@ export const Mellomlagre11_9Skjema = ({
     { shouldUnregister: true }
   );
 
-  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const onSubmit = (event: SubmitEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
       lagre({
         id: crypto.randomUUID(),

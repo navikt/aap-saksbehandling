@@ -5,7 +5,7 @@ import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggå
 
 import styles from './VilkårsKort.module.css';
 import { usePostmottakRequiredFlyt } from 'hooks/postmottak/PostmottakFlytHook';
-import { FormEvent, ReactNode } from 'react';
+import { SubmitEvent, ReactNode } from 'react';
 import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { ApiException } from 'lib/utils/api';
 import { StegType as PostmottakStegType } from 'lib/types/postmottakTypes';
@@ -15,7 +15,7 @@ interface PostmottakVilkårskortProps {
   heading: string;
   steg: PostmottakStegType;
   children: ReactNode;
-  onSubmit: (e: FormEvent<HTMLFormElement>) => void;
+  onSubmit: (e: SubmitEvent<HTMLFormElement>) => void;
   isLoading: boolean;
   status: LøsBehovOgGåTilNesteStegStatus;
   løsBehovOgGåTilNesteStegError: ApiException | undefined;

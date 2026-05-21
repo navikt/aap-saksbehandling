@@ -4,7 +4,7 @@ import { Behovstype } from 'lib/utils/form';
 import { BodyShort, Box, Label, List, Table, VStack } from '@navikt/ds-react';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 
-import { FormEvent } from 'react';
+import { SubmitEvent } from 'react';
 import { ForeslåVedtakGrunnlag, StansOpphørÅrsak } from 'lib/types/types';
 import { ForeslåVedtakTabell } from 'components/behandlinger/vedtak/foreslåvedtak/foreslåvedtaktabell/ForeslåVedtakTabell';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
@@ -37,7 +37,7 @@ export const ForeslåVedtak = ({ behandlingVersjon, readOnly, grunnlag }: Props)
       status={status}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       isLoading={isLoading}
-      onSubmit={(event: FormEvent<HTMLFormElement>) => {
+      onSubmit={(event: SubmitEvent<HTMLFormElement>) => {
         event.preventDefault();
         løsBehovOgGåTilNesteSteg({
           behandlingVersjon: behandlingVersjon,

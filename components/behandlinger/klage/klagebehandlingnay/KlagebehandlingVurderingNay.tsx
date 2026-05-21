@@ -10,7 +10,7 @@ import {
   MellomlagretVurdering,
   TypeBehandling,
 } from 'lib/types/types';
-import { FormEvent, useEffect } from 'react';
+import { SubmitEvent, useEffect } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import { getValgteHjemlerSomIkkeErImplementert, hjemmelalternativer, hjemmelMap } from 'lib/utils/hjemmel';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
@@ -131,7 +131,7 @@ export const KlagebehandlingVurderingNay = ({
     }
   }, [form, innstilling]);
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: SubmitEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
       løsBehovOgGåTilNesteSteg(
         {

@@ -8,7 +8,7 @@ import styles from './VurderRettighetsperiodeModal.module.css';
 import { Behovstype } from 'lib/utils/form';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
-import { FormEvent } from 'react';
+import { SubmitEvent } from 'react';
 
 interface Props {
   saksnummer: string;
@@ -44,7 +44,7 @@ export const VurderRettighetsperiodeModal = ({
     },
   });
 
-  const onBekreft = (event: FormEvent<HTMLFormElement>) => {
+  const onBekreft = (event: SubmitEvent<HTMLFormElement>) => {
     if (harAlleredeAvklaringsbehovForVurderingAvRettighetsperiode) {
       router.push(`/saksbehandling/sak/${saksnummer}/${behandlingReferanse}/RETTIGHETSPERIODE`);
       onClose();

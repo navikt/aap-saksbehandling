@@ -5,7 +5,7 @@ import { InstitusjonsoppholdTabell } from 'components/behandlinger/institusjonso
 import { HelseinstitusjonGrunnlag, MellomlagretVurdering, Periode, VurderingFormMeta } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { DATO_FORMATER, erUendeligSlutt, formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
-import React, { FormEvent } from 'react';
+import React, { SubmitEvent } from 'react';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useConfigForm } from 'components/form/FormHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
@@ -83,7 +83,7 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
     form
   );
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: SubmitEvent<HTMLFormElement>) => {
     form.handleSubmit((data) => {
       const parseDato = (dato: string) => parse(dato, 'dd.MM.yyyy', new Date());
 

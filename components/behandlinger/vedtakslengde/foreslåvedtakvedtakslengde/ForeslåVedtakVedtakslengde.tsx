@@ -5,7 +5,7 @@ import { BodyShort, Box, Label, List, Table, VStack } from '@navikt/ds-react';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 
-import { FormEvent } from 'react';
+import { SubmitEvent } from 'react';
 import { ForeslåVedtakVedtakslengdeGrunnlag } from 'lib/types/types';
 import { ForeslåVedtakVedtakslengdeTabell } from 'components/behandlinger/vedtakslengde/foreslåvedtakvedtakslengde/ForeslåVedtakVedtakslengdeTabell';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
@@ -39,7 +39,7 @@ export const ForeslåVedtakVedtakslengde = ({ behandlingVersjon, readOnly, grunn
       status={status}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       isLoading={isLoading}
-      onSubmit={(event: FormEvent<HTMLFormElement>) => {
+      onSubmit={(event: SubmitEvent<HTMLFormElement>) => {
         event.preventDefault();
         løsBehovOgGåTilNesteSteg({
           behandlingVersjon: behandlingVersjon,

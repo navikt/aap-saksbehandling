@@ -1,6 +1,6 @@
 'use client';
 
-import React, { FormEvent, useState } from 'react';
+import React, { SubmitEvent, useState } from 'react';
 import { Alert, Button, HStack, Label, Modal, Pagination, Radio, VStack } from '@navikt/ds-react';
 import { SaksbehandlerSøk } from 'components/tildeloppgavemodal/SaksbehandlerSøk';
 import { SaksbehandlerFraSøk } from 'lib/types/oppgaveTypes';
@@ -54,7 +54,7 @@ export const TildelOppgaveModal = ({ revalidateFunction }: Props) => {
 
   const form = useForm<FormFields>();
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
     await form.handleSubmit(async (data) => {
       setIsLoading(true);
       const res = await clientTildelTilSaksbehandler(oppgaveIder, data.saksbehandlerIdent);
