@@ -8,7 +8,7 @@ import { FormField, ValuePair } from 'components/form/FormField';
 import { Button } from '@navikt/ds-react';
 import { addWeeks, format, isBefore, startOfWeek, subMonths } from 'date-fns';
 import { MeldeperioderV2 } from 'components/postmottak/digitaliserdokument/meldekort/MeldePerioderV2';
-import { FormEvent } from 'react';
+import { SubmitEventHandler } from 'react';
 import { Dato } from 'lib/types/Dato';
 
 interface Props extends Submittable {
@@ -87,7 +87,7 @@ export const DigitaliserMeldekortV2 = ({ readOnly, submit, isLoading }: Props) =
     return JSON.stringify(meldekort);
   }
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => submit('MELDEKORT', mapTilMeldekortKontrakt(data), data.innsendtDato))(event);
   };
 

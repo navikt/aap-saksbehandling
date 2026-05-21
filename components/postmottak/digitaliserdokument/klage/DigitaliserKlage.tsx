@@ -5,7 +5,7 @@ import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { Button } from '@navikt/ds-react';
-import { FormEvent } from 'react';
+import { SubmitEventHandler } from 'react';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { KlageV0 } from 'lib/types/types';
 import { parse } from 'date-fns';
@@ -77,7 +77,7 @@ export const DigitaliserKlage = ({ readOnly, submit, grunnlag, isLoading, regist
     return JSON.stringify(klageJournalføring);
   }
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => submit('KLAGE', mapTilKlageKontrakt(data), null))(event);
   };
   return (
