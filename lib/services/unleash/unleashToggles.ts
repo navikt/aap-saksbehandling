@@ -9,7 +9,6 @@ export const FLAGS = [
   'VisArenasakerOversikt',
   'ArenasakerLenkeTilVisninsklient',
   'BegrunnelseForIkkeSendBrev',
-  'HastemarkeringerFoerst',
   'ForutgaaendeGap',
 ] as const;
 
@@ -27,6 +26,5 @@ export const mockedFlags: Flags = {
   VisArenasakerOversikt: true,
   ArenasakerLenkeTilVisninsklient: true,
   BegrunnelseForIkkeSendBrev: true,
-  HastemarkeringerFoerst: true,
   ForutgaaendeGap: true,
 };

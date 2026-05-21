@@ -31,7 +31,6 @@ import { useBackendSortering } from 'hooks/oppgave/BackendSorteringHook';
 import { AlleOppgaverFiltrering } from 'components/oppgaveliste/filtrering/alleoppgaverfiltrering/AlleOppgaverFiltrering';
 import { ValuePair } from 'components/form/FormField';
 import { useInnloggetBruker } from 'hooks/BrukerHook';
-import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   enheter: Enhet[];
@@ -45,7 +44,6 @@ export const AlleOppgaver = ({ enheter }: Props) => {
   const bruker = useInnloggetBruker();
   const [aktivKø, setAktivKø] = useState<AktivKø | undefined>(undefined);
   const [hasteoppgaverØverst, setHasteOppgaverØverst] = useState<boolean>(true);
-  const skalViseHasteoppgaveToggle = useFeatureFlag('HastemarkeringerFoerst');
 
   const [valgteRader, setValgteRader] = useState<number[]>([]);
   const lagretUtvidetFilter = hentAktivUtvidetFilter();
@@ -226,16 +224,14 @@ export const AlleOppgaver = ({ enheter }: Props) => {
               oppdaterKø={oppdaterKø}
               form={form}
             />
-            {skalViseHasteoppgaveToggle && (
-              <Switch
-                value="hasteoppgaver"
-                checked={hasteoppgaverØverst}
-                onChange={() => setHasteOppgaverØverst((prev) => !prev)}
-                size={'small'}
-              >
-                Vis hastemarkeringer øverst
-              </Switch>
-            )}
+            <Switch
+              value="hasteoppgaver"
+              checked={hasteoppgaverØverst}
+              onChange={() => setHasteOppgaverØverst((prev) => !prev)}
+              size={'small'}
+            >
+              Vis hastemarkeringer øverst
+            </Switch>
           </HStack>
           <HStack gap={'space-8'} paddingInline={'space-16'} paddingBlock={'space-8'}>
             <Label as="p" size={'small'}>
