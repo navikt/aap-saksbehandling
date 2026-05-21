@@ -17695,11 +17695,12 @@ export interface components {
         | 'RETUR_FRA_BESLUTTER'
         | 'TIL_BEHANDLING'
         | 'TIL_BESLUTTER'
+        | 'TIL_FORHÅNDSVARSEL'
         | 'TIL_GODKJENNING';
       fullstendigPeriode: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.TilbakekrevingPeriode'];
       /**
        * Format: date-time
-       * @example 2025-04-01T12:30:00
+       * @example 2025-04-01T14:30:00+02:00
        */
       sakOpprettet: string;
       saksbehandlingURL: string;
@@ -17709,6 +17710,7 @@ export interface components {
        * @example 2025-04-01
        */
       varselSendt?: string | null;
+      venter?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.TilbakekrevingVenterKafkaDto'];
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.TilbakekrevingPeriode': {
       /**
@@ -17721,6 +17723,25 @@ export interface components {
        * @example 2025-04-01
        */
       tom: string;
+    };
+    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.TilbakekrevingVenterKafkaDto': {
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      gjennoptas?: string | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      gjenopptas?: string | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      gjenoptas?: string | null;
+      /** @enum {string} */
+      grunn: 'AVVENTER_BRUKERUTTALELSE';
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Uf\u00F8revedtak': components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Uf\u00F8revedtakV0'];
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Uf\u00F8revedtakV0': {
@@ -17898,6 +17919,7 @@ export interface components {
         | 'SATT_PÅ_VENT'
         | 'SENDT_TIL_BESLUTTER'
         | 'SENDT_TIL_KVALITETSSIKRER'
+        | 'SØKNAD_TRUKKET'
         | 'TATT_AV_VENT'
         | 'VEDTAK_FATTET';
       resultat?: string | null;
@@ -18147,7 +18169,11 @@ export interface components {
        */
       opprettetTidspunkt: string;
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
-      /** @enum {string|null} */
+      /**
+       * @deprecated
+       * @description Bruk tilstand i stedet for å utlede sakens tilstand
+       * @enum {string|null}
+       */
       resultat?:
         | 'AVBRUTT'
         | 'AVSLAG'
@@ -18160,6 +18186,8 @@ export interface components {
         | 'TRUKKET'
         | null;
       saksnummer: string;
+      /** @enum {string|null} */
+      tilstand?: 'TRUKKET' | 'ÅPEN' | null;
     };
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.S\u00F8kDto': {
       's\u00F8ketekst': string;
