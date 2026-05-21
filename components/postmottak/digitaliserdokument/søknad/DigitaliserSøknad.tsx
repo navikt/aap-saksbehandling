@@ -26,7 +26,7 @@ import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { isBefore, parse, startOfDay } from 'date-fns';
 import { validerDato } from 'lib/validation/dateValidation';
-import { FormEvent } from 'react';
+import { SubmitEventHandler } from 'react';
 import { formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
 
 export type Utenlandsopphold = {
@@ -212,7 +212,7 @@ export const DigitaliserSøknad = ({ grunnlag, registrertDato, readOnly, submit,
     { readOnly }
   );
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) =>
       submit('SØKNAD', mapTilSøknadKontrakt(data), parseDatoFraDatePicker(data.søknadsDato)!)
     )(event);

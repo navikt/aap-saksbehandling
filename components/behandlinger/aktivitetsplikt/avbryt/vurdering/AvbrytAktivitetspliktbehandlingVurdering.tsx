@@ -5,7 +5,7 @@ import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { useConfigForm } from 'components/form/FormHook';
-import { FormEvent } from 'react';
+import { SubmitEventHandler } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
 import { FormField } from 'components/form/FormField';
@@ -61,7 +61,7 @@ export const AvbrytAktivitetspliktbehandlingVurdering = ({ grunnlag, readOnly, b
     { readOnly: formReadOnly }
   );
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
       løsBehovOgGåTilNesteSteg({
         behandlingVersjon: behandlingVersjon,
