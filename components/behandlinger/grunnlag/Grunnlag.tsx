@@ -38,6 +38,7 @@ export const Grunnlag = async ({ behandlingsreferanse }: Props) => {
     flyt.data,
     Behovstype.FASTSETT_YRKESSKADEINNTEKT
   );
+  console.log('fastsettYrkesskadeInntekt', fastsettYrkesskadeInntekt);
   const vurderManglendeLigningSteg = getStegData(aktivStegGruppe, 'MANGLENDE_LIGNING', flyt.data);
   const inntektsbortfall = getStegData(
     aktivStegGruppe,
