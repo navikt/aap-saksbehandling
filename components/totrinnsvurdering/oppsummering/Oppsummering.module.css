@@ -2,6 +2,7 @@
   display: grid;
   flex-direction: column;
   gap: var(--ax-space-12);
+  overflow-wrap: anywhere;
 }
 
 .beslutteroppsummering {
