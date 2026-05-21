@@ -7,7 +7,7 @@ import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 
 import styles from 'components/vilkårskort/Vilkårskort.module.css';
 import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
-import { FormEvent, ReactNode } from 'react';
+import { ReactNode, SubmitEventHandler } from 'react';
 import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { ApiException } from 'lib/utils/api';
 import { VisningActions, VisningModus } from 'lib/types/visningTypes';
@@ -17,7 +17,7 @@ export interface VilkårsKortMedFormOgMellomlagringProps {
   heading: string;
   steg: StegType;
   children: ReactNode;
-  onSubmit: (e: FormEvent<HTMLFormElement>) => void;
+  onSubmit: SubmitEventHandler;
   isLoading: boolean;
   status: LøsBehovOgGåTilNesteStegStatus;
   løsBehovOgGåTilNesteStegError: ApiException | undefined;

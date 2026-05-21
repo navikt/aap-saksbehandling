@@ -8,7 +8,7 @@ import {
   MellomlagretVurdering,
 } from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { FormEvent } from 'react';
+import { SubmitEventHandler } from 'react';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { isBefore, parse } from 'date-fns';
 import { erDatoFoerDato, erDatoIFremtiden, validerDato } from 'lib/validation/dateValidation';
@@ -114,7 +114,7 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly, initi
     form
   );
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
       løsBehovOgGåTilNesteSteg(
         {

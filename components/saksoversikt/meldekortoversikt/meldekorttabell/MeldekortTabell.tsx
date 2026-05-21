@@ -69,9 +69,7 @@ export const MeldekortTabell = () => {
                   {antallTimerArbeidetIProsent != null ? `${antallTimerArbeidetIProsent} %` : '-'}
                 </Table.DataCell>
                 <Table.DataCell textSize={'small'}>
-                  {meldekort.meldekort?.meldeDato
-                    ? formaterDatoForFrontend(meldekort.meldekort?.meldeDato)
-                    : '-'}
+                  {meldekort.meldekort?.meldeDato ? formaterDatoForFrontend(meldekort.meldekort?.meldeDato) : '-'}
                 </Table.DataCell>
                 <Table.DataCell textSize={'small'}>
                   {meldekort.meldekort?.oppdatertTidspunkt

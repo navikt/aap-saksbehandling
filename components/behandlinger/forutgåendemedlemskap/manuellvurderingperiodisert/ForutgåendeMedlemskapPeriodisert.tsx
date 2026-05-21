@@ -153,7 +153,7 @@ export const ForutgåendeMedlemskapPeriodisert = ({
           key={crypto.randomUUID()}
           fom={parseISO(vurdering.fom)}
           tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
-          foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+          førsteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
           vurderingStatus={getErOppfyltEllerIkkeStatus(
             vurdering.harForutgåendeMedlemskap ||
               vurdering.varMedlemMedNedsattArbeidsevne === true ||
