@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, FormEventHandler } from 'react';
+import { SubmitEventHandler } from 'react';
 import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/PostmottakLøsBehovOgGåTilNesteStegHook';
 import { AvsenderMottakerIdType, FinnSakGrunnlag, JournalpostInfo, Saksinfo } from 'lib/types/postmottakTypes';
 import { Alert, Detail, Label, Radio, VStack } from '@navikt/ds-react';
@@ -98,7 +98,7 @@ export const AvklarSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, 
     isLoading,
     løsBehovOgGåTilNesteStegError: error,
   } = usePostmottakLøsBehovOgGåTilNesteSteg('AVKLAR_SAK');
-  const onSubmit: FormEventHandler<HTMLFormElement> = (event: FormEvent<HTMLFormElement>) => {
+  const onSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
       løsBehovOgGåTilNesteSteg({
         behandlingVersjon: behandlingsVersjon,

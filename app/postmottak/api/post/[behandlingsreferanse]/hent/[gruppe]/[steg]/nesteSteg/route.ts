@@ -39,7 +39,7 @@ export async function GET(
         };
         await writer.write(`event: message\ndata: ${JSON.stringify(json)}\n\n`);
         await writer.close();
-        Prometheus.observePolling(startTime, {endepunkt, status: json.status, reason: 'MAX_RETRIES', retries});
+        Prometheus.observePolling(startTime, { endepunkt, status: json.status, reason: 'MAX_RETRIES', retries });
         return;
       }
       if (retries === 3) {

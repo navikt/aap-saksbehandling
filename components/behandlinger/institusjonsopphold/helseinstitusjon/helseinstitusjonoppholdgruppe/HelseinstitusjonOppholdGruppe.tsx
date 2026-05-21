@@ -112,9 +112,7 @@ export const HelseinstitusjonOppholdGruppe = ({
                   key={vurdering.periode.fom}
                   fom={new Dato(vurdering.periode.fom).dato}
                   tom={justertTomDato}
-                  foersteNyePeriodeFraDato={
-                    foersteNyePeriode == null ? null : parseDatoFraDatePicker(foersteNyePeriode)
-                  }
+                  førsteNyePeriodeFraDato={foersteNyePeriode == null ? null : parseDatoFraDatePicker(foersteNyePeriode)}
                   vurderingStatus={getErReduksjonEllerIkke(erReduksjonUtIFraVurdering(vurdering))}
                   vurderingerMeta={vurdering.vurderingerMeta}
                 >
