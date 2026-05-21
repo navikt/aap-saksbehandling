@@ -32,6 +32,7 @@ describe('totrinnsvurderingform', () => {
         grunnlag={grunnlagUtenVurdering}
         erKvalitetssikring={false}
         readOnly={false}
+        markeringer={[]}
       />
     );
 
@@ -49,6 +50,7 @@ describe('totrinnsvurderingform', () => {
         grunnlag={grunnlagUtenVurdering}
         erKvalitetssikring={false}
         readOnly={false}
+        markeringer={[]}
       />
     );
 
@@ -66,6 +68,7 @@ describe('totrinnsvurderingform', () => {
         grunnlag={grunnlagUtenVurdering}
         erKvalitetssikring={false}
         readOnly={false}
+        markeringer={[]}
       />
     );
 
@@ -80,6 +83,7 @@ describe('totrinnsvurderingform', () => {
         grunnlag={grunnlagUtenVurdering}
         erKvalitetssikring={false}
         readOnly={false}
+        markeringer={[]}
       />
     );
 
@@ -97,6 +101,7 @@ describe('totrinnsvurderingform', () => {
         grunnlag={grunnlagUtenVurdering}
         erKvalitetssikring={false}
         readOnly={false}
+        markeringer={[]}
       />
     );
 
@@ -123,6 +128,7 @@ describe('totrinnsvurderingform', () => {
         grunnlag={grunnlagUtenVurdering}
         erKvalitetssikring={false}
         readOnly={false}
+        markeringer={[]}
       />
     );
 
@@ -140,6 +146,7 @@ describe('totrinnsvurderingform', () => {
         grunnlag={grunnlagUtenVurdering}
         erKvalitetssikring={false}
         readOnly={false}
+        markeringer={[]}
       />
     );
 
@@ -160,6 +167,7 @@ describe('totrinnsvurderingform', () => {
         grunnlag={grunnlagUtenVurdering}
         erKvalitetssikring={false}
         readOnly={false}
+        markeringer={[]}
       />
     );
 
@@ -180,6 +188,7 @@ describe('totrinnsvurderingform', () => {
         grunnlag={grunnlagUtenVurdering}
         erKvalitetssikring={false}
         readOnly={false}
+        markeringer={[]}
       />
     );
 
@@ -203,6 +212,7 @@ describe('totrinnsvurderingform', () => {
         grunnlag={grunnlagUtenVurdering}
         erKvalitetssikring={false}
         readOnly={false}
+        markeringer={[]}
       />
     );
 
@@ -232,6 +242,7 @@ describe('totrinnsvurderingform', () => {
         grunnlag={grunnlagUtenVurdering}
         erKvalitetssikring={false}
         readOnly={false}
+        markeringer={[]}
       />
     );
 
@@ -259,6 +270,7 @@ describe('totrinnsvurderingform', () => {
         grunnlag={grunnlagUtenVurdering}
         erKvalitetssikring={false}
         readOnly={false}
+        markeringer={[]}
       />
     );
 
@@ -280,6 +292,7 @@ describe('totrinnsvurderingform', () => {
         }}
         erKvalitetssikring={false}
         readOnly={false}
+        markeringer={[]}
       />
     );
     const radioJa = screen.getAllByRole('radio', { name: /ja/i });
@@ -303,6 +316,7 @@ describe('totrinnsvurderingform', () => {
         }}
         erKvalitetssikring={false}
         readOnly={false}
+        markeringer={[]}
       />
     );
     const radioJa = screen.getAllByRole('radio', { name: /nei/i });
@@ -331,14 +345,13 @@ describe('Totrinnsvurdering av vedtaksbrev', () => {
   };
   it('har en egen beskrivelse for kvalitetssikring av vedtaksbrev', () => {
     render(
-      <TotrinnsvurderingForm behandlingsversjon={1} grunnlag={grunnlaget} erKvalitetssikring={true} readOnly={false} />
-    );
+      <TotrinnsvurderingForm behandlingsversjon={1} grunnlag={grunnlaget} erKvalitetssikring={true} readOnly={false} markeringer={[]} />);
     expect(screen.getByText('Godkjenner du begrunnelsen?')).toBeVisible();
   });
 
   it('har egne grunner for retur', async () => {
     render(
-      <TotrinnsvurderingForm behandlingsversjon={1} grunnlag={grunnlaget} erKvalitetssikring={true} readOnly={false} />
+      <TotrinnsvurderingForm behandlingsversjon={1} grunnlag={grunnlaget} erKvalitetssikring={true} readOnly={false} markeringer={[]} />
     );
 
     await user.click(screen.getByRole('radio', { name: /Nei/ }));
@@ -356,6 +369,7 @@ describe('Totrinnsvurdering av vedtaksbrev', () => {
         grunnlag={grunnlagUtenVurdering}
         erKvalitetssikring={false}
         readOnly={false}
+        markeringer={[]}
       />
     );
 
@@ -403,6 +417,7 @@ describe('mellomlagring', () => {
         erKvalitetssikring={false}
         grunnlag={grunnlagUtenVurdering}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+        markeringer={[]}
       />
     );
     const tekst = screen.getByText('Utkast lagret 21.08.2025 12:00 (Jan T. Loven)');
@@ -417,6 +432,7 @@ describe('mellomlagring', () => {
         erKvalitetssikring={false}
         grunnlag={grunnlagUtenVurdering}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+        markeringer={[]}
       />
     );
 
@@ -439,6 +455,7 @@ describe('mellomlagring', () => {
         erKvalitetssikring={false}
         grunnlag={grunnlagMedVurdering}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+        markeringer={[]}
       />
     );
 
@@ -456,6 +473,7 @@ describe('mellomlagring', () => {
         readOnly={false}
         erKvalitetssikring={false}
         grunnlag={grunnlagMedVurdering}
+        markeringer={[]}
       />
     );
 
@@ -474,6 +492,7 @@ describe('mellomlagring', () => {
         erKvalitetssikring={false}
         grunnlag={grunnlagUtenVurdering}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+        markeringer={[]}
       />
     );
 
@@ -498,6 +517,7 @@ describe('mellomlagring', () => {
         erKvalitetssikring={false}
         grunnlag={grunnlagMedVurdering}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+        markeringer={[]}
       />
     );
 
@@ -524,6 +544,7 @@ describe('mellomlagring', () => {
         erKvalitetssikring={false}
         grunnlag={grunnlagMedVurdering}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+        markeringer={[]}
       />
     );
 

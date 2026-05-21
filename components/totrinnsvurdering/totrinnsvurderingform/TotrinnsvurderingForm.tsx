@@ -6,6 +6,8 @@ import { Alert, Button, Detail, HStack } from '@navikt/ds-react';
 import {
   FatteVedtakGrunnlag,
   KvalitetssikringGrunnlag,
+  MarkeringDto,
+  Markeringstype,
   MellomlagretVurdering,
   ToTrinnsVurdering,
 } from 'lib/types/types';
@@ -25,6 +27,10 @@ import {
   useUmamiStartTidspunkt,
   useUmamiVarighetHendelser,
 } from 'lib/utils/umami';
+import { TotrinnsvurderingHastemarkering } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingHastemarkering';
+import { Markering } from 'lib/types/oppgaveTypes';
+import { NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType } from '@navikt/aap-oppgave-typescript-types';
+import { clientFjernMarkeringForBehandling } from 'lib/clientApi';
 import { isLocal } from 'lib/utils/environment';
 
 interface Props {
@@ -33,6 +39,7 @@ interface Props {
   readOnly: boolean;
   initialMellomlagretVurdering?: MellomlagretVurdering;
   behandlingsversjon: number;
+  markeringer?: Markering[];
 }
 
 export interface FormFieldsToTrinnsVurdering {
@@ -47,6 +54,7 @@ export const TotrinnsvurderingForm = ({
   erKvalitetssikring,
   initialMellomlagretVurdering,
   behandlingsversjon,
+  markeringer,
 }: Props) => {
   const { saksnummer, behandlingsreferanse } = useParamsMedType();
 
@@ -63,10 +71,27 @@ export const TotrinnsvurderingForm = ({
     ? mapMellomlagringToDraftFormFields(JSON.parse(initialMellomlagretVurdering.data))
     : mapVurderingToDraftFormFields(grunnlag.vurderinger);
 
+  const hastemarkeringer = markeringer !== undefined ? markeringer.filter(erHastemarkering) : [];
+  const harHastermarkering = erMarkeringsjekk(hastemarkeringer);
+
+  const hastemarkeringSjekk: ToTrinnsVurderingFormFields = {
+    godkjent: undefined,
+    begrunnelse: hastemarkeringer?.at(0)?.begrunnelse ?? '',
+    grunner: [],
+    årsakFritekst: 'Haster',
+    definisjon: '5032',
+    markeringer: hastemarkeringer,
+  };
+
+  const totrinnsvurderinger =
+    harHastermarkering && erKvalitetssikring
+      ? defaultValue.totrinnsvurderinger?.concat([hastemarkeringSjekk])
+      : defaultValue.totrinnsvurderinger;
+
   const { form } = useConfigForm<FormFieldsToTrinnsVurdering>({
     totrinnsvurderinger: {
       type: 'fieldArray',
-      defaultValue: defaultValue.totrinnsvurderinger,
+      defaultValue: totrinnsvurderinger,
     },
   });
 
@@ -105,6 +130,11 @@ export const TotrinnsvurderingForm = ({
               isError = true;
               return;
             }
+            if (neste && erMarkeringsjekk(neste.markeringer) && neste.godkjent === JaEllerNei.Nei) {
+              neste.markeringer?.filter(erHastemarkering).forEach((markering) => {
+                clientFjernMarkeringForBehandling(behandlingsreferanse, markering);
+              });
+            }
           }
         });
         if (isError) {
@@ -115,26 +145,28 @@ export const TotrinnsvurderingForm = ({
             behandlingVersjon: behandlingsversjon,
             behov: {
               behovstype: erKvalitetssikring ? Behovstype.KVALITETSSIKRING_KODE : Behovstype.FATTE_VEDTAK_KODE,
-              vurderinger: assessedFields.map((vurdering) => {
-                if (vurdering.godkjent === JaEllerNei.Ja) {
-                  return {
-                    definisjon: vurdering.definisjon,
-                    godkjent: true,
-                  };
-                } else {
-                  return {
-                    definisjon: vurdering.definisjon,
-                    godkjent: getTrueFalseEllerUndefined(vurdering.godkjent),
-                    grunner: vurdering.grunner?.map((grunn) => {
-                      return {
-                        årsak: grunn,
-                        årsakFritekst: grunn === 'ANNET' ? vurdering.årsakFritekst : undefined,
-                      };
-                    }),
-                    begrunnelse: vurdering.begrunnelse,
-                  };
-                }
-              }),
+              vurderinger: assessedFields
+                .filter((vurdering) => !erMarkeringsjekk(vurdering.markeringer))
+                .map((vurdering) => {
+                  if (vurdering.godkjent === JaEllerNei.Ja) {
+                    return {
+                      definisjon: vurdering.definisjon,
+                      godkjent: true,
+                    };
+                  } else {
+                    return {
+                      definisjon: vurdering.definisjon,
+                      godkjent: getTrueFalseEllerUndefined(vurdering.godkjent),
+                      grunner: vurdering.grunner?.map((grunn) => {
+                        return {
+                          årsak: grunn,
+                          årsakFritekst: grunn === 'ANNET' ? vurdering.årsakFritekst : undefined,
+                        };
+                      }),
+                      begrunnelse: vurdering.begrunnelse,
+                    };
+                  }
+                }),
             },
             referanse: behandlingsreferanse,
           },
@@ -167,6 +199,17 @@ export const TotrinnsvurderingForm = ({
               link={link}
               readOnly={readOnly}
               felterOnBlur={addHendelse}
+            />
+          );
+        }
+        if (erMarkeringsjekk(field.markeringer)) {
+          return (
+            <TotrinnsvurderingHastemarkering
+              key={field.id}
+              form={form}
+              index={index}
+              erKvalitetssikring={erKvalitetssikring}
+              readOnly={readOnly}
             />
           );
         }
@@ -245,6 +288,26 @@ function mapMellomlagringToDraftFormFields(mellomlagring: FormFieldsToTrinnsVurd
     }),
   };
 }
+
+function mapMarkeringstype(markeringstype: Markeringstype): NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType {
+  switch (markeringstype) {
+    case 'HASTER':
+      return NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.HASTER;
+    case 'KREVER_SPESIALKOMPETANSE':
+      return NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.KREVER_SPESIALKOMPETANSE;
+  }
+}
+
+function mapMarkeringFraDto(data: MarkeringDto): Markering {
+  return {
+    begrunnelse: data.begrunnelse,
+    markeringType: mapMarkeringstype(data.markeringType),
+    opprettetAv: data.opprettetAv,
+    opprettetAvNavn: data.opprettetAvNavn,
+    opprettetTidspunkt: data.opprettetTidspunkt,
+  };
+}
+
 function mapVurderingToDraftFormFields(vurderinger: ToTrinnsVurdering[]): DraftFormFields {
   return {
     totrinnsvurderinger: vurderinger.map((vurdering) => {
@@ -256,6 +319,7 @@ function mapVurderingToDraftFormFields(vurderinger: ToTrinnsVurdering[]): DraftF
           return grunn.årsak;
         }),
         årsakFritekst: vurdering.grunner?.find((grunn) => grunn.årsakFritekst)?.årsakFritekst || '',
+        markeringer: vurdering.markeringer?.map((markering) => mapMarkeringFraDto(markering)),
       };
     }),
   };
@@ -268,4 +332,14 @@ function godkjennAlleTotrinnsvurderinger(form: UseFormReturn<FormFieldsToTrinnsV
       form.setValue(`totrinnsvurderinger.${index}.godkjent`, JaEllerNei.Ja);
     });
   }
+}
+
+function erMarkeringsjekk(markeringer?: Markering[]) {
+  return markeringer !== undefined && markeringer?.length > 0;
+}
+
+function erHastemarkering(markering?: Markering) {
+  return (
+    markering !== undefined && markering?.markeringType === NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.HASTER
+  );
 }
