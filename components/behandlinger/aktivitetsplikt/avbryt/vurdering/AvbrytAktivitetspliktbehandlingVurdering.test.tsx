@@ -30,7 +30,7 @@ describe('Avbryt aktivitetspliktbehandling', () => {
         behandlingVersjon={1}
       />
     );
-    expect(screen.getByRole('heading', { name: 'Avbryt aktivitetspliktbehandling', level: 3 })).toBeVisible();
+    expect(screen.getByRole('heading', { name: 'Avbryt behandling', level: 3 })).toBeVisible();
   });
 
   it('har et felt for å begrunne hvorfor behandling skal avbrytes', () => {

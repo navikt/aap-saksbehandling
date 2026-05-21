@@ -76,7 +76,7 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
     case '4201':
       return '§ 11-9 Aktivitetsplikt';
     case '4301':
-      return 'Avbryt aktivitetspliktbehandling'
+      return 'Avbryt behandling'
     case '5001':
       return '§ 11-14 Student';
     case '5002':

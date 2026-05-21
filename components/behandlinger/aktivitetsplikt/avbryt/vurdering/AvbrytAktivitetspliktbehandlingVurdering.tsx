@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { AvbrytAktivitetspliktbehandlingGrunnlag } from 'lib/types/types';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
@@ -23,8 +23,9 @@ interface FormFields {
 
 export const AvbrytAktivitetspliktbehandlingVurdering = ({ grunnlag, readOnly, behandlingVersjon }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('AVBRYT_AKTIVITETSPLIKTBEHANDLING');
+  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } = useLøsBehovOgGåTilNesteSteg(
+    'AVBRYT_AKTIVITETSPLIKTBEHANDLING'
+  );
 
   const { visningModus, visningActions, formReadOnly } = useVilkårskortVisning(
     readOnly,
@@ -36,7 +37,7 @@ export const AvbrytAktivitetspliktbehandlingVurdering = ({ grunnlag, readOnly, b
     {
       aarsak: {
         type: 'combobox',
-        label: 'Hva er årsaken til at aktivitetspliktbehandlingen skal avbrytes?',
+        label: 'Hva er årsaken til at behandlingen skal avbrytes?',
         options: [
           { value: 'BEHANDLINGEN_BLE_OPPRETTET_VED_EN_FEIL', label: 'Behandlingen ble opprettet ved en feil' },
           {
@@ -78,7 +79,7 @@ export const AvbrytAktivitetspliktbehandlingVurdering = ({ grunnlag, readOnly, b
 
   return (
     <VilkårskortMedForm
-      heading={'Avbryt aktivitetspliktbehandling'}
+      heading={'Avbryt behandling'}
       steg={'AVBRYT_AKTIVITETSPLIKTBEHANDLING'}
       onSubmit={handleSubmit}
       status={status}
