@@ -18,9 +18,18 @@ interface Props {
   index: number;
   form: UseFormReturn<FormFieldsToTrinnsVurdering>;
   field: FieldArrayWithId<FormFieldsToTrinnsVurdering, 'totrinnsvurderinger'>;
+  felterOnBlur?: (hendelse: string, tidsstempel: number) => void;
 }
 
-export const TotrinnnsvurderingFelter = ({ readOnly, link, erKvalitetssikring, form, index, field }: Props) => {
+export const TotrinnnsvurderingFelter = ({
+  readOnly,
+  link,
+  erKvalitetssikring,
+  form,
+  index,
+  field,
+  felterOnBlur = () => {},
+}: Props) => {
   const grunnOptions: ValuePair<ToTrinnsVurderingGrunn>[] = [
     { label: 'Mangler i utredning før vilkårsvurderingen', value: 'MANGLENDE_UTREDNING' },
     { label: 'Mangler i vilkårsvurderingen', value: 'MANGELFULL_BEGRUNNELSE' },
@@ -32,13 +41,21 @@ export const TotrinnnsvurderingFelter = ({ readOnly, link, erKvalitetssikring, f
   const annetGrunnErValgt =
     form.watch(`totrinnsvurderinger.${index}.grunner`) &&
     form.watch(`totrinnsvurderinger.${index}.grunner`)?.includes('ANNET');
+  const behovstypeEllerKode =
+    Object.keys(Behovstype)[Object.values(Behovstype).indexOf(field.definisjon as Behovstype)] || field.definisjon;
+  const eventPrefix = `${erKvalitetssikring ? 'KVALITETSSIKRER' : 'BESLUTTER'}_${behovstypeEllerKode}`;
 
   return (
     <div className={styles.totrinnsvurderingform}>
       <div
         className={`${styles.heading} ${erKvalitetssikring ? styles.headingKvalitetssikrer : styles.headingBeslutter}`}
       >
-        <AkselLink as={Link} prefetch={false} href={link}>
+        <AkselLink
+          as={Link}
+          prefetch={false}
+          href={link}
+          onClick={() => felterOnBlur(`${eventPrefix}_LINK`, Date.now())}
+        >
           {mapBehovskodeTilBehovstype(field.definisjon as Behovstype)}
         </AkselLink>
       </div>
@@ -50,7 +67,11 @@ export const TotrinnnsvurderingFelter = ({ readOnly, link, erKvalitetssikring, f
           readOnly={readOnly}
         >
           {JaEllerNeiOptions.map((option) => (
-            <Radio value={option.value} key={option.value}>
+            <Radio
+              onBlur={() => felterOnBlur(`${eventPrefix}_GODKJENT`, Date.now())}
+              value={option.value}
+              key={option.value}
+            >
               {option.label}
             </Radio>
           ))}
@@ -72,6 +93,7 @@ export const TotrinnnsvurderingFelter = ({ readOnly, link, erKvalitetssikring, f
                       : true,
                 },
               }}
+              onBlur={() => felterOnBlur(`${eventPrefix}_RETUR_BEGRUNNELSE`, Date.now())}
             />
             <CheckboxWrapper
               label={'Returårsak'}
@@ -81,7 +103,11 @@ export const TotrinnnsvurderingFelter = ({ readOnly, link, erKvalitetssikring, f
               rules={{ required: 'Du må oppgi en årsak' }}
             >
               {grunnOptions.map((option) => (
-                <Checkbox value={option.value} key={option.value}>
+                <Checkbox
+                  value={option.value}
+                  key={option.value}
+                  onBlur={() => felterOnBlur(`${eventPrefix}_RETUR_GRUNNER`, Date.now())}
+                >
                   {option.label}
                 </Checkbox>
               ))}
@@ -102,6 +128,7 @@ export const TotrinnnsvurderingFelter = ({ readOnly, link, erKvalitetssikring, f
                     message: 'Kan bestå av maks 50 tegn. Utfyllende begrunnelse skal i feltet over.',
                   },
                 }}
+                onBlur={() => felterOnBlur(`${eventPrefix}_RETUR_ÅRSAKFRITEKST`, Date.now())}
               />
             )}
           </>

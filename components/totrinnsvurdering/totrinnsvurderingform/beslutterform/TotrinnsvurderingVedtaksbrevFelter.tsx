@@ -1,7 +1,7 @@
 import { Behovstype, JaEllerNei, JaEllerNeiOptions, mapBehovskodeTilBehovstype } from 'lib/utils/form';
 
 import styles from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingFelter.module.css';
-import { Checkbox, Radio, Link as AkselLink } from '@navikt/ds-react';
+import { Checkbox, Link as AkselLink, Radio } from '@navikt/ds-react';
 import Link from 'next/link';
 import { ToTrinnsVurderingGrunn } from 'lib/types/types';
 import { FieldArrayWithId, UseFormReturn } from 'react-hook-form';
@@ -18,6 +18,7 @@ interface Props {
   index: number;
   form: UseFormReturn<FormFieldsToTrinnsVurdering>;
   field: FieldArrayWithId<FormFieldsToTrinnsVurdering, 'totrinnsvurderinger'>;
+  felterOnBlur?: (hendelse: string, tidsstempel: number) => void;
 }
 
 export const TotrinnsvurderingVedtaksbrevFelter = ({
@@ -27,6 +28,7 @@ export const TotrinnsvurderingVedtaksbrevFelter = ({
   form,
   index,
   field,
+  felterOnBlur = () => {},
 }: Props) => {
   const grunnOptions: ValuePair<ToTrinnsVurderingGrunn>[] = [
     { label: 'Skrivefeil', value: 'SKRIVEFEIL' },
@@ -39,13 +41,21 @@ export const TotrinnsvurderingVedtaksbrevFelter = ({
   const annetGrunnErValgt =
     form.watch(`totrinnsvurderinger.${index}.grunner`) &&
     form.watch(`totrinnsvurderinger.${index}.grunner`)?.includes('ANNET');
+  const behovstypeEllerKode =
+    Object.keys(Behovstype)[Object.values(Behovstype).indexOf(field.definisjon as Behovstype)] || field.definisjon;
+  const eventPrefix = `${erKvalitetssikring ? 'KVALITETSSIKRER' : 'BESLUTTER'}_${behovstypeEllerKode}`;
 
   return (
     <div className={styles.totrinnsvurderingform}>
       <div
         className={`${styles.heading} ${erKvalitetssikring ? styles.headingKvalitetssikrer : styles.headingBeslutter}`}
       >
-        <AkselLink as={Link} prefetch={false} href={link}>
+        <AkselLink
+          as={Link}
+          prefetch={false}
+          href={link}
+          onClick={() => felterOnBlur(`${eventPrefix}_LINK`, Date.now())}
+        >
           {mapBehovskodeTilBehovstype(field.definisjon as Behovstype)}
         </AkselLink>
       </div>
@@ -57,7 +67,11 @@ export const TotrinnsvurderingVedtaksbrevFelter = ({
           readOnly={readOnly}
         >
           {JaEllerNeiOptions.map((option) => (
-            <Radio value={option.value} key={option.value}>
+            <Radio
+              value={option.value}
+              key={option.value}
+              onBlur={() => felterOnBlur(`${eventPrefix}_GODKJENT`, Date.now())}
+            >
               {option.label}
             </Radio>
           ))}
@@ -79,6 +93,7 @@ export const TotrinnsvurderingVedtaksbrevFelter = ({
                       : true,
                 },
               }}
+              onBlur={() => felterOnBlur(`${eventPrefix}_RETUR_BEGRUNNELSE`, Date.now())}
             />
             <CheckboxWrapper
               label={'Returårsak'}
@@ -88,7 +103,11 @@ export const TotrinnsvurderingVedtaksbrevFelter = ({
               rules={{ required: 'Du må oppgi en grunn' }}
             >
               {grunnOptions.map((option) => (
-                <Checkbox value={option.value} key={option.value}>
+                <Checkbox
+                  value={option.value}
+                  key={option.value}
+                  onBlur={() => felterOnBlur(`${eventPrefix}_RETUR_GRUNNER`, Date.now())}
+                >
                   {option.label}
                 </Checkbox>
               ))}
@@ -108,6 +127,7 @@ export const TotrinnsvurderingVedtaksbrevFelter = ({
                     message: 'Kan bestå av maks 50 tegn. Utfyllende begrunnelse skal i feltet over.',
                   },
                 }}
+                onBlur={() => felterOnBlur(`${eventPrefix}_RETUR_ÅRSAKFRITEKST`, Date.now())}
               />
             )}{' '}
           </>
