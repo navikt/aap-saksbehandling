@@ -126,6 +126,8 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov | Vurde
       return '§ 11-15 Etablering av egen virksomhet';
     case 'REVURDER_SYKESTIPEND':
       return 'Revurder sykestipend';
+    case 'AKTIVITETSPLIKTBEHANDLING_AVBRUTT':
+      return 'Behandling avbrutt'
     default:
       return vurderingsbehov;
   }

@@ -164,6 +164,9 @@ export type TrukketSøknadVurdering =
 export type AvbrytRevurderingGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.revurdering.AvbrytRevurderingGrunnlagDto'];
 
+export type AvbrytAktivitetspliktbehandlingGrunnlag =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.avbrytaktivitetspliktbehandling.AvbrytAktivitetspliktbehandlingGrunnlagDto'];
+
 export type RettighetsinfoDto =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.rettighet.RettighetsinfoDto'];
 

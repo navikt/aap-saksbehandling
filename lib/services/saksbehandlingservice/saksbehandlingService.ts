@@ -8,6 +8,7 @@ import {
   ArbeidsevneGrunnlag,
   ArbeidsopptrappingGrunnlagResponse,
   AutomatiskLovvalgOgMedlemskapVurdering,
+  AvbrytAktivitetspliktbehandlingGrunnlag,
   AvbrytRevurderingGrunnlag,
   AvklarOppfolgingsoppgaveGrunnlagResponse,
   BarnepensjonGrunnlag,
@@ -373,6 +374,11 @@ export const hentTrukketSøknad = async (behandlingsreferanse: string) => {
 export const hentAvbruttRevurdering = async (behandlingsreferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/avbryt-revurdering`;
   return await apiFetch<AvbrytRevurderingGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentAvbruttAktivitetspliktbehandling = async (behandlingsreferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/aktivitetsplikt/${behandlingsreferanse}/grunnlag/avbryt`;
+  return await apiFetch<AvbrytAktivitetspliktbehandlingGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentRettighetsperiodeGrunnlag = async (behandlingsreferanse: string) => {
