@@ -39,9 +39,9 @@ export const Forhåndsvisning = ({ saksnummer, fritekst, dokumentasjonsType, vis
         {isLoading && <Loader />}
 
         {!isLoading && isSuccess(data) && (
-          <div style={{ whiteSpace: 'pre-wrap' }}>
+          <p style={{ whiteSpace: 'pre-wrap' }}>
             {data.data.konstruertBrev}
-          </div>
+          </p>
         )}
 
         {isError(data) && (
