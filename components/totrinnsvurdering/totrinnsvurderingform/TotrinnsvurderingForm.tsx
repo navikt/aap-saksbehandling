@@ -31,6 +31,7 @@ import { TotrinnsvurderingHastemarkering } from 'components/totrinnsvurdering/to
 import { Markering } from 'lib/types/oppgaveTypes';
 import { NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType } from '@navikt/aap-oppgave-typescript-types';
 import { useFeatureFlag } from 'context/UnleashContext';
+
 import { clientFjernMarkeringForBehandling } from 'lib/clientApi';
 import { isLocal } from 'lib/utils/environment';
 
