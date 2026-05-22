@@ -196,7 +196,7 @@ export const Yrkesskade = ({
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
       <VStack gap={'space-4'}>
-        <Label size="medium">Relevante informasjon fra søknad</Label>
+        <Label size="medium">Relevant informasjon fra søknad</Label>
         <BodyShort size={'small'}>
           {`Har du yrkesskade eller yrkessykdom som påvirker hvor mye du kan arbeide? ${mapOppgittYrkesskadeISøknadTilTekst(grunnlag.opplysninger.oppgittYrkesskadeISøknad)}`}
         </BodyShort>

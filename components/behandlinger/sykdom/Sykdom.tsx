@@ -19,7 +19,7 @@ import { EtableringAvEgenVirksomhetMedDatafetching } from 'components/behandling
 import { Behovstype } from 'lib/utils/form';
 import { BehandlingFlytOgTilstand, StegGruppe } from 'lib/types/types';
 import { BekreftVurderingerOppfølgingMedDataFetching } from 'components/behandlinger/sykdom/bekreftvurderingeroppfølging/BekreftVurderingerOppfølgingMedDataFetching';
-import { OppgittYrkesskadeUtenRegistertreffDataFetchingInfo } from 'components/behandlinger/sykdom/yrkesskade/OppgittYrkesskadeUtenRegistertreffDataFetchingInfo';
+import { OppgittYrkesskadeUtenRegistertreffInfo } from 'components/behandlinger/sykdom/yrkesskade/OppgittYrkesskadeUtenRegistertreffInfo';
 
 interface Props {
   behandlingsreferanse: string;
@@ -31,7 +31,7 @@ export const Sykdom = async ({ behandlingsreferanse }: Props) => {
     hentYrkesskadeVurderingGrunnlag(behandlingsreferanse),
   ]);
 
-  if (isError(flyt)) {
+  if (isError(flyt) || isError(yrkesskadeVurderingGrunnlag)) {
     return <ApiException apiResponses={[flyt]} />;
   }
 
@@ -145,7 +145,7 @@ export const Sykdom = async ({ behandlingsreferanse }: Props) => {
       )}
       {oppgittYrkesskadeInfoSteg.skalViseSteg && !vurderYrkesskadeSteg.skalViseSteg && (
         <StegSuspense>
-          <OppgittYrkesskadeUtenRegistertreffDataFetchingInfo grunnlag={yrkesskadeVurderingGrunnlag.data} />
+          <OppgittYrkesskadeUtenRegistertreffInfo grunnlag={yrkesskadeVurderingGrunnlag.data} />
         </StegSuspense>
       )}
       {vurderSykepengeerstatningSteg.skalViseSteg && (
@@ -166,7 +166,6 @@ export function hentStegDataForOppgittYrkesskadeInfo(grunnlag: {
 }) {
   const oppgittYrkesskadeISøknad = grunnlag.opplysninger.oppgittYrkesskadeISøknad;
   const harIngenYrkesskadeId = grunnlag.yrkesskadeVurdering == null;
-  console.log('grunnlag', grunnlag);
 
   return {
     skalViseSteg: oppgittYrkesskadeISøknad === true && harIngenYrkesskadeId,

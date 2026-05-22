@@ -11,7 +11,7 @@ export const OppgittYrkesskadeUtenRegistertreffInfo = ({ grunnlag }: YrkesskadeI
     <VilkårsKort heading={'§ 11-22 AAP ved yrkesskade'} steg={'VURDER_YRKESSKADE'} defaultOpen={true}>
       <VStack gap="space-16" style={{ marginBottom: 24 }}>
         <div>
-          <Label size="medium">Relevante informasjon fra søknad</Label>
+          <Label size="medium">Relevant informasjon fra søknad</Label>
           <BodyShort size="small" style={{ marginTop: 2 }}>
             Har du yrkesskade eller yrkessykdom som påvirker hvor mye du kan arbeide?{' '}
             {grunnlag.opplysninger.oppgittYrkesskadeISøknad ? 'Ja' : 'Nei'}
