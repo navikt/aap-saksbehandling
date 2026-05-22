@@ -214,6 +214,10 @@ export function clientBestillTestBrev(behandlingReferanse: string) {
   return clientFetch(`${BASE_URL}/api/test/bestill/brev`, 'POST', { behandlingReferanse });
 }
 
+export function clientHentBrevbyggerPreview(brevbestillingReferanse: string) {
+  return clientFetch(`${BASE_URL}/api/brev/${brevbestillingReferanse}/brevbygger-preview`, 'GET');
+}
+
 export function clientPurrPåLegeerklæring(dialogmeldingUUID: string, behandlingsreferanse: string) {
   return clientFetch(`${BASE_URL}/api/dokumentinnhenting/purring`, 'POST', {
     dialogmeldingPurringUUID: dialogmeldingUUID,

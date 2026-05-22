@@ -17,12 +17,23 @@ interface Props {
 
 interface MellomlagringAvBrevResultat {
   lasterHtml: boolean;
-  htmlString: string | undefined;
+  brevPreview: BrevpreviewResponse | undefined;
+}
+
+export interface InnholdNode {
+  htmlString: string;
+  sanityNoekkel?: string;
+}
+
+export interface BrevpreviewResponse {
+  header: InnholdNode;
+  delmaler: InnholdNode[];
+  signaturer: InnholdNode;
 }
 
 export function useMellomlagringAvBrev({ referanse, control, brevmal, brevdata }: Props): MellomlagringAvBrevResultat {
   const [lasterHtml, setLasterHtml] = useState(false);
-  const [htmlString, setHtmlString] = useState<string | undefined>();
+  const [brevPreview, setBrevpreview] = useState<BrevpreviewResponse | undefined>();
 
   const formVerdier = useWatch({ control });
   const debouncedFormVerdier = useDebounce(formVerdier);
@@ -35,8 +46,10 @@ export function useMellomlagringAvBrev({ referanse, control, brevmal, brevdata }
         const res = await clientOppdaterBrevdata(referanse, payload);
 
         if (isSuccess(res)) {
-          const { html } = await fetch(`/saksbehandling/api/brev/${referanse}/forhandsvis-html/`).then((r) => r.json());
-          setHtmlString(html);
+          const response = await fetch(`/saksbehandling/api/brev/${referanse}/brevbygger-preview/`).then((r) =>
+            r.json()
+          );
+          setBrevpreview(JSON.parse(response.json));
         }
       } finally {
         setLasterHtml(false);
@@ -45,5 +58,5 @@ export function useMellomlagringAvBrev({ referanse, control, brevmal, brevdata }
     lagreOgOppdaterHtml();
   }, [debouncedFormVerdier]);
 
-  return { lasterHtml, htmlString };
+  return { lasterHtml, brevPreview };
 }

@@ -2,7 +2,7 @@
 
 import { Box, Button, HGrid, HStack, VStack } from '@navikt/ds-react';
 import { useForm } from 'react-hook-form';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ExpandIcon, ShrinkIcon } from '@navikt/aksel-icons';
 
@@ -27,6 +27,8 @@ import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { loggUmamiEvent, useUmamiStartTidspunkt } from 'lib/utils/umami';
 import { ForhåndsvisHtml } from 'components/brevbygger/ForhåndsvisHtml';
 import { FerdigstillBrevDialog } from 'components/brevbygger/FerdigstillBrevDialog';
+
+import styles from './Brevbygger.module.css';
 
 interface BrevbyggerProps {
   referanse: string;
@@ -62,8 +64,16 @@ export const Brevbygger = ({
     values: initialiserFormVerdier(parsedBrevmal, brevdata),
   });
   const umamiStartTidspunkt = useUmamiStartTidspunkt('AKTIV');
+  // const [brevPreview, setBrevPreview] = useState<BrevpreviewResponse | undefined>();
+  const { brevPreview, lasterHtml } = useMellomlagringAvBrev({ referanse, control, brevmal: parsedBrevmal, brevdata });
 
-  const { htmlString, lasterHtml } = useMellomlagringAvBrev({ referanse, control, brevmal: parsedBrevmal, brevdata });
+  // useEffect(() => {
+  //   const getTheData = async () => {
+  //     const html = await fetch(`/saksbehandling/api/brev/${referanse}/brevbygger-preview/`).then((r) => r.json());
+  //     setBrevPreview(html);
+  //   };
+  //   getTheData();
+  // }, [brevdata]);
 
   const router = useRouter();
   const { behandlingsreferanse, saksnummer } = useParamsMedType();
@@ -134,7 +144,7 @@ export const Brevbygger = ({
   };
 
   return (
-    <HGrid columns={pdfViewExpanded ? '1fr 3fr' : '1fr 1fr'} gap={'space-8'} minWidth={'100%'}>
+    <>
       <Box>
         {fullmektigMottaker && brukerMottaker && (
           <VelgeMottakere
@@ -148,15 +158,28 @@ export const Brevbygger = ({
 
         <VStack gap="space-16">
           <RefusjonskravVisning refusjonskravgrunnlag={refusjonskravgrunnlag} />
-          {parsedBrevmal.delmaler.map((delmalRef) => (
-            <Delmal
-              key={delmalRef._key}
-              delmalRef={delmalRef}
-              control={control}
-              erMarkert={markerteDelmalKeys.has(delmalRef._key)}
-              onToggleMarkering={() => toggleMarkering(delmalRef._key)}
-            />
-          ))}
+          <HGrid columns={'1fr 2fr'} gap={'space-8'}>
+            {brevPreview && (
+              <>
+                <div />
+                <div
+                  style={{ background: '#fff', padding: '1rem' }}
+                  className={styles.brevheader}
+                  dangerouslySetInnerHTML={{ __html: brevPreview?.header.htmlString }}
+                />
+              </>
+            )}
+            {parsedBrevmal.delmaler.map((delmalRef) => (
+              <Delmal
+                key={delmalRef._key}
+                delmalRef={delmalRef}
+                control={control}
+                erMarkert={markerteDelmalKeys.has(delmalRef._key)}
+                onToggleMarkering={() => toggleMarkering(delmalRef._key)}
+                delmalInnhold={brevPreview?.delmaler.find((bbb) => bbb.sanityNoekkel === delmalRef._key)?.htmlString}
+              />
+            ))}
+          </HGrid>
         </VStack>
 
         <HStack gap="space-8" justify="space-between" marginBlock="space-8">
@@ -205,7 +228,7 @@ export const Brevbygger = ({
             icon={pdfViewExpanded ? <ShrinkIcon /> : <ExpandIcon />}
           />
         </div>
-        <ForhåndsvisHtml isLoading={lasterHtml} html={htmlString} markerteDelmalKeys={markerteDelmalKeys} />
+        {/*<ForhåndsvisHtml isLoading={lasterHtml} html={htmlString} markerteDelmalKeys={markerteDelmalKeys} />*/}
       </VStack>
       <IkkeSendBrevModal
         isOpen={ikkeSendBrevModalOpen}
@@ -219,6 +242,7 @@ export const Brevbygger = ({
         sendBrev={sendBrev}
         senderBrev={isLoading}
       />
-    </HGrid>
+      {/*</HGrid>*/}
+    </>
   );
 };

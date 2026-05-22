@@ -651,6 +651,13 @@ export const hentForhåndsvisningBrevHtml = async (brevbestillingReferanse: stri
   );
 };
 
+export const hentBrevmalPreview = async (brevbestillingReferanse: string) => {
+  return apiFetchPdf(
+    `${saksbehandlingApiBaseUrl}/api/brev/${brevbestillingReferanse}/brevmal-preview`,
+    saksbehandlingApiScope
+  );
+};
+
 export const hentOppfølgingsoppgaveGrunnlag = async (behandlingsreferanse: string) => {
   return apiFetch<AvklarOppfolgingsoppgaveGrunnlagResponse>(
     `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/oppfolgingsoppgave`,
