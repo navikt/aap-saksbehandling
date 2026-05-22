@@ -31,6 +31,7 @@ import { Alert, Link, VStack } from '@navikt/ds-react';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
+import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
 
 interface Props {
   behandlingVersjon: number;
@@ -86,6 +87,15 @@ export const Bistandsbehov = ({
 
   const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
+      const erPerioderGyldige = validerPeriodiserteVurderingerRekkefølge({
+        form,
+        nyeVurderinger: data.vurderinger,
+        grunnlag,
+        vurderingerKanIkkeVæreFørKanVurderes: true,
+      });
+      if (!erPerioderGyldige) {
+        return;
+      }
       løsPeriodisertBehovOgGåTilNesteSteg(
         {
           behandlingVersjon: behandlingVersjon,
