@@ -5,13 +5,14 @@ import {
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { Tilkjent, TilkjentMedDiff } from 'components/behandlinger/tilkjentytelse/tilkjent/Tilkjent';
-
+import { unleashService } from 'lib/services/unleash/unleashService';
 interface Props {
   behandlingsreferanse: string;
 }
 
 export const TilkjentMedDataFetching = async ({ behandlingsreferanse }: Props) => {
-  const tilkjentYtelseMedDiffToggle = true;
+  const tilkjentYtelseMedDiffToggle = unleashService.isEnabled('TilkjentYtelseMedDiff');
+
   if (tilkjentYtelseMedDiffToggle) {
     const tilkjentYtelseMedDiff = await hentTilkjentYtelseMedDiff(behandlingsreferanse);
     if (isError(tilkjentYtelseMedDiff)) {

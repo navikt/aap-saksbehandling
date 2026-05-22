@@ -1,10 +1,10 @@
 'use client';
 
-import { TilkjentYtelseGrunnlag, TilkjentYtelseGrunnlagMedDiff, TilkjentYtelsePeriode } from 'lib/types/types';
+import { Diff, TilkjentYtelseGrunnlag, TilkjentYtelseGrunnlagMedDiff, TilkjentYtelsePeriode } from 'lib/types/types';
 import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
-import { ActionMenu, BodyShort, Button, Table, VStack } from '@navikt/ds-react';
-
+import { ActionMenu, BodyShort, Button, Chips, Table, VStack } from '@navikt/ds-react';
 import { TableStyled } from 'components/tablestyled/TableStyled';
+import React, { useState } from 'react';
 import { formaterDatoForFrontend, formaterPeriode } from 'lib/utils/date';
 import { formaterTilNok, formaterTilProsent } from 'lib/utils/string';
 
@@ -41,23 +41,39 @@ export const Tilkjent = ({ grunnlag }: Props) => {
         </Table.Header>
         <Table.Body>
           {grunnlag.perioder.map((periode, periodeIndex) => {
-            return <TilkjentPeriodeRad key={periodeIndex} periode={periode} periodeIndex={periodeIndex} />;
+            const bakgrunnClassName = periodeIndex % 2 ? styles.tablerowwithzebra : '';
+            return <TilkjentPeriodeRad key={periodeIndex} periode={periode} bakgrunnClassName={bakgrunnClassName} />;
           })}
         </Table.Body>
       </TableStyled>
     </VilkårsKort>
   );
 };
-export const TilkjentMedDiff = ({ grunnlagMedDiff }: PropsMedDiff) => {
-  const endredePerioder = grunnlagMedDiff.perioder
-    // @ts-expect-error Skal fikses senere
-    .filter((periode) => periode['diff'] === 'Endret')
-    // @ts-expect-error Skal fikses senere
-    .map((periode) => periode['til']);
 
-  console.log(grunnlagMedDiff);
+export const TilkjentMedDiff = ({ grunnlagMedDiff }: PropsMedDiff) => {
+  const [visHistorikkPåEndredePerioder, setVisHistorikkPåEndredePerioder] = useState(false);
+  const [visPerioderUtenEndringFraTidligere, setVisPerioderUtenEndringFraTidligere] = useState(false);
+
   return (
     <VilkårsKort heading="Tilkjent ytelse" steg="BEREGN_TILKJENT_YTELSE">
+      <Chips size={'small'}>
+        <Chips.Toggle
+          onClick={() => {
+            setVisHistorikkPåEndredePerioder(!visHistorikkPåEndredePerioder);
+          }}
+          selected={visHistorikkPåEndredePerioder}
+        >
+          Vis historikk på endrede perioder
+        </Chips.Toggle>
+        <Chips.Toggle
+          onClick={() => {
+            setVisPerioderUtenEndringFraTidligere(!visPerioderUtenEndringFraTidligere);
+          }}
+          selected={visPerioderUtenEndringFraTidligere}
+        >
+          Vis perioder uten endring fra tidligere behandling
+        </Chips.Toggle>
+      </Chips>
       <TableStyled size="medium">
         <Table.Header>
           <Table.Row>
@@ -77,8 +93,28 @@ export const TilkjentMedDiff = ({ grunnlagMedDiff }: PropsMedDiff) => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {endredePerioder.map((periode, periodeIndex) => {
-            return <TilkjentPeriodeRad key={periodeIndex} periode={periode} periodeIndex={periodeIndex} />;
+          {grunnlagMedDiff.perioder.map((periode, periodeIndex) => {
+            const nyPeriode = utledNyPeriode(periode);
+            const uendretPeriode =
+              visPerioderUtenEndringFraTidligere && periode.diff === 'Uendret' ? periode.uendret : null;
+            const historiskPeriode = visHistorikkPåEndredePerioder ? utledHistoriskPeriode(periode) : null;
+            return (
+              <React.Fragment key={periodeIndex}>
+                {nyPeriode && (
+                  <TilkjentPeriodeRad key={`ny-${periodeIndex}`} periode={nyPeriode} bakgrunnClassName={''} />
+                )}
+                {historiskPeriode && (
+                  <TilkjentPeriodeRad
+                    key={`historisk-${periodeIndex}`}
+                    periode={historiskPeriode}
+                    bakgrunnClassName={styles.tablerowwithzebra}
+                  />
+                )}
+                {uendretPeriode && (
+                  <TilkjentPeriodeRad key={`uendret-${periodeIndex}`} periode={uendretPeriode} bakgrunnClassName={''} />
+                )}
+              </React.Fragment>
+            );
           })}
         </Table.Body>
       </TableStyled>
@@ -86,18 +122,40 @@ export const TilkjentMedDiff = ({ grunnlagMedDiff }: PropsMedDiff) => {
   );
 };
 
+const utledNyPeriode = (periode: Diff<TilkjentYtelsePeriode>) => {
+  switch (periode.diff) {
+    case 'Endret':
+      return periode.til;
+    case 'LagtTil':
+      return periode.lagtTil;
+    case 'Fjernet':
+    case 'Uendret':
+      return null;
+  }
+};
+
+const utledHistoriskPeriode = (periode: Diff<TilkjentYtelsePeriode>) => {
+  switch (periode.diff) {
+    case 'Endret':
+      return periode.fra;
+    case 'Fjernet':
+      return periode.fjernet;
+    case 'LagtTil':
+    case 'Uendret':
+      return null;
+  }
+};
+
 interface TilkjentYtelsePeriodeProps {
   periode: TilkjentYtelsePeriode;
-  periodeIndex: number;
+  bakgrunnClassName: string;
 }
-const TilkjentPeriodeRad = ({ periode, periodeIndex }: TilkjentYtelsePeriodeProps) => {
+const TilkjentPeriodeRad = ({ periode, bakgrunnClassName }: TilkjentYtelsePeriodeProps) => {
   return periode.vurdertePerioder.map((vurdertPeriode, vurdertPeriodeIndex) => {
     const skilleLinjeClassName =
       periode.vurdertePerioder.length === vurdertPeriodeIndex + 1 || periode.vurdertePerioder.length === 1
         ? ''
         : styles.tablerowwithoutborder;
-
-    const bakgrunnClassName = periodeIndex % 2 ? styles.tablerowwithzebra : '';
 
     return (
       <Table.Row key={vurdertPeriodeIndex} className={bakgrunnClassName}>

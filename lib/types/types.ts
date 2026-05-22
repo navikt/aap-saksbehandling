@@ -80,8 +80,50 @@ export type TilkjentYtelseGrunnlag =
 export type TilkjentYtelsePeriode =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto'];
 
-export type TilkjentYtelseGrunnlagMedDiff =
+type TilkjentYtelseGrunnlagMedDiffFraSchema =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelse2MedDiffDto'];
+
+export type DiffUendret<T> = {
+  diff: 'Uendret';
+  uendret: T;
+};
+
+export type DiffEndret<T> = {
+  diff: 'Endret';
+  fra: T;
+  til: T;
+};
+
+export type DiffFjernet<T> = {
+  diff: 'Fjernet';
+  fjernet: T;
+};
+
+export type DiffLagtTil<T> = {
+  diff: 'LagtTil';
+  lagtTil: T;
+};
+
+export type Diff<T> = DiffUendret<T> | DiffEndret<T> | DiffFjernet<T> | DiffLagtTil<T>;
+
+export type TilkjentYtelseGrunnlagMedDiff = Omit<TilkjentYtelseGrunnlagMedDiffFraSchema, 'perioder'> & {
+  perioder: Diff<TilkjentYtelsePeriode>[];
+};
+
+// Type guards for Diff-utledning
+export function erDiffUendret<T>(d: Diff<T>): d is DiffUendret<T> {
+  return d.diff === 'Uendret';
+}
+export function erDiffEndret<T>(d: Diff<T>): d is DiffEndret<T> {
+  return d.diff === 'Endret';
+}
+export function erDiffFjernet<T>(d: Diff<T>): d is DiffFjernet<T> {
+  return d.diff === 'Fjernet';
+}
+
+export function erDiffLagtTil<T>(d: Diff<T>): d is DiffLagtTil<T> {
+  return d.diff === 'LagtTil';
+}
 
 export type KvalitetssikringGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.kvalitetssikring.KvalitetssikringGrunnlagDto'];
