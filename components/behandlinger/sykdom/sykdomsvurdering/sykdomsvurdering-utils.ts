@@ -86,6 +86,14 @@ export function erTidligereVurderingOppfylt(vurdering: Sykdomvurdering): boolean
   ) {
     return true;
   }
+
+  // TODO: Kan fjernes når toggle for viss varighet forsvinner
+  if (
+    vurdering.erSkadeSykdomEllerLyteVesentligdel === true &&
+    vurdering.erNedsettelseIArbeidsevneAvEnVissVarighet == null
+  ) {
+    return true;
+  }
 }
 
 export function emptySykdomsvurdering(diagnoser?: {
