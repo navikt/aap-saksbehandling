@@ -12,12 +12,6 @@ type Props = {
   onClose: () => void;
 };
 
-const formaterTekst = (input: string) => {
-  const parts = input.split('\\n');
-  const noNewline = parts.map((part) => part.replaceAll('\\n', ''));
-  return noNewline;
-};
-
 export const Forhåndsvisning = ({ saksnummer, fritekst, dokumentasjonsType, visModal, onClose }: Props) => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const { data, isLoading } = useSWR(
@@ -46,9 +40,7 @@ export const Forhåndsvisning = ({ saksnummer, fritekst, dokumentasjonsType, vis
 
         {!isLoading && isSuccess(data) && (
           <div style={{ whiteSpace: 'pre-wrap' }}>
-            {formaterTekst(data.data.konstruertBrev).map((part, index) => (
-              <p key={index}>{part}</p>
-            ))}
+            {data.data.konstruertBrev}
           </div>
         )}
 
