@@ -1,7 +1,7 @@
 import { JaEllerNei } from 'lib/utils/form';
 
 import styles from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingFelter.module.css';
-import { Checkbox, Radio } from '@navikt/ds-react';
+import { BodyShort, Checkbox, HStack, Radio, Tag, VStack } from '@navikt/ds-react';
 import { ToTrinnsVurderingGrunn } from 'lib/types/types';
 import { UseFormReturn } from 'react-hook-form';
 import { FormFieldsToTrinnsVurdering } from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingForm';
@@ -28,8 +28,8 @@ export const TotrinnsvurderingHastemarkering = ({ readOnly, erKvalitetssikring, 
   ];
 
   const beholdIkkeBeholdOptions: ValuePair[] = [
-    { label: 'Ja, behold hastemarkeringen', value: JaEllerNei.Ja },
-    { label: 'Nei, fjern hastemarkeringen', value: JaEllerNei.Nei },
+    { label: 'Ja, viderefør til NAY', value: JaEllerNei.Ja },
+    { label: 'Nei, fjern markering', value: JaEllerNei.Nei },
   ];
 
   const vurderingErIkkeGodkjent = form.watch(`totrinnsvurderinger.${index}.godkjent`) === JaEllerNei.Nei;
@@ -42,9 +42,19 @@ export const TotrinnsvurderingHastemarkering = ({ readOnly, erKvalitetssikring, 
       <div
         className={`${styles.heading} ${erKvalitetssikring ? styles.headingKvalitetssikrer : styles.headingBeslutter}`}
       >
-        <ExclamationmarkTriangleIcon /> <b>Behandlingen er hastemarkert</b>
+        <HStack align={'center'} gap={'space-8'}>
+          <Tag data-color="danger" icon={<ExclamationmarkTriangleIcon />} variant={'moderate'} size={'medium'}>
+            {''}
+          </Tag>
+
+          <b>Behandlingen er hastemarkert</b>
+        </HStack>
       </div>
       <div className={styles.felter}>
+        <VStack paddingBlock={'space-4'} gap={'space-4'}>
+          <BodyShort weight={'semibold'}>Årsak</BodyShort>
+          <BodyShort size={'small'}>{form.watch(`totrinnsvurderinger.${index}.begrunnelse`)}</BodyShort>
+        </VStack>
         <RadioGroupWrapper
           label={'Skal hastemarkeringen følge behandlingen videre?'}
           control={form.control}
