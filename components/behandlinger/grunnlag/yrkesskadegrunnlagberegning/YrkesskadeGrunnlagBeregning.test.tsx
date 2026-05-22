@@ -13,7 +13,7 @@ fetchMock.enableMocks();
 const user = userEvent.setup();
 
 beforeEach(() => {
-  setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'FASTSETT_GRUNNLAG' });
+  setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'FASTSETT_BEREGNINGSTIDSPUNKT' });
 });
 
 describe('YrkesskadeGrunnlagBeregning', () => {
