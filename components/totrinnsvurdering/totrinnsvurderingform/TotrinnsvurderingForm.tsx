@@ -30,6 +30,7 @@ import {
 import { TotrinnsvurderingHastemarkering } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingHastemarkering';
 import { Markering } from 'lib/types/oppgaveTypes';
 import { NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType } from '@navikt/aap-oppgave-typescript-types';
+import { useFeatureFlag } from 'context/UnleashContext';
 import { clientFjernMarkeringForBehandling } from 'lib/clientApi';
 import { isLocal } from 'lib/utils/environment';
 
@@ -62,6 +63,8 @@ export const TotrinnsvurderingForm = ({
     erKvalitetssikring ? 'KVALITETSSIKRING' : 'FATTE_VEDTAK'
   );
 
+  const featureFlagHastemarkeringBoks = useFeatureFlag('VisBoksForVurderingOmHastemarkeringSkalFjernes');
+
   const { addHendelse, varighetHendelseRef, hendelseSerieRef } = useUmamiVarighetHendelser(
     erKvalitetssikring ? 'KVALITETSSIKRER_VARIGHET_HENDELSER' : 'BESLUTTER_VARIGHET_HENDELSER'
   );
@@ -72,19 +75,11 @@ export const TotrinnsvurderingForm = ({
     : mapVurderingToDraftFormFields(grunnlag.vurderinger);
 
   const hastemarkeringer = markeringer !== undefined ? markeringer.filter(erHastemarkering) : [];
-  const harHastermarkering = erMarkeringsjekk(hastemarkeringer);
+  const skalMarkeringerSjekkes = harMarkeringer(hastemarkeringer);
 
-  const hastemarkeringSjekk: ToTrinnsVurderingFormFields = {
-    godkjent: undefined,
-    begrunnelse: hastemarkeringer?.at(0)?.begrunnelse ?? '',
-    grunner: [],
-    årsakFritekst: 'Haster',
-    definisjon: '5032',
-    markeringer: hastemarkeringer,
-  };
-
+  const hastemarkeringSjekk = lagFormFieldsForMarkering(hastemarkeringer);
   const totrinnsvurderinger =
-    harHastermarkering && erKvalitetssikring
+    featureFlagHastemarkeringBoks && skalMarkeringerSjekkes && erKvalitetssikring
       ? defaultValue.totrinnsvurderinger?.concat([hastemarkeringSjekk])
       : defaultValue.totrinnsvurderinger;
 
@@ -130,7 +125,7 @@ export const TotrinnsvurderingForm = ({
               isError = true;
               return;
             }
-            if (neste && erMarkeringsjekk(neste.markeringer) && neste.godkjent === JaEllerNei.Nei) {
+            if (neste && harMarkeringer(neste.markeringer) && neste.godkjent === JaEllerNei.Nei) {
               neste.markeringer?.filter(erHastemarkering).forEach((markering) => {
                 clientFjernMarkeringForBehandling(behandlingsreferanse, markering);
               });
@@ -146,7 +141,7 @@ export const TotrinnsvurderingForm = ({
             behov: {
               behovstype: erKvalitetssikring ? Behovstype.KVALITETSSIKRING_KODE : Behovstype.FATTE_VEDTAK_KODE,
               vurderinger: assessedFields
-                .filter((vurdering) => !erMarkeringsjekk(vurdering.markeringer))
+                .filter((vurdering) => !harMarkeringer(vurdering.markeringer))
                 .map((vurdering) => {
                   if (vurdering.godkjent === JaEllerNei.Ja) {
                     return {
@@ -202,7 +197,7 @@ export const TotrinnsvurderingForm = ({
             />
           );
         }
-        if (erMarkeringsjekk(field.markeringer)) {
+        if (harMarkeringer(field.markeringer)) {
           return (
             <TotrinnsvurderingHastemarkering
               key={field.id}
@@ -334,7 +329,7 @@ function godkjennAlleTotrinnsvurderinger(form: UseFormReturn<FormFieldsToTrinnsV
   }
 }
 
-function erMarkeringsjekk(markeringer?: Markering[]) {
+function harMarkeringer(markeringer?: Markering[]) {
   return markeringer !== undefined && markeringer?.length > 0;
 }
 
@@ -342,4 +337,16 @@ function erHastemarkering(markering?: Markering) {
   return (
     markering !== undefined && markering?.markeringType === NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.HASTER
   );
+}
+
+function lagFormFieldsForMarkering(markeringer: Markering[]): ToTrinnsVurderingFormFields {
+  return {
+    godkjent: undefined,
+    begrunnelse: markeringer?.at(0)?.begrunnelse ?? '',
+    grunner: [],
+    årsakFritekst: '',
+    // Må ha en verdi fra enumen, men hvilken er likegyldig siden den ikke skal brukes
+    definisjon: '5032',
+    markeringer: markeringer,
+  };
 }
