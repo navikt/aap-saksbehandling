@@ -14,7 +14,7 @@ import { RedigerMeldekortFormFields } from 'components/saksoversikt/meldekortove
 
 interface Props {
   felterIUken: MeldeperiodeUke;
-  readOnly: boolean
+  readOnly: boolean;
 }
 
 export const UkeRad = ({ felterIUken, readOnly }: Props) => {

@@ -2,7 +2,7 @@ arbeidOgInntektApp: arbeid-og-inntekt
 fssCluster: prod-fss
 
 ingresses:
-  - "https://kelvin.intern.nav.no"
+  - 'https://kelvin.intern.nav.no'
 
 groups:
   # 0000-GA-AAP_BESLUTTER

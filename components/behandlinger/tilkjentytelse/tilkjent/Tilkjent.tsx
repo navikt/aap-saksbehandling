@@ -197,7 +197,7 @@ const TilkjentPeriodeRad = ({ periode, bakgrunnClassName }: TilkjentYtelsePeriod
             (periode.levertMeldekortDato ? formaterDatoForFrontend(periode.levertMeldekortDato) : 'Ikke levert')}
         </Table.DataCell>
         <Table.DataCell className={skilleLinjeClassName}>
-          {periode.sisteLeverteMeldekort && (
+          {vurdertPeriodeIndex === 0 && periode.sisteLeverteMeldekort && (
             <ActionMenu>
               <ActionMenu.Trigger>
                 <Button variant={'tertiary'} icon={<MenuElipsisVerticalIcon title={'Oppgavemeny'} />} />

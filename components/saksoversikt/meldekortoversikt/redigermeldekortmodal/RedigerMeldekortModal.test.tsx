@@ -4,6 +4,12 @@ import userEvent from '@testing-library/user-event';
 
 import { RedigerMeldekortModal } from 'components/saksoversikt/meldekortoversikt/redigermeldekortmodal/RedigerMeldekortModal';
 import { MeldeperiodeMedMeldekortDto } from 'lib/types/types';
+import { addDays } from 'date-fns';
+import { Dato } from 'lib/types/Dato';
+
+vi.mock('lib/clientApi', () => ({
+  clientKorrigerMeldekort: vi.fn().mockResolvedValue({}),
+}));
 
 const meldekort: MeldeperiodeMedMeldekortDto = {
   tidligereMeldekort: [],
@@ -21,7 +27,7 @@ const meldekortMedDager: MeldeperiodeMedMeldekortDto = {
   },
   meldekort: {
     id: 'meldekort-1',
-    mottattTidspunkt: '2025-01-20T12:00:00.000Z',
+    meldeDato: '2025-01-20T12:00:00.000Z',
     dager: [
       { dato: '2025-01-06', timerArbeidet: 7.5 },
       { dato: '2025-01-07', timerArbeidet: 0 },
@@ -50,7 +56,7 @@ const meldekortMedNullTimer: MeldeperiodeMedMeldekortDto = {
   },
   meldekort: {
     id: 'meldekort-2',
-    mottattTidspunkt: '2025-01-20T12:00:00.000Z',
+    meldeDato: '2025-01-20T12:00:00.000Z',
     dager: [
       { dato: '2025-01-06', timerArbeidet: 0 },
       { dato: '2025-01-07', timerArbeidet: 0 },
@@ -204,5 +210,27 @@ describe('RedigerMeldekortModal', () => {
       expect(screen.queryByText('Bruker har ikke levert noen timer.')).not.toBeInTheDocument();
     });
   });
-});
 
+  describe('Meldedato validering', () => {
+    const fyllUtOgSubmit = async (meldedato: string) => {
+      await user.type(screen.getByRole('textbox', { name: /begrunnelse/i }), 'Begrunnelse for endring');
+      await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Registrere meldedato');
+      await user.type(screen.getByLabelText(/meldedato/i), meldedato);
+      await user.click(screen.getByRole('button', { name: 'Bekreft' }));
+    };
+
+    it('viser feilmelding når meldedato er før meldeperiodens tom-dato', async () => {
+      render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
+      await fyllUtOgSubmit('18.01.2025');
+
+      expect(screen.getAllByText('Meldedato kan ikke være før meldeperiodens slutt.')[0]).toBeVisible();
+    });
+
+    it('viser feilmelding når meldedato er etter dagens dato', async () => {
+      render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
+      await fyllUtOgSubmit(new Dato(addDays(new Date(), 1)).formaterForFrontend());
+
+      expect(screen.getAllByText('Meldedato kan ikke være i fremtiden.')[0]).toBeVisible();
+    });
+  });
+});

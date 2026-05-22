@@ -24,7 +24,7 @@ import {
   skalVæreInitiellEkspandert,
 } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
-import { FormEvent } from 'react';
+import { SubmitEventHandler } from 'react';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { RelevantInformasjonStudent } from 'components/behandlinger/sykdom/student/studentvurdering/RelevantInformasjonStudent';
 import { StudentVurderingFelter } from 'components/behandlinger/sykdom/student/studentvurdering/StudentVurderingFelter';
@@ -101,7 +101,7 @@ export const StudentVurdering = ({
     form
   );
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
       const løsning: AvklarPeriodisertStudentLøsning[] = data.vurderinger.map((vurdering, index) => {
         const isLast = index === data.vurderinger.length - 1;
@@ -182,7 +182,7 @@ export const StudentVurdering = ({
               key={index}
               fom={new Dato(vurdering.fom).dato}
               tom={vurdering.tom && !erUendeligSlutt(vurdering.tom) ? new Dato(vurdering.tom).dato : undefined}
-              foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+              førsteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
               vurderingStatus={hentVurderingStatusForVedtattVurdering(vurdering)}
               vurderingerMeta={vurdering.vurderingerMeta}
             >

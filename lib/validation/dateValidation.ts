@@ -23,20 +23,6 @@ export function validerDato(value?: string) {
   }
 }
 
-export function validerNullableDato(value?: string) {
-  if (!value) {
-    return;
-  }
-  if (!new RegExp(/^\d{2}\.\d{2}\.\d{4}$/).test(value)) {
-    return 'Datoformatet er ikke gyldig. Dato må være på formatet dd.mm.åååå';
-  }
-
-  const inputDato = parseDatoFraDatePicker(value);
-  if (!inputDato) {
-    return 'Datoen er ikke gyldig';
-  }
-}
-
 export function erDatoFoerDato(inputDato: string, referanseDato: string): boolean {
   const parsedInputDato = new Date(parse(inputDato, 'dd.MM.yyyy', new Date()));
   const parsedReferanseDato = new Date(parse(referanseDato, 'dd.MM.yyyy', new Date()));
@@ -51,8 +37,8 @@ export function erDatoIPeriode(inputDato: Date, periodeFra: Date, periodeTil: Da
   );
 }
 
-export function erDatoIFremtiden(value: string): boolean {
-  return value == undefined ? false : isFuture(parse(value as string, 'dd.MM.yyyy', new Date()));
+export function erDatoIFremtiden(value?: string): boolean {
+  return value ? isFuture(parse(value as string, 'dd.MM.yyyy', new Date())) : false;
 }
 
 export function validerÅrstall(val: string | string[]) {

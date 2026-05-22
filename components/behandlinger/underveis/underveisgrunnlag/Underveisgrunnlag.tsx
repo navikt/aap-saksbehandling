@@ -5,7 +5,6 @@ import { UnderveisAvslagsÅrsak, UnderveisGrunnlag } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { mapUtfallTilTekst } from 'lib/utils/oversettelser';
 import { exhaustiveCheck } from 'lib/utils/typescript';
-import { FormEvent } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
@@ -57,7 +56,7 @@ export const Underveisgrunnlag = ({ grunnlag, readOnly, behandlingVersjon }: Pro
       status={status}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       isLoading={isLoading}
-      onSubmit={(event: FormEvent<HTMLFormElement>) => {
+      onSubmit={(event) => {
         event.preventDefault();
         løsBehovOgGåTilNesteSteg({
           behandlingVersjon: behandlingVersjon,

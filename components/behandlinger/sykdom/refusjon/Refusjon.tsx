@@ -7,7 +7,7 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgG
 import { MellomlagretVurdering, RefusjonskravGrunnlag } from 'lib/types/types';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
-import { FormEvent } from 'react';
+import { SubmitEventHandler } from 'react';
 import { useSak } from 'hooks/SakHook';
 import { BodyLong, Radio, VStack } from '@navikt/ds-react';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
@@ -77,7 +77,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
     form
   );
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
       løsBehovOgGåTilNesteSteg(
         {

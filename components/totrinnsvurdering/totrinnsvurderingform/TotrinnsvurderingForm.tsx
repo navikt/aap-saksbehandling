@@ -20,7 +20,13 @@ import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { TotrinnsvurderingVedtaksbrevFelter } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingVedtaksbrevFelter';
 import { byggVilkårskortLenke } from 'lib/utils/vilkårskort';
-import { loggUmamiEvent, useUmamiStartTidspunkt } from 'lib/utils/umami';
+import {
+  loggUmamiEvent,
+  loggUmamiVarighetHendelser,
+  useUmamiStartTidspunkt,
+  useUmamiVarighetHendelser,
+} from 'lib/utils/umami';
+import { UmamiTags } from 'components/umami/Umami';
 
 interface Props {
   grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;
@@ -49,6 +55,9 @@ export const TotrinnsvurderingForm = ({
   );
 
   const umamiStartTidspunkt = useUmamiStartTidspunkt();
+  const { addHendelse, varighetHendelseRef, hendelseSerieRef } = useUmamiVarighetHendelser(
+    erKvalitetssikring ? UmamiTags.KVALITETSSIKRER_VARIGHET_HENDELSER : UmamiTags.BESLUTTER_VARIGHET_HENDELSER
+  );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? mapMellomlagringToDraftFormFields(JSON.parse(initialMellomlagretVurdering.data))
@@ -138,6 +147,7 @@ export const TotrinnsvurderingForm = ({
                 varighet_sekunder: Math.floor((Date.now() - umamiStartTidspunkt) / 1000),
                 typeBehandling: flyt.visning.typeBehandling,
               });
+              loggUmamiVarighetHendelser(varighetHendelseRef.current, hendelseSerieRef.current);
             }
             nullstillMellomlagretVurdering();
           }
@@ -158,6 +168,7 @@ export const TotrinnsvurderingForm = ({
               erKvalitetssikring={erKvalitetssikring}
               link={link}
               readOnly={readOnly}
+              felterOnBlur={addHendelse}
             />
           );
         }
@@ -170,6 +181,7 @@ export const TotrinnsvurderingForm = ({
             erKvalitetssikring={erKvalitetssikring}
             link={link}
             readOnly={readOnly}
+            felterOnBlur={addHendelse}
           />
         );
       })}

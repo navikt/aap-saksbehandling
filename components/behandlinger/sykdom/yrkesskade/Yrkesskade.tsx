@@ -8,7 +8,7 @@ import { erProsent } from 'lib/utils/validering';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
-import { FormEvent } from 'react';
+import { SubmitEventHandler } from 'react';
 import { YrkesskadeVurderingTabell } from 'components/behandlinger/sykdom/yrkesskade/YrkesskadeVurderingTabell';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { parse } from 'date-fns';
@@ -144,7 +144,7 @@ export const Yrkesskade = ({
     },
   });
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
       løsBehovOgGåTilNesteSteg(
         {
@@ -196,7 +196,7 @@ export const Yrkesskade = ({
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
       <VStack gap={'space-4'}>
-        <Label size="medium">Relevante informasjon fra søknad</Label>
+        <Label size="medium">Relevant informasjon fra søknad</Label>
         <BodyShort size={'small'}>
           {`Har du yrkesskade eller yrkessykdom som påvirker hvor mye du kan arbeide? ${mapOppgittYrkesskadeISøknadTilTekst(grunnlag.opplysninger.oppgittYrkesskadeISøknad)}`}
         </BodyShort>

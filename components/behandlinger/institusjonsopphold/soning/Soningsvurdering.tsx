@@ -6,7 +6,7 @@ import { InstitusjonsoppholdTabell } from '../InstitusjonsoppholdTabell';
 import { Behovstype, JaEllerNei } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { FormEvent } from 'react';
+import { SubmitEvent } from 'react';
 import { useFieldArray } from 'react-hook-form';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { BodyShort, Button, Label, Radio } from '@navikt/ds-react';
@@ -71,7 +71,7 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon, initi
 
   const { fields, remove, append } = useFieldArray({ control: form.control, name: 'soningsvurderinger' });
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: SubmitEvent) => {
     form.handleSubmit((data) => {
       løsBehovOgGåTilNesteSteg(
         {

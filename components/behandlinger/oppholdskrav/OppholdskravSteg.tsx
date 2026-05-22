@@ -157,7 +157,7 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
             key={crypto.randomUUID()}
             fom={parseISO(vurdering.fom)}
             tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
-            foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+            førsteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
             vurderingStatus={getErOppfyltEllerIkkeStatus(vurdering.oppfylt)}
             vurderingerMeta={vurdering.vurderingerMeta}
           >
