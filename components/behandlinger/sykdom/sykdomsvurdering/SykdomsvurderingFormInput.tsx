@@ -29,7 +29,6 @@ interface Props {
   erÅrsakssammenhengYrkesskade: boolean;
   rettighetsperiodeStartdato: Date;
   diagnoseDefaultOptions: DiagnoserDefaultOptions;
-  sykdomUtenVissVarighetToggle: boolean;
 }
 
 export const vilkårsvurderingLabel = 'Vilkårsvurdering';
@@ -40,7 +39,6 @@ export const yrkesskadeBegrunnelse = '§ 11-22 AAP ved yrkesskade';
 export const erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense = 'Er arbeidsevnen nedsatt med minst 30 prosent?';
 export const erSkadeSykdomEllerLyteVesentligdelLabel =
   'Er sykdom, skade eller lyte vesentlig medvirkende til at arbeidsevnen er nedsatt?';
-export const erNedsettelseIArbeidsevneAvEnVissVarighetLabel = 'Er den nedsatte arbeidsevnen av en viss varighet?';
 
 export const SykdomsvurderingFormInput = ({
   erÅrsakssammenhengYrkesskade,
@@ -51,13 +49,9 @@ export const SykdomsvurderingFormInput = ({
   ikkeRelevantePerioder,
   rettighetsperiodeStartdato,
   diagnoseDefaultOptions,
-  sykdomUtenVissVarighetToggle,
 }: Props) => {
   const harNedsattArbeidsevne = form.watch(`vurderinger.${index}.harNedsattArbeidsevne`);
-  const skalViseNedsettelse =
-    form.watch(`vurderinger.${index}.erArbeidsevnenNedsatt`) === JaEllerNei.Ja ||
-    harNedsattArbeidsevne === 'JA' ||
-    harNedsattArbeidsevne === 'JA_FORBIGÅENDE_PROBLEMER';
+  const skalViseNedsettelse = harNedsattArbeidsevne === 'JA' || harNedsattArbeidsevne === 'JA_FORBIGÅENDE_PROBLEMER';
 
   return (
     <VStack gap={'space-20'}>
@@ -112,37 +106,24 @@ export const SykdomsvurderingFormInput = ({
             readOnly={readonly}
             diagnoseDefaultOptions={diagnoseDefaultOptions}
           />
-          {sykdomUtenVissVarighetToggle ? (
-            <RadioGroupWrapper
-              name={`vurderinger.${index}.harNedsattArbeidsevne`}
-              control={form.control}
-              label={harNedsattArbeidsevneLabel}
-              rules={{ required: 'Du må svare på om brukeren har nedsatt arbeidsevne' }}
-              readOnly={readonly}
-              size={'small'}
-            >
-              <Radio value={'JA'}>{JaNeiEllerForbigåendeTekst.Ja}</Radio>
-              <Radio value={'JA_FORBIGÅENDE_PROBLEMER'}>{JaNeiEllerForbigåendeTekst.Forbigående}</Radio>
-              <Radio value={'NEI'}>{JaNeiEllerForbigåendeTekst.Nei}</Radio>
-            </RadioGroupWrapper>
-          ) : (
-            <RadioGroupJaNei
-              name={`vurderinger.${index}.erArbeidsevnenNedsatt`}
-              control={form.control}
-              label={harNedsattArbeidsevneLabel}
-              horisontal={true}
-              rules={{ required: 'Du må svare på om brukeren har nedsatt arbeidsevne' }}
-              readOnly={readonly}
-            />
-          )}
-
-          {(form.watch(`vurderinger.${index}.erArbeidsevnenNedsatt`) === JaEllerNei.Nei ||
-            form.watch(`vurderinger.${index}.harNedsattArbeidsevne`) === 'NEI') && (
+          <RadioGroupWrapper
+            name={`vurderinger.${index}.harNedsattArbeidsevne`}
+            control={form.control}
+            label={harNedsattArbeidsevneLabel}
+            rules={{ required: 'Du må svare på om brukeren har nedsatt arbeidsevne' }}
+            readOnly={readonly}
+            size={'small'}
+          >
+            <Radio value={'JA'}>{JaNeiEllerForbigåendeTekst.Ja}</Radio>
+            <Radio value={'JA_FORBIGÅENDE_PROBLEMER'}>{JaNeiEllerForbigåendeTekst.Forbigående}</Radio>
+            <Radio value={'NEI'}>{JaNeiEllerForbigåendeTekst.Nei}</Radio>
+          </RadioGroupWrapper>
+          )
+          {form.watch(`vurderinger.${index}.harNedsattArbeidsevne`) === 'NEI' && (
             <Alert variant={'info'} size={'small'} className={'fit-content'}>
               Brukeren vil få vedtak om at de ikke har rett på AAP. De kvalifiserer ikke for sykepengeerstatning.
             </Alert>
           )}
-
           {skalViseNedsettelse && (
             <SykdomsvurderingNedsattArbeidsevneDetaljer
               index={index}
