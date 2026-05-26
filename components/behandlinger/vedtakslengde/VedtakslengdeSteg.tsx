@@ -195,7 +195,7 @@ export const VedtakslengdeSteg = ({
           key={`vedtatt-${index}`}
           fom={parseISO(vurdering.fom)}
           tom={vurdering.tom ? parseISO(vurdering.tom) : null}
-          foersteNyePeriodeFraDato={foersteNyePeriode == null ? null : parseDatoFraDatePicker(foersteNyePeriode)}
+          førsteNyePeriodeFraDato={foersteNyePeriode == null ? null : parseDatoFraDatePicker(foersteNyePeriode)}
           vurderingStatus={
             vurdering.manuellVurdering
               ? VurderingStatus.VedtaksperiodeManuell
@@ -213,7 +213,7 @@ export const VedtakslengdeSteg = ({
             key={`ny-automatisk-${index}`}
             fom={parseISO(vurdering.fom)}
             tom={vurdering.tom ? parseISO(vurdering.tom) : null}
-            foersteNyePeriodeFraDato={foersteNyePeriode == null ? null : parseDatoFraDatePicker(foersteNyePeriode)}
+            førsteNyePeriodeFraDato={foersteNyePeriode == null ? null : parseDatoFraDatePicker(foersteNyePeriode)}
             vurderingStatus={VurderingStatus.VedtaksperiodeAutomatisk}
             vurderingerMeta={vurdering.vurderingerMeta}
           >

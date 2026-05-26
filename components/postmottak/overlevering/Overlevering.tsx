@@ -3,7 +3,7 @@
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/postmottakForm';
 import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/PostmottakLøsBehovOgGåTilNesteStegHook';
 import { OverleveringGrunnlag } from 'lib/types/postmottakTypes';
-import { FormEvent, FormEventHandler } from 'react';
+import { SubmitEventHandler } from 'react';
 import { VStack } from '@navikt/ds-react';
 import { ServerSentEventStatusAlert } from 'components/postmottak/serversenteventstatusalert/ServerSentEventStatusAlert';
 import { useConfigForm } from 'components/form/FormHook';
@@ -42,7 +42,7 @@ export const Overlevering = ({ behandlingsVersjon, behandlingsreferanse, grunnla
 
   const { visningActions, visningModus } = usePostmottakVilkårskortVisning(readOnly, 'OVERLEVER_TIL_FAGSYSTEM');
 
-  const onSubmit: FormEventHandler<HTMLFormElement> = (event: FormEvent<HTMLFormElement>) => {
+  const onSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
       løsBehovOgGåTilNesteSteg({
         behandlingVersjon: behandlingsVersjon,

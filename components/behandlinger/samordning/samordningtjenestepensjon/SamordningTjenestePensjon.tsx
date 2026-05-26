@@ -8,7 +8,7 @@ import { useConfigForm } from 'components/form/FormHook';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { FormField } from 'components/form/FormField';
 import { formaterPeriode } from 'lib/utils/date';
-import { FormEvent } from 'react';
+import { SubmitEventHandler } from 'react';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
@@ -75,7 +75,7 @@ export const SamordningTjenestePensjon = ({
     form
   );
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) =>
       løsBehovOgGåTilNesteSteg(
         {

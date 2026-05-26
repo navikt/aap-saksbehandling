@@ -177,7 +177,7 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
           key={crypto.randomUUID()}
           fom={parseISO(vurdering.fom)}
           tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
-          foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+          førsteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
           vurderingStatus={getErOppfyltEllerIkkeStatus(
             vurdering.reellMulighetTilOpptrapping && vurdering.rettPaaAAPIOpptrapping
           )}

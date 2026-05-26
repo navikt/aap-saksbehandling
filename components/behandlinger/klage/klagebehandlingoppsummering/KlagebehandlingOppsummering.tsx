@@ -8,7 +8,7 @@ import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { BodyShort, Detail, VStack } from '@navikt/ds-react';
 import { mapInnstillingTilTekst } from 'lib/utils/oversettelser';
 import styles from './KlagebehandlingOppsummering.module.css';
-import { FormEvent } from 'react';
+import { SubmitEventHandler } from 'react';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
 
@@ -67,7 +67,7 @@ export const KlagebehandlingOppsummering = ({ behandlingVersjon, readOnly, grunn
   const vilkårSomOmgjøres = utledVilkårSomOmgjøres(grunnlagKontor, grunnlagNay);
   const vilkårSomOpprettholdes = utledVilkårSomOpprettholdes(grunnlagKontor, grunnlagNay);
 
-  const handleSubmit = (event: FormEvent) => {
+  const handleSubmit: SubmitEventHandler = (event) => {
     event.preventDefault();
     løsBehovOgGåTilNesteSteg({
       behandlingVersjon: behandlingVersjon,

@@ -16,8 +16,9 @@ export const HandlingerDokumentButton = ({ sak, journalpost }: { sak: SaksInfo; 
   const [feilregistrerOpen, setFeilregistrerOpen] = useState(false);
   const [redigitaliserOpen, setRedigitaliserOpen] = useState(false);
 
+  const redigitaliserToggle = useFeatureFlag('RedigitaliseringV2');
   const redigitaliserDokument =
-    useFeatureFlag('Redigitalisering') && journalpost.journalposttype != Journalposttype.U && journalpost.sak?.fagsakId;
+    journalpost.journalposttype != Journalposttype.U && journalpost.sak?.fagsakId && redigitaliserToggle;
 
   return (
     <>

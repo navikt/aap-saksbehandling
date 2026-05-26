@@ -7,7 +7,7 @@ import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 
 import styles from 'components/vilkårskort/Vilkårskort.module.css';
 import { useFlyt } from 'hooks/saksbehandling/FlytHook';
-import { FormEvent, ReactNode } from 'react';
+import { ReactNode, SubmitEventHandler } from 'react';
 import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { ApiException } from 'lib/utils/api';
 import { VisningActions, VisningModus } from 'lib/types/visningTypes';
@@ -17,7 +17,7 @@ export interface VilkårsKortMedFormOgMellomlagringProps {
   heading: string;
   steg: StegType;
   children: ReactNode;
-  onSubmit: (e: FormEvent<HTMLFormElement>) => void;
+  onSubmit: SubmitEventHandler;
   isLoading: boolean;
   status: LøsBehovOgGåTilNesteStegStatus;
   løsBehovOgGåTilNesteStegError: ApiException | undefined;
@@ -43,7 +43,7 @@ export const VilkårskortMedFormOgMellomlagring = ({
   vilkårTilhørerNavKontor,
   knappTekst = 'Bekreft',
   defaultOpen = true,
-  vurderingerMeta = {},
+  vurderingerMeta,
   onDeleteMellomlagringClick,
   mellomlagretVurdering,
   visningModus,
@@ -144,11 +144,11 @@ export const VilkårskortMedFormOgMellomlagring = ({
               </VStack>
 
               <VStack align="end">
-                {vurderingerMeta.vurdertAutomatisk && <Detail>Vurdert automatisk</Detail>}
-                <VurdertAvAnsattDetail vurdertAv={vurderingerMeta.vurdertAv} variant={'VURDERING'} />
-                <VurdertAvAnsattDetail vurdertAv={vurderingerMeta.kvalitetssikretAv} variant={'KVALITETSSIKRER'} />
-                <VurdertAvAnsattDetail vurdertAv={vurderingerMeta.besluttetAv} variant={'BESLUTTER'} />
-                <VurdertAvAnsattDetail vurdertAv={vurderingerMeta.trukketAv} variant={'TRUKKET'} />
+                {vurderingerMeta?.vurdertAutomatisk && <Detail>Vurdert automatisk</Detail>}
+                <VurdertAvAnsattDetail vurdertAv={vurderingerMeta?.vurdertAv} variant={'VURDERING'} />
+                <VurdertAvAnsattDetail vurdertAv={vurderingerMeta?.kvalitetssikretAv} variant={'KVALITETSSIKRER'} />
+                <VurdertAvAnsattDetail vurdertAv={vurderingerMeta?.besluttetAv} variant={'BESLUTTER'} />
+                <VurdertAvAnsattDetail vurdertAv={vurderingerMeta?.trukketAv} variant={'TRUKKET'} />
               </VStack>
             </HStack>
           </VStack>

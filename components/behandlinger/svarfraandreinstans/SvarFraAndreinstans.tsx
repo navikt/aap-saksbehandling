@@ -6,7 +6,7 @@ import { formaterSvartype, formaterUtfall } from 'lib/utils/svarfraandreinstans'
 import { useConfigForm } from 'components/form/FormHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { FormEvent } from 'react';
+import { SubmitEventHandler } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import { getValgteHjemlerSomIkkeErImplementert, hjemmelalternativer, hjemmelMap } from 'lib/utils/hjemmel';
 import { FormField } from 'components/form/FormField';
@@ -94,7 +94,7 @@ export const SvarFraAndreinstans = ({ grunnlag, readOnly, behandlingVersjon, ini
     form
   );
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
       løsBehovOgGåTilNesteSteg(
         {

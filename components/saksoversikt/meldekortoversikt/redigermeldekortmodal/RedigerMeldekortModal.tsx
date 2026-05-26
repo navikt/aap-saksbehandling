@@ -16,7 +16,11 @@ import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { isError } from 'lib/utils/api';
 import { useAlleDokumenterPåSak } from 'hooks/saksbehandling/DokumenterHook';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
+import { MeldekortProsesseringServerSentEvent } from 'app/saksbehandling/api/meldekort/[saksnummer]/prosessering/route';
 import { addDays } from 'date-fns';
+import { useMeldekort } from 'hooks/saksbehandling/MeldekortHook';
+import { Journalpost } from 'lib/types/journalpost';
+import { erDatoFoerDato, erDatoIFremtiden } from 'lib/validation/dateValidation';
 
 interface Props {
   setIsOpen: (isOpen: boolean) => void;
@@ -47,9 +51,37 @@ const årsakOptions = ['', ...Object.values(Årsaker)];
 export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) => {
   const { saksnummer } = useParamsMedType();
   const { dokumenter } = useAlleDokumenterPåSak();
+  const { refetchMeldekort } = useMeldekort();
 
   const [error, setError] = useState<string>();
   const [isLoading, setIsLoading] = useState(false);
+
+  const ventPåMeldekortProsessering = () => {
+    const eventSource = new EventSource(`/saksbehandling/api/meldekort/${saksnummer}/prosessering/`, {
+      withCredentials: true,
+    });
+
+    eventSource.onmessage = async (event: MessageEvent) => {
+      const eventData: MeldekortProsesseringServerSentEvent = JSON.parse(event.data);
+
+      if (eventData.status === 'KLAR') {
+        eventSource.close();
+        refetchMeldekort();
+        setIsOpen(false);
+        setIsLoading(false);
+      } else {
+        eventSource.close();
+        setError('Meldekort ble sendt inn, men prosesseringen tok for lang tid. Prøv å laste siden på nytt.');
+        setIsLoading(false);
+      }
+    };
+
+    eventSource.onerror = () => {
+      eventSource.close();
+      setError('Noe gikk galt under prosessering av meldekort.');
+      setIsLoading(false);
+    };
+  };
 
   const defaultValues = getDefaultValuesForForm(meldekort);
 
@@ -79,6 +111,22 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
       label: 'Meldedato',
       description: 'Meldekortet regnes som levert på denne datoen.',
       defaultValue: defaultValues?.meldedato,
+      rules: {
+        required: 'Du må legge til en meldedato for meldekortet.',
+        validate: {
+          validerIkkeFørDato: (value) => {
+            if (erDatoIFremtiden(value as string)) {
+              return 'Meldedato kan ikke være i fremtiden.';
+            }
+          },
+          validerIkkeFørMeldeperiodeTom: (value) => {
+            const tom = meldekort?.meldeperiode.tom;
+            if (tom && erDatoFoerDato(value as string, formaterDatoForFrontend(tom))) {
+              return 'Meldedato kan ikke være før meldeperiodens slutt.';
+            }
+          },
+        },
+      },
     },
     dager: {
       type: 'fieldArray',
@@ -99,8 +147,6 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
   const fom = new Dato(meldekort.meldeperiode.fom);
   const tom = new Dato(meldekort.meldeperiode.tom);
 
-  const errorList = hentFeilmeldingerForForm(form.formState.errors);
-
   const årsak = form.watch('årsak');
 
   const erÅrsakLevereMeldekort = årsak === Årsaker.LEVERE_MELDEKORT_FOR_BRUKER;
@@ -113,20 +159,8 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
   const skalViseTimer = erÅrsakLevereMeldekort || (erÅrsakRegistrereMeldedato && brukerHarLevertTimer);
   const skalViseAlertForIngenTimer = erÅrsakRegistrereMeldedato && !brukerHarLevertTimer;
 
-  const tidligereInnsendteMeldekort = meldekort.tidligereMeldekort.map((tidligereMeldekort) => {
-    const dokument = dokumenter?.find((doku) => doku.journalpostId === tidligereMeldekort.journalpostId);
-    const journalpostId = tidligereMeldekort.journalpostId;
-    const dokumentId = dokument?.dokumenter[0]?.dokumentInfoId;
-    const mottattTidspunkt = tidligereMeldekort.mottattTidspunkt;
-    const oppdatertAv = tidligereMeldekort.oppdatertAv;
-
-    return {
-      journalpostId,
-      dokumentId,
-      mottattTidspunkt,
-      oppdatertAv,
-    };
-  });
+  const tidligereInnsendteMeldekort = kobleDokumentInfoTilTidligereMeldekort(meldekort, dokumenter);
+  const errorList = hentFeilmeldingerForForm(form.formState.errors);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen} size={'medium'}>
@@ -149,17 +183,17 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
                         timerArbeidet: Number(dag.timerArbeidet),
                       };
                     }),
+                    meldeDato: new Dato(data.meldedato).formaterForBackend(),
                     begrunnelse: data.begrunnelse,
                     meldeperiode: meldekort.meldeperiode,
                   });
 
                   if (isError(oppdaterMeldekortResponse)) {
                     setError('Noe gikk galt ved oppdatering av meldekort.');
+                    setIsLoading(false);
                   } else {
-                    setIsOpen(false);
+                    ventPåMeldekortProsessering();
                   }
-
-                  setIsLoading(false);
                 })}
               >
                 <VStack gap={'space-16'}>
@@ -201,8 +235,7 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
                           </Link>
                         )}
                         <Detail>
-                          {formaterDatoForFrontend(tidligereMeldekort.mottattTidspunkt)}{' '}
-                          {tidligereMeldekort.oppdatertAv}
+                          {formaterDatoForFrontend(tidligereMeldekort.meldeDato)} {tidligereMeldekort.oppdatertAv}
                         </Detail>
                       </HStack>
                     );
@@ -249,9 +282,27 @@ function getDefaultValuesForForm(meldekort?: MeldeperiodeMedMeldekortDto): Redig
   return {
     begrunnelse: '',
     årsak: '',
-    meldedato: meldekort.meldekort?.mottattTidspunkt
-      ? formaterDatoForFrontend(meldekort.meldekort.mottattTidspunkt)
-      : '',
+    meldedato: meldekort.meldekort?.meldeDato ? formaterDatoForFrontend(meldekort.meldekort.meldeDato) : '',
     dager: alleDager,
   };
+}
+
+function kobleDokumentInfoTilTidligereMeldekort(
+  meldeperiodeMedMeldekort: MeldeperiodeMedMeldekortDto,
+  dokumenter?: Journalpost[]
+) {
+  return meldeperiodeMedMeldekort.tidligereMeldekort.map((tidligereMeldekort) => {
+    const dokument = dokumenter?.find((doku) => doku.journalpostId === tidligereMeldekort.journalpostId);
+    const journalpostId = tidligereMeldekort.journalpostId;
+    const dokumentId = dokument?.dokumenter[0]?.dokumentInfoId;
+    const meldeDato = tidligereMeldekort.meldeDato;
+    const oppdatertAv = tidligereMeldekort.oppdatertAv;
+
+    return {
+      journalpostId,
+      dokumentId,
+      meldeDato,
+      oppdatertAv,
+    };
+  });
 }

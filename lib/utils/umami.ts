@@ -25,8 +25,9 @@ export const loggUmamiVarighetHendelser = (
       window.umami?.track(hendelseSerie.hendelse_serie, {
         hendelser_serie_id: hendelseSerie.hendelse_serie_id,
         hendelser_serie: hendelseSerie.hendelse_serie,
-        hendelser: hendelse.hendelse,
+        hendelse: hendelse.hendelse,
         varighet_sekunder: hendelse.varighet_sekunder,
+        varighet_sekunder_siden_forrige: hendelse.varighet_sekunder_siden_forrige,
         tidsstempel: hendelse.tidsstempel,
       })
     );

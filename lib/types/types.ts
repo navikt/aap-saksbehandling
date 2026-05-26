@@ -77,6 +77,54 @@ export type BeregningstidspunktVurderingResponse =
 export type TilkjentYtelseGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelse2Dto'];
 
+export type TilkjentYtelsePeriode =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto'];
+
+type TilkjentYtelseGrunnlagMedDiffFraSchema =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelse2MedDiffDto'];
+
+export type DiffUendret<T> = {
+  diff: 'Uendret';
+  uendret: T;
+};
+
+export type DiffEndret<T> = {
+  diff: 'Endret';
+  fra: T;
+  til: T;
+};
+
+export type DiffFjernet<T> = {
+  diff: 'Fjernet';
+  fjernet: T;
+};
+
+export type DiffLagtTil<T> = {
+  diff: 'LagtTil';
+  lagtTil: T;
+};
+
+export type Diff<T> = DiffUendret<T> | DiffEndret<T> | DiffFjernet<T> | DiffLagtTil<T>;
+
+export type TilkjentYtelseGrunnlagMedDiff = Omit<TilkjentYtelseGrunnlagMedDiffFraSchema, 'perioder'> & {
+  perioder: Diff<TilkjentYtelsePeriode>[];
+};
+
+// Type guards for Diff-utledning
+export function erDiffUendret<T>(d: Diff<T>): d is DiffUendret<T> {
+  return d.diff === 'Uendret';
+}
+export function erDiffEndret<T>(d: Diff<T>): d is DiffEndret<T> {
+  return d.diff === 'Endret';
+}
+export function erDiffFjernet<T>(d: Diff<T>): d is DiffFjernet<T> {
+  return d.diff === 'Fjernet';
+}
+
+export function erDiffLagtTil<T>(d: Diff<T>): d is DiffLagtTil<T> {
+  return d.diff === 'LagtTil';
+}
+
 export type KvalitetssikringGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.kvalitetssikring.KvalitetssikringGrunnlagDto'];
 export type KvalitetssikringTilgang =
@@ -163,6 +211,9 @@ export type TrukketSøknadVurdering =
 
 export type AvbrytRevurderingGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.revurdering.AvbrytRevurderingGrunnlagDto'];
+
+export type AvbrytAktivitetspliktbehandlingGrunnlag =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.avbrytaktivitetspliktbehandling.AvbrytAktivitetspliktbehandlingGrunnlagDto'];
 
 export type RettighetsinfoDto =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.rettighet.RettighetsinfoDto'];
@@ -592,6 +643,12 @@ export type OppdaterMeldekortRequest =
 
 export type OppdaterMeldekortResponse =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.OppdaterMeldekortResponse'];
+
+export type MeldekortProsesseringResponse =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.MeldekortProsesseringResponse'];
+
+export type MeldekortProsesseringStatus =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.MeldekortProsesseringResponse']['meldekortProsesseringStatus'];
 
 export type DagDto = components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.DagDto'];
 

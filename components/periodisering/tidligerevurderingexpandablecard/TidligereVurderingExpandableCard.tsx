@@ -13,7 +13,7 @@ import { VurderingStatus, VurderingStatusTag } from 'components/periodisering/Vu
 interface Props {
   fom: Date;
   tom: Date | null | undefined;
-  foersteNyePeriodeFraDato: Date | null | undefined;
+  førsteNyePeriodeFraDato: Date | null | undefined;
   vurderingStatus: VurderingStatus | undefined;
   vurderingerMeta: VurderingerMeta;
   children: ReactNode;
@@ -23,7 +23,7 @@ interface Props {
 export const TidligereVurderingExpandableCard = ({
   fom,
   tom,
-  foersteNyePeriodeFraDato,
+  førsteNyePeriodeFraDato,
   vurderingStatus,
   vurderingerMeta,
   children,
@@ -32,11 +32,11 @@ export const TidligereVurderingExpandableCard = ({
   const [cardExpanded, setCardExpanded] = useState<boolean>(defaultCollapsed);
 
   const formattertFom = formaterDatoForFrontend(fom);
-  const strekUtHele = foersteNyePeriodeFraDato ? !isBefore(fom, foersteNyePeriodeFraDato) : false;
+  const strekUtHele = førsteNyePeriodeFraDato ? !isBefore(fom, førsteNyePeriodeFraDato) : false;
   const nySluttdato =
     !strekUtHele &&
-    foersteNyePeriodeFraDato &&
-    (tom == null || isBefore(foersteNyePeriodeFraDato, tom) || isSameDay(foersteNyePeriodeFraDato, tom));
+    førsteNyePeriodeFraDato &&
+    (tom == null || isBefore(førsteNyePeriodeFraDato, tom) || isSameDay(førsteNyePeriodeFraDato, tom));
 
   return (
     <CustomExpandableCard
@@ -51,7 +51,7 @@ export const TidligereVurderingExpandableCard = ({
             {tom != null && (
               <span className={nySluttdato ? styles.streketUtTekst : ''}>{formatDatoMedMånedsnavn(tom)}</span>
             )}
-            {nySluttdato && <span> {formatDatoMedMånedsnavn(sub(foersteNyePeriodeFraDato, { days: 1 }))}</span>}
+            {nySluttdato && <span> {formatDatoMedMånedsnavn(sub(førsteNyePeriodeFraDato, { days: 1 }))}</span>}
           </BodyShort>
           <VurderingStatusTag status={vurderingStatus} />
         </HStack>
