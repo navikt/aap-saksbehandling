@@ -5,7 +5,6 @@ import { IngenFlereOppgaverModal } from 'components/ingenflereoppgavermodal/Inge
 import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
 import { StegGruppeIndikatorAksel } from 'components/steggruppeindikator/StegGruppeIndikatorAksel';
 import { HGrid, VStack } from '@navikt/ds-react';
-import { Behandlingsinfo } from 'components/behandlingsinfo/Behandlingsinfo';
 import { Saksbehandlingsoversikt } from 'components/saksbehandlingsoversikt/Saksbehandlingsoversikt';
 import { ToTrinnsvurderingMedDataFetching } from 'components/totrinnsvurdering/ToTrinnsvurderingMedDataFetching';
 import { ReactNode } from 'react';
@@ -23,7 +22,6 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { hentOppgave } from 'lib/services/oppgaveservice/oppgaveservice';
 import { StegGruppe } from 'lib/types/types';
 import { SakContextProvider } from 'context/saksbehandling/SakContext';
-import { KlageBehandlingInfo } from 'components/behandlingsinfo/KlageBehandlingInfo';
 import { ÅrsakTilBehandling } from 'components/revurderingsinfo/ÅrsakTilBehandling';
 import { visÅrsakTilVurdering } from './visÅrsakTilVurdering';
 import { OverstyrTildelingContextProvider } from 'context/saksbehandling/OverstyrTildelingContext';
@@ -141,12 +139,15 @@ export const BehandlingLayout = async ({ saksnummer, behandlingsreferanse, child
                   <div style={{ width: '100%' }}>{children}</div>
                 </VStack>
                 <aside className={`flex-column`}>
-                  <Behandlingsinfo behandling={behandling.data} sak={sak} klageresultat={klageresultat.data} />
-                  <KlageBehandlingInfo kabalKlageResultat={kabalKlageResultat} klageresultat={klageresultat.data} />
                   {visTotrinnsvurdering && (
                     <ToTrinnsvurderingMedDataFetching behandlingsreferanse={behandlingsreferanse} />
                   )}
-                  <Saksbehandlingsoversikt />
+                  <Saksbehandlingsoversikt
+                    behandling={behandling.data}
+                    sak={sak}
+                    klageresultat={klageresultat.data}
+                    kabalKlageresultat={kabalKlageResultat}
+                  />
                 </aside>
               </SakContextProvider>
             </HGrid>

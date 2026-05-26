@@ -1,22 +1,38 @@
 'use client';
 
 import { Tabs, Tooltip } from '@navikt/ds-react';
-import { ClockDashedIcon, FilesIcon, HddDownIcon } from '@navikt/aksel-icons';
+import { ClockDashedIcon, FilesIcon, FolderFileIcon, HddDownIcon, PersonGavelIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';
 import { Saksdokumenter } from 'components/saksdokumenter/Saksdokumenter';
 import { InnhentDokumentasjon } from 'components/innhentdokumentasjon/InnhentDokumentasjon';
 
 import styles from './Saksbehandlingsoversikt.module.css';
 import { SaksHistorikk } from 'components/sakshistorikk/SaksHistorikk';
+import { DetaljertBehandling, KabalKlageResultat, Klageresultat, SaksInfo } from 'lib/types/types';
+import { Behandlingsinfo } from 'components/behandlingsinfo/Behandlingsinfo';
+import { FetchResponse, isError } from 'lib/utils/api';
+import { KlageBehandlingInfo } from 'components/behandlingsinfo/KlageBehandlingInfo';
 
 enum Tab {
+  BEHANDLINGSINFO = 'BEHANDLINGSINFO',
+  KLAGEBEHANDLINGINFO = 'KLAGEBEHANDLINGINFO',
   SAKSDOKUMENTER = 'SAKSDOKUMENTER',
   BE_OM_OPPLYSNINGER = 'BE_OM_OPPLYSNINGER',
   HISTORIKK = 'HISTORIKK',
 }
 
-export const Saksbehandlingsoversikt = () => {
-  const [toggleGroupValue, setToggleGroupValue] = useState<Tab>(Tab.SAKSDOKUMENTER);
+interface Props {
+  behandling: DetaljertBehandling;
+  sak: SaksInfo;
+  klageresultat?: Klageresultat;
+  kabalKlageresultat: FetchResponse<KabalKlageResultat>;
+}
+
+export const Saksbehandlingsoversikt = ({ behandling, sak, klageresultat, kabalKlageresultat }: Props) => {
+  const [toggleGroupValue, setToggleGroupValue] = useState<Tab>(Tab.BEHANDLINGSINFO);
+
+  const visKlagebehandlingFane =
+    isError(kabalKlageresultat) || (klageresultat && ['OPPRETTHOLDES', 'DELVIS_OMGJØRES'].includes(klageresultat.type));
 
   return (
     <div className={styles.saksbehandlingsoversikt}>
@@ -29,6 +45,14 @@ export const Saksbehandlingsoversikt = () => {
         fill
       >
         <Tabs.List>
+          <Tooltip content={'Informasjon om behandlingen'}>
+            <Tabs.Tab value={Tab.BEHANDLINGSINFO} label={'Behandling'} icon={<FolderFileIcon aria-hidden />} />
+          </Tooltip>
+          {visKlagebehandlingFane && (
+            <Tooltip content={'Informasjon om klagebehandling'}>
+              <Tabs.Tab value={Tab.KLAGEBEHANDLINGINFO} label={'Klage'} icon={<PersonGavelIcon aria-hidden />} />
+            </Tooltip>
+          )}
           <Tooltip content={'Åpne saksdokumenter'}>
             <Tabs.Tab value={Tab.SAKSDOKUMENTER} label={'Saksdokumenter'} icon={<FilesIcon aria-hidden />} />
           </Tooltip>
@@ -41,6 +65,12 @@ export const Saksbehandlingsoversikt = () => {
         </Tabs.List>
       </Tabs>
       <div className={styles.tabContent}>
+        {toggleGroupValue === Tab.BEHANDLINGSINFO && (
+          <Behandlingsinfo behandling={behandling} sak={sak} klageresultat={klageresultat} />
+        )}
+        {toggleGroupValue === Tab.KLAGEBEHANDLINGINFO && (
+          <KlageBehandlingInfo kabalKlageResultat={kabalKlageresultat} klageresultat={klageresultat} />
+        )}
         {toggleGroupValue === Tab.SAKSDOKUMENTER && <Saksdokumenter />}
         {toggleGroupValue === Tab.BE_OM_OPPLYSNINGER && <InnhentDokumentasjon />}
         {toggleGroupValue === Tab.HISTORIKK && <SaksHistorikk />}
