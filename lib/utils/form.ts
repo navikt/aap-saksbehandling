@@ -64,7 +64,7 @@ export enum Behovstype {
   VURDER_INNTEKTSBORTFALL = '5040',
   FASTSETT_VEDTAKSLENGDE = '5059',
   FORESLÅ_VEDTAK_VEDTAKSLENGDE = '5060',
-  AVBRYT_AKTIVITETSPLIKTBEHANDLING = '4301'
+  AVBRYT_AKTIVITETSPLIKTBEHANDLING = '4301',
 }
 
 type BehovsKode = `${Behovstype}`;
@@ -76,7 +76,7 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
     case '4201':
       return '§ 11-9 Aktivitetsplikt';
     case '4301':
-      return 'Avbryt behandling'
+      return 'Avbryt behandling';
     case '5001':
       return '§ 11-14 Student';
     case '5002':

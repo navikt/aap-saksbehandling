@@ -12,7 +12,13 @@ interface Props {
   navIdent?: string | null;
 }
 
-export const AvbrytAktivitetspliktbehandlingModal = ({ saksnummer, isOpen, onClose, behandlingReferanse, navIdent }: Props) => {
+export const AvbrytAktivitetspliktbehandlingModal = ({
+  saksnummer,
+  isOpen,
+  onClose,
+  behandlingReferanse,
+  navIdent,
+}: Props) => {
   const { isLoading, sendHendelseOgVentPåProsessering, sendHendelseError } = useSendHendelseOgVentPåProsessering();
 
   return (

@@ -1737,6 +1737,44 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/behandling/tilkjent-med-diff/{referanse}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description referanse */
+          referanse: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelse2MedDiffDto'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/behandling/{referanse}/grunnlag/foreslaa-vedtak': {
     parameters: {
       query?: never;
@@ -4066,6 +4104,44 @@ export interface paths {
           };
           content: {
             'application/json': components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BrevResponsDTO'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/brev/{brevbestillingReferanse}/brevmal-preview': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description brevbestillingReferanse */
+          brevbestillingReferanse: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BrevmalPreviewResponsDTO'];
           };
         };
       };
@@ -14104,6 +14180,9 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelse2Dto': {
       perioder: components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto'][];
     };
+    'no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelse2MedDiffDto': {
+      perioder: components['schemas']['no.nav.aap.behandlingsflyt.utils.diff.DiffDto<no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto>'][];
+    };
     'no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto': {
       /**
        * Format: date
@@ -17729,17 +17808,7 @@ export interface components {
        * Format: date
        * @example 2025-04-01
        */
-      gjennoptas?: string | null;
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      gjenopptas?: string | null;
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      gjenoptas?: string | null;
+      gjenopptas: string;
       /** @enum {string} */
       grunn: 'AVVENTER_BRUKERUTTALELSE';
     };
@@ -18116,6 +18185,9 @@ export interface components {
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BrevResponsDTO': {
       html: string;
     };
+    'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BrevmalPreviewResponsDTO': {
+      json: string;
+    };
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.FinnBehandlingForIdentDTO': {
       ident: string;
       /**
@@ -18169,11 +18241,7 @@ export interface components {
        */
       opprettetTidspunkt: string;
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
-      /**
-       * @deprecated
-       * @description Bruk tilstand i stedet for å utlede sakens tilstand
-       * @enum {string|null}
-       */
+      /** @enum {string|null} */
       resultat?:
         | 'AVBRUTT'
         | 'AVSLAG'
@@ -18186,8 +18254,6 @@ export interface components {
         | 'TRUKKET'
         | null;
       saksnummer: string;
-      /** @enum {string|null} */
-      tilstand?: 'TRUKKET' | 'ÅPEN' | null;
     };
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.S\u00F8kDto': {
       's\u00F8ketekst': string;
@@ -18300,6 +18366,24 @@ export interface components {
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
       /** @enum {string} */
       ytelseType: 'INGENTING' | 'TILTAKSPENGER' | 'TILTAKSPENGER_OG_BARNETILLEGG';
+    };
+    'no.nav.aap.behandlingsflyt.utils.diff.DiffDto<no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto>':
+      | components['schemas']['no.nav.aap.behandlingsflyt.utils.diff.Endret<no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto>']
+      | components['schemas']['no.nav.aap.behandlingsflyt.utils.diff.Fjernet<no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto>']
+      | components['schemas']['no.nav.aap.behandlingsflyt.utils.diff.LagtTil<no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto>']
+      | components['schemas']['no.nav.aap.behandlingsflyt.utils.diff.Uendret<no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto>'];
+    'no.nav.aap.behandlingsflyt.utils.diff.Endret<no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto>': {
+      fra: components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto'];
+      til: components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto'];
+    };
+    'no.nav.aap.behandlingsflyt.utils.diff.Fjernet<no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto>': {
+      fjernet: components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto'];
+    };
+    'no.nav.aap.behandlingsflyt.utils.diff.LagtTil<no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto>': {
+      lagtTil: components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto'];
+    };
+    'no.nav.aap.behandlingsflyt.utils.diff.Uendret<no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto>': {
+      uendret: components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto'];
     };
     'no.nav.aap.brev.kontrakt.Adresse': {
       adresselinje1: string;

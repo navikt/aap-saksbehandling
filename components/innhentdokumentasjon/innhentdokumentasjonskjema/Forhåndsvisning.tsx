@@ -38,11 +38,7 @@ export const Forhåndsvisning = ({ saksnummer, fritekst, dokumentasjonsType, vis
       <Modal.Body>
         {isLoading && <Loader />}
 
-        {!isLoading && isSuccess(data) && (
-          <p style={{ whiteSpace: 'pre-wrap' }}>
-            {data.data.konstruertBrev}
-          </p>
-        )}
+        {!isLoading && isSuccess(data) && <p style={{ whiteSpace: 'pre-wrap' }}>{data.data.konstruertBrev}</p>}
 
         {isError(data) && (
           <Alert variant="error">{data.apiException.message || 'En ukjent feil oppsto ved forhåndsvisning'}</Alert>

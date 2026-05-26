@@ -9,6 +9,7 @@ export const FLAGS = [
   'ArenasakerLenkeTilVisninsklient',
   'BegrunnelseForIkkeSendBrev',
   'ForutgaaendeGap',
+  'TilkjentYtelseMedDiff',
   'AvbrytAktivitetspliktbehandling',
   'RedigitaliseringV2',
 ] as const;
@@ -27,6 +28,7 @@ export const mockedFlags: Flags = {
   ArenasakerLenkeTilVisninsklient: true,
   BegrunnelseForIkkeSendBrev: true,
   ForutgaaendeGap: true,
+  TilkjentYtelseMedDiff: true,
   AvbrytAktivitetspliktbehandling: true,
   RedigitaliseringV2: true,
 };

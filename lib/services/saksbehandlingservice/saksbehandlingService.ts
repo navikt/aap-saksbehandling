@@ -90,6 +90,7 @@ import {
   SykestipendGrunnlag,
   SøkPåSakInfo,
   TilkjentYtelseGrunnlag,
+  TilkjentYtelseGrunnlagMedDiff,
   TrekkKlageGrunnlag,
   TrukketSøknadGrunnlag,
   UnderveisGrunnlag,
@@ -364,6 +365,11 @@ export const hentSoningsvurdering = async (behandlingsreferanse: string) => {
 export const hentTilkjentYtelse = async (behandlingsreferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/tilkjentV2/${behandlingsreferanse}`;
   return await apiFetch<TilkjentYtelseGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentTilkjentYtelseMedDiff = async (behandlingsreferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/tilkjent-med-diff/${behandlingsreferanse}`;
+  return await apiFetch<TilkjentYtelseGrunnlagMedDiff>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentTrukketSøknad = async (behandlingsreferanse: string) => {
