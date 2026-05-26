@@ -19,15 +19,7 @@ import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { TotrinnsvurderingVedtaksbrevFelter } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingVedtaksbrevFelter';
 import { byggVilkårskortLenke } from 'lib/utils/vilkårskort';
-import {
-  loggUmamiEvent,
-  loggUmamiVarighetHendelser,
-  useUmamiStartTidspunkt,
-  useUmamiVarighetHendelser,
-} from 'lib/utils/umami';
-import { UmamiTags } from 'components/umami/Umami';
-import { useFlyt } from 'hooks/saksbehandling/FlytHook';
-
+import { loggUmamiVarighetHendelser, useUmamiVarighetHendelser } from 'lib/utils/umami';
 
 interface Props {
   grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;
@@ -51,7 +43,6 @@ export const TotrinnsvurderingForm = ({
   behandlingsversjon,
 }: Props) => {
   const { saksnummer, behandlingsreferanse } = useParamsMedType();
-  const { flyt } = useFlyt();
 
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } = useLøsBehovOgGåTilNesteSteg(
     erKvalitetssikring ? 'KVALITETSSIKRING' : 'FATTE_VEDTAK',
