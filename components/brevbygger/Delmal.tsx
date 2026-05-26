@@ -31,7 +31,7 @@ export const Delmal = ({ delmalRef, control, erMarkert, delmalInnhold }: Props) 
   const visDelmalKomponent = !obligatorisk || harValgEllerFritekst;
   // sjekker om denne delmalen er valgt eller er obligatorisk
   const erValgt = delmalErValgt || obligatorisk;
-  const bgcolor = obligatorisk && !harValgEllerFritekst ? 'var(--ax-bg-danger-moderate)' : 'var(--ax-bg-default)';
+  const kanIkkeRedigeres = obligatorisk && !harValgEllerFritekst;
   return (
     <>
       <div>
@@ -76,7 +76,12 @@ export const Delmal = ({ delmalRef, control, erMarkert, delmalInnhold }: Props) 
           </Box>
         )}
       </div>
-      {<div style={{ padding: '1rem', background: bgcolor }} dangerouslySetInnerHTML={{ __html: delmalInnhold }} />}
+      {
+        <div
+          className={`${styles.delmal} ${kanIkkeRedigeres ? styles.ikkeRedigerbar : ''}`}
+          dangerouslySetInnerHTML={{ __html: delmalInnhold }}
+        />
+      }
     </>
   );
 };

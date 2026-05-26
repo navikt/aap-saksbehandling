@@ -163,7 +163,12 @@ export const Brevbygger = ({
               <>
                 <div />
                 <div
-                  style={{ background: '#fff', padding: '1rem' }}
+                  style={{
+                    background: '#fff',
+                    padding: '1rem',
+                    boxShadow:
+                      '0.5rem 0 0 inset var(--ax-border-warning-subtle), -0.5rem 0 0 inset var(--ax-border-warning-subtle)',
+                  }}
                   className={styles.brevheader}
                   dangerouslySetInnerHTML={{ __html: brevPreview?.header.htmlString }}
                 />

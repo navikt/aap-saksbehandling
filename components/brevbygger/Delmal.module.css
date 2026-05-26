@@ -1,7 +1,15 @@
 .delmal {
   box-sizing: border-box;
+  padding: 1rem;
+  background-color: var(--ax-bg-default);
 }
 
 .markertDelmal {
   box-shadow: 0.5rem 0 0 inset var(--ax-bg-brand-blue-strong);
+}
+
+.ikkeRedigerbar {
+  box-shadow:
+    0.5rem 0 0 inset var(--ax-border-warning-subtle),
+    -0.5rem 0 0 inset var(--ax-border-warning-subtle);
 }
