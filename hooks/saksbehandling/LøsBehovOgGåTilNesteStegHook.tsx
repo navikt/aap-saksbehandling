@@ -51,6 +51,7 @@ export function useLøsBehovOgGåTilNesteSteg(
   ) => void;
 } {
   const umamiStartTidspunkt = useUmamiStartTidspunkt();
+
   const params = useParamsMedType();
   const router = useRouter();
   const { refetchFlytClient } = useRequiredFlyt();
@@ -63,6 +64,7 @@ export function useLøsBehovOgGåTilNesteSteg(
   const [isPending, startTransition] = useTransition();
 
   const erLokal = isLocal();
+  const dateNowRef = useRef(Date.now);
   const sisteBehovRef = useRef<{
     behov: LøsAvklaringsbehovPåBehandling | LøsPeriodisertBehovPåBehandling;
     erPeriodisert: boolean;
@@ -115,7 +117,7 @@ export function useLøsBehovOgGåTilNesteSteg(
           // Logg steg fullført til umami
           if (umamiStegTag) {
             loggUmamiEvent(umamiStegTag, {
-              varighet_sekunder: Math.floor((Date.now() - umamiStartTidspunkt) / 1000),
+              varighet_sekunder: Math.floor((dateNowRef.current() - umamiStartTidspunkt) / 1000),
               typeBehandling: flytResponse.data.visning.typeBehandling,
             });
           }
