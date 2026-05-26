@@ -63,7 +63,7 @@ export const VilkårskortPeriodisert = ({
 
   return (
     <VStack
-      padding={'space-12'} // TODO Fiks denne slik at padding over og under er 0 når kortet ikke er aktivt
+      padding={'space-12'}
       gap={'space-4'}
       aria-label={heading}
       className={`${erAktivtSteg ? classNameBasertPåEnhet : styles.vilkårsKort}`}
