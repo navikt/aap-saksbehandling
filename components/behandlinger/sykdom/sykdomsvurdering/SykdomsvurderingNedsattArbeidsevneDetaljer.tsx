@@ -11,7 +11,6 @@ import {
   yrkesskadeBegrunnelse,
 } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingFormInput';
 import React from 'react';
-import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   index: number;
@@ -31,7 +30,6 @@ export const SykdomsvurderingNedsattArbeidsevneDetaljer = ({
   index,
   readonly,
 }: Props) => {
-  const sykdomUtenVissVarighetToggle = useFeatureFlag('SykdomUtenVissVarighetFrontend');
   const valgtDato = parseDatoFraDatePicker(form.watch(`vurderinger.${index}.fraDato`));
   const vurderingDatoSammeSomRettighetsperiodeStart = vurderingFraDatoErSammeSomRettighetsperiodeStart(
     valgtDato,
@@ -60,7 +58,6 @@ export const SykdomsvurderingNedsattArbeidsevneDetaljer = ({
 
       <SykdomsvurderingYrkesskade
         form={form}
-        erÅrsakssammenhengYrkesskade={erÅrsakssammenhengYrkesskade}
         index={index}
         readonly={readonly}
         skalVurdereYrkesskade={skalVurdereYrkesskade}
@@ -78,21 +75,6 @@ export const SykdomsvurderingNedsattArbeidsevneDetaljer = ({
             }}
             readOnly={readonly}
           />
-
-          {form.watch(`vurderinger.${index}.erSkadeSykdomEllerLyteVesentligdel`) === JaEllerNei.Ja &&
-            !sykdomUtenVissVarighetToggle && (
-              <RadioGroupJaNei
-                name={`vurderinger.${index}.erNedsettelseIArbeidsevneAvEnVissVarighet`}
-                control={form.control}
-                label={'Er den nedsatte arbeidsevnen av en viss varighet?'}
-                description={'Om du svarer nei, vil brukeren vurderes for AAP som sykepengeerstatning etter § 11-13.'}
-                horisontal={true}
-                rules={{
-                  required: 'Du må svare på om den nedsatte arbeidsevnen er av en viss varighet',
-                }}
-                readOnly={readonly}
-              />
-            )}
         </>
       )}
     </>
@@ -103,7 +85,6 @@ const SykdomsvurderingYrkesskade = ({
   form,
   vurderingDatoSammeSomRettighetsperiodeStart,
   skalVurdereYrkesskade,
-  erÅrsakssammenhengYrkesskade,
   index,
   readonly,
 }: {
@@ -112,7 +93,6 @@ const SykdomsvurderingYrkesskade = ({
   readonly: boolean;
   vurderingDatoSammeSomRettighetsperiodeStart: boolean;
   skalVurdereYrkesskade: boolean;
-  erÅrsakssammenhengYrkesskade: boolean;
 }) => {
   /*
    * Logikken for yrkesskade er litt kronglete.
@@ -158,7 +138,7 @@ const SykdomsvurderingYrkesskade = ({
     );
   } else {
     return (
-      erÅrsakssammenhengYrkesskade && (
+      skalVurdereYrkesskade && (
         <RadioGroupJaNei
           name={`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense`}
           control={form.control}

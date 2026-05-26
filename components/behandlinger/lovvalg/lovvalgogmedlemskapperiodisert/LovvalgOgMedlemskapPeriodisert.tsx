@@ -30,7 +30,6 @@ import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 import { loggUmamiVarighetHendelser, useUmamiVarighetHendelser } from 'lib/utils/umami';
-import { UmamiTags } from 'components/umami/Umami';
 
 interface Props {
   behandlingVersjon: number;
@@ -51,7 +50,7 @@ export const LovvalgOgMedlemskapPeriodisert = ({
 }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
   const { løsPeriodisertBehovOgGåTilNesteSteg, status, løsBehovOgGåTilNesteStegError, isLoading } =
-    useLøsBehovOgGåTilNesteSteg('VURDER_LOVVALG');
+    useLøsBehovOgGåTilNesteSteg('VURDER_LOVVALG', 'STEG_LOVVALG_MEDLEMSKAP_VARIGHET');
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
@@ -66,7 +65,7 @@ export const LovvalgOgMedlemskapPeriodisert = ({
     : getDefaultValuesFromGrunnlag(grunnlag);
 
   const { hendelseSerieRef, varighetHendelseRef, addHendelse } = useUmamiVarighetHendelser(
-    UmamiTags.LOVVALG_MEDLEMSKAP_VARIGHET_HENDELSER
+    'LOVVALG_MEDLEMSKAP_VARIGHET_HENDELSER'
   );
 
   const form = useForm<LovOgMedlemskapVurderingForm>({
@@ -122,7 +121,6 @@ export const LovvalgOgMedlemskapPeriodisert = ({
       closeAllAccordions();
       visningActions.onBekreftClick();
       nullstillMellomlagretVurdering();
-      addHendelse(UmamiTags.LOVVALG_MEDLEMSKAP_STEG_FULLFØRT, Date.now());
       loggUmamiVarighetHendelser(varighetHendelseRef.current, hendelseSerieRef.current);
     });
   }

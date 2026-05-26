@@ -10,6 +10,7 @@ import { ValuePair } from 'components/form/FormField';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { CheckboxWrapper } from 'components/form/checkboxwrapper/CheckboxWrapper';
+import { UmamiTag } from 'components/umami/Umami';
 
 interface Props {
   link: string;
@@ -18,7 +19,7 @@ interface Props {
   index: number;
   form: UseFormReturn<FormFieldsToTrinnsVurdering>;
   field: FieldArrayWithId<FormFieldsToTrinnsVurdering, 'totrinnsvurderinger'>;
-  felterOnBlur?: (hendelse: string, tidsstempel: number) => void;
+  felterOnBlur?: (hendelse: UmamiTag, tidsstempel: number) => void;
 }
 
 export const TotrinnsvurderingVedtaksbrevFelter = ({
@@ -54,7 +55,7 @@ export const TotrinnsvurderingVedtaksbrevFelter = ({
           as={Link}
           prefetch={false}
           href={link}
-          onClick={() => felterOnBlur(`${eventPrefix}_LINK`, Date.now())}
+          onClick={() => felterOnBlur(`${eventPrefix}_LINK` as UmamiTag, Date.now())}
         >
           {mapBehovskodeTilBehovstype(field.definisjon as Behovstype)}
         </AkselLink>
@@ -70,7 +71,7 @@ export const TotrinnsvurderingVedtaksbrevFelter = ({
             <Radio
               value={option.value}
               key={option.value}
-              onBlur={() => felterOnBlur(`${eventPrefix}_GODKJENT`, Date.now())}
+              onBlur={() => felterOnBlur(`${eventPrefix}_GODKJENT` as UmamiTag, Date.now())}
             >
               {option.label}
             </Radio>
@@ -93,7 +94,7 @@ export const TotrinnsvurderingVedtaksbrevFelter = ({
                       : true,
                 },
               }}
-              onBlur={() => felterOnBlur(`${eventPrefix}_RETUR_BEGRUNNELSE`, Date.now())}
+              onBlur={() => felterOnBlur(`${eventPrefix}_RETUR_BEGRUNNELSE` as UmamiTag, Date.now())}
             />
             <CheckboxWrapper
               label={'Returårsak'}
@@ -106,7 +107,7 @@ export const TotrinnsvurderingVedtaksbrevFelter = ({
                 <Checkbox
                   value={option.value}
                   key={option.value}
-                  onBlur={() => felterOnBlur(`${eventPrefix}_RETUR_GRUNNER`, Date.now())}
+                  onBlur={() => felterOnBlur(`${eventPrefix}_RETUR_GRUNNER` as UmamiTag, Date.now())}
                 >
                   {option.label}
                 </Checkbox>
@@ -127,7 +128,7 @@ export const TotrinnsvurderingVedtaksbrevFelter = ({
                     message: 'Kan bestå av maks 50 tegn. Utfyllende begrunnelse skal i feltet over.',
                   },
                 }}
-                onBlur={() => felterOnBlur(`${eventPrefix}_RETUR_ÅRSAKFRITEKST`, Date.now())}
+                onBlur={() => felterOnBlur(`${eventPrefix}_RETUR_ÅRSAKFRITEKST` as UmamiTag, Date.now())}
               />
             )}{' '}
           </>

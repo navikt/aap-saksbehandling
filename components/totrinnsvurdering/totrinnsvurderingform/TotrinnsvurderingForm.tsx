@@ -54,12 +54,12 @@ export const TotrinnsvurderingForm = ({
   const { flyt } = useFlyt();
 
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } = useLøsBehovOgGåTilNesteSteg(
-    erKvalitetssikring ? 'KVALITETSSIKRING' : 'FATTE_VEDTAK'
+    erKvalitetssikring ? 'KVALITETSSIKRING' : 'FATTE_VEDTAK',
+    erKvalitetssikring ? 'STEG_BESLUTTER_VARIGHET' : 'STEG_KVALITETSSIKRER_VARIGHET'
   );
 
-  const umamiStartTidspunkt = useUmamiStartTidspunkt();
   const { addHendelse, varighetHendelseRef, hendelseSerieRef } = useUmamiVarighetHendelser(
-    erKvalitetssikring ? UmamiTags.KVALITETSSIKRER_VARIGHET_HENDELSER : UmamiTags.BESLUTTER_VARIGHET_HENDELSER
+    erKvalitetssikring ? 'KVALITETSSIKRER_VARIGHET_HENDELSER' : 'BESLUTTER_VARIGHET_HENDELSER'
   );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
@@ -143,10 +143,6 @@ export const TotrinnsvurderingForm = ({
           },
           () => {
             if (!erKvalitetssikring) {
-              loggUmamiEvent('beslutter-varighet', {
-                varighet_sekunder: Math.floor((Date.now() - umamiStartTidspunkt) / 1000),
-                typeBehandling: flyt?.visning.typeBehandling,
-              });
               loggUmamiVarighetHendelser(varighetHendelseRef.current, hendelseSerieRef.current);
             }
             nullstillMellomlagretVurdering();
