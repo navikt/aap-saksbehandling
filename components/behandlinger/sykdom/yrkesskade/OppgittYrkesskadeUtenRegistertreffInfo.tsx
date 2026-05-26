@@ -18,8 +18,7 @@ export const OppgittYrkesskadeUtenRegistertreffInfo = ({ grunnlag }: YrkesskadeI
           </BodyShort>
         </div>
         <Alert variant="info" size="small" style={{ maxWidth: 600 }}>
-          Det er ingen registrerte yrkesskader på brukeren. Det legges automatisk inn en forklaring til brukeren i
-          førstegangsvedtaket.
+          Det er ingen registrerte yrkesskader på brukeren.
         </Alert>
       </VStack>
     </VilkårsKort>

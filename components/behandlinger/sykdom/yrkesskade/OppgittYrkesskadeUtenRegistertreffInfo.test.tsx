@@ -43,7 +43,7 @@ describe('OppgittYrkesskadeUtenRegistertreffInfo', () => {
     render(<OppgittYrkesskadeUtenRegistertreffInfo grunnlag={grunnlagMedOppgittYrkesskade} />);
     expect(
       screen.getByText(
-        'Det er ingen registrerte yrkesskader på brukeren. Det legges automatisk inn en forklaring til brukeren i førstegangsvedtaket.'
+        'Det er ingen registrerte yrkesskader på brukeren.'
       )
     ).toBeVisible();
   });
