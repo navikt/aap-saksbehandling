@@ -255,13 +255,21 @@ describe('mapTilPeriodisertVurdering', () => {
           expect(result.erNedsettelseIArbeidsevneMerEnnHalvparten).toBe(false);
         });
 
-        it('skal sette yrkesskade-felt selv om skalVurdereYrkesskade er true', () => {
+        it('skal ikke sette yrkesskade-begrunnelse selv om skalVurdereYrkesskade er true', () => {
           const data: Sykdomsvurdering = {
             ...baseSykdomsvurdering,
             fraDato: fraDatoEtterRettighetsperiodeStart,
           };
           const result = mapTilPeriodisertVurdering(data, true, false, rettighetsperiodeStart, false);
           expect(result.yrkesskadeBegrunnelse).toBeUndefined();
+        });
+
+        it('skal sette yrkesskade-felt når skalVurdereYrkesskade er true', () => {
+          const data: Sykdomsvurdering = {
+            ...baseSykdomsvurdering,
+            fraDato: fraDatoEtterRettighetsperiodeStart,
+          };
+          const result = mapTilPeriodisertVurdering(data, true, false, rettighetsperiodeStart, false);
           expect(result.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense).toBe(true);
         });
       });
