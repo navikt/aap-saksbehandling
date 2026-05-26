@@ -27,10 +27,15 @@ import { hentTildeltStatusClient } from 'lib/oppgaveClientApi';
 import { isLocal } from 'lib/utils/environment';
 import { useOverstyrTildelingHook } from 'hooks/saksbehandling/OverstyrTildelingHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { loggUmamiEvent, useUmamiStartTidspunkt } from 'lib/utils/umami';
+import { UmamiTag } from 'components/umami/Umami';
 
 export type LøsBehovOgGåTilNesteStegStatus = ServerSentEventStatus | undefined;
 
-export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
+export function useLøsBehovOgGåTilNesteSteg(
+  steg: StegType,
+  umamiStegTag?: UmamiTag
+): {
   løsBehovOgGåTilNesteStegError?: ApiException;
   status: LøsBehovOgGåTilNesteStegStatus;
   isLoading: boolean;
@@ -45,6 +50,7 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
     sjekkTildeltStatus?: boolean
   ) => void;
 } {
+  const umamiStartTidspunkt = useUmamiStartTidspunkt();
   const params = useParamsMedType();
   const router = useRouter();
   const { refetchFlytClient } = useRequiredFlyt();
@@ -106,6 +112,13 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
         const flytResponse = await clientHentFlyt(params.behandlingsreferanse);
 
         if (isSuccess(flytResponse)) {
+          // Logg steg fullført til umami
+          if (umamiStegTag) {
+            loggUmamiEvent(umamiStegTag, {
+              varighet_sekunder: Math.floor((Date.now() - umamiStartTidspunkt) / 1000),
+              typeBehandling: flytResponse.data.visning.typeBehandling,
+            });
+          }
           const clientLøsBehovEtterConflict = erPeriodisert
             ? await clientLøsPeriodisertBehov({
                 ...(behov as LøsPeriodisertBehovPåBehandling), // TODO: Rydd opp i typene
