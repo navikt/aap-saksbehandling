@@ -32,6 +32,7 @@ import { Aktivitetsplikt11_9 } from 'components/behandlinger/aktivitetsplikt/11-
 import { LovvalgPeriodisert } from 'components/behandlinger/lovvalg/LovvalgPeriodisert';
 import { PeriodisertForutgåendeMedlemskap } from 'components/behandlinger/forutgåendemedlemskap/PeriodisertForutgåendeMedlemskap';
 import { Vedtakslengde } from 'components/behandlinger/vedtakslengde/Vedtakslengde';
+import { AvbrytAktivitetspliktbehandling } from 'components/behandlinger/aktivitetsplikt/avbryt/vurdering/AvbrytAktivitetspliktbehandling';
 
 interface Props {
   behandlingsreferanse: string;
@@ -95,5 +96,8 @@ export const OppgaveKolonne = async ({ behandlingsreferanse, aktivGruppe, classN
     {/* Aktivitetsplikt */}
     {aktivGruppe === 'AKTIVITETSPLIKT_11_7' && <Aktivitetsplikt11_7 behandlingsreferanse={behandlingsreferanse} />}
     {aktivGruppe === 'AKTIVITETSPLIKT_11_9' && <Aktivitetsplikt11_9 behandlingsreferanse={behandlingsreferanse} />}
+    {aktivGruppe === 'AVBRYT_AKTIVITETSPLIKTBEHANDLING' && (
+      <AvbrytAktivitetspliktbehandling behandlingsreferanse={behandlingsreferanse} />
+    )}
   </section>
 );

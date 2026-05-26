@@ -20,7 +20,7 @@ import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { TotrinnsvurderingVedtaksbrevFelter } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingVedtaksbrevFelter';
 import { byggVilkårskortLenke } from 'lib/utils/vilkårskort';
-import { loggUmamiEvent, useUmamiStartTidspunkt } from 'lib/utils/umami';
+import { loggUmamiVarighetHendelser, useUmamiVarighetHendelser } from 'lib/utils/umami';
 
 interface Props {
   grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;
@@ -45,10 +45,13 @@ export const TotrinnsvurderingForm = ({
   const { saksnummer, behandlingsreferanse } = useParamsMedType();
 
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } = useLøsBehovOgGåTilNesteSteg(
-    erKvalitetssikring ? 'KVALITETSSIKRING' : 'FATTE_VEDTAK'
+    erKvalitetssikring ? 'KVALITETSSIKRING' : 'FATTE_VEDTAK',
+    erKvalitetssikring ? 'STEG_BESLUTTER_VARIGHET' : 'STEG_KVALITETSSIKRER_VARIGHET'
   );
 
-  const umamiStartTidspunkt = useUmamiStartTidspunkt();
+  const { addHendelse, varighetHendelseRef, hendelseSerieRef } = useUmamiVarighetHendelser(
+    erKvalitetssikring ? 'KVALITETSSIKRER_VARIGHET_HENDELSER' : 'BESLUTTER_VARIGHET_HENDELSER'
+  );
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? mapMellomlagringToDraftFormFields(JSON.parse(initialMellomlagretVurdering.data))
@@ -134,10 +137,7 @@ export const TotrinnsvurderingForm = ({
           },
           () => {
             if (!erKvalitetssikring) {
-              loggUmamiEvent('beslutter-varighet', {
-                varighet_sekunder: Math.floor((Date.now() - umamiStartTidspunkt) / 1000),
-                typeBehandling: flyt.visning.typeBehandling,
-              });
+              loggUmamiVarighetHendelser(varighetHendelseRef.current, hendelseSerieRef.current);
             }
             nullstillMellomlagretVurdering();
           }
@@ -158,6 +158,7 @@ export const TotrinnsvurderingForm = ({
               erKvalitetssikring={erKvalitetssikring}
               link={link}
               readOnly={readOnly}
+              felterOnBlur={addHendelse}
             />
           );
         }
@@ -170,6 +171,7 @@ export const TotrinnsvurderingForm = ({
             erKvalitetssikring={erKvalitetssikring}
             link={link}
             readOnly={readOnly}
+            felterOnBlur={addHendelse}
           />
         );
       })}

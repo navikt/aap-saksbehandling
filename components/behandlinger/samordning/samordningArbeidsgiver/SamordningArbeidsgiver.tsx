@@ -3,7 +3,7 @@
 import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { BodyLong, BodyShort, Link, VStack } from '@navikt/ds-react';
-import { FormEvent } from 'react';
+import { SubmitEventHandler } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
@@ -87,7 +87,7 @@ export const SamordningArbeidsgiver = ({
 
   const harFåttEkstrautbetalingFraArbeidsgiver = grunnlag.harFåttEkstrautbetalingFraArbeidsgiver ? 'Ja' : 'Nei';
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit(async (data) =>
       løsBehovOgGåTilNesteSteg(
         {

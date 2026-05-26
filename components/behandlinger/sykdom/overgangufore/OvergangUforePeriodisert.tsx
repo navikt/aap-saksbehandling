@@ -8,7 +8,7 @@ import {
 } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import React, { FormEvent } from 'react';
+import { SubmitEventHandler } from 'react';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
@@ -80,7 +80,7 @@ export const OvergangUforePeriodisert = ({
     form
   );
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
       løsPeriodisertBehovOgGåTilNesteSteg(
         {
@@ -114,7 +114,7 @@ export const OvergangUforePeriodisert = ({
   };
 
   const tidligereVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
-  const foersteNyePeriode = nyeVurderingFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
+  const førsteNyePeriode = nyeVurderingFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
   const errorList = hentFeilmeldingerForForm(form.formState.errors);
   return (
     <VilkårskortPeriodisert
@@ -145,7 +145,7 @@ export const OvergangUforePeriodisert = ({
             key={crypto.randomUUID()}
             fom={parseISO(vurdering.fom)}
             tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
-            foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+            førsteNyePeriodeFraDato={førsteNyePeriode != null ? parseDatoFraDatePicker(førsteNyePeriode) : null}
             vurderingStatus={getErOppfyltEllerIkkeStatus(!!vurdering.brukerRettPåAAP)}
             vurderingerMeta={vurdering.vurderingerMeta}
           >

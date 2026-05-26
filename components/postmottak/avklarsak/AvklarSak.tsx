@@ -1,12 +1,10 @@
 'use client';
 
-import { FormEvent, FormEventHandler } from 'react';
+import { SubmitEventHandler } from 'react';
 import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/PostmottakLøsBehovOgGåTilNesteStegHook';
-import { AvsenderMottakerIdType, FinnSakGrunnlag, JournalpostInfo, Saksinfo } from 'lib/types/postmottakTypes';
+import { AvsenderMottakerIdType, FinnSakGrunnlag, JournalpostInfo } from 'lib/types/postmottakTypes';
 import { Alert, Detail, Label, Radio, VStack } from '@navikt/ds-react';
 import { ServerSentEventStatusAlert } from 'components/postmottak/serversenteventstatusalert/ServerSentEventStatusAlert';
-import { FormFieldRadioOptions } from 'components/form/FormHook';
-import { formaterDatoForFrontend } from 'lib/utils/date';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { TextFieldToggle } from 'components/form/TextFieldToggle';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
@@ -70,8 +68,6 @@ const mapIdType = (type?: string | null) => {
 };
 
 export const AvklarSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, readOnly, søker }: Props) => {
-  const nySakOption = grunnlag.saksinfo.length === 0 ? [{ label: 'Opprett ny sak', value: NY }] : [];
-
   const form = useForm<FormFields>({
     defaultValues: {
       knyttTilSak: mapVurderingTilValgtOption(grunnlag.vurdering),
@@ -98,7 +94,7 @@ export const AvklarSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, 
     isLoading,
     løsBehovOgGåTilNesteStegError: error,
   } = usePostmottakLøsBehovOgGåTilNesteSteg('AVKLAR_SAK');
-  const onSubmit: FormEventHandler<HTMLFormElement> = (event: FormEvent<HTMLFormElement>) => {
+  const onSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
       løsBehovOgGåTilNesteSteg({
         behandlingVersjon: behandlingsVersjon,
@@ -149,15 +145,20 @@ export const AvklarSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, 
           control={form.control}
           readOnly={formReadOnly}
         >
-          {[
-            ...nySakOption,
-            ...grunnlag.saksinfo.map(mapSaksinfoToOptions),
-            { label: 'Journalfør på generell sak', value: GENERELL },
-          ].map((option, i) => (
-            <Radio key={`knytttilsak-${i}`} value={option.value}>
-              {option.label}
+          {grunnlag.kanOppretteNySak && <Radio value={NY}>Opprett ny sak</Radio>}
+          {grunnlag.saksinfo.map((sak) => (
+            <Radio key={sak.saksnummer} value={sak.saksnummer}>
+              {sak.resultat === 'TRUKKET' ? (
+                <>
+                  <s>{sak.saksnummer}</s> ({sak.resultat})
+                </>
+              ) : (
+                sak.saksnummer
+              )}
             </Radio>
           ))}
+
+          <Radio value={GENERELL}>Journalfør på generell sak</Radio>
         </RadioGroupWrapper>
 
         <div>
@@ -245,11 +246,3 @@ export const AvklarSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, 
     </PostmottakVilkårskort>
   );
 };
-
-function mapSaksinfoToOptions(saksinfo: Saksinfo): FormFieldRadioOptions {
-  return {
-    value: saksinfo.saksnummer,
-    label: saksinfo.saksnummer,
-    description: `${formaterDatoForFrontend(saksinfo.periode.fom)} - ${formaterDatoForFrontend(saksinfo.periode.tom)}`,
-  };
-}

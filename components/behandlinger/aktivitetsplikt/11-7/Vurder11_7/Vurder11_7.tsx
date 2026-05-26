@@ -9,7 +9,7 @@ import { useSak } from 'hooks/SakHook';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { FormEvent } from 'react';
+import { SubmitEventHandler } from 'react';
 import { Aktivitetsplikt11_7Grunnlag, Aktivitetsplikt11_7Vurdering, MellomlagretVurdering } from 'lib/types/types';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
@@ -58,7 +58,7 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
     ? isBefore(grunnlag.varsel.svarfrist, startOfDay(new Date()))
     : null;
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
       løsBehovOgGåTilNesteSteg(
         {

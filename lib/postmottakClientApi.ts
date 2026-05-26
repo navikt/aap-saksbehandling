@@ -38,7 +38,7 @@ export async function postmottakHentDokumentClient(journalpostId: number, dokume
 }
 
 export function redigitaliserDokument(journalpostId: number, saksnummer: string) {
-  return clientFetch(`/postmottak/api/post/redigitaliser`, 'POST', {
+  return clientFetch<{ message?: string }>(`/postmottak/api/post/redigitaliser`, 'POST', {
     journalpostId: journalpostId,
     saksnummer: saksnummer,
   });

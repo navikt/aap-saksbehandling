@@ -6,7 +6,7 @@ registries:
     token: ${{ secrets.READER_TOKEN }}
 updates:
   - package-ecosystem: 'docker'
-    directory: "/"
+    directory: '/'
     schedule:
       interval: weekly
     cooldown:
@@ -20,7 +20,7 @@ updates:
     cooldown:
       default-days: 7
   - package-ecosystem: npm
-    directory: "/"
+    directory: '/'
     schedule:
       interval: daily
     cooldown:
@@ -36,13 +36,13 @@ updates:
     registries: '*'
     ignore:
       - dependency-name: '*'
-        update-types: [ 'version-update:semver-major' ]
+        update-types: ['version-update:semver-major']
       - dependency-name: '@navikt/eslint-config-aap'
       - dependency-name: 'prettier'
       - dependency-name: '@typescript-eslint*'
       - dependency-name: 'eslint-*'
       - dependency-name: 'eslint'
-        versions: [ '9.x' ]
+        versions: ['9.x']
     groups:
       aap-backend-typescript-types:
         patterns:

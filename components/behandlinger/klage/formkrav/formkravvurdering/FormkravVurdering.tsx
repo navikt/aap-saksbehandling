@@ -3,7 +3,7 @@
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { useConfigForm } from 'components/form/FormHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { FormEvent } from 'react';
+import { SubmitEventHandler } from 'react';
 import { FormField } from 'components/form/FormField';
 import { FormkravGrunnlag, MellomlagretVurdering, TypeBehandling } from 'lib/types/types';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
@@ -113,7 +113,7 @@ export const FormkravVurdering = ({ behandlingVersjon, grunnlag, readOnly, initi
     !avvistGrunnetFrist &&
     (erBrukerPart === JaEllerNei.Nei || erKonkret === JaEllerNei.Nei || erSignert === JaEllerNei.Nei);
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
       løsBehovOgGåTilNesteSteg(
         {

@@ -8,7 +8,7 @@ import {
 } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
-import React, { FormEvent } from 'react';
+import { SubmitEventHandler } from 'react';
 import {
   EtableringEgenVirksomhetGrunnlagResponse,
   EtableringEierBrukerVirksomheten,
@@ -93,7 +93,7 @@ export const EtableringAvEgenVirksomhet = ({
     form
   );
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
       // Må finnes minst en oppstart eller utviklingsperiode hvis vilkår er oppfylt
       let validerTidsplan = true;
@@ -210,7 +210,7 @@ export const EtableringAvEgenVirksomhet = ({
           key={crypto.randomUUID()}
           fom={parseISO(vurdering.fom)}
           tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
-          foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+          førsteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
           vurderingStatus={getErOppfyltEllerIkkeStatus(tidligereVurderingErOppfylt(vurdering))}
           vurderingerMeta={vurdering.vurderingerMeta}
         >

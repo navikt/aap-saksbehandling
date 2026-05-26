@@ -1,6 +1,5 @@
 import { TextField } from '@navikt/ds-react';
-import React, { HTMLInputAutoCompleteAttribute } from 'react';
-import { ReactNode } from 'react';
+import React, { FocusEventHandler, HTMLInputAutoCompleteAttribute, ReactNode } from 'react';
 import { Control, Controller, FieldPath, FieldValues, RegisterOptions } from 'react-hook-form';
 import { mapShortDateToDateString } from './dateMapper';
 
@@ -18,8 +17,9 @@ export type DateInputWrapperProps<FormFieldValues extends FieldValues> = {
   readOnly?: boolean;
   className?: string;
   autocomplete?: HTMLInputAutoCompleteAttribute;
-  onChangeCustom?: (event: React.FormEvent<HTMLInputElement>) => void;
+  onChangeCustom?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   dataUmamiEvent?: string;
+  onBlur?: FocusEventHandler<HTMLInputElement> | undefined;
 };
 
 export const DateInputWrapper = <FormFieldValues extends FieldValues>({
@@ -36,9 +36,10 @@ export const DateInputWrapper = <FormFieldValues extends FieldValues>({
   autocomplete,
   onChangeCustom,
   dataUmamiEvent,
+  onBlur,
 }: DateInputWrapperProps<FormFieldValues>) => {
   const classNames = `${styles.aap_date_input} ${className}`;
-  const transform = (input: React.FormEvent<HTMLInputElement>) => mapShortDateToDateString(input.currentTarget.value);
+  const transform = (input: React.ChangeEvent<HTMLInputElement>) => mapShortDateToDateString(input.currentTarget.value);
 
   return (
     <Controller
@@ -47,7 +48,7 @@ export const DateInputWrapper = <FormFieldValues extends FieldValues>({
       rules={rules}
       shouldUnregister={shouldUnregister}
       render={({ field: { name, value, onChange }, fieldState: { error } }) => {
-        const handleChange = (e: React.FormEvent<HTMLInputElement>) => {
+        const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
           onChange(transform(e));
           if (onChangeCustom) {
             onChangeCustom(e);
@@ -70,6 +71,7 @@ export const DateInputWrapper = <FormFieldValues extends FieldValues>({
             readOnly={readOnly}
             className={classNames}
             autoComplete={autocomplete}
+            onBlur={onBlur}
           />
         );
       }}

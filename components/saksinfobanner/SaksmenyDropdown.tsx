@@ -18,6 +18,8 @@ import { AvbrytRevurderingModal } from 'components/saksinfobanner/avbrytrevurder
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useInnloggetBruker } from 'hooks/BrukerHook';
 import { brukerErBeslutter, brukerKanSaksbehandle } from 'lib/utils/innloggetBruker';
+import { AvbrytAktivitetspliktbehandlingModal } from 'components/saksinfobanner/avbrytaktivitetspliktbehandlingmodal/AvbrytAktivitetspliktbehandlingModal';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 export const SaksmenyDropdown = ({
   flyt,
@@ -41,13 +43,18 @@ export const SaksmenyDropdown = ({
   const [visTrekkSøknadModal, settVisTrekkSøknadModal] = useState(false);
   const [visTrekkKlageModal, settVisTrekkKlageModal] = useState(false);
   const [visAvbrytRevurderingModal, settVisAvbrytRevurderingModal] = useState(false);
+  const [visAvbrytAktivitetspliktbehandlingModal, settVisAvbrytAktivitetspliktbehandlingModal] = useState(false);
   const [visVurderRettighetsperiodeModal, settVisVurderRettighetsperiodeModal] = useState(false);
   const [aktivMarkeringType, settAktivMarkeringType] = useState<MarkeringType | null>(null);
 
   const søknadStegGruppe = flyt && flyt.find((f) => f.stegGruppe === 'SØKNAD');
   const avbrytRevurderingSteg = flyt && flyt.find((f) => f.stegGruppe === 'AVBRYT_REVURDERING');
+  const avbrytAktivitetspliktbehandlingSteg =
+    flyt && flyt.find((f) => f.stegGruppe === 'AVBRYT_AKTIVITETSPLIKTBEHANDLING');
   const behandlerEnSøknadSomSkalTrekkes = søknadStegGruppe && søknadStegGruppe.skalVises;
   const behandlerRevurderingSomSkalAvbrytes = avbrytRevurderingSteg && avbrytRevurderingSteg.skalVises;
+  const behandlerAktivitetspliktbehandlingSomSkalAvbrytes =
+    avbrytAktivitetspliktbehandlingSteg && avbrytAktivitetspliktbehandlingSteg.skalVises;
 
   const trekkKlageSteg = flyt && flyt.find((f) => f.stegGruppe === 'TREKK_KLAGE');
   const harAlleredeValgtTrekkKlage = trekkKlageSteg && trekkKlageSteg.skalVises;
@@ -55,8 +62,11 @@ export const SaksmenyDropdown = ({
   const typeBehandling = visning?.typeBehandling;
   const behandlingErFørstegangsbehandling = typeBehandling && typeBehandling === 'Førstegangsbehandling';
   const behandlingErRevurdering = typeBehandling && typeBehandling === 'Revurdering';
+  const behandlingErAktivitetspliktbehandling =
+    typeBehandling && (typeBehandling === 'Aktivitetsplikt' || typeBehandling === 'Aktivitetsplikt11_9');
   const behandlingErIkkeAvsluttet = behandling.status !== 'AVSLUTTET';
   const behandlingErIkkeIverksatt = behandling.status !== 'IVERKSETTES';
+  const skalViseAvbrytAktivitetspliktbehandling = useFeatureFlag('AvbrytAktivitetspliktbehandling');
 
   const visValgForÅTrekkeSøknad =
     !behandlerEnSøknadSomSkalTrekkes &&
@@ -71,6 +81,14 @@ export const SaksmenyDropdown = ({
     innloggetBrukerKanSaksbehandle &&
     behandlingErRevurdering &&
     behandlingErIkkeAvsluttet;
+
+  const visValgForÅAvbryteAktivitetspliktbehandling =
+    behandlingErIkkeIverksatt &&
+    innloggetBrukerKanSaksbehandle &&
+    behandlingErAktivitetspliktbehandling &&
+    behandlingErIkkeAvsluttet &&
+    !behandlerAktivitetspliktbehandlingSomSkalAvbrytes &&
+    skalViseAvbrytAktivitetspliktbehandling;
 
   const visValgForÅTrekkeKlage =
     innloggetBrukerKanSaksbehandle &&
@@ -113,6 +131,11 @@ export const SaksmenyDropdown = ({
             )}
             {visValgForÅAvbryteRevurdering && (
               <Dropdown.Menu.GroupedList.Item onClick={() => settVisAvbrytRevurderingModal(true)}>
+                Avbryt behandling
+              </Dropdown.Menu.GroupedList.Item>
+            )}
+            {visValgForÅAvbryteAktivitetspliktbehandling && (
+              <Dropdown.Menu.GroupedList.Item onClick={() => settVisAvbrytAktivitetspliktbehandlingModal(true)}>
                 Avbryt behandling
               </Dropdown.Menu.GroupedList.Item>
             )}
@@ -159,6 +182,13 @@ export const SaksmenyDropdown = ({
       <AvbrytRevurderingModal
         isOpen={visAvbrytRevurderingModal}
         onClose={() => settVisAvbrytRevurderingModal(false)}
+        saksnummer={saksnummer}
+        behandlingReferanse={behandling.referanse}
+        navIdent={brukerInformasjon?.NAVident ? brukerInformasjon.NAVident : null}
+      />
+      <AvbrytAktivitetspliktbehandlingModal
+        isOpen={visAvbrytAktivitetspliktbehandlingModal}
+        onClose={() => settVisAvbrytAktivitetspliktbehandlingModal(false)}
         saksnummer={saksnummer}
         behandlingReferanse={behandling.referanse}
         navIdent={brukerInformasjon?.NAVident ? brukerInformasjon.NAVident : null}

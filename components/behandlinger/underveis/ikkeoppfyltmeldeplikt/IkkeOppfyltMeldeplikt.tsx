@@ -1,7 +1,7 @@
 'use client';
 
 import { MeldepliktOverstyringLøsningDto, OverstyringMeldepliktGrunnlag, Periode } from 'lib/types/types';
-import { FormEvent } from 'react';
+import { SubmitEventHandler } from 'react';
 import { BodyLong, Link, VStack } from '@navikt/ds-react';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { IkkeMeldtPerioderTable } from 'components/behandlinger/underveis/ikkeoppfyltmeldeplikt/IkkeMeldtPerioderTable';
@@ -101,7 +101,7 @@ export const IkkeOppfyltMeldeplikt = ({ grunnlag, behandlingVersjon, readOnly }:
   const { fields: vurderinger, append, remove } = useFieldArray({ control: form.control, name: 'vurderinger' });
   const valgtePerioder = vurderinger.map((v) => v.fraDato).sort((a, b) => a.localeCompare(b));
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
       const meldepliktOverstyringDto: MeldepliktOverstyringLøsningDto = {
         perioder: data.vurderinger

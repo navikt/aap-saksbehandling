@@ -74,14 +74,6 @@ export async function hentOppgave(behandlingReferanse: string) {
   return await apiFetch<Oppgave>(url, oppgaveApiScope, 'GET');
 }
 
-//TODO: ubrukt? ser ingen steder som kaller route
-export async function hentAntallOppgaver(behandlingstype?: string) {
-  const url = `${oppgaveApiBaseURL}/produksjonsstyring/antall-oppgaver`;
-  return await apiFetch<Record<string, number>>(url, oppgaveApiScope, 'POST', {
-    behandlingstype: behandlingstype || null,
-  });
-}
-
 export const hentMineOppgaver = async (queryParams: MineOppgaverQueryParams) => {
   const query = queryParams?.sortby
     ? mineOppgaverQueryParams({ sortby: queryParams?.sortby, sortorder: queryParams.sortorder })

@@ -2,7 +2,7 @@
 import { BodyShort, Button } from '@navikt/ds-react';
 import { clientSendHendelse } from 'lib/clientApi';
 import { useConfigForm } from 'components/form/FormHook';
-import { FormEvent } from 'react';
+import { SubmitEventHandler } from 'react';
 import { FormField } from 'components/form/FormField';
 import { KabalBehandlingDetaljer, KabalSvarType } from 'lib/types/types';
 
@@ -153,7 +153,7 @@ export function DummyKabalEvent({
     await clientSendHendelse(saksnummer, reqBody);
   }
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
       publiserKabalEvent(data.kildereferanse, data.type);
     })(event);

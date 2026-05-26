@@ -74,7 +74,7 @@ export const Dokumentvisning = ({ journalpostId, dokumenter, setIsExpandedAction
       </HStack>
       {dataUri && (
         <div className={styles.pdf}>
-          <iframe src={dataUri} title="Dokumentvisning" width="100%" height="100%" style={{ border: 'none' }} />
+          <iframe className={styles.iframe} src={dataUri} title="Dokumentvisning" />
         </div>
       )}
     </div>

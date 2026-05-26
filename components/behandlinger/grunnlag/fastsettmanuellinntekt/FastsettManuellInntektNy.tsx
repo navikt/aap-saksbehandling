@@ -3,7 +3,7 @@
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
-import { FormEvent, useEffect } from 'react';
+import { SubmitEvent, useEffect } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { ManuellInntektGrunnlag, ManuellInntektÅr, MellomlagretVurdering } from 'lib/types/types';
@@ -104,7 +104,7 @@ export const FastsettManuellInntektNy = ({
     form.setValue('tabellår', defaultValue.tabellår || []);
   }, [grunnlag]);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: SubmitEvent) {
     form.handleSubmit((data) => {
       løsBehovOgGåTilNesteSteg(
         {
