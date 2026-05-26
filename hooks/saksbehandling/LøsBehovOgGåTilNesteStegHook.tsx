@@ -50,7 +50,9 @@ export function useLøsBehovOgGåTilNesteSteg(
     sjekkTildeltStatus?: boolean
   ) => void;
 } {
+  const erLokal = isLocal();
   const umamiStartTidspunkt = useUmamiStartTidspunkt();
+  const dateNowRef = useRef(Date.now);
 
   const params = useParamsMedType();
   const router = useRouter();
@@ -63,8 +65,6 @@ export function useLøsBehovOgGåTilNesteSteg(
   const [error, setError] = useState<ApiException | undefined>();
   const [isPending, startTransition] = useTransition();
 
-  const erLokal = isLocal();
-  const dateNowRef = useRef(Date.now);
   const sisteBehovRef = useRef<{
     behov: LøsAvklaringsbehovPåBehandling | LøsPeriodisertBehovPåBehandling;
     erPeriodisert: boolean;
