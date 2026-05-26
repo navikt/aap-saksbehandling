@@ -291,7 +291,7 @@ describe('mapTilPeriodisertVurdering', () => {
         };
 
         it('skal mappe erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense', () => {
-          const result = mapTilPeriodisertVurdering(data, false, true, rettighetsperiodeStart);
+          const result = mapTilPeriodisertVurdering(data, true, true, rettighetsperiodeStart);
           expect(result.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense).toBe(true);
         });
 
