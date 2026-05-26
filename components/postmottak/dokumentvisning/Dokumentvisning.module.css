@@ -2,6 +2,7 @@
   background-color: var(--ax-bg-default);
   border-radius: var(--ax-radius-8);
   border: 1px solid var(--ax-border-neutral-subtle);
+  overflow: hidden;
 }
 
 .ekspanderknapp {
@@ -10,5 +11,11 @@
 
 .pdf {
   padding: var(--ax-space-8);
+  height: 100vh;
+}
+
+.iframe {
   height: 100%;
+  width: 100%;
+  border: none;
 }
