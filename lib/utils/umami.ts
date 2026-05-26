@@ -1,4 +1,5 @@
 import { RefObject, useEffect, useRef } from 'react';
+import { UmamiTag } from 'components/umami/Umami';
 
 type UmamiValue = string | number | boolean | null;
 type UmamiData = Record<string, UmamiValue>;
@@ -58,7 +59,7 @@ export interface UmamiVarighetHendelse {
 
 export function useUmamiVarighetHendelser(hendelseSerieNavn: string): {
   varighetHendelseRef: RefObject<UmamiVarighetHendelse[]>;
-  addHendelse: (hendelse: string, tidsstempel: number) => void;
+  addHendelse: (hendelse: UmamiTag, tidsstempel: number) => void;
   hendelseSerieRef: RefObject<UmamiHendelserSerie | null>;
 } {
   const hendelseSerie = useRef<UmamiHendelserSerie | null>(null);

@@ -11,13 +11,13 @@ import { LovOgMedlemskapVurderingForm } from 'components/behandlinger/lovvalg/lo
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
-import { UmamiTags } from 'components/umami/Umami';
+import { UmamiTag } from 'components/umami/Umami';
 
 type Props = {
   form: UseFormReturn<LovOgMedlemskapVurderingForm>;
   readOnly: boolean;
   index: number;
-  umamiAddHendelse: (hendelse: string, tidsstempel: number) => void;
+  umamiAddHendelse: (hendelse: UmamiTag, tidsstempel: number) => void;
 };
 
 export const LovvalgOgMedlemskapFormInput = ({ readOnly, index, form, umamiAddHendelse }: Props) => {
@@ -35,7 +35,7 @@ export const LovvalgOgMedlemskapFormInput = ({ readOnly, index, form, umamiAddHe
             validate: (value) => validerDato(value as string),
           }}
           readOnly={readOnly}
-          onBlur={() => umamiAddHendelse(UmamiTags.LOVVALG_MEDLEMSKAP_INPUT_FRA_DATO, Date.now())}
+          onBlur={() => umamiAddHendelse('LOVVALG_MEDLEMSKAP_INPUT_FRA_DATO', Date.now())}
         />
       </HStack>
       <HvordanLeggeTilSluttdatoReadMore />
@@ -47,7 +47,7 @@ export const LovvalgOgMedlemskapFormInput = ({ readOnly, index, form, umamiAddHe
           required: 'Du må gi en begrunnelse på lovvalg',
         }}
         readOnly={readOnly}
-        onBlur={() => umamiAddHendelse(UmamiTags.LOVVALG_MEDLEMSKAP_INPUT_LOVVALG_BEGRUNNELSE, Date.now())}
+        onBlur={() => umamiAddHendelse('LOVVALG_MEDLEMSKAP_INPUT_LOVVALG_BEGRUNNELSE', Date.now())}
       />
       <RadioGroupWrapper
         name={`vurderinger.${index}.lovvalg.lovvalgsEØSLand`}
@@ -66,7 +66,7 @@ export const LovvalgOgMedlemskapFormInput = ({ readOnly, index, form, umamiAddHe
           <Radio
             key={`radio-${option.value}`}
             value={option.value}
-            onBlur={() => umamiAddHendelse(UmamiTags.LOVVALG_MEDLEMSKAP_INPUT_LOVVALGSLAND_EØS, Date.now())}
+            onBlur={() => umamiAddHendelse('LOVVALG_MEDLEMSKAP_INPUT_LOVVALGSLAND_EØS', Date.now())}
           >
             {option.label}
           </Radio>
@@ -75,13 +75,13 @@ export const LovvalgOgMedlemskapFormInput = ({ readOnly, index, form, umamiAddHe
       {watch(`vurderinger.${index}.lovvalg.lovvalgsEØSLand`) === 'Annet land med avtale' && (
         <ComboboxWrapper
           name={`vurderinger.${index}.lovvalg.annetLovvalgslandMedAvtale`}
-          dataUmamiEvent={UmamiTags.LOVVALG_MEDLEMSKAP_INPUT_LOVVALGSLAND_ANNET}
+          dataUmamiEvent={'LOVVALG_MEDLEMSKAP_INPUT_LOVVALGSLAND_ANNET'}
           control={control}
           label="Velg land som vi vurderer som lovvalgsland"
           options={landMedTrygdesamarbeid}
           rules={{ validate: (value) => (isNotEmpty(value) ? undefined : 'Du må velge et land') }}
           readOnly={readOnly}
-          onBlur={() => umamiAddHendelse(UmamiTags.LOVVALG_MEDLEMSKAP_INPUT_LOVVALGSLAND_ANNET, Date.now())}
+          onBlur={() => umamiAddHendelse('LOVVALG_MEDLEMSKAP_INPUT_LOVVALGSLAND_ANNET', Date.now())}
         />
       )}
       {watch(`vurderinger.${index}.lovvalg.lovvalgsEØSLand`) === 'Norge' && (
@@ -94,7 +94,7 @@ export const LovvalgOgMedlemskapFormInput = ({ readOnly, index, form, umamiAddHe
               required: 'Du må begrunne medlemskapsvurderingen',
             }}
             readOnly={readOnly}
-            onBlur={() => umamiAddHendelse(UmamiTags.LOVVALG_MEDLEMSKAP_INPUT_MEDLEMSKAP_BEGRUNNELSE, Date.now())}
+            onBlur={() => umamiAddHendelse('LOVVALG_MEDLEMSKAP_INPUT_MEDLEMSKAP_BEGRUNNELSE', Date.now())}
           />
           <RadioGroupJaNei
             name={`vurderinger.${index}.medlemskap.varMedlemIFolketrygd`}
@@ -103,7 +103,7 @@ export const LovvalgOgMedlemskapFormInput = ({ readOnly, index, form, umamiAddHe
             horisontal={true}
             rules={{ required: 'Du må velg om brukeren var medlem av folketrygden' }}
             readOnly={readOnly}
-            onBlur={() => umamiAddHendelse(UmamiTags.LOVVALG_MEDLEMSKAP_INPUT_MEDLEMSKAP_I_FOLKETRYGDEN, Date.now())}
+            onBlur={() => umamiAddHendelse('LOVVALG_MEDLEMSKAP_INPUT_MEDLEMSKAP_I_FOLKETRYGDEN', Date.now())}
           />
         </>
       )}
