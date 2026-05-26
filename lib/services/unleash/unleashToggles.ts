@@ -1,15 +1,16 @@
 export const FLAGS = [
   'VisAvslagsaarsaker',
   'VisStansOpphorFrontend',
-  'Redigitalisering',
   'InkluderOvergangUforeArbeid',
   'TilbakekrevingBelopFilter',
   'registrereEllerEndreMeldekort',
   'VisArenasakerOversikt',
   'ArenasakerLenkeTilVisninsklient',
   'BegrunnelseForIkkeSendBrev',
-  'HastemarkeringerFoerst',
   'ForutgaaendeGap',
+  'TilkjentYtelseMedDiff',
+  'AvbrytAktivitetspliktbehandling',
+  'RedigitaliseringV2',
 ] as const;
 
 export type FlagNames = (typeof FLAGS)[number];
@@ -18,13 +19,14 @@ export type Flags = Record<FlagNames, boolean>;
 export const mockedFlags: Flags = {
   VisAvslagsaarsaker: true,
   VisStansOpphorFrontend: true,
-  Redigitalisering: true,
   InkluderOvergangUforeArbeid: true,
   TilbakekrevingBelopFilter: true,
   registrereEllerEndreMeldekort: true,
   VisArenasakerOversikt: true,
   ArenasakerLenkeTilVisninsklient: true,
   BegrunnelseForIkkeSendBrev: true,
-  HastemarkeringerFoerst: true,
   ForutgaaendeGap: true,
+  TilkjentYtelseMedDiff: true,
+  AvbrytAktivitetspliktbehandling: true,
+  RedigitaliseringV2: true,
 };

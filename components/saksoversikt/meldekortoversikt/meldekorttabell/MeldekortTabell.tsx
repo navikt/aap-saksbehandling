@@ -69,13 +69,11 @@ export const MeldekortTabell = () => {
                   {antallTimerArbeidetIProsent != null ? `${antallTimerArbeidetIProsent} %` : '-'}
                 </Table.DataCell>
                 <Table.DataCell textSize={'small'}>
-                  {meldekort.meldekort?.mottattTidspunkt
-                    ? formaterDatoForFrontend(meldekort.meldekort?.mottattTidspunkt)
-                    : '-'}
+                  {meldekort.meldekort?.meldeDato ? formaterDatoForFrontend(meldekort.meldekort?.meldeDato) : '-'}
                 </Table.DataCell>
                 <Table.DataCell textSize={'small'}>
-                  {meldekort.meldekort?.mottattTidspunkt
-                    ? formaterDatoForFrontend(meldekort.meldekort?.mottattTidspunkt)
+                  {meldekort.meldekort?.oppdatertTidspunkt
+                    ? formaterDatoForFrontend(meldekort.meldekort?.oppdatertTidspunkt)
                     : '-'}
                 </Table.DataCell>
                 <Table.DataCell textSize={'small'}>{meldekort.meldekort?.oppdatertAv}</Table.DataCell>

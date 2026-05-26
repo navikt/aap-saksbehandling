@@ -33,7 +33,6 @@ import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/op
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
-import React from 'react';
 import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
@@ -154,7 +153,7 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
     });
   }
 
-  const foersteNyePeriode = fields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
+  const førsteNyePeriode = fields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
   const errorList = hentFeilmeldingerForForm(form.formState.errors);
 
   return (
@@ -188,7 +187,7 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
           key={crypto.randomUUID()}
           fom={parseISO(vurdering.fom)}
           tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
-          foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+          førsteNyePeriodeFraDato={førsteNyePeriode != null ? parseDatoFraDatePicker(førsteNyePeriode) : null}
           vurderingStatus={getErOppfyltEllerIkkeStatus(vurdering.arbeidsevne > 0)}
           vurderingerMeta={vurdering.vurderingerMeta}
         >

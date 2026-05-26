@@ -29,6 +29,7 @@ import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
+import { loggUmamiVarighetHendelser, useUmamiVarighetHendelser } from 'lib/utils/umami';
 
 interface Props {
   behandlingVersjon: number;
@@ -49,7 +50,7 @@ export const LovvalgOgMedlemskapPeriodisert = ({
 }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
   const { løsPeriodisertBehovOgGåTilNesteSteg, status, løsBehovOgGåTilNesteStegError, isLoading } =
-    useLøsBehovOgGåTilNesteSteg('VURDER_LOVVALG');
+    useLøsBehovOgGåTilNesteSteg('VURDER_LOVVALG', 'STEG_LOVVALG_MEDLEMSKAP_VARIGHET');
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
@@ -62,6 +63,10 @@ export const LovvalgOgMedlemskapPeriodisert = ({
   const defaultValues = initialMellomlagretVurdering
     ? hentPeriodiserteVerdierFraMellomlagretVurdering(initialMellomlagretVurdering, grunnlag)
     : getDefaultValuesFromGrunnlag(grunnlag);
+
+  const { hendelseSerieRef, varighetHendelseRef, addHendelse } = useUmamiVarighetHendelser(
+    'LOVVALG_MEDLEMSKAP_VARIGHET_HENDELSER'
+  );
 
   const form = useForm<LovOgMedlemskapVurderingForm>({
     defaultValues,
@@ -116,6 +121,7 @@ export const LovvalgOgMedlemskapPeriodisert = ({
       closeAllAccordions();
       visningActions.onBekreftClick();
       nullstillMellomlagretVurdering();
+      loggUmamiVarighetHendelser(varighetHendelseRef.current, hendelseSerieRef.current);
     });
   }
 
@@ -148,7 +154,7 @@ export const LovvalgOgMedlemskapPeriodisert = ({
           key={crypto.randomUUID()}
           fom={parseISO(vurdering.fom)}
           tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
-          foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+          førsteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
           vurderingStatus={getErOppfyltEllerIkkeStatus(
             vurdering.lovvalg.lovvalgsEØSLandEllerLandMedAvtale === 'NOR' &&
               vurdering.medlemskap?.varMedlemIFolketrygd === true
@@ -179,7 +185,12 @@ export const LovvalgOgMedlemskapPeriodisert = ({
           readonly={formReadOnly}
           initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
         >
-          <LovvalgOgMedlemskapFormInput form={form} readOnly={formReadOnly} index={index} />
+          <LovvalgOgMedlemskapFormInput
+            form={form}
+            readOnly={formReadOnly}
+            index={index}
+            umamiAddHendelse={addHendelse}
+          />
         </NyVurderingExpandableCard>
       ))}
     </VilkårskortPeriodisert>

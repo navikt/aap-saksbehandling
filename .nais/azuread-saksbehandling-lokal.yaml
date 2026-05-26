@@ -6,9 +6,9 @@ metadata:
   labels:
     team: aap
 spec:
-  logoutUrl: "http://localhost:4000"
+  logoutUrl: 'http://localhost:4000'
   replyUrls:
-    - url: "http://localhost:4000/oauth2/callback"
+    - url: 'http://localhost:4000/oauth2/callback'
   preAuthorizedApplications:
     - application: behandlingsflyt
       cluster: dev-gcp
@@ -35,7 +35,7 @@ spec:
   secretName: azuread-saksbehandling-lokal
   claims:
     groups:
-        # 0000-GA-AAP_BESLUTTER
+      # 0000-GA-AAP_BESLUTTER
       - id: f0f6cad5-e3c0-4308-99a2-3630ac60174a
         # 0000-GA-AAP_LES
       - id: 96e18023-db50-45f7-b023-3251279df28d

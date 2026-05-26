@@ -290,8 +290,8 @@ describe('mapTilPeriodisertVurdering', () => {
           fraDato: fraDatoEtterRettighetsperiodeStart,
         };
 
-        it('skal mappe erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense så lenge skalVurdereYrkeskade = true ', () => {
-          const result = mapTilPeriodisertVurdering(baseSykdomsvurdering, true, false, rettighetsperiodeStart);
+        it('skal mappe erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense', () => {
+          const result = mapTilPeriodisertVurdering(data, false, true, rettighetsperiodeStart);
           expect(result.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense).toBe(true);
         });
 

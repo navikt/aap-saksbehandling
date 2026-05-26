@@ -8,6 +8,7 @@ import {
   ArbeidsevneGrunnlag,
   ArbeidsopptrappingGrunnlagResponse,
   AutomatiskLovvalgOgMedlemskapVurdering,
+  AvbrytAktivitetspliktbehandlingGrunnlag,
   AvbrytRevurderingGrunnlag,
   AvklarOppfolgingsoppgaveGrunnlagResponse,
   BarnepensjonGrunnlag,
@@ -50,6 +51,8 @@ import {
   LøsAvklaringsbehovPåBehandling,
   LøsPeriodisertBehovPåBehandling,
   ManuellInntektGrunnlag,
+  MeldekortProsesseringResponse,
+  MeldeperiodeMedMeldekortDto,
   MellomlagretVurderingRequest,
   MellomlagretVurderingResponse,
   NavEnhetRequest,
@@ -87,6 +90,7 @@ import {
   SykestipendGrunnlag,
   SøkPåSakInfo,
   TilkjentYtelseGrunnlag,
+  TilkjentYtelseGrunnlagMedDiff,
   TrekkKlageGrunnlag,
   TrukketSøknadGrunnlag,
   UnderveisGrunnlag,
@@ -363,6 +367,11 @@ export const hentTilkjentYtelse = async (behandlingsreferanse: string) => {
   return await apiFetch<TilkjentYtelseGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
+export const hentTilkjentYtelseMedDiff = async (behandlingsreferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/tilkjent-med-diff/${behandlingsreferanse}`;
+  return await apiFetch<TilkjentYtelseGrunnlagMedDiff>(url, saksbehandlingApiScope, 'GET');
+};
+
 export const hentTrukketSøknad = async (behandlingsreferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/trukket-søknad`;
   return await apiFetch<TrukketSøknadGrunnlag>(url, saksbehandlingApiScope, 'GET');
@@ -371,6 +380,11 @@ export const hentTrukketSøknad = async (behandlingsreferanse: string) => {
 export const hentAvbruttRevurdering = async (behandlingsreferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/avbryt-revurdering`;
   return await apiFetch<AvbrytRevurderingGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentAvbruttAktivitetspliktbehandling = async (behandlingsreferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/aktivitetsplikt/${behandlingsreferanse}/grunnlag/avbryt`;
+  return await apiFetch<AvbrytAktivitetspliktbehandlingGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentRettighetsperiodeGrunnlag = async (behandlingsreferanse: string) => {
@@ -710,8 +724,15 @@ export const hentAktivitetspliktTrekk = async (saksnummer: string) => {
 };
 
 export const hentMeldekort = async (saksnummer: string) => {
-  return apiFetch<AktivitetspliktMedTrekkRespons>(
+  return apiFetch<MeldeperiodeMedMeldekortDto>(
     `${saksbehandlingApiBaseUrl}/api/meldekort/${saksnummer}`,
+    saksbehandlingApiScope
+  );
+};
+
+export const hentMeldekortProsseseringStatus = async (saksnummer: string) => {
+  return apiFetch<MeldekortProsesseringResponse>(
+    `${saksbehandlingApiBaseUrl}/api/meldekort/${saksnummer}/prosessering`,
     saksbehandlingApiScope
   );
 };

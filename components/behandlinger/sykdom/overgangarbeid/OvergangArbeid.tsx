@@ -88,7 +88,7 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialM
     });
   }
 
-  const foersteNyePeriode = vurderingerFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
+  const førsteNyePeriode = vurderingerFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
 
   const onSubmit = (data: OvergangArbeidForm) => {
     const erPerioderGyldige = validerPeriodiserteVurderingerRekkefølge({
@@ -150,7 +150,7 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialM
           key={crypto.randomUUID()}
           fom={parseISO(vurdering.fom)}
           tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
-          foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+          førsteNyePeriodeFraDato={førsteNyePeriode != null ? parseDatoFraDatePicker(førsteNyePeriode) : null}
           vurderingStatus={getErOppfyltEllerIkkeStatus(vurdering.brukerRettPåAAP)}
           vurderingerMeta={vurdering.vurderingerMeta}
         >

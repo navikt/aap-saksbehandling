@@ -6,6 +6,7 @@ const behovskodeMap = {
   '4101': '§ 11-7 Aktivitetsplikt',
   '4102': 'Venter på uttalelse fra brukeren på forhåndsvarsel aktivitetsplikt § 11-7',
   '4201': '§ 11-9 Aktivitetsplikt',
+  '4301': 'Avbryt behandling',
   '5001': '§ 11-14 Student',
   '5002': '§ 11-10 andre ledd. Perioder uten overholdt meldeplikt',
   '5003': '§ 11-5 Nedsatt arbeidsevne',
@@ -205,6 +206,8 @@ export function mapTilSteggruppeTekst(steggruppe: string) {
       return 'Oppholdskrav';
     case 'VEDTAKSLENGDE':
       return 'Vedtaksperiode';
+    case 'AVBRYT_AKTIVITETSPLIKTBEHANDLING':
+      return 'Avbryt behandling';
     default:
       return `${steggruppe}`;
   }
