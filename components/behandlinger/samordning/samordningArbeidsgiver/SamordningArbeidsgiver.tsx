@@ -21,6 +21,7 @@ import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilk
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 
 import { SamordningArbeidsGiverTabell } from 'components/behandlinger/samordning/samordningArbeidsgiver/SamordningArbeidsgiverTabell';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
 
 interface Props {
   grunnlag: SamordningArbeidsgiverGrunnlag;
@@ -57,6 +58,7 @@ export const SamordningArbeidsgiver = ({
     'SAMORDNING_ARBEIDSGIVER',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -105,6 +107,7 @@ export const SamordningArbeidsgiver = ({
           referanse: behandlingsreferanse,
         },
         () => {
+          loggUmamiVarighet('STEG_SAMORDNING_ARBEIDSGIVER_VARIGHET', umamiStartTidspunkt, Date.now());
           visningActions.onBekreftClick();
           nullstillMellomlagretVurdering();
         }

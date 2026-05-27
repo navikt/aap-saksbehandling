@@ -17,6 +17,7 @@ import { useFieldArray } from 'react-hook-form';
 import { FastsettManuellInntektTabell } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/FastsettManuellInntektTabell';
 import { FastsettManuellInntektForm, Tabellår } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/types';
 import { sorterEtterNyesteDato } from 'lib/utils/date';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
 
 interface Props {
   behandlingsversjon: number;
@@ -50,6 +51,7 @@ export const FastsettManuellInntektNy = ({
     'MANGLENDE_LIGNING',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -124,6 +126,7 @@ export const FastsettManuellInntektNy = ({
           referanse: behandlingsreferanse,
         },
         () => {
+          loggUmamiVarighet('STEG_MANGLENDE_LIGNING_VARIGHET', umamiStartTidspunkt, Date.now());
           visningActions.onBekreftClick();
           nullstillMellomlagretVurdering();
         }

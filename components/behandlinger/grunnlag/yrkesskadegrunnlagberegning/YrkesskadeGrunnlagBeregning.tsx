@@ -20,6 +20,7 @@ import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerU
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
 
 interface Props {
   behandlingVersjon: number;
@@ -57,6 +58,7 @@ export const YrkesskadeGrunnlagBeregning = ({
     'FASTSETT_BEREGNINGSTIDSPUNKT',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -110,6 +112,7 @@ export const YrkesskadeGrunnlagBeregning = ({
             behandlingVersjon: behandlingVersjon,
           },
           () => {
+            loggUmamiVarighet('STEG_YRKESSKADE_GRUNNLAGSBEREGNING_VARIGHET', umamiStartTidspunkt, Date.now());
             nullstillMellomlagretVurdering();
             visningActions.onBekreftClick();
           }

@@ -11,6 +11,7 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgG
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
 
 type Props = {
   grunnlag: UnderveisGrunnlag[];
@@ -47,6 +48,7 @@ export const Underveisgrunnlag = ({ grunnlag, readOnly, behandlingVersjon }: Pro
   const { status, løsBehovOgGåTilNesteSteg, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('FASTSETT_UTTAK');
   const { visningModus, visningActions } = useVilkårskortVisning(readOnly, 'FASTSETT_UTTAK', undefined);
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   return (
     <VilkårskortMedForm
@@ -58,13 +60,18 @@ export const Underveisgrunnlag = ({ grunnlag, readOnly, behandlingVersjon }: Pro
       isLoading={isLoading}
       onSubmit={(event) => {
         event.preventDefault();
-        løsBehovOgGåTilNesteSteg({
-          behandlingVersjon: behandlingVersjon,
-          behov: {
-            behovstype: Behovstype.FORESLÅ_UTTAK_KODE,
+        løsBehovOgGåTilNesteSteg(
+          {
+            behandlingVersjon: behandlingVersjon,
+            behov: {
+              behovstype: Behovstype.FORESLÅ_UTTAK_KODE,
+            },
+            referanse: behandlingsreferanse,
           },
-          referanse: behandlingsreferanse,
-        });
+          () => {
+            loggUmamiVarighet('STEG_UNDERVEIS_VARIGHET', umamiStartTidspunkt, Date.now());
+          }
+        );
       }}
       knappTekst={'Neste'}
       visningModus={visningModus}

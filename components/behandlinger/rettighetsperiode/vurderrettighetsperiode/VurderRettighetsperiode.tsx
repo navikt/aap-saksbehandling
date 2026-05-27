@@ -14,6 +14,7 @@ import { formaterDatoForBackend, formaterDatoForFrontend, stringToDate } from 'l
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
 
 interface Props {
   readOnly: boolean;
@@ -47,6 +48,7 @@ export const VurderRettighetsperiode = ({
     'VURDER_RETTIGHETSPERIODE',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const defaultValues: DraftFormfields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -140,6 +142,7 @@ export const VurderRettighetsperiode = ({
           referanse: behandlingsreferanse,
         },
         () => {
+          loggUmamiVarighet('STEG_RETTIGHETSPERIODE_VARIGHET', umamiStartTidspunkt, Date.now());
           visningActions.onBekreftClick();
           nullstillMellomlagretVurdering();
         }

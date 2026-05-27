@@ -30,6 +30,7 @@ import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import { BodyLong, Link, VStack } from '@navikt/ds-react';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
 
 type Props = {
   grunnlag: OppholdskravGrunnlagResponse;
@@ -51,6 +52,7 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
     'VURDER_OPPHOLDSKRAV',
     initialMellomlagring
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const defaultValues = initialMellomlagring
     ? JSON.parse(initialMellomlagring.data)
@@ -118,6 +120,7 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
     };
 
     løsPeriodisertBehovOgGåTilNesteSteg(losning, () => {
+      loggUmamiVarighet('STEG_OPPHOLDSKRAV_VARIGHET', umamiStartTidspunkt, Date.now());
       nullstillMellomlagretVurdering();
       visningActions.onBekreftClick();
       closeAllAccordions();

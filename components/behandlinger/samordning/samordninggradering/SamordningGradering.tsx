@@ -30,6 +30,7 @@ import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { storForbokstavOgMellomromForUnderstrek } from 'lib/utils/string';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
 
 interface Props {
   grunnlag: SamordningGraderingGrunnlag;
@@ -86,6 +87,7 @@ export const SamordningGradering = ({
     'SAMORDNING_GRADERING',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -140,6 +142,7 @@ export const SamordningGradering = ({
             referanse: behandlingsreferanse,
           },
           () => {
+            loggUmamiVarighet('STEG_SAMORDNING_GRADERING_VARIGHET', umamiStartTidspunkt, Date.now());
             visningActions.onBekreftClick();
             nullstillMellomlagretVurdering();
           }

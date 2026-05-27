@@ -18,6 +18,7 @@ import { Dato } from 'lib/types/Dato';
 import { VStack } from '@navikt/ds-react';
 import { HelseinstitusjonOppholdGruppe } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/helseinstitusjonoppholdgruppe/HelseinstitusjonOppholdGruppe';
 import { nb } from 'date-fns/locale';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
 
 interface Props {
   grunnlag: HelseinstitusjonGrunnlag;
@@ -60,6 +61,7 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
     'DU_ER_ET_ANNET_STED',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -120,6 +122,7 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
           referanse: behandlingsreferanse,
         },
         () => {
+          loggUmamiVarighet('STEG_INSTITUSJON_VARIGHET', umamiStartTidspunkt, Date.now());
           closeAllAccordions();
           nullstillMellomlagretVurdering();
         }

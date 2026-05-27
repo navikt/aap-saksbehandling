@@ -9,6 +9,7 @@ import { SubmitEventHandler } from 'react';
 import { AvbrytRevurderingGrunnlag } from 'lib/types/types';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
 
 interface Props {
   behandlingVersjon: number;
@@ -31,6 +32,7 @@ export const AvbrytRevurderingVurdering = ({ grunnlag, readOnly, behandlingVersj
     'AVBRYT_REVURDERING',
     undefined
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const { form, formFields } = useConfigForm<FormFields>(
     {
@@ -62,17 +64,22 @@ export const AvbrytRevurderingVurdering = ({ grunnlag, readOnly, behandlingVersj
 
   const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
-      løsBehovOgGåTilNesteSteg({
-        behandlingVersjon: behandlingVersjon,
-        behov: {
-          behovstype: Behovstype.AVBRYT_REVURDERING_KODE,
-          vurdering: {
-            begrunnelse: data.begrunnelse,
-            årsak: data.aarsak,
+      løsBehovOgGåTilNesteSteg(
+        {
+          behandlingVersjon: behandlingVersjon,
+          behov: {
+            behovstype: Behovstype.AVBRYT_REVURDERING_KODE,
+            vurdering: {
+              begrunnelse: data.begrunnelse,
+              årsak: data.aarsak,
+            },
           },
+          referanse: behandlingsreferanse,
         },
-        referanse: behandlingsreferanse,
-      });
+        () => {
+          loggUmamiVarighet('STEG_AVBRYT_REVURDERING_VARIGHET', umamiStartTidspunkt, Date.now());
+        }
+      );
     })(event);
   };
 

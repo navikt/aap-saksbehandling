@@ -38,6 +38,7 @@ import { VedtattStudentVurderinger } from 'components/behandlinger/sykdom/studen
 import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
 import { hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import { DiagnoserDefaultOptions } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
 
 interface Props {
   behandlingVersjon: number;
@@ -94,6 +95,7 @@ export const StudentVurdering = ({
     'AVKLAR_STUDENT',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
     Behovstype.AVKLAR_STUDENT_KODE,
@@ -142,6 +144,7 @@ export const StudentVurdering = ({
           referanse: behandlingsreferanse,
         },
         () => {
+          loggUmamiVarighet('STEG_YRKESSKADE_VARIGHET', umamiStartTidspunkt, Date.now());
           nullstillMellomlagretVurdering();
           visningActions.onBekreftClick();
           closeAllAccordions();

@@ -15,6 +15,7 @@ import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { VisningModus } from 'lib/types/visningTypes';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
 
 interface Props {
   behandlingVersjon: number;
@@ -60,6 +61,7 @@ export const Inntektsbortfall = ({
     'VURDER_INNTEKTSBORTFALL',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const defaultValues: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -119,6 +121,7 @@ export const Inntektsbortfall = ({
               referanse: behandlingsreferanse,
             },
             () => {
+              loggUmamiVarighet('STEG_INNTEKTSBORTFALL_VARIGHET', umamiStartTidspunkt, Date.now());
               visningActions.onBekreftClick();
               nullstillMellomlagretVurdering();
             }

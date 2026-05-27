@@ -61,7 +61,7 @@ export const SkriveBrev = ({
   const debouncedBrev = useDebounce<Brev>(brev, 2000);
   const [kanMellomlagreBrev, setKanMellomlagreBrev] = useState(true);
   const [valgteMottakere, setMottakere] = useState<Mottaker[]>([]);
-  const umamiStartTidspunkt = useUmamiStartTidspunkt();
+  const umamiStartTidspunkt = useUmamiStartTidspunkt('AKTIV');
 
   const [forhåndsvisModalOpen, setForhåndsvisModalOpen] = useState(false);
   const [ikkeSendBrevModalOpen, settIkkeSendBrevModalOpen] = useState(false);

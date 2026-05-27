@@ -14,10 +14,17 @@ export const loggUmamiEvent = (eventName: string, data: UmamiData) => {
   }
 };
 
-export const loggUmamiVarighetHendelser = (
+export function loggUmamiVarighet(hendelse: UmamiTag, start: number, stop: number, typeBehandling?: string) {
+  loggUmamiEvent(hendelse, {
+    varighet_sekunder: Math.floor((start - stop) / 1000),
+    ...(typeBehandling ? { typeBehandling } : {}),
+  });
+}
+
+export function loggUmamiVarighetHendelser(
   hendelser: UmamiVarighetHendelse[],
   hendelseSerie: UmamiHendelserSerie | null
-) => {
+) {
   if (typeof window === 'undefined') return;
   if (!hendelseSerie) return;
 
@@ -35,14 +42,14 @@ export const loggUmamiVarighetHendelser = (
   } catch (error) {
     console.error(`Umami Failed to track list of events:`, error);
   }
-};
+}
 
-export function useUmamiStartTidspunkt(): number {
+export function useUmamiStartTidspunkt(visningsModus: string): number {
   const umamiStartTidspunkt = useRef<number | null>(null);
 
   useEffect(() => {
     umamiStartTidspunkt.current = Date.now();
-  }, []);
+  }, [visningsModus]);
 
   return umamiStartTidspunkt.current ?? 0;
 }

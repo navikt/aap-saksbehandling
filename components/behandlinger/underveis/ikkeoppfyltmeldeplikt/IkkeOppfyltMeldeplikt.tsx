@@ -16,6 +16,7 @@ import { Behovstype } from 'lib/utils/form';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
 
 type Props = {
   grunnlag?: OverstyringMeldepliktGrunnlag;
@@ -34,6 +35,7 @@ export const IkkeOppfyltMeldeplikt = ({ grunnlag, behandlingVersjon, readOnly }:
     'IKKE_OPPFYLT_MELDEPLIKT',
     undefined
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   /**
    * Ikke meldte perioder som skal vises er alle perioder som er registrert som ikke meldt
@@ -124,6 +126,7 @@ export const IkkeOppfyltMeldeplikt = ({ grunnlag, behandlingVersjon, readOnly }:
           },
         },
         () => {
+          loggUmamiVarighet('STEG_IKKEOPPFYLT_MELDEPLIKT_VARIGHET', umamiStartTidspunkt, Date.now());
           visningActions.onBekreftClick();
         }
       );
