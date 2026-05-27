@@ -62,16 +62,21 @@ export const DokumentInfoBanner = ({
 
   const tildelingStatus = hentOppgaveTildeling();
   const oppgaveStatus = hentOppgaveStatus();
+  const søkerNavn = storForbokstavIHvertOrd(journalpostInfo.søker?.navn);
 
   return (
     <div className={styles.dokumentinfobanner}>
       <div className={styles.dokumentinfo}>
         <HStack gap={'space-8'} align="center">
-          <Label size="small">
-            <Link href={`/saksbehandling/sak/${oppgave.saksnummer}`}>
-              {storForbokstavIHvertOrd(journalpostInfo.søker?.navn)}
-            </Link>
-          </Label>
+          {oppgave.saksnummer ? (
+            <Label size="small">
+              <Link href={`/saksbehandling/sak/${oppgave.saksnummer}`}>{søkerNavn}</Link>
+            </Label>
+          ) : (
+            <BodyShort size="small" weight="semibold">
+              {søkerNavn}
+            </BodyShort>
+          )}
 
           <CopyButton
             copyText={journalpostInfo.søker?.ident!}
