@@ -6,7 +6,7 @@ import styles from 'components/postmottak/postmottaksettbehandlingpåventmodal/P
 import { HourglassBottomFilledIcon } from '@navikt/aksel-icons';
 import { PostmottakSettPåVentÅrsaker } from 'lib/types/postmottakTypes';
 import { formaterDatoForBackend } from 'lib/utils/date';
-import { revalidatePostMottakFlyt } from 'lib/actions/actions';
+import { revalidatePostMottakBehandling } from 'lib/actions/actions';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { parse } from 'date-fns';
@@ -90,7 +90,7 @@ export const PostmottakSettBehandllingPVentModal = ({
                   grunn: data.grunn,
                 });
                 if (res.ok) {
-                  await revalidatePostMottakFlyt(behandlingsreferanse);
+                  await revalidatePostMottakBehandling(behandlingsreferanse);
                   onClose();
                 }
               });
