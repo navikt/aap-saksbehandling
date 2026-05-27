@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
+import { useFlyt } from 'hooks/saksbehandling/FlytHook';
 import { MellomlagretVurdering, StegType } from 'lib/types/types';
 import { VisningModus, VisningState } from 'lib/types/visningTypes';
 import { hentVisning, isFormReadOnly } from 'lib/utils/visning';
@@ -9,9 +9,9 @@ export function useVilkårskortVisning(
   steg: StegType,
   mellomlagring: MellomlagretVurdering | undefined
 ): VisningState {
-  const { flyt } = useRequiredFlyt();
+  const { flyt } = useFlyt();
 
-  const erAktivtSteg = flyt.aktivtSteg === steg;
+  const erAktivtSteg = flyt?.aktivtSteg === steg;
   const initialVisningModus = hentVisning(readOnly, erAktivtSteg, mellomlagring);
   const initialFormReadOnly = isFormReadOnly(initialVisningModus);
   const [visning, setVisning] = useState<VisningModus>(initialVisningModus);
@@ -22,7 +22,7 @@ export function useVilkårskortVisning(
     const formReadOnly = isFormReadOnly(visning);
     setVisning(visning);
     setFormReadOnly(formReadOnly);
-  }, [flyt.aktivtSteg, readOnly, erAktivtSteg, mellomlagring]);
+  }, [flyt?.aktivtSteg, readOnly, erAktivtSteg, mellomlagring]);
 
   function avbrytEndringClick() {
     setVisning(VisningModus.LÅST_MED_ENDRE);

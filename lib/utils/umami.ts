@@ -1,7 +1,7 @@
 import { RefObject, useEffect, useRef } from 'react';
 import { UmamiTag } from 'components/umami/Umami';
 
-type UmamiValue = string | number | boolean | null;
+type UmamiValue = string | number | boolean | null | undefined;
 type UmamiData = Record<string, UmamiValue>;
 
 export const loggUmamiEvent = (eventName: string, data: UmamiData) => {

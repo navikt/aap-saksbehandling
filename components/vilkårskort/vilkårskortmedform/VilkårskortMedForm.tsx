@@ -6,7 +6,7 @@ import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggå
 import { formaterDatoForFrontend } from 'lib/utils/date';
 
 import styles from 'components/vilkårskort/Vilkårskort.module.css';
-import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
+import { useFlyt } from 'hooks/saksbehandling/FlytHook';
 import { ReactNode, SubmitEventHandler } from 'react';
 import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { ApiException } from 'lib/utils/api';
@@ -50,8 +50,8 @@ export const VilkårskortMedForm = ({
   formReset,
 }: VilkårsKortMedFormProps) => {
   const classNameBasertPåEnhet = vilkårTilhørerNavKontor ? styles.vilkårsKortNAV : styles.vilkårsKortNAY;
-  const { flyt } = useRequiredFlyt();
-  const erAktivtSteg = flyt.aktivtSteg === steg || visningModus === 'AKTIV_MED_AVBRYT';
+  const { flyt } = useFlyt();
+  const erAktivtSteg = flyt?.aktivtSteg === steg || visningModus === 'AKTIV_MED_AVBRYT';
 
   return (
     <ExpansionCard

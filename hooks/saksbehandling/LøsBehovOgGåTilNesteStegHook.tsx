@@ -20,7 +20,7 @@ import {
 } from 'lib/clientApi';
 import { useIngenFlereOppgaverModal } from 'hooks/saksbehandling/IngenFlereOppgaverModalHook';
 import { ApiException, isError, isSuccess } from 'lib/utils/api';
-import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
+import { useFlyt } from 'hooks/saksbehandling/FlytHook';
 import { Behovstype } from 'lib/utils/form';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import { hentTildeltStatusClient } from 'lib/oppgaveClientApi';
@@ -56,7 +56,7 @@ export function useLøsBehovOgGåTilNesteSteg(
 
   const params = useParamsMedType();
   const router = useRouter();
-  const { refetchFlytClient } = useRequiredFlyt();
+  const { refetchFlytClient } = useFlyt();
   const { setIsModalOpen } = useIngenFlereOppgaverModal();
   const { setVisOverstyrModal, setCallback, setReservertAvNavn } = useOverstyrTildelingHook();
 
