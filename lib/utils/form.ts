@@ -32,11 +32,12 @@ export enum Behovstype {
   AVBRYT_REVURDERING_KODE = '5033',
   AVKLAR_SAMORDNING_SYKESTIPEND_KODE = '5034',
   AVKLAR_SAMORDNING_BARNEPENSJON_KODE = '5036',
-  SYKDOMSVURDERING_BREV_KODE = '5053',
   OVERGANG_UFORE = '5031',
+  SKRIV_VEDTAKSBREV_SAKSBEHANDLER_KODE = '5041',
   SKRIV_BREV_KODE = '5050',
   SKRIV_VEDTAKSBREV_KODE = '5051',
   SKRIV_FORHÅNDSVARSEL_AKTIVITETSPLIKT_BREV_KODE = '5052',
+  SYKDOMSVURDERING_BREV_KODE = '5053',
   BEKREFT_VURDERINGER_OPPFØLGING = '5054',
   FORESLÅ_UTTAK_KODE = '5096',
   KVALITETSSIKRING_KODE = '5097',
@@ -149,6 +150,8 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
       return '§ 11-27 Samordning barnepensjon';
     case '5040':
       return '§ 11-4 andre ledd. Krav om inntektsbortfall etter fylte 62 år';
+    case '5041':
+      return 'Skriv brev';
     case '5050':
       return 'Skriv brev';
     case '5051':
