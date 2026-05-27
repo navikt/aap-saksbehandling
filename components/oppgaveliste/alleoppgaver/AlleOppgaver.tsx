@@ -170,6 +170,10 @@ export const AlleOppgaver = ({ enheter }: Props) => {
     return () => fieldValues.unsubscribe();
   }, [form, lagreAktivUtvidetFilter]);
 
+  useEffect(() => {
+    mutate();
+  }, [mutate]);
+
   const oppdaterKø = (kø: AktivKø) => {
     setAktivKø(kø);
     lagreAktivKø(kø.id, kø.type);
