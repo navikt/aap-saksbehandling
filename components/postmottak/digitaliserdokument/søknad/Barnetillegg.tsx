@@ -13,18 +13,18 @@ export const Barnetillegg = ({ form, readOnly }: Props) => {
 
   return (
     <VStack gap={'space-8'}>
-      <Label size={'small'}>Har søker barn?</Label>
+      <Label size={'small'}>Har brukeren oppgitt at de har barn under 18 år?</Label>
       {fields.length > 0 && (
         <>
-          {fields.map((_, i) => {
-            return <LeggTilBarn i={i} form={form} readOnly={readOnly} remove={remove} key={`div-${i}`} />;
+          {fields.map((_, index) => {
+            return <LeggTilBarn index={index} form={form} readOnly={readOnly} remove={remove} key={`div-${index}`} />;
           })}
         </>
       )}
       <HStack>
         <Button
           variant={'secondary'}
-          icon={<PlusCircleFillIcon title={'Legg til barn'} />}
+          icon={<PlusCircleFillIcon />}
           disabled={readOnly}
           size={'small'}
           type={'button'}

@@ -37,8 +37,8 @@ export const Medlemskap = ({ form, formFields, readOnly }: Props) => {
         arbeidetUtenforNorgeFørSykdom === JaEllerNei.Ja) && (
         <VStack gap={'space-8'}>
           <Label size={'small'}>Utenlandsopphold</Label>
-          {fields.map((field, i) => (
-            <LeggTilUtenlandsOpphold key={field.id} i={i} form={form} readOnly={readOnly} remove={remove} />
+          {fields.map((field, index) => (
+            <LeggTilUtenlandsOpphold key={field.id} index={index} form={form} readOnly={readOnly} remove={remove} />
           ))}
           <HStack>
             <Button
