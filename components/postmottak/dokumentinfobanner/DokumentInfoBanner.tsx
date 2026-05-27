@@ -1,6 +1,6 @@
 'use client';
 
-import { BodyShort, Button, CopyButton, Dropdown, HStack, Tag, Tooltip } from '@navikt/ds-react';
+import { BodyShort, Button, CopyButton, Dropdown, HStack, Label, Link, Tag, Tooltip } from '@navikt/ds-react';
 import { useState } from 'react';
 
 import { ChevronDownIcon, ChevronRightIcon, PaperplaneIcon } from '@navikt/aksel-icons';
@@ -62,12 +62,21 @@ export const DokumentInfoBanner = ({
 
   const tildelingStatus = hentOppgaveTildeling();
   const oppgaveStatus = hentOppgaveStatus();
+  const søkerNavn = storForbokstavIHvertOrd(journalpostInfo.søker?.navn);
 
   return (
     <div className={styles.dokumentinfobanner}>
       <div className={styles.dokumentinfo}>
         <HStack gap={'space-8'} align="center">
-          <BodyShort size="small">{storForbokstavIHvertOrd(journalpostInfo.søker?.navn)}</BodyShort>
+          {oppgave.saksnummer ? (
+            <Label size="small">
+              <Link href={`/saksbehandling/sak/${oppgave.saksnummer}`}>{søkerNavn}</Link>
+            </Label>
+          ) : (
+            <BodyShort size="small" weight="semibold">
+              {søkerNavn}
+            </BodyShort>
+          )}
 
           <CopyButton
             copyText={journalpostInfo.søker?.ident!}

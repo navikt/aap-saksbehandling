@@ -27,6 +27,7 @@ const journalpostInfo = {
 
 const oppgave: Oppgave = {
   behandlingRef: 'gasg',
+  saksnummer: '12345',
   vurderingsbehov: [],
   avklaringsbehovKode: '',
   behandlingOpprettet: '',
@@ -57,8 +58,9 @@ describe('Dokumentinfobanner', () => {
   });
 
   it('skal vise navn på søker ', () => {
-    const navn = screen.getByText('Lun Veterinær');
+    const navn = screen.getByRole('link', { name: 'God Påske' });
     expect(navn).toBeVisible();
+    expect(navn).toHaveAttribute('href', '/saksbehandling/sak/12345');
   });
 
   it('skal vise identen til søker', () => {
@@ -157,4 +159,20 @@ test('skal vise tag dersom oppgaven er ledig', () => {
 
   const tildeltTag = screen.queryByText('Tildelt');
   expect(tildeltTag).not.toBeInTheDocument();
+});
+
+test('skal vise søker som tekst når saksnummer mangler', () => {
+  renderMedInnloggetBruker(
+    <DokumentInfoBanner
+      behandlingsreferanse={'uuid'}
+      behandlingsVersjon={1}
+      journalpostInfo={journalpostInfo}
+      påVent={false}
+      oppgave={{ ...oppgave, saksnummer: undefined }}
+    />
+  );
+
+  const navn = screen.getByText('God Påske');
+  expect(navn).toBeVisible();
+  expect(screen.queryByRole('link', { name: 'God Påske' })).not.toBeInTheDocument();
 });
