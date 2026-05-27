@@ -20,6 +20,12 @@
   background-color: var(--ax-bg-default);
 }
 
+.hidden {
+  max-width: 4rem; /* ikke bruk et magisk tall da... */
+  flex-direction: column;
+  align-items: end;
+}
+
 .fillHeight:last-child {
   flex: 1 1 100%;
 }
