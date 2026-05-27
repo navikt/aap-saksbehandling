@@ -106,7 +106,7 @@ export const SkriveBrev = ({
       },
       referanse: behandlingsreferanse,
     });
-    await revalidateFlyt(behandlingsreferanse);
+    await revalidateFlyt();
     settIkkeSendBrevModalOpen(false);
   };
 

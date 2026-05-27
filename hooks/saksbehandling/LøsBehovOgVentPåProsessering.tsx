@@ -66,7 +66,7 @@ export function useLøsBehovOgVentPåProsessering(): {
       const eventData: FlytProsesseringServerSentEvent = JSON.parse(event.data);
       if (eventData.status === 'FERDIG') {
         eventSource.close();
-        await revalidateFlyt(params.behandlingsreferanse);
+        await revalidateFlyt();
         refetchFlytClient();
         setIsLoading(false);
       }

@@ -77,7 +77,7 @@ export const SettMarkeringForBehandlingModal = ({ referanse, type, isOpen, onClo
                 });
 
                 if (isSuccess(res)) {
-                  await revalidateFlyt(referanse);
+                  await revalidateFlyt();
                   onClose();
                 } else {
                   setError(res.apiException.message);

@@ -114,7 +114,7 @@ export const SettBehandlingPåVentModal = ({ behandlingsreferanse, reservert, is
       const eventData: FlytProsesseringServerSentEvent = JSON.parse(event.data);
       if (eventData.status === 'FERDIG') {
         eventSource.close();
-        await revalidateFlyt(behandlingsreferanse);
+        await revalidateFlyt();
 
         // Simuler en delay for å vise loading state før modalen lukkes
         setTimeout(() => {
@@ -124,7 +124,7 @@ export const SettBehandlingPåVentModal = ({ behandlingsreferanse, reservert, is
       }
       if (eventData.status === 'FEILET') {
         eventSource.close();
-        await revalidateFlyt(behandlingsreferanse);
+        await revalidateFlyt();
         setIsLoading(false);
         setError('Kan ikke sette behandlingen på vent.');
       }

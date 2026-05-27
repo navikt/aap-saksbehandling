@@ -14,7 +14,7 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { revalidateFlyt } from 'lib/actions/actions';
 
 export const InnhentDokumentasjon = () => {
-  const { saksnummer, behandlingsreferanse } = useParamsMedType();
+  const { saksnummer } = useParamsMedType();
   const {
     data: dialogmeldinger,
     isLoading,
@@ -29,7 +29,7 @@ export const InnhentDokumentasjon = () => {
   const skjulOgRefresh = () => {
     skjulSkjema();
     mutate();
-    revalidateFlyt(behandlingsreferanse);
+    revalidateFlyt();
   };
   return (
     <section>

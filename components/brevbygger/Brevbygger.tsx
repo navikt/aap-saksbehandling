@@ -112,7 +112,7 @@ export const Brevbygger = ({
       },
       referanse: behandlingsreferanse,
     });
-    await revalidateFlyt(behandlingsreferanse);
+    await revalidateFlyt();
   };
 
   const oppdaterBrevmal = async () => {
