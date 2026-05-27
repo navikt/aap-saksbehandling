@@ -11,10 +11,10 @@ import styles from './InnhentDokumentasjon.module.css';
 import { RelevanteDokumenter } from 'components/innhentdokumentasjon/relevantedokumenter/RelevanteDokumenter';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-import { revalidateFlyt } from 'lib/actions/actions';
+import { revalidateBehandlingPath } from 'lib/actions/actions';
 
 export const InnhentDokumentasjon = () => {
-  const { saksnummer } = useParamsMedType();
+  const { saksnummer, behandlingsreferanse } = useParamsMedType();
   const {
     data: dialogmeldinger,
     isLoading,
@@ -29,7 +29,7 @@ export const InnhentDokumentasjon = () => {
   const skjulOgRefresh = () => {
     skjulSkjema();
     mutate();
-    revalidateFlyt();
+    revalidateBehandlingPath(saksnummer, behandlingsreferanse);
   };
   return (
     <section>

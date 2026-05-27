@@ -12,7 +12,7 @@ import { Behovstype } from 'lib/utils/form';
 
 import NavLogo from 'public/nav_logo.png';
 import { useCallback, useEffect, useState } from 'react';
-import { revalidateFlyt } from 'lib/actions/actions';
+import { revalidateBehandlingPath } from 'lib/actions/actions';
 import { ChevronDownIcon, GlassIcon, TrashIcon } from '@navikt/aksel-icons';
 import { ForhåndsvisBrevModal } from 'components/behandlinger/brev/skriveBrev/ForhåndsvisBrevModal';
 import { IkkeSendBrevModal, IkkeSendFields } from 'components/behandlinger/brev/skriveBrev/IkkeSendBrevModal';
@@ -30,7 +30,6 @@ export const SkriveBrev = ({
   mottaker,
   fullmektigMottaker,
   brukerMottaker,
-  saksnummer,
   grunnlag,
   signaturer,
   visAvbryt = true,
@@ -43,7 +42,6 @@ export const SkriveBrev = ({
   mottaker: BrevMottaker;
   fullmektigMottaker?: Mottaker;
   brukerMottaker?: Mottaker;
-  saksnummer?: string;
   behandlingVersjon: number;
   grunnlag: Brev;
   signaturer: Signatur[];
@@ -52,7 +50,7 @@ export const SkriveBrev = ({
   readOnly: boolean;
   behandlingstype: TypeBehandling;
 }) => {
-  const { behandlingsreferanse } = useParamsMedType();
+  const { behandlingsreferanse, saksnummer } = useParamsMedType();
   const [brev, setBrev] = useState<Brev>(grunnlag);
   const [sistLagret, setSistLagret] = useState<Date | undefined>();
   const [isSaving, setIsSaving] = useState(false);
@@ -106,7 +104,7 @@ export const SkriveBrev = ({
       },
       referanse: behandlingsreferanse,
     });
-    await revalidateFlyt();
+    await revalidateBehandlingPath(saksnummer, behandlingsreferanse);
     settIkkeSendBrevModalOpen(false);
   };
 

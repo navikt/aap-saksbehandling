@@ -4,12 +4,13 @@ import { BookIcon, ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import styles from 'components/settbehandlingpåventmodal/SettBehandlingPåVentModal.module.css';
 import { Alert, Button, Modal, VStack } from '@navikt/ds-react';
 
-import { revalidateFlyt } from 'lib/actions/actions';
+import { revalidateBehandlingPath } from 'lib/actions/actions';
 import { clientSettMarkeringForBehandling } from 'lib/clientApi';
 import { MarkeringType } from 'lib/types/oppgaveTypes';
 import { NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType } from '@navikt/aap-oppgave-typescript-types';
 import { FormField } from 'components/form/FormField';
 import { isSuccess } from 'lib/utils/api';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 
 interface Props {
   referanse: string;
@@ -27,6 +28,7 @@ export const SettMarkeringForBehandlingModal = ({ referanse, type, isOpen, onClo
   const [error, setError] = useState<string>();
   const [isLoading, setIsLoading] = useState(false);
   const markeringsType = markeringTypeTilEnum(type);
+  const { saksnummer, behandlingsreferanse } = useParamsMedType();
 
   const { form, formFields } = useConfigForm<FormFields>({
     begrunnelse: {
@@ -77,7 +79,7 @@ export const SettMarkeringForBehandlingModal = ({ referanse, type, isOpen, onClo
                 });
 
                 if (isSuccess(res)) {
-                  await revalidateFlyt();
+                  await revalidateBehandlingPath(saksnummer, behandlingsreferanse);
                   onClose();
                 } else {
                   setError(res.apiException.message);

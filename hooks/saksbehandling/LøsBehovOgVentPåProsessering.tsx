@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { FlytProsesseringStatus, LøsAvklaringsbehovPåBehandling } from 'lib/types/types';
 import { clientHentFlyt, clientLøsBehov } from 'lib/clientApi';
 import { FlytProsesseringServerSentEvent } from 'app/saksbehandling/api/behandling/hent/[referanse]/prosessering/route';
-import { revalidateFlyt } from 'lib/actions/actions';
+import { revalidateBehandlingPath } from 'lib/actions/actions';
 import { ApiException, isError, isSuccess } from 'lib/utils/api';
 import { useFlyt } from 'hooks/saksbehandling/FlytHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
@@ -66,7 +66,7 @@ export function useLøsBehovOgVentPåProsessering(): {
       const eventData: FlytProsesseringServerSentEvent = JSON.parse(event.data);
       if (eventData.status === 'FERDIG') {
         eventSource.close();
-        await revalidateFlyt();
+        await revalidateBehandlingPath(params.saksnummer, params.behandlingsreferanse);
         refetchFlytClient();
         setIsLoading(false);
       }

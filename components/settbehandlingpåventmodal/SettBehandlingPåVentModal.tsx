@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, SubmitEventHandler } from 'react';
+import { SubmitEventHandler, useState } from 'react';
 import { Alert, Box, Button, Modal, VStack } from '@navikt/ds-react';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { clientSettBehandlingPåVent } from 'lib/clientApi';
-import { revalidateFlyt } from 'lib/actions/actions';
+import { revalidateBehandlingPath } from 'lib/actions/actions';
 
 import styles from './SettBehandlingPåVentModal.module.css';
 import { HourglassBottomFilledIcon } from '@navikt/aksel-icons';
@@ -16,9 +16,9 @@ import { erDatoIFremtiden, validerDato } from 'lib/validation/dateValidation';
 import { useFlyt } from 'hooks/saksbehandling/FlytHook';
 import { FlytProsesseringServerSentEvent } from 'app/saksbehandling/api/behandling/hent/[referanse]/prosessering/route';
 import { isSuccess } from 'lib/utils/api';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 
 interface Props {
-  behandlingsreferanse: string;
   reservert: boolean;
   isOpen: boolean;
   onClose: () => void;
@@ -30,10 +30,11 @@ interface FormFields {
   grunn: SettPåVentÅrsaker;
 }
 
-export const SettBehandlingPåVentModal = ({ behandlingsreferanse, reservert, isOpen, onClose }: Props) => {
+export const SettBehandlingPåVentModal = ({ reservert, isOpen, onClose }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>();
   const { flyt } = useFlyt();
+  const { saksnummer, behandlingsreferanse } = useParamsMedType();
 
   const grunnOptions: ValuePair<SettPåVentÅrsaker>[] = [
     { label: 'Medisinske opplysninger', value: 'VENTER_PÅ_MEDISINSKE_OPPLYSNINGER' },
@@ -114,7 +115,7 @@ export const SettBehandlingPåVentModal = ({ behandlingsreferanse, reservert, is
       const eventData: FlytProsesseringServerSentEvent = JSON.parse(event.data);
       if (eventData.status === 'FERDIG') {
         eventSource.close();
-        await revalidateFlyt();
+        await revalidateBehandlingPath(saksnummer, behandlingsreferanse);
 
         // Simuler en delay for å vise loading state før modalen lukkes
         setTimeout(() => {
@@ -124,7 +125,7 @@ export const SettBehandlingPåVentModal = ({ behandlingsreferanse, reservert, is
       }
       if (eventData.status === 'FEILET') {
         eventSource.close();
-        await revalidateFlyt();
+        await revalidateBehandlingPath(saksnummer, behandlingsreferanse);
         setIsLoading(false);
         setError('Kan ikke sette behandlingen på vent.');
       }
