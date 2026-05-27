@@ -6,6 +6,7 @@ import { getJaNeiEllerIkkeBesvart, getJaNeiJaForbigåendeEllerIkkeBesvart } from
 import { DiagnoseSystem, diagnoseSøker } from 'lib/diagnosesøker/DiagnoseSøker';
 import {
   harNedsattArbeidsevneLabel,
+  erNedsettelseIArbeidsevneAvEnVissVarighetLabel,
   erNedsettelseIArbeidsevneMerEnnHalvpartenLabel,
   erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense,
   erSkadeSykdomEllerLyteVesentligdelLabel,
@@ -18,9 +19,10 @@ import { Sykdomvurdering } from 'lib/types/types';
 
 interface Props {
   vurdering: Sykdomvurdering;
+  sykdomUtenVissVarighetToggle: boolean;
 }
 
-export const TidligereSykdomsvurdering = ({ vurdering }: Props) => {
+export const TidligereSykdomsvurdering = ({ vurdering, sykdomUtenVissVarighetToggle }: Props) => {
   return (
     <VStack gap="space-20">
       <SpørsmålOgSvar spørsmål={'Fra dato'} svar={new Dato(vurdering.fom).formaterForFrontend()} />
@@ -44,7 +46,13 @@ export const TidligereSykdomsvurdering = ({ vurdering }: Props) => {
           .filter(Boolean)
           .join(', ')}
       />
-      {vurdering.harNedsattArbeidsevne !== undefined && (
+      {!sykdomUtenVissVarighetToggle && vurdering.erArbeidsevnenNedsatt !== undefined && (
+        <SpørsmålOgSvar
+          spørsmål={harNedsattArbeidsevneLabel}
+          svar={getJaNeiEllerIkkeBesvart(vurdering.erArbeidsevnenNedsatt)}
+        />
+      )}
+      {sykdomUtenVissVarighetToggle && vurdering.harNedsattArbeidsevne !== undefined && (
         <SpørsmålOgSvar
           spørsmål={harNedsattArbeidsevneLabel}
           svar={getJaNeiJaForbigåendeEllerIkkeBesvart(vurdering.harNedsattArbeidsevne)}
@@ -71,6 +79,12 @@ export const TidligereSykdomsvurdering = ({ vurdering }: Props) => {
           svar={getJaNeiEllerIkkeBesvart(vurdering.erSkadeSykdomEllerLyteVesentligdel)}
         />
       )}
+      {!sykdomUtenVissVarighetToggle && vurdering.erNedsettelseIArbeidsevneAvEnVissVarighet !== undefined && (
+        <SpørsmålOgSvar
+          spørsmål={erNedsettelseIArbeidsevneAvEnVissVarighetLabel}
+          svar={getJaNeiEllerIkkeBesvart(vurdering.erNedsettelseIArbeidsevneAvEnVissVarighet)}
+        />
+      )}{' '}
     </VStack>
   );
 };

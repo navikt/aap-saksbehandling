@@ -23,20 +23,46 @@ export function vurderingFraDatoErSammeSomRettighetsperiodeStart(
     return false;
   }
 }
-export function erNyVurderingOppfylt(vurdering: Sykdomsvurdering, skalVurdereYrkesskade: boolean): boolean | undefined {
-  if (
-    vurdering.harSkadeSykdomEllerLyte === JaEllerNei.Nei ||
-    vurdering.harNedsattArbeidsevne == 'NEI' ||
-    vurdering.harNedsattArbeidsevne == 'JA_FORBIGÅENDE_PROBLEMER' ||
-    (!skalVurdereYrkesskade && vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten === JaEllerNei.Nei) ||
-    vurdering.erSkadeSykdomEllerLyteVesentligdel === JaEllerNei.Nei ||
-    vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense === JaEllerNei.Nei
-  ) {
-    return false;
-  }
+export function erNyVurderingOppfylt(
+  vurdering: Sykdomsvurdering,
+  skalVurdereYrkesskade: boolean,
+  sykdomUtenVissVarighetToggle: boolean
+): boolean | undefined {
+  if (sykdomUtenVissVarighetToggle) {
+    if (
+      vurdering.harSkadeSykdomEllerLyte === JaEllerNei.Nei ||
+      vurdering.harNedsattArbeidsevne == 'NEI' ||
+      vurdering.harNedsattArbeidsevne == 'JA_FORBIGÅENDE_PROBLEMER' ||
+      (!skalVurdereYrkesskade && vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten === JaEllerNei.Nei) ||
+      vurdering.erSkadeSykdomEllerLyteVesentligdel === JaEllerNei.Nei ||
+      vurdering.erNedsettelseIArbeidsevneAvEnVissVarighet === JaEllerNei.Nei ||
+      vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense === JaEllerNei.Nei
+    ) {
+      return false;
+    }
 
-  if (vurdering.erSkadeSykdomEllerLyteVesentligdel === JaEllerNei.Ja) {
-    return true;
+    if (vurdering.erSkadeSykdomEllerLyteVesentligdel === JaEllerNei.Ja) {
+      return true;
+    }
+  } else {
+    if (
+      vurdering.harSkadeSykdomEllerLyte === JaEllerNei.Nei ||
+      vurdering.erArbeidsevnenNedsatt === JaEllerNei.Nei ||
+      (!skalVurdereYrkesskade && vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten === JaEllerNei.Nei) ||
+      vurdering.erSkadeSykdomEllerLyteVesentligdel === JaEllerNei.Nei ||
+      vurdering.erNedsettelseIArbeidsevneAvEnVissVarighet === JaEllerNei.Nei ||
+      vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense === JaEllerNei.Nei
+    ) {
+      return false;
+    }
+
+    if (vurdering.erNedsettelseIArbeidsevneAvEnVissVarighet === JaEllerNei.Ja) {
+      return true;
+    }
+
+    if (vurdering.erSkadeSykdomEllerLyteVesentligdel === JaEllerNei.Ja) {
+      return true;
+    }
   }
 }
 
@@ -44,6 +70,8 @@ export function erTidligereVurderingOppfylt(vurdering: Sykdomvurdering): boolean
   if (
     !vurdering.harSkadeSykdomEllerLyte ||
     vurdering.harNedsattArbeidsevne === 'NEI' ||
+    vurdering.erArbeidsevnenNedsatt === false ||
+    vurdering.erNedsettelseIArbeidsevneAvEnVissVarighet === false ||
     vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten === false ||
     vurdering.erSkadeSykdomEllerLyteVesentligdel === false ||
     vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense === false
@@ -52,8 +80,17 @@ export function erTidligereVurderingOppfylt(vurdering: Sykdomvurdering): boolean
   }
 
   if (
+    vurdering.erNedsettelseIArbeidsevneAvEnVissVarighet === true ||
     vurdering.harNedsattArbeidsevne === 'JA_FORBIGÅENDE_PROBLEMER' ||
     vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense === true
+  ) {
+    return true;
+  }
+
+  // TODO: Kan fjernes når toggle for viss varighet forsvinner
+  if (
+    vurdering.erSkadeSykdomEllerLyteVesentligdel === true &&
+    vurdering.erNedsettelseIArbeidsevneAvEnVissVarighet == null
   ) {
     return true;
   }
@@ -69,12 +106,13 @@ export function emptySykdomsvurdering(diagnoser?: {
     begrunnelse: '',
     vurderingenGjelderFra: '',
     harSkadeSykdomEllerLyte: '',
-    harNedsattArbeidsevne: undefined,
+    erArbeidsevnenNedsatt: undefined,
     erNedsettelseIArbeidsevneMerEnnHalvparten: undefined,
     erSkadeSykdomEllerLyteVesentligdel: undefined,
     kodeverk: diagnoser?.kodeverk,
     hoveddiagnose: diagnoser?.hoveddiagnose,
     bidiagnose: diagnoser?.bidiagnose,
+    erNedsettelseIArbeidsevneAvEnVissVarighet: undefined,
     erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense: undefined,
     yrkesskadeBegrunnelse: '',
     erNyVurdering: true,
