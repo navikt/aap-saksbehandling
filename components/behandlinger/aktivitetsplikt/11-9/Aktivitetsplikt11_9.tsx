@@ -9,7 +9,6 @@ interface Props {
 }
 
 export const Aktivitetsplikt11_9 = async ({ behandlingsreferanse, flyt }: Props) => {
-  //const stegSomSkalVises = getStegSomSkalVises('AKTIVITETSPLIKT_11_9', flyt);
   const stegSomSkalVises = ['VURDER_AKTIVITETSPLIKT_11_9'];
   const behandlingVersjon = flyt.behandlingVersjon;
 

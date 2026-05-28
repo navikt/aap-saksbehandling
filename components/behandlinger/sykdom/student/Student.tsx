@@ -2,7 +2,7 @@ import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { StudentvurderingMedDataFetching } from 'components/behandlinger/sykdom/student/studentvurdering/StudentvurderingMedDataFetching';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { getStegData } from 'lib/utils/steg';
-import { BehandlingFlytOgTilstand } from '../../../../lib/types/types';
+import { BehandlingFlytOgTilstand } from 'lib/types/types';
 
 interface Props {
   behandlingsreferanse: string;
