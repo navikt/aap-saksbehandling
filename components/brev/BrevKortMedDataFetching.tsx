@@ -72,6 +72,8 @@ export function skrivBrevBehovstype(avklaringsbehovKode: AvklaringsbehovKode): B
   switch (avklaringsbehovKode) {
     case Behovstype.SKRIV_VEDTAKSBREV_KODE:
       return Behovstype.SKRIV_VEDTAKSBREV_KODE;
+    case Behovstype.SKRIV_VEDTAKSBREV_SAKSBEHANDLER_KODE:
+      return Behovstype.SKRIV_VEDTAKSBREV_SAKSBEHANDLER_KODE;
     case Behovstype.SKRIV_FORHÅNDSVARSEL_AKTIVITETSPLIKT_BREV_KODE:
       return Behovstype.SKRIV_FORHÅNDSVARSEL_AKTIVITETSPLIKT_BREV_KODE;
     case Behovstype.SKRIV_FORHÅNDSVARSEL_KLAGE_FORMKRAV_BREV_KODE:

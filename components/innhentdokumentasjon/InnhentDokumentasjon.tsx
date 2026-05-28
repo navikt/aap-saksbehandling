@@ -11,7 +11,7 @@ import styles from './InnhentDokumentasjon.module.css';
 import { RelevanteDokumenter } from 'components/innhentdokumentasjon/relevantedokumenter/RelevanteDokumenter';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-import { revalidateFlyt } from 'lib/actions/actions';
+import { revalidateBehandlingPath } from 'lib/actions/actions';
 
 export const InnhentDokumentasjon = () => {
   const { saksnummer, behandlingsreferanse } = useParamsMedType();
@@ -29,7 +29,7 @@ export const InnhentDokumentasjon = () => {
   const skjulOgRefresh = () => {
     skjulSkjema();
     mutate();
-    revalidateFlyt(behandlingsreferanse);
+    revalidateBehandlingPath(saksnummer, behandlingsreferanse);
   };
   return (
     <section>

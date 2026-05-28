@@ -472,9 +472,7 @@ export const hentEtableringEgenVirksomhetGrunnlag = async (behandlingsreferanse:
 
 export const hentFlyt = async (behandlingsreferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/flyt`;
-  return await apiFetch<BehandlingFlytOgTilstand>(url, saksbehandlingApiScope, 'GET', undefined, {
-    tags: [`flyt/${behandlingsreferanse}`],
-  });
+  return await apiFetch<BehandlingFlytOgTilstand>(url, saksbehandlingApiScope, 'GET', undefined);
 };
 
 // Requestene skal ikke caches ved polling
@@ -485,9 +483,7 @@ export const hentFlytUtenRequestMemoization = async (behandlingsreferanse: strin
 
 export const hentUtbetalingOgSimuleringGrunnlag = async (behandlingsreferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/utbetaling/simulering`;
-  return await apiFetch<UtbetalingOgSimuleringGrunnlag[]>(url, saksbehandlingApiScope, 'GET', undefined, {
-    tags: [`utbetalingogsimulering/${behandlingsreferanse}`],
-  });
+  return await apiFetch<UtbetalingOgSimuleringGrunnlag[]>(url, saksbehandlingApiScope, 'GET', undefined);
 };
 
 export const løsPeriodisertAvklaringsbehov = async (avklaringsBehov: LøsPeriodisertBehovPåBehandling) => {

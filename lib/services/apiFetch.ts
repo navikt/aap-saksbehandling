@@ -8,8 +8,8 @@ const NUMBER_OF_RETRIES = 3;
 const REQUEST_TIMEOUT_MS = 60_000; // 60 sekunder, samme som RestClient default i Kelvin komponenter
 
 export type CacheOptions = {
-  revalidate?: number;
-  tags?: string[];
+  revalidate: number;
+  tags: string[];
 };
 
 export const apiFetch = async <ResponseType>(
