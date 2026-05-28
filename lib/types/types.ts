@@ -708,3 +708,8 @@ export enum Roller {
   DRIFT = 'Drift',
   PRODUKSJONSSTYRING = 'Produksjonsstyring',
 }
+
+export interface EksternLenkeIVilkårskort {
+  lenkeTekst: string;
+  url: string;
+}
