@@ -26,7 +26,6 @@ interface Props {
   ikkeRelevantePerioder?: Periode[];
   sak: Sak;
   skalVurdereYrkesskade: boolean;
-  erÅrsakssammenhengYrkesskade: boolean;
   rettighetsperiodeStartdato: Date;
   diagnoseDefaultOptions: DiagnoserDefaultOptions;
   sykdomUtenVissVarighetToggle: boolean;
@@ -43,7 +42,6 @@ export const erSkadeSykdomEllerLyteVesentligdelLabel =
 export const erNedsettelseIArbeidsevneAvEnVissVarighetLabel = 'Er den nedsatte arbeidsevnen av en viss varighet?';
 
 export const SykdomsvurderingFormInput = ({
-  erÅrsakssammenhengYrkesskade,
   skalVurdereYrkesskade,
   index,
   form,
@@ -150,7 +148,6 @@ export const SykdomsvurderingFormInput = ({
               readonly={readonly}
               rettighetsperiodeStartdato={rettighetsperiodeStartdato}
               skalVurdereYrkesskade={skalVurdereYrkesskade}
-              erÅrsakssammenhengYrkesskade={erÅrsakssammenhengYrkesskade}
             />
           )}
         </>
