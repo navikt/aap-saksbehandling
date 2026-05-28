@@ -15,6 +15,7 @@ import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { storForbokstav } from 'lib/utils/string';
 import { mapÅrsakTilTekst } from 'components/behandlinger/vedtak/foreslåvedtak/ForeslåVedtak';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
 
 interface Props {
   behandlingVersjon: number;
@@ -29,6 +30,7 @@ export const ForeslåVedtakVedtakslengde = ({ behandlingVersjon, readOnly, grunn
   const visStansOpphørFeature = useFeatureFlag('VisStansOpphorFrontend');
 
   const { visningActions, visningModus } = useVilkårskortVisning(readOnly, 'FORESLÅ_VEDTAK_VEDTAKSLENGDE', undefined);
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   return (
     <VilkårskortMedForm
@@ -40,13 +42,18 @@ export const ForeslåVedtakVedtakslengde = ({ behandlingVersjon, readOnly, grunn
       isLoading={isLoading}
       onSubmit={(event) => {
         event.preventDefault();
-        løsBehovOgGåTilNesteSteg({
-          behandlingVersjon: behandlingVersjon,
-          behov: {
-            behovstype: Behovstype.FORESLÅ_VEDTAK_VEDTAKSLENGDE,
+        løsBehovOgGåTilNesteSteg(
+          {
+            behandlingVersjon: behandlingVersjon,
+            behov: {
+              behovstype: Behovstype.FORESLÅ_VEDTAK_VEDTAKSLENGDE,
+            },
+            referanse: behandlingsreferanse,
           },
-          referanse: behandlingsreferanse,
-        });
+          () => {
+            loggUmamiVarighet('STEG_FORESLÅ_VEDTAK_VEDTAKSLENGDE_VARIGHET', umamiStartTidspunkt, Date.now());
+          }
+        );
       }}
       knappTekst={'Bekreft'}
       visningModus={visningModus}

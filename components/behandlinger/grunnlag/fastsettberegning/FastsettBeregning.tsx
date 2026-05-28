@@ -22,6 +22,7 @@ import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerU
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
 
 interface Props {
   grunnlag?: BeregningTidspunktGrunnlag;
@@ -51,6 +52,7 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly, initi
     'FASTSETT_BEREGNINGSTIDSPUNKT',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const defaultValues: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -135,6 +137,7 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly, initi
           referanse: behandlingsreferanse,
         },
         () => {
+          loggUmamiVarighet('STEG_FASTSETT_BEREGNINGSTIDSPUNKT_VARIGHET', umamiStartTidspunkt, Date.now());
           visningActions.onBekreftClick();
           nullstillMellomlagretVurdering();
         }

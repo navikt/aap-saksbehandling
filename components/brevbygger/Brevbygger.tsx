@@ -60,7 +60,7 @@ export const Brevbygger = ({
   const { control, trigger, watch } = useForm<BrevFormVerdier>({
     values: initialiserFormVerdier(parsedBrevmal, brevdata),
   });
-  const umamiStartTidspunkt = useUmamiStartTidspunkt();
+  const umamiStartTidspunkt = useUmamiStartTidspunkt('AKTIV');
 
   const { pdfDataUri, lasterPdf } = useMellomlagringAvBrev({ referanse, control, brevmal: parsedBrevmal, brevdata });
 

@@ -21,6 +21,7 @@ import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupW
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
 
 interface Props {
   grunnlag: Soningsgrunnlag;
@@ -51,6 +52,7 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon, initi
     'DU_ER_ET_ANNET_STED',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -91,6 +93,7 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon, initi
           referanse: behandlingsreferanse,
         },
         () => {
+          loggUmamiVarighet('STEG_SONINGSFORHOLD_VARIGHET', umamiStartTidspunkt, Date.now());
           nullstillMellomlagretVurdering();
           visningActions.onBekreftClick();
         }

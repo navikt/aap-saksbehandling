@@ -15,6 +15,7 @@ import { parse } from 'date-fns';
 import { useFieldArray } from 'react-hook-form';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
 
 interface Props {
   grunnlag: YrkesskadeVurderingGrunnlag;
@@ -61,6 +62,7 @@ export const Yrkesskade = ({
     'VURDER_YRKESSKADE',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const defaultValues: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -170,6 +172,7 @@ export const Yrkesskade = ({
           referanse: behandlingsreferanse,
         },
         () => {
+          loggUmamiVarighet('STEG_YRKESSKADE_VARIGHET', umamiStartTidspunkt, Date.now());
           visningActions.onBekreftClick();
           nullstillMellomlagretVurdering();
         }

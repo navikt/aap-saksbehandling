@@ -19,6 +19,7 @@ import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilk
 import { OppgitteFolkeregisterBarnVurdering } from 'components/barn/oppgittebarnvurdering/OppgitteFolkeregisterBarnVurdering';
 import { PlusIcon } from '@navikt/aksel-icons';
 import { SaksbehandlerOppgittBarnVurdering } from 'components/barn/oppgittebarnvurdering/SaksbehandlerOppgittBarnVurdering';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
 
 interface Props {
   behandlingsversjon: number;
@@ -85,6 +86,7 @@ export const BarnetilleggVurdering = ({
     'BARNETILLEGG',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const { form } = useConfigForm<BarnetilleggFormFields>(
     {
@@ -170,6 +172,7 @@ export const BarnetilleggVurdering = ({
           referanse: behandlingsreferanse,
         },
         () => {
+          loggUmamiVarighet('STEG_BARNETILLEGG_VARIGHET', umamiStartTidspunkt, Date.now());
           visningActions.onBekreftClick();
           nullstillMellomlagretVurdering();
         }
