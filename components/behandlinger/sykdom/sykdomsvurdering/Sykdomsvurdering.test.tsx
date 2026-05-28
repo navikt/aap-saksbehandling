@@ -202,7 +202,7 @@ describe('felt for begrunnelse', () => {
     expect(textbox).toBeVisible();
   });
 
-  it('Skal vise feilmelding dersom begrunnelse felt ikke har blitt besvart', async () => {
+  it('Skal vise feilmelding dersom begrunnelsesfelt er tomt', async () => {
     render(
       <Sykdomsvurdering
         diagnoseDefaultOptions={diagnoserDefaultOptions}
@@ -213,11 +213,35 @@ describe('felt for begrunnelse', () => {
         erOvergangArbeid={false}
       />
     );
+
+    const begrunnelseFelt = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
     await skrivInnDatoForNårVurderingenGjelderFra(format(new Date(), 'ddMMyy'));
+    await user.clear(begrunnelseFelt);
     const button = screen.getByRole('button', { name: 'Bekreft' });
     await user.click(button);
 
     const feilmeldinger = await screen.findAllByText('Du må gjøre en vilkårsvurdering');
+    expect(feilmeldinger.length).toBe(2);
+    expect(feilmeldinger[0]).toBeVisible();
+  });
+
+  it('Skal vise feilmelding dersom saksbehandler prøver å bekrefte med default begrunnelsestekst', async () => {
+    render(
+      <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
+        grunnlag={grunnlagUtenYrkesskade}
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Førstegangsbehandling'}
+        erOvergangArbeid={false}
+      />
+    );
+
+    await skrivInnDatoForNårVurderingenGjelderFra(format(new Date(), 'ddMMyy'));
+    const button = screen.getByRole('button', { name: 'Bekreft' });
+    await user.click(button);
+
+    const feilmeldinger = await screen.findAllByText('Du må skrive en egen vilkårsvurdering');
     expect(feilmeldinger.length).toBe(2);
     expect(feilmeldinger[0]).toBeVisible();
   });
@@ -1059,7 +1083,14 @@ describe('mellomlagring i sykdom', () => {
 
     await user.click(slettKnapp);
 
-    expect(screen.getByRole('textbox', { name: 'Vilkårsvurdering' })).toHaveValue('');
+    const defaultBegrunnelse = [
+      'Har brukeren sykdom, skade eller lyte?',
+      'Har brukeren fått arbeidsevnen nedsatt?',
+      'Har brukeren fått arbeidsevnen med minst halvparten?',
+      'Er sykdom, skade eller lyte vesentlig medvirkende årsak til at brukerens arbeidsevne er nedsatt med minst halvparten (årsakssammenheng)?',
+    ].join('\n\n');
+
+    expect(screen.getByRole('textbox', { name: 'Vilkårsvurdering' })).toHaveValue(defaultBegrunnelse);
   });
 
   it('Skal resette skjema til bekreftet vurdering dersom det finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {

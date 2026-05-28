@@ -40,6 +40,7 @@ import { Alert, BodyLong, Link, VStack } from '@navikt/ds-react';
 import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
 import {
   emptySykdomsvurdering,
+  emptySykdomsvurderingMedDefaultBegrunnelse,
   erNyVurderingOppfylt,
   erTidligereVurderingOppfylt,
 } from 'components/behandlinger/sykdom/sykdomsvurdering/sykdomsvurdering-utils';
@@ -102,6 +103,8 @@ export const Sykdomsvurdering = ({
     'AVKLAR_SYKDOM',
     initialMellomlagretVurdering
   );
+
+  const hjelpetekster115FrontendToggle = useFeatureFlag('Hjelpetekster115Frontend');
 
   const defaultValues: SykdomsvurderingerForm = initialMellomlagretVurdering
     ? parseOgMigrerMellomlagretData(initialMellomlagretVurdering.data)
@@ -185,7 +188,11 @@ export const Sykdomsvurdering = ({
       visningActions={visningActions}
       visningModus={visningModus}
       formReset={() => form.reset(mapGrunnlagTilDefaultvalues(grunnlag))}
-      onLeggTilVurdering={() => append(emptySykdomsvurdering(utledDiagnoserForNyVurdering()))}
+      onLeggTilVurdering={() =>
+        hjelpetekster115FrontendToggle
+          ? append(emptySykdomsvurderingMedDefaultBegrunnelse(utledDiagnoserForNyVurdering()))
+          : append(emptySykdomsvurdering(utledDiagnoserForNyVurdering()))
+      }
       errorList={errorList}
     >
       <VStack gap={'space-16'}>
@@ -264,7 +271,9 @@ export const Sykdomsvurdering = ({
 
     if (trengerVurderingsForslag(grunnlag)) {
       return hentPerioderSomTrengerVurdering<Sykdomsvurdering>(grunnlag, () =>
-        emptySykdomsvurdering(diagnoserForNyVurdering)
+        hjelpetekster115FrontendToggle
+          ? emptySykdomsvurderingMedDefaultBegrunnelse(diagnoserForNyVurdering)
+          : emptySykdomsvurdering(diagnoserForNyVurdering)
       );
     }
 
