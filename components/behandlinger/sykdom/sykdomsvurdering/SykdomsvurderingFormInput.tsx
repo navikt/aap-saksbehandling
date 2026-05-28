@@ -92,6 +92,7 @@ export const SykdomsvurderingFormInput = ({
         name={`vurderinger.${index}.begrunnelse`}
         control={form.control}
         label={vilkårsvurderingLabel}
+        description={`Skriv en vurdering som svarer på de fire vilkårene i § 11-5`}
         rules={{
           required: 'Du må gjøre en vilkårsvurdering',
           validate: {
