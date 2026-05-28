@@ -119,3 +119,34 @@ export function emptySykdomsvurdering(diagnoser?: {
     behøverVurdering: false,
   };
 }
+
+export const defaultBegrunnelse = [
+  'Har brukeren sykdom, skade eller lyte?',
+  'Har brukeren fått arbeidsevnen nedsatt?',
+  'Har brukeren fått arbeidsevnen med minst halvparten?',
+  'Er sykdom, skade eller lyte vesentlig medvirkende årsak til at brukerens arbeidsevne er nedsatt med minst halvparten (årsakssammenheng)?',
+].join('\n\n');
+
+export function emptySykdomsvurderingMedDefaultBegrunnelse(diagnoser?: {
+  kodeverk?: string;
+  hoveddiagnose?: ValuePair | null;
+  bidiagnose?: ValuePair[] | null;
+}): Sykdomsvurdering {
+  return {
+    fraDato: '',
+    begrunnelse: defaultBegrunnelse,
+    vurderingenGjelderFra: '',
+    harSkadeSykdomEllerLyte: '',
+    erArbeidsevnenNedsatt: undefined,
+    erNedsettelseIArbeidsevneMerEnnHalvparten: undefined,
+    erSkadeSykdomEllerLyteVesentligdel: undefined,
+    kodeverk: diagnoser?.kodeverk,
+    hoveddiagnose: diagnoser?.hoveddiagnose,
+    bidiagnose: diagnoser?.bidiagnose,
+    erNedsettelseIArbeidsevneAvEnVissVarighet: undefined,
+    erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense: undefined,
+    yrkesskadeBegrunnelse: '',
+    erNyVurdering: true,
+    behøverVurdering: false,
+  };
+}

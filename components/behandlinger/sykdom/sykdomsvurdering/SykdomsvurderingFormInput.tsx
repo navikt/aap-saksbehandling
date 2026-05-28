@@ -18,6 +18,7 @@ import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilslut
 import React from 'react';
 import { DiagnoserDefaultOptions } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
+import { defaultBegrunnelse } from 'components/behandlinger/sykdom/sykdomsvurdering/sykdomsvurdering-utils';
 
 interface Props {
   index: number;
@@ -93,6 +94,10 @@ export const SykdomsvurderingFormInput = ({
         label={vilkårsvurderingLabel}
         rules={{
           required: 'Du må gjøre en vilkårsvurdering',
+          validate: {
+            kanIkkeVæreDefaultBegrunnelse: (value) =>
+              (value as string).trim() !== defaultBegrunnelse.trim() || 'Du må skrive en egen vilkårsvurdering',
+          },
         }}
         readOnly={readonly}
       />
