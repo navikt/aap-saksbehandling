@@ -155,14 +155,17 @@ export const Sykdom = async ({ behandlingsreferanse, flyt }: Props) => {
 };
 
 export function hentStegDataForOppgittYrkesskadeInfo(grunnlag: {
-  opplysninger: { oppgittYrkesskadeISøknad?: boolean | null };
+  opplysninger: { oppgittYrkesskadeISøknad?: boolean | null; innhentedeYrkesskader: unknown[] };
   yrkesskadeVurdering?: unknown;
 }) {
   const oppgittYrkesskadeISøknad = grunnlag.opplysninger.oppgittYrkesskadeISøknad;
   const harIngenYrkesskadeId = grunnlag.yrkesskadeVurdering == null;
+  const harIngenInnhentetYrkesskade =
+    grunnlag.opplysninger.innhentedeYrkesskader == null ||
+    grunnlag.opplysninger.innhentedeYrkesskader.length === 0;
 
   return {
-    skalViseSteg: oppgittYrkesskadeISøknad === true && harIngenYrkesskadeId,
+    skalViseSteg: oppgittYrkesskadeISøknad === true && harIngenYrkesskadeId && harIngenInnhentetYrkesskade,
     readOnly: true,
   };
 }
