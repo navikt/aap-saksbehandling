@@ -1,33 +1,35 @@
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
-import { hentBehandling, hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { hentBehandling } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isError } from 'lib/utils/api';
 import { UtbetalingOgSimuleringMedDataFetching } from './utbetalingogsimulering/UtbetalingOgSimuleringMedDataFetching';
 import { Alert } from '@navikt/ds-react';
 import { toggles } from 'lib/utils/toggles';
+import { BehandlingFlytOgTilstand } from 'lib/types/types';
 
 interface Props {
   behandlingsreferanse: string;
+  flyt: BehandlingFlytOgTilstand;
 }
 
-export const Simulering = async ({ behandlingsreferanse }: Props) => {
+export const Simulering = async ({ behandlingsreferanse, flyt }: Props) => {
   // TODO: Ref AAP-1325 - Skal skjule simuleringssteget frem til forbedringer er på plass
   if (!toggles.featureSimulering) {
     return <div>Simulering er foreløpig under arbeid</div>;
   }
-  const [flyt, behandling] = await Promise.all([hentFlyt(behandlingsreferanse), hentBehandling(behandlingsreferanse)]);
-  if (isError(flyt) || isError(behandling)) {
-    return <ApiException apiResponses={[flyt]} />;
+  const behandling = await hentBehandling(behandlingsreferanse);
+  if (isError(behandling)) {
+    return <ApiException apiResponses={[behandling]} />;
   }
 
   return (
     <GruppeSteg
-      behandlingVersjon={flyt.data.behandlingVersjon}
+      behandlingVersjon={flyt.behandlingVersjon}
       behandlingReferanse={behandlingsreferanse}
-      prosessering={flyt.data.prosessering}
-      visning={flyt.data.visning}
-      aktivtSteg={flyt.data.aktivtSteg}
+      prosessering={flyt.prosessering}
+      visning={flyt.visning}
+      aktivtSteg={flyt.aktivtSteg}
     >
       <StegSuspense>
         {behandling.data.status === 'UTREDES' || behandling.data.status === 'OPPRETTET' ? (

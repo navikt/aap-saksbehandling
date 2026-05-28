@@ -1,7 +1,6 @@
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import {
   hentBeregningstidspunktVurdering,
-  hentFlyt,
   hentForutgåendeMedlemskapGrunnlag,
   hentForutgåendeMedlemskapsVurdering,
   hentMellomlagring,
@@ -14,14 +13,15 @@ import { Behovstype } from 'lib/utils/form';
 import { kanViseOverstyrKnapp } from 'lib/utils/overstyring';
 import { PeriodisertForutgåendemedlemskapOverstyringswrapper } from 'components/behandlinger/forutgåendemedlemskap/PeriodisertForutgåendemedlemskapOverstyringswrapper';
 import { ForutgåendeMedlemskapPeriodisert } from 'components/behandlinger/forutgåendemedlemskap/manuellvurderingperiodisert/ForutgåendeMedlemskapPeriodisert';
+import { BehandlingFlytOgTilstand } from 'lib/types/types';
 
 interface Props {
   behandlingsreferanse: string;
+  flyt: BehandlingFlytOgTilstand;
 }
-export const PeriodisertForutgåendeMedlemskap = async ({ behandlingsreferanse }: Props) => {
-  const [flyt, grunnlag, beregningsperiodeGrunnlag, automatiskVurdering, yrkesskadeVurderingGrunnlag] =
+export const PeriodisertForutgåendeMedlemskap = async ({ behandlingsreferanse, flyt }: Props) => {
+  const [grunnlag, beregningsperiodeGrunnlag, automatiskVurdering, yrkesskadeVurderingGrunnlag] =
     await Promise.all([
-      hentFlyt(behandlingsreferanse),
       hentForutgåendeMedlemskapGrunnlag(behandlingsreferanse),
       hentBeregningstidspunktVurdering(behandlingsreferanse),
       hentForutgåendeMedlemskapsVurdering(behandlingsreferanse),
@@ -31,16 +31,15 @@ export const PeriodisertForutgåendeMedlemskap = async ({ behandlingsreferanse }
   if (
     isError(grunnlag) ||
     isError(automatiskVurdering) ||
-    isError(flyt) ||
     isError(yrkesskadeVurderingGrunnlag) ||
     isError(beregningsperiodeGrunnlag)
   ) {
-    return <ApiException apiResponses={[grunnlag, automatiskVurdering, flyt]} />;
+    return <ApiException apiResponses={[grunnlag, automatiskVurdering]} />;
   }
 
-  const behandlingsVersjon = flyt.data.behandlingVersjon;
+  const behandlingsVersjon = flyt.behandlingVersjon;
   const harYrkesskade = yrkesskadeVurderingGrunnlag.data.yrkesskadeVurdering?.erÅrsakssammenheng === true;
-  const vurderMedlemskapSteg = getStegData('MEDLEMSKAP', 'VURDER_MEDLEMSKAP', flyt.data);
+  const vurderMedlemskapSteg = getStegData('MEDLEMSKAP', 'VURDER_MEDLEMSKAP', flyt);
   const readOnly = vurderMedlemskapSteg.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
 
   const initialMellomlagretVurdering = await hentMellomlagring(
@@ -62,17 +61,17 @@ export const PeriodisertForutgåendeMedlemskap = async ({ behandlingsreferanse }
 
   const erOverstyrt = grunnlag?.data.overstyrt || erOverstyrtTilbakeførtVurdering;
   const behovstype =
-    flyt.data.visning.typeBehandling === 'Førstegangsbehandling' && erOverstyrt
+    flyt.visning.typeBehandling === 'Førstegangsbehandling' && erOverstyrt
       ? Behovstype.MANUELL_OVERSTYRING_MEDLEMSKAP
       : Behovstype.AVKLAR_FORUTGÅENDE_MEDLEMSKAP;
 
   return (
     <GruppeSteg
-      prosessering={flyt.data.prosessering}
-      visning={flyt.data.visning}
+      prosessering={flyt.prosessering}
+      visning={flyt.visning}
       behandlingReferanse={behandlingsreferanse}
       behandlingVersjon={behandlingsVersjon}
-      aktivtSteg={flyt.data.aktivtSteg}
+      aktivtSteg={flyt.aktivtSteg}
     >
       <PeriodisertForutgåendemedlemskapOverstyringswrapper
         behandlingsreferanse={behandlingsreferanse}

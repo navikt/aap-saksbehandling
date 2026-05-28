@@ -1,6 +1,3 @@
-import { isError } from 'lib/utils/api';
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { getStegSomSkalVises } from 'lib/utils/steg';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
@@ -9,35 +6,33 @@ import { PåklagetBehandlingMedDataFetching } from './påklagetbehandling/Påkla
 import { BehandlendeEnhetMedDataFetching } from './behandlendeenhet/BehandlendeEnhetMedDataFetching';
 import { FullmektigVurderingMedDataFetching } from 'components/behandlinger/klage/formkrav/fullmektig/FullmektigVurderingMedDataFetching';
 import { BrevKortMedDataFetching } from 'components/brev/BrevKortMedDataFetching';
+import { BehandlingFlytOgTilstand } from 'lib/types/types';
 
 interface Props {
   behandlingsreferanse: string;
+  flyt: BehandlingFlytOgTilstand;
 }
 
-export const Formkrav = async ({ behandlingsreferanse }: Props) => {
-  const flyt = await hentFlyt(behandlingsreferanse);
-  if (isError(flyt)) {
-    return <ApiException apiResponses={[flyt]} />;
-  }
-  const stegSomSkalVises = getStegSomSkalVises('FORMKRAV', flyt.data);
-  const behandlingVersjon = flyt.data.behandlingVersjon;
+export const Formkrav = async ({ behandlingsreferanse, flyt }: Props) => {
+  const stegSomSkalVises = getStegSomSkalVises('FORMKRAV', flyt);
+  const behandlingVersjon = flyt.behandlingVersjon;
 
   return (
     <GruppeSteg
-      prosessering={flyt.data.prosessering}
-      brevForhåndsvisning={flyt.data.aktivGruppe !== 'FORMKRAV'}
-      visning={flyt.data.visning}
+      prosessering={flyt.prosessering}
+      brevForhåndsvisning={flyt.aktivGruppe !== 'FORMKRAV'}
+      visning={flyt.visning}
       behandlingReferanse={behandlingsreferanse}
-      behandlingVersjon={flyt.data.behandlingVersjon}
-      aktivtSteg={flyt.data.aktivtSteg}
+      behandlingVersjon={flyt.behandlingVersjon}
+      aktivtSteg={flyt.aktivtSteg}
     >
       {stegSomSkalVises.includes('PÅKLAGET_BEHANDLING') && (
         <StegSuspense>
           <PåklagetBehandlingMedDataFetching
             behandlingsreferanse={behandlingsreferanse}
             behandlingVersjon={behandlingVersjon}
-            readOnly={flyt.data.visning.saksbehandlerReadOnly}
-            typeBehandling={flyt.data.visning.typeBehandling}
+            readOnly={flyt.visning.saksbehandlerReadOnly}
+            typeBehandling={flyt.visning.typeBehandling}
           />
         </StegSuspense>
       )}
@@ -46,8 +41,8 @@ export const Formkrav = async ({ behandlingsreferanse }: Props) => {
           <FullmektigVurderingMedDataFetching
             behandlingsreferanse={behandlingsreferanse}
             behandlingVersjon={behandlingVersjon}
-            readOnly={flyt.data.visning.saksbehandlerReadOnly}
-            typeBehandling={flyt.data.visning.typeBehandling}
+            readOnly={flyt.visning.saksbehandlerReadOnly}
+            typeBehandling={flyt.visning.typeBehandling}
           />
         </StegSuspense>
       )}
@@ -56,18 +51,18 @@ export const Formkrav = async ({ behandlingsreferanse }: Props) => {
           <FormkravVurderingMedDataFetching
             behandlingsreferanse={behandlingsreferanse}
             behandlingVersjon={behandlingVersjon}
-            readOnly={flyt.data.visning.saksbehandlerReadOnly}
-            typeBehandling={flyt.data.visning.typeBehandling}
+            readOnly={flyt.visning.saksbehandlerReadOnly}
+            typeBehandling={flyt.visning.typeBehandling}
           />
         </StegSuspense>
       )}
-      {flyt.data.visning.visBrevkort && flyt.data.aktivGruppe === 'FORMKRAV' && (
+      {flyt.visning.visBrevkort && flyt.aktivGruppe === 'FORMKRAV' && (
         <BrevKortMedDataFetching
           behandlingReferanse={behandlingsreferanse}
           visAvbryt={false}
           behandlingVersjon={behandlingVersjon}
-          aktivtSteg={flyt.data.aktivtSteg}
-          behandlingstype={flyt.data.visning.typeBehandling}
+          aktivtSteg={flyt.aktivtSteg}
+          behandlingstype={flyt.visning.typeBehandling}
         />
       )}
       {stegSomSkalVises.includes('BEHANDLENDE_ENHET') && (
@@ -75,8 +70,8 @@ export const Formkrav = async ({ behandlingsreferanse }: Props) => {
           <BehandlendeEnhetMedDataFetching
             behandlingsreferanse={behandlingsreferanse}
             behandlingVersjon={behandlingVersjon}
-            readOnly={flyt.data.visning.saksbehandlerReadOnly}
-            typeBehandling={flyt.data.visning.typeBehandling}
+            readOnly={flyt.visning.saksbehandlerReadOnly}
+            typeBehandling={flyt.visning.typeBehandling}
           />
         </StegSuspense>
       )}

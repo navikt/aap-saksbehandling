@@ -1,39 +1,34 @@
-import { isError } from 'lib/utils/api';
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { getStegSomSkalVises } from 'lib/utils/steg';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { KlagebehandlingVurderingNayMedDataFetching } from 'components/behandlinger/klage/klagebehandlingnay/KlagebehandlingVurderingNayMedDataFetching';
 import { KlagebehandlingOppsummeringMedDataFetching } from 'components/behandlinger/klage/klagebehandlingoppsummering/KlagebehandlingOppsummeringMedDataFetching';
+import { BehandlingFlytOgTilstand } from 'lib/types/types';
 
 interface Props {
   behandlingsreferanse: string;
+  flyt: BehandlingFlytOgTilstand;
 }
 
-export const KlagebehandlingNay = async ({ behandlingsreferanse }: Props) => {
-  const flyt = await hentFlyt(behandlingsreferanse);
-  if (isError(flyt)) {
-    return <ApiException apiResponses={[flyt]} />;
-  }
-  const stegSomSkalVises = getStegSomSkalVises('KLAGEBEHANDLING_NAY', flyt.data);
-  const behandlingVersjon = flyt.data.behandlingVersjon;
+export const KlagebehandlingNay = async ({ behandlingsreferanse, flyt }: Props) => {
+  const stegSomSkalVises = getStegSomSkalVises('KLAGEBEHANDLING_NAY', flyt);
+  const behandlingVersjon = flyt.behandlingVersjon;
 
   return (
     <GruppeSteg
-      prosessering={flyt.data.prosessering}
-      visning={flyt.data.visning}
+      prosessering={flyt.prosessering}
+      visning={flyt.visning}
       behandlingReferanse={behandlingsreferanse}
-      behandlingVersjon={flyt.data.behandlingVersjon}
-      aktivtSteg={flyt.data.aktivtSteg}
+      behandlingVersjon={flyt.behandlingVersjon}
+      aktivtSteg={flyt.aktivtSteg}
     >
       {stegSomSkalVises.includes('KLAGEBEHANDLING_NAY') && (
         <StegSuspense>
           <KlagebehandlingVurderingNayMedDataFetching
             behandlingsreferanse={behandlingsreferanse}
             behandlingVersjon={behandlingVersjon}
-            readOnly={flyt.data.visning.saksbehandlerReadOnly}
-            typeBehandling={flyt.data.visning.typeBehandling}
+            readOnly={flyt.visning.saksbehandlerReadOnly}
+            typeBehandling={flyt.visning.typeBehandling}
           />
         </StegSuspense>
       )}
@@ -42,8 +37,8 @@ export const KlagebehandlingNay = async ({ behandlingsreferanse }: Props) => {
           <KlagebehandlingOppsummeringMedDataFetching
             behandlingsreferanse={behandlingsreferanse}
             behandlingVersjon={behandlingVersjon}
-            readOnly={flyt.data.visning.saksbehandlerReadOnly}
-            typeBehandling={flyt.data.visning.typeBehandling}
+            readOnly={flyt.visning.saksbehandlerReadOnly}
+            typeBehandling={flyt.visning.typeBehandling}
           />
         </StegSuspense>
       )}

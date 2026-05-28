@@ -24,7 +24,7 @@ const Page = async (props: {
       <ForberedBehandling behandlingsreferanse={behandlingsreferanse} aktivGruppe={aktivGruppe} />
     </Suspense>
   ) : (
-    <BehandlingPage behandlingsreferanse={behandlingsreferanse} aktivGruppe={aktivGruppe as StegGruppe} />
+    <BehandlingPage behandlingsreferanse={behandlingsreferanse} aktivGruppe={aktivGruppe} />
   );
 };
 
