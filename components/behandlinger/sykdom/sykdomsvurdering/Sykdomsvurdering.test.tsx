@@ -1086,7 +1086,7 @@ describe('mellomlagring i sykdom', () => {
     const defaultBegrunnelse = [
       'Har brukeren sykdom, skade eller lyte?',
       'Har brukeren fått arbeidsevnen nedsatt?',
-      'Har brukeren fått arbeidsevnen med minst halvparten?',
+      'Har brukeren fått arbeidsevnen nedsatt med minst halvparten?',
       'Er sykdom, skade eller lyte vesentlig medvirkende årsak til at brukerens arbeidsevne er nedsatt med minst halvparten (årsakssammenheng)?',
     ].join('\n\n');
 
