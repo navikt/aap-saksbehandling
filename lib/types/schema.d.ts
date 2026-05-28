@@ -1169,44 +1169,6 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  '/api/behandling/{referanse}/grunnlag/medlemskap': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          /** @description referanse */
-          referanse: string;
-        };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description OK */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.medlemskap.MedlemskapGrunnlagDto'];
-          };
-        };
-      };
-    };
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
   '/api/behandling/{referanse}/grunnlag/student': {
     parameters: {
       query?: never;
@@ -12886,9 +12848,6 @@ export interface components {
       /** @enum {string} */
       utfall: 'IKKE_OPPFYLT' | 'IKKE_RELEVANT' | 'IKKE_VURDERT' | 'OPPFYLT';
     };
-    'no.nav.aap.behandlingsflyt.behandling.grunnlag.medlemskap.MedlemskapGrunnlagDto': {
-      medlemskap: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.register.medlemskap.MedlemskapUnntakGrunnlag'];
-    };
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.AndreStatligeYtelserPeriodeDto': {
       /**
        * Format: date
@@ -15662,19 +15621,6 @@ export interface components {
         | 'TPS'
         | 'srvgosys'
         | 'srvmelosys';
-    };
-    'no.nav.aap.behandlingsflyt.faktagrunnlag.register.medlemskap.MedlemskapUnntakGrunnlag': {
-      unntak: components['schemas']['no.nav.aap.komponenter.tidslinje.Segment<no.nav.aap.behandlingsflyt.faktagrunnlag.register.medlemskap.Unntak>'][];
-    };
-    'no.nav.aap.behandlingsflyt.faktagrunnlag.register.medlemskap.Unntak': {
-      grunnlag: string;
-      helsedel: boolean;
-      kilde?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.register.medlemskap.KildesystemMedl'];
-      lovvalg: string;
-      lovvalgsland?: string | null;
-      medlem: boolean;
-      status: string;
-      statusaarsak?: string | null;
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.register.yrkesskade.SkadekombinasjonRegister': {
       kroppsdel: string;
@@ -18616,10 +18562,6 @@ export interface components {
     'no.nav.aap.brev.kontrakt.Vedlegg': {
       dokumentInfoId: string;
       journalpostId: string;
-    };
-    'no.nav.aap.komponenter.tidslinje.Segment<no.nav.aap.behandlingsflyt.faktagrunnlag.register.medlemskap.Unntak>': {
-      periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
-      verdi: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.register.medlemskap.Unntak'];
     };
     'no.nav.aap.komponenter.type.Periode': {
       /**
