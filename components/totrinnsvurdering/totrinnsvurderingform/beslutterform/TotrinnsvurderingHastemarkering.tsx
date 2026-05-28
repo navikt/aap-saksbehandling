@@ -1,7 +1,7 @@
 import { JaEllerNei } from 'lib/utils/form';
 
 import styles from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingFelter.module.css';
-import { BodyShort, HStack, Radio, Tag, VStack } from '@navikt/ds-react';
+import { BodyShort, HStack, Label, Radio, Tag, VStack } from '@navikt/ds-react';
 import { UseFormReturn } from 'react-hook-form';
 import { FormFieldsToTrinnsVurdering } from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingForm';
 import { ValuePair } from 'components/form/FormField';
@@ -32,7 +32,7 @@ export const TotrinnsvurderingHastemarkering = ({ readOnly, erKvalitetssikring, 
             {''}
           </Tag>
 
-          <b>Behandlingen er hastemarkert</b>
+          <Label>Behandlingen er hastemarkert</Label>
         </HStack>
       </div>
       <div className={styles.felter}>

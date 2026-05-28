@@ -28,7 +28,7 @@ import {
   useUmamiVarighetHendelser,
 } from 'lib/utils/umami';
 import { TotrinnsvurderingHastemarkering } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingHastemarkering';
-import { Markering } from 'lib/types/oppgaveTypes';
+import { Markering, MarkeringHaster } from 'lib/types/oppgaveTypes';
 import { NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType } from '@navikt/aap-oppgave-typescript-types';
 import { useFeatureFlag } from 'context/UnleashContext';
 
@@ -121,7 +121,7 @@ export const TotrinnsvurderingForm = ({
             if (neste && !neste.godkjent) {
               form.setError(`totrinnsvurderinger.${i + 1}.godkjent`, {
                 type: 'validate',
-                message: 'Du må ta stilling til alle vilkårsvurderinger hvis ikke du underkjenner.',
+                message: feilmeldingManglendeAvkrysning(neste),
               });
               isError = true;
               return;
@@ -335,9 +335,7 @@ function harMarkeringer(markeringer?: Markering[]) {
 }
 
 function erHastemarkering(markering?: Markering) {
-  return (
-    markering !== undefined && markering?.markeringType === NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.HASTER
-  );
+  return markering !== undefined && markering?.markeringType === MarkeringHaster;
 }
 
 function lagFormFieldsForMarkering(markeringer: Markering[]): ToTrinnsVurderingFormFields {
@@ -350,4 +348,12 @@ function lagFormFieldsForMarkering(markeringer: Markering[]): ToTrinnsVurderingF
     definisjon: '5032',
     markeringer: markeringer,
   };
+}
+
+function feilmeldingManglendeAvkrysning(vurdering: ToTrinnsVurderingFormFields) {
+  if (harMarkeringer(vurdering.markeringer) && vurdering.markeringer?.some(erHastemarkering)) {
+    return 'Du må ta stilling til om hastemarkeringen skal følge behandlingen videre';
+  }
+
+  return 'Du må ta stilling til alle vilkårsvurderinger hvis ikke du underkjenner.';
 }

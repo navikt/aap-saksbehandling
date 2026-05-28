@@ -13622,10 +13622,6 @@ export interface components {
       /** @enum {string} */
       meldekortProsesseringStatus: 'KLAR' | 'PROSESSERER_MELDEKORT';
     };
-    'no.nav.aap.behandlingsflyt.behandling.meldekort.MeldekortProsesseringResponse': {
-      /** @enum {string} */
-      meldekortProsesseringStatus: 'KLAR' | 'PROSESSERER_MELDEKORT';
-    };
     'no.nav.aap.behandlingsflyt.behandling.meldekort.MeldeperiodeMedMeldekortDto': {
       meldekort?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.MeldekortDto'];
       meldeperiode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
