@@ -68,7 +68,7 @@ export const DokumentInfoBanner = ({
     <div className={styles.dokumentinfobanner}>
       <div className={styles.dokumentinfo}>
         <HStack gap={'space-8'} align="center">
-          {oppgave.saksnummer ? (
+          {oppgave?.saksnummer ? (
             <Label size="small">
               <Link href={`/saksbehandling/sak/${oppgave.saksnummer}`}>{søkerNavn}</Link>
             </Label>
