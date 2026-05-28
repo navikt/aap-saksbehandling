@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Tabs, Tooltip, VStack } from '@navikt/ds-react';
+import { Button, HGrid, Tabs, Tooltip, VStack } from '@navikt/ds-react';
 import {
   ChevronLeftDoubleIcon,
   ChevronRightDoubleIcon,
@@ -34,14 +34,31 @@ interface Props {
   sak: SaksInfo;
   klageresultat?: Klageresultat;
   kabalKlageresultat: FetchResponse<KabalKlageResultat>;
+  expanded: boolean;
+  onExpandedChange: (expanded: boolean) => void;
 }
 
-export const Saksbehandlingsoversikt = ({ behandling, sak, klageresultat, kabalKlageresultat }: Props) => {
-  const [expanded, setExpanded] = useState<boolean>(true);
+export const Saksbehandlingsoversikt = ({
+  behandling,
+  sak,
+  klageresultat,
+  kabalKlageresultat,
+  expanded: expandedProp,
+  onExpandedChange,
+}: Props) => {
+  const [expandedState, setExpandedState] = useState<boolean>(true);
   const [toggleGroupValue, setToggleGroupValue] = useState<Tab>(Tab.BEHANDLINGSINFO);
+  const expanded = expandedProp ?? expandedState;
 
   const visKlagebehandlingFane =
     isError(kabalKlageresultat) || (klageresultat && ['OPPRETTHOLDES', 'DELVIS_OMGJØRES'].includes(klageresultat.type));
+
+  const setExpanded = (nextExpanded: boolean) => {
+    onExpandedChange(nextExpanded);
+    if (expandedProp === undefined) {
+      setExpandedState(nextExpanded);
+    }
+  };
 
   const expandAndSwitch = (tab: Tab) => {
     setExpanded(!expanded);
@@ -50,49 +67,57 @@ export const Saksbehandlingsoversikt = ({ behandling, sak, klageresultat, kabalK
 
   return (
     <div className={`${styles.saksbehandlingsoversikt} ${expanded ? '' : styles.hidden}`}>
-      <Button
-        size="small"
-        variant={'tertiary'}
-        type={'button'}
-        icon={
-          expanded ? <ChevronRightDoubleIcon title="Skjul kolonne" /> : <ChevronLeftDoubleIcon title="Vis kolonne" />
-        }
-        onClick={() => setExpanded(!expanded)}
-      />
       {expanded && (
         <>
-          <Tabs
-            defaultValue={toggleGroupValue}
-            onChange={(value) => setToggleGroupValue(value as Tab)}
-            value={toggleGroupValue}
-            className={styles.stretch}
-            size={'small'}
-            fill
-          >
-            <Tabs.List className={expanded ? '' : styles.hidden}>
-              <Tooltip content={'Informasjon om behandlingen'}>
-                <Tabs.Tab value={Tab.BEHANDLINGSINFO} label={'Behandling'} icon={<FolderFileIcon aria-hidden />} />
-              </Tooltip>
-              {visKlagebehandlingFane && (
-                <Tooltip content={'Informasjon om klagebehandling'}>
-                  <Tabs.Tab value={Tab.KLAGEBEHANDLINGINFO} label={'Klage'} icon={<PersonGavelIcon aria-hidden />} />
+          <HGrid columns={'1fr auto'}>
+            <div className={styles.hide}>
+              <Button
+                size="small"
+                variant={'tertiary'}
+                type={'button'}
+                icon={
+                  expanded ? (
+                    <ChevronRightDoubleIcon title="Skjul kolonne" />
+                  ) : (
+                    <ChevronLeftDoubleIcon title="Vis kolonne" />
+                  )
+                }
+                onClick={() => setExpanded(!expanded)}
+              />
+            </div>
+            <Tabs
+              defaultValue={toggleGroupValue}
+              onChange={(value) => setToggleGroupValue(value as Tab)}
+              value={toggleGroupValue}
+              className={styles.stretch}
+              size={'small'}
+              fill
+            >
+              <Tabs.List className={expanded ? '' : styles.hidden}>
+                <Tooltip content={'Informasjon om behandlingen'}>
+                  <Tabs.Tab value={Tab.BEHANDLINGSINFO} label={'Behandling'} icon={<FolderFileIcon aria-hidden />} />
                 </Tooltip>
-              )}
-              <Tooltip content={'Åpne saksdokumenter'}>
-                <Tabs.Tab value={Tab.SAKSDOKUMENTER} label={'Saksdokumenter'} icon={<FilesIcon aria-hidden />} />
-              </Tooltip>
-              <Tooltip content={'Åpne be om opplysninger'}>
-                <Tabs.Tab
-                  value={Tab.BE_OM_OPPLYSNINGER}
-                  label={'Be om opplysninger'}
-                  icon={<HddDownIcon aria-hidden />}
-                />
-              </Tooltip>
-              <Tooltip content={'Historikk'}>
-                <Tabs.Tab value={Tab.HISTORIKK} label={'Historikk'} icon={<ClockDashedIcon aria-hidden />} />
-              </Tooltip>
-            </Tabs.List>
-          </Tabs>
+                {visKlagebehandlingFane && (
+                  <Tooltip content={'Informasjon om klagebehandling'}>
+                    <Tabs.Tab value={Tab.KLAGEBEHANDLINGINFO} label={'Klage'} icon={<PersonGavelIcon aria-hidden />} />
+                  </Tooltip>
+                )}
+                <Tooltip content={'Åpne saksdokumenter'}>
+                  <Tabs.Tab value={Tab.SAKSDOKUMENTER} label={'Saksdokumenter'} icon={<FilesIcon aria-hidden />} />
+                </Tooltip>
+                <Tooltip content={'Åpne be om opplysninger'}>
+                  <Tabs.Tab
+                    value={Tab.BE_OM_OPPLYSNINGER}
+                    label={'Be om opplysninger'}
+                    icon={<HddDownIcon aria-hidden />}
+                  />
+                </Tooltip>
+                <Tooltip content={'Historikk'}>
+                  <Tabs.Tab value={Tab.HISTORIKK} label={'Historikk'} icon={<ClockDashedIcon aria-hidden />} />
+                </Tooltip>
+              </Tabs.List>
+            </Tabs>
+          </HGrid>
           <div className={styles.tabContent}>
             {toggleGroupValue === Tab.BEHANDLINGSINFO && (
               <Behandlingsinfo behandling={behandling} sak={sak} klageresultat={klageresultat} />
@@ -108,6 +133,22 @@ export const Saksbehandlingsoversikt = ({ behandling, sak, klageresultat, kabalK
       )}
       {!expanded && (
         <VStack>
+          <div style={{ borderBottom: '1px solid var(--ax-border-neutral-subtle)' }}>
+            <Button
+              size="small"
+              variant={'tertiary'}
+              type={'button'}
+              icon={
+                expanded ? (
+                  <ChevronRightDoubleIcon title="Skjul kolonne" />
+                ) : (
+                  <ChevronLeftDoubleIcon title="Vis kolonne" />
+                )
+              }
+              onClick={() => setExpanded(!expanded)}
+            />
+          </div>
+
           <Button
             size={'small'}
             variant={'tertiary'}

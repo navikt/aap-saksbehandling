@@ -7,7 +7,6 @@
   flex: 1 1 100%;
   padding: var(--ax-space-16);
   padding-top: var(--ax-space-20);
-  margin: calc(var(--ax-space-16) * -1);
 }
 
 .saksbehandlingsoversikt {
@@ -15,15 +14,14 @@
   flex-direction: column;
   gap: var(--ax-space-16);
   border: 1px solid var(--ax-border-neutral-subtle);
-  padding: var(--ax-space-16);
   border-radius: var(--ax-radius-8);
   background-color: var(--ax-bg-default);
 }
 
 .hidden {
-  max-width: 4rem; /* ikke bruk et magisk tall da... */
+  max-width: 4rem;
   flex-direction: column;
-  align-items: end;
+  align-self: end;
 }
 
 .fillHeight:last-child {
@@ -32,4 +30,10 @@
 
 .fillHeight:not(:last-child) {
   margin-bottom: var(--ax-space-16);
+}
+
+.hide {
+  border-right: 1px solid var(--ax-border-neutral-subtle);
+  border-bottom: 1px solid var(--ax-border-neutral-subtle);
+  padding-top: var(--ax-space-8);
 }

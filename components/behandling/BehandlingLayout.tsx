@@ -4,8 +4,7 @@ import styles from 'app/saksbehandling/sak/[saksnummer]/[behandlingsreferanse]/l
 import { IngenFlereOppgaverModal } from 'components/ingenflereoppgavermodal/IngenFlereOppgaverModal';
 import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
 import { StegGruppeIndikatorAksel } from 'components/steggruppeindikator/StegGruppeIndikatorAksel';
-import { HGrid, VStack } from '@navikt/ds-react';
-import { Saksbehandlingsoversikt } from 'components/saksbehandlingsoversikt/Saksbehandlingsoversikt';
+import { VStack } from '@navikt/ds-react';
 import { ToTrinnsvurderingMedDataFetching } from 'components/totrinnsvurdering/ToTrinnsvurderingMedDataFetching';
 import { ReactNode } from 'react';
 import {
@@ -26,6 +25,7 @@ import { ÅrsakTilBehandling } from 'components/revurderingsinfo/ÅrsakTilBehand
 import { visÅrsakTilVurdering } from './visÅrsakTilVurdering';
 import { OverstyrTildelingContextProvider } from 'context/saksbehandling/OverstyrTildelingContext';
 import { OverstyrTildelingModal } from 'components/overstyrtildelingmodal/OverstyrTildelingModal';
+import { Kolonnelayout } from 'components/behandling/Kolonnelayout';
 
 interface Props {
   saksnummer: string;
@@ -111,46 +111,40 @@ export const BehandlingLayout = async ({ saksnummer, behandlingsreferanse, child
               stegGrupperSomSkalVises={stegGrupperSomSkalVises}
             />
 
-            <HGrid
-              columns="4fr 2fr"
-              padding={'space-16'}
-              gap={'space-16'}
-              maxWidth={'1680px'}
-              marginInline={'auto'}
-              marginBlock={'space-0'}
+            <SakContextProvider
+              sak={{
+                ident: sak.ident,
+                opprettetTidspunkt: sak.opprettetTidspunkt,
+                periode: sak.periode,
+                saksnummer: sak.saksnummer,
+                virkningsTidspunkt: behandling.data.virkningstidspunkt,
+              }}
             >
-              <SakContextProvider
-                sak={{
-                  ident: sak.ident,
-                  opprettetTidspunkt: sak.opprettetTidspunkt,
-                  periode: sak.periode,
-                  saksnummer: sak.saksnummer,
-                  virkningsTidspunkt: behandling.data.virkningstidspunkt,
-                }}
-              >
-                <VStack gap={'space-20'}>
-                  {visÅrsakTilBehandling && (
-                    <ÅrsakTilBehandling
-                      behandlingType={behandling.data.type}
-                      vurderingsbehovOgÅrsaker={behandling.data.vurderingsbehovOgÅrsaker}
-                    />
-                  )}
-                  {/*Vi må ha children inne i en div for å unngå layoutshift*/}
-                  <div style={{ width: '100%' }}>{children}</div>
-                </VStack>
-                <aside className={`flex-column`}>
-                  {visTotrinnsvurdering && (
+              <Kolonnelayout
+                visTotrinnsvurdering={visTotrinnsvurdering}
+                toTrinnsvurdering={
+                  visTotrinnsvurdering ? (
                     <ToTrinnsvurderingMedDataFetching behandlingsreferanse={behandlingsreferanse} />
-                  )}
-                  <Saksbehandlingsoversikt
-                    behandling={behandling.data}
-                    sak={sak}
-                    klageresultat={klageresultat.data}
-                    kabalKlageresultat={kabalKlageResultat}
-                  />
-                </aside>
-              </SakContextProvider>
-            </HGrid>
+                  ) : undefined
+                }
+                behandling={behandling.data}
+                sak={sak}
+                klageresultat={klageresultat.data}
+                kabalKlageresultat={kabalKlageResultat}
+                hovedkolonneInnhold={
+                  <VStack gap={'space-20'}>
+                    {visÅrsakTilBehandling && (
+                      <ÅrsakTilBehandling
+                        behandlingType={behandling.data.type}
+                        vurderingsbehovOgÅrsaker={behandling.data.vurderingsbehovOgÅrsaker}
+                      />
+                    )}
+                    {/*Vi må ha children inne i en div for å unngå layoutshift*/}
+                    <div style={{ width: '100%' }}>{children}</div>
+                  </VStack>
+                }
+              />
+            </SakContextProvider>
           </div>
         </OverstyrTildelingContextProvider>
       </IngenFlereOppgaverModalContextProvider>
