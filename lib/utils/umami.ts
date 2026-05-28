@@ -16,7 +16,7 @@ export const loggUmamiEvent = (eventName: string, data: UmamiData) => {
 
 export function loggUmamiVarighet(hendelse: UmamiTag, start: number, stop: number, typeBehandling?: string) {
   loggUmamiEvent(hendelse, {
-    varighet_sekunder: Math.floor((start - stop) / 1000),
+    varighet_sekunder: Math.floor((stop - start) / 1000),
     ...(typeBehandling ? { typeBehandling } : {}),
   });
 }
