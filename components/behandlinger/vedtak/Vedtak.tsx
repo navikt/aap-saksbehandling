@@ -1,35 +1,29 @@
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
-import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { ForeslåVedtakMedDataFetching } from 'components/behandlinger/vedtak/foreslåvedtak/ForeslåVedtakMedDataFetching';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
-import { isError } from 'lib/utils/api';
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+import { BehandlingFlytOgTilstand } from 'lib/types/types';
 
 interface Props {
   behandlingsreferanse: string;
+  flyt: BehandlingFlytOgTilstand;
 }
 
-export const Vedtak = async ({ behandlingsreferanse }: Props) => {
-  const flyt = await hentFlyt(behandlingsreferanse);
-  if (isError(flyt)) {
-    return <ApiException apiResponses={[flyt]} />;
-  }
-
-  const behandlingVersjon = flyt.data.behandlingVersjon;
+export const Vedtak = async ({ behandlingsreferanse, flyt }: Props) => {
+  const behandlingVersjon = flyt.behandlingVersjon;
 
   return (
     <GruppeSteg
       behandlingVersjon={behandlingVersjon}
       behandlingReferanse={behandlingsreferanse}
-      prosessering={flyt.data.prosessering}
-      visning={flyt.data.visning}
-      aktivtSteg={flyt.data.aktivtSteg}
+      prosessering={flyt.prosessering}
+      visning={flyt.visning}
+      aktivtSteg={flyt.aktivtSteg}
     >
       <StegSuspense>
         <ForeslåVedtakMedDataFetching
           behandlingVersjon={behandlingVersjon}
           behandlingsreferanse={behandlingsreferanse}
-          readonly={flyt.data.visning.saksbehandlerReadOnly}
+          readonly={flyt.visning.saksbehandlerReadOnly}
         />
       </StegSuspense>
     </GruppeSteg>

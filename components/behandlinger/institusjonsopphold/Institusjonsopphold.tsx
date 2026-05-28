@@ -1,44 +1,38 @@
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
-import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { HelseinstitusjonMedDataFetching } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/HelseinstitusjonMedDataFetching';
 import { SoningsvurderingMedDataFetching } from './soning/SoningsvurderingMedDataFetching';
 import { Behovstype } from 'lib/utils/form';
-import { isError } from 'lib/utils/api';
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { getStegData } from 'lib/utils/steg';
 import { ManglendeOpphold } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/ManglendeOpphold';
+import { BehandlingFlytOgTilstand } from 'lib/types/types';
 
 interface Props {
   behandlingsreferanse: string;
+  flyt: BehandlingFlytOgTilstand;
 }
 
-export const Institusjonsopphold = async ({ behandlingsreferanse }: Props) => {
-  const flyt = await hentFlyt(behandlingsreferanse);
-  if (isError(flyt)) {
-    return <ApiException apiResponses={[flyt]} />;
-  }
-
+export const Institusjonsopphold = async ({ behandlingsreferanse, flyt }: Props) => {
   const vurderHelseinstitusjonSteg = getStegData(
     'ET_ANNET_STED',
     'DU_ER_ET_ANNET_STED',
-    flyt.data,
+    flyt,
     Behovstype.AVKLAR_HELSEINSTITUSJON
   );
 
   const vurderSoningSteg = getStegData(
     'ET_ANNET_STED',
     'DU_ER_ET_ANNET_STED',
-    flyt.data,
+    flyt,
     Behovstype.AVKLAR_SONINGSFORRHOLD
   );
   return (
     <GruppeSteg
-      prosessering={flyt.data.prosessering}
-      visning={flyt.data.visning}
+      prosessering={flyt.prosessering}
+      visning={flyt.visning}
       behandlingReferanse={behandlingsreferanse}
-      behandlingVersjon={flyt.data.behandlingVersjon}
-      aktivtSteg={flyt.data.aktivtSteg}
+      behandlingVersjon={flyt.behandlingVersjon}
+      aktivtSteg={flyt.aktivtSteg}
     >
       {vurderHelseinstitusjonSteg.skalViseSteg && (
         <StegSuspense>

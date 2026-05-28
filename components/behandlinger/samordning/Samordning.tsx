@@ -1,45 +1,39 @@
-import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { getStegData } from 'lib/utils/steg';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { SamordningSosialstønadMedDatafetching } from 'components/behandlinger/samordning/samordningsosial/SamordningSosialstønadMedDatafetching';
 import { SamordningAndreStatligeYtelserMedDatafetching } from 'components/behandlinger/samordning/samordningandrestatlige/SamordningAndreStatligeYtelserMedDatafetching';
 import { SamordningGraderingMedDatafetching } from 'components/behandlinger/samordning/samordninggradering/SamordningGraderingMedDatafetching';
 import { SamordningUføreMedDatafetching } from 'components/behandlinger/samordning/samordninguføre/SamordningUføreMedDatafetching';
-import { isError } from 'lib/utils/api';
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { SamordningTjenestePensjonMedDataFetching } from 'components/behandlinger/samordning/samordningtjenestepensjon/SamordningTjenestePensjonMedDataFetching';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { SamordningArbeidsgiverMedDatafetching } from 'components/behandlinger/samordning/samordningArbeidsgiver/SamordningArbeidsgiverMedDatafetching';
 import { SykestipendMedDataFetching } from 'components/behandlinger/samordning/sykestipend/SykestipendMedDataFetching';
 import { BarnepensjonMedDataFetching } from 'components/behandlinger/samordning/barnepensjon/BarnepensjonMedDataFetching';
+import { BehandlingFlytOgTilstand } from 'lib/types/types';
 
 interface Props {
   behandlingsreferanse: string;
+  flyt: BehandlingFlytOgTilstand;
 }
 
-export const Samordning = async ({ behandlingsreferanse }: Props) => {
-  const flyt = await hentFlyt(behandlingsreferanse);
-  if (isError(flyt)) {
-    return <ApiException apiResponses={[flyt]} />;
-  }
-
+export const Samordning = async ({ behandlingsreferanse, flyt }: Props) => {
   const aktivGruppe = 'SAMORDNING';
-  const samordningSosialStønadSteg = getStegData('SYKDOM', 'REFUSJON_KRAV', flyt.data);
-  const samordningGraderingSteg = getStegData(aktivGruppe, 'SAMORDNING_GRADERING', flyt.data);
-  const samordningUføreSteg = getStegData(aktivGruppe, 'SAMORDNING_UFØRE', flyt.data);
-  const samordningStatligeYtelserSteg = getStegData(aktivGruppe, 'SAMORDNING_ANDRE_STATLIGE_YTELSER', flyt.data);
-  const samordningArbeidsgiverSteg = getStegData(aktivGruppe, 'SAMORDNING_ARBEIDSGIVER', flyt.data);
-  const samordningTjenestepensjonSteg = getStegData(aktivGruppe, 'SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV', flyt.data);
-  const sykestipendSteg = getStegData(aktivGruppe, 'SAMORDNING_SYKESTIPEND', flyt.data);
-  const samordningBarnepensjonSteg = getStegData(aktivGruppe, 'SAMORDNING_BARNEPENSJON', flyt.data);
+  const samordningSosialStønadSteg = getStegData('SYKDOM', 'REFUSJON_KRAV', flyt);
+  const samordningGraderingSteg = getStegData(aktivGruppe, 'SAMORDNING_GRADERING', flyt);
+  const samordningUføreSteg = getStegData(aktivGruppe, 'SAMORDNING_UFØRE', flyt);
+  const samordningStatligeYtelserSteg = getStegData(aktivGruppe, 'SAMORDNING_ANDRE_STATLIGE_YTELSER', flyt);
+  const samordningArbeidsgiverSteg = getStegData(aktivGruppe, 'SAMORDNING_ARBEIDSGIVER', flyt);
+  const samordningTjenestepensjonSteg = getStegData(aktivGruppe, 'SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV', flyt);
+  const sykestipendSteg = getStegData(aktivGruppe, 'SAMORDNING_SYKESTIPEND', flyt);
+  const samordningBarnepensjonSteg = getStegData(aktivGruppe, 'SAMORDNING_BARNEPENSJON', flyt);
 
   return (
     <GruppeSteg
-      behandlingVersjon={flyt.data.behandlingVersjon}
+      behandlingVersjon={flyt.behandlingVersjon}
       behandlingReferanse={behandlingsreferanse}
-      prosessering={flyt.data.prosessering}
-      visning={flyt.data.visning}
-      aktivtSteg={flyt.data.aktivtSteg}
+      prosessering={flyt.prosessering}
+      visning={flyt.visning}
+      aktivtSteg={flyt.aktivtSteg}
     >
       {samordningSosialStønadSteg.skalViseSteg && (
         <StegSuspense>

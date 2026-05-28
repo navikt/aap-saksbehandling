@@ -1,4 +1,4 @@
-import { hentBeregningsGrunnlag, hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { hentBeregningsGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { FastsettBeregningMedDataFetching } from 'components/behandlinger/grunnlag/fastsettberegning/FastsettBeregningMedDataFetching';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
@@ -10,49 +10,48 @@ import { isError } from 'lib/utils/api';
 import { getStegData } from 'lib/utils/steg';
 import { FastsettManuellInntektMedDataFetchingNy } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/FastsettManuellInntektMedDataFetchingNy';
 import { InntektsbortfallMedDataFetching } from './inntektsbortfall/InntektsbortfallMedDataFetching';
+import { BehandlingFlytOgTilstand } from 'lib/types/types';
 
 interface Props {
   behandlingsreferanse: string;
+  flyt: BehandlingFlytOgTilstand;
 }
 
-export const Grunnlag = async ({ behandlingsreferanse }: Props) => {
-  const [flyt, beregningsgrunnlag] = await Promise.all([
-    hentFlyt(behandlingsreferanse),
-    hentBeregningsGrunnlag(behandlingsreferanse),
-  ]);
+export const Grunnlag = async ({ behandlingsreferanse, flyt }: Props) => {
+  const beregningsgrunnlag = await hentBeregningsGrunnlag(behandlingsreferanse);
 
-  if (isError(beregningsgrunnlag) || isError(flyt)) {
-    return <ApiException apiResponses={[beregningsgrunnlag, flyt]} />;
+  if (isError(beregningsgrunnlag)) {
+    return <ApiException apiResponses={[beregningsgrunnlag]} />;
   }
 
   const aktivStegGruppe = 'GRUNNLAG';
   const fastsettBeregningstidspunktSteg = getStegData(
     aktivStegGruppe,
     'FASTSETT_BEREGNINGSTIDSPUNKT',
-    flyt.data,
+    flyt,
     Behovstype.FASTSETT_BEREGNINGSTIDSPUNKT_KODE
   );
   const fastsettYrkesskadeInntekt = getStegData(
     aktivStegGruppe,
     'FASTSETT_BEREGNINGSTIDSPUNKT',
-    flyt.data,
+    flyt,
     Behovstype.FASTSETT_YRKESSKADEINNTEKT
   );
-  const vurderManglendeLigningSteg = getStegData(aktivStegGruppe, 'MANGLENDE_LIGNING', flyt.data);
+  const vurderManglendeLigningSteg = getStegData(aktivStegGruppe, 'MANGLENDE_LIGNING', flyt);
   const inntektsbortfall = getStegData(
     aktivStegGruppe,
     'VURDER_INNTEKTSBORTFALL',
-    flyt.data,
+    flyt,
     Behovstype.VURDER_INNTEKTSBORTFALL
   );
 
   return (
     <GruppeSteg
       behandlingReferanse={behandlingsreferanse}
-      behandlingVersjon={flyt.data.behandlingVersjon}
-      prosessering={flyt.data.prosessering}
-      visning={flyt.data.visning}
-      aktivtSteg={flyt.data.aktivtSteg}
+      behandlingVersjon={flyt.behandlingVersjon}
+      prosessering={flyt.prosessering}
+      visning={flyt.visning}
+      aktivtSteg={flyt.aktivtSteg}
     >
       {fastsettBeregningstidspunktSteg.skalViseSteg && (
         <StegSuspense>

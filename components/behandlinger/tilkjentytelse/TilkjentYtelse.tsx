@@ -1,26 +1,20 @@
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
-import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { isError } from 'lib/utils/api';
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { TilkjentMedDataFetching } from 'components/behandlinger/tilkjentytelse/tilkjent/TilkjentMedDataFetching';
+import { BehandlingFlytOgTilstand } from 'lib/types/types';
 
 interface Props {
   behandlingsreferanse: string;
+  flyt: BehandlingFlytOgTilstand;
 }
-export const TilkjentYtelse = async ({ behandlingsreferanse }: Props) => {
-  const flyt = await hentFlyt(behandlingsreferanse);
-  if (isError(flyt)) {
-    return <ApiException apiResponses={[flyt]} />;
-  }
-
+export const TilkjentYtelse = async ({ behandlingsreferanse, flyt }: Props) => {
   return (
     <GruppeSteg
-      behandlingVersjon={flyt.data.behandlingVersjon}
+      behandlingVersjon={flyt.behandlingVersjon}
       behandlingReferanse={behandlingsreferanse}
-      prosessering={flyt.data.prosessering}
-      visning={flyt.data.visning}
-      aktivtSteg={flyt.data.aktivtSteg}
+      prosessering={flyt.prosessering}
+      visning={flyt.visning}
+      aktivtSteg={flyt.aktivtSteg}
     >
       <StegSuspense>
         <TilkjentMedDataFetching behandlingsreferanse={behandlingsreferanse} />

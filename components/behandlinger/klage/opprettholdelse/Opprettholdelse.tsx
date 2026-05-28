@@ -1,4 +1,4 @@
-import { hentFlyt, hentKlageresultat } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { hentKlageresultat } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
@@ -9,14 +9,11 @@ import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
 
 interface Props {
   behandlingsreferanse: string;
+  flyt: BehandlingFlytOgTilstand;
 }
 
-export const Opprettholdelse = async ({ behandlingsreferanse }: Props) => {
-  const flyt = await hentFlyt(behandlingsreferanse);
-  if (isError(flyt)) {
-    return <ApiException apiResponses={[flyt]} />;
-  }
-  const behandlingVersjon = flyt.data.behandlingVersjon;
+export const Opprettholdelse = async ({ behandlingsreferanse, flyt }: Props) => {
+  const behandlingVersjon = flyt.behandlingVersjon;
   const klageresultat = await hentKlageresultat(behandlingsreferanse);
   if (isError(klageresultat)) {
     return <ApiException apiResponses={[klageresultat]} />;
@@ -24,15 +21,15 @@ export const Opprettholdelse = async ({ behandlingsreferanse }: Props) => {
 
   return (
     <GruppeSteg
-      prosessering={flyt.data.prosessering}
-      visning={flyt.data.visning}
+      prosessering={flyt.prosessering}
+      visning={flyt.visning}
       behandlingReferanse={behandlingsreferanse}
       behandlingVersjon={behandlingVersjon}
-      aktivtSteg={flyt.data.aktivtSteg}
+      aktivtSteg={flyt.aktivtSteg}
     >
       <StegSuspense>
         <VilkårsKort steg={'OPPRETTHOLDELSE'} heading={'Opprettholdelse'}>
-          <p>{utledTekst(flyt.data)}</p>
+          <p>{utledTekst(flyt)}</p>
           <p>Følgende vilkår skal opprettholdes:</p>
           <p>{vilkårSomSkalOpprettholdes(klageresultat.data)}</p>
         </VilkårsKort>

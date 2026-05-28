@@ -1,7 +1,6 @@
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import {
   hentAutomatiskLovvalgOgMedlemskapVurdering,
-  hentFlyt,
   hentLovvalgMedlemskapGrunnlag,
   hentMellomlagring,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
@@ -12,23 +11,24 @@ import { Behovstype } from 'lib/utils/form';
 import { kanViseOverstyrKnapp } from 'lib/utils/overstyring';
 import { LovvalgOgMedlemskapPeriodisert } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/LovvalgOgMedlemskapPeriodisert';
 import { LovvalgOgMedlemskapPeriodisertOverstyringswrapper } from 'components/behandlinger/lovvalg/LovvalgOgMedlemskapPeriodisertOverstyringswrapper';
+import { BehandlingFlytOgTilstand } from 'lib/types/types';
 
 interface Props {
   behandlingsreferanse: string;
+  flyt: BehandlingFlytOgTilstand;
 }
 
-export const LovvalgPeriodisert = async ({ behandlingsreferanse }: Props) => {
-  const [flyt, vurderingAutomatisk, grunnlag] = await Promise.all([
-    hentFlyt(behandlingsreferanse),
+export const LovvalgPeriodisert = async ({ behandlingsreferanse, flyt }: Props) => {
+  const [vurderingAutomatisk, grunnlag] = await Promise.all([
     hentAutomatiskLovvalgOgMedlemskapVurdering(behandlingsreferanse),
     hentLovvalgMedlemskapGrunnlag(behandlingsreferanse),
   ]);
 
-  if (isError(vurderingAutomatisk) || isError(grunnlag) || isError(flyt)) {
-    return <ApiException apiResponses={[vurderingAutomatisk, grunnlag, flyt]} />;
+  if (isError(vurderingAutomatisk) || isError(grunnlag)) {
+    return <ApiException apiResponses={[vurderingAutomatisk, grunnlag]} />;
   }
 
-  const vurderLovvalgSteg = getStegData('LOVVALG', 'VURDER_LOVVALG', flyt.data);
+  const vurderLovvalgSteg = getStegData('LOVVALG', 'VURDER_LOVVALG', flyt);
   const readOnly = vurderLovvalgSteg.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
@@ -36,7 +36,7 @@ export const LovvalgPeriodisert = async ({ behandlingsreferanse }: Props) => {
     readOnly
   );
 
-  const behandlingsVersjon = flyt.data.behandlingVersjon;
+  const behandlingsVersjon = flyt.behandlingVersjon;
   const erOverstyrtTilbakeførtVurdering =
     vurderingAutomatisk.data.kanBehandlesAutomatisk &&
     (grunnlag.data.nyeVurderinger.length === 0 || grunnlag.data.overstyrt);
@@ -51,17 +51,17 @@ export const LovvalgPeriodisert = async ({ behandlingsreferanse }: Props) => {
   const erOverstyrt = grunnlag?.data.overstyrt || erOverstyrtTilbakeførtVurdering;
 
   const behovstype =
-    flyt.data.visning.typeBehandling === 'Førstegangsbehandling' && erOverstyrt
+    flyt.visning.typeBehandling === 'Førstegangsbehandling' && erOverstyrt
       ? Behovstype.MANUELL_OVERSTYRING_LOVVALG
       : Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP;
 
   return (
     <GruppeSteg
-      prosessering={flyt.data.prosessering}
-      visning={flyt.data.visning}
+      prosessering={flyt.prosessering}
+      visning={flyt.visning}
       behandlingReferanse={behandlingsreferanse}
       behandlingVersjon={behandlingsVersjon}
-      aktivtSteg={flyt.data.aktivtSteg}
+      aktivtSteg={flyt.aktivtSteg}
     >
       <LovvalgOgMedlemskapPeriodisertOverstyringswrapper
         automatiskVurdering={vurderingAutomatisk.data}

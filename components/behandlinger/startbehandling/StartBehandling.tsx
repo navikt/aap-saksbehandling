@@ -1,13 +1,13 @@
-'use server';
-
-import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
-import { hentBehandlingPåVentInformasjon, hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
+import { hentBehandlingPåVentInformasjon } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { StartBehandlingRedirectRiktigGruppe } from './StartBehandlingRedirectRiktigGruppe';
+import { BehandlingFlytOgTilstand } from 'lib/types/types';
 
 interface Props {
   behandlingsreferanse: string;
+  flyt: BehandlingFlytOgTilstand;
 }
 
 const VENTESTATUSER_SOM_SKAL_KUNNE_GJENÅPNES = ['VENTER_PÅ_KLAGE_IMPLEMENTASJON'];
@@ -20,30 +20,27 @@ const VENTESTATUSER_SOM_SKAL_KUNNE_GJENÅPNES = ['VENTER_PÅ_KLAGE_IMPLEMENTASJO
  * For å være sikker på at man ikke kan gjenåpne statuser som ikke er klare for det, er VENTESTATUSER_SOM_SKAL_KUNNE_GJENÅPNES
  * en whitelsit med grunner som man får lov til å gjenåpne her.
  */
-export const StartBehandling = async ({ behandlingsreferanse }: Props) => {
-  const [flyt, venteInformasjon] = await Promise.all([
-    hentFlyt(behandlingsreferanse),
-    hentBehandlingPåVentInformasjon(behandlingsreferanse),
-  ]);
+export const StartBehandling = async ({ behandlingsreferanse, flyt }: Props) => {
+  const venteInformasjon = await hentBehandlingPåVentInformasjon(behandlingsreferanse);
 
-  if (isError(flyt) || isError(venteInformasjon)) {
-    return <ApiException apiResponses={[flyt, venteInformasjon]} />;
+  if (isError(venteInformasjon)) {
+    return <ApiException apiResponses={[venteInformasjon]} />;
   }
 
   if (
     !VENTESTATUSER_SOM_SKAL_KUNNE_GJENÅPNES.includes(venteInformasjon?.data?.grunn) ||
-    !flyt.data.visning.visVentekort
+    !flyt.visning.visVentekort
   ) {
-    return <StartBehandlingRedirectRiktigGruppe flyt={flyt.data} />;
+    return <StartBehandlingRedirectRiktigGruppe flyt={flyt} />;
   }
 
   return (
     <GruppeSteg
-      behandlingVersjon={flyt.data.behandlingVersjon}
+      behandlingVersjon={flyt.behandlingVersjon}
       behandlingReferanse={behandlingsreferanse}
-      prosessering={flyt.data.prosessering}
-      visning={flyt.data.visning}
-      aktivtSteg={flyt.data.aktivtSteg}
+      prosessering={flyt.prosessering}
+      visning={flyt.visning}
+      aktivtSteg={flyt.aktivtSteg}
     >
       <></>
     </GruppeSteg>
