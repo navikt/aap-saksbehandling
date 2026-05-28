@@ -24,22 +24,22 @@ function skalViseUtenlandsId(landAlpha3: string): boolean {
 }
 
 interface Props {
-  i: number;
+  index: number;
   form: UseFormReturn<SøknadFormFields>;
   readOnly: boolean;
   remove: UseFieldArrayRemove;
 }
 
-export const LeggTilUtenlandsOpphold = ({ i, form, readOnly, remove }: Props) => {
-  const land = form.watch(`utenlandsOpphold.${i}.land`);
-  const fraDato = form.watch(`utenlandsOpphold.${i}.fraDato`);
+export const LeggTilUtenlandsOpphold = ({ index, form, readOnly, remove }: Props) => {
+  const land = form.watch(`utenlandsOpphold.${index}.land`);
+  const fraDato = form.watch(`utenlandsOpphold.${index}.fraDato`);
   const visUtenlandsId = skalViseUtenlandsId(land);
 
   return (
     <VStack gap={'space-16'} className={styles.barn}>
       <ComboboxWrapper
         label={'Land'}
-        name={`utenlandsOpphold.${i}.land`}
+        name={`utenlandsOpphold.${index}.land`}
         control={form.control}
         options={alleLandUtenNorge}
         readOnly={readOnly}
@@ -49,7 +49,7 @@ export const LeggTilUtenlandsOpphold = ({ i, form, readOnly, remove }: Props) =>
         <VStack>
           <DateInputWrapper
             label={'Fra dato'}
-            name={`utenlandsOpphold.${i}.fraDato`}
+            name={`utenlandsOpphold.${index}.fraDato`}
             control={form.control}
             readOnly={readOnly}
             rules={{
@@ -61,7 +61,7 @@ export const LeggTilUtenlandsOpphold = ({ i, form, readOnly, remove }: Props) =>
         <VStack>
           <DateInputWrapper
             label={'Til dato'}
-            name={`utenlandsOpphold.${i}.tilDato`}
+            name={`utenlandsOpphold.${index}.tilDato`}
             control={form.control}
             readOnly={readOnly}
             rules={{
@@ -80,8 +80,8 @@ export const LeggTilUtenlandsOpphold = ({ i, form, readOnly, remove }: Props) =>
         </VStack>
       </HStack>
       <RadioGroupWrapper
-        label={'Var søker i arbeid i utlandet?'}
-        name={`utenlandsOpphold.${i}.iArbeid`}
+        label={'Har brukeren oppgitt at de arbeidet i landet?'}
+        name={`utenlandsOpphold.${index}.iArbeid`}
         control={form.control}
         readOnly={readOnly}
         rules={{ required: 'Du må velge et alternativ' }}
@@ -97,7 +97,7 @@ export const LeggTilUtenlandsOpphold = ({ i, form, readOnly, remove }: Props) =>
           label={'Utenlandsk ID-nummer'}
           size={'small'}
           readOnly={readOnly}
-          {...form.register(`utenlandsOpphold.${i}.utenlandsId`)}
+          {...form.register(`utenlandsOpphold.${index}.utenlandsId`)}
         />
       )}
       <HStack>
@@ -107,7 +107,7 @@ export const LeggTilUtenlandsOpphold = ({ i, form, readOnly, remove }: Props) =>
           icon={<TrashIcon title={'Fjern utenlandsopphold'} />}
           variant={'tertiary'}
           type={'button'}
-          onClick={() => remove(i)}
+          onClick={() => remove(index)}
           disabled={readOnly}
         >
           Fjern utenlandsopphold

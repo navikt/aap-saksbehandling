@@ -10,7 +10,7 @@ import {
 } from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { Alert, BodyLong, BodyShort, Box, Button, Heading, HStack, Modal, VStack } from '@navikt/ds-react';
-import { FormEvent, useRef, useState } from 'react';
+import { SubmitEventHandler, useRef, useState } from 'react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
@@ -30,6 +30,7 @@ import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { storForbokstavOgMellomromForUnderstrek } from 'lib/utils/string';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
 
 interface Props {
   grunnlag: SamordningGraderingGrunnlag;
@@ -86,6 +87,7 @@ export const SamordningGradering = ({
     'SAMORDNING_GRADERING',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -113,7 +115,7 @@ export const SamordningGradering = ({
     form
   );
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit(async (data) => {
       setErrorMessage(undefined);
       if (grunnlag.ytelser.length > 0 && data.vurderteSamordninger.length === 0) {
@@ -140,6 +142,7 @@ export const SamordningGradering = ({
             referanse: behandlingsreferanse,
           },
           () => {
+            loggUmamiVarighet('STEG_SAMORDNING_GRADERING_VARIGHET', umamiStartTidspunkt, Date.now());
             visningActions.onBekreftClick();
             nullstillMellomlagretVurdering();
           }

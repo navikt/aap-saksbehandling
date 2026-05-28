@@ -1,5 +1,5 @@
 import { Alert, BodyShort, Button, Heading, Link } from '@navikt/ds-react';
-import { FormEvent, useState } from 'react';
+import { useState, SubmitEventHandler } from 'react';
 
 import styles from './InnhentDokumentasjonSkjema.module.css';
 import { BestillLegeerklæring } from 'lib/types/types';
@@ -74,7 +74,7 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
     },
   });
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit(async (data) => {
       const body: BestillLegeerklæring = {
         behandlerNavn: data.behandler.label,

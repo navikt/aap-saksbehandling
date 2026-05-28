@@ -14,19 +14,24 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgG
 import { useFieldArray } from 'react-hook-form';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { useConfigForm } from 'components/form/FormHook';
-import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { TotrinnsvurderingVedtaksbrevFelter } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingVedtaksbrevFelter';
 import { byggVilkårskortLenke } from 'lib/utils/vilkårskort';
-import { loggUmamiEvent, useUmamiStartTidspunkt } from 'lib/utils/umami';
+import {
+  loggUmamiVarighet,
+  loggUmamiVarighetHendelser,
+  useUmamiStartTidspunkt,
+  useUmamiVarighetHendelser,
+} from 'lib/utils/umami';
 
 interface Props {
   grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;
   erKvalitetssikring: boolean;
   readOnly: boolean;
   initialMellomlagretVurdering?: MellomlagretVurdering;
+  behandlingsversjon: number;
 }
 
 export interface FormFieldsToTrinnsVurdering {
@@ -40,15 +45,18 @@ export const TotrinnsvurderingForm = ({
   readOnly,
   erKvalitetssikring,
   initialMellomlagretVurdering,
+  behandlingsversjon,
 }: Props) => {
-  const { flyt } = useRequiredFlyt();
   const { saksnummer, behandlingsreferanse } = useParamsMedType();
 
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } = useLøsBehovOgGåTilNesteSteg(
     erKvalitetssikring ? 'KVALITETSSIKRING' : 'FATTE_VEDTAK'
   );
 
-  const umamiStartTidspunkt = useUmamiStartTidspunkt();
+  const { addHendelse, varighetHendelseRef, hendelseSerieRef } = useUmamiVarighetHendelser(
+    erKvalitetssikring ? 'KVALITETSSIKRER_VARIGHET_HENDELSER' : 'BESLUTTER_VARIGHET_HENDELSER'
+  );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt('TOTRINN');
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? mapMellomlagringToDraftFormFields(JSON.parse(initialMellomlagretVurdering.data))
@@ -73,9 +81,6 @@ export const TotrinnsvurderingForm = ({
     rules: {
       validate: (vurderinger) => {
         const assessedFields = vurderinger.filter((vurdering) => vurdering.godkjent !== undefined);
-        if (!flyt.behandlingVersjon) {
-          return 'Kunne ikke finne behandlingversjon';
-        }
         if (!assessedFields.length) {
           return 'Du må gjøre minst én vurdering.';
         }
@@ -106,7 +111,7 @@ export const TotrinnsvurderingForm = ({
         }
         løsBehovOgGåTilNesteSteg(
           {
-            behandlingVersjon: flyt.behandlingVersjon,
+            behandlingVersjon: behandlingsversjon,
             behov: {
               behovstype: erKvalitetssikring ? Behovstype.KVALITETSSIKRING_KODE : Behovstype.FATTE_VEDTAK_KODE,
               vurderinger: assessedFields.map((vurdering) => {
@@ -133,11 +138,13 @@ export const TotrinnsvurderingForm = ({
             referanse: behandlingsreferanse,
           },
           () => {
+            loggUmamiVarighet(
+              erKvalitetssikring ? 'STEG_BESLUTTER_VARIGHET' : 'STEG_KVALITETSSIKRER_VARIGHET',
+              umamiStartTidspunkt,
+              Date.now()
+            );
             if (!erKvalitetssikring) {
-              loggUmamiEvent('beslutter-varighet', {
-                varighet_sekunder: Math.floor((Date.now() - umamiStartTidspunkt) / 1000),
-                typeBehandling: flyt.visning.typeBehandling,
-              });
+              loggUmamiVarighetHendelser(varighetHendelseRef.current, hendelseSerieRef.current);
             }
             nullstillMellomlagretVurdering();
           }
@@ -158,6 +165,7 @@ export const TotrinnsvurderingForm = ({
               erKvalitetssikring={erKvalitetssikring}
               link={link}
               readOnly={readOnly}
+              felterOnBlur={addHendelse}
             />
           );
         }
@@ -170,6 +178,7 @@ export const TotrinnsvurderingForm = ({
             erKvalitetssikring={erKvalitetssikring}
             link={link}
             readOnly={readOnly}
+            felterOnBlur={addHendelse}
           />
         );
       })}

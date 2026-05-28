@@ -9,7 +9,7 @@ import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useFieldArray } from 'react-hook-form';
 import { DATO_FORMATER, formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { parse } from 'date-fns';
-import React, { FormEvent, useState } from 'react';
+import { SubmitEvent, useState } from 'react';
 import styles from './BarnetilleggVurdering.module.css';
 import { useConfigForm } from 'components/form/FormHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
@@ -19,6 +19,7 @@ import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilk
 import { OppgitteFolkeregisterBarnVurdering } from 'components/barn/oppgittebarnvurdering/OppgitteFolkeregisterBarnVurdering';
 import { PlusIcon } from '@navikt/aksel-icons';
 import { SaksbehandlerOppgittBarnVurdering } from 'components/barn/oppgittebarnvurdering/SaksbehandlerOppgittBarnVurdering';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
 
 interface Props {
   behandlingsversjon: number;
@@ -85,6 +86,7 @@ export const BarnetilleggVurdering = ({
     'BARNETILLEGG',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const { form } = useConfigForm<BarnetilleggFormFields>(
     {
@@ -129,7 +131,7 @@ export const BarnetilleggVurdering = ({
     name: 'saksbehandlerOppgitteBarnVurderinger',
   });
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: SubmitEvent) {
     form.handleSubmit((data) => {
       const mapVurdering = (vurdering: Vurdering) => ({
         begrunnelse: vurdering.begrunnelse,
@@ -170,6 +172,7 @@ export const BarnetilleggVurdering = ({
           referanse: behandlingsreferanse,
         },
         () => {
+          loggUmamiVarighet('STEG_BARNETILLEGG_VARIGHET', umamiStartTidspunkt, Date.now());
           visningActions.onBekreftClick();
           nullstillMellomlagretVurdering();
         }

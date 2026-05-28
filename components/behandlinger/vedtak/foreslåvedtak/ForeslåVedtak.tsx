@@ -4,7 +4,6 @@ import { Behovstype } from 'lib/utils/form';
 import { BodyShort, Box, Label, List, Table, VStack } from '@navikt/ds-react';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 
-import { FormEvent } from 'react';
 import { ForeslåVedtakGrunnlag, StansOpphørÅrsak } from 'lib/types/types';
 import { ForeslåVedtakTabell } from 'components/behandlinger/vedtak/foreslåvedtak/foreslåvedtaktabell/ForeslåVedtakTabell';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
@@ -14,6 +13,7 @@ import { TableStyled } from 'components/tablestyled/TableStyled';
 import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { storForbokstav } from 'lib/utils/string';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
 
 interface Props {
   behandlingVersjon: number;
@@ -28,6 +28,7 @@ export const ForeslåVedtak = ({ behandlingVersjon, readOnly, grunnlag }: Props)
   const visStansOpphørFeature = useFeatureFlag('VisStansOpphorFrontend');
 
   const { visningActions, visningModus } = useVilkårskortVisning(readOnly, 'FORESLÅ_VEDTAK', undefined);
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   return (
     <VilkårskortMedForm
@@ -37,15 +38,20 @@ export const ForeslåVedtak = ({ behandlingVersjon, readOnly, grunnlag }: Props)
       status={status}
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       isLoading={isLoading}
-      onSubmit={(event: FormEvent<HTMLFormElement>) => {
+      onSubmit={(event) => {
         event.preventDefault();
-        løsBehovOgGåTilNesteSteg({
-          behandlingVersjon: behandlingVersjon,
-          behov: {
-            behovstype: Behovstype.FORESLÅ_VEDTAK_KODE,
+        løsBehovOgGåTilNesteSteg(
+          {
+            behandlingVersjon: behandlingVersjon,
+            behov: {
+              behovstype: Behovstype.FORESLÅ_VEDTAK_KODE,
+            },
+            referanse: behandlingsreferanse,
           },
-          referanse: behandlingsreferanse,
-        });
+          () => {
+            loggUmamiVarighet('STEG_FORESLÅ_VEDTAK_VARIGHET', umamiStartTidspunkt, Date.now());
+          }
+        );
       }}
       knappTekst={'Send til beslutter'}
       visningModus={visningModus}

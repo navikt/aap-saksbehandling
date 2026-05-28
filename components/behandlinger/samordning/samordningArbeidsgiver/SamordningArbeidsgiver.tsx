@@ -3,7 +3,7 @@
 import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { BodyLong, BodyShort, Link, VStack } from '@navikt/ds-react';
-import { FormEvent } from 'react';
+import { SubmitEventHandler } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
@@ -21,6 +21,7 @@ import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilk
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 
 import { SamordningArbeidsGiverTabell } from 'components/behandlinger/samordning/samordningArbeidsgiver/SamordningArbeidsgiverTabell';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
 
 interface Props {
   grunnlag: SamordningArbeidsgiverGrunnlag;
@@ -57,6 +58,7 @@ export const SamordningArbeidsgiver = ({
     'SAMORDNING_ARBEIDSGIVER',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -87,7 +89,7 @@ export const SamordningArbeidsgiver = ({
 
   const harFåttEkstrautbetalingFraArbeidsgiver = grunnlag.harFåttEkstrautbetalingFraArbeidsgiver ? 'Ja' : 'Nei';
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit(async (data) =>
       løsBehovOgGåTilNesteSteg(
         {
@@ -105,6 +107,7 @@ export const SamordningArbeidsgiver = ({
           referanse: behandlingsreferanse,
         },
         () => {
+          loggUmamiVarighet('STEG_SAMORDNING_ARBEIDSGIVER_VARIGHET', umamiStartTidspunkt, Date.now());
           visningActions.onBekreftClick();
           nullstillMellomlagretVurdering();
         }

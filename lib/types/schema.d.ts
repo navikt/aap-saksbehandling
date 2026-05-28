@@ -1737,6 +1737,44 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/behandling/tilkjent-med-diff/{referanse}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description referanse */
+          referanse: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelse2MedDiffDto'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/behandling/{referanse}/grunnlag/foreslaa-vedtak': {
     parameters: {
       query?: never;
@@ -4078,6 +4116,44 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/brev/{brevbestillingReferanse}/brevmal-preview': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description brevbestillingReferanse */
+          brevbestillingReferanse: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BrevmalPreviewResponsDTO'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/{brevbestillingReferanse}/kan-distribuere-brev': {
     parameters: {
       query?: never;
@@ -5834,6 +5910,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -5919,6 +5996,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -6001,6 +6079,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -6083,6 +6162,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -6165,6 +6245,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -6247,6 +6328,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -6329,6 +6411,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -6411,6 +6494,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -6494,6 +6578,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -6576,6 +6661,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -6657,6 +6743,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -6739,6 +6826,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -6821,6 +6909,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -6903,6 +6992,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -6985,6 +7075,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -7067,6 +7158,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -7149,6 +7241,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -7231,6 +7324,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -7313,6 +7407,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -7396,6 +7491,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -7477,6 +7573,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -7559,6 +7656,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -7641,6 +7739,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -7723,6 +7822,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -7805,6 +7905,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -7890,6 +7991,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -7972,6 +8074,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -8054,6 +8157,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -8136,6 +8240,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -8218,6 +8323,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -8299,6 +8405,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -8374,6 +8481,7 @@ export interface components {
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.SattP\u00E5VentL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.SkrivForh\u00E5ndsvarselBruddAktivitetspliktBrevL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.SkrivForh\u00E5ndsvarselKlageFormkravBrevL\u00F8sning']
+      | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.SkrivVedtaksbrevKlageL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.SkrivVedtaksbrevL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.SykdomsvurderingForBrevL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.TjenestepensjonRefusjonskravL\u00F8sning']
@@ -8435,6 +8543,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -8518,6 +8627,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -8599,6 +8709,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -8681,6 +8792,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -8763,6 +8875,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -8845,6 +8958,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -8927,6 +9041,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -9009,6 +9124,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -9090,6 +9206,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -9171,6 +9288,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -9252,6 +9370,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -9341,6 +9460,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -9466,6 +9586,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -9548,6 +9669,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -9629,6 +9751,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -9711,6 +9834,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -9810,6 +9934,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -9892,6 +10017,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -9974,6 +10100,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -10056,6 +10183,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -10137,6 +10265,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -10218,6 +10347,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -10304,6 +10434,95 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
+        | '5050'
+        | '5051'
+        | '5052'
+        | '5053'
+        | '5054'
+        | '5056'
+        | '5057'
+        | '5058'
+        | '5059'
+        | '5060'
+        | '5096'
+        | '5097'
+        | '5098'
+        | '5099'
+        | '5999'
+        | '6000'
+        | '6001'
+        | '6002'
+        | '6003'
+        | '6004'
+        | '6005'
+        | '6006'
+        | '6007'
+        | '6008'
+        | '6009'
+        | '6010'
+        | '7001'
+        | '8001'
+        | '8002'
+        | '8003'
+        | '9001'
+        | '9002'
+        | '9003'
+        | '9004'
+        | '9082'
+        | '9083';
+      /** Format: uuid */
+      brevbestillingReferanse: string;
+      /** @enum {string} */
+      handling: 'AVBRYT' | 'FERDIGSTILL';
+      mottakere: components['schemas']['no.nav.aap.brev.kontrakt.MottakerDto'][];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.SkrivVedtaksbrevKlageL\u00F8sning': {
+      begrunnelse?: string | null;
+      /** @enum {string} */
+      behovstype:
+        | '4101'
+        | '4102'
+        | '4201'
+        | '4301'
+        | '5001'
+        | '5002'
+        | '5003'
+        | '5004'
+        | '5005'
+        | '5006'
+        | '5007'
+        | '5008'
+        | '5009'
+        | '5010'
+        | '5011'
+        | '5012'
+        | '5013'
+        | '5014'
+        | '5015'
+        | '5016'
+        | '5017'
+        | '5018'
+        | '5019'
+        | '5020'
+        | '5021'
+        | '5022'
+        | '5023'
+        | '5024'
+        | '5025'
+        | '5026'
+        | '5027'
+        | '5028'
+        | '5029'
+        | '5030'
+        | '5031'
+        | '5032'
+        | '5033'
+        | '5034'
+        | '5035'
+        | '5036'
+        | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -10391,6 +10610,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -10477,6 +10697,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -10559,6 +10780,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -10641,6 +10863,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -10724,6 +10947,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -10806,6 +11030,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -10887,6 +11112,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -10968,6 +11194,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -11049,6 +11276,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -11130,6 +11358,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -11212,6 +11441,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -11294,6 +11524,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -11375,6 +11606,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -11457,6 +11689,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -11539,6 +11772,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -11621,6 +11855,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -11703,6 +11938,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -12420,6 +12656,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -13543,6 +13780,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -13632,6 +13870,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -14103,6 +14342,9 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelse2Dto': {
       perioder: components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto'][];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelse2MedDiffDto': {
+      perioder: components['schemas']['no.nav.aap.behandlingsflyt.utils.diff.DiffDto<no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto>'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto': {
       /**
@@ -16706,6 +16948,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5040'
+        | '5041'
         | '5050'
         | '5051'
         | '5052'
@@ -17695,11 +17938,12 @@ export interface components {
         | 'RETUR_FRA_BESLUTTER'
         | 'TIL_BEHANDLING'
         | 'TIL_BESLUTTER'
+        | 'TIL_FORHÅNDSVARSEL'
         | 'TIL_GODKJENNING';
       fullstendigPeriode: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.TilbakekrevingPeriode'];
       /**
        * Format: date-time
-       * @example 2025-04-01T12:30:00
+       * @example 2025-04-01T14:30:00+02:00
        */
       sakOpprettet: string;
       saksbehandlingURL: string;
@@ -17709,6 +17953,7 @@ export interface components {
        * @example 2025-04-01
        */
       varselSendt?: string | null;
+      venter?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.TilbakekrevingVenterKafkaDto'];
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.TilbakekrevingPeriode': {
       /**
@@ -17721,6 +17966,15 @@ export interface components {
        * @example 2025-04-01
        */
       tom: string;
+    };
+    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.TilbakekrevingVenterKafkaDto': {
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      gjenopptas: string;
+      /** @enum {string} */
+      grunn: 'AVVENTER_BRUKERUTTALELSE';
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Uf\u00F8revedtak': components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Uf\u00F8revedtakV0'];
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Uf\u00F8revedtakV0': {
@@ -17898,6 +18152,7 @@ export interface components {
         | 'SATT_PÅ_VENT'
         | 'SENDT_TIL_BESLUTTER'
         | 'SENDT_TIL_KVALITETSSIKRER'
+        | 'SØKNAD_TRUKKET'
         | 'TATT_AV_VENT'
         | 'VEDTAK_FATTET';
       resultat?: string | null;
@@ -18094,6 +18349,9 @@ export interface components {
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BrevResponsDTO': {
       html: string;
     };
+    'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BrevmalPreviewResponsDTO': {
+      json: string;
+    };
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.FinnBehandlingForIdentDTO': {
       ident: string;
       /**
@@ -18272,6 +18530,24 @@ export interface components {
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
       /** @enum {string} */
       ytelseType: 'INGENTING' | 'TILTAKSPENGER' | 'TILTAKSPENGER_OG_BARNETILLEGG';
+    };
+    'no.nav.aap.behandlingsflyt.utils.diff.DiffDto<no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto>':
+      | components['schemas']['no.nav.aap.behandlingsflyt.utils.diff.Endret<no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto>']
+      | components['schemas']['no.nav.aap.behandlingsflyt.utils.diff.Fjernet<no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto>']
+      | components['schemas']['no.nav.aap.behandlingsflyt.utils.diff.LagtTil<no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto>']
+      | components['schemas']['no.nav.aap.behandlingsflyt.utils.diff.Uendret<no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto>'];
+    'no.nav.aap.behandlingsflyt.utils.diff.Endret<no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto>': {
+      fra: components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto'];
+      til: components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto'];
+    };
+    'no.nav.aap.behandlingsflyt.utils.diff.Fjernet<no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto>': {
+      fjernet: components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto'];
+    };
+    'no.nav.aap.behandlingsflyt.utils.diff.LagtTil<no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto>': {
+      lagtTil: components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto'];
+    };
+    'no.nav.aap.behandlingsflyt.utils.diff.Uendret<no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto>': {
+      uendret: components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto'];
     };
     'no.nav.aap.brev.kontrakt.Adresse': {
       adresselinje1: string;

@@ -4,7 +4,7 @@ import { MellomlagretVurdering, SamordningUføreGrunnlag } from 'lib/types/types
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { FormEvent } from 'react';
+import { SubmitEventHandler } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { SamordningUføreTabell } from 'components/behandlinger/samordning/samordninguføre/SamordningUføreTabell';
@@ -15,6 +15,7 @@ import { TableStyled } from 'components/tablestyled/TableStyled';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
 
 interface Props {
   grunnlag: SamordningUføreGrunnlag;
@@ -44,6 +45,7 @@ export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly, initia
     'SAMORDNING_UFØRE',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -71,7 +73,7 @@ export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly, initia
     form
   );
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit(async (data) =>
       løsBehovOgGåTilNesteSteg(
         {
@@ -91,12 +93,13 @@ export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly, initia
           referanse: behandlingsreferanse,
         },
         () => {
+          loggUmamiVarighet('STEG_SAMORDNING_UFØRE_VARIGHET', umamiStartTidspunkt, Date.now());
           visningActions.onBekreftClick();
           nullstillMellomlagretVurdering();
         }
       )
     )(event);
-  }
+  };
 
   return (
     <VilkårskortMedFormOgMellomlagring

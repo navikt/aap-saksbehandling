@@ -6,8 +6,8 @@ import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggå
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 
 import styles from 'components/vilkårskort/Vilkårskort.module.css';
-import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
-import { FormEvent, ReactNode } from 'react';
+import { useFlyt } from 'hooks/saksbehandling/FlytHook';
+import { ReactNode, SubmitEventHandler } from 'react';
 import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { ApiException } from 'lib/utils/api';
 import { VisningActions, VisningModus } from 'lib/types/visningTypes';
@@ -17,7 +17,7 @@ export interface VilkårsKortMedFormOgMellomlagringProps {
   heading: string;
   steg: StegType;
   children: ReactNode;
-  onSubmit: (e: FormEvent<HTMLFormElement>) => void;
+  onSubmit: SubmitEventHandler;
   isLoading: boolean;
   status: LøsBehovOgGåTilNesteStegStatus;
   løsBehovOgGåTilNesteStegError: ApiException | undefined;
@@ -51,8 +51,8 @@ export const VilkårskortMedFormOgMellomlagring = ({
   formReset,
 }: VilkårsKortMedFormOgMellomlagringProps) => {
   const classNameBasertPåEnhet = vilkårTilhørerNavKontor ? styles.vilkårsKortNAV : styles.vilkårsKortNAY;
-  const { flyt } = useRequiredFlyt();
-  const erAktivtSteg = flyt.aktivtSteg === steg || visningModus === 'AKTIV_MED_AVBRYT';
+  const { flyt } = useFlyt();
+  const erAktivtSteg = flyt?.aktivtSteg === steg || visningModus === 'AKTIV_MED_AVBRYT';
 
   const readOnly = visningModus === 'LÅST_MED_ENDRE' || visningModus === 'LÅST_UTEN_ENDRE';
 

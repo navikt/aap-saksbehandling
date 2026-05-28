@@ -1,5 +1,11 @@
 import { exhaustiveCheck } from 'lib/utils/typescript';
-import { CheckmarkCircleIcon, EnvelopeClosedIcon, GavelSoundBlockIcon, PlayIcon } from '@navikt/aksel-icons';
+import {
+  CheckmarkCircleIcon,
+  EnvelopeClosedIcon,
+  FileXMarkIcon,
+  GavelSoundBlockIcon,
+  PlayIcon,
+} from '@navikt/aksel-icons';
 
 export type HistorikkEvent =
   | 'SATT_PÅ_VENT' //  Behandling satt på vent, med årsak og begrunnelse
@@ -15,7 +21,8 @@ export type HistorikkEvent =
   | 'KLAGE_OPPRETTET'
   | 'MOTTATT_DIALOGMELDING' // ? Mottatt legeerklæring og dialogmelding
   | 'BESTILT_LEGEERKLÆRING'
-  | 'KVALITETSSIKRET';
+  | 'KVALITETSSIKRET'
+  | 'SØKNAD_TRUKKET';
 
 export function mapEventTilString(historikkEvent: HistorikkEvent) {
   switch (historikkEvent) {
@@ -47,6 +54,8 @@ export function mapEventTilString(historikkEvent: HistorikkEvent) {
       return 'Bestilt legeerklæring';
     case 'KVALITETSSIKRET':
       return 'Kvalitetssikret';
+    case 'SØKNAD_TRUKKET':
+      return 'Søknad trukket';
   }
   exhaustiveCheck(historikkEvent);
 }
@@ -81,6 +90,8 @@ export function mapEventTilIkon(historikkEvent: HistorikkEvent) {
       return null;
     case 'KVALITETSSIKRET':
       return <CheckmarkCircleIcon title="kvalitetssikret" fontSize="1.5rem" />;
+    case 'SØKNAD_TRUKKET':
+      return <FileXMarkIcon title="søknad trukket" fontSize="1.5rem" />;
   }
   exhaustiveCheck(historikkEvent);
 }

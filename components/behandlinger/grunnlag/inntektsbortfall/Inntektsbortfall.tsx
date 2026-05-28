@@ -4,7 +4,6 @@ import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } fro
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import styles from './Inntektsbortfall.module.css';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { FormEvent } from 'react';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { Alert, Table } from '@navikt/ds-react';
@@ -16,6 +15,7 @@ import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { VisningModus } from 'lib/types/visningTypes';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
 
 interface Props {
   behandlingVersjon: number;
@@ -61,6 +61,7 @@ export const Inntektsbortfall = ({
     'VURDER_INNTEKTSBORTFALL',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const defaultValues: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -105,7 +106,7 @@ export const Inntektsbortfall = ({
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       isLoading={isLoading}
       vurderingerMeta={{ vurdertAutomatisk: grunnlag.kanBehandlesAutomatisk, ...vurdering?.vurderingerMeta }}
-      onSubmit={(event: FormEvent<HTMLFormElement>) => {
+      onSubmit={(event) => {
         form.handleSubmit((data) => {
           løsBehovOgGåTilNesteSteg(
             {
@@ -120,6 +121,7 @@ export const Inntektsbortfall = ({
               referanse: behandlingsreferanse,
             },
             () => {
+              loggUmamiVarighet('STEG_INNTEKTSBORTFALL_VARIGHET', umamiStartTidspunkt, Date.now());
               visningActions.onBekreftClick();
               nullstillMellomlagretVurdering();
             }

@@ -29,8 +29,12 @@ import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
-import { loggUmamiVarighetHendelser, useUmamiVarighetHendelser } from 'lib/utils/umami';
-import { UmamiTags } from 'components/umami/Umami';
+import {
+  loggUmamiVarighet,
+  loggUmamiVarighetHendelser,
+  useUmamiStartTidspunkt,
+  useUmamiVarighetHendelser,
+} from 'lib/utils/umami';
 
 interface Props {
   behandlingVersjon: number;
@@ -60,13 +64,14 @@ export const LovvalgOgMedlemskapPeriodisert = ({
     'VURDER_LOVVALG',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const defaultValues = initialMellomlagretVurdering
     ? hentPeriodiserteVerdierFraMellomlagretVurdering(initialMellomlagretVurdering, grunnlag)
     : getDefaultValuesFromGrunnlag(grunnlag);
 
   const { hendelseSerieRef, varighetHendelseRef, addHendelse } = useUmamiVarighetHendelser(
-    UmamiTags.LOVVALG_MEDLEMSKAP_VARIGHET_HENDELSER
+    'LOVVALG_MEDLEMSKAP_VARIGHET_HENDELSER'
   );
 
   const form = useForm<LovOgMedlemskapVurderingForm>({
@@ -122,7 +127,7 @@ export const LovvalgOgMedlemskapPeriodisert = ({
       closeAllAccordions();
       visningActions.onBekreftClick();
       nullstillMellomlagretVurdering();
-      addHendelse(UmamiTags.LOVVALG_MEDLEMSKAP_STEG_FULLFØRT, Date.now());
+      loggUmamiVarighet('STEG_LOVVALG_MEDLEMSKAP_VARIGHET', umamiStartTidspunkt, Date.now());
       loggUmamiVarighetHendelser(varighetHendelseRef.current, hendelseSerieRef.current);
     });
   }
@@ -156,7 +161,7 @@ export const LovvalgOgMedlemskapPeriodisert = ({
           key={crypto.randomUUID()}
           fom={parseISO(vurdering.fom)}
           tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
-          foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+          førsteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
           vurderingStatus={getErOppfyltEllerIkkeStatus(
             vurdering.lovvalg.lovvalgsEØSLandEllerLandMedAvtale === 'NOR' &&
               vurdering.medlemskap?.varMedlemIFolketrygd === true

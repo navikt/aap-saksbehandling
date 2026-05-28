@@ -1,7 +1,7 @@
 'use client';
 
 import { MeldepliktOverstyringLøsningDto, OverstyringMeldepliktGrunnlag, Periode } from 'lib/types/types';
-import { FormEvent } from 'react';
+import { SubmitEventHandler } from 'react';
 import { BodyLong, Link, VStack } from '@navikt/ds-react';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { IkkeMeldtPerioderTable } from 'components/behandlinger/underveis/ikkeoppfyltmeldeplikt/IkkeMeldtPerioderTable';
@@ -16,6 +16,7 @@ import { Behovstype } from 'lib/utils/form';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
 
 type Props = {
   grunnlag?: OverstyringMeldepliktGrunnlag;
@@ -34,6 +35,7 @@ export const IkkeOppfyltMeldeplikt = ({ grunnlag, behandlingVersjon, readOnly }:
     'IKKE_OPPFYLT_MELDEPLIKT',
     undefined
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   /**
    * Ikke meldte perioder som skal vises er alle perioder som er registrert som ikke meldt
@@ -101,7 +103,7 @@ export const IkkeOppfyltMeldeplikt = ({ grunnlag, behandlingVersjon, readOnly }:
   const { fields: vurderinger, append, remove } = useFieldArray({ control: form.control, name: 'vurderinger' });
   const valgtePerioder = vurderinger.map((v) => v.fraDato).sort((a, b) => a.localeCompare(b));
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
       const meldepliktOverstyringDto: MeldepliktOverstyringLøsningDto = {
         perioder: data.vurderinger
@@ -124,6 +126,7 @@ export const IkkeOppfyltMeldeplikt = ({ grunnlag, behandlingVersjon, readOnly }:
           },
         },
         () => {
+          loggUmamiVarighet('STEG_IKKEOPPFYLT_MELDEPLIKT_VARIGHET', umamiStartTidspunkt, Date.now());
           visningActions.onBekreftClick();
         }
       );

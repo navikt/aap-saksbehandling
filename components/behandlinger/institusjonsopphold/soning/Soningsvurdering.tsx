@@ -6,7 +6,7 @@ import { InstitusjonsoppholdTabell } from '../InstitusjonsoppholdTabell';
 import { Behovstype, JaEllerNei } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { FormEvent } from 'react';
+import { SubmitEvent } from 'react';
 import { useFieldArray } from 'react-hook-form';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { BodyShort, Button, Label, Radio } from '@navikt/ds-react';
@@ -21,6 +21,7 @@ import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupW
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
 
 interface Props {
   grunnlag: Soningsgrunnlag;
@@ -51,6 +52,7 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon, initi
     'DU_ER_ET_ANNET_STED',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -71,7 +73,7 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon, initi
 
   const { fields, remove, append } = useFieldArray({ control: form.control, name: 'soningsvurderinger' });
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: SubmitEvent) => {
     form.handleSubmit((data) => {
       løsBehovOgGåTilNesteSteg(
         {
@@ -91,6 +93,7 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon, initi
           referanse: behandlingsreferanse,
         },
         () => {
+          loggUmamiVarighet('STEG_SONINGSFORHOLD_VARIGHET', umamiStartTidspunkt, Date.now());
           nullstillMellomlagretVurdering();
           visningActions.onBekreftClick();
         }

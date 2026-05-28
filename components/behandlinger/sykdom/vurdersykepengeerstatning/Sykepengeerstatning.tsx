@@ -29,6 +29,7 @@ import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/form
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
 
 interface Props {
   behandlingVersjon: number;
@@ -48,6 +49,7 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
     'VURDER_SYKEPENGEERSTATNING',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const defaultValues = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -115,6 +117,7 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
     };
 
     løsPeriodisertBehovOgGåTilNesteSteg(losning, () => {
+      loggUmamiVarighet('STEG_SYKEPENGEERSTATNING_VARIGHET', umamiStartTidspunkt, Date.now());
       nullstillMellomlagretVurdering();
       visningActions.onBekreftClick();
       closeAllAccordions();
@@ -150,7 +153,7 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
           key={crypto.randomUUID()}
           fom={parseISO(vurdering.fom)}
           tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
-          foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+          førsteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
           vurderingStatus={getErOppfyltEllerIkkeStatus(vurdering.harRettPå)}
           vurderingerMeta={vurdering.vurderingerMeta}
         >

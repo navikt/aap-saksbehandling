@@ -1,6 +1,6 @@
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { SykdomsvurderingMedDataFetching } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedDataFetching';
-import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { hentFlyt, hentYrkesskadeVurderingGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { getAvklaringsbehovForSteg, getStegData } from 'lib/utils/steg';
 import { BistandsbehovMedDataFetching } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovMedDataFetching';
 import { MeldepliktMedDataFetching } from 'components/behandlinger/sykdom/meldeplikt/MeldepliktMedDataFetching';
@@ -19,15 +19,24 @@ import { EtableringAvEgenVirksomhetMedDatafetching } from 'components/behandling
 import { Behovstype } from 'lib/utils/form';
 import { BehandlingFlytOgTilstand, StegGruppe } from 'lib/types/types';
 import { BekreftVurderingerOppfølgingMedDataFetching } from 'components/behandlinger/sykdom/bekreftvurderingeroppfølging/BekreftVurderingerOppfølgingMedDataFetching';
+import { OppgittYrkesskadeUtenRegistertreffInfo } from 'components/behandlinger/sykdom/yrkesskade/OppgittYrkesskadeUtenRegistertreffInfo';
 
 interface Props {
   behandlingsreferanse: string;
 }
 
 export const Sykdom = async ({ behandlingsreferanse }: Props) => {
-  const flyt = await hentFlyt(behandlingsreferanse);
-  if (isError(flyt)) {
+  const [flyt, yrkesskadeVurderingGrunnlag] = await Promise.all([
+    hentFlyt(behandlingsreferanse),
+    hentYrkesskadeVurderingGrunnlag(behandlingsreferanse),
+  ]);
+
+  if (isError(flyt) || isError(yrkesskadeVurderingGrunnlag)) {
     return <ApiException apiResponses={[flyt]} />;
+  }
+
+  if (isError(yrkesskadeVurderingGrunnlag)) {
+    return <ApiException apiResponses={[yrkesskadeVurderingGrunnlag]} />;
   }
 
   const aktivStegGruppe = 'SYKDOM';
@@ -44,6 +53,7 @@ export const Sykdom = async ({ behandlingsreferanse }: Props) => {
   const vurderSykepengeerstatningSteg = getStegData(aktivStegGruppe, 'VURDER_SYKEPENGEERSTATNING', flyt.data);
   const overganguføreSteg = getStegData(aktivStegGruppe, 'OVERGANG_UFORE', flyt.data);
   const overgangarbeidSteg = getStegData(aktivStegGruppe, 'OVERGANG_ARBEID', flyt.data);
+  const oppgittYrkesskadeInfoSteg = hentStegDataForOppgittYrkesskadeInfo(yrkesskadeVurderingGrunnlag.data);
 
   return (
     <GruppeSteg
@@ -133,6 +143,11 @@ export const Sykdom = async ({ behandlingsreferanse }: Props) => {
           <YrkesskadeMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={vurderYrkesskadeSteg} />
         </StegSuspense>
       )}
+      {oppgittYrkesskadeInfoSteg.skalViseSteg && !vurderYrkesskadeSteg.skalViseSteg && (
+        <StegSuspense>
+          <OppgittYrkesskadeUtenRegistertreffInfo grunnlag={yrkesskadeVurderingGrunnlag.data} />
+        </StegSuspense>
+      )}
       {vurderSykepengeerstatningSteg.skalViseSteg && (
         <StegSuspense>
           <SykepengeerstatningMedDataFetching
@@ -144,6 +159,19 @@ export const Sykdom = async ({ behandlingsreferanse }: Props) => {
     </GruppeSteg>
   );
 };
+
+export function hentStegDataForOppgittYrkesskadeInfo(grunnlag: {
+  opplysninger: { oppgittYrkesskadeISøknad?: boolean | null };
+  yrkesskadeVurdering?: unknown;
+}) {
+  const oppgittYrkesskadeISøknad = grunnlag.opplysninger.oppgittYrkesskadeISøknad;
+  const harIngenYrkesskadeId = grunnlag.yrkesskadeVurdering == null;
+
+  return {
+    skalViseSteg: oppgittYrkesskadeISøknad === true && harIngenYrkesskadeId,
+    readOnly: true,
+  };
+}
 
 export function getStegDataForBekreftVurderingerOppfølgingSteg(
   aktivStegGruppe: StegGruppe,

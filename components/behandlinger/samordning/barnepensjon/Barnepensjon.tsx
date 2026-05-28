@@ -15,6 +15,7 @@ import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { replaceCommasWithDots } from 'lib/utils/string';
 import { hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import { FormErrorSummary } from 'components/formerrorsummary/FormErrorSummary';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
 
 interface Props {
   grunnlag: BarnepensjonGrunnlag;
@@ -47,6 +48,7 @@ export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering, behandlin
     'SAMORDNING_BARNEPENSJON',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -100,6 +102,7 @@ export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering, behandlin
             },
           },
           () => {
+            loggUmamiVarighet('STEG_BARNEPENSJON_VARIGHET', umamiStartTidspunkt, Date.now());
             nullstillMellomlagretVurdering();
             visningActions.onBekreftClick();
           }

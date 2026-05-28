@@ -2,6 +2,7 @@ import 'server-only';
 import { isLocal } from 'lib/utils/environment';
 import { getToken } from '@navikt/oasis';
 import { redirect } from 'next/navigation';
+import { buildOAuthLoginUrl } from 'lib/services/azure/redirectUtils';
 
 const lokalFakeAccessToken = isLocal();
 export function getAccessTokenOrRedirectToLogin(headers: Headers): string {
@@ -10,7 +11,7 @@ export function getAccessTokenOrRedirectToLogin(headers: Headers): string {
   const redirectPath = headers.get('x-path');
   const token = getToken(headers);
   if (!token) {
-    redirect(`/oauth2/login?redirect=${redirectPath}`);
+    redirect(buildOAuthLoginUrl(redirectPath));
   }
 
   return token;

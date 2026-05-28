@@ -10,7 +10,7 @@ import { BrevdataDto, BrevMottaker, Mottaker, RefusjonskravGrunnlag, TypeBehandl
 import { BrevmalType } from 'components/brevbygger/brevmodellTypes';
 import { Behovstype } from 'lib/utils/form';
 import { clientOppdaterBrevmal } from 'lib/clientApi';
-import { revalidateFlyt } from 'lib/actions/actions';
+import { revalidateBehandlingPath } from 'lib/actions/actions';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 
 import { ForhåndsvisBrev } from 'components/brevbygger/ForhåndsvisBrev';
@@ -60,12 +60,12 @@ export const Brevbygger = ({
   const { control, trigger, watch } = useForm<BrevFormVerdier>({
     values: initialiserFormVerdier(parsedBrevmal, brevdata),
   });
-  const umamiStartTidspunkt = useUmamiStartTidspunkt();
+  const umamiStartTidspunkt = useUmamiStartTidspunkt('AKTIV');
 
   const { pdfDataUri, lasterPdf } = useMellomlagringAvBrev({ referanse, control, brevmal: parsedBrevmal, brevdata });
 
   const router = useRouter();
-  const { behandlingsreferanse } = useParamsMedType();
+  const { behandlingsreferanse, saksnummer } = useParamsMedType();
   const {
     løsBehovOgGåTilNesteSteg,
     status: løsBehovStatus,
@@ -112,7 +112,7 @@ export const Brevbygger = ({
       },
       referanse: behandlingsreferanse,
     });
-    await revalidateFlyt(behandlingsreferanse);
+    await revalidateBehandlingPath(saksnummer, behandlingsreferanse);
   };
 
   const oppdaterBrevmal = async () => {

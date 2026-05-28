@@ -60,7 +60,6 @@ export const SykdomsvurderingNedsattArbeidsevneDetaljer = ({
 
       <SykdomsvurderingYrkesskade
         form={form}
-        erÅrsakssammenhengYrkesskade={erÅrsakssammenhengYrkesskade}
         index={index}
         readonly={readonly}
         skalVurdereYrkesskade={skalVurdereYrkesskade}
@@ -103,7 +102,6 @@ const SykdomsvurderingYrkesskade = ({
   form,
   vurderingDatoSammeSomRettighetsperiodeStart,
   skalVurdereYrkesskade,
-  erÅrsakssammenhengYrkesskade,
   index,
   readonly,
 }: {
@@ -112,7 +110,6 @@ const SykdomsvurderingYrkesskade = ({
   readonly: boolean;
   vurderingDatoSammeSomRettighetsperiodeStart: boolean;
   skalVurdereYrkesskade: boolean;
-  erÅrsakssammenhengYrkesskade: boolean;
 }) => {
   /*
    * Logikken for yrkesskade er litt kronglete.
@@ -158,7 +155,7 @@ const SykdomsvurderingYrkesskade = ({
     );
   } else {
     return (
-      erÅrsakssammenhengYrkesskade && (
+      skalVurdereYrkesskade && (
         <RadioGroupJaNei
           name={`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense`}
           control={form.control}

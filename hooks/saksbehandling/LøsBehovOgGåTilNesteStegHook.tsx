@@ -20,7 +20,7 @@ import {
 } from 'lib/clientApi';
 import { useIngenFlereOppgaverModal } from 'hooks/saksbehandling/IngenFlereOppgaverModalHook';
 import { ApiException, isError, isSuccess } from 'lib/utils/api';
-import { useRequiredFlyt } from 'hooks/saksbehandling/FlytHook';
+import { useFlyt } from 'hooks/saksbehandling/FlytHook';
 import { Behovstype } from 'lib/utils/form';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import { hentTildeltStatusClient } from 'lib/oppgaveClientApi';
@@ -45,9 +45,11 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
     sjekkTildeltStatus?: boolean
   ) => void;
 } {
+  const erLokal = isLocal();
+
   const params = useParamsMedType();
   const router = useRouter();
-  const { refetchFlytClient } = useRequiredFlyt();
+  const { refetchFlytClient } = useFlyt();
   const { setIsModalOpen } = useIngenFlereOppgaverModal();
   const { setVisOverstyrModal, setCallback, setReservertAvNavn } = useOverstyrTildelingHook();
 
@@ -56,7 +58,6 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
   const [error, setError] = useState<ApiException | undefined>();
   const [isPending, startTransition] = useTransition();
 
-  const erLokal = isLocal();
   const sisteBehovRef = useRef<{
     behov: LøsAvklaringsbehovPåBehandling | LøsPeriodisertBehovPåBehandling;
     erPeriodisert: boolean;
@@ -106,6 +107,7 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
         const flytResponse = await clientHentFlyt(params.behandlingsreferanse);
 
         if (isSuccess(flytResponse)) {
+          // Logg steg fullført til umami
           const clientLøsBehovEtterConflict = erPeriodisert
             ? await clientLøsPeriodisertBehov({
                 ...(behov as LøsPeriodisertBehovPåBehandling), // TODO: Rydd opp i typene

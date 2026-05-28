@@ -34,6 +34,7 @@ import { ForutgåendeMedlemskapFormInput } from 'components/behandlinger/forutg�
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
 
 interface Props {
   behandlingVersjon: number;
@@ -63,6 +64,7 @@ export const ForutgåendeMedlemskapPeriodisert = ({
     'VURDER_MEDLEMSKAP',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
@@ -118,6 +120,7 @@ export const ForutgåendeMedlemskapPeriodisert = ({
     };
 
     løsPeriodisertBehovOgGåTilNesteSteg(losning, () => {
+      loggUmamiVarighet('STEG_FORUTGÅENDE_MEDLEMSKAP_VARIGHET', umamiStartTidspunkt, Date.now());
       closeAllAccordions();
       visningActions.onBekreftClick();
       nullstillMellomlagretVurdering();
@@ -153,7 +156,7 @@ export const ForutgåendeMedlemskapPeriodisert = ({
           key={crypto.randomUUID()}
           fom={parseISO(vurdering.fom)}
           tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
-          foersteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
+          førsteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
           vurderingStatus={getErOppfyltEllerIkkeStatus(
             vurdering.harForutgåendeMedlemskap ||
               vurdering.varMedlemMedNedsattArbeidsevne === true ||

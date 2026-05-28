@@ -1,15 +1,15 @@
 'use server';
 
-import { revalidateTag } from 'next/cache';
+import { revalidatePath } from 'next/cache';
 import { logWarning } from 'lib/serverutlis/logger';
 import { ClientError } from 'lib/types/clientTypes';
 
-export async function revalidateFlyt(behandlingReferanse: string) {
-  revalidateTag(`flyt/${behandlingReferanse}`, 'max');
+export async function revalidateBehandlingPath(saksnummer: string, behandlingsreferanse: string) {
+  revalidatePath(`/saksbehandling/sak/${saksnummer}/${behandlingsreferanse}`, 'layout');
 }
 
-export async function revalidatePostMottakFlyt(behandlingReferanse: string) {
-  revalidateTag(`postmottak/flyt/${behandlingReferanse}`, 'max');
+export async function revalidatePostMottakBehandling(behandlingReferanse: string) {
+  revalidatePath(`/postmottak/${behandlingReferanse}`);
 }
 
 export async function logClientWarning(error: ClientError) {

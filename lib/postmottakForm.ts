@@ -59,7 +59,7 @@ export enum JaNeiAvbruttIkkeOppgitt {
 export const JaNeiAbruttEllerIkkeOpgittOptions: ValuePair[] = [
   { label: 'Ja', value: JaNeiAvbruttIkkeOppgitt.JA },
   { label: 'Nei', value: JaNeiAvbruttIkkeOppgitt.NEI },
-  { label: 'Avbrutt', value: JaNeiAvbruttIkkeOppgitt.AVBRUTT },
+  { label: 'Ja, og at de har avbrutt studiet', value: JaNeiAvbruttIkkeOppgitt.AVBRUTT },
   { label: 'Ikke oppgitt', value: JaNeiAvbruttIkkeOppgitt.IKKE_OPPGITT },
 ];
 

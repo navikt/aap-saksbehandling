@@ -1,18 +1,16 @@
 'use client';
 
 import {
-  JaNeiAbruttEllerIkkeOpgittOptions,
-  JaNeiAvbruttIkkeOppgitt,
-  JaNeiEllerIkkeOppgittOptions,
   JaEllerNei,
   JaEllerNeiOptions,
+  JaNeiAbruttEllerIkkeOpgittOptions,
+  JaNeiAvbruttIkkeOppgitt,
+  JaNeiEllerVetIkkeOptions,
   JaNeiIkkeOppgitt,
   JaNeiVetIkke,
   stringToJaEllerNei,
   stringToJaNeiAvbruttIkkeOppgitt,
-  stringToJaNeiIkkeOppgitt,
   stringToJaNeiVetikke,
-  JaNeiEllerVetIkkeOptions,
 } from 'lib/postmottakForm';
 import { Barnetillegg } from './Barnetillegg';
 import { Medlemskap } from './Medlemskap';
@@ -26,7 +24,7 @@ import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { isBefore, parse, startOfDay } from 'date-fns';
 import { validerDato } from 'lib/validation/dateValidation';
-import { FormEvent } from 'react';
+import { SubmitEventHandler } from 'react';
 import { formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
 
 export type Utenlandsopphold = {
@@ -144,14 +142,14 @@ export const DigitaliserSøknad = ({ grunnlag, registrertDato, readOnly, submit,
       },
       yrkesSkade: {
         type: 'radio',
-        label: 'Har søker yrkesskade?',
-        options: JaNeiEllerIkkeOppgittOptions,
-        defaultValue: søknadGrunnlag.yrkesskade ? stringToJaNeiIkkeOppgitt(søknadGrunnlag.yrkesskade) : undefined,
+        label: 'Har brukeren oppgitt at de har en relevant yrkesskade?',
+        options: JaEllerNeiOptions,
+        defaultValue: søknadGrunnlag.yrkesskade ? stringToJaEllerNei(søknadGrunnlag.yrkesskade) : undefined,
         rules: { required: 'Du må velge om brukeren har oppgitt en yrkesskade' },
       },
       erStudent: {
         type: 'radio',
-        label: 'Er søkeren student?',
+        label: 'Har brukeren oppgitt at de er student?',
         options: JaNeiAbruttEllerIkkeOpgittOptions,
         defaultValue: søknadGrunnlag.student?.erStudent
           ? stringToJaNeiAvbruttIkkeOppgitt(søknadGrunnlag.student.erStudent)
@@ -171,7 +169,7 @@ export const DigitaliserSøknad = ({ grunnlag, registrertDato, readOnly, submit,
       },
       arbeidetUtenforNorgeFørSykdom: {
         type: 'radio',
-        label: 'Arbeidet søker utenfor Norge de siste fem årene?',
+        label: 'Har brukeren oppgitt at de har arbeidet utenfor Norge siste 5 år?',
         options: JaEllerNeiOptions,
         defaultValue: søknadGrunnlag.medlemskap?.arbeidetUtenforNorgeFørSykdom
           ? stringToJaEllerNei(søknadGrunnlag.medlemskap.arbeidetUtenforNorgeFørSykdom)
@@ -180,7 +178,7 @@ export const DigitaliserSøknad = ({ grunnlag, registrertDato, readOnly, submit,
       },
       harArbeidetINorgeSiste5År: {
         type: 'radio',
-        label: 'Har søker arbeidet sammenhengende i Norge siste 5 år?',
+        label: 'Har brukeren oppgitt at de har arbeidet sammenhengende i Norge siste 5 år?',
         options: JaEllerNeiOptions,
         defaultValue: søknadGrunnlag.medlemskap?.harArbeidetINorgeSiste5År
           ? stringToJaEllerNei(søknadGrunnlag.medlemskap.harArbeidetINorgeSiste5År)
@@ -189,7 +187,7 @@ export const DigitaliserSøknad = ({ grunnlag, registrertDato, readOnly, submit,
       },
       harBoddINorgeSiste5År: {
         type: 'radio',
-        label: 'Har søker bodd sammenhengende i Norge siste 5 år?',
+        label: 'Har brukeren oppgitt at de har bodd sammenhengende i Norge siste 5 år?',
         options: JaEllerNeiOptions,
         defaultValue: søknadGrunnlag.medlemskap?.harBoddINorgeSiste5År
           ? stringToJaEllerNei(søknadGrunnlag.medlemskap.harBoddINorgeSiste5År)
@@ -212,7 +210,7 @@ export const DigitaliserSøknad = ({ grunnlag, registrertDato, readOnly, submit,
     { readOnly }
   );
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) =>
       submit('SØKNAD', mapTilSøknadKontrakt(data), parseDatoFraDatePicker(data.søknadsDato)!)
     )(event);

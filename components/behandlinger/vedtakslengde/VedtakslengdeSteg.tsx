@@ -31,6 +31,7 @@ import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/form
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import React from 'react';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
 
 interface VedtakslengdeVurderingForm extends VurderingFormMeta {
   manuellVurdering: boolean;
@@ -92,6 +93,7 @@ export const VedtakslengdeSteg = ({
     'FASTSETT_VEDTAKSLENGDE',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const defaultValues: VedtakslengdeForm = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -160,6 +162,7 @@ export const VedtakslengdeSteg = ({
     };
 
     løsPeriodisertBehovOgGåTilNesteSteg(losning, () => {
+      loggUmamiVarighet('STEG_VEDTAKSLENGDE_VARIGHET', umamiStartTidspunkt, Date.now());
       closeAllAccordions();
       visningActions.onBekreftClick();
       nullstillMellomlagretVurdering();
@@ -195,7 +198,7 @@ export const VedtakslengdeSteg = ({
           key={`vedtatt-${index}`}
           fom={parseISO(vurdering.fom)}
           tom={vurdering.tom ? parseISO(vurdering.tom) : null}
-          foersteNyePeriodeFraDato={foersteNyePeriode == null ? null : parseDatoFraDatePicker(foersteNyePeriode)}
+          førsteNyePeriodeFraDato={foersteNyePeriode == null ? null : parseDatoFraDatePicker(foersteNyePeriode)}
           vurderingStatus={
             vurdering.manuellVurdering
               ? VurderingStatus.VedtaksperiodeManuell
@@ -213,7 +216,7 @@ export const VedtakslengdeSteg = ({
             key={`ny-automatisk-${index}`}
             fom={parseISO(vurdering.fom)}
             tom={vurdering.tom ? parseISO(vurdering.tom) : null}
-            foersteNyePeriodeFraDato={foersteNyePeriode == null ? null : parseDatoFraDatePicker(foersteNyePeriode)}
+            førsteNyePeriodeFraDato={foersteNyePeriode == null ? null : parseDatoFraDatePicker(foersteNyePeriode)}
             vurderingStatus={VurderingStatus.VedtaksperiodeAutomatisk}
             vurderingerMeta={vurdering.vurderingerMeta}
           >

@@ -11,29 +11,31 @@ import { SøknadFormFields } from 'components/postmottak/digitaliserdokument/sø
 import { useEffect } from 'react';
 
 interface Props {
-  i: number;
+  index: number;
   form: UseFormReturn<SøknadFormFields>;
   readOnly: boolean;
   remove: UseFieldArrayRemove;
 }
 
-export const LeggTilBarn = ({ i, form, readOnly, remove }: Props) => {
-  const manglerIdent = form.watch(`oppgitteBarn.${i}.checkboxList`).includes('manglerIdent');
+export const LeggTilBarn = ({ index, form, readOnly, remove }: Props) => {
+  const manglerIdent = form.watch(`oppgitteBarn.${index}.checkboxList`).includes('manglerIdent');
+
   useEffect(() => {
     if (manglerIdent) {
-      form.setValue(`oppgitteBarn.${i}.fnr`, '');
-      form.clearErrors(`oppgitteBarn.${i}.fnr`);
+      form.setValue(`oppgitteBarn.${index}.fnr`, '');
+      form.clearErrors(`oppgitteBarn.${index}.fnr`);
     }
   }, [manglerIdent]);
+
   return (
-    <VStack key={`div-${i}`} gap={'space-16'} className={styles.barn}>
+    <VStack key={`div-${index}`} gap={'space-16'} className={styles.barn}>
       <HStack gap={'space-16'}>
         <VStack>
           <TextFieldWrapper
             label={'Fornavn og mellomnavn'}
             type={'text'}
             className={styles.input}
-            name={`oppgitteBarn.${i}.fornavn`}
+            name={`oppgitteBarn.${index}.fornavn`}
             control={form.control}
             readOnly={readOnly}
             rules={{
@@ -46,7 +48,7 @@ export const LeggTilBarn = ({ i, form, readOnly, remove }: Props) => {
             label={'Etternavn'}
             type={'text'}
             className={styles.input}
-            name={`oppgitteBarn.${i}.etternavn`}
+            name={`oppgitteBarn.${index}.etternavn`}
             control={form.control}
             readOnly={readOnly}
             rules={{
@@ -59,7 +61,7 @@ export const LeggTilBarn = ({ i, form, readOnly, remove }: Props) => {
         <VStack>
           <SelectWrapper
             label={'Hva er relasjonen til barnet'}
-            name={`oppgitteBarn.${i}.relasjon`}
+            name={`oppgitteBarn.${index}.relasjon`}
             control={form.control}
             readOnly={readOnly}
             className={styles.input}
@@ -74,7 +76,7 @@ export const LeggTilBarn = ({ i, form, readOnly, remove }: Props) => {
         <VStack>
           <DateInputWrapper
             label={'Fødselsdato'}
-            name={`oppgitteBarn.${i}.fødselsdato`}
+            name={`oppgitteBarn.${index}.fødselsdato`}
             control={form.control}
             readOnly={readOnly}
             rules={{
@@ -98,7 +100,7 @@ export const LeggTilBarn = ({ i, form, readOnly, remove }: Props) => {
               label={'Fødselsnummer eller D-nummer'}
               type={'text'}
               className={styles.input}
-              name={`oppgitteBarn.${i}.fnr`}
+              name={`oppgitteBarn.${index}.fnr`}
               control={form.control}
               readOnly={readOnly}
               rules={{
@@ -112,7 +114,7 @@ export const LeggTilBarn = ({ i, form, readOnly, remove }: Props) => {
             hideLabel={true}
             readOnly={readOnly}
             control={form.control}
-            name={`oppgitteBarn.${i}.checkboxList`}
+            name={`oppgitteBarn.${index}.checkboxList`}
           >
             <Checkbox value={'manglerIdent'}>Barn mangler fødselsnummer og D-nummer</Checkbox>
           </CheckboxWrapper>
@@ -125,7 +127,7 @@ export const LeggTilBarn = ({ i, form, readOnly, remove }: Props) => {
           icon={<TrashIcon title={'Fjern barn'} />}
           variant={'tertiary'}
           type={'button'}
-          onClick={() => remove(i)}
+          onClick={() => remove(index)}
           disabled={readOnly}
         >
           Fjern barn

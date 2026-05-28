@@ -47,7 +47,7 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly, gru
 
   useEffect(() => {
     form.clearErrors(`vurderinger`);
-  }, [utviklingperiodeList, oppstartsperiodeList, form.clearErrors]);
+  }, [utviklingperiodeList, oppstartsperiodeList, form]);
 
   return (
     <VStack gap={'space-16'}>
