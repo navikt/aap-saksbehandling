@@ -36,7 +36,7 @@ import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/sy
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
-import { Alert, BodyLong, Link, VStack } from '@navikt/ds-react';
+import { Alert, VStack } from '@navikt/ds-react';
 import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
 import {
   emptySykdomsvurdering,
@@ -48,7 +48,7 @@ import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
 import { useFeatureFlag } from 'context/UnleashContext';
-import { eksterneLenker } from 'components/behandlinger/sykdom/sykdomsvurdering/eksterneLenker';
+import { EksterneLenker } from 'components/vilkårskort/eksternelenker/EksterneLenker';
 
 export interface SykdomsvurderingerForm {
   vurderinger: Array<Sykdomsvurdering>;
@@ -195,14 +195,9 @@ export const Sykdomsvurdering = ({
           : append(emptySykdomsvurdering(utledDiagnoserForNyVurdering()))
       }
       errorList={errorList}
-      eksterneLenker={eksterneLenker}
     >
       <VStack gap={'space-16'}>
-        <BodyLong size={'small'}>
-          <Link href="https://lovdata.no/nav/rundskriv/r11-00#KAPITTEL_7-1" target="_blank">
-            Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-5 (lovdata.no)
-          </Link>
-        </BodyLong>
+        <EksterneLenker steg={'AVKLAR_SYKDOM'} />
 
         {erOvergangArbeid && (
           <Alert variant={'info'} size={'small'}>

@@ -1,4 +1,4 @@
-import { EksternLenkeIVilkårskort, MellomlagretVurdering, StegType } from 'lib/types/types';
+import { MellomlagretVurdering, StegType, VurderingerMeta } from 'lib/types/types';
 import styles from './VilkårskortPeriodisert.module.css';
 import { Button, Detail, Heading, HGrid, HStack, VStack } from '@navikt/ds-react';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
@@ -10,9 +10,7 @@ import { Dispatch, ReactNode, SetStateAction, SubmitEventHandler } from 'react';
 import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { ApiException } from 'lib/utils/api';
 import { VisningActions, VisningModus } from 'lib/types/visningTypes';
-import { VurderingerMeta } from 'lib/types/types';
 import { VurdertAvAnsattDetail } from 'components/vurdertav/VurdertAvAnsattDetail';
-import { EksterneLenker } from 'components/vilkårskort/eksternelenker/EksterneLenker';
 
 interface VilkårsKortPeriodisertProps {
   heading: string;
@@ -36,7 +34,6 @@ interface VilkårsKortPeriodisertProps {
   visOverstyrTildelingModal?: boolean;
   setVisOverstyrTildelingModal?: Dispatch<SetStateAction<boolean>>;
   reservertAvNavn?: string;
-  eksterneLenker?: EksternLenkeIVilkårskort[];
 }
 
 export const VilkårskortPeriodisert = ({
@@ -57,7 +54,6 @@ export const VilkårskortPeriodisert = ({
   onLeggTilVurdering,
   formReset,
   errorList,
-  eksterneLenker,
 }: VilkårsKortPeriodisertProps) => {
   const classNameBasertPåEnhet = vilkårTilhørerNavKontor ? styles.vilkårsKortNAV : styles.vilkårsKortNAY;
   const erAktivtSteg = visningModus === 'AKTIV_UTEN_AVBRYT' || visningModus === 'AKTIV_MED_AVBRYT';
@@ -76,7 +72,6 @@ export const VilkårskortPeriodisert = ({
           {heading}
         </Heading>
       </HGrid>
-      {eksterneLenker && eksterneLenker.length > 0 && <EksterneLenker lenker={eksterneLenker} />}
       <VStack>
         <form onSubmit={onSubmit} id={steg} autoComplete="off">
           <VStack gap="space-16">
