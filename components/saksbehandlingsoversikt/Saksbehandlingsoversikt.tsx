@@ -29,6 +29,18 @@ enum Tab {
   HISTORIKK = 'HISTORIKK',
 }
 
+const ToggleButton = ({ expanded, setExpanded }: { expanded: boolean; setExpanded: (e: boolean) => void }) => (
+  <div className={expanded ? styles.utvidetWrapper : styles.skjultWrapper}>
+    <Button
+      size="small"
+      variant={'tertiary'}
+      type={'button'}
+      icon={expanded ? <ChevronRightDoubleIcon title="Skjul kolonne" /> : <ChevronLeftDoubleIcon title="Vis kolonne" />}
+      onClick={() => setExpanded(!expanded)}
+    />
+  </div>
+);
+
 interface Props {
   behandling: DetaljertBehandling;
   sak: SaksInfo;
@@ -65,26 +77,45 @@ export const Saksbehandlingsoversikt = ({
     setToggleGroupValue(tab);
   };
 
+  const tabs = [
+    {
+      tooltip: 'Informasjon om behandlingen',
+      label: 'Behandling',
+      tabName: Tab.BEHANDLINGSINFO,
+      icon: <FolderFileIcon aria-hidden />,
+    },
+    {
+      tooltip: 'Informasjon om klagebehandling',
+      label: 'Klage',
+      tabName: Tab.KLAGEBEHANDLINGINFO,
+      icon: <PersonGavelIcon aria-hidden />,
+    },
+    {
+      tooltip: 'Åpne saksdokumenter',
+      label: 'Saksdokumenter',
+      tabName: Tab.SAKSDOKUMENTER,
+      icon: <FilesIcon aria-hidden />,
+    },
+    {
+      tooltip: 'Åpne be om opplysninger',
+      label: 'Be om opplysninger',
+      tabName: Tab.BE_OM_OPPLYSNINGER,
+      icon: <HddDownIcon aria-hidden />,
+    },
+    {
+      tooltip: 'Historikk',
+      label: 'Historikk',
+      tabName: Tab.HISTORIKK,
+      icon: <ClockDashedIcon aria-hidden />,
+    },
+  ];
+
   return (
-    <div className={`${styles.saksbehandlingsoversikt} ${expanded ? '' : styles.hidden}`}>
+    <div className={`${styles.saksbehandlingsoversikt} ${expanded ? '' : styles.minimert}`}>
       {expanded && (
         <>
           <HGrid columns={'1fr auto'}>
-            <div className={styles.hide}>
-              <Button
-                size="small"
-                variant={'tertiary'}
-                type={'button'}
-                icon={
-                  expanded ? (
-                    <ChevronRightDoubleIcon title="Skjul kolonne" />
-                  ) : (
-                    <ChevronLeftDoubleIcon title="Vis kolonne" />
-                  )
-                }
-                onClick={() => setExpanded(!expanded)}
-              />
-            </div>
+            <ToggleButton expanded={expanded} setExpanded={setExpanded} />
             <Tabs
               defaultValue={toggleGroupValue}
               onChange={(value) => setToggleGroupValue(value as Tab)}
@@ -94,27 +125,13 @@ export const Saksbehandlingsoversikt = ({
               fill
             >
               <Tabs.List className={expanded ? '' : styles.hidden}>
-                <Tooltip content={'Informasjon om behandlingen'}>
-                  <Tabs.Tab value={Tab.BEHANDLINGSINFO} label={'Behandling'} icon={<FolderFileIcon aria-hidden />} />
-                </Tooltip>
-                {visKlagebehandlingFane && (
-                  <Tooltip content={'Informasjon om klagebehandling'}>
-                    <Tabs.Tab value={Tab.KLAGEBEHANDLINGINFO} label={'Klage'} icon={<PersonGavelIcon aria-hidden />} />
-                  </Tooltip>
-                )}
-                <Tooltip content={'Åpne saksdokumenter'}>
-                  <Tabs.Tab value={Tab.SAKSDOKUMENTER} label={'Saksdokumenter'} icon={<FilesIcon aria-hidden />} />
-                </Tooltip>
-                <Tooltip content={'Åpne be om opplysninger'}>
-                  <Tabs.Tab
-                    value={Tab.BE_OM_OPPLYSNINGER}
-                    label={'Be om opplysninger'}
-                    icon={<HddDownIcon aria-hidden />}
-                  />
-                </Tooltip>
-                <Tooltip content={'Historikk'}>
-                  <Tabs.Tab value={Tab.HISTORIKK} label={'Historikk'} icon={<ClockDashedIcon aria-hidden />} />
-                </Tooltip>
+                {tabs
+                  .filter((tab) => (!visKlagebehandlingFane ? tab.tabName !== Tab.KLAGEBEHANDLINGINFO : true))
+                  .map((tab) => (
+                    <Tooltip content={tab.tooltip} key={tab.tabName}>
+                      <Tabs.Tab value={tab.tabName} icon={tab.icon} label={tab.label} />
+                    </Tooltip>
+                  ))}
               </Tabs.List>
             </Tabs>
           </HGrid>
@@ -132,60 +149,22 @@ export const Saksbehandlingsoversikt = ({
         </>
       )}
       {!expanded && (
-        <VStack>
-          <div style={{ borderBottom: '1px solid var(--ax-border-neutral-subtle)' }}>
-            <Button
-              size="small"
-              variant={'tertiary'}
-              type={'button'}
-              icon={
-                expanded ? (
-                  <ChevronRightDoubleIcon title="Skjul kolonne" />
-                ) : (
-                  <ChevronLeftDoubleIcon title="Vis kolonne" />
-                )
-              }
-              onClick={() => setExpanded(!expanded)}
-            />
-          </div>
-
-          <Button
-            size={'small'}
-            variant={'tertiary'}
-            type={'button'}
-            icon={<FolderFileIcon aria-hidden />}
-            onClick={() => expandAndSwitch(Tab.BEHANDLINGSINFO)}
-          />
-          {visKlagebehandlingFane && (
-            <Button
-              size={'small'}
-              variant={'tertiary'}
-              type={'button'}
-              icon={<PersonGavelIcon aria-hidden />}
-              onClick={() => expandAndSwitch(Tab.KLAGEBEHANDLINGINFO)}
-            />
-          )}
-          <Button
-            size={'small'}
-            variant={'tertiary'}
-            type={'button'}
-            icon={<FilesIcon aria-hidden />}
-            onClick={() => expandAndSwitch(Tab.SAKSDOKUMENTER)}
-          />
-          <Button
-            size={'small'}
-            variant={'tertiary'}
-            type={'button'}
-            icon={<HddDownIcon aria-hidden />}
-            onClick={() => expandAndSwitch(Tab.BE_OM_OPPLYSNINGER)}
-          />
-          <Button
-            size={'small'}
-            variant={'tertiary'}
-            type={'button'}
-            icon={<ClockDashedIcon aria-hidden />}
-            onClick={() => expandAndSwitch(Tab.HISTORIKK)}
-          />
+        <VStack gap={'space-8'} paddingBlock={'space-8'}>
+          <ToggleButton expanded={expanded} setExpanded={setExpanded} />
+          {tabs
+            .filter((tab) => (!visKlagebehandlingFane ? tab.tabName !== Tab.KLAGEBEHANDLINGINFO : true))
+            .map((tab) => (
+              <Button
+                className={styles.minimertKnapp}
+                key={tab.tabName}
+                size={'small'}
+                variant={'tertiary'}
+                type={'button'}
+                icon={tab.icon}
+                title={tab.label}
+                onClick={() => expandAndSwitch(tab.tabName)}
+              />
+            ))}
         </VStack>
       )}
     </div>

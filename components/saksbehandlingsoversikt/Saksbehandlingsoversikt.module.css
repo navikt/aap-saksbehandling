@@ -18,12 +18,6 @@
   background-color: var(--ax-bg-default);
 }
 
-.hidden {
-  max-width: 4rem;
-  flex-direction: column;
-  align-self: end;
-}
-
 .fillHeight:last-child {
   flex: 1 1 100%;
 }
@@ -32,8 +26,26 @@
   margin-bottom: var(--ax-space-16);
 }
 
-.hide {
+.minimert {
+  max-width: 4rem;
+  flex-direction: column;
+  align-self: end;
+}
+
+.utvidetWrapper {
   border-right: 1px solid var(--ax-border-neutral-subtle);
   border-bottom: 1px solid var(--ax-border-neutral-subtle);
   padding-top: var(--ax-space-8);
+}
+
+.skjultWrapper {
+  border-bottom: 1px solid var(--ax-border-neutral-subtle);
+}
+
+.skjultWrapper > button {
+  padding-inline: var(--ax-space-8);
+}
+
+.minimertKnapp {
+  padding-inline: var(--ax-space-8);
 }
