@@ -90,8 +90,8 @@ export function clientLeggTilInstitusjonsopphold(saksnummer: string, body: Objec
   return clientFetch(`${BASE_URL}/api/test/endre/${saksnummer}/legg-til-institusjonsopphold`, 'POST', body);
 }
 
-export function clientLeggTilYrkesskade(saksnummer: string) {
-  return clientFetch(`${BASE_URL}/api/test/endre/${saksnummer}/legg-til-yrkesskade`, 'POST');
+export function clientLeggTilYrkesskade(saksnummer: string, body: LeggTilYrkesskadeRequest) {
+  return clientFetch(`${BASE_URL}/api/test/endre/${saksnummer}/legg-til-yrkesskade`, 'POST', body);
 }
 
 export function clientOpprettDummySak(sak: OpprettDummySakDto) {
@@ -280,4 +280,16 @@ export function clientHentAInntektRedirectUrl(saksnummer: string) {
 
 export function clientHentSakPersoninfo(saksnummer: string) {
   return clientFetch<SakPersoninfo>(`${BASE_URL}/api/sak/${saksnummer}/personinformasjon`, 'GET');
+}
+
+interface LeggTilYrkesskadeRequest {
+  yrkesskader: {
+    kilde: 'REGISTER';
+    harYrkesskade: boolean;
+    skadeart?: string;
+    diagnose?: string;
+    skadebeskrivelse?: string;
+    skadedato?: string;
+    vedtaksdato?: string;
+  }[];
 }
