@@ -59,6 +59,7 @@ export const UtfyllingKalender = ({ readOnly }: Props) => {
       {Object.entries(meldeperiodeUker).map(([ukeStart, felterIUken]) => (
         <UkeRad key={ukeStart} felterIUken={felterIUken} readOnly={readOnly} />
       ))}
+
       <OppsummeringTimer
         timer={form
           .watch('dager')
