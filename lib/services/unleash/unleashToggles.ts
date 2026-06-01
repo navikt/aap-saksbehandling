@@ -11,7 +11,6 @@ export const FLAGS = [
   'ForutgaaendeGap',
   'TilkjentYtelseMedDiff',
   'AvbrytAktivitetspliktbehandling',
-  'RedigitaliseringV2',
   'Hjelpetekster115Frontend',
   'InfoboksGRegulering',
 ] as const;
@@ -32,7 +31,6 @@ export const mockedFlags: Flags = {
   ForutgaaendeGap: true,
   TilkjentYtelseMedDiff: true,
   AvbrytAktivitetspliktbehandling: true,
-  RedigitaliseringV2: true,
   Hjelpetekster115Frontend: true,
   InfoboksGRegulering: true,
 };
