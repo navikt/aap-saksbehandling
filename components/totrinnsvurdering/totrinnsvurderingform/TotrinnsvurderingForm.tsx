@@ -76,13 +76,12 @@ export const TotrinnsvurderingForm = ({
     : mapVurderingToDraftFormFields(grunnlag.vurderinger);
 
   const hastemarkeringer = markeringer !== undefined ? markeringer.filter(erHastemarkering) : [];
-  const skalMarkeringerSjekkes = harMarkeringer(hastemarkeringer);
+  let totrinnsvurderinger = defaultValue.totrinnsvurderinger;
 
-  const hastemarkeringSjekk = lagFormFieldsForMarkering(hastemarkeringer);
-  const totrinnsvurderinger =
-    featureFlagHastemarkeringBoks && skalMarkeringerSjekkes && erKvalitetssikring
-      ? defaultValue.totrinnsvurderinger?.concat([hastemarkeringSjekk])
-      : defaultValue.totrinnsvurderinger;
+  if (harMarkeringer(hastemarkeringer) && erKvalitetssikring && featureFlagHastemarkeringBoks) {
+    const hastemarkeringSjekk = lagFormFieldsForMarkering(hastemarkeringer[0]);
+    totrinnsvurderinger = totrinnsvurderinger?.concat([hastemarkeringSjekk]);
+  }
 
   const { form } = useConfigForm<FormFieldsToTrinnsVurdering>({
     totrinnsvurderinger: {
@@ -198,7 +197,7 @@ export const TotrinnsvurderingForm = ({
             />
           );
         }
-        if (harMarkeringer(field.markeringer)) {
+        if (harMarkeringer(field.markeringer) && field.markeringer?.every(erHastemarkering)) {
           return (
             <TotrinnsvurderingHastemarkering
               key={field.id}
@@ -338,15 +337,15 @@ function erHastemarkering(markering?: Markering) {
   return markering !== undefined && markering?.markeringType === MarkeringHaster;
 }
 
-function lagFormFieldsForMarkering(markeringer: Markering[]): ToTrinnsVurderingFormFields {
+function lagFormFieldsForMarkering(markering: Markering): ToTrinnsVurderingFormFields {
   return {
     godkjent: undefined,
-    begrunnelse: markeringer?.at(0)?.begrunnelse ?? '',
+    begrunnelse: markering?.begrunnelse ?? '',
     grunner: [],
     årsakFritekst: '',
     // Må ha en verdi fra enumen, men hvilken er likegyldig siden den ikke skal brukes
     definisjon: '5032',
-    markeringer: markeringer,
+    markeringer: [markering],
   };
 }
 
