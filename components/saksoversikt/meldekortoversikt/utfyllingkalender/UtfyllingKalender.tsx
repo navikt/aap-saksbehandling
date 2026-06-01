@@ -54,8 +54,6 @@ export const UtfyllingKalender = ({ readOnly }: Props) => {
     {} as Record<string, MeldeperiodeUke>
   );
 
-  console.log('meldeperiodeUker', meldeperiodeUker);
-
   return (
     <VStack gap={'space-16'} id={utfyllingKalenderId}>
       {Object.entries(meldeperiodeUker).map(([ukeStart, felterIUken]) => (
