@@ -39,7 +39,7 @@ import { parseISO } from 'date-fns';
 import { parseDatoFraDatePicker, summerPerioderVarighetIArbeidsdager } from 'lib/utils/date';
 import { IkkeVurderbarPeriode } from 'components/periodisering/IkkeVurderbarPeriode';
 import { validerPeriodiserteVurderingerMotIkkeRelevantePerioder } from 'lib/utils/validering';
-import { EksterneLenker } from 'components/vilkårskort/eksternelenker/EksterneLenker';
+import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
 
 interface Props {
   behandlingVersjon: number;
@@ -189,7 +189,7 @@ export const EtableringAvEgenVirksomhet = ({
       errorList={errorList}
     >
       <VStack gap={'space-16'}>
-        <EksterneLenker steg={'ETABLERING_EGEN_VIRKSOMHET'} />
+        <EksterneLenkerIVilkårskort steg={'ETABLERING_EGEN_VIRKSOMHET'} />
         {grunnlag.ikkeRelevantePerioder.map((vurdering) => (
           <IkkeVurderbarPeriode
             key={crypto.randomUUID()}

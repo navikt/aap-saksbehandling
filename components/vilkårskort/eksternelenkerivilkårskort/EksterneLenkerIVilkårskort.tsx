@@ -3,10 +3,10 @@
 import { Link } from '@navikt/ds-react';
 import { StegType } from 'lib/types/types';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
-import { lenkerPerSteg } from 'components/vilkårskort/eksternelenker/lenkerPerSteg';
-import styles from './EksterneLenker.module.css';
+import { lenkerPerSteg } from 'components/vilkårskort/eksternelenkerivilkårskort/lenkerPerSteg';
+import styles from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort.module.css';
 
-export const EksterneLenker = ({ steg }: { steg: StegType }) => {
+export const EksterneLenkerIVilkårskort = ({ steg }: { steg: StegType }) => {
   const lenker = lenkerPerSteg[steg];
   if (!lenker) return null;
 

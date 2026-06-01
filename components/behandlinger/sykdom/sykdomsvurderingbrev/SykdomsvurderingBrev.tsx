@@ -20,6 +20,7 @@ import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { ForeløpigBehandlingsutfallOppsummering } from 'components/behandlingsutfall/ForeløpigBehandlingsutfallOppsummering';
+import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
 
 interface Props {
   foreløpigBehandlingsutfall: ForeløpigBehandlingsutfall;
@@ -144,7 +145,11 @@ export const SykdomsvurderingBrev = ({
         <Veiledning
           header={'Hva skal være med i teksten?'}
           tekst={
+            //TODO: padding her
             <Box>
+              <Box marginBlock="space-16" asChild>
+                <EksterneLenkerIVilkårskort steg={'SYKDOMSVURDERING_BREV'} />
+              </Box>
               <BodyLong size={'small'}>Melding om innvilgelse skal innholde en beskrivelse av</BodyLong>
               <Box marginBlock="space-16" asChild>
                 <List size={'small'}>

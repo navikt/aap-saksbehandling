@@ -94,4 +94,10 @@ export const lenkerPerSteg: Partial<Record<StegType, EksternLenkeIVilkårskort[]
       url: 'https://navno.sharepoint.com/sites/fag-og-ytelser-arbeid-arbeidsavklaringspenger/SitePages/%C2%A7-11-17-arbeidsavklaringspenger-mens-brukeren-s%C3%B8ker-arbeid.aspx',
     },
   ],
+  SYKDOMSVURDERING_BREV: [
+    {
+      lenkeTekst: 'Hvordan skrive individuelle begrunnelsen (Navet)',
+      url: 'https://navno.sharepoint.com/sites/fag-og-ytelser-arbeid-arbeidsavklaringspenger/SitePages/S%C3%A5nn.aspx',
+    },
+  ],
 };

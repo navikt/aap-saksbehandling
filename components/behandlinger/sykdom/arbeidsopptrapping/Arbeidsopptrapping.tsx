@@ -31,7 +31,7 @@ import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
-import { EksterneLenker } from 'components/vilkårskort/eksternelenker/EksterneLenker';
+import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
 
 interface Props {
   behandlingVersjon: number;
@@ -154,7 +154,7 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
       errorList={errorList}
     >
       <VStack gap={'space-16'}>
-        <EksterneLenker steg={'ARBEIDSOPPTRAPPING'} />
+        <EksterneLenkerIVilkårskort steg={'ARBEIDSOPPTRAPPING'} />
         {ikkeVurderbarePerioder.map((vurdering) => (
           <IkkeVurderbarPeriode
             key={crypto.randomUUID()}

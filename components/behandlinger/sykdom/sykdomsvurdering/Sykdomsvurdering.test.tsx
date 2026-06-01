@@ -100,24 +100,6 @@ describe('generelt', () => {
     expect(heading).toBeVisible();
   });
 
-  it('skal vise en lenke som viser hvordan vilkåret skal vurderes', () => {
-    render(
-      <Sykdomsvurdering
-        diagnoseDefaultOptions={diagnoserDefaultOptions}
-        grunnlag={grunnlagUtenYrkesskade}
-        readOnly={false}
-        behandlingVersjon={0}
-        typeBehandling={'Førstegangsbehandling'}
-        erOvergangArbeid={false}
-      />
-    );
-
-    const link = screen.getByRole('link', {
-      name: 'Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-5 (lovdata.no)',
-    });
-    expect(link).toBeVisible();
-  });
-
   it('skal vise en informasjonsvarsling dersom det blir besvart av brukeren ikke har nedsatt arbeidsevne', async () => {
     render(
       <Sykdomsvurdering

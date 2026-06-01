@@ -30,7 +30,7 @@ import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/op
 import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
-import { EksterneLenker } from 'components/vilkårskort/eksternelenker/EksterneLenker';
+import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
 
 interface Props {
   behandlingVersjon: number;
@@ -135,7 +135,7 @@ export const OvergangUforePeriodisert = ({
       errorList={errorList}
     >
       <VStack gap={'space-16'}>
-        <EksterneLenker steg={'OVERGANG_UFORE'} />
+        <EksterneLenkerIVilkårskort steg={'OVERGANG_UFORE'} />
         {grunnlag.sisteVedtatteVurderinger.map((vurdering) => (
           <TidligereVurderingExpandableCard
             key={crypto.randomUUID()}

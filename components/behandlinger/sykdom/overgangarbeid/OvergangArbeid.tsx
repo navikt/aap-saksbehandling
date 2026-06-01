@@ -30,7 +30,7 @@ import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/ov
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
-import { EksterneLenker } from 'components/vilkårskort/eksternelenker/EksterneLenker';
+import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
 import { VStack } from '@navikt/ds-react';
 
 interface Props {
@@ -148,7 +148,7 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialM
       errorList={errorList}
     >
       <VStack gap={'space-16'}>
-        <EksterneLenker steg={'OVERGANG_ARBEID'} />
+        <EksterneLenkerIVilkårskort steg={'OVERGANG_ARBEID'} />
         {vedtatteVurderinger?.map((vurdering) => (
           <TidligereVurderingExpandableCard
             key={crypto.randomUUID()}

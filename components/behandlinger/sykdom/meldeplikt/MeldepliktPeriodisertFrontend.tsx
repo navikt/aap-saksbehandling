@@ -34,7 +34,7 @@ import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
-import { EksterneLenker } from 'components/vilkårskort/eksternelenker/EksterneLenker';
+import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
 
 interface Props {
   behandlingVersjon: number;
@@ -161,7 +161,7 @@ export const MeldepliktPeriodisertFrontend = ({
       errorList={errorList}
     >
       <VStack gap={'space-16'}>
-        <EksterneLenker steg={'FRITAK_MELDEPLIKT'} />
+        <EksterneLenkerIVilkårskort steg={'FRITAK_MELDEPLIKT'} />
         {vedtatteVurderinger.map((vurdering) => (
           <TidligereVurderingExpandableCard
             key={crypto.randomUUID()}

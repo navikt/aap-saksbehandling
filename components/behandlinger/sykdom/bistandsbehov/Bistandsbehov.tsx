@@ -32,7 +32,7 @@ import { Veiledning } from 'components/veiledning/Veiledning';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
-import { EksterneLenker } from 'components/vilkårskort/eksternelenker/EksterneLenker';
+import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
 
 interface Props {
   behandlingVersjon: number;
@@ -150,7 +150,7 @@ export const Bistandsbehov = ({
       errorList={errorList}
     >
       <VStack gap={'space-16'}>
-        <Veiledning defaultOpen={false} tekst={<EksterneLenker steg={'VURDER_BISTANDSBEHOV'} />} />
+        <Veiledning defaultOpen={false} tekst={<EksterneLenkerIVilkårskort steg={'VURDER_BISTANDSBEHOV'} />} />
 
         {erRevurderingAvOvergangUføre && (
           <Alert variant={'info'} size={'small'}>

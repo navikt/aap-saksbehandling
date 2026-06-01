@@ -48,7 +48,7 @@ import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
 import { useFeatureFlag } from 'context/UnleashContext';
-import { EksterneLenker } from 'components/vilkårskort/eksternelenker/EksterneLenker';
+import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
 
 export interface SykdomsvurderingerForm {
   vurderinger: Array<Sykdomsvurdering>;
@@ -197,7 +197,7 @@ export const Sykdomsvurdering = ({
       errorList={errorList}
     >
       <VStack gap={'space-16'}>
-        <EksterneLenker steg={'AVKLAR_SYKDOM'} />
+        <EksterneLenkerIVilkårskort steg={'AVKLAR_SYKDOM'} />
 
         {erOvergangArbeid && (
           <Alert variant={'info'} size={'small'}>
