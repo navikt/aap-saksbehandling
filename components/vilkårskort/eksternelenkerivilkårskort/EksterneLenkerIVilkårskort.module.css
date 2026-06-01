@@ -1,0 +1,8 @@
+.lenkeliste {
+  display: flex;
+  gap: var(--ax-space-16);
+  padding-left: 0;
+  margin: 0;
+  list-style-type: none;
+  font-size: var(--ax-font-size-medium);
+}

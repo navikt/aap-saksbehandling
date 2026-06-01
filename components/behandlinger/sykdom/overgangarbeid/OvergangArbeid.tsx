@@ -30,6 +30,8 @@ import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/ov
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
+import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
+import { VStack } from '@navikt/ds-react';
 
 interface Props {
   behandlingVersjon: number;
@@ -145,47 +147,50 @@ export const OvergangArbeid = ({ behandlingVersjon, grunnlag, readOnly, initialM
       onLeggTilVurdering={onAddPeriode}
       errorList={errorList}
     >
-      {vedtatteVurderinger?.map((vurdering) => (
-        <TidligereVurderingExpandableCard
-          key={crypto.randomUUID()}
-          fom={parseISO(vurdering.fom)}
-          tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
-          førsteNyePeriodeFraDato={førsteNyePeriode != null ? parseDatoFraDatePicker(førsteNyePeriode) : null}
-          vurderingStatus={getErOppfyltEllerIkkeStatus(vurdering.brukerRettPåAAP)}
-          vurderingerMeta={vurdering.vurderingerMeta}
-        >
-          <OvergangArbeidTidligereVurdering
-            fraDato={vurdering.fom}
-            tilDato={vurdering.tom}
-            begrunnelse={vurdering.begrunnelse}
-            oppfyller={vurdering.brukerRettPåAAP}
-          />
-        </TidligereVurderingExpandableCard>
-      ))}
+      <VStack gap={'space-16'}>
+        <EksterneLenkerIVilkårskort steg={'OVERGANG_ARBEID'} />
+        {vedtatteVurderinger?.map((vurdering) => (
+          <TidligereVurderingExpandableCard
+            key={crypto.randomUUID()}
+            fom={parseISO(vurdering.fom)}
+            tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
+            førsteNyePeriodeFraDato={førsteNyePeriode != null ? parseDatoFraDatePicker(førsteNyePeriode) : null}
+            vurderingStatus={getErOppfyltEllerIkkeStatus(vurdering.brukerRettPåAAP)}
+            vurderingerMeta={vurdering.vurderingerMeta}
+          >
+            <OvergangArbeidTidligereVurdering
+              fraDato={vurdering.fom}
+              tilDato={vurdering.tom}
+              begrunnelse={vurdering.begrunnelse}
+              oppfyller={vurdering.brukerRettPåAAP}
+            />
+          </TidligereVurderingExpandableCard>
+        ))}
 
-      {vurderingerFields.map((vurdering, index) => (
-        <NyVurderingExpandableCard
-          key={vurdering.id}
-          accordionsSignal={accordionsSignal}
-          fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-          vurderingStatus={getErOppfyltEllerIkkeStatus(
-            form.watch(`vurderinger.${index}.brukerRettPåAAP`)
-              ? form.watch(`vurderinger.${index}.brukerRettPåAAP`) === JaEllerNei.Ja
-              : undefined
-          )}
-          nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
-          isLast={index === vurderingerFields.length - 1}
-          vurdering={vurdering}
-          readonly={formReadOnly}
-          onSlettVurdering={() => remove(index)}
-          harTidligereVurderinger={tidligereVurderinger.length > 0}
-          index={index}
-          finnesFeil={finnesFeilForVurdering(index, errorList)}
-          initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
-        >
-          <OvergangArbeidFormInput form={form} readOnly={formReadOnly} index={index} />
-        </NyVurderingExpandableCard>
-      ))}
+        {vurderingerFields.map((vurdering, index) => (
+          <NyVurderingExpandableCard
+            key={vurdering.id}
+            accordionsSignal={accordionsSignal}
+            fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
+            vurderingStatus={getErOppfyltEllerIkkeStatus(
+              form.watch(`vurderinger.${index}.brukerRettPåAAP`)
+                ? form.watch(`vurderinger.${index}.brukerRettPåAAP`) === JaEllerNei.Ja
+                : undefined
+            )}
+            nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
+            isLast={index === vurderingerFields.length - 1}
+            vurdering={vurdering}
+            readonly={formReadOnly}
+            onSlettVurdering={() => remove(index)}
+            harTidligereVurderinger={tidligereVurderinger.length > 0}
+            index={index}
+            finnesFeil={finnesFeilForVurdering(index, errorList)}
+            initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
+          >
+            <OvergangArbeidFormInput form={form} readOnly={formReadOnly} index={index} />
+          </NyVurderingExpandableCard>
+        ))}
+      </VStack>
     </VilkårskortPeriodisert>
   );
 };
