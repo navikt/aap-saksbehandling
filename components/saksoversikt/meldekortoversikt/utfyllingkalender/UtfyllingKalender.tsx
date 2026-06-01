@@ -54,11 +54,14 @@ export const UtfyllingKalender = ({ readOnly }: Props) => {
     {} as Record<string, MeldeperiodeUke>
   );
 
+  console.log('meldeperiodeUker', meldeperiodeUker);
+
   return (
     <VStack gap={'space-16'} id={utfyllingKalenderId}>
       {Object.entries(meldeperiodeUker).map(([ukeStart, felterIUken]) => (
         <UkeRad key={ukeStart} felterIUken={felterIUken} readOnly={readOnly} />
       ))}
+
       <OppsummeringTimer
         timer={form
           .watch('dager')

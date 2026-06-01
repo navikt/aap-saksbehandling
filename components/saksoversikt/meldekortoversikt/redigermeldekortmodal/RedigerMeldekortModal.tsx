@@ -17,7 +17,7 @@ import { isError } from 'lib/utils/api';
 import { useAlleDokumenterPåSak } from 'hooks/saksbehandling/DokumenterHook';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { MeldekortProsesseringServerSentEvent } from 'app/saksbehandling/api/meldekort/[saksnummer]/prosessering/route';
-import { addDays } from 'date-fns';
+import { addDays, differenceInDays } from 'date-fns';
 import { useMeldekort } from 'hooks/saksbehandling/MeldekortHook';
 import { Journalpost } from 'lib/types/journalpost';
 import { erDatoFoerDato, erDatoIFremtiden } from 'lib/validation/dateValidation';
@@ -265,8 +265,10 @@ function getDefaultValuesForForm(meldekort?: MeldeperiodeMedMeldekortDto): Redig
 
   const eksisterendeDager = meldekort.meldekort?.dager ?? [];
   const startDato = new Dato(meldekort.meldeperiode.fom);
+  const sluttDato = new Dato(meldekort.meldeperiode.tom);
+  const antallDager = differenceInDays(sluttDato.dato, startDato.dato) + 1; // +1 for å inkludere tom dato
 
-  const alleDager: Dag[] = Array.from({ length: 14 }).map((_, index) => {
+  const alleDager: Dag[] = Array.from({ length: antallDager }).map((_, index) => {
     const dato = formaterDatoForBackend(addDays(startDato.dato, index));
     const eksisterendeDag = eksisterendeDager.find((dag) => dag.dato === dato);
 
