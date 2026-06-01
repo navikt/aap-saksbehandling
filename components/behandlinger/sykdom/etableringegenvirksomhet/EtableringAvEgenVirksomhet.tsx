@@ -100,7 +100,7 @@ export const EtableringAvEgenVirksomhet = ({
       data.vurderinger.forEach((vurdering, index) => {
         const erOppfylt = nyVurderingErOppfylt(vurdering);
         if (erOppfylt) {
-          if (vurdering.utviklingsperioder.length === 0 && vurdering.oppstartsperioder.length === 0) {
+          if (vurdering.utviklingsperioder?.length === 0 && vurdering.oppstartsperioder?.length === 0) {
             validerTidsplan = false;
             form.setError(`vurderinger.${index}.utviklingsperioder`, {
               type: 'custom',

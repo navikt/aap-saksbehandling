@@ -156,17 +156,25 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly, gru
                     return (
                       <Table.Row key={id}>
                         <Table.DataCell>
-                          <HStack gap={'space-8'} align={'center'}>
+                          <HStack gap={'space-8'} align={'center'} wrap={false}>
                             <DateInputWrapper
                               readOnly={readOnly}
                               name={`vurderinger.${index}.utviklingsperioder.${i}.fom`}
                               control={form.control}
+                              rules={{
+                                required: 'Du må velge en dato vurderingen gjelder fra',
+                                validate: (value) => validerDato(value as string),
+                              }}
                             />
                             {'-'}
                             <DateInputWrapper
                               readOnly={readOnly}
                               name={`vurderinger.${index}.utviklingsperioder.${i}.tom`}
                               control={form.control}
+                              rules={{
+                                required: 'Du må velge en dato vurderingen gjelder til',
+                                validate: (value) => validerDato(value as string),
+                              }}
                             />
                           </HStack>
                         </Table.DataCell>
@@ -242,12 +250,20 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly, gru
                               readOnly={readOnly}
                               name={`vurderinger.${index}.oppstartsperioder.${i}.fom`}
                               control={form.control}
+                              rules={{
+                                required: 'Du må velge en dato vurderingen gjelder til',
+                                validate: (value) => validerDato(value as string),
+                              }}
                             />
                             {'-'}
                             <DateInputWrapper
                               readOnly={readOnly}
                               name={`vurderinger.${index}.oppstartsperioder.${i}.tom`}
                               control={form.control}
+                              rules={{
+                                required: 'Du må velge en dato vurderingen gjelder fra',
+                                validate: (value) => validerDato(value as string),
+                              }}
                             />
                           </HStack>
                         </Table.DataCell>
