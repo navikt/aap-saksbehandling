@@ -5341,7 +5341,11 @@ export interface paths {
         };
         cookie?: never;
       };
-      requestBody?: never;
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['no.nav.aap.behandlingsflyt.LeggTilYrkesskadeDTO'];
+        };
+      };
       responses: {
         /** @description OK */
         200: {
@@ -5389,6 +5393,9 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.LeggTilInstitusjonsoppholdDTO': {
       opphold: components['schemas']['no.nav.aap.behandlingsflyt.InstitusjonsoppholdItemDTO'][];
+    };
+    'no.nav.aap.behandlingsflyt.LeggTilYrkesskadeDTO': {
+      yrkesskader: components['schemas']['no.nav.aap.behandlingsflyt.TestYrkesskadeDto'][];
     };
     'no.nav.aap.behandlingsflyt.OpprettTestcaseDTO': {
       andreUtbetalinger?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AndreUtbetalingerDto'];
@@ -9428,7 +9435,7 @@ export interface components {
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
-      )[];
+        )[];
     };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.KvalitetssikringL\u00F8sning': {
       /** @enum {string} */
@@ -12796,7 +12803,7 @@ export interface components {
         | 'VARIGHET_OVERSKREDET_ARBEIDSSØKER'
         | 'VARIGHET_OVERSKREDET_OVERGANG_UFORE'
         | 'VARIGHET_OVERSKREDET_STUDENT'
-      )[];
+        )[];
     };
     'no.nav.aap.behandlingsflyt.behandling.foresl\u00E5vedtak.VedtakslengdeVedtakDto': {
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
@@ -13196,7 +13203,7 @@ export interface components {
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
-      )[];
+        )[];
       'vilk\u00E5rSomOpprettholdes': (
         | 'ANDRE_TRYGDEAVTALER'
         | 'EOES_883_2004'
@@ -13234,7 +13241,7 @@ export interface components {
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
-      )[];
+        )[];
       vurderingerMeta: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.klage.klagebehandling.KlagevurderingNayDto': {
@@ -13279,7 +13286,7 @@ export interface components {
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
-      )[];
+        )[];
       'vilk\u00E5rSomOpprettholdes': (
         | 'ANDRE_TRYGDEAVTALER'
         | 'EOES_883_2004'
@@ -13317,7 +13324,7 @@ export interface components {
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
-      )[];
+        )[];
       vurderingerMeta: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.klage.p\u00E5klagetbehandling.BehandlingMedVedtakDto': {
@@ -13408,7 +13415,7 @@ export interface components {
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
         | 'VURDER_RETTIGHETSPERIODE'
-      )[];
+        )[];
       /** @enum {string|null} */
       '\u00E5rsakTilOpprettelse'?:
         | 'AKTIVITETSMELDING'
@@ -13881,7 +13888,7 @@ export interface components {
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
         | 'VURDER_RETTIGHETSPERIODE'
-      )[];
+        )[];
       vurdertAv: string;
       '\u00E5rsak'?: string | null;
     };
@@ -13897,63 +13904,63 @@ export interface components {
       'konsekvensAvOppf\u00F8lging': 'INGEN' | 'OPPRETT_VURDERINGSBEHOV';
       opplysningerTilRevurdering?:
         | (
-            | 'AKTIVITETSPLIKTBEHANDLING_AVBRUTT'
-            | 'AKTIVITETSPLIKT_11_7'
-            | 'AKTIVITETSPLIKT_11_9'
-            | 'BARNETILLEGG'
-            | 'BARNETILLEGG_SATS_REGULERING'
-            | 'DØDSFALL_BARN'
-            | 'DØDSFALL_BRUKER'
-            | 'EFFEKTUER_AKTIVITETSPLIKT'
-            | 'EFFEKTUER_AKTIVITETSPLIKT_11_9'
-            | 'ETABLERING_EGEN_VIRKSOMHET'
-            | 'FASTSATT_PERIODE_PASSERT'
-            | 'FORUTGAENDE_MEDLEMSKAP'
-            | 'FRITAK_MELDEPLIKT'
-            | 'G_REGULERING'
-            | 'HELHETLIG_VURDERING'
-            | 'INSTITUSJONSOPPHOLD'
-            | 'KLAGE_TRUKKET'
-            | 'LOVVALG_OG_MEDLEMSKAP'
-            | 'MIGRER_RETTIGHETSPERIODE'
-            | 'MOTATT_KLAGE'
-            | 'MOTTATT_AKTIVITETSMELDING'
-            | 'MOTTATT_AVVIST_LEGEERKLÆRING'
-            | 'MOTTATT_DIALOGMELDING'
-            | 'MOTTATT_KABAL_HENDELSE'
-            | 'MOTTATT_LEGEERKLÆRING'
-            | 'MOTTATT_MELDEKORT'
-            | 'MOTTATT_SØKNAD'
-            | 'OPPFØLGINGSOPPGAVE'
-            | 'OPPHOLDSKRAV'
-            | 'OVERGANG_ARBEID'
-            | 'OVERGANG_UFORE'
-            | 'REFUSJONSKRAV'
-            | 'REVURDERING_AVBRUTT'
-            | 'REVURDER_BEREGNING'
-            | 'REVURDER_LOVVALG'
-            | 'REVURDER_MANUELL_INNTEKT'
-            | 'REVURDER_MEDLEMSKAP'
-            | 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN'
-            | 'REVURDER_SAMORDNING'
-            | 'REVURDER_SAMORDNING_ANDRE_FOLKETRYGDYTELSER'
-            | 'REVURDER_SAMORDNING_ANDRE_STATLIGE_YTELSER'
-            | 'REVURDER_SAMORDNING_ARBEIDSGIVER'
-            | 'REVURDER_SAMORDNING_BARNEPENSJON'
-            | 'REVURDER_SAMORDNING_TJENESTEPENSJON'
-            | 'REVURDER_SAMORDNING_UFØRE'
-            | 'REVURDER_STUDENT'
-            | 'REVURDER_SYKEPENGEERSTATNING'
-            | 'REVURDER_SYKESTIPEND'
-            | 'REVURDER_YRKESSKADE'
-            | 'SAMORDNING_OG_AVREGNING'
-            | 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND'
-            | 'SØKNAD_TRUKKET'
-            | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
-            | 'UTVID_VEDTAKSLENGDE'
-            | 'VEDTAKSLENGDE_MANUELT'
-            | 'VURDER_RETTIGHETSPERIODE'
-          )[]
+        | 'AKTIVITETSPLIKTBEHANDLING_AVBRUTT'
+        | 'AKTIVITETSPLIKT_11_7'
+        | 'AKTIVITETSPLIKT_11_9'
+        | 'BARNETILLEGG'
+        | 'BARNETILLEGG_SATS_REGULERING'
+        | 'DØDSFALL_BARN'
+        | 'DØDSFALL_BRUKER'
+        | 'EFFEKTUER_AKTIVITETSPLIKT'
+        | 'EFFEKTUER_AKTIVITETSPLIKT_11_9'
+        | 'ETABLERING_EGEN_VIRKSOMHET'
+        | 'FASTSATT_PERIODE_PASSERT'
+        | 'FORUTGAENDE_MEDLEMSKAP'
+        | 'FRITAK_MELDEPLIKT'
+        | 'G_REGULERING'
+        | 'HELHETLIG_VURDERING'
+        | 'INSTITUSJONSOPPHOLD'
+        | 'KLAGE_TRUKKET'
+        | 'LOVVALG_OG_MEDLEMSKAP'
+        | 'MIGRER_RETTIGHETSPERIODE'
+        | 'MOTATT_KLAGE'
+        | 'MOTTATT_AKTIVITETSMELDING'
+        | 'MOTTATT_AVVIST_LEGEERKLÆRING'
+        | 'MOTTATT_DIALOGMELDING'
+        | 'MOTTATT_KABAL_HENDELSE'
+        | 'MOTTATT_LEGEERKLÆRING'
+        | 'MOTTATT_MELDEKORT'
+        | 'MOTTATT_SØKNAD'
+        | 'OPPFØLGINGSOPPGAVE'
+        | 'OPPHOLDSKRAV'
+        | 'OVERGANG_ARBEID'
+        | 'OVERGANG_UFORE'
+        | 'REFUSJONSKRAV'
+        | 'REVURDERING_AVBRUTT'
+        | 'REVURDER_BEREGNING'
+        | 'REVURDER_LOVVALG'
+        | 'REVURDER_MANUELL_INNTEKT'
+        | 'REVURDER_MEDLEMSKAP'
+        | 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN'
+        | 'REVURDER_SAMORDNING'
+        | 'REVURDER_SAMORDNING_ANDRE_FOLKETRYGDYTELSER'
+        | 'REVURDER_SAMORDNING_ANDRE_STATLIGE_YTELSER'
+        | 'REVURDER_SAMORDNING_ARBEIDSGIVER'
+        | 'REVURDER_SAMORDNING_BARNEPENSJON'
+        | 'REVURDER_SAMORDNING_TJENESTEPENSJON'
+        | 'REVURDER_SAMORDNING_UFØRE'
+        | 'REVURDER_STUDENT'
+        | 'REVURDER_SYKEPENGEERSTATNING'
+        | 'REVURDER_SYKESTIPEND'
+        | 'REVURDER_YRKESSKADE'
+        | 'SAMORDNING_OG_AVREGNING'
+        | 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND'
+        | 'SØKNAD_TRUKKET'
+        | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
+        | 'UTVID_VEDTAKSLENGDE'
+        | 'VEDTAKSLENGDE_MANUELT'
+        | 'VURDER_RETTIGHETSPERIODE'
+        )[]
         | null;
       '\u00E5rsak'?: string | null;
     };
@@ -14163,7 +14170,7 @@ export interface components {
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
-      )[];
+        )[];
       vurderingerMeta: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.s\u00F8knad.TrukketS\u00F8knadGrunnlagDto': {
@@ -14630,7 +14637,7 @@ export interface components {
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
         | 'VURDER_RETTIGHETSPERIODE'
-      )[];
+        )[];
       /** @enum {string|null} */
       '\u00E5rsakTilOpprettelse'?:
         | 'AKTIVITETSMELDING'
@@ -15181,7 +15188,7 @@ export interface components {
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
-      )[];
+        )[];
       'vilk\u00E5rSomOpprettholdes': (
         | 'ANDRE_TRYGDEAVTALER'
         | 'EOES_883_2004'
@@ -15219,7 +15226,7 @@ export interface components {
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
-      )[];
+        )[];
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.klage.klagebehandling.nay.KlagevurderingNayL\u00F8sningDto': {
       begrunnelse: string;
@@ -15263,7 +15270,7 @@ export interface components {
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
-      )[];
+        )[];
       'vilk\u00E5rSomOpprettholdes': (
         | 'ANDRE_TRYGDEAVTALER'
         | 'EOES_883_2004'
@@ -15301,7 +15308,7 @@ export interface components {
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
-      )[];
+        )[];
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.klage.p\u00E5klagetbehandling.P\u00E5klagetBehandlingVurderingL\u00F8sningDto': {
       /** Format: uuid */
@@ -15355,7 +15362,7 @@ export interface components {
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
-      )[];
+        )[];
       'vilk\u00E5rSomSkalOpprettholdes': (
         | 'ANDRE_TRYGDEAVTALER'
         | 'EOES_883_2004'
@@ -15393,7 +15400,7 @@ export interface components {
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
-      )[];
+        )[];
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.klage.resultat.KlageResultat':
       | components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.resultat.Avsl\u00E5tt']
@@ -15442,7 +15449,7 @@ export interface components {
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
-      )[];
+        )[];
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.klage.resultat.Opprettholdes': {
       /** @enum {string} */
@@ -15484,7 +15491,7 @@ export interface components {
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
-      )[];
+        )[];
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.klage.resultat.Trukket': {
       /** @enum {string} */
@@ -16867,7 +16874,7 @@ export interface components {
         | 'PRODUKSJONSSTYRING'
         | 'SAKSBEHANDLER_NASJONAL'
         | 'SAKSBEHANDLER_OPPFOLGING'
-      )[];
+        )[];
       /** @enum {string} */
       'l\u00F8sesISteg':
         | 'ARBEIDSOPPTRAPPING'
@@ -17001,17 +17008,17 @@ export interface components {
       'l\u00F8nn'?: 'Ja' | 'Nei' | null;
       'st\u00F8nad'?:
         | (
-            | 'AFP'
-            | 'INTRODUKSJONSSTØNAD'
-            | 'KVALIFISERINGSSTØNAD'
-            | 'LÅN'
-            | 'NEI'
-            | 'OMSORGSSTØNAD'
-            | 'STIPEND'
-            | 'UTLAND'
-            | 'VERV'
-            | 'ØKONOMISK_SOSIALHJELP'
-          )[]
+        | 'AFP'
+        | 'INTRODUKSJONSSTØNAD'
+        | 'KVALIFISERINGSSTØNAD'
+        | 'LÅN'
+        | 'NEI'
+        | 'OMSORGSSTØNAD'
+        | 'STIPEND'
+        | 'UTLAND'
+        | 'VERV'
+        | 'ØKONOMISK_SOSIALHJELP'
+        )[]
         | null;
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AnkeITrygderettenbehandlingOpprettetDetaljer': {
@@ -17119,7 +17126,7 @@ export interface components {
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
         | 'VURDER_RETTIGHETSPERIODE'
-      )[];
+        )[];
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AnnetRelevantDokumentV1': {
       begrunnelse: string;
@@ -17179,7 +17186,7 @@ export interface components {
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
         | 'VURDER_RETTIGHETSPERIODE'
-      )[];
+        )[];
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ArbeidIPeriodeV0': {
       /**
@@ -17454,7 +17461,7 @@ export interface components {
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
         | 'VURDER_RETTIGHETSPERIODE'
-      )[];
+        )[];
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ManueltOppgittBarn': {
       /**
@@ -17552,7 +17559,7 @@ export interface components {
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
         | 'VURDER_RETTIGHETSPERIODE'
-      )[];
+        )[];
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.OmgjoeringskravbehandlingAvsluttetDetaljer': {
       /**
@@ -17627,7 +17634,7 @@ export interface components {
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
         | 'VURDER_RETTIGHETSPERIODE'
-      )[];
+        )[];
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Omgj\u00F8ringKlageRevurderingV1': {
       beskrivelse: string;
@@ -17691,7 +17698,7 @@ export interface components {
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
         | 'VURDER_RETTIGHETSPERIODE'
-      )[];
+        )[];
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Oppf\u00F8lgingsoppgave': components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Oppf\u00F8lgingsoppgaveV0'];
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Oppf\u00F8lgingsoppgaveV0': {
@@ -18106,7 +18113,7 @@ export interface components {
         | 'VEDTAKSLENGDE_MANUELT'
         | 'VURDER_RETTIGHETSPERIODE'
         | null
-      )[];
+        )[];
       '\u00E5rsakerTilRetur': components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.\u00C5rsakTilRetur'][];
     };
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlingHistorikkDTO': {
@@ -18190,7 +18197,7 @@ export interface components {
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
         | 'VURDER_RETTIGHETSPERIODE'
-      )[];
+        )[];
       /** @enum {string|null} */
       '\u00E5rsakTilOpprettelse'?:
         | 'AKTIVITETSMELDING'
@@ -18325,17 +18332,17 @@ export interface components {
       loenn?: 'JA' | 'NEI' | null;
       stoenad?:
         | (
-            | 'AFP'
-            | 'INTRODUKSJONSSTOENAD'
-            | 'KVALIFISERINGSSTOENAD'
-            | 'LAAN'
-            | 'NEI'
-            | 'OEKONOMISK_SOSIALHJELP'
-            | 'OMSORGSSTOENAD'
-            | 'STIPEND'
-            | 'UTLAND'
-            | 'VERV'
-          )[]
+        | 'AFP'
+        | 'INTRODUKSJONSSTOENAD'
+        | 'KVALIFISERINGSSTOENAD'
+        | 'LAAN'
+        | 'NEI'
+        | 'OEKONOMISK_SOSIALHJELP'
+        | 'OMSORGSSTOENAD'
+        | 'STIPEND'
+        | 'UTLAND'
+        | 'VERV'
+        )[]
         | null;
     };
     'no.nav.aap.behandlingsflyt.test.BehandlingStatusRequest': {
