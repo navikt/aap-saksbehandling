@@ -70,7 +70,7 @@ describe('Kelvinsøkeresultat', () => {
     expect(screen.getByText('Testkontor')).toBeInTheDocument();
   });
 
-  it('skal vise lenkerPerSteg når saksbehandler har lesetilgang', () => {
+  it('skal vise lenker når saksbehandler har lesetilgang', () => {
     render(<Kelvinsøkeresultat søkeresultat={{ ...søkeresultat, harTilgang: true }} />);
 
     const lenker = screen.getAllByRole('link');

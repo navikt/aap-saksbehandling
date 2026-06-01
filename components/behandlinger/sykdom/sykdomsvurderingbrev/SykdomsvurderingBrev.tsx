@@ -145,9 +145,8 @@ export const SykdomsvurderingBrev = ({
         <Veiledning
           header={'Hva skal være med i teksten?'}
           tekst={
-            //TODO: padding her
             <Box>
-              <Box marginBlock="space-16" asChild>
+              <Box marginBlock="space-16">
                 <EksterneLenkerIVilkårskort steg={'SYKDOMSVURDERING_BREV'} />
               </Box>
               <BodyLong size={'small'}>Melding om innvilgelse skal innholde en beskrivelse av</BodyLong>

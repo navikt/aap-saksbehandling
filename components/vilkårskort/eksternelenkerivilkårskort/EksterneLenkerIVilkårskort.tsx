@@ -11,7 +11,7 @@ export const EksterneLenkerIVilkårskort = ({ steg }: { steg: StegType }) => {
   if (!lenker) return null;
 
   return (
-    <ul className={styles.liste}>
+    <ul className={styles.lenkeliste}>
       {lenker.map((lenke, index) => (
         <li key={index}>
           <Link inlineText={true} href={lenke.url} target="_blank" rel="noopener noreferrer">
