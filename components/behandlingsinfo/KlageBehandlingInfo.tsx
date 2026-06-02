@@ -23,69 +23,61 @@ export const KlageBehandlingInfo = ({ kabalKlageResultat }: Props) => {
   const svarFraAndreinstans = kabalKlageResultat?.data?.svarFraAndreinstans;
 
   return (
-    <Box
-      padding="space-16"
-      borderWidth="1"
-      borderRadius="8"
-      borderColor="neutral-subtle"
-      className={styles.behandlingsinfo}
-    >
-      <VStack gap={'space-16'}>
-        <Label>Svar fra Nav klageinstans</Label>
-        {!svarFraAndreinstans?.length ? (
-          <Box>
-            <HGrid columns={'1fr 1fr'} gap="space-4">
-              <BodyShort size={'small'}>Venter på svar</BodyShort>
-            </HGrid>
-          </Box>
-        ) : (
-          svarFraAndreinstans?.map((resultat, index) => {
-            return (
-              <Box key={index} className={index !== 0 ? styles.klageBehandlingResultatMedSkillelinje : ''}>
-                <HGrid columns={'1fr 1fr'} gap="space-4">
-                  <Label as="p" size={'small'}>
-                    Resultat:
-                  </Label>
-                  <BodyShort size={'small'}>{formaterSvartype(resultat.type)}</BodyShort>
+    <VStack gap={'space-16'}>
+      <Label>Svar fra Nav klageinstans</Label>
+      {!svarFraAndreinstans?.length ? (
+        <Box>
+          <HGrid columns={'1fr 1fr'} gap="space-4">
+            <BodyShort size={'small'}>Venter på svar</BodyShort>
+          </HGrid>
+        </Box>
+      ) : (
+        svarFraAndreinstans?.map((resultat, index) => {
+          return (
+            <Box key={index} className={styles.klagebehandling}>
+              <HGrid columns={'1fr 1fr'} gap="space-4">
+                <Label as="p" size={'small'}>
+                  Resultat:
+                </Label>
+                <BodyShort size={'small'}>{formaterSvartype(resultat.type)}</BodyShort>
 
-                  {resultat.utfall && (
-                    <>
-                      <Label as="p" size={'small'}>
-                        Utfall:
-                      </Label>
-                      <BodyShort size={'small'}>{formaterUtfall(resultat.utfall)}</BodyShort>
-                    </>
-                  )}
-                  {resultat.opprettetTidspunkt && (
-                    <>
-                      <Label as="p" size={'small'}>
-                        Opprettet:
-                      </Label>
-                      <BodyShort size={'small'}>{formaterDatoForFrontend(resultat.opprettetTidspunkt)}</BodyShort>
-                    </>
-                  )}
-                  {resultat.avsluttetTidspunkt && (
-                    <>
-                      <Label as="p" size={'small'}>
-                        Avsluttet:
-                      </Label>
-                      <BodyShort size={'small'}>{formaterDatoForFrontend(resultat.avsluttetTidspunkt)}</BodyShort>
-                    </>
-                  )}
-                  {resultat.feilregistrertBegrunnelse && (
-                    <>
-                      <Label as="p" size={'small'}>
-                        Begrunnelse:
-                      </Label>
-                      <BodyShort size={'small'}>{resultat.feilregistrertBegrunnelse}</BodyShort>
-                    </>
-                  )}
-                </HGrid>
-              </Box>
-            );
-          })
-        )}
-      </VStack>
-    </Box>
+                {resultat.utfall && (
+                  <>
+                    <Label as="p" size={'small'}>
+                      Utfall:
+                    </Label>
+                    <BodyShort size={'small'}>{formaterUtfall(resultat.utfall)}</BodyShort>
+                  </>
+                )}
+                {resultat.opprettetTidspunkt && (
+                  <>
+                    <Label as="p" size={'small'}>
+                      Opprettet:
+                    </Label>
+                    <BodyShort size={'small'}>{formaterDatoForFrontend(resultat.opprettetTidspunkt)}</BodyShort>
+                  </>
+                )}
+                {resultat.avsluttetTidspunkt && (
+                  <>
+                    <Label as="p" size={'small'}>
+                      Avsluttet:
+                    </Label>
+                    <BodyShort size={'small'}>{formaterDatoForFrontend(resultat.avsluttetTidspunkt)}</BodyShort>
+                  </>
+                )}
+                {resultat.feilregistrertBegrunnelse && (
+                  <>
+                    <Label as="p" size={'small'}>
+                      Begrunnelse:
+                    </Label>
+                    <BodyShort size={'small'}>{resultat.feilregistrertBegrunnelse}</BodyShort>
+                  </>
+                )}
+              </HGrid>
+            </Box>
+          );
+        })
+      )}
+    </VStack>
   );
 };

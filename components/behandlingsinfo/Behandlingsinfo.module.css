@@ -1,4 +1,4 @@
-.klageBehandlingResultatMedSkillelinje {
+.klagebehandling + .klagebehandling {
   border-top: 1px solid var(--ax-border-neutral-subtle);
   padding-top: var(--ax-space-16);
 }
