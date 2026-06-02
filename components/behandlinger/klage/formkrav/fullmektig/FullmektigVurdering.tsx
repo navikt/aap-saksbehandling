@@ -247,7 +247,7 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly, ini
       {harFullmektig === JaEllerNei.Ja && idType === 'utl_orgnr' && (
         <FormField form={form} className={styles.orgNrOgFnr} formField={formFields.utlOrgnr} />
       )}
-      {harFullmektig && idType && skalFylleInnNavnOgAdresse(idType) && (
+      {harFullmektig === JaEllerNei.Ja && idType && skalFylleInnNavnOgAdresse(idType) && (
         <>
           <FormField form={form} formField={formFields.land} />
           <FormField form={form} formField={formFields.navn} />
