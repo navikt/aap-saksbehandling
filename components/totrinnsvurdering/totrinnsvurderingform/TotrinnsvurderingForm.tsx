@@ -309,31 +309,3 @@ function godkjennAlleTotrinnsvurderinger(form: UseFormReturn<FormFieldsToTrinnsV
     });
   }
 }
-
-function harMarkeringer(markeringer?: Markering[]) {
-  return markeringer !== undefined && markeringer?.length > 0;
-}
-
-function erHastemarkering(markering?: Markering) {
-  return markering !== undefined && markering?.markeringType === MarkeringHaster;
-}
-
-function lagFormFieldsForMarkering(markering: Markering): ToTrinnsVurderingFormFields {
-  return {
-    godkjent: undefined,
-    begrunnelse: markering?.begrunnelse ?? '',
-    grunner: [],
-    årsakFritekst: '',
-    // Må ha en verdi fra enumen, men hvilken er likegyldig siden den ikke skal brukes
-    definisjon: '5032',
-    markeringer: [markering],
-  };
-}
-
-function feilmeldingManglendeAvkrysning(vurdering: ToTrinnsVurderingFormFields) {
-  if (harMarkeringer(vurdering.markeringer) && vurdering.markeringer?.some(erHastemarkering)) {
-    return 'Du må ta stilling til om hastemarkeringen skal følge behandlingen videre';
-  }
-
-  return 'Du må ta stilling til alle vilkårsvurderinger hvis ikke du underkjenner.';
-}
