@@ -99,17 +99,15 @@ export const Sykdom = async ({ behandlingsreferanse, flyt }: Props) => {
           />
         </StegSuspense>
       )}
-      {overganguføreSteg.skalViseSteg && (
-        <StegSuspense>
-          <OvergangUforeMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={overganguføreSteg} />
-        </StegSuspense>
-      )}
 
-      {overgangarbeidSteg.skalViseSteg && (
-        <StegSuspense>
-          <OvergangArbeidMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={overgangarbeidSteg} />
-        </StegSuspense>
-      )}
+      <StegSuspense>
+        <OvergangUforeMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={overganguføreSteg} />
+      </StegSuspense>
+
+      <StegSuspense>
+        <OvergangArbeidMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={overgangarbeidSteg} />
+      </StegSuspense>
+
       {refusjonskravSteg.skalViseSteg && (
         <StegSuspense>
           <RefusjonMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={refusjonskravSteg} />
