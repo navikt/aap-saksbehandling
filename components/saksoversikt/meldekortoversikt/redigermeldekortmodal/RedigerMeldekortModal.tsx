@@ -9,7 +9,7 @@ import { FormErrorSummary } from 'components/formerrorsummary/FormErrorSummary';
 import { hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import { hentUkeNummerForPeriode } from 'components/saksoversikt/meldekortoversikt/meldekorttabell/MeldekortTabell';
 import { Dato } from 'lib/types/Dato';
-import { MeldeperiodeMedMeldekortDto } from 'lib/types/types';
+import { MeldeperiodeMedMeldekortDto, OppdaterMeldekortRequest } from 'lib/types/types';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { clientKorrigerMeldekort } from 'lib/clientApi';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
@@ -176,20 +176,13 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
                 id={'endre-meldekort'}
                 onSubmit={form.handleSubmit(async (data) => {
                   setIsLoading(true);
-                  const oppdaterMeldekortResponse = await clientKorrigerMeldekort(saksnummer, {
-                    dager: data.dager.map((dag) => {
-                      return {
-                        dato: dag.dato,
-                        timerArbeidet: Number(dag.timerArbeidet),
-                      };
-                    }),
-                    meldeDato: new Dato(data.meldedato).formaterForBackend(),
-                    begrunnelse: data.begrunnelse,
-                    meldeperiode: meldekort.meldeperiode,
-                  });
+                  const oppdaterMeldekortResponse = await clientKorrigerMeldekort(
+                    saksnummer,
+                    mapFormDataTilOppdaterMeldekortRequest(data, meldekort.meldeperiode)
+                  );
 
                   if (isError(oppdaterMeldekortResponse)) {
-                    setError('Noe gikk galt ved oppdatering av meldekort.');
+                    setError('Noe gikk galt ved innsending: ' + oppdaterMeldekortResponse.apiException.message);
                     setIsLoading(false);
                   } else {
                     ventPåMeldekortProsessering();
@@ -307,4 +300,23 @@ function kobleDokumentInfoTilTidligereMeldekort(
       oppdatertAv,
     };
   });
+}
+
+export function mapFormDataTilOppdaterMeldekortRequest(
+  data: RedigerMeldekortFormFields,
+  meldeperiode: MeldeperiodeMedMeldekortDto['meldeperiode']
+): OppdaterMeldekortRequest {
+  return {
+    dager: data.dager.map((dag) => ({
+      dato: dag.dato,
+      timerArbeidet: Number(replaceCommasWithDots(dag.timerArbeidet)),
+    })),
+    meldeDato: new Dato(data.meldedato).formaterForBackend(),
+    begrunnelse: data.begrunnelse,
+    meldeperiode,
+  };
+}
+
+export function replaceCommasWithDots(input: string): string {
+  return input.replace(/,/g, '.');
 }

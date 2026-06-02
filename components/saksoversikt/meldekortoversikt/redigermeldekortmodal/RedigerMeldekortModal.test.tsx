@@ -2,7 +2,10 @@ import { describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { RedigerMeldekortModal } from 'components/saksoversikt/meldekortoversikt/redigermeldekortmodal/RedigerMeldekortModal';
+import {
+  mapFormDataTilOppdaterMeldekortRequest,
+  RedigerMeldekortModal,
+} from 'components/saksoversikt/meldekortoversikt/redigermeldekortmodal/RedigerMeldekortModal';
 import { MeldeperiodeMedMeldekortDto } from 'lib/types/types';
 import { addDays } from 'date-fns';
 import { Dato } from 'lib/types/Dato';
@@ -298,5 +301,54 @@ describe('RedigerMeldekortModal', () => {
 
       expect(screen.getAllByText('Meldedato kan ikke være i fremtiden.')[0]).toBeVisible();
     });
+  });
+});
+
+const meldeperiode: MeldeperiodeMedMeldekortDto['meldeperiode'] = {
+  fom: '2025-01-06',
+  tom: '2025-01-19',
+};
+
+describe('mapFormDataTilOppdaterMeldekortRequest', () => {
+  it('mapper begrunnelse til request', () => {
+    const result = mapFormDataTilOppdaterMeldekortRequest(
+      { begrunnelse: 'Min begrunnelse', årsak: '', meldedato: '20.01.2025', dager: [] },
+      meldeperiode
+    );
+    expect(result.begrunnelse).toBe('Min begrunnelse');
+  });
+
+  it('mapper meldedato fra frontend-format (dd.MM.yyyy) til backend-format (yyyy-MM-dd)', () => {
+    const result = mapFormDataTilOppdaterMeldekortRequest(
+      { begrunnelse: '', årsak: '', meldedato: '20.01.2025', dager: [] },
+      meldeperiode
+    );
+    expect(result.meldeDato).toBe('2025-01-20');
+  });
+
+  it('konverterer komma til punktum i timerArbeidet', () => {
+    const result = mapFormDataTilOppdaterMeldekortRequest(
+      {
+        begrunnelse: '',
+        årsak: '',
+        meldedato: '20.01.2025',
+        dager: [{ dato: '2025-01-06', timerArbeidet: '7,5' }],
+      },
+      meldeperiode
+    );
+    expect(result.dager[0].timerArbeidet).toBe(7.5);
+  });
+
+  it('konverterer tom streng i timerArbeidet til 0', () => {
+    const result = mapFormDataTilOppdaterMeldekortRequest(
+      {
+        begrunnelse: '',
+        årsak: '',
+        meldedato: '20.01.2025',
+        dager: [{ dato: '2025-01-06', timerArbeidet: '' }],
+      },
+      meldeperiode
+    );
+    expect(result.dager[0].timerArbeidet).toBe(0);
   });
 });
