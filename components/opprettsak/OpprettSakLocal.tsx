@@ -346,7 +346,7 @@ export const OpprettSakLocal = () => {
           },
         })) || [],
       tjenestePensjon: getTrueFalseEllerUndefined(data.tjenestePensjon),
-      erArbeidsevnenNedsatt: data.erArbeidsevnenNedsatt === JaEllerNei.Ja,
+      harNedsattArbeidsevne: data.erArbeidsevnenNedsatt === JaEllerNei.Ja,
       erNedsettelseIArbeidsevneMerEnnHalvparten: data.erNedsettelseIArbeidsevneMerEnnHalvparten === JaEllerNei.Ja,
       steg: steg,
     };

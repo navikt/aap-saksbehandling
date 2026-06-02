@@ -13,7 +13,7 @@ type Props = {
   dialogmeldinger?: LegeerklæringStatus[];
 };
 
-const mapStatusTilTekst = (status?: 'BESTILT' | 'SENDT' | 'OK' | 'AVVIST' | null): ReactNode => {
+const mapStatusTilTekst = (status?: 'BESTILT' | 'SENDT' | 'OK' | 'AVVIST' | 'MOTTATT' | null): ReactNode => {
   switch (status) {
     case 'BESTILT':
     case 'SENDT':

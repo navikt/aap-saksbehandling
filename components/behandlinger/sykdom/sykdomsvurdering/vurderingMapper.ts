@@ -17,8 +17,6 @@ function mapArbeidsevneOgYrkesskade(
   | 'erSkadeSykdomEllerLyteVesentligdel'
   | 'erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense'
   | 'yrkesskadeBegrunnelse'
-  | 'erNedsettelseMerEnnYrkesskadegrense'
-  | 'erNedsettelseMinstHalvparten'
 > {
   const fraDato = parseDatoFraDatePicker(vurderingFraDato);
   const vurderingDatoSammeSomRettighetsperiodeStart = vurderingFraDatoErSammeSomRettighetsperiodeStart(

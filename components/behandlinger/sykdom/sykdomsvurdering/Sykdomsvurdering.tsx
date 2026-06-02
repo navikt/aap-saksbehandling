@@ -294,8 +294,6 @@ export const Sykdomsvurdering = ({
           erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense: getJaNeiEllerUndefined(
             vurdering?.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense
           ),
-          erNedsettelseMinstHalvparten: vurdering?.erNedsettelseMinstHalvparten,
-          erNedsettelseMerEnnYrkesskadegrense: vurdering?.erNedsettelseMerEnnYrkesskadegrense,
           yrkesskadeBegrunnelse: getStringEllerUndefined(vurdering?.yrkesskadeBegrunnelse),
           vurderingerMeta: vurdering.vurderingerMeta,
           erNyVurdering: false,
