@@ -37,6 +37,7 @@
   border-right: 1px solid var(--ax-border-neutral-subtle);
   border-bottom: 1px solid var(--ax-border-neutral-subtle);
   padding-top: var(--ax-space-8);
+  justify-self: center;
 }
 
 .skjultWrapper {
