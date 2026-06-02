@@ -1,6 +1,7 @@
 .stretch {
   display: flex;
   justify-content: space-between;
+  padding-top: var(--ax-space-8);
 }
 
 .tabContent {

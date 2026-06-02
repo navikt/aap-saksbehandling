@@ -5,9 +5,9 @@ import {
   ChevronLeftDoubleIcon,
   ChevronRightDoubleIcon,
   ClockDashedIcon,
-  FilesIcon,
-  FolderFileIcon,
-  HddDownIcon,
+  FolderIcon,
+  InformationSquareIcon,
+  PaperplaneIcon,
   PersonGavelIcon,
 } from '@navikt/aksel-icons';
 import { useState } from 'react';
@@ -79,10 +79,10 @@ export const Saksbehandlingsoversikt = ({
 
   const tabs = [
     {
-      tooltip: 'Informasjon om behandlingen',
-      label: 'Behandling',
+      tooltip: 'Informasjon om saken',
+      label: 'Om saken',
       tabName: Tab.BEHANDLINGSINFO,
-      icon: <FolderFileIcon aria-hidden />,
+      icon: <InformationSquareIcon aria-hidden />,
     },
     {
       tooltip: 'Informasjon om klagebehandling',
@@ -94,13 +94,13 @@ export const Saksbehandlingsoversikt = ({
       tooltip: 'Åpne saksdokumenter',
       label: 'Saksdokumenter',
       tabName: Tab.SAKSDOKUMENTER,
-      icon: <FilesIcon aria-hidden />,
+      icon: <FolderIcon aria-hidden />,
     },
     {
       tooltip: 'Åpne be om opplysninger',
       label: 'Be om opplysninger',
       tabName: Tab.BE_OM_OPPLYSNINGER,
-      icon: <HddDownIcon aria-hidden />,
+      icon: <PaperplaneIcon aria-hidden />,
     },
     {
       tooltip: 'Historikk',
@@ -122,7 +122,7 @@ export const Saksbehandlingsoversikt = ({
               value={toggleGroupValue}
               className={styles.stretch}
               size={'small'}
-              fill
+              iconPosition="top"
             >
               <Tabs.List className={expanded ? '' : styles.hidden}>
                 {tabs
