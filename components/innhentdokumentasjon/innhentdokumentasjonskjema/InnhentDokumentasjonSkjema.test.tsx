@@ -47,7 +47,11 @@ describe('InnhentDokumentasjon', () => {
 
 describe('validering', () => {
   beforeEach(async () => {
-    render(<InnhentDokumentasjonSkjema onCancel={vi.fn} onSuccess={vi.fn} />);
+    render(
+      <FeatureFlagProvider flags={mockedFlags}>
+        <InnhentDokumentasjonSkjema onCancel={vi.fn} onSuccess={vi.fn} />
+      </FeatureFlagProvider>
+    );
   });
 
   test('gir feilmelding dersom behandler ikke er valgt', async () => {
