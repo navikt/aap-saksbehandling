@@ -1,13 +1,19 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { InnhentDokumentasjonSkjema } from 'components/innhentdokumentasjon/innhentdokumentasjonskjema/InnhentDokumentasjonSkjema';
-import { describe, test, expect, beforeEach, vi } from 'vitest';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
+import { mockedFlags } from 'lib/services/unleash/unleashToggles';
+import { FeatureFlagProvider } from 'context/UnleashContext';
 
 const user = userEvent.setup();
 
 describe('InnhentDokumentasjon', () => {
   beforeEach(() => {
-    render(<InnhentDokumentasjonSkjema onCancel={vi.fn} onSuccess={vi.fn} />);
+    render(
+      <FeatureFlagProvider flags={mockedFlags}>
+        <InnhentDokumentasjonSkjema onCancel={vi.fn} onSuccess={vi.fn} />
+      </FeatureFlagProvider>
+    );
   });
 
   test('har en overskrift på nivå 3 når man viser skjema', async () => {
