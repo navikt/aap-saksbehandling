@@ -11,11 +11,11 @@ import React from 'react';
 
 interface Props {
   readOnly: boolean;
-  index: number;
   form: UseFormReturn<FormFieldsToTrinnsVurdering>;
+  begrunnelse: string;
 }
 
-export const TotrinnsvurderingHastemarkering = ({ readOnly, form, index }: Props) => {
+export const TotrinnsvurderingHastemarkering = ({ readOnly, form, begrunnelse }: Props) => {
   const beholdIkkeBeholdOptions: ValuePair[] = [
     { label: 'Ja, viderefør til NAY', value: JaEllerNei.Ja },
     { label: 'Nei, fjern markering', value: JaEllerNei.Nei },
@@ -23,7 +23,7 @@ export const TotrinnsvurderingHastemarkering = ({ readOnly, form, index }: Props
 
   return (
     <div className={styles.totrinnsvurderingform}>
-      <div className={styles.headingKvalitetssikrer}>
+      <div className={`${styles.heading} ${styles.headingKvalitetssikrer}`}>
         <HStack align={'center'} gap={'space-8'}>
           <Tag data-color="danger" icon={<ExclamationmarkTriangleIcon />} variant={'moderate'} size={'medium'}>
             {''}
@@ -35,7 +35,7 @@ export const TotrinnsvurderingHastemarkering = ({ readOnly, form, index }: Props
       <div className={styles.felter}>
         <VStack paddingBlock={'space-4'} gap={'space-4'}>
           <BodyShort weight={'semibold'}>Årsak</BodyShort>
-          <BodyShort size={'small'}>{form.watch(`totrinnsvurderinger.${index}.begrunnelse`)}</BodyShort>
+          <BodyShort size={'small'}>{begrunnelse}</BodyShort>
         </VStack>
         <RadioGroupWrapper
           label={'Skal hastemarkeringen følge behandlingen videre?'}

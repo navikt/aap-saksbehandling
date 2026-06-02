@@ -39,7 +39,7 @@ export const ToTrinnsvurderingMedDataFetching = async ({ behandlingsreferanse }:
     totalReadOnly
   );
 
-  const erBehandlingHastemarkert = markeringer.data.some((markering) => markering.markeringType === MarkeringHaster);
+  const hastemarkering = markeringer.data.filter((markering) => markering.markeringType === MarkeringHaster)?.at(0);
 
   return (
     <>
@@ -63,7 +63,7 @@ export const ToTrinnsvurderingMedDataFetching = async ({ behandlingsreferanse }:
           readOnly={flyt.data.visning.kvalitetssikringReadOnly}
           initialMellomlagretVurdering={initialMellomlagretVurdering}
           behandlingsversjon={flyt.data.behandlingVersjon}
-          erBehandlingHastemarkert={erBehandlingHastemarkert}
+          hastemarkering={hastemarkering}
         />
       )}
     </>

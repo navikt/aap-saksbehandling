@@ -12,6 +12,7 @@ import {
 import { TotrinnsvurderingForm } from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingForm';
 import styles from 'components/totrinnsvurdering/ToTrinnsvurdering.module.css';
 import { Alert, Label, VStack } from '@navikt/ds-react';
+import { Markering } from 'lib/types/oppgaveTypes';
 
 interface Props {
   grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;
@@ -21,7 +22,7 @@ interface Props {
   initialMellomlagretVurdering?: MellomlagretVurdering;
   harTilgangTilÅSaksbehandle: boolean;
   behandlingsversjon: number;
-  erBehandlingHastemarkert?: boolean;
+  hastemarkering?: Markering;
 }
 
 export interface ToTrinnsVurderingFormFields {
@@ -39,7 +40,7 @@ export const ToTrinnsvurdering = ({
   initialMellomlagretVurdering,
   harTilgangTilÅSaksbehandle,
   behandlingsversjon,
-  erBehandlingHastemarkert,
+  hastemarkering,
 }: Props) => {
   const vurderteTotrinnsvurderinger = grunnlag.vurderinger.filter(
     (vurdering) => typeof vurdering.godkjent === 'boolean'
@@ -66,7 +67,7 @@ export const ToTrinnsvurdering = ({
               readOnly={readOnly}
               initialMellomlagretVurdering={initialMellomlagretVurdering}
               behandlingsversjon={behandlingsversjon}
-              erBehandlingHastemarkert={erBehandlingHastemarkert}
+              hastemarkering={hastemarkering}
             />
           </VStack>
         )}

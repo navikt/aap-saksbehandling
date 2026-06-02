@@ -47,12 +47,12 @@ interface Props {
   readOnly: boolean;
   initialMellomlagretVurdering?: MellomlagretVurdering;
   behandlingsversjon: number;
-  erBehandlingHastemarkert?: boolean;
+  hastemarkering?: Markering;
 }
 
 export interface FormFieldsToTrinnsVurdering {
   totrinnsvurderinger: ToTrinnsVurderingFormFields[];
-  skalHastemarkeringFjernes?: boolean;
+  skalHastemarkeringFjernes?: JaEllerNei;
 }
 
 type DraftFormFields = Partial<FormFieldsToTrinnsVurdering>;
@@ -63,7 +63,7 @@ export const TotrinnsvurderingForm = ({
   erKvalitetssikring,
   initialMellomlagretVurdering,
   behandlingsversjon,
-  erBehandlingHastemarkert,
+  hastemarkering,
 }: Props) => {
   const { saksnummer, behandlingsreferanse } = useParamsMedType();
 
@@ -82,7 +82,10 @@ export const TotrinnsvurderingForm = ({
     ? mapMellomlagringToDraftFormFields(JSON.parse(initialMellomlagretVurdering.data))
     : mapVurderingToDraftFormFields(grunnlag.vurderinger);
 
-  let totrinnsvurderinger = defaultValue.totrinnsvurderinger;
+  const totrinnsvurderinger = defaultValue.totrinnsvurderinger;
+  const erBehandlingHastemarkert = hastemarkering !== undefined;
+  const skalFjerningAvHastemarkeringVurderes =
+    erBehandlingHastemarkert && erKvalitetssikring && featureFlagHastemarkeringBoks;
 
   const { form } = useConfigForm<FormFieldsToTrinnsVurdering>({
     totrinnsvurderinger: {
@@ -124,7 +127,9 @@ export const TotrinnsvurderingForm = ({
         data.totrinnsvurderinger.forEach((vurdering, i) => {
           if (vurdering.godkjent === JaEllerNei.Ja) {
             const neste = data.totrinnsvurderinger[i + 1];
-            if (neste && !neste.godkjent) {
+            const manglerVurderingAvHastemarkering =
+              data.skalHastemarkeringFjernes === undefined && skalFjerningAvHastemarkeringVurderes;
+            if ((neste && !neste.godkjent) || manglerVurderingAvHastemarkering) {
               form.setError(`totrinnsvurderinger.${i + 1}.godkjent`, {
                 type: 'validate',
                 message: 'Du må ta stilling til alle vilkårsvurderinger hvis ikke du underkjenner.',
@@ -134,7 +139,7 @@ export const TotrinnsvurderingForm = ({
             }
           }
         });
-        if (data.skalHastemarkeringFjernes) {
+        if (data.skalHastemarkeringFjernes === JaEllerNei.Nei) {
           clientFjernMarkeringForBehandling(behandlingsreferanse, { markeringType: MarkeringHaster });
         }
         if (isError) {
@@ -200,9 +205,6 @@ export const TotrinnsvurderingForm = ({
             />
           );
         }
-        if (erBehandlingHastemarkert && erKvalitetssikring && featureFlagHastemarkeringBoks) {
-          return <TotrinnsvurderingHastemarkering key={field.id} form={form} index={index} readOnly={readOnly} />;
-        }
         return (
           <TotrinnnsvurderingFelter
             key={field.id}
@@ -216,6 +218,14 @@ export const TotrinnsvurderingForm = ({
           />
         );
       })}
+      {skalFjerningAvHastemarkeringVurderes && (
+        <TotrinnsvurderingHastemarkering
+          key={crypto.randomUUID()}
+          form={form}
+          readOnly={readOnly}
+          begrunnelse={hastemarkering?.begrunnelse ?? ''}
+        />
+      )}
       {form.formState.errors.totrinnsvurderinger?.root && (
         <Alert variant={'error'}>{form.formState.errors.totrinnsvurderinger.root.message}</Alert>
       )}
