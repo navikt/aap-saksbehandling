@@ -1,7 +1,6 @@
 'use client';
 
 import {
-  BistandVurderingResponse,
   MellomlagretVurdering,
   OvergangUforeGrunnlag,
   OvergangUføreVedtakResultat,
@@ -33,6 +32,7 @@ import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
 import { IkkeVurderbarPeriode } from 'components/periodisering/IkkeVurderbarPeriode';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   behandlingVersjon: number;
@@ -60,6 +60,8 @@ export const OvergangUforePeriodisert = ({
   initialMellomlagretVurdering,
   skalStegVurderes,
 }: Props) => {
+  const skalAlltidVisesFeatureFlag = useFeatureFlag('Skal1117og1118AlltidVises');
+
   const { behandlingsreferanse } = useParamsMedType();
   const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('OVERGANG_UFORE');
@@ -84,6 +86,10 @@ export const OvergangUforePeriodisert = ({
     initialMellomlagretVurdering,
     form
   );
+
+  if (!skalAlltidVisesFeatureFlag && !skalStegVurderes) {
+    return null;
+  }
 
   const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
@@ -201,7 +207,7 @@ export const OvergangUforePeriodisert = ({
               fom={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`)) ?? new Date()}
               tom={null}
               alertMelding={
-                'Vilkåret kan ikke vurderes for denne perioden. For å kunne vurdere vilkåret må § 11-5 ikke være oppfylt i samme periode, og brukeren må ha hatt en periode med ordinær AAP før § 11-17 perioden'
+                'Vilkåret kan ikke vurderes for denne perioden. For å vurdere vilkåret må § 11-5 være oppfylt, og § 11-6 ikke oppfylt i samme periode'
               }
               foersteNyePeriodeFraDato={undefined}
             ></IkkeVurderbarPeriode>

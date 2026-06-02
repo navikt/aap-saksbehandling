@@ -34,6 +34,7 @@ import { IkkeVurderbarPeriode } from 'components/periodisering/IkkeVurderbarPeri
 import React from 'react';
 import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
 import { VStack } from '@navikt/ds-react';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   behandlingVersjon: number;
@@ -50,12 +51,13 @@ export const OvergangArbeid = ({
   initialMellomlagretVurdering,
   skalStegVurderes,
 }: Props) => {
+  const skalAlltidVisesFeatureFlag = useFeatureFlag('Skal1117og1118AlltidVises');
+
   const { behandlingsreferanse } = useParamsMedType();
   const { løsPeriodisertBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('OVERGANG_ARBEID');
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
-
   const { visningActions, visningModus, formReadOnly, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'OVERGANG_ARBEID',
@@ -97,6 +99,10 @@ export const OvergangArbeid = ({
       erNyVurdering: true,
       behøverVurdering: false,
     });
+  }
+
+  if (!skalAlltidVisesFeatureFlag && !skalStegVurderes) {
+    return null;
   }
 
   const førsteNyePeriode = vurderingerFields.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
@@ -217,11 +223,3 @@ export const OvergangArbeid = ({
     </VilkårskortPeriodisert>
   );
 };
-
-/*
-              fom={
-                vurdering.fraDato !== null
-                  ? parseISO(vurdering.fraDato)
-                  : parseISO("2026-05-05")
-              } // TODO: FIX!
- */
