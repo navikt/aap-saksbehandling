@@ -11,6 +11,7 @@ import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { CheckboxWrapper } from 'components/form/checkboxwrapper/CheckboxWrapper';
 import { UmamiTag } from 'components/umami/Umami';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   link: string;
@@ -31,10 +32,18 @@ export const TotrinnsvurderingVedtaksbrevFelter = ({
   field,
   felterOnBlur = () => {},
 }: Props) => {
+  const nyeReturÅrsakerFlag = useFeatureFlag('ReturAarsakJournalforing');
+
   const grunnOptions: ValuePair<ToTrinnsVurderingGrunn>[] = [
     { label: 'Skrivefeil', value: 'SKRIVEFEIL' },
     { label: 'For detaljerte beskrivelser', value: 'FOR_DETALJERT' },
     { label: 'Ikke individuell og konkret nok', value: 'IKKE_INDIVIDUELL_OG_KONKRET' },
+    ...(nyeReturÅrsakerFlag
+      ? ([
+          { label: 'Manglende kildehenvisning', value: 'MANGLENDE_KILDEHENVISNING' },
+          { label: 'Manglende journalføring', value: 'MANGLENDE_JOURNALFØRING' },
+        ] as const)
+      : []),
     { label: 'Annen returårsak', value: 'ANNET' },
   ];
 
