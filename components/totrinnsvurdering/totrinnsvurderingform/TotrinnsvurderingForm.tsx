@@ -11,7 +11,7 @@ import {
 } from 'lib/types/types';
 import { ToTrinnsVurderingFormFields } from 'components/totrinnsvurdering/ToTrinnsvurdering';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { useFieldArray } from 'react-hook-form';
+import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { useConfigForm } from 'components/form/FormHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
@@ -25,6 +25,7 @@ import {
   useUmamiStartTidspunkt,
   useUmamiVarighetHendelser,
 } from 'lib/utils/umami';
+import { isLocal } from 'lib/utils/environment';
 
 interface Props {
   grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;
@@ -195,6 +196,16 @@ export const TotrinnsvurderingForm = ({
             <Button size={'medium'} className={'fit-content'} loading={isLoading}>
               Bekreft og send videre
             </Button>
+            {isLocal() && (
+              <Button
+                type={'button'}
+                size={'medium'}
+                className={'fit-content'}
+                onClick={() => godkjennAlleTotrinnsvurderinger(form)}
+              >
+                Godkjenn alle vurderinger
+              </Button>
+            )}
           </HStack>
           {mellomlagretVurdering && (
             <HStack align={'baseline'}>
@@ -248,4 +259,13 @@ function mapVurderingToDraftFormFields(vurderinger: ToTrinnsVurdering[]): DraftF
       };
     }),
   };
+}
+
+function godkjennAlleTotrinnsvurderinger(form: UseFormReturn<FormFieldsToTrinnsVurdering>) {
+  if (isLocal()) {
+    const vurderinger = form.getValues('totrinnsvurderinger');
+    vurderinger.forEach((_, index) => {
+      form.setValue(`totrinnsvurderinger.${index}.godkjent`, JaEllerNei.Ja);
+    });
+  }
 }
