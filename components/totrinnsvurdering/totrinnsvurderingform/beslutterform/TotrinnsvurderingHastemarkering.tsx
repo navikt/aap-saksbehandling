@@ -11,12 +11,11 @@ import React from 'react';
 
 interface Props {
   readOnly: boolean;
-  erKvalitetssikring: boolean;
   index: number;
   form: UseFormReturn<FormFieldsToTrinnsVurdering>;
 }
 
-export const TotrinnsvurderingHastemarkering = ({ readOnly, erKvalitetssikring, form, index }: Props) => {
+export const TotrinnsvurderingHastemarkering = ({ readOnly, form, index }: Props) => {
   const beholdIkkeBeholdOptions: ValuePair[] = [
     { label: 'Ja, viderefør til NAY', value: JaEllerNei.Ja },
     { label: 'Nei, fjern markering', value: JaEllerNei.Nei },
@@ -24,9 +23,7 @@ export const TotrinnsvurderingHastemarkering = ({ readOnly, erKvalitetssikring, 
 
   return (
     <div className={styles.totrinnsvurderingform}>
-      <div
-        className={`${styles.heading} ${erKvalitetssikring ? styles.headingKvalitetssikrer : styles.headingBeslutter}`}
-      >
+      <div className={styles.headingKvalitetssikrer}>
         <HStack align={'center'} gap={'space-8'}>
           <Tag data-color="danger" icon={<ExclamationmarkTriangleIcon />} variant={'moderate'} size={'medium'}>
             {''}
@@ -43,7 +40,7 @@ export const TotrinnsvurderingHastemarkering = ({ readOnly, erKvalitetssikring, 
         <RadioGroupWrapper
           label={'Skal hastemarkeringen følge behandlingen videre?'}
           control={form.control}
-          name={`totrinnsvurderinger.${index}.godkjent`}
+          name={'skalHastemarkeringFjernes'}
           readOnly={readOnly}
         >
           {beholdIkkeBeholdOptions.map((option) => (

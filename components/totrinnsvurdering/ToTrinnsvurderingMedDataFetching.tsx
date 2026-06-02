@@ -9,25 +9,25 @@ import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { Behovstype } from 'lib/utils/form';
 import { hentMarkeringer } from 'lib/services/oppgaveservice/oppgaveservice';
+import { MarkeringHaster } from 'lib/types/oppgaveTypes';
 
 interface Props {
   behandlingsreferanse: string;
 }
 
 export const ToTrinnsvurderingMedDataFetching = async ({ behandlingsreferanse }: Props) => {
-  const [fatteVedtakGrunnlag, kvalitetssikringGrunnlag, flyt] = await Promise.all([
+  const [fatteVedtakGrunnlag, kvalitetssikringGrunnlag, flyt, markeringer] = await Promise.all([
     hentFatteVedtakGrunnlang(behandlingsreferanse),
     hentKvalitetssikringGrunnlag(behandlingsreferanse),
     hentFlyt(behandlingsreferanse),
+    hentMarkeringer(behandlingsreferanse),
   ]);
 
-  if (isError(fatteVedtakGrunnlag) || isError(kvalitetssikringGrunnlag) || isError(flyt)) {
+  if (isError(fatteVedtakGrunnlag) || isError(kvalitetssikringGrunnlag) || isError(flyt) || isError(markeringer)) {
     return <ApiException apiResponses={[fatteVedtakGrunnlag, kvalitetssikringGrunnlag, flyt]} />;
   }
 
   const erKvalitetssikring = flyt.data.visning.visKvalitetssikringKort && !flyt.data.visning.visBeslutterKort;
-  const markeringerResponse = await hentMarkeringer(behandlingsreferanse);
-  const markeringer = markeringerResponse.type === 'SUCCESS' ? markeringerResponse.data : [];
 
   const totalReadOnly = erKvalitetssikring
     ? !kvalitetssikringGrunnlag.data.harTilgangTilÅSaksbehandle || flyt.data.visning.kvalitetssikringReadOnly
@@ -38,6 +38,8 @@ export const ToTrinnsvurderingMedDataFetching = async ({ behandlingsreferanse }:
     erKvalitetssikring ? Behovstype.KVALITETSSIKRING_KODE : Behovstype.FATTE_VEDTAK_KODE,
     totalReadOnly
   );
+
+  const erBehandlingHastemarkert = markeringer.data.some((markering) => markering.markeringType === MarkeringHaster);
 
   return (
     <>
@@ -50,7 +52,6 @@ export const ToTrinnsvurderingMedDataFetching = async ({ behandlingsreferanse }:
           readOnly={flyt.data.visning.beslutterReadOnly}
           initialMellomlagretVurdering={initialMellomlagretVurdering}
           behandlingsversjon={flyt.data.behandlingVersjon}
-          markeringer={markeringer}
         />
       )}
       {flyt.data.visning.visKvalitetssikringKort && (
@@ -62,7 +63,7 @@ export const ToTrinnsvurderingMedDataFetching = async ({ behandlingsreferanse }:
           readOnly={flyt.data.visning.kvalitetssikringReadOnly}
           initialMellomlagretVurdering={initialMellomlagretVurdering}
           behandlingsversjon={flyt.data.behandlingVersjon}
-          markeringer={markeringer}
+          erBehandlingHastemarkert={erBehandlingHastemarkert}
         />
       )}
     </>

@@ -1,7 +1,13 @@
 'use client';
 
 import { TotrinnnsvurderingFelter } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnnsvurderingFelter';
-import { Behovstype, getJaNeiEllerUndefined, getTrueFalseEllerUndefined, JaEllerNei } from 'lib/utils/form';
+import {
+  Behovstype,
+  getJaNeiEllerUndefined,
+  getTrueFalseEllerUndefined,
+  JaEllerNei,
+  JaEllerNeiOptions,
+} from 'lib/utils/form';
 import { Alert, Button, Detail, HStack } from '@navikt/ds-react';
 import {
   FatteVedtakGrunnlag,
@@ -41,11 +47,12 @@ interface Props {
   readOnly: boolean;
   initialMellomlagretVurdering?: MellomlagretVurdering;
   behandlingsversjon: number;
-  markeringer?: Markering[];
+  erBehandlingHastemarkert?: boolean;
 }
 
 export interface FormFieldsToTrinnsVurdering {
   totrinnsvurderinger: ToTrinnsVurderingFormFields[];
+  skalHastemarkeringFjernes?: boolean;
 }
 
 type DraftFormFields = Partial<FormFieldsToTrinnsVurdering>;
@@ -56,7 +63,7 @@ export const TotrinnsvurderingForm = ({
   erKvalitetssikring,
   initialMellomlagretVurdering,
   behandlingsversjon,
-  markeringer,
+  erBehandlingHastemarkert,
 }: Props) => {
   const { saksnummer, behandlingsreferanse } = useParamsMedType();
 
@@ -75,18 +82,18 @@ export const TotrinnsvurderingForm = ({
     ? mapMellomlagringToDraftFormFields(JSON.parse(initialMellomlagretVurdering.data))
     : mapVurderingToDraftFormFields(grunnlag.vurderinger);
 
-  const hastemarkeringer = markeringer !== undefined ? markeringer.filter(erHastemarkering) : [];
   let totrinnsvurderinger = defaultValue.totrinnsvurderinger;
-
-  if (harMarkeringer(hastemarkeringer) && erKvalitetssikring && featureFlagHastemarkeringBoks) {
-    const hastemarkeringSjekk = lagFormFieldsForMarkering(hastemarkeringer[0]);
-    totrinnsvurderinger = totrinnsvurderinger?.concat([hastemarkeringSjekk]);
-  }
 
   const { form } = useConfigForm<FormFieldsToTrinnsVurdering>({
     totrinnsvurderinger: {
       type: 'fieldArray',
       defaultValue: totrinnsvurderinger,
+    },
+    skalHastemarkeringFjernes: {
+      type: 'radio',
+      rules: { required: 'Du må ta stilling til om hastemarkeringen skal følge behandlingen videre' },
+      defaultValue: undefined,
+      options: JaEllerNeiOptions,
     },
   });
 
@@ -120,18 +127,16 @@ export const TotrinnsvurderingForm = ({
             if (neste && !neste.godkjent) {
               form.setError(`totrinnsvurderinger.${i + 1}.godkjent`, {
                 type: 'validate',
-                message: feilmeldingManglendeAvkrysning(neste),
+                message: 'Du må ta stilling til alle vilkårsvurderinger hvis ikke du underkjenner.',
               });
               isError = true;
               return;
             }
-            if (neste && harMarkeringer(neste.markeringer) && neste.godkjent === JaEllerNei.Nei) {
-              neste.markeringer?.filter(erHastemarkering).forEach((markering) => {
-                clientFjernMarkeringForBehandling(behandlingsreferanse, markering);
-              });
-            }
           }
         });
+        if (data.skalHastemarkeringFjernes) {
+          clientFjernMarkeringForBehandling(behandlingsreferanse, { markeringType: MarkeringHaster });
+        }
         if (isError) {
           return;
         }
@@ -140,28 +145,26 @@ export const TotrinnsvurderingForm = ({
             behandlingVersjon: behandlingsversjon,
             behov: {
               behovstype: erKvalitetssikring ? Behovstype.KVALITETSSIKRING_KODE : Behovstype.FATTE_VEDTAK_KODE,
-              vurderinger: assessedFields
-                .filter((vurdering) => !harMarkeringer(vurdering.markeringer))
-                .map((vurdering) => {
-                  if (vurdering.godkjent === JaEllerNei.Ja) {
-                    return {
-                      definisjon: vurdering.definisjon,
-                      godkjent: true,
-                    };
-                  } else {
-                    return {
-                      definisjon: vurdering.definisjon,
-                      godkjent: getTrueFalseEllerUndefined(vurdering.godkjent),
-                      grunner: vurdering.grunner?.map((grunn) => {
-                        return {
-                          årsak: grunn,
-                          årsakFritekst: grunn === 'ANNET' ? vurdering.årsakFritekst : undefined,
-                        };
-                      }),
-                      begrunnelse: vurdering.begrunnelse,
-                    };
-                  }
-                }),
+              vurderinger: assessedFields.map((vurdering) => {
+                if (vurdering.godkjent === JaEllerNei.Ja) {
+                  return {
+                    definisjon: vurdering.definisjon,
+                    godkjent: true,
+                  };
+                } else {
+                  return {
+                    definisjon: vurdering.definisjon,
+                    godkjent: getTrueFalseEllerUndefined(vurdering.godkjent),
+                    grunner: vurdering.grunner?.map((grunn) => {
+                      return {
+                        årsak: grunn,
+                        årsakFritekst: grunn === 'ANNET' ? vurdering.årsakFritekst : undefined,
+                      };
+                    }),
+                    begrunnelse: vurdering.begrunnelse,
+                  };
+                }
+              }),
             },
             referanse: behandlingsreferanse,
           },
@@ -197,16 +200,8 @@ export const TotrinnsvurderingForm = ({
             />
           );
         }
-        if (harMarkeringer(field.markeringer) && field.markeringer?.every(erHastemarkering)) {
-          return (
-            <TotrinnsvurderingHastemarkering
-              key={field.id}
-              form={form}
-              index={index}
-              erKvalitetssikring={erKvalitetssikring}
-              readOnly={readOnly}
-            />
-          );
+        if (erBehandlingHastemarkert && erKvalitetssikring && featureFlagHastemarkeringBoks) {
+          return <TotrinnsvurderingHastemarkering key={field.id} form={form} index={index} readOnly={readOnly} />;
         }
         return (
           <TotrinnnsvurderingFelter
