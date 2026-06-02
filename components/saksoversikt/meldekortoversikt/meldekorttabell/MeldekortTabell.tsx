@@ -7,6 +7,7 @@ import { MeldeperiodeMedMeldekortDto } from 'lib/types/types';
 import { Kort } from 'components/kort/Kort';
 import { useMeldekort } from 'hooks/saksbehandling/MeldekortHook';
 import { MeldekortTabellRow } from 'components/saksoversikt/meldekortoversikt/meldekorttabell/meldekorttabellrow/MeldekortTabellRow';
+import { sorterEtterNyesteDato } from 'lib/utils/date';
 
 export const MeldekortTabell = () => {
   const { alleMeldekort } = useMeldekort();
@@ -32,14 +33,16 @@ export const MeldekortTabell = () => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {alleMeldekort?.map((meldekort, index) => (
-            <MeldekortTabellRow
-              key={index}
-              meldekort={meldekort}
-              setSelectedMeldekort={setSelectedMeldekort}
-              setIsOpen={setIsOpen}
-            />
-          ))}
+          {alleMeldekort
+            ?.sort((a, b) => sorterEtterNyesteDato(a.meldeperiode.fom, b.meldeperiode.fom))
+            .map((meldekort, index) => (
+              <MeldekortTabellRow
+                key={index}
+                meldekort={meldekort}
+                setSelectedMeldekort={setSelectedMeldekort}
+                setIsOpen={setIsOpen}
+              />
+            ))}
         </Table.Body>
       </TableStyled>
       <RedigerMeldekortModal setIsOpen={setIsOpen} isOpen={isOpen} meldekort={selectedMeldekort} />
