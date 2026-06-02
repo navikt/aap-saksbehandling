@@ -374,7 +374,7 @@ export type BehandlingsFlytAvklaringsbehovKode =
   components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.avklaringsbehov.Definisjon']['kode'];
 
 export type LegeerklæringStatus =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.dokument.dokumentinnhenting.LegeerklæringStatusResponse'];
+  components['schemas']['no.nav.aap.dokumentinnhenting.kontrakt.DialogmeldingStatusTilBehandslingsflytDto'];
 
 export type YrkesskadeVurderingGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.YrkesskadeVurderingGrunnlagResponse'];
@@ -401,13 +401,13 @@ export type InntektsbortfallResponse =
   paths['/api/behandling/{referanse}/grunnlag/inntektsbortfall']['get']['responses']['200']['content']['application/json'];
 
 export type BestillLegeerklæring =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.dokumentinnhenting.BestillLegeerklæringDto'];
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.behandlerdialog.BestillLegeerklæringDto'];
 
 export type ForhåndsvisDialogmelding =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.dokumentinnhenting.Forh\u00E5ndsvisBrevRequest'];
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.behandlerdialog.ForhåndsvisBrevRequest'];
 
 export type ForhåndsvisDialogmeldingResponse =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.dokument.dokumentinnhenting.BrevResponse'];
+  components['schemas']['no.nav.aap.dokumentinnhenting.kontrakt.DialogmeldingForhåndsvisningDto'];
 
 export type UnderveisGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.underveis.UnderveisperiodeDto'];

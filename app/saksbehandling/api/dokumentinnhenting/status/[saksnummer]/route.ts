@@ -8,6 +8,7 @@ import { FetchResponse, isError } from 'lib/utils/api';
 const testdata: LegeerklæringStatus[] = [
   {
     behandlerRef: '1234',
+    behandlingsReferanse: '123',
     dialogmeldingUuid: 'uuid-1',
     opprettet: '2024-08-12',
     personId: '12345678910',
@@ -18,6 +19,7 @@ const testdata: LegeerklæringStatus[] = [
   },
   {
     behandlerRef: '1234',
+    behandlingsReferanse: '123',
     dialogmeldingUuid: 'uuid-3',
     opprettet: '2024-10-27',
     personId: '12345678910',

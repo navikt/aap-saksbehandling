@@ -13,12 +13,7 @@ function mapArbeidsevneOgYrkesskade(
   førsteDatoSomKanVurderes: Date
 ): Pick<
   SykdomsvurderingLøsningDto,
-  | 'erNedsettelseIArbeidsevneMerEnnHalvparten'
-  | 'erSkadeSykdomEllerLyteVesentligdel'
-  | 'erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense'
-  | 'yrkesskadeBegrunnelse'
-  | 'erNedsettelseMerEnnYrkesskadegrense'
-  | 'erNedsettelseMinstHalvparten'
+  'erSkadeSykdomEllerLyteVesentligdel' | 'erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense' | 'yrkesskadeBegrunnelse'
 > {
   const fraDato = parseDatoFraDatePicker(vurderingFraDato);
   const vurderingDatoSammeSomRettighetsperiodeStart = vurderingFraDatoErSammeSomRettighetsperiodeStart(
@@ -49,8 +44,6 @@ function mapArbeidsevneOgYrkesskade(
   return {
     yrkesskadeBegrunnelse,
     erSkadeSykdomEllerLyteVesentligdel,
-    erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense,
-    erNedsettelseIArbeidsevneMerEnnHalvparten,
   };
 }
 

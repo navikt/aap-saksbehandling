@@ -7,6 +7,7 @@ import createFetchMock from 'vitest-fetch-mock';
 const testdata: LegeerklæringStatus[] = [
   {
     behandlerRef: '1234',
+    behandlingsReferanse: '...',
     dialogmeldingUuid: 'uuid-1',
     opprettet: '2024-08-12',
     personId: '12345678910',
