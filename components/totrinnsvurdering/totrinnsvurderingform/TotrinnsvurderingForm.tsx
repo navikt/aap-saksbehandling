@@ -12,8 +12,6 @@ import { Alert, Button, Detail, HStack } from '@navikt/ds-react';
 import {
   FatteVedtakGrunnlag,
   KvalitetssikringGrunnlag,
-  MarkeringDto,
-  Markeringstype,
   MellomlagretVurdering,
   ToTrinnsVurdering,
 } from 'lib/types/types';
@@ -35,7 +33,6 @@ import {
 } from 'lib/utils/umami';
 import { TotrinnsvurderingHastemarkering } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingHastemarkering';
 import { Markering, MarkeringHaster } from 'lib/types/oppgaveTypes';
-import { NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType } from '@navikt/aap-oppgave-typescript-types';
 import { useFeatureFlag } from 'context/UnleashContext';
 
 import { clientFjernMarkeringForBehandling } from 'lib/clientApi';
@@ -94,7 +91,7 @@ export const TotrinnsvurderingForm = ({
     },
     skalHastemarkeringFjernes: {
       type: 'radio',
-      rules: { required: 'Du må ta stilling til om hastemarkeringen skal følge behandlingen videre' },
+      rules: { required: 'Du må ta stilling til om hastemarkeringen skal følge behandlingen videre.' },
       defaultValue: undefined,
       options: JaEllerNeiOptions,
     },
@@ -132,7 +129,7 @@ export const TotrinnsvurderingForm = ({
             if ((neste && !neste.godkjent) || manglerVurderingAvHastemarkering) {
               form.setError(`totrinnsvurderinger.${i + 1}.godkjent`, {
                 type: 'validate',
-                message: 'Du må ta stilling til alle vilkårsvurderinger hvis ikke du underkjenner.',
+                message: 'Du må ta stilling til alle vilkårsvurderinger hvis du ikke underkjenner.',
               });
               isError = true;
               return;
@@ -288,26 +285,6 @@ function mapMellomlagringToDraftFormFields(mellomlagring: FormFieldsToTrinnsVurd
     }),
   };
 }
-
-function mapMarkeringstype(markeringstype: Markeringstype): NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType {
-  switch (markeringstype) {
-    case 'HASTER':
-      return NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.HASTER;
-    case 'KREVER_SPESIALKOMPETANSE':
-      return NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.KREVER_SPESIALKOMPETANSE;
-  }
-}
-
-function mapMarkeringFraDto(data: MarkeringDto): Markering {
-  return {
-    begrunnelse: data.begrunnelse,
-    markeringType: mapMarkeringstype(data.markeringType),
-    opprettetAv: data.opprettetAv,
-    opprettetAvNavn: data.opprettetAvNavn,
-    opprettetTidspunkt: data.opprettetTidspunkt,
-  };
-}
-
 function mapVurderingToDraftFormFields(vurderinger: ToTrinnsVurdering[]): DraftFormFields {
   return {
     totrinnsvurderinger: vurderinger.map((vurdering) => {
@@ -319,7 +296,6 @@ function mapVurderingToDraftFormFields(vurderinger: ToTrinnsVurdering[]): DraftF
           return grunn.årsak;
         }),
         årsakFritekst: vurdering.grunner?.find((grunn) => grunn.årsakFritekst)?.årsakFritekst || '',
-        markeringer: vurdering.markeringer?.map((markering) => mapMarkeringFraDto(markering)),
       };
     }),
   };
