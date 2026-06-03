@@ -30,9 +30,6 @@ export const FlytProsesseringAlert = ({ flytProsessering }: Props) => {
 
                 <HStack gap="space-16" wrap>
                   <BodyShort size="small">
-                    Status: <strong>{oppgave.status}</strong>
-                  </BodyShort>
-                  <BodyShort size="small">
                     Feilende forsøk: <strong>{oppgave.antallFeilendeForsøk}</strong>
                   </BodyShort>
                 </HStack>
