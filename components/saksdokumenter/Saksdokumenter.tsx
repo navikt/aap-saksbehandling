@@ -218,7 +218,7 @@ const VedleggRow = ({
 function formatterBrevkode(brevkode: string): string {
   switch (brevkode) {
     case 'MELDING_FRA_NAV':
-      return 'Melding fra NAV';
+      return 'Melding fra Nav';
     default:
       return storForbokstav(brevkode);
   }
