@@ -44,7 +44,6 @@ export const Underveisgrunnlag = ({ grunnlag, grunnlagMedDiff, readOnly, behandl
       løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       isLoading={isLoading}
       onSubmit={(event) => {
-        console.log('submitting', event);
         event.preventDefault();
         løsBehovOgGåTilNesteSteg(
           {
