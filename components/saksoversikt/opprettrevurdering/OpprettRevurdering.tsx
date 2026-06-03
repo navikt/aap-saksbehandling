@@ -10,7 +10,6 @@ import { Spinner } from 'components/felles/Spinner';
 import { useRouter } from 'next/navigation';
 import { isSuccess } from 'lib/utils/api';
 import { vurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
-import { useFeatureFlag } from 'context/UnleashContext';
 import { Kort } from 'components/kort/Kort';
 import { useInnloggetBruker } from 'hooks/BrukerHook';
 
@@ -37,8 +36,6 @@ export const OpprettRevurdering = ({
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>();
-
-  const inkluderOvergangUføreArbeid = useFeatureFlag('InkluderOvergangUforeArbeid');
 
   async function sendHendelse(data: ManuellRevurderingFormFields) {
     const innsending = {
@@ -85,11 +82,7 @@ export const OpprettRevurdering = ({
     årsaker: {
       type: 'combobox_multiple',
       label: `Hvilke opplysninger skal ${erFørstegangsbehandling ? 'vurderes' : 'revurderes'}?`,
-      options: vurderingsbehovOptions().filter(
-        (option) =>
-          (inkluderOvergangUføreArbeid || option.value !== 'OVERGANG_UFORE') &&
-          (inkluderOvergangUføreArbeid || option.value !== 'OVERGANG_ARBEID')
-      ),
+      options: vurderingsbehovOptions(),
       defaultValue: defaultÅrsaker,
       rules: {
         required: `Velg opplysning som er grunnlaget for ${variant}en`,
