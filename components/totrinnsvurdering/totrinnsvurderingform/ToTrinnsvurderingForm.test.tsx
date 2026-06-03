@@ -289,7 +289,7 @@ describe('totrinnsvurderingform', () => {
     await user.click(sendInnButton);
 
     expect(
-      screen.getByText('Du må ta stilling til alle vilkårsvurderinger hvis ikke du underkjenner.')
+      screen.getByText('Du må ta stilling til alle vilkårsvurderinger hvis du ikke underkjenner.')
     ).toBeInTheDocument();
   });
 
