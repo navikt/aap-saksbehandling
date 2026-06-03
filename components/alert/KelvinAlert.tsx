@@ -7,7 +7,7 @@ import {
   XMarkOctagonFillIcon,
 } from '@navikt/aksel-icons';
 
-interface Props extends InfoCardProps {
+interface Props extends Omit<InfoCardProps, 'data-color'> {
   variant: 'warning' | 'info' | 'error' | 'success';
   children: ReactNode;
   className?: string;
@@ -17,26 +17,26 @@ export const KelvinAlert = ({ variant, children, size = 'small', className, ...r
   switch (variant) {
     case 'success':
       return (
-        <InfoCard data-color="success" size={size} className={className} {...rest}>
+        <InfoCard data-color="success" aria-label={'suksess alert'} size={size} className={className} {...rest}>
           <InfoCard.Message icon={<CheckmarkCircleFillIcon aria-hidden />}>{children}</InfoCard.Message>
         </InfoCard>
       );
 
     case 'warning':
       return (
-        <InfoCard data-color="warning" size={size} className={className} {...rest}>
+        <InfoCard data-color="warning" aria-label={'warning alert'} size={size} className={className} {...rest}>
           <InfoCard.Message icon={<ExclamationmarkTriangleFillIcon aria-hidden />}>{children}</InfoCard.Message>
         </InfoCard>
       );
     case 'info':
       return (
-        <InfoCard data-color="info" size={size} className={className} {...rest}>
+        <InfoCard data-color="info" aria-label={'info alert'} size={size} className={className} {...rest}>
           <InfoCard.Message icon={<InformationSquareFillIcon aria-hidden />}>{children}</InfoCard.Message>
         </InfoCard>
       );
     case 'error':
       return (
-        <InfoCard data-color="danger" size={size} className={className} {...rest}>
+        <InfoCard data-color="danger" aria-label={'error alert'} size={size} className={className} {...rest}>
           <InfoCard.Message icon={<XMarkOctagonFillIcon aria-hidden />}>{children}</InfoCard.Message>
         </InfoCard>
       );

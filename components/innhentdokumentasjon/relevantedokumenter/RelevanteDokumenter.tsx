@@ -75,7 +75,12 @@ export const RelevanteDokumenter = () => {
   }
 
   return (
-    <InfoCard data-color={'info'} size={'small'}>
+    <InfoCard
+      data-color={'info'}
+      size={'small'}
+      as={'section'}
+      aria-label={'Informasjon om helseopplysninger som kan være relevant for saken'}
+    >
       <InfoCard.Header icon={<InformationSquareFillIcon />}>
         <InfoCard.Title>Følgende helseopplysninger kan være relevant for saken</InfoCard.Title>
       </InfoCard.Header>
