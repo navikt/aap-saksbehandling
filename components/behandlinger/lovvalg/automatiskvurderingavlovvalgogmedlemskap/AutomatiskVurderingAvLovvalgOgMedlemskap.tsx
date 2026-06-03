@@ -1,10 +1,11 @@
 'use client';
 
 import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
-import { Alert, BodyShort, Button, Detail, HStack, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, Detail, HStack, VStack } from '@navikt/ds-react';
 import { AutomatiskLovvalgOgMedlemskapVurdering } from 'lib/types/types';
 import { TilhørighetsVurderingTabell } from 'components/behandlinger/lovvalg/automatiskvurderingavlovvalgogmedlemskap/TilhørighetsVurderingTabell';
 import { Dispatch, SetStateAction } from 'react';
+import { KelvinAlert } from 'components/alert/KelvinAlert';
 
 interface Props {
   vurdering: AutomatiskLovvalgOgMedlemskapVurdering;
@@ -22,10 +23,10 @@ export const AutomatiskVurderingAvLovvalgOgMedlemskap = ({
     <VilkårsKort heading={'Automatisk vurdering av lovvalg og medlemskap'} steg={'VURDER_LOVVALG'}>
       <VStack gap={'space-28'} paddingBlock={'space-12'}>
         {!vurdering.kanBehandlesAutomatisk && (
-          <Alert variant={'warning'} title={'Til manuell vurdering'} size={'small'} className={'fit-content'}>
+          <KelvinAlert variant={'warning'} title={'Til manuell vurdering'} className={'fit-content'}>
             Opplysningene tilsier at det kan være utenlandsk lovvalg eller manglende medlemskap. Lovvalg og medlemskap
             må vurderes manuelt.
-          </Alert>
+          </KelvinAlert>
         )}
 
         <div>

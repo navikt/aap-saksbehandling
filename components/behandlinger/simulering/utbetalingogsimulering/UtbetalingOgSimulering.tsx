@@ -1,8 +1,9 @@
 'use client';
 
-import { Alert, Label, Table } from '@navikt/ds-react';
+import { Label, Table } from '@navikt/ds-react';
 import { SimulertUtbetaling, UtbetalingOgSimuleringGrunnlag } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
+import { KelvinAlert } from 'components/alert/KelvinAlert';
 
 interface Props {
   grunnlag: UtbetalingOgSimuleringGrunnlag[];
@@ -35,7 +36,7 @@ const Utbetalingstabell = ({ utbetalinger }: { utbetalinger: SimulertUtbetaling[
 
 export const UtbetalingOgSimulering = ({ grunnlag }: Props) => {
   if (!grunnlag.length) {
-    return <Alert variant={'info'}>Ingenting å vise.</Alert>;
+    return <KelvinAlert variant={'info'}>Ingenting å vise.</KelvinAlert>;
   }
   return (
     <div>

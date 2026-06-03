@@ -1,7 +1,7 @@
 'use client';
 
 import { useFieldArray, UseFormReturn, useWatch } from 'react-hook-form';
-import { Alert, BodyLong, Button, HStack, Label, Table, VStack } from '@navikt/ds-react';
+import { BodyLong, Button, HStack, Label, Table, VStack } from '@navikt/ds-react';
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { TableStyled } from 'components/tablestyled/TableStyled';
@@ -9,6 +9,7 @@ import { SamordningArbeidsgiverFormFields } from 'components/behandlinger/samord
 import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
 import { addBusinessDays, areIntervalsOverlapping, format, isValid, parse } from 'date-fns';
 import { useEffect } from 'react';
+import { KelvinAlert } from 'components/alert/KelvinAlert';
 
 interface Props {
   form: UseFormReturn<SamordningArbeidsgiverFormFields>;
@@ -92,7 +93,7 @@ export const SamordningArbeidsGiverTabell = ({ form, readOnly }: Props) => {
         </HStack>
       )}
       {form.formState.errors.perioder?.root && (
-        <Alert variant={'error'}>{form.formState.errors.perioder.root.message}</Alert>
+        <KelvinAlert variant={'error'}>{form.formState.errors.perioder.root.message}</KelvinAlert>
       )}
     </VStack>
   );

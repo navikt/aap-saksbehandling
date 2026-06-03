@@ -1,13 +1,14 @@
 'use client';
 
 import { PlusIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Alert, Button, Checkbox, Heading, HStack, VStack } from '@navikt/ds-react';
+import { Button, Checkbox, Heading, HStack, VStack } from '@navikt/ds-react';
 import { clientLeggTilYrkesskade } from 'lib/clientApi';
 import { useFetch } from 'hooks/FetchHook';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { subDays, subMonths } from 'date-fns';
+import { KelvinAlert } from 'components/alert/KelvinAlert';
 
 const skadeartOptions = ['Arbeidsulykke', 'Yrkessykdom', 'Annet'];
 const diagnoseOptions = ['Lumbago', 'Karpaltunnelsyndrom', 'Håndleddsfraktur', 'Hørselstap', 'Hjernerystelse'];
@@ -71,11 +72,19 @@ export const LeggTilMockYrkesskade = ({ saksnummer }: { saksnummer: string }) =>
       {fields.map((field, index) => (
         <HStack key={field.id} gap="space-8" align="end">
           <SelectWrapper label="Skadeart" name={`yrkesskader.${index}.skadeart`} control={form.control}>
-            {skadeartOptions.map((o) => <option key={o} value={o}>{o}</option>)}
+            {skadeartOptions.map((o) => (
+              <option key={o} value={o}>
+                {o}
+              </option>
+            ))}
           </SelectWrapper>
 
           <SelectWrapper label="Diagnose" name={`yrkesskader.${index}.diagnose`} control={form.control}>
-            {diagnoseOptions.map((o) => <option key={o} value={o}>{o}</option>)}
+            {diagnoseOptions.map((o) => (
+              <option key={o} value={o}>
+                {o}
+              </option>
+            ))}
           </SelectWrapper>
 
           <Checkbox
@@ -118,7 +127,7 @@ export const LeggTilMockYrkesskade = ({ saksnummer }: { saksnummer: string }) =>
           Lagre
         </Button>
       </HStack>
-      {error && <Alert variant="error">{error}</Alert>}
+      {error && <KelvinAlert variant="error">{error}</KelvinAlert>}
     </VStack>
   );
 };

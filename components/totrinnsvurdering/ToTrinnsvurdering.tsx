@@ -11,7 +11,8 @@ import {
 } from 'lib/types/types';
 import { TotrinnsvurderingForm } from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingForm';
 import styles from 'components/totrinnsvurdering/ToTrinnsvurdering.module.css';
-import { Alert, Label, VStack } from '@navikt/ds-react';
+import { Label, VStack } from '@navikt/ds-react';
+import { KelvinAlert } from 'components/alert/KelvinAlert';
 
 interface Props {
   grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;
@@ -48,9 +49,9 @@ export const ToTrinnsvurdering = ({
     <>
       <div className={styles.toTrinnsKontroll}>
         {grunnlag.harGjortVilkårsvurderingerPåBehandling && !readOnly && (
-          <Alert
+          <KelvinAlert
             variant={'info'}
-          >{`Du har jobbet på denne behandlingen tidligere og kan ikke være ${erKvalitetssikring ? 'kvalitetssikrer' : 'beslutter'}.`}</Alert>
+          >{`Du har jobbet på denne behandlingen tidligere og kan ikke være ${erKvalitetssikring ? 'kvalitetssikrer' : 'beslutter'}.`}</KelvinAlert>
         )}
         {skalViseOppsummering && (
           <Oppsummering vurderinger={vurderteTotrinnsvurderinger} erKvalitetssikrer={erKvalitetssikring} />

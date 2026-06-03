@@ -1,7 +1,7 @@
 'use client';
 
 import { SubmitEventHandler, useState } from 'react';
-import { Alert, Box, Button, Modal, VStack } from '@navikt/ds-react';
+import { Box, Button, Modal, VStack } from '@navikt/ds-react';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { clientSettBehandlingPåVent } from 'lib/clientApi';
 import { revalidateBehandlingPath } from 'lib/actions/actions';
@@ -17,6 +17,7 @@ import { useFlyt } from 'hooks/saksbehandling/FlytHook';
 import { FlytProsesseringServerSentEvent } from 'app/saksbehandling/api/behandling/hent/[referanse]/prosessering/route';
 import { isSuccess } from 'lib/utils/api';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { KelvinAlert } from 'components/alert/KelvinAlert';
 
 interface Props {
   reservert: boolean;
@@ -153,9 +154,9 @@ export const SettBehandlingPåVentModal = ({ reservert, isOpen, onClose }: Props
             <form id={'settBehandlingPåVent'} onSubmit={handleSubmit} className={'flex-column'} autoComplete={'off'}>
               {!reservert && (
                 <Box marginBlock={'space-0 space-8'}>
-                  <Alert variant={'info'} size={'small'}>
+                  <KelvinAlert variant={'info'}>
                     Behandlingen er ikke tildelt deg. Den tildeles deg når du setter den på vent.
-                  </Alert>
+                  </KelvinAlert>
                 </Box>
               )}
               <FormField form={form} formField={formFields.begrunnelse} />
@@ -163,11 +164,7 @@ export const SettBehandlingPåVentModal = ({ reservert, isOpen, onClose }: Props
               <FormField form={form} formField={formFields.grunn} />
             </form>
           )}
-          {error && (
-            <Alert variant={'error'} size={'small'}>
-              {error}
-            </Alert>
-          )}
+          {error && <KelvinAlert variant={'error'}>{error}</KelvinAlert>}
         </VStack>
       </Modal.Body>
       <Modal.Footer>

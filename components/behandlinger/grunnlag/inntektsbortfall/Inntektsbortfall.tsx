@@ -6,7 +6,7 @@ import styles from './Inntektsbortfall.module.css';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { Alert, Table } from '@navikt/ds-react';
+import { Table } from '@navikt/ds-react';
 import { InntektsbortfallResponse, MellomlagretVurdering } from 'lib/types/types';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { CheckmarkCircleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
@@ -16,6 +16,7 @@ import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { VisningModus } from 'lib/types/visningTypes';
 import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
+import { KelvinAlert } from 'components/alert/KelvinAlert';
 
 interface Props {
   behandlingVersjon: number;
@@ -187,10 +188,10 @@ export const Inntektsbortfall = ({
           </Table.Body>
         </TableStyled>
         {showRettTilUttakAlert && (
-          <Alert variant="info">
+          <KelvinAlert variant="info">
             Brukeren har ikke hatt inntekt over 1 G siste år / 3 G siste 3 år. Det må vurderes om brukeren har rett til
             å ta ut full alderspensjon.
-          </Alert>
+          </KelvinAlert>
         )}
         <FormField form={form} formField={formFields.begrunnelse} />
         <FormField form={form} formField={formFields.rettTilUttak} />

@@ -1,4 +1,4 @@
-import { ActionMenu, Alert, BodyShort, Button, Heading, Link, Loader, Table } from '@navikt/ds-react';
+import { ActionMenu, BodyShort, Button, Heading, Link, Loader, Table } from '@navikt/ds-react';
 import useSWR from 'swr';
 
 import styles from './RelevanteDokumenter.module.css';
@@ -14,6 +14,7 @@ import { KnyttTilSakModal } from 'components/saksoversikt/dokumentoversikt/Knytt
 import { SakContextType } from 'context/saksbehandling/SakContext';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { storForbokstav } from 'lib/utils/string';
+import { KelvinAlert } from 'components/alert/KelvinAlert';
 
 interface FormFields {
   dokumentnavn: string;
@@ -59,26 +60,18 @@ export const RelevanteDokumenter = () => {
 
   if (isLoading) {
     return (
-      <Alert variant="info">
+      <KelvinAlert variant="info">
         <Loader size={'small'} title="Søker etter relevante dokumenter" />
-      </Alert>
+      </KelvinAlert>
     );
   }
 
   if (relevanteDokumenter && isError(relevanteDokumenter)) {
-    return (
-      <Alert variant={'error'} size={'small'}>
-        {relevanteDokumenter.apiException.message}
-      </Alert>
-    );
+    return <KelvinAlert variant={'error'}>{relevanteDokumenter.apiException.message}</KelvinAlert>;
   }
 
   if (relevanteDokumenter?.data.length === 0) {
-    return (
-      <Alert size={'small'} variant="info">
-        Fant ingen relevante helseopplysninger
-      </Alert>
-    );
+    return <KelvinAlert variant="info">Fant ingen relevante helseopplysninger</KelvinAlert>;
   }
 
   return (

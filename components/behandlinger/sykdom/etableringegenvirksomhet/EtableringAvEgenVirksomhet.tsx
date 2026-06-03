@@ -1,7 +1,7 @@
 'use client';
 
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
-import { Alert, HStack, VStack } from '@navikt/ds-react';
+import { HStack, VStack } from '@navikt/ds-react';
 import {
   NyVurderingExpandableCard,
   skalVæreInitiellEkspandert,
@@ -40,6 +40,7 @@ import { parseDatoFraDatePicker, summerPerioderVarighetIArbeidsdager } from 'lib
 import { IkkeVurderbarPeriode } from 'components/periodisering/IkkeVurderbarPeriode';
 import { validerPeriodiserteVurderingerMotIkkeRelevantePerioder } from 'lib/utils/validering';
 import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
+import { KelvinAlert } from 'components/alert/KelvinAlert';
 
 interface Props {
   behandlingVersjon: number;
@@ -250,7 +251,7 @@ export const EtableringAvEgenVirksomhet = ({
           </NyVurderingExpandableCard>
         ))}
         {form.formState.errors.vurderinger && (
-          <Alert variant={'error'}>{form.formState.errors.vurderinger.message}</Alert>
+          <KelvinAlert variant={'error'}>{form.formState.errors.vurderinger.message}</KelvinAlert>
         )}
       </VStack>
     </VilkårskortPeriodisert>

@@ -9,7 +9,7 @@ import {
   SamordningYtelseVurdering,
 } from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { Alert, BodyLong, BodyShort, Box, Button, Heading, HStack, Modal, VStack } from '@navikt/ds-react';
+import { BodyLong, BodyShort, Box, Button, Heading, HStack, Modal, VStack } from '@navikt/ds-react';
 import { SubmitEventHandler, useRef, useState } from 'react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
@@ -31,6 +31,7 @@ import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilk
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { storForbokstavOgMellomromForUnderstrek } from 'lib/utils/string';
 import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
+import { KelvinAlert } from 'components/alert/KelvinAlert';
 
 interface Props {
   grunnlag: SamordningGraderingGrunnlag;
@@ -249,12 +250,12 @@ export const SamordningGradering = ({
             <Ytelsesvurderinger form={form} readOnly={formReadOnly} />
             {(success || erAllereddeOppfølgningsOppgave) && (
               <Box maxWidth={'80ch'}>
-                <Alert variant="success">Oppfølgingsoppgave opprettet</Alert>
+                <KelvinAlert variant="success">Oppfølgingsoppgave opprettet</KelvinAlert>
               </Box>
             )}
             {!erAllereddeOppfølgningsOppgave && visRevurderVirkningstidspunkt && !success && (
               <Box maxWidth={'90ch'}>
-                <Alert variant="info">
+                <KelvinAlert variant="info">
                   <Heading spacing size="small" level="3">
                     Tidligste virkningstidspunkt etter samordning er{' '}
                     <strong>{finnTidligsteVirkningstidspunkt()}</strong>
@@ -281,10 +282,10 @@ export const SamordningGradering = ({
                       Opprett oppfølgingsoppgave
                     </Button>
                   </VStack>
-                </Alert>
+                </KelvinAlert>
               </Box>
             )}
-            {errorMessage && <Alert variant={'error'}>{errorMessage}</Alert>}
+            {errorMessage && <KelvinAlert variant={'error'}>{errorMessage}</KelvinAlert>}
           </VStack>
         )}
         {!visForm && (

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useTransition } from 'react';
-import { Alert, Button, Modal } from '@navikt/ds-react';
+import { Button, Modal } from '@navikt/ds-react';
 import styles from 'components/postmottak/postmottaksettbehandlingpåventmodal/PostmottakSettBehandlingPåVentModal.module.css';
 import { HourglassBottomFilledIcon } from '@navikt/aksel-icons';
 import { PostmottakSettPåVentÅrsaker } from 'lib/types/postmottakTypes';
@@ -11,6 +11,7 @@ import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { parse } from 'date-fns';
 import { usePostmottakSettPåVent } from 'hooks/FetchHook';
+import { KelvinAlert } from 'components/alert/KelvinAlert';
 
 interface Props {
   behandlingVersjon: number;
@@ -77,7 +78,7 @@ export const PostmottakSettBehandllingPVentModal = ({
       className={styles.settBehandlingPåVentModal}
     >
       <Modal.Body>
-        {error && <Alert variant={'error'}>{error}</Alert>}
+        {error && <KelvinAlert variant={'error'}>{error}</KelvinAlert>}
         {isOpen && (
           <form
             id={'settBehandlingPåVent'}

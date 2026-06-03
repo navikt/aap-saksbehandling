@@ -1,8 +1,9 @@
 import { useSendHendelseOgVentPåProsessering } from 'hooks/saksbehandling/SendHendelseOgVentPåProsessering';
-import { Alert, BodyLong, Button, Modal } from '@navikt/ds-react';
+import { BodyLong, Button, Modal } from '@navikt/ds-react';
 import { XMarkOctagonIcon } from '@navikt/aksel-icons';
 import styles from 'components/saksinfobanner/avbrytrevurderingmodal/AvbrytRevurderingModal.module.css';
 import { NyÅrsakTilBehandlingV0 } from 'lib/types/types';
+import { KelvinAlert } from 'components/alert/KelvinAlert';
 
 interface Props {
   saksnummer: string;
@@ -33,11 +34,7 @@ export const AvbrytAktivitetspliktbehandlingModal = ({
     >
       <Modal.Body>
         <BodyLong>Behandlingen vil avsluttes og ingen endringer vil bli lagret på saken.</BodyLong>
-        {sendHendelseError && (
-          <Alert variant={'error'} size={'small'}>
-            {sendHendelseError.message}
-          </Alert>
-        )}
+        {sendHendelseError && <KelvinAlert variant={'error'}>{sendHendelseError.message}</KelvinAlert>}
       </Modal.Body>
       <Modal.Footer>
         <Button

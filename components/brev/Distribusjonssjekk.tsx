@@ -1,8 +1,9 @@
-import { Alert, BodyShort, Button, Heading, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, Heading, VStack } from '@navikt/ds-react';
 import { clientKanDistribuereBrev } from 'lib/clientApi';
 import { Mottaker } from 'lib/types/types';
 import { isError } from 'lib/utils/api';
 import { Dispatch, useCallback, useEffect, useState } from 'react';
+import { KelvinAlert } from 'components/alert/KelvinAlert';
 
 interface Props {
   readOnly: boolean;
@@ -66,12 +67,12 @@ export const Distribusjonssjekk = ({
   return (
     <>
       {visKanIkkeDistribuereAdvarsel && (
-        <Alert variant={'warning'} size={'small'} className={'fit-content'}>
+        <KelvinAlert variant={'warning'} className={'fit-content'}>
           Brevet kan ikke distribueres til alle mottakere. Se rutinebeskrivelse for manuell håndtering.
-        </Alert>
+        </KelvinAlert>
       )}
       {distribusjonssjekkFeil && (
-        <Alert variant="error" size="small">
+        <KelvinAlert variant="error">
           <Heading level={'3'} size="small">
             Det har oppstått en feil
           </Heading>
@@ -90,7 +91,7 @@ export const Distribusjonssjekk = ({
               Prøv igjen
             </Button>
           </VStack>
-        </Alert>
+        </KelvinAlert>
       )}
     </>
   );

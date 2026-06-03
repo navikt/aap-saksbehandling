@@ -4,8 +4,9 @@ import { CustomExpandableCard } from 'components/customexpandablecard/CustomExpa
 import { isBefore, isSameDay, sub } from 'date-fns';
 import { formatDatoMedMånedsnavn } from 'lib/utils/date';
 import { useState } from 'react';
-import { Alert, BodyShort, HStack, Tag, VStack } from '@navikt/ds-react';
+import { BodyShort, HStack, Tag, VStack } from '@navikt/ds-react';
 import styles from 'components/behandlinger/oppholdskrav/oppholdskrav.module.css';
+import { KelvinAlert } from 'components/alert/KelvinAlert';
 
 interface Props {
   fom: Date;
@@ -42,9 +43,9 @@ export const IkkeVurderbarPeriode = ({ fom, tom, foersteNyePeriodeFraDato, alert
       }
     >
       <VStack>
-        <Alert size="small" variant={'info'} className={'fit-content'}>
+        <KelvinAlert variant={'info'} className={'fit-content'}>
           {alertMelding}
-        </Alert>
+        </KelvinAlert>
       </VStack>
     </CustomExpandableCard>
   );

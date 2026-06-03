@@ -1,9 +1,10 @@
 'use client';
 
-import { Alert, Button, Heading, Page, Table } from '@navikt/ds-react';
+import { Button, Heading, Page, Table } from '@navikt/ds-react';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { UbehandletJournalpost } from 'lib/types/postmottakTypes';
+import { KelvinAlert } from 'components/alert/KelvinAlert';
 
 export const UbehandledeJournalposter = ({ journalposter }: { journalposter: UbehandletJournalpost[] }) => {
   return (
@@ -43,9 +44,7 @@ export const UbehandledeJournalposter = ({ journalposter }: { journalposter: Ube
                       Vis oppgave
                     </Button>
                   ) : (
-                    <Alert variant="warning" size="small">
-                      Ingen behandling
-                    </Alert>
+                    <KelvinAlert variant="warning">Ingen behandling</KelvinAlert>
                   )}
                 </Table.DataCell>
               </Table.Row>

@@ -2,7 +2,7 @@
 
 import { TotrinnnsvurderingFelter } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnnsvurderingFelter';
 import { Behovstype, getJaNeiEllerUndefined, getTrueFalseEllerUndefined, JaEllerNei } from 'lib/utils/form';
-import { Alert, Button, Detail, HStack } from '@navikt/ds-react';
+import { Button, Detail, HStack } from '@navikt/ds-react';
 import {
   FatteVedtakGrunnlag,
   KvalitetssikringGrunnlag,
@@ -26,6 +26,7 @@ import {
   useUmamiVarighetHendelser,
 } from 'lib/utils/umami';
 import { isLocal } from 'lib/utils/environment';
+import { KelvinAlert } from 'components/alert/KelvinAlert';
 
 interface Props {
   grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;
@@ -184,7 +185,7 @@ export const TotrinnsvurderingForm = ({
         );
       })}
       {form.formState.errors.totrinnsvurderinger?.root && (
-        <Alert variant={'error'}>{form.formState.errors.totrinnsvurderinger.root.message}</Alert>
+        <KelvinAlert variant={'error'}>{form.formState.errors.totrinnsvurderinger.root.message}</KelvinAlert>
       )}
       <LøsBehovOgGåTilNesteStegStatusAlert
         status={status}

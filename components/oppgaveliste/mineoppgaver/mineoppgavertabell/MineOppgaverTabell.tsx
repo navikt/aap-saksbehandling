@@ -1,11 +1,12 @@
 import { Oppgave } from 'lib/types/oppgaveTypes';
 import { useState } from 'react';
-import { Alert, SortState, Table, VStack } from '@navikt/ds-react';
+import { SortState, Table, VStack } from '@navikt/ds-react';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { ManglerTilgangModal } from 'components/oppgaveliste/manglertilgangmodal/ManglerTilgangModal';
 import { MineOppgaverTabellRad } from 'components/oppgaveliste/mineoppgaver/mineoppgavertabell/MineOppgaverTabellRad';
 import { TildelOppgaveModal } from 'components/tildeloppgavemodal/TildelOppgaveModal';
 import { PathsMineOppgaverGetParametersQuerySortby } from '@navikt/aap-oppgave-typescript-types';
+import { KelvinAlert } from 'components/alert/KelvinAlert';
 
 interface Props {
   oppgaver: Oppgave[];
@@ -26,7 +27,7 @@ export const MineOppgaverTabell = ({ oppgaver, revalidateFunction, setSortBy, so
         revalidateFunction={revalidateFunction}
       />
       <TildelOppgaveModal revalidateFunction={revalidateFunction} />
-      {feilmelding && <Alert variant={'error'}>{feilmelding}</Alert>}
+      {feilmelding && <KelvinAlert variant={'error'}>{feilmelding}</KelvinAlert>}
       <TableStyled
         size={'small'}
         zebraStripes

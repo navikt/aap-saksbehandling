@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, BodyLong, Button, HStack, Page, VStack } from '@navikt/ds-react';
+import { BodyLong, Button, HStack, Page, VStack } from '@navikt/ds-react';
 import { OppfølgingsoppgaveV0 } from 'lib/types/types';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
@@ -16,6 +16,7 @@ import { Behovstype } from 'lib/utils/form';
 import { Kort } from 'components/kort/Kort';
 import { useInnloggetBruker } from 'hooks/BrukerHook';
 import { brukerharNayTilgang } from 'lib/utils/innloggetBruker';
+import { KelvinAlert } from 'components/alert/KelvinAlert';
 
 interface Props {
   saksnummer: string;
@@ -197,9 +198,9 @@ export const OpprettOppfølgingsBehandling = ({
           </Kort>
 
           {error && (
-            <Alert variant={'error'} size={'small'}>
+            <KelvinAlert variant={'error'} size={'small'}>
               {error}
-            </Alert>
+            </KelvinAlert>
           )}
 
           <HStack gap="space-16">

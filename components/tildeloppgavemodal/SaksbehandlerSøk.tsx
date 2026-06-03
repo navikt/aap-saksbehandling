@@ -1,9 +1,10 @@
 'use client';
 
-import { Alert, Search, VStack } from '@navikt/ds-react';
+import { Search, VStack } from '@navikt/ds-react';
 import { Dispatch, SetStateAction, SubmitEventHandler, useState } from 'react';
 import { clientSøkPåSaksbehandler } from 'lib/clientApi';
 import { isSuccess } from 'lib/utils/api';
+import { KelvinAlert } from 'components/alert/KelvinAlert';
 
 interface Props {
   oppgaver: number[];
@@ -76,7 +77,7 @@ export const SaksbehandlerSøk = ({
           <Search.Button loading={isLoading} />
         </Search>
       </form>
-      {error && <Alert variant={'error'}>{error}</Alert>}
+      {error && <KelvinAlert variant={'error'}>{error}</KelvinAlert>}
     </VStack>
   );
 };

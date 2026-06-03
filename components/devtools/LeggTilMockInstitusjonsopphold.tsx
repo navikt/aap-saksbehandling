@@ -1,4 +1,4 @@
-import { Alert, Button, Heading, HStack, VStack } from '@navikt/ds-react';
+import { Button, Heading, HStack, VStack } from '@navikt/ds-react';
 import { clientLeggTilInstitusjonsopphold } from 'lib/clientApi';
 import { parse } from 'date-fns';
 import { useFetch } from 'hooks/FetchHook';
@@ -7,6 +7,7 @@ import { PlusIcon, TrashIcon } from '@navikt/aksel-icons';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
 import { formaterDatoForBackend } from 'lib/utils/date';
+import { KelvinAlert } from 'components/alert/KelvinAlert';
 
 interface InstitusjonsoppholdItem {
   institusjonstype: 'FO' | 'HS';
@@ -89,7 +90,7 @@ export const LeggTilMockInstitusjonsopphold = ({ saksnummer }: { saksnummer: str
           Lagre
         </Button>
       </HStack>
-      {error && <Alert variant="error">{error}</Alert>}
+      {error && <KelvinAlert variant="error">{error}</KelvinAlert>}
     </VStack>
   );
 };

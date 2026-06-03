@@ -1,8 +1,9 @@
-import { Alert, BodyShort, Button, Modal, Table } from '@navikt/ds-react';
+import { BodyShort, Button, Modal, Table } from '@navikt/ds-react';
 import { isError, isSuccess } from 'lib/utils/api';
 import { useState } from 'react';
 import { feilregistrerSakstilknytning, opphevFeilregistrertSakstilknytning } from 'lib/dokumentClientApi';
 import { Journalpost } from 'lib/types/journalpost';
+import { KelvinAlert } from 'components/alert/KelvinAlert';
 
 export const FeilregistrerJournalpostModal = ({
   journalpost,
@@ -50,7 +51,7 @@ export const FeilregistrerJournalpostModal = ({
           </BodyShort>
         </Modal.Body>
 
-        {error && <Alert variant="error">{error}</Alert>}
+        {error && <KelvinAlert variant="error">{error}</KelvinAlert>}
 
         <Modal.Footer>
           <Button variant="primary" onClick={feilregistrer} loading={isLoading}>
@@ -95,7 +96,7 @@ export const FeilregistrerJournalpostModal = ({
           </Table.Body>
         </Table>
       </Modal.Body>
-      {error && <Alert variant="error">{error}</Alert>}
+      {error && <KelvinAlert variant="error">{error}</KelvinAlert>}
       <Modal.Footer>
         <Button data-color="danger" variant="primary" onClick={feilregistrer} loading={isLoading}>
           Ja, feilregistrer

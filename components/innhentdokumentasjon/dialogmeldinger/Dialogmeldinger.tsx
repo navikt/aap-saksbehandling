@@ -1,4 +1,4 @@
-import { Alert, BodyShort, Button, HStack, Table } from '@navikt/ds-react';
+import { BodyShort, Button, HStack, Table } from '@navikt/ds-react';
 import { LegeerklæringStatus } from 'lib/types/types';
 import { ReactNode, useState } from 'react';
 
@@ -8,6 +8,7 @@ import { formaterDatoForFrontend, sorterEtterNyesteDato } from 'lib/utils/date';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { isBefore, subDays } from 'date-fns';
 import { usePurrPåDialogmelding } from 'hooks/FetchHook';
+import { KelvinAlert } from 'components/alert/KelvinAlert';
 
 type Props = {
   dialogmeldinger?: LegeerklæringStatus[];
@@ -19,15 +20,15 @@ const mapStatusTilTekst = (status?: 'BESTILT' | 'SENDT' | 'OK' | 'AVVIST' | 'MOT
     case 'SENDT':
     case 'OK':
       return (
-        <Alert size={'small'} variant="success" inline>
+        <KelvinAlert variant="success" inline>
           Bestilt
-        </Alert>
+        </KelvinAlert>
       );
     case 'AVVIST':
       return (
-        <Alert size={'small'} variant="error" inline>
+        <KelvinAlert variant="error" inline>
           Feilet
-        </Alert>
+        </KelvinAlert>
       );
     default:
       return '';
@@ -76,17 +77,9 @@ const Dialogmelding = ({ melding }: { melding: LegeerklæringStatus }) => {
             </Button>
           )}
 
-          {purringSent && !error && (
-            <Alert variant="success" size="small">
-              Purring sendt
-            </Alert>
-          )}
+          {purringSent && !error && <KelvinAlert variant="success">Purring sendt</KelvinAlert>}
 
-          {error && (
-            <Alert variant="error" size="small">
-              {error}
-            </Alert>
-          )}
+          {error && <KelvinAlert variant="error">{error}</KelvinAlert>}
         </HStack>
       </Table.DataCell>
     </Table.Row>

@@ -1,5 +1,5 @@
 import styles from './DokumentOversikt.module.css';
-import { Alert, Button, Heading, HStack, Table, VStack } from '@navikt/ds-react';
+import { Button, Heading, HStack, Table, VStack } from '@navikt/ds-react';
 import { Spinner } from 'components/felles/Spinner';
 import { isSuccess } from 'lib/utils/api';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
@@ -16,6 +16,7 @@ import { useEffect, useState } from 'react';
 import { useLagretDokumentFilter } from 'hooks/dokumenter/dokumentFilterHook';
 import { ArrowCirclepathReverseIcon } from '@navikt/aksel-icons';
 import { Kort } from 'components/kort/Kort';
+import { KelvinAlert } from 'components/alert/KelvinAlert';
 
 export interface DokumentFilterFormFields {
   tema: string[];
@@ -96,7 +97,7 @@ export const DokumentOversikt = ({ sak }: { sak: SaksInfo }) => {
   };
 
   if (error) {
-    return <Alert variant="error">{error || 'Ukjent feil oppsto'}</Alert>;
+    return <KelvinAlert variant="error">{error || 'Ukjent feil oppsto'}</KelvinAlert>;
   }
 
   return (

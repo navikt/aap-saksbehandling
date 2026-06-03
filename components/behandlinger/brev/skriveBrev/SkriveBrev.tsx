@@ -1,18 +1,7 @@
 'use client';
 
 import { BrevbyggerBeta } from '@navikt/aap-breveditor/';
-import {
-  ActionMenu,
-  Alert,
-  BodyShort,
-  Button,
-  HStack,
-  Label,
-  List,
-  Loader,
-  LocalAlert,
-  VStack,
-} from '@navikt/ds-react';
+import { ActionMenu, BodyShort, Button, HStack, Label, List, Loader, LocalAlert, VStack } from '@navikt/ds-react';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useDebounce } from 'hooks/DebounceHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
@@ -34,6 +23,7 @@ import { FormField } from 'components/form/FormField';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { Distribusjonssjekk } from 'components/brev/Distribusjonssjekk';
 import { loggUmamiEvent, useUmamiStartTidspunkt } from 'lib/utils/umami';
+import { KelvinAlert } from 'components/alert/KelvinAlert';
 
 export const SkriveBrev = ({
   referanse,
@@ -138,11 +128,7 @@ export const SkriveBrev = ({
           <HStack gap="space-8">
             {sistLagret && <Label as="p">Sist lagret: {formaterDatoMedTidspunktForFrontend(sistLagret)}</Label>}
             {isSaving && <Loader />}
-            {error && (
-              <Alert variant="error" size="small">
-                {error}
-              </Alert>
-            )}
+            {error && <KelvinAlert variant="error">{error}</KelvinAlert>}
           </HStack>
           {!readOnly && (
             <ActionMenu>

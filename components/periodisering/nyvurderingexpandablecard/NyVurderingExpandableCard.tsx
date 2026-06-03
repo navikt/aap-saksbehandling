@@ -3,7 +3,7 @@
 import { CustomExpandableCard } from 'components/customexpandablecard/CustomExpandableCard';
 import { formatDatoMedMånedsnavn } from 'lib/utils/date';
 import { ReactNode, useRef, useState } from 'react';
-import { Alert, BodyShort, Button, HGrid, HStack, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, HGrid, HStack, VStack } from '@navikt/ds-react';
 import { VurdertAvAnsattDetail } from 'components/vurdertav/VurdertAvAnsattDetail';
 import { subDays } from 'date-fns';
 import { TrashFillIcon } from '@navikt/aksel-icons';
@@ -11,6 +11,7 @@ import { VurderingFormMeta } from 'lib/types/types';
 import { SlettVurderingModal } from 'components/periodisering/slettvurderingmodal/SlettVurderingModal';
 import { VurderingStatus, VurderingStatusTag } from 'components/periodisering/VurderingStatusTag';
 import { AccordionsSignal } from 'hooks/AccordionSignalHook';
+import { KelvinAlert } from 'components/alert/KelvinAlert';
 
 interface Props {
   initiellEkspandert: boolean;
@@ -78,10 +79,9 @@ export const NyVurderingExpandableCard = ({
         <HGrid columns={'1fr 30px'}>
           <VStack gap={'space-20'}>
             {vurdering.behøverVurdering && (
-              <Alert
+              <KelvinAlert
                 variant={'info'}
-                size={'small'}
-              >{`Perioden fra ${fraDato ? formatDatoMedMånedsnavn(fraDato) : ''} mangler vurdering og må vurderes.`}</Alert>
+              >{`Perioden fra ${fraDato ? formatDatoMedMånedsnavn(fraDato) : ''} mangler vurdering og må vurderes.`}</KelvinAlert>
             )}
             {children}
           </VStack>

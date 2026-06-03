@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, BodyShort, Button, Heading, HStack, Label, Radio, Table, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, Heading, HStack, Label, Radio, Table, VStack } from '@navikt/ds-react';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { validerDato } from 'lib/validation/dateValidation';
 import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
@@ -18,6 +18,7 @@ import {
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { useEffect } from 'react';
 import { nyVurderingErOppfylt } from 'components/behandlinger/sykdom/etableringegenvirksomhet/etablering-av-egen-virksomhet-utils';
+import { KelvinAlert } from 'components/alert/KelvinAlert';
 
 const EierBrukerVirsomheten = lagEnumObjektFraUnionType<NonNullable<EtableringEierBrukerVirksomheten>>({
   EIER_MINST_50_PROSENT: 'EIER_MINST_50_PROSENT',
@@ -137,7 +138,9 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly, gru
               </VStack>
             </VStack>
             {form.formState.errors.vurderinger?.[index]?.utviklingsperioder && (
-              <Alert variant={'error'}>{form.formState.errors.vurderinger[index].utviklingsperioder.message}</Alert>
+              <KelvinAlert variant={'error'}>
+                {form.formState.errors.vurderinger[index].utviklingsperioder.message}
+              </KelvinAlert>
             )}
             <VStack gap={'space-16'}>
               <Table size="small">
@@ -226,7 +229,9 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly, gru
               </VStack>
             </VStack>
             {form.formState.errors.vurderinger?.[index]?.oppstartsperioder && (
-              <Alert variant={'error'}>{form.formState.errors.vurderinger[index].oppstartsperioder.message}</Alert>
+              <KelvinAlert variant={'error'}>
+                {form.formState.errors.vurderinger[index].oppstartsperioder.message}
+              </KelvinAlert>
             )}
             <VStack gap={'space-16'}>
               <Table size="small">
@@ -299,7 +304,7 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly, gru
               </HStack>
             </VStack>
           </VStack>
-          <Alert variant={'info'}>
+          <KelvinAlert variant={'info'}>
             <VStack>
               <BodyShort>{'Har du husket'}</BodyShort>
               <BodyShort>
@@ -307,7 +312,7 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly, gru
               </BodyShort>
               <BodyShort>{'- å opprette en oppfølgingsoppgave før utgangen av neste periode?'}</BodyShort>
             </VStack>
-          </Alert>
+          </KelvinAlert>
         </VStack>
       )}
     </VStack>

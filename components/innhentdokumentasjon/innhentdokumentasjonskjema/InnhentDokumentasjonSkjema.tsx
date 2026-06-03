@@ -1,5 +1,5 @@
-import { Alert, BodyShort, Button, Heading, Link } from '@navikt/ds-react';
-import { useState, SubmitEventHandler } from 'react';
+import { BodyShort, Button, Heading, Link } from '@navikt/ds-react';
+import { SubmitEventHandler, useState } from 'react';
 
 import styles from './InnhentDokumentasjonSkjema.module.css';
 import { BestillLegeerklæring } from 'lib/types/types';
@@ -11,6 +11,7 @@ import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { isError } from 'lib/utils/api';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
+import { KelvinAlert } from 'components/alert/KelvinAlert';
 
 export type Behandler = {
   type?: string;
@@ -175,9 +176,7 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
         </div>
         {error && (
           <div className={styles.rad}>
-            <Alert variant="error" size={'small'}>
-              {error || 'Noe gikk galt ved bestilling av dialogmelding'}
-            </Alert>
+            <KelvinAlert variant="error">{error || 'Noe gikk galt ved bestilling av dialogmelding'}</KelvinAlert>
           </div>
         )}
       </form>

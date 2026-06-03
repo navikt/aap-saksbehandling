@@ -6,7 +6,7 @@ import {
   VedtakslengdeVurderingResponse,
   VurderingFormMeta,
 } from 'lib/types/types';
-import { Radio, VStack, Alert } from '@navikt/ds-react';
+import { Radio, VStack } from '@navikt/ds-react';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { Behovstype } from 'lib/utils/form';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
@@ -32,6 +32,7 @@ import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupW
 import React from 'react';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
+import { KelvinAlert } from 'components/alert/KelvinAlert';
 
 interface VedtakslengdeVurderingForm extends VurderingFormMeta {
   manuellVurdering: boolean;
@@ -187,10 +188,10 @@ export const VedtakslengdeSteg = ({
       formReset={() => form.reset(getDefaultValuesFromGrunnlag(grunnlag))}
     >
       {erVedtakslengdeManuelt && (
-        <Alert variant={'info'} size={'small'} style={{ marginBottom: '1rem' }}>
+        <KelvinAlert variant={'info'} style={{ marginBottom: '1rem' }}>
           Brukeren har stans eller opphør etterfulgt av løpende rettighet fram i tid. Vedtaksperioden må vurderes
           manuelt.
-        </Alert>
+        </KelvinAlert>
       )}
 
       {grunnlag.sisteVedtatteVurderinger.map((vurdering, index) => (

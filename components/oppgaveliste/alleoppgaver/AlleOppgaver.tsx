@@ -2,7 +2,7 @@
 
 import { Enhet } from 'lib/types/oppgaveTypes';
 import { useEffect, useState } from 'react';
-import { Alert, BodyShort, Box, Button, HStack, Label, Switch, VStack } from '@navikt/ds-react';
+import { BodyShort, Box, Button, HStack, Label, Switch, VStack } from '@navikt/ds-react';
 import { AlleOppgaverTabell } from 'components/oppgaveliste/alleoppgaver/alleoppgavertabell/AlleOppgaverTabell';
 import { useAlleOppgaverForEnhet } from 'hooks/oppgave/OppgaveHook';
 import { KøSelect } from 'components/oppgaveliste/køselect/KøSelect';
@@ -31,6 +31,7 @@ import { useBackendSortering } from 'hooks/oppgave/BackendSorteringHook';
 import { AlleOppgaverFiltrering } from 'components/oppgaveliste/filtrering/alleoppgaverfiltrering/AlleOppgaverFiltrering';
 import { ValuePair } from 'components/form/FormField';
 import { useInnloggetBruker } from 'hooks/BrukerHook';
+import { KelvinAlert } from 'components/alert/KelvinAlert';
 
 interface Props {
   enheter: Enhet[];
@@ -195,7 +196,7 @@ export const AlleOppgaver = ({ enheter }: Props) => {
   }, [køer]);
 
   if (isError(køer)) {
-    return <Alert variant="error">{køer.apiException.message}</Alert>;
+    return <KelvinAlert variant="error">{køer.apiException.message}</KelvinAlert>;
   }
 
   if (!aktivKø) {

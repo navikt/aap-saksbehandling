@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, BodyShort, Button, Chips, Heading, HStack, Table, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, Chips, Heading, HStack, Table, VStack } from '@navikt/ds-react';
 import { RettighetsinfoDto, SaksInfo, Vurderingsbehov } from 'lib/types/types';
 import { capitalize } from 'lodash';
 import { SakDevTools } from 'components/saksoversikt/SakDevTools';
@@ -22,6 +22,7 @@ import { usePostmottakBehandlinger } from 'hooks/postmottak/PostmottakBehandling
 import { useHentOppgaverForBehandlinger } from 'hooks/oppgave/OppgaverPåSakHook';
 import { Dato } from 'lib/types/Dato';
 import { Kort } from 'components/kort/Kort';
+import { KelvinAlert } from 'components/alert/KelvinAlert';
 
 const lokalDevToolsForBehandlingOgSak = isLocal();
 
@@ -138,7 +139,7 @@ export const SakMedBehandlinger = ({
         </VStack>
         <VStack gap="space-16">
           <Heading size="xsmall">Behandlinger</Heading>
-          {feilmelding && <Alert variant={'error'}>{feilmelding}</Alert>}
+          {feilmelding && <KelvinAlert variant={'error'}>{feilmelding}</KelvinAlert>}
           <Chips>
             <Chips.Toggle
               selected={visMeldekortbehandlinger}

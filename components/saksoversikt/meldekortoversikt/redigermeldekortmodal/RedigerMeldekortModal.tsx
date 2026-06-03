@@ -1,4 +1,4 @@
-import { Alert, BodyShort, Button, Detail, Dialog, HStack, Link, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, Detail, Dialog, HStack, Link, VStack } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 
@@ -21,6 +21,7 @@ import { addDays, differenceInDays } from 'date-fns';
 import { useMeldekort } from 'hooks/saksbehandling/MeldekortHook';
 import { Journalpost } from 'lib/types/journalpost';
 import { erDatoFoerDato, erDatoIFremtiden } from 'lib/validation/dateValidation';
+import { KelvinAlert } from 'components/alert/KelvinAlert';
 
 interface Props {
   setIsOpen: (isOpen: boolean) => void;
@@ -195,17 +196,15 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
                   {skalViseMeldedato && <FormField form={form} formField={formFields.meldedato} />}
                   {skalViseTimer && <UtfyllingKalender readOnly={erÅrsakRegistrereMeldedato} />}
                   {skalViseAlertForIngenTimer && (
-                    <Alert variant={'info'} size={'small'}>
-                      Bruker har ikke levert noen timer.
-                    </Alert>
+                    <KelvinAlert variant={'info'}>Bruker har ikke levert noen timer.</KelvinAlert>
                   )}
                   <FormErrorSummary errorList={errorList} />
-                  {error && <Alert variant={'error'}>{error}</Alert>}
+                  {error && <KelvinAlert variant={'error'}>{error}</KelvinAlert>}
                   {erÅrsakOverstyring && (
-                    <Alert variant={'warning'} size={'small'}>
+                    <KelvinAlert variant={'warning'}>
                       Overstyring av bruker er ikke støttet enda. Hvis behovet vedvarer etter dialog med bruker, send
                       sak i porten til team AAP.
-                    </Alert>
+                    </KelvinAlert>
                   )}
                 </VStack>
               </form>

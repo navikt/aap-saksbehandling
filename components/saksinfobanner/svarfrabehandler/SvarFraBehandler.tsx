@@ -1,11 +1,12 @@
 'use client';
 
-import { Alert, BodyLong, BodyShort, Box, Button, HStack, Popover, Tag, VStack } from '@navikt/ds-react';
+import { BodyLong, BodyShort, Box, Button, HStack, Popover, Tag, VStack } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
 import { FirstAidKitIcon } from '@navikt/aksel-icons';
 import { useMottattDokumenterLest } from 'hooks/FetchHook';
 
 import styles from 'components/saksinfobanner/svarfrabehandler/SvarFraBehandler.module.css';
+import { KelvinAlert } from 'components/alert/KelvinAlert';
 
 interface SvarFraBehandlerProps {
   behandlingReferanse: string;
@@ -57,9 +58,7 @@ export const SvarFraBehandler = ({ behandlingReferanse, oppdaterVisHarUlesteDoku
           <Box borderWidth={'1'} borderColor={'neutral-subtle'} />
           {error && (
             <HStack padding={'space-8'} justify={'center'}>
-              <Alert size={'small'} variant={'error'}>
-                Kunne ikke markere dokument som lest
-              </Alert>
+              <KelvinAlert variant={'error'}>Kunne ikke markere dokument som lest</KelvinAlert>
             </HStack>
           )}
           <HStack padding={'space-8'} justify={'end'}>

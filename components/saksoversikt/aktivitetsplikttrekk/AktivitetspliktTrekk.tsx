@@ -1,4 +1,4 @@
-import { Alert, Detail, Heading, HStack, Table, VStack } from '@navikt/ds-react';
+import { Detail, Heading, HStack, Table, VStack } from '@navikt/ds-react';
 import { Spinner } from 'components/felles/Spinner';
 import { SaksInfo } from 'lib/types/types';
 import { TableStyled } from 'components/tablestyled/TableStyled';
@@ -9,6 +9,7 @@ import { formaterBrudd, formaterGrunn } from 'components/behandlinger/aktivitets
 import { formaterTilNok } from 'lib/utils/string';
 import { formaterDatoForFrontend, sorterEtterNyesteDato } from 'lib/utils/date';
 import { Kort } from 'components/kort/Kort';
+import { KelvinAlert } from 'components/alert/KelvinAlert';
 
 export const AktivitetspliktTrekk = ({ sak }: { sak: SaksInfo }) => {
   const {
@@ -22,7 +23,7 @@ export const AktivitetspliktTrekk = ({ sak }: { sak: SaksInfo }) => {
   if (isLoading) {
     return <Spinner label="Henter trekk" />;
   } else if (error || isError(aktivitetspliktMedTrekk)) {
-    return <Alert variant="error">Kunne ikke hente aktivitetsplikt § 11-9 med trekk</Alert>;
+    return <KelvinAlert variant="error">Kunne ikke hente aktivitetsplikt § 11-9 med trekk</KelvinAlert>;
   }
 
   const vurderingerMedTrekk = aktivitetspliktMedTrekk?.data?.vurderingerMedTrekk || [];

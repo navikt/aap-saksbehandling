@@ -1,4 +1,4 @@
-import { Alert, BodyShort, Box, Button, HStack, Label, Tag, VStack } from '@navikt/ds-react';
+import { BodyShort, Box, Button, HStack, Label, Tag, VStack } from '@navikt/ds-react';
 import { Buildings3Icon } from '@navikt/aksel-icons';
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { HelseinstitusjonGrunnlag, HelseInstiusjonVurdering } from 'lib/types/types';
@@ -26,6 +26,7 @@ import { erReduksjonUtIFraFormFields, erReduksjonUtIFraVurdering } from 'lib/uti
 import { HelseinstitusjonTidligereVurdering } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/helseinstitusjontidligerevurdering/HelseinstitusjonTidligereVurdering';
 import { CustomExpandableCard } from 'components/customexpandablecard/CustomExpandableCard';
 import { addDays } from 'date-fns';
+import { KelvinAlert } from 'components/alert/KelvinAlert';
 
 interface Props {
   form: UseFormReturn<HelseinstitusjonsFormFields>;
@@ -184,9 +185,9 @@ export const HelseinstitusjonOppholdGruppe = ({
               }
             >
               <VStack>
-                <Alert size="small" variant={'info'} className={'fit-content'}>
+                <KelvinAlert variant={'info'} className={'fit-content'}>
                   Vilkåret kan bare vurderes innenfor oppholdsperioden.
-                </Alert>
+                </KelvinAlert>
               </VStack>
             </CustomExpandableCard>
           )}
