@@ -23,7 +23,7 @@ import { OppgittYrkesskadeUtenRegistertreffInfo } from 'components/behandlinger/
 
 interface Props {
   behandlingsreferanse: string;
-  flyt: BehandlingFlytOgTilstand
+  flyt: BehandlingFlytOgTilstand;
 }
 
 export const Sykdom = async ({ behandlingsreferanse, flyt }: Props) => {
@@ -99,17 +99,15 @@ export const Sykdom = async ({ behandlingsreferanse, flyt }: Props) => {
           />
         </StegSuspense>
       )}
-      {overganguføreSteg.skalViseSteg && (
-        <StegSuspense>
-          <OvergangUforeMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={overganguføreSteg} />
-        </StegSuspense>
-      )}
 
-      {overgangarbeidSteg.skalViseSteg && (
-        <StegSuspense>
-          <OvergangArbeidMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={overgangarbeidSteg} />
-        </StegSuspense>
-      )}
+      <StegSuspense>
+        <OvergangUforeMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={overganguføreSteg} />
+      </StegSuspense>
+
+      <StegSuspense>
+        <OvergangArbeidMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={overgangarbeidSteg} />
+      </StegSuspense>
+
       {refusjonskravSteg.skalViseSteg && (
         <StegSuspense>
           <RefusjonMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={refusjonskravSteg} />
@@ -161,8 +159,7 @@ export function hentStegDataForOppgittYrkesskadeInfo(grunnlag: {
   const oppgittYrkesskadeISøknad = grunnlag.opplysninger.oppgittYrkesskadeISøknad;
   const harIngenYrkesskadeId = grunnlag.yrkesskadeVurdering == null;
   const harIngenInnhentetYrkesskade =
-    grunnlag.opplysninger.innhentedeYrkesskader == null ||
-    grunnlag.opplysninger.innhentedeYrkesskader.length === 0;
+    grunnlag.opplysninger.innhentedeYrkesskader == null || grunnlag.opplysninger.innhentedeYrkesskader.length === 0;
 
   return {
     skalViseSteg: oppgittYrkesskadeISøknad === true && harIngenYrkesskadeId && harIngenInnhentetYrkesskade,

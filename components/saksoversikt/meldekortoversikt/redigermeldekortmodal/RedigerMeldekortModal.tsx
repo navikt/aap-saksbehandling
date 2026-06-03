@@ -9,7 +9,7 @@ import { FormErrorSummary } from 'components/formerrorsummary/FormErrorSummary';
 import { hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import { hentUkeNummerForPeriode } from 'components/saksoversikt/meldekortoversikt/meldekorttabell/MeldekortTabell';
 import { Dato } from 'lib/types/Dato';
-import { MeldeperiodeMedMeldekortDto } from 'lib/types/types';
+import { MeldeperiodeMedMeldekortDto, OppdaterMeldekortRequest } from 'lib/types/types';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { clientKorrigerMeldekort } from 'lib/clientApi';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
@@ -17,7 +17,7 @@ import { isError } from 'lib/utils/api';
 import { useAlleDokumenterPåSak } from 'hooks/saksbehandling/DokumenterHook';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { MeldekortProsesseringServerSentEvent } from 'app/saksbehandling/api/meldekort/[saksnummer]/prosessering/route';
-import { addDays } from 'date-fns';
+import { addDays, differenceInDays } from 'date-fns';
 import { useMeldekort } from 'hooks/saksbehandling/MeldekortHook';
 import { Journalpost } from 'lib/types/journalpost';
 import { erDatoFoerDato, erDatoIFremtiden } from 'lib/validation/dateValidation';
@@ -176,20 +176,13 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
                 id={'endre-meldekort'}
                 onSubmit={form.handleSubmit(async (data) => {
                   setIsLoading(true);
-                  const oppdaterMeldekortResponse = await clientKorrigerMeldekort(saksnummer, {
-                    dager: data.dager.map((dag) => {
-                      return {
-                        dato: dag.dato,
-                        timerArbeidet: Number(dag.timerArbeidet),
-                      };
-                    }),
-                    meldeDato: new Dato(data.meldedato).formaterForBackend(),
-                    begrunnelse: data.begrunnelse,
-                    meldeperiode: meldekort.meldeperiode,
-                  });
+                  const oppdaterMeldekortResponse = await clientKorrigerMeldekort(
+                    saksnummer,
+                    mapFormDataTilOppdaterMeldekortRequest(data, meldekort.meldeperiode)
+                  );
 
                   if (isError(oppdaterMeldekortResponse)) {
-                    setError('Noe gikk galt ved oppdatering av meldekort.');
+                    setError('Noe gikk galt ved innsending: ' + oppdaterMeldekortResponse.apiException.message);
                     setIsLoading(false);
                   } else {
                     ventPåMeldekortProsessering();
@@ -265,8 +258,10 @@ function getDefaultValuesForForm(meldekort?: MeldeperiodeMedMeldekortDto): Redig
 
   const eksisterendeDager = meldekort.meldekort?.dager ?? [];
   const startDato = new Dato(meldekort.meldeperiode.fom);
+  const sluttDato = new Dato(meldekort.meldeperiode.tom);
+  const antallDager = differenceInDays(sluttDato.dato, startDato.dato) + 1; // +1 for å inkludere tom dato
 
-  const alleDager: Dag[] = Array.from({ length: 14 }).map((_, index) => {
+  const alleDager: Dag[] = Array.from({ length: antallDager }).map((_, index) => {
     const dato = formaterDatoForBackend(addDays(startDato.dato, index));
     const eksisterendeDag = eksisterendeDager.find((dag) => dag.dato === dato);
 
@@ -305,4 +300,23 @@ function kobleDokumentInfoTilTidligereMeldekort(
       oppdatertAv,
     };
   });
+}
+
+export function mapFormDataTilOppdaterMeldekortRequest(
+  data: RedigerMeldekortFormFields,
+  meldeperiode: MeldeperiodeMedMeldekortDto['meldeperiode']
+): OppdaterMeldekortRequest {
+  return {
+    dager: data.dager.map((dag) => ({
+      dato: dag.dato,
+      timerArbeidet: Number(replaceCommasWithDots(dag.timerArbeidet)),
+    })),
+    meldeDato: new Dato(data.meldedato).formaterForBackend(),
+    begrunnelse: data.begrunnelse,
+    meldeperiode,
+  };
+}
+
+export function replaceCommasWithDots(input: string): string {
+  return input.replace(/,/g, '.');
 }

@@ -2,7 +2,10 @@ import { describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { RedigerMeldekortModal } from 'components/saksoversikt/meldekortoversikt/redigermeldekortmodal/RedigerMeldekortModal';
+import {
+  mapFormDataTilOppdaterMeldekortRequest,
+  RedigerMeldekortModal,
+} from 'components/saksoversikt/meldekortoversikt/redigermeldekortmodal/RedigerMeldekortModal';
 import { MeldeperiodeMedMeldekortDto } from 'lib/types/types';
 import { addDays } from 'date-fns';
 import { Dato } from 'lib/types/Dato';
@@ -211,6 +214,72 @@ describe('RedigerMeldekortModal', () => {
     });
   });
 
+  describe('Generering av dager i kalender', () => {
+    const åpneKalender = async () => {
+      const user = userEvent.setup();
+      await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Lever/endre meldekort for bruker');
+    };
+
+    it('genererer 14 input-felt for en standard 14-dagers periode', async () => {
+      render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
+      await åpneKalender();
+
+      const kalender = document.getElementById('rapporteringskalender')!;
+      expect(kalender.querySelectorAll('input')).toHaveLength(14);
+    });
+
+    it('genererer korrekt antall input-felt for en kortere periode', async () => {
+      const kortMeldekort: MeldeperiodeMedMeldekortDto = {
+        tidligereMeldekort: [],
+        meldeperiode: { fom: '2025-01-08', tom: '2025-01-14' },
+      };
+      render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={kortMeldekort} />);
+      await åpneKalender();
+
+      const kalender = document.getElementById('rapporteringskalender')!;
+      expect(kalender.querySelectorAll('input')).toHaveLength(7);
+    });
+  });
+
+  describe('Dager utenfor meldeperioden i kalender', () => {
+    // Periode: onsdag 8. jan – tirsdag 14. jan (7 dager, starter midt i uke)
+    // Uke 1: mandag 6. jan og tirsdag 7. jan er utenfor perioden
+    // Uke 2: onsdag 15. jan – søndag 19. jan er utenfor perioden
+    const kortMeldekort: MeldeperiodeMedMeldekortDto = {
+      tidligereMeldekort: [],
+      meldeperiode: { fom: '2025-01-08', tom: '2025-01-19' },
+    };
+
+    const åpneKalender = async () => {
+      const user = userEvent.setup();
+      await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Lever/endre meldekort for bruker');
+    };
+
+    it('viser dato-tekst for dag utenfor perioden uten input-felt', async () => {
+      render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={kortMeldekort} />);
+      await åpneKalender();
+
+      expect(screen.getByText('06.01.')).toBeVisible();
+      expect(screen.queryByRole('textbox', { name: /arbeid for mandag 6. januar/i })).not.toBeInTheDocument();
+    });
+
+    it('viser input-felt for dag innenfor perioden', async () => {
+      render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={kortMeldekort} />);
+      await åpneKalender();
+
+      expect(screen.getByRole('textbox', { name: /arbeid for onsdag 8. januar/i })).toBeInTheDocument();
+    });
+
+    it('viser alle 7 dager i uken selv om bare noen er innenfor perioden', async () => {
+      render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={kortMeldekort} />);
+      await åpneKalender();
+
+      // Uke 1: ma 06.01., ti 07.01. er utenfor — begge skal vises som tekst
+      expect(screen.getByText('06.01.')).toBeVisible();
+      expect(screen.getByText('07.01.')).toBeVisible();
+    });
+  });
+
   describe('Meldedato validering', () => {
     const fyllUtOgSubmit = async (meldedato: string) => {
       await user.type(screen.getByRole('textbox', { name: /begrunnelse/i }), 'Begrunnelse for endring');
@@ -232,5 +301,54 @@ describe('RedigerMeldekortModal', () => {
 
       expect(screen.getAllByText('Meldedato kan ikke være i fremtiden.')[0]).toBeVisible();
     });
+  });
+});
+
+const meldeperiode: MeldeperiodeMedMeldekortDto['meldeperiode'] = {
+  fom: '2025-01-06',
+  tom: '2025-01-19',
+};
+
+describe('mapFormDataTilOppdaterMeldekortRequest', () => {
+  it('mapper begrunnelse til request', () => {
+    const result = mapFormDataTilOppdaterMeldekortRequest(
+      { begrunnelse: 'Min begrunnelse', årsak: '', meldedato: '20.01.2025', dager: [] },
+      meldeperiode
+    );
+    expect(result.begrunnelse).toBe('Min begrunnelse');
+  });
+
+  it('mapper meldedato fra frontend-format (dd.MM.yyyy) til backend-format (yyyy-MM-dd)', () => {
+    const result = mapFormDataTilOppdaterMeldekortRequest(
+      { begrunnelse: '', årsak: '', meldedato: '20.01.2025', dager: [] },
+      meldeperiode
+    );
+    expect(result.meldeDato).toBe('2025-01-20');
+  });
+
+  it('konverterer komma til punktum i timerArbeidet', () => {
+    const result = mapFormDataTilOppdaterMeldekortRequest(
+      {
+        begrunnelse: '',
+        årsak: '',
+        meldedato: '20.01.2025',
+        dager: [{ dato: '2025-01-06', timerArbeidet: '7,5' }],
+      },
+      meldeperiode
+    );
+    expect(result.dager[0].timerArbeidet).toBe(7.5);
+  });
+
+  it('konverterer tom streng i timerArbeidet til 0', () => {
+    const result = mapFormDataTilOppdaterMeldekortRequest(
+      {
+        begrunnelse: '',
+        årsak: '',
+        meldedato: '20.01.2025',
+        dager: [{ dato: '2025-01-06', timerArbeidet: '' }],
+      },
+      meldeperiode
+    );
+    expect(result.dager[0].timerArbeidet).toBe(0);
   });
 });

@@ -1,6 +1,6 @@
 'use client';
 
-import { BodyLong, Link, Radio, VStack } from '@navikt/ds-react';
+import { Radio, VStack } from '@navikt/ds-react';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import {
@@ -34,6 +34,7 @@ import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
+import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
 
 interface Props {
   behandlingVersjon: number;
@@ -159,88 +160,82 @@ export const MeldepliktPeriodisertFrontend = ({
       onLeggTilVurdering={onAddPeriode}
       errorList={errorList}
     >
-      {!formReadOnly && (
-        <VStack paddingBlock={'space-16'}>
-          <BodyLong size={'small'}>
-            <Link href={'https://lovdata.no/pro/rundskriv/r11-00/KAPITTEL_12'} target="_blank">
-              Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-10 (lovdata.no)
-            </Link>
-          </BodyLong>
-        </VStack>
-      )}
-      {vedtatteVurderinger.map((vurdering) => (
-        <TidligereVurderingExpandableCard
-          key={crypto.randomUUID()}
-          fom={parseISO(vurdering.fom)}
-          tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
-          førsteNyePeriodeFraDato={førsteNyePeriode != null ? parseDatoFraDatePicker(førsteNyePeriode) : null}
-          vurderingStatus={getErOppfyltEllerIkkeStatus(vurdering.harFritak)}
-          vurderingerMeta={vurdering.vurderingerMeta}
-        >
-          <VStack gap={'space-20'}>
-            <SpørsmålOgSvar spørsmål="Vurderingen gjelder fra?" svar={formaterDatoForFrontend(vurdering.fom)} />
-            <SpørsmålOgSvar spørsmål="Vilkårsvurdering" svar={vurdering.begrunnelse} />
-            <SpørsmålOgSvar
-              spørsmål="Skal brukeren få fritak fra meldeplikt?"
-              svar={getJaNeiEllerUndefined(vurdering.harFritak)!}
-            />
-          </VStack>
-        </TidligereVurderingExpandableCard>
-      ))}
-      {fields.map((vurdering, index) => (
-        <NyVurderingExpandableCard
-          key={vurdering.id}
-          accordionsSignal={accordionsSignal}
-          fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-          vurderingStatus={getErOppfyltEllerIkkeStatus(
-            form.watch(`vurderinger.${index}.harFritak`)
-              ? form.watch(`vurderinger.${index}.harFritak`) === JaEllerNei.Ja
-              : undefined
-          )}
-          nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
-          isLast={index === vedtatteVurderinger.length - 1}
-          vurdering={vurdering}
-          finnesFeil={finnesFeilForVurdering(index, errorList)}
-          readonly={formReadOnly}
-          onSlettVurdering={() => remove(index)}
-          // vilkåret er valgfritt, kan derfor slette vurderingen selv om det ikke finnes en tidligere vurdering
-          harTidligereVurderinger={true}
-          index={index}
-          initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
-        >
-          <DateInputWrapper
-            name={`vurderinger.${index}.fraDato`}
-            label="Vurderingen gjelder fra"
-            control={form.control}
-            rules={{
-              required: 'Vennligst velg en dato for når vurderingen gjelder fra',
-              validate: (value) => validerDato(value as string),
-            }}
-            readOnly={formReadOnly}
-          />
-
-          <HvordanLeggeTilSluttdatoReadMore />
-
-          <TextAreaWrapper
-            label={'Vilkårsvurdering'}
-            control={form.control}
-            name={`vurderinger.${index}.begrunnelse`}
-            rules={{ required: 'Du må begrunne vurderingen din' }}
-            readOnly={formReadOnly}
-          />
-          <RadioGroupWrapper
-            label={'Skal brukeren få fritak fra meldeplikt?'}
-            control={form.control}
-            name={`vurderinger.${index}.harFritak`}
-            rules={{ required: 'Du må svare på om brukeren skal få fritak fra meldeplikt' }}
-            readOnly={formReadOnly}
-            horisontal
+      <VStack gap={'space-16'}>
+        <EksterneLenkerIVilkårskort steg={'FRITAK_MELDEPLIKT'} />
+        {vedtatteVurderinger.map((vurdering) => (
+          <TidligereVurderingExpandableCard
+            key={crypto.randomUUID()}
+            fom={parseISO(vurdering.fom)}
+            tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
+            førsteNyePeriodeFraDato={førsteNyePeriode != null ? parseDatoFraDatePicker(førsteNyePeriode) : null}
+            vurderingStatus={getErOppfyltEllerIkkeStatus(vurdering.harFritak)}
+            vurderingerMeta={vurdering.vurderingerMeta}
           >
-            <Radio value={JaEllerNei.Ja}>Ja</Radio>
-            <Radio value={JaEllerNei.Nei}>Nei</Radio>
-          </RadioGroupWrapper>
-        </NyVurderingExpandableCard>
-      ))}
+            <VStack gap={'space-20'}>
+              <SpørsmålOgSvar spørsmål="Vurderingen gjelder fra?" svar={formaterDatoForFrontend(vurdering.fom)} />
+              <SpørsmålOgSvar spørsmål="Vilkårsvurdering" svar={vurdering.begrunnelse} />
+              <SpørsmålOgSvar
+                spørsmål="Skal brukeren få fritak fra meldeplikt?"
+                svar={getJaNeiEllerUndefined(vurdering.harFritak)!}
+              />
+            </VStack>
+          </TidligereVurderingExpandableCard>
+        ))}
+        {fields.map((vurdering, index) => (
+          <NyVurderingExpandableCard
+            key={vurdering.id}
+            accordionsSignal={accordionsSignal}
+            fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
+            vurderingStatus={getErOppfyltEllerIkkeStatus(
+              form.watch(`vurderinger.${index}.harFritak`)
+                ? form.watch(`vurderinger.${index}.harFritak`) === JaEllerNei.Ja
+                : undefined
+            )}
+            nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
+            isLast={index === vedtatteVurderinger.length - 1}
+            vurdering={vurdering}
+            finnesFeil={finnesFeilForVurdering(index, errorList)}
+            readonly={formReadOnly}
+            onSlettVurdering={() => remove(index)}
+            // vilkåret er valgfritt, kan derfor slette vurderingen selv om det ikke finnes en tidligere vurdering
+            harTidligereVurderinger={true}
+            index={index}
+            initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
+          >
+            <DateInputWrapper
+              name={`vurderinger.${index}.fraDato`}
+              label="Vurderingen gjelder fra"
+              control={form.control}
+              rules={{
+                required: 'Vennligst velg en dato for når vurderingen gjelder fra',
+                validate: (value) => validerDato(value as string),
+              }}
+              readOnly={formReadOnly}
+            />
+
+            <HvordanLeggeTilSluttdatoReadMore />
+
+            <TextAreaWrapper
+              label={'Vilkårsvurdering'}
+              control={form.control}
+              name={`vurderinger.${index}.begrunnelse`}
+              rules={{ required: 'Du må begrunne vurderingen din' }}
+              readOnly={formReadOnly}
+            />
+            <RadioGroupWrapper
+              label={'Skal brukeren få fritak fra meldeplikt?'}
+              control={form.control}
+              name={`vurderinger.${index}.harFritak`}
+              rules={{ required: 'Du må svare på om brukeren skal få fritak fra meldeplikt' }}
+              readOnly={formReadOnly}
+              horisontal
+            >
+              <Radio value={JaEllerNei.Ja}>Ja</Radio>
+              <Radio value={JaEllerNei.Nei}>Nei</Radio>
+            </RadioGroupWrapper>
+          </NyVurderingExpandableCard>
+        ))}
+      </VStack>
     </VilkårskortPeriodisert>
   );
 };

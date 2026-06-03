@@ -7,6 +7,7 @@ import { describe, expect, test } from 'vitest';
 const dialogmeldinger: LegeerklæringStatus[] = [
   {
     behandlerRef: '1234',
+    behandlingsReferanse: '123',
     dialogmeldingUuid: 'uuuid',
     opprettet: '2024-10-28',
     personId: '12345678910',
@@ -18,6 +19,7 @@ const dialogmeldinger: LegeerklæringStatus[] = [
   },
   {
     behandlerRef: '5849',
+    behandlingsReferanse: '123',
     dialogmeldingUuid: 'uuuid-4',
     fritekst: 'hello',
     opprettet: '2024-08-22',
@@ -50,6 +52,7 @@ describe('Dialogmeldinger', () => {
   test('ikon for purring vises ikke hvis det er under 14 dager siden den ble bestilt', () => {
     const dialogmelding: LegeerklæringStatus = {
       behandlerRef: '1234',
+      behandlingsReferanse: '24',
       dialogmeldingUuid: 'uuuuuid',
       opprettet: format(subDays(new Date(), 5), 'yyyy-MM-dd'),
       personId: '12345678910',
@@ -66,6 +69,7 @@ describe('Dialogmeldinger', () => {
   test('ikon for purring vises hvis det er under 21 dager siden den ble bestilt', () => {
     const dialogmelding: LegeerklæringStatus = {
       behandlerRef: '1234',
+      behandlingsReferanse: '234',
       dialogmeldingUuid: 'uuuuuid',
       opprettet: format(subDays(new Date(), 22), 'yyyy-MM-dd'),
       personId: '12345678910',

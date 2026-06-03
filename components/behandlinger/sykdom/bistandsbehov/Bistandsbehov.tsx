@@ -27,11 +27,12 @@ import {
 import { Dato } from 'lib/types/Dato';
 import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovMellomlagringParser';
 import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
-import { Alert, Link, VStack } from '@navikt/ds-react';
+import { Alert, VStack } from '@navikt/ds-react';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
+import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
 
 interface Props {
   behandlingVersjon: number;
@@ -149,21 +150,7 @@ export const Bistandsbehov = ({
       errorList={errorList}
     >
       <VStack gap={'space-16'}>
-        <Veiledning
-          defaultOpen={false}
-          tekst={
-            <div>
-              Vilkårene i § 11-6 første ledd bokstav a til c er tre alternative vilkår. Det vil si at det er nok at
-              brukeren oppfyller ett av dem for å fylle vilkåret i § 11-6.Først skal du vurdere om vilkårene i bokstav a
-              (aktiv behandling) og bokstav b (arbeidsrettet tiltak) er oppfylte. Hvis du svarer ja på ett eller begge
-              vilkårene, er § 11-6 oppfylt. Hvis du svarer nei på a og b, må du vurdere om bokstav c er oppfylt. Hvis du
-              svarer nei på alle tre vilkårene, er § 11-6 ikke oppfylt.{' '}
-              <Link href="https://lovdata.no/nav/rundskriv/r11-00#KAPITTEL_8" target="_blank">
-                Du kan lese om hvordan vilkåret skal vurderes i rundskrivet til § 11-6 (lovdata.no)
-              </Link>
-            </div>
-          }
-        />
+        <Veiledning defaultOpen={false} tekst={<EksterneLenkerIVilkårskort steg={'VURDER_BISTANDSBEHOV'} />} />
 
         {erRevurderingAvOvergangUføre && (
           <Alert variant={'info'} size={'small'}>

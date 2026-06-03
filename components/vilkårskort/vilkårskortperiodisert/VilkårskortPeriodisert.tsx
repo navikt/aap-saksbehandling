@@ -1,4 +1,4 @@
-import { MellomlagretVurdering, StegType } from 'lib/types/types';
+import { MellomlagretVurdering, StegType, VurderingerMeta } from 'lib/types/types';
 import styles from './VilkårskortPeriodisert.module.css';
 import { Button, Detail, Heading, HGrid, HStack, VStack } from '@navikt/ds-react';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
@@ -10,7 +10,6 @@ import { Dispatch, ReactNode, SetStateAction, SubmitEventHandler } from 'react';
 import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { ApiException } from 'lib/utils/api';
 import { VisningActions, VisningModus } from 'lib/types/visningTypes';
-import { VurderingerMeta } from 'lib/types/types';
 import { VurdertAvAnsattDetail } from 'components/vurdertav/VurdertAvAnsattDetail';
 
 interface VilkårsKortPeriodisertProps {
