@@ -1,6 +1,4 @@
-'use client';
-
-import { BodyShort, Box, Detail, HStack, Label, LocalAlert, ReadMore, VStack } from '@navikt/ds-react';
+import { BodyShort, Box, Detail, Label, LocalAlert, ReadMore, VStack } from '@navikt/ds-react';
 import { FlytProsessering } from 'lib/types/types';
 
 interface Props {
@@ -10,33 +8,29 @@ interface Props {
 export const FlytProsesseringAlert = ({ flytProsessering }: Props) => {
   const { ventendeOppgaver } = flytProsessering;
 
-  console.log(flytProsessering);
   return (
-    <LocalAlert status="error" size={'small'}>
+    <LocalAlert status="error" size="small">
       <LocalAlert.Header>
         <LocalAlert.Title>Prosessering feilet i Kelvin</LocalAlert.Title>
       </LocalAlert.Header>
       <LocalAlert.Content>
         {ventendeOppgaver.length === 0 ? (
-          <BodyShort>Kunne ikke hente detaljer om feilet prosessering.</BodyShort>
+          <BodyShort size="small">Kunne ikke hente detaljer om feilet prosessering.</BodyShort>
         ) : (
-          <VStack gap="space-16">
-            {ventendeOppgaver.map((oppgave) => (
+          <VStack gap="space-12">
+            {ventendeOppgaver.map((oppgave, index) => (
               <VStack key={oppgave.id} gap="space-8">
-                <div>
-                  <Label>{oppgave.navn}</Label>
-                  {oppgave.beskrivelse && <BodyShort size="small">{oppgave.beskrivelse}</BodyShort>}
-                </div>
-
-                <HStack gap="space-16" wrap>
-                  <BodyShort size="small">
+                {index > 0 && <hr style={{ margin: 0, borderColor: 'var(--a-border-default)' }} />}
+                <VStack gap="space-4">
+                  <Label size="small">{oppgave.navn}</Label>
+                  {oppgave.beskrivelse && <Detail>{oppgave.beskrivelse}</Detail>}
+                  <Detail>
                     Feilende forsøk: <strong>{oppgave.antallFeilendeForsøk}</strong>
-                  </BodyShort>
-                </HStack>
-
+                  </Detail>
+                </VStack>
                 {oppgave.feilmelding?.trim() && (
                   <Box background="neutral-moderateA" padding="space-8" style={{ minWidth: 0 }}>
-                    <ReadMore header="Vis feilmelding" size="small" defaultOpen={true}>
+                    <ReadMore header="Vis feilmelding" size="small">
                       <pre
                         style={{
                           fontSize: 'small',
@@ -54,6 +48,9 @@ export const FlytProsesseringAlert = ({ flytProsessering }: Props) => {
                 )}
               </VStack>
             ))}
+            <BodyShort size="small" weight={'semibold'}>
+              Dersom feilen vedvarer kan du ta kontakt med brukerstøtte for å få løst problemet.
+            </BodyShort>
           </VStack>
         )}
       </LocalAlert.Content>
