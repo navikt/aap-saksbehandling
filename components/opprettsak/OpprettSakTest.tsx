@@ -4,11 +4,12 @@ import styles from './OpprettSak.module.css';
 import { JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
-import { Alert, Button } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react';
 import { useOpprettDummySak } from 'hooks/FetchHook';
 import { OpprettDummySakDto } from 'lib/types/types';
 import { mutate } from 'swr';
 import { useState } from 'react';
+import { KelvinAlert } from 'components/alert/KelvinAlert';
 
 interface OpprettSakFormFields {
   ident?: string;
@@ -66,6 +67,9 @@ const OpprettTestSakSkjema = () => {
   });
 
   const handleSubmit = async (data: OpprettSakFormFields) => {
+    setShowError(false);
+    setOpprettSakAlert(null);
+
     try {
       const { ok } = await opprettSak(mapFormTilDto(data));
       if (opprettSakAlert) {
@@ -97,27 +101,18 @@ const OpprettTestSakSkjema = () => {
       <FormField form={form} formField={formFields.student} />
 
       {showError && (
-        <Alert fullWidth={true} contentMaxWidth={false} variant="error" closeButton onClose={() => setShowError(false)}>
+        <KelvinAlert variant="error">
           {error?.toString() ||
             'Noe gikk galt ved oppretting av testsaken. Vennligst sjekk at fødselsnummer er en gyldig testbruker og prøv igjen.'}
-        </Alert>
+        </KelvinAlert>
       )}
 
       {opprettSakAlert && (
-        <Alert
-          fullWidth={true}
-          contentMaxWidth={false}
-          variant="success"
-          closeButton
-          onClose={() => {
-            clearTimeout(opprettSakAlert?.id);
-            setOpprettSakAlert(null);
-          }}
-        >
+        <KelvinAlert variant="success">
           En test-sak har blitt opprettet for bruker med fødselsnummer {opprettSakAlert.fnr}. Det kan ta opp mot et
           minutt før saken dukker opp i listen under, bruk gjerne knappen &#34;Refresh listen&#34; for å sjekke om saken
           er klar for behandling i Kelvin.
-        </Alert>
+        </KelvinAlert>
       )}
 
       <Button className={'fit-content'} loading={isLoading}>
