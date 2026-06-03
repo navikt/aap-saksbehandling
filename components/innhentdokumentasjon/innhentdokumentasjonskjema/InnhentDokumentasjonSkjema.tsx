@@ -11,6 +11,7 @@ import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { isError } from 'lib/utils/api';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
+import { useFeatureFlag } from 'context/UnleashContext';
 import { KelvinAlert } from 'components/alert/KelvinAlert';
 
 export type Behandler = {
@@ -54,6 +55,20 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
   const [defaultOptions, setDefaultOptions] = useState<ValuePair[]>([]);
   const { saksnummer, behandlingsreferanse } = useParamsMedType();
 
+  const skalViseDialogmeldingOption = useFeatureFlag('VisValgForDialogmelding');
+  const optionsForTypeDokumentasjon = skalViseDialogmeldingOption
+    ? [
+        { label: 'Velg dokumentasjonstype', value: '' },
+        { label: 'Tilleggsopplysninger (L8)', value: 'L8' },
+        { label: 'Legeerklæring ved arbeidsuførhet (L40)', value: 'L40' },
+        { label: 'Dialogmelding', value: 'MELDING_FRA_NAV' },
+      ]
+    : [
+        { label: 'Velg dokumentasjonstype', value: '' },
+        { label: 'Tilleggsopplysninger (L8)', value: 'L8' },
+        { label: 'Legeerklæring ved arbeidsuførhet (L40)', value: 'L40' },
+      ];
+
   const { form, formFields } = useConfigForm<FormFields>({
     behandler: {
       type: 'async_combobox',
@@ -61,11 +76,7 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
     dokumentasjonstype: {
       type: 'select',
       label: 'Type dokumentasjon',
-      options: [
-        { label: 'Velg dokumentasjonstype', value: '' },
-        { label: 'Tilleggsopplysninger (L8)', value: 'L8' },
-        { label: 'Legeerklæring ved arbeidsuførhet (L40)', value: 'L40' },
-      ],
+      options: optionsForTypeDokumentasjon,
       rules: { required: 'Du må velge hvilken type dokumentasjon som skal bestilles' },
     },
     melding: {
