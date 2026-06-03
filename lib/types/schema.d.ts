@@ -4101,7 +4101,7 @@ export interface paths {
       };
       requestBody?: {
         content: {
-          'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.dokumentinnhenting.BestillLegeerkl\u00E6ringDto'];
+          'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.behandlerdialog.BestillLegeerkl\u00E6ringDto'];
         };
       };
       responses: {
@@ -4147,7 +4147,7 @@ export interface paths {
             [name: string]: unknown;
           };
           content: {
-            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.dokument.dokumentinnhenting.Legeerkl\u00E6ringStatusResponse'][];
+            'application/json': components['schemas']['no.nav.aap.dokumentinnhenting.kontrakt.DialogmeldingStatusTilBehandslingsflytDto'][];
           };
         };
       };
@@ -4178,7 +4178,7 @@ export interface paths {
       };
       requestBody?: {
         content: {
-          'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.dokumentinnhenting.Forh\u00E5ndsvisBrevRequest'];
+          'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.behandlerdialog.Forh\u00E5ndsvisBrevRequest'];
         };
       };
       responses: {
@@ -4188,7 +4188,7 @@ export interface paths {
             [name: string]: unknown;
           };
           content: {
-            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.dokument.dokumentinnhenting.BrevResponse'];
+            'application/json': components['schemas']['no.nav.aap.dokumentinnhenting.kontrakt.DialogmeldingForh\u00E5ndsvisningDto'];
           };
         };
       };
@@ -4217,7 +4217,7 @@ export interface paths {
       };
       requestBody?: {
         content: {
-          'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.dokumentinnhenting.PurringLegeerkl\u00E6ringRequest'];
+          'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.behandlerdialog.PurringLegeerkl\u00E6ringRequest'];
         };
       };
       responses: {
@@ -4328,7 +4328,7 @@ export interface paths {
     };
     /**
      * Hente alle underveis-vurderinger på en behandling
-     * @description * periode: Perioden denne vurdering gjelder for
+     * @description * periode: Perioden denne vurderingen gjelder for
      *     * meldePeriode: Meldeperioden denne vurderingen faller inn i
      *     * trekk: Total trekk for hele perioden
      */
@@ -4351,6 +4351,45 @@ export interface paths {
           };
           content: {
             'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.underveis.UnderveisperiodeDto'][];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/behandling/underveis-med-diff/{referanse}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Hente underveisperioder med diff-vurderinger på gjeldende og forrige behandling */
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description referanse */
+          referanse: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.underveis.UnderveisGrunnlagMedDiffDto'];
           };
         };
       };
@@ -5341,7 +5380,11 @@ export interface paths {
         };
         cookie?: never;
       };
-      requestBody?: never;
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['no.nav.aap.behandlingsflyt.LeggTilYrkesskadeDTO'];
+        };
+      };
       responses: {
         /** @description OK */
         200: {
@@ -5390,17 +5433,20 @@ export interface components {
     'no.nav.aap.behandlingsflyt.LeggTilInstitusjonsoppholdDTO': {
       opphold: components['schemas']['no.nav.aap.behandlingsflyt.InstitusjonsoppholdItemDTO'][];
     };
+    'no.nav.aap.behandlingsflyt.LeggTilYrkesskadeDTO': {
+      yrkesskader: components['schemas']['no.nav.aap.behandlingsflyt.TestYrkesskadeDto'][];
+    };
     'no.nav.aap.behandlingsflyt.OpprettTestcaseDTO': {
       andreUtbetalinger?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AndreUtbetalingerDto'];
       barn: components['schemas']['no.nav.aap.behandlingsflyt.TestBarn'][];
       dagpenger: components['schemas']['no.nav.aap.behandlingsflyt.test.modell.TestPerson.Dagpenger'][];
-      erArbeidsevnenNedsatt: boolean;
       erNedsettelseIArbeidsevneMerEnnHalvparten: boolean;
       /**
        * Format: date
        * @example 2025-04-01
        */
       'f\u00F8dselsdato': string;
+      harNedsattArbeidsevne: boolean;
       harYrkesskade: boolean;
       'harYrkesskadeFraS\u00F8knad': boolean;
       inntekterPerAr?: components['schemas']['no.nav.aap.behandlingsflyt.InntektPer\u00C5rDto'][] | null;
@@ -5540,7 +5586,8 @@ export interface components {
     'no.nav.aap.behandlingsflyt.TestYrkesskadeDto': {
       diagnose?: string | null;
       harYrkesskade: boolean;
-      kilde: string;
+      /** @enum {string} */
+      kilde: 'REGISTER' | 'SØKNAD';
       saksreferanse: string;
       skadeart?: string | null;
       skadebeskrivelse?: string | null;
@@ -11893,6 +11940,8 @@ export interface components {
         | 'FOR_DETALJERT'
         | 'IKKE_INDIVIDUELL_OG_KONKRET'
         | 'MANGELFULL_BEGRUNNELSE'
+        | 'MANGLENDE_JOURNALFØRING'
+        | 'MANGLENDE_KILDEHENVISNING'
         | 'MANGLENDE_UTREDNING'
         | 'SKRIVEFEIL';
       '\u00E5rsakFritekst'?: string | null;
@@ -11964,6 +12013,29 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.barnetillegg.SlettbarVurdertBarnDto': {
       erSlettbar: boolean;
       vurdertBarn: components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnetillegg.ExtendedVurdertBarnDto'];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.behandlerdialog.BestillLegeerkl\u00E6ringDto': {
+      behandlerHprNr: string;
+      behandlerNavn: string;
+      behandlerRef: string;
+      /** Format: uuid */
+      behandlingsReferanse: string;
+      /** @enum {string} */
+      dokumentasjonType: 'L120' | 'L40' | 'L8' | 'MELDING_FRA_NAV' | 'PURRING' | 'RETUR_LEGEERKLÆRING';
+      fritekst: string;
+      saksnummer: string;
+    };
+    'no.nav.aap.behandlingsflyt.behandling.behandlerdialog.Forh\u00E5ndsvisBrevRequest': {
+      /** @enum {string} */
+      dokumentasjonType: 'L120' | 'L40' | 'L8' | 'MELDING_FRA_NAV' | 'PURRING' | 'RETUR_LEGEERKLÆRING';
+      fritekst: string;
+      saksnummer: string;
+    };
+    'no.nav.aap.behandlingsflyt.behandling.behandlerdialog.PurringLegeerkl\u00E6ringRequest': {
+      /** Format: uuid */
+      behandlingsReferanse: string;
+      /** Format: uuid */
+      dialogmeldingPurringUUID: string;
     };
     'no.nav.aap.behandlingsflyt.behandling.bekreftvurderingeroppf\u00F8lging.BekreftVurderingerOppf\u00F8lgingDto': {
       mellomlagredeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.mellomlagring.MellomlagretVurdering'][];
@@ -12251,30 +12323,8 @@ export interface components {
        * @description Bruk fom
        */
       dokumenterBruktIVurdering: components['schemas']['no.nav.aap.verdityper.dokument.JournalpostId'][];
-      /**
-       * @deprecated
-       * @description Bruk harArbeidsevneNedsatt
-       */
-      erArbeidsevnenNedsatt?: boolean | null;
-      /**
-       * @deprecated
-       * @description Bruk harNedsattArbeidsevne
-       */
-      erNedsettelseIArbeidsevneAvEnVissVarighet?: boolean | null;
       erNedsettelseIArbeidsevneMerEnnHalvparten?: boolean | null;
       erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense?: boolean | null;
-      /**
-       * @deprecated
-       * @description Bruk erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense
-       * @enum {string|null}
-       */
-      erNedsettelseMerEnnYrkesskadegrense?: 'JA' | 'JA_FORBIGÅENDE_PROBLEMER' | 'NEI' | null;
-      /**
-       * @deprecated
-       * @description Bruk erNedsettelseIArbeidsevneMerEnnHalvparten
-       * @enum {string|null}
-       */
-      erNedsettelseMinstHalvparten?: 'JA' | 'JA_FORBIGÅENDE_PROBLEMER' | 'NEI' | null;
       erSkadeSykdomEllerLyteVesentligdel?: boolean | null;
       /**
        * Format: date
@@ -12650,29 +12700,6 @@ export interface components {
       /** Format: uuid */
       dialogmeldingUuid: string;
       vedlegg: components['schemas']['no.nav.aap.brev.kontrakt.Vedlegg'];
-    };
-    'no.nav.aap.behandlingsflyt.behandling.dokumentinnhenting.BestillLegeerkl\u00E6ringDto': {
-      behandlerHprNr: string;
-      behandlerNavn: string;
-      behandlerRef: string;
-      /** Format: uuid */
-      behandlingsReferanse: string;
-      /** @enum {string} */
-      dokumentasjonType: 'L120' | 'L40' | 'L8' | 'MELDING_FRA_NAV' | 'PURRING' | 'RETUR_LEGEERKLÆRING';
-      fritekst: string;
-      saksnummer: string;
-    };
-    'no.nav.aap.behandlingsflyt.behandling.dokumentinnhenting.Forh\u00E5ndsvisBrevRequest': {
-      /** @enum {string} */
-      dokumentasjonType: 'L120' | 'L40' | 'L8' | 'MELDING_FRA_NAV' | 'PURRING' | 'RETUR_LEGEERKLÆRING';
-      fritekst: string;
-      saksnummer: string;
-    };
-    'no.nav.aap.behandlingsflyt.behandling.dokumentinnhenting.PurringLegeerkl\u00E6ringRequest': {
-      /** Format: uuid */
-      behandlingsReferanse: string;
-      /** Format: uuid */
-      dialogmeldingPurringUUID: string;
     };
     'no.nav.aap.behandlingsflyt.behandling.etableringegenvirksomhet.EtableringEgenVirksomhetGrunnlagResponse': {
       'beh\u00F8verVurderinger': components['schemas']['no.nav.aap.komponenter.type.Periode'][];
@@ -14308,6 +14335,9 @@ export interface components {
       /** @enum {string} */
       rettighetsType: 'ARBEIDSSØKER' | 'BISTANDSBEHOV' | 'STUDENT' | 'SYKEPENGEERSTATNING' | 'VURDERES_FOR_UFØRETRYGD';
     };
+    'no.nav.aap.behandlingsflyt.behandling.underveis.UnderveisGrunnlagMedDiffDto': {
+      perioder: components['schemas']['no.nav.aap.behandlingsflyt.utils.diff.DiffDto<no.nav.aap.behandlingsflyt.behandling.underveis.UnderveisperiodeDto>'][];
+    };
     'no.nav.aap.behandlingsflyt.behandling.underveis.UnderveisperiodeDto': {
       /** @enum {string|null} */
       'avslags\u00E5rsak'?:
@@ -15089,26 +15119,6 @@ export interface components {
       /** @enum {string} */
       utfall: 'IKKE_OPPFYLT' | 'IKKE_RELEVANT' | 'IKKE_VURDERT' | 'OPPFYLT';
       versjon: string;
-    };
-    'no.nav.aap.behandlingsflyt.faktagrunnlag.dokument.dokumentinnhenting.BrevResponse': {
-      konstruertBrev: string;
-    };
-    'no.nav.aap.behandlingsflyt.faktagrunnlag.dokument.dokumentinnhenting.Legeerkl\u00E6ringStatusResponse': {
-      behandlerNavn: string;
-      behandlerRef: string;
-      /** Format: uuid */
-      dialogmeldingUuid: string;
-      fritekst: string;
-      /**
-       * Format: date-time
-       * @example 2025-04-01T12:30:00
-       */
-      opprettet: string;
-      personId: string;
-      saksnummer: string;
-      /** @enum {string|null} */
-      status?: 'AVVIST' | 'BESTILT' | 'OK' | 'SENDT' | null;
-      statusTekst?: string | null;
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.klage.behandlendeenhet.BehandlendeEnhetL\u00F8sningDto': {
       skalBehandlesAvKontor: boolean;
@@ -16027,30 +16037,8 @@ export interface components {
       begrunnelse: string;
       bidiagnoser?: string[] | null;
       dokumenterBruktIVurdering: components['schemas']['no.nav.aap.verdityper.dokument.JournalpostId'][];
-      /**
-       * @deprecated
-       * @description Erstattes av harNedsattArbeidsevne
-       */
-      erArbeidsevnenNedsatt?: boolean | null;
-      /**
-       * @deprecated
-       * @description Bakes inn i harNedsattArbeidsevne
-       */
-      erNedsettelseIArbeidsevneAvEnVissVarighet?: boolean | null;
       erNedsettelseIArbeidsevneMerEnnHalvparten?: boolean | null;
       erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense?: boolean | null;
-      /**
-       * @deprecated
-       * @description Bruk erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense
-       * @enum {string|null}
-       */
-      erNedsettelseMerEnnYrkesskadegrense?: 'JA' | 'JA_FORBIGÅENDE_PROBLEMER' | 'NEI' | null;
-      /**
-       * @deprecated
-       * @description Bruk erNedsettelseIArbeidsevneMerEnnHalvparten
-       * @enum {string|null}
-       */
-      erNedsettelseMinstHalvparten?: 'JA' | 'JA_FORBIGÅENDE_PROBLEMER' | 'NEI' | null;
       erSkadeSykdomEllerLyteVesentligdel?: boolean | null;
       /**
        * Format: date
@@ -18408,18 +18396,36 @@ export interface components {
       | components['schemas']['no.nav.aap.behandlingsflyt.utils.diff.Fjernet<no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto>']
       | components['schemas']['no.nav.aap.behandlingsflyt.utils.diff.LagtTil<no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto>']
       | components['schemas']['no.nav.aap.behandlingsflyt.utils.diff.Uendret<no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto>'];
+    'no.nav.aap.behandlingsflyt.utils.diff.DiffDto<no.nav.aap.behandlingsflyt.behandling.underveis.UnderveisperiodeDto>':
+      | components['schemas']['no.nav.aap.behandlingsflyt.utils.diff.Endret<no.nav.aap.behandlingsflyt.behandling.underveis.UnderveisperiodeDto>']
+      | components['schemas']['no.nav.aap.behandlingsflyt.utils.diff.Fjernet<no.nav.aap.behandlingsflyt.behandling.underveis.UnderveisperiodeDto>']
+      | components['schemas']['no.nav.aap.behandlingsflyt.utils.diff.LagtTil<no.nav.aap.behandlingsflyt.behandling.underveis.UnderveisperiodeDto>']
+      | components['schemas']['no.nav.aap.behandlingsflyt.utils.diff.Uendret<no.nav.aap.behandlingsflyt.behandling.underveis.UnderveisperiodeDto>'];
     'no.nav.aap.behandlingsflyt.utils.diff.Endret<no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto>': {
       fra: components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto'];
       til: components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto'];
     };
+    'no.nav.aap.behandlingsflyt.utils.diff.Endret<no.nav.aap.behandlingsflyt.behandling.underveis.UnderveisperiodeDto>': {
+      fra: components['schemas']['no.nav.aap.behandlingsflyt.behandling.underveis.UnderveisperiodeDto'];
+      til: components['schemas']['no.nav.aap.behandlingsflyt.behandling.underveis.UnderveisperiodeDto'];
+    };
     'no.nav.aap.behandlingsflyt.utils.diff.Fjernet<no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto>': {
       fjernet: components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto'];
+    };
+    'no.nav.aap.behandlingsflyt.utils.diff.Fjernet<no.nav.aap.behandlingsflyt.behandling.underveis.UnderveisperiodeDto>': {
+      fjernet: components['schemas']['no.nav.aap.behandlingsflyt.behandling.underveis.UnderveisperiodeDto'];
     };
     'no.nav.aap.behandlingsflyt.utils.diff.LagtTil<no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto>': {
       lagtTil: components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto'];
     };
+    'no.nav.aap.behandlingsflyt.utils.diff.LagtTil<no.nav.aap.behandlingsflyt.behandling.underveis.UnderveisperiodeDto>': {
+      lagtTil: components['schemas']['no.nav.aap.behandlingsflyt.behandling.underveis.UnderveisperiodeDto'];
+    };
     'no.nav.aap.behandlingsflyt.utils.diff.Uendret<no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto>': {
       uendret: components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto'];
+    };
+    'no.nav.aap.behandlingsflyt.utils.diff.Uendret<no.nav.aap.behandlingsflyt.behandling.underveis.UnderveisperiodeDto>': {
+      uendret: components['schemas']['no.nav.aap.behandlingsflyt.behandling.underveis.UnderveisperiodeDto'];
     };
     'no.nav.aap.brev.kontrakt.Adresse': {
       adresselinje1: string;
@@ -18525,6 +18531,28 @@ export interface components {
     'no.nav.aap.brev.kontrakt.Vedlegg': {
       dokumentInfoId: string;
       journalpostId: string;
+    };
+    'no.nav.aap.dokumentinnhenting.kontrakt.DialogmeldingForh\u00E5ndsvisningDto': {
+      konstruertBrev: string;
+    };
+    'no.nav.aap.dokumentinnhenting.kontrakt.DialogmeldingStatusTilBehandslingsflytDto': {
+      behandlerNavn: string;
+      behandlerRef: string;
+      /** Format: uuid */
+      behandlingsReferanse: string;
+      /** Format: uuid */
+      dialogmeldingUuid: string;
+      fritekst: string;
+      /**
+       * Format: date-time
+       * @example 2025-04-01T12:30:00
+       */
+      opprettet: string;
+      personId: string;
+      saksnummer: string;
+      /** @enum {string|null} */
+      status?: 'AVVIST' | 'BESTILT' | 'MOTTATT' | 'OK' | 'SENDT' | null;
+      statusTekst?: string | null;
     };
     'no.nav.aap.komponenter.type.Periode': {
       /**

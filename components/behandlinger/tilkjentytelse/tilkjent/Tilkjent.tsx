@@ -2,7 +2,7 @@
 
 import { Diff, TilkjentYtelseGrunnlag, TilkjentYtelseGrunnlagMedDiff, TilkjentYtelsePeriode } from 'lib/types/types';
 import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
-import { ActionMenu, BodyShort, Button, Chips, Table, VStack } from '@navikt/ds-react';
+import { ActionMenu, Alert, BodyShort, Button, Chips, Table, VStack } from '@navikt/ds-react';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import React, { useState } from 'react';
 import { formaterDatoForFrontend, formaterPeriode } from 'lib/utils/date';
@@ -54,70 +54,87 @@ export const TilkjentMedDiff = ({ grunnlagMedDiff }: PropsMedDiff) => {
   const [visHistorikkPåEndredePerioder, setVisHistorikkPåEndredePerioder] = useState(false);
   const [visPerioderUtenEndringFraTidligere, setVisPerioderUtenEndringFraTidligere] = useState(false);
 
+  const skalViseMeldingOmIngenEndringIPerioder =
+    grunnlagMedDiff.perioder.length > 0 &&
+    !grunnlagMedDiff.perioder.some(
+      (periode) => periode.diff === 'Endret' || periode.diff === 'Fjernet' || periode.diff === 'LagtTil'
+    );
+
   return (
     <VilkårsKort heading="Tilkjent ytelse" steg="BEREGN_TILKJENT_YTELSE">
-      <Chips size={'small'}>
-        <Chips.Toggle
-          onClick={() => {
-            setVisHistorikkPåEndredePerioder(!visHistorikkPåEndredePerioder);
-          }}
-          selected={visHistorikkPåEndredePerioder}
-        >
-          Vis historikk på endrede perioder
-        </Chips.Toggle>
-        <Chips.Toggle
-          onClick={() => {
-            setVisPerioderUtenEndringFraTidligere(!visPerioderUtenEndringFraTidligere);
-          }}
-          selected={visPerioderUtenEndringFraTidligere}
-        >
-          Vis perioder uten endring fra tidligere behandling
-        </Chips.Toggle>
-      </Chips>
-      <TableStyled size="medium">
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell>Meldeperiode</Table.HeaderCell>
-            <Table.HeaderCell>Vurdert periode</Table.HeaderCell>
-            <Table.HeaderCell>Dagsats</Table.HeaderCell>
-            <Table.HeaderCell>Barnetillegg</Table.HeaderCell>
-            <Table.HeaderCell>Arbeid</Table.HeaderCell>
-            <Table.HeaderCell>Samordning</Table.HeaderCell>
-            <Table.HeaderCell>Institusjon</Table.HeaderCell>
-            <Table.HeaderCell>Arbeidsgiver</Table.HeaderCell>
-            <Table.HeaderCell>Total reduksjon</Table.HeaderCell>
-            <Table.HeaderCell>Barnepensjon</Table.HeaderCell>
-            <Table.HeaderCell>Effektiv dagsats</Table.HeaderCell>
-            <Table.HeaderCell>Meldekort levert</Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          {grunnlagMedDiff.perioder.map((periode, periodeIndex) => {
-            const nyPeriode = utledNyPeriode(periode);
-            const uendretPeriode =
-              visPerioderUtenEndringFraTidligere && periode.diff === 'Uendret' ? periode.uendret : null;
-            const historiskPeriode = visHistorikkPåEndredePerioder ? utledHistoriskPeriode(periode) : null;
-            return (
-              <React.Fragment key={periodeIndex}>
-                {nyPeriode && (
-                  <TilkjentPeriodeRad key={`ny-${periodeIndex}`} periode={nyPeriode} bakgrunnClassName={''} />
-                )}
-                {historiskPeriode && (
-                  <TilkjentPeriodeRad
-                    key={`historisk-${periodeIndex}`}
-                    periode={historiskPeriode}
-                    bakgrunnClassName={styles.tablerowwithzebra}
-                  />
-                )}
-                {uendretPeriode && (
-                  <TilkjentPeriodeRad key={`uendret-${periodeIndex}`} periode={uendretPeriode} bakgrunnClassName={''} />
-                )}
-              </React.Fragment>
-            );
-          })}
-        </Table.Body>
-      </TableStyled>
+      <VStack gap="space-16">
+        <Chips size={'small'}>
+          <Chips.Toggle
+            onClick={() => {
+              setVisHistorikkPåEndredePerioder(!visHistorikkPåEndredePerioder);
+            }}
+            selected={visHistorikkPåEndredePerioder}
+          >
+            Vis historikk på endrede perioder
+          </Chips.Toggle>
+          <Chips.Toggle
+            onClick={() => {
+              setVisPerioderUtenEndringFraTidligere(!visPerioderUtenEndringFraTidligere);
+            }}
+            selected={visPerioderUtenEndringFraTidligere}
+          >
+            Vis perioder uten endring fra tidligere behandling
+          </Chips.Toggle>
+        </Chips>
+        {skalViseMeldingOmIngenEndringIPerioder && (
+          <Alert variant={'info'} size={'small'}>
+            Ingen nye eller endrede perioder siden forrige behandling
+          </Alert>
+        )}
+        <TableStyled size="medium">
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell>Meldeperiode</Table.HeaderCell>
+              <Table.HeaderCell>Vurdert periode</Table.HeaderCell>
+              <Table.HeaderCell>Dagsats</Table.HeaderCell>
+              <Table.HeaderCell>Barnetillegg</Table.HeaderCell>
+              <Table.HeaderCell>Arbeid</Table.HeaderCell>
+              <Table.HeaderCell>Samordning</Table.HeaderCell>
+              <Table.HeaderCell>Institusjon</Table.HeaderCell>
+              <Table.HeaderCell>Arbeidsgiver</Table.HeaderCell>
+              <Table.HeaderCell>Total reduksjon</Table.HeaderCell>
+              <Table.HeaderCell>Barnepensjon</Table.HeaderCell>
+              <Table.HeaderCell>Effektiv dagsats</Table.HeaderCell>
+              <Table.HeaderCell>Meldekort levert</Table.HeaderCell>
+              <Table.HeaderCell></Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            {grunnlagMedDiff.perioder.map((periode, periodeIndex) => {
+              const nyPeriode = utledNyPeriode(periode);
+              const uendretPeriode =
+                visPerioderUtenEndringFraTidligere && periode.diff === 'Uendret' ? periode.uendret : null;
+              const historiskPeriode = visHistorikkPåEndredePerioder ? utledHistoriskPeriode(periode) : null;
+              return (
+                <React.Fragment key={periodeIndex}>
+                  {nyPeriode && (
+                    <TilkjentPeriodeRad key={`ny-${periodeIndex}`} periode={nyPeriode} bakgrunnClassName={''} />
+                  )}
+                  {historiskPeriode && (
+                    <TilkjentPeriodeRad
+                      key={`historisk-${periodeIndex}`}
+                      periode={historiskPeriode}
+                      bakgrunnClassName={styles.tablerowwithzebra}
+                    />
+                  )}
+                  {uendretPeriode && (
+                    <TilkjentPeriodeRad
+                      key={`uendret-${periodeIndex}`}
+                      periode={uendretPeriode}
+                      bakgrunnClassName={''}
+                    />
+                  )}
+                </React.Fragment>
+              );
+            })}
+          </Table.Body>
+        </TableStyled>
+      </VStack>
     </VilkårsKort>
   );
 };

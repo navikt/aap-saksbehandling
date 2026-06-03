@@ -94,6 +94,7 @@ import {
   TrekkKlageGrunnlag,
   TrukketSøknadGrunnlag,
   UnderveisGrunnlag,
+  UnderveisGrunnlagMedDiff,
   UtbetalingOgSimuleringGrunnlag,
   VedtakslengdeGrunnlag,
   VenteInformasjon,
@@ -594,6 +595,11 @@ export const purrPåLegeerklæring = async (requestBody: { dialogmeldingPurringU
 export const hentUnderveisGrunnlag = async (behandlingsreferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/underveis/${behandlingsreferanse}`;
   return await apiFetch<UnderveisGrunnlag[]>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentUnderveisGrunnlagMedDiff = async (behandlingsreferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/underveis-med-diff/${behandlingsreferanse}`;
+  return await apiFetch<UnderveisGrunnlagMedDiff>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentBarnepensjonGrunnlag = async (behandlingsreferanse: string) => {

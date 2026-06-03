@@ -412,6 +412,10 @@ export type ForhåndsvisDialogmeldingResponse =
 export type UnderveisGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.underveis.UnderveisperiodeDto'];
 
+export type UnderveisGrunnlagMedDiff = {
+  perioder: Diff<UnderveisGrunnlag>[];
+};
+
 export type VedtakslengdeGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.vedtakslengde.VedtakslengdeGrunnlagResponse'];
 
