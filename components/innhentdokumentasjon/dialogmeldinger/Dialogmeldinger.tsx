@@ -1,4 +1,4 @@
-import { BodyShort, Button, HStack, Table } from '@navikt/ds-react';
+import { BodyShort, Button, HStack, InlineMessage, Table } from '@navikt/ds-react';
 import { LegeerklæringStatus } from 'lib/types/types';
 import { ReactNode, useState } from 'react';
 
@@ -20,15 +20,15 @@ const mapStatusTilTekst = (status?: 'BESTILT' | 'SENDT' | 'OK' | 'AVVIST' | 'MOT
     case 'SENDT':
     case 'OK':
       return (
-        <KelvinAlert variant="success" inline>
+        <InlineMessage status="success" size="small">
           Bestilt
-        </KelvinAlert>
+        </InlineMessage>
       );
     case 'AVVIST':
       return (
-        <KelvinAlert variant="error" inline>
+        <InlineMessage status="error" size="small">
           Feilet
-        </KelvinAlert>
+        </InlineMessage>
       );
     default:
       return '';
