@@ -177,7 +177,7 @@ const HoveddokumentRow = ({
       </HStack>
     </Table.DataCell>
     <Table.DataCell>
-      <BodyShort size={'small'}>{brevkode ? storForbokstav(brevkode) : '-'}</BodyShort>
+      <BodyShort size={'small'}>{brevkode ? formatterBrevkode(brevkode) : '-'}</BodyShort>
     </Table.DataCell>
     <Table.DataCell>
       {datoOpprettet && (
@@ -214,3 +214,12 @@ const VedleggRow = ({
     </Table.DataCell>
   </>
 );
+
+function formatterBrevkode(brevkode: string): string {
+  switch (brevkode) {
+    case 'MELDING_FRA_NAV':
+      return 'Melding fra Nav';
+    default:
+      return storForbokstav(brevkode);
+  }
+}
