@@ -39,7 +39,6 @@ import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering'
 import { Alert, VStack } from '@navikt/ds-react';
 import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
 import {
-  emptySykdomsvurdering,
   emptySykdomsvurderingMedDefaultBegrunnelse,
   erNyVurderingOppfylt,
   erTidligereVurderingOppfylt,
@@ -249,9 +248,7 @@ export const Sykdomsvurdering = ({
 
     if (trengerVurderingsForslag(grunnlag)) {
       return hentPerioderSomTrengerVurdering<Sykdomsvurdering>(grunnlag, () =>
-        hjelpetekster115FrontendToggle
-          ? emptySykdomsvurderingMedDefaultBegrunnelse(diagnoserForNyVurdering)
-          : emptySykdomsvurdering(diagnoserForNyVurdering)
+        emptySykdomsvurderingMedDefaultBegrunnelse(diagnoserForNyVurdering)
       );
     }
 
