@@ -1,3 +1,6 @@
+'use client';
+
+import { useState } from 'react';
 import { BodyShort, Box, Detail, Label, LocalAlert, ReadMore, VStack } from '@navikt/ds-react';
 import { FlytProsessering } from 'lib/types/types';
 
@@ -21,31 +24,7 @@ export const FlytProsesseringAlert = ({ flytProsessering }: Props) => {
             {ventendeOppgaver.map((oppgave, index) => (
               <VStack key={oppgave.id} gap="space-8">
                 {index > 0 && <hr style={{ margin: 0, borderColor: 'var(--a-border-default)' }} />}
-                <VStack gap="space-4">
-                  <Label size="small">{oppgave.navn}</Label>
-                  {oppgave.beskrivelse && <Detail>{oppgave.beskrivelse}</Detail>}
-                  <Detail>
-                    Feilende forsøk: <strong>{oppgave.antallFeilendeForsøk}</strong>
-                  </Detail>
-                </VStack>
-                {oppgave.feilmelding?.trim() && (
-                  <Box background="neutral-moderateA" padding="space-8" style={{ minWidth: 0 }}>
-                    <ReadMore header="Vis feilmelding" size="small">
-                      <pre
-                        style={{
-                          fontSize: 'small',
-                          whiteSpace: 'pre-wrap',
-                          wordBreak: 'break-word',
-                          maxHeight: '20rem',
-                          overflowY: 'auto',
-                          overflowX: 'hidden',
-                        }}
-                      >
-                        {oppgave.feilmelding}
-                      </pre>
-                    </ReadMore>
-                  </Box>
-                )}
+                <VentendeOppgave oppgave={oppgave} />
               </VStack>
             ))}
             <BodyShort size="small" weight={'semibold'}>
@@ -55,5 +34,46 @@ export const FlytProsesseringAlert = ({ flytProsessering }: Props) => {
         )}
       </LocalAlert.Content>
     </LocalAlert>
+  );
+};
+
+type Oppgave = FlytProsessering['ventendeOppgaver'][number];
+
+const VentendeOppgave = ({ oppgave }: { oppgave: Oppgave }) => {
+  const [open, setOpen] = useState(true);
+
+  return (
+    <VStack gap="space-8">
+      <VStack gap="space-4">
+        <Label size="small">{oppgave.navn}</Label>
+        {oppgave.beskrivelse && <Detail>{oppgave.beskrivelse}</Detail>}
+        <Detail>
+          Feilende forsøk: <strong>{oppgave.antallFeilendeForsøk}</strong>
+        </Detail>
+      </VStack>
+      {oppgave.feilmelding?.trim() && (
+        <Box background="neutral-moderateA" padding="space-8" style={{ minWidth: 0 }}>
+          <ReadMore
+            header={open ? 'Skjul feilmelding' : 'Vis feilmelding'}
+            size="small"
+            open={open}
+            onOpenChange={setOpen}
+          >
+            <pre
+              style={{
+                fontSize: 'small',
+                whiteSpace: 'pre-wrap',
+                wordBreak: 'break-word',
+                maxHeight: '20rem',
+                overflowY: 'auto',
+                overflowX: 'hidden',
+              }}
+            >
+              {oppgave.feilmelding}
+            </pre>
+          </ReadMore>
+        </Box>
+      )}
+    </VStack>
   );
 };
