@@ -10,6 +10,7 @@ interface Props {
 export const FlytProsesseringAlert = ({ flytProsessering }: Props) => {
   const { ventendeOppgaver } = flytProsessering;
 
+  console.log(flytProsessering);
   return (
     <LocalAlert status="error" size={'small'}>
       <LocalAlert.Header>
@@ -24,7 +25,6 @@ export const FlytProsesseringAlert = ({ flytProsessering }: Props) => {
               <VStack key={oppgave.id} gap="space-8">
                 <div>
                   <Label>{oppgave.navn}</Label>
-                  <Detail>{oppgave.type}</Detail>
                   {oppgave.beskrivelse && <BodyShort size="small">{oppgave.beskrivelse}</BodyShort>}
                 </div>
 
