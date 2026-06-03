@@ -40,7 +40,7 @@ export const TotrinnsvurderingHastemarkering = ({ readOnly, form, begrunnelse }:
         <RadioGroupWrapper
           label={'Skal hastemarkeringen følge behandlingen videre?'}
           control={form.control}
-          name={'skalHastemarkeringFjernes'}
+          name={'skalHastemarkeringBeholdes'}
           readOnly={readOnly}
         >
           {beholdIkkeBeholdOptions.map((option) => (

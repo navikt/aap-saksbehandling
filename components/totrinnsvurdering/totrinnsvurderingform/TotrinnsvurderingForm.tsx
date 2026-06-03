@@ -49,7 +49,7 @@ interface Props {
 
 export interface FormFieldsToTrinnsVurdering {
   totrinnsvurderinger: ToTrinnsVurderingFormFields[];
-  skalHastemarkeringFjernes?: JaEllerNei;
+  skalHastemarkeringBeholdes?: JaEllerNei;
 }
 
 type DraftFormFields = Partial<FormFieldsToTrinnsVurdering>;
@@ -89,7 +89,7 @@ export const TotrinnsvurderingForm = ({
       type: 'fieldArray',
       defaultValue: totrinnsvurderinger,
     },
-    skalHastemarkeringFjernes: {
+    skalHastemarkeringBeholdes: {
       type: 'radio',
       rules: { required: 'Du må ta stilling til om hastemarkeringen skal følge behandlingen videre.' },
       defaultValue: undefined,
@@ -125,7 +125,7 @@ export const TotrinnsvurderingForm = ({
           if (vurdering.godkjent === JaEllerNei.Ja) {
             const neste = data.totrinnsvurderinger[i + 1];
             const manglerVurderingAvHastemarkering =
-              data.skalHastemarkeringFjernes === undefined && skalFjerningAvHastemarkeringVurderes;
+              data.skalHastemarkeringBeholdes === undefined && skalFjerningAvHastemarkeringVurderes;
             if ((neste && !neste.godkjent) || manglerVurderingAvHastemarkering) {
               form.setError(`totrinnsvurderinger.${i + 1}.godkjent`, {
                 type: 'validate',
@@ -136,7 +136,7 @@ export const TotrinnsvurderingForm = ({
             }
           }
         });
-        if (data.skalHastemarkeringFjernes === JaEllerNei.Nei) {
+        if (data.skalHastemarkeringBeholdes === JaEllerNei.Nei) {
           clientFjernMarkeringForBehandling(behandlingsreferanse, { markeringType: MarkeringHaster });
         }
         if (isError) {
