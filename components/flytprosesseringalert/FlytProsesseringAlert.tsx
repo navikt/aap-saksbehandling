@@ -13,7 +13,7 @@ export const FlytProsesseringAlert = ({ flytProsessering }: Props) => {
   return (
     <LocalAlert status="error" size={'small'}>
       <LocalAlert.Header>
-        <LocalAlert.Title>Prosessering feilet i backend</LocalAlert.Title>
+        <LocalAlert.Title>Prosessering feilet i Kelvin</LocalAlert.Title>
       </LocalAlert.Header>
       <LocalAlert.Content>
         {ventendeOppgaver.length === 0 ? (
