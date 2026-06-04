@@ -71,11 +71,19 @@ export const LeggTilMockYrkesskade = ({ saksnummer }: { saksnummer: string }) =>
       {fields.map((field, index) => (
         <HStack key={field.id} gap="space-8" align="end">
           <SelectWrapper label="Skadeart" name={`yrkesskader.${index}.skadeart`} control={form.control}>
-            {skadeartOptions.map((o) => <option key={o} value={o}>{o}</option>)}
+            {skadeartOptions.map((o) => (
+              <option key={o} value={o}>
+                {o}
+              </option>
+            ))}
           </SelectWrapper>
 
           <SelectWrapper label="Diagnose" name={`yrkesskader.${index}.diagnose`} control={form.control}>
-            {diagnoseOptions.map((o) => <option key={o} value={o}>{o}</option>)}
+            {diagnoseOptions.map((o) => (
+              <option key={o} value={o}>
+                {o}
+              </option>
+            ))}
           </SelectWrapper>
 
           <Checkbox

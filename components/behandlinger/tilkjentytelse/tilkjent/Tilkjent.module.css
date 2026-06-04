@@ -5,3 +5,7 @@
 .tablerowwithzebra {
   background-color: var(--ax-bg-neutral-soft);
 }
+
+.tablerowhistoriskinnhold {
+  background-color: var(--ax-bg-neutral-moderate);
+}
