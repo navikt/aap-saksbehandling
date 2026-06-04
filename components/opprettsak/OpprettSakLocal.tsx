@@ -22,6 +22,7 @@ import {
 } from 'lib/types/types';
 import { OpprettYrkesskade } from 'components/opprettsak/yrkesskade/OpprettYrkesskade';
 import { Dato } from '../../lib/types/Dato';
+import { Tiltakspenger } from 'components/opprettsak/samordning/Tiltakspenger';
 
 interface Barn {
   fodselsdato: string;
@@ -396,6 +397,7 @@ export const OpprettSakLocal = () => {
             <OpprettInntekter form={form} />
             <Sykepenger form={form} />
             <Dagpenger form={form} />
+            <Tiltakspenger form={form} />
           </VStack>
         </HGrid>
 

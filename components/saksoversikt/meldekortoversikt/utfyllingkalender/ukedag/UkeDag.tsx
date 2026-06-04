@@ -35,9 +35,7 @@ export const UkeDag = ({ dag, felterMap, erSisteFeltiRaden, radHarError, readOnl
       ? form.formState.errors?.dager?.[eksisterendeFelt.index]?.timerArbeidet
       : undefined;
 
-  const harVerdi = eksisterendeFelt
-    ? form.watch(`dager.${eksisterendeFelt.index}.timerArbeidet`)
-    : undefined;
+  const harVerdi = eksisterendeFelt ? form.watch(`dager.${eksisterendeFelt.index}.timerArbeidet`) : undefined;
 
   const containerClassNames = [
     !eksisterendeFelt && styles.ikkeeksisterendefelt,

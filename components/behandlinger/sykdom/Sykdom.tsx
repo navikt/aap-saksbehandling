@@ -23,7 +23,7 @@ import { OppgittYrkesskadeUtenRegistertreffInfo } from 'components/behandlinger/
 
 interface Props {
   behandlingsreferanse: string;
-  flyt: BehandlingFlytOgTilstand
+  flyt: BehandlingFlytOgTilstand;
 }
 
 export const Sykdom = async ({ behandlingsreferanse, flyt }: Props) => {
@@ -159,8 +159,7 @@ export function hentStegDataForOppgittYrkesskadeInfo(grunnlag: {
   const oppgittYrkesskadeISøknad = grunnlag.opplysninger.oppgittYrkesskadeISøknad;
   const harIngenYrkesskadeId = grunnlag.yrkesskadeVurdering == null;
   const harIngenInnhentetYrkesskade =
-    grunnlag.opplysninger.innhentedeYrkesskader == null ||
-    grunnlag.opplysninger.innhentedeYrkesskader.length === 0;
+    grunnlag.opplysninger.innhentedeYrkesskader == null || grunnlag.opplysninger.innhentedeYrkesskader.length === 0;
 
   return {
     skalViseSteg: oppgittYrkesskadeISøknad === true && harIngenYrkesskadeId && harIngenInnhentetYrkesskade,

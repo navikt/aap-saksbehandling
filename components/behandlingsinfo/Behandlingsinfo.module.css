@@ -1,8 +1,4 @@
-.behandlingsinfo {
-  background-color: var(--ax-bg-default);
-}
-
-.klageBehandlingResultatMedSkillelinje {
+.klagebehandling + .klagebehandling {
   border-top: 1px solid var(--ax-border-neutral-subtle);
   padding-top: var(--ax-space-16);
 }

@@ -121,7 +121,7 @@ export const Brevbygger = ({
   };
 
   return (
-    <HGrid columns={pdfViewExpanded ? '1fr 3fr' : '1fr 1fr'} gap={'space-8'}>
+    <HGrid columns={pdfViewExpanded ? '1fr 3fr' : '1fr 1fr'} gap={'space-8'} minWidth={'100%'}>
       <Box>
         {fullmektigMottaker && brukerMottaker && (
           <VelgeMottakere

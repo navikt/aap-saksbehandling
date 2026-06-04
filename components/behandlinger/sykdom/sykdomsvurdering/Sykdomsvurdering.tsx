@@ -39,7 +39,6 @@ import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering'
 import { Alert, VStack } from '@navikt/ds-react';
 import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
 import {
-  emptySykdomsvurdering,
   emptySykdomsvurderingMedDefaultBegrunnelse,
   erNyVurderingOppfylt,
   erTidligereVurderingOppfylt,
@@ -47,7 +46,6 @@ import {
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
-import { useFeatureFlag } from 'context/UnleashContext';
 import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
 
 export interface SykdomsvurderingerForm {
@@ -101,8 +99,6 @@ export const Sykdomsvurdering = ({
     'AVKLAR_SYKDOM',
     initialMellomlagretVurdering
   );
-
-  const hjelpetekster115FrontendToggle = useFeatureFlag('Hjelpetekster115Frontend');
 
   const defaultValues: SykdomsvurderingerForm = initialMellomlagretVurdering
     ? parseOgMigrerMellomlagretData(initialMellomlagretVurdering.data)
@@ -185,11 +181,7 @@ export const Sykdomsvurdering = ({
       visningActions={visningActions}
       visningModus={visningModus}
       formReset={() => form.reset(mapGrunnlagTilDefaultvalues(grunnlag))}
-      onLeggTilVurdering={() =>
-        hjelpetekster115FrontendToggle
-          ? append(emptySykdomsvurderingMedDefaultBegrunnelse(utledDiagnoserForNyVurdering()))
-          : append(emptySykdomsvurdering(utledDiagnoserForNyVurdering()))
-      }
+      onLeggTilVurdering={() => append(emptySykdomsvurderingMedDefaultBegrunnelse(utledDiagnoserForNyVurdering()))}
       errorList={errorList}
     >
       <VStack gap={'space-16'}>
@@ -256,9 +248,7 @@ export const Sykdomsvurdering = ({
 
     if (trengerVurderingsForslag(grunnlag)) {
       return hentPerioderSomTrengerVurdering<Sykdomsvurdering>(grunnlag, () =>
-        hjelpetekster115FrontendToggle
-          ? emptySykdomsvurderingMedDefaultBegrunnelse(diagnoserForNyVurdering)
-          : emptySykdomsvurdering(diagnoserForNyVurdering)
+        emptySykdomsvurderingMedDefaultBegrunnelse(diagnoserForNyVurdering)
       );
     }
 

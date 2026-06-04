@@ -10,11 +10,12 @@ export const FLAGS = [
   'ForutgaaendeGap',
   'VisBoksForVurderingOmHastemarkeringSkalFjernes',
   'TilkjentYtelseMedDiff',
+  'UnderveisMedDiff',
   'AvbrytAktivitetspliktbehandling',
-  'Hjelpetekster115Frontend',
   'InfoboksGRegulering',
   'ReturAarsakJournalforing',
   'Skal1117og1118AlltidVises',
+  'VisValgForDialogmelding'
 ] as const;
 
 export type FlagNames = (typeof FLAGS)[number];
@@ -32,9 +33,10 @@ export const mockedFlags: Flags = {
   ForutgaaendeGap: true,
   VisBoksForVurderingOmHastemarkeringSkalFjernes: true,
   TilkjentYtelseMedDiff: true,
+  UnderveisMedDiff: true,
   AvbrytAktivitetspliktbehandling: true,
-  Hjelpetekster115Frontend: true,
   InfoboksGRegulering: true,
   ReturAarsakJournalforing: true,
   Skal1117og1118AlltidVises: true,
+  VisValgForDialogmelding: true
 };
