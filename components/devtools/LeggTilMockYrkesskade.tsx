@@ -1,14 +1,13 @@
 'use client';
 
 import { PlusIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Button, Checkbox, Heading, HStack, VStack } from '@navikt/ds-react';
+import { Alert, Button, Checkbox, Heading, HStack, VStack } from '@navikt/ds-react';
 import { clientLeggTilYrkesskade } from 'lib/clientApi';
 import { useFetch } from 'hooks/FetchHook';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { subDays, subMonths } from 'date-fns';
-import { Alert } from 'components/alert/Alert';
 
 const skadeartOptions = ['Arbeidsulykke', 'Yrkessykdom', 'Annet'];
 const diagnoseOptions = ['Lumbago', 'Karpaltunnelsyndrom', 'Håndleddsfraktur', 'Hørselstap', 'Hjernerystelse'];

@@ -1,4 +1,4 @@
-import { BodyLong, Button, Modal, VStack } from '@navikt/ds-react';
+import { Alert, BodyLong, Button, Modal, VStack } from '@navikt/ds-react';
 import { useRouter } from 'next/navigation';
 
 import { DetaljertBehandling, NyÅrsakTilBehandlingV0 } from 'lib/types/types';
@@ -9,7 +9,6 @@ import { Behovstype } from 'lib/utils/form';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { SubmitEventHandler } from 'react';
-import { Alert } from 'components/alert/Alert';
 
 interface Props {
   saksnummer: string;
@@ -93,7 +92,11 @@ export const VurderRettighetsperiodeModal = ({
             </BodyLong>
             <BodyLong>Tilbakedatering av søknadsdato etter § 22-13 5. ledd må gjøres i postmottak.</BodyLong>
             <FormField form={form} formField={formFields.begrunnelse} size="medium" />
-            {sendHendelseError && <Alert variant={'error'}>{sendHendelseError.message}</Alert>}
+            {sendHendelseError && (
+              <Alert variant={'error'} size={'small'}>
+                {sendHendelseError.message}
+              </Alert>
+            )}
           </VStack>
         </Modal.Body>
         <Modal.Footer>

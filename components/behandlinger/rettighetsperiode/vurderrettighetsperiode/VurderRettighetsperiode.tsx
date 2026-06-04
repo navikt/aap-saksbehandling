@@ -9,13 +9,12 @@ import { Behovstype } from 'lib/utils/form';
 import { validerDato } from 'lib/validation/dateValidation';
 import { MellomlagretVurdering, RettighetsperiodeGrunnlag } from 'lib/types/types';
 import { addYears, isBefore, parse, startOfDay } from 'date-fns';
-import { BodyShort, HStack, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, HStack, VStack } from '@navikt/ds-react';
 import { formaterDatoForBackend, formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
-import { Alert } from 'components/alert/Alert';
 
 interface Props {
   readOnly: boolean;
@@ -190,7 +189,7 @@ export const VurderRettighetsperiode = ({
         <>
           <FormField form={form} formField={formFields.startDato} />
           <HStack>
-            <Alert variant={'warning'}>
+            <Alert variant={'warning'} size={'small'}>
               Det er ikke støtte for beregning av renter i Kelvin ennå. Følg samme rutine som brukes på Arena-saker (via
               Gosys).
             </Alert>

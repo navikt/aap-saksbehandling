@@ -1,9 +1,8 @@
 'use client';
 
-import { Label, Table } from '@navikt/ds-react';
+import { Alert, Label, Table } from '@navikt/ds-react';
 import { SimulertUtbetaling, UtbetalingOgSimuleringGrunnlag } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import { Alert } from 'components/alert/Alert';
 
 interface Props {
   grunnlag: UtbetalingOgSimuleringGrunnlag[];

@@ -1,6 +1,6 @@
 import { isBefore } from 'date-fns';
+import { Alert } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import { Alert } from 'components/alert/Alert';
 
 type Props = {
   frist: Date;

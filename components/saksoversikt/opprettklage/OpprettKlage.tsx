@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, HStack, Page, VStack } from '@navikt/ds-react';
+import { Alert, Button, HStack, Page, VStack } from '@navikt/ds-react';
 import { KlageV0, SaksInfo } from 'lib/types/types';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
@@ -12,7 +12,6 @@ import { isSuccess } from 'lib/utils/api';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { parse } from 'date-fns';
 import { Kort } from 'components/kort/Kort';
-import { Alert } from 'components/alert/Alert';
 
 export interface KlageFormFields {
   kravMottatt: string;

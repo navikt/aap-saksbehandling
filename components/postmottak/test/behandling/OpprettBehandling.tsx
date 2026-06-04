@@ -1,11 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Button, HStack, Page, TextField } from '@navikt/ds-react';
+import { Alert, Button, HStack, Page, TextField } from '@navikt/ds-react';
 import { postmottakOpprettBehandlingClient } from 'lib/postmottakClientApi';
 import styles from './OpprettBehandling.module.css';
 import { isSuccess } from 'lib/utils/api';
-import { Alert } from 'components/alert/Alert';
 
 export const OpprettBehandling = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);

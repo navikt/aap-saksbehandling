@@ -1,6 +1,6 @@
 'use client';
 
-import { BodyShort, Button, Chips, Heading, HStack, Table, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, Chips, Heading, HStack, Table, VStack } from '@navikt/ds-react';
 import { RettighetsinfoDto, SaksInfo, Vurderingsbehov } from 'lib/types/types';
 import { capitalize } from 'lodash';
 import { SakDevTools } from 'components/saksoversikt/SakDevTools';
@@ -22,7 +22,6 @@ import { usePostmottakBehandlinger } from 'hooks/postmottak/PostmottakBehandling
 import { useHentOppgaverForBehandlinger } from 'hooks/oppgave/OppgaverPåSakHook';
 import { Dato } from 'lib/types/Dato';
 import { Kort } from 'components/kort/Kort';
-import { Alert } from 'components/alert/Alert';
 
 const lokalDevToolsForBehandlingOgSak = isLocal();
 

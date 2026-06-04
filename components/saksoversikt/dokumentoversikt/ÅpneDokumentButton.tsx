@@ -1,8 +1,7 @@
-import { Box, Button, Dropdown, HStack } from '@navikt/ds-react';
+import { Alert, Box, Button, Dropdown, HStack } from '@navikt/ds-react';
 import { ChevronDownIcon, ExternalLinkIcon } from '@navikt/aksel-icons';
 import Link from 'next/link';
 import { DokumentInfo, Journalpost } from 'lib/types/journalpost';
-import { Alert } from 'components/alert/Alert';
 
 export const ÅpneDokumentButton = ({ journalpost }: { journalpost: Journalpost }) => {
   if (journalpost.dokumenter.length > 1) {
@@ -34,7 +33,9 @@ export const ÅpneDokumentButton = ({ journalpost }: { journalpost: Journalpost 
 
                 {!dok.dokumentvarianter[0]?.saksbehandlerHarTilgang && (
                   <Box padding="space-16">
-                    <Alert variant="warning">Ikke Tilgang</Alert>
+                    <Alert variant="warning" size="small">
+                      Ikke Tilgang
+                    </Alert>
                   </Box>
                 )}
               </HStack>

@@ -1,4 +1,4 @@
-import { ActionMenu, BodyShort, Button, HGrid, InfoCard, Link, Loader, Table, VStack } from '@navikt/ds-react';
+import { ActionMenu, Alert, BodyShort, Button, Heading, Link, Loader, Table } from '@navikt/ds-react';
 import useSWR from 'swr';
 
 import styles from './RelevanteDokumenter.module.css';
@@ -14,7 +14,6 @@ import { KnyttTilSakModal } from 'components/saksoversikt/dokumentoversikt/Knytt
 import { SakContextType } from 'context/saksbehandling/SakContext';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { storForbokstav } from 'lib/utils/string';
-import { Alert } from 'components/alert/Alert';
 
 interface FormFields {
   dokumentnavn: string;
@@ -67,59 +66,63 @@ export const RelevanteDokumenter = () => {
   }
 
   if (relevanteDokumenter && isError(relevanteDokumenter)) {
-    return <Alert variant={'error'}>{relevanteDokumenter.apiException.message}</Alert>;
+    return (
+      <Alert variant={'error'} size={'small'}>
+        {relevanteDokumenter.apiException.message}
+      </Alert>
+    );
   }
 
   if (relevanteDokumenter?.data.length === 0) {
-    return <Alert variant="info">Fant ingen relevante helseopplysninger</Alert>;
+    return (
+      <Alert size={'small'} variant="info">
+        Fant ingen relevante helseopplysninger
+      </Alert>
+    );
   }
 
   return (
-    <InfoCard
-      data-color={'info'}
-      size={'small'}
-      as={'section'}
-      aria-label={'Informasjon om helseopplysninger som kan være relevant for saken'}
-    >
-      <InfoCard.Header icon={<InformationSquareFillIcon />}>
-        <InfoCard.Title>Følgende helseopplysninger kan være relevant for saken</InfoCard.Title>
-      </InfoCard.Header>
-      <InfoCard.Content>
-        <VStack gap={'space-16'}>
+    <section className={styles.blaaBoks}>
+      <div className={styles.heading}>
+        <InformationSquareFillIcon className={styles.icon} />
+        <div>
+          <Heading level={'3'} size={'xsmall'}>
+            Følgende helseopplysninger kan være relevant for saken
+          </Heading>
           <BodyShort size={'small'} className={styles.beskrivelse}>
             Nav har tidligere mottatt følgende helseopplysninger som kan være relevant for brukers AAP sak. Velg
             dokumenter som er aktuelle for å koble de til saken.
           </BodyShort>
-          <HGrid columns={'1fr 1fr'} gap={'space-8'}>
-            <FormField form={form} formField={formFields.dokumentnavn} />
-            <FormField form={form} formField={formFields.tema} />
-          </HGrid>
-          <TableStyled size={'small'}>
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell textSize={'small'}>Dokument</Table.HeaderCell>
-                <Table.HeaderCell textSize={'small'}>Tema</Table.HeaderCell>
-                <Table.HeaderCell textSize={'small'}>Brevkode</Table.HeaderCell>
-                <Table.HeaderCell textSize={'small'}>Journalført</Table.HeaderCell>
-                <Table.HeaderCell />
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {relevanteDokumenter?.data
-                .filter(
-                  (dokument) =>
-                    !form.watch('dokumentnavn') ||
-                    dokument.tittel.toUpperCase().includes(form.watch('dokumentnavn').toUpperCase())
-                )
-                .filter((dokument) => !form.watch('tema') || dokument.tema === form.watch('tema'))
-                .map((dokument) => (
-                  <DokumentRad key={dokument.dokumentInfoId} sak={sak} dokument={dokument} />
-                ))}
-            </Table.Body>
-          </TableStyled>
-        </VStack>
-      </InfoCard.Content>
-    </InfoCard>
+        </div>
+      </div>
+      <div className={styles.filterrad}>
+        <FormField form={form} formField={formFields.dokumentnavn} />
+        <FormField form={form} formField={formFields.tema} />
+      </div>
+      <TableStyled size={'small'}>
+        <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell textSize={'small'}>Dokument</Table.HeaderCell>
+            <Table.HeaderCell textSize={'small'}>Tema</Table.HeaderCell>
+            <Table.HeaderCell textSize={'small'}>Brevkode</Table.HeaderCell>
+            <Table.HeaderCell textSize={'small'}>Journalført</Table.HeaderCell>
+            <Table.HeaderCell />
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          {relevanteDokumenter?.data
+            .filter(
+              (dokument) =>
+                !form.watch('dokumentnavn') ||
+                dokument.tittel.toUpperCase().includes(form.watch('dokumentnavn').toUpperCase())
+            )
+            .filter((dokument) => !form.watch('tema') || dokument.tema === form.watch('tema'))
+            .map((dokument) => (
+              <DokumentRad key={dokument.dokumentInfoId} sak={sak} dokument={dokument} />
+            ))}
+        </Table.Body>
+      </TableStyled>
+    </section>
   );
 };
 

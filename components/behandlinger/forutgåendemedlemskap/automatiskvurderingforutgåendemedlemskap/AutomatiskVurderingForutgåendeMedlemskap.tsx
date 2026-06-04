@@ -1,11 +1,10 @@
 'use client';
 
 import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
-import { BodyShort, Button, Detail, HStack, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, Detail, HStack, VStack } from '@navikt/ds-react';
 import { AutomatiskLovvalgOgMedlemskapVurdering } from 'lib/types/types';
 import { TilhørighetsVurderingTabell } from 'components/behandlinger/lovvalg/automatiskvurderingavlovvalgogmedlemskap/TilhørighetsVurderingTabell';
 import { Dispatch, SetStateAction } from 'react';
-import { Alert } from 'components/alert/Alert';
 
 interface Props {
   vurdering: AutomatiskLovvalgOgMedlemskapVurdering;
@@ -25,13 +24,13 @@ export const AutomatiskVurderingForutgåendeMedlemskap = ({
     <VilkårsKort heading={'Automatisk vurdering av forutgående medlemskap'} steg={'VURDER_MEDLEMSKAP'}>
       <VStack gap={'space-20'}>
         {!vurdering.kanBehandlesAutomatisk && !harYrkesskade && (
-          <Alert variant={'warning'} title={'Til manuell vurdering'} className={'fit-content'}>
+          <Alert variant={'warning'} title={'Til manuell vurdering'} size={'small'} className={'fit-content'}>
             Opplysningene tilsier at det kan være tilhørighet utenfor Norge. Forutgående medlemskap må vurderes manuelt.
           </Alert>
         )}
 
         {harYrkesskade && (
-          <Alert variant={'success'} title={'Bruker har yrkesskade'} className={'fit-content'}>
+          <Alert variant={'success'} title={'Bruker har yrkesskade'} size={'small'} className={'fit-content'}>
             Brukeren har en yrkesskade med godkjent årsakssammenheng med den nedsatte arbeidsevnen. Vilkåret i § 11-2 om
             forutgående medlemskap gjelder ikke.
           </Alert>

@@ -1,5 +1,5 @@
 import styles from './DokumentOversikt.module.css';
-import { Button, Heading, HStack, Table, VStack } from '@navikt/ds-react';
+import { Alert, Button, Heading, HStack, Table, VStack } from '@navikt/ds-react';
 import { Spinner } from 'components/felles/Spinner';
 import { isSuccess } from 'lib/utils/api';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
@@ -16,7 +16,6 @@ import { useEffect, useState } from 'react';
 import { useLagretDokumentFilter } from 'hooks/dokumenter/dokumentFilterHook';
 import { ArrowCirclepathReverseIcon } from '@navikt/aksel-icons';
 import { Kort } from 'components/kort/Kort';
-import { Alert } from 'components/alert/Alert';
 
 export interface DokumentFilterFormFields {
   tema: string[];

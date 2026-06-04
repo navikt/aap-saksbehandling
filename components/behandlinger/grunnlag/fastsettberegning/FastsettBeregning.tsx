@@ -13,7 +13,7 @@ import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { isBefore, parse } from 'date-fns';
 import { erDatoFoerDato, erDatoIFremtiden, validerDato } from 'lib/validation/dateValidation';
 import styles from './FastsettBeregning.module.css';
-import { Heading } from '@navikt/ds-react';
+import { Alert, Heading } from '@navikt/ds-react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { useSak } from 'hooks/SakHook';
@@ -23,7 +23,6 @@ import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
-import { Alert } from 'components/alert/Alert';
 
 interface Props {
   grunnlag?: BeregningTidspunktGrunnlag;
@@ -202,7 +201,7 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly, initi
         </div>
       )}
       {erBeregningsTidspunktEtterVirkningsTidspunkt && (
-        <Alert variant={'warning'}>
+        <Alert variant={'warning'} size={'small'}>
           Sjekk om beregningstidspunkt skal være datert etter tidspunkt for foreløpig virkningstidspunkt
         </Alert>
       )}

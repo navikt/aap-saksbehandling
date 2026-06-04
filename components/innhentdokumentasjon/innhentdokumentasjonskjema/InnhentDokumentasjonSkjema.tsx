@@ -1,4 +1,4 @@
-import { BodyShort, Button, Heading, Link } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, Heading, Link } from '@navikt/ds-react';
 import { SubmitEventHandler, useState } from 'react';
 
 import styles from './InnhentDokumentasjonSkjema.module.css';
@@ -12,7 +12,6 @@ import { FormField, ValuePair } from 'components/form/FormField';
 import { isError } from 'lib/utils/api';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { useFeatureFlag } from 'context/UnleashContext';
-import { Alert } from 'components/alert/Alert';
 
 export type Behandler = {
   type?: string;
@@ -187,7 +186,9 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
         </div>
         {error && (
           <div className={styles.rad}>
-            <Alert variant="error">{error || 'Noe gikk galt ved bestilling av dialogmelding'}</Alert>
+            <Alert variant="error" size={'small'}>
+              {error || 'Noe gikk galt ved bestilling av dialogmelding'}
+            </Alert>
           </div>
         )}
       </form>

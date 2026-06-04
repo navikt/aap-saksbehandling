@@ -1,6 +1,6 @@
 'use client';
 
-import { BodyShort, Chips, Table, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Chips, Table, VStack } from '@navikt/ds-react';
 import { Diff, UnderveisAvslagsÅrsak, UnderveisGrunnlag, UnderveisGrunnlagMedDiff } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { mapUtfallTilTekst } from 'lib/utils/oversettelser';
@@ -14,7 +14,6 @@ import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
 import React, { useState } from 'react';
 import styles from 'components/behandlinger/underveis/underveisgrunnlag/Underveisgrunnlag.module.css';
-import { Alert } from 'components/alert/Alert';
 
 type Props = {
   grunnlag: UnderveisGrunnlag[];
@@ -127,7 +126,9 @@ export const UnderveisTabellMedDiff = ({ grunnlag }: { grunnlag: UnderveisGrunnl
         </Chips.Toggle>
       </Chips>
       {skalViseMeldingOmIngenEndringIPerioder && (
-        <Alert variant={'info'}>Ingen nye eller endrede perioder siden forrige behandling</Alert>
+        <Alert variant={'info'} size={'small'}>
+          Ingen nye eller endrede perioder siden forrige behandling
+        </Alert>
       )}
       <Table>
         <Table.Header>

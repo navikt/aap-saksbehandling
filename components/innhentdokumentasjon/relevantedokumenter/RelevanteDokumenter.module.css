@@ -1,3 +1,27 @@
+.blaaBoks {
+  background-color: var(--ax-bg-info-soft);
+  border: 1px solid var(--ax-border-info);
+  border-radius: var(--ax-radius-4);
+  padding: var(--ax-space-16);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ax-space-16);
+}
+
+.icon {
+  font-size: var(--ax-font-size-heading-medium);
+  color: var(--ax-text-info-decoration);
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+.heading {
+  display: flex;
+  flex-direction: row;
+  gap: var(--ax-space-8);
+  margin-bottom: var(--ax-space-8);
+}
+
 .filterrad {
   display: grid;
   grid-template-columns: 1fr 1fr;

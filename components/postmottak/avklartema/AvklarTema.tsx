@@ -6,7 +6,7 @@ import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/Postmo
 import { AvklarTemaGrunnlag } from 'lib/types/postmottakTypes';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { postmottakLøsBehovClient } from 'lib/postmottakClientApi';
-import { BodyShort, Button, Modal, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, Modal, VStack } from '@navikt/ds-react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { usePostmottakEndreTema } from 'hooks/FetchHook';
@@ -14,7 +14,6 @@ import { CheckmarkCircleIcon } from '@navikt/aksel-icons';
 import { toggles } from 'lib/utils/toggles';
 import { PostmottakVilkårskort } from 'components/postmottak/vilkårskort/PostmottakVilkårskort';
 import { usePostmottakVilkårskortVisning } from 'hooks/postmottak/PostmottakVisningHook';
-import { Alert } from 'components/alert/Alert';
 
 interface Props {
   behandlingsVersjon: number;
@@ -142,7 +141,7 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
       </Modal>
       <VStack gap={'space-24'}>
         {skalViseKlageEttersendelseInfo && (
-          <Alert variant={'info'}>
+          <Alert variant={'info'} size={'small'}>
             Denne journalposten er en ettersendelse til klage, og journalførende enhet er satt til{'  '}
             {NAV_KLAGEINSTANS_ENHET}. Svar <i>Nei</i> dersom du ønsker å opprette journalføringsoppgave i Gosys for Nav
             Klageinstans.
@@ -151,7 +150,7 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
         <LøsBehovOgGåTilNesteStegStatusAlert status={status} />
         <FormField form={form} formField={formFields.erTemaAAP} />
         {error && (
-          <Alert size={'small'} variant={'error'}>
+          <Alert size={'small'} variant={'error'} title={''}>
             <BodyShort size={'small'}>Noe gikk galt ved endring av tema</BodyShort>
             {error}
           </Alert>

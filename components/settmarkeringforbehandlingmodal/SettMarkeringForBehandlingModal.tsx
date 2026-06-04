@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useConfigForm } from 'components/form/FormHook';
 import { BookIcon, ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import styles from 'components/settbehandlingpåventmodal/SettBehandlingPåVentModal.module.css';
-import { Button, Modal, VStack } from '@navikt/ds-react';
+import { Alert, Button, Modal, VStack } from '@navikt/ds-react';
 
 import { revalidateBehandlingPath } from 'lib/actions/actions';
 import { clientSettMarkeringForBehandling } from 'lib/clientApi';
@@ -11,7 +11,6 @@ import { NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType } from '@navikt/aap-o
 import { FormField } from 'components/form/FormField';
 import { isSuccess } from 'lib/utils/api';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { Alert } from 'components/alert/Alert';
 
 interface Props {
   referanse: string;
@@ -98,7 +97,11 @@ export const SettMarkeringForBehandlingModal = ({ referanse, type, isOpen, onClo
               )}
             </form>
           )}
-          {error && <Alert variant={'error'}>{error}</Alert>}
+          {error && (
+            <Alert variant={'error'} size={'small'}>
+              {error}
+            </Alert>
+          )}
         </VStack>
       </Modal.Body>
       <Modal.Footer>

@@ -73,19 +73,6 @@ const config = [
       'jest/prefer-to-have-length': 'warn',
       'jest/valid-expect': 'error',
 
-      'no-restricted-imports': [
-        'error',
-        {
-          paths: [
-            {
-              name: '@navikt/ds-react',
-              importNames: ['Alert'],
-              message: 'Bruk Alert fra components/alert/Alert i stedet for Alert fra @navikt/ds-react.',
-            },
-          ],
-        },
-      ],
-
       // Regler vi burde skru på, men midleritig av fordi vi hadde mange feil
       'no-redeclare': 'off',
       'react-hooks/refs': 'off',

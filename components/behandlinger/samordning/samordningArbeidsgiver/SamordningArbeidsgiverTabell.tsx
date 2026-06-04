@@ -1,7 +1,7 @@
 'use client';
 
 import { useFieldArray, UseFormReturn, useWatch } from 'react-hook-form';
-import { BodyLong, Button, HStack, Label, Table, VStack } from '@navikt/ds-react';
+import { Alert, BodyLong, Button, HStack, Label, Table, VStack } from '@navikt/ds-react';
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { TableStyled } from 'components/tablestyled/TableStyled';
@@ -9,7 +9,6 @@ import { SamordningArbeidsgiverFormFields } from 'components/behandlinger/samord
 import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
 import { addBusinessDays, areIntervalsOverlapping, format, isValid, parse } from 'date-fns';
 import { useEffect } from 'react';
-import { Alert } from 'components/alert/Alert';
 
 interface Props {
   form: UseFormReturn<SamordningArbeidsgiverFormFields>;

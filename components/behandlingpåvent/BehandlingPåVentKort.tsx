@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { BodyShort, Button, Label } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, Label } from '@navikt/ds-react';
 import { SideProsessKort } from 'components/sideprosesskort/SideProsessKort';
 import { HourglassBottomFilledIcon } from '@navikt/aksel-icons';
 import { SettPåVentÅrsaker, VenteInformasjon } from 'lib/types/types';
@@ -9,7 +9,6 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 import { useLøsBehovOgVentPåProsessering } from 'hooks/saksbehandling/LøsBehovOgVentPåProsessering';
 import { useFlyt } from 'hooks/saksbehandling/FlytHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { Alert } from 'components/alert/Alert';
 
 interface Props {
   behandlingVersjon: number;
@@ -41,9 +40,17 @@ export const BehandlingPåVentKort = ({ informasjon }: Props) => {
             </div>
 
             <BodyShort as={'p'}>Behandlingen er på vent. Vil du åpne den igjen?</BodyShort>
-            {løsBehovError && <Alert variant={'error'}>{løsBehovError.message}</Alert>}
+            {løsBehovError && (
+              <Alert variant={'error'} size={'small'}>
+                {løsBehovError.message}
+              </Alert>
+            )}
 
-            {errorMessage && <Alert variant={'error'}>{errorMessage}</Alert>}
+            {errorMessage && (
+              <Alert variant={'error'} size={'small'}>
+                {errorMessage}
+              </Alert>
+            )}
 
             <Button
               size={'medium'}

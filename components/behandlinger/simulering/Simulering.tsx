@@ -4,9 +4,9 @@ import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { hentBehandling } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isError } from 'lib/utils/api';
 import { UtbetalingOgSimuleringMedDataFetching } from './utbetalingogsimulering/UtbetalingOgSimuleringMedDataFetching';
+import { Alert } from '@navikt/ds-react';
 import { toggles } from 'lib/utils/toggles';
 import { BehandlingFlytOgTilstand } from 'lib/types/types';
-import { Alert } from 'components/alert/Alert';
 
 interface Props {
   behandlingsreferanse: string;

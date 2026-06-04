@@ -1,4 +1,4 @@
-import { BodyShort, Button, Detail, Dialog, HStack, Link, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, Detail, Dialog, HStack, Link, VStack } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 
@@ -21,7 +21,6 @@ import { addDays, differenceInDays } from 'date-fns';
 import { useMeldekort } from 'hooks/saksbehandling/MeldekortHook';
 import { Journalpost } from 'lib/types/journalpost';
 import { erDatoFoerDato, erDatoIFremtiden } from 'lib/validation/dateValidation';
-import { Alert } from 'components/alert/Alert';
 
 interface Props {
   setIsOpen: (isOpen: boolean) => void;
@@ -196,12 +195,14 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
                   {skalViseMeldedato && <FormField form={form} formField={formFields.meldedato} />}
                   {skalViseTimer && <UtfyllingKalender readOnly={erÅrsakRegistrereMeldedato} />}
                   {skalViseAlertForIngenTimer && (
-                    <Alert variant={'info'}>Bruker har ikke levert noen timer.</Alert>
+                    <Alert variant={'info'} size={'small'}>
+                      Bruker har ikke levert noen timer.
+                    </Alert>
                   )}
                   <FormErrorSummary errorList={errorList} />
                   {error && <Alert variant={'error'}>{error}</Alert>}
                   {erÅrsakOverstyring && (
-                    <Alert variant={'warning'}>
+                    <Alert variant={'warning'} size={'small'}>
                       Overstyring av bruker er ikke støttet enda. Hvis behovet vedvarer etter dialog med bruker, send
                       sak i porten til team AAP.
                     </Alert>
