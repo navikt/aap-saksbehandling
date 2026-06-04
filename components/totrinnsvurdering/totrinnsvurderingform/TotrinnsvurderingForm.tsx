@@ -1,7 +1,13 @@
 'use client';
 
 import { TotrinnnsvurderingFelter } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnnsvurderingFelter';
-import { Behovstype, getJaNeiEllerUndefined, getTrueFalseEllerUndefined, JaEllerNei } from 'lib/utils/form';
+import {
+  Behovstype,
+  getJaNeiEllerUndefined,
+  getTrueFalseEllerUndefined,
+  JaEllerNei,
+  JaEllerNeiOptions,
+} from 'lib/utils/form';
 import { Button, Detail, HStack } from '@navikt/ds-react';
 import {
   FatteVedtakGrunnlag,
@@ -25,8 +31,13 @@ import {
   useUmamiStartTidspunkt,
   useUmamiVarighetHendelser,
 } from 'lib/utils/umami';
-import { isLocal } from 'lib/utils/environment';
 import { Alert } from 'components/alert/Alert';
+import { TotrinnsvurderingHastemarkering } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingHastemarkering';
+import { Markering, MarkeringHaster } from 'lib/types/oppgaveTypes';
+import { useFeatureFlag } from 'context/UnleashContext';
+
+import { clientFjernMarkeringForBehandling } from 'lib/clientApi';
+import { isLocal } from 'lib/utils/environment';
 
 interface Props {
   grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;
@@ -34,10 +45,12 @@ interface Props {
   readOnly: boolean;
   initialMellomlagretVurdering?: MellomlagretVurdering;
   behandlingsversjon: number;
+  hastemarkering?: Markering;
 }
 
 export interface FormFieldsToTrinnsVurdering {
   totrinnsvurderinger: ToTrinnsVurderingFormFields[];
+  skalHastemarkeringBeholdes?: JaEllerNei;
 }
 
 type DraftFormFields = Partial<FormFieldsToTrinnsVurdering>;
@@ -48,12 +61,15 @@ export const TotrinnsvurderingForm = ({
   erKvalitetssikring,
   initialMellomlagretVurdering,
   behandlingsversjon,
+  hastemarkering,
 }: Props) => {
   const { saksnummer, behandlingsreferanse } = useParamsMedType();
 
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } = useLøsBehovOgGåTilNesteSteg(
     erKvalitetssikring ? 'KVALITETSSIKRING' : 'FATTE_VEDTAK'
   );
+
+  const featureFlagHastemarkeringBoks = useFeatureFlag('VisBoksForVurderingOmHastemarkeringSkalFjernes');
 
   const { addHendelse, varighetHendelseRef, hendelseSerieRef } = useUmamiVarighetHendelser(
     erKvalitetssikring ? 'KVALITETSSIKRER_VARIGHET_HENDELSER' : 'BESLUTTER_VARIGHET_HENDELSER'
@@ -64,10 +80,21 @@ export const TotrinnsvurderingForm = ({
     ? mapMellomlagringToDraftFormFields(JSON.parse(initialMellomlagretVurdering.data))
     : mapVurderingToDraftFormFields(grunnlag.vurderinger);
 
+  const totrinnsvurderinger = defaultValue.totrinnsvurderinger;
+  const erBehandlingHastemarkert = hastemarkering !== undefined;
+  const skalFjerningAvHastemarkeringVurderes =
+    erBehandlingHastemarkert && erKvalitetssikring && featureFlagHastemarkeringBoks;
+
   const { form } = useConfigForm<FormFieldsToTrinnsVurdering>({
     totrinnsvurderinger: {
       type: 'fieldArray',
-      defaultValue: defaultValue.totrinnsvurderinger,
+      defaultValue: totrinnsvurderinger,
+    },
+    skalHastemarkeringBeholdes: {
+      type: 'radio',
+      rules: { required: 'Du må ta stilling til om hastemarkeringen skal følge behandlingen videre.' },
+      defaultValue: undefined,
+      options: JaEllerNeiOptions,
     },
   });
 
@@ -94,20 +121,32 @@ export const TotrinnsvurderingForm = ({
     <form
       onSubmit={form.handleSubmit(async (data) => {
         const assessedFields = data.totrinnsvurderinger.filter((vurdering) => vurdering.godkjent !== undefined);
+        const manglerVurderingAvHastemarkering =
+          data.skalHastemarkeringBeholdes === undefined && skalFjerningAvHastemarkeringVurderes;
         let isError = false;
+
         data.totrinnsvurderinger.forEach((vurdering, i) => {
           if (vurdering.godkjent === JaEllerNei.Ja) {
             const neste = data.totrinnsvurderinger[i + 1];
-            if (neste && !neste.godkjent) {
+            if ((neste && !neste.godkjent) || manglerVurderingAvHastemarkering) {
               form.setError(`totrinnsvurderinger.${i + 1}.godkjent`, {
                 type: 'validate',
-                message: 'Du må ta stilling til alle vilkårsvurderinger hvis ikke du underkjenner.',
+                message: 'Du må ta stilling til alle vilkårsvurderinger hvis du ikke underkjenner.',
               });
               isError = true;
               return;
             }
           }
         });
+        if (manglerVurderingAvHastemarkering) {
+          form.setError(`skalHastemarkeringBeholdes`, {
+            type: 'validate',
+            message: 'Du må ta stilling til om hastemarkeringen skal følge behandlingen videre.',
+          });
+        }
+        if (data.skalHastemarkeringBeholdes === JaEllerNei.Nei) {
+          clientFjernMarkeringForBehandling(behandlingsreferanse, { markeringType: MarkeringHaster });
+        }
         if (isError) {
           return;
         }
@@ -184,6 +223,14 @@ export const TotrinnsvurderingForm = ({
           />
         );
       })}
+      {skalFjerningAvHastemarkeringVurderes && (
+        <TotrinnsvurderingHastemarkering
+          key={crypto.randomUUID()}
+          form={form}
+          readOnly={readOnly}
+          begrunnelse={hastemarkering?.begrunnelse ?? ''}
+        />
+      )}
       {form.formState.errors.totrinnsvurderinger?.root && (
         <Alert variant={'error'}>{form.formState.errors.totrinnsvurderinger.root.message}</Alert>
       )}

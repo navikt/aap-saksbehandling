@@ -8,19 +8,22 @@ import { ToTrinnsvurdering } from 'components/totrinnsvurdering/ToTrinnsvurderin
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { Behovstype } from 'lib/utils/form';
+import { hentMarkeringer } from 'lib/services/oppgaveservice/oppgaveservice';
+import { MarkeringHaster } from 'lib/types/oppgaveTypes';
 
 interface Props {
   behandlingsreferanse: string;
 }
 
 export const ToTrinnsvurderingMedDataFetching = async ({ behandlingsreferanse }: Props) => {
-  const [fatteVedtakGrunnlag, kvalitetssikringGrunnlag, flyt] = await Promise.all([
+  const [fatteVedtakGrunnlag, kvalitetssikringGrunnlag, flyt, markeringer] = await Promise.all([
     hentFatteVedtakGrunnlang(behandlingsreferanse),
     hentKvalitetssikringGrunnlag(behandlingsreferanse),
     hentFlyt(behandlingsreferanse),
+    hentMarkeringer(behandlingsreferanse),
   ]);
 
-  if (isError(fatteVedtakGrunnlag) || isError(kvalitetssikringGrunnlag) || isError(flyt)) {
+  if (isError(fatteVedtakGrunnlag) || isError(kvalitetssikringGrunnlag) || isError(flyt) || isError(markeringer)) {
     return <ApiException apiResponses={[fatteVedtakGrunnlag, kvalitetssikringGrunnlag, flyt]} />;
   }
 
@@ -35,6 +38,8 @@ export const ToTrinnsvurderingMedDataFetching = async ({ behandlingsreferanse }:
     erKvalitetssikring ? Behovstype.KVALITETSSIKRING_KODE : Behovstype.FATTE_VEDTAK_KODE,
     totalReadOnly
   );
+
+  const hastemarkering = markeringer.data.filter((markering) => markering.markeringType === MarkeringHaster)?.at(0);
 
   return (
     <>
@@ -58,6 +63,7 @@ export const ToTrinnsvurderingMedDataFetching = async ({ behandlingsreferanse }:
           readOnly={flyt.data.visning.kvalitetssikringReadOnly}
           initialMellomlagretVurdering={initialMellomlagretVurdering}
           behandlingsversjon={flyt.data.behandlingVersjon}
+          hastemarkering={hastemarkering}
         />
       )}
     </>
