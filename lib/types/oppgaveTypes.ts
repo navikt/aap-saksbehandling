@@ -40,6 +40,8 @@ export type TildeltStatus = oppgave['schemas']['no.nav.aap.oppgave.tildel.Tildel
 export type OppgaveBehandlingstype = `${NoNavAapOppgaveOppgaveDtoBehandlingstype}`;
 export type OppgaveStatus = `${NoNavAapOppgaveOppgaveDtoStatus}`;
 export type MarkeringType = `${NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType}`;
+export const MarkeringHaster = NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.HASTER;
+export const MarkeringSpesialKompetanse = NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.KREVER_SPESIALKOMPETANSE;
 
 export type OppgaveAvklaringsbehovKode = BehandlingsFlytAvklaringsbehovKode | PostmottakAvklaringsbehovKode;
 export type FilterTidsEnhet = 'DAG' | 'UKE' | 'MÅNED' | 'ÅR';

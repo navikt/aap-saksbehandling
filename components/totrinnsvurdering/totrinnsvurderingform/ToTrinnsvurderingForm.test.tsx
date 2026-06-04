@@ -6,6 +6,7 @@ import { FatteVedtakGrunnlag, MellomlagretVurderingResponse } from 'lib/types/ty
 import { userEvent } from '@testing-library/user-event';
 import { FetchResponse } from 'lib/utils/api';
 import createFetchMock from 'vitest-fetch-mock';
+import { MarkeringHaster } from 'lib/types/oppgaveTypes';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
@@ -289,7 +290,7 @@ describe('totrinnsvurderingform', () => {
     await user.click(sendInnButton);
 
     expect(
-      screen.getByText('Du må ta stilling til alle vilkårsvurderinger hvis ikke du underkjenner.')
+      screen.getByText('Du må ta stilling til alle vilkårsvurderinger hvis du ikke underkjenner.')
     ).toBeInTheDocument();
   });
 
@@ -316,6 +317,41 @@ describe('totrinnsvurderingform', () => {
       screen.queryByText('Du må ta stilling til alle vilkårsvurderinger hvis ikke du underkjenner.')
     ).not.toBeInTheDocument();
   });
+});
+
+it('skal vise en feilmelding dersom hastemarkeringsboksen ikke blir vurdert', async () => {
+  render(
+    <TotrinnsvurderingForm
+      behandlingsversjon={1}
+      grunnlag={{
+        ...grunnlagUtenVurdering,
+        vurderinger: [...grunnlagUtenVurdering.vurderinger, { definisjon: Behovstype.AVKLAR_OPPFØLGINGSBEHOV_NAY }],
+      }}
+      erKvalitetssikring={true}
+      readOnly={false}
+      hastemarkering={{
+        begrunnelse: 'Avtalt med leder',
+        markeringType: MarkeringHaster,
+        opprettetAv: null,
+        opprettetAvNavn: null,
+        opprettetTidspunkt: Date.now().toString(),
+      }}
+    />
+  );
+  const radioJa = screen.getAllByRole('radio', { name: /ja/i });
+  await user.click(radioJa[0]);
+  await user.click(radioJa[1]);
+
+  const sendInnButton = screen.getByRole('button', { name: 'Bekreft og send videre' });
+  await user.click(sendInnButton);
+
+  expect(
+    screen.getByText('Du må ta stilling til alle vilkårsvurderinger hvis du ikke underkjenner.')
+  ).toBeInTheDocument();
+  expect(screen.queryByText('Du må gjøre minst én vurdering.')).not.toBeInTheDocument();
+  expect(
+    screen.queryByText('Du må ta stilling til om hastemarkeringen skal følge behandlingen videre.')
+  ).toBeInTheDocument();
 });
 
 describe('Totrinnsvurdering av vedtaksbrev', () => {

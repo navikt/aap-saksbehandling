@@ -171,3 +171,8 @@ export const fjernMarkering = async (referanse: string, requestBody: Markering) 
   const url = `${oppgaveApiBaseURL}/${referanse}/fjern-markering`;
   return await apiFetch(url, oppgaveApiScope, 'POST', requestBody);
 };
+
+export const hentMarkeringer = async (referanse: string) => {
+  const url = `${oppgaveApiBaseURL}/${referanse}/hent-markeringer`;
+  return await apiFetch<Markering[]>(url, oppgaveApiScope, 'GET', undefined);
+};
