@@ -120,12 +120,13 @@ export const TotrinnsvurderingForm = ({
     <form
       onSubmit={form.handleSubmit(async (data) => {
         const assessedFields = data.totrinnsvurderinger.filter((vurdering) => vurdering.godkjent !== undefined);
+        const manglerVurderingAvHastemarkering =
+          data.skalHastemarkeringBeholdes === undefined && skalFjerningAvHastemarkeringVurderes;
         let isError = false;
+
         data.totrinnsvurderinger.forEach((vurdering, i) => {
           if (vurdering.godkjent === JaEllerNei.Ja) {
             const neste = data.totrinnsvurderinger[i + 1];
-            const manglerVurderingAvHastemarkering =
-              data.skalHastemarkeringBeholdes === undefined && skalFjerningAvHastemarkeringVurderes;
             if ((neste && !neste.godkjent) || manglerVurderingAvHastemarkering) {
               form.setError(`totrinnsvurderinger.${i + 1}.godkjent`, {
                 type: 'validate',
@@ -136,6 +137,12 @@ export const TotrinnsvurderingForm = ({
             }
           }
         });
+        if (manglerVurderingAvHastemarkering) {
+          form.setError(`skalHastemarkeringBeholdes`, {
+            type: 'validate',
+            message: 'Du må ta stilling til om hastemarkeringen skal følge behandlingen videre.',
+          });
+        }
         if (data.skalHastemarkeringBeholdes === JaEllerNei.Nei) {
           clientFjernMarkeringForBehandling(behandlingsreferanse, { markeringType: MarkeringHaster });
         }
