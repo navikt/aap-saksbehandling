@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, SubmitEventHandler } from 'react';
-import { Alert, Button, HStack, Label, Modal, Pagination, Radio, VStack } from '@navikt/ds-react';
+import { SubmitEventHandler, useState } from 'react';
+import { Button, HStack, Label, Modal, Pagination, Radio, VStack } from '@navikt/ds-react';
 import { SaksbehandlerSøk } from 'components/tildeloppgavemodal/SaksbehandlerSøk';
 import { SaksbehandlerFraSøk } from 'lib/types/oppgaveTypes';
 import { useForm } from 'react-hook-form';
@@ -10,6 +10,7 @@ import { clientTildelTilSaksbehandler } from 'lib/clientApi';
 import styles from './TildelOppgaveModal.module.css';
 import { isError } from 'lib/utils/api';
 import { useTildelOppgaver } from 'context/oppgave/TildelOppgaverContext';
+import { Alert } from 'components/alert/Alert';
 
 interface FormFields {
   saksbehandlerIdent: string;
@@ -101,22 +102,14 @@ export const TildelOppgaveModal = ({ revalidateFunction }: Props) => {
                 søkefeltError={søkefeltError}
                 setSøkefeltError={setSøkefeltError}
               />
-              {infomelding && (
-                <Alert variant={'info'} size={'small'}>
-                  {infomelding}
-                </Alert>
-              )}
+              {infomelding && <Alert variant={'info'}>{infomelding}</Alert>}
               <form id={'tildelSaksbehandler'} onSubmit={handleSubmit}>
                 {saksbehandlere.length > 0 && (
                   <Label as="p" size={'medium'}>
                     {`Søkeresultat (${saksbehandlere.length} treff)`}
                   </Label>
                 )}
-                {error && (
-                  <Alert variant={'error'} size={'small'}>
-                    {error}
-                  </Alert>
-                )}
+                {error && <Alert variant={'error'}>{error}</Alert>}
                 <RadioGroupWrapper
                   name={'saksbehandlerIdent'}
                   control={form.control}

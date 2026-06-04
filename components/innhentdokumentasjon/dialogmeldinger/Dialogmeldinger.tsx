@@ -1,4 +1,4 @@
-import { Alert, BodyShort, Button, HStack, Table } from '@navikt/ds-react';
+import { BodyShort, Button, HStack, InlineMessage, Table } from '@navikt/ds-react';
 import { LegeerklæringStatus } from 'lib/types/types';
 import { ReactNode, useState } from 'react';
 
@@ -8,6 +8,7 @@ import { formaterDatoForFrontend, sorterEtterNyesteDato } from 'lib/utils/date';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { isBefore, subDays } from 'date-fns';
 import { usePurrPåDialogmelding } from 'hooks/FetchHook';
+import { Alert } from 'components/alert/Alert';
 
 type Props = {
   dialogmeldinger?: LegeerklæringStatus[];
@@ -19,15 +20,15 @@ const mapStatusTilTekst = (status?: 'BESTILT' | 'SENDT' | 'OK' | 'AVVIST' | 'MOT
     case 'SENDT':
     case 'OK':
       return (
-        <Alert size={'small'} variant="success" inline>
+        <InlineMessage status="success" size="small">
           Bestilt
-        </Alert>
+        </InlineMessage>
       );
     case 'AVVIST':
       return (
-        <Alert size={'small'} variant="error" inline>
+        <InlineMessage status="error" size="small">
           Feilet
-        </Alert>
+        </InlineMessage>
       );
     default:
       return '';
@@ -76,17 +77,9 @@ const Dialogmelding = ({ melding }: { melding: LegeerklæringStatus }) => {
             </Button>
           )}
 
-          {purringSent && !error && (
-            <Alert variant="success" size="small">
-              Purring sendt
-            </Alert>
-          )}
+          {purringSent && !error && <Alert variant="success">Purring sendt</Alert>}
 
-          {error && (
-            <Alert variant="error" size="small">
-              {error}
-            </Alert>
-          )}
+          {error && <Alert variant="error">{error}</Alert>}
         </HStack>
       </Table.DataCell>
     </Table.Row>

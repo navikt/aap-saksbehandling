@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, BodyLong, Button, HStack, Page, VStack } from '@navikt/ds-react';
+import { BodyLong, Button, HStack, Page, VStack } from '@navikt/ds-react';
 import { OppfølgingsoppgaveV0 } from 'lib/types/types';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
@@ -16,6 +16,7 @@ import { Behovstype } from 'lib/utils/form';
 import { Kort } from 'components/kort/Kort';
 import { useInnloggetBruker } from 'hooks/BrukerHook';
 import { brukerharNayTilgang } from 'lib/utils/innloggetBruker';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   saksnummer: string;
