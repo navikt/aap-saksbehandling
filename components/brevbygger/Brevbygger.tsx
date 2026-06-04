@@ -4,7 +4,6 @@ import { Box, Button, HGrid, HStack, VStack } from '@navikt/ds-react';
 import { useForm } from 'react-hook-form';
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ExpandIcon, ShrinkIcon } from '@navikt/aksel-icons';
 
 import { BrevdataDto, BrevMottaker, Mottaker, RefusjonskravGrunnlag, TypeBehandling } from 'lib/types/types';
 import { BrevmalType } from 'components/brevbygger/brevmodellTypes';
@@ -79,7 +78,6 @@ export const Brevbygger = ({
   const [distribusjonssjekkFeil, setDistribusjonssjekkFeil] = useState<string | undefined>();
   const [ikkeSendBrevModalOpen, settIkkeSendBrevModalOpen] = useState(false);
   const [visFerdigstillBrevDialog, settVisFerdigstillBrevDialog] = useState(false);
-  const [pdfViewExpanded, setPdfViewExpanded] = useState(false);
 
   const ferdigstillBrev = async () => {
     const isValid = await trigger();
@@ -143,11 +141,6 @@ export const Brevbygger = ({
           <HGrid columns={'1fr 2fr'} gap={'space-12'}>
             <StandardtekstBoks />
             <div
-              style={{
-                background: '#fff',
-                padding: '1rem',
-                marginLeft: '1rem',
-              }}
               className={styles.brevheader}
               dangerouslySetInnerHTML={{ __html: brevPreview?.header.htmlString ?? '' }}
             />
@@ -201,17 +194,6 @@ export const Brevbygger = ({
         </HStack>
       </Box>
 
-      <VStack gap="space-8">
-        <div>
-          <Button
-            type="button"
-            onClick={() => setPdfViewExpanded(!pdfViewExpanded)}
-            size="small"
-            variant="tertiary"
-            icon={pdfViewExpanded ? <ShrinkIcon /> : <ExpandIcon />}
-          />
-        </div>
-      </VStack>
       <IkkeSendBrevModal
         isOpen={ikkeSendBrevModalOpen}
         onClose={() => settIkkeSendBrevModalOpen(false)}
