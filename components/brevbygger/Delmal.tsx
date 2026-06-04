@@ -1,4 +1,4 @@
-import { Box, Heading, HStack, Switch, VStack } from '@navikt/ds-react';
+import { Box, Heading, HGrid, HStack, Loader, Skeleton, Switch, VStack } from '@navikt/ds-react';
 import { Control, Controller, useWatch } from 'react-hook-form';
 import { DelmalReferanse, FritekstType, ValgRef } from 'components/brevbygger/brevmodellTypes';
 import { BrevFormVerdier } from 'components/brevbygger/types';
@@ -6,16 +6,16 @@ import { Valg } from 'components/brevbygger/Valg';
 import { DelmalFritekst } from 'components/brevbygger/Fritekst';
 
 import styles from './Delmal.module.css';
+import { StandardtekstBoks } from 'components/brevbygger/StandardtekstBoks';
 
 interface Props {
   delmalRef: DelmalReferanse;
   control: Control<BrevFormVerdier>;
-  erMarkert: boolean;
-  onToggleMarkering: () => void;
   delmalInnhold: any;
+  isLoading: boolean;
 }
 
-export const Delmal = ({ delmalRef, control, erMarkert, delmalInnhold }: Props) => {
+export const Delmal = ({ delmalRef, control, delmalInnhold, isLoading }: Props) => {
   const { delmal, obligatorisk } = delmalRef;
 
   const valgOgFritekst = delmal.teksteditor.filter(
@@ -31,10 +31,11 @@ export const Delmal = ({ delmalRef, control, erMarkert, delmalInnhold }: Props) 
   const visDelmalKomponent = !obligatorisk || harValgEllerFritekst;
   // sjekker om denne delmalen er valgt eller er obligatorisk
   const erValgt = delmalErValgt || obligatorisk;
-  const kanIkkeRedigeres = obligatorisk && !harValgEllerFritekst;
+
   return (
     <>
-      <div>
+      <HGrid>
+        {visDelmalKomponent === false && <StandardtekstBoks />}
         {visDelmalKomponent && (
           <Box
             borderWidth="1"
@@ -44,7 +45,6 @@ export const Delmal = ({ delmalRef, control, erMarkert, delmalInnhold }: Props) 
             borderColor="neutral-subtle"
             background="default"
             id={delmalRef._key}
-            className={erMarkert ? `${styles.markertDelmal} ${styles.delmal}` : `${styles.delmal}`}
           >
             <HStack justify="space-between">
               <Heading level="2" size="small">
@@ -75,12 +75,16 @@ export const Delmal = ({ delmalRef, control, erMarkert, delmalInnhold }: Props) 
             )}
           </Box>
         )}
-      </div>
+      </HGrid>
       {
-        <div
-          className={`${styles.delmal} ${kanIkkeRedigeres ? styles.ikkeRedigerbar : ''}`}
-          dangerouslySetInnerHTML={{ __html: delmalInnhold }}
-        />
+        <div className={`${styles.delmal} ${isLoading ? styles.loading : ''}`}>
+          {isLoading && (
+            <div className={styles.loader}>
+              <Loader transparent size={'3xlarge'} />
+            </div>
+          )}
+          <div dangerouslySetInnerHTML={{ __html: delmalInnhold }} />
+        </div>
       }
     </>
   );

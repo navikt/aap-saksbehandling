@@ -2,7 +2,7 @@
 
 import { Box, Button, HGrid, HStack, VStack } from '@navikt/ds-react';
 import { useForm } from 'react-hook-form';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ExpandIcon, ShrinkIcon } from '@navikt/aksel-icons';
 
@@ -25,10 +25,10 @@ import { Delmal } from 'components/brevbygger/Delmal';
 import { useMellomlagringAvBrev } from 'components/brevbygger/useMellomlagringAvBrev';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { loggUmamiEvent, useUmamiStartTidspunkt } from 'lib/utils/umami';
-import { ForhåndsvisHtml } from 'components/brevbygger/ForhåndsvisHtml';
 import { FerdigstillBrevDialog } from 'components/brevbygger/FerdigstillBrevDialog';
 
 import styles from './Brevbygger.module.css';
+import { StandardtekstBoks } from 'components/brevbygger/StandardtekstBoks';
 
 interface BrevbyggerProps {
   referanse: string;
@@ -64,16 +64,7 @@ export const Brevbygger = ({
     values: initialiserFormVerdier(parsedBrevmal, brevdata),
   });
   const umamiStartTidspunkt = useUmamiStartTidspunkt('AKTIV');
-  // const [brevPreview, setBrevPreview] = useState<BrevpreviewResponse | undefined>();
   const { brevPreview, lasterHtml } = useMellomlagringAvBrev({ referanse, control, brevmal: parsedBrevmal, brevdata });
-
-  // useEffect(() => {
-  //   const getTheData = async () => {
-  //     const html = await fetch(`/saksbehandling/api/brev/${referanse}/brevbygger-preview/`).then((r) => r.json());
-  //     setBrevPreview(html);
-  //   };
-  //   getTheData();
-  // }, [brevdata]);
 
   const router = useRouter();
   const { behandlingsreferanse, saksnummer } = useParamsMedType();
@@ -89,15 +80,6 @@ export const Brevbygger = ({
   const [ikkeSendBrevModalOpen, settIkkeSendBrevModalOpen] = useState(false);
   const [visFerdigstillBrevDialog, settVisFerdigstillBrevDialog] = useState(false);
   const [pdfViewExpanded, setPdfViewExpanded] = useState(false);
-  const [markerteDelmalKeys, settMarkerteDelmalKeys] = useState<Set<string>>(new Set());
-
-  const toggleMarkering = (key: string) => {
-    settMarkerteDelmalKeys((eksisterendeMarkeringer) => {
-      const nyeMarkeringer = new Set(eksisterendeMarkeringer);
-      nyeMarkeringer.has(key) ? nyeMarkeringer.delete(key) : nyeMarkeringer.add(key);
-      return nyeMarkeringer;
-    });
-  };
 
   const ferdigstillBrev = async () => {
     const isValid = await trigger();
@@ -158,30 +140,26 @@ export const Brevbygger = ({
 
         <VStack gap="space-16">
           <RefusjonskravVisning refusjonskravgrunnlag={refusjonskravgrunnlag} />
-          <HGrid columns={'1fr 2fr'} gap={'space-8'}>
-            {brevPreview && (
-              <>
-                <div />
-                <div
-                  style={{
-                    background: '#fff',
-                    padding: '1rem',
-                    boxShadow:
-                      '0.5rem 0 0 inset var(--ax-border-warning-subtle), -0.5rem 0 0 inset var(--ax-border-warning-subtle)',
-                  }}
-                  className={styles.brevheader}
-                  dangerouslySetInnerHTML={{ __html: brevPreview?.header.htmlString }}
-                />
-              </>
-            )}
+          <HGrid columns={'1fr 2fr'} gap={'space-12'}>
+            <StandardtekstBoks />
+            <div
+              style={{
+                background: '#fff',
+                padding: '1rem',
+                marginLeft: '1rem',
+              }}
+              className={styles.brevheader}
+              dangerouslySetInnerHTML={{ __html: brevPreview?.header.htmlString ?? '' }}
+            />
             {parsedBrevmal.delmaler.map((delmalRef) => (
               <Delmal
                 key={delmalRef._key}
                 delmalRef={delmalRef}
                 control={control}
-                erMarkert={markerteDelmalKeys.has(delmalRef._key)}
-                onToggleMarkering={() => toggleMarkering(delmalRef._key)}
-                delmalInnhold={brevPreview?.delmaler.find((bbb) => bbb.sanityNoekkel === delmalRef._key)?.htmlString}
+                delmalInnhold={
+                  brevPreview?.delmaler.find((innholdNode) => innholdNode.sanityNoekkel === delmalRef._key)?.htmlString
+                }
+                isLoading={lasterHtml}
               />
             ))}
           </HGrid>
@@ -233,7 +211,6 @@ export const Brevbygger = ({
             icon={pdfViewExpanded ? <ShrinkIcon /> : <ExpandIcon />}
           />
         </div>
-        {/*<ForhåndsvisHtml isLoading={lasterHtml} html={htmlString} markerteDelmalKeys={markerteDelmalKeys} />*/}
       </VStack>
       <IkkeSendBrevModal
         isOpen={ikkeSendBrevModalOpen}
@@ -247,7 +224,6 @@ export const Brevbygger = ({
         sendBrev={sendBrev}
         senderBrev={isLoading}
       />
-      {/*</HGrid>*/}
     </>
   );
 };

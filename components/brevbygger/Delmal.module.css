@@ -2,14 +2,20 @@
   box-sizing: border-box;
   padding: 1rem;
   background-color: var(--ax-bg-default);
+  min-height: 100%;
+  margin-left: var(--ax-space-16);
+  position: relative;
 }
 
-.markertDelmal {
-  box-shadow: 0.5rem 0 0 inset var(--ax-bg-brand-blue-strong);
+.loading {
+  background-color: var(--ax-bg-neutral-moderate);
 }
 
-.ikkeRedigerbar {
-  box-shadow:
-    0.5rem 0 0 inset var(--ax-border-warning-subtle),
-    -0.5rem 0 0 inset var(--ax-border-warning-subtle);
+.loader {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
 }

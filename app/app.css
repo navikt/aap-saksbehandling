@@ -29,10 +29,12 @@ dialog.tour-modal {
   background: var(--ax-bg-default);
 }
 
+/* Brukes i brevbygger */
 .aktivtValg {
   position: relative;
   z-index: 1;
   background: var(--ax-bg-accent-moderate);
   padding-inline: 1rem;
   margin-inline: -1rem;
+  box-shadow: 0.5rem 0 0 inset var(--ax-bg-brand-blue-strong);
 }
