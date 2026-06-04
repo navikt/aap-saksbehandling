@@ -55,10 +55,7 @@ export const TilkjentMedDiff = ({ grunnlagMedDiff }: PropsMedDiff) => {
   const [visPerioderUtenEndringFraTidligere, setVisPerioderUtenEndringFraTidligere] = useState(false);
 
   const skalViseMeldingOmIngenEndringIPerioder =
-    grunnlagMedDiff.perioder.length > 0 &&
-    !grunnlagMedDiff.perioder.some(
-      (periode) => periode.diff === 'Endret' || periode.diff === 'Fjernet' || periode.diff === 'LagtTil'
-    );
+    grunnlagMedDiff.perioder.length > 0 && grunnlagMedDiff.perioder.every((periode) => periode.diff === 'Uendret');
 
   return (
     <VilkårsKort heading="Tilkjent ytelse" steg="BEREGN_TILKJENT_YTELSE">
@@ -119,7 +116,7 @@ export const TilkjentMedDiff = ({ grunnlagMedDiff }: PropsMedDiff) => {
                     <TilkjentPeriodeRad
                       key={`historisk-${periodeIndex}`}
                       periode={historiskPeriode}
-                      bakgrunnClassName={styles.tablerowwithzebra}
+                      bakgrunnClassName={styles.tablerowhistoriskinnhold}
                     />
                   )}
                   {uendretPeriode && (

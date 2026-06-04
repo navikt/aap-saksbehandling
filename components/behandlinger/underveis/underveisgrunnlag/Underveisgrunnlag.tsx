@@ -102,10 +102,7 @@ export const UnderveisTabellMedDiff = ({ grunnlag }: { grunnlag: UnderveisGrunnl
   const [visPerioderUtenEndringFraTidligere, setVisPerioderUtenEndringFraTidligere] = useState(false);
 
   const skalViseMeldingOmIngenEndringIPerioder =
-    grunnlag.perioder.length > 0 &&
-    !grunnlag.perioder.some(
-      (periode) => periode.diff === 'Endret' || periode.diff === 'Fjernet' || periode.diff === 'LagtTil'
-    );
+    grunnlag.perioder.length > 0 && grunnlag.perioder.every((periode) => periode.diff === 'Uendret');
   return (
     <>
       <Chips size={'small'}>
@@ -159,7 +156,7 @@ export const UnderveisTabellMedDiff = ({ grunnlag }: { grunnlag: UnderveisGrunnl
                   <Perioderad
                     key={`historisk-${periodeIndex}`}
                     periode={historiskPeriode}
-                    bakgrunnClassName={styles.tablerowwithzebra}
+                    bakgrunnClassName={styles.tablerowhistoriskinnhold}
                   />
                 )}
                 {uendretPeriode && (
