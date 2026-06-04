@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, HStack, Page, VStack } from '@navikt/ds-react';
+import { Button, HStack, Page, VStack } from '@navikt/ds-react';
 import { OpprettAktivitetspliktBehandlingDto, SaksInfo } from 'lib/types/types';
 import { useConfigForm } from 'components/form/FormHook';
 import { clientOpprettAktivitetsplikt } from 'lib/clientApi';
@@ -10,6 +10,7 @@ import { FormField } from 'components/form/FormField';
 import { isSuccess } from 'lib/utils/api';
 import { useRouter } from 'next/navigation';
 import { Kort } from 'components/kort/Kort';
+import { Alert } from 'components/alert/Alert';
 
 export interface AktivitetspliktbruddFormFields {
   aktivitetspliktBruddType: 'AKTIVITETSPLIKT_11_7';

@@ -1,9 +1,10 @@
-import { Alert, BodyShort, Box, HGrid, Label, VStack } from '@navikt/ds-react';
+import { BodyShort, Box, HGrid, Label, VStack } from '@navikt/ds-react';
 import { KabalKlageResultat, Klageresultat } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import styles from 'components/behandlingsinfo/Behandlingsinfo.module.css';
 import { formaterSvartype, formaterUtfall } from 'lib/utils/svarfraandreinstans';
 import { FetchResponse, isError } from 'lib/utils/api';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   kabalKlageResultat?: FetchResponse<KabalKlageResultat>;

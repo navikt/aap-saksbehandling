@@ -1,9 +1,10 @@
 'use client';
 
-import { Alert, Search, VStack } from '@navikt/ds-react';
+import { Search, VStack } from '@navikt/ds-react';
 import { Dispatch, SetStateAction, SubmitEventHandler, useState } from 'react';
 import { clientSøkPåSaksbehandler } from 'lib/clientApi';
 import { isSuccess } from 'lib/utils/api';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   oppgaver: number[];

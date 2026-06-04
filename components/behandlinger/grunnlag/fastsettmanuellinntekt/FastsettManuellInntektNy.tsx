@@ -10,7 +10,7 @@ import { ManuellInntektGrunnlag, ManuellInntektÅr, MellomlagretVurdering } from
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
-import { Alert, BodyLong, BodyShort, Label, Link, VStack } from '@navikt/ds-react';
+import { BodyLong, BodyShort, Label, Link, VStack } from '@navikt/ds-react';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
 import { useFieldArray } from 'react-hook-form';
@@ -18,6 +18,7 @@ import { FastsettManuellInntektTabell } from 'components/behandlinger/grunnlag/f
 import { FastsettManuellInntektForm, Tabellår } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/types';
 import { sorterEtterNyesteDato } from 'lib/utils/date';
 import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   behandlingsversjon: number;
@@ -192,7 +193,7 @@ export const FastsettManuellInntektNy = ({
         />
       )}
       {grunnlag.registrerteInntekterSisteRelevanteAr.length < 3 && (
-        <Alert variant={'warning'} size={'small'}>
+        <Alert variant={'warning'}>
           Du må oppgi pensjonsgivende inntekt for år hvor inntekten ikke er ferdig lignet.
         </Alert>
       )}

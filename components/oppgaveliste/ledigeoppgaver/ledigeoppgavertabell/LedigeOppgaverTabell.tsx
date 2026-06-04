@@ -1,4 +1,4 @@
-import { Alert, BodyShort, CopyButton, Table, Tooltip, Link as AkselLink } from '@navikt/ds-react';
+import { BodyShort, CopyButton, Link as AkselLink, Table, Tooltip } from '@navikt/ds-react';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import Link from 'next/link';
 import { storForbokstavIHvertOrd } from 'lib/utils/string';
@@ -22,6 +22,7 @@ import { NoNavAapOppgaveListeOppgaveSorteringSortBy } from '@navikt/aap-oppgave-
 import { ScopedBackendSortState } from 'hooks/oppgave/BackendSorteringHook';
 import { isOppgavelisteOppgaveSorteringSortBy } from 'lib/utils/request';
 import { AktivKø } from 'hooks/oppgave/aktivkøHook';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   oppgaver: Oppgave[];
