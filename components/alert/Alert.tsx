@@ -1,3 +1,5 @@
+'use client';
+
 import React, { ReactNode } from 'react';
 import { InfoCard, InfoCardProps } from '@navikt/ds-react';
 import {
@@ -10,7 +12,6 @@ import {
 interface Props extends Omit<InfoCardProps, 'data-color'> {
   variant: 'warning' | 'info' | 'error' | 'success';
   children: ReactNode;
-  className?: string;
 }
 
 export const Alert = ({ variant, children, size = 'small', className, ...rest }: Props) => {
