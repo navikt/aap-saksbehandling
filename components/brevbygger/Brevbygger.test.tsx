@@ -26,7 +26,7 @@ const user = userEvent.setup();
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
-fetchMock.mockResponse(JSON.stringify({ type: 'SUCCESS', status: 200, data: {} }));
+fetchMock.mockResponse(JSON.stringify({ json: { type: 'SUCCESS', status: 200, data: { key: 'value' } } }));
 
 beforeEach(() => {
   vi.restoreAllMocks();
