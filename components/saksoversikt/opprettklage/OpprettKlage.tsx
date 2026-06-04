@@ -12,7 +12,7 @@ import { isSuccess } from 'lib/utils/api';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { parse } from 'date-fns';
 import { Kort } from 'components/kort/Kort';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 export interface KlageFormFields {
   kravMottatt: string;
@@ -82,9 +82,9 @@ export const OpprettKlage = ({ sak }: { sak: SaksInfo }) => {
             </VStack>
           </Kort>
           {error && (
-            <KelvinAlert variant={'error'} size={'small'}>
+            <Alert variant={'error'} size={'small'}>
               {error}
-            </KelvinAlert>
+            </Alert>
           )}
           <HStack gap="space-16">
             <Button type="submit">Opprett klage</Button>

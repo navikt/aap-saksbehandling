@@ -4,7 +4,7 @@ import { BodyShort } from '@navikt/ds-react';
 import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { ApiException } from 'lib/utils/api';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   status?: LøsBehovOgGåTilNesteStegStatus;
@@ -16,7 +16,7 @@ export const LøsBehovOgGåTilNesteStegStatusAlert = ({ status, løsBehovOgGåTi
   return (
     <>
       {løsBehovOgGåTilNesteStegError && (
-        <KelvinAlert variant="error">
+        <Alert variant="error">
           <BodyShort spacing style={{ whiteSpace: 'pre-wrap' }}>
             {løsBehovOgGåTilNesteStegError.message}
           </BodyShort>
@@ -28,10 +28,10 @@ export const LøsBehovOgGåTilNesteStegStatusAlert = ({ status, løsBehovOgGåTi
             <b>Behandlingsreferanse:</b>
             {` ${behandlingsreferanse}`}
           </BodyShort>
-        </KelvinAlert>
+        </Alert>
       )}
       {status === 'ERROR' && (
-        <KelvinAlert variant="error">
+        <Alert variant="error">
           <BodyShort spacing>Det tok for lang tid å hente neste steg fra baksystemet. Kom tilbake senere.</BodyShort>
           <BodyShort size={'small'}>
             <b>SakId:</b>
@@ -41,10 +41,10 @@ export const LøsBehovOgGåTilNesteStegStatusAlert = ({ status, løsBehovOgGåTi
             <b>Behandlingsreferanse:</b>
             {` ${behandlingsreferanse}`}
           </BodyShort>
-        </KelvinAlert>
+        </Alert>
       )}
       {status === 'POLLING' && (
-        <KelvinAlert variant="info">
+        <Alert variant="info">
           <BodyShort spacing>Maskinen bruker litt lengre tid på å jobbe enn vanlig.</BodyShort>
           <BodyShort size={'small'}>
             <b>SakId:</b>
@@ -54,7 +54,7 @@ export const LøsBehovOgGåTilNesteStegStatusAlert = ({ status, løsBehovOgGåTi
             <b>Behandlingsreferanse:</b>
             {` ${behandlingsreferanse}`}
           </BodyShort>
-        </KelvinAlert>
+        </Alert>
       )}
     </>
   );

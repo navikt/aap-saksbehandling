@@ -6,7 +6,7 @@ import { NyÅrsakTilBehandlingV0 } from 'lib/types/types';
 import { useSendHendelseOgVentPåProsessering } from 'hooks/saksbehandling/SendHendelseOgVentPåProsessering';
 
 import styles from './TrekkSøknadModal.module.css';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   saksnummer: string;
@@ -34,7 +34,7 @@ export const TrekkSøknadModal = ({ saksnummer, isOpen, onClose, behandlingRefer
           Når du trekker søknaden vil saken avsluttes og alle vurderinger vil bli slettet. Saken kan ikke åpnes igjen
           etter søknaden er trukket.
         </BodyLong>
-        {sendHendelseError && <KelvinAlert variant={'error'}>{sendHendelseError.message}</KelvinAlert>}
+        {sendHendelseError && <Alert variant={'error'}>{sendHendelseError.message}</Alert>}
       </Modal.Body>
       <Modal.Footer>
         <Button

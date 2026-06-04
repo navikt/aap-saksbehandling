@@ -1,7 +1,7 @@
 import { BodyShort, Label, VStack } from '@navikt/ds-react';
 import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
 import { YrkesskadeVurderingGrunnlag } from 'lib/types/types';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 interface YrkesskadeInfoProps {
   grunnlag: YrkesskadeVurderingGrunnlag;
@@ -18,9 +18,9 @@ export const OppgittYrkesskadeUtenRegistertreffInfo = ({ grunnlag }: YrkesskadeI
             {grunnlag.opplysninger.oppgittYrkesskadeISøknad ? 'Ja' : 'Nei'}
           </BodyShort>
         </div>
-        <KelvinAlert variant="info" style={{ maxWidth: 600 }}>
+        <Alert variant="info" style={{ maxWidth: 600 }}>
           Det er ingen registrerte yrkesskader på brukeren.
-        </KelvinAlert>
+        </Alert>
       </VStack>
     </VilkårsKort>
   );

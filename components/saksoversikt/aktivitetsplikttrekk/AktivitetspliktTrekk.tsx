@@ -9,7 +9,7 @@ import { formaterBrudd, formaterGrunn } from 'components/behandlinger/aktivitets
 import { formaterTilNok } from 'lib/utils/string';
 import { formaterDatoForFrontend, sorterEtterNyesteDato } from 'lib/utils/date';
 import { Kort } from 'components/kort/Kort';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 export const AktivitetspliktTrekk = ({ sak }: { sak: SaksInfo }) => {
   const {
@@ -23,7 +23,7 @@ export const AktivitetspliktTrekk = ({ sak }: { sak: SaksInfo }) => {
   if (isLoading) {
     return <Spinner label="Henter trekk" />;
   } else if (error || isError(aktivitetspliktMedTrekk)) {
-    return <KelvinAlert variant="error">Kunne ikke hente aktivitetsplikt § 11-9 med trekk</KelvinAlert>;
+    return <Alert variant="error">Kunne ikke hente aktivitetsplikt § 11-9 med trekk</Alert>;
   }
 
   const vurderingerMedTrekk = aktivitetspliktMedTrekk?.data?.vurderingerMedTrekk || [];

@@ -6,7 +6,7 @@ import { ManglerTilgangModal } from 'components/oppgaveliste/manglertilgangmodal
 import { MineOppgaverTabellRad } from 'components/oppgaveliste/mineoppgaver/mineoppgavertabell/MineOppgaverTabellRad';
 import { TildelOppgaveModal } from 'components/tildeloppgavemodal/TildelOppgaveModal';
 import { PathsMineOppgaverGetParametersQuerySortby } from '@navikt/aap-oppgave-typescript-types';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   oppgaver: Oppgave[];
@@ -27,7 +27,7 @@ export const MineOppgaverTabell = ({ oppgaver, revalidateFunction, setSortBy, so
         revalidateFunction={revalidateFunction}
       />
       <TildelOppgaveModal revalidateFunction={revalidateFunction} />
-      {feilmelding && <KelvinAlert variant={'error'}>{feilmelding}</KelvinAlert>}
+      {feilmelding && <Alert variant={'error'}>{feilmelding}</Alert>}
       <TableStyled
         size={'small'}
         zebraStripes

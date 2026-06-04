@@ -7,7 +7,7 @@ import { PlusIcon, TrashIcon } from '@navikt/aksel-icons';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
 import { formaterDatoForBackend } from 'lib/utils/date';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 interface InstitusjonsoppholdItem {
   institusjonstype: 'FO' | 'HS';
@@ -90,7 +90,7 @@ export const LeggTilMockInstitusjonsopphold = ({ saksnummer }: { saksnummer: str
           Lagre
         </Button>
       </HStack>
-      {error && <KelvinAlert variant="error">{error}</KelvinAlert>}
+      {error && <Alert variant="error">{error}</Alert>}
     </VStack>
   );
 };

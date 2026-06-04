@@ -80,7 +80,7 @@ const config = [
             {
               name: '@navikt/ds-react',
               importNames: ['Alert'],
-              message: 'Bruk KelvinAlert fra components/alert/KelvinAlert i stedet for Alert fra @navikt/ds-react.',
+              message: 'Bruk Alert fra components/alert/Alert i stedet for Alert fra @navikt/ds-react.',
             },
           ],
         },

@@ -17,7 +17,7 @@ import { useFlyt } from 'hooks/saksbehandling/FlytHook';
 import { FlytProsesseringServerSentEvent } from 'app/saksbehandling/api/behandling/hent/[referanse]/prosessering/route';
 import { isSuccess } from 'lib/utils/api';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   reservert: boolean;
@@ -154,9 +154,9 @@ export const SettBehandlingPåVentModal = ({ reservert, isOpen, onClose }: Props
             <form id={'settBehandlingPåVent'} onSubmit={handleSubmit} className={'flex-column'} autoComplete={'off'}>
               {!reservert && (
                 <Box marginBlock={'space-0 space-8'}>
-                  <KelvinAlert variant={'info'}>
+                  <Alert variant={'info'}>
                     Behandlingen er ikke tildelt deg. Den tildeles deg når du setter den på vent.
-                  </KelvinAlert>
+                  </Alert>
                 </Box>
               )}
               <FormField form={form} formField={formFields.begrunnelse} />
@@ -164,7 +164,7 @@ export const SettBehandlingPåVentModal = ({ reservert, isOpen, onClose }: Props
               <FormField form={form} formField={formFields.grunn} />
             </form>
           )}
-          {error && <KelvinAlert variant={'error'}>{error}</KelvinAlert>}
+          {error && <Alert variant={'error'}>{error}</Alert>}
         </VStack>
       </Modal.Body>
       <Modal.Footer>

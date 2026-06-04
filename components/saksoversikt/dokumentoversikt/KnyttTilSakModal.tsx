@@ -2,7 +2,7 @@ import { BodyShort, Button, Modal } from '@navikt/ds-react';
 import { useState } from 'react';
 import { isError, isSuccess } from 'lib/utils/api';
 import { clientKnyttTilAnnenSak } from 'lib/dokumentClientApi';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 export interface KnyttTilAnnenSakRequest {
   bruker: {
@@ -66,7 +66,7 @@ export const KnyttTilSakModal = ({
         <BodyShort spacing>Er du sikker på at du vil knytte journalposten til sak {saksnummer}?</BodyShort>
       </Modal.Body>
 
-      {error && <KelvinAlert variant="error">{error}</KelvinAlert>}
+      {error && <Alert variant="error">{error}</Alert>}
 
       <Modal.Footer>
         <Button type={'button'} onClick={knyttTilAktivSak} loading={isLoading}>

@@ -12,7 +12,7 @@ import { FormField, ValuePair } from 'components/form/FormField';
 import { isError } from 'lib/utils/api';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { useFeatureFlag } from 'context/UnleashContext';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 export type Behandler = {
   type?: string;
@@ -187,7 +187,7 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
         </div>
         {error && (
           <div className={styles.rad}>
-            <KelvinAlert variant="error">{error || 'Noe gikk galt ved bestilling av dialogmelding'}</KelvinAlert>
+            <Alert variant="error">{error || 'Noe gikk galt ved bestilling av dialogmelding'}</Alert>
           </div>
         )}
       </form>

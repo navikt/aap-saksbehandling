@@ -32,7 +32,7 @@ import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupW
 import React from 'react';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 interface VedtakslengdeVurderingForm extends VurderingFormMeta {
   manuellVurdering: boolean;
@@ -188,10 +188,10 @@ export const VedtakslengdeSteg = ({
       formReset={() => form.reset(getDefaultValuesFromGrunnlag(grunnlag))}
     >
       {erVedtakslengdeManuelt && (
-        <KelvinAlert variant={'info'} style={{ marginBottom: '1rem' }}>
+        <Alert variant={'info'} style={{ marginBottom: '1rem' }}>
           Brukeren har stans eller opphør etterfulgt av løpende rettighet fram i tid. Vedtaksperioden må vurderes
           manuelt.
-        </KelvinAlert>
+        </Alert>
       )}
 
       {grunnlag.sisteVedtatteVurderinger.map((vurdering, index) => (

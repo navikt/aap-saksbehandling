@@ -22,7 +22,7 @@ import { usePostmottakBehandlinger } from 'hooks/postmottak/PostmottakBehandling
 import { useHentOppgaverForBehandlinger } from 'hooks/oppgave/OppgaverPåSakHook';
 import { Dato } from 'lib/types/Dato';
 import { Kort } from 'components/kort/Kort';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 const lokalDevToolsForBehandlingOgSak = isLocal();
 
@@ -139,7 +139,7 @@ export const SakMedBehandlinger = ({
         </VStack>
         <VStack gap="space-16">
           <Heading size="xsmall">Behandlinger</Heading>
-          {feilmelding && <KelvinAlert variant={'error'}>{feilmelding}</KelvinAlert>}
+          {feilmelding && <Alert variant={'error'}>{feilmelding}</Alert>}
           <Chips>
             <Chips.Toggle
               selected={visMeldekortbehandlinger}

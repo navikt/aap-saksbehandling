@@ -9,7 +9,7 @@ import { Behovstype } from 'lib/utils/form';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { SubmitEventHandler } from 'react';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   saksnummer: string;
@@ -93,7 +93,7 @@ export const VurderRettighetsperiodeModal = ({
             </BodyLong>
             <BodyLong>Tilbakedatering av søknadsdato etter § 22-13 5. ledd må gjøres i postmottak.</BodyLong>
             <FormField form={form} formField={formFields.begrunnelse} size="medium" />
-            {sendHendelseError && <KelvinAlert variant={'error'}>{sendHendelseError.message}</KelvinAlert>}
+            {sendHendelseError && <Alert variant={'error'}>{sendHendelseError.message}</Alert>}
           </VStack>
         </Modal.Body>
         <Modal.Footer>

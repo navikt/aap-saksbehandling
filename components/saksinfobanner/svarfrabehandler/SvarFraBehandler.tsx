@@ -6,7 +6,7 @@ import { FirstAidKitIcon } from '@navikt/aksel-icons';
 import { useMottattDokumenterLest } from 'hooks/FetchHook';
 
 import styles from 'components/saksinfobanner/svarfrabehandler/SvarFraBehandler.module.css';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 interface SvarFraBehandlerProps {
   behandlingReferanse: string;
@@ -58,7 +58,7 @@ export const SvarFraBehandler = ({ behandlingReferanse, oppdaterVisHarUlesteDoku
           <Box borderWidth={'1'} borderColor={'neutral-subtle'} />
           {error && (
             <HStack padding={'space-8'} justify={'center'}>
-              <KelvinAlert variant={'error'}>Kunne ikke markere dokument som lest</KelvinAlert>
+              <Alert variant={'error'}>Kunne ikke markere dokument som lest</Alert>
             </HStack>
           )}
           <HStack padding={'space-8'} justify={'end'}>

@@ -13,7 +13,7 @@ import { vurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
 import { useFeatureFlag } from 'context/UnleashContext';
 import { Kort } from 'components/kort/Kort';
 import { useInnloggetBruker } from 'hooks/BrukerHook';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 export interface ManuellRevurderingFormFields {
   årsaker: string[];
@@ -115,7 +115,7 @@ export const OpprettRevurdering = ({
             </VStack>
           </Kort>
 
-          {error && <KelvinAlert variant={'error'}>{error}</KelvinAlert>}
+          {error && <Alert variant={'error'}>{error}</Alert>}
 
           <HStack gap="space-16">
             <Button type="submit">Opprett {variant}</Button>

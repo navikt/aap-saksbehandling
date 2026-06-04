@@ -5,7 +5,7 @@ import { Button, HStack, Page, TextField } from '@navikt/ds-react';
 import { postmottakOpprettBehandlingClient } from 'lib/postmottakClientApi';
 import styles from './OpprettBehandling.module.css';
 import { isSuccess } from 'lib/utils/api';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 export const OpprettBehandling = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -43,7 +43,7 @@ export const OpprettBehandling = () => {
             Opprett behandling
           </Button>
 
-          {message && <KelvinAlert variant="info">{message}</KelvinAlert>}
+          {message && <Alert variant="info">{message}</Alert>}
         </HStack>
       </div>
     </Page.Block>

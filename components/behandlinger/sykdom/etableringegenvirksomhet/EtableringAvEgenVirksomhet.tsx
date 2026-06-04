@@ -40,7 +40,7 @@ import { parseDatoFraDatePicker, summerPerioderVarighetIArbeidsdager } from 'lib
 import { IkkeVurderbarPeriode } from 'components/periodisering/IkkeVurderbarPeriode';
 import { validerPeriodiserteVurderingerMotIkkeRelevantePerioder } from 'lib/utils/validering';
 import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   behandlingVersjon: number;
@@ -251,7 +251,7 @@ export const EtableringAvEgenVirksomhet = ({
           </NyVurderingExpandableCard>
         ))}
         {form.formState.errors.vurderinger && (
-          <KelvinAlert variant={'error'}>{form.formState.errors.vurderinger.message}</KelvinAlert>
+          <Alert variant={'error'}>{form.formState.errors.vurderinger.message}</Alert>
         )}
       </VStack>
     </VilkårskortPeriodisert>

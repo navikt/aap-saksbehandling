@@ -26,7 +26,7 @@ import { erReduksjonUtIFraFormFields, erReduksjonUtIFraVurdering } from 'lib/uti
 import { HelseinstitusjonTidligereVurdering } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/helseinstitusjontidligerevurdering/HelseinstitusjonTidligereVurdering';
 import { CustomExpandableCard } from 'components/customexpandablecard/CustomExpandableCard';
 import { addDays } from 'date-fns';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   form: UseFormReturn<HelseinstitusjonsFormFields>;
@@ -185,9 +185,9 @@ export const HelseinstitusjonOppholdGruppe = ({
               }
             >
               <VStack>
-                <KelvinAlert variant={'info'} className={'fit-content'}>
+                <Alert variant={'info'} className={'fit-content'}>
                   Vilkåret kan bare vurderes innenfor oppholdsperioden.
-                </KelvinAlert>
+                </Alert>
               </VStack>
             </CustomExpandableCard>
           )}

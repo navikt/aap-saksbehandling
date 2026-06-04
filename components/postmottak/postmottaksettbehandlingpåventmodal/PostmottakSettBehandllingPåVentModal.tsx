@@ -11,7 +11,7 @@ import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { parse } from 'date-fns';
 import { usePostmottakSettPåVent } from 'hooks/FetchHook';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   behandlingVersjon: number;
@@ -78,7 +78,7 @@ export const PostmottakSettBehandllingPVentModal = ({
       className={styles.settBehandlingPåVentModal}
     >
       <Modal.Body>
-        {error && <KelvinAlert variant={'error'}>{error}</KelvinAlert>}
+        {error && <Alert variant={'error'}>{error}</Alert>}
         {isOpen && (
           <form
             id={'settBehandlingPåVent'}

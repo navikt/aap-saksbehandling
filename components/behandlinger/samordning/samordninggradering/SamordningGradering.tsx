@@ -31,7 +31,7 @@ import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilk
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { storForbokstavOgMellomromForUnderstrek } from 'lib/utils/string';
 import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   grunnlag: SamordningGraderingGrunnlag;
@@ -250,12 +250,12 @@ export const SamordningGradering = ({
             <Ytelsesvurderinger form={form} readOnly={formReadOnly} />
             {(success || erAllereddeOppfølgningsOppgave) && (
               <Box maxWidth={'80ch'}>
-                <KelvinAlert variant="success">Oppfølgingsoppgave opprettet</KelvinAlert>
+                <Alert variant="success">Oppfølgingsoppgave opprettet</Alert>
               </Box>
             )}
             {!erAllereddeOppfølgningsOppgave && visRevurderVirkningstidspunkt && !success && (
               <Box maxWidth={'90ch'}>
-                <KelvinAlert variant="info">
+                <Alert variant="info">
                   <Heading spacing size="small" level="3">
                     Tidligste virkningstidspunkt etter samordning er{' '}
                     <strong>{finnTidligsteVirkningstidspunkt()}</strong>
@@ -282,10 +282,10 @@ export const SamordningGradering = ({
                       Opprett oppfølgingsoppgave
                     </Button>
                   </VStack>
-                </KelvinAlert>
+                </Alert>
               </Box>
             )}
-            {errorMessage && <KelvinAlert variant={'error'}>{errorMessage}</KelvinAlert>}
+            {errorMessage && <Alert variant={'error'}>{errorMessage}</Alert>}
           </VStack>
         )}
         {!visForm && (

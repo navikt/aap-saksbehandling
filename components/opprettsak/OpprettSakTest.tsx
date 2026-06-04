@@ -9,7 +9,7 @@ import { useOpprettDummySak } from 'hooks/FetchHook';
 import { OpprettDummySakDto } from 'lib/types/types';
 import { mutate } from 'swr';
 import { useState } from 'react';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 interface OpprettSakFormFields {
   ident?: string;
@@ -101,18 +101,18 @@ const OpprettTestSakSkjema = () => {
       <FormField form={form} formField={formFields.student} />
 
       {showError && (
-        <KelvinAlert variant="error">
+        <Alert variant="error">
           {error?.toString() ||
             'Noe gikk galt ved oppretting av testsaken. Vennligst sjekk at fødselsnummer er en gyldig testbruker og prøv igjen.'}
-        </KelvinAlert>
+        </Alert>
       )}
 
       {opprettSakAlert && (
-        <KelvinAlert variant="success">
+        <Alert variant="success">
           En test-sak har blitt opprettet for bruker med fødselsnummer {opprettSakAlert.fnr}. Det kan ta opp mot et
           minutt før saken dukker opp i listen under, bruk gjerne knappen &#34;Refresh listen&#34; for å sjekke om saken
           er klar for behandling i Kelvin.
-        </KelvinAlert>
+        </Alert>
       )}
 
       <Button className={'fit-content'} loading={isLoading}>

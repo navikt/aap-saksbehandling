@@ -22,7 +22,7 @@ import { NoNavAapOppgaveListeOppgaveSorteringSortBy } from '@navikt/aap-oppgave-
 import { ScopedBackendSortState } from 'hooks/oppgave/BackendSorteringHook';
 import { isOppgavelisteOppgaveSorteringSortBy } from 'lib/utils/request';
 import { AktivKø } from 'hooks/oppgave/aktivkøHook';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   oppgaver: Oppgave[];
@@ -57,7 +57,7 @@ export const LedigeOppgaverTabell = ({ oppgaver, revalidateFunction, setSortBy, 
         saksbehandlerNavn={saksbehandlerNavn}
         revaliderOppgaver={revalidateFunction}
       />
-      {feilmelding && <KelvinAlert variant={'error'}>{feilmelding}</KelvinAlert>}
+      {feilmelding && <Alert variant={'error'}>{feilmelding}</Alert>}
       <TableStyled
         size={'small'}
         zebraStripes

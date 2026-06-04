@@ -31,7 +31,7 @@ import { useBackendSortering } from 'hooks/oppgave/BackendSorteringHook';
 import { AlleOppgaverFiltrering } from 'components/oppgaveliste/filtrering/alleoppgaverfiltrering/AlleOppgaverFiltrering';
 import { ValuePair } from 'components/form/FormField';
 import { useInnloggetBruker } from 'hooks/BrukerHook';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   enheter: Enhet[];
@@ -196,7 +196,7 @@ export const AlleOppgaver = ({ enheter }: Props) => {
   }, [køer]);
 
   if (isError(køer)) {
-    return <KelvinAlert variant="error">{køer.apiException.message}</KelvinAlert>;
+    return <Alert variant="error">{køer.apiException.message}</Alert>;
   }
 
   if (!aktivKø) {

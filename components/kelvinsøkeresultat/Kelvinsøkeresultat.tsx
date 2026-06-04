@@ -10,7 +10,7 @@ import { AdressebeskyttelseStatus } from 'components/adressebeskyttelsestatus/Ad
 import { Adressebeskyttelsesgrad } from 'lib/utils/adressebeskyttelse';
 import { SøkeResultat } from 'app/api/kelvinsok/route';
 import { MarkeringStatus } from 'components/markeringstatus/MarkeringStatus';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   søkeresultat: SøkeResultat;
@@ -22,9 +22,9 @@ export const Kelvinsøkeresultat = ({
   if (saker?.length == 0 && oppgaver?.length == 0) {
     return (
       <HStack>
-        <KelvinAlert variant={'info'} className={styles.info}>
+        <Alert variant={'info'} className={styles.info}>
           Du fikk ingen treff. Sjekk at saksnummeret eller fødselsnummer er riktig skrevet.
-        </KelvinAlert>
+        </Alert>
       </HStack>
     );
   }
@@ -33,11 +33,11 @@ export const Kelvinsøkeresultat = ({
     <VStack gap={'space-8'}>
       {!harTilgang && (
         <HStack>
-          <KelvinAlert variant={'info'} className={styles.info}>
+          <Alert variant={'info'} className={styles.info}>
             {harAdressebeskyttelse
               ? 'Du har ikke tilgang til saken fordi personen er egen ansatt eller har adressebeskyttelse.'
               : 'Du har ikke tilgang til saken.'}
-          </KelvinAlert>
+          </Alert>
         </HStack>
       )}
       <HStack gap={'space-32'}>

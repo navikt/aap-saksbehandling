@@ -16,7 +16,7 @@ import { useEffect, useState } from 'react';
 import { useLagretDokumentFilter } from 'hooks/dokumenter/dokumentFilterHook';
 import { ArrowCirclepathReverseIcon } from '@navikt/aksel-icons';
 import { Kort } from 'components/kort/Kort';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 export interface DokumentFilterFormFields {
   tema: string[];
@@ -97,7 +97,7 @@ export const DokumentOversikt = ({ sak }: { sak: SaksInfo }) => {
   };
 
   if (error) {
-    return <KelvinAlert variant="error">{error || 'Ukjent feil oppsto'}</KelvinAlert>;
+    return <Alert variant="error">{error || 'Ukjent feil oppsto'}</Alert>;
   }
 
   return (

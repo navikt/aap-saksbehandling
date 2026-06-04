@@ -4,7 +4,7 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 import styles from 'components/behandlingsinfo/Behandlingsinfo.module.css';
 import { formaterSvartype, formaterUtfall } from 'lib/utils/svarfraandreinstans';
 import { FetchResponse, isError } from 'lib/utils/api';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   kabalKlageResultat?: FetchResponse<KabalKlageResultat>;
@@ -14,10 +14,10 @@ interface Props {
 export const KlageBehandlingInfo = ({ kabalKlageResultat }: Props) => {
   if (isError(kabalKlageResultat)) {
     return (
-      <KelvinAlert variant="warning">
+      <Alert variant="warning">
         Kunne ikke hente klagebehandlingsinformasjon fra Kabal: <br />
         {kabalKlageResultat.apiException.message}
-      </KelvinAlert>
+      </Alert>
     );
   }
 

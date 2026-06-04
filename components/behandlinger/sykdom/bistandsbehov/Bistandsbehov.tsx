@@ -33,7 +33,7 @@ import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
 import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   behandlingVersjon: number;
@@ -154,10 +154,10 @@ export const Bistandsbehov = ({
         <Veiledning defaultOpen={false} tekst={<EksterneLenkerIVilkårskort steg={'VURDER_BISTANDSBEHOV'} />} />
 
         {erRevurderingAvOvergangUføre && (
-          <KelvinAlert variant={'info'}>
+          <Alert variant={'info'}>
             Hvis brukeren skal vurderes for uføretrygd og ha AAP etter § 11-18, må du først vurdere at brukeren ikke
             lenger har behov for bistand etter § 11-6.
-          </KelvinAlert>
+          </Alert>
         )}
 
         {vedtatteVurderinger.map((vurdering) => (

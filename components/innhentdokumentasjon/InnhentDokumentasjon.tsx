@@ -12,7 +12,7 @@ import { RelevanteDokumenter } from 'components/innhentdokumentasjon/relevantedo
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { revalidateBehandlingPath } from 'lib/actions/actions';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 export const InnhentDokumentasjon = () => {
   const { saksnummer, behandlingsreferanse } = useParamsMedType();
@@ -46,7 +46,7 @@ export const InnhentDokumentasjon = () => {
               <Loader title="Ser etter dialogmeldinger..." size={'small'} />
             </div>
           )}
-          {error && <KelvinAlert variant="error">Noe gikk galt under henting av dialogmeldinger</KelvinAlert>}
+          {error && <Alert variant="error">Noe gikk galt under henting av dialogmeldinger</Alert>}
           {dialogmeldinger && isError(dialogmeldinger) ? (
             <ApiException apiResponses={[dialogmeldinger]} />
           ) : (

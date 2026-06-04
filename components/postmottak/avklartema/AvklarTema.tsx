@@ -14,7 +14,7 @@ import { CheckmarkCircleIcon } from '@navikt/aksel-icons';
 import { toggles } from 'lib/utils/toggles';
 import { PostmottakVilkårskort } from 'components/postmottak/vilkårskort/PostmottakVilkårskort';
 import { usePostmottakVilkårskortVisning } from 'hooks/postmottak/PostmottakVisningHook';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   behandlingsVersjon: number;
@@ -142,19 +142,19 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
       </Modal>
       <VStack gap={'space-24'}>
         {skalViseKlageEttersendelseInfo && (
-          <KelvinAlert variant={'info'}>
+          <Alert variant={'info'}>
             Denne journalposten er en ettersendelse til klage, og journalførende enhet er satt til{'  '}
             {NAV_KLAGEINSTANS_ENHET}. Svar <i>Nei</i> dersom du ønsker å opprette journalføringsoppgave i Gosys for Nav
             Klageinstans.
-          </KelvinAlert>
+          </Alert>
         )}
         <LøsBehovOgGåTilNesteStegStatusAlert status={status} />
         <FormField form={form} formField={formFields.erTemaAAP} />
         {error && (
-          <KelvinAlert size={'small'} variant={'error'}>
+          <Alert size={'small'} variant={'error'}>
             <BodyShort size={'small'}>Noe gikk galt ved endring av tema</BodyShort>
             {error}
-          </KelvinAlert>
+          </Alert>
         )}
       </VStack>
     </PostmottakVilkårskort>

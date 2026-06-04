@@ -10,7 +10,7 @@ import { clientTildelTilSaksbehandler } from 'lib/clientApi';
 import styles from './TildelOppgaveModal.module.css';
 import { isError } from 'lib/utils/api';
 import { useTildelOppgaver } from 'context/oppgave/TildelOppgaverContext';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 interface FormFields {
   saksbehandlerIdent: string;
@@ -80,7 +80,7 @@ export const TildelOppgaveModal = ({ revalidateFunction }: Props) => {
       {success ? (
         <>
           <Modal.Body>
-            <KelvinAlert variant={'success'}>{success}</KelvinAlert>
+            <Alert variant={'success'}>{success}</Alert>
           </Modal.Body>
           <Modal.Footer>
             <Button variant={'primary'} onClick={lukkOgResetModal}>
@@ -102,14 +102,14 @@ export const TildelOppgaveModal = ({ revalidateFunction }: Props) => {
                 søkefeltError={søkefeltError}
                 setSøkefeltError={setSøkefeltError}
               />
-              {infomelding && <KelvinAlert variant={'info'}>{infomelding}</KelvinAlert>}
+              {infomelding && <Alert variant={'info'}>{infomelding}</Alert>}
               <form id={'tildelSaksbehandler'} onSubmit={handleSubmit}>
                 {saksbehandlere.length > 0 && (
                   <Label as="p" size={'medium'}>
                     {`Søkeresultat (${saksbehandlere.length} treff)`}
                   </Label>
                 )}
-                {error && <KelvinAlert variant={'error'}>{error}</KelvinAlert>}
+                {error && <Alert variant={'error'}>{error}</Alert>}
                 <RadioGroupWrapper
                   name={'saksbehandlerIdent'}
                   control={form.control}

@@ -9,7 +9,7 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 import { useLøsBehovOgVentPåProsessering } from 'hooks/saksbehandling/LøsBehovOgVentPåProsessering';
 import { useFlyt } from 'hooks/saksbehandling/FlytHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   behandlingVersjon: number;
@@ -41,9 +41,9 @@ export const BehandlingPåVentKort = ({ informasjon }: Props) => {
             </div>
 
             <BodyShort as={'p'}>Behandlingen er på vent. Vil du åpne den igjen?</BodyShort>
-            {løsBehovError && <KelvinAlert variant={'error'}>{løsBehovError.message}</KelvinAlert>}
+            {løsBehovError && <Alert variant={'error'}>{løsBehovError.message}</Alert>}
 
-            {errorMessage && <KelvinAlert variant={'error'}>{errorMessage}</KelvinAlert>}
+            {errorMessage && <Alert variant={'error'}>{errorMessage}</Alert>}
 
             <Button
               size={'medium'}

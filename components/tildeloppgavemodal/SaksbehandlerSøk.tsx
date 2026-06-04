@@ -4,7 +4,7 @@ import { Search, VStack } from '@navikt/ds-react';
 import { Dispatch, SetStateAction, SubmitEventHandler, useState } from 'react';
 import { clientSøkPåSaksbehandler } from 'lib/clientApi';
 import { isSuccess } from 'lib/utils/api';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   oppgaver: number[];
@@ -77,7 +77,7 @@ export const SaksbehandlerSøk = ({
           <Search.Button loading={isLoading} />
         </Search>
       </form>
-      {error && <KelvinAlert variant={'error'}>{error}</KelvinAlert>}
+      {error && <Alert variant={'error'}>{error}</Alert>}
     </VStack>
   );
 };

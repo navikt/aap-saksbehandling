@@ -16,7 +16,7 @@ import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { VisningModus } from 'lib/types/visningTypes';
 import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   behandlingVersjon: number;
@@ -188,10 +188,10 @@ export const Inntektsbortfall = ({
           </Table.Body>
         </TableStyled>
         {showRettTilUttakAlert && (
-          <KelvinAlert variant="info">
+          <Alert variant="info">
             Brukeren har ikke hatt inntekt over 1 G siste år / 3 G siste 3 år. Det må vurderes om brukeren har rett til
             å ta ut full alderspensjon.
-          </KelvinAlert>
+          </Alert>
         )}
         <FormField form={form} formField={formFields.begrunnelse} />
         <FormField form={form} formField={formFields.rettTilUttak} />

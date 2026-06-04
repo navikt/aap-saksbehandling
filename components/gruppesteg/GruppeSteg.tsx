@@ -3,7 +3,7 @@ import { BehandlingPåVentKortMedDataFetching } from 'components/sideprosesser/B
 import { FlytProsesseringAlert } from 'components/flytprosesseringalert/FlytProsesseringAlert';
 import { FlytProsessering, FlytVisning, StegType } from 'lib/types/types';
 import { BrevKortMedDataFetching } from 'components/brev/BrevKortMedDataFetching';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   prosessering: FlytProsessering;
@@ -32,14 +32,14 @@ export const GruppeSteg = ({
   return (
     <div className={'flex-column'}>
       {skalViseAlertForGjennomførtBesluttet && (
-        <KelvinAlert variant={'info'}>
+        <Alert variant={'info'}>
           Som aktiv beslutter i denne behandlingen kan du ikke gjøre vilkårsvurderinger i denne behandlingen.
-        </KelvinAlert>
+        </Alert>
       )}
       {skalViseAlertForGjennomførtKvalitetssikring && (
-        <KelvinAlert variant={'info'}>
+        <Alert variant={'info'}>
           Du har gjort kvalitetssikring og kan ikke gjøre vilkårsvurderinger i denne behandlingen.
-        </KelvinAlert>
+        </Alert>
       )}
       {prosessering.status === 'FEILET' && <FlytProsesseringAlert flytProsessering={prosessering} />}
       {visning.visVentekort && (

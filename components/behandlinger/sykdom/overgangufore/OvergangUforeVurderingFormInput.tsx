@@ -10,7 +10,7 @@ import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupW
 import { JaEllerNei } from 'lib/utils/form';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   index: number;
@@ -71,11 +71,11 @@ export const OvergangUforeVurderingFormInput = ({ index, form, readonly, søknad
         readOnly={readonly}
         shouldUnregister
       />
-      <KelvinAlert variant={'info'}>
+      <Alert variant={'info'}>
         {søknadsdatoUføretrygd
           ? `Brukeren har søkt om uføretrygd ${formaterDatoForFrontend(søknadsdatoUføretrygd)}`
           : 'Ingen uføresøknad funnet på brukeren'}
-      </KelvinAlert>
+      </Alert>
       {brukerHarSoktOmUforetrygd && (
         <RadioGroupWrapper
           name={`vurderinger.${index}.brukerHarFåttVedtakOmUføretrygd`}
@@ -93,10 +93,10 @@ export const OvergangUforeVurderingFormInput = ({ index, form, readonly, søknad
         </RadioGroupWrapper>
       )}
       {brukerHarFattAvslagPaUforetrygd && (
-        <KelvinAlert variant="warning">
+        <Alert variant="warning">
           Hvis bruker har fått avslag på uføretrygd på bakgrunn av § 12-5, så må § 11-6 vurderes til oppfylt fra dato på
           uføretrygdvedtaket.
-        </KelvinAlert>
+        </Alert>
       )}
       {brukerHarSoktOmUforetrygd && form.watch(`vurderinger.${index}.brukerHarFåttVedtakOmUføretrygd`) === 'NEI' && (
         <RadioGroupJaNei
@@ -110,15 +110,15 @@ export const OvergangUforeVurderingFormInput = ({ index, form, readonly, søknad
         />
       )}
       {harUforeVedtakEtterSoknad && (
-        <KelvinAlert variant={'info'}>
+        <Alert variant={'info'}>
           Hovedregelen er at datoen vurderingen gjelder fra er virkningstidspunktet for uføretrygd. Sjekk
           posteringsgrunnlaget og Kelvin-rutinen for mer informasjon.
-        </KelvinAlert>
+        </Alert>
       )}
       {venterPaUforeVedtakMenHarAAP && (
-        <KelvinAlert variant={'info'}>
+        <Alert variant={'info'}>
           Pass på at datoen vurderingen gjelder fra er samme som søknadsdato om uføretrygd.
-        </KelvinAlert>
+        </Alert>
       )}
     </VStack>
   );

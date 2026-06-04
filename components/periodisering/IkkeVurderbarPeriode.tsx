@@ -6,7 +6,7 @@ import { formatDatoMedMånedsnavn } from 'lib/utils/date';
 import { useState } from 'react';
 import { BodyShort, HStack, Tag, VStack } from '@navikt/ds-react';
 import styles from 'components/behandlinger/oppholdskrav/oppholdskrav.module.css';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   fom: Date;
@@ -43,9 +43,9 @@ export const IkkeVurderbarPeriode = ({ fom, tom, foersteNyePeriodeFraDato, alert
       }
     >
       <VStack>
-        <KelvinAlert variant={'info'} className={'fit-content'}>
+        <Alert variant={'info'} className={'fit-content'}>
           {alertMelding}
-        </KelvinAlert>
+        </Alert>
       </VStack>
     </CustomExpandableCard>
   );

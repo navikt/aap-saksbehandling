@@ -21,7 +21,7 @@ import { addDays, differenceInDays } from 'date-fns';
 import { useMeldekort } from 'hooks/saksbehandling/MeldekortHook';
 import { Journalpost } from 'lib/types/journalpost';
 import { erDatoFoerDato, erDatoIFremtiden } from 'lib/validation/dateValidation';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   setIsOpen: (isOpen: boolean) => void;
@@ -196,15 +196,15 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
                   {skalViseMeldedato && <FormField form={form} formField={formFields.meldedato} />}
                   {skalViseTimer && <UtfyllingKalender readOnly={erÅrsakRegistrereMeldedato} />}
                   {skalViseAlertForIngenTimer && (
-                    <KelvinAlert variant={'info'}>Bruker har ikke levert noen timer.</KelvinAlert>
+                    <Alert variant={'info'}>Bruker har ikke levert noen timer.</Alert>
                   )}
                   <FormErrorSummary errorList={errorList} />
-                  {error && <KelvinAlert variant={'error'}>{error}</KelvinAlert>}
+                  {error && <Alert variant={'error'}>{error}</Alert>}
                   {erÅrsakOverstyring && (
-                    <KelvinAlert variant={'warning'}>
+                    <Alert variant={'warning'}>
                       Overstyring av bruker er ikke støttet enda. Hvis behovet vedvarer etter dialog med bruker, send
                       sak i porten til team AAP.
-                    </KelvinAlert>
+                    </Alert>
                   )}
                 </VStack>
               </form>

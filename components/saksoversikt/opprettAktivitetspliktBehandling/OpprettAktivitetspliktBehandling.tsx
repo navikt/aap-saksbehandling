@@ -10,7 +10,7 @@ import { FormField } from 'components/form/FormField';
 import { isSuccess } from 'lib/utils/api';
 import { useRouter } from 'next/navigation';
 import { Kort } from 'components/kort/Kort';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 export interface AktivitetspliktbruddFormFields {
   aktivitetspliktBruddType: 'AKTIVITETSPLIKT_11_7';
@@ -69,9 +69,9 @@ export const OpprettAktivitetspliktBehandling = ({ sak }: { sak: SaksInfo }) => 
           </Kort>
 
           {error && (
-            <KelvinAlert variant={'error'} size={'small'}>
+            <Alert variant={'error'} size={'small'}>
               {error}
-            </KelvinAlert>
+            </Alert>
           )}
 
           <HStack gap="space-16">

@@ -13,7 +13,7 @@ import { formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
 import { JaEllerNei } from 'lib/utils/form';
 import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
 import React from 'react';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   index: number;
@@ -79,9 +79,9 @@ export const ArbeidsopptrappingVurderingFormInput = ({ index, readonly, form, ik
       />
       {rettPåAAPIOpptrapping === JaEllerNei.Ja && (
         <HStack>
-          <KelvinAlert variant={'info'}>
+          <Alert variant={'info'}>
             Har du husket å lage en aktivitet for opptrappingen i aktivitetsplanen?
-          </KelvinAlert>
+          </Alert>
         </HStack>
       )}
     </VStack>

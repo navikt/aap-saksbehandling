@@ -23,7 +23,7 @@ import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   grunnlag?: BeregningTidspunktGrunnlag;
@@ -202,9 +202,9 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly, initi
         </div>
       )}
       {erBeregningsTidspunktEtterVirkningsTidspunkt && (
-        <KelvinAlert variant={'warning'}>
+        <Alert variant={'warning'}>
           Sjekk om beregningstidspunkt skal være datert etter tidspunkt for foreløpig virkningstidspunkt
-        </KelvinAlert>
+        </Alert>
       )}
     </VilkårskortMedFormOgMellomlagring>
   );

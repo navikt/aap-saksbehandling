@@ -13,7 +13,7 @@ interface Props extends Omit<InfoCardProps, 'data-color'> {
   className?: string;
 }
 
-export const KelvinAlert = ({ variant, children, size = 'small', className, ...rest }: Props) => {
+export const Alert = ({ variant, children, size = 'small', className, ...rest }: Props) => {
   switch (variant) {
     case 'success':
       return (

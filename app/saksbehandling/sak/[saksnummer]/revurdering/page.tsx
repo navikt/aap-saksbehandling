@@ -3,7 +3,7 @@ import { hentSak, hentSakPersoninfo } from 'lib/services/saksbehandlingservice/s
 import { OpprettRevurdering } from 'components/saksoversikt/opprettrevurdering/OpprettRevurdering';
 import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
 import { erAktivFørstegangsbehandling } from 'lib/utils/behandling';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 export default async function Page(props: { params: Promise<{ saksnummer: string }> }) {
   const params = await props.params;
@@ -13,9 +13,9 @@ export default async function Page(props: { params: Promise<{ saksnummer: string
     return (
       <HStack justify="center">
         <VStack width="600" gap="space-16" margin="space-32" align="center">
-          <KelvinAlert variant="warning">
+          <Alert variant="warning">
             Søknaden er trukket. Kan ikke opprette ny vurdering eller revurdering.
-          </KelvinAlert>
+          </Alert>
 
           <Link href={`/saksbehandling/sak/${sak.saksnummer}`}>Gå tilbake</Link>
         </VStack>

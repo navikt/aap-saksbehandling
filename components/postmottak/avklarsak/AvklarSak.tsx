@@ -11,7 +11,7 @@ import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupW
 import { Behovstype } from 'lib/postmottakForm';
 import { PostmottakVilkårskort } from 'components/postmottak/vilkårskort/PostmottakVilkårskort';
 import { usePostmottakVilkårskortVisning } from 'hooks/postmottak/PostmottakVisningHook';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   behandlingsVersjon: number;
@@ -242,7 +242,7 @@ export const AvklarSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, 
           </VStack>
         )}
 
-        {error && <KelvinAlert variant="error">{error.message}</KelvinAlert>}
+        {error && <Alert variant="error">{error.message}</Alert>}
       </VStack>
     </PostmottakVilkårskort>
   );

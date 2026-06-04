@@ -6,7 +6,7 @@ import { isError } from 'lib/utils/api';
 import { UtbetalingOgSimuleringMedDataFetching } from './utbetalingogsimulering/UtbetalingOgSimuleringMedDataFetching';
 import { toggles } from 'lib/utils/toggles';
 import { BehandlingFlytOgTilstand } from 'lib/types/types';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   behandlingsreferanse: string;
@@ -35,9 +35,9 @@ export const Simulering = async ({ behandlingsreferanse, flyt }: Props) => {
         {behandling.data.status === 'UTREDES' || behandling.data.status === 'OPPRETTET' ? (
           <UtbetalingOgSimuleringMedDataFetching behandlingsreferanse={behandlingsreferanse} />
         ) : (
-          <KelvinAlert variant={'info'}>
+          <Alert variant={'info'}>
             Simulering kan kun vises etter steget Tilkjent ytelse, og før det er fattet et vedtak.
-          </KelvinAlert>
+          </Alert>
         )}
       </StegSuspense>
     </GruppeSteg>

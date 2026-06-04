@@ -26,7 +26,7 @@ import {
   useUmamiVarighetHendelser,
 } from 'lib/utils/umami';
 import { isLocal } from 'lib/utils/environment';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;
@@ -185,7 +185,7 @@ export const TotrinnsvurderingForm = ({
         );
       })}
       {form.formState.errors.totrinnsvurderinger?.root && (
-        <KelvinAlert variant={'error'}>{form.formState.errors.totrinnsvurderinger.root.message}</KelvinAlert>
+        <Alert variant={'error'}>{form.formState.errors.totrinnsvurderinger.root.message}</Alert>
       )}
       <LøsBehovOgGåTilNesteStegStatusAlert
         status={status}

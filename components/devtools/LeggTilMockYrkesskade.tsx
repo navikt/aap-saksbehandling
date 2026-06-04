@@ -8,7 +8,7 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { subDays, subMonths } from 'date-fns';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 const skadeartOptions = ['Arbeidsulykke', 'Yrkessykdom', 'Annet'];
 const diagnoseOptions = ['Lumbago', 'Karpaltunnelsyndrom', 'Håndleddsfraktur', 'Hørselstap', 'Hjernerystelse'];
@@ -127,7 +127,7 @@ export const LeggTilMockYrkesskade = ({ saksnummer }: { saksnummer: string }) =>
           Lagre
         </Button>
       </HStack>
-      {error && <KelvinAlert variant="error">{error}</KelvinAlert>}
+      {error && <Alert variant="error">{error}</Alert>}
     </VStack>
   );
 };

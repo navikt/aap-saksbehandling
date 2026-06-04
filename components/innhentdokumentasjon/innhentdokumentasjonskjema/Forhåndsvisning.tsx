@@ -3,7 +3,7 @@ import { clientForhåndsvisDialogmelding } from 'lib/clientApi';
 import { useRef } from 'react';
 import useSWR from 'swr';
 import { isError, isSuccess } from 'lib/utils/api';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 type Props = {
   saksnummer: string;
@@ -42,9 +42,9 @@ export const Forhåndsvisning = ({ saksnummer, fritekst, dokumentasjonsType, vis
         {!isLoading && isSuccess(data) && <p style={{ whiteSpace: 'pre-wrap' }}>{data.data.konstruertBrev}</p>}
 
         {isError(data) && (
-          <KelvinAlert variant="error">
+          <Alert variant="error">
             {data.apiException.message || 'En ukjent feil oppsto ved forhåndsvisning'}
-          </KelvinAlert>
+          </Alert>
         )}
       </Modal.Body>
       <Modal.Footer>

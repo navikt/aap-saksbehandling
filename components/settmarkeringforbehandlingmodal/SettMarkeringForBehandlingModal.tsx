@@ -11,7 +11,7 @@ import { NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType } from '@navikt/aap-o
 import { FormField } from 'components/form/FormField';
 import { isSuccess } from 'lib/utils/api';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   referanse: string;
@@ -98,7 +98,7 @@ export const SettMarkeringForBehandlingModal = ({ referanse, type, isOpen, onClo
               )}
             </form>
           )}
-          {error && <KelvinAlert variant={'error'}>{error}</KelvinAlert>}
+          {error && <Alert variant={'error'}>{error}</Alert>}
         </VStack>
       </Modal.Body>
       <Modal.Footer>

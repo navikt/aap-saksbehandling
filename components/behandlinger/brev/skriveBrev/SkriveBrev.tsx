@@ -23,7 +23,7 @@ import { FormField } from 'components/form/FormField';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { Distribusjonssjekk } from 'components/brev/Distribusjonssjekk';
 import { loggUmamiEvent, useUmamiStartTidspunkt } from 'lib/utils/umami';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 export const SkriveBrev = ({
   referanse,
@@ -128,7 +128,7 @@ export const SkriveBrev = ({
           <HStack gap="space-8">
             {sistLagret && <Label as="p">Sist lagret: {formaterDatoMedTidspunktForFrontend(sistLagret)}</Label>}
             {isSaving && <Loader />}
-            {error && <KelvinAlert variant="error">{error}</KelvinAlert>}
+            {error && <Alert variant="error">{error}</Alert>}
           </HStack>
           {!readOnly && (
             <ActionMenu>

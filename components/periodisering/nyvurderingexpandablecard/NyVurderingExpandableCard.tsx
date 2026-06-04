@@ -11,7 +11,7 @@ import { VurderingFormMeta } from 'lib/types/types';
 import { SlettVurderingModal } from 'components/periodisering/slettvurderingmodal/SlettVurderingModal';
 import { VurderingStatus, VurderingStatusTag } from 'components/periodisering/VurderingStatusTag';
 import { AccordionsSignal } from 'hooks/AccordionSignalHook';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   initiellEkspandert: boolean;
@@ -79,9 +79,9 @@ export const NyVurderingExpandableCard = ({
         <HGrid columns={'1fr 30px'}>
           <VStack gap={'space-20'}>
             {vurdering.behøverVurdering && (
-              <KelvinAlert
+              <Alert
                 variant={'info'}
-              >{`Perioden fra ${fraDato ? formatDatoMedMånedsnavn(fraDato) : ''} mangler vurdering og må vurderes.`}</KelvinAlert>
+              >{`Perioden fra ${fraDato ? formatDatoMedMånedsnavn(fraDato) : ''} mangler vurdering og må vurderes.`}</Alert>
             )}
             {children}
           </VStack>

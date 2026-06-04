@@ -5,7 +5,7 @@ import { BodyShort, Button, Detail, HStack, VStack } from '@navikt/ds-react';
 import { AutomatiskLovvalgOgMedlemskapVurdering } from 'lib/types/types';
 import { TilhørighetsVurderingTabell } from 'components/behandlinger/lovvalg/automatiskvurderingavlovvalgogmedlemskap/TilhørighetsVurderingTabell';
 import { Dispatch, SetStateAction } from 'react';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   vurdering: AutomatiskLovvalgOgMedlemskapVurdering;
@@ -23,10 +23,10 @@ export const AutomatiskVurderingAvLovvalgOgMedlemskap = ({
     <VilkårsKort heading={'Automatisk vurdering av lovvalg og medlemskap'} steg={'VURDER_LOVVALG'}>
       <VStack gap={'space-28'} paddingBlock={'space-12'}>
         {!vurdering.kanBehandlesAutomatisk && (
-          <KelvinAlert variant={'warning'} title={'Til manuell vurdering'} className={'fit-content'}>
+          <Alert variant={'warning'} title={'Til manuell vurdering'} className={'fit-content'}>
             Opplysningene tilsier at det kan være utenlandsk lovvalg eller manglende medlemskap. Lovvalg og medlemskap
             må vurderes manuelt.
-          </KelvinAlert>
+          </Alert>
         )}
 
         <div>

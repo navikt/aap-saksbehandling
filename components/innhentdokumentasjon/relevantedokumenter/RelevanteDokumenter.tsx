@@ -14,7 +14,7 @@ import { KnyttTilSakModal } from 'components/saksoversikt/dokumentoversikt/Knytt
 import { SakContextType } from 'context/saksbehandling/SakContext';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { storForbokstav } from 'lib/utils/string';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 interface FormFields {
   dokumentnavn: string;
@@ -60,18 +60,18 @@ export const RelevanteDokumenter = () => {
 
   if (isLoading) {
     return (
-      <KelvinAlert variant="info">
+      <Alert variant="info">
         <Loader size={'small'} title="Søker etter relevante dokumenter" />
-      </KelvinAlert>
+      </Alert>
     );
   }
 
   if (relevanteDokumenter && isError(relevanteDokumenter)) {
-    return <KelvinAlert variant={'error'}>{relevanteDokumenter.apiException.message}</KelvinAlert>;
+    return <Alert variant={'error'}>{relevanteDokumenter.apiException.message}</Alert>;
   }
 
   if (relevanteDokumenter?.data.length === 0) {
-    return <KelvinAlert variant="info">Fant ingen relevante helseopplysninger</KelvinAlert>;
+    return <Alert variant="info">Fant ingen relevante helseopplysninger</Alert>;
   }
 
   return (

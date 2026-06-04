@@ -17,7 +17,7 @@ import { useEffect } from 'react';
 import { useBackendSortering } from 'hooks/oppgave/BackendSorteringHook';
 import { PathsMineOppgaverGetParametersQuerySortby } from '@navikt/aap-oppgave-typescript-types';
 import { ValuePair } from 'components/form/FormField';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 export interface FormFieldsFilter {
   behandlingstyper?: string[];
@@ -109,7 +109,7 @@ export const MineOppgaver = () => {
   });
 
   if (error) {
-    return <KelvinAlert variant="error">{error}</KelvinAlert>;
+    return <Alert variant="error">{error}</Alert>;
   }
 
   return (

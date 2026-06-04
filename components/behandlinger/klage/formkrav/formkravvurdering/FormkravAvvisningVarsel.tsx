@@ -1,6 +1,6 @@
 import { isBefore } from 'date-fns';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 type Props = {
   frist: Date;
@@ -11,17 +11,17 @@ export const FormkravAvvisningVarsel = ({ frist }: Props) => {
 
   if (isBefore(today, frist)) {
     return (
-      <KelvinAlert variant="warning">
+      <Alert variant="warning">
         Brukeren har frem til {formaterDatoForFrontend(frist)} til å svare på varselet om avvisningen av klagen. Ved å
         bekrefte en vurdering om at formkravene ikke er oppfyllt vil behandlingen settes på vent frem til svarfristen.
-      </KelvinAlert>
+      </Alert>
     );
   }
 
   return (
-    <KelvinAlert variant="warning">
+    <Alert variant="warning">
       Svarfristen på forhåndsvarselet om avvisning utløp {formaterDatoForFrontend(frist)}. Ved å bekrefte at formkravene
       ikke er oppfyllt vil vi starte effektuering av avvisningen av klagen.
-    </KelvinAlert>
+    </Alert>
   );
 };

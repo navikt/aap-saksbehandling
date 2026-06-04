@@ -19,7 +19,7 @@ import React from 'react';
 import { DiagnoserDefaultOptions } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { defaultBegrunnelse } from 'components/behandlinger/sykdom/sykdomsvurdering/sykdomsvurdering-utils';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   index: number;
@@ -126,9 +126,9 @@ export const SykdomsvurderingFormInput = ({
             <Radio value={'NEI'}>{JaNeiEllerForbigåendeTekst.Nei}</Radio>
           </RadioGroupWrapper>
           {form.watch(`vurderinger.${index}.harNedsattArbeidsevne`) === 'NEI' && (
-            <KelvinAlert variant={'info'} className={'fit-content'}>
+            <Alert variant={'info'} className={'fit-content'}>
               Brukeren vil få vedtak om at de ikke har rett på AAP. De kvalifiserer ikke for sykepengeerstatning.
-            </KelvinAlert>
+            </Alert>
           )}
           {skalViseNedsettelse && (
             <SykdomsvurderingNedsattArbeidsevneDetaljer

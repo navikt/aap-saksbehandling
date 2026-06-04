@@ -2,14 +2,14 @@
 
 import { BodyShort, VStack } from '@navikt/ds-react';
 import { FetchResponse, isError } from 'lib/utils/api';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   apiResponses: FetchResponse<unknown>[];
 }
 export const ApiException = ({ apiResponses }: Props) => {
   return (
-    <KelvinAlert variant={'error'}>
+    <Alert variant={'error'}>
       {apiResponses
         .filter((res) => isError(res))
         .map((feil, i) => (
@@ -19,6 +19,6 @@ export const ApiException = ({ apiResponses }: Props) => {
             <BodyShort size={'small'}>{feil.apiException.message}</BodyShort>
           </VStack>
         ))}
-    </KelvinAlert>
+    </Alert>
   );
 };

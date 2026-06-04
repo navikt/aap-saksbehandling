@@ -3,7 +3,7 @@ import { BodyLong, Button, Modal } from '@navikt/ds-react';
 import { XMarkOctagonIcon } from '@navikt/aksel-icons';
 import styles from 'components/saksinfobanner/avbrytrevurderingmodal/AvbrytRevurderingModal.module.css';
 import { NyÅrsakTilBehandlingV0 } from 'lib/types/types';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   saksnummer: string;
@@ -34,7 +34,7 @@ export const AvbrytAktivitetspliktbehandlingModal = ({
     >
       <Modal.Body>
         <BodyLong>Behandlingen vil avsluttes og ingen endringer vil bli lagret på saken.</BodyLong>
-        {sendHendelseError && <KelvinAlert variant={'error'}>{sendHendelseError.message}</KelvinAlert>}
+        {sendHendelseError && <Alert variant={'error'}>{sendHendelseError.message}</Alert>}
       </Modal.Body>
       <Modal.Footer>
         <Button

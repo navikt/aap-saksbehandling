@@ -3,7 +3,7 @@ import { isError, isSuccess } from 'lib/utils/api';
 import { useState } from 'react';
 import { feilregistrerSakstilknytning, opphevFeilregistrertSakstilknytning } from 'lib/dokumentClientApi';
 import { Journalpost } from 'lib/types/journalpost';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 export const FeilregistrerJournalpostModal = ({
   journalpost,
@@ -51,7 +51,7 @@ export const FeilregistrerJournalpostModal = ({
           </BodyShort>
         </Modal.Body>
 
-        {error && <KelvinAlert variant="error">{error}</KelvinAlert>}
+        {error && <Alert variant="error">{error}</Alert>}
 
         <Modal.Footer>
           <Button variant="primary" onClick={feilregistrer} loading={isLoading}>
@@ -96,7 +96,7 @@ export const FeilregistrerJournalpostModal = ({
           </Table.Body>
         </Table>
       </Modal.Body>
-      {error && <KelvinAlert variant="error">{error}</KelvinAlert>}
+      {error && <Alert variant="error">{error}</Alert>}
       <Modal.Footer>
         <Button data-color="danger" variant="primary" onClick={feilregistrer} loading={isLoading}>
           Ja, feilregistrer

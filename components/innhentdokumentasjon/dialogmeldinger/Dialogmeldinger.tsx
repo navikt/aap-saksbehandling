@@ -8,7 +8,7 @@ import { formaterDatoForFrontend, sorterEtterNyesteDato } from 'lib/utils/date';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { isBefore, subDays } from 'date-fns';
 import { usePurrPåDialogmelding } from 'hooks/FetchHook';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 type Props = {
   dialogmeldinger?: LegeerklæringStatus[];
@@ -77,9 +77,9 @@ const Dialogmelding = ({ melding }: { melding: LegeerklæringStatus }) => {
             </Button>
           )}
 
-          {purringSent && !error && <KelvinAlert variant="success">Purring sendt</KelvinAlert>}
+          {purringSent && !error && <Alert variant="success">Purring sendt</Alert>}
 
-          {error && <KelvinAlert variant="error">{error}</KelvinAlert>}
+          {error && <Alert variant="error">{error}</Alert>}
         </HStack>
       </Table.DataCell>
     </Table.Row>

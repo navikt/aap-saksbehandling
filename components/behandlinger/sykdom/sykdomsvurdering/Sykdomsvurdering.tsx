@@ -47,7 +47,7 @@ import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
 import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 export interface SykdomsvurderingerForm {
   vurderinger: Array<Sykdomsvurdering>;
@@ -189,11 +189,11 @@ export const Sykdomsvurdering = ({
         <EksterneLenkerIVilkårskort steg={'AVKLAR_SYKDOM'} />
 
         {erOvergangArbeid && (
-          <KelvinAlert variant={'info'}>
+          <Alert variant={'info'}>
             Hvis brukeren skal ha AAP i perioden som arbeidssøker etter § 11-17, må du først vurdere at arbeidsevnen
             ikke lenger er nedsatt etter § 11-5 og at brukeren er satt i stand til å skaffe seg arbeid som han eller hun
             kan utføre.
-          </KelvinAlert>
+          </Alert>
         )}
 
         {vedtatteVurderinger.map((vurdering) => (

@@ -18,7 +18,7 @@ import {
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { useEffect } from 'react';
 import { nyVurderingErOppfylt } from 'components/behandlinger/sykdom/etableringegenvirksomhet/etablering-av-egen-virksomhet-utils';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 const EierBrukerVirsomheten = lagEnumObjektFraUnionType<NonNullable<EtableringEierBrukerVirksomheten>>({
   EIER_MINST_50_PROSENT: 'EIER_MINST_50_PROSENT',
@@ -138,9 +138,9 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly, gru
               </VStack>
             </VStack>
             {form.formState.errors.vurderinger?.[index]?.utviklingsperioder && (
-              <KelvinAlert variant={'error'}>
+              <Alert variant={'error'}>
                 {form.formState.errors.vurderinger[index].utviklingsperioder.message}
-              </KelvinAlert>
+              </Alert>
             )}
             <VStack gap={'space-16'}>
               <Table size="small">
@@ -229,9 +229,9 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly, gru
               </VStack>
             </VStack>
             {form.formState.errors.vurderinger?.[index]?.oppstartsperioder && (
-              <KelvinAlert variant={'error'}>
+              <Alert variant={'error'}>
                 {form.formState.errors.vurderinger[index].oppstartsperioder.message}
-              </KelvinAlert>
+              </Alert>
             )}
             <VStack gap={'space-16'}>
               <Table size="small">
@@ -304,7 +304,7 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly, gru
               </HStack>
             </VStack>
           </VStack>
-          <KelvinAlert variant={'info'}>
+          <Alert variant={'info'}>
             <VStack>
               <BodyShort>{'Har du husket'}</BodyShort>
               <BodyShort>
@@ -312,7 +312,7 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly, gru
               </BodyShort>
               <BodyShort>{'- å opprette en oppfølgingsoppgave før utgangen av neste periode?'}</BodyShort>
             </VStack>
-          </KelvinAlert>
+          </Alert>
         </VStack>
       )}
     </VStack>

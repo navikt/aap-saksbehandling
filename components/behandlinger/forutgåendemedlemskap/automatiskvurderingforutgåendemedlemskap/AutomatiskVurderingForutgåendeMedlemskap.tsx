@@ -5,7 +5,7 @@ import { BodyShort, Button, Detail, HStack, VStack } from '@navikt/ds-react';
 import { AutomatiskLovvalgOgMedlemskapVurdering } from 'lib/types/types';
 import { TilhørighetsVurderingTabell } from 'components/behandlinger/lovvalg/automatiskvurderingavlovvalgogmedlemskap/TilhørighetsVurderingTabell';
 import { Dispatch, SetStateAction } from 'react';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   vurdering: AutomatiskLovvalgOgMedlemskapVurdering;
@@ -25,16 +25,16 @@ export const AutomatiskVurderingForutgåendeMedlemskap = ({
     <VilkårsKort heading={'Automatisk vurdering av forutgående medlemskap'} steg={'VURDER_MEDLEMSKAP'}>
       <VStack gap={'space-20'}>
         {!vurdering.kanBehandlesAutomatisk && !harYrkesskade && (
-          <KelvinAlert variant={'warning'} title={'Til manuell vurdering'} className={'fit-content'}>
+          <Alert variant={'warning'} title={'Til manuell vurdering'} className={'fit-content'}>
             Opplysningene tilsier at det kan være tilhørighet utenfor Norge. Forutgående medlemskap må vurderes manuelt.
-          </KelvinAlert>
+          </Alert>
         )}
 
         {harYrkesskade && (
-          <KelvinAlert variant={'success'} title={'Bruker har yrkesskade'} className={'fit-content'}>
+          <Alert variant={'success'} title={'Bruker har yrkesskade'} className={'fit-content'}>
             Brukeren har en yrkesskade med godkjent årsakssammenheng med den nedsatte arbeidsevnen. Vilkåret i § 11-2 om
             forutgående medlemskap gjelder ikke.
-          </KelvinAlert>
+          </Alert>
         )}
 
         <div>

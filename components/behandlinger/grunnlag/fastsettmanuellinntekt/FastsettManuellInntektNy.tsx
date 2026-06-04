@@ -18,7 +18,7 @@ import { FastsettManuellInntektTabell } from 'components/behandlinger/grunnlag/f
 import { FastsettManuellInntektForm, Tabellår } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/types';
 import { sorterEtterNyesteDato } from 'lib/utils/date';
 import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   behandlingsversjon: number;
@@ -193,9 +193,9 @@ export const FastsettManuellInntektNy = ({
         />
       )}
       {grunnlag.registrerteInntekterSisteRelevanteAr.length < 3 && (
-        <KelvinAlert variant={'warning'}>
+        <Alert variant={'warning'}>
           Du må oppgi pensjonsgivende inntekt for år hvor inntekten ikke er ferdig lignet.
-        </KelvinAlert>
+        </Alert>
       )}
       <BodyShort>
         Hvis det mangler pensjonsgivende inntekt for noen av beregningsårene, eller brukerens inntekt skal beregnes med

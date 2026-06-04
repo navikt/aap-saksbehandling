@@ -16,7 +16,7 @@ import { Behovstype } from 'lib/utils/form';
 import { Kort } from 'components/kort/Kort';
 import { useInnloggetBruker } from 'hooks/BrukerHook';
 import { brukerharNayTilgang } from 'lib/utils/innloggetBruker';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   saksnummer: string;
@@ -198,9 +198,9 @@ export const OpprettOppfølgingsBehandling = ({
           </Kort>
 
           {error && (
-            <KelvinAlert variant={'error'} size={'small'}>
+            <Alert variant={'error'} size={'small'}>
               {error}
-            </KelvinAlert>
+            </Alert>
           )}
 
           <HStack gap="space-16">

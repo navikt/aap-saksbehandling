@@ -9,7 +9,7 @@ import { SamordningArbeidsgiverFormFields } from 'components/behandlinger/samord
 import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
 import { addBusinessDays, areIntervalsOverlapping, format, isValid, parse } from 'date-fns';
 import { useEffect } from 'react';
-import { KelvinAlert } from 'components/alert/KelvinAlert';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   form: UseFormReturn<SamordningArbeidsgiverFormFields>;
@@ -93,7 +93,7 @@ export const SamordningArbeidsGiverTabell = ({ form, readOnly }: Props) => {
         </HStack>
       )}
       {form.formState.errors.perioder?.root && (
-        <KelvinAlert variant={'error'}>{form.formState.errors.perioder.root.message}</KelvinAlert>
+        <Alert variant={'error'}>{form.formState.errors.perioder.root.message}</Alert>
       )}
     </VStack>
   );
