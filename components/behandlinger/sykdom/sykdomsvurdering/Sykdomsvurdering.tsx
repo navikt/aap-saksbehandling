@@ -75,6 +75,7 @@ interface SykdomProps {
   diagnoseDefaultOptions: DiagnoserDefaultOptions;
   initialMellomlagretVurdering?: MellomlagretVurdering;
   erOvergangArbeid: boolean;
+  erRevurderingStudent: boolean;
 }
 
 export const Sykdomsvurdering = ({
@@ -85,6 +86,7 @@ export const Sykdomsvurdering = ({
   typeBehandling,
   initialMellomlagretVurdering,
   erOvergangArbeid,
+  erRevurderingStudent,
 }: SykdomProps) => {
   const { behandlingsreferanse } = useParamsMedType();
   const { sak } = useSak();
@@ -192,6 +194,13 @@ export const Sykdomsvurdering = ({
             Hvis brukeren skal ha AAP i perioden som arbeidssøker etter § 11-17, må du først vurdere at arbeidsevnen
             ikke lenger er nedsatt etter § 11-5 og at brukeren er satt i stand til å skaffe seg arbeid som han eller hun
             kan utføre.
+          </Alert>
+        )}
+
+        {erRevurderingStudent && (
+          <Alert variant={'info'} size={'small'}>
+            Hvis brukeren skal ha AAP som student etter § 11-14, må du først vurdere at arbeidsevnen ikke er nedsatt,
+            men at bruker isteden skal vurderes for student i vurderingen av § 11-5.
           </Alert>
         )}
 

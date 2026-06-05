@@ -19,6 +19,7 @@ import React from 'react';
 import { DiagnoserDefaultOptions } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { defaultBegrunnelse } from 'components/behandlinger/sykdom/sykdomsvurdering/sykdomsvurdering-utils';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   index: number;
@@ -53,6 +54,7 @@ export const SykdomsvurderingFormInput = ({
 }: Props) => {
   const harNedsattArbeidsevne = form.watch(`vurderinger.${index}.harNedsattArbeidsevne`);
   const skalViseNedsettelse = harNedsattArbeidsevne === 'JA' || harNedsattArbeidsevne === 'JA_FORBIGÅENDE_PROBLEMER';
+  const skalViseNeiMenStudent = useFeatureFlag('StudentV2');
 
   return (
     <VStack gap={'space-20'}>
@@ -123,7 +125,9 @@ export const SykdomsvurderingFormInput = ({
             <Radio value={'JA'}>{JaNeiEllerForbigåendeTekst.Ja}</Radio>
             <Radio value={'JA_FORBIGÅENDE_PROBLEMER'}>{JaNeiEllerForbigåendeTekst.Forbigående}</Radio>
             <Radio value={'NEI'}>{JaNeiEllerForbigåendeTekst.Nei}</Radio>
-            <Radio value={'NEI_MEN_STUDENT'}>{JaNeiEllerForbigåendeTekst.NeiMenStudent}</Radio>
+            {skalViseNeiMenStudent && (
+              <Radio value={'NEI_MEN_STUDENT'}>{JaNeiEllerForbigåendeTekst.NeiMenStudent}</Radio>
+            )}
           </RadioGroupWrapper>
           {form.watch(`vurderinger.${index}.harNedsattArbeidsevne`) === 'NEI' && (
             <Alert variant={'info'} size={'small'} className={'fit-content'}>
