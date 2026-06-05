@@ -255,9 +255,13 @@ function getDefaultValuesForForm(meldekort?: MeldeperiodeMedMeldekortDto): Redig
     return undefined;
   }
 
+  if (!meldekort.periode) {
+    return undefined;
+  }
+
   const eksisterendeDager = meldekort.meldekort?.dager ?? [];
-  const startDato = new Dato(meldekort.meldeperiode.fom);
-  const sluttDato = new Dato(meldekort.meldeperiode.tom);
+  const startDato = new Dato(meldekort.periode.fom);
+  const sluttDato = new Dato(meldekort.periode.tom);
   const antallDager = differenceInDays(sluttDato.dato, startDato.dato) + 1; // +1 for å inkludere tom dato
 
   const alleDager: Dag[] = Array.from({ length: antallDager }).map((_, index) => {

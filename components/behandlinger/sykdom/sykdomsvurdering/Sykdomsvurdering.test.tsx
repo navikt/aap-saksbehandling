@@ -50,7 +50,6 @@ const grunnlagMedTidligereVurdering: SykdomsGrunnlag = {
     {
       fom: '2025-01-01',
       begrunnelse: 'Dette er en tidligere begrunnelse',
-      dokumenterBruktIVurdering: [{ identifikator: '12345' }],
       harSkadeSykdomEllerLyte: true,
       vurderingerMeta: {
         vurdertAv: {
@@ -934,7 +933,6 @@ describe('mellomlagring i sykdom', () => {
   const sykdomsvurdering: Sykdomvurdering = {
     fom: '2025-01-01',
     begrunnelse: 'Dette er min vurdering som er bekreftet',
-    dokumenterBruktIVurdering: [],
     harSkadeSykdomEllerLyte: false,
     vurderingerMeta: { vurdertAv: { ident: '1234', dato: '2025-01-01' } },
   };

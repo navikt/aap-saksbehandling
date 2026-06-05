@@ -634,6 +634,44 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/behandling/{referanse}/flyt/prosessering': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description referanse */
+          referanse: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.flyt.Prosessering'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/behandling/{referanse}/sett-p\u00E5-vent': {
     parameters: {
       query?: never;
@@ -12318,11 +12356,6 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomsvurderingResponse': {
       begrunnelse: string;
       bidiagnoser?: string[] | null;
-      /**
-       * @deprecated
-       * @description Bruk fom
-       */
-      dokumenterBruktIVurdering: components['schemas']['no.nav.aap.verdityper.dokument.JournalpostId'][];
       erNedsettelseIArbeidsevneMerEnnHalvparten?: boolean | null;
       erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense?: boolean | null;
       erSkadeSykdomEllerLyteVesentligdel?: boolean | null;
@@ -12331,7 +12364,11 @@ export interface components {
        * @example 2025-04-01
        */
       fom: string;
-      /** @enum {string|null} */
+      /**
+       * @deprecated
+       * @description Bruk fom
+       * @enum {string|null}
+       */
       harNedsattArbeidsevne?: 'JA' | 'JA_FORBIGÅENDE_PROBLEMER' | 'NEI' | null;
       harSkadeSykdomEllerLyte: boolean;
       hoveddiagnose?: string | null;
@@ -12395,7 +12432,6 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykepengergrunnlag.SykepengerVurderingResponse': {
       begrunnelse: string;
-      dokumenterBruktIVurdering: components['schemas']['no.nav.aap.verdityper.dokument.JournalpostId'][];
       /**
        * Format: date
        * @example 2025-04-01
@@ -13622,13 +13658,10 @@ export interface components {
       /** @enum {string} */
       meldekortProsesseringStatus: 'KLAR' | 'PROSESSERER_MELDEKORT';
     };
-    'no.nav.aap.behandlingsflyt.behandling.meldekort.MeldekortProsesseringResponse': {
-      /** @enum {string} */
-      meldekortProsesseringStatus: 'KLAR' | 'PROSESSERER_MELDEKORT';
-    };
     'no.nav.aap.behandlingsflyt.behandling.meldekort.MeldeperiodeMedMeldekortDto': {
       meldekort?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.MeldekortDto'];
       meldeperiode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
+      periode?: components['schemas']['no.nav.aap.komponenter.type.Periode'];
       tidligereMeldekort: components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.MeldekortDto'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.meldekort.MeldeperioderMedMeldekortResponse': {

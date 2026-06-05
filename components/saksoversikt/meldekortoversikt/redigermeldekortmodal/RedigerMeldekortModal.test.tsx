@@ -20,11 +20,19 @@ const meldekort: MeldeperiodeMedMeldekortDto = {
     fom: '2025-01-06',
     tom: '2025-01-19',
   },
+  periode: {
+    fom: '2025-01-06',
+    tom: '2025-01-19',
+  },
 };
 
 const meldekortMedDager: MeldeperiodeMedMeldekortDto = {
   tidligereMeldekort: [],
   meldeperiode: {
+    fom: '2025-01-06',
+    tom: '2025-01-19',
+  },
+  periode: {
     fom: '2025-01-06',
     tom: '2025-01-19',
   },
@@ -54,6 +62,10 @@ const meldekortMedDager: MeldeperiodeMedMeldekortDto = {
 const meldekortMedNullTimer: MeldeperiodeMedMeldekortDto = {
   tidligereMeldekort: [],
   meldeperiode: {
+    fom: '2025-01-06',
+    tom: '2025-01-19',
+  },
+  periode: {
     fom: '2025-01-06',
     tom: '2025-01-19',
   },
@@ -232,6 +244,7 @@ describe('RedigerMeldekortModal', () => {
       const kortMeldekort: MeldeperiodeMedMeldekortDto = {
         tidligereMeldekort: [],
         meldeperiode: { fom: '2025-01-08', tom: '2025-01-14' },
+        periode: { fom: '2025-01-08', tom: '2025-01-14' },
       };
       render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={kortMeldekort} />);
       await åpneKalender();
@@ -248,6 +261,7 @@ describe('RedigerMeldekortModal', () => {
     const kortMeldekort: MeldeperiodeMedMeldekortDto = {
       tidligereMeldekort: [],
       meldeperiode: { fom: '2025-01-08', tom: '2025-01-19' },
+      periode: { fom: '2025-01-08', tom: '2025-01-19' },
     };
 
     const åpneKalender = async () => {
