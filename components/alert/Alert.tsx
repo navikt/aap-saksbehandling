@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { InfoCard, InfoCardProps } from '@navikt/ds-react';
 import {
   CheckmarkCircleIcon,
