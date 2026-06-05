@@ -32,6 +32,23 @@ beforeEach(() => {
   vi.restoreAllMocks();
 });
 
+describe('Feilhåndtering', () => {
+  test('viser feilmelding når brevmal ikke er gyldig JSON', () => {
+    render(
+      <Brevbygger
+        referanse={'1234'}
+        brevmal={'ugyldig json'}
+        behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
+        mottaker={{ ident: '1234', navn: 'Navn' }}
+        behandlingVersjon={1}
+        readOnly={false}
+        behandlingstype={'Førstegangsbehandling'}
+      />
+    );
+    expect(screen.getByText('Feil ved parsing av brevmal')).toBeVisible();
+  });
+});
+
 describe('Delmalvelger', () => {
   const brevmal: BrevmalType = {
     ...sanityAttrs,

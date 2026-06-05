@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Button, HGrid, HStack, LocalAlert, VStack } from '@navikt/ds-react';
+import { BodyShort, Box, Button, HGrid, HStack, LocalAlert, VStack } from '@navikt/ds-react';
 import { useForm } from 'react-hook-form';
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -99,11 +99,16 @@ export const Brevbygger = ({
 
   if (!parsedBrevmal) {
     return (
-      <LocalAlert status={'error'}>
+      <LocalAlert status={'error'} size={'small'}>
         <LocalAlert.Header>
           <LocalAlert.Title>Feil ved parsing av brevmal</LocalAlert.Title>
         </LocalAlert.Header>
-        <LocalAlert.Content>{parsingFeilmelding}</LocalAlert.Content>
+        <LocalAlert.Content>
+          <BodyShort size={'small'}>Feilmeldingen var: {parsingFeilmelding}</BodyShort>
+          <BodyShort size={'small'} weight={'semibold'}>
+            Dersom feilen vedvarer kan du ta kontakt med brukerstøtte for å få løst problemet.
+          </BodyShort>
+        </LocalAlert.Content>
       </LocalAlert>
     );
   }
