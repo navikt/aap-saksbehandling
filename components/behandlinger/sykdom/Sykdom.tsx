@@ -20,6 +20,9 @@ import { Behovstype } from 'lib/utils/form';
 import { BehandlingFlytOgTilstand, StegGruppe } from 'lib/types/types';
 import { BekreftVurderingerOppfølgingMedDataFetching } from 'components/behandlinger/sykdom/bekreftvurderingeroppfølging/BekreftVurderingerOppfølgingMedDataFetching';
 import { OppgittYrkesskadeUtenRegistertreffInfo } from 'components/behandlinger/sykdom/yrkesskade/OppgittYrkesskadeUtenRegistertreffInfo';
+import {
+  StudentvurderingMedDataFetching
+} from 'components/behandlinger/sykdom/student/studentvurdering/StudentvurderingMedDataFetching';
 
 interface Props {
   behandlingsreferanse: string;
@@ -44,6 +47,7 @@ export const Sykdom = async ({ behandlingsreferanse, flyt }: Props) => {
   const sykdomsvurderingBrevSteg = getStegData(aktivStegGruppe, 'SYKDOMSVURDERING_BREV', flyt);
   const bekreftVurderingerOppfølgingSteg = getStegDataForBekreftVurderingerOppfølgingSteg(aktivStegGruppe, flyt);
   const vurderYrkesskadeSteg = getStegData(aktivStegGruppe, 'VURDER_YRKESSKADE', flyt);
+  const vurderStudentStegV2 = getStegData(aktivStegGruppe, 'AVKLAR_STUDENT_V2', flyt);
   const vurderSykepengeerstatningSteg = getStegData(aktivStegGruppe, 'VURDER_SYKEPENGEERSTATNING', flyt);
   const overganguføreSteg = getStegData(aktivStegGruppe, 'OVERGANG_UFORE', flyt);
   const overgangarbeidSteg = getStegData(aktivStegGruppe, 'OVERGANG_ARBEID', flyt);
@@ -138,6 +142,14 @@ export const Sykdom = async ({ behandlingsreferanse, flyt }: Props) => {
       {oppgittYrkesskadeInfoSteg.skalViseSteg && !vurderYrkesskadeSteg.skalViseSteg && (
         <StegSuspense>
           <OppgittYrkesskadeUtenRegistertreffInfo grunnlag={yrkesskadeVurderingGrunnlag.data} />
+        </StegSuspense>
+      )}
+      {vurderStudentStegV2.skalViseSteg && (
+        <StegSuspense>
+          <StudentvurderingMedDataFetching
+            behandlingsreferanse={behandlingsreferanse}
+            stegData={vurderStudentStegV2}
+          />
         </StegSuspense>
       )}
       {vurderSykepengeerstatningSteg.skalViseSteg && (
