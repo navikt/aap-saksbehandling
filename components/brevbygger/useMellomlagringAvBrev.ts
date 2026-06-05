@@ -11,7 +11,7 @@ import { byggBrevdataPayload } from 'components/brevbygger/formUtils';
 interface Props {
   referanse: string;
   control: Control<BrevFormVerdier>;
-  brevmal: BrevmalType;
+  brevmal: BrevmalType | null;
   brevdata: BrevdataDto | undefined;
 }
 
@@ -40,6 +40,7 @@ export function useMellomlagringAvBrev({ referanse, control, brevmal, brevdata }
 
   useEffect(() => {
     const lagreOgOppdaterHtml = async () => {
+      if (!brevmal) return;
       setLasterHtml(true);
       try {
         const payload = byggBrevdataPayload(debouncedFormVerdier as BrevFormVerdier, brevmal, brevdata);

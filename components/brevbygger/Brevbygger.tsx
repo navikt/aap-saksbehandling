@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Button, HGrid, HStack, VStack } from '@navikt/ds-react';
+import { Box, Button, HGrid, HStack, LocalAlert, VStack } from '@navikt/ds-react';
 import { useForm } from 'react-hook-form';
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -44,6 +44,11 @@ interface BrevbyggerProps {
   behandlingstype: TypeBehandling;
 }
 
+type ParsingResultat = {
+  parsedBrevmal: BrevmalType | null;
+  parsingFeilmelding: string | null;
+};
+
 export const Brevbygger = ({
   referanse,
   brevmal,
@@ -58,9 +63,22 @@ export const Brevbygger = ({
   refusjonskravgrunnlag,
   behandlingstype,
 }: BrevbyggerProps) => {
-  const parsedBrevmal: BrevmalType = useMemo(() => JSON.parse(brevmal ?? ''), [brevmal]);
+  const { parsedBrevmal, parsingFeilmelding } = useMemo<ParsingResultat>(() => {
+    try {
+      return {
+        parsedBrevmal: JSON.parse(brevmal ?? ''),
+        parsingFeilmelding: null,
+      };
+    } catch (e) {
+      return {
+        parsedBrevmal: null,
+        parsingFeilmelding: e instanceof Error ? e.message : String(e),
+      };
+    }
+  }, [brevmal]);
+
   const { control, trigger } = useForm<BrevFormVerdier>({
-    values: initialiserFormVerdier(parsedBrevmal, brevdata),
+    values: parsedBrevmal ? initialiserFormVerdier(parsedBrevmal, brevdata) : undefined,
   });
   const umamiStartTidspunkt = useUmamiStartTidspunkt('AKTIV');
   const { brevPreview, lasterHtml } = useMellomlagringAvBrev({ referanse, control, brevmal: parsedBrevmal, brevdata });
@@ -79,6 +97,17 @@ export const Brevbygger = ({
   const [ikkeSendBrevModalOpen, settIkkeSendBrevModalOpen] = useState(false);
   const [visFerdigstillBrevDialog, settVisFerdigstillBrevDialog] = useState(false);
 
+  if (!parsedBrevmal) {
+    return (
+      <LocalAlert status={'error'}>
+        <LocalAlert.Header>
+          <LocalAlert.Title>Feil ved parsing av brevmal</LocalAlert.Title>
+        </LocalAlert.Header>
+        <LocalAlert.Content>{parsingFeilmelding}</LocalAlert.Content>
+      </LocalAlert>
+    );
+  }
+
   const ferdigstillBrev = async () => {
     const isValid = await trigger();
     if (!isValid) return;
@@ -86,7 +115,8 @@ export const Brevbygger = ({
   };
 
   const sendBrev = async () => {
-    løsBehovOgGåTilNesteSteg({
+    løsBehovOgGåTilNesteSteg(
+      {
         behandlingVersjon,
         behov: {
           behovstype,
