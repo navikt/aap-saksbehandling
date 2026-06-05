@@ -33,7 +33,7 @@ export interface BrevpreviewResponse {
 
 export function useMellomlagringAvBrev({ referanse, control, brevmal, brevdata }: Props): MellomlagringAvBrevResultat {
   const [lasterHtml, setLasterHtml] = useState(false);
-  const [brevPreview, setBrevpreview] = useState<BrevpreviewResponse | undefined>();
+  const [brevPreview, setBrevPreview] = useState<BrevpreviewResponse | undefined>();
 
   const formVerdier = useWatch({ control });
   const debouncedFormVerdier = useDebounce(formVerdier);
@@ -49,14 +49,16 @@ export function useMellomlagringAvBrev({ referanse, control, brevmal, brevdata }
           const response = await fetch(`/saksbehandling/api/brev/${referanse}/brevbygger-preview/`).then((r) =>
             r.json()
           );
-          setBrevpreview(JSON.parse(response.json));
+          // .json er feltnavnet responsen, som er en json-string, ligger i.
+          // Kommer fra endepunktet i behandlingsflyt og bør nok endres til noe som gir litt mer mening der
+          setBrevPreview(JSON.parse(response.json));
         }
       } finally {
         setLasterHtml(false);
       }
     };
     lagreOgOppdaterHtml();
-  }, [debouncedFormVerdier]);
+  }, [debouncedFormVerdier, referanse, brevmal, brevdata]);
 
   return { lasterHtml, brevPreview };
 }
