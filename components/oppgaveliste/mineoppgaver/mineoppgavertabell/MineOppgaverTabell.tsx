@@ -1,11 +1,12 @@
 import { Oppgave } from 'lib/types/oppgaveTypes';
 import { useState } from 'react';
-import { Alert, SortState, Table, VStack } from '@navikt/ds-react';
+import { SortState, Table, VStack } from '@navikt/ds-react';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { ManglerTilgangModal } from 'components/oppgaveliste/manglertilgangmodal/ManglerTilgangModal';
 import { MineOppgaverTabellRad } from 'components/oppgaveliste/mineoppgaver/mineoppgavertabell/MineOppgaverTabellRad';
 import { TildelOppgaveModal } from 'components/tildeloppgavemodal/TildelOppgaveModal';
 import { PathsMineOppgaverGetParametersQuerySortby } from '@navikt/aap-oppgave-typescript-types';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   oppgaver: Oppgave[];

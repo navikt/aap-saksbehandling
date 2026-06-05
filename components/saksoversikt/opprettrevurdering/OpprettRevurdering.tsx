@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, HStack, Page, VStack } from '@navikt/ds-react';
+import { Button, HStack, Page, VStack } from '@navikt/ds-react';
 import { ManuellRevurderingV0, SaksInfo } from 'lib/types/types';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
@@ -12,6 +12,7 @@ import { isSuccess } from 'lib/utils/api';
 import { vurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
 import { Kort } from 'components/kort/Kort';
 import { useInnloggetBruker } from 'hooks/BrukerHook';
+import { Alert } from 'components/alert/Alert';
 
 export interface ManuellRevurderingFormFields {
   årsaker: string[];
@@ -107,11 +108,7 @@ export const OpprettRevurdering = ({
             </VStack>
           </Kort>
 
-          {error && (
-            <Alert variant={'error'} size={'small'}>
-              {error}
-            </Alert>
-          )}
+          {error && <Alert variant={'error'}>{error}</Alert>}
 
           <HStack gap="space-16">
             <Button type="submit">Opprett {variant}</Button>

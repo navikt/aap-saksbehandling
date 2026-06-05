@@ -8,7 +8,7 @@ import {
   JaEllerNei,
   JaEllerNeiOptions,
 } from 'lib/utils/form';
-import { Alert, Button, Detail, HStack } from '@navikt/ds-react';
+import { Button, Detail, HStack } from '@navikt/ds-react';
 import {
   FatteVedtakGrunnlag,
   KvalitetssikringGrunnlag,
@@ -31,6 +31,7 @@ import {
   useUmamiStartTidspunkt,
   useUmamiVarighetHendelser,
 } from 'lib/utils/umami';
+import { Alert } from 'components/alert/Alert';
 import { TotrinnsvurderingHastemarkering } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingHastemarkering';
 import { Markering, MarkeringHaster } from 'lib/types/oppgaveTypes';
 import { useFeatureFlag } from 'context/UnleashContext';

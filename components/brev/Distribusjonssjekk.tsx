@@ -1,8 +1,9 @@
-import { Alert, BodyShort, Button, Heading, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, Heading, VStack } from '@navikt/ds-react';
 import { clientKanDistribuereBrev } from 'lib/clientApi';
 import { Mottaker } from 'lib/types/types';
 import { isError } from 'lib/utils/api';
 import { Dispatch, useCallback, useEffect, useState } from 'react';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   readOnly: boolean;
@@ -66,12 +67,12 @@ export const Distribusjonssjekk = ({
   return (
     <>
       {visKanIkkeDistribuereAdvarsel && (
-        <Alert variant={'warning'} size={'small'} className={'fit-content'}>
+        <Alert variant={'warning'} className={'fit-content'}>
           Brevet kan ikke distribueres til alle mottakere. Se rutinebeskrivelse for manuell håndtering.
         </Alert>
       )}
       {distribusjonssjekkFeil && (
-        <Alert variant="error" size="small">
+        <Alert variant="error">
           <Heading level={'3'} size="small">
             Det har oppstått en feil
           </Heading>

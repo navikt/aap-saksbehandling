@@ -3,7 +3,7 @@
 import { CustomExpandableCard } from 'components/customexpandablecard/CustomExpandableCard';
 import { formatDatoMedMånedsnavn } from 'lib/utils/date';
 import { ReactNode, useRef, useState } from 'react';
-import { Alert, BodyShort, Button, HGrid, HStack, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, HGrid, HStack, VStack } from '@navikt/ds-react';
 import { VurdertAvAnsattDetail } from 'components/vurdertav/VurdertAvAnsattDetail';
 import { subDays } from 'date-fns';
 import { TrashFillIcon } from '@navikt/aksel-icons';
@@ -11,6 +11,7 @@ import { VurderingFormMeta } from 'lib/types/types';
 import { SlettVurderingModal } from 'components/periodisering/slettvurderingmodal/SlettVurderingModal';
 import { VurderingStatus, VurderingStatusTag } from 'components/periodisering/VurderingStatusTag';
 import { AccordionsSignal } from 'hooks/AccordionSignalHook';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   initiellEkspandert: boolean;
@@ -80,7 +81,6 @@ export const NyVurderingExpandableCard = ({
             {vurdering.behøverVurdering && (
               <Alert
                 variant={'info'}
-                size={'small'}
               >{`Perioden fra ${fraDato ? formatDatoMedMånedsnavn(fraDato) : ''} mangler vurdering og må vurderes.`}</Alert>
             )}
             {children}

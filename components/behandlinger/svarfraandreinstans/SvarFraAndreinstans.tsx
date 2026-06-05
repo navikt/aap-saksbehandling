@@ -1,7 +1,7 @@
 'use client';
 
 import { Hjemmel, MellomlagretVurdering, SvarFraAndreinstansGrunnlag, SvarKonsekvens } from 'lib/types/types';
-import { Alert, BodyShort, HStack, VStack } from '@navikt/ds-react';
+import { BodyShort, HStack, VStack } from '@navikt/ds-react';
 import { formaterSvartype, formaterUtfall } from 'lib/utils/svarfraandreinstans';
 import { useConfigForm } from 'components/form/FormHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
@@ -14,6 +14,7 @@ import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   grunnlag?: SvarFraAndreinstansGrunnlag;
@@ -174,7 +175,7 @@ export const SvarFraAndreinstans = ({ grunnlag, readOnly, behandlingVersjon, ini
         <FormField form={form} formField={formFields.konsekvens} />
         {konsekvens === 'OMGJØRING' && <FormField form={form} formField={formFields.vilkårSomSkalOmgjøres} />}
         {konsekvens === 'BEHANDLE_PÅ_NYTT' && (
-          <Alert variant={'info'} size={'small'} className={'fit-content'}>
+          <Alert variant={'info'} className={'fit-content'}>
             For å behandle klagen på nytt må du opprette en ny klage manuelt.
           </Alert>
         )}

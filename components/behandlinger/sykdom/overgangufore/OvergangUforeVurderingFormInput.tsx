@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Radio, VStack } from '@navikt/ds-react';
+import { Radio, VStack } from '@navikt/ds-react';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
 import { UseFormReturn } from 'react-hook-form';
@@ -10,6 +10,8 @@ import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupW
 import { JaEllerNei } from 'lib/utils/form';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { formaterDatoForFrontend } from 'lib/utils/date';
+import { Alert } from 'components/alert/Alert';
+
 interface Props {
   index: number;
   form: UseFormReturn<OvergangUforeForm>;
@@ -69,7 +71,7 @@ export const OvergangUforeVurderingFormInput = ({ index, form, readonly, søknad
         readOnly={readonly}
         shouldUnregister
       />
-      <Alert variant={'info'} size={'small'}>
+      <Alert variant={'info'}>
         {søknadsdatoUføretrygd
           ? `Brukeren har søkt om uføretrygd ${formaterDatoForFrontend(søknadsdatoUføretrygd)}`
           : 'Ingen uføresøknad funnet på brukeren'}
@@ -91,7 +93,7 @@ export const OvergangUforeVurderingFormInput = ({ index, form, readonly, søknad
         </RadioGroupWrapper>
       )}
       {brukerHarFattAvslagPaUforetrygd && (
-        <Alert variant="warning" size={'small'}>
+        <Alert variant="warning">
           Hvis bruker har fått avslag på uføretrygd på bakgrunn av § 12-5, så må § 11-6 vurderes til oppfylt fra dato på
           uføretrygdvedtaket.
         </Alert>
@@ -108,13 +110,13 @@ export const OvergangUforeVurderingFormInput = ({ index, form, readonly, søknad
         />
       )}
       {harUforeVedtakEtterSoknad && (
-        <Alert variant={'info'} size={'small'}>
+        <Alert variant={'info'}>
           Hovedregelen er at datoen vurderingen gjelder fra er virkningstidspunktet for uføretrygd. Sjekk
           posteringsgrunnlaget og Kelvin-rutinen for mer informasjon.
         </Alert>
       )}
       {venterPaUforeVedtakMenHarAAP && (
-        <Alert variant={'info'} size={'small'}>
+        <Alert variant={'info'}>
           Pass på at datoen vurderingen gjelder fra er samme som søknadsdato om uføretrygd.
         </Alert>
       )}

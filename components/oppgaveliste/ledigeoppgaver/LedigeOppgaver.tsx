@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import useSWR from 'swr';
-import { Alert, BodyShort, Box, Button, HStack, Label, Switch, VStack } from '@navikt/ds-react';
+import { BodyShort, Box, Button, HStack, Label, Switch, VStack } from '@navikt/ds-react';
 import { KøSelect } from 'components/oppgaveliste/køselect/KøSelect';
 import { queryParamsArray } from 'lib/utils/request';
 import { Enhet } from 'lib/types/oppgaveTypes';
@@ -32,6 +32,7 @@ import { useBackendSortering } from 'hooks/oppgave/BackendSorteringHook';
 import { LedigeOppgaverFiltrering } from 'components/oppgaveliste/filtrering/ledigeoppgaverfiltrering/LedigeOppgaverFiltrering';
 import { ValuePair } from 'components/form/FormField';
 import { useInnloggetBruker } from 'hooks/BrukerHook';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   enheter: Enhet[];
