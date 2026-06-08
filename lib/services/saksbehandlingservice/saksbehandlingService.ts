@@ -644,13 +644,6 @@ export const hentForhåndsvisningBrev = async (brevbestillingReferanse: string):
   );
 };
 
-export const hentForhåndsvisningBrevHtml = async (brevbestillingReferanse: string): Promise<Response> => {
-  return apiFetchPdf(
-    `${saksbehandlingApiBaseUrl}/api/brev/${brevbestillingReferanse}/forhandsvis-html`,
-    saksbehandlingApiScope
-  );
-};
-
 export const hentBrevmalPreview = async (brevbestillingReferanse: string) => {
   return apiFetchPdf(
     `${saksbehandlingApiBaseUrl}/api/brev/${brevbestillingReferanse}/brevmal-preview`,
