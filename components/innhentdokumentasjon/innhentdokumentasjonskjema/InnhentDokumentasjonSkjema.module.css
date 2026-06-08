@@ -4,3 +4,23 @@
   gap: var(--ax-space-16);
   margin-top: var(--ax-space-16);
 }
+
+.behandlerValgGruppe :global(.aksel-radio-buttons) {
+  border: 1px solid var(--ax-border-neutral);
+  border-radius: var(--ax-radius-8);
+  overflow: hidden;
+}
+
+.behandlerValgGruppe :global(.aksel-radio) {
+  width: 100%;
+  padding: var(--ax-space-12) var(--ax-space-16);
+  border-bottom: 1px solid var(--ax-border-neutral);
+}
+
+.behandlerValgGruppe :global(.aksel-radio):last-child {
+  border-bottom: none;
+}
+
+.behandlerValgDetaljer {
+  color: var(--ax-text-neutral-subtle);
+}

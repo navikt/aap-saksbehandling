@@ -1,4 +1,4 @@
-import { BodyShort, Button, Heading, Link } from '@navikt/ds-react';
+import { BodyShort, Button, Heading, Link, Radio } from '@navikt/ds-react';
 import { SubmitEventHandler, useState } from 'react';
 
 import styles from './InnhentDokumentasjonSkjema.module.css';
@@ -9,6 +9,7 @@ import { Forhåndsvisning } from 'components/innhentdokumentasjon/innhentdokumen
 import { AsyncComboSearch } from 'components/form/asynccombosearch/AsyncComboSearch';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
+import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { isError, isSuccess } from 'lib/utils/api';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { useFeatureFlag } from 'context/UnleashContext';
@@ -80,25 +81,11 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
 
   const fastlegeDto = isSuccess(fastlege) ? fastlege.data.fastlege : undefined;
 
-  const behandlerValgOptions = fastlegeDto
-    ? [
-        {
-          label: `${fastlegeDto.navn}${fastlegeDto.kontor ? ` – ${fastlegeDto.kontor}` : ''}`,
-          value: 'fastlege',
-          description: fastlegeDto.adresse
-            ? [fastlegeDto.adresse, fastlegeDto.postnummer, fastlegeDto.poststed].filter(Boolean).join(', ')
-            : undefined,
-        },
-        { label: 'Søk opp annen behandler', value: 'søk' },
-      ]
-    : [];
-
   const { form, formFields } = useConfigForm<FormFields>({
     behandlerValg: {
       type: 'radio',
-      label: 'Velg behandler som skal motta meldingen',
-      options: behandlerValgOptions,
-      rules: { required: 'Du må velge en behandler' },
+      label: 'Velg behandler',
+      options: [],
     },
     behandler: {
       type: 'async_combobox',
@@ -199,7 +186,29 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
       <form onSubmit={handleSubmit} className={'flex-column'} autoComplete={'off'}>
         {fastlegeDto ? (
           <>
-            <FormField form={form} formField={formFields.behandlerValg} />
+            <RadioGroupWrapper
+              name={'behandlerValg'}
+              control={form.control}
+              label={'Velg behandler'}
+              rules={{ required: 'Du må velge en behandler' }}
+              size={'small'}
+              className={styles.behandlerValgGruppe}
+            >
+              <Radio value={'fastlege'}>
+                <div>{fastlegeDto.navn}</div>
+                <div className={styles.behandlerValgDetaljer}>
+                  {fastlegeDto.kontor && <div>Kontor: {fastlegeDto.kontor}</div>}
+                  {fastlegeDto.adresse && (
+                    <div>
+                      Adresse:{' '}
+                      {[fastlegeDto.adresse, fastlegeDto.postnummer, fastlegeDto.poststed].filter(Boolean).join(', ')}
+                    </div>
+                  )}
+                  {fastlegeDto.telefon && <div>Telefon: {fastlegeDto.telefon}</div>}
+                </div>
+              </Radio>
+              <Radio value={'søk'}>Annen behandler</Radio>
+            </RadioGroupWrapper>
             {behandlerValg === 'søk' && (
               <AsyncComboSearch
                 label={'Velg behandler'}
