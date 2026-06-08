@@ -644,11 +644,10 @@ export const hentForhåndsvisningBrev = async (brevbestillingReferanse: string):
   );
 };
 
+// TODO bør types
 export const hentBrevmalPreview = async (brevbestillingReferanse: string) => {
-  return apiFetchPdf(
-    `${saksbehandlingApiBaseUrl}/api/brev/${brevbestillingReferanse}/brevmal-preview`,
-    saksbehandlingApiScope
-  );
+  const url = `${saksbehandlingApiBaseUrl}/api/brev/${brevbestillingReferanse}/brevmal-preview`;
+  return await apiFetch(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentOppfølgingsoppgaveGrunnlag = async (behandlingsreferanse: string) => {

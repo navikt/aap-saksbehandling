@@ -52,7 +52,7 @@ export function useMellomlagringAvBrev({ referanse, control, brevmal, brevdata }
           );
           // .json er feltnavnet responsen, som er en json-string, ligger i.
           // Kommer fra endepunktet i behandlingsflyt og bør nok endres til noe som gir litt mer mening der
-          setBrevPreview(JSON.parse(response.json));
+          setBrevPreview(JSON.parse(response.data.json));
         }
       } finally {
         setLasterHtml(false);
