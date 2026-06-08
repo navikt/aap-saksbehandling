@@ -4,15 +4,17 @@ import { SubmitEventHandler, useState } from 'react';
 import styles from './InnhentDokumentasjonSkjema.module.css';
 import { BestillLegeerklæring } from 'lib/types/types';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { clientBestillDialogmelding, clientSøkPåBehandler } from 'lib/clientApi';
+import { clientBestillDialogmelding, clientHentFastlege, clientSøkPåBehandler } from 'lib/clientApi';
 import { Forhåndsvisning } from 'components/innhentdokumentasjon/innhentdokumentasjonskjema/Forhåndsvisning';
 import { AsyncComboSearch } from 'components/form/asynccombosearch/AsyncComboSearch';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
-import { isError } from 'lib/utils/api';
+import { isError, isSuccess } from 'lib/utils/api';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { useFeatureFlag } from 'context/UnleashContext';
 import { Alert } from 'components/alert/Alert';
+import useSWR from 'swr';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 export type Behandler = {
   type?: string;
@@ -31,6 +33,7 @@ export type Behandler = {
 };
 
 type FormFields = {
+  behandlerValg: 'fastlege' | 'søk';
   behandler: ValuePair;
   dokumentasjonstype: 'L8' | 'L40';
   melding: string;
@@ -55,6 +58,12 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
   const [defaultOptions, setDefaultOptions] = useState<ValuePair[]>([]);
   const { saksnummer, behandlingsreferanse } = useParamsMedType();
 
+  const skalHenteFastlege = useFeatureFlag('HentFastlege');
+
+  const { data: fastlege } = useSWR(`api/dokumentinnhenting/behandleroppslag/fastlege/${saksnummer}`, () =>
+    skalHenteFastlege ? clientHentFastlege(saksnummer) : undefined
+  );
+
   const skalViseDialogmeldingOption = useFeatureFlag('VisValgForDialogmelding');
   const optionsForTypeDokumentasjon = skalViseDialogmeldingOption
     ? [
@@ -69,7 +78,28 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
         { label: 'Legeerklæring ved arbeidsuførhet (L40)', value: 'L40' },
       ];
 
+  const fastlegeDto = isSuccess(fastlege) ? fastlege.data.fastlege : undefined;
+
+  const behandlerValgOptions = fastlegeDto
+    ? [
+        {
+          label: `${fastlegeDto.navn}${fastlegeDto.kontor ? ` – ${fastlegeDto.kontor}` : ''}`,
+          value: 'fastlege',
+          description: fastlegeDto.adresse
+            ? [fastlegeDto.adresse, fastlegeDto.postnummer, fastlegeDto.poststed].filter(Boolean).join(', ')
+            : undefined,
+        },
+        { label: 'Søk opp annen behandler', value: 'søk' },
+      ]
+    : [];
+
   const { form, formFields } = useConfigForm<FormFields>({
+    behandlerValg: {
+      type: 'radio',
+      label: 'Velg behandler som skal motta meldingen',
+      options: behandlerValgOptions,
+      rules: { required: 'Du må velge en behandler' },
+    },
     behandler: {
       type: 'async_combobox',
     },
@@ -88,23 +118,33 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
 
   const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit(async (data) => {
+      const isFastlegeValgt = fastlegeDto && data.behandlerValg === 'fastlege';
+      const behandlerNavn = isFastlegeValgt
+        ? `${fastlegeDto.navn}${fastlegeDto.kontor ? ` – ${fastlegeDto.kontor}` : ''}`
+        : data.behandler.label;
+      const behandlerRef = isFastlegeValgt ? fastlegeDto.behandlerRef : data.behandler.value.split('::')[0];
+      const behandlerHprNr = isFastlegeValgt
+        ? fastlegeDto.hprId
+        : data.behandler.value.split('::')[1];
+
+      const manglerHprNr =
+        !behandlerHprNr || behandlerHprNr === 'null';
+
+      if (manglerHprNr) {
+        setError(': Mangler HPR-nr på behandler');
+        return;
+      }
+
       const body: BestillLegeerklæring = {
-        behandlerNavn: data.behandler.label,
-        behandlerRef: data.behandler.value.split('::')[0],
-        behandlerHprNr: data.behandler.value.split('::')[1],
+        behandlerNavn,
+        behandlerRef,
+        behandlerHprNr,
         dokumentasjonType: data.dokumentasjonstype,
         fritekst: data.melding,
         saksnummer: saksnummer,
         behandlingsReferanse: behandlingsreferanse,
       };
 
-      const manglerHprNr =
-        body.behandlerHprNr === undefined || body.behandlerHprNr === null || body.behandlerHprNr === 'null';
-
-      if (manglerHprNr) {
-        setError(': Mangler HPR-nr på behandler');
-        return;
-      }
       setIsLoading(true);
       const result = await clientBestillDialogmelding(body).finally(() => setIsLoading(false));
 
@@ -139,6 +179,8 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
     return res;
   };
 
+  const behandlerValg = form.watch('behandlerValg');
+
   return (
     <div className={'flex-column'}>
       <Heading level={'3'} size={'small'}>
@@ -153,16 +195,35 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
         <BodyShort size={'small'}>Rutiner for innhenting av helseopplysninger</BodyShort>
         <ExternalLinkIcon />
       </Link>
+      {isError(fastlege) ? <ApiException apiResponses={[fastlege]} /> : null}
       <form onSubmit={handleSubmit} className={'flex-column'} autoComplete={'off'}>
-        <AsyncComboSearch
-          label={'Velg behandler som skal motta meldingen'}
-          form={form}
-          name={'behandler'}
-          fetcher={behandlersøk}
-          rules={{ required: 'Du må velge en behandler' }}
-          size={'small'}
-          defaultOptions={defaultOptions}
-        />
+        {fastlegeDto ? (
+          <>
+            <FormField form={form} formField={formFields.behandlerValg} />
+            {behandlerValg === 'søk' && (
+              <AsyncComboSearch
+                label={'Velg behandler'}
+                hideLabel
+                form={form}
+                name={'behandler'}
+                fetcher={behandlersøk}
+                rules={{ required: 'Du må velge en behandler' }}
+                size={'small'}
+                defaultOptions={defaultOptions}
+              />
+            )}
+          </>
+        ) : (
+          <AsyncComboSearch
+            label={'Velg behandler som skal motta meldingen'}
+            form={form}
+            name={'behandler'}
+            fetcher={behandlersøk}
+            rules={{ required: 'Du må velge en behandler' }}
+            size={'small'}
+            defaultOptions={defaultOptions}
+          />
+        )}
         <FormField form={form} formField={formFields.dokumentasjonstype} />
         <FormField form={form} formField={formFields.melding} />
         <div className={styles.rad}>
