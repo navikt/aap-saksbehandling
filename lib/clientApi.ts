@@ -8,6 +8,7 @@ import {
   BestillLegeerklæring,
   Brev,
   BrevdataDto,
+  FastlegeResponse,
   ForhåndsvisDialogmelding,
   ForhåndsvisDialogmeldingResponse,
   KanDistribuereBrevRequest,
@@ -127,6 +128,10 @@ export function clientSøkPåBehandler(fritekst: string, saksnummer: string) {
     fritekst: fritekst,
     saksnummer: saksnummer,
   });
+}
+
+export function clientHentFastlege(saksnummer: string) {
+  return clientFetch<FastlegeResponse>(`${BASE_URL}/api/dokumentinnhenting/behandleroppslag/fastlege/${saksnummer}`, 'GET');
 }
 
 export function clientHentFlyt(behandlingsreferanse: string) {

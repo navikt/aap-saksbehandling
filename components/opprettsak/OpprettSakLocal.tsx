@@ -315,6 +315,12 @@ export const OpprettSakLocal = () => {
         fengsel: data?.institusjon?.includes('fengsel'),
       },
       medlemskap: data.medlemskap === JaEllerNei.Ja,
+      fastlege: {
+        harFastlege: true,
+        harEndretFastlege: false,
+        varFastlegeRiktigPåSøknadstidspunkt: true,
+        harOppgittAndreBehandlere: true,
+      },
       inntekterPerAr:
         data.inntekter?.map((inntekt) => ({
           år: Number(inntekt.år),

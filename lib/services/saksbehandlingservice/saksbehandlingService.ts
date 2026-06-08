@@ -27,6 +27,7 @@ import {
   BrevGrunnlag,
   DetaljertBehandling,
   EtableringEgenVirksomhetGrunnlagResponse,
+  FastlegeResponse,
   FatteVedtakGrunnlag,
   FlytProsessering,
   ForeløpigBehandlingsutfall,
@@ -570,6 +571,11 @@ export const forberedBehandlingOgVentPåProsessering = async (
 export const hentAlleDialogmeldingerPåSak = async (saksnummer: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/syfo/status/${saksnummer}`;
   return await apiFetch<LegeerklæringStatus[]>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentFastlege = async (saksnummer: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/syfo/fastlege/${saksnummer}`;
+  return await apiFetch<FastlegeResponse[]>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const bestillDialogmelding = async (requestBody: BestillLegeerklæring) => {
