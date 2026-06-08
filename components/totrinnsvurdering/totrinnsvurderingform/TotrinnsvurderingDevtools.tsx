@@ -1,10 +1,12 @@
 import { Box, Button, Heading, VStack } from '@navikt/ds-react';
 import { UseFormReturn } from 'react-hook-form';
 import { FormFieldsToTrinnsVurdering } from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingForm';
-import { isLocal } from 'lib/utils/environment';
+import { isLocal, isProd } from 'lib/utils/environment';
 import { JaEllerNei } from 'lib/utils/form';
 
 export const TotrinnsvurderingDevtools = ({ form }: { form: UseFormReturn<FormFieldsToTrinnsVurdering> }) => {
+  if (isProd()) return null;
+
   function godkjennAlle() {
     if (isLocal()) {
       const vurderinger = form.getValues('totrinnsvurderinger');
@@ -27,9 +29,9 @@ export const TotrinnsvurderingDevtools = ({ form }: { form: UseFormReturn<FormFi
   }
 
   return (
-    <Box padding="space-8" borderColor="neutral-subtle" borderWidth="1" background="danger-softA">
+    <Box padding="space-8" borderColor="neutral-subtle" borderWidth="1" background="danger-softA" borderRadius="8">
       <Heading size="xsmall" spacing>
-        Devtools
+        Utviklerverktøy
       </Heading>
       <VStack gap="space-8">
         <Button
