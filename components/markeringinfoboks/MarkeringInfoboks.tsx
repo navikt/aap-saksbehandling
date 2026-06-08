@@ -3,7 +3,7 @@ import { BodyShort, Button, Detail, HStack, Popover, Tag, VStack } from '@navikt
 import styles from './MarkeringInfoBoks.module.css';
 import { clientFjernMarkeringForBehandling } from 'lib/clientApi';
 import { Markering, MarkeringType } from 'lib/types/oppgaveTypes';
-import { BandageIcon, BookIcon, ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
+import { BookIcon, ExclamationmarkTriangleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType } from '@navikt/aap-oppgave-typescript-types';
 import { isSuccess } from 'lib/utils/api';
 import { formaterDatoForFrontend } from 'lib/utils/date';
@@ -117,7 +117,7 @@ export function ikonForMarkeringType(type: MarkeringType) {
     case 'KREVER_SPESIALKOMPETANSE':
       return <BookIcon />;
     case 'AVSLAG_11_5':
-      return <BandageIcon />;
+      return <XMarkOctagonIcon />;
   }
 }
 
