@@ -199,16 +199,21 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
               }
             >
               <Radio value={'fastlege'}>
-                <div>{fastlegeDto.navn}</div>
-                <div className={styles.behandlerValgDetaljer}>
-                  {fastlegeDto.kontor && <div>Kontor: {fastlegeDto.kontor}</div>}
-                  {fastlegeDto.adresse && (
-                    <div>
-                      Adresse:{' '}
-                      {[fastlegeDto.adresse, fastlegeDto.postnummer, fastlegeDto.poststed].filter(Boolean).join(', ')}
+                <div className={styles.fastlegeRadioInnhold}>
+                  <div>
+                    <div>{fastlegeDto.navn}</div>
+                    <div className={styles.behandlerValgDetaljer}>
+                      {fastlegeDto.kontor && <div>Kontor: {fastlegeDto.kontor}</div>}
+                      {fastlegeDto.adresse && (
+                        <div>
+                          Adresse:{' '}
+                          {[fastlegeDto.adresse, fastlegeDto.postnummer, fastlegeDto.poststed].filter(Boolean).join(', ')}
+                        </div>
+                      )}
+                      {fastlegeDto.telefon && <div>Telefon: {fastlegeDto.telefon}</div>}
                     </div>
-                  )}
-                  {fastlegeDto.telefon && <div>Telefon: {fastlegeDto.telefon}</div>}
+                  </div>
+                  <div className={styles.fastlegeEtikett}>Registrert fastlege</div>
                 </div>
               </Radio>
               <Radio value={'søk'}>Annen behandler</Radio>

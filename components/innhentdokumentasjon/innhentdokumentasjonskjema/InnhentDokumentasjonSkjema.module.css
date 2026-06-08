@@ -41,3 +41,15 @@
 .behandlerValgDetaljer {
   color: var(--ax-text-neutral-subtle);
 }
+
+.fastlegeRadioInnhold {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--ax-space-16);
+  width: 100%;
+}
+
+.fastlegeEtikett {
+  color: var(--ax-text-neutral-subtle);
+  white-space: nowrap;
+}
