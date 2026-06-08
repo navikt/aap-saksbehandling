@@ -252,7 +252,7 @@ export enum JaNeiEllerForbigåendeTekst {
   Ja = 'Ja',
   Nei = 'Nei',
   Forbigående = 'Ja, men brukeren har kun forbigående problemer med å komme i arbeid og skal vurderes for AAP som sykepengeerstatning etter § 11-13',
-  NeiMenStudent = 'Nei, men brukeren er student',
+  NeiMenStudent = 'Nei, men brukeren har avbrutt et studie på grunn av sykdom eller skade og skal vurderes for AAP til studenter etter § 11-14',
 }
 
 export function getJaNeiJaForbigåendeEllerIkkeBesvart(value?: ArbeidsevneNedsattValg | null) {

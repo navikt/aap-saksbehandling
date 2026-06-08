@@ -124,10 +124,10 @@ export const SykdomsvurderingFormInput = ({
           >
             <Radio value={'JA'}>{JaNeiEllerForbigåendeTekst.Ja}</Radio>
             <Radio value={'JA_FORBIGÅENDE_PROBLEMER'}>{JaNeiEllerForbigåendeTekst.Forbigående}</Radio>
-            <Radio value={'NEI'}>{JaNeiEllerForbigåendeTekst.Nei}</Radio>
             {skalViseNeiMenStudent && (
               <Radio value={'NEI_MEN_STUDENT'}>{JaNeiEllerForbigåendeTekst.NeiMenStudent}</Radio>
             )}
+            <Radio value={'NEI'}>{JaNeiEllerForbigåendeTekst.Nei}</Radio>
           </RadioGroupWrapper>
           {form.watch(`vurderinger.${index}.harNedsattArbeidsevne`) === 'NEI' && (
             <Alert variant={'info'} size={'small'} className={'fit-content'}>
