@@ -39,6 +39,7 @@ import { useFeatureFlag } from 'context/UnleashContext';
 import { clientFjernMarkeringForBehandling } from 'lib/clientApi';
 import { isLocal } from 'lib/utils/environment';
 import { TotrinnsvurderingDevtools } from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingDevtools';
+import { clientMottattDokumenterLest } from 'lib/oppgaveClientApi';
 
 interface Props {
   grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;
@@ -187,7 +188,10 @@ export const TotrinnsvurderingForm = ({
             );
             if (!erKvalitetssikring) {
               loggUmamiVarighetHendelser(varighetHendelseRef.current, hendelseSerieRef.current);
+            } else {
+              clientMottattDokumenterLest(behandlingsreferanse);
             }
+
             nullstillMellomlagretVurdering();
           }
         );
