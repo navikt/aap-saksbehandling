@@ -207,7 +207,12 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
                       {fastlegeDto.adresse && (
                         <div>
                           Adresse:{' '}
-                          {[fastlegeDto.adresse, fastlegeDto.postnummer, fastlegeDto.poststed].filter(Boolean).join(', ')}
+                          {[
+                            fastlegeDto.adresse,
+                            [fastlegeDto.postnummer, fastlegeDto.poststed].filter(Boolean).join(' '),
+                          ]
+                            .filter(Boolean)
+                            .join(', ')}
                         </div>
                       )}
                       {fastlegeDto.telefon && <div>Telefon: {fastlegeDto.telefon}</div>}
