@@ -5,10 +5,27 @@
   margin-top: var(--ax-space-16);
 }
 
+.behandlerValgGruppe {
+  margin-bottom: 0;
+}
+
 .behandlerValgGruppe :global(.aksel-radio-buttons) {
   border: 1px solid var(--ax-border-neutral);
   border-radius: var(--ax-radius-8);
-  overflow: hidden;
+}
+
+.behandlerValgÅpen :global(.aksel-radio-buttons) {
+  border-bottom: none;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.annenBehandlerSøk {
+  border: 1px solid var(--ax-border-neutral);
+  border-top: none;
+  border-bottom-left-radius: var(--ax-radius-8);
+  border-bottom-right-radius: var(--ax-radius-8);
+  padding: var(--ax-space-12) var(--ax-space-16);
 }
 
 .behandlerValgGruppe :global(.aksel-radio) {

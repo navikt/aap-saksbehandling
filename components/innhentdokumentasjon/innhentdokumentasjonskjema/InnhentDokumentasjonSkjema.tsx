@@ -185,14 +185,18 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
       {isError(fastlege) ? <ApiException apiResponses={[fastlege]} /> : null}
       <form onSubmit={handleSubmit} className={'flex-column'} autoComplete={'off'}>
         {fastlegeDto ? (
-          <>
+          <div>
             <RadioGroupWrapper
               name={'behandlerValg'}
               control={form.control}
               label={'Velg behandler'}
               rules={{ required: 'Du må velge en behandler' }}
               size={'small'}
-              className={styles.behandlerValgGruppe}
+              className={
+                behandlerValg === 'søk'
+                  ? `${styles.behandlerValgGruppe} ${styles.behandlerValgÅpen}`
+                  : styles.behandlerValgGruppe
+              }
             >
               <Radio value={'fastlege'}>
                 <div>{fastlegeDto.navn}</div>
@@ -210,18 +214,19 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
               <Radio value={'søk'}>Annen behandler</Radio>
             </RadioGroupWrapper>
             {behandlerValg === 'søk' && (
-              <AsyncComboSearch
-                label={'Velg behandler'}
-                hideLabel
-                form={form}
-                name={'behandler'}
-                fetcher={behandlersøk}
-                rules={{ required: 'Du må velge en behandler' }}
-                size={'small'}
-                defaultOptions={defaultOptions}
-              />
+              <div className={styles.annenBehandlerSøk}>
+                <AsyncComboSearch
+                  label={'Søk etter behandler'}
+                  form={form}
+                  name={'behandler'}
+                  fetcher={behandlersøk}
+                  rules={{ required: 'Du må velge en behandler' }}
+                  size={'small'}
+                  defaultOptions={defaultOptions}
+                />
+              </div>
             )}
-          </>
+          </div>
         ) : (
           <AsyncComboSearch
             label={'Velg behandler som skal motta meldingen'}
