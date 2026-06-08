@@ -1,4 +1,4 @@
-import { BodyShort, Button, Heading, Link, Radio } from '@navikt/ds-react';
+import { BodyShort, Button, Heading, InlineMessage, Link, Radio } from '@navikt/ds-react';
 import { SubmitEventHandler, useState } from 'react';
 
 import styles from './InnhentDokumentasjonSkjema.module.css';
@@ -79,7 +79,8 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
         { label: 'Legeerklæring ved arbeidsuførhet (L40)', value: 'L40' },
       ];
 
-  const fastlegeDto = isSuccess(fastlege) ? fastlege.data.fastlege : undefined;
+  const fastlegeResponse = isSuccess(fastlege) ? fastlege.data : undefined;
+  const fastlegeDto = fastlegeResponse?.fastlege;
 
   const { form, formFields } = useConfigForm<FormFields>({
     behandlerValg: {
@@ -110,12 +111,9 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
         ? `${fastlegeDto.navn}${fastlegeDto.kontor ? ` – ${fastlegeDto.kontor}` : ''}`
         : data.behandler.label;
       const behandlerRef = isFastlegeValgt ? fastlegeDto.behandlerRef : data.behandler.value.split('::')[0];
-      const behandlerHprNr = isFastlegeValgt
-        ? fastlegeDto.hprId
-        : data.behandler.value.split('::')[1];
+      const behandlerHprNr = isFastlegeValgt ? fastlegeDto.hprId : data.behandler.value.split('::')[1];
 
-      const manglerHprNr =
-        !behandlerHprNr || behandlerHprNr === 'null';
+      const manglerHprNr = !behandlerHprNr || behandlerHprNr === 'null';
 
       if (manglerHprNr) {
         setError(': Mangler HPR-nr på behandler');
@@ -216,6 +214,12 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
                         </div>
                       )}
                       {fastlegeDto.telefon && <div>Telefon: {fastlegeDto.telefon}</div>}
+                      {!fastlegeResponse.varFastlegeRiktigPåSøknadstidspunkt &&
+                        !fastlegeResponse.erFastlegeEndretSidenSøknadstidspunkt && (
+                          <InlineMessage status="warning">
+                            Bruker oppgir i søknaden at informasjon om fastlegen ikke er riktig
+                          </InlineMessage>
+                        )}
                     </div>
                   </div>
                   <div className={styles.fastlegeEtikett}>Registrert fastlege</div>
