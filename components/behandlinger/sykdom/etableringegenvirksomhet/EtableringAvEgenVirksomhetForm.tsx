@@ -137,10 +137,8 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly, gru
                 ) : null}
               </VStack>
             </VStack>
-            {form.formState.errors.vurderinger?.[index]?.utviklingsperioder && (
-              <Alert variant={'error'}>
-                {form.formState.errors.vurderinger[index].utviklingsperioder.message}
-              </Alert>
+            {form.formState.errors.vurderinger?.[index]?.utviklingsperioder?.message && (
+              <Alert variant={'error'}>{form.formState.errors.vurderinger[index].utviklingsperioder.message}</Alert>
             )}
             <VStack gap={'space-16'}>
               <Table size="small">
@@ -228,10 +226,8 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly, gru
                 ) : null}
               </VStack>
             </VStack>
-            {form.formState.errors.vurderinger?.[index]?.oppstartsperioder && (
-              <Alert variant={'error'}>
-                {form.formState.errors.vurderinger[index].oppstartsperioder.message}
-              </Alert>
+            {form.formState.errors.vurderinger?.[index]?.oppstartsperioder?.message && (
+              <Alert variant={'error'}>{form.formState.errors.vurderinger[index].oppstartsperioder.message}</Alert>
             )}
             <VStack gap={'space-16'}>
               <Table size="small">

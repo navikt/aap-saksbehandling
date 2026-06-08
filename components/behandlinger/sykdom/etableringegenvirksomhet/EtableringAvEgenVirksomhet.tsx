@@ -99,12 +99,12 @@ export const EtableringAvEgenVirksomhet = ({
     form.handleSubmit((data) => {
       // Må finnes minst en oppstart eller utviklingsperiode hvis vilkår er oppfylt
       let validerTidsplan = true;
-      data.vurderinger.forEach((vurdering, index) => {
+      data.vurderinger.forEach((vurdering) => {
         const erOppfylt = nyVurderingErOppfylt(vurdering);
         if (erOppfylt) {
           if (vurdering.utviklingsperioder?.length === 0 && vurdering.oppstartsperioder?.length === 0) {
             validerTidsplan = false;
-            form.setError(`vurderinger.${index}.utviklingsperioder`, {
+            form.setError('root', {
               type: 'custom',
               message: 'Det må være minst en periode lagt i oppstartperiode eller uviklingsperiode',
             });
@@ -116,7 +116,7 @@ export const EtableringAvEgenVirksomhet = ({
       const utviklingsperioderDuration = summerPerioderVarighetIArbeidsdager(alleUtviklingsperioder);
       if (utviklingsperioderDuration > 131) {
         validerTidsplan = false;
-        form.setError(`vurderinger`, {
+        form.setError('root', {
           type: 'custom',
           message: `Utviklingsfase kan ikke være lengre enn 6 mnd. Du legger til ${utviklingsperioderDuration} arbeidsdager. Maks antall dager totalt er 131.`,
         });
@@ -127,7 +127,7 @@ export const EtableringAvEgenVirksomhet = ({
       const oppstartsperioderDuration = summerPerioderVarighetIArbeidsdager(alleOppstartsperioder);
       if (oppstartsperioderDuration > 66) {
         validerTidsplan = false;
-        form.setError(`vurderinger`, {
+        form.setError('root', {
           type: 'custom',
           message: `Oppstartsfase kan ikke være lengre enn 3 mnd. Du legger til ${oppstartsperioderDuration} arbeidsdager. Maks antall dager totalt er 66.`,
         });
@@ -250,9 +250,7 @@ export const EtableringAvEgenVirksomhet = ({
             />
           </NyVurderingExpandableCard>
         ))}
-        {form.formState.errors.vurderinger && (
-          <Alert variant={'error'}>{form.formState.errors.vurderinger.message}</Alert>
-        )}
+        {form.formState.errors.root && <Alert variant={'error'}>{form.formState.errors.root.message}</Alert>}
       </VStack>
     </VilkårskortPeriodisert>
   );
