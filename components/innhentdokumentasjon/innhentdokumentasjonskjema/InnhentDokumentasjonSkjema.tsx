@@ -1,4 +1,4 @@
-import { BodyShort, Button, Heading, InlineMessage, Link, Radio } from '@navikt/ds-react';
+import { BodyShort, Button, Heading, InlineMessage, InfoCard, Link, Radio, VStack } from '@navikt/ds-react';
 import { SubmitEventHandler, useState } from 'react';
 
 import styles from './InnhentDokumentasjonSkjema.module.css';
@@ -11,7 +11,7 @@ import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { isError, isSuccess } from 'lib/utils/api';
-import { ExternalLinkIcon } from '@navikt/aksel-icons';
+import { ExternalLinkIcon, InformationSquareIcon } from '@navikt/aksel-icons';
 import { useFeatureFlag } from 'context/UnleashContext';
 import { Alert } from 'components/alert/Alert';
 import useSWR from 'swr';
@@ -252,6 +252,35 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
             defaultOptions={defaultOptions}
           />
         )}
+        {fastlegeResponse?.andreBehandlereFraSøknad?.map((behandler, index) => (
+          <InfoCard key={index} data-color={'info'} size={'small'} as={'section'}>
+            <InfoCard.Header icon={<InformationSquareIcon />}>
+              <InfoCard.Title>Behandler oppgitt i søknaden</InfoCard.Title>
+            </InfoCard.Header>
+            <InfoCard.Content>
+              <VStack>
+                {behandler.navn && <BodyShort size={'small'}>{behandler.navn}</BodyShort>}
+                {behandler.legekontor && (
+                  <BodyShort size={'small'}>Kontor: {behandler.legekontor}</BodyShort>
+                )}
+                {behandler.adresse && (
+                  <BodyShort size={'small'}>
+                    Adresse:{' '}
+                    {[
+                      behandler.adresse,
+                      [behandler.postnummer, behandler.poststed].filter(Boolean).join(' '),
+                    ]
+                      .filter(Boolean)
+                      .join(', ')}
+                  </BodyShort>
+                )}
+                {behandler.telefon && (
+                  <BodyShort size={'small'}>Telefon: {behandler.telefon}</BodyShort>
+                )}
+              </VStack>
+            </InfoCard.Content>
+          </InfoCard>
+        ))}
         <FormField form={form} formField={formFields.dokumentasjonstype} />
         <FormField form={form} formField={formFields.melding} />
         <div className={styles.rad}>
