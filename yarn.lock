@@ -1589,10 +1589,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aap-oppgave-typescript-types@npm:0.0.787":
-  version: 0.0.787
-  resolution: "@navikt/aap-oppgave-typescript-types@npm:0.0.787::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-oppgave-typescript-types%2F0.0.787%2F0d8996fda98788a644275ef0c159e33d5f942aad"
-  checksum: 10c0/0fae3c5dba64cc438944f53dfa859fa1679ec469ef70ee690e993aaadd79e17c9accd53fb1ab918992ba48e309002b4063675c0b6b3edc86549e19d94db34d2d
+"@navikt/aap-oppgave-typescript-types@npm:0.0.791":
+  version: 0.0.791
+  resolution: "@navikt/aap-oppgave-typescript-types@npm:0.0.791::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-oppgave-typescript-types%2F0.0.791%2F9fe7ca693e1e28d1d8fa7b60375101ad57c55318"
+  checksum: 10c0/27139ac97595617e2a0077219943b3a2a0d733088a5ff0a30408dfcbb554e0784994d471b44e8fde4279a9b254947a96f8d9e1c2226b6ac083f59b0bb0ff1301
   languageName: node
   linkType: hard
 
@@ -3060,7 +3060,7 @@ __metadata:
     "@navikt/aap-breveditor": "npm:0.13.0"
     "@navikt/aap-breveditor-css": "npm:0.6.0"
     "@navikt/aap-felles-prettier": "npm:5.6.3"
-    "@navikt/aap-oppgave-typescript-types": "npm:0.0.787"
+    "@navikt/aap-oppgave-typescript-types": "npm:0.0.791"
     "@navikt/aap-postmottak-backend-typescript-types": "npm:0.0.730"
     "@navikt/aksel": "npm:8.11.1"
     "@navikt/aksel-icons": "npm:8.11.1"
