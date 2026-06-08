@@ -35,7 +35,13 @@ export const FastsettManuellInntektTabell = ({ tabellår, form, readOnly, låstV
         <Table.Body data-testid={'inntektstabell'}>
           {tabellår.map((år, index) => {
             const ferdigLignetPGI = låstVisning ? år.ferdigLignetPGI : form.watch(`tabellår.${index}.ferdigLignetPGI`);
-            const beregnetPGI = låstVisning ? år.beregnetPGI : form.watch(`tabellår.${index}.beregnetPGI`);
+            let beregnetPGI;
+            // Ferdig lignet PGI fra POPP skal alltid overstyre manuell PGI
+            if (ferdigLignetPGI) {
+              form.setValue(`tabellår.${index}.beregnetPGI`, '');
+            } else {
+              beregnetPGI = låstVisning ? år.beregnetPGI : form.watch(`tabellår.${index}.beregnetPGI`);
+            }
             const eøsInntekt = låstVisning ? år.eøsInntekt : form.watch(`tabellår.${index}.eøsInntekt`);
             return (
               <Table.Row key={år.år}>
