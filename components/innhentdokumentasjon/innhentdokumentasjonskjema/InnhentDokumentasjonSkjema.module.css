@@ -42,6 +42,10 @@
   color: var(--ax-text-neutral-subtle);
 }
 
+.fastlegeRadioAdvarsel {
+  margin-block: var(--ax-space-6);
+}
+
 .fastlegeRadioInnhold {
   display: flex;
   justify-content: space-between;
@@ -57,5 +61,5 @@
 .behandlerNavn {
   display: flex;
   align-items: center;
-  gap: var(--ax-space-2);;
+  gap: var(--ax-space-2);
 }

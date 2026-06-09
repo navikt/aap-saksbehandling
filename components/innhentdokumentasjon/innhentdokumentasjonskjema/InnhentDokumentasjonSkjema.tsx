@@ -214,16 +214,16 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
                         </div>
                       )}
                       {fastlegeDto.telefon && <div>Telefon: {fastlegeDto.telefon}</div>}
-                      {!fastlegeResponse.varFastlegeRiktigPåSøknadstidspunkt &&
-                        !fastlegeResponse.erFastlegeEndretSidenSøknadstidspunkt && (
-                          <InlineMessage status="warning">
-                            Bruker oppgir i søknaden at informasjon om fastlegen ikke er riktig
-                          </InlineMessage>
-                        )}
                     </div>
                   </div>
                   <div className={styles.fastlegeEtikett}>Registrert fastlege</div>
                 </div>
+                {!fastlegeResponse.varFastlegeRiktigPåSøknadstidspunkt &&
+                  !fastlegeResponse.erFastlegeEndretSidenSøknadstidspunkt && (
+                    <InlineMessage status="warning" size="small" className={styles.fastlegeRadioAdvarsel}>
+                      Bruker oppgir i søknaden at informasjon om fastlegen ikke er riktig
+                    </InlineMessage>
+                  )}
               </Radio>
               <Radio value={'søk'}>Annen behandler</Radio>
             </RadioGroupWrapper>
