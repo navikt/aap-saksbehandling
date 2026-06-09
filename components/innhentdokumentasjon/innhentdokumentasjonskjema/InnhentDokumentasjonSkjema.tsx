@@ -225,7 +225,9 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
                     </InlineMessage>
                   )}
               </Radio>
-              <Radio value={'søk'} className={styles.radioItem}>Annen behandler</Radio>
+              <Radio value={'søk'} className={styles.radioItem}>
+                Annen behandler
+              </Radio>
             </RadioGroupWrapper>
             {behandlerValg === 'søk' && (
               <div className={styles.annenBehandlerSøk}>
@@ -265,16 +267,18 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
                     <CopyButton copyText={behandler.navn} size="xsmall" />
                   </BodyShort>
                 )}
-                {behandler.legekontor && <BodyShort size={'small'}>Kontor: {behandler.legekontor}</BodyShort>}
-                {behandler.adresse && (
-                  <BodyShort size={'small'}>
-                    Adresse:{' '}
-                    {[behandler.adresse, [behandler.postnummer, behandler.poststed].filter(Boolean).join(' ')]
-                      .filter(Boolean)
-                      .join(', ')}
-                  </BodyShort>
-                )}
-                {behandler.telefon && <BodyShort size={'small'}>Telefon: {behandler.telefon}</BodyShort>}
+                <div className={styles.behandlerValgDetaljer}>
+                  {behandler.legekontor && <BodyShort size={'small'}>Kontor: {behandler.legekontor}</BodyShort>}
+                  {behandler.adresse && (
+                    <BodyShort size={'small'}>
+                      Adresse:{' '}
+                      {[behandler.adresse, [behandler.postnummer, behandler.poststed].filter(Boolean).join(' ')]
+                        .filter(Boolean)
+                        .join(', ')}
+                    </BodyShort>
+                  )}
+                  {behandler.telefon && <BodyShort size={'small'}>Telefon: {behandler.telefon}</BodyShort>}
+                </div>
               </VStack>
             </InfoCard.Content>
           </InfoCard>
