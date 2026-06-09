@@ -28,13 +28,13 @@
   padding: var(--ax-space-12) var(--ax-space-16);
 }
 
-.behandlerValgGruppe :global(.aksel-radio) {
+.radioItem {
   width: 100%;
   padding: var(--ax-space-12) var(--ax-space-16);
   border-bottom: 1px solid var(--ax-border-neutral);
 }
 
-.behandlerValgGruppe :global(.aksel-radio):last-child {
+.radioItem:last-child {
   border-bottom: none;
 }
 

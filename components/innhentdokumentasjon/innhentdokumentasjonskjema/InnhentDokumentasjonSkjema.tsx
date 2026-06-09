@@ -196,7 +196,7 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
                   : styles.behandlerValgGruppe
               }
             >
-              <Radio value={'fastlege'}>
+              <Radio value={'fastlege'} className={styles.radioItem}>
                 <div className={styles.fastlegeRadioInnhold}>
                   <div>
                     <div>{fastlegeDto.navn}</div>
@@ -225,7 +225,7 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
                     </InlineMessage>
                   )}
               </Radio>
-              <Radio value={'søk'}>Annen behandler</Radio>
+              <Radio value={'søk'} className={styles.radioItem}>Annen behandler</Radio>
             </RadioGroupWrapper>
             {behandlerValg === 'søk' && (
               <div className={styles.annenBehandlerSøk}>
