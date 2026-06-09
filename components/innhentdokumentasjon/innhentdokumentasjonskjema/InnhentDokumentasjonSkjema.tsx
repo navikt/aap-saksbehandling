@@ -1,4 +1,4 @@
-import { BodyShort, Button, Heading, InlineMessage, InfoCard, Link, Radio, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, Heading, InlineMessage, InfoCard, Link, Radio, VStack, CopyButton } from '@navikt/ds-react';
 import { SubmitEventHandler, useState } from 'react';
 
 import styles from './InnhentDokumentasjonSkjema.module.css';
@@ -259,24 +259,22 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
             </InfoCard.Header>
             <InfoCard.Content>
               <VStack>
-                {behandler.navn && <BodyShort size={'small'}>{behandler.navn}</BodyShort>}
-                {behandler.legekontor && (
-                  <BodyShort size={'small'}>Kontor: {behandler.legekontor}</BodyShort>
+                {behandler.navn && (
+                  <BodyShort size={'small'} as={'div'} className={styles.behandlerNavn}>
+                    <span>{behandler.navn}</span>
+                    <CopyButton copyText={behandler.navn} size="xsmall" />
+                  </BodyShort>
                 )}
+                {behandler.legekontor && <BodyShort size={'small'}>Kontor: {behandler.legekontor}</BodyShort>}
                 {behandler.adresse && (
                   <BodyShort size={'small'}>
                     Adresse:{' '}
-                    {[
-                      behandler.adresse,
-                      [behandler.postnummer, behandler.poststed].filter(Boolean).join(' '),
-                    ]
+                    {[behandler.adresse, [behandler.postnummer, behandler.poststed].filter(Boolean).join(' ')]
                       .filter(Boolean)
                       .join(', ')}
                   </BodyShort>
                 )}
-                {behandler.telefon && (
-                  <BodyShort size={'small'}>Telefon: {behandler.telefon}</BodyShort>
-                )}
+                {behandler.telefon && <BodyShort size={'small'}>Telefon: {behandler.telefon}</BodyShort>}
               </VStack>
             </InfoCard.Content>
           </InfoCard>
