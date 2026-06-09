@@ -128,7 +128,7 @@ export function variantFraType(type: MarkeringType) {
     case 'KREVER_SPESIALKOMPETANSE':
       return 'alt1-moderate';
     case 'AVSLAG_11_5':
-      return 'alt2-moderate';
+      return 'alt1-moderate';
 
     default:
       return 'error-moderate';
