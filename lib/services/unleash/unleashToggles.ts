@@ -39,7 +39,6 @@ export const mockedFlags: Flags = {
   InfoboksGRegulering: true,
   ReturAarsakJournalforing: true,
   Skal1117og1118AlltidVises: true,
-  VisValgForDialogmelding: true,
   FjernMarkeringMottatteHelseopplysninger: true,
   VisValgForDialogmelding: true,
   StudentV2: true
