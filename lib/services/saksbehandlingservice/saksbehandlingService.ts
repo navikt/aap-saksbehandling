@@ -129,6 +129,8 @@ export const hentSak = async (saksnummer: string) => {
       ingenTilgang();
     } else if (res.status === 404) {
       notFound();
+    } else if (res.status === 408) {
+      throw new Error(res.apiException.message || 'Forespørselen tok for lang tid. Prøv igjen om litt.');
     } else {
       logError(`Feil ved henting av sak ${saksnummer}`, res.apiException);
       throw new Error(res.apiException.message || 'Ukjent feil oppsto ved henting av sak');
@@ -648,6 +650,12 @@ export const hentForhåndsvisningBrev = async (brevbestillingReferanse: string):
     `${saksbehandlingApiBaseUrl}/api/brev/${brevbestillingReferanse}/forhandsvis`,
     saksbehandlingApiScope
   );
+};
+
+// TODO bør types
+export const hentBrevmalPreview = async (brevbestillingReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/brev/${brevbestillingReferanse}/brevmal-preview`;
+  return await apiFetch(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentOppfølgingsoppgaveGrunnlag = async (behandlingsreferanse: string) => {

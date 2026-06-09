@@ -90,7 +90,16 @@ export const SaksinfoBanner = ({ personInformasjon, sak, behandling, oppgave, fl
           {behandling && (
             <>
               <ChevronRightIcon className={styles.chevron} />
-              <BodyShort size={'small'}>Sak {sak.saksnummer}</BodyShort>
+              <BodyShort size={'small'}>
+                Sak
+                <CopyButton
+                  copyText={sak.saksnummer}
+                  size={'xsmall'}
+                  text={sak.saksnummer}
+                  iconPosition="right"
+                  className={styles.copybutton}
+                />
+              </BodyShort>
               <ChevronRightIcon className={styles.chevron} />
 
               <BodyShort size={'small'}>{behandling.type}</BodyShort>

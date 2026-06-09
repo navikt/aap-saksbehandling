@@ -36,7 +36,7 @@ interface ByggTabellDataProps {
 
 type DraftFormFields = Partial<FastsettManuellInntektForm>;
 
-export const FastsettManuellInntektNy = ({
+export const FastsettManuellInntekt = ({
   behandlingsversjon,
   grunnlag,
   readOnly,

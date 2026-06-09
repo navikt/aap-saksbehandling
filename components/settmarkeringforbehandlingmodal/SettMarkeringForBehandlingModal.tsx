@@ -119,6 +119,8 @@ const markeringTypeTilEnum = (type: MarkeringType) => {
       return NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.HASTER;
     case 'KREVER_SPESIALKOMPETANSE':
       return NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.KREVER_SPESIALKOMPETANSE;
+    case 'AVSLAG_11_5':
+      return NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.AVSLAG_11_5;
     default:
       return NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.HASTER;
   }

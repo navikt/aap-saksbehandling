@@ -1,0 +1,21 @@
+.delmal {
+  box-sizing: border-box;
+  padding: 1rem;
+  background-color: var(--ax-bg-default);
+  min-height: 100%;
+  margin-left: var(--ax-space-16);
+  position: relative;
+}
+
+.loading {
+  background-color: var(--ax-bg-neutral-moderate);
+}
+
+.loader {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+}

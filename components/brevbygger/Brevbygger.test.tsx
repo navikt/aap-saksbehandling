@@ -10,9 +10,10 @@ import {
 } from 'components/brevbygger/brevbyggerTestdata';
 import { render, screen, within } from 'lib/test/CustomRender';
 import { BrevdataDto } from 'lib/types/types';
-import { describe, test, expect } from 'vitest';
+import { describe, test, expect, vi, beforeEach } from 'vitest';
 import userEvent from '@testing-library/user-event';
 import { Behovstype } from 'lib/utils/form';
+import createFetchMock from 'vitest-fetch-mock';
 
 const brevdata: BrevdataDto = {
   betingetTekst: [],
@@ -22,6 +23,31 @@ const brevdata: BrevdataDto = {
 };
 
 const user = userEvent.setup();
+
+const fetchMock = createFetchMock(vi);
+fetchMock.enableMocks();
+fetchMock.mockResponse(JSON.stringify({ json: { type: 'SUCCESS', status: 200, data: { key: 'value' } } }));
+
+beforeEach(() => {
+  vi.restoreAllMocks();
+});
+
+describe('Feilhåndtering', () => {
+  test('viser feilmelding når brevmal ikke er gyldig JSON', () => {
+    render(
+      <Brevbygger
+        referanse={'1234'}
+        brevmal={'ugyldig json'}
+        behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
+        mottaker={{ ident: '1234', navn: 'Navn' }}
+        behandlingVersjon={1}
+        readOnly={false}
+        behandlingstype={'Førstegangsbehandling'}
+      />
+    );
+    expect(screen.getByText('Feil ved parsing av brevmal')).toBeVisible();
+  });
+});
 
 describe('Delmalvelger', () => {
   const brevmal: BrevmalType = {
@@ -367,7 +393,7 @@ describe('Delmaler med valg', () => {
     );
     await user.click(screen.getByRole('checkbox', { name: 'Inkluder i brev' }));
     expect(screen.getByText('Beskrivelse av alternativ')).toBeVisible();
-    await user.click(screen.getByRole('button', { name: 'Send brev' }));
+    await user.click(screen.getByRole('button', { name: 'Ferdigstill brev' }));
     expect(screen.getByText('Du må velge et alternativ')).toBeVisible();
   });
 
@@ -394,7 +420,7 @@ describe('Delmaler med valg', () => {
     );
     await user.click(screen.getByRole('checkbox', { name: 'Inkluder i brev' }));
     expect(screen.getByText('Beskrivelse av alternativ')).toBeVisible();
-    await user.click(screen.getByRole('button', { name: 'Send brev' }));
+    await user.click(screen.getByRole('button', { name: 'Ferdigstill brev' }));
     expect(screen.queryByText('Du må velge et alternativ')).not.toBeInTheDocument();
   });
 });

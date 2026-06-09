@@ -1,12 +1,11 @@
 'use client';
 
-import { Button, HGrid, Tabs, Tooltip, VStack } from '@navikt/ds-react';
+import { Box, Button, HGrid, Label, Tabs, Tooltip, VStack } from '@navikt/ds-react';
 import {
   ChevronLeftDoubleIcon,
   ChevronRightDoubleIcon,
   ClockDashedIcon,
   FolderIcon,
-  InformationSquareIcon,
   PaperplaneIcon,
   PersonGavelIcon,
 } from '@navikt/aksel-icons';
@@ -20,9 +19,9 @@ import { DetaljertBehandling, KabalKlageResultat, Klageresultat, SaksInfo } from
 import { Behandlingsinfo } from 'components/behandlingsinfo/Behandlingsinfo';
 import { FetchResponse, isError } from 'lib/utils/api';
 import { KlageBehandlingInfo } from 'components/behandlingsinfo/KlageBehandlingInfo';
+import { mapTypeBehandlingTilTekst } from 'lib/utils/oversettelser';
 
 enum Tab {
-  BEHANDLINGSINFO = 'BEHANDLINGSINFO',
   KLAGEBEHANDLINGINFO = 'KLAGEBEHANDLINGINFO',
   SAKSDOKUMENTER = 'SAKSDOKUMENTER',
   BE_OM_OPPLYSNINGER = 'BE_OM_OPPLYSNINGER',
@@ -59,7 +58,7 @@ export const Saksbehandlingsoversikt = ({
   onExpandedChange,
 }: Props) => {
   const [expandedState, setExpandedState] = useState<boolean>(true);
-  const [toggleGroupValue, setToggleGroupValue] = useState<Tab>(Tab.BEHANDLINGSINFO);
+  const [toggleGroupValue, setToggleGroupValue] = useState<Tab>(Tab.SAKSDOKUMENTER);
   const expanded = expandedProp ?? expandedState;
 
   const visKlagebehandlingFane =
@@ -78,12 +77,6 @@ export const Saksbehandlingsoversikt = ({
   };
 
   const tabs = [
-    {
-      tooltip: 'Informasjon om saken',
-      label: 'Om saken',
-      tabName: Tab.BEHANDLINGSINFO,
-      icon: <InformationSquareIcon aria-hidden />,
-    },
     {
       tooltip: 'Informasjon om klagebehandling',
       label: 'Klage',
@@ -114,31 +107,33 @@ export const Saksbehandlingsoversikt = ({
     <div className={`${styles.saksbehandlingsoversikt} ${expanded ? '' : styles.minimert}`}>
       {expanded && (
         <>
-          <HGrid columns={'1fr auto'}>
+          <HGrid columns={'auto 1fr'} gap={'space-8'} align="center" className={styles.header}>
             <ToggleButton expanded={expanded} setExpanded={setExpanded} />
-            <Tabs
-              defaultValue={toggleGroupValue}
-              onChange={(value) => setToggleGroupValue(value as Tab)}
-              value={toggleGroupValue}
-              className={styles.stretch}
-              size={'small'}
-              iconPosition="top"
-            >
-              <Tabs.List className={expanded ? '' : styles.hidden}>
-                {tabs
-                  .filter((tab) => (!visKlagebehandlingFane ? tab.tabName !== Tab.KLAGEBEHANDLINGINFO : true))
-                  .map((tab) => (
-                    <Tooltip content={tab.tooltip} key={tab.tabName}>
-                      <Tabs.Tab value={tab.tabName} icon={tab.icon} label={tab.label} />
-                    </Tooltip>
-                  ))}
-              </Tabs.List>
-            </Tabs>
+            <Box padding={'space-8'}>
+              <Label as={'p'} size={'medium'}>
+                {mapTypeBehandlingTilTekst(behandling.type)}
+              </Label>
+            </Box>
           </HGrid>
+          <Behandlingsinfo behandling={behandling} sak={sak} klageresultat={klageresultat} />
+          <Tabs
+            defaultValue={toggleGroupValue}
+            onChange={(value) => setToggleGroupValue(value as Tab)}
+            value={toggleGroupValue}
+            className={styles.tabs}
+            size={'small'}
+          >
+            <Tabs.List className={expanded ? '' : styles.hidden}>
+              {tabs
+                .filter((tab) => (!visKlagebehandlingFane ? tab.tabName !== Tab.KLAGEBEHANDLINGINFO : true))
+                .map((tab) => (
+                  <Tooltip content={tab.tooltip} key={tab.tabName}>
+                    <Tabs.Tab value={tab.tabName} icon={tab.icon} label={tab.label} />
+                  </Tooltip>
+                ))}
+            </Tabs.List>
+          </Tabs>
           <div className={styles.tabContent}>
-            {toggleGroupValue === Tab.BEHANDLINGSINFO && (
-              <Behandlingsinfo behandling={behandling} sak={sak} klageresultat={klageresultat} />
-            )}
             {toggleGroupValue === Tab.KLAGEBEHANDLINGINFO && (
               <KlageBehandlingInfo kabalKlageResultat={kabalKlageresultat} klageresultat={klageresultat} />
             )}
