@@ -266,5 +266,7 @@ export function getJaNeiJaForbigåendeEllerIkkeBesvart(value?: ArbeidsevneNedsat
       return JaNeiEllerForbigåendeTekst.Ja;
     case 'NEI':
       return JaNeiEllerForbigåendeTekst.Nei;
+    case 'NEI_MEN_STUDENT':
+      return JaNeiEllerForbigåendeTekst.NeiMenStudent
   }
 }
