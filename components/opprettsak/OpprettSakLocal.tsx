@@ -318,7 +318,7 @@ export const OpprettSakLocal = () => {
       fastlege: {
         harFastlege: true,
         harEndretFastlege: false,
-        varFastlegeRiktigPåSøknadstidspunkt: true,
+        varFastlegeRiktigPåSøknadstidspunkt: false,
         harOppgittAndreBehandlere: true,
       },
       inntekterPerAr:
