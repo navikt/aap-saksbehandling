@@ -332,15 +332,18 @@ export const BarnetilleggVurdering = ({
             åpne={true}
             readOnly={formReadOnly}
             alleBarn={[
-              ...[
-                ...(grunnlag.vurderteBarn ?? []),
-                ...(grunnlag.barnSomTrengerVurdering ?? []),
-                ...(grunnlag.saksbehandlerOppgitteBarn ?? []),
-              ].map((barn: any) => ({
-                ident: barn.ident?.identifikator ?? barn.ident ?? '',
+              ...grunnlag.vurderteBarn.map((barn) => ({
+                ident: barn.ident ?? '',
                 navn: barn.navn ?? '',
-                fødselsdato: barn.fodselsDato ?? barn.fødselsdato ?? '',
+                fødselsdato: barn.fødselsdato ?? '',
               })),
+              ...[...(grunnlag.barnSomTrengerVurdering ?? []), ...(grunnlag.saksbehandlerOppgitteBarn ?? [])].map(
+                (barn) => ({
+                  ident: barn.ident?.identifikator ?? '',
+                  navn: barn.navn ?? '',
+                  fødselsdato: barn.fodselsDato ?? '',
+                })
+              ),
               ...(saksbehandlerOppgitteBarnVurderinger?.map((barn) => ({
                 ident: barn.ident ?? '',
                 navn: barn.navn ?? '',
@@ -441,7 +444,7 @@ function mapVurderingToDraftFormFields(
         );
       });
 
-      const mapVurdering = (value: any) => ({
+      const mapVurdering = (value: BarnetilleggGrunnlag['vurderteBarn'][number]['vurderinger'][number]) => ({
         begrunnelse: value.begrunnelse,
         harForeldreAnsvar: value.harForeldreAnsvar ? JaEllerNei.Ja : JaEllerNei.Nei,
         fraDato: formaterDatoForFrontend(value.fraDato),

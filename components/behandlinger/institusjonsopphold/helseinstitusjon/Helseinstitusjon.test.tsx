@@ -512,12 +512,18 @@ describe('handleSubmit - periode beregning', () => {
   beforeEach(() => {
     capturedRequest = null;
 
-    window.EventSource = vi.fn(function (this: any) {
-      this.close = vi.fn();
-      this.addEventListener = vi.fn();
-      this.onmessage = null;
-      this.onerror = null;
-    }) as any;
+    Object.defineProperty(window, 'EventSource', {
+      value: vi.fn(function () {
+        return {
+          close: vi.fn(),
+          addEventListener: vi.fn(),
+          onmessage: null,
+          onerror: null,
+        };
+      }),
+      writable: true,
+      configurable: true,
+    });
 
     fetchMock.mockResponse(async (req) => {
       if (req.method === 'POST') {

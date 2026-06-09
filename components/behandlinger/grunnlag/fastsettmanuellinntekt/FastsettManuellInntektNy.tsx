@@ -166,7 +166,7 @@ export const FastsettManuellInntektNy = ({
           getErGjeldende={(v) => deepEqual(v, vurderinger.at(0))}
           getVurdertAvIdent={(v) => v.vurderingerMeta.vurdertAv?.ident ?? ''}
           getVurdertDato={(v) => v.vurderingerMeta.vurdertAv?.dato ?? ''}
-          getFomDato={(v) => v.vurderingerMeta.vurdertAv?.dato}
+          getFomDato={(v) => v.vurderingerMeta.vurdertAv?.dato ?? ''}
           grupperPåOpprettetDato={true}
           customElement={(valgtVurderingIndex) => {
             const tabelldata: Tabellår[] | undefined = vurderinger

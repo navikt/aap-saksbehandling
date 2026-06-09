@@ -198,7 +198,7 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
           getErGjeldende={(v) =>
             grunnlag?.vedtatteVurderinger.some((gjeldendeVurdering) => deepEqual(v, gjeldendeVurdering, ['dato']))
           }
-          getFomDato={(v) => v.gjelderFra ?? v.vurderingerMeta?.vurdertAv?.dato}
+          getFomDato={(v) => v.gjelderFra ?? v.vurderingerMeta?.vurdertAv?.dato ?? ''}
           getVurdertAvIdent={(v) => v.vurderingerMeta?.vurdertAv?.ident ?? ''}
           getVurdertDato={(v) => v.vurderingerMeta?.vurdertAv?.dato ?? ''}
         />

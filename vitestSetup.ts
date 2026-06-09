@@ -99,6 +99,7 @@ beforeAll(() => {
   // Mocker eventsource ettersom vi bruker det i Form komponenten
   Object.defineProperty(window, 'EventSource', {
     writable: true,
+    configurable: true,
     value: vi.fn().mockImplementation(() => ({
       close: vi.fn(() => {}),
       addEventListener: vi.fn(),

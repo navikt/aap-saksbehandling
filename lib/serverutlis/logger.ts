@@ -5,18 +5,18 @@ const logger = pino({
     level: (label) => {
       return { level: label };
     },
-    log: (object: any) => {
-      if (object.err) {
-        const err = object.err instanceof Error ? pino.stdSerializers.err(object.err) : object.err;
+    log: (object: Record<string, unknown>) => {
+      if (object.err instanceof Error) {
+        const err = pino.stdSerializers.err(object.err);
         object.stack_trace = err.stack;
         object.type = err.type;
         object.error_message = err.message;
 
         // Spesifikt for [ClientError]
-        object.x_error_digest = err.digest;
-        object.x_saksnummer = err.saksnummer;
-        object.x_behandlingsreferanse = err.behandlingsReferanse;
-        object.x_pathname = err.pathname;
+        object.x_error_digest = err['digest'];
+        object.x_saksnummer = err['saksnummer'];
+        object.x_behandlingsreferanse = err['behandlingsReferanse'];
+        object.x_pathname = err['pathname'];
 
         delete object.err;
       }

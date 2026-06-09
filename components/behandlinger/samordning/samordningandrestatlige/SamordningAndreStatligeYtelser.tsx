@@ -144,9 +144,6 @@ export const SamordningAndreStatligeYtelser = ({
           getErGjeldende={() => {
             return true;
           }}
-          getFomDato={(v) => v.vurderingerMeta.vurdertAv?.dato ?? ''}
-          getVurdertAvIdent={(v) => v.vurderingerMeta.vurdertAv?.ident ?? ''}
-          getVurdertDato={(v) => v.vurderingerMeta.vurdertAv?.dato ?? ''}
           grupperPåOpprettetDato={true}
         />
       )}

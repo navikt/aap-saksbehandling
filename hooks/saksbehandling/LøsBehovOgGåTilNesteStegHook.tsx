@@ -172,7 +172,7 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
         withCredentials: true,
       }
     );
-    eventSource.onmessage = async (event: any) => {
+    eventSource.onmessage = async (event: MessageEvent) => {
       const eventData: ServerSentEventData = JSON.parse(event.data);
       const {
         status,
@@ -242,8 +242,9 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
         setStatus(status);
       }
     };
-    eventSource.onerror = (event: any) => {
-      throw new Error('event onError', event);
+    eventSource.onerror = () => {
+      eventSource.close();
+      setError({ message: 'Tilkoblingen til serveren ble brutt. Prøv igjen.' });
     };
   };
 
