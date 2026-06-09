@@ -39,6 +39,7 @@ import { useFeatureFlag } from 'context/UnleashContext';
 import { clientFjernMarkeringForBehandling } from 'lib/clientApi';
 import { isLocal } from 'lib/utils/environment';
 import { TotrinnsvurderingDevtools } from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingDevtools';
+import { clientMottattDokumenterLest } from 'lib/oppgaveClientApi';
 
 interface Props {
   grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;
@@ -71,6 +72,7 @@ export const TotrinnsvurderingForm = ({
   );
 
   const featureFlagHastemarkeringBoks = useFeatureFlag('VisBoksForVurderingOmHastemarkeringSkalFjernes');
+  const featureFlagFjernMarkeringDokumenterMottatt = useFeatureFlag('FjernMarkeringMottatteHelseopplysninger');
 
   const { addHendelse, varighetHendelseRef, hendelseSerieRef } = useUmamiVarighetHendelser(
     erKvalitetssikring ? 'KVALITETSSIKRER_VARIGHET_HENDELSER' : 'BESLUTTER_VARIGHET_HENDELSER'
@@ -187,7 +189,10 @@ export const TotrinnsvurderingForm = ({
             );
             if (!erKvalitetssikring) {
               loggUmamiVarighetHendelser(varighetHendelseRef.current, hendelseSerieRef.current);
+            } else if (featureFlagFjernMarkeringDokumenterMottatt) {
+              clientMottattDokumenterLest(behandlingsreferanse);
             }
+
             nullstillMellomlagretVurdering();
           }
         );
