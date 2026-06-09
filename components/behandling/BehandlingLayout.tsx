@@ -14,7 +14,6 @@ import {
   hentKabalKlageresultat,
   hentKlageresultat,
   hentSak,
-  hentSakPersoninfo,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
@@ -47,9 +46,8 @@ export const BehandlingLayout = async ({ saksnummer, behandlingsreferanse, child
   // noinspection ES6MissingAwait - trenger ikke vente på svar fra auditlog-kall
   auditlog(behandlingsreferanse);
 
-  const [oppgave, personInfo, flytResponse, sak, kabalKlageResultat, klageresultat] = await Promise.all([
+  const [oppgave, flytResponse, sak, kabalKlageResultat, klageresultat] = await Promise.all([
     hentOppgave(behandlingsreferanse),
-    hentSakPersoninfo(saksnummer),
     hentFlyt(behandlingsreferanse),
     hentSak(saksnummer),
     hentKabalKlageresultat(behandlingsreferanse),
@@ -98,7 +96,6 @@ export const BehandlingLayout = async ({ saksnummer, behandlingsreferanse, child
             <OverstyrTildelingModal />
 
             <SaksinfoBanner
-              personInformasjon={personInfo}
               behandling={behandling.data}
               sak={sak}
               oppgave={oppgave.data}

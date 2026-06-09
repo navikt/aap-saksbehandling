@@ -3,6 +3,7 @@ import { ReactElement } from 'react';
 import { afterEach } from 'vitest';
 import { IngenFlereOppgaverModalContextProvider } from 'context/saksbehandling/IngenFlereOppgaverModalContext';
 import { SakContextProvider } from 'context/saksbehandling/SakContext';
+import { SakPersoninformasjonContextProvider } from 'context/saksbehandling/SakPersoninformasjonContext';
 import { addDays, format } from 'date-fns';
 import { TildelOppgaverContext } from 'context/oppgave/TildelOppgaverContext';
 import { FeatureFlagProvider } from 'context/UnleashContext';
@@ -18,23 +19,27 @@ afterEach(() => {
 const today = format(new Date(), 'yyyy-MM-dd');
 const tomorrow = format(addDays(new Date(), 1), 'yyyy-MM-dd');
 
+const defaultPersonInformasjon = { personReferanse: '1234', navn: 'Peder Ås', fnr: '12345678910' };
+
 export function customRender(ui: ReactElement) {
   return render(
     <InnloggetBrukerContextProvider bruker={{ NAVident: 'Z000000', navn: 'Test Testesen', roller: [] }}>
       <FeatureFlagProvider flags={mockedFlags}>
         <IngenFlereOppgaverModalContextProvider>
           <OverstyrTildelingContextProvider>
-            <SakContextProvider
-              sak={{
-                saksnummer: '12345',
-                ident: '12345678910',
-                opprettetTidspunkt: today,
-                periode: { fom: today, tom: tomorrow },
-                virkningsTidspunkt: today,
-              }}
-            >
-              {ui}
-            </SakContextProvider>
+            <SakPersoninformasjonContextProvider SakPersonInfo={defaultPersonInformasjon}>
+              <SakContextProvider
+                sak={{
+                  saksnummer: '12345',
+                  ident: '12345678910',
+                  opprettetTidspunkt: today,
+                  periode: { fom: today, tom: tomorrow },
+                  virkningsTidspunkt: today,
+                }}
+              >
+                {ui}
+              </SakContextProvider>
+            </SakPersoninformasjonContextProvider>
           </OverstyrTildelingContextProvider>
         </IngenFlereOppgaverModalContextProvider>
       </FeatureFlagProvider>
@@ -84,17 +89,19 @@ export function customRenderMedRoller(ui: ReactElement, roller: Roller[]) {
       <FeatureFlagProvider flags={mockedFlags}>
         <IngenFlereOppgaverModalContextProvider>
           <OverstyrTildelingContextProvider>
-            <SakContextProvider
-              sak={{
-                saksnummer: '12345',
-                ident: '12345678910',
-                opprettetTidspunkt: today,
-                periode: { fom: today, tom: tomorrow },
-                virkningsTidspunkt: today,
-              }}
-            >
-              {ui}
-            </SakContextProvider>
+            <SakPersoninformasjonContextProvider SakPersonInfo={defaultPersonInformasjon}>
+              <SakContextProvider
+                sak={{
+                  saksnummer: '12345',
+                  ident: '12345678910',
+                  opprettetTidspunkt: today,
+                  periode: { fom: today, tom: tomorrow },
+                  virkningsTidspunkt: today,
+                }}
+              >
+                {ui}
+              </SakContextProvider>
+            </SakPersoninformasjonContextProvider>
           </OverstyrTildelingContextProvider>
         </IngenFlereOppgaverModalContextProvider>
       </FeatureFlagProvider>

@@ -26,7 +26,7 @@ const Page = async (props: { params: Promise<{ saksnummer: string }> }) => {
 
   return (
     <Box background="neutral-soft">
-      <SaksinfoBanner personInformasjon={personInfo} sak={sak} />
+      <SaksinfoBanner sak={sak} />
 
       <br />
 
