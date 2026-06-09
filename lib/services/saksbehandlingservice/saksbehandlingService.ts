@@ -128,6 +128,8 @@ export const hentSak = async (saksnummer: string) => {
       ingenTilgang();
     } else if (res.status === 404) {
       notFound();
+    } else if (res.status === 408) {
+      throw new Error(res.apiException.message || 'Forespørselen tok for lang tid. Prøv igjen om litt.');
     } else {
       logError(`Feil ved henting av sak ${saksnummer}`, res.apiException);
       throw new Error(res.apiException.message || 'Ukjent feil oppsto ved henting av sak');
