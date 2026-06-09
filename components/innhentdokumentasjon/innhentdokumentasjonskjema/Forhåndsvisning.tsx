@@ -1,8 +1,9 @@
-import { Alert, Button, Loader, Modal } from '@navikt/ds-react';
+import { Button, Loader, Modal } from '@navikt/ds-react';
 import { clientForhåndsvisDialogmelding } from 'lib/clientApi';
 import { useRef } from 'react';
 import useSWR from 'swr';
 import { isError, isSuccess } from 'lib/utils/api';
+import { Alert } from 'components/alert/Alert';
 
 type Props = {
   saksnummer: string;
@@ -41,7 +42,9 @@ export const Forhåndsvisning = ({ saksnummer, fritekst, dokumentasjonsType, vis
         {!isLoading && isSuccess(data) && <p style={{ whiteSpace: 'pre-wrap' }}>{data.data.konstruertBrev}</p>}
 
         {isError(data) && (
-          <Alert variant="error">{data.apiException.message || 'En ukjent feil oppsto ved forhåndsvisning'}</Alert>
+          <Alert variant="error">
+            {data.apiException.message || 'En ukjent feil oppsto ved forhåndsvisning'}
+          </Alert>
         )}
       </Modal.Body>
       <Modal.Footer>

@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Radio, VStack } from '@navikt/ds-react';
+import { Radio, VStack } from '@navikt/ds-react';
 import { erDatoIPeriode, validerDato } from 'lib/validation/dateValidation';
 import { parse } from 'date-fns';
 import { stringToDate } from 'lib/utils/date';
@@ -20,6 +20,7 @@ import { DiagnoserDefaultOptions } from 'components/behandlinger/sykdom/sykdomsv
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { defaultBegrunnelse } from 'components/behandlinger/sykdom/sykdomsvurdering/sykdomsvurdering-utils';
 import { useFeatureFlag } from 'context/UnleashContext';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   index: number;
@@ -130,7 +131,7 @@ export const SykdomsvurderingFormInput = ({
             <Radio value={'NEI'}>{JaNeiEllerForbigåendeTekst.Nei}</Radio>
           </RadioGroupWrapper>
           {form.watch(`vurderinger.${index}.harNedsattArbeidsevne`) === 'NEI' && (
-            <Alert variant={'info'} size={'small'} className={'fit-content'}>
+            <Alert variant={'info'} className={'fit-content'}>
               Brukeren vil få vedtak om at de ikke har rett på AAP. De kvalifiserer ikke for sykepengeerstatning.
             </Alert>
           )}

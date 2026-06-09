@@ -15,6 +15,8 @@ export const FLAGS = [
   'ReturAarsakJournalforing',
   'Skal1117og1118AlltidVises',
   'VisValgForDialogmelding',
+  'FjernMarkeringMottatteHelseopplysninger',
+  'VisValgForDialogmelding',
   'StudentV2'
 ] as const;
 
@@ -37,6 +39,8 @@ export const mockedFlags: Flags = {
   InfoboksGRegulering: true,
   ReturAarsakJournalforing: true,
   Skal1117og1118AlltidVises: true,
+  VisValgForDialogmelding: true,
+  FjernMarkeringMottatteHelseopplysninger: true,
   VisValgForDialogmelding: true,
   StudentV2: true
 };

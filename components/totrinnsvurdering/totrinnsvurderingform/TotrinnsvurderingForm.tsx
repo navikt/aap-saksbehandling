@@ -8,7 +8,7 @@ import {
   JaEllerNei,
   JaEllerNeiOptions,
 } from 'lib/utils/form';
-import { Alert, Button, Detail, HStack } from '@navikt/ds-react';
+import { Button, Detail, HStack, VStack } from '@navikt/ds-react';
 import {
   FatteVedtakGrunnlag,
   KvalitetssikringGrunnlag,
@@ -17,7 +17,7 @@ import {
 } from 'lib/types/types';
 import { ToTrinnsVurderingFormFields } from 'components/totrinnsvurdering/ToTrinnsvurdering';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { useFieldArray, UseFormReturn } from 'react-hook-form';
+import { useFieldArray } from 'react-hook-form';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { useConfigForm } from 'components/form/FormHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
@@ -31,12 +31,15 @@ import {
   useUmamiStartTidspunkt,
   useUmamiVarighetHendelser,
 } from 'lib/utils/umami';
+import { Alert } from 'components/alert/Alert';
 import { TotrinnsvurderingHastemarkering } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingHastemarkering';
 import { Markering, MarkeringHaster } from 'lib/types/oppgaveTypes';
 import { useFeatureFlag } from 'context/UnleashContext';
 
 import { clientFjernMarkeringForBehandling } from 'lib/clientApi';
 import { isLocal } from 'lib/utils/environment';
+import { TotrinnsvurderingDevtools } from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingDevtools';
+import { clientMottattDokumenterLest } from 'lib/oppgaveClientApi';
 
 interface Props {
   grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;
@@ -69,6 +72,7 @@ export const TotrinnsvurderingForm = ({
   );
 
   const featureFlagHastemarkeringBoks = useFeatureFlag('VisBoksForVurderingOmHastemarkeringSkalFjernes');
+  const featureFlagFjernMarkeringDokumenterMottatt = useFeatureFlag('FjernMarkeringMottatteHelseopplysninger');
 
   const { addHendelse, varighetHendelseRef, hendelseSerieRef } = useUmamiVarighetHendelser(
     erKvalitetssikring ? 'KVALITETSSIKRER_VARIGHET_HENDELSER' : 'BESLUTTER_VARIGHET_HENDELSER'
@@ -185,7 +189,10 @@ export const TotrinnsvurderingForm = ({
             );
             if (!erKvalitetssikring) {
               loggUmamiVarighetHendelser(varighetHendelseRef.current, hendelseSerieRef.current);
+            } else if (featureFlagFjernMarkeringDokumenterMottatt) {
+              clientMottattDokumenterLest(behandlingsreferanse);
             }
+
             nullstillMellomlagretVurdering();
           }
         );
@@ -238,22 +245,13 @@ export const TotrinnsvurderingForm = ({
         løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       />
       {!readOnly && (
-        <>
-          <HStack gap={'space-8'}>
-            <Button size={'medium'} className={'fit-content'} loading={isLoading}>
-              Bekreft og send videre
-            </Button>
-            {isLocal() && (
-              <Button
-                type={'button'}
-                size={'medium'}
-                className={'fit-content'}
-                onClick={() => godkjennAlleTotrinnsvurderinger(form)}
-              >
-                Godkjenn alle vurderinger
-              </Button>
-            )}
-          </HStack>
+        <VStack gap="space-8">
+          <Button size={'medium'} className={'fit-content'} loading={isLoading}>
+            Bekreft og send videre
+          </Button>
+
+          {isLocal() && <TotrinnsvurderingDevtools form={form} />}
+
           {mellomlagretVurdering && (
             <HStack align={'baseline'}>
               <Detail>{`Utkast lagret ${formaterDatoMedTidspunktForFrontend(mellomlagretVurdering.vurdertDato)} (${mellomlagretVurdering.vurdertAv})`}</Detail>
@@ -270,7 +268,7 @@ export const TotrinnsvurderingForm = ({
               </Button>
             </HStack>
           )}
-        </>
+        </VStack>
       )}
     </form>
   );
@@ -306,13 +304,4 @@ function mapVurderingToDraftFormFields(vurderinger: ToTrinnsVurdering[]): DraftF
       };
     }),
   };
-}
-
-function godkjennAlleTotrinnsvurderinger(form: UseFormReturn<FormFieldsToTrinnsVurdering>) {
-  if (isLocal()) {
-    const vurderinger = form.getValues('totrinnsvurderinger');
-    vurderinger.forEach((_, index) => {
-      form.setValue(`totrinnsvurderinger.${index}.godkjent`, JaEllerNei.Ja);
-    });
-  }
 }

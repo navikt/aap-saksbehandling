@@ -8,7 +8,7 @@ import { Behovstype } from 'lib/utils/form';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { getStegData } from 'lib/utils/steg';
-import { FastsettManuellInntektMedDataFetchingNy } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/FastsettManuellInntektMedDataFetchingNy';
+import { FastsettManuellInntektMedDataFetching } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/FastsettManuellInntektMedDataFetching';
 import { InntektsbortfallMedDataFetching } from './inntektsbortfall/InntektsbortfallMedDataFetching';
 import { BehandlingFlytOgTilstand } from 'lib/types/types';
 
@@ -70,7 +70,7 @@ export const Grunnlag = async ({ behandlingsreferanse, flyt }: Props) => {
         </StegSuspense>
       )}
       <StegSuspense>
-        <FastsettManuellInntektMedDataFetchingNy
+        <FastsettManuellInntektMedDataFetching
           behandlingsreferanse={behandlingsreferanse}
           stegData={vurderManglendeLigningSteg}
         />

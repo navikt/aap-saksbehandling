@@ -139,7 +139,8 @@ describe('SaksinfoBanner på behandling siden', () => {
     customRender(
       <SaksinfoBanner personInformasjon={personInformasjon} sak={sak} behandling={behandling} visning={visning} />
     );
-    expect(screen.getByText('Sak 12345'));
+    expect(screen.getByText(/^Sak$/));
+    expect(screen.getByRole('button', { name: /^12345$/ }));
   });
 
   it('skal vise hvilken type behandling', () => {

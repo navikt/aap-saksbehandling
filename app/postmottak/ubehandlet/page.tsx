@@ -2,7 +2,7 @@ import { hentUbehandledeJournalposter } from 'lib/services/postmottakservice/pos
 import { Suspense } from 'react';
 import { UbehandledeJournalposter } from 'components/postmottak/ubehandlede/UbehandledeJournalposter';
 import { isError } from 'lib/utils/api';
-import { Alert } from '@navikt/ds-react';
+import { Alert } from 'components/alert/Alert';
 
 /**
  * Grensesnitt for uthenting av Kelvin journalposter som har ligget lenge utbehandlet.
@@ -10,7 +10,8 @@ import { Alert } from '@navikt/ds-react';
 const Page = async () => {
   const result = await hentUbehandledeJournalposter();
 
-  if (isError(result)) return <Alert variant="error">{result.apiException.message || 'En ukjent feil oppsto'}</Alert>;
+  if (isError(result))
+    return <Alert variant="error">{result.apiException.message || 'En ukjent feil oppsto'}</Alert>;
 
   return (
     <Suspense>

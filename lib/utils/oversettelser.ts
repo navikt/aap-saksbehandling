@@ -350,6 +350,7 @@ export function mapStatusTilTekst(
     | 'VENTEFRIST_UTLØPT'
     | 'RETUR_FRA_VEILEDER'
     | 'RETUR_FRA_SAKSBEHANDLER'
+    | 'AVSLAG_11_5'
 ): string {
   switch (status) {
     case 'VENT':
@@ -366,6 +367,8 @@ export function mapStatusTilTekst(
       return 'Retur fra veileder';
     case 'RETUR_FRA_SAKSBEHANDLER':
       return 'Retur fra saksbehandler';
+    case 'AVSLAG_11_5':
+      return 'Avslag § 11-5';
   }
 }
 

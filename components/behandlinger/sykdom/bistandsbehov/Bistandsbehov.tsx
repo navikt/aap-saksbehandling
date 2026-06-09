@@ -27,12 +27,13 @@ import {
 import { Dato } from 'lib/types/Dato';
 import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovMellomlagringParser';
 import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
-import { Alert, VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
 import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   behandlingVersjon: number;
@@ -153,7 +154,7 @@ export const Bistandsbehov = ({
         <Veiledning defaultOpen={false} tekst={<EksterneLenkerIVilkårskort steg={'VURDER_BISTANDSBEHOV'} />} />
 
         {erRevurderingAvOvergangUføre && (
-          <Alert variant={'info'} size={'small'}>
+          <Alert variant={'info'}>
             Hvis brukeren skal vurderes for uføretrygd og ha AAP etter § 11-18, må du først vurdere at brukeren ikke
             lenger har behov for bistand etter § 11-6.
           </Alert>

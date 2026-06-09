@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, BodyShort } from '@navikt/ds-react';
+import { BodyShort } from '@navikt/ds-react';
 import { MineOppgaverTabell } from 'components/oppgaveliste/mineoppgaver/mineoppgavertabell/MineOppgaverTabell';
 import { useConfigForm } from 'components/form/FormHook';
 import { oppgaveBehandlingstyper, OppgaveStatuser } from 'lib/utils/behandlingstyper';
@@ -17,6 +17,7 @@ import { useEffect } from 'react';
 import { useBackendSortering } from 'hooks/oppgave/BackendSorteringHook';
 import { PathsMineOppgaverGetParametersQuerySortby } from '@navikt/aap-oppgave-typescript-types';
 import { ValuePair } from 'components/form/FormField';
+import { Alert } from 'components/alert/Alert';
 
 export interface FormFieldsFilter {
   behandlingstyper?: string[];

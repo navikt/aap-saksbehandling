@@ -1,11 +1,11 @@
-import { BodyShort, HGrid, HStack, Label, VStack } from '@navikt/ds-react';
+import { BodyShort, HGrid, Label, VStack } from '@navikt/ds-react';
 import { DetaljertBehandling, Klageresultat, SaksInfo } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import { Behandlingsstatus } from 'components/behandlingsstatus/Behandlingsstatus';
 
 import { formaterKlageresultat } from 'lib/utils/klageresultat';
-import { mapTypeBehandlingTilTekst } from 'lib/utils/oversettelser';
 import Link from 'next/link';
+
+import styles from './Behandlingsinfo.module.css';
 
 interface Props {
   behandling: DetaljertBehandling;
@@ -21,23 +21,20 @@ export const Behandlingsinfo = ({ behandling, sak, klageresultat }: Props) => {
   const erSvarFraKabal = behandling.type === 'SvarFraAndreinstans';
 
   return (
-    <VStack gap={'space-16'}>
-      <HStack gap={'space-8'} align={'center'}>
-        <Label as="p" size="medium">
-          {mapTypeBehandlingTilTekst(behandling.type)}
-        </Label>
-        <Behandlingsstatus status={behandling.status} />
-      </HStack>
-
-      <HGrid columns={'1fr 1fr'} gap="space-4">
+    <VStack gap={'space-16'} className={styles.behandlingsinformasjon}>
+      <HGrid columns={'1fr 1fr'} gap="space-4" margin={'space-16'}>
         <Label as="p" size={'small'}>
-          Opprettet:
+          Behandling opprettet:
         </Label>
         <BodyShort size={'small'}>{formaterDatoForFrontend(behandling.opprettet)}</BodyShort>
-        <Label as="p" size={'small'}>
-          Saksnummer:
-        </Label>
-        <BodyShort size={'small'}>{sak.saksnummer}</BodyShort>
+        {vedtaksdato && (
+          <>
+            <Label as="p" size={'small'}>
+              Vedtaksdato:
+            </Label>
+            <BodyShort size={'small'}>{formaterDatoForFrontend(vedtaksdato)}</BodyShort>
+          </>
+        )}
         {erFørstegangsbehandlingEllerRevurdering && (
           <>
             <Label as="p" size={'small'}>
@@ -76,14 +73,6 @@ export const Behandlingsinfo = ({ behandling, sak, klageresultat }: Props) => {
               Resultat:
             </Label>
             <BodyShort size={'small'}>{formaterKlageresultat(klageresultat)}</BodyShort>
-          </>
-        )}
-        {vedtaksdato && (
-          <>
-            <Label as="p" size={'small'}>
-              Vedtaksdato:
-            </Label>
-            <BodyShort size={'small'}>{formaterDatoForFrontend(vedtaksdato)}</BodyShort>
           </>
         )}
       </HGrid>

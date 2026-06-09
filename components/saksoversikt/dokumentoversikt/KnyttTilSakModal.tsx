@@ -1,7 +1,8 @@
-import { Alert, BodyShort, Button, Modal } from '@navikt/ds-react';
+import { BodyShort, Button, Modal } from '@navikt/ds-react';
 import { useState } from 'react';
 import { isError, isSuccess } from 'lib/utils/api';
 import { clientKnyttTilAnnenSak } from 'lib/dokumentClientApi';
+import { Alert } from 'components/alert/Alert';
 
 export interface KnyttTilAnnenSakRequest {
   bruker: {

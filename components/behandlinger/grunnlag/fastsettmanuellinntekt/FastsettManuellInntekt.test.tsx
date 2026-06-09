@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render, screen } from 'lib/test/CustomRender';
-import { FastsettManuellInntektNy } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/FastsettManuellInntektNy';
+import { FastsettManuellInntekt } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/FastsettManuellInntekt';
 import { ManuellInntektGrunnlag, MellomlagretVurderingResponse } from 'lib/types/types';
 import userEvent from '@testing-library/user-event';
 import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
@@ -62,7 +62,7 @@ describe('Manglende pensjonsgivende inntekt / EØS-beregnet inntekt', () => {
   describe('Generelt', () => {
     beforeEach(() => {
       render(
-        <FastsettManuellInntektNy
+        <FastsettManuellInntekt
           behandlingsversjon={1}
           grunnlag={grunnlag}
           readOnly={false}
@@ -158,7 +158,7 @@ describe('Manglende pensjonsgivende inntekt / EØS-beregnet inntekt', () => {
 
     it('Skal vise en tekst om hvem som har gjort vurderingen dersom det finnes en mellomlagring', () => {
       render(
-        <FastsettManuellInntektNy
+        <FastsettManuellInntekt
           behandlingsversjon={0}
           grunnlag={grunnlag}
           readOnly={false}
@@ -173,7 +173,7 @@ describe('Manglende pensjonsgivende inntekt / EØS-beregnet inntekt', () => {
 
     it('Skal ikke vise tekst om hvem som har gjort mellomlagring dersom bruker trykker på slett mellomlagring', async () => {
       render(
-        <FastsettManuellInntektNy
+        <FastsettManuellInntekt
           behandlingsversjon={0}
           grunnlag={grunnlag}
           readOnly={false}
@@ -195,7 +195,7 @@ describe('Manglende pensjonsgivende inntekt / EØS-beregnet inntekt', () => {
 
     it('Skal bruke mellomlagring som defaultValue i skjema dersom det finnes', () => {
       render(
-        <FastsettManuellInntektNy
+        <FastsettManuellInntekt
           behandlingsversjon={0}
           grunnlag={grunnlag}
           readOnly={false}
@@ -212,7 +212,7 @@ describe('Manglende pensjonsgivende inntekt / EØS-beregnet inntekt', () => {
 
     it('Skal bruke bekreftet vurdering fra grunnlag som defaultValue i skjema dersom mellomlagring ikke finnes', () => {
       render(
-        <FastsettManuellInntektNy
+        <FastsettManuellInntekt
           behandlingsversjon={0}
           grunnlag={grunnlagMedVurdering}
           readOnly={false}
@@ -228,7 +228,7 @@ describe('Manglende pensjonsgivende inntekt / EØS-beregnet inntekt', () => {
 
     it('Skal resette skjema til tomt skjema dersom det ikke finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
       render(
-        <FastsettManuellInntektNy
+        <FastsettManuellInntekt
           behandlingsversjon={0}
           grunnlag={grunnlag}
           readOnly={false}
@@ -251,7 +251,7 @@ describe('Manglende pensjonsgivende inntekt / EØS-beregnet inntekt', () => {
 
     it('Skal resette skjema til bekreftet vurdering dersom det finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
       render(
-        <FastsettManuellInntektNy
+        <FastsettManuellInntekt
           behandlingsversjon={0}
           grunnlag={grunnlagMedVurdering}
           readOnly={false}
@@ -274,7 +274,7 @@ describe('Manglende pensjonsgivende inntekt / EØS-beregnet inntekt', () => {
 
     it('Skal ikke være mulig å slette mellomlagring hvis det er readOnly', () => {
       render(
-        <FastsettManuellInntektNy
+        <FastsettManuellInntekt
           behandlingsversjon={0}
           grunnlag={grunnlag}
           readOnly={true}

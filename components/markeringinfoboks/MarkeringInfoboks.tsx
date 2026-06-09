@@ -3,7 +3,7 @@ import { BodyShort, Button, Detail, HStack, Popover, Tag, VStack } from '@navikt
 import styles from './MarkeringInfoBoks.module.css';
 import { clientFjernMarkeringForBehandling } from 'lib/clientApi';
 import { Markering, MarkeringType } from 'lib/types/oppgaveTypes';
-import { BookIcon, ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
+import { BookIcon, ExclamationmarkTriangleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType } from '@navikt/aap-oppgave-typescript-types';
 import { isSuccess } from 'lib/utils/api';
 import { formaterDatoForFrontend } from 'lib/utils/date';
@@ -103,6 +103,8 @@ function markeringTypeTilTekst(type: MarkeringType): string {
       return 'Haster';
     case 'KREVER_SPESIALKOMPETANSE':
       return 'Krever spesialkompetanse';
+    case 'AVSLAG_11_5':
+      return 'Avslag § 11-5';
     default:
       return 'Haster';
   }
@@ -114,6 +116,8 @@ export function ikonForMarkeringType(type: MarkeringType) {
       return <ExclamationmarkTriangleIcon />;
     case 'KREVER_SPESIALKOMPETANSE':
       return <BookIcon />;
+    case 'AVSLAG_11_5':
+      return <XMarkOctagonIcon />;
   }
 }
 
@@ -122,6 +126,8 @@ export function variantFraType(type: MarkeringType) {
     case 'HASTER':
       return 'error-moderate';
     case 'KREVER_SPESIALKOMPETANSE':
+      return 'alt1-moderate';
+    case 'AVSLAG_11_5':
       return 'alt1-moderate';
 
     default:
