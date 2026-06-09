@@ -81,7 +81,12 @@ export const Brevbygger = ({
     values: parsedBrevmal ? initialiserFormVerdier(parsedBrevmal, brevdata) : undefined,
   });
   const umamiStartTidspunkt = useUmamiStartTidspunkt('AKTIV');
-  const { brevPreview, lasterHtml } = useMellomlagringAvBrev({ referanse, control, brevmal: parsedBrevmal, brevdata });
+  const { brevPreview, lasterBrevdata } = useMellomlagringAvBrev({
+    referanse,
+    control,
+    brevmal: parsedBrevmal,
+    brevdata,
+  });
 
   const router = useRouter();
   const { behandlingsreferanse, saksnummer } = useParamsMedType();
@@ -188,7 +193,7 @@ export const Brevbygger = ({
                 delmalInnhold={
                   brevPreview?.delmaler.find((innholdNode) => innholdNode.sanityNoekkel === delmalRef._key)?.htmlString
                 }
-                isLoading={lasterHtml}
+                isLoading={lasterBrevdata}
               />
             ))}
           </HGrid>

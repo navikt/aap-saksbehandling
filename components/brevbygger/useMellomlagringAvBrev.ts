@@ -16,7 +16,7 @@ interface Props {
 }
 
 interface MellomlagringAvBrevResultat {
-  lasterHtml: boolean;
+  lasterBrevdata: boolean;
   brevPreview: BrevpreviewResponse | undefined;
 }
 
@@ -32,7 +32,7 @@ export interface BrevpreviewResponse {
 }
 
 export function useMellomlagringAvBrev({ referanse, control, brevmal, brevdata }: Props): MellomlagringAvBrevResultat {
-  const [lasterHtml, setLasterHtml] = useState(false);
+  const [lasterBrevdata, setLasterBrevdata] = useState(false);
   const [brevPreview, setBrevPreview] = useState<BrevpreviewResponse | undefined>();
 
   const formVerdier = useWatch({ control });
@@ -41,7 +41,7 @@ export function useMellomlagringAvBrev({ referanse, control, brevmal, brevdata }
   useEffect(() => {
     const lagreOgOppdaterHtml = async () => {
       if (!brevmal) return;
-      setLasterHtml(true);
+      setLasterBrevdata(true);
       try {
         const payload = byggBrevdataPayload(debouncedFormVerdier as BrevFormVerdier, brevmal, brevdata);
         const res = await clientOppdaterBrevdata(referanse, payload);
@@ -55,11 +55,11 @@ export function useMellomlagringAvBrev({ referanse, control, brevmal, brevdata }
           setBrevPreview(JSON.parse(response.data.json));
         }
       } finally {
-        setLasterHtml(false);
+        setLasterBrevdata(false);
       }
     };
     lagreOgOppdaterHtml();
   }, [debouncedFormVerdier, referanse, brevmal, brevdata]);
 
-  return { lasterHtml, brevPreview };
+  return { lasterBrevdata, brevPreview };
 }
