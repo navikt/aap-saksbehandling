@@ -6,7 +6,7 @@ import {
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { StegData } from 'lib/utils/steg';
-import { FastsettManuellInntektNy } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/FastsettManuellInntektNy';
+import { FastsettManuellInntekt } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/FastsettManuellInntekt';
 import { Behovstype } from 'lib/utils/form';
 
 interface Props {
@@ -14,7 +14,7 @@ interface Props {
   stegData: StegData;
 }
 
-export const FastsettManuellInntektMedDataFetchingNy = async ({ behandlingsreferanse, stegData }: Props) => {
+export const FastsettManuellInntektMedDataFetching = async ({ behandlingsreferanse, stegData }: Props) => {
   const beregningstidspunkt = await hentBeregningstidspunktVurdering(behandlingsreferanse);
   if (isError(beregningstidspunkt)) {
     return <ApiException apiResponses={[beregningstidspunkt]} />;
@@ -39,7 +39,7 @@ export const FastsettManuellInntektMedDataFetchingNy = async ({ behandlingsrefer
   );
 
   return (
-    <FastsettManuellInntektNy
+    <FastsettManuellInntekt
       behandlingsversjon={stegData.behandlingVersjon}
       grunnlag={grunnlag.data}
       readOnly={totalReadOnly}
