@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Table } from '@navikt/ds-react';
 import {
@@ -7,6 +7,7 @@ import {
   utledOppdatertAv,
 } from 'components/saksoversikt/meldekortoversikt/meldekorttabell/meldekorttabellrow/MeldekortTabellRow';
 import { MeldeperiodeMedMeldekortDto } from 'lib/types/types';
+import { customRender } from 'lib/test/CustomRender';
 
 const meldekortUtenDager: MeldeperiodeMedMeldekortDto = {
   tidligereMeldekort: [],
@@ -58,10 +59,14 @@ const meldekortFremtidig: MeldeperiodeMedMeldekortDto = {
 };
 
 function renderRow(meldekort: MeldeperiodeMedMeldekortDto, setSelectedMeldekort = vi.fn(), setIsOpen = vi.fn()) {
-  return render(
+  return customRender(
     <Table>
       <Table.Body>
-        <MeldekortTabellRow meldePeriodeMedMeldekort={meldekort} setSelectedMeldekort={setSelectedMeldekort} setIsOpen={setIsOpen} />
+        <MeldekortTabellRow
+          meldePeriodeMedMeldekort={meldekort}
+          setSelectedMeldekort={setSelectedMeldekort}
+          setIsOpen={setIsOpen}
+        />
       </Table.Body>
     </Table>
   );
