@@ -337,7 +337,7 @@ describe('mapTilPeriodisertVurdering', () => {
 
         it('nedsettelse mer enn halvparten - skal IKKE ta stilling til erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense', () => {
           const result = mapTilPeriodisertVurdering(baseSykdomsvurdering, true, false, rettighetsperiodeStart);
-          expect(result.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense).toBe(false);
+          expect(result.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense).toBeUndefined();
         });
 
         it('skal begrunne yrkesskade og mappe yrkesskadegrense', () => {
