@@ -1,5 +1,5 @@
 import { Box, HStack, Link, Page as AkselPage, VStack } from '@navikt/ds-react';
-import { hentSak, hentSakPersoninfo } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { hentSak } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { OpprettRevurdering } from 'components/saksoversikt/opprettrevurdering/OpprettRevurdering';
 import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
 import { erAktivFørstegangsbehandling } from 'lib/utils/behandling';
@@ -7,7 +7,7 @@ import { Alert } from 'components/alert/Alert';
 
 export default async function Page(props: { params: Promise<{ saksnummer: string }> }) {
   const params = await props.params;
-  const [sak, personInfo] = await Promise.all([hentSak(params.saksnummer), hentSakPersoninfo(params.saksnummer)]);
+  const sak = await hentSak(params.saksnummer);
 
   if (sak.søknadErTrukket) {
     return (
@@ -25,7 +25,7 @@ export default async function Page(props: { params: Promise<{ saksnummer: string
 
   return (
     <AkselPage>
-      <SaksinfoBanner personInformasjon={personInfo} sak={sak} />
+      <SaksinfoBanner sak={sak} />
       <Box marginBlock="space-32">
         <OpprettRevurdering
           sak={sak}

@@ -13428,6 +13428,7 @@ export interface components {
         | 'OPPHOLDSKRAV'
         | 'OVERGANG_ARBEID'
         | 'OVERGANG_UFORE'
+        | 'OVERGANG_UFORE_AUTOMATISK_STANS'
         | 'REFUSJONSKRAV'
         | 'REVURDERING_AVBRUTT'
         | 'REVURDER_BEREGNING'
@@ -13478,6 +13479,7 @@ export interface components {
         | 'SVAR_FRA_KLAGEINSTANS'
         | 'SØKNAD'
         | 'TILBAKEKREVING_HENDELSE'
+        | 'UFØRE_VEDTAK_HENDELSE'
         | 'UTVID_VEDTAKSLENGDE'
         | null;
     };
@@ -13630,6 +13632,7 @@ export interface components {
        */
       meldeDato: string;
       oppdatertAv?: string | null;
+      oppdatertAvSaksbehandler: boolean;
       /**
        * Format: date
        * @example 2025-04-01
@@ -13902,6 +13905,7 @@ export interface components {
         | 'OPPHOLDSKRAV'
         | 'OVERGANG_ARBEID'
         | 'OVERGANG_UFORE'
+        | 'OVERGANG_UFORE_AUTOMATISK_STANS'
         | 'REFUSJONSKRAV'
         | 'REVURDERING_AVBRUTT'
         | 'REVURDER_BEREGNING'
@@ -13974,6 +13978,7 @@ export interface components {
             | 'OPPHOLDSKRAV'
             | 'OVERGANG_ARBEID'
             | 'OVERGANG_UFORE'
+            | 'OVERGANG_UFORE_AUTOMATISK_STANS'
             | 'REFUSJONSKRAV'
             | 'REVURDERING_AVBRUTT'
             | 'REVURDER_BEREGNING'
@@ -14654,6 +14659,7 @@ export interface components {
         | 'OPPHOLDSKRAV'
         | 'OVERGANG_ARBEID'
         | 'OVERGANG_UFORE'
+        | 'OVERGANG_UFORE_AUTOMATISK_STANS'
         | 'REFUSJONSKRAV'
         | 'REVURDERING_AVBRUTT'
         | 'REVURDER_BEREGNING'
@@ -14704,6 +14710,7 @@ export interface components {
         | 'SVAR_FRA_KLAGEINSTANS'
         | 'SØKNAD'
         | 'TILBAKEKREVING_HENDELSE'
+        | 'UFØRE_VEDTAK_HENDELSE'
         | 'UTVID_VEDTAKSLENGDE'
         | null;
     };
@@ -17074,6 +17081,7 @@ export interface components {
         | 'OPPHOLDSKRAV'
         | 'OVERGANG_ARBEID'
         | 'OVERGANG_UFORE'
+        | 'OVERGANG_UFORE_AUTOMATISK_STANS'
         | 'REFUSJONSKRAV'
         | 'REVURDERING_AVBRUTT'
         | 'REVURDER_BEREGNING'
@@ -17134,6 +17142,7 @@ export interface components {
         | 'OPPHOLDSKRAV'
         | 'OVERGANG_ARBEID'
         | 'OVERGANG_UFORE'
+        | 'OVERGANG_UFORE_AUTOMATISK_STANS'
         | 'REFUSJONSKRAV'
         | 'REVURDERING_AVBRUTT'
         | 'REVURDER_BEREGNING'
@@ -17409,6 +17418,7 @@ export interface components {
         | 'OPPHOLDSKRAV'
         | 'OVERGANG_ARBEID'
         | 'OVERGANG_UFORE'
+        | 'OVERGANG_UFORE_AUTOMATISK_STANS'
         | 'REFUSJONSKRAV'
         | 'REVURDERING_AVBRUTT'
         | 'REVURDER_BEREGNING'
@@ -17507,6 +17517,7 @@ export interface components {
         | 'OPPHOLDSKRAV'
         | 'OVERGANG_ARBEID'
         | 'OVERGANG_UFORE'
+        | 'OVERGANG_UFORE_AUTOMATISK_STANS'
         | 'REFUSJONSKRAV'
         | 'REVURDERING_AVBRUTT'
         | 'REVURDER_BEREGNING'
@@ -17582,6 +17593,7 @@ export interface components {
         | 'OPPHOLDSKRAV'
         | 'OVERGANG_ARBEID'
         | 'OVERGANG_UFORE'
+        | 'OVERGANG_UFORE_AUTOMATISK_STANS'
         | 'REFUSJONSKRAV'
         | 'REVURDERING_AVBRUTT'
         | 'REVURDER_BEREGNING'
@@ -17646,6 +17658,7 @@ export interface components {
         | 'OPPHOLDSKRAV'
         | 'OVERGANG_ARBEID'
         | 'OVERGANG_UFORE'
+        | 'OVERGANG_UFORE_AUTOMATISK_STANS'
         | 'REFUSJONSKRAV'
         | 'REVURDERING_AVBRUTT'
         | 'REVURDER_BEREGNING'
@@ -17920,6 +17933,7 @@ export interface components {
         | 'OPPHOLDSKRAV'
         | 'OVERGANG_ARBEID'
         | 'OVERGANG_UFORE'
+        | 'OVERGANG_UFORE_AUTOMATISK_STANS'
         | 'REFUSJONSKRAV'
         | 'REVURDERING_AVBRUTT'
         | 'REVURDER_BEREGNING'
@@ -17978,6 +17992,7 @@ export interface components {
         | 'SVAR_FRA_KLAGEINSTANS'
         | 'SØKNAD'
         | 'TILBAKEKREVING_HENDELSE'
+        | 'UFØRE_VEDTAK_HENDELSE'
         | 'UTVID_VEDTAKSLENGDE';
     };
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlingAvTypeDTO': {
@@ -18061,6 +18076,7 @@ export interface components {
         | 'OPPHOLDSKRAV'
         | 'OVERGANG_ARBEID'
         | 'OVERGANG_UFORE'
+        | 'OVERGANG_UFORE_AUTOMATISK_STANS'
         | 'REFUSJONSKRAV'
         | 'REVURDERING_AVBRUTT'
         | 'REVURDER_BEREGNING'
@@ -18146,6 +18162,7 @@ export interface components {
         | 'OPPHOLDSKRAV'
         | 'OVERGANG_ARBEID'
         | 'OVERGANG_UFORE'
+        | 'OVERGANG_UFORE_AUTOMATISK_STANS'
         | 'REFUSJONSKRAV'
         | 'REVURDERING_AVBRUTT'
         | 'REVURDER_BEREGNING'
@@ -18196,6 +18213,7 @@ export interface components {
         | 'SVAR_FRA_KLAGEINSTANS'
         | 'SØKNAD'
         | 'TILBAKEKREVING_HENDELSE'
+        | 'UFØRE_VEDTAK_HENDELSE'
         | 'UTVID_VEDTAKSLENGDE'
         | null;
     };
@@ -18352,6 +18370,12 @@ export interface components {
       harYrkesskade: boolean;
       /** @description Dolly-ident for test-personen. */
       ident: string;
+      /**
+       * Format: date
+       * @description Søknadsdato. Brukes som rettighetsperiode.fom og mottattTidspunkt. Defaulter til dagens dato.
+       * @example 2025-04-01
+       */
+      's\u00F8knadsdato'?: string | null;
     };
     'no.nav.aap.behandlingsflyt.test.OpprettOgFullforBehandlingRespons': {
       saksnummer: string;
