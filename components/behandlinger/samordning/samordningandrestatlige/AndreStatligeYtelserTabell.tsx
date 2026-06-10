@@ -10,6 +10,8 @@ import { erDatoFoerDato, validerDato } from 'lib/validation/dateValidation';
 import { ValuePair } from 'components/form/FormField';
 import { SamordningAndreStatligeYtelserYtelse } from 'lib/types/types';
 import { TableStyled } from 'components/tablestyled/TableStyled';
+import { Alert } from 'components/alert/Alert';
+import { useEffect, useState } from 'react';
 
 interface Props {
   form: UseFormReturn<SamordningAndreStatligeYtelserFormFields>;
@@ -55,14 +57,24 @@ const ytelsesoptions: ValuePair<SamordningAndreStatligeYtelserYtelse | undefined
   },
 ];
 export const AndreStatligeYtelserTabell = ({ form, readOnly }: Props) => {
+  const [skalViseInfoMelding, setSkalViseInfoMelding] = useState(false);
   const { fields, append, remove } = useFieldArray({ name: 'vurderteSamordninger', control: form.control });
+
   function leggTilRad() {
     append({
       ytelse: undefined,
       fom: '',
       tom: '',
     });
+    setSkalViseInfoMelding(true);
   }
+
+  useEffect(() => {
+    if (fields.length === 0) {
+      setSkalViseInfoMelding(false);
+    }
+  }, [fields.length]);
+
   return (
     <VStack gap={'space-8'}>
       <Label size={'small'}>Legg til ytelse og periode for utbetaling</Label>
@@ -152,8 +164,11 @@ export const AndreStatligeYtelserTabell = ({ form, readOnly }: Props) => {
           <Button size={'small'} type={'button'} variant={'tertiary'} icon={<PlusCircleIcon />} onClick={leggTilRad}>
             Legg til
           </Button>
-        )}{' '}
+        )}
       </HStack>
+      {skalViseInfoMelding && (
+        <Alert variant={'info'}>Har du husket å sende gosysoppgaver i henhold til rutinen?</Alert>
+      )}
     </VStack>
   );
 };

@@ -31,6 +31,42 @@ beforeEach(() => {
   setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'SAMORDNING_ANDRE_STATLIGE_YTELSER' });
 });
 
+describe('AndreStatligeYtelserTabell', () => {
+  it('skal ikke vise varselet ved første render', () => {
+    render(<SamordningAndreStatligeYtelser grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
+
+    expect(screen.queryByText('Har du husket å sende gosysoppgaver i henhold til rutinen?')).not.toBeInTheDocument();
+  });
+
+  it('skal vise varselet etter at saksbehandler legger til en rad', async () => {
+    render(<SamordningAndreStatligeYtelser grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
+
+    const leggTilKnapp = screen.getByRole('button', { name: 'Legg til' });
+    await user.click(leggTilKnapp);
+
+    expect(screen.getByText('Har du husket å sende gosysoppgaver i henhold til rutinen?')).toBeVisible();
+  });
+
+  it('skal ikke vise varselet i readOnly-modus', () => {
+    render(<SamordningAndreStatligeYtelser grunnlag={grunnlagUtenVurdering} readOnly={true} behandlingVersjon={0} />);
+
+    expect(screen.queryByText('Har du husket å sende gosysoppgaver i henhold til rutinen?')).not.toBeInTheDocument();
+  });
+  it('skal skjule varselet igjen når siste rad slettes', async () => {
+    render(<SamordningAndreStatligeYtelser grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingVersjon={0} />);
+
+    const leggTilKnapp = screen.getByRole('button', { name: 'Legg til' });
+    await user.click(leggTilKnapp);
+
+    expect(screen.getByText('Har du husket å sende gosysoppgaver i henhold til rutinen?')).toBeVisible();
+
+    const slettKnapp = screen.getByRole('button', { name: 'Slett' });
+    await user.click(slettKnapp);
+
+    expect(screen.queryByText('Har du husket å sende gosysoppgaver i henhold til rutinen?')).not.toBeInTheDocument();
+  });
+});
+
 it('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
   setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'AVKLAR_SYKDOM' });
 
