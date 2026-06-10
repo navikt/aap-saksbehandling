@@ -96,6 +96,7 @@ export const OpprettOppfølgingsBehandling = ({
             ? brukerInformasjon.NAVident
             : undefined,
         hvemSkalFølgeOpp: data.hvemSkalFølgeOpp,
+        opprettetAv: brukerInformasjon.NAVident,
       } satisfies OppfølgingsoppgaveV0,
     };
 
