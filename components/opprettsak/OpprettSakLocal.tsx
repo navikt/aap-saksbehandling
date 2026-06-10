@@ -23,6 +23,7 @@ import {
 import { OpprettYrkesskade } from 'components/opprettsak/yrkesskade/OpprettYrkesskade';
 import { Dato } from '../../lib/types/Dato';
 import { Tiltakspenger } from 'components/opprettsak/samordning/Tiltakspenger';
+import { DevtoolWrapper } from 'components/devtools/DevtoolWrapper';
 
 interface Barn {
   fodselsdato: string;
@@ -367,14 +368,7 @@ export const OpprettSakLocal = () => {
 
   return (
     <form autoComplete={'off'}>
-      <Box
-        padding="space-16"
-        marginBlock="space-16"
-        background="default"
-        borderWidth="1"
-        borderColor="neutral-subtle"
-        borderRadius="4"
-      >
+      <DevtoolWrapper title="Utviklerverktøy – Opprett sak">
         <HGrid columns={2} gap="space-16">
           <VStack gap="space-16">
             <FormField form={form} formField={formFields.søknadsdato} />
@@ -451,7 +445,7 @@ export const OpprettSakLocal = () => {
             </HStack>
           </Box>
         </HGrid>
-      </Box>
+      </DevtoolWrapper>
     </form>
   );
 };
