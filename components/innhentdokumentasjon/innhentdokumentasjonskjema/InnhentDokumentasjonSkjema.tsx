@@ -1,3 +1,5 @@
+'use client';
+
 import { BodyShort, Button, Heading, InlineMessage, InfoCard, Link, Radio, VStack, CopyButton } from '@navikt/ds-react';
 import { SubmitEventHandler, useState } from 'react';
 
