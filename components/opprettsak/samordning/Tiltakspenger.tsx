@@ -44,7 +44,7 @@ export const Tiltakspenger = ({ form }: Props) => {
       <Label>Samordning, tiltakspenger</Label>
       {fields.map((field, index) => {
         return (
-          <HStack key={field.id} gap={'space-8'} align={'end'}>
+          <HStack key={field.id} gap={'space-8'} align={'end'} wrap={false}>
             <SelectWrapper
               label="Kilde"
               size={'small'}

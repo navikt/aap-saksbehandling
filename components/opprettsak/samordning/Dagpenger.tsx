@@ -25,15 +25,15 @@ const kildeOptions: ValuePair<DagpengerKilde>[] = [
 const ytelsesOptions: ValuePair<DagpengerYtelserType>[] = [
   {
     value: 'DAGPENGER_ARBEIDSSOKER_ORDINAER',
-    label: 'Dagpenger Arbeidssøker Ordinær',
+    label: 'Arbeidssøker Ordinær',
   },
   {
     value: 'DAGPENGER_PERMITTERING_ORDINAER',
-    label: 'Dagpenger Permittering Ordinær',
+    label: 'Permittering Ordinær',
   },
   {
     value: 'DAGPENGER_PERMITTERING_FISKEINDUSTRI',
-    label: 'Dagpenger Permittering Fiskeindustri',
+    label: 'Permittering Fiskeindustri',
   },
 ];
 
@@ -48,7 +48,7 @@ export const Dagpenger = ({ form }: Props) => {
       <Label>Samordning, dagpenger</Label>
       {fields.map((field, index) => {
         return (
-          <HStack key={field.id} gap={'space-8'} align={'end'}>
+          <HStack key={field.id} gap={'space-8'} align={'end'} wrap={false}>
             <SelectWrapper
               label="Kilde"
               size={'small'}
@@ -84,7 +84,7 @@ export const Dagpenger = ({ form }: Props) => {
               icon={<TrashIcon aria-hidden />}
               onClick={() => remove(index)}
             >
-              Fjern samordning
+              Fjern
             </Button>
           </HStack>
         );
@@ -103,7 +103,7 @@ export const Dagpenger = ({ form }: Props) => {
         variant={'tertiary'}
         icon={<PlusIcon aria-hidden />}
       >
-        Legg til samordning
+        Legg til
       </Button>
     </VStack>
   );
