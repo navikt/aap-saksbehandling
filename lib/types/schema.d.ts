@@ -13628,6 +13628,8 @@ export interface components {
       journalpostId: string;
       /**
        * Format: date
+       * @deprecated
+       * @description Bruk heller meldeDato fra MeldeperiodeMedMeldekortDto
        * @example 2025-04-01
        */
       meldeDato: string;
@@ -13644,6 +13646,11 @@ export interface components {
       meldekortProsesseringStatus: 'KLAR' | 'PROSESSERER_MELDEKORT';
     };
     'no.nav.aap.behandlingsflyt.behandling.meldekort.MeldeperiodeMedMeldekortDto': {
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      meldeDato?: string | null;
       meldekort?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.MeldekortDto'];
       meldeperiode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
       periode?: components['schemas']['no.nav.aap.komponenter.type.Periode'];
@@ -13869,6 +13876,7 @@ export interface components {
       'hvaSkalF\u00F8lgesOpp': string;
       /** @enum {string} */
       'hvemSkalF\u00F8lgeOpp': 'Lokalkontor' | 'NasjonalEnhet';
+      opprettetAv?: string | null;
     };
     'no.nav.aap.behandlingsflyt.behandling.oppfolgingsbehandling.Oppf\u00F8lgingsoppgaveGrunnlagResponse': {
       /** @enum {string} */
@@ -17697,6 +17705,7 @@ export interface components {
       'hvaSkalF\u00F8lgesOpp': string;
       /** @enum {string} */
       'hvemSkalF\u00F8lgeOpp': 'Lokalkontor' | 'NasjonalEnhet';
+      opprettetAv?: string | null;
       opprinnelse?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Opprinnelse'];
       reserverTilBruker?: string | null;
     };
@@ -18362,6 +18371,8 @@ export interface components {
     'no.nav.aap.behandlingsflyt.test.OpprettOgFullforBehandlingRequest': {
       /** @description Om søker svarte at hen mottar andre utbetalinger i søknaden. */
       andreUtbetalinger?: components['schemas']['no.nav.aap.behandlingsflyt.test.AndreUtbetalingerApiDto'];
+      /** @description Om det skal sendes automatisk meldekort ukentlig, så lenge saken har aktiv rettighetsperiode. */
+      automatiskMeldekort: boolean;
       /** @description Om personen svarer at han/hun er student i søknaden. */
       erStudent: boolean;
       /** @description Om personen svarer at han/hun har bodd/jobbet i Norge i siste 5 år. */
@@ -18375,7 +18386,7 @@ export interface components {
        * @description Søknadsdato. Brukes som rettighetsperiode.fom og mottattTidspunkt. Defaulter til dagens dato.
        * @example 2025-04-01
        */
-      's\u00F8knadsdato'?: string | null;
+      soeknadsdato?: string | null;
     };
     'no.nav.aap.behandlingsflyt.test.OpprettOgFullforBehandlingRespons': {
       saksnummer: string;
@@ -18385,6 +18396,11 @@ export interface components {
       erStudent: boolean;
       harMedlemskap: boolean;
       harYrkesskade: boolean;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      soeknadsdato?: string | null;
     };
     'no.nav.aap.behandlingsflyt.test.modell.TestPerson.Dagpenger': {
       /** @enum {string} */
@@ -18619,7 +18635,7 @@ export interface components {
     'no.nav.aap.oppgave.markering.MarkeringDto': {
       begrunnelse?: string | null;
       /** @enum {string} */
-      markeringType: 'HASTER' | 'KREVER_SPESIALKOMPETANSE';
+      markeringType: 'AVSLAG_11_5' | 'HASTER' | 'KREVER_SPESIALKOMPETANSE';
       opprettetAv?: string | null;
       opprettetAvNavn?: string | null;
       /**

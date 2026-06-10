@@ -147,6 +147,12 @@ export const AvklaroppfolgingVurdering = ({
         <Label>Dato for oppfølging</Label>
         <BodyShort>{formaterDatoForFrontend(grunnlag.datoForOppfølging)}</BodyShort>
       </div>
+      {grunnlag.opprettetAv && (
+        <div>
+          <Label>Opprettet av</Label>
+          <BodyShort>{grunnlag.opprettetAv}</BodyShort>
+        </div>
+      )}
       <div>
         <Label>Hva skal følges opp?</Label>
         <BodyShort>{grunnlag.hvaSkalFølgesOpp}</BodyShort>
