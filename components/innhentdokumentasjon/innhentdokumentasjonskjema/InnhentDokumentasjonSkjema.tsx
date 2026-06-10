@@ -16,6 +16,7 @@ import { useFeatureFlag } from 'context/UnleashContext';
 import { Alert } from 'components/alert/Alert';
 import useSWR from 'swr';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+import { slåSammenDefinerte } from 'lib/utils/string';
 
 export type Behandler = {
   type?: string;
@@ -205,12 +206,11 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
                       {fastlegeDto.adresse && (
                         <div>
                           Adresse:{' '}
-                          {[
+                          {slåSammenDefinerte(
+                            ', ',
                             fastlegeDto.adresse,
-                            [fastlegeDto.postnummer, fastlegeDto.poststed].filter(Boolean).join(' '),
-                          ]
-                            .filter(Boolean)
-                            .join(', ')}
+                            slåSammenDefinerte(' ', fastlegeDto.postnummer, fastlegeDto.poststed)
+                          )}
                         </div>
                       )}
                       {fastlegeDto.telefon && <div>Telefon: {fastlegeDto.telefon}</div>}
@@ -272,9 +272,11 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
                   {behandler.adresse && (
                     <BodyShort size={'small'}>
                       Adresse:{' '}
-                      {[behandler.adresse, [behandler.postnummer, behandler.poststed].filter(Boolean).join(' ')]
-                        .filter(Boolean)
-                        .join(', ')}
+                      {slåSammenDefinerte(
+                        ', ',
+                        behandler.adresse,
+                        slåSammenDefinerte(' ', behandler.postnummer, behandler.poststed)
+                      )}
                     </BodyShort>
                   )}
                   {behandler.telefon && <BodyShort size={'small'}>Telefon: {behandler.telefon}</BodyShort>}
