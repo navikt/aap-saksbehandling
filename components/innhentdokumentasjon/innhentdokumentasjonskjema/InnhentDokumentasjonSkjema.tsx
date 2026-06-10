@@ -65,8 +65,8 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
   const skalHenteFastlege = useFeatureFlag('HentFastlege');
 
   const { data: fastlege } = useSWR(
-    `api/dokumentinnhenting/behandleroppslag/fastlege/${saksnummer}`,
-    () => (skalHenteFastlege ? clientHentFastlege(saksnummer) : undefined),
+    skalHenteFastlege ? `api/dokumentinnhenting/behandleroppslag/fastlege/${saksnummer}` : null,
+    () => clientHentFastlege(saksnummer),
     {
       revalidateOnFocus: false,
     }
