@@ -64,8 +64,12 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
 
   const skalHenteFastlege = useFeatureFlag('HentFastlege');
 
-  const { data: fastlege } = useSWR(`api/dokumentinnhenting/behandleroppslag/fastlege/${saksnummer}`, () =>
-    skalHenteFastlege ? clientHentFastlege(saksnummer) : undefined
+  const { data: fastlege } = useSWR(
+    `api/dokumentinnhenting/behandleroppslag/fastlege/${saksnummer}`,
+    () => (skalHenteFastlege ? clientHentFastlege(saksnummer) : undefined),
+    {
+      revalidateOnFocus: false,
+    }
   );
 
   const skalViseDialogmeldingOption = useFeatureFlag('VisValgForDialogmelding');
