@@ -19,14 +19,12 @@ interface Props {
   ikkeRelevantePerioder?: Periode[];
   rettighetsperiodeStartdato: Date;
   skalVurdereYrkesskade: boolean;
-  erÅrsakssammenhengYrkesskade: boolean;
 }
 
 export const SykdomsvurderingNedsattArbeidsevneDetaljer = ({
   form,
   rettighetsperiodeStartdato,
   skalVurdereYrkesskade,
-  erÅrsakssammenhengYrkesskade,
   index,
   readonly,
 }: Props) => {
@@ -42,19 +40,17 @@ export const SykdomsvurderingNedsattArbeidsevneDetaljer = ({
 
   return (
     <>
-      {!erÅrsakssammenhengYrkesskade && (
-        <RadioGroupJaNei
-          name={`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnHalvparten`}
-          description={
-            'Det er tilstrekkelig at arbeidsevnen er redusert med 40 prosent (§ 11-23) hvis brukeren mottar AAP eller skal tre inn i en tidligere stanset sak (§ 11-31).'
-          }
-          control={form.control}
-          label={'Er arbeidsevnen nedsatt med minst halvparten?'}
-          horisontal={true}
-          rules={{ required: 'Du må svare på om arbeidsevnen er nedsatt med minst halvparten' }}
-          readOnly={readonly}
-        />
-      )}
+      <RadioGroupJaNei
+        name={`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnHalvparten`}
+        description={
+          'Det er tilstrekkelig at arbeidsevnen er redusert med 40 prosent (§ 11-23) hvis brukeren mottar AAP eller skal tre inn i en tidligere stanset sak (§ 11-31).'
+        }
+        control={form.control}
+        label={'Er arbeidsevnen nedsatt med minst halvparten?'}
+        horisontal={true}
+        rules={{ required: 'Du må svare på om arbeidsevnen er nedsatt med minst halvparten' }}
+        readOnly={readonly}
+      />
 
       <SykdomsvurderingYrkesskade
         form={form}
