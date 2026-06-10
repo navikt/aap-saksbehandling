@@ -38,7 +38,7 @@ export const MeldekortTabell = () => {
             .map((meldekort, index) => (
               <MeldekortTabellRow
                 key={index}
-                meldekort={meldekort}
+                meldePeriodeMedMeldekort={meldekort}
                 setSelectedMeldekort={setSelectedMeldekort}
                 setIsOpen={setIsOpen}
               />
