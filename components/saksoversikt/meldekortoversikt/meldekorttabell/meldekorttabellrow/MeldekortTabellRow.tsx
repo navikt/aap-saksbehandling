@@ -7,6 +7,7 @@ import { FørteTimer } from 'components/saksoversikt/meldekortoversikt/meldekort
 import { hentUkeNummerForPeriode } from '../MeldekortTabell';
 import { PencilIcon } from '@navikt/aksel-icons';
 import { useSakPersonInformasjon } from 'hooks/saksbehandling/SakPersoninformasjonHook';
+import { storForbokstavIHvertOrd } from 'lib/utils/string';
 
 interface Props {
   meldePeriodeMedMeldekort: MeldeperiodeMedMeldekortDto;
@@ -85,7 +86,7 @@ export function utledOppdatertAv(meldekort: MeldeperiodeMedMeldekortDto['meldeko
     return '-';
   }
   if (!meldekort.oppdatertAv && !meldekort.oppdatertAvSaksbehandler) {
-    return personNavn;
+    return storForbokstavIHvertOrd(personNavn);
   }
   return meldekort.oppdatertAv ?? '-';
 }
