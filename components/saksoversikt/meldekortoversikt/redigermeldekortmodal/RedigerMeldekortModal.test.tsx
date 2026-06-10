@@ -56,6 +56,7 @@ const meldekortMedDager: MeldeperiodeMedMeldekortDto = {
       { dato: '2025-01-19', timerArbeidet: 0 },
     ],
     journalpostId: '',
+    oppdatertAvSaksbehandler: true,
   },
 };
 
@@ -89,6 +90,7 @@ const meldekortMedNullTimer: MeldeperiodeMedMeldekortDto = {
       { dato: '2025-01-19', timerArbeidet: 0 },
     ],
     journalpostId: '',
+    oppdatertAvSaksbehandler: false,
   },
 };
 
