@@ -179,7 +179,11 @@ describe('RedigerMeldekortModal', () => {
       render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
       await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Registrere meldedato');
 
-      expect(screen.getByText('Bruker har ikke levert noen timer.')).toBeVisible();
+      expect(
+        screen.getByText(
+          'Bruker har ikke levert noen timer. Det vil ikke gå noen utbetaling før bruker registrerer timer i meldekortet.'
+        )
+      ).toBeVisible();
       expect(document.getElementById('rapporteringskalender')).not.toBeInTheDocument();
     });
 
@@ -187,7 +191,11 @@ describe('RedigerMeldekortModal', () => {
       render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekortMedNullTimer} />);
       await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Registrere meldedato');
 
-      expect(screen.getByText('Bruker har ikke levert noen timer.')).toBeVisible();
+      expect(
+        screen.getByText(
+          'Bruker har ikke levert noen timer. Det vil ikke gå noen utbetaling før bruker registrerer timer i meldekortet.'
+        )
+      ).toBeVisible();
       expect(document.getElementById('rapporteringskalender')).not.toBeInTheDocument();
     });
 
@@ -309,7 +317,8 @@ describe('RedigerMeldekortModal', () => {
       render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
       await fyllUtOgSubmit('18.01.2025');
 
-      expect(screen.getAllByText('Meldedato kan ikke være før meldeperiodens slutt.')[0]).toBeVisible();
+
+      expect(screen.getAllByText('Meldedato må være dagen etter meldeperiodens slutt eller senere.')[0]).toBeVisible();
     });
 
     it('viser feilmelding når meldedato er etter dagens dato', async () => {

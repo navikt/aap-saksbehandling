@@ -122,8 +122,11 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
           },
           validerIkkeFørMeldeperiodeTom: (value) => {
             const tom = meldekort?.meldeperiode.tom;
-            if (tom && erDatoFoerDato(value as string, formaterDatoForFrontend(tom))) {
-              return 'Meldedato kan ikke være før meldeperiodens slutt.';
+            if (tom) {
+              const dagenEtterTom = formaterDatoForFrontend(addDays(new Date(tom), 1));
+              if (erDatoFoerDato(value as string, dagenEtterTom)) {
+                return `Meldedato må være dagen etter meldeperiodens slutt eller senere.`;
+              }
             }
           },
         },
@@ -195,7 +198,12 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
                   <FormField form={form} formField={formFields.årsak} />
                   {skalViseMeldedato && <FormField form={form} formField={formFields.meldedato} />}
                   {skalViseTimer && <UtfyllingKalender readOnly={erÅrsakRegistrereMeldedato} />}
-                  {skalViseAlertForIngenTimer && <Alert variant={'info'}>Bruker har ikke levert noen timer.</Alert>}
+                  {skalViseAlertForIngenTimer && (
+                    <Alert variant={'info'}>
+                      Bruker har ikke levert noen timer. Det vil ikke gå noen utbetaling før bruker registrerer timer i
+                      meldekortet.
+                    </Alert>
+                  )}
                   <FormErrorSummary errorList={errorList} />
                   {error && <Alert variant={'error'}>{error}</Alert>}
                   {erÅrsakOverstyring && (

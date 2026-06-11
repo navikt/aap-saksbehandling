@@ -22,8 +22,6 @@ export const MeldekortTabellRow = ({ meldePeriodeMedMeldekort, setSelectedMeldek
   const tom = new Dato(meldePeriodeMedMeldekort.meldeperiode.tom);
 
   const antallTimerArbeidet = hentTotaltAntallTimerArbeidet(meldePeriodeMedMeldekort.meldekort?.dager);
-  const antallTimerArbeidetIProsent =
-    antallTimerArbeidet != null ? regnUtProsentForTimerArbeidet(antallTimerArbeidet) : undefined;
 
   const kanRedigereMeldekort = isAfter(new Date(), tom.dato);
 
@@ -41,15 +39,12 @@ export const MeldekortTabellRow = ({ meldePeriodeMedMeldekort, setSelectedMeldek
       </Table.HeaderCell>
       <Table.DataCell textSize={'small'}>
         {antallTimerArbeidet != null ? (
-          antallTimerArbeidet
+          `${antallTimerArbeidet} timer`
         ) : (
           <Tooltip content={'Timer er ikke rapportert / Bruker har ikke meldt seg'}>
             <BodyShort>-</BodyShort>
           </Tooltip>
         )}
-      </Table.DataCell>
-      <Table.DataCell textSize={'small'} colSpan={3}>
-        {antallTimerArbeidetIProsent != null ? `${antallTimerArbeidetIProsent} %` : '-'}
       </Table.DataCell>
       <Table.DataCell textSize={'small'}>
         {meldePeriodeMedMeldekort.meldekort?.meldeDato
@@ -89,11 +84,6 @@ export function utledOppdatertAv(meldekort: MeldeperiodeMedMeldekortDto['meldeko
     return storForbokstavIHvertOrd(personNavn);
   }
   return meldekort.oppdatertAv ?? '-';
-}
-
-function regnUtProsentForTimerArbeidet(antallTimerArbeidet: number): number {
-  const antallTimerFor2Uker = 37.5 * 2;
-  return Math.round((antallTimerArbeidet / antallTimerFor2Uker) * 100);
 }
 
 function hentTotaltAntallTimerArbeidet(dager?: DagDto[]) {

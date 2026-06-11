@@ -89,7 +89,7 @@ describe('MeldekortTabellRow', () => {
     it('viser totalt antall timer arbeidet når dager finnes', () => {
       renderRow(meldekortMedDager);
       // 10 dager * 7.5 = 75 timer
-      expect(screen.getByText('75')).toBeVisible();
+      expect(screen.getByText('75 timer')).toBeVisible();
     });
 
     it('viser 0 timer arbeidet når alle dager har 0 timer', () => {
@@ -101,21 +101,7 @@ describe('MeldekortTabellRow', () => {
         },
       };
       renderRow(meldekortNullTimer);
-      expect(screen.getByText('0')).toBeVisible();
-    });
-  });
-
-  describe('Prosent arbeidet', () => {
-    it('viser beregnet prosent når timer finnes', () => {
-      renderRow(meldekortMedDager);
-      // 75 / 75 * 100 = 100 %
-      expect(screen.getByText('100 %')).toBeVisible();
-    });
-
-    it('viser "-" for prosent når meldekort mangler dager', () => {
-      renderRow(meldekortUtenDager);
-      // Forventer minst én "-" i raden
-      expect(screen.getAllByText('-').length).toBeGreaterThan(0);
+      expect(screen.getByText('0 timer')).toBeVisible();
     });
   });
 
