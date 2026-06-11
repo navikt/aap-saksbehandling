@@ -2806,6 +2806,7 @@ export interface paths {
             | 'AVBRYT_REVURDERING'
             | 'AVKLAR_OPPFØLGING'
             | 'AVKLAR_STUDENT'
+            | 'AVKLAR_STUDENT_V2'
             | 'AVKLAR_SYKDOM'
             | 'BARNETILLEGG'
             | 'BEHANDLENDE_ENHET'
@@ -2836,6 +2837,7 @@ export interface paths {
             | 'KLAGEBEHANDLING_KONTOR'
             | 'KLAGEBEHANDLING_NAY'
             | 'KLAGEBEHANDLING_OPPSUMMERING'
+            | 'KRAV'
             | 'KVALITETSSIKRING'
             | 'MANGLENDE_LIGNING'
             | 'OMGJØRING'
@@ -2881,6 +2883,7 @@ export interface paths {
             | 'AVBRYT_REVURDERING'
             | 'AVKLAR_OPPFØLGING'
             | 'AVKLAR_STUDENT'
+            | 'AVKLAR_STUDENT_V2'
             | 'AVKLAR_SYKDOM'
             | 'BARNETILLEGG'
             | 'BEHANDLENDE_ENHET'
@@ -2911,6 +2914,7 @@ export interface paths {
             | 'KLAGEBEHANDLING_KONTOR'
             | 'KLAGEBEHANDLING_NAY'
             | 'KLAGEBEHANDLING_OPPSUMMERING'
+            | 'KRAV'
             | 'KVALITETSSIKRING'
             | 'MANGLENDE_LIGNING'
             | 'OMGJØRING'
@@ -5524,11 +5528,10 @@ export interface components {
        */
       'f\u00F8dselsdato': string;
       harNedsattArbeidsevne: boolean;
-      harYrkesskade: boolean;
-      'harYrkesskadeFraS\u00F8knad': boolean;
       inntekterPerAr?: components['schemas']['no.nav.aap.behandlingsflyt.InntektPer\u00C5rDto'][] | null;
       institusjoner: components['schemas']['no.nav.aap.behandlingsflyt.Institusjoner'];
       medlemskap: boolean;
+      samordning: components['schemas']['no.nav.aap.behandlingsflyt.SamordningDto'][];
       /** @enum {string|null} */
       steg?:
         | 'ARBEIDSOPPTRAPPING'
@@ -5536,6 +5539,7 @@ export interface components {
         | 'AVBRYT_REVURDERING'
         | 'AVKLAR_OPPFØLGING'
         | 'AVKLAR_STUDENT'
+        | 'AVKLAR_STUDENT_V2'
         | 'AVKLAR_SYKDOM'
         | 'BARNETILLEGG'
         | 'BEHANDLENDE_ENHET'
@@ -5566,6 +5570,7 @@ export interface components {
         | 'KLAGEBEHANDLING_KONTOR'
         | 'KLAGEBEHANDLING_NAY'
         | 'KLAGEBEHANDLING_OPPSUMMERING'
+        | 'KRAV'
         | 'KVALITETSSIKRING'
         | 'MANGLENDE_LIGNING'
         | 'OMGJØRING'
@@ -5633,6 +5638,18 @@ export interface components {
       'uf\u00F8regradTom'?: string | null;
       yrkesskader: components['schemas']['no.nav.aap.behandlingsflyt.TestYrkesskadeDto'][];
     };
+    'no.nav.aap.behandlingsflyt.PeriodeDto': {
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fom: string;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      tom: string;
+    };
     'no.nav.aap.behandlingsflyt.PersoninfoDTO': {
       /**
        * Format: date
@@ -5650,6 +5667,17 @@ export interface components {
     'no.nav.aap.behandlingsflyt.PersoninfoRequest': {
       /** Format: uuid */
       personReferanse: string;
+    };
+    'no.nav.aap.behandlingsflyt.SamordningDto': {
+      dagpengerKilde?: string | null;
+      dagpengerYtelseType?: string | null;
+      periode: components['schemas']['no.nav.aap.behandlingsflyt.PeriodeDto'];
+      /** Format: int32 */
+      sykepengerGrad?: number | null;
+      tiltakspengerKilde?: string | null;
+      tiltakspengerYtelseType?: string | null;
+      /** @enum {string} */
+      type: 'DAGPENGER' | 'SYKEPENGER' | 'TILTAKSPENGER';
     };
     'no.nav.aap.behandlingsflyt.TestBarn': {
       /**
@@ -5926,6 +5954,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -6013,6 +6042,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -6096,6 +6126,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -6179,6 +6210,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -6262,6 +6294,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -6345,6 +6378,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -6428,6 +6462,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -6511,6 +6546,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -6595,6 +6631,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -6678,6 +6715,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -6760,6 +6798,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -6843,6 +6882,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -6926,6 +6966,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -7009,6 +7050,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -7092,6 +7134,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -7175,6 +7218,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -7258,6 +7302,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -7341,6 +7386,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -7424,6 +7470,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -7508,6 +7555,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -7590,6 +7638,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -7673,6 +7722,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -7756,6 +7806,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -7839,6 +7890,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -7922,6 +7974,91 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
+        | '5040'
+        | '5041'
+        | '5050'
+        | '5051'
+        | '5052'
+        | '5053'
+        | '5054'
+        | '5056'
+        | '5057'
+        | '5058'
+        | '5059'
+        | '5060'
+        | '5096'
+        | '5097'
+        | '5098'
+        | '5099'
+        | '5999'
+        | '6000'
+        | '6001'
+        | '6002'
+        | '6003'
+        | '6004'
+        | '6005'
+        | '6006'
+        | '6007'
+        | '6008'
+        | '6009'
+        | '6010'
+        | '7001'
+        | '8001'
+        | '8002'
+        | '8003'
+        | '9001'
+        | '9002'
+        | '9003'
+        | '9004'
+        | '9082'
+        | '9083';
+      'l\u00F8sningerForPerioder': components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.PeriodisertStudentDto'][];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarStudentL\u00F8sningV2': {
+      /** @enum {string} */
+      behovstype:
+        | '4101'
+        | '4102'
+        | '4201'
+        | '4301'
+        | '5001'
+        | '5002'
+        | '5003'
+        | '5004'
+        | '5005'
+        | '5006'
+        | '5007'
+        | '5008'
+        | '5009'
+        | '5010'
+        | '5011'
+        | '5012'
+        | '5013'
+        | '5014'
+        | '5015'
+        | '5016'
+        | '5017'
+        | '5018'
+        | '5019'
+        | '5020'
+        | '5021'
+        | '5022'
+        | '5023'
+        | '5024'
+        | '5025'
+        | '5026'
+        | '5027'
+        | '5028'
+        | '5029'
+        | '5030'
+        | '5031'
+        | '5032'
+        | '5033'
+        | '5034'
+        | '5035'
+        | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -8005,6 +8142,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -8088,6 +8226,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -8171,6 +8310,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -8254,6 +8394,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -8336,6 +8477,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -8473,6 +8615,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -8557,6 +8700,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -8639,6 +8783,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -8722,6 +8867,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -8805,6 +8951,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -8888,6 +9035,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -8971,6 +9119,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -9054,6 +9203,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -9136,6 +9286,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -9218,6 +9369,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -9300,6 +9452,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -9390,6 +9543,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -9516,6 +9670,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -9599,6 +9754,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -9681,6 +9837,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -9764,6 +9921,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -9815,6 +9973,7 @@ export interface components {
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarPeriodisertOverstyrtForutg\u00E5endeMedlemskapL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarPeriodisertOverstyrtLovvalgMedlemskapL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarStudentL\u00F8sning']
+      | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarStudentL\u00F8sningV2']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarSykdomL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarVedtakslengdeL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.EtableringEgenVirksomhetL\u00F8sning']
@@ -9864,6 +10023,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -9947,6 +10107,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -10030,6 +10191,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -10113,6 +10275,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -10195,6 +10358,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -10277,6 +10441,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -10364,6 +10529,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -10452,6 +10618,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -10540,6 +10707,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -10627,6 +10795,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -10710,6 +10879,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -10793,6 +10963,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -10877,6 +11048,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -10960,6 +11132,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -11042,6 +11215,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -11124,6 +11298,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -11206,6 +11381,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -11288,6 +11464,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -11371,6 +11548,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -11454,6 +11632,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -11536,6 +11715,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -11619,6 +11799,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -11702,6 +11883,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -11785,6 +11967,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -11868,6 +12051,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -12351,7 +12535,7 @@ export interface components {
        * @description Bruk fom
        * @enum {string|null}
        */
-      harNedsattArbeidsevne?: 'JA' | 'JA_FORBIGÅENDE_PROBLEMER' | 'NEI' | null;
+      harNedsattArbeidsevne?: 'JA' | 'JA_FORBIGÅENDE_PROBLEMER' | 'NEI' | 'NEI_MEN_STUDENT' | null;
       harSkadeSykdomEllerLyte: boolean;
       hoveddiagnose?: string | null;
       kodeverk?: string | null;
@@ -12611,6 +12795,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -13720,6 +13905,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -13810,6 +13996,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -14235,6 +14422,14 @@ export interface components {
       vurderingerMeta: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.tidligerevurderinger.TidligereVurderingDto': {
+      /** @enum {string|null} */
+      muligRettighetstypeFraNavkontor?:
+        | 'ARBEIDSSØKER'
+        | 'BISTANDSBEHOV'
+        | 'STUDENT'
+        | 'SYKEPENGEERSTATNING'
+        | 'VURDERES_FOR_UFØRETRYGD'
+        | null;
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
       /** @enum {string|null} */
       rettighetstype?:
@@ -14898,6 +15093,7 @@ export interface components {
         | 'AVBRYT_REVURDERING'
         | 'AVKLAR_OPPFØLGING'
         | 'AVKLAR_STUDENT'
+        | 'AVKLAR_STUDENT_V2'
         | 'AVKLAR_SYKDOM'
         | 'BARNETILLEGG'
         | 'BEHANDLENDE_ENHET'
@@ -14928,6 +15124,7 @@ export interface components {
         | 'KLAGEBEHANDLING_KONTOR'
         | 'KLAGEBEHANDLING_NAY'
         | 'KLAGEBEHANDLING_OPPSUMMERING'
+        | 'KRAV'
         | 'KVALITETSSIKRING'
         | 'MANGLENDE_LIGNING'
         | 'OMGJØRING'
@@ -16054,7 +16251,7 @@ export interface components {
        */
       fom: string;
       /** @enum {string|null} */
-      harNedsattArbeidsevne?: 'JA' | 'JA_FORBIGÅENDE_PROBLEMER' | 'NEI' | null;
+      harNedsattArbeidsevne?: 'JA' | 'JA_FORBIGÅENDE_PROBLEMER' | 'NEI' | 'NEI_MEN_STUDENT' | null;
       harSkadeSykdomEllerLyte: boolean;
       hoveddiagnose?: string | null;
       kodeverk?: string | null;
@@ -16124,6 +16321,7 @@ export interface components {
         | 'IVERKSETT_VEDTAK'
         | 'KLAGEBEHANDLING_KONTOR'
         | 'KLAGEBEHANDLING_NAY'
+        | 'KRAV'
         | 'KVALITETSSIKRING'
         | 'LOVVALG'
         | 'MEDLEMSKAP'
@@ -16153,6 +16351,7 @@ export interface components {
         | 'AVBRYT_REVURDERING'
         | 'AVKLAR_OPPFØLGING'
         | 'AVKLAR_STUDENT'
+        | 'AVKLAR_STUDENT_V2'
         | 'AVKLAR_SYKDOM'
         | 'BARNETILLEGG'
         | 'BEHANDLENDE_ENHET'
@@ -16183,6 +16382,7 @@ export interface components {
         | 'KLAGEBEHANDLING_KONTOR'
         | 'KLAGEBEHANDLING_NAY'
         | 'KLAGEBEHANDLING_OPPSUMMERING'
+        | 'KRAV'
         | 'KVALITETSSIKRING'
         | 'MANGLENDE_LIGNING'
         | 'OMGJØRING'
@@ -16245,6 +16445,7 @@ export interface components {
         | 'IVERKSETT_VEDTAK'
         | 'KLAGEBEHANDLING_KONTOR'
         | 'KLAGEBEHANDLING_NAY'
+        | 'KRAV'
         | 'KVALITETSSIKRING'
         | 'LOVVALG'
         | 'MEDLEMSKAP'
@@ -16275,6 +16476,7 @@ export interface components {
         | 'AVBRYT_REVURDERING'
         | 'AVKLAR_OPPFØLGING'
         | 'AVKLAR_STUDENT'
+        | 'AVKLAR_STUDENT_V2'
         | 'AVKLAR_SYKDOM'
         | 'BARNETILLEGG'
         | 'BEHANDLENDE_ENHET'
@@ -16305,6 +16507,7 @@ export interface components {
         | 'KLAGEBEHANDLING_KONTOR'
         | 'KLAGEBEHANDLING_NAY'
         | 'KLAGEBEHANDLING_OPPSUMMERING'
+        | 'KRAV'
         | 'KVALITETSSIKRING'
         | 'MANGLENDE_LIGNING'
         | 'OMGJØRING'
@@ -16362,6 +16565,7 @@ export interface components {
         | 'AVBRYT_REVURDERING'
         | 'AVKLAR_OPPFØLGING'
         | 'AVKLAR_STUDENT'
+        | 'AVKLAR_STUDENT_V2'
         | 'AVKLAR_SYKDOM'
         | 'BARNETILLEGG'
         | 'BEHANDLENDE_ENHET'
@@ -16392,6 +16596,7 @@ export interface components {
         | 'KLAGEBEHANDLING_KONTOR'
         | 'KLAGEBEHANDLING_NAY'
         | 'KLAGEBEHANDLING_OPPSUMMERING'
+        | 'KRAV'
         | 'KVALITETSSIKRING'
         | 'MANGLENDE_LIGNING'
         | 'OMGJØRING'
@@ -16514,6 +16719,7 @@ export interface components {
         | 'IVERKSETT_VEDTAK'
         | 'KLAGEBEHANDLING_KONTOR'
         | 'KLAGEBEHANDLING_NAY'
+        | 'KRAV'
         | 'KVALITETSSIKRING'
         | 'LOVVALG'
         | 'MEDLEMSKAP'
@@ -16546,6 +16752,7 @@ export interface components {
         | 'AVBRYT_REVURDERING'
         | 'AVKLAR_OPPFØLGING'
         | 'AVKLAR_STUDENT'
+        | 'AVKLAR_STUDENT_V2'
         | 'AVKLAR_SYKDOM'
         | 'BARNETILLEGG'
         | 'BEHANDLENDE_ENHET'
@@ -16576,6 +16783,7 @@ export interface components {
         | 'KLAGEBEHANDLING_KONTOR'
         | 'KLAGEBEHANDLING_NAY'
         | 'KLAGEBEHANDLING_OPPSUMMERING'
+        | 'KRAV'
         | 'KVALITETSSIKRING'
         | 'MANGLENDE_LIGNING'
         | 'OMGJØRING'
@@ -16815,6 +17023,7 @@ export interface components {
         | '5034'
         | '5035'
         | '5036'
+        | '5037'
         | '5040'
         | '5041'
         | '5050'
@@ -16871,6 +17080,7 @@ export interface components {
         | 'AVBRYT_REVURDERING'
         | 'AVKLAR_OPPFØLGING'
         | 'AVKLAR_STUDENT'
+        | 'AVKLAR_STUDENT_V2'
         | 'AVKLAR_SYKDOM'
         | 'BARNETILLEGG'
         | 'BEHANDLENDE_ENHET'
@@ -16901,6 +17111,7 @@ export interface components {
         | 'KLAGEBEHANDLING_KONTOR'
         | 'KLAGEBEHANDLING_NAY'
         | 'KLAGEBEHANDLING_OPPSUMMERING'
+        | 'KRAV'
         | 'KVALITETSSIKRING'
         | 'MANGLENDE_LIGNING'
         | 'OMGJØRING'
@@ -18393,6 +18604,7 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.test.SoeknadDetaljer': {
       andreUtbetalinger?: components['schemas']['no.nav.aap.behandlingsflyt.test.AndreUtbetalingerApiDto'];
+      automatiskMeldekort: boolean;
       erStudent: boolean;
       harMedlemskap: boolean;
       harYrkesskade: boolean;
@@ -18635,7 +18847,7 @@ export interface components {
     'no.nav.aap.oppgave.markering.MarkeringDto': {
       begrunnelse?: string | null;
       /** @enum {string} */
-      markeringType: 'AVSLAG_11_5' | 'HASTER' | 'KREVER_SPESIALKOMPETANSE';
+      markeringType: 'HASTER' | 'KREVER_SPESIALKOMPETANSE';
       opprettetAv?: string | null;
       opprettetAvNavn?: string | null;
       /**
