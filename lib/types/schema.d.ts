@@ -18849,7 +18849,7 @@ export interface components {
     'no.nav.aap.oppgave.markering.MarkeringDto': {
       begrunnelse?: string | null;
       /** @enum {string} */
-      markeringType: 'HASTER' | 'KREVER_SPESIALKOMPETANSE';
+      markeringType: 'AVSLAG_11_5' | 'HASTER' | 'KREVER_SPESIALKOMPETANSE';
       opprettetAv?: string | null;
       opprettetAvNavn?: string | null;
       /**
