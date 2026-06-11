@@ -39,7 +39,7 @@ export const MeldekortTabellRow = ({ meldePeriodeMedMeldekort, setSelectedMeldek
       </Table.HeaderCell>
       <Table.DataCell textSize={'small'}>
         {antallTimerArbeidet != null ? (
-          antallTimerArbeidet
+          `${antallTimerArbeidet} timer`
         ) : (
           <Tooltip content={'Timer er ikke rapportert / Bruker har ikke meldt seg'}>
             <BodyShort>-</BodyShort>

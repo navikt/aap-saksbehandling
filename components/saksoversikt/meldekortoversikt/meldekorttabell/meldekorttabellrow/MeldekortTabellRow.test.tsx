@@ -89,7 +89,7 @@ describe('MeldekortTabellRow', () => {
     it('viser totalt antall timer arbeidet når dager finnes', () => {
       renderRow(meldekortMedDager);
       // 10 dager * 7.5 = 75 timer
-      expect(screen.getByText('75')).toBeVisible();
+      expect(screen.getByText('75 timer')).toBeVisible();
     });
 
     it('viser 0 timer arbeidet når alle dager har 0 timer', () => {
@@ -101,7 +101,7 @@ describe('MeldekortTabellRow', () => {
         },
       };
       renderRow(meldekortNullTimer);
-      expect(screen.getByText('0')).toBeVisible();
+      expect(screen.getByText('0 timer')).toBeVisible();
     });
   });
 
