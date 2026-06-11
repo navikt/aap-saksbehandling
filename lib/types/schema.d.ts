@@ -5479,6 +5479,46 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/test/endre/{saksnummer}/legg-til-kravvurdering': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description saksnummer */
+          saksnummer: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['no.nav.aap.behandlingsflyt.LeggTilKravVurderingDTO'];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -5508,8 +5548,30 @@ export interface components {
       /** @enum {string} */
       oppholdstype: 'A' | 'D' | 'F' | 'H' | 'P' | 'R' | 'S' | 'UKJENT' | 'V';
     };
+    'no.nav.aap.behandlingsflyt.KravVurderingTestDto': {
+      /** @enum {string} */
+      kravType: 'GJENOPPTAK' | 'KLAGE' | 'NYTT_KRAV_AAP' | 'TILLEGGSOPPLYSNING' | 'TRUKKET_SØKNAD';
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      kravdato?: string | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      muligRettFra?: string | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      's\u00F8knadsdato'?: string | null;
+    };
     'no.nav.aap.behandlingsflyt.LeggTilInstitusjonsoppholdDTO': {
       opphold: components['schemas']['no.nav.aap.behandlingsflyt.InstitusjonsoppholdItemDTO'][];
+    };
+    'no.nav.aap.behandlingsflyt.LeggTilKravVurderingDTO': {
+      kravVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.KravVurderingTestDto'][];
     };
     'no.nav.aap.behandlingsflyt.LeggTilYrkesskadeDTO': {
       yrkesskader: components['schemas']['no.nav.aap.behandlingsflyt.TestYrkesskadeDto'][];
@@ -5530,6 +5592,7 @@ export interface components {
       'harYrkesskadeFraS\u00F8knad': boolean;
       inntekterPerAr?: components['schemas']['no.nav.aap.behandlingsflyt.InntektPer\u00C5rDto'][] | null;
       institusjoner: components['schemas']['no.nav.aap.behandlingsflyt.Institusjoner'];
+      kravVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.KravVurderingTestDto'][];
       medlemskap: boolean;
       samordning: components['schemas']['no.nav.aap.behandlingsflyt.SamordningDto'][];
       /** @enum {string|null} */
