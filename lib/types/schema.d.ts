@@ -5528,6 +5528,8 @@ export interface components {
        */
       'f\u00F8dselsdato': string;
       harNedsattArbeidsevne: boolean;
+      harYrkesskade: boolean;
+      'harYrkesskadeFraS\u00F8knad': boolean;
       inntekterPerAr?: components['schemas']['no.nav.aap.behandlingsflyt.InntektPer\u00C5rDto'][] | null;
       institusjoner: components['schemas']['no.nav.aap.behandlingsflyt.Institusjoner'];
       medlemskap: boolean;
