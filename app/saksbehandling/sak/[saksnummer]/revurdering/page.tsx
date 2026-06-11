@@ -13,9 +13,7 @@ export default async function Page(props: { params: Promise<{ saksnummer: string
     return (
       <HStack justify="center">
         <VStack width="600" gap="space-16" margin="space-32" align="center">
-          <Alert variant="warning">
-            Søknaden er trukket. Kan ikke opprette ny vurdering eller revurdering.
-          </Alert>
+          <Alert variant="warning">Søknaden er trukket. Kan ikke opprette ny vurdering eller revurdering.</Alert>
 
           <Link href={`/saksbehandling/sak/${sak.saksnummer}`}>Gå tilbake</Link>
         </VStack>

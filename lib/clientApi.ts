@@ -131,7 +131,10 @@ export function clientSøkPåBehandler(fritekst: string, saksnummer: string) {
 }
 
 export function clientHentFastlege(saksnummer: string) {
-  return clientFetch<FastlegeResponse>(`${BASE_URL}/api/dokumentinnhenting/behandleroppslag/fastlege/${saksnummer}`, 'GET');
+  return clientFetch<FastlegeResponse>(
+    `${BASE_URL}/api/dokumentinnhenting/behandleroppslag/fastlege/${saksnummer}`,
+    'GET'
+  );
 }
 
 export function clientHentFlyt(behandlingsreferanse: string) {

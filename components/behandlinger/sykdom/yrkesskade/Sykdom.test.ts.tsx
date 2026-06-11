@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { hentStegDataForOppgittYrkesskadeInfo } from 'components/behandlinger/sykdom/Sykdom';
 
 describe('hentStegDataForOppgittYrkesskadeInfo', () => {
-    it('skal vise steg når oppgittYrkesskadeISøknad er true og ingen yrkesskadeVurdering finnes', () => {
+  it('skal vise steg når oppgittYrkesskadeISøknad er true og ingen yrkesskadeVurdering finnes', () => {
     const result = hentStegDataForOppgittYrkesskadeInfo({
       opplysninger: { oppgittYrkesskadeISøknad: true, innhentedeYrkesskader: [] },
     });

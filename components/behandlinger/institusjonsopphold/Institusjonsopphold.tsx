@@ -20,12 +20,7 @@ export const Institusjonsopphold = async ({ behandlingsreferanse, flyt }: Props)
     Behovstype.AVKLAR_HELSEINSTITUSJON
   );
 
-  const vurderSoningSteg = getStegData(
-    'ET_ANNET_STED',
-    'DU_ER_ET_ANNET_STED',
-    flyt,
-    Behovstype.AVKLAR_SONINGSFORRHOLD
-  );
+  const vurderSoningSteg = getStegData('ET_ANNET_STED', 'DU_ER_ET_ANNET_STED', flyt, Behovstype.AVKLAR_SONINGSFORRHOLD);
   return (
     <GruppeSteg
       prosessering={flyt.prosessering}

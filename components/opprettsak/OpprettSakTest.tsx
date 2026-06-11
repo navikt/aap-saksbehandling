@@ -95,6 +95,10 @@ const OpprettTestSakSkjema = () => {
 
   return (
     <DevtoolWrapper title="Testverktøy – Opprett sak">
+      <Alert variant="info">
+        Man kan nå opprette Kelvin-saker i Dolly. Under feltet &quot;Arbeidsytelser&quot;, under &quot;Kelvin&quot;,
+        velg &quot;AAP-ytelse&quot;.
+      </Alert>
       <form onSubmit={form.handleSubmit(handleSubmit)}>
         <FormField form={form} formField={formFields.ident} />
         <FormField form={form} formField={formFields.medlemskap} />
