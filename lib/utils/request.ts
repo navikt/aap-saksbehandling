@@ -15,7 +15,13 @@ export function queryParamsArray(key: string, values: (string | number)[]) {
   return values.map((e) => `${key}=${e}`).join('&');
 }
 
-const validSortKeys = new Set<string>(Object.values(NoNavAapOppgaveListeOppgaveSorteringSortBy));
+// TODO: fjern når @navikt/aap-oppgave-typescript-types er oppdatert med TILBAKEKREVINGS_BELOP
+export const TILBAKEKREVINGS_BELOP_SORT_KEY = 'TILBAKEKREVINGS_BELOP' as NoNavAapOppgaveListeOppgaveSorteringSortBy;
+
+const validSortKeys = new Set<string>([
+  ...Object.values(NoNavAapOppgaveListeOppgaveSorteringSortBy),
+  TILBAKEKREVINGS_BELOP_SORT_KEY,
+]);
 
 /**
  * Type guard for enum NoNavAapOppgaveListeOppgaveSorteringSortBy

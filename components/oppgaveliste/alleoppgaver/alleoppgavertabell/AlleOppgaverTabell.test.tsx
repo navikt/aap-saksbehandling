@@ -59,6 +59,7 @@ describe('AlleOppgaverTabell', () => {
         setSortBy={() => {}}
         sort={undefined}
         aktivKø={undefined}
+        visBeløpKolonne={false}
       />,
       false
     );
@@ -79,6 +80,7 @@ describe('AlleOppgaverTabell', () => {
         setSortBy={() => {}}
         sort={undefined}
         aktivKø={undefined}
+        visBeløpKolonne={false}
       />,
       false
     );

@@ -17,6 +17,7 @@ import { oppgaveBehandlingstyper, OppgaveStatuser } from 'lib/utils/behandlingst
 import { alleVurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
 import { oppgaveAvklaringsbehov } from 'lib/utils/avklaringsbehov';
 import {
+  NoNavAapOppgaveFilterFilterDtoBehandlingstyper,
   NoNavAapOppgaveListeOppgaveSorteringSortBy,
   NoNavAapOppgaveListeUtvidetOppgavelisteFilterBehandlingstyper,
   NoNavAapOppgaveListeUtvidetOppgavelisteFilterReturStatuser,
@@ -32,6 +33,7 @@ import { AlleOppgaverFiltrering } from 'components/oppgaveliste/filtrering/alleo
 import { ValuePair } from 'components/form/FormField';
 import { useInnloggetBruker } from 'hooks/BrukerHook';
 import { Alert } from 'components/alert/Alert';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   enheter: Enhet[];
@@ -43,6 +45,7 @@ export const AlleOppgaver = ({ enheter }: Props) => {
   const { hentLagredeAktiveEnheter, lagreAktiveEnheter } = useLagreAktiveEnheter();
 
   const bruker = useInnloggetBruker();
+  const oppgavelisteMedBeløp = useFeatureFlag('OppgavelisteMedBelopISaksbehandling');
   const [aktivKø, setAktivKø] = useState<AktivKø | undefined>(undefined);
   const [hasteoppgaverØverst, setHasteOppgaverØverst] = useState<boolean>(true);
 
@@ -269,6 +272,13 @@ export const AlleOppgaver = ({ enheter }: Props) => {
             setSortBy={setSort}
             sort={sort}
             aktivKø={aktivKø}
+            visBeløpKolonne={
+              oppgavelisteMedBeløp &&
+              (oppgaveKøer
+                ?.find((e) => e.id === aktivKø.id)
+                ?.behandlingstyper?.includes(NoNavAapOppgaveFilterFilterDtoBehandlingstyper.TILBAKEKREVING) ??
+                false)
+            }
           />
         ) : (
           <BodyShort size={'small'} className={styles.ingenoppgaver}>
