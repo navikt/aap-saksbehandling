@@ -19,7 +19,7 @@ import {
   TiltakspengerYtelserType,
 } from 'lib/types/types';
 import { OpprettYrkesskade } from 'components/opprettsak/yrkesskade/OpprettYrkesskade';
-import { Dato } from '../../lib/types/Dato';
+import { Dato } from 'lib/types/Dato';
 import { DevtoolWrapper } from 'components/devtools/DevtoolWrapper';
 import { OpprettSamordning } from 'components/opprettsak/samordning/OpprettSamordning';
 
@@ -38,11 +38,11 @@ export type SamordningType = 'SYKEPENGER' | 'DAGPENGER' | 'TILTAKSPENGER';
 
 export interface SamordningOppføring {
   type: SamordningType;
-  grad?: number; // SYKEPENGER
-  dagpengerYtelseType?: DagpengerYtelserType; // DAGPENGER
-  dagpengerKilde?: DagpengerKilde; // DAGPENGER
-  tiltakspengerYtelseType?: TiltakspengerYtelserType; // TILTAKSPENGER
-  tiltakspengerKilde?: TiltakspengerKilde; // TILTAKSPENGER
+  sykepengerGrad?: number;
+  dagpengerYtelseType?: DagpengerYtelserType;
+  dagpengerKilde?: DagpengerKilde;
+  tiltakspengerYtelseType?: TiltakspengerYtelserType;
+  tiltakspengerKilde?: TiltakspengerKilde;
   periode: { fom: string; tom: string };
 }
 
@@ -292,7 +292,7 @@ export const OpprettSakLocal = () => {
         samordning
           ?.filter((s) => s.type === 'SYKEPENGER')
           .map((s) => ({
-            grad: s.grad ?? 100,
+            grad: s.sykepengerGrad ?? 100,
             periode: {
               fom: formaterDatoForBackend(parse(s.periode.fom, 'dd.MM.yyyy', new Date())),
               tom: formaterDatoForBackend(parse(s.periode.tom, 'dd.MM.yyyy', new Date())),
