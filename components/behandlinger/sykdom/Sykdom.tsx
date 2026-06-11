@@ -23,6 +23,7 @@ import { OppgittYrkesskadeUtenRegistertreffInfo } from 'components/behandlinger/
 import {
   StudentvurderingMedDataFetching
 } from 'components/behandlinger/sykdom/student/studentvurdering/StudentvurderingMedDataFetching';
+import { unleashService } from 'lib/services/unleash/unleashService';
 
 interface Props {
   behandlingsreferanse: string;
@@ -52,6 +53,8 @@ export const Sykdom = async ({ behandlingsreferanse, flyt }: Props) => {
   const overganguføreSteg = getStegData(aktivStegGruppe, 'OVERGANG_UFORE', flyt);
   const overgangarbeidSteg = getStegData(aktivStegGruppe, 'OVERGANG_ARBEID', flyt);
   const oppgittYrkesskadeInfoSteg = hentStegDataForOppgittYrkesskadeInfo(yrkesskadeVurderingGrunnlag.data);
+
+  const skalViseStudentV2 = unleashService.isEnabled('StudentV2');
 
   return (
     <GruppeSteg
@@ -144,7 +147,7 @@ export const Sykdom = async ({ behandlingsreferanse, flyt }: Props) => {
           <OppgittYrkesskadeUtenRegistertreffInfo grunnlag={yrkesskadeVurderingGrunnlag.data} />
         </StegSuspense>
       )}
-      {vurderStudentStegV2.skalViseSteg && (
+      {vurderStudentStegV2.skalViseSteg && skalViseStudentV2 && (
         <StegSuspense>
           <StudentvurderingMedDataFetching
             behandlingsreferanse={behandlingsreferanse}
