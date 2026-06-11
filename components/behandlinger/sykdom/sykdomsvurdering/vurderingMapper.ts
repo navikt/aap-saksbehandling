@@ -34,9 +34,10 @@ function mapArbeidsevneOgYrkesskade(
 
   const yrkesskadeBegrunnelse = skalBegrunneYrkesskaden ? data?.yrkesskadeBegrunnelse : undefined;
 
-  const erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense = skalVurdereYrkesskade
-    ? getTrueFalseEllerUndefined(data.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense)
-    : undefined;
+  const erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense =
+    skalBegrunneYrkesskaden || (skalVurdereYrkesskade && !vurderingDatoSammeSomRettighetsperiodeStart)
+      ? getTrueFalseEllerUndefined(data.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense)
+      : undefined;
 
   // Kun mappe derson bruker har tilstrekkelig nedsatt arbeidsevne
   const erSkadeSykdomEllerLyteVesentligdel =

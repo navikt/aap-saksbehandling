@@ -6,7 +6,6 @@ export const FLAGS = [
   'VisArenasakerOversikt',
   'ArenasakerLenkeTilVisninsklient',
   'BegrunnelseForIkkeSendBrev',
-  'ForutgaaendeGap',
   'VisBoksForVurderingOmHastemarkeringSkalFjernes',
   'TilkjentYtelseMedDiff',
   'UnderveisMedDiff',
@@ -16,7 +15,7 @@ export const FLAGS = [
   'Skal1117og1118AlltidVises',
   'VisValgForDialogmelding',
   'FjernMarkeringMottatteHelseopplysninger',
-  'VisValgForDialogmelding',
+  'HentFastlege',
   'StudentV2'
 ] as const;
 
@@ -31,7 +30,6 @@ export const mockedFlags: Flags = {
   VisArenasakerOversikt: true,
   ArenasakerLenkeTilVisninsklient: true,
   BegrunnelseForIkkeSendBrev: true,
-  ForutgaaendeGap: true,
   VisBoksForVurderingOmHastemarkeringSkalFjernes: true,
   TilkjentYtelseMedDiff: true,
   UnderveisMedDiff: true,
@@ -41,5 +39,6 @@ export const mockedFlags: Flags = {
   Skal1117og1118AlltidVises: true,
   FjernMarkeringMottatteHelseopplysninger: true,
   VisValgForDialogmelding: true,
-  StudentV2: true
+  StudentV2: true,
+  HentFastlege: true,
 };

@@ -31,7 +31,7 @@ interface Props {
 
 export interface RedigerMeldekortFormFields {
   begrunnelse: string;
-  årsak: string;
+  årsak: Årsaker;
   meldedato: string;
   dager: Dag[];
 }
@@ -41,7 +41,7 @@ interface Dag {
   timerArbeidet: string;
 }
 
-enum Årsaker {
+export enum Årsaker {
   REGISTRERE_MELDEDATO = 'Registrere meldedato',
   LEVERE_MELDEKORT_FOR_BRUKER = 'Lever/endre meldekort for bruker',
   OVERSTYRE_BRUKER = 'Overstyre bruker',
@@ -195,9 +195,7 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
                   <FormField form={form} formField={formFields.årsak} />
                   {skalViseMeldedato && <FormField form={form} formField={formFields.meldedato} />}
                   {skalViseTimer && <UtfyllingKalender readOnly={erÅrsakRegistrereMeldedato} />}
-                  {skalViseAlertForIngenTimer && (
-                    <Alert variant={'info'}>Bruker har ikke levert noen timer.</Alert>
-                  )}
+                  {skalViseAlertForIngenTimer && <Alert variant={'info'}>Bruker har ikke levert noen timer.</Alert>}
                   <FormErrorSummary errorList={errorList} />
                   {error && <Alert variant={'error'}>{error}</Alert>}
                   {erÅrsakOverstyring && (
@@ -279,7 +277,7 @@ function getDefaultValuesForForm(meldekort?: MeldeperiodeMedMeldekortDto): Redig
 
   return {
     begrunnelse: '',
-    årsak: '',
+    årsak: '' as Årsaker,
     meldedato: meldekort.meldekort?.meldeDato ? formaterDatoForFrontend(meldekort.meldekort.meldeDato) : '',
     dager: alleDager,
   };
@@ -310,10 +308,13 @@ export function mapFormDataTilOppdaterMeldekortRequest(
   meldeperiode: MeldeperiodeMedMeldekortDto['meldeperiode']
 ): OppdaterMeldekortRequest {
   return {
-    dager: data.dager.map((dag) => ({
-      dato: dag.dato,
-      timerArbeidet: Number(replaceCommasWithDots(dag.timerArbeidet)),
-    })),
+    dager:
+      data.årsak === Årsaker.LEVERE_MELDEKORT_FOR_BRUKER
+        ? data.dager.map((dag) => ({
+            dato: dag.dato,
+            timerArbeidet: Number(replaceCommasWithDots(dag.timerArbeidet)),
+          }))
+        : [],
     meldeDato: new Dato(data.meldedato).formaterForBackend(),
     begrunnelse: data.begrunnelse,
     meldeperiode,

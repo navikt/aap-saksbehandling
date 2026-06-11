@@ -15,7 +15,7 @@ import {
   VStack,
 } from '@navikt/ds-react';
 import { Kelvinsøk } from 'components/kelvinsøkeresultat/Kelvinsøk';
-import { ArrowRightLeftIcon, LeaveIcon, XMarkIcon, ExternalLinkIcon } from '@navikt/aksel-icons';
+import { ArrowRightLeftIcon, ExternalLinkIcon, LeaveIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Kelvinsøkeresultat } from 'components/kelvinsøkeresultat/Kelvinsøkeresultat';
 import styles from './KelvinAppHeader.module.css';
 import { AppSwitcher } from 'components/kelvinappheader/AppSwitcher';

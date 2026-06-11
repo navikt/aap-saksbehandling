@@ -24,8 +24,6 @@ import { Dato } from 'lib/types/Dato';
 import { Kort } from 'components/kort/Kort';
 import { Alert } from 'components/alert/Alert';
 
-const lokalDevToolsForBehandlingOgSak = isLocal();
-
 /**
  * Slår sammen duplikater i vurderingsbehov og legger til en teller for hvor mange ganger hvert behov forekommer.
  * Eksempel: ["MELDEKORT", "MELDEKORT", "MELDEKORT", "SØKNAD"] vises som 'Meldekort (3), Søknad'
@@ -200,7 +198,7 @@ export const SakMedBehandlinger = ({
             ))}
           </Table.Body>
         </Table>
-        {lokalDevToolsForBehandlingOgSak && (
+        {isLocal() && (
           <SakDevTools
             saksnummer={sak.saksnummer}
             behandlinger={sak.behandlinger.map((e) => ({ referanse: e.referanse, type: e.typeBehandling }))}

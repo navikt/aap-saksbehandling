@@ -6,25 +6,33 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 import { FørteTimer } from 'components/saksoversikt/meldekortoversikt/meldekorttabell/førtetimer/FørteTimer';
 import { hentUkeNummerForPeriode } from '../MeldekortTabell';
 import { PencilIcon } from '@navikt/aksel-icons';
+import { useSakPersonInformasjon } from 'hooks/saksbehandling/SakPersoninformasjonHook';
+import { storForbokstavIHvertOrd } from 'lib/utils/string';
 
 interface Props {
-  meldekort: MeldeperiodeMedMeldekortDto;
+  meldePeriodeMedMeldekort: MeldeperiodeMedMeldekortDto;
   setSelectedMeldekort: (meldekort: MeldeperiodeMedMeldekortDto) => void;
   setIsOpen: (isOpen: boolean) => void;
 }
 
-export const MeldekortTabellRow = ({ meldekort, setSelectedMeldekort, setIsOpen }: Props) => {
-  const fom = new Dato(meldekort.meldeperiode.fom);
-  const tom = new Dato(meldekort.meldeperiode.tom);
+export const MeldekortTabellRow = ({ meldePeriodeMedMeldekort, setSelectedMeldekort, setIsOpen }: Props) => {
+  const { personInformasjon } = useSakPersonInformasjon();
 
-  const antallTimerArbeidet = hentTotaltAntallTimerArbeidet(meldekort.meldekort?.dager);
+  const fom = new Dato(meldePeriodeMedMeldekort.meldeperiode.fom);
+  const tom = new Dato(meldePeriodeMedMeldekort.meldeperiode.tom);
+
+  const antallTimerArbeidet = hentTotaltAntallTimerArbeidet(meldePeriodeMedMeldekort.meldekort?.dager);
   const antallTimerArbeidetIProsent =
     antallTimerArbeidet != null ? regnUtProsentForTimerArbeidet(antallTimerArbeidet) : undefined;
 
   const kanRedigereMeldekort = isAfter(new Date(), tom.dato);
 
   return (
-    <Table.ExpandableRow expandOnRowClick content={<FørteTimer meldekort={meldekort} />} togglePlacement={'right'}>
+    <Table.ExpandableRow
+      expandOnRowClick
+      content={<FørteTimer meldekort={meldePeriodeMedMeldekort} />}
+      togglePlacement={'right'}
+    >
       <Table.HeaderCell textSize={'small'} colSpan={2} scope={'row'}>
         <VStack gap={'space-8'}>
           <BodyShort size={'small'}>{`Uke ${hentUkeNummerForPeriode(fom.dato, tom.dato)}`}</BodyShort>
@@ -44,14 +52,18 @@ export const MeldekortTabellRow = ({ meldekort, setSelectedMeldekort, setIsOpen 
         {antallTimerArbeidetIProsent != null ? `${antallTimerArbeidetIProsent} %` : '-'}
       </Table.DataCell>
       <Table.DataCell textSize={'small'}>
-        {meldekort.meldekort?.meldeDato ? formaterDatoForFrontend(meldekort.meldekort?.meldeDato) : '-'}
-      </Table.DataCell>
-      <Table.DataCell textSize={'small'}>
-        {meldekort.meldekort?.oppdatertTidspunkt
-          ? formaterDatoForFrontend(meldekort.meldekort?.oppdatertTidspunkt)
+        {meldePeriodeMedMeldekort.meldekort?.meldeDato
+          ? formaterDatoForFrontend(meldePeriodeMedMeldekort.meldekort?.meldeDato)
           : '-'}
       </Table.DataCell>
-      <Table.DataCell textSize={'small'}>{meldekort.meldekort?.oppdatertAv}</Table.DataCell>
+      <Table.DataCell textSize={'small'}>
+        {meldePeriodeMedMeldekort.meldekort?.oppdatertTidspunkt
+          ? formaterDatoForFrontend(meldePeriodeMedMeldekort.meldekort?.oppdatertTidspunkt)
+          : '-'}
+      </Table.DataCell>
+      <Table.DataCell textSize={'small'}>
+        {utledOppdatertAv(meldePeriodeMedMeldekort.meldekort, personInformasjon.navn)}
+      </Table.DataCell>
       <Table.DataCell textSize={'small'}>
         {kanRedigereMeldekort && (
           <Button
@@ -59,7 +71,7 @@ export const MeldekortTabellRow = ({ meldekort, setSelectedMeldekort, setIsOpen 
             variant={'tertiary'}
             icon={<PencilIcon aria-label={'rediger meldekort'} />}
             onClick={() => {
-              setSelectedMeldekort(meldekort);
+              setSelectedMeldekort(meldePeriodeMedMeldekort);
               setIsOpen(true);
             }}
           />
@@ -68,6 +80,16 @@ export const MeldekortTabellRow = ({ meldekort, setSelectedMeldekort, setIsOpen 
     </Table.ExpandableRow>
   );
 };
+
+export function utledOppdatertAv(meldekort: MeldeperiodeMedMeldekortDto['meldekort'], personNavn: string): string {
+  if (!meldekort) {
+    return '-';
+  }
+  if (!meldekort.oppdatertAv && !meldekort.oppdatertAvSaksbehandler) {
+    return storForbokstavIHvertOrd(personNavn);
+  }
+  return meldekort.oppdatertAv ?? '-';
+}
 
 function regnUtProsentForTimerArbeidet(antallTimerArbeidet: number): number {
   const antallTimerFor2Uker = 37.5 * 2;

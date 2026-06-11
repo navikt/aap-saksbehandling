@@ -1,18 +1,24 @@
-import { BodyShort, Button, Heading, Link } from '@navikt/ds-react';
+'use client';
+
+import { BodyShort, Button, Heading, InlineMessage, InfoCard, Link, Radio, VStack, CopyButton } from '@navikt/ds-react';
 import { SubmitEventHandler, useState } from 'react';
 
 import styles from './InnhentDokumentasjonSkjema.module.css';
 import { BestillLegeerklæring } from 'lib/types/types';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { clientBestillDialogmelding, clientSøkPåBehandler } from 'lib/clientApi';
+import { clientBestillDialogmelding, clientHentFastlege, clientSøkPåBehandler } from 'lib/clientApi';
 import { Forhåndsvisning } from 'components/innhentdokumentasjon/innhentdokumentasjonskjema/Forhåndsvisning';
 import { AsyncComboSearch } from 'components/form/asynccombosearch/AsyncComboSearch';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
-import { isError } from 'lib/utils/api';
-import { ExternalLinkIcon } from '@navikt/aksel-icons';
+import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
+import { isError, isSuccess } from 'lib/utils/api';
+import { ExternalLinkIcon, InformationSquareIcon } from '@navikt/aksel-icons';
 import { useFeatureFlag } from 'context/UnleashContext';
 import { Alert } from 'components/alert/Alert';
+import useSWR from 'swr';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+import { slåSammenDefinerte } from 'lib/utils/string';
 
 export type Behandler = {
   type?: string;
@@ -31,6 +37,7 @@ export type Behandler = {
 };
 
 type FormFields = {
+  behandlerValg: 'fastlege' | 'søk';
   behandler: ValuePair;
   dokumentasjonstype: 'L8' | 'L40';
   melding: string;
@@ -55,6 +62,16 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
   const [defaultOptions, setDefaultOptions] = useState<ValuePair[]>([]);
   const { saksnummer, behandlingsreferanse } = useParamsMedType();
 
+  const skalHenteFastlege = useFeatureFlag('HentFastlege');
+
+  const { data: fastlege } = useSWR(
+    skalHenteFastlege ? `api/dokumentinnhenting/behandleroppslag/fastlege/${saksnummer}` : null,
+    () => clientHentFastlege(saksnummer),
+    {
+      revalidateOnFocus: false,
+    }
+  );
+
   const skalViseDialogmeldingOption = useFeatureFlag('VisValgForDialogmelding');
   const optionsForTypeDokumentasjon = skalViseDialogmeldingOption
     ? [
@@ -69,7 +86,15 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
         { label: 'Legeerklæring ved arbeidsuførhet (L40)', value: 'L40' },
       ];
 
+  const fastlegeResponse = isSuccess(fastlege) ? fastlege.data : undefined;
+  const fastlegeDto = fastlegeResponse?.fastlege;
+
   const { form, formFields } = useConfigForm<FormFields>({
+    behandlerValg: {
+      type: 'radio',
+      label: 'Velg behandler',
+      options: [],
+    },
     behandler: {
       type: 'async_combobox',
     },
@@ -88,23 +113,30 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
 
   const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit(async (data) => {
+      const isFastlegeValgt = fastlegeDto && data.behandlerValg === 'fastlege';
+      const behandlerNavn = isFastlegeValgt
+        ? `${fastlegeDto.navn}${fastlegeDto.kontor ? ` – ${fastlegeDto.kontor}` : ''}`
+        : data.behandler.label;
+      const behandlerRef = isFastlegeValgt ? fastlegeDto.behandlerRef : data.behandler.value.split('::')[0];
+      const behandlerHprNr = isFastlegeValgt ? fastlegeDto.hprId : data.behandler.value.split('::')[1];
+
+      const manglerHprNr = !behandlerHprNr || behandlerHprNr === 'null';
+
+      if (manglerHprNr) {
+        setError(': Mangler HPR-nr på behandler');
+        return;
+      }
+
       const body: BestillLegeerklæring = {
-        behandlerNavn: data.behandler.label,
-        behandlerRef: data.behandler.value.split('::')[0],
-        behandlerHprNr: data.behandler.value.split('::')[1],
+        behandlerNavn,
+        behandlerRef,
+        behandlerHprNr,
         dokumentasjonType: data.dokumentasjonstype,
         fritekst: data.melding,
         saksnummer: saksnummer,
         behandlingsReferanse: behandlingsreferanse,
       };
 
-      const manglerHprNr =
-        body.behandlerHprNr === undefined || body.behandlerHprNr === null || body.behandlerHprNr === 'null';
-
-      if (manglerHprNr) {
-        setError(': Mangler HPR-nr på behandler');
-        return;
-      }
       setIsLoading(true);
       const result = await clientBestillDialogmelding(body).finally(() => setIsLoading(false));
 
@@ -139,6 +171,8 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
     return res;
   };
 
+  const behandlerValg = form.watch('behandlerValg');
+
   return (
     <div className={'flex-column'}>
       <Heading level={'3'} size={'small'}>
@@ -153,16 +187,110 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
         <BodyShort size={'small'}>Rutiner for innhenting av helseopplysninger</BodyShort>
         <ExternalLinkIcon />
       </Link>
+      {isError(fastlege) ? <ApiException apiResponses={[fastlege]} /> : null}
       <form onSubmit={handleSubmit} className={'flex-column'} autoComplete={'off'}>
-        <AsyncComboSearch
-          label={'Velg behandler som skal motta meldingen'}
-          form={form}
-          name={'behandler'}
-          fetcher={behandlersøk}
-          rules={{ required: 'Du må velge en behandler' }}
-          size={'small'}
-          defaultOptions={defaultOptions}
-        />
+        {fastlegeDto ? (
+          <div>
+            <RadioGroupWrapper
+              name={'behandlerValg'}
+              control={form.control}
+              label={'Velg behandler'}
+              rules={{ required: 'Du må velge en behandler' }}
+              size={'small'}
+              className={
+                behandlerValg === 'søk'
+                  ? `${styles.behandlerValgGruppe} ${styles.behandlerValgÅpen}`
+                  : styles.behandlerValgGruppe
+              }
+            >
+              <Radio value={'fastlege'} className={styles.radioItem}>
+                <div className={styles.fastlegeRadioInnhold}>
+                  <div>
+                    <div>{fastlegeDto.navn}</div>
+                    <div className={styles.behandlerValgDetaljer}>
+                      {fastlegeDto.kontor && <div>Kontor: {fastlegeDto.kontor}</div>}
+                      {fastlegeDto.adresse && (
+                        <div>
+                          Adresse:{' '}
+                          {slåSammenDefinerte(
+                            ', ',
+                            fastlegeDto.adresse,
+                            slåSammenDefinerte(' ', fastlegeDto.postnummer, fastlegeDto.poststed)
+                          )}
+                        </div>
+                      )}
+                      {fastlegeDto.telefon && <div>Telefon: {fastlegeDto.telefon}</div>}
+                    </div>
+                  </div>
+                  <div className={styles.fastlegeEtikett}>Registrert fastlege</div>
+                </div>
+                {!fastlegeResponse.varFastlegeRiktigPåSøknadstidspunkt &&
+                  !fastlegeResponse.erFastlegeEndretSidenSøknadstidspunkt && (
+                    <InlineMessage status="warning" size="small" className={styles.fastlegeRadioAdvarsel}>
+                      Bruker oppgir i søknaden at informasjon om fastlegen ikke er riktig
+                    </InlineMessage>
+                  )}
+              </Radio>
+              <Radio value={'søk'} className={styles.radioItem}>
+                Annen behandler
+              </Radio>
+            </RadioGroupWrapper>
+            {behandlerValg === 'søk' && (
+              <div className={styles.annenBehandlerSøk}>
+                <AsyncComboSearch
+                  label={'Søk etter behandler'}
+                  form={form}
+                  name={'behandler'}
+                  fetcher={behandlersøk}
+                  rules={{ required: 'Du må velge en behandler' }}
+                  size={'small'}
+                  defaultOptions={defaultOptions}
+                />
+              </div>
+            )}
+          </div>
+        ) : (
+          <AsyncComboSearch
+            label={'Velg behandler som skal motta meldingen'}
+            form={form}
+            name={'behandler'}
+            fetcher={behandlersøk}
+            rules={{ required: 'Du må velge en behandler' }}
+            size={'small'}
+            defaultOptions={defaultOptions}
+          />
+        )}
+        {fastlegeResponse?.andreBehandlereFraSøknad?.map((behandler, index) => (
+          <InfoCard key={index} data-color={'info'} size={'small'} as={'section'}>
+            <InfoCard.Header icon={<InformationSquareIcon />}>
+              <InfoCard.Title>Behandler oppgitt i søknaden</InfoCard.Title>
+            </InfoCard.Header>
+            <InfoCard.Content>
+              <VStack>
+                {behandler.navn && (
+                  <BodyShort size={'small'} as={'div'} className={styles.behandlerNavn}>
+                    <span>{behandler.navn}</span>
+                    <CopyButton copyText={behandler.navn} size="xsmall" />
+                  </BodyShort>
+                )}
+                <div className={styles.behandlerValgDetaljer}>
+                  {behandler.legekontor && <BodyShort size={'small'}>Kontor: {behandler.legekontor}</BodyShort>}
+                  {behandler.adresse && (
+                    <BodyShort size={'small'}>
+                      Adresse:{' '}
+                      {slåSammenDefinerte(
+                        ', ',
+                        behandler.adresse,
+                        slåSammenDefinerte(' ', behandler.postnummer, behandler.poststed)
+                      )}
+                    </BodyShort>
+                  )}
+                  {behandler.telefon && <BodyShort size={'small'}>Telefon: {behandler.telefon}</BodyShort>}
+                </div>
+              </VStack>
+            </InfoCard.Content>
+          </InfoCard>
+        ))}
         <FormField form={form} formField={formFields.dokumentasjonstype} />
         <FormField form={form} formField={formFields.melding} />
         <div className={styles.rad}>

@@ -20,7 +20,7 @@ export const Sykepenger = ({ form }: Props) => {
       <Label>Samordning, sykepenger</Label>
       {fields.map((field, index) => {
         return (
-          <HStack key={field.id} gap={'space-8'} align={'end'}>
+          <HStack key={field.id} gap={'space-8'} align={'end'} wrap={false}>
             <TextFieldWrapper label={`Grad`} control={form.control} name={`sykepenger.${index}.grad`} type={'text'} />
             <DateInputWrapper label={`Fra og med`} control={form.control} name={`sykepenger.${index}.periode.fom`} />
             <DateInputWrapper label={`Til og med`} control={form.control} name={`sykepenger.${index}.periode.tom`} />
@@ -31,7 +31,7 @@ export const Sykepenger = ({ form }: Props) => {
               icon={<TrashIcon aria-hidden />}
               onClick={() => remove(index)}
             >
-              Fjern samordning
+              Fjern
             </Button>
           </HStack>
         );
@@ -46,7 +46,7 @@ export const Sykepenger = ({ form }: Props) => {
         variant={'tertiary'}
         icon={<PlusIcon aria-hidden />}
       >
-        Legg til samordning
+        Legg til
       </Button>
     </VStack>
   );

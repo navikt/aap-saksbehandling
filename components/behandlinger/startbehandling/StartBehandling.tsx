@@ -27,10 +27,7 @@ export const StartBehandling = async ({ behandlingsreferanse, flyt }: Props) => 
     return <ApiException apiResponses={[venteInformasjon]} />;
   }
 
-  if (
-    !VENTESTATUSER_SOM_SKAL_KUNNE_GJENÅPNES.includes(venteInformasjon?.data?.grunn) ||
-    !flyt.visning.visVentekort
-  ) {
+  if (!VENTESTATUSER_SOM_SKAL_KUNNE_GJENÅPNES.includes(venteInformasjon?.data?.grunn) || !flyt.visning.visVentekort) {
     return <StartBehandlingRedirectRiktigGruppe flyt={flyt} />;
   }
 

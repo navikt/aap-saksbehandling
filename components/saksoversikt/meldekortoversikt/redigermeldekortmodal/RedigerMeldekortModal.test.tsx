@@ -5,6 +5,7 @@ import userEvent from '@testing-library/user-event';
 import {
   mapFormDataTilOppdaterMeldekortRequest,
   RedigerMeldekortModal,
+  Årsaker,
 } from 'components/saksoversikt/meldekortoversikt/redigermeldekortmodal/RedigerMeldekortModal';
 import { MeldeperiodeMedMeldekortDto } from 'lib/types/types';
 import { addDays } from 'date-fns';
@@ -56,6 +57,7 @@ const meldekortMedDager: MeldeperiodeMedMeldekortDto = {
       { dato: '2025-01-19', timerArbeidet: 0 },
     ],
     journalpostId: '',
+    oppdatertAvSaksbehandler: true,
   },
 };
 
@@ -89,6 +91,7 @@ const meldekortMedNullTimer: MeldeperiodeMedMeldekortDto = {
       { dato: '2025-01-19', timerArbeidet: 0 },
     ],
     journalpostId: '',
+    oppdatertAvSaksbehandler: false,
   },
 };
 
@@ -326,7 +329,7 @@ const meldeperiode: MeldeperiodeMedMeldekortDto['meldeperiode'] = {
 describe('mapFormDataTilOppdaterMeldekortRequest', () => {
   it('mapper begrunnelse til request', () => {
     const result = mapFormDataTilOppdaterMeldekortRequest(
-      { begrunnelse: 'Min begrunnelse', årsak: '', meldedato: '20.01.2025', dager: [] },
+      { begrunnelse: 'Min begrunnelse', årsak: '' as Årsaker, meldedato: '20.01.2025', dager: [] },
       meldeperiode
     );
     expect(result.begrunnelse).toBe('Min begrunnelse');
@@ -334,7 +337,7 @@ describe('mapFormDataTilOppdaterMeldekortRequest', () => {
 
   it('mapper meldedato fra frontend-format (dd.MM.yyyy) til backend-format (yyyy-MM-dd)', () => {
     const result = mapFormDataTilOppdaterMeldekortRequest(
-      { begrunnelse: '', årsak: '', meldedato: '20.01.2025', dager: [] },
+      { begrunnelse: '', årsak: '' as Årsaker, meldedato: '20.01.2025', dager: [] },
       meldeperiode
     );
     expect(result.meldeDato).toBe('2025-01-20');
@@ -344,7 +347,7 @@ describe('mapFormDataTilOppdaterMeldekortRequest', () => {
     const result = mapFormDataTilOppdaterMeldekortRequest(
       {
         begrunnelse: '',
-        årsak: '',
+        årsak: Årsaker.LEVERE_MELDEKORT_FOR_BRUKER,
         meldedato: '20.01.2025',
         dager: [{ dato: '2025-01-06', timerArbeidet: '7,5' }],
       },
@@ -357,12 +360,42 @@ describe('mapFormDataTilOppdaterMeldekortRequest', () => {
     const result = mapFormDataTilOppdaterMeldekortRequest(
       {
         begrunnelse: '',
-        årsak: '',
+        årsak: Årsaker.LEVERE_MELDEKORT_FOR_BRUKER,
         meldedato: '20.01.2025',
         dager: [{ dato: '2025-01-06', timerArbeidet: '' }],
       },
       meldeperiode
     );
     expect(result.dager[0].timerArbeidet).toBe(0);
+  });
+
+  it('returnerer dager fra skjema når årsak er "Lever/endre meldekort for bruker"', () => {
+    const result = mapFormDataTilOppdaterMeldekortRequest(
+      {
+        begrunnelse: '',
+        årsak: Årsaker.LEVERE_MELDEKORT_FOR_BRUKER,
+        meldedato: '20.01.2025',
+        dager: [
+          { dato: '2025-01-06', timerArbeidet: '7.5' },
+          { dato: '2025-01-07', timerArbeidet: '0' },
+        ],
+      },
+      meldeperiode
+    );
+    expect(result.dager).toHaveLength(2);
+    expect(result.dager[0]).toEqual({ dato: '2025-01-06', timerArbeidet: 7.5 });
+  });
+
+  it('returnerer tom dager-liste ved årsak "Registrere meldedato"', () => {
+    const result = mapFormDataTilOppdaterMeldekortRequest(
+      {
+        begrunnelse: '',
+        årsak: Årsaker.REGISTRERE_MELDEDATO,
+        meldedato: '20.01.2025',
+        dager: [{ dato: '2025-01-06', timerArbeidet: '7.5' }],
+      },
+      meldeperiode
+    );
+    expect(result.dager).toEqual([]);
   });
 });

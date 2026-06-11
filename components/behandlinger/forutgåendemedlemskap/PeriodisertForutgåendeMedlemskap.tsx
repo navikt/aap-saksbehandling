@@ -20,13 +20,12 @@ interface Props {
   flyt: BehandlingFlytOgTilstand;
 }
 export const PeriodisertForutgåendeMedlemskap = async ({ behandlingsreferanse, flyt }: Props) => {
-  const [grunnlag, beregningsperiodeGrunnlag, automatiskVurdering, yrkesskadeVurderingGrunnlag] =
-    await Promise.all([
-      hentForutgåendeMedlemskapGrunnlag(behandlingsreferanse),
-      hentBeregningstidspunktVurdering(behandlingsreferanse),
-      hentForutgåendeMedlemskapsVurdering(behandlingsreferanse),
-      hentYrkesskadeVurderingGrunnlag(behandlingsreferanse),
-    ]);
+  const [grunnlag, beregningsperiodeGrunnlag, automatiskVurdering, yrkesskadeVurderingGrunnlag] = await Promise.all([
+    hentForutgåendeMedlemskapGrunnlag(behandlingsreferanse),
+    hentBeregningstidspunktVurdering(behandlingsreferanse),
+    hentForutgåendeMedlemskapsVurdering(behandlingsreferanse),
+    hentYrkesskadeVurderingGrunnlag(behandlingsreferanse),
+  ]);
 
   if (
     isError(grunnlag) ||

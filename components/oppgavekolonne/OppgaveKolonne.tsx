@@ -45,13 +45,17 @@ export const OppgaveKolonne = async ({ behandlingsreferanse, aktivGruppe, classN
   <section className={className}>
     {aktivGruppe === 'START_BEHANDLING' && <StartBehandling behandlingsreferanse={behandlingsreferanse} flyt={flyt} />}
     {aktivGruppe === 'SØKNAD' && <Søknad behandlingsreferanse={behandlingsreferanse} flyt={flyt} />}
-    {aktivGruppe === 'AVBRYT_REVURDERING' && <AvbrytRevurdering behandlingsreferanse={behandlingsreferanse} flyt={flyt} />}
+    {aktivGruppe === 'AVBRYT_REVURDERING' && (
+      <AvbrytRevurdering behandlingsreferanse={behandlingsreferanse} flyt={flyt} />
+    )}
     {aktivGruppe === 'LOVVALG' && (
       <StegSuspense>
         <LovvalgPeriodisert behandlingsreferanse={behandlingsreferanse} flyt={flyt} />
       </StegSuspense>
     )}
-    {aktivGruppe === 'RETTIGHETSPERIODE' && <Rettighetsperiode behandlingsreferanse={behandlingsreferanse} flyt={flyt} />}
+    {aktivGruppe === 'RETTIGHETSPERIODE' && (
+      <Rettighetsperiode behandlingsreferanse={behandlingsreferanse} flyt={flyt} />
+    )}
     {aktivGruppe === 'ALDER' && (
       <StegSuspense>
         <AlderMedDataFetching behandlingsreferanse={behandlingsreferanse} flyt={flyt} />
@@ -64,7 +68,9 @@ export const OppgaveKolonne = async ({ behandlingsreferanse, aktivGruppe, classN
         <PeriodisertForutgåendeMedlemskap behandlingsreferanse={behandlingsreferanse} flyt={flyt} />
       </StegSuspense>
     )}
-    {aktivGruppe === 'OPPHOLDSKRAV' && <OppholdskravStegGruppe behandlingsreferanse={behandlingsreferanse} flyt={flyt} />}
+    {aktivGruppe === 'OPPHOLDSKRAV' && (
+      <OppholdskravStegGruppe behandlingsreferanse={behandlingsreferanse} flyt={flyt} />
+    )}
     {aktivGruppe === 'GRUNNLAG' && <Grunnlag behandlingsreferanse={behandlingsreferanse} flyt={flyt} />}
     {aktivGruppe === 'VEDTAKSLENGDE' && <Vedtakslengde behandlingsreferanse={behandlingsreferanse} flyt={flyt} />}
     {aktivGruppe === 'UNDERVEIS' && <Underveis behandlingsreferanse={behandlingsreferanse} flyt={flyt} />}
@@ -79,8 +85,12 @@ export const OppgaveKolonne = async ({ behandlingsreferanse, aktivGruppe, classN
     {aktivGruppe === 'BREV' && <Brev behandlingsreferanse={behandlingsreferanse} flyt={flyt} />}
     {/* Klage */}
     {aktivGruppe === 'FORMKRAV' && <Formkrav behandlingsreferanse={behandlingsreferanse} flyt={flyt} />}
-    {aktivGruppe === 'KLAGEBEHANDLING_KONTOR' && <KlagebehandlingKontor behandlingsreferanse={behandlingsreferanse} flyt={flyt} />}
-    {aktivGruppe === 'KLAGEBEHANDLING_NAY' && <KlagebehandlingNay behandlingsreferanse={behandlingsreferanse} flyt={flyt} />}
+    {aktivGruppe === 'KLAGEBEHANDLING_KONTOR' && (
+      <KlagebehandlingKontor behandlingsreferanse={behandlingsreferanse} flyt={flyt} />
+    )}
+    {aktivGruppe === 'KLAGEBEHANDLING_NAY' && (
+      <KlagebehandlingNay behandlingsreferanse={behandlingsreferanse} flyt={flyt} />
+    )}
     {aktivGruppe === 'OMGJØRING' && <Omgjøring behandlingsreferanse={behandlingsreferanse} flyt={flyt} />}
     {aktivGruppe === 'OPPRETTHOLDELSE' && <Opprettholdelse behandlingsreferanse={behandlingsreferanse} flyt={flyt} />}
     {aktivGruppe === 'TREKK_KLAGE' && <TrekkKlage behandlingsreferanse={behandlingsreferanse} flyt={flyt} />}
@@ -95,8 +105,12 @@ export const OppgaveKolonne = async ({ behandlingsreferanse, aktivGruppe, classN
       <AvklarOppfolgingsSteg behandlingsreferanse={behandlingsreferanse} flyt={flyt} />
     )}
     {/* Aktivitetsplikt */}
-    {aktivGruppe === 'AKTIVITETSPLIKT_11_7' && <Aktivitetsplikt11_7 behandlingsreferanse={behandlingsreferanse} flyt={flyt} />}
-    {aktivGruppe === 'AKTIVITETSPLIKT_11_9' && <Aktivitetsplikt11_9 behandlingsreferanse={behandlingsreferanse} flyt={flyt} />}
+    {aktivGruppe === 'AKTIVITETSPLIKT_11_7' && (
+      <Aktivitetsplikt11_7 behandlingsreferanse={behandlingsreferanse} flyt={flyt} />
+    )}
+    {aktivGruppe === 'AKTIVITETSPLIKT_11_9' && (
+      <Aktivitetsplikt11_9 behandlingsreferanse={behandlingsreferanse} flyt={flyt} />
+    )}
     {aktivGruppe === 'AVBRYT_AKTIVITETSPLIKTBEHANDLING' && (
       <AvbrytAktivitetspliktbehandling behandlingsreferanse={behandlingsreferanse} flyt={flyt} />
     )}
