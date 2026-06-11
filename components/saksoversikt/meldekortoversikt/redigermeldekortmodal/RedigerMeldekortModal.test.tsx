@@ -179,7 +179,11 @@ describe('RedigerMeldekortModal', () => {
       render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
       await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Registrere meldedato');
 
-      expect(screen.getByText('Bruker har ikke levert noen timer.')).toBeVisible();
+      expect(
+        screen.getByText(
+          'Bruker har ikke levert noen timer. Det vil ikke gå noen utbetaling før bruker registrerer timer i meldekortet.'
+        )
+      ).toBeVisible();
       expect(document.getElementById('rapporteringskalender')).not.toBeInTheDocument();
     });
 
@@ -187,7 +191,11 @@ describe('RedigerMeldekortModal', () => {
       render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekortMedNullTimer} />);
       await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Registrere meldedato');
 
-      expect(screen.getByText('Bruker har ikke levert noen timer.')).toBeVisible();
+      expect(
+        screen.getByText(
+          'Bruker har ikke levert noen timer. Det vil ikke gå noen utbetaling før bruker registrerer timer i meldekortet.'
+        )
+      ).toBeVisible();
       expect(document.getElementById('rapporteringskalender')).not.toBeInTheDocument();
     });
 

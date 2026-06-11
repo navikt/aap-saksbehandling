@@ -195,7 +195,12 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
                   <FormField form={form} formField={formFields.årsak} />
                   {skalViseMeldedato && <FormField form={form} formField={formFields.meldedato} />}
                   {skalViseTimer && <UtfyllingKalender readOnly={erÅrsakRegistrereMeldedato} />}
-                  {skalViseAlertForIngenTimer && <Alert variant={'info'}>Bruker har ikke levert noen timer.</Alert>}
+                  {skalViseAlertForIngenTimer && (
+                    <Alert variant={'info'}>
+                      Bruker har ikke levert noen timer. Det vil ikke gå noen utbetaling før bruker registrerer timer i
+                      meldekortet.
+                    </Alert>
+                  )}
                   <FormErrorSummary errorList={errorList} />
                   {error && <Alert variant={'error'}>{error}</Alert>}
                   {erÅrsakOverstyring && (
