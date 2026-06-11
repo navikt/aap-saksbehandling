@@ -317,7 +317,9 @@ describe('RedigerMeldekortModal', () => {
       render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
       await fyllUtOgSubmit('18.01.2025');
 
-      expect(screen.getAllByText('Meldedato kan ikke være før meldeperiodens slutt.')[0]).toBeVisible();
+      expect(
+        screen.getAllByText('Meldedato må være dagen etter meldeperiodens slutt (20.01.2025) eller senere.')[0]
+      ).toBeVisible();
     });
 
     it('viser feilmelding når meldedato er etter dagens dato', async () => {

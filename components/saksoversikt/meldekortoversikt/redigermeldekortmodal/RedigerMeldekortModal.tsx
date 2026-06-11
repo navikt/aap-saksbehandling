@@ -122,8 +122,11 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
           },
           validerIkkeFørMeldeperiodeTom: (value) => {
             const tom = meldekort?.meldeperiode.tom;
-            if (tom && erDatoFoerDato(value as string, formaterDatoForFrontend(tom))) {
-              return 'Meldedato kan ikke være før meldeperiodens slutt.';
+            if (tom) {
+              const dagenEtterTom = formaterDatoForFrontend(addDays(new Date(tom), 1));
+              if (erDatoFoerDato(value as string, dagenEtterTom)) {
+                return `Meldedato må være dagen etter meldeperiodens slutt eller senere.`;
+              }
             }
           },
         },
