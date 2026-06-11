@@ -34,17 +34,29 @@ interface Inntekt {
   beløp: string;
 }
 
-export type SamordningType = 'SYKEPENGER' | 'DAGPENGER' | 'TILTAKSPENGER';
+type SamordningPeriode = { fom: string; tom: string };
 
-export interface SamordningOppføring {
-  type: SamordningType;
+type SamordningSykepenger = {
+  type: 'SYKEPENGER';
   sykepengerGrad?: number;
-  dagpengerYtelseType?: DagpengerYtelserType;
-  dagpengerKilde?: DagpengerKilde;
-  tiltakspengerYtelseType?: TiltakspengerYtelserType;
-  tiltakspengerKilde?: TiltakspengerKilde;
-  periode: { fom: string; tom: string };
-}
+  periode: SamordningPeriode;
+};
+
+type SamordningDagpenger = {
+  type: 'DAGPENGER';
+  dagpengerYtelseType: DagpengerYtelserType;
+  dagpengerKilde: DagpengerKilde;
+  periode: SamordningPeriode;
+};
+
+type SamordningTiltakspenger = {
+  type: 'TILTAKSPENGER';
+  tiltakspengerYtelseType: TiltakspengerYtelserType;
+  tiltakspengerKilde: TiltakspengerKilde;
+  periode: SamordningPeriode;
+};
+
+export type SamordningOppføring = SamordningSykepenger | SamordningDagpenger | SamordningTiltakspenger;
 
 interface YrkesskadeOppføring {
   kilde: 'SØKNAD' | 'REGISTER';
@@ -288,6 +300,14 @@ export const OpprettSakLocal = () => {
           år: Number(inntekt.år),
           beløp: { verdi: Number(inntekt.beløp) },
         })) || [],
+      samordning:
+        samordning?.map((s) => ({
+          ...s,
+          periode: {
+            fom: formaterDatoForBackend(parse(s.periode.fom, 'dd.MM.yyyy', new Date())),
+            tom: formaterDatoForBackend(parse(s.periode.tom, 'dd.MM.yyyy', new Date())),
+          },
+        })) ?? [],
       sykepenger:
         samordning
           ?.filter((s) => s.type === 'SYKEPENGER')
@@ -302,8 +322,8 @@ export const OpprettSakLocal = () => {
         samordning
           ?.filter((s) => s.type === 'DAGPENGER')
           .map((s) => ({
-            dagpengerYtelseType: s.dagpengerYtelseType!,
-            kilde: s.dagpengerKilde!,
+            dagpengerYtelseType: s.dagpengerYtelseType,
+            kilde: s.dagpengerKilde,
             periode: {
               fom: formaterDatoForBackend(parse(s.periode.fom, 'dd.MM.yyyy', new Date())),
               tom: formaterDatoForBackend(parse(s.periode.tom, 'dd.MM.yyyy', new Date())),
@@ -313,8 +333,8 @@ export const OpprettSakLocal = () => {
         samordning
           ?.filter((s) => s.type === 'TILTAKSPENGER')
           .map((s) => ({
-            ytelseType: s.tiltakspengerYtelseType!,
-            kilde: s.tiltakspengerKilde!,
+            ytelseType: s.tiltakspengerYtelseType,
+            kilde: s.tiltakspengerKilde,
             periode: {
               fom: formaterDatoForBackend(parse(s.periode.fom, 'dd.MM.yyyy', new Date())),
               tom: formaterDatoForBackend(parse(s.periode.tom, 'dd.MM.yyyy', new Date())),

@@ -2836,6 +2836,7 @@ export interface paths {
             | 'KLAGEBEHANDLING_KONTOR'
             | 'KLAGEBEHANDLING_NAY'
             | 'KLAGEBEHANDLING_OPPSUMMERING'
+            | 'KRAV'
             | 'KVALITETSSIKRING'
             | 'MANGLENDE_LIGNING'
             | 'OMGJØRING'
@@ -2911,6 +2912,7 @@ export interface paths {
             | 'KLAGEBEHANDLING_KONTOR'
             | 'KLAGEBEHANDLING_NAY'
             | 'KLAGEBEHANDLING_OPPSUMMERING'
+            | 'KRAV'
             | 'KVALITETSSIKRING'
             | 'MANGLENDE_LIGNING'
             | 'OMGJØRING'
@@ -5529,6 +5531,7 @@ export interface components {
       inntekterPerAr?: components['schemas']['no.nav.aap.behandlingsflyt.InntektPer\u00C5rDto'][] | null;
       institusjoner: components['schemas']['no.nav.aap.behandlingsflyt.Institusjoner'];
       medlemskap: boolean;
+      samordning: components['schemas']['no.nav.aap.behandlingsflyt.SamordningDto'][];
       /** @enum {string|null} */
       steg?:
         | 'ARBEIDSOPPTRAPPING'
@@ -5566,6 +5569,7 @@ export interface components {
         | 'KLAGEBEHANDLING_KONTOR'
         | 'KLAGEBEHANDLING_NAY'
         | 'KLAGEBEHANDLING_OPPSUMMERING'
+        | 'KRAV'
         | 'KVALITETSSIKRING'
         | 'MANGLENDE_LIGNING'
         | 'OMGJØRING'
@@ -5633,6 +5637,18 @@ export interface components {
       'uf\u00F8regradTom'?: string | null;
       yrkesskader: components['schemas']['no.nav.aap.behandlingsflyt.TestYrkesskadeDto'][];
     };
+    'no.nav.aap.behandlingsflyt.PeriodeDto': {
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fom: string;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      tom: string;
+    };
     'no.nav.aap.behandlingsflyt.PersoninfoDTO': {
       /**
        * Format: date
@@ -5650,6 +5666,17 @@ export interface components {
     'no.nav.aap.behandlingsflyt.PersoninfoRequest': {
       /** Format: uuid */
       personReferanse: string;
+    };
+    'no.nav.aap.behandlingsflyt.SamordningDto': {
+      dagpengerKilde?: string | null;
+      dagpengerYtelseType?: string | null;
+      periode: components['schemas']['no.nav.aap.behandlingsflyt.PeriodeDto'];
+      /** Format: int32 */
+      sykepengerGrad?: number | null;
+      tiltakspengerKilde?: string | null;
+      tiltakspengerYtelseType?: string | null;
+      /** @enum {string} */
+      type: 'DAGPENGER' | 'SYKEPENGER' | 'TILTAKSPENGER';
     };
     'no.nav.aap.behandlingsflyt.TestBarn': {
       /**
@@ -14928,6 +14955,7 @@ export interface components {
         | 'KLAGEBEHANDLING_KONTOR'
         | 'KLAGEBEHANDLING_NAY'
         | 'KLAGEBEHANDLING_OPPSUMMERING'
+        | 'KRAV'
         | 'KVALITETSSIKRING'
         | 'MANGLENDE_LIGNING'
         | 'OMGJØRING'
@@ -16124,6 +16152,7 @@ export interface components {
         | 'IVERKSETT_VEDTAK'
         | 'KLAGEBEHANDLING_KONTOR'
         | 'KLAGEBEHANDLING_NAY'
+        | 'KRAV'
         | 'KVALITETSSIKRING'
         | 'LOVVALG'
         | 'MEDLEMSKAP'
@@ -16183,6 +16212,7 @@ export interface components {
         | 'KLAGEBEHANDLING_KONTOR'
         | 'KLAGEBEHANDLING_NAY'
         | 'KLAGEBEHANDLING_OPPSUMMERING'
+        | 'KRAV'
         | 'KVALITETSSIKRING'
         | 'MANGLENDE_LIGNING'
         | 'OMGJØRING'
@@ -16245,6 +16275,7 @@ export interface components {
         | 'IVERKSETT_VEDTAK'
         | 'KLAGEBEHANDLING_KONTOR'
         | 'KLAGEBEHANDLING_NAY'
+        | 'KRAV'
         | 'KVALITETSSIKRING'
         | 'LOVVALG'
         | 'MEDLEMSKAP'
@@ -16305,6 +16336,7 @@ export interface components {
         | 'KLAGEBEHANDLING_KONTOR'
         | 'KLAGEBEHANDLING_NAY'
         | 'KLAGEBEHANDLING_OPPSUMMERING'
+        | 'KRAV'
         | 'KVALITETSSIKRING'
         | 'MANGLENDE_LIGNING'
         | 'OMGJØRING'
@@ -16392,6 +16424,7 @@ export interface components {
         | 'KLAGEBEHANDLING_KONTOR'
         | 'KLAGEBEHANDLING_NAY'
         | 'KLAGEBEHANDLING_OPPSUMMERING'
+        | 'KRAV'
         | 'KVALITETSSIKRING'
         | 'MANGLENDE_LIGNING'
         | 'OMGJØRING'
@@ -16514,6 +16547,7 @@ export interface components {
         | 'IVERKSETT_VEDTAK'
         | 'KLAGEBEHANDLING_KONTOR'
         | 'KLAGEBEHANDLING_NAY'
+        | 'KRAV'
         | 'KVALITETSSIKRING'
         | 'LOVVALG'
         | 'MEDLEMSKAP'
@@ -16576,6 +16610,7 @@ export interface components {
         | 'KLAGEBEHANDLING_KONTOR'
         | 'KLAGEBEHANDLING_NAY'
         | 'KLAGEBEHANDLING_OPPSUMMERING'
+        | 'KRAV'
         | 'KVALITETSSIKRING'
         | 'MANGLENDE_LIGNING'
         | 'OMGJØRING'
@@ -16901,6 +16936,7 @@ export interface components {
         | 'KLAGEBEHANDLING_KONTOR'
         | 'KLAGEBEHANDLING_NAY'
         | 'KLAGEBEHANDLING_OPPSUMMERING'
+        | 'KRAV'
         | 'KVALITETSSIKRING'
         | 'MANGLENDE_LIGNING'
         | 'OMGJØRING'
@@ -18393,6 +18429,7 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.test.SoeknadDetaljer': {
       andreUtbetalinger?: components['schemas']['no.nav.aap.behandlingsflyt.test.AndreUtbetalingerApiDto'];
+      automatiskMeldekort: boolean;
       erStudent: boolean;
       harMedlemskap: boolean;
       harYrkesskade: boolean;
