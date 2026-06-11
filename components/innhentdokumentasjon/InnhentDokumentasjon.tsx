@@ -1,3 +1,5 @@
+'use client';
+
 import { Button, Loader, VStack } from '@navikt/ds-react';
 import { useState } from 'react';
 

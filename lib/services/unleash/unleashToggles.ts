@@ -15,6 +15,7 @@ export const FLAGS = [
   'Skal1117og1118AlltidVises',
   'VisValgForDialogmelding',
   'FjernMarkeringMottatteHelseopplysninger',
+  'HentFastlege',
 ] as const;
 
 export type FlagNames = (typeof FLAGS)[number];
@@ -37,4 +38,5 @@ export const mockedFlags: Flags = {
   Skal1117og1118AlltidVises: true,
   VisValgForDialogmelding: true,
   FjernMarkeringMottatteHelseopplysninger: true,
+  HentFastlege: true,
 };

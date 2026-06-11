@@ -11,7 +11,6 @@ import {
 } from '@navikt/aap-oppgave-typescript-types';
 import { customRender, customRenderMedRoller } from 'lib/test/CustomRender';
 
-
 const user = userEvent.setup();
 
 const sak: SaksInfo = {
@@ -122,88 +121,62 @@ const avsluttetBehandling: DetaljertBehandling = {
 
 describe('SaksinfoBanner på behandling siden', () => {
   it('skal vise navn på bruker', () => {
-    customRender(
-      <SaksinfoBanner sak={sak} behandling={behandling} visning={visning} />
-    );
+    customRender(<SaksinfoBanner sak={sak} behandling={behandling} visning={visning} />);
     expect(screen.getByText('Peder Ås')).toBeVisible();
   });
 
   it('skal vise ident på bruker', () => {
-    customRender(
-      <SaksinfoBanner sak={sak} behandling={behandling} visning={visning} />
-    );
+    customRender(<SaksinfoBanner sak={sak} behandling={behandling} visning={visning} />);
     expect(screen.getByText('12345678910')).toBeVisible();
   });
 
   it('skal vise saksnummer derosm brukeren er på behandlingsiden', () => {
-    customRender(
-      <SaksinfoBanner sak={sak} behandling={behandling} visning={visning} />
-    );
+    customRender(<SaksinfoBanner sak={sak} behandling={behandling} visning={visning} />);
     expect(screen.getByText(/^Sak$/));
     expect(screen.getByRole('button', { name: /^12345$/ }));
   });
 
   it('skal vise hvilken type behandling', () => {
-    customRender(
-      <SaksinfoBanner sak={sak} behandling={behandling} visning={visning} />
-    );
+    customRender(<SaksinfoBanner sak={sak} behandling={behandling} visning={visning} />);
     expect(screen.getByText('Førstegangsbehandling')).toBeVisible();
   });
 
   it('skal vise status', () => {
-    customRender(
-      <SaksinfoBanner sak={sak} behandling={behandling} visning={visning} />
-    );
+    customRender(<SaksinfoBanner sak={sak} behandling={behandling} visning={visning} />);
     expect(screen.getByText('Utredes')).toBeVisible();
   });
 
   it('skal ha en knapp for å åpne saksmeny', () => {
-    customRender(
-      <SaksinfoBanner sak={sak} behandling={behandling} visning={visning} />
-    );
+    customRender(<SaksinfoBanner sak={sak} behandling={behandling} visning={visning} />);
     const knapp = screen.getByRole('button', { name: 'Saksmeny' });
     expect(knapp).toBeVisible();
   });
 
   it('menyvalg for å trekke søknad vises for førstegangsbehandling', async () => {
-    customRenderMedRoller(
-      <SaksinfoBanner sak={sak} behandling={behandling} visning={visning} />,
-      [Roller.SAKSBEHANDLER_NASJONAL]
-    );
+    customRenderMedRoller(<SaksinfoBanner sak={sak} behandling={behandling} visning={visning} />, [
+      Roller.SAKSBEHANDLER_NASJONAL,
+    ]);
     await user.click(screen.getByRole('button', { name: 'Saksmeny' }));
     expect(screen.getByRole('button', { name: 'Trekk søknad' })).toBeVisible();
   });
 
   it('menyvalg for å trekke søknad vises ikke hvis bruker ikke har saksbehandlertilgang', async () => {
-    customRender(
-      <SaksinfoBanner sak={sak} behandling={behandling} visning={visning} />
-    );
+    customRender(<SaksinfoBanner sak={sak} behandling={behandling} visning={visning} />);
     await user.click(screen.getByRole('button', { name: 'Saksmeny' }));
     expect(screen.queryByRole('button', { name: 'Trekk søknad' })).not.toBeInTheDocument();
   });
 
   it('menyvalg for å trekke søknad vises ikke for en avsluttet førstegangsbehandling', async () => {
-    customRenderMedRoller(
-      <SaksinfoBanner
-       
-        sak={avsluttetSak}
-        behandling={avsluttetBehandling}
-        visning={visning}
-      />,
-      [Roller.SAKSBEHANDLER_OPPFØLGING]
-    );
+    customRenderMedRoller(<SaksinfoBanner sak={avsluttetSak} behandling={avsluttetBehandling} visning={visning} />, [
+      Roller.SAKSBEHANDLER_OPPFØLGING,
+    ]);
     await user.click(screen.getByRole('button', { name: 'Saksmeny' }));
     expect(screen.queryByRole('button', { name: 'Trekk søknad' })).not.toBeInTheDocument();
   });
 
   it('menyvalg for å trekke søknad vises ikke for revurdering', async () => {
     customRender(
-      <SaksinfoBanner
-       
-        sak={sak}
-        behandling={behandling}
-        visning={{ ...visning, typeBehandling: 'Revurdering' }}
-      />
+      <SaksinfoBanner sak={sak} behandling={behandling} visning={{ ...visning, typeBehandling: 'Revurdering' }} />
     );
     await user.click(screen.getByRole('button', { name: 'Saksmeny' }));
     expect(screen.queryByRole('button', { name: 'Trekk søknad' })).not.toBeInTheDocument();
@@ -211,12 +184,7 @@ describe('SaksinfoBanner på behandling siden', () => {
 
   it('menyvalg for å overstyre startstidspunkt vises ikke hvis behandling er iverksatt', async () => {
     customRenderMedRoller(
-      <SaksinfoBanner
-       
-        sak={sak}
-        behandling={{ ...behandling, status: 'IVERKSETTES' }}
-        visning={visning}
-      />,
+      <SaksinfoBanner sak={sak} behandling={{ ...behandling, status: 'IVERKSETTES' }} visning={visning} />,
       [Roller.SAKSBEHANDLER_OPPFØLGING]
     );
 
@@ -226,12 +194,7 @@ describe('SaksinfoBanner på behandling siden', () => {
 
   it('menyvalg for å sette markeringer på behandling vises', async () => {
     customRenderMedRoller(
-      <SaksinfoBanner
-       
-        sak={sak}
-        behandling={{ ...behandling, status: 'IVERKSETTES' }}
-        visning={visning}
-      />,
+      <SaksinfoBanner sak={sak} behandling={{ ...behandling, status: 'IVERKSETTES' }} visning={visning} />,
       [Roller.SAKSBEHANDLER_OPPFØLGING]
     );
 
@@ -240,9 +203,7 @@ describe('SaksinfoBanner på behandling siden', () => {
   });
 
   it('skal ikke vise Arena-tag når brukeren ikke har AAP-Arena-historikk', () => {
-    customRender(
-      <SaksinfoBanner sak={sak} behandling={behandling} oppgave={oppgave} />
-    );
+    customRender(<SaksinfoBanner sak={sak} behandling={behandling} oppgave={oppgave} />);
     const returTag = screen.queryByText('Arenahistorikk');
     expect(returTag).not.toBeInTheDocument();
   });
@@ -251,7 +212,6 @@ describe('SaksinfoBanner på behandling siden', () => {
     sak.behandlinger;
     customRender(
       <SaksinfoBanner
-       
         sak={sak}
         behandling={{
           ...behandling,
@@ -269,23 +229,14 @@ describe('SaksinfoBanner på behandling siden', () => {
 
 describe('Sak status', () => {
   it('skal vise en tag som viser om saken er satt på vent dersom den er det', () => {
-    customRender(
-      <SaksinfoBanner
-       
-        sak={sak}
-        behandling={behandling}
-        visning={{ ...visning, visVentekort: true }}
-      />
-    );
+    customRender(<SaksinfoBanner sak={sak} behandling={behandling} visning={{ ...visning, visVentekort: true }} />);
 
     const påVentTag = screen.getByText('På vent');
     expect(påVentTag).toBeVisible();
   });
 
   it('skal ikke vise en tag som viser om saken er satt på vent dersom den ikke er det', () => {
-    customRender(
-      <SaksinfoBanner sak={sak} behandling={behandling} visning={visning} />
-    );
+    customRender(<SaksinfoBanner sak={sak} behandling={behandling} visning={visning} />);
 
     const påVentTag = screen.queryByText('På vent');
     expect(påVentTag).not.toBeInTheDocument();
@@ -294,7 +245,6 @@ describe('Sak status', () => {
   it('skal vise saksbehandlers navn på tildelt-tag dersom oppgaven er reservert', () => {
     customRender(
       <SaksinfoBanner
-       
         sak={sak}
         behandling={behandling}
         oppgave={{ ...oppgave, reservertAvNavn: 'Test Testesen' }}
@@ -307,24 +257,14 @@ describe('Sak status', () => {
   });
 
   it('skal vise saksbehandlers ident på tildelt-tag dersom oppgaven er tildelt og navn ikke finnes', () => {
-    customRender(
-      <SaksinfoBanner
-       
-        sak={sak}
-        behandling={behandling}
-        oppgave={oppgave}
-        visning={visning}
-      />
-    );
+    customRender(<SaksinfoBanner sak={sak} behandling={behandling} oppgave={oppgave} visning={visning} />);
 
     const tildeltTagIdent = screen.getByText('Tildelt: navIdent');
     expect(tildeltTagIdent).toBeVisible();
   });
 
   it('skal vise en tag som viser om behandlingen er tildelt dersom innnlogget bruker har resertvert den', () => {
-    customRender(
-      <SaksinfoBanner sak={sak} behandling={behandling} oppgave={oppgave} />
-    );
+    customRender(<SaksinfoBanner sak={sak} behandling={behandling} oppgave={oppgave} />);
 
     const reservertTag = screen.getByText('Tildelt: navIdent');
     expect(reservertTag).toBeVisible();
@@ -357,7 +297,6 @@ describe('Sak status', () => {
   it('skal vise retur-tag når behandling er sendt tilbake fra kvalitetssikrer', () => {
     customRender(
       <SaksinfoBanner
-       
         sak={sak}
         behandling={behandling}
         oppgave={{
@@ -378,7 +317,6 @@ describe('Sak status', () => {
   it('skal vise retur-tag når behandling er sendt tilbake til kvalitetssikrer', () => {
     customRender(
       <SaksinfoBanner
-       
         sak={sak}
         behandling={behandling}
         oppgave={{
@@ -397,9 +335,7 @@ describe('Sak status', () => {
   });
 
   it('skal ikke vise retur-tag når oppgave ikke har retur-status', () => {
-    customRender(
-      <SaksinfoBanner sak={sak} behandling={behandling} oppgave={oppgave} />
-    );
+    customRender(<SaksinfoBanner sak={sak} behandling={behandling} oppgave={oppgave} />);
     const returTag = screen.queryByText('Retur');
     expect(returTag).not.toBeInTheDocument();
   });
@@ -407,7 +343,6 @@ describe('Sak status', () => {
   it('skal vise frist utløpt-tag når oppgave har utløpt ventefrist', async () => {
     customRender(
       <SaksinfoBanner
-       
         sak={sak}
         behandling={behandling}
         oppgave={{
@@ -434,9 +369,7 @@ describe('Sak status', () => {
   });
 
   it('skal ikke vise frist utløpt-tag når oppgave ikke har utløpt ventefrist', () => {
-    customRender(
-      <SaksinfoBanner sak={sak} behandling={behandling} oppgave={oppgave} />
-    );
+    customRender(<SaksinfoBanner sak={sak} behandling={behandling} oppgave={oppgave} />);
     const fristTag = screen.queryByText('Frist utløpt 04.01.2026');
     expect(fristTag).not.toBeInTheDocument();
   });

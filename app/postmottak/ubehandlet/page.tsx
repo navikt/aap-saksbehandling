@@ -10,8 +10,7 @@ import { Alert } from 'components/alert/Alert';
 const Page = async () => {
   const result = await hentUbehandledeJournalposter();
 
-  if (isError(result))
-    return <Alert variant="error">{result.apiException.message || 'En ukjent feil oppsto'}</Alert>;
+  if (isError(result)) return <Alert variant="error">{result.apiException.message || 'En ukjent feil oppsto'}</Alert>;
 
   return (
     <Suspense>
