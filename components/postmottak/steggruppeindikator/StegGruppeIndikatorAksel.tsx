@@ -29,6 +29,8 @@ function stegGruppeNavnTilLabel(stegGruppeNavn: FlytGruppe['stegGruppe']) {
       return 'Iverksettes';
     case 'SETT_FAGSAK':
       return 'Sett fagsak';
+    case 'AVKLAR_FORDELING':
+      return 'Avklar fordeling';
   }
   exhaustiveCheck(stegGruppeNavn);
 }
