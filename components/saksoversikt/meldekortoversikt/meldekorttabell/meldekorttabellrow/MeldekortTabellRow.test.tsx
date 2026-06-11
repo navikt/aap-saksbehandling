@@ -105,20 +105,6 @@ describe('MeldekortTabellRow', () => {
     });
   });
 
-  describe('Prosent arbeidet', () => {
-    it('viser beregnet prosent når timer finnes', () => {
-      renderRow(meldekortMedDager);
-      // 75 / 75 * 100 = 100 %
-      expect(screen.getByText('100 %')).toBeVisible();
-    });
-
-    it('viser "-" for prosent når meldekort mangler dager', () => {
-      renderRow(meldekortUtenDager);
-      // Forventer minst én "-" i raden
-      expect(screen.getAllByText('-').length).toBeGreaterThan(0);
-    });
-  });
-
   describe('Levert dato og sist endret', () => {
     it('viser meldedato formatert for frontend', () => {
       renderRow(meldekortMedDager);

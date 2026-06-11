@@ -23,9 +23,6 @@ export const MeldekortTabell = () => {
               Meldeperiode
             </Table.HeaderCell>
             <Table.HeaderCell textSize={'small'}>Timer arbeidet</Table.HeaderCell>
-            <Table.HeaderCell textSize={'small'} colSpan={3}>
-              Prosent
-            </Table.HeaderCell>
             <Table.HeaderCell textSize={'small'}>Levert dato</Table.HeaderCell>
             <Table.HeaderCell textSize={'small'}>Sist endret</Table.HeaderCell>
             <Table.HeaderCell textSize={'small'}>Endret av</Table.HeaderCell>
