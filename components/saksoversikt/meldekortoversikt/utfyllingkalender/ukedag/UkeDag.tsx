@@ -67,6 +67,7 @@ export const UkeDag = ({ dag, felterMap, erSisteFeltiRaden, radHarError, readOnl
                 className={`${styles.tekstfelt} ${harFeilmelding ? 'navds-text-field--error' : ''}`}
                 hideLabel
                 hideErrorMessage
+                autocomplete={'off'}
                 readOnly={readOnly}
                 rules={{
                   validate: (value) => {
