@@ -53,7 +53,7 @@ export const OpprettSamordning = ({ form }: Props) => {
               onChange: (e: React.ChangeEvent<HTMLSelectElement>) => {
                 const type = e.target.value;
                 if (type === 'SYKEPENGER') {
-                  form.setValue(`samordning.${index}.grad`, 100);
+                  form.setValue(`samordning.${index}.sykepengerGrad`, 100);
                   form.setValue(`samordning.${index}.dagpengerKilde`, undefined);
                   form.setValue(`samordning.${index}.dagpengerYtelseType`, undefined);
                   form.setValue(`samordning.${index}.tiltakspengerKilde`, undefined);
@@ -61,13 +61,13 @@ export const OpprettSamordning = ({ form }: Props) => {
                 } else if (type === 'DAGPENGER') {
                   form.setValue(`samordning.${index}.dagpengerKilde`, dagpengerKildeOptions[0].value);
                   form.setValue(`samordning.${index}.dagpengerYtelseType`, dagpengerYtelsesOptions[0].value);
-                  form.setValue(`samordning.${index}.grad`, undefined);
+                  form.setValue(`samordning.${index}.sykepengerGrad`, undefined);
                   form.setValue(`samordning.${index}.tiltakspengerKilde`, undefined);
                   form.setValue(`samordning.${index}.tiltakspengerYtelseType`, undefined);
                 } else if (type === 'TILTAKSPENGER') {
                   form.setValue(`samordning.${index}.tiltakspengerKilde`, tiltakspengerKildeOptions[0].value);
                   form.setValue(`samordning.${index}.tiltakspengerYtelseType`, tiltakspengerYtelsesOptions[0].value);
-                  form.setValue(`samordning.${index}.grad`, undefined);
+                  form.setValue(`samordning.${index}.sykepengerGrad`, undefined);
                   form.setValue(`samordning.${index}.dagpengerKilde`, undefined);
                   form.setValue(`samordning.${index}.dagpengerYtelseType`, undefined);
                 }
@@ -113,7 +113,7 @@ const SamordningRadFelter = ({ form, index }: { form: UseFormReturn<OpprettSakFo
   const type = useWatch({ control: form.control, name: `samordning.${index}.type` });
 
   if (type === 'SYKEPENGER') {
-    return <TextFieldWrapper label="Grad" control={form.control} name={`samordning.${index}.grad`} type="text" />;
+    return <TextFieldWrapper label="Grad" control={form.control} name={`samordning.${index}.sykepengerGrad`} type="text" />;
   }
 
   if (type === 'DAGPENGER') {
