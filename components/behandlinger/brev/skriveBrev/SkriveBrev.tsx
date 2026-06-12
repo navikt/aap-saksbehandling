@@ -6,7 +6,7 @@ import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useDebounce } from 'hooks/DebounceHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { clientHentFlyt, clientMellomlagreBrev } from 'lib/clientApi';
-import { Brev, BrevMottaker, BrevStatus, Mottaker, Signatur, TypeBehandling } from 'lib/types/types';
+import { Brev, BrevGrunnlagBrev, BrevMottaker, BrevStatus, Mottaker, Signatur, TypeBehandling } from 'lib/types/types';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { Behovstype } from 'lib/utils/form';
 import { useFeatureFlag } from 'context/UnleashContext';
@@ -22,7 +22,7 @@ import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { Distribusjonssjekk } from 'components/brev/Distribusjonssjekk';
-import { loggUmamiEvent, useUmamiStartTidspunkt } from 'lib/utils/umami';
+import { loggUmamiBrevVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
 import { Alert } from 'components/alert/Alert';
 
 export const SkriveBrev = ({
@@ -37,7 +37,7 @@ export const SkriveBrev = ({
   visAvbryt = true,
   status,
   readOnly,
-  behandlingstype,
+  brevtype,
 }: {
   referanse: string;
   behovstype: Behovstype;
@@ -50,7 +50,7 @@ export const SkriveBrev = ({
   visAvbryt?: boolean;
   status: BrevStatus;
   readOnly: boolean;
-  behandlingstype: TypeBehandling;
+  brevtype: BrevGrunnlagBrev['brevtype'];
 }) => {
   const { behandlingsreferanse, saksnummer } = useParamsMedType();
   const [brev, setBrev] = useState<Brev>(grunnlag);
@@ -228,11 +228,7 @@ export const SkriveBrev = ({
                       },
                       referanse: behandlingsreferanse,
                     },
-                    () =>
-                      loggUmamiEvent('skrivebrev-varighet', {
-                        varighet_sekunder: Math.floor((Date.now() - umamiStartTidspunkt) / 1000),
-                        typeBehandling: behandlingstype,
-                      })
+                    () => loggUmamiBrevVarighet('STEG_SKRIVBREV_VARIGHET', umamiStartTidspunkt, Date.now(), brevtype)
                   );
                 }
               }}
