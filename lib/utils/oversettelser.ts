@@ -237,6 +237,8 @@ export function mapTilOppgaveBehandlingstypeTekst(behandlingsType: OppgaveBehand
       return 'Aktivitetsplikt § 11-7';
     case 'AKTIVITETSPLIKT_11_9':
       return 'Aktivitetsplikt § 11-9';
+    case 'FORDELING':
+      return 'Fordeling';
   }
   exhaustiveCheck(behandlingsType);
 }

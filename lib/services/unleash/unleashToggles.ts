@@ -16,7 +16,8 @@ export const FLAGS = [
   'VisValgForDialogmelding',
   'FjernMarkeringMottatteHelseopplysninger',
   'HentFastlege',
-  'StudentV2'
+  'StudentV2',
+  'OppgavelisteMedBelopISaksbehandling',
 ] as const;
 
 export type FlagNames = (typeof FLAGS)[number];
@@ -41,4 +42,5 @@ export const mockedFlags: Flags = {
   VisValgForDialogmelding: true,
   StudentV2: true,
   HentFastlege: true,
+  OppgavelisteMedBelopISaksbehandling: true,
 };
