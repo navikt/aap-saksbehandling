@@ -17,7 +17,7 @@ import { SynkroniserEnhetModal } from 'components/oppgaveliste/synkroniserenhetm
 import { TildelOppgaveModal } from 'components/tildeloppgavemodal/TildelOppgaveModal';
 import { NoNavAapOppgaveListeOppgaveSorteringSortBy } from '@navikt/aap-oppgave-typescript-types';
 import { ScopedBackendSortState } from 'hooks/oppgave/BackendSorteringHook';
-import { isOppgavelisteOppgaveSorteringSortBy, TILBAKEKREVINGS_BELOP_SORT_KEY } from 'lib/utils/request';
+import { isOppgavelisteOppgaveSorteringSortBy } from 'lib/utils/request';
 import { AktivKø } from 'hooks/oppgave/aktivkøHook';
 import { Køtype } from 'lib/types/oppgaveTypes';
 
@@ -111,7 +111,10 @@ export const AlleOppgaverTabell = ({
               Tildelt
             </Table.ColumnHeader>
             {visBeløpKolonne && (
-              <Table.ColumnHeader sortKey={TILBAKEKREVINGS_BELOP_SORT_KEY} sortable={true}>
+              <Table.ColumnHeader
+                sortKey={NoNavAapOppgaveListeOppgaveSorteringSortBy.TILBAKEKREVINGS_BELOP}
+                sortable={true}
+              >
                 Beløp
               </Table.ColumnHeader>
             )}
