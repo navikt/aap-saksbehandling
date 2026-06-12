@@ -1,13 +1,14 @@
 'use client';
 
 import { PlusIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Alert, Button, Heading, HStack, VStack } from '@navikt/ds-react';
+import { Button, Heading, HStack, VStack } from '@navikt/ds-react';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
 import { clientLeggTilKravVurdering } from 'lib/clientApi';
 import { useFetch } from 'hooks/FetchHook';
 import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { formaterDatoForBackend } from 'lib/utils/date';
+import { Alert } from 'components/alert/Alert';
 import { subMonths } from 'date-fns';
 
 type KravType = 'NYTT_KRAV_AAP' | 'GJENOPPTAK' | 'TRUKKET_SØKNAD' | 'KLAGE' | 'TILLEGGSOPPLYSNING';
