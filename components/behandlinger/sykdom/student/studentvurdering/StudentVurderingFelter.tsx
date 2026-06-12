@@ -131,7 +131,7 @@ export const StudentVurderingFelter = ({ index, readOnly, diagnoseDefaultOptions
               const inputDato = parseDatoFraDatePicker(value as string);
               if (inputDato) {
                 return isAfter(inputDato, new Date())
-                  ? 'Dato for når stuideevnen ble 100% nedsatt / avbrutt kan ikke være frem i tid.'
+                  ? 'Dato for når studieevnen ble 100% nedsatt / avbrutt kan ikke være frem i tid.'
                   : true;
               }
             },

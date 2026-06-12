@@ -6,6 +6,7 @@ export enum Behovstype {
   VURDER_BRUDD_11_7_KODE = '4101',
   VURDER_BRUDD_11_9_KODE = '4201',
   AVKLAR_STUDENT_KODE = '5001',
+  AVKLAR_STUDENT_KODE_V2 = '5037',
   OVERSTYR_IKKE_OPPFYLT_MELDEPLIKT_KODE = '5002',
   AVKLAR_SYKDOM_KODE = '5003',
   FASTSETT_ARBEIDSEVNE_KODE = '5004',
@@ -96,6 +97,8 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
       return '§ 11-19 Tidspunktet da arbeidsevnen ble nedsatt, jf. § 11-5';
     case '5009':
       return '§ 11-20 tredje og fjerde ledd barnetillegg';
+    case '5037':
+      return '§ 11-14 Student';
     case '5098':
       return 'Foreslå vedtak';
     case '5099':
@@ -249,6 +252,7 @@ export enum JaNeiEllerForbigåendeTekst {
   Ja = 'Ja',
   Nei = 'Nei',
   Forbigående = 'Ja, men brukeren har kun forbigående problemer med å komme i arbeid og skal vurderes for AAP som sykepengeerstatning etter § 11-13',
+  NeiMenStudent = 'Nei, men brukeren har avbrutt et studie på grunn av sykdom eller skade og skal vurderes for AAP til studenter etter § 11-14',
 }
 
 export function getJaNeiJaForbigåendeEllerIkkeBesvart(value?: ArbeidsevneNedsattValg | null) {
@@ -262,5 +266,7 @@ export function getJaNeiJaForbigåendeEllerIkkeBesvart(value?: ArbeidsevneNedsat
       return JaNeiEllerForbigåendeTekst.Ja;
     case 'NEI':
       return JaNeiEllerForbigåendeTekst.Nei;
+    case 'NEI_MEN_STUDENT':
+      return JaNeiEllerForbigåendeTekst.NeiMenStudent
   }
 }

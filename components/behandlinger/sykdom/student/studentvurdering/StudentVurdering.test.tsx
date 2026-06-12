@@ -469,7 +469,7 @@ describe('Student', () => {
       await user.click(button);
 
       const feilmelding = screen.getAllByText(
-        'Dato for når stuideevnen ble 100% nedsatt / avbrutt kan ikke være frem i tid.'
+        'Dato for når studieevnen ble 100% nedsatt / avbrutt kan ikke være frem i tid.'
       )[0];
 
       expect(feilmelding).toBeVisible();
