@@ -16,6 +16,7 @@ vi.mock('lib/clientApi', () => ({
 }));
 
 const meldekort: MeldeperiodeMedMeldekortDto = {
+  meldepliktStatus: [],
   tidligereMeldekort: [],
   meldeperiode: {
     fom: '2025-01-06',
@@ -24,10 +25,11 @@ const meldekort: MeldeperiodeMedMeldekortDto = {
   periode: {
     fom: '2025-01-06',
     tom: '2025-01-19',
-  },
+  }
 };
 
 const meldekortMedDager: MeldeperiodeMedMeldekortDto = {
+  meldepliktStatus: [],
   tidligereMeldekort: [],
   meldeperiode: {
     fom: '2025-01-06',
@@ -58,10 +60,11 @@ const meldekortMedDager: MeldeperiodeMedMeldekortDto = {
     ],
     journalpostId: '',
     oppdatertAvSaksbehandler: true,
-  },
+  }
 };
 
 const meldekortMedNullTimer: MeldeperiodeMedMeldekortDto = {
+  meldepliktStatus: [],
   tidligereMeldekort: [],
   meldeperiode: {
     fom: '2025-01-06',
@@ -92,7 +95,7 @@ const meldekortMedNullTimer: MeldeperiodeMedMeldekortDto = {
     ],
     journalpostId: '',
     oppdatertAvSaksbehandler: false,
-  },
+  }
 };
 
 describe('RedigerMeldekortModal', () => {
@@ -253,9 +256,10 @@ describe('RedigerMeldekortModal', () => {
 
     it('genererer korrekt antall input-felt for en kortere periode', async () => {
       const kortMeldekort: MeldeperiodeMedMeldekortDto = {
+        meldepliktStatus: [],
         tidligereMeldekort: [],
         meldeperiode: { fom: '2025-01-08', tom: '2025-01-14' },
-        periode: { fom: '2025-01-08', tom: '2025-01-14' },
+        periode: { fom: '2025-01-08', tom: '2025-01-14' }
       };
       render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={kortMeldekort} />);
       await åpneKalender();
@@ -270,9 +274,10 @@ describe('RedigerMeldekortModal', () => {
     // Uke 1: mandag 6. jan og tirsdag 7. jan er utenfor perioden
     // Uke 2: onsdag 15. jan – søndag 19. jan er utenfor perioden
     const kortMeldekort: MeldeperiodeMedMeldekortDto = {
+      meldepliktStatus: [],
       tidligereMeldekort: [],
       meldeperiode: { fom: '2025-01-08', tom: '2025-01-19' },
-      periode: { fom: '2025-01-08', tom: '2025-01-19' },
+      periode: { fom: '2025-01-08', tom: '2025-01-19' }
     };
 
     const åpneKalender = async () => {

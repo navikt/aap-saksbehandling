@@ -13820,6 +13820,11 @@ export interface components {
        * @example 2025-04-01
        */
       meldeDato: string;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      mottattTidspunkt?: string | null;
       oppdatertAv?: string | null;
       oppdatertAvSaksbehandler: boolean;
       /**
@@ -13840,6 +13845,17 @@ export interface components {
       meldeDato?: string | null;
       meldekort?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.MeldekortDto'];
       meldeperiode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
+      meldepliktStatus: (
+        | 'FREMTIDIG_IKKE_OPPFYLT'
+        | 'FREMTIDIG_OPPFYLT'
+        | 'FRITAK'
+        | 'FØRSTE_MELDEPERIODE_MED_RETT'
+        | 'FØR_VEDTAK'
+        | 'IKKE_MELDT_SEG'
+        | 'MELDT_SEG'
+        | 'RIMELIG_GRUNN'
+        | 'UTEN_RETT'
+      )[];
       periode?: components['schemas']['no.nav.aap.komponenter.type.Periode'];
       tidligereMeldekort: components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.MeldekortDto'][];
     };
