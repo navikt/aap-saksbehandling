@@ -71,7 +71,6 @@ export const TotrinnsvurderingForm = ({
     erKvalitetssikring ? 'KVALITETSSIKRING' : 'FATTE_VEDTAK'
   );
 
-  const featureFlagHastemarkeringBoks = useFeatureFlag('VisBoksForVurderingOmHastemarkeringSkalFjernes');
   const featureFlagFjernMarkeringDokumenterMottatt = useFeatureFlag('FjernMarkeringMottatteHelseopplysninger');
 
   const { addHendelse, varighetHendelseRef, hendelseSerieRef } = useUmamiVarighetHendelser(
@@ -85,8 +84,7 @@ export const TotrinnsvurderingForm = ({
 
   const totrinnsvurderinger = defaultValue.totrinnsvurderinger;
   const erBehandlingHastemarkert = hastemarkering !== undefined;
-  const skalFjerningAvHastemarkeringVurderes =
-    erBehandlingHastemarkert && erKvalitetssikring && featureFlagHastemarkeringBoks;
+  const skalFjerningAvHastemarkeringVurderes = erBehandlingHastemarkert && erKvalitetssikring;
 
   const { form } = useConfigForm<FormFieldsToTrinnsVurdering>({
     totrinnsvurderinger: {
