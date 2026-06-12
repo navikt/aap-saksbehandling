@@ -7,6 +7,7 @@ import { LeggTilMockInstitusjonsopphold } from 'components/devtools/LeggTilMockI
 import { LeggTilMockYrkesskade } from 'components/devtools/LeggTilMockYrkesskade';
 import { TypeBehandling } from 'lib/types/types';
 import { DevtoolWrapper } from 'components/devtools/DevtoolWrapper';
+import { LeggTilKravVurdering } from 'components/devtools/LeggTilKravVurdering';
 
 export const SakDevTools = ({
   saksnummer,
@@ -36,6 +37,7 @@ export const SakDevTools = ({
         <VStack gap="space-16">
           <LeggTilMockInstitusjonsopphold saksnummer={saksnummer} />
           <LeggTilMockYrkesskade saksnummer={saksnummer} />
+          <LeggTilKravVurdering saksnummer={saksnummer} />
         </VStack>
       </HGrid>
     </DevtoolWrapper>

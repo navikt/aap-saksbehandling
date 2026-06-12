@@ -95,6 +95,10 @@ export function clientLeggTilYrkesskade(saksnummer: string, body: LeggTilYrkessk
   return clientFetch(`${BASE_URL}/api/test/endre/${saksnummer}/legg-til-yrkesskade`, 'POST', body);
 }
 
+export function clientLeggTilKravVurdering(saksnummer: string, body: object) {
+  return clientFetch(`${BASE_URL}/api/test/endre/${saksnummer}/legg-til-kravvurdering`, 'POST', body);
+}
+
 export function clientOpprettDummySak(sak: OpprettDummySakDto) {
   return clientFetch(`${BASE_URL}/api/test/opprettDummySak`, 'POST', sak);
 }
