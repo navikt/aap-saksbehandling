@@ -48,10 +48,15 @@ import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingS
 import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
 import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
 import { Alert } from 'components/alert/Alert';
+import useSWR from 'swr';
+import { clientHentRelevanteDokumenter } from 'lib/dokumentClientApi';
+import { isSuccess } from 'lib/utils/api';
 
 export interface SykdomsvurderingerForm {
   vurderinger: Array<Sykdomsvurdering>;
 }
+
+const SYKMELDING_39UKER_BREVKODE = 'NAV 08-07.04 R';
 
 export interface Sykdomsvurdering extends VurderingFormMeta {
   fraDato: string;
@@ -91,6 +96,15 @@ export const Sykdomsvurdering = ({
 }: SykdomProps) => {
   const { behandlingsreferanse } = useParamsMedType();
   const { sak } = useSak();
+
+  const { data: relevanteDokumenter } = useSWR(`/api/dokumenter/bruker/helsedokumenter`, () =>
+    clientHentRelevanteDokumenter(sak.saksnummer, sak.ident)
+  );
+
+  const har39UkersSykmelding =
+    isSuccess(relevanteDokumenter) &&
+    relevanteDokumenter.data.filter((dokument) => dokument.brevkode?.toUpperCase() == SYKMELDING_39UKER_BREVKODE)
+      .length > 0;
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
@@ -189,6 +203,14 @@ export const Sykdomsvurdering = ({
     >
       <VStack gap={'space-16'}>
         <EksterneLenkerIVilkårskort steg={'AVKLAR_SYKDOM'} />
+
+        {har39UkersSykmelding && (
+          <Alert variant={'info'}>
+            {
+              'Nav har tidligere mottatt helseopplysninger som kan være relevant for brukers AAP-sak. Trykk på "be om opplysninger" i menyen til høyre for å se dokumentene.'
+            }
+          </Alert>
+        )}
 
         {erOvergangArbeid && (
           <Alert variant={'info'}>

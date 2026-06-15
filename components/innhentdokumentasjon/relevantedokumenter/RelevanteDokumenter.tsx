@@ -87,7 +87,7 @@ export const RelevanteDokumenter = () => {
       <InfoCard.Content>
         <VStack gap={'space-16'}>
           <BodyShort size={'small'} className={styles.beskrivelse}>
-            Nav har tidligere mottatt følgende helseopplysninger som kan være relevant for brukers AAP sak. Velg
+            Nav har tidligere mottatt følgende helseopplysninger som kan være relevant for brukers AAP-sak. Velg
             dokumenter som er aktuelle for å koble de til saken.
           </BodyShort>
           <HGrid columns={'1fr 1fr'} gap={'space-8'}>
