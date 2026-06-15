@@ -19,7 +19,6 @@ import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useInnloggetBruker } from 'hooks/BrukerHook';
 import { brukerErBeslutter, brukerKanSaksbehandle } from 'lib/utils/innloggetBruker';
 import { AvbrytAktivitetspliktbehandlingModal } from 'components/saksinfobanner/avbrytaktivitetspliktbehandlingmodal/AvbrytAktivitetspliktbehandlingModal';
-import { useFeatureFlag } from 'context/UnleashContext';
 
 export const SaksmenyDropdown = ({
   flyt,
@@ -66,7 +65,6 @@ export const SaksmenyDropdown = ({
     typeBehandling && (typeBehandling === 'Aktivitetsplikt' || typeBehandling === 'Aktivitetsplikt11_9');
   const behandlingErIkkeAvsluttet = behandling.status !== 'AVSLUTTET';
   const behandlingErIkkeIverksatt = behandling.status !== 'IVERKSETTES';
-  const skalViseAvbrytAktivitetspliktbehandling = useFeatureFlag('AvbrytAktivitetspliktbehandling');
 
   const visValgForÅTrekkeSøknad =
     !behandlerEnSøknadSomSkalTrekkes &&
@@ -87,8 +85,7 @@ export const SaksmenyDropdown = ({
     innloggetBrukerKanSaksbehandle &&
     behandlingErAktivitetspliktbehandling &&
     behandlingErIkkeAvsluttet &&
-    !behandlerAktivitetspliktbehandlingSomSkalAvbrytes &&
-    skalViseAvbrytAktivitetspliktbehandling;
+    !behandlerAktivitetspliktbehandlingSomSkalAvbrytes;
 
   const visValgForÅTrekkeKlage =
     innloggetBrukerKanSaksbehandle &&
