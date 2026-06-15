@@ -32,7 +32,6 @@ import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
 import { IkkeVurderbarPeriode } from 'components/periodisering/IkkeVurderbarPeriode';
-import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   behandlingVersjon: number;
@@ -60,8 +59,6 @@ export const OvergangUforePeriodisert = ({
   initialMellomlagretVurdering,
   skalStegVurderes,
 }: Props) => {
-  const skalAlltidVisesFeatureFlag = useFeatureFlag('Skal1117og1118AlltidVises');
-
   const { behandlingsreferanse } = useParamsMedType();
   const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('OVERGANG_UFORE');
@@ -86,10 +83,6 @@ export const OvergangUforePeriodisert = ({
     initialMellomlagretVurdering,
     form
   );
-
-  if (!skalAlltidVisesFeatureFlag && !skalStegVurderes) {
-    return null;
-  }
 
   const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
