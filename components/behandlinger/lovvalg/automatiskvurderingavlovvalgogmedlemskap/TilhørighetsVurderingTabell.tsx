@@ -48,9 +48,11 @@ export const TilhørighetsVurderingTabell = ({
               <Table.DataCell textSize="small" width={750}>
                 <HStack gap={'space-4'} align={'center'} className={styles.opplysning}>
                   <BodyShort size="small">{opplysning.opplysning}</BodyShort>
-                  <HelpText>
-                    {'Manglende inntekt i 1 månedsperiode godtas inntil 10 ganger i løpet av 5-års perioden'}
-                  </HelpText>
+                  {harVisuellTidslinje && (
+                    <HelpText>
+                      {'Manglende inntekt i 1 månedsperiode godtas inntil 10 ganger i løpet av 5-års perioden'}
+                    </HelpText>
+                  )}
                 </HStack>
               </Table.DataCell>
               <Table.DataCell textSize="small" width={'auto'}>
