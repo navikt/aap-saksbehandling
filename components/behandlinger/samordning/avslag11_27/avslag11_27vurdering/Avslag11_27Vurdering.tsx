@@ -1,50 +1,85 @@
-import { Avslag11_27Grunnlag, BehandlingFlytOgTilstand } from 'lib/types/types';
-import { getStegSomSkalVises } from 'lib/utils/steg';
-import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
-import { StegSuspense } from 'components/stegsuspense/StegSuspense';
-import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { useUmamiStartTidspunkt } from 'lib/utils/umami';
-import { AvslagAndreYtelserMedDataFetching } from 'components/behandlinger/samordning/avslag11_27/AvslagAndreYtelserMedDataFetching';
+'use client';
+
+import { Radio, VStack } from '@navikt/ds-react';
 import { UseFormReturn } from 'react-hook-form';
+import { JaEllerNei } from 'lib/utils/form';
+import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
+import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { Avslag11_27FormFields } from 'components/behandlinger/samordning/avslag11_27/Avslag11_27';
 
-interface props {
+interface Props {
   form: UseFormReturn<Avslag11_27FormFields>;
-  behandlingVersjon: number;
-  readOnly: boolean;
-  grunnlag: Avslag11_27Grunnlag;
-  flyt: BehandlingFlytOgTilstand;
+  kravIndex: number;
+  readonly: boolean;
 }
 
-export const Avslag11_27Vurdering = async ({ form, grunnlag, readOnly, behandlingVersjon, flyt }: props) => {
-  const { behandlingsreferanse } = useParamsMedType();
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('AVSLAG_11_27');
-
-  const { visningModus, visningActions, formReadOnly } = useVilkårskortVisning(readOnly, 'AVSLAG_11_27', undefined);
-
-  const stegSomSkalVises = getStegSomSkalVises('AVSLAG_11_27', flyt);
-  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
+export const Avslag11_27Vurdering = ({ form, kravIndex, readonly }: Props) => {
+  const vurdering = form.watch(`avslag11_27vurderinger.${kravIndex}.vurdering`);
+  const visYtelseSpørsmål = vurdering?.harAnnenFullYtelse === JaEllerNei.Ja;
+  const visSykepengegrunnlagSpørsmål = visYtelseSpørsmål && vurdering?.brukersYtelse === 'SYKEPENGER';
 
   return (
-    <GruppeSteg
-      prosessering={flyt.prosessering}
-      visning={flyt.visning}
-      behandlingReferanse={behandlingsreferanse}
-      behandlingVersjon={behandlingVersjon}
-      aktivtSteg={flyt.aktivtSteg}
-    >
-      {stegSomSkalVises.includes('AVSLAG_11_27') && (
-        <StegSuspense>
-          <AvslagAndreYtelserMedDataFetching
-            behandlingsreferanse={behandlingsreferanse}
-            behandlingVersjon={behandlingVersjon}
-            readOnly={flyt.visning.saksbehandlerReadOnly}
-          />
-        </StegSuspense>
+    <VStack gap={'space-16'}>
+      <TextAreaWrapper
+        name={`avslag11_27vurderinger.${kravIndex}.vurdering.begrunnelse`}
+        control={form.control}
+        label={'Begrunnelse'}
+        description={'Vurder om brukeren har en annen full ytelse fra folketrygden.'}
+        rules={{ required: 'Du må begrunne vurderingen din' }}
+        readOnly={readonly}
+      />
+      <RadioGroupWrapper
+        name={`avslag11_27vurderinger.${kravIndex}.vurdering.harAnnenFullYtelse`}
+        control={form.control}
+        label={'Har brukeren en annen ytelse som regnes som full ytelse fra folketrygden?'}
+        rules={{ required: 'Du må svare på dette spørsmålet' }}
+        readOnly={readonly}
+        horisontal
+      >
+        <Radio value={JaEllerNei.Ja}>Ja</Radio>
+        <Radio value={JaEllerNei.Nei}>Nei</Radio>
+      </RadioGroupWrapper>
+      {visYtelseSpørsmål && (
+        <RadioGroupWrapper
+          name={`avslag11_27vurderinger.${kravIndex}.vurdering.brukersYtelse`}
+          control={form.control}
+          label={'Hvilken ytelse har brukeren?'}
+          rules={{ required: 'Du må velge hvilken ytelse brukeren har' }}
+          readOnly={readonly}
+        >
+          <Radio value={'SYKEPENGER'}>Sykepenger</Radio>
+          <Radio value={'FORELDREPENGER'}>Foreldrepenger</Radio>
+          <Radio value={'PLEIEPENGER'}>Pleiepenger</Radio>
+          <Radio value={'OMSORGSPENGER'}>Omsorgspenger</Radio>
+          <Radio value={'OPPLÆRINGSPENGER'}>Opplæringspenger</Radio>
+          <Radio value={'SVANGERSKAPSPENGER'}>Svangerskapspenger</Radio>
+          <Radio value={'FERIE_I_SYKEPENGEPERIODE'}>Ferie i sykepengeperiode</Radio>
+        </RadioGroupWrapper>
       )}
-    </GruppeSteg>
+      {visSykepengegrunnlagSpørsmål && (
+        <RadioGroupWrapper
+          name={`avslag11_27vurderinger.${kravIndex}.vurdering.harSykepengegrunnlagOver2G`}
+          control={form.control}
+          label={'Har brukeren sykepengegrunnlag større enn 2G?'}
+          rules={{ required: 'Du må svare på dette spørsmålet' }}
+          readOnly={readonly}
+          horisontal
+        >
+          <Radio value={JaEllerNei.Ja}>Ja</Radio>
+          <Radio value={JaEllerNei.Nei}>Nei</Radio>
+        </RadioGroupWrapper>
+      )}
+      <RadioGroupWrapper
+        name={`avslag11_27vurderinger.${kravIndex}.vurdering.skalAvslås1127`}
+        control={form.control}
+        label={'Skal søknaden avslås etter § 11-27 fordi det er for tidlig å vurdere vilkårene for AAP mens brukeren har en annen ytelse?'}
+        rules={{ required: 'Du må svare på dette spørsmålet' }}
+        readOnly={readonly}
+        horisontal
+      >
+        <Radio value={JaEllerNei.Ja}>Ja</Radio>
+        <Radio value={JaEllerNei.Nei}>Nei</Radio>
+      </RadioGroupWrapper>
+    </VStack>
   );
 };

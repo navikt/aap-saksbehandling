@@ -1,14 +1,16 @@
 import { Avslag11_27Krav } from 'lib/types/types';
-import { BodyShort, Button, Table, VStack } from '@navikt/ds-react';
+import { BodyShort, Checkbox, Table, VStack } from '@navikt/ds-react';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 
 interface Props {
   label: string;
   avslag11_27krav: Avslag11_27Krav[];
+  selectedJournalpostIds: string[];
+  onToggle: (journalpostId: string) => void;
 }
 
-export const Avslag11_27KravTabell = ({ label, avslag11_27krav }: Props) => {
+export const Avslag11_27KravTabell = ({ label, avslag11_27krav, selectedJournalpostIds, onToggle }: Props) => {
   return (
     <VStack gap={'space-16'}>
       <VStack gap={'space-4'}>
@@ -32,7 +34,7 @@ export const Avslag11_27KravTabell = ({ label, avslag11_27krav }: Props) => {
               Mulig rettighet fra
             </Table.HeaderCell>
             <Table.HeaderCell scope={'col'} textSize={'small'}>
-              Velg
+              Vurder
             </Table.HeaderCell>
           </Table.Row>
         </Table.Header>
@@ -48,9 +50,14 @@ export const Avslag11_27KravTabell = ({ label, avslag11_27krav }: Props) => {
                 {krav.muligRettighetFra ? formaterDatoForFrontend(krav.muligRettighetFra) : '-'}
               </Table.DataCell>
               <Table.DataCell textSize={'small'}>
-                <Button size={'small'} variant={'secondary'}>
+                <Checkbox
+                  size={'small'}
+                  hideLabel
+                  checked={selectedJournalpostIds.includes(krav.søknadsdokument)}
+                  onChange={() => onToggle(krav.søknadsdokument)}
+                >
                   Vurder
-                </Button>
+                </Checkbox>
               </Table.DataCell>
             </Table.Row>
           ))}

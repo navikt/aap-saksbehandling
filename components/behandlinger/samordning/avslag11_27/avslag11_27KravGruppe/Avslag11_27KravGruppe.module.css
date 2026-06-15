@@ -1,0 +1,12 @@
+.kravGruppe {
+  margin-bottom: var(--ax-space-12);
+}
+
+.detailgray {
+  color: var(--ax-text-neutral-subtle);
+}
+
+.kravHeader {
+  border-bottom: 1px solid var(--ax-border-neutral-subtle);
+  border-radius: var(--ax-radius-12) var(--ax-radius-12) 0 0;
+}
