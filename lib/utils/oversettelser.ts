@@ -62,6 +62,7 @@ const behovskodeMap = {
   '5097': 'Kvalitetssikre sak',
   '5098': 'Foreslå vedtak',
   '5099': 'Beslutte sak',
+  '5042': 'Avslag § 11-27',
   '5999': 'Fastsett påklaget behandling',
   '6000': 'Formkrav',
   '6001': 'Fastsett behanadlende enhet',
@@ -136,6 +137,8 @@ export function mapTilSteggruppeTekst(steggruppe: string) {
       return 'Avbryt revurdering';
     case 'ALDER':
       return 'Alder';
+    case 'AVSLAG_11_27':
+      return 'Avslag § 11-27';
     case 'LOVVALG':
       return 'Lovvalg og medlemskap';
     case 'START_BEHANDLING':

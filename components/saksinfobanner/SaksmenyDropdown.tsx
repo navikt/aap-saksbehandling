@@ -19,6 +19,7 @@ import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useInnloggetBruker } from 'hooks/BrukerHook';
 import { brukerErBeslutter, brukerKanSaksbehandle } from 'lib/utils/innloggetBruker';
 import { AvbrytAktivitetspliktbehandlingModal } from 'components/saksinfobanner/avbrytaktivitetspliktbehandlingmodal/AvbrytAktivitetspliktbehandlingModal';
+import { Avslag11_27Modal } from 'components/saksinfobanner/avslag11_27modal/Avslag11_27Modal';
 
 export const SaksmenyDropdown = ({
   flyt,
@@ -65,6 +66,7 @@ export const SaksmenyDropdown = ({
     typeBehandling && (typeBehandling === 'Aktivitetsplikt' || typeBehandling === 'Aktivitetsplikt11_9');
   const behandlingErIkkeAvsluttet = behandling.status !== 'AVSLUTTET';
   const behandlingErIkkeIverksatt = behandling.status !== 'IVERKSETTES';
+  const [visAvslag1127Modal, settVisAvslag1127Modal] = useState(false);
 
   const visValgForÅTrekkeSøknad =
     !behandlerEnSøknadSomSkalTrekkes &&
@@ -100,6 +102,13 @@ export const SaksmenyDropdown = ({
     behandlingErIkkeIverksatt;
 
   const visValgForÅSetteMarkering = innloggetBrukerKanSaksbehandle && behandlingErIkkeAvsluttet;
+
+  const visValgForAvslag1127 =
+    behandlingErIkkeIverksatt &&
+    innloggetBrukerKanSaksbehandle &&
+    behandlingErIkkeAvsluttet &&
+    !behandlerEnSøknadSomSkalTrekkes &&
+    !behandlerRevurderingSomSkalAvbrytes;
 
   return (
     <div className={styles.saksmeny}>
@@ -153,6 +162,11 @@ export const SaksmenyDropdown = ({
                 Marker som haster
               </Dropdown.Menu.GroupedList.Item>
             )}
+            {visValgForAvslag1127 && (
+              <Dropdown.Menu.GroupedList.Item onClick={() => settVisAvslag1127Modal(true)}>
+                Vurder avslag § 11-27
+              </Dropdown.Menu.GroupedList.Item>
+            )}
           </Dropdown.Menu.GroupedList>
         </Dropdown.Menu>
       </Dropdown>
@@ -204,6 +218,12 @@ export const SaksmenyDropdown = ({
           onClose={() => settAktivMarkeringType(null)}
         />
       )}
+      <Avslag11_27Modal
+        isOpen={visAvslag1127Modal}
+        onClose={() => settVisAvslag1127Modal(false)}
+        saksnummer={saksnummer}
+        behandlingReferanse={behandling?.referanse!}
+      />
     </div>
   );
 };
