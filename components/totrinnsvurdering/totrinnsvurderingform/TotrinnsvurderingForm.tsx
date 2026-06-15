@@ -72,7 +72,6 @@ export const TotrinnsvurderingForm = ({
   );
 
   const featureFlagHastemarkeringBoks = useFeatureFlag('VisBoksForVurderingOmHastemarkeringSkalFjernes');
-  const featureFlagFjernMarkeringDokumenterMottatt = useFeatureFlag('FjernMarkeringMottatteHelseopplysninger');
 
   const { addHendelse, varighetHendelseRef, hendelseSerieRef } = useUmamiVarighetHendelser(
     erKvalitetssikring ? 'KVALITETSSIKRER_VARIGHET_HENDELSER' : 'BESLUTTER_VARIGHET_HENDELSER'
@@ -189,7 +188,7 @@ export const TotrinnsvurderingForm = ({
             );
             if (!erKvalitetssikring) {
               loggUmamiVarighetHendelser(varighetHendelseRef.current, hendelseSerieRef.current);
-            } else if (featureFlagFjernMarkeringDokumenterMottatt) {
+            } else {
               clientMottattDokumenterLest(behandlingsreferanse);
             }
 
