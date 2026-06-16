@@ -34,7 +34,6 @@ import {
 import { Alert } from 'components/alert/Alert';
 import { TotrinnsvurderingHastemarkering } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingHastemarkering';
 import { Markering, MarkeringHaster } from 'lib/types/oppgaveTypes';
-import { useFeatureFlag } from 'context/UnleashContext';
 
 import { clientFjernMarkeringForBehandling } from 'lib/clientApi';
 import { isLocal } from 'lib/utils/environment';
