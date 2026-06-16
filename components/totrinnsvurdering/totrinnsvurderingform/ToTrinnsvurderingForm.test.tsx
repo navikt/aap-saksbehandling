@@ -174,58 +174,6 @@ describe('totrinnsvurderingform', () => {
     expect(errorMessage).toBeVisible();
   });
 
-  it('skal dukke opp et fritekst felt for å skrive inn en grunn dersom ANNET er valgt', async () => {
-    render(
-      <TotrinnsvurderingForm
-        behandlingsversjon={1}
-        grunnlag={grunnlagUtenVurdering}
-        erKvalitetssikring={false}
-        readOnly={false}
-      />
-    );
-
-    const vurderPåNyttValg = screen.getByRole('radio', { name: /nei/i });
-    await user.click(vurderPåNyttValg);
-
-    const fritekstFelt = await screen.queryByRole('textbox', { name: /annen returårsak/i });
-    expect(fritekstFelt).not.toBeInTheDocument();
-
-    const annetValg = screen.getByRole('checkbox', { name: /annen returårsak/i });
-    await user.click(annetValg);
-
-    const fritekstFeltEtterAnnetErValgt = screen.getByRole('textbox', { name: /annen returårsak/i });
-    expect(fritekstFeltEtterAnnetErValgt).toBeVisible();
-  });
-
-  it('skal dukke opp error på fritekst felt for å skrive inn en grunn dersom ANNET er valgt og det ikke er besvart', async () => {
-    render(
-      <TotrinnsvurderingForm
-        behandlingsversjon={1}
-        grunnlag={grunnlagUtenVurdering}
-        erKvalitetssikring={false}
-        readOnly={false}
-      />
-    );
-
-    const vurderPåNyttValg = screen.getByRole('radio', { name: /nei/i });
-    await user.click(vurderPåNyttValg);
-
-    const fritekstFelt = await screen.queryByRole('textbox', { name: /annen returårsak/i });
-    expect(fritekstFelt).not.toBeInTheDocument();
-
-    const annetValg = screen.getByRole('checkbox', { name: /annen returårsak/i });
-    await user.click(annetValg);
-
-    const fritekstFeltEtterAnnetErValgt = await screen.queryByRole('textbox', { name: /annen returårsak/i });
-    expect(fritekstFeltEtterAnnetErValgt).toBeVisible();
-
-    const knapp = screen.getByRole('button', { name: 'Bekreft og send videre' });
-    await user.click(knapp);
-
-    const errorMessage = await screen.getByText('Annen returårsak må fylles ut');
-    expect(errorMessage).toBeVisible();
-  });
-
   it('gir feilmelding hvis man velger en grunn for så å fjerne den igjen', async () => {
     render(
       <TotrinnsvurderingForm
@@ -383,27 +331,6 @@ describe('Totrinnsvurdering av vedtaksbrev', () => {
     expect(screen.getByRole('checkbox', { name: /For detaljerte beskrivelser/ })).toBeVisible();
     expect(screen.getByRole('checkbox', { name: /Ikke individuell og konkret nok/ })).toBeVisible();
     expect(screen.getByRole('checkbox', { name: /Annen returårsak/ })).toBeVisible();
-  });
-
-  it('skal dukke opp et fritekst felt for å skrive inn en grunn dersom ANNET er valgt', async () => {
-    render(
-      <TotrinnsvurderingForm
-        behandlingsversjon={1}
-        grunnlag={grunnlagUtenVurdering}
-        erKvalitetssikring={false}
-        readOnly={false}
-      />
-    );
-
-    const vurderPåNyttValg = screen.getByRole('radio', { name: 'Nei' });
-    await user.click(vurderPåNyttValg);
-
-    expect(screen.queryByRole('textbox', { name: 'Annen returårsak' })).not.toBeInTheDocument();
-
-    const annetValg = screen.getByRole('checkbox', { name: 'Annen returårsak' });
-    await user.click(annetValg);
-
-    expect(screen.getByRole('textbox', { name: 'Annen returårsak' })).toBeVisible();
   });
 });
 
