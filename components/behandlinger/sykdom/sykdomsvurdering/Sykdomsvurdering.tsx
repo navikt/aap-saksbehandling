@@ -36,7 +36,7 @@ import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/sy
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
-import { VStack } from '@navikt/ds-react';
+import { InfoCard, VStack } from '@navikt/ds-react';
 import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
 import {
   emptySykdomsvurderingMedDefaultBegrunnelse,
@@ -48,10 +48,17 @@ import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingS
 import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
 import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
 import { Alert } from 'components/alert/Alert';
+import useSWR from 'swr';
+import { clientHentRelevanteDokumenter } from 'lib/dokumentClientApi';
+import { isSuccess } from 'lib/utils/api';
+import { LightBulbIcon } from '@navikt/aksel-icons';
+import styles from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering.module.css';
 
 export interface SykdomsvurderingerForm {
   vurderinger: Array<Sykdomsvurdering>;
 }
+
+const SYKMELDING_39UKER_BREVKODE = 'NAV 08-07.04 R';
 
 export interface Sykdomsvurdering extends VurderingFormMeta {
   fraDato: string;
@@ -91,6 +98,15 @@ export const Sykdomsvurdering = ({
 }: SykdomProps) => {
   const { behandlingsreferanse } = useParamsMedType();
   const { sak } = useSak();
+
+  const { data: relevanteDokumenter } = useSWR(`/api/dokumenter/bruker/helsedokumenter`, () =>
+    clientHentRelevanteDokumenter(sak.saksnummer, sak.ident)
+  );
+
+  const har39UkersSykmelding =
+    isSuccess(relevanteDokumenter) &&
+    relevanteDokumenter.data.filter((dokument) => dokument.brevkode?.toUpperCase() == SYKMELDING_39UKER_BREVKODE)
+      .length > 0;
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
@@ -189,6 +205,16 @@ export const Sykdomsvurdering = ({
     >
       <VStack gap={'space-16'}>
         <EksterneLenkerIVilkårskort steg={'AVKLAR_SYKDOM'} />
+
+        {har39UkersSykmelding && (
+          <InfoCard data-color="meta-purple" size={'small'} className={styles.sykmeldingInfo}>
+            <InfoCard.Message icon={<LightBulbIcon aria-hidden />}>
+              {
+                'Det er nylig mottatt en 39-ukers sykemelding på saken. Du finner den under "Be om opplysninger" i høyre kolonne.'
+              }
+            </InfoCard.Message>
+          </InfoCard>
+        )}
 
         {erOvergangArbeid && (
           <Alert variant={'info'}>
