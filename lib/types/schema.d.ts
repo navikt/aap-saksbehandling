@@ -3098,6 +3098,44 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/behandling/{referanse}/grunnlag/krav': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description referanse */
+          referanse: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.KravGrunnlagDto'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/klage/{referanse}/grunnlag/p\u00E5klaget-behandling': {
     parameters: {
       query?: never;
@@ -5792,17 +5830,12 @@ export interface components {
        * Format: date
        * @example 2025-04-01
        */
-      kravdato?: string | null;
+      overstyrMuligRettFra?: string | null;
       /**
        * Format: date
        * @example 2025-04-01
        */
-      muligRettFra?: string | null;
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      's\u00F8knadsdato'?: string | null;
+      's\u00F8knadsdato': string;
     };
     'no.nav.aap.behandlingsflyt.LeggTilInstitusjonsoppholdDTO': {
       opphold: components['schemas']['no.nav.aap.behandlingsflyt.InstitusjonsoppholdItemDTO'][];
@@ -6256,6 +6289,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -6345,6 +6379,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -6430,6 +6465,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -6515,6 +6551,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -6600,6 +6637,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -6685,6 +6723,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -6770,6 +6809,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -6855,6 +6895,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -6941,6 +6982,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -7026,6 +7068,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -7110,6 +7153,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -7195,6 +7239,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -7280,6 +7325,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -7365,6 +7411,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -7450,6 +7497,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -7535,6 +7583,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -7620,6 +7669,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -7705,6 +7755,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -7790,6 +7841,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -7876,6 +7928,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -7960,6 +8013,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -8045,6 +8099,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -8130,6 +8185,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -8215,6 +8271,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -8300,6 +8357,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -8385,6 +8443,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -8470,6 +8529,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -8555,6 +8615,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -8640,6 +8701,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -8725,6 +8787,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -8809,6 +8872,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -8904,6 +8968,7 @@ export interface components {
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.VurderInntektsbortfallL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.VurderKlageKontorL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.VurderKlageNayL\u00F8sning']
+      | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.VurderKravL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.VurderRettighetsperiodeL\u00F8sning'];
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.EtableringEgenVirksomhetL\u00F8sning': {
       /** @enum {string} */
@@ -8949,6 +9014,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -9035,6 +9101,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -9119,6 +9186,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -9204,6 +9272,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -9289,6 +9358,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -9374,6 +9444,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -9459,6 +9530,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -9544,6 +9616,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -9628,6 +9701,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -9712,6 +9786,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -9796,6 +9871,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -9888,6 +9964,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -10016,6 +10093,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -10101,6 +10179,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -10185,6 +10264,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -10270,6 +10350,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -10373,6 +10454,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -10458,6 +10540,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -10543,6 +10626,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -10628,6 +10712,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -10712,6 +10797,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -10796,6 +10882,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -10885,6 +10972,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -10975,6 +11063,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -11065,6 +11154,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -11154,6 +11244,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -11239,6 +11330,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -11324,6 +11416,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -11410,6 +11503,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -11495,6 +11589,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -11579,6 +11674,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -11663,6 +11759,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -11747,6 +11844,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -11831,6 +11929,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -11916,6 +12015,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -12001,6 +12101,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -12086,6 +12187,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -12170,6 +12272,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -12255,6 +12358,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -12340,6 +12444,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -12425,6 +12530,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -12465,6 +12571,92 @@ export interface components {
         | '9082'
         | '9083';
       klagevurderingNay: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.klagebehandling.nay.KlagevurderingNayL\u00F8sningDto'];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.VurderKravL\u00F8sning': {
+      /** @enum {string} */
+      behovstype:
+        | '4101'
+        | '4102'
+        | '4201'
+        | '4301'
+        | '5001'
+        | '5002'
+        | '5003'
+        | '5004'
+        | '5005'
+        | '5006'
+        | '5007'
+        | '5008'
+        | '5009'
+        | '5010'
+        | '5011'
+        | '5012'
+        | '5013'
+        | '5014'
+        | '5015'
+        | '5016'
+        | '5017'
+        | '5018'
+        | '5019'
+        | '5020'
+        | '5021'
+        | '5022'
+        | '5023'
+        | '5024'
+        | '5025'
+        | '5026'
+        | '5027'
+        | '5028'
+        | '5029'
+        | '5030'
+        | '5031'
+        | '5032'
+        | '5033'
+        | '5034'
+        | '5035'
+        | '5036'
+        | '5037'
+        | '5038'
+        | '5040'
+        | '5041'
+        | '5042'
+        | '5050'
+        | '5051'
+        | '5052'
+        | '5053'
+        | '5054'
+        | '5056'
+        | '5057'
+        | '5058'
+        | '5059'
+        | '5060'
+        | '5096'
+        | '5097'
+        | '5098'
+        | '5099'
+        | '5999'
+        | '6000'
+        | '6001'
+        | '6002'
+        | '6003'
+        | '6004'
+        | '6005'
+        | '6006'
+        | '6007'
+        | '6008'
+        | '6009'
+        | '6010'
+        | '7001'
+        | '8001'
+        | '8002'
+        | '8003'
+        | '9001'
+        | '9002'
+        | '9003'
+        | '9004'
+        | '9082'
+        | '9083';
+      kravVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.KravVurderingL\u00F8sningDto'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.VurderRettighetsperiodeL\u00F8sning': {
       /** @enum {string} */
@@ -12510,6 +12702,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -13255,6 +13448,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -14142,6 +14336,7 @@ export interface components {
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
         | 'VURDER_AVSLAG_11_27'
+        | 'VURDER_KRAV'
         | 'VURDER_RETTIGHETSPERIODE'
       )[];
       /** @enum {string|null} */
@@ -14189,6 +14384,96 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.behandling.klage.trekk.TrekkKlageGrunnlagDto': {
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.trekkklage.flate.TrekkKlageVurderingDto'];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.krav.GjenopptakDto': {
+      begrunnelse: string;
+      journalpostId: components['schemas']['no.nav.aap.verdityper.dokument.JournalpostId'];
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      muligRettFra: string;
+      /**
+       * Format: date-time
+       * @example 2025-04-01T10:30:00Z
+       */
+      opprettet: string;
+      overstyrMuligRettFra?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.OverstyrMuligRettFra'];
+      's\u00F8knadsdato': components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.S\u00F8knadsdato'];
+      /** @enum {string} */
+      type: 'GJENOPPTAK' | 'KLAGE' | 'NYTT_KRAV_AAP' | 'TILLEGGSOPPLYSNING' | 'TRUKKET_SØKNAD';
+      vurdertAv: components['schemas']['no.nav.aap.komponenter.verdityper.Bruker'];
+      vurdertIBehandling: components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.behandling.BehandlingId'];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.krav.KlageDto': {
+      begrunnelse: string;
+      journalpostId: components['schemas']['no.nav.aap.verdityper.dokument.JournalpostId'];
+      /**
+       * Format: date-time
+       * @example 2025-04-01T10:30:00Z
+       */
+      opprettet: string;
+      /** @enum {string} */
+      type: 'GJENOPPTAK' | 'KLAGE' | 'NYTT_KRAV_AAP' | 'TILLEGGSOPPLYSNING' | 'TRUKKET_SØKNAD';
+      vurdertAv: components['schemas']['no.nav.aap.komponenter.verdityper.Bruker'];
+      vurdertIBehandling: components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.behandling.BehandlingId'];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.krav.KravGrunnlagDto': {
+      'harTilgangTil\u00C5Saksbehandle': boolean;
+      nyeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.KravVurderingDto'][];
+      vedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.KravVurderingDto'][];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.krav.KravVurderingDto':
+      | components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.GjenopptakDto']
+      | components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.KlageDto']
+      | components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.NyttKravDto']
+      | components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.TilleggsopplysningDto']
+      | components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.TrukketS\u00F8knadDto'];
+    'no.nav.aap.behandlingsflyt.behandling.krav.NyttKravDto': {
+      begrunnelse: string;
+      journalpostId: components['schemas']['no.nav.aap.verdityper.dokument.JournalpostId'];
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      muligRettFra: string;
+      /**
+       * Format: date-time
+       * @example 2025-04-01T10:30:00Z
+       */
+      opprettet: string;
+      overstyrMuligRettFra?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.OverstyrMuligRettFra'];
+      's\u00F8knadsdato': components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.S\u00F8knadsdato'];
+      /** @enum {string} */
+      type: 'GJENOPPTAK' | 'KLAGE' | 'NYTT_KRAV_AAP' | 'TILLEGGSOPPLYSNING' | 'TRUKKET_SØKNAD';
+      vurdertAv: components['schemas']['no.nav.aap.komponenter.verdityper.Bruker'];
+      vurdertIBehandling: components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.behandling.BehandlingId'];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.krav.TilleggsopplysningDto': {
+      begrunnelse: string;
+      journalpostId: components['schemas']['no.nav.aap.verdityper.dokument.JournalpostId'];
+      /**
+       * Format: date-time
+       * @example 2025-04-01T10:30:00Z
+       */
+      opprettet: string;
+      /** @enum {string} */
+      type: 'GJENOPPTAK' | 'KLAGE' | 'NYTT_KRAV_AAP' | 'TILLEGGSOPPLYSNING' | 'TRUKKET_SØKNAD';
+      vurdertAv: components['schemas']['no.nav.aap.komponenter.verdityper.Bruker'];
+      vurdertIBehandling: components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.behandling.BehandlingId'];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.krav.TrukketS\u00F8knadDto': {
+      begrunnelse: string;
+      journalpostId: components['schemas']['no.nav.aap.verdityper.dokument.JournalpostId'];
+      /**
+       * Format: date-time
+       * @example 2025-04-01T10:30:00Z
+       */
+      opprettet: string;
+      /** @enum {string} */
+      type: 'GJENOPPTAK' | 'KLAGE' | 'NYTT_KRAV_AAP' | 'TILLEGGSOPPLYSNING' | 'TRUKKET_SØKNAD';
+      vurdertAv: components['schemas']['no.nav.aap.komponenter.verdityper.Bruker'];
+      vurdertIBehandling: components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.behandling.BehandlingId'];
     };
     'no.nav.aap.behandlingsflyt.behandling.kvalitetssikring.KvalitetssikringGrunnlagDto': {
       'harGjortVilk\u00E5rsvurderingerP\u00E5Behandling': boolean;
@@ -14426,6 +14711,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -14518,6 +14804,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -14648,6 +14935,7 @@ export interface components {
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
         | 'VURDER_AVSLAG_11_27'
+        | 'VURDER_KRAV'
         | 'VURDER_RETTIGHETSPERIODE'
       )[];
       vurdertAv: string;
@@ -14722,6 +15010,7 @@ export interface components {
             | 'UTVID_VEDTAKSLENGDE'
             | 'VEDTAKSLENGDE_MANUELT'
             | 'VURDER_AVSLAG_11_27'
+            | 'VURDER_KRAV'
             | 'VURDER_RETTIGHETSPERIODE'
           )[]
         | null;
@@ -15412,6 +15701,7 @@ export interface components {
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
         | 'VURDER_AVSLAG_11_27'
+        | 'VURDER_KRAV'
         | 'VURDER_RETTIGHETSPERIODE'
       )[];
       /** @enum {string|null} */
@@ -16554,6 +16844,74 @@ export interface components {
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.flate.SoningsvurderingerDto': {
       vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.flate.SoningsvurderingDto'][];
     };
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.GjenopptakKravL\u00F8sningDto': {
+      begrunnelse: string;
+      journalpostId: components['schemas']['no.nav.aap.verdityper.dokument.JournalpostId'];
+      muligRettFra?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.OverstyrMuligRettFra'];
+      /** Format: uuid */
+      referanse?: string | null;
+      's\u00F8knadsdato': components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.S\u00F8knadsdato'];
+      /** @enum {string} */
+      kravType: 'GJENOPPTAK' | 'KLAGE' | 'NYTT_KRAV_AAP' | 'TILLEGGSOPPLYSNING' | 'TRUKKET_SØKNAD';
+    };
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.KlageKravL\u00F8sningDto': {
+      begrunnelse: string;
+      journalpostId: components['schemas']['no.nav.aap.verdityper.dokument.JournalpostId'];
+      /** Format: uuid */
+      referanse?: string | null;
+      /** @enum {string} */
+      kravType: 'GJENOPPTAK' | 'KLAGE' | 'NYTT_KRAV_AAP' | 'TILLEGGSOPPLYSNING' | 'TRUKKET_SØKNAD';
+    };
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.KravVurderingL\u00F8sningDto':
+      | components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.GjenopptakKravL\u00F8sningDto']
+      | components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.KlageKravL\u00F8sningDto']
+      | components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.NyttKravL\u00F8sningDto']
+      | components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.TilleggsopplysningKravL\u00F8sningDto']
+      | components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.TrukketS\u00F8knadKravL\u00F8sningDto'];
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.NyttKravL\u00F8sningDto': {
+      begrunnelse: string;
+      journalpostId: components['schemas']['no.nav.aap.verdityper.dokument.JournalpostId'];
+      overstyrMuligRettFra?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.OverstyrMuligRettFra'];
+      /** Format: uuid */
+      referanse?: string | null;
+      's\u00F8knadsdato': components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.S\u00F8knadsdato'];
+      /** @enum {string} */
+      kravType: 'GJENOPPTAK' | 'KLAGE' | 'NYTT_KRAV_AAP' | 'TILLEGGSOPPLYSNING' | 'TRUKKET_SØKNAD';
+    };
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.OverstyrMuligRettFra': {
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      dato: string;
+      /** @enum {string} */
+      '\u00E5rsak': 'IkkeIStandTilÅSøkeTidligere' | 'MisvisendeOpplysninger';
+    };
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.S\u00F8knadsdato': {
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      dato: string;
+      /** @enum {string} */
+      '\u00E5rsak': 'BrukerHarSøktTidligere' | 'FeilregistrertSøknadsdato' | 'SøknadMottatt';
+    };
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.TilleggsopplysningKravL\u00F8sningDto': {
+      begrunnelse: string;
+      journalpostId: components['schemas']['no.nav.aap.verdityper.dokument.JournalpostId'];
+      /** Format: uuid */
+      referanse?: string | null;
+      /** @enum {string} */
+      kravType: 'GJENOPPTAK' | 'KLAGE' | 'NYTT_KRAV_AAP' | 'TILLEGGSOPPLYSNING' | 'TRUKKET_SØKNAD';
+    };
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.TrukketS\u00F8knadKravL\u00F8sningDto': {
+      begrunnelse: string;
+      journalpostId: components['schemas']['no.nav.aap.verdityper.dokument.JournalpostId'];
+      /** Format: uuid */
+      referanse?: string | null;
+      /** @enum {string} */
+      kravType: 'GJENOPPTAK' | 'KLAGE' | 'NYTT_KRAV_AAP' | 'TILLEGGSOPPLYSNING' | 'TRUKKET_SØKNAD';
+    };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.meldeplikt.OverstyringMeldepliktVurderingPeriode': {
       begrunnelse: string;
       /**
@@ -17577,6 +17935,7 @@ export interface components {
         | '5035'
         | '5036'
         | '5037'
+        | '5038'
         | '5040'
         | '5041'
         | '5042'
@@ -17882,6 +18241,7 @@ export interface components {
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
         | 'VURDER_AVSLAG_11_27'
+        | 'VURDER_KRAV'
         | 'VURDER_RETTIGHETSPERIODE'
       )[];
     };
@@ -17944,6 +18304,7 @@ export interface components {
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
         | 'VURDER_AVSLAG_11_27'
+        | 'VURDER_KRAV'
         | 'VURDER_RETTIGHETSPERIODE'
       )[];
     };
@@ -18221,6 +18582,7 @@ export interface components {
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
         | 'VURDER_AVSLAG_11_27'
+        | 'VURDER_KRAV'
         | 'VURDER_RETTIGHETSPERIODE'
       )[];
     };
@@ -18321,6 +18683,7 @@ export interface components {
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
         | 'VURDER_AVSLAG_11_27'
+        | 'VURDER_KRAV'
         | 'VURDER_RETTIGHETSPERIODE'
       )[];
     };
@@ -18398,6 +18761,7 @@ export interface components {
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
         | 'VURDER_AVSLAG_11_27'
+        | 'VURDER_KRAV'
         | 'VURDER_RETTIGHETSPERIODE'
       )[];
     };
@@ -18464,6 +18828,7 @@ export interface components {
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
         | 'VURDER_AVSLAG_11_27'
+        | 'VURDER_KRAV'
         | 'VURDER_RETTIGHETSPERIODE'
       )[];
     };
@@ -18740,6 +19105,7 @@ export interface components {
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
         | 'VURDER_AVSLAG_11_27'
+        | 'VURDER_KRAV'
         | 'VURDER_RETTIGHETSPERIODE';
     };
     'no.nav.aap.behandlingsflyt.sakogbehandling.behandling.VurderingsbehovOg\u00C5rsak': {
@@ -18884,6 +19250,7 @@ export interface components {
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
         | 'VURDER_AVSLAG_11_27'
+        | 'VURDER_KRAV'
         | 'VURDER_RETTIGHETSPERIODE'
         | null
       )[];
@@ -18971,6 +19338,7 @@ export interface components {
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
         | 'VURDER_AVSLAG_11_27'
+        | 'VURDER_KRAV'
         | 'VURDER_RETTIGHETSPERIODE'
       )[];
       /** @enum {string|null} */
@@ -19377,6 +19745,9 @@ export interface components {
     };
     'no.nav.aap.komponenter.verdityper.Bel\u00F8p': {
       verdi: number;
+    };
+    'no.nav.aap.komponenter.verdityper.Bruker': {
+      ident: string;
     };
     'no.nav.aap.komponenter.verdityper.Dagsatser': {
       /** Format: int32 */
