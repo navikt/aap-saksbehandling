@@ -39,9 +39,6 @@ export const TotrinnnsvurderingFelter = ({
   ];
 
   const vurderingErIkkeGodkjent = form.watch(`totrinnsvurderinger.${index}.godkjent`) === JaEllerNei.Nei;
-  const annetGrunnErValgt =
-    form.watch(`totrinnsvurderinger.${index}.grunner`) &&
-    form.watch(`totrinnsvurderinger.${index}.grunner`)?.includes('ANNET');
   const behovstypeEllerKode =
     Object.keys(Behovstype)[Object.values(Behovstype).indexOf(field.definisjon as Behovstype)] || field.definisjon;
   const eventPrefix = `${erKvalitetssikring ? 'KVALITETSSIKRER' : 'BESLUTTER'}_${behovstypeEllerKode}`;
@@ -113,25 +110,6 @@ export const TotrinnnsvurderingFelter = ({
                 </Checkbox>
               ))}
             </CheckboxWrapper>
-
-            {annetGrunnErValgt && (
-              <TextAreaWrapper
-                label={'Annen returårsak'}
-                description={'Kort beskrivelse (maks 50 tegn)'}
-                readOnly={readOnly}
-                control={form.control}
-                maxLength={50}
-                name={`totrinnsvurderinger.${index}.årsakFritekst`}
-                rules={{
-                  required: 'Annen returårsak må fylles ut',
-                  maxLength: {
-                    value: 50,
-                    message: 'Kan bestå av maks 50 tegn. Utfyllende begrunnelse skal i feltet over.',
-                  },
-                }}
-                onBlur={() => felterOnBlur(`${eventPrefix}_RETUR_ÅRSAKFRITEKST` as UmamiTag, Date.now())}
-              />
-            )}
           </>
         )}
       </div>

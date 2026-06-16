@@ -280,6 +280,7 @@ function mapMellomlagringToDraftFormFields(mellomlagring: FormFieldsToTrinnsVurd
     totrinnsvurderinger: mellomlagring.totrinnsvurderinger.map((vurdering) => {
       return {
         ...vurdering,
+        begrunnelse: getDefaultBegrunnelse(vurdering.begrunnelse, vurdering.årsakFritekst),
         godkjent:
           // @ts-expect-error migrering for true og false verdier i mellomlagring, endret til JaEllerNei
           vurdering.godkjent === 'true' || vurdering.godkjent === 'false'
@@ -292,15 +293,25 @@ function mapMellomlagringToDraftFormFields(mellomlagring: FormFieldsToTrinnsVurd
 function mapVurderingToDraftFormFields(vurderinger: ToTrinnsVurdering[]): DraftFormFields {
   return {
     totrinnsvurderinger: vurderinger.map((vurdering) => {
+      const årsakFritekst = vurdering.grunner?.find((grunn) => grunn.årsakFritekst)?.årsakFritekst || '';
+
       return {
         definisjon: vurdering.definisjon,
         godkjent: getJaNeiEllerUndefined(vurdering.godkjent),
-        begrunnelse: vurdering.begrunnelse || '',
+        begrunnelse: getDefaultBegrunnelse(vurdering.begrunnelse, årsakFritekst),
         grunner: vurdering.grunner?.map((grunn) => {
           return grunn.årsak;
         }),
-        årsakFritekst: vurdering.grunner?.find((grunn) => grunn.årsakFritekst)?.årsakFritekst || '',
+        årsakFritekst: årsakFritekst,
       };
     }),
   };
+}
+
+function getDefaultBegrunnelse(begrunnelse: string | undefined | null, årsakFritekst?: string) {
+  if (årsakFritekst && !begrunnelse?.includes(årsakFritekst)) {
+    return begrunnelse + '\n\nAnnet: ' + årsakFritekst;
+  }
+
+  return begrunnelse || '';
 }
