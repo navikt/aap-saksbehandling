@@ -1,5 +1,6 @@
 import { RefObject, useEffect, useRef } from 'react';
 import { UmamiTag } from 'components/umami/Umami';
+import { BrevGrunnlagBrev } from 'lib/types/types';
 
 type UmamiValue = string | number | boolean | null | undefined;
 type UmamiData = Record<string, UmamiValue>;
@@ -13,6 +14,17 @@ export const loggUmamiEvent = (eventName: string, data: UmamiData) => {
     console.error(`Umami Failed to track event ${eventName}:`, error);
   }
 };
+export function loggUmamiBrevVarighet(
+  hendelse: UmamiTag,
+  start: number,
+  stop: number,
+  brevtype: BrevGrunnlagBrev['brevtype']
+) {
+  loggUmamiEvent(hendelse, {
+    varighet_sekunder: Math.floor((stop - start) / 1000),
+    brevtype,
+  });
+}
 
 export function loggUmamiVarighet(hendelse: UmamiTag, start: number, stop: number, typeBehandling?: string) {
   loggUmamiEvent(hendelse, {
