@@ -203,6 +203,21 @@ export type SamordningAndreStatligeYtelserData =
 export type SamordningAndreStatligeYtelserYtelse =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.samordning.andrestatligeytelservurdering.SamordningAndreStatligeYtelserVurderingPeriodeDto']['ytelse'];
 
+export type KravGrunnlag = components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.KravGrunnlagDto'];
+
+export type KravVurdering = components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.KravVurderingDto'];
+
+export type NyttKrav = components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.NyttKravDto'];
+
+export type Tilleggsopplysning =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.TilleggsopplysningDto'];
+
+export type Søknadsdato =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.NyttKravDto']['søknadsdato'];
+
+export type OverstyrMuligRettFra =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.NyttKravDto']['overstyrMuligRettFra'];
+
 export type TrukketSøknadGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.søknad.TrukketSøknadGrunnlagDto'];
 
