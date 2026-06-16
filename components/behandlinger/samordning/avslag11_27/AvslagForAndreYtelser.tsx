@@ -3,6 +3,7 @@ import { getStegData } from 'lib/utils/steg';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { AvslagAndreYtelserMedDataFetching } from 'components/behandlinger/samordning/avslag11_27/AvslagAndreYtelserMedDataFetching';
+import { Behovstype } from 'lib/utils/form';
 
 interface props {
   behandlingsreferanse: string;
@@ -10,7 +11,7 @@ interface props {
 }
 
 export const AvslagForAndreYtelser = async ({ behandlingsreferanse, flyt }: props) => {
-  const stegSomSkalVises = getStegData('AVSLAG_11_27', 'VURDER_AVSLAG_11_27', flyt).skalViseSteg;
+  const stegData = getStegData('AVSLAG_11_27', 'VURDER_AVSLAG_11_27', flyt, Behovstype.VURDER_AVSLAG_11_27);
   const behandlingVersjon = flyt.behandlingVersjon;
 
   return (
@@ -21,7 +22,7 @@ export const AvslagForAndreYtelser = async ({ behandlingsreferanse, flyt }: prop
       behandlingVersjon={behandlingVersjon}
       aktivtSteg={flyt.aktivtSteg}
     >
-      {stegSomSkalVises && (
+      {stegData.skalViseSteg && (
         <StegSuspense>
           <AvslagAndreYtelserMedDataFetching
             behandlingsreferanse={behandlingsreferanse}

@@ -2067,7 +2067,7 @@ export interface paths {
             [name: string]: unknown;
           };
           content: {
-            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.avslag_11_27.Avslag11_27KravDto.Avslag11_27GrunnlagDto'];
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.avslag_11_27.Avslag11_27GrunnlagDto'];
           };
         };
       };
@@ -13503,6 +13503,16 @@ export interface components {
       /** @enum {string} */
       utfall: 'IKKE_OPPFYLT' | 'IKKE_RELEVANT' | 'IKKE_VURDERT' | 'OPPFYLT';
     };
+    'no.nav.aap.behandlingsflyt.behandling.grunnlag.avslag_11_27.Avslag11_27GrunnlagDto': {
+      'harTilgangTil\u00C5Saksbehandle': boolean;
+      krav: components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.avslag_11_27.Avslag11_27KravDto'][];
+      vedtatteVurdering?:
+        | components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.avslag_11_27.Avslag11_27VurderingDto'][]
+        | null;
+      vurderinger?:
+        | components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.avslag_11_27.Avslag11_27VurderingDto'][]
+        | null;
+    };
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.avslag_11_27.Avslag11_27KravDto': {
       /**
        * Format: date
@@ -13517,17 +13527,7 @@ export interface components {
       's\u00F8knadsdokument': string;
       type: string;
     };
-    'no.nav.aap.behandlingsflyt.behandling.grunnlag.avslag_11_27.Avslag11_27KravDto.Avslag11_27GrunnlagDto': {
-      'harTilgangTil\u00C5Saksbehandle': boolean;
-      krav: components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.avslag_11_27.Avslag11_27KravDto'][];
-      vedtatteVurdering?:
-        | components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.avslag_11_27.Avslag11_27KravDto.Avslag11_27VurderingDto'][]
-        | null;
-      vurderinger?:
-        | components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.avslag_11_27.Avslag11_27KravDto.Avslag11_27VurderingDto'][]
-        | null;
-    };
-    'no.nav.aap.behandlingsflyt.behandling.grunnlag.avslag_11_27.Avslag11_27KravDto.Avslag11_27VurderingDto': {
+    'no.nav.aap.behandlingsflyt.behandling.grunnlag.avslag_11_27.Avslag11_27VurderingDto': {
       begrunnelse: string;
       /** @enum {string|null} */
       brukersYtelse?:

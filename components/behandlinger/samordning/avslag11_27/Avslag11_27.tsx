@@ -15,10 +15,11 @@ import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
 import { useConfigForm } from 'components/form/FormHook';
 import { useFieldArray } from 'react-hook-form';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
-import { SubmitEvent, SubmitEventHandler } from 'react';
+import { SubmitEvent, SubmitEventHandler, useState } from 'react';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
-import { BodyLong, VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react';
 import { Avslag11_27KravTabell } from 'components/behandlinger/samordning/avslag11_27/Avslag11_27KravTabell';
+import { Avslag11_27KravGruppe } from 'components/behandlinger/samordning/avslag11_27/avslag11_27KravGruppe/Avslag11_27KravGruppe';
 
 interface Props {
   grunnlag: Avslag11_27Grunnlag;
@@ -40,7 +41,7 @@ export interface KravMedVurdering extends VurderingFormMeta {
   begrunnelse: string;
   harAnnenFullYtelse: JaEllerNei;
   brukersYtelse: Avslag11_27BrukersYtelse | undefined;
-  harSykepengegrunnlagOver2G: JaEllerNei | undefined; // Kun for sykepenger
+  harSykepengegrunnlagOver2G: JaEllerNei | undefined;
   skalAvslås1127: JaEllerNei;
 }
 
@@ -72,7 +73,7 @@ export const Avslag11_27 = ({ grunnlag, readOnly, behandlingVersjon, initialMell
     },
   });
 
-  const { fields: kravdFields } = useFieldArray({
+  const { fields: kravFields } = useFieldArray({
     control: form.control,
     name: 'avslag11_27vurderinger',
   });
@@ -83,20 +84,36 @@ export const Avslag11_27 = ({ grunnlag, readOnly, behandlingVersjon, initialMell
     form
   );
 
+  const [selectedJournalpostIds, setSelectedJournalpostIds] = useState<string[]>(() =>
+    grunnlag.krav
+      .filter((krav) => {
+        const vedtatt = (grunnlag.vedtatteVurdering ?? []).find((v) => v.journalpostId === krav.søknadsdokument);
+        return !!vedtatt;
+      })
+      .map((krav) => krav.søknadsdokument)
+  );
+
+  const handleToggle = (journalpostId: string) => {
+    setSelectedJournalpostIds((prev) =>
+      prev.includes(journalpostId) ? prev.filter((id) => id !== journalpostId) : [...prev, journalpostId]
+    );
+  };
+
   const handleSubmit: SubmitEventHandler = (event: SubmitEvent) => {
     form.handleSubmit((data) => {
-      const vurderinger = data.avslag11_27vurderinger.map((krav) => {
-        const vurdering = krav.vurdering;
-
-        return {
-          journalpostId: vurdering.journalpostId,
-          begrunnelse: vurdering.begrunnelse,
-          harAnnenFullYtelse: vurdering.harAnnenFullYtelse === JaEllerNei.Ja,
-          brukersYtelse: vurdering.brukersYtelse,
-          harSykepengegrunnlagOver2G: vurdering.harSykepengegrunnlagOver2G === JaEllerNei.Ja,
-          skalAvslås1127: vurdering.skalAvslås1127 === JaEllerNei.Ja,
-        };
-      });
+      const vurderinger = data.avslag11_27vurderinger
+        .filter((krav) => selectedJournalpostIds.includes(krav.vurdering.journalpostId))
+        .map((krav) => {
+          const vurdering = krav.vurdering;
+          return {
+            journalpostId: vurdering.journalpostId,
+            begrunnelse: vurdering.begrunnelse,
+            harAnnenFullYtelse: vurdering.harAnnenFullYtelse === JaEllerNei.Ja,
+            brukersYtelse: vurdering.brukersYtelse,
+            harSykepengegrunnlagOver2G: vurdering.harSykepengegrunnlagOver2G === JaEllerNei.Ja,
+            skalAvslås1127: vurdering.skalAvslås1127 === JaEllerNei.Ja,
+          };
+        });
 
       løsBehovOgGåTilNesteSteg(
         {
@@ -134,30 +151,33 @@ export const Avslag11_27 = ({ grunnlag, readOnly, behandlingVersjon, initialMell
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
     >
       <VStack gap={'space-24'}>
-        <Avslag11_27KravTabell label={'Bruker har følgende søknader om AAP'} avslag11_27krav={grunnlag.krav} />
+        <Avslag11_27KravTabell
+          label={'Bruker har følgende søknader om AAP'}
+          avslag11_27krav={grunnlag.krav}
+          selectedJournalpostIds={selectedJournalpostIds}
+          onToggle={handleToggle}
+        />
+        {kravFields.map((kravField, kravIndex) => {
+          const faktiskKrav = grunnlag.krav[kravIndex];
+          if (!selectedJournalpostIds.includes(faktiskKrav.søknadsdokument)) return null;
 
-        {/*{kravdFields.map((kravField, kravIndex) => { // FIXME Thao
-          const faktiskKrav = grunnlag.find((o) => o.oppholdId === oppholdField.oppholdId)!;
-          const skalJustere = skalJustereVedtatteVurderinger(grunnlag, oppholdField.oppholdId);
-
-          const tidligereVurderinger = grunnlag.vedtatteVurderinger
-            .filter((v) => v.oppholdId === oppholdField.oppholdId)
-            .flatMap((v) => v.vurderinger || []);
+          const tidligereVurdering = (grunnlag.vedtatteVurdering ?? []).find(
+            (v) => v.journalpostId === faktiskKrav.søknadsdokument
+          );
 
           return (
-            <Avslag11_27Gruppe
-              key={oppholdField.id}
-              journalpostId={faktiskOpphold}
-              tidligereVurderinger={tidligereVurderinger}
-              accordionsSignal={accordionsSignal}
-              oppholdIndex={oppholdIndex}
+            <Avslag11_27KravGruppe
+              key={kravField.id}
               form={form}
+              kravIndex={kravIndex}
+              krav={faktiskKrav}
+              tidligereVurdering={tidligereVurdering}
               readonly={formReadOnly}
+              accordionsSignal={accordionsSignal}
               erAktivUtenAvbryt={erAktivUtenAvbryt}
-              skalJustereVedtatteVurderinger={skalJustere}
             />
           );
-        })} */}
+        })}
       </VStack>
     </VilkårskortMedFormOgMellomlagring>
   );
