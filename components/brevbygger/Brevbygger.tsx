@@ -5,14 +5,7 @@ import { useForm } from 'react-hook-form';
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import {
-  BrevdataDto,
-  BrevGrunnlagBrev,
-  BrevMottaker,
-  Mottaker,
-  RefusjonskravGrunnlag,
-  TypeBehandling,
-} from 'lib/types/types';
+import { BrevdataDto, BrevGrunnlagBrev, BrevMottaker, Mottaker, RefusjonskravGrunnlag } from 'lib/types/types';
 import { BrevmalType } from 'components/brevbygger/brevmodellTypes';
 import { Behovstype } from 'lib/utils/form';
 import { clientOppdaterBrevmal } from 'lib/clientApi';
