@@ -6,7 +6,7 @@ import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useDebounce } from 'hooks/DebounceHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { clientHentFlyt, clientMellomlagreBrev } from 'lib/clientApi';
-import { Brev, BrevGrunnlagBrev, BrevMottaker, BrevStatus, Mottaker, Signatur, TypeBehandling } from 'lib/types/types';
+import { Brev, BrevGrunnlagBrev, BrevMottaker, BrevStatus, Mottaker, Signatur } from 'lib/types/types';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { Behovstype } from 'lib/utils/form';
 import { useFeatureFlag } from 'context/UnleashContext';
