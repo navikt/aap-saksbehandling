@@ -6,17 +6,14 @@ export const FLAGS = [
   'VisArenasakerOversikt',
   'ArenasakerLenkeTilVisninsklient',
   'BegrunnelseForIkkeSendBrev',
-  'VisBoksForVurderingOmHastemarkeringSkalFjernes',
   'TilkjentYtelseMedDiff',
   'UnderveisMedDiff',
-  'AvbrytAktivitetspliktbehandling',
   'InfoboksGRegulering',
   'ReturAarsakJournalforing',
-  'Skal1117og1118AlltidVises',
   'VisValgForDialogmelding',
-  'FjernMarkeringMottatteHelseopplysninger',
   'HentFastlege',
-  'StudentV2'
+  'StudentV2',
+  'OppgavelisteMedBelopISaksbehandling',
 ] as const;
 
 export type FlagNames = (typeof FLAGS)[number];
@@ -30,15 +27,12 @@ export const mockedFlags: Flags = {
   VisArenasakerOversikt: true,
   ArenasakerLenkeTilVisninsklient: true,
   BegrunnelseForIkkeSendBrev: true,
-  VisBoksForVurderingOmHastemarkeringSkalFjernes: true,
   TilkjentYtelseMedDiff: true,
   UnderveisMedDiff: true,
-  AvbrytAktivitetspliktbehandling: true,
   InfoboksGRegulering: true,
   ReturAarsakJournalforing: true,
-  Skal1117og1118AlltidVises: true,
-  FjernMarkeringMottatteHelseopplysninger: true,
   VisValgForDialogmelding: true,
   StudentV2: true,
   HentFastlege: true,
+  OppgavelisteMedBelopISaksbehandling: true,
 };

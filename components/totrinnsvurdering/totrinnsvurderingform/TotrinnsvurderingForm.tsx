@@ -34,7 +34,6 @@ import {
 import { Alert } from 'components/alert/Alert';
 import { TotrinnsvurderingHastemarkering } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingHastemarkering';
 import { Markering, MarkeringHaster } from 'lib/types/oppgaveTypes';
-import { useFeatureFlag } from 'context/UnleashContext';
 
 import { clientFjernMarkeringForBehandling } from 'lib/clientApi';
 import { isLocal } from 'lib/utils/environment';
@@ -71,9 +70,6 @@ export const TotrinnsvurderingForm = ({
     erKvalitetssikring ? 'KVALITETSSIKRING' : 'FATTE_VEDTAK'
   );
 
-  const featureFlagHastemarkeringBoks = useFeatureFlag('VisBoksForVurderingOmHastemarkeringSkalFjernes');
-  const featureFlagFjernMarkeringDokumenterMottatt = useFeatureFlag('FjernMarkeringMottatteHelseopplysninger');
-
   const { addHendelse, varighetHendelseRef, hendelseSerieRef } = useUmamiVarighetHendelser(
     erKvalitetssikring ? 'KVALITETSSIKRER_VARIGHET_HENDELSER' : 'BESLUTTER_VARIGHET_HENDELSER'
   );
@@ -85,8 +81,7 @@ export const TotrinnsvurderingForm = ({
 
   const totrinnsvurderinger = defaultValue.totrinnsvurderinger;
   const erBehandlingHastemarkert = hastemarkering !== undefined;
-  const skalFjerningAvHastemarkeringVurderes =
-    erBehandlingHastemarkert && erKvalitetssikring && featureFlagHastemarkeringBoks;
+  const skalFjerningAvHastemarkeringVurderes = erBehandlingHastemarkert && erKvalitetssikring;
 
   const { form } = useConfigForm<FormFieldsToTrinnsVurdering>({
     totrinnsvurderinger: {
@@ -189,7 +184,7 @@ export const TotrinnsvurderingForm = ({
             );
             if (!erKvalitetssikring) {
               loggUmamiVarighetHendelser(varighetHendelseRef.current, hendelseSerieRef.current);
-            } else if (featureFlagFjernMarkeringDokumenterMottatt) {
+            } else {
               clientMottattDokumenterLest(behandlingsreferanse);
             }
 
@@ -281,6 +276,7 @@ function mapMellomlagringToDraftFormFields(mellomlagring: FormFieldsToTrinnsVurd
     totrinnsvurderinger: mellomlagring.totrinnsvurderinger.map((vurdering) => {
       return {
         ...vurdering,
+        begrunnelse: getDefaultBegrunnelse(vurdering.begrunnelse, vurdering.årsakFritekst),
         godkjent:
           // @ts-expect-error migrering for true og false verdier i mellomlagring, endret til JaEllerNei
           vurdering.godkjent === 'true' || vurdering.godkjent === 'false'
@@ -293,15 +289,25 @@ function mapMellomlagringToDraftFormFields(mellomlagring: FormFieldsToTrinnsVurd
 function mapVurderingToDraftFormFields(vurderinger: ToTrinnsVurdering[]): DraftFormFields {
   return {
     totrinnsvurderinger: vurderinger.map((vurdering) => {
+      const årsakFritekst = vurdering.grunner?.find((grunn) => grunn.årsakFritekst)?.årsakFritekst || '';
+
       return {
         definisjon: vurdering.definisjon,
         godkjent: getJaNeiEllerUndefined(vurdering.godkjent),
-        begrunnelse: vurdering.begrunnelse || '',
+        begrunnelse: getDefaultBegrunnelse(vurdering.begrunnelse, årsakFritekst),
         grunner: vurdering.grunner?.map((grunn) => {
           return grunn.årsak;
         }),
-        årsakFritekst: vurdering.grunner?.find((grunn) => grunn.årsakFritekst)?.årsakFritekst || '',
+        årsakFritekst: årsakFritekst,
       };
     }),
   };
+}
+
+function getDefaultBegrunnelse(begrunnelse: string | undefined | null, årsakFritekst?: string) {
+  if (årsakFritekst && !begrunnelse?.includes(årsakFritekst)) {
+    return begrunnelse + '\n\nAnnet: ' + årsakFritekst;
+  }
+
+  return begrunnelse || '';
 }

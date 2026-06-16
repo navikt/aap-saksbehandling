@@ -10,6 +10,7 @@ import { MeldeperiodeMedMeldekortDto } from 'lib/types/types';
 import { customRender } from 'lib/test/CustomRender';
 
 const meldekortUtenDager: MeldeperiodeMedMeldekortDto = {
+  meldepliktStatus: [],
   tidligereMeldekort: [],
   meldeperiode: {
     fom: '2025-01-06',
@@ -18,6 +19,7 @@ const meldekortUtenDager: MeldeperiodeMedMeldekortDto = {
 };
 
 const meldekortMedDager: MeldeperiodeMedMeldekortDto = {
+  meldepliktStatus: [],
   tidligereMeldekort: [],
   meldeperiode: {
     fom: '2025-01-06',
@@ -51,6 +53,7 @@ const meldekortMedDager: MeldeperiodeMedMeldekortDto = {
 
 // Tom-dato i fremtiden — kan ikke redigeres
 const meldekortFremtidig: MeldeperiodeMedMeldekortDto = {
+  meldepliktStatus: [],
   tidligereMeldekort: [],
   meldeperiode: {
     fom: '2099-01-06',
@@ -106,11 +109,6 @@ describe('MeldekortTabellRow', () => {
   });
 
   describe('Levert dato og sist endret', () => {
-    it('viser meldedato formatert for frontend', () => {
-      renderRow(meldekortMedDager);
-      expect(screen.getByText('20.01.2025')).toBeVisible();
-    });
-
     it('viser oppdatertTidspunkt formatert for frontend', () => {
       renderRow(meldekortMedDager);
       expect(screen.getByText('21.01.2025')).toBeVisible();

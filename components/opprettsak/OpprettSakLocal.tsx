@@ -22,6 +22,7 @@ import { OpprettYrkesskade } from 'components/opprettsak/yrkesskade/OpprettYrkes
 import { Dato } from 'lib/types/Dato';
 import { DevtoolWrapper } from 'components/devtools/DevtoolWrapper';
 import { OpprettSamordning } from 'components/opprettsak/samordning/OpprettSamordning';
+import { OpprettKravVurdering } from 'components/opprettsak/krav/OpprettKravVurdering';
 
 interface Barn {
   fodselsdato: string;
@@ -33,6 +34,22 @@ interface Inntekt {
   år: string;
   beløp: string;
 }
+
+export type KravType = 'NYTT_KRAV_AAP' | 'GJENOPPTAK' | 'TRUKKET_SØKNAD' | 'KLAGE' | 'TILLEGGSOPPLYSNING';
+
+export interface KravVurderingOppføring {
+  kravType: KravType;
+  søknadsdato?: string;
+  kravdato?: string;
+  muligRettFra?: string;
+}
+
+export interface OpprettSakFormFields {
+  // ...eksisterende felter...
+  kravVurderinger?: KravVurderingOppføring[];
+}
+
+export type SamordningType = 'SYKEPENGER' | 'DAGPENGER' | 'TILTAKSPENGER';
 
 type SamordningPeriode = { fom: string; tom: string };
 
@@ -189,6 +206,10 @@ export const OpprettSakLocal = () => {
         type: 'fieldArray',
         defaultValue: [],
       },
+      kravVurderinger: {
+        type: 'fieldArray',
+        defaultValue: [],
+      },
       tjenestePensjon: {
         type: 'radio',
         label: 'Tjenestepensjon?',
@@ -241,7 +262,7 @@ export const OpprettSakLocal = () => {
   );
 
   function mapInnhold(data: OpprettSakFormFields, steg?: TestcaseSteg): OpprettTestcase {
-    const { samordning, ...restData } = data;
+    const { samordning, kravVurderinger, ...restData } = data;
     const søknadYrkesskade = data.yrkesskader?.find((y) => y.kilde === 'SØKNAD');
 
     return {
@@ -340,6 +361,17 @@ export const OpprettSakLocal = () => {
               tom: formaterDatoForBackend(parse(s.periode.tom, 'dd.MM.yyyy', new Date())),
             },
           })) ?? [],
+      kravVurderinger:
+        kravVurderinger?.map((k) => ({
+          kravType: k.kravType,
+          søknadsdato: k.søknadsdato
+            ? formaterDatoForBackend(parse(k.søknadsdato, 'dd.MM.yyyy', new Date()))
+            : undefined,
+          kravdato: k.kravdato ? formaterDatoForBackend(parse(k.kravdato, 'dd.MM.yyyy', new Date())) : undefined,
+          muligRettFra: k.muligRettFra
+            ? formaterDatoForBackend(parse(k.muligRettFra, 'dd.MM.yyyy', new Date()))
+            : undefined,
+        })) ?? [],
       tjenestePensjon: getTrueFalseEllerUndefined(data.tjenestePensjon),
       harNedsattArbeidsevne: data.erArbeidsevnenNedsatt === JaEllerNei.Ja,
       erNedsettelseIArbeidsevneMerEnnHalvparten: data.erNedsettelseIArbeidsevneMerEnnHalvparten === JaEllerNei.Ja,
@@ -383,6 +415,7 @@ export const OpprettSakLocal = () => {
             <OpprettSakBarn form={form} />
             <OpprettInntekter form={form} />
             <OpprettSamordning form={form} />
+            <OpprettKravVurdering form={form} />
           </VStack>
         </HGrid>
 

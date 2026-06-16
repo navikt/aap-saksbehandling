@@ -650,6 +650,9 @@ export type MeldePerioderMedMEldekortResponse =
 export type MeldeperiodeMedMeldekortDto =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.MeldeperiodeMedMeldekortDto'];
 
+export type MeldepliktStatuser =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.MeldeperiodeMedMeldekortDto']['meldepliktStatus'];
+
 export type OppdaterMeldekortRequest =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.OppdaterMeldekortRequest'];
 

@@ -1,9 +1,9 @@
 import { BodyShort, Button, Detail, Table, Tooltip, VStack } from '@navikt/ds-react';
 import { Dato } from 'lib/types/Dato';
 import { isAfter } from 'date-fns';
-import { DagDto, MeldeperiodeMedMeldekortDto } from 'lib/types/types';
+import { DagDto, MeldeperiodeMedMeldekortDto, MeldepliktStatuser } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import { FørteTimer } from 'components/saksoversikt/meldekortoversikt/meldekorttabell/førtetimer/FørteTimer';
+import { MeldekortExpandableContent } from 'components/saksoversikt/meldekortoversikt/meldekorttabell/meldekortexpandablecontent/MeldekortExpandableContent';
 import { hentUkeNummerForPeriode } from '../MeldekortTabell';
 import { PencilIcon } from '@navikt/aksel-icons';
 import { useSakPersonInformasjon } from 'hooks/saksbehandling/SakPersoninformasjonHook';
@@ -28,7 +28,7 @@ export const MeldekortTabellRow = ({ meldePeriodeMedMeldekort, setSelectedMeldek
   return (
     <Table.ExpandableRow
       expandOnRowClick
-      content={<FørteTimer meldekort={meldePeriodeMedMeldekort} />}
+      content={<MeldekortExpandableContent meldekort={meldePeriodeMedMeldekort} />}
       togglePlacement={'right'}
     >
       <Table.HeaderCell textSize={'small'} colSpan={2} scope={'row'}>
@@ -47,9 +47,7 @@ export const MeldekortTabellRow = ({ meldePeriodeMedMeldekort, setSelectedMeldek
         )}
       </Table.DataCell>
       <Table.DataCell textSize={'small'}>
-        {meldePeriodeMedMeldekort.meldekort?.meldeDato
-          ? formaterDatoForFrontend(meldePeriodeMedMeldekort.meldekort?.meldeDato)
-          : '-'}
+        {meldepliktStatusTilString(meldePeriodeMedMeldekort.meldepliktStatus)}
       </Table.DataCell>
       <Table.DataCell textSize={'small'}>
         {meldePeriodeMedMeldekort.meldekort?.oppdatertTidspunkt
@@ -88,4 +86,33 @@ export function utledOppdatertAv(meldekort: MeldeperiodeMedMeldekortDto['meldeko
 
 function hentTotaltAntallTimerArbeidet(dager?: DagDto[]) {
   return dager?.reduce((acc, curr) => acc + (curr.timerArbeidet ? curr.timerArbeidet : 0), 0);
+}
+
+function meldepliktStatusTilString(meldepliktStatuser: MeldepliktStatuser) {
+  return meldepliktStatuser
+    .map((status) => {
+      switch (status) {
+        case 'FREMTIDIG_IKKE_OPPFYLT':
+          return 'Fremtidig ikke oppfylt';
+        case 'FREMTIDIG_OPPFYLT':
+          return 'Fremtidig oppfylt';
+        case 'FRITAK':
+          return 'Fritak';
+        case 'FØRSTE_MELDEPERIODE_MED_RETT':
+          return 'Første meldeperiode med rett';
+        case 'FØR_VEDTAK':
+          return 'Før vedtak';
+        case 'IKKE_MELDT_SEG':
+          return 'Ikke meldt seg';
+        case 'MELDT_SEG':
+          return 'Meldt seg';
+        case 'RIMELIG_GRUNN':
+          return 'Rimelig grunn';
+        case 'UTEN_RETT':
+          return 'Uten rett';
+        default:
+          return status;
+      }
+    })
+    .join(', ');
 }

@@ -1,7 +1,7 @@
 import { BodyShort, CopyButton, Link as AkselLink, Table, Tooltip } from '@navikt/ds-react';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import Link from 'next/link';
-import { storForbokstavIHvertOrd } from 'lib/utils/string';
+import { formaterTilNok, storForbokstavIHvertOrd } from 'lib/utils/string';
 import {
   mapBehovskodeTilBehovstype,
   mapTilOppgaveBehandlingstypeTekst,
@@ -30,9 +30,17 @@ interface Props {
   setSortBy: (orderBy: NoNavAapOppgaveListeOppgaveSorteringSortBy) => void;
   sort: ScopedBackendSortState<NoNavAapOppgaveListeOppgaveSorteringSortBy> | undefined;
   aktivKø: AktivKø | undefined;
+  visBeløpKolonne: boolean;
 }
 
-export const LedigeOppgaverTabell = ({ oppgaver, revalidateFunction, setSortBy, sort, aktivKø }: Props) => {
+export const LedigeOppgaverTabell = ({
+  oppgaver,
+  revalidateFunction,
+  setSortBy,
+  sort,
+  aktivKø,
+  visBeløpKolonne,
+}: Props) => {
   const [feilmelding, setFeilmelding] = useState<string>();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [visSynkroniserEnhetModal, setVisSynkroniserEnhetModal] = useState<boolean>(false);
@@ -109,6 +117,14 @@ export const LedigeOppgaverTabell = ({ oppgaver, revalidateFunction, setSortBy, 
             >
               Oppg. opprettet
             </Table.ColumnHeader>
+            {visBeløpKolonne && (
+              <Table.ColumnHeader
+                sortKey={NoNavAapOppgaveListeOppgaveSorteringSortBy.TILBAKEKREVINGS_BELOP}
+                sortable={true}
+              >
+                Beløp
+              </Table.ColumnHeader>
+            )}
             <Table.HeaderCell></Table.HeaderCell>
             <Table.HeaderCell></Table.HeaderCell>
           </Table.Row>
@@ -172,6 +188,14 @@ export const LedigeOppgaverTabell = ({ oppgaver, revalidateFunction, setSortBy, 
                 )}
               </Table.DataCell>
               <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(oppgave.opprettetTidspunkt)}</Table.DataCell>
+
+              {visBeløpKolonne && (
+                <Table.DataCell textSize={'small'}>
+                  {oppgave.behandlingstype === 'TILBAKEKREVING'
+                    ? formaterTilNok(oppgave.tilbakekrevingsVarsDto?.['tilbakekrevings_beløp'])
+                    : ''}
+                </Table.DataCell>
+              )}
 
               <Table.DataCell textSize={'small'}>
                 <OppgaveInformasjon oppgave={oppgave} />
