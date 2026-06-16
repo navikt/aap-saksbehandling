@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import {
@@ -10,6 +10,7 @@ import {
 import { MeldeperiodeMedMeldekortDto } from 'lib/types/types';
 import { addDays } from 'date-fns';
 import { Dato } from 'lib/types/Dato';
+import { customRender } from 'lib/test/CustomRender';
 
 vi.mock('lib/clientApi', () => ({
   clientKorrigerMeldekort: vi.fn().mockResolvedValue({}),
@@ -25,7 +26,7 @@ const meldekort: MeldeperiodeMedMeldekortDto = {
   periode: {
     fom: '2025-01-06',
     tom: '2025-01-19',
-  }
+  },
 };
 
 const meldekortMedDager: MeldeperiodeMedMeldekortDto = {
@@ -60,7 +61,7 @@ const meldekortMedDager: MeldeperiodeMedMeldekortDto = {
     ],
     journalpostId: '',
     oppdatertAvSaksbehandler: true,
-  }
+  },
 };
 
 const meldekortMedNullTimer: MeldeperiodeMedMeldekortDto = {
@@ -95,39 +96,39 @@ const meldekortMedNullTimer: MeldeperiodeMedMeldekortDto = {
     ],
     journalpostId: '',
     oppdatertAvSaksbehandler: false,
-  }
+  },
 };
 
 describe('RedigerMeldekortModal', () => {
   const user = userEvent.setup();
 
   it('viser tittel med riktig ukenummer', () => {
-    render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
+    customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
     expect(screen.getByRole('heading', { name: 'Endre meldekort for uke 2 - 3' })).toBeVisible();
   });
 
   it('viser datoperioden i dialogen', () => {
-    render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
+    customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
     expect(screen.getByText('06.01.2025 - 19.01.2025')).toBeVisible();
   });
 
   it('viser begrunnelse-felt', () => {
-    render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
+    customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
     expect(screen.getByRole('textbox', { name: /begrunnelse/i })).toBeVisible();
   });
 
   it('viser årsak-nedtrekksliste', () => {
-    render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
+    customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
     expect(screen.getByRole('combobox', { name: /årsak/i })).toBeVisible();
   });
 
   it('inneholder "Registrere at bruker har meldt seg" som årsak-valg', () => {
-    render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
+    customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
     expect(screen.getByRole('option', { name: 'Registrere at bruker har meldt seg' })).toBeInTheDocument();
   });
 
   it('viser ikke "Meldedato" som label på datofelt – beskrivelse er fjernet', async () => {
-    render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
+    customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
     await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Lever/endre meldekort for bruker');
 
     expect(screen.queryByText('Meldekortet regnes som levert på denne datoen.')).not.toBeInTheDocument();
@@ -135,19 +136,19 @@ describe('RedigerMeldekortModal', () => {
   });
 
   it('viser Avbryt- og Bekreft-knapper', () => {
-    render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
+    customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
     expect(screen.getByRole('button', { name: 'Avbryt' })).toBeVisible();
     expect(screen.getByRole('button', { name: 'Bekreft' })).toBeVisible();
   });
 
   it('viser ikke meldedato eller timer som standard', () => {
-    render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
+    customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
     expect(screen.queryByRole('textbox', { name: /meldedato/i })).not.toBeInTheDocument();
     expect(document.getElementById('rapporteringskalender')).not.toBeInTheDocument();
   });
 
   it('viser meldedato og timerkalender ved årsak "Lever/endre meldekort for bruker"', async () => {
-    render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
+    customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
     await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Lever/endre meldekort for bruker');
 
     expect(screen.getByLabelText('Dato brukeren meldte opplysningene')).toBeVisible();
@@ -155,7 +156,7 @@ describe('RedigerMeldekortModal', () => {
   });
 
   it('viser kun meldedato ved årsak "Registrere at bruker har meldt seg"', async () => {
-    render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
+    customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
     await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Registrere at bruker har meldt seg');
 
     expect(screen.getByLabelText('Dato brukeren meldte seg for Nav')).toBeVisible();
@@ -163,7 +164,7 @@ describe('RedigerMeldekortModal', () => {
   });
 
   it('viser ikke meldedato eller timerkalender ved årsak "Overstyre bruker"', async () => {
-    render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
+    customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
     await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Overstyre bruker');
 
     expect(screen.queryByLabelText(/meldedato/i)).not.toBeInTheDocument();
@@ -171,14 +172,14 @@ describe('RedigerMeldekortModal', () => {
   });
 
   it('viser advarsel ved årsak "Overstyre bruker"', async () => {
-    render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
+    customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
     await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Overstyre bruker');
 
     expect(screen.getByText(/Overstyring av bruker er ikke støttet enda/i)).toBeVisible();
   });
 
   it('viser feilmelding dersom begrunnelse mangler ved innsending', async () => {
-    render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
+    customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
     await user.click(screen.getByRole('button', { name: 'Bekreft' }));
 
     const feilmelding = screen.getAllByText('Du må skrive en begrunnelse for hvorfor du gjør endring.')[0];
@@ -186,13 +187,13 @@ describe('RedigerMeldekortModal', () => {
   });
 
   it('bruker eksisterende dager fra meldekort dersom de finnes', () => {
-    render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekortMedDager} />);
+    customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekortMedDager} />);
     expect(screen.getByRole('heading', { name: 'Endre meldekort for uke 2 - 3' })).toBeVisible();
   });
 
   describe('Registrere at bruker har meldt seg', () => {
     it('viser alert "Bruker har ikke levert noen timer" når meldekort mangler', async () => {
-      render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
+      customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
       await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Registrere at bruker har meldt seg');
 
       expect(
@@ -204,7 +205,7 @@ describe('RedigerMeldekortModal', () => {
     });
 
     it('viser alert "Bruker har ikke levert noen timer" når alle dager har 0 timer', async () => {
-      render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekortMedNullTimer} />);
+      customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekortMedNullTimer} />);
       await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Registrere at bruker har meldt seg');
 
       expect(
@@ -216,14 +217,14 @@ describe('RedigerMeldekortModal', () => {
     });
 
     it('viser ikke timerkalender selv om bruker har levert timer', async () => {
-      render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekortMedDager} />);
+      customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekortMedDager} />);
       await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Registrere at bruker har meldt seg');
 
       expect(document.getElementById('rapporteringskalender')).not.toBeInTheDocument();
     });
 
     it('viser ikke alert "Bruker har ikke levert noen timer" når bruker har levert timer', async () => {
-      render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekortMedDager} />);
+      customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekortMedDager} />);
       await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Registrere at bruker har meldt seg');
 
       expect(
@@ -234,7 +235,7 @@ describe('RedigerMeldekortModal', () => {
     });
 
     it('viser label "Dato brukeren meldte seg for Nav" på meldedato-feltet', async () => {
-      render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
+      customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
       await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Registrere at bruker har meldt seg');
 
       expect(screen.getByLabelText('Dato brukeren meldte seg for Nav')).toBeVisible();
@@ -243,7 +244,7 @@ describe('RedigerMeldekortModal', () => {
 
   describe('Lever/endre meldekort for bruker', () => {
     it('timer-input er redigerbare i kalender', async () => {
-      render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekortMedDager} />);
+      customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekortMedDager} />);
       await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Lever/endre meldekort for bruker');
 
       const kalender = document.getElementById('rapporteringskalender')!;
@@ -253,14 +254,14 @@ describe('RedigerMeldekortModal', () => {
     });
 
     it('viser label "Dato brukeren meldte opplysningene" på meldedato-feltet', async () => {
-      render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
+      customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
       await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Lever/endre meldekort for bruker');
 
       expect(screen.getByLabelText('Dato brukeren meldte opplysningene')).toBeVisible();
     });
 
     it('viser ikke alert om ingen timer', async () => {
-      render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
+      customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
       await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Lever/endre meldekort for bruker');
 
       expect(screen.queryByText('Bruker har ikke levert noen timer.')).not.toBeInTheDocument();
@@ -274,7 +275,7 @@ describe('RedigerMeldekortModal', () => {
     };
 
     it('genererer 14 input-felt for en standard 14-dagers periode', async () => {
-      render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
+      customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
       await åpneKalender();
 
       const kalender = document.getElementById('rapporteringskalender')!;
@@ -286,9 +287,9 @@ describe('RedigerMeldekortModal', () => {
         meldepliktStatus: [],
         tidligereMeldekort: [],
         meldeperiode: { fom: '2025-01-08', tom: '2025-01-14' },
-        periode: { fom: '2025-01-08', tom: '2025-01-14' }
+        periode: { fom: '2025-01-08', tom: '2025-01-14' },
       };
-      render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={kortMeldekort} />);
+      customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={kortMeldekort} />);
       await åpneKalender();
 
       const kalender = document.getElementById('rapporteringskalender')!;
@@ -304,7 +305,7 @@ describe('RedigerMeldekortModal', () => {
       meldepliktStatus: [],
       tidligereMeldekort: [],
       meldeperiode: { fom: '2025-01-08', tom: '2025-01-19' },
-      periode: { fom: '2025-01-08', tom: '2025-01-19' }
+      periode: { fom: '2025-01-08', tom: '2025-01-19' },
     };
 
     const åpneKalender = async () => {
@@ -313,7 +314,7 @@ describe('RedigerMeldekortModal', () => {
     };
 
     it('viser dato-tekst for dag utenfor perioden uten input-felt', async () => {
-      render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={kortMeldekort} />);
+      customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={kortMeldekort} />);
       await åpneKalender();
 
       expect(screen.getByText('06.01.')).toBeVisible();
@@ -321,14 +322,14 @@ describe('RedigerMeldekortModal', () => {
     });
 
     it('viser input-felt for dag innenfor perioden', async () => {
-      render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={kortMeldekort} />);
+      customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={kortMeldekort} />);
       await åpneKalender();
 
       expect(screen.getByRole('textbox', { name: /arbeid for onsdag 8. januar/i })).toBeInTheDocument();
     });
 
     it('viser alle 7 dager i uken selv om bare noen er innenfor perioden', async () => {
-      render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={kortMeldekort} />);
+      customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={kortMeldekort} />);
       await åpneKalender();
 
       // Uke 1: ma 06.01., ti 07.01. er utenfor — begge skal vises som tekst
@@ -346,15 +347,14 @@ describe('RedigerMeldekortModal', () => {
     };
 
     it('viser feilmelding når meldedato er før meldeperiodens tom-dato', async () => {
-      render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
+      customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
       await fyllUtOgSubmit('18.01.2025');
-
 
       expect(screen.getAllByText('Meldedato må være dagen etter meldeperiodens slutt eller senere.')[0]).toBeVisible();
     });
 
     it('viser feilmelding når meldedato er etter dagens dato', async () => {
-      render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
+      customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
       await fyllUtOgSubmit(new Dato(addDays(new Date(), 1)).formaterForFrontend());
 
       expect(screen.getAllByText('Meldedato kan ikke være i fremtiden.')[0]).toBeVisible();

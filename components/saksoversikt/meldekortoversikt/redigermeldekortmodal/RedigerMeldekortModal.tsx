@@ -6,7 +6,7 @@ import { FormErrorSummary } from 'components/formerrorsummary/FormErrorSummary';
 import { hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import { hentUkeNummerForPeriode } from 'components/saksoversikt/meldekortoversikt/meldekorttabell/MeldekortTabell';
 import { Dato } from 'lib/types/Dato';
-import { MeldeperiodeMedMeldekortDto, OppdaterMeldekortRequest } from 'lib/types/types';
+import { MeldeperiodeMedMeldekortDto, OppdaterMeldekortRequest, SakPersoninfo } from 'lib/types/types';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { clientKorrigerMeldekort } from 'lib/clientApi';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
@@ -23,6 +23,8 @@ import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrap
 import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
 import { Option } from 'react-day-picker';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
+import { useSakPersonInformasjon } from 'hooks/saksbehandling/SakPersoninformasjonHook';
+import { utledOppdatertAv } from 'components/saksoversikt/meldekortoversikt/meldekorttabell/meldekorttabellrow/MeldekortTabellRow';
 
 interface Props {
   setIsOpen: (isOpen: boolean) => void;
@@ -53,6 +55,7 @@ const årsakOptions = ['', ...Object.values(Årsaker)];
 export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) => {
   const { saksnummer } = useParamsMedType();
   const { dokumenter } = useAlleDokumenterPåSak();
+  const { personInformasjon } = useSakPersonInformasjon();
   const { refetchMeldekort } = useMeldekort();
 
   const [error, setError] = useState<string>();
@@ -114,7 +117,7 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
   const meldeDatoLabel =
     årsak === Årsaker.REGISTRERE_MELDEDATO ? 'Dato brukeren meldte seg for Nav' : 'Dato brukeren meldte opplysningene';
 
-  const tidligereInnsendteMeldekort = kobleDokumentInfoTilTidligereMeldekort(meldekort, dokumenter);
+  const tidligereInnsendteMeldekort = kobleDokumentInfoTilTidligereMeldekort(meldekort, personInformasjon, dokumenter);
   const errorList = hentFeilmeldingerForForm(form.formState.errors);
 
   return (
@@ -290,6 +293,7 @@ function getDefaultValuesForForm(meldekort?: MeldeperiodeMedMeldekortDto): Redig
 
 function kobleDokumentInfoTilTidligereMeldekort(
   meldeperiodeMedMeldekort: MeldeperiodeMedMeldekortDto,
+  personInformasjon: SakPersoninfo,
   dokumenter?: Journalpost[]
 ) {
   return meldeperiodeMedMeldekort.tidligereMeldekort.map((tidligereMeldekort) => {
@@ -297,7 +301,7 @@ function kobleDokumentInfoTilTidligereMeldekort(
     const journalpostId = tidligereMeldekort.journalpostId;
     const dokumentId = dokument?.dokumenter[0]?.dokumentInfoId;
     const meldeDato = tidligereMeldekort.meldeDato;
-    const oppdatertAv = tidligereMeldekort.oppdatertAv;
+    const oppdatertAv = utledOppdatertAv(meldeperiodeMedMeldekort.meldekort, personInformasjon.navn);
 
     return {
       journalpostId,
