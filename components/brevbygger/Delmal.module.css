@@ -18,15 +18,3 @@
   display: flex;
   justify-content: center;
 }
-
-.readonlyWrapper {
-  background-color: var(--ax-bg-default);
-}
-
-.readonlyFade {
-  max-height: 8rem;
-  overflow: hidden;
-
-  -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
-  mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
-}

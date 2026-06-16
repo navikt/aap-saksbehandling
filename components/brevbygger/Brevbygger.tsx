@@ -28,6 +28,7 @@ import { FerdigstillBrevDialog } from 'components/brevbygger/FerdigstillBrevDial
 
 import styles from './Brevbygger.module.css';
 import { StandardtekstBoks } from 'components/brevbygger/StandardtekstBoks';
+import { ReadOnly } from 'components/brevbygger/ReadOnly';
 
 interface BrevbyggerProps {
   referanse: string;
@@ -181,10 +182,12 @@ export const Brevbygger = ({
           {/* Antall kolonner som returneres fra Delmal må matche antallet kolonner her. Ønsker at kolonnene skal være like brede på tvers, dermed er grid definert her */}
           <HGrid columns={'1fr 2fr'} gap={'space-12 space-24'}>
             <StandardtekstBoks />
-            <div
-              className={styles.brevheader}
-              dangerouslySetInnerHTML={{ __html: brevPreview?.header.htmlString ?? '' }}
-            />
+            <ReadOnly>
+              <div
+                className={styles.brevheader}
+                dangerouslySetInnerHTML={{ __html: brevPreview?.header.htmlString ?? '' }}
+              />
+            </ReadOnly>
             {parsedBrevmal.delmaler.map((delmalRef) => (
               <Delmal
                 key={delmalRef._key}
