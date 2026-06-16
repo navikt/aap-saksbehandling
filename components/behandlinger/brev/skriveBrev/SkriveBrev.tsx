@@ -1,23 +1,12 @@
 'use client';
 
 import { BrevbyggerBeta } from '@navikt/aap-breveditor/';
-import {
-  ActionMenu,
-  Alert,
-  BodyShort,
-  Button,
-  HStack,
-  Label,
-  List,
-  Loader,
-  LocalAlert,
-  VStack,
-} from '@navikt/ds-react';
+import { ActionMenu, BodyShort, Button, HStack, Label, List, Loader, LocalAlert, VStack } from '@navikt/ds-react';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useDebounce } from 'hooks/DebounceHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { clientHentFlyt, clientMellomlagreBrev } from 'lib/clientApi';
-import { Brev, BrevMottaker, BrevStatus, Mottaker, Signatur, TypeBehandling } from 'lib/types/types';
+import { Brev, BrevGrunnlagBrev, BrevMottaker, BrevStatus, Mottaker, Signatur } from 'lib/types/types';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { Behovstype } from 'lib/utils/form';
 import { useFeatureFlag } from 'context/UnleashContext';
@@ -33,7 +22,8 @@ import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { Distribusjonssjekk } from 'components/brev/Distribusjonssjekk';
-import { loggUmamiEvent, useUmamiStartTidspunkt } from 'lib/utils/umami';
+import { loggUmamiBrevVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
+import { Alert } from 'components/alert/Alert';
 
 export const SkriveBrev = ({
   referanse,
@@ -47,7 +37,7 @@ export const SkriveBrev = ({
   visAvbryt = true,
   status,
   readOnly,
-  behandlingstype,
+  brevtype,
 }: {
   referanse: string;
   behovstype: Behovstype;
@@ -60,7 +50,7 @@ export const SkriveBrev = ({
   visAvbryt?: boolean;
   status: BrevStatus;
   readOnly: boolean;
-  behandlingstype: TypeBehandling;
+  brevtype: BrevGrunnlagBrev['brevtype'];
 }) => {
   const { behandlingsreferanse, saksnummer } = useParamsMedType();
   const [brev, setBrev] = useState<Brev>(grunnlag);
@@ -138,11 +128,7 @@ export const SkriveBrev = ({
           <HStack gap="space-8">
             {sistLagret && <Label as="p">Sist lagret: {formaterDatoMedTidspunktForFrontend(sistLagret)}</Label>}
             {isSaving && <Loader />}
-            {error && (
-              <Alert variant="error" size="small">
-                {error}
-              </Alert>
-            )}
+            {error && <Alert variant="error">{error}</Alert>}
           </HStack>
           {!readOnly && (
             <ActionMenu>
@@ -242,11 +228,7 @@ export const SkriveBrev = ({
                       },
                       referanse: behandlingsreferanse,
                     },
-                    () =>
-                      loggUmamiEvent('skrivebrev-varighet', {
-                        varighet_sekunder: Math.floor((Date.now() - umamiStartTidspunkt) / 1000),
-                        typeBehandling: behandlingstype,
-                      })
+                    () => loggUmamiBrevVarighet('STEG_SKRIVBREV_VARIGHET', umamiStartTidspunkt, Date.now(), brevtype)
                   );
                 }
               }}

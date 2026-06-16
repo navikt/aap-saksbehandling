@@ -1,7 +1,7 @@
 'use client';
 
 import { BodyShort, CopyButton, HStack, Label, Link, Tag } from '@navikt/ds-react';
-import { DetaljertBehandling, FlytGruppe, FlytVisning, SakPersoninfo, SaksInfo as SaksInfoType } from 'lib/types/types';
+import { DetaljertBehandling, FlytGruppe, FlytVisning, SaksInfo as SaksInfoType } from 'lib/types/types';
 import { useState } from 'react';
 import { ChevronRightIcon } from '@navikt/aksel-icons';
 
@@ -20,9 +20,9 @@ import { ReturStatus } from 'components/returstatus/ReturStatus';
 import { SaksmenyDropdown } from 'components/saksinfobanner/SaksmenyDropdown';
 import { UtløptVentefristBoks } from '../oppgaveliste/utløptventefristboks/UtløptVentefristBoks';
 import { useInnloggetBruker } from 'hooks/BrukerHook';
+import { useSakPersonInformasjon } from 'hooks/saksbehandling/SakPersoninformasjonHook';
 
 interface Props {
-  personInformasjon: SakPersoninfo;
   sak: SaksInfoType;
   behandling?: DetaljertBehandling;
   oppgave?: Oppgave;
@@ -30,8 +30,9 @@ interface Props {
   visning?: FlytVisning;
 }
 
-export const SaksinfoBanner = ({ personInformasjon, sak, behandling, oppgave, flyt, visning }: Props) => {
+export const SaksinfoBanner = ({ sak, behandling, oppgave, flyt, visning }: Props) => {
   const brukerInformasjon = useInnloggetBruker();
+  const { personInformasjon: personInformasjon } = useSakPersonInformasjon();
   const [visHarUlesteDokumenter, settVisHarUlesteDokumenter] = useState(!!oppgave?.harUlesteDokumenter);
   const erReservertAvInnloggetBruker = brukerInformasjon?.NAVident === oppgave?.reservertAv;
 
@@ -90,7 +91,16 @@ export const SaksinfoBanner = ({ personInformasjon, sak, behandling, oppgave, fl
           {behandling && (
             <>
               <ChevronRightIcon className={styles.chevron} />
-              <BodyShort size={'small'}>Sak {sak.saksnummer}</BodyShort>
+              <BodyShort size={'small'}>
+                Sak
+                <CopyButton
+                  copyText={sak.saksnummer}
+                  size={'xsmall'}
+                  text={sak.saksnummer}
+                  iconPosition="right"
+                  className={styles.copybutton}
+                />
+              </BodyShort>
               <ChevronRightIcon className={styles.chevron} />
 
               <BodyShort size={'small'}>{behandling.type}</BodyShort>

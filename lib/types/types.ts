@@ -379,7 +379,8 @@ export type BehandlingsFlytAvklaringsbehovKode =
 
 export type LegeerklæringStatus =
   components['schemas']['no.nav.aap.dokumentinnhenting.kontrakt.DialogmeldingStatusTilBehandslingsflytDto'];
-
+export type FastlegeResponse =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.behandlerdialog.FastlegeResponse'];
 export type YrkesskadeVurderingGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.YrkesskadeVurderingGrunnlagResponse'];
 
@@ -648,6 +649,9 @@ export type MeldePerioderMedMEldekortResponse =
 
 export type MeldeperiodeMedMeldekortDto =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.MeldeperiodeMedMeldekortDto'];
+
+export type MeldepliktStatuser =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.MeldeperiodeMedMeldekortDto']['meldepliktStatus'];
 
 export type OppdaterMeldekortRequest =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.OppdaterMeldekortRequest'];

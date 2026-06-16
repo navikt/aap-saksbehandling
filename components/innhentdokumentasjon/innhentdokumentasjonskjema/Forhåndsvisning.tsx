@@ -1,8 +1,9 @@
-import { Alert, Button, Loader, Modal } from '@navikt/ds-react';
+import { Button, Loader, Modal } from '@navikt/ds-react';
 import { clientForhåndsvisDialogmelding } from 'lib/clientApi';
 import { useRef } from 'react';
 import useSWR from 'swr';
 import { isError, isSuccess } from 'lib/utils/api';
+import { Alert } from 'components/alert/Alert';
 
 type Props = {
   saksnummer: string;

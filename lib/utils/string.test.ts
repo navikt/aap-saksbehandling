@@ -1,5 +1,11 @@
 import { describe, it, expect } from 'vitest';
-import { formaterTilG, formaterTilProsent, storForbokstav, storForbokstavIHvertOrd } from 'lib/utils/string';
+import {
+  formaterTilG,
+  formaterTilProsent,
+  slåSammenDefinerte,
+  storForbokstav,
+  storForbokstavIHvertOrd,
+} from 'lib/utils/string';
 
 describe('storForbokstav', () => {
   it('skal returnere en string med stor forbokstav dersom value er bare uppercase', () => {
@@ -50,5 +56,11 @@ describe('formaterTilProsent', () => {
 
   it('skal returnere en string med korrekt formatering med 80', () => {
     expect(formaterTilProsent(80)).toBe('80 %');
+  });
+});
+
+describe('slåSammenDefinerte', () => {
+  it('skal slå sammen strings som ikke er null eller undefined med separator', () => {
+    expect(slåSammenDefinerte(', ', 'a', undefined, 'b', null)).toBe('a, b');
   });
 });

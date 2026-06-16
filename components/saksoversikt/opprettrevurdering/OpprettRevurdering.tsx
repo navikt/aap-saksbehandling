@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, HStack, Page, VStack } from '@navikt/ds-react';
+import { Button, HStack, Page, VStack } from '@navikt/ds-react';
 import { ManuellRevurderingV0, SaksInfo } from 'lib/types/types';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
@@ -10,9 +10,9 @@ import { Spinner } from 'components/felles/Spinner';
 import { useRouter } from 'next/navigation';
 import { isSuccess } from 'lib/utils/api';
 import { vurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
-import { useFeatureFlag } from 'context/UnleashContext';
 import { Kort } from 'components/kort/Kort';
 import { useInnloggetBruker } from 'hooks/BrukerHook';
+import { Alert } from 'components/alert/Alert';
 
 export interface ManuellRevurderingFormFields {
   årsaker: string[];
@@ -37,8 +37,6 @@ export const OpprettRevurdering = ({
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>();
-
-  const inkluderOvergangUføreArbeid = useFeatureFlag('InkluderOvergangUforeArbeid');
 
   async function sendHendelse(data: ManuellRevurderingFormFields) {
     const innsending = {
@@ -85,11 +83,7 @@ export const OpprettRevurdering = ({
     årsaker: {
       type: 'combobox_multiple',
       label: `Hvilke opplysninger skal ${erFørstegangsbehandling ? 'vurderes' : 'revurderes'}?`,
-      options: vurderingsbehovOptions().filter(
-        (option) =>
-          (inkluderOvergangUføreArbeid || option.value !== 'OVERGANG_UFORE') &&
-          (inkluderOvergangUføreArbeid || option.value !== 'OVERGANG_ARBEID')
-      ),
+      options: vurderingsbehovOptions(),
       defaultValue: defaultÅrsaker,
       rules: {
         required: `Velg opplysning som er grunnlaget for ${variant}en`,
@@ -114,11 +108,7 @@ export const OpprettRevurdering = ({
             </VStack>
           </Kort>
 
-          {error && (
-            <Alert variant={'error'} size={'small'}>
-              {error}
-            </Alert>
-          )}
+          {error && <Alert variant={'error'}>{error}</Alert>}
 
           <HStack gap="space-16">
             <Button type="submit">Opprett {variant}</Button>

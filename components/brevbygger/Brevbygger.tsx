@@ -1,19 +1,17 @@
 'use client';
 
-import { Box, Button, HGrid, HStack, VStack } from '@navikt/ds-react';
+import { BodyShort, Box, Button, HGrid, HStack, LocalAlert, VStack } from '@navikt/ds-react';
 import { useForm } from 'react-hook-form';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ExpandIcon, ShrinkIcon } from '@navikt/aksel-icons';
 
-import { BrevdataDto, BrevMottaker, Mottaker, RefusjonskravGrunnlag, TypeBehandling } from 'lib/types/types';
+import { BrevdataDto, BrevGrunnlagBrev, BrevMottaker, Mottaker, RefusjonskravGrunnlag } from 'lib/types/types';
 import { BrevmalType } from 'components/brevbygger/brevmodellTypes';
 import { Behovstype } from 'lib/utils/form';
 import { clientOppdaterBrevmal } from 'lib/clientApi';
 import { revalidateBehandlingPath } from 'lib/actions/actions';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 
-import { ForhåndsvisBrev } from 'components/brevbygger/ForhåndsvisBrev';
 import { VelgeMottakere } from 'components/brevbygger/VelgeMottakere';
 import { IkkeSendBrevModal, IkkeSendFields } from 'components/behandlinger/brev/skriveBrev/IkkeSendBrevModal';
 import { RefusjonskravVisning } from 'components/brevbygger/RefusjonskravVisning';
@@ -25,7 +23,11 @@ import { initialiserFormVerdier } from 'components/brevbygger/formUtils';
 import { Delmal } from 'components/brevbygger/Delmal';
 import { useMellomlagringAvBrev } from 'components/brevbygger/useMellomlagringAvBrev';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { loggUmamiEvent, useUmamiStartTidspunkt } from 'lib/utils/umami';
+import { loggUmamiBrevVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
+import { FerdigstillBrevDialog } from 'components/brevbygger/FerdigstillBrevDialog';
+
+import styles from './Brevbygger.module.css';
+import { StandardtekstBoks } from 'components/brevbygger/StandardtekstBoks';
 
 interface BrevbyggerProps {
   referanse: string;
@@ -39,8 +41,13 @@ interface BrevbyggerProps {
   brevmal?: string | null;
   brevdata?: BrevdataDto;
   refusjonskravgrunnlag?: RefusjonskravGrunnlag;
-  behandlingstype: TypeBehandling;
+  brevtype: BrevGrunnlagBrev['brevtype'];
 }
+
+type ParsingResultat = {
+  parsedBrevmal: BrevmalType | null;
+  parsingFeilmelding: string | null;
+};
 
 export const Brevbygger = ({
   referanse,
@@ -54,15 +61,32 @@ export const Brevbygger = ({
   readOnly,
   visAvbryt = true,
   refusjonskravgrunnlag,
-  behandlingstype,
+  brevtype,
 }: BrevbyggerProps) => {
-  const parsedBrevmal: BrevmalType = JSON.parse(brevmal ?? '');
-  const { control, trigger, watch } = useForm<BrevFormVerdier>({
-    values: initialiserFormVerdier(parsedBrevmal, brevdata),
+  const { parsedBrevmal, parsingFeilmelding } = useMemo<ParsingResultat>(() => {
+    try {
+      return {
+        parsedBrevmal: JSON.parse(brevmal ?? ''),
+        parsingFeilmelding: null,
+      };
+    } catch (e) {
+      return {
+        parsedBrevmal: null,
+        parsingFeilmelding: e instanceof Error ? e.message : String(e),
+      };
+    }
+  }, [brevmal]);
+
+  const { control, trigger } = useForm<BrevFormVerdier>({
+    values: parsedBrevmal ? initialiserFormVerdier(parsedBrevmal, brevdata) : undefined,
   });
   const umamiStartTidspunkt = useUmamiStartTidspunkt('AKTIV');
-
-  const { pdfDataUri, lasterPdf } = useMellomlagringAvBrev({ referanse, control, brevmal: parsedBrevmal, brevdata });
+  const { brevPreview, lasterBrevdata } = useMellomlagringAvBrev({
+    referanse,
+    control,
+    brevmal: parsedBrevmal,
+    brevdata,
+  });
 
   const router = useRouter();
   const { behandlingsreferanse, saksnummer } = useParamsMedType();
@@ -76,12 +100,31 @@ export const Brevbygger = ({
   const [valgteMottakere, setMottakere] = useState<Mottaker[]>([]);
   const [distribusjonssjekkFeil, setDistribusjonssjekkFeil] = useState<string | undefined>();
   const [ikkeSendBrevModalOpen, settIkkeSendBrevModalOpen] = useState(false);
-  const [pdfViewExpanded, setPdfViewExpanded] = useState(false);
+  const [visFerdigstillBrevDialog, settVisFerdigstillBrevDialog] = useState(false);
 
-  const sendBrev = async () => {
+  if (!parsedBrevmal) {
+    return (
+      <LocalAlert status={'error'} size={'small'}>
+        <LocalAlert.Header>
+          <LocalAlert.Title>Feil ved parsing av brevmal</LocalAlert.Title>
+        </LocalAlert.Header>
+        <LocalAlert.Content>
+          <BodyShort size={'small'}>Feilmeldingen var: {parsingFeilmelding}</BodyShort>
+          <BodyShort size={'small'} weight={'semibold'}>
+            Dersom feilen vedvarer kan du ta kontakt med brukerstøtte for å få løst problemet.
+          </BodyShort>
+        </LocalAlert.Content>
+      </LocalAlert>
+    );
+  }
+
+  const ferdigstillBrev = async () => {
     const isValid = await trigger();
     if (!isValid) return;
+    settVisFerdigstillBrevDialog(true);
+  };
 
+  const sendBrev = async () => {
     løsBehovOgGåTilNesteSteg(
       {
         behandlingVersjon,
@@ -93,11 +136,7 @@ export const Brevbygger = ({
         },
         referanse: behandlingsreferanse,
       },
-      () =>
-        loggUmamiEvent('brevbygger-varighet', {
-          varighet_sekunder: Math.floor((Date.now() - umamiStartTidspunkt) / 1000),
-          typeBehandling: behandlingstype,
-        })
+      () => loggUmamiBrevVarighet('STEG_BREVBYGGER_VARIGHET', umamiStartTidspunkt, Date.now(), brevtype)
     );
   };
 
@@ -121,7 +160,7 @@ export const Brevbygger = ({
   };
 
   return (
-    <HGrid columns={pdfViewExpanded ? '1fr 3fr' : '1fr 1fr'} gap={'space-8'} minWidth={'100%'}>
+    <>
       <Box>
         {fullmektigMottaker && brukerMottaker && (
           <VelgeMottakere
@@ -135,9 +174,25 @@ export const Brevbygger = ({
 
         <VStack gap="space-16">
           <RefusjonskravVisning refusjonskravgrunnlag={refusjonskravgrunnlag} />
-          {parsedBrevmal.delmaler.map((delmalRef) => (
-            <Delmal key={delmalRef._key} delmalRef={delmalRef} control={control} watch={watch} />
-          ))}
+          {/* Antall kolonner som returneres fra Delmal må matche antallet kolonner her. Ønsker at kolonnene skal være like brede på tvers, dermed er grid definert her */}
+          <HGrid columns={'1fr 2fr'} gap={'space-12'}>
+            <StandardtekstBoks />
+            <div
+              className={styles.brevheader}
+              dangerouslySetInnerHTML={{ __html: brevPreview?.header.htmlString ?? '' }}
+            />
+            {parsedBrevmal.delmaler.map((delmalRef) => (
+              <Delmal
+                key={delmalRef._key}
+                delmalRef={delmalRef}
+                control={control}
+                delmalInnhold={
+                  brevPreview?.delmaler.find((innholdNode) => innholdNode.sanityNoekkel === delmalRef._key)?.htmlString
+                }
+                isLoading={lasterBrevdata}
+              />
+            ))}
+          </HGrid>
         </VStack>
 
         <HStack gap="space-8" justify="space-between" marginBlock="space-8">
@@ -170,29 +225,24 @@ export const Brevbygger = ({
               Oppdater brevmal
             </Button>
           </HStack>
-          <Button type="button" onClick={sendBrev} loading={isLoading} size="small" disabled={!!distribusjonssjekkFeil}>
-            Send brev
+          <Button type="button" onClick={ferdigstillBrev} size={'small'}>
+            Ferdigstill brev
           </Button>
         </HStack>
       </Box>
 
-      <VStack gap="space-8">
-        <div>
-          <Button
-            type="button"
-            onClick={() => setPdfViewExpanded(!pdfViewExpanded)}
-            size="small"
-            variant="tertiary"
-            icon={pdfViewExpanded ? <ShrinkIcon /> : <ExpandIcon />}
-          />
-        </div>
-        <ForhåndsvisBrev isLoading={lasterPdf} dataUri={pdfDataUri} />
-      </VStack>
       <IkkeSendBrevModal
         isOpen={ikkeSendBrevModalOpen}
         onClose={() => settIkkeSendBrevModalOpen(false)}
         onDelete={slettBrev}
       />
-    </HGrid>
+      <FerdigstillBrevDialog
+        referanse={referanse}
+        isOpen={visFerdigstillBrevDialog}
+        onClose={() => settVisFerdigstillBrevDialog(false)}
+        sendBrev={sendBrev}
+        senderBrev={isLoading}
+      />
+    </>
   );
 };

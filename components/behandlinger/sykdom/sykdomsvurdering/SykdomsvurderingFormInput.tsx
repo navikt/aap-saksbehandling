@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Radio, VStack } from '@navikt/ds-react';
+import { Radio, VStack } from '@navikt/ds-react';
 import { erDatoIPeriode, validerDato } from 'lib/validation/dateValidation';
 import { parse } from 'date-fns';
 import { stringToDate } from 'lib/utils/date';
@@ -19,6 +19,8 @@ import React from 'react';
 import { DiagnoserDefaultOptions } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { defaultBegrunnelse } from 'components/behandlinger/sykdom/sykdomsvurdering/sykdomsvurdering-utils';
+import { useFeatureFlag } from 'context/UnleashContext';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   index: number;
@@ -53,6 +55,7 @@ export const SykdomsvurderingFormInput = ({
 }: Props) => {
   const harNedsattArbeidsevne = form.watch(`vurderinger.${index}.harNedsattArbeidsevne`);
   const skalViseNedsettelse = harNedsattArbeidsevne === 'JA' || harNedsattArbeidsevne === 'JA_FORBIGÅENDE_PROBLEMER';
+  const skalViseNeiMenStudent = useFeatureFlag('StudentV2');
 
   return (
     <VStack gap={'space-20'}>
@@ -122,10 +125,13 @@ export const SykdomsvurderingFormInput = ({
           >
             <Radio value={'JA'}>{JaNeiEllerForbigåendeTekst.Ja}</Radio>
             <Radio value={'JA_FORBIGÅENDE_PROBLEMER'}>{JaNeiEllerForbigåendeTekst.Forbigående}</Radio>
+            {skalViseNeiMenStudent && (
+              <Radio value={'NEI_MEN_STUDENT'}>{JaNeiEllerForbigåendeTekst.NeiMenStudent}</Radio>
+            )}
             <Radio value={'NEI'}>{JaNeiEllerForbigåendeTekst.Nei}</Radio>
           </RadioGroupWrapper>
           {form.watch(`vurderinger.${index}.harNedsattArbeidsevne`) === 'NEI' && (
-            <Alert variant={'info'} size={'small'} className={'fit-content'}>
+            <Alert variant={'info'} className={'fit-content'}>
               Brukeren vil få vedtak om at de ikke har rett på AAP. De kvalifiserer ikke for sykepengeerstatning.
             </Alert>
           )}

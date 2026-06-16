@@ -2,7 +2,7 @@
 
 import { Diff, TilkjentYtelseGrunnlagMedDiff, TilkjentYtelsePeriode } from 'lib/types/types';
 import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
-import { ActionMenu, Alert, BodyShort, Button, Chips, Table, VStack } from '@navikt/ds-react';
+import { ActionMenu, BodyShort, Button, Chips, Table, VStack } from '@navikt/ds-react';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import React, { useState } from 'react';
 import { formaterDatoForFrontend, formaterPeriode } from 'lib/utils/date';
@@ -10,6 +10,7 @@ import { formaterTilNok, formaterTilProsent } from 'lib/utils/string';
 
 import styles from 'components/behandlinger/tilkjentytelse/tilkjent/Tilkjent.module.css';
 import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
+import { Alert } from 'components/alert/Alert';
 
 interface PropsMedDiff {
   grunnlagMedDiff: TilkjentYtelseGrunnlagMedDiff;
@@ -44,9 +45,7 @@ export const TilkjentMedDiff = ({ grunnlagMedDiff }: PropsMedDiff) => {
           </Chips.Toggle>
         </Chips>
         {skalViseMeldingOmIngenEndringIPerioder && (
-          <Alert variant={'info'} size={'small'}>
-            Ingen nye eller endrede perioder siden forrige behandling
-          </Alert>
+          <Alert variant={'info'}>Ingen nye eller endrede perioder siden forrige behandling</Alert>
         )}
         <TableStyled size="medium">
           <Table.Header>

@@ -4,7 +4,7 @@ import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper
 import { UseFormReturn } from 'react-hook-form';
 import { ArbeidsopptrappingForm } from 'components/behandlinger/sykdom/arbeidsopptrapping/Arbeidsopptrapping';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
-import { Alert, HStack, VStack } from '@navikt/ds-react';
+import { HStack, VStack } from '@navikt/ds-react';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { erDatoIPeriode, validerDato } from 'lib/validation/dateValidation';
 import { parse } from 'date-fns';
@@ -13,6 +13,7 @@ import { formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
 import { JaEllerNei } from 'lib/utils/form';
 import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
 import React from 'react';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   index: number;
@@ -78,9 +79,7 @@ export const ArbeidsopptrappingVurderingFormInput = ({ index, readonly, form, ik
       />
       {rettPåAAPIOpptrapping === JaEllerNei.Ja && (
         <HStack>
-          <Alert size={'small'} variant={'info'}>
-            Har du husket å lage en aktivitet for opptrappingen i aktivitetsplanen?
-          </Alert>
+          <Alert variant={'info'}>Har du husket å lage en aktivitet for opptrappingen i aktivitetsplanen?</Alert>
         </HStack>
       )}
     </VStack>

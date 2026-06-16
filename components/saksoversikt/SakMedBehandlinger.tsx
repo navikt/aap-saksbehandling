@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, BodyShort, Button, Chips, Heading, HStack, Table, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, Chips, Heading, HStack, Table, VStack } from '@navikt/ds-react';
 import { RettighetsinfoDto, SaksInfo, Vurderingsbehov } from 'lib/types/types';
 import { capitalize } from 'lodash';
 import { SakDevTools } from 'components/saksoversikt/SakDevTools';
@@ -22,8 +22,7 @@ import { usePostmottakBehandlinger } from 'hooks/postmottak/PostmottakBehandling
 import { useHentOppgaverForBehandlinger } from 'hooks/oppgave/OppgaverPåSakHook';
 import { Dato } from 'lib/types/Dato';
 import { Kort } from 'components/kort/Kort';
-
-const lokalDevToolsForBehandlingOgSak = isLocal();
+import { Alert } from 'components/alert/Alert';
 
 /**
  * Slår sammen duplikater i vurderingsbehov og legger til en teller for hvor mange ganger hvert behov forekommer.
@@ -199,7 +198,7 @@ export const SakMedBehandlinger = ({
             ))}
           </Table.Body>
         </Table>
-        {lokalDevToolsForBehandlingOgSak && (
+        {isLocal() && (
           <SakDevTools
             saksnummer={sak.saksnummer}
             behandlinger={sak.behandlinger.map((e) => ({ referanse: e.referanse, type: e.typeBehandling }))}

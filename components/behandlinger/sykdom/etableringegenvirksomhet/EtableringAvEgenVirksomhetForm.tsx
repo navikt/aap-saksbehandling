@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, BodyShort, Button, Heading, HStack, Label, Radio, Table, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, Heading, HStack, Label, Radio, Table, VStack } from '@navikt/ds-react';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { validerDato } from 'lib/validation/dateValidation';
 import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
@@ -18,6 +18,7 @@ import {
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { useEffect } from 'react';
 import { nyVurderingErOppfylt } from 'components/behandlinger/sykdom/etableringegenvirksomhet/etablering-av-egen-virksomhet-utils';
+import { Alert } from 'components/alert/Alert';
 
 const EierBrukerVirsomheten = lagEnumObjektFraUnionType<NonNullable<EtableringEierBrukerVirksomheten>>({
   EIER_MINST_50_PROSENT: 'EIER_MINST_50_PROSENT',
@@ -136,7 +137,7 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly, gru
                 ) : null}
               </VStack>
             </VStack>
-            {form.formState.errors.vurderinger?.[index]?.utviklingsperioder && (
+            {form.formState.errors.vurderinger?.[index]?.utviklingsperioder?.message && (
               <Alert variant={'error'}>{form.formState.errors.vurderinger[index].utviklingsperioder.message}</Alert>
             )}
             <VStack gap={'space-16'}>
@@ -225,7 +226,7 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly, gru
                 ) : null}
               </VStack>
             </VStack>
-            {form.formState.errors.vurderinger?.[index]?.oppstartsperioder && (
+            {form.formState.errors.vurderinger?.[index]?.oppstartsperioder?.message && (
               <Alert variant={'error'}>{form.formState.errors.vurderinger[index].oppstartsperioder.message}</Alert>
             )}
             <VStack gap={'space-16'}>

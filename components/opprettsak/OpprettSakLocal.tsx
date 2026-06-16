@@ -9,8 +9,6 @@ import { OpprettInntekter } from 'components/opprettsak/inntekter/OpprettInntekt
 import { useOpprettSak } from 'hooks/FetchHook';
 import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
-import { Sykepenger } from 'components/opprettsak/samordning/Sykepenger';
-import { Dagpenger } from 'components/opprettsak/samordning/Dagpenger';
 import { parse } from 'date-fns';
 import {
   DagpengerKilde,
@@ -21,8 +19,10 @@ import {
   TiltakspengerYtelserType,
 } from 'lib/types/types';
 import { OpprettYrkesskade } from 'components/opprettsak/yrkesskade/OpprettYrkesskade';
-import { Dato } from '../../lib/types/Dato';
-import { Tiltakspenger } from 'components/opprettsak/samordning/Tiltakspenger';
+import { Dato } from 'lib/types/Dato';
+import { DevtoolWrapper } from 'components/devtools/DevtoolWrapper';
+import { OpprettSamordning } from 'components/opprettsak/samordning/OpprettSamordning';
+import { OpprettKravVurdering } from 'components/opprettsak/krav/OpprettKravVurdering';
 
 interface Barn {
   fodselsdato: string;
@@ -35,31 +35,45 @@ interface Inntekt {
   beløp: string;
 }
 
-interface SamordningSykepenger {
-  grad: number;
-  periode: {
-    fom: string;
-    tom: string;
-  };
+export type KravType = 'NYTT_KRAV_AAP' | 'GJENOPPTAK' | 'TRUKKET_SØKNAD' | 'KLAGE' | 'TILLEGGSOPPLYSNING';
+
+export interface KravVurderingOppføring {
+  kravType: KravType;
+  søknadsdato?: string;
+  kravdato?: string;
+  muligRettFra?: string;
 }
 
-interface SamordningDagpenger {
+export interface OpprettSakFormFields {
+  // ...eksisterende felter...
+  kravVurderinger?: KravVurderingOppføring[];
+}
+
+export type SamordningType = 'SYKEPENGER' | 'DAGPENGER' | 'TILTAKSPENGER';
+
+type SamordningPeriode = { fom: string; tom: string };
+
+type SamordningSykepenger = {
+  type: 'SYKEPENGER';
+  sykepengerGrad?: number;
+  periode: SamordningPeriode;
+};
+
+type SamordningDagpenger = {
+  type: 'DAGPENGER';
   dagpengerYtelseType: DagpengerYtelserType;
-  kilde: DagpengerKilde;
-  periode: {
-    fom: string;
-    tom: string;
-  };
-}
+  dagpengerKilde: DagpengerKilde;
+  periode: SamordningPeriode;
+};
 
-interface SamordningTiltakspenger {
-  ytelseType: TiltakspengerYtelserType;
-  kilde: TiltakspengerKilde;
-  periode: {
-    fom: string;
-    tom: string;
-  };
-}
+type SamordningTiltakspenger = {
+  type: 'TILTAKSPENGER';
+  tiltakspengerYtelseType: TiltakspengerYtelserType;
+  tiltakspengerKilde: TiltakspengerKilde;
+  periode: SamordningPeriode;
+};
+
+export type SamordningOppføring = SamordningSykepenger | SamordningDagpenger | SamordningTiltakspenger;
 
 interface YrkesskadeOppføring {
   kilde: 'SØKNAD' | 'REGISTER';
@@ -104,9 +118,7 @@ export interface OpprettSakFormFields {
   institusjon?: Institusjon[];
   medlemskap?: JaEllerNei;
   søknadsdato: Date;
-  sykepenger?: SamordningSykepenger[];
-  dagpenger?: SamordningDagpenger[];
-  tiltakspenger?: SamordningTiltakspenger[];
+  samordning?: SamordningOppføring[];
   tjenestePensjon?: JaEllerNei;
   erArbeidsevnenNedsatt: JaEllerNei;
   erNedsettelseIArbeidsevneMerEnnHalvparten: JaEllerNei;
@@ -190,26 +202,11 @@ export const OpprettSakLocal = () => {
         defaultValue: JaEllerNei.Ja,
         options: JaEllerNeiOptions,
       },
-      sykepenger: {
+      samordning: {
         type: 'fieldArray',
-        defaultValue: [{ grad: 50, periode: { fom: '14.03.2025', tom: '31.03.2025' } }],
+        defaultValue: [],
       },
-      dagpenger: {
-        type: 'fieldArray',
-        defaultValue: [
-          {
-            dagpengerYtelseType: 'DAGPENGER_ARBEIDSSOKER_ORDINAER',
-            kilde: 'DP_SAK',
-            periode: { fom: '01.05.2025', tom: '14.05.2025' },
-          },
-          {
-            dagpengerYtelseType: 'DAGPENGER_ARBEIDSSOKER_ORDINAER',
-            kilde: 'ARENA',
-            periode: { fom: '15.05.2025', tom: '28.05.2025' },
-          },
-        ],
-      },
-      tiltakspenger: {
+      kravVurderinger: {
         type: 'fieldArray',
         defaultValue: [],
       },
@@ -265,17 +262,15 @@ export const OpprettSakLocal = () => {
   );
 
   function mapInnhold(data: OpprettSakFormFields, steg?: TestcaseSteg): OpprettTestcase {
+    const { samordning, kravVurderinger, ...restData } = data;
     const søknadYrkesskade = data.yrkesskader?.find((y) => y.kilde === 'SØKNAD');
+
     return {
-      ...data,
+      ...restData,
       harYrkesskade: søknadYrkesskade?.harYrkesskade === JaEllerNei.Ja,
       harYrkesskadeFraSøknad: søknadYrkesskade?.harYrkesskade === JaEllerNei.Ja,
       andreUtbetalinger: {
-        afp: data.afp
-          ? {
-              hvemBetaler: data.afp,
-            }
-          : undefined,
+        afp: data.afp ? { hvemBetaler: data.afp } : undefined,
         lønn: data.lønn,
         stønad: data.stønad,
       },
@@ -285,14 +280,14 @@ export const OpprettSakLocal = () => {
         const kilde = y.kilde ?? 'REGISTER';
         if (kilde === 'SØKNAD') {
           return {
-            kilde: kilde,
+            kilde,
             saksreferanse: '',
             harYrkesskade: y.harYrkesskade === JaEllerNei.Ja,
             harYrkesskadeFraSøknad: y.harYrkesskade === JaEllerNei.Ja,
           };
         } else {
           return {
-            kilde: kilde,
+            kilde,
             saksreferanse: y.yrkesskadeRegisterKilde ?? '',
             skadeart: y.skadeart ?? '',
             diagnose: y.diagnose ?? '',
@@ -315,37 +310,68 @@ export const OpprettSakLocal = () => {
         fengsel: data?.institusjon?.includes('fengsel'),
       },
       medlemskap: data.medlemskap === JaEllerNei.Ja,
+      fastlege: {
+        harFastlege: true,
+        harEndretFastlege: false,
+        varFastlegeRiktigPåSøknadstidspunkt: false,
+        harOppgittAndreBehandlere: true,
+      },
       inntekterPerAr:
         data.inntekter?.map((inntekt) => ({
           år: Number(inntekt.år),
           beløp: { verdi: Number(inntekt.beløp) },
         })) || [],
+      samordning:
+        samordning?.map((s) => ({
+          ...s,
+          periode: {
+            fom: formaterDatoForBackend(parse(s.periode.fom, 'dd.MM.yyyy', new Date())),
+            tom: formaterDatoForBackend(parse(s.periode.tom, 'dd.MM.yyyy', new Date())),
+          },
+        })) ?? [],
       sykepenger:
-        data.sykepenger?.map((samordning) => ({
-          grad: samordning.grad,
-          periode: {
-            fom: formaterDatoForBackend(parse(samordning.periode.fom, 'dd.MM.yyyy', new Date())),
-            tom: formaterDatoForBackend(parse(samordning.periode.tom, 'dd.MM.yyyy', new Date())),
-          },
-        })) || [],
+        samordning
+          ?.filter((s) => s.type === 'SYKEPENGER')
+          .map((s) => ({
+            grad: s.sykepengerGrad ?? 100,
+            periode: {
+              fom: formaterDatoForBackend(parse(s.periode.fom, 'dd.MM.yyyy', new Date())),
+              tom: formaterDatoForBackend(parse(s.periode.tom, 'dd.MM.yyyy', new Date())),
+            },
+          })) ?? [],
       dagpenger:
-        data.dagpenger?.map((samordning) => ({
-          dagpengerYtelseType: samordning.dagpengerYtelseType,
-          kilde: samordning.kilde,
-          periode: {
-            fom: formaterDatoForBackend(parse(samordning.periode.fom, 'dd.MM.yyyy', new Date())),
-            tom: formaterDatoForBackend(parse(samordning.periode.tom, 'dd.MM.yyyy', new Date())),
-          },
-        })) || [],
+        samordning
+          ?.filter((s) => s.type === 'DAGPENGER')
+          .map((s) => ({
+            dagpengerYtelseType: s.dagpengerYtelseType,
+            kilde: s.dagpengerKilde,
+            periode: {
+              fom: formaterDatoForBackend(parse(s.periode.fom, 'dd.MM.yyyy', new Date())),
+              tom: formaterDatoForBackend(parse(s.periode.tom, 'dd.MM.yyyy', new Date())),
+            },
+          })) ?? [],
       tiltakspenger:
-        data.tiltakspenger?.map((samordning) => ({
-          ytelseType: samordning.ytelseType,
-          kilde: samordning.kilde,
-          periode: {
-            fom: formaterDatoForBackend(parse(samordning.periode.fom, 'dd.MM.yyyy', new Date())),
-            tom: formaterDatoForBackend(parse(samordning.periode.tom, 'dd.MM.yyyy', new Date())),
-          },
-        })) || [],
+        samordning
+          ?.filter((s) => s.type === 'TILTAKSPENGER')
+          .map((s) => ({
+            ytelseType: s.tiltakspengerYtelseType,
+            kilde: s.tiltakspengerKilde,
+            periode: {
+              fom: formaterDatoForBackend(parse(s.periode.fom, 'dd.MM.yyyy', new Date())),
+              tom: formaterDatoForBackend(parse(s.periode.tom, 'dd.MM.yyyy', new Date())),
+            },
+          })) ?? [],
+      kravVurderinger:
+        kravVurderinger?.map((k) => ({
+          kravType: k.kravType,
+          søknadsdato: k.søknadsdato
+            ? formaterDatoForBackend(parse(k.søknadsdato, 'dd.MM.yyyy', new Date()))
+            : undefined,
+          kravdato: k.kravdato ? formaterDatoForBackend(parse(k.kravdato, 'dd.MM.yyyy', new Date())) : undefined,
+          muligRettFra: k.muligRettFra
+            ? formaterDatoForBackend(parse(k.muligRettFra, 'dd.MM.yyyy', new Date()))
+            : undefined,
+        })) ?? [],
       tjenestePensjon: getTrueFalseEllerUndefined(data.tjenestePensjon),
       harNedsattArbeidsevne: data.erArbeidsevnenNedsatt === JaEllerNei.Ja,
       erNedsettelseIArbeidsevneMerEnnHalvparten: data.erNedsettelseIArbeidsevneMerEnnHalvparten === JaEllerNei.Ja,
@@ -361,14 +387,7 @@ export const OpprettSakLocal = () => {
 
   return (
     <form autoComplete={'off'}>
-      <Box
-        padding="space-16"
-        marginBlock="space-16"
-        background="default"
-        borderWidth="1"
-        borderColor="neutral-subtle"
-        borderRadius="4"
-      >
+      <DevtoolWrapper title="Utviklerverktøy – Opprett sak">
         <HGrid columns={2} gap="space-16">
           <VStack gap="space-16">
             <FormField form={form} formField={formFields.søknadsdato} />
@@ -395,9 +414,8 @@ export const OpprettSakLocal = () => {
           <VStack gap="space-16">
             <OpprettSakBarn form={form} />
             <OpprettInntekter form={form} />
-            <Sykepenger form={form} />
-            <Dagpenger form={form} />
-            <Tiltakspenger form={form} />
+            <OpprettSamordning form={form} />
+            <OpprettKravVurdering form={form} />
           </VStack>
         </HGrid>
 
@@ -445,7 +463,7 @@ export const OpprettSakLocal = () => {
             </HStack>
           </Box>
         </HGrid>
-      </Box>
+      </DevtoolWrapper>
     </form>
   );
 };

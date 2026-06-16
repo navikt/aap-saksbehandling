@@ -1,6 +1,8 @@
 import { SettPåVentÅrsaker, TypeBehandling, VilkårUtfall, ÅrsakTilOpprettelse } from 'lib/types/types';
 import { exhaustiveCheck } from 'lib/utils/typescript';
 import { OppgaveAvklaringsbehovKode, OppgaveBehandlingstype } from 'lib/types/oppgaveTypes';
+import { PostmottakSettPåVentÅrsaker, PostmottakTypeBehandling } from 'lib/types/postmottakTypes';
+
 const behovskodeMap = {
   // Behandlingsflyt
   '4101': '§ 11-7 Aktivitetsplikt',
@@ -43,6 +45,7 @@ const behovskodeMap = {
   '5034': 'Avklar samordning sykestipend',
   '5035': 'Avklar oppholdskrav',
   '5036': 'Samordning barnepensjon',
+  '5037': '§ 11-14 Student',
   '5040': '§ 11-4 andre ledd. Krav om inntektsbortfall etter fylte 62 år',
   '5041': 'Skriv vedtaksbrev',
   '5050': 'Skriv brev',
@@ -90,8 +93,6 @@ const behovskodeMap = {
   '1341': 'Endre tema',
   '1342': 'Vent på Gosys',
 } as const;
-
-import { PostmottakSettPåVentÅrsaker, PostmottakTypeBehandling } from 'lib/types/postmottakTypes';
 
 export function mapBehovskodeTilBehovstype(kode: OppgaveAvklaringsbehovKode | string): string {
   return behovskodeMap[kode as OppgaveAvklaringsbehovKode] ?? 'Ukjent behovstype';
@@ -236,6 +237,8 @@ export function mapTilOppgaveBehandlingstypeTekst(behandlingsType: OppgaveBehand
       return 'Aktivitetsplikt § 11-7';
     case 'AKTIVITETSPLIKT_11_9':
       return 'Aktivitetsplikt § 11-9';
+    case 'FORDELING':
+      return 'Fordeling';
   }
   exhaustiveCheck(behandlingsType);
 }
@@ -350,6 +353,7 @@ export function mapStatusTilTekst(
     | 'VENTEFRIST_UTLØPT'
     | 'RETUR_FRA_VEILEDER'
     | 'RETUR_FRA_SAKSBEHANDLER'
+    | 'AVSLAG_11_5'
 ): string {
   switch (status) {
     case 'VENT':
@@ -366,6 +370,8 @@ export function mapStatusTilTekst(
       return 'Retur fra veileder';
     case 'RETUR_FRA_SAKSBEHANDLER':
       return 'Retur fra saksbehandler';
+    case 'AVSLAG_11_5':
+      return 'Avslag § 11-5';
   }
 }
 

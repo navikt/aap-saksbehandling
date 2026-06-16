@@ -1,4 +1,4 @@
-import { Box, Heading, HGrid, VStack } from '@navikt/ds-react';
+import { Heading, HGrid, VStack } from '@navikt/ds-react';
 import { DummyMeldekort } from 'components/devtools/DummyMeldekort';
 import { SendNySoknad } from 'components/devtools/SendNySoknad';
 import { SendNySoknadUtenMedlemskap } from 'components/devtools/SendNySoknadUtenMedlemskap';
@@ -6,6 +6,8 @@ import { DummyKabalEvent } from 'components/devtools/DummyKabalEvent';
 import { LeggTilMockInstitusjonsopphold } from 'components/devtools/LeggTilMockInstitusjonsopphold';
 import { LeggTilMockYrkesskade } from 'components/devtools/LeggTilMockYrkesskade';
 import { TypeBehandling } from 'lib/types/types';
+import { DevtoolWrapper } from 'components/devtools/DevtoolWrapper';
+import { LeggTilKravVurdering } from 'components/devtools/LeggTilKravVurdering';
 
 export const SakDevTools = ({
   saksnummer,
@@ -15,9 +17,8 @@ export const SakDevTools = ({
   behandlinger: { referanse: string; type: TypeBehandling }[];
 }) => {
   return (
-    <Box background="neutral-soft" padding="space-16" borderWidth="1" borderRadius="8" borderColor="neutral-subtle">
-      <Heading size={'medium'}>Utviklerverktøy</Heading>
-      <HGrid gap="space-8" columns={2}>
+    <DevtoolWrapper>
+      <HGrid gap="space-8" columns={2} padding="space-8">
         <VStack gap="space-16">
           <Heading size={'xsmall'}>Send et meldekort for inneværende mnd</Heading>
 
@@ -36,8 +37,9 @@ export const SakDevTools = ({
         <VStack gap="space-16">
           <LeggTilMockInstitusjonsopphold saksnummer={saksnummer} />
           <LeggTilMockYrkesskade saksnummer={saksnummer} />
+          <LeggTilKravVurdering saksnummer={saksnummer} />
         </VStack>
       </HGrid>
-    </Box>
+    </DevtoolWrapper>
   );
 };

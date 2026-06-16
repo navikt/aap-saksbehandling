@@ -1,25 +1,31 @@
 import { AlleSakerListe } from 'components/saksliste/AlleSakerListe';
-import styles from './page.module.css';
 import { isDev, isLocal, isProd } from 'lib/utils/environment';
 import { OpprettSakLocal } from 'components/opprettsak/OpprettSakLocal';
 import OpprettSakTest from 'components/opprettsak/OpprettSakTest';
 import { Suspense } from 'react';
+import { PageBlock } from '@navikt/ds-react/Page';
+import { Page } from '@navikt/ds-react';
+import { redirect } from 'next/navigation';
 
-const lokalOpprettelseAvDummySak = isLocal();
-const devOpprettelseAvDummySak = isDev();
-const visningAvAlleBehandlingerLokaltOgDev = !isProd();
-const Page = async () => {
+const SaksoversiktPage = async () => {
+  if (isProd()) {
+    redirect('/oppgave');
+  }
+
   return (
-    <main className={styles.main}>
-      {lokalOpprettelseAvDummySak && <OpprettSakLocal />}
-      {devOpprettelseAvDummySak && <OpprettSakTest />}
-      {visningAvAlleBehandlingerLokaltOgDev && (
-        <Suspense>
-          <AlleSakerListe />
-        </Suspense>
-      )}
-    </main>
+    <Page>
+      <PageBlock width="2xl">
+        {isLocal() && <OpprettSakLocal />}
+        {isDev() && <OpprettSakTest />}
+
+        {!isProd() && (
+          <Suspense>
+            <AlleSakerListe />
+          </Suspense>
+        )}
+      </PageBlock>
+    </Page>
   );
 };
 
-export default Page;
+export default SaksoversiktPage;

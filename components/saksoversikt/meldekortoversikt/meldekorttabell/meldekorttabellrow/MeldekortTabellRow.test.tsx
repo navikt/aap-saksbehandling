@@ -1,11 +1,16 @@
 import { describe, expect, it, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Table } from '@navikt/ds-react';
-import { MeldekortTabellRow } from 'components/saksoversikt/meldekortoversikt/meldekorttabell/meldekorttabellrow/MeldekortTabellRow';
+import {
+  MeldekortTabellRow,
+  utledOppdatertAv,
+} from 'components/saksoversikt/meldekortoversikt/meldekorttabell/meldekorttabellrow/MeldekortTabellRow';
 import { MeldeperiodeMedMeldekortDto } from 'lib/types/types';
+import { customRender } from 'lib/test/CustomRender';
 
 const meldekortUtenDager: MeldeperiodeMedMeldekortDto = {
+  meldepliktStatus: [],
   tidligereMeldekort: [],
   meldeperiode: {
     fom: '2025-01-06',
@@ -14,6 +19,7 @@ const meldekortUtenDager: MeldeperiodeMedMeldekortDto = {
 };
 
 const meldekortMedDager: MeldeperiodeMedMeldekortDto = {
+  meldepliktStatus: [],
   tidligereMeldekort: [],
   meldeperiode: {
     fom: '2025-01-06',
@@ -25,6 +31,7 @@ const meldekortMedDager: MeldeperiodeMedMeldekortDto = {
     meldeDato: '2025-01-20',
     oppdatertTidspunkt: '2025-01-21',
     oppdatertAv: 'saksbehandler',
+    oppdatertAvSaksbehandler: true,
     dager: [
       { dato: '2025-01-06', timerArbeidet: 7.5 },
       { dato: '2025-01-07', timerArbeidet: 7.5 },
@@ -46,6 +53,7 @@ const meldekortMedDager: MeldeperiodeMedMeldekortDto = {
 
 // Tom-dato i fremtiden — kan ikke redigeres
 const meldekortFremtidig: MeldeperiodeMedMeldekortDto = {
+  meldepliktStatus: [],
   tidligereMeldekort: [],
   meldeperiode: {
     fom: '2099-01-06',
@@ -54,10 +62,14 @@ const meldekortFremtidig: MeldeperiodeMedMeldekortDto = {
 };
 
 function renderRow(meldekort: MeldeperiodeMedMeldekortDto, setSelectedMeldekort = vi.fn(), setIsOpen = vi.fn()) {
-  return render(
+  return customRender(
     <Table>
       <Table.Body>
-        <MeldekortTabellRow meldekort={meldekort} setSelectedMeldekort={setSelectedMeldekort} setIsOpen={setIsOpen} />
+        <MeldekortTabellRow
+          meldePeriodeMedMeldekort={meldekort}
+          setSelectedMeldekort={setSelectedMeldekort}
+          setIsOpen={setIsOpen}
+        />
       </Table.Body>
     </Table>
   );
@@ -80,7 +92,7 @@ describe('MeldekortTabellRow', () => {
     it('viser totalt antall timer arbeidet når dager finnes', () => {
       renderRow(meldekortMedDager);
       // 10 dager * 7.5 = 75 timer
-      expect(screen.getByText('75')).toBeVisible();
+      expect(screen.getByText('75 timer')).toBeVisible();
     });
 
     it('viser 0 timer arbeidet når alle dager har 0 timer', () => {
@@ -92,30 +104,11 @@ describe('MeldekortTabellRow', () => {
         },
       };
       renderRow(meldekortNullTimer);
-      expect(screen.getByText('0')).toBeVisible();
-    });
-  });
-
-  describe('Prosent arbeidet', () => {
-    it('viser beregnet prosent når timer finnes', () => {
-      renderRow(meldekortMedDager);
-      // 75 / 75 * 100 = 100 %
-      expect(screen.getByText('100 %')).toBeVisible();
-    });
-
-    it('viser "-" for prosent når meldekort mangler dager', () => {
-      renderRow(meldekortUtenDager);
-      // Forventer minst én "-" i raden
-      expect(screen.getAllByText('-').length).toBeGreaterThan(0);
+      expect(screen.getByText('0 timer')).toBeVisible();
     });
   });
 
   describe('Levert dato og sist endret', () => {
-    it('viser meldedato formatert for frontend', () => {
-      renderRow(meldekortMedDager);
-      expect(screen.getByText('20.01.2025')).toBeVisible();
-    });
-
     it('viser oppdatertTidspunkt formatert for frontend', () => {
       renderRow(meldekortMedDager);
       expect(screen.getByText('21.01.2025')).toBeVisible();
@@ -154,5 +147,42 @@ describe('MeldekortTabellRow', () => {
       expect(setSelectedMeldekort).toHaveBeenCalledWith(meldekortUtenDager);
       expect(setIsOpen).toHaveBeenCalledWith(true);
     });
+  });
+});
+
+type Meldekort = NonNullable<MeldeperiodeMedMeldekortDto['meldekort']>;
+
+const baseMeldekort: Meldekort = {
+  id: 'id',
+  journalpostId: '',
+  meldeDato: '2025-01-20',
+  dager: [],
+  oppdatertAv: null,
+  oppdatertAvSaksbehandler: false,
+};
+
+describe('utledOppdatertAv', () => {
+  it('returnerer "-" når det ikke finnes meldekort', () => {
+    expect(utledOppdatertAv(undefined, 'Ola Nordmann')).toBe('-');
+  });
+
+  it('returnerer brukerens navn når hverken oppdatertAv eller oppdatertAvSaksbehandler er satt', () => {
+    const meldekort: Meldekort = { ...baseMeldekort, oppdatertAv: null, oppdatertAvSaksbehandler: false };
+    expect(utledOppdatertAv(meldekort, 'Ola Nordmann')).toBe('Ola Nordmann');
+  });
+
+  it('returnerer oppdatertAv når feltet er satt og oppdatertAvSaksbehandler er false', () => {
+    const meldekort: Meldekort = { ...baseMeldekort, oppdatertAv: 'Z999999', oppdatertAvSaksbehandler: false };
+    expect(utledOppdatertAv(meldekort, 'Ola Nordmann')).toBe('Z999999');
+  });
+
+  it('returnerer oppdatertAv når oppdatertAvSaksbehandler er true', () => {
+    const meldekort: Meldekort = { ...baseMeldekort, oppdatertAv: 'Z999999', oppdatertAvSaksbehandler: true };
+    expect(utledOppdatertAv(meldekort, 'Ola Nordmann')).toBe('Z999999');
+  });
+
+  it('returnerer "-" når oppdatertAvSaksbehandler er true men oppdatertAv mangler', () => {
+    const meldekort: Meldekort = { ...baseMeldekort, oppdatertAv: null, oppdatertAvSaksbehandler: true };
+    expect(utledOppdatertAv(meldekort, 'Ola Nordmann')).toBe('-');
   });
 });

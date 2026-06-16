@@ -173,6 +173,14 @@ export const fjernMarkering = async (referanse: string, requestBody: Markering) 
 };
 
 export const hentMarkeringer = async (referanse: string) => {
+  if (lokalFakeOppgave) {
+    const mockData: FetchResponse<Markering[]> = {
+      type: 'SUCCESS',
+      status: 200,
+      data: [],
+    };
+    return mockData;
+  }
   const url = `${oppgaveApiBaseURL}/${referanse}/hent-markeringer`;
   return await apiFetch<Markering[]>(url, oppgaveApiScope, 'GET', undefined);
 };

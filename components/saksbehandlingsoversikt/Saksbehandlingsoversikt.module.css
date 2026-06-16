@@ -1,7 +1,6 @@
-.stretch {
-  display: flex;
-  justify-content: space-between;
-  padding-top: var(--ax-space-8);
+.tabs {
+  padding-top: var(--ax-space-16);
+  padding-inline: var(--ax-space-16);
 }
 
 .tabContent {
@@ -13,9 +12,8 @@
 .saksbehandlingsoversikt {
   display: flex;
   flex-direction: column;
-  gap: var(--ax-space-16);
   border: 1px solid var(--ax-border-neutral-subtle);
-  border-radius: var(--ax-radius-8);
+  border-radius: var(--ax-radius-12);
   background-color: var(--ax-bg-default);
 }
 
@@ -35,12 +33,11 @@
 
 .utvidetWrapper {
   border-right: 1px solid var(--ax-border-neutral-subtle);
-  border-bottom: 1px solid var(--ax-border-neutral-subtle);
-  padding-top: var(--ax-space-8);
-  justify-self: center;
+  padding: var(--ax-space-8);
 }
 
-.skjultWrapper {
+.skjultWrapper,
+.header {
   border-bottom: 1px solid var(--ax-border-neutral-subtle);
 }
 

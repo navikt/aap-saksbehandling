@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, BodyShort, Detail, HStack, Link, VStack } from '@navikt/ds-react';
+import { BodyShort, Detail, HStack, Link, VStack } from '@navikt/ds-react';
 import { OppgaveStatus, OppgaveStatusType } from 'components/oppgavestatus/OppgaveStatus';
 import { Behandlingsstatus } from 'components/behandlingsstatus/Behandlingsstatus';
 
@@ -10,6 +10,7 @@ import { AdressebeskyttelseStatus } from 'components/adressebeskyttelsestatus/Ad
 import { Adressebeskyttelsesgrad } from 'lib/utils/adressebeskyttelse';
 import { SøkeResultat } from 'app/api/kelvinsok/route';
 import { MarkeringStatus } from 'components/markeringstatus/MarkeringStatus';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   søkeresultat: SøkeResultat;
@@ -21,7 +22,7 @@ export const Kelvinsøkeresultat = ({
   if (saker?.length == 0 && oppgaver?.length == 0) {
     return (
       <HStack>
-        <Alert variant={'info'} size={'small'} className={styles.info}>
+        <Alert variant={'info'} className={styles.info}>
           Du fikk ingen treff. Sjekk at saksnummeret eller fødselsnummer er riktig skrevet.
         </Alert>
       </HStack>
@@ -32,7 +33,7 @@ export const Kelvinsøkeresultat = ({
     <VStack gap={'space-8'}>
       {!harTilgang && (
         <HStack>
-          <Alert variant={'info'} size={'small'} className={styles.info}>
+          <Alert variant={'info'} className={styles.info}>
             {harAdressebeskyttelse
               ? 'Du har ikke tilgang til saken fordi personen er egen ansatt eller har adressebeskyttelse.'
               : 'Du har ikke tilgang til saken.'}

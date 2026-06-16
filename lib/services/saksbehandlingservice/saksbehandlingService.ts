@@ -27,6 +27,7 @@ import {
   BrevGrunnlag,
   DetaljertBehandling,
   EtableringEgenVirksomhetGrunnlagResponse,
+  FastlegeResponse,
   FatteVedtakGrunnlag,
   FlytProsessering,
   ForeløpigBehandlingsutfall,
@@ -128,6 +129,8 @@ export const hentSak = async (saksnummer: string) => {
       ingenTilgang();
     } else if (res.status === 404) {
       notFound();
+    } else if (res.status === 408) {
+      throw new Error(res.apiException.message || 'Forespørselen tok for lang tid. Prøv igjen om litt.');
     } else {
       logError(`Feil ved henting av sak ${saksnummer}`, res.apiException);
       throw new Error(res.apiException.message || 'Ukjent feil oppsto ved henting av sak');
@@ -532,6 +535,11 @@ export const leggTilDummyYrkesskade = async (saksnummer: string, body: object) =
   return await apiFetch<void>(url, saksbehandlingApiScope, 'POST', body);
 };
 
+export const leggTilDummyKravVurdering = async (saksnummer: string, body: object) => {
+  const url = `${saksbehandlingApiBaseUrl}/test/endre/${saksnummer}/legg-til-kravvurdering`;
+  return await apiFetch<void>(url, saksbehandlingApiScope, 'POST', body);
+};
+
 export const opprettDummySakTest = async (sak: OpprettDummySakDto) => {
   const url = `${saksbehandlingApiBaseUrl}/api/test/opprettDummySak`;
   return await apiFetch<void>(url, saksbehandlingApiScope, 'POST', sak);
@@ -570,6 +578,11 @@ export const forberedBehandlingOgVentPåProsessering = async (
 export const hentAlleDialogmeldingerPåSak = async (saksnummer: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/syfo/status/${saksnummer}`;
   return await apiFetch<LegeerklæringStatus[]>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentFastlege = async (saksnummer: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/syfo/fastlege/${saksnummer}`;
+  return await apiFetch<FastlegeResponse[]>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const bestillDialogmelding = async (requestBody: BestillLegeerklæring) => {
@@ -642,6 +655,12 @@ export const hentForhåndsvisningBrev = async (brevbestillingReferanse: string):
     `${saksbehandlingApiBaseUrl}/api/brev/${brevbestillingReferanse}/forhandsvis`,
     saksbehandlingApiScope
   );
+};
+
+// TODO bør types
+export const hentBrevmalPreview = async (brevbestillingReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/brev/${brevbestillingReferanse}/brevmal-preview`;
+  return await apiFetch(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentOppfølgingsoppgaveGrunnlag = async (behandlingsreferanse: string) => {

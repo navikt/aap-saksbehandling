@@ -36,7 +36,7 @@ import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/sy
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
-import { Alert, VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react';
 import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
 import {
   emptySykdomsvurderingMedDefaultBegrunnelse,
@@ -47,6 +47,7 @@ import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
 import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
+import { Alert } from 'components/alert/Alert';
 
 export interface SykdomsvurderingerForm {
   vurderinger: Array<Sykdomsvurdering>;
@@ -75,6 +76,7 @@ interface SykdomProps {
   diagnoseDefaultOptions: DiagnoserDefaultOptions;
   initialMellomlagretVurdering?: MellomlagretVurdering;
   erOvergangArbeid: boolean;
+  erRevurderingStudent: boolean;
 }
 
 export const Sykdomsvurdering = ({
@@ -85,6 +87,7 @@ export const Sykdomsvurdering = ({
   typeBehandling,
   initialMellomlagretVurdering,
   erOvergangArbeid,
+  erRevurderingStudent,
 }: SykdomProps) => {
   const { behandlingsreferanse } = useParamsMedType();
   const { sak } = useSak();
@@ -188,10 +191,17 @@ export const Sykdomsvurdering = ({
         <EksterneLenkerIVilkårskort steg={'AVKLAR_SYKDOM'} />
 
         {erOvergangArbeid && (
-          <Alert variant={'info'} size={'small'}>
+          <Alert variant={'info'}>
             Hvis brukeren skal ha AAP i perioden som arbeidssøker etter § 11-17, må du først vurdere at arbeidsevnen
             ikke lenger er nedsatt etter § 11-5 og at brukeren er satt i stand til å skaffe seg arbeid som han eller hun
             kan utføre.
+          </Alert>
+        )}
+
+        {erRevurderingStudent && (
+          <Alert variant={'info'} size={'small'}>
+            Hvis brukeren skal ha AAP som student etter § 11-14, må du først vurdere at arbeidsevnen ikke er nedsatt,
+            men at bruker isteden skal vurderes for student i vurderingen av § 11-5.
           </Alert>
         )}
 

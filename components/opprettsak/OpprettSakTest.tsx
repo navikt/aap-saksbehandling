@@ -1,14 +1,15 @@
 'use client';
 
-import styles from './OpprettSak.module.css';
 import { JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
-import { Alert, Button } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react';
 import { useOpprettDummySak } from 'hooks/FetchHook';
 import { OpprettDummySakDto } from 'lib/types/types';
 import { mutate } from 'swr';
 import { useState } from 'react';
+import { Alert } from 'components/alert/Alert';
+import { DevtoolWrapper } from 'components/devtools/DevtoolWrapper';
 
 interface OpprettSakFormFields {
   ident?: string;
@@ -66,6 +67,9 @@ const OpprettTestSakSkjema = () => {
   });
 
   const handleSubmit = async (data: OpprettSakFormFields) => {
+    setShowError(false);
+    setOpprettSakAlert(null);
+
     try {
       const { ok } = await opprettSak(mapFormTilDto(data));
       if (opprettSakAlert) {
@@ -90,40 +94,37 @@ const OpprettTestSakSkjema = () => {
   };
 
   return (
-    <form onSubmit={form.handleSubmit(handleSubmit)} className={styles.formTest}>
-      <FormField form={form} formField={formFields.ident} className={styles.fnr} />
-      <FormField form={form} formField={formFields.medlemskap} />
-      <FormField form={form} formField={formFields.yrkesskade} />
-      <FormField form={form} formField={formFields.student} />
+    <DevtoolWrapper title="Testverktøy – Opprett sak">
+      <Alert variant="info">
+        Man kan nå opprette Kelvin-saker i Dolly. Under feltet &quot;Arbeidsytelser&quot;, under &quot;Kelvin&quot;,
+        velg &quot;AAP-ytelse&quot;.
+      </Alert>
+      <form onSubmit={form.handleSubmit(handleSubmit)}>
+        <FormField form={form} formField={formFields.ident} />
+        <FormField form={form} formField={formFields.medlemskap} />
+        <FormField form={form} formField={formFields.yrkesskade} />
+        <FormField form={form} formField={formFields.student} />
 
-      {showError && (
-        <Alert fullWidth={true} contentMaxWidth={false} variant="error" closeButton onClose={() => setShowError(false)}>
-          {error?.toString() ||
-            'Noe gikk galt ved oppretting av testsaken. Vennligst sjekk at fødselsnummer er en gyldig testbruker og prøv igjen.'}
-        </Alert>
-      )}
+        {showError && (
+          <Alert variant="error">
+            {error?.toString() ||
+              'Noe gikk galt ved oppretting av testsaken. Vennligst sjekk at fødselsnummer er en gyldig testbruker og prøv igjen.'}
+          </Alert>
+        )}
 
-      {opprettSakAlert && (
-        <Alert
-          fullWidth={true}
-          contentMaxWidth={false}
-          variant="success"
-          closeButton
-          onClose={() => {
-            clearTimeout(opprettSakAlert?.id);
-            setOpprettSakAlert(null);
-          }}
-        >
-          En test-sak har blitt opprettet for bruker med fødselsnummer {opprettSakAlert.fnr}. Det kan ta opp mot et
-          minutt før saken dukker opp i listen under, bruk gjerne knappen &#34;Refresh listen&#34; for å sjekke om saken
-          er klar for behandling i Kelvin.
-        </Alert>
-      )}
+        {opprettSakAlert && (
+          <Alert variant="success">
+            En test-sak har blitt opprettet for bruker med fødselsnummer {opprettSakAlert.fnr}. Det kan ta opp mot et
+            minutt før saken dukker opp i listen under, bruk gjerne knappen &#34;Refresh listen&#34; for å sjekke om
+            saken er klar for behandling i Kelvin.
+          </Alert>
+        )}
 
-      <Button className={'fit-content'} loading={isLoading}>
-        Opprett testsak
-      </Button>
-    </form>
+        <Button className={'fit-content'} loading={isLoading}>
+          Opprett testsak
+        </Button>
+      </form>
+    </DevtoolWrapper>
   );
 };
 

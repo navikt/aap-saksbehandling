@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import useSWR from 'swr';
-import { Alert, BodyShort, Box, Button, HStack, Label, Switch, VStack } from '@navikt/ds-react';
+import { BodyShort, Box, Button, HStack, Label, Switch, VStack } from '@navikt/ds-react';
 import { KøSelect } from 'components/oppgaveliste/køselect/KøSelect';
 import { queryParamsArray } from 'lib/utils/request';
 import { Enhet } from 'lib/types/oppgaveTypes';
@@ -20,6 +20,7 @@ import { formaterDatoForBackend } from 'lib/utils/date';
 
 import styles from 'components/oppgaveliste/ledigeoppgaver/LedigeOppgaver.module.css';
 import {
+  NoNavAapOppgaveFilterFilterDtoBehandlingstyper,
   NoNavAapOppgaveListeOppgaveSorteringSortBy,
   NoNavAapOppgaveListeUtvidetOppgavelisteFilterBehandlingstyper,
   NoNavAapOppgaveListeUtvidetOppgavelisteFilterReturStatuser,
@@ -32,6 +33,8 @@ import { useBackendSortering } from 'hooks/oppgave/BackendSorteringHook';
 import { LedigeOppgaverFiltrering } from 'components/oppgaveliste/filtrering/ledigeoppgaverfiltrering/LedigeOppgaverFiltrering';
 import { ValuePair } from 'components/form/FormField';
 import { useInnloggetBruker } from 'hooks/BrukerHook';
+import { Alert } from 'components/alert/Alert';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   enheter: Enhet[];
@@ -45,6 +48,7 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
   const { hentLagredeAktiveEnheter, lagreAktiveEnheter } = useLagreAktiveEnheter();
 
   const bruker = useInnloggetBruker();
+  const oppgavelisteMedBeløp = useFeatureFlag('OppgavelisteMedBelopISaksbehandling');
   const [aktivKø, setAktivKø] = useState<AktivKø | undefined>(undefined);
 
   const [veilederFilter, setVeilederFilter] = useState<string>('');
@@ -280,6 +284,13 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
               sort={sort}
               revalidateFunction={mutate}
               aktivKø={aktivKø}
+              visBeløpKolonne={
+                oppgavelisteMedBeløp &&
+                (oppgaveKøer
+                  ?.find((e) => e.id === aktivKø.id)
+                  ?.behandlingstyper?.includes(NoNavAapOppgaveFilterFilterDtoBehandlingstyper.TILBAKEKREVING) ??
+                  false)
+              }
             />
           ) : (
             <BodyShort size={'small'} className={styles.ingenoppgaver}>

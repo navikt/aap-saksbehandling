@@ -8,6 +8,7 @@ import {
   BestillLegeerklæring,
   Brev,
   BrevdataDto,
+  FastlegeResponse,
   ForhåndsvisDialogmelding,
   ForhåndsvisDialogmeldingResponse,
   KanDistribuereBrevRequest,
@@ -94,6 +95,10 @@ export function clientLeggTilYrkesskade(saksnummer: string, body: LeggTilYrkessk
   return clientFetch(`${BASE_URL}/api/test/endre/${saksnummer}/legg-til-yrkesskade`, 'POST', body);
 }
 
+export function clientLeggTilKravVurdering(saksnummer: string, body: object) {
+  return clientFetch(`${BASE_URL}/api/test/endre/${saksnummer}/legg-til-kravvurdering`, 'POST', body);
+}
+
 export function clientOpprettDummySak(sak: OpprettDummySakDto) {
   return clientFetch(`${BASE_URL}/api/test/opprettDummySak`, 'POST', sak);
 }
@@ -127,6 +132,13 @@ export function clientSøkPåBehandler(fritekst: string, saksnummer: string) {
     fritekst: fritekst,
     saksnummer: saksnummer,
   });
+}
+
+export function clientHentFastlege(saksnummer: string) {
+  return clientFetch<FastlegeResponse>(
+    `${BASE_URL}/api/dokumentinnhenting/behandleroppslag/fastlege/${saksnummer}`,
+    'GET'
+  );
 }
 
 export function clientHentFlyt(behandlingsreferanse: string) {

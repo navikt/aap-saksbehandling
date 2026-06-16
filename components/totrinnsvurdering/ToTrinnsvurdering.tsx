@@ -11,7 +11,8 @@ import {
 } from 'lib/types/types';
 import { TotrinnsvurderingForm } from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingForm';
 import styles from 'components/totrinnsvurdering/ToTrinnsvurdering.module.css';
-import { Alert, Label, VStack } from '@navikt/ds-react';
+import { Label, VStack } from '@navikt/ds-react';
+import { Alert } from 'components/alert/Alert';
 import { Markering } from 'lib/types/oppgaveTypes';
 
 interface Props {

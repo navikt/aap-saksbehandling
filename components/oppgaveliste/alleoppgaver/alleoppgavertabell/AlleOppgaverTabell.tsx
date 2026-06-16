@@ -9,6 +9,7 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 import Link from 'next/link';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
+import { formaterTilNok } from 'lib/utils/string';
 import { AlleOppgaverActionMenu } from 'components/oppgaveliste/alleoppgaver/alleoppgaveractionmenu/AlleOppgaverActionMenu';
 import { OppgaveInformasjon } from 'components/oppgaveliste/oppgaveinformasjon/OppgaveInformasjon';
 import { Dispatch, SetStateAction, useState } from 'react';
@@ -28,6 +29,7 @@ interface Props {
   setSortBy: (orderBy: NoNavAapOppgaveListeOppgaveSorteringSortBy) => void;
   sort: ScopedBackendSortState<NoNavAapOppgaveListeOppgaveSorteringSortBy> | undefined;
   aktivKø: AktivKø | undefined;
+  visBeløpKolonne: boolean;
 }
 
 export const AlleOppgaverTabell = ({
@@ -38,6 +40,7 @@ export const AlleOppgaverTabell = ({
   setSortBy,
   sort,
   aktivKø,
+  visBeløpKolonne,
 }: Props) => {
   const [visSynkroniserEnhetModal, setVisSynkroniserEnhetModal] = useState<boolean>(false);
 
@@ -107,6 +110,14 @@ export const AlleOppgaverTabell = ({
             <Table.ColumnHeader sortKey={NoNavAapOppgaveListeOppgaveSorteringSortBy.RESERVERT_AV} sortable={true}>
               Tildelt
             </Table.ColumnHeader>
+            {visBeløpKolonne && (
+              <Table.ColumnHeader
+                sortKey={NoNavAapOppgaveListeOppgaveSorteringSortBy.TILBAKEKREVINGS_BELOP}
+                sortable={true}
+              >
+                Beløp
+              </Table.ColumnHeader>
+            )}
             <Table.HeaderCell></Table.HeaderCell>
             <Table.HeaderCell></Table.HeaderCell>
           </Table.Row>
@@ -181,6 +192,13 @@ export const AlleOppgaverTabell = ({
                   </BodyShort>
                 </Tooltip>
               </Table.DataCell>
+              {visBeløpKolonne && (
+                <Table.DataCell textSize={'small'}>
+                  {oppgave.behandlingstype === 'TILBAKEKREVING'
+                    ? formaterTilNok(oppgave.tilbakekrevingsVarsDto?.['tilbakekrevings_beløp'])
+                    : ''}
+                </Table.DataCell>
+              )}
               <Table.DataCell textSize={'small'}>
                 <OppgaveInformasjon oppgave={oppgave} />
               </Table.DataCell>

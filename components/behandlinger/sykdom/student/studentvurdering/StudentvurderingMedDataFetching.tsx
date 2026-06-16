@@ -8,6 +8,8 @@ import {
   finnDiagnoseGrunnlagForStudent,
   getDefaultOptionsForDiagnosesystem,
 } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
+import { unleashService } from 'lib/services/unleash/unleashService';
+import { StudentVurderingV2 } from 'components/behandlinger/sykdom/student/studentvurdering/StudentVurderingV2';
 
 interface Props {
   behandlingsreferanse: string;
@@ -16,6 +18,7 @@ interface Props {
 
 export const StudentvurderingMedDataFetching = async ({ behandlingsreferanse, stegData }: Props) => {
   const grunnlag = await hentStudentGrunnlag(behandlingsreferanse);
+  const skalBrukeNyttStudentsteg = unleashService.isEnabled('StudentV2');
 
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
@@ -29,12 +32,20 @@ export const StudentvurderingMedDataFetching = async ({ behandlingsreferanse, st
   }
 
   const totalReadOnly = stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
-  const initialMellomlagretVurdering = await hentMellomlagring(
-    behandlingsreferanse,
-    Behovstype.AVKLAR_STUDENT_KODE,
-    totalReadOnly
-  );
+  const behovstype = skalBrukeNyttStudentsteg ? Behovstype.AVKLAR_STUDENT_KODE_V2 : Behovstype.AVKLAR_STUDENT_KODE;
+  const initialMellomlagretVurdering = await hentMellomlagring(behandlingsreferanse, behovstype, totalReadOnly);
 
+  if (skalBrukeNyttStudentsteg) {
+    return (
+      <StudentVurderingV2
+        grunnlag={grunnlag.data}
+        readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+        behandlingVersjon={stegData.behandlingVersjon}
+        initialMellomlagretVurdering={initialMellomlagretVurdering}
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
+      />
+    );
+  }
   return (
     <StudentVurdering
       grunnlag={grunnlag.data}

@@ -14,7 +14,6 @@ import { isError } from 'lib/utils/api';
 import { skrivBrevBehovstype } from 'components/brev/BrevKortMedDataFetching';
 import { BrevOppsummering } from 'components/behandlinger/brev/skriveBrev/BrevOppsummering';
 import { mapGrunnlagTilMottakere } from 'lib/utils/brevmottakere';
-import { isProd } from 'lib/utils/environment';
 import { Brevbygger } from 'components/brevbygger/Brevbygger';
 
 interface Props {
@@ -71,7 +70,7 @@ export const SkriveBrevMedDataFetching = async ({
     (x) => x.status === 'AVBRUTT' && x.brev != null && x.avklaringsbehovKode === '5050'
   );
 
-  const brukNyBrevbygger = !isProd() && !!brev?.brevmal && !!brev?.brevdata;
+  const brukNyBrevbygger = !!brev?.brevmal && !!brev?.brevdata;
 
   if (!brev?.brev && !brukNyBrevbygger) {
     return <BrevOppsummering sendteBrev={sendteBrev} avbrutteBrev={avbrytteBrev} />;
@@ -105,7 +104,7 @@ export const SkriveBrevMedDataFetching = async ({
           behandlingVersjon={behandlingVersjon}
           readOnly={readOnlyBrev}
           refusjonskravgrunnlag={refusjonGrunnlag.data}
-          behandlingstype={behandlingstype}
+          brevtype={brev?.brevtype}
         />
       )}
       {!brukNyBrevbygger && brev.brev && (
@@ -120,7 +119,7 @@ export const SkriveBrevMedDataFetching = async ({
           readOnly={readOnlyBrev}
           signaturer={brev.signaturer}
           behandlingVersjon={behandlingVersjon}
-          behandlingstype={behandlingstype}
+          brevtype={brev?.brevtype}
         />
       )}
     </div>
