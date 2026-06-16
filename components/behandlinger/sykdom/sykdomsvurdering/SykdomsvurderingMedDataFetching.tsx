@@ -51,7 +51,7 @@ export const SykdomsvurderingMedDataFetching = async ({ behandlingsreferanse, st
       ? behandling.data.vurderingsbehovOgÅrsaker.flatMap((behovOgÅrsak) => behovOgÅrsak.vurderingsbehov)
       : [];
   const erOvergangArbeid = vurderingsbehov.some((x) => x.type === 'OVERGANG_ARBEID');
-  const erRevurderingStudent = vurderingsbehov.some((x) => x.type === 'REVURDER_STUDENT') && !stegData.readOnly
+  const erRevurderingStudent = vurderingsbehov.some((x) => x.type === 'REVURDER_STUDENT') && !stegData.readOnly;
 
   return (
     <Sykdomsvurdering

@@ -113,7 +113,9 @@ const SamordningRadFelter = ({ form, index }: { form: UseFormReturn<OpprettSakFo
   const type = useWatch({ control: form.control, name: `samordning.${index}.type` });
 
   if (type === 'SYKEPENGER') {
-    return <TextFieldWrapper label="Grad" control={form.control} name={`samordning.${index}.sykepengerGrad`} type="text" />;
+    return (
+      <TextFieldWrapper label="Grad" control={form.control} name={`samordning.${index}.sykepengerGrad`} type="text" />
+    );
   }
 
   if (type === 'DAGPENGER') {

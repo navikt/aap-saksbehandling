@@ -20,9 +20,7 @@ import { Behovstype } from 'lib/utils/form';
 import { BehandlingFlytOgTilstand, StegGruppe } from 'lib/types/types';
 import { BekreftVurderingerOppfølgingMedDataFetching } from 'components/behandlinger/sykdom/bekreftvurderingeroppfølging/BekreftVurderingerOppfølgingMedDataFetching';
 import { OppgittYrkesskadeUtenRegistertreffInfo } from 'components/behandlinger/sykdom/yrkesskade/OppgittYrkesskadeUtenRegistertreffInfo';
-import {
-  StudentvurderingMedDataFetching
-} from 'components/behandlinger/sykdom/student/studentvurdering/StudentvurderingMedDataFetching';
+import { StudentvurderingMedDataFetching } from 'components/behandlinger/sykdom/student/studentvurdering/StudentvurderingMedDataFetching';
 import { unleashService } from 'lib/services/unleash/unleashService';
 
 interface Props {
@@ -149,10 +147,7 @@ export const Sykdom = async ({ behandlingsreferanse, flyt }: Props) => {
       )}
       {vurderStudentStegV2.skalViseSteg && skalViseStudentV2 && (
         <StegSuspense>
-          <StudentvurderingMedDataFetching
-            behandlingsreferanse={behandlingsreferanse}
-            stegData={vurderStudentStegV2}
-          />
+          <StudentvurderingMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={vurderStudentStegV2} />
         </StegSuspense>
       )}
       {vurderSykepengeerstatningSteg.skalViseSteg && (

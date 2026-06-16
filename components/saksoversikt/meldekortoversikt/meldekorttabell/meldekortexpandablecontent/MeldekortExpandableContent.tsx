@@ -29,7 +29,7 @@ export const MeldekortExpandableContent = ({ meldekort }: Props) => {
   const begrunnelse = meldekort.meldekort?.begrunnelse;
 
   return (
-    <HStack gap={'space-8'} align={"baseline"}>
+    <HStack gap={'space-8'} align={'baseline'}>
       <div>
         {uker.map((uke, ukeIndex) => (
           <HStack key={ukeIndex}>
