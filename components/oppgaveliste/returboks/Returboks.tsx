@@ -64,7 +64,7 @@ export const Returboks = ({
     maybeReturInformasjon?.status == 'RETUR_FRA_BESLUTTER';
   const skalViseForrigeKvalitetssikrer =
     maybeReturInformasjon?.status == 'RETUR_FRA_VEILEDER' &&
-    maybeForrigeKvalitetssikrerInfo !== undefined;
+    maybeForrigeKvalitetssikrerInfo?.forrigeKvalitetssikrerIdent != null;
 
   function utledPopoverInnhold() {
     if (returFraToTrinn) {
