@@ -34,7 +34,6 @@ import {
 import { Alert } from 'components/alert/Alert';
 import { TotrinnsvurderingHastemarkering } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingHastemarkering';
 import { Markering, MarkeringHaster } from 'lib/types/oppgaveTypes';
-import { useFeatureFlag } from 'context/UnleashContext';
 
 import { clientFjernMarkeringForBehandling } from 'lib/clientApi';
 import { isLocal } from 'lib/utils/environment';
@@ -71,8 +70,6 @@ export const TotrinnsvurderingForm = ({
     erKvalitetssikring ? 'KVALITETSSIKRING' : 'FATTE_VEDTAK'
   );
 
-  const featureFlagHastemarkeringBoks = useFeatureFlag('VisBoksForVurderingOmHastemarkeringSkalFjernes');
-
   const { addHendelse, varighetHendelseRef, hendelseSerieRef } = useUmamiVarighetHendelser(
     erKvalitetssikring ? 'KVALITETSSIKRER_VARIGHET_HENDELSER' : 'BESLUTTER_VARIGHET_HENDELSER'
   );
@@ -84,8 +81,7 @@ export const TotrinnsvurderingForm = ({
 
   const totrinnsvurderinger = defaultValue.totrinnsvurderinger;
   const erBehandlingHastemarkert = hastemarkering !== undefined;
-  const skalFjerningAvHastemarkeringVurderes =
-    erBehandlingHastemarkert && erKvalitetssikring && featureFlagHastemarkeringBoks;
+  const skalFjerningAvHastemarkeringVurderes = erBehandlingHastemarkert && erKvalitetssikring;
 
   const { form } = useConfigForm<FormFieldsToTrinnsVurdering>({
     totrinnsvurderinger: {
