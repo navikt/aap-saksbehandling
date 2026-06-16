@@ -215,22 +215,22 @@ describe('RedigerMeldekortModal', () => {
       expect(document.getElementById('rapporteringskalender')).not.toBeInTheDocument();
     });
 
-    it('viser timerkalender når bruker har levert timer', async () => {
+    it('viser ikke timerkalender selv om bruker har levert timer', async () => {
       render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekortMedDager} />);
       await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Registrere at bruker har meldt seg');
 
-      expect(document.getElementById('rapporteringskalender')).toBeInTheDocument();
-      expect(screen.queryByText('Bruker har ikke levert noen timer.')).not.toBeInTheDocument();
+      expect(document.getElementById('rapporteringskalender')).not.toBeInTheDocument();
     });
 
-    it('timer-input er readOnly i kalender når bruker har levert timer og årsak er Registrere at bruker har meldt seg', async () => {
+    it('viser ikke alert "Bruker har ikke levert noen timer" når bruker har levert timer', async () => {
       render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekortMedDager} />);
       await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Registrere at bruker har meldt seg');
 
-      const kalender = document.getElementById('rapporteringskalender')!;
-      const inputs = kalender.querySelectorAll('input');
-      expect(inputs.length).toBeGreaterThan(0);
-      inputs.forEach((input) => expect(input).toHaveAttribute('readonly'));
+      expect(
+        screen.queryByText(
+          'Bruker har ikke levert noen timer. Det vil ikke gå noen utbetaling før bruker registrerer timer i meldekortet.'
+        )
+      ).not.toBeInTheDocument();
     });
 
     it('viser label "Dato brukeren meldte seg for Nav" på meldedato-feltet', async () => {

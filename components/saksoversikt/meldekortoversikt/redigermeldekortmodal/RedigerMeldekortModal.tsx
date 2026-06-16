@@ -100,7 +100,7 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
   const fom = new Dato(meldekort.meldeperiode.fom);
   const tom = new Dato(meldekort.meldeperiode.tom);
 
-  const årsak = form.getValues('årsak');
+  const årsak = form.watch('årsak');
 
   const erÅrsakLevereMeldekort = årsak === Årsaker.LEVERE_MELDEKORT_FOR_BRUKER;
   const erÅrsakRegistrereMeldedato = årsak === Årsaker.REGISTRERE_MELDEDATO;
@@ -109,7 +109,7 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
   const brukerHarLevertTimer = meldekort.meldekort?.dager.some((dag) => dag.timerArbeidet > 0) ?? false;
 
   const skalViseMeldedato = erÅrsakLevereMeldekort || erÅrsakRegistrereMeldedato;
-  const skalViseTimer = erÅrsakLevereMeldekort || (erÅrsakRegistrereMeldedato && brukerHarLevertTimer);
+  const skalViseTimer = erÅrsakLevereMeldekort;
   const skalViseAlertForIngenTimer = erÅrsakRegistrereMeldedato && !brukerHarLevertTimer;
   const meldeDatoLabel =
     årsak === Årsaker.REGISTRERE_MELDEDATO ? 'Dato brukeren meldte seg for Nav' : 'Dato brukeren meldte opplysningene';
