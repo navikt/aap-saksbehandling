@@ -60,7 +60,7 @@ export const SykdomsvurderingFormInput = ({
   const skalViseNedsettelse = harNedsattArbeidsevne === 'JA' || harNedsattArbeidsevne === 'JA_FORBIGÅENDE_PROBLEMER';
   const skalViseNeiMenStudent = useFeatureFlag('StudentV2');
   const skalViseStudentSoknad =
-    studentgrunnlag.oppgittStudent?.erStudentStatus === 'AVBRUTT' &&
+    skalViseNeiMenStudent && studentgrunnlag.oppgittStudent?.erStudentStatus === 'AVBRUTT' &&
     (studentgrunnlag.oppgittStudent?.skalGjenopptaStudieStatus === 'JA' ||
       studentgrunnlag.oppgittStudent?.skalGjenopptaStudieStatus === 'VET_IKKE');
 
