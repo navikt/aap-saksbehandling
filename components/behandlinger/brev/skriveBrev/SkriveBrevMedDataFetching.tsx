@@ -104,7 +104,7 @@ export const SkriveBrevMedDataFetching = async ({
           behandlingVersjon={behandlingVersjon}
           readOnly={readOnlyBrev}
           refusjonskravgrunnlag={refusjonGrunnlag.data}
-          behandlingstype={behandlingstype}
+          brevtype={brev?.brevtype}
         />
       )}
       {!brukNyBrevbygger && brev.brev && (
@@ -119,7 +119,7 @@ export const SkriveBrevMedDataFetching = async ({
           readOnly={readOnlyBrev}
           signaturer={brev.signaturer}
           behandlingVersjon={behandlingVersjon}
-          behandlingstype={behandlingstype}
+          brevtype={brev?.brevtype}
         />
       )}
     </div>

@@ -62,7 +62,6 @@ export const Formkrav = async ({ behandlingsreferanse, flyt }: Props) => {
           visAvbryt={false}
           behandlingVersjon={behandlingVersjon}
           aktivtSteg={flyt.aktivtSteg}
-          behandlingstype={flyt.visning.typeBehandling}
         />
       )}
       {stegSomSkalVises.includes('BEHANDLENDE_ENHET') && (
