@@ -1596,10 +1596,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aap-postmottak-backend-typescript-types@npm:0.0.736":
-  version: 0.0.736
-  resolution: "@navikt/aap-postmottak-backend-typescript-types@npm:0.0.736::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-postmottak-backend-typescript-types%2F0.0.736%2F6fb7da7b2b777bd253020630bb34408abc9cbb18"
-  checksum: 10c0/a30882fcb27c5670a849bf0173ccb516ca10fa62d72e84456917d0e187f0a058acdd19dcd6bf2d31c8f99aa95dabad897b7e82f52c0a6a9977f4a6ad9aa0377a
+"@navikt/aap-postmottak-backend-typescript-types@npm:0.0.752":
+  version: 0.0.752
+  resolution: "@navikt/aap-postmottak-backend-typescript-types@npm:0.0.752::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-postmottak-backend-typescript-types%2F0.0.752%2Fe40a1f8c7317fd72163cd0c820035070daf9dd30"
+  checksum: 10c0/2f92f1a0a9257399f81667ef3b5ec616458b9480808a243b6987c59bfc785aae5124fa331f895dc5d322f47fd372c68e3b4cc51234656c7118250f49fa8be3b1
   languageName: node
   linkType: hard
 
@@ -3063,7 +3063,7 @@ __metadata:
     "@navikt/aap-breveditor-css": "npm:0.6.0"
     "@navikt/aap-felles-prettier": "npm:5.6.3"
     "@navikt/aap-oppgave-typescript-types": "npm:0.0.803"
-    "@navikt/aap-postmottak-backend-typescript-types": "npm:0.0.736"
+    "@navikt/aap-postmottak-backend-typescript-types": "npm:0.0.752"
     "@navikt/aksel": "npm:8.11.1"
     "@navikt/aksel-icons": "npm:8.11.1"
     "@navikt/diagnosekoder": "npm:1.2026.0"
