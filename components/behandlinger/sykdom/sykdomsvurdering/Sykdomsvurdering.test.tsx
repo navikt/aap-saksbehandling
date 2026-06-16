@@ -79,7 +79,6 @@ const diagnoserDefaultOptions: DiagnoserDefaultOptions = {
   },
 };
 
-
 const studentgrunnlag: StudentGrunnlag = {
   behøverVurderinger: [],
   harTilgangTilÅSaksbehandle: true,
@@ -707,7 +706,7 @@ describe('yrkesskade', () => {
           typeBehandling={'Førstegangsbehandling'}
           erOvergangArbeid={false}
           erRevurderingStudent={false}
-        studentgrunnlag={studentgrunnlag}
+          studentgrunnlag={studentgrunnlag}
         />
       );
       await velgAtBrukerHarSykdomSkadeLyte();
@@ -727,7 +726,7 @@ describe('yrkesskade', () => {
           typeBehandling={'Førstegangsbehandling'}
           erOvergangArbeid={false}
           erRevurderingStudent={false}
-        studentgrunnlag={studentgrunnlag}
+          studentgrunnlag={studentgrunnlag}
         />
       );
       await velgAtBrukerHarSykdomSkadeLyte();
@@ -751,7 +750,7 @@ describe('yrkesskade', () => {
           typeBehandling={'Førstegangsbehandling'}
           erOvergangArbeid={false}
           erRevurderingStudent={false}
-        studentgrunnlag={studentgrunnlag}
+          studentgrunnlag={studentgrunnlag}
         />
       );
       await velgAtBrukerHarSykdomSkadeLyte();
@@ -778,7 +777,7 @@ describe('yrkesskade', () => {
           typeBehandling={'Førstegangsbehandling'}
           erOvergangArbeid={false}
           erRevurderingStudent={false}
-        studentgrunnlag={studentgrunnlag}
+          studentgrunnlag={studentgrunnlag}
         />
       );
       await velgAtBrukerHarSykdomSkadeLyte();
@@ -798,7 +797,7 @@ describe('yrkesskade', () => {
           typeBehandling={'Førstegangsbehandling'}
           erOvergangArbeid={false}
           erRevurderingStudent={false}
-        studentgrunnlag={studentgrunnlag}
+          studentgrunnlag={studentgrunnlag}
         />
       );
       await velgAtBrukerHarSykdomSkadeLyte();
