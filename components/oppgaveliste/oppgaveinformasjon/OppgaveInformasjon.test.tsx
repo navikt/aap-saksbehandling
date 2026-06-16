@@ -82,6 +82,34 @@ describe('OppgaveInformasjon', () => {
     expect(tekst).toBeVisible();
   });
 
+  it('skal vise hvem som gjorde forrige kvalitetssikring hvis retur fra veileder', () => {
+    render(
+      <OppgaveInformasjon
+        oppgave={{
+          ...oppgave,
+          returInformasjon: {
+            status: NoNavAapOppgaveReturInformasjonStatus.RETUR_FRA_VEILEDER,
+            begrunnelse: 'Hei',
+            årsaker: [],
+            endretAv: 'Veileder',
+          },
+          forrigeKvalitetssikrerInfo: {
+            forrigeKvalitetssikrerIdent: 'T1234',
+            forrigeKvalitetssikrerNavn: 'Kvalitetssikrer',
+          },
+        }}
+      />
+    );
+
+    const icon = screen.getByRole('img', { name: 'Retur fra veileder' });
+    expect(icon).toBeVisible();
+
+    user.click(icon);
+
+    const tekst = screen.getByText('Sist kvalitetssikret av');
+    expect(tekst).toBeVisible();
+  });
+
   it('skal vise ikon for adressebeskyttelse hvis brukeren er kode 7', () => {
     render(<OppgaveInformasjon oppgave={{ ...oppgave, harFortroligAdresse: true }} />);
     expect(screen.getByRole('img', { name: 'Adressebeskyttelse Ikon' })).toBeVisible();
