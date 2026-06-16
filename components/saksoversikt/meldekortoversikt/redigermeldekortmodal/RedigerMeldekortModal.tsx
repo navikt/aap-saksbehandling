@@ -43,7 +43,7 @@ interface Dag {
 }
 
 export enum Årsaker {
-  REGISTRERE_MELDEDATO = 'Registrere meldedato',
+  REGISTRERE_MELDEDATO = 'Registrere at bruker har meldt seg',
   LEVERE_MELDEKORT_FOR_BRUKER = 'Lever/endre meldekort for bruker',
   OVERSTYRE_BRUKER = 'Overstyre bruker',
 }
@@ -85,9 +85,7 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
     };
   };
 
-  const defaultValues = getDefaultValuesForForm(meldekort);
-
-  const form = useForm({ defaultValues });
+  const form = useForm({ defaultValues: getDefaultValuesForForm(meldekort) });
 
   useEffect(() => {
     if (isOpen && meldekort) {
@@ -102,7 +100,7 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
   const fom = new Dato(meldekort.meldeperiode.fom);
   const tom = new Dato(meldekort.meldeperiode.tom);
 
-  const årsak = form.watch('årsak');
+  const årsak = form.getValues('årsak');
 
   const erÅrsakLevereMeldekort = årsak === Årsaker.LEVERE_MELDEKORT_FOR_BRUKER;
   const erÅrsakRegistrereMeldedato = årsak === Årsaker.REGISTRERE_MELDEDATO;
@@ -113,6 +111,8 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
   const skalViseMeldedato = erÅrsakLevereMeldekort || erÅrsakRegistrereMeldedato;
   const skalViseTimer = erÅrsakLevereMeldekort || (erÅrsakRegistrereMeldedato && brukerHarLevertTimer);
   const skalViseAlertForIngenTimer = erÅrsakRegistrereMeldedato && !brukerHarLevertTimer;
+  const meldeDatoLabel =
+    årsak === Årsaker.REGISTRERE_MELDEDATO ? 'Dato brukeren meldte seg for Nav' : 'Dato brukeren meldte opplysningene';
 
   const tidligereInnsendteMeldekort = kobleDokumentInfoTilTidligereMeldekort(meldekort, dokumenter);
   const errorList = hentFeilmeldingerForForm(form.formState.errors);
@@ -172,8 +172,7 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
                     <DateInputWrapper
                       control={form.control}
                       name={'meldedato'}
-                      label={'Meldedato'}
-                      description={'Meldekortet regnes som levert på denne datoen.'}
+                      label={meldeDatoLabel}
                       rules={{
                         required: 'Du må legge til en meldedato for meldekortet.',
                         validate: {
