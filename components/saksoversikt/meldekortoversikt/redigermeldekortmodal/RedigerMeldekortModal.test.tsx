@@ -121,6 +121,19 @@ describe('RedigerMeldekortModal', () => {
     expect(screen.getByRole('combobox', { name: /årsak/i })).toBeVisible();
   });
 
+  it('inneholder "Registrere at bruker har meldt seg" som årsak-valg', () => {
+    render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
+    expect(screen.getByRole('option', { name: 'Registrere at bruker har meldt seg' })).toBeInTheDocument();
+  });
+
+  it('viser ikke "Meldedato" som label på datofelt – beskrivelse er fjernet', async () => {
+    render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
+    await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Lever/endre meldekort for bruker');
+
+    expect(screen.queryByText('Meldekortet regnes som levert på denne datoen.')).not.toBeInTheDocument();
+    expect(screen.queryByLabelText(/^meldedato$/i)).not.toBeInTheDocument();
+  });
+
   it('viser Avbryt- og Bekreft-knapper', () => {
     render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
     expect(screen.getByRole('button', { name: 'Avbryt' })).toBeVisible();
@@ -137,15 +150,15 @@ describe('RedigerMeldekortModal', () => {
     render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
     await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Lever/endre meldekort for bruker');
 
-    expect(screen.getByLabelText(/meldedato/i)).toBeVisible();
+    expect(screen.getByLabelText('Dato brukeren meldte opplysningene')).toBeVisible();
     expect(document.getElementById('rapporteringskalender')).toBeInTheDocument();
   });
 
-  it('viser kun meldedato ved årsak "Registrere meldedato"', async () => {
+  it('viser kun meldedato ved årsak "Registrere at bruker har meldt seg"', async () => {
     render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
-    await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Registrere meldedato');
+    await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Registrere at bruker har meldt seg');
 
-    expect(screen.getByLabelText(/meldedato/i)).toBeVisible();
+    expect(screen.getByLabelText('Dato brukeren meldte seg for Nav')).toBeVisible();
     expect(document.getElementById('rapporteringskalender')).not.toBeInTheDocument();
   });
 
@@ -177,10 +190,10 @@ describe('RedigerMeldekortModal', () => {
     expect(screen.getByRole('heading', { name: 'Endre meldekort for uke 2 - 3' })).toBeVisible();
   });
 
-  describe('Registrere meldedato', () => {
+  describe('Registrere at bruker har meldt seg', () => {
     it('viser alert "Bruker har ikke levert noen timer" når meldekort mangler', async () => {
       render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
-      await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Registrere meldedato');
+      await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Registrere at bruker har meldt seg');
 
       expect(
         screen.getByText(
@@ -192,7 +205,7 @@ describe('RedigerMeldekortModal', () => {
 
     it('viser alert "Bruker har ikke levert noen timer" når alle dager har 0 timer', async () => {
       render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekortMedNullTimer} />);
-      await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Registrere meldedato');
+      await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Registrere at bruker har meldt seg');
 
       expect(
         screen.getByText(
@@ -202,22 +215,29 @@ describe('RedigerMeldekortModal', () => {
       expect(document.getElementById('rapporteringskalender')).not.toBeInTheDocument();
     });
 
-    it('viser timerkalender når bruker har levert timer', async () => {
+    it('viser ikke timerkalender selv om bruker har levert timer', async () => {
       render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekortMedDager} />);
-      await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Registrere meldedato');
+      await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Registrere at bruker har meldt seg');
 
-      expect(document.getElementById('rapporteringskalender')).toBeInTheDocument();
-      expect(screen.queryByText('Bruker har ikke levert noen timer.')).not.toBeInTheDocument();
+      expect(document.getElementById('rapporteringskalender')).not.toBeInTheDocument();
     });
 
-    it('timer-input er readOnly i kalender når bruker har levert timer og årsak er Registrere meldedato', async () => {
+    it('viser ikke alert "Bruker har ikke levert noen timer" når bruker har levert timer', async () => {
       render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekortMedDager} />);
-      await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Registrere meldedato');
+      await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Registrere at bruker har meldt seg');
 
-      const kalender = document.getElementById('rapporteringskalender')!;
-      const inputs = kalender.querySelectorAll('input');
-      expect(inputs.length).toBeGreaterThan(0);
-      inputs.forEach((input) => expect(input).toHaveAttribute('readonly'));
+      expect(
+        screen.queryByText(
+          'Bruker har ikke levert noen timer. Det vil ikke gå noen utbetaling før bruker registrerer timer i meldekortet.'
+        )
+      ).not.toBeInTheDocument();
+    });
+
+    it('viser label "Dato brukeren meldte seg for Nav" på meldedato-feltet', async () => {
+      render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
+      await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Registrere at bruker har meldt seg');
+
+      expect(screen.getByLabelText('Dato brukeren meldte seg for Nav')).toBeVisible();
     });
   });
 
@@ -230,6 +250,13 @@ describe('RedigerMeldekortModal', () => {
       const inputs = kalender.querySelectorAll('input');
       expect(inputs.length).toBeGreaterThan(0);
       inputs.forEach((input) => expect(input).not.toHaveAttribute('readonly'));
+    });
+
+    it('viser label "Dato brukeren meldte opplysningene" på meldedato-feltet', async () => {
+      render(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
+      await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Lever/endre meldekort for bruker');
+
+      expect(screen.getByLabelText('Dato brukeren meldte opplysningene')).toBeVisible();
     });
 
     it('viser ikke alert om ingen timer', async () => {
@@ -313,8 +340,8 @@ describe('RedigerMeldekortModal', () => {
   describe('Meldedato validering', () => {
     const fyllUtOgSubmit = async (meldedato: string) => {
       await user.type(screen.getByRole('textbox', { name: /begrunnelse/i }), 'Begrunnelse for endring');
-      await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Registrere meldedato');
-      await user.type(screen.getByLabelText(/meldedato/i), meldedato);
+      await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Registrere at bruker har meldt seg');
+      await user.type(screen.getByLabelText('Dato brukeren meldte seg for Nav'), meldedato);
       await user.click(screen.getByRole('button', { name: 'Bekreft' }));
     };
 
