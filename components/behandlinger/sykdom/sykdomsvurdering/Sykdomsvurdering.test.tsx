@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { customRenderWithSøknadstidspunkt, render, screen, within } from 'lib/test/CustomRender';
 import { userEvent } from '@testing-library/user-event';
-import { MellomlagretVurderingResponse, SykdomsGrunnlag, Sykdomvurdering } from 'lib/types/types';
+import { MellomlagretVurderingResponse, StudentGrunnlag, SykdomsGrunnlag, Sykdomvurdering } from 'lib/types/types';
 import { addDays, format, subDays } from 'date-fns';
 import { FetchResponse } from 'lib/utils/api';
 import createFetchMock from 'vitest-fetch-mock';
@@ -79,6 +79,16 @@ const diagnoserDefaultOptions: DiagnoserDefaultOptions = {
   },
 };
 
+
+const studentgrunnlag: StudentGrunnlag = {
+  behøverVurderinger: [],
+  harTilgangTilÅSaksbehandle: true,
+  ikkeRelevantePerioder: [],
+  kanVurderes: [],
+  nyeVurderinger: [],
+  sisteVedtatteVurderinger: [],
+};
+
 beforeEach(() => {
   setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'AVKLAR_SYKDOM' });
 });
@@ -94,6 +104,7 @@ describe('generelt', () => {
         typeBehandling={'Førstegangsbehandling'}
         erOvergangArbeid={false}
         erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
       />
     );
     const heading = screen.getByRole('heading', { name: '§ 11-5 Nedsatt arbeidsevne og krav til årsakssammenheng' });
@@ -110,6 +121,7 @@ describe('generelt', () => {
         typeBehandling={'Førstegangsbehandling'}
         erOvergangArbeid={false}
         erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
       />
     );
     await velgAtBrukerHarSykdomSkadeLyte();
@@ -139,6 +151,7 @@ describe('generelt', () => {
         typeBehandling={'Førstegangsbehandling'}
         erOvergangArbeid={false}
         erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
       />
     );
 
@@ -181,6 +194,7 @@ describe('felt for begrunnelse', () => {
         typeBehandling={'Førstegangsbehandling'}
         erOvergangArbeid={false}
         erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
       />
     );
     const textbox = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
@@ -197,6 +211,7 @@ describe('felt for begrunnelse', () => {
         typeBehandling={'Førstegangsbehandling'}
         erOvergangArbeid={false}
         erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
       />
     );
 
@@ -221,6 +236,7 @@ describe('felt for begrunnelse', () => {
         typeBehandling={'Førstegangsbehandling'}
         erOvergangArbeid={false}
         erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
       />
     );
 
@@ -245,6 +261,7 @@ describe('felt for om brukeren har sykdom, skade eller lyte', () => {
         typeBehandling={'Førstegangsbehandling'}
         erOvergangArbeid={false}
         erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
       />
     );
     expect(screen.getByRole('radiogroup', { name: 'Har brukeren sykdom, skade eller lyte?' })).toBeVisible();
@@ -260,6 +277,7 @@ describe('felt for om brukeren har sykdom, skade eller lyte', () => {
         typeBehandling={'Førstegangsbehandling'}
         erOvergangArbeid={false}
         erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
       />
     );
     await velgBekreft();
@@ -280,6 +298,7 @@ describe('felt for om arbeidsevnen er nedsatt', () => {
         typeBehandling={'Førstegangsbehandling'}
         erOvergangArbeid={false}
         erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
       />
     );
     await velgAtBrukerHarSykdomSkadeLyte();
@@ -297,6 +316,7 @@ describe('felt for om arbeidsevnen er nedsatt', () => {
         typeBehandling={'Førstegangsbehandling'}
         erOvergangArbeid={false}
         erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
       />
     );
     await velgAtBrukerHarSykdomSkadeLyte();
@@ -319,6 +339,7 @@ describe('felt for å sette diagnoser', () => {
         typeBehandling={'Førstegangsbehandling'}
         erOvergangArbeid={false}
         erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
       />
     );
 
@@ -335,6 +356,7 @@ describe('felt for å sette diagnoser', () => {
         typeBehandling={'Førstegangsbehandling'}
         erOvergangArbeid={false}
         erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
       />
     );
 
@@ -353,6 +375,7 @@ describe('felt for å sette diagnoser', () => {
         typeBehandling={'Førstegangsbehandling'}
         erOvergangArbeid={false}
         erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
       />
     );
 
@@ -374,6 +397,7 @@ describe('felt for å sette diagnoser', () => {
         typeBehandling={'Førstegangsbehandling'}
         erOvergangArbeid={false}
         erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
       />
     );
 
@@ -394,6 +418,7 @@ describe('felt for å sette diagnoser', () => {
         typeBehandling={'Førstegangsbehandling'}
         erOvergangArbeid={false}
         erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
       />
     );
 
@@ -417,6 +442,7 @@ describe('felt for å sette diagnoser', () => {
         typeBehandling={'Førstegangsbehandling'}
         erOvergangArbeid={false}
         erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
       />
     );
 
@@ -437,6 +463,7 @@ describe('felt for å sette diagnoser', () => {
         typeBehandling={'Førstegangsbehandling'}
         erOvergangArbeid={false}
         erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
       />
     );
 
@@ -463,6 +490,7 @@ describe('felt for å sette diagnoser', () => {
         typeBehandling={'Førstegangsbehandling'}
         erOvergangArbeid={false}
         erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
       />
     );
 
@@ -493,6 +521,7 @@ describe('felt for nedsettelsen er av en viss varighet', () => {
         typeBehandling={'Førstegangsbehandling'}
         erOvergangArbeid={false}
         erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
       />
     );
 
@@ -526,6 +555,7 @@ describe('felt for nedsettelsen er av en viss varighet', () => {
         typeBehandling={'Førstegangsbehandling'}
         erOvergangArbeid={false}
         erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
       />
     );
     await velgAtBrukerHarSykdomSkadeLyte();
@@ -557,6 +587,7 @@ describe('felt for om arbeidsevnen er nedsatt med minst halvparten', () => {
         typeBehandling={'Førstegangsbehandling'}
         erOvergangArbeid={false}
         erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
       />
     );
     await velgAtBrukerHarSykdomSkadeLyte();
@@ -575,6 +606,7 @@ describe('felt for om arbeidsevnen er nedsatt med minst halvparten', () => {
         typeBehandling={'Førstegangsbehandling'}
         erOvergangArbeid={false}
         erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
       />
     );
     await velgAtBrukerHarSykdomSkadeLyte();
@@ -598,6 +630,7 @@ describe('felt for om sykdom, skade eller lyte er vestenlig medvirkende til at a
         typeBehandling={'Førstegangsbehandling'}
         erOvergangArbeid={false}
         erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
       />
     );
     await velgAtBrukerHarSykdomSkadeLyte();
@@ -621,6 +654,7 @@ describe('felt for om sykdom, skade eller lyte er vestenlig medvirkende til at a
         typeBehandling={'Førstegangsbehandling'}
         erOvergangArbeid={false}
         erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
       />
     );
     await velgAtBrukerHarSykdomSkadeLyte();
@@ -645,6 +679,7 @@ describe('felt for om sykdom, skade eller lyte er vestenlig medvirkende til at a
         typeBehandling={'Førstegangsbehandling'}
         erOvergangArbeid={false}
         erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
       />
     );
     await velgAtBrukerHarSykdomSkadeLyte();
@@ -672,6 +707,7 @@ describe('yrkesskade', () => {
           typeBehandling={'Førstegangsbehandling'}
           erOvergangArbeid={false}
           erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
         />
       );
       await velgAtBrukerHarSykdomSkadeLyte();
@@ -691,6 +727,7 @@ describe('yrkesskade', () => {
           typeBehandling={'Førstegangsbehandling'}
           erOvergangArbeid={false}
           erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
         />
       );
       await velgAtBrukerHarSykdomSkadeLyte();
@@ -714,6 +751,7 @@ describe('yrkesskade', () => {
           typeBehandling={'Førstegangsbehandling'}
           erOvergangArbeid={false}
           erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
         />
       );
       await velgAtBrukerHarSykdomSkadeLyte();
@@ -740,6 +778,7 @@ describe('yrkesskade', () => {
           typeBehandling={'Førstegangsbehandling'}
           erOvergangArbeid={false}
           erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
         />
       );
       await velgAtBrukerHarSykdomSkadeLyte();
@@ -759,6 +798,7 @@ describe('yrkesskade', () => {
           typeBehandling={'Førstegangsbehandling'}
           erOvergangArbeid={false}
           erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
         />
       );
       await velgAtBrukerHarSykdomSkadeLyte();
@@ -787,6 +827,7 @@ describe('vurderinger uten viss varighet', () => {
         typeBehandling={'Revurdering'}
         erOvergangArbeid={false}
         erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
       />
     );
 
@@ -805,6 +846,7 @@ describe('vurderinger uten viss varighet', () => {
         initialMellomlagretVurdering={undefined}
         erOvergangArbeid={false}
         erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
       />,
       today
     );
@@ -840,6 +882,7 @@ describe('vurderinger uten viss varighet', () => {
         typeBehandling={'Revurdering'}
         erOvergangArbeid={false}
         erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
       />,
       format(subDays(new Date(), 4), 'yyyy-MM-dd')
     );
@@ -862,6 +905,7 @@ describe('vurderinger uten viss varighet', () => {
         typeBehandling={'Revurdering'}
         erOvergangArbeid={false}
         erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
       />,
       format(søknadstidspunkt, 'yyyy-MM-dd')
     );
@@ -884,6 +928,7 @@ describe('vurderinger uten viss varighet', () => {
         typeBehandling={'Revurdering'}
         erOvergangArbeid={false}
         erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
       />,
       format(søknadstidspunkt, 'yyyy-MM-dd')
     );
@@ -919,6 +964,7 @@ describe('vurderinger uten viss varighet', () => {
         typeBehandling={'Revurdering'}
         erOvergangArbeid={false}
         erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
       />,
       format(søknadstidspunkt, 'yyyy-MM-dd')
     );
@@ -942,6 +988,7 @@ describe('vurderinger uten viss varighet', () => {
         typeBehandling={'Revurdering'}
         erOvergangArbeid={false}
         erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
       />,
       format(søknadstidspunkt, 'yyyy-MM-dd')
     );
@@ -1009,6 +1056,7 @@ describe('mellomlagring i sykdom', () => {
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
         erOvergangArbeid={false}
         erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
       />
     );
     const tekst = screen.getByText('Utkast lagret 21.08.2025 12:00 (Jan T. Loven)');
@@ -1026,6 +1074,7 @@ describe('mellomlagring i sykdom', () => {
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
         erOvergangArbeid={false}
         erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
       />
     );
 
@@ -1051,6 +1100,7 @@ describe('mellomlagring i sykdom', () => {
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
         erOvergangArbeid={false}
         erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
       />
     );
     const begrunnelseFelt = screen.getByRole('textbox', {
@@ -1070,6 +1120,7 @@ describe('mellomlagring i sykdom', () => {
         typeBehandling={'Førstegangsbehandling'}
         erOvergangArbeid={false}
         erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
       />
     );
     const begrunnelseFelt = screen.getByRole('textbox', {
@@ -1090,6 +1141,7 @@ describe('mellomlagring i sykdom', () => {
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
         erOvergangArbeid={false}
         erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
       />
     );
     await user.type(screen.getByRole('textbox', { name: 'Vilkårsvurdering' }), ' her er ekstra tekst');
@@ -1126,6 +1178,7 @@ describe('mellomlagring i sykdom', () => {
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
         erOvergangArbeid={false}
         erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
       />
     );
     await user.type(screen.getByRole('textbox', { name: 'Vilkårsvurdering' }), ' her er ekstra tekst');
@@ -1156,6 +1209,7 @@ describe('mellomlagring i sykdom', () => {
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
         erOvergangArbeid={false}
         erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
       />
     );
 
@@ -1188,6 +1242,7 @@ describe('mellomlagring i sykdom', () => {
         initialMellomlagretVurdering={mellomlagringGammel.mellomlagretVurdering}
         erOvergangArbeid={false}
         erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
       />
     );
 

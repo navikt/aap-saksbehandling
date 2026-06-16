@@ -9,6 +9,7 @@ import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import {
   ArbeidsevneNedsattValg,
   MellomlagretVurdering,
+  StudentGrunnlag,
   SykdomsGrunnlag,
   TypeBehandling,
   VurderingFormMeta,
@@ -77,6 +78,7 @@ interface SykdomProps {
   initialMellomlagretVurdering?: MellomlagretVurdering;
   erOvergangArbeid: boolean;
   erRevurderingStudent: boolean;
+  studentgrunnlag: StudentGrunnlag;
 }
 
 export const Sykdomsvurdering = ({
@@ -88,6 +90,7 @@ export const Sykdomsvurdering = ({
   initialMellomlagretVurdering,
   erOvergangArbeid,
   erRevurderingStudent,
+  studentgrunnlag,
 }: SykdomProps) => {
   const { behandlingsreferanse } = useParamsMedType();
   const { sak } = useSak();
@@ -246,6 +249,7 @@ export const Sykdomsvurdering = ({
               skalVurdereYrkesskade={grunnlag.skalVurdereYrkesskade}
               rettighetsperiodeStartdato={førsteDatoSomKanVurderes}
               diagnoseDefaultOptions={diagnoseDefaultOptions}
+              studentgrunnlag={studentgrunnlag}
             />
           </NyVurderingExpandableCard>
         ))}
