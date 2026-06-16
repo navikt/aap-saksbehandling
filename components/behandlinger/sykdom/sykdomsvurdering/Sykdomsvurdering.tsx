@@ -36,7 +36,7 @@ import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/sy
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
-import { VStack } from '@navikt/ds-react';
+import { InfoCard, VStack } from '@navikt/ds-react';
 import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
 import {
   emptySykdomsvurderingMedDefaultBegrunnelse,
@@ -51,6 +51,7 @@ import { Alert } from 'components/alert/Alert';
 import useSWR from 'swr';
 import { clientHentRelevanteDokumenter } from 'lib/dokumentClientApi';
 import { isSuccess } from 'lib/utils/api';
+import { LightBulbIcon } from '@navikt/aksel-icons';
 
 export interface SykdomsvurderingerForm {
   vurderinger: Array<Sykdomsvurdering>;
@@ -205,11 +206,13 @@ export const Sykdomsvurdering = ({
         <EksterneLenkerIVilkårskort steg={'AVKLAR_SYKDOM'} />
 
         {har39UkersSykmelding && (
-          <Alert variant={'info'}>
-            {
-              'Nav har tidligere mottatt helseopplysninger som kan være relevant for brukers AAP-sak. Trykk på "be om opplysninger" i menyen til høyre for å se dokumentene.'
-            }
-          </Alert>
+          <InfoCard data-color="meta-purple" size={'small'}>
+            <InfoCard.Message icon={<LightBulbIcon aria-hidden />}>
+              {
+                'Det er nylig mottatt en 39-ukers sykemelding på saken. Du finner den under "Be om opplysninger" i høyre kolonne.'
+              }
+            </InfoCard.Message>
+          </InfoCard>
         )}
 
         {erOvergangArbeid && (
