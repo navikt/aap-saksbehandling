@@ -53,7 +53,6 @@ export const GruppeSteg = ({
           behandlingReferanse={behandlingReferanse}
           behandlingVersjon={behandlingVersjon}
           aktivtSteg={aktivtSteg}
-          behandlingstype={visning.typeBehandling}
         />
       )}
       {children}

@@ -3,7 +3,7 @@ import { Dato } from 'lib/types/Dato';
 import { isAfter } from 'date-fns';
 import { DagDto, MeldeperiodeMedMeldekortDto, MeldepliktStatuser } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import { FørteTimer } from 'components/saksoversikt/meldekortoversikt/meldekorttabell/førtetimer/FørteTimer';
+import { MeldekortExpandableContent } from 'components/saksoversikt/meldekortoversikt/meldekorttabell/meldekortexpandablecontent/MeldekortExpandableContent';
 import { hentUkeNummerForPeriode } from '../MeldekortTabell';
 import { PencilIcon } from '@navikt/aksel-icons';
 import { useSakPersonInformasjon } from 'hooks/saksbehandling/SakPersoninformasjonHook';
@@ -28,7 +28,7 @@ export const MeldekortTabellRow = ({ meldePeriodeMedMeldekort, setSelectedMeldek
   return (
     <Table.ExpandableRow
       expandOnRowClick
-      content={<FørteTimer meldekort={meldePeriodeMedMeldekort} />}
+      content={<MeldekortExpandableContent meldekort={meldePeriodeMedMeldekort} />}
       togglePlacement={'right'}
     >
       <Table.HeaderCell textSize={'small'} colSpan={2} scope={'row'}>
