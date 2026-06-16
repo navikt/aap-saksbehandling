@@ -21,7 +21,7 @@ import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupW
 import { defaultBegrunnelse } from 'components/behandlinger/sykdom/sykdomsvurdering/sykdomsvurdering-utils';
 import { useFeatureFlag } from 'context/UnleashContext';
 import { Alert } from 'components/alert/Alert';
-import { RelevantInformasjonStudent } from '../student/studentvurdering/RelevantInformasjonStudent';
+import { RelevantInformasjonStudent } from 'components/behandlinger/sykdom/student/studentvurdering/RelevantInformasjonStudent';
 
 interface Props {
   index: number;
@@ -59,6 +59,10 @@ export const SykdomsvurderingFormInput = ({
   const harNedsattArbeidsevne = form.watch(`vurderinger.${index}.harNedsattArbeidsevne`);
   const skalViseNedsettelse = harNedsattArbeidsevne === 'JA' || harNedsattArbeidsevne === 'JA_FORBIGÅENDE_PROBLEMER';
   const skalViseNeiMenStudent = useFeatureFlag('StudentV2');
+  const skalViseStudentSoknad =
+    studentgrunnlag.oppgittStudent?.erStudentStatus === 'AVBRUTT' &&
+    (studentgrunnlag.oppgittStudent?.skalGjenopptaStudieStatus === 'JA' ||
+      studentgrunnlag.oppgittStudent?.skalGjenopptaStudieStatus === 'VET_IKKE');
 
   return (
     <VStack gap={'space-20'}>
@@ -118,11 +122,7 @@ export const SykdomsvurderingFormInput = ({
             readOnly={readonly}
             diagnoseDefaultOptions={diagnoseDefaultOptions}
           />
-          {studentgrunnlag.oppgittStudent?.erStudentStatus == 'AVBRUTT' &&
-            (studentgrunnlag.oppgittStudent?.skalGjenopptaStudieStatus == 'JA' ||
-              studentgrunnlag.oppgittStudent?.skalGjenopptaStudieStatus == 'VET_IKKE') && (
-              <RelevantInformasjonStudent opplysninger={studentgrunnlag.oppgittStudent} />
-            )}
+          {skalViseStudentSoknad && <RelevantInformasjonStudent opplysninger={studentgrunnlag.oppgittStudent} />}
           <RadioGroupWrapper
             name={`vurderinger.${index}.harNedsattArbeidsevne`}
             control={form.control}

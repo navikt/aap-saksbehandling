@@ -1253,6 +1253,111 @@ describe('mellomlagring i sykdom', () => {
   });
 });
 
+describe('RelevantInformasjonStudent', () => {
+  const relevantInfoLabel = 'Relevant informasjon fra søknaden';
+
+  it('vises når erStudentStatus er AVBRUTT og skalGjenopptaStudieStatus er JA', async () => {
+    const studentgrunnlagMedJa: StudentGrunnlag = {
+      ...studentgrunnlag,
+      oppgittStudent: { erStudentStatus: 'AVBRUTT', skalGjenopptaStudieStatus: 'JA' },
+    };
+    render(
+      <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
+        grunnlag={grunnlagUtenYrkesskade}
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Førstegangsbehandling'}
+        erOvergangArbeid={false}
+        erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlagMedJa}
+      />
+    );
+    await velgAtBrukerHarSykdomSkadeLyte();
+    expect(screen.getByText(relevantInfoLabel)).toBeVisible();
+  });
+
+  it('vises når erStudentStatus er AVBRUTT og skalGjenopptaStudieStatus er VET_IKKE', async () => {
+    const studentgrunnlagMedVetIkke: StudentGrunnlag = {
+      ...studentgrunnlag,
+      oppgittStudent: { erStudentStatus: 'AVBRUTT', skalGjenopptaStudieStatus: 'VET_IKKE' },
+    };
+    render(
+      <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
+        grunnlag={grunnlagUtenYrkesskade}
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Førstegangsbehandling'}
+        erOvergangArbeid={false}
+        erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlagMedVetIkke}
+      />
+    );
+    await velgAtBrukerHarSykdomSkadeLyte();
+    expect(screen.getByText(relevantInfoLabel)).toBeVisible();
+  });
+
+  it('vises ikke når skalGjenopptaStudieStatus er NEI', async () => {
+    const studentgrunnlagMedNei: StudentGrunnlag = {
+      ...studentgrunnlag,
+      oppgittStudent: { erStudentStatus: 'AVBRUTT', skalGjenopptaStudieStatus: 'NEI' },
+    };
+    render(
+      <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
+        grunnlag={grunnlagUtenYrkesskade}
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Førstegangsbehandling'}
+        erOvergangArbeid={false}
+        erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlagMedNei}
+      />
+    );
+    await velgAtBrukerHarSykdomSkadeLyte();
+    expect(screen.queryByText(relevantInfoLabel)).not.toBeInTheDocument();
+  });
+
+  it('vises ikke når erStudentStatus ikke er AVBRUTT, selv om skalGjenopptaStudieStatus er JA', async () => {
+    const studentgrunnlagIkkeAvbrutt: StudentGrunnlag = {
+      ...studentgrunnlag,
+      oppgittStudent: { erStudentStatus: 'JA', skalGjenopptaStudieStatus: 'JA' },
+    };
+    render(
+      <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
+        grunnlag={grunnlagUtenYrkesskade}
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Førstegangsbehandling'}
+        erOvergangArbeid={false}
+        erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlagIkkeAvbrutt}
+      />
+    );
+    await velgAtBrukerHarSykdomSkadeLyte();
+    expect(screen.queryByText(relevantInfoLabel)).not.toBeInTheDocument();
+  });
+
+  it('vises ikke når oppgittStudent ikke er satt', async () => {
+    render(
+      <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
+        grunnlag={grunnlagUtenYrkesskade}
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Førstegangsbehandling'}
+        erOvergangArbeid={false}
+        erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
+      />
+    );
+    await velgAtBrukerHarSykdomSkadeLyte();
+    expect(screen.queryByText(relevantInfoLabel)).not.toBeInTheDocument();
+  });
+});
+
 const velgBekreft = async () => {
   const button = screen.getByRole('button', { name: 'Bekreft' });
   await user.click(button);
