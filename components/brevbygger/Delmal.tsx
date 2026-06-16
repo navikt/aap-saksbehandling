@@ -1,4 +1,5 @@
-import { Box, Heading, HStack, Loader, Switch, VStack } from '@navikt/ds-react';
+import { useState } from 'react';
+import { Box, Button, Heading, HStack, Loader, Switch, VStack } from '@navikt/ds-react';
 import { Control, Controller, useWatch } from 'react-hook-form';
 import { DelmalReferanse, FritekstType, ValgRef } from 'components/brevbygger/brevmodellTypes';
 import { BrevFormVerdier } from 'components/brevbygger/types';
@@ -7,6 +8,7 @@ import { DelmalFritekst } from 'components/brevbygger/Fritekst';
 
 import styles from './Delmal.module.css';
 import { StandardtekstBoks } from 'components/brevbygger/StandardtekstBoks';
+import { ChevronDownIcon, ChevronUpIcon } from 'components/DsClient';
 
 interface Props {
   delmalRef: DelmalReferanse;
@@ -14,6 +16,37 @@ interface Props {
   delmalInnhold: string | undefined;
   isLoading: boolean;
 }
+
+const ReadOnlyView = ({ children }: { children: React.ReactNode }) => {
+  const [showAll, toggleShowAll] = useState<boolean>(false);
+  return (
+    <div className={styles.readonlyWrapper}>
+      <div className={showAll ? '' : styles.readonlyFade} style={{ position: 'relative' }}>
+        {children}
+      </div>
+      <VStack>
+        <Button
+          variant={'tertiary'}
+          onClick={() => toggleShowAll(!showAll)}
+          icon={showAll ? <ChevronUpIcon aria-label="Skjul" /> : <ChevronDownIcon aria-label="Vis" />}
+        />
+      </VStack>
+    </div>
+  );
+};
+
+const SanityDelmal = ({ isLoading, delmalInnhold }: { isLoading: boolean; delmalInnhold: string | undefined }) => {
+  return (
+    <div className={`${styles.delmal} ${isLoading ? styles.loading : ''}`}>
+      {isLoading && (
+        <div className={styles.loader}>
+          <Loader transparent size={'3xlarge'} />
+        </div>
+      )}
+      {delmalInnhold && <div dangerouslySetInnerHTML={{ __html: delmalInnhold }} />}
+    </div>
+  );
+};
 
 export const Delmal = ({ delmalRef, control, delmalInnhold, isLoading }: Props) => {
   const { delmal, obligatorisk } = delmalRef;
@@ -31,6 +64,17 @@ export const Delmal = ({ delmalRef, control, delmalInnhold, isLoading }: Props) 
   const visDelmalKomponent = !obligatorisk || harValgEllerFritekst;
   // sjekker om denne delmalen er valgt eller er obligatorisk
   const erValgt = delmalErValgt || obligatorisk;
+
+  if (!visDelmalKomponent) {
+    return (
+      <>
+        <StandardtekstBoks />
+        <ReadOnlyView>
+          <SanityDelmal isLoading={isLoading} delmalInnhold={delmalInnhold} />
+        </ReadOnlyView>
+      </>
+    );
+  }
 
   // Må returnere like mange elementer som definert i grid-definisjonen i Brevbygger
   return (
@@ -75,14 +119,7 @@ export const Delmal = ({ delmalRef, control, delmalInnhold, isLoading }: Props) 
           )}
         </Box>
       )}
-      <div className={`${styles.delmal} ${isLoading ? styles.loading : ''}`}>
-        {isLoading && (
-          <div className={styles.loader}>
-            <Loader transparent size={'3xlarge'} />
-          </div>
-        )}
-        {delmalInnhold && <div dangerouslySetInnerHTML={{ __html: delmalInnhold }} />}
-      </div>
+      <SanityDelmal isLoading={isLoading} delmalInnhold={delmalInnhold} />
     </>
   );
 };
