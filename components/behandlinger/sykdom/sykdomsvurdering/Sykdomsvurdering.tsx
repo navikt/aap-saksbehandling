@@ -52,6 +52,7 @@ import useSWR from 'swr';
 import { clientHentRelevanteDokumenter } from 'lib/dokumentClientApi';
 import { isSuccess } from 'lib/utils/api';
 import { LightBulbIcon } from '@navikt/aksel-icons';
+import styles from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering.module.css';
 
 export interface SykdomsvurderingerForm {
   vurderinger: Array<Sykdomsvurdering>;
@@ -206,7 +207,7 @@ export const Sykdomsvurdering = ({
         <EksterneLenkerIVilkårskort steg={'AVKLAR_SYKDOM'} />
 
         {har39UkersSykmelding && (
-          <InfoCard data-color="meta-purple" size={'small'}>
+          <InfoCard data-color="meta-purple" size={'small'} className={styles.sykmeldingInfo}>
             <InfoCard.Message icon={<LightBulbIcon aria-hidden />}>
               {
                 'Det er nylig mottatt en 39-ukers sykemelding på saken. Du finner den under "Be om opplysninger" i høyre kolonne.'
