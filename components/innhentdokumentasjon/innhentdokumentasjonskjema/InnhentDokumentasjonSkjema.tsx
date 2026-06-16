@@ -1,6 +1,6 @@
 'use client';
 
-import { BodyShort, Button, Heading, InlineMessage, InfoCard, Link, Radio, VStack, CopyButton } from '@navikt/ds-react';
+import { BodyShort, Button, Heading, InlineMessage, InfoCard, Link, Loader, Radio, VStack, CopyButton } from '@navikt/ds-react';
 import { SubmitEventHandler, useState } from 'react';
 
 import styles from './InnhentDokumentasjonSkjema.module.css';
@@ -64,7 +64,7 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
 
   const skalHenteFastlege = useFeatureFlag('HentFastlege');
 
-  const { data: fastlege } = useSWR(
+  const { data: fastlege, isLoading: fastlegeIsLoading } = useSWR(
     skalHenteFastlege ? `api/dokumentinnhenting/behandleroppslag/fastlege/${saksnummer}` : null,
     () => clientHentFastlege(saksnummer),
     {
@@ -188,6 +188,9 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
         <ExternalLinkIcon />
       </Link>
       {isError(fastlege) ? <ApiException apiResponses={[fastlege]} /> : null}
+      {fastlegeIsLoading ? (
+        <Loader size={'small'} title={'Henter fastlege...'} />
+      ) : (
       <form onSubmit={handleSubmit} className={'flex-column'} autoComplete={'off'}>
         {fastlegeDto ? (
           <div>
@@ -319,6 +322,7 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
           </div>
         )}
       </form>
+      )}
     </div>
   );
 };
