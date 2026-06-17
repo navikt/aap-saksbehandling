@@ -222,18 +222,17 @@ export const Brevbygger = ({
                 type="button"
                 onClick={() => settIkkeSendBrevModalOpen(true)}
                 variant="primary"
-                size="small"
                 disabled={isLoading}
               >
                 Ikke send brev
               </Button>
             )}
-            <Button type="button" variant="secondary" onClick={oppdaterBrevmal} size="small" disabled={isLoading}>
+            <Button type="button" variant="secondary" onClick={oppdaterBrevmal} disabled={isLoading}>
               Oppdater brevmal
             </Button>
           </HStack>
-          <Button type="button" onClick={ferdigstillBrev} size={'small'}>
-            Ferdigstill brev
+          <Button type="button" onClick={ferdigstillBrev}>
+            Forhåndsvis brev
           </Button>
         </HStack>
       </Box>
