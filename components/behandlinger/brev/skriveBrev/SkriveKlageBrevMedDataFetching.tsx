@@ -20,7 +20,6 @@ export const SkriveKlageBrevMedDataFetching = async ({
   behandlingsreferanse,
   behandlingVersjon,
   aktivtSteg,
-  behandlingstype,
 }: {
   behandlingsreferanse: string;
   behandlingVersjon: number;
@@ -93,7 +92,7 @@ export const SkriveKlageBrevMedDataFetching = async ({
         fullmektigMottaker={fullmektig}
         brukerMottaker={bruker}
         behandlingVersjon={behandlingVersjon}
-        behandlingstype={behandlingstype}
+        brevtype={brev.brevtype}
       />
     </div>
   );

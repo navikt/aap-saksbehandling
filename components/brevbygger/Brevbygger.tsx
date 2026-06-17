@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { BrevdataDto, BrevMottaker, Mottaker, RefusjonskravGrunnlag, TypeBehandling } from 'lib/types/types';
+import { BrevdataDto, BrevGrunnlagBrev, BrevMottaker, Mottaker, RefusjonskravGrunnlag } from 'lib/types/types';
 import { BrevmalType } from 'components/brevbygger/brevmodellTypes';
 import { Behovstype } from 'lib/utils/form';
 import { clientOppdaterBrevmal } from 'lib/clientApi';
@@ -23,7 +23,7 @@ import { initialiserFormVerdier } from 'components/brevbygger/formUtils';
 import { Delmal } from 'components/brevbygger/Delmal';
 import { useMellomlagringAvBrev } from 'components/brevbygger/useMellomlagringAvBrev';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { loggUmamiEvent, useUmamiStartTidspunkt } from 'lib/utils/umami';
+import { loggUmamiBrevVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
 import { FerdigstillBrevDialog } from 'components/brevbygger/FerdigstillBrevDialog';
 
 import styles from './Brevbygger.module.css';
@@ -41,7 +41,7 @@ interface BrevbyggerProps {
   brevmal?: string | null;
   brevdata?: BrevdataDto;
   refusjonskravgrunnlag?: RefusjonskravGrunnlag;
-  behandlingstype: TypeBehandling;
+  brevtype: BrevGrunnlagBrev['brevtype'];
 }
 
 type ParsingResultat = {
@@ -61,7 +61,7 @@ export const Brevbygger = ({
   readOnly,
   visAvbryt = true,
   refusjonskravgrunnlag,
-  behandlingstype,
+  brevtype,
 }: BrevbyggerProps) => {
   const { parsedBrevmal, parsingFeilmelding } = useMemo<ParsingResultat>(() => {
     try {
@@ -136,11 +136,7 @@ export const Brevbygger = ({
         },
         referanse: behandlingsreferanse,
       },
-      () =>
-        loggUmamiEvent('brevbygger-varighet', {
-          varighet_sekunder: Math.floor((Date.now() - umamiStartTidspunkt) / 1000),
-          typeBehandling: behandlingstype,
-        })
+      () => loggUmamiBrevVarighet('STEG_BREVBYGGER_VARIGHET', umamiStartTidspunkt, Date.now(), brevtype)
     );
   };
 
@@ -199,7 +195,7 @@ export const Brevbygger = ({
           </HGrid>
         </VStack>
 
-        <HStack gap="space-8" justify="space-between" marginBlock="space-8">
+        <HStack gap="space-8" justify="space-between" marginBlock="space-24">
           <LøsBehovOgGåTilNesteStegStatusAlert
             status={løsBehovStatus}
             løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
