@@ -156,6 +156,7 @@ export const Avslag11_27 = ({ grunnlag, readOnly, behandlingVersjon, initialMell
           avslag11_27krav={grunnlag.krav}
           selectedJournalpostIds={selectedJournalpostIds}
           onToggle={handleToggle}
+          readonly={formReadOnly}
         />
         {kravFields.map((kravField, kravIndex) => {
           const faktiskKrav = grunnlag.krav[kravIndex];

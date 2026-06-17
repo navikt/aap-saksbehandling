@@ -35,8 +35,7 @@ export const Avslag11_27Vurdering = ({ form, kravIndex, readonly }: Props) => {
       <TextAreaWrapper
         name={`avslag11_27vurderinger.${kravIndex}.vurdering.begrunnelse`}
         control={form.control}
-        label={'Begrunnelse'}
-        description={'Vurder om brukeren har en annen full ytelse fra folketrygden.'}
+        label={'Vilkårsvurdering'}
         rules={{ required: 'Du må begrunne vurderingen din' }}
         readOnly={readonly}
       />
@@ -52,20 +51,22 @@ export const Avslag11_27Vurdering = ({ form, kravIndex, readonly }: Props) => {
         <Radio value={JaEllerNei.Nei}>Nei</Radio>
       </RadioGroupWrapper>
       {visYtelseSpørsmål && (
-        <SelectWrapper
-          name={`avslag11_27vurderinger.${kravIndex}.vurdering.brukersYtelse`}
-          control={form.control}
-          label={'Hvilken ytelse har brukeren?'}
-          rules={{ required: 'Du må velge hvilken ytelse brukeren har' }}
-          readOnly={readonly}
-        >
-          <option value="">Velg ytelse</option>
-          {brukersYtelseOptions.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </SelectWrapper>
+        <VStack key={kravIndex} gap="space-8" align="start">
+          <SelectWrapper
+            name={`avslag11_27vurderinger.${kravIndex}.vurdering.brukersYtelse`}
+            control={form.control}
+            label={'Hvilken ytelse har brukeren?'}
+            rules={{ required: 'Du må velge hvilken ytelse brukeren har' }}
+            readOnly={readonly}
+          >
+            <option value="">Velg ytelse</option>
+            {brukersYtelseOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </SelectWrapper>
+        </VStack>
       )}
       {visSykepengegrunnlagSpørsmål && (
         <RadioGroupWrapper

@@ -8,9 +8,28 @@ interface Props {
   avslag11_27krav: Avslag11_27Krav[];
   selectedJournalpostIds: string[];
   onToggle: (journalpostId: string) => void;
+  readonly: boolean;
 }
 
-export const Avslag11_27KravTabell = ({ label, avslag11_27krav, selectedJournalpostIds, onToggle }: Props) => {
+const kravTypeLabels: Record<string, string> = {
+  NYTT_KRAV_AAP: 'Nytt krav om AAP',
+  TRUKKET_SØKNAD: 'Trukket søknad',
+  GJENOPPTAK: 'Gjenopptak',
+  KLAGE: 'Klage',
+  TILLEGGSOPPLYSNING: 'Tilleggsopplysning',
+};
+
+function formaterKravType(type: string): string {
+  return kravTypeLabels[type] ?? type;
+}
+
+export const Avslag11_27KravTabell = ({
+  label,
+  avslag11_27krav,
+  selectedJournalpostIds,
+  onToggle,
+  readonly,
+}: Props) => {
   return (
     <VStack gap={'space-16'}>
       <VStack gap={'space-4'}>
@@ -42,7 +61,7 @@ export const Avslag11_27KravTabell = ({ label, avslag11_27krav, selectedJournalp
           {avslag11_27krav.map((krav, index) => (
             <Table.Row key={index}>
               <Table.DataCell textSize={'small'}>{krav.søknadsdokument}</Table.DataCell>
-              <Table.DataCell textSize={'small'}>{krav.type}</Table.DataCell>
+              <Table.DataCell textSize={'small'}>{formaterKravType(krav.type)}</Table.DataCell>
               <Table.DataCell textSize={'small'}>
                 {krav.søknadsdato ? formaterDatoForFrontend(krav.søknadsdato) : '-'}
               </Table.DataCell>
@@ -55,6 +74,7 @@ export const Avslag11_27KravTabell = ({ label, avslag11_27krav, selectedJournalp
                   hideLabel
                   checked={selectedJournalpostIds.includes(krav.søknadsdokument)}
                   onChange={() => onToggle(krav.søknadsdokument)}
+                  readOnly={readonly}
                 >
                   Vurder
                 </Checkbox>

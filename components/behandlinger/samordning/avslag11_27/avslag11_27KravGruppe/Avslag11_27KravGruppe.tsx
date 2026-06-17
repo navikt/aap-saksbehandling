@@ -63,7 +63,7 @@ export const Avslag11_27KravGruppe = ({
         <VStack gap="space-8">
           {tidligereVurdering && (
             <TidligereVurderingExpandableCard
-              fom={krav.søknadsdato ? new Date(krav.søknadsdato) : new Date()} //FIXME Thao: Kan søknadsdato være null?
+              fom={krav.søknadsdato ? new Date(krav.søknadsdato) : new Date()}
               vurderingStatus={getErOppfyltEllerIkkeStatus(!tidligereVurdering.skalAvslås1127)}
               vurderingerMeta={tidligereVurdering.vurderingerMeta}
               tom={undefined}
@@ -74,7 +74,7 @@ export const Avslag11_27KravGruppe = ({
           )}
           <NyVurderingExpandableCard
             accordionsSignal={accordionsSignal}
-            fraDato={krav.søknadsdato ? new Date(krav.søknadsdato) : new Date()} //FIXME Thao: Kan søknadsdato være null?
+            fraDato={krav.søknadsdato ? new Date(krav.søknadsdato) : new Date()}
             nestePeriodeFraDato={null}
             isLast={true}
             vurderingStatus={getErOppfyltEllerIkkeStatus(
