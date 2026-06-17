@@ -198,6 +198,12 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
                     />
                   )}
                   {skalViseTimer && <UtfyllingKalender readOnly={erÅrsakRegistrereMeldedato} />}
+                  {årsak === Årsaker.LEVERE_MELDEKORT_FOR_BRUKER && (
+                    <Alert variant={'info'}>
+                      Når du leverer meldekortet vil det startes en automatisk meldekortbehandling i Kelvin. Brukeren
+                      får justert utbetaling som om de har levert meldekortet selv.
+                    </Alert>
+                  )}
                   {skalViseAlertForIngenTimer && (
                     <Alert variant={'info'}>
                       Bruker har ikke levert noen timer. Det vil ikke gå noen utbetaling før bruker registrerer timer i
