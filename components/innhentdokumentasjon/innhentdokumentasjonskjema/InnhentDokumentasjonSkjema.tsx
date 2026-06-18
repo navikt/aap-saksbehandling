@@ -199,7 +199,15 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
         <BodyShort size={'small'}>Rutiner for innhenting av helseopplysninger</BodyShort>
         <ExternalLinkIcon />
       </Link>
-      {isError(fastlege) ? <ApiException apiResponses={[fastlege]} /> : null}
+      {isError(fastlege) ? (
+        fastlege.status === 403 ? (
+          <InlineMessage status="warning" size="small">
+            Du har ikke tilgang til å se registrert fastlege. Søk opp behandleren manuelt.
+          </InlineMessage>
+        ) : (
+          <ApiException apiResponses={[fastlege]} />
+        )
+      ) : null}
       {fastlegeIsLoading ? (
         <Loader size={'small'} title={'Henter fastlege...'} />
       ) : (
