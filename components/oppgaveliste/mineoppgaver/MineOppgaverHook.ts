@@ -8,7 +8,7 @@ import {
 } from '@navikt/aap-oppgave-typescript-types';
 import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
 import { useDebouncedValue } from 'hooks/useDebouncedValueHook';
-import { useFeatureFlag } from 'context/UnleashContext';
+
 
 const oppgaveStatus = {
   VENT: (oppgave: Oppgave) => !!oppgave.påVentTil,
@@ -27,7 +27,6 @@ interface Props {
 }
 
 export const useFiltrerteOppgaver = ({ oppgaver, filter }: Props) => {
-  const tilbakekrevingBelopFilter = useFeatureFlag('TilbakekrevingBelopFilter');
   const debouncedFilters = useDebouncedValue(filter, 300);
   return useMemo(() => {
     const filtrerOppgave = (oppgave: Oppgave) => {
@@ -64,19 +63,17 @@ export const useFiltrerteOppgaver = ({ oppgaver, filter }: Props) => {
         return false;
       }
 
-      if (tilbakekrevingBelopFilter) {
-        if (tilbakekrevingBeløpFom) {
-          const beløp = oppgave.tilbakekrevingsVarsDto?.tilbakekrevings_beløp;
-          if (beløp == null || beløp < Number(tilbakekrevingBeløpFom)) {
-            return false;
-          }
+      if (tilbakekrevingBeløpFom) {
+        const beløp = oppgave.tilbakekrevingsVarsDto?.tilbakekrevings_beløp;
+        if (beløp == null || beløp < Number(tilbakekrevingBeløpFom)) {
+          return false;
         }
+      }
 
-        if (tilbakekrevingBeløpTom) {
-          const beløp = oppgave.tilbakekrevingsVarsDto?.tilbakekrevings_beløp;
-          if (beløp == null || beløp > Number(tilbakekrevingBeløpTom)) {
-            return false;
-          }
+      if (tilbakekrevingBeløpTom) {
+        const beløp = oppgave.tilbakekrevingsVarsDto?.tilbakekrevings_beløp;
+        if (beløp == null || beløp > Number(tilbakekrevingBeløpTom)) {
+          return false;
         }
       }
 
@@ -86,5 +83,5 @@ export const useFiltrerteOppgaver = ({ oppgaver, filter }: Props) => {
     };
 
     return oppgaver.filter(filtrerOppgave);
-  }, [oppgaver, debouncedFilters, tilbakekrevingBelopFilter]);
+  }, [oppgaver, debouncedFilters]);
 };

@@ -56,11 +56,7 @@ const lagOppgaveUtenBeløp = (id: number): Oppgave => ({
 });
 
 const wrapper = ({ children }: { children: ReactNode }) => (
-  <FeatureFlagProvider flags={{ ...mockedFlags, TilbakekrevingBelopFilter: true }}>{children}</FeatureFlagProvider>
-);
-
-const wrapperUtenFeatureFlag = ({ children }: { children: ReactNode }) => (
-  <FeatureFlagProvider flags={{ ...mockedFlags, TilbakekrevingBelopFilter: false }}>{children}</FeatureFlagProvider>
+  <FeatureFlagProvider flags={mockedFlags}>{children}</FeatureFlagProvider>
 );
 
 describe('useFiltrerteOppgaver — tilbakekrevingBeløp-filter', () => {
@@ -149,16 +145,4 @@ describe('useFiltrerteOppgaver — tilbakekrevingBeløp-filter', () => {
     expect(ids).not.toContain(4);
   });
 
-  it('ignorerer beløpsfilter når feature-flagget er av', () => {
-    const { result } = renderHook(
-      () => useFiltrerteOppgaver({ oppgaver, filter: { tilbakekrevingBeløpFom: '1000' } }),
-      { wrapper: wrapperUtenFeatureFlag }
-    );
-
-    act(() => {
-      vi.advanceTimersByTime(300);
-    });
-
-    expect(result.current).toHaveLength(4);
-  });
 });
