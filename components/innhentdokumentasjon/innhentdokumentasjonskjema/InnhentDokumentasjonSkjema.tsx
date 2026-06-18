@@ -226,7 +226,11 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
                     : styles.behandlerValgGruppe
                 }
               >
-                <Radio value={'fastlege'} className={styles.radioItem}>
+                <Radio
+                  value={'fastlege'}
+                  className={styles.radioItem}
+                  aria-label={`Registrert fastlege: ${fastlegeDto.navn}`}
+                >
                   <div className={styles.fastlegeRadioInnhold}>
                     <div>
                       <BodyShort size={'small'}>{fastlegeDto.navn}</BodyShort>
