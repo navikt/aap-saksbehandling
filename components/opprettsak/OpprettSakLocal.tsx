@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Button, HGrid, HStack, VStack } from '@navikt/ds-react';
+import { BodyShort, Box, Button, HGrid, HStack, VStack } from '@navikt/ds-react';
 import { mutate } from 'swr';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { OpprettSakBarn } from 'components/opprettsak/barn/OpprettSakBarn';
@@ -9,7 +9,7 @@ import { OpprettInntekter } from 'components/opprettsak/inntekter/OpprettInntekt
 import { useOpprettSak } from 'hooks/FetchHook';
 import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
-import { parse } from 'date-fns';
+import { differenceInCalendarYears, parse } from 'date-fns';
 import {
   DagpengerKilde,
   DagpengerYtelserType,
@@ -391,7 +391,10 @@ export const OpprettSakLocal = () => {
         <HGrid columns={2} gap="space-16">
           <VStack gap="space-16">
             <FormField form={form} formField={formFields.søknadsdato} />
-            <FormField form={form} formField={formFields.fødselsdato} />
+            <HStack gap="space-8" align="end">
+              <FormField form={form} formField={formFields.fødselsdato} />
+              <BodyShort>{differenceInCalendarYears(new Date(), form.watch('fødselsdato'))} år</BodyShort>
+            </HStack>
             <OpprettYrkesskade form={form} />
             <FormField form={form} formField={formFields.erArbeidsevnenNedsatt} horizontalRadio={true} />
             {form.watch('erArbeidsevnenNedsatt') === JaEllerNei.Ja && (
