@@ -41,8 +41,6 @@ const meldekortMedDager: MeldeperiodeMedMeldekortDto = {
     tom: '2025-01-19',
   },
   meldekort: {
-    id: 'meldekort-1',
-    meldeDato: '2025-01-20T12:00:00.000Z',
     dager: [
       { dato: '2025-01-06', timerArbeidet: 7.5 },
       { dato: '2025-01-07', timerArbeidet: 0 },
@@ -61,6 +59,8 @@ const meldekortMedDager: MeldeperiodeMedMeldekortDto = {
     ],
     journalpostId: '',
     oppdatertAvSaksbehandler: true,
+    mottattTidspunkt: '2025-01-20T12:00:00.000Z',
+    oppdatertTidspunkt: '2025-01-20T12:00:00.000Z',
   },
 };
 
@@ -76,8 +76,6 @@ const meldekortMedNullTimer: MeldeperiodeMedMeldekortDto = {
     tom: '2025-01-19',
   },
   meldekort: {
-    id: 'meldekort-2',
-    meldeDato: '2025-01-20T12:00:00.000Z',
     dager: [
       { dato: '2025-01-06', timerArbeidet: 0 },
       { dato: '2025-01-07', timerArbeidet: 0 },
@@ -96,6 +94,8 @@ const meldekortMedNullTimer: MeldeperiodeMedMeldekortDto = {
     ],
     journalpostId: '',
     oppdatertAvSaksbehandler: false,
+    mottattTidspunkt: '2025-01-20T12:00:00.000Z',
+    oppdatertTidspunkt: '2025-01-20T12:00:00.000Z',
   },
 };
 

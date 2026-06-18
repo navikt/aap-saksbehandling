@@ -26,9 +26,7 @@ const meldekortMedDager: MeldeperiodeMedMeldekortDto = {
     tom: '2025-01-19',
   },
   meldekort: {
-    id: 'meldekort-1',
     journalpostId: '',
-    meldeDato: '2025-01-20',
     oppdatertTidspunkt: '2025-01-21',
     oppdatertAv: 'saksbehandler',
     oppdatertAvSaksbehandler: true,
@@ -48,6 +46,7 @@ const meldekortMedDager: MeldeperiodeMedMeldekortDto = {
       { dato: '2025-01-18', timerArbeidet: 0 },
       { dato: '2025-01-19', timerArbeidet: 0 },
     ],
+    mottattTidspunkt: '2025-01-20',
   },
 };
 
@@ -153,9 +152,9 @@ describe('MeldekortTabellRow', () => {
 type Meldekort = NonNullable<MeldeperiodeMedMeldekortDto['meldekort']>;
 
 const baseMeldekort: Meldekort = {
-  id: 'id',
+  mottattTidspunkt: '2025-01-20',
+  oppdatertTidspunkt: '2025-01-20',
   journalpostId: '',
-  meldeDato: '2025-01-20',
   dager: [],
   oppdatertAv: null,
   oppdatertAvSaksbehandler: false,
