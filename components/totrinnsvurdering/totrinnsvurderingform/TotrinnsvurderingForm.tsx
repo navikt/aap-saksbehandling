@@ -138,7 +138,7 @@ export const TotrinnsvurderingForm = ({
         });
         if (
           manglerVurderingAvHastemarkering &&
-          (isError || data.totrinnsvurderinger.every((vurdering) => vurdering.godkjent === JaEllerNei.Ja))
+          data.totrinnsvurderinger.every((vurdering) => vurdering.godkjent === JaEllerNei.Ja)
         ) {
           form.setError(`skalHastemarkeringBeholdes`, {
             type: 'validate',
