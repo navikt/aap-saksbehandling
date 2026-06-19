@@ -1,8 +1,9 @@
 'use client';
 
-import { BodyShort, Box, HStack, Label, VStack } from '@navikt/ds-react';
+import { BodyShort, Box, Button, HStack, Label, VStack } from '@navikt/ds-react';
 import { TasklistIcon } from '@navikt/aksel-icons';
 import { UseFormReturn } from 'react-hook-form';
+import { useState } from 'react';
 import { AccordionsSignal } from 'hooks/AccordionSignalHook';
 import { Avslag11_27FormFields } from 'components/behandlinger/samordning/avslag11_27/Avslag11_27';
 import { Avslag11_27Vurdering as Avslag11_27VurderingSkjema } from 'components/behandlinger/samordning/avslag11_27/avslag11_27vurdering/Avslag11_27Vurdering';
@@ -15,8 +16,8 @@ import {
 } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import styles from './Avslag11_27KravGruppe.module.css';
 import { JaEllerNei } from 'lib/utils/form';
+import styles from './Avslag11_27KravGruppe.module.css';
 
 interface Props {
   form: UseFormReturn<Avslag11_27FormFields>;
@@ -27,6 +28,8 @@ interface Props {
   readonly: boolean;
   accordionsSignal: AccordionsSignal;
   erAktivUtenAvbryt: boolean;
+  visLeggTilVurderingKnapp: boolean;
+  onSlettVurdering: (referanse: string) => void;
 }
 
 export const Avslag11_27KravGruppe = ({
@@ -38,8 +41,28 @@ export const Avslag11_27KravGruppe = ({
   readonly,
   accordionsSignal,
   erAktivUtenAvbryt,
+  visLeggTilVurderingKnapp,
+  onSlettVurdering,
 }: Props) => {
   const vurderingFormField = form.watch(`avslag11_27vurderinger.${kravIndex}.vurdering`);
+
+  // Vis skjema direkte hvis: ikke revurdering ELLER nåværende vurdering finnes
+  const [visNyVurdering, setVisNyVurdering] = useState(!visLeggTilVurderingKnapp || !!nåværendeVurdering);
+
+  const handleSlettNyVurdering = () => {
+    form.setValue(`avslag11_27vurderinger.${kravIndex}.vurdering`, {
+      referanse: krav.referanse,
+      behøverVurdering: true,
+      erNyVurdering: true,
+      begrunnelse: '',
+      harAnnenFullYtelse: undefined,
+      brukersYtelse: undefined,
+      harSykepengegrunnlagOver2G: undefined,
+      skalAvslås1127: undefined,
+    });
+    setVisNyVurdering(false);
+    onSlettVurdering(krav.referanse);
+  };
 
   return (
     <Box
@@ -75,22 +98,36 @@ export const Avslag11_27KravGruppe = ({
             </TidligereVurderingExpandableCard>
           )}
 
-          <NyVurderingExpandableCard
-            accordionsSignal={accordionsSignal}
-            fraDato={new Date(krav.søknadsdato)}
-            nestePeriodeFraDato={null}
-            isLast={true}
-            vurderingStatus={getErOppfyltEllerIkkeStatus(vurderingFormField?.skalAvslås1127 === JaEllerNei.Nei)}
-            vurdering={vurderingFormField}
-            harTidligereVurderinger={!!vedtattVurdering}
-            finnesFeil={false}
-            onSlettVurdering={() => {}}
-            index={0}
-            readonly={readonly}
-            initiellEkspandert={skalVæreInitiellEkspandert(vurderingFormField?.erNyVurdering, erAktivUtenAvbryt)}
-          >
-            <Avslag11_27VurderingSkjema form={form} kravIndex={kravIndex} readonly={readonly} />
-          </NyVurderingExpandableCard>
+          {visNyVurdering && (
+            <NyVurderingExpandableCard
+              accordionsSignal={accordionsSignal}
+              fraDato={new Date(krav.søknadsdato)}
+              nestePeriodeFraDato={null}
+              isLast={true}
+              vurderingStatus={getErOppfyltEllerIkkeStatus(vurderingFormField?.skalAvslås1127 === JaEllerNei.Nei)}
+              vurdering={vurderingFormField}
+              harTidligereVurderinger={!!vedtattVurdering}
+              finnesFeil={false}
+              onSlettVurdering={handleSlettNyVurdering}
+              index={vedtattVurdering ? 1 : 0}
+              readonly={readonly}
+              initiellEkspandert={skalVæreInitiellEkspandert(vurderingFormField?.erNyVurdering, erAktivUtenAvbryt)}
+            >
+              <Avslag11_27VurderingSkjema form={form} kravIndex={kravIndex} readonly={readonly} />
+            </NyVurderingExpandableCard>
+          )}
+
+          {visLeggTilVurderingKnapp && !visNyVurdering && !readonly && (
+            <Button
+              type="button"
+              variant="secondary"
+              size="small"
+              className="fit-content"
+              onClick={() => setVisNyVurdering(true)}
+            >
+              Legg til vurdering
+            </Button>
+          )}
         </VStack>
       </Box>
     </Box>

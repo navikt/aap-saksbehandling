@@ -9,6 +9,7 @@ interface Props {
   selectedReferanser: string[];
   onToggle: (referanse: string) => void;
   readonly: boolean;
+  vedtatteReferanser: string[];
 }
 
 const kravTypeLabels: Record<string, string> = {
@@ -29,6 +30,7 @@ export const Avslag11_27KravTabell = ({
   selectedReferanser,
   onToggle,
   readonly,
+  vedtatteReferanser,
 }: Props) => {
   return (
     <VStack gap={'space-16'}>
@@ -74,7 +76,7 @@ export const Avslag11_27KravTabell = ({
                   hideLabel
                   checked={selectedReferanser.includes(krav.referanse)}
                   onChange={() => onToggle(krav.referanse)}
-                  readOnly={readonly}
+                  readOnly={readonly || vedtatteReferanser.includes(krav.referanse)}
                 >
                   Vurder
                 </Checkbox>

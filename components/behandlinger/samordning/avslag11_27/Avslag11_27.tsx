@@ -4,6 +4,7 @@ import {
   Avslag11_27BrukersYtelse,
   Avslag11_27Grunnlag,
   MellomlagretVurdering,
+  TypeBehandling,
   VurderingFormMeta,
 } from 'lib/types/types';
 import { Behovstype, JaEllerNei } from 'lib/utils/form';
@@ -26,6 +27,7 @@ interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
   initialMellomlagretVurdering?: MellomlagretVurdering;
+  typeBehandling: TypeBehandling;
 }
 
 export interface Avslag11_27FormFields {
@@ -47,7 +49,13 @@ export interface KravMedVurdering extends VurderingFormMeta {
 
 type DraftFormFields = Partial<Avslag11_27FormFields>;
 
-export const Avslag11_27 = ({ grunnlag, readOnly, behandlingVersjon, initialMellomlagretVurdering }: Props) => {
+export const Avslag11_27 = ({
+  grunnlag,
+  readOnly,
+  behandlingVersjon,
+  initialMellomlagretVurdering,
+  typeBehandling,
+}: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
 
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
@@ -87,11 +95,8 @@ export const Avslag11_27 = ({ grunnlag, readOnly, behandlingVersjon, initialMell
   const [selectedReferanser, setSelectedReferanser] = useState<string[]>(() => {
     const vedtatteIds = (grunnlag.vedtatteVurdering ?? []).map((v) => v.referanse);
     const nåværendeIds = (grunnlag.vurderinger ?? []).map((v) => v.referanse);
-
-    const alleVurderte = new Set(new Set([...vedtatteIds, ...nåværendeIds]));
-    return grunnlag.krav
-      .filter((krav) => alleVurderte.has(krav.referanse))
-      .map((krav) => krav.referanse);
+    const alleVurderte = new Set([...vedtatteIds, ...nåværendeIds]);
+    return grunnlag.krav.filter((krav) => alleVurderte.has(krav.referanse)).map((krav) => krav.referanse);
   });
 
   const handleToggle = (referanse: string) => {
@@ -100,21 +105,56 @@ export const Avslag11_27 = ({ grunnlag, readOnly, behandlingVersjon, initialMell
     );
   };
 
+  const erRevurdering = typeBehandling === 'Revurdering';
+
+  const [deletedReferanser, setDeletedReferanser] = useState<Set<string>>(new Set());
+
+  const handleSlettVurdering = (referanse: string) => {
+    setDeletedReferanser((prev) => new Set([...prev, referanse]));
+  };
+
+  // TODO Thao: Avklar om det er behov for å slette utkast i tilleg når vi sletter en vurdering? Men da sletter det utkast for ALLE vurderinger som har det.
+  const handleSlettVurderingOgUtkast = (referanse: string) => {
+    handleSlettVurdering(referanse);
+    if (mellomlagretVurdering) {
+      slettMellomlagring(() => form.reset(mapVurderingToDraftFormFields(grunnlag, grunnlag.krav)));
+    }
+  };
+
+    const harNåværendeVurdering = (referanse: string) =>
+    (grunnlag.vurderinger ?? []).some((v) => v.referanse === referanse);
+
+  const finnesIKravgrunnlag = (referanse: string) =>
+    grunnlag.krav.some((krav) => krav.referanse === referanse);
+
+  const skalSendeVurdering = (krav: KravMedVurderinger) => {
+    const { referanse, begrunnelse } = krav.vurdering;
+
+    if (!selectedReferanser.includes(referanse)) return false;
+    if (deletedReferanser.has(referanse)) return false;
+    if (!finnesIKravgrunnlag(referanse)) return false;
+
+    const harFyltUtNyVurdering = !!begrunnelse?.trim();
+    return harNåværendeVurdering(referanse) || harFyltUtNyVurdering;
+  };
+
+  const mapTilVurderingPayload = (krav: KravMedVurderinger) => {
+    const vurdering = krav.vurdering;
+    return {
+      referanse: vurdering.referanse,
+      begrunnelse: vurdering.begrunnelse,
+      harAnnenFullYtelse: vurdering.harAnnenFullYtelse === JaEllerNei.Ja,
+      brukersYtelse: vurdering.brukersYtelse,
+      harSykepengegrunnlagOver2G: vurdering.harSykepengegrunnlagOver2G === JaEllerNei.Ja,
+      skalAvslås1127: vurdering.skalAvslås1127 === JaEllerNei.Ja,
+    };
+  };
+
   const handleSubmit: SubmitEventHandler = (event: SubmitEvent) => {
     form.handleSubmit((data) => {
       const vurderinger = data.avslag11_27vurderinger
-        .filter((krav) => selectedReferanser.includes(krav.vurdering.referanse))
-        .map((krav) => {
-          const vurdering = krav.vurdering;
-          return {
-            referanse: vurdering.referanse,
-            begrunnelse: vurdering.begrunnelse,
-            harAnnenFullYtelse: vurdering.harAnnenFullYtelse === JaEllerNei.Ja,
-            brukersYtelse: vurdering.brukersYtelse,
-            harSykepengegrunnlagOver2G: vurdering.harSykepengegrunnlagOver2G === JaEllerNei.Ja,
-            skalAvslås1127: vurdering.skalAvslås1127 === JaEllerNei.Ja,
-          };
-        });
+        .filter(skalSendeVurdering)
+        .map(mapTilVurderingPayload);
 
       løsBehovOgGåTilNesteSteg(
         {
@@ -158,6 +198,7 @@ export const Avslag11_27 = ({ grunnlag, readOnly, behandlingVersjon, initialMell
           selectedReferanser={selectedReferanser}
           onToggle={handleToggle}
           readonly={formReadOnly}
+          vedtatteReferanser={(grunnlag.vedtatteVurdering ?? []).map((v) => v.referanse)}
         />
         {kravFields.map((kravField, kravIndex) => {
           const faktiskKrav = grunnlag.krav[kravIndex];
@@ -165,11 +206,8 @@ export const Avslag11_27 = ({ grunnlag, readOnly, behandlingVersjon, initialMell
 
           const vedtattVurdering = (grunnlag.vedtatteVurdering ?? []).find(
             (v) => v.referanse === faktiskKrav.referanse
-          ); // FIXME: Thao: Må finne basert på vurdert i behandling
-
-          const nåværendeVurdering = (grunnlag.vurderinger ?? []).find(
-            (v) => v.referanse === faktiskKrav.referanse
-          );  // FIXME: Thao: Må finne basert på vurdert i behandling
+          );
+          const nåværendeVurdering = (grunnlag.vurderinger ?? []).find((v) => v.referanse === faktiskKrav.referanse);
 
           return (
             <Avslag11_27KravGruppe
@@ -182,6 +220,8 @@ export const Avslag11_27 = ({ grunnlag, readOnly, behandlingVersjon, initialMell
               readonly={formReadOnly}
               accordionsSignal={accordionsSignal}
               erAktivUtenAvbryt={erAktivUtenAvbryt}
+              visLeggTilVurderingKnapp={erRevurdering}
+              onSlettVurdering={handleSlettVurderingOgUtkast}
             />
           );
         })}
@@ -196,18 +236,12 @@ function mapVurderingToDraftFormFields(
 ): DraftFormFields {
   return {
     avslag11_27vurderinger: krav.map((kravItem) => {
-
-      //FIXME Thao: Må hente ut basert på vurdert i behandling
       const nåværende = (grunnlag.vurderinger ?? []).find((v) => v.referanse === kravItem.referanse);
-      const vedtatt = (grunnlag.vedtatteVurdering ?? []).find((v) => v.referanse === kravItem.referanse);
 
-      const gjeldendeVurdering = nåværende ?? vedtatt;
-
-      if (!gjeldendeVurdering) {
+      if (!nåværende) {
         return {
           vurdering: {
             referanse: kravItem.referanse,
-            journalpostId: kravItem.søknadsdokument,
             behøverVurdering: true,
             erNyVurdering: true,
             begrunnelse: '',
@@ -220,21 +254,20 @@ function mapVurderingToDraftFormFields(
       }
 
       let harSykepengegrunnlagOver2G: JaEllerNei | undefined;
-      if (gjeldendeVurdering.harSykepengegrunnlagOver2G !== undefined && gjeldendeVurdering.harSykepengegrunnlagOver2G !== null) {
-        harSykepengegrunnlagOver2G = gjeldendeVurdering.harSykepengegrunnlagOver2G ? JaEllerNei.Ja : JaEllerNei.Nei;
+      if (nåværende.harSykepengegrunnlagOver2G !== undefined && nåværende.harSykepengegrunnlagOver2G !== null) {
+        harSykepengegrunnlagOver2G = nåværende.harSykepengegrunnlagOver2G ? JaEllerNei.Ja : JaEllerNei.Nei;
       }
 
       return {
         vurdering: {
           referanse: kravItem.referanse,
-          journalpostId: kravItem.søknadsdokument,
           behøverVurdering: true,
           erNyVurdering: !nåværende,
-          begrunnelse: gjeldendeVurdering.begrunnelse ?? '',
-          harAnnenFullYtelse: gjeldendeVurdering.harAnnenFullYtelse ? JaEllerNei.Ja : JaEllerNei.Nei,
-          brukersYtelse: gjeldendeVurdering.brukersYtelse ?? undefined,
+          begrunnelse: nåværende.begrunnelse ?? '',
+          harAnnenFullYtelse: nåværende.harAnnenFullYtelse ? JaEllerNei.Ja : JaEllerNei.Nei,
+          brukersYtelse: nåværende.brukersYtelse ?? undefined,
           harSykepengegrunnlagOver2G,
-          skalAvslås1127: gjeldendeVurdering.skalAvslås1127 ? JaEllerNei.Ja : JaEllerNei.Nei,
+          skalAvslås1127: nåværende.skalAvslås1127 ? JaEllerNei.Ja : JaEllerNei.Nei,
         },
       };
     }),

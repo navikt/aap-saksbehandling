@@ -218,12 +218,14 @@ export const SaksmenyDropdown = ({
           onClose={() => settAktivMarkeringType(null)}
         />
       )}
-      <Avslag11_27Modal
-        isOpen={visAvslag1127Modal}
-        onClose={() => settVisAvslag1127Modal(false)}
-        saksnummer={saksnummer}
-        behandlingReferanse={behandling?.referanse!}
-      />
+      {visAvslag1127Modal && (
+        <Avslag11_27Modal
+          isOpen={visAvslag1127Modal}
+          onClose={() => settVisAvslag1127Modal(false)}
+          saksnummer={saksnummer}
+          behandlingReferanse={behandling?.referanse!}
+        />
+      )}
     </div>
   );
 };

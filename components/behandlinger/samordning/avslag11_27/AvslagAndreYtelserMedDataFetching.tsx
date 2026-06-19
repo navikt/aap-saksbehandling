@@ -3,17 +3,20 @@ import { isError } from 'lib/utils/api';
 import { hentAvslag11_27Grunnlag, hentMellomlagring } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { Behovstype } from 'lib/utils/form';
 import { Avslag11_27 } from 'components/behandlinger/samordning/avslag11_27/Avslag11_27';
+import { TypeBehandling } from 'lib/types/types';
 
 interface Props {
   behandlingsreferanse: string;
   behandlingVersjon: number;
   readOnly: boolean;
+  typeBehandling: TypeBehandling;
 }
 
 export const AvslagAndreYtelserMedDataFetching = async ({
   behandlingsreferanse,
   readOnly,
   behandlingVersjon,
+  typeBehandling,
 }: Props) => {
   const grunnlag = await hentAvslag11_27Grunnlag(behandlingsreferanse);
 
@@ -34,6 +37,7 @@ export const AvslagAndreYtelserMedDataFetching = async ({
       readOnly={totalReadOnly}
       behandlingVersjon={behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
+      typeBehandling={typeBehandling}
     />
   );
 };
