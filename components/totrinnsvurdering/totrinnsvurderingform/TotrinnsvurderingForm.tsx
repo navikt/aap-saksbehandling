@@ -126,7 +126,7 @@ export const TotrinnsvurderingForm = ({
         data.totrinnsvurderinger.forEach((vurdering, i) => {
           if (vurdering.godkjent === JaEllerNei.Ja) {
             const neste = data.totrinnsvurderinger[i + 1];
-            if ((neste && !neste.godkjent) || manglerVurderingAvHastemarkering) {
+            if (neste && !neste.godkjent) {
               form.setError(`totrinnsvurderinger.${i + 1}.godkjent`, {
                 type: 'validate',
                 message: 'Du må ta stilling til alle vilkårsvurderinger hvis du ikke underkjenner.',
@@ -136,11 +136,15 @@ export const TotrinnsvurderingForm = ({
             }
           }
         });
-        if (manglerVurderingAvHastemarkering) {
+        if (
+          manglerVurderingAvHastemarkering &&
+          data.totrinnsvurderinger.every((vurdering) => vurdering.godkjent === JaEllerNei.Ja)
+        ) {
           form.setError(`skalHastemarkeringBeholdes`, {
             type: 'validate',
             message: 'Du må ta stilling til om hastemarkeringen skal følge behandlingen videre.',
           });
+          isError = true;
         }
         if (data.skalHastemarkeringBeholdes === JaEllerNei.Nei) {
           await clientFjernMarkeringForBehandling(behandlingsreferanse, { markeringType: MarkeringHaster });
