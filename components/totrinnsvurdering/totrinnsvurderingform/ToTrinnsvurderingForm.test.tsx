@@ -267,7 +267,7 @@ describe('totrinnsvurderingform', () => {
   });
 });
 
-it('skal vise en feilmelding dersom hastemarkeringsboksen ikke blir vurdert', async () => {
+it('skal vise en feilmelding dersom hastemarkeringsboksen ikke blir vurdert mens alt annet er godkjent', async () => {
   render(
     <TotrinnsvurderingForm
       behandlingsversjon={1}
@@ -289,6 +289,37 @@ it('skal vise en feilmelding dersom hastemarkeringsboksen ikke blir vurdert', as
   const radioJa = screen.getAllByRole('radio', { name: /ja/i });
   await user.click(radioJa[0]);
   await user.click(radioJa[1]);
+
+  const sendInnButton = screen.getByRole('button', { name: 'Bekreft og send videre' });
+  await user.click(sendInnButton);
+
+  expect(screen.queryByText('Du må gjøre minst én vurdering.')).not.toBeInTheDocument();
+  expect(
+    screen.queryByText('Du må ta stilling til om hastemarkeringen skal følge behandlingen videre.')
+  ).toBeInTheDocument();
+});
+
+it('skal vise en feilmelding dersom hastemarkeringsboksen ikke blir vurdert hvis kun en av to tidligere vurderinger er vurdert og den siste er godkjent', async () => {
+  render(
+    <TotrinnsvurderingForm
+      behandlingsversjon={1}
+      grunnlag={{
+        ...grunnlagUtenVurdering,
+        vurderinger: [...grunnlagUtenVurdering.vurderinger, { definisjon: Behovstype.AVKLAR_OPPFØLGINGSBEHOV_NAY }],
+      }}
+      erKvalitetssikring={true}
+      readOnly={false}
+      hastemarkering={{
+        begrunnelse: 'Avtalt med leder',
+        markeringType: MarkeringHaster,
+        opprettetAv: null,
+        opprettetAvNavn: null,
+        opprettetTidspunkt: Date.now().toString(),
+      }}
+    />
+  );
+  const radioJa = screen.getAllByRole('radio', { name: /ja/i });
+  await user.click(radioJa[0]);
 
   const sendInnButton = screen.getByRole('button', { name: 'Bekreft og send videre' });
   await user.click(sendInnButton);
