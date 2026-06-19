@@ -5,8 +5,8 @@ import { TasklistIcon } from '@navikt/aksel-icons';
 import { UseFormReturn } from 'react-hook-form';
 import { AccordionsSignal } from 'hooks/AccordionSignalHook';
 import { Avslag11_27FormFields } from 'components/behandlinger/samordning/avslag11_27/Avslag11_27';
-import { Avslag11_27Vurdering } from 'components/behandlinger/samordning/avslag11_27/avslag11_27vurdering/Avslag11_27Vurdering';
-import { Avslag11_27Grunnlag } from 'lib/types/types';
+import { Avslag11_27Vurdering as Avslag11_27VurderingSkjema } from 'components/behandlinger/samordning/avslag11_27/avslag11_27vurdering/Avslag11_27Vurdering';
+import { Avslag11_27Grunnlag, Avslag11_27Vurdering } from 'lib/types/types';
 import { Avslag11_27TidligereVurdering } from 'components/behandlinger/samordning/avslag11_27/avslag11_27tidligerevurdering/Avslag11_27TidligereVurdering';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import {
@@ -16,13 +16,14 @@ import {
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import styles from './Avslag11_27KravGruppe.module.css';
-import { getTrueFalseEllerUndefined } from 'lib/utils/form';
+import { JaEllerNei } from 'lib/utils/form';
 
 interface Props {
   form: UseFormReturn<Avslag11_27FormFields>;
   kravIndex: number;
   krav: Avslag11_27Grunnlag['krav'][0];
-  tidligereVurdering?: Avslag11_27Grunnlag['vedtatteVurdering'][0] | null;
+  vedtattVurdering?: Avslag11_27Vurdering | null;
+  nåværendeVurdering?: Avslag11_27Vurdering | null;
   readonly: boolean;
   accordionsSignal: AccordionsSignal;
   erAktivUtenAvbryt: boolean;
@@ -32,7 +33,8 @@ export const Avslag11_27KravGruppe = ({
   form,
   kravIndex,
   krav,
-  tidligereVurdering,
+  vedtattVurdering,
+  nåværendeVurdering,
   readonly,
   accordionsSignal,
   erAktivUtenAvbryt,
@@ -61,34 +63,33 @@ export const Avslag11_27KravGruppe = ({
       </Box>
       <Box padding="space-16">
         <VStack gap="space-8">
-          {tidligereVurdering && (
+          {vedtattVurdering && (
             <TidligereVurderingExpandableCard
               fom={krav.søknadsdato ? new Date(krav.søknadsdato) : new Date()}
-              vurderingStatus={getErOppfyltEllerIkkeStatus(!tidligereVurdering.skalAvslås1127)}
-              vurderingerMeta={tidligereVurdering.vurderingerMeta}
+              vurderingStatus={getErOppfyltEllerIkkeStatus(!vedtattVurdering.skalAvslås1127)}
+              vurderingerMeta={vedtattVurdering.vurderingerMeta ?? {}}
               tom={undefined}
               førsteNyePeriodeFraDato={undefined}
             >
-              <Avslag11_27TidligereVurdering vurdering={tidligereVurdering} />
+              <Avslag11_27TidligereVurdering vurdering={vedtattVurdering} />
             </TidligereVurderingExpandableCard>
           )}
+
           <NyVurderingExpandableCard
             accordionsSignal={accordionsSignal}
-            fraDato={krav.søknadsdato ? new Date(krav.søknadsdato) : new Date()}
+            fraDato={new Date(krav.søknadsdato)}
             nestePeriodeFraDato={null}
             isLast={true}
-            vurderingStatus={getErOppfyltEllerIkkeStatus(
-              getTrueFalseEllerUndefined(vurderingFormField?.skalAvslås1127)
-            )}
+            vurderingStatus={getErOppfyltEllerIkkeStatus(vurderingFormField?.skalAvslås1127 === JaEllerNei.Nei)}
             vurdering={vurderingFormField}
-            harTidligereVurderinger={!!tidligereVurdering}
+            harTidligereVurderinger={!!vedtattVurdering}
             finnesFeil={false}
             onSlettVurdering={() => {}}
             index={0}
             readonly={readonly}
             initiellEkspandert={skalVæreInitiellEkspandert(vurderingFormField?.erNyVurdering, erAktivUtenAvbryt)}
           >
-            <Avslag11_27Vurdering form={form} kravIndex={kravIndex} readonly={readonly} />
+            <Avslag11_27VurderingSkjema form={form} kravIndex={kravIndex} readonly={readonly} />
           </NyVurderingExpandableCard>
         </VStack>
       </Box>

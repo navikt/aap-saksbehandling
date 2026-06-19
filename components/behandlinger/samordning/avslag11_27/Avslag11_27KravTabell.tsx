@@ -6,8 +6,8 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 interface Props {
   label: string;
   avslag11_27krav: Avslag11_27Krav[];
-  selectedJournalpostIds: string[];
-  onToggle: (journalpostId: string) => void;
+  selectedReferanser: string[];
+  onToggle: (referanse: string) => void;
   readonly: boolean;
 }
 
@@ -26,7 +26,7 @@ function formaterKravType(type: string): string {
 export const Avslag11_27KravTabell = ({
   label,
   avslag11_27krav,
-  selectedJournalpostIds,
+  selectedReferanser,
   onToggle,
   readonly,
 }: Props) => {
@@ -72,8 +72,8 @@ export const Avslag11_27KravTabell = ({
                 <Checkbox
                   size={'small'}
                   hideLabel
-                  checked={selectedJournalpostIds.includes(krav.søknadsdokument)}
-                  onChange={() => onToggle(krav.søknadsdokument)}
+                  checked={selectedReferanser.includes(krav.referanse)}
+                  onChange={() => onToggle(krav.referanse)}
                   readOnly={readonly}
                 >
                   Vurder

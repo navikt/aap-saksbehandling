@@ -37,12 +37,12 @@ export interface KravMedVurderinger {
 }
 
 export interface KravMedVurdering extends VurderingFormMeta {
-  journalpostId: string;
+  referanse: string;
   begrunnelse: string;
-  harAnnenFullYtelse: JaEllerNei;
+  harAnnenFullYtelse: JaEllerNei | undefined;
   brukersYtelse: Avslag11_27BrukersYtelse | undefined;
   harSykepengegrunnlagOver2G: JaEllerNei | undefined;
-  skalAvslås1127: JaEllerNei;
+  skalAvslås1127: JaEllerNei | undefined;
 }
 
 type DraftFormFields = Partial<Avslag11_27FormFields>;
@@ -84,29 +84,30 @@ export const Avslag11_27 = ({ grunnlag, readOnly, behandlingVersjon, initialMell
     form
   );
 
-  const [selectedJournalpostIds, setSelectedJournalpostIds] = useState<string[]>(() =>
-    grunnlag.krav
-      .filter((krav) => {
-        const vedtatt = (grunnlag.vedtatteVurdering ?? []).find((v) => v.journalpostId === krav.søknadsdokument);
-        return !!vedtatt;
-      })
-      .map((krav) => krav.søknadsdokument)
-  );
+  const [selectedReferanser, setSelectedReferanser] = useState<string[]>(() => {
+    const vedtatteIds = (grunnlag.vedtatteVurdering ?? []).map((v) => v.referanse);
+    const nåværendeIds = (grunnlag.vurderinger ?? []).map((v) => v.referanse);
 
-  const handleToggle = (journalpostId: string) => {
-    setSelectedJournalpostIds((prev) =>
-      prev.includes(journalpostId) ? prev.filter((id) => id !== journalpostId) : [...prev, journalpostId]
+    const alleVurderte = new Set(new Set([...vedtatteIds, ...nåværendeIds]));
+    return grunnlag.krav
+      .filter((krav) => alleVurderte.has(krav.referanse))
+      .map((krav) => krav.referanse);
+  });
+
+  const handleToggle = (referanse: string) => {
+    setSelectedReferanser((prev) =>
+      prev.includes(referanse) ? prev.filter((id) => id !== referanse) : [...prev, referanse]
     );
   };
 
   const handleSubmit: SubmitEventHandler = (event: SubmitEvent) => {
     form.handleSubmit((data) => {
       const vurderinger = data.avslag11_27vurderinger
-        .filter((krav) => selectedJournalpostIds.includes(krav.vurdering.journalpostId))
+        .filter((krav) => selectedReferanser.includes(krav.vurdering.referanse))
         .map((krav) => {
           const vurdering = krav.vurdering;
           return {
-            journalpostId: vurdering.journalpostId,
+            referanse: vurdering.referanse,
             begrunnelse: vurdering.begrunnelse,
             harAnnenFullYtelse: vurdering.harAnnenFullYtelse === JaEllerNei.Ja,
             brukersYtelse: vurdering.brukersYtelse,
@@ -154,17 +155,21 @@ export const Avslag11_27 = ({ grunnlag, readOnly, behandlingVersjon, initialMell
         <Avslag11_27KravTabell
           label={'Bruker har følgende søknader om AAP'}
           avslag11_27krav={grunnlag.krav}
-          selectedJournalpostIds={selectedJournalpostIds}
+          selectedReferanser={selectedReferanser}
           onToggle={handleToggle}
           readonly={formReadOnly}
         />
         {kravFields.map((kravField, kravIndex) => {
           const faktiskKrav = grunnlag.krav[kravIndex];
-          if (!selectedJournalpostIds.includes(faktiskKrav.søknadsdokument)) return null;
+          if (!selectedReferanser.includes(faktiskKrav.referanse)) return null;
 
-          const tidligereVurdering = (grunnlag.vedtatteVurdering ?? []).find(
-            (v) => v.journalpostId === faktiskKrav.søknadsdokument
-          );
+          const vedtattVurdering = (grunnlag.vedtatteVurdering ?? []).find(
+            (v) => v.referanse === faktiskKrav.referanse
+          ); // FIXME: Thao: Må finne basert på vurdert i behandling
+
+          const nåværendeVurdering = (grunnlag.vurderinger ?? []).find(
+            (v) => v.referanse === faktiskKrav.referanse
+          );  // FIXME: Thao: Må finne basert på vurdert i behandling
 
           return (
             <Avslag11_27KravGruppe
@@ -172,7 +177,8 @@ export const Avslag11_27 = ({ grunnlag, readOnly, behandlingVersjon, initialMell
               form={form}
               kravIndex={kravIndex}
               krav={faktiskKrav}
-              tidligereVurdering={tidligereVurdering}
+              vedtattVurdering={vedtattVurdering}
+              nåværendeVurdering={nåværendeVurdering}
               readonly={formReadOnly}
               accordionsSignal={accordionsSignal}
               erAktivUtenAvbryt={erAktivUtenAvbryt}
@@ -188,29 +194,47 @@ function mapVurderingToDraftFormFields(
   grunnlag: Avslag11_27Grunnlag,
   krav: Avslag11_27Grunnlag['krav']
 ): DraftFormFields {
-  const vedtatteVurderinger = grunnlag.vedtatteVurdering ?? [];
-
   return {
     avslag11_27vurderinger: krav.map((kravItem) => {
-      const tidligereVurderingForKrav = vedtatteVurderinger.find((v) => v.journalpostId === kravItem.søknadsdokument);
-      let harSykepengegrunnlagOver2G: JaEllerNei | undefined;
 
-      if (tidligereVurderingForKrav?.harSykepengegrunnlagOver2G !== undefined) {
-        harSykepengegrunnlagOver2G = tidligereVurderingForKrav.harSykepengegrunnlagOver2G
-          ? JaEllerNei.Ja
-          : JaEllerNei.Nei;
+      //FIXME Thao: Må hente ut basert på vurdert i behandling
+      const nåværende = (grunnlag.vurderinger ?? []).find((v) => v.referanse === kravItem.referanse);
+      const vedtatt = (grunnlag.vedtatteVurdering ?? []).find((v) => v.referanse === kravItem.referanse);
+
+      const gjeldendeVurdering = nåværende ?? vedtatt;
+
+      if (!gjeldendeVurdering) {
+        return {
+          vurdering: {
+            referanse: kravItem.referanse,
+            journalpostId: kravItem.søknadsdokument,
+            behøverVurdering: true,
+            erNyVurdering: true,
+            begrunnelse: '',
+            harAnnenFullYtelse: undefined,
+            brukersYtelse: undefined,
+            harSykepengegrunnlagOver2G: undefined,
+            skalAvslås1127: undefined,
+          },
+        };
+      }
+
+      let harSykepengegrunnlagOver2G: JaEllerNei | undefined;
+      if (gjeldendeVurdering.harSykepengegrunnlagOver2G !== undefined && gjeldendeVurdering.harSykepengegrunnlagOver2G !== null) {
+        harSykepengegrunnlagOver2G = gjeldendeVurdering.harSykepengegrunnlagOver2G ? JaEllerNei.Ja : JaEllerNei.Nei;
       }
 
       return {
         vurdering: {
+          referanse: kravItem.referanse,
           journalpostId: kravItem.søknadsdokument,
           behøverVurdering: true,
-          erNyVurdering: !tidligereVurderingForKrav,
-          begrunnelse: tidligereVurderingForKrav?.begrunnelse ?? '',
-          harAnnenFullYtelse: tidligereVurderingForKrav?.harAnnenFullYtelse ? JaEllerNei.Ja : JaEllerNei.Nei,
-          brukersYtelse: tidligereVurderingForKrav?.brukersYtelse,
+          erNyVurdering: !nåværende,
+          begrunnelse: gjeldendeVurdering.begrunnelse ?? '',
+          harAnnenFullYtelse: gjeldendeVurdering.harAnnenFullYtelse ? JaEllerNei.Ja : JaEllerNei.Nei,
+          brukersYtelse: gjeldendeVurdering.brukersYtelse ?? undefined,
           harSykepengegrunnlagOver2G,
-          skalAvslås1127: tidligereVurderingForKrav?.skalAvslås1127 ? JaEllerNei.Ja : JaEllerNei.Nei,
+          skalAvslås1127: gjeldendeVurdering.skalAvslås1127 ? JaEllerNei.Ja : JaEllerNei.Nei,
         },
       };
     }),
