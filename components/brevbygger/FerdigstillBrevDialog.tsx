@@ -18,26 +18,26 @@ export const FerdigstillBrevDialog = ({ referanse, isOpen, onClose, sendBrev, se
   const pdfDataUriRef = useRef<string | undefined>(undefined);
 
   useEffect(() => {
-    const getPdf = async () => {
-      setLasterPdf(true);
-      try {
-        const blob = await fetch(`/saksbehandling/api/brev/${referanse}/forhandsvis/`).then((r) => r.blob());
-        const url = URL.createObjectURL(new Blob([blob], { type: 'application/pdf' }));
-        pdfDataUriRef.current = url;
-        setPdfDataUri(url);
-      } finally {
-        setLasterPdf(false);
-      }
-    };
     if (isOpen) {
+      const getPdf = async () => {
+        setLasterPdf(true);
+        try {
+          const blob = await fetch(`/saksbehandling/api/brev/${referanse}/forhandsvis/`).then((r) => r.blob());
+          const url = URL.createObjectURL(new Blob([blob], { type: 'application/pdf' }));
+          pdfDataUriRef.current = url;
+          setPdfDataUri(url);
+        } finally {
+          setLasterPdf(false);
+        }
+      };
       getPdf();
-    }
-    return () => {
+    } else {
+      setPdfDataUri(undefined);
       if (pdfDataUriRef.current) {
         URL.revokeObjectURL(pdfDataUriRef.current);
         pdfDataUriRef.current = undefined;
       }
-    };
+    }
   }, [isOpen]);
 
   return (

@@ -25,11 +25,11 @@ describe('InnhentDokumentasjon', () => {
   });
 
   test('har et felt for å velge dokumentasjonstype', async () => {
-    expect(screen.getByRole('combobox', { name: 'Type dokumentasjon' })).toBeVisible();
+    expect(screen.getByRole('combobox', { name: 'Velg dokumenttype' })).toBeVisible();
   });
 
   test('har et felt for melding til behandler', async () => {
-    expect(screen.getByRole('textbox', { name: 'Melding' })).toBeVisible();
+    expect(screen.getByRole('textbox', { name: 'Skriv melding' })).toBeVisible();
   });
 
   test('har en knapp for å sende melding', async () => {

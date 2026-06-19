@@ -17,18 +17,16 @@ import styles from 'components/behandlinger/underveis/underveisgrunnlag/Undervei
 import { Alert } from 'components/alert/Alert';
 
 type Props = {
-  grunnlag: UnderveisGrunnlag[];
   grunnlagMedDiff: UnderveisGrunnlagMedDiff;
   readOnly: boolean;
   behandlingVersjon: number;
-  visMedDiff: boolean;
 };
 type PeriodeProps = {
   periode: UnderveisGrunnlag;
   bakgrunnClassName?: string;
 };
 
-export const Underveisgrunnlag = ({ grunnlag, grunnlagMedDiff, readOnly, behandlingVersjon, visMedDiff }: Props) => {
+export const Underveisgrunnlag = ({ grunnlagMedDiff, readOnly, behandlingVersjon }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
 
   const { status, løsBehovOgGåTilNesteSteg, isLoading, løsBehovOgGåTilNesteStegError } =
@@ -63,8 +61,7 @@ export const Underveisgrunnlag = ({ grunnlag, grunnlagMedDiff, readOnly, behandl
       visningModus={visningModus}
       visningActions={visningActions}
     >
-      {!visMedDiff && <UnderveisTabell grunnlag={grunnlag} />}
-      {visMedDiff && <UnderveisTabellMedDiff grunnlag={grunnlagMedDiff} />}
+      <UnderveisTabellMedDiff grunnlag={grunnlagMedDiff} />
       <VStack gap={'space-16'}>
         {!readOnly && <BodyShort>Trykk på neste steg for å komme videre.</BodyShort>}
         <LøsBehovOgGåTilNesteStegStatusAlert
@@ -76,28 +73,6 @@ export const Underveisgrunnlag = ({ grunnlag, grunnlagMedDiff, readOnly, behandl
   );
 };
 
-const UnderveisTabell = ({ grunnlag }: { grunnlag: UnderveisGrunnlag[] }) => {
-  return (
-    <Table>
-      <Table.Header>
-        <Table.Row>
-          <Table.HeaderCell>Vurdert periode</Table.HeaderCell>
-          <Table.HeaderCell>Utfall</Table.HeaderCell>
-          <Table.HeaderCell>Avslagsårsak</Table.HeaderCell>
-          <Table.HeaderCell>Gradering</Table.HeaderCell>
-          <Table.HeaderCell>Trekk (dagsatser)</Table.HeaderCell>
-          <Table.HeaderCell>Rettighetstype</Table.HeaderCell>
-          <Table.HeaderCell>Meldeperiode</Table.HeaderCell>
-        </Table.Row>
-      </Table.Header>
-      <Table.Body>
-        {grunnlag.map((periode, index) => (
-          <Perioderad key={index} periode={periode} />
-        ))}
-      </Table.Body>
-    </Table>
-  );
-};
 export const UnderveisTabellMedDiff = ({ grunnlag }: { grunnlag: UnderveisGrunnlagMedDiff }) => {
   const [visHistorikkPåEndredePerioder, setVisHistorikkPåEndredePerioder] = useState(false);
   const [visPerioderUtenEndringFraTidligere, setVisPerioderUtenEndringFraTidligere] = useState(false);

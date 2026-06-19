@@ -1,6 +1,6 @@
 import {
   hentBehandling,
-  hentMellomlagring,
+  hentMellomlagring, hentStudentGrunnlag,
   hentSykdomsGrunnlag,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import {
@@ -19,14 +19,15 @@ interface Props {
 }
 
 export const SykdomsvurderingMedDataFetching = async ({ behandlingsreferanse, stegData }: Props) => {
-  const [grunnlag, behandling] = await Promise.all([
+  const [grunnlag, behandling, studentgrunnlag] = await Promise.all([
     hentSykdomsGrunnlag(behandlingsreferanse),
     hentBehandling(behandlingsreferanse),
+    hentStudentGrunnlag(behandlingsreferanse),
   ]);
 
   const typeBehandling = stegData.typeBehandling;
 
-  if (isError(grunnlag)) {
+  if (isError(grunnlag) || isError(studentgrunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
   }
 
@@ -51,7 +52,7 @@ export const SykdomsvurderingMedDataFetching = async ({ behandlingsreferanse, st
       ? behandling.data.vurderingsbehovOgÅrsaker.flatMap((behovOgÅrsak) => behovOgÅrsak.vurderingsbehov)
       : [];
   const erOvergangArbeid = vurderingsbehov.some((x) => x.type === 'OVERGANG_ARBEID');
-  const erRevurderingStudent = vurderingsbehov.some((x) => x.type === 'REVURDER_STUDENT') && !stegData.readOnly
+  const erRevurderingStudent = vurderingsbehov.some((x) => x.type === 'REVURDER_STUDENT') && !stegData.readOnly;
 
   return (
     <Sykdomsvurdering
@@ -63,6 +64,7 @@ export const SykdomsvurderingMedDataFetching = async ({ behandlingsreferanse, st
       initialMellomlagretVurdering={initialMellomlagretVurdering}
       erOvergangArbeid={erOvergangArbeid}
       erRevurderingStudent={erRevurderingStudent}
+      studentgrunnlag={studentgrunnlag.data}
     />
   );
 };

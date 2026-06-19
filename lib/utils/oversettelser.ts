@@ -46,6 +46,7 @@ const behovskodeMap = {
   '5035': 'Avklar oppholdskrav',
   '5036': 'Samordning barnepensjon',
   '5037': '§ 11-14 Student',
+  '5038': 'Vurder krav',
   '5040': '§ 11-4 andre ledd. Krav om inntektsbortfall etter fylte 62 år',
   '5041': 'Skriv vedtaksbrev',
   '5050': 'Skriv brev',

@@ -14,8 +14,12 @@ export const ApiException = ({ apiResponses }: Props) => {
         .filter((res) => isError(res))
         .map((feil, i) => (
           <VStack key={`feil-${i}`}>
-            <BodyShort size={'small'}>{feil.status}</BodyShort>
-            <BodyShort size={'small'}>{feil.apiException.code}</BodyShort>
+            {feil.status >= 500 && (
+              <>
+                <BodyShort size={'small'}>{feil.status}</BodyShort>
+                <BodyShort size={'small'}>{feil.apiException.code}</BodyShort>
+              </>
+            )}
             <BodyShort size={'small'}>{feil.apiException.message}</BodyShort>
           </VStack>
         ))}

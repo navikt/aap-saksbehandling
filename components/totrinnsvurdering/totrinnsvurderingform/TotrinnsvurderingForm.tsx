@@ -143,7 +143,7 @@ export const TotrinnsvurderingForm = ({
           });
         }
         if (data.skalHastemarkeringBeholdes === JaEllerNei.Nei) {
-          clientFjernMarkeringForBehandling(behandlingsreferanse, { markeringType: MarkeringHaster });
+          await clientFjernMarkeringForBehandling(behandlingsreferanse, { markeringType: MarkeringHaster });
         }
         if (isError) {
           return;
