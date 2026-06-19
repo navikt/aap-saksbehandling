@@ -39,7 +39,7 @@ export type KravType = 'NYTT_KRAV_AAP' | 'GJENOPPTAK' | 'TRUKKET_SØKNAD' | 'KLA
 
 export interface KravVurderingOppføring {
   kravType: KravType;
-  søknadsdato?: string;
+  søknadsdato: string;
   kravdato?: string;
   muligRettFra?: string;
 }
@@ -364,9 +364,7 @@ export const OpprettSakLocal = () => {
       kravVurderinger:
         kravVurderinger?.map((k) => ({
           kravType: k.kravType,
-          søknadsdato: k.søknadsdato
-            ? formaterDatoForBackend(parse(k.søknadsdato, 'dd.MM.yyyy', new Date()))
-            : undefined,
+          søknadsdato: formaterDatoForBackend(parse(k.søknadsdato, 'dd.MM.yyyy', new Date())),
           kravdato: k.kravdato ? formaterDatoForBackend(parse(k.kravdato, 'dd.MM.yyyy', new Date())) : undefined,
           muligRettFra: k.muligRettFra
             ? formaterDatoForBackend(parse(k.muligRettFra, 'dd.MM.yyyy', new Date()))

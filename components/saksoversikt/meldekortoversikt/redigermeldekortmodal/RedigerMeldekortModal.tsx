@@ -239,7 +239,7 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
                           </Link>
                         )}
                         <Detail>
-                          {formaterDatoForFrontend(tidligereMeldekort.meldeDato)} {tidligereMeldekort.oppdatertAv}
+                          {formaterDatoForFrontend(tidligereMeldekort.mottatTidspunkt)} {tidligereMeldekort.oppdatertAv}
                         </Detail>
                       </HStack>
                     );
@@ -292,7 +292,7 @@ function getDefaultValuesForForm(meldekort?: MeldeperiodeMedMeldekortDto): Redig
   return {
     begrunnelse: '',
     årsak: '' as Årsaker,
-    meldedato: meldekort.meldekort?.meldeDato ? formaterDatoForFrontend(meldekort.meldekort.meldeDato) : '',
+    meldedato: '',
     dager: alleDager,
   };
 }
@@ -306,13 +306,13 @@ function kobleDokumentInfoTilTidligereMeldekort(
     const dokument = dokumenter?.find((doku) => doku.journalpostId === tidligereMeldekort.journalpostId);
     const journalpostId = tidligereMeldekort.journalpostId;
     const dokumentId = dokument?.dokumenter[0]?.dokumentInfoId;
-    const meldeDato = tidligereMeldekort.meldeDato;
+    const mottatTidspunkt = tidligereMeldekort.mottattTidspunkt;
     const oppdatertAv = utledOppdatertAv(meldeperiodeMedMeldekort.meldekort, personInformasjon.navn);
 
     return {
       journalpostId,
       dokumentId,
-      meldeDato,
+      mottatTidspunkt,
       oppdatertAv,
     };
   });
