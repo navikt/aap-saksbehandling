@@ -9,7 +9,6 @@ import { clientHentFlyt, clientMellomlagreBrev } from 'lib/clientApi';
 import { Brev, BrevGrunnlagBrev, BrevMottaker, BrevStatus, Mottaker, Signatur } from 'lib/types/types';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { Behovstype } from 'lib/utils/form';
-import { useFeatureFlag } from 'context/UnleashContext';
 
 import NavLogo from 'public/nav_logo.png';
 import { useCallback, useEffect, useState } from 'react';
@@ -65,8 +64,6 @@ export const SkriveBrev = ({
 
   const [forhåndsvisModalOpen, setForhåndsvisModalOpen] = useState(false);
   const [ikkeSendBrevModalOpen, settIkkeSendBrevModalOpen] = useState(false);
-
-  const visGReguleringInfoboks = useFeatureFlag('InfoboksGRegulering');
 
   const mellomlagreBackendRequest = useCallback(async () => {
     setIsSaving(true);
@@ -168,26 +165,24 @@ export const SkriveBrev = ({
         </HStack>
 
         <VStack gap={'space-16'}>
-          {visGReguleringInfoboks && (
-            <LocalAlert status={'warning'} size={'small'} style={{ maxWidth: '210mm' }}>
-              <LocalAlert.Header>
-                <LocalAlert.Title>G-regulering for AAP i Kelvin 2026</LocalAlert.Title>
-              </LocalAlert.Header>
-              <LocalAlert.Content>
-                <BodyShort size={'small'}>
-                  Se over om bruker har fått innvilget AAP i en periode før 1. mai. Hvis virkningstidspunktet er før 1.
-                  mai 2026, må beslutter i dagens løsning
-                </BodyShort>
-                <List as={'ul'} size={'small'}>
-                  <List.Item>Manuelt skrive inn den nye dagsatsen som gjelder fra 1. mai 2026.</List.Item>
-                  <List.Item>Dagsatsen på virkningstidspunktet kommer automatisk i brevet.</List.Item>
-                </List>
-                <BodyShort size={'small'} style={{ marginTop: 'var(--ax-space-8)' }}>
-                  Begge satsene finnes i steget «Tilkjent ytelse».
-                </BodyShort>
-              </LocalAlert.Content>
-            </LocalAlert>
-          )}
+          <LocalAlert status={'warning'} size={'small'} style={{ maxWidth: '210mm' }}>
+            <LocalAlert.Header>
+              <LocalAlert.Title>G-regulering for AAP i Kelvin 2026</LocalAlert.Title>
+            </LocalAlert.Header>
+            <LocalAlert.Content>
+              <BodyShort size={'small'}>
+                Se over om bruker har fått innvilget AAP i en periode før 1. mai. Hvis virkningstidspunktet er før 1.
+                mai 2026, må beslutter i dagens løsning
+              </BodyShort>
+              <List as={'ul'} size={'small'}>
+                <List.Item>Manuelt skrive inn den nye dagsatsen som gjelder fra 1. mai 2026.</List.Item>
+                <List.Item>Dagsatsen på virkningstidspunktet kommer automatisk i brevet.</List.Item>
+              </List>
+              <BodyShort size={'small'} style={{ marginTop: 'var(--ax-space-8)' }}>
+                Begge satsene finnes i steget «Tilkjent ytelse».
+              </BodyShort>
+            </LocalAlert.Content>
+          </LocalAlert>
           <BrevbyggerBeta
             brevmal={brev}
             mottaker={mottaker}
