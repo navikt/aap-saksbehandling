@@ -195,7 +195,7 @@ export const Brevbygger = ({
           </HGrid>
         </VStack>
 
-        <HStack gap="space-8" justify="space-between" marginBlock="space-8">
+        <HStack gap="space-8" justify="space-between" marginBlock="space-24">
           <LøsBehovOgGåTilNesteStegStatusAlert
             status={løsBehovStatus}
             løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
