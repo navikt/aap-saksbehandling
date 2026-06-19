@@ -201,9 +201,11 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
       </Link>
       {isError(fastlege) ? (
         fastlege.status === 403 ? (
-          <InlineMessage status="warning" size="small">
-            Du har ikke tilgang til å se registrert fastlege. Søk opp behandleren manuelt.
-          </InlineMessage>
+          <InfoCard data-color="warning" size="small">
+            <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+              Du har ikke tilgang til å se registrert fastlege. Søk opp behandleren manuelt.
+            </InfoCard.Message>
+          </InfoCard>
         ) : (
           <ApiException apiResponses={[fastlege]} />
         )
