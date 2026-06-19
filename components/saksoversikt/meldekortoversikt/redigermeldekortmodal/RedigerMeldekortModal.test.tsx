@@ -23,6 +23,7 @@ const meldekort: MeldeperiodeMedMeldekortDto = {
     fom: '2025-01-06',
     tom: '2025-01-19',
   },
+  meldefrist: '2025-01-21',
   periode: {
     fom: '2025-01-06',
     tom: '2025-01-19',
@@ -36,6 +37,7 @@ const meldekortMedDager: MeldeperiodeMedMeldekortDto = {
     fom: '2025-01-06',
     tom: '2025-01-19',
   },
+  meldefrist: '2025-01-21',
   periode: {
     fom: '2025-01-06',
     tom: '2025-01-19',
@@ -71,6 +73,7 @@ const meldekortMedNullTimer: MeldeperiodeMedMeldekortDto = {
     fom: '2025-01-06',
     tom: '2025-01-19',
   },
+  meldefrist: '2025-01-21',
   periode: {
     fom: '2025-01-06',
     tom: '2025-01-19',
@@ -284,6 +287,7 @@ describe('RedigerMeldekortModal', () => {
 
     it('genererer korrekt antall input-felt for en kortere periode', async () => {
       const kortMeldekort: MeldeperiodeMedMeldekortDto = {
+        meldefrist: '2025-01-22',
         meldepliktStatus: [],
         tidligereMeldekort: [],
         meldeperiode: { fom: '2025-01-08', tom: '2025-01-14' },
@@ -302,6 +306,7 @@ describe('RedigerMeldekortModal', () => {
     // Uke 1: mandag 6. jan og tirsdag 7. jan er utenfor perioden
     // Uke 2: onsdag 15. jan – søndag 19. jan er utenfor perioden
     const kortMeldekort: MeldeperiodeMedMeldekortDto = {
+      meldefrist: '2025-01-27',
       meldepliktStatus: [],
       tidligereMeldekort: [],
       meldeperiode: { fom: '2025-01-08', tom: '2025-01-19' },
@@ -358,6 +363,69 @@ describe('RedigerMeldekortModal', () => {
       await fyllUtOgSubmit(new Dato(addDays(new Date(), 1)).formaterForFrontend());
 
       expect(screen.getAllByText('Meldedato kan ikke være i fremtiden.')[0]).toBeVisible();
+    });
+  });
+
+  describe('Advarsel om meldedato etter meldefrist', () => {
+    const velgÅrsakOgFyllMeldedato = async (meldedato: string) => {
+      await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Registrere at bruker har meldt seg');
+      await user.type(screen.getByLabelText('Dato brukeren meldte seg for Nav'), meldedato);
+    };
+
+    it('viser advarsel når meldedato er etter meldefrist', async () => {
+      customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
+      await velgÅrsakOgFyllMeldedato('22.01.2025'); // etter meldefrist 2025-01-21
+
+      expect(
+        screen.getByText(
+          'Du skal kun legge inn faktisk dato brukeren har meldt seg. Hvis det skal vurderes om det er rimelig grunn til at brukeren ikke har meldt seg, så må du opprette revurdering på § 11-10 Overstyr perioder uten oppfylt meldeplikt.'
+        )
+      ).toBeVisible();
+    });
+
+    it('viser ikke advarsel når meldedato er på meldefrist', async () => {
+      customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
+      await velgÅrsakOgFyllMeldedato('21.01.2025'); // samme dag som meldefrist
+
+      expect(
+        screen.queryByText(
+          'Du skal kun legge inn faktisk dato brukeren har meldt seg. Hvis det skal vurderes om det er rimelig grunn til at brukeren ikke har meldt seg, så må du opprette revurdering på § 11-10 Overstyr perioder uten oppfylt meldeplikt.'
+        )
+      ).not.toBeInTheDocument();
+    });
+
+    it('viser ikke advarsel når meldedato er før meldefrist', async () => {
+      customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
+      await velgÅrsakOgFyllMeldedato('20.01.2025'); // før meldefrist 2025-01-21
+
+      expect(
+        screen.queryByText(
+          'Du skal kun legge inn faktisk dato brukeren har meldt seg. Hvis det skal vurderes om det er rimelig grunn til at brukeren ikke har meldt seg, så må du opprette revurdering på § 11-10 Overstyr perioder uten oppfylt meldeplikt.'
+        )
+      ).not.toBeInTheDocument();
+    });
+
+    it('viser ikke advarsel ved årsak "Lever/endre meldekort for bruker" selv om meldedato er etter meldefrist', async () => {
+      customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
+      await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Lever/endre meldekort for bruker');
+      await user.type(screen.getByLabelText('Dato brukeren meldte opplysningene'), '22.01.2025');
+
+      expect(
+        screen.queryByText(
+          'Du skal kun legge inn faktisk dato brukeren har meldt seg. Hvis det skal vurderes om det er rimelig grunn til at brukeren ikke har meldt seg, så må du opprette revurdering på § 11-10 Overstyr perioder uten oppfylt meldeplikt.'
+        )
+      ).not.toBeInTheDocument();
+    });
+
+    it('viser ikke advarsel når meldedato ikke er fylt inn', async () => {
+      customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
+      await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Registrere at bruker har meldt seg');
+
+      expect(
+        screen.queryByText(
+          'Du skal kun legge inn faktisk dato brukeren har meldt seg. Hvis det skal vurderes om det er rimelig grunn til at brukeren ikke har meldt seg, så må du opprette revurdering på § 11-10 Overstyr perioder uten oppfylt meldeplikt.'
+        )
+      ).not.toBeInTheDocument();
     });
   });
 });

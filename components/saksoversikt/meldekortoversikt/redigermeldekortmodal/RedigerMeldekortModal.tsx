@@ -104,6 +104,7 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
   const tom = new Dato(meldekort.meldeperiode.tom);
 
   const årsak = form.watch('årsak');
+  const meldedato = form.watch('meldedato');
 
   const erÅrsakLevereMeldekort = årsak === Årsaker.LEVERE_MELDEKORT_FOR_BRUKER;
   const erÅrsakRegistrereMeldedato = årsak === Årsaker.REGISTRERE_MELDEDATO;
@@ -116,6 +117,9 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
   const skalViseAlertForIngenTimer = erÅrsakRegistrereMeldedato && !brukerHarLevertTimer;
   const meldeDatoLabel =
     årsak === Årsaker.REGISTRERE_MELDEDATO ? 'Dato brukeren meldte seg for Nav' : 'Dato brukeren meldte opplysningene';
+
+  const skalViseMeldedatoErEtterMeldefristAlert =
+    årsak === Årsaker.REGISTRERE_MELDEDATO && erDatoFoerDato(formaterDatoForFrontend(meldekort.meldefrist), meldedato);
 
   const tidligereInnsendteMeldekort = kobleDokumentInfoTilTidligereMeldekort(meldekort, personInformasjon, dokumenter);
   const errorList = hentFeilmeldingerForForm(form.formState.errors);
@@ -202,6 +206,13 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
                     <Alert variant={'info'}>
                       Når du leverer meldekortet vil det startes en automatisk meldekortbehandling i Kelvin. Brukeren
                       får justert utbetaling som om de har levert meldekortet selv.
+                    </Alert>
+                  )}
+                  {skalViseMeldedatoErEtterMeldefristAlert && (
+                    <Alert variant={'warning'}>
+                      Du skal kun legge inn faktisk dato brukeren har meldt seg. Hvis det skal vurderes om det er
+                      rimelig grunn til at brukeren ikke har meldt seg, så må du opprette revurdering på § 11-10
+                      Overstyr perioder uten oppfylt meldeplikt.
                     </Alert>
                   )}
                   {skalViseAlertForIngenTimer && (
