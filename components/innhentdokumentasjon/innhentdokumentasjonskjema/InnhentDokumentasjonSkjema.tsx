@@ -1,6 +1,18 @@
 'use client';
 
-import { BodyShort, Button, Heading, InlineMessage, InfoCard, Link, Loader, Radio, VStack, CopyButton } from '@navikt/ds-react';
+import {
+  BodyShort,
+  Button,
+  Heading,
+  InlineMessage,
+  InfoCard,
+  Link,
+  Loader,
+  Radio,
+  VStack,
+  CopyButton,
+  Detail,
+} from '@navikt/ds-react';
 import { SubmitEventHandler, useState } from 'react';
 
 import styles from './InnhentDokumentasjonSkjema.module.css';
@@ -75,7 +87,7 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
   const skalViseDialogmeldingOption = useFeatureFlag('VisValgForDialogmelding');
   const optionsForTypeDokumentasjon = skalViseDialogmeldingOption
     ? [
-        { label: 'Velg dokumentasjonstype', value: '' },
+        { label: 'Velg dokument', value: '' },
         { label: 'Tilleggsopplysninger (L8)', value: 'L8' },
         { label: 'Legeerklæring ved arbeidsuførhet (L40)', value: 'L40' },
         { label: 'Dialogmelding', value: 'MELDING_FRA_NAV' },
@@ -100,13 +112,13 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
     },
     dokumentasjonstype: {
       type: 'select',
-      label: 'Type dokumentasjon',
+      label: 'Velg dokumenttype',
       options: optionsForTypeDokumentasjon,
       rules: { required: 'Du må velge hvilken type dokumentasjon som skal bestilles' },
     },
     melding: {
       type: 'textarea',
-      label: 'Melding',
+      label: 'Skriv melding',
       rules: { required: 'Du må skrive en melding til behandler' },
     },
   });
@@ -187,141 +199,155 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
         <BodyShort size={'small'}>Rutiner for innhenting av helseopplysninger</BodyShort>
         <ExternalLinkIcon />
       </Link>
-      {isError(fastlege) ? <ApiException apiResponses={[fastlege]} /> : null}
+      {isError(fastlege) ? (
+        fastlege.status === 403 ? (
+          <InfoCard data-color="warning" size="small">
+            <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+              Du har ikke tilgang til å se registrert fastlege. Søk opp behandleren manuelt.
+            </InfoCard.Message>
+          </InfoCard>
+        ) : (
+          <ApiException apiResponses={[fastlege]} />
+        )
+      ) : null}
       {fastlegeIsLoading ? (
         <Loader size={'small'} title={'Henter fastlege...'} />
       ) : (
-      <form onSubmit={handleSubmit} className={'flex-column'} autoComplete={'off'}>
-        {fastlegeDto ? (
-          <div>
-            <RadioGroupWrapper
-              name={'behandlerValg'}
-              control={form.control}
-              label={'Velg behandler'}
+        <form onSubmit={handleSubmit} className={'flex-column'} autoComplete={'off'}>
+          {fastlegeDto ? (
+            <div>
+              <RadioGroupWrapper
+                name={'behandlerValg'}
+                control={form.control}
+                label={'Velg behandler'}
+                rules={{ required: 'Du må velge en behandler' }}
+                size={'small'}
+                className={
+                  behandlerValg === 'søk'
+                    ? `${styles.behandlerValgGruppe} ${styles.behandlerValgÅpen}`
+                    : styles.behandlerValgGruppe
+                }
+              >
+                <Radio
+                  value={'fastlege'}
+                  className={styles.radioItem}
+                  aria-label={`Registrert fastlege: ${fastlegeDto.navn}`}
+                >
+                  <div className={styles.fastlegeRadioInnhold}>
+                    <div>
+                      <BodyShort size={'small'}>{fastlegeDto.navn}</BodyShort>
+                      <div className={styles.behandlerValgDetaljer}>
+                        {fastlegeDto.kontor && <Detail>Kontor: {fastlegeDto.kontor}</Detail>}
+                        {fastlegeDto.adresse && (
+                          <Detail>
+                            Adresse:{' '}
+                            {slåSammenDefinerte(
+                              ', ',
+                              fastlegeDto.adresse,
+                              slåSammenDefinerte(' ', fastlegeDto.postnummer, fastlegeDto.poststed)
+                            )}
+                          </Detail>
+                        )}
+                        {fastlegeDto.telefon && <Detail>Telefon: {fastlegeDto.telefon}</Detail>}
+                      </div>
+                    </div>
+                    <Detail className={styles.fastlegeEtikett}>Registrert fastlege</Detail>
+                  </div>
+                  {!fastlegeResponse.varFastlegeRiktigPåSøknadstidspunkt &&
+                    !fastlegeResponse.erFastlegeEndretSidenSøknadstidspunkt && (
+                      <InlineMessage status="warning" size="small" className={styles.fastlegeRadioAdvarsel}>
+                        Bruker oppgir i søknaden at informasjon om fastlegen ikke er riktig
+                      </InlineMessage>
+                    )}
+                </Radio>
+                <Radio value={'søk'} className={styles.radioItem}>
+                  Annen behandler
+                </Radio>
+              </RadioGroupWrapper>
+              {behandlerValg === 'søk' && (
+                <div className={styles.annenBehandlerSøk}>
+                  <AsyncComboSearch
+                    label={'Søk etter behandler'}
+                    form={form}
+                    name={'behandler'}
+                    fetcher={behandlersøk}
+                    rules={{ required: 'Du må velge en behandler' }}
+                    size={'small'}
+                    defaultOptions={defaultOptions}
+                  />
+                </div>
+              )}
+            </div>
+          ) : (
+            <AsyncComboSearch
+              label={'Velg behandler som skal motta meldingen'}
+              form={form}
+              name={'behandler'}
+              fetcher={behandlersøk}
               rules={{ required: 'Du må velge en behandler' }}
               size={'small'}
-              className={
-                behandlerValg === 'søk'
-                  ? `${styles.behandlerValgGruppe} ${styles.behandlerValgÅpen}`
-                  : styles.behandlerValgGruppe
-              }
-            >
-              <Radio value={'fastlege'} className={styles.radioItem}>
-                <div className={styles.fastlegeRadioInnhold}>
-                  <div>
-                    <div>{fastlegeDto.navn}</div>
-                    <div className={styles.behandlerValgDetaljer}>
-                      {fastlegeDto.kontor && <div>Kontor: {fastlegeDto.kontor}</div>}
-                      {fastlegeDto.adresse && (
-                        <div>
-                          Adresse:{' '}
-                          {slåSammenDefinerte(
-                            ', ',
-                            fastlegeDto.adresse,
-                            slåSammenDefinerte(' ', fastlegeDto.postnummer, fastlegeDto.poststed)
-                          )}
-                        </div>
-                      )}
-                      {fastlegeDto.telefon && <div>Telefon: {fastlegeDto.telefon}</div>}
-                    </div>
-                  </div>
-                  <div className={styles.fastlegeEtikett}>Registrert fastlege</div>
-                </div>
-                {!fastlegeResponse.varFastlegeRiktigPåSøknadstidspunkt &&
-                  !fastlegeResponse.erFastlegeEndretSidenSøknadstidspunkt && (
-                    <InlineMessage status="warning" size="small" className={styles.fastlegeRadioAdvarsel}>
-                      Bruker oppgir i søknaden at informasjon om fastlegen ikke er riktig
-                    </InlineMessage>
-                  )}
-              </Radio>
-              <Radio value={'søk'} className={styles.radioItem}>
-                Annen behandler
-              </Radio>
-            </RadioGroupWrapper>
-            {behandlerValg === 'søk' && (
-              <div className={styles.annenBehandlerSøk}>
-                <AsyncComboSearch
-                  label={'Søk etter behandler'}
-                  form={form}
-                  name={'behandler'}
-                  fetcher={behandlersøk}
-                  rules={{ required: 'Du må velge en behandler' }}
-                  size={'small'}
-                  defaultOptions={defaultOptions}
-                />
-              </div>
-            )}
-          </div>
-        ) : (
-          <AsyncComboSearch
-            label={'Velg behandler som skal motta meldingen'}
-            form={form}
-            name={'behandler'}
-            fetcher={behandlersøk}
-            rules={{ required: 'Du må velge en behandler' }}
-            size={'small'}
-            defaultOptions={defaultOptions}
-          />
-        )}
-        {fastlegeResponse?.andreBehandlereFraSøknad?.map((behandler, index) => (
-          <InfoCard key={index} data-color={'info'} size={'small'} as={'section'}>
-            <InfoCard.Header icon={<InformationSquareIcon />}>
-              <InfoCard.Title>Behandler oppgitt i søknaden</InfoCard.Title>
-            </InfoCard.Header>
-            <InfoCard.Content>
-              <VStack>
-                {behandler.navn && (
-                  <BodyShort size={'small'} as={'div'} className={styles.behandlerNavn}>
-                    <span>{behandler.navn}</span>
-                    <CopyButton copyText={behandler.navn} size="xsmall" />
-                  </BodyShort>
-                )}
-                <div className={styles.behandlerValgDetaljer}>
-                  {behandler.legekontor && <BodyShort size={'small'}>Kontor: {behandler.legekontor}</BodyShort>}
-                  {behandler.adresse && (
-                    <BodyShort size={'small'}>
-                      Adresse:{' '}
-                      {slåSammenDefinerte(
-                        ', ',
-                        behandler.adresse,
-                        slåSammenDefinerte(' ', behandler.postnummer, behandler.poststed)
-                      )}
-                    </BodyShort>
-                  )}
-                  {behandler.telefon && <BodyShort size={'small'}>Telefon: {behandler.telefon}</BodyShort>}
-                </div>
-              </VStack>
-            </InfoCard.Content>
-          </InfoCard>
-        ))}
-        <FormField form={form} formField={formFields.dokumentasjonstype} />
-        <FormField form={form} formField={formFields.melding} />
-        <div className={styles.rad}>
-          <Button size={'small'} loading={isLoading}>
-            Send dialogmelding
-          </Button>
-          <Button size={'small'} variant="secondary" type="button" onClick={forhåndsvis} disabled={isLoading}>
-            Forhåndsvis
-          </Button>
-          {visModal && (
-            <Forhåndsvisning
-              saksnummer={saksnummer}
-              fritekst={form.getValues('melding')}
-              dokumentasjonsType={form.getValues('dokumentasjonstype')}
-              visModal={visModal}
-              onClose={() => setVisModal(false)}
+              defaultOptions={defaultOptions}
             />
           )}
-          <Button size={'small'} variant="tertiary" type="button" onClick={onCancel} disabled={isLoading}>
-            Avbryt
-          </Button>
-        </div>
-        {error && (
+          {fastlegeResponse?.andreBehandlereFraSøknad?.map((behandler, index) => (
+            <InfoCard key={index} data-color={'info'} size={'small'} as={'section'}>
+              <InfoCard.Header icon={<InformationSquareIcon />}>
+                <InfoCard.Title>Behandler oppgitt i søknaden</InfoCard.Title>
+              </InfoCard.Header>
+              <InfoCard.Content>
+                <VStack>
+                  {behandler.navn && (
+                    <BodyShort size={'small'} as={'div'} className={styles.behandlerNavn}>
+                      <span>{behandler.navn}</span>
+                      <CopyButton copyText={behandler.navn} size="xsmall" />
+                    </BodyShort>
+                  )}
+                  <div className={styles.behandlerValgDetaljer}>
+                    {behandler.legekontor && <Detail>Kontor: {behandler.legekontor}</Detail>}
+                    {behandler.adresse && (
+                      <Detail>
+                        Adresse:{' '}
+                        {slåSammenDefinerte(
+                          ', ',
+                          behandler.adresse,
+                          slåSammenDefinerte(' ', behandler.postnummer, behandler.poststed)
+                        )}
+                      </Detail>
+                    )}
+                    {behandler.telefon && <Detail>Telefon: {behandler.telefon}</Detail>}
+                  </div>
+                </VStack>
+              </InfoCard.Content>
+            </InfoCard>
+          ))}
+          <FormField form={form} formField={formFields.dokumentasjonstype} />
+          <FormField form={form} formField={formFields.melding} />
           <div className={styles.rad}>
-            <Alert variant="error">{error || 'Noe gikk galt ved bestilling av dialogmelding'}</Alert>
+            <Button size={'small'} loading={isLoading}>
+              Send dialogmelding
+            </Button>
+            <Button size={'small'} variant="secondary" type="button" onClick={forhåndsvis} disabled={isLoading}>
+              Forhåndsvis
+            </Button>
+            {visModal && (
+              <Forhåndsvisning
+                saksnummer={saksnummer}
+                fritekst={form.getValues('melding')}
+                dokumentasjonsType={form.getValues('dokumentasjonstype')}
+                visModal={visModal}
+                onClose={() => setVisModal(false)}
+              />
+            )}
+            <Button size={'small'} variant="tertiary" type="button" onClick={onCancel} disabled={isLoading}>
+              Avbryt
+            </Button>
           </div>
-        )}
-      </form>
+          {error && (
+            <div className={styles.rad}>
+              <Alert variant="error">{error || 'Noe gikk galt ved bestilling av dialogmelding'}</Alert>
+            </div>
+          )}
+        </form>
       )}
     </div>
   );
