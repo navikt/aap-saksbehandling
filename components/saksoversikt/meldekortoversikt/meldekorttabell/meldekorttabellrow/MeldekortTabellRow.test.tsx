@@ -10,15 +10,17 @@ import { MeldeperiodeMedMeldekortDto } from 'lib/types/types';
 import { customRender } from 'lib/test/CustomRender';
 
 const meldekortUtenDager: MeldeperiodeMedMeldekortDto = {
+  meldefrist: 'ikke relevant',
   meldepliktStatus: [],
   tidligereMeldekort: [],
   meldeperiode: {
     fom: '2025-01-06',
     tom: '2025-01-19',
-  },
+  }
 };
 
 const meldekortMedDager: MeldeperiodeMedMeldekortDto = {
+  meldefrist: 'ikke relevant',
   meldepliktStatus: [],
   tidligereMeldekort: [],
   meldeperiode: {
@@ -52,6 +54,7 @@ const meldekortMedDager: MeldeperiodeMedMeldekortDto = {
 
 // Tom-dato i fremtiden — kan ikke redigeres
 const meldekortFremtidig: MeldeperiodeMedMeldekortDto = {
+  meldefrist: 'ikke relevant',
   meldepliktStatus: [],
   tidligereMeldekort: [],
   meldeperiode: {
