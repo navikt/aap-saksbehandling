@@ -299,7 +299,7 @@ it('skal vise en feilmelding dersom hastemarkeringsboksen ikke blir vurdert mens
   ).toBeInTheDocument();
 });
 
-it('skal vise en feilmelding dersom hastemarkeringsboksen ikke blir vurdert hvis kun en av to tidligere vurderinger er vurdert og den siste er godkjent', async () => {
+it('skal ikke vise en feilmelding dersom hastemarkeringsboksen ikke blir vurdert hvis kun en av to tidligere vurderinger er vurdert og den siste er godkjent', async () => {
   render(
     <TotrinnsvurderingForm
       behandlingsversjon={1}
@@ -330,7 +330,7 @@ it('skal vise en feilmelding dersom hastemarkeringsboksen ikke blir vurdert hvis
   expect(screen.queryByText('Du må gjøre minst én vurdering.')).not.toBeInTheDocument();
   expect(
     screen.queryByText('Du må ta stilling til om hastemarkeringen skal følge behandlingen videre.')
-  ).toBeInTheDocument();
+  ).not.toBeInTheDocument();
 });
 
 describe('Totrinnsvurdering av vedtaksbrev', () => {
