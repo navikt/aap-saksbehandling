@@ -4902,6 +4902,46 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/drift/behandling/{referanse}/prosesser': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description referanse */
+          referanse: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['no.nav.aap.behandlingsflyt.drift.`DriftApiKt$driftApi$1$ProsesserBehandling`'];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/drift/behandling/{referanse}/utvid-rettighetsperiode-og-kjor-fra-start': {
     parameters: {
       query?: never;
@@ -14069,6 +14109,7 @@ export interface components {
         | 'REFUSJONSKRAV'
         | 'REVURDERING_AVBRUTT'
         | 'REVURDER_BEREGNING'
+        | 'REVURDER_INNTEKTSBORTFALL'
         | 'REVURDER_LOVVALG'
         | 'REVURDER_MANUELL_INNTEKT'
         | 'REVURDER_MEDLEMSKAP'
@@ -14667,6 +14708,7 @@ export interface components {
         | 'REFUSJONSKRAV'
         | 'REVURDERING_AVBRUTT'
         | 'REVURDER_BEREGNING'
+        | 'REVURDER_INNTEKTSBORTFALL'
         | 'REVURDER_LOVVALG'
         | 'REVURDER_MANUELL_INNTEKT'
         | 'REVURDER_MEDLEMSKAP'
@@ -14741,6 +14783,7 @@ export interface components {
             | 'REFUSJONSKRAV'
             | 'REVURDERING_AVBRUTT'
             | 'REVURDER_BEREGNING'
+            | 'REVURDER_INNTEKTSBORTFALL'
             | 'REVURDER_LOVVALG'
             | 'REVURDER_MANUELL_INNTEKT'
             | 'REVURDER_MEDLEMSKAP'
@@ -15431,6 +15474,7 @@ export interface components {
         | 'REFUSJONSKRAV'
         | 'REVURDERING_AVBRUTT'
         | 'REVURDER_BEREGNING'
+        | 'REVURDER_INNTEKTSBORTFALL'
         | 'REVURDER_LOVVALG'
         | 'REVURDER_MANUELL_INNTEKT'
         | 'REVURDER_MEDLEMSKAP'
@@ -15729,6 +15773,9 @@ export interface components {
         | 'VURDER_RETTIGHETSPERIODE'
         | 'VURDER_SYKEPENGEERSTATNING'
         | 'VURDER_YRKESSKADE';
+    };
+    'no.nav.aap.behandlingsflyt.drift.`DriftApiKt$driftApi$1$ProsesserBehandling`': {
+      skalForberede: boolean;
     };
     'no.nav.aap.behandlingsflyt.drift.`DriftApiKt$driftApi$1$RettighetstypePeriodeDto`': {
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
@@ -17939,6 +17986,7 @@ export interface components {
         | 'REFUSJONSKRAV'
         | 'REVURDERING_AVBRUTT'
         | 'REVURDER_BEREGNING'
+        | 'REVURDER_INNTEKTSBORTFALL'
         | 'REVURDER_LOVVALG'
         | 'REVURDER_MANUELL_INNTEKT'
         | 'REVURDER_MEDLEMSKAP'
@@ -18001,6 +18049,7 @@ export interface components {
         | 'REFUSJONSKRAV'
         | 'REVURDERING_AVBRUTT'
         | 'REVURDER_BEREGNING'
+        | 'REVURDER_INNTEKTSBORTFALL'
         | 'REVURDER_LOVVALG'
         | 'REVURDER_MANUELL_INNTEKT'
         | 'REVURDER_MEDLEMSKAP'
@@ -18278,6 +18327,7 @@ export interface components {
         | 'REFUSJONSKRAV'
         | 'REVURDERING_AVBRUTT'
         | 'REVURDER_BEREGNING'
+        | 'REVURDER_INNTEKTSBORTFALL'
         | 'REVURDER_LOVVALG'
         | 'REVURDER_MANUELL_INNTEKT'
         | 'REVURDER_MEDLEMSKAP'
@@ -18378,6 +18428,7 @@ export interface components {
         | 'REFUSJONSKRAV'
         | 'REVURDERING_AVBRUTT'
         | 'REVURDER_BEREGNING'
+        | 'REVURDER_INNTEKTSBORTFALL'
         | 'REVURDER_LOVVALG'
         | 'REVURDER_MANUELL_INNTEKT'
         | 'REVURDER_MEDLEMSKAP'
@@ -18455,6 +18506,7 @@ export interface components {
         | 'REFUSJONSKRAV'
         | 'REVURDERING_AVBRUTT'
         | 'REVURDER_BEREGNING'
+        | 'REVURDER_INNTEKTSBORTFALL'
         | 'REVURDER_LOVVALG'
         | 'REVURDER_MANUELL_INNTEKT'
         | 'REVURDER_MEDLEMSKAP'
@@ -18521,6 +18573,7 @@ export interface components {
         | 'REFUSJONSKRAV'
         | 'REVURDERING_AVBRUTT'
         | 'REVURDER_BEREGNING'
+        | 'REVURDER_INNTEKTSBORTFALL'
         | 'REVURDER_LOVVALG'
         | 'REVURDER_MANUELL_INNTEKT'
         | 'REVURDER_MEDLEMSKAP'
@@ -18798,6 +18851,7 @@ export interface components {
         | 'REFUSJONSKRAV'
         | 'REVURDERING_AVBRUTT'
         | 'REVURDER_BEREGNING'
+        | 'REVURDER_INNTEKTSBORTFALL'
         | 'REVURDER_LOVVALG'
         | 'REVURDER_MANUELL_INNTEKT'
         | 'REVURDER_MEDLEMSKAP'
@@ -18942,6 +18996,7 @@ export interface components {
         | 'REFUSJONSKRAV'
         | 'REVURDERING_AVBRUTT'
         | 'REVURDER_BEREGNING'
+        | 'REVURDER_INNTEKTSBORTFALL'
         | 'REVURDER_LOVVALG'
         | 'REVURDER_MANUELL_INNTEKT'
         | 'REVURDER_MEDLEMSKAP'
@@ -19029,6 +19084,7 @@ export interface components {
         | 'REFUSJONSKRAV'
         | 'REVURDERING_AVBRUTT'
         | 'REVURDER_BEREGNING'
+        | 'REVURDER_INNTEKTSBORTFALL'
         | 'REVURDER_LOVVALG'
         | 'REVURDER_MANUELL_INNTEKT'
         | 'REVURDER_MEDLEMSKAP'
@@ -19493,6 +19549,8 @@ export interface components {
     };
     'no.nav.aap.oppgave.markering.MarkeringDto': {
       begrunnelse?: string | null;
+      /** @enum {string|null} */
+      hendelseType?: 'FJERNET' | 'OPPRETTET' | null;
       /** @enum {string} */
       markeringType: 'AVSLAG_11_5' | 'HASTER' | 'KREVER_SPESIALKOMPETANSE';
       opprettetAv?: string | null;
