@@ -58,7 +58,7 @@ export const InnhentDokumentasjon = () => {
       )}
       {visSkjema && <InnhentDokumentasjonSkjema onCancel={skjulSkjema} onSuccess={skjulOgRefresh} />}
       <div className={styles.marginTop}>
-        <RelevanteDokumenter />
+        {!visSkjema && <RelevanteDokumenter />}
       </div>
     </section>
   );

@@ -8,6 +8,7 @@ import { LeggTilMockYrkesskade } from 'components/devtools/LeggTilMockYrkesskade
 import { TypeBehandling } from 'lib/types/types';
 import { DevtoolWrapper } from 'components/devtools/DevtoolWrapper';
 import { LeggTilKravVurdering } from 'components/devtools/LeggTilKravVurdering';
+import { DummyLegeerklæring } from 'components/devtools/DummyLegeerklæring';
 
 export const SakDevTools = ({
   saksnummer,
@@ -23,6 +24,7 @@ export const SakDevTools = ({
           <Heading size={'xsmall'}>Send et meldekort for inneværende mnd</Heading>
 
           <DummyMeldekort saksid={saksnummer} />
+          <DummyLegeerklæring saksid={saksnummer} />
           <SendNySoknad saksid={saksnummer} />
           <SendNySoknadUtenMedlemskap saksid={saksnummer} />
 

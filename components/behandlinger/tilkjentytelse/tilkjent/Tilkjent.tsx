@@ -1,6 +1,6 @@
 'use client';
 
-import { Diff, TilkjentYtelseGrunnlag, TilkjentYtelseGrunnlagMedDiff, TilkjentYtelsePeriode } from 'lib/types/types';
+import { Diff, TilkjentYtelseGrunnlagMedDiff, TilkjentYtelsePeriode } from 'lib/types/types';
 import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
 import { ActionMenu, BodyShort, Button, Chips, Table, VStack } from '@navikt/ds-react';
 import { TableStyled } from 'components/tablestyled/TableStyled';
@@ -12,44 +12,9 @@ import styles from 'components/behandlinger/tilkjentytelse/tilkjent/Tilkjent.mod
 import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
 import { Alert } from 'components/alert/Alert';
 
-interface Props {
-  grunnlag: TilkjentYtelseGrunnlag;
-}
 interface PropsMedDiff {
   grunnlagMedDiff: TilkjentYtelseGrunnlagMedDiff;
 }
-
-export const Tilkjent = ({ grunnlag }: Props) => {
-  return (
-    <VilkårsKort heading="Tilkjent ytelse" steg="BEREGN_TILKJENT_YTELSE">
-      <TableStyled size="medium">
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell>Meldeperiode</Table.HeaderCell>
-            <Table.HeaderCell>Vurdert periode</Table.HeaderCell>
-            <Table.HeaderCell>Dagsats</Table.HeaderCell>
-            <Table.HeaderCell>Barnetillegg</Table.HeaderCell>
-            <Table.HeaderCell>Arbeid</Table.HeaderCell>
-            <Table.HeaderCell>Samordning</Table.HeaderCell>
-            <Table.HeaderCell>Institusjon</Table.HeaderCell>
-            <Table.HeaderCell>Arbeidsgiver</Table.HeaderCell>
-            <Table.HeaderCell>Total reduksjon</Table.HeaderCell>
-            <Table.HeaderCell>Barnepensjon</Table.HeaderCell>
-            <Table.HeaderCell>Effektiv dagsats</Table.HeaderCell>
-            <Table.HeaderCell>Meldekort levert</Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          {grunnlag.perioder.map((periode, periodeIndex) => {
-            const bakgrunnClassName = periodeIndex % 2 ? styles.tablerowwithzebra : '';
-            return <TilkjentPeriodeRad key={periodeIndex} periode={periode} bakgrunnClassName={bakgrunnClassName} />;
-          })}
-        </Table.Body>
-      </TableStyled>
-    </VilkårsKort>
-  );
-};
 
 export const TilkjentMedDiff = ({ grunnlagMedDiff }: PropsMedDiff) => {
   const [visHistorikkPåEndredePerioder, setVisHistorikkPåEndredePerioder] = useState(false);

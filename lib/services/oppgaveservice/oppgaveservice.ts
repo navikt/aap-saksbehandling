@@ -179,7 +179,7 @@ export const hentMarkeringer = async (referanse: string) => {
       status: 200,
       data: [],
     };
-    return mockData
+    return mockData;
   }
   const url = `${oppgaveApiBaseURL}/${referanse}/hent-markeringer`;
   return await apiFetch<Markering[]>(url, oppgaveApiScope, 'GET', undefined);

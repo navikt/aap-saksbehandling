@@ -10,15 +10,17 @@ import { MeldeperiodeMedMeldekortDto } from 'lib/types/types';
 import { customRender } from 'lib/test/CustomRender';
 
 const meldekortUtenDager: MeldeperiodeMedMeldekortDto = {
+  meldefrist: 'ikke relevant',
   meldepliktStatus: [],
   tidligereMeldekort: [],
   meldeperiode: {
     fom: '2025-01-06',
     tom: '2025-01-19',
-  },
+  }
 };
 
 const meldekortMedDager: MeldeperiodeMedMeldekortDto = {
+  meldefrist: 'ikke relevant',
   meldepliktStatus: [],
   tidligereMeldekort: [],
   meldeperiode: {
@@ -26,9 +28,7 @@ const meldekortMedDager: MeldeperiodeMedMeldekortDto = {
     tom: '2025-01-19',
   },
   meldekort: {
-    id: 'meldekort-1',
     journalpostId: '',
-    meldeDato: '2025-01-20',
     oppdatertTidspunkt: '2025-01-21',
     oppdatertAv: 'saksbehandler',
     oppdatertAvSaksbehandler: true,
@@ -48,11 +48,13 @@ const meldekortMedDager: MeldeperiodeMedMeldekortDto = {
       { dato: '2025-01-18', timerArbeidet: 0 },
       { dato: '2025-01-19', timerArbeidet: 0 },
     ],
+    mottattTidspunkt: '2025-01-20',
   },
 };
 
 // Tom-dato i fremtiden — kan ikke redigeres
 const meldekortFremtidig: MeldeperiodeMedMeldekortDto = {
+  meldefrist: 'ikke relevant',
   meldepliktStatus: [],
   tidligereMeldekort: [],
   meldeperiode: {
@@ -153,9 +155,9 @@ describe('MeldekortTabellRow', () => {
 type Meldekort = NonNullable<MeldeperiodeMedMeldekortDto['meldekort']>;
 
 const baseMeldekort: Meldekort = {
-  id: 'id',
+  mottattTidspunkt: '2025-01-20',
+  oppdatertTidspunkt: '2025-01-20',
   journalpostId: '',
-  meldeDato: '2025-01-20',
   dager: [],
   oppdatertAv: null,
   oppdatertAvSaksbehandler: false,

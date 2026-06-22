@@ -89,7 +89,7 @@ export const FastsettManuellInntektTabell = ({ tabellår, form, readOnly, låstV
       </TableStyled>
       {form.formState.errors.tabellår && (
         <ErrorMessage size={'small'} showIcon>
-          {form.formState.errors.tabellår[0]?.message}
+          {form.formState.errors.tabellår?.root?.message}
         </ErrorMessage>
       )}
     </VStack>
