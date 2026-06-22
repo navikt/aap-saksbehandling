@@ -2,12 +2,14 @@ import { Avslag11_27Krav } from 'lib/types/types';
 import { BodyShort, Checkbox, Table, VStack } from '@navikt/ds-react';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { formaterDatoForFrontend } from 'lib/utils/date';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   label: string;
   avslag11_27krav: Avslag11_27Krav[];
   selectedReferanser: string[];
   onToggle: (referanse: string) => void;
+  ingenVurderingerValgtFeil: string | null;
   readonly: boolean;
   vedtatteReferanser: string[];
 }
@@ -29,6 +31,7 @@ export const Avslag11_27KravTabell = ({
   avslag11_27krav,
   selectedReferanser,
   onToggle,
+  ingenVurderingerValgtFeil,
   readonly,
   vedtatteReferanser,
 }: Props) => {
@@ -85,6 +88,11 @@ export const Avslag11_27KravTabell = ({
           ))}
         </Table.Body>
       </TableStyled>
+      {ingenVurderingerValgtFeil && (
+        <Alert variant="error" size="small">
+          {ingenVurderingerValgtFeil}
+        </Alert>
+      )}
     </VStack>
   );
 };

@@ -99,10 +99,13 @@ export const Avslag11_27 = ({
     return grunnlag.krav.filter((krav) => alleVurderte.has(krav.referanse)).map((krav) => krav.referanse);
   });
 
+  const [ingenVurderingerValgtFeil, setIngenVurderingerValgtFeil] = useState<string | null>(null);
+
   const handleToggle = (referanse: string) => {
     setSelectedReferanser((prev) =>
       prev.includes(referanse) ? prev.filter((id) => id !== referanse) : [...prev, referanse]
     );
+    setIngenVurderingerValgtFeil(null);
   };
 
   const erRevurdering = typeBehandling === 'Revurdering';
@@ -150,8 +153,30 @@ export const Avslag11_27 = ({
     };
   };
 
+    const harMinstEttValgtKravUtenVedtatt = (): boolean => {
+    if (erRevurdering) return true;
+
+    const nåværendeKravUtenVedtatt = grunnlag.krav.filter(
+      (krav) => !(grunnlag.vedtatteVurdering ?? []).some((v) => v.referanse === krav.referanse)
+    );
+
+    if (nåværendeKravUtenVedtatt.length === 0) return true;
+
+    return nåværendeKravUtenVedtatt.some((krav) => selectedReferanser.includes(krav.referanse));
+  };
+
+  const validerValgteVurderinger = (): boolean => {
+    const erGyldig = harMinstEttValgtKravUtenVedtatt();
+    setIngenVurderingerValgtFeil(erGyldig ? null : 'Du må velge minst ett krav å vurdere.');
+    return erGyldig;
+  };
+
   const handleSubmit: SubmitEventHandler = (event: SubmitEvent) => {
     form.handleSubmit((data) => {
+            if (!validerValgteVurderinger()) {
+        return;
+      }
+
       const vurderinger = data.avslag11_27vurderinger
         .filter(skalSendeVurdering)
         .map(mapTilVurderingPayload);
@@ -197,6 +222,7 @@ export const Avslag11_27 = ({
           avslag11_27krav={grunnlag.krav}
           selectedReferanser={selectedReferanser}
           onToggle={handleToggle}
+          ingenVurderingerValgtFeil = {ingenVurderingerValgtFeil}
           readonly={formReadOnly}
           vedtatteReferanser={(grunnlag.vedtatteVurdering ?? []).map((v) => v.referanse)}
         />
@@ -208,6 +234,7 @@ export const Avslag11_27 = ({
             (v) => v.referanse === faktiskKrav.referanse
           );
           const nåværendeVurdering = (grunnlag.vurderinger ?? []).find((v) => v.referanse === faktiskKrav.referanse);
+          const visLeggTilVurderingKnapp = erRevurdering && !!vedtattVurdering;
 
           return (
             <Avslag11_27KravGruppe
@@ -220,7 +247,7 @@ export const Avslag11_27 = ({
               readonly={formReadOnly}
               accordionsSignal={accordionsSignal}
               erAktivUtenAvbryt={erAktivUtenAvbryt}
-              visLeggTilVurderingKnapp={erRevurdering}
+              visLeggTilVurderingKnapp={visLeggTilVurderingKnapp}
               onSlettVurdering={handleSlettVurderingOgUtkast}
             />
           );
