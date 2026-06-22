@@ -92,12 +92,14 @@ export const Avslag11_27 = ({
     form
   );
 
-  const [selectedReferanser, setSelectedReferanser] = useState<string[]>(() => {
+  const initialSelectedReferanser = () => {
     const vedtatteIds = (grunnlag.vedtatteVurdering ?? []).map((v) => v.referanse);
     const nåværendeIds = (grunnlag.vurderinger ?? []).map((v) => v.referanse);
     const alleVurderte = new Set([...vedtatteIds, ...nåværendeIds]);
     return grunnlag.krav.filter((krav) => alleVurderte.has(krav.referanse)).map((krav) => krav.referanse);
-  });
+  };
+
+  const [selectedReferanser, setSelectedReferanser] = useState<string[]>(initialSelectedReferanser);
 
   const [ingenVurderingerValgtFeil, setIngenVurderingerValgtFeil] = useState<string | null>(null);
 
@@ -214,7 +216,12 @@ export const Avslag11_27 = ({
       }
       visningModus={visningModus}
       visningActions={visningActions}
-      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
+      formReset={() => {
+        form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined);
+        setSelectedReferanser(initialSelectedReferanser());
+        setDeletedReferanser(new Set());
+        setIngenVurderingerValgtFeil(null);
+      }}
     >
       <VStack gap={'space-24'}>
         <Avslag11_27KravTabell
