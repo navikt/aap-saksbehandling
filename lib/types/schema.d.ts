@@ -12704,6 +12704,16 @@ export interface components {
       vurderingerMeta: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'];
       vurdertIBehandling: components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.behandling.BehandlingId'];
     };
+    'no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.DelperiodeData': {
+      /** Format: date */
+      periodeFom: string;
+      /** Format: date */
+      periodeTom: string;
+      /** Format: int32 */
+      'uf\u00F8regrad': number;
+      /** Format: int32 */
+      '\u00E5r': number;
+    };
     'no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.ManuellInntektGrunnlagResponse': {
       /**
        * Format: int32
@@ -12711,6 +12721,9 @@ export interface components {
        * @description Erstattes av vurderinger
        */
       ar: number;
+      'delperioderForSplitt\u00C5r'?:
+        | components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.DelperiodeData'][]
+        | null;
       /**
        * @deprecated
        * @description Erstattes av vurderinger
@@ -12755,6 +12768,10 @@ export interface components {
       'bel\u00F8p'?: number | null;
       'e\u00F8sBel\u00F8p'?: number | null;
       ferdigLignetPGI?: number | null;
+      /** Format: date */
+      periodeFom?: string | null;
+      /** Format: date */
+      periodeTom?: string | null;
       /** Format: int32 */
       '\u00E5r': number;
     };
@@ -16024,6 +16041,10 @@ export interface components {
       'bel\u00F8p'?: number | null;
       'e\u00F8sBel\u00F8p'?: number | null;
       ferdigLignetPGI?: number | null;
+      /** Format: date */
+      periodeFom?: string | null;
+      /** Format: date */
+      periodeTom?: string | null;
       /** Format: int32 */
       '\u00E5r': number;
     };
