@@ -25,10 +25,7 @@ export const VurderKravMedDataFetching = async ({ behandlingsreferanse, behandli
       grunnlag={grunnlag.data}
       initialMellomlagretVurdering={initialMellomlagretVurdering.data.mellomlagretVurdering}
       behandlingVersjon={behandlingVersjon}
-      readOnly={
-        readOnly
-        // || !grunnlag.data.harTilgangTilÅSaksbehandle
-      }
+      readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
     />
   );
 };

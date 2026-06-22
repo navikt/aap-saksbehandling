@@ -4902,6 +4902,46 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/drift/behandling/{referanse}/prosesser': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description referanse */
+          referanse: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['no.nav.aap.behandlingsflyt.drift.`DriftApiKt$driftApi$1$ProsesserBehandling`'];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/drift/behandling/{referanse}/utvid-rettighetsperiode-og-kjor-fra-start': {
     parameters: {
       query?: never;
@@ -14153,6 +14193,8 @@ export interface components {
        */
       opprettet: string;
       overstyrMuligRettFra?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.OverstyrMuligRettFra'];
+      /** Format: uuid */
+      referanse: string;
       's\u00F8knadsdato': components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.S\u00F8knadsdato'];
       /** @enum {string} */
       type: 'GJENOPPTAK' | 'KLAGE' | 'NYTT_KRAV_AAP' | 'TILLEGGSOPPLYSNING' | 'TRUKKET_SØKNAD';
@@ -14167,13 +14209,17 @@ export interface components {
        * @example 2025-04-01T10:30:00Z
        */
       opprettet: string;
+      /** Format: uuid */
+      referanse: string;
       /** @enum {string} */
       type: 'GJENOPPTAK' | 'KLAGE' | 'NYTT_KRAV_AAP' | 'TILLEGGSOPPLYSNING' | 'TRUKKET_SØKNAD';
       vurdertAv: components['schemas']['no.nav.aap.komponenter.verdityper.Bruker'];
       vurdertIBehandling: components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.behandling.BehandlingId'];
     };
     'no.nav.aap.behandlingsflyt.behandling.krav.KravGrunnlagDto': {
+      'harTilgangTil\u00C5Saksbehandle': boolean;
       nyeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.KravVurderingDto'][];
+      's\u00F8knaderUtenKravvurdering': components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.S\u00F8knadUtenKravDto'][];
       vedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.KravVurderingDto'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.krav.KravVurderingDto':
@@ -14196,11 +14242,21 @@ export interface components {
        */
       opprettet: string;
       overstyrMuligRettFra?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.OverstyrMuligRettFra'];
+      /** Format: uuid */
+      referanse: string;
       's\u00F8knadsdato': components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.S\u00F8knadsdato'];
       /** @enum {string} */
       type: 'GJENOPPTAK' | 'KLAGE' | 'NYTT_KRAV_AAP' | 'TILLEGGSOPPLYSNING' | 'TRUKKET_SØKNAD';
       vurdertAv: components['schemas']['no.nav.aap.komponenter.verdityper.Bruker'];
       vurdertIBehandling: components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.behandling.BehandlingId'];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.krav.S\u00F8knadUtenKravDto': {
+      journalpostId: components['schemas']['no.nav.aap.verdityper.dokument.JournalpostId'];
+      /**
+       * Format: date-time
+       * @example 2025-04-01T12:30:00
+       */
+      mottattTidspunkt: string;
     };
     'no.nav.aap.behandlingsflyt.behandling.krav.TilleggsopplysningDto': {
       begrunnelse: string;
@@ -14210,6 +14266,8 @@ export interface components {
        * @example 2025-04-01T10:30:00Z
        */
       opprettet: string;
+      /** Format: uuid */
+      referanse: string;
       /** @enum {string} */
       type: 'GJENOPPTAK' | 'KLAGE' | 'NYTT_KRAV_AAP' | 'TILLEGGSOPPLYSNING' | 'TRUKKET_SØKNAD';
       vurdertAv: components['schemas']['no.nav.aap.komponenter.verdityper.Bruker'];
@@ -14223,6 +14281,8 @@ export interface components {
        * @example 2025-04-01T10:30:00Z
        */
       opprettet: string;
+      /** Format: uuid */
+      referanse: string;
       /** @enum {string} */
       type: 'GJENOPPTAK' | 'KLAGE' | 'NYTT_KRAV_AAP' | 'TILLEGGSOPPLYSNING' | 'TRUKKET_SØKNAD';
       vurdertAv: components['schemas']['no.nav.aap.komponenter.verdityper.Bruker'];
@@ -14347,31 +14407,19 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.meldekort.MeldekortDto': {
       begrunnelse?: string | null;
       dager: components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.DagDto'][];
-      /**
-       * @deprecated
-       * @description Bruk journalpostId i stedet for id, da det er mer beskrivende
-       */
-      id: string;
       journalpostId: string;
       /**
        * Format: date
-       * @deprecated
-       * @description Bruk heller meldeDato fra MeldeperiodeMedMeldekortDto
        * @example 2025-04-01
        */
-      meldeDato: string;
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      mottattTidspunkt?: string | null;
+      mottattTidspunkt: string;
       oppdatertAv?: string | null;
       oppdatertAvSaksbehandler: boolean;
       /**
        * Format: date
        * @example 2025-04-01
        */
-      oppdatertTidspunkt?: string | null;
+      oppdatertTidspunkt: string;
     };
     'no.nav.aap.behandlingsflyt.behandling.meldekort.MeldekortProsesseringResponse': {
       /** @enum {string} */
@@ -14382,7 +14430,7 @@ export interface components {
        * Format: date
        * @example 2025-04-01
        */
-      meldeDato?: string | null;
+      meldefrist: string;
       meldekort?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.MeldekortDto'];
       meldeperiode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
       meldepliktStatus: (
@@ -14414,11 +14462,6 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.behandling.meldekort.OppdaterMeldekortResponse': {
       journalpostId: string;
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      oppdatertTidspunkt: string;
     };
     'no.nav.aap.behandlingsflyt.behandling.mellomlagring.MellomlagretVurdering': {
       /** @enum {string} */
@@ -15726,6 +15769,9 @@ export interface components {
         | 'VURDER_RETTIGHETSPERIODE'
         | 'VURDER_SYKEPENGEERSTATNING'
         | 'VURDER_YRKESSKADE';
+    };
+    'no.nav.aap.behandlingsflyt.drift.`DriftApiKt$driftApi$1$ProsesserBehandling`': {
+      skalForberede: boolean;
     };
     'no.nav.aap.behandlingsflyt.drift.`DriftApiKt$driftApi$1$RettighetstypePeriodeDto`': {
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
@@ -19490,6 +19536,8 @@ export interface components {
     };
     'no.nav.aap.oppgave.markering.MarkeringDto': {
       begrunnelse?: string | null;
+      /** @enum {string|null} */
+      hendelseType?: 'FJERNET' | 'OPPRETTET' | null;
       /** @enum {string} */
       markeringType: 'AVSLAG_11_5' | 'HASTER' | 'KREVER_SPESIALKOMPETANSE';
       opprettetAv?: string | null;

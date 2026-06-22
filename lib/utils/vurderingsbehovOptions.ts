@@ -30,6 +30,7 @@ export const vurderingsbehovOptions = (): ValuePair<Vurderingsbehov>[] => {
     'DØDSFALL_BRUKER',
     'REVURDER_SAMORDNING_BARNEPENSJON',
     'VEDTAKSLENGDE_MANUELT',
+    'VURDER_KRAV',
   ];
 
   return behov.map((behov) => ({
