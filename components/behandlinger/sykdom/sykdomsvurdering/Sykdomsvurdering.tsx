@@ -271,7 +271,6 @@ export const Sykdomsvurdering = ({
               form={form}
               readonly={formReadOnly}
               sak={sak}
-              erÅrsakssammenhengYrkesskade={grunnlag.erÅrsakssammenhengYrkesskade}
               skalVurdereYrkesskade={grunnlag.skalVurdereYrkesskade}
               rettighetsperiodeStartdato={førsteDatoSomKanVurderes}
               diagnoseDefaultOptions={diagnoseDefaultOptions}
