@@ -6,17 +6,17 @@ import { FormField } from 'components/form/FormField';
 import { SubmitEvent, useEffect } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { ManuellInntektGrunnlag, ManuellInntektÅr, MellomlagretVurdering } from 'lib/types/types';
+import { DelperiodeData, ManuellInntektGrunnlag, ManuellInntektÅr, MellomlagretVurdering } from 'lib/types/types';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { BodyLong, BodyShort, Label, Link, VStack } from '@navikt/ds-react';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
-import { useFieldArray } from 'react-hook-form';
+import { useFieldArray, useWatch } from 'react-hook-form';
 import { FastsettManuellInntektTabell } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/FastsettManuellInntektTabell';
 import { FastsettManuellInntektForm, Tabellår } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/types';
-import { sorterEtterNyesteDato } from 'lib/utils/date';
+import { sorterEtterNyesteDato, formaterDatoForFrontend } from 'lib/utils/date';
 import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
 import { Alert } from 'components/alert/Alert';
 
@@ -32,9 +32,22 @@ interface ByggTabellDataProps {
   sisteÅr: number;
   pgi: ManuellInntektÅr[];
   manuelleInntekter: ManuellInntektÅr[];
+  delperioder: DelperiodeData[];
 }
 
 type DraftFormFields = Partial<FastsettManuellInntektForm>;
+
+const MÅNED_KORT = ['jan', 'feb', 'mar', 'apr', 'mai', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'des'];
+
+/**
+ * Bygger visningsnavn for en delperiode, f.eks. «2022 jan-feb». Måneden hentes fra ISO-datostrengen
+ * uten tidssone-konvertering.
+ */
+const formaterDelperiodeLabel = (år: number, periodeFom: string, periodeTom: string): string => {
+  const fomMåned = MÅNED_KORT[Number(periodeFom.slice(5, 7)) - 1];
+  const tomMåned = MÅNED_KORT[Number(periodeTom.slice(5, 7)) - 1];
+  return `${år} ${fomMåned}-${tomMåned}`;
+};
 
 export const FastsettManuellInntekt = ({
   behandlingsversjon,
@@ -53,6 +66,9 @@ export const FastsettManuellInntekt = ({
     initialMellomlagretVurdering
   );
   const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
+
+  const delperioder = grunnlag.delperioderForSplittÅr ?? [];
+  const splittÅr = [...new Set(delperioder.map((d) => d.år))].sort((a, b) => a - b);
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -80,8 +96,11 @@ export const FastsettManuellInntekt = ({
     control: form.control,
     rules: {
       validate: (år) => {
-        const manglerPGI = år.some((år) => {
-          return år.ferdigLignetPGI === undefined && år.beregnetPGI === undefined;
+        const manglerPGI = år.some((rad) => {
+          if (rad.erKunVisning) {
+            return false;
+          }
+          return rad.ferdigLignetPGI === undefined && rad.beregnetPGI === undefined;
         });
         if (manglerPGI) {
           form.setError('tabellår', {
@@ -116,12 +135,16 @@ export const FastsettManuellInntekt = ({
             behovstype: Behovstype.FASTSETT_MANUELL_INNTEKT,
             manuellVurderingForManglendeInntekt: {
               begrunnelse: data.begrunnelse,
-              vurderinger: data.tabellår.map((år) => ({
-                år: år.år,
-                beløp: Number(år.beregnetPGI),
-                eøsBeløp: Number(år.eøsInntekt),
-                ferdigLignetPGI: Number(år.ferdigLignetPGI),
-              })),
+              vurderinger: data.tabellår
+                .filter((år) => !år.erKunVisning)
+                .map((år) => ({
+                  år: år.år,
+                  beløp: Number(år.beregnetPGI),
+                  eøsBeløp: Number(år.eøsInntekt),
+                  ferdigLignetPGI: år.ferdigLignetPGI ?? undefined,
+                  periodeFom: år.periodeFom,
+                  periodeTom: år.periodeTom,
+                })),
             },
           },
           referanse: behandlingsreferanse,
@@ -138,6 +161,18 @@ export const FastsettManuellInntekt = ({
   const visHovedinnhold = !formReadOnly || grunnlag.manuelleVurderinger !== null;
   const vurderinger = grunnlag.historiskeManuelleVurderinger?.sort((a, b) => {
     return sorterEtterNyesteDato(a.vurderingerMeta.vurdertAv?.dato ?? '', b.vurderingerMeta.vurdertAv?.dato ?? '');
+  });
+
+  const tabellårValues = useWatch({ control: form.control, name: 'tabellår' });
+  const harAvvikMotFerdigLignet = splittÅr.some((år) => {
+    const ferdigLignet = tabellårValues?.find((rad) => rad.år === år && rad.erKunVisning)?.ferdigLignetPGI;
+    if (ferdigLignet === undefined || ferdigLignet === null) {
+      return false;
+    }
+    const sumBeregnet = (tabellårValues ?? [])
+      .filter((rad) => rad.år === år && rad.erDelperiode)
+      .reduce((acc, rad) => acc + Number(rad.beregnetPGI || 0), 0);
+    return sumBeregnet > 0 && sumBeregnet !== ferdigLignet;
   });
 
   return (
@@ -176,6 +211,13 @@ export const FastsettManuellInntekt = ({
                 ferdigLignetPGI: år.ferdigLignetPGI,
                 beregnetPGI: år.beløp,
                 eøsInntekt: år.eøsBeløp,
+                label:
+                  år.periodeFom && år.periodeTom
+                    ? formaterDelperiodeLabel(år.år, år.periodeFom, år.periodeTom)
+                    : undefined,
+                periodeFom: år.periodeFom ?? undefined,
+                periodeTom: år.periodeTom ?? undefined,
+                erDelperiode: Boolean(år.periodeFom),
               }));
 
             return (
@@ -197,6 +239,22 @@ export const FastsettManuellInntekt = ({
           Du må oppgi pensjonsgivende inntekt for år hvor inntekten ikke er ferdig lignet.
         </Alert>
       )}
+      {splittÅr.map((år) => (
+        <Alert variant={'warning'} key={`ufore-${år}`}>
+          <BodyShort spacing>
+            {`Brukeren har hatt endring i uføregrad i løpet av ${år}. Det mangler inntekter i A-inntekt for perioden. Du må legge inn inntekter manuelt for perioden før og etter endring av uføregrad i ${år} for å sikre korrekt beregningsgrunnlag.`}
+          </BodyShort>
+          <Label size={'small'}>Uføregrad</Label>
+          {delperioder
+            .filter((d) => d.år === år)
+            .sort((a, b) => a.periodeFom.localeCompare(b.periodeFom))
+            .map((d) => (
+              <BodyShort size={'small'} key={d.periodeFom}>
+                {`${formaterDatoForFrontend(d.periodeFom)} - ${d.uføregrad}%`}
+              </BodyShort>
+            ))}
+        </Alert>
+      ))}
       <BodyShort>
         Hvis det mangler pensjonsgivende inntekt for noen av beregningsårene, eller brukerens inntekt skal beregnes med
         utgangspunkt i arbeidsperioder i EØS, så kan brukerens inntekt overstyres. Inntekter skal ikke oppjusteres etter
@@ -215,6 +273,12 @@ export const FastsettManuellInntekt = ({
           </BodyLong>
           <FormField form={form} formField={formFields.begrunnelse} />
           <FastsettManuellInntektTabell form={form} tabellår={tabellår} readOnly={formReadOnly} />
+          {harAvvikMotFerdigLignet && (
+            <Alert variant={'warning'}>
+              Beregnet pensjonsgivende inntekt avviker fra ferdig lignet pensjonsgivende inntekt. Er du sikker på at
+              beregnet inntekt er riktig?
+            </Alert>
+          )}
         </>
       )}
     </VilkårskortMedFormOgMellomlagring>
@@ -249,11 +313,12 @@ const berikMedPGI = (treÅr: Tabellår[], pgi: ManuellInntektÅr[]): Tabellår[]
 };
 
 /**
- * Berik med manuelle inntekter dersom disse er lagt inn av saksbehandler.
+ * Berik med manuelle inntekter på år-nivå dersom disse er lagt inn av saksbehandler. Periode-vurderinger
+ * (endring i uføregrad) håndteres i berikMedDelperioder.
  */
 const berikMedManuelleInntekter = (treÅr: Tabellår[], manuelleInntekter: ManuellInntektÅr[]): Tabellår[] => {
   return treÅr.map((år) => {
-    const inntekter = manuelleInntekter.find((inntekter) => inntekter.år === år.år);
+    const inntekter = manuelleInntekter.find((inntekter) => inntekter.år === år.år && !inntekter.periodeFom);
     return {
       år: år.år,
       ferdigLignetPGI: år.ferdigLignetPGI,
@@ -263,11 +328,56 @@ const berikMedManuelleInntekter = (treÅr: Tabellår[], manuelleInntekter: Manue
   });
 };
 
-const byggTabellData = ({ sisteÅr, pgi, manuelleInntekter }: ByggTabellDataProps): Tabellår[] => {
+/**
+ * For år med endring i uføregrad: gjør år-raden til en informasjonsrad og legg til én redigerbar
+ * delperiode-rad per uføregrad-segment, eventuelt forhåndsutfylt med tidligere lagrede verdier.
+ */
+const berikMedDelperioder = (
+  treÅr: Tabellår[],
+  delperioder: DelperiodeData[],
+  manuelleInntekter: ManuellInntektÅr[]
+): Tabellår[] => {
+  if (delperioder.length === 0) {
+    return treÅr;
+  }
+  const splittÅr = new Set(delperioder.map((d) => d.år));
+
+  return treÅr.flatMap((år) => {
+    if (!splittÅr.has(år.år)) {
+      return [år];
+    }
+
+    const visningsrad: Tabellår = { ...år, beregnetPGI: undefined, eøsInntekt: undefined, erKunVisning: true };
+
+    const delperiodeRader: Tabellår[] = delperioder
+      .filter((d) => d.år === år.år)
+      .sort((a, b) => a.periodeFom.localeCompare(b.periodeFom))
+      .map((d) => {
+        const lagret = manuelleInntekter.find(
+          (m) => m.år === d.år && m.periodeFom === d.periodeFom && m.periodeTom === d.periodeTom
+        );
+        return {
+          år: år.år,
+          label: formaterDelperiodeLabel(d.år, d.periodeFom, d.periodeTom),
+          ferdigLignetPGI: undefined,
+          beregnetPGI: lagret?.beløp,
+          eøsInntekt: lagret?.eøsBeløp,
+          periodeFom: d.periodeFom,
+          periodeTom: d.periodeTom,
+          erDelperiode: true,
+        };
+      });
+
+    return [visningsrad, ...delperiodeRader];
+  });
+};
+
+const byggTabellData = ({ sisteÅr, pgi, manuelleInntekter, delperioder }: ByggTabellDataProps): Tabellår[] => {
   let tabellår: Tabellår[] = [];
   tabellår = berikMedManglendeÅr(sisteÅr);
   tabellår = berikMedPGI(tabellår, pgi);
   tabellår = berikMedManuelleInntekter(tabellår, manuelleInntekter);
+  tabellår = berikMedDelperioder(tabellår, delperioder, manuelleInntekter);
   return tabellår;
 };
 
@@ -278,6 +388,7 @@ const mapGrunnlagToDraftFormFields = (grunnlag: ManuellInntektGrunnlag): DraftFo
       sisteÅr: grunnlag.sisteRelevanteÅr,
       pgi: grunnlag.registrerteInntekterSisteRelevanteAr,
       manuelleInntekter: grunnlag.manuelleVurderinger?.årsVurderinger || [],
+      delperioder: grunnlag.delperioderForSplittÅr ?? [],
     }),
   };
 };
