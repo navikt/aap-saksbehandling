@@ -122,7 +122,7 @@ export const YrkesskadeVurderingTabell = ({ form, yrkesskader, readOnly, update,
       </TableStyled>
       {form.formState.errors.relevanteYrkesskadeSaker && ingenYrkesskadeErTilknyttet && (
         <ErrorMessage size={'small'} showIcon>
-          {form.formState.errors.relevanteYrkesskadeSaker[0]?.message}
+          {form.formState.errors.relevanteYrkesskadeSaker?.root?.message}
         </ErrorMessage>
       )}
     </VStack>
