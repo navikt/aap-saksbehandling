@@ -3,10 +3,10 @@
 import { DigitaliseringsGrunnlag } from 'lib/types/postmottakTypes';
 
 import { Button, VStack } from '@navikt/ds-react';
-import { AnnetRelevantDokument, DokumentÅrsakTilBehandling } from 'lib/types/types';
+import { AnnetRelevantDokument, AnnetRelevantDokumentUnderkategori, DokumentÅrsakTilBehandling } from 'lib/types/types';
 import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
 import type { Submittable } from 'components/postmottak/digitaliserdokument/DigitaliserDokument';
-import { FormField } from 'components/form/FormField';
+import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { SubmitEventHandler } from 'react';
 import { vurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
@@ -14,6 +14,7 @@ import { vurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
 export interface AnnetRelevantDokumentFormFields {
   årsaker: string[];
   begrunnelse: string;
+  underKategori: AnnetRelevantDokumentUnderkategori;
 }
 
 interface Props extends Submittable {
@@ -22,11 +23,33 @@ interface Props extends Submittable {
   isLoading: boolean;
 }
 
+const kategorierOptions: ValuePair<NonNullable<AnnetRelevantDokumentUnderkategori>>[] = [
+  { label: 'Arbeidsutprøving', value: 'ARBEIDSUTPROVING' },
+  { label: 'Barnetillegg', value: 'BARNETILLEGG' },
+  { label: 'Etablering', value: 'ETABLERING' },
+  { label: 'Ettersendelse til feilutbetaling', value: 'ETTERSENDELSE_TIL_FEILUTBETALING' },
+  { label: 'Ettersendelse til klage', value: 'ETTERSENDELSE_TIL_KLAGE' },
+  { label: 'Fengsel/varetekt', value: 'FENGSEL_VARETEKT' },
+  { label: 'Helseopplysninger', value: 'HELSEOPPLYSNINGER' },
+  { label: 'Institusjonsopphold', value: 'INSTITUSJONSOPPHOLD' },
+  { label: 'Karakterutskrifter og CV', value: 'KARAKTERUTSKRIFTER_OG_CV' },
+  { label: 'Klage', value: 'KLAGE' },
+  { label: 'Lærling', value: 'LAERLING' },
+  { label: 'Medlemskap', value: 'MEDLEMSKAP' },
+  { label: 'Partsinnsyn', value: 'PARTSINNSYN' },
+  { label: 'Refusjonskrav', value: 'REFUSJONSKRAV' },
+  { label: 'Sluttavtale', value: 'SLUTTAVTALE' },
+  { label: 'Studentbestemmelsen', value: 'STUDENTBESTEMMELSEN' },
+  { label: 'Tiltaksrapport', value: 'TILTAKSRAPPORT' },
+  { label: 'Yrkesskade', value: 'YRKESSKADE' },
+];
+
 function mapTilAnnetRelevantDokumentKontrakt(data: AnnetRelevantDokumentFormFields) {
   const dokument = {
-    meldingType: 'AnnetRelevantDokumentV1',
+    meldingType: 'AnnetRelevantDokumentV2',
     årsakerTilBehandling: data.årsaker.map((årsak) => årsak as DokumentÅrsakTilBehandling),
     begrunnelse: data.begrunnelse,
+    underKategori: data.underKategori,
   } satisfies AnnetRelevantDokument;
   return JSON.stringify(dokument);
 }
@@ -59,6 +82,11 @@ export const DigitaliserAnnetRelevantDokument = ({ grunnlag, readOnly, submit, i
         defaultValue: annetRelevantDokumentGrunnlag.begrunnelse || '',
         rules: { required: 'Du må oppgi begrunnelse.' },
       },
+      underKategori: {
+        type: 'select',
+        label: 'Underkategori',
+        options: ['', ...kategorierOptions],
+      },
     },
     { readOnly }
   );
@@ -75,6 +103,7 @@ export const DigitaliserAnnetRelevantDokument = ({ grunnlag, readOnly, submit, i
         <VStack gap={'space-24'}>
           <FormField form={form} formField={formFields.årsaker} />
           <FormField form={form} formField={formFields.begrunnelse} />
+          <FormField form={form} formField={formFields.underKategori} />
           {!readOnly && (
             <Button loading={isLoading} className={'fit-content'}>
               Neste
