@@ -136,11 +136,7 @@ export const Yrkesskade = ({
         }
         const ingenYrkesskadeErTilknyttet = fields.every((yrkesskade) => !yrkesskade.erTilknyttet);
         if (ingenYrkesskadeErTilknyttet) {
-          form.setError('relevanteYrkesskadeSaker', {
-            type: 'custom',
-            message: 'Du må velge minst én yrkesskade',
-          });
-          return false;
+          return 'Du må velge minst én yrkesskade';
         }
       },
     },
