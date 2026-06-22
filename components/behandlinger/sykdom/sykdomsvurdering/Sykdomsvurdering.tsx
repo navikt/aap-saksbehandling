@@ -102,8 +102,10 @@ export const Sykdomsvurdering = ({
   const { behandlingsreferanse } = useParamsMedType();
   const { sak } = useSak();
 
-  const { data: relevanteDokumenter } = useSWR(`/api/dokumenter/bruker/helsedokumenter`, () =>
-    clientHentRelevanteDokumenter(sak.saksnummer, sak.ident)
+  const { data: relevanteDokumenter } = useSWR(
+    `/api/dokumenter/bruker/helsedokumenter`,
+    () => clientHentRelevanteDokumenter(sak.saksnummer, sak.ident),
+    { revalidateOnFocus: false, revalidateIfStale: false }
   );
 
   const har39UkersSykmelding =
