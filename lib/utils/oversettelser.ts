@@ -211,6 +211,8 @@ export function mapTilSteggruppeTekst(steggruppe: string) {
       return 'Vedtaksperiode';
     case 'AVBRYT_AKTIVITETSPLIKTBEHANDLING':
       return 'Avbryt behandling';
+    case 'KRAV':
+      return 'Krav';
     default:
       return `${steggruppe}`;
   }
