@@ -40,6 +40,7 @@ function umamiBeforeSend(type: string, payload: { url?: string }) {
 export type UmamiTag =
   | 'STEG_TREKK_SØKNAD_VARIGHET'
   | 'STEG_RETTIGHETSPERIODE_VARIGHET'
+  | 'STEG_AVSLAG_11_27_VARIGHET'
   | 'STEG_LOVVALG_MEDLEMSKAP_VARIGHET'
   | 'STEG_STUDENT_VARIGHET'
   | 'STEG_YRKESSKADE_VARIGHET'

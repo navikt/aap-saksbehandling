@@ -33,6 +33,7 @@ import { LovvalgPeriodisert } from 'components/behandlinger/lovvalg/LovvalgPerio
 import { PeriodisertForutgåendeMedlemskap } from 'components/behandlinger/forutgåendemedlemskap/PeriodisertForutgåendeMedlemskap';
 import { Vedtakslengde } from 'components/behandlinger/vedtakslengde/Vedtakslengde';
 import { AvbrytAktivitetspliktbehandling } from 'components/behandlinger/aktivitetsplikt/avbryt/vurdering/AvbrytAktivitetspliktbehandling';
+import { AvslagForAndreYtelser } from 'components/behandlinger/samordning/avslag11_27/AvslagForAndreYtelser';
 
 interface Props {
   behandlingsreferanse: string;
@@ -60,6 +61,9 @@ export const OppgaveKolonne = async ({ behandlingsreferanse, aktivGruppe, classN
       <StegSuspense>
         <AlderMedDataFetching behandlingsreferanse={behandlingsreferanse} flyt={flyt} />
       </StegSuspense>
+    )}
+    {aktivGruppe === 'AVSLAG_11_27' && (
+      <AvslagForAndreYtelser behandlingsreferanse={behandlingsreferanse} flyt={flyt} />
     )}
     {aktivGruppe === 'STUDENT' && <Student behandlingsreferanse={behandlingsreferanse} flyt={flyt} />}
     {aktivGruppe === 'SYKDOM' && <Sykdom behandlingsreferanse={behandlingsreferanse} flyt={flyt} />}

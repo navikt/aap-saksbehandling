@@ -16,7 +16,6 @@ type KravType = 'NYTT_KRAV_AAP' | 'GJENOPPTAK' | 'TRUKKET_SØKNAD' | 'KLAGE' | '
 interface KravVurderingEntry {
   kravType: KravType;
   søknadsdato?: string;
-  kravdato?: string;
   muligRettFra?: string;
 }
 
@@ -30,7 +29,6 @@ const kravTyperMedDatofelter: ReadonlySet<KravType> = new Set(['NYTT_KRAV_AAP', 
 const defaultKrav = (): KravVurderingEntry => ({
   kravType: 'NYTT_KRAV_AAP',
   søknadsdato: defaultDato,
-  kravdato: defaultDato,
   muligRettFra: undefined,
 });
 
@@ -42,7 +40,6 @@ const KravRadFelter = ({ form, index }: { form: ReturnType<typeof useForm<FormFi
   return (
     <>
       <DateInputWrapper label="Søknadsdato" control={form.control} name={`kravVurderinger.${index}.søknadsdato`} />
-      <DateInputWrapper label="Kravdato" control={form.control} name={`kravVurderinger.${index}.kravdato`} />
       <DateInputWrapper label="Mulig rett fra" control={form.control} name={`kravVurderinger.${index}.muligRettFra`} />
     </>
   );
@@ -65,9 +62,8 @@ export const LeggTilKravVurdering = ({ saksnummer }: { saksnummer: string }) => 
     await leggTilKravVurdering(saksnummer, {
       kravVurderinger: kravVurderinger.map((k) => ({
         kravType: k.kravType,
-        søknadsdato: k.søknadsdato || undefined,
-        kravdato: k.kravdato || undefined,
-        muligRettFra: k.muligRettFra || undefined,
+        søknadsdato: k.søknadsdato,
+        muligRettFra: k.muligRettFra,
       })),
     });
   };
@@ -87,10 +83,8 @@ export const LeggTilKravVurdering = ({ saksnummer }: { saksnummer: string }) => 
                 const type = e.target.value as KravType;
                 if (kravTyperMedDatofelter.has(type)) {
                   form.setValue(`kravVurderinger.${index}.søknadsdato`, defaultDato);
-                  form.setValue(`kravVurderinger.${index}.kravdato`, defaultDato);
                 } else {
                   form.setValue(`kravVurderinger.${index}.søknadsdato`, undefined);
-                  form.setValue(`kravVurderinger.${index}.kravdato`, undefined);
                   form.setValue(`kravVurderinger.${index}.muligRettFra`, undefined);
                 }
               },

@@ -11,6 +11,7 @@ import {
   AvbrytAktivitetspliktbehandlingGrunnlag,
   AvbrytRevurderingGrunnlag,
   AvklarOppfolgingsoppgaveGrunnlagResponse,
+  Avslag11_27Grunnlag,
   BarnepensjonGrunnlag,
   BarnetilleggGrunnlag,
   BehandlendeEnhetGrunnlag,
@@ -334,6 +335,11 @@ export const hentSamordningAndreStatligeYtelseGrunnlag = async (behandlingsrefer
 export const hentSamordningArbeidsgiverGrunnlag = async (behandlingsreferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/samordning-arbeidsgiver`;
   return await apiFetch<SamordningArbeidsgiverGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentAvslag11_27Grunnlag = async (behandlingsreferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/avslag-11-27`;
+  return await apiFetch<Avslag11_27Grunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentBeregningstidspunktVurdering = async (behandlingsreferanse: string) => {
