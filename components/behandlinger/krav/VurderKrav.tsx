@@ -1,15 +1,14 @@
 'use client';
 
-import { KravGrunnlag, KravVurdering, KravVurderingLøsning, MellomlagretVurdering } from 'lib/types/types';
+import { KravGrunnlag, MellomlagretVurdering } from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
-import { Button, VStack } from '@navikt/ds-react';
-
-import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
-import React, { useState } from 'react';
+import { VStack } from '@navikt/ds-react';
 import { KravTabell } from 'components/behandlinger/krav/KravTabell';
 import { KravVurderingModal } from 'components/behandlinger/krav/KravVurderingModal';
-import { kravVurderingTilLøsning } from 'components/behandlinger/krav/kravutils';
+import { LeggTilKravModal } from 'components/behandlinger/krav/LeggTilKravModal';
+import { useKravVurderingerState } from 'components/behandlinger/krav/useKravVurderingerState';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { VilkårskortMedMellomlagring } from 'components/vilkårskort/vilkårskortmedmellomlagring/VilkårskortMedMellomlagring';
 import { Behovstype } from 'lib/utils/form';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 
@@ -20,73 +19,82 @@ type Props = {
   readOnly: boolean;
 };
 
-export const VurderKrav = ({ readOnly, grunnlag, behandlingVersjon }: Props) => {
+export const VurderKrav = ({ readOnly, grunnlag, behandlingVersjon, initialMellomlagretVurdering }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
     useLøsBehovOgGåTilNesteSteg('KRAV');
 
-  const [endredeVedtatte, setEndredeVedtatte] = useState<Record<string, KravVurderingLøsning>>({});
-  const [endredeNye, setEndredeNye] = useState<Record<string, KravVurderingLøsning>>({});
-  const [valgtVurdering, setValgtVurdering] = useState<{ krav: KravVurdering; erVedtatt: boolean } | undefined>();
+  const {
+    endredeVedtatte,
+    endredeNye,
+    slettedeNyeReferanser,
+    lokaleNyeKrav,
+    valgtVurdering,
+    valgtLokalNyKey,
+    visLeggTilModal,
+    lukkVurderingModal,
+    lukkLeggTilModal,
+    handleEndreKrav,
+    handleLagre,
+    handleTilbakestill,
+    handleSlettNyVurdering,
+    handleLeggTilNy,
+    handleLagreNy,
+    handleEndreLokalNy,
+    handleSlettLokalNy,
+    mellomlagretVurdering,
+    nullstill,
+    slettMellomlagring,
+    byggKravVurderinger,
+  } = useKravVurderingerState({ grunnlag, initialMellomlagretVurdering });
 
-  const handleEndreKrav = (krav: KravVurdering, erVedtatt: boolean) => {
-    setValgtVurdering({ krav, erVedtatt });
-  };
+  const { visningModus, visningActions, formReadOnly } = useVilkårskortVisning(readOnly, 'KRAV', mellomlagretVurdering);
 
-  const handleLagre = (løsning: KravVurderingLøsning) => {
-    if (!valgtVurdering) return;
-    if (valgtVurdering.erVedtatt) {
-      setEndredeVedtatte((prev) => ({ ...prev, [valgtVurdering.krav.referanse]: løsning }));
-    } else {
-      setEndredeNye((prev) => ({ ...prev, [valgtVurdering.krav.referanse]: løsning }));
-    }
-    setValgtVurdering(undefined);
-  };
-
-  const handleTilbakestill = () => {
-    if (!valgtVurdering) return;
-    if (valgtVurdering.erVedtatt) {
-      setEndredeVedtatte((prev) => {
-        const { [valgtVurdering.krav.referanse]: _, ...rest } = prev;
-        return rest;
-      });
-    } else {
-      setEndredeNye((prev) => {
-        const { [valgtVurdering.krav.referanse]: _, ...rest } = prev;
-        return rest;
-      });
-    }
-    setValgtVurdering(undefined);
-  };
-
-  const handleSubmit = () => {
-    const nyeVurderingerLøsninger = (grunnlag?.nyeVurderinger ?? []).map(
-      (vurdering) => endredeNye[vurdering.referanse] ?? kravVurderingTilLøsning(vurdering)
-    );
-    const endredeVedtatteVurderinger = Object.values(endredeVedtatte);
-
-    console.log('Nye vurderinger: ', nyeVurderingerLøsninger);
-    console.log('Endrede vurderinger: ', endredeVedtatteVurderinger);
-
-    løsBehovOgGåTilNesteSteg({
-      behandlingVersjon: behandlingVersjon,
-      referanse: behandlingsreferanse,
-      behov: {
-        behovstype: Behovstype.VURDER_KRAV_KODE,
-        kravVurderinger: [...nyeVurderingerLøsninger, ...endredeVedtatteVurderinger],
+  const handleBekreft = () => {
+    løsBehovOgGåTilNesteSteg(
+      {
+        behandlingVersjon,
+        referanse: behandlingsreferanse,
+        behov: { behovstype: Behovstype.VURDER_KRAV_KODE, kravVurderinger: byggKravVurderinger() },
       },
-    });
+      () => {
+        visningActions.onBekreftClick();
+        slettMellomlagring();
+      }
+    );
   };
 
   return (
-    <VilkårsKort heading={'Vurder krav'} steg={'KRAV'}>
-      <VStack gap={'space-16'}>
+    <VilkårskortMedMellomlagring
+      heading="Vurder krav"
+      steg="KRAV"
+      vilkårTilhørerNavKontor={false}
+      onBekreft={handleBekreft}
+      isLoading={isLoading}
+      status={status}
+      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      mellomlagretVurdering={mellomlagretVurdering}
+      onDeleteMellomlagringClick={() => {
+        slettMellomlagring();
+        nullstill();
+      }}
+      visningModus={visningModus}
+      visningActions={visningActions}
+      onNullstill={nullstill}
+    >
+      <VStack gap="space-16">
         <KravTabell
           grunnlag={grunnlag}
           endredeVedtatte={endredeVedtatte}
           endredeNye={endredeNye}
-          readOnly={readOnly}
+          slettedeNyeReferanser={slettedeNyeReferanser}
+          lokaleNyeKrav={lokaleNyeKrav}
+          readOnly={formReadOnly}
           onEndreKrav={handleEndreKrav}
+          onSlettNyVurdering={handleSlettNyVurdering}
+          onEndreLokalNy={handleEndreLokalNy}
+          onSlettLokalNy={handleSlettLokalNy}
+          onLeggTilNy={handleLeggTilNy}
         />
         {valgtVurdering && (
           <KravVurderingModal
@@ -97,26 +105,23 @@ export const VurderKrav = ({ readOnly, grunnlag, behandlingVersjon }: Props) => 
                 ? endredeVedtatte[valgtVurdering.krav.referanse]
                 : endredeNye[valgtVurdering.krav.referanse]
             }
+            søknaderUtenKravvurdering={
+              !valgtVurdering.erVedtatt ? (grunnlag?.søknaderUtenKravvurdering ?? []) : undefined
+            }
             onLagre={handleLagre}
             onTilbakestill={handleTilbakestill}
-            onAvbryt={() => setValgtVurdering(undefined)}
+            onAvbryt={lukkVurderingModal}
           />
         )}
-        <LøsBehovOgGåTilNesteStegStatusAlert
-          løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-          status={status}
-        />
-        <Button
-          type="button"
-          variant="primary"
-          onClick={handleSubmit}
-          disabled={readOnly}
-          className={'fit-content'}
-          loading={isLoading}
-        >
-          Bekreft
-        </Button>
+        {visLeggTilModal && (
+          <LeggTilKravModal
+            søknaderUtenKravvurdering={grunnlag?.søknaderUtenKravvurdering ?? []}
+            initialLøsning={valgtLokalNyKey ? lokaleNyeKrav[valgtLokalNyKey] : undefined}
+            onLagre={handleLagreNy}
+            onAvbryt={lukkLeggTilModal}
+          />
+        )}
       </VStack>
-    </VilkårsKort>
+    </VilkårskortMedMellomlagring>
   );
 };

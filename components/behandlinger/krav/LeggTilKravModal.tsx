@@ -5,7 +5,6 @@ import { useForm, useWatch } from 'react-hook-form';
 import {
   GjenopptakKravLøsning,
   KlageKravLøsning,
-  KravVurdering,
   KravVurderingLøsning,
   NyttKravLøsning,
   SøknadUtenKrav,
@@ -21,11 +20,7 @@ import {
 } from 'components/behandlinger/krav/kravutils';
 import { KravType } from 'components/opprettsak/OpprettSakLocal';
 
-const ALLE_KRAVTYPER: KravType[] = ['NYTT_KRAV_AAP', 'GJENOPPTAK', 'TILLEGGSOPPLYSNING', 'KLAGE', 'TRUKKET_SØKNAD'];
-
-const KRAV_MED_DATO: KravType[] = ['NYTT_KRAV_AAP', 'GJENOPPTAK'];
-
-type KravVurderingFormFields = {
+type LeggTilKravFormFields = {
   kravtype: KravType;
   journalpostId: string;
   begrunnelse: string;
@@ -35,51 +30,33 @@ type KravVurderingFormFields = {
   overstyrÅrsak: string;
 };
 
+const ALLE_KRAVTYPER: KravType[] = ['NYTT_KRAV_AAP', 'GJENOPPTAK', 'TILLEGGSOPPLYSNING', 'KLAGE', 'TRUKKET_SØKNAD'];
+
+const KOMPLEKSE_TYPER: KravType[] = ['NYTT_KRAV_AAP', 'GJENOPPTAK'];
+
 interface Props {
-  krav: KravVurdering;
-  erVedtatt: boolean;
+  søknaderUtenKravvurdering: SøknadUtenKrav[];
   initialLøsning?: KravVurderingLøsning;
-  søknaderUtenKravvurdering?: SøknadUtenKrav[];
   onLagre: (løsning: KravVurderingLøsning) => void;
-  onTilbakestill?: () => void;
   onAvbryt: () => void;
 }
 
-export const KravVurderingModal = ({
-  krav,
-  erVedtatt,
-  initialLøsning,
-  søknaderUtenKravvurdering,
-  onLagre,
-  onTilbakestill,
-  onAvbryt,
-}: Props) => {
-  const initialKravtype = (initialLøsning?.kravType as KravType | undefined) ?? krav.type;
+export const LeggTilKravModal = ({ søknaderUtenKravvurdering, initialLøsning, onLagre, onAvbryt }: Props) => {
+  const erRedigering = initialLøsning !== undefined;
   const eksisterendeSøknadsdato = initialLøsning ? finnSøknadsdatoFraLøsning(initialLøsning) : null;
   const eksisterendeOverstyr = initialLøsning ? finnOverstyrMuligRettFraFraLøsning(initialLøsning) : null;
-
-  const gjeldendJournalpostId = initialLøsning?.journalpostId.identifikator ?? krav.journalpostId.identifikator;
-
-  const journalpostOptions: { id: string }[] = erVedtatt
-    ? []
-    : [
-        { id: krav.journalpostId.identifikator },
-        ...(søknaderUtenKravvurdering ?? [])
-          .map((s) => ({ id: s.journalpostId.identifikator }))
-          .filter((s) => s.id !== krav.journalpostId.identifikator),
-      ];
 
   const {
     register,
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<KravVurderingFormFields>({
+  } = useForm<LeggTilKravFormFields>({
     shouldUnregister: true,
     defaultValues: {
-      kravtype: initialKravtype,
-      journalpostId: gjeldendJournalpostId,
-      begrunnelse: initialLøsning?.begrunnelse ?? krav.begrunnelse,
+      kravtype: (initialLøsning?.kravType as KravType) ?? 'NYTT_KRAV_AAP',
+      journalpostId: initialLøsning?.journalpostId.identifikator ?? '',
+      begrunnelse: initialLøsning?.begrunnelse ?? '',
       søknadsdatoDato: eksisterendeSøknadsdato ? formaterDatoForFrontend(eksisterendeSøknadsdato.dato) : '',
       søknadsdatoÅrsak: eksisterendeSøknadsdato?.årsak ?? '',
       overstyrDato: eksisterendeOverstyr ? formaterDatoForFrontend(eksisterendeOverstyr.dato) : '',
@@ -88,13 +65,12 @@ export const KravVurderingModal = ({
   });
 
   const valgtType = useWatch({ control, name: 'kravtype' }) as KravType;
-  const erKravtypeMedDato = KRAV_MED_DATO.includes(valgtType);
+  const erKompleksType = KOMPLEKSE_TYPER.includes(valgtType);
 
   const onSubmit = handleSubmit((data) => {
-    const referanse = erVedtatt ? krav.referanse : undefined;
     const journalpostId = { identifikator: data.journalpostId };
 
-    if (erKravtypeMedDato) {
+    if (erKompleksType) {
       const søknadsdatoParsed = parseDatoFraDatePicker(data.søknadsdatoDato);
       if (!søknadsdatoParsed) return;
 
@@ -102,9 +78,8 @@ export const KravVurderingModal = ({
         dato: formaterDatoForBackend(søknadsdatoParsed),
         årsak: data.søknadsdatoÅrsak as 'BrukerHarSøktTidligere' | 'FeilregistrertSøknadsdato' | 'SøknadMottatt',
       };
-
       const overstyrParsed = data.overstyrDato ? parseDatoFraDatePicker(data.overstyrDato) : undefined;
-      const overstyr =
+      const overstyrMuligRettFra =
         overstyrParsed && data.overstyrÅrsak
           ? {
               dato: formaterDatoForBackend(overstyrParsed),
@@ -118,8 +93,8 @@ export const KravVurderingModal = ({
           journalpostId,
           begrunnelse: data.begrunnelse,
           søknadsdato,
-          overstyrMuligRettFra: overstyr,
-          referanse,
+          overstyrMuligRettFra,
+          referanse: undefined,
         } satisfies NyttKravLøsning);
       } else {
         onLagre({
@@ -127,8 +102,8 @@ export const KravVurderingModal = ({
           journalpostId,
           begrunnelse: data.begrunnelse,
           søknadsdato,
-          muligRettFra: overstyr,
-          referanse,
+          muligRettFra: overstyrMuligRettFra,
+          referanse: undefined,
         } satisfies GjenopptakKravLøsning);
       }
     } else {
@@ -138,7 +113,7 @@ export const KravVurderingModal = ({
             kravType: 'TILLEGGSOPPLYSNING',
             journalpostId,
             begrunnelse: data.begrunnelse,
-            referanse,
+            referanse: undefined,
           } satisfies TilleggsopplysningKravLøsning);
           break;
         case 'KLAGE':
@@ -146,7 +121,7 @@ export const KravVurderingModal = ({
             kravType: 'KLAGE',
             journalpostId,
             begrunnelse: data.begrunnelse,
-            referanse,
+            referanse: undefined,
           } satisfies KlageKravLøsning);
           break;
         case 'TRUKKET_SØKNAD':
@@ -154,7 +129,7 @@ export const KravVurderingModal = ({
             kravType: 'TRUKKET_SØKNAD',
             journalpostId,
             begrunnelse: data.begrunnelse,
-            referanse,
+            referanse: undefined,
           } satisfies TrukketSøknadKravLøsning);
           break;
       }
@@ -164,11 +139,11 @@ export const KravVurderingModal = ({
   return (
     <Modal
       open
-      header={{ heading: `${erVedtatt ? 'Endre' : 'Rediger'} kravvurdering` }}
+      header={{ heading: erRedigering ? 'Rediger vurdering' : 'Legg til ny vurdering' }}
       onClose={onAvbryt}
       width="medium"
     >
-      <form id="krav-vurdering-skjema" onSubmit={onSubmit} autoComplete="off">
+      <form id="legg-til-krav-skjema" onSubmit={onSubmit} autoComplete="off">
         <Modal.Body>
           <VStack gap="space-16">
             <Select
@@ -176,6 +151,7 @@ export const KravVurderingModal = ({
               {...register('kravtype', { required: 'Du må velge kravtype.' })}
               error={errors.kravtype?.message}
               size="small"
+              disabled={erRedigering}
             >
               {ALLE_KRAVTYPER.map((type) => (
                 <option key={type} value={type}>
@@ -184,22 +160,38 @@ export const KravVurderingModal = ({
               ))}
             </Select>
 
-            {!erVedtatt && journalpostOptions.length > 0 && (
+            {søknaderUtenKravvurdering.length > 0 && !erRedigering ? (
               <Select
                 label="Journalpost"
                 {...register('journalpostId', { required: 'Du må velge journalpost.' })}
                 error={errors.journalpostId?.message}
                 size="small"
               >
-                {journalpostOptions.map((j) => (
-                  <option key={j.id} value={j.id}>
-                    {j.id}
+                <option value="">Velg journalpost</option>
+                {søknaderUtenKravvurdering.map((s) => (
+                  <option key={s.journalpostId.identifikator} value={s.journalpostId.identifikator}>
+                    {s.journalpostId.identifikator}
                   </option>
                 ))}
               </Select>
+            ) : (
+              <Select
+                label="Journalpost"
+                {...register('journalpostId', { required: 'Du må fylle inn journalpost-id.' })}
+                error={errors.journalpostId?.message}
+                size="small"
+                disabled={erRedigering}
+              >
+                {erRedigering && (
+                  <option value={initialLøsning?.journalpostId.identifikator}>
+                    {initialLøsning?.journalpostId.identifikator}
+                  </option>
+                )}
+                {!erRedigering && <option value="">Ingen søknader uten vurdering</option>}
+              </Select>
             )}
 
-            {erKravtypeMedDato && (
+            {erKompleksType && (
               <>
                 <DateInputWrapper
                   name="søknadsdatoDato"
@@ -236,17 +228,12 @@ export const KravVurderingModal = ({
           </VStack>
         </Modal.Body>
         <Modal.Footer>
-          <Button type="submit" variant="primary" form="krav-vurdering-skjema" className="fit-content">
+          <Button type="submit" variant="primary" form="legg-til-krav-skjema" className="fit-content">
             Lagre
           </Button>
           <Button type="button" variant="secondary" className="fit-content" onClick={onAvbryt}>
             Avbryt
           </Button>
-          {initialLøsning && onTilbakestill && (
-            <Button type="button" variant="tertiary" className="fit-content" onClick={onTilbakestill}>
-              Tilbakestill
-            </Button>
-          )}
         </Modal.Footer>
       </form>
     </Modal>
