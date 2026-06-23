@@ -77,6 +77,7 @@ export const SettMarkeringForBehandlingModal = ({ referanse, type, isOpen, onClo
                       ? data.hasteBegrunnelse
                       : data.begrunnelse,
                   markeringType: markeringsType,
+                  opprettetTidspunkt: new Date().toISOString(),
                 });
 
                 if (isSuccess(res)) {
