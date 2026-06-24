@@ -7,7 +7,6 @@ export interface Tabellår {
   periodeFom?: string;
   periodeTom?: string;
   erDelperiode?: boolean;
-  /** True for split-årets informasjonsrad (ingen input, sendes ikke inn). */
   erKunVisning?: boolean;
 }
 

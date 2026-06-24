@@ -19,7 +19,6 @@ export const FastsettManuellInntektTabell = ({ tabellår, form, readOnly, låstV
     return formaterTilNok(total);
   };
 
-  // Totalt for split-årets informasjonsrad: summen av delperiodenes (beregnet PGI + EØS).
   const regnUtTotalForSplittÅr = (år: number): string => {
     const alleRader = låstVisning ? tabellår : form.watch('tabellår');
     const sum = alleRader
@@ -42,16 +41,18 @@ export const FastsettManuellInntektTabell = ({ tabellår, form, readOnly, låstV
           </Table.Row>
         </Table.Header>
         <Table.Body data-testid={'inntektstabell'}>
-          {tabellår.map((år, index) => {
-            const ferdigLignetPGI = låstVisning ? år.ferdigLignetPGI : form.watch(`tabellår.${index}.ferdigLignetPGI`);
-            const beregnetPGI = låstVisning ? år.beregnetPGI : form.watch(`tabellår.${index}.beregnetPGI`);
-            const eøsInntekt = låstVisning ? år.eøsInntekt : form.watch(`tabellår.${index}.eøsInntekt`);
-            const redigerbar = !år.erKunVisning;
+          {tabellår.map((tabellÅr, index) => {
+            const ferdigLignetPGI = låstVisning
+              ? tabellÅr.ferdigLignetPGI
+              : form.watch(`tabellår.${index}.ferdigLignetPGI`);
+            const beregnetPGI = låstVisning ? tabellÅr.beregnetPGI : form.watch(`tabellår.${index}.beregnetPGI`);
+            const eøsInntekt = låstVisning ? tabellÅr.eøsInntekt : form.watch(`tabellår.${index}.eøsInntekt`);
+            const redigerbar = !tabellÅr.erKunVisning;
             return (
-              <Table.Row key={år.label ?? år.år}>
-                <Table.DataCell textSize={'small'}>{år.label ?? år.år}</Table.DataCell>
+              <Table.Row key={tabellÅr.label ?? tabellÅr.år}>
+                <Table.DataCell textSize={'small'}>{tabellÅr.label ?? tabellÅr.år}</Table.DataCell>
                 <Table.DataCell textSize={'small'} data-testid={'ferdigLignetPGI'}>
-                  {år.ferdigLignetPGI ? formaterTilNok(år.ferdigLignetPGI) : '-'}
+                  {tabellÅr.ferdigLignetPGI ? formaterTilNok(tabellÅr.ferdigLignetPGI) : '-'}
                 </Table.DataCell>
                 <Table.DataCell textSize={'small'} data-testid={'beregnetPGI'}>
                   {!redigerbar ? (
@@ -69,7 +70,7 @@ export const FastsettManuellInntektTabell = ({ tabellår, form, readOnly, låstV
                       control={form.control}
                       type={'number'}
                       hideLabel={true}
-                      readOnly={år.ferdigLignetPGI !== undefined || readOnly}
+                      readOnly={tabellÅr.ferdigLignetPGI !== undefined || readOnly}
                     />
                   )}
                 </Table.DataCell>
@@ -94,9 +95,9 @@ export const FastsettManuellInntektTabell = ({ tabellår, form, readOnly, låstV
                   )}
                 </Table.DataCell>
                 <Table.DataCell data-testid={'totalt'} textSize={'small'}>
-                  {år.erKunVisning
-                    ? regnUtTotalForSplittÅr(år.år)
-                    : år.erDelperiode
+                  {tabellÅr.erKunVisning
+                    ? regnUtTotalForSplittÅr(tabellÅr.år)
+                    : tabellÅr.erDelperiode
                       ? '-'
                       : regnUtTotalbeløpPerÅr(ferdigLignetPGI ?? 0, Number(beregnetPGI ?? 0), Number(eøsInntekt ?? 0))}
                 </Table.DataCell>

@@ -37,15 +37,11 @@ interface ByggTabellDataProps {
 
 type DraftFormFields = Partial<FastsettManuellInntektForm>;
 
-const MÅNED_KORT = ['jan', 'feb', 'mar', 'apr', 'mai', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'des'];
+const MÅNED = ['jan', 'feb', 'mar', 'apr', 'mai', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'des'];
 
-/**
- * Bygger visningsnavn for en delperiode, f.eks. «2022 jan-feb». Måneden hentes fra ISO-datostrengen
- * uten tidssone-konvertering.
- */
 const formaterDelperiodeLabel = (år: number, periodeFom: string, periodeTom: string): string => {
-  const fomMåned = MÅNED_KORT[Number(periodeFom.slice(5, 7)) - 1];
-  const tomMåned = MÅNED_KORT[Number(periodeTom.slice(5, 7)) - 1];
+  const fomMåned = MÅNED[Number(periodeFom.slice(5, 7)) - 1];
+  const tomMåned = MÅNED[Number(periodeTom.slice(5, 7)) - 1];
   return `${år} ${fomMåned}-${tomMåned}`;
 };
 
@@ -68,7 +64,7 @@ export const FastsettManuellInntekt = ({
   const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const delperioder = grunnlag.delperioderForSplittÅr ?? [];
-  const splittÅr = [...new Set(delperioder.map((d) => d.år))].sort((a, b) => a - b);
+  const splittÅr = [...new Set(delperioder.map((delPeriode) => delPeriode.år))].sort((a, b) => a - b);
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -206,18 +202,18 @@ export const FastsettManuellInntekt = ({
           customElement={(valgtVurderingIndex) => {
             const tabelldata: Tabellår[] | undefined = vurderinger
               .at(valgtVurderingIndex)
-              ?.årsVurderinger.map((år) => ({
-                år: år.år,
-                ferdigLignetPGI: år.ferdigLignetPGI,
-                beregnetPGI: år.beløp,
-                eøsInntekt: år.eøsBeløp,
+              ?.årsVurderinger.map((årsVurdering) => ({
+                år: årsVurdering.år,
+                ferdigLignetPGI: årsVurdering.ferdigLignetPGI,
+                beregnetPGI: årsVurdering.beløp,
+                eøsInntekt: årsVurdering.eøsBeløp,
                 label:
-                  år.periodeFom && år.periodeTom
-                    ? formaterDelperiodeLabel(år.år, år.periodeFom, år.periodeTom)
+                  årsVurdering.periodeFom && årsVurdering.periodeTom
+                    ? formaterDelperiodeLabel(årsVurdering.år, årsVurdering.periodeFom, årsVurdering.periodeTom)
                     : undefined,
-                periodeFom: år.periodeFom ?? undefined,
-                periodeTom: år.periodeTom ?? undefined,
-                erDelperiode: Boolean(år.periodeFom),
+                periodeFom: årsVurdering.periodeFom ?? undefined,
+                periodeTom: årsVurdering.periodeTom ?? undefined,
+                erDelperiode: Boolean(årsVurdering.periodeFom),
               }));
 
             return (
@@ -312,16 +308,12 @@ const berikMedPGI = (treÅr: Tabellår[], pgi: ManuellInntektÅr[]): Tabellår[]
   });
 };
 
-/**
- * Berik med manuelle inntekter på år-nivå dersom disse er lagt inn av saksbehandler. Periode-vurderinger
- * (endring i uføregrad) håndteres i berikMedDelperioder.
- */
 const berikMedManuelleInntekter = (treÅr: Tabellår[], manuelleInntekter: ManuellInntektÅr[]): Tabellår[] => {
-  return treÅr.map((år) => {
-    const inntekter = manuelleInntekter.find((inntekter) => inntekter.år === år.år && !inntekter.periodeFom);
+  return treÅr.map((tabellÅr) => {
+    const inntekter = manuelleInntekter.find((inntekter) => inntekter.år === tabellÅr.år && !inntekter.periodeFom);
     return {
-      år: år.år,
-      ferdigLignetPGI: år.ferdigLignetPGI,
+      år: tabellÅr.år,
+      ferdigLignetPGI: tabellÅr.ferdigLignetPGI,
       beregnetPGI: inntekter?.beløp,
       eøsInntekt: inntekter?.eøsBeløp,
     };
@@ -342,22 +334,22 @@ const berikMedDelperioder = (
   }
   const splittÅr = new Set(delperioder.map((d) => d.år));
 
-  return treÅr.flatMap((år) => {
-    if (!splittÅr.has(år.år)) {
-      return [år];
+  return treÅr.flatMap((tabellÅr) => {
+    if (!splittÅr.has(tabellÅr.år)) {
+      return [tabellÅr];
     }
 
-    const visningsrad: Tabellår = { ...år, beregnetPGI: undefined, eøsInntekt: undefined, erKunVisning: true };
+    const visningsrad: Tabellår = { ...tabellÅr, beregnetPGI: undefined, eøsInntekt: undefined, erKunVisning: true };
 
     const delperiodeRader: Tabellår[] = delperioder
-      .filter((d) => d.år === år.år)
+      .filter((d) => d.år === tabellÅr.år)
       .sort((a, b) => a.periodeFom.localeCompare(b.periodeFom))
       .map((d) => {
         const lagret = manuelleInntekter.find(
           (m) => m.år === d.år && m.periodeFom === d.periodeFom && m.periodeTom === d.periodeTom
         );
         return {
-          år: år.år,
+          år: tabellÅr.år,
           label: formaterDelperiodeLabel(d.år, d.periodeFom, d.periodeTom),
           ferdigLignetPGI: undefined,
           beregnetPGI: lagret?.beløp,
