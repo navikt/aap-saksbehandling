@@ -85,6 +85,7 @@ export const DigitaliserAnnetRelevantDokument = ({ grunnlag, readOnly, submit, i
       underKategori: {
         type: 'select',
         label: 'Underkategori',
+        description: 'Velg kategorien som passer best for dokumentet. Dette gjør dokumentet enklere å finne og forstå.',
         options: ['', ...kategorierOptions],
       },
     },
