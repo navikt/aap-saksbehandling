@@ -585,7 +585,7 @@ export type AnnetRelevantDokument =
   };
 
 export type AnnetRelevantDokumentUnderkategori =
-  components['schemas'][`no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AnnetRelevantDokument`]['underKategori'];
+  components['schemas'][`no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AnnetRelevantDokument`]['underkategori'];
 
 export const ManuellRevurderingV0 = 'ManuellRevurderingV0';
 export type ManuellRevurderingV0 =

@@ -14,7 +14,7 @@ import { vurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
 export interface AnnetRelevantDokumentFormFields {
   årsaker: string[];
   begrunnelse: string;
-  underKategori: AnnetRelevantDokumentUnderkategori;
+  underkategori: AnnetRelevantDokumentUnderkategori;
 }
 
 interface Props extends Submittable {
@@ -49,7 +49,7 @@ function mapTilAnnetRelevantDokumentKontrakt(data: AnnetRelevantDokumentFormFiel
     meldingType: 'AnnetRelevantDokumentV2',
     årsakerTilBehandling: data.årsaker.map((årsak) => årsak as DokumentÅrsakTilBehandling),
     begrunnelse: data.begrunnelse,
-    underKategori: data.underKategori,
+    underkategori: data.underkategori,
   } satisfies AnnetRelevantDokument;
   return JSON.stringify(dokument);
 }
@@ -82,10 +82,10 @@ export const DigitaliserAnnetRelevantDokument = ({ grunnlag, readOnly, submit, i
         defaultValue: annetRelevantDokumentGrunnlag.begrunnelse || '',
         rules: { required: 'Du må oppgi begrunnelse.' },
       },
-      underKategori: {
+      underkategori: {
         type: 'select',
         label: 'Underkategori',
-        defaultValue: annetRelevantDokumentGrunnlag.underKategori || '',
+        defaultValue: annetRelevantDokumentGrunnlag.underkategori || '',
         description: 'Velg kategorien som passer best for dokumentet. Dette gjør dokumentet enklere å finne og forstå.',
         options: ['', ...kategorierOptions],
       },
@@ -103,7 +103,7 @@ export const DigitaliserAnnetRelevantDokument = ({ grunnlag, readOnly, submit, i
     <VilkårsKort heading={'Annet relevant dokument'}>
       <form onSubmit={handleSubmit}>
         <VStack gap={'space-24'}>
-          <FormField form={form} formField={formFields.underKategori} />
+          <FormField form={form} formField={formFields.underkategori} />
           <FormField form={form} formField={formFields.årsaker} />
           <FormField form={form} formField={formFields.begrunnelse} />
           {!readOnly && (
