@@ -17949,9 +17949,31 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AnnetRelevantDokument':
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AnnetRelevantDokumentV0']
-      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AnnetRelevantDokumentV1'];
+      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AnnetRelevantDokumentV1']
+      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AnnetRelevantDokumentV2'];
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AnnetRelevantDokumentV0': {
       begrunnelse?: string | null;
+      /** @enum {string|null} */
+      underKategori?:
+        | 'ARBEIDSUTPROVING'
+        | 'BARNETILLEGG'
+        | 'ETABLERING'
+        | 'ETTERSENDELSE_TIL_FEILUTBETALING'
+        | 'ETTERSENDELSE_TIL_KLAGE'
+        | 'FENGSEL_VARETEKT'
+        | 'HELSEOPPLYSNINGER'
+        | 'INSTITUSJONSOPPHOLD'
+        | 'KARAKTERUTSKRIFTER_OG_CV'
+        | 'KLAGE'
+        | 'LAERLING'
+        | 'MEDLEMSKAP'
+        | 'PARTSINNSYN'
+        | 'REFUSJONSKRAV'
+        | 'SLUTTAVTALE'
+        | 'STUDENTBESTEMMELSEN'
+        | 'TILTAKSRAPPORT'
+        | 'YRKESSKADE'
+        | null;
       '\u00E5rsakerTilBehandling': (
         | 'AKTIVITETSMELDING'
         | 'AKTIVITETSPLIKTBEHANDLING_AVBRUTT'
@@ -18015,6 +18037,110 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AnnetRelevantDokumentV1': {
       begrunnelse: string;
+      /** @enum {string|null} */
+      underKategori?:
+        | 'ARBEIDSUTPROVING'
+        | 'BARNETILLEGG'
+        | 'ETABLERING'
+        | 'ETTERSENDELSE_TIL_FEILUTBETALING'
+        | 'ETTERSENDELSE_TIL_KLAGE'
+        | 'FENGSEL_VARETEKT'
+        | 'HELSEOPPLYSNINGER'
+        | 'INSTITUSJONSOPPHOLD'
+        | 'KARAKTERUTSKRIFTER_OG_CV'
+        | 'KLAGE'
+        | 'LAERLING'
+        | 'MEDLEMSKAP'
+        | 'PARTSINNSYN'
+        | 'REFUSJONSKRAV'
+        | 'SLUTTAVTALE'
+        | 'STUDENTBESTEMMELSEN'
+        | 'TILTAKSRAPPORT'
+        | 'YRKESSKADE'
+        | null;
+      '\u00E5rsakerTilBehandling': (
+        | 'AKTIVITETSMELDING'
+        | 'AKTIVITETSPLIKTBEHANDLING_AVBRUTT'
+        | 'AKTIVITETSPLIKT_11_7'
+        | 'AKTIVITETSPLIKT_11_9'
+        | 'AVVIST_LEGEERKLÆRING'
+        | 'BARNETILLEGG'
+        | 'BARNETILLEGG_SATS_REGULERING'
+        | 'DIALOGMELDING'
+        | 'DØDSFALL_BARN'
+        | 'DØDSFALL_BRUKER'
+        | 'EFFEKTUER_AKTIVITETSPLIKT'
+        | 'EFFEKTUER_AKTIVITETSPLIKT_11_9'
+        | 'ETABLERING_EGEN_VIRKSOMHET'
+        | 'FORUTGAENDE_MEDLEMSKAP'
+        | 'FRITAK_MELDEPLIKT'
+        | 'G_REGULERING'
+        | 'HELHETLIG_VURDERING'
+        | 'INSTITUSJONSOPPHOLD'
+        | 'KLAGE'
+        | 'KLAGE_TRUKKET'
+        | 'LEGEERKLÆRING'
+        | 'LOVVALG_OG_MEDLEMSKAP'
+        | 'MELDEKORT'
+        | 'MIGRER_RETTIGHETSPERIODE'
+        | 'MOTTATT_KABAL_HENDELSE'
+        | 'OPPFØLGINGSOPPGAVE'
+        | 'OPPHOLDSKRAV'
+        | 'OVERGANG_ARBEID'
+        | 'OVERGANG_UFORE'
+        | 'OVERGANG_UFORE_AUTOMATISK_STANS'
+        | 'REFUSJONSKRAV'
+        | 'REVURDERING_AVBRUTT'
+        | 'REVURDER_BEREGNING'
+        | 'REVURDER_INNTEKTSBORTFALL'
+        | 'REVURDER_LOVVALG'
+        | 'REVURDER_MANUELL_INNTEKT'
+        | 'REVURDER_MEDLEMSKAP'
+        | 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN'
+        | 'REVURDER_SAMORDNING'
+        | 'REVURDER_SAMORDNING_ANDRE_FOLKETRYGDYTELSER'
+        | 'REVURDER_SAMORDNING_ANDRE_STATLIGE_YTELSER'
+        | 'REVURDER_SAMORDNING_ARBEIDSGIVER'
+        | 'REVURDER_SAMORDNING_BARNEPENSJON'
+        | 'REVURDER_SAMORDNING_TJENESTEPENSJON'
+        | 'REVURDER_SAMORDNING_UFØRE'
+        | 'REVURDER_STUDENT'
+        | 'REVURDER_SYKEPENGEERSTATNING'
+        | 'REVURDER_SYKESTIPEND'
+        | 'REVURDER_YRKESSKADE'
+        | 'SAMORDNING_OG_AVREGNING'
+        | 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND'
+        | 'SØKNAD'
+        | 'SØKNAD_TRUKKET'
+        | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
+        | 'UTVID_VEDTAKSLENGDE'
+        | 'VEDTAKSLENGDE_MANUELT'
+        | 'VURDER_KRAV'
+        | 'VURDER_RETTIGHETSPERIODE'
+      )[];
+    };
+    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AnnetRelevantDokumentV2': {
+      begrunnelse: string;
+      /** @enum {string} */
+      underKategori:
+        | 'ARBEIDSUTPROVING'
+        | 'BARNETILLEGG'
+        | 'ETABLERING'
+        | 'ETTERSENDELSE_TIL_FEILUTBETALING'
+        | 'ETTERSENDELSE_TIL_KLAGE'
+        | 'FENGSEL_VARETEKT'
+        | 'HELSEOPPLYSNINGER'
+        | 'INSTITUSJONSOPPHOLD'
+        | 'KARAKTERUTSKRIFTER_OG_CV'
+        | 'KLAGE'
+        | 'LAERLING'
+        | 'MEDLEMSKAP'
+        | 'PARTSINNSYN'
+        | 'REFUSJONSKRAV'
+        | 'SLUTTAVTALE'
+        | 'STUDENTBESTEMMELSEN'
+        | 'TILTAKSRAPPORT'
+        | 'YRKESSKADE';
       '\u00E5rsakerTilBehandling': (
         | 'AKTIVITETSMELDING'
         | 'AKTIVITETSPLIKTBEHANDLING_AVBRUTT'
