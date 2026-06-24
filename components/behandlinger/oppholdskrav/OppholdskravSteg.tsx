@@ -60,8 +60,6 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
 
   const form = useForm<OppholdskravForm>({
     defaultValues,
-    reValidateMode: 'onChange',
-    shouldUnregister: true,
   });
 
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
@@ -79,7 +77,6 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
   } = useFieldArray({
     control: form.control,
     name: 'vurderinger',
-    rules: {},
   });
 
   function onAddPeriode() {
