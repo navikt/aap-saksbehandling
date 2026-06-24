@@ -33,6 +33,7 @@ import { LovvalgPeriodisert } from 'components/behandlinger/lovvalg/LovvalgPerio
 import { PeriodisertForutgåendeMedlemskap } from 'components/behandlinger/forutgåendemedlemskap/PeriodisertForutgåendeMedlemskap';
 import { Vedtakslengde } from 'components/behandlinger/vedtakslengde/Vedtakslengde';
 import { AvbrytAktivitetspliktbehandling } from 'components/behandlinger/aktivitetsplikt/avbryt/vurdering/AvbrytAktivitetspliktbehandling';
+import { Krav } from 'components/behandlinger/krav/Krav';
 
 interface Props {
   behandlingsreferanse: string;
@@ -44,6 +45,7 @@ interface Props {
 export const OppgaveKolonne = async ({ behandlingsreferanse, aktivGruppe, className, flyt }: Props) => (
   <section className={className}>
     {aktivGruppe === 'START_BEHANDLING' && <StartBehandling behandlingsreferanse={behandlingsreferanse} flyt={flyt} />}
+    {aktivGruppe === 'KRAV' && <Krav behandlingsreferanse={behandlingsreferanse} flyt={flyt} />}
     {aktivGruppe === 'SØKNAD' && <Søknad behandlingsreferanse={behandlingsreferanse} flyt={flyt} />}
     {aktivGruppe === 'AVBRYT_REVURDERING' && (
       <AvbrytRevurdering behandlingsreferanse={behandlingsreferanse} flyt={flyt} />
