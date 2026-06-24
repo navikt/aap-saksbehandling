@@ -584,6 +584,9 @@ export type AnnetRelevantDokument =
     meldingType: 'AnnetRelevantDokumentV1' /* Hadde vært fint om dette kom med i kontrakten ... */;
   };
 
+export type AnnetRelevantDokumentUnderkategori =
+  components['schemas'][`no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AnnetRelevantDokument`]['underkategori'];
+
 export const ManuellRevurderingV0 = 'ManuellRevurderingV0';
 export type ManuellRevurderingV0 =
   components['schemas'][`no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.${typeof ManuellRevurderingV0}`] & {
