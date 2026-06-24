@@ -43,7 +43,7 @@ export function finnSøknadsdatoFraLøsning(løsning: KravVurderingLøsning): S�
 
 export function finnOverstyrMuligRettFraFraLøsning(løsning: KravVurderingLøsning): OverstyrMuligRettFra | null {
   if (løsning.kravType === 'NYTT_KRAV_AAP') return (løsning as NyttKravLøsning).overstyrMuligRettFra ?? null;
-  if (løsning.kravType === 'GJENOPPTAK') return (løsning as GjenopptakKravLøsning).muligRettFra ?? null;
+  if (løsning.kravType === 'GJENOPPTAK') return (løsning as GjenopptakKravLøsning).overstyrMuligRettFra ?? null;
   return null;
 }
 
@@ -89,7 +89,7 @@ export function kravVurderingTilLøsning(vurdering: KravVurdering): KravVurderin
         journalpostId: v.journalpostId,
         begrunnelse: v.begrunnelse,
         søknadsdato: v.søknadsdato,
-        muligRettFra: v.overstyrMuligRettFra,
+        overstyrMuligRettFra: v.overstyrMuligRettFra,
         referanse: undefined,
       } satisfies GjenopptakKravLøsning;
     }

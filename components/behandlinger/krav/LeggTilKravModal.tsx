@@ -102,7 +102,7 @@ export const LeggTilKravModal = ({ søknaderUtenKravvurdering, initialLøsning, 
           journalpostId,
           begrunnelse: data.begrunnelse,
           søknadsdato,
-          muligRettFra: overstyrMuligRettFra,
+          overstyrMuligRettFra: overstyrMuligRettFra,
           referanse: undefined,
         } satisfies GjenopptakKravLøsning);
       }
