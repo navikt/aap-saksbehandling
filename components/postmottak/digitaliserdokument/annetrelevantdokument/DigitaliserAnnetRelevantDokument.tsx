@@ -46,7 +46,7 @@ const kategorierOptions: ValuePair<NonNullable<AnnetRelevantDokumentUnderkategor
 
 function mapTilAnnetRelevantDokumentKontrakt(data: AnnetRelevantDokumentFormFields) {
   const dokument = {
-    meldingType: 'AnnetRelevantDokumentV2',
+    meldingType: 'AnnetRelevantDokumentV1',
     årsakerTilBehandling: data.årsaker.map((årsak) => årsak as DokumentÅrsakTilBehandling),
     begrunnelse: data.begrunnelse,
     underkategori: data.underkategori,

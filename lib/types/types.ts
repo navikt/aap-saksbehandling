@@ -581,7 +581,7 @@ export type KlageV0 =
 
 export type AnnetRelevantDokument =
   components['schemas'][`no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AnnetRelevantDokument`] & {
-    meldingType: 'AnnetRelevantDokumentV2' /* Hadde vært fint om dette kom med i kontrakten ... */;
+    meldingType: 'AnnetRelevantDokumentV1' /* Hadde vært fint om dette kom med i kontrakten ... */;
   };
 
 export type AnnetRelevantDokumentUnderkategori =
