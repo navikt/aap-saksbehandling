@@ -7,7 +7,7 @@ import { stringToDate } from 'lib/utils/date';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
 import { UseFormReturn } from 'react-hook-form';
-import { Periode } from 'lib/types/types';
+import { Periode, StudentGrunnlag } from 'lib/types/types';
 import type { SykdomsvurderingerForm } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import { JaEllerNei, JaNeiEllerForbigåendeTekst } from 'lib/utils/form';
 import { Sak } from 'context/saksbehandling/SakContext';
@@ -21,6 +21,7 @@ import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupW
 import { defaultBegrunnelse } from 'components/behandlinger/sykdom/sykdomsvurdering/sykdomsvurdering-utils';
 import { useFeatureFlag } from 'context/UnleashContext';
 import { Alert } from 'components/alert/Alert';
+import { RelevantInformasjonStudent } from 'components/behandlinger/sykdom/student/studentvurdering/RelevantInformasjonStudent';
 
 interface Props {
   index: number;
@@ -32,6 +33,7 @@ interface Props {
   erÅrsakssammenhengYrkesskade: boolean;
   rettighetsperiodeStartdato: Date;
   diagnoseDefaultOptions: DiagnoserDefaultOptions;
+  studentgrunnlag: StudentGrunnlag;
 }
 
 export const vilkårsvurderingLabel = 'Vilkårsvurdering';
@@ -52,10 +54,15 @@ export const SykdomsvurderingFormInput = ({
   ikkeRelevantePerioder,
   rettighetsperiodeStartdato,
   diagnoseDefaultOptions,
+  studentgrunnlag,
 }: Props) => {
   const harNedsattArbeidsevne = form.watch(`vurderinger.${index}.harNedsattArbeidsevne`);
   const skalViseNedsettelse = harNedsattArbeidsevne === 'JA' || harNedsattArbeidsevne === 'JA_FORBIGÅENDE_PROBLEMER';
   const skalViseNeiMenStudent = useFeatureFlag('StudentV2');
+  const skalViseStudentSoknad =
+    skalViseNeiMenStudent && studentgrunnlag.oppgittStudent?.erStudentStatus === 'AVBRUTT' &&
+    (studentgrunnlag.oppgittStudent?.skalGjenopptaStudieStatus === 'JA' ||
+      studentgrunnlag.oppgittStudent?.skalGjenopptaStudieStatus === 'VET_IKKE');
 
   return (
     <VStack gap={'space-20'}>
@@ -115,6 +122,7 @@ export const SykdomsvurderingFormInput = ({
             readOnly={readonly}
             diagnoseDefaultOptions={diagnoseDefaultOptions}
           />
+          {skalViseStudentSoknad && <RelevantInformasjonStudent opplysninger={studentgrunnlag.oppgittStudent} />}
           <RadioGroupWrapper
             name={`vurderinger.${index}.harNedsattArbeidsevne`}
             control={form.control}

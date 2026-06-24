@@ -203,6 +203,44 @@ export type SamordningAndreStatligeYtelserData =
 export type SamordningAndreStatligeYtelserYtelse =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.samordning.andrestatligeytelservurdering.SamordningAndreStatligeYtelserVurderingPeriodeDto']['ytelse'];
 
+export type KravGrunnlag = components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.KravGrunnlagDto'];
+
+export type KravVurdering = components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.KravVurderingDto'];
+
+export type NyttKrav = components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.NyttKravDto'];
+
+export type Gjenopptak = components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.GjenopptakDto'];
+
+export type Tilleggsopplysning =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.TilleggsopplysningDto'];
+
+export type Søknadsdato =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.NyttKravDto']['søknadsdato'];
+
+export type OverstyrMuligRettFra =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.NyttKravDto']['overstyrMuligRettFra'];
+
+export type KravVurderingLøsning =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.KravVurderingLøsningDto'];
+
+export type NyttKravLøsning =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.NyttKravLøsningDto'];
+
+export type GjenopptakKravLøsning =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.GjenopptakKravLøsningDto'];
+
+export type KlageKravLøsning =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.KlageKravLøsningDto'];
+
+export type TilleggsopplysningKravLøsning =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.TilleggsopplysningKravLøsningDto'];
+
+export type TrukketSøknadKravLøsning =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.TrukketSøknadKravLøsningDto'];
+
+export type SøknadUtenKrav =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.SøknadUtenKravDto'];
+
 export type TrukketSøknadGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.søknad.TrukketSøknadGrunnlagDto'];
 

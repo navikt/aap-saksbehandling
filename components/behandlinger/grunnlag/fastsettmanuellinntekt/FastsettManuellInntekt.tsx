@@ -99,11 +99,7 @@ export const FastsettManuellInntekt = ({
           return rad.ferdigLignetPGI === undefined && rad.beregnetPGI === undefined;
         });
         if (manglerPGI) {
-          form.setError('tabellår', {
-            type: 'custom',
-            message: 'Du må fylle inn beregnet PGI',
-          });
-          return false;
+          return 'Du må fylle inn beregnet PGI';
         }
       },
     },

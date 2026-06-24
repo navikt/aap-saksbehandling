@@ -15,6 +15,7 @@ export const vurderingsbehovOptions = (): ValuePair<Vurderingsbehov>[] => {
     'REVURDER_SYKEPENGEERSTATNING',
     'REVURDER_BEREGNING',
     'REVURDER_MANUELL_INNTEKT',
+    'REVURDER_INNTEKTSBORTFALL',
     'FORUTGAENDE_MEDLEMSKAP',
     'OPPHOLDSKRAV',
     'BARNETILLEGG',
@@ -30,6 +31,7 @@ export const vurderingsbehovOptions = (): ValuePair<Vurderingsbehov>[] => {
     'DØDSFALL_BRUKER',
     'REVURDER_SAMORDNING_BARNEPENSJON',
     'VEDTAKSLENGDE_MANUELT',
+    'VURDER_KRAV',
   ];
 
   return behov.map((behov) => ({
@@ -50,6 +52,7 @@ export const alleVurderingsbehovOptions: ValuePair<Vurderingsbehov | Vurderingsb
   { value: 'KLAGE_TRUKKET', label: formaterVurderingsbehov('KLAGE_TRUKKET') },
   { value: 'REVURDERING_AVBRUTT', label: formaterVurderingsbehov('REVURDERING_AVBRUTT') },
   { value: 'REVURDER_MEDLEMSKAP', label: formaterVurderingsbehov('REVURDER_MEDLEMSKAP') },
+  { value: 'REVURDER_INNTEKTSBORTFALL', label: formaterVurderingsbehov('REVURDER_INNTEKTSBORTFALL') },
   { value: 'REVURDER_SAMORDNING', label: formaterVurderingsbehov('REVURDER_SAMORDNING') },
   { value: 'REVURDER_LOVVALG', label: formaterVurderingsbehov('REVURDER_LOVVALG') },
   { value: 'REVURDER_BEREGNING', label: formaterVurderingsbehov('REVURDER_BEREGNING') },

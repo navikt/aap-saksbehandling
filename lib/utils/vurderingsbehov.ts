@@ -128,6 +128,8 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov | Vurde
       return 'Revurder sykestipend';
     case 'AKTIVITETSPLIKTBEHANDLING_AVBRUTT':
       return 'Behandling avbrutt';
+    case 'REVURDER_INNTEKTSBORTFALL':
+      return 'Revurder inntektsbortfall';
     default:
       return vurderingsbehov;
   }
