@@ -81,12 +81,12 @@ const Layout = async (props: LayoutProps) => {
             stegGrupper={stegGrupper}
             flytRespons={flytResponse.data}
           />
-          {flytResponse.data.prosessering.status === 'FEILET' && (
-            <FlytProsesseringAlert flytProsessering={flytResponse.data.prosessering} />
-          )}
 
           <SplitVindu journalpostId={journalpostInfo.data.journalpostId} dokumenter={dokumenter}>
             <VStack gap={'space-16'}>
+              {flytResponse.data.prosessering.status === 'FEILET' && (
+                <FlytProsesseringAlert flytProsessering={flytResponse.data.prosessering} />
+              )}
               {flytResponse.data.visning.visVentekort && (
                 <BehandlingPVentMedDataFetching behandlingsreferanse={params.behandlingsreferanse} />
               )}
