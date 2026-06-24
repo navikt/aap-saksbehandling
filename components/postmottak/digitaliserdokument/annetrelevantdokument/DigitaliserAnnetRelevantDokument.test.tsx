@@ -43,7 +43,7 @@ describe('DigitaliserAnnetDokument', () => {
 
     expect(submit).toHaveBeenCalledExactlyOnceWith(
       'ANNET_RELEVANT_DOKUMENT',
-      '{"meldingType":"AnnetRelevantDokumentV2","årsakerTilBehandling":["REVURDER_YRKESSKADE","REVURDER_SAMORDNING_ANDRE_FOLKETRYGDYTELSER"],"begrunnelse":"begrunnelse"}',
+      '{"meldingType":"AnnetRelevantDokumentV1","årsakerTilBehandling":["REVURDER_YRKESSKADE","REVURDER_SAMORDNING_ANDRE_FOLKETRYGDYTELSER"],"begrunnelse":"begrunnelse"}',
       null
     );
   });
@@ -64,7 +64,7 @@ describe('DigitaliserAnnetDokument', () => {
 
     expect(submit).toHaveBeenCalledExactlyOnceWith(
       'ANNET_RELEVANT_DOKUMENT',
-      '{"meldingType":"AnnetRelevantDokumentV2","årsakerTilBehandling":["REVURDER_YRKESSKADE"],"begrunnelse":"begrunnelse med underkategori","underKategori":"YRKESSKADE"}',
+      '{"meldingType":"AnnetRelevantDokumentV1","årsakerTilBehandling":["REVURDER_YRKESSKADE"],"begrunnelse":"begrunnelse med underkategori","underkategori":"YRKESSKADE"}',
       null
     );
   });
