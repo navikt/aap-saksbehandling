@@ -14,7 +14,7 @@ import { vurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
 export interface AnnetRelevantDokumentFormFields {
   årsaker: string[];
   begrunnelse: string;
-  underkategori: AnnetRelevantDokumentUnderkategori;
+  underkategori?: AnnetRelevantDokumentUnderkategori;
 }
 
 interface Props extends Submittable {
