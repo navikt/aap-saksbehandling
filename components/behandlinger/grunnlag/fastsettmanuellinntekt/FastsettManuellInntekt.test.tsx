@@ -13,10 +13,7 @@ const user = userEvent.setup();
 describe('Manglende pensjonsgivende inntekt / EØS-beregnet inntekt', () => {
   const grunnlag: ManuellInntektGrunnlag = {
     sisteRelevanteÅr: 2024,
-    ar: 2024,
-    gverdi: 0,
     harTilgangTilÅSaksbehandle: true,
-    historiskeVurderinger: [],
     manuelleVurderinger: {
       årsVurderinger: [{ år: 2022 }, { år: 2023, beløp: 200000, eøsBeløp: 50000 }, { år: 2024, eøsBeløp: 300000 }],
       begrunnelse: '',
@@ -35,10 +32,7 @@ describe('Manglende pensjonsgivende inntekt / EØS-beregnet inntekt', () => {
 
   const grunnlagMedVurdering: ManuellInntektGrunnlag = {
     sisteRelevanteÅr: 2024,
-    ar: 2024,
-    gverdi: 0,
     harTilgangTilÅSaksbehandle: true,
-    historiskeVurderinger: [],
     manuelleVurderinger: {
       årsVurderinger: [{ år: 2022 }, { år: 2023, beløp: 200000 }, { år: 2024 }],
       begrunnelse: 'Dette er en begrunnelse',
