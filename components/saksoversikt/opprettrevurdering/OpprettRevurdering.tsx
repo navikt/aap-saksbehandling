@@ -13,6 +13,7 @@ import { vurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
 import { Kort } from 'components/kort/Kort';
 import { useInnloggetBruker } from 'hooks/BrukerHook';
 import { Alert } from 'components/alert/Alert';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 export interface ManuellRevurderingFormFields {
   årsaker: string[];
@@ -69,6 +70,7 @@ export const OpprettRevurdering = ({
   }
 
   const variant = erFørstegangsbehandling ? 'vurdering' : 'revurdering';
+  const erKravEnabled = useFeatureFlag('KravSteg');
 
   const { form, formFields } = useConfigForm<ManuellRevurderingFormFields>({
     beskrivelse: {
@@ -83,7 +85,7 @@ export const OpprettRevurdering = ({
     årsaker: {
       type: 'combobox_multiple',
       label: `Hvilke opplysninger skal ${erFørstegangsbehandling ? 'vurderes' : 'revurderes'}?`,
-      options: vurderingsbehovOptions(),
+      options: vurderingsbehovOptions(erKravEnabled),
       defaultValue: defaultÅrsaker,
       rules: {
         required: `Velg opplysning som er grunnlaget for ${variant}en`,

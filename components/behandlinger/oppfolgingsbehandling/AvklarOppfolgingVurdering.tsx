@@ -17,6 +17,7 @@ import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   behandlingVersjon: number;
@@ -63,6 +64,8 @@ export const AvklaroppfolgingVurdering = ({
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag.grunnlag);
 
+  const erKravEnabled = useFeatureFlag('KravSteg');
+
   const { form, formFields } = useConfigForm<FormFields>(
     {
       årsak: {
@@ -84,7 +87,7 @@ export const AvklaroppfolgingVurdering = ({
       hvaSkalRevurderes: {
         type: 'combobox_multiple',
         label: 'Hvilke opplysninger skal revurderes?',
-        options: vurderingsbehovOptions(),
+        options: vurderingsbehovOptions(erKravEnabled),
         defaultValue: defaultValue.hvaSkalRevurderes,
       },
     },

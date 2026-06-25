@@ -50,7 +50,7 @@ export const ÅrsakTilBehandling = ({ vurderingsbehovOgÅrsaker, behandlingType 
         <VStack gap={'space-12'}>
           {filtrerteÅrsaker
             .filter(({ vurderingsbehov }) => !vurderingsbehov.some((v) => v.type === 'REVURDERING_AVBRUTT'))
-            .map(({ vurderingsbehov, opprettet, årsak, beskrivelse }, index) => {
+            .map(({ vurderingsbehov, opprettet, årsak, beskrivelse, opprettetAv }, index) => {
               return (
                 <Box key={index}>
                   <HStack gap="space-8" align="end">
@@ -60,6 +60,7 @@ export const ÅrsakTilBehandling = ({ vurderingsbehovOgÅrsaker, behandlingType 
                     </Detail>
                   </HStack>
                   {beskrivelse && <BodyLong size="small">Begrunnelse: {beskrivelse}</BodyLong>}
+                  {opprettetAv && <BodyLong size="small">Opprettet av: {opprettetAv}</BodyLong>}
                 </Box>
               );
             })}

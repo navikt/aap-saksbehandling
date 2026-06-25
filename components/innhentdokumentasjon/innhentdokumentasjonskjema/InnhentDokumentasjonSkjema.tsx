@@ -3,15 +3,15 @@
 import {
   BodyShort,
   Button,
+  CopyButton,
+  Detail,
   Heading,
-  InlineMessage,
   InfoCard,
+  InlineMessage,
   Link,
   Loader,
   Radio,
   VStack,
-  CopyButton,
-  Detail,
 } from '@navikt/ds-react';
 import { SubmitEventHandler, useState } from 'react';
 
