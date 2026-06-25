@@ -181,7 +181,7 @@ describe('Manglende pensjonsgivende inntekt / EØS-beregnet inntekt', () => {
       const tabell = screen.getByTestId('inntektstabell');
       const rader = within(tabell).getAllByRole('row');
       const etiketter = rader.map((rad) => within(rad).getAllByRole('cell')[0].textContent);
-      expect(etiketter).toEqual(['2022', '2022 jan-feb', '2022 mar-des', '2023', '2024']);
+      expect(etiketter).toEqual(['2022', '2022 jan.-feb.', '2022 mar.-des.', '2023', '2024']);
     });
 
     it('split-årets informasjonsrad har ingen input, mens delperiode-radene er redigerbare', () => {

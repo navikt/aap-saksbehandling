@@ -11,6 +11,8 @@ import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { BodyLong, BodyShort, Label, Link, VStack } from '@navikt/ds-react';
+import { format } from 'date-fns';
+import { nb } from 'date-fns/locale';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
 import { useFieldArray, useWatch } from 'react-hook-form';
@@ -38,9 +40,7 @@ interface ByggTabellDataProps {
 
 type DraftFormFields = Partial<FastsettManuellInntektForm>;
 
-const MÅNED = ['jan', 'feb', 'mar', 'apr', 'mai', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'des'];
-
-const formaterMåned = (dato: string): string => MÅNED[new Dato(dato).dato.getMonth()];
+const formaterMåned = (dato: string): string => format(new Dato(dato).dato, 'LLL', { locale: nb });
 
 const formaterDelperiodeLabel = (år: number, periodeFom: string, periodeTom: string): string => {
   const fomMåned = formaterMåned(periodeFom);
