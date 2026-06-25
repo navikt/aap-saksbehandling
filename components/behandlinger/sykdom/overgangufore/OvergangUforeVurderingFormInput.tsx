@@ -11,6 +11,7 @@ import { JaEllerNei } from 'lib/utils/form';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { Alert } from 'components/alert/Alert';
+import { validerDato } from 'lib/validation/dateValidation';
 
 interface Props {
   index: number;
@@ -49,6 +50,9 @@ export const OvergangUforeVurderingFormInput = ({ index, form, readonly, søknad
         control={form.control}
         rules={{
           required: 'Du må velge fra hvilken dato vurderingen gjelder fra',
+          validate: {
+            validerDato: (value) => validerDato(value as string),
+          },
         }}
         readOnly={readonly}
       />
