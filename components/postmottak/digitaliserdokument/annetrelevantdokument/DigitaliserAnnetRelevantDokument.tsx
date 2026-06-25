@@ -10,6 +10,7 @@ import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { SubmitEventHandler } from 'react';
 import { vurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 export interface AnnetRelevantDokumentFormFields {
   årsaker: string[];
@@ -59,7 +60,9 @@ export const DigitaliserAnnetRelevantDokument = ({ grunnlag, readOnly, submit, i
     ? JSON.parse(grunnlag.vurdering?.strukturertDokumentJson)
     : {};
 
-  const vurderingsbehov = vurderingsbehovOptions();
+  const erKravEnabled = useFeatureFlag('KravSteg');
+
+  const vurderingsbehov = vurderingsbehovOptions(erKravEnabled);
   const defaultÅrsakOptions: string[] = (annetRelevantDokumentGrunnlag.årsakerTilBehandling || [])
     .map((årsakFraGrunnlag) => vurderingsbehov.find((årsak) => årsak.value === årsakFraGrunnlag))
     .filter((e) => e !== undefined)

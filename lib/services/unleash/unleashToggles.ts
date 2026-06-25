@@ -11,6 +11,7 @@ export const FLAGS = [
   'HentFastlege',
   'StudentV2',
   'OppgavelisteMedBelopISaksbehandling',
+  'KravSteg',
 ] as const;
 
 export type FlagNames = (typeof FLAGS)[number];
@@ -29,4 +30,5 @@ export const mockedFlags: Flags = {
   StudentV2: true,
   HentFastlege: true,
   OppgavelisteMedBelopISaksbehandling: true,
+  KravSteg: true,
 };
