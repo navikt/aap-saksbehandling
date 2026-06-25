@@ -10,7 +10,6 @@ import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { SubmitEventHandler } from 'react';
 import { vurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
-import { useFeatureFlag } from 'context/UnleashContext';
 
 export interface AnnetRelevantDokumentFormFields {
   årsaker: string[];
@@ -22,6 +21,7 @@ interface Props extends Submittable {
   grunnlag: DigitaliseringsGrunnlag;
   readOnly: boolean;
   isLoading: boolean;
+  erKravEnabled: boolean;
 }
 
 const kategorierOptions: ValuePair<NonNullable<AnnetRelevantDokumentUnderkategori>>[] = [
@@ -55,12 +55,10 @@ function mapTilAnnetRelevantDokumentKontrakt(data: AnnetRelevantDokumentFormFiel
   return JSON.stringify(dokument);
 }
 
-export const DigitaliserAnnetRelevantDokument = ({ grunnlag, readOnly, submit, isLoading }: Props) => {
+export const DigitaliserAnnetRelevantDokument = ({ grunnlag, readOnly, submit, isLoading, erKravEnabled }: Props) => {
   const annetRelevantDokumentGrunnlag: AnnetRelevantDokument = grunnlag.vurdering?.strukturertDokumentJson
     ? JSON.parse(grunnlag.vurdering?.strukturertDokumentJson)
     : {};
-
-  const erKravEnabled = useFeatureFlag('KravSteg');
 
   const vurderingsbehov = vurderingsbehovOptions(erKravEnabled);
   const defaultÅrsakOptions: string[] = (annetRelevantDokumentGrunnlag.årsakerTilBehandling || [])
