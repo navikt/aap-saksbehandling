@@ -47,6 +47,7 @@ import {
   KlagebehandlingKontorGrunnlag,
   KlagebehandlingNayGrunnlag,
   Klageresultat,
+  KravGrunnlag,
   KvalitetssikringGrunnlag,
   KvalitetssikringTilgang,
   LegeerklæringStatus,
@@ -468,6 +469,11 @@ export const hentAktivitetsplikt11_9Grunnlag = async (behandlingsreferanse: stri
 export const hentRettighetsinfo = async (saksnummer: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/${saksnummer}/rettighetsinfo`;
   return await apiFetch<RettighetsinfoDto>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentKravGrunnlag = async (behandlingsreferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/krav`;
+  return await apiFetch<KravGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentSvarFraAndreinstansGrunnlag = async (behandlingsreferanse: string) => {

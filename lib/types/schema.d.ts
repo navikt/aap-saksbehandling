@@ -14357,6 +14357,7 @@ export interface components {
         | 'REFUSJONSKRAV'
         | 'REVURDERING_AVBRUTT'
         | 'REVURDER_BEREGNING'
+        | 'REVURDER_INNTEKTSBORTFALL'
         | 'REVURDER_LOVVALG'
         | 'REVURDER_MANUELL_INNTEKT'
         | 'REVURDER_MEDLEMSKAP'
@@ -14958,6 +14959,7 @@ export interface components {
         | 'REFUSJONSKRAV'
         | 'REVURDERING_AVBRUTT'
         | 'REVURDER_BEREGNING'
+        | 'REVURDER_INNTEKTSBORTFALL'
         | 'REVURDER_LOVVALG'
         | 'REVURDER_MANUELL_INNTEKT'
         | 'REVURDER_MEDLEMSKAP'
@@ -15033,6 +15035,7 @@ export interface components {
             | 'REFUSJONSKRAV'
             | 'REVURDERING_AVBRUTT'
             | 'REVURDER_BEREGNING'
+            | 'REVURDER_INNTEKTSBORTFALL'
             | 'REVURDER_LOVVALG'
             | 'REVURDER_MANUELL_INNTEKT'
             | 'REVURDER_MEDLEMSKAP'
@@ -15724,6 +15727,7 @@ export interface components {
         | 'REFUSJONSKRAV'
         | 'REVURDERING_AVBRUTT'
         | 'REVURDER_BEREGNING'
+        | 'REVURDER_INNTEKTSBORTFALL'
         | 'REVURDER_LOVVALG'
         | 'REVURDER_MANUELL_INNTEKT'
         | 'REVURDER_MEDLEMSKAP'
@@ -16898,7 +16902,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.GjenopptakKravL\u00F8sningDto': {
       begrunnelse: string;
       journalpostId: components['schemas']['no.nav.aap.verdityper.dokument.JournalpostId'];
-      muligRettFra?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.OverstyrMuligRettFra'];
+      overstyrMuligRettFra?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.OverstyrMuligRettFra'];
       /** Format: uuid */
       referanse?: string | null;
       's\u00F8knadsdato': components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.S\u00F8knadsdato'];
@@ -18237,6 +18241,27 @@ export interface components {
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AnnetRelevantDokumentV1'];
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AnnetRelevantDokumentV0': {
       begrunnelse?: string | null;
+      /** @enum {string|null} */
+      underkategori?:
+        | 'ARBEIDSUTPROVING'
+        | 'BARNETILLEGG'
+        | 'ETABLERING'
+        | 'ETTERSENDELSE_TIL_FEILUTBETALING'
+        | 'ETTERSENDELSE_TIL_KLAGE'
+        | 'FENGSEL_VARETEKT'
+        | 'HELSEOPPLYSNINGER'
+        | 'INSTITUSJONSOPPHOLD'
+        | 'KARAKTERUTSKRIFTER_OG_CV'
+        | 'KLAGE'
+        | 'LAERLING'
+        | 'MEDLEMSKAP'
+        | 'PARTSINNSYN'
+        | 'REFUSJONSKRAV'
+        | 'SLUTTAVTALE'
+        | 'STUDENTBESTEMMELSEN'
+        | 'TILTAKSRAPPORT'
+        | 'YRKESSKADE'
+        | null;
       '\u00E5rsakerTilBehandling': (
         | 'AKTIVITETSMELDING'
         | 'AKTIVITETSPLIKTBEHANDLING_AVBRUTT'
@@ -18271,6 +18296,7 @@ export interface components {
         | 'REFUSJONSKRAV'
         | 'REVURDERING_AVBRUTT'
         | 'REVURDER_BEREGNING'
+        | 'REVURDER_INNTEKTSBORTFALL'
         | 'REVURDER_LOVVALG'
         | 'REVURDER_MANUELL_INNTEKT'
         | 'REVURDER_MEDLEMSKAP'
@@ -18300,6 +18326,27 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AnnetRelevantDokumentV1': {
       begrunnelse: string;
+      /** @enum {string|null} */
+      underkategori?:
+        | 'ARBEIDSUTPROVING'
+        | 'BARNETILLEGG'
+        | 'ETABLERING'
+        | 'ETTERSENDELSE_TIL_FEILUTBETALING'
+        | 'ETTERSENDELSE_TIL_KLAGE'
+        | 'FENGSEL_VARETEKT'
+        | 'HELSEOPPLYSNINGER'
+        | 'INSTITUSJONSOPPHOLD'
+        | 'KARAKTERUTSKRIFTER_OG_CV'
+        | 'KLAGE'
+        | 'LAERLING'
+        | 'MEDLEMSKAP'
+        | 'PARTSINNSYN'
+        | 'REFUSJONSKRAV'
+        | 'SLUTTAVTALE'
+        | 'STUDENTBESTEMMELSEN'
+        | 'TILTAKSRAPPORT'
+        | 'YRKESSKADE'
+        | null;
       '\u00E5rsakerTilBehandling': (
         | 'AKTIVITETSMELDING'
         | 'AKTIVITETSPLIKTBEHANDLING_AVBRUTT'
@@ -18334,6 +18381,7 @@ export interface components {
         | 'REFUSJONSKRAV'
         | 'REVURDERING_AVBRUTT'
         | 'REVURDER_BEREGNING'
+        | 'REVURDER_INNTEKTSBORTFALL'
         | 'REVURDER_LOVVALG'
         | 'REVURDER_MANUELL_INNTEKT'
         | 'REVURDER_MEDLEMSKAP'
@@ -18612,6 +18660,7 @@ export interface components {
         | 'REFUSJONSKRAV'
         | 'REVURDERING_AVBRUTT'
         | 'REVURDER_BEREGNING'
+        | 'REVURDER_INNTEKTSBORTFALL'
         | 'REVURDER_LOVVALG'
         | 'REVURDER_MANUELL_INNTEKT'
         | 'REVURDER_MEDLEMSKAP'
@@ -18713,6 +18762,7 @@ export interface components {
         | 'REFUSJONSKRAV'
         | 'REVURDERING_AVBRUTT'
         | 'REVURDER_BEREGNING'
+        | 'REVURDER_INNTEKTSBORTFALL'
         | 'REVURDER_LOVVALG'
         | 'REVURDER_MANUELL_INNTEKT'
         | 'REVURDER_MEDLEMSKAP'
@@ -18791,6 +18841,7 @@ export interface components {
         | 'REFUSJONSKRAV'
         | 'REVURDERING_AVBRUTT'
         | 'REVURDER_BEREGNING'
+        | 'REVURDER_INNTEKTSBORTFALL'
         | 'REVURDER_LOVVALG'
         | 'REVURDER_MANUELL_INNTEKT'
         | 'REVURDER_MEDLEMSKAP'
@@ -18858,6 +18909,7 @@ export interface components {
         | 'REFUSJONSKRAV'
         | 'REVURDERING_AVBRUTT'
         | 'REVURDER_BEREGNING'
+        | 'REVURDER_INNTEKTSBORTFALL'
         | 'REVURDER_LOVVALG'
         | 'REVURDER_MANUELL_INNTEKT'
         | 'REVURDER_MEDLEMSKAP'
@@ -19136,6 +19188,7 @@ export interface components {
         | 'REFUSJONSKRAV'
         | 'REVURDERING_AVBRUTT'
         | 'REVURDER_BEREGNING'
+        | 'REVURDER_INNTEKTSBORTFALL'
         | 'REVURDER_LOVVALG'
         | 'REVURDER_MANUELL_INNTEKT'
         | 'REVURDER_MEDLEMSKAP'
@@ -19281,6 +19334,7 @@ export interface components {
         | 'REFUSJONSKRAV'
         | 'REVURDERING_AVBRUTT'
         | 'REVURDER_BEREGNING'
+        | 'REVURDER_INNTEKTSBORTFALL'
         | 'REVURDER_LOVVALG'
         | 'REVURDER_MANUELL_INNTEKT'
         | 'REVURDER_MEDLEMSKAP'
@@ -19369,6 +19423,7 @@ export interface components {
         | 'REFUSJONSKRAV'
         | 'REVURDERING_AVBRUTT'
         | 'REVURDER_BEREGNING'
+        | 'REVURDER_INNTEKTSBORTFALL'
         | 'REVURDER_LOVVALG'
         | 'REVURDER_MANUELL_INNTEKT'
         | 'REVURDER_MEDLEMSKAP'
@@ -19834,6 +19889,8 @@ export interface components {
     };
     'no.nav.aap.oppgave.markering.MarkeringDto': {
       begrunnelse?: string | null;
+      /** @enum {string|null} */
+      hendelseType?: 'FJERNET' | 'OPPRETTET' | null;
       /** @enum {string} */
       markeringType: 'AVSLAG_11_5' | 'HASTER' | 'KREVER_SPESIALKOMPETANSE';
       opprettetAv?: string | null;

@@ -147,7 +147,7 @@ export const TotrinnsvurderingForm = ({
           isError = true;
         }
         if (data.skalHastemarkeringBeholdes === JaEllerNei.Nei) {
-          await clientFjernMarkeringForBehandling(behandlingsreferanse, { markeringType: MarkeringHaster });
+          await clientFjernMarkeringForBehandling(behandlingsreferanse, { markeringType: MarkeringHaster, opprettetTidspunkt: new Date().toISOString() });
         }
         if (isError) {
           return;

@@ -132,6 +132,8 @@ export function mapTilVenteÅrsakTekst(årsak: SettPåVentÅrsaker | PostmottakS
 
 export function mapTilSteggruppeTekst(steggruppe: string) {
   switch (steggruppe) {
+    case 'KRAV':
+      return 'Krav';
     case 'SØKNAD':
       return 'Trekk søknad';
     case 'AVBRYT_REVURDERING':
