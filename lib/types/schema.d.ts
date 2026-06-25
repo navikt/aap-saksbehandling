@@ -16573,10 +16573,7 @@ export interface components {
       'bel\u00F8p'?: number | null;
       'e\u00F8sBel\u00F8p'?: number | null;
       ferdigLignetPGI?: number | null;
-      /** Format: date */
-      periodeFom?: string | null;
-      /** Format: date */
-      periodeTom?: string | null;
+      periode?: components['schemas']['no.nav.aap.komponenter.type.Periode'];
       /** Format: int32 */
       '\u00E5r': number;
     };

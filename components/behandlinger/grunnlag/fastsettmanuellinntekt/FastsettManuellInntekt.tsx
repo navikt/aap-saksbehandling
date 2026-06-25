@@ -16,6 +16,7 @@ import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerU
 import { useFieldArray, useWatch } from 'react-hook-form';
 import { FastsettManuellInntektTabell } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/FastsettManuellInntektTabell';
 import { FastsettManuellInntektForm, Tabellår } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/types';
+import { Dato } from 'lib/types/Dato';
 import { sorterEtterNyesteDato, formaterDatoForFrontend } from 'lib/utils/date';
 import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
 import { Alert } from 'components/alert/Alert';
@@ -39,9 +40,11 @@ type DraftFormFields = Partial<FastsettManuellInntektForm>;
 
 const MÅNED = ['jan', 'feb', 'mar', 'apr', 'mai', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'des'];
 
+const formaterMåned = (dato: string): string => MÅNED[new Dato(dato).dato.getMonth()];
+
 const formaterDelperiodeLabel = (år: number, periodeFom: string, periodeTom: string): string => {
-  const fomMåned = MÅNED[Number(periodeFom.slice(5, 7)) - 1];
-  const tomMåned = MÅNED[Number(periodeTom.slice(5, 7)) - 1];
+  const fomMåned = formaterMåned(periodeFom);
+  const tomMåned = formaterMåned(periodeTom);
   return `${år} ${fomMåned}-${tomMåned}`;
 };
 
@@ -134,8 +137,13 @@ export const FastsettManuellInntekt = ({
                   beløp: Number(år.beregnetPGI),
                   eøsBeløp: Number(år.eøsInntekt),
                   ferdigLignetPGI: år.ferdigLignetPGI ?? undefined,
-                  periodeFom: år.periodeFom,
-                  periodeTom: år.periodeTom,
+                  periode:
+                    år.periodeFom && år.periodeTom
+                      ? {
+                          fom: år.periodeFom,
+                          tom: år.periodeTom,
+                        }
+                      : undefined,
                 })),
             },
           },
@@ -316,10 +324,6 @@ const berikMedManuelleInntekter = (treÅr: Tabellår[], manuelleInntekter: Manue
   });
 };
 
-/**
- * For år med endring i uføregrad: gjør år-raden til en informasjonsrad og legg til én redigerbar
- * delperiode-rad per uføregrad-segment, eventuelt forhåndsutfylt med tidligere lagrede verdier.
- */
 const berikMedDelperioder = (
   treÅr: Tabellår[],
   delperioder: DelperiodeData[],

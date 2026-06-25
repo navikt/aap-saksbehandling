@@ -205,10 +205,8 @@ describe('Manglende pensjonsgivende inntekt / EØS-beregnet inntekt', () => {
       const advarselTekst =
         'Beregnet pensjonsgivende inntekt avviker fra ferdig lignet pensjonsgivende inntekt. Er du sikker på at beregnet inntekt er riktig?';
 
-      // Ingen advarsel før saksbehandler har lagt inn noe
       expect(screen.queryByText(advarselTekst)).not.toBeInTheDocument();
 
-      // 100 000 + 500 000 = 600 000, avviker fra ferdig lignet 640 500 → live (uten submit)
       await user.type(janFeb, '100000');
       await user.type(marDes, '500000');
 
@@ -222,7 +220,6 @@ describe('Manglende pensjonsgivende inntekt / EØS-beregnet inntekt', () => {
       const janFeb = within(rader[1]).getByTestId('beregnetPGI').querySelector('input')!;
       const marDes = within(rader[2]).getByTestId('beregnetPGI').querySelector('input')!;
 
-      // 140 500 + 500 000 = 640 500 = ferdig lignet → ingen advarsel
       await user.type(janFeb, '140500');
       await user.type(marDes, '500000');
 
