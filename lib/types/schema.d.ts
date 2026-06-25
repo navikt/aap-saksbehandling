@@ -6319,6 +6319,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -6408,6 +6409,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -6493,6 +6495,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -6578,6 +6581,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -6663,6 +6667,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -6748,6 +6753,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -6833,6 +6839,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -6918,6 +6925,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -7004,6 +7012,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -7089,6 +7098,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -7173,6 +7183,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -7258,6 +7269,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -7343,6 +7355,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -7428,6 +7441,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -7513,6 +7527,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -7598,6 +7613,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -7683,6 +7699,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -7768,6 +7785,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -7853,6 +7871,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -7939,6 +7958,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -8023,6 +8043,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -8108,6 +8129,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -8193,6 +8215,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -8278,6 +8301,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -8363,6 +8387,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -8448,6 +8473,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -8533,6 +8559,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -8618,6 +8645,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -8703,6 +8731,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -8788,6 +8817,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -8872,6 +8902,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -8924,6 +8955,7 @@ export interface components {
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.TrekkS\u00F8knadL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.UtenlandskVideref\u00F8ringL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.VentP\u00E5Oppf\u00F8lgingL\u00F8sning']
+      | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.VentP\u00E5Oppf\u00F8lgingNyL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.VenteP\u00E5FristForh\u00E5ndsvarselAktivitetsplikt11_7L\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.VenteP\u00E5FristForh\u00E5ndsvarselKlageFormkravL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.VenteP\u00E5KlageimplementasjonL\u00F8sning']
@@ -9012,6 +9044,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -9098,6 +9131,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -9182,6 +9216,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -9267,6 +9302,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -9352,6 +9388,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -9437,6 +9474,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -9522,6 +9560,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -9607,6 +9646,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -9691,6 +9731,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -9775,6 +9816,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -9859,6 +9901,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -9951,6 +9994,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -10079,6 +10123,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -10164,6 +10209,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -10248,6 +10294,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -10333,6 +10380,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -10436,6 +10484,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -10521,6 +10570,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -10606,6 +10656,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -10691,6 +10742,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -10775,6 +10827,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -10859,6 +10912,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -10948,6 +11002,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -11038,6 +11093,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -11128,6 +11184,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -11217,6 +11274,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -11302,6 +11360,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -11387,6 +11446,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -11473,6 +11533,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -11558,6 +11619,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -11565,6 +11627,10 @@ export interface components {
         | '9082'
         | '9083';
     };
+    /**
+     * @deprecated
+     * @description Erstattes av VentPåOppfølgingNyLøsning
+     */
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.VentP\u00E5Oppf\u00F8lgingL\u00F8sning': {
       /** @enum {string} */
       behovstype:
@@ -11642,6 +11708,92 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
+        | '9001'
+        | '9002'
+        | '9003'
+        | '9004'
+        | '9082'
+        | '9083';
+    };
+    'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.VentP\u00E5Oppf\u00F8lgingNyL\u00F8sning': {
+      /** @enum {string} */
+      behovstype:
+        | '4101'
+        | '4102'
+        | '4201'
+        | '4301'
+        | '5001'
+        | '5002'
+        | '5003'
+        | '5004'
+        | '5005'
+        | '5006'
+        | '5007'
+        | '5008'
+        | '5009'
+        | '5010'
+        | '5011'
+        | '5012'
+        | '5013'
+        | '5014'
+        | '5015'
+        | '5016'
+        | '5017'
+        | '5018'
+        | '5019'
+        | '5020'
+        | '5021'
+        | '5022'
+        | '5023'
+        | '5024'
+        | '5025'
+        | '5026'
+        | '5027'
+        | '5028'
+        | '5029'
+        | '5030'
+        | '5031'
+        | '5032'
+        | '5033'
+        | '5034'
+        | '5035'
+        | '5036'
+        | '5037'
+        | '5038'
+        | '5040'
+        | '5041'
+        | '5050'
+        | '5051'
+        | '5052'
+        | '5053'
+        | '5054'
+        | '5056'
+        | '5057'
+        | '5058'
+        | '5059'
+        | '5060'
+        | '5096'
+        | '5097'
+        | '5098'
+        | '5099'
+        | '5999'
+        | '6000'
+        | '6001'
+        | '6002'
+        | '6003'
+        | '6004'
+        | '6005'
+        | '6006'
+        | '6007'
+        | '6008'
+        | '6009'
+        | '6010'
+        | '7001'
+        | '8001'
+        | '8002'
+        | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -11726,6 +11878,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -11810,6 +11963,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -11894,6 +12048,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -11979,6 +12134,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -12064,6 +12220,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -12148,6 +12305,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -12233,6 +12391,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -12318,6 +12477,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -12403,6 +12563,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -12488,6 +12649,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -12573,6 +12735,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -12702,7 +12865,6 @@ export interface components {
       /** @enum {string} */
       dokumentasjonType: 'L120' | 'L40' | 'L8' | 'MELDING_FRA_NAV' | 'PURRING' | 'RETUR_LEGEERKLÆRING';
       fritekst: string;
-      saksnummer: string;
     };
     'no.nav.aap.behandlingsflyt.behandling.behandlerdialog.FastlegeResponse': {
       'andreBehandlereFraS\u00F8knad': components['schemas']['no.nav.aap.behandlingsflyt.behandling.behandlerdialog.ManueltOppgittBehandlerDto'][];
@@ -13129,51 +13291,25 @@ export interface components {
       vurdertIBehandling: components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.behandling.BehandlingId'];
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.ManuellInntektGrunnlagResponse': {
-      /**
-       * Format: int32
-       * @deprecated
-       * @description Erstattes av vurderinger
-       */
-      ar: number;
-      /**
-       * @deprecated
-       * @description Erstattes av vurderinger
-       */
-      gverdi: number;
+      'alleRelevante\u00C5r': number[];
       'harTilgangTil\u00C5Saksbehandle': boolean;
       historiskeManuelleVurderinger?:
         | components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.ManuellInntektGrunnlagVurdering'][]
         | null;
-      /**
-       * @deprecated
-       * @description Erstattes av vurderinger
-       */
-      historiskeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.ManuellInntektVurderingGrunnlagResponse'][];
+      'manglerInntektFor\u00C5r': number[];
       manuelleVurderinger?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.ManuellInntektGrunnlagVurdering'];
       registrerteInntekterSisteRelevanteAr: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.\u00C5rData'][];
-      /** Format: int32 */
-      'sisteRelevante\u00C5r': number;
       /**
+       * Format: int32
        * @deprecated
-       * @description Erstattes av vurderinger
+       * @description Brukes ikke av frontend snart.
        */
-      vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.ManuellInntektVurderingGrunnlagResponse'];
+      'sisteRelevante\u00C5r': number;
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.ManuellInntektGrunnlagVurdering': {
       begrunnelse: string;
       vurderingerMeta: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'];
       '\u00E5rsVurderinger': components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.\u00C5rData'][];
-    };
-    /**
-     * @deprecated
-     * @description Erstattes av vurderinger
-     */
-    'no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.ManuellInntektVurderingGrunnlagResponse': {
-      /** Format: int32 */
-      ar: number;
-      begrunnelse: string;
-      belop: number;
-      vurdertAv: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurdertAvResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.\u00C5rData': {
       'bel\u00F8p'?: number | null;
@@ -13318,6 +13454,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -14541,6 +14678,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -14633,6 +14771,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -15642,6 +15781,12 @@ export interface components {
         | 'TILBAKEKREVING_HENDELSE'
         | 'UFØRE_VEDTAK_HENDELSE';
     };
+    'no.nav.aap.behandlingsflyt.drift.PersonDriftsinfo': {
+      /** Format: int32 */
+      antallIdenter: number;
+      /** Format: int64 */
+      personId: number;
+    };
     'no.nav.aap.behandlingsflyt.drift.SakDriftsinfoDTO': {
       'andreSakerP\u00E5Bruker': string[];
       behandlinger: components['schemas']['no.nav.aap.behandlingsflyt.drift.BehandlingDriftsinfo'][];
@@ -15650,6 +15795,7 @@ export interface components {
        * @example 2025-04-01T12:30:00
        */
       opprettetTidspunkt: string;
+      person: components['schemas']['no.nav.aap.behandlingsflyt.drift.PersonDriftsinfo'];
       rettighetsperiode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
       saksnummer: string;
       /** @enum {string} */
@@ -17738,6 +17884,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -18925,6 +19072,7 @@ export interface components {
        * @example 2025-04-01T12:30:00
        */
       opprettet: string;
+      opprettetAv?: string | null;
       vurderingsbehov: components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.behandling.VurderingsbehovMedPeriode'][];
       /** @enum {string} */
       '\u00E5rsak':

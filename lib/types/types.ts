@@ -238,8 +238,7 @@ export type TilleggsopplysningKravLøsning =
 export type TrukketSøknadKravLøsning =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.TrukketSøknadKravLøsningDto'];
 
-export type SøknadUtenKrav =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.SøknadUtenKravDto'];
+export type SøknadUtenKrav = components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.SøknadUtenKravDto'];
 
 export type TrukketSøknadGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.søknad.TrukketSøknadGrunnlagDto'];
@@ -427,8 +426,7 @@ export type YrkesskadeVurderingResponse =
 
 export type ManuellInntektGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.ManuellInntektGrunnlagResponse'];
-export type ManuellInntektVurderingGrunnlagResponse =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.ManuellInntektVurderingGrunnlagResponse'];
+
 export type ManuellInntektÅr =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.\u00C5rData'];
 

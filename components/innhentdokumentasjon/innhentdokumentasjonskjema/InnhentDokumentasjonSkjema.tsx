@@ -145,7 +145,6 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
         behandlerHprNr,
         dokumentasjonType: data.dokumentasjonstype,
         fritekst: data.melding,
-        saksnummer: saksnummer,
         behandlingsReferanse: behandlingsreferanse,
       };
 
