@@ -22,7 +22,9 @@ export type HistorikkEvent =
   | 'MOTTATT_DIALOGMELDING' // ? Mottatt legeerklæring og dialogmelding
   | 'BESTILT_LEGEERKLÆRING'
   | 'KVALITETSSIKRET'
-  | 'SØKNAD_TRUKKET';
+  | 'SØKNAD_TRUKKET'
+  | 'MARKERING_OPPRETTET'
+  | 'MARKERING_FJERNET';
 
 export function mapEventTilString(historikkEvent: HistorikkEvent) {
   switch (historikkEvent) {
@@ -56,6 +58,10 @@ export function mapEventTilString(historikkEvent: HistorikkEvent) {
       return 'Kvalitetssikret';
     case 'SØKNAD_TRUKKET':
       return 'Søknad trukket';
+    case 'MARKERING_OPPRETTET':
+      return 'Markering opprettet';
+    case 'MARKERING_FJERNET':
+      return 'Markering fjernet';
   }
   exhaustiveCheck(historikkEvent);
 }
@@ -92,6 +98,10 @@ export function mapEventTilIkon(historikkEvent: HistorikkEvent) {
       return <CheckmarkCircleIcon title="kvalitetssikret" fontSize="1.5rem" />;
     case 'SØKNAD_TRUKKET':
       return <FileXMarkIcon title="søknad trukket" fontSize="1.5rem" />;
+    case 'MARKERING_OPPRETTET':
+      return null;
+    case 'MARKERING_FJERNET':
+      return null;
   }
   exhaustiveCheck(historikkEvent);
 }
