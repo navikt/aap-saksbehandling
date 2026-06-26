@@ -158,6 +158,7 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
                     label={'Begrunnelse'}
                     description={'Hvorfor gjør du endring, og hva er kilden til informasjonen.'}
                     rules={{ required: 'Du må skrive en begrunnelse for hvorfor du gjør endring.' }}
+                    autocomplete={'off'}
                   />
                   <SelectWrapper
                     control={form.control}
@@ -180,6 +181,7 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
                       control={form.control}
                       name={'meldedato'}
                       label={meldeDatoLabel}
+                      autocomplete={'off'}
                       rules={{
                         required: 'Du må legge til en meldedato for meldekortet.',
                         validate: {
