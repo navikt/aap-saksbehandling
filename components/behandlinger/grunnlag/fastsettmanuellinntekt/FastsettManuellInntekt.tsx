@@ -3,7 +3,7 @@
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
-import { SubmitEvent, useEffect } from 'react';
+import { SubmitEvent, useEffect, useMemo } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { DelperiodeData, ManuellInntektGrunnlag, ManuellInntektÅr, MellomlagretVurdering } from 'lib/types/types';
@@ -32,7 +32,7 @@ interface Props {
 }
 
 interface ByggTabellDataProps {
-  sisteÅr: number;
+  relevanteÅr: number[];
   pgi: ManuellInntektÅr[];
   manuelleInntekter: ManuellInntektÅr[];
   delperioder: DelperiodeData[];
@@ -69,9 +69,13 @@ export const FastsettManuellInntekt = ({
   const delperioder = grunnlag.delperioderForSplittÅr ?? [];
   const splittÅr = [...new Set(delperioder.map((delPeriode) => delPeriode.år))].sort((a, b) => a - b);
 
-  const defaultValue: DraftFormFields = initialMellomlagretVurdering
-    ? JSON.parse(initialMellomlagretVurdering.data)
-    : mapGrunnlagToDraftFormFields(grunnlag);
+  const defaultValue: DraftFormFields = useMemo(
+    () =>
+      initialMellomlagretVurdering
+        ? JSON.parse(initialMellomlagretVurdering.data)
+        : mapGrunnlagToDraftFormFields(grunnlag),
+    [grunnlag, initialMellomlagretVurdering]
+  );
 
   const { form, formFields } = useConfigForm<FastsettManuellInntektForm>(
     {
@@ -99,7 +103,11 @@ export const FastsettManuellInntekt = ({
           if (rad.erKunVisning) {
             return false;
           }
-          return rad.ferdigLignetPGI === undefined && rad.beregnetPGI === undefined;
+          return (
+            rad.ferdigLignetPGI === undefined &&
+            rad.beregnetPGI === undefined &&
+            grunnlag.manglerInntektForÅr.includes(rad.år)
+          );
         });
         if (manglerPGI) {
           return 'Du må fylle inn beregnet PGI';
@@ -119,7 +127,7 @@ export const FastsettManuellInntekt = ({
    */
   useEffect(() => {
     form.setValue('tabellår', defaultValue.tabellår || []);
-  }, [grunnlag]);
+  }, [grunnlag, defaultValue.tabellår, form]);
 
   function handleSubmit(event: SubmitEvent) {
     form.handleSubmit((data) => {
@@ -286,15 +294,15 @@ export const FastsettManuellInntekt = ({
 };
 
 /**
- * Sikre at inntektstabellen alltid inneholder de tre siste relevante beregningsårene.
+ * Sikre at inntektstabellen alltid inneholder de relevante beregningsårene.
  */
-const berikMedManglendeÅr = (sisteÅr: number): Tabellår[] => {
-  return [sisteÅr - 2, sisteÅr - 1, sisteÅr].map((år) => ({
-    år: år,
+const berikMedManglendeÅr = (relevantÅr: number): Tabellår => {
+  return {
+    år: relevantÅr,
     ferdigLignetPGI: undefined,
     beregnetPGI: undefined,
     eøsInntekt: undefined,
-  }));
+  };
 };
 
 /**
@@ -324,6 +332,7 @@ const berikMedManuelleInntekter = (treÅr: Tabellår[], manuelleInntekter: Manue
   });
 };
 
+const byggTabellData = ({ relevanteÅr, pgi, manuelleInntekter }: ByggTabellDataProps): Tabellår[] => {
 const berikMedDelperioder = (
   treÅr: Tabellår[],
   delperioder: DelperiodeData[],
@@ -366,7 +375,7 @@ const berikMedDelperioder = (
 
 const byggTabellData = ({ sisteÅr, pgi, manuelleInntekter, delperioder }: ByggTabellDataProps): Tabellår[] => {
   let tabellår: Tabellår[] = [];
-  tabellår = berikMedManglendeÅr(sisteÅr);
+  tabellår = relevanteÅr.map((år) => berikMedManglendeÅr(år));
   tabellår = berikMedPGI(tabellår, pgi);
   tabellår = berikMedManuelleInntekter(tabellår, manuelleInntekter);
   tabellår = berikMedDelperioder(tabellår, delperioder, manuelleInntekter);
@@ -377,7 +386,7 @@ const mapGrunnlagToDraftFormFields = (grunnlag: ManuellInntektGrunnlag): DraftFo
   return {
     begrunnelse: grunnlag.manuelleVurderinger?.begrunnelse,
     tabellår: byggTabellData({
-      sisteÅr: grunnlag.sisteRelevanteÅr,
+      relevanteÅr: grunnlag.alleRelevanteÅr,
       pgi: grunnlag.registrerteInntekterSisteRelevanteAr,
       manuelleInntekter: grunnlag.manuelleVurderinger?.årsVurderinger || [],
       delperioder: grunnlag.delperioderForSplittÅr ?? [],

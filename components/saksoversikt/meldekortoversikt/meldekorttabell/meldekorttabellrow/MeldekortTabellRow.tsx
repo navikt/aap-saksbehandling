@@ -101,9 +101,9 @@ function meldepliktStatusTilString(meldepliktStatuser: MeldepliktStatuser) {
         case 'FØRSTE_MELDEPERIODE_MED_RETT':
           return 'Første meldeperiode med rett';
         case 'FØR_VEDTAK':
-          return 'Før vedtak';
+          return 'Oppfylt, før vedtak';
         case 'IKKE_MELDT_SEG':
-          return 'Ikke meldt seg';
+          return 'Ikke oppfylt';
         case 'MELDT_SEG':
           return 'Meldt seg';
         case 'RIMELIG_GRUNN':

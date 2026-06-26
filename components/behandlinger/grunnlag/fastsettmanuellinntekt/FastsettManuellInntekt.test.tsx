@@ -12,11 +12,10 @@ const user = userEvent.setup();
 
 describe('Manglende pensjonsgivende inntekt / EØS-beregnet inntekt', () => {
   const grunnlag: ManuellInntektGrunnlag = {
+    manglerInntektForÅr: [2022, 2024],
     sisteRelevanteÅr: 2024,
-    ar: 2024,
-    gverdi: 0,
+    alleRelevanteÅr: [2022, 2023, 2024],
     harTilgangTilÅSaksbehandle: true,
-    historiskeVurderinger: [],
     manuelleVurderinger: {
       årsVurderinger: [{ år: 2022 }, { år: 2023, beløp: 200000, eøsBeløp: 50000 }, { år: 2024, eøsBeløp: 300000 }],
       begrunnelse: '',
@@ -35,10 +34,9 @@ describe('Manglende pensjonsgivende inntekt / EØS-beregnet inntekt', () => {
 
   const grunnlagMedVurdering: ManuellInntektGrunnlag = {
     sisteRelevanteÅr: 2024,
-    ar: 2024,
-    gverdi: 0,
+    manglerInntektForÅr: [2024, 2023, 2021],
+    alleRelevanteÅr: [2022, 2024],
     harTilgangTilÅSaksbehandle: true,
-    historiskeVurderinger: [],
     manuelleVurderinger: {
       årsVurderinger: [{ år: 2022 }, { år: 2023, beløp: 200000 }, { år: 2024 }],
       begrunnelse: 'Dette er en begrunnelse',
@@ -95,6 +93,7 @@ describe('Manglende pensjonsgivende inntekt / EØS-beregnet inntekt', () => {
     it('skal liste opp de tre siste relevante årene i tabell', () => {
       const tabell = screen.getByTestId('inntektstabell');
       const rader = within(tabell).getAllByRole('row');
+      // Det mangler inntekter for to år
       expect(rader).toHaveLength(3);
       const årstall = rader.map((rad) => within(rad).getByText(/\d{4}/).textContent);
       expect(årstall).toEqual(['2022', '2023', '2024']);

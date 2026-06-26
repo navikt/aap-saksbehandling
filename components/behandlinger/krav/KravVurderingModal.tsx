@@ -127,7 +127,7 @@ export const KravVurderingModal = ({
           journalpostId,
           begrunnelse: data.begrunnelse,
           søknadsdato,
-          muligRettFra: overstyr,
+          overstyrMuligRettFra: overstyr,
           referanse,
         } satisfies GjenopptakKravLøsning);
       }

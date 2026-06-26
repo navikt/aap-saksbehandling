@@ -11,6 +11,7 @@ import { DigitaliserAnnetRelevantDokument } from './annetrelevantdokument/Digita
 import { VStack } from '@navikt/ds-react';
 import { DigitaliserKlage } from 'components/postmottak/digitaliserdokument/klage/DigitaliserKlage';
 import { DigitaliserMeldekortV2 } from 'components/postmottak/digitaliserdokument/meldekort/DigitaliserMeldekortV2';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   behandlingsVersjon: number;
@@ -46,6 +47,8 @@ export const DigitaliserDokument = ({
       referanse: behandlingsreferanse,
     });
   }
+
+  const erKravEnabled = useFeatureFlag('KravSteg');
 
   return (
     <VStack gap={'space-16'}>
@@ -83,6 +86,7 @@ export const DigitaliserDokument = ({
           grunnlag={grunnlag}
           readOnly={readOnly}
           isLoading={isLoading}
+          erKravEnabled={erKravEnabled}
         />
       )}
     </VStack>
