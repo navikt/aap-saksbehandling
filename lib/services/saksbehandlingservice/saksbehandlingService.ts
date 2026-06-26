@@ -689,8 +689,18 @@ export const hentMellomlagringMedStatus = (behandlingsreferanse: string, kode: s
     saksbehandlingApiScope
   );
 };
+
+const behandlingErIkkePåVent = async (behandlingsreferanse: string): Promise<boolean> => {
+  const flyt = await hentFlyt(behandlingsreferanse);
+  return isSuccess(flyt) && !flyt.data.visning.visVentekort;
+};
+
+/**
+ * Vi ønsker å hente mellomlagring når behandling er på vent slik at saksbehandler ser siste mellomlagrede vurdering ved gjenopptak av behandlingen.
+ * Etter innsending til beslutter/KS skal kun bekreftede vurderinger vises.
+ */
 export const hentMellomlagring = async (behandlingsreferanse: string, kode: string, readOnly: boolean) => {
-  if (readOnly) {
+  if (readOnly && (await behandlingErIkkePåVent(behandlingsreferanse))) {
     return undefined;
   }
 
