@@ -15,6 +15,7 @@ describe('Manglende pensjonsgivende inntekt / EØS-beregnet inntekt', () => {
     manglerInntektForÅr: [2022, 2024],
     sisteRelevanteÅr: 2024,
     alleRelevanteÅr: [2022, 2023, 2024],
+    manglendeMånedsInntekter: [],
     harTilgangTilÅSaksbehandle: true,
     manuelleVurderinger: {
       årsVurderinger: [{ år: 2022 }, { år: 2023, beløp: 200000, eøsBeløp: 50000 }, { år: 2024, eøsBeløp: 300000 }],
@@ -36,6 +37,7 @@ describe('Manglende pensjonsgivende inntekt / EØS-beregnet inntekt', () => {
     sisteRelevanteÅr: 2024,
     manglerInntektForÅr: [2024, 2023, 2021],
     alleRelevanteÅr: [2022, 2024],
+    manglendeMånedsInntekter: [],
     harTilgangTilÅSaksbehandle: true,
     manuelleVurderinger: {
       årsVurderinger: [{ år: 2022 }, { år: 2023, beløp: 200000 }, { år: 2024 }],
@@ -144,18 +146,17 @@ describe('Manglende pensjonsgivende inntekt / EØS-beregnet inntekt', () => {
   describe('Endring i uføregrad (delperioder)', () => {
     const grunnlagMedDelperioder: ManuellInntektGrunnlag = {
       sisteRelevanteÅr: 2024,
-      ar: 2024,
-      gverdi: 0,
+      alleRelevanteÅr: [2022, 2023, 2024],
+      manglerInntektForÅr: [2022],
       harTilgangTilÅSaksbehandle: true,
-      historiskeVurderinger: [],
       registrerteInntekterSisteRelevanteAr: [
         { år: 2022, beløp: 640500 },
         { år: 2023, beløp: 500000 },
         { år: 2024, beløp: 300000 },
       ],
-      delperioderForSplittÅr: [
-        { år: 2022, periodeFom: '2022-01-01', periodeTom: '2022-02-28', uføregrad: 0 },
-        { år: 2022, periodeFom: '2022-03-01', periodeTom: '2022-12-31', uføregrad: 50 },
+      manglendeMånedsInntekter: [
+        { periode: { fom: '2022-01-01', tom: '2022-02-28' }, uføregrad: 0 },
+        { periode: { fom: '2022-03-01', tom: '2022-12-31' }, uføregrad: 50 },
       ],
     };
 
@@ -180,7 +181,7 @@ describe('Manglende pensjonsgivende inntekt / EØS-beregnet inntekt', () => {
       const tabell = screen.getByTestId('inntektstabell');
       const rader = within(tabell).getAllByRole('row');
       const etiketter = rader.map((rad) => within(rad).getAllByRole('cell')[0].textContent);
-      expect(etiketter).toEqual(['2022', '2022 jan.-feb.', '2022 mar.-des.', '2023', '2024']);
+      expect(etiketter).toEqual(['2022', '2022 jan.-feb.', '2022 mars-des.', '2023', '2024']);
     });
 
     it('split-årets informasjonsrad har ingen input, mens delperiode-radene er redigerbare', () => {
