@@ -690,6 +690,7 @@ export const hentMellomlagringMedStatus = (behandlingsreferanse: string, kode: s
   );
 };
 
+// hentFlyt bruker Next.js request memoization, så dette fører ikke til ekstra API-kall
 const behandlingErIkkePåVent = async (behandlingsreferanse: string): Promise<boolean> => {
   const flyt = await hentFlyt(behandlingsreferanse);
   return isSuccess(flyt) && !flyt.data.visning.visVentekort;
