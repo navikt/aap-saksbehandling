@@ -30,7 +30,6 @@ interface Props {
 
 interface ByggTabellDataProps {
   relevanteÅr: number[];
-  manglendeÅr: number[];
   pgi: ManuellInntektÅr[];
   manuelleInntekter: ManuellInntektÅr[];
 }
@@ -281,7 +280,6 @@ const mapGrunnlagToDraftFormFields = (grunnlag: ManuellInntektGrunnlag): DraftFo
     begrunnelse: grunnlag.manuelleVurderinger?.begrunnelse,
     tabellår: byggTabellData({
       relevanteÅr: grunnlag.alleRelevanteÅr,
-      manglendeÅr: grunnlag.manglerInntektForÅr,
       pgi: grunnlag.registrerteInntekterSisteRelevanteAr,
       manuelleInntekter: grunnlag.manuelleVurderinger?.årsVurderinger || [],
     }),
