@@ -35,7 +35,7 @@ import { Alert } from 'components/alert/Alert';
 import { TotrinnsvurderingHastemarkering } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingHastemarkering';
 import { Markering, MarkeringHaster } from 'lib/types/oppgaveTypes';
 
-import { clientFjernMarkeringForBehandling } from 'lib/clientApi';
+import { clientOpprettMarkeringHendelse, MarkeringHendelseType } from 'lib/clientApi';
 import { isLocal } from 'lib/utils/environment';
 import { TotrinnsvurderingDevtools } from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingDevtools';
 import { clientMottattDokumenterLest } from 'lib/oppgaveClientApi';
@@ -147,7 +147,10 @@ export const TotrinnsvurderingForm = ({
           isError = true;
         }
         if (data.skalHastemarkeringBeholdes === JaEllerNei.Nei) {
-          await clientFjernMarkeringForBehandling(behandlingsreferanse, { markeringType: MarkeringHaster, opprettetTidspunkt: new Date().toISOString() });
+          clientOpprettMarkeringHendelse(behandlingsreferanse, {
+            markeringType: MarkeringHaster,
+            hendelseType: MarkeringHendelseType.FJERNET,
+          });
         }
         if (isError) {
           return;

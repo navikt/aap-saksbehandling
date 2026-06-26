@@ -162,17 +162,12 @@ export async function oppgaveTekstSøk(søketekst: string) {
   return await apiFetch<SøkResponse>(url, oppgaveApiScope, 'POST', { søketekst });
 }
 
-export const settMarkeringForBehandling = async (referanse: string, requestBody: Markering) => {
-  const url = `${oppgaveApiBaseURL}/${referanse}/ny-markering`;
-  return await apiFetch(url, oppgaveApiScope, 'POST', requestBody);
+export const hentSisteAktiveMarkeringerForBehandling = async (referanse: string) => {
+  const url = `${oppgaveApiBaseURL}/${referanse}/hent-siste-aktive-markeringer-for-behandling`;
+  return await apiFetch<Markering[]>(url, oppgaveApiScope, 'GET', undefined);
 };
 
-export const fjernMarkering = async (referanse: string, requestBody: Markering) => {
-  const url = `${oppgaveApiBaseURL}/${referanse}/fjern-markering`;
-  return await apiFetch(url, oppgaveApiScope, 'POST', requestBody);
-};
-
-export const hentMarkeringer = async (referanse: string) => {
+export const opprettMarkeringHendelse = async (referanse: string, body: object) => {
   if (lokalFakeOppgave) {
     const mockData: FetchResponse<Markering[]> = {
       type: 'SUCCESS',
@@ -181,6 +176,7 @@ export const hentMarkeringer = async (referanse: string) => {
     };
     return mockData;
   }
-  const url = `${oppgaveApiBaseURL}/${referanse}/hent-markeringer`;
-  return await apiFetch<Markering[]>(url, oppgaveApiScope, 'GET', undefined);
+
+  const url = `${oppgaveApiBaseURL}/${referanse}/opprett-markering-hendelse`;
+  return await apiFetch(url, oppgaveApiScope, 'POST', body);
 };
