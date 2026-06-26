@@ -30,13 +30,14 @@ import {
   RettighetsinfoDto,
   SakPersoninfo,
   SaksInfo,
+  Markeringstype,
   SettPåVent,
 } from './types/types';
 import { getErrorMessage } from 'lib/utils/errorUtil';
 import { ClientConfig } from 'lib/types/clientTypes';
 import { FetchResponse } from 'lib/utils/api';
 import { TilgangResponse } from 'lib/services/tilgangservice/tilgangsService';
-import { Markering, SaksbehandlerSøkRespons, TildelOppgaveRequest } from 'lib/types/oppgaveTypes';
+import { SaksbehandlerSøkRespons, TildelOppgaveRequest } from 'lib/types/oppgaveTypes';
 import { MellomLagringIdentifikator } from 'app/saksbehandling/api/mellomlagring/route';
 import { isLocal } from 'lib/utils/environment';
 import { buildOAuthLoginUrl } from 'lib/services/azure/redirectUtils';
@@ -247,12 +248,25 @@ export async function clientSjekkTilgang(behandlingsreferanse: string, behovsKod
   });
 }
 
-export function clientSettMarkeringForBehandling(referanse: string, markering: Markering) {
-  return clientFetch(`${BASE_URL}/api/behandling/${referanse}/markering/ny`, 'POST', markering);
+// TODO: hent fra aap-oppgave
+export enum MarkeringHendelseType {
+  OPPRETTET = 'OPPRETTET',
+  FJERNET = 'FJERNET',
 }
 
-export function clientFjernMarkeringForBehandling(referanse: string, markering: Markering) {
-  return clientFetch(`${BASE_URL}/api/behandling/${referanse}/markering/fjern`, 'POST', markering);
+// TODO: hent fra aap-oppgave
+export interface OpprettMarkeringHendelse {
+  markeringType: Markeringstype;
+  begrunnelse?: string;
+  hendelseType: MarkeringHendelseType;
+}
+
+export function clientOpprettMarkeringHendelse(referanse: string, opprettMarkeringHendelse: OpprettMarkeringHendelse) {
+  return clientFetch(
+    `${BASE_URL}/api/behandling/${referanse}/opprett-markering-hendelse`,
+    'POST',
+    opprettMarkeringHendelse
+  );
 }
 
 export function clientSøkPåSaksbehandler(oppgaver: number[], søketekst: string, enheter?: string[]) {
