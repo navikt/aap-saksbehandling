@@ -19,7 +19,15 @@ describe('DigitaliserAnnetDokument', () => {
   it('at det går an å velge flere alternativer', async () => {
     const submit = vi.fn(() => {});
 
-    render(<DigitaliserAnnetRelevantDokument submit={submit} grunnlag={grunnlag} readOnly={false} isLoading={false} />);
+    render(
+      <DigitaliserAnnetRelevantDokument
+        submit={submit}
+        grunnlag={grunnlag}
+        readOnly={false}
+        isLoading={false}
+        erKravEnabled={true}
+      />
+    );
 
     const årsaker = screen.getByRole('combobox', { name: /Hvilke opplysninger/ });
     await user.click(årsaker);
@@ -51,7 +59,15 @@ describe('DigitaliserAnnetDokument', () => {
   it('at underkategori inkluderes i submit når den er valgt', async () => {
     const submit = vi.fn(() => {});
 
-    render(<DigitaliserAnnetRelevantDokument submit={submit} grunnlag={grunnlag} readOnly={false} isLoading={false} />);
+    render(
+      <DigitaliserAnnetRelevantDokument
+        submit={submit}
+        grunnlag={grunnlag}
+        readOnly={false}
+        isLoading={false}
+        erKravEnabled={true}
+      />
+    );
 
     await user.selectOptions(screen.getByLabelText('Underkategori'), 'YRKESSKADE');
 

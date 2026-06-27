@@ -80,6 +80,7 @@ const behovskodeMap = {
   '8001': 'Oppfølgingsoppgave - kontor',
   '8002': 'Oppfølgingsoppgave - NAY',
   '8003': 'Venter på oppfølging',
+  '8004': 'Venter på oppfølging',
   '9001': 'Manuelt satt på vent',
   '9002': 'Bestill brev',
   '9003': 'Bestill legeerklæring',

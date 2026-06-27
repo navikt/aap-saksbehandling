@@ -3,15 +3,15 @@
 import {
   BodyShort,
   Button,
+  CopyButton,
+  Detail,
   Heading,
-  InlineMessage,
   InfoCard,
+  InlineMessage,
   Link,
   Loader,
   Radio,
   VStack,
-  CopyButton,
-  Detail,
 } from '@navikt/ds-react';
 import { SubmitEventHandler, useState } from 'react';
 
@@ -145,7 +145,6 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
         behandlerHprNr,
         dokumentasjonType: data.dokumentasjonstype,
         fritekst: data.melding,
-        saksnummer: saksnummer,
         behandlingsReferanse: behandlingsreferanse,
       };
 

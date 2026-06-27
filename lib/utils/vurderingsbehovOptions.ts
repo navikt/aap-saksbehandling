@@ -2,7 +2,7 @@ import { ValuePair } from 'components/form/FormField';
 import type { Vurderingsbehov, VurderingsbehovIntern } from '../types/types';
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
 
-export const vurderingsbehovOptions = (): ValuePair<Vurderingsbehov>[] => {
+export const vurderingsbehovOptions = (erKravEnabled: boolean): ValuePair<Vurderingsbehov>[] => {
   const behov: Vurderingsbehov[] = [
     // TODO fjerner denne inntil det er avklart om denne skal brukes { label: 'Helhetlig vurdering', value: 'HELHETLIG_VURDERING' },
     'VURDER_RETTIGHETSPERIODE',
@@ -31,9 +31,9 @@ export const vurderingsbehovOptions = (): ValuePair<Vurderingsbehov>[] => {
     'DØDSFALL_BRUKER',
     'REVURDER_SAMORDNING_BARNEPENSJON',
     'VEDTAKSLENGDE_MANUELT',
-    'VURDER_KRAV',
     'VURDER_AVSLAG_11_27',
-  ];
+    'VURDER_KRAV',
+  ].filter((option) => erKravEnabled || option !== 'VURDER_KRAV') as Vurderingsbehov[];
 
   return behov.map((behov) => ({
     value: behov,
