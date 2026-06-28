@@ -1,6 +1,6 @@
 'use client';
 
-import { SettPåVentÅrsaker } from 'lib/types/types';
+import { SettPåVentÅrsaker, TilbakekrevingVenteÅrsaker } from 'lib/types/types';
 import { BodyShort, Button, Detail, Popover, Tag, VStack } from '@navikt/ds-react';
 import { mapTilVenteÅrsakTekst } from 'lib/utils/oversettelser';
 import { useRef, useState } from 'react';
@@ -19,15 +19,17 @@ export const PåVentInfoboks = ({ frist, årsak, begrunnelse }: Props) => {
   const [vis, setVis] = useState(false);
 
   const forskjellIMillisekunder = new Date(frist).getTime() - new Date().getTime();
+  const erUtløpt = forskjellIMillisekunder < 0;
 
-  const forskjellIDager = (forskjellIMillisekunder / (1000 * 60 * 60 * 24)).toFixed(0);
-  const dagTekst = forskjellIDager == '1' ? 'dag' : 'dager';
+  const antallDager = Math.abs(Math.round(forskjellIMillisekunder / (1000 * 60 * 60 * 24)));
+  const dagTekst = antallDager === 1 ? 'dag' : 'dager';
+  const venteTekst = erUtløpt ? `${antallDager} ${dagTekst} siden` : `${antallDager} ${dagTekst} igjen`;
 
   return (
     <>
       <Button
         icon={<HourglassTopFilledIcon title={'Oppgave på vent'} />}
-        className={styles.knapp}
+        className={erUtløpt ? styles.knappUtløpt : styles.knapp}
         onClick={() => setVis(!vis)}
         ref={buttonRef}
         size="xsmall"
@@ -43,27 +45,27 @@ export const PåVentInfoboks = ({ frist, årsak, begrunnelse }: Props) => {
       >
         <VStack gap={'space-8'} className={styles.boks}>
           <Tag
-            data-color="warning"
+            data-color={erUtløpt ? 'danger' : 'warning'}
             icon={<HourglassTopFilledIcon />}
             variant={'moderate'}
             size={'medium'}
             className={styles.tag}
           >
             <BodyShort size={'small'} weight={'semibold'}>
-              På vent
+              {erUtløpt ? 'Ventefrist utløpt' : 'På vent'}
             </BodyShort>
           </Tag>
           <VStack>
             <Detail textColor="subtle">Frist</Detail>
             <div>
-              {formaterDatoForFrontend(frist)} ({forskjellIDager} {dagTekst} igjen)
+              {formaterDatoForFrontend(frist)} ({venteTekst})
             </div>
           </VStack>
           {årsak ? (
             <VStack>
               <Detail textColor="subtle">Årsak</Detail>
 
-              <div>{mapTilVenteÅrsakTekst(årsak as SettPåVentÅrsaker)}</div>
+              <div>{mapTilVenteÅrsakTekst(årsak as SettPåVentÅrsaker | TilbakekrevingVenteÅrsaker)}</div>
             </VStack>
           ) : undefined}
           {begrunnelse ? (
