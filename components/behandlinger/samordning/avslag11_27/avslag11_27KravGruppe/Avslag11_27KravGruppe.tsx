@@ -64,6 +64,11 @@ export const Avslag11_27KravGruppe = ({
     onSlettVurdering(krav.referanse);
   };
 
+  const vurderingStatusForNyVurdering =
+    vurderingFormField?.skalAvslås1127 === undefined
+      ? undefined
+      : getErOppfyltEllerIkkeStatus(vurderingFormField.skalAvslås1127 === JaEllerNei.Nei);
+
   return (
     <Box
       background="default"
@@ -104,7 +109,7 @@ export const Avslag11_27KravGruppe = ({
               fraDato={new Date(krav.søknadsdato)}
               nestePeriodeFraDato={null}
               isLast={true}
-              vurderingStatus={getErOppfyltEllerIkkeStatus(vurderingFormField?.skalAvslås1127 === JaEllerNei.Nei)}
+              vurderingStatus={vurderingStatusForNyVurdering}
               vurdering={vurderingFormField}
               harTidligereVurderinger={!!vedtattVurdering}
               finnesFeil={false}

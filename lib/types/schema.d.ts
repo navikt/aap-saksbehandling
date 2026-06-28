@@ -11869,6 +11869,7 @@ export interface components {
         | '5038'
         | '5040'
         | '5041'
+        | '5042'
         | '5050'
         | '5051'
         | '5052'
@@ -12157,6 +12158,7 @@ export interface components {
         | '8001'
         | '8002'
         | '8003'
+        | '8004'
         | '9001'
         | '9002'
         | '9003'
@@ -13831,7 +13833,7 @@ export interface components {
       type: 'OPPHEVET' | 'OPPHØR' | 'STANS';
       '\u00E5rsaker': (
         | 'ANNEN_FULL_YTELSE'
-        | 'ANNEN_FULL_YTELSE_11_27'
+        | 'ANNEN_FULL_YTELSE_AVSLAG'
         | 'BRUDD_PÅ_AKTIVITETSPLIKT_OPPHØR'
         | 'BRUDD_PÅ_AKTIVITETSPLIKT_STANS'
         | 'BRUDD_PÅ_OPPHOLDSKRAV_OPPHØR'
@@ -15958,7 +15960,7 @@ export interface components {
       /** @enum {string|null} */
       'avslags\u00E5rsak'?:
         | 'ANNEN_FULL_YTELSE'
-        | 'ANNEN_FULL_YTELSE_11_27'
+        | 'ANNEN_FULL_YTELSE_AVSLAG'
         | 'BRUDD_PÅ_AKTIVITETSPLIKT_OPPHØR'
         | 'BRUDD_PÅ_AKTIVITETSPLIKT_STANS'
         | 'BRUDD_PÅ_OPPHOLDSKRAV_OPPHØR'
@@ -16062,7 +16064,6 @@ export interface components {
       type:
         | 'AKTIVITETSPLIKT'
         | 'ALDERSVILKÅRET'
-        | 'AVSLAG_11_27'
         | 'BISTANDSVILKÅRET'
         | 'GRUNNLAGET'
         | 'INNTEKTSBORTFALL'
@@ -16324,7 +16325,7 @@ export interface components {
       /** @enum {string|null} */
       'avslags\u00E5rsak'?:
         | 'ANNEN_FULL_YTELSE'
-        | 'ANNEN_FULL_YTELSE_11_27'
+        | 'ANNEN_FULL_YTELSE_AVSLAG'
         | 'BRUDD_PÅ_AKTIVITETSPLIKT_OPPHØR'
         | 'BRUDD_PÅ_AKTIVITETSPLIKT_STANS'
         | 'BRUDD_PÅ_OPPHOLDSKRAV_OPPHØR'
@@ -17991,7 +17992,6 @@ export interface components {
       'vilk\u00E5rtype':
         | 'AKTIVITETSPLIKT'
         | 'ALDERSVILKÅRET'
-        | 'AVSLAG_11_27'
         | 'BISTANDSVILKÅRET'
         | 'GRUNNLAGET'
         | 'INNTEKTSBORTFALL'
@@ -18018,7 +18018,7 @@ export interface components {
       /** @enum {string|null} */
       'avslags\u00E5rsak'?:
         | 'ANNEN_FULL_YTELSE'
-        | 'ANNEN_FULL_YTELSE_11_27'
+        | 'ANNEN_FULL_YTELSE_AVSLAG'
         | 'BRUDD_PÅ_AKTIVITETSPLIKT_OPPHØR'
         | 'BRUDD_PÅ_AKTIVITETSPLIKT_STANS'
         | 'BRUDD_PÅ_OPPHOLDSKRAV_OPPHØR'
