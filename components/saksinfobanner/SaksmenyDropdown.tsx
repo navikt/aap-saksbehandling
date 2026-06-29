@@ -20,6 +20,7 @@ import { useInnloggetBruker } from 'hooks/BrukerHook';
 import { brukerErBeslutter, brukerKanSaksbehandle } from 'lib/utils/innloggetBruker';
 import { AvbrytAktivitetspliktbehandlingModal } from 'components/saksinfobanner/avbrytaktivitetspliktbehandlingmodal/AvbrytAktivitetspliktbehandlingModal';
 import { Avslag11_27Modal } from 'components/saksinfobanner/avslag11_27modal/Avslag11_27Modal';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 export const SaksmenyDropdown = ({
   flyt,
@@ -55,6 +56,8 @@ export const SaksmenyDropdown = ({
   const behandlerRevurderingSomSkalAvbrytes = avbrytRevurderingSteg && avbrytRevurderingSteg.skalVises;
   const behandlerAktivitetspliktbehandlingSomSkalAvbrytes =
     avbrytAktivitetspliktbehandlingSteg && avbrytAktivitetspliktbehandlingSteg.skalVises;
+  const avslag1127Steg = flyt && flyt.find((f) => f.stegGruppe === 'AVSLAG_11_27');
+  const harAlleredeValgtAvslag1127 = avslag1127Steg && avslag1127Steg.skalVises;
 
   const trekkKlageSteg = flyt && flyt.find((f) => f.stegGruppe === 'TREKK_KLAGE');
   const harAlleredeValgtTrekkKlage = trekkKlageSteg && trekkKlageSteg.skalVises;
@@ -103,12 +106,14 @@ export const SaksmenyDropdown = ({
 
   const visValgForÅSetteMarkering = innloggetBrukerKanSaksbehandle && behandlingErIkkeAvsluttet;
 
+  const avslag11_27Enable = useFeatureFlag('Avslag11_27');
+
   const visValgForAvslag1127 =
+    avslag11_27Enable &&
     behandlingErIkkeIverksatt &&
     innloggetBrukerKanSaksbehandle &&
     behandlingErIkkeAvsluttet &&
-    !behandlerEnSøknadSomSkalTrekkes &&
-    !behandlerRevurderingSomSkalAvbrytes;
+    !harAlleredeValgtAvslag1127;
 
   return (
     <div className={styles.saksmeny}>
