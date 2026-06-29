@@ -3,11 +3,6 @@
   color: black;
 }
 
-.knappUtløpt {
-  background-color: var(--ax-bg-danger-moderate);
-  color: black;
-}
-
 .tag {
   justify-content: left;
   height: var(--ax-space-40);
@@ -16,10 +11,6 @@
 
 .knapp:hover {
   background-color: var(--ax-bg-warning-moderate-hover);
-}
-
-.knappUtløpt:hover {
-  background-color: var(--ax-bg-danger-moderate-hover);
 }
 
 .boks > * {

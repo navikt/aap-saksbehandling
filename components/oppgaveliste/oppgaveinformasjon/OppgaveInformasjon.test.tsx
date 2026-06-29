@@ -6,7 +6,7 @@ import {
   NoNavAapOppgaveReturInformasjonRsaker,
   NoNavAapOppgaveReturInformasjonStatus,
 } from '@navikt/aap-oppgave-typescript-types';
-import { addDays } from 'date-fns';
+import { addDays, format } from 'date-fns';
 import { render, screen } from '@testing-library/react';
 import { OppgaveInformasjon } from 'components/oppgaveliste/oppgaveinformasjon/OppgaveInformasjon';
 import userEvent from '@testing-library/user-event';
@@ -143,5 +143,15 @@ describe('OppgaveInformasjon', () => {
   it('skal ikke vise ventefrist utløpt-ikon når oppgave ikke har ventefrist', () => {
     renderWithFlags(<OppgaveInformasjon oppgave={oppgave} />);
     expect(screen.queryByRole('img', { name: 'Ventefrist utløpt' })).not.toBeInTheDocument();
+  });
+
+  it('skal vise ventefrist utløpt-ikon dersom påVentTil er passert dagens dato', () => {
+    renderWithFlags(
+      <OppgaveInformasjon
+        oppgave={{ ...oppgave, utløptVentefrist: format(addDays(new Date(), -1), 'yyyy-MM-dd') }}
+      />
+    );
+    expect(screen.getByRole('img', { name: 'Ventefrist utløpt' })).toBeVisible();
+    expect(screen.queryByRole('img', { name: 'Oppgave på vent' })).not.toBeInTheDocument();
   });
 });

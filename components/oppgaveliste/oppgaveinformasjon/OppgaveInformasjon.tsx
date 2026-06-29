@@ -23,7 +23,7 @@ export const OppgaveInformasjon = ({ oppgave }: Props) => {
       {oppgave.påVentTil && (oppgave.behandlingstype !== 'TILBAKEKREVING' || ventStatusForTilbakekreving) && (
         <PåVentInfoboks frist={oppgave.påVentTil} årsak={oppgave.påVentÅrsak} begrunnelse={oppgave.venteBegrunnelse} />
       )}
-      {oppgave.utløptVentefrist && (
+      {oppgave.utløptVentefrist && (oppgave.behandlingstype !== 'TILBAKEKREVING' || ventStatusForTilbakekreving) && (
         <UtløptVentefristBoks
           frist={oppgave.utløptVentefrist}
           årsak={oppgave.forrigePåVentÅrsak}

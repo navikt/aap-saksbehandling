@@ -18,18 +18,11 @@ export const PåVentInfoboks = ({ frist, årsak, begrunnelse }: Props) => {
   const buttonRef = useRef(null);
   const [vis, setVis] = useState(false);
 
-  const forskjellIMillisekunder = new Date(frist).getTime() - new Date().getTime();
-  const erUtløpt = forskjellIMillisekunder < 0;
-
-  const antallDager = Math.abs(Math.round(forskjellIMillisekunder / (1000 * 60 * 60 * 24)));
-  const dagTekst = antallDager === 1 ? 'dag' : 'dager';
-  const venteTekst = erUtløpt ? `${antallDager} ${dagTekst} siden` : `${antallDager} ${dagTekst} igjen`;
-
   return (
     <>
       <Button
         icon={<HourglassTopFilledIcon title={'Oppgave på vent'} />}
-        className={erUtløpt ? styles.knappUtløpt : styles.knapp}
+        className={styles.knapp}
         onClick={() => setVis(!vis)}
         ref={buttonRef}
         size="xsmall"
@@ -45,26 +38,23 @@ export const PåVentInfoboks = ({ frist, årsak, begrunnelse }: Props) => {
       >
         <VStack gap={'space-8'} className={styles.boks}>
           <Tag
-            data-color={erUtløpt ? 'danger' : 'warning'}
+            data-color="warning"
             icon={<HourglassTopFilledIcon />}
             variant={'moderate'}
             size={'medium'}
             className={styles.tag}
           >
             <BodyShort size={'small'} weight={'semibold'}>
-              {erUtløpt ? 'Ventefrist utløpt' : 'På vent'}
+              På vent
             </BodyShort>
           </Tag>
           <VStack>
             <Detail textColor="subtle">Frist</Detail>
-            <div>
-              {formaterDatoForFrontend(frist)} ({venteTekst})
-            </div>
+            <div>{formaterDatoForFrontend(frist)}</div>
           </VStack>
           {årsak ? (
             <VStack>
               <Detail textColor="subtle">Årsak</Detail>
-
               <div>{mapTilVenteÅrsakTekst(årsak as SettPåVentÅrsaker | TilbakekrevingVenteÅrsaker)}</div>
             </VStack>
           ) : undefined}
