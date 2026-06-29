@@ -89,20 +89,6 @@ export async function hentEnheter() {
     revalidate: CACHE_1_TIME,
     tags: [await genererTagMedNavIdent('enheter')],
   });
-  /*
-  // Testing locally with NAY oppgaver (4491), ex. tilbakekreving require more than superNav! fake
-  if (resultat.type != 'SUCCESS') {
-    return resultat
-  }
-  const ekstraEnhet: Enhet = { enhetNr: "4491", navn: "NAY"};
-  const utvidetResultat = {
-      ...resultat,
-      data: [...resultat.data, ekstraEnhet],
-  };
-  console.log("hentEnheter resultat:")
-  console.log(utvidetResultat)
-  return utvidetResultat;
-  */
 }
 
 export async function synkroniserEnhetPåOppgave(data: EnhetSynkroniseringOppgave) {
