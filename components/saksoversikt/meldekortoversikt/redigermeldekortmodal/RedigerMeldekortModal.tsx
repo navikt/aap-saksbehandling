@@ -121,6 +121,9 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
   const skalViseMeldedatoErEtterMeldefristAlert =
     årsak === Årsaker.REGISTRERE_MELDEDATO && erDatoFoerDato(formaterDatoForFrontend(meldekort.meldefrist), meldedato);
 
+  const skalViseAlertFaktiskMeldedato =
+    erÅrsakLevereMeldekort && erDatoFoerDato(meldedato, formaterDatoForFrontend(new Date()));
+
   const tidligereInnsendteMeldekort = kobleDokumentInfoTilTidligereMeldekort(meldekort, personInformasjon, dokumenter);
   const errorList = hentFeilmeldingerForForm(form.formState.errors);
 
@@ -202,6 +205,13 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
                         },
                       }}
                     />
+                  )}
+                  {skalViseAlertFaktiskMeldedato && (
+                    <Alert variant={'info'}>
+                      Pass på at du legger inn faktisk dato brukeren har meldt opplysningene. Hvis det skal vurderes om
+                      det er rimelig grunn til at brukeren ikke har meldt seg, så må du opprette revurdering på § 11-10
+                      Overstyr perioder uten oppfylt meldeplikt.
+                    </Alert>
                   )}
                   {skalViseTimer && <UtfyllingKalender readOnly={erÅrsakRegistrereMeldedato} />}
                   {årsak === Årsaker.LEVERE_MELDEKORT_FOR_BRUKER && (

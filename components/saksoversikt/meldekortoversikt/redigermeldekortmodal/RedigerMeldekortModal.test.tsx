@@ -434,6 +434,54 @@ describe('RedigerMeldekortModal', () => {
       ).not.toBeInTheDocument();
     });
   });
+
+  describe('skalViseAlertFaktiskMeldedato', () => {
+    const alertTekst =
+      'Pass på at du legger inn faktisk dato brukeren har meldt opplysningene. Hvis det skal vurderes om det er rimelig grunn til at brukeren ikke har meldt seg, så må du opprette revurdering på § 11-10 Overstyr perioder uten oppfylt meldeplikt.';
+
+    const velgÅrsakOgFyllMeldedato = async (meldedato: string) => {
+      await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Lever/endre meldekort for bruker');
+      await user.type(screen.getByLabelText('Dato brukeren meldte opplysningene'), meldedato);
+    };
+
+    it('viser alert når meldedato er før dagens dato', async () => {
+      customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
+      const igårDato = new Dato(addDays(new Date(), -1)).formaterForFrontend();
+      await velgÅrsakOgFyllMeldedato(igårDato);
+
+      expect(screen.getByText(alertTekst)).toBeVisible();
+    });
+
+    it('viser ikke alert når meldedato er dagens dato', async () => {
+      customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
+      const dagsDato = new Dato(new Date()).formaterForFrontend();
+      await velgÅrsakOgFyllMeldedato(dagsDato);
+
+      expect(screen.queryByText(alertTekst)).not.toBeInTheDocument();
+    });
+
+    it('viser ikke alert når meldedato er i fremtiden', async () => {
+      customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
+      const morgendagsDato = new Dato(addDays(new Date(), 1)).formaterForFrontend();
+      await velgÅrsakOgFyllMeldedato(morgendagsDato);
+
+      expect(screen.queryByText(alertTekst)).not.toBeInTheDocument();
+    });
+
+    it('viser ikke alert når meldedato er tomt', async () => {
+      customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
+      await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Lever/endre meldekort for bruker');
+
+      expect(screen.queryByText(alertTekst)).not.toBeInTheDocument();
+    });
+
+    it('viser ikke alert ved årsak "Overstyre bruker" selv om meldedato er i fortiden', async () => {
+      customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
+      await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Overstyre bruker');
+
+      expect(screen.queryByText(alertTekst)).not.toBeInTheDocument();
+    });
+  });
 });
 
 const meldeperiode: MeldeperiodeMedMeldekortDto['meldeperiode'] = {
