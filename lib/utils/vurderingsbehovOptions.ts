@@ -4,7 +4,7 @@ import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
 
 export const vurderingsbehovOptions = (
   erKravEnabled: boolean,
-  erAvslag11_27Enabled: boolean
+  erAvslag11_27Enabled: boolean | undefined
 ): ValuePair<Vurderingsbehov>[] => {
   const behov: Vurderingsbehov[] = [
     // TODO fjerner denne inntil det er avklart om denne skal brukes { label: 'Helhetlig vurdering', value: 'HELHETLIG_VURDERING' },
