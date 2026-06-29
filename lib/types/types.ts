@@ -427,6 +427,9 @@ export type ManuellInntektGrunnlag =
 export type ManuellInntektÅr =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.\u00C5rData'];
 
+export type DelperiodeData =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.MånedsperiodeData'];
+
 export type RegistrerYrkesskade =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.RegistrertYrkesskade'];
 

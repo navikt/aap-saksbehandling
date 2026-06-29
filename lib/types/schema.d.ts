@@ -5845,6 +5845,7 @@ export interface components {
       yrkesskader: components['schemas']['no.nav.aap.behandlingsflyt.TestYrkesskadeDto'][];
     };
     'no.nav.aap.behandlingsflyt.OpprettTestcaseDTO': {
+      aInntekterPerAr?: components['schemas']['no.nav.aap.behandlingsflyt.InntektPer\u00C5rDto'][] | null;
       andreUtbetalinger?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AndreUtbetalingerDto'];
       barn: components['schemas']['no.nav.aap.behandlingsflyt.TestBarn'][];
       dagpenger: components['schemas']['no.nav.aap.behandlingsflyt.test.modell.TestPerson.Dagpenger'][];
@@ -5952,6 +5953,7 @@ export interface components {
       tjenestePensjon?: boolean | null;
       /** Format: int32 */
       'uf\u00F8re'?: number | null;
+      'uf\u00F8reHistorikk': components['schemas']['no.nav.aap.behandlingsflyt.TestUf\u00F8reHistorikkDto'][];
       /**
        * Format: date
        * @example 2025-04-01
@@ -5968,6 +5970,11 @@ export interface components {
        */
       'uf\u00F8regradTom'?: string | null;
       yrkesskader: components['schemas']['no.nav.aap.behandlingsflyt.TestYrkesskadeDto'][];
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      ytterligereNedsattArbeidsevneDato?: string | null;
     };
     'no.nav.aap.behandlingsflyt.PeriodeDto': {
       /**
@@ -6024,6 +6031,25 @@ export interface components {
       harFastlege: boolean;
       harOppgittAndreBehandlere: boolean;
       'varFastlegeRiktigP\u00E5S\u00F8knadstidspunkt': boolean;
+    };
+    'no.nav.aap.behandlingsflyt.TestUf\u00F8reHistorikkDto': {
+      /** Format: int32 */
+      'uf\u00F8regrad': number;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      'uf\u00F8regradFom'?: string | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      'uf\u00F8regradTom'?: string | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      virkningstidspunkt: string;
     };
     'no.nav.aap.behandlingsflyt.TestYrkesskadeDto': {
       diagnose?: string | null;
@@ -13296,6 +13322,7 @@ export interface components {
       historiskeManuelleVurderinger?:
         | components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.ManuellInntektGrunnlagVurdering'][]
         | null;
+      'manglendeM\u00E5nedsInntekter': components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.M\u00E5nedsperiodeData'][];
       'manglerInntektFor\u00C5r': number[];
       manuelleVurderinger?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.ManuellInntektGrunnlagVurdering'];
       registrerteInntekterSisteRelevanteAr: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.\u00C5rData'][];
@@ -13311,10 +13338,16 @@ export interface components {
       vurderingerMeta: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'];
       '\u00E5rsVurderinger': components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.\u00C5rData'][];
     };
+    'no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.M\u00E5nedsperiodeData': {
+      periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
+      /** Format: int32 */
+      'uf\u00F8regrad': number;
+    };
     'no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.\u00C5rData': {
       'bel\u00F8p'?: number | null;
       'e\u00F8sBel\u00F8p'?: number | null;
       ferdigLignetPGI?: number | null;
+      periode?: components['schemas']['no.nav.aap.komponenter.type.Periode'];
       /** Format: int32 */
       '\u00E5r': number;
     };
@@ -16702,6 +16735,7 @@ export interface components {
       'bel\u00F8p'?: number | null;
       'e\u00F8sBel\u00F8p'?: number | null;
       ferdigLignetPGI?: number | null;
+      periode?: components['schemas']['no.nav.aap.komponenter.type.Periode'];
       /** Format: int32 */
       '\u00E5r': number;
     };
