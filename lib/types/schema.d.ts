@@ -13291,13 +13291,19 @@ export interface components {
       vurdertIBehandling: components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.behandling.BehandlingId'];
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.ManuellInntektGrunnlagResponse': {
+      'alleRelevante\u00C5r': number[];
       'harTilgangTil\u00C5Saksbehandle': boolean;
       historiskeManuelleVurderinger?:
         | components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.ManuellInntektGrunnlagVurdering'][]
         | null;
+      'manglerInntektFor\u00C5r': number[];
       manuelleVurderinger?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.ManuellInntektGrunnlagVurdering'];
       registrerteInntekterSisteRelevanteAr: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.\u00C5rData'][];
-      /** Format: int32 */
+      /**
+       * Format: int32
+       * @deprecated
+       * @description Brukes ikke av frontend snart.
+       */
       'sisteRelevante\u00C5r': number;
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.ManuellInntektGrunnlagVurdering': {

@@ -423,6 +423,7 @@ export type YrkesskadeVurderingGrunnlag =
 
 export type ManuellInntektGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.ManuellInntektGrunnlagResponse'];
+
 export type ManuellInntektÅr =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.\u00C5rData'];
 
