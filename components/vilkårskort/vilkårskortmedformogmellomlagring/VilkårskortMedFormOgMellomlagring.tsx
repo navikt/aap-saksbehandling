@@ -11,6 +11,7 @@ import { ApiException } from 'lib/utils/api';
 import { VisningActions, VisningModus } from 'lib/types/visningTypes';
 import { VurdertAvAnsattDetail } from 'components/vurdertav/VurdertAvAnsattDetail';
 import { UtkastInfo } from 'components/vilkårskort/utkastinfo/UtkastInfo';
+import { useFlyt } from 'hooks/saksbehandling/FlytHook';
 
 export interface VilkårsKortMedFormOgMellomlagringProps {
   heading: string;
@@ -49,11 +50,12 @@ export const VilkårskortMedFormOgMellomlagring = ({
   visningActions,
   formReset,
 }: VilkårsKortMedFormOgMellomlagringProps) => {
+  const { flyt } = useFlyt();
   const classNameBasertPåEnhet = vilkårTilhørerNavKontor ? styles.vilkårsKortNAV : styles.vilkårsKortNAY;
   const erAktivtSteg = visningModus === 'AKTIV_UTEN_AVBRYT' || visningModus === 'AKTIV_MED_AVBRYT';
 
   const readOnly = visningModus === 'LÅST_MED_ENDRE' || visningModus === 'LÅST_UTEN_ENDRE';
-  const skalViseUtkastOverlay = !!mellomlagretVurdering && readOnly;
+  const skalViseUtkastOverlay = !!mellomlagretVurdering && readOnly && flyt?.visning.visVentekort;
 
   return (
     <ExpansionCard

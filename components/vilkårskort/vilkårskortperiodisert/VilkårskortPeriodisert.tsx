@@ -11,6 +11,7 @@ import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehov
 import { ApiException } from 'lib/utils/api';
 import { VisningActions, VisningModus } from 'lib/types/visningTypes';
 import { VurdertAvAnsattDetail } from 'components/vurdertav/VurdertAvAnsattDetail';
+import { useFlyt } from 'hooks/saksbehandling/FlytHook';
 import { UtkastInfo } from 'components/vilkårskort/utkastinfo/UtkastInfo';
 
 interface VilkårsKortPeriodisertProps {
@@ -56,10 +57,11 @@ export const VilkårskortPeriodisert = ({
   formReset,
   errorList,
 }: VilkårsKortPeriodisertProps) => {
+  const { flyt } = useFlyt();
   const classNameBasertPåEnhet = vilkårTilhørerNavKontor ? styles.vilkårsKortNAV : styles.vilkårsKortNAY;
   const erAktivtSteg = visningModus === 'AKTIV_UTEN_AVBRYT' || visningModus === 'AKTIV_MED_AVBRYT';
   const readOnly = visningModus === 'LÅST_MED_ENDRE' || visningModus === 'LÅST_UTEN_ENDRE';
-  const skalViseUtkastLayouver = !!mellomlagretVurdering && readOnly;
+  const skalViseUtkastLayouver = !!mellomlagretVurdering && readOnly && flyt?.visning.visVentekort;
 
   return (
     <VStack
