@@ -3,7 +3,6 @@
 import { Button, Detail, ExpansionCard, HStack, VStack } from '@navikt/ds-react';
 import { MellomlagretVurdering, StegType, VurderingerMeta } from 'lib/types/types';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
-import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 
 import styles from 'components/vilkårskort/Vilkårskort.module.css';
 import { useFlyt } from 'hooks/saksbehandling/FlytHook';
@@ -12,6 +11,7 @@ import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehov
 import { ApiException } from 'lib/utils/api';
 import { VisningActions, VisningModus } from 'lib/types/visningTypes';
 import { VurdertAvAnsattDetail } from 'components/vurdertav/VurdertAvAnsattDetail';
+import { UtkastInfo } from 'components/vilkårskort/utkastinfo/UtkastInfo';
 
 export interface VilkårsKortMedFormOgMellomlagringProps {
   heading: string;
@@ -128,19 +128,11 @@ export const VilkårskortMedFormOgMellomlagring = ({
                   {visningModus === 'LÅST_UTEN_ENDRE' && null}
                 </HStack>
 
-                {/* Utkast-info */}
-                {!readOnly && mellomlagretVurdering && onDeleteMellomlagringClick && (
-                  <HStack align="baseline">
-                    <Detail>
-                      {`Utkast lagret ${formaterDatoMedTidspunktForFrontend(
-                        mellomlagretVurdering.vurdertDato
-                      )} (${mellomlagretVurdering.vurdertAv})`}
-                    </Detail>
-                    <Button type="button" size="small" variant="tertiary" onClick={onDeleteMellomlagringClick}>
-                      Slett utkast
-                    </Button>
-                  </HStack>
-                )}
+                <UtkastInfo
+                  mellomlagretVurdering={mellomlagretVurdering}
+                  readOnly={readOnly}
+                  onDeleteMellomlagringClick={onDeleteMellomlagringClick}
+                />
               </VStack>
 
               <VStack align="end">
