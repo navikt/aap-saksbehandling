@@ -22,6 +22,10 @@ export const MarkeringInfoboks = ({ markering, referanse, showLabel = false, siz
   const [isLoading, setIsLoading] = useState(false);
   const [visTag, setVisTag] = useState(true);
 
+  if (markering.hendelseType === 'FJERNET') {
+    return null;
+  }
+
   return (
     <>
       {visTag && (

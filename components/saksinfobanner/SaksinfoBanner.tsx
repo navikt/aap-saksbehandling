@@ -158,7 +158,6 @@ export const SaksinfoBanner = ({ sak, behandling, oppgave, flyt, visning }: Prop
               <MarkeringInfoboks markering={markering} referanse={behandling.referanse} showLabel={true} />
             </div>
           ))}
-
           <SaksmenyDropdown
             flyt={flyt}
             visning={visning}

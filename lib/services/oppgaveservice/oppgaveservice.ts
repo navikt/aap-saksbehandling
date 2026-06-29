@@ -162,8 +162,8 @@ export async function oppgaveTekstSøk(søketekst: string) {
   return await apiFetch<SøkResponse>(url, oppgaveApiScope, 'POST', { søketekst });
 }
 
-export const hentSisteAktiveMarkeringerForBehandling = async (referanse: string) => {
-  const url = `${oppgaveApiBaseURL}/${referanse}/hent-siste-aktive-markeringer-for-behandling`;
+export const hentGjeldendeMarkeringerForBehandling = async (referanse: string) => {
+  const url = `${oppgaveApiBaseURL}/${referanse}/hent-gjeldende-markeringer-for-behandling`;
   return await apiFetch<Markering[]>(url, oppgaveApiScope, 'GET', undefined);
 };
 
