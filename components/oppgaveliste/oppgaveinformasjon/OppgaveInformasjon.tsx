@@ -1,3 +1,5 @@
+'use client';
+
 import { PåVentInfoboks } from 'components/oppgaveliste/påventinfoboks/PåVentInfoboks';
 import { SvarFraBehandler } from 'components/oppgaveliste/svarfrabehandler/SvarFraBehandler';
 import { HStack } from '@navikt/ds-react';
@@ -7,6 +9,7 @@ import { AdressebeskyttelseInfoBoks } from 'components/oppgaveliste/adressebesky
 import { utledAdressebeskyttelse } from 'lib/utils/adressebeskyttelse';
 import { MarkeringInfoboks } from 'components/markeringinfoboks/MarkeringInfoboks';
 import { UtløptVentefristBoks } from 'components/oppgaveliste/utløptventefristboks/UtløptVentefristBoks';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   oppgave: Oppgave;
@@ -14,9 +17,10 @@ interface Props {
 
 export const OppgaveInformasjon = ({ oppgave }: Props) => {
   const adressebeskyttelser = utledAdressebeskyttelse(oppgave);
+  const ventStatusForTilbakekreving = useFeatureFlag('VentStatusForTilbakekreving');
   return (
     <HStack gap={'space-4'}>
-      {oppgave.påVentTil && (
+      {oppgave.påVentTil && (oppgave.behandlingstype !== 'TILBAKEKREVING' || ventStatusForTilbakekreving) && (
         <PåVentInfoboks frist={oppgave.påVentTil} årsak={oppgave.påVentÅrsak} begrunnelse={oppgave.venteBegrunnelse} />
       )}
       {oppgave.utløptVentefrist && (
