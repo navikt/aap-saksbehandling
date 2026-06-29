@@ -19,6 +19,14 @@ export const FastsettManuellInntektTabell = ({ tabellår, form, readOnly, låstV
     return formaterTilNok(total);
   };
 
+  const regnUtTotalForSplittÅr = (år: number): string => {
+    const alleRader = låstVisning ? tabellår : form.watch('tabellår');
+    const sum = alleRader
+      .filter((rad) => rad.år === år && rad.erDelperiode)
+      .reduce((acc, rad) => acc + Number(rad.beregnetPGI ?? 0) + Number(rad.eøsInntekt ?? 0), 0);
+    return sum > 0 ? formaterTilNok(sum) : '-';
+  };
+
   return (
     <VStack gap={'space-8'}>
       <Label size={'small'}>Hvilke år skal inntekt overstyres?</Label>
@@ -33,18 +41,23 @@ export const FastsettManuellInntektTabell = ({ tabellår, form, readOnly, låstV
           </Table.Row>
         </Table.Header>
         <Table.Body data-testid={'inntektstabell'}>
-          {tabellår.map((år, index) => {
-            const ferdigLignetPGI = låstVisning ? år.ferdigLignetPGI : form.watch(`tabellår.${index}.ferdigLignetPGI`);
-            const beregnetPGI = låstVisning ? år.beregnetPGI : form.watch(`tabellår.${index}.beregnetPGI`);
-            const eøsInntekt = låstVisning ? år.eøsInntekt : form.watch(`tabellår.${index}.eøsInntekt`);
+          {tabellår.map((tabellÅr, index) => {
+            const ferdigLignetPGI = låstVisning
+              ? tabellÅr.ferdigLignetPGI
+              : form.watch(`tabellår.${index}.ferdigLignetPGI`);
+            const beregnetPGI = låstVisning ? tabellÅr.beregnetPGI : form.watch(`tabellår.${index}.beregnetPGI`);
+            const eøsInntekt = låstVisning ? tabellÅr.eøsInntekt : form.watch(`tabellår.${index}.eøsInntekt`);
+            const redigerbar = !tabellÅr.erKunVisning;
             return (
-              <Table.Row key={år.år}>
-                <Table.DataCell textSize={'small'}>{år.år}</Table.DataCell>
+              <Table.Row key={tabellÅr.label ?? tabellÅr.år}>
+                <Table.DataCell textSize={'small'}>{tabellÅr.label ?? tabellÅr.år}</Table.DataCell>
                 <Table.DataCell textSize={'small'} data-testid={'ferdigLignetPGI'}>
-                  {år.ferdigLignetPGI ? formaterTilNok(år.ferdigLignetPGI) : '-'}
+                  {tabellÅr.ferdigLignetPGI ? formaterTilNok(tabellÅr.ferdigLignetPGI) : '-'}
                 </Table.DataCell>
                 <Table.DataCell textSize={'small'} data-testid={'beregnetPGI'}>
-                  {låstVisning ? (
+                  {!redigerbar ? (
+                    '-'
+                  ) : låstVisning ? (
                     beregnetPGI ? (
                       formaterTilNok(Number(beregnetPGI))
                     ) : (
@@ -57,12 +70,14 @@ export const FastsettManuellInntektTabell = ({ tabellår, form, readOnly, låstV
                       control={form.control}
                       type={'number'}
                       hideLabel={true}
-                      readOnly={år.ferdigLignetPGI !== undefined || readOnly}
+                      readOnly={tabellÅr.ferdigLignetPGI !== undefined || readOnly}
                     />
                   )}
                 </Table.DataCell>
                 <Table.DataCell textSize={'small'} data-testid={'eøsInntekt'}>
-                  {låstVisning ? (
+                  {!redigerbar ? (
+                    '-'
+                  ) : låstVisning ? (
                     eøsInntekt ? (
                       formaterTilNok(Number(eøsInntekt))
                     ) : (
@@ -80,7 +95,11 @@ export const FastsettManuellInntektTabell = ({ tabellår, form, readOnly, låstV
                   )}
                 </Table.DataCell>
                 <Table.DataCell data-testid={'totalt'} textSize={'small'}>
-                  {regnUtTotalbeløpPerÅr(ferdigLignetPGI ?? 0, Number(beregnetPGI ?? 0), Number(eøsInntekt ?? 0))}
+                  {tabellÅr.erKunVisning
+                    ? regnUtTotalForSplittÅr(tabellÅr.år)
+                    : tabellÅr.erDelperiode
+                      ? '-'
+                      : regnUtTotalbeløpPerÅr(ferdigLignetPGI ?? 0, Number(beregnetPGI ?? 0), Number(eøsInntekt ?? 0))}
                 </Table.DataCell>
               </Table.Row>
             );
