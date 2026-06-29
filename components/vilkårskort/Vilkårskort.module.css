@@ -27,3 +27,38 @@
   align-items: flex-end;
   gap: var(--ax-space-8);
 }
+
+.utkast {
+  position: relative;
+  overflow: hidden;
+}
+
+.utkast::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+
+  background: repeating-linear-gradient(
+    -45deg,
+    rgba(0, 0, 0, 0.06) 0px,
+    rgba(0, 0, 0, 0.06) 16px,
+    transparent 16px,
+    transparent 48px
+  );
+}
+
+.utkastOverlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+  pointer-events: none;
+  z-index: 10;
+  font-size: 4rem;
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.45);
+  white-space: nowrap;
+  user-select: none;
+}

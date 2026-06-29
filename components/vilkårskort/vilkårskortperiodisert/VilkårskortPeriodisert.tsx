@@ -1,5 +1,6 @@
 import { MellomlagretVurdering, StegType, VurderingerMeta } from 'lib/types/types';
 import styles from './VilkårskortPeriodisert.module.css';
+import vilkårskortStyles from 'components/vilkårskort/Vilkårskort.module.css';
 import { Button, Detail, Heading, HGrid, HStack, VStack } from '@navikt/ds-react';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { PlusIcon } from '@navikt/aksel-icons';
@@ -58,14 +59,21 @@ export const VilkårskortPeriodisert = ({
   const classNameBasertPåEnhet = vilkårTilhørerNavKontor ? styles.vilkårsKortNAV : styles.vilkårsKortNAY;
   const erAktivtSteg = visningModus === 'AKTIV_UTEN_AVBRYT' || visningModus === 'AKTIV_MED_AVBRYT';
   const readOnly = visningModus === 'LÅST_MED_ENDRE' || visningModus === 'LÅST_UTEN_ENDRE';
+  const skalViseUtkastLayouver = !!mellomlagretVurdering && readOnly;
 
   return (
     <VStack
       padding={'space-12'}
       gap={'space-4'}
-      aria-label={heading}
-      className={`${erAktivtSteg ? classNameBasertPåEnhet : styles.vilkårsKort}`}
+      role="region"
+      aria-label={skalViseUtkastLayouver ? `${heading} – Utkast` : heading}
+      className={`${skalViseUtkastLayouver ? vilkårskortStyles.utkast : ''} ${erAktivtSteg ? classNameBasertPåEnhet : styles.vilkårsKort}`}
     >
+      {skalViseUtkastLayouver && (
+        <div className={vilkårskortStyles.utkastOverlay} aria-hidden="true">
+          Utkast
+        </div>
+      )}
       <HGrid columns={'1fr'} paddingBlock={'space-4'}>
         <Heading level={'3'} size={'small'} data-testid="vilkår-heading">
           {heading}
