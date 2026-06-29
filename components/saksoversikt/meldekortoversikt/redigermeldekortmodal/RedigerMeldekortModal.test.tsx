@@ -8,8 +8,6 @@ import {
   Årsaker,
 } from 'components/saksoversikt/meldekortoversikt/redigermeldekortmodal/RedigerMeldekortModal';
 import { MeldeperiodeMedMeldekortDto } from 'lib/types/types';
-import { addDays } from 'date-fns';
-import { Dato } from 'lib/types/Dato';
 import { customRender } from 'lib/test/CustomRender';
 
 vi.mock('lib/clientApi', () => ({
@@ -66,42 +64,6 @@ const meldekortMedDager: MeldeperiodeMedMeldekortDto = {
   },
 };
 
-const meldekortMedNullTimer: MeldeperiodeMedMeldekortDto = {
-  meldepliktStatus: [],
-  tidligereMeldekort: [],
-  meldeperiode: {
-    fom: '2025-01-06',
-    tom: '2025-01-19',
-  },
-  meldefrist: '2025-01-21',
-  periode: {
-    fom: '2025-01-06',
-    tom: '2025-01-19',
-  },
-  meldekort: {
-    dager: [
-      { dato: '2025-01-06', timerArbeidet: 0 },
-      { dato: '2025-01-07', timerArbeidet: 0 },
-      { dato: '2025-01-08', timerArbeidet: 0 },
-      { dato: '2025-01-09', timerArbeidet: 0 },
-      { dato: '2025-01-10', timerArbeidet: 0 },
-      { dato: '2025-01-11', timerArbeidet: 0 },
-      { dato: '2025-01-12', timerArbeidet: 0 },
-      { dato: '2025-01-13', timerArbeidet: 0 },
-      { dato: '2025-01-14', timerArbeidet: 0 },
-      { dato: '2025-01-15', timerArbeidet: 0 },
-      { dato: '2025-01-16', timerArbeidet: 0 },
-      { dato: '2025-01-17', timerArbeidet: 0 },
-      { dato: '2025-01-18', timerArbeidet: 0 },
-      { dato: '2025-01-19', timerArbeidet: 0 },
-    ],
-    journalpostId: '',
-    oppdatertAvSaksbehandler: false,
-    mottattTidspunkt: '2025-01-20T12:00:00.000Z',
-    oppdatertTidspunkt: '2025-01-20T12:00:00.000Z',
-  },
-};
-
 describe('RedigerMeldekortModal', () => {
   const user = userEvent.setup();
 
@@ -123,11 +85,6 @@ describe('RedigerMeldekortModal', () => {
   it('viser årsak-nedtrekksliste', () => {
     customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
     expect(screen.getByRole('combobox', { name: /årsak/i })).toBeVisible();
-  });
-
-  it('inneholder "Registrere at bruker har meldt seg" som årsak-valg', () => {
-    customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
-    expect(screen.getByRole('option', { name: 'Registrere at bruker har meldt seg' })).toBeInTheDocument();
   });
 
   it('viser ikke "Meldedato" som label på datofelt – beskrivelse er fjernet', async () => {
@@ -158,14 +115,6 @@ describe('RedigerMeldekortModal', () => {
     expect(document.getElementById('rapporteringskalender')).toBeInTheDocument();
   });
 
-  it('viser kun meldedato ved årsak "Registrere at bruker har meldt seg"', async () => {
-    customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
-    await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Registrere at bruker har meldt seg');
-
-    expect(screen.getByLabelText('Dato brukeren meldte seg for Nav')).toBeVisible();
-    expect(document.getElementById('rapporteringskalender')).not.toBeInTheDocument();
-  });
-
   it('viser ikke meldedato eller timerkalender ved årsak "Overstyre bruker"', async () => {
     customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
     await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Overstyre bruker');
@@ -192,57 +141,6 @@ describe('RedigerMeldekortModal', () => {
   it('bruker eksisterende dager fra meldekort dersom de finnes', () => {
     customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekortMedDager} />);
     expect(screen.getByRole('heading', { name: 'Endre meldekort for uke 2 - 3' })).toBeVisible();
-  });
-
-  describe('Registrere at bruker har meldt seg', () => {
-    it('viser alert "Bruker har ikke levert noen timer" når meldekort mangler', async () => {
-      customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
-      await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Registrere at bruker har meldt seg');
-
-      expect(
-        screen.getByText(
-          'Bruker har ikke levert noen timer. Det vil ikke gå noen utbetaling før bruker registrerer timer i meldekortet.'
-        )
-      ).toBeVisible();
-      expect(document.getElementById('rapporteringskalender')).not.toBeInTheDocument();
-    });
-
-    it('viser alert "Bruker har ikke levert noen timer" når alle dager har 0 timer', async () => {
-      customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekortMedNullTimer} />);
-      await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Registrere at bruker har meldt seg');
-
-      expect(
-        screen.getByText(
-          'Bruker har ikke levert noen timer. Det vil ikke gå noen utbetaling før bruker registrerer timer i meldekortet.'
-        )
-      ).toBeVisible();
-      expect(document.getElementById('rapporteringskalender')).not.toBeInTheDocument();
-    });
-
-    it('viser ikke timerkalender selv om bruker har levert timer', async () => {
-      customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekortMedDager} />);
-      await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Registrere at bruker har meldt seg');
-
-      expect(document.getElementById('rapporteringskalender')).not.toBeInTheDocument();
-    });
-
-    it('viser ikke alert "Bruker har ikke levert noen timer" når bruker har levert timer', async () => {
-      customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekortMedDager} />);
-      await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Registrere at bruker har meldt seg');
-
-      expect(
-        screen.queryByText(
-          'Bruker har ikke levert noen timer. Det vil ikke gå noen utbetaling før bruker registrerer timer i meldekortet.'
-        )
-      ).not.toBeInTheDocument();
-    });
-
-    it('viser label "Dato brukeren meldte seg for Nav" på meldedato-feltet', async () => {
-      customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
-      await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Registrere at bruker har meldt seg');
-
-      expect(screen.getByLabelText('Dato brukeren meldte seg for Nav')).toBeVisible();
-    });
   });
 
   describe('Lever/endre meldekort for bruker', () => {
@@ -342,92 +240,6 @@ describe('RedigerMeldekortModal', () => {
       expect(screen.getByText('07.01.')).toBeVisible();
     });
   });
-
-  describe('Meldedato validering', () => {
-    const fyllUtOgSubmit = async (meldedato: string) => {
-      await user.type(screen.getByRole('textbox', { name: /begrunnelse/i }), 'Begrunnelse for endring');
-      await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Registrere at bruker har meldt seg');
-      await user.type(screen.getByLabelText('Dato brukeren meldte seg for Nav'), meldedato);
-      await user.click(screen.getByRole('button', { name: 'Bekreft' }));
-    };
-
-    it('viser feilmelding når meldedato er før meldeperiodens tom-dato', async () => {
-      customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
-      await fyllUtOgSubmit('18.01.2025');
-
-      expect(screen.getAllByText('Meldedato må være dagen etter meldeperiodens slutt eller senere.')[0]).toBeVisible();
-    });
-
-    it('viser feilmelding når meldedato er etter dagens dato', async () => {
-      customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
-      await fyllUtOgSubmit(new Dato(addDays(new Date(), 1)).formaterForFrontend());
-
-      expect(screen.getAllByText('Meldedato kan ikke være i fremtiden.')[0]).toBeVisible();
-    });
-  });
-
-  describe('Advarsel om meldedato etter meldefrist', () => {
-    const velgÅrsakOgFyllMeldedato = async (meldedato: string) => {
-      await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Registrere at bruker har meldt seg');
-      await user.type(screen.getByLabelText('Dato brukeren meldte seg for Nav'), meldedato);
-    };
-
-    it('viser advarsel når meldedato er etter meldefrist', async () => {
-      customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
-      await velgÅrsakOgFyllMeldedato('22.01.2025'); // etter meldefrist 2025-01-21
-
-      expect(
-        screen.getByText(
-          'Du skal kun legge inn faktisk dato brukeren har meldt seg. Hvis det skal vurderes om det er rimelig grunn til at brukeren ikke har meldt seg, så må du opprette revurdering på § 11-10 Overstyr perioder uten oppfylt meldeplikt.'
-        )
-      ).toBeVisible();
-    });
-
-    it('viser ikke advarsel når meldedato er på meldefrist', async () => {
-      customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
-      await velgÅrsakOgFyllMeldedato('21.01.2025'); // samme dag som meldefrist
-
-      expect(
-        screen.queryByText(
-          'Du skal kun legge inn faktisk dato brukeren har meldt seg. Hvis det skal vurderes om det er rimelig grunn til at brukeren ikke har meldt seg, så må du opprette revurdering på § 11-10 Overstyr perioder uten oppfylt meldeplikt.'
-        )
-      ).not.toBeInTheDocument();
-    });
-
-    it('viser ikke advarsel når meldedato er før meldefrist', async () => {
-      customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
-      await velgÅrsakOgFyllMeldedato('20.01.2025'); // før meldefrist 2025-01-21
-
-      expect(
-        screen.queryByText(
-          'Du skal kun legge inn faktisk dato brukeren har meldt seg. Hvis det skal vurderes om det er rimelig grunn til at brukeren ikke har meldt seg, så må du opprette revurdering på § 11-10 Overstyr perioder uten oppfylt meldeplikt.'
-        )
-      ).not.toBeInTheDocument();
-    });
-
-    it('viser ikke advarsel ved årsak "Lever/endre meldekort for bruker" selv om meldedato er etter meldefrist', async () => {
-      customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
-      await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Lever/endre meldekort for bruker');
-      await user.type(screen.getByLabelText('Dato brukeren meldte opplysningene'), '22.01.2025');
-
-      expect(
-        screen.queryByText(
-          'Du skal kun legge inn faktisk dato brukeren har meldt seg. Hvis det skal vurderes om det er rimelig grunn til at brukeren ikke har meldt seg, så må du opprette revurdering på § 11-10 Overstyr perioder uten oppfylt meldeplikt.'
-        )
-      ).not.toBeInTheDocument();
-    });
-
-    it('viser ikke advarsel når meldedato ikke er fylt inn', async () => {
-      customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
-      await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Registrere at bruker har meldt seg');
-
-      expect(
-        screen.queryByText(
-          'Du skal kun legge inn faktisk dato brukeren har meldt seg. Hvis det skal vurderes om det er rimelig grunn til at brukeren ikke har meldt seg, så må du opprette revurdering på § 11-10 Overstyr perioder uten oppfylt meldeplikt.'
-        )
-      ).not.toBeInTheDocument();
-    });
-  });
 });
 
 const meldeperiode: MeldeperiodeMedMeldekortDto['meldeperiode'] = {
@@ -493,18 +305,5 @@ describe('mapFormDataTilOppdaterMeldekortRequest', () => {
     );
     expect(result.dager).toHaveLength(2);
     expect(result.dager[0]).toEqual({ dato: '2025-01-06', timerArbeidet: 7.5 });
-  });
-
-  it('returnerer tom dager-liste ved årsak "Registrere meldedato"', () => {
-    const result = mapFormDataTilOppdaterMeldekortRequest(
-      {
-        begrunnelse: '',
-        årsak: Årsaker.REGISTRERE_MELDEDATO,
-        meldedato: '20.01.2025',
-        dager: [{ dato: '2025-01-06', timerArbeidet: '7.5' }],
-      },
-      meldeperiode
-    );
-    expect(result.dager).toEqual([]);
   });
 });
