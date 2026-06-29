@@ -50,7 +50,7 @@ export enum Årsaker {
   OVERSTYRE_BRUKER = 'Overstyre bruker',
 }
 
-const årsakOptions = ['', ...Object.values(Årsaker)];
+const årsakOptions = ['', Årsaker.LEVERE_MELDEKORT_FOR_BRUKER, Årsaker.OVERSTYRE_BRUKER];
 
 export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) => {
   const { saksnummer } = useParamsMedType();

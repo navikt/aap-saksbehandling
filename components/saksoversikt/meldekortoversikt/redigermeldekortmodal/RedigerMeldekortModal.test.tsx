@@ -125,7 +125,8 @@ describe('RedigerMeldekortModal', () => {
     expect(screen.getByRole('combobox', { name: /årsak/i })).toBeVisible();
   });
 
-  it('inneholder "Registrere at bruker har meldt seg" som årsak-valg', () => {
+  // TODO Ta inn denne igjen når valget er tilbake
+  it.skip('inneholder "Registrere at bruker har meldt seg" som årsak-valg', () => {
     customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
     expect(screen.getByRole('option', { name: 'Registrere at bruker har meldt seg' })).toBeInTheDocument();
   });
@@ -158,7 +159,8 @@ describe('RedigerMeldekortModal', () => {
     expect(document.getElementById('rapporteringskalender')).toBeInTheDocument();
   });
 
-  it('viser kun meldedato ved årsak "Registrere at bruker har meldt seg"', async () => {
+  // TODO Ta inn denne igjen når valget er tilbake
+  it.skip('viser kun meldedato ved årsak "Registrere at bruker har meldt seg"', async () => {
     customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
     await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Registrere at bruker har meldt seg');
 
@@ -194,7 +196,8 @@ describe('RedigerMeldekortModal', () => {
     expect(screen.getByRole('heading', { name: 'Endre meldekort for uke 2 - 3' })).toBeVisible();
   });
 
-  describe('Registrere at bruker har meldt seg', () => {
+  // TODO Ta inn denne igjen når valget er tilbake
+  describe.skip('Registrere at bruker har meldt seg', () => {
     it('viser alert "Bruker har ikke levert noen timer" når meldekort mangler', async () => {
       customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
       await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Registrere at bruker har meldt seg');
@@ -343,7 +346,8 @@ describe('RedigerMeldekortModal', () => {
     });
   });
 
-  describe('Meldedato validering', () => {
+  // TODO Ta inn denne igjen når valget er tilbake
+  describe.skip('Meldedato validering', () => {
     const fyllUtOgSubmit = async (meldedato: string) => {
       await user.type(screen.getByRole('textbox', { name: /begrunnelse/i }), 'Begrunnelse for endring');
       await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Registrere at bruker har meldt seg');
@@ -366,7 +370,8 @@ describe('RedigerMeldekortModal', () => {
     });
   });
 
-  describe('Advarsel om meldedato etter meldefrist', () => {
+  // TODO Ta inn denne igjen når valget er tilbake
+  describe.skip('Advarsel om meldedato etter meldefrist', () => {
     const velgÅrsakOgFyllMeldedato = async (meldedato: string) => {
       await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Registrere at bruker har meldt seg');
       await user.type(screen.getByLabelText('Dato brukeren meldte seg for Nav'), meldedato);
@@ -417,7 +422,8 @@ describe('RedigerMeldekortModal', () => {
       ).not.toBeInTheDocument();
     });
 
-    it('viser ikke advarsel når meldedato ikke er fylt inn', async () => {
+    // TODO Ta inn denne igjen når valget er tilbake
+    it.skip('viser ikke advarsel når meldedato ikke er fylt inn', async () => {
       customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
       await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Registrere at bruker har meldt seg');
 
