@@ -6,6 +6,7 @@ import { BodyShort, Detail, HStack, Label, VStack } from '@navikt/ds-react';
 
 import styles from 'components/saksoversikt/meldekortoversikt/meldekorttabell/meldekortexpandablecontent/MeldekortExpandableContent.module.css';
 import { MeldeperiodeMedMeldekortDto } from 'lib/types/types';
+import { replaceDotsWithCommas } from 'components/saksoversikt/meldekortoversikt/redigermeldekortmodal/RedigerMeldekortModal';
 
 interface Props {
   meldekort: MeldeperiodeMedMeldekortDto;
@@ -45,7 +46,9 @@ export const MeldekortExpandableContent = ({ meldekort }: Props) => {
               return (
                 <VStack key={index} className={containerClassNames} gap={'space-8'} align={'start'}>
                   <Detail>{dato}</Detail>
-                  <BodyShort size={'small'}>{dag.timerArbeidet ? dag.timerArbeidet : '-'}</BodyShort>
+                  <BodyShort size={'small'}>
+                    {dag.timerArbeidet ? replaceDotsWithCommas(dag.timerArbeidet.toString()) : '-'}
+                  </BodyShort>
                 </VStack>
               );
             })}

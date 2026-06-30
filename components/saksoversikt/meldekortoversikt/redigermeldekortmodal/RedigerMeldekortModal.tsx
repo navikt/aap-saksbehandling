@@ -372,3 +372,7 @@ export function mapFormDataTilOppdaterMeldekortRequest(
 export function replaceCommasWithDots(input: string): string {
   return input.replace(/,/g, '.');
 }
+
+export function replaceDotsWithCommas(input: string): string {
+  return input.replace(/\./g, ',');
+}

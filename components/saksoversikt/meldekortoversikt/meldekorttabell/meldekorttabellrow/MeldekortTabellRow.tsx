@@ -8,6 +8,7 @@ import { hentUkeNummerForPeriode } from '../MeldekortTabell';
 import { PencilIcon } from '@navikt/aksel-icons';
 import { useSakPersonInformasjon } from 'hooks/saksbehandling/SakPersoninformasjonHook';
 import { storForbokstavIHvertOrd } from 'lib/utils/string';
+import { replaceDotsWithCommas } from 'components/saksoversikt/meldekortoversikt/redigermeldekortmodal/RedigerMeldekortModal';
 
 interface Props {
   meldePeriodeMedMeldekort: MeldeperiodeMedMeldekortDto;
@@ -85,7 +86,8 @@ export function utledOppdatertAv(meldekort: MeldeperiodeMedMeldekortDto['meldeko
 }
 
 function hentTotaltAntallTimerArbeidet(dager?: DagDto[]) {
-  return dager?.reduce((acc, curr) => acc + (curr.timerArbeidet ? curr.timerArbeidet : 0), 0);
+  const antallTimer = dager?.reduce((acc, curr) => acc + (curr.timerArbeidet ? curr.timerArbeidet : 0), 0);
+  return antallTimer !== undefined ? replaceDotsWithCommas(antallTimer.toString()) : undefined;
 }
 
 function meldepliktStatusTilString(meldepliktStatuser: MeldepliktStatuser) {
