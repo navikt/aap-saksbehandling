@@ -7,6 +7,7 @@ import { BodyShort, Detail, HStack, Label, VStack } from '@navikt/ds-react';
 import styles from 'components/saksoversikt/meldekortoversikt/meldekorttabell/meldekortexpandablecontent/MeldekortExpandableContent.module.css';
 import { MeldeperiodeMedMeldekortDto } from 'lib/types/types';
 import { replaceDotsWithCommas } from 'components/saksoversikt/meldekortoversikt/redigermeldekortmodal/RedigerMeldekortModal';
+import { TidligereMeldekortVersjoner } from 'components/saksoversikt/meldekortoversikt/tidligeremeldekortversjoner/TidligereMeldekortVersjoner';
 
 interface Props {
   meldekort: MeldeperiodeMedMeldekortDto;
@@ -30,7 +31,7 @@ export const MeldekortExpandableContent = ({ meldekort }: Props) => {
   const begrunnelse = meldekort.meldekort?.begrunnelse;
 
   return (
-    <HStack gap={'space-8'} align={'baseline'}>
+    <VStack gap={'space-12'} align={'baseline'}>
       <div>
         {uker.map((uke, ukeIndex) => (
           <HStack key={ukeIndex}>
@@ -57,12 +58,14 @@ export const MeldekortExpandableContent = ({ meldekort }: Props) => {
       </div>
 
       {begrunnelse && (
-        <VStack>
+        <VStack gap={'space-2'}>
           <Label size="small">Begrunnelse</Label>
           <BodyShort size="small">{begrunnelse}</BodyShort>
         </VStack>
       )}
-    </HStack>
+
+      <TidligereMeldekortVersjoner meldekort={meldekort} />
+    </VStack>
   );
 };
 
