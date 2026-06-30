@@ -5,7 +5,7 @@ import styles from 'components/settbehandlingpåventmodal/SettBehandlingPåVentM
 import { Button, Modal, VStack } from '@navikt/ds-react';
 
 import { revalidateBehandlingPath } from 'lib/actions/actions';
-import { clientSettMarkeringForBehandling } from 'lib/clientApi';
+import { clientOpprettMarkeringHendelse, MarkeringHendelseType } from 'lib/clientApi';
 import { MarkeringType } from 'lib/types/oppgaveTypes';
 import { NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType } from '@navikt/aap-oppgave-typescript-types';
 import { FormField } from 'components/form/FormField';
@@ -71,13 +71,13 @@ export const SettMarkeringForBehandlingModal = ({ referanse, type, isOpen, onClo
               onSubmit={form.handleSubmit(async (data) => {
                 setIsLoading(true);
 
-                const res = await clientSettMarkeringForBehandling(referanse, {
+                const res = await clientOpprettMarkeringHendelse(referanse, {
                   begrunnelse:
                     markeringsType === NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.HASTER
                       ? data.hasteBegrunnelse
                       : data.begrunnelse,
                   markeringType: markeringsType,
-                  opprettetTidspunkt: new Date().toISOString(),
+                  hendelseType: MarkeringHendelseType.OPPRETTET,
                 });
 
                 if (isSuccess(res)) {
