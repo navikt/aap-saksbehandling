@@ -90,6 +90,7 @@ export async function hentEnheter() {
     tags: [await genererTagMedNavIdent('enheter')],
   });
 }
+
 export async function synkroniserEnhetPåOppgave(data: EnhetSynkroniseringOppgave) {
   const url = `${oppgaveApiBaseURL}/synkroniser-enhet-paa-oppgave`;
   return await apiFetch<void>(url, oppgaveApiScope, 'POST', { oppgaveId: data.oppgaveId });

@@ -8,43 +8,33 @@ import {
   NoNavAapOppgaveOppgaveDtoStatus,
 } from '@navikt/aap-oppgave-typescript-types';
 
+const baseOppgave: Oppgave = {
+  behandlingRef: 'dgklasdf',
+  vurderingsbehov: [],
+  avklaringsbehovKode: '',
+  behandlingOpprettet: '2025-02-09',
+  behandlingstype: NoNavAapOppgaveOppgaveDtoBehandlingstype.F_RSTEGANGSBEHANDLING,
+  enhet: '',
+  opprettetAv: '',
+  opprettetTidspunkt: '2025-02-09',
+  status: NoNavAapOppgaveOppgaveDtoStatus.OPPRETTET,
+  versjon: 0,
+  årsakerTilBehandling: [],
+  markeringer: [],
+  reservertAv: 'ident',
+  reservertAvNavn: 'Test Testesen',
+  enhetForKø: '4491',
+  erPåVent: false,
+  erÅpen: true,
+};
+
 const oppgaver: Oppgave[] = [
+  baseOppgave,
   {
-    behandlingRef: 'dgklasdf',
-    vurderingsbehov: [],
-    avklaringsbehovKode: '',
-    behandlingOpprettet: '2025-02-09',
-    behandlingstype: NoNavAapOppgaveOppgaveDtoBehandlingstype.F_RSTEGANGSBEHANDLING,
-    enhet: '',
-    opprettetAv: '',
-    opprettetTidspunkt: '2025-02-09',
-    status: NoNavAapOppgaveOppgaveDtoStatus.OPPRETTET,
-    versjon: 0,
-    årsakerTilBehandling: [],
-    markeringer: [],
-    reservertAv: 'ident',
-    reservertAvNavn: 'Test Testesen',
-    enhetForKø: '4491',
-    erPåVent: false,
-    erÅpen: true,
-  },
-  {
+    ...baseOppgave,
     behandlingRef: 'sdfgaf',
-    vurderingsbehov: [],
-    avklaringsbehovKode: '',
-    behandlingOpprettet: '2025-02-09',
-    behandlingstype: NoNavAapOppgaveOppgaveDtoBehandlingstype.F_RSTEGANGSBEHANDLING,
-    enhet: '',
-    opprettetAv: '',
-    opprettetTidspunkt: '2025-02-09',
-    status: NoNavAapOppgaveOppgaveDtoStatus.OPPRETTET,
-    versjon: 0,
-    årsakerTilBehandling: [],
-    markeringer: [],
     reservertAv: 'ident2',
-    enhetForKø: '4491',
-    erPåVent: false,
-    erÅpen: true,
+    reservertAvNavn: undefined,
   },
 ];
 
@@ -90,4 +80,33 @@ describe('AlleOppgaverTabell', () => {
     const saksbehandlernavn = screen.queryByText('Test Testesen');
     expect(saksbehandlernavn).not.toBeInTheDocument();
   });
+
+  it('skal vise PÅ_VENT-indikator for tilbakekrevingsbehandling som er på vent', async () => {
+    const tilbakekrevingPåVent: Oppgave = {
+      ...baseOppgave,
+      behandlingRef: 'tilbakekreving-behandling',
+      behandlingstype: NoNavAapOppgaveOppgaveDtoBehandlingstype.TILBAKEKREVING,
+      påVentTil: '2025-12-31',
+      påVentÅrsak: 'AVVENTER_BRUKERUTTALELSE',
+      erPåVent: true,
+    };
+
+    customRenderWithTildelOppgaveContext(
+      <AlleOppgaverTabell
+        oppgaver={[tilbakekrevingPåVent]}
+        revalidateFunction={vi.fn()}
+        setValgteRader={vi.fn()}
+        valgteRader={[]}
+        setSortBy={() => {}}
+        sort={undefined}
+        aktivKø={undefined}
+        visBeløpKolonne={false}
+      />,
+      false
+    );
+
+    const påVentKnapp = screen.getByTitle('Oppgave på vent').closest('button');
+    expect(påVentKnapp).toBeInTheDocument();
+  });
 });
+
