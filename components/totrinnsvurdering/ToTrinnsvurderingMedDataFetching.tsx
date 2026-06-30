@@ -8,7 +8,7 @@ import { ToTrinnsvurdering } from 'components/totrinnsvurdering/ToTrinnsvurderin
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { Behovstype } from 'lib/utils/form';
-import { hentMarkeringer } from 'lib/services/oppgaveservice/oppgaveservice';
+import { hentGjeldendeMarkeringerForBehandling } from 'lib/services/oppgaveservice/oppgaveservice';
 import { MarkeringHaster } from 'lib/types/oppgaveTypes';
 
 interface Props {
@@ -20,7 +20,7 @@ export const ToTrinnsvurderingMedDataFetching = async ({ behandlingsreferanse }:
     hentFatteVedtakGrunnlang(behandlingsreferanse),
     hentKvalitetssikringGrunnlag(behandlingsreferanse),
     hentFlyt(behandlingsreferanse),
-    hentMarkeringer(behandlingsreferanse),
+    hentGjeldendeMarkeringerForBehandling(behandlingsreferanse),
   ]);
 
   if (isError(fatteVedtakGrunnlag) || isError(kvalitetssikringGrunnlag) || isError(flyt) || isError(markeringer)) {

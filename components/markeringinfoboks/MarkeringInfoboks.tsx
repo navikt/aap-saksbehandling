@@ -1,15 +1,16 @@
 import React, { useRef, useState } from 'react';
 import { BodyShort, Button, Detail, HStack, Popover, Tag, VStack } from '@navikt/ds-react';
 import styles from './MarkeringInfoBoks.module.css';
-import { clientFjernMarkeringForBehandling } from 'lib/clientApi';
-import { Markering, MarkeringType } from 'lib/types/oppgaveTypes';
+import { clientOpprettMarkeringHendelse, MarkeringHendelseType } from 'lib/clientApi';
+import { MarkeringType } from 'lib/types/oppgaveTypes';
 import { BookIcon, ExclamationmarkTriangleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType } from '@navikt/aap-oppgave-typescript-types';
 import { isSuccess } from 'lib/utils/api';
 import { formaterDatoForFrontend } from 'lib/utils/date';
+import { MarkeringDto } from 'lib/types/types';
 
 interface Props {
-  markering: Markering;
+  markering: MarkeringDto;
   referanse?: string | null;
   showLabel?: boolean;
   size?: 'small' | 'xsmall';
@@ -20,6 +21,10 @@ export const MarkeringInfoboks = ({ markering, referanse, showLabel = false, siz
   const [visInfo, setVisInfo] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [visTag, setVisTag] = useState(true);
+
+  if (markering.hendelseType === 'FJERNET') {
+    return null;
+  }
 
   return (
     <>
@@ -77,7 +82,10 @@ export const MarkeringInfoboks = ({ markering, referanse, showLabel = false, siz
                     loading={isLoading}
                     onClick={async () => {
                       setIsLoading(true);
-                      const res = await clientFjernMarkeringForBehandling(referanse, markering);
+                      const res = await clientOpprettMarkeringHendelse(referanse, {
+                        markeringType: markering.markeringType,
+                        hendelseType: MarkeringHendelseType.FJERNET,
+                      });
                       if (isSuccess(res)) {
                         setVisInfo(false);
                         setVisTag(false);

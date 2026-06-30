@@ -1,6 +1,6 @@
 'use client';
 
-import { SettPåVentÅrsaker } from 'lib/types/types';
+import { SettPåVentÅrsaker, TilbakekrevingVenteÅrsaker } from 'lib/types/types';
 import { BodyShort, Button, Detail, Popover, Tag, VStack } from '@navikt/ds-react';
 import { mapTilVenteÅrsakTekst } from 'lib/utils/oversettelser';
 import { useRef, useState } from 'react';
@@ -17,11 +17,6 @@ interface Props {
 export const PåVentInfoboks = ({ frist, årsak, begrunnelse }: Props) => {
   const buttonRef = useRef(null);
   const [vis, setVis] = useState(false);
-
-  const forskjellIMillisekunder = new Date(frist).getTime() - new Date().getTime();
-
-  const forskjellIDager = (forskjellIMillisekunder / (1000 * 60 * 60 * 24)).toFixed(0);
-  const dagTekst = forskjellIDager == '1' ? 'dag' : 'dager';
 
   return (
     <>
@@ -55,15 +50,12 @@ export const PåVentInfoboks = ({ frist, årsak, begrunnelse }: Props) => {
           </Tag>
           <VStack>
             <Detail textColor="subtle">Frist</Detail>
-            <div>
-              {formaterDatoForFrontend(frist)} ({forskjellIDager} {dagTekst} igjen)
-            </div>
+            <div>{formaterDatoForFrontend(frist)}</div>
           </VStack>
           {årsak ? (
             <VStack>
               <Detail textColor="subtle">Årsak</Detail>
-
-              <div>{mapTilVenteÅrsakTekst(årsak as SettPåVentÅrsaker)}</div>
+              <div>{mapTilVenteÅrsakTekst(årsak as SettPåVentÅrsaker | TilbakekrevingVenteÅrsaker)}</div>
             </VStack>
           ) : undefined}
           {begrunnelse ? (

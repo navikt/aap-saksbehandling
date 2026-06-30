@@ -15,6 +15,7 @@ describe('Manglende pensjonsgivende inntekt / EØS-beregnet inntekt', () => {
     manglerInntektForÅr: [2022, 2024],
     sisteRelevanteÅr: 2024,
     alleRelevanteÅr: [2022, 2023, 2024],
+    manglendeMånedsInntekter: [],
     harTilgangTilÅSaksbehandle: true,
     manuelleVurderinger: {
       årsVurderinger: [{ år: 2022 }, { år: 2023, beløp: 200000, eøsBeløp: 50000 }, { år: 2024, eøsBeløp: 300000 }],
@@ -36,6 +37,7 @@ describe('Manglende pensjonsgivende inntekt / EØS-beregnet inntekt', () => {
     sisteRelevanteÅr: 2024,
     manglerInntektForÅr: [2024, 2023, 2021],
     alleRelevanteÅr: [2022, 2024],
+    manglendeMånedsInntekter: [],
     harTilgangTilÅSaksbehandle: true,
     manuelleVurderinger: {
       årsVurderinger: [{ år: 2022 }, { år: 2023, beløp: 200000 }, { år: 2024 }],
@@ -140,6 +142,94 @@ describe('Manglende pensjonsgivende inntekt / EØS-beregnet inntekt', () => {
   });
 
   // TODO skriv tester for historiske vurderinger
+
+  describe('Endring i uføregrad (delperioder)', () => {
+    const grunnlagMedDelperioder: ManuellInntektGrunnlag = {
+      sisteRelevanteÅr: 2024,
+      alleRelevanteÅr: [2022, 2023, 2024],
+      manglerInntektForÅr: [2022],
+      harTilgangTilÅSaksbehandle: true,
+      registrerteInntekterSisteRelevanteAr: [
+        { år: 2022, beløp: 640500 },
+        { år: 2023, beløp: 500000 },
+        { år: 2024, beløp: 300000 },
+      ],
+      manglendeMånedsInntekter: [
+        { periode: { fom: '2022-01-01', tom: '2022-02-28' }, uføregrad: 0 },
+        { periode: { fom: '2022-03-01', tom: '2022-12-31' }, uføregrad: 50 },
+      ],
+    };
+
+    beforeEach(() => {
+      render(
+        <FastsettManuellInntekt
+          behandlingsversjon={1}
+          grunnlag={grunnlagMedDelperioder}
+          readOnly={false}
+          behandlingErRevurdering={false}
+        />
+      );
+    });
+
+    it('skal vise advarsel om endring i uføregrad med segmentene', () => {
+      expect(screen.getByText(/Brukeren har hatt endring i uføregrad i løpet av 2022/)).toBeVisible();
+      expect(screen.getByText('01.01.2022 - 0%')).toBeVisible();
+      expect(screen.getByText('01.03.2022 - 50%')).toBeVisible();
+    });
+
+    it('skal vise informasjonsrad for split-året og én rad per delperiode', () => {
+      const tabell = screen.getByTestId('inntektstabell');
+      const rader = within(tabell).getAllByRole('row');
+      const etiketter = rader.map((rad) => within(rad).getAllByRole('cell')[0].textContent);
+      expect(etiketter).toEqual(['2022', '2022 jan.-feb.', '2022 mars-des.', '2023', '2024']);
+    });
+
+    it('split-årets informasjonsrad har ingen input, mens delperiode-radene er redigerbare', () => {
+      const tabell = screen.getByTestId('inntektstabell');
+      const rader = within(tabell).getAllByRole('row');
+
+      // Rad 0 = 2022 (informasjonsrad): ingen input for beregnet PGI
+      expect(within(rader[0]).getByTestId('beregnetPGI').querySelector('input')).toBeNull();
+      // Rad 1 = 2022 jan-feb (delperiode): har input
+      expect(within(rader[1]).getByTestId('beregnetPGI').querySelector('input')).not.toBeNull();
+      expect(within(rader[2]).getByTestId('beregnetPGI').querySelector('input')).not.toBeNull();
+    });
+
+    it('skal vise avviksadvarsel når sum av beregnet PGI avviker fra ferdig lignet PGI', async () => {
+      const tabell = screen.getByTestId('inntektstabell');
+      const rader = within(tabell).getAllByRole('row');
+
+      const janFeb = within(rader[1]).getByTestId('beregnetPGI').querySelector('input')!;
+      const marDes = within(rader[2]).getByTestId('beregnetPGI').querySelector('input')!;
+
+      const advarselTekst =
+        'Beregnet pensjonsgivende inntekt avviker fra ferdig lignet pensjonsgivende inntekt. Er du sikker på at beregnet inntekt er riktig?';
+
+      expect(screen.queryByText(advarselTekst)).not.toBeInTheDocument();
+
+      await user.type(janFeb, '100000');
+      await user.type(marDes, '500000');
+
+      expect(screen.getByText(advarselTekst)).toBeVisible();
+    });
+
+    it('skal ikke vise avviksadvarsel når sum av beregnet PGI er lik ferdig lignet PGI', async () => {
+      const tabell = screen.getByTestId('inntektstabell');
+      const rader = within(tabell).getAllByRole('row');
+
+      const janFeb = within(rader[1]).getByTestId('beregnetPGI').querySelector('input')!;
+      const marDes = within(rader[2]).getByTestId('beregnetPGI').querySelector('input')!;
+
+      await user.type(janFeb, '140500');
+      await user.type(marDes, '500000');
+
+      expect(
+        screen.queryByText(
+          'Beregnet pensjonsgivende inntekt avviker fra ferdig lignet pensjonsgivende inntekt. Er du sikker på at beregnet inntekt er riktig?'
+        )
+      ).not.toBeInTheDocument();
+    });
+  });
 
   describe('Mellomlagring', () => {
     const fetchMock = createFetchMock(vi);

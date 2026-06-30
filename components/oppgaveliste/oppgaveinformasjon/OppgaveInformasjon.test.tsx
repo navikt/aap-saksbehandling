@@ -6,10 +6,15 @@ import {
   NoNavAapOppgaveReturInformasjonRsaker,
   NoNavAapOppgaveReturInformasjonStatus,
 } from '@navikt/aap-oppgave-typescript-types';
-import { addDays } from 'date-fns';
+import { addDays, format } from 'date-fns';
 import { render, screen } from '@testing-library/react';
 import { OppgaveInformasjon } from 'components/oppgaveliste/oppgaveinformasjon/OppgaveInformasjon';
 import userEvent from '@testing-library/user-event';
+import { FeatureFlagProvider } from 'context/UnleashContext';
+import { mockedFlags } from 'lib/services/unleash/unleashToggles';
+
+const renderWithFlags = (ui: React.ReactElement) =>
+  render(<FeatureFlagProvider flags={mockedFlags}>{ui}</FeatureFlagProvider>);
 
 const oppgave: Oppgave = {
   behandlingRef: 'dsfadf',
@@ -33,19 +38,19 @@ const user = userEvent.setup();
 
 describe('OppgaveInformasjon', () => {
   it('Skal vise på vent ikon dersom oppgave er på vent', () => {
-    render(
+    renderWithFlags(
       <OppgaveInformasjon oppgave={{ ...oppgave, påVentTil: addDays(new Date(), 1).toDateString(), erPåVent: true }} />
     );
     expect(screen.getByRole('img', { name: 'Oppgave på vent' })).toBeVisible();
   });
 
   it('Skal vise ikon for mottat svar fra behandler dersom oppgave er markert med harUlesteDokumenter', () => {
-    render(<OppgaveInformasjon oppgave={{ ...oppgave, harUlesteDokumenter: true }} />);
+    renderWithFlags(<OppgaveInformasjon oppgave={{ ...oppgave, harUlesteDokumenter: true }} />);
     expect(screen.getByRole('img', { name: 'Mottatt svar fra behandler' })).toBeVisible();
   });
 
   it('Skal vise både på vent ikon og mottat svar fra behandler ikon dersom saken er på vent og mottat svar', () => {
-    render(
+    renderWithFlags(
       <OppgaveInformasjon
         oppgave={{
           ...oppgave,
@@ -59,7 +64,7 @@ describe('OppgaveInformasjon', () => {
   });
 
   it('skal vise ikon for returinformasjon om oppgaven er returnert', () => {
-    render(
+    renderWithFlags(
       <OppgaveInformasjon
         oppgave={{
           ...oppgave,
@@ -83,7 +88,7 @@ describe('OppgaveInformasjon', () => {
   });
 
   it('skal vise hvem som gjorde forrige kvalitetssikring hvis retur fra veileder', () => {
-    render(
+    renderWithFlags(
       <OppgaveInformasjon
         oppgave={{
           ...oppgave,
@@ -111,32 +116,42 @@ describe('OppgaveInformasjon', () => {
   });
 
   it('skal vise ikon for adressebeskyttelse hvis brukeren er kode 7', () => {
-    render(<OppgaveInformasjon oppgave={{ ...oppgave, harFortroligAdresse: true }} />);
+    renderWithFlags(<OppgaveInformasjon oppgave={{ ...oppgave, harFortroligAdresse: true }} />);
     expect(screen.getByRole('img', { name: 'Adressebeskyttelse Ikon' })).toBeVisible();
   });
 
   it('skal ikke vise ikon for adressebeskyttelse hvis bruker ikke er kode 7', () => {
-    render(<OppgaveInformasjon oppgave={{ ...oppgave, harFortroligAdresse: false }} />);
+    renderWithFlags(<OppgaveInformasjon oppgave={{ ...oppgave, harFortroligAdresse: false }} />);
     expect(screen.queryByRole('img', { name: 'Adressebeskyttelse Ikon' })).not.toBeInTheDocument();
   });
 
   it('skal vise egen ansatt-ikon når oppgave ligger på egen ansatt-enhet', () => {
-    render(<OppgaveInformasjon oppgave={{ ...oppgave, enhet: '4483' }} />);
+    renderWithFlags(<OppgaveInformasjon oppgave={{ ...oppgave, enhet: '4483' }} />);
     expect(screen.getByRole('img', { name: 'Adressebeskyttelse Ikon' })).toBeVisible();
   });
 
   it('skal ikke vise egen ansatt-ikon når bruker ikke er egen ansatt', () => {
-    render(<OppgaveInformasjon oppgave={{ ...oppgave, enhet: '1783' }} />);
+    renderWithFlags(<OppgaveInformasjon oppgave={{ ...oppgave, enhet: '1783' }} />);
     expect(screen.queryByRole('img', { name: 'Adressebeskyttelse Ikon' })).not.toBeInTheDocument();
   });
 
   it('skal vise ventefrist utløpt-ikon om ventefrist er utløpt', () => {
-    render(<OppgaveInformasjon oppgave={{ ...oppgave, utløptVentefrist: '2026-01-04' }} />);
+    renderWithFlags(<OppgaveInformasjon oppgave={{ ...oppgave, utløptVentefrist: '2026-01-04' }} />);
     expect(screen.getByRole('img', { name: 'Ventefrist utløpt' })).toBeVisible();
   });
 
   it('skal ikke vise ventefrist utløpt-ikon når oppgave ikke har ventefrist', () => {
-    render(<OppgaveInformasjon oppgave={oppgave} />);
+    renderWithFlags(<OppgaveInformasjon oppgave={oppgave} />);
     expect(screen.queryByRole('img', { name: 'Ventefrist utløpt' })).not.toBeInTheDocument();
+  });
+
+  it('skal vise ventefrist utløpt-ikon dersom påVentTil er passert dagens dato', () => {
+    renderWithFlags(
+      <OppgaveInformasjon
+        oppgave={{ ...oppgave, utløptVentefrist: format(addDays(new Date(), -1), 'yyyy-MM-dd') }}
+      />
+    );
+    expect(screen.getByRole('img', { name: 'Ventefrist utløpt' })).toBeVisible();
+    expect(screen.queryByRole('img', { name: 'Oppgave på vent' })).not.toBeInTheDocument();
   });
 });

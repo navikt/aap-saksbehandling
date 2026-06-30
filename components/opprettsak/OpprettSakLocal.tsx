@@ -298,6 +298,7 @@ export const OpprettSakLocal = () => {
       }),
       student: data.student === JaEllerNei.Ja,
       uføre: Number(data.uføre),
+      uføreHistorikk: [],
       barn:
         data.barn?.map((barn) => ({
           fodselsdato: formaterDatoForBackend(new Date(barn.fodselsdato)),

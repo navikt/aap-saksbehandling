@@ -397,6 +397,9 @@ export type UføreInntekt = components['schemas']['no.nav.aap.behandlingsflyt.be
 export type SettPåVent = components['schemas']['no.nav.aap.behandlingsflyt.flyt.SettPåVentRequest'];
 export type SettPåVentÅrsaker = components['schemas']['no.nav.aap.behandlingsflyt.flyt.SettPåVentRequest']['grunn'];
 
+export type TilbakekrevingVenteÅrsaker =
+  components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.TilbakekrevingVenterKafkaDto']['grunn'];
+
 export type VenteInformasjon = components['schemas']['no.nav.aap.behandlingsflyt.flyt.Venteinformasjon'];
 
 export type VilkårUtfall = components['schemas']['no.nav.aap.behandlingsflyt.flyt.VilkårsperiodeDTO']['utfall'];
@@ -438,6 +441,9 @@ export type ManuellInntektGrunnlag =
 
 export type ManuellInntektÅr =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.\u00C5rData'];
+
+export type DelperiodeData =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.manuellinntekt.MånedsperiodeData'];
 
 export type RegistrerYrkesskade =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.RegistrertYrkesskade'];
