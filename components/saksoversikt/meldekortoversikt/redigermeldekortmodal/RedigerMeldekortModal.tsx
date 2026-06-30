@@ -1,4 +1,4 @@
-import { BodyShort, Button, Detail, Dialog, HStack, Link, VStack } from '@navikt/ds-react';
+import { Button, Dialog, VStack } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { UtfyllingKalender } from 'components/saksoversikt/meldekortoversikt/utfyllingkalender/UtfyllingKalender';
@@ -6,25 +6,21 @@ import { FormErrorSummary } from 'components/formerrorsummary/FormErrorSummary';
 import { hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import { hentUkeNummerForPeriode } from 'components/saksoversikt/meldekortoversikt/meldekorttabell/MeldekortTabell';
 import { Dato } from 'lib/types/Dato';
-import { MeldeperiodeMedMeldekortDto, OppdaterMeldekortRequest, SakPersoninfo } from 'lib/types/types';
+import { MeldeperiodeMedMeldekortDto, OppdaterMeldekortRequest } from 'lib/types/types';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { clientKorrigerMeldekort } from 'lib/clientApi';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { isError } from 'lib/utils/api';
-import { useAlleDokumenterPåSak } from 'hooks/saksbehandling/DokumenterHook';
-import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { MeldekortProsesseringServerSentEvent } from 'app/saksbehandling/api/meldekort/[saksnummer]/prosessering/route';
 import { addDays, differenceInDays } from 'date-fns';
 import { useMeldekort } from 'hooks/saksbehandling/MeldekortHook';
-import { Journalpost } from 'lib/types/journalpost';
 import { erDatoFoerDato, erDatoIFremtiden } from 'lib/validation/dateValidation';
 import { Alert } from 'components/alert/Alert';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
 import { Option } from 'react-day-picker';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
-import { useSakPersonInformasjon } from 'hooks/saksbehandling/SakPersoninformasjonHook';
-import { utledOppdatertAv } from 'components/saksoversikt/meldekortoversikt/meldekorttabell/meldekorttabellrow/MeldekortTabellRow';
+import { TidligereMeldekortVersjoner } from 'components/saksoversikt/meldekortoversikt/tidligeremeldekortversjoner/TidligereMeldekortVersjoner';
 
 interface Props {
   setIsOpen: (isOpen: boolean) => void;
@@ -55,8 +51,6 @@ const årsakOptions = ['', Årsaker.LEVERE_MELDEKORT_FOR_BRUKER, Årsaker.OVERST
 
 export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) => {
   const { saksnummer } = useParamsMedType();
-  const { dokumenter } = useAlleDokumenterPåSak();
-  const { personInformasjon } = useSakPersonInformasjon();
   const { refetchMeldekort } = useMeldekort();
 
   const [error, setError] = useState<string>();
@@ -125,7 +119,6 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
   const skalViseAlertFaktiskMeldedato =
     erÅrsakLevereMeldekort && erDatoFoerDato(meldedato, formaterDatoForFrontend(new Date()));
 
-  const tidligereInnsendteMeldekort = kobleDokumentInfoTilTidligereMeldekort(meldekort, personInformasjon, dokumenter);
   const errorList = hentFeilmeldingerForForm(form.formState.errors);
 
   return (
@@ -255,31 +248,7 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
               </form>
             </FormProvider>
 
-            {tidligereInnsendteMeldekort && tidligereInnsendteMeldekort.length > 0 && (
-              <VStack gap={'space-8'}>
-                <BodyShort weight={'semibold'}>Tidligere versjoner av meldekortet:</BodyShort>
-                <VStack gap={'space-2'}>
-                  {tidligereInnsendteMeldekort.map((tidligereMeldekort, index) => {
-                    return (
-                      <HStack key={index} gap={'space-4'} align={'baseline'}>
-                        {tidligereMeldekort.dokumentId && (
-                          <Link
-                            href={`/saksbehandling/api/dokumenter/${tidligereMeldekort.journalpostId}/${tidligereMeldekort.dokumentId}`}
-                            target="_blank"
-                          >
-                            Meldekort for uke {hentUkeNummerForPeriode(fom.dato, tom.dato)}
-                            <ExternalLinkIcon />
-                          </Link>
-                        )}
-                        <Detail>
-                          {formaterDatoForFrontend(tidligereMeldekort.mottatTidspunkt)} {tidligereMeldekort.oppdatertAv}
-                        </Detail>
-                      </HStack>
-                    );
-                  })}
-                </VStack>
-              </VStack>
-            )}
+            <TidligereMeldekortVersjoner meldekort={meldekort} />
           </VStack>
         </Dialog.Body>
         <Dialog.Footer>
@@ -330,27 +299,6 @@ function getDefaultValuesForForm(meldekort?: MeldeperiodeMedMeldekortDto): Redig
   };
 }
 
-function kobleDokumentInfoTilTidligereMeldekort(
-  meldeperiodeMedMeldekort: MeldeperiodeMedMeldekortDto,
-  personInformasjon: SakPersoninfo,
-  dokumenter?: Journalpost[]
-) {
-  return meldeperiodeMedMeldekort.tidligereMeldekort.map((tidligereMeldekort) => {
-    const dokument = dokumenter?.find((doku) => doku.journalpostId === tidligereMeldekort.journalpostId);
-    const journalpostId = tidligereMeldekort.journalpostId;
-    const dokumentId = dokument?.dokumenter[0]?.dokumentInfoId;
-    const mottatTidspunkt = tidligereMeldekort.mottattTidspunkt;
-    const oppdatertAv = utledOppdatertAv(meldeperiodeMedMeldekort.meldekort, personInformasjon.navn);
-
-    return {
-      journalpostId,
-      dokumentId,
-      mottatTidspunkt,
-      oppdatertAv,
-    };
-  });
-}
-
 export function mapFormDataTilOppdaterMeldekortRequest(
   data: RedigerMeldekortFormFields,
   meldeperiode: MeldeperiodeMedMeldekortDto['meldeperiode']
@@ -371,4 +319,8 @@ export function mapFormDataTilOppdaterMeldekortRequest(
 
 export function replaceCommasWithDots(input: string): string {
   return input.replace(/,/g, '.');
+}
+
+export function replaceDotsWithCommas(input: string): string {
+  return input.replace(/\./g, ',');
 }
