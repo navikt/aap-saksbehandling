@@ -164,6 +164,15 @@ export async function oppgaveTekstSøk(søketekst: string) {
 }
 
 export const hentGjeldendeMarkeringerForBehandling = async (referanse: string) => {
+  if (lokalFakeOppgave) {
+    const mockData: FetchResponse<Markering[]> = {
+      type: 'SUCCESS',
+      status: 200,
+      data: [],
+    };
+    return mockData;
+  }
+
   const url = `${oppgaveApiBaseURL}/${referanse}/hent-gjeldende-markeringer-for-behandling`;
   return await apiFetch<Markering[]>(url, oppgaveApiScope, 'GET', undefined);
 };
