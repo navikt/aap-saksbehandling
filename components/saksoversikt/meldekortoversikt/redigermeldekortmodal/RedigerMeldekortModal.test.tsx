@@ -274,6 +274,66 @@ describe('RedigerMeldekortModal', () => {
     });
   });
 
+  describe('Validering: meldedato kan ikke være før eksisterende meldekort', () => {
+    // mottattTidspunkt = 21.01.2025, som er etter dagenEtterTom (20.01.2025)
+    // slik at kun den nye validatoren trigges for datoer mellom 20.01 og 21.01
+    const meldekortMedSenereMottattTidspunkt: MeldeperiodeMedMeldekortDto = {
+      ...meldekortMedDager,
+      meldekort: {
+        ...meldekortMedDager.meldekort!,
+        mottattTidspunkt: '2025-01-21T12:00:00.000Z',
+      },
+    };
+
+    const fyllUtOgSubmit = async (meldedato: string) => {
+      await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Lever/endre meldekort for bruker');
+      await user.type(screen.getByLabelText('Dato brukeren meldte opplysningene'), meldedato);
+      await user.click(screen.getByRole('button', { name: 'Bekreft' }));
+    };
+
+    it('viser feilmelding når meldedato er før mottattTidspunkt på eksisterende meldekort', async () => {
+      customRender(
+        <RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekortMedSenereMottattTidspunkt} />
+      );
+      await fyllUtOgSubmit('20.01.2025'); // etter meldeperiode tom+1, men før mottattTidspunkt
+
+      expect(
+        screen.getAllByText('Du har satt en meldedato som er før et eksisterende meldekort for perioden')[0]
+      ).toBeVisible();
+    });
+
+    it('viser ikke feilmelding når meldedato er lik mottattTidspunkt på eksisterende meldekort', async () => {
+      customRender(
+        <RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekortMedSenereMottattTidspunkt} />
+      );
+      await fyllUtOgSubmit('21.01.2025'); // samme dag som mottattTidspunkt
+
+      expect(
+        screen.queryByText('Du har satt en meldedato som er før et eksisterende meldekort for perioden')
+      ).not.toBeInTheDocument();
+    });
+
+    it('viser ikke feilmelding når meldedato er etter mottattTidspunkt på eksisterende meldekort', async () => {
+      customRender(
+        <RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekortMedSenereMottattTidspunkt} />
+      );
+      await fyllUtOgSubmit('22.01.2025'); // etter mottattTidspunkt
+
+      expect(
+        screen.queryByText('Du har satt en meldedato som er før et eksisterende meldekort for perioden')
+      ).not.toBeInTheDocument();
+    });
+
+    it('viser ikke feilmelding når det ikke finnes et eksisterende meldekort', async () => {
+      customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
+      await fyllUtOgSubmit('20.01.2025');
+
+      expect(
+        screen.queryByText('Du har satt en meldedato som er før et eksisterende meldekort for perioden')
+      ).not.toBeInTheDocument();
+    });
+  });
+
   describe('Generering av dager i kalender', () => {
     const åpneKalender = async () => {
       const user = userEvent.setup();

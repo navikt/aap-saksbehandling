@@ -188,9 +188,18 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
                       rules={{
                         required: 'Du må legge til en meldedato for meldekortet.',
                         validate: {
-                          validerIkkeFørDato: (value) => {
+                          validerIkkeIFremtiden: (value) => {
                             if (erDatoIFremtiden(value as string)) {
                               return 'Meldedato kan ikke være i fremtiden.';
+                            }
+                          },
+
+                          validerIkkeTilbakeITidEnnTidligsteMeldedato: (value) => {
+                            const eksisterendeMottattDato = meldekort?.meldekort?.mottattTidspunkt
+                              ? formaterDatoForFrontend(meldekort.meldekort.mottattTidspunkt)
+                              : undefined;
+                            if (eksisterendeMottattDato && erDatoFoerDato(value as string, eksisterendeMottattDato)) {
+                              return 'Du har satt en meldedato som er før et eksisterende meldekort for perioden';
                             }
                           },
                           validerIkkeFørMeldeperiodeTom: (value) => {
