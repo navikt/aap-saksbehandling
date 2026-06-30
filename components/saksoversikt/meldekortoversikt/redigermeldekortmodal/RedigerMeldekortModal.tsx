@@ -50,6 +50,7 @@ export enum Årsaker {
   OVERSTYRE_BRUKER = 'Overstyre bruker',
 }
 
+// TODO AAP-2320
 const årsakOptions = ['', Årsaker.LEVERE_MELDEKORT_FOR_BRUKER, Årsaker.OVERSTYRE_BRUKER];
 
 export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) => {

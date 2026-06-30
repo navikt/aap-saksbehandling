@@ -159,7 +159,7 @@ describe('RedigerMeldekortModal', () => {
     expect(document.getElementById('rapporteringskalender')).toBeInTheDocument();
   });
 
-  // TODO Ta inn denne igjen når valget er tilbake
+  // TODO Ta inn denne igjen når valget er tilbake AAP-2320
   it.skip('viser kun meldedato ved årsak "Registrere at bruker har meldt seg"', async () => {
     customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
     await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Registrere at bruker har meldt seg');
@@ -196,7 +196,7 @@ describe('RedigerMeldekortModal', () => {
     expect(screen.getByRole('heading', { name: 'Endre meldekort for uke 2 - 3' })).toBeVisible();
   });
 
-  // TODO Ta inn denne igjen når valget er tilbake
+  // TODO Ta inn denne igjen når valget er tilbake AAP-2320
   describe.skip('Registrere at bruker har meldt seg', () => {
     it('viser alert "Bruker har ikke levert noen timer" når meldekort mangler', async () => {
       customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
@@ -406,7 +406,7 @@ describe('RedigerMeldekortModal', () => {
     });
   });
 
-  // TODO Ta inn denne igjen når valget er tilbake
+  // TODO Ta inn denne igjen når valget er tilbake AAP-2320
   describe.skip('Meldedato validering', () => {
     const fyllUtOgSubmit = async (meldedato: string) => {
       await user.type(screen.getByRole('textbox', { name: /begrunnelse/i }), 'Begrunnelse for endring');
@@ -430,7 +430,7 @@ describe('RedigerMeldekortModal', () => {
     });
   });
 
-  // TODO Ta inn denne igjen når valget er tilbake
+  // TODO Ta inn denne igjen når valget er tilbake AAP-2320
   describe.skip('Advarsel om meldedato etter meldefrist', () => {
     const velgÅrsakOgFyllMeldedato = async (meldedato: string) => {
       await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Registrere at bruker har meldt seg');
@@ -482,7 +482,7 @@ describe('RedigerMeldekortModal', () => {
       ).not.toBeInTheDocument();
     });
 
-    // TODO Ta inn denne igjen når valget er tilbake
+    // TODO Ta inn denne igjen når valget er tilbake AAP-2320
     it.skip('viser ikke advarsel når meldedato ikke er fylt inn', async () => {
       customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
       await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Registrere at bruker har meldt seg');
