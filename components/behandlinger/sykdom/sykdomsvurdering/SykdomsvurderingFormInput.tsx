@@ -30,7 +30,6 @@ interface Props {
   ikkeRelevantePerioder?: Periode[];
   sak: Sak;
   skalVurdereYrkesskade: boolean;
-  erÅrsakssammenhengYrkesskade: boolean;
   rettighetsperiodeStartdato: Date;
   diagnoseDefaultOptions: DiagnoserDefaultOptions;
   studentgrunnlag: StudentGrunnlag;
@@ -46,7 +45,6 @@ export const erSkadeSykdomEllerLyteVesentligdelLabel =
   'Er sykdom, skade eller lyte vesentlig medvirkende til at arbeidsevnen er nedsatt?';
 
 export const SykdomsvurderingFormInput = ({
-  erÅrsakssammenhengYrkesskade,
   skalVurdereYrkesskade,
   index,
   form,
@@ -150,7 +148,6 @@ export const SykdomsvurderingFormInput = ({
               readonly={readonly}
               rettighetsperiodeStartdato={rettighetsperiodeStartdato}
               skalVurdereYrkesskade={skalVurdereYrkesskade}
-              erÅrsakssammenhengYrkesskade={erÅrsakssammenhengYrkesskade}
             />
           )}
         </>
