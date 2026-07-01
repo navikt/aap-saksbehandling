@@ -1,0 +1,24 @@
+.readonlyWrapper {
+  background-color: var(--ax-bg-default);
+}
+
+.readonlyHidden,
+.readonlyExpanded {
+  overflow: hidden;
+  transition:
+    max-height 200ms ease,
+    mask-image 200ms ease,
+    -webkit-mask-image 200ms ease;
+}
+
+.readonlyHidden {
+  max-height: 8rem;
+  -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+}
+
+.readonlyExpanded {
+  max-height: 200rem;
+  -webkit-mask-image: none;
+  mask-image: none;
+}

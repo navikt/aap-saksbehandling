@@ -1,8 +1,8 @@
 .brevheader {
   background: var(--ax-bg-default);
   padding: var(--ax-space-16);
-  margin-left: var(--ax-space-16);
 }
+
 .brevheader :global(.navLogo) {
   height: 75px;
 }

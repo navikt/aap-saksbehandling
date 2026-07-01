@@ -1,9 +1,8 @@
 .delmal {
   box-sizing: border-box;
-  padding: 1rem;
+  padding: var(--ax-space-4) var(--ax-space-16);
   background-color: var(--ax-bg-default);
   min-height: 100%;
-  margin-left: var(--ax-space-16);
   position: relative;
 }
 
