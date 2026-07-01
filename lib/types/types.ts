@@ -74,6 +74,9 @@ export type BeregningTidspunktGrunnlag =
 export type BeregningstidspunktVurderingResponse =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.tidspunkt.BeregningstidspunktVurderingResponse'];
 
+export type ÅrsakBeregningstidspunkt = NonNullable<BeregningstidspunktVurderingResponse['årsak']>;
+export type ÅrsakYtterligereNedsatt = NonNullable<BeregningstidspunktVurderingResponse['ytterligereNedsattÅrsak']>;
+
 export type TilkjentYtelseGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelse2Dto'];
 

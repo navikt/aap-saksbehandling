@@ -6,6 +6,8 @@ import {
   BeregningstidspunktVurderingResponse,
   BeregningTidspunktGrunnlag,
   MellomlagretVurdering,
+  ÅrsakBeregningstidspunkt,
+  ÅrsakYtterligereNedsatt,
 } from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { SubmitEventHandler } from 'react';
@@ -168,8 +170,8 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly, initi
                 ? formaterDatoForBackend(parse(data.ytterligereNedsattArbeidsevneDato, 'dd.MM.yyyy', new Date()))
                 : undefined,
               ytterligereNedsattBegrunnelse: data?.ytterligereNedsattArbeidsevneDatobegrunnelse,
-              årsak: data.årsak || undefined,
-              ytterligereNedsattÅrsak: data.ytterligereNedsattÅrsak || undefined,
+              årsak: (data.årsak || undefined) as ÅrsakBeregningstidspunkt | undefined,
+              ytterligereNedsattÅrsak: (data.ytterligereNedsattÅrsak || undefined) as ÅrsakYtterligereNedsatt | undefined,
             },
           },
           referanse: behandlingsreferanse,
