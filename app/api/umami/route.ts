@@ -1,5 +1,7 @@
 import umami, { UmamiEventData } from '@umami/node';
 import { UmamiKelvinEvent } from 'lib/types/types';
+import { logWarning } from 'lib/serverutlis/logger';
+import { NextResponse } from 'next/server';
 
 const umamiSporingskode = 'ebb233f3-6c6d-4b9f-b84d-9a11a3c2f16f';
 umami.init({
@@ -30,5 +32,10 @@ export async function POST(req: Request) {
       : {}),
     ...(eventData.brevtype ? { brevtype: eventData.brevtype } : {}),
   };
-  umami.track(eventData.name, filtrertEventData);
+  try {
+    await umami.track(eventData.name, filtrertEventData);
+  } catch {
+    logWarning(`umami-event feilet: ${eventData.name}`);
+  }
+  return NextResponse.json('OK', { status: 200 });
 }
