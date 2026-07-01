@@ -71,6 +71,7 @@ export const OpprettRevurdering = ({
 
   const variant = erFørstegangsbehandling ? 'vurdering' : 'revurdering';
   const erKravEnabled = useFeatureFlag('KravSteg');
+  const avslag11_27Enable = useFeatureFlag('Avslag11_27');
 
   const { form, formFields } = useConfigForm<ManuellRevurderingFormFields>({
     beskrivelse: {
@@ -85,7 +86,7 @@ export const OpprettRevurdering = ({
     årsaker: {
       type: 'combobox_multiple',
       label: `Hvilke opplysninger skal ${erFørstegangsbehandling ? 'vurderes' : 'revurderes'}?`,
-      options: vurderingsbehovOptions(erKravEnabled),
+      options: vurderingsbehovOptions(erKravEnabled, avslag11_27Enable),
       defaultValue: defaultÅrsaker,
       rules: {
         required: `Velg opplysning som er grunnlaget for ${variant}en`,

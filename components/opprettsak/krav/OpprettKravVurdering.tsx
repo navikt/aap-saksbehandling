@@ -25,7 +25,6 @@ const KravRadFelter = ({ form, index }: { form: UseFormReturn<OpprettSakFormFiel
   return (
     <>
       <DateInputWrapper label="Søknadsdato" control={form.control} name={`kravVurderinger.${index}.søknadsdato`} />
-      <DateInputWrapper label="Kravdato" control={form.control} name={`kravVurderinger.${index}.kravdato`} />
       <DateInputWrapper label="Mulig rett fra" control={form.control} name={`kravVurderinger.${index}.muligRettFra`} />
     </>
   );
@@ -50,7 +49,6 @@ export const OpprettKravVurdering = ({ form }: Props) => {
             rules={{
               onChange: () => {
                 form.setValue(`kravVurderinger.${index}.søknadsdato`, defaultDato);
-                form.setValue(`kravVurderinger.${index}.kravdato`, defaultDato);
                 form.setValue(`kravVurderinger.${index}.muligRettFra`, defaultMuligRettFra);
               },
             }}
@@ -85,7 +83,6 @@ export const OpprettKravVurdering = ({ form }: Props) => {
           append({
             kravType: 'NYTT_KRAV_AAP',
             søknadsdato: defaultDato,
-            kravdato: defaultDato,
             muligRettFra: defaultMuligRettFra,
           })
         }
