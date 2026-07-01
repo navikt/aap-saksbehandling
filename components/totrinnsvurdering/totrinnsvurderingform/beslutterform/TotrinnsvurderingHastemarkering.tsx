@@ -22,7 +22,7 @@ export const TotrinnsvurderingHastemarkering = ({ readOnly, form, begrunnelse }:
   ];
 
   return (
-    <div className={styles.totrinnsvurderingform}>
+    <div className={styles.totrinnsvurderingFormUtenEndring}>
       <div className={`${styles.heading} ${styles.headingKvalitetssikrer}`}>
         <HStack align={'center'} gap={'space-8'}>
           <Tag data-color="danger" icon={<ExclamationmarkTriangleIcon />} variant={'moderate'} size={'medium'}>

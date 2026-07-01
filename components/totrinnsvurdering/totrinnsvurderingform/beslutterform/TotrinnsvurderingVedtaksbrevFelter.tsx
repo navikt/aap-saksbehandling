@@ -1,7 +1,7 @@
 import { Behovstype, JaEllerNei, JaEllerNeiOptions, mapBehovskodeTilBehovstype } from 'lib/utils/form';
 
 import styles from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingFelter.module.css';
-import { Checkbox, Link as AkselLink, Radio } from '@navikt/ds-react';
+import { Checkbox, Detail, HStack, Link as AkselLink, Radio, VStack } from '@navikt/ds-react';
 import Link from 'next/link';
 import { ToTrinnsVurderingGrunn } from 'lib/types/types';
 import { FieldArrayWithId, UseFormReturn } from 'react-hook-form';
@@ -12,6 +12,7 @@ import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupW
 import { CheckboxWrapper } from 'components/form/checkboxwrapper/CheckboxWrapper';
 import { UmamiTag } from 'components/umami/Umami';
 import { useFeatureFlag } from 'context/UnleashContext';
+import { PencilWritingIcon } from '@navikt/aksel-icons';
 
 interface Props {
   link: string;
@@ -21,6 +22,7 @@ interface Props {
   form: UseFormReturn<FormFieldsToTrinnsVurdering>;
   field: FieldArrayWithId<FormFieldsToTrinnsVurdering, 'totrinnsvurderinger'>;
   felterOnBlur?: (hendelse: UmamiTag, tidsstempel: number) => void;
+  endretSidenForrigeGang: boolean | null;
 }
 
 export const TotrinnsvurderingVedtaksbrevFelter = ({
@@ -31,6 +33,7 @@ export const TotrinnsvurderingVedtaksbrevFelter = ({
   index,
   field,
   felterOnBlur = () => {},
+  endretSidenForrigeGang,
 }: Props) => {
   const nyeReturÅrsakerFlag = useFeatureFlag('ReturAarsakJournalforing');
 
@@ -51,20 +54,37 @@ export const TotrinnsvurderingVedtaksbrevFelter = ({
   const behovstypeEllerKode =
     Object.keys(Behovstype)[Object.values(Behovstype).indexOf(field.definisjon as Behovstype)] || field.definisjon;
   const eventPrefix = `${erKvalitetssikring ? 'KVALITETSSIKRER' : 'BESLUTTER'}_${behovstypeEllerKode}`;
+  const kvalitetssikringDiffFeatureToggle = useFeatureFlag('KvalitetssikringDiff');
+  const skalViseEndretSidenForrigeGang = endretSidenForrigeGang != null && kvalitetssikringDiffFeatureToggle;
 
   return (
-    <div className={styles.totrinnsvurderingform}>
+    <div
+      className={`${erKvalitetssikring && endretSidenForrigeGang && skalViseEndretSidenForrigeGang ? styles.totrinnsvurderingFormMedEndring : styles.totrinnsvurderingFormUtenEndring}`}
+    >
       <div
-        className={`${styles.heading} ${erKvalitetssikring ? styles.headingKvalitetssikrer : styles.headingBeslutter}`}
+        className={`${styles.heading} ${erKvalitetssikring ? (endretSidenForrigeGang && skalViseEndretSidenForrigeGang ? styles.endretSidenSistHeading : styles.headingKvalitetssikrer) : styles.headingBeslutter}`}
       >
-        <AkselLink
-          as={Link}
-          prefetch={false}
-          href={link}
-          onClick={() => felterOnBlur(`${eventPrefix}_LINK` as UmamiTag, Date.now())}
-        >
-          {mapBehovskodeTilBehovstype(field.definisjon as Behovstype)}
-        </AkselLink>
+        <VStack gap={'space-6'}>
+          {skalViseEndretSidenForrigeGang &&
+            (endretSidenForrigeGang ? (
+              <HStack gap={'space-4'}>
+                <PencilWritingIcon className={`${styles.endretSidenSistIkon}`} />
+                <Detail data-color={'warning'} textColor={'subtle'}>
+                  Vurderingen er endret siden forrige retur
+                </Detail>
+              </HStack>
+            ) : (
+              <Detail>Ingen endring siden forrige retur</Detail>
+            ))}
+          <AkselLink
+            as={Link}
+            prefetch={false}
+            href={link}
+            onClick={() => felterOnBlur(`${eventPrefix}_LINK` as UmamiTag, Date.now())}
+          >
+            {mapBehovskodeTilBehovstype(field.definisjon as Behovstype)}
+          </AkselLink>
+        </VStack>
       </div>
       <div className={styles.felter}>
         <RadioGroupWrapper

@@ -44,7 +44,7 @@ export const TotrinnnsvurderingFelter = ({
   const eventPrefix = `${erKvalitetssikring ? 'KVALITETSSIKRER' : 'BESLUTTER'}_${behovstypeEllerKode}`;
 
   return (
-    <div className={styles.totrinnsvurderingform}>
+    <div className={`${styles.totrinnsvurderingFormUtenEndring}`}>
       <div
         className={`${styles.heading} ${erKvalitetssikring ? styles.headingKvalitetssikrer : styles.headingBeslutter}`}
       >
