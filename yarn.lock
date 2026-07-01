@@ -2881,6 +2881,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@umami/node@npm:0.4.0":
+  version: 0.4.0
+  resolution: "@umami/node@npm:0.4.0"
+  checksum: 10c0/4b01da65143b5ecc39e7875a3e9e77bb68701f174ea963ef7b2f815b2973b01303e17b9f9271d91b1154ad151b0831434cc31b27bac88f7bbcd2215c0268eeeb
+  languageName: node
+  linkType: hard
+
 "@unrs/resolver-binding-android-arm-eabi@npm:1.11.1":
   version: 1.11.1
   resolution: "@unrs/resolver-binding-android-arm-eabi@npm:1.11.1"
@@ -3189,6 +3196,7 @@ __metadata:
     "@types/react-dom": "npm:19.2.3"
     "@typescript-eslint/eslint-plugin": "npm:8.61.1"
     "@typescript-eslint/parser": "npm:8.61.1"
+    "@umami/node": "npm:0.4.0"
     "@vercel/otel": "npm:2.1.3"
     "@vitejs/plugin-react": "npm:6.0.3"
     "@vitest/coverage-v8": "npm:4.1.9"
