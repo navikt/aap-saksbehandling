@@ -29,7 +29,7 @@ interface Props {
   accordionsSignal: AccordionsSignal;
   erAktivUtenAvbryt: boolean;
   visLeggTilVurderingKnapp: boolean;
-  onSlettVurdering: (referanse: string) => void;
+  brukersYtelseAlternativer: string[];
 }
 
 export const Avslag11_27KravGruppe = ({
@@ -42,7 +42,7 @@ export const Avslag11_27KravGruppe = ({
   accordionsSignal,
   erAktivUtenAvbryt,
   visLeggTilVurderingKnapp,
-  onSlettVurdering,
+  brukersYtelseAlternativer,
 }: Props) => {
   const vurderingFormField = form.watch(`avslag11_27vurderinger.${kravIndex}.vurdering`);
 
@@ -61,7 +61,6 @@ export const Avslag11_27KravGruppe = ({
       skalAvslås1127: undefined,
     });
     setVisNyVurdering(false);
-    onSlettVurdering(krav.referanse);
   };
 
   const vurderingStatusForNyVurdering =
@@ -118,7 +117,12 @@ export const Avslag11_27KravGruppe = ({
               readonly={readonly}
               initiellEkspandert={skalVæreInitiellEkspandert(vurderingFormField?.erNyVurdering, erAktivUtenAvbryt)}
             >
-              <Avslag11_27VurderingSkjema form={form} kravIndex={kravIndex} readonly={readonly} />
+              <Avslag11_27VurderingSkjema
+                form={form}
+                kravIndex={kravIndex}
+                readonly={readonly}
+                brukersYtelseAlternativer={brukersYtelseAlternativer}
+              />
             </NyVurderingExpandableCard>
           )}
 

@@ -5481,6 +5481,44 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/drift/sak/{saksnummer}/oppdater-meldeperioder': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description saksnummer */
+          saksnummer: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': string;
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/behandling/{referanse}/utbetaling/simulering': {
     parameters: {
       query?: never;
@@ -13911,6 +13949,15 @@ export interface components {
       utfall: 'IKKE_OPPFYLT' | 'IKKE_RELEVANT' | 'IKKE_VURDERT' | 'OPPFYLT';
     };
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.avslag_11_27.Avslag11_27GrunnlagDto': {
+      brukersYtelseAlternativer: (
+        | 'FERIE_I_SYKEPENGEPERIODE'
+        | 'FORELDREPENGER'
+        | 'OMSORGSPENGER'
+        | 'OPPLÆRINGSPENGER'
+        | 'PLEIEPENGER'
+        | 'SVANGERSKAPSPENGER'
+        | 'SYKEPENGER'
+      )[];
       'harTilgangTil\u00C5Saksbehandle': boolean;
       krav: components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.avslag_11_27.Avslag11_27KravDto'][];
       vedtatteVurdering?:
@@ -19449,10 +19496,10 @@ export interface components {
         | 'FØRSTEGANGSBEHANDLING_OPPRETTET'
         | 'KLAGE_OPPRETTET'
         | 'KVALITETSSIKRET'
+        | 'MARKERING_AVSLAG_SYKDOM_FJERNET'
+        | 'MARKERING_AVSLAG_SYKDOM_OPPRETTET'
         | 'MARKERING_HASTER_FJERNET'
         | 'MARKERING_HASTER_OPPRETTET'
-        | 'MARKERING_SYKDOM_AVSLAG_FJERNET'
-        | 'MARKERING_SYKDOM_AVSLAG_OPPRETTET'
         | 'MOTTATT_DIALOGMELDING'
         | 'RETUR_FRA_BESLUTTER'
         | 'RETUR_FRA_KVALITETSSIKRER'

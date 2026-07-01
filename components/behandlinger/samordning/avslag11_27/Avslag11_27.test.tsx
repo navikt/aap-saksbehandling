@@ -15,7 +15,18 @@ const user = userEvent.setup();
 const ref1 = 'ref-uuid-1';
 const ref2 = 'ref-uuid-2';
 
+const brukersYtelse: Avslag11_27Grunnlag['brukersYtelseAlternativer'] = [
+  'OMSORGSPENGER',
+  'FORELDREPENGER',
+  'FERIE_I_SYKEPENGEPERIODE',
+  'SYKEPENGER',
+  'OPPLÆRINGSPENGER',
+  'PLEIEPENGER',
+  'SVANGERSKAPSPENGER',
+];
+
 const grunnlagUtenVurdering: Avslag11_27Grunnlag = {
+  brukersYtelseAlternativer: brukersYtelse,
   harTilgangTilÅSaksbehandle: true,
   krav: [
     {
@@ -31,6 +42,7 @@ const grunnlagUtenVurdering: Avslag11_27Grunnlag = {
 };
 
 const grunnlagMedVurdering: Avslag11_27Grunnlag = {
+  brukersYtelseAlternativer: brukersYtelse,
   harTilgangTilÅSaksbehandle: true,
   krav: [
     {
@@ -55,6 +67,7 @@ const grunnlagMedVurdering: Avslag11_27Grunnlag = {
 };
 
 const grunnlagMedVedtattOgNyVurdering: Avslag11_27Grunnlag = {
+  brukersYtelseAlternativer: brukersYtelse,
   harTilgangTilÅSaksbehandle: true,
   krav: [
     {

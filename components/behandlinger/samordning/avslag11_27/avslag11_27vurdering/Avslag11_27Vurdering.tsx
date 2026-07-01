@@ -6,26 +6,17 @@ import { JaEllerNei } from 'lib/utils/form';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { Avslag11_27FormFields } from 'components/behandlinger/samordning/avslag11_27/Avslag11_27';
-import { Avslag11_27BrukersYtelse } from 'lib/types/types';
 import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
+import { storForbokstavOgMellomromForUnderstrek } from 'lib/utils/string';
 
 interface Props {
   form: UseFormReturn<Avslag11_27FormFields>;
   kravIndex: number;
   readonly: boolean;
+  brukersYtelseAlternativer: string[];
 }
 
-const brukersYtelseOptions: { value: NonNullable<Avslag11_27BrukersYtelse>; label: string }[] = [
-  { value: 'SYKEPENGER', label: 'Sykepenger' },
-  { value: 'FORELDREPENGER', label: 'Foreldrepenger' },
-  { value: 'PLEIEPENGER', label: 'Pleiepenger' },
-  { value: 'OMSORGSPENGER', label: 'Omsorgspenger' },
-  { value: 'OPPLÆRINGSPENGER', label: 'Opplæringspenger' },
-  { value: 'SVANGERSKAPSPENGER', label: 'Svangerskapspenger' },
-  { value: 'FERIE_I_SYKEPENGEPERIODE', label: 'Ferie i sykepengeperiode' },
-];
-
-export const Avslag11_27Vurdering = ({ form, kravIndex, readonly }: Props) => {
+export const Avslag11_27Vurdering = ({ form, kravIndex, readonly, brukersYtelseAlternativer }: Props) => {
   const vurdering = form.watch(`avslag11_27vurderinger.${kravIndex}.vurdering`);
   const visYtelseSpørsmål = vurdering?.harAnnenFullYtelse === JaEllerNei.Ja;
   const visSykepengegrunnlagSpørsmål = visYtelseSpørsmål && vurdering?.brukersYtelse === 'SYKEPENGER';
@@ -43,7 +34,7 @@ export const Avslag11_27Vurdering = ({ form, kravIndex, readonly }: Props) => {
         name={`avslag11_27vurderinger.${kravIndex}.vurdering.harAnnenFullYtelse`}
         control={form.control}
         label={'Har brukeren en annen ytelse som regnes som full ytelse fra folketrygden?'}
-        rules={{ required: 'Du må svare på dette spørsmålet' }}
+        rules={{ required: 'Du må svare om brukeren har en annen ytelse som regnes som full ytelse fra folketrygden.' }}
         readOnly={readonly}
         horisontal
       >
@@ -60,9 +51,9 @@ export const Avslag11_27Vurdering = ({ form, kravIndex, readonly }: Props) => {
             readOnly={readonly}
           >
             <option value="">Velg ytelse</option>
-            {brukersYtelseOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
+            {brukersYtelseAlternativer.map((verdi) => (
+              <option key={verdi} value={verdi}>
+                {storForbokstavOgMellomromForUnderstrek(verdi)}
               </option>
             ))}
           </SelectWrapper>
@@ -73,7 +64,7 @@ export const Avslag11_27Vurdering = ({ form, kravIndex, readonly }: Props) => {
           name={`avslag11_27vurderinger.${kravIndex}.vurdering.harSykepengegrunnlagOver2G`}
           control={form.control}
           label={'Har brukeren sykepengegrunnlag større enn 2G?'}
-          rules={{ required: 'Du må svare på dette spørsmålet' }}
+          rules={{ required: 'Du må svare om brukeren har sykepengegrunnlag større enn 2G.' }}
           readOnly={readonly}
           horisontal
         >
@@ -87,7 +78,7 @@ export const Avslag11_27Vurdering = ({ form, kravIndex, readonly }: Props) => {
         label={
           'Skal søknaden avslås etter § 11-27 fordi det er for tidlig å vurdere vilkårene for AAP mens brukeren har en annen ytelse?'
         }
-        rules={{ required: 'Du må svare på dette spørsmålet' }}
+        rules={{ required: 'Du må svare om søknaden skal avslås etter § 11-27' }}
         readOnly={readonly}
         horisontal
       >

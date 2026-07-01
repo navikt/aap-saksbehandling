@@ -19,7 +19,7 @@ import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useInnloggetBruker } from 'hooks/BrukerHook';
 import { brukerErBeslutter, brukerKanSaksbehandle } from 'lib/utils/innloggetBruker';
 import { AvbrytAktivitetspliktbehandlingModal } from 'components/saksinfobanner/avbrytaktivitetspliktbehandlingmodal/AvbrytAktivitetspliktbehandlingModal';
-import { Avslag11_27Modal } from 'components/saksinfobanner/avslag11_27modal/Avslag11_27Modal';
+import { Avslag11_27Dialog } from 'components/saksinfobanner/avslag11_27dialog/Avslag11_27Dialog';
 import { useFeatureFlag } from 'context/UnleashContext';
 
 export const SaksmenyDropdown = ({
@@ -224,11 +224,11 @@ export const SaksmenyDropdown = ({
         />
       )}
       {visAvslag1127Modal && (
-        <Avslag11_27Modal
+        <Avslag11_27Dialog
           isOpen={visAvslag1127Modal}
           onClose={() => settVisAvslag1127Modal(false)}
           saksnummer={saksnummer}
-          behandlingReferanse={behandling?.referanse!}
+          behandlingReferanse={behandling?.referanse}
         />
       )}
     </div>

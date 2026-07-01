@@ -13,7 +13,6 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgG
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
-import { useConfigForm } from 'components/form/FormHook';
 import { useFieldArray } from 'react-hook-form';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { SubmitEvent, SubmitEventHandler, useState } from 'react';
@@ -21,6 +20,7 @@ import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilk
 import { VStack } from '@navikt/ds-react';
 import { Avslag11_27KravTabell } from 'components/behandlinger/samordning/avslag11_27/Avslag11_27KravTabell';
 import { Avslag11_27KravGruppe } from 'components/behandlinger/samordning/avslag11_27/avslag11_27KravGruppe/Avslag11_27KravGruppe';
+import { useConfigForm } from 'components/form/FormHook';
 
 interface Props {
   grunnlag: Avslag11_27Grunnlag;
@@ -31,6 +31,7 @@ interface Props {
 }
 
 export interface Avslag11_27FormFields {
+  selectedReferanser: string[];
   avslag11_27vurderinger: KravMedVurderinger[];
 }
 
@@ -70,16 +71,38 @@ export const Avslag11_27 = ({
   );
   const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
+  const initialSelectedReferanser = () => {
+    const vedtatteIds = (grunnlag.vedtatteVurdering ?? []).map((v) => v.referanse);
+    const nåværendeIds = (grunnlag.vurderinger ?? []).map((v) => v.referanse);
+    const alleVurderte = new Set([...vedtatteIds, ...nåværendeIds]);
+    return grunnlag.krav.filter((krav) => alleVurderte.has(krav.referanse)).map((krav) => krav.referanse);
+  };
+
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag, grunnlag.krav);
 
   const { form } = useConfigForm<Avslag11_27FormFields>({
+    selectedReferanser: {
+      type: 'fieldArray',
+      defaultValue: defaultValue.selectedReferanser ?? initialSelectedReferanser(),
+    },
     avslag11_27vurderinger: {
       type: 'fieldArray',
       defaultValue: defaultValue.avslag11_27vurderinger,
     },
   });
+
+  const selectedReferanser: string[] = form.watch('selectedReferanser') ?? [];
+
+  const handleToggle = (referanse: string) => {
+    const current = form.getValues('selectedReferanser') ?? [];
+    form.setValue(
+      'selectedReferanser',
+      current.includes(referanse) ? current.filter((id) => id !== referanse) : [...current, referanse]
+    );
+    setIngenVurderingerValgtFeil(null);
+  };
 
   const { fields: kravFields } = useFieldArray({
     control: form.control,
@@ -92,45 +115,16 @@ export const Avslag11_27 = ({
     form
   );
 
-  const initialSelectedReferanser = () => {
-    const vedtatteIds = (grunnlag.vedtatteVurdering ?? []).map((v) => v.referanse);
-    const nåværendeIds = (grunnlag.vurderinger ?? []).map((v) => v.referanse);
-    const alleVurderte = new Set([...vedtatteIds, ...nåværendeIds]);
-    return grunnlag.krav.filter((krav) => alleVurderte.has(krav.referanse)).map((krav) => krav.referanse);
-  };
-
-  const [selectedReferanser, setSelectedReferanser] = useState<string[]>(initialSelectedReferanser);
-
   const [ingenVurderingerValgtFeil, setIngenVurderingerValgtFeil] = useState<string | null>(null);
-
-  const handleToggle = (referanse: string) => {
-    setSelectedReferanser((prev) =>
-      prev.includes(referanse) ? prev.filter((id) => id !== referanse) : [...prev, referanse]
-    );
-    setIngenVurderingerValgtFeil(null);
-  };
 
   const erRevurdering = typeBehandling === 'Revurdering';
 
   const [deletedReferanser, setDeletedReferanser] = useState<Set<string>>(new Set());
 
-  const handleSlettVurdering = (referanse: string) => {
-    setDeletedReferanser((prev) => new Set([...prev, referanse]));
-  };
-
-  // TODO Thao: Avklar om det er behov for å slette utkast i tilleg når vi sletter en vurdering? Men da sletter det utkast for ALLE vurderinger som har det.
-  const handleSlettVurderingOgUtkast = (referanse: string) => {
-    handleSlettVurdering(referanse);
-    if (mellomlagretVurdering) {
-      slettMellomlagring(() => form.reset(mapVurderingToDraftFormFields(grunnlag, grunnlag.krav)));
-    }
-  };
-
-    const harNåværendeVurdering = (referanse: string) =>
+  const harNåværendeVurdering = (referanse: string) =>
     (grunnlag.vurderinger ?? []).some((v) => v.referanse === referanse);
 
-  const finnesIKravgrunnlag = (referanse: string) =>
-    grunnlag.krav.some((krav) => krav.referanse === referanse);
+  const finnesIKravgrunnlag = (referanse: string) => grunnlag.krav.some((krav) => krav.referanse === referanse);
 
   const skalSendeVurdering = (krav: KravMedVurderinger) => {
     const { referanse, begrunnelse } = krav.vurdering;
@@ -155,7 +149,7 @@ export const Avslag11_27 = ({
     };
   };
 
-    const harMinstEttValgtKravUtenVedtatt = (): boolean => {
+  const harMinstEttValgtKravUtenVedtatt = (): boolean => {
     if (erRevurdering) return true;
 
     const nåværendeKravUtenVedtatt = grunnlag.krav.filter(
@@ -175,13 +169,11 @@ export const Avslag11_27 = ({
 
   const handleSubmit: SubmitEventHandler = (event: SubmitEvent) => {
     form.handleSubmit((data) => {
-            if (!validerValgteVurderinger()) {
+      if (!validerValgteVurderinger()) {
         return;
       }
 
-      const vurderinger = data.avslag11_27vurderinger
-        .filter(skalSendeVurdering)
-        .map(mapTilVurderingPayload);
+      const vurderinger = data.avslag11_27vurderinger.filter(skalSendeVurdering).map(mapTilVurderingPayload);
 
       løsBehovOgGåTilNesteSteg(
         {
@@ -217,8 +209,14 @@ export const Avslag11_27 = ({
       visningModus={visningModus}
       visningActions={visningActions}
       formReset={() => {
-        form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined);
-        setSelectedReferanser(initialSelectedReferanser());
+        form.reset(
+          mellomlagretVurdering
+            ? JSON.parse(mellomlagretVurdering.data)
+            : {
+                selectedReferanser: initialSelectedReferanser(),
+                avslag11_27vurderinger: defaultValue.avslag11_27vurderinger,
+              }
+        );
         setDeletedReferanser(new Set());
         setIngenVurderingerValgtFeil(null);
       }}
@@ -229,12 +227,13 @@ export const Avslag11_27 = ({
           avslag11_27krav={grunnlag.krav}
           selectedReferanser={selectedReferanser}
           onToggle={handleToggle}
-          ingenVurderingerValgtFeil = {ingenVurderingerValgtFeil}
+          ingenVurderingerValgtFeil={ingenVurderingerValgtFeil}
           readonly={formReadOnly}
           vedtatteReferanser={(grunnlag.vedtatteVurdering ?? []).map((v) => v.referanse)}
         />
         {kravFields.map((kravField, kravIndex) => {
-          const faktiskKrav = grunnlag.krav[kravIndex];
+          const faktiskKrav = grunnlag.krav.find((k) => k.referanse === kravField.vurdering.referanse);
+          if (!faktiskKrav) return null;
           if (!selectedReferanser.includes(faktiskKrav.referanse)) return null;
 
           const vedtattVurdering = (grunnlag.vedtatteVurdering ?? []).find(
@@ -255,7 +254,7 @@ export const Avslag11_27 = ({
               accordionsSignal={accordionsSignal}
               erAktivUtenAvbryt={erAktivUtenAvbryt}
               visLeggTilVurderingKnapp={visLeggTilVurderingKnapp}
-              onSlettVurdering={handleSlettVurderingOgUtkast}
+              brukersYtelseAlternativer={grunnlag.brukersYtelseAlternativer}
             />
           );
         })}
@@ -268,7 +267,12 @@ function mapVurderingToDraftFormFields(
   grunnlag: Avslag11_27Grunnlag,
   krav: Avslag11_27Grunnlag['krav']
 ): DraftFormFields {
+  const vedtatteIds = (grunnlag.vedtatteVurdering ?? []).map((v) => v.referanse);
+  const nåværendeIds = (grunnlag.vurderinger ?? []).map((v) => v.referanse);
+  const alleVurderte = new Set([...vedtatteIds, ...nåværendeIds]);
+
   return {
+    selectedReferanser: krav.filter((k) => alleVurderte.has(k.referanse)).map((k) => k.referanse),
     avslag11_27vurderinger: krav.map((kravItem) => {
       const nåværende = (grunnlag.vurderinger ?? []).find((v) => v.referanse === kravItem.referanse);
 
