@@ -1,6 +1,5 @@
 import { RefObject, useEffect, useRef } from 'react';
-import { UmamiTag } from 'components/umami/Umami';
-import { BrevGrunnlagBrev, UmamiKelvinEvent } from 'lib/types/types';
+import { BrevGrunnlagBrev, UmamiKelvinEvent, UmamiTag } from 'lib/types/types';
 
 type UmamiValue = string | number | boolean | null | undefined;
 type UmamiData = Record<string, UmamiValue>;
