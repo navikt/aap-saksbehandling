@@ -1,6 +1,12 @@
 import umami, { UmamiEventData } from '@umami/node';
 import { UmamiKelvinEvent } from 'lib/types/types';
 
+const umamiSporingskode = 'ebb233f3-6c6d-4b9f-b84d-9a11a3c2f16f';
+umami.init({
+  websiteId: umamiSporingskode,
+  hostUrl: process.env.UMAMI_HOST_URL,
+});
+
 export async function POST(req: Request) {
   const payload = await req.json();
   const eventData: UmamiKelvinEvent = {
