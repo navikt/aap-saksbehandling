@@ -175,7 +175,7 @@ export const Brevbygger = ({
         <VStack gap="space-16">
           <RefusjonskravVisning refusjonskravgrunnlag={refusjonskravgrunnlag} />
           {/* Antall kolonner som returneres fra Delmal må matche antallet kolonner her. Ønsker at kolonnene skal være like brede på tvers, dermed er grid definert her */}
-          <HGrid columns={'1fr 2fr'} gap={'space-12'}>
+          <HGrid columns={'1fr 2fr'} gap={'space-12 space-24'}>
             <StandardtekstBoks />
             <div
               className={styles.brevheader}
@@ -215,17 +215,16 @@ export const Brevbygger = ({
                 type="button"
                 onClick={() => settIkkeSendBrevModalOpen(true)}
                 variant="primary"
-                size="small"
                 disabled={isLoading}
               >
                 Ikke send brev
               </Button>
             )}
-            <Button type="button" variant="secondary" onClick={oppdaterBrevmal} size="small" disabled={isLoading}>
+            <Button type="button" variant="secondary" onClick={oppdaterBrevmal} disabled={isLoading}>
               Oppdater brevmal
             </Button>
           </HStack>
-          <Button type="button" onClick={ferdigstillBrev} size={'small'}>
+          <Button type="button" onClick={ferdigstillBrev}>
             Ferdigstill brev
           </Button>
         </HStack>
