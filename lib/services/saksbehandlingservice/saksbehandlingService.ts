@@ -145,6 +145,10 @@ export const søkPåSak = async (søketekst: string) => {
   return await apiFetch<SøkPåSakInfo[]>(url, saksbehandlingApiScope, 'POST', { søketekst });
 };
 
+export const hentPersoninformasjon = async (personReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/person/personinformasjon`;
+  return await apiFetch<{ fnr: string }>(url, saksbehandlingApiScope, 'POST', { personReferanse });
+};
 export const hentSakPersoninfo = async (saksnummer: string): Promise<SakPersoninfo> => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/${saksnummer}/personinformasjon`;
   const res = await apiFetch<SakPersoninfo>(url, saksbehandlingApiScope, 'GET');
