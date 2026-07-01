@@ -765,3 +765,14 @@ export enum Roller {
   DRIFT = 'Drift',
   PRODUKSJONSSTYRING = 'Produksjonsstyring',
 }
+
+export interface UmamiKelvinEvent {
+  name: string;
+  hendelse?: string;
+  hendelser_serie: string | null;
+  hendelser_serie_id: string | null;
+  tidsstempel: number | null;
+  varighet_sekunder: number | null;
+  varighet_sekunder_siden_forrige: number | null;
+  brevtype: string | null;
+}

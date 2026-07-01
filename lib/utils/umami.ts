@@ -1,35 +1,45 @@
 import { RefObject, useEffect, useRef } from 'react';
 import { UmamiTag } from 'components/umami/Umami';
-import { BrevGrunnlagBrev } from 'lib/types/types';
+import { BrevGrunnlagBrev, UmamiKelvinEvent } from 'lib/types/types';
 
 type UmamiValue = string | number | boolean | null | undefined;
 type UmamiData = Record<string, UmamiValue>;
 
-export const loggUmamiEvent = (eventName: string, data: UmamiData) => {
+async function clientLoggUmamiEvent(data: UmamiKelvinEvent) {
   if (typeof window === 'undefined') return;
 
   try {
-    window.umami?.track(eventName, data);
+    await fetch('/api/umami', { method: 'POST', body: JSON.stringify(data) });
   } catch (error) {
-    console.error(`Umami Failed to track event ${eventName}:`, error);
+    console.error(`Umami Failed to track event ${data.name}:`, error);
   }
-};
+}
 export function loggUmamiBrevVarighet(
   hendelse: UmamiTag,
   start: number,
   stop: number,
   brevtype: BrevGrunnlagBrev['brevtype']
 ) {
-  loggUmamiEvent(hendelse, {
+  clientLoggUmamiEvent({
+    name: hendelse,
     varighet_sekunder: Math.floor((stop - start) / 1000),
     brevtype,
+    hendelser_serie: null,
+    hendelser_serie_id: null,
+    tidsstempel: null,
+    varighet_sekunder_siden_forrige: null,
   });
 }
 
-export function loggUmamiVarighet(hendelse: UmamiTag, start: number, stop: number, typeBehandling?: string) {
-  loggUmamiEvent(hendelse, {
+export function loggUmamiVarighet(hendelse: UmamiTag, start: number, stop: number) {
+  clientLoggUmamiEvent({
+    name: hendelse,
     varighet_sekunder: Math.floor((stop - start) / 1000),
-    ...(typeBehandling ? { typeBehandling } : {}),
+    hendelser_serie: null,
+    hendelser_serie_id: null,
+    tidsstempel: null,
+    varighet_sekunder_siden_forrige: null,
+    brevtype: null,
   });
 }
 
@@ -40,20 +50,18 @@ export function loggUmamiVarighetHendelser(
   if (typeof window === 'undefined') return;
   if (!hendelseSerie) return;
 
-  try {
-    hendelser.forEach((hendelse) =>
-      window.umami?.track(hendelseSerie.hendelse_serie, {
-        hendelser_serie_id: hendelseSerie.hendelse_serie_id,
-        hendelser_serie: hendelseSerie.hendelse_serie,
-        hendelse: hendelse.hendelse,
-        varighet_sekunder: hendelse.varighet_sekunder,
-        varighet_sekunder_siden_forrige: hendelse.varighet_sekunder_siden_forrige,
-        tidsstempel: hendelse.tidsstempel,
-      })
-    );
-  } catch (error) {
-    console.error(`Umami Failed to track list of events:`, error);
-  }
+  hendelser.forEach((hendelse) =>
+    clientLoggUmamiEvent({
+      name: hendelseSerie.hendelse_serie,
+      hendelser_serie_id: hendelseSerie.hendelse_serie_id,
+      hendelser_serie: hendelseSerie.hendelse_serie,
+      hendelse: hendelse.hendelse,
+      varighet_sekunder: hendelse.varighet_sekunder,
+      varighet_sekunder_siden_forrige: hendelse.varighet_sekunder_siden_forrige,
+      tidsstempel: hendelse.tidsstempel,
+      brevtype: null,
+    })
+  );
 }
 
 export function useUmamiStartTidspunkt(visningsModus: string): number {
