@@ -204,6 +204,9 @@ export const TotrinnsvurderingForm = ({
     >
       {fields.map((field, index) => {
         const link = byggVilkårskortLenke(saksnummer, behandlingsreferanse, field.definisjon as Behovstype);
+        const endretSidenForrigeGang =
+          grunnlag.vurderinger.find((vurdering) => vurdering.definisjon === field.definisjon)
+            ?.endretSidenSist ?? null;
         if (field.definisjon === Behovstype.SYKDOMSVURDERING_BREV_KODE) {
           return (
             <TotrinnsvurderingVedtaksbrevFelter
@@ -215,6 +218,7 @@ export const TotrinnsvurderingForm = ({
               link={link}
               readOnly={readOnly}
               felterOnBlur={addHendelse}
+              endretSidenForrigeGang={endretSidenForrigeGang}
             />
           );
         }
