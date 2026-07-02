@@ -3223,7 +3223,7 @@ __metadata:
     server-only: "npm:0.0.1"
     swr: "npm:2.4.2"
     typescript: "npm:6.0.3"
-    unleash-client: "npm:6.11.0"
+    unleash-client: "npm:6.11.1"
     vitest: "npm:4.1.9"
     vitest-fetch-mock: "npm:0.4.5"
   languageName: unknown
@@ -9259,9 +9259,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"unleash-client@npm:6.11.0":
-  version: 6.11.0
-  resolution: "unleash-client@npm:6.11.0"
+"unleash-client@npm:6.11.1":
+  version: 6.11.1
+  resolution: "unleash-client@npm:6.11.1"
   dependencies:
     http-proxy-agent: "npm:^7.0.2"
     https-proxy-agent: "npm:^7.0.5"
@@ -9273,7 +9273,7 @@ __metadata:
     proxy-from-env: "npm:^1.1.0"
     re2js: "npm:^1.2.2"
     semver: "npm:^7.7.3"
-  checksum: 10c0/3c33193e90f66381c291ec68567b588ac68ed7aa2b188fc0954caabcd2d9053c010123b69e976e8821182adf4188d868ee80dfe96defcba653eb1abb15440264
+  checksum: 10c0/d63e2358f9c919061a1a763fb7d30e485b453320978afbba03bf4a4e45d4c3b3023c69c5a1564314b52a32c4faf780ef4271895fb0d78f808a3936123b1fd8aa
   languageName: node
   linkType: hard
 
