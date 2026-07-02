@@ -56,11 +56,10 @@ export const SykdomsvurderingFormInput = ({
   diagnoseDefaultOptions,
   studentgrunnlag,
 }: Props) => {
-  const harNedsattArbeidsevne = form.watch(`vurderinger.${index}.harNedsattArbeidsevne`);
-  const skalViseNedsettelse = harNedsattArbeidsevne === 'JA' || harNedsattArbeidsevne === 'JA_FORBIGÅENDE_PROBLEMER';
   const skalViseNeiMenStudent = useFeatureFlag('StudentV2');
   const skalViseStudentSoknad =
-    skalViseNeiMenStudent && studentgrunnlag.oppgittStudent?.erStudentStatus === 'AVBRUTT' &&
+    skalViseNeiMenStudent &&
+    studentgrunnlag.oppgittStudent?.erStudentStatus === 'AVBRUTT' &&
     (studentgrunnlag.oppgittStudent?.skalGjenopptaStudieStatus === 'JA' ||
       studentgrunnlag.oppgittStudent?.skalGjenopptaStudieStatus === 'VET_IKKE');
 
@@ -123,38 +122,32 @@ export const SykdomsvurderingFormInput = ({
             diagnoseDefaultOptions={diagnoseDefaultOptions}
           />
           {skalViseStudentSoknad && <RelevantInformasjonStudent opplysninger={studentgrunnlag.oppgittStudent} />}
-          <RadioGroupWrapper
-            name={`vurderinger.${index}.harNedsattArbeidsevne`}
-            control={form.control}
-            label={harNedsattArbeidsevneLabel}
-            rules={{ required: 'Du må svare på om brukeren har nedsatt arbeidsevne' }}
-            readOnly={readonly}
-            size={'small'}
-          >
-            <Radio value={'JA'}>{JaNeiEllerForbigåendeTekst.Ja}</Radio>
-            <Radio value={'JA_FORBIGÅENDE_PROBLEMER'}>{JaNeiEllerForbigåendeTekst.Forbigående}</Radio>
-            {skalViseNeiMenStudent && (
-              <Radio value={'NEI_MEN_STUDENT'}>{JaNeiEllerForbigåendeTekst.NeiMenStudent}</Radio>
-            )}
-            <Radio value={'NEI'}>{JaNeiEllerForbigåendeTekst.Nei}</Radio>
-          </RadioGroupWrapper>
-          {form.watch(`vurderinger.${index}.harNedsattArbeidsevne`) === 'NEI' && (
-            <Alert variant={'info'} className={'fit-content'}>
-              Brukeren vil få vedtak om at de ikke har rett på AAP. De kvalifiserer ikke for sykepengeerstatning.
-            </Alert>
-          )}
-          {skalViseNedsettelse && (
-            <SykdomsvurderingNedsattArbeidsevneDetaljer
-              index={index}
-              form={form}
-              readonly={readonly}
-              rettighetsperiodeStartdato={rettighetsperiodeStartdato}
-              skalVurdereYrkesskade={skalVurdereYrkesskade}
-              erÅrsakssammenhengYrkesskade={erÅrsakssammenhengYrkesskade}
-            />
-          )}
         </>
       )}
+      <RadioGroupWrapper
+        name={`vurderinger.${index}.harNedsattArbeidsevne`}
+        control={form.control}
+        label={harNedsattArbeidsevneLabel}
+        rules={{ required: 'Du må svare på om brukeren har nedsatt arbeidsevne' }}
+        readOnly={readonly}
+        size={'small'}
+      >
+        <Radio value={'JA'}>{JaNeiEllerForbigåendeTekst.Ja}</Radio>
+        <Radio value={'JA_FORBIGÅENDE_PROBLEMER'}>{JaNeiEllerForbigåendeTekst.Forbigående}</Radio>
+        {skalViseNeiMenStudent && <Radio value={'NEI_MEN_STUDENT'}>{JaNeiEllerForbigåendeTekst.NeiMenStudent}</Radio>}
+        <Radio value={'NEI'}>{JaNeiEllerForbigåendeTekst.Nei}</Radio>
+      </RadioGroupWrapper>
+      <Alert variant={'info'} className={'fit-content'}>
+        Brukeren vil få vedtak om at de ikke har rett på AAP. De kvalifiserer ikke for sykepengeerstatning.
+      </Alert>
+      <SykdomsvurderingNedsattArbeidsevneDetaljer
+        index={index}
+        form={form}
+        readonly={readonly}
+        rettighetsperiodeStartdato={rettighetsperiodeStartdato}
+        skalVurdereYrkesskade={skalVurdereYrkesskade}
+        erÅrsakssammenhengYrkesskade={erÅrsakssammenhengYrkesskade}
+      />
     </VStack>
   );
 };
