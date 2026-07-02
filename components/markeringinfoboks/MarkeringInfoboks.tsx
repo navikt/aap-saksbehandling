@@ -2,15 +2,14 @@ import React, { useRef, useState } from 'react';
 import { BodyShort, Button, Detail, HStack, Popover, Tag, VStack } from '@navikt/ds-react';
 import styles from './MarkeringInfoBoks.module.css';
 import { clientOpprettMarkeringHendelse, MarkeringHendelseType } from 'lib/clientApi';
-import { MarkeringType } from 'lib/types/oppgaveTypes';
+import { Markering, MarkeringType } from 'lib/types/oppgaveTypes';
 import { BookIcon, ExclamationmarkTriangleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType } from '@navikt/aap-oppgave-typescript-types';
 import { isSuccess } from 'lib/utils/api';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import { MarkeringDto } from 'lib/types/types';
 
 interface Props {
-  markering: MarkeringDto;
+  markering: Markering;
   referanse?: string | null;
   showLabel?: boolean;
   size?: 'small' | 'xsmall';
