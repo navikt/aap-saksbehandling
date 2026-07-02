@@ -116,10 +116,10 @@ export const FastsettBeregning = ({
       },
       årsak: {
         type: 'select',
-        label: 'Årsak til beregningstidspunkt',
+        label: 'Årsak til beregningstidspunkt.',
         options: ÅRSAK_TIL_BEREGNINGSTIDSPUNKT_OPTIONS,
         defaultValue: defaultValues.årsak,
-        rules: visAarsakDropdowns ? { required: 'Du må velge årsak til beregningstidspunkt' } : {},
+        rules: visAarsakDropdowns ? { required: 'Du må velge årsak til beregningstidspunkt.' } : {},
       },
       ytterligereNedsattArbeidsevneDatobegrunnelse: {
         type: 'textarea',
@@ -146,10 +146,10 @@ export const FastsettBeregning = ({
       },
       ytterligereNedsattÅrsak: {
         type: 'select',
-        label: 'Årsak til ytterligere nedsatt tidspunkt',
+        label: 'Årsak til ytterligere nedsatt tidspunkt.',
         options: ÅRSAK_TIL_YTTERLIGERE_NEDSATT_OPTIONS,
         defaultValue: defaultValues.ytterligereNedsattÅrsak,
-        rules: visAarsakDropdowns ? { required: 'Du må velge årsak til ytterligere nedsatt tidspunkt' } : {},
+        rules: visAarsakDropdowns ? { required: 'Du må velge årsak til ytterligere nedsatt tidspunkt.' } : {},
       },
     },
     { readOnly: formReadOnly }
@@ -301,7 +301,7 @@ const byggFelter = (vurdering: BeregningstidspunktVurderingResponse, visAarsak: 
   ...(visAarsak
     ? [
         {
-          label: 'Årsak til beregningstidspunkt',
+          label: 'Årsak til beregningstidspunkt.',
           value: finnÅrsakLabel(ÅRSAK_TIL_BEREGNINGSTIDSPUNKT_OPTIONS, vurdering.årsak),
         },
       ]
@@ -319,7 +319,7 @@ const byggFelter = (vurdering: BeregningstidspunktVurderingResponse, visAarsak: 
   ...(visAarsak
     ? [
         {
-          label: 'Årsak til ytterligere nedsatt tidspunkt',
+          label: 'Årsak til ytterligere nedsatt tidspunkt.',
           value: finnÅrsakLabel(ÅRSAK_TIL_YTTERLIGERE_NEDSATT_OPTIONS, vurdering.ytterligereNedsattÅrsak),
         },
       ]
