@@ -139,10 +139,8 @@ export const DigitaliserMeldekortV2 = ({ readOnly, submit, isLoading, oppgave }:
     };
   }, [meldeperioder, oppgave.saksnummer]);
 
-  console.log(form.watch());
-
   const timerErRegistrertIKelvin = form.watch('timerErAlleredeRegistrertIKelvin').includes('timerErRegistrert');
-  console.log(timerErRegistrertIKelvin);
+
   return (
     <VilkårsKort heading={'Meldekort'}>
       <form onSubmit={handleSubmit}>
