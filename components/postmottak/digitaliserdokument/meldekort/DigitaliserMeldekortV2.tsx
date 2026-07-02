@@ -32,7 +32,7 @@ export interface MeldekortFormFields {
   gjelderForUker: string[];
   innsendtDato: Date;
   meldeperioder: Meldeperiode[];
-  timerErAlleredeRegistrertIKelvin: string;
+  timerErAlleredeRegistrertIKelvin: string[];
 }
 
 export const ukestartSisteHalvår = (): ValuePair[] => {
@@ -76,7 +76,7 @@ export const DigitaliserMeldekortV2 = ({ readOnly, submit, isLoading, oppgave }:
       },
       timerErAlleredeRegistrertIKelvin: {
         type: 'checkbox',
-        options: [{ value: 'true', label: 'Timer er allerede registrert i kelvin' }],
+        options: [{ value: 'timerErRegistrert', label: 'Timer er allerede registrert i kelvin' }],
       },
     },
     { readOnly }
@@ -94,7 +94,7 @@ export const DigitaliserMeldekortV2 = ({ readOnly, submit, isLoading, oppgave }:
     const meldekort: MeldekortV0 = {
       meldingType: MeldekortV0,
       harDuArbeidet: dager.some((dag) => dag.timerArbeid > 0),
-      timerArbeidPerPeriode: dager,
+      timerArbeidPerPeriode: data.timerErAlleredeRegistrertIKelvin.includes('timerErRegistrert') ? [] : dager,
     };
     return JSON.stringify(meldekort);
   }
@@ -139,12 +139,17 @@ export const DigitaliserMeldekortV2 = ({ readOnly, submit, isLoading, oppgave }:
     };
   }, [meldeperioder, oppgave.saksnummer]);
 
+  console.log(form.watch());
+
+  const timerErRegistrertIKelvin = form.watch('timerErAlleredeRegistrertIKelvin').includes('timerErRegistrert');
+  console.log(timerErRegistrertIKelvin);
   return (
     <VilkårsKort heading={'Meldekort'}>
       <form onSubmit={handleSubmit}>
         <FormField form={form} formField={formFields.gjelderForUker} />
         <FormField form={form} formField={formFields.innsendtDato} />
-        <MeldeperioderV2 form={form} readOnly={readOnly} />
+        <FormField form={form} formField={formFields.timerErAlleredeRegistrertIKelvin} />
+        {!timerErRegistrertIKelvin && <MeldeperioderV2 form={form} readOnly={readOnly} />}
 
         {finnesTimerForMeldeperiode && (
           <Alert variant={'info'}>Det er allerede ført timer for denne meldeperioden.</Alert>
