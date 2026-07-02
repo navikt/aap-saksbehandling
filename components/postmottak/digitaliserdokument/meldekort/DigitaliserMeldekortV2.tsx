@@ -106,7 +106,6 @@ export const DigitaliserMeldekortV2 = ({ readOnly, submit, isLoading, oppgave }:
   const meldeperioder = form.watch('meldeperioder');
 
   useEffect(() => {
-    // Valider meldeperiode lik som i useFieldArray for meldeperiode i MeldeperioderV2.tsx
     const erGyldigMeldeperiode =
       meldeperioder.length === 2 &&
       getISOWeek(addWeeks(meldeperioder[0].ukestart, 1)) === getISOWeek(meldeperioder[1].ukestart);

@@ -776,8 +776,6 @@ export const hentHarRegistrerteTimerIMeldeperioden = async (
     meldeperiodeTom: formaterDatoForBackend(meldeperiodeTom),
   });
 
-  const url = `${saksbehandlingApiBaseUrl}/api/meldekort/${saksnummer}/har-registrert-timer?${params}`;
-  console.log(url)
   return apiFetch<HarRegistrertTimerResponse>(
     `${saksbehandlingApiBaseUrl}/api/meldekort/${saksnummer}/har-registrert-timer?${params}`,
     saksbehandlingApiScope
