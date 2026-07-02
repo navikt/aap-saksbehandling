@@ -38,6 +38,7 @@ import {
   FormkravGrunnlag,
   FritakMeldepliktGrunnlag,
   FullmektigGrunnlag,
+  HarRegistrertTimerResponse,
   HelseinstitusjonGrunnlag,
   InntektsbortfallResponse,
   KabalKlageResultat,
@@ -112,6 +113,7 @@ import { isLocal } from 'lib/utils/environment';
 import { notFound } from 'next/navigation';
 import { ingenTilgang } from 'lib/utils/ingenTilgang';
 import { CACHE_1_TIME } from 'lib/services/cache';
+import { formaterDatoForBackend } from 'lib/utils/date';
 
 const saksbehandlingApiBaseUrl = process.env.BEHANDLING_API_BASE_URL;
 const saksbehandlingApiScope = process.env.BEHANDLING_API_SCOPE ?? '';
@@ -760,6 +762,24 @@ export const hentMeldekort = async (saksnummer: string) => {
 export const hentMeldekortProsseseringStatus = async (saksnummer: string) => {
   return apiFetch<MeldekortProsesseringResponse>(
     `${saksbehandlingApiBaseUrl}/api/meldekort/${saksnummer}/prosessering`,
+    saksbehandlingApiScope
+  );
+};
+
+export const hentHarRegistrerteTimerIMeldeperioden = async (
+  saksnummer: string,
+  meldepeeriodeFom: Date,
+  meldeperiodeTom: Date
+) => {
+  const params = new URLSearchParams({
+    meldeperiodeFom: formaterDatoForBackend(meldepeeriodeFom),
+    meldeperiodeTom: formaterDatoForBackend(meldeperiodeTom),
+  });
+
+  const url = `${saksbehandlingApiBaseUrl}/api/meldekort/${saksnummer}/har-registrert-timer?${params}`;
+  console.log(url)
+  return apiFetch<HarRegistrertTimerResponse>(
+    `${saksbehandlingApiBaseUrl}/api/meldekort/${saksnummer}/har-registrert-timer?${params}`,
     saksbehandlingApiScope
   );
 };

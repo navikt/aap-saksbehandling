@@ -574,6 +574,9 @@ export type MeldekortV0 =
     meldingType: typeof MeldekortV0 /* Hadde vært fint om dette kom med i kontrakten ... */;
   };
 
+export type HarRegistrertTimerResponse =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.HarRegistrertTimerResponse'];
+
 export const KlageV0 = 'KlageV0';
 export type KlageV0 =
   components['schemas'][`no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.${typeof KlageV0}`] & {
