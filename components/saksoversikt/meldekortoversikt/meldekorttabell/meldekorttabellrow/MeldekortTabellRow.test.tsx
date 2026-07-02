@@ -16,7 +16,7 @@ const meldekortUtenDager: MeldeperiodeMedMeldekortDto = {
   meldeperiode: {
     fom: '2025-01-06',
     tom: '2025-01-19',
-  }
+  },
 };
 
 const meldekortMedDager: MeldeperiodeMedMeldekortDto = {

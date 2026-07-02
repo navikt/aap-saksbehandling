@@ -90,6 +90,7 @@ export async function hentEnheter() {
     tags: [await genererTagMedNavIdent('enheter')],
   });
 }
+
 export async function synkroniserEnhetPåOppgave(data: EnhetSynkroniseringOppgave) {
   const url = `${oppgaveApiBaseURL}/synkroniser-enhet-paa-oppgave`;
   return await apiFetch<void>(url, oppgaveApiScope, 'POST', { oppgaveId: data.oppgaveId });
@@ -163,6 +164,15 @@ export async function oppgaveTekstSøk(søketekst: string) {
 }
 
 export const hentGjeldendeMarkeringerForBehandling = async (referanse: string) => {
+  if (lokalFakeOppgave) {
+    const mockData: FetchResponse<Markering[]> = {
+      type: 'SUCCESS',
+      status: 200,
+      data: [],
+    };
+    return mockData;
+  }
+
   const url = `${oppgaveApiBaseURL}/${referanse}/hent-gjeldende-markeringer-for-behandling`;
   return await apiFetch<Markering[]>(url, oppgaveApiScope, 'GET', undefined);
 };
