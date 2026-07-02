@@ -3,14 +3,13 @@ import { Behovstype, JaEllerNei, JaEllerNeiOptions, mapBehovskodeTilBehovstype }
 import styles from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingFelter.module.css';
 import { Checkbox, Link as AkselLink, Radio } from '@navikt/ds-react';
 import Link from 'next/link';
-import { ToTrinnsVurderingGrunn } from 'lib/types/types';
+import { ToTrinnsVurderingGrunn, UmamiTag } from 'lib/types/types';
 import { FieldArrayWithId, UseFormReturn } from 'react-hook-form';
 import { FormFieldsToTrinnsVurdering } from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingForm';
 import { ValuePair } from 'components/form/FormField';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { CheckboxWrapper } from 'components/form/checkboxwrapper/CheckboxWrapper';
-import { UmamiTag } from 'components/umami/Umami';
 
 interface Props {
   link: string;
@@ -44,7 +43,7 @@ export const TotrinnnsvurderingFelter = ({
   const eventPrefix = `${erKvalitetssikring ? 'KVALITETSSIKRER' : 'BESLUTTER'}_${behovstypeEllerKode}`;
 
   return (
-    <div className={styles.totrinnsvurderingform}>
+    <div className={`${styles.totrinnsvurderingFormUtenEndring}`}>
       <div
         className={`${styles.heading} ${erKvalitetssikring ? styles.headingKvalitetssikrer : styles.headingBeslutter}`}
       >

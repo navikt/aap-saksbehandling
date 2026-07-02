@@ -1,7 +1,14 @@
-.totrinnsvurderingform {
+.totrinnsvurderingFormUtenEndring {
   display: flex;
   flex-direction: column;
-  border: 2px solid var(--ax-neutral-500);
+  border: 1px solid var(--ax-neutral-500);
+  border-radius: var(--ax-radius-8);
+}
+
+.totrinnsvurderingFormMedEndring {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--ax-text-warning-subtle);
   border-radius: var(--ax-radius-8);
 }
 
@@ -10,6 +17,14 @@
   border-top-left-radius: var(--ax-radius-8);
   border-top-right-radius: var(--ax-radius-8);
   border-bottom: 2px solid var(--ax-neutral-500);
+}
+
+.endretSidenSistHeading {
+  background-color: var(--ax-bg-warning-moderate);
+}
+
+.endretSidenSistIkon {
+  color: var(--ax-text-warning-subtle);
 }
 
 .headingBeslutter {
