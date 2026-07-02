@@ -18,8 +18,10 @@ interface Props {
 
 export const Avslag11_27Vurdering = ({ form, kravIndex, readonly, brukersYtelseAlternativer }: Props) => {
   const vurdering = form.watch(`avslag11_27vurderinger.${kravIndex}.vurdering`);
-  const visYtelseSpørsmål = vurdering?.harAnnenFullYtelse === JaEllerNei.Ja;
+  const harAnnenFullYtelse = vurdering?.harAnnenFullYtelse;
+  const visYtelseSpørsmål = harAnnenFullYtelse === JaEllerNei.Ja;
   const visSykepengegrunnlagSpørsmål = visYtelseSpørsmål && vurdering?.brukersYtelse === 'SYKEPENGER';
+  const visAvslagsSpørsmål = harAnnenFullYtelse === JaEllerNei.Ja;
 
   return (
     <VStack gap={'space-16'}>
@@ -47,7 +49,7 @@ export const Avslag11_27Vurdering = ({ form, kravIndex, readonly, brukersYtelseA
             name={`avslag11_27vurderinger.${kravIndex}.vurdering.brukersYtelse`}
             control={form.control}
             label={'Hvilken ytelse har brukeren?'}
-            rules={{ required: 'Du må velge hvilken ytelse brukeren har' }}
+            rules={visYtelseSpørsmål ? { required: 'Du må velge hvilken ytelse brukeren har' } : {}}
             readOnly={readonly}
           >
             <option value="">Velg ytelse</option>
@@ -64,7 +66,7 @@ export const Avslag11_27Vurdering = ({ form, kravIndex, readonly, brukersYtelseA
           name={`avslag11_27vurderinger.${kravIndex}.vurdering.harSykepengegrunnlagOver2G`}
           control={form.control}
           label={'Har brukeren sykepengegrunnlag større enn 2G?'}
-          rules={{ required: 'Du må svare om brukeren har sykepengegrunnlag større enn 2G.' }}
+          rules={visSykepengegrunnlagSpørsmål ? { required: 'Du må svare om brukeren har sykepengegrunnlag større enn 2G.' } : {}}
           readOnly={readonly}
           horisontal
         >
@@ -72,19 +74,19 @@ export const Avslag11_27Vurdering = ({ form, kravIndex, readonly, brukersYtelseA
           <Radio value={JaEllerNei.Nei}>Nei</Radio>
         </RadioGroupWrapper>
       )}
-      <RadioGroupWrapper
-        name={`avslag11_27vurderinger.${kravIndex}.vurdering.skalAvslås1127`}
-        control={form.control}
-        label={
-          'Skal søknaden avslås etter § 11-27 fordi det er for tidlig å vurdere vilkårene for AAP mens brukeren har en annen ytelse?'
-        }
-        rules={{ required: 'Du må svare om søknaden skal avslås etter § 11-27' }}
-        readOnly={readonly}
-        horisontal
-      >
-        <Radio value={JaEllerNei.Ja}>Ja</Radio>
-        <Radio value={JaEllerNei.Nei}>Nei</Radio>
-      </RadioGroupWrapper>
+      {visAvslagsSpørsmål && (
+        <RadioGroupWrapper
+          name={`avslag11_27vurderinger.${kravIndex}.vurdering.skalAvslås1127`}
+          control={form.control}
+          label={'Skal søknaden avslås etter § 11-27 fordi det er for tidlig å vurdere vilkårene for AAP mens brukeren har en annen ytelse?'}
+          rules={visAvslagsSpørsmål ? { required: 'Du må svare om søknaden skal avslås etter § 11-27' } : {}}
+          readOnly={readonly}
+          horisontal
+        >
+          <Radio value={JaEllerNei.Ja}>Ja</Radio>
+          <Radio value={JaEllerNei.Nei}>Nei</Radio>
+        </RadioGroupWrapper>
+      )}
     </VStack>
   );
 };
