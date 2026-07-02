@@ -3886,6 +3886,49 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/meldekort/{saksnummer}/har-registrert-timer': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query: {
+          /** @description Meldeperiodens fra-og-med-dato */
+          meldeperiodeFom: string;
+          /** @description Meldeperiodens til-og-med-dato */
+          meldeperiodeTom: string;
+        };
+        header?: never;
+        path: {
+          /** @description saksnummer */
+          saksnummer: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.HarRegistrertTimerResponse'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/meldekort/{saksnummer}/prosessering': {
     parameters: {
       query?: never;
@@ -4972,6 +5015,45 @@ export interface paths {
     };
     put?: never;
     post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/drift/person': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['no.nav.aap.behandlingsflyt.drift.IdentDto'];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.drift.PersonS\u00F8kDriftsinfoDto'];
+          };
+        };
+      };
+    };
     delete?: never;
     options?: never;
     head?: never;
@@ -13846,6 +13928,8 @@ export interface components {
       /** @enum {string} */
       brevtype:
         | 'AVSLAG'
+        | 'AVSLAG_11_5'
+        | 'AVSLAG_UNDER_17_AAR_9_MAANEDER'
         | 'BARNETILLEGG_SATS_REGULERING'
         | 'FORHÅNDSVARSEL_BRUDD_AKTIVITETSPLIKT'
         | 'FORHÅNDSVARSEL_KLAGE_FORMKRAV'
@@ -14979,6 +15063,9 @@ export interface components {
       /** Format: double */
       timerArbeidet: number;
     };
+    'no.nav.aap.behandlingsflyt.behandling.meldekort.HarRegistrertTimerResponse': {
+      harRegistrertTimerForMeldeperioden: boolean;
+    };
     'no.nav.aap.behandlingsflyt.behandling.meldekort.MeldekortDto': {
       begrunnelse?: string | null;
       dager: components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.DagDto'][];
@@ -15737,6 +15824,7 @@ export interface components {
         | '5038'
         | '5040'
         | '5041'
+        | '5042'
         | '5050'
         | '5051'
         | '5052'
@@ -16279,6 +16367,9 @@ export interface components {
       /** @enum {string} */
       utfall: 'IKKE_OPPFYLT' | 'IKKE_RELEVANT' | 'IKKE_VURDERT' | 'OPPFYLT';
     };
+    'no.nav.aap.behandlingsflyt.drift.IdentDto': {
+      ident: string;
+    };
     'no.nav.aap.behandlingsflyt.drift.MottattDokumentDriftsinfoDTO': {
       /** @enum {string} */
       kanal: 'DIGITAL' | 'PAPIR';
@@ -16321,6 +16412,9 @@ export interface components {
       /** Format: int64 */
       personId: number;
     };
+    'no.nav.aap.behandlingsflyt.drift.PersonS\u00F8kDriftsinfoDto': {
+      saker: components['schemas']['no.nav.aap.behandlingsflyt.drift.SaksnummerOgRettighetsperiode'][];
+    };
     'no.nav.aap.behandlingsflyt.drift.SakDriftsinfoDTO': {
       'andreSakerP\u00E5Bruker': string[];
       behandlinger: components['schemas']['no.nav.aap.behandlingsflyt.drift.BehandlingDriftsinfo'][];
@@ -16334,6 +16428,10 @@ export interface components {
       saksnummer: string;
       /** @enum {string} */
       status: 'AVSLUTTET' | 'LØPENDE' | 'OPPRETTET' | 'UTREDES';
+    };
+    'no.nav.aap.behandlingsflyt.drift.SaksnummerOgRettighetsperiode': {
+      rettighetsperiode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
+      saksnummer: string;
     };
     'no.nav.aap.behandlingsflyt.drift.Vilk\u00E5rDriftsinfoDTO': {
       perioder: components['schemas']['no.nav.aap.behandlingsflyt.drift.ForenkletVilk\u00E5rsperiode'][];
