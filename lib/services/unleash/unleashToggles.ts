@@ -12,6 +12,7 @@ export const FLAGS = [
   'StudentV2',
   'OppgavelisteMedBelopISaksbehandling',
   'KravSteg',
+  'BeregningstidspunktAarsak',
   'VentStatusForTilbakekreving',
   'KvalitetssikringDiff'
 ] as const;
@@ -33,6 +34,7 @@ export const mockedFlags: Flags = {
   HentFastlege: true,
   OppgavelisteMedBelopISaksbehandling: true,
   KravSteg: true,
+  BeregningstidspunktAarsak: true,
   VentStatusForTilbakekreving: true,
   KvalitetssikringDiff: true
 };
