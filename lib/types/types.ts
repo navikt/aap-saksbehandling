@@ -244,6 +244,18 @@ export type TrukketSøknadKravLøsning =
 
 export type SøknadUtenKrav = components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.SøknadUtenKravDto'];
 
+export type Avslag11_27Grunnlag =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.avslag_11_27.Avslag11_27GrunnlagDto'];
+
+export type Avslag11_27BrukersYtelse =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.avslag_11_27.Avslag11_27VurderingDto']['brukersYtelse'];
+
+export type Avslag11_27Krav =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.avslag_11_27.Avslag11_27KravDto'];
+
+export type Avslag11_27Vurdering =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.avslag_11_27.Avslag11_27VurderingDto'];
+
 export type TrukketSøknadGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.søknad.TrukketSøknadGrunnlagDto'];
 
@@ -785,6 +797,7 @@ export type UmamiTag =
   | 'STEG_RETTIGHETSPERIODE_VARIGHET'
   | 'STEG_LOVVALG_MEDLEMSKAP_VARIGHET'
   | 'STEG_STUDENT_VARIGHET'
+  | 'STEG_AVSLAG_11_27_VARIGHET'
   | 'STEG_YRKESSKADE_VARIGHET'
   | 'STEG_SYKEPENGEERSTATNING_VARIGHET'
   | 'STEG_FASTSETT_BEREGNINGSTIDSPUNKT_VARIGHET'
