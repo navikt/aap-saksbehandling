@@ -6,7 +6,6 @@ import { InnloggetBrukerContextProvider } from 'context/InnloggetBrukerContext';
 import { FeatureFlagProvider } from 'context/UnleashContext';
 import { getAllFlags } from 'lib/services/unleash/unleashService';
 import { Metadata } from 'next';
-import { isDev } from 'lib/utils/environment';
 import Faro from 'components/frontendobservability/faro';
 
 export const metadata: Metadata = {
