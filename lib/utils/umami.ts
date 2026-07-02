@@ -1,9 +1,6 @@
 import { RefObject, useEffect, useRef } from 'react';
 import { BrevGrunnlagBrev, UmamiKelvinEvent, UmamiTag } from 'lib/types/types';
 
-type UmamiValue = string | number | boolean | null | undefined;
-type UmamiData = Record<string, UmamiValue>;
-
 async function clientLoggUmamiEvent(data: UmamiKelvinEvent) {
   if (typeof window === 'undefined') return;
 
@@ -118,12 +115,4 @@ export function useUmamiVarighetHendelser(hendelseSerieNavn: string): {
   }
 
   return { varighetHendelseRef: varighetHendelser, addHendelse, hendelseSerieRef: hendelseSerie };
-}
-
-declare global {
-  interface Window {
-    umami?: {
-      track: (eventName: string, data: UmamiData) => void;
-    };
-  }
 }
