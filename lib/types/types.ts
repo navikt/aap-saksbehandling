@@ -74,6 +74,9 @@ export type BeregningTidspunktGrunnlag =
 export type BeregningstidspunktVurderingResponse =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.tidspunkt.BeregningstidspunktVurderingResponse'];
 
+export type ÅrsakBeregningstidspunkt = NonNullable<BeregningstidspunktVurderingResponse['årsak']>;
+export type ÅrsakYtterligereNedsatt = NonNullable<BeregningstidspunktVurderingResponse['ytterligereNedsattÅrsak']>;
+
 export type TilkjentYtelseGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelse2Dto'];
 
@@ -126,7 +129,8 @@ export function erDiffLagtTil<T>(d: Diff<T>): d is DiffLagtTil<T> {
 }
 
 export type KvalitetssikringGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.kvalitetssikring.KvalitetssikringGrunnlagDto'];
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.kvalitetssikring.KvalitetssikringGrunnlagResponse'];
+
 export type KvalitetssikringTilgang =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.kvalitetssikring.KvalitetssikringTilgangDto'];
 export type BarnetilleggGrunnlag =
@@ -141,7 +145,7 @@ export type HelseInstiusjonVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.HelseinstitusjonVurderingDto'];
 
 export type FatteVedtakGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.FatteVedtakGrunnlagDto'];
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.FatteVedtakGrunnlagResponse'];
 
 export type AlderGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.alder.AlderDTO'];
@@ -239,6 +243,18 @@ export type TrukketSøknadKravLøsning =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.TrukketSøknadKravLøsningDto'];
 
 export type SøknadUtenKrav = components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.SøknadUtenKravDto'];
+
+export type Avslag11_27Grunnlag =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.avslag_11_27.Avslag11_27GrunnlagDto'];
+
+export type Avslag11_27BrukersYtelse =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.avslag_11_27.Avslag11_27VurderingDto']['brukersYtelse'];
+
+export type Avslag11_27Krav =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.avslag_11_27.Avslag11_27KravDto'];
+
+export type Avslag11_27Vurdering =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.avslag_11_27.Avslag11_27VurderingDto'];
 
 export type TrukketSøknadGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.søknad.TrukketSøknadGrunnlagDto'];
@@ -768,3 +784,58 @@ export enum Roller {
   DRIFT = 'Drift',
   PRODUKSJONSSTYRING = 'Produksjonsstyring',
 }
+
+export interface UmamiKelvinEvent {
+  name: string;
+  hendelse?: string;
+  hendelser_serie: string | null;
+  hendelser_serie_id: string | null;
+  tidsstempel: number | null;
+  varighet_sekunder: number | null;
+  varighet_sekunder_siden_forrige: number | null;
+  brevtype: string | null;
+}
+export type UmamiTag =
+  | 'STEG_TREKK_SØKNAD_VARIGHET'
+  | 'STEG_RETTIGHETSPERIODE_VARIGHET'
+  | 'STEG_LOVVALG_MEDLEMSKAP_VARIGHET'
+  | 'STEG_STUDENT_VARIGHET'
+  | 'STEG_AVSLAG_11_27_VARIGHET'
+  | 'STEG_YRKESSKADE_VARIGHET'
+  | 'STEG_SYKEPENGEERSTATNING_VARIGHET'
+  | 'STEG_FASTSETT_BEREGNINGSTIDSPUNKT_VARIGHET'
+  | 'STEG_YRKESSKADE_GRUNNLAGSBEREGNING_VARIGHET'
+  | 'STEG_MANGLENDE_LIGNING_VARIGHET'
+  | 'STEG_INNTEKTSBORTFALL_VARIGHET'
+  | 'STEG_FORUTGÅENDE_MEDLEMSKAP_VARIGHET'
+  | 'STEG_OPPHOLDSKRAV_VARIGHET'
+  | 'STEG_BARNETILLEGG_VARIGHET'
+  | 'STEG_INSTITUSJON_VARIGHET'
+  | 'STEG_SONINGSFORHOLD_VARIGHET'
+  | 'STEG_SAMORDNING_GRADERING_VARIGHET'
+  | 'STEG_SAMORDNING_UFØRE_VARIGHET'
+  | 'STEG_SAMORDNING_TJENESTEPENSJON_VARIGHET'
+  | 'STEG_SAMORDNING_ARBEIDSGIVER_VARIGHET'
+  | 'STEG_BARNEPENSJON_VARIGHET'
+  | 'STEG_SYKESTIPEND_VARIGHET'
+  | 'STEG_SAMORDNING_ANDRE_STATLIGE_YTELSER_VARIGHET'
+  | 'STEG_VEDTAKSLENGDE_VARIGHET'
+  | 'STEG_FORESLÅ_VEDTAK_VEDTAKSLENGDE_VARIGHET'
+  | 'STEG_IKKEOPPFYLT_MELDEPLIKT_VARIGHET'
+  | 'STEG_UNDERVEIS_VARIGHET'
+  | 'STEG_FORESLÅ_VEDTAK_VARIGHET'
+  | 'STEG_BESLUTTER_VARIGHET'
+  | 'STEG_KVALITETSSIKRER_VARIGHET'
+  | 'STEG_AVBRYT_REVURDERING_VARIGHET'
+  | 'STEG_SVAR_FRA_ANDREINSTANS_VARIGHET'
+  | 'STEG_BREVBYGGER_VARIGHET'
+  | 'STEG_SKRIVBREV_VARIGHET'
+  | 'LOVVALG_MEDLEMSKAP_VARIGHET_HENDELSER'
+  | 'LOVVALG_MEDLEMSKAP_INPUT_FRA_DATO'
+  | 'LOVVALG_MEDLEMSKAP_INPUT_LOVVALG_BEGRUNNELSE'
+  | 'LOVVALG_MEDLEMSKAP_INPUT_LOVVALGSLAND_EØS'
+  | 'LOVVALG_MEDLEMSKAP_INPUT_LOVVALGSLAND_ANNET'
+  | 'LOVVALG_MEDLEMSKAP_INPUT_MEDLEMSKAP_BEGRUNNELSE'
+  | 'LOVVALG_MEDLEMSKAP_INPUT_MEDLEMSKAP_I_FOLKETRYGDEN'
+  | 'BESLUTTER_VARIGHET_HENDELSER'
+  | 'KVALITETSSIKRER_VARIGHET_HENDELSER';

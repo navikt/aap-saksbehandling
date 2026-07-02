@@ -19,6 +19,8 @@ import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useInnloggetBruker } from 'hooks/BrukerHook';
 import { brukerErBeslutter, brukerKanSaksbehandle } from 'lib/utils/innloggetBruker';
 import { AvbrytAktivitetspliktbehandlingModal } from 'components/saksinfobanner/avbrytaktivitetspliktbehandlingmodal/AvbrytAktivitetspliktbehandlingModal';
+import { Avslag11_27Dialog } from 'components/saksinfobanner/avslag11_27dialog/Avslag11_27Dialog';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 export const SaksmenyDropdown = ({
   flyt,
@@ -54,6 +56,8 @@ export const SaksmenyDropdown = ({
   const behandlerRevurderingSomSkalAvbrytes = avbrytRevurderingSteg && avbrytRevurderingSteg.skalVises;
   const behandlerAktivitetspliktbehandlingSomSkalAvbrytes =
     avbrytAktivitetspliktbehandlingSteg && avbrytAktivitetspliktbehandlingSteg.skalVises;
+  const avslag1127Steg = flyt && flyt.find((f) => f.stegGruppe === 'AVSLAG_11_27');
+  const harAlleredeValgtAvslag1127 = avslag1127Steg && avslag1127Steg.skalVises;
 
   const trekkKlageSteg = flyt && flyt.find((f) => f.stegGruppe === 'TREKK_KLAGE');
   const harAlleredeValgtTrekkKlage = trekkKlageSteg && trekkKlageSteg.skalVises;
@@ -65,6 +69,7 @@ export const SaksmenyDropdown = ({
     typeBehandling && (typeBehandling === 'Aktivitetsplikt' || typeBehandling === 'Aktivitetsplikt11_9');
   const behandlingErIkkeAvsluttet = behandling.status !== 'AVSLUTTET';
   const behandlingErIkkeIverksatt = behandling.status !== 'IVERKSETTES';
+  const [visAvslag1127Modal, settVisAvslag1127Modal] = useState(false);
 
   const visValgForÅTrekkeSøknad =
     !behandlerEnSøknadSomSkalTrekkes &&
@@ -100,6 +105,15 @@ export const SaksmenyDropdown = ({
     behandlingErIkkeIverksatt;
 
   const visValgForÅSetteMarkering = innloggetBrukerKanSaksbehandle && behandlingErIkkeAvsluttet;
+
+  const avslag11_27Enable = useFeatureFlag('Avslag11_27');
+
+  const visValgForAvslag1127 =
+    avslag11_27Enable &&
+    behandlingErIkkeIverksatt &&
+    innloggetBrukerKanSaksbehandle &&
+    behandlingErIkkeAvsluttet &&
+    !harAlleredeValgtAvslag1127;
 
   return (
     <div className={styles.saksmeny}>
@@ -153,6 +167,11 @@ export const SaksmenyDropdown = ({
                 Marker som haster
               </Dropdown.Menu.GroupedList.Item>
             )}
+            {visValgForAvslag1127 && (
+              <Dropdown.Menu.GroupedList.Item onClick={() => settVisAvslag1127Modal(true)}>
+                Vurder avslag § 11-27
+              </Dropdown.Menu.GroupedList.Item>
+            )}
           </Dropdown.Menu.GroupedList>
         </Dropdown.Menu>
       </Dropdown>
@@ -202,6 +221,14 @@ export const SaksmenyDropdown = ({
           type={aktivMarkeringType}
           isOpen={true}
           onClose={() => settAktivMarkeringType(null)}
+        />
+      )}
+      {visAvslag1127Modal && (
+        <Avslag11_27Dialog
+          isOpen={visAvslag1127Modal}
+          onClose={() => settVisAvslag1127Modal(false)}
+          saksnummer={saksnummer}
+          behandlingReferanse={behandling?.referanse}
         />
       )}
     </div>

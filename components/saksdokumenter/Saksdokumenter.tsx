@@ -46,10 +46,12 @@ export const Saksdokumenter = () => {
   const dokumentnavn = form.watch('dokumentnavn');
   const visMeldekort = form.watch('visMeldekort');
 
+  const meldekortBrevkoder = ['00-10.02', '00-10.03'];
+
   const dokumenterFiltrertPåSøk =
     journalposterPåSak?.data?.filter((journalpost) =>
       journalpost.dokumenter?.some((dok) => {
-        const inklMeldekort = visMeldekort || !dok.brevkode?.includes('00-10.02');
+        const inklMeldekort = visMeldekort || !meldekortBrevkoder.some((brevkode) => dok.brevkode?.includes(brevkode));
 
         return dokumentnavn
           ? dok.tittel?.toLowerCase().includes(dokumentnavn.toLowerCase()) && inklMeldekort

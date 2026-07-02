@@ -13928,6 +13928,8 @@ export interface components {
       /** @enum {string} */
       brevtype:
         | 'AVSLAG'
+        | 'AVSLAG_11_5'
+        | 'AVSLAG_UNDER_17_AAR_9_MAANEDER'
         | 'BARNETILLEGG_SATS_REGULERING'
         | 'FORHÅNDSVARSEL_BRUDD_AKTIVITETSPLIKT'
         | 'FORHÅNDSVARSEL_KLAGE_FORMKRAV'
