@@ -2,7 +2,6 @@ import umami, { UmamiEventData } from '@umami/node';
 import { UmamiKelvinEvent } from 'lib/types/types';
 import { logWarning } from 'lib/serverutlis/logger';
 import { NextResponse } from 'next/server';
-import { getToken, validateToken } from '@navikt/oasis';
 
 const umamiSporingskode = 'ebb233f3-6c6d-4b9f-b84d-9a11a3c2f16f';
 umami.init({
@@ -11,16 +10,6 @@ umami.init({
 });
 
 export async function POST(req: Request) {
-  const token = getToken(req);
-  if (!token) {
-    return NextResponse.json('Fant ikke token', { status: 401 });
-  }
-  const validation = await validateToken(token);
-  if (!validation.ok) {
-    logWarning(`Token for /umami validerte ikke (errortype='${validation.errorType}')`, validation.error);
-    return NextResponse.json('', { status: 401 });
-  }
-
   const payload: UmamiKelvinEvent = await req.json();
   const eventData: UmamiKelvinEvent = {
     name: payload.name,
