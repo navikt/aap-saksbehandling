@@ -10,7 +10,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { AktivitetspliktTrekk } from 'components/saksoversikt/aktivitetsplikttrekk/AktivitetspliktTrekk';
 import { MeldekortOversikt } from 'components/saksoversikt/meldekortoversikt/MeldekortOversikt';
 import { useFeatureFlag } from 'context/UnleashContext';
-import { SakerResponse } from 'lib/services/apiinternservice/apiInternService';
+import { SakerResponse } from 'lib/services/apiinternservice/apiInternServiceDTOs';
 import { ArenaSakerListe } from 'components/saksoversikt/ArenaSakerListe';
 
 enum Tab {
