@@ -16,6 +16,7 @@ export const FLAGS = [
   'VentStatusForTilbakekreving',
   'KvalitetssikringDiff',
   'Avslag11_27',
+  'VarselNaarDetFinnesTimerPaaMeldeperiode',
   'SkalViseAlleSykdomssteg',
 ] as const;
 
@@ -41,4 +42,5 @@ export const mockedFlags: Flags = {
   KvalitetssikringDiff: true,
   Avslag11_27: true,
   SkalViseAlleSykdomssteg: true,
+  VarselNaarDetFinnesTimerPaaMeldeperiode: true,
 };
