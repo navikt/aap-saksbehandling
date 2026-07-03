@@ -68,7 +68,8 @@ export const DigitaliserMeldekort = ({ readOnly, submit, isLoading, oppgave }: P
       },
       innsendtDato: {
         type: 'date',
-        label: 'Dato for innsendt meldekort',
+        label: 'Dato bruker oppga opplysninger',
+        description: 'Dato dokumentet er innsendt, men tidligst mandag etter meldeperioden',
         rules: {
           required: 'Du må registrere når meldekortet ble innsendt',
           validate: (value, formValues) => {
