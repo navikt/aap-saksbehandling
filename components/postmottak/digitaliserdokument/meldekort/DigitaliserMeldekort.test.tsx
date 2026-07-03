@@ -62,7 +62,7 @@ describe('Validering av mottatt dato på digitalisert meldekort', () => {
   it('viser feilmelding når mottatt dato er satt til før siste dag i valgt meldeperiode', async () => {
     await velgToPåfølgendeUker();
 
-    const innsendtDatoInput = screen.getByRole('textbox', { name: 'Dato for innsendt meldekort' });
+    const innsendtDatoInput = screen.getByRole('textbox', { name: 'Dato bruker oppga opplysninger' });
     await user.type(innsendtDatoInput, '01.01.2020');
 
     await trykkPåNeste();
@@ -73,7 +73,7 @@ describe('Validering av mottatt dato på digitalisert meldekort', () => {
   it('viser ikke feilmelding når mottatt dato er satt til langt etter valgt meldeperiode', async () => {
     await velgToPåfølgendeUker();
 
-    const innsendtDatoInput = screen.getByRole('textbox', { name: 'Dato for innsendt meldekort' });
+    const innsendtDatoInput = screen.getByRole('textbox', { name: 'Dato bruker oppga opplysninger' });
     await user.type(innsendtDatoInput, '01.01.2999');
 
     await trykkPåNeste();
@@ -84,7 +84,7 @@ describe('Validering av mottatt dato på digitalisert meldekort', () => {
   });
 
   it('validerer ikke mottatt dato mot meldeperiode når ingen uker er valgt', async () => {
-    const innsendtDatoInput = screen.getByRole('textbox', { name: 'Dato for innsendt meldekort' });
+    const innsendtDatoInput = screen.getByRole('textbox', { name: 'Dato bruker oppga opplysninger' });
     await user.type(innsendtDatoInput, '01.01.2020');
 
     await trykkPåNeste();
