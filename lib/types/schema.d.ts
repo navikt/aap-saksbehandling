@@ -777,7 +777,7 @@ export interface paths {
             [name: string]: unknown;
           };
           content: {
-            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.FatteVedtakGrunnlagDto'];
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.FatteVedtakGrunnlagResponse'];
           };
         };
       };
@@ -853,7 +853,7 @@ export interface paths {
             [name: string]: unknown;
           };
           content: {
-            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.kvalitetssikring.KvalitetssikringGrunnlagDto'];
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.kvalitetssikring.KvalitetssikringGrunnlagResponse'];
           };
         };
       };
@@ -6469,13 +6469,6 @@ export interface components {
        */
       tidspunkt: string;
     };
-    'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.FatteVedtakGrunnlagDto': {
-      besluttetAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.BeslutterDto'];
-      'harGjortVilk\u00E5rsvurderingerP\u00E5Behandling': boolean;
-      'harTilgangTil\u00C5Saksbehandle': boolean;
-      historikk: components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.flate.Historikk'][];
-      vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8ser.vedtak.TotrinnsVurdering'][];
-    };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.FatteVedtakGrunnlagResponse': {
       besluttetAv?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.BeslutterDto'];
       'harGjortVilk\u00E5rsvurderingerP\u00E5Behandling': boolean;
@@ -6603,7 +6596,6 @@ export interface components {
       grunner?:
         | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.\u00C5rsakTilRetur'][]
         | null;
-      markeringer?: components['schemas']['no.nav.aap.oppgave.markering.MarkeringDto'][] | null;
     };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.ArbeidsopptrappingL\u00F8sning': {
       /** @enum {string} */
@@ -14941,12 +14933,6 @@ export interface components {
       vurdertAv: components['schemas']['no.nav.aap.komponenter.verdityper.Bruker'];
       vurdertIBehandling: components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.behandling.BehandlingId'];
     };
-    'no.nav.aap.behandlingsflyt.behandling.kvalitetssikring.KvalitetssikringGrunnlagDto': {
-      'harGjortVilk\u00E5rsvurderingerP\u00E5Behandling': boolean;
-      'harTilgangTil\u00C5Saksbehandle': boolean;
-      historikk: components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.flate.Historikk'][];
-      vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8ser.vedtak.TotrinnsVurdering'][];
-    };
     'no.nav.aap.behandlingsflyt.behandling.kvalitetssikring.KvalitetssikringGrunnlagResponse': {
       'harGjortVilk\u00E5rsvurderingerP\u00E5Behandling': boolean;
       'harTilgangTil\u00C5Saksbehandle': boolean;
@@ -18795,6 +18781,7 @@ export interface components {
         | 'KLAGE'
         | 'LAERLING'
         | 'MEDLEMSKAP'
+        | 'MELDEKORT'
         | 'PARTSINNSYN'
         | 'REFUSJONSKRAV'
         | 'SLUTTAVTALE'
@@ -18880,6 +18867,7 @@ export interface components {
         | 'KLAGE'
         | 'LAERLING'
         | 'MEDLEMSKAP'
+        | 'MELDEKORT'
         | 'PARTSINNSYN'
         | 'REFUSJONSKRAV'
         | 'SLUTTAVTALE'
@@ -20431,20 +20419,6 @@ export interface components {
       /** @enum {string} */
       status: 'AVBRUTT' | 'FEILET' | 'FERDIG' | 'KLAR' | 'PLUKKET';
       type: string;
-    };
-    'no.nav.aap.oppgave.markering.MarkeringDto': {
-      begrunnelse?: string | null;
-      /** @enum {string|null} */
-      hendelseType?: 'FJERNET' | 'OPPRETTET' | null;
-      /** @enum {string} */
-      markeringType: 'AVSLAG_11_5' | 'HASTER' | 'KREVER_SPESIALKOMPETANSE';
-      opprettetAv?: string | null;
-      opprettetAvNavn?: string | null;
-      /**
-       * Format: date-time
-       * @example 2025-04-01T12:30:00
-       */
-      opprettetTidspunkt?: string | null;
     };
     'no.nav.aap.utbetal.simulering.SimuleringDto': {
       perioder: components['schemas']['no.nav.aap.utbetal.simulering.SimuleringsperiodeDto'][];
