@@ -6,14 +6,19 @@ import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { Button } from '@navikt/ds-react';
-import { addWeeks, format, isBefore, startOfWeek, subMonths } from 'date-fns';
+import { addWeeks, format, getISOWeek, isBefore, lastDayOfISOWeek, startOfWeek, subMonths } from 'date-fns';
 import { MeldeperioderV2 } from 'components/postmottak/digitaliserdokument/meldekort/MeldePerioderV2';
-import { SubmitEventHandler } from 'react';
+import { SubmitEventHandler, useEffect, useState } from 'react';
 import { Dato } from 'lib/types/Dato';
+import { Alert } from 'components/alert/Alert';
+import { clientHentHarRegistrertTimerIMeldeperioden } from 'lib/clientApi';
+import { isError } from 'lib/utils/api';
+import { Oppgave } from 'lib/types/oppgaveTypes';
 
 interface Props extends Submittable {
   readOnly: boolean;
   isLoading: boolean;
+  oppgave: Oppgave;
 }
 export type Meldedag = {
   dato: Date;
@@ -27,6 +32,7 @@ export interface MeldekortFormFields {
   gjelderForUker: string[];
   innsendtDato: Date;
   meldeperioder: Meldeperiode[];
+  timerErAlleredeRegistrertIKelvin: string[];
 }
 
 export const ukestartSisteHalvår = (): ValuePair[] => {
@@ -48,7 +54,9 @@ export const ukestartSisteHalvår = (): ValuePair[] => {
   return opts;
 };
 
-export const DigitaliserMeldekortV2 = ({ readOnly, submit, isLoading }: Props) => {
+export const DigitaliserMeldekort = ({ readOnly, submit, isLoading, oppgave }: Props) => {
+  const [finnesTimerForMeldeperiode, setFinnesTimerForMeldeperiode] = useState<boolean>();
+
   const { form, formFields } = useConfigForm<MeldekortFormFields>(
     {
       gjelderForUker: {
@@ -66,6 +74,10 @@ export const DigitaliserMeldekortV2 = ({ readOnly, submit, isLoading }: Props) =
         type: 'fieldArray',
         defaultValue: [],
       },
+      timerErAlleredeRegistrertIKelvin: {
+        type: 'checkbox',
+        options: [{ value: 'timerErRegistrert', label: 'Timer er allerede registrert i kelvin' }],
+      },
     },
     { readOnly }
   );
@@ -82,7 +94,7 @@ export const DigitaliserMeldekortV2 = ({ readOnly, submit, isLoading }: Props) =
     const meldekort: MeldekortV0 = {
       meldingType: MeldekortV0,
       harDuArbeidet: dager.some((dag) => dag.timerArbeid > 0),
-      timerArbeidPerPeriode: dager,
+      timerArbeidPerPeriode: data.timerErAlleredeRegistrertIKelvin.includes('timerErRegistrert') ? [] : dager,
     };
     return JSON.stringify(meldekort);
   }
@@ -91,12 +103,55 @@ export const DigitaliserMeldekortV2 = ({ readOnly, submit, isLoading }: Props) =
     form.handleSubmit((data) => submit('MELDEKORT', mapTilMeldekortKontrakt(data), data.innsendtDato))(event);
   };
 
+  const meldeperioder = form.watch('meldeperioder');
+
+  useEffect(() => {
+    const erGyldigMeldeperiode =
+      meldeperioder.length === 2 &&
+      getISOWeek(addWeeks(meldeperioder[0].ukestart, 1)) === getISOWeek(meldeperioder[1].ukestart);
+
+    if (!erGyldigMeldeperiode || !oppgave.saksnummer) {
+      setFinnesTimerForMeldeperiode(undefined);
+      return;
+    }
+
+    let avbrutt = false;
+
+    const hentHarRegistrerteTimer = async () => {
+      const meldeperiodeFom = new Date(meldeperioder[0].ukestart);
+      const meldeperiodeTom = lastDayOfISOWeek(new Date(meldeperioder[1].ukestart));
+
+      const respons = await clientHentHarRegistrertTimerIMeldeperioden(
+        oppgave.saksnummer!,
+        meldeperiodeFom,
+        meldeperiodeTom
+      );
+
+      if (!avbrutt && !isError(respons)) {
+        setFinnesTimerForMeldeperiode(respons.data.harRegistrertTimerForMeldeperioden);
+      }
+    };
+
+    hentHarRegistrerteTimer();
+
+    return () => {
+      avbrutt = true;
+    };
+  }, [meldeperioder, oppgave.saksnummer]);
+
+  const timerErRegistrertIKelvin = form.watch('timerErAlleredeRegistrertIKelvin').includes('timerErRegistrert');
+
   return (
     <VilkårsKort heading={'Meldekort'}>
       <form onSubmit={handleSubmit}>
         <FormField form={form} formField={formFields.gjelderForUker} />
         <FormField form={form} formField={formFields.innsendtDato} />
-        <MeldeperioderV2 form={form} readOnly={readOnly} />
+        <FormField form={form} formField={formFields.timerErAlleredeRegistrertIKelvin} />
+        {!timerErRegistrertIKelvin && <MeldeperioderV2 form={form} readOnly={readOnly} />}
+
+        {finnesTimerForMeldeperiode && (
+          <Alert variant={'info'}>Det er allerede ført timer for denne meldeperioden.</Alert>
+        )}
 
         {!readOnly && (
           <Button loading={isLoading} className={'fit-content'}>
@@ -107,5 +162,3 @@ export const DigitaliserMeldekortV2 = ({ readOnly, submit, isLoading }: Props) =
     </VilkårsKort>
   );
 };
-
-DigitaliserMeldekortV2.displayName = 'DigitaliserMeldekort';
