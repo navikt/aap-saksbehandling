@@ -56,6 +56,7 @@ export interface BetingetTekstType {
 export interface KategorisertTekstRef {
   _key: string;
   _type: 'kategorisertTekstRef';
+  erDefault?: boolean;
   kategori: string | null;
   tekst: TekstType;
 }
