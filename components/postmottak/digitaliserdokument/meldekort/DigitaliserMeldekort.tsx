@@ -34,7 +34,6 @@ export interface MeldekortFormFields {
   gjelderForUker: string[];
   innsendtDato: Date;
   meldeperioder: Meldeperiode[];
-  timerErAlleredeRegistrertIKelvin: string[];
 }
 
 export const ukestartSisteHalvår = (): ValuePair[] => {
@@ -88,10 +87,6 @@ export const DigitaliserMeldekort = ({ readOnly, submit, isLoading, oppgave }: P
         type: 'fieldArray',
         defaultValue: [],
       },
-      timerErAlleredeRegistrertIKelvin: {
-        type: 'checkbox',
-        options: [{ value: 'timerErRegistrert', label: 'Timer er allerede registrert i kelvin' }],
-      },
     },
     { readOnly }
   );
@@ -108,7 +103,7 @@ export const DigitaliserMeldekort = ({ readOnly, submit, isLoading, oppgave }: P
     const meldekort: MeldekortV0 = {
       meldingType: MeldekortV0,
       harDuArbeidet: dager.some((dag) => dag.timerArbeid > 0),
-      timerArbeidPerPeriode: data.timerErAlleredeRegistrertIKelvin?.includes('timerErRegistrert') ? [] : dager,
+      timerArbeidPerPeriode: dager,
     };
     return JSON.stringify(meldekort);
   }
@@ -153,19 +148,19 @@ export const DigitaliserMeldekort = ({ readOnly, submit, isLoading, oppgave }: P
     };
   }, [meldeperioder, oppgave.saksnummer]);
 
-  const timerErRegistrertIKelvin = form.watch('timerErAlleredeRegistrertIKelvin')?.includes('timerErRegistrert');
-
   return (
     <VilkårsKort heading={'Meldekort'}>
       <form onSubmit={handleSubmit}>
         <FormField form={form} formField={formFields.gjelderForUker} />
-        <FormField form={form} formField={formFields.innsendtDato} />
-        <FormField form={form} formField={formFields.timerErAlleredeRegistrertIKelvin} />
-        {!timerErRegistrertIKelvin && <Meldeperioder form={form} readOnly={readOnly} />}
 
         {finnesTimerForMeldeperiode && (
-          <Alert variant={'info'}>Det er allerede ført timer for denne meldeperioden.</Alert>
+          <Alert
+            variant={'warning'}
+          >{`Det er allerede levert meldekort for denne meldeperioden. Hvis du ikke trenger å endre arbeidede timer, så kan du kategorisere dokumentet som "Annet relevant dokument" med underkategorien Meldekort.`}</Alert>
         )}
+
+        <FormField form={form} formField={formFields.innsendtDato} />
+        <Meldeperioder form={form} readOnly={readOnly} />
 
         {!readOnly && (
           <Button loading={isLoading} className={'fit-content'}>
