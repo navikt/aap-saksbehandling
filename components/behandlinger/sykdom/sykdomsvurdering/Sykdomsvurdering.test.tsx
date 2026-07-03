@@ -871,13 +871,27 @@ describe('vurderinger uten viss varighet', () => {
       screen.getByRole('radiogroup', { name: /er arbeidsevnen nedsatt med minst halvparten\?/i })
     ).getByRole('radio', { name: 'Nei' });
 
-    await user.click(SkadeSykdomLyteNeiValg);
     await user.click(NedsattArbeidsevneNeiValg);
     await user.click(NedsattArbeidsevneTilstrekkeligNeiValg);
 
+    const nedsatt30Prosent = await screen.findByRole('radiogroup', {
+      name: /er arbeidsevnen nedsatt med minst 30 prosent\?/i,
+    });
+    await user.click(within(nedsatt30Prosent).getByRole('radio', { name: 'Ja' }));
+    await user.type(
+      screen.getByRole('textbox', { name: '§ 11-22 AAP ved yrkesskade' }),
+      'Kort begrunnelse for vurdering av 30 prosent.'
+    );
+    await user.click(SkadeSykdomLyteNeiValg);
+    const vesentligMedvirkende = await screen.findByRole('radiogroup', {
+      name: /er sykdom, skade eller lyte vesentlig medvirkende til at arbeidsevnen er nedsatt\?/i,
+    });
+    await user.click(within(vesentligMedvirkende).getByRole('radio', { name: 'Ja' }));
+
     await velgBekreft();
+
     const feilmeldinger = screen.getAllByText(
-      /datoen som er satt er tidligere enn perioden som skal vurderes. Vurderingen kan tidligst gjelde fra /i
+      /Datoen som er satt er tidligere enn perioden som skal vurderes. Vurderingen kan tidligst gjelde fra/i
     );
 
     await expect(feilmeldinger.length).toBe(2);
