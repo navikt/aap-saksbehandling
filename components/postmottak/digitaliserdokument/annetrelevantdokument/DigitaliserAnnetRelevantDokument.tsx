@@ -24,7 +24,7 @@ interface Props extends Submittable {
   erKravEnabled: boolean;
 }
 
-const kategorierOptions: ValuePair<NonNullable<AnnetRelevantDokumentUnderkategori>>[] = [
+const underkategoriOptions: ValuePair<NonNullable<AnnetRelevantDokumentUnderkategori>>[] = [
   { label: 'Arbeidsutprøving', value: 'ARBEIDSUTPROVING' },
   { label: 'Barnetillegg', value: 'BARNETILLEGG' },
   { label: 'Etablering', value: 'ETABLERING' },
@@ -43,6 +43,7 @@ const kategorierOptions: ValuePair<NonNullable<AnnetRelevantDokumentUnderkategor
   { label: 'Studentbestemmelsen', value: 'STUDENTBESTEMMELSEN' },
   { label: 'Tiltaksrapport', value: 'TILTAKSRAPPORT' },
   { label: 'Yrkesskade', value: 'YRKESSKADE' },
+  { label: 'Meldekort', value: 'MELDEKORT' },
 ];
 
 function mapTilAnnetRelevantDokumentKontrakt(data: AnnetRelevantDokumentFormFields) {
@@ -88,7 +89,7 @@ export const DigitaliserAnnetRelevantDokument = ({ grunnlag, readOnly, submit, i
         label: 'Underkategori',
         defaultValue: annetRelevantDokumentGrunnlag.underkategori || '',
         description: 'Velg kategorien som passer best for dokumentet. Dette gjør dokumentet enklere å finne og forstå.',
-        options: ['', ...kategorierOptions],
+        options: ['', ...underkategoriOptions],
       },
     },
     { readOnly }
