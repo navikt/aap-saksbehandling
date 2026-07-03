@@ -7,13 +7,13 @@ import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { Button } from '@navikt/ds-react';
 import { addWeeks, format, getISOWeek, isBefore, lastDayOfISOWeek, startOfWeek, subMonths } from 'date-fns';
-import { MeldeperioderV2 } from 'components/postmottak/digitaliserdokument/meldekort/MeldePerioderV2';
 import { SubmitEventHandler, useEffect, useState } from 'react';
 import { Dato } from 'lib/types/Dato';
 import { Alert } from 'components/alert/Alert';
 import { clientHentHarRegistrertTimerIMeldeperioden } from 'lib/clientApi';
 import { isError } from 'lib/utils/api';
 import { Oppgave } from 'lib/types/oppgaveTypes';
+import { Meldeperioder } from 'components/postmottak/digitaliserdokument/meldekort/MeldePerioder';
 
 interface Props extends Submittable {
   readOnly: boolean;
@@ -147,7 +147,7 @@ export const DigitaliserMeldekort = ({ readOnly, submit, isLoading, oppgave }: P
         <FormField form={form} formField={formFields.gjelderForUker} />
         <FormField form={form} formField={formFields.innsendtDato} />
         <FormField form={form} formField={formFields.timerErAlleredeRegistrertIKelvin} />
-        {!timerErRegistrertIKelvin && <MeldeperioderV2 form={form} readOnly={readOnly} />}
+        {!timerErRegistrertIKelvin && <Meldeperioder form={form} readOnly={readOnly} />}
 
         {finnesTimerForMeldeperiode && (
           <Alert variant={'info'}>Det er allerede ført timer for denne meldeperioden.</Alert>
@@ -162,3 +162,5 @@ export const DigitaliserMeldekort = ({ readOnly, submit, isLoading, oppgave }: P
     </VilkårsKort>
   );
 };
+
+DigitaliserMeldekort.displayName = 'DigitaliserMeldekort';

@@ -5,17 +5,14 @@ import {
   ukestartSisteHalvår,
 } from 'components/postmottak/digitaliserdokument/meldekort/DigitaliserMeldekortV2';
 import userEvent from '@testing-library/user-event';
-import { Oppgave } from 'lib/types/oppgaveTypes';
 
 const user = userEvent.setup();
 
 const ukestarterSisteHalvår = ukestartSisteHalvår();
 
-const oppgave = { saksnummer: '123' } as Oppgave;
-
 describe('Digitaliser meldekort v2', () => {
   beforeEach(() => {
-    render(<DigitaliserMeldekortV2 submit={() => {}} isLoading={false} readOnly={false} oppgave={oppgave} />);
+    render(<DigitaliserMeldekortV2 submit={() => {}} isLoading={false} readOnly={false} />);
   });
 
   it('innsendtdato vises', () => {
