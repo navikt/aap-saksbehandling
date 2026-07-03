@@ -69,6 +69,11 @@ export const SaksinfoBanner = ({ sak, behandling, oppgave, flyt, visning }: Prop
       <div className={styles.saksinfo}>
         <HStack gap={'space-8'} align="center">
           <Label size="small">
+            <Link href={`/person/${personInformasjon.personReferanse}`} title="Personside">
+              Personside
+            </Link>
+          </Label>
+          <Label size="small">
             <Link href={`/saksbehandling/sak/${sak.saksnummer}`} title="Tilbake til saksoversikt">
               {storForbokstavIHvertOrd(personInformasjon.navn)}
             </Link>
