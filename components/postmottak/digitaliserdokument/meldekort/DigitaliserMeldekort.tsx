@@ -94,7 +94,7 @@ export const DigitaliserMeldekort = ({ readOnly, submit, isLoading, oppgave }: P
     const meldekort: MeldekortV0 = {
       meldingType: MeldekortV0,
       harDuArbeidet: dager.some((dag) => dag.timerArbeid > 0),
-      timerArbeidPerPeriode: data.timerErAlleredeRegistrertIKelvin.includes('timerErRegistrert') ? [] : dager,
+      timerArbeidPerPeriode: data.timerErAlleredeRegistrertIKelvin?.includes('timerErRegistrert') ? [] : dager,
     };
     return JSON.stringify(meldekort);
   }
@@ -139,7 +139,7 @@ export const DigitaliserMeldekort = ({ readOnly, submit, isLoading, oppgave }: P
     };
   }, [meldeperioder, oppgave.saksnummer]);
 
-  const timerErRegistrertIKelvin = form.watch('timerErAlleredeRegistrertIKelvin').includes('timerErRegistrert');
+  const timerErRegistrertIKelvin = form.watch('timerErAlleredeRegistrertIKelvin')?.includes('timerErRegistrert');
 
   return (
     <VilkårsKort heading={'Meldekort'}>
