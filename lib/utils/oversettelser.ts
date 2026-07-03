@@ -1,4 +1,10 @@
-import { SettPåVentÅrsaker, TilbakekrevingVenteÅrsaker, TypeBehandling, VilkårUtfall, ÅrsakTilOpprettelse } from 'lib/types/types';
+import {
+  SettPåVentÅrsaker,
+  TilbakekrevingVenteÅrsaker,
+  TypeBehandling,
+  VilkårUtfall,
+  ÅrsakTilOpprettelse,
+} from 'lib/types/types';
 import { exhaustiveCheck } from 'lib/utils/typescript';
 import { OppgaveAvklaringsbehovKode, OppgaveBehandlingstype } from 'lib/types/oppgaveTypes';
 import { PostmottakSettPåVentÅrsaker, PostmottakTypeBehandling } from 'lib/types/postmottakTypes';
@@ -102,7 +108,7 @@ export function mapBehovskodeTilBehovstype(kode: OppgaveAvklaringsbehovKode | st
 }
 
 export function mapTilVenteÅrsakTekst(
-  årsak: SettPåVentÅrsaker | PostmottakSettPåVentÅrsaker | TilbakekrevingVenteÅrsaker,
+  årsak: SettPåVentÅrsaker | PostmottakSettPåVentÅrsaker | TilbakekrevingVenteÅrsaker
 ): string {
   switch (årsak) {
     case 'VENTER_PÅ_OPPLYSNINGER':
@@ -288,6 +294,8 @@ export function mapTilÅrsakTilOpprettelseTilTekst(årsakTilOpprettelse: ÅrsakT
       return 'Aktivitetsplikt';
     case 'UTVID_VEDTAKSLENGDE':
       return 'Utvid vedtaksperiode';
+    case 'MIGRERING_FRA_ARENA':
+      return 'Migrering fra Arena';
   }
 }
 
@@ -350,6 +358,8 @@ export function mapTypeBehandlingTilTekst(typeBehandling: TypeBehandling | Postm
       return 'Aktivitetsplikt § 11-9';
     case 'DokumentHåndtering':
       return 'Dokumenthåndtering';
+    case 'MigreringFraArena':
+      return 'Migrering fra Arena';
     default:
       return typeBehandling;
   }

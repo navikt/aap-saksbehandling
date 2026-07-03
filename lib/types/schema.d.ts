@@ -241,6 +241,45 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/sak/migrerFraArena': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.MigrerArenasakDTO'];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.SaksinfoDTO'];
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/sak/siste/{antall}': {
     parameters: {
       query?: never;
@@ -382,6 +421,7 @@ export interface paths {
             | 'Aktivitetsplikt11_9'
             | 'Førstegangsbehandling'
             | 'Klage'
+            | 'MigreringFraArena'
             | 'OppfølgingsBehandling'
             | 'Revurdering'
             | 'SvarFraAndreinstans'
@@ -14702,6 +14742,7 @@ export interface components {
         | 'Aktivitetsplikt11_9'
         | 'Førstegangsbehandling'
         | 'Klage'
+        | 'MigreringFraArena'
         | 'OppfølgingsBehandling'
         | 'Revurdering'
         | 'SvarFraAndreinstans'
@@ -14735,6 +14776,7 @@ export interface components {
         | 'INSTITUSJONSOPPHOLD'
         | 'KLAGE_TRUKKET'
         | 'LOVVALG_OG_MEDLEMSKAP'
+        | 'MIGRERING_FRA_ARENA'
         | 'MIGRER_RETTIGHETSPERIODE'
         | 'MOTATT_KLAGE'
         | 'MOTTATT_AKTIVITETSMELDING'
@@ -14794,6 +14836,7 @@ export interface components {
         | 'KLAGE'
         | 'MANUELL_OPPRETTELSE'
         | 'MELDEKORT'
+        | 'MIGRERING_FRA_ARENA'
         | 'MIGRER_RETTIGHETSPERIODE'
         | 'OMGJØRING_ETTER_KLAGE'
         | 'OMGJØRING_ETTER_SVAR_FRA_KLAGEINSTANS'
@@ -15342,6 +15385,7 @@ export interface components {
         | 'INSTITUSJONSOPPHOLD'
         | 'KLAGE_TRUKKET'
         | 'LOVVALG_OG_MEDLEMSKAP'
+        | 'MIGRERING_FRA_ARENA'
         | 'MIGRER_RETTIGHETSPERIODE'
         | 'MOTATT_KLAGE'
         | 'MOTTATT_AKTIVITETSMELDING'
@@ -15418,6 +15462,7 @@ export interface components {
             | 'INSTITUSJONSOPPHOLD'
             | 'KLAGE_TRUKKET'
             | 'LOVVALG_OG_MEDLEMSKAP'
+            | 'MIGRERING_FRA_ARENA'
             | 'MIGRER_RETTIGHETSPERIODE'
             | 'MOTATT_KLAGE'
             | 'MOTTATT_AKTIVITETSMELDING'
@@ -16202,6 +16247,7 @@ export interface components {
         | 'INSTITUSJONSOPPHOLD'
         | 'KLAGE_TRUKKET'
         | 'LOVVALG_OG_MEDLEMSKAP'
+        | 'MIGRERING_FRA_ARENA'
         | 'MIGRER_RETTIGHETSPERIODE'
         | 'MOTATT_KLAGE'
         | 'MOTTATT_AKTIVITETSMELDING'
@@ -16261,6 +16307,7 @@ export interface components {
         | 'KLAGE'
         | 'MANUELL_OPPRETTELSE'
         | 'MELDEKORT'
+        | 'MIGRERING_FRA_ARENA'
         | 'MIGRER_RETTIGHETSPERIODE'
         | 'OMGJØRING_ETTER_KLAGE'
         | 'OMGJØRING_ETTER_SVAR_FRA_KLAGEINSTANS'
@@ -16381,6 +16428,7 @@ export interface components {
         | 'LEGEERKLÆRING_AVVIST'
         | 'MANUELL_REVURDERING'
         | 'MELDEKORT'
+        | 'MIGRERING_FRA_ARENA'
         | 'NY_ÅRSAK_TIL_BEHANDLING'
         | 'OMGJØRING_KLAGE_REVURDERING'
         | 'OPPFØLGINGSOPPGAVE'
@@ -18150,6 +18198,7 @@ export interface components {
         | 'Aktivitetsplikt11_9'
         | 'Førstegangsbehandling'
         | 'Klage'
+        | 'MigreringFraArena'
         | 'OppfølgingsBehandling'
         | 'Revurdering'
         | 'SvarFraAndreinstans'
@@ -18464,6 +18513,7 @@ export interface components {
         | 'Aktivitetsplikt11_9'
         | 'Førstegangsbehandling'
         | 'Klage'
+        | 'MigreringFraArena'
         | 'OppfølgingsBehandling'
         | 'Revurdering'
         | 'SvarFraAndreinstans'
@@ -18647,6 +18697,7 @@ export interface components {
         | 'VURDER_RETTIGHETSPERIODE'
         | 'VURDER_SYKEPENGEERSTATNING'
         | 'VURDER_YRKESSKADE';
+      'm\u00E5RevurderesEtterOpph\u00F8r': boolean;
       /** @enum {string} */
       type: 'BREV' | 'BREV_VENTEPUNKT' | 'MANUELT_FRIVILLIG' | 'MANUELT_PÅKREVD' | 'OVERSTYR' | 'VENTEPUNKT';
       name: string;
@@ -18673,6 +18724,7 @@ export interface components {
         | 'JOURNALPOST'
         | 'KABAL_HENDELSE_ID'
         | 'MANUELL_OPPRETTELSE'
+        | 'MIGRERING_FRA_ARENA'
         | 'PDL_HENDELSE_ID'
         | 'REVURDERING_ID'
         | 'SAKSBEHANDLER_KELVIN_REFERANSE'
@@ -18813,6 +18865,7 @@ export interface components {
         | 'LEGEERKLÆRING'
         | 'LOVVALG_OG_MEDLEMSKAP'
         | 'MELDEKORT'
+        | 'MIGRERING_FRA_ARENA'
         | 'MIGRER_RETTIGHETSPERIODE'
         | 'MOTTATT_KABAL_HENDELSE'
         | 'OPPFØLGINGSOPPGAVE'
@@ -18899,6 +18952,7 @@ export interface components {
         | 'LEGEERKLÆRING'
         | 'LOVVALG_OG_MEDLEMSKAP'
         | 'MELDEKORT'
+        | 'MIGRERING_FRA_ARENA'
         | 'MIGRER_RETTIGHETSPERIODE'
         | 'MOTTATT_KABAL_HENDELSE'
         | 'OPPFØLGINGSOPPGAVE'
@@ -19065,6 +19119,7 @@ export interface components {
         | 'LEGEERKLÆRING_AVVIST'
         | 'MANUELL_REVURDERING'
         | 'MELDEKORT'
+        | 'MIGRERING_FRA_ARENA'
         | 'NY_ÅRSAK_TIL_BEHANDLING'
         | 'OMGJØRING_KLAGE_REVURDERING'
         | 'OPPFØLGINGSOPPGAVE'
@@ -19178,6 +19233,7 @@ export interface components {
         | 'LEGEERKLÆRING'
         | 'LOVVALG_OG_MEDLEMSKAP'
         | 'MELDEKORT'
+        | 'MIGRERING_FRA_ARENA'
         | 'MIGRER_RETTIGHETSPERIODE'
         | 'MOTTATT_KABAL_HENDELSE'
         | 'OPPFØLGINGSOPPGAVE'
@@ -19280,6 +19336,7 @@ export interface components {
         | 'LEGEERKLÆRING'
         | 'LOVVALG_OG_MEDLEMSKAP'
         | 'MELDEKORT'
+        | 'MIGRERING_FRA_ARENA'
         | 'MIGRER_RETTIGHETSPERIODE'
         | 'MOTTATT_KABAL_HENDELSE'
         | 'OPPFØLGINGSOPPGAVE'
@@ -19359,6 +19416,7 @@ export interface components {
         | 'LEGEERKLÆRING'
         | 'LOVVALG_OG_MEDLEMSKAP'
         | 'MELDEKORT'
+        | 'MIGRERING_FRA_ARENA'
         | 'MIGRER_RETTIGHETSPERIODE'
         | 'MOTTATT_KABAL_HENDELSE'
         | 'OPPFØLGINGSOPPGAVE'
@@ -19427,6 +19485,7 @@ export interface components {
         | 'LEGEERKLÆRING'
         | 'LOVVALG_OG_MEDLEMSKAP'
         | 'MELDEKORT'
+        | 'MIGRERING_FRA_ARENA'
         | 'MIGRER_RETTIGHETSPERIODE'
         | 'MOTTATT_KABAL_HENDELSE'
         | 'OPPFØLGINGSOPPGAVE'
@@ -19508,6 +19567,7 @@ export interface components {
         | 'LEGEERKLÆRING_AVVIST'
         | 'MANUELL_REVURDERING'
         | 'MELDEKORT'
+        | 'MIGRERING_FRA_ARENA'
         | 'NY_ÅRSAK_TIL_BEHANDLING'
         | 'OMGJØRING_KLAGE_REVURDERING'
         | 'OPPFØLGINGSOPPGAVE'
@@ -19699,6 +19759,7 @@ export interface components {
         | 'INSTITUSJONSOPPHOLD'
         | 'KLAGE_TRUKKET'
         | 'LOVVALG_OG_MEDLEMSKAP'
+        | 'MIGRERING_FRA_ARENA'
         | 'MIGRER_RETTIGHETSPERIODE'
         | 'MOTATT_KLAGE'
         | 'MOTTATT_AKTIVITETSMELDING'
@@ -19767,6 +19828,7 @@ export interface components {
         | 'KLAGE'
         | 'MANUELL_OPPRETTELSE'
         | 'MELDEKORT'
+        | 'MIGRERING_FRA_ARENA'
         | 'MIGRER_RETTIGHETSPERIODE'
         | 'OMGJØRING_ETTER_KLAGE'
         | 'OMGJØRING_ETTER_SVAR_FRA_KLAGEINSTANS'
@@ -19850,6 +19912,7 @@ export interface components {
         | 'INSTITUSJONSOPPHOLD'
         | 'KLAGE_TRUKKET'
         | 'LOVVALG_OG_MEDLEMSKAP'
+        | 'MIGRERING_FRA_ARENA'
         | 'MIGRER_RETTIGHETSPERIODE'
         | 'MOTATT_KLAGE'
         | 'MOTTATT_AKTIVITETSMELDING'
@@ -19916,6 +19979,7 @@ export interface components {
         | 'Aktivitetsplikt11_9'
         | 'Førstegangsbehandling'
         | 'Klage'
+        | 'MigreringFraArena'
         | 'OppfølgingsBehandling'
         | 'Revurdering'
         | 'SvarFraAndreinstans'
@@ -19939,6 +20003,7 @@ export interface components {
         | 'INSTITUSJONSOPPHOLD'
         | 'KLAGE_TRUKKET'
         | 'LOVVALG_OG_MEDLEMSKAP'
+        | 'MIGRERING_FRA_ARENA'
         | 'MIGRER_RETTIGHETSPERIODE'
         | 'MOTATT_KLAGE'
         | 'MOTTATT_AKTIVITETSMELDING'
@@ -19998,6 +20063,7 @@ export interface components {
         | 'KLAGE'
         | 'MANUELL_OPPRETTELSE'
         | 'MELDEKORT'
+        | 'MIGRERING_FRA_ARENA'
         | 'MIGRER_RETTIGHETSPERIODE'
         | 'OMGJØRING_ETTER_KLAGE'
         | 'OMGJØRING_ETTER_SVAR_FRA_KLAGEINSTANS'
@@ -20034,6 +20100,10 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.FinnSakForIdentDTO': {
       ident: string;
+    };
+    'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.MigrerArenasakDTO': {
+      ident: string;
+      saksnummer: string;
     };
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.NullableSakOgBehandlingDTO': {
       sakOgBehandlingDTO?: components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.SakOgBehandlingDTO'];

@@ -132,6 +132,8 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov | Vurde
       return 'Revurder inntektsbortfall';
     case 'VURDER_AVSLAG_11_27':
       return '§ 11-27 Mulig avslag pga. annen full folketrygdytelse';
+    case 'MIGRERING_FRA_ARENA':
+      return 'Migrering fra Arena';
     default:
       return vurderingsbehov;
   }
@@ -216,6 +218,8 @@ export const formaterFrittVurderingsbehov = (vurderingsbehov: String) => {
       return 'Satsregulering barnetillegg';
     case 'MIGRER_RETTIGHETSPERIODE':
       return 'Korrigering av teknisk periode (automatisk behandling)';
+    case 'MIGRERING_FRA_ARENA':
+      return 'Migrering fra Arena';
     default:
       return vurderingsbehov;
   }
