@@ -31,7 +31,6 @@ import {
   RettighetsinfoDto,
   SakPersoninfo,
   SaksInfo,
-  Markeringstype,
   SettPåVent,
 } from './types/types';
 import { getErrorMessage } from 'lib/utils/errorUtil';
@@ -39,11 +38,10 @@ import { formaterDatoForBackend } from 'lib/utils/date';
 import { ClientConfig } from 'lib/types/clientTypes';
 import { FetchResponse } from 'lib/utils/api';
 import { TilgangResponse } from 'lib/services/tilgangservice/tilgangsService';
-import { SaksbehandlerSøkRespons, TildelOppgaveRequest } from 'lib/types/oppgaveTypes';
+import { MarkeringType, SaksbehandlerSøkRespons, TildelOppgaveRequest } from 'lib/types/oppgaveTypes';
 import { MellomLagringIdentifikator } from 'app/saksbehandling/api/mellomlagring/route';
 import { isLocal } from 'lib/utils/environment';
 import { buildOAuthLoginUrl } from 'lib/services/azure/redirectUtils';
-
 const BASE_URL = '/saksbehandling';
 
 export async function clientFetch<ResponseBody>(
@@ -258,7 +256,7 @@ export enum MarkeringHendelseType {
 
 // TODO: hent fra aap-oppgave
 export interface OpprettMarkeringHendelse {
-  markeringType: Markeringstype;
+  markeringType: MarkeringType;
   begrunnelse?: string;
   hendelseType: MarkeringHendelseType;
 }

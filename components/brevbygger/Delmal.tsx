@@ -67,7 +67,9 @@ export const Delmal = ({ delmalRef, control, delmalInnhold, isLoading }: Props) 
             <VStack gap="space-16" marginBlock="space-8">
               {valgOgFritekst.map((node) => {
                 if (node._type === 'fritekst') {
-                  return <DelmalFritekst key={node._key} node={node} control={control} />;
+                  return (
+                    <DelmalFritekst key={node._key} node={node} control={control} delmalId={delmal._id} />
+                  );
                 }
                 return <Valg key={node._key} valgRef={node} control={control} />;
               })}
