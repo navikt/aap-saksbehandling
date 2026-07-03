@@ -833,6 +833,57 @@ describe('vurderinger uten viss varighet', () => {
     expect(screen.getByRole('textbox', { name: 'Vurderingen gjelder fra' })).toBeVisible();
   });
 
+  it('viser feilmelding dersom dato for når vurderingen gjelder fra er før søknadstidspunkt', async () => {
+    const today = format(new Date(), 'yyyy-MM-dd');
+    customRenderWithSøknadstidspunkt(
+      <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
+        grunnlag={grunnlagMedYrkesskade}
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Førstegangsbehandling'}
+        initialMellomlagretVurdering={undefined}
+        erOvergangArbeid={false}
+        erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
+      />,
+      today
+    );
+    const vurderingFraDato = format(subDays(new Date(), 7), 'dd.MM.yyyy');
+    await skrivInnDatoForNårVurderingenGjelderFra(vurderingFraDato);
+    await user.type(
+      screen.getByRole('textbox', { name: 'Vilkårsvurdering' }),
+      'Her har jeg begynt å skrive en vurdering..'
+    );
+    const SkadeSykdomLyteNeiValg = within(
+      screen.getByRole('radiogroup', { name: 'Har brukeren sykdom, skade eller lyte?' })
+    ).getByRole('radio', {
+      name: 'Nei',
+    });
+
+    const NedsattArbeidsevneNeiValg = within(
+      screen.getByRole('radiogroup', { name: 'Har brukeren nedsatt arbeidsevne?' })
+    ).getByRole('radio', {
+      name: 'Nei',
+    });
+
+    const NedsattArbeidsevneTilstrekkeligNeiValg = within(
+      screen.getByRole('radiogroup', { name: /er arbeidsevnen nedsatt med minst halvparten\?/i })
+    ).getByRole('radio', { name: 'Nei' });
+
+    await user.click(SkadeSykdomLyteNeiValg);
+    await user.click(NedsattArbeidsevneNeiValg);
+    await user.click(NedsattArbeidsevneTilstrekkeligNeiValg);
+
+    await velgBekreft();
+    const feilmeldinger = screen.getAllByText(
+      /datoen som er satt er tidligere enn perioden som skal vurderes. Vurderingen kan tidligst gjelde fra /i
+    );
+
+    await expect(feilmeldinger.length).toBe(2);
+    await expect(feilmeldinger[0]).toBeVisible();
+  });
+
   it('viser ikke feilmelding når dato for vurderingen er etter søknadstidspunkt', async () => {
     customRenderWithSøknadstidspunkt(
       <Sykdomsvurdering
