@@ -3,6 +3,9 @@ import { Button, Dialog } from '@navikt/ds-react';
 import { ForhåndsvisBrev } from 'components/brevbygger/ForhåndsvisBrev';
 
 import styles from './FerdigstillBrevDialog.module.css';
+import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
+import { ApiException } from 'lib/utils/api';
+import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 
 interface Props {
   referanse: string;
@@ -10,9 +13,19 @@ interface Props {
   onClose: () => void;
   sendBrev: () => void;
   senderBrev: boolean;
+  løsBehovStatus?: LøsBehovOgGåTilNesteStegStatus;
+  løsBehovOgGåTilNesteStegError?: ApiException;
 }
 
-export const FerdigstillBrevDialog = ({ referanse, isOpen, onClose, sendBrev, senderBrev }: Props) => {
+export const FerdigstillBrevDialog = ({
+  referanse,
+  isOpen,
+  onClose,
+  sendBrev,
+  senderBrev,
+  løsBehovStatus,
+  løsBehovOgGåTilNesteStegError,
+}: Props) => {
   const [lasterPdf, setLasterPdf] = useState<boolean>(false);
   const [pdfDataUri, setPdfDataUri] = useState<string | undefined>();
   const pdfDataUriRef = useRef<string | undefined>(undefined);
@@ -48,6 +61,10 @@ export const FerdigstillBrevDialog = ({ referanse, isOpen, onClose, sendBrev, se
         </Dialog.Header>
         <Dialog.Body className={styles.dialogBody}>
           <ForhåndsvisBrev isLoading={lasterPdf} dataUri={pdfDataUri} />
+          <LøsBehovOgGåTilNesteStegStatusAlert
+            status={løsBehovStatus}
+            løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+          />
         </Dialog.Body>
         <Dialog.Footer>
           <Button type={'button'} variant={'secondary'} size={'small'} onClick={onClose} disabled={senderBrev}>
