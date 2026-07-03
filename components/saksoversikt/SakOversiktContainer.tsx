@@ -39,7 +39,6 @@ export const SakOversiktContainer = ({
     router.replace(`?t=${newTab}`);
   };
 
-  const registrereEllerEndreMeldekortFlagg = useFeatureFlag('registrereEllerEndreMeldekort');
   const visArenasakerOversikt = useFeatureFlag('VisArenasakerOversikt');
 
   return (
@@ -49,9 +48,7 @@ export const SakOversiktContainer = ({
           <Tabs.List>
             <Tabs.Tab label="Oversikt" value={Tab.OVERSIKT} icon={<PersonIcon />} />
             <Tabs.Tab label="Dokumenter" value={Tab.DOKUMENTER} icon={<FileTextIcon />} />
-            {registrereEllerEndreMeldekortFlagg && (
-              <Tabs.Tab label="Meldekort" value={Tab.MELDEKORT} icon={<TasklistIcon />} />
-            )}
+            <Tabs.Tab label="Meldekort" value={Tab.MELDEKORT} icon={<TasklistIcon />} />
             <Tabs.Tab label="Aktivitetsplikt 11-9 trekk" value={Tab.TREKK} icon={<FileTextIcon />} />
           </Tabs.List>
 
@@ -67,11 +64,9 @@ export const SakOversiktContainer = ({
               <DokumentOversikt sak={sak} />
             </Tabs.Panel>
 
-            {registrereEllerEndreMeldekortFlagg && (
-              <Tabs.Panel value={Tab.MELDEKORT}>
-                <MeldekortOversikt />
-              </Tabs.Panel>
-            )}
+            <Tabs.Panel value={Tab.MELDEKORT}>
+              <MeldekortOversikt />
+            </Tabs.Panel>
 
             <Tabs.Panel value={Tab.TREKK}>
               <AktivitetspliktTrekk sak={sak} />
