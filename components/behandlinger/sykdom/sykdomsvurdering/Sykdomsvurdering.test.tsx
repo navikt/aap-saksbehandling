@@ -855,38 +855,45 @@ describe('vurderinger uten viss varighet', () => {
       screen.getByRole('textbox', { name: 'Vilkårsvurdering' }),
       'Her har jeg begynt å skrive en vurdering..'
     );
-    const SkadeSykdomLyteNeiValg = within(
+    const skadeSykdomLyteNeiValg = within(
       screen.getByRole('radiogroup', { name: 'Har brukeren sykdom, skade eller lyte?' })
     ).getByRole('radio', {
       name: 'Nei',
     });
 
-    const NedsattArbeidsevneNeiValg = within(
+    const nedsattArbeidsevneNeiValg = within(
       screen.getByRole('radiogroup', { name: 'Har brukeren nedsatt arbeidsevne?' })
     ).getByRole('radio', {
       name: 'Nei',
     });
 
-    const NedsattArbeidsevneTilstrekkeligNeiValg = within(
+    const nedsattArbeidsevneTilstrekkeligNeiValg = within(
       screen.getByRole('radiogroup', { name: /er arbeidsevnen nedsatt med minst halvparten\?/i })
     ).getByRole('radio', { name: 'Nei' });
 
-    await user.click(NedsattArbeidsevneNeiValg);
-    await user.click(NedsattArbeidsevneTilstrekkeligNeiValg);
+    await user.click(nedsattArbeidsevneNeiValg);
+    await user.click(nedsattArbeidsevneTilstrekkeligNeiValg);
 
-    const nedsatt30Prosent = await screen.findByRole('radiogroup', {
-      name: /er arbeidsevnen nedsatt med minst 30 prosent\?/i,
-    });
-    await user.click(within(nedsatt30Prosent).getByRole('radio', { name: 'Ja' }));
+    const nedsatt30Prosent = within(
+      screen.getByRole('radiogroup', { name: /er arbeidsevnen nedsatt med minst 30 prosent\?/i })
+    ).getByRole('radio', { name: 'Ja' });
+
+    await user.click(nedsatt30Prosent);
+
     await user.type(
       screen.getByRole('textbox', { name: '§ 11-22 AAP ved yrkesskade' }),
       'Kort begrunnelse for vurdering av 30 prosent.'
     );
-    await user.click(SkadeSykdomLyteNeiValg);
-    const vesentligMedvirkende = await screen.findByRole('radiogroup', {
-      name: /er sykdom, skade eller lyte vesentlig medvirkende til at arbeidsevnen er nedsatt\?/i,
-    });
-    await user.click(within(vesentligMedvirkende).getByRole('radio', { name: 'Ja' }));
+
+    await user.click(skadeSykdomLyteNeiValg);
+
+    const vesentligMedvirkende = within(
+      screen.getByRole('radiogroup', {
+        name: /er sykdom, skade eller lyte vesentlig medvirkende til at arbeidsevnen er nedsatt\?/i,
+      })
+    ).getByRole('radio', { name: 'Ja' });
+
+    await user.click(vesentligMedvirkende);
 
     await velgBekreft();
 
