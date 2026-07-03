@@ -10,7 +10,7 @@ export interface DateProps<FormFieldValues extends FieldValues> {
   label?: string;
   description?: React.ReactNode;
   disableWeekends?: boolean;
-  rules?: Omit<RegisterOptions<FormFieldValues>, 'validate'>;
+  rules?: RegisterOptions<FormFieldValues>;
   control: Control<FormFieldValues>;
   fromDate?: Date;
   size?: 'small' | 'medium';
@@ -49,7 +49,15 @@ export const DateWrapper = <FormFieldValues extends FieldValues>({
     control,
     rules: {
       ...rules,
-      validate: (value) => (isDate(value) && isValid(value)) || 'Dato må være i formatet "dd.MM.åååå"',
+      validate: (value, formValues) => {
+        if (!(isDate(value) && isValid(value))) {
+          return 'Dato må være i formatet "dd.MM.åååå"';
+        }
+        if (typeof rules?.validate === 'function') {
+          return rules.validate(value, formValues);
+        }
+        return true;
+      },
     },
   });
 

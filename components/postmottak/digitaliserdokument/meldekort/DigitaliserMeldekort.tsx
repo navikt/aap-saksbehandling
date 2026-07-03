@@ -14,6 +14,8 @@ import { clientHentHarRegistrertTimerIMeldeperioden } from 'lib/clientApi';
 import { isError } from 'lib/utils/api';
 import { Oppgave } from 'lib/types/oppgaveTypes';
 import { Meldeperioder } from 'components/postmottak/digitaliserdokument/meldekort/MeldePerioder';
+import { erDatoFoerDato } from 'lib/validation/dateValidation';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 
 interface Props extends Submittable {
   readOnly: boolean;
@@ -68,7 +70,19 @@ export const DigitaliserMeldekort = ({ readOnly, submit, isLoading, oppgave }: P
       innsendtDato: {
         type: 'date',
         label: 'Dato for innsendt meldekort',
-        rules: { required: 'Du må registrere når meldekortet ble innsendt' },
+        rules: {
+          required: 'Du må registrere når meldekortet ble innsendt',
+          validate: (value, formValues) => {
+            const sisteUken = formValues.meldeperioder.at(-1);
+            if (sisteUken && value) {
+              const sisteDagIUken = formaterDatoForFrontend(lastDayOfISOWeek(new Date(sisteUken.ukestart)));
+              const inputValue = formaterDatoForFrontend(value as Date);
+              if (erDatoFoerDato(inputValue, sisteDagIUken)) {
+                return 'hello pello';
+              }
+            }
+          },
+        },
       },
       meldeperioder: {
         type: 'fieldArray',
