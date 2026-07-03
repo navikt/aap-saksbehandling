@@ -67,7 +67,7 @@ describe('Validering av mottatt dato på digitalisert meldekort', () => {
 
     await trykkPåNeste();
 
-    expect(await screen.findByText('hello pello')).toBeVisible();
+    expect(await screen.findByText('Mottatt dato kan ikke være før dagen etter valgt meldeperiode.')).toBeVisible();
   });
 
   it('viser ikke feilmelding når mottatt dato er satt til langt etter valgt meldeperiode', async () => {
@@ -78,7 +78,9 @@ describe('Validering av mottatt dato på digitalisert meldekort', () => {
 
     await trykkPåNeste();
 
-    expect(screen.queryByText('hello pello')).not.toBeInTheDocument();
+    expect(
+      screen.queryByText('Mottatt dato kan ikke være før dagen etter valgt meldeperiode.')
+    ).not.toBeInTheDocument();
   });
 
   it('validerer ikke mottatt dato mot meldeperiode når ingen uker er valgt', async () => {
@@ -87,6 +89,8 @@ describe('Validering av mottatt dato på digitalisert meldekort', () => {
 
     await trykkPåNeste();
 
-    expect(screen.queryByText('hello pello')).not.toBeInTheDocument();
+    expect(
+      screen.queryByText('Mottatt dato kan ikke være før dagen etter valgt meldeperiode.')
+    ).not.toBeInTheDocument();
   });
 });

@@ -78,7 +78,7 @@ export const DigitaliserMeldekort = ({ readOnly, submit, isLoading, oppgave }: P
               const sisteDagIUken = formaterDatoForFrontend(lastDayOfISOWeek(new Date(sisteUken.ukestart)));
               const inputValue = formaterDatoForFrontend(value as Date);
               if (erDatoFoerDato(inputValue, sisteDagIUken)) {
-                return 'hello pello';
+                return 'Mottatt dato kan ikke være før dagen etter valgt meldeperiode.';
               }
             }
           },
