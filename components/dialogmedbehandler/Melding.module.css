@@ -1,0 +1,38 @@
+.meldingboksInnkommende {
+  background: var(--ax-bg-neutral-soft);
+  border-radius: var(--ax-space-16) var(--ax-space-16) var(--ax-space-16) 0;
+  padding: var(--ax-space-12) var(--ax-space-16);
+  font-size: var(--ax-font-size-small);
+  width: 90%;
+}
+
+.meldingboksUtgående {
+  background: var(--ax-bg-accent-moderate);
+  border-radius: var(--ax-space-16) var(--ax-space-16) 0 var(--ax-space-16);
+  padding: var(--ax-space-12) var(--ax-space-16);
+  font-size: var(--ax-font-size-small);
+  width: 90%;
+}
+
+.meldingFeilet {
+  background: var(--ax-bg-danger-moderate);
+}
+
+.feilmelding {
+  color: var(--ax-text-danger);
+}
+
+.vedleggboks {
+  background: var(--ax-bg-default);
+  border: 1px solid var(--ax-border-neutral-subtle);
+  border-radius: var(--ax-space-8);
+  padding: var(--ax-space-12);
+}
+
+.vedleggikon {
+  background: var(--ax-bg-neutral-soft);
+  border-radius: var(--ax-space-4);
+  color: var(--ax-text-neutral);
+  padding: var(--ax-space-4);
+  height: var(--ax-space-32);
+}

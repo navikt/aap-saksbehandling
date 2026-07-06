@@ -1,0 +1,5 @@
+.meldingervindu {
+  max-height: 648px;
+  margin: var(--ax-space-16) 0;
+  overflow: scroll;
+}
