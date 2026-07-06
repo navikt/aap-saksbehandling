@@ -4,7 +4,6 @@ import {
   paths,
   NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType,
   NoNavAapOppgaveOppgaveDtoBehandlingstype,
-  NoNavAapOppgaveOppgaveDtoStatus,
   NoNavAapOppgaveFilterFilterDtoType,
 } from '@navikt/aap-oppgave-typescript-types';
 import { BehandlingsFlytAvklaringsbehovKode } from 'lib/types/types';
@@ -21,7 +20,6 @@ export type OppgavelisteRequest = oppgave['schemas']['no.nav.aap.oppgave.liste.O
   hastemarkeringerFørst?: boolean;
 };
 export type OppgavelisteResponse = oppgave['schemas']['no.nav.aap.oppgave.liste.OppgavelisteRespons'];
-export type OppgavelisteSortering = oppgave['schemas']['no.nav.aap.oppgave.liste.OppgaveSortering'];
 export type Paging = OppgavelisteRequest['paging'];
 export type Enhet = oppgave['schemas']['no.nav.aap.oppgave.enhet.EnhetDto'];
 export type PlukkOppgaveDto = oppgave['schemas']['no.nav.aap.oppgave.plukk.PlukkOppgaveDto'];
@@ -38,13 +36,10 @@ export type TildeltStatus = oppgave['schemas']['no.nav.aap.oppgave.tildel.Tildel
 
 // typer fra enums
 export type OppgaveBehandlingstype = `${NoNavAapOppgaveOppgaveDtoBehandlingstype}`;
-export type OppgaveStatus = `${NoNavAapOppgaveOppgaveDtoStatus}`;
 export type MarkeringType = `${NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType}`;
 export const MarkeringHaster = NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.HASTER;
-export const MarkeringSpesialKompetanse = NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.KREVER_SPESIALKOMPETANSE;
 
 export type OppgaveAvklaringsbehovKode = BehandlingsFlytAvklaringsbehovKode | PostmottakAvklaringsbehovKode;
-export type FilterTidsEnhet = 'DAG' | 'UKE' | 'MÅNED' | 'ÅR';
 
 export type MineOppgaverQueryParams = paths['/mine-oppgaver']['get']['parameters']['query'];
 
