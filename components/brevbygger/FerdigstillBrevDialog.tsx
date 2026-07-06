@@ -62,7 +62,7 @@ export const FerdigstillBrevDialog = ({
         <Dialog.Body className={styles.dialogBody}>
           <ForhåndsvisBrev isLoading={lasterPdf} dataUri={pdfDataUri} />
         </Dialog.Body>
-        <Dialog.Footer style={{ justifyContent: 'space-between' }}>
+        <Dialog.Footer className={styles.dialogFooter}>
           <div>
             <LøsBehovOgGåTilNesteStegStatusAlert
               status={løsBehovStatus}
