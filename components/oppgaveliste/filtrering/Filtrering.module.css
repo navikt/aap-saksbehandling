@@ -1,8 +1,8 @@
 .wrapper {
   display: flex;
   flex-direction: column;
-  border-top-left-radius: var(--ax-radius-8);
-  border-top-right-radius: var(--ax-radius-8);
+  border-top-left-radius: var(--ax-radius-12);
+  border-top-right-radius: var(--ax-radius-12);
   background-color: var(--ax-bg-default);
 }
 
