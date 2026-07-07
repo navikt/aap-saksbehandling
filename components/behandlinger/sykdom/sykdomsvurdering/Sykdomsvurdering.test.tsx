@@ -855,18 +855,52 @@ describe('vurderinger uten viss varighet', () => {
       screen.getByRole('textbox', { name: 'Vilkårsvurdering' }),
       'Her har jeg begynt å skrive en vurdering..'
     );
-    const neiValg = within(
+    const skadeSykdomLyteNeiValg = within(
       screen.getByRole('radiogroup', { name: 'Har brukeren sykdom, skade eller lyte?' })
     ).getByRole('radio', {
       name: 'Nei',
     });
-    await user.click(neiValg);
+
+    const nedsattArbeidsevneNeiValg = within(
+      screen.getByRole('radiogroup', { name: 'Har brukeren nedsatt arbeidsevne?' })
+    ).getByRole('radio', {
+      name: 'Nei',
+    });
+
+    const nedsattArbeidsevneTilstrekkeligNeiValg = within(
+      screen.getByRole('radiogroup', { name: /er arbeidsevnen nedsatt med minst halvparten\?/i })
+    ).getByRole('radio', { name: 'Nei' });
+
+    await user.click(nedsattArbeidsevneNeiValg);
+    await user.click(nedsattArbeidsevneTilstrekkeligNeiValg);
+
+    const nedsatt30Prosent = within(
+      screen.getByRole('radiogroup', { name: /er arbeidsevnen nedsatt med minst 30 prosent\?/i })
+    ).getByRole('radio', { name: 'Ja' });
+
+    await user.click(nedsatt30Prosent);
+
+    await user.type(
+      screen.getByRole('textbox', { name: '§ 11-22 AAP ved yrkesskade' }),
+      'Kort begrunnelse for vurdering av 30 prosent.'
+    );
+
+    await user.click(skadeSykdomLyteNeiValg);
+
+    const vesentligMedvirkende = within(
+      screen.getByRole('radiogroup', {
+        name: /er sykdom, skade eller lyte vesentlig medvirkende til at arbeidsevnen er nedsatt\?/i,
+      })
+    ).getByRole('radio', { name: 'Ja' });
+
+    await user.click(vesentligMedvirkende);
 
     await velgBekreft();
 
     const feilmeldinger = screen.getAllByText(
       /Datoen som er satt er tidligere enn perioden som skal vurderes. Vurderingen kan tidligst gjelde fra/i
     );
+
     await expect(feilmeldinger.length).toBe(2);
     await expect(feilmeldinger[0]).toBeVisible();
   });
