@@ -1,6 +1,7 @@
 'use client';
 
-import { Button, Modal, Select, Textarea, VStack } from '@navikt/ds-react';
+import { useEffect } from 'react';
+import { Button, Modal, Select, Textarea, TextField, VStack } from '@navikt/ds-react';
 import { useForm, useWatch } from 'react-hook-form';
 import {
   GjenopptakKravLøsning,
@@ -50,6 +51,8 @@ export const LeggTilKravModal = ({ søknaderUtenKravvurdering, initialLøsning, 
     register,
     control,
     handleSubmit,
+    getValues,
+    setValue,
     formState: { errors },
   } = useForm<LeggTilKravFormFields>({
     shouldUnregister: true,
@@ -64,8 +67,24 @@ export const LeggTilKravModal = ({ søknaderUtenKravvurdering, initialLøsning, 
     },
   });
 
+  const journalpostOptions = søknaderUtenKravvurdering.map((s) => s.journalpostId.identifikator);
+
   const valgtType = useWatch({ control, name: 'kravtype' }) as KravType;
+  const valgtJournalpostId = useWatch({ control, name: 'journalpostId' });
   const erKompleksType = KOMPLEKSE_TYPER.includes(valgtType);
+
+  useEffect(() => {
+    if (valgtType !== 'NYTT_KRAV_AAP') return;
+    if (!valgtJournalpostId) return;
+
+    const søknad = søknaderUtenKravvurdering.find((s) => s.journalpostId.identifikator === valgtJournalpostId);
+    if (!søknad) return;
+
+    if (getValues('søknadsdatoDato')) return;
+
+    setValue('søknadsdatoDato', formaterDatoForFrontend(søknad.mottattTidspunkt));
+    setValue('søknadsdatoÅrsak', 'SøknadMottatt');
+  }, [valgtJournalpostId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const onSubmit = handleSubmit((data) => {
     const journalpostId = { identifikator: data.journalpostId };
@@ -160,36 +179,21 @@ export const LeggTilKravModal = ({ søknaderUtenKravvurdering, initialLøsning, 
               ))}
             </Select>
 
-            {søknaderUtenKravvurdering.length > 0 && !erRedigering ? (
-              <Select
-                label="Journalpost"
-                {...register('journalpostId', { required: 'Du må velge journalpost.' })}
-                error={errors.journalpostId?.message}
-                size="small"
-              >
-                <option value="">Velg journalpost</option>
-                {søknaderUtenKravvurdering.map((s) => (
-                  <option key={s.journalpostId.identifikator} value={s.journalpostId.identifikator}>
-                    {s.journalpostId.identifikator}
-                  </option>
+            {journalpostOptions.length > 0 && (
+              <datalist id="journalpost-options">
+                {journalpostOptions.map((id) => (
+                  <option key={id} value={id} />
                 ))}
-              </Select>
-            ) : (
-              <Select
-                label="Journalpost"
-                {...register('journalpostId', { required: 'Du må fylle inn journalpost-id.' })}
-                error={errors.journalpostId?.message}
-                size="small"
-                disabled={erRedigering}
-              >
-                {erRedigering && (
-                  <option value={initialLøsning?.journalpostId.identifikator}>
-                    {initialLøsning?.journalpostId.identifikator}
-                  </option>
-                )}
-                {!erRedigering && <option value="">Ingen søknader uten vurdering</option>}
-              </Select>
+              </datalist>
             )}
+            <TextField
+              label="Journalpost-id"
+              list={journalpostOptions.length > 0 ? 'journalpost-options' : undefined}
+              {...register('journalpostId', { required: 'Du må skrive inn journalpost-id.' })}
+              error={errors.journalpostId?.message}
+              size="small"
+              disabled={erRedigering}
+            />
 
             {erKompleksType && (
               <>
