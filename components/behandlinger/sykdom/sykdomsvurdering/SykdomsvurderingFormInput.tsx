@@ -180,9 +180,11 @@ export const SykdomsvurderingFormInput = ({
             )}
             <Radio value={'NEI'}>{JaNeiEllerForbigåendeTekst.Nei}</Radio>
           </RadioGroupWrapper>
-          <Alert variant={'info'} className={'fit-content'}>
-            Brukeren vil få vedtak om at de ikke har rett på AAP. De kvalifiserer ikke for sykepengeerstatning.
-          </Alert>
+          {form.watch(`vurderinger.${index}.harNedsattArbeidsevne`) === 'NEI' && (
+            <Alert variant={'info'} className={'fit-content'}>
+              Brukeren vil få vedtak om at de ikke har rett på AAP. De kvalifiserer ikke for sykepengeerstatning.
+            </Alert>
+          )}
           <SykdomsvurderingNedsattArbeidsevneDetaljer
             index={index}
             form={form}
