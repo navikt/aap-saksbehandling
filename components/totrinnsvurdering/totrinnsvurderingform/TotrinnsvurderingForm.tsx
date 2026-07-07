@@ -38,7 +38,7 @@ import { Markering, MarkeringHaster } from 'lib/types/oppgaveTypes';
 import { clientOpprettMarkeringHendelse, MarkeringHendelseType } from 'lib/clientApi';
 import { isLocal } from 'lib/utils/environment';
 import { TotrinnsvurderingDevtools } from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingDevtools';
-import { clientMottattDokumenterLest } from 'lib/oppgaveClientApi';
+import { clientFjernHelseopplysningIkon } from 'lib/oppgaveClientApi';
 
 interface Props {
   grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;
@@ -192,7 +192,7 @@ export const TotrinnsvurderingForm = ({
             if (!erKvalitetssikring) {
               loggUmamiVarighetHendelser(varighetHendelseRef.current, hendelseSerieRef.current);
             } else {
-              clientMottattDokumenterLest(behandlingsreferanse);
+              clientFjernHelseopplysningIkon(behandlingsreferanse);
             }
 
             nullstillMellomlagretVurdering();
