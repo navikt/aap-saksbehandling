@@ -1,0 +1,20 @@
+.stipletLinje {
+  flex-grow: 1;
+  height: 1px;
+  background-image: linear-gradient(to right, var(--ax-text-neutral) 50%, transparent 0%);
+  background-size: 5px 100%;
+  color: var(--ax-text-neutral-subtle);
+}
+
+.meldingboks {
+  border: 1px solid var(--ax-border-neutral-subtle);
+  border-radius: var(--ax-space-16) var(--ax-space-16) var(--ax-space-16) 0;
+  padding: var(--ax-space-12) var(--ax-space-16);
+  font-size: var(--ax-font-size-small);
+  width: 90%;
+  color: var(--ax-text-neutral-subtle);
+}
+
+.meldingboksWrapper {
+  margin: var(--ax-space-20) 0;
+}
