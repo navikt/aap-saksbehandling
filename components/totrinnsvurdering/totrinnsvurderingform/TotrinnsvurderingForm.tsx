@@ -232,6 +232,7 @@ export const TotrinnsvurderingForm = ({
             link={link}
             readOnly={readOnly}
             felterOnBlur={addHendelse}
+            endretSidenForrigeGang={endretSidenForrigeGang}
           />
         );
       })}
