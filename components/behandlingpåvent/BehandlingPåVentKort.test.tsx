@@ -15,6 +15,7 @@ const informasjon: VenteInformasjon = {
     løsesISteg: 'START_BEHANDLING',
     type: 'MANUELT_PÅKREVD',
     name: 'Navn på definisjon',
+    måRevurderesEtterOpphør: true,
   },
 };
 

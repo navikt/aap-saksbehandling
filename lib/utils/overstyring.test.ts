@@ -12,6 +12,7 @@ const eksempelAvklaringsbehov: Avklaringsbehov = {
     løsesISteg: 'AVKLAR_SYKDOM',
     name: '',
     type: 'MANUELT_PÅKREVD',
+    måRevurderesEtterOpphør: true,
   },
   endringer: [],
   status: 'OPPRETTET',

@@ -63,6 +63,7 @@ export const KravTabell = ({
           <Table.Row>
             <Table.HeaderCell></Table.HeaderCell>
             <Table.HeaderCell>JournalpostId</Table.HeaderCell>
+            <Table.HeaderCell>Journalpost mottatt</Table.HeaderCell>
             <Table.HeaderCell>Type</Table.HeaderCell>
             <Table.HeaderCell>Søknadsdato</Table.HeaderCell>
             <Table.HeaderCell>Mulig rett fra</Table.HeaderCell>
@@ -76,12 +77,15 @@ export const KravTabell = ({
             .filter((v) => !slettedeNyeReferanser.includes(v.referanse))
             .map((vurdering) => {
               const aktivLøsning = endredeNye[vurdering.referanse];
+              const journalpostMottatt = grunnlag.søknader.find((s) => s.journalpostId === vurdering.journalpostId);
+
               return (
                 <Table.ExpandableRow
                   content={aktivLøsning?.begrunnelse ?? vurdering.begrunnelse}
                   key={vurdering.referanse}
                 >
                   <Table.DataCell>{vurdering.journalpostId.identifikator}</Table.DataCell>
+                  <Table.DataCell>{journalpostMottatt?.mottattTidspunkt ?? '-'}</Table.DataCell>
                   <Table.DataCell>{formaterKravtype(vurdering.type)}</Table.DataCell>
                   <Table.DataCell>{formaterSøknadsdatoRad(vurdering, aktivLøsning)}</Table.DataCell>
                   <Table.DataCell>{formaterOverstyrMuligRettFraRad(vurdering, aktivLøsning)}</Table.DataCell>
