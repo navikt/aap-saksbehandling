@@ -14864,6 +14864,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.krav.KravGrunnlagDto': {
       'harTilgangTil\u00C5Saksbehandle': boolean;
       nyeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.KravVurderingDto'][];
+      's\u00F8knader': components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.S\u00F8knadUtenKravDto'][];
       's\u00F8knaderUtenKravvurdering': components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.S\u00F8knadUtenKravDto'][];
       vedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.KravVurderingDto'][];
     };
@@ -18647,6 +18648,7 @@ export interface components {
         | 'VURDER_RETTIGHETSPERIODE'
         | 'VURDER_SYKEPENGEERSTATNING'
         | 'VURDER_YRKESSKADE';
+      'm\u00E5RevurderesEtterOpph\u00F8r': boolean;
       /** @enum {string} */
       type: 'BREV' | 'BREV_VENTEPUNKT' | 'MANUELT_FRIVILLIG' | 'MANUELT_PÅKREVD' | 'OVERSTYR' | 'VENTEPUNKT';
       name: string;
