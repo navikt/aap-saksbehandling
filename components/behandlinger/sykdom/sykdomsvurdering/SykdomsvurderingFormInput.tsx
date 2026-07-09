@@ -157,6 +157,7 @@ export const SykdomsvurderingFormInput = ({
                   rettighetsperiodeStartdato={rettighetsperiodeStartdato}
                   skalVurdereYrkesskade={skalVurdereYrkesskade}
                   erÅrsakssammenhengYrkesskade={erÅrsakssammenhengYrkesskade}
+                  visAlleSykdomssteg={visAlleSykdomsSteg}
                 />
               )}
             </>
@@ -192,6 +193,7 @@ export const SykdomsvurderingFormInput = ({
             rettighetsperiodeStartdato={rettighetsperiodeStartdato}
             skalVurdereYrkesskade={skalVurdereYrkesskade}
             erÅrsakssammenhengYrkesskade={erÅrsakssammenhengYrkesskade}
+            visAlleSykdomssteg={visAlleSykdomsSteg}
           />
         </>
       )}
