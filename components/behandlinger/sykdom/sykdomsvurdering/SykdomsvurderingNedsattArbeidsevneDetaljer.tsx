@@ -65,21 +65,20 @@ export const SykdomsvurderingNedsattArbeidsevneDetaljer = ({
         skalVurdereYrkesskade={skalVurdereYrkesskade}
         vurderingDatoSammeSomRettighetsperiodeStart={vurderingDatoSammeSomRettighetsperiodeStart}
       />
-      {erTilstrekkeligNedsatt ||
-        (visAlleSykdomssteg && (
-          <>
-            <RadioGroupJaNei
-              name={`vurderinger.${index}.erSkadeSykdomEllerLyteVesentligdel`}
-              control={form.control}
-              label={'Er sykdom, skade eller lyte vesentlig medvirkende til at arbeidsevnen er nedsatt?'}
-              horisontal={true}
-              rules={{
-                required: 'Du må svare på om sykdom, skade eller lyte er vesentlig medvirkende til nedsatt arbeidsevne',
-              }}
-              readOnly={readonly}
-            />
-          </>
-        ))}
+      {(erTilstrekkeligNedsatt || visAlleSykdomssteg) && (
+        <>
+          <RadioGroupJaNei
+            name={`vurderinger.${index}.erSkadeSykdomEllerLyteVesentligdel`}
+            control={form.control}
+            label={'Er sykdom, skade eller lyte vesentlig medvirkende til at arbeidsevnen er nedsatt?'}
+            horisontal={true}
+            rules={{
+              required: 'Du må svare på om sykdom, skade eller lyte er vesentlig medvirkende til nedsatt arbeidsevne',
+            }}
+            readOnly={readonly}
+          />
+        </>
+      )}
     </>
   );
 };
