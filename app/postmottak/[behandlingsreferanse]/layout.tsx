@@ -18,6 +18,7 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { hentOppgave } from 'lib/services/oppgaveservice/oppgaveservice';
 import { SWRConfig } from 'swr';
 import { OverstyrTildelingContextProvider } from 'context/saksbehandling/OverstyrTildelingContext';
+import { OverstyrTildelingNyModal } from 'components/overstyrtildelingmodal/OverstyrTildelingNyModal';
 import { OverstyrTildelingModal } from 'components/overstyrtildelingmodal/OverstyrTildelingModal';
 
 interface LayoutProps {
@@ -68,6 +69,7 @@ const Layout = async (props: LayoutProps) => {
     >
       <OverstyrTildelingContextProvider>
         <OverstyrTildelingModal />
+        <OverstyrTildelingNyModal />
         <div className={styles.idLayoutWrapper}>
           <DokumentInfoBanner
             behandlingsreferanse={params.behandlingsreferanse}

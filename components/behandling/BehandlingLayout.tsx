@@ -23,8 +23,9 @@ import { SakContextProvider } from 'context/saksbehandling/SakContext';
 import { ÅrsakTilBehandling } from 'components/revurderingsinfo/ÅrsakTilBehandling';
 import { visÅrsakTilVurdering } from './visÅrsakTilVurdering';
 import { OverstyrTildelingContextProvider } from 'context/saksbehandling/OverstyrTildelingContext';
-import { OverstyrTildelingModal } from 'components/overstyrtildelingmodal/OverstyrTildelingModal';
+import { OverstyrTildelingNyModal } from 'components/overstyrtildelingmodal/OverstyrTildelingNyModal';
 import { Kolonnelayout } from 'components/behandling/Kolonnelayout';
+import { OverstyrTildelingModal } from 'components/overstyrtildelingmodal/OverstyrTildelingModal';
 
 interface Props {
   saksnummer: string;
@@ -94,6 +95,7 @@ export const BehandlingLayout = async ({ saksnummer, behandlingsreferanse, child
             <IngenFlereOppgaverModal />
 
             <OverstyrTildelingModal />
+            <OverstyrTildelingNyModal />
 
             <SaksinfoBanner
               behandling={behandling.data}

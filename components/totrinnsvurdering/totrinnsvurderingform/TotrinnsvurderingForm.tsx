@@ -39,6 +39,8 @@ import { clientOpprettMarkeringHendelse, MarkeringHendelseType } from 'lib/clien
 import { isLocal } from 'lib/utils/environment';
 import { TotrinnsvurderingDevtools } from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingDevtools';
 import { clientMottattDokumenterLest } from 'lib/oppgaveClientApi';
+import { useFeatureFlag } from 'context/UnleashContext';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
   grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;
@@ -69,6 +71,9 @@ export const TotrinnsvurderingForm = ({
   const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } = useLøsBehovOgGåTilNesteSteg(
     erKvalitetssikring ? 'KVALITETSSIKRING' : 'FATTE_VEDTAK'
   );
+
+  const { løsAvklaringsbehov, løsAvklaringsbehovIsLoading, løsAvklaringsbehovStatus, løsAvklaringsbehovError } =
+    useLøsAvklaringsbehov(erKvalitetssikring ? 'KVALITETSSIKRING' : 'FATTE_VEDTAK');
 
   const { addHendelse, varighetHendelseRef, hendelseSerieRef } = useUmamiVarighetHendelser(
     erKvalitetssikring ? 'KVALITETSSIKRER_VARIGHET_HENDELSER' : 'BESLUTTER_VARIGHET_HENDELSER'
@@ -115,6 +120,8 @@ export const TotrinnsvurderingForm = ({
     },
   });
 
+  const nyHookForAvklaringsbehov = useFeatureFlag('NyHookForAvklaringsbehov');
+
   return (
     <form
       onSubmit={form.handleSubmit(async (data) => {
@@ -155,49 +162,95 @@ export const TotrinnsvurderingForm = ({
         if (isError) {
           return;
         }
-        løsBehovOgGåTilNesteSteg(
-          {
-            behandlingVersjon: behandlingsversjon,
-            behov: {
-              behovstype: erKvalitetssikring ? Behovstype.KVALITETSSIKRING_KODE : Behovstype.FATTE_VEDTAK_KODE,
-              vurderinger: assessedFields.map((vurdering) => {
-                if (vurdering.godkjent === JaEllerNei.Ja) {
-                  return {
-                    definisjon: vurdering.definisjon,
-                    godkjent: true,
-                  };
-                } else {
-                  return {
-                    definisjon: vurdering.definisjon,
-                    godkjent: getTrueFalseEllerUndefined(vurdering.godkjent),
-                    grunner: vurdering.grunner?.map((grunn) => {
-                      return {
-                        årsak: grunn,
-                        årsakFritekst: grunn === 'ANNET' ? vurdering.årsakFritekst : undefined,
-                      };
-                    }),
-                    begrunnelse: vurdering.begrunnelse,
-                  };
-                }
-              }),
+        if (nyHookForAvklaringsbehov) {
+          løsAvklaringsbehov(
+            {
+              behandlingVersjon: behandlingsversjon,
+              behov: {
+                behovstype: erKvalitetssikring ? Behovstype.KVALITETSSIKRING_KODE : Behovstype.FATTE_VEDTAK_KODE,
+                vurderinger: assessedFields.map((vurdering) => {
+                  if (vurdering.godkjent === JaEllerNei.Ja) {
+                    return {
+                      definisjon: vurdering.definisjon,
+                      godkjent: true,
+                    };
+                  } else {
+                    return {
+                      definisjon: vurdering.definisjon,
+                      godkjent: getTrueFalseEllerUndefined(vurdering.godkjent),
+                      grunner: vurdering.grunner?.map((grunn) => {
+                        return {
+                          årsak: grunn,
+                          årsakFritekst: grunn === 'ANNET' ? vurdering.årsakFritekst : undefined,
+                        };
+                      }),
+                      begrunnelse: vurdering.begrunnelse,
+                    };
+                  }
+                }),
+              },
+              referanse: behandlingsreferanse,
             },
-            referanse: behandlingsreferanse,
-          },
-          () => {
-            loggUmamiVarighet(
-              erKvalitetssikring ? 'STEG_BESLUTTER_VARIGHET' : 'STEG_KVALITETSSIKRER_VARIGHET',
-              umamiStartTidspunkt,
-              Date.now()
-            );
-            if (!erKvalitetssikring) {
-              loggUmamiVarighetHendelser(varighetHendelseRef.current, hendelseSerieRef.current);
-            } else {
-              clientMottattDokumenterLest(behandlingsreferanse);
-            }
+            () => {
+              loggUmamiVarighet(
+                erKvalitetssikring ? 'STEG_BESLUTTER_VARIGHET' : 'STEG_KVALITETSSIKRER_VARIGHET',
+                umamiStartTidspunkt,
+                Date.now()
+              );
+              if (!erKvalitetssikring) {
+                loggUmamiVarighetHendelser(varighetHendelseRef.current, hendelseSerieRef.current);
+              } else {
+                clientMottattDokumenterLest(behandlingsreferanse);
+              }
 
-            nullstillMellomlagretVurdering();
-          }
-        );
+              nullstillMellomlagretVurdering();
+            }
+          );
+        } else {
+          løsBehovOgGåTilNesteSteg(
+            {
+              behandlingVersjon: behandlingsversjon,
+              behov: {
+                behovstype: erKvalitetssikring ? Behovstype.KVALITETSSIKRING_KODE : Behovstype.FATTE_VEDTAK_KODE,
+                vurderinger: assessedFields.map((vurdering) => {
+                  if (vurdering.godkjent === JaEllerNei.Ja) {
+                    return {
+                      definisjon: vurdering.definisjon,
+                      godkjent: true,
+                    };
+                  } else {
+                    return {
+                      definisjon: vurdering.definisjon,
+                      godkjent: getTrueFalseEllerUndefined(vurdering.godkjent),
+                      grunner: vurdering.grunner?.map((grunn) => {
+                        return {
+                          årsak: grunn,
+                          årsakFritekst: grunn === 'ANNET' ? vurdering.årsakFritekst : undefined,
+                        };
+                      }),
+                      begrunnelse: vurdering.begrunnelse,
+                    };
+                  }
+                }),
+              },
+              referanse: behandlingsreferanse,
+            },
+            () => {
+              loggUmamiVarighet(
+                erKvalitetssikring ? 'STEG_BESLUTTER_VARIGHET' : 'STEG_KVALITETSSIKRER_VARIGHET',
+                umamiStartTidspunkt,
+                Date.now()
+              );
+              if (!erKvalitetssikring) {
+                loggUmamiVarighetHendelser(varighetHendelseRef.current, hendelseSerieRef.current);
+              } else {
+                clientMottattDokumenterLest(behandlingsreferanse);
+              }
+
+              nullstillMellomlagretVurdering();
+            }
+          );
+        }
       })}
       className={'flex-column'}
       autoComplete={'off'}
@@ -205,8 +258,7 @@ export const TotrinnsvurderingForm = ({
       {fields.map((field, index) => {
         const link = byggVilkårskortLenke(saksnummer, behandlingsreferanse, field.definisjon as Behovstype);
         const endretSidenForrigeGang =
-          grunnlag.vurderinger.find((vurdering) => vurdering.definisjon === field.definisjon)
-            ?.endretSidenSist ?? null;
+          grunnlag.vurderinger.find((vurdering) => vurdering.definisjon === field.definisjon)?.endretSidenSist ?? null;
         if (field.definisjon === Behovstype.SYKDOMSVURDERING_BREV_KODE) {
           return (
             <TotrinnsvurderingVedtaksbrevFelter
@@ -248,12 +300,18 @@ export const TotrinnsvurderingForm = ({
         <Alert variant={'error'}>{form.formState.errors.totrinnsvurderinger.root.message}</Alert>
       )}
       <LøsBehovOgGåTilNesteStegStatusAlert
-        status={status}
-        løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+        status={nyHookForAvklaringsbehov ? løsAvklaringsbehovStatus : status}
+        løsBehovOgGåTilNesteStegError={
+          nyHookForAvklaringsbehov ? løsAvklaringsbehovError : løsBehovOgGåTilNesteStegError
+        }
       />
       {!readOnly && (
         <VStack gap="space-8">
-          <Button size={'medium'} className={'fit-content'} loading={isLoading}>
+          <Button
+            size={'medium'}
+            className={'fit-content'}
+            loading={nyHookForAvklaringsbehov ? løsAvklaringsbehovIsLoading : isLoading}
+          >
             Bekreft og send videre
           </Button>
 

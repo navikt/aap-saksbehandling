@@ -16,6 +16,7 @@ export const FLAGS = [
   'KvalitetssikringDiff',
   'Avslag11_27',
   'VarselNaarDetFinnesTimerPaaMeldeperiode',
+  'NyHookForAvklaringsbehov',
   'SkalViseAlleSykdomssteg',
 ] as const;
 
@@ -40,5 +41,6 @@ export const mockedFlags: Flags = {
   KvalitetssikringDiff: true,
   Avslag11_27: true,
   VarselNaarDetFinnesTimerPaaMeldeperiode: true,
+  NyHookForAvklaringsbehov: true,
   SkalViseAlleSykdomssteg: true,
 };
