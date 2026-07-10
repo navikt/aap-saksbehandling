@@ -278,6 +278,7 @@ export const BarnetilleggVurdering = ({
                     )}
                     harOppgittFosterforelderRelasjon={vurdering.oppgittForelderRelasjon === 'FOSTERFORELDER'}
                     forsørgerPeriode={vurdering.forsørgerPeriode}
+                    søknadstidspunkt={grunnlag.søknadstidspunkt}
                     readOnly={formReadOnly}
                   />
                 );
