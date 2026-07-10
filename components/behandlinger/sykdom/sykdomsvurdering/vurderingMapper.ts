@@ -61,6 +61,7 @@ function mapTilPeriodisertVurdering(
   tilDato?: string
 ): SykdomsvurderingLøsningDto {
   // Denne overstyrer alle verdiene under. Hvis false skal alt nulles ut.
+
   const harSkadeSykdomEllerLyte = data.harSkadeSykdomEllerLyte === JaEllerNei.Ja;
 
   const kodeverk = harSkadeSykdomEllerLyte ? data?.kodeverk : undefined;

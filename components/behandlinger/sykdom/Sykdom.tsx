@@ -53,6 +53,7 @@ export const Sykdom = async ({ behandlingsreferanse, flyt }: Props) => {
   const oppgittYrkesskadeInfoSteg = hentStegDataForOppgittYrkesskadeInfo(yrkesskadeVurderingGrunnlag.data);
 
   const skalViseStudentV2 = unleashService.isEnabled('StudentV2');
+  const skalViseAlleSykdomSteg = unleashService.isEnabled('SkalViseAlleSykdomssteg');
 
   return (
     <GruppeSteg
