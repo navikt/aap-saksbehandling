@@ -1,6 +1,7 @@
 import {
   hentBehandling,
-  hentMellomlagring, hentStudentGrunnlag,
+  hentMellomlagring,
+  hentStudentGrunnlag,
   hentSykdomsGrunnlag,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import {
@@ -16,9 +17,14 @@ import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurderin
 interface Props {
   behandlingsreferanse: string;
   stegData: StegData;
+  skalViseAlleSykdomsSteg: boolean;
 }
 
-export const SykdomsvurderingMedDataFetching = async ({ behandlingsreferanse, stegData }: Props) => {
+export const SykdomsvurderingMedDataFetching = async ({
+  behandlingsreferanse,
+  stegData,
+  skalViseAlleSykdomsSteg,
+}: Props) => {
   const [grunnlag, behandling, studentgrunnlag] = await Promise.all([
     hentSykdomsGrunnlag(behandlingsreferanse),
     hentBehandling(behandlingsreferanse),
@@ -65,6 +71,7 @@ export const SykdomsvurderingMedDataFetching = async ({ behandlingsreferanse, st
       erOvergangArbeid={erOvergangArbeid}
       erRevurderingStudent={erRevurderingStudent}
       studentgrunnlag={studentgrunnlag.data}
+      skalViseAlleSykdomSteg={skalViseAlleSykdomsSteg}
     />
   );
 };
