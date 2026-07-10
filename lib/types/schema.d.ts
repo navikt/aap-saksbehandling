@@ -16277,6 +16277,11 @@ export interface components {
     'no.nav.aap.behandlingsflyt.drift.ForenkletAvklaringsbehov': {
       definisjon: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.avklaringsbehov.Definisjon'];
       endretAv: string;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      'fristSettP\u00E5Vent'?: string | null;
       perioderKreverVurdering?: components['schemas']['no.nav.aap.komponenter.type.Periode'][] | null;
       perioderUgyldigVurdering?: components['schemas']['no.nav.aap.komponenter.type.Periode'][] | null;
       /** @enum {string} */
@@ -18773,6 +18778,8 @@ export interface components {
       underkategori?:
         | 'ARBEIDSUTPROVING'
         | 'BARNETILLEGG'
+        | 'BEHOLDE_AAP_I_UTLANDET'
+        | 'DOKUMENTASJON_TREKK_SOKNAD'
         | 'ETABLERING'
         | 'ETTERSENDELSE_TIL_FEILUTBETALING'
         | 'ETTERSENDELSE_TIL_KLAGE'
@@ -18859,6 +18866,8 @@ export interface components {
       underkategori?:
         | 'ARBEIDSUTPROVING'
         | 'BARNETILLEGG'
+        | 'BEHOLDE_AAP_I_UTLANDET'
+        | 'DOKUMENTASJON_TREKK_SOKNAD'
         | 'ETABLERING'
         | 'ETTERSENDELSE_TIL_FEILUTBETALING'
         | 'ETTERSENDELSE_TIL_KLAGE'

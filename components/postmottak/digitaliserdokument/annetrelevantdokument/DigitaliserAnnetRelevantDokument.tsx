@@ -27,6 +27,8 @@ interface Props extends Submittable {
 const underkategoriOptions: ValuePair<NonNullable<AnnetRelevantDokumentUnderkategori>>[] = [
   { label: 'Arbeidsutprøving', value: 'ARBEIDSUTPROVING' },
   { label: 'Barnetillegg', value: 'BARNETILLEGG' },
+  { label: 'Søknad om å beholde AAP i utlandet', value: 'BEHOLDE_AAP_I_UTLANDET' },
+  { label: 'Dokumentasjon på trekk av søknad', value: 'DOKUMENTASJON_TREKK_SOKNAD' },
   { label: 'Etablering', value: 'ETABLERING' },
   { label: 'Ettersendelse til feilutbetaling', value: 'ETTERSENDELSE_TIL_FEILUTBETALING' },
   { label: 'Ettersendelse til klage', value: 'ETTERSENDELSE_TIL_KLAGE' },
