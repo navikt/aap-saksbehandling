@@ -34,6 +34,7 @@ interface Props {
   rettighetsperiodeStartdato: Date;
   diagnoseDefaultOptions: DiagnoserDefaultOptions;
   studentgrunnlag: StudentGrunnlag;
+  skalViseAlleSykdomsSteg: boolean;
 }
 
 export const vilkårsvurderingLabel = 'Vilkårsvurdering';
@@ -55,9 +56,8 @@ export const SykdomsvurderingFormInput = ({
   rettighetsperiodeStartdato,
   diagnoseDefaultOptions,
   studentgrunnlag,
+  skalViseAlleSykdomsSteg,
 }: Props) => {
-  const visAlleSykdomsSteg = useFeatureFlag('SkalViseAlleSykdomssteg');
-
   const harNedsattArbeidsevne = form.watch(`vurderinger.${index}.harNedsattArbeidsevne`);
   const skalViseNedsettelse = harNedsattArbeidsevne === 'JA' || harNedsattArbeidsevne === 'JA_FORBIGÅENDE_PROBLEMER';
   const skalViseNeiMenStudent = useFeatureFlag('StudentV2');
@@ -126,7 +126,7 @@ export const SykdomsvurderingFormInput = ({
             diagnoseDefaultOptions={diagnoseDefaultOptions}
           />
           {skalViseStudentSoknad && <RelevantInformasjonStudent opplysninger={studentgrunnlag.oppgittStudent} />}
-          {!visAlleSykdomsSteg && (
+          {!skalViseAlleSykdomsSteg && (
             <>
               <RadioGroupWrapper
                 name={`vurderinger.${index}.harNedsattArbeidsevne`}
@@ -157,14 +157,14 @@ export const SykdomsvurderingFormInput = ({
                   rettighetsperiodeStartdato={rettighetsperiodeStartdato}
                   skalVurdereYrkesskade={skalVurdereYrkesskade}
                   erÅrsakssammenhengYrkesskade={erÅrsakssammenhengYrkesskade}
-                  visAlleSykdomssteg={visAlleSykdomsSteg}
+                  visAlleSykdomssteg={skalViseAlleSykdomsSteg}
                 />
               )}
             </>
           )}
         </>
       )}
-      {visAlleSykdomsSteg && (
+      {skalViseAlleSykdomsSteg && (
         <>
           <RadioGroupWrapper
             name={`vurderinger.${index}.harNedsattArbeidsevne`}
@@ -193,7 +193,7 @@ export const SykdomsvurderingFormInput = ({
             rettighetsperiodeStartdato={rettighetsperiodeStartdato}
             skalVurdereYrkesskade={skalVurdereYrkesskade}
             erÅrsakssammenhengYrkesskade={erÅrsakssammenhengYrkesskade}
-            visAlleSykdomssteg={visAlleSykdomsSteg}
+            visAlleSykdomssteg={skalViseAlleSykdomsSteg}
           />
         </>
       )}

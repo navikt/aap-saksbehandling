@@ -86,6 +86,7 @@ interface SykdomProps {
   erOvergangArbeid: boolean;
   erRevurderingStudent: boolean;
   studentgrunnlag: StudentGrunnlag;
+  skalViseAlleSykdomSteg?: boolean;
 }
 
 export const Sykdomsvurdering = ({
@@ -98,6 +99,7 @@ export const Sykdomsvurdering = ({
   erOvergangArbeid,
   erRevurderingStudent,
   studentgrunnlag,
+  skalViseAlleSykdomSteg = false,
 }: SykdomProps) => {
   const { behandlingsreferanse } = useParamsMedType();
   const { sak } = useSak();
@@ -170,7 +172,8 @@ export const Sykdomsvurdering = ({
                 grunnlag.skalVurdereYrkesskade,
                 grunnlag.erÅrsakssammenhengYrkesskade,
                 førsteDatoSomKanVurderes,
-                tilDato ? formaterDatoForBackend(tilDato) : undefined
+                tilDato ? formaterDatoForBackend(tilDato) : undefined,
+                skalViseAlleSykdomSteg
               );
             }),
           },
@@ -278,6 +281,7 @@ export const Sykdomsvurdering = ({
               rettighetsperiodeStartdato={førsteDatoSomKanVurderes}
               diagnoseDefaultOptions={diagnoseDefaultOptions}
               studentgrunnlag={studentgrunnlag}
+              skalViseAlleSykdomsSteg={skalViseAlleSykdomSteg}
             />
           </NyVurderingExpandableCard>
         ))}

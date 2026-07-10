@@ -65,7 +65,11 @@ export const Sykdom = async ({ behandlingsreferanse, flyt }: Props) => {
     >
       {sykdomSteg.skalViseSteg && (
         <StegSuspense>
-          <SykdomsvurderingMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={sykdomSteg} />
+          <SykdomsvurderingMedDataFetching
+            behandlingsreferanse={behandlingsreferanse}
+            stegData={sykdomSteg}
+            skalViseAlleSykdomsSteg={skalViseAlleSykdomSteg}
+          />
         </StegSuspense>
       )}
       {vurderBistandsbehovSteg.skalViseSteg && (
