@@ -60,3 +60,9 @@ export function clientMottattDokumenterLest(behandlingsreferanse: string) {
     behandlingRef: behandlingsreferanse,
   });
 }
+
+export function clientFjernHelseopplysningIkon(behandlingsreferanse: string) {
+  return clientFetch(`/oppgave/api/oppgave/fjern-helseopplysning-ikon`, 'POST', {
+    behandlingRef: behandlingsreferanse,
+  });
+}

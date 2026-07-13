@@ -129,6 +129,11 @@ export async function mottattDokumenterLest(behandlingRef: string) {
   return await apiFetch<{}>(url, oppgaveApiScope, 'POST', { behandlingRef: behandlingRef });
 }
 
+export async function fjernHelseopplysningIkon(behandlingRef: string) {
+  const url = `${oppgaveApiBaseURL}/fjern-helseopplysning-ikon`;
+  return await apiFetch<{}>(url, oppgaveApiScope, 'POST', { behandlingRef: behandlingRef });
+}
+
 const lokalFakeOppgaveSøk = isLocal();
 export async function oppgaveTekstSøk(søketekst: string) {
   if (lokalFakeOppgaveSøk) {
