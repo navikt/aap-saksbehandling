@@ -19,7 +19,7 @@ Dette oppsettet forutsetter at du har følgende programvare installert:
 5. Klikk Configure SSO -> Authorize for navikt-organisasjonen
 6. Legg inn miljøvariabel med token i ~/.bashrc eller ~/.zshrc:
    ```env
-   export NPM_AUTH_TOKEN=<token-her>
+   export NODE_AUTH_TOKEN=<token-her>
    ```
    Husk å kjøre `source ~/.bashrc` eller `source ~/.zshrc` etterpå for å laste inn endringene, evt start terminal på nytt.
 
