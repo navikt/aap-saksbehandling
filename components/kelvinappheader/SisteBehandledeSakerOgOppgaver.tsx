@@ -2,9 +2,9 @@ import { ActionMenu, BodyShort, Detail, HStack, Loader, Spacer } from '@navikt/d
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';
 import { isSuccess } from 'lib/utils/api';
-import { Behovstype, mapBehovskodeTilBehovstype } from 'lib/utils/form';
 import { clientHentMineSisteOppgaver } from 'lib/oppgaveClientApi';
 import { SakOgAvklaringsbehov } from 'lib/types/oppgaveTypes';
+import { mapBehovskodeTilBehovstype } from 'lib/utils/oversettelser';
 
 export const SisteBehandledeSakerOgOppgaver = () => {
   const [saker, setSaker] = useState<SakOgAvklaringsbehov[] | undefined>(undefined);
@@ -40,7 +40,7 @@ export const SisteBehandledeSakerOgOppgaver = () => {
             <HStack gap="space-16" justify="space-between" width="100%">
               <BodyShort size="small">{sak.saksnummer}</BodyShort>
               <BodyShort size="small">
-                {sak.avklaringsbehovKode && mapBehovskodeTilBehovstype(sak.avklaringsbehovKode as Behovstype)}
+                {sak.avklaringsbehovKode && mapBehovskodeTilBehovstype(sak.avklaringsbehovKode)}
               </BodyShort>
             </HStack>
             <Spacer />
