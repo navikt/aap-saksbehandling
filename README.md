@@ -17,17 +17,29 @@ Dette oppsettet forutsetter at du har følgende programvare installert:
 3. Gi token et navn, sett utløpsdato og huk av for `read:packages`-rettighet
 4. Klikk Generate token og kopier tokenet (Det forsvinner fra siden)
 5. Klikk Configure SSO -> Authorize for navikt-organisasjonen
-6. Legg inn miljøvariabel med token i ~/.bashrc eller ~/.zshrc:
-   ```env
-   export NODE_AUTH_TOKEN=<token-her>
-   ```
-   Husk å kjøre `source ~/.bashrc` eller `source ~/.zshrc` etterpå for å laste inn endringene, evt start terminal på nytt.
+6. Opprett miljøvariabel med token i `~/.bashrc` eller `~/.zshrc`:
+   - **Med Keychain på Mac (anbefalt)**:
+     - Kjør kommando (med faktisk passord, ikke dummyverdi)
+       ```shell
+       security add-generic-password -a "$USER" -s "NODE_AUTH_TOKEN" -w "<PASSWORD>"
+       ```
+     - Legg inn følgende i `~/.bashrc` eller `~/.zshrc`:
+       ```env
+       export NODE_AUTH_TOKEN=$(security find-generic-password -w -a "$USER" -s "NODE_AUTH_TOKEN")
+       ```
+   - **Uten Keychain**:\
+     Legg inn følgende i `~/.bashrc` eller `~/.zshrc`:
+     ```env
+     export NODE_AUTH_TOKEN=<token-her>
+     ```
+7. Til slutt kan du kjøre `source ~/.bashrc` eller `source ~/.zshrc` for å laste inn endringene (ev. restart terminalen/shellet).
 
 ### Prettier og linting
 
 Prosjektet bruker prettier og eslint. Skru gjerne på "Automatic configuration" for disse i din IDE.
 
-For at pre-commit hooks for linting og formatering skal kunne kjøre, må du sette opp Husky med følgende kommando (trengs bare én gang):
+For at pre-commit hooks for linting og formatering skal kunne kjøre, må du sette opp Husky med følgende kommando (trengs
+bare én gang):
 
 ```bash
   yarn husky
@@ -78,11 +90,13 @@ POSTMOTTAK_API_BASE_URL="http://localhost:8070"
 POSTMOTTAK_API_SCOPE="dev-gcp:aap:postmottak-backend"
 ```
 
-Deretter, det logges i postmottak i TestApp, referansen på en dummy-behandling. Se i loggene og se etter referansen. Naviger deretter inn på `http://localhost:3000/postmottak/<referansen>/`.
+Deretter, det logges i postmottak i TestApp, referansen på en dummy-behandling. Se i loggene og se etter referansen.
+Naviger deretter inn på `http://localhost:3000/postmottak/<referansen>/`.
 
 ## Rydd opp før ny oppstart
 
-Dersom du opplever rare feilmeldinger kan det hende at ting er kjørt opp i feil rekkefølge eller at noe har hengt seg opp.
+Dersom du opplever rare feilmeldinger kan det hende at ting er kjørt opp i feil rekkefølge eller at noe har hengt seg
+opp.
 Disse kommandoene kan hjelpe deg med å rydde opp før du prøver på nytt:
 
 ```bash
@@ -112,12 +126,14 @@ For å generere typene, kjør følgende kommando:
   yarn gentypes
 ```
 
-**OBS:** Dette krever at backend kjører lokalt. Typer for aap-oppgave, aap-postmottak-backend og aap-statistikk ligger i egne pakker
+**OBS:** Dette krever at backend kjører lokalt. Typer for aap-oppgave, aap-postmottak-backend og aap-statistikk ligger i
+egne pakker
 og må hentes ikke separat med yarn install.
 
 ### Oppdatere avhengigheter
 
-For å forhindre utilsiktede endringer i `yarn.lock` er man tvunget til å alltid kjøre følgende kommando når man vil oppdatere avhengigheter:
+For å forhindre utilsiktede endringer i `yarn.lock` er man tvunget til å alltid kjøre følgende kommando når man vil
+oppdatere avhengigheter:
 
 ```bash
   yarn install --no-immutable
