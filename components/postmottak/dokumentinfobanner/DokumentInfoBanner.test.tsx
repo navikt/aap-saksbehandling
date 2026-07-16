@@ -26,6 +26,8 @@ const journalpostInfo = {
 };
 
 const oppgave: Oppgave = {
+  id: 123,
+  personIdent: '123456',
   behandlingRef: 'gasg',
   saksnummer: '12345',
   vurderingsbehov: [],
@@ -38,10 +40,7 @@ const oppgave: Oppgave = {
   status: NoNavAapOppgaveOppgaveDtoStatus.OPPRETTET,
   versjon: 0,
   årsakerTilBehandling: [],
-  markeringer: [],
-  enhetForKø: '0300',
-  erPåVent: false,
-  erÅpen: true,
+  markeringer: []
 };
 
 describe('Dokumentinfobanner', () => {

@@ -221,7 +221,7 @@ export const hentBarnetilleggGrunnlag = async (behandlingsreferanse: string) => 
 };
 
 export const hentKvalitetssikringGrunnlag = async (behandlingsreferanse: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/kvalitetssikring/v2`;
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/kvalitetssikring`;
   return await apiFetch<KvalitetssikringGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
@@ -296,7 +296,7 @@ export const hentOvergangArbeidGrunnlag = async (behandlingsreferanse: string) =
 };
 
 export const hentFatteVedtakGrunnlang = async (behandlingsreferanse: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/fatte-vedtak/v2`;
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/fatte-vedtak`;
   return await apiFetch<FatteVedtakGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 

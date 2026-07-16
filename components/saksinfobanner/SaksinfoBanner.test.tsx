@@ -32,6 +32,8 @@ const avsluttetSak: SaksInfo = {
 };
 
 const oppgave: Oppgave = {
+  id: 123,
+  personIdent: '12345678910',
   behandlingRef: 'gasg',
   vurderingsbehov: [],
   avklaringsbehovKode: '',
@@ -45,9 +47,6 @@ const oppgave: Oppgave = {
   årsakerTilBehandling: [],
   markeringer: [],
   reservertAv: 'navIdent',
-  enhetForKø: '0300',
-  erPåVent: false,
-  erÅpen: true,
 };
 
 const visning: FlytVisning = {
