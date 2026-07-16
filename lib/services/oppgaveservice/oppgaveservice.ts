@@ -49,6 +49,8 @@ export async function hentOppgave(behandlingReferanse: string) {
     const mockResponse: FetchResponse<Oppgave> = {
       type: 'SUCCESS',
       data: {
+        id: 123,
+        personIdent: '123456',
         behandlingRef: 'dsfad',
         avklaringsbehovKode: '5008',
         behandlingOpprettet: '2025-08-20',
@@ -61,9 +63,6 @@ export async function hentOppgave(behandlingReferanse: string) {
         versjon: 0,
         vurderingsbehov: [],
         årsakerTilBehandling: [],
-        enhetForKø: '4491',
-        erPåVent: false,
-        erÅpen: true,
       },
     };
 
