@@ -6,6 +6,7 @@ import {
   OppgavelisteRequest,
   OppgavelisteResponse,
   PlukkOppgaveDto,
+  SakOgAvklaringsbehov,
   TildeltStatus,
 } from './types/oppgaveTypes';
 import { mapSortStateDirectionTilQueryParamEnum, mineOppgaverQueryParams, queryParamsArray } from './utils/request';
@@ -65,4 +66,8 @@ export function clientFjernHelseopplysningIkon(behandlingsreferanse: string) {
   return clientFetch(`/oppgave/api/oppgave/fjern-helseopplysning-ikon`, 'POST', {
     behandlingRef: behandlingsreferanse,
   });
+}
+
+export async function clientHentMineSisteOppgaver() {
+  return await clientFetch<SakOgAvklaringsbehov[]>('/oppgave/api/oppgave/mine-siste-oppgaver', 'GET');
 }

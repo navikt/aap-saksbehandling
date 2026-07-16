@@ -10,6 +10,7 @@ import {
   Oppgave,
   OppgavelisteRequest,
   OppgavelisteResponse,
+  SakOgAvklaringsbehov,
   SaksbehandlerSøkRequest,
   SaksbehandlerSøkRespons,
   SøkResponse,
@@ -79,6 +80,11 @@ export const hentMineOppgaver = async (queryParams: MineOppgaverQueryParams) => 
     : '';
   const url = `${oppgaveApiBaseURL}/mine-oppgaver${query ? `?${query}` : ''}`;
   return await apiFetch<OppgavelisteResponse>(url, oppgaveApiScope, 'GET');
+};
+
+export const hentMineSisteOppgaver = async () => {
+  const url = `${oppgaveApiBaseURL}/mine-siste-oppgaver`;
+  return await apiFetch<SakOgAvklaringsbehov[]>(url, oppgaveApiScope, 'GET');
 };
 
 export async function hentEnheter() {
