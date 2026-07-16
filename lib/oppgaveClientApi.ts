@@ -12,6 +12,7 @@ import { mapSortStateDirectionTilQueryParamEnum, mineOppgaverQueryParams, queryP
 import { clientFetch } from 'lib/clientApi';
 import { PathsMineOppgaverGetParametersQuerySortby } from '@navikt/aap-oppgave-typescript-types';
 import { ScopedBackendSortState } from 'hooks/oppgave/BackendSorteringHook';
+import { SakOgAvklaringsbehov } from 'components/kelvinappheader/SisteBehandledeSakerOgOppgaver';
 
 // oppgave
 export async function hentOppgaverClient(oppgavelisteRequest: OppgavelisteRequest) {
@@ -65,4 +66,8 @@ export function clientFjernHelseopplysningIkon(behandlingsreferanse: string) {
   return clientFetch(`/oppgave/api/oppgave/fjern-helseopplysning-ikon`, 'POST', {
     behandlingRef: behandlingsreferanse,
   });
+}
+
+export async function clientHentMineSisteOppgaver() {
+  return await clientFetch<SakOgAvklaringsbehov[]>('/oppgave/api/oppgave/mine-siste-oppgaver', 'GET');
 }

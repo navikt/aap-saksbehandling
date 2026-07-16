@@ -26,6 +26,7 @@ import {
   NoNavAapOppgaveOppgaveDtoStatus,
 } from '@navikt/aap-oppgave-typescript-types';
 import { CACHE_1_TIME, genererTagMedNavIdent } from 'lib/services/cache';
+import { SakOgAvklaringsbehov } from 'components/kelvinappheader/SisteBehandledeSakerOgOppgaver';
 
 const oppgaveApiBaseURL = process.env.OPPGAVE_API_BASE_URL;
 const oppgaveApiScope = process.env.OPPGAVE_API_SCOPE ?? '';
@@ -80,6 +81,11 @@ export const hentMineOppgaver = async (queryParams: MineOppgaverQueryParams) => 
     : '';
   const url = `${oppgaveApiBaseURL}/mine-oppgaver${query ? `?${query}` : ''}`;
   return await apiFetch<OppgavelisteResponse>(url, oppgaveApiScope, 'GET');
+};
+
+export const hentMineSisteOppgaver = async () => {
+  const url = `${oppgaveApiBaseURL}/mine-siste-oppgaver`;
+  return await apiFetch<SakOgAvklaringsbehov[]>(url, oppgaveApiScope, 'GET');
 };
 
 export async function hentEnheter() {
