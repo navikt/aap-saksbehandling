@@ -10,6 +10,7 @@ import {
   Oppgave,
   OppgavelisteRequest,
   OppgavelisteResponse,
+  SakOgAvklaringsbehov,
   SaksbehandlerSøkRequest,
   SaksbehandlerSøkRespons,
   SøkResponse,
@@ -26,7 +27,6 @@ import {
   NoNavAapOppgaveOppgaveDtoStatus,
 } from '@navikt/aap-oppgave-typescript-types';
 import { CACHE_1_TIME, genererTagMedNavIdent } from 'lib/services/cache';
-import { SakOgAvklaringsbehov } from 'components/kelvinappheader/SisteBehandledeSakerOgOppgaver';
 
 const oppgaveApiBaseURL = process.env.OPPGAVE_API_BASE_URL;
 const oppgaveApiScope = process.env.OPPGAVE_API_SCOPE ?? '';

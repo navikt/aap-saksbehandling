@@ -4,11 +4,7 @@ import { useState } from 'react';
 import { isSuccess } from 'lib/utils/api';
 import { Behovstype, mapBehovskodeTilBehovstype } from 'lib/utils/form';
 import { clientHentMineSisteOppgaver } from 'lib/oppgaveClientApi';
-
-export interface SakOgAvklaringsbehov {
-  saksnummer: string;
-  avklaringsbehovKode: string;
-}
+import { SakOgAvklaringsbehov } from 'lib/types/oppgaveTypes';
 
 export const SisteBehandledeSakerOgOppgaver = () => {
   const [saker, setSaker] = useState<SakOgAvklaringsbehov[] | undefined>(undefined);

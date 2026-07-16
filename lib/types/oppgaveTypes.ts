@@ -33,6 +33,7 @@ export type SaksbehandlerFraSøk = oppgave['schemas']['no.nav.aap.oppgave.tildel
 export type TildelOppgaveRequest = oppgave['schemas']['no.nav.aap.oppgave.tildel.TildelOppgaveRequest'];
 export type TildelOppgaveResponse = oppgave['schemas']['no.nav.aap.oppgave.tildel.TildelOppgaveResponse'];
 export type TildeltStatus = oppgave['schemas']['no.nav.aap.oppgave.tildel.TildeltStatusDto'];
+export type SakOgAvklaringsbehov = oppgave['schemas']['no.nav.aap.oppgave.SakOgAvklaringsbehov'];
 
 // typer fra enums
 export type OppgaveBehandlingstype = `${NoNavAapOppgaveOppgaveDtoBehandlingstype}`;

@@ -6,13 +6,13 @@ import {
   OppgavelisteRequest,
   OppgavelisteResponse,
   PlukkOppgaveDto,
+  SakOgAvklaringsbehov,
   TildeltStatus,
 } from './types/oppgaveTypes';
 import { mapSortStateDirectionTilQueryParamEnum, mineOppgaverQueryParams, queryParamsArray } from './utils/request';
 import { clientFetch } from 'lib/clientApi';
 import { PathsMineOppgaverGetParametersQuerySortby } from '@navikt/aap-oppgave-typescript-types';
 import { ScopedBackendSortState } from 'hooks/oppgave/BackendSorteringHook';
-import { SakOgAvklaringsbehov } from 'components/kelvinappheader/SisteBehandledeSakerOgOppgaver';
 
 // oppgave
 export async function hentOppgaverClient(oppgavelisteRequest: OppgavelisteRequest) {
