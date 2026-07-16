@@ -17,6 +17,8 @@ const renderWithFlags = (ui: React.ReactElement) =>
   render(<FeatureFlagProvider flags={mockedFlags}>{ui}</FeatureFlagProvider>);
 
 const oppgave: Oppgave = {
+  id: 123,
+  personIdent: '12345678910',
   behandlingRef: 'dsfadf',
   vurderingsbehov: [],
   avklaringsbehovKode: '',
@@ -29,9 +31,6 @@ const oppgave: Oppgave = {
   versjon: 0,
   årsakerTilBehandling: [],
   markeringer: [],
-  enhetForKø: '4491',
-  erPåVent: false,
-  erÅpen: true,
 };
 
 const user = userEvent.setup();
@@ -39,7 +38,7 @@ const user = userEvent.setup();
 describe('OppgaveInformasjon', () => {
   it('Skal vise på vent ikon dersom oppgave er på vent', () => {
     renderWithFlags(
-      <OppgaveInformasjon oppgave={{ ...oppgave, påVentTil: addDays(new Date(), 1).toDateString(), erPåVent: true }} />
+      <OppgaveInformasjon oppgave={{ ...oppgave, påVentTil: addDays(new Date(), 1).toDateString() }} />
     );
     expect(screen.getByRole('img', { name: 'Oppgave på vent' })).toBeVisible();
   });
