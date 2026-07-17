@@ -1,10 +1,13 @@
-import { ValuePair } from 'components/form/FormField';
-import type { Vurderingsbehov, VurderingsbehovIntern } from '../types/types';
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
+
+import { ValuePair } from 'components/form/FormField';
+
+import type { Vurderingsbehov, VurderingsbehovIntern } from '../types/types';
 
 export const vurderingsbehovOptions = (
   erKravEnabled: boolean,
-  erAvslag11_27Enabled: boolean | undefined
+  erAvslag11_27Enabled: boolean | undefined,
+  erRevurdereFrivilligeEnabled: boolean | undefined = false
 ): ValuePair<Vurderingsbehov>[] => {
   const behov: Vurderingsbehov[] = [
     // TODO fjerner denne inntil det er avklart om denne skal brukes { label: 'Helhetlig vurdering', value: 'HELHETLIG_VURDERING' },
@@ -40,7 +43,9 @@ export const vurderingsbehovOptions = (
     'VURDER_KRAV',
   ].filter(
     (option) =>
-      (erKravEnabled || option !== 'VURDER_KRAV') && (erAvslag11_27Enabled || option !== 'VURDER_AVSLAG_11_27')
+      (erKravEnabled || option !== 'VURDER_KRAV') &&
+      (erAvslag11_27Enabled || option !== 'VURDER_AVSLAG_11_27') &&
+      (erRevurdereFrivilligeEnabled || (option !== 'VURDER_FRITAK_MELDEPLIKT' && option !== 'FASTSETT_ARBEIDSEVNE'))
   ) as Vurderingsbehov[];
 
   return behov.map((behov) => ({

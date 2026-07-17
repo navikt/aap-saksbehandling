@@ -1,15 +1,15 @@
 'use client';
 
-import { DigitaliseringsGrunnlag } from 'lib/types/postmottakTypes';
-
 import { Button, VStack } from '@navikt/ds-react';
+import { DigitaliseringsGrunnlag } from 'lib/types/postmottakTypes';
 import { AnnetRelevantDokument, AnnetRelevantDokumentUnderkategori, DokumentÅrsakTilBehandling } from 'lib/types/types';
-import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
-import type { Submittable } from 'components/postmottak/digitaliserdokument/DigitaliserDokument';
+import { vurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
+import { SubmitEventHandler } from 'react';
+
 import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
-import { SubmitEventHandler } from 'react';
-import { vurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
+import type { Submittable } from 'components/postmottak/digitaliserdokument/DigitaliserDokument';
+import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
 
 export interface AnnetRelevantDokumentFormFields {
   årsaker: string[];
@@ -22,6 +22,7 @@ interface Props extends Submittable {
   readOnly: boolean;
   isLoading: boolean;
   erKravEnabled: boolean;
+  erRevurdereFrivilligeEnabled: boolean;
 }
 
 const underkategoriOptions: ValuePair<NonNullable<AnnetRelevantDokumentUnderkategori>>[] = [
@@ -58,12 +59,19 @@ function mapTilAnnetRelevantDokumentKontrakt(data: AnnetRelevantDokumentFormFiel
   return JSON.stringify(dokument);
 }
 
-export const DigitaliserAnnetRelevantDokument = ({ grunnlag, readOnly, submit, isLoading, erKravEnabled }: Props) => {
+export const DigitaliserAnnetRelevantDokument = ({
+  grunnlag,
+  readOnly,
+  submit,
+  isLoading,
+  erKravEnabled,
+  erRevurdereFrivilligeEnabled,
+}: Props) => {
   const annetRelevantDokumentGrunnlag: AnnetRelevantDokument = grunnlag.vurdering?.strukturertDokumentJson
     ? JSON.parse(grunnlag.vurdering?.strukturertDokumentJson)
     : {};
 
-  const vurderingsbehov = vurderingsbehovOptions(erKravEnabled, undefined);
+  const vurderingsbehov = vurderingsbehovOptions(erKravEnabled, undefined, erRevurdereFrivilligeEnabled);
   const defaultÅrsakOptions: string[] = (annetRelevantDokumentGrunnlag.årsakerTilBehandling || [])
     .map((årsakFraGrunnlag) => vurderingsbehov.find((årsak) => årsak.value === årsakFraGrunnlag))
     .filter((e) => e !== undefined)
