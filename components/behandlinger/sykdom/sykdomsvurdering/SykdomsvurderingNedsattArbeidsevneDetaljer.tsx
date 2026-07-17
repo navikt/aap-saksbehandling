@@ -20,7 +20,7 @@ interface Props {
   rettighetsperiodeStartdato: Date;
   skalVurdereYrkesskade: boolean;
   erÅrsakssammenhengYrkesskade: boolean;
-  visAlleSykdomssteg: boolean;
+  skalViseAlleSykdomSteg: boolean;
 }
 
 export const SykdomsvurderingNedsattArbeidsevneDetaljer = ({
@@ -28,7 +28,7 @@ export const SykdomsvurderingNedsattArbeidsevneDetaljer = ({
   rettighetsperiodeStartdato,
   skalVurdereYrkesskade,
   erÅrsakssammenhengYrkesskade,
-  visAlleSykdomssteg,
+  skalViseAlleSykdomSteg,
   index,
   readonly,
 }: Props) => {
@@ -65,7 +65,7 @@ export const SykdomsvurderingNedsattArbeidsevneDetaljer = ({
         skalVurdereYrkesskade={skalVurdereYrkesskade}
         vurderingDatoSammeSomRettighetsperiodeStart={vurderingDatoSammeSomRettighetsperiodeStart}
       />
-      {(erTilstrekkeligNedsatt || visAlleSykdomssteg) && (
+      {(erTilstrekkeligNedsatt || skalViseAlleSykdomSteg) && (
         <>
           <RadioGroupJaNei
             name={`vurderinger.${index}.erSkadeSykdomEllerLyteVesentligdel`}

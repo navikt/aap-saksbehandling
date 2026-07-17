@@ -157,7 +157,7 @@ export const SykdomsvurderingFormInput = ({
                   rettighetsperiodeStartdato={rettighetsperiodeStartdato}
                   skalVurdereYrkesskade={skalVurdereYrkesskade}
                   erÅrsakssammenhengYrkesskade={erÅrsakssammenhengYrkesskade}
-                  visAlleSykdomssteg={skalViseAlleSykdomsSteg}
+                  skalViseAlleSykdomSteg={skalViseAlleSykdomsSteg}
                 />
               )}
             </>
@@ -186,15 +186,17 @@ export const SykdomsvurderingFormInput = ({
               Brukeren vil få vedtak om at de ikke har rett på AAP. De kvalifiserer ikke for sykepengeerstatning.
             </Alert>
           )}
-          <SykdomsvurderingNedsattArbeidsevneDetaljer
-            index={index}
-            form={form}
-            readonly={readonly}
-            rettighetsperiodeStartdato={rettighetsperiodeStartdato}
-            skalVurdereYrkesskade={skalVurdereYrkesskade}
-            erÅrsakssammenhengYrkesskade={erÅrsakssammenhengYrkesskade}
-            visAlleSykdomssteg={skalViseAlleSykdomsSteg}
-          />
+          {skalViseNedsettelse && (
+            <SykdomsvurderingNedsattArbeidsevneDetaljer
+              index={index}
+              form={form}
+              readonly={readonly}
+              rettighetsperiodeStartdato={rettighetsperiodeStartdato}
+              skalVurdereYrkesskade={skalVurdereYrkesskade}
+              erÅrsakssammenhengYrkesskade={erÅrsakssammenhengYrkesskade}
+              skalViseAlleSykdomSteg={skalViseAlleSykdomsSteg}
+            />
+          )}
         </>
       )}
     </VStack>

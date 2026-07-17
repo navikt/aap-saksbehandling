@@ -901,29 +901,18 @@ describe('vurderinger uten viss varighet', () => {
       name: 'Nei',
     });
 
-    const nedsattArbeidsevneNeiValg = within(
+    const nedsattArbeidsevneJaValg = within(
       screen.getByRole('radiogroup', { name: 'Har brukeren nedsatt arbeidsevne?' })
     ).getByRole('radio', {
-      name: 'Nei',
+      name: 'Ja',
     });
+    await user.click(nedsattArbeidsevneJaValg);
 
-    const nedsattArbeidsevneTilstrekkeligNeiValg = within(
+    const nedsattArbeidsevneTilstrekkeligJaValg = within(
       screen.getByRole('radiogroup', { name: /er arbeidsevnen nedsatt med minst halvparten\?/i })
-    ).getByRole('radio', { name: 'Nei' });
-
-    await user.click(nedsattArbeidsevneNeiValg);
-    await user.click(nedsattArbeidsevneTilstrekkeligNeiValg);
-
-    const nedsatt30Prosent = within(
-      screen.getByRole('radiogroup', { name: /er arbeidsevnen nedsatt med minst 30 prosent\?/i })
     ).getByRole('radio', { name: 'Ja' });
 
-    await user.click(nedsatt30Prosent);
-
-    await user.type(
-      screen.getByRole('textbox', { name: '§ 11-22 AAP ved yrkesskade' }),
-      'Kort begrunnelse for vurdering av 30 prosent.'
-    );
+    await user.click(nedsattArbeidsevneTilstrekkeligJaValg);
 
     await user.click(skadeSykdomLyteNeiValg);
 
