@@ -87,7 +87,9 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov | Vurde
     case 'MOTTATT_KABAL_HENDELSE':
       return 'Mottatt svar fra Nav Klageinstans';
     case 'FRITAK_MELDEPLIKT':
-      return 'Fritak meldeplikt';
+      return '§ 11-10 Fritak meldeplikt';
+    case 'VURDER_FRITAK_MELDEPLIKT':
+      return '§ 11-10 Vurder fritak meldeplikt';
     case 'REVURDER_MANUELL_INNTEKT':
       return 'Manuell inntekt';
     case 'OPPFØLGINGSOPPGAVE':
@@ -124,6 +126,8 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov | Vurde
       return 'Korrigering av teknisk periode (automatisk behandling)';
     case 'ETABLERING_EGEN_VIRKSOMHET':
       return '§ 11-15 Etablering av egen virksomhet';
+    case 'FASTSETT_ARBEIDSEVNE':
+      return '§ 11-23 andre ledd. Arbeidsevne som ikke er utnyttet';
     case 'REVURDER_SYKESTIPEND':
       return 'Revurder sykestipend';
     case 'AKTIVITETSPLIKTBEHANDLING_AVBRUTT':

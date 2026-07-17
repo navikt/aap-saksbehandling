@@ -77,15 +77,16 @@ export const OpprettRevurdering = ({
     beskrivelse: {
       type: 'textarea',
       label: 'Hva er årsaken?',
-      description: 'Utdyp så det er tydelig for andre i Kelvin hva som er årsak til vurderingsbehovet',
+      description: 'Utdyp så det er tydelig for andre i Kelvin hva som er årsak til vurderingsbehovet.',
       rules: {
-        required: `Skriv litt om hvorfor du skal ${erFørstegangsbehandling ? 'opprette vurdering' : 'revurdere saken'}`,
+        required: `Skriv litt om hvorfor du skal ${erFørstegangsbehandling ? 'opprette vurdering' : 'revurdere saken'}.`,
       },
       defaultValue: defaultBegrunnelse ?? '',
     },
     årsaker: {
       type: 'combobox_multiple',
       label: `Hvilke opplysninger skal ${erFørstegangsbehandling ? 'vurderes' : 'revurderes'}?`,
+      description: 'Skriv i feltet for å filtrere listen.',
       options: vurderingsbehovOptions(erKravEnabled, avslag11_27Enable),
       defaultValue: defaultÅrsaker,
       rules: {
