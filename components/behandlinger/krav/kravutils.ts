@@ -1,24 +1,20 @@
 import {
-  Gjenopptak,
-  GjenopptakKravLøsning,
   KlageKravLøsning,
   KravVurdering,
   KravVurderingLøsning,
-  NyttKrav,
-  NyttKravLøsning,
+  RelevantKrav,
   OverstyrMuligRettFra,
   Søknadsdato,
   TilleggsopplysningKravLøsning,
   TrukketSøknadKravLøsning,
+  RelevantKravLøsning,
 } from 'lib/types/types';
 import { KravType } from 'components/opprettsak/OpprettSakLocal';
 
 export function finnSøknadsdato(vurdering: KravVurdering): Søknadsdato | null {
   switch (vurdering.type) {
-    case 'NYTT_KRAV_AAP':
-      return (vurdering as NyttKrav).søknadsdato;
-    case 'GJENOPPTAK':
-      return (vurdering as Gjenopptak).søknadsdato;
+    case 'RELEVANT_KRAV':
+      return (vurdering as RelevantKrav).søknadsdato;
     default:
       return null;
   }
@@ -26,35 +22,29 @@ export function finnSøknadsdato(vurdering: KravVurdering): Søknadsdato | null 
 
 export function finnOverstyrMuligRettFra(vurdering: KravVurdering): OverstyrMuligRettFra | null {
   switch (vurdering.type) {
-    case 'NYTT_KRAV_AAP':
-      return (vurdering as NyttKrav).overstyrMuligRettFra ?? null;
-    case 'GJENOPPTAK':
-      return (vurdering as Gjenopptak).overstyrMuligRettFra ?? null;
+    case 'RELEVANT_KRAV':
+      return (vurdering as RelevantKrav).overstyrMuligRettFra ?? null;
     default:
       return null;
   }
 }
 
 export function finnSøknadsdatoFraLøsning(løsning: KravVurderingLøsning): Søknadsdato | null {
-  if (løsning.kravType === 'NYTT_KRAV_AAP') return (løsning as NyttKravLøsning).søknadsdato;
-  if (løsning.kravType === 'GJENOPPTAK') return (løsning as GjenopptakKravLøsning).søknadsdato;
+  if (løsning.kravType === 'RELEVANT_KRAV') return (løsning as RelevantKravLøsning).søknadsdato;
   return null;
 }
 
 export function finnOverstyrMuligRettFraFraLøsning(løsning: KravVurderingLøsning): OverstyrMuligRettFra | null {
-  if (løsning.kravType === 'NYTT_KRAV_AAP') return (løsning as NyttKravLøsning).overstyrMuligRettFra ?? null;
-  if (løsning.kravType === 'GJENOPPTAK') return (løsning as GjenopptakKravLøsning).overstyrMuligRettFra ?? null;
+  if (løsning.kravType === 'RELEVANT_KRAV') return (løsning as RelevantKravLøsning).overstyrMuligRettFra ?? null;
   return null;
 }
 
 export function formaterKravtype(type: KravType) {
   switch (type) {
-    case 'NYTT_KRAV_AAP':
-      return 'Nytt krav';
+    case 'RELEVANT_KRAV':
+      return 'Relevant krav';
     case 'KLAGE':
       return 'Klage';
-    case 'GJENOPPTAK':
-      return 'Gjenopptak';
     case 'TILLEGGSOPPLYSNING':
       return 'Tilleggsopplysning';
     case 'TRUKKET_SØKNAD':
@@ -71,27 +61,16 @@ export function formaterKravtype(type: KravType) {
  */
 export function kravVurderingTilLøsning(vurdering: KravVurdering): KravVurderingLøsning {
   switch (vurdering.type) {
-    case 'NYTT_KRAV_AAP': {
-      const v = vurdering as NyttKrav;
+    case 'RELEVANT_KRAV': {
+      const v = vurdering as RelevantKrav;
       return {
-        kravType: 'NYTT_KRAV_AAP',
+        kravType: 'RELEVANT_KRAV',
         journalpostId: v.journalpostId,
         begrunnelse: v.begrunnelse,
         søknadsdato: v.søknadsdato,
         overstyrMuligRettFra: v.overstyrMuligRettFra,
         referanse: undefined,
-      } satisfies NyttKravLøsning;
-    }
-    case 'GJENOPPTAK': {
-      const v = vurdering as Gjenopptak;
-      return {
-        kravType: 'GJENOPPTAK',
-        journalpostId: v.journalpostId,
-        begrunnelse: v.begrunnelse,
-        søknadsdato: v.søknadsdato,
-        overstyrMuligRettFra: v.overstyrMuligRettFra,
-        referanse: undefined,
-      } satisfies GjenopptakKravLøsning;
+      } satisfies RelevantKravLøsning;
     }
     case 'KLAGE':
       return {

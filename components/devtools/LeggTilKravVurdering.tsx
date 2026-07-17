@@ -11,7 +11,7 @@ import { formaterDatoForBackend } from 'lib/utils/date';
 import { Alert } from 'components/alert/Alert';
 import { subMonths } from 'date-fns';
 
-type KravType = 'NYTT_KRAV_AAP' | 'GJENOPPTAK' | 'TRUKKET_SØKNAD' | 'KLAGE' | 'TILLEGGSOPPLYSNING';
+type KravType = 'RELEVANT_KRAV' | 'TRUKKET_SØKNAD' | 'KLAGE' | 'TILLEGGSOPPLYSNING';
 
 interface KravVurderingEntry {
   kravType: KravType;
@@ -24,10 +24,10 @@ interface FormFields {
 }
 
 const defaultDato = formaterDatoForBackend(subMonths(new Date(), 3));
-const kravTyperMedDatofelter: ReadonlySet<KravType> = new Set(['NYTT_KRAV_AAP', 'GJENOPPTAK']);
+const kravTyperMedDatofelter: ReadonlySet<KravType> = new Set(['RELEVANT_KRAV']);
 
 const defaultKrav = (): KravVurderingEntry => ({
-  kravType: 'NYTT_KRAV_AAP',
+  kravType: 'RELEVANT_KRAV',
   søknadsdato: defaultDato,
   muligRettFra: undefined,
 });
@@ -90,8 +90,7 @@ export const LeggTilKravVurdering = ({ saksnummer }: { saksnummer: string }) => 
               },
             }}
           >
-            <option value="NYTT_KRAV_AAP">Nytt krav AAP</option>
-            <option value="GJENOPPTAK">Gjenopptak</option>
+            <option value="RELEVANT_KRAV">Nytt krav AAP</option>
             <option value="TRUKKET_SØKNAD">Trukket søknad</option>
             <option value="KLAGE">Klage</option>
             <option value="TILLEGGSOPPLYSNING">Tilleggsopplysning</option>

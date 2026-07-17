@@ -15,10 +15,10 @@ interface Props {
 
 const defaultDato = formaterDatoForFrontend(subMonths(new Date(), 3));
 const defaultMuligRettFra = formaterDatoForFrontend(subDays(subMonths(new Date(), 1), 5));
-const kravTyperMedDatofelter: ReadonlySet<KravType> = new Set(['NYTT_KRAV_AAP', 'GJENOPPTAK']);
+const kravTyperMedDatofelter: ReadonlySet<KravType> = new Set(['RELEVANT_KRAV']);
 
 const KravRadFelter = ({ form, index }: { form: UseFormReturn<OpprettSakFormFields>; index: number }) => {
-  const kravType = useWatch({ control: form.control, name: `kravVurderinger.${index}.kravType` }) ?? 'NYTT_KRAV_AAP';
+  const kravType = useWatch({ control: form.control, name: `kravVurderinger.${index}.kravType` }) ?? 'RELEVANT_KRAV';
 
   if (!kravTyperMedDatofelter.has(kravType)) return null;
 
@@ -53,8 +53,7 @@ export const OpprettKravVurdering = ({ form }: Props) => {
               },
             }}
           >
-            <option value="NYTT_KRAV_AAP">Nytt krav AAP</option>
-            <option value="GJENOPPTAK">Gjenopptak</option>
+            <option value="RELEVANT_KRAV">Nytt krav AAP</option>
             <option value="TRUKKET_SØKNAD">Trukket søknad</option>
             <option value="KLAGE">Klage</option>
             <option value="TILLEGGSOPPLYSNING">Tilleggsopplysning</option>
@@ -81,7 +80,7 @@ export const OpprettKravVurdering = ({ form }: Props) => {
         icon={<PlusIcon aria-hidden />}
         onClick={() =>
           append({
-            kravType: 'NYTT_KRAV_AAP',
+            kravType: 'RELEVANT_KRAV',
             søknadsdato: defaultDato,
             muligRettFra: defaultMuligRettFra,
           })

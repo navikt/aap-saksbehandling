@@ -211,27 +211,22 @@ export type KravGrunnlag = components['schemas']['no.nav.aap.behandlingsflyt.beh
 
 export type KravVurdering = components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.KravVurderingDto'];
 
-export type NyttKrav = components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.NyttKravDto'];
-
-export type Gjenopptak = components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.GjenopptakDto'];
+export type RelevantKrav = components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.RelevantKravDto'];
 
 export type Tilleggsopplysning =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.TilleggsopplysningDto'];
 
 export type Søknadsdato =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.NyttKravDto']['søknadsdato'];
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.RelevantKravDto']['søknadsdato'];
 
 export type OverstyrMuligRettFra =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.NyttKravDto']['overstyrMuligRettFra'];
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.RelevantKravDto']['overstyrMuligRettFra'];
 
 export type KravVurderingLøsning =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.KravVurderingLøsningDto'];
 
-export type NyttKravLøsning =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.NyttKravLøsningDto'];
-
-export type GjenopptakKravLøsning =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.GjenopptakKravLøsningDto'];
+export type RelevantKravLøsning =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.RelevantKravLøsningDto'];
 
 export type KlageKravLøsning =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.KlageKravLøsningDto'];
