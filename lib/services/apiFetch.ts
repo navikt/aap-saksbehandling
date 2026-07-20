@@ -1,8 +1,8 @@
 'use server';
 
-import { logError, logWarning } from 'lib/serverutlis/logger';
-import { ApiException, FetchResponse } from 'lib/utils/api';
+import { logError, logInfo, logWarning } from 'lib/serverutlis/logger';
 import { getToken } from 'lib/services/token';
+import { ApiException, FetchResponse } from 'lib/utils/api';
 
 const NUMBER_OF_RETRIES = 3;
 const REQUEST_TIMEOUT_MS = 60_000; // 60 sekunder, samme som RestClient default i Kelvin komponenter
@@ -66,6 +66,9 @@ const fetchWithRetry = async <ResponseType>(
       const feilmelding = `klarte ikke å hente ${url}: ${responseJson.message} med status ${response.status}`;
       if (response.status >= 500) {
         logError(feilmelding);
+      }
+      if (response.status == 404) {
+        logInfo(feilmelding);
       } else {
         logWarning(feilmelding);
       }
