@@ -3,11 +3,10 @@
 import { Button, Modal, Select, Textarea, VStack } from '@navikt/ds-react';
 import { useForm, useWatch } from 'react-hook-form';
 import {
-  GjenopptakKravLøsning,
   KlageKravLøsning,
   KravVurdering,
   KravVurderingLøsning,
-  NyttKravLøsning,
+  RelevantKravLøsning,
   SøknadUtenKrav,
   TilleggsopplysningKravLøsning,
   TrukketSøknadKravLøsning,
@@ -21,9 +20,9 @@ import {
 } from 'components/behandlinger/krav/kravutils';
 import { KravType } from 'components/opprettsak/OpprettSakLocal';
 
-const ALLE_KRAVTYPER: KravType[] = ['NYTT_KRAV_AAP', 'GJENOPPTAK', 'TILLEGGSOPPLYSNING', 'KLAGE', 'TRUKKET_SØKNAD'];
+const ALLE_KRAVTYPER: KravType[] = ['RELEVANT_KRAV', 'TILLEGGSOPPLYSNING', 'KLAGE', 'TRUKKET_SØKNAD'];
 
-const KRAV_MED_DATO: KravType[] = ['NYTT_KRAV_AAP', 'GJENOPPTAK'];
+const KRAV_MED_DATO: KravType[] = ['RELEVANT_KRAV'];
 
 type KravVurderingFormFields = {
   kravtype: KravType;
@@ -112,24 +111,15 @@ export const KravVurderingModal = ({
             }
           : undefined;
 
-      if (data.kravtype === 'NYTT_KRAV_AAP') {
+      if (data.kravtype === 'RELEVANT_KRAV') {
         onLagre({
-          kravType: 'NYTT_KRAV_AAP',
+          kravType: 'RELEVANT_KRAV',
           journalpostId,
           begrunnelse: data.begrunnelse,
           søknadsdato,
           overstyrMuligRettFra: overstyr,
           referanse,
-        } satisfies NyttKravLøsning);
-      } else {
-        onLagre({
-          kravType: 'GJENOPPTAK',
-          journalpostId,
-          begrunnelse: data.begrunnelse,
-          søknadsdato,
-          overstyrMuligRettFra: overstyr,
-          referanse,
-        } satisfies GjenopptakKravLøsning);
+        } satisfies RelevantKravLøsning);
       }
     } else {
       switch (data.kravtype) {

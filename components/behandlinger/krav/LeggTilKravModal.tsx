@@ -4,10 +4,9 @@ import { useEffect } from 'react';
 import { Button, Modal, Select, Textarea, TextField, VStack } from '@navikt/ds-react';
 import { useForm, useWatch } from 'react-hook-form';
 import {
-  GjenopptakKravLøsning,
   KlageKravLøsning,
   KravVurderingLøsning,
-  NyttKravLøsning,
+  RelevantKravLøsning,
   SøknadUtenKrav,
   TilleggsopplysningKravLøsning,
   TrukketSøknadKravLøsning,
@@ -31,9 +30,9 @@ type LeggTilKravFormFields = {
   overstyrÅrsak: string;
 };
 
-const ALLE_KRAVTYPER: KravType[] = ['NYTT_KRAV_AAP', 'GJENOPPTAK', 'TILLEGGSOPPLYSNING', 'KLAGE', 'TRUKKET_SØKNAD'];
+const ALLE_KRAVTYPER: KravType[] = ['RELEVANT_KRAV', 'TILLEGGSOPPLYSNING', 'KLAGE', 'TRUKKET_SØKNAD'];
 
-const KOMPLEKSE_TYPER: KravType[] = ['NYTT_KRAV_AAP', 'GJENOPPTAK'];
+const KOMPLEKSE_TYPER: KravType[] = ['RELEVANT_KRAV'];
 
 interface Props {
   søknaderUtenKravvurdering: SøknadUtenKrav[];
@@ -57,7 +56,7 @@ export const LeggTilKravModal = ({ søknaderUtenKravvurdering, initialLøsning, 
   } = useForm<LeggTilKravFormFields>({
     shouldUnregister: true,
     defaultValues: {
-      kravtype: (initialLøsning?.kravType as KravType) ?? 'NYTT_KRAV_AAP',
+      kravtype: (initialLøsning?.kravType as KravType) ?? 'RELEVANT_KRAV',
       journalpostId: initialLøsning?.journalpostId.identifikator ?? '',
       begrunnelse: initialLøsning?.begrunnelse ?? '',
       søknadsdatoDato: eksisterendeSøknadsdato ? formaterDatoForFrontend(eksisterendeSøknadsdato.dato) : '',
@@ -74,7 +73,7 @@ export const LeggTilKravModal = ({ søknaderUtenKravvurdering, initialLøsning, 
   const erKompleksType = KOMPLEKSE_TYPER.includes(valgtType);
 
   useEffect(() => {
-    if (valgtType !== 'NYTT_KRAV_AAP') return;
+    if (valgtType !== 'RELEVANT_KRAV') return;
     if (!valgtJournalpostId) return;
 
     const søknad = søknaderUtenKravvurdering.find((s) => s.journalpostId.identifikator === valgtJournalpostId);
@@ -106,24 +105,15 @@ export const LeggTilKravModal = ({ søknaderUtenKravvurdering, initialLøsning, 
             }
           : undefined;
 
-      if (data.kravtype === 'NYTT_KRAV_AAP') {
+      if (data.kravtype === 'RELEVANT_KRAV') {
         onLagre({
-          kravType: 'NYTT_KRAV_AAP',
+          kravType: 'RELEVANT_KRAV',
           journalpostId,
           begrunnelse: data.begrunnelse,
           søknadsdato,
           overstyrMuligRettFra,
           referanse: undefined,
-        } satisfies NyttKravLøsning);
-      } else {
-        onLagre({
-          kravType: 'GJENOPPTAK',
-          journalpostId,
-          begrunnelse: data.begrunnelse,
-          søknadsdato,
-          overstyrMuligRettFra: overstyrMuligRettFra,
-          referanse: undefined,
-        } satisfies GjenopptakKravLøsning);
+        } satisfies RelevantKravLøsning);
       }
     } else {
       switch (data.kravtype) {

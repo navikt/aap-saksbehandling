@@ -1583,13 +1583,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aap-felles-prettier@npm:5.8.0":
-  version: 5.8.0
-  resolution: "@navikt/aap-felles-prettier@npm:5.8.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-prettier%2F5.8.0%2F3fa63b55cf755647cc2f3b49fd68808e5bdf0be4"
+"@navikt/aap-felles-prettier@npm:5.9.0":
+  version: 5.9.0
+  resolution: "@navikt/aap-felles-prettier@npm:5.9.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-prettier%2F5.9.0%2F84994aec2d3dee343acf0b10082985d9588edc95"
   dependencies:
     "@trivago/prettier-plugin-sort-imports": "npm:^6.0.2"
     prettier: "npm:^3.9.5"
-  checksum: 10c0/659c7e519dd60b61b7b37f590e52b2f327de5bb4a92e1c66d74de23372a905252fbe28be812d13e49319fb0573699d72f54a770f98aeee9c50e2f4920782992c
+  checksum: 10c0/7267e96d19dc747bffcdf460d1aa21940508a5ca7d3fc72d8d92e94f3e074b2cfc6a48651fcc6d4dbb49fd92b22d216ae21130aa3563b20722cbf9f02cd26e9b
   languageName: node
   linkType: hard
 
@@ -1600,10 +1600,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aap-postmottak-backend-typescript-types@npm:0.0.784":
-  version: 0.0.784
-  resolution: "@navikt/aap-postmottak-backend-typescript-types@npm:0.0.784::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-postmottak-backend-typescript-types%2F0.0.784%2Ff62451bf1271b9004ec4744819146250834f54c5"
-  checksum: 10c0/33ac938a8576b6942c6f414be0e49b38affbabf3ee7280c17c5eae7889e4b60783194694d230701ae3a615855b8add43fb2cdac6acd265fc2dbc2ef36e176c07
+"@navikt/aap-postmottak-backend-typescript-types@npm:0.0.785":
+  version: 0.0.785
+  resolution: "@navikt/aap-postmottak-backend-typescript-types@npm:0.0.785::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-postmottak-backend-typescript-types%2F0.0.785%2Fcd9ba7bafddce1a84f34c12f14bde1997d5e2fec"
+  checksum: 10c0/7066a68ba4408a9ad3cf4b64cb81fcb0a597930ca6225744746252b9c3d526295629486e284b29e1fe353c02669eccb30311cdb598974dd49f5dd24d02ebe703
   languageName: node
   linkType: hard
 
@@ -3137,9 +3137,9 @@ __metadata:
     "@grafana/faro-web-tracing": "npm:2.8.2"
     "@navikt/aap-breveditor": "npm:0.13.0"
     "@navikt/aap-breveditor-css": "npm:0.6.0"
-    "@navikt/aap-felles-prettier": "npm:5.8.0"
+    "@navikt/aap-felles-prettier": "npm:5.9.0"
     "@navikt/aap-oppgave-typescript-types": "npm:0.0.847"
-    "@navikt/aap-postmottak-backend-typescript-types": "npm:0.0.784"
+    "@navikt/aap-postmottak-backend-typescript-types": "npm:0.0.785"
     "@navikt/aksel": "npm:8.15.0"
     "@navikt/aksel-icons": "npm:8.15.0"
     "@navikt/diagnosekoder": "npm:1.2026.0"

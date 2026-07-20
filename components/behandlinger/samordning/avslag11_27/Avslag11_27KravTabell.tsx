@@ -15,9 +15,8 @@ interface Props {
 }
 
 const kravTypeLabels: Record<string, string> = {
-  NYTT_KRAV_AAP: 'Nytt krav om AAP',
+  RELEVANT_KRAV: 'Nytt krav om AAP',
   TRUKKET_SØKNAD: 'Trukket søknad',
-  GJENOPPTAK: 'Gjenopptak',
   KLAGE: 'Klage',
   TILLEGGSOPPLYSNING: 'Tilleggsopplysning',
 };
