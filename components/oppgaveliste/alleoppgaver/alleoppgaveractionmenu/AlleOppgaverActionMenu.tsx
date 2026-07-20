@@ -1,12 +1,12 @@
 import { useRouter } from 'next/navigation';
 import { ActionMenu, Button } from '@navikt/ds-react';
 import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
+import { byggKelvinURL } from 'lib/utils/request';
 import { Oppgave } from 'lib/types/oppgaveTypes';
 import { avreserverOppgaveClient, synkroniserOppgaveMedEnhetClient } from 'lib/oppgaveClientApi';
 import { isSuccess } from 'lib/utils/api';
 import { Dispatch, SetStateAction, useState, useTransition } from 'react';
 import { useTildelOppgaver } from 'context/oppgave/TildelOppgaverContext';
-import { byggKelvinURLFraOppgave } from 'lib/utils/request';
 
 interface Props {
   oppgave: Oppgave;
@@ -61,7 +61,7 @@ export const AlleOppgaverActionMenu = ({ setVisSynkroniserEnhetModal, oppgave, r
           <ActionMenu.Item
             onSelect={() => {
               setIsLoading(true);
-              router.push(byggKelvinURLFraOppgave(oppgave));
+              router.push(byggKelvinURL(oppgave));
             }}
           >
             Åpne oppgave
