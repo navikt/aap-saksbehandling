@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev --turbo | pino-pretty",
     "build": "next build",
+    "typecheck": "tsc --noEmit",
     "test": "vitest --run",
     "test:watch": "vitest --watch",
     "start": "next start",
