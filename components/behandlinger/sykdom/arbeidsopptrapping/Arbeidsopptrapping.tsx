@@ -1,37 +1,38 @@
 'use client';
 
+import { VStack } from '@navikt/ds-react';
+import { parse, parseISO } from 'date-fns';
+import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import {
   ArbeidsopptrappingGrunnlagResponse,
   ArbeidsopptrappingLøsningDto,
   MellomlagretVurdering,
   VurderingFormMeta,
 } from 'lib/types/types';
-import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
-import { useFieldArray, useForm } from 'react-hook-form';
-import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
-import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
-import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
-import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
+import { Behovstype, JaEllerNei, getJaNeiEllerUndefined } from 'lib/utils/form';
 import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
-import { parse, parseISO } from 'date-fns';
-import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
-import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
+import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
+import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
+import { useFieldArray, useForm } from 'react-hook-form';
+
+import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
+import { ArbeidsopptrappingVurderingFormInput } from 'components/behandlinger/sykdom/arbeidsopptrapping/ArbeidsopptrappingVurderingFormInput';
+import { IkkeVurderbarPeriode } from 'components/periodisering/IkkeVurderbarPeriode';
+import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 import {
   NyVurderingExpandableCard,
   skalVæreInitiellEkspandert,
 } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
-import { ArbeidsopptrappingVurderingFormInput } from 'components/behandlinger/sykdom/arbeidsopptrapping/ArbeidsopptrappingVurderingFormInput';
-import { VStack } from '@navikt/ds-react';
+import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
-import { IkkeVurderbarPeriode } from 'components/periodisering/IkkeVurderbarPeriode';
-import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
-import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
-import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
-import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
+import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 
 interface Props {
   behandlingVersjon: number;
@@ -105,10 +106,6 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
       tidligsteDatoMåMatcheMedRettighetsperiode: false,
     });
     if (!erPerioderGyldige) {
-      return;
-    }
-    if (data.vurderinger.length === 0 && nyeVurderinger.length === 0) {
-      visningActions.avbrytEndringClick();
       return;
     }
     const losning: LøsningerForPerioder = {

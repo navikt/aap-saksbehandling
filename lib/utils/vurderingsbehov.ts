@@ -136,6 +136,8 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov | Vurde
       return 'Revurder inntektsbortfall';
     case 'VURDER_AVSLAG_11_27':
       return '§ 11-27 Mulig avslag pga. annen full folketrygdytelse';
+    case 'VURDER_ARBEIDSOPPTRAPPING':
+      return '§ 11-23 sjette ledd. Arbeidsopptrapping';
     default:
       return vurderingsbehov;
   }

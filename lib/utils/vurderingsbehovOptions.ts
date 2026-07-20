@@ -18,6 +18,7 @@ export const vurderingsbehovOptions = (
     'OVERGANG_ARBEID',
     'OVERGANG_UFORE',
     'VURDER_FRITAK_MELDEPLIKT',
+    'VURDER_ARBEIDSOPPTRAPPING',
     'FASTSETT_ARBEIDSEVNE',
     'REVURDER_YRKESSKADE',
     'REVURDER_SYKEPENGEERSTATNING',
@@ -29,6 +30,7 @@ export const vurderingsbehovOptions = (
     'BARNETILLEGG',
     'DØDSFALL_BARN',
     'INSTITUSJONSOPPHOLD',
+    'REFUSJONSKRAV',
     'REVURDER_SAMORDNING_ANDRE_FOLKETRYGDYTELSER',
     'REVURDER_SAMORDNING_UFØRE',
     'REVURDER_MELDEPLIKT_RIMELIG_GRUNN',
@@ -45,7 +47,10 @@ export const vurderingsbehovOptions = (
     (option) =>
       (erKravEnabled || option !== 'VURDER_KRAV') &&
       (erAvslag11_27Enabled || option !== 'VURDER_AVSLAG_11_27') &&
-      (erRevurdereFrivilligeEnabled || (option !== 'VURDER_FRITAK_MELDEPLIKT' && option !== 'FASTSETT_ARBEIDSEVNE'))
+      (erRevurdereFrivilligeEnabled ||
+        (option !== 'VURDER_FRITAK_MELDEPLIKT' &&
+          option !== 'FASTSETT_ARBEIDSEVNE' &&
+          option !== 'VURDER_ARBEIDSOPPTRAPPING'))
   ) as Vurderingsbehov[];
 
   return behov.map((behov) => ({

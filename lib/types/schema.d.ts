@@ -6447,7 +6447,7 @@ export interface components {
         | 'RETURNERT_FRA_KVALITETSSIKRER'
         | 'SENDT_TIL_BESLUTTER'
         | 'SENDT_TIL_KVALITETSSIKRER';
-      avIdent: string;
+      avIdent: components['schemas']['no.nav.aap.komponenter.verdityper.Bruker'];
       /**
        * Format: date-time
        * @example 2025-04-01T12:30:00
@@ -14737,6 +14737,7 @@ export interface components {
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
+        | 'VURDER_ARBEIDSOPPTRAPPING'
         | 'VURDER_AVSLAG_11_27'
         | 'VURDER_FRITAK_MELDEPLIKT'
         | 'VURDER_KRAV'
@@ -15324,6 +15325,7 @@ export interface components {
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
+        | 'VURDER_ARBEIDSOPPTRAPPING'
         | 'VURDER_AVSLAG_11_27'
         | 'VURDER_FRITAK_MELDEPLIKT'
         | 'VURDER_KRAV'
@@ -15402,6 +15404,7 @@ export interface components {
             | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
             | 'UTVID_VEDTAKSLENGDE'
             | 'VEDTAKSLENGDE_MANUELT'
+            | 'VURDER_ARBEIDSOPPTRAPPING'
             | 'VURDER_AVSLAG_11_27'
             | 'VURDER_FRITAK_MELDEPLIKT'
             | 'VURDER_KRAV'
@@ -16188,6 +16191,7 @@ export interface components {
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
+        | 'VURDER_ARBEIDSOPPTRAPPING'
         | 'VURDER_AVSLAG_11_27'
         | 'VURDER_FRITAK_MELDEPLIKT'
         | 'VURDER_KRAV'
@@ -16223,7 +16227,7 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.drift.ForenkletAvklaringsbehov': {
       definisjon: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.avklaringsbehov.Definisjon'];
-      endretAv: string;
+      endretAv: components['schemas']['no.nav.aap.komponenter.verdityper.Bruker'];
       /**
        * Format: date
        * @example 2025-04-01
@@ -18129,7 +18133,7 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.flyt.EndringDTO': {
       begrunnelse?: string | null;
-      endretAv: string;
+      endretAv: components['schemas']['no.nav.aap.komponenter.verdityper.Bruker'];
       /** @enum {string} */
       status:
         | 'AVBRUTT'
@@ -18808,6 +18812,7 @@ export interface components {
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
+        | 'VURDER_ARBEIDSOPPTRAPPING'
         | 'VURDER_AVSLAG_11_27'
         | 'VURDER_FRITAK_MELDEPLIKT'
         | 'VURDER_KRAV'
@@ -18898,6 +18903,7 @@ export interface components {
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
+        | 'VURDER_ARBEIDSOPPTRAPPING'
         | 'VURDER_AVSLAG_11_27'
         | 'VURDER_FRITAK_MELDEPLIKT'
         | 'VURDER_KRAV'
@@ -19179,6 +19185,7 @@ export interface components {
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
+        | 'VURDER_ARBEIDSOPPTRAPPING'
         | 'VURDER_AVSLAG_11_27'
         | 'VURDER_FRITAK_MELDEPLIKT'
         | 'VURDER_KRAV'
@@ -19283,6 +19290,7 @@ export interface components {
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
+        | 'VURDER_ARBEIDSOPPTRAPPING'
         | 'VURDER_AVSLAG_11_27'
         | 'VURDER_FRITAK_MELDEPLIKT'
         | 'VURDER_KRAV'
@@ -19364,6 +19372,7 @@ export interface components {
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
+        | 'VURDER_ARBEIDSOPPTRAPPING'
         | 'VURDER_AVSLAG_11_27'
         | 'VURDER_FRITAK_MELDEPLIKT'
         | 'VURDER_KRAV'
@@ -19434,6 +19443,7 @@ export interface components {
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
+        | 'VURDER_ARBEIDSOPPTRAPPING'
         | 'VURDER_AVSLAG_11_27'
         | 'VURDER_FRITAK_MELDEPLIKT'
         | 'VURDER_KRAV'
@@ -19714,6 +19724,7 @@ export interface components {
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
+        | 'VURDER_ARBEIDSOPPTRAPPING'
         | 'VURDER_AVSLAG_11_27'
         | 'VURDER_FRITAK_MELDEPLIKT'
         | 'VURDER_KRAV'
@@ -19726,7 +19737,7 @@ export interface components {
        * @example 2025-04-01T12:30:00
        */
       opprettet: string;
-      opprettetAv?: string | null;
+      opprettetAv?: components['schemas']['no.nav.aap.komponenter.verdityper.Bruker'];
       vurderingsbehov: components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.behandling.VurderingsbehovMedPeriode'][];
       /** @enum {string} */
       '\u00E5rsak':
@@ -19867,6 +19878,7 @@ export interface components {
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
+        | 'VURDER_ARBEIDSOPPTRAPPING'
         | 'VURDER_AVSLAG_11_27'
         | 'VURDER_FRITAK_MELDEPLIKT'
         | 'VURDER_KRAV'
@@ -19958,6 +19970,7 @@ export interface components {
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
+        | 'VURDER_ARBEIDSOPPTRAPPING'
         | 'VURDER_AVSLAG_11_27'
         | 'VURDER_FRITAK_MELDEPLIKT'
         | 'VURDER_KRAV'
@@ -20368,9 +20381,7 @@ export interface components {
     'no.nav.aap.komponenter.verdityper.Bel\u00F8p': {
       verdi: number;
     };
-    'no.nav.aap.komponenter.verdityper.Bruker': {
-      ident: string;
-    };
+    'no.nav.aap.komponenter.verdityper.Bruker': string;
     'no.nav.aap.komponenter.verdityper.Dagsatser': {
       /** Format: int32 */
       antall: number;
