@@ -53,17 +53,17 @@ export const ToTrinnsvurdering = ({
   const skalViseOppsummering = readOnly && vurderteTotrinnsvurderinger.length > 0;
   const innloggetBruker = useInnloggetBruker();
 
-  const erKvalitetssikrerEllerBeslutter =
-    brukerErKvalitetssikrer(innloggetBruker) || brukerErBeslutter(innloggetBruker);
-
   return (
     <>
       <div className={styles.toTrinnsKontroll}>
-        {grunnlag.harGjortVilkårsvurderingerPåBehandling && erKvalitetssikrerEllerBeslutter && !readOnly && (
-          <Alert
-            variant={'info'}
-          >{`Du har jobbet på denne behandlingen tidligere og kan ikke være ${erKvalitetssikring ? 'kvalitetssikrer' : 'beslutter'}.`}</Alert>
-        )}
+        {grunnlag.harGjortVilkårsvurderingerPåBehandling &&
+          ((erKvalitetssikring && brukerErKvalitetssikrer(innloggetBruker)) ||
+            (!erKvalitetssikring && brukerErBeslutter(innloggetBruker))) &&
+          !readOnly && (
+            <Alert
+              variant={'info'}
+            >{`Du har jobbet på denne behandlingen tidligere og kan ikke være ${erKvalitetssikring ? 'kvalitetssikrer' : 'beslutter'}.`}</Alert>
+          )}
         {skalViseOppsummering && (
           <Oppsummering vurderinger={vurderteTotrinnsvurderinger} erKvalitetssikrer={erKvalitetssikring} />
         )}
