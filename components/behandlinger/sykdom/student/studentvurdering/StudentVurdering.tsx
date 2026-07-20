@@ -18,7 +18,7 @@ import { ValuePair } from 'components/form/FormField';
 
 import { erUendeligSlutt, formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { Dato } from 'lib/types/Dato';
-import { VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react/Stack';
 import {
   NyVurderingExpandableCard,
   skalVæreInitiellEkspandert,

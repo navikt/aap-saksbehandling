@@ -1,4 +1,6 @@
-import { BodyLong, Button, Modal } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { Modal } from '@navikt/ds-react/Modal';
+import { BodyLong } from '@navikt/ds-react/Typography';
 
 import { XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { NyÅrsakTilBehandlingV0 } from 'lib/types/types';

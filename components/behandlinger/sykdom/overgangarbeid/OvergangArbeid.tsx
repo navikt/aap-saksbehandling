@@ -33,7 +33,7 @@ import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingS
 import { IkkeVurderbarPeriode } from 'components/periodisering/IkkeVurderbarPeriode';
 import React from 'react';
 import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
-import { VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react/Stack';
 
 interface Props {
   behandlingVersjon: number;

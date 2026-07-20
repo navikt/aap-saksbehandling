@@ -15,7 +15,7 @@ import { format, parse, subDays } from 'date-fns';
 import { useFieldArray } from 'react-hook-form';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { Dato } from 'lib/types/Dato';
-import { VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react/Stack';
 import { HelseinstitusjonOppholdGruppe } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/helseinstitusjonoppholdgruppe/HelseinstitusjonOppholdGruppe';
 import { nb } from 'date-fns/locale';
 import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';

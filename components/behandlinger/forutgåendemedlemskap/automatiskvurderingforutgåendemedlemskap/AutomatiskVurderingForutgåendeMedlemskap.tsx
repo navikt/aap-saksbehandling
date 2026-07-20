@@ -1,7 +1,9 @@
 'use client';
 
 import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
-import { BodyShort, Button, Detail, HStack, VStack } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { BodyShort, Detail } from '@navikt/ds-react/Typography';
 import { AutomatiskLovvalgOgMedlemskapVurdering } from 'lib/types/types';
 import { TilhørighetsVurderingTabell } from 'components/behandlinger/lovvalg/automatiskvurderingavlovvalgogmedlemskap/TilhørighetsVurderingTabell';
 import { Dispatch, SetStateAction } from 'react';

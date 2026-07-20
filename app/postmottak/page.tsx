@@ -1,14 +1,18 @@
-import { BodyShort, Box, Link, Page as AkselPage } from '@navikt/ds-react';
-import { BehandlingOversikt } from 'components/postmottak/oversikt/BehandlingOversikt';
-import { isDev, isLocal, isProd } from 'lib/utils/environment';
+import { ExternalLinkIcon } from '@navikt/aksel-icons';
+import { Box } from '@navikt/ds-react/Box';
+import { Link } from '@navikt/ds-react/Link';
+import { Page as AkselPage } from '@navikt/ds-react/Page';
+import { PageBlock } from '@navikt/ds-react/Page';
+import { BodyShort } from '@navikt/ds-react/Typography';
 import { hentAlleBehandlinger } from 'lib/services/postmottakservice/postmottakservice';
 import { isError } from 'lib/utils/api';
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+import { isDev, isLocal, isProd } from 'lib/utils/environment';
 import { redirect } from 'next/navigation';
-import { PageBlock } from '@navikt/ds-react/Page';
-import styles from 'components/postmottak/test/behandling/OpprettBehandling.module.css';
-import { ExternalLinkIcon } from '@navikt/aksel-icons';
+
+import { BehandlingOversikt } from 'components/postmottak/oversikt/BehandlingOversikt';
 import { OpprettBehandling } from 'components/postmottak/test/behandling/OpprettBehandling';
+import styles from 'components/postmottak/test/behandling/OpprettBehandling.module.css';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 const Page = async () => {
   if (isProd()) {

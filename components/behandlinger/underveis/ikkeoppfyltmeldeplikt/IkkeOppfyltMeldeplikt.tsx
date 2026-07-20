@@ -2,7 +2,9 @@
 
 import { MeldepliktOverstyringLøsningDto, OverstyringMeldepliktGrunnlag, Periode } from 'lib/types/types';
 import { SubmitEventHandler } from 'react';
-import { BodyLong, Link, VStack } from '@navikt/ds-react';
+import { Link } from '@navikt/ds-react/Link';
+import { VStack } from '@navikt/ds-react/Stack';
+import { BodyLong } from '@navikt/ds-react/Typography';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { IkkeMeldtPerioderTable } from 'components/behandlinger/underveis/ikkeoppfyltmeldeplikt/IkkeMeldtPerioderTable';
 import { VurderingMeldepliktOverstyringSkjema } from 'components/behandlinger/underveis/ikkeoppfyltmeldeplikt/VurderingMeldepliktOverstyringSkjema';

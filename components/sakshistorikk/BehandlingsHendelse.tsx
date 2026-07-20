@@ -1,5 +1,7 @@
 import { BehandlingsHistorikk, Vurderingsbehov } from 'lib/types/types';
-import { BodyShort, Detail, Label, Process, VStack } from '@navikt/ds-react';
+import { Process } from '@navikt/ds-react/Process';
+import { VStack } from '@navikt/ds-react/Stack';
+import { BodyShort, Detail, Label } from '@navikt/ds-react/Typography';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { HistorikkEvent, mapEventTilIkon, mapEventTilString } from 'components/sakshistorikk/oversettelser';
 import { mapGrunnTilString, mapTilVenteÅrsakTekst } from 'lib/utils/oversettelser';

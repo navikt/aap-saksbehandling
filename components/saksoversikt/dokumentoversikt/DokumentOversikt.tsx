@@ -1,5 +1,8 @@
 import styles from './DokumentOversikt.module.css';
-import { Button, Heading, HStack, Table, VStack } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { Table } from '@navikt/ds-react/Table';
+import { Heading } from '@navikt/ds-react/Typography';
 import { Spinner } from 'components/felles/Spinner';
 import { isSuccess } from 'lib/utils/api';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';

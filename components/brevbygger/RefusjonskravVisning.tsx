@@ -1,4 +1,4 @@
-import { InfoCard } from '@navikt/ds-react';
+import { InfoCard } from '@navikt/ds-react/InfoCard';
 import { Dato } from 'lib/types/Dato';
 import { RefusjonkravVurderingResponse, RefusjonskravGrunnlag } from 'lib/types/types';
 

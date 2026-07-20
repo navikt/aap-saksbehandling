@@ -2,7 +2,10 @@
 
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { SamordningAndreStatligeYtelserFormFields } from 'components/behandlinger/samordning/samordningandrestatlige/SamordningAndreStatligeYtelser';
-import { BodyLong, Button, HStack, Label, Table, VStack } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { Table } from '@navikt/ds-react/Table';
+import { BodyLong, Label } from '@navikt/ds-react/Typography';
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';

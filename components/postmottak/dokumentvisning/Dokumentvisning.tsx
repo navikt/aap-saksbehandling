@@ -1,7 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { BodyShort, Button, HStack, Tabs, Tooltip } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { HStack } from '@navikt/ds-react/Stack';
+import { Tabs } from '@navikt/ds-react/Tabs';
+import { Tooltip } from '@navikt/ds-react/Tooltip';
+import { BodyShort } from '@navikt/ds-react/Typography';
 import { Dokument } from 'lib/types/postmottakTypes';
 import { ExpandIcon, ShrinkIcon } from '@navikt/aksel-icons';
 

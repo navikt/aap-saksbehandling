@@ -1,4 +1,5 @@
-import { BodyShort, Button } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { BodyShort } from '@navikt/ds-react/Typography';
 import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { clientSendHendelse } from 'lib/clientApi';

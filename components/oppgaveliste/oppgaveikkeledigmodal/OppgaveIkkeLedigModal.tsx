@@ -1,5 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
-import { BodyShort, Button, Modal } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { Modal } from '@navikt/ds-react/Modal';
+import { BodyShort } from '@navikt/ds-react/Typography';
 import { PadlockLockedFillIcon } from '@navikt/aksel-icons';
 
 interface Props {

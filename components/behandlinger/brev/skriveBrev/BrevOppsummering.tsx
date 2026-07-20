@@ -2,7 +2,7 @@
 
 import { BrevGrunnlagBrev } from 'lib/types/types';
 import styles from './brevoppsummering.module.css';
-import { Heading } from '@navikt/ds-react';
+import { Heading } from '@navikt/ds-react/Typography';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 
 type BrevOppsummeringProps = {

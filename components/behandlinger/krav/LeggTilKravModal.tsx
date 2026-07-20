@@ -1,7 +1,12 @@
 'use client';
 
 import { useEffect } from 'react';
-import { Button, Modal, Select, Textarea, TextField, VStack } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { Modal } from '@navikt/ds-react/Modal';
+import { Select } from '@navikt/ds-react/Select';
+import { VStack } from '@navikt/ds-react/Stack';
+import { TextField } from '@navikt/ds-react/TextField';
+import { Textarea } from '@navikt/ds-react/Textarea';
 import { useForm, useWatch } from 'react-hook-form';
 import {
   KlageKravLøsning,

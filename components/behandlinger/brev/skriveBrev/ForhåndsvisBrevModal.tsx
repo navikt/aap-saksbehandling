@@ -1,7 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Modal, Button, Loader, BodyShort } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { Loader } from '@navikt/ds-react/Loader';
+import { Modal } from '@navikt/ds-react/Modal';
+import { BodyShort } from '@navikt/ds-react/Typography';
 import styles from './ForhåndsvisBrevModal.module.css';
 
 interface Props {

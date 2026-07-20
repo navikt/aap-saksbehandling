@@ -1,4 +1,8 @@
-import { BodyShort, Button, HStack, InlineMessage, Table } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { InlineMessage } from '@navikt/ds-react/InlineMessage';
+import { HStack } from '@navikt/ds-react/Stack';
+import { Table } from '@navikt/ds-react/Table';
+import { BodyShort } from '@navikt/ds-react/Typography';
 import { LegeerklæringStatus } from 'lib/types/types';
 import { ReactNode, useState } from 'react';
 

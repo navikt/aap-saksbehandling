@@ -1,5 +1,5 @@
 import { Behandlingsstatus as Status } from 'lib/types/types';
-import { Tag } from '@navikt/ds-react';
+import { Tag } from '@navikt/ds-react/Tag';
 
 interface Props {
   status?: Status;

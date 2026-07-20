@@ -2,7 +2,7 @@
 
 import { JaEllerNei } from 'lib/utils/form';
 import { validerDato } from 'lib/validation/dateValidation';
-import { VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react/Stack';
 import { UseFormReturn } from 'react-hook-form';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';

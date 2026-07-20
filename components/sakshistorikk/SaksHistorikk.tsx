@@ -1,6 +1,6 @@
 'use client';
 
-import { VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react/Stack';
 import { BehandlingsHendelserTidslinje } from 'components/sakshistorikk/BehandlingsHendelserTidslinje';
 import { useSaksHistorikk } from 'hooks/saksbehandling/SaksHistorikkHook';
 import { isError } from 'lib/utils/api';

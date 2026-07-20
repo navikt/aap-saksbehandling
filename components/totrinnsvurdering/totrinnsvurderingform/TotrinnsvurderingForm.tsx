@@ -8,7 +8,9 @@ import {
   JaEllerNei,
   JaEllerNeiOptions,
 } from 'lib/utils/form';
-import { Button, Detail, HStack, VStack } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { Detail } from '@navikt/ds-react/Typography';
 import {
   FatteVedtakGrunnlag,
   KvalitetssikringGrunnlag,

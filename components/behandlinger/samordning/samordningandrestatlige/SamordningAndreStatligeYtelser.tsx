@@ -2,7 +2,8 @@
 
 import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
-import { ReadMore, VStack } from '@navikt/ds-react';
+import { ReadMore } from '@navikt/ds-react/ReadMore';
+import { VStack } from '@navikt/ds-react/Stack';
 import { SubmitEventHandler } from 'react';
 import { AndreStatligeYtelserTabell } from 'components/behandlinger/samordning/samordningandrestatlige/AndreStatligeYtelserTabell';
 import { Behovstype } from 'lib/utils/form';

@@ -9,7 +9,7 @@ import { Suspense } from 'react';
 import { isSuccess } from 'lib/utils/api';
 import { hentArenaSakerForPerson } from 'lib/services/apiinternservice/apiInternService';
 import { unleashService } from 'lib/services/unleash/unleashService';
-import { Box } from '@navikt/ds-react';
+import { Box } from '@navikt/ds-react/Box';
 import { logError } from 'lib/serverutlis/logger';
 
 const Page = async (props: { params: Promise<{ saksnummer: string }> }) => {

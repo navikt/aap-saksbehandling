@@ -5,7 +5,8 @@ import { KlagebehandlingKontorGrunnlag, KlagebehandlingNayGrunnlag, TypeBehandli
 import { Behovstype } from 'lib/utils/form';
 import { hjemmelMap } from 'lib/utils/hjemmel';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { BodyShort, Detail, VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react/Stack';
+import { BodyShort, Detail } from '@navikt/ds-react/Typography';
 import { mapInnstillingTilTekst } from 'lib/utils/oversettelser';
 import styles from './KlagebehandlingOppsummering.module.css';
 import { SubmitEventHandler } from 'react';

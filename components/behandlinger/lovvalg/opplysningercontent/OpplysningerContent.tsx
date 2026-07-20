@@ -1,5 +1,6 @@
 import { tilhørighetVurdering } from 'lib/types/types';
-import { BodyShort, HStack, VStack } from '@navikt/ds-react';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { BodyShort } from '@navikt/ds-react/Typography';
 import { formaterPeriode, sorterEtterNyesteDato } from 'lib/utils/date';
 import { formaterTilNok } from 'lib/utils/string';
 import { getLandNavn } from 'lib/utils/countries';

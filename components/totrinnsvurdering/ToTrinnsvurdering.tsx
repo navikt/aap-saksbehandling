@@ -1,6 +1,7 @@
 'use client';
 
-import { Label, VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react/Stack';
+import { Label } from '@navikt/ds-react/Typography';
 import { useInnloggetBruker } from 'hooks/BrukerHook';
 import { Markering } from 'lib/types/oppgaveTypes';
 import {

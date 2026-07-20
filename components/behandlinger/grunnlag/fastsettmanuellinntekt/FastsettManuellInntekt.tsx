@@ -10,7 +10,9 @@ import { DelperiodeData, ManuellInntektGrunnlag, ManuellInntektÅr, Mellomlagret
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
-import { BodyLong, BodyShort, Label, Link, VStack } from '@navikt/ds-react';
+import { Link } from '@navikt/ds-react/Link';
+import { VStack } from '@navikt/ds-react/Stack';
+import { BodyLong, BodyShort, Label } from '@navikt/ds-react/Typography';
 import { format } from 'date-fns';
 import { nb } from 'date-fns/locale';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';

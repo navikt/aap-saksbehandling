@@ -1,5 +1,6 @@
 import { StegGruppe } from 'lib/types/types';
-import { BodyShort, VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react/Stack';
+import { BodyShort } from '@navikt/ds-react/Typography';
 import { OppgaveKolonne } from 'components/oppgavekolonne/OppgaveKolonne';
 import styles from 'app/saksbehandling/sak/[saksnummer]/[behandlingsreferanse]/[aktivGruppe]/page.module.css';
 import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';

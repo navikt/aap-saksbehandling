@@ -1,6 +1,7 @@
 'use client';
 
-import { ExpansionCard, Label } from '@navikt/ds-react';
+import { ExpansionCard } from '@navikt/ds-react/ExpansionCard';
+import { Label } from '@navikt/ds-react/Typography';
 import styles from './SaksopplysningerKort.module.css';
 import { ReactNode } from 'react';
 

@@ -1,6 +1,9 @@
 'use client';
 
-import { BodyLong, BodyShort, Box, Heading, Label, List, VStack } from '@navikt/ds-react';
+import { Box } from '@navikt/ds-react/Box';
+import { List } from '@navikt/ds-react/List';
+import { VStack } from '@navikt/ds-react/Stack';
+import { BodyLong, BodyShort, Heading, Label } from '@navikt/ds-react/Typography';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import {

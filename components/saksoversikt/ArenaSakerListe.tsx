@@ -1,6 +1,6 @@
 'use client';
 
-import { VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react/Stack';
 import { ArenaSakKort } from 'components/saksoversikt/ArenaSakKort';
 import { SakerResponse } from 'lib/services/apiinternservice/apiInternService';
 

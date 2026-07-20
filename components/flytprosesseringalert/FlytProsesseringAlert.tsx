@@ -1,7 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { BodyShort, Box, Detail, Label, LocalAlert, ReadMore, VStack } from '@navikt/ds-react';
+import { Box } from '@navikt/ds-react/Box';
+import { LocalAlert } from '@navikt/ds-react/LocalAlert';
+import { ReadMore } from '@navikt/ds-react/ReadMore';
+import { VStack } from '@navikt/ds-react/Stack';
+import { BodyShort, Detail, Label } from '@navikt/ds-react/Typography';
 import { FlytProsessering } from 'lib/types/types';
 
 interface Props {

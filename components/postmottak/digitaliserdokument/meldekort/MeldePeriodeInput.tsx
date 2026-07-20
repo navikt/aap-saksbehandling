@@ -1,4 +1,5 @@
-import { Table, VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react/Stack';
+import { Table } from '@navikt/ds-react/Table';
 import { format } from 'date-fns';
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import styles from './MeldePeriodeInput.module.css';

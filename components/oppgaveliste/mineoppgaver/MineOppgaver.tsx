@@ -1,6 +1,6 @@
 'use client';
 
-import { BodyShort } from '@navikt/ds-react';
+import { BodyShort } from '@navikt/ds-react/Typography';
 import { MineOppgaverTabell } from 'components/oppgaveliste/mineoppgaver/mineoppgavertabell/MineOppgaverTabell';
 import { useConfigForm } from 'components/form/FormHook';
 import { oppgaveBehandlingstyper, OppgaveStatuser } from 'lib/utils/behandlingstyper';

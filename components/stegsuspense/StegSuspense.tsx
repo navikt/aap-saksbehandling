@@ -1,6 +1,6 @@
 'use client';
 
-import { Skeleton } from '@navikt/ds-react';
+import { Skeleton } from '@navikt/ds-react/Skeleton';
 import { ReactNode, Suspense } from 'react';
 
 interface Props {

@@ -4,7 +4,7 @@ import styles from 'app/saksbehandling/sak/[saksnummer]/[behandlingsreferanse]/l
 import { IngenFlereOppgaverModal } from 'components/ingenflereoppgavermodal/IngenFlereOppgaverModal';
 import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
 import { StegGruppeIndikatorAksel } from 'components/steggruppeindikator/StegGruppeIndikatorAksel';
-import { VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react/Stack';
 import { ToTrinnsvurderingMedDataFetching } from 'components/totrinnsvurdering/ToTrinnsvurderingMedDataFetching';
 import { ReactNode } from 'react';
 import {

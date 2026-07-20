@@ -3,7 +3,7 @@ import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { useConfigForm } from '../FormHook';
 import { FormField } from '../FormField';
-import { Button } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
 import userEvent from '@testing-library/user-event';
 
 describe('Checkbox', () => {

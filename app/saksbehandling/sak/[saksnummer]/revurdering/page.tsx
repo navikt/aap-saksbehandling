@@ -1,4 +1,7 @@
-import { Box, HStack, Link, Page as AkselPage, VStack } from '@navikt/ds-react';
+import { Box } from '@navikt/ds-react/Box';
+import { Link } from '@navikt/ds-react/Link';
+import { Page as AkselPage } from '@navikt/ds-react/Page';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
 import { hentSak } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { OpprettRevurdering } from 'components/saksoversikt/opprettrevurdering/OpprettRevurdering';
 import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';

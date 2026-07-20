@@ -1,6 +1,9 @@
 'use client';
 
-import { Button, Heading, Page, Table } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { Page } from '@navikt/ds-react/Page';
+import { Table } from '@navikt/ds-react/Table';
+import { Heading } from '@navikt/ds-react/Typography';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { UbehandletJournalpost } from 'lib/types/postmottakTypes';

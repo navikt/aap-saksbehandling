@@ -1,6 +1,9 @@
 'use client';
 
-import { BodyShort, Box, HStack, Label, Table, VStack } from '@navikt/ds-react';
+import { Box } from '@navikt/ds-react/Box';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { Table } from '@navikt/ds-react/Table';
+import { BodyShort, Label } from '@navikt/ds-react/Typography';
 import { SamordningGraderingYtelse } from 'lib/types/types';
 
 import styles from 'components/behandlinger/samordning/samordninggradering/YtelseTabell.module.css';

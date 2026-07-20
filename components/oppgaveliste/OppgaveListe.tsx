@@ -1,7 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Heading, HStack, Tabs, VStack } from '@navikt/ds-react';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { Tabs } from '@navikt/ds-react/Tabs';
+import { Heading } from '@navikt/ds-react/Typography';
 import { Enhet } from 'lib/types/oppgaveTypes';
 import { MineOppgaver } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
 import { LedigeOppgaver } from 'components/oppgaveliste/ledigeoppgaver/LedigeOppgaver';

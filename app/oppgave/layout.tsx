@@ -1,6 +1,6 @@
 import '@navikt/ds-css';
 import { Metadata } from 'next';
-import { Box } from '@navikt/ds-react';
+import { Box } from '@navikt/ds-react/Box';
 
 export const metadata: Metadata = {
   title: 'Kelvin - Oppgave',

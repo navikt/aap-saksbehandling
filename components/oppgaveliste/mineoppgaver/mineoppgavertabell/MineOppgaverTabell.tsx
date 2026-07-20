@@ -1,6 +1,7 @@
 import { Oppgave } from 'lib/types/oppgaveTypes';
 import { useState } from 'react';
-import { SortState, Table, VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react/Stack';
+import { SortState, Table } from '@navikt/ds-react/Table';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { ManglerTilgangModal } from 'components/oppgaveliste/manglertilgangmodal/ManglerTilgangModal';
 import { MineOppgaverTabellRad } from 'components/oppgaveliste/mineoppgaver/mineoppgavertabell/MineOppgaverTabellRad';

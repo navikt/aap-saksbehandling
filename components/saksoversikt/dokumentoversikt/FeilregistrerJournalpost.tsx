@@ -1,4 +1,7 @@
-import { BodyShort, Button, Modal, Table } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { Modal } from '@navikt/ds-react/Modal';
+import { Table } from '@navikt/ds-react/Table';
+import { BodyShort } from '@navikt/ds-react/Typography';
 import { isError, isSuccess } from 'lib/utils/api';
 import { useState } from 'react';
 import { feilregistrerSakstilknytning, opphevFeilregistrertSakstilknytning } from 'lib/dokumentClientApi';

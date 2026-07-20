@@ -15,7 +15,8 @@ import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker
 import { Behovstype } from 'lib/utils/form';
 import { parse, parseISO } from 'date-fns';
 
-import { HStack, Label, VStack } from '@navikt/ds-react';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { Label } from '@navikt/ds-react/Typography';
 import { pipe } from 'lib/utils/functional';
 import { erProsent, validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';

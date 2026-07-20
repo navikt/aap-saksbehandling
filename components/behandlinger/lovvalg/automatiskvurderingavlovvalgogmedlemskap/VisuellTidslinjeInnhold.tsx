@@ -1,6 +1,6 @@
 'use client';
 
-import { Timeline } from '@navikt/ds-react';
+import { Timeline } from '@navikt/ds-react/Timeline';
 import { VisuellTidslinjeArbeidInntekt } from 'lib/types/types';
 import { formaterPeriode } from 'lib/utils/date';
 

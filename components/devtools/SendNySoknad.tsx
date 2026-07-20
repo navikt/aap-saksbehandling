@@ -1,4 +1,5 @@
-import { BodyShort, Button } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { BodyShort } from '@navikt/ds-react/Typography';
 import { clientSendHendelse } from 'lib/clientApi';
 
 export const SendNySoknad = ({ saksid }: { saksid: string }) => {

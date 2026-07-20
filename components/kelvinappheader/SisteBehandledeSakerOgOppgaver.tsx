@@ -1,4 +1,7 @@
-import { ActionMenu, BodyShort, Detail, HStack, Loader, Spacer } from '@navikt/ds-react';
+import { ActionMenu } from '@navikt/ds-react/ActionMenu';
+import { Loader } from '@navikt/ds-react/Loader';
+import { HStack, Spacer } from '@navikt/ds-react/Stack';
+import { BodyShort, Detail } from '@navikt/ds-react/Typography';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';
 import { isSuccess } from 'lib/utils/api';

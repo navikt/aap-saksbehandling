@@ -1,6 +1,7 @@
 'use client';
 
-import { Button, Dropdown } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { Dropdown } from '@navikt/ds-react/Dropdown';
 import { DetaljertBehandling, FlytGruppe, FlytVisning } from 'lib/types/types';
 import { useState } from 'react';
 import { SettBehandlingPåVentModal } from 'components/settbehandlingpåventmodal/SettBehandlingPåVentModal';

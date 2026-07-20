@@ -1,7 +1,11 @@
 import { Behovstype, JaEllerNei, JaEllerNeiOptions, mapBehovskodeTilBehovstype } from 'lib/utils/form';
 
 import styles from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingFelter.module.css';
-import { Checkbox, Detail, HStack, Link as AkselLink, Radio, VStack } from '@navikt/ds-react';
+import { Checkbox } from '@navikt/ds-react/Checkbox';
+import { Link as AkselLink } from '@navikt/ds-react/Link';
+import { Radio } from '@navikt/ds-react/Radio';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { Detail } from '@navikt/ds-react/Typography';
 import Link from 'next/link';
 import { ToTrinnsVurderingGrunn, UmamiTag } from 'lib/types/types';
 import { FieldArrayWithId, UseFormReturn } from 'react-hook-form';

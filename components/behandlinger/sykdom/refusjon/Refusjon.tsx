@@ -9,7 +9,9 @@ import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date'
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { SubmitEventHandler } from 'react';
 import { useSak } from 'hooks/SakHook';
-import { BodyLong, Radio, VStack } from '@navikt/ds-react';
+import { Radio } from '@navikt/ds-react/Radio';
+import { VStack } from '@navikt/ds-react/Stack';
+import { BodyLong } from '@navikt/ds-react/Typography';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';

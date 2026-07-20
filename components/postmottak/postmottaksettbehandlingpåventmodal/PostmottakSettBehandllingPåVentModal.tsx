@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useTransition } from 'react';
-import { Button, Modal } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { Modal } from '@navikt/ds-react/Modal';
 import styles from 'components/postmottak/postmottaksettbehandlingpåventmodal/PostmottakSettBehandlingPåVentModal.module.css';
 import { HourglassBottomFilledIcon } from '@navikt/aksel-icons';
 import { PostmottakSettPåVentÅrsaker } from 'lib/types/postmottakTypes';

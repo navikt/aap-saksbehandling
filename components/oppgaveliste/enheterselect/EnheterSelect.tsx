@@ -1,6 +1,6 @@
 'use client';
 
-import { UNSAFE_Combobox } from '@navikt/ds-react';
+import { UNSAFE_Combobox } from '@navikt/ds-react/Combobox';
 import { Enhet } from 'lib/types/oppgaveTypes';
 import { useMemo, useState } from 'react';
 import { ValuePair } from 'components/form/FormField';

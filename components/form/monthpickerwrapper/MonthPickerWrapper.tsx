@@ -1,4 +1,5 @@
-import { MonthPicker, useMonthpicker } from '@navikt/ds-react';
+import { MonthPicker } from '@navikt/ds-react/MonthPicker';
+import { useMonthpicker } from '@navikt/ds-react/MonthPicker';
 import { Control, FieldPath, FieldValues, RegisterOptions, useController, UseFormReturn } from 'react-hook-form';
 import React from 'react';
 import { format } from 'date-fns';

@@ -1,4 +1,5 @@
-import { BodyShort, Label, Table } from '@navikt/ds-react';
+import { Table } from '@navikt/ds-react/Table';
+import { BodyShort, Label } from '@navikt/ds-react/Typography';
 import { RegistrerYrkesskade } from 'lib/types/types';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { formaterDatoForFrontend } from 'lib/utils/date';

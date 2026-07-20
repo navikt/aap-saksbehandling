@@ -1,6 +1,7 @@
 import { ForeslåVedtakGrunnlag, UnderveisAvslagsÅrsak } from 'lib/types/types';
 import { TableStyled } from 'components/tablestyled/TableStyled';
-import { HStack, Table } from '@navikt/ds-react';
+import { HStack } from '@navikt/ds-react/Stack';
+import { Table } from '@navikt/ds-react/Table';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { CheckmarkCircleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 import styles from './ForeslåVedtakTabell.module.css';

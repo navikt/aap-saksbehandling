@@ -1,5 +1,10 @@
 import { Oppgave, Vurderingsbehov, ÅrsakTilOpprettelse } from 'lib/types/types';
-import { BodyShort, Checkbox, CopyButton, Table, Tooltip, Link as AkselLink } from '@navikt/ds-react';
+import { Checkbox } from '@navikt/ds-react/Checkbox';
+import { CopyButton } from '@navikt/ds-react/CopyButton';
+import { Link as AkselLink } from '@navikt/ds-react/Link';
+import { Table } from '@navikt/ds-react/Table';
+import { Tooltip } from '@navikt/ds-react/Tooltip';
+import { BodyShort } from '@navikt/ds-react/Typography';
 import {
   mapBehovskodeTilBehovstype,
   mapTilOppgaveBehandlingstypeTekst,

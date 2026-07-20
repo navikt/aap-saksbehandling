@@ -1,7 +1,10 @@
 'use client';
 
 import { SubmitEventHandler, useState } from 'react';
-import { Box, Button, Modal, VStack } from '@navikt/ds-react';
+import { Box } from '@navikt/ds-react/Box';
+import { Button } from '@navikt/ds-react/Button';
+import { Modal } from '@navikt/ds-react/Modal';
+import { VStack } from '@navikt/ds-react/Stack';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { clientSettBehandlingPåVent } from 'lib/clientApi';
 import { revalidateBehandlingPath } from 'lib/actions/actions';

@@ -2,7 +2,12 @@
 
 import { Diff, TilkjentYtelseGrunnlagMedDiff, TilkjentYtelsePeriode } from 'lib/types/types';
 import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
-import { ActionMenu, BodyShort, Button, Chips, Table, VStack } from '@navikt/ds-react';
+import { ActionMenu } from '@navikt/ds-react/ActionMenu';
+import { Button } from '@navikt/ds-react/Button';
+import { Chips } from '@navikt/ds-react/Chips';
+import { VStack } from '@navikt/ds-react/Stack';
+import { Table } from '@navikt/ds-react/Table';
+import { BodyShort } from '@navikt/ds-react/Typography';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import React, { useState } from 'react';
 import { formaterDatoForFrontend, formaterPeriode } from 'lib/utils/date';

@@ -1,7 +1,8 @@
 import React from 'react';
 import { GjeldendeGrunnbeløp, UføreGrunnlag } from 'lib/types/types';
 import { InntektTabell } from 'components/inntekttabell/InntektTabell';
-import { BodyShort, Table } from '@navikt/ds-react';
+import { Table } from '@navikt/ds-react/Table';
+import { BodyShort } from '@navikt/ds-react/Typography';
 import { formaterTilG } from 'lib/utils/string';
 import { UføreInntektTabell } from 'components/uføreinntekttabell/UføreInntektTabell';
 import { sorterEtterÅrIStigendeRekkefølge } from 'lib/utils/arrays';

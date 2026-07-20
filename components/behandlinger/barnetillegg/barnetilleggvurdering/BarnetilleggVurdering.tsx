@@ -1,6 +1,8 @@
 'use client';
 
-import { Button, Heading, ReadMore } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { ReadMore } from '@navikt/ds-react/ReadMore';
+import { Heading } from '@navikt/ds-react/Typography';
 import { LeggTilBarnModal } from './LeggTilBarnModal';
 import { BarnetilleggGrunnlag, BehandlingPersoninfo, MellomlagretVurdering, Periode } from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';

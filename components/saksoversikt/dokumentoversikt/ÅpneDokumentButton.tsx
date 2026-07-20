@@ -1,4 +1,7 @@
-import { Box, Button, Dropdown, HStack } from '@navikt/ds-react';
+import { Box } from '@navikt/ds-react/Box';
+import { Button } from '@navikt/ds-react/Button';
+import { Dropdown } from '@navikt/ds-react/Dropdown';
+import { HStack } from '@navikt/ds-react/Stack';
 import { ChevronDownIcon, ExternalLinkIcon } from '@navikt/aksel-icons';
 import Link from 'next/link';
 import { DokumentInfo, Journalpost } from 'lib/types/journalpost';

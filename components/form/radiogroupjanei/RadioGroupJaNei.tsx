@@ -2,7 +2,7 @@
 
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { JaEllerNeiOptions } from 'lib/utils/form';
-import { Radio } from '@navikt/ds-react';
+import { Radio } from '@navikt/ds-react/Radio';
 import { Control, FieldPath, FieldValues, RegisterOptions } from 'react-hook-form';
 import React, { FocusEventHandler, ReactNode } from 'react';
 

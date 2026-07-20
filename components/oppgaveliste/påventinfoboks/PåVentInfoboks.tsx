@@ -1,7 +1,11 @@
 'use client';
 
 import { SettPåVentÅrsaker, TilbakekrevingVenteÅrsaker } from 'lib/types/types';
-import { BodyShort, Button, Detail, Popover, Tag, VStack } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { Popover } from '@navikt/ds-react/Popover';
+import { VStack } from '@navikt/ds-react/Stack';
+import { Tag } from '@navikt/ds-react/Tag';
+import { BodyShort, Detail } from '@navikt/ds-react/Typography';
 import { mapTilVenteÅrsakTekst } from 'lib/utils/oversettelser';
 import { useRef, useState } from 'react';
 import { formaterDatoForFrontend } from 'lib/utils/date';

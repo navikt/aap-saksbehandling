@@ -1,4 +1,4 @@
-import { Radio } from '@navikt/ds-react';
+import { Radio } from '@navikt/ds-react/Radio';
 import { JaEllerNei } from 'lib/utils/form';
 
 import { BarnetilleggFormFields } from 'components/behandlinger/barnetillegg/barnetilleggvurdering/BarnetilleggVurdering';

@@ -1,7 +1,10 @@
 import { JaEllerNei } from 'lib/utils/form';
 
 import styles from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingFelter.module.css';
-import { BodyShort, HStack, Label, Radio, Tag, VStack } from '@navikt/ds-react';
+import { Radio } from '@navikt/ds-react/Radio';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { Tag } from '@navikt/ds-react/Tag';
+import { BodyShort, Label } from '@navikt/ds-react/Typography';
 import { UseFormReturn } from 'react-hook-form';
 import { FormFieldsToTrinnsVurdering } from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingForm';
 import { ValuePair } from 'components/form/FormField';

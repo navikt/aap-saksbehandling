@@ -1,6 +1,8 @@
 'use client';
 
-import { Button, HStack, Page, VStack } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { Page } from '@navikt/ds-react/Page';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
 import { OpprettAktivitetspliktBehandlingDto, SaksInfo } from 'lib/types/types';
 import { useConfigForm } from 'components/form/FormHook';
 import { clientOpprettAktivitetsplikt } from 'lib/clientApi';

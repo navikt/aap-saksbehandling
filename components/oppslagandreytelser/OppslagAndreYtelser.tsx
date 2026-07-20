@@ -1,7 +1,9 @@
 'use client';
 
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import { BodyShort, Label, Table, VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react/Stack';
+import { Table } from '@navikt/ds-react/Table';
+import { BodyShort, Label } from '@navikt/ds-react/Typography';
 import { AndreStatligeYtelserPeriodeDto, AndreStatligeYtelserType } from 'lib/types/types';
 
 import { TableStyled } from 'components/tablestyled/TableStyled';

@@ -1,4 +1,6 @@
-import { BodyShort, Table, VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react/Stack';
+import { Table } from '@navikt/ds-react/Table';
+import { BodyShort } from '@navikt/ds-react/Typography';
 import { formaterTilG, formaterTilNok, formaterTilProsent } from 'lib/utils/string';
 import React from 'react';
 import { YrkesskadeGrunnlag } from 'lib/types/types';

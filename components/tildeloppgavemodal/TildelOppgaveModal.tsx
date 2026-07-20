@@ -1,7 +1,12 @@
 'use client';
 
 import { SubmitEventHandler, useState } from 'react';
-import { Button, HStack, Label, Modal, Pagination, Radio, VStack } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { Modal } from '@navikt/ds-react/Modal';
+import { Pagination } from '@navikt/ds-react/Pagination';
+import { Radio } from '@navikt/ds-react/Radio';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { Label } from '@navikt/ds-react/Typography';
 import { SaksbehandlerSøk } from 'components/tildeloppgavemodal/SaksbehandlerSøk';
 import { SaksbehandlerFraSøk } from 'lib/types/oppgaveTypes';
 import { useForm } from 'react-hook-form';

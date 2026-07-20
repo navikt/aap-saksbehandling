@@ -1,4 +1,7 @@
-import { BodyLong, Button, Modal, VStack } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { Modal } from '@navikt/ds-react/Modal';
+import { VStack } from '@navikt/ds-react/Stack';
+import { BodyLong } from '@navikt/ds-react/Typography';
 import { useRouter } from 'next/navigation';
 
 import { DetaljertBehandling, NyÅrsakTilBehandlingV0 } from 'lib/types/types';

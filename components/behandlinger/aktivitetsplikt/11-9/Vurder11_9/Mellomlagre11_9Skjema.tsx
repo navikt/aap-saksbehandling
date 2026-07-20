@@ -7,7 +7,7 @@ import {
 import { formaterBrudd, formaterGrunn } from 'components/behandlinger/aktivitetsplikt/11-9/Vurder11_9/utils';
 import { BruddRad } from 'components/behandlinger/aktivitetsplikt/11-9/Vurder11_9/Registrer11_9BruddTabell';
 import { FormField } from 'components/form/FormField';
-import { VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react/Stack';
 import { SubmitEventHandler } from 'react';
 import { parse } from 'date-fns';
 import { Brudd } from 'lib/types/types';

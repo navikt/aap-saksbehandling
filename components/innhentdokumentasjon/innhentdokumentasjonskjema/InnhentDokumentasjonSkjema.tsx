@@ -1,18 +1,14 @@
 'use client';
 
-import {
-  BodyShort,
-  Button,
-  CopyButton,
-  Detail,
-  Heading,
-  InfoCard,
-  InlineMessage,
-  Link,
-  Loader,
-  Radio,
-  VStack,
-} from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { CopyButton } from '@navikt/ds-react/CopyButton';
+import { InfoCard } from '@navikt/ds-react/InfoCard';
+import { InlineMessage } from '@navikt/ds-react/InlineMessage';
+import { Link } from '@navikt/ds-react/Link';
+import { Loader } from '@navikt/ds-react/Loader';
+import { Radio } from '@navikt/ds-react/Radio';
+import { VStack } from '@navikt/ds-react/Stack';
+import { BodyShort, Detail, Heading } from '@navikt/ds-react/Typography';
 import { SubmitEventHandler, useState } from 'react';
 
 import styles from './InnhentDokumentasjonSkjema.module.css';

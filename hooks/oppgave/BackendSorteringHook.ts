@@ -1,4 +1,4 @@
-import { SortState } from '@navikt/ds-react';
+import { SortState } from '@navikt/ds-react/Table';
 import { useEffect, useState } from 'react';
 import { useInnloggetBruker } from 'hooks/BrukerHook';
 

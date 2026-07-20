@@ -1,5 +1,6 @@
 import { Periode } from 'lib/types/types';
-import { Heading, VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react/Stack';
+import { Heading } from '@navikt/ds-react/Typography';
 import { formaterPeriode } from 'lib/utils/date';
 import styles from './rimeliggrunn.module.css';
 import { Control, FieldArrayWithId } from 'react-hook-form';

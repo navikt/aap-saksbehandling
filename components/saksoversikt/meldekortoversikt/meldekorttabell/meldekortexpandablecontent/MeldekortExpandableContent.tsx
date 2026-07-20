@@ -2,7 +2,8 @@ import { Dato } from 'lib/types/Dato';
 import { eachDayOfInterval, format } from 'date-fns';
 import { nb } from 'date-fns/locale';
 import { formaterDatoUtenÅrForFrontend } from 'components/saksoversikt/meldekortoversikt/utfyllingDate';
-import { BodyShort, Detail, HStack, Label, VStack } from '@navikt/ds-react';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { BodyShort, Detail, Label } from '@navikt/ds-react/Typography';
 
 import styles from 'components/saksoversikt/meldekortoversikt/meldekorttabell/meldekortexpandablecontent/MeldekortExpandableContent.module.css';
 import { MeldeperiodeMedMeldekortDto } from 'lib/types/types';

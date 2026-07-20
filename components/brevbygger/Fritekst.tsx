@@ -1,5 +1,7 @@
 import { useState } from 'react';
-import { Button, Textarea, VStack } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { VStack } from '@navikt/ds-react/Stack';
+import { Textarea } from '@navikt/ds-react/Textarea';
 import { BrevFormVerdier } from 'components/brevbygger/types';
 import { FritekstType } from 'components/brevbygger/brevmodellTypes';
 import { Control, FieldPath, useController } from 'react-hook-form';

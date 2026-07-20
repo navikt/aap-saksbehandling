@@ -15,7 +15,7 @@ import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { isBefore, parse } from 'date-fns';
 import { erDatoFoerDato, erDatoIFremtiden, validerDato } from 'lib/validation/dateValidation';
 import styles from './FastsettBeregning.module.css';
-import { Heading } from '@navikt/ds-react';
+import { Heading } from '@navikt/ds-react/Typography';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { useSak } from 'hooks/SakHook';

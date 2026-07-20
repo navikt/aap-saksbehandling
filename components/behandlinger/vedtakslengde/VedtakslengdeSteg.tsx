@@ -6,7 +6,8 @@ import {
   VedtakslengdeVurderingResponse,
   VurderingFormMeta,
 } from 'lib/types/types';
-import { Radio, VStack } from '@navikt/ds-react';
+import { Radio } from '@navikt/ds-react/Radio';
+import { VStack } from '@navikt/ds-react/Stack';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { Behovstype } from 'lib/utils/form';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';

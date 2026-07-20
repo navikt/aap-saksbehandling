@@ -4,7 +4,7 @@ import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper
 import { UseFormReturn } from 'react-hook-form';
 import { ArbeidsopptrappingForm } from 'components/behandlinger/sykdom/arbeidsopptrapping/Arbeidsopptrapping';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
-import { HStack, VStack } from '@navikt/ds-react';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { erDatoIPeriode, validerDato } from 'lib/validation/dateValidation';
 import { parse } from 'date-fns';

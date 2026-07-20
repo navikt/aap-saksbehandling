@@ -1,6 +1,9 @@
 'use client';
 
-import { BodyShort, Heading, HStack, Link, Tag } from '@navikt/ds-react';
+import { Link } from '@navikt/ds-react/Link';
+import { HStack } from '@navikt/ds-react/Stack';
+import { Tag } from '@navikt/ds-react/Tag';
+import { BodyShort, Heading } from '@navikt/ds-react/Typography';
 import { ArenaSakOppsummeringKontrakt } from 'lib/services/apiinternservice/apiInternService';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { useFeatureFlag } from 'context/UnleashContext';

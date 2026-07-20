@@ -1,6 +1,6 @@
 'use client';
 
-import { BodyShort, Label } from '@navikt/ds-react';
+import { BodyShort, Label } from '@navikt/ds-react/Typography';
 import { HourglassBottomFilledIcon } from '@navikt/aksel-icons';
 import { PostmottakSettPåVentÅrsaker, Venteinformasjon } from 'lib/types/postmottakTypes';
 import { formaterDatoForFrontend } from 'lib/utils/date';

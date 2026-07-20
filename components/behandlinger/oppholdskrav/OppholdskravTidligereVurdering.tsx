@@ -1,4 +1,4 @@
-import { VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react/Stack';
 import { alleLandUtenNorge } from 'lib/utils/countries';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';

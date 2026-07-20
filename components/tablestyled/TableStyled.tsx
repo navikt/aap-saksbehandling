@@ -1,6 +1,6 @@
 'use client';
 
-import { Table, TableProps } from '@navikt/ds-react';
+import { Table, TableProps } from '@navikt/ds-react/Table';
 import styles from 'components/tablestyled/TableStyled.module.css';
 
 interface Props extends TableProps {

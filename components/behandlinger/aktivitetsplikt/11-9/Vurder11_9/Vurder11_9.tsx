@@ -1,6 +1,8 @@
 'use client';
 import React from 'react';
-import { Button, Heading, VStack } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { VStack } from '@navikt/ds-react/Stack';
+import { Heading } from '@navikt/ds-react/Typography';
 import { Registrer11_9BruddTabell } from 'components/behandlinger/aktivitetsplikt/11-9/Vurder11_9/Registrer11_9BruddTabell';
 import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
 import { PlusIcon } from '@navikt/aksel-icons';

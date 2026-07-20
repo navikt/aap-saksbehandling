@@ -1,6 +1,6 @@
 'use client';
 
-import { Select } from '@navikt/ds-react';
+import { Select } from '@navikt/ds-react/Select';
 import { Kø } from 'lib/types/oppgaveTypes';
 import { AktivKø } from 'hooks/oppgave/aktivkøHook';
 import { useInnloggetBruker } from 'hooks/BrukerHook';

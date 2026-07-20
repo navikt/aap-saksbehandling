@@ -1,6 +1,6 @@
 import { describe, test, expect, vi } from 'vitest';
 import React from 'react';
-import { Button } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 

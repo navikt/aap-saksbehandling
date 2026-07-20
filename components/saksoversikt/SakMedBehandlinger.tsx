@@ -1,6 +1,10 @@
 'use client';
 
-import { BodyShort, Button, Chips, Heading, HStack, Table, VStack } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { Chips } from '@navikt/ds-react/Chips';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { Table } from '@navikt/ds-react/Table';
+import { BodyShort, Heading } from '@navikt/ds-react/Typography';
 import { RettighetsinfoDto, SaksInfo, Vurderingsbehov } from 'lib/types/types';
 import { capitalize } from 'lodash';
 import { SakDevTools } from 'components/saksoversikt/SakDevTools';

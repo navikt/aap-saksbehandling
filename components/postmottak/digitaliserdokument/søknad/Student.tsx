@@ -1,7 +1,7 @@
 import { FieldPath, UseFormReturn } from 'react-hook-form';
 import { SøknadFormFields } from './DigitaliserSøknad';
 import { JaNeiAvbruttIkkeOppgitt } from 'lib/postmottakForm';
-import { VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react/Stack';
 import { FormFields } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 

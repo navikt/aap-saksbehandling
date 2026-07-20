@@ -1,6 +1,9 @@
 import { MellomlagretVurdering, StegType, VurderingerMeta } from 'lib/types/types';
 import styles from './VilkårskortPeriodisert.module.css';
-import { Button, Detail, Heading, HGrid, HStack, VStack } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { HGrid } from '@navikt/ds-react/HGrid';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { Detail, Heading } from '@navikt/ds-react/Typography';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { PlusIcon } from '@navikt/aksel-icons';

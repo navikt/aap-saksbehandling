@@ -1,5 +1,8 @@
 import { Avslag11_27Krav } from 'lib/types/types';
-import { BodyShort, Checkbox, Table, VStack } from '@navikt/ds-react';
+import { Checkbox } from '@navikt/ds-react/Checkbox';
+import { VStack } from '@navikt/ds-react/Stack';
+import { Table } from '@navikt/ds-react/Table';
+import { BodyShort } from '@navikt/ds-react/Typography';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { Alert } from 'components/alert/Alert';

@@ -1,7 +1,8 @@
 'use client';
 
 import { ExternalLinkIcon, MenuGridIcon } from '@navikt/aksel-icons';
-import { Dropdown, InternalHeader } from '@navikt/ds-react';
+import { Dropdown } from '@navikt/ds-react/Dropdown';
+import { InternalHeader } from '@navikt/ds-react/InternalHeader';
 import { useEffect, useState } from 'react';
 import { clientConfig, clientHentAInntektRedirectUrl, clientHentSakPersoninfo } from 'lib/clientApi';
 import { ClientConfig } from 'lib/types/clientTypes';

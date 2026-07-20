@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
 import { isSuccess } from 'lib/utils/api';
 import { clientBestillTestBrev } from 'lib/clientApi';
 

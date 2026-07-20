@@ -5,7 +5,7 @@ import type { Submittable } from 'components/postmottak/digitaliserdokument/Digi
 import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
-import { Button } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
 import { addWeeks, format, getISOWeek, isBefore, lastDayOfISOWeek, startOfWeek, subMonths } from 'date-fns';
 import { SubmitEventHandler, useEffect, useState } from 'react';
 import { Dato } from 'lib/types/Dato';

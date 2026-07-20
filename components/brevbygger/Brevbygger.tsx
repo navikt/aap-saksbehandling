@@ -1,6 +1,11 @@
 'use client';
 
-import { BodyShort, Box, Button, HGrid, HStack, LocalAlert, VStack } from '@navikt/ds-react';
+import { Box } from '@navikt/ds-react/Box';
+import { Button } from '@navikt/ds-react/Button';
+import { HGrid } from '@navikt/ds-react/HGrid';
+import { LocalAlert } from '@navikt/ds-react/LocalAlert';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { BodyShort } from '@navikt/ds-react/Typography';
 import { useForm } from 'react-hook-form';
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';

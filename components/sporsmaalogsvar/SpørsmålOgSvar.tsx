@@ -1,4 +1,5 @@
-import { BodyShort, Label, VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react/Stack';
+import { BodyShort, Label } from '@navikt/ds-react/Typography';
 
 type SpørsmålOgSvarProps = {
   spørsmål: string;

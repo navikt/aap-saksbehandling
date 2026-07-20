@@ -1,4 +1,6 @@
-import { BodyShort, Table, VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react/Stack';
+import { Table } from '@navikt/ds-react/Table';
+import { BodyShort } from '@navikt/ds-react/Typography';
 import { Institusjonsopphold } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { TableStyled } from 'components/tablestyled/TableStyled';

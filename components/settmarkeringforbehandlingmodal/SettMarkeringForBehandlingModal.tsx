@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { useConfigForm } from 'components/form/FormHook';
 import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import styles from 'components/settbehandlingpåventmodal/SettBehandlingPåVentModal.module.css';
-import { Button, Modal, VStack } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { Modal } from '@navikt/ds-react/Modal';
+import { VStack } from '@navikt/ds-react/Stack';
 
 import { revalidateBehandlingPath } from 'lib/actions/actions';
 import { clientOpprettMarkeringHendelse, MarkeringHendelseType } from 'lib/clientApi';

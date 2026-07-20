@@ -1,6 +1,7 @@
 'use client';
 
-import { ActionMenu, Button } from '@navikt/ds-react';
+import { ActionMenu } from '@navikt/ds-react/ActionMenu';
+import { Button } from '@navikt/ds-react/Button';
 import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
 import { SaksInfo } from 'lib/types/types';
 import { useState } from 'react';

@@ -1,4 +1,6 @@
-import { Button, Loader, Modal } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { Loader } from '@navikt/ds-react/Loader';
+import { Modal } from '@navikt/ds-react/Modal';
 import { clientForhåndsvisDialogmelding } from 'lib/clientApi';
 import { useRef } from 'react';
 import useSWR from 'swr';

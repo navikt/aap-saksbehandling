@@ -1,4 +1,4 @@
-import { Textarea } from '@navikt/ds-react';
+import { Textarea } from '@navikt/ds-react/Textarea';
 import React, { FocusEventHandler, HTMLInputAutoCompleteAttribute } from 'react';
 import { Control, Controller, FieldPath, FieldValues, RegisterOptions } from 'react-hook-form';
 

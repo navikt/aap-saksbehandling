@@ -1,6 +1,7 @@
 'use client';
 
-import { Radio, VStack } from '@navikt/ds-react';
+import { Radio } from '@navikt/ds-react/Radio';
+import { VStack } from '@navikt/ds-react/Stack';
 import { erDatoIPeriode, validerDato } from 'lib/validation/dateValidation';
 import { parse } from 'date-fns';
 import { stringToDate } from 'lib/utils/date';

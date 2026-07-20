@@ -1,4 +1,6 @@
-import { Box, Heading, VStack } from '@navikt/ds-react';
+import { Box } from '@navikt/ds-react/Box';
+import { VStack } from '@navikt/ds-react/Stack';
+import { Heading } from '@navikt/ds-react/Typography';
 import { ReactNode } from 'react';
 import type {
   AkselColoredStatelessBackgroundToken,

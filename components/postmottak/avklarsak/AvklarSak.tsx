@@ -3,7 +3,9 @@
 import { SubmitEventHandler } from 'react';
 import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/PostmottakLøsBehovOgGåTilNesteStegHook';
 import { AvsenderMottakerIdType, FinnSakGrunnlag, JournalpostInfo } from 'lib/types/postmottakTypes';
-import { Detail, Label, Radio, VStack } from '@navikt/ds-react';
+import { Radio } from '@navikt/ds-react/Radio';
+import { VStack } from '@navikt/ds-react/Stack';
+import { Detail, Label } from '@navikt/ds-react/Typography';
 import { ServerSentEventStatusAlert } from 'components/postmottak/serversenteventstatusalert/ServerSentEventStatusAlert';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { TextFieldToggle } from 'components/form/TextFieldToggle';

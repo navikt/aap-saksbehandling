@@ -1,6 +1,6 @@
 'use client';
 
-import { Tag, TagProps } from '@navikt/ds-react';
+import { Tag, TagProps } from '@navikt/ds-react/Tag';
 
 export enum VurderingStatus {
   Oppfylt = 'Oppfylt',

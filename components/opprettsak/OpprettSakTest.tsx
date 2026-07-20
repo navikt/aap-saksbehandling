@@ -3,7 +3,7 @@
 import { JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
-import { Button } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
 import { useOpprettDummySak } from 'hooks/FetchHook';
 import { OpprettDummySakDto } from 'lib/types/types';
 import { mutate } from 'swr';

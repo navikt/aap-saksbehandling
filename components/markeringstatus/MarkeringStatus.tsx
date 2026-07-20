@@ -1,4 +1,4 @@
-import { Tag } from '@navikt/ds-react';
+import { Tag } from '@navikt/ds-react/Tag';
 import { MarkeringType } from 'lib/types/oppgaveTypes';
 import { ikonForMarkeringType, variantFraType } from 'components/markeringinfoboks/MarkeringInfoboks';
 

@@ -1,6 +1,7 @@
 'use client';
 
-import { Search, VStack } from '@navikt/ds-react';
+import { Search } from '@navikt/ds-react/Search';
+import { VStack } from '@navikt/ds-react/Stack';
 import { Dispatch, SetStateAction, SubmitEventHandler, useState } from 'react';
 import { clientSøkPåSaksbehandler } from 'lib/clientApi';
 import { isSuccess } from 'lib/utils/api';

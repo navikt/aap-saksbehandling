@@ -1,5 +1,9 @@
 import React, { useRef, useState } from 'react';
-import { BodyShort, Button, Detail, HStack, Popover, Tag, VStack } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { Popover } from '@navikt/ds-react/Popover';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { Tag } from '@navikt/ds-react/Tag';
+import { BodyShort, Detail } from '@navikt/ds-react/Typography';
 import styles from './MarkeringInfoBoks.module.css';
 import { clientOpprettMarkeringHendelse, MarkeringHendelseType } from 'lib/clientApi';
 import { Markering, MarkeringType } from 'lib/types/oppgaveTypes';

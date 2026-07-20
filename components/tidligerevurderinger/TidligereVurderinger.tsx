@@ -1,5 +1,8 @@
 import { useState } from 'react';
-import { BodyShort, Chips, Detail, ExpansionCard, Label, VStack } from '@navikt/ds-react';
+import { Chips } from '@navikt/ds-react/Chips';
+import { ExpansionCard } from '@navikt/ds-react/ExpansionCard';
+import { VStack } from '@navikt/ds-react/Stack';
+import { BodyShort, Detail, Label } from '@navikt/ds-react/Typography';
 import styles from './TidligereVurderinger.module.css';
 import { formatDatoMedMånedsnavn, formaterDatoForFrontend, sorterEtterNyesteDato } from 'lib/utils/date';
 import { ClockDashedIcon } from '@navikt/aksel-icons';

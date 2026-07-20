@@ -1,4 +1,4 @@
-import { Tag } from '@navikt/ds-react';
+import { Tag } from '@navikt/ds-react/Tag';
 import { ArrowsSquarepathIcon } from '@navikt/aksel-icons';
 import { returStatusTilTekst } from 'components/oppgaveliste/returboks/Returboks';
 import { NoNavAapOppgaveReturInformasjonStatus } from '@navikt/aap-oppgave-typescript-types';

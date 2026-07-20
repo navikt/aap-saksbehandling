@@ -1,6 +1,6 @@
 'use client';
 
-import { Table } from '@navikt/ds-react';
+import { Table } from '@navikt/ds-react/Table';
 import { DokumentTabellRad } from 'components/dokumenttabell/DokumentTabellRad';
 
 import styles from './DokumentTabell.module.css';

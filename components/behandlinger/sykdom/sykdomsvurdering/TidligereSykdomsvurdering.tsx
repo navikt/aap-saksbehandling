@@ -1,6 +1,6 @@
 'use client';
 
-import { VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react/Stack';
 import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
 import { getJaNeiEllerIkkeBesvart, getJaNeiJaForbigåendeEllerIkkeBesvart } from 'lib/utils/form';
 import { DiagnoseSystem, diagnoseSøker } from 'lib/diagnosesøker/DiagnoseSøker';

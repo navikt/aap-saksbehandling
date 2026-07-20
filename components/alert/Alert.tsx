@@ -1,7 +1,7 @@
 'use client';
 
 import { ReactNode } from 'react';
-import { InfoCard, InfoCardProps } from '@navikt/ds-react';
+import { InfoCard, InfoCardProps } from '@navikt/ds-react/InfoCard';
 import {
   CheckmarkCircleIcon,
   ExclamationmarkTriangleIcon,

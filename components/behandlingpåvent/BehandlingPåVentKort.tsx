@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { BodyShort, Button, Label } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { BodyShort, Label } from '@navikt/ds-react/Typography';
 import { SideProsessKort } from 'components/sideprosesskort/SideProsessKort';
 import { HourglassBottomFilledIcon } from '@navikt/aksel-icons';
 import { SettPåVentÅrsaker, VenteInformasjon } from 'lib/types/types';

@@ -1,4 +1,5 @@
-import { Button, Dialog } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { Dialog } from '@navikt/ds-react/Dialog';
 import { Alert } from 'components/alert/Alert';
 import { NyÅrsakTilBehandlingV0 } from 'lib/types/types';
 import { useSendHendelseOgVentPåProsessering } from 'hooks/saksbehandling/SendHendelseOgVentPåProsessering';

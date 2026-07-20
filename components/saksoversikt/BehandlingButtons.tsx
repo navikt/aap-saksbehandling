@@ -1,7 +1,8 @@
 import { SaksInfo } from 'lib/types/types';
 import { useRouter } from 'next/navigation';
 import { Dispatch, SetStateAction, useTransition } from 'react';
-import { Button, HStack } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { HStack } from '@navikt/ds-react/Stack';
 import { isLocal } from 'lib/utils/environment';
 import { BestillBrevTestKnapp } from 'components/behandlinger/brev/BestillBrevTestKnapp';
 import { ExternalLinkIcon, EyeIcon } from '@navikt/aksel-icons';

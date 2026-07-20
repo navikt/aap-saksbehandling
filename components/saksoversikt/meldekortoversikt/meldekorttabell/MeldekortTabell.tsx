@@ -1,4 +1,4 @@
-import { Table } from '@navikt/ds-react';
+import { Table } from '@navikt/ds-react/Table';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { eachWeekOfInterval, getISOWeek } from 'date-fns';
 import { RedigerMeldekortModal } from 'components/saksoversikt/meldekortoversikt/redigermeldekortmodal/RedigerMeldekortModal';

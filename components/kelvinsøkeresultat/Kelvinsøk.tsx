@@ -1,7 +1,7 @@
 'use client';
 
 import { Dispatch, SetStateAction, useState } from 'react';
-import { Search } from '@navikt/ds-react';
+import { Search } from '@navikt/ds-react/Search';
 import styles from 'components/kelvinappheader/KelvinAppHeader.module.css';
 import { SøkeResultat } from 'app/api/kelvinsok/route';
 

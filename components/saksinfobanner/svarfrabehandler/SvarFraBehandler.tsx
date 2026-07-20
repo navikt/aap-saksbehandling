@@ -1,6 +1,11 @@
 'use client';
 
-import { BodyLong, BodyShort, Box, Button, HStack, Popover, Tag, VStack } from '@navikt/ds-react';
+import { Box } from '@navikt/ds-react/Box';
+import { Button } from '@navikt/ds-react/Button';
+import { Popover } from '@navikt/ds-react/Popover';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { Tag } from '@navikt/ds-react/Tag';
+import { BodyLong, BodyShort } from '@navikt/ds-react/Typography';
 import { useRef, useState } from 'react';
 import { FirstAidKitIcon } from '@navikt/aksel-icons';
 import { useMottattDokumenterLest } from 'hooks/FetchHook';

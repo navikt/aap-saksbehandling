@@ -4,7 +4,7 @@ import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } fro
 import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/PostmottakLøsBehovOgGåTilNesteStegHook';
 import { OverleveringGrunnlag } from 'lib/types/postmottakTypes';
 import { SubmitEventHandler } from 'react';
-import { VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react/Stack';
 import { ServerSentEventStatusAlert } from 'components/postmottak/serversenteventstatusalert/ServerSentEventStatusAlert';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';

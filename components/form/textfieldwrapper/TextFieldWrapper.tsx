@@ -1,4 +1,4 @@
-import { TextField } from '@navikt/ds-react';
+import { TextField } from '@navikt/ds-react/TextField';
 import { isNullOrUndefined } from 'lib/utils/validering';
 import React, { HTMLInputAutoCompleteAttribute } from 'react';
 import { Control, Controller, FieldValues, RegisterOptions, FieldPath } from 'react-hook-form';

@@ -1,4 +1,4 @@
-import { Select } from '@navikt/ds-react';
+import { Select } from '@navikt/ds-react/Select';
 import React, { HTMLInputAutoCompleteAttribute, ReactNode } from 'react';
 import { Control, Controller, RegisterOptions, FieldPath, FieldValues } from 'react-hook-form';
 
