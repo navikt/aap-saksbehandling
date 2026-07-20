@@ -26,6 +26,10 @@ export default defineConfig({
       ['lib/**/*.test.ts', 'node'],
       ['components/**/*.test.ts', 'node'],
     ],
+    onConsoleLog(log) {
+      // Suppress noisy sourcemap warnings from packages that ship without source files
+      if (log.includes('Sourcemap for') && log.includes('points to missing source files')) return false;
+    },
     server: {
       deps: {
         inline: ['@navikt/endringslogg'],
