@@ -1,6 +1,11 @@
-name: Test sharding eksperiment
+name: Tests
 on:
   workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
 
 jobs:
   tests:
@@ -65,7 +70,7 @@ jobs:
         run: yarn install --immutable
 
       - name: Download blob reports
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           path: .vitest-reports
           pattern: blob-report-*
