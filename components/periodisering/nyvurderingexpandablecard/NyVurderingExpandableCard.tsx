@@ -3,7 +3,10 @@
 import { CustomExpandableCard } from 'components/customexpandablecard/CustomExpandableCard';
 import { formatDatoMedMånedsnavn } from 'lib/utils/date';
 import { ReactNode, useRef, useState } from 'react';
-import { BodyShort, Button, HGrid, HStack, VStack } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { HGrid } from '@navikt/ds-react/HGrid';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { BodyShort } from '@navikt/ds-react/Typography';
 import { VurdertAvAnsattDetail } from 'components/vurdertav/VurdertAvAnsattDetail';
 import { subDays } from 'date-fns';
 import { TrashFillIcon } from '@navikt/aksel-icons';

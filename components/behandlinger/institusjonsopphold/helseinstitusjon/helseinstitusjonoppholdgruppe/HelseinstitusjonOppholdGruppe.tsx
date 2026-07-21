@@ -1,4 +1,8 @@
-import { BodyShort, Box, Button, HStack, Label, Tag, VStack } from '@navikt/ds-react';
+import { Box } from '@navikt/ds-react/Box';
+import { Button } from '@navikt/ds-react/Button';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { Tag } from '@navikt/ds-react/Tag';
+import { BodyShort, Label } from '@navikt/ds-react/Typography';
 import { Buildings3Icon } from '@navikt/aksel-icons';
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { HelseinstitusjonGrunnlag, HelseInstiusjonVurdering } from 'lib/types/types';

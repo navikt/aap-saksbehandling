@@ -1,4 +1,6 @@
-import { BodyShort, Detail, HStack, Link, VStack } from '@navikt/ds-react';
+import { Link } from '@navikt/ds-react/Link';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { BodyShort, Detail } from '@navikt/ds-react/Typography';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { MeldeperiodeMedMeldekortDto, SakPersoninfo } from 'lib/types/types';
 import { Journalpost } from 'lib/types/journalpost';

@@ -2,7 +2,8 @@
 
 import { DigitaliseringsGrunnlag } from 'lib/types/postmottakTypes';
 
-import { Button, VStack } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { VStack } from '@navikt/ds-react/Stack';
 import { AnnetRelevantDokument, AnnetRelevantDokumentUnderkategori, DokumentÅrsakTilBehandling } from 'lib/types/types';
 import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
 import type { Submittable } from 'components/postmottak/digitaliserdokument/DigitaliserDokument';

@@ -1,4 +1,7 @@
-import { Button, Dropdown, HStack, Loader } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { Dropdown } from '@navikt/ds-react/Dropdown';
+import { Loader } from '@navikt/ds-react/Loader';
+import { HStack } from '@navikt/ds-react/Stack';
 import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { Oppgave } from 'lib/types/oppgaveTypes';
 import { avreserverOppgaveClient, plukkOppgaveClient } from 'lib/oppgaveClientApi';

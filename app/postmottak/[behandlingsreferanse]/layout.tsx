@@ -12,7 +12,7 @@ import {
 } from 'lib/services/postmottakservice/postmottakservice';
 import { BehandlingPVentMedDataFetching } from 'components/postmottak/postmottakbehandlingpåvent/PostmottakBehandlingPåVentMedDataFetching';
 import { FlytProsesseringAlert } from 'components/flytprosesseringalert/FlytProsesseringAlert';
-import { VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react/Stack';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { hentOppgave } from 'lib/services/oppgaveservice/oppgaveservice';

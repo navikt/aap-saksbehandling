@@ -1,6 +1,6 @@
 'use client';
 
-import { Stepper } from '@navikt/ds-react';
+import { Stepper } from '@navikt/ds-react/Stepper';
 import style from './StegGruppeIndikator.module.css';
 import { BehandlingFlytOgTilstand, FlytGruppe } from 'lib/types/postmottakTypes';
 import { exhaustiveCheck } from 'lib/utils/typescript';

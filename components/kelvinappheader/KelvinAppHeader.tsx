@@ -1,19 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import {
-  ActionMenu,
-  BodyShort,
-  Box,
-  Button,
-  Heading,
-  HStack,
-  InternalHeader,
-  Link,
-  Spacer,
-  Theme,
-  VStack,
-} from '@navikt/ds-react';
+import { ActionMenu } from '@navikt/ds-react/ActionMenu';
+import { Box } from '@navikt/ds-react/Box';
+import { Button } from '@navikt/ds-react/Button';
+import { InternalHeader } from '@navikt/ds-react/InternalHeader';
+import { Link } from '@navikt/ds-react/Link';
+import { HStack, Spacer, VStack } from '@navikt/ds-react/Stack';
+import { Theme } from '@navikt/ds-react/Theme';
+import { BodyShort, Heading } from '@navikt/ds-react/Typography';
 import { Kelvinsøk } from 'components/kelvinsøkeresultat/Kelvinsøk';
 import { ArrowRightLeftIcon, ExternalLinkIcon, LeaveIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Kelvinsøkeresultat } from 'components/kelvinsøkeresultat/Kelvinsøkeresultat';

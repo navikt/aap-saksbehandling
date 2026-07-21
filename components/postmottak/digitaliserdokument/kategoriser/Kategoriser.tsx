@@ -7,7 +7,7 @@ import { ServerSentEventStatus } from 'app/postmottak/api/post/[behandlingsrefer
 import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
-import { Button } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
 
 interface Props extends Submittable {
   kategori?: KategoriserDokumentKategori;

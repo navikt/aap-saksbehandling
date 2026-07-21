@@ -1,4 +1,4 @@
-import { UNSAFE_Combobox } from '@navikt/ds-react';
+import { UNSAFE_Combobox } from '@navikt/ds-react/Combobox';
 import React, { FocusEventHandler, ReactNode } from 'react';
 import { Control, Controller, FieldPath, FieldValues, RegisterOptions } from 'react-hook-form';
 import { ValuePair } from '../FormField';

@@ -1,5 +1,7 @@
 import { UseFormReturn } from 'react-hook-form';
-import { Radio, ReadMore, VStack } from '@navikt/ds-react';
+import { Radio } from '@navikt/ds-react/Radio';
+import { ReadMore } from '@navikt/ds-react/ReadMore';
+import { VStack } from '@navikt/ds-react/Stack';
 import { JaEllerNei } from 'lib/utils/form';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';

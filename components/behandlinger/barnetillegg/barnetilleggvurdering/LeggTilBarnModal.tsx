@@ -1,4 +1,8 @@
-import { Button, Checkbox, Modal, Radio, VStack } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { Checkbox } from '@navikt/ds-react/Checkbox';
+import { Modal } from '@navikt/ds-react/Modal';
+import { Radio } from '@navikt/ds-react/Radio';
+import { VStack } from '@navikt/ds-react/Stack';
 import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
 import { useForm } from 'react-hook-form';
 import { CheckboxWrapper } from 'components/form/checkboxwrapper/CheckboxWrapper';

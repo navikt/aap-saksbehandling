@@ -3,7 +3,8 @@
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { MellomlagretVurdering, YrkesskadeVurderingGrunnlag } from 'lib/types/types';
-import { BodyShort, Label, VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react/Stack';
+import { BodyShort, Label } from '@navikt/ds-react/Typography';
 import { erProsent } from 'lib/utils/validering';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';

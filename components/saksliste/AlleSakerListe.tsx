@@ -3,7 +3,10 @@
 import { clientHentAlleSaker } from 'lib/clientApi';
 import Link from 'next/link';
 import useSWR from 'swr';
-import { Button, Pagination, Table, TextField } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { Pagination } from '@navikt/ds-react/Pagination';
+import { Table } from '@navikt/ds-react/Table';
+import { TextField } from '@navikt/ds-react/TextField';
 import { formaterDatoMedTidspunktForFrontend, sorterEtterNyesteDato } from 'lib/utils/date';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { ArrowCirclepathIcon } from '@navikt/aksel-icons';

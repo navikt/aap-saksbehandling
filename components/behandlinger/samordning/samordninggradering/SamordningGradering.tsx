@@ -9,7 +9,11 @@ import {
   SamordningYtelseVurdering,
 } from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { BodyLong, BodyShort, Box, Button, Heading, HStack, Modal, VStack } from '@navikt/ds-react';
+import { Box } from '@navikt/ds-react/Box';
+import { Button } from '@navikt/ds-react/Button';
+import { Modal } from '@navikt/ds-react/Modal';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { BodyLong, BodyShort, Heading } from '@navikt/ds-react/Typography';
 import { SubmitEventHandler, useRef, useState } from 'react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';

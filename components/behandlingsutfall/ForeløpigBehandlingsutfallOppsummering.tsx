@@ -1,5 +1,6 @@
 import { ForeløpigBehandlingsutfall } from 'lib/types/types';
-import { HStack, Table } from '@navikt/ds-react';
+import { HStack } from '@navikt/ds-react/Stack';
+import { Table } from '@navikt/ds-react/Table';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { CheckmarkCircleIcon, QuestionmarkCircleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 import styles from 'components/behandlinger/vedtak/foreslåvedtak/foreslåvedtaktabell/ForeslåVedtakTabell.module.css';

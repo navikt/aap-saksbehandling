@@ -1,6 +1,9 @@
 'use client';
 
-import { Button, HStack, Label, Table, VStack } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { Table } from '@navikt/ds-react/Table';
+import { Label } from '@navikt/ds-react/Typography';
 import styles from 'components/behandlinger/samordning/samordninggradering/YtelseTabell.module.css';
 import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
 import { useFieldArray, UseFormReturn } from 'react-hook-form';

@@ -1,7 +1,7 @@
 'use client';
 
 import { ErrorList } from 'lib/utils/formerrors';
-import { ErrorSummary } from '@navikt/ds-react';
+import { ErrorSummary } from '@navikt/ds-react/ErrorSummary';
 
 interface Props {
   errorList: ErrorList;

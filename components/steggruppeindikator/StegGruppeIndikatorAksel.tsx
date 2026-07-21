@@ -2,7 +2,7 @@
 
 import { BehandlingFlytOgTilstand, StegGruppe } from 'lib/types/types';
 import { useRouter } from 'next/navigation';
-import { Stepper } from '@navikt/ds-react';
+import { Stepper } from '@navikt/ds-react/Stepper';
 import styles from './StegGruppeIndikator.module.css';
 import { mapTilSteggruppeTekst } from 'lib/utils/oversettelser';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';

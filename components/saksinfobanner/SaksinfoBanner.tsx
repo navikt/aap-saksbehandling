@@ -1,6 +1,10 @@
 'use client';
 
-import { BodyShort, CopyButton, HStack, Label, Link, Tag } from '@navikt/ds-react';
+import { CopyButton } from '@navikt/ds-react/CopyButton';
+import { Link } from '@navikt/ds-react/Link';
+import { HStack } from '@navikt/ds-react/Stack';
+import { Tag } from '@navikt/ds-react/Tag';
+import { BodyShort, Label } from '@navikt/ds-react/Typography';
 import { DetaljertBehandling, FlytGruppe, FlytVisning, SaksInfo as SaksInfoType } from 'lib/types/types';
 import { useState } from 'react';
 import { ChevronRightIcon } from '@navikt/aksel-icons';

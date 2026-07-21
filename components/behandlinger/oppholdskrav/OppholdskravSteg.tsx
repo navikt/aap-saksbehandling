@@ -27,7 +27,9 @@ import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering'
 import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
-import { BodyLong, Link, VStack } from '@navikt/ds-react';
+import { Link } from '@navikt/ds-react/Link';
+import { VStack } from '@navikt/ds-react/Stack';
+import { BodyLong } from '@navikt/ds-react/Typography';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';

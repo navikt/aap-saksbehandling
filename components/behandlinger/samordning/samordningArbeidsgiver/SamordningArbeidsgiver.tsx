@@ -2,7 +2,9 @@
 
 import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
-import { BodyLong, BodyShort, Link, VStack } from '@navikt/ds-react';
+import { Link } from '@navikt/ds-react/Link';
+import { VStack } from '@navikt/ds-react/Stack';
+import { BodyLong, BodyShort } from '@navikt/ds-react/Typography';
 import { SubmitEventHandler } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';

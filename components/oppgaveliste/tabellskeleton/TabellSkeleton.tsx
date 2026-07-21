@@ -1,4 +1,5 @@
-import { Skeleton, VStack } from '@navikt/ds-react';
+import { Skeleton } from '@navikt/ds-react/Skeleton';
+import { VStack } from '@navikt/ds-react/Stack';
 
 export const TabellSkeleton = () => {
   return (

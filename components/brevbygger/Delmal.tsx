@@ -1,4 +1,8 @@
-import { Box, Heading, HStack, Loader, Switch, VStack } from '@navikt/ds-react';
+import { Box } from '@navikt/ds-react/Box';
+import { Loader } from '@navikt/ds-react/Loader';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { Switch } from '@navikt/ds-react/Switch';
+import { Heading } from '@navikt/ds-react/Typography';
 import { Control, Controller, useWatch } from 'react-hook-form';
 import { DelmalReferanse, FritekstType, ValgRef } from 'components/brevbygger/brevmodellTypes';
 import { BrevFormVerdier } from 'components/brevbygger/types';

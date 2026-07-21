@@ -1,5 +1,9 @@
 import { useRef, useState } from 'react';
-import { BodyShort, Button, Detail, Popover, Tag, VStack } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { Popover } from '@navikt/ds-react/Popover';
+import { VStack } from '@navikt/ds-react/Stack';
+import { Tag } from '@navikt/ds-react/Tag';
+import { BodyShort, Detail } from '@navikt/ds-react/Typography';
 import { HourglassBottomFilledIcon } from '@navikt/aksel-icons';
 import styles from './UtløptVentefristBoks.module.css';
 import { Dato } from 'lib/types/Dato';

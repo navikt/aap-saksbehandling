@@ -1,5 +1,9 @@
 import { Oppgave } from 'lib/types/oppgaveTypes';
-import { BodyShort, CopyButton, Table, Tooltip, Link as AkselLink } from '@navikt/ds-react';
+import { CopyButton } from '@navikt/ds-react/CopyButton';
+import { Link as AkselLink } from '@navikt/ds-react/Link';
+import { Table } from '@navikt/ds-react/Table';
+import { Tooltip } from '@navikt/ds-react/Tooltip';
+import { BodyShort } from '@navikt/ds-react/Typography';
 import Link from 'next/link';
 import { storForbokstavIHvertOrd } from 'lib/utils/string';
 import {

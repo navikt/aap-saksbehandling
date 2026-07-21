@@ -1,4 +1,4 @@
-import { ReadMore } from '@navikt/ds-react';
+import { ReadMore } from '@navikt/ds-react/ReadMore';
 import { ReactNode } from 'react';
 
 interface Props {

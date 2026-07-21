@@ -1,6 +1,8 @@
 'use client';
 
-import { BodyShort, Detail, HStack, Link, VStack } from '@navikt/ds-react';
+import { Link } from '@navikt/ds-react/Link';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { BodyShort, Detail } from '@navikt/ds-react/Typography';
 import { OppgaveStatus, OppgaveStatusType } from 'components/oppgavestatus/OppgaveStatus';
 import { Behandlingsstatus } from 'components/behandlingsstatus/Behandlingsstatus';
 

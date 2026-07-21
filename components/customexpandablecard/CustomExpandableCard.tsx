@@ -1,6 +1,7 @@
 'use client';
 
-import { HGrid, VStack } from '@navikt/ds-react';
+import { HGrid } from '@navikt/ds-react/HGrid';
+import { VStack } from '@navikt/ds-react/Stack';
 import { ReactNode } from 'react';
 import { ChevronDownIcon, ChevronUpIcon, CircleSlashIcon, PadlockLockedIcon, PencilIcon } from '@navikt/aksel-icons';
 import styles from './CustomExpandableCard.module.css';

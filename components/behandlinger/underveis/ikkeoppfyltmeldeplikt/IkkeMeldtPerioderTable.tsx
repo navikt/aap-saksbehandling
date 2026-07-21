@@ -1,5 +1,6 @@
 import { TableStyled } from 'components/tablestyled/TableStyled';
-import { Checkbox, Table } from '@navikt/ds-react';
+import { Checkbox } from '@navikt/ds-react/Checkbox';
+import { Table } from '@navikt/ds-react/Table';
 import { formaterDatoForFrontend, formaterPeriode } from 'lib/utils/date';
 import { MeldepliktOverstyringStatus, Periode, OverstyringMeldepliktGrunnlagVurdering } from 'lib/types/types';
 import styles from './rimeliggrunn.module.css';

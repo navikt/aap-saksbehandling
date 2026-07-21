@@ -1,4 +1,4 @@
-import { Tag, TagProps } from '@navikt/ds-react';
+import { Tag, TagProps } from '@navikt/ds-react/Tag';
 
 import { ShieldLockIcon } from '@navikt/aksel-icons';
 import { Adressebeskyttelsesgrad } from 'lib/utils/adressebeskyttelse';

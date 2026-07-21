@@ -2,7 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import useSWR from 'swr';
-import { BodyShort, Box, Button, HStack, Label, Switch, VStack } from '@navikt/ds-react';
+import { Box } from '@navikt/ds-react/Box';
+import { Button } from '@navikt/ds-react/Button';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { Switch } from '@navikt/ds-react/Switch';
+import { BodyShort, Label } from '@navikt/ds-react/Typography';
 import { KøSelect } from 'components/oppgaveliste/køselect/KøSelect';
 import { queryParamsArray } from 'lib/utils/request';
 import { Enhet } from 'lib/types/oppgaveTypes';

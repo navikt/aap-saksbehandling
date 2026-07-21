@@ -1,4 +1,6 @@
-import { Button, Checkbox, HStack, VStack } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { Checkbox } from '@navikt/ds-react/Checkbox';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
 import styles from 'components/postmottak/digitaliserdokument/søknad/Barnetillegg.module.css';
 import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
 import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';

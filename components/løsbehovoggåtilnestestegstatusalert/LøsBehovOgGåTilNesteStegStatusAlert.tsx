@@ -1,6 +1,6 @@
 'use client';
 
-import { BodyShort } from '@navikt/ds-react';
+import { BodyShort } from '@navikt/ds-react/Typography';
 import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { ApiException } from 'lib/utils/api';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';

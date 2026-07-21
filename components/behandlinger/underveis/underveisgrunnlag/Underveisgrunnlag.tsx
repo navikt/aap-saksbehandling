@@ -1,6 +1,9 @@
 'use client';
 
-import { BodyShort, Chips, Table, VStack } from '@navikt/ds-react';
+import { Chips } from '@navikt/ds-react/Chips';
+import { VStack } from '@navikt/ds-react/Stack';
+import { Table } from '@navikt/ds-react/Table';
+import { BodyShort } from '@navikt/ds-react/Typography';
 import { Diff, UnderveisAvslagsÅrsak, UnderveisGrunnlag, UnderveisGrunnlagMedDiff } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { mapUtfallTilTekst } from 'lib/utils/oversettelser';

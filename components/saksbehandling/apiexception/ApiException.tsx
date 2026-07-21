@@ -1,6 +1,7 @@
 'use client';
 
-import { BodyShort, VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react/Stack';
+import { BodyShort } from '@navikt/ds-react/Typography';
 import { FetchResponse, isError } from 'lib/utils/api';
 import { Alert } from 'components/alert/Alert';
 

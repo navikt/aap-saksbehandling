@@ -4,7 +4,7 @@ import { JaEllerNei } from 'lib/utils/form';
 import { UseFormReturn } from 'react-hook-form';
 import { SykdomsvurderingerForm } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
-import { Radio } from '@navikt/ds-react';
+import { Radio } from '@navikt/ds-react/Radio';
 import { DiagnoserDefaultOptions } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
 import styles from './SykdomsvurderingDiagnosesøk.module.css';
 

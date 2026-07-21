@@ -1,6 +1,9 @@
 'use client';
 
-import { Button, Detail, ExpansionCard, HStack, VStack } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { ExpansionCard } from '@navikt/ds-react/ExpansionCard';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { Detail } from '@navikt/ds-react/Typography';
 import { MellomlagretVurdering, StegType, VurderingerMeta } from 'lib/types/types';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';

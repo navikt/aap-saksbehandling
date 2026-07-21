@@ -1,6 +1,8 @@
 'use client';
 
-import { BodyLong, Button, Modal } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { Modal } from '@navikt/ds-react/Modal';
+import { BodyLong } from '@navikt/ds-react/Typography';
 import styles from 'components/saksinfobanner/avbrytrevurderingmodal/AvbrytRevurderingModal.module.css';
 import { useOverstyrTildelingHook } from 'hooks/saksbehandling/OverstyrTildelingHook';
 

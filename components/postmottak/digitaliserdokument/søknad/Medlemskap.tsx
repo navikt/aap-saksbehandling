@@ -1,4 +1,6 @@
-import { Button, HStack, Label, VStack } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { Label } from '@navikt/ds-react/Typography';
 import { PlusCircleFillIcon } from '@navikt/aksel-icons';
 import { FieldPath, useFieldArray, UseFormReturn } from 'react-hook-form';
 import { SøknadFormFields } from './DigitaliserSøknad';

@@ -1,5 +1,8 @@
 import { TableStyled } from 'components/tablestyled/TableStyled';
-import { BodyShort, Button, HStack, Table } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { HStack } from '@navikt/ds-react/Stack';
+import { Table } from '@navikt/ds-react/Table';
+import { BodyShort } from '@navikt/ds-react/Typography';
 import { formaterDatoForFrontend, sorterEtterEldsteDato } from 'lib/utils/date';
 import { Vurdering11_9 } from 'components/behandlinger/aktivitetsplikt/11-9/Vurder11_9/Vurder11_9MedDataFetching';
 import styles from './vurder-11-9.module.css';

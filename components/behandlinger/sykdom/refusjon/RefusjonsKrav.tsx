@@ -1,5 +1,9 @@
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
-import { BodyLong, Box, Button, HStack, Table, VStack } from '@navikt/ds-react';
+import { Box } from '@navikt/ds-react/Box';
+import { Button } from '@navikt/ds-react/Button';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { Table } from '@navikt/ds-react/Table';
+import { BodyLong } from '@navikt/ds-react/Typography';
 
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 

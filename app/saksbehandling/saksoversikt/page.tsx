@@ -4,7 +4,7 @@ import { OpprettSakLocal } from 'components/opprettsak/OpprettSakLocal';
 import OpprettSakTest from 'components/opprettsak/OpprettSakTest';
 import { Suspense } from 'react';
 import { PageBlock } from '@navikt/ds-react/Page';
-import { Page } from '@navikt/ds-react';
+import { Page } from '@navikt/ds-react/Page';
 import { redirect } from 'next/navigation';
 
 const SaksoversiktPage = async () => {

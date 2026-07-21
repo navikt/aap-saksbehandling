@@ -1,6 +1,6 @@
 'use client';
 
-import { HGrid } from '@navikt/ds-react';
+import { HGrid } from '@navikt/ds-react/HGrid';
 import { ReactNode, useState } from 'react';
 import styles from './SplitVindu.module.css';
 import { Dokumentvisning } from 'components/postmottak/dokumentvisning/Dokumentvisning';

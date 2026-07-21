@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import { Button, Dialog, HStack } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { Dialog } from '@navikt/ds-react/Dialog';
+import { HStack } from '@navikt/ds-react/Stack';
 import { ForhåndsvisBrev } from 'components/brevbygger/ForhåndsvisBrev';
 
 import styles from './FerdigstillBrevDialog.module.css';

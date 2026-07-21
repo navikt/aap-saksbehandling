@@ -1,7 +1,10 @@
 'use client';
 
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
-import { BodyLong, Button, HStack, Label, Table, VStack } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { Table } from '@navikt/ds-react/Table';
+import { BodyLong, Label } from '@navikt/ds-react/Typography';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { validerDato } from 'lib/validation/dateValidation';

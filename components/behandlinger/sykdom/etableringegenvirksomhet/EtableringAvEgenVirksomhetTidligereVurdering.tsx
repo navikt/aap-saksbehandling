@@ -4,7 +4,8 @@ import { EtableringEgenVirksomhetVurderingResponse } from 'lib/types/types';
 import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { getJaNeiEllerUndefined } from 'lib/utils/form';
-import { BodyShort, Label, VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react/Stack';
+import { BodyShort, Label } from '@navikt/ds-react/Typography';
 import { Dato } from 'lib/types/Dato';
 
 interface Props {

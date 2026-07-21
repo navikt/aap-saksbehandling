@@ -1,4 +1,5 @@
-import { BodyShort, HStack } from '@navikt/ds-react';
+import { HStack } from '@navikt/ds-react/Stack';
+import { BodyShort } from '@navikt/ds-react/Typography';
 import styles from './OppsummeringTimer.module.css';
 import { replaceDotsWithCommas } from 'components/saksoversikt/meldekortoversikt/redigermeldekortmodal/RedigerMeldekortModal';
 

@@ -1,6 +1,7 @@
 'use client';
 
-import { InlineMessage, VStack } from '@navikt/ds-react';
+import { InlineMessage } from '@navikt/ds-react/InlineMessage';
+import { VStack } from '@navikt/ds-react/Stack';
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { MeldekortFormFields } from 'components/postmottak/digitaliserdokument/meldekort/DigitaliserMeldekortV2';
 import { MeldePeriodeInputV2 } from 'components/postmottak/digitaliserdokument/meldekort/MeldePeriodeInputV2';

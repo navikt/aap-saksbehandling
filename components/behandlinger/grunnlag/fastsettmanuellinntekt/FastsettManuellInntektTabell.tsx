@@ -1,4 +1,6 @@
-import { ErrorMessage, Label, Table, VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react/Stack';
+import { Table } from '@navikt/ds-react/Table';
+import { ErrorMessage, Label } from '@navikt/ds-react/Typography';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
 import { formaterTilNok } from 'lib/utils/string';

@@ -6,7 +6,7 @@ import styles from './Inntektsbortfall.module.css';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { Table } from '@navikt/ds-react';
+import { Table } from '@navikt/ds-react/Table';
 import { InntektsbortfallResponse, MellomlagretVurdering } from 'lib/types/types';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { CheckmarkCircleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';

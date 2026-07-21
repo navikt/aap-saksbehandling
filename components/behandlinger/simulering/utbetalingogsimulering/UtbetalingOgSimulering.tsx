@@ -1,6 +1,7 @@
 'use client';
 
-import { Label, Table } from '@navikt/ds-react';
+import { Table } from '@navikt/ds-react/Table';
+import { Label } from '@navikt/ds-react/Typography';
 import { SimulertUtbetaling, UtbetalingOgSimuleringGrunnlag } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { Alert } from 'components/alert/Alert';

@@ -1,4 +1,6 @@
-import { Heading, Radio, RadioGroup, SortState, Table } from '@navikt/ds-react';
+import { Radio, RadioGroup } from '@navikt/ds-react/Radio';
+import { SortState, Table } from '@navikt/ds-react/Table';
+import { Heading } from '@navikt/ds-react/Typography';
 import { ChangeEvent, Ref, useState } from 'react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import Link from 'next/link';

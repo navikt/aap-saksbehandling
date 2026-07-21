@@ -1,7 +1,13 @@
 'use client';
 
 import { BrevbyggerBeta } from '@navikt/aap-breveditor/';
-import { ActionMenu, BodyShort, Button, HStack, Label, List, Loader, LocalAlert, VStack } from '@navikt/ds-react';
+import { ActionMenu } from '@navikt/ds-react/ActionMenu';
+import { Button } from '@navikt/ds-react/Button';
+import { List } from '@navikt/ds-react/List';
+import { Loader } from '@navikt/ds-react/Loader';
+import { LocalAlert } from '@navikt/ds-react/LocalAlert';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { BodyShort, Label } from '@navikt/ds-react/Typography';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useDebounce } from 'hooks/DebounceHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';

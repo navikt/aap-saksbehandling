@@ -1,6 +1,13 @@
 'use client';
 
-import { BodyShort, Button, CopyButton, Dropdown, HStack, Label, Link, Tag, Tooltip } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { CopyButton } from '@navikt/ds-react/CopyButton';
+import { Dropdown } from '@navikt/ds-react/Dropdown';
+import { Link } from '@navikt/ds-react/Link';
+import { HStack } from '@navikt/ds-react/Stack';
+import { Tag } from '@navikt/ds-react/Tag';
+import { Tooltip } from '@navikt/ds-react/Tooltip';
+import { BodyShort, Label } from '@navikt/ds-react/Typography';
 import { useState } from 'react';
 
 import { ChevronDownIcon, ChevronRightIcon, PaperplaneIcon } from '@navikt/aksel-icons';

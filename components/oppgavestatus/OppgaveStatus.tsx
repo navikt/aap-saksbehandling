@@ -1,4 +1,4 @@
-import { Tag, TagProps } from '@navikt/ds-react';
+import { Tag, TagProps } from '@navikt/ds-react/Tag';
 import {
   HourglassBottomFilledIcon,
   HourglassTopFilledIcon,

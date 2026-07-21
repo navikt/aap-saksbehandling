@@ -1,5 +1,7 @@
 import { useSendHendelseOgVentPåProsessering } from 'hooks/saksbehandling/SendHendelseOgVentPåProsessering';
-import { BodyLong, Button, Modal } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { Modal } from '@navikt/ds-react/Modal';
+import { BodyLong } from '@navikt/ds-react/Typography';
 import { XMarkOctagonIcon } from '@navikt/aksel-icons';
 import styles from 'components/saksinfobanner/avbrytrevurderingmodal/AvbrytRevurderingModal.module.css';
 import { NyÅrsakTilBehandlingV0 } from 'lib/types/types';

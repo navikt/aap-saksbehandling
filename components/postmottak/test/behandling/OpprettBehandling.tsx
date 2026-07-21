@@ -1,7 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Button, HStack, Page, TextField } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { Page } from '@navikt/ds-react/Page';
+import { HStack } from '@navikt/ds-react/Stack';
+import { TextField } from '@navikt/ds-react/TextField';
 import { postmottakOpprettBehandlingClient } from 'lib/postmottakClientApi';
 import styles from './OpprettBehandling.module.css';
 import { isSuccess } from 'lib/utils/api';

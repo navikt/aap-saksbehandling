@@ -9,7 +9,9 @@ import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { SubmitEvent } from 'react';
 import { useFieldArray } from 'react-hook-form';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
-import { BodyShort, Button, Label, Radio } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { Radio } from '@navikt/ds-react/Radio';
+import { BodyShort, Label } from '@navikt/ds-react/Typography';
 import { validerDato } from 'lib/validation/dateValidation';
 import { parse } from 'date-fns';
 

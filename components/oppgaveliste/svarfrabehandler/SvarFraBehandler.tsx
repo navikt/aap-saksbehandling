@@ -1,6 +1,10 @@
 'use client';
 
-import { BodyShort, Button, Popover, Tag, VStack } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { Popover } from '@navikt/ds-react/Popover';
+import { VStack } from '@navikt/ds-react/Stack';
+import { Tag } from '@navikt/ds-react/Tag';
+import { BodyShort } from '@navikt/ds-react/Typography';
 import { useRef, useState } from 'react';
 import { FirstAidKitIcon } from '@navikt/aksel-icons';
 import styles from 'components/oppgaveliste/svarfrabehandler/SvarFraBehandler.module.css';

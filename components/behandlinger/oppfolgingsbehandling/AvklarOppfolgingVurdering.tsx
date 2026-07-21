@@ -12,7 +12,7 @@ import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { SubmitEventHandler } from 'react';
 import { vurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
-import { BodyShort, Label } from '@navikt/ds-react';
+import { BodyShort, Label } from '@navikt/ds-react/Typography';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';

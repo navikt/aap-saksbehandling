@@ -1,5 +1,8 @@
 import { KravGrunnlag, KravVurdering, KravVurderingLøsning } from 'lib/types/types';
-import { BodyShort, Button, Table, Tag } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { Table } from '@navikt/ds-react/Table';
+import { Tag } from '@navikt/ds-react/Tag';
+import { BodyShort } from '@navikt/ds-react/Typography';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import {
   finnOverstyrMuligRettFra,

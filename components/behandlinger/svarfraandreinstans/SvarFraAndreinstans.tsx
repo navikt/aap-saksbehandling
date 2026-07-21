@@ -1,7 +1,8 @@
 'use client';
 
 import { Hjemmel, MellomlagretVurdering, SvarFraAndreinstansGrunnlag, SvarKonsekvens } from 'lib/types/types';
-import { BodyShort, HStack, VStack } from '@navikt/ds-react';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { BodyShort } from '@navikt/ds-react/Typography';
 import { formaterSvartype, formaterUtfall } from 'lib/utils/svarfraandreinstans';
 import { useConfigForm } from 'components/form/FormHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';

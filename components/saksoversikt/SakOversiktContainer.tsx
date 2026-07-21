@@ -1,6 +1,9 @@
 'use client';
 
-import { Box, Page, Tabs, VStack } from '@navikt/ds-react';
+import { Box } from '@navikt/ds-react/Box';
+import { Page } from '@navikt/ds-react/Page';
+import { VStack } from '@navikt/ds-react/Stack';
+import { Tabs } from '@navikt/ds-react/Tabs';
 import { SakMedBehandlinger } from 'components/saksoversikt/SakMedBehandlinger';
 import { RettighetsinfoDto, SaksInfo } from 'lib/types/types';
 import { FileTextIcon, PersonIcon, TasklistIcon } from '@navikt/aksel-icons';

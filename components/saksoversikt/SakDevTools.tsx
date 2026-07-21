@@ -1,4 +1,6 @@
-import { Heading, HGrid, VStack } from '@navikt/ds-react';
+import { HGrid } from '@navikt/ds-react/HGrid';
+import { VStack } from '@navikt/ds-react/Stack';
+import { Heading } from '@navikt/ds-react/Typography';
 import { DummyMeldekort } from 'components/devtools/DummyMeldekort';
 import { SendNySoknad } from 'components/devtools/SendNySoknad';
 import { SendNySoknadUtenMedlemskap } from 'components/devtools/SendNySoknadUtenMedlemskap';

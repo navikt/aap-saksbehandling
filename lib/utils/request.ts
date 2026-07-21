@@ -1,11 +1,12 @@
-import { MineOppgaverQueryParams, Oppgave, OppgavelisteRequest } from 'lib/types/oppgaveTypes';
-import { SortState } from '@navikt/ds-react';
 import {
   NoNavAapOppgaveListeOppgaveSorteringSortBy,
   NoNavAapOppgaveListeOppgaveSorteringSortOrder,
   PathsMineOppgaverGetParametersQuerySortorder,
 } from '@navikt/aap-oppgave-typescript-types';
+import { SortState } from '@navikt/ds-react/Table';
 import { ScopedBackendSortState } from 'hooks/oppgave/BackendSorteringHook';
+import { MineOppgaverQueryParams, OppgavelisteRequest } from 'lib/types/oppgaveTypes';
+import { Oppgave } from 'lib/types/types';
 
 export function queryParamsArray(key: string, values: (string | number)[]) {
   const filtered = values.filter((value) => value !== undefined && value !== null && value !== '');

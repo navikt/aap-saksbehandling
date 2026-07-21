@@ -1,5 +1,6 @@
 import { InntektTabell } from 'components/inntekttabell/InntektTabell';
-import { BodyShort, Table } from '@navikt/ds-react';
+import { Table } from '@navikt/ds-react/Table';
+import { BodyShort } from '@navikt/ds-react/Typography';
 
 import { formaterTilG } from 'lib/utils/string';
 import { GjeldendeGrunnbeløp, YrkesskadeGrunnlag } from 'lib/types/types';

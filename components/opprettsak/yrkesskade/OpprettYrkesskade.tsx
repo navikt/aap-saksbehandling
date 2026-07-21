@@ -1,7 +1,10 @@
 'use client';
 
 import { PlusIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Button, Checkbox, HStack, Label, VStack } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { Checkbox } from '@navikt/ds-react/Checkbox';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { Label } from '@navikt/ds-react/Typography';
 import { useFieldArray, UseFormReturn, useWatch } from 'react-hook-form';
 import { OpprettSakFormFields } from 'components/opprettsak/OpprettSakLocal';
 import { JaEllerNei } from 'lib/utils/form';

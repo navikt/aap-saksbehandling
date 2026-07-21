@@ -1,6 +1,6 @@
 'use client';
 
-import { ExpansionCard } from '@navikt/ds-react';
+import { ExpansionCard } from '@navikt/ds-react/ExpansionCard';
 import { ReactNode } from 'react';
 import styles from 'components/vilkårskort/Vilkårskort.module.css';
 import { StegType } from 'lib/types/types';

@@ -1,4 +1,4 @@
-import { Tag } from '@navikt/ds-react';
+import { Tag } from '@navikt/ds-react/Tag';
 import { ClockDashedIcon } from '@navikt/aksel-icons';
 
 export const ArenaStatus = () => {

@@ -1,4 +1,5 @@
-import { DatePicker, useDatepicker } from '@navikt/ds-react';
+import { DatePicker } from '@navikt/ds-react/DatePicker';
+import { useDatepicker } from '@navikt/ds-react/DatePicker';
 import { addYears, isEqual, isValid, subYears } from 'date-fns';
 import React, { useEffect } from 'react';
 import { Control, FieldPath, FieldValues, RegisterOptions, useController } from 'react-hook-form';

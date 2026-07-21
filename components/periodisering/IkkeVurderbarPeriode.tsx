@@ -4,7 +4,9 @@ import { CustomExpandableCard } from 'components/customexpandablecard/CustomExpa
 import { isBefore, isSameDay, sub } from 'date-fns';
 import { formatDatoMedMånedsnavn } from 'lib/utils/date';
 import { useState } from 'react';
-import { BodyShort, HStack, Tag, VStack } from '@navikt/ds-react';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { Tag } from '@navikt/ds-react/Tag';
+import { BodyShort } from '@navikt/ds-react/Typography';
 import styles from 'components/behandlinger/oppholdskrav/oppholdskrav.module.css';
 import { Alert } from 'components/alert/Alert';
 

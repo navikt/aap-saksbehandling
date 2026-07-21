@@ -1,4 +1,4 @@
-import { Switch } from '@navikt/ds-react';
+import { Switch } from '@navikt/ds-react/Switch';
 import React, { ReactNode } from 'react';
 import { Control, Controller, FieldPath, FieldValues, RegisterOptions } from 'react-hook-form';
 

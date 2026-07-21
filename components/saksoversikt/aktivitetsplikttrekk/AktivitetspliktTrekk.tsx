@@ -1,4 +1,6 @@
-import { Detail, Heading, HStack, Table, VStack } from '@navikt/ds-react';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { Table } from '@navikt/ds-react/Table';
+import { Detail, Heading } from '@navikt/ds-react/Typography';
 import { Spinner } from 'components/felles/Spinner';
 import { SaksInfo } from 'lib/types/types';
 import { TableStyled } from 'components/tablestyled/TableStyled';

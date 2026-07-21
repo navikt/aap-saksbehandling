@@ -4,7 +4,7 @@ import { useFieldArray } from 'react-hook-form';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { YrkesskadeTabell } from 'components/behandlinger/grunnlag/yrkesskadegrunnlagberegning/yrkesskadetabell/YrkesskadeTabell';
-import { BodyShort, Label } from '@navikt/ds-react';
+import { BodyShort, Label } from '@navikt/ds-react/Typography';
 
 import styles from './YrkesskadeGrunnlagBeregning.module.css';
 import { MellomlagretVurdering, YrkeskadeBeregningGrunnlag, YrkesskadeBeløpVurderingResponse } from 'lib/types/types';

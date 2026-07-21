@@ -1,4 +1,6 @@
-import { BodyShort, Dropdown, HStack } from '@navikt/ds-react';
+import { Dropdown } from '@navikt/ds-react/Dropdown';
+import { HStack } from '@navikt/ds-react/Stack';
+import { BodyShort } from '@navikt/ds-react/Typography';
 import { CheckmarkCircleFillIcon } from '@navikt/aksel-icons';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';

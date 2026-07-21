@@ -1,5 +1,7 @@
 import { ToTrinnsVurdering } from 'lib/types/types';
-import { BodyShort, Label, Link as AkselLink, VStack } from '@navikt/ds-react';
+import { Link as AkselLink } from '@navikt/ds-react/Link';
+import { VStack } from '@navikt/ds-react/Stack';
+import { BodyShort, Label } from '@navikt/ds-react/Typography';
 import { Behovstype, mapBehovskodeTilBehovstype } from 'lib/utils/form';
 import Link from 'next/link';
 

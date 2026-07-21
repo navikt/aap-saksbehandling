@@ -1,4 +1,4 @@
-import { Loader } from '@navikt/ds-react';
+import { Loader } from '@navikt/ds-react/Loader';
 
 import styles from './ForhåndsvisBrev.module.css';
 

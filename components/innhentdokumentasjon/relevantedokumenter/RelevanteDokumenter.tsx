@@ -1,4 +1,12 @@
-import { ActionMenu, BodyShort, Button, HGrid, InfoCard, Link, Loader, Table, VStack } from '@navikt/ds-react';
+import { ActionMenu } from '@navikt/ds-react/ActionMenu';
+import { Button } from '@navikt/ds-react/Button';
+import { HGrid } from '@navikt/ds-react/HGrid';
+import { InfoCard } from '@navikt/ds-react/InfoCard';
+import { Link } from '@navikt/ds-react/Link';
+import { Loader } from '@navikt/ds-react/Loader';
+import { VStack } from '@navikt/ds-react/Stack';
+import { Table } from '@navikt/ds-react/Table';
+import { BodyShort } from '@navikt/ds-react/Typography';
 import useSWR from 'swr';
 
 import styles from './RelevanteDokumenter.module.css';

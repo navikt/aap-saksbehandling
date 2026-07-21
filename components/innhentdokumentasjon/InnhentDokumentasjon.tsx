@@ -1,6 +1,8 @@
 'use client';
 
-import { Button, Loader, VStack } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { Loader } from '@navikt/ds-react/Loader';
+import { VStack } from '@navikt/ds-react/Stack';
 import { useState } from 'react';
 
 import { InnhentDokumentasjonSkjema } from 'components/innhentdokumentasjon/innhentdokumentasjonskjema/InnhentDokumentasjonSkjema';

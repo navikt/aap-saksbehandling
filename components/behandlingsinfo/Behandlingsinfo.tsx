@@ -1,4 +1,6 @@
-import { BodyShort, HGrid, Label, VStack } from '@navikt/ds-react';
+import { HGrid } from '@navikt/ds-react/HGrid';
+import { VStack } from '@navikt/ds-react/Stack';
+import { BodyShort, Label } from '@navikt/ds-react/Typography';
 import { DetaljertBehandling, Klageresultat, SaksInfo } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 

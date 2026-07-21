@@ -2,7 +2,10 @@
 
 import { FieldArray, UseFormReturn } from 'react-hook-form';
 import { TableStyled } from 'components/tablestyled/TableStyled';
-import { Checkbox, ErrorMessage, Table, VStack } from '@navikt/ds-react';
+import { Checkbox } from '@navikt/ds-react/Checkbox';
+import { VStack } from '@navikt/ds-react/Stack';
+import { Table } from '@navikt/ds-react/Table';
+import { ErrorMessage } from '@navikt/ds-react/Typography';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { validerDato } from 'lib/validation/dateValidation';

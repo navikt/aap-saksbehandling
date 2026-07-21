@@ -1,5 +1,5 @@
 import { XMarkOctagonIcon } from '@navikt/aksel-icons';
-import { BodyLong, Label } from '@navikt/ds-react';
+import { BodyLong, Label } from '@navikt/ds-react/Typography';
 import { SideProsessKort } from 'components/sideprosesskort/SideProsessKort';
 
 interface Props {

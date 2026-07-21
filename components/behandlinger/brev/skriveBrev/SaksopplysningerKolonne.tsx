@@ -1,6 +1,6 @@
 import { SaksopplysningerKort } from 'components/behandlinger/brev/skriveBrev/SaksopplysningerKort';
 import styles from './SaksopplysningerKolonne.module.css';
-import { Label } from '@navikt/ds-react';
+import { Label } from '@navikt/ds-react/Typography';
 import {
   RefusjonkravVurderingResponse,
   Aktivitetsplikt11_7Grunnlag,

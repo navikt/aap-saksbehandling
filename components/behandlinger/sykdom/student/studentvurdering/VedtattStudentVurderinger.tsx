@@ -1,4 +1,4 @@
-import { VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react/Stack';
 import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
 import { Dato } from 'lib/types/Dato';
 import { getJaNeiEllerIkkeBesvart } from 'lib/utils/form';

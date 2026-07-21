@@ -1,7 +1,9 @@
 'use client';
 
 import { PlusIcon } from '@navikt/aksel-icons';
-import { Button, Heading, ReadMore } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { ReadMore } from '@navikt/ds-react/ReadMore';
+import { Heading } from '@navikt/ds-react/Typography';
 import { parse } from 'date-fns';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';

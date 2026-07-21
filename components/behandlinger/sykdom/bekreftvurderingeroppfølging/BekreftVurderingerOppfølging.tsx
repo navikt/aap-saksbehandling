@@ -5,7 +5,9 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgG
 import { Behovstype, mapBehovskodeTilBehovstype } from 'lib/utils/form';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
-import { Button, ErrorSummary, VStack } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { ErrorSummary } from '@navikt/ds-react/ErrorSummary';
+import { VStack } from '@navikt/ds-react/Stack';
 import { BekreftVurderingerOppfølgingGrunnlag } from 'lib/types/types';
 import { byggVilkårskortLenke } from 'lib/utils/vilkårskort';
 import { useBekreftVurderingerGrunnlag } from 'hooks/saksbehandling/BekrefteVurderingerHook';

@@ -1,4 +1,6 @@
-import { Box, HGrid, Label } from '@navikt/ds-react';
+import { Box } from '@navikt/ds-react/Box';
+import { HGrid } from '@navikt/ds-react/HGrid';
+import { Label } from '@navikt/ds-react/Typography';
 import { PadlockLockedIcon } from '@navikt/aksel-icons';
 
 import styles from './StandardtekstBoks.module.css';

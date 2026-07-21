@@ -25,7 +25,7 @@ import { OvergangUforeVurderingFormInput } from 'components/behandlinger/sykdom/
 import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { OvergangUforeTidligereVurdering } from 'components/behandlinger/sykdom/overgangufore/OvergangUforeTidligereVurdering';
-import { VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react/Stack';
 import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
 import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';

@@ -1,4 +1,8 @@
-import { BodyShort, Button, Detail, Table, Tooltip, VStack } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { VStack } from '@navikt/ds-react/Stack';
+import { Table } from '@navikt/ds-react/Table';
+import { Tooltip } from '@navikt/ds-react/Tooltip';
+import { BodyShort, Detail } from '@navikt/ds-react/Typography';
 import { Dato } from 'lib/types/Dato';
 import { isAfter } from 'date-fns';
 import { DagDto, MeldeperiodeMedMeldekortDto, MeldepliktStatuser } from 'lib/types/types';

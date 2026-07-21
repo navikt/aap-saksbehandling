@@ -3,7 +3,9 @@
 import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
 import { CheckmarkIcon, ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import { BodyShort, Detail, HStack, Label, Table, VStack } from '@navikt/ds-react';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { Table } from '@navikt/ds-react/Table';
+import { BodyShort, Detail, Label } from '@navikt/ds-react/Typography';
 import { AlderGrunnlag, AvslagÅrsak } from 'lib/types/types';
 
 import styles from './Alder.module.css';

@@ -1,7 +1,9 @@
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { BarnetilleggFormFields } from 'components/behandlinger/barnetillegg/barnetilleggvurdering/BarnetilleggVurdering';
 import { ChildEyesIcon, TrashIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, Detail, Tag } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { Tag } from '@navikt/ds-react/Tag';
+import { BodyShort, Detail } from '@navikt/ds-react/Typography';
 import { kalkulerAlder, kalkulerAlderFraTidspunkt } from 'components/behandlinger/alder/Alder';
 import { JaEllerNei } from 'lib/utils/form';
 

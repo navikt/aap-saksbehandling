@@ -1,7 +1,10 @@
 'use client';
 
 import { PlusIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Button, Checkbox, Heading, HStack, VStack } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { Checkbox } from '@navikt/ds-react/Checkbox';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { Heading } from '@navikt/ds-react/Typography';
 import { clientLeggTilYrkesskade } from 'lib/clientApi';
 import { useFetch } from 'hooks/FetchHook';
 import { useFieldArray, useForm } from 'react-hook-form';

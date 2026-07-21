@@ -17,7 +17,7 @@ import { useFieldArray } from 'react-hook-form';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { SubmitEvent, SubmitEventHandler, useState } from 'react';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
-import { VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react/Stack';
 import { Avslag11_27KravTabell } from 'components/behandlinger/samordning/avslag11_27/Avslag11_27KravTabell';
 import { Avslag11_27KravGruppe } from 'components/behandlinger/samordning/avslag11_27/avslag11_27KravGruppe/Avslag11_27KravGruppe';
 import { useConfigForm } from 'components/form/FormHook';

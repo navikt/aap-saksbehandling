@@ -1,4 +1,6 @@
-import { BodyShort, Table, VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react/Stack';
+import { Table } from '@navikt/ds-react/Table';
+import { BodyShort } from '@navikt/ds-react/Typography';
 import { Inntekt } from 'lib/types/types';
 
 import { formaterTilG, formaterTilNok } from 'lib/utils/string';

@@ -1,4 +1,5 @@
-import { Button, VStack } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { VStack } from '@navikt/ds-react/Stack';
 import { UseFormReturn } from 'react-hook-form';
 import { FormFieldsToTrinnsVurdering } from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingForm';
 import { isLocal, isProd } from 'lib/utils/environment';

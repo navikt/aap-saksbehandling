@@ -1,5 +1,6 @@
 import { useRouter } from 'next/navigation';
-import { ActionMenu, Button } from '@navikt/ds-react';
+import { ActionMenu } from '@navikt/ds-react/ActionMenu';
+import { Button } from '@navikt/ds-react/Button';
 import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
 import { byggKelvinURL } from 'lib/utils/request';
 import { Oppgave } from 'lib/types/oppgaveTypes';

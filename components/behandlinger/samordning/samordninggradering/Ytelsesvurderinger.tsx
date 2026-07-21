@@ -1,5 +1,9 @@
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
-import { BodyShort, Box, Button, HStack, Label, Table, VStack } from '@navikt/ds-react';
+import { Box } from '@navikt/ds-react/Box';
+import { Button } from '@navikt/ds-react/Button';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { Table } from '@navikt/ds-react/Table';
+import { BodyShort, Label } from '@navikt/ds-react/Typography';
 import { SamordningGraderingFormfields } from 'components/behandlinger/samordning/samordninggradering/SamordningGradering';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { ValuePair } from 'components/form/FormField';

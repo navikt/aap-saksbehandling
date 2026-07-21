@@ -1,4 +1,6 @@
-import { BodyLong, HStack, Loader, type LoaderProps } from '@navikt/ds-react';
+import { Loader, type LoaderProps } from '@navikt/ds-react/Loader';
+import { HStack } from '@navikt/ds-react/Stack';
+import { BodyLong } from '@navikt/ds-react/Typography';
 
 interface Props extends Omit<LoaderProps, 'title'> {
   visible?: boolean;

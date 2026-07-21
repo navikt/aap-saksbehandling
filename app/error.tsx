@@ -1,6 +1,11 @@
 'use client';
 
-import { BodyShort, Box, Heading, HGrid, Label, Link, Page, VStack } from '@navikt/ds-react';
+import { Box } from '@navikt/ds-react/Box';
+import { HGrid } from '@navikt/ds-react/HGrid';
+import { Link } from '@navikt/ds-react/Link';
+import { Page } from '@navikt/ds-react/Page';
+import { VStack } from '@navikt/ds-react/Stack';
+import { BodyShort, Heading, Label } from '@navikt/ds-react/Typography';
 import { faro, LogLevel } from '@grafana/faro-web-sdk';
 import { usePathname } from 'next/navigation';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';

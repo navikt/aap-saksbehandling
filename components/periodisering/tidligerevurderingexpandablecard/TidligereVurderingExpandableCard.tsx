@@ -4,7 +4,8 @@ import { CustomExpandableCard } from 'components/customexpandablecard/CustomExpa
 import { isBefore, isSameDay, sub } from 'date-fns';
 import { formatDatoMedMånedsnavn, formaterDatoForFrontend } from 'lib/utils/date';
 import { ReactNode, useState } from 'react';
-import { BodyShort, HStack, VStack } from '@navikt/ds-react';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { BodyShort } from '@navikt/ds-react/Typography';
 import styles from 'components/behandlinger/oppholdskrav/oppholdskrav.module.css';
 import { VurdertAvAnsattDetail } from 'components/vurdertav/VurdertAvAnsattDetail';
 import { VurderingerMeta } from 'lib/types/types';

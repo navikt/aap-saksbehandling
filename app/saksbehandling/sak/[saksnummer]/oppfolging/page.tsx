@@ -1,4 +1,5 @@
-import { Box, Page as AkselPage } from '@navikt/ds-react';
+import { Box } from '@navikt/ds-react/Box';
+import { Page as AkselPage } from '@navikt/ds-react/Page';
 import { hentSak } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
 import { OpprettOppfølgingsBehandling } from 'components/saksoversikt/opprettoppfølgingsbehandling/OpprettOppfølgingsbehandling';

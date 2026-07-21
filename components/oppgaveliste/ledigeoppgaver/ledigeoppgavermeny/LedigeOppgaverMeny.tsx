@@ -1,4 +1,7 @@
-import { ActionMenu, Button, HStack, Loader } from '@navikt/ds-react';
+import { ActionMenu } from '@navikt/ds-react/ActionMenu';
+import { Button } from '@navikt/ds-react/Button';
+import { Loader } from '@navikt/ds-react/Loader';
+import { HStack } from '@navikt/ds-react/Stack';
 import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
 import { Dispatch, SetStateAction, useTransition } from 'react';
 import { Oppgave } from 'lib/types/oppgaveTypes';

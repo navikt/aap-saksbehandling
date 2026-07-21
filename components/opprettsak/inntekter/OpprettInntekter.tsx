@@ -1,7 +1,9 @@
 import React from 'react';
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { OpprettSakFormFields } from 'components/opprettsak/OpprettSakLocal';
-import { Button, HStack, Label, VStack } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { Label } from '@navikt/ds-react/Typography';
 import { PlusIcon, TrashIcon } from '@navikt/aksel-icons';
 import { validerÅrstall } from 'lib/validation/dateValidation';
 import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';

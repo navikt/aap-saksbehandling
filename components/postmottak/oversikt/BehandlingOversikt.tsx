@@ -1,6 +1,10 @@
 'use client';
 
-import { Button, Heading, Page, Table, Tag } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { Page } from '@navikt/ds-react/Page';
+import { Table } from '@navikt/ds-react/Table';
+import { Tag } from '@navikt/ds-react/Tag';
+import { Heading } from '@navikt/ds-react/Typography';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { useRouter } from 'next/navigation';
 import { EyeIcon } from '@navikt/aksel-icons';

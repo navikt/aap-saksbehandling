@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { describe, expect, test, vi } from 'vitest';
 import { useConfigForm } from '../FormHook';
 import { FormField } from '../FormField';
-import { Button } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
 import { render, screen, waitFor, within } from '@testing-library/react';
 
 describe('Combobox', () => {

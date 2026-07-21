@@ -1,7 +1,11 @@
 'use client';
 
 import { Behovstype } from 'lib/utils/form';
-import { BodyShort, Box, Label, List, Table, VStack } from '@navikt/ds-react';
+import { Box } from '@navikt/ds-react/Box';
+import { List } from '@navikt/ds-react/List';
+import { VStack } from '@navikt/ds-react/Stack';
+import { Table } from '@navikt/ds-react/Table';
+import { BodyShort, Label } from '@navikt/ds-react/Typography';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 

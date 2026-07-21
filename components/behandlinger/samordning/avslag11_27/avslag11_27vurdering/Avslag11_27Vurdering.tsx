@@ -1,6 +1,7 @@
 'use client';
 
-import { Radio, VStack } from '@navikt/ds-react';
+import { Radio } from '@navikt/ds-react/Radio';
+import { VStack } from '@navikt/ds-react/Stack';
 import { UseFormReturn } from 'react-hook-form';
 import { JaEllerNei } from 'lib/utils/form';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';

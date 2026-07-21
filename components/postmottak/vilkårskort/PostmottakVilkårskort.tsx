@@ -1,6 +1,8 @@
 'use client';
 
-import { Button, ExpansionCard, HStack, VStack } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { ExpansionCard } from '@navikt/ds-react/ExpansionCard';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 
 import styles from './VilkårsKort.module.css';

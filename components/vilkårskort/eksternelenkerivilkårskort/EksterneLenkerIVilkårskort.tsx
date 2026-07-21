@@ -1,6 +1,6 @@
 'use client';
 
-import { Link } from '@navikt/ds-react';
+import { Link } from '@navikt/ds-react/Link';
 import { StegType } from 'lib/types/types';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { lenkerPerSteg } from 'components/vilkårskort/eksternelenkerivilkårskort/lenkerPerSteg';

@@ -1,4 +1,5 @@
-import { Heading, VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react/Stack';
+import { Heading } from '@navikt/ds-react/Typography';
 import { MeldekortTabell } from 'components/saksoversikt/meldekortoversikt/meldekorttabell/MeldekortTabell';
 import { SaksInfo } from 'lib/types/types';
 import { Alert } from 'components/alert/Alert';

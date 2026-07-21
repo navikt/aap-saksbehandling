@@ -1,4 +1,6 @@
-import { BodyShort, Button, Modal } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { Modal } from '@navikt/ds-react/Modal';
+import { BodyShort } from '@navikt/ds-react/Typography';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { useForm } from 'react-hook-form';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';

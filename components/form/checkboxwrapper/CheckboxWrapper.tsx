@@ -1,4 +1,4 @@
-import { CheckboxGroup } from '@navikt/ds-react';
+import { CheckboxGroup } from '@navikt/ds-react/Checkbox';
 import React, { ReactNode } from 'react';
 import { Control, Controller, FieldPath, FieldValues, RegisterOptions } from 'react-hook-form';
 import { createSyntheticEvent } from 'lib/types/SyntheticEvent';

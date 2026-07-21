@@ -1,6 +1,12 @@
 'use client';
 
-import { Box, Button, HGrid, Label, Tabs, Tooltip, VStack } from '@navikt/ds-react';
+import { Box } from '@navikt/ds-react/Box';
+import { Button } from '@navikt/ds-react/Button';
+import { HGrid } from '@navikt/ds-react/HGrid';
+import { VStack } from '@navikt/ds-react/Stack';
+import { Tabs } from '@navikt/ds-react/Tabs';
+import { Tooltip } from '@navikt/ds-react/Tooltip';
+import { Label } from '@navikt/ds-react/Typography';
 import {
   ChevronLeftDoubleIcon,
   ChevronRightDoubleIcon,

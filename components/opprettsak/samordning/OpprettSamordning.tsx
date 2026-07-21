@@ -1,7 +1,9 @@
 'use client';
 
 import { PlusIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Button, HStack, Label, VStack } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { Label } from '@navikt/ds-react/Typography';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
 import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';

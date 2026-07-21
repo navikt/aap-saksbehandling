@@ -1,6 +1,9 @@
 'use client';
 
-import { BodyShort, HelpText, HStack, Table } from '@navikt/ds-react';
+import { HelpText } from '@navikt/ds-react/HelpText';
+import { HStack } from '@navikt/ds-react/Stack';
+import { Table } from '@navikt/ds-react/Table';
+import { BodyShort } from '@navikt/ds-react/Typography';
 import { tilhørighetVurdering } from 'lib/types/types';
 import { VisuellTidslinjeInnhold } from './VisuellTidslinjeInnhold';
 import { TableStyled } from 'components/tablestyled/TableStyled';

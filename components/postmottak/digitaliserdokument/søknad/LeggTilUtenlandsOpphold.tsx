@@ -1,4 +1,7 @@
-import { Button, HStack, Radio, TextField, VStack } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { Radio } from '@navikt/ds-react/Radio';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { TextField } from '@navikt/ds-react/TextField';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { UseFieldArrayRemove, UseFormReturn } from 'react-hook-form';
 import { SøknadFormFields } from 'components/postmottak/digitaliserdokument/søknad/DigitaliserSøknad';

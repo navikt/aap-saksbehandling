@@ -3,7 +3,7 @@
 import { endOfWeek, format, getISOWeek, startOfWeek } from 'date-fns';
 import { FieldArrayWithId, useFieldArray, useFormContext } from 'react-hook-form';
 
-import { VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react/Stack';
 import { RedigerMeldekortFormFields } from 'components/saksoversikt/meldekortoversikt/redigermeldekortmodal/RedigerMeldekortModal';
 import { UkeRad } from 'components/saksoversikt/meldekortoversikt/utfyllingkalender/ukerad/UkeRad';
 import { replaceCommasWithDots } from 'lib/utils/string';

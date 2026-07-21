@@ -1,6 +1,11 @@
 'use client';
 
-import { BodyShort, Box, Button, Chips, Detail, HGrid, HStack, VStack } from '@navikt/ds-react';
+import { Box } from '@navikt/ds-react/Box';
+import { Button } from '@navikt/ds-react/Button';
+import { Chips } from '@navikt/ds-react/Chips';
+import { HGrid } from '@navikt/ds-react/HGrid';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { BodyShort, Detail } from '@navikt/ds-react/Typography';
 
 import styles from '../Filtrering.module.css';
 import { useEffect, useState } from 'react';

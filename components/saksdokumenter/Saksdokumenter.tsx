@@ -1,4 +1,10 @@
-import { BodyShort, Button, HStack, Link, Pagination, Table, Tooltip, VStack } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { Link } from '@navikt/ds-react/Link';
+import { Pagination } from '@navikt/ds-react/Pagination';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { Table } from '@navikt/ds-react/Table';
+import { Tooltip } from '@navikt/ds-react/Tooltip';
+import { BodyShort } from '@navikt/ds-react/Typography';
 import { formaterDatoForFrontend, formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import useSWR from 'swr';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';

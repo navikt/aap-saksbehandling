@@ -1,6 +1,8 @@
 'use client';
 
-import { Checkbox, Link, Table } from '@navikt/ds-react';
+import { Checkbox } from '@navikt/ds-react/Checkbox';
+import { Link } from '@navikt/ds-react/Link';
+import { Table } from '@navikt/ds-react/Table';
 
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { Dokument } from 'components/dokumenttabell/DokumentTabell';

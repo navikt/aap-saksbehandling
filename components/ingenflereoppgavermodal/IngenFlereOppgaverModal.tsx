@@ -1,6 +1,8 @@
 'use client';
 
-import { BodyShort, Button, Modal } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { Modal } from '@navikt/ds-react/Modal';
+import { BodyShort } from '@navikt/ds-react/Typography';
 import { useRouter } from 'next/navigation';
 import { CheckmarkCircleIcon } from '@navikt/aksel-icons';
 import { useIngenFlereOppgaverModal } from 'hooks/saksbehandling/IngenFlereOppgaverModalHook';

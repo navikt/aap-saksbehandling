@@ -1,4 +1,6 @@
-import { BodyShort, Button, Modal } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { Modal } from '@navikt/ds-react/Modal';
+import { BodyShort } from '@navikt/ds-react/Typography';
 import { useState } from 'react';
 import { isError, isSuccess } from 'lib/utils/api';
 import { clientKnyttTilAnnenSak } from 'lib/dokumentClientApi';

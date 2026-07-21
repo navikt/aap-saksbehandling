@@ -2,7 +2,7 @@ import { describe, test, expect, vi } from 'vitest';
 import React from 'react';
 import { useConfigForm } from '../FormHook';
 import { FormField } from '../FormField';
-import { Button } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
 
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';

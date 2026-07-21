@@ -1,4 +1,6 @@
-import { Box, Heading, HStack } from '@navikt/ds-react';
+import { Box } from '@navikt/ds-react/Box';
+import { HStack } from '@navikt/ds-react/Stack';
+import { Heading } from '@navikt/ds-react/Typography';
 import { ReactNode } from 'react';
 import { isProd } from 'lib/utils/environment';
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';

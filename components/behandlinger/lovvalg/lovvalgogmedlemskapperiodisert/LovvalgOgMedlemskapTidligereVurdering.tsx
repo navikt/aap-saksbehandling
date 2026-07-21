@@ -1,4 +1,4 @@
-import { VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react/Stack';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { PeriodisertManuellVurderingForLovvalgMedlemskapResponse } from 'lib/types/types';
 import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';

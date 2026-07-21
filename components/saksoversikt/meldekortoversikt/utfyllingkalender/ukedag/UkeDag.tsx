@@ -1,4 +1,5 @@
-import { BodyShort, Detail, VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react/Stack';
+import { BodyShort, Detail } from '@navikt/ds-react/Typography';
 
 import { format } from 'date-fns';
 

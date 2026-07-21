@@ -1,4 +1,6 @@
-import { BodyShort, Button, Heading, VStack } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { VStack } from '@navikt/ds-react/Stack';
+import { BodyShort, Heading } from '@navikt/ds-react/Typography';
 import { clientKanDistribuereBrev } from 'lib/clientApi';
 import { Mottaker } from 'lib/types/types';
 import { isError } from 'lib/utils/api';

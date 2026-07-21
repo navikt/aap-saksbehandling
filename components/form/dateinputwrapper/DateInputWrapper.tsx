@@ -1,4 +1,4 @@
-import { TextField } from '@navikt/ds-react';
+import { TextField } from '@navikt/ds-react/TextField';
 import React, { FocusEventHandler, HTMLInputAutoCompleteAttribute, ReactNode } from 'react';
 import { Control, Controller, FieldPath, FieldValues, RegisterOptions } from 'react-hook-form';
 import { mapShortDateToDateString } from './dateMapper';

@@ -78,9 +78,15 @@ const config = [
         {
           paths: [
             {
+              // Ban barrel — use subpath imports to avoid loading the whole library
               name: '@navikt/ds-react',
-              importNames: ['Alert'],
-              message: 'Bruk Alert fra components/alert/Alert i stedet for Alert fra @navikt/ds-react.',
+              message:
+                "Use subpath imports, e.g. import { Button } from '@navikt/ds-react/Button'. See scripts/ds-react-subpath-imports.mjs for the full mapping.",
+            },
+            {
+              // Even via the correct subpath, prefer the local wrapper for Alert
+              name: '@navikt/ds-react/Alert',
+              message: 'Bruk Alert fra components/alert/Alert i stedet.',
             },
           ],
         },

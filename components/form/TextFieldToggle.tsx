@@ -1,4 +1,7 @@
-import { BodyShort, Button, HStack, TextField, VStack } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { TextField } from '@navikt/ds-react/TextField';
+import { BodyShort } from '@navikt/ds-react/Typography';
 import React, { useState } from 'react';
 import { PencilIcon } from '@navikt/aksel-icons';
 import { Controller, FieldPath, FieldValues, RegisterOptions, UseFormReturn } from 'react-hook-form';

@@ -2,7 +2,8 @@
 
 import { eachDayOfInterval } from 'date-fns';
 
-import { BodyShort, VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react/Stack';
+import { BodyShort } from '@navikt/ds-react/Typography';
 
 import styles from './UkeRad.module.css';
 

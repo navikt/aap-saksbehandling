@@ -2,7 +2,9 @@
 
 import { KravGrunnlag, MellomlagretVurdering } from 'lib/types/types';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { BodyShort, Box, VStack } from '@navikt/ds-react';
+import { Box } from '@navikt/ds-react/Box';
+import { VStack } from '@navikt/ds-react/Stack';
+import { BodyShort } from '@navikt/ds-react/Typography';
 import { KravTabell } from 'components/behandlinger/krav/KravTabell';
 import { KravVurderingModal } from 'components/behandlinger/krav/KravVurderingModal';
 import { LeggTilKravModal } from 'components/behandlinger/krav/LeggTilKravModal';

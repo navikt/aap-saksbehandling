@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Table } from '@navikt/ds-react';
+import { Table } from '@navikt/ds-react/Table';
 import {
   MeldekortTabellRow,
   utledOppdatertAv,

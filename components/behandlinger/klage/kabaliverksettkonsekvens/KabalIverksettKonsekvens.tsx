@@ -2,7 +2,8 @@
 
 import { SvarFraAndreinstansGrunnlag, SvarFraAndreinstansVurdering } from 'lib/types/types';
 import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
-import { BodyShort, HStack, VStack } from '@navikt/ds-react';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { BodyShort } from '@navikt/ds-react/Typography';
 import { formaterSvartype, formaterUtfall } from 'lib/utils/svarfraandreinstans';
 import { hjemmelMap } from 'lib/utils/hjemmel';
 

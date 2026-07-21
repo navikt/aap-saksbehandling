@@ -2,7 +2,7 @@
 
 import { PåVentInfoboks } from 'components/oppgaveliste/påventinfoboks/PåVentInfoboks';
 import { SvarFraBehandler } from 'components/oppgaveliste/svarfrabehandler/SvarFraBehandler';
-import { HStack } from '@navikt/ds-react';
+import { HStack } from '@navikt/ds-react/Stack';
 import { Oppgave } from 'lib/types/oppgaveTypes';
 import { Returboks } from '../returboks/Returboks';
 import { AdressebeskyttelseInfoBoks } from 'components/oppgaveliste/adressebeskyttelse/AdressebeskyttelseInfoBoks';

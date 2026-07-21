@@ -4,7 +4,7 @@ import type { Submittable } from 'components/postmottak/digitaliserdokument/Digi
 import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
-import { Button } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
 import { SubmitEventHandler } from 'react';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { KlageV0 } from 'lib/types/types';

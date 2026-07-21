@@ -1,6 +1,7 @@
 'use client';
 
-import { InlineMessage, VStack } from '@navikt/ds-react';
+import { InlineMessage } from '@navikt/ds-react/InlineMessage';
+import { VStack } from '@navikt/ds-react/Stack';
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { useEffect } from 'react';
 import { addDays, addWeeks, eachDayOfInterval, getISOWeek, isAfter } from 'date-fns';

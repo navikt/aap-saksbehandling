@@ -1,5 +1,6 @@
 import { Controller, FieldPath, FieldValues, RegisterOptions, UseFormReturn } from 'react-hook-form';
-import { ErrorMessage, Label, Skeleton } from '@navikt/ds-react';
+import { Skeleton } from '@navikt/ds-react/Skeleton';
+import { ErrorMessage, Label } from '@navikt/ds-react/Typography';
 import { customStyles } from 'components/form/asynccombosearch/AsyncComboSearchStyling';
 import { PadlockLockedFillIcon } from '@navikt/aksel-icons';
 

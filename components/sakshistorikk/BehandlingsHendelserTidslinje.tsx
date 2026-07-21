@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { BehandlingsHistorikk } from 'lib/types/types';
 import { BehandlingsHendelse } from 'components/sakshistorikk/BehandlingsHendelse';
-import { BodyShort, Link, Process } from '@navikt/ds-react';
+import { Link } from '@navikt/ds-react/Link';
+import { Process } from '@navikt/ds-react/Process';
+import { BodyShort } from '@navikt/ds-react/Typography';
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 
 interface Props {

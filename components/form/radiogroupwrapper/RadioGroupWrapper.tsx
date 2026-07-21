@@ -1,4 +1,5 @@
-import { HStack, RadioGroup } from '@navikt/ds-react';
+import { RadioGroup } from '@navikt/ds-react/Radio';
+import { HStack } from '@navikt/ds-react/Stack';
 import React, { ReactNode } from 'react';
 import { Control, Controller, FieldPath, FieldValues, RegisterOptions } from 'react-hook-form';
 import { createSyntheticEvent } from 'lib/types/SyntheticEvent';

@@ -1,7 +1,7 @@
 'use client';
 
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
-import { HStack, VStack } from '@navikt/ds-react';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
 import {
   NyVurderingExpandableCard,
   skalVæreInitiellEkspandert,

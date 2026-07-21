@@ -1,6 +1,10 @@
 'use client';
 
-import { BodyShort, Box, Heading, Link, Page, VStack } from '@navikt/ds-react';
+import { Box } from '@navikt/ds-react/Box';
+import { Link } from '@navikt/ds-react/Link';
+import { Page } from '@navikt/ds-react/Page';
+import { VStack } from '@navikt/ds-react/Stack';
+import { BodyShort, Heading } from '@navikt/ds-react/Typography';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 
 const SakIkkeFunnet = () => {

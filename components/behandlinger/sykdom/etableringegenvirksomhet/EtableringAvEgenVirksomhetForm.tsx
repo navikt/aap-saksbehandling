@@ -1,6 +1,10 @@
 'use client';
 
-import { BodyShort, Button, Heading, HStack, Label, Radio, Table, VStack } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { Radio } from '@navikt/ds-react/Radio';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { Table } from '@navikt/ds-react/Table';
+import { BodyShort, Heading, Label } from '@navikt/ds-react/Typography';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { validerDato } from 'lib/validation/dateValidation';
 import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';

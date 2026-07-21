@@ -1,7 +1,9 @@
 'use client';
 
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { BodyShort, Table, VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react/Stack';
+import { Table } from '@navikt/ds-react/Table';
+import { BodyShort } from '@navikt/ds-react/Typography';
 import { MellomlagretVurdering, SamordningTjenestePensjonGrunnlag } from 'lib/types/types';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { useConfigForm } from 'components/form/FormHook';

@@ -2,7 +2,11 @@
 
 import { Enhet } from 'lib/types/oppgaveTypes';
 import { useEffect, useState } from 'react';
-import { BodyShort, Box, Button, HStack, Label, Switch, VStack } from '@navikt/ds-react';
+import { Box } from '@navikt/ds-react/Box';
+import { Button } from '@navikt/ds-react/Button';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { Switch } from '@navikt/ds-react/Switch';
+import { BodyShort, Label } from '@navikt/ds-react/Typography';
 import { AlleOppgaverTabell } from 'components/oppgaveliste/alleoppgaver/alleoppgavertabell/AlleOppgaverTabell';
 import { useAlleOppgaverForEnhet } from 'hooks/oppgave/OppgaveHook';
 import { KøSelect } from 'components/oppgaveliste/køselect/KøSelect';

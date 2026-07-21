@@ -1,4 +1,7 @@
-import { BodyShort, Box, HGrid, Label, VStack } from '@navikt/ds-react';
+import { Box } from '@navikt/ds-react/Box';
+import { HGrid } from '@navikt/ds-react/HGrid';
+import { VStack } from '@navikt/ds-react/Stack';
+import { BodyShort, Label } from '@navikt/ds-react/Typography';
 import { KabalKlageResultat, Klageresultat } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import styles from 'components/behandlingsinfo/Behandlingsinfo.module.css';

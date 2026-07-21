@@ -1,7 +1,9 @@
 'use client';
 
 import { CheckmarkCircleIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, Modal } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { Modal } from '@navikt/ds-react/Modal';
+import { BodyShort } from '@navikt/ds-react/Typography';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { BehandlingFlytOgTilstand } from 'lib/types/postmottakTypes';

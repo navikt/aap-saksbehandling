@@ -1,6 +1,9 @@
 'use client';
 
-import { BodyShort, Box, Button, HStack, Label, VStack } from '@navikt/ds-react';
+import { Box } from '@navikt/ds-react/Box';
+import { Button } from '@navikt/ds-react/Button';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { BodyShort, Label } from '@navikt/ds-react/Typography';
 import { TasklistIcon } from '@navikt/aksel-icons';
 import { UseFormReturn } from 'react-hook-form';
 import { useState } from 'react';

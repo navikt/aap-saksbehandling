@@ -1,4 +1,6 @@
-import { Button, Dialog, VStack } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react/Button';
+import { Dialog } from '@navikt/ds-react/Dialog';
+import { VStack } from '@navikt/ds-react/Stack';
 import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { UtfyllingKalender } from 'components/saksoversikt/meldekortoversikt/utfyllingkalender/UtfyllingKalender';

@@ -1,6 +1,6 @@
 'use client';
 
-import { VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react/Stack';
 import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { BistandVurderingResponse } from 'lib/types/types';

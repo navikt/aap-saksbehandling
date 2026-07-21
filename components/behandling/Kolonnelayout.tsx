@@ -1,6 +1,6 @@
 'use client';
 
-import { HGrid } from '@navikt/ds-react';
+import { HGrid } from '@navikt/ds-react/HGrid';
 import { ReactNode, useState } from 'react';
 import { Saksbehandlingsoversikt } from 'components/saksbehandlingsoversikt/Saksbehandlingsoversikt';
 import { FetchResponse } from 'lib/utils/api';

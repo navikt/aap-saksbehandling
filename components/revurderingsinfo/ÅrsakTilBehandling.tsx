@@ -1,6 +1,9 @@
 'use client';
 
-import { BodyLong, Box, Detail, ExpansionCard, HStack, Label, VStack } from '@navikt/ds-react';
+import { Box } from '@navikt/ds-react/Box';
+import { ExpansionCard } from '@navikt/ds-react/ExpansionCard';
+import { HStack, VStack } from '@navikt/ds-react/Stack';
+import { BodyLong, Detail, Label } from '@navikt/ds-react/Typography';
 import { TypeBehandling, VurderingsbehovOgÅrsak } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { mapTilÅrsakTilOpprettelseTilTekst } from 'lib/utils/oversettelser';
