@@ -10,7 +10,8 @@ import { isSuccess } from 'lib/utils/api';
 import { hentArenaSakerForPerson } from 'lib/services/apiinternservice/apiInternService';
 import { unleashService } from 'lib/services/unleash/unleashService';
 import { Box } from '@navikt/ds-react';
-import { logError } from 'lib/serverutlis/logger';
+import { logError, logWarning } from 'lib/serverutlis/logger';
+import { erIngenTilgangError } from 'lib/utils/ingenTilgang';
 
 const Page = async (props: { params: Promise<{ saksnummer: string }> }) => {
   const params = await props.params;
@@ -19,7 +20,11 @@ const Page = async (props: { params: Promise<{ saksnummer: string }> }) => {
     hentSakPersoninfo(params.saksnummer),
     hentRettighetsinfo(params.saksnummer),
   ]).catch((err) => {
-    logError(`Feil i Promise.all ved henting av saksoversikt for ${params.saksnummer}`, err);
+    if (erIngenTilgangError(err)) {
+      logWarning(`Ingen tilgang til saksoversikt for ${params.saksnummer}`);
+    } else {
+      logError(`Feil i Promise.all ved henting av saksoversikt for ${params.saksnummer}`, err);
+    }
     throw err;
   });
   const rettighetsinfo = isSuccess(rettihetsinfoRes) ? rettihetsinfoRes.data : null;
