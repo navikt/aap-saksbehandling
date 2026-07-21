@@ -1,12 +1,12 @@
-import { beforeEach, describe, expect, it, test, vi } from 'vitest';
-
-import { render, screen, within } from 'lib/test/CustomRender';
 import { userEvent } from '@testing-library/user-event';
+import { render, screen, within } from 'lib/test/CustomRender';
 import { HelseinstitusjonGrunnlag, MellomlagretVurderingResponse } from 'lib/types/types';
-import { Behovstype } from 'lib/utils/form';
 import { FetchResponse } from 'lib/utils/api';
+import { Behovstype } from 'lib/utils/form';
+import { beforeEach, describe, expect, it, test, vi } from 'vitest';
 import createFetchMock from 'vitest-fetch-mock';
 import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
+
 import { Helseinstitusjon } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/Helseinstitusjon';
 
 const fetchMock = createFetchMock(vi);
@@ -512,12 +512,16 @@ describe('handleSubmit - periode beregning', () => {
   beforeEach(() => {
     capturedRequest = null;
 
-    window.EventSource = vi.fn(function (this: any) {
-      this.close = vi.fn();
-      this.addEventListener = vi.fn();
-      this.onmessage = null;
-      this.onerror = null;
-    }) as any;
+    Object.defineProperty(window, 'EventSource', {
+      value: vi.fn(function (this: EventSource) {
+        this.close = vi.fn();
+        this.addEventListener = vi.fn();
+        this.onmessage = null;
+        this.onerror = null;
+      }),
+      writable: true,
+      configurable: true,
+    });
 
     fetchMock.mockResponse(async (req) => {
       if (req.method === 'POST') {
