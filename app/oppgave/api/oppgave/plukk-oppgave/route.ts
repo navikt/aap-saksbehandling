@@ -1,13 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PlukkOppgaveRequest } from 'lib/types/oppgaveTypes';
+import { PlukkOppgaveDto } from 'lib/types/oppgaveTypes';
 import { plukkOppgave } from 'lib/services/oppgaveservice/oppgaveservice';
 import { logError, logInfo } from 'lib/serverutlis/logger';
 import { isError } from 'lib/utils/api';
 
 export async function POST(req: NextRequest) {
-  const data: PlukkOppgaveRequest = await req
-    .json()
-    .then((data) => ({ oppgaveId: data.oppgaveId, versjon: data.versjon }));
+  const data: PlukkOppgaveDto = await req.json().then((data) => ({ oppgaveId: data.oppgaveId, versjon: data.versjon }));
   if (data.oppgaveId === undefined || data.versjon === undefined) {
     return NextResponse.json({ message: 'Missing oppgaveId or versjon', status: 400 }, { status: 400 });
   }

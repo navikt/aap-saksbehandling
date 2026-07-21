@@ -8,10 +8,8 @@ import {
   Markering,
   MineOppgaverQueryParams,
   Oppgave,
-  OppgaveInfoTilSøk,
   OppgavelisteRequest,
   OppgavelisteResponse,
-  PlukkOppgaveResponse,
   SakOgAvklaringsbehov,
   SaksbehandlerSøkRequest,
   SaksbehandlerSøkRespons,
@@ -127,8 +125,8 @@ export async function avreserverOppgave({ oppgaver }: AvreserverOppgaveDto) {
   return await apiFetch<unknown>(url, oppgaveApiScope, 'POST', { oppgaver: oppgaver });
 }
 export async function plukkOppgave(oppgaveId: number, versjon: number) {
-  const url = `${oppgaveApiBaseURL}/plukk-oppgave/v2`;
-  return await apiFetch<PlukkOppgaveResponse>(url, oppgaveApiScope, 'POST', { oppgaveId, versjon });
+  const url = `${oppgaveApiBaseURL}/plukk-oppgave`;
+  return await apiFetch<Oppgave>(url, oppgaveApiScope, 'POST', { oppgaveId, versjon });
 }
 
 export async function mottattDokumenterLest(behandlingRef: string) {
@@ -144,13 +142,16 @@ export async function fjernHelseopplysningIkon(behandlingRef: string) {
 const lokalFakeOppgaveSøk = isLocal();
 export async function oppgaveTekstSøk(søketekst: string) {
   if (lokalFakeOppgaveSøk) {
-    const oppgaver: OppgaveInfoTilSøk[] = [
+    const oppgaver: Oppgave[] = [
       {
+        avklaringsbehovKode: '',
+        behandlingOpprettet: '',
         // @ts-expect-error Fiks type i backend
         behandlingstype: 'DOKUMENT_H\u00C5NDTERING',
-        enhetForKø: '',
+        enhet: '',
         opprettetAv: '',
         opprettetTidspunkt: '',
+        // @ts-expect-error Fiks type i backend
         status: 'OPPRETTET',
         versjon: 0,
       },
@@ -168,7 +169,7 @@ export async function oppgaveTekstSøk(søketekst: string) {
 
     return mockData;
   }
-  const url = `${oppgaveApiBaseURL}/sok/v2`;
+  const url = `${oppgaveApiBaseURL}/sok`;
   return await apiFetch<SøkResponse>(url, oppgaveApiScope, 'POST', { søketekst });
 }
 
