@@ -99,10 +99,13 @@ beforeAll(() => {
   // Mocker eventsource ettersom vi bruker det i Form komponenten
   Object.defineProperty(window, 'EventSource', {
     writable: true,
-    value: vi.fn().mockImplementation(() => ({
-      close: vi.fn(() => {}),
-      addEventListener: vi.fn(),
-    })),
+    configurable: true,
+    value: vi.fn().mockImplementation(function () {
+      return {
+        close: vi.fn(),
+        addEventListener: vi.fn(),
+      };
+    }),
   });
 
   // Mocker scrollIntoView da jsdom ikke implementerer denne
