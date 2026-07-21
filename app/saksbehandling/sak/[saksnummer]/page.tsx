@@ -1,16 +1,18 @@
+import { Box } from '@navikt/ds-react/Box';
+import { logError, logWarning } from 'lib/serverutlis/logger';
+import { hentArenaSakerForPerson } from 'lib/services/apiinternservice/apiInternService';
 import {
   hentRettighetsinfo,
   hentSak,
   hentSakPersoninfo,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { unleashService } from 'lib/services/unleash/unleashService';
+import { isSuccess } from 'lib/utils/api';
+import { erIngenTilgangError } from 'lib/utils/ingenTilgang';
+import { Suspense } from 'react';
+
 import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
 import { SakOversiktContainer } from 'components/saksoversikt/SakOversiktContainer';
-import { Suspense } from 'react';
-import { isSuccess } from 'lib/utils/api';
-import { hentArenaSakerForPerson } from 'lib/services/apiinternservice/apiInternService';
-import { unleashService } from 'lib/services/unleash/unleashService';
-import { Box } from '@navikt/ds-react/Box';
-import { logError } from 'lib/serverutlis/logger';
 
 const Page = async (props: { params: Promise<{ saksnummer: string }> }) => {
   const params = await props.params;
@@ -19,7 +21,11 @@ const Page = async (props: { params: Promise<{ saksnummer: string }> }) => {
     hentSakPersoninfo(params.saksnummer),
     hentRettighetsinfo(params.saksnummer),
   ]).catch((err) => {
-    logError(`Feil i Promise.all ved henting av saksoversikt for ${params.saksnummer}`, err);
+    if (erIngenTilgangError(err)) {
+      logWarning(`Ingen tilgang til saksoversikt for ${params.saksnummer}`);
+    } else {
+      logError(`Feil i Promise.all ved henting av saksoversikt for ${params.saksnummer}`, err);
+    }
     throw err;
   });
   const rettighetsinfo = isSuccess(rettihetsinfoRes) ? rettihetsinfoRes.data : null;
