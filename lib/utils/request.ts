@@ -1,3 +1,6 @@
+import { BehandlingskontekstForOppgave, MineOppgaverQueryParams, OppgavelisteRequest } from 'lib/types/oppgaveTypes';
+import { Oppgave } from 'lib/types/types';
+import { SortState } from '@navikt/ds-react';
 import {
   NoNavAapOppgaveListeOppgaveSorteringSortBy,
   NoNavAapOppgaveListeOppgaveSorteringSortOrder,
@@ -5,8 +8,6 @@ import {
 } from '@navikt/aap-oppgave-typescript-types';
 import { SortState } from '@navikt/ds-react/Table';
 import { ScopedBackendSortState } from 'hooks/oppgave/BackendSorteringHook';
-import { BehandlingskontekstForOppgave, MineOppgaverQueryParams, OppgavelisteRequest } from 'lib/types/oppgaveTypes';
-import { Oppgave } from 'lib/types/types';
 
 export function queryParamsArray(key: string, values: (string | number)[]) {
   const filtered = values.filter((value) => value !== undefined && value !== null && value !== '');
@@ -74,29 +75,18 @@ export function mineOppgaverQueryParams(params: MineOppgaverQueryParams) {
   return encodeURI(string);
 }
 
-function buildSaksbehandlingsURL(saksnummer: string, behandlingsreferanse: string): string {
-  return `/saksbehandling/sak/${saksnummer}/${behandlingsreferanse}`;
+function buildSaksbehandlingsURL(oppgave: Oppgave): string {
+  return `/saksbehandling/sak/${oppgave.saksnummer}/${oppgave?.behandlingRef}`;
 }
-function buildPostmottakURL(behandlingsreferanse: string): string {
-  return `/postmottak/${behandlingsreferanse}`;
+function buildPostmottakURL(oppgave: Oppgave): string {
+  return `/postmottak/${oppgave?.behandlingRef}`;
 }
-export function byggKelvinURL(oppgaveInfo: BehandlingskontekstForOppgave): string {
-  if (oppgaveInfo.journalpostId != undefined) {
-    return buildPostmottakURL(oppgaveInfo.behandlingsreferanse);
-  } else if (oppgaveInfo.behandlingstype === 'TILBAKEKREVING') {
-    return oppgaveInfo.tilbakekrevingUrl!!;
-  } else {
-    return buildSaksbehandlingsURL(oppgaveInfo.saksnummer!!, oppgaveInfo.behandlingsreferanse);
-  }
-}
-
-// TODO: skal fjernes når frontend ikke lenger bruker Oppgave-typen
-export function byggKelvinURLFraOppgave(oppgave: Oppgave): string {
+export function byggKelvinURL(oppgave: Oppgave): string {
   if (oppgave.journalpostId) {
-    return buildPostmottakURL(oppgave.behandlingRef);
+    return buildPostmottakURL(oppgave);
   } else if (oppgave.behandlingstype === 'TILBAKEKREVING') {
-    return oppgave.tilbakekrevingsVarsDto?.tilbakekrevings_URL!!;
+    return oppgave.tilbakekrevingsVarsDto!!.tilbakekrevings_URL;
   } else {
-    return buildSaksbehandlingsURL(oppgave.saksnummer!!, oppgave.behandlingRef);
+    return buildSaksbehandlingsURL(oppgave);
   }
 }

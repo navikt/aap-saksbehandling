@@ -58,7 +58,7 @@ export const BehandlingButtons = ({
       }
       const plukketOppgave = await plukkOppgaveClient(oppgaveInfo.id, oppgaveInfo.versjon);
       if (isSuccess(plukketOppgave)) {
-        router.push(byggKelvinURL(plukketOppgave.data.behandlingskontekst));
+        router.push(byggKelvinURL(plukketOppgave.data));
       } else {
         if (plukketOppgave.status == 401) {
           setFeilmelding('Du har ikke tilgang til å behandle denne oppgaven.');

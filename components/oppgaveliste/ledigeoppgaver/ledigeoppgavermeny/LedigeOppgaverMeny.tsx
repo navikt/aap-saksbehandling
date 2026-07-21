@@ -7,9 +7,9 @@ import { Dispatch, SetStateAction, useTransition } from 'react';
 import { Oppgave } from 'lib/types/oppgaveTypes';
 import { hentOppgaveClient, plukkOppgaveClient, synkroniserOppgaveMedEnhetClient } from 'lib/oppgaveClientApi';
 import { isSuccess } from 'lib/utils/api';
+import { byggKelvinURL } from 'lib/utils/request';
 import { useRouter } from 'next/navigation';
 import { useTildelOppgaver } from 'context/oppgave/TildelOppgaverContext';
-import { byggKelvinURL, byggKelvinURLFraOppgave } from 'lib/utils/request';
 
 interface Props {
   oppgave: Oppgave;
@@ -51,7 +51,7 @@ export const LedigeOppgaverMeny = ({
 
         const plukketOppgave = await plukkOppgaveClient(oppgave.id, oppgave.versjon);
         if (isSuccess(plukketOppgave)) {
-          router.push(byggKelvinURL(plukketOppgave.data.behandlingskontekst));
+          router.push(byggKelvinURL(plukketOppgave.data));
         } else {
           if (plukketOppgave.status == 401) {
             setÅpenModal(true);
@@ -76,7 +76,7 @@ export const LedigeOppgaverMeny = ({
   function åpneOppgave(oppgave: Oppgave) {
     startTransitionMeny(() => {
       if (oppgave.id) {
-        router.push(byggKelvinURLFraOppgave(oppgave));
+        router.push(byggKelvinURL(oppgave));
       }
     });
   }
