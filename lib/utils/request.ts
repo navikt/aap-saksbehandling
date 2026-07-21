@@ -1,11 +1,11 @@
-import { BehandlingskontekstForOppgave, MineOppgaverQueryParams, OppgavelisteRequest } from 'lib/types/oppgaveTypes';
-import { SortState } from '@navikt/ds-react';
 import {
   NoNavAapOppgaveListeOppgaveSorteringSortBy,
   NoNavAapOppgaveListeOppgaveSorteringSortOrder,
   PathsMineOppgaverGetParametersQuerySortorder,
 } from '@navikt/aap-oppgave-typescript-types';
+import { SortState } from '@navikt/ds-react';
 import { ScopedBackendSortState } from 'hooks/oppgave/BackendSorteringHook';
+import { BehandlingskontekstForOppgave, MineOppgaverQueryParams, OppgavelisteRequest } from 'lib/types/oppgaveTypes';
 import { Oppgave } from 'lib/types/types';
 
 export function queryParamsArray(key: string, values: (string | number)[]) {
@@ -84,9 +84,15 @@ export function byggKelvinURL(oppgaveInfo: BehandlingskontekstForOppgave): strin
   if (oppgaveInfo.journalpostId) {
     return buildPostmottakURL(oppgaveInfo.behandlingsreferanse);
   } else if (oppgaveInfo.behandlingstype === 'TILBAKEKREVING') {
-    return oppgaveInfo.tilbakekrevingUrl!!;
+    if (!oppgaveInfo.tilbakekrevingUrl) {
+      throw new Error('Mangler tilbakekrevingsURL for plukket tilbakekreving-oppgave');
+    }
+    return oppgaveInfo.tilbakekrevingUrl;
   } else {
-    return buildSaksbehandlingsURL(oppgaveInfo.saksnummer!!, oppgaveInfo.behandlingsreferanse);
+    if (!oppgaveInfo.saksnummer) {
+      throw new Error('Mangler saksnummer for plukket oppgave');
+    }
+    return buildSaksbehandlingsURL(oppgaveInfo.saksnummer, oppgaveInfo.behandlingsreferanse);
   }
 }
 
@@ -95,8 +101,14 @@ export function byggKelvinURLFraOppgave(oppgave: Oppgave): string {
   if (oppgave.journalpostId) {
     return buildPostmottakURL(oppgave.behandlingRef);
   } else if (oppgave.behandlingstype === 'TILBAKEKREVING') {
-    return oppgave.tilbakekrevingsVarsDto!!.tilbakekrevings_URL;
+    if (!oppgave.tilbakekrevingsVarsDto?.tilbakekrevings_URL) {
+      throw new Error('Mangler tilbakekrevingsURL for tilbakekreving-oppgave');
+    }
+    return oppgave.tilbakekrevingsVarsDto.tilbakekrevings_URL;
   } else {
-    return buildSaksbehandlingsURL(oppgave.saksnummer!!, oppgave.behandlingRef);
+    if (!oppgave.saksnummer) {
+      throw new Error('Mangler saksnummer for oppgave');
+    }
+    return buildSaksbehandlingsURL(oppgave.saksnummer, oppgave.behandlingRef);
   }
 }
