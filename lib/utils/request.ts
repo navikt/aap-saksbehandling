@@ -81,7 +81,7 @@ function buildPostmottakURL(behandlingsreferanse: string): string {
   return `/postmottak/${behandlingsreferanse}`;
 }
 export function byggKelvinURL(oppgaveInfo: BehandlingskontekstForOppgave): string {
-  if (oppgaveInfo.journalpostId != undefined) {
+  if (oppgaveInfo.journalpostId) {
     return buildPostmottakURL(oppgaveInfo.behandlingsreferanse);
   } else if (oppgaveInfo.behandlingstype === 'TILBAKEKREVING') {
     return oppgaveInfo.tilbakekrevingUrl!!;
@@ -95,7 +95,7 @@ export function byggKelvinURLFraOppgave(oppgave: Oppgave): string {
   if (oppgave.journalpostId) {
     return buildPostmottakURL(oppgave.behandlingRef);
   } else if (oppgave.behandlingstype === 'TILBAKEKREVING') {
-    return oppgave.tilbakekrevingsVarsDto?.tilbakekrevings_URL!!;
+    return oppgave.tilbakekrevingsVarsDto!!.tilbakekrevings_URL;
   } else {
     return buildSaksbehandlingsURL(oppgave.saksnummer!!, oppgave.behandlingRef);
   }
