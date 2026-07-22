@@ -1,14 +1,12 @@
-import { NoNavAapOppgaveFilterFilterDtoType, NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType, NoNavAapOppgaveOppgaveDtoBehandlingstype, components as oppgave, paths } from '@navikt/aap-oppgave-typescript-types';
+import {
+  NoNavAapOppgaveFilterFilterDtoType,
+  NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType,
+  NoNavAapOppgaveOppgaveDtoBehandlingstype,
+  components as oppgave,
+  paths,
+} from '@navikt/aap-oppgave-typescript-types';
 import { components as postmottak } from '@navikt/aap-postmottak-backend-typescript-types';
 import { BehandlingsFlytAvklaringsbehovKode } from 'lib/types/types';
-
-
-
-
-
-
-
-
 
 // postmottak
 export type PostmottakAvklaringsbehovKode =
@@ -22,7 +20,8 @@ export type OppgavelisteRequest = oppgave['schemas']['no.nav.aap.oppgave.liste.O
   hastemarkeringerFørst?: boolean;
 };
 export type OppgavelisteResponse = oppgave['schemas']['no.nav.aap.oppgave.liste.OppgavelisteRespons'];
-export type OppgaveVisningsinformasjon = oppgave['schemas']['no.nav.aap.oppgave.hent.OppgaveVisningsinformasjonResponse'];
+export type OppgaveVisningsinformasjon =
+  oppgave['schemas']['no.nav.aap.oppgave.hent.OppgaveVisningsinformasjonResponse'];
 export type Paging = OppgavelisteRequest['paging'];
 export type Enhet = oppgave['schemas']['no.nav.aap.oppgave.enhet.EnhetDto'];
 export type PlukkOppgaveRequest = oppgave['schemas']['no.nav.aap.oppgave.plukk.PlukkOppgaveRequest'];

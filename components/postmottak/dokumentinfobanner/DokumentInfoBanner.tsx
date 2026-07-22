@@ -33,20 +33,20 @@ export const DokumentInfoBanner = ({
   const [settBehandlingPåVentmodalIsOpen, setSettBehandlingPåVentmodalIsOpen] = useState(false);
   const bruker = useInnloggetBruker();
 
-  const erReservertAvInnloggetBruker = bruker.NAVident === oppgaveVisningsinfo?.reservertAvIdent;
+  const erReservertAvInnloggetBruker = bruker.NAVident === oppgaveVisningsinfo.reservertAvIdent;
 
   const hentOppgaveTildeling = (): OppgaveStatusType | undefined => {
-    if (!oppgaveVisningsinfo?.reservertAvIdent) {
+    if (!oppgaveVisningsinfo.reservertAvIdent) {
       return { status: 'LEDIG', label: `Ledig` };
     } else if (erReservertAvInnloggetBruker) {
       return {
         status: 'TILDELT_INNLOGGET_BRUKER',
-        label: `Tildelt: ${oppgaveVisningsinfo?.reservertAvNavn ?? oppgaveVisningsinfo?.reservertAvIdent}`,
+        label: `Tildelt: ${oppgaveVisningsinfo.reservertAvNavn ?? oppgaveVisningsinfo.reservertAvIdent}`,
       };
-    } else if (oppgaveVisningsinfo?.reservertAvIdent && !erReservertAvInnloggetBruker) {
+    } else if (oppgaveVisningsinfo.reservertAvIdent && !erReservertAvInnloggetBruker) {
       return {
         status: 'TILDELT',
-        label: `Tildelt: ${oppgaveVisningsinfo?.reservertAvNavn ?? oppgaveVisningsinfo?.reservertAvIdent}`,
+        label: `Tildelt: ${oppgaveVisningsinfo.reservertAvNavn ?? oppgaveVisningsinfo.reservertAvIdent}`,
       };
     }
   };
