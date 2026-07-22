@@ -37,6 +37,9 @@ jobs:
       - name: Typecheck
         run: yarn typecheck
 
+      - name: Build
+        run: yarn run build
+
   tests:
     name: Tests (shard ${{ matrix.shardIndex }}/${{ matrix.shardTotal }})
     runs-on: ubuntu-latest
