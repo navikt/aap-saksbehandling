@@ -1,15 +1,12 @@
-import { beforeEach, describe, expect, it } from 'vitest';
-import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
-import { DetaljertBehandling, FlytVisning, Roller, SaksInfo } from 'lib/types/types';
+import { NoNavAapOppgaveReturInformasjonDtoStatus } from '@navikt/aap-oppgave-typescript-types';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Oppgave } from 'lib/types/oppgaveTypes';
-import {
-  NoNavAapOppgaveOppgaveDtoBehandlingstype,
-  NoNavAapOppgaveOppgaveDtoStatus,
-  NoNavAapOppgaveReturInformasjonStatus,
-} from '@navikt/aap-oppgave-typescript-types';
 import { customRender, customRenderMedRoller } from 'lib/test/CustomRender';
+import { OppgaveVisningsinformasjon } from 'lib/types/oppgaveTypes';
+import { DetaljertBehandling, FlytVisning, Roller, SaksInfo } from 'lib/types/types';
+import { beforeEach, describe, expect, it } from 'vitest';
+
+import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
 
 const user = userEvent.setup();
 
@@ -31,22 +28,13 @@ const avsluttetSak: SaksInfo = {
   periode: { fom: '12 mai', tom: '27 mai' },
 };
 
-const oppgave: Oppgave = {
+const oppgaveVisningsinfo: OppgaveVisningsinformasjon = {
+  harUlesteDokumenter: false,
+  skjermingInfo: { erSkjermet: false, harFortroligAdresse: false, harStrengtFortroligAdresse: false },
   id: 123,
-  personIdent: '12345678910',
-  behandlingRef: 'gasg',
-  vurderingsbehov: [],
-  avklaringsbehovKode: '',
-  behandlingOpprettet: '',
-  behandlingstype: NoNavAapOppgaveOppgaveDtoBehandlingstype.F_RSTEGANGSBEHANDLING,
-  enhet: '',
-  opprettetAv: '',
-  opprettetTidspunkt: '',
-  status: NoNavAapOppgaveOppgaveDtoStatus.OPPRETTET,
   versjon: 0,
-  årsakerTilBehandling: [],
   markeringer: [],
-  reservertAv: 'navIdent',
+  reservertAvIdent: 'navIdent',
 };
 
 const visning: FlytVisning = {
@@ -202,7 +190,7 @@ describe('SaksinfoBanner på behandling siden', () => {
   });
 
   it('skal ikke vise Arena-tag når brukeren ikke har AAP-Arena-historikk', () => {
-    customRender(<SaksinfoBanner sak={sak} behandling={behandling} oppgave={oppgave} />);
+    customRender(<SaksinfoBanner sak={sak} behandling={behandling} oppgaveVisninginfo={oppgaveVisningsinfo} />);
     const returTag = screen.queryByText('Arenahistorikk');
     expect(returTag).not.toBeInTheDocument();
   });
@@ -218,7 +206,7 @@ describe('SaksinfoBanner på behandling siden', () => {
             harArenaHistorikk: true,
           },
         }}
-        oppgave={oppgave}
+        oppgaveVisninginfo={oppgaveVisningsinfo}
       />
     );
     const returTag = screen.queryByText('Arenahistorikk');
@@ -246,7 +234,7 @@ describe('Sak status', () => {
       <SaksinfoBanner
         sak={sak}
         behandling={behandling}
-        oppgave={{ ...oppgave, reservertAvNavn: 'Test Testesen' }}
+        oppgaveVisninginfo={{ ...oppgaveVisningsinfo, reservertAvNavn: 'Test Testesen' }}
         visning={visning}
       />
     );
@@ -256,14 +244,16 @@ describe('Sak status', () => {
   });
 
   it('skal vise saksbehandlers ident på tildelt-tag dersom oppgaven er tildelt og navn ikke finnes', () => {
-    customRender(<SaksinfoBanner sak={sak} behandling={behandling} oppgave={oppgave} visning={visning} />);
+    customRender(
+      <SaksinfoBanner sak={sak} behandling={behandling} oppgaveVisninginfo={oppgaveVisningsinfo} visning={visning} />
+    );
 
     const tildeltTagIdent = screen.getByText('Tildelt: navIdent');
     expect(tildeltTagIdent).toBeVisible();
   });
 
   it('skal vise en tag som viser om behandlingen er tildelt dersom innnlogget bruker har resertvert den', () => {
-    customRender(<SaksinfoBanner sak={sak} behandling={behandling} oppgave={oppgave} />);
+    customRender(<SaksinfoBanner sak={sak} behandling={behandling} oppgaveVisninginfo={oppgaveVisningsinfo} />);
 
     const reservertTag = screen.getByText('Tildelt: navIdent');
     expect(reservertTag).toBeVisible();
@@ -287,7 +277,7 @@ describe('Sak status', () => {
     expect(screen.getByText('Trukket')).toBeVisible();
   });
 
-  it('skal vise ledig-tag når en oppgave ikke er tildelt noen', () => {
+  it('skal vise ledig-tag når en oppgaveVisningsinfo ikke er tildelt noen', () => {
     customRender(<SaksinfoBanner sak={sak} behandling={behandling} />);
     const ledigTag = screen.getByText('Ledig');
     expect(ledigTag).toBeVisible();
@@ -298,12 +288,12 @@ describe('Sak status', () => {
       <SaksinfoBanner
         sak={sak}
         behandling={behandling}
-        oppgave={{
-          ...oppgave,
+        oppgaveVisninginfo={{
+          ...oppgaveVisningsinfo,
           returInformasjon: {
             begrunnelse: 'Underkjent',
             endretAv: 'Kvalitetssikrer',
-            status: NoNavAapOppgaveReturInformasjonStatus.RETUR_FRA_KVALITETSSIKRER,
+            status: NoNavAapOppgaveReturInformasjonDtoStatus.RETUR_FRA_KVALITETSSIKRER,
             årsaker: [],
           },
         }}
@@ -318,12 +308,12 @@ describe('Sak status', () => {
       <SaksinfoBanner
         sak={sak}
         behandling={behandling}
-        oppgave={{
-          ...oppgave,
+        oppgaveVisninginfo={{
+          ...oppgaveVisningsinfo,
           returInformasjon: {
             begrunnelse: 'Underkjent',
             endretAv: 'Kvalitetssikrer',
-            status: NoNavAapOppgaveReturInformasjonStatus.RETUR_FRA_VEILEDER,
+            status: NoNavAapOppgaveReturInformasjonDtoStatus.RETUR_FRA_VEILEDER,
             årsaker: [],
           },
         }}
@@ -333,24 +323,24 @@ describe('Sak status', () => {
     expect(returTag).toBeVisible();
   });
 
-  it('skal ikke vise retur-tag når oppgave ikke har retur-status', () => {
-    customRender(<SaksinfoBanner sak={sak} behandling={behandling} oppgave={oppgave} />);
+  it('skal ikke vise retur-tag når oppgaveVisningsinfo ikke har retur-status', () => {
+    customRender(<SaksinfoBanner sak={sak} behandling={behandling} oppgaveVisninginfo={oppgaveVisningsinfo} />);
     const returTag = screen.queryByText('Retur');
     expect(returTag).not.toBeInTheDocument();
   });
 
-  it('skal vise frist utløpt-tag når oppgave har utløpt ventefrist', async () => {
+  it('skal vise frist utløpt-tag når oppgaveVisningsinfo har utløpt ventefrist', async () => {
     customRender(
       <SaksinfoBanner
         sak={sak}
         behandling={behandling}
-        oppgave={{
-          ...oppgave,
-          utløptVentefrist: '2026-01-04',
-          påVentÅrsak: 'VENTER_PÅ_OPPLYSNINGER',
-          venteBegrunnelse: 'Venter på dokumentasjon',
-          forrigeVenteBegrunnelse: 'Venter på dokumentasjon',
-          forrigePåVentÅrsak: 'VENTER_PÅ_OPPLYSNINGER',
+        oppgaveVisninginfo={{
+          ...oppgaveVisningsinfo,
+          utløptVenteInfo: {
+            påVentTil: '2026-01-04',
+            påVentÅrsak: 'VENTER_PÅ_OPPLYSNINGER',
+            venteBegrunnelse: 'Venter på dokumentasjon',
+          },
         }}
       />
     );
@@ -367,8 +357,8 @@ describe('Sak status', () => {
     expect(screen.getByText('Venter på dokumentasjon')).toBeVisible();
   });
 
-  it('skal ikke vise frist utløpt-tag når oppgave ikke har utløpt ventefrist', () => {
-    customRender(<SaksinfoBanner sak={sak} behandling={behandling} oppgave={oppgave} />);
+  it('skal ikke vise frist utløpt-tag når oppgaveVisningsinfo ikke har utløpt ventefrist', () => {
+    customRender(<SaksinfoBanner sak={sak} behandling={behandling} oppgaveVisninginfo={oppgaveVisningsinfo} />);
     const fristTag = screen.queryByText('Frist utløpt 04.01.2026');
     expect(fristTag).not.toBeInTheDocument();
   });

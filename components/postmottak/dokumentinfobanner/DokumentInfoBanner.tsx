@@ -1,27 +1,26 @@
 'use client';
 
+import { ChevronDownIcon, ChevronRightIcon, PaperplaneIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, CopyButton, Dropdown, HStack, Label, Link, Tag, Tooltip } from '@navikt/ds-react';
+import { useInnloggetBruker } from 'hooks/BrukerHook';
+import { Dato } from 'lib/types/Dato';
+import { OppgaveVisningsinformasjon } from 'lib/types/oppgaveTypes';
+import { JournalpostInfo } from 'lib/types/postmottakTypes';
+import { formaterDatoForFrontend } from 'lib/utils/date';
+import { storForbokstavIHvertOrd } from 'lib/utils/string';
 import { useState } from 'react';
 
-import { ChevronDownIcon, ChevronRightIcon, PaperplaneIcon } from '@navikt/aksel-icons';
-import { JournalpostInfo } from 'lib/types/postmottakTypes';
+import { OppgaveStatus, OppgaveStatusType } from 'components/oppgavestatus/OppgaveStatus';
+import { PostmottakSettBehandllingPVentModal } from 'components/postmottak/postmottaksettbehandlingpåventmodal/PostmottakSettBehandllingPåVentModal';
 
 import styles from './DokumentInfoBanner.module.css';
-import { PostmottakSettBehandllingPVentModal } from 'components/postmottak/postmottaksettbehandlingpåventmodal/PostmottakSettBehandllingPåVentModal';
-import { formaterDatoForFrontend } from 'lib/utils/date';
-
-import { storForbokstavIHvertOrd } from 'lib/utils/string';
-import { Oppgave } from 'lib/types/oppgaveTypes';
-import { OppgaveStatus, OppgaveStatusType } from 'components/oppgavestatus/OppgaveStatus';
-import { Dato } from 'lib/types/Dato';
-import { useInnloggetBruker } from 'hooks/BrukerHook';
 
 interface Props {
   behandlingsreferanse: string;
   behandlingsVersjon: number;
   journalpostInfo: JournalpostInfo;
   påVent: boolean;
-  oppgave: Oppgave;
+  oppgaveVisningsinfo: OppgaveVisningsinformasjon;
 }
 
 export const DokumentInfoBanner = ({
@@ -29,33 +28,36 @@ export const DokumentInfoBanner = ({
   behandlingsVersjon,
   journalpostInfo,
   påVent,
-  oppgave,
+  oppgaveVisningsinfo,
 }: Props) => {
   const [settBehandlingPåVentmodalIsOpen, setSettBehandlingPåVentmodalIsOpen] = useState(false);
   const bruker = useInnloggetBruker();
 
-  const erReservertAvInnloggetBruker = bruker.NAVident === oppgave?.reservertAv;
+  const erReservertAvInnloggetBruker = bruker.NAVident === oppgaveVisningsinfo?.reservertAvIdent;
 
   const hentOppgaveTildeling = (): OppgaveStatusType | undefined => {
-    if (!oppgave?.reservertAv) {
+    if (!oppgaveVisningsinfo?.reservertAvIdent) {
       return { status: 'LEDIG', label: `Ledig` };
     } else if (erReservertAvInnloggetBruker) {
       return {
         status: 'TILDELT_INNLOGGET_BRUKER',
-        label: `Tildelt: ${oppgave?.reservertAvNavn ?? oppgave?.reservertAv}`,
+        label: `Tildelt: ${oppgaveVisningsinfo?.reservertAvNavn ?? oppgaveVisningsinfo?.reservertAvIdent}`,
       };
-    } else if (oppgave?.reservertAv && !erReservertAvInnloggetBruker) {
-      return { status: 'TILDELT', label: `Tildelt: ${oppgave?.reservertAvNavn ?? oppgave?.reservertAv}` };
+    } else if (oppgaveVisningsinfo?.reservertAvIdent && !erReservertAvInnloggetBruker) {
+      return {
+        status: 'TILDELT',
+        label: `Tildelt: ${oppgaveVisningsinfo?.reservertAvNavn ?? oppgaveVisningsinfo?.reservertAvIdent}`,
+      };
     }
   };
 
   const hentOppgaveStatus = (): OppgaveStatusType | undefined => {
     if (påVent) {
       return { status: 'PÅ_VENT', label: 'På vent' };
-    } else if (oppgave?.utløptVentefrist) {
+    } else if (oppgaveVisningsinfo?.utløptVenteInfo) {
       return {
         status: 'VENTEFRIST_UTLØPT',
-        label: `Frist utløpt ${new Dato(oppgave.utløptVentefrist).formaterForFrontend()}`,
+        label: `Frist utløpt ${new Dato(oppgaveVisningsinfo.utløptVenteInfo.påVentTil).formaterForFrontend()}`,
       };
     }
   };
@@ -68,9 +70,9 @@ export const DokumentInfoBanner = ({
     <div className={styles.dokumentinfobanner}>
       <div className={styles.dokumentinfo}>
         <HStack gap={'space-8'} align="center">
-          {oppgave?.saksnummer ? (
+          {oppgaveVisningsinfo?.saksnummer ? (
             <Label size="small">
-              <Link href={`/saksbehandling/sak/${oppgave.saksnummer}`}>{søkerNavn}</Link>
+              <Link href={`/saksbehandling/sak/${oppgaveVisningsinfo.saksnummer}`}>{søkerNavn}</Link>
             </Label>
           ) : (
             <BodyShort size="small" weight="semibold">
