@@ -3205,7 +3205,7 @@ export interface paths {
             [name: string]: unknown;
           };
           content: {
-            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.st\u00F8nadsperiode.St\u00F8nadsperiodeGrunnlagDto'];
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.st\u00F8nadsperiode.St\u00F8nadsperiodeGrunnlagResponse'];
           };
         };
       };
@@ -15619,12 +15619,12 @@ export interface components {
       perioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
       vurderingerMeta: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'];
     };
-    'no.nav.aap.behandlingsflyt.behandling.st\u00F8nadsperiode.St\u00F8nadsperiodeGrunnlagDto': {
+    'no.nav.aap.behandlingsflyt.behandling.st\u00F8nadsperiode.St\u00F8nadsperiodeGrunnlagResponse': {
       'harTilgangTil\u00C5Saksbehandle': boolean;
-      nyeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.st\u00F8nadsperiode.St\u00F8nadsperiodeVurderingDto'][];
-      vedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.st\u00F8nadsperiode.St\u00F8nadsperiodeVurderingDto'][];
+      nyeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.st\u00F8nadsperiode.St\u00F8nadsperiodeVurderingResponse'][];
+      vedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.st\u00F8nadsperiode.St\u00F8nadsperiodeVurderingResponse'][];
     };
-    'no.nav.aap.behandlingsflyt.behandling.st\u00F8nadsperiode.St\u00F8nadsperiodeVurderingDto': {
+    'no.nav.aap.behandlingsflyt.behandling.st\u00F8nadsperiode.St\u00F8nadsperiodeVurderingResponse': {
       begrunnelse: string;
       'harGjenv\u00E6rendeKvote': boolean;
       'harHattOrdin\u00E6rSiste52Uker': boolean;
