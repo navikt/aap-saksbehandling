@@ -2372,7 +2372,33 @@ export interface paths {
       };
     };
     put?: never;
-    post?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description ID */
+          jobbId: number;
+        };
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['no.nav.aap.motor.api.`MotorApiKt$motorApi$1$7$AvbrytJobbRequest`'];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': string;
+          };
+        };
+      };
+    };
     delete?: never;
     options?: never;
     head?: never;
@@ -20469,6 +20495,9 @@ export interface components {
     };
     'no.nav.aap.motor.api.`MotorApiKt$motorApi$1$5$LeggTilKommentarRequest`': {
       kommentar: string;
+    };
+    'no.nav.aap.motor.api.`MotorApiKt$motorApi$1$7$AvbrytJobbRequest`': {
+      begrunnelse: string;
     };
     'no.nav.aap.utbetal.simulering.SimuleringDto': {
       perioder: components['schemas']['no.nav.aap.utbetal.simulering.SimuleringsperiodeDto'][];
