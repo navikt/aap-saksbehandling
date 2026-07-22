@@ -2887,6 +2887,7 @@ export interface paths {
             | 'AVKLAR_OPPFØLGING'
             | 'AVKLAR_STUDENT'
             | 'AVKLAR_STUDENT_V2'
+            | 'AVKLAR_STØNADSPERIODE'
             | 'AVKLAR_SYKDOM'
             | 'BARNETILLEGG'
             | 'BEHANDLENDE_ENHET'
@@ -2965,6 +2966,7 @@ export interface paths {
             | 'AVKLAR_OPPFØLGING'
             | 'AVKLAR_STUDENT'
             | 'AVKLAR_STUDENT_V2'
+            | 'AVKLAR_STØNADSPERIODE'
             | 'AVKLAR_SYKDOM'
             | 'BARNETILLEGG'
             | 'BEHANDLENDE_ENHET'
@@ -3166,6 +3168,44 @@ export interface paths {
           };
           content: {
             'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.KravGrunnlagDto'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/behandling/{referanse}/grunnlag/stonadsperiode': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description referanse */
+          referanse: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.st\u00F8nadsperiode.St\u00F8nadsperiodeGrunnlagDto'];
           };
         };
       };
@@ -5352,6 +5392,7 @@ export interface paths {
             | 'AVKLAR_OPPFØLGING'
             | 'AVKLAR_STUDENT'
             | 'AVKLAR_STUDENT_V2'
+            | 'AVKLAR_STØNADSPERIODE'
             | 'AVKLAR_SYKDOM'
             | 'BARNETILLEGG'
             | 'BEHANDLENDE_ENHET'
@@ -5430,6 +5471,7 @@ export interface paths {
             | 'AVKLAR_OPPFØLGING'
             | 'AVKLAR_STUDENT'
             | 'AVKLAR_STUDENT_V2'
+            | 'AVKLAR_STØNADSPERIODE'
             | 'AVKLAR_SYKDOM'
             | 'BARNETILLEGG'
             | 'BEHANDLENDE_ENHET'
@@ -6114,6 +6156,7 @@ export interface components {
         | 'AVKLAR_OPPFØLGING'
         | 'AVKLAR_STUDENT'
         | 'AVKLAR_STUDENT_V2'
+        | 'AVKLAR_STØNADSPERIODE'
         | 'AVKLAR_SYKDOM'
         | 'BARNETILLEGG'
         | 'BEHANDLENDE_ENHET'
@@ -15576,6 +15619,26 @@ export interface components {
       perioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
       vurderingerMeta: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'];
     };
+    'no.nav.aap.behandlingsflyt.behandling.st\u00F8nadsperiode.St\u00F8nadsperiodeGrunnlagDto': {
+      'harTilgangTil\u00C5Saksbehandle': boolean;
+      nyeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.st\u00F8nadsperiode.St\u00F8nadsperiodeVurderingDto'][];
+      vedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.st\u00F8nadsperiode.St\u00F8nadsperiodeVurderingDto'][];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.st\u00F8nadsperiode.St\u00F8nadsperiodeVurderingDto': {
+      begrunnelse: string;
+      'harGjenv\u00E6rendeKvote': boolean;
+      'harHattOrdin\u00E6rSiste52Uker': boolean;
+      /**
+       * Format: date-time
+       * @example 2025-04-01T10:30:00Z
+       */
+      opprettet: string;
+      referanse: string;
+      /** @enum {string} */
+      relevantKravType: 'AVSLAG' | 'GJENINNTREDEN_ETTER_OPPHØR' | 'GJENOPPTAK_ETTER_STANS' | 'NY_STØNADSPERIODE';
+      vurdertAv: components['schemas']['no.nav.aap.komponenter.verdityper.Bruker'];
+      vurdertIBehandling: components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.behandling.BehandlingId'];
+    };
     'no.nav.aap.behandlingsflyt.behandling.svarfraandreinstans.svarfraandreinstans.SvarFraAndreinstansDto': {
       /**
        * Format: date-time
@@ -16483,6 +16546,7 @@ export interface components {
         | 'AVKLAR_OPPFØLGING'
         | 'AVKLAR_STUDENT'
         | 'AVKLAR_STUDENT_V2'
+        | 'AVKLAR_STØNADSPERIODE'
         | 'AVKLAR_SYKDOM'
         | 'BARNETILLEGG'
         | 'BEHANDLENDE_ENHET'
@@ -17842,6 +17906,7 @@ export interface components {
         | 'AVKLAR_OPPFØLGING'
         | 'AVKLAR_STUDENT'
         | 'AVKLAR_STUDENT_V2'
+        | 'AVKLAR_STØNADSPERIODE'
         | 'AVKLAR_SYKDOM'
         | 'BARNETILLEGG'
         | 'BEHANDLENDE_ENHET'
@@ -17969,6 +18034,7 @@ export interface components {
         | 'AVKLAR_OPPFØLGING'
         | 'AVKLAR_STUDENT'
         | 'AVKLAR_STUDENT_V2'
+        | 'AVKLAR_STØNADSPERIODE'
         | 'AVKLAR_SYKDOM'
         | 'BARNETILLEGG'
         | 'BEHANDLENDE_ENHET'
@@ -18059,6 +18125,7 @@ export interface components {
         | 'AVKLAR_OPPFØLGING'
         | 'AVKLAR_STUDENT'
         | 'AVKLAR_STUDENT_V2'
+        | 'AVKLAR_STØNADSPERIODE'
         | 'AVKLAR_SYKDOM'
         | 'BARNETILLEGG'
         | 'BEHANDLENDE_ENHET'
@@ -18248,6 +18315,7 @@ export interface components {
         | 'AVKLAR_OPPFØLGING'
         | 'AVKLAR_STUDENT'
         | 'AVKLAR_STUDENT_V2'
+        | 'AVKLAR_STØNADSPERIODE'
         | 'AVKLAR_SYKDOM'
         | 'BARNETILLEGG'
         | 'BEHANDLENDE_ENHET'
@@ -18581,6 +18649,7 @@ export interface components {
         | 'AVKLAR_OPPFØLGING'
         | 'AVKLAR_STUDENT'
         | 'AVKLAR_STUDENT_V2'
+        | 'AVKLAR_STØNADSPERIODE'
         | 'AVKLAR_SYKDOM'
         | 'BARNETILLEGG'
         | 'BEHANDLENDE_ENHET'
