@@ -1,5 +1,7 @@
-import 'server-only';
-
+import { logError, logInfo, logWarning } from 'lib/serverutlis/logger';
+import { apiFetch, apiFetchNoMemoization, apiFetchPdf } from 'lib/services/apiFetch';
+import { CACHE_1_TIME } from 'lib/services/cache';
+import { Enhet } from 'lib/types/oppgaveTypes';
 import {
   Aktivitetsplikt11_7Grunnlag,
   Aktivitetsplikt11_9Grunnlag,
@@ -19,13 +21,13 @@ import {
   BehandlingPersoninfo,
   BehandlingsHistorikk,
   BekreftVurderingerOppfølgingGrunnlag,
-  BeregningsGrunnlag,
   BeregningTidspunktGrunnlag,
+  BeregningsGrunnlag,
   BestillLegeerklæring,
   BistandsGrunnlag,
   Brev,
-  BrevdataDto,
   BrevGrunnlag,
+  BrevdataDto,
   DetaljertBehandling,
   EtableringEgenVirksomhetGrunnlagResponse,
   FastlegeResponse,
@@ -87,6 +89,7 @@ import {
   Soningsgrunnlag,
   StegType,
   StudentGrunnlag,
+  StønadsperiodeGrunnlag,
   SvarFraAndreinstansGrunnlag,
   SykdomsGrunnlag,
   SykdomsvurderingBrevGrunnlag,
@@ -105,16 +108,13 @@ import {
   YrkeskadeBeregningGrunnlag,
   YrkesskadeVurderingGrunnlag,
 } from 'lib/types/types';
-import { apiFetch, apiFetchNoMemoization, apiFetchPdf } from 'lib/services/apiFetch';
-import { logError, logInfo, logWarning } from 'lib/serverutlis/logger';
 import { FetchResponse, isError, isSuccess } from 'lib/utils/api';
-import { Enhet } from 'lib/types/oppgaveTypes';
-import { Behovstype } from 'lib/utils/form';
-import { isLocal } from 'lib/utils/environment';
-import { notFound } from 'next/navigation';
-import { ingenTilgang } from 'lib/utils/ingenTilgang';
-import { CACHE_1_TIME } from 'lib/services/cache';
 import { formaterDatoForBackend } from 'lib/utils/date';
+import { isLocal } from 'lib/utils/environment';
+import { Behovstype } from 'lib/utils/form';
+import { ingenTilgang } from 'lib/utils/ingenTilgang';
+import { notFound } from 'next/navigation';
+import 'server-only';
 
 const saksbehandlingApiBaseUrl = process.env.BEHANDLING_API_BASE_URL;
 const saksbehandlingApiScope = process.env.BEHANDLING_API_SCOPE ?? '';
@@ -208,6 +208,11 @@ export const hentStudentGrunnlag = async (behandlingsreferanse: string) => {
 export const hentSykestipendGrunnlag = async (behandlingsreferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/sykestipend`;
   return await apiFetch<SykestipendGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentStønadsperiodeGrunnlag = async (behandlingsreferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/stonadsperiode`;
+  return await apiFetch<StønadsperiodeGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentSykdomsGrunnlag = async (behandlingsreferanse: string) => {
