@@ -1,6 +1,8 @@
-import { ValuePair } from 'components/form/FormField';
-import type { Vurderingsbehov, VurderingsbehovIntern } from '../types/types';
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
+
+import { ValuePair } from 'components/form/FormField';
+
+import type { Vurderingsbehov, VurderingsbehovIntern } from '../types/types';
 
 export const vurderingsbehovOptions = (
   erKravEnabled: boolean,
@@ -14,6 +16,7 @@ export const vurderingsbehovOptions = (
     'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND',
     'OVERGANG_ARBEID',
     'OVERGANG_UFORE',
+    'REFUSJONSKRAV',
     'REVURDER_YRKESSKADE',
     'REVURDER_SYKEPENGEERSTATNING',
     'REVURDER_BEREGNING',
