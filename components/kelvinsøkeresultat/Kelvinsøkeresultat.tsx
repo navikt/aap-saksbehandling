@@ -2,7 +2,6 @@
 
 import { BodyShort, Detail, HStack, Link, VStack } from '@navikt/ds-react';
 import { OppgaveStatus, OppgaveStatusType } from 'components/oppgavestatus/OppgaveStatus';
-import { Behandlingsstatus } from 'components/behandlingsstatus/Behandlingsstatus';
 
 import styles from 'components/kelvinsøkeresultat/Kelvinsøkeresultat.module.css';
 import { storForbokstavIHvertOrd } from 'lib/utils/string';
@@ -17,7 +16,7 @@ interface Props {
 }
 
 export const Kelvinsøkeresultat = ({
-  søkeresultat: { oppgaver, saker, kontor, person, behandlingsStatus, harTilgang, harAdressebeskyttelse },
+  søkeresultat: { oppgaver, saker, kontor, person, harTilgang, harAdressebeskyttelse },
 }: Props) => {
   if (saker?.length == 0 && oppgaver?.length == 0) {
     return (
@@ -129,17 +128,6 @@ export const Kelvinsøkeresultat = ({
                   {søk.enhet}
                 </BodyShort>
               ))
-            )}
-          </VStack>
-        </VStack>
-
-        <VStack gap={'space-4'}>
-          <Detail className={styles.detail}>Status</Detail>
-          <VStack gap="space-8">
-            {!behandlingsStatus?.length ? (
-              <BodyShort size={'small'}>Fant ikke status</BodyShort>
-            ) : (
-              behandlingsStatus.map((søk, index) => <Behandlingsstatus key={index} status={søk.status} />)
             )}
           </VStack>
         </VStack>
