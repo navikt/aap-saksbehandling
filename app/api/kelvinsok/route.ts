@@ -1,14 +1,15 @@
 import { NextResponse } from 'next/server';
 import { søkPåSak } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { Behandlingsstatus, SøkPåSakInfo } from 'lib/types/types';
+import { SøkPåSakInfo } from 'lib/types/types';
 import { oppgaveTekstSøk } from 'lib/services/oppgaveservice/oppgaveservice';
-import { MarkeringType, Oppgave } from 'lib/types/oppgaveTypes';
+import { MarkeringType } from 'lib/types/oppgaveTypes';
 import { logError } from 'lib/serverutlis/logger';
 import { isSuccess } from 'lib/utils/api';
 import { mapBehovskodeTilBehovstype } from 'lib/utils/oversettelser';
 import { capitalize } from 'lodash';
 import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { formaterDatoForFrontend } from 'lib/utils/date';
+import { byggKelvinURL } from 'lib/utils/request';
 
 export interface SøkeResultat {
   oppgaver?: {
@@ -22,7 +23,6 @@ export interface SøkeResultat {
   saker?: { href: string; label: string }[];
   kontor?: { enhet: string }[];
   person?: { href: string | null; label: string }[];
-  behandlingsStatus?: { status?: Behandlingsstatus }[];
 }
 
 interface Props {
@@ -74,28 +74,28 @@ async function utledSøkeresultat(søketekst: string, brukerinformasjon?: Bruker
   // Oppgaver
   let oppgaveData: SøkeResultat['oppgaver'] = [];
   let kontorData: SøkeResultat['kontor'] = [];
-  let behandlingsStatusData: SøkeResultat['behandlingsStatus'] = [];
   let harAdressebeskyttelse: boolean = true;
   try {
     const oppgavesøkRes = await oppgaveTekstSøk(søketekst);
     if (isSuccess(oppgavesøkRes)) {
       harAdressebeskyttelse = oppgavesøkRes.data.harAdressebeskyttelse;
-      oppgavesøkRes.data.oppgaver.forEach((oppgave) => {
-        const isReservert = Boolean(oppgave.reservertAv) && oppgave.reservertAv != brukerinformasjon?.NAVident;
-        const isPåVent = oppgave.påVentÅrsak != null;
+      oppgavesøkRes.data.oppgaver.forEach((oppgaveISøk) => {
+        const isReservert =
+          Boolean(oppgaveISøk.reservertAvIdent) && oppgaveISøk.reservertAvIdent != brukerinformasjon?.NAVident;
+        const isPåVent = oppgaveISøk.erPåVent;
         oppgaveData.push({
-          href: byggKelvinURL(oppgave),
-          label: `${formaterOppgave(oppgave)}`,
+          href: byggKelvinURL(oppgaveISøk.behandlingskontekst),
+          label: `${formaterOppgave(oppgaveISøk.behandlingskontekst.behandlingstype, oppgaveISøk.avklaringsbehovKode)}`,
           status: isReservert ? 'TILDELT' : isPåVent ? 'PÅ_VENT' : 'ÅPEN',
-          markeringer: oppgave.markeringer.map((markering) => markering.markeringType),
+          markeringer: oppgaveISøk.typeMarkeringer,
         });
-        kontorData.push({ enhet: `${oppgave.oppfølgingsenhet ?? oppgave.enhet}` });
-        behandlingsStatusData.push({ status: `${oppgave.status}` });
+        kontorData.push({ enhet: `${oppgaveISøk.enhetForKø}` });
+
         // Hvis sak ikke finnes, hent navn fra oppgave. Skal ikke lenke til noe
         if (personData?.length == 0) {
           personData.push({
             href: null,
-            label: `${oppgave.personNavn}`,
+            label: `${oppgaveISøk.personNavn}`,
           });
         }
       });
@@ -115,33 +115,13 @@ async function utledSøkeresultat(søketekst: string, brukerinformasjon?: Bruker
     harTilgang: sakData[0]?.harTilgang ?? true,
     harAdressebeskyttelse: harAdressebeskyttelse,
     kontor: kontorData,
-    person: personData,
-    behandlingsStatus: behandlingsStatusData,
+    person: personData
   };
 }
-function buildSaksbehandlingsURL(oppgave: Oppgave): string {
-  return `/saksbehandling/sak/${oppgave.saksnummer}/${oppgave?.behandlingRef}`;
-}
 
-function buildPostmottakURL(oppgave: Oppgave): string {
-  return `/postmottak/${oppgave?.behandlingRef}`;
-}
-
-function formaterOppgave(oppgave: Oppgave) {
+function formaterOppgave(behandlingstype: string, avklaringsbehovKode: string) {
   const formatertBehandlingstype =
-    oppgave.behandlingstype == 'DOKUMENT_HÅNDTERING'
-      ? 'Dokumenthåndtering'
-      : capitalize(oppgave.behandlingstype).replaceAll('_', ' ');
+    behandlingstype == 'DOKUMENT_HÅNDTERING' ? 'Dokumenthåndtering' : capitalize(behandlingstype).replaceAll('_', ' ');
 
-  return `${formatertBehandlingstype} - ${mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode)}`;
-}
-
-export function byggKelvinURL(oppgave: Oppgave): string {
-  if (oppgave.journalpostId) {
-    return buildPostmottakURL(oppgave);
-  } else if (oppgave.behandlingstype === 'TILBAKEKREVING') {
-    return oppgave.tilbakekrevingsVarsDto!!.tilbakekrevings_URL;
-  } else {
-    return buildSaksbehandlingsURL(oppgave);
-  }
+  return `${formatertBehandlingstype} - ${mapBehovskodeTilBehovstype(avklaringsbehovKode)}`;
 }

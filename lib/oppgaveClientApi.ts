@@ -5,7 +5,8 @@ import {
   Oppgave,
   OppgavelisteRequest,
   OppgavelisteResponse,
-  PlukkOppgaveDto,
+  PlukkOppgaveRequest,
+  PlukkOppgaveResponse,
   SakOgAvklaringsbehov,
   TildeltStatus,
 } from './types/oppgaveTypes';
@@ -48,8 +49,8 @@ export async function hentKøerForEnheterClient(enheter: string[]) {
   return clientFetch<Kø[]>(url, 'GET');
 }
 export async function plukkOppgaveClient(oppgaveId: number, versjon: number) {
-  const payload: PlukkOppgaveDto = { oppgaveId, versjon };
-  return await clientFetch<Oppgave>('/oppgave/api/oppgave/plukk-oppgave', 'POST', payload);
+  const payload: PlukkOppgaveRequest = { oppgaveId, versjon };
+  return await clientFetch<PlukkOppgaveResponse>('/oppgave/api/oppgave/plukk-oppgave', 'POST', payload);
 }
 export async function synkroniserOppgaveMedEnhetClient(oppgaveId: number) {
   return await clientFetch<void>('/oppgave/api/oppgave/synkroniser-enhet-paa-oppgave', 'POST', {
